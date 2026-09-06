@@ -61,7 +61,7 @@ Renderer plus stylesheet, with pinned values as the regression seam. There is no
 
 ### Key Components
 
-- **`CalendarRenderer.renderWeekAllDayStrip`** (`src/views/calendar-renderer.ts`, the block at `:840-870`): the only in-grid producer of a multi-day bar left after P0-3, and therefore the only in-grid producer of `.db-calendar-month-dates`.
+- **`CalendarRenderer.renderAllDaySection`** (`src/views/calendar-renderer.ts:769`, the segment loop at `:839-870`): the only in-grid producer of a multi-day bar left after P0-3, and therefore the only in-grid producer of `.db-calendar-month-dates`.
 - **`.db-calendar-month-dates`** (`styles.css:17361-17373`) and its `:has()` flex bound (`:17381-17383`): shared by four producers - the all-day strip, the day popover, the overflow popover and the drag ghost. Only the first is in-grid.
 - **`.db-calendar-mini-day`** (`styles.css:15932-15945`) and its date-edit override (`styles.css:6941-6945`): the picker's day cell, in two variants.
 
@@ -87,7 +87,7 @@ Renderer plus stylesheet, with pinned values as the regression seam. There is no
 | `calendar-pinned-values.test.ts` | The regression seam for both legs | update | Two new pins, two negative controls |
 
 Required inventories:
-- Producers of the class: `rg -n 'db-calendar-month-dates' src styles.css` - four in `src`, three selectors in `styles.css`, re-run after the edit.
+- Producers of the class: `rg -n 'db-calendar-month-dates' src styles.css` - eight matches in `src`, of which four are `createSpan` producers (`:628`, `:863`, `:930`, `:1498`) and two are queries against an existing node (`:1310`, `:1483`); three selectors in `styles.css`. Re-run after the edit.
 - Consumers of the picker metric: `rg -n 'db-calendar-mini-day' styles.css src` before choosing the selector to lift.
 - Matrix axes for REQ-002: {toolbar mini, date-edit popover} x {phone profile, coarse pointer, hover desktop} = six rows, all six stated before implementation.
 <!-- /ANCHOR:affected-surfaces -->

@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-06: **67 phases**, **6 with nothing left**, **231 rows** waiting on a device.
+Derived 2026-09-06: **68 phases**, **6 with nothing left**, **236 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -364,10 +364,10 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 ## 060-notion-calendar-refinement — 0/5
 
 - [ ] C1 — The inline start-end date string is gone from every in-grid calendar surface. A constructed render of the week scale carrying one all-day event whose `endDateKey > startDateKey` yields 0 `.db-calendar-month-dates` elements inside `.db-calendar-week-allday-cols`, on the desktop and the phone profile alike. The dates survive where Notion also keeps them out of the grid: the chip's own `title` tooltip (`getSegmentTitle`) and the day and overflow popovers. Observed red on `3e1c3c65`: the string renders, emitted at `calendar-renderer.ts:862-864`, styled `styles.css:17361-17373`, with the flex band-aid at `:17381-17383` and no `is-mobile` rule anywhere against it, while its sibling time prefix is hidden on mobile at `:17791`.
-- [ ] C2 — Every date-picker day cell clears its touch floor. `.db-calendar-mini-day` reads a hit target of at least 44 CSS px in the phone profile and at least 28 px under `(pointer: coarse)`, pinned in `calendar-pinned-values.test.ts` with a negative control that goes red when the floor is reverted. Observed red on `3e1c3c65`: `min-height: 34px` (`styles.css:15938`) and `min-height: 28px` inside a `(hover: hover)` block that a touch device never enters (`styles.css:6942`), with no `mini-*` selector in any of the three touch-media regions.
+- [ ] C2 — Every date-picker day cell clears its touch floor. `.db-calendar-mini-day` reads a hit target of at least 44 CSS px in the phone profile and at least 28 px under `(pointer: coarse)`, pinned in `calendar-pinned-values.test.ts` with a negative control that goes red when the floor is reverted. Observed red on `3e1c3c65`: `min-height: 34px` (`styles.css:15938`) and `min-height: 28px` inside a `(hover: hover)` block that a touch device never enters (`styles.css:6942`), with no `mini-*` selector carrying a touch floor anywhere in the stylesheet - swept across all eight `(pointer: coarse)` / `(hover: none)` blocks and every `.is-phone` calendar rule.
 - [ ] C3 — Every Notion-versus-Anytype conflict the harvest named carries an ADR that leaves the landed ruling standing. `decision-record.md` holds one ADR per conflict, each citing the Notion screen id and our `file:line` for both readings, and no ADR un-ticks a `Met` row in `057/acceptance-criteria.md`.
 - [ ] C4 — The four research rows the rebuild closed are recorded as verification, not as work. `+N more` band (`057` G5/G8), the toolbar's segmented control (`057` G13), the unscheduled chip's 44px floor and the Monday week start (`057` G7) each carry the `main`-side evidence that closed them.
-- [ ] C5 — Every criterion and ADR cites a Notion screen id and our `file:line`, and the loop that produced them stays in the packet. `057/research/research.md` and its five iteration files remain readable from here.
+- [ ] C5 — Every criterion and ADR cites a Notion screen id and our `file:line`, and the loop that produced them stays in the packet. `057/research/research.md`, `findings-registry.json`, `deep-research-state.jsonl` and `orchestration-summary.json` are committed beside this packet. The lineage tree under `057/research/lineages/` - ledgers, deltas and the five iteration narratives - stays on disk untracked under this repo's `specs//research//lineages/` ignore rule, the same convention `036/goal.md` records.
 
 ## 061-notion-sheet-refinement — 0/7
 

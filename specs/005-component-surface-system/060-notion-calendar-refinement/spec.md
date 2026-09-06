@@ -103,7 +103,7 @@ The calendar reads the same way at every scale for a multi-day event, its date p
 
 - **SC-001**: A constructed week-scale render carrying one multi-day all-day event yields 0 `.db-calendar-month-dates` elements inside `.db-calendar-week-allday-cols`, on both profiles, and re-adding the emitter turns that assertion red.
 - **SC-002**: The two `min-height` declarations at `styles.css:15938` and `:6942` are superseded by profile-scoped floors of 44 px and 28 px, pinned with a negative control.
-- **SC-003**: Seven ADRs exist; the four conflict ADRs are `Accepted` with the landed ruling intact, and the two routed rows are `Proposed` and name their owner.
+- **SC-003**: Seven ADRs exist; the four conflict ADRs are `Accepted` with the landed ruling intact, ADR-005 - the one adoption, on the element Anytype never ruled - is `Accepted` too, and the two routed rows are `Proposed` and name their owner.
 - **SC-004**: `057/acceptance-criteria.md` still reads 13 `Met` of 15 after this packet lands - nothing here un-ticks a measured row.
 <!-- /ANCHOR:success-criteria -->
 

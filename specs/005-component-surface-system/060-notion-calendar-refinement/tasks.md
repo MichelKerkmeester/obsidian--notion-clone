@@ -122,7 +122,7 @@ contextType: "implementation"
 - **Plan**: See `plan.md`
 - **Criteria**: See `acceptance-criteria.md`
 - **Decisions**: See `decision-record.md`
-- **Evidence**: `../057-calendar-anytype-parity/research/research.md` and its five iteration files
+- **Evidence**: `../057-calendar-anytype-parity/research/research.md` and the committed registries beside it (`findings-registry.json`, `deep-research-state.jsonl`, `orchestration-summary.json`). The lineage tree with the five iteration narratives is untracked under the repo's `specs/**/research/**/lineages/` ignore rule
 <!-- /ANCHOR:cross-refs -->
 
 ---

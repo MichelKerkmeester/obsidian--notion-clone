@@ -95,7 +95,7 @@ than counted.
 | Check | Result |
 |-------|--------|
 | Research loop completed | PASS - 5/5 iterations, `stopReason maxIterationsReached`, lineage `glm-devpass-calendar` |
-| Findings reconciled against `main` | PASS - four rows closed, one moved scale, two still red at `3e1c3c65` |
+| Findings reconciled against `main` | PASS - of the loop's six ranked rows, four closed and two are still red at `3e1c3c65`; the rank-1 of those two moved scale rather than closing |
 | Code legs | Not started |
 | Three gates | Not run - no code changed |
 <!-- /ANCHOR:verification -->
