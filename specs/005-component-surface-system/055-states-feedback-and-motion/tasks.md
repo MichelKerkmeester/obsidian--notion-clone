@@ -654,6 +654,17 @@ A task missing any of the three is not ready to start.
       safety net. Red-first: today a single-row delete raises a confirm dialog before the toast
       ever shows; assert no confirm surface opens after the fix, and the Undo toast still restores
       the file. `deleteSelectedRows` (bulk, `database-view.ts:4962`) is untouched by this task
+- [ ] T020 (2026-09-06) **The Notion refinement of this phase lives in
+      `../066-notion-states-refinement/`, not here.** The five-iteration `/deep:research:auto` loop
+      on the Notion screen digest (`research/research.md`, one lineage `glm-openrouter-states` on
+      GLM 5.3 flash max, 23 findings, 5 of 5 questions answered) found three gaps this phase's
+      criteria do not cover and one documentation defect that does: the action-carrying toast
+      dismisses on the plain-success 2200ms budget (`toast.ts:62`, `:137`), the owned operation
+      failures still escape to bare notices (`database-view.ts:3681`, `:8378`, `:8468`), a stale
+      reference has no inline chip shape, and **five rows of this file's own §3 Today column and
+      T003 / the T019 amendment are stale against the tree** — `066` T010 owns the reconciliation
+      and this row is closed by it. Two Notion findings contradict a landed Anytype ruling and are
+      held as Proposed ADRs there under parent `goal.md` D15, never applied here
 <!-- /ANCHOR:phase-3 -->
 
 ---

@@ -1,0 +1,105 @@
+{
+  "topic": "Research how Notion's UI for empty, loading, error and offline states, toasts and undo, confirmations, onboarding hints, skeletons, motion and transitions should refine the note-database Obsidian plugin's surface, using the Notion screen digest at specs/005-component-surface-system/055-states-feedback-and-motion/notion-screens-digest.md as the ONLY source of Notion facts (it was written by an image-capable analyst from the Mobbin captures; you cannot read PNG files — never open image files), against our implementation and design record: src/views/empty-state-renderer.ts src/views/toast.ts src/views/confirm-sheet.ts the --db-motion-* tokens and state blocks of styles.css specs/005-component-surface-system/055-states-feedback-and-motion/{goal.md,design-trueup.md,decision-record.md,tasks.md}, specs/005-component-surface-system/design-system.md, and roadmap.md §6A rulings. Bounded scope: read those files and nothing beyond them unless a finding requires one more source file. Operator context: Anytype parity is the default ruling for these surfaces (051 ADR-007, 056, 057); Notion refinements are additive — where Notion and Anytype disagree, name the conflict and propose which to adopt with the reason, never override a landed operator ruling. Questions to answer with file:line and screen-id evidence: which Notion patterns from the digest would improve this surface for a user (rank by user impact); for each, the concrete change to our code and CSS (file, rule/function, value) and its measurable threshold; which Notion behaviours we already have; which conflict with an Anytype ruling; which need a device-only check; and a ranked remediation plan as concrete phase tasks with thresholds and red-first checks suitable for a new child phase. Cite every claim; mark inferences as inferences.",
+  "maxIterations": 5,
+  "convergenceThreshold": 0.05,
+  "antiConvergence": {
+    "minIterations": 3,
+    "convergenceMode": "default",
+    "stopPolicy": "fail-closed"
+  },
+  "stuckThreshold": 3,
+  "maxDurationMinutes": 120,
+  "maxToolCallsPerIteration": 12,
+  "maxMinutesPerIteration": 10,
+  "progressiveSynthesis": true,
+  "specFolder": "specs/005-component-surface-system/055-states-feedback-and-motion",
+  "createdAt": "2026-09-06T14:56:36.666Z",
+  "status": "complete",
+  "executionMode": "auto",
+  "lineage": {
+    "sessionId": "dr-1788706596667",
+    "parentSessionId": null,
+    "lineageMode": "new",
+    "allowedModes": [
+      "new",
+      "resume",
+      "restart"
+    ],
+    "deferredModes": [
+      "fork",
+      "completed-continue"
+    ],
+    "generation": 1,
+    "continuedFromRun": null
+  },
+  "reducer": {
+    "enabled": true,
+    "version": "1.0",
+    "registryFile": "research/findings-registry.json",
+    "dashboardFile": "research/deep-research-dashboard.md",
+    "strategyFile": "research/deep-research-strategy.md",
+    "machineOwnedSections": [
+      "key-questions",
+      "answered-questions",
+      "what-worked",
+      "what-failed",
+      "exhausted-approaches",
+      "ruled-out-directions",
+      "divergence-frontier",
+      "next-focus"
+    ]
+  },
+  "capabilityMatrixPath": ".opencode/skills/system-deep-loop/deep-research/assets/runtime-capabilities.json",
+  "capabilityMatrixDocPath": ".opencode/skills/system-deep-loop/deep-research/references/guides/capability-matrix.md",
+  "runtimeCapabilityResolver": ".opencode/skills/system-deep-loop/deep-research/scripts/runtime-capabilities.cjs",
+  "reducerScriptPath": ".opencode/skills/system-deep-loop/deep-research/scripts/reduce-state.cjs",
+  "pauseSentinelPath": "research/.deep-research-pause",
+  "archiveRoot": "research_archive",
+  "migrationWindowDays": 28,
+  "fileProtection": {
+    "deep-research-config.json": "immutable",
+    "deep-research-state.jsonl": "append-only",
+    "deep-research-strategy.md": "mutable",
+    "deep-research-dashboard.md": "auto-generated",
+    "findings-registry.json": "auto-generated",
+    "iteration-*.md": "write-once",
+    "research/research.md": "mutable"
+  },
+  "_optimizerManaged": {
+    "description": "Fields managed by the offline loop optimizer (042.004). See optimizer-manifest.json for the canonical tunable/locked field registry.",
+    "manifestPath": ".opencode/skills/system-spec-kit/runtime/cli/optimizer/optimizer-manifest.json",
+    "tunableFields": [
+      "convergenceThreshold",
+      "stuckThreshold",
+      "maxIterations"
+    ],
+    "lockedFields": [
+      "lineage",
+      "reducer",
+      "fileProtection",
+      "sessionId",
+      "status",
+      "antiConvergence.convergenceMode",
+      "antiConvergence.stopPolicy"
+    ],
+    "promotionMode": "advisory-only"
+  },
+  "researchTopic": "Research how Notion's UI for empty, loading, error and offline states, toasts and undo, confirmations, onboarding hints, skeletons, motion and transitions should refine the note-database Obsidian plugin's surface, using the Notion screen digest at specs/005-component-surface-system/055-states-feedback-and-motion/notion-screens-digest.md as the ONLY source of Notion facts (it was written by an image-capable analyst from the Mobbin captures; you cannot read PNG files — never open image files), against our implementation and design record: src/views/empty-state-renderer.ts src/views/toast.ts src/views/confirm-sheet.ts the --db-motion-* tokens and state blocks of styles.css specs/005-component-surface-system/055-states-feedback-and-motion/{goal.md,design-trueup.md,decision-record.md,tasks.md}, specs/005-component-surface-system/design-system.md, and roadmap.md §6A rulings. Bounded scope: read those files and nothing beyond them unless a finding requires one more source file. Operator context: Anytype parity is the default ruling for these surfaces (051 ADR-007, 056, 057); Notion refinements are additive — where Notion and Anytype disagree, name the conflict and propose which to adopt with the reason, never override a landed operator ruling. Questions to answer with file:line and screen-id evidence: which Notion patterns from the digest would improve this surface for a user (rank by user impact); for each, the concrete change to our code and CSS (file, rule/function, value) and its measurable threshold; which Notion behaviours we already have; which conflict with an Anytype ruling; which need a device-only check; and a ranked remediation plan as concrete phase tasks with thresholds and red-first checks suitable for a new child phase. Cite every claim; mark inferences as inferences.",
+  "stopPolicy": "max-iterations",
+  "fanout": {
+    "executors": [
+      {
+        "kind": "cli-pi",
+        "model": "z-ai/glm-5.3-flash",
+        "reasoningEffort": "max",
+        "iterations": 5,
+        "label": "glm-openrouter-states",
+        "count": 1
+      }
+    ],
+    "concurrency": 1
+  },
+  "resource_map": {
+    "emit": true
+  }
+}

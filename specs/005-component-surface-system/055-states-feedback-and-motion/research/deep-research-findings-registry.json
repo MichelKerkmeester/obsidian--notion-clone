@@ -1,0 +1,352 @@
+{
+  "mergedFrom": [
+    "glm-openrouter-states"
+  ],
+  "openQuestions": [],
+  "resolvedQuestions": [],
+  "keyFindings": [
+    {
+      "id": "F-102",
+      "label": "P5 two-tier loading: single-tier complete today; pattern recorded with threshold",
+      "iteration": 1,
+      "fit": "2/5",
+      "confidence": 0.78,
+      "evidenceRefs": [
+        "file:styles.css:2864-2910",
+        "screen:a483c1af"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-206",
+      "label": "P6 undo shapes: toast slot only; three other shapes recorded not built",
+      "iteration": 2,
+      "fit": "2/5",
+      "confidence": 0.8,
+      "evidenceRefs": [
+        "screen:4e97a1c9",
+        "screen:5415dd8d"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-202",
+      "label": "P2 two red weights + toast placement: conflicts named, HOLD proposed",
+      "iteration": 2,
+      "fit": "3/5",
+      "confidence": 0.82,
+      "evidenceRefs": [
+        "file:src/views/modals/confirm-modal.ts:28",
+        "screen:28751c29",
+        "screen:348fd2b7"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-103",
+      "label": "P8 error split: inline actionable chip missing; 242 bare Notice sites bypass the owned toast",
+      "iteration": 1,
+      "fit": "4/5",
+      "confidence": 0.83,
+      "evidenceRefs": [
+        "file:styles.css:2711-2718",
+        "screen:9748e66c",
+        "screen:53f4023b"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-405",
+      "label": "Digest open questions 5/6 dispositioned: loading recorded; no dark sweep",
+      "iteration": 4,
+      "fit": "3/5",
+      "confidence": 0.85,
+      "evidenceRefs": [
+        "file:specs/005-component-surface-system/055-states-feedback-and-motion/notion-screens-digest.md:14-17"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-303",
+      "label": "Residual census refined: 4 real ease-out literals vs an ease token",
+      "iteration": 3,
+      "fit": "3/5",
+      "confidence": 0.85,
+      "evidenceRefs": [
+        "file:styles.css:200",
+        "file:styles.css:473",
+        "file:styles.css:7431",
+        "file:styles.css:22638"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-104",
+      "label": "P3 in-trash persistent banner: genuine gap, no equivalent in tree",
+      "iteration": 1,
+      "fit": "3/5",
+      "confidence": 0.85,
+      "evidenceRefs": [
+        "screen:15f3126a",
+        "screen:4e2f2124"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-205",
+      "label": "deleteRow failure path is a bare Notice below the owned success toast",
+      "iteration": 2,
+      "fit": "4/5",
+      "confidence": 0.87,
+      "evidenceRefs": [
+        "file:src/views/database-view.ts:8376-8379"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-304",
+      "label": "2200ms is a recorded rail inheritance, not a measured constant",
+      "iteration": 3,
+      "fit": "3/5",
+      "confidence": 0.88,
+      "evidenceRefs": [
+        "file:specs/005-component-surface-system/055-states-feedback-and-motion/design-trueup.md:350"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-203",
+      "label": "Action-carrying undo toasts auto-dismiss at 2200ms — the plain-success budget",
+      "iteration": 2,
+      "fit": "5/5",
+      "confidence": 0.88,
+      "evidenceRefs": [
+        "file:src/views/toast.ts:77",
+        "file:src/views/toast.ts:137",
+        "file:src/views/database-view.ts:8369-8374"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-403",
+      "label": "Anytype-conflict map complete: 2 conflicts propose HOLD; 4 additive; 3 have-and-richer; 1 N/A; 1 out-of-scope",
+      "iteration": 4,
+      "fit": "4/5",
+      "confidence": 0.88,
+      "evidenceRefs": [
+        "screen:28751c29",
+        "screen:7a0e976e"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-204",
+      "label": "Undo wording already consistent (toolbar.undo, both sites)",
+      "iteration": 2,
+      "fit": "4/5",
+      "confidence": 0.9,
+      "evidenceRefs": [
+        "file:src/i18n.ts:324"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-502",
+      "label": "Ranked remediation plan R1-R7 delivered with thresholds and red-first checks",
+      "iteration": 5,
+      "fit": "5/5",
+      "confidence": 0.9,
+      "evidenceRefs": [
+        "file:src/views/toast.ts:77",
+        "file:src/views/empty-state-renderer.ts:295"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-305",
+      "label": "--db-sheet-enter 260ms ours and reasoned; uncontested",
+      "iteration": 3,
+      "fit": "2/5",
+      "confidence": 0.9,
+      "evidenceRefs": [
+        "file:styles.css:114-122"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-401",
+      "label": "P7 onboarding out of scope; pattern recorded; disabled styling is opacity not tint",
+      "iteration": 4,
+      "fit": "2/5",
+      "confidence": 0.9,
+      "evidenceRefs": [
+        "file:styles.css:148-149",
+        "screen:8a755986"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-404",
+      "label": "Device checks D-1/D-2 + blanket no-Notion-pixels rule",
+      "iteration": 4,
+      "fit": "4/5",
+      "confidence": 0.9,
+      "evidenceRefs": [
+        "file:styles.css:2756-2767"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-501",
+      "label": "showOperationResult relocated to :11316-11334; rail models Undo/Retry actions",
+      "iteration": 5,
+      "fit": "4/5",
+      "confidence": 0.92,
+      "evidenceRefs": [
+        "file:src/views/database-view.ts:11316-11334"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-101",
+      "label": "P4 desktop empty-state ladder: have, and richer than Notion",
+      "iteration": 1,
+      "fit": "5/5",
+      "confidence": 0.92,
+      "evidenceRefs": [
+        "file:src/views/empty-state-renderer.ts:295-330",
+        "file:src/views/database-view.ts:8233-8267",
+        "screen:120f4d36"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-302",
+      "label": "Reduced-motion coverage exceeds both references; device check D-1 recorded",
+      "iteration": 3,
+      "fit": "4/5",
+      "confidence": 0.92,
+      "evidenceRefs": [
+        "file:styles.css:1007-1030",
+        "file:styles.css:21095-21113"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-201",
+      "label": "P1 confirm/undo split fully implemented; radio-picker refused (no consumer)",
+      "iteration": 2,
+      "fit": "5/5",
+      "confidence": 0.93,
+      "evidenceRefs": [
+        "file:src/views/row-menu.ts:166-176",
+        "file:src/views/database-view.ts:8344-8379",
+        "screen:348fd2b7"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-402",
+      "label": "goal.md Today column stale on ≥5 rows; T003/T019-amendment landed but unchecked",
+      "iteration": 4,
+      "fit": "5/5",
+      "confidence": 0.94,
+      "evidenceRefs": [
+        "file:specs/005-component-surface-system/055-states-feedback-and-motion/goal.md:126-128",
+        "file:src/views/row-menu.ts:166-176"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-301",
+      "label": "Motion set landed at decided values; Notion cannot contest (stills carry no durations)",
+      "iteration": 3,
+      "fit": "4/5",
+      "confidence": 0.95,
+      "evidenceRefs": [
+        "file:styles.css:142-146",
+        "file:specs/005-component-surface-system/055-states-feedback-and-motion/decision-record.md:412-466"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    },
+    {
+      "id": "F-105",
+      "label": "P9 offline: negative pattern, no owner in this plugin",
+      "iteration": 1,
+      "fit": "1/5",
+      "confidence": 0.95,
+      "evidenceRefs": [
+        "screen:a335360d"
+      ],
+      "_lineages": [
+        "glm-openrouter-states"
+      ]
+    }
+  ],
+  "ruledOutDirections": [],
+  "metrics": {
+    "iterationsCompleted": 0,
+    "openQuestions": 0,
+    "resolvedQuestions": 0,
+    "keyFindings": 23,
+    "sourceFindings": 23,
+    "reconstructionGaps": 0,
+    "convergenceScore": 0,
+    "coverageBySources": {}
+  },
+  "schema_mismatch": [
+    {
+      "type": "schema_mismatch",
+      "severity": "warn",
+      "lineage": "glm-openrouter-states",
+      "message": "Registry uses non-canonical key \"findings\" instead of \"keyFindings\"; coerced 23 entries.",
+      "aliasKey": "findings",
+      "canonicalKey": "keyFindings",
+      "coercedCount": 23
+    }
+  ]
+}

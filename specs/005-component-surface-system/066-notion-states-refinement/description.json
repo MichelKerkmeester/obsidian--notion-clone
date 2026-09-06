@@ -1,0 +1,24 @@
+{
+  "specFolder": "005-component-surface-system/066-notion-states-refinement",
+  "description": "The Notion refinement of 055's state, feedback and motion surfaces: an action-carrying toast with a window a reader can act inside, owned operation failures routed through the toast, an inline stale-reference chip, 055's tracking documents reconciled against the tree, and the fast motion band taken to zero literals.",
+  "keywords": [
+    "notion",
+    "states",
+    "feedback",
+    "motion",
+    "toast",
+    "undo",
+    "empty-state",
+    "inline-chip",
+    "refinement"
+  ],
+  "lastUpdated": "2026-09-06T16:10:00.000Z",
+  "specId": "066",
+  "folderSlug": "notion-states-refinement",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

@@ -48,6 +48,7 @@
       "goal.md",
       "decision-record.md",
       "implementation-summary.md",
+      "research/research.md",
       "src/views/empty-state-renderer.ts",
       "src/views/chart-renderer.ts",
       "src/views/toast.ts",
@@ -59,8 +60,7 @@
       "src/views/database-view.ts",
       "repo-rules/screenshot-currency.md",
       "tools/storybook/verify-placement.mjs",
-      "src/i18n.ts",
-      "src/views/deletion-undo.test.ts"
+      "src/i18n.ts"
     ],
     "entities": [
       {
@@ -103,6 +103,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
         "source": "derived"
       },
       {
@@ -178,12 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "deletion-undo.test.ts",
-        "kind": "test",
-        "path": "src/views/deletion-undo.test.ts",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Every surface has states; nothing owns them",
     "created_at": "2026-09-05T11:08:14Z",
-    "last_save_at": "2026-09-06T14:40:11.552Z",
+    "last_save_at": "2026-09-06T16:16:29.348Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,16 +220,18 @@
       "acceptance-criteria.md",
       "goal.md",
       "decision-record.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "research/research.md"
     ],
-    "source_fingerprint": "sha256:c050ad7beb768279958c626a4292a96ca17b1d6b2b2dcc169c316755671d0cc0",
+    "source_fingerprint": "sha256:6d4c49655effa507919c027315b4e925ff7337379a8c44a9f843b7e035a5e3e7",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "34440444221b62c83fb89dc9a7d3a321e9bacfe5fd9982ca72def658dfbd3437",
       "plan.md": "0b06ddc242ef7e734b6c322ef1a0bbea144830214e756d85b4cb911e3bbd172a",
-      "tasks.md": "1d89047b5e17507704546d76e7e1bc686140f0e0737f062ebb8c2dab6dfa7198",
+      "tasks.md": "32181c9babb70927744445df0858788882116fc203a69b9c66a2a684d6d91842",
       "decision-record.md": "4baffc38f99a506fe2a8b971d68a39abe6689a8ad4ab914b576dcc18ac7e4c2c",
-      "implementation-summary.md": "a414291ec061f721a3cdba745dcacfcca02a0a1d17730215dd35360abfbc25c7"
+      "implementation-summary.md": "a414291ec061f721a3cdba745dcacfcca02a0a1d17730215dd35360abfbc25c7",
+      "research/research.md": "6c5885dd20e5b2bb609c2310e75e4a02e2444b262caec7651deb96480d8a085b"
     },
     "last_active_child_id": null,
     "last_active_at": null

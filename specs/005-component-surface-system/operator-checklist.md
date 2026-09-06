@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-06: **62 phases**, **6 with nothing left**, **195 rows** waiting on a device.
+Derived 2026-09-06: **63 phases**, **6 with nothing left**, **201 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -372,6 +372,15 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] C7 — An empty visible property reads as empty in the peek. Notion writes the word in its page view (`050083af`). Today: observed red — it renders as nothing. `renderValue` assigns `valueEl.textContent = text` for a non-option value (`src/views/table-record-peek.ts:357-360`), and `text` is `""` for an empty property, so the row shows a label and a blank. Done is a muted placeholder in the peek only. Table cells are unchanged by design and changing them would break parity rather than create it: Notion's own table cells render blank, exactly as ours do (`src/views/cell-renderer.ts:263-264`, `styles.css:6766-6771`), and `050083af` is page-view only.
 - [ ] C8 — The add-row affordance names what it adds. Notion derives the noun from the data source — `+ New page` on one board (`19745d87`), `+ New task` on another (`e33466b4`).
 - [ ] C9 — The operator reads the refined table on a device, in both themes. Three things no headless harness in this repository can answer. The frozen column mid-scroll on iOS: WebKit's sticky-inside-table behaviour is not something the render harness stands in for, and no capture of a frozen state exists to compare against. Every new colour in dark theme: zero of the 102 opened screens are dark, so the divider, the handle line and any tint are unverified there by construction. The title-cell affordance at 390px: Notion lets its OPEN pill overlap the tail of a long title rather than truncating first (`19745d87`, `35c64a84`, `d9d61160`), while ours is a button inside a phone `td` capped at 60vw with ellipsis (`src/views/table-record-peek.ts:86-114`, touch branch `:102-104`; `styles.css:21029-21035`) — whether it steals title width, overlaps the ellipsis or collides with the link hit area was not measured by the loop and no number is guessed here; the task owes the threshold. Operator-owned. No agent ticks this row.
+
+## 066-notion-states-refinement — 0/6
+
+- [ ] A toast that carries an action stays long enough to act on, and a plain success does not.
+- [ ] Every operation failure this plugin owns reports through the toast, with the census moving.
+- [ ] A stale reference has an inline, permanent, actionable shape.
+- [ ] `055`'s own tracking documents say what the tree says.
+- [ ] The fast motion band has one owner and no raw literals.
+- [ ] The operator rules the two held conflicts and reads the refined surface on a device. Two Notion findings contradict a landed Anytype ruling and are held as Proposed: the second destructive red weight (`screen:28751c29` text-only against `screen:348fd2b7` filled, against one `danger` boolean at `src/views/modals/confirm-modal.ts:28` themed to `mod-warning` at `src/views/confirm-sheet.ts:69`) and the toast placement (`screen:56f376d3` centred iOS pill against the Anytype-measured bottom-right card at `styles.css:2724-2736`). Two device facts ride the existing operator pass: D-1, iOS `Reduce Motion` stops the shimmer and snaps entrances inside the plugin's WKWebView, and D-2, the Undo target is one-hand reachable at the rail's clamped phone width `min(384px, calc(100vw - 32px))` (`styles.css:2756-2767`), without which a 5000ms window is a number and not an affordance.
 
 ## 067-sheet-family-remediation — 0/7
 

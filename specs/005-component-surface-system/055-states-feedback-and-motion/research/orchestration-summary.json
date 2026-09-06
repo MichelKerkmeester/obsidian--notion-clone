@@ -1,0 +1,71 @@
+{
+  "run_id": "1788706611202-9hvcld",
+  "loop_type": "research",
+  "spec_folder": "specs/005-component-surface-system/055-states-feedback-and-motion",
+  "base_artifact_dir": "specs/005-component-surface-system/055-states-feedback-and-motion/research",
+  "total_cli_lineages": 1,
+  "orphaned_lineages": [],
+  "total": 1,
+  "succeeded": 1,
+  "failed": 0,
+  "all_failed": false,
+  "gauges": {
+    "lag": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "failure_classes": {
+    "timeout": 0,
+    "exit": 0,
+    "salvage_miss": 0
+  },
+  "timestamp_anomalies": [
+    {
+      "label": "glm-openrouter-states",
+      "state_log": "specs/005-component-surface-system/055-states-feedback-and-motion/research/lineages/glm-openrouter-states/deep-research-state.jsonl",
+      "window": {
+        "start_at_iso": "2026-09-06T14:56:51.205Z",
+        "end_at_iso": "2026-09-06T15:23:51.404Z",
+        "tolerance_ms": 120000
+      },
+      "counts": {
+        "anomalous": 6,
+        "untimestamped": 0,
+        "unparseable": 0,
+        "total": 15
+      },
+      "sample": [
+        {
+          "index": 9,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T17:27:55+02:00",
+          "deltaMs": 123596
+        },
+        {
+          "index": 10,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T17:27:55+02:00",
+          "deltaMs": 123596
+        },
+        {
+          "index": 11,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T17:27:55+02:00",
+          "deltaMs": 123596
+        },
+        {
+          "index": 12,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T17:31:20+02:00",
+          "deltaMs": 328596
+        },
+        {
+          "index": 13,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T17:31:20+02:00",
+          "deltaMs": 328596
+        }
+      ]
+    }
+  ]
+}
