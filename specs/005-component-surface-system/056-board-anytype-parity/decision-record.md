@@ -275,9 +275,12 @@ pattern the ADR named, and it is a visible difference against the reference.
 **Decision.** The operator, verbatim: *"Anytype tint fill"*.
 
 **Consequences.** `.db-kanban-col-chip` gains the tint fill of the option's own hue, matching the
-card chip's existing tint/text pair rather than introducing a third treatment. It moves every board
-capture and is a stylesheet edit, so it needs the CSS lane. **Nothing is changed by this leg** — it
-was instructed to record the ruling and leave the code, and the row stays open in `tasks.md` T012.
+card chip's existing tint/text pair rather than introducing a third treatment. Contrast is measured
+**per colour**: E1's 5.93:1 amber figure was one sample, not a guarantee for all seven option hues,
+so each hue is re-measured against its own tint fill and any that fails is named as its own
+exception rather than assumed to clear with the rest. It moves every board capture and is a
+stylesheet edit, so it needs the CSS lane. **Nothing is changed by this leg** — it was instructed to
+record the ruling and leave the code, and the row stays open in `tasks.md` T012.
 
 ---
 

@@ -161,3 +161,20 @@ hidden.
 
 Nothing is measured yet. T001 is the true-up and it is owed to an image-capable leaf; T002 is the
 red-first measurement pass. No code has been written and no criterion is met.
+
+### 2026-09-06 amendment: R6/R7 rulings recorded, and a pointer to 058
+
+**R6 ("Anytype tint fill") and R7 ("Neutral, match Anytype")** are the operator's rulings on two of
+`tasks.md` T012's ten measured residuals — recorded in full in `decision-record.md`'s ADR-004
+addendum, and referenced in place on T012's own R6/R7 rows rather than restated here. R6 reaffirms
+ADR-004 E1 as written (the shipped chip's unfilled treatment was the *declined* one, not the
+replacement); R7 settles a defect ADR-004 never addressed (a red-tinted grey where Anytype's own is
+neutral). Neither reopens ADR-002's parity-by-default posture.
+
+**Pointer to `058-card-title-and-title-formats`.** The operator's phone-board report the same
+night — *"the name is a number… ideally we can change which value becomes the card name"* — named
+this packet's card anatomy as a co-owner of the fix. `058` owns the shared title resolver and its
+format routing; this packet's own card rendering is a consumer, not a duplicate owner, per that
+packet's D4/ADR-002 (one picker, reached from the surface the operator was looking at). No card
+rendering was changed here to accommodate it — `058` edits `title-field-display.ts` and
+`board-card-properties-panel.ts`'s Title row, neither of which this packet owns.
