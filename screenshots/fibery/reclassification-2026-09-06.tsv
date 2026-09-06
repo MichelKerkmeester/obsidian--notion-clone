@@ -55,7 +55,7 @@ web/navigation/fibery-web-navigation-sidebar-b17fe4dd-1408-4729-8f51-81e44cdea77
 web/navigation/fibery-web-navigation-sidebar-b1c1016d-82db-4150-83c4-32f8eb6d761f.webp	web/database/fibery-web-database-b1c1016d-82db-4150-83c4-32f8eb6d761f.webp	New table field color config with values list
 web/navigation/fibery-web-navigation-sidebar-b3d6302f-cf7d-4c32-b0e0-b68d0c456d78.webp	web/database/fibery-web-database-b3d6302f-cf7d-4c32-b0e0-b68d0c456d78.webp	New table field color grouping logic and swatches
 web/navigation/fibery-web-navigation-sidebar-b685338f-0684-4625-9096-1f93d555b329.webp	web/reports/fibery-web-reports-b685338f-0684-4625-9096-1f93d555b329.webp	New Report chart wizard (chart type, filters, icon picker)
-web/navigation/fibery-web-navigation-sidebar-b777e868-fb0f-462f-99b4-c01e0ceafc23.webp	web/database/fibery-web-database-b777e868-fb0f-462f-99b4-c01e0ceafc23.webp	New table field/grouping config panel
+web/navigation/fibery-web-navigation-sidebar-b777e868-fb0f-462f-99b4-c01e0ceafc23.webp	web/database/fibery-web-database-b777e868-fb0f-462f-99b4-c01e0ceafc23.webp	Home dashboard table widget with conditional Color rule panel open
 web/navigation/fibery-web-navigation-sidebar-b7effa46-f37d-4c1a-b10a-3337f01cbbdd.webp	web/editors/fibery-web-editors-b7effa46-f37d-4c1a-b10a-3337f01cbbdd.webp	New document block-insert layout menu (columns, table, lists)
 web/navigation/fibery-web-navigation-sidebar-ba007df0-c925-4b57-82e1-d14750b3f7c9.webp	web/database/fibery-web-database-ba007df0-c925-4b57-82e1-d14750b3f7c9.webp	New table relation/link picker list
 web/navigation/fibery-web-navigation-sidebar-ba12f893-a958-4ded-ab57-b00e9718ece5.webp	web/database/fibery-web-database-ba12f893-a958-4ded-ab57-b00e9718ece5.webp	New table basic field name creation
@@ -70,7 +70,7 @@ web/navigation/fibery-web-navigation-sidebar-cbe36c71-b63b-4fb8-88dd-b918858b017
 web/navigation/fibery-web-navigation-sidebar-cdd21558-d6d6-4dec-aa5e-8907723c259f.webp	web/settings/fibery-web-settings-cdd21558-d6d6-4dec-aa5e-8907723c259f.webp	Integrate with GitHub connection panel
 web/navigation/fibery-web-navigation-sidebar-cf11411e-c2b2-429f-abe5-056ca36e8fc2.webp	web/onboarding/fibery-web-onboarding-cf11411e-c2b2-429f-abe5-056ca36e8fc2.webp	Getting Started welcome checklist dominates panel
 web/navigation/fibery-web-navigation-sidebar-cf43eee5-8c2d-4378-bc35-29d8ee5c3687.webp	web/database/fibery-web-database-cf43eee5-8c2d-4378-bc35-29d8ee5c3687.webp	New table field type/reference dropdown list
-web/navigation/fibery-web-navigation-sidebar-cffbe9a3-3e32-41cf-aaf3-16fb3391079e.webp	web/editors/fibery-web-editors-cffbe9a3-3e32-41cf-aaf3-16fb3391079e.webp	New document blank editor with placeholder text
+web/navigation/fibery-web-navigation-sidebar-cffbe9a3-3e32-41cf-aaf3-16fb3391079e.webp	web/editors/fibery-web-editors-cffbe9a3-3e32-41cf-aaf3-16fb3391079e.webp	New document editor with a red callout/highlight block
 web/navigation/fibery-web-navigation-sidebar-d3b873bd-209e-458a-ad5b-7fe54a90b9c1.webp	web/editors/fibery-web-editors-d3b873bd-209e-458a-ad5b-7fe54a90b9c1.webp	Document with pasted image, video thumbnail and description text
 web/navigation/fibery-web-navigation-sidebar-d68293ff-2be5-44d6-b9d2-cf4cdee6eb22.webp	web/onboarding/fibery-web-onboarding-d68293ff-2be5-44d6-b9d2-cf4cdee6eb22.webp	Getting Started checklist dominates alongside small New calendar panel
 web/navigation/fibery-web-navigation-sidebar-d868ebec-3f34-4390-b8ae-73ed3d956de4.webp	web/ai/fibery-web-ai-d868ebec-3f34-4390-b8ae-73ed3d956de4.webp	AI writing assistant suggestions popup in document
@@ -235,7 +235,7 @@ web/screens/fibery-web-screen-3e934311-48a8-4049-acc8-c5097887435e.webp	web/data
 web/screens/fibery-web-screen-40021061-83fe-449c-85f7-bd55dc1947c8.webp	web/editors/fibery-web-editors-40021061-83fe-449c-85f7-bd55dc1947c8.webp	Read.me document with added-to-space toast
 web/screens/fibery-web-screen-40ad6297-5ada-4003-b980-5aa0063dd328.webp	web/editors/fibery-web-editors-40ad6297-5ada-4003-b980-5aa0063dd328.webp	Document with pasted image, video thumbnail and description text
 web/screens/fibery-web-screen-4108e4c0-c2f1-44d0-8940-8440b139e776.webp	web/views/fibery-web-views-4108e4c0-c2f1-44d0-8940-8440b139e776.webp	Rendered Features Kanban board with heading outline panel
-web/screens/fibery-web-screen-41126de4-5341-436d-83a8-551cc857836d.webp	web/dialogs/fibery-web-dialogs-41126de4-5341-436d-83a8-551cc857836d.webp	Delete-all-data confirmation modal for a Space
+web/screens/fibery-web-screen-41126de4-5341-436d-83a8-551cc857836d.webp	web/dialogs/fibery-web-dialogs-41126de4-5341-436d-83a8-551cc857836d.webp	Delete-Space confirmation modal listing the Databases that will be deleted
 web/screens/fibery-web-screen-423229a8-9bfa-454f-9067-2e05b6cf9827.webp	web/database/fibery-web-database-423229a8-9bfa-454f-9067-2e05b6cf9827.webp	New table Color coding Add Group values
 web/screens/fibery-web-screen-4396dbcf-ff11-40d8-8bed-728019ce2128.webp	web/reports/fibery-web-reports-4396dbcf-ff11-40d8-8bed-728019ce2128.webp	Client report Set up your chart wizard
 web/screens/fibery-web-screen-43b2893e-1fa4-4b20-9e80-9f4165b79789.webp	web/views/fibery-web-views-43b2893e-1fa4-4b20-9e80-9f4165b79789.webp	Rendered timeline/Gantt view with dates
@@ -284,7 +284,7 @@ web/screens/fibery-web-screen-56a3f4ea-5f41-44bd-8de7-449cafa9b139.webp	web/form
 web/screens/fibery-web-screen-57619f39-3862-4f1a-9dfc-5ccbba2b7b19.webp	web/reports/fibery-web-reports-57619f39-3862-4f1a-9dfc-5ccbba2b7b19.webp	Client report chart wizard setup
 web/screens/fibery-web-screen-57f5d21c-5fae-4113-bcb4-7b28fb9e2d82.webp	web/navigation/fibery-web-navigation-57f5d21c-5fae-4113-bcb4-7b28fb9e2d82.webp	Trash Bin destination listing deleted items
 web/screens/fibery-web-screen-58c50b56-38eb-4419-b96e-01281bbc0ee5.webp	web/database/fibery-web-database-58c50b56-38eb-4419-b96e-01281bbc0ee5.webp	Rendered grid with row context menu (copy/export/delete)
-web/screens/fibery-web-screen-59b68706-022a-4537-892a-e73b87951b1d.webp	web/dialogs/fibery-web-dialogs-59b68706-022a-4537-892a-e73b87951b1d.webp	Delete-all-data confirmation modal for a Space
+web/screens/fibery-web-screen-59b68706-022a-4537-892a-e73b87951b1d.webp	web/dialogs/fibery-web-dialogs-59b68706-022a-4537-892a-e73b87951b1d.webp	Delete-Space confirmation modal in the deleting (in-progress) state
 web/screens/fibery-web-screen-59bac0c5-d2c9-4cca-82e5-3d59ffefab0c.webp	web/views/fibery-web-views-59bac0c5-d2c9-4cca-82e5-3d59ffefab0c.webp	Rendered Problems grid table
 web/screens/fibery-web-screen-59e6b9fe-673a-4672-9563-f455d6f34183.webp	web/states/fibery-web-states-59e6b9fe-673a-4672-9563-f455d6f34183.webp	Inbox empty state illustration and message
 web/screens/fibery-web-screen-5a10d91e-980d-410f-9ba3-036b1def6a58.webp	web/views/fibery-web-views-5a10d91e-980d-410f-9ba3-036b1def6a58.webp	Rendered timeline/Gantt view with lane/type dropdown
