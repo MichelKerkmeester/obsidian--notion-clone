@@ -45,7 +45,7 @@ export interface ConfirmSheetBodyOptions {
  */
 export function buildConfirmSheetBody(host: HTMLElement, options: ConfirmSheetBodyOptions): void {
   host.createEl("h3", { text: options.title });
-  // db-panel-row is the sheet grammar's shared row shape (044): on a phone, the shell marks
+  // db-panel-row is the sheet grammar's shared row shape: on a phone, the shell marks
   // this modal's own root as the .note-database-container the row's padding rule is scoped
   // under, so the confirm's body reads as a padded row like every other phone sheet's content
   // rather than as bare, unpadded text.

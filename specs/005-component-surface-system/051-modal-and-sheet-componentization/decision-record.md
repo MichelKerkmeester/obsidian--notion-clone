@@ -482,6 +482,17 @@ than absorbed silently. Two readings are open and only the operator can choose:
 
 Reading 1 is applied until the operator says otherwise.
 
+**E4 is closed, 2026-09-06 (~07:50). The operator ruled, verbatim: "No confirm for single delete,
+Undo toast."** The confirm is kept for bulk delete and for anything not undoable. This is neither of
+the two readings above: it takes Anytype's pattern without the data-model change reading 2 required,
+by making the single delete reversible at the interaction layer — an undo toast — rather than at the
+storage layer. The hold this ADR flagged is discharged; the row stops waiting on the operator.
+
+**Not implemented here.** This leg exported the confirm primitive and closed the census; removing
+the single-delete confirm and adding the undo toast is a separate leg's work, and nothing in the
+code shipped alongside this ruling acts on it. The primitive is what a bulk-delete and
+not-undoable confirm will keep using.
+
 **One value was over-generalised rather than under-adopted, and is corrected in the same pass.**
 `design-trueup.md` §6 C10: Anytype ships **two** phone frame shapes, not one. A **floating card** at
 device L 24 / R 1181 / bottom 2597 — 8.0 / 8.3 / 8.3pt with a 16pt radius, on 22 files — and a

@@ -519,9 +519,18 @@ excluded on its own recorded terms.
       call the exported `confirmWithModal` wrapper, not a hand-built dialog — `rg -c
       "confirmWithModal\(" src/ --type ts` finds every one of them, and none builds its own
       `.db-modal-actions` row. What T013 closes is the primitive underneath that wrapper; T014's own
-      remaining threshold — a census of hand-built confirm markup — reads **0** in `src/`:
-      `rg -n "db-modal-actions" src/ --type ts` resolves to exactly the one declaration inside
-      `confirm-sheet.ts` plus its one consumer, `confirm-modal.ts`. The generic modal-child stand-in
+      remaining threshold — a census of generic confirm bodies — reads **1** in `src/`:
+      `confirm-sheet.ts:54` builds it and `confirm-modal.ts` is its only consumer.
+      **Corrected on landing, 2026-09-06**: this row originally cited
+      `rg -n "db-modal-actions" src/ --type ts` as resolving to that one declaration and that one
+      consumer, and it does not — `grep -rn "db-modal-actions" src --include="*.ts"` returns seven
+      producers (`main.ts:2986`, `invalid-time-events-modal.ts:184`,
+      `csv-markdown-export-modal.ts:44`, `computed-frontmatter-cleanup-modal.ts:91`,
+      `property-type-conflict-modal.ts:136`, `create-linked-view-modal.ts:100`, plus
+      `confirm-sheet.ts:54`). The six others each build a button row for a modal carrying its own
+      body — an import picker, a bulk quick-fix list, export options, a cleanup list, a conflict
+      list, a name field — so none is a generic yes/no confirm and the threshold still holds; the
+      class is a shared button-row shape, never the confirm's marker. The generic modal-child stand-in
       the stacked-pair registry's `openHostModalChild` builds (`tools/live/sheet-grammar.mjs`) is
       unrelated — it fakes "some modal child" for two different stacking scenarios (`Confirm` and
       `Import`) and was never a confirm implementation to begin with; it carries no actions row and

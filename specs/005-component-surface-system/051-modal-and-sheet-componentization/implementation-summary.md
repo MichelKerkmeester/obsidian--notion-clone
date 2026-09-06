@@ -353,8 +353,12 @@ call site (`database-view.ts`, `embedded-database-renderer.ts`, `column-operatio
 `row-menu.ts`, `cell-editor-option.ts`, `status-options-modal.ts`, `formula-modal.ts`,
 `settings.ts`) already called the exported `confirmWithModal` wrapper, not a hand-built dialog. What
 T013 closed was the primitive underneath that wrapper being real and exported; T014's own remaining
-threshold — a count of hand-built confirm markup in `src/` — reads **1** (`confirm-sheet.ts`'s own
-declaration, `confirm-modal.ts` its one consumer), read via `rg -n "db-modal-actions" src/ --type ts`.
+threshold — a count of generic confirm bodies in `src/` — reads **1**: `confirm-sheet.ts:54` builds
+it, `confirm-modal.ts` is its only consumer. Corrected on landing: the leg cited
+`rg -n "db-modal-actions" src/ --type ts` for that count, and the class is not a confirm marker —
+`grep -rn "db-modal-actions" src --include="*.ts"` returns seven producers, the other six being
+button rows for modals with their own bodies (import picker, bulk quick-fix, export options,
+cleanup list, conflict list, name field), none of them a yes/no confirm.
 
 **T015 — one more permanent row, and the other three candidates dispositioned.** Of the four gaps
 the last landing named still open: the **confirm grammar** closes with T013 above (fidelity, not a
