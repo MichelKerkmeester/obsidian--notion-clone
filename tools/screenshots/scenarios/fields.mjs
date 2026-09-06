@@ -297,10 +297,10 @@ export const FIELDS_SCENARIOS = [
 
         <div class="db-cell-edit-popover db-date-edit-popover db-date-value-popover" role="dialog" aria-label="Value">
           <div class="db-date-presets" role="group" aria-label="Quick dates">
-            <button type="button" class="db-date-preset">Today</button>
-            <button type="button" class="db-date-preset">Tomorrow</button>
-            <button type="button" class="db-date-preset">Next week</button>
-            <button type="button" class="db-date-preset">Clear</button>
+            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Today</span><span class="db-date-preset-subline">Aug 21</span></button>
+            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Tomorrow</span><span class="db-date-preset-subline">Aug 22</span></button>
+            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Next week</span><span class="db-date-preset-subline">Aug 28</span></button>
+            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Clear</span></button>
           </div>
           <div class="db-date-segments">
             <input class="db-date-seg" maxlength="4" inputmode="numeric" placeholder="YYYY" aria-label="YYYY" value="2026">
@@ -344,10 +344,10 @@ export const FIELDS_SCENARIOS = [
 
         <div class="db-cell-edit-popover db-date-edit-popover db-date-value-popover is-datetime" role="dialog" aria-label="Value">
           <div class="db-date-presets" role="group" aria-label="Quick dates">
-            <button type="button" class="db-date-preset">Today</button>
-            <button type="button" class="db-date-preset">Tomorrow</button>
-            <button type="button" class="db-date-preset">Next week</button>
-            <button type="button" class="db-date-preset">Clear</button>
+            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Today</span><span class="db-date-preset-subline">Aug 21</span></button>
+            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Tomorrow</span><span class="db-date-preset-subline">Aug 22</span></button>
+            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Next week</span><span class="db-date-preset-subline">Aug 28</span></button>
+            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Clear</span></button>
           </div>
           <div class="db-date-segments">
             <input class="db-date-seg" maxlength="4" inputmode="numeric" placeholder="YYYY" aria-label="YYYY" value="2026">
@@ -441,17 +441,41 @@ export const FIELDS_SCENARIOS = [
     id: "field-option-color-picker",
     title: "Option colour picker",
     group: "fields",
-    width: 156,
+    width: 224,
     fixtureOf: "constructed-option-color-picker",
-    sources: ["src/views/option-color-picker.ts", "src/data/status-colors.ts"],
-    note: "Sixteen swatches in the persisted order, the current colour ringed and carrying a trailing tick — the ring is never the only signal a swatch is current. Opened from the colour dot in the select editor and created on document.body.",
+    sources: ["src/views/option-color-picker.ts", "src/views/popover-host.ts", "styles.css"],
+    note: "A one-column labelled list (ADR-004) — sixteen rows in the persisted order, each a leading dot and its visible name, the current colour carrying the trailing tick every row in the family uses. Opened from the colour dot in the select editor and created on document.body. On a phone this is the family's own sheet, not the anchored popover: a header names the picker, and the same sixteen rows grow to the 44px floor.",
     captureCss: `.db-color-picker-popup { position: static !important; top: auto !important; left: auto !important; }`,
-    html: () => `
-      <div class="db-color-picker-popup" role="grid" aria-label="Custom">
-        ${COLORS.map((c) => `
-        <button type="button" role="gridcell" class="db-color-picker-swatch db-option-color-${c}${c === "blue" ? " is-selected" : ""}"
-          title="${c}" aria-label="${c}" aria-pressed="${c === "blue"}">${c === "blue" ? glyph(I.check) : ""}</button>`).join("")}
-      </div>`,
+    html: (device) => {
+      const isPhoneSheet = device?.id === "mobile";
+      const row = (c) => `
+        <button type="button" role="option" class="db-dropdown-option db-menu-item${c === "blue" ? " is-selected" : ""}" aria-selected="${c === "blue"}">
+          <span class="db-color-picker-row-dot db-option-color-${c}" aria-hidden="true"></span>
+          <span class="db-dropdown-option-label db-menu-item-label">${c.charAt(0).toUpperCase()}${c.slice(1)}</span>
+          <span class="db-dropdown-option-check db-menu-item-check">${c === "blue" ? glyph(I.check) : ""}</span>
+        </button>`;
+      const rows = COLORS.map(row).join("");
+      if (!isPhoneSheet) {
+        return `
+      <div class="db-color-picker-popup" role="listbox" aria-label="Custom">
+        ${rows}
+      </div>`;
+      }
+      // The phone sheet `mountPickerSheetHeader` builds: a title-and-close header ahead of the
+      // rows, inside the family's own `.db-mobile-bottom-sheet` chrome — the shape the previously
+      // registered pair never photographed (`field-option-color-picker-mobile-light.png` was
+      // shape-identical to its desktop twin before this fixture branched on device).
+      return `
+      <div class="db-color-picker-popup db-mobile-bottom-sheet" role="listbox" aria-label="Custom">
+        <div class="db-panel-header">
+          <span class="db-panel-title">Color</span>
+          <button type="button" class="db-sheet-close" aria-label="Close">${glyph('<path d="M18 6 6 18"/><path d="m6 6 12 12"/>')}</button>
+        </div>
+        <div class="db-color-picker-body db-panel-row">
+          ${rows}
+        </div>
+      </div>`;
+    },
   },
   {
     id: "field-relation-values",

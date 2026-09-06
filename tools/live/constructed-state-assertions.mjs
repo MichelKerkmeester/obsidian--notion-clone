@@ -109,7 +109,8 @@ window.__stateMarkers = (scenario) => {
     datePicker: !!container.querySelector(".db-date-value-popover .db-calendar-mini-grid"),
     datePickerDatetime: !!container.querySelector(".db-date-value-popover.is-datetime .db-hour-seg"),
     iconPicker: !!doc.querySelector(".db-icon-picker-popover .db-icon-picker-colors"),
-    colorPicker: !!doc.querySelector(".db-color-picker-popup .db-color-picker-swatch.is-selected"),
+    // A labelled list, not a swatch grid — the current row carries the trailing check.
+    colorPicker: !!doc.querySelector(".db-color-picker-popup .db-dropdown-option.is-selected .db-dropdown-option-check"),
     relationValues: !container.querySelector("table")
       && container.querySelectorAll(".db-relation-values .db-relation-link").length >= 2,
     fileFields: !!container.querySelector(".db-file-tags .db-file-tag-badge")
@@ -120,7 +121,15 @@ window.__stateMarkers = (scenario) => {
     recordIconColumn: !!container.querySelector(".db-record-icon-emoji")
       && !!container.querySelector(".db-record-icon.is-default"),
     statusColors: statusColors.size >= 16,
-    dropdownPopover: !!container.querySelector(".db-dropdown-popover .db-dropdown-option.is-disabled"),
+    dropdownPopover: !!container.querySelector(".db-dropdown-popover .db-dropdown-option.is-disabled")
+      // The selected row's own check must be present AND trailing — lastElementChild === check
+      // fails both for a row with no check at all (negative control: a checkless row cannot pass by
+      // matching nothing) and for a row whose check still renders first.
+      && (() => {
+        const selectedRow = container.querySelector(".db-dropdown-popover .db-dropdown-option.is-selected");
+        const check = selectedRow?.querySelector(".db-dropdown-option-check") ?? null;
+        return !!check && selectedRow?.lastElementChild === check;
+      })(),
     emptyStateCard: !!container.querySelector(".db-empty-card .db-empty-card-title"),
     columnHeaderTriggers: !!container.querySelector(".db-column-menu-trigger")
       && !!container.querySelector(".db-resize-handle"),

@@ -257,9 +257,10 @@ export const CORE_SCENARIOS = [
     sources: ["src/views/dropdown-field.ts"],
     note: "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
     html: () => {
-      // The option's real shape, from `openDropdownPopover`: a check span, then a text wrapper
-      // holding the label. The row is `display: grid` with `grid-template-columns: 16px minmax(0,
-      // 1fr)`, so the check takes the first track and the text takes the second.
+      // The option's real shape, from `openDropdownPopover`: a text wrapper holding the label,
+      // then a check span, last. The row is `display: grid` with `grid-template-columns:
+      // minmax(0, 1fr) 16px`, so the text takes the leading track and the check takes the
+      // trailing one — the check is the row's last element child, at the 16px right inset (G14).
       //
       // Without the check, the LABEL landed in the 16px track. Every option rendered as one
       // character and an ellipsis — "S…", "A…", "R…" — in a popover over a thousand pixels wide,
@@ -276,8 +277,8 @@ export const CORE_SCENARIOS = [
       // for the matching value, so the fixture claimed a selected state with nothing marking it.
       const option = (label, extra = "", attrs = "", checked = false) => `
           <button type="button" class="${`db-dropdown-option db-menu-item ${extra}`.trim()}" ${attrs}>
-            <span class="db-dropdown-option-check db-menu-item-check">${checked ? ICONS.check : ""}</span>
             <span class="db-dropdown-option-text db-menu-item-label"><span class="db-dropdown-option-label">${label}</span></span>
+            <span class="db-dropdown-option-check db-menu-item-check">${checked ? ICONS.check : ""}</span>
           </button>`;
       // The desktop panel opens with its query field first and the options in their own scroll
       // container beneath it — every desktop menu is searchable, so a three-option list carries

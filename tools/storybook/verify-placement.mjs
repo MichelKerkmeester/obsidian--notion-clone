@@ -10076,10 +10076,9 @@ await section("a press on the backdrop dismisses the sheet under it", async () =
 //
 // A capture reviewer reported that `gray` and `slate` render identically, and that `brown` and
 // `orange` collapse onto one swatch in the dark theme. Both are true at the token level — but a
-// reviewer's reading is a hypothesis, and the mitigations matter: these are `color-mix` values that
-// resolve differently per theme, and the swatch paints the FOREGROUND token rather than the
-// background, so "the chips look the same" and "the swatches look the same" are different claims
-// about different properties.
+// reviewer's reading is a hypothesis, and the mitigation matters: these are `color-mix` values
+// that resolve differently per theme, and the check below reads the computed pair rather than
+// trusting the token names.
 //
 // So every entry is rendered in both themes and its computed pair is read. A palette that offers a
 // name the reader cannot distinguish from another cannot express the choice it is offering — which
@@ -10088,6 +10087,14 @@ await section("a press on the backdrop dismisses the sheet under it", async () =
 // BOTH PROPERTIES, BOTH THEMES. Two entries sharing a background while differing in foreground are
 // still distinguishable; two sharing both are not. The signature is the pair, and the run is per
 // theme because a collision can exist in one and not the other.
+//
+// THE SWATCH-GRID MEASUREMENT RETIRED WITH THE GRID IT MEASURED. The colour picker now uses a
+// one-column labelled list (`.db-dropdown-option`) instead of the sixteen-swatch grid, precisely
+// because two near-identical hues are not reliably told apart by colour alone — the row's leading
+// dot is decorative once the visible name sits beside it, so a swatch's own distinctness is no
+// longer a correctness question this file needs to answer, and `.db-color-picker-swatch` carries
+// no styling for this probe to read any more. The chip check below (`.db-status-chip`, painted on
+// every view's own badges, not the picker) is unrelated to the picker's row shape and stays.
 
 const paletteResults = [];
 
@@ -10111,42 +10118,15 @@ await section("sixteen named colours are sixteen different colours", async () =>
       const entries = NAMES.map((name) => {
         const chip = probe.createSpan({ cls: `db-status-chip db-option-color-${name}` });
         const style = getComputedStyle(chip);
-        return {
-          name,
-          bg: style.backgroundColor,
-          fg: style.color,
-          // The swatch in the pickers paints the FOREGROUND token, so it is read as its own
-          // property — a pair can differ in chip fill and still show two identical swatches.
-          swatch: style.backgroundColor,
-        };
-      });
-      // Swatches are a separate element class; read them the same way.
-      const swatches = NAMES.map((name) => {
-        const sw = probe.createSpan({ cls: `db-color-picker-swatch db-option-color-${name}` });
-        return { name, fill: getComputedStyle(sw).backgroundColor };
+        return { name, bg: style.backgroundColor, fg: style.color };
       });
       probe.remove();
-      return { entries, swatches };
+      return { entries };
     };
 
     const dark = readTheme("theme-dark");
     const light = readTheme("theme-light");
     document.body.className = "";
-
-    // The picker's own wrap. Sixteen swatches in a popover that fits five per row is three full
-    // rows and an orphan, which reads as an accident rather than a layout — and the leftover track
-    // pushes the block off-centre in its own frame. Measured by row, from the rendered boxes.
-    const popup = document.body.createDiv({ cls: "db-color-picker-popup db-surface" });
-    for (const name of NAMES) popup.createSpan({ cls: `db-color-picker-swatch db-option-color-${name}` });
-    const tops = [...popup.querySelectorAll(".db-color-picker-swatch")]
-      .map((el) => Math.round(el.getBoundingClientRect().top));
-    const rowCounts = [...tops.reduce((map, top) => map.set(top, (map.get(top) || 0) + 1), new Map()).values()];
-    const box = popup.getBoundingClientRect();
-    const last = popup.lastElementChild.getBoundingClientRect();
-    const style = getComputedStyle(popup);
-    const pad = parseFloat(style.paddingRight) || 0;
-    const slack = Math.round(box.right - pad - last.right);
-    popup.remove();
 
     const collisions = (rows, key) => {
       const seen = new Map();
@@ -10163,10 +10143,7 @@ await section("sixteen named colours are sixteen different colours", async () =>
       names: NAMES.length,
       darkChips: collisions(dark.entries, (r) => `${r.bg} / ${r.fg}`),
       lightChips: collisions(light.entries, (r) => `${r.bg} / ${r.fg}`),
-      darkSwatches: collisions(dark.swatches, (r) => r.fill),
-      lightSwatches: collisions(light.swatches, (r) => r.fill),
       sampleDark: dark.entries.slice(0, 2).map((r) => `${r.name}=${r.bg}/${r.fg}`).join(", "),
-      rowCounts, slack,
     };
   });
 
@@ -10179,16 +10156,8 @@ await section("sixteen named colours are sixteen different colours", async () =>
       + `same empty value would report sixteen collisions, and one that resolved none would report `
       + `zero — so the sample is printed rather than assumed`);
 
-  record("the picker's swatches fill every row they start",
-    m.rowCounts.length > 1 && new Set(m.rowCounts).size === 1,
-    `swatches per row: [${m.rowCounts.join(", ")}], and the last one ends ${m.slack}px short of the `
-      + `popover's content edge. Sixteen wrapping five to a row is three full rows and an orphan, `
-      + `which reads as an accident rather than a layout and leaves the block off-centre in its own `
-      + `frame. Four per row is the only count that divides sixteen evenly`);
-
   for (const [where, found] of [
     ["chip in dark", m.darkChips], ["chip in light", m.lightChips],
-    ["swatch in dark", m.darkSwatches], ["swatch in light", m.lightSwatches],
   ]) {
     record(`no two palette entries share a ${where}`,
       found.length === 0,

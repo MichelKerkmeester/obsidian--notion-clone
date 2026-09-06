@@ -3420,11 +3420,15 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "color-picker"));
     if (results[0].pass) {
       const popup = container.ownerDocument.querySelector(".db-color-picker-popup");
+      // A one-column labelled list built from the family's own `.db-dropdown-option`
+      // row, not a swatch grid — sixteen rows, zero swatches, the current colour's row selected
+      // with its trailing check.
       results.push({
-        name: "the colour picker drew its sixteen swatches with the current one selected",
-        pass: Boolean(popup) && popup.querySelectorAll(".db-color-picker-swatch").length === 16
-          && Boolean(popup?.querySelector(".db-color-picker-swatch.is-selected")),
-        detail: popup ? `${popup.querySelectorAll(".db-color-picker-swatch").length} swatch(es)` : "no .db-color-picker-popup",
+        name: "the colour picker drew its sixteen labelled rows with the current one selected",
+        pass: Boolean(popup) && popup.querySelectorAll(".db-dropdown-option").length === 16
+          && popup!.querySelectorAll(".db-color-picker-swatch").length === 0
+          && Boolean(popup?.querySelector(".db-dropdown-option.is-selected .db-dropdown-option-check")),
+        detail: popup ? `${popup.querySelectorAll(".db-dropdown-option").length} row(s)` : "no .db-color-picker-popup",
       });
     }
   } else if (scenario.renderer === "relation-values") {
