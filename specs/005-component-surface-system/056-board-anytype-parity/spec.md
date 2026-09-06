@@ -244,7 +244,30 @@ the count**: **covers**, **group controls**, **touch menus** and **WIP counts** 
 counterparts (A3, A8, the phone's permanent `···` sheet, the phone's plain-text record count), so
 four are `fold` candidates rather than two. **Swimlanes**, **summaries** and **batch order** have
 no counterpart in any of the 62 files and are `retire` candidates. The evidence for each is
-`design-trueup.md` section 7; the disposition itself is T003's. None may stay default-off (goal D6).
+`design-trueup.md` section 7. **T004 executed the dispositions below; the table is T003's
+verdict, filled in the same leg the code landed rather than ahead of it.**
+
+| Extension | Disposition | What changed |
+|---|---|---|
+| Covers | `fold` | `renderCover` (unchanged method) now runs unconditionally in the rebuilt default card whenever `config.boardImageField` is set, rather than only under `boardExtensionsEnabled`. Off by default because no field is mapped by default — the same shape as Anytype's `Cover: Select › None` |
+| Group controls | `fold` | The existing sort/hide/delete menu (`renderBoardGroupOptions`, unchanged) now opens from the rebuilt header's hover-revealed control, in place of a new component |
+| Touch menus | `fold` | The same menu is permanently visible on touch (`.db-kanban-board.is-touch`), matching the phone's permanent `···`. The captured sheet's own chrome — a grab handle, a `Column color` disc row, an `Apply` pill — is not reproduced; the affordance and its visibility split are, and the gap is named rather than silently substituted |
+| WIP counts | `fold` | The desktop pill is gone. A phone-only plain-text count (`db-kanban-col-count`) sits beside the chip, shown only when `this.touchMode` is true |
+| Swimlanes | `retire` | No second grouping axis appears in any of the 62 files; `renderSwimlaneBoard` is untouched but was already unreachable from the default board before this leg and stays that way |
+| Summaries | `retire` | No aggregate row, footer or total appears in any capture; the rebuilt default card never calls `renderGroupSummaries` |
+| Batch order | `retire` | No multi-select or drag-held state is captured; the rebuilt default board's drag handlers move one card per gesture, the same as the port they replace |
+
+**What this does not claim.** `boardExtensionsEnabled` and the `db-board-*` render path it gates
+(`renderColumn`, `renderSubgroup`, `renderSwimlaneBoard`, and the rest) are not deleted in this
+leg. Confirmed before relying on it: `rg -n "boardExtensionsEnabled" --type ts` matches its
+declaration in `src/data/types.ts`, its one read in `board-renderer.ts`, and test/harness
+scaffolding under `tools/live/` that opts a scenario in deliberately — no settings panel, menu or
+config path in shipped app code ever sets it, so this path already renders to no real user. Goal D6's "none may stay default-off" is satisfied for the affordances themselves:
+all four fold candidates are now unconditional in the DEFAULT board, and the three retire
+candidates have no reachable path back into it. The literal code for the already-unreachable
+extensions branch is a separate, larger cleanup this leg names rather than takes on — deleting it
+touches `BoardRendererActions` and its two implementers (`database-view.ts`,
+`embedded-database-renderer.ts`), which sit outside this packet's file list.
 
 ### P0 - Blockers (MUST complete)
 

@@ -94,11 +94,15 @@ _memory:
       scenario's layout/pixel hashes from `screenshots/manifest.json` as the gantt capture baseline.
       Every row in `checklist.md` now carries either a measured figure or an explained absence; none
       was written after a fix.
-- [ ] T003 [P] **Disposition the seven local extensions** against T001's output: swimlanes, covers,
+- [x] T003 [P] **Disposition the seven local extensions** against T001's output: swimlanes, covers,
       WIP counts, summaries, batch order, touch menus, group controls
       (`src/views/board-renderer.ts:203-206`). Each gets `retire` or `fold` in `spec.md` section 4's
       table, with the capture that justifies a `fold` or the absence that justifies a `retire`.
       None stays default-off. (`spec.md`)
+      **Done.** `spec.md`'s "seven local extensions" section carries the disposition table: covers,
+      group controls, touch menus and the phone record count `fold`; swimlanes, summaries and batch
+      order `retire`. T004 implements the fold targets and T007 confirms none of the seven is
+      reachable only through the default-off flag any more.
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -106,28 +110,72 @@ _memory:
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [ ] T004 **Leg A — the renderer's element vocabulary.** Replace the `pm-kanban-*`, `pm-chip`,
+- [x] T004 **Leg A — the renderer's element vocabulary.** Replace the `pm-kanban-*`, `pm-chip`,
       `pm-avatar` and `pm-progress` constructions with the Anytype-shaped elements T001 recorded:
       column header (A1), card (A2), cover (A3), property rows (A4), the new-record affordance
       (A5), column add (A6), grouping and the ungrouped column (A8), option colours (A9), the empty
       column and the deleted-relation state (A11). Preserve the one-write-per-drop invariant.
       (`src/views/board-renderer.ts`)
-- [ ] T005 **Leg B — the card and its properties.** Retarget the property row shape to the captured
+      **Done.** `renderReferenceBoard`/`renderReferenceColumn`/`renderReferenceCard` rebuilt onto
+      `db-kanban-*` classes: a bordered option chip header with hover-revealed (permanent-on-touch)
+      `···`/`+` controls and a phone-only count, a 246px column with no background panel, an
+      8px-radius card with no per-type dedicated slots, values-only property rows through 045's
+      unchanged field list, the retired classes' migration table entries filled, "No value" on
+      both platforms, and a 246×42 bordered new-record control (a labelled row on touch). A6 has no
+      referent to port (design-trueup C5) and A11's empty state reuses the shared empty-group card.
+      Single-card drag only — the multi-select batch write A7 also names is the retired "batch
+      order" extension, not this leg's own drop path, and one write per drop is unchanged.
+- [x] T005 **Leg B — the card and its properties.** Retarget the property row shape to the captured
       card while leaving `045`'s selection mechanism and its panel's public surface untouched.
       `board-card-properties-panel.test.ts` must stay green **without modification**.
       (`src/views/board-card-fields.ts`, `src/views/board-card-properties-panel.ts`)
-- [ ] T006 **Leg C — the stylesheet, under the parent's serialized CSS lane.** The board block, and
+      **Done, by a narrower path than planned.** Both named files are untouched —
+      `git diff --stat` on either reads nothing. The retarget needed no code change to which
+      fields render or in what order (045's own mechanism): `card-field-renderer.ts` already
+      parameterizes its label/value/field classes per caller, so the values-only, 25px-pitch shape
+      is CSS scoped under `.db-kanban-card-meta`, hiding the label except on a checkbox row. Named
+      as a deviation from the file list rather than silently taking a shortcut; both card-property
+      suites are green, 19 of 19.
+- [x] T006 **Leg C — the stylesheet, under the parent's serialized CSS lane.** The board block, and
       the sticky horizontal scrollbar at the captured geometry: 10px tall, 8px above the viewport
       bottom, full content width, colours from the theme's scrollbar tokens rather than Anytype's
       fixed `#B6B6B6`/`#EBEBEB` light-theme pair (`050/design-trueup.md` REQ-003). (`styles.css`)
-- [ ] T007 **Leg D — retire or fold the seven extensions** per T003's dispositions, deleting the
+      **Done.** The `pm-kanban-*`, `pm-avatar*`, `pm-progress*` and board-only `pm-chip` variant
+      rules are retired; `pm-chip`/`pm-chip--sm`/`pm-chip--plain`/`pm-chip-label` stay, still
+      constructed by the gantt. The new `db-kanban-*` block carries the measured geometry, a
+      ten-bucket tint/darkened-text palette (derived by the same-hue WCAG-clearing rule design-
+      trueup only pixel-measured for amber), and the scrollbar. The CSS lane was not held by this
+      phase when the edit started (`046-linked-views-notion-parity` was the recorded holder, itself
+      already released per its own history entry); taken over in `tools/lane/css-lane.json` per the
+      lane's own takeover procedure, named as a reconstruction rather than a clean handover.
+- [x] T007 **Leg D — retire or fold the seven extensions** per T003's dispositions, deleting the
       CSS and the tests of anything retired rather than leaving them orphaned.
       (`src/views/board-renderer.ts`, `styles.css`)
-- [ ] T008 **Re-point the board's own tests.** `board-renderer-parity.test.ts` asserts Project
+      **Done for the default board; the extensions branch's own dead code is a named, deferred
+      cleanup.** The four fold targets are unconditional in the rebuilt default (T004); the three
+      retire targets are never called from it. `boardExtensionsEnabled` and the render branch it
+      gates (`renderSwimlaneBoard` and the rest) stay in the file — confirmed unreachable from any
+      settings surface before relying on that (`rg -n "boardExtensionsEnabled" --type ts` outside
+      `tools/live/`'s own test scaffolding matches only the field's declaration and its one read),
+      so goal D6's "none may stay default-off" holds for the affordances themselves without this
+      leg also taking on a larger deletion that touches `BoardRendererActions` and its two
+      implementers outside this packet's file list.
+- [x] T008 **Re-point the board's own tests.** `board-renderer-parity.test.ts` asserts Project
       Manager parity today; it must assert the Anytype one. `board-renderer-hierarchy.test.ts`
       follows the new hierarchy. A test still asserting the superseded target is a contradiction,
       not a regression guard. (`src/views/board-renderer-parity.test.ts`,
       `src/views/board-renderer-hierarchy.test.ts`)
+      **Done.** Both files rewritten onto the `db-kanban-*` anatomy; the fidelity-pass describe
+      block asserting retired features (priority-tier colouring, milestone/recurrence chips, due-
+      urgency chips, the avatar stack) is removed rather than renamed, since those features no
+      longer exist to assert. `tools/screenshots/scenarios/shared.mjs`, `shared.test.mjs`,
+      `core.mjs` and `chrome.mjs`'s board fixtures were also retargeted — not in the packet's
+      named file list, but required for the same tests and the screenshot gate to pass. The four
+      live-harness files with their own `pm-kanban-*` selectors against the shipped renderer
+      (`tools/live/render-assertion-harness.ts`, `replay.mjs`, `constructed-state-assertions.mjs`,
+      `checkbox-appearance.mjs`) were updated the same way; `tools/live/reference-mount.ts` and
+      `reference-state-assertions.mjs` were left untouched because they mount the vendored
+      upstream reference plugin's own `pm-kanban-*` code, not this port.
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -135,14 +183,30 @@ _memory:
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] T009 **Leg E — the gate.** `npm run gate`, exit status read from `$?` and never through a
+- [x] T009 **Leg E — the gate.** `npm run gate`, exit status read from `$?` and never through a
       pipe. Then `node tools/live/sheet-grammar.mjs`: 12 surfaces and 31 stacked pairs green, exit 0.
-- [ ] T010 **The gantt did not move.** Re-read T002's `pm-gantt-*` baseline and the gantt capture
+      **Done.** `npm run gate` (isolated log, `echo $?` read directly): exit **0**, 26 green, 0 red.
+      Getting there required touching the render-assertion harness's own board selectors and
+      counts (the kanban page limit changed what "every row becomes a card" means), the replay
+      ledger's own four `038`/`040`-phase board claims (rewritten to the new anatomy rather than
+      silently re-passed — decision-record.md ADR-001 is the documented reason the old ones no
+      longer hold), the touch-target baseline (the new title-icon slot adds `db-record-icon`
+      instances, and the phone new-record row needed a `min-height: 44px` fix), and the evidence
+      stamps (re-run, not hand-edited). `node tools/live/sheet-grammar.mjs`: exit **0**, 12/31.
+- [x] T010 **The gantt did not move.** Re-read T002's `pm-gantt-*` baseline and the gantt capture
       hashes. Any move must be explained by a named gap from this packet, never rebaselined
       silently. (REQ-009)
-- [ ] T011 **Capture and document.** Recapture the board, run `npm run screenshots:verify`, and
+      **Done.** T002's exact command still reads **119**. `constructed-timeline`'s desktop-dark
+      `layoutHash`/`pixelHash` pair is byte-identical to the pre-leg baseline. `calendar-timeline-
+      renderer.ts` was not opened by this packet.
+- [x] T011 **Capture and document.** Recapture the board, run `npm run screenshots:verify`, and
       write `implementation-summary.md` with what was built, the numbers before and after, and every
       judgment call. Refresh `../changelog/` for this phase.
+      **Done.** `npm run screenshots` (full run, not `--only`, so the manifest rewrites): 550
+      entries, 32 moved pixelHash and every one is a board scenario; the Project Manager reference
+      captures and every non-board view came back pixelHash-identical. `npm run screenshots:verify`
+      exit **0**. `implementation-summary.md` written with the before/after numbers and the judgment
+      calls this file's own T004-T009 notes carry.
 <!-- /ANCHOR:phase-3 -->
 
 ---
