@@ -166,7 +166,7 @@ _memory:
 - [ ] T010 **Follow the tests.** `calendar-renderer.test.ts` follows the retargeted shape.
       `calendar-keyboard-navigation.test.ts` and `calendar-search-placement.test.ts` must stay green
       **without modification** — REQ-010's guard. (`src/views/calendar-renderer.test.ts`)
-- [ ] T015 **Close the seven residuals a post-landing capture read measured.** Legs A and C landed
+- [x] T015 **Close the seven residuals a post-landing capture read measured.** Legs A and C landed
       and were then read back against the references by an independent pass; seven differences
       survive, each measured on a named capture rather than noticed. None is a reason to unwind the
       retarget and none is silently accepted. **R1** and **R2** are one defect seen from two sides
