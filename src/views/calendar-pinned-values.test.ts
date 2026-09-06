@@ -1,0 +1,85 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    calendar-pinned-values
+// COMPONENT: pins the calendar's own measured values so a stylesheet edit that
+//            changes one fails here, not just as "styles.css moved" in a lane
+// ───────────────────────────────────────────────────────────────────
+//
+// The CSS lane that guards styles.css detects that the file changed and asks
+// a reader to recapture and review — it has no opinion on WHAT changed. That
+// is the right division of labour for most of a nineteen-thousand-line
+// stylesheet, but a handful of the calendar's own values were each measured
+// against a reference capture at a specific number (a row height, a rule
+// colour, a chip's height and radius, the today marker's size) and are cheap
+// to pin directly: read the rule's own text out of styles.css and assert the
+// value literally, so a future edit that quietly widens a chip or drops a
+// rule colour turns this file red at `npm test` speed, before anyone opens an
+// image.
+//
+// Deliberately narrow: this is not a CSS parser, and does not try to be one.
+// Each assertion locates one named selector's own `{ ... }` block by a plain
+// string search and reads the one declaration it cares about out of that
+// block — enough to catch the value moving, not enough to be a general
+// stylesheet test harness.
+
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS & HELPERS
+// ───────────────────────────────────────────────────────────────────
+
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { describe, expect, it } from "vitest";
+
+const STYLES = readFileSync(resolve(__dirname, "../../styles.css"), "utf-8");
+
+/** The declaration block for the first selector whose text matches `selector`
+ *  exactly (as it appears in the stylesheet, including combinators), or
+ *  throws — a selector that no longer exists is exactly the drift this file
+ *  exists to catch, so a missing match must fail loudly rather than pass an
+ *  empty string through every downstream `toContain`. */
+function ruleBody(selector: string): string {
+  const start = STYLES.indexOf(`${selector} {`);
+  if (start === -1) throw new Error(`calendar-pinned-values: selector not found verbatim: ${selector}`);
+  const braceOpen = STYLES.indexOf("{", start);
+  const braceClose = STYLES.indexOf("}", braceOpen);
+  return STYLES.slice(braceOpen + 1, braceClose);
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 2. TESTS
+// ───────────────────────────────────────────────────────────────────
+
+describe("calendar pinned values — measured against the Anytype month grid capture", () => {
+  it("pins the month row's default height at 136px", () => {
+    const body = ruleBody(".note-database-container .db-calendar-month-week");
+    expect(body).toContain("var(--db-calendar-day-min-height, 136px)");
+  });
+
+  it("pins the day-cell rule colour to the measured #EBEBEB / #292929 pair", () => {
+    const light = ruleBody(".note-database-container .db-calendar-month-week > .db-calendar-day");
+    expect(light).toContain("border-right: 1px solid #EBEBEB");
+    expect(light).toContain("border-bottom: 1px solid #EBEBEB");
+
+    const dark = ruleBody(".theme-dark .note-database-container .db-calendar-month-week > .db-calendar-day");
+    expect(dark).toContain("border-right-color: #292929");
+    expect(dark).toContain("border-bottom-color: #292929");
+  });
+
+  it("pins the flat chip's 20px desktop pitch and square corners", () => {
+    const body = ruleBody(".note-database-container .db-calendar-month-segment");
+    expect(body).toContain("height: 20px");
+    expect(body).toContain("border-radius: 0");
+    expect(body).toContain("background: none");
+  });
+
+  it("pins the phone chip's 44px touch-floor override", () => {
+    const body = ruleBody(".is-phone .note-database-container .db-calendar-month-segment");
+    expect(body.replace(/\s+/g, " ").trim()).toBe("height: 44px;");
+  });
+
+  it("pins the today marker's 26x24px size and #216DFA fill", () => {
+    const body = ruleBody(".note-database-container .db-calendar-day.is-today .db-calendar-day-number");
+    expect(body).toContain("width: 26px");
+    expect(body).toContain("height: 24px");
+    expect(body).toContain("background: #216DFA");
+  });
+});
