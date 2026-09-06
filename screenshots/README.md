@@ -1223,6 +1223,16 @@ The shipped month grid anchored on the bench's event dates, one chip carrying a 
 
 Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
+### Calendar month view, unscheduled chip and a multi-day chip (constructed)
+
+The shipped month grid with one row carrying no date (the header's "Unscheduled · N" chip) and one row spanning several days (a multi-day all-day chip), the two states the bench shape alone never draws.
+
+| dark | light |
+|---|---|
+| ![constructed-calendar-month-unscheduled dark](notion-clone/views/constructed-calendar-month-unscheduled-mobile-dark.png) | ![constructed-calendar-month-unscheduled light](notion-clone/views/constructed-calendar-month-unscheduled-mobile-light.png) |
+
+Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+
 ### Calendar week view (constructed)
 
 The shipped week time grid, scrolled to the workday by the renderer's own post-render correction.
