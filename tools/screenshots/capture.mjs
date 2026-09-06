@@ -20,7 +20,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { chromium } from "playwright-core";
-import { mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from "node:fs";
+import { mkdirSync, writeFileSync, readFileSync, readdirSync, existsSync, rmSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -49,11 +49,30 @@ import { pixelHash } from "./pixel-hash.mjs";
 // subject, that stops being true and this page needs the leaf.
 //
 // Paths are repo-relative because that is what `fingerprint` and the freshness check both expect.
+//
+// `scenarios.mjs` is a sixty-line barrel: every fixture's markup lives in the modules it
+// re-exports, so listing only the barrel fingerprinted the index and not the pictures. A fixture
+// could be rewritten and every capture of it still reported fresh. The directory is read rather
+// than transcribed because the failure being fixed IS a module the list did not know about, and a
+// hand-kept list reproduces it the next time one is added. Tests are excluded: they assert about
+// the fixtures, they do not render them.
+//
+// This does fan a fixture edit out across the whole corpus, which is the cry-wolf cost the note
+// above weighs for the Storybook preview. It is accepted here for two reasons the preview does
+// not share: these modules ARE read by this file, and the barrel already carried the same
+// fan-out while fingerprinting none of the markup — so this trades a check that was quiet when
+// it should have spoken for one that is loud, and a full run costs three minutes.
+const SCENARIO_MODULES = readdirSync(fileURLToPath(new URL("./scenarios/", import.meta.url)))
+  .filter((name) => name.endsWith(".mjs") && !name.endsWith(".test.mjs"))
+  .sort()
+  .map((name) => `tools/screenshots/scenarios/${name}`);
+
 const CAPTURE_INPUTS = [
   "styles.css",
   "tools/screenshots/theme.css",
   "tools/screenshots/runtime-vars.css",
   "tools/screenshots/scenarios.mjs",
+  ...SCENARIO_MODULES,
   "tools/screenshots/capture.mjs",
 ];
 

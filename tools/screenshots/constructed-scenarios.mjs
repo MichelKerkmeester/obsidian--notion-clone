@@ -290,7 +290,9 @@ export async function mountConstructed(page, device, theme, spec) {
         if (overflowX === "auto" || overflowX === "scroll") { scrollHost = el; break; }
         if (el === embed) break;
       }
-      // AC-001's card furniture, read off the shipped stylesheet rather than counted by eye.
+      // The embed's card furniture — border, radius, padding — read off the shipped stylesheet
+      // rather than counted by eye, so the width comparison below subtracts what the card
+      // actually costs instead of a number that drifts the moment a rule changes.
       const embedStyle = getComputedStyle(embed);
       const furniture = {
         borderTopWidth: parseFloat(embedStyle.borderTopWidth),
