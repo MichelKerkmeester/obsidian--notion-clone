@@ -78,13 +78,21 @@ const CODE_OPERATOR = /=>|[^=!<>]=[^=]|\+\+|--/;
 // `specs/context` is deliberately unmatched — it is a durable, non-packet
 // path (a symlinked vendored-reference fixture, not a spec doc that rots),
 // so the spec-path pattern requires the digit a real packet path starts with.
+//
+// The packet-id pattern refuses a preceding digit or comma because a
+// comma-grouped measurement ends in the same three characters a packet id
+// starts with: "a 2,000-row table" and "a 19,000-line stylesheet" both carry
+// a literal `000-` followed by a lowercase word, and this repo's prose
+// already writes both. Without the guard the lane would demand an author
+// reword a legitimate number, which trains people to route around the check
+// rather than to drop the ephemeral id it exists to catch.
 const ARTIFACT_ID_PATTERNS = [
   { kind: "task id", re: /\bT\d{3}\b/ },
   { kind: "ADR id", re: /\bADR-\d+\b/ },
   { kind: "REQ id", re: /\bREQ-\d+\b/ },
   { kind: "CHK id", re: /\bCHK-\d+\b/ },
   { kind: "AC id", re: /\bAC-\d+\b/ },
-  { kind: "packet id", re: /\b0\d{2}-[a-z][a-z0-9-]*\b/ },
+  { kind: "packet id", re: /(?<![\d,])\b0\d{2}-[a-z][a-z0-9-]*\b/ },
   { kind: "packet number used as a label", re: /\b0\d{2}'s\b/ },
   { kind: "packet number used as a label", re: /\bper\s+0\d{2}\b/i },
   { kind: "spec path", re: /\bspecs\/\d{3}[a-z0-9-]*\b/i },
