@@ -170,6 +170,30 @@ export const SHELL_ENTER_MS = 200;
 export const SHELL_EXIT_MS = 150;
 
 // ───────────────────────────────────────────────────────────────────
+// 4b. THE DESKTOP SIDE SHEET
+// ───────────────────────────────────────────────────────────────────
+//
+// A fourth desktop shape, beside the modal, the anchored popover and the fullscreen workbench —
+// a full-height panel docked to the pane's right edge, for a surface whose content is a form too
+// long for an anchored dropdown's own height cap. The operator's report, 2026-09-06: "this
+// dropdown on desktop is horrible … should probably become a sheet". The class is a marker a
+// consumer's own panel opts into; this module does not mount or position one, because the two
+// consumers this shape exists for (today: the database settings panel) already own a render loop
+// that decides when their panel is visible at all.
+
+/** Stamped on a consumer's own panel element to opt into the side-sheet CSS shape. */
+export const SHELL_SIDE_SHEET_CLASS = "db-shell-side-sheet";
+
+/**
+ * Measured off Anytype's own right-hand object panel — `anytype-menu-object-properties-panel-
+ * dark-full.png`, border column at device x 1832 of a 2168px window, 336px to the edge. Widened
+ * here rather than copied: our settings body carries a multi-line description field and a
+ * template picker Anytype's plain label/value list does not, the same reasoning the sort/filter
+ * condition panel's own width already carries against its measured 288px (`roadmap.md` §7.11).
+ */
+export const SHELL_SIDE_SHEET_WIDTH_PX = 420;
+
+// ───────────────────────────────────────────────────────────────────
 // 5. THE SUB-PAGE STACK
 // ───────────────────────────────────────────────────────────────────
 //

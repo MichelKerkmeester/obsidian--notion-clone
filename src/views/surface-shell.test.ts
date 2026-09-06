@@ -30,6 +30,8 @@ import {
   SHELL_PHONE_CLOSE_PX,
   SHELL_RADIUS_PX,
   SHELL_ROW_HEIGHT_PX,
+  SHELL_SIDE_SHEET_CLASS,
+  SHELL_SIDE_SHEET_WIDTH_PX,
   createSubPageState,
   createSurfaceShell,
   getScrapeFallbackTitleUseCount,
@@ -176,6 +178,11 @@ describe("the shell's own geometry constants", () => {
   it("carries the reconciled motion band", () => {
     expect(SHELL_ENTER_MS).toBe(200);
     expect(SHELL_EXIT_MS).toBe(150);
+  });
+
+  it("carries the desktop side-sheet's marker class and measured width", () => {
+    expect(SHELL_SIDE_SHEET_CLASS).toBe("db-shell-side-sheet");
+    expect(SHELL_SIDE_SHEET_WIDTH_PX).toBe(420);
   });
 });
 
