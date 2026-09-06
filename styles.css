@@ -2750,7 +2750,10 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
    stack it was never mounted into. */
 .db-toast.is-inline {
   position: static;
-  width: 384px;
+  /* The stack's own 384px, clamped to what the host's fixed 16px inset leaves: a phone is
+     narrower than 384 + 32, and an unclamped card anchored to the right edge would hang off
+     the left one. */
+  width: min(384px, calc(100vw - 32px));
 }
 
 /* Only the frontmost card renders — the same idiom the measured source uses so a second

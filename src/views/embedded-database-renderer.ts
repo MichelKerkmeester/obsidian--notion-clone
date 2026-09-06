@@ -3256,11 +3256,12 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     try {
       const content = await this.app.vault.cachedRead(row.file);
       await this.dataSource.trashNote(row.file, { sourceInstanceId: this.instanceId });
-      this.pushHistory({ type: "deleted", label: t("undo.deleteRow"), file: { path: row.file.path, content } });
+      const entry: EmbedHistoryEntry = { type: "deleted", label: t("undo.deleteRow"), file: { path: row.file.path, content } };
+      this.pushHistory(entry);
       showToast(this.containerEl.ownerDocument, {
         severity: "success",
         message: t("notice.deletedRow", { name: row.file.basename }),
-        action: { label: t("toolbar.undo"), onClick: () => this.undoLastEdit() },
+        action: { label: t("toolbar.undo"), onClick: () => this.undoDeletion(entry) },
       });
       if (this.config) this.renderResults(this.config);
     } catch (err) {
@@ -3306,6 +3307,22 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private pushHistory(entry: EmbedHistoryEntry): void {
     this.historyStack.unshift(entry);
     if (this.historyStack.length > 15) this.historyStack.length = 15;
+  }
+
+  /**
+   * The toast's Undo replays the deletion it was raised for, or nothing.
+   *
+   * The card outlives its entry: anything pushed while it is still up — a created row most
+   * dangerously — becomes the top of the stack, and a bare `undoLastEdit()` would then undo that
+   * instead, which for a creation means trashing a second file. Identity, not type, is the test:
+   * two deletions in the same second are two entries and each button owns only its own.
+   */
+  private async undoDeletion(entry: EmbedHistoryEntry): Promise<void> {
+    if (this.historyStack[0] !== entry) {
+      new Notice(t("notice.undoSuperseded"));
+      return;
+    }
+    await this.undoLastEdit();
   }
 
   async undoLastEdit(): Promise<void> {

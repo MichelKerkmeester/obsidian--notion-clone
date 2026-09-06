@@ -8327,12 +8327,13 @@ export class DatabaseView extends FileView {
       // snapshot has to exist before the file that would supply it stops existing.
       const content = await this.app.vault.cachedRead(row.file);
       await this.dataSource.trashNote(row.file, { sourceInstanceId: this.instanceId });
-      this.pushHistory({ type: "deleted", label: t("undo.deleteRow"), file: { path: row.file.path, content } });
+      const entry: DeletedHistoryEntry = { type: "deleted", label: t("undo.deleteRow"), file: { path: row.file.path, content } };
+      this.pushHistory(entry);
       if (this.containerEl_) {
         showToast(this.containerEl_.ownerDocument, {
           severity: "success",
           message: t("notice.deletedRow", { name: displayName }),
-          action: { label: t("toolbar.undo"), onClick: () => this.undoLastEdit() },
+          action: { label: t("toolbar.undo"), onClick: () => this.undoDeletion(entry) },
         });
       }
       await this.refreshAfterSave();
@@ -8340,6 +8341,22 @@ export class DatabaseView extends FileView {
       console.error("Note Database: failed to delete row", err);
       new Notice(t("errors.deleteFailed", { error: String(err) }));
     }
+  }
+
+  /**
+   * The toast's Undo replays the deletion it was raised for, or nothing.
+   *
+   * The card outlives its entry: anything pushed while it is still up — a created row most
+   * dangerously — becomes the top of the stack, and a bare `undoLastEdit()` would then undo that
+   * instead, which for a creation means trashing a second file. Identity, not type, is the test:
+   * two deletions in the same second are two entries and each button owns only its own.
+   */
+  private async undoDeletion(entry: DeletedHistoryEntry): Promise<void> {
+    if (this.historyStack[0] !== entry) {
+      new Notice(t("notice.undoSuperseded"));
+      return;
+    }
+    await this.undoLastEdit();
   }
 
   /**
