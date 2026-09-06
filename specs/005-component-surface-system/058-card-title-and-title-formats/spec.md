@@ -21,7 +21,7 @@ contextType: "general"
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Draft |
+| **Status** | Implemented — AC-001 through AC-007 Met; AC-008 Unmet, operator-owned (`acceptance-criteria.md`) |
 | **Created** | 2026-09-06 |
 | **Branch** | `005-component-surface-system` |
 | **Parent Spec** | ../spec.md |

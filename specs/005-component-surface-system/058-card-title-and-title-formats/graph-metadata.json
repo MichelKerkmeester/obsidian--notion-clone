@@ -3,6 +3,7 @@
   "packet_id": "005-component-surface-system/058-card-title-and-title-formats",
   "spec_folder": "005-component-surface-system/058-card-title-and-title-formats",
   "parent_id": "005-component-surface-system",
+  "status_review_required": true,
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -39,7 +40,7 @@
       "breakdown"
     ],
     "importance_tier": "normal",
-    "status": "draft",
+    "status": "complete",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -48,8 +49,13 @@
       "goal.md",
       "decision-record.md",
       "implementation-summary.md",
+      "tools/screenshots/scenarios/core.mjs",
+      "tools/screenshots/scenarios/panels.mjs",
       "src/data/title-field-display.ts",
+      "src/data/title-field-display.test.ts",
       "src/views/board-card-properties-panel.ts",
+      "src/views/board-card-properties-panel.test.ts",
+      "src/views/view-config-panel-renderer.ts",
       "src/views/board-card-fields.test.ts",
       "src/data/euro-format.ts"
     ],
@@ -97,15 +103,45 @@
         "source": "derived"
       },
       {
+        "name": "core.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/core.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "panels.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/panels.mjs",
+        "source": "derived"
+      },
+      {
         "name": "title-field-display.ts",
         "kind": "code",
         "path": "src/data/title-field-display.ts",
         "source": "derived"
       },
       {
+        "name": "title-field-display.test.ts",
+        "kind": "test",
+        "path": "src/data/title-field-display.test.ts",
+        "source": "derived"
+      },
+      {
         "name": "board-card-properties-panel.ts",
         "kind": "code",
         "path": "src/views/board-card-properties-panel.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-card-properties-panel.test.ts",
+        "kind": "test",
+        "path": "src/views/board-card-properties-panel.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "view-config-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/view-config-panel-renderer.ts",
         "source": "derived"
       },
       {
@@ -167,41 +203,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Pattern Single",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Key Components",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "A view's card and record title can already be set to any column (`ViewConfig.titleField`), but the",
     "created_at": "2026-09-06T06:27:07Z",
-    "last_save_at": "2026-09-06T14:40:16.561Z",
+    "last_save_at": "2026-09-06T18:05:20.150Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,14 +219,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8d80e3d20010248e90a5f9b9c1b58e39534272f342180463a6f6646619284451",
+    "source_fingerprint": "sha256:d21c592c5e0315d92d9b195a384f2745455bb5ba314cb2a087ac3b6c84597485",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "96f72cf84244e9af071768a1d444251219e2a396f4ce2006e3e1ba53005cb79d",
+      "spec.md": "e5d5f1f87dbc3eb60f999f1fa7a81d1da0b7094423a43492428909f102fccc1f",
       "plan.md": "2b114b644bc945f12ee7465c2af969119ddfe3690907644d0c0bb158b02b9063",
-      "tasks.md": "7e08473be60bbee38439bcc10be62cfdb83e3d91e00b56df7d5690f46a454334",
+      "tasks.md": "e1c07e55e00ba9dfd753590ea72429edde8fc41e2a865c52a5b8ed018e386fa7",
       "decision-record.md": "11706a89e750bdfe7b1b1f7afb99cebd4d2df8e129dc800535e20980a8b0632e",
-      "implementation-summary.md": "bf50d69bfd20fc18967d5b1ef7283398745d4ba08f40e4ac6ea53c8183612478"
+      "implementation-summary.md": "a2c5481432e4407acdc7674c9b4de7b54c5877764a5603561c5065cb309e1d5a"
     },
     "last_active_at": null
   }

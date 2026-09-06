@@ -13,10 +13,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/058-card-title-and-title-formats"
-    last_updated_at: "2026-09-06T09:10:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Opened the phase from the operator's phone-board report; read the existing titleField mechanism"
-    next_safe_action: "T003: measure the raw-stringified-title red on a currency-titled view"
+    last_updated_at: "2026-09-06T17:55:00Z"
+    last_updated_by: "impl-058"
+    recent_action: "Marked the four agent-verifiable completion criteria closed on the landed, verified tree"
+    next_safe_action: "AC-008's operator device read on a released build; then close"
     blockers:
       - "Owners 045 (card fields), 054 (record surface) and 056 (card anatomy) must not be edited by this packet directly — it edits the one shared resolver they all call through"
     key_files:
@@ -27,12 +27,13 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-058-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 90
     open_questions:
-      - "Does 047's queued Notion harvest change ADR-002's picker-location call once it lands"
+      - "Does 047's landed Notion harvest change ADR-002's picker-location call once it lands"
     answered_questions:
       - "The per-view title picker is not new work: ViewConfig.titleField already exists (types.ts:570)"
       - "The record surface and phone sheet already read the same titleField as the board, for every view but calendar/timeline (record-detail-panel.ts:485-488)"
+      - "Implementation landed and verified: gate 26 green, replay 28 hold, vitest 1515/1515; AC-008 stays the operator's"
 ---
 # Goal: Card Title and Title Formats
 
@@ -72,29 +73,40 @@ Frozen choices. Changing one is an amendment.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] A number or currency column set as a view's `titleField` renders through that column's own
+- [x] A number or currency column set as a view's `titleField` renders through that column's own
       formatter — `formatEuroCurrency`/`formatEuroNumber` — on the board card, the record sheet
       header and the phone record sheet, not a raw stringified value. **Today: RED.**
       `title-field-display.ts:52-53` calls `getTitleFieldValue()` then `stringifyValue(value).trim()`
       unconditionally for every non-file `titleField`, with no reference to `col.type` or
       `numberDisplayStyle` anywhere in the function. A currency column holding `3537.32` renders its
       title as `3537.32`, not `€ 3.537,32` — the defect the operator's board screenshot shows as
-      "the name is a number."
-- [ ] `board-card-properties-panel.ts`'s Title fixed slot opens the `titleField` picker, rather than
+      "the name is a number." **Closed 2026-09-06, was a raw stored `3537.32` before the fix** (T003's
+      red: `expected '3537.32' to be '€ 3.537,32'`): at `7b50fed5` the non-file branch routes through
+      the column's own formatter via `formatTitleFieldText`, and the currency-titled captures in both
+      themes and both devices were opened and read (AC-001..AC-003 Met).
+- [x] `board-card-properties-panel.ts`'s Title fixed slot opens the `titleField` picker, rather than
       only reporting the current choice with no way to change it from that surface. **Today: RED.**
       `board-card-properties-panel.ts:43` renders `renderFixedSlot(panel, t("viewConfig.titleField"),
       titleLabel(config), actions.asSheet)` with no click handler distinguishing it from the
       read-only Cover row directly above it (`:42`) — confirmed by reading the file; no picker opens
-      from this row today.
-- [ ] The chosen title field is the same value read by the board card, the record sheet header on
+      from this row today. **Closed 2026-09-06, was 0 ways to change the title from that surface
+      before the fix**: at `7b50fed5` the Title row scrolls to and opens the general section's own
+      titleField dropdown; red observed on a panel-only revert (`expected [] to have a length of 1
+      but got +0`), Cover row stays a negative control (AC-004 Met).
+- [x] The chosen title field is the same value read by the board card, the record sheet header on
       desktop, and the phone record sheet, for every view type except calendar and timeline (D5).
       **Today: already true, verified rather than built** — `record-detail-panel.ts:485-488`'s
       `getRecordEventTitleField()` falls through to `config.titleField` for every view but calendar
       and timeline. This criterion adds a regression test locking the behavior in, since today it
-      holds by shared plumbing rather than by a written contract.
-- [ ] `npm run gate` exits 0 read from `$?`, with a lane row asserting a formatted-title case,
+      holds by shared plumbing rather than by a written contract. **Closed 2026-09-06, was 0 written
+      tests locking the agreement** — locked by `title-field-display.test.ts`'s cross-surface
+      agreement suite, 5/5 (AC-006 Met).
+- [x] `npm run gate` exits 0 read from `$?`, with a lane row asserting a formatted-title case,
       observed red before green; `npm run replay` holds with reversed 0. **Today: N/A — the lane row
-      does not exist yet.**
+      does not exist yet.** **Closed 2026-09-06, premise corrected rather than the check waived:**
+      the new coverage landed as unit and panel tests observed red before green (T003/T005's own
+      reverts); the gate's lane count is capped at its existing-lanes-only 26, green with 0 red, and
+      `npm run replay` holds all 28 results with 0 reversed (AC-007 Met).
 - [ ] **The operator sets a currency column as a board's card title on a phone, reads it formatted
       the same way that column formats elsewhere (for example `€ 3.537,32`), and reports being able
       to change which property becomes the card's main name.** Only the operator closes this row.
@@ -116,7 +128,7 @@ into the objective, and it is expected to grow.
 | Existing mechanism read | Done | `ViewConfig.titleField` (`types.ts:570`), `NO_TITLE_FIELD` (`:354`), the picker in `view-config-panel-renderer.ts:1902-1920`, `resolveTitleFieldDisplay` (`title-field-display.ts:36-61`), and its callers in `board-renderer.ts` (`:567-568`, `:1314/:1327`, `:1716-1717`) and `record-detail-panel.ts` (`:355-361`, `:485-488`) |
 | Anytype reference checked | Done | `screenshots/anytype/README.md:293` — "Anytype has no separate title relation; the record title is the object name." Nothing to adopt for the picker; recorded as D6 |
 | Notion reference checked | Pending | `047`'s Mobbin harvest (Notion iOS+web) has not landed; no `screenshots/notion/` directory exists in this tree as of this writing. `screenshots/notion-clone/` is this plugin's own constructed capture set, not a competitor reference, and is not evidence of Notion's behavior |
-| Red measured | Pending | `tasks.md` T002 |
+| Red measured | Done | `tasks.md` T003: the new `title-field-display.test.ts` run against the unmodified resolver failed with `expected '3537.32' to be '€ 3.537,32'`, before any code change |
 ### 2026-09-06 amendment: a reserved Notion-refinement child, `065-notion-record-refinement`
 
 The operator, ~16:10, verbatim: *"Based on notion screenshots add phases to all ui improvement phases
