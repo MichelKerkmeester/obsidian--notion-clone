@@ -279,4 +279,42 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     expect(STYLES).not.toContain(".db-calendar-add-button {\n    opacity: 1;\n  }");
     expect(source).toContain("db-calendar-add-button");
   });
+
+  it("pins the all-day strip's range-string removal: the in-grid emitter is gone, the three off-grid producers survive", () => {
+    // Observed red before this fix: `content.createSpan({ cls: "db-calendar-month-dates", ... })`
+    // rendered inside the week/day all-day strip's segment loop — one count inside
+    // `.db-calendar-week-allday-cols` per multi-day event, proven by a constructed render in
+    // `calendar-renderer.test.ts`.
+    const source = readFileSync(resolve(__dirname, "calendar-renderer.ts"), "utf-8");
+    expect(source).not.toContain('content.createSpan({ cls: "db-calendar-month-dates"');
+    // The day popover, the overflow popover and the drag ghost are not in-grid resting chips and
+    // keep emitting the range — this is what the shared `.db-calendar-month-dates` rule and its
+    // `:has()` flex bound still have to reach, and why neither is retired below.
+    expect(source).toContain('eventEl.createSpan({ cls: "db-calendar-month-dates"');
+    expect(source).toContain('ghost.createSpan({ cls: "db-calendar-month-dates"');
+  });
+
+  it("pins the shared .db-calendar-month-dates rule and its :has() flex bound as still-reachable, not orphaned", () => {
+    // Both survive the all-day strip's removal above: the day popover and the overflow popover
+    // share `.db-calendar-day-popover-events`, and both they and the drag ghost carry
+    // `.db-calendar-month-dates` as a direct child of `.db-calendar-month-segment`, which is what
+    // the `:has()` bound and the base rule's colour/size still reach.
+    const base = ruleBody(".note-database-container .db-calendar-month-dates");
+    expect(base).toContain("color: var(--text-muted)");
+    const bounded = ruleBody(".note-database-container .db-calendar-month-segment:has(> .db-calendar-month-dates) > .db-calendar-month-title");
+    expect(bounded.replace(/\s+/g, " ").trim()).toBe("flex-grow: 0;");
+  });
+
+  it("pins the mini day-cell's phone touch floor: the toolbar calendar and the date-edit popover variant both clear 44px", () => {
+    // Observed red before this fix: 34px in the toolbar mini calendar, 28px in the date-edit
+    // popover variant, and no `.is-phone` rule reaching either — swept across every `.is-phone`
+    // calendar rule and every `(pointer: coarse)` / `(hover: none)` block in the stylesheet.
+    const base = ruleBody(".note-database-container .db-calendar-mini-day");
+    expect(base).toContain("min-height: 34px");
+    const popoverBase = ruleBody(".db-cell-edit-popover.db-date-edit-popover .db-calendar-mini-day");
+    expect(popoverBase).toContain("min-height: 28px");
+
+    const phone = ruleBody(".is-phone .note-database-container .db-calendar-mini-day,\n.is-phone .db-cell-edit-popover.db-date-edit-popover .db-calendar-mini-day");
+    expect(phone.replace(/\s+/g, " ").trim()).toBe("min-width: 44px; min-height: 44px;");
+  });
 });

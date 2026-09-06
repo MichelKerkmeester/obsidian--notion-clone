@@ -859,9 +859,9 @@ export class CalendarRenderer {
 			this.actions.renderRecordIcon?.(content, segment.event.row, this.withRecordIconDefault(config), true);
 			const titleEl = content.createSpan({ cls: `db-calendar-month-title${segment.event.titleIsEmpty ? " is-empty-title" : ""}`, text: segment.event.title });
 			markNoteHoverLink(titleEl, segment.event.row.file.path, segment.event.row.file.path);
-			if (segment.event.endDateKey > segment.event.startDateKey) {
-				content.createSpan({ cls: "db-calendar-month-dates", text: this.formatMonthDateRange(segment.event.startDateKey, segment.event.endDateKey, segment.event.startMinutes, segment.event.endMinutes) });
-			}
+			// The range stays reachable through the chip's own title tooltip
+			// (getSegmentTitle) and the day and overflow popovers, matching where
+			// the reference keeps it off the resting grid.
 			this.attachEventOpenHandlers(eventEl, segment.event);
 			this.attachMonthMoveHandler(eventEl, stage, days, segment, config, ".db-calendar-week-allday-cols", ".db-calendar-week-allday-col", days.length);
 			if (!this.actions.isReadOnly && this.actions.updateEventDates && config.calendarEndDateField) {

@@ -15,6 +15,7 @@
 import { describe, expect, it, vi, beforeAll } from "vitest";
 import { CalendarRenderer, CalendarRendererActions } from "./calendar-renderer";
 import { ViewConfig, RowData, ColumnDef } from "../data/types";
+import { formatDateTimeRangeDisplay } from "../data/date-time-format";
 import { TFile } from "obsidian";
 /* eslint-disable-next-line import/no-nodejs-modules --
    Asserting the phone month-chip title's flex rule means reading the stylesheet from disk —
@@ -519,6 +520,39 @@ describe("Calendar parity behaviours", () => {
     expect(openSegment).toBeDefined();
     expect(doneSegment?.className.split(/\s+/)).toContain("is-completed");
     expect(openSegment?.className.split(/\s+/)).not.toContain("is-completed");
+  });
+
+  it("prints no inline start-end date string on a multi-day event in the week all-day strip", () => {
+    const renderer = new CalendarRenderer(createMockActions());
+    const container = new MockElement("div") as unknown as HTMLElement;
+    const rangeConfig: ViewConfig = {
+      ...parityConfig,
+      calendarScale: "week",
+      calendarWeekStart: "2026-08-10",
+      calendarEndDateField: "dueEnd",
+      schema: {
+        columns: [
+          { key: "due", label: "Due Date", type: "date" as const },
+          { key: "dueEnd", label: "Due End", type: "date" as const },
+          { key: "done", label: "Done", type: "checkbox" as const },
+        ],
+        computedFields: [],
+      },
+    };
+
+    renderer.render(container, rangeConfig, [
+      makeRow("multi-day.md", { due: "2026-08-11", dueEnd: "2026-08-13" }),
+    ]);
+
+    const root = container as unknown as MockElement;
+    const strip = root.querySelector(".db-calendar-week-allday-cols");
+    expect(strip).toBeDefined();
+    expect(strip!.querySelectorAll(".db-calendar-month-dates").length).toBe(0);
+
+    // The range survives where Notion also keeps it: the chip's own tooltip.
+    const segment = eventForPath(root, ".db-calendar-week-allday-segment", "multi-day.md");
+    const expectedRange = formatDateTimeRangeDisplay("2026-08-11", "2026-08-13", undefined, undefined, { contextYear: 2026 });
+    expect(segment?.getAttribute("title")).toContain(expectedRange);
   });
 
   it("marks a completed-row event on timed week events", () => {

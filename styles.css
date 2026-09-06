@@ -18702,6 +18702,17 @@ body.pm-resize-active * {
   min-height: 44px;
 }
 
+/* The date picker's day cell is the one interactive thing this view draws whose touch floor
+   nobody pinned: 34px in the toolbar mini calendar, 28px in the date-edit popover variant. Both
+   variants lift to the phone floor here; the popover's own unconditional 28px density
+   (`.db-cell-edit-popover.db-date-edit-popover .db-calendar-mini-day`) stays for every profile
+   this rule does not reach. */
+.is-phone .note-database-container .db-calendar-mini-day,
+.is-phone .db-cell-edit-popover.db-date-edit-popover .db-calendar-mini-day {
+  min-width: 44px;
+  min-height: 44px;
+}
+
 .note-database-container .db-timeline-empty-range {
   min-height: 160px;
   margin: 0;
