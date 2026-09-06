@@ -81,7 +81,14 @@
   --db-radius-sm: 4px;
   --db-radius-md: 6px;
   --db-radius-lg: 8px;
+  /* The floating phone sheet's own corner radius (design-trueup.md §6 C10, ≈16pt measured on 22
+     files) — larger than any other radius token this stylesheet declares, so it gets its own name
+     rather than overloading `--db-radius-lg` (8px) for two different measured shapes. */
+  --db-radius-xl: 16px;
   --db-radius-full: 9999px;
+  /* The floating phone sheet's inset from the viewport edge on all three free sides (design-
+     trueup.md §6 C5/C10, 8.0-8.3pt measured on 22 files) — the flush shape below needs none. */
+  --db-sheet-float-inset: 8px;
   /* The sheet header's close button and the shell's own back control, so a second edge slot
      added later reads the size the first one already declared instead of repeating "44px". */
   --db-shell-edge-control-size: 44px;
@@ -248,8 +255,32 @@
   padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
   border-right: 0 !important;
   border-bottom: 0 !important;
-  border-radius: var(--db-radius-lg) var(--db-radius-lg) 0 0;
+  /* `!important`, matching the z-index rule above it (`.db-mobile-bottom-sheet.db-mobile-
+     bottom-sheet`) for the identical reason: several of the surfaces this class dresses —
+     `.db-view-config-panel`, `.db-column-manager`, `.db-filter-panel` and their siblings — carry
+     the shared desktop-popover chrome's own `border-radius: var(--db-radius-lg)` (§ FLOATING
+     PANELS), a `.db-x.db-surface` selector with more classes and so more specificity than this
+     one. Without `!important` here that rule wins on the sheet too, rounding all four corners
+     instead of only the top two — measured on `settings`, not assumed, once the flush/floating
+     split below started asserting the flush shape's corners rather than only its edges. */
+  border-radius: var(--db-radius-lg) var(--db-radius-lg) 0 0 !important;
   isolation: isolate;
+}
+
+/* Anytype ships two phone sheet frames, not one. Every floating sheet the
+   capture set measured put its top edge at >=299pt of an 874pt screen; every flush sheet (the
+   base rule above) at <=198pt — a short sheet floats clear of all three free edges with a large
+   radius, a tall one runs the width flush with only its top corners rounded. `mobile-bottom-
+   sheet.ts`'s `watchSheetFrameShape` toggles this class off the sheet's own rendered height once
+   layout settles, so a sheet reclassifies if its content — and so its natural height — changes
+   while it is open, rather than freezing whatever shape it opened with. */
+.db-mobile-bottom-sheet.db-sheet-floating {
+  left: var(--db-sheet-float-inset) !important;
+  right: var(--db-sheet-float-inset) !important;
+  bottom: calc(var(--db-sheet-float-inset) + var(--db-mobile-sheet-bottom, 0px)) !important;
+  width: auto !important;
+  max-height: calc(90svh - var(--db-sheet-float-inset) - var(--db-mobile-sheet-bottom, 0px)) !important;
+  border-radius: var(--db-radius-xl) !important;
 }
 
 /* A child sheet sits above the surface that opened it. The root panel keeps its own box so the
@@ -353,6 +384,27 @@
   top: -40px;
   bottom: -28px;
   transform: translateX(-50%);
+}
+
+/* The flush sheet above spans the viewport, so sizing its drag band past its own edge means
+   sizing it past the viewport — there is no other edge to reach. A floating sheet has one: its
+   own box stops 8pt short of the viewport on both sides, and a band still sized off `100vw` runs
+   past that box into the space the inset just cleared, wider than the sheet it drags and wider
+   than the `overflow-x: hidden` sheet closing over it accounts for when a lane measures scroll
+   width.
+
+   `width: 100%` was tried first and measured wrong: the pseudo-element's containing block is
+   `.db-mobile-bottom-sheet-handle` itself (`position: relative`, 36px wide), not the sheet — the
+   `top`/`bottom` insets above need exactly that containing block to turn into the band's height,
+   so the handle cannot lose its own positioning context. A `%` width on the same element
+   therefore resolves against 36px, not the sheet's, and shrank the drag target from a full-width
+   band to the bar's own width — measured landing a press 120px to either side on nothing. Two
+   `vw` subtractions read the sheet's actual rendered width without touching the containing block
+   at all: the floating sheet's own width is `100vw` minus the inset on each free side, so the
+   band matches it exactly and stays centred with the handle, which is itself centred in the
+   sheet by its own `margin: 8px auto 4px`. */
+.db-sheet-floating .db-mobile-bottom-sheet-handle::before {
+  width: calc(100vw - 2 * var(--db-sheet-float-inset));
 }
 
 /* The record sheet pads its top by --db-space-6, four times what the menu sheets use, so its bar
@@ -12693,6 +12745,19 @@ body.is-phone .note-database-container .db-record-detail-panel {
   padding-inline: var(--db-sheet-inset);
 }
 
+/* A floating sheet's own 8pt frame inset already claims
+   horizontal space no flush sheet gave up. `db-sort-rule-row`'s condition row was already at its
+   tightest fit inside the 16px content inset above — its trailing "×" landed 11px past its own
+   row even before this leg, absorbed by that inset's own slack rather than by any margin the row
+   carried itself, because `CONDITION_FIELD_FLOOR_PX` (`toolbar-primitives.ts`) sizes the row's two
+   dropdowns for the DESKTOP anchored popover's width, not this sheet's. Losing another 16px to the
+   frame's own inset spends slack the row never had. Halving the content inset when the frame also
+   claims its own restores exactly the content width the row was tuned against, rather than asking
+   a floor several other rows share to shrink for a change none of them own. */
+.db-sort-panel.db-mobile-bottom-sheet.db-sheet-floating {
+  padding-inline: var(--db-space-2);
+}
+
 /* createSheetHeader's own family — sort, filter, add-view and view-config — sits close enough
    behind the grab handle on a phone (25px of chrome measured, against the owned menu's 40px the
    shared drag band was tuned against) that the band reached into it and answered a press on the
@@ -12768,43 +12833,61 @@ body.is-phone .note-database-container .db-record-detail-panel {
   height: 18px;
 }
 
-/* The shell's own header keeps a third slot ahead of the title, sized to match the close
-   button on the other end via the size that button already declares, so the title lands
-   centred between two equal edges instead of pinned to the leading one. Nothing but the
-   shared shell builds this header today, so this scope reaches no other panel or sheet.
-   Centring is a phone-sheet shape (`anytype-mobile-sheet-view-edit-dark.png`'s centred
-   `Edit view`) — the desktop popover puts a sub-page's title on the leading edge instead
-   (`‹ Layout`, `anytype-menu-set-view-layout-dark.png`), so both rules are scoped to
-   `is-phone` rather than reaching a future desktop consumer of this same header. The
-   leading slot is scoped the same way, and out of flow entirely rather than merely narrow:
-   several of this header's callers (the filter, sort and toolbar popovers) build it on the
-   desktop popover too, not only the phone sheet, and `.db-panel-header`'s own `gap: 8px`
-   still opens a gap beside a zero-width flex child — a first, narrower fix left every one
-   of those desktop titles shifted right by that gap, which the desktop reference does not
-   show. `display: none` removes it from the flex row altogether on desktop, caught by the
-   capture set this edit moved on the desktop passes of `constructed-filter-panel`,
-   `constructed-sort-panel` and `constructed-toolbar-*`. A desktop back affordance is a
-   different shape regardless (`‹ Layout` inline with the title itself,
-   `anytype-menu-set-view-layout-dark.png`), not this leading button, so hiding it there
-   loses nothing the desktop reference shows. */
+/* The trailing slot: everything `buildShellHeader`'s `beforeClose` draws, plus the close
+   button itself, moved into one box so the header has exactly three top-level children
+   (leading, title, trailing) rather than a title facing however many loose trailing
+   siblings a caller added. Unscoped — a two-child header (title, trailing) under the base
+   `.db-panel-header`'s `space-between` reproduces the pre-existing desktop shape exactly
+   (title flush left, the trailing cluster flush right, `gap: 8px` between whatever it
+   holds), so this box needs no `is-phone` gate of its own. */
+.note-database-container .db-shell-header-trailing {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* On the phone sheet, the header becomes a three-column grid — `1fr auto 1fr` — instead of
+   the two-child flex row above. A flex row can only mirror the leading and trailing slots
+   when they happen to be the same width; `constructed-column-manager`'s "Properties" broke
+   that assumption (a fixed 44px leading slot against a trailing box holding the "All"
+   toggle plus the close, ~98px), and the title sat off-centre by however much the two
+   slots' widths differed. A grid's two `1fr` tracks divide the row's LEFTOVER width
+   (whatever the title's own `auto` column does not use) equally between them by
+   definition, so the title's column is centred in the frame regardless of what either
+   side holds — the two slots no longer need to match each other's content, only the
+   track's own fraction. Centring is a phone-sheet shape
+   (`anytype-mobile-sheet-view-edit-dark.png`'s centred `Edit view`) — the desktop popover
+   puts a sub-page's title on the leading edge instead (`‹ Layout`,
+   `anytype-menu-set-view-layout-dark.png`), so the grid is scoped to `is-phone` rather
+   than reaching a future desktop consumer of this same header. */
 body.is-phone .note-database-container .db-shell-header {
-  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
 }
 
 .note-database-container .db-shell-header-leading {
   display: none;
-  align-items: center;
-  justify-content: center;
 }
 
+/* Stretches to fill the grid's first `1fr` track (grid's default `justify-self`), so an
+   empty leading slot still reserves the same width the trailing slot's track claims on the
+   other side — the mirroring the fixed 44px `min-width` used to fake and broke whenever the
+   trailing side needed more than that. A populated slot (the back control) sits flush to
+   the track's own leading edge, matching the button's un-centred desktop-reference position
+   (`anytype-mobile-sheet-view-layout-picker-dark.png`) rather than floating mid-track. */
 body.is-phone .note-database-container .db-shell-header-leading {
-  display: inline-flex;
-  flex: 0 0 auto;
-  min-width: var(--db-shell-edge-control-size);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+body.is-phone .note-database-container .db-shell-header-trailing {
+  justify-self: stretch;
 }
 
 body.is-phone .note-database-container .db-shell-header .db-panel-title {
-  flex: 1 1 auto;
   text-align: center;
 }
 
@@ -20695,38 +20778,6 @@ body.pm-resize-active * {
    equivalent for the panel's own class. */
 .db-mobile-column-width-panel.note-database-container {
   height: auto !important;
-}
-
-/* Record detail panel's own close-button pairing, reused rather than re-derived: hidden by default
-   so the desktop fixed panel keeps its plain header, shown and sized for a thumb once the panel is
-   the phone sheet. Without a rule scoped to this surface `.db-cell-edit-close` matches nothing here
-   at all — its only other rules are scoped to `.db-cell-edit-popover` and `.db-record-detail-panel`
-   — and the button would paint with the browser's bare default chrome. */
-.db-mobile-column-width-panel .db-cell-edit-close {
-  display: none;
-}
-
-.db-mobile-column-width-panel.db-mobile-bottom-sheet .db-cell-edit-close {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 0;
-  border-radius: var(--db-radius-md);
-  background: transparent;
-  color: var(--text-muted);
-}
-
-.db-mobile-column-width-panel.db-mobile-bottom-sheet .db-cell-edit-close:active {
-  background: var(--background-modifier-hover);
-  color: var(--text-normal);
-}
-
-.db-mobile-column-width-panel.db-mobile-bottom-sheet .db-cell-edit-close svg {
-  width: 20px;
-  height: 20px;
 }
 
 /* The range row and the presets row are each a single child of a `.db-panel-row`, and

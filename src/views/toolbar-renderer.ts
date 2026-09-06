@@ -47,6 +47,7 @@ import {
   dismissToolbarSurfaces,
   type PopoverShellHandle,
 } from "./toolbar-primitives";
+import { buildShellHeader } from "./surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. HELPERS
@@ -605,8 +606,7 @@ export class ToolbarRenderer {
     focusIndex?: number,
   ): void {
     panel.empty();
-    const header = panel.createDiv({ cls: "db-panel-header" });
-    header.createDiv({ cls: "db-panel-title", text: t("settings.databaseList.title") });
+    buildShellHeader(panel, { title: t("settings.databaseList.title"), onClose: () => this.closeDatabasePopover() });
 
     viewEntries.forEach((entry, i) => {
       this.renderDatabasePopoverRow(panel, anchorEl, viewEntries, entry, i, currentDbIndex, actions, true, updateState);
@@ -1767,8 +1767,7 @@ export class ToolbarRenderer {
     groupValue: string,
     actions: ToolbarActions
   ): void {
-    const header = panel.createDiv({ cls: "db-panel-header" });
-    header.createDiv({ cls: "db-panel-title", text: t("toolbar.group") });
+    buildShellHeader(panel, { title: t("toolbar.group"), onClose: () => this.closeGroupPopover() });
 
     const groupColumn = config.schema.columns.find((col) => col.key === groupValue);
     if (groupValue && groupColumn) {

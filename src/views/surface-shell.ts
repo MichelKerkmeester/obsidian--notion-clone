@@ -218,10 +218,12 @@ export function shellHasBack(state: SurfaceShellSubPageState): boolean {
 
 const SHELL_HEADER_CLASS = "db-shell-header";
 const SHELL_HEADER_LEADING_CLASS = "db-shell-header-leading";
+const SHELL_HEADER_TRAILING_CLASS = "db-shell-header-trailing";
 const SHELL_HEADER_BACK_CLASS = "db-shell-back";
 
 export interface SurfaceShellHeaderHandle extends SheetHeaderHandle {
   leadingEl: HTMLElement;
+  trailingEl: HTMLElement;
 }
 
 /** Build the shell's own three-slot header: a leading slot, the centred title, and the close. */
@@ -247,7 +249,20 @@ export function buildShellHeader(
   // newer `ParentNode` methods.
   built.header.insertBefore(leadingEl, built.header.children[0] ?? null);
   if (options.onBack) attachBackControl(leadingEl, options.onBack);
-  return { ...built, leadingEl };
+  // Everything `beforeClose` built plus the close button itself moves into one trailing box, so
+  // the header has exactly three top-level slots rather than a leading slot facing a leading
+  // title facing however many loose trailing children a caller added. Two loose trailing
+  // children is exactly what broke centring: a leading slot pinned to the close button's own
+  // 44px, and a trailing edge as wide as whatever `beforeClose` drew beside the close, so the
+  // title's own flex box sat between two DIFFERENT widths instead of two equal ones. Grouping
+  // the trailing side into one element gives it one width to mirror, and the stylesheet mirrors
+  // it structurally (`1fr auto 1fr`) rather than by measuring anything at runtime.
+  const trailingEl = built.header.createDiv({ cls: SHELL_HEADER_TRAILING_CLASS });
+  for (const child of Array.from(built.header.children)) {
+    if (child === leadingEl || child === built.titleEl || child === trailingEl) continue;
+    trailingEl.appendChild(child);
+  }
+  return { ...built, leadingEl, trailingEl };
 }
 
 function attachBackControl(leadingEl: HTMLElement, onBack: () => void): HTMLButtonElement {

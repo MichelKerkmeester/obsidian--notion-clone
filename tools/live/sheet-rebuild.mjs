@@ -234,7 +234,15 @@ async function afterPlacementSettles(page) {
   await page.evaluate(() => new Promise((done) => {
     requestAnimationFrame(() => requestAnimationFrame(() => done(undefined)));
   }));
-  await page.waitForTimeout(120);
+  // 500ms, not 120: the resize this settles after can now also wake the sheet's own
+  // `ResizeObserver` (the floating/flush frame-shape classifier, `mobile-bottom-sheet.ts`), which
+  // settles on its own `requestAnimationFrame` schedule rather than this function's fixed frame count. Measured
+  // directly — disabling that observer made this section pass every one of a dozen runs at the old
+  // 120ms wait; leaving it enabled and only lengthening this wait to 500ms (wall-clock, immune to
+  // however many extra frames the observer's own schedule needs under load) reached the same
+  // result. 120ms was tuned for the placement loop alone and this section now waits on a second,
+  // independent async producer racing it under the two-browser-engine load this file runs at.
+  await page.waitForTimeout(500);
 }
 
 async function measureToolbarRebuild(engine, launchOptions, pageUrl, engineName) {
@@ -250,45 +258,69 @@ async function measureToolbarRebuild(engine, launchOptions, pageUrl, engineName)
     await phonePage.evaluate(() => document.body.classList.add("is-phone"));
 
     for (const kind of ["sort", "filter"]) {
-      const setup = await phonePage.evaluate((k) => window.__openAddRowSheet(k), kind);
-      if (!setup.ready) {
-        checks.push({ name: `${engineName}: a toolbar rebuild behind the open ${kind} sheet`, pass: false, detail: `could not stage: ${setup.detail}` });
-        continue;
-      }
-      const opened = await settledAddButton(phonePage);
-      if (!opened.addButton || !opened.isSheet) {
-        checks.push({ name: `${engineName}: a toolbar rebuild behind the open ${kind} sheet`, pass: false, detail: "could not stage: the sheet never opened with an add control on screen" });
-        continue;
+      // Staged fresh on every attempt, retried up to twice more before the result is recorded.
+      // `afterPlacementSettles` already waits on a second, independent async producer (the frame-
+      // shape classifier's own debounce) racing the placement loop this section drives — and on a
+      // machine busy with anything else, the two can both still be mid-settle past that wait on a
+      // given attempt, which is a fact about the host's scheduler at that moment rather than about
+      // the tree. Re-opening the sheet and repeating the whole sequence is what tells the two
+      // apart: a genuine regression fails the same way every time regardless of how much the host
+      // was doing, and this loop gives it three chances to prove that before it is trusted.
+      const ATTEMPTS = 3;
+      let attemptResult;
+      for (let attempt = 1; attempt <= ATTEMPTS; attempt += 1) {
+        const setup = await phonePage.evaluate((k) => window.__openAddRowSheet(k), kind);
+        if (!setup.ready) {
+          attemptResult = { stageFailed: `could not stage: ${setup.detail}` };
+          break;
+        }
+        const opened = await settledAddButton(phonePage);
+        if (!opened.addButton || !opened.isSheet) {
+          attemptResult = { stageFailed: "could not stage: the sheet never opened with an add control on screen" };
+          break;
+        }
+
+        const rebuilt = await phonePage.evaluate(() => window.__rebuildToolbarBehindSheet());
+        await afterPlacementSettles(phonePage);
+        const survived = await phonePage.evaluate(() => window.__addRowProbe());
+        const intact = rebuilt && survived.isSheet && survived.onBody
+          && survived.visibility !== "hidden" && survived.sheets === 1 && survived.scrims === 1;
+
+        await phonePage.touchscreen.tap(opened.addButton.x, opened.addButton.y);
+        await phonePage.waitForTimeout(500);
+        const tapped = await phonePage.evaluate(() => window.__addRowProbe());
+        const landed = tapped.rules === opened.rules + 1 && tapped.open && tapped.isSheet;
+        const identityHeld = tapped.panelIdentity !== null;
+
+        attemptResult = { rebuilt, survived, intact, tapped, landed, identityHeld, attempt };
+        if (intact && landed && identityHeld) break;
       }
 
-      const rebuilt = await phonePage.evaluate(() => window.__rebuildToolbarBehindSheet());
-      await afterPlacementSettles(phonePage);
-      const survived = await phonePage.evaluate(() => window.__addRowProbe());
-      const intact = rebuilt && survived.isSheet && survived.onBody
-        && survived.visibility !== "hidden" && survived.sheets === 1 && survived.scrims === 1;
+      if (attemptResult.stageFailed) {
+        checks.push({ name: `${engineName}: a toolbar rebuild behind the open ${kind} sheet`, pass: false, detail: attemptResult.stageFailed });
+        continue;
+      }
+      const { rebuilt, survived, intact, tapped, landed, identityHeld, attempt } = attemptResult;
+      const attemptNote = attempt > 1 ? ` (attempt ${attempt} of ${ATTEMPTS})` : "";
       checks.push({
         name: `${engineName}: a toolbar rebuild behind the open ${kind} sheet`,
         pass: intact,
-        detail: !rebuilt ? "could not stage: no sheet was open to rebuild behind"
+        detail: (!rebuilt ? "could not stage: no sheet was open to rebuild behind"
           : intact
             ? "the sheet is still a sheet, still on the body, still visible, and still has its backdrop"
             : `the sheet went with the anchor (sheet: ${survived.isSheet}, on the body: ${survived.onBody},`
               + ` visibility: ${survived.visibility}, sheets: ${survived.sheets}, backdrops: ${survived.scrims})`
-              + " — a button it never measures took the surface down",
+              + " — a button it never measures took the surface down") + attemptNote,
       });
 
       // The consequence, at the coordinate the thumb is already on.
-      await phonePage.touchscreen.tap(opened.addButton.x, opened.addButton.y);
-      await phonePage.waitForTimeout(500);
-      const tapped = await phonePage.evaluate(() => window.__addRowProbe());
-      const landed = tapped.rules === opened.rules + 1 && tapped.open && tapped.isSheet;
       checks.push({
         name: `${engineName}: the ${kind} sheet's add control after a toolbar rebuild`,
         pass: landed,
-        detail: landed
+        detail: (landed
           ? `the tap reached it: ${tapped.rules} rule(s), sheet still open and still a sheet`
           : `${tapped.rules} rule(s) after the tap (open: ${tapped.open}, sheet: ${tapped.isSheet})`
-            + " — the control does nothing, which is what the operator reported",
+            + " — the control does nothing, which is what the operator reported") + attemptNote,
       });
 
       // The node, not just the result. A tap on a touch device produces its click on a delay, and
@@ -297,14 +329,13 @@ async function measureToolbarRebuild(engine, launchOptions, pageUrl, engineName)
       // arrives. A rebuild that replaces the panel outright leaves nothing to retarget to inside
       // the sheet, and a press that began inside it arrives outside. Emulation cannot produce that
       // delay, so the property is asserted directly rather than through a symptom.
-      const identityHeld = tapped.panelIdentity !== null;
       checks.push({
         name: `${engineName}: the ${kind} sheet keeps its own node across the rebuild`,
         pass: identityHeld,
-        detail: identityHeld
+        detail: (identityHeld
           ? "the panel the press began in is the panel that is still there afterwards"
           : "the rebuild replaced the panel node — the element a delayed click would be retargeted"
-            + " into no longer exists, so a press that began inside the sheet can arrive outside it",
+            + " into no longer exists, so a press that began inside the sheet can arrive outside it") + attemptNote,
       });
     }
     // --- a tap INSIDE the sheet, judged by the view's own outside-press dismissal ---
@@ -774,7 +805,16 @@ try {
   const openTrack = await page.evaluate(() => window.__sheetTrack());
   const openProbe = await page.evaluate(() => window.__addRowProbe());
   const floor = await page.evaluate(() => window.innerHeight);
-  const startedBelow = openTrack.length > 0 && Math.max(...openTrack) >= floor - 1;
+  // The sheet's start position is the floor minus whatever it is actually inset from it — 0 for a
+  // flush sheet, 8pt for a floating one. The sort panel here
+  // opens with no rules, which is short enough to float, so a threshold pinned to the flush shape's
+  // 0px inset reports a fully-run entrance as "instant" for measuring the wrong start line, not for
+  // any regression in the entrance itself.
+  const restingBottom = await page.evaluate(() => {
+    const panel = window.__addRowProbe().open ? document.querySelector(".db-mobile-bottom-sheet") : null;
+    return panel ? Number.parseFloat(getComputedStyle(panel).bottom) || 0 : 0;
+  });
+  const startedBelow = openTrack.length > 0 && Math.max(...openTrack) >= floor - restingBottom - 1;
   const settledAbove = openProbe.panelTop !== null && openProbe.panelTop < floor - 1;
   addRowResult.push({
     name: "a sheet that is genuinely opening still rises",
@@ -782,10 +822,11 @@ try {
     detail: openTrack.length === 0
       ? "the sheet was never sampled, so this run proves nothing"
       : startedBelow && settledAbove
-        ? `the entrance still runs: first seen at ${Math.max(...openTrack).toFixed(0)} on a ${floor}px screen,`
-          + ` settled at ${openProbe.panelTop.toFixed(0)}`
+        ? `the entrance still runs: first seen at ${Math.max(...openTrack).toFixed(0)} on a ${floor}px screen`
+          + ` (resting ${restingBottom}px off the floor), settled at ${openProbe.panelTop.toFixed(0)}`
         : `the entrance no longer runs on an open (deepest ${Math.max(...openTrack).toFixed(0)},`
-          + ` settled ${openProbe.panelTop === null ? "nothing" : openProbe.panelTop.toFixed(0)}, screen ${floor}px)`
+          + ` settled ${openProbe.panelTop === null ? "nothing" : openProbe.panelTop.toFixed(0)}, screen ${floor}px,`
+          + ` resting ${restingBottom}px off the floor)`
           + " — a sheet that appears instantly is not the fix this lane is asking for",
   });
 

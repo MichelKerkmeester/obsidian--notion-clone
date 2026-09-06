@@ -349,15 +349,10 @@ export class ViewConfigPanelRenderer {
     // is what keeps the sheet from replaying its rise and moving out from under the thumb.
     if (wasOpen) carrySheetEntrance(panel);
     this.asSheet = isMobileBottomSheet(panel.ownerDocument);
-    if (this.asSheet) {
-      buildShellHeader(panel, {
-        title: t("toolbar.settings"),
-        onClose: () => panel.remove(),
-      });
-    } else {
-      const header = panel.createDiv({ cls: "db-panel-header" });
-      header.createDiv({ cls: "db-panel-title", text: t("toolbar.settings") });
-    }
+    buildShellHeader(panel, {
+      title: t("toolbar.settings"),
+      onClose: () => panel.remove(),
+    });
 
     // Everything below the header scrolls; the header and the grab bar above it do not.
     //

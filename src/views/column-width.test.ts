@@ -65,13 +65,11 @@ describe("the column-width adjuster presents as a shared bottom sheet on a phone
     expect(columnWidthSource).toContain("installPopoverAutoClose");
   });
 
-  it("emits the shared sheet header: title row and a close control with the shared glyph", () => {
-    expect(columnWidthSource).toContain('cls: "db-panel-header"');
-    expect(columnWidthSource).toContain('cls: "db-panel-title"');
+  it("routes its header through the shell's three-slot builder rather than drawing its own", () => {
+    expect(columnWidthSource).toContain("buildShellHeader(panel");
     expect(columnWidthSource).toContain('t("columnWidth.adjustTitle"');
-    expect(columnWidthSource).toContain('cls: "db-cell-edit-close"');
-    expect(columnWidthSource).toContain('setIcon(closeBtn, "x")');
-    expect(columnWidthSource).toContain('"aria-label": t("common.close")');
+    expect(columnWidthSource).not.toContain('cls: "db-panel-header"');
+    expect(columnWidthSource).not.toContain('cls: "db-cell-edit-close"');
   });
 
   it("puts the slider and the typed value in one shared range row, not a floating pill", () => {

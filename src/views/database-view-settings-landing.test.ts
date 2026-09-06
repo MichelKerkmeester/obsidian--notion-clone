@@ -184,9 +184,28 @@ class MockElement {
     return el;
   }
 
-  appendChild(child: MockElement): void {
+  appendChild(child: MockElement): MockElement {
+    if (child.parentElement) {
+      const index = child.parentElement.children.indexOf(child);
+      if (index >= 0) child.parentElement.children.splice(index, 1);
+    }
     child.parentElement = this;
     this.children.push(child);
+    return child;
+  }
+
+  // `buildShellHeader` moves its own leading/trailing slots — and whatever a caller's
+  // `beforeClose` built — into position rather than only ever appending a fresh node, so this
+  // mock needs the same move semantics `appendChild` above got for the same reason.
+  insertBefore(newNode: MockElement, referenceNode: MockElement | null): MockElement {
+    if (newNode.parentElement) {
+      const index = newNode.parentElement.children.indexOf(newNode);
+      if (index >= 0) newNode.parentElement.children.splice(index, 1);
+    }
+    newNode.parentElement = this;
+    const at = referenceNode ? this.children.indexOf(referenceNode) : -1;
+    this.children.splice(at === -1 ? this.children.length : at, 0, newNode);
+    return newNode;
   }
 
   remove(): void {

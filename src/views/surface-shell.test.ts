@@ -296,18 +296,25 @@ describe("the thirteen sheet subclasses and the four fullscreen ones declare a t
 });
 
 // ───────────────────────────────────────────────────────────────────
-// 8. THE TWELVE createSheetHeader SITES ROUTE THROUGH THE SHELL'S OWN HEADER
+// 8. THE HEADER-BEARING FILES ROUTE THROUGH THE SHELL'S OWN HEADER
 // ───────────────────────────────────────────────────────────────────
 //
-// Eleven independent call sites migrate onto `buildShellHeader`; the engine's own default
-// builder inside `mobile-bottom-sheet.ts` is the twelfth and the expected survivor — it is
-// what `buildShellHeader` itself calls, so it must keep calling `createSheetHeader` directly.
+// The census started at twelve independent `createSheetHeader` sites (eleven migrated, the
+// engine's own default builder inside `mobile-bottom-sheet.ts` the expected twelfth survivor —
+// it is what `buildShellHeader` itself calls, so it must keep calling `createSheetHeader`
+// directly). A later census found that list short: `column-width.ts`, `chart-toolbar-renderer.ts`
+// (four sites), `toolbar-renderer.ts` (two), and `record-surface/record-header.ts`'s unconsumed
+// phone builder were all still hand-built from raw `db-panel-header`/`db-panel-title` markup.
+// The list below is the true population, re-pinned rather than left at twelve.
 //
-// Three of the eleven — the date, colour and icon pickers — since reached the same builder through
-// the picker host's `mountPickerSheetHeader`, which is the one place the family's phone-sheet
-// header is now built. They are asserted against that route instead of against a direct call, and
-// the host itself is asserted to reach `buildShellHeader`; what the whole section protects is
-// unchanged, that no surface builds the engine's two-slot header for itself.
+// Three of the original eleven — the date, colour and icon pickers — since reached the same
+// builder through the picker host's `mountPickerSheetHeader`, which is the one place the family's
+// phone-sheet header is now built. They are asserted against that route instead of against a
+// direct call, and the host itself is asserted to reach `buildShellHeader`; what the whole section
+// protects is unchanged, that no surface builds the engine's two-slot header for itself.
+//
+// `calendar-toolbar-renderer.ts` and `calendar-timeline-toolbar-renderer.ts` are the two raw sites
+// deliberately absent here: a concurrent calendar leg owns those files.
 
 const SHELL_HEADER_CONSUMER_FILES = [
   // The relation editor's phone header — editRelationPopover's body moved here from CellRenderer.
@@ -319,6 +326,10 @@ const SHELL_HEADER_CONSUMER_FILES = [
   "filter-panel-renderer.ts",
   "view-config-panel-renderer.ts",
   "column-manager-renderer.ts",
+  "column-width.ts",
+  "chart-toolbar-renderer.ts",
+  "toolbar-renderer.ts",
+  "record-surface/record-header.ts",
 ];
 
 const PICKER_HOST_HEADER_FILES = [

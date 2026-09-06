@@ -649,7 +649,12 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   // Real content, not a fixed height. The sheet sizes to what it holds, so an empty panel measures
   // 48px and passes the floor checks while covering almost none of the navigation band — a check
   // that would report success on a sheet no user could see.
-  for (let i = 0; i < 6; i += 1) {
+  //
+  // 20 fields, not 6: a record this short is exactly the shape the floating frame floats — 8pt clear
+  // of the floor on purpose, not a defect — so the floor/navbar-coverage claim below only still
+  // means what it says on content tall enough to classify flush, which is what an ordinary record
+  // (rarely under a dozen properties) actually renders as.
+  for (let i = 0; i < 20; i += 1) {
     const field = sheetPanel.createDiv({ cls: "db-record-detail-field" });
     field.createDiv({ cls: "db-record-detail-label", text: `Field ${i}` });
     field.createDiv({ cls: "db-record-detail-value", text: `Value ${i}` });
@@ -1873,13 +1878,18 @@ const addViewProbe = (isPhone) => {
   const handle = panel.querySelector(".db-mobile-bottom-sheet-handle");
   const handleBox = handle ? handle.getBoundingClientRect() : null;
   if (isPhone) {
+    // Flush or floating — the add-view menu is short enough to
+    // float, so "on the floor" is read against whichever inset the sheet actually classified as
+    // rather than the flush shape's fixed 0.
+    const floating = panel.classList.contains("db-sheet-floating");
+    const inset = floating ? Number.parseFloat(cs.left) || 0 : 0;
     out.push({
       name: "add view: on a phone the surface is a sheet on the viewport floor",
-      pass: isSheet && cs.bottom === "0px" && Math.abs(rect.bottom - window.innerHeight) <= 1
-        && Math.round(rect.width) >= window.innerWidth - 1 && scrim && Boolean(handle),
+      pass: isSheet && Number.parseFloat(cs.bottom) === inset && Math.abs(window.innerHeight - rect.bottom - inset) <= 1
+        && Math.round(rect.width) >= window.innerWidth - inset * 2 - 1 && scrim && Boolean(handle),
       detail: `sheet=${isSheet} bottom=${cs.bottom} rect.bottom=${Math.round(rect.bottom)} `
         + `viewport=${window.innerHeight} width=${Math.round(rect.width)}/${window.innerWidth} `
-        + `scrim=${scrim} handle=${Boolean(handle)}`,
+        + `scrim=${scrim} handle=${Boolean(handle)} resting ${inset}px off the floor`,
     });
     // The grab band is a ::before on the handle — 100vw by 48px, centred on a bar that is itself
     // only 36x4. `getBoundingClientRect` returns the bar and reports 4px, which is what this check
@@ -2424,11 +2434,16 @@ const columnWidthKeyboardResults = await section(
 
     numberField.focus();
     const restingBox = panel.getBoundingClientRect();
+    // The adjuster's own resting inset: 0 for a flush sheet,
+    // 8pt for a floating one — this specific column has one field and floats, measured via the
+    // class `mobile-bottom-sheet.ts`'s classifier toggles rather than assumed as the flush 0.
+    const restingInset = Number.parseFloat(getComputedStyle(panel).bottom) || 0;
     out.push({
       name: "with no keyboard the adjuster still sits on the viewport floor",
-      pass: Math.abs(restingBox.bottom - window.innerHeight) <= 1,
+      pass: Math.abs(window.innerHeight - restingBox.bottom - restingInset) <= 1,
       detail: `bottom=${restingBox.bottom.toFixed(0)} viewport=${window.innerHeight} `
-        + "(this must not move — only the keyboard cases below should)",
+        + `(resting ${restingInset}px off the floor; this gap must not move — only the keyboard`
+        + " cases below should)",
     });
 
     // The same 331px keyboard height every other check in this file drives, measured off the
@@ -2439,14 +2454,14 @@ const columnWidthKeyboardResults = await section(
     document.documentElement.style.setProperty("--keyboard-height", `${KEYBOARD}px`);
     window.dispatchEvent(new window.Event("resize"));
     await settle();
-    const hostFloor = window.innerHeight - KEYBOARD;
+    const hostFloor = window.innerHeight - KEYBOARD - restingInset;
     const hostPanelBox = panel.getBoundingClientRect();
     const hostFieldBox = numberField.getBoundingClientRect();
     out.push({
       name: "the adjuster clears a keyboard the host reports",
       pass: Math.abs(hostPanelBox.bottom - hostFloor) <= 2,
       detail: `panel bottom=${hostPanelBox.bottom.toFixed(0)} want=${hostFloor} `
-        + `(keyboard covers ${hostFloor}..${window.innerHeight})`,
+        + `(keyboard covers ${hostFloor}..${window.innerHeight}, resting ${restingInset}px off the floor)`,
     });
     out.push({
       name: "the focused width field stays visible above a keyboard the host reports",
@@ -2488,14 +2503,14 @@ const columnWidthKeyboardResults = await section(
     });
     window.visualViewport.dispatchEvent(new window.Event("resize"));
     await settle();
-    const deviceFloor = window.innerHeight - KEYBOARD;
+    const deviceFloor = window.innerHeight - KEYBOARD - restingInset;
     const devicePanelBox = panel.getBoundingClientRect();
     const deviceFieldBox = numberField.getBoundingClientRect();
     out.push({
       name: "the adjuster clears a keyboard no host reported",
       pass: Math.abs(devicePanelBox.bottom - deviceFloor) <= 2,
       detail: `panel bottom=${devicePanelBox.bottom.toFixed(0)} want=${deviceFloor} `
-        + `(visualViewport shrunk to ${window.visualViewport.height})`,
+        + `(visualViewport shrunk to ${window.visualViewport.height}, resting ${restingInset}px off the floor)`,
     });
     out.push({
       name: "the focused width field stays visible above a keyboard no host reported",
@@ -2509,8 +2524,8 @@ const columnWidthKeyboardResults = await section(
     const closedBox = panel.getBoundingClientRect();
     out.push({
       name: "the adjuster returns to the floor once the keyboard closes",
-      pass: Math.abs(closedBox.bottom - window.innerHeight) <= 1,
-      detail: `bottom=${closedBox.bottom.toFixed(0)} viewport=${window.innerHeight}`,
+      pass: Math.abs(window.innerHeight - closedBox.bottom - restingInset) <= 1,
+      detail: `bottom=${closedBox.bottom.toFixed(0)} viewport=${window.innerHeight} resting ${restingInset}px off the floor`,
     });
 
     close();
@@ -4599,8 +4614,17 @@ const rowRangeProbe = async ({ pointerType }) => {
     const asSheet = menu.classList.contains("db-mobile-bottom-sheet");
     const onScreen = m.top >= 0 && m.left >= -1
       && m.bottom <= window.innerHeight + 1 && m.right <= window.innerWidth + 1;
+    // A sheet sits flush against every free edge, or floats a fixed 8pt off all three of them
+    // a four-entry menu is short enough to float, and a
+    // check that only accepted the flush shape read that as unplaced rather than as the OTHER
+    // shape this same class name can now carry. Read off the class the classifier toggles
+    // (`mobile-bottom-sheet.ts`'s `db-sheet-floating`) rather than re-deriving the inset, so this
+    // stays in step with whichever value that module owns.
+    const floating = menu.classList.contains("db-sheet-floating");
+    const inset = floating ? Number.parseFloat(getComputedStyle(menu).left) || 0 : 0;
     const placed = asSheet
-      ? Math.abs(m.width - window.innerWidth) <= 1 && Math.abs(m.bottom - window.innerHeight) <= 1
+      ? Math.abs(m.width - (window.innerWidth - inset * 2)) <= 1
+        && Math.abs(window.innerHeight - m.bottom - inset) <= 1
       : (Math.abs(m.top - r.bottom) <= 12 || Math.abs(m.bottom - r.top) <= 12
         || (m.top >= r.top - 12 && m.top <= r.bottom + 12))
         && m.right > r.left && m.left < r.right;
@@ -5776,12 +5800,18 @@ await section("lifted probes: desktop placement", async () => {
     menu.showAt({ x: 40, y: 200 });
     const r = menu.el.getBoundingClientRect();
     const style = getComputedStyle(menu.el);
+    // Flush or floating — an 8-row owned menu is short enough
+    // to float, so "still a bottom sheet" is read against whichever inset it actually classified
+    // as rather than the flush shape's fixed 0/full-width.
+    const floating = menu.el.classList.contains("db-sheet-floating");
+    const inset = floating ? Number.parseFloat(style.left) || 0 : 0;
     out.push({
       name: "PHONE an owned menu still presents as a full-width bottom sheet",
-      pass: Math.round(r.width) >= window.innerWidth - 1 && Math.abs(r.bottom - window.innerHeight) <= 1,
+      pass: Math.round(r.width) >= window.innerWidth - inset * 2 - 1
+        && Math.abs(window.innerHeight - r.bottom - inset) <= 1,
       detail: `menu=[${Math.round(r.left)}..${Math.round(r.right)}] width=${Math.round(r.width)} `
         + `viewport=${window.innerWidth}x${window.innerHeight} bottom=${Math.round(r.bottom)} `
-        + `position=${style.position} max-height=${style.maxHeight}`,
+        + `position=${style.position} max-height=${style.maxHeight} resting ${inset}px off the floor`,
     });
     // The CAP, not the resulting height. Asserting only `height <= 90%` passes on almost any menu:
     // a six-row list is under that ceiling wherever it is placed, so the clause went green on a
@@ -5789,14 +5819,17 @@ await section("lifted probes: desktop placement", async () => {
     // control and this was the one presentation clause that did not move. What discriminates is
     // which ceiling is in force.
     const cap = parseFloat(style.maxHeight);
-    const sheetCap = window.innerHeight * 0.9;
+    // A floating sheet's cap is the same 90svh minus the inset it also keeps clear at the bottom
+    // (`.db-sheet-floating`'s own `max-height` rule) — the flush
+    // 90svh figure alone is only the OTHER shape's ceiling.
+    const sheetCap = window.innerHeight * 0.9 - inset;
     out.push({
       name: "PHONE the sheet is capped and scrolls rather than growing past the screen",
       pass: Math.abs(cap - sheetCap) <= 1 && r.height <= cap + 2 && style.overflowY === "auto",
       detail: `height=${Math.round(r.height)} against a computed max-height of ${cap.toFixed(1)}px; `
-        + `the sheet's 90svh cap is ${sheetCap.toFixed(1)}px, and the two agree=`
-        + `${Math.abs(cap - sheetCap) <= 1} — which is the clause, because the desktop branch writes `
-        + `its own ceiling and a short menu sits under either one; overflow-y=${style.overflowY}`,
+        + `the sheet's own cap (90svh, less its ${inset}px inset) is ${sheetCap.toFixed(1)}px, and `
+        + `the two agree=${Math.abs(cap - sheetCap) <= 1} — which is the clause, because the desktop `
+        + `branch writes its own ceiling and a short menu sits under either one; overflow-y=${style.overflowY}`,
     });
     menu.close();
 
@@ -5885,12 +5918,14 @@ await section("lifted probes: desktop placement", async () => {
     const keptRect = kept.getBoundingClientRect();
     const keptVisibility = getComputedStyle(kept).visibility;
     const keptScrims = scrims();
+    const keptFloating = kept.classList.contains("db-sheet-floating");
+    const keptInset = keptFloating ? Number.parseFloat(getComputedStyle(kept).left) || 0 : 0;
     out.push({
       name: "PHONE CONTROL a sheet with a live anchor keeps its backdrop and stays on the floor",
       pass: keptVisibility !== "hidden" && keptScrims === 1
-        && Math.abs(keptRect.bottom - window.innerHeight) <= 1,
+        && Math.abs(window.innerHeight - keptRect.bottom - keptInset) <= 1,
       detail: `visibility=${keptVisibility}, ${keptScrims} backdrop(s), sheet bottom`
-        + ` ${Math.round(keptRect.bottom)} of ${window.innerHeight}`,
+        + ` ${Math.round(keptRect.bottom)} of ${window.innerHeight}, resting ${keptInset}px off the floor`,
     });
     kept.remove();
     liveAnchor.remove();
@@ -6593,6 +6628,9 @@ await section("lifted probes: the sheet audit", async () => {
   const kbVisual = await page.evaluate(async () => {
     const panel = document.querySelector(".db-record-detail-panel");
     const before = Math.round(panel.getBoundingClientRect().bottom);
+    // This record carries four fields, short enough to float —
+    // read the resting inset off the panel itself rather than assuming the flush shape's fixed 0.
+    const restingInset = Number.parseFloat(getComputedStyle(panel).bottom) || 0;
     document.documentElement.style.setProperty("--keyboard-height", "336px");
     // The iOS-shaped signal: visualViewport changes, window does not.
     window.visualViewport?.dispatchEvent(new Event("resize"));
@@ -6605,7 +6643,7 @@ await section("lifted probes: the sheet audit", async () => {
     window.visualViewport?.dispatchEvent(new Event("resize"));
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     const back = document.querySelector(".db-record-detail-panel");
-    return { ...out, restored: back ? Math.round(back.getBoundingClientRect().bottom) : null, viewport: window.innerHeight };
+    return { ...out, restingInset, restored: back ? Math.round(back.getBoundingClientRect().bottom) : null, viewport: window.innerHeight };
   });
   record(4, "a declared keyboard height lifts the sheet clear of it",
     kbVisual.survived && kbVisual.viewport - kbVisual.bottom >= 330,
@@ -6618,8 +6656,9 @@ await section("lifted probes: the sheet audit", async () => {
     kbVisual.survived && kbVisual.top >= 0,
     kbVisual.survived ? `top edge at y=${kbVisual.top}, max-height ${kbVisual.maxH}` : "n/a — sheet gone");
   record(4, "the sheet returns to the floor when the keyboard closes",
-    kbVisual.restored !== null && Math.abs(kbVisual.restored - kbVisual.viewport) <= 1,
-    kbVisual.restored === null ? "n/a — sheet gone" : `bottom edge back at ${kbVisual.restored} of ${kbVisual.viewport}`);
+    kbVisual.restored !== null && Math.abs(kbVisual.viewport - kbVisual.restored - kbVisual.restingInset) <= 1,
+    kbVisual.restored === null ? "n/a — sheet gone"
+      : `bottom edge back at ${kbVisual.restored} of ${kbVisual.viewport}, resting ${kbVisual.restingInset}px off the floor`);
 
   // The fallback ON ITS OWN, with the host variable absent.
   //
@@ -6679,6 +6718,7 @@ await section("lifted probes: the sheet audit", async () => {
     return {
       survived: Boolean(live),
       bottom: live ? Math.round(live.getBoundingClientRect().bottom) : null,
+      restingInset: live ? Number.parseFloat(getComputedStyle(live).bottom) || 0 : 0,
       viewport: window.innerHeight,
       width: window.innerWidth,
     };
@@ -6692,12 +6732,13 @@ await section("lifted probes: the sheet audit", async () => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(120);
   record(4, "the sheet survives the window resize a keyboard causes, and not the one a rotation causes",
-    kbWindow.survived && kbWindow.bottom === kbWindow.viewport && !rotated.survived,
+    kbWindow.survived && kbWindow.bottom === kbWindow.viewport - kbWindow.restingInset && !rotated.survived,
     kbWindow.survived
       ? `the viewport shrank 844 -> ${kbWindow.viewport} at an unchanged width of ${kbWindow.width}:`
         + ` the sheet is still open and still on the floor, bottom edge ${kbWindow.bottom} of`
-        + ` ${kbWindow.viewport}. Rotating to ${rotated.width} wide closed it=${!rotated.survived},`
-        + ` which is what says the handler reads the geometry rather than ignoring the event`
+        + ` ${kbWindow.viewport} (resting ${kbWindow.restingInset}px off it). Rotating to ${rotated.width}`
+        + ` wide closed it=${!rotated.survived}, which is what says the handler reads the geometry`
+        + " rather than ignoring the event"
       : "one window resize closed the record sheet outright — openRecordDetailPanel registers"
         + " onResize = close(), so on a host that resizes the window for its keyboard the sheet is"
         + " gone before any inset can be applied");

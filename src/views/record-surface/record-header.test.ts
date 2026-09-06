@@ -22,6 +22,7 @@ class MockElement {
   public textContent = "";
   public attributes = new Map<string, string>();
   public children: MockElement[] = [];
+  public parent: MockElement | null = null;
   private listeners = new Map<string, Array<(event: { stopPropagation(): void; preventDefault(): void }) => void>>();
 
   constructor(tagName = "div", className = "") {
@@ -45,8 +46,28 @@ class MockElement {
       el.textContent = options.text;
     }
     if (options.attr) for (const [key, value] of Object.entries(options.attr)) el.attributes.set(key, value);
+    el.parent = this;
     this.children.push(el);
     return el;
+  }
+
+  // `buildShellHeader` moves an already-created child (its own leading/trailing slots, and
+  // whatever a caller's `beforeClose` built) rather than only ever appending a fresh one — real
+  // DOM nodes detach from their current parent on either call, and this mock reproduces exactly
+  // that rather than only the append-only subset `createEl` needed until now.
+  insertBefore(newNode: MockElement, referenceNode: MockElement | null): MockElement {
+    newNode.parent?.children.splice(newNode.parent.children.indexOf(newNode), 1);
+    newNode.parent = this;
+    const at = referenceNode ? this.children.indexOf(referenceNode) : -1;
+    this.children.splice(at === -1 ? this.children.length : at, 0, newNode);
+    return newNode;
+  }
+
+  appendChild(newNode: MockElement): MockElement {
+    newNode.parent?.children.splice(newNode.parent.children.indexOf(newNode), 1);
+    newNode.parent = this;
+    this.children.push(newNode);
+    return newNode;
   }
 
   addEventListener(type: string, handler: (event: { stopPropagation(): void; preventDefault(): void }) => void): void {

@@ -5,11 +5,11 @@
 //
 // Two shapes exist today, built by hand in three different files. The desktop shape
 // (icon + title + open + close in one row) is `record-detail-panel.ts`'s own DOM; the
-// sheet shape (title centred, a persistent close button) is `createSheetHeader`, already
-// shared by every other phone panel. Neither is redesigned here — the desktop builder
-// reproduces the existing DOM byte for byte, and the phone builder is a thin pass-through
-// to the sheet header that already exists — so a consumer can switch onto this module
-// without its capture moving.
+// sheet shape (a leading slot, the centred title, a persistent close button) is
+// `buildShellHeader`, already shared by every other migrated phone panel. Neither is
+// redesigned here — the desktop builder reproduces the existing DOM byte for byte, and the
+// phone builder is a thin pass-through to the shell header that already exists — so a
+// consumer can switch onto this module without its capture moving.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -18,7 +18,8 @@
 import { setIcon, setTooltip } from "obsidian";
 import { t } from "../../i18n";
 import { setFieldTooltip } from "../field-tooltip";
-import { createSheetHeader, type SheetHeaderHandle, type SheetHeaderOptions } from "../mobile-bottom-sheet";
+import { type SheetHeaderHandle, type SheetHeaderOptions } from "../mobile-bottom-sheet";
+import { buildShellHeader } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. DESKTOP VARIANT
@@ -118,9 +119,12 @@ export interface PhoneRecordHeaderOptions extends Pick<SheetHeaderOptions, "befo
   onClose: () => void;
 }
 
-/** The sheet header every other phone panel already shares. Nothing new — a named entry point. */
+/** The shell's own three-slot header every other phone panel already shares. Nothing new — a
+ * named entry point, pointed at `buildShellHeader` rather than the engine's two-slot builder so a
+ * consumer's title lands centred like every other migrated sheet instead of pinned to the leading
+ * edge beside a centred one. */
 export function buildPhoneRecordHeader(options: PhoneRecordHeaderOptions): SheetHeaderHandle {
-  return createSheetHeader(options.parent, {
+  return buildShellHeader(options.parent, {
     title: options.title,
     onClose: options.onClose,
     beforeClose: options.beforeClose,

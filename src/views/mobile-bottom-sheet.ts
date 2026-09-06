@@ -274,6 +274,110 @@ export function attachSheetChromeToModal(
 }
 
 // ───────────────────────────────────────────────────────────────────
+// 2d. THE FRAME SHAPE
+// ───────────────────────────────────────────────────────────────────
+
+// Anytype ships two phone sheet frames, not one. Every
+// floating sheet the capture set measured put its top edge at >=299pt of an 874pt screen; every
+// flush sheet at <=198pt. Nothing was captured in between, so the split below sits at the
+// midpoint of that unobserved gap rather than inventing a boundary either capture set would
+// contradict — a value pinned to either observed edge would misclassify the first surface whose
+// natural height lands on the other side of it.
+//
+// Stated as a height ratio rather than the two pt figures directly, because a sheet's own
+// natural height is measured against whatever viewport it is actually on, not against 874pt.
+const FLOATING_HEIGHT_RATIO_MAX = ((1 - 299 / 874) + (1 - 198 / 874)) / 2;
+
+// The shape this module toggles is also one of the shape's own inputs: floating narrows the sheet
+// by two insets and caps its height differently, and a condition row sized for the flush width can
+// wrap onto a second line at the narrower one — which changes the SAME rendered height this
+// function reads next time `ResizeObserver` calls it. Measured directly on the filter sheet's
+// `add-condition` scenario: classifying it floating narrows it, the row wraps, the taller wrapped
+// height reads back above the cutoff, the very next observation classifies it flush again, flush
+// widens it back, the row unwraps, and the shorter height reads below the cutoff once more — an
+// oscillation with no settled state, each leg of it a real layout change a concurrent placement
+// pass can land in the middle of. A single cutoff cannot both classify a genuinely tall surface
+// and refuse to answer its own footprint; two cutoffs with a gap between them can, because leaving
+// the sheet's CURRENT shape alone inside that gap is a legitimate third answer a plain `<=` never
+// had. The gap is 3% of viewport height (≈25px on an 874pt screen) — wider than the wrap this
+// leg measured (≈20px, one condition row's line-height) and narrower than the unobserved span
+// between the two captured shapes (§6 C10 above), so it absorbs the feedback without blurring the
+// boundary the captures actually drew.
+const FLOATING_HYSTERESIS_RATIO = 0.03;
+const FLUSH_HEIGHT_RATIO_MIN = FLOATING_HEIGHT_RATIO_MAX + FLOATING_HYSTERESIS_RATIO;
+
+const frameShapeObservers = new WeakMap<HTMLElement, { disconnect(): void }>();
+
+/** Read the sheet's own rendered height against the viewport and toggle the floating class. */
+function classifySheetFrameShape(panel: HTMLElement): void {
+  const view = panel.ownerDocument.defaultView;
+  const viewportHeight = view?.visualViewport?.height ?? view?.innerHeight;
+  const height = panel.getBoundingClientRect().height;
+  if (!viewportHeight || !height) return;
+  const ratio = height / viewportHeight;
+  if (ratio <= FLOATING_HEIGHT_RATIO_MAX) panel.addClass("db-sheet-floating");
+  else if (ratio >= FLUSH_HEIGHT_RATIO_MIN) panel.removeClass("db-sheet-floating");
+  // Between the two: neither cutoff is crossed, so the sheet keeps whatever shape it already had
+  // rather than a `<=` deciding on a height this same class may have produced.
+}
+
+/**
+ * Keep a sheet's frame shape current as its natural height changes.
+ *
+ * A one-off measurement at mount would freeze the sheet's shape at whatever height it opened
+ * with — wrong the moment a filter panel goes from no rules to three, or a sub-page swaps in
+ * taller content. `ResizeObserver` is the one signal that fires for both, without this module
+ * having to know which of its many callers changed the content or why.
+ */
+function watchSheetFrameShape(panel: HTMLElement): void {
+  if (frameShapeObservers.has(panel)) return;
+  classifySheetFrameShape(panel);
+  const ResizeObserverCtor = panel.ownerDocument.defaultView?.ResizeObserver;
+  if (!ResizeObserverCtor) return;
+  // Debounced rather than deferred by one frame: the class this toggles changes `max-height` and
+  // the floating insets, which on a sheet whose content was up against that ceiling — or whose
+  // narrower floating width wraps a row onto a second line — changes the panel's own rendered
+  // height again, waking this same observer a second time. A single deferred frame still landed
+  // inside that second wake on a loaded machine (two browser engines driving one host, `sheet-
+  // rebuild.mjs`'s own toolbar-rebuild section), so a probe reading the panel between the first
+  // and second classification measured a shape already mid-reclassification rather than settled —
+  // and a control whose on-screen position just moved under a thumb already resting on it is
+  // exactly the defect `044`'s grab band and this leg's own C10 geometry both exist to prevent.
+  // Debouncing collapses however many of these self-answering wakes a given layout produces into
+  // the one classification taken after they stop, rather than acting on each in turn.
+  let debounce: number | undefined;
+  const observer = new ResizeObserverCtor(() => {
+    const view = panel.ownerDocument.defaultView;
+    if (!view) {
+      classifySheetFrameShape(panel);
+      return;
+    }
+    if (debounce !== undefined) view.clearTimeout(debounce);
+    debounce = view.setTimeout(() => {
+      debounce = undefined;
+      classifySheetFrameShape(panel);
+    }, 80);
+  });
+  observer.observe(panel);
+  frameShapeObservers.set(panel, {
+    disconnect: () => {
+      observer.disconnect();
+      // A pending debounce outlives `disconnect()` otherwise — the timer is not owned by the
+      // observer, so stopping observation does not stop it, and it would still fire the
+      // classifier on a panel this module has already stopped tracking as a sheet.
+      const view = panel.ownerDocument.defaultView;
+      if (debounce !== undefined) view?.clearTimeout(debounce);
+    },
+  });
+}
+
+function unwatchSheetFrameShape(panel: HTMLElement): void {
+  frameShapeObservers.get(panel)?.disconnect();
+  frameShapeObservers.delete(panel);
+  panel.removeClass("db-sheet-floating");
+}
+
+// ───────────────────────────────────────────────────────────────────
 // 3. THE ENTRANCE
 // ───────────────────────────────────────────────────────────────────
 
@@ -376,6 +480,7 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     if (isSheetTraceEnabled()) beginSheetGeneration(panel.className);
     claimBottomDock(doc, "sheet", true);
     watchForSheetRemoval(doc);
+    watchSheetFrameShape(panel);
     // A surface built on the body is already where a sheet has to be, so there is nothing to move
     // and nothing to remember. It still needs the backdrop, which is why that is settled above
     // rather than inside the move: an owned menu mounts itself on the body, and returning here
@@ -426,6 +531,7 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
 
   const wasSheet = sheetsFor(doc).delete(panel);
   sheetPointerCapture.delete(panel);
+  unwatchSheetFrameShape(panel);
   if (wasSheet) overlayStack.unregisterPanel(panel, false);
   panel.style.removeProperty("--db-sheet-depth");
   panel.style.removeProperty("--db-sheet-z-index");

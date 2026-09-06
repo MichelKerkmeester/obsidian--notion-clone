@@ -109,6 +109,47 @@ const REGISTERED_SURFACES = [
   { name: "confirm", spec: { renderer: "confirm" } },
 ];
 
+// ───────────────────────────────────────────────────────────────────
+// 2c. TITLE CENTRING
+// ───────────────────────────────────────────────────────────────────
+
+// Every registered header-bearing surface, minus the two whose header is not `buildShellHeader`'s
+// at all — `record-detail` and `record-peek` draw `.db-record-detail-header` by hand in
+// `record-detail-panel.ts`, a third header shape this leg does not touch (`record-header.ts`'s own
+// phone builder now calls `buildShellHeader` too, but no production caller has reached it yet) —
+// plus the one this defect was actually found on: `column-manager` pairs a fixed-width leading
+// slot with a wider trailing one (the "All" toggle beside the close), so it is the one member of
+// this list guaranteed to expose an unmirrored slot if the centring rule regresses —
+// constructed-column-manager's "Properties" measured off centre before buildShellHeader grouped
+// its trailing children into one box the grid could mirror.
+const TITLE_CENTERED_SURFACES = [
+  ...REGISTERED_SURFACES.filter((s) => s.name !== "record-detail" && s.name !== "record-peek"),
+  { name: "column-manager", spec: { renderer: "column-manager", bag: "file-view", captureData: true } },
+];
+
+// A 1px allowance for sub-pixel rounding on the two measured rects, never for an actual asymmetry —
+// `design-trueup.md` §6 C6 asks for the frame's own centre, not agreement between two slots.
+const TITLE_CENTER_TOLERANCE_PX = 1;
+
+// ───────────────────────────────────────────────────────────────────
+// 2d. THE FRAME SHAPE
+// ───────────────────────────────────────────────────────────────────
+
+// One short surface, one tall one — the two measured shapes, not a sweep over every registered
+// row: `sort-panel` renders three rows and stays well clear of the 90svh cap (240px measured);
+// `settings` renders the whole view-config body and hits that cap outright (759.6px of an 844px
+// viewport, both measured against the same fixtures the rest of this lane already mounts). A
+// third value between the two is exactly what the capture set never produced either.
+const FRAME_SHAPE_SURFACES = [
+  { name: "sort-panel", shape: "floating", spec: { renderer: "sort-panel", bag: "file-view", captureData: true } },
+  { name: "settings", shape: "flush", spec: { renderer: "view-config", bag: "file-view", captureData: true } },
+];
+
+const FRAME_INSET_PX = 8;
+const FRAME_RADIUS_FLOATING_PX = 16;
+const FRAME_RADIUS_FLUSH_PX = 8;
+const FRAME_GEOMETRY_TOLERANCE_PX = 0.5;
+
 // Each entry names a real parent shape from the render harness and the production opener family
 // used by the child. The adapter below keeps the row contract identical for dropdowns, menus,
 // pickers and host-modal chrome, while the parent and child still go through shipped modules.
@@ -358,6 +399,115 @@ window.__sheetGrammarNegativeControl = () => {
     restored = sheet ? describeSheetGrammar(sheet) : null;
   });
   return { removed, restored };
+};
+
+const measureTitleCenter = (sheet) => {
+  const title = sheet.querySelector(".db-shell-header .db-panel-title");
+  if (!title) return { titleFound: false };
+  const sheetRect = sheet.getBoundingClientRect();
+  const titleRect = title.getBoundingClientRect();
+  return {
+    titleFound: true,
+    delta: Math.abs((sheetRect.left + sheetRect.right) / 2 - (titleRect.left + titleRect.right) / 2),
+  };
+};
+
+window.__shellHeaderCentering = (scenario) => {
+  let result = { mounted: false };
+  runRenderAssertions(document.body, scenario, "", () => {
+    const sheet = mountedSheet();
+    if (!sheet) return;
+    result = { mounted: true, sheetFound: true, ...measureTitleCenter(sheet) };
+  });
+  return result;
+};
+
+// The negative control puts the header back into the two-slot flex row buildShellHeader used to
+// produce before this leg — a fixed-width leading slot facing a content-width trailing one — by
+// overriding the CSS in the page rather than touching a shipped file, so it proves the grid rule
+// is load-bearing rather than merely present. column-manager's trailing box (the "All" toggle
+// plus the close) is wider than the leading slot's old fixed 44px, which is exactly the asymmetry
+// the report measured.
+window.__shellHeaderCenteringNegativeControl = (scenario) => {
+  const style = document.createElement("style");
+  style.textContent = [
+    ".db-shell-header { display: flex !important; justify-content: flex-start !important; }",
+    ".db-shell-header-leading { display: inline-flex !important; flex: 0 0 auto !important; min-width: 44px !important; }",
+    ".db-shell-header .db-panel-title { flex: 1 1 auto !important; }",
+    ".db-shell-header-trailing { flex: 0 0 auto !important; justify-self: auto !important; }",
+  ].join(" ");
+  document.head.appendChild(style);
+  let broken = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    const sheet = mountedSheet();
+    if (sheet) {
+      const measured = measureTitleCenter(sheet);
+      if (measured.titleFound) broken = measured.delta;
+    }
+  });
+  style.remove();
+  let fixed = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    const sheet = mountedSheet();
+    if (sheet) {
+      const measured = measureTitleCenter(sheet);
+      if (measured.titleFound) fixed = measured.delta;
+    }
+  });
+  return { broken, fixed };
+};
+
+const pxToNumber = (value) => Number.parseFloat(value) || 0;
+
+// Read off computed style rather than getBoundingClientRect: the sheet's entrance plays a
+// transform, which moves the painted box without moving the left/right/bottom/border-radius
+// values the frame shape actually sets, so a rect read mid-entrance would measure the
+// animation, not the shape. Every registered scenario mounts and measures within one render pass
+// with no intervening frame, exactly like every other check in this file — the animation plays
+// after, never before, the callback below runs.
+const measureFrameShape = (sheet) => {
+  const style = getComputedStyle(sheet);
+  return {
+    floating: sheet.classList.contains("db-sheet-floating"),
+    // The CSS left/right/bottom properties on a position: fixed element ARE the inset
+    // from that edge already — no viewport arithmetic needed to read them as insets.
+    left: pxToNumber(style.left),
+    right: pxToNumber(style.right),
+    bottom: pxToNumber(style.bottom),
+    topLeftRadius: pxToNumber(style.borderTopLeftRadius),
+    bottomLeftRadius: pxToNumber(style.borderBottomLeftRadius),
+  };
+};
+
+window.__sheetFrameShape = (scenario) => {
+  let out = { mounted: false };
+  runRenderAssertions(document.body, scenario, "", () => {
+    const sheet = mountedSheet();
+    if (!sheet) return;
+    out = { mounted: true, sheetFound: true, ...measureFrameShape(sheet) };
+  });
+  return out;
+};
+
+// The negative control neutralises the shape rule itself — the CSS mobile-bottom-sheet.ts's
+// classifier depends on — rather than the class the ResizeObserver toggles, so it proves the
+// GEOMETRY is load-bearing even on a surface the classifier still (correctly) calls floating.
+window.__sheetFrameShapeNegativeControl = (scenario) => {
+  const style = document.createElement("style");
+  style.textContent = ".db-mobile-bottom-sheet.db-sheet-floating { left: 0 !important; right: 0 !important; bottom: 0 !important; border-radius: 8px 8px 0 0 !important; }";
+  document.head.appendChild(style);
+  let broken = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    const sheet = mountedSheet();
+    if (sheet) broken = measureFrameShape(sheet);
+  });
+  style.remove();
+  let fixed = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    const sheet = mountedSheet();
+    if (sheet) fixed = measureFrameShape(sheet);
+  });
+  return { broken, fixed };
 };
 
 const waitForStackSettle = () => new Promise((resolve) => {
@@ -1127,6 +1277,82 @@ try {
     console.log(`  ${controlBeforeGreen ? "PASS" : "FAIL"}  parent treatment green before the old-way mount (opacity ${before.dim}, content transform ${before.transform})`);
     console.log(`  ${oldWayRed ? "PASS" : "FAIL"}  parent treatment red for the old-way mount (opacity ${oldWay.dim}, content transform ${oldWay.transform})`);
     console.log(`  ${controlRestoredGreen ? "PASS" : "FAIL"}  parent treatment green after restoration (opacity ${restored.dim}, content transform ${restored.transform})`);
+  }
+  console.log("");
+
+  console.log("sheet-grammar: title centring — every header-bearing surface\n");
+  for (const { name, spec } of TITLE_CENTERED_SURFACES) {
+    const report = await page.evaluate((scenario) => window.__shellHeaderCentering(scenario), spec);
+    if (!report.mounted || !report.sheetFound) {
+      failures.push(`title centring ${name}: did not mount a sheet`);
+      console.log(`  FAIL  ${name} — did not mount a sheet`);
+      continue;
+    }
+    if (!report.titleFound) {
+      failures.push(`title centring ${name}: no .db-shell-header title to measure`);
+      console.log(`  FAIL  ${name} — no .db-shell-header title to measure`);
+      continue;
+    }
+    const ok = report.delta <= TITLE_CENTER_TOLERANCE_PX;
+    if (!ok) failures.push(`title centring ${name}: title centre ${report.delta.toFixed(2)}px off the frame centre, wanted <= ${TITLE_CENTER_TOLERANCE_PX}px`);
+    console.log(`  ${ok ? "PASS" : "FAIL"}  ${name} — title centre within ${report.delta.toFixed(2)}px of the frame centre`);
+  }
+  console.log("");
+
+  const columnManagerSpec = TITLE_CENTERED_SURFACES.find((s) => s.name === "column-manager").spec;
+  const centeringControl = await page.evaluate((scenario) => window.__shellHeaderCenteringNegativeControl(scenario), columnManagerSpec);
+  console.log("sheet-grammar: title centring negative control — column-manager's old two-slot flex row\n");
+  if (centeringControl.broken == null || centeringControl.fixed == null) {
+    failures.push("title centring negative control: column-manager did not mount a title to measure");
+    console.log("  FAIL  title centring negative control — column-manager did not mount a title to measure");
+  } else {
+    const wentRed = centeringControl.broken > TITLE_CENTER_TOLERANCE_PX;
+    const cleanAfter = centeringControl.fixed <= TITLE_CENTER_TOLERANCE_PX;
+    if (!wentRed) failures.push(`title centring negative control: the old two-slot row measured ${centeringControl.broken.toFixed(2)}px off centre, wanted > ${TITLE_CENTER_TOLERANCE_PX}px`);
+    if (!cleanAfter) failures.push(`title centring negative control: the grid rule did not restore centring (${centeringControl.fixed.toFixed(2)}px)`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  the old two-slot row goes off-centre (${centeringControl.broken.toFixed(2)}px)`);
+    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  the grid rule restores centring (${centeringControl.fixed.toFixed(2)}px)`);
+  }
+  console.log("");
+
+  console.log("sheet-grammar: frame shape — the floating/flush split\n");
+  for (const { name, shape, spec } of FRAME_SHAPE_SURFACES) {
+    const report = await page.evaluate((scenario) => window.__sheetFrameShape(scenario), spec);
+    if (!report.mounted || !report.sheetFound) {
+      failures.push(`frame shape ${name}: did not mount a sheet`);
+      console.log(`  FAIL  ${name} — did not mount a sheet`);
+      continue;
+    }
+    const wantFloating = shape === "floating";
+    const classOk = report.floating === wantFloating;
+    if (!classOk) failures.push(`frame shape ${name}: classified as ${report.floating ? "floating" : "flush"}, wanted ${shape}`);
+    console.log(`  ${classOk ? "PASS" : "FAIL"}  ${name} — classified ${report.floating ? "floating" : "flush"}, wanted ${shape}`);
+
+    const expected = wantFloating
+      ? { left: FRAME_INSET_PX, right: FRAME_INSET_PX, bottom: FRAME_INSET_PX, topLeftRadius: FRAME_RADIUS_FLOATING_PX, bottomLeftRadius: FRAME_RADIUS_FLOATING_PX }
+      : { left: 0, right: 0, bottom: 0, topLeftRadius: FRAME_RADIUS_FLUSH_PX, bottomLeftRadius: 0 };
+    for (const [key, want] of Object.entries(expected)) {
+      const ok = Math.abs(report[key] - want) <= FRAME_GEOMETRY_TOLERANCE_PX;
+      if (!ok) failures.push(`frame shape ${name}: ${key} measured ${report[key]}px, wanted ${want}px`);
+      console.log(`  ${ok ? "PASS" : "FAIL"}  ${name} — ${key}: ${report[key]}px (want ${want}px)`);
+    }
+  }
+  console.log("");
+
+  const floatingSurface = FRAME_SHAPE_SURFACES.find((s) => s.shape === "floating");
+  const frameShapeControl = await page.evaluate((scenario) => window.__sheetFrameShapeNegativeControl(scenario), floatingSurface.spec);
+  console.log(`sheet-grammar: frame shape negative control — ${floatingSurface.name}'s geometry neutralised\n`);
+  if (!frameShapeControl.broken || !frameShapeControl.fixed) {
+    failures.push("frame shape negative control: the surface did not mount a sheet to measure");
+    console.log("  FAIL  frame shape negative control — the surface did not mount a sheet to measure");
+  } else {
+    const wentRed = frameShapeControl.broken.left === 0 && frameShapeControl.broken.topLeftRadius === FRAME_RADIUS_FLUSH_PX;
+    const cleanAfter = Math.abs(frameShapeControl.fixed.left - FRAME_INSET_PX) <= FRAME_GEOMETRY_TOLERANCE_PX
+      && Math.abs(frameShapeControl.fixed.topLeftRadius - FRAME_RADIUS_FLOATING_PX) <= FRAME_GEOMETRY_TOLERANCE_PX;
+    if (!wentRed) failures.push("frame shape negative control: neutralising the geometry rule did not go red");
+    if (!cleanAfter) failures.push("frame shape negative control: the real rule did not restore the floating geometry");
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  neutralised CSS goes flush despite the floating classification (left ${frameShapeControl.broken.left}px, radius ${frameShapeControl.broken.topLeftRadius}px)`);
+    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  the real rule restores the floating geometry (left ${frameShapeControl.fixed.left}px, radius ${frameShapeControl.fixed.topLeftRadius}px)`);
   }
   console.log("");
 

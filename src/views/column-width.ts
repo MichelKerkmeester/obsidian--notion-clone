@@ -22,12 +22,12 @@ import { InlineMarkdownNode, parseInlineMarkdown, inlineMarkdownToPlainText } fr
 import { parseTextLink } from "../data/text-link";
 import { isTextLinkScheme } from "../data/text-link-scheme";
 import { getRelationDisplayLabel, parseRelationValues } from "../data/relation-links";
-import { setIcon } from "obsidian";
 import { t } from "../i18n";
 import { applySheetChrome, attachSheetDragToDismiss, playSheetEntrance } from "./mobile-bottom-sheet";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import { isMobileBottomSheet, keepSheetPlaced, placeSheet } from "./popover-position";
 import { syncTableColumnLayouts } from "./table-column-layout-sync";
+import { buildShellHeader } from "./surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. PUBLIC WIDTH HELPERS
@@ -357,15 +357,16 @@ export function openColumnWidthAdjuster(options: ColumnWidthAdjusterOptions): ()
   // the stylesheet, right beside the rule it corrects.
   panel.addClass("note-database-container");
 
-  // The same header grammar every other sheet carries: a title row with the close control on the
-  // right, so the adjuster reads as part of the family rather than as a bare strip.
-  const header = panel.createDiv({ cls: "db-panel-header" });
-  header.createDiv({ cls: "db-panel-title", text: t("columnWidth.adjustTitle", { name: col.label || col.key }) });
-  const closeBtn = header.createEl("button", {
-    cls: "db-cell-edit-close",
-    attr: { type: "button", "aria-label": t("common.close") },
+  // The same three-slot header grammar every other shell surface carries: a centred title (on the
+  // phone sheet) with the close control on the trailing edge, so the adjuster reads as part of the
+  // family rather than as a bare strip built by hand. `close` is defined further down, after the
+  // panel's own dirty-tracking state exists, so this reads from the `let` below rather than
+  // reordering the panel's construction around a callback that only ever fires on a later tap.
+  let close: () => void = () => undefined;
+  buildShellHeader(panel, {
+    title: t("columnWidth.adjustTitle", { name: col.label || col.key }),
+    onClose: () => close(),
   });
-  setIcon(closeBtn, "x");
 
   // The shared range control: slider and typed value side by side in one row. Dragging cannot
   // hit an exact number, and matching a column to a known width is the whole reason someone
@@ -488,7 +489,7 @@ export function openColumnWidthAdjuster(options: ColumnWidthAdjusterOptions): ()
   let releasePlacement: (() => void) | undefined;
   let removeAutoClose: (() => void) | undefined;
 
-  const close = (): void => {
+  close = (): void => {
     if (closed) return;
     closed = true;
     if (dirty) options.persist();
@@ -517,11 +518,6 @@ export function openColumnWidthAdjuster(options: ColumnWidthAdjusterOptions): ()
   // One owner for dismissal on both presentations: the overlay stack answers Escape and any
   // press outside the panel — the scrim on a phone, the backdrop on desktop.
   removeAutoClose = installPopoverAutoClose({ panel, close });
-
-  closeBtn.onclick = (event) => {
-    event.stopPropagation();
-    close();
-  };
 
   reflect(fallbackWidth());
   return close;

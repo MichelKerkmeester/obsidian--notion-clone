@@ -38,6 +38,7 @@ import { clamp, getVisiblePopoverBounds, positionToolbarPopover, setPosition } f
 import { createDropdownField, DropdownOption } from "./dropdown-field";
 import { createCheckbox } from "./checkbox";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "./property-type-icon";
+import { buildShellHeader } from "./surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -340,8 +341,7 @@ export class ChartToolbarRenderer {
     this.closePopover();
     const panel = containerEl.createDiv({ cls: "db-chart-options-popover" });
     this.popover = panel;
-    const header = panel.createDiv({ cls: "db-panel-header" });
-    header.createDiv({ cls: "db-panel-title", text: t("chart.options") });
+    buildShellHeader(panel, { title: t("chart.options"), onClose: () => this.closePopover() });
     this.renderPopoverContent(panel, containerEl, config, actions);
     panel.addClass("db-anchored-popover");
     positionToolbarPopover(panel, anchor, { preferredWidth: 520, maxWidth: 560 });
@@ -531,8 +531,10 @@ export class ChartToolbarRenderer {
     slot: ChartValueSlot,
   ): void {
     this.openChildPopover(containerEl, anchor, "db-chart-value-aggregation-popover", (panel) => {
-      const header = panel.createDiv({ cls: "db-panel-header" });
-      header.createDiv({ cls: "db-panel-title", text: slot === "primary" ? t("chart.toolbarValue") : t("chart.toolbarLineValue") });
+      buildShellHeader(panel, {
+        title: slot === "primary" ? t("chart.toolbarValue") : t("chart.toolbarLineValue"),
+        onClose: () => this.closeChildPopover(),
+      });
       this.renderValueAggregationPopover(panel, config, actions, slot);
     });
   }
@@ -696,8 +698,7 @@ export class ChartToolbarRenderer {
 
   private openStylePopover(containerEl: HTMLElement, anchor: HTMLElement, config: ViewConfig, actions: ChartToolbarActions): void {
     this.openChildPopover(containerEl, anchor, "db-chart-style-popover", (panel) => {
-      const header = panel.createDiv({ cls: "db-panel-header" });
-      header.createDiv({ cls: "db-panel-title", text: t("chart.optionsStyle") });
+      buildShellHeader(panel, { title: t("chart.optionsStyle"), onClose: () => this.closeChildPopover() });
       this.renderStyleSection(panel, config, actions);
     });
   }
@@ -908,8 +909,7 @@ export class ChartToolbarRenderer {
     groups: string[]
   ): void {
     this.openChildPopover(containerEl, anchor, "db-chart-visible-groups-popover", (panel) => {
-      const header = panel.createDiv({ cls: "db-panel-header" });
-      header.createDiv({ cls: "db-panel-title", text: t("chart.visibleGroups") });
+      buildShellHeader(panel, { title: t("chart.visibleGroups"), onClose: () => this.closeChildPopover() });
       const wrap = panel.createDiv({ cls: "db-chart-visible-groups-list" });
       if (groups.length === 0) {
         wrap.createDiv({ cls: "db-panel-empty", text: t("chart.noFieldSelected") });
