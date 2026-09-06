@@ -201,7 +201,7 @@
     ],
     "causal_summary": "A removed view that nobody documented is a bug report waiting to be filed",
     "created_at": "2026-09-04T19:33:28Z",
-    "last_save_at": "2026-09-05T02:07:46.306Z",
+    "last_save_at": "2026-09-06T01:07:18.372Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -211,12 +211,12 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e17ac28e0a4d90d7b6ddb5aba668342d163e158c8195e2b5aa16649b8c871dfe",
+    "source_fingerprint": "sha256:f021b50d7a9c238f18bc572fe95c62a518940324b0131c7afa438aa069523ebc",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "e18b7148a1a1b93f02b09b8764e064d9be6aa516b7c8691f9602ee624066bd6d",
       "plan.md": "ee9ad0c3f7d81b983b2ee8ced1e4482129095c46846781bc7fb13efcb8210dbc",
-      "tasks.md": "10cf3632d85c421ff35211797f61c45eb86bb2a83b961a516053b8c3373e741c",
+      "tasks.md": "788f4c4f8fdf9b6ee9d99a3dbc49915fde0ea2498f8a72977e965a2435fd5c64",
       "implementation-summary.md": "66012985f3960ed938e5d2e8e75770b234226c3d675d371ef81ec713ef2b403d"
     },
     "last_active_child_id": null,

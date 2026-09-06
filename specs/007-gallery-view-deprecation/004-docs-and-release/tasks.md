@@ -50,6 +50,12 @@ contextType: "general"
 - [x] T008 [P] Close `030-gallery-view-deprecation` against this retirement — superseded, its own measurements kept as evidence, the way `006`'s REQ-007 closed `033` and `024` (`../../005-component-surface-system/030-gallery-view-deprecation/spec.md`)
 - [x] T009 True up the `030` row in the surface-system roadmap §5.A (`../../005-component-surface-system/roadmap.md`) — also updated `005/goal.md`'s DONE table row for `007` itself
 - [x] T010 Take ADR-001: does the in-app "What's new" surface carry this, or is README plus CHANGELOG enough (`plan.md`) — Accepted, out of scope, matching `006`
+- [x] T016 Drop the gallery from the community-plugin `description` (`manifest.json:6`) — T006 cleared `package.json`, but `manifest.json` is the file Obsidian's community-plugin browser renders, so the gallery was still being offered there as a current view. `rg -i gallery manifest.json` now returns nothing; `version` untouched at `0.0.28`
+
+> **Out of scope, recorded rather than fixed.** `package.json:4`'s `description` and `package.json:39`'s
+> `keywords` still name the **list** view, retired at `0.0.23`. That residue belongs to
+> `specs/006-list-view-deprecation/008-docs-and-release`, which is still open, and is logged there as
+> an open row rather than absorbed here.
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -59,7 +65,7 @@ contextType: "general"
 
 - [x] T011 `npm run gate`, exit status read from `$?` — exit 0, 26/26 green
 - [x] T012 `rg -i gallery README.md package.json` and confirm nothing offers the gallery as a current feature — returns nothing
-- [x] T013 Read the CHANGELOG entry as a user who lost a gallery would, and check every loss is findable — all six `gallery*` fields findable by name
+- [x] T013 Read the CHANGELOG entry as a user who lost a gallery would, and check every loss is findable — all six `gallery*` fields have their own bullet, each named in the words a user sees; `galleryImageField` is the one carried as an identifier, the other five being described by what they did
 - [x] T014 Cut the release, or hand the cut to the orchestrator WITH the target version recorded in `implementation-summary.md` — release **0.0.28** (`d3433d81`) already carries `001`-`003`; recorded rather than re-cut
 - [ ] T015 Leave the operator row open. An agent never ticks it
 <!-- /ANCHOR:phase-3 -->

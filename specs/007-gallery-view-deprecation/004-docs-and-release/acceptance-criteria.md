@@ -12,7 +12,7 @@ _memory:
     packet_pointer: "007-gallery-view-deprecation/004-docs-and-release"
     last_updated_at: "2026-09-06T00:30:00Z"
     last_updated_by: "gallery-007-004-docs-and-release"
-    recent_action: "AC-001 through AC-006 verified Met; AC-007 stays Unmet, operator-only"
+    recent_action: "AC-002 evidence trued up to the CHANGELOG text; manifest description cleared of gallery"
     next_safe_action: "None here — only the operator's own device confirmation remains"
     blockers:
       - "AC-007 is operator-only"
@@ -67,7 +67,7 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 **Verification observed, 2026-09-06:**
 
 - **AC-001:** `rg -n -i gallery README.md` returns nothing. "Six database views" is now "Five database views" (`:22`); the Gallery screenshot row is removed; the page-preview and cover-settings prose (`:87`, `:120-123`) name only the surviving views.
-- **AC-002:** `CHANGELOG.md`'s `## 0.0.28` entry names all six `gallery*` fields by name: `galleryImageField`, `galleryImageAspectRatio` and `galleryImageFit` as full carries; `galleryImageAspectRatioPreset` as a softened loss (the number carries, the preset name does not); `galleryCardSize` and `galleryCardSizePreset` as genuine losses with no board equivalent.
+- **AC-002:** `CHANGELOG.md`'s `## 0.0.28` entry gives each of the six `gallery*` fields its own bullet, in the words a user sees rather than merged into a summary: Cover image, Cover fit and Cover aspect ratio as full carries (`galleryImageField`, `galleryImageAspectRatio`, `galleryImageFit`); a named aspect-ratio preset as a softened loss, the number carrying and the preset name not (`galleryImageAspectRatioPreset`); Card size and a card-size preset as genuine losses with no board equivalent (`galleryCardSize`, `galleryCardSizePreset`). Only `galleryImageField` appears in the entry as an identifier — `grep -o "gallery[A-Za-z]*" CHANGELOG.md` returns `gallery` and `galleryImageField` and nothing else — so the row is met by the individual bullets, not by six literal field names.
 - **AC-003:** the `## 0.0.28` Removed section states plainly that reinstalling an older plugin version does not turn a migrated board back into a gallery, and that immediately after migration the notice's own Undo action is the one reversal.
 - **AC-004:** `030/spec.md`'s Status reads Superseded, its measured footprint and its `goal.md`/`tasks.md` evidence tables are unchanged in substance (only the rows the retirement resolved were ticked), and `005/roadmap.md` §5.A's row is trued up to **83% — 5/6**.
 - **AC-005:** `rg -n gallery package.json` returns nothing; also removed from `keywords`, since `rg -i gallery README.md package.json` (SC-001) checks the whole file.
@@ -101,7 +101,7 @@ waiver is treated as an unmet criterion rather than as a pass.
 AC-001 through AC-006 are `Met`, each against evidence observed 2026-09-06 rather than assumed. AC-002
 was the row this phase existed for: the difference between a declared loss and a discovered one is
 whether it was named, and naming it individually is more work than summarising it — `CHANGELOG.md`'s
-`## 0.0.28` entry names all six `gallery*` fields by name. AC-006 did not need an assumption: release
+`## 0.0.28` entry gives each of the six a bullet of its own, in user-facing words. AC-006 did not need an assumption: release
 **0.0.28** (`d3433d81`) already carries children `001`-`003`, cut before this doc phase started rather
 than left owed the way `006`'s `008` left 0.0.23. AC-007 is the operator's and an agent never ticks it.
 <!-- /ANCHOR:closure -->

@@ -3,7 +3,7 @@
   "name": "Note Database",
   "version": "0.0.28",
   "minAppVersion": "1.7.2",
-  "description": "Database views for notes with table, board, gallery, chart, calendar, timeline, formulas, filters, and inline editing.",
+  "description": "Database views for notes with table, board, chart, calendar, timeline, formulas, filters, and inline editing.",
   "author": "pangy9",
   "authorUrl": "https://github.com/pangy9",
   "fundingUrl": "https://paypal.me/pangy9",
