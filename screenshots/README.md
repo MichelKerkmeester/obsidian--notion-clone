@@ -1373,23 +1373,23 @@ Sources: `src/views/table-renderer.ts`, `src/views/column-header-controller.ts`,
 
 ### Table wrap off — a markdown column clips to one line
 
-Every row holds the row floor with wrap off, including the markdown-render Journal column: its source value carries its own line breaks, and each one collapses to a space instead of forcing a <br> through white-space: nowrap.
+The view's wrap switch off, which clips every column whatever mode it carries. Both ways a value used to escape that are shown holding the floor: a long sentence ellipsised at one line, and a value carrying its own line breaks collapsed to spaces instead of forcing a <br> through white-space: nowrap.
 
 | dark | light |
 |---|---|
 | ![table-wrap-off dark](notion-clone/views/table-wrap-off-mobile-dark.png) | ![table-wrap-off light](notion-clone/views/table-wrap-off-mobile-light.png) |
 
-Sources: `src/views/cell-renderer.ts`, `src/views/inline-markdown-renderer.ts`
+Sources: `src/data/column-types.ts`, `src/views/cell-renderer.ts`, `src/views/inline-markdown-renderer.ts`
 
 ### Table wrap on — the same markdown column wraps
 
-The same column and the same source values with wrap on: db-cell-wrap sets white-space: normal, so the value's own line breaks render as real line breaks again.
+The same column and the same source values with the switch on: db-cell-wrap sets white-space: normal, so the long sentence takes a second line and the value's own line breaks render as real line breaks again. The phone renders this identically now.
 
 | dark | light |
 |---|---|
 | ![table-wrap-on dark](notion-clone/views/table-wrap-on-mobile-dark.png) | ![table-wrap-on light](notion-clone/views/table-wrap-on-mobile-light.png) |
 
-Sources: `src/views/cell-renderer.ts`, `src/views/inline-markdown-renderer.ts`
+Sources: `src/data/column-types.ts`, `src/views/cell-renderer.ts`, `src/views/inline-markdown-renderer.ts`
 
 ### Timeline view — subtask tree
 
