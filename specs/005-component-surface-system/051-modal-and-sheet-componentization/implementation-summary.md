@@ -241,3 +241,73 @@ division is wrong by 3× and the row heights read as 150.
 - **No timing was measured and none could be.** Every motion figure remains `050` §4's reconciled
   band, labelled as a source read. A static capture carries no duration.
 <!-- /ANCHOR:limitations -->
+
+---
+
+<!-- ANCHOR:third-landing -->
+## Third landing verification, 2026-09-06
+
+A fresh verifier re-measured the second landing's claims against the images and the running code
+rather than against its report. Four held, three did not.
+
+**Held.** Title centring: the live lane measures every one of the eleven header-bearing surfaces
+within **0.01px** of its frame centre, and its negative control — the old two-slot flex rule
+restored in the page — measures **27.67px** off on `column-manager`, so the grid rule is
+load-bearing rather than merely present. In the captures at DPR 2 the same surface reads **1.5
+device px** off the frame centre where the pre-fix image read **52.5 device px** off; `filter`,
+`sort` and the option colour picker read 2.5, 1.5 and 2.0, and the sheet's own centred grab handle
+sits at 403.5 in all four, so the residual is glyph ink asymmetry rather than layout. The nine
+migrations: `rg` finds **zero** raw `db-panel-header`/`db-panel-title` construction left outside
+`mobile-bottom-sheet.ts`'s own builder. C10's frame shapes: measured in the captures, a floating
+sheet is inset **16 device px** on left, right and bottom with the scrim visible around it and a
+**32 device px** radius fitted on all four corners; a flush sheet is inset 0 with a 16 device-px
+radius on its top corners only and square below. The stacked-pair surfaces still pass — 13
+surfaces and 31 pairs, exit 0 — and every stacked child over a floating parent measures inside its
+own client width on both engines.
+
+**Did not hold, corrected here.**
+
+- **"Zero layout changes on desktop" is still wrong, in the other direction.** Seven desktop
+  captures move `pixelHash`, not zero: `constructed-chart-toolbar-options`, `constructed-view-config`
+  and `constructed-board-card-properties` at both themes, plus `constructed-column-width-adjuster`
+  in light. The cause is not a regression but the migration itself — `buildShellHeader` always
+  draws the close control, so a popover whose hand-built header had none now has one, exactly as
+  the filter, sort and add-view popovers already did. The family is consistent on desktop rather
+  than unchanged on it, and that is the honest statement. One desktop header did NOT take this
+  change: `column-manager-renderer.ts`'s desktop branch keeps the componentized desktop builder a
+  sibling packet landed, which is a better fit than the phone header and leaves that capture
+  pixel-identical.
+- **The `constructed-toolbar-add-view-mobile-dark` story was a race, not a shape change.** The
+  second landing recorded that capture as moving to the flush shape and confirmed it "stable across
+  three repeated captures". The committed file hashes to the **pre-fix** value, the manifest
+  recorded a third value belonging to an image in neither commit, and 27 further entries had
+  manifest byte counts describing files that were never committed. The producer: the capture
+  pipeline waited two animation frames while the frame-shape classifier debounces for 80ms, so
+  whether a sheet was photographed floating or flush depended on how long the fonts took. The
+  shutter now waits for the classifier's own settle signal, and that scenario no longer moves at
+  all. The manifest is regenerated from the images on disk — **0 byte and 0 pixelHash mismatches
+  across 562 entries**.
+- **The `sheet-rebuild` retry was hiding a real defect and its stated cause was wrong.** A 500ms
+  sleep plus three attempts of the whole open-rebuild-tap sequence is retrying a failing assertion.
+  Both are replaced by a wait on the settle signal, and the defect underneath then reproduced three
+  times out of three: the lane read the "+ Add" coordinate as soon as the sheet's top edge held for
+  two frames, and on WebKit's filter sheet the top held at 556 while the bottom sat at 733 on a
+  660px screen — 73px below the viewport, mid-placement. The tap went to y=703 when the control had
+  settled at y=622, reached the scrim, and dismissed the sheet. The wait now requires the sheet to
+  be resting, not merely still.
+
+**Measurements that answer the standing questions.** The shell path declares no raw geometry
+literal for the phone close: `surface-shell.ts` exports `SHELL_PHONE_CLOSE_PX` and
+`SHELL_TRAILING_CHIP_SIZE_PT` as named constants and the stylesheet declares
+`--db-shell-edge-control-size: 44px` once, so AC-006's count over the shell's own rules is **0**.
+No census ratchet was raised: `touch-targets-baseline.json` and
+`touch-targets-constructed-baseline.json` are byte-unchanged, and the surface census moves only by
+the one new class name this leg adds.
+
+**Gate from the final state**, each exit status read from a file rather than a pipe:
+`npx tsc --noEmit` 0, `npx vitest run` **1442/1442** in 137 files, `npm run build` 0,
+`node tools/screenshots/verify.mjs` 0 with **562** current, `node tools/lane/check-lane.mjs` 0,
+isolated `npm run gate` **PASS 26 green / 0 red** exit 0, `npm run replay` **28/28 held**,
+`evidence.mjs --check-all` 15 of 15 fresh.
+<!-- /ANCHOR:third-landing -->
+

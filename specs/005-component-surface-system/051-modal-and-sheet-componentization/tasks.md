@@ -432,7 +432,18 @@ excluded on its own recorded terms.
       toolbar rebuild occasionally missed while the frame-shape classifier was still settling,
       reproduced at roughly one run in three before the fix and clean across 14 consecutive runs
       after moving the settle wait to 500ms wall-clock and retrying the whole open-rebuild-tap
-      sequence up to three times. Full detail and the read exit codes are in `checklist.md` C6/C8/C10.
+      sequence up to three times. **Third landing, 2026-09-06 — that fix was wrong on both halves
+      and is replaced.** A retry that stops as soon as the assertion passes is retrying a failing
+      assertion, and its stated cause did not survive checking: the same section fails on a tree
+      without the frame shapes at all, one run in six. The producer is published instead — the
+      sheet module reports classifications queued and classifications run, and both the lane and
+      the capture shutter wait for nothing queued plus no new classification across two frames,
+      in place of a sleep and a retry. With the retry gone the real defect reproduced three times
+      in three: the lane read the add control's coordinate as soon as the sheet's top edge held
+      for two frames, and on WebKit's filter sheet the top held at 556 while the bottom sat at 733
+      on a 660px screen, 73px below the viewport. The tap went to y=703 when the control had
+      settled at y=622, reached the scrim and dismissed the surface. The probe now returns the
+      sheet's bottom edge and the wait requires it inside the viewport: resting, not merely still. Full detail and the read exit codes are in `checklist.md` C6/C8/C10.
 <!-- /ANCHOR:phase-3 -->
 
 ---
@@ -535,6 +546,18 @@ The packet closes when every row in `acceptance-criteria.md` is `Met`, `Waived` 
 `Superseded` with an ADR — except AC-010, which is the operator's and which nothing in this
 repository can close (parent D3).
 <!-- /ANCHOR:completion -->
+
+---
+
+**Addendum, 2026-09-06 (third landing) — the header census is closed.** With the calendar leg's
+own migration landed, `rg 'cls: "db-panel-header"'` over `src` returns exactly one hit, the sheet
+engine's own builder inside `mobile-bottom-sheet.ts` — the expected survivor, since that is what
+`buildShellHeader` calls. `surface-shell.test.ts`'s consumer list carries both calendar toolbars
+rather than naming them as a gap. One site is deliberately not the shell's: `column-manager-
+renderer.ts`'s **desktop** branch keeps the componentized desktop header a sibling packet landed,
+which is the better fit for that shape and leaves the desktop capture pixel-identical. The seven
+desktop captures that do move are the popovers whose hand-built headers had no close control and
+now draw the shared one; that is a real desktop change, recorded rather than described as zero.
 
 ---
 
