@@ -12891,8 +12891,11 @@ body.is-phone .note-database-container .db-record-detail-panel {
   overscroll-behavior: contain;
 }
 
-.db-mobile-bottom-sheet .db-sheet-original-title,
-.db-mobile-bottom-sheet > .modal-close-button {
+/* The native close button is neutralised in JS instead (`attachSheetChromeToModal`, `mobile-
+   bottom-sheet.ts`), which finds the real element by reference rather than assuming it is a
+   direct child of `modalEl` — a selector-based rule here would also catch and mask a SECOND
+   close control landing in the same position, which is exactly the shape the defect took. */
+.db-mobile-bottom-sheet .db-sheet-original-title {
   display: none !important;
 }
 
@@ -22510,6 +22513,23 @@ body.is-tablet .note-database-container .db-record-open-btn {
   border: 1px solid var(--db-surface-modal-border);
   box-shadow: var(--db-elevation-3);
   backdrop-filter: blur(var(--db-overlay-blur, 12px));
+}
+
+/* The rule above is the desktop centred dialog's own frame: a bordered, blurred, elevated card
+   floating over the app. Presented as a phone sheet, `modalEl` already carries that frame from
+   the shared sheet rule below — a second background, border and blur midway through the same
+   surface is a bordered card drawn inside the sheet rather than the sheet itself, and its own
+   `--db-surface-modal` tint reads lighter than whatever the header beside it sits on, which has
+   no background of its own. One token, on the sheet root, for both. */
+.db-mobile-bottom-sheet > .note-database-modal {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.db-mobile-bottom-sheet:has(> .note-database-modal) {
+  background: var(--background-primary);
 }
 
 .db-color-picker-popup {

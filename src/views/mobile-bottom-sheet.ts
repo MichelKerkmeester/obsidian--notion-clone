@@ -228,11 +228,35 @@ export function attachSheetChromeToModal(
   close: () => void,
   options: SheetModalChromeOptions = {},
 ): () => void {
+  // The host's own chrome, captured before `applySheetChrome` moves `modalEl` out of it. Every
+  // `Modal` carries a title element and a close button of its own (`titleEl`, and an unexposed
+  // close button beside it) whether or not a subclass ever uses them, and the container that
+  // wraps `modalEl` on the way in is left behind, empty, once the sheet portal takes `modalEl`
+  // to the body — still on the body, still painting its own backdrop, over whatever the stack
+  // dims. A CSS selector hiding these depends on guessing their exact nesting; finding the real
+  // elements here and hiding them by reference does not.
+  const nativeContainer = modalEl.parentElement;
+  const nativeTitle = modalEl.querySelector<HTMLElement>(".modal-title");
+  const nativeClose = modalEl.querySelector<HTMLElement>(".modal-close-button");
   applySheetChrome(modalEl, isSheet, {
     close: isSheet ? () => close() : undefined,
     closeOnOutsidePointerDown: isSheet ? options.closeOnOutsidePointerDown ?? true : false,
     closeOnEscape: isSheet ? options.closeOnEscape ?? true : false,
   });
+  if (isSheet) {
+    // Hidden, not removed: `applyPresentation` re-runs on a layout change (a rotation moving the
+    // surface back across the touch boundary), and the desktop presentation that returns wants
+    // its own close button and whatever title a subclass set back exactly as they were.
+    nativeClose?.style.setProperty("display", "none");
+    if (nativeTitle && !nativeTitle.textContent?.trim()) nativeTitle.style.setProperty("display", "none");
+    if (nativeContainer && nativeContainer !== modalEl.ownerDocument.body) {
+      nativeContainer.style.setProperty("display", "none");
+    }
+  } else {
+    nativeClose?.style.removeProperty("display");
+    nativeTitle?.style.removeProperty("display");
+    nativeContainer?.style.removeProperty("display");
+  }
   const releaseDrag = isSheet ? attachSheetDragToDismiss(modalEl, close) : undefined;
   let header: SheetHeaderHandle | undefined;
   if (isSheet) {
@@ -269,6 +293,9 @@ export function attachSheetChromeToModal(
     header = undefined;
     releasedHeader?.header.remove();
     modalEl.querySelectorAll<HTMLElement>(".db-sheet-original-title").forEach((heading) => heading.removeClass("db-sheet-original-title"));
+    nativeClose?.style.removeProperty("display");
+    nativeTitle?.style.removeProperty("display");
+    nativeContainer?.style.removeProperty("display");
     applySheetChrome(modalEl, false);
   };
 }
