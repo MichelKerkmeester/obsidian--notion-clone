@@ -3680,7 +3680,12 @@ export class DatabaseView extends FileView {
       try {
         await this.dataSource.trashNote(file, { sourceInstanceId: this.instanceId });
       } catch (e) {
-        new Notice(t("errors.deleteFailed", { error: String(e) }));
+        if (this.containerEl_) {
+          showToast(this.containerEl_.ownerDocument, {
+            severity: "error",
+            message: t("errors.deleteFailed", { error: String(e) }),
+          });
+        }
         return;
       }
     }
@@ -8377,7 +8382,12 @@ export class DatabaseView extends FileView {
       await this.refreshAfterSave();
     } catch (err) {
       console.error("Note Database: failed to delete row", err);
-      new Notice(t("errors.deleteFailed", { error: String(err) }));
+      if (this.containerEl_) {
+        showToast(this.containerEl_.ownerDocument, {
+          severity: "error",
+          message: t("errors.deleteFailed", { error: String(err) }),
+        });
+      }
     }
   }
 
@@ -8467,7 +8477,12 @@ export class DatabaseView extends FileView {
       await this.refreshAfterSave();
     } catch (err) {
       console.error("Note Database: failed to duplicate row", err);
-      new Notice(t("errors.deleteFailed", { error: String(err) }));
+      if (this.containerEl_) {
+        showToast(this.containerEl_.ownerDocument, {
+          severity: "error",
+          message: t("errors.deleteFailed", { error: String(err) }),
+        });
+      }
     }
   }
 

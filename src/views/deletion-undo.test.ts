@@ -285,6 +285,22 @@ describe("database-view row deletion", () => {
     expect(vault.files.get("Tasks/beta.md")).toBe("beta content");
   });
 
+  it("routes a failed delete through the error toast instead of a bare notice", async () => {
+    const { self, vault, trashed } = makeStandalone();
+    vault.seed("Tasks/alpha.md", "alpha");
+    (self.dataSource as { trashNote: () => Promise<void> }).trashNote = async () => {
+      throw new Error("disk is full");
+    };
+
+    await invoke(self, "deleteRow", rowFor(vault, "Tasks/alpha.md"));
+    expect(trashed).toEqual([]);
+    expect(vault.files.has("Tasks/alpha.md")).toBe(true);
+    const raised = raisedToasts[raisedToasts.length - 1];
+    expect(raised?.severity).toBe("error");
+    expect(raised?.action).toBeUndefined();
+    expect(notices).toHaveLength(0);
+  });
+
   it("does not confirm a single delete when the row's content can be read", async () => {
     const { self, vault } = makeStandalone();
     vault.seed("Tasks/alpha.md", "alpha");
@@ -305,7 +321,9 @@ describe("database-view row deletion", () => {
   /** Skipping the confirm makes the history entry the only thing standing between a mis-tap and a
    *  lost note, so it has to be recorded before anything that can throw after the trash. Here the
    *  toolbar refresh inside pushHistory is what fails; the deletion must still be on the stack for
-   *  Ctrl+Z even though the toast that would have offered Undo never went up. */
+   *  Ctrl+Z even though the toast that would have offered Undo never went up — the catch now
+   *  raises its own toast where it used to raise a bare notice, so a toast is up, just not one
+   *  carrying that Undo. */
   it("records the deletion before the toolbar refresh that can fail after the trash", async () => {
     const { self, vault, trashed, history } = makeStandalone();
     vault.seed("Tasks/alpha.md", "alpha");
@@ -315,7 +333,7 @@ describe("database-view row deletion", () => {
     expect(confirmCalls).toHaveLength(0);
     expect(trashed).toEqual(["Tasks/alpha.md"]);
     expect(history[0]).toMatchObject({ type: "deleted", file: { path: "Tasks/alpha.md", content: "alpha" } });
-    expect(raisedToasts).toHaveLength(0);
+    expect(raisedToasts.some((toast) => toast.action?.label === "toolbar.undo")).toBe(false);
 
     self.updateUndoAction = () => {};
     await invoke(self, "undoLastEdit");
