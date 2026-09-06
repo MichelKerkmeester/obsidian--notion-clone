@@ -18246,6 +18246,21 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   background: #6E9EFC;
 }
 
+/* The date-property submenu (start/end date field dropdowns only, scoped by
+   this class rather than the shared dropdown default): the measured 224px
+   panel width and 28px row height. Per-option icon and selected checkmark
+   already come from the shared dropdown-menu component unmodified; the
+   divider and "+ Add Property" row it also carries have no counterpart to
+   divide from here (frontmatter keys are not a property registry, declined
+   on product grounds) and are not added just to host an empty divider. */
+.note-database-container .db-calendar-date-field-dropdown.db-dropdown-popover {
+  width: 224px;
+}
+
+.note-database-container .db-calendar-date-field-dropdown .db-dropdown-option {
+  min-height: 28px;
+}
+
 /* Keep empty calendar cards compact without changing the shared empty-state component. The
    box-sizing this rule used to carry moved to .db-empty-card itself — every host needs the same
    correction, not only this one. */

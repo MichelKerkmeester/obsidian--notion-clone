@@ -186,10 +186,35 @@ _memory:
       (untouched — the `.is-phone` scoping and the `isPhoneLayout()` check both leave a desktop
       render's code path unchanged). `npm test` 1419/1419, `npx tsc --noEmit` exit 0, gantt
       confirmed unmoved by MD5 and a zero-line diff.
-- [ ] T009 **The date-property picker** against
+- [x] T009 **The date-property picker** against
       `anytype-menu-set-layout-calendar-date-property-{light,dark}-full.png` (A8). If it changes
       which date property a calendar reads by default, that is a data-visible change and the leg
       names its reversal. (`src/views/calendar-renderer.ts`)
+      **Done 2026-09-06, bounded to what is measurable and calendar-owned.** `design-trueup.md`
+      §A8 already carries per-option icons and a selected checkmark as **Adopt**, and both already
+      existed unmodified: `getDateFieldOptions` already attaches
+      `icon: getPropertyDropdownIcon(type)` per row, and the shared dropdown-menu component
+      (`dropdown-field.ts`) already renders `.db-dropdown-option-check` with `setIcon(check,
+      "check")` on the selected value. What was actually missing was the measured **geometry**:
+      the submenu is a **224px** panel of **28px** rows in the capture, against the shared
+      component's un-set width and 30px `min-height`. Rather than resize the shared dropdown-menu
+      for every consumer in the app — a change this packet does not own, the same boundary
+      `design-trueup.md` §A8 already draws for the layout-tile panel ("**out of scope: `053` owns
+      the view switcher**") — a new class, `db-calendar-date-field-dropdown`, scopes the 224px
+      width and 28px row height to the start/end date-field dropdowns only, leaving every other
+      dropdown in the app (including the calendar's own title-field and scale rows, which share
+      the same generic `db-calendar-options-dropdown` popover class) at its existing size. The
+      divider and `+ Add Property` stay declined exactly as recorded (frontmatter keys are not a
+      property registry) — a divider with nothing below it to divide from is not added just to
+      claim the row. **No data-visible change**: no default date field moved; this changes only
+      the geometry of the picker that chooses one. A new `calendar-toolbar-renderer.test.ts` pins
+      the scoping — the geometry class reaches the start/end rows and not the title row — against
+      a spy on `createDropdownField`'s call arguments rather than the open popover's own DOM,
+      because `createDropdownField`'s real open path needs a real `ownerDocument`
+      (`getDropdownPopoverHost`) the test harness's DOM shim does not provide. `npm test`
+      1420/1420, `npx tsc --noEmit` exit 0; the closed-row capture is confirmed pixel-identical
+      (the geometry only exists once the dropdown opens) and the gantt/timeline toolbar files carry
+      a zero-line diff.
 - [ ] T010 **Follow the tests.** `calendar-renderer.test.ts` follows the retargeted shape.
       `calendar-keyboard-navigation.test.ts` and `calendar-search-placement.test.ts` must stay green
       **without modification** — REQ-010's guard. (`src/views/calendar-renderer.test.ts`)

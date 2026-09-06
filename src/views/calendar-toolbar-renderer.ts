@@ -151,17 +151,18 @@ export class CalendarToolbarRenderer {
 		const data = this.createSection(panel, t("chart.optionsData"));
 
 		// 顺序与时间线 popover 对齐：start → end → 同字段警告 → invalid 提示 → title → scale → year。
-		this.renderSelect(data, t("viewConfig.eventStartDateField"), this.getDateFieldOptions(config), config.calendarStartDateField || "", (value) => {
+		const dateFieldOptions = this.getDateFieldOptions(config);
+		this.renderSelect(data, t("viewConfig.eventStartDateField"), dateFieldOptions, config.calendarStartDateField || "", (value) => {
 			config.calendarStartDateField = value || undefined;
 			actions.onChange(t("undo.calendarStartFieldConfig"));
 			if (this.popoverContent) this.renderSections(this.popoverContent, config, actions);
-		}, "calendar-days");
+		}, "calendar-days", dateFieldOptions.length > 8, false, "db-calendar-date-field-dropdown");
 
-		this.renderSelect(data, t("viewConfig.eventEndDateField"), this.getDateFieldOptions(config), config.calendarEndDateField || "", (value) => {
+		this.renderSelect(data, t("viewConfig.eventEndDateField"), dateFieldOptions, config.calendarEndDateField || "", (value) => {
 			config.calendarEndDateField = value || undefined;
 			actions.onChange(t("undo.calendarEndFieldConfig"));
 			if (this.popoverContent) this.renderSections(this.popoverContent, config, actions);
-		}, "calendar-range");
+		}, "calendar-range", dateFieldOptions.length > 8, false, "db-calendar-date-field-dropdown");
 
 		this.renderSameDateFieldWarning(data, config.calendarStartDateField, config.calendarEndDateField);
 		this.renderInvalidEventsNotice(data, actions);
@@ -459,6 +460,7 @@ export class CalendarToolbarRenderer {
 		icon: string,
 		searchable = options.length > 8,
 		disabled = false,
+		extraPopoverClass?: string,
 	): void {
 		createDropdownField({
 			parent,
@@ -468,7 +470,7 @@ export class CalendarToolbarRenderer {
 			onChange,
 			icon,
 			className: "db-chart-options-dropdown",
-			popoverClassName: "db-calendar-options-dropdown",
+			popoverClassName: extraPopoverClass ? `db-calendar-options-dropdown ${extraPopoverClass}` : "db-calendar-options-dropdown",
 			searchable,
 			disabled,
 			renderIcon: (iconEl, iconName) => {
