@@ -46,6 +46,12 @@ export interface RenderInlineMarkdownOptions {
   linkClickStrategy?: LinkClickStrategy;
   /** Source note path used to resolve relative internal links and Page Preview. */
   sourcePath?: string;
+  /** Render a line break as a collapsed space instead of a `<br>`. A `<br>` forces its line
+   *  break under any `white-space` value, including `nowrap` — the one way a clipped cell's
+   *  value could still grow the row past its floor. Callers that render into a clipped cell set
+   *  this; callers that always want the source's own line breaks (the record sheet, the peek,
+   *  a card) leave it off. Default false, so every existing caller keeps its current output. */
+  collapseBreaks?: boolean;
 }
 
 export interface RenderedTextWidthMeasurer {
@@ -183,7 +189,8 @@ function appendNode(
       parent.appendText(node.text);
       break;
     case "br":
-      parent.createEl("br");
+      if (options.collapseBreaks) parent.appendText(" ");
+      else parent.createEl("br");
       break;
     case "code":
       parent.createEl("code", { text: node.text, cls: `${baseClass}-md-code` });

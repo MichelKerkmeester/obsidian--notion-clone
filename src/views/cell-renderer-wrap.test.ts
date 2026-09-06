@@ -43,6 +43,11 @@ import type { ColumnDef, RowData } from "../data/types";
 
 class MockElement {
   readonly classes = new Set<string>();
+  // One ordered list rather than separate text/element arrays, so the markdown-branch tests can
+  // tell a collapsed line break (no child, an inline space) from a real one (a <br> child between
+  // two text nodes) without a real DOM's textContent.
+  readonly nodes: (string | MockElement)[] = [];
+  tagName = "DIV";
   title = "";
   tabIndex = 0;
 
@@ -51,11 +56,36 @@ class MockElement {
   }
 
   createSpan(): MockElement {
-    return new MockElement();
+    const child = new MockElement();
+    this.nodes.push(child);
+    return child;
+  }
+
+  createEl(tag: string): MockElement {
+    const child = new MockElement();
+    child.tagName = tag.toUpperCase();
+    this.nodes.push(child);
+    return child;
+  }
+
+  appendText(text: string): void {
+    this.nodes.push(text);
+  }
+
+  empty(): void {
+    this.nodes.length = 0;
   }
 
   addEventListener(): void {
-    /* no listener is exercised on the empty-value path */
+    /* no listener is exercised on the empty-value or read-only display paths */
+  }
+
+  hasChildTag(tag: string): boolean {
+    return this.nodes.some((node) => typeof node !== "string" && node.tagName === tag.toUpperCase());
+  }
+
+  get textContent(): string {
+    return this.nodes.map((node) => (typeof node === "string" ? node : node.textContent)).join("");
   }
 }
 
@@ -101,5 +131,38 @@ describe("CellRenderer wrap resolution", () => {
 
   it("clips when neither side asks for wrapping, which is what an upgraded vault has", () => {
     expect(wrapsWith(undefined, undefined)).toBe(false);
+  });
+});
+
+// A markdown-render column's own line breaks travel through `renderInlineMarkdown` as `<br>`
+// elements, which force their break under any `white-space` value — including the `nowrap` a
+// clipped cell relies on. Resolving to clip has to reach that render call too, or a long-text
+// value with its own line breaks reopens the row-height defect through a door the wrap toggle
+// never touches.
+describe("CellRenderer markdown wrap: line-break collapse", () => {
+  const value = "Line one\nLine two";
+
+  function renderMarkdown(colWrap: boolean | undefined, viewDefault: boolean | undefined): MockElement {
+    const td = new MockElement();
+    const col = { key: "Journal", label: "Journal", type: "text", textRenderMode: "markdown", wrap: colWrap } as ColumnDef;
+    const markdownRow = { file: { path: "Notes/One.md" }, frontmatter: { Journal: value }, computed: {} } as unknown as RowData;
+    renderer().renderCell(td as unknown as HTMLElement, markdownRow, col, viewDefault);
+    return td;
+  }
+
+  it("collapses the line break to a space when the resolved state clips", () => {
+    const td = renderMarkdown(false, true);
+    expect(td.hasChildTag("br")).toBe(false);
+    expect(td.textContent).toBe("Line one Line two");
+  });
+
+  it("keeps the line break when the column's own choice wraps", () => {
+    const td = renderMarkdown(true, false);
+    expect(td.hasChildTag("br")).toBe(true);
+  });
+
+  it("keeps the line break when only the view default wraps", () => {
+    const td = renderMarkdown(undefined, true);
+    expect(td.hasChildTag("br")).toBe(true);
   });
 });

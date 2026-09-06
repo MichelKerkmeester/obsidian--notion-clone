@@ -205,7 +205,8 @@ export class CellRenderer {
    *  wrap override of its own (`col.wrap === undefined`) — a column's explicit choice always wins. */
   renderCell(td: HTMLElement, row: RowData, col: ColumnDef, viewWrapDefault?: boolean): void {
     td.addClass("db-cell");
-    if (col.wrap ?? viewWrapDefault) td.addClass("db-cell-wrap");
+    const isWrapping = Boolean(col.wrap ?? viewWrapDefault);
+    if (isWrapping) td.addClass("db-cell-wrap");
     let value: unknown;
 
     if (col.type === "computed" || col.type === "rollup") {
@@ -345,6 +346,12 @@ export class CellRenderer {
             renderInlineMarkdown(td, nodes, {
               sourcePath: row.file.path,
               linkClickStrategy: "table",
+              // A clipped cell's `white-space: nowrap` stops text from wrapping, but a `<br>`
+              // forces its line break regardless — the one way a markdown value ignored the row
+              // floor. Collapsing each line break to a space keeps the clip whole and matches how
+              // the same value already reads as plain text, which the browser's own whitespace
+              // collapsing already does for a literal newline outside markdown.
+              collapseBreaks: !isWrapping,
               onOpenLink: (target, external) => {
                 if (external) openExternalUrl(target);
                 else void this.app?.workspace.openLinkText(target, row.file.path);

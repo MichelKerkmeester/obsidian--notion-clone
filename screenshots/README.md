@@ -1371,6 +1371,26 @@ Sources: `src/views/table-renderer.ts`, `src/views/table-column-layout-sync.ts`,
 
 Sources: `src/views/table-renderer.ts`, `src/views/column-header-controller.ts`, `src/views/cell-renderer.ts`
 
+### Table wrap off — a markdown column clips to one line
+
+Every row holds the row floor with wrap off, including the markdown-render Journal column: its source value carries its own line breaks, and each one collapses to a space instead of forcing a <br> through white-space: nowrap.
+
+| dark | light |
+|---|---|
+| ![table-wrap-off dark](notion-clone/views/table-wrap-off-mobile-dark.png) | ![table-wrap-off light](notion-clone/views/table-wrap-off-mobile-light.png) |
+
+Sources: `src/views/cell-renderer.ts`, `src/views/inline-markdown-renderer.ts`
+
+### Table wrap on — the same markdown column wraps
+
+The same column and the same source values with wrap on: db-cell-wrap sets white-space: normal, so the value's own line breaks render as real line breaks again.
+
+| dark | light |
+|---|---|
+| ![table-wrap-on dark](notion-clone/views/table-wrap-on-mobile-dark.png) | ![table-wrap-on light](notion-clone/views/table-wrap-on-mobile-light.png) |
+
+Sources: `src/views/cell-renderer.ts`, `src/views/inline-markdown-renderer.ts`
+
 ### Timeline view — subtask tree
 
 The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.

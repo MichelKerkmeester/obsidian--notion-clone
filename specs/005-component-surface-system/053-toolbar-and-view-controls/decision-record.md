@@ -15,10 +15,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/053-toolbar-and-view-controls"
-    last_updated_at: "2026-09-06T22:45:00Z"
-    last_updated_by: "verify-053-table-footer"
-    recent_action: "Added ADR-006 for the rail gear; the deleted overflow row leaves one settings path"
-    next_safe_action: "Operator device pass on the gear and the footer; nothing here is blocked"
+    last_updated_at: "2026-09-06T23:59:00Z"
+    last_updated_by: "fix-053-wrap-off-rows"
+    recent_action: "Fixed a markdown line break bypassing clip; ADR-004 addendum; gate 26 green"
+    next_safe_action: "Operator device pass on the gear, the footer and both wrap halves; nothing here is blocked"
     blockers: []
     key_files:
       - "src/views/active-view-controls-renderer.ts"
@@ -44,6 +44,7 @@ _memory:
       - "ADR-001 amendment 2 (T001): the direction colour is demoted to a redundant third signal at 3.14:1 accent-on-tint and 1.19:1 fill-on-bar; direction rides the arrow glyph and the direction word"
       - "ADR-004: the view carries a wrapText default (table view settings only); a column's own wrap always overrides it; undefined follows the view"
       - "ADR-005: the summary footer is hidden entirely at zero rows; its phone trigger is raised to the shared 44px floor, desktop unchanged at 26px"
+      - "ADR-004 addendum: a clipped cell's markdown line breaks collapse to a space instead of a <br>, so a markdown value with its own newlines clips like every other text cell"
 ---
 
 # Decision Record: Toolbar and View Controls
@@ -417,6 +418,16 @@ needs to see: the whole point of `Follow view` is that it is not self-evident fr
 | **What does it touch?** | `types.ts` (both fields), `data-source.ts` (parse/serialize `wrapText`), `cell-renderer.ts` (the one resolution), `column-menu.ts` and `embedded-database-renderer.ts` (the submenu), `view-config-panel-renderer.ts` (the switch) |
 | **What is the real caller that must not break?** | Every existing `renderCell` call site — the new fourth parameter is optional and every scenario that never sets it keeps its exact prior output, proved by pixelHash-identical screenshots after a full recapture |
 | **What contract must not break?** | `005` ADR-001's `td:not(.db-cell-wrap)` rule for the four value containers — the wrap control reaches it only by adding `.db-cell-wrap` through the same class, never by touching the containers directly |
+
+### Addendum, 2026-09-06: a fifth thing bypassed the clip, and it was never the four containers
+
+**Operator report, desktop, ~10:25:** *"with wrap disabled you still have these huge table rows with too large height in current desktop version."* Screenshot `.operator-wrap-report.png` (the operator's own capture): a Habit and Health Log table, wrap off, every column clipped to one line except *Journal*, six lines tall.
+
+**Root cause.** Nothing above was wrong — `col.wrap ?? config.wrapText` still resolved to clip, `td` still carried `white-space: nowrap`, and none of ADR-001's four containers were in play. The column the operator photographed is `textRenderMode: "markdown"`, and its source value carries its own literal line breaks. `renderInlineMarkdown` (`inline-markdown-renderer.ts`) turns each one into a real `<br>` element, and a `<br>` forces its line break under any `white-space` value, `nowrap` included — the one way a resolved-to-clip cell could still grow the row past its floor. Plain text never had this gap: a literal newline inside `textContent` is ordinary whitespace, and `nowrap` collapses it like any other.
+
+**Fix, at the render call, not the stylesheet.** `RenderInlineMarkdownOptions` gained `collapseBreaks?: boolean`; its `"br"` case appends a collapsed space instead of a `<br>` when set. `CellRenderer.renderCell` already resolves the cell's wrap state in its first two lines (`isWrapping`) — the markdown branch now passes `collapseBreaks: !isWrapping`, so a clipped cell's own line breaks read as spaces (matching how the same value already reads as plain text) and a wrapping cell's render exactly as before. No stylesheet rule changed and no class was added: the fix is entirely in what DOM the markdown renderer builds, because a clamp that stops at nowrap+ellipsis cannot out-argue an element whose whole job is to force a break.
+
+**Evidence.** `render-assertions.mjs`'s wrap-toggle pass gained a third mount: the same catalogue, a markdown column with no wrap override of its own, a source value carrying two line breaks. Pre-fix: `tallest 58px`, floor 36px, exit 1. Post-fix: `tallest 36px`, exit 0. `cell-renderer-wrap.test.ts` gained three cases against the real `renderCell`/`renderInlineMarkdown` path: clipped collapses the break to a space with no `<br>` child; the column's own wrap and the view's default each keep it. Two screenshot scenarios, `table-wrap-off` and `table-wrap-on`, photograph a Journal-style column both ways side by side, self-contained rather than added to a shared fixture row so no other scenario's capture moves.
 <!-- /ANCHOR:adr-004 -->
 
 ---

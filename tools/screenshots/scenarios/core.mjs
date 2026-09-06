@@ -28,6 +28,47 @@ export const CORE_SCENARIOS = [
       </div>`,
   },
   {
+    id: "table-wrap-off",
+    title: "Table wrap off — a markdown column clips to one line",
+    group: "views",
+    width: 640,
+    sources: ["src/views/cell-renderer.ts", "src/views/inline-markdown-renderer.ts"],
+    note: "Every row holds the row floor with wrap off, including the markdown-render Journal "
+      + "column: its source value carries its own line breaks, and each one collapses to a space "
+      + "instead of forcing a <br> through white-space: nowrap.",
+    html: () => `
+      <div class="note-database-container">
+        <table class="db-table"><thead><tr>
+          <th><div class="db-th-content"><span class="db-th-label">Title</span></div></th>
+          <th><div class="db-th-content"><span class="db-th-label">Journal</span></div></th>
+        </tr></thead><tbody>
+          <tr><td class="db-cell">Log 2026-02-01</td><td class="db-cell">Nothing measurable changed, but the day felt heavier than the numbers suggest. Worth noting rather than explaining away.</td></tr>
+          <tr><td class="db-cell">Log 2026-02-02</td><td class="db-cell">Streak intact Watch tomorrow morning Third week running</td></tr>
+          <tr><td class="db-cell">Log 2026-02-03</td><td class="db-cell">Best sleep of the month by a wide margin</td></tr>
+        </tbody></table>
+      </div>`,
+  },
+  {
+    id: "table-wrap-on",
+    title: "Table wrap on — the same markdown column wraps",
+    group: "views",
+    width: 640,
+    sources: ["src/views/cell-renderer.ts", "src/views/inline-markdown-renderer.ts"],
+    note: "The same column and the same source values with wrap on: db-cell-wrap sets "
+      + "white-space: normal, so the value's own line breaks render as real line breaks again.",
+    html: () => `
+      <div class="note-database-container">
+        <table class="db-table"><thead><tr>
+          <th><div class="db-th-content"><span class="db-th-label">Title</span></div></th>
+          <th><div class="db-th-content"><span class="db-th-label">Journal</span></div></th>
+        </tr></thead><tbody>
+          <tr><td class="db-cell">Log 2026-02-01</td><td class="db-cell db-cell-wrap">Nothing measurable changed, but the day felt heavier than the numbers suggest.<br>Worth noting rather than explaining away.</td></tr>
+          <tr><td class="db-cell">Log 2026-02-02</td><td class="db-cell db-cell-wrap">Streak intact<br>Watch tomorrow morning<br>Third week running</td></tr>
+          <tr><td class="db-cell">Log 2026-02-03</td><td class="db-cell db-cell-wrap">Best sleep of the month by a wide margin</td></tr>
+        </tbody></table>
+      </div>`,
+  },
+  {
     id: "table-column-header",
     title: "Column header affordances",
     group: "components",

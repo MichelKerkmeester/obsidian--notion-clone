@@ -516,6 +516,15 @@ export interface ScenarioSpec {
    * exactly what turns one of these rows red.
    */
   emptyReason?: "source-missing" | "no-matching-data";
+  /**
+   * Opt-in, renderer "table" only, `catalogueUseCase` required: overwrites the catalogue's own
+   * markdown-render column with a value carrying literal newlines, on a column that carries no
+   * `wrap` override of its own (follows the view). Proves that a clipped resolution — the view's
+   * `wrapText` off, nothing set on the column — still clips a value whose source markdown breaks
+   * across lines, rather than reopening the row through a `<br>` a `white-space: nowrap` ancestor
+   * cannot stop.
+   */
+  catalogueMarkdownNewline?: boolean;
 }
 
 export interface AssertionResult {
@@ -3784,6 +3793,13 @@ export function runRenderAssertions(
     const textCol = columnOfType(columns, "text");
     if (scenario.longHeaderLabel && columns[1]) {
       columns[1].label = "A deliberately long column name that must truncate";
+    }
+    if (scenario.catalogueMarkdownNewline) {
+      const markdownCol = columns.find((col) => col.textRenderMode === "markdown");
+      const target = rows[0] as unknown as { frontmatter: Record<string, unknown> } | undefined;
+      if (markdownCol && target) {
+        target.frontmatter[markdownCol.key] = "Streak intact\nBut mornings are still rough\nWatch tomorrow";
+      }
     }
     if (scenario.fullStatusPalette) {
       // The whole sixteen-colour vocabulary: point every option column at one option per colour

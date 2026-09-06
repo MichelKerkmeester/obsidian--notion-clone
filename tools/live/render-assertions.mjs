@@ -114,6 +114,14 @@ const ROW_HEIGHT_CEILING = 49;
 const WRAP_TOGGLE_SCENARIOS = [
   { name: "table-catalogue-home-inventory-wrap-off/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "home-inventory" },
   { name: "table-catalogue-home-inventory-wrap-on/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "home-inventory", wrapText: true },
+  // A third mount, paired with neither of the above: home-inventory's chips prove the flex
+  // containers clip, but a markdown column whose source value carries literal newlines takes a
+  // different path to the DOM (`renderInlineMarkdown` turns each `\n` into a real `<br>`), and a
+  // `<br>` forces its line break regardless of `white-space: nowrap` on every ancestor. This
+  // column carries no wrap override of its own — it follows the view, which is off here — so the
+  // clip this proves is the same one the chip pair proves, reached through markdown instead of a
+  // flex-wrap container.
+  { name: "table-catalogue-habit-health-log-markdown-newline-wrap-off/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "habit-health-log", catalogueMarkdownNewline: true },
 ];
 
 // The measured floor at the shipped default density, tokens attached (see RHYTHM_SCENARIOS above,
@@ -674,6 +682,23 @@ console.log("\nrender-assertions: wrap toggle over the mock-data catalogue");
     if (!wrappedOk) {
       failures.push(`${wrappedName}: forcing wrapText on did not grow any row past the floor `
         + `(${ROW_FLOOR}px + 1) — tallest ${wrappedTallest}px; the view-level default is not reaching the cell renderer`);
+    }
+  }
+
+  const markdownName = WRAP_TOGGLE_SCENARIOS[2].name;
+  const markdownClipped = wrapToggleOutcomes ? wrapToggleOutcomes[2] : null;
+  if (!markdownClipped || markdownClipped.count === 0) {
+    failures.push("wrap toggle: measured no rows for the markdown-newline scenario");
+    console.log("  FAIL  wrap toggle — markdown-newline scenario measured no rows");
+  } else {
+    const markdownTallest = Math.max(...markdownClipped.heights);
+    const markdownOk = markdownTallest <= ROW_FLOOR + 1;
+    console.log(`  ${markdownOk ? "PASS" : "FAIL"}  ${markdownName.padEnd(52)} `
+      + `tallest ${markdownTallest}px, floor ${ROW_FLOOR}px`);
+    if (!markdownOk) {
+      failures.push(`${markdownName}: a markdown value's literal newlines did not clip — tallest `
+        + `${markdownTallest}px exceeds the row floor (${ROW_FLOOR}px + 1) set by `
+        + `${markdownClipped.worst.child} in ${markdownClipped.worst.cell}`);
     }
   }
 }
