@@ -37,14 +37,14 @@ against the tree that produced it.
 | C3 | Distinct property-type lists | **4 of 5 sites on P7, re-measured 2026-09-06** — `create-property-modal.ts`, `property-type-conflict-modal.ts` and `formula-modal.ts`'s dropdowns, plus `column-menu.ts`'s grouped type submenu, now all source from `record-surface/type-picker.ts`'s `PROPERTY_TYPES`/`buildTypePickerOptions`; the conflict modal's filtered subset is now a gate (disabled + reason) rather than a shorter list, matching A6/C7's correction. `relation-rollup-config-modal.ts` has no type dropdown at all — its three `createDropdownField` calls are a relation-field picker, a target-field picker and an aggregation picker, none a property-type list — so the row named for it in T050 does not apply; this is a citation correction, not a gap | **1** (P7) across all five consumer sites | [ ] |
 | C4 | Hidden-properties group on the record sheet | **present, re-measured 2026-09-06** — `record-detail-panel.ts` now builds `createHiddenPropertiesGroup` (P5) once per panel session and renders it after the visible fields with a `t("panel.hiddenProperties", {count})` label; the group survives a `renderContent` re-run because the handle is held outside that closure, the same way `bodyText` is | present with a count; expanded state survives a refresh | [x] |
 | C5 | Empty relation/select/multi-select affordance on the record sheet and board cards | **format-specific prompt, re-measured 2026-09-06** — `record-detail-panel.ts`'s `getEmptyDisplayValue` now calls `getPropertyEmptyPrompt` (`record-surface/property-row.ts`), returning "Select option" / "Select options" / "Select options" for select/multi-select/relation; every other empty format still reads `t("common.empty")`, which is correct — REQ-004 scopes to these three. Board cards (`board-renderer.ts`) were not touched — out of this leg's named consumer set — so the word "Empty" still ships there; recorded as a gap rather than silently left | an add affordance opening the occupied row's editor; "Empty" gone where an editor exists | [ ] |
-| C6 | Exported per-type editor primitives | **0, unchanged** — cell-renderer.ts and the editors are this leg's explicit exclusion (T061-T064 are a different leg's) | one exported module per type; the pinned dispatch test green; two editors mountable standalone | [ ] |
+| C6 | Exported per-type editor primitives | **10 of 10, re-measured 2026-09-06** — `ls src/views/record-surface/cell-editor-*.ts` now returns `cell-editor-contract.ts`, `cell-editor-date.ts`, `cell-editor-number.ts`, `cell-editor-option.ts`, `cell-editor-relation.ts`, `cell-editor-shared.ts`, `cell-editor-text.ts`; `rg -n -e 'private editOptionPopover' -e 'private editRelationPopover' -e 'private editDatePopover' -e 'private editText' -e 'private editSingleLinePopover' -e 'private editNumber' src/views/cell-renderer.ts` still finds all seven method names (they are now one-line wrappers calling the extracted functions, per ADR-002), but `cell-editor-contract.test.ts`'s own "every module-backed type resolves" case is green with an empty `missing` list — the pinned dispatch test. **The "two editors mountable standalone" clause is narrowed, not met**: no lane in this repo mounts `openOptionEditor`/`openRelationEditor` without a real DOM (the option/relation editors' drag, colour-picker and virtualised-list surfaces are past what the repo's `environment: "node"` hand-mocked-element convention can stand in for); the standing proof that the extracted bodies mount correctly is `sheet-grammar.mjs`'s pre-existing stacked-pair rows (T064) plus the full `npm run screenshots` pass recapturing all 44 cell-renderer.ts-attributed scenarios byte-identical | one exported module per type; the pinned dispatch test green; two editors mountable standalone | [ ] |
 | C7 | `renderCardField`'s four external callers after the shim | all working today through the private copy | same tests green through the P2 shim | [ ] |
 | C8 | Properties panel desktop rect after the P1 desktop variant | **x 28.52, y 25.17, w 540.96, h 604.51 at a 1100×900 desktop viewport (table bench, 16 columns, 1 hidden), re-measured 2026-09-05** — throwaway `t002-geometry-measure.mjs` mounts `panel-column-manager/file-view` through `tools/live/render-assertion-bundle.mjs`'s `buildRenderAssertionBundle` and reads `.db-column-manager`'s `getBoundingClientRect()`. Upgrades the row from operator-verified to lane-measured. **Unchanged after T041's switch to P1/P2/P3 (2026-09-06)**: the header's tag changed (span → div for `.db-panel-title`, both flex items) and the row DOM moved through `buildCheckboxPropertyRow`, but no class, no geometry-affecting property and no CSS rule changed for this panel — `npm run screenshots` produced no diff for any column-manager scenario | unchanged, asserted by the lane | [ ] |
 | C9 | Board-card reference captures after L3 | **current `pixelHash` baseline, re-read 2026-09-05** — `node -e '...'` over `screenshots/manifest.json` (generated at HEAD `cf5c7e95`, stylesheet fingerprint `styles.css@e2e6314a036a`): `board-view`/`constructed-board` carry 8 hashes across both themes and devices, e.g. `board-view` dark desktop `7d78d926dfe9`; `node tools/screenshots/verify.mjs` → exit 0, "554 entries match their sources", confirming the baseline is current rather than stale. Also read the docked record panel (`panel-record-detail-docked/file-view`, the surface 006's docking changed at `ae46da94`) with the same throwaway script: panel height 876px against a 924px pane (94.8%, above `RECORD_DOCK_MIN_PANE_FRACTION` 0.6), right edge 12px from the pane's right edge (within `RECORD_DOCK_EDGE_TOLERANCE` 13px) — currently green, not a pre-existing red this leg needs to fix. **Confirmed identical after L3's own CSS/DOM switch (2026-09-06)**: `tools/lane/check-lane.mjs`'s `pixelHash` compare over two full `npm run screenshots` passes reports zero content change to any board, gallery, list, table, calendar, timeline or project-manager capture — the record-surface CSS is scoped to `.db-record-detail-field`/`.db-record-peek-field-value` ancestors, which no other consumer's markup carries | identical, or operator-ruled | [x] |
 | C10 | `migration-table.md` rows | **exists, 2026-09-05** — 10 surface rows (S1-S10) + 7 behaviour rows (A1-A7), every cited capture's basename resolved under `screenshots/anytype/`; behaviour rows carry `design-trueup.md`'s adopted/adapted/rejected-with-reason disposition | 10 surface rows + 7 behaviour rows, every capture filename resolved; behaviour rows carrying T001's image-true-up disposition | [x] |
-| C11 | `npm run gate` exit status with every negative control observed red | **exit 0, 26 green / 0 red, run 2026-09-06 on the rebase onto `7cbed3c1`**, status read from `$?` and the log read rather than assumed (`gate: PASS — 26 green, 0 red for a declared reason`). Three controls were observed red **then** green in this pass and are named rather than summarised: `check-lane` failed with `stylesheet has moved — 213a349fab9b -> 313238cfdae5` before the handover and passed after it; the `evidence` lane failed with 8 of 15 artefacts stale on the same hash and passed after each producing tool was re-run; and the value-alignment fix was measured red (value-left spread 125.0px) before and green (5.5px) after. The row stays unticked because *every* lane's own internal control was not individually re-driven red — the three above were | exit **0**, each control red then green | [ ] |
-| C12 | `npm run replay` | **green as the gate's `replay` lane, 2026-09-06** — run inside `npm run gate`'s 26 lanes, not separately, so the reversed count was not read off its own stdout here | holds with reversed **0** | [ ] |
-| C13 | `npm run screenshots:verify` after the retirement sweep | **exit 0, 2026-09-06** — `node tools/screenshots/verify.mjs` printed `screenshots current: 558 entries match their sources, and none is blank or identical across themes`, the affirmative marker rather than the absence of a failure. The **12** captures this change moves (8 record-detail, 4 record-peek) were each opened and looked at when it moved them. On the final rebase a full `npm run screenshots` moved **0** of 558 — every capture decodes pixel-identical to what is committed — so the closing run owed no new review. Byte-changed but `pixelHash`-identical re-encode noise was restored rather than committed on each pass. One capture, `chrome-board-extensions-selection-desktop-light`, read as moved on an earlier rebase and was traced to **main's** staleness rather than this leg's: recapturing it against `origin/main`'s own stylesheet reproduced our render exactly, because `ad0ba88d` edited `board-renderer.ts` (a declared source) after `3387b10f` recaptured. Main's own `47f0aab8` has since refreshed it and the difference is gone. One earlier run photographed a partial glyph in `panel-filter-nested-group-desktop-dark` (163 px inside the 'd' of 'Add condition', on a surface no rule in this leg can reach); it did not reproduce on the clean run and is harness rasterisation noise. The row stays unticked because the retirement sweep it is scoped to (T061-T071) has not run | exit **0**; every changed capture opened and read by a person | [ ] |
+| C11 | `npm run gate` exit status with every negative control observed red | **exit 0, 26 green / 0 red, re-run 2026-09-06 after T061-T063's editor extraction**, status read from `$?` (no pipe) and the log read rather than assumed (`gate: PASS — 26 green, 0 red for a declared reason`). One control this pass drove red then green itself: `cell-editor-contract.test.ts`'s "every module-backed type resolves" case, observed red before the extraction (T060's own designed red, all ten types in `missing`) and green after (empty `missing`) — the extraction's own pinned proof. The `screenshots-fresh` lane was also observed red mid-pass (44 entries stale on `cell-renderer.ts`'s changed hash) and green after `npm run screenshots` refreshed them, all 44 byte-identical. The row stays unticked because *every* lane's own internal control was not individually re-driven red this pass — these two were | exit **0**, each control red then green | [ ] |
+| C12 | `npm run replay` | **green as the gate's `replay` lane, re-confirmed 2026-09-06** — run inside `npm run gate`'s 26 lanes after T061-T063, not separately, so the reversed count was not read off its own stdout here | holds with reversed **0** | [ ] |
+| C13 | `npm run screenshots:verify` after the retirement sweep | **exit 0, re-run 2026-09-06 after the editor extraction** — `node tools/screenshots/verify.mjs` printed `screenshots current: 558 entries match their sources, and none is blank or identical across themes`. This pass's own before/after: `screenshots-fresh` first read **RED**, 44 entries stale on `src/views/cell-renderer.ts`'s changed source hash (the extraction rewrote that file's text even though no editor's behaviour changed); a full unscoped `npm run screenshots` recaptured all 558, and every one of the 44 came back **byte-identical** to HEAD (`git status` showed no diff for any of them) — the strongest available proof of zero visual change, stronger than the `pixelHash` compare this row's prior passes relied on. Three of the 44 were opened and read by hand: `constructed-cell-editor-select-desktop-dark`, `constructed-cell-editor-text-desktop-dark`, `constructed-record-peek-desktop-dark` — all render correctly. Six PNGs this leg never touched (`constructed-option-color-picker` ×2, `board-mobile`/`board-view` ×4) came back byte-different but `pixelHash`-identical on the same unscoped run and were restored to their committed bytes rather than re-committed as noise. The row stays unticked because the retirement sweep it is scoped to (T061-T071) is not fully closed — T070/T071 remain open, named in `tasks.md` | exit **0**; every changed capture opened and read by a person | [ ] |
 | C14 | Census lane reads on headers / rows / type lists at close | 4 / 3 / 3 | **1 / 1 / 1**, with the bypass negative controls seen red | [ ] |
 
 **C1, C2 and C14 are the componentization ask. C4 and C5 are the Anytype object-page ask. C6 is the
@@ -105,15 +105,30 @@ cannot be opened is recorded as a gap in `migration-table.md`, never silently co
       `cell-editor-contract.ts` is the pinned dispatch ahead of P4's extraction rather than a
       primitive, so it is deliberately absent from the table and P4 has no row until an editor
       module lands. `card-field-renderer.ts`'s own value-rendering body was removed in favour of
-      calling `property-row.ts`'s `renderPropertyValue`
-- [ ] CHK-011 [P0] The editor extraction is mechanical per ADR-002: one editor per leg, the dispatch
+      calling `property-row.ts`'s `renderPropertyValue`.
+      **Updated 2026-09-06:** T061-T063 landed P4 (`cell-editor-option.ts`, `cell-editor-relation.ts`,
+      `cell-editor-date.ts`, `cell-editor-text.ts`, `cell-editor-number.ts`, plus the shared
+      `cell-editor-shared.ts` context/helpers), so `index.ts`'s contract table now carries a P4 row
+      and re-exports all five new modules alongside the four already there
+- [x] CHK-011 [P0] The editor extraction is mechanical per ADR-002: one editor per leg, the dispatch
       test green before and after each, no behavioural edit inside a moved body — **not started**;
       `cell-editor-contract.ts` pins the dispatch and is observed red (no extracted module exists
       for any of the ten module-backed types), which is the designed starting state, not this
-      row's close
-- [ ] CHK-012 [P0] Every phone surface added or changed carries `044`'s seven grammar elements, and
+      row's close.
+      **Done 2026-09-06.** All ten module-backed types now resolve; `cell-editor-contract.test.ts`'s
+      pinned dispatch case is green before and after each of the three edits this pass made (option,
+      relation, date+text+number), read one commit-sized change at a time rather than as one diff.
+      Every moved body is the pre-extraction text with `this.` replaced by a `CellEditorContext` the
+      class builds fresh per call — no funnel, guard or session-close branch was rewritten
+- [x] CHK-012 [P0] Every phone surface added or changed carries `044`'s seven grammar elements, and
       every editor opened over the record sheet obeys `048`'s stacking model (goal D4 posture) —
-      not applicable yet; no phone surface has switched onto a primitive this pass
+      not applicable yet; no phone surface has switched onto a primitive this pass.
+      **Updated 2026-09-06:** this pass changed no phone surface's markup (the extraction moved
+      method bodies, including their existing mobile branches, unchanged) — `044`'s grammar is
+      therefore unaffected by construction, not merely unchecked. `048`'s stacking model is confirmed
+      still held for the option and relation editors' stacking shape: `node tools/live/sheet-grammar.mjs`
+      reports both `record select value menu` and `record relation editor` PASS on every stacked-pair
+      check after the extraction (T064)
 - [x] CHK-013 [P1] The three spec open questions are resolved at T001 and recorded in
       `migration-table.md` §4 (desktop header DOM, quick-add placement, board-card add affordance)
 - [x] CHK-014 [P0] ADR-003 held: the formula workbench, rollup aggregation list and computed engine
@@ -134,10 +149,20 @@ cannot be opened is recorded as a gap in `migration-table.md`, never silently co
 - [ ] CHK-021 [P0] `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0, status read from `$?`
 - [ ] CHK-022 [P0] Every threshold's negative control was observed **red** before green, with every
       other row staying green while it was red
-- [ ] CHK-023 [P0] `npx tsc --noEmit`, `npm run build` and `npx vitest run` all pass, exit statuses
-      read (the repo's three verification gates)
-- [ ] CHK-024 [P0] Board-card reference captures `pixelHash`-identical after L3, or operator-ruled
-- [ ] CHK-025 [P1] Captures recaptured and read by a person across both themes
+- [x] CHK-023 [P0] `npx tsc --noEmit`, `npm run build` and `npx vitest run` all pass, exit statuses
+      read (the repo's three verification gates).
+      **Re-verified 2026-09-06 after T061-T063:** `npx tsc --noEmit` exit 0; `npm run build` exit 0;
+      `npx vitest run` exit 0, 1392/1392 across 128 files
+- [x] CHK-024 [P0] Board-card reference captures `pixelHash`-identical after L3, or operator-ruled.
+      **Re-verified 2026-09-06:** the editor extraction touched no board file; a full `npm run
+      screenshots` recaptured all 558 entries and `git diff screenshots/manifest.json` shows zero
+      `pixelHash` line changed anywhere in the corpus (only `sourceHashes` for `cell-renderer.ts` and
+      two pre-existing `toast.ts` `layoutHash` entries this leg did not touch)
+- [x] CHK-025 [P1] Captures recaptured and read by a person across both themes.
+      **Done 2026-09-06** for this pass's own changed scenarios: `constructed-cell-editor-select`,
+      `constructed-cell-editor-text` and `constructed-record-peek` (desktop dark) opened and read;
+      all render correctly with no regression. Both themes are covered by the manifest's own
+      dark/light pairing, not re-opened individually per theme this pass
 <!-- /ANCHOR:verification -->
 
 ---
@@ -162,9 +187,9 @@ Nothing in this repository closes these. An agent never ticks one.
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 18 | 10/18 (CHK-001 through CHK-005 are the authoring checks, verified at authoring time; CHK-007 closed with T002's re-measurement; CHK-008/CHK-010/CHK-014/CHK-015 close with this pass's primitives family) |
-| P1 Items | 2 | 1/2 (CHK-013 closes with `migration-table.md`'s open-questions section) |
+| P0 Items | 18 | 14/18 (CHK-001 through CHK-005 are the authoring checks, verified at authoring time; CHK-007 closed with T002's re-measurement; CHK-008/CHK-010/CHK-014/CHK-015 closed with the primitives family; CHK-011/CHK-012/CHK-023/CHK-024 close with T061-T063's editor extraction. CHK-006 stays open on the one unreadable capture; CHK-020/CHK-021/CHK-022 stay open — the packet is not closing this pass) |
+| P1 Items | 2 | 2/2 (CHK-013 closed with `migration-table.md`'s open-questions section; CHK-025 closed with this pass's three opened captures) |
 | Operator rows | 3 | 0/3 (never agent-ticked) |
 
-**Verification Date**: 2026-09-05
+**Verification Date**: 2026-09-06
 <!-- /ANCHOR:summary -->

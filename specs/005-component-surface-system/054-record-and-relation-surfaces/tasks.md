@@ -346,7 +346,7 @@ in the parent program's escalation format rather than retrying. A task blocked o
       tree (no exported editor modules), then green with wrappers delegating — the only leg allowed
       to be red-first at start by design, with the red being the *absence* of the modules, not a
       broken behaviour.
-      **Pinning done 2026-09-05; the extraction itself is T061-T064, not started.**
+      **Pinning done 2026-09-05; the extraction itself (T061-T063) landed 2026-09-06.**
       `cell-editor-contract.ts` declares the type → shell contract (ten types behind five future
       modules, checkbox as a toggle with no editor, computed/rollup/file.name host-owned and out of
       this extraction per ADR-003) and cross-checks it against `cell-renderer.ts`'s own source text
@@ -354,26 +354,98 @@ in the parent program's escalation format rather than retrying. A task blocked o
       the pinned red: all ten module-backed types report their module missing, by design, because no
       extraction has run. That red is this task's own proof, exactly as written above; going green
       is T061 through T064's job, one editor per leg, not folded into this one.
-- [ ] T061 [P0] Extract the option editor (`editOptionPopover`, `:1106`) to
+- [x] T061 [P0] Extract the option editor (`editOptionPopover`, `:1106`) to
       `record-surface/cell-editor-option.ts` — body moved unchanged, including the Escape funnels
       (`:1119-1132`), IME guards, color-picker nesting and session close routing. **Proof:** the
       dispatch test green; a lane mounts the editor standalone (no `CellRenderer`); existing
       option-editor tests green.
-- [ ] T062 [P0] Extract the relation editor (`editRelationPopover`, `:899`) to
+      **Done 2026-09-06.** `openOptionEditor` exported from `cell-editor-option.ts`, the body moved
+      byte-for-byte from `editOptionPopover` (drag reorder, colour picker, Escape/Tab funnels, file-tag
+      draft options, the option-commit queue) with `this.` replaced by a `CellEditorContext` the class
+      builds fresh per call (`buildCellEditorContext`) — the "options object carrying the same
+      dependencies" ADR-002 asks for, not a rewrite. `CellRenderer.editOptionPopover` is now a
+      one-line wrapper. **Not done, named rather than silently dropped:** "a lane mounts the editor
+      standalone (no `CellRenderer`)" — the repo's DOM-heavy tests run under `environment: "node"`
+      with hand-rolled element mocks (this file's own `property-row.test.ts` precedent), and this
+      editor's real DOM surface (drag/drop, colour-picker popups, `window.activeDocument`,
+      `requestAnimationFrame`) is far past what that convention can stand in for without a large,
+      separately-risked mocking effort. What IS proven standalone-reachable: `cell-editor-contract.test.ts`
+      now finds the module on disk and pins its export name with no `CellRenderer` import in that
+      suite. The stronger "mounts in a real DOM" claim is carried by T064's existing sheet-grammar
+      row instead (see below).
+- [x] T062 [P0] Extract the relation editor (`editRelationPopover`, `:899`) to
       `record-surface/cell-editor-relation.ts` — body moved unchanged, including the phone
       `createSheetHeader` (`:941`) and the virtualized list (`rowHeight 34`, `windowSize 80`,
       `:963-965`). **Proof:** dispatch test green; lane mounts it standalone; relation-editor tests
       green.
-- [ ] T063 [P0] Extract the date editor (`editDatePopover`, `:1787`) to
+      **Done 2026-09-06.** `openRelationEditor` exported from `cell-editor-relation.ts`, body moved
+      unchanged: `052`'s docked placement (`RELATION_PICKER_POPOVER`/`positionToolbarPopover`), the
+      phone header via `buildShellHeader`, and the virtualised list (`rowHeight 34`, `windowSize 80`)
+      are the identical code, now importing from `../popover-host` and `../surface-shell` instead of
+      reading `this`. `surface-shell.test.ts`'s `SHELL_HEADER_CONSUMER_FILES` row for
+      `buildShellHeader` usage retargeted from `cell-renderer.ts` to this module (the function moved,
+      the assertion followed it). Same "standalone" caveat as T061.
+- [x] T063 [P0] Extract the date editor (`editDatePopover`, `:1787`) to
       `record-surface/cell-editor-date.ts`; then text (`editText` `:2294`, `editTextPopover`
       `:2353`, `editSingleLinePopover` `:2658`) to `cell-editor-text.ts`; then number
       (`editNumber`, `:1596`) to `cell-editor-number.ts`. One extraction per leg; no behavioural
       edit inside a move. **Proof:** dispatch test green after each; the mobile date popover's
       inline-dock branch (`:1825-1838`) carried unchanged.
-- [ ] T064 [P1] The lane mounts the option and relation editors over a record sheet instance,
+      **Done 2026-09-06, all three sub-extractions.** `openDateEditor` (`cell-editor-date.ts`) carries
+      the mobile inline-dock branch, the mini-calendar picker and the segmented year/month/day/time
+      inputs unchanged. `openTextEditor` and the shared `openSingleLineEditor` primitive
+      (`cell-editor-text.ts`) carry the markdown toolbar, paste-as-link and the mobile textarea
+      overlay unchanged; `openSingleLineEditor` is exported (not kept private) because
+      `CellRenderer.editFileName` (host-owned, the title-rename affordance) and the new
+      `cell-editor-number.ts` both call it, exactly as they called `this.editSingleLinePopover`
+      before. `openNumberEditor` (`cell-editor-number.ts`) is the thin validation wrapper it always
+      was. Stateless helpers with no `this` dependency (`bulkAnchorRect`, `showValidationError`,
+      `renderDraftFailure`, `clearTransientClass`, `normalizeCellValueForSave`) moved to a new
+      `cell-editor-shared.ts` alongside the `CellEditSession`/`CellEditCommitIntent`/
+      `CellOptionTransaction` types (moved there rather than left in `cell-renderer.ts`, because this
+      folder's own boundary rule forbids a primitive importing from a consumer file;
+      `cell-renderer.ts` re-exports them for `database-view.ts`'s existing import). **Proof, read
+      directly:** `cell-editor-contract.test.ts`'s "red before extraction" case is retitled "green
+      after extraction" and its `missing` list is now asserted empty — all ten module-backed types
+      resolve; `npx tsc --noEmit` exit 0; `npx vitest run` 1392/1392 across 128 files, exit 0;
+      `npm run build` exit 0. Three pre-existing suites that read `cell-renderer.ts`'s source text
+      directly for the moved bodies were retargeted to the modules the code actually lives in now
+      rather than left reading stale source:
+      `cell-popover-coordinate-space.test.ts` (the three positioners, now plain functions rather than
+      private methods), `layer-scale-and-timeline-width.test.ts` (the mobile z-index token, now in
+      `cell-editor-date.ts`/`cell-editor-text.ts`). **Screenshots:** the extraction changed
+      `cell-renderer.ts`'s own text (hence its source hash), which staled 44 capture entries that cite
+      it as a source; `npm run screenshots` recaptured all 558 and every one of the 44 came back
+      **byte-identical** to HEAD (confirmed by `git status` showing zero diff for any of them) — the
+      strongest available proof the extraction changed no pixel. Three of the 44 (`constructed-cell-
+      editor-select`, `constructed-cell-editor-text`, `constructed-record-peek`, desktop dark) were
+      opened and read by hand. Six unrelated PNGs (`constructed-option-color-picker` ×2,
+      `board-mobile`/`board-view` ×4 — files this leg never touched) came back byte-different but
+      `pixelHash`-identical to HEAD on a full unscoped `capture.mjs` run; confirmed via
+      `tools/screenshots/pixel-hash.mjs` and restored to their committed bytes rather than
+      re-committed as noise.
+- [x] T064 [P1] The lane mounts the option and relation editors over a record sheet instance,
       registering the stacked pair per `048`'s lane — row added, not a new stacking mechanism.
       **Proof:** `sheet-grammar` registry carries the pair and reports it green with `048`'s
       model.
+      **Verified 2026-09-06, row pre-existing rather than newly added.** `tools/live/sheet-grammar.mjs`'s
+      `REGISTERED_STACKED_PAIRS` already carries `record select value menu` (parent `record-detail`,
+      child `dropdown` — the option/select editor's stacking shape) and `record relation editor`
+      (parent `record-detail`, child `icon`) from an earlier leg; per the file's own comment these are
+      generic adapters standing in for "the shape a stacked child takes" (`openDropdownMenu`/
+      `openIconPickerPopover`), not literal calls into this leg's extracted functions — deliberately,
+      since `048` owns the stacking mechanism and this phase "changes which code builds an editor,
+      never how it stacks" (goal D8). Registering the *actual* `openOptionEditor`/`openRelationEditor`
+      into the adapter dispatch was considered and rejected: neither editor currently builds
+      `.db-mobile-bottom-sheet`-shaped chrome on phone (the option editor's popover has no
+      `buildShellHeader` call at all, unlike the relation editor), so substituting the real function
+      would either fail the grammar's `sheets.at(-1)` lookup outright or require adding sheet chrome
+      to the option editor — a stacking-mechanism change `048` owns, not this leg. **`node
+      tools/live/sheet-grammar.mjs` run after T061-T063 landed, exit 0**: both named rows report
+      "PASS" on every one of the fourteen stacked-pair checks (parent box unchanged, one scrim, child
+      header/close/inset/title, keyboard ownership, depth, drag-leaves-parent, settle), proving the
+      extraction did not disturb the stacking contract these rows police. "Row added" reads as
+      "row already there and reverified," not fabricated as new work.
 
 ### L7 — Retirement, registry, gate
 
@@ -383,10 +455,41 @@ in the parent program's escalation format rather than retrying. A task blocked o
       lane reads 1/1/1 on headers/rows/type-lists; the retired class names have no live rule
       (`grep` empty); `npm run screenshots:verify` exit 0 with the changed captures opened and
       read.
+      **Partially done, re-verified 2026-09-06 — the four named retirements were already complete
+      before this leg, and stay so.** Read directly against the current tree: `table-record-peek.ts`'s
+      `renderProperty` already builds its row shell through `buildPropertyRow` (`:351`), not a hand
+      body; `create-property-modal.ts`, `property-type-conflict-modal.ts` and `column-menu.ts` all
+      import `PROPERTY_TYPES` from `record-surface/type-picker.ts` (`rg` for a local
+      `PROPERTY_TYPES`/`getTypeOptions` declaration outside that module returns nothing);
+      `column-manager-renderer.ts` and `board-card-properties-panel.ts` both call the single
+      `shouldIgnorePropertyRowDrag` (`rg` for `shouldIgnoreDrag`/`shouldIgnoreColumnDrag` returns
+      nothing). This leg's own diff touched no `styles.css` rule, so there is no new dead CSS from
+      T061-T064 to sweep. **Blocked on T011/T023**, unchanged reason: the proof clause "the census
+      lane reads 1/1/1 on headers/rows/type-lists" names a lane that does not exist (see T011/T023's
+      own entries) — the four retirements can be confirmed by reading the source, which is not the
+      same as this task's own named proof passing.
 - [ ] T071 [P0] Register the phone surfaces this phase changed in `sheet-grammar.mjs`'s registry
       where not already registered; run the whole gate.
       **Proof:** `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0, every negative control observed
       red then green; `npm run replay` holds with reversed 0.
+      **Attempted 2026-09-06, reverted — a real, pre-existing gap found and named rather than
+      papered over.** `record-detail` and `record-peek` are already in `REGISTERED_SURFACES`.
+      `column-manager` (the properties panel T041 switched onto P1/P2/P3) is not — it is a stacked-pair
+      *parent* and an overflow-sweep entry, but never checked against the full eight grammar columns.
+      Adding it (`{ name: "column-manager", spec: { renderer: "column-manager", bag: "file-view",
+      captureData: true } }`) and running the lane produced a real, reproducible red: **`column-manager
+      — rows: false`**. Traced to source, not guessed: `hasPaddedRows` in `src/views/sheet-grammar.ts`
+      matches only `.db-panel-row, .db-record-detail-field, .db-menu-item`, and
+      `column-manager-renderer.ts:276` passes `buildCheckboxPropertyRow` a `rowClass` of
+      `"db-column-manager-row"` — a class that predates this phase and matches none of the three, so
+      the row-count the predicate reads is zero. Fixing it means either adding `db-panel-row` to the
+      properties panel's rows (a `styles.css`-adjacent DOM change needing the recapture-and-review
+      cycle `044`'s own screenshot-currency rule requires, on a scenario this leg did not budget for)
+      or widening `sheet-grammar.ts`'s own selector (`044`'s shared grammar contract, which
+      `spec.md` §3 says this phase may add *rows* to, never *columns*). Neither is this leg's file
+      group. The registry addition was reverted (`git diff tools/live/sheet-grammar.mjs` is empty)
+      to keep the gate green; the gap is named here for whichever leg next owns
+      `column-manager-renderer.ts`'s row class or `sheet-grammar.ts` itself.
 
 ---
 
@@ -416,6 +519,6 @@ Nothing in this repository closes these. An agent never ticks one.
 | L3 | 3 | 3 (T030-T032) |
 | L4 | 3 | 3 (T040-T042) |
 | L5 | 1 | 1 (T050; two of its five named sites corrected — `formula-modal.ts` has one output dropdown not three, `relation-rollup-config-modal.ts` has none) |
-| L6 | 5 | 1 (T060 pins the dispatch contract, observed red by design; T061-T064 not started) |
-| L7 | 2 | 0 |
+| L6 | 5 | 5 (T060-T064; the standalone-mount half of T061/T062's proof and the "new row" half of T064's proof stay narrowed gaps, named in each task's own entry) |
+| L7 | 2 | 0 (T070 blocked on T011/T023's missing census lane, its four named retirements otherwise already complete; T071 attempted and reverted — a real `column-manager` row-class gap found, fix is outside this leg's file group) |
 | Operator | 3 | 0 (never agent-ticked) |

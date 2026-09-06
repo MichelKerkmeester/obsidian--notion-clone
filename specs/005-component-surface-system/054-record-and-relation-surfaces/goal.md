@@ -14,16 +14,16 @@ _memory:
     packet_pointer: "005-component-surface-system/054-record-and-relation-surfaces"
     last_updated_at: "2026-09-06T00:00:00Z"
     last_updated_by: "implementer-leg"
-    recent_action: "Switched the record sheet, the peek and the two properties panels onto the primitives"
-    next_safe_action: "Implement T061-T064 per ADR-002"
+    recent_action: "Extracted all ten cell editors behind CellRenderer.startEdit (T061-T063); gate 26 green"
+    next_safe_action: "Build the census lane (T011/T023); resolve the column-manager row-class gap named at T071"
     blockers:
-      - "T061-T071 remain: editor extraction, retirement sweep, phone-surface registry, full negative-control gate"
+      - "T070/T071 remain: T070 needs the census lane T011/T023 didn't build; T071 needs a styles.css fix outside this leg's file group"
       - "OPS-001..003 are the operator's; nothing here can close them"
     key_files:
-      - "src/views/record-detail-panel.ts"
       - "src/views/cell-renderer.ts"
-      - "src/views/table-record-peek.ts"
-      - "src/views/record-surface/type-picker.ts"
+      - "src/views/record-surface/cell-editor-option.ts"
+      - "src/views/record-surface/cell-editor-relation.ts"
+      - "src/views/record-surface/cell-editor-shared.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-054-goal"
@@ -168,6 +168,26 @@ conflicts; never resolve them silently.
 
 Volatile. Not part of the directive.
 
+- **2026-09-06 — L6 editor extraction landed (T060-T064); L7 attempted, two gaps named rather than
+  fixed blind.** All ten module-backed column types now resolve to an exported module under
+  `src/views/record-surface/` (`cell-editor-option.ts`, `cell-editor-relation.ts`,
+  `cell-editor-date.ts`, `cell-editor-text.ts`, `cell-editor-number.ts`, plus the shared
+  `cell-editor-shared.ts`), each moved unchanged from its `CellRenderer` private method per ADR-002
+  — `cell-renderer.ts` fell from 3,152 to 1,212 lines. `cell-editor-contract.test.ts`'s pinned
+  dispatch test, red by design before this leg, is green with an empty `missing` list.
+  **T064 verified rather than newly coded**: the `record select value menu`/`record relation
+  editor` stacked-pair rows `tools/live/sheet-grammar.mjs` already carried stay green after the
+  extraction, confirming `048`'s stacking contract held. **T070 stays open**: its four named
+  retirements were already complete from earlier legs (confirmed by source read), but its own proof
+  clause — "the census lane reads 1/1/1" — names infrastructure T011/T023 never built, so the row
+  cannot close on this evidence alone. **T071 surfaced a real defect and was reverted rather than
+  forced green**: registering `column-manager` into `sheet-grammar.mjs`'s full grammar check
+  produced an observed red (`rows: false`) because `column-manager-renderer.ts`'s row class predates
+  the shared grammar's selector — fixing it needs a `styles.css` change and a recapture cycle outside
+  this leg's file group, so the registry addition was reverted and the gap named for whoever owns
+  that file next. `npx tsc --noEmit`, `npx vitest run` (1392/1392 across 128 files) and `npm run
+  build` all pass; `npm run gate` is 26 green, 0 red; a full `npm run screenshots` moved 0 of 558
+  entries' pixels.
 - **2026-09-05 — landed in-runtime.** Reviewed against the parent's D1-D14, `050`'s
   `design-trueup.md` and the current tree, then copied from
   `worktrees/083-phase-record-relation-surfaces` into `worktrees/086-land-phases-051-055`.

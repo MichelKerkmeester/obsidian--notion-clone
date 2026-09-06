@@ -13,12 +13,12 @@ _memory:
     packet_pointer: "005-component-surface-system/054-record-and-relation-surfaces"
     last_updated_at: "2026-09-06T00:00:00Z"
     last_updated_by: "implementer-leg"
-    recent_action: "T030-T032/T040-T042/T050 switched consumers onto ADR-001's primitives; ADR-002 untouched"
-    next_safe_action: "Implement T061-T064 per ADR-002"
+    recent_action: "ADR-002's extraction landed (T061-T063): five editor modules, cell-renderer.ts 3152->1212 lines"
+    next_safe_action: "Build the census lane (T011/T023); resolve the column-manager row-class gap named at T071"
     blockers: []
     key_files:
-      - "src/views/record-detail-panel.ts"
       - "src/views/cell-renderer.ts"
+      - "src/views/record-surface/cell-editor-shared.ts"
       - "src/views/record-surface/property-row.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
@@ -94,7 +94,21 @@ callers beyond this family keep working unchanged.
 <!-- ANCHOR:adr-002 -->
 ## ADR-002: The per-type editor extraction is mechanical — method bodies move, and the dispatch contract is pinned red-first
 
-**Status: DECIDED — 2026-09-05 (authored with the packet).**
+**Status: DECIDED — 2026-09-05 (authored with the packet). Landed 2026-09-06 (T060-T063).**
+
+`cell-editor-contract.ts` pinned the dispatch red-first at T060; T061 (option), T062 (relation) and
+T063 (date, then text, then number — three sub-extractions, one commit-sized change per leg) moved
+every body into `record-surface/cell-editor-*.ts`, unchanged, with `this.` replaced by a
+`CellEditorContext` the class builds fresh per call — the "options object carrying the same
+dependencies" this ADR asked for rather than a rewrite. `cell-renderer.ts` fell from 3,152 to 1,212
+lines. Every accumulated defect fix the context named (the Escape funnels, IME guards, session close
+routing) moved with its body; `npx tsc --noEmit`, `npx vitest run` (1392/1392) and `npm run build`
+all pass, and a full `npm run screenshots` recaptured every `cell-renderer.ts`-attributed scenario
+byte-identical to HEAD. One thing this ADR did not anticipate and the landing found: the shared
+single-line-popover primitive (`editSingleLinePopover`) is reused by three callers — the text
+editor, the number editor and `editFileName` (host-owned) — so it is exported from
+`cell-editor-text.ts` as `openSingleLineEditor` rather than kept private to the text module, and the
+two other callers import it rather than each keeping a copy.
 
 ### Context
 
