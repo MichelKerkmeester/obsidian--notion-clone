@@ -479,7 +479,16 @@ than absorbed silently. Two readings are open and only the operator can choose:
 2. **Reach the pattern properly** by routing deletions through `TrashManagerModal` and then dropping
    the confirm. That is a data-model change, far outside `051`, and would belong to its own packet.
 
-Reading 1 is applied until the operator says otherwise.
+Reading 1 was applied until the operator ruled.
+
+**CLOSED, 2026-09-06 (~07:50), operator: *"No confirm for single delete, Undo toast."*** A third
+reading, not either of the two above: single-row delete becomes immediate, with Undo carried on the
+toast, and the confirm stays for bulk delete and for anything not undoable. This does not require
+`TrashManagerModal` (reading 2) and does not leave the confirm on single-row delete (reading 1) — it
+reuses the toast/undo primitive `055` already owns rather than either of E4's original two paths.
+The confirm primitive this ADR builds still exists and is still the only one; it is simply no longer
+the path a single-row delete takes. Owner of the `deleteRow` call-site changes: `055`; this packet's
+scope is unchanged — the confirm primitive `055` calls into for bulk/non-undoable cases.
 
 **E4 is closed, 2026-09-06 (~07:50). The operator ruled, verbatim: "No confirm for single delete,
 Undo toast."** The confirm is kept for bulk delete and for anything not undoable. This is neither of
@@ -545,4 +554,82 @@ been wrong on thirteen of thirty-five census surfaces.
 | **What is the real caller that must not break?** | `044`'s twelve registered `sheet-grammar` surfaces and `048`'s thirty-one registered pairs — the frame-shape change moves every selector that measures a sheet rect, so it lands with T012's row updates |
 | **What contract must not break?** | WCAG 1.4.1, 1.4.3 and 1.4.11, which are the only grounds on which this ruling permits a deviation at all |
 <!-- /ANCHOR:adr-007 -->
+
+---
+
+## ADR-008: The desktop database Settings surface is a new shell shape — a right side sheet
+
+**Status: Accepted, 2026-09-06, operator: *"Right side sheet."***
+
+### Context
+
+Operator report, desktop, ~08:15 (screenshots in `scratchpad/`): *"btw this dropdown on desktop is
+horrible … should probably become a sheet, on desktop at least, and get dedicated button."* The
+database Settings panel opens today as a tall anchored dropdown through
+`positionToolbarPopover`'s general preset (`view-config-panel-renderer.ts`), sized by
+`design-system.md` §3's `panel` role (292-360px, anchored to its trigger). None of §3's existing
+roles fit what the operator asked for: `panel` is anchored and bounded, not full-height; `sheet` is
+the phone presentation, docked to the bottom; `condition panel` is a wider `panel`, still anchored.
+
+### Decision
+
+**We chose**: a new role, `side sheet` — desktop-only, full-height, docked to the right edge of the
+viewport. The database stays visible and interactive to its left; the side sheet scrolls
+independently. It is a shell presentation the same `surface-shell.ts` composes, not a fourth
+independent implementation — `053`'s toolbar owns the dedicated gear button that opens it (this
+packet's own amendment above names the split).
+
+**How it works**: `openSurface({ role: "side sheet", mount: "bodyPortal", ... })` docks to
+`right: 0`, full viewport height, with its own scroll region; the database's own scroll and
+interaction are untouched because the side sheet does not overlay it. Dismissal: outside click (on
+the database side), Escape, and the gear button toggling it closed — no scrim, because the database
+stays interactive, unlike a `sheet` or `dialog`.
+
+### Alternatives Considered
+
+| Option | Pros | Cons | Score |
+|--------|------|------|-------|
+| **Chosen: new `side sheet` role, desktop-only** | Matches the operator's own words exactly; the database staying visible is the one property no anchored-popover role can give | A fifth role to maintain in `design-system.md` §3 | 9/10 |
+| Widen `panel` to a taller, anchored popover | Smaller change to the role table | Still anchored to a trigger and still dismisses on outside click over the database — cannot deliver "database stays visible and interactive" the way a docked, non-overlaying panel can | 3/10 |
+| Reuse the phone `sheet` role on desktop | One less role | `sheet` docks to the bottom and scrims the host; the operator's ask is a right-docked, non-scrimmed panel — a different shape, not a width variant | 2/10 |
+
+**Why this one**: The operator's own words describe a shape none of the five existing roles produce;
+inventing a sixth bespoke width inside `panel` would repeat exactly the anti-pattern
+`design-system.md` §5 was written to end.
+
+### Consequences
+
+**What improves**:
+- The Settings surface no longer competes with the database for the same anchored-popover space,
+  and a taller settings body no longer needs `PANEL_POPOVER`'s derived-width workaround
+
+**What it costs**:
+- A new role in `design-system.md` §3/§4, and a new grammar row in whatever lane checks role widths
+  and dismissal (`tools/live/sheet-grammar.mjs` or its desktop counterpart, T011's to wire)
+
+**Risks**:
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| A side sheet full-height on a short viewport could clip its own content | Low | Independent internal scroll, per the decision, not a fixed content height |
+
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | No existing role in `design-system.md` §3 produces a full-height, edge-docked, non-scrimming panel |
+| 2 | **Beyond Local Maxima?** | PASS | Two narrower alternatives (widen `panel`, reuse `sheet`) considered and rejected with reasons |
+| 3 | **Sufficient?** | PASS | One new role, composed by the existing shell, not a new component family |
+| 4 | **Fits Goal?** | PASS | Directly grounds the new completion criterion this amendment adds to `goal.md` §3 |
+| 5 | **Open Horizons?** | PASS | `053`'s gear-button amendment is the only other packet this touches, and it is named rather than silently assumed |
+
+**Checks Summary**: 5/5 PASS
+
+### Implementation
+
+**What changes**: `design-system.md` §3/§4 (new role row), `surface-shell.ts` (new presentation),
+`view-config-panel-renderer.ts` (desktop mount switches from `positionToolbarPopover` to the new
+role when opened from `053`'s gear button).
+
+**How to roll back**: Revert to the anchored-popover mount; no stored data changes.
 

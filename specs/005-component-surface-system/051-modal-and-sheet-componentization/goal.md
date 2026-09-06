@@ -165,6 +165,12 @@ never resolve them silently.
 - [ ] **The operator opens a modal, a sheet, a sub-page and a destructive confirm on iOS and on
       desktop and reads them as one surface family, debugged, refined, perfected.** Only the
       operator closes this row; nothing in this repository can.
+- [ ] **The desktop database Settings surface opens as a right side sheet: a full-height panel
+      docked to the right edge, the database stays visible and interactive to its left, and the
+      panel scrolls independently of it.** **Added 2026-09-06** from the operator's report and
+      ruling (`goal.md` §4 amendment below). **Today: the Settings surface is a tall anchored
+      dropdown** (`positionToolbarPopover`'s `PANEL_POPOVER`/general preset, `view-config-panel-
+      renderer.ts`), a new shell shape distinct from every role in `design-system.md` §3.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -199,4 +205,33 @@ Everything below is VOLATILE.
 | **The true-up measured parity and then declined it fifteen times** | T001 read the captures under *"capture wins"* and applied it row by row rather than as a rule. Fifteen of the thirty-five census cells recorded a measured Anytype value in the pattern column and kept ours in the decision column — some for a real reason (no equivalent surface exists), some because the change looked large, some with no stated reason at all. Three of the nine contradictions were deferred, routed or declined the same way. The operator's ~18:30 ruling replaces the judgment with a rule and ADR-007 records it; **18** decisions flipped. Recorded because the pattern — measure a reference, then decline it surface by surface — converges on neither the reference nor a design of its own, and it is the same drift `spec.md` §2 names as the family's original defect. |
 | **One value was over-generalised, not under-adopted** | REQ-006 said the phone frame has "an 8pt inset on three sides". Re-measuring all 52 dark sheet captures for the retarget found **two** shapes: a floating card at device L 24 / R 1181 / bottom 2597 on 22 files, and a flush edge-to-edge sheet at L 0 / R 1205 / bottom 2621 on 13. A blanket inset would have been wrong on thirteen of the thirty-five census surfaces. The boundary between the shapes is **unobserved** — every floating capture sits at a top edge ≥ 299pt and every flush one at ≤ 198pt, and nothing was captured between — so the shell takes the shape from a declared height role rather than from an invented threshold. |
 | `048` D1 already moved the modals | The operator's 2026-09-05 ruling — Obsidian modals opened from a sheet on the phone become stacked sheets, none stay modals — landed at `915591c2` and gave all subclasses the shared header. That is the reason this packet is componentization rather than repair: the behaviour is right and the code that produces it is in four places. |
+
+### 2026-09-06 amendment: the desktop Settings side sheet, and ADR-007 E4 closes
+
+**Operator report, desktop, ~08:15 (screenshots in `scratchpad/`):** *"btw this dropdown on desktop
+is horrible … should probably become a sheet, on desktop at least, and get dedicated button."* The
+database Settings panel opens today as a tall anchored dropdown (`view-config-panel-renderer.ts`
+through `positionToolbarPopover`'s general preset), which is none of `design-system.md` §3's roles —
+too tall for `panel`, not a phone `sheet`, and not the `condition panel` role either.
+
+**Ruling: "Right side sheet."** A full-height panel docked to the right edge of the viewport, with
+the database staying visible and interactive to its left, and the panel scrolling independently of
+the database beneath it. This is a **new shell shape**, not a wider `panel` — `design-system.md` §5's
+policy ("declare a wider role, not a bespoke number") does not reach a desktop surface that is
+full-height and edge-docked rather than anchored to a trigger, so this packet's own
+`decision-record.md` gains a new ADR for the shape and its grammar rather than stretching an
+anchored-popover role to fit it.
+Recorded in `../roadmap.md` §4 (new row) and `../roadmap.md` §6A. Owner: this packet, for the shell
+shape in `surface-shell.ts`; `053` owns the second half of the same report — a dedicated gear button
+in the toolbar rail, see `053/goal.md`'s own amendment.
+
+**ADR-007 E4 closes.** The operator's ruling, 2026-09-06 ~07:50, verbatim: **"No confirm for single
+delete, Undo toast."** Single-row delete becomes immediate, with Undo carried on the toast; the
+confirm stays for bulk delete and for anything not undoable. This is a third reading of E4, not
+either of the two ADR-007 posed: not "keep the confirm because there is no Bin" (reading 1) and not
+"build a `TrashManagerModal`" (reading 2) — the operator chose Undo-on-toast, which this packet
+already has a primitive for (`055`'s toast/undo vocabulary, D5's cross-reference). E4 is closed;
+`decision-record.md`'s ADR-007 is amended in place with the ruling, dated, rather than rewritten.
+Owner of the call-site changes: `055` (`deleteRow` callers); this packet's own scope is only the
+confirm primitive `055` calls into for the cases that still need one.
 <!-- /ANCHOR:log -->

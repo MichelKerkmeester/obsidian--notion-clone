@@ -633,6 +633,18 @@ excluded on its own recorded terms.
       first doc pass, once more after a `SPECDOC_FRONTMATTER_004` finding
       (`implementation-summary.md`'s `next_safe_action` read as narrative, not compact; corrected
       to an imperative phrase). `node "$(realpath .opencode)/skills/system-spec-kit/runtime/dist/lib/validation/orchestrator.js" <this folder> --strict` → first `RESULT:` **PASSED**, `Errors: 0 Warnings: 0`, re-run after the fix. Isolated `npm run gate </dev/null > ".gate-<pid>.log" 2>&1; echo $?` → **0**, 26 green (two lanes needed a run after this leg's own edits, not a regression: `operator-list` regenerated after `goal.md`'s confirm row ticked, `story-coverage` closed by writing `confirm-sheet.stories.ts` rather than an allowlist entry, since the module is genuinely renderable). `npx tsc --noEmit` → 0; `npx vitest run` → 0, 1442 passing across 137 files; `npm run build` → 0. `styles.css` untouched this session, so no capture recapture is owed.
+- [ ] **T021 — Build the `side sheet` role (ADR-008).** A new `surface-shell.ts` presentation:
+      full-height, docked right, no scrim, independent internal scroll, dismissed by outside click
+      (database side), Escape, or the gear button. **Threshold**: the database's own scroll position
+      and interactivity are unchanged while the side sheet is open. **Red-first proof**: today's
+      anchored dropdown clips at the viewport bottom on a short desktop window and steals outside-click
+      dismissal from the database beneath it — both observed on the operator's screenshots
+- [ ] **T022 — Wire the desktop database Settings surface onto the `side sheet` role**, replacing
+      `view-config-panel-renderer.ts`'s `positionToolbarPopover` mount when opened from `053`'s new
+      gear button. `PANEL_POPOVER`'s derived-width workaround is no longer needed for this caller
+- [ ] **T023 — Register the new role in `design-system.md` §3/§4** and add its grammar row to the
+      lane that checks role widths and dismissal, with a negative control (the database becomes
+      non-interactive while the side sheet is open) observed red before green
 <!-- /ANCHOR:phase-4 -->
 
 ---
