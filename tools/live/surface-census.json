@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T10:27:03.305Z",
+  "measuredAt": "2026-09-06T14:37:50.678Z",
   "inputs": {
-    "styles.css": "cdc3ea497d56",
+    "styles.css": "8aa5238bdcfb",
     "tools/live/surface-census.mjs": "ea52a1e1e8f5",
     "src/views/surface-contract.ts": "ca203fa23a84",
     "src/views/record-detail-panel.ts": "c150d55fdd79",
@@ -802,7 +802,7 @@
       "mountParent": "note-database-container",
       "tokens": true,
       "role": null,
-      "rect": "278x289",
+      "rect": "278x324",
       "scenarios": [
         "calendar-mini-calendar",
         "field-date-value-picker",
@@ -1412,7 +1412,7 @@
       "mountParent": "db-icon-picker-scroll",
       "tokens": true,
       "role": null,
-      "rect": "275x65",
+      "rect": "286x65",
       "scenarios": [
         "field-icon-picker",
         "field-icon-picker"
@@ -1423,7 +1423,7 @@
       "mountParent": "db-icon-picker-section",
       "tokens": true,
       "role": null,
-      "rect": "275x15",
+      "rect": "286x15",
       "scenarios": [
         "field-icon-picker",
         "field-icon-picker"
@@ -1434,7 +1434,7 @@
       "mountParent": "db-icon-picker-section",
       "tokens": true,
       "role": null,
-      "rect": "275x44",
+      "rect": "286x44",
       "scenarios": [
         "field-icon-picker",
         "field-icon-picker"

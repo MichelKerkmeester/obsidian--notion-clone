@@ -133,18 +133,21 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     expect(getLocaleWeekStartsOn({ calendarFirstDayOfWeek: 6 })).toBe(6);
   });
 
-  it("pins the weekend tint token: one color-mix expression, mixed toward transparent so the week's slot lines survive under it", () => {
-    expect(STYLES).toContain("--db-calendar-weekend-bg: color-mix(in srgb, var(--text-normal) 3%, transparent)");
+  it("pins the weekend tint: one step off the page, in a flat form for the month cell and a wash for the time grid", () => {
+    expect(STYLES).toContain("--db-calendar-weekend-bg: color-mix(in srgb, var(--background-primary) 97%, var(--text-normal))");
+    expect(STYLES).toContain("--db-calendar-weekend-wash: color-mix(in srgb, var(--text-normal) 3%, transparent)");
     // Negative control: the tree used to carry a literal light value and a
     // `.theme-dark` override with a DIFFERENT literal — neither survives.
     expect(STYLES).not.toContain("--db-calendar-weekend-bg: #F7F7F7");
     expect(STYLES).not.toContain("--db-calendar-weekend-bg: #1E1E1E");
-    // And it must not go back to mixing toward the page: an opaque result is
-    // painted by the week grid's own column layer, which sits above the slot
-    // lines, and erased every hour line under the weekend pair. Over the page
-    // the two expressions resolve to the same colour, so only a live read tells
-    // them apart — this is the text guard for what that read found.
-    expect(STYLES).not.toContain("--db-calendar-weekend-bg: color-mix(in srgb, var(--background-primary) 97%, var(--text-normal))");
+    // The two forms are not interchangeable and the split is the point. The time
+    // grid paints its day columns above its slot lines, so the flat form erased
+    // every hour line under the weekend pair; the month day heading is sticky and
+    // takes `background: inherit`, so the wash repaints there a second time.
+    const monthCell = ruleBody(".note-database-container .db-calendar-month-week > .db-calendar-day.is-weekend:not(.is-today)");
+    expect(monthCell).toContain("background: var(--db-calendar-weekend-bg)");
+    const timeGrid = ruleBody(".note-database-container .db-calendar-time-columns .db-calendar-week-day-col.is-weekend:not(.is-today)");
+    expect(timeGrid).toContain("background: var(--db-calendar-weekend-wash)");
   });
 
   it("pins the month grid to seven fluid columns regardless of a custom column width", () => {

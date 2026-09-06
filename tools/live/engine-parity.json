@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-06T10:27:00.398Z",
+  "measuredAt": "2026-09-06T14:37:47.319Z",
   "inputs": {
-    "styles.css": "cdc3ea497d56",
+    "styles.css": "8aa5238bdcfb",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
     "fixtures": 76,
-    "differences": 49
+    "differences": 44
   },
   "differences": [
     {
@@ -99,51 +99,11 @@
       ]
     },
     {
-      "scenarioId": "calendar-month-view",
-      "selector": "button",
-      "index": 18,
-      "notes": [
-        "width 462.86 vs 466.3"
-      ]
-    },
-    {
-      "scenarioId": "calendar-month-view",
-      "selector": "button",
-      "index": 27,
-      "notes": [
-        "width 771.42 vs 777.14"
-      ]
-    },
-    {
-      "scenarioId": "calendar-month-view",
-      "selector": "button",
-      "index": 38,
-      "notes": [
-        "width 771.42 vs 777.14"
-      ]
-    },
-    {
-      "scenarioId": "calendar-month-view",
-      "selector": "button",
-      "index": 48,
-      "notes": [
-        "width 462.86 vs 466.28"
-      ]
-    },
-    {
-      "scenarioId": "calendar-month-view",
-      "selector": "button",
-      "index": 56,
-      "notes": [
-        "width 617.14 vs 621.7"
-      ]
-    },
-    {
       "scenarioId": "calendar-week-time-grid",
       "selector": "button",
-      "index": 22,
+      "index": 21,
       "notes": [
-        "width 446.3 vs 449.7"
+        "width 446.28 vs 449.72"
       ]
     },
     {

@@ -17751,11 +17751,15 @@ body.is-mobile .note-database-container .db-calendar-month-time {
    the same colour; that reasoning still holds, only the value's source moved. */
 .note-database-container .db-calendar {
   --db-calendar-rule: color-mix(in srgb, var(--background-primary) 92%, var(--text-normal));
-  /* Mixed toward transparent rather than toward the page: over the page the two
-     are the same colour, but the week grid paints its day columns in a layer
-     above the slot lines, so an opaque tint erased every hour line under the
-     weekend pair. A 3% wash lets them through at full geometry. */
-  --db-calendar-weekend-bg: color-mix(in srgb, var(--text-normal) 3%, transparent);
+  --db-calendar-weekend-bg: color-mix(in srgb, var(--background-primary) 97%, var(--text-normal));
+  /* The same step, expressed as a wash instead of a flat colour: over the page
+     the two resolve identically, but a wash lets whatever is already painted
+     beneath it survive. The week grid needs that — it paints its day columns in
+     a layer above its slot lines, so the flat form erased every hour line under
+     the weekend pair. The month grid must NOT use it: its day heading is sticky
+     and takes `background: inherit`, which repaints a wash a second time (a
+     two-tone cell) and stops occluding the chips that scroll under it. */
+  --db-calendar-weekend-wash: color-mix(in srgb, var(--text-normal) 3%, transparent);
   --db-calendar-done-accent: var(--text-success, var(--interactive-accent));
   --db-calendar-done-bg: color-mix(in srgb, var(--db-calendar-done-accent) 12%, var(--background-primary));
   /* --text-faint measures under WCAG 1.4.3's 4.5:1 against the day-cell
@@ -17772,10 +17776,13 @@ body.is-mobile .note-database-container .db-calendar-month-time {
 
 /* The header band carries no weekend tint at all — only the grid columns
    below it do; the two were previously conflated. */
-.note-database-container .db-calendar-month-week > .db-calendar-day.is-weekend:not(.is-today),
+.note-database-container .db-calendar-month-week > .db-calendar-day.is-weekend:not(.is-today) {
+  background: var(--db-calendar-weekend-bg);
+}
+
 .note-database-container .db-calendar-week-allday-col.is-weekend:not(.is-today),
 .note-database-container .db-calendar-time-columns .db-calendar-week-day-col.is-weekend:not(.is-today) {
-  background: var(--db-calendar-weekend-bg);
+  background: var(--db-calendar-weekend-wash);
 }
 
 .note-database-container .db-calendar-week-allday-date.is-weekend:not(.is-today) {

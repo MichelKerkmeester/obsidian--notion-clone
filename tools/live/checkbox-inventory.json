@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T10:26:06.873Z",
+  "measuredAt": "2026-09-06T14:36:39.030Z",
   "inputs": {
-    "styles.css": "cdc3ea497d56",
+    "styles.css": "8aa5238bdcfb",
     "tools/live/checkbox-inventory.mjs": "e869ed91680a"
   },
   "totals": {
@@ -13,7 +13,7 @@
   "classless": [
     {
       "file": "src/views/calendar-toolbar-renderer.ts",
-      "line": 490,
+      "line": 501,
       "chain": [
         "db-chart-options-row db-calendar-range-row"
       ],
@@ -55,7 +55,7 @@
     },
     {
       "file": "src/views/calendar-toolbar-renderer.ts",
-      "line": 490,
+      "line": 501,
       "chain": [
         "db-chart-options-row db-calendar-range-row"
       ],
@@ -91,7 +91,7 @@
     },
     {
       "file": "src/views/column-menu.ts",
-      "line": 491,
+      "line": 495,
       "chain": [
         "db-displayopt-row db-displayopt-colors"
       ],
