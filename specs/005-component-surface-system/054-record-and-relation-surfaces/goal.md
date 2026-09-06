@@ -136,8 +136,24 @@ conflicts; never resolve them silently.
       one permanent lane row per primitive, each negative control observed red then green; `npm run
       replay` holds with reversed 0; `npm run screenshots:verify` exits 0 with every changed capture
       opened and read by a person.
-- [ ] The board-card reference captures are `pixelHash`-identical to their pre-L3 baseline, or the
+- [x] The board-card reference captures are `pixelHash`-identical to their pre-L3 baseline, or the
       difference carries an operator ruling — read before any L3 close (D7).
+      **Red first, on this row's own observable.** Every `screenshots/**` PNG present at the
+      baseline whose path names a board, gallery, list, table, calendar, timeline, gantt or
+      project-manager surface — **394 files** — was decoded and compared by `pixelHash` against the
+      landed tree. Measured against baseline `932fa3a9` this read **1 of 394 not identical**:
+      `chrome-board-extensions-selection-desktop-light`. It was traced rather than waved through,
+      and it was not this leg's — recapturing that scenario against `origin/main`'s own stylesheet
+      produced the identical render to ours, and both differed from the committed capture, because
+      main's `ad0ba88d` edited `board-renderer.ts`, a declared source of the scenario, after
+      `3387b10f` had already recaptured. It reproduced across three runs, so it was not raster
+      jitter.
+      **Closed 2026-09-06 against baseline `7cbed3c1`: 0 of 394 moved**, main's own `47f0aab8`
+      having refreshed the capture it had left stale. The 12 captures this leg does move are all
+      record-detail and record-peek panels, which is the whole reach of a change scoped to
+      `.db-record-detail-field` and `.db-record-peek-field-value` ancestors. The compare is over
+      decoded pixels, not file bytes, so encoder jitter can neither read as a difference nor hide
+      one.
 - [ ] **The operator opens a record on iOS and desktop and reads it as one object page against the
       Anytype object page; reports no surface where a property looks or edits differently from the
       same property elsewhere; and confirms formulas, rollups and aggregations behave exactly as
