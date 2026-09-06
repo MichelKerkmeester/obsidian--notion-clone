@@ -614,6 +614,40 @@ excluded on its own recorded terms.
       **the sub-page shape** has no row because it has no production producer — `rg -n
       "pushSubPage|popSubPage" src` outside tests and stories returns only `surface-shell.ts`'s own
       definition and its internal call, so there is nothing to mount. Three deliverables, no rows.
+
+      **Fifth landing, 2026-09-06 — the motion timing band gets its row; the other two stay open for
+      the same reason the sub-page does.** Checked each of the three named gaps against the shipped
+      tree before writing anything: **the primary action pill** and **the trailing header chip**
+      have no production producer either. `SHELL_PRIMARY_ACTION_HEIGHT_PT` and
+      `SHELL_TRAILING_CHIP_SIZE_PT` (`surface-shell.ts`) are named constants nothing reads —
+      `rg -n "SHELL_PRIMARY_ACTION_HEIGHT_PT|SHELL_TRAILING_CHIP_SIZE_PT" src tools` outside
+      `surface-shell.ts` itself returns nothing. `CreatePropertyModal` (row 3's own surface) still
+      builds a plain two-button `db-modal-button-row` (`create-property-modal.ts:101-106`), not the
+      full-width pill design-trueup.md §8a measured (341.7 × 50.0pt); `filter-panel-renderer.ts`'s
+      header (row 33) builds an AND/OR logic toggle, not the circular trailing `+` chip
+      (44.0 × 44.0pt) the same section measured; no other site builds either shape. A lane row
+      measuring a rendered element that production never draws would pass by construction, which
+      is the fabrication `root-cause-and-debugging.md` refuses — so these two stay open, on the same
+      ground as the sub-page shape, not narrowed further this leg.
+
+      **The motion timing band does have a producer**, and gets the row AC-007 was missing:
+      `tools/live/sheet-grammar.mjs` §2f mounts `sort-panel` and reads the computed
+      `animation-duration` off `.db-mobile-sheet-scrim` — the shell's own engine call
+      (`applySheetChrome`, built for every mounted phone sheet, not a per-surface choice) — against
+      `--db-sheet-enter`/`--db-motion-sheet`'s reconciled 180-260ms band. **Red-first**: the row did
+      not exist. **Green**: `PASS scrim entrance measures 260ms, wanted 260ms inside 180-260ms`.
+      **Negative control, observed red then green**: overriding `--db-sheet-enter` (scoped to
+      `.db-mobile-sheet-scrim` itself, not `:root` — the token is declared directly on that selector
+      in styles.css's shared token block, so a `:root` override only reaches an element nothing
+      inherits it FROM, the identical lesson the edge-control-token control above already carries)
+      to 500ms reads `PASS overriding --db-sheet-enter moves the scrim past the band (500ms)`;
+      removing the override reads `PASS removing the override restores 260ms (260ms)`. Permanent —
+      runs on every `node tools/live/sheet-grammar.mjs`, including inside `npm run gate`.
+
+      **Still not closed, honestly:** two of the three named deliverables (the primary action pill,
+      the trailing header chip) plus the sub-page shape remain unbuilt in production, so this task
+      stays unticked. One row landed; two gaps narrowed from "no lane row" to "no lane row because
+      no producer exists to measure," which is the same status the sub-page already carried.
 - [x] **T016 — [P] Re-read the board and gantt parity captures against T003's baseline.**
       **Threshold**: `pixelHash`-identical, or an operator ruling on the difference (parent goal
       D5). **Red-first proof**: T003's recorded hashes.
@@ -787,12 +821,12 @@ excluded on its own recorded terms.
       | Packet | Non-operator rows still open | Operator row |
       |---|---|---|
       | `044` | none — 6 of 7 goal criteria ticked, 8 of 9 AC rows Met, `checklist.md` CHK-043 (P2, README naming) the only unticked box | AC-006 / criterion 7, no reply since the 0.0.23 check |
-      | `048` | `tasks.md` T025 — no depth-3 stacked capture scenario exists | AC-009 / criterion 7, no reply on 0.0.24 through 0.0.29 |
-      | `051` | T010 `[B]`, T015 (three lane rows missing), T023 (declined until a second consumer), and 7 of 9 goal criteria | AC-010 / criterion 7 and T018 |
+      | `048` | none — T025 closed 2026-09-06 (the three depth-3 stacked scenarios registered and captured) | AC-009 / criterion 7, no reply on 0.0.24 through 0.0.29 |
+      | `051` | T010 `[B]`, T015 (two of three lane rows still missing — motion timing band closed 2026-09-06), T023 (declined until a second consumer), and 7 of 9 goal criteria | AC-010 / criterion 7 and T018 |
 
       So the loop does not start yet. `044` is the closest: it needs only the operator's read.
-      `048` needs one capture scenario and then the operator's read. `051` is the packet that
-      actually gates the family, and its own shell criteria are the work, not the waiting.
+      `048` now needs only the operator's read. `051` is the packet that actually gates the
+      family, and its own shell criteria are the work, not the waiting.
 <!-- /ANCHOR:phase-4 -->
 
 ---

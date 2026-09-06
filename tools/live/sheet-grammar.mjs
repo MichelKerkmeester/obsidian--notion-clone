@@ -166,6 +166,22 @@ const EDGE_CONTROL_TOKEN_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "s
 const EDGE_CONTROL_TOKEN_DEFAULT_PX = 44;
 const EDGE_CONTROL_TOKEN_OVERRIDE_PX = 60;
 
+// ───────────────────────────────────────────────────────────────────
+// 2f. THE MOTION TIMING BAND
+// ───────────────────────────────────────────────────────────────────
+
+// Every phone sheet the shell mounts arrives with a scrim (`applySheetChrome`, `mobile-bottom-
+// sheet.ts`), and its entrance plays `var(--db-sheet-enter)` — the same token `--db-motion-sheet`
+// aliases (styles.css, § tokens). `styles.css`'s own comment for the token states the band this
+// checks: "260ms is the top of the state-change band", the 180-260ms range `050/design-trueup.md`
+// §"Motion" reconciles for a small state change. Reusing `sort-panel` costs no new fixture, for
+// the same reason the edge-control-token row above reuses it.
+const MOTION_BAND_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "sort-panel");
+const MOTION_BAND_MIN_MS = 180;
+const MOTION_BAND_MAX_MS = 260;
+const MOTION_BAND_TOKEN_DEFAULT_MS = 260;
+const MOTION_BAND_TOKEN_OVERRIDE_MS = 500;
+
 // Each entry names a real parent shape from the render harness and the production opener family
 // used by the child. The adapter below keeps the row contract identical for dropdowns, menus,
 // pickers and host-modal chrome, while the parent and child still go through shipped modules.
@@ -595,6 +611,53 @@ window.__shellEdgeControlTokenNegativeControl = (scenario, overridePx) => {
   let fixed = null;
   runRenderAssertions(document.body, scenario, "", () => {
     fixed = measureEdgeControl(mountedSheet());
+  });
+  return { broken, fixed };
+};
+
+// Read off the scrim's own computed style, not the sheet's: the scrim is the element the
+// entrance duration is declared on (\`.db-mobile-sheet-scrim\`, styles.css), and it is built by
+// \`applySheetChrome\` for every mounted phone sheet — the shell's own engine call, not a
+// per-surface choice. \`getComputedStyle().animationDuration\` always reports seconds
+// ("0.26s"), never the declared unit, so the caller converts. \`.at(-1)\`, not the first match:
+// earlier checks in this lane leave their own mounted sheets and scrims behind in the document,
+// exactly like \`newestSheet\` below has to account for.
+const measureMotionBand = () => {
+  const scrims = document.querySelectorAll(".db-mobile-sheet-scrim");
+  const scrim = scrims[scrims.length - 1];
+  if (!scrim) return null;
+  const seconds = Number.parseFloat(getComputedStyle(scrim).animationDuration) || 0;
+  return Math.round(seconds * 1000);
+};
+
+window.__shellMotionBand = (scenario) => {
+  let measuredMs = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    measuredMs = measureMotionBand();
+  });
+  return measuredMs;
+};
+
+// The negative control overrides the token itself (\`--db-sheet-enter\`), not a hardcoded
+// duration, so a scrim that hardcoded 260ms somewhere else would stay green here while failing
+// the plain measurement above — same pairing argument the edge-control-token control above
+// makes. Overridden on \`.db-mobile-sheet-scrim\`, not \`:root\`, for the identical reason the
+// edge-control-token control scopes to \`.db-surface\`: \`--db-sheet-enter\` is declared directly
+// on \`.db-mobile-sheet-scrim\` itself (styles.css's shared token block, one selector among
+// several), not merely inherited from \`:root\` — a \`:root\` override only ever reaches an
+// element nothing inherits it FROM, and this element declares its own copy.
+window.__shellMotionBandNegativeControl = (scenario, overrideMs) => {
+  const style = document.createElement("style");
+  style.textContent = ".db-mobile-sheet-scrim { --db-sheet-enter: " + overrideMs + "ms !important; }";
+  document.head.appendChild(style);
+  let broken = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    broken = measureMotionBand();
+  });
+  style.remove();
+  let fixed = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    fixed = measureMotionBand();
   });
   return { broken, fixed };
 };
@@ -1767,6 +1830,37 @@ try {
     if (!cleanAfter) failures.push(`edge control token negative control: removing the override did not restore ${EDGE_CONTROL_TOKEN_DEFAULT_PX}px (measured ${edgeControlControl.fixed.width.toFixed(1)}x${edgeControlControl.fixed.height.toFixed(1)})`);
     console.log(`  ${wentRed ? "PASS" : "FAIL"}  overriding the token moves the close control (${edgeControlControl.broken.width.toFixed(1)}x${edgeControlControl.broken.height.toFixed(1)})`);
     console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores ${EDGE_CONTROL_TOKEN_DEFAULT_PX}px (${edgeControlControl.fixed.width.toFixed(1)}x${edgeControlControl.fixed.height.toFixed(1)})`);
+  }
+  console.log("");
+
+  console.log(`sheet-grammar: motion timing band — the scrim's entrance reads --db-sheet-enter within ${MOTION_BAND_MIN_MS}-${MOTION_BAND_MAX_MS}ms\n`);
+  const motionBandMeasured = await page.evaluate((scenario) => window.__shellMotionBand(scenario), MOTION_BAND_SURFACE.spec);
+  if (motionBandMeasured == null) {
+    failures.push("motion timing band: no scrim to measure");
+    console.log("  FAIL  motion timing band — no scrim to measure");
+  } else {
+    const inBand = motionBandMeasured >= MOTION_BAND_MIN_MS && motionBandMeasured <= MOTION_BAND_MAX_MS;
+    const atToken = motionBandMeasured === MOTION_BAND_TOKEN_DEFAULT_MS;
+    if (!inBand) failures.push(`motion timing band: scrim entrance measured ${motionBandMeasured}ms, wanted ${MOTION_BAND_MIN_MS}-${MOTION_BAND_MAX_MS}ms`);
+    if (!atToken) failures.push(`motion timing band: scrim entrance measured ${motionBandMeasured}ms, wanted ${MOTION_BAND_TOKEN_DEFAULT_MS}ms (--db-sheet-enter)`);
+    console.log(`  ${inBand && atToken ? "PASS" : "FAIL"}  scrim entrance measures ${motionBandMeasured}ms, wanted ${MOTION_BAND_TOKEN_DEFAULT_MS}ms inside ${MOTION_BAND_MIN_MS}-${MOTION_BAND_MAX_MS}ms`);
+  }
+
+  const motionBandControl = await page.evaluate(
+    ({ scenario, overrideMs }) => window.__shellMotionBandNegativeControl(scenario, overrideMs),
+    { scenario: MOTION_BAND_SURFACE.spec, overrideMs: MOTION_BAND_TOKEN_OVERRIDE_MS },
+  );
+  console.log(`sheet-grammar: motion timing band negative control — ${MOTION_BAND_SURFACE.name}'s --db-sheet-enter overridden\n`);
+  if (motionBandControl.broken == null || motionBandControl.fixed == null) {
+    failures.push("motion timing band negative control: the surface did not mount a scrim to measure");
+    console.log("  FAIL  motion timing band negative control — the surface did not mount a scrim to measure");
+  } else {
+    const wentRed = motionBandControl.broken === MOTION_BAND_TOKEN_OVERRIDE_MS && motionBandControl.broken > MOTION_BAND_MAX_MS;
+    const cleanAfter = motionBandControl.fixed === MOTION_BAND_TOKEN_DEFAULT_MS;
+    if (!wentRed) failures.push(`motion timing band negative control: overriding --db-sheet-enter did not move the scrim's duration past the band (measured ${motionBandControl.broken}ms)`);
+    if (!cleanAfter) failures.push(`motion timing band negative control: removing the override did not restore ${MOTION_BAND_TOKEN_DEFAULT_MS}ms (measured ${motionBandControl.fixed}ms)`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  overriding --db-sheet-enter moves the scrim past the band (${motionBandControl.broken}ms)`);
+    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores ${MOTION_BAND_TOKEN_DEFAULT_MS}ms (${motionBandControl.fixed}ms)`);
   }
   console.log("");
 
