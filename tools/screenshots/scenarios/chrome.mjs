@@ -76,7 +76,12 @@ const I = {
   refreshFx: glyph('<path d="M15 7a7 7 0 1 0 2 5"/><path d="M15 4v4h-4"/>'
     + '<g transform="translate(12 10)"><g transform="scale(0.6)" stroke-width="4">'
     + '<path d="M6.5 5.5h10.5l-5.5 6.5l5.5 6.5h-10.5"/></g></g>'),
-  settings: glyph('<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>'),
+  // The cog the rail's permanent settings control actually draws, path for path — the same
+  // lucide `settings` outline the icon stub hands the constructed capture, so the hand-written
+  // fixture and its constructed sibling photograph one icon rather than two. The spoked
+  // circle that used to sit here stood in for the retired `settings-2` slider glyph of the
+  // overflow menu's deleted row, and reusing it for a cog would have drawn a sun.
+  settings: glyph('<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.39a2 2 0 0 0 .73 2.73l.15.08a2 2 0 0 1 1 1.74v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.39a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>'),
   arrowLeftRight: glyph('<path d="m8 3-5 5 5 5"/><path d="M3 8h13"/><path d="m16 21 5-5-5-5"/><path d="M21 16H8"/>'),
   fileOutput: glyph('<path d="M14 2H7a2 2 0 0 0-2 2v6"/><path d="M14 2v5h5"/><path d="M19 7v13a2 2 0 0 1-2 2H9"/><path d="M3 15h8"/><path d="m7 11-4 4 4 4"/>'),
   // The toast's severity glyphs and its close control. `showToast` pairs `check`/`alert-triangle`
