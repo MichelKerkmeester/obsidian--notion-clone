@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T09:59:15.122Z",
+  "measuredAt": "2026-09-06T10:11:58.327Z",
   "inputs": {
-    "styles.css": "78ceeb6f89b3",
+    "styles.css": "deb7e368824b",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "7edae5db0282"
   },
@@ -133,9 +133,9 @@
     "src/views/column-manager-renderer.ts:224  .db-panel-header-actions",
     "src/views/column-menu.ts:263  .db-dropdown-section-title",
     "src/views/column-menu.ts:398  .db-column-menu-back",
-    "src/views/column-width.ts:348  .db-mobile-column-width-panel",
-    "src/views/column-width.ts:374  .db-panel-row",
-    "src/views/column-width.ts:398  .db-panel-row",
+    "src/views/column-width.ts:353  .db-mobile-column-width-panel",
+    "src/views/column-width.ts:379  .db-panel-row",
+    "src/views/column-width.ts:403  .db-panel-row",
     "src/views/confirm-sheet.ts:52  .db-modal-help",
     "src/views/confirm-sheet.ts:54  .db-modal-actions",
     "src/views/database-view.ts:3147  .db-group-order-popover",
@@ -149,8 +149,8 @@
     "src/views/dropdown-field.ts:260  .db-dropdown-empty",
     "src/views/dropdown-field.ts:328  .db-dropdown-section-title",
     "src/views/embedded-database-renderer.ts:1387  .db-calendar-search-results-popover",
-    "src/views/embedded-database-renderer.ts:3064  .db-group-order-popover",
-    "src/views/embedded-database-renderer.ts:3180  .db-panel-button",
+    "src/views/embedded-database-renderer.ts:3065  .db-group-order-popover",
+    "src/views/embedded-database-renderer.ts:3181  .db-panel-button",
     "src/views/filter-panel-renderer.ts:176  .db-filter-panel",
     "src/views/filter-panel-renderer.ts:198  .db-panel-empty",
     "src/views/filter-panel-renderer.ts:218  .db-panel-button",

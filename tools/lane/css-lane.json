@@ -1,8 +1,8 @@
 {
   "holder": "053-toolbar-and-view-controls",
   "acquiredAt": "2026-09-07T03:10:00Z",
-  "baselineHash": "fb7ad189edbc",
-  "baselineCommit": "c7fed705",
+  "baselineHash": "deb7e368824b",
+  "baselineCommit": "41513bd3",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -4323,7 +4323,7 @@
       "event": "release",
       "phase": "053-toolbar-and-view-controls",
       "at": "2026-09-07T03:35:00Z",
-      "hash": "fb7ad189edbc",
+      "hash": "deb7e368824b",
       "reviewed": [
         "screenshots/notion-clone/views/table-wrap-off-desktop-dark.png",
         "screenshots/notion-clone/views/table-wrap-off-desktop-light.png",
