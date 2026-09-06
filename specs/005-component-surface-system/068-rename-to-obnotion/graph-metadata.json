@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/068-rename-to-obnotion",
+  "spec_folder": "005-component-surface-system/068-rename-to-obnotion",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "feature specification",
+      "rename to obnotion",
+      "068 spec",
+      "plugin id rename",
+      "implementation plan",
+      "rename to obnotion plan",
+      "068 plan",
+      "prefix rewrite",
+      "task breakdown",
+      "068 tasks",
+      "rename to obnotion tasks",
+      "acceptance criteria"
+    ],
+    "key_topics": [
+      "feature",
+      "specification",
+      "rename",
+      "obnotion",
+      "spec",
+      "plugin",
+      "implementation",
+      "plan",
+      "prefix",
+      "rewrite",
+      "task",
+      "breakdown"
+    ],
+    "importance_tier": "important",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "tools/lane/css-lane.json",
+      "repo-rules/spec-tree-layout.md",
+      "src/main.ts",
+      "src/i18n.ts",
+      "src/views/database-view.ts",
+      "src/views/database-file-view.ts",
+      "src/views/modals/linked-view-block.ts",
+      "src/data/csv-markdown-zip-export.ts",
+      "src/data/conditional-formatting.ts",
+      ".storybook/preview.ts",
+      "screenshots/manifest.json",
+      ".github/workflows/release.yml",
+      "tools/naming/failing-values-baseline.json",
+      "tools/naming/build-operator-checklist.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "spec-tree-layout.md",
+        "kind": "doc",
+        "path": "repo-rules/spec-tree-layout.md",
+        "source": "derived"
+      },
+      {
+        "name": "main.ts",
+        "kind": "code",
+        "path": "src/main.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-file-view.ts",
+        "kind": "code",
+        "path": "src/views/database-file-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "linked-view-block.ts",
+        "kind": "code",
+        "path": "src/views/modals/linked-view-block.ts",
+        "source": "derived"
+      },
+      {
+        "name": "csv-markdown-zip-export.ts",
+        "kind": "code",
+        "path": "src/data/csv-markdown-zip-export.ts",
+        "source": "derived"
+      },
+      {
+        "name": "conditional-formatting.ts",
+        "kind": "code",
+        "path": "src/data/conditional-formatting.ts",
+        "source": "derived"
+      },
+      {
+        "name": "preview.ts",
+        "kind": "code",
+        "path": ".storybook/preview.ts",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "release.yml",
+        "kind": "config",
+        "path": ".github/workflows/release.yml",
+        "source": "derived"
+      },
+      {
+        "name": "failing-values-baseline.json",
+        "kind": "config",
+        "path": "tools/naming/failing-values-baseline.json",
+        "source": "derived"
+      },
+      {
+        "name": "build-operator-checklist.mjs",
+        "kind": "file",
+        "path": "tools/naming/build-operator-checklist.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Note Database",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The product has one name in the operator's head and a different one in every file",
+    "created_at": "2026-09-06T16:08:10Z",
+    "last_save_at": "2026-09-06T16:23:35.424Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md"
+    ],
+    "source_fingerprint": "sha256:ad41b1ceb4ad6788102869df910e890763e29b1834d1fdcf744f3aff205d0427",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "166de64170b14a4b65f76c437fcbd2c34c0e997e950118509e75ee673c13cc62",
+      "plan.md": "489a1b13eeec5bb252860c5f46c88953b6715cf7c087b90c4c19b5daabc35620",
+      "tasks.md": "06aa5a5f39d1b9df691b6fc6d252510a2e0536703031fe03f9cd5de56fb5fd71",
+      "decision-record.md": "e292516da9610de62d12bae1376513a09c61585e69362660ed431f67bdc312c5"
+    },
+    "last_active_at": null
+  }
+}

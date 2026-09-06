@@ -1,0 +1,169 @@
+---
+title: "Goal: Rename to Obnotion"
+description: "The durable directive for renaming the plugin from Note Database to Obnotion, and the criteria that decide when it is done."
+trigger_phrases:
+  - "packet goal"
+  - "068 goal"
+  - "obnotion rename directive"
+  - "rename plugin obnotion"
+importance_tier: "important"
+contextType: "planning"
+_memory:
+  continuity:
+    packet_pointer: "005-component-surface-system/068-rename-to-obnotion"
+    last_updated_at: "2026-09-06T18:20:00Z"
+    last_updated_by: "markdown-leaf"
+    recent_action: "Opened 068 from the operator's rename instruction and censused the blast radius"
+    next_safe_action: "Answer Q2 and Q3; run the single leg after 0.0.30 and every in-flight leg"
+    blockers:
+      - "Runs last: after 0.0.30 and after 058, 056 edge-reveal, 057 month-chip and 059-067"
+      - "ADR-003 obn- is Proposed until the operator accepts it"
+      - "Q2 manifest attribution is the operator's"
+    key_files:
+      - "spec.md"
+      - "plan.md"
+      - "tasks.md"
+      - "decision-record.md"
+    session_dedup:
+      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      session_id: "068-rename-to-obnotion"
+      parent_session_id: null
+    completion_pct: 0
+    open_questions:
+      - "Does the GitHub repository rename from obsidian--notion-clone"
+      - "Who is the manifest author after the fork"
+      - "Is obn- the class prefix"
+    answered_questions:
+      - "Scope is everything including CSS class prefixes"
+      - "The surface that matters is the community plugin panel, so the id changes too"
+      - "The old data.json is copied, never moved"
+      - "specs/ is not rewritten; history stays as written"
+---
+# Goal: Rename to Obnotion
+
+<!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
+
+> Everything above the log is DURABLE: it is what an operator sets as the session
+> objective, and it must stay true for the life of the packet.
+
+---
+
+<!-- ANCHOR:directive -->
+## 1. DURABLE DIRECTIVE
+
+**Objective:** The plugin is called Obnotion everywhere a user or a machine reads it — the
+community plugin panel, the plugin id, the ribbon, the settings tab and every CSS class — and an
+existing install keeps its settings, its open tabs and its notes working with no manual step.
+
+### Decisions
+
+Frozen choices. Changing one is an amendment.
+
+| ID | Decision |
+|----|----------|
+| D1 | **The operator's instruction, 2026-09-06 ~18:07, verbatim:** *"our plugin is still named note database but rename to obnotion"*. Asked where it had to show: *"In community plugin"*. Asked how far it reached: *"Everything, including CSS class prefixes"*. Those three sentences are the scope; nothing here widens them |
+| D2 | **The plugin id changes with the name.** `note-database` → `obnotion` in `manifest.json`, which moves the vault folder, the `obsidian://show-plugin?id=` deep link and the iCloud install path. A display-name-only rename was considered and rejected (ADR-001): it leaves the old name in the one place a user meets it on disk |
+| D3 | **The old `data.json` is copied, never moved** (ADR-002). On first load under the new id, when the new folder has no data and the old folder does, the file is copied and the event logged once. The source is never moved, renamed or deleted, and a throw is non-fatal |
+| D4 | **Five strings keep permanent aliases** (ADR-004): the code-block languages `note-database` and `database-view`, the view types `note-database-view` and `note-database-file-view` that Obsidian stores in the vault's `workspace.json`, and the export marker `note-database-csv-markdown`. Write the new, read either, forever. No deprecation window |
+| D5 | **The class prefix becomes `obn-` and the root class `obnotion-container`** (ADR-003, **Proposed**, operator-vetoable). `db_view` — the frontmatter key in the user's own notes — is excluded by name: it is user data and carries no product name |
+| D6 | **`specs/` is not rewritten** (ADR-005). A spec document naming `note-database` reports what was true when it was written |
+| D7 | **One leg, one rebase window, sequenced last** (ADR-006): after 0.0.30 is cut and after `058`, `056`'s edge-reveal, `057`'s month-chip and every `059`-`067` child have landed. `recommend-level.sh` recommended four phases; that recommendation is declined on the record, because the risk is the concurrency, not the edit |
+| D8 | **The repository name stays `obsidian--notion-clone`** unless the operator says otherwise, and the root `README.md` rewrite belongs to the GLM leg running in parallel — referenced, not redone |
+
+### Operator copy
+
+The operator holds this directive as the session objective, and that copy is what judges
+completion. Whenever anything above the log changes, resend the full text of this file in chat.
+<!-- /ANCHOR:directive -->
+
+---
+
+<!-- ANCHOR:completion -->
+## 3. COMPLETION CRITERIA
+
+- [ ] `jq -r '.id,.name' manifest.json` prints `obnotion` and `Obnotion`, and the operator reads the
+      name Obnotion in Obsidian's community plugin panel
+- [ ] `git grep -c -E 'note-database|Note Database' -- styles.css src tools .storybook README.md manifest.json package.json screenshots/manifest.json`
+      returns only the five aliases named in `acceptance-criteria.md` AC-006 (baseline on
+      `dc1d54a9`: 3,375 in `styles.css` + `src` alone)
+- [ ] `git grep -ho '\bdb-[a-zA-Z0-9_-]*' -- styles.css src tools .storybook | sort -u | wc -l`
+      prints 0 (baseline: 1,724 distinct tokens, 17,099 occurrences), and
+      `rg -n '\bdb_view\b' src tools | wc -l` still prints 57
+- [ ] A vault holding only `.obsidian/plugins/note-database/data.json` opens under 0.0.31 with its
+      databases, views and settings intact, the source file still present and byte-identical
+- [ ] A note with a pre-rename `note-database` code fence renders, and a `workspace.json`
+      holding the old view types reopens both tab kinds
+- [ ] `npm run gate </dev/null` exits 0 across 26 lanes from a clean tree, with the log written
+      inside this leg's own worktree
+- [ ] Release 0.0.31 is cut with notes naming the id change and the migration, its three assets
+      attached, and the build copied into the iCloud vault under `.obsidian/plugins/obnotion/`
+- [ ] The operator confirms on their own device that the rename landed and nothing of theirs was
+      lost (parent D3: only this closes the packet)
+<!-- /ANCHOR:completion -->
+
+---
+
+<!-- ANCHOR:log -->
+## 4. LOG
+
+Everything below is VOLATILE.
+
+### Opened 2026-09-06 ~18:07
+
+The operator asked for the rename and then answered two scoping questions in the same exchange, which
+is why this packet is a rename **and** a migration rather than a find-and-replace. *"In community
+plugin"* put `manifest.json`'s `id` in scope, and the id is a directory in the user's vault.
+*"Everything, including CSS class prefixes"* put a 17,099-occurrence token family in scope, which is
+what makes it a single-leg change rather than a phased one.
+
+### The census, measured on `origin/main` `dc1d54a9`
+
+| Reading | Count | Command |
+|---|---|---|
+| `note-database` in `styles.css` + `src/` | **3,375** (2,892 + 483) | `grep -ro "note-database" styles.css src \| wc -l` |
+| Distinct `.db-*` selectors in `styles.css` | **1,201** | `grep -o '\.db-[a-zA-Z0-9_-]*' styles.css \| sort -u \| wc -l` |
+| Distinct `db-*` tokens, `styles.css`+`src`+`tools`+`.storybook` | **1,724** | `git grep -ho '\bdb-[a-zA-Z0-9_-]*' -- styles.css src tools .storybook \| sort -u \| wc -l` |
+| `db-*` occurrences, same scope | **17,099** | same, without `sort -u` |
+| Distinct `--db-*` custom properties | **209** | `git grep -ho '\-\-db-[a-zA-Z0-9_-]*' -- styles.css src tools \| sort -u \| wc -l` |
+| `note-database-container` occurrences | **3,181** (2,167 in `styles.css`) | `git grep -o "note-database-container" -- . ':!specs' ':!main.js' \| wc -l` |
+| Distinct `note-database*` identifiers | **40** | `git grep -ho 'note-database[a-zA-Z0-9_-]*' -- styles.css src tools .storybook \| sort -u` |
+| Files holding the name, tracked, excluding `specs/` and `main.js` | **131** (129 excluding `screenshots/`) | `git grep -l "note-database" -- . ':!specs' ':!main.js' \| wc -l` |
+| Files under `tools/`, `.github/`, root docs holding the name | **46** | `git grep -l "note-database" -- tools .github README.md STORYBOOK.md AGENTS.md CHANGELOG.md \| wc -l` |
+| `Note Database` display-string occurrences (excluding `specs/`) | **109**, of which **15** in `src/i18n.ts` across three locales | `git grep -o "Note Database" -- . ':!specs' ':!main.js' \| wc -l` |
+| `noteDatabase` camel-case occurrences | **64** | `git grep -o "noteDatabase" -- . ':!specs' ':!main.js' \| wc -l` |
+| Lines in the rewrite scope matching either family | **4,314** across **134** files | `git grep -c -E 'note-database\|\bdb-[a-zA-Z0-9_-]' -- styles.css src tools .storybook README.md manifest.json package.json screenshots/manifest.json` |
+| Captures that re-derive | **1,467** PNGs | `git ls-files 'screenshots/**/*.png' \| wc -l` |
+| `db_view` references — **excluded**, user data | **57** | `git grep -o "db_view" -- src tools \| wc -l` |
+
+**The operator's figures and ours differ slightly and both are right.** The brief quoted 3,295
+`note-database` references and 55 name-bearing files under `tools`/`.github`/README; measured on
+`dc1d54a9` those read 3,375 and 46. The gap is the base commit and the exact file set, not a
+disagreement — T003 re-runs the census on the leg's own base before any edit, and those numbers,
+not these, are what AC-002 and AC-003 are checked against.
+
+### Sizing
+
+`recommend-level.sh --loc 4314 --files 134 --api --db --architectural` → **Level 3**, total 90/100,
+confidence 95, `phase_score: 50`, `suggested_phase_count: 4`. The level is adopted; the phase count
+is declined, on the record, in ADR-006.
+
+### Progress
+
+| Item | State | Evidence |
+|------|-------|----------|
+| Packet opened, census taken, six ADRs written | Done | This file, `spec.md`, `decision-record.md`; census commands above |
+| Operator answers to Q2 (attribution) and Q3 (`obn-`) | Pending | `spec.md` §12 |
+| The rename leg | Pending | Blocked on 0.0.30 and eight siblings (D7) |
+| Fresh-vault smoke | Pending | `tasks.md` T020 |
+| Release 0.0.31 | Pending | `tasks.md` T021 |
+
+### Deviations and findings
+
+| Item | Note |
+|------|------|
+| `recommend-level.sh` recommended 4 phases; this packet is one leg | The scale is real, the shape is not: four phases would mean four rebase windows across a tree whose every class name is moving. Declined in ADR-006 rather than absorbed |
+| The release workflow needed no change | `.github/workflows/release.yml` attaches `main.js`, `manifest.json` and `styles.css` by fixed filename. Read, not assumed — recorded so a later reader does not go looking |
+| `update-fork.sh` points at the wrong repository | `REPO="MichelKerkmeester/obsidian-note-database"` (`:12`), while origin is `MichelKerkmeester/obsidian--notion-clone`. A pre-existing defect the census surfaced, in a file the rename touches anyway. Q4 |
+| `manifest.json` still credits pangy9 | `author`, `authorUrl` and `fundingUrl` are upstream's, from the fork point. Renaming the product without settling attribution is worse for both parties than a clear fork notice. Recommendation in Q2: attribute the fork to MichelKerkmeester, keep upstream credit in the README |
+| The root README rewrite is somebody else's leg | A GLM leg is rewriting it in parallel and lands separately. This packet applies only the mechanical prefix rewrite to whatever is on `main` when its leg starts |
+<!-- /ANCHOR:log -->

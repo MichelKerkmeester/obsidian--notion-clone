@@ -1,0 +1,21 @@
+{
+  "specFolder": "005-component-surface-system/068-rename-to-obnotion",
+  "description": "Phase 68: rename the plugin from Note Database to Obnotion across identity, plugin id, user-facing syntax and CSS/DOM prefixes, with a copy-never-move data migration and permanent aliases",
+  "keywords": [
+    "phase",
+    "rename-to-obnotion",
+    "obnotion",
+    "plugin-id",
+    "data-migration",
+    "css-prefix"
+  ],
+  "lastUpdated": "2026-09-06T18:20:00.000Z",
+  "specId": "068",
+  "folderSlug": "rename-to-obnotion",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

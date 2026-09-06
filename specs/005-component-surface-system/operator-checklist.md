@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-06: **65 phases**, **6 with nothing left**, **215 rows** waiting on a device.
+Derived 2026-09-06: **66 phases**, **6 with nothing left**, **223 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -411,6 +411,17 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] Every measured value has one source of truth, and a check fails when the stylesheet disagrees with it. Today: six declared constants with no consumer. `SHELL_ENTER_MS = 200`, `SHELL_EXIT_MS = 150`, `SHELL_PHONE_ROW_HEIGHT_PT = 50`, `SHELL_PHONE_HEADER_HEIGHT_PT = 70`, `SHELL_PRIMARY_ACTION_HEIGHT_PT = 50`, `SHELL_TRAILING_CHIP_SIZE_PT = 44` (`surface-shell.ts:139-170`) against a stylesheet shipping 260ms with no exit transition at all (`styles.css:130`, `:440-456`) and `.db-panel-row` with no min-height (`:12366-12373`). The section comment asks consumers to "point at one of these instead of repeating the number" and a CSS custom property cannot read a TS constant.
 - [ ] `npm run gate` exits 0 read from `$?`, with one permanent lane row per remaining deliverable — the pill, the chip, the header block, the scrim level, the handle geometry and the three suggest surfaces — each negative control observed red before green, and the registered counts hold at or above 14 surfaces / 32 pairs. Today: none of those rows exists, and `HANDLE_TO_TITLE_GAP_MAX_PX = 80` (`sheet-grammar.mjs:228`) passes the 74.4px state it was created for.
 - [ ] The operator opens a sheet, a stacked pair, a menu and a destructive confirm on one iOS build and reads the family as debugged, refined, perfected. One build, one sitting, closing `044` AC-006, `048` AC-009 and `051` AC-010 together, with the device-only checklist (keyboard focus-steal, safe-area inset, rubber-band scrolling, drag-to-dismiss) bound to that read. Only the operator closes this row; nothing in this repository can.
+
+## 068-rename-to-obnotion — 0/8
+
+- [ ] `jq -r '.id,.name' manifest.json` prints `obnotion` and `Obnotion`, and the operator reads the name Obnotion in Obsidian's community plugin panel
+- [ ] `git grep -c -E 'note-database|Note Database' -- styles.css src tools .storybook README.md manifest.json package.json screenshots/manifest.json` returns only the five aliases named in `acceptance-criteria.md` AC-006 (baseline on `dc1d54a9`: 3,375 in `styles.css` + `src` alone)
+- [ ] `git grep -ho '\bdb-[a-zA-Z0-9_-]*' -- styles.css src tools .storybook | sort -u | wc -l` prints 0 (baseline: 1,724 distinct tokens, 17,099 occurrences), and `rg -n '\bdb_view\b' src tools | wc -l` still prints 57
+- [ ] A vault holding only `.obsidian/plugins/note-database/data.json` opens under 0.0.31 with its databases, views and settings intact, the source file still present and byte-identical
+- [ ] A note with a pre-rename `note-database` code fence renders, and a `workspace.json` holding the old view types reopens both tab kinds
+- [ ] `npm run gate </dev/null` exits 0 across 26 lanes from a clean tree, with the log written inside this leg's own worktree
+- [ ] Release 0.0.31 is cut with notes naming the id change and the migration, its three assets attached, and the build copied into the iCloud vault under `.obsidian/plugins/obnotion/`
+- [ ] The operator confirms on their own device that the rename landed and nothing of theirs was lost (parent D3: only this closes the packet)
 
 ## Nothing left to check
 
