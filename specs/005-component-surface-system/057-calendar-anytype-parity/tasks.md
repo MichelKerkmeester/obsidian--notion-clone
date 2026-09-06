@@ -232,7 +232,18 @@ _memory:
       tests (16/16) stay green with no modification; `npx tsc --noEmit` exit 0. **R5**: the day number's ink sits **18px** below the
       cell top and **7-8px** inside the right rule against the reference's 12px and 5px — the
       12px heading padding is applied above a flex row that then centres a 16px line, so the
-      padding and the ink offset are not the same number. **R6**: the weekday labels read `Sun`
+      padding and the ink offset are not the same number.
+      **R5 done 2026-09-06.** `.db-calendar-day-heading` switched from `align-items: center` to
+      `flex-start`: centring let the row's height — set by the `+` add button, taller than the
+      number's own line box — push the number down past its padding, so the two numbers were
+      never the same. Flex-start makes the padding the offset directly. The number also took
+      `line-height: 1` to remove the font's own half-leading slack. Padding tuned by measurement
+      (`calendar-month-view-desktop-light.png`, a non-weekend, non-today cell) from
+      `12px 6px 2px` to `9px 3px 2px`: ink top offset measured **12px CSS** exactly (was 18px, a
+      6px miss) and right inset **5px CSS** exactly (was 6px, a 1px miss) — both now match the
+      reference. The today-state disc (7px top padding override, unchanged) still reads clean at
+      the same read-back. `npm test` 1418/1418, `npx tsc --noEmit` exit 0, gantt confirmed
+      unmoved by MD5 and a zero-line diff. **R6**: the weekday labels read `Sun`
       `Mon` on a Sunday-start week against the reference's two-letter Monday-start `Mo` `Tu`; the
       design read trued the *week start* as configurable and ours a superset, and never trued the
       **label form**, so this is an unmeasured element rather than a declined one. **R7**: the

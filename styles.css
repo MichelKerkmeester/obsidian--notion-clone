@@ -16947,13 +16947,17 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
 
 /* Day cell: the number reads top-right — `row-reverse` swaps which child
    `space-between` pushes to which edge without touching the heading's DOM
-   order, so the `+` add button (still the first child) lands on the left. */
+   order, so the `+` add button (still the first child) lands on the left.
+   `align-items: flex-start` (rather than `center`) so the number's own ink
+   offset from the cell top is exactly the top padding: centring the row let
+   the add button's own height (taller than the number's line box) push the
+   number down past its padding, so the two numbers drifted apart. */
 .note-database-container .db-calendar-day-heading {
   display: flex;
   flex-direction: row-reverse;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  padding: 12px 6px 2px;
+  padding: 9px 3px 2px;
   position: sticky;
   top: 0;
   z-index: 1;
@@ -16963,6 +16967,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
 .note-database-container .db-calendar-day-number {
   font-size: 16px;
   font-weight: 400;
+  line-height: 1;
   color: var(--text-normal);
 }
 
