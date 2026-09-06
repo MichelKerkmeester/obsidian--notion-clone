@@ -528,9 +528,14 @@ ticks an operator row.**
   (the `comments` gate lane) scans `src/**/*.ts`, `tools/**/*.{ts,mjs,js}`, `styles.css` and every
   `describe`/`it`/`test` name for a task id, an ADR/REQ/CHK/AC id, a packet number used as a label,
   or a numbered spec-folder path, with no baseline — a hard block with a ratchet is a suggestion.
-  This repo also carries its own `tools/git-hooks/pre-commit` (install:
-  `git config core.hooksPath tools/git-hooks`), because the pre-commit hook this machine actually
-  runs lives outside this repository and does not catch every shape this rule forbids.
+  **The gate's `comments` lane blocks landing; the repo-owned hook blocks only when installed.**
+  `tools/git-hooks/pre-commit` is tracked but not installed, and installing it via
+  `core.hooksPath` REPLACES this machine's whole global hook chain rather than adding to it —
+  losing `commit-msg` and the `pre-push` remote-push backstop. Use the scoped
+  `git -c core.hooksPath=tools/git-hooks commit ...`, or just run the scanner. The global chain
+  does already block the common shapes (`ADR-`/`REQ-`/`CHK-`/`T123`/`specs/<name>/` in a comment);
+  what it misses is `AC-` ids, bare packet-number labels, test names and `styles.css`. Wiring this
+  lane into the sk-git chain instead of displacing it is the durable fix — roadmap §6.
 <!-- /ANCHOR:next-session -->
 
 ---

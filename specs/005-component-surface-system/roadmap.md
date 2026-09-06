@@ -1322,6 +1322,13 @@ ownership; **none measures column geometry**. `017/acceptance-criteria.md` indep
 the two overlap checks as "not this phase's". Both neighbours were right, and nothing owned it. Now
 `018-select-column-affordance-fit`. A lane hold is permission to edit a file, not a scope grant.
 
+**Open, and outside this repository.** The `comments` gate lane now enforces comment hygiene's
+artifact-id rule, but it blocks only at gate time: `tools/git-hooks/pre-commit` runs it at commit
+time only if someone installs it, and installing it via `core.hooksPath` replaces this machine's
+whole global hook chain rather than adding to it. The durable fix is to wire this lane into the
+sk-git hook chain that already runs here — work that belongs to the shared hooks repository, not
+to this one, and is recorded here so it stops being rediscovered.
+
 **A third gap, closed while this was being written.** `016-sheet-drag-and-audit` owned the
 most-reported defect in the program and, at the start of this pass, had no `spec.md` and no
 `acceptance-criteria.md` — three probes and nothing else. Both appeared before it finished. Recorded
