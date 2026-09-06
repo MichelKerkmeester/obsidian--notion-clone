@@ -393,7 +393,11 @@ export const CONSTRUCTED_SCENARIOS = [
   constructedScenario("board", {
     renderer: "board",
     title: "Board view (constructed)",
-    sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts"),
+    // The card's field values are drawn by the shared property renderer, not by board-renderer
+    // itself, so both are depicted here. Omitting them let a change to the read-only checkbox
+    // state move all ten board captures without screenshots:verify reporting one of them stale.
+    sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts")
+      .concat(["src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts"]),
     note: "The shipped board renderer at the bench shape: 1600 rows into five status columns.",
   }),
   constructedScenario("calendar-month", {
@@ -441,6 +445,7 @@ export const CONSTRUCTED_SCENARIOS = [
     subtaskTree: true,
     title: "Board view — subtask tree (constructed)",
     sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts")
+      .concat(["src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts"])
       .concat(["src/data/subtask-relation.ts", "src/data/subtask-serialize.ts", "src/i18n.ts"]),
     note: "The shipped board renderer with the first capture-sized row wired into a parent (two "
       + "children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.",
@@ -1032,6 +1037,7 @@ export const CONSTRUCTED_SCENARIOS = [
     title: "Board view — empty column (constructed)",
     fixtureOf: "board-empty-column",
     sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts")
+      .concat(["src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts"])
       .concat(["src/data/group-visibility.ts"]),
     note: "The reference board with one configured select option no row carries, backfilled as a "
       + "zero-row column through the same withEmptyOptionGroups call the hosts make.",
