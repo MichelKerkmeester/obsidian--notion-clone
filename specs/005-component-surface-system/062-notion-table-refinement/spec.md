@@ -58,7 +58,7 @@ an implementation ADR due before the Person renderer.
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P1 |
-| **Status** | Draft |
+| **Status** | In Progress — AC-001 through AC-008 built and green; AC-009 (the operator's device read) still open |
 | **Created** | 2026-09-06 |
 | **Branch** | `worktrees/177-notion-table` (documentation only; implementation legs get their own) |
 | **Parent Spec** | ../spec.md |

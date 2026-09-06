@@ -573,3 +573,83 @@ must be settled in writing before its renderer exists, or the type ships with a 
 chose.
 <!-- /ANCHOR:adr-007-consequences -->
 <!-- /ANCHOR:adr-007 -->
+
+---
+
+<!-- ANCHOR:adr-008 -->
+## ADR-008: Person's vault value source, and the two audit types with the same gap
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-07 |
+| **Deciders** | This implementation, per ADR-007's T021a carve-out |
+| **Criterion** | Unblocks the Person, created-by and last-edited-by renderers under AC-004 |
+
+<!-- ANCHOR:adr-008-context -->
+### Context
+
+ADR-007 shipped eight types and named one open implementation decision: Person has no vault-native
+value source, because a person is not a note and an Obsidian vault has no user directory. Writing
+the renderer surfaced a second instance of the identical gap in the same batch — created-by and
+last-edited-by are read-only "who" audit types, and a single-user local-first vault has no author
+metadata to read either. Created-time and last-edited-time have no such problem: `file.stat.ctime`
+and `file.stat.mtime` are exact, already-shipped Obsidian data (`src/data/file-fields.ts` reads them
+for `file.ctime`/`file.mtime` today).
+
+Two existing renderers already answer the "what does a value with no vault-native source look like"
+question, in opposite ways worth choosing between deliberately rather than by accident:
+
+- A **link-mode text column** (`col.textRenderMode === "link"`) accepts a wikilink or a URL, and
+  `renderTextLink`/`parseTextLink` already parse `[[Person Name]]` alongside a plain string. Nothing
+  new to build; a Person value is exactly this shape one step removed.
+- A **relation column** requires a target database and a real note per value, which a "person" has
+  no natural analogue for — there is no "people database" concept anywhere else in this schema.
+<!-- /ANCHOR:adr-008-context -->
+
+<!-- ANCHOR:adr-008-decision -->
+### Decision
+
+**Person stores a wikilink or plain text, reusing the existing link-mode text renderer/editor
+verbatim** — not a new value shape, not a relation. `renderTextLink` and `parseTextLink` already do
+exactly what a Person value needs: `[[Person Name]]` renders as an internal link to that note when
+one exists, and plain text (a name with no corresponding note) renders as text. The cell editor is
+the same plain-text single-line editor every other text-shaped column already uses; there is no
+Person-specific input widget. This is the "vault links/text" framing the operator's own review of
+this packet named, made concrete: both are already one renderer, not two.
+
+**Created-by and last-edited-by are a frontmatter passthrough, not a computed value.** Unlike the
+two time-based audit types, nothing in Obsidian tracks who created or last touched a note, so these
+two types read `row.frontmatter[col.key]` exactly like an ordinary text column — a reader (or a
+template) fills the field in by hand, same as they would today with a plain text column named
+"Author". What the type actually changes is that the cell renders **read-only**: no inline editor
+opens on it, matching the other two audit types' framing as attribution someone else established
+rather than something to type into this cell. A vault that never populates the field simply shows
+the empty placeholder, same as any other unset property.
+<!-- /ANCHOR:adr-008-decision -->
+
+<!-- ANCHOR:adr-008-alternatives -->
+### Alternatives Considered
+
+| Option | Why not |
+|--------|---------|
+| A dedicated Person value shape (`{name, notePath}`) with its own editor | Duplicates what the link-mode text renderer already does correctly, for a value that is a string either way |
+| Person as a `relation` to a manually-maintained "People" database | Invents a database concept this schema has no other use for, and gates the type behind a setup step Person's own row in the picker does not ask for |
+| Created-by/last-edited-by computed from the note's own frontmatter history | There is no history to compute from — a single-user local-first vault keeps no revision author log |
+| Leave created-by/last-edited-by editable like a plain text column | Contradicts their own "audit type" framing (ADR-007) and the disabled-Advanced-group placement next to the two time types they ship beside |
+<!-- /ANCHOR:adr-008-alternatives -->
+
+<!-- ANCHOR:adr-008-consequences -->
+### Consequences
+
+Person, URL, Email and Phone are now four renderers built from two existing primitives
+(`renderTextLink`'s scheme-link path, generalized by type instead of by column flag) rather than
+four bespoke ones. Created-by and last-edited-by carry no auto-population — a vault that wants them
+filled writes to that frontmatter key the same way it writes any other property, most likely from a
+template. That is a real limitation worth stating plainly: these two audit types describe an
+intent (attribution) that this plugin cannot verify or enforce, unlike the two time-based ones next
+to them in the menu, which are exact.
+<!-- /ANCHOR:adr-008-consequences -->
+<!-- /ANCHOR:adr-008 -->

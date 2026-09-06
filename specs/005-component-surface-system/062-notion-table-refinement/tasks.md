@@ -46,7 +46,7 @@ them there. Written first per `050` ADR-004: assert what is missing **and** sepa
 already works, so it cannot regress. Every row extends an existing lane —
 `tools/live/render-assertions.mjs` — and none creates a new one.
 
-- [ ] **T001 [P] Guard the footer's zero-row skip and its phone touch floor**
+- [x] **T001 [P] Guard the footer's zero-row skip and its phone touch floor**
       (`tools/live/render-assertions.mjs`).
       **Threshold:** a table with zero rows renders no footer; a table with rows renders one
       `+ Calculate` trigger per column, each computing at least 44px min-height under `.is-phone`.
@@ -55,7 +55,7 @@ already works, so it cannot regress. Every row extends an existing lane —
       `.is-phone .note-database-container .db-table-footer-trigger { min-height: 44px }`
       (`styles.css:8486-8488`). **Controls:** remove the return; drop the rule. Notion: `6055725d`,
       `101392c7`, `20a95974` — the digest's own "closest parity" call.
-- [ ] **T002 [P] Guard the header row's composition** (`tools/live/render-assertions.mjs`).
+- [x] **T002 [P] Guard the header row's composition** (`tools/live/render-assertions.mjs`).
       **Threshold:** every column header carries a type icon, a label, a menu target, and — where a
       sort rule applies — an ordinal with the matching `aria-sort`.
       **Observed red:** unasserted. `renderPropertyTypeIcon(content, col)` at
@@ -63,19 +63,19 @@ already works, so it cannot regress. Every row extends an existing lane —
       `:635-646`. **Control:** drop the `renderPropertyTypeIcon` call. Notion: P1 — `19745d87`,
       `35c64a84`, `3b3c3c26`. Ours is **ahead**: Notion's captures put sort state on the chip row
       (`7e310dca`), not in the header.
-- [ ] **T003 [P] Guard inline multi-select chips and the measurer's cap**
+- [x] **T003 [P] Guard inline multi-select chips and the measurer's cap**
       (`tools/live/render-assertions.mjs`).
       **Threshold:** chips render inline in `.db-multi-select-values` with 4px gaps, and the
       auto-fit width for a multi-select column is `min(Σ(badge + 14) + gaps + 20, 560)`.
       **Observed red:** unasserted. Chips at `src/views/cell-renderer.ts:470-498`, measurer at
       `src/views/column-width.ts:118-125`. **Controls:** stack the chips in a block container;
       remove the 560 cap. Notion: P3 — `21d71e5f`. This closes the digest's own open question §6 Q1.
-- [ ] **T004 [P] Guard per-option pill colour** (`tools/live/render-assertions.mjs`).
+- [x] **T004 [P] Guard per-option pill colour** (`tools/live/render-assertions.mjs`).
       **Threshold:** two rows with different status or select values in the same column compute
       different badge colours. **Observed red:** unasserted;
       `src/views/cell-renderer.ts:453-468` resolves the colour per option.
       **Control:** force one colour for the column. Notion: `8d6dcf3b`, `6673816d`.
-- [ ] **T005 [P] Guard the conditional row tint's paint path**
+- [x] **T005 [P] Guard the conditional row tint's paint path**
       (`tools/live/render-assertions.mjs`).
       **Threshold:** a row carrying `.db-conditional-format` computes the tint on its `td`
       backgrounds, not only on the `tr`. **Observed red:** unasserted, and this is the row the
@@ -92,12 +92,12 @@ already works, so it cannot regress. Every row extends an existing lane —
 <!-- ANCHOR:phase-2 -->
 ## Phase 2 — Leg 2: freeze, the one structural adoption
 
-- [ ] **T010 Add `frozenColumnKeys` to the view config** (`src/data/types.ts`).
+- [x] **T010 Add `frozenColumnKeys` to the view config** (`src/data/types.ts`).
       **Threshold:** `ViewConfig.frozenColumnKeys?: string[]` beside `columnWidths` (`:531`),
       surviving serialise → parse unchanged, and inert when it names a column that no longer exists
       (NFR-R01). **Observed red:** no such field; `ViewConfig` carries `wrapText` at `:527` and
       `columnWidths` at `:531` and nothing else related.
-- [ ] **T011 Add the freeze action and its menu row** (`src/views/column-menu.ts`).
+- [x] **T011 Add the freeze action and its menu row** (`src/views/column-menu.ts`).
       **Threshold:** `freezeColumn(col, frozen)` on `ColumnMenuActions`, and one menu row beside the
       wrap row carrying a per-column checked state that persists.
       **Observed red:** `ColumnMenuActions` declares twenty-five actions across `:38-63` and no
@@ -105,7 +105,7 @@ already works, so it cannot regress. Every row extends an existing lane —
       case-insensitive `freeze|frozen` sweep of `src/` and `styles.css` returns only `Object.freeze`,
       a frozen render clock and one prose comment — **zero** hits on a column. Notion: `74fe28d3`,
       `039351aa`, worded *"Freeze up to and including this column"* (digest P7).
-- [ ] **T012 Make frozen columns stick** (`src/views/table-renderer.ts`, `styles.css`).
+- [x] **T012 Make frozen columns stick** (`src/views/table-renderer.ts`, `styles.css`).
       **Threshold:** a frozen `th` and its `td`s compute `position: sticky` with `left` equal to the
       sum of the preceding frozen columns' widths within **±1px** in the render harness; the last frozen
       column paints **no** right-edge shadow at `scrollLeft === 0` and a soft token-derived shadow
@@ -119,7 +119,7 @@ already works, so it cannot regress. Every row extends an existing lane —
       §6 Q3), so nothing here is copied and the shadow value derives from our own tokens under ADR-004,
       measured in **both** themes. **ADR-005 is Accepted** — operator, 2026-09-06 18:32, verbatim:
       *"Subtle shadow when scrolled past"*; desktop-only stays.
-- [ ] **T013 Pin the round-trip** (`src/data/`, unit).
+- [x] **T013 Pin the round-trip** (`src/data/`, unit).
       **Threshold:** `frozenColumnKeys` survives serialise → parse; an unknown key is preserved
       rather than dropped, so a downgrade does not destroy the setting.
       **Observed red:** the field does not exist, so there is nothing to round-trip.
@@ -128,14 +128,14 @@ already works, so it cannot regress. Every row extends an existing lane —
 
 Independent of each other. They share `styles.css` and serialize through the parent's CSS lane.
 
-- [ ] **T020 [P] Give a date an end** (`src/views/record-surface/cell-editor-date.ts`,
+- [x] **T020 [P] Give a date an end** (`src/views/record-surface/cell-editor-date.ts`,
       `src/views/cell-renderer.ts`).
       **Threshold:** an optional end value, an *End date* row in the picker, and a cell that renders
       both ends in one string. Malformed cases from `spec.md` §8 render without throwing.
       **Observed red:** no end or range concept in any of the 546 lines of `cell-editor-date.ts`,
       and `renderDate` formats exactly one value (`src/views/cell-renderer.ts:537-541`). Notion:
       `bd482935`. Timezone and Remind rows are out of scope.
-- [ ] **T021 Bring the four type registries into step**
+- [x] **T021 Bring the four type registries into step**
       (`src/data/types.ts`, `src/views/record-surface/type-picker.ts`,
       `src/views/property-type-icon.ts`, `src/data/column-types.ts`, `src/views/column-menu.ts`).
       **Threshold:** **twenty-one** types, one glyph and one label each, the four registries the
@@ -155,7 +155,7 @@ Independent of each other. They share `styles.css` and serialize through the par
       `7f2dbda0`, `3b3c3c26`. **ADR-007 Accepted, option 1 widened** — operator, 2026-09-06 18:32,
       verbatim: *"All types or add more as needed"*. The research's estimate of eighteen is
       superseded; the count is **13 → 21**.
-- [ ] **T021a Settle Person's vault value source in writing, before its renderer**
+- [x] **T021a Settle Person's vault value source in writing, before its renderer**
       (`decision-record.md` of the implementing packet).
       **Threshold:** an ADR that names whether a Person value stores a wikilink to a person note or
       plain text, and that states the storage shape, the cell rendering and the editor that follow
@@ -164,14 +164,14 @@ Independent of each other. They share `styles.css` and serialize through the par
       other seven types Person has no obvious value source (ADR-007's own constraint). The operator
       recorded it as an open implementation decision rather than a gate — the other seven types do
       not wait on it, and T021 can land them first.
-- [ ] **T022 [P] Make the resize handle visible on header hover** (`styles.css`).
+- [x] **T022 [P] Make the resize handle visible on header hover** (`styles.css`).
       **Threshold:** the handle's computed background changes on `th:hover`, from a token-derived
       colour clearing 3:1 non-text contrast in **both** themes (`050` ADR-005,
       `../design-system.md` §12). **Observed red:** `.db-resize-handle` (`styles.css:5655-5663`) is
       a 4px absolutely-positioned strip with `cursor: col-resize` and **no background declaration
       and no `:hover` rule anywhere in the file** — it paints nothing at any time. Notion:
       `d53b3912`, where the grip becomes visible on selection.
-- [ ] **T023 [P] Add the *Show vertical lines* view switch**
+- [x] **T023 [P] Add the *Show vertical lines* view switch**
       (`src/data/types.ts`, `styles.css`).
       **Threshold:** switch off ⇒ no `td` computes a right border; switch on ⇒ the computed borders
       are unchanged from today. **Observed red:** unconditional. `.db-table th, .db-table td`
@@ -179,7 +179,7 @@ Independent of each other. They share `styles.css` and serialize through the par
       (`styles.css:5414-5421`, the declaration at `:5416`). Notion: `d3acf726`. **This row's first
       read also owes an answer on the sixth P10 toggle, *Show data source title*** — the loop did
       not locate it and deliberately did not guess.
-- [ ] **T024 [P] Render an empty visible property as empty in the peek**
+- [x] **T024 [P] Render an empty visible property as empty in the peek**
       (`src/views/table-record-peek.ts`).
       **Threshold:** a muted placeholder for an empty visible property in the docked peek; **table
       cells unchanged**. **Observed red:** `valueEl.textContent = text` with `text` empty
@@ -187,7 +187,7 @@ Independent of each other. They share `styles.css` and serialize through the par
       **page-view only** — Notion's own table cells are blank exactly as ours are
       (`src/views/cell-renderer.ts:263-264`, `styles.css:6766-6771`), so changing the cells would
       break parity rather than create it.
-- [ ] **T025 Give a view a configured add-row noun**
+- [x] **T025 Give a view a configured add-row noun**
       (`src/data/types.ts`, `src/views/table-renderer.ts`, the view-settings surface,
       i18n × 3 locales).
       **Threshold:** a per-view noun on `ViewConfig` that survives serialise → parse; `+ New <noun>`
@@ -206,7 +206,7 @@ Independent of each other. They share `styles.css` and serialize through the par
 <!-- ANCHOR:phase-3 -->
 ## Phase 3 — Leg 4: harness, captures and the device read
 
-- [ ] **T030 Register two capture scenarios for the two new visual states**
+- [x] **T030 Register two capture scenarios for the two new visual states**
       (`tools/screenshots/scenarios/core.mjs`).
       **Threshold:** `table-frozen-column` and `table-vertical-lines-off`, each in dark and light,
       registered in the same change that creates the state, with a `sources` list naming every file
@@ -214,12 +214,12 @@ Independent of each other. They share `styles.css` and serialize through the par
       photographed; the file carries `table-wrap-off` at `:31` and its `-on` pair as the pattern to
       follow. A registered-but-uncaptured scenario is reported as a failure, which is the property
       that keeps this honest.
-- [ ] **T031 Recapture, and read the movers by scenario** (`npm run screenshots`).
+- [x] **T031 Recapture, and read the movers by scenario** (`npm run screenshots`).
       **Threshold:** every capture whose content changed is opened and looked at; the protected
       entries are `pixelHash`-identical; byte-only re-encodes are restored to their committed bytes
       rather than recommitted as churn. **Observed red:** the border gate in T023 moves every table
       capture, and a count alone cannot tell a real regression from an encode.
-- [ ] **T032 Take the gate** (`npm run gate`, `npx tsc --noEmit`, `npm run build`,
+- [x] **T032 Take the gate** (`npm run gate`, `npx tsc --noEmit`, `npm run build`,
       `npx vitest run`, `npm run screenshots:verify`).
       **Threshold:** each exits 0 with its output and exit status read directly, not through a pipe.
       Every new lane row is green on the tree and red under its own control, **both observed**.

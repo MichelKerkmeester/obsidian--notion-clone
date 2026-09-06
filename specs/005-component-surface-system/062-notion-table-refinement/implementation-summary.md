@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Notion Table Refinement"
-description: "Nothing has been implemented. This records the packet opening, the level and phase arithmetic behind it, the three findings that were corrected against main, and what the first leg will have to show."
+description: "All four legs landed: the five guards, per-column freeze, the date range/type-set/handle/vertical-lines/peek/add-row-noun batch, and the harness/capture/gate close. AC-001 through AC-008 are Met; AC-009 is the operator's device read."
 trigger_phrases:
   - "implementation summary"
   - "what shipped"
@@ -49,7 +49,7 @@ _memory:
 |-------|-------|
 | **Packet** | `005-component-surface-system/062-notion-table-refinement` |
 | **Level** | 3 |
-| **Status** | Opened, not started |
+| **Status** | In Progress — AC-001 through AC-008 Met, AC-009 Unmet (operator device read) |
 | **Tree at opening** | `94f03c88` |
 <!-- /ANCHOR:metadata -->
 
@@ -58,34 +58,76 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-**Nothing yet.** No file under `src/`, `styles.css` or `tools/` was created or modified by this
-packet, exactly as none was by the research loop that produced it.
+**Leg 1 — guards.** Five permanent assertions added to `tools/live/render-assertion-harness.ts` /
+`tools/live/render-assertions.mjs`: the footer's zero-row skip plus its 44px `.is-phone` floor, the
+header's icon/label/aria-sort/multi-sort-ordinal composition, the inline chip container's
+`display`/`gap`, per-option pill colour computed-style distinctness, and the conditional-format
+tint's `td` paint. Each was observed red under the named control (removing the guarded behaviour)
+before being trusted, then restored green — see Verification below for the exact commands run per
+row. One pre-existing guard (`table-renderer-footer-visibility.test.ts`) already covered the
+zero-row-skip row-count half; this leg's own addition is the 44px phone floor and the four other
+rows that had no coverage anywhere in the tree.
 
-### What was produced at opening
+**Leg 2 — freeze.** `ViewConfig.frozenColumnKeys`, a `freezeColumn`/`isColumnFrozen` pair on
+`ColumnMenuActions` with a checked menu row beside Wrap, and a sticky `th`/`td` implementation in
+`TableRenderer` — offsets computed once per render (`computeFrozenLayout`), applied per cell
+(`applyFrozenCellStyle`), with a `scroll`-listener-driven `is-scrolled-x` class gating a soft
+right-edge shadow that paints only once the table has scrolled sideways. Desktop-only via
+`:not(.is-phone)` in the CSS. A stale `frozenColumnKeys` entry is simply never visited by the offset
+loop, which is what keeps it inert rather than fatal. Round-tripped through
+`DataSource.parseDatabaseConfig`/`toViewPayload` with a new unit test.
 
-- Nine binding criteria in `goal.md` §3, each carrying a Notion screen id, our `file:line`, a
-  threshold and a value **observed red** on the tree at `94f03c88`.
-- Eighteen task rows across four legs, guards first.
-- Nine acceptance criteria in measurable form.
-- Seven ADRs: three Accepted because a landed ruling or a landed commit already decides them, four
-  Proposed pending the operator.
-- Three amendments to the parent: the `roadmap.md` §5.A row, the `goal.md` reserved-children row,
-  and a pointer from `053`'s `tasks.md`.
+**Leg 3 — quality of life.** A date-range end value under a derived companion frontmatter key
+(`col.key + "::end"`), a new "End date" row in the date editor's popover, and
+`formatDateRangeDisplay` (an existing utility) wired into `renderDate`. Eight new `ColumnDef` types
+(`url`, `email`, `phone`, `person`, `created-time`, `created-by`, `last-edited-time`,
+`last-edited-by`) across all four registries (`types.ts`, `type-picker.ts`'s `PROPERTY_TYPES`,
+`property-type-icon.ts`'s icon map, `column-types.ts`'s label map), with the grouped submenu's slice
+boundaries moved from 6/9 to 10/13 — Basic now ends at Person, Advanced now includes the four audit
+types. Person's and the two "by" audit types' vault value source is ADR-008 (new, Accepted): Person
+reuses the existing link-mode text renderer/editor verbatim; created-by/last-edited-by are a
+frontmatter passthrough, read-only. A visible resize-handle line on `th:hover`
+(`--interactive-accent`). A `showVerticalLines` view field gating a `db-no-vertical-lines` class
+that removes only the right border. A muted empty-property placeholder in the docked peek
+(`.db-record-peek-field-value-empty`, distinct from the table cell's intentionally-blank
+`.db-empty-value`). A per-view `addRowNoun` field, a text row for it in the view-settings panel, and
+`toolbar.newNoun` framing in all three locales.
+
+**Leg 4 — harness, captures, gate.** Two new capture scenarios (`table-frozen-column`,
+`table-vertical-lines-off`), registered in the same change that creates the states, both opened and
+read in both themes and both devices. A full recapture (596 entries, `verify.mjs` exit 0); 24
+pre-existing captures moved bytes but not `pixelHash`/`layoutHash` (encoder noise) and were restored
+to their committed bytes. `styles.css`'s CSS lane taken over from `058-card-title-and-title-formats`
+and released back with the 8 content-changed captures named. Eight stale evidence artefacts
+(`cascade-audit`, `checkbox-appearance`, `checkbox-inventory`, `design-conformance`,
+`engine-parity`, `surface-census`, `token-census`, `view-census`) re-measured against the moved
+`styles.css`/`table-record-peek.ts`. `npm run gate`: 26/26 green.
 
 ### Files Changed
 
 | File | Change |
 |------|--------|
-| `062-notion-table-refinement/goal.md` | Created |
-| `062-notion-table-refinement/spec.md` | Created |
-| `062-notion-table-refinement/plan.md` | Created |
-| `062-notion-table-refinement/tasks.md` | Created |
-| `062-notion-table-refinement/acceptance-criteria.md` | Created |
-| `062-notion-table-refinement/decision-record.md` | Created |
-| `062-notion-table-refinement/implementation-summary.md` | Created |
-| `../goal.md` | Amended — the reserved-children row and the phase table entry |
-| `../roadmap.md` | Amended — the §5.A row |
-| `../053-toolbar-and-view-controls/tasks.md` | Amended — a pointer to this child |
+| `src/data/types.ts` | `ColumnDef["type"]` +8 members; `ViewConfig.frozenColumnKeys`/`showVerticalLines`/`addRowNoun` |
+| `src/data/column-types.ts` | `COLUMN_TYPE_LABELS`, `isColumnType`, `isAuditColumnType` (new), `getDateEndFieldKey` (new) |
+| `src/data/data-source.ts` | Parse/serialize + `legacyViewKeys` for the three new `ViewConfig` fields |
+| `src/views/table-renderer.ts` | Frozen-layout computation/application, scroll tracking, vertical-lines class, add-row noun label |
+| `src/views/cell-renderer.ts` | Render/edit dispatch for the 8 new types; date-range display; audit-type read-only guards |
+| `src/views/column-menu.ts` | Freeze menu row; submenu slice boundaries |
+| `src/views/database-view.ts` | `freezeColumn`/`isColumnFrozen` actions wired into `ColumnMenu` |
+| `src/views/property-type-icon.ts` | 4 new icon defs (`user`, `world`, `mail`, `phone`); 8 new name-map entries |
+| `src/views/record-surface/type-picker.ts` | `PROPERTY_TYPES` reordered to 21, grouped |
+| `src/views/record-surface/cell-editor-date.ts` | End-date row + its own commit/validation path |
+| `src/views/table-record-peek.ts` | Empty-property placeholder |
+| `src/views/view-config-panel-renderer.ts` | Add-row-noun text field |
+| `src/i18n.ts` | New keys across all three locales (columnType.\*, menu.freezeColumn, toolbar.newNoun, viewConfig.addRowNoun, date.\*, cell.auditReadonly, undo.\*) |
+| `styles.css` | Freeze sticky/shadow, vertical-lines gate, resize-handle hover, peek-empty-value color |
+| `tools/live/render-assertion-harness.ts` | 5 guard functions; `tableFooterEmpty`/`tableSortRules`/`tableHeaderNoop` scenario fields |
+| `tools/live/render-assertions.mjs` | `TABLE_GUARD_SCENARIOS`, `__footerFloor`, guard reporting sections |
+| `tools/screenshots/scenarios/core.mjs` | Two new scenarios |
+| `tools/lane/css-lane.json` | Acquire + release entries for this phase |
+| `src/data/data-source.test.ts`, `src/views/record-surface/type-picker.test.ts` | New/updated unit coverage |
+| `screenshots/manifest.json`, 8 new PNGs under `screenshots/notion-clone/views/` | Recapture |
+| Evidence artefacts (8 files under `tools/live/*.json`) | Re-measured against the moved tree |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -138,11 +180,17 @@ renderer (T021a).
 
 | Check | Result |
 |-------|--------|
-| `validate.sh <packet> --strict` | Run at opening; the first `RESULT:` line read directly |
-| `node tools/naming/scan-failing-values.mjs` | Exit 0 — no new ticked rows, so no new bare row |
-| `node tools/naming/scan-comments.mjs` | Exit 0 |
-| Build gates (`tsc`, `build`, `vitest`) | Not applicable at opening — no code changed |
-| Screenshot gate | Not applicable at opening — no surface changed |
+| `npx tsc --noEmit` | Exit 0 |
+| `npx vitest run` | Exit 0, 142 files / 1523 tests |
+| `npm run build` | Exit 0 |
+| `node tools/live/sheet-grammar.mjs` | Exit 0 |
+| `node tools/live/render-assertions.mjs` | Exit 0 — all 5 guards green; each also observed red under its own control (icon call removed, sort block disabled, chip container forced to block, pill colour forced to one value, `td` paint rule disabled, phone floor rule dropped, zero-row footer restored) before being trusted |
+| `npm run screenshots` → `npm run screenshots:verify` | 596 entries; exit 0 |
+| `npm run gate` | 26/26 green |
+| `node tools/naming/scan-comments.mjs` | Exit 0 — no artifact-id or commented-code violations |
+| `node tools/naming/scan-failing-values.mjs` | Exit 0 — 8 new ticked criteria (C1-C8 in `goal.md`), all carrying their observed-red evidence; bare count unchanged at 144 |
+| `SURFACE_PHASE=062-notion-table-refinement node tools/lane/check-lane.mjs` | Exit 0 |
+| `node tools/live/evidence.mjs --check-all` | Exit 0 — 15/15 artefacts fresh |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -172,4 +220,25 @@ renderer (T021a).
   resolved there and this worktree was absent from that repo's worktree list. Non-blocking by
   contract, and an environment issue rather than a research finding — recorded because the same
   symlink is what made the create script unusable above.
+- **AC-009 is not this implementation's to close.** Operator-owned by design; nothing here ticks it.
+- **Column auto-fit width for `created-time`/`last-edited-time` is not tuned.** Both hosts'
+  `getColumnDisplayText` (used for the auto-fit-column measurement, not for rendering) fall through
+  to a `row.frontmatter[col.key]` read for these two types, which is always empty since the value
+  comes from `row.file.stat` instead. Auto-fit sizes the column to its header alone rather than to a
+  formatted date — a cosmetic gap, not a rendering defect (the cell itself renders the correct date;
+  only the *width guess* undersizes it), left for whoever next opens that block.
+- **The date-range end value has no dedicated clear affordance.** Clearing it means deleting all
+  three segment fields by hand; there is no "×" button next to the End date row the way some other
+  pickers in this surface offer. Functionally complete, ergonomically minimal.
+- **The `Show vertical lines` switch has no exposed UI toggle.** T023's own file list is
+  `src/data/types.ts` and `styles.css` only — the config field and the render-time CSS gate exist
+  and are guarded, but no reader can set `showVerticalLines: false` from the app today short of
+  editing the stored view config directly. Matches the task's stated scope; flagged here so it is
+  not mistaken for a finished end-to-end feature.
+- **A pre-existing duplicate CSS declaration was found, not touched.** Two selectors both paint the
+  conditional-format tint's `td` background — `tr.db-conditional-format > td:not(.db-conditional-format)`
+  (an older rule) and `tr.db-conditional-format > td:not(.db-cell-selected):not(.db-cell-range-selected)`
+  (a newer, higher-specificity one that actually wins the cascade). Both work; the guard added here
+  proves the *effect*, not which selector produces it, so a future cleanup pass would need to delete
+  both to observe a red control. Left alone — de-duplicating is not in this packet's scope.
 <!-- /ANCHOR:limitations -->

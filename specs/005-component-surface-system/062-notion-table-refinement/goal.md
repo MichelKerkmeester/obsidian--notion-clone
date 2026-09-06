@@ -138,7 +138,7 @@ never resolve them silently.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] **C1 — A column can be frozen, and the frozen columns hold their place while the rest
+- [x] **C1 — A column can be frozen, and the frozen columns hold their place while the rest
       scrolls.** Notion exposes Freeze in the column header menu, worded *"Freeze up to and
       including this column"* (`74fe28d3`, `039351aa`; digest P7). **Today: observed red — the
       concept does not exist anywhere in the tree.** `ColumnMenuActions`
@@ -158,7 +158,7 @@ never resolve them silently.
       no-phone". The frozen state appears in **no** capture in the 98-screen read (digest P7, §6
       Q3), so the sticky offset and the shadow are **our design, marked inference**, not an
       adoption — and the shadow's behaviour is the operator's 18:32 ruling, not a Notion fact.
-- [ ] **C2 — The thirteen behaviours already at parity each carry a permanent assertion that goes
+- [x] **C2 — The thirteen behaviours already at parity each carry a permanent assertion that goes
       red under its own negative control.** **Today: observed red — five of them have no assertion
       at all.** The footer's zero-row skip is a bare `if (rows.length === 0) return`
       (`src/views/table-renderer.ts:801-804`) with the 44px phone floor in one rule
@@ -174,14 +174,14 @@ never resolve them silently.
       five rows on an existing lane, each **observed red** under a named control — remove the
       zero-row return, drop the floor rule, stack the chips in a block container, force one pill
       colour, delete the `td` paint rule — and green on the tree.
-- [ ] **C3 — A date value can carry an end.** Notion's date picker offers an End date and renders
+- [x] **C3 — A date value can carry an end.** Notion's date picker offers an End date and renders
       the range in the cell (`bd482935`). **Today: observed red — there is no end or range concept
       anywhere.** All 546 lines of `src/views/record-surface/cell-editor-date.ts` contain no end
       field, and `renderDate` formats exactly one value
       (`src/views/cell-renderer.ts:537-541`). Done is: an optional end value on the date, an End
       date row in the picker, a range display form, and a cell that renders both ends. Timezone and
       Remind rows are **out** — Notion-service features with no Obsidian analogue.
-- [ ] **C4 — The type picker offers every type the four registries agree on, and they agree.**
+- [x] **C4 — The type picker offers every type the four registries agree on, and they agree.**
       Notion shows Person, URL, Email, Phone and a set of audit types
       (`af7a18b0`, `7f2dbda0`, `3b3c3c26`) that our thirteen do not carry. **Today: observed red at
       thirteen, across four registries that must move together** — the `ColumnDef["type"]` union
@@ -197,14 +197,14 @@ never resolve them silently.
       on `af7a18b0`'s canonical list our union lacks — each **enabled with a real renderer behind
       it**. Person's vault value source is owed its own ADR before its renderer and does not gate
       the other seven.
-- [ ] **C5 — The resize handle is visible before you need it.** Notion's grip becomes visible on
+- [x] **C5 — The resize handle is visible before you need it.** Notion's grip becomes visible on
       column selection (`d53b3912`). **Today: observed red, and worse than the research reported.**
       `.db-resize-handle` (`styles.css:5655-5663`) is a 4px absolutely-positioned strip with
       `cursor: col-resize` and **no background declaration and no hover rule anywhere in the
       file** — it paints nothing at any time, so the cursor change is the only feedback the column
       edge gives. Done is a 2px token-derived line whose computed background changes on `th:hover`,
       clearing D5's contrast bar in both themes.
-- [ ] **C6 — Vertical lines are a view choice.** Notion carries a *Show vertical lines* switch in
+- [x] **C6 — Vertical lines are a view choice.** Notion carries a *Show vertical lines* switch in
       the table's view options (`d3acf726`). **Today: observed red — borders are
       unconditional.** `.db-table th, .db-table td` declares `border-right: 1px solid
       var(--db-border-subtle)` with no gate (`styles.css:5414-5421`, the declaration at `:5416`).
@@ -212,7 +212,7 @@ never resolve them silently.
       border**, with the switch on leaving today's computed borders unchanged. The first read of
       this item also owes an answer on the sixth P10 toggle, *Show data source title*, which the
       loop deliberately did not guess at.
-- [ ] **C7 — An empty visible property reads as empty in the peek.** Notion writes the word in its
+- [x] **C7 — An empty visible property reads as empty in the peek.** Notion writes the word in its
       page view (`050083af`). **Today: observed red — it renders as nothing.**
       `renderValue` assigns `valueEl.textContent = text` for a non-option value
       (`src/views/table-record-peek.ts:357-360`), and `text` is `""` for an empty property, so the
@@ -221,7 +221,7 @@ never resolve them silently.
       own table cells render blank, exactly as ours do
       (`src/views/cell-renderer.ts:263-264`, `styles.css:6766-6771`), and `050083af` is page-view
       only.
-- [ ] **C8 — The add-row affordance names what it adds.** Notion derives the noun from the data
+- [x] **C8 — The add-row affordance names what it adds.** Notion derives the noun from the data
       source — `+ New page` on one board (`19745d87`), `+ New task` on another (`e33466b4`).
       **Today: observed red — the string is fixed.** `src/views/table-renderer.ts:982` builds
       `` `+ ${t("toolbar.new")}` ``. Done is `+ New <noun>` where the view carries a **configured**
