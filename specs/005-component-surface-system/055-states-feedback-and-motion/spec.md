@@ -206,7 +206,7 @@ container's near-zero duration and `.db-surface`'s real zero exist for exactly t
 
 | This phase's token/contract | design-system.md anchor |
 |-----------------------------|--------------------------|
-| Toast is a `menu`-role surface for dismissal and focus; severity is styling, not role | §3 role vocabulary |
+| Toast is a `feedback`-role surface: dismissal by explicit action or its own timer, no focus; severity is styling, not role | §3 role vocabulary |
 | Empty card and toast carry the token snapshot when portalled | §4.2 |
 | Toast rows and confirm buttons are `createMenuRow`/row-grammar rows | §6 |
 | The confirm sheet declares its presentation; it never infers one from its anchor | §7 |

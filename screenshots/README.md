@@ -199,6 +199,26 @@ A column with summary rules stacks each kind over its result; a column without o
 
 Sources: `src/views/table-footer-renderer.ts`, `src/views/table-renderer.ts`
 
+### Toast — error, sticky until dismissed
+
+An error toast carries no auto-dismiss timer and no action row — `showToast` builds the row unconditionally and `:empty` hides it, so a plain error photographs with no stray gap under its message.
+
+| dark | light |
+|---|---|
+| ![chrome-toast-error dark](notion-clone/components/chrome-toast-error-mobile-dark.png) | ![chrome-toast-error light](notion-clone/components/chrome-toast-error-mobile-light.png) |
+
+Sources: `src/views/toast.ts`
+
+### Toast — success, with an Undo action
+
+The shared feedback surface `showToast` builds, raised here exactly as the gallery-migration notice raises it: success severity, paired with the check glyph rather than colour alone, and an Undo action. Not wrapped in `note-database-container`: this stack mounts on `doc.body`, so a fixture that wrapped it would photograph a surface the plugin never ships.
+
+| dark | light |
+|---|---|
+| ![chrome-toast-success dark](notion-clone/components/chrome-toast-success-mobile-dark.png) | ![chrome-toast-success light](notion-clone/components/chrome-toast-success-mobile-light.png) |
+
+Sources: `src/views/toast.ts`
+
 ### Main toolbar
 
 View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.

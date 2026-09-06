@@ -8,7 +8,7 @@
 // 1. TYPES
 // ───────────────────────────────────────────────────────────────────
 
-export type SurfaceRole = "menu" | "panel" | "dialog" | "sheet" | "submenu";
+export type SurfaceRole = "menu" | "panel" | "dialog" | "sheet" | "submenu" | "feedback";
 
 export type SurfaceMount = "local" | "bodyPortal" | "shadowRoot" | "topLayer";
 
@@ -22,9 +22,10 @@ export type SurfaceDismissal =
   | "explicit-action"
   | "scrim-tap"
   | "back"
-  | "drag-to-dismiss";
+  | "drag-to-dismiss"
+  | "timeout";
 
-export type SurfaceFocusMode = "roving" | "trapped" | "return-to-parent";
+export type SurfaceFocusMode = "roving" | "trapped" | "return-to-parent" | "none";
 
 export type SurfaceWidthPolicy =
   | {
@@ -65,7 +66,8 @@ export type SurfaceProducerId =
   | "owned-menu"
   | "record-detail-panel"
   | "filter-panel"
-  | "date-value-picker";
+  | "date-value-picker"
+  | "toast";
 
 export type SurfaceTokenKey = (typeof SURFACE_TOKEN_KEYS)[number];
 
@@ -118,6 +120,18 @@ export const SURFACE_ROLE_DEFAULTS: Readonly<Record<SurfaceRole, SurfaceRoleDefa
       preferredWidth: 292,
       maxWidth: 320,
     },
+  },
+  /**
+   * A transient report on an operation, not a question the reader must answer. It never takes
+   * focus — `aria-live="polite"` is the point precisely because it must not interrupt — and it
+   * leaves on its own timer as readily as it leaves on a click, which no other role in this table
+   * does. Its geometry is a measured constant rather than a scale, so `role-declared` is honest
+   * where `menu`'s 320px cap or `panel`'s bounded range would both be measurably wrong.
+   */
+  feedback: {
+    dismissal: ["explicit-action", "timeout"],
+    focusMode: "none",
+    width: { kind: "role-declared" },
   },
 } as const;
 
@@ -227,6 +241,13 @@ export const SURFACE_REGISTRY = {
   "record-detail-panel": { role: "panel", mount: "local", host: "container" },
   "filter-panel": { role: "panel", mount: "local", host: "container" },
   "date-value-picker": { role: "menu", mount: "local", host: "container" },
+  // `showToast` creates its stack on `doc.body` the first time a document raises one — the same
+  // body-portal idiom `owned-menu` uses, so a measurement against this entry is a measurement of
+  // where the surface actually lands. It was left out of this table for a while rather than
+  // entered under the nearest existing role: `menu`'s outside-pointerdown/escape dismissal, roving
+  // focus and 320px cap are each measurably false of a surface that dismisses on its own timer,
+  // takes no focus, and is fixed at 384px. `feedback` exists so this row can be true.
+  "toast": { role: "feedback", mount: "bodyPortal", host: "body" },
 } as const satisfies Record<SurfaceProducerId, SurfaceProducerDefinition>;
 
 export function getSurfaceProducerDefinition(producer: SurfaceProducerId): SurfaceProducerDefinition {

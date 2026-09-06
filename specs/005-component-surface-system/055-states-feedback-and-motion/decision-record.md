@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/055-states-feedback-and-motion"
-    last_updated_at: "2026-09-05T20:45:00Z"
+    last_updated_at: "2026-09-06T01:55:00Z"
     last_updated_by: "landing-verification"
-    recent_action: "Added ADR-006 (sweep plus reduced-motion repair) and ADR-007 (registry escalated)"
-    next_safe_action: "Operator rules ADR-007: a sixth SurfaceRole, or toast outside the registry"
+    recent_action: "ADR-007 Accepted, sixth role feedback; ADR-008 Proposed on the unbacked deletion Undo"
+    next_safe_action: "Start L2 (T005/T006) — the empty-state flavours and chart absorption"
     blockers: []
     key_files:
       - "src/views/toast.ts"
@@ -555,9 +555,18 @@ which is how the defect was found in the first place.
 
 | Field | Value |
 |-------|-------|
-| **Status** | Accepted — escalated, awaiting the operator |
+| **Status** | Accepted |
 | **Date** | 2026-09-05 |
-| **Deciders** | Landing verification |
+| **Deciders** | Landing verification; ruled by the operator 2026-09-05 |
+
+### Operator ruling (2026-09-05)
+
+> ADR-007 → Accepted as "Add a sixth role 'feedback'": transient, non-focusing, timer-or-action
+> dismissal, 384px width role; the registry and its lane rows cover toasts like every other
+> surface.
+
+This takes the fourth alternative below rather than the escalate-and-cover option the landing
+recommended, and it is now the decision this ADR records.
 
 ---
 
@@ -592,62 +601,215 @@ trusts the registry is then reasoning about a program that does not exist."
 
 ### Decision
 
-**We chose**: do not register the toast, and escalate the vocabulary gap.
+**We chose**: add a sixth `SurfaceRole`, `feedback`, and register the toast under it.
 
-Registering it under `menu` would put three false claims into the one table whose value is that it
-is true. The two honest ways forward are both the operator's:
+Registering the toast under `menu` would have put three false claims into the one table whose
+value is that it is true. The operator's ruling takes the option that keeps the table accurate
+instead of leaving it incomplete: `feedback` declares its own defaults — dismissal by explicit
+action or timeout, no focus, `role-declared` width — none of which borrow a number from `menu` or
+`dialog`. `surface-contract.ts` carries the role and the registry entry; `verify-placement.mjs`
+carries the opener its own registry-iteration lane requires; `design-system.md` §3 and this
+packet's `spec.md` §4 carry the corrected row so the shared contract and the code agree.
 
-1. Add a sixth `SurfaceRole` — `status`, or similar — with its own defaults: dismissal by explicit
-   action or timeout, no focus, `role-declared` width. Then register the toast and give it an
-   opener in `verify-placement.mjs`.
-2. Rule that a transient, non-focusable feedback surface is outside this registry, and correct
-   `spec.md` §4's token map, which currently asserts a role the shipped component contradicts.
-
-**How it works**: until one is taken, the toast's placement, geometry, severity, action wiring and
-reduced-motion behaviour are covered by the seven lane rows this landing added — so the surface is
-not unmeasured, it is only unregistered.
+**How it works**: the closed-registry test in `surface-contract.test.ts` was extended first and
+observed red — six entries expected, five shipped — then the role, its defaults and the registry
+entry landed together, and the same test went green. The registry-iteration lane in
+`verify-placement.mjs` picked up the sixth entry the moment it existed and needed its own opener in
+the same change, exactly as its own comment predicts for "a producer added tomorrow".
 
 ### Alternatives Considered
 
 | Option | Pros | Cons | Score |
 |--------|------|------|-------|
-| **Escalate, cover by lane rows (chosen)** | Nothing false enters the registry; the surface is still measured | The registry stays incomplete and `spec.md` §4 stays unsatisfied | 8/10 |
+| Escalate, cover by lane rows only | Nothing false enters the registry; the surface is still measured | The registry stays incomplete and `spec.md` §4 stays unsatisfied indefinitely | 8/10 |
 | Register as `menu` per `spec.md` §4 | Closes the token-map row today | Three measurably false claims — dismissal, focus and a 384px surface under a 320px cap | 2/10 |
 | Register as `dialog` | Right on dismissal and width | Still claims `focusMode: "trapped"`, which would be a defect if any consumer acted on it | 3/10 |
-| Add a sixth role here | Closes it properly | Changes a vocabulary five phases consume, inside a landing, without the operator | 4/10 |
+| **Add a sixth role (operator-ruled, chosen)** | Closes it properly — the table stays true and the toast stops being an exception | Changes a vocabulary five phases consume; needed the operator's authority to do, which it now has | 10/10 |
 
-**Why this one**: a registry is a claim about the running program, and this landing has no mandate
-to change the vocabulary five other phases read.
+**Why this one**: the operator's ruling is the authority the landing itself named as missing —
+"changes a vocabulary five phases consume, inside a landing, without the operator" was the objection
+to this option, and the objection is the thing the ruling removes.
 
 ### Consequences
 
-**What improves**: the registry keeps meaning what it says.
+**What improves**: the registry keeps meaning what it says, and it now says something true about
+all six surfaces rather than five. `spec.md` §4's registration row and `design-system.md` §3's role
+table both close.
 
-**What it costs**: `spec.md` §4's registration row is unsatisfied and stays visible as such. The
-census reports five declared producers while six surfaces exist.
+**What it costs**: `SurfaceRole` gained a sixth member, which every consumer of the closed union
+(`044`, `048`, `051`, `052`, `053`) now sees. None of them exhaustively switches over the type today
+— confirmed by grep before this landed — so the addition is additive, not breaking.
 
 **Risks**:
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| The gap is forgotten because nothing goes red for it | M | Recorded here, in `tasks.md` T002's residual and in `checklist.md`; the toast's own lane rows name the registry in their detail text |
+| A future exhaustive switch over `SurfaceRole` in another phase silently gets a seventh case it never asked for | L | The type is a closed union, so an exhaustive switch missing `feedback` is a compile error the moment one is added, not a silent gap |
 
 ### Five Checks Evaluation
 
 | # | Check | Result | Evidence |
 |---|-------|--------|----------|
-| 1 | **Necessary?** | PASS | The registration cannot be written without choosing a role, and every available role is contradicted by the shipped component |
-| 2 | **Beyond Local Maxima?** | PASS | Four options scored, including both ways of writing the entry today |
-| 3 | **Sufficient?** | PASS | The surface is covered by seven lane rows while the vocabulary question is open |
-| 4 | **Fits Goal?** | PASS | Goal: name conflicts rather than resolve them silently |
-| 5 | **Open Horizons?** | PASS | Both dispositions remain fully open; nothing here forecloses either |
+| 1 | **Necessary?** | PASS | The registration cannot be written without choosing a role, and every existing role was contradicted by the shipped component |
+| 2 | **Beyond Local Maxima?** | PASS | Four options scored, including both ways of writing the entry under an existing role |
+| 3 | **Sufficient?** | PASS | One role, its defaults and one registry entry close the gap completely, no lane-row workaround needed |
+| 4 | **Fits Goal?** | PASS | Goal: name conflicts rather than resolve them silently — this ADR named the conflict and the operator resolved it |
+| 5 | **Open Horizons?** | PASS | A seventh role remains just as available to a future surface that needs one |
 
 **Checks Summary**: 5/5 PASS
 
 ### Implementation
 
-**What changes**: nothing in `src/views/surface-contract.ts`. `tasks.md` and `checklist.md` carry
-the open gap.
+**What changes**:
+- `src/views/surface-contract.ts` — `feedback` added to `SurfaceRole`, `timeout` added to
+  `SurfaceDismissal`, `none` added to `SurfaceFocusMode`, `SURFACE_ROLE_DEFAULTS.feedback` declared,
+  `toast` added to `SurfaceProducerId` and registered in `SURFACE_REGISTRY`.
+- `src/views/surface-contract.test.ts` — the closed-registry test extended to six entries and the
+  role-defaults test extended for `feedback`, both observed red before the source change landed.
+- `tools/storybook/verify-placement.mjs` — a `toast` opener in the registry-iteration lane.
+- `specs/005-component-surface-system/design-system.md` §3 and this packet's `spec.md` §4 — the
+  role table and the token map corrected to `feedback` in place of the contradicted `menu` claim.
 
-**How to roll back**: not applicable — this ADR records a decision not to write code.
+**How to roll back**: revert this leg's commit. The registry entry, the role and its test extension
+move together, so reverting returns the toast to unregistered rather than to a half-true entry.
 <!-- /ANCHOR:adr-007 -->
+
+---
+
+<!-- ANCHOR:adr-008 -->
+
+## ADR-008: A row deletion is not undoable, so the deletion toast carries no Undo until it is
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Proposed |
+| **Date** | 2026-09-06 |
+| **Deciders** | Landing verification; the removal ruled by the operator 2026-09-06, the repair still open |
+
+### Operator ruling (2026-09-06)
+
+> Remove the `action` from the two `deleteRow` toasts (the notice migrates to the shared surface
+> with no Undo promise), and record deletion-undo as a new task plus a Proposed ADR naming the
+> three wrong behaviours.
+
+The removal is done and is not what stays Proposed. What stays Proposed is the repair: whether a
+deletion earns its own history entry at all, and if so with what redo semantics. T018 carries it.
+
+---
+
+### Context
+
+T003 routed all four owned notice call sites through the toast, and gave each of them an Undo wired
+to `this.undoLastEdit()`. On two of them that is correct. On the two `notice.deletedRow` sites it
+was not, and the defect is a whole-affordance one rather than an edge case.
+
+Neither class records a deletion:
+
+- `type HistoryEntry = CellHistoryEntry | ConfigHistoryEntry | CreatedHistoryEntry`
+  (`database-view.ts:351`) and `type EmbedHistoryEntry` = `created | cell | moved`
+  (`embedded-database-renderer.ts:150`). **There is no kind for a deletion in either union.**
+- `deleteRow` calls `trashNote` and then `refreshAfterSave()`, which is three lines and only
+  `refresh()` (`database-view.ts:11539`). It never calls `pushHistory`; the twelve call sites that
+  do are all cell, config or created writes.
+- `undoLastEdit` delegates to `replayHistory("undo")`, which replays `historyStack[0]`
+  (`database-view.ts:10315`).
+
+So the button offered on a deletion toast does one of three things, none of them the undo it
+promises, and two of them destructive:
+
+1. **The stack is empty** — it reports `notice.nothingToUndo`. The button was a lie, harmlessly.
+2. **A `cells` or `config` entry is on top** — it reverts an *unrelated* edit the reader did not ask
+   to undo, and the deleted row stays deleted.
+3. **A `created` entry is on top** — `applyCreatedHistoryEntry` undoes a creation by calling
+   `removeCreatedFile`, which **trashes that file** (`database-view.ts:10388`, `:10395-10402`). The
+   reader creates a row, deletes a different row, presses Undo on the deletion toast, and loses the
+   created row as well. One press, two deletions, zero undos.
+
+Reachability is ordinary, not adversarial: create-then-delete is a normal editing minute, and the
+stack holds fifteen entries.
+
+The contrast that makes this a defect rather than a limitation is the sibling site. The gallery
+migration sets `pendingUndoLabel` and calls `scheduleConfigSave()` before raising its toast
+(`database-view.ts:2744-2755`), so a config entry exists for the replay to find. Its Undo works.
+The deletion sites copied the affordance without the entry.
+
+This was derived statically and cannot be run here: exercising a real deletion needs an Obsidian
+`App`, vault and metadata cache, the same limit AC-002 already records. The derivation is complete
+on its own terms, though — the entry kind does not exist, so no execution path can produce one.
+
+Before this leg the site raised a bare `new Notice(t("notice.deletedRow"))`, and
+`notice.deletedRow` is `"Deleted: {name}"` (`src/i18n.ts:1514`) — it promises no undo. The leg
+therefore did not fail to improve the site; it moved it in the destructive direction.
+
+---
+
+### Decision
+
+**Now:** the two `notice.deletedRow` toasts carry `severity` and `message` and no `action`. The
+notice still migrates to the shared surface, which is what T003 was for, and `showToast` builds its
+action row unconditionally while `.db-toast-actions:empty` hides it (`styles.css:2859`), so a
+deletion toast renders with no stray gap — the shape the `chrome-toast-error` capture already shows.
+
+**Proposed, not decided:** whether `deleteRow` should record a `deleted` history entry so the Undo
+can come back. T018 sketches the shape — snapshot the content before `trashNote` as
+`removeCreatedFile` already does, restore on undo, re-trash on redo — but three questions are open
+and belong to the operator rather than to a landing pass:
+
+- Whether restoring to the original path is right when something else now occupies it.
+- Whether a bulk delete (`database-view.ts:5001-5003`, which deletes a selection in a loop) records
+  one entry or many.
+- Whether the embed's `moved` entry shape or the standalone's `created` shape is the better model,
+  since the two classes keep separate stacks and separate unions.
+
+---
+
+### Alternatives Considered
+
+| # | Option | Score | Why not |
+|---|--------|-------|---------|
+| 1 | **Remove the action, record the repair** (chosen) | — | — |
+| 2 | Leave the Undo and document the limitation | Rejected | A documented destructive button is still a destructive button, and the document is not in front of the reader who presses it |
+| 3 | Guard the Undo on `historyStack[0]?.type` and hide it when the top entry is not the deletion | Rejected | The top entry is never the deletion, so the guard hides the button always — the same outcome through more code |
+| 4 | Build the deletion history entry inside this leg | Rejected | A new entry kind, a content snapshot, redo semantics and tests across two classes is a feature, not the notice migration T003 scoped. Deferred to T018 rather than absorbed |
+| 5 | Revert the whole deletion-site migration to `new Notice` | Rejected | Loses the shared surface for no safety gain: the bare notice and the action-less toast are equally undoless, and only one of them is the component this phase exists to adopt |
+
+### Consequences
+
+**Positive**: no press of any shipped control can now delete a second file; the two deletion sites
+still gain the shared surface, its severity glyph and its keyboard-reachable close; the repair is
+recorded as work rather than lost as a footnote.
+
+**Negative**: a row deletion remains un-undoable, which is the state the plugin was already in and
+which T018 now tracks rather than leaving implicit.
+
+| Risk | Likelihood | Mitigation |
+|------|------------|------------|
+| The Undo is re-attached later without the history entry landing first | L | T018's threshold names the entry and the button in one task, and its red-first control is exactly the create-then-delete sequence that fails today |
+
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | A shipped button that trashes a second file is not a deferrable finding |
+| 2 | **Beyond Local Maxima?** | PASS | Five options scored, including both "leave it and document" and "build it now" |
+| 3 | **Sufficient?** | PASS | Removing the action closes the destructive path completely; nothing else in the leg depends on it |
+| 4 | **Fits Goal?** | PASS | Goal: name conflicts rather than resolve them silently — the affordance is gone and the debt is a numbered task |
+| 5 | **Open Horizons?** | PASS | T018 can add the entry and re-attach the button without revisiting this decision |
+
+**Checks Summary**: 5/5 PASS
+
+### Implementation
+
+**What changes**:
+- `src/views/database-view.ts` — `deleteRow`'s toast loses its `action`, with the reason recorded at
+  the call site.
+- `src/views/embedded-database-renderer.ts` — the same, for the embed's `deleteRow`.
+- `tasks.md` — T003's body corrected; T018 opened for the repair.
+- `acceptance-criteria.md` AC-001 and AC-002, and `checklist.md` C2 — the "each with Undo wired to
+  the existing `undoLastEdit`" claim corrected to what the tree does.
+
+**How to roll back**: re-add the two `action:` properties. That restores the destructive path, so it
+should only ever happen as part of T018, with the history entry landing in the same change.
+<!-- /ANCHOR:adr-008 -->

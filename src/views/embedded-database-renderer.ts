@@ -3171,7 +3171,14 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     }
     try {
       await this.dataSource.trashNote(row.file, { sourceInstanceId: this.instanceId });
-      new Notice(t("notice.deletedRow", { name: row.file.basename }));
+      // No Undo here, deliberately, and for the same reason the standalone view's deleteRow gives:
+      // nothing is pushed for a deletion, so `undoLastEdit` would replay an unrelated entry, and a
+      // `created` one on top undoes by trashing that file — an Undo press that deletes a second
+      // note. The toast reports; it does not offer what the stack cannot do.
+      showToast(this.containerEl.ownerDocument, {
+        severity: "success",
+        message: t("notice.deletedRow", { name: row.file.basename }),
+      });
       if (this.config) this.renderResults(this.config);
     } catch (err) {
       new Notice(t("errors.updateFailed", { error: String(err) }));

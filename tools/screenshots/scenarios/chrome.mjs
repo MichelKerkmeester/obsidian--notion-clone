@@ -79,6 +79,11 @@ const I = {
   settings: glyph('<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>'),
   arrowLeftRight: glyph('<path d="m8 3-5 5 5 5"/><path d="M3 8h13"/><path d="m16 21 5-5-5-5"/><path d="M21 16H8"/>'),
   fileOutput: glyph('<path d="M14 2H7a2 2 0 0 0-2 2v6"/><path d="M14 2v5h5"/><path d="M19 7v13a2 2 0 0 1-2 2H9"/><path d="M3 15h8"/><path d="m7 11-4 4 4 4"/>'),
+  // The toast's severity glyphs and its close control. `showToast` pairs `check`/`alert-triangle`
+  // with success/error so severity survives for a reader who cannot separate the two colours; `x`
+  // is its keyboard-reachable dismiss button.
+  alertTriangle: glyph('<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4M12 17h.01"/>'),
+  x: glyph('<path d="M18 6 6 18"/><path d="m6 6 12 12"/>'),
 };
 
 /* One More-tools row, built the way `renderToolbarMenuRow` builds it: the shared `db-menu-item`
@@ -891,6 +896,56 @@ export const CHROME_SCENARIOS = [
           <button type="button" class="db-selection-action">Copy TSV</button>
           <button type="button" class="db-selection-action">Copy Markdown</button>
           <button type="button" class="db-selection-action">Copy CSV</button>
+        </div>
+      </div>`,
+  },
+  {
+    id: "chrome-toast-success",
+    title: "Toast — success, with an Undo action",
+    group: "components",
+    sources: ["src/views/toast.ts"],
+    // `.db-toast-stack` docks to the viewport with position: fixed, and `.db-toast` sits inside it
+    // with position: absolute — the same collapsed-stack idiom the selection bar's own fixed dock
+    // hits above. Neither contributes height to the element being captured undone, so both are put
+    // back in flow; nothing about the card's own furniture is touched.
+    captureCss: `.db-toast-stack {
+      position: static !important; right: auto !important; bottom: auto !important;
+    }
+    .db-toast { position: static !important; inset: auto !important; }`,
+    note: "The shared feedback surface `showToast` builds, raised here exactly as the gallery-migration notice raises it: success severity, paired with the check glyph rather than colour alone, and an Undo action. Not wrapped in `note-database-container`: this stack mounts on `doc.body`, so a fixture that wrapped it would photograph a surface the plugin never ships.",
+    html: () => `
+      <div class="db-surface db-toast-stack">
+        <div class="db-toast is-success" role="status" aria-live="polite" aria-atomic="true">
+          <div class="db-toast-header">
+            <div class="db-toast-icon">${ICONS.check}</div>
+            <div class="db-toast-message">"Subscriptions" was a gallery. Gallery views are being retired, so it now shows as a board with the same cover image, fit and aspect ratio. Its card-size settings do not carry over. Undo to keep it a gallery.</div>
+            <button type="button" class="db-toast-close" aria-label="Close">${I.x}</button>
+          </div>
+          <div class="db-toast-actions">
+            <button type="button" class="db-toast-action">Undo</button>
+          </div>
+        </div>
+      </div>`,
+  },
+  {
+    id: "chrome-toast-error",
+    title: "Toast — error, sticky until dismissed",
+    group: "components",
+    sources: ["src/views/toast.ts"],
+    captureCss: `.db-toast-stack {
+      position: static !important; right: auto !important; bottom: auto !important;
+    }
+    .db-toast { position: static !important; inset: auto !important; }`,
+    note: "An error toast carries no auto-dismiss timer and no action row — `showToast` builds the row unconditionally and `:empty` hides it, so a plain error photographs with no stray gap under its message.",
+    html: () => `
+      <div class="db-surface db-toast-stack">
+        <div class="db-toast is-error" role="status" aria-live="polite" aria-atomic="true">
+          <div class="db-toast-header">
+            <div class="db-toast-icon">${I.alertTriangle}</div>
+            <div class="db-toast-message">Could not read the source. Check the database source and try again.</div>
+            <button type="button" class="db-toast-close" aria-label="Close">${I.x}</button>
+          </div>
+          <div class="db-toast-actions"></div>
         </div>
       </div>`,
   },

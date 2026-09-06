@@ -1618,7 +1618,7 @@
       "layoutHash": "9bcd1f820e51",
       "pixelHash": "c27637c76096",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "55a57f7e04e8",
+        "src/views/embedded-database-renderer.ts": "59d112776c54",
         "styles.css": "ef54a53db80f",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -1642,7 +1642,7 @@
       "layoutHash": "9bcd1f820e51",
       "pixelHash": "16c408942267",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "55a57f7e04e8",
+        "src/views/embedded-database-renderer.ts": "59d112776c54",
         "styles.css": "ef54a53db80f",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -1666,7 +1666,7 @@
       "layoutHash": "834c932f6aa8",
       "pixelHash": "f420ebc9f537",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "55a57f7e04e8",
+        "src/views/embedded-database-renderer.ts": "59d112776c54",
         "styles.css": "ef54a53db80f",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -1690,7 +1690,7 @@
       "layoutHash": "834c932f6aa8",
       "pixelHash": "e6c4b0e9ed6b",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "55a57f7e04e8",
+        "src/views/embedded-database-renderer.ts": "59d112776c54",
         "styles.css": "ef54a53db80f",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -1908,6 +1908,198 @@
       "capture": "element",
       "bytes": 151434,
       "fixtureOf": "constructed-table-footer"
+    },
+    {
+      "id": "chrome-toast-error",
+      "title": "Toast — error, sticky until dismissed",
+      "group": "components",
+      "theme": "dark",
+      "device": "desktop",
+      "file": "screenshots/notion-clone/components/chrome-toast-error-desktop-dark.png",
+      "sources": [
+        "src/views/toast.ts"
+      ],
+      "layoutHash": "02d0836ee6f6",
+      "pixelHash": "5f14c4d8c7aa",
+      "sourceHashes": {
+        "src/views/toast.ts": "512ba854aeae",
+        "styles.css": "ef54a53db80f",
+        "tools/screenshots/theme.css": "f30f295f9cf0",
+        "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "81caa525d520"
+      },
+      "note": "An error toast carries no auto-dismiss timer and no action row — `showToast` builds the row unconditionally and `:empty` hides it, so a plain error photographs with no stray gap under its message.",
+      "capture": "element",
+      "bytes": 23109
+    },
+    {
+      "id": "chrome-toast-error",
+      "title": "Toast — error, sticky until dismissed",
+      "group": "components",
+      "theme": "light",
+      "device": "desktop",
+      "file": "screenshots/notion-clone/components/chrome-toast-error-desktop-light.png",
+      "sources": [
+        "src/views/toast.ts"
+      ],
+      "layoutHash": "02d0836ee6f6",
+      "pixelHash": "fbcfc8c9b4b5",
+      "sourceHashes": {
+        "src/views/toast.ts": "512ba854aeae",
+        "styles.css": "ef54a53db80f",
+        "tools/screenshots/theme.css": "f30f295f9cf0",
+        "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "81caa525d520"
+      },
+      "note": "An error toast carries no auto-dismiss timer and no action row — `showToast` builds the row unconditionally and `:empty` hides it, so a plain error photographs with no stray gap under its message.",
+      "capture": "element",
+      "bytes": 21637
+    },
+    {
+      "id": "chrome-toast-error",
+      "title": "Toast — error, sticky until dismissed",
+      "group": "components",
+      "theme": "dark",
+      "device": "mobile",
+      "file": "screenshots/notion-clone/components/chrome-toast-error-mobile-dark.png",
+      "sources": [
+        "src/views/toast.ts"
+      ],
+      "layoutHash": "02d0836ee6f6",
+      "pixelHash": "821bf5e00874",
+      "sourceHashes": {
+        "src/views/toast.ts": "512ba854aeae",
+        "styles.css": "ef54a53db80f",
+        "tools/screenshots/theme.css": "f30f295f9cf0",
+        "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "81caa525d520"
+      },
+      "note": "An error toast carries no auto-dismiss timer and no action row — `showToast` builds the row unconditionally and `:empty` hides it, so a plain error photographs with no stray gap under its message.",
+      "capture": "element",
+      "bytes": 21518
+    },
+    {
+      "id": "chrome-toast-error",
+      "title": "Toast — error, sticky until dismissed",
+      "group": "components",
+      "theme": "light",
+      "device": "mobile",
+      "file": "screenshots/notion-clone/components/chrome-toast-error-mobile-light.png",
+      "sources": [
+        "src/views/toast.ts"
+      ],
+      "layoutHash": "02d0836ee6f6",
+      "pixelHash": "c6ba7356f882",
+      "sourceHashes": {
+        "src/views/toast.ts": "512ba854aeae",
+        "styles.css": "ef54a53db80f",
+        "tools/screenshots/theme.css": "f30f295f9cf0",
+        "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "81caa525d520"
+      },
+      "note": "An error toast carries no auto-dismiss timer and no action row — `showToast` builds the row unconditionally and `:empty` hides it, so a plain error photographs with no stray gap under its message.",
+      "capture": "element",
+      "bytes": 20386
+    },
+    {
+      "id": "chrome-toast-success",
+      "title": "Toast — success, with an Undo action",
+      "group": "components",
+      "theme": "dark",
+      "device": "desktop",
+      "file": "screenshots/notion-clone/components/chrome-toast-success-desktop-dark.png",
+      "sources": [
+        "src/views/toast.ts"
+      ],
+      "layoutHash": "7425a6d0cd70",
+      "pixelHash": "5033e8ac805a",
+      "sourceHashes": {
+        "src/views/toast.ts": "512ba854aeae",
+        "styles.css": "ef54a53db80f",
+        "tools/screenshots/theme.css": "f30f295f9cf0",
+        "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "81caa525d520"
+      },
+      "note": "The shared feedback surface `showToast` builds, raised here exactly as the gallery-migration notice raises it: success severity, paired with the check glyph rather than colour alone, and an Undo action. Not wrapped in `note-database-container`: this stack mounts on `doc.body`, so a fixture that wrapped it would photograph a surface the plugin never ships.",
+      "capture": "element",
+      "bytes": 47966
+    },
+    {
+      "id": "chrome-toast-success",
+      "title": "Toast — success, with an Undo action",
+      "group": "components",
+      "theme": "light",
+      "device": "desktop",
+      "file": "screenshots/notion-clone/components/chrome-toast-success-desktop-light.png",
+      "sources": [
+        "src/views/toast.ts"
+      ],
+      "layoutHash": "ec7335c12b6a",
+      "pixelHash": "539cd21a1e38",
+      "sourceHashes": {
+        "src/views/toast.ts": "512ba854aeae",
+        "styles.css": "ef54a53db80f",
+        "tools/screenshots/theme.css": "f30f295f9cf0",
+        "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "81caa525d520"
+      },
+      "note": "The shared feedback surface `showToast` builds, raised here exactly as the gallery-migration notice raises it: success severity, paired with the check glyph rather than colour alone, and an Undo action. Not wrapped in `note-database-container`: this stack mounts on `doc.body`, so a fixture that wrapped it would photograph a surface the plugin never ships.",
+      "capture": "element",
+      "bytes": 46465
+    },
+    {
+      "id": "chrome-toast-success",
+      "title": "Toast — success, with an Undo action",
+      "group": "components",
+      "theme": "dark",
+      "device": "mobile",
+      "file": "screenshots/notion-clone/components/chrome-toast-success-mobile-dark.png",
+      "sources": [
+        "src/views/toast.ts"
+      ],
+      "layoutHash": "7425a6d0cd70",
+      "pixelHash": "5ecc424ebfb5",
+      "sourceHashes": {
+        "src/views/toast.ts": "512ba854aeae",
+        "styles.css": "ef54a53db80f",
+        "tools/screenshots/theme.css": "f30f295f9cf0",
+        "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "81caa525d520"
+      },
+      "note": "The shared feedback surface `showToast` builds, raised here exactly as the gallery-migration notice raises it: success severity, paired with the check glyph rather than colour alone, and an Undo action. Not wrapped in `note-database-container`: this stack mounts on `doc.body`, so a fixture that wrapped it would photograph a surface the plugin never ships.",
+      "capture": "element",
+      "bytes": 46292
+    },
+    {
+      "id": "chrome-toast-success",
+      "title": "Toast — success, with an Undo action",
+      "group": "components",
+      "theme": "light",
+      "device": "mobile",
+      "file": "screenshots/notion-clone/components/chrome-toast-success-mobile-light.png",
+      "sources": [
+        "src/views/toast.ts"
+      ],
+      "layoutHash": "ec7335c12b6a",
+      "pixelHash": "a22555652bf8",
+      "sourceHashes": {
+        "src/views/toast.ts": "512ba854aeae",
+        "styles.css": "ef54a53db80f",
+        "tools/screenshots/theme.css": "f30f295f9cf0",
+        "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
+        "tools/screenshots/scenarios.mjs": "4c26fcda113a",
+        "tools/screenshots/capture.mjs": "81caa525d520"
+      },
+      "note": "The shared feedback surface `showToast` builds, raised here exactly as the gallery-migration notice raises it: success severity, paired with the check glyph rather than colour alone, and an Undo action. Not wrapped in `note-database-container`: this stack mounts on `doc.body`, so a fixture that wrapped it would photograph a surface the plugin never ships.",
+      "capture": "element",
+      "bytes": 45089
     },
     {
       "id": "chrome-toolbar",
@@ -13461,7 +13653,7 @@
       },
       "note": "The reference board inside the default-width container: its fixed-width columns page horizontally on a phone while the card tree remains unchanged.",
       "capture": "viewport",
-      "bytes": 145399,
+      "bytes": 145392,
       "fixtureOf": "constructed-board"
     },
     {
@@ -13694,7 +13886,7 @@
       },
       "note": "A parent and two child cards beside an ordinary lane, using the same card, title, chip, progress, and footer tree as the rendered board.",
       "capture": "viewport",
-      "bytes": 67750,
+      "bytes": 67744,
       "fixtureOf": "constructed-board-subtask"
     },
     {
@@ -13752,7 +13944,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 214800,
+      "bytes": 214815,
       "fixtureOf": "constructed-board"
     },
     {
@@ -14309,7 +14501,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment, a calm unscheduled empty line and the current-time ruler sit in frame.",
       "capture": "viewport",
-      "bytes": 65790,
+      "bytes": 65725,
       "fixtureOf": "constructed-calendar-week"
     },
     {
@@ -19234,7 +19426,7 @@
       },
       "note": "The same kanban with the first three rows wired into a parent with two children and the config's kanbanShowSubtasks on, so the subtask cards carry the parent chip the way constructed-board-subtask draws its tree.",
       "capture": "viewport",
-      "bytes": 149914,
+      "bytes": 149900,
       "source": "reference",
       "renderer": "pm-kanban",
       "referenceOf": "constructed-board-subtask"

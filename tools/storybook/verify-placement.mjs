@@ -8382,6 +8382,11 @@ await section("the registry describes where these surfaces actually mount", asyn
           close: () => { closeActiveDateValuePicker(document); parent.remove(); },
         };
       },
+      "toast": () => {
+        const handle = globalThis.__toast.showToast(document, { severity: "success", message: "Registry check" });
+        const el = document.querySelector(".db-toast-stack");
+        return { el, close: () => { handle.close(); el?.remove(); } };
+      },
     };
 
     const out = [];
@@ -8517,13 +8522,27 @@ await section("the toast pairs severity with a glyph and its action reaches its 
     });
     const actionRead = read(document.querySelector(".db-toast"));
     document.querySelector(".db-toast-action").click();
+    const cardsAfterAction = document.querySelectorAll(".db-toast").length;
+
+    // The close button is a second, independent dismissal path from the action button above, and
+    // nothing had driven it: a toast that empties its stack when pressed one way but leaves a
+    // stray card behind when pressed the other would still read as "dismissal works" from the
+    // action-only check alone. Measured into its own variable, before this toast exists, so a
+    // close button that fails here cannot also read back as a failure of the action check above.
+    showToast(document, { severity: "success", message: "Last one" });
+    document.querySelector(".db-toast-close").click();
+    const stackAfterClose = {
+      toastCount: document.querySelectorAll(".db-toast").length,
+      liveRegionCount: document.querySelectorAll("[aria-live]").length,
+    };
 
     return {
       plain: plainRead,
       error: errorRead,
       action: actionRead,
       clicks,
-      cardsAfterAction: document.querySelectorAll(".db-toast").length,
+      cardsAfterAction,
+      stackAfterClose,
     };
   });
 
@@ -8606,6 +8625,13 @@ await section("the toast pairs severity with a glyph and its action reaches its 
     measured.cardsAfterAction === 0,
     `${measured.cardsAfterAction} card(s) remain after the press. A toast whose action stays on `
       + `screen invites the same undo twice`);
+
+  record("dismissing the last toast through its close button leaves no card and no live region",
+    measured.stackAfterClose.toastCount === 0 && measured.stackAfterClose.liveRegionCount === 0,
+    `${measured.stackAfterClose.toastCount} card(s) and ${measured.stackAfterClose.liveRegionCount} `
+      + `\`[aria-live]\` element(s) remain. The card is the live region — role="status" and `
+      + `aria-live="polite" sit on it directly — so a card the close button failed to remove would `
+      + `also be a live region a screen reader keeps announcing after the reader dismissed it`);
 });
 
 // ───────────────────────────────────────────────────────────────────

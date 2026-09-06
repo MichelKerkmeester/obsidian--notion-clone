@@ -8307,7 +8307,16 @@ export class DatabaseView extends FileView {
     const displayName = row.file.name.replace(/\.md$/, "");
     try {
       await this.dataSource.trashNote(row.file, { sourceInstanceId: this.instanceId });
-      new Notice(t("notice.deletedRow", { name: displayName }));
+      // No Undo here, deliberately. A deletion pushes nothing onto the history stack — the entry
+      // union has no kind for it — so `undoLastEdit` would replay whatever unrelated edit sits on
+      // top, and a `created` entry on top undoes by trashing that file, which turns an Undo press
+      // into a second deletion. The toast reports; it does not offer what the stack cannot do.
+      if (this.containerEl_) {
+        showToast(this.containerEl_.ownerDocument, {
+          severity: "success",
+          message: t("notice.deletedRow", { name: displayName }),
+        });
+      }
       await this.refreshAfterSave();
     } catch (err) {
       console.error("Note Database: failed to delete row", err);

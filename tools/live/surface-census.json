@@ -1,14 +1,14 @@
 {
-  "measuredAt": "2026-09-05T23:54:54.585Z",
+  "measuredAt": "2026-09-06T00:23:59.319Z",
   "inputs": {
     "styles.css": "ef54a53db80f",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
-    "src/views/surface-contract.ts": "ff7e6bafd3c8"
+    "src/views/surface-contract.ts": "ca203fa23a84"
   },
   "totals": {
     "rendered": 83,
     "buildable": 222,
-    "declared": 5,
+    "declared": 6,
     "renderedOnly": 0,
     "buildableNotRendered": 139,
     "untokened": 0,
@@ -1625,6 +1625,7 @@
     "owned-menu",
     "record-detail-panel",
     "filter-panel",
-    "date-value-picker"
+    "date-value-picker",
+    "toast"
   ]
 }

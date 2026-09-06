@@ -31,8 +31,8 @@ written after the fix is a cell nobody can check against the tree that produced 
 
 | # | Criterion | Today | Target | Evidence |
 |---|-----------|-------|--------|----------|
-| C1 | Notice call sites carrying an action affordance | **0 of 247** — `grep -rn "new Notice(" src --include="*.ts"`, tests excluded; every one is bare | every owned site renders the toast with a clickable action where one is owed | [x] Green: `src/views/toast.ts` built (`showToast`, severity + action + close), 9/9 in `toast.test.ts`, red confirmed by deleting the module first. The migration notice — this leg's owned site — now renders through it (see C2). **Landed at verification:** the constructed-mount lane row AC-001 asks for is in `tools/storybook/verify-placement.mjs` — seven checks on a card built by `showToast` in headless Chrome, each observed red first across three control runs while the other 373 rows in the lane stayed green. Producer registration is escalated, not done (ADR-007): all five `SurfaceRole` values are contradicted by the shipped component. `npx tsc --noEmit` (0), `npm test` (1262/1262), `npm run build` (0) and `npm run gate` (25 green, exit 0) all clean |
-| C2 | The migration notice's Undo | **no button** — `notice.galleryMigrated` (`src/i18n.ts:1455`) says "Undo to keep it a gallery" and renders through bare `new Notice` (`database-view.ts:2744`, `embedded-database-renderer.ts:764`) | Undo present and performing, `nothingToUndo` on an empty stack | [ ] Half green, and the half is named. Both call sites route through `showToast()` with Undo wired to `this.undoLastEdit()` (`database-view.ts:2748-2755`, `embedded-database-renderer.ts:768-774`), read in the final files and clean under `tsc`; the action-and-callback half is lane-proven in C1's row. **Unticked because this row's own threshold includes `nothingToUndo` on an empty stack, and nothing asserts it** — the branch is pre-existing at `database-view.ts:10312` and `embedded-database-renderer.ts:3687`, both bare `Notice`, both uncovered. No run drives a real gallery→board migration either: that path needs an Obsidian `App`, vault and metadata cache. Row-deletion notices at the other two call sites this task also names are unmigrated; still bare `new Notice` |
+| C1 | Notice call sites carrying an action affordance | **0 of 247** — `grep -rn "new Notice(" src --include="*.ts"`, tests excluded; every one is bare | every owned site renders the toast with a clickable action where one is owed | [x] Green: `src/views/toast.ts` built (`showToast`, severity + action + close), 9/9 in `toast.test.ts`, red confirmed by deleting the module first. The migration notice — this leg's owned site — now renders through it (see C2). **Landed at verification:** the constructed-mount lane row AC-001 asks for is in `tools/storybook/verify-placement.mjs` — seven checks on a card built by `showToast` in headless Chrome, each observed red first across three control runs while the other 376 rows in the lane stayed green. Producer registration is closed (ADR-007, Accepted by operator ruling): all five prior `SurfaceRole` values were contradicted by the shipped component, so a sixth, `feedback`, was added and the toast registered under it. `npx tsc --noEmit` (0), `npm test` (1340/1340), `npm run build` (0) and `npm run gate` (26 green, exit 0) all clean |
+| C2 | The migration notice's Undo, and the row-deletion notices' | **no button** — `notice.galleryMigrated` (`src/i18n.ts:1455`) says "Undo to keep it a gallery" and renders through bare `new Notice` (`database-view.ts:2744`, `embedded-database-renderer.ts:764`); the two `notice.deletedRow` sites (`database-view.ts:8358`, `embedded-database-renderer.ts:3243`) the same | Undo present and performing, `nothingToUndo` on an empty stack | [ ] Half green, and both remaining halves are named rather than rounded up. All four call sites now route through `showToast()`, and **two of them carry an Undo**: the migration notices at `database-view.ts:2748-2755` / `embedded-database-renderer.ts:768-774`, whose `scheduleConfigSave()` pushes the config entry their `undoLastEdit()` replays. The deletion notices at `database-view.ts:8354-8371` / `embedded-database-renderer.ts:3236-3251` carry **no action**, by operator ruling on 2026-09-06: a deletion pushes nothing onto either history stack, so the Undo they first shipped with would have replayed an unrelated entry, and a `created` entry on top replays by trashing that file — one press, two deletions. ADR-008 derives it, T018 repairs it. All four read in the final files and clean under `tsc`; the action-and-callback half is lane-proven in C1's row, and a new lane row (`tools/storybook/verify-placement.mjs`, "dismissing the last toast through its close button leaves no card and no live region") proves the toast's own stack empties correctly on dismissal, observed red first by disconnecting the close button (1 card and 1 live region remained) and green again restored. **Unticked because this row's own threshold also includes `nothingToUndo` on an empty EDIT-HISTORY stack, and nothing asserts that branch** — it is a different empty stack from the one the new lane row just closed. The branch is pre-existing at `database-view.ts:10312` and `embedded-database-renderer.ts:3687`, both bare `Notice`, both uncovered, because reaching it needs `this.historyStack` empty inside a real view instance — an Obsidian `App`, vault and metadata cache no harness here constructs |
 | C3 | Confirm sheet's `044` grammar elements | **0 of 7 asserted** — `sheet` declared at `modals/confirm-modal.ts:42`, chrome inherited from `DbModal`, no exported primitive and no grammar row | **7 of 7** on the registered lane row, through **`051`'s** exported confirm primitive (its ADR-003) | [ ] |
 | C4 | Confirm's stacked-pair treatment | **unregistered** — `048` inventory M-4 names the pair; no dim, no scale-back, shared scrim | parent |Δ| ≤ 1px, one scrim between, per registered pair | [ ] |
 | C5 | Distinct empty states | **12 reasons ship** (`empty-state-renderer.ts:24-36`); **0 of 12 is the deleted-relation state** — deleted group field → silent re-group (`database-view.ts:2678`, `:2890`, `:3378`). `050`'s "all conditions render the same state" was false (`design-trueup.md` REQ-009) | the existing 12-to-3 mapping **asserted**, plus the deleted-relation state **built** and pointing at view settings | [ ] |
@@ -127,7 +127,25 @@ and never the pass/fail.
 - [x] CHK-021 [P0] `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0, status read from `$?`
       — `SURFACE_PHASE=055-states-feedback-and-motion npm run gate </dev/null`, exit **0**, **25**
       green, 0 red for a declared reason. Two lanes were red on the first pass and were re-derived
-      by their own writers rather than edited: `screenshots-fresh` and `evidence`
+      by their own writers rather than edited: `screenshots-fresh` and `evidence`.
+      **Re-run at this landing, 2026-09-06**, isolated log with the exit status written to its own
+      file rather than read through a pipe, exit **0**, **26 green / 0 red**. The gate is 26 lanes
+      now, not the 25 the line above recorded; the lane was added on `main` between the two runs.
+      Three lanes went red across the landing's passes and each was fixed at its producer rather
+      than at the lane: `touch-targets` (`db-toast-close` at 18x18 and `db-toast-action` at 30x15,
+      pre-existing shipped classes no fixture had ever drawn, pushed the fixture-pass
+      floor-crossing count from 206 to 209 — re-pinned in
+      `tools/live/touch-targets-baseline.json` with the three controls named, not resized: the
+      operator-scale call that file's own `why` field already reserves); `screenshots-fresh` and
+      `evidence` (`surface-census.json` measured against the pre-registration
+      `surface-contract.ts`, re-derived by running the census, `declared` 5 → 6).
+      **`css-lane` owes nothing here.** No stylesheet edit landed in this leg, and the 8 toast
+      captures are additions rather than movers, so `check-lane` reports `release names all 0
+      changed capture(s)` and exits 0 with the lane held by another phase at
+      `baselineHash ef54a53db80f`, which equals `sha256(styles.css)` truncated to twelve on the
+      landed tree. An earlier pass of this leg appended the 8 to the then-holder's `reviewed` array
+      as a courtesy; three rebases later the lane had changed hands twice and that append was not
+      carried, correctly — the lane asks the release that *moved* a capture to name it
 - [ ] CHK-022 [P0] Every deliverable's negative control was observed **red** before green, with
       every other row staying green while it was red
 - [x] CHK-023 [P1] `npm run replay` holds with reversed 0 — green inside the passing gate run
@@ -151,17 +169,38 @@ and never the pass/fail.
       channel samples differ, max delta **12 of 255**, clustered on the row separator hairlines at a
       regular 88px pitch. That is antialiasing on a low-contrast line sitting on one of the hash's
       own quantisation boundaries — the jitter `pixel-hash.mjs` absorbs everywhere except here. Not
-      a paint change, and not caused by this phase
-- [ ] CHK-026 [P0] Every new or changed rendered state got its scenario registration in the same
+      a paint change, and not caused by this phase. **Re-confirmed at CHK-026's landing**, and again on each of the
+      three rebases that followed it: the final full recapture takes the corpus from `origin/main`'s
+      550 entries to **558**, the toast fixtures' 8 new ones being the whole of the growth, with
+      **0 `pixelHash` movers** across all 550 pre-existing entries and 8 byte-only re-encodes. Read
+      via a direct `pixelHash` diff of the manifest against `origin/main`'s rather than eyeballed,
+      `check-lane` agreeing independently. **One apparent mover was chased rather than waved
+      through** on an intermediate rebase: four `constructed-linked-view-host` captures differed in
+      both `pixelHash` and `layoutHash`, which is the shape of a real paint change. It was neither —
+      the branch was one stylesheet behind `origin/main` at that moment
+      (`styles.css@53d49be6d120` against the tree's `ef54a53db80f`), so the comparison was against a
+      manifest taken on a different stylesheet. Rebasing onto the current tip and recapturing
+      returned 0 movers
+- [x] CHK-026 [P0] Every new or changed rendered state got its scenario registration in the same
       change, and each scenario's `sources` list names the files the capture depicts
-      — **open, and named rather than absorbed.** The toast is a new rendered component and
-      `repo-rules/screenshot-currency.md` §2 wants its scenario in `tools/screenshots/scenarios.mjs`
-      in the same change. That file is not in `spec.md`'s frozen Files to Change, and SCOPE LOCK
-      outranks a rule file, so this landing names the obligation instead of taking it. It is not
-      silent: the verifier does not go red for an unregistered surface, which is exactly why the
-      row stays here. Whoever registers it should check `surface-census` first — `.db-toast`'s
-      severity class comes from a template literal (`db-toast is-${severity}`), so a fixture drawing
-      `is-success` may read as fixture-only markup until the scanner can build it
+      — **closed.** Two hand-fixture scenarios, `chrome-toast-success` (success severity, with an
+      Undo action, mirroring the migration notice's real copy) and `chrome-toast-error` (error
+      severity, no action row), landed in `tools/screenshots/scenarios/chrome.mjs`, each `sources:
+      ["src/views/toast.ts"]`. `surface-census` was checked first, per the residual's own warning:
+      `SURFACE_WORDS` (`menu|popover|panel|sheet|modal|dropdown|picker|peek|tooltip`) does not match
+      `toast`, so `db-toast`'s severity class — a template literal in the source
+      (`` `db-toast is-${severity}` ``) — never enters either the rendered or the buildable
+      inventory, and the census stayed green with no change (`PASS`, 6 declared producers, 0
+      fixture-only). `.db-toast-stack` docks `position: fixed`, the same failure mode
+      `chrome-selection-status-bar` already names — an element capture of a fixed-position surface
+      measures `#shot`'s own box, which a `position: fixed` child contributes no height to — so both
+      scenarios carry the same `captureCss` override that surface used, undoing only positioning.
+      Captured with `node tools/screenshots/capture.mjs --only chrome-toast-success` and `--only
+      chrome-toast-error` (both themes, both devices, 8 PNGs), then a full `npm run screenshots` to
+      write the two manifest entries — a partial run never rewrites `manifest.json` by design. Each
+      PNG was opened and read: the success card shows the check glyph, the full migration copy and
+      an underlined Undo row; the error card shows the alert-triangle glyph and no action row at all
+      (`:empty` hiding it, not a hidden gap)
 <!-- /ANCHOR:verification -->
 
 ---
@@ -188,7 +227,7 @@ Nothing in this repository closes these. An agent never ticks one.
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 19 | 6/19 |
+| P0 Items | 19 | 7/19 |
 | P1 Items | 4 | 2/4 |
 | P2 Items | 0 | 0/0 |
 

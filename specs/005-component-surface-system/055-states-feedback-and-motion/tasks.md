@@ -71,11 +71,14 @@ A task missing any of the three is not ready to start.
       migration notice (`database-view.ts`, `embedded-database-renderer.ts`) is the owned site this
       leg migrates off bare `new Notice`; the row-deletion notices T003 also names are not touched
       here. Producer-registry registration (`surface-contract.ts`'s closed `SurfaceProducerId`
-      list) is **escalated, not deferred** — see ADR-007. Every one of the five `SurfaceRole`
-      values is contradicted by the shipped component: `menu` declares outside-pointerdown/escape
-      dismissal, roving focus and a 320px cap against a surface that dismisses on explicit action
-      or its own timer, takes no focus, and measures 384px. Writing the entry needs a sixth role or
-      a ruling that transient feedback sits outside the registry, and both are the operator's.
+      list) is **closed, 2026-09-05, by operator ruling on ADR-007**: a sixth `SurfaceRole`,
+      `feedback`, declares its own defaults (dismissal by explicit action or timeout, no focus,
+      `role-declared` width) rather than the `menu` role's outside-pointerdown/escape dismissal,
+      roving focus and 320px cap — all three of which the shipped component contradicted. The
+      closed-registry test in `surface-contract.test.ts` was extended to six entries and observed
+      red before the role and the `"toast"` entry landed; `verify-placement.mjs`'s
+      registry-iteration lane gained the opener its own "arrives red until driven" comment
+      predicted, and passed on the same run.
       Red confirmed by deleting `toast.ts` and re-running `toast.test.ts` (import failure);
       green: 9/9. **Landed at verification, 2026-09-05:** the constructed-mount lane row AC-001
       names is now in `tools/storybook/verify-placement.mjs` — seven checks over severity glyphs,
@@ -100,19 +103,48 @@ A task missing any of the three is not ready to start.
       `notice.galleryMigrated` through the toast with its Undo action wired to
       `undoLastEdit`; same for the row-deletion notices at `database-view.ts:8314` and
       `embedded-database-renderer.ts:3208`.
-      **Half closed, 2026-09-05, and the half is named rather than rounded up.** Both
-      `notice.galleryMigrated` sites now raise the toast with an Undo wired to
-      `this.undoLastEdit()` — `database-view.ts:2748-2755` (standalone) and
-      `embedded-database-renderer.ts:768-774` (embed) — reusing the existing
-      `notice.nothingToUndo` empty-stack report rather than rebuilding it. The **two row-deletion
-      notices are untouched**, so this task stays `[ ]`. What is still unobserved on the half that
-      landed: no run drives a real gallery→board migration end to end, because that path needs an
-      Obsidian `App`, a vault and a metadata cache. The component's action and callback are
-      lane-proven; the two call sites are proven by reading the final files and by `tsc`.
+      **All four owned sites now route through the toast, 2026-09-05, but only two of them carry an
+      Undo, and the reason the other two do not is a defect this task found rather than shipped.**
+      The `notice.galleryMigrated` sites (`database-view.ts:2748-2755`,
+      `embedded-database-renderer.ts:768-774`) raise the toast with an Undo wired to
+      `this.undoLastEdit()`, and that Undo is correct: the migration sets `pendingUndoLabel` and
+      calls `scheduleConfigSave()`, so a config history entry exists for the replay to find. The
+      `notice.deletedRow` sites (`database-view.ts:8354-8371`,
+      `embedded-database-renderer.ts:3236-3251`) raise the toast **with no action at all**, by
+      operator ruling on 2026-09-06 after landing verification derived that the Undo shipped there
+      first could not work — see ADR-008. A deletion pushes nothing onto either history stack, so
+      the button would have replayed an unrelated entry, and a `created` entry on top replays by
+      trashing that file. Removing it is the smaller half of the repair; the larger half, making a
+      deletion undoable at all, is T018. A new lane row (`tools/storybook/verify-placement.mjs`,
+      "dismissing the last toast through its close button leaves no card and no live region")
+      proves the toast's own stack empties on dismissal — observed red first by disconnecting the
+      close button, green again restored. This task stays `[ ]` because its own threshold's
+      `nothingToUndo` branch is a different empty stack, the edit history rather than the toast's:
+      no run drives a real gallery→board migration end to end, because reaching an empty
+      `this.historyStack` needs an Obsidian `App`, a vault and a metadata cache no harness here
+      constructs. The component's action and callback are lane-proven; all four call sites are
+      proven by reading the final files and by `tsc`.
       **Threshold:** the Undo button appears with the notice and performs the undo — or reports
       `notice.nothingToUndo` (`src/i18n.ts:1484`) when the stack is empty, never a silent no-op.
       **Red first:** the notice renders with no button at all today.
       **Capture:** none (`src/views/database-view.ts`, `src/views/embedded-database-renderer.ts`)
+- [ ] T018 [P0] **REQ-055-1 — a deletion history entry with redo semantics in both classes, then
+      re-attach Undo.** Opened 2026-09-06 by ADR-008. `deleteRow` is undoable in neither class
+      today: `type HistoryEntry` (`database-view.ts:351`) and `type EmbedHistoryEntry`
+      (`embedded-database-renderer.ts:150`) have no kind for a deletion, and neither `deleteRow`
+      calls `pushHistory`. Add one — read the file's content before `trashNote` the way
+      `removeCreatedFile` already does (`database-view.ts:10395-10402`), push a `deleted` entry
+      carrying the path and that snapshot, restore it on undo and re-trash it on redo — then put
+      the Undo action back on the two `notice.deletedRow` toasts T003 stripped.
+      **Threshold:** deleting a row, then pressing the toast's Undo, restores that row's file at its
+      original path with its original content, and pressing Redo trashes it again; with the history
+      stack otherwise empty the Undo restores that deletion and nothing else. The three behaviours
+      ADR-008 names are each unreachable afterwards.
+      **Red first:** delete a row while a `created` entry sits on top of the stack and press Undo —
+      the created file is trashed and the deleted one is not restored. That is the current tree, and
+      it is why T003 removed the button rather than leaving it.
+      **Capture:** none (`src/views/database-view.ts`, `src/views/embedded-database-renderer.ts`)
+
 - [ ] T004 [B] [P1] **REQ-055-1 — unify the two undo shapes.** `showOperationResult`
       (`showOperationResult`, called at `database-view.ts:9433-9437`) and the selection bar's undo (`database-view.ts:7719`) render the
       toast component as placements, keeping their positions.

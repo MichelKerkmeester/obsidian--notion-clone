@@ -46,15 +46,25 @@ describe("surface contract", () => {
       focusMode: "return-to-parent",
       width: { kind: "fixed", preferredWidth: 292 },
     });
+    // Neither an action sheet nor a dialog: a toast reports on an operation without asking the
+    // reader to answer it, so it never takes focus and dismisses itself as readily as it waits for
+    // a click. `dialog`'s width policy is the nearest fit — a fixed geometry declared by the role,
+    // not derived from the fixed/bounded scales the other floating surfaces share.
+    expect(SURFACE_ROLE_DEFAULTS.feedback).toMatchObject({
+      dismissal: ["explicit-action", "timeout"],
+      focusMode: "none",
+      width: { kind: "role-declared" },
+    });
   });
 
-  it("keeps the verified producer registry closed over five entries", () => {
+  it("keeps the verified producer registry closed over six entries", () => {
     expect(Object.keys(SURFACE_REGISTRY)).toEqual([
       "column-menu",
       "owned-menu",
       "record-detail-panel",
       "filter-panel",
       "date-value-picker",
+      "toast",
     ]);
     expect(SURFACE_REGISTRY["column-menu"]).toEqual({ role: "menu", mount: "bodyPortal", host: "body" });
     expect(SURFACE_REGISTRY["owned-menu"]).toEqual({ role: "menu", mount: "bodyPortal", host: "body" });
@@ -67,6 +77,10 @@ describe("surface contract", () => {
     // depends on where a surface is mounted. Any measurement rerun on this has to put the leaf away
     // from the viewport origin, or the offset it is testing for is zero by construction.
     expect(SURFACE_REGISTRY["date-value-picker"]).toEqual({ role: "menu", mount: "local", host: "container" });
+    // `showToast` builds its stack on `doc.body` on first use, the same body-portal idiom
+    // `owned-menu` uses, so a measurement taken against the registry describes where it actually
+    // lands rather than a role of convenience.
+    expect(SURFACE_REGISTRY["toast"]).toEqual({ role: "feedback", mount: "bodyPortal", host: "body" });
   });
 
   it("defines a versioned plugin token key list", () => {

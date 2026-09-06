@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-06T00:21:33.973Z",
+  "measuredAt": "2026-09-06T00:29:23.392Z",
   "inputs": {
     "styles.css": "ef54a53db80f",
     "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -11,7 +11,7 @@
   },
   "fixture": {
     "links": 112,
-    "scenarios": 71
+    "scenarios": 73
   },
   "constructed": {
     "links": 1268,

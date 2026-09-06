@@ -79,6 +79,7 @@ literal, and everything visual is derived from it.
 | `dialog` | A decision that must be answered before continuing | explicit action only | trapped, mandatory | role-declared |
 | `sheet` | A phone presentation: docked to the bottom edge, full width, over the host chrome | scrim tap, Escape, back, drag-to-dismiss | trapped | 100% |
 | `submenu` | A `menu` opened *from* a row of another surface, in the same LIFO group | Escape closes innermost only | returns to the parent row | 292px |
+| `feedback` | A transient report on a completed or failed operation — never a question the reader must answer | explicit action (close, or an inline action), or its own timer | none — it must not interrupt what the reader was doing | role-declared (384px) |
 | `checkbox` | Not a floating surface, but the same declaration discipline (§7) | n/a | n/a | role picks size only |
 | `row` | A line inside a surface (§6) | n/a | n/a | fills its surface |
 | `target` | Where a record opens: a leaf, a modal, or a phone sheet | per its host | per its host | per its host |
