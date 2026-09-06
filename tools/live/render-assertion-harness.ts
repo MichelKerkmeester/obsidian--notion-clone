@@ -414,6 +414,13 @@ export interface ScenarioSpec {
    */
   recordIconColumn?: boolean;
   /**
+   * Opt-in, renderer "calendar" only: `showRecordIcon` plus a real `renderRecordIcon` bag
+   * member on one event's row, mirroring the table's own `recordIconColumn` wiring, so a chip
+   * with an icon actually exists somewhere in the capture corpus rather than every calendar
+   * scenario stubbing the bag member to `() => null`.
+   */
+  calendarRecordIcon?: boolean;
+  /**
    * Opt-in, renderer "table" only: wires the `setupColumnHeader` bag member to a real
    * `ColumnHeaderController.setup` — the same wiring `database-view.ts` uses — so every header
    * carries its production menu trigger, resize handle and drag affordances instead of the
@@ -2468,10 +2475,26 @@ export function runRenderAssertions(
     );
     if (scenario.captureData) applyCaptureOptions(columns, rows);
     const baseConfig = makeCalendarConfig(columns, scale);
+    const iconKey = scenario.calendarRecordIcon
+      ? columns.find((col) => col.type === "text" && col.key !== "file.name")?.key
+      : undefined;
     const config: ViewConfig = scenario.emptyState
       ? { ...baseConfig, calendarStartDateField: undefined }
-      : baseConfig;
+      : scenario.calendarRecordIcon
+        ? { ...baseConfig, showRecordIcon: true, recordIconFieldOverrideEnabled: true, recordIconField: iconKey }
+        : baseConfig;
     const bag = scenario.bag === "file-view" ? fileViewCalendarBag(columns) : embedCalendarBag(columns);
+    if (scenario.calendarRecordIcon) {
+      // Every bench row already carries an event date (calendar-render-bench.ts's makeRows sets
+      // it unconditionally), so the first row is always a real, drawn event.
+      const fm = (rows[0] as unknown as { frontmatter: Record<string, unknown> }).frontmatter;
+      if (iconKey) fm[iconKey] = "☁️";
+      bag.renderRecordIcon = (parent, row, cfg, compact) => renderRecordIcon(
+        parent,
+        iconKey ? row.frontmatter[iconKey] : undefined,
+        { compact: !!compact, editable: false, tooltip: "Icon" },
+      );
+    }
     bagKeys = Object.keys(bag).sort();
     const renderer = new CalendarRenderer(bag);
     if (control === "per-item" && scale === "week") armPerItemRead(bag);

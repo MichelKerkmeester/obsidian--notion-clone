@@ -326,7 +326,7 @@ const SPEC_OPTIONS = [
   "toolbarPopover", "searchText", "rules", "ruleKind", "filterDepth", "calendarHint",
   "recordBodyVariant", "editorKind", "includeTime", "boardExtensions", "boardImageField",
   "boardEmptyColumn", "tableGroups", "tableFooter", "fullStatusPalette",
-  "recordIconColumn", "columnHeaderController", "longHeaderLabel", "migratedFromList",
+  "recordIconColumn", "calendarRecordIcon", "columnHeaderController", "longHeaderLabel", "migratedFromList",
   "viewConfigVariant", "boardCardFieldsHidden", "tableColumnCount", "recordPlacement",
 ];
 
@@ -403,9 +403,10 @@ export const CONSTRUCTED_SCENARIOS = [
   constructedScenario("calendar-month", {
     renderer: "calendar",
     scale: "month",
+    calendarRecordIcon: true,
     title: "Calendar month view (constructed)",
     sources: constructedSources("src/views/calendar-renderer.ts", "tools/bench/calendar-render-bench.ts"),
-    note: "The shipped month grid anchored on the bench's event dates, with its unscheduled backlog.",
+    note: "The shipped month grid anchored on the bench's event dates, one chip carrying a real leading icon; the unscheduled drawer is absent because every bench row has an event date.",
   }),
   constructedScenario("calendar-week", {
     renderer: "calendar",

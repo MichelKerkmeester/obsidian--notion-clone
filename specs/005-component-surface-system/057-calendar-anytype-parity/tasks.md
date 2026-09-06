@@ -280,12 +280,27 @@ _memory:
       than silently broken, and its probe now checks the drawer's absence instead. `npm test`
       1419/1419 (net +1), `npx tsc --noEmit` exit 0, gantt confirmed unmoved by MD5 and a zero-line
       diff. (`styles.css`, `src/views/calendar-renderer.ts`)
-- [ ] T016 **Verify the chip's leading icon on a capture that carries one.** The design read adopts
+- [x] T016 **Verify the chip's leading icon on a capture that carries one.** The design read adopts
       the chip's leading icon and the `Show icon` toggle that gates it. The toggle landed and is
       sized and coloured, but **no chip in any of the 28 recaptured calendar images renders an
       icon**, so the icon half of that row is currently unverified rather than confirmed — the
       fixtures and constructed scenarios may simply carry no icon data. Either give one scenario a
       record icon or record the icon row as unverifiable from this corpus. (`tools/screenshots/scenarios/temporal.mjs`)
+      **Done 2026-09-06.** The gap was upstream of any fixture: every calendar scenario's harness
+      bag (`tools/live/render-assertion-harness.ts`'s `fileViewCalendarBag`/`embedCalendarBag`)
+      stubs `renderRecordIcon: () => null`, so no calendar capture could ever have exercised the
+      real icon path regardless of what data a fixture carried. Added a new opt-in `ScenarioSpec`
+      option, `calendarRecordIcon`, mirroring the table's own `recordIconColumn` wiring: when set,
+      the config takes `showRecordIcon: true` plus a `recordIconField` pointed at a text column,
+      one bench row's frontmatter carries an emoji token, and the bag's `renderRecordIcon` calls
+      the real `renderRecordIcon` helper instead of the stub.
+      `constructed-calendar-month` (`tools/screenshots/constructed-scenarios.mjs`) now sets this
+      option; its note is corrected at the same time ("with its unscheduled backlog" was already
+      stale — every bench row carries an event date, so the drawer was always empty and T015 R7
+      now omits it entirely). Recaptured: every chip in
+      `constructed-calendar-month-desktop-light.png` carries a leading icon, one the real emoji
+      variant and the rest the default file-icon fallback. `npm test` 1419/1419,
+      `npx tsc --noEmit` exit 0, gantt confirmed unmoved by MD5.
 <!-- /ANCHOR:phase-2 -->
 
 ---
