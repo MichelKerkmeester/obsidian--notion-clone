@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/055-states-feedback-and-motion"
-    last_updated_at: "2026-09-06T14:10:00Z"
-    last_updated_by: "landing-verification"
-    recent_action: "ADR-008 verified on seven hostile cases; the seventh failed and was repaired"
-    next_safe_action: "Give the shared empty card its own box-sizing where that component is owned"
+    last_updated_at: "2026-09-06T18:00:00Z"
+    last_updated_by: "loadmore-lanes"
+    recent_action: "ADR-009 Accepted: a deleted source gets its own state with a Choose database action"
+    next_safe_action: "Build the source-missing empty state ADR-009 records (T005)"
     blockers: []
     key_files:
       - "src/views/toast.ts"
@@ -958,3 +958,98 @@ the toast's `action:` property without reverting the history-entry plumbing woul
 original destructive path (an Undo that can trash a second file), which is exactly the state this
 ADR exists to keep closed.
 <!-- /ANCHOR:adr-008 -->
+
+---
+
+<!-- ANCHOR:adr-009 -->
+
+## ADR-009: A deleted source is a third condition, and it gets its own empty state
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted — recorded here, built by a follow-up leg |
+| **Date** | 2026-09-06 |
+| **Deciders** | Operator ruling; recorded by the landing verification that found the contradiction |
+
+### Operator ruling (2026-09-06)
+
+> New "source missing" state
+
+A distinct empty-state flavour with its own copy and a **"Choose database"** action. The other two
+states keep their meaning.
+
+---
+
+### Context — two of this packet's own documents read one condition two ways
+
+T005 and AC-005 both describe what a view renders when its source folder is missing or deleted, and
+they disagree:
+
+- **T005's reading:** it is `getEmptyStateReason`'s `sourceCount === 0` branch, which returns
+  `no-matching-data` — the same reason a view whose source exists and matched nothing gets
+  (`src/views/empty-state-renderer.ts:217`).
+- **AC-005's reading:** it is `no-database`, the reason the hero path chooses for a view with no
+  database at all (`src/views/empty-state-renderer.ts:318`).
+
+Both readings are about the same condition and only one could be the threshold, so AC-005 could not
+close on either without settling it by assertion. The row was escalated rather than picked.
+
+### Decision
+
+**Neither reading wins. Both are superseded.** A view whose source was deleted or is missing is a
+*third* condition, and it renders a fourteenth `EmptyStateReason` of its own:
+
+| Condition | Reason | Meaning after this ADR |
+|---|---|---|
+| The view names a source that no longer resolves | **the new source-missing flavour** | Its own copy, plus a **"Choose database"** action |
+| The view never named a database | `no-database` | Unchanged |
+| The source resolves and nothing matched | `no-matching-data` | Unchanged |
+
+The two existing reasons keep their meaning exactly. What changes is that neither of them is asked
+to carry a condition it was not written for — which is what produced the contradiction rather than
+either document being careless.
+
+### Red, measured on the landed tree (2026-09-06)
+
+- `EmptyStateReason` holds **13** members and none is the source-missing flavour
+  (`src/views/empty-state-renderer.ts:25-38`).
+- `getEmptyStateReason` maps `diagnostics.sourceCount === 0` to `"no-matching-data"`
+  (`src/views/empty-state-renderer.ts:217`), so a deleted source is today indistinguishable from a
+  no-match view at the reason level.
+- No **"Choose database"** action exists anywhere in `src/` (`rg -n "chooseDatabase|Choose database" src/`
+  → no matches).
+
+**Threshold:** `EmptyStateReason` gains a fourteenth member for the missing source; the copy names
+the action rather than the absence; the card carries a primary **"Choose database"** action;
+`getEmptyStateReason` routes `sourceCount === 0` there rather than to `no-matching-data`; and a lane
+row asserts the three flavours are distinct, with a negative control that collapses two of them and
+requires red. The `050` three-tier ladder places it at **tier 2** — a 48px illustration over one
+primary-colour line — since it is an action-carrying state without a body paragraph.
+
+### Scope — this ADR is a record, not an implementation
+
+**Not built here.** The leg that recorded this ruling was a landing verification, and building a
+fourteenth reason with its copy, its action wiring in both renderer classes, its i18n entries in
+three locales and its lane row is a feature, not a reconciliation. It is the follow-up leg's, and
+T005 carries it.
+
+### Consequences
+
+- **Positive:** AC-005's first clause becomes checkable. Two documents that could not both be right
+  now describe the same three conditions.
+- **Negative:** AC-005 and T005 both move *further* from Met than they read before — the row now
+  owes a state that does not exist, where previously it owed a choice between two that do.
+- **Neutral:** `group-relation-deleted`, AC-005's third clause, is unaffected; it landed
+  2026-09-06 and stays landed.
+
+### Implementation
+
+**What changed here:** `tasks.md` T005 and `acceptance-criteria.md` AC-005, both rewritten off the
+contradiction onto the new flavour with its threshold and its red value; `roadmap.md` §6A carries
+the operator's words. No code.
+
+**How to roll back**: delete this ADR and restore T005 and AC-005 to their contradicting readings —
+which is the state this fixes, so there is nothing to preserve.
+<!-- /ANCHOR:adr-009 -->

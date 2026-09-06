@@ -226,46 +226,53 @@ A task missing any of the three is not ready to start.
 
 ### L2 — empty-state flavours and chart absorption
 
-- [ ] T005 [B] [P0] **REQ-055-5 — the two empty-state flavours plus the deleted-relation state**
-      (050 REQ-009 at AC-009's threshold, verbatim). `no-source` renders when the source is missing
-      or deleted; `no-matches` when the source exists and nothing matched; `deleted-relation`
-      names the missing group field and points at view settings. Each with its per-layout add
-      affordance.
-      **Threshold:** three distinct rendered states, asserted by a lane row; negative control
-      collapses two flavours into one and requires red.
-      **Red first:** `getEmptyStateReason` maps `sourceCount === 0` to the same
-      `no-matching-data` reason a no-match view gets (`empty-state-renderer.ts:210-211`), and a
-      deleted board group field silently re-groups (`database-view.ts:2678`, `:2890`, `:3378`).
+- [ ] T005 [B] [P0] **REQ-055-5 — three empty-state flavours, one of them new**
+      (050 REQ-009 at AC-009's threshold, verbatim). A **missing or deleted source** renders its
+      own flavour with its own copy and a primary **"Choose database"** action; `no-matching-data`
+      renders when the source resolves and nothing matched; `group-relation-deleted` names the
+      missing group field and points at view settings. Each with its per-layout add affordance.
+      **Rewritten 2026-09-06 on the operator's ruling — verbatim: *"New 'source missing' state"*
+      (`decision-record.md` ADR-009, `roadmap.md` §6A).** This row and AC-005 had been reading the
+      deleted-source condition two ways, this row as `getEmptyStateReason`'s
+      `sourceCount === 0 -> no-matching-data` and AC-005 as the hero path's `no-database`. **Both
+      readings are superseded.** A deleted source is a third condition with its own state; the
+      other two reasons keep their meaning unchanged.
+      **Threshold:** `EmptyStateReason` gains a fourteenth member for the missing source, its copy
+      names the action rather than the absence, the card carries a primary "Choose database"
+      action, `getEmptyStateReason` routes `sourceCount === 0` there instead of to
+      `no-matching-data`, and a lane row asserts the three flavours render distinctly; negative
+      control collapses two flavours into one and requires red.
+      **Red value, measured on the landed tree 2026-09-06:** `EmptyStateReason` holds **13**
+      members and none is the source-missing flavour (`empty-state-renderer.ts:25-38`);
+      `getEmptyStateReason` returns `"no-matching-data"` for `sourceCount === 0`
+      (`empty-state-renderer.ts:217`), so a deleted source is indistinguishable from a no-match view
+      at the reason level; and **no "Choose database" action exists anywhere in `src/`**
+      (`rg -n "chooseDatabase|Choose database" src/` -> no matches). Target: 14 members, the
+      routing moved, the action present.
       **Capture:** the desktop `anytype-inlinecollection-empty-dark.png` renders **no** empty block
       at all, so the design comes from the iOS set's **three-tier ladder** — tier 1
       `mobile/anytype-mobile-sheet-view-filters-empty-dark.png`, tier 2
       `mobile/anytype-mobile-sheet-grid-cell-objecttype-empty-dark.png`, tier 3
       `mobile/anytype-mobile-sheet-cell-multiselect-empty-dark.png`, measured in `design-trueup.md`
-      §3. The **deleted-relation state is still not captured on either platform** and stays
-      designed from `047` §9 with the gap named; its destination is proved by
+      §3. The new source-missing flavour sits at **tier 2** — a 48px illustration over one
+      primary-colour line — since it carries an action and no body paragraph. The
+      **deleted-relation state is still not captured on either platform** and stays designed from
+      `047` §9 with the gap named; its destination is proved by
       `mobile/anytype-mobile-sheet-kanban-groupby-dark.png` (`src/views/empty-state-renderer.ts`,
-      `src/views/database-view.ts`)
-      **Third state landed with the `050` sibling, 2026-09-06 (`f61b1dc9`, now on main); the first
-      two did not, so this stays `[ ]`.** `group-relation-deleted` is a thirteenth
-      `EmptyStateReason` with its own title, body and `folder-x` icon
-      (`empty-state-renderer.ts:38`, copy at `:205-209`), selected by the pure
+      `src/views/database-view.ts`, `src/views/embedded-database-renderer.ts`, `src/i18n.ts`)
+      **Third clause landed with the `050` sibling, 2026-09-06 (`f61b1dc9`, now on main).**
+      `group-relation-deleted` is a thirteenth `EmptyStateReason` with its own title, body and
+      `folder-x` icon (`empty-state-renderer.ts:38`, copy at `:205-209`), selected by the pure
       `isBoardGroupFieldMissing` (`:231-234`) and rendered from both classes with a primary
       "Open view settings" action (`database-view.ts:10627-10636`,
-      `embedded-database-renderer.ts:2025-2038`). Asserted by
-      `empty-state-renderer.test.ts` — *"gives every reason its own title and body, including the
-      deleted-group-relation state"* (`:284`), which also asserts it is distinct from
-      `empty-group`, plus three `isBoardGroupFieldMissing` cases at `:302-320`.
-      **What is not closed, and a contradiction between two of this packet's own documents.** This
-      row's first red — `getEmptyStateReason` returning `no-matching-data` for `sourceCount === 0`,
-      the same reason a no-match view gets — is unchanged on the landed tree
-      (`empty-state-renderer.ts:266`). AC-005's own Today cell reads that differently: it treats
-      `no-database` as the "target" flavour, and `no-database` is chosen on the hero path
-      (`:318`) for a view with no database at all, which is not the same condition as a view whose
-      **source folder** was deleted. So either a deleted source is a `no-database` (AC-005's
-      reading, and this row's first red is stale) or it is a `no-matching-data` (this row's
-      reading, and AC-005 is Met only on its third clause). **Not resolved here**, because picking
-      one silently would settle a threshold by assertion; the next leg on this row decides, and
-      the deleted-relation half is landed either way.
+      `embedded-database-renderer.ts:2025-2038`). Asserted by `empty-state-renderer.test.ts` —
+      *"gives every reason its own title and body, including the deleted-group-relation state"*
+      (`:284`), which also asserts it is distinct from `empty-group`, plus three
+      `isBoardGroupFieldMissing` cases at `:302-320`. That clause is unaffected by the ruling.
+      **Not implemented by the leg that recorded the ruling**, which was a landing verification:
+      a fourteenth reason with its copy, its action wiring in both renderer classes, its i18n
+      entries in three locales and its lane row is a feature, not a reconciliation. The follow-up
+      leg on this row builds it.
 - [x] T006 [P0] **REQ-055-6 — absorb chart's private vocabulary.** Done 2026-09-06.
       `renderEmptyState` now calls `EmptyStateRenderer.renderCard`, mapping each of chart's six
       reasons onto the nearest shared `EmptyStateReason` for its default title only (`no-columns`
