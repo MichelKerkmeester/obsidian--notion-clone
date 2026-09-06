@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T20:30:00Z"
     last_updated_by: "land-057-rebuild-leg-p1"
-    recent_action: "P1 rows landed on P0/T020; corpus recaptured; twelve of fifteen G rows Met"
-    next_safe_action: "Sweep G6 live at a custom column width; add a second-theme capture for G12"
+    recent_action: "ADR-007 gains the migration trace; 13 of 15 G rows Met"
+    next_safe_action: "Add a third theme profile for G12, then take G15"
     blockers: []
     key_files:
       - "src/views/calendar-renderer.ts"
@@ -29,12 +29,9 @@ _memory:
       - "ADR-002 is ruled: keep week and day, styled to the month grid"
       - "The calendar's thresholds are per-element because it carries zero pm-* classes"
       - "Parity by default is inherited from 051 ADR-007 without re-asking"
-      - "ADR-002's implementation half is partly landed: the weekend tint and nav cluster carried to week and day, the rule colour and today marker did not"
       - "ADR-002's colour question is answered: the timed blocks flatten to chip ink, carried as T017"
       - "T017 landed: the week/day timed block reads the month chip's flat ink, no separator rule needed since the slot lines show through"
-      - "The 2026-09-06 gestalt read changes no ADR: ADR-001 through ADR-005 stand unaltered"
       - "ADR-006 ruled: the unscheduled surface is a header chip + shared owned-menu popover/sheet, not a band; A4's disposition (kept, reachable) is unchanged, only its shape moved"
-      - "The multi-day range-text defect was a title flex-grow with nothing bounding it on a wide spanning segment, not a text-align/justify-content bug — fixed with :has(), superseded for the month grid's own chips by the per-day rebuild, still live for the day popover and the drag ghost"
       - "ADR-007 ruled: the week defaults to Monday regardless of locale, the setting stays an override, landed alongside the rebuild leg"
       - "ADR-005's amendment (stagger overlaps, revert to a 45px minimum column) is landed, not only ruled"
 ---
@@ -539,6 +536,17 @@ was never coupled to a hardcoded Sunday-first assumption. `calendar-pinned-value
 new default with a negative control (the removed locale fallback's own value, Sunday, must not
 reappear for an unset config). The toolbar's "First day of week" control's own "auto" label changes
 from "follow the system locale" to naming the new default plainly, in every shipped locale string.
+
+**The migration path was traced rather than assumed, because the ruling only holds if a saved
+Sunday can be told apart from an inherited one.** It can, and the config shape is why. The field is
+typed `0 | 1 | 6 | undefined` (`src/data/types.ts:701`), and **both** ends of persistence normalize
+anything else to `undefined`: `data-source.ts:1084` on read and `:1309` on write. The only writer is
+the toolbar's own select (`calendar-toolbar-renderer.ts:387-389`), whose "auto" option writes
+`undefined`, and no code path anywhere ever persisted the value the removed `Intl` lookup derived —
+it was computed at render time and thrown away. So an existing vault that never touched the control
+carries `undefined` and now reads Monday, while a vault where the operator explicitly chose Sunday
+carries a literal `0` and still reads Sunday. There is no ambiguous third state to disambiguate and
+no migration to write; the defect this check was looking for does not exist in this codebase.
 
 **Alternatives rejected.** Leaving the fallback locale-driven, as AC-002 originally called it: this
 is the status quo the operator's ruling replaces, given the review's own count (twenty out of

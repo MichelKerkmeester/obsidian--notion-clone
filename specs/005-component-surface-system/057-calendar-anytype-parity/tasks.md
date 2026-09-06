@@ -12,13 +12,13 @@ _memory:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T20:30:00Z"
     last_updated_by: "land-057-rebuild-leg-p1"
-    recent_action: "Corpus recaptured; G1-G15 re-measured: twelve Met, three Unmet"
-    next_safe_action: "Sweep G6 live at a custom column width; add a second-theme capture for G12"
+    recent_action: "G1-G15 re-verified: 13 Met, 2 Unmet; T020 re-measured"
+    next_safe_action: "Add a third theme profile for G12, then take G15"
     blockers:
       - "AC-010 is the operator's own device read and nothing in this repository can close it"
       - "Five AC-002 sub-rows stay pixel read owed — a static capture cannot answer hover/focus/press/drag/overflow"
       - "AC-004's layout-tile panel has no measured value in design-trueup.md and is named out of scope"
-      - "G6 needs a live pane-width sweep on a custom-column-width view; G12 needs a second-theme capture; G15 is P2-1"
+      - "G12 needs a second-theme capture; G15 is the review's P2-1"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "src/views/calendar-toolbar-renderer.ts"
@@ -34,19 +34,12 @@ _memory:
     completion_pct: 90
     open_questions: []
     answered_questions:
-      - "T001 landed: nine elements trued, both absences established across twenty"
-      - "T002 landed: C3, C8 and C9 turned into figures on cc5a7ff2, 2026-09-06"
       - "T004-T007 landed: the month grid retargeted, AC-003 Met, the gantt confirmed unmoved"
-      - "AC-002 was claimed Met and is reopened: seven measured residuals are carried as T015 and T016"
       - "T015 R1-R7, T016, T008, T009 all landed: gate 26 green, gantt confirmed unmoved throughout"
       - "ADR-002 colour question answered by the operator: flatten the timed blocks to chip ink"
       - "T017 landed: 0 device px of the former per-event fills and accent bar across the four recaptured files"
-      - "T017's flatten costs the phone an overlap-column block: carried as T018, the remedy is the operator's"
-      - "T018 landed: ADR-005 records the 80px minimum and why the month cell was not enough"
       - "The operator read 0.0.29 beside Anytype and reopened the phase on a gestalt judgement"
-      - "T021 landed: the unscheduled band is a header chip (ADR-006); a multi-day title's flex-grow is bounded as an interim, superseded by T019's per-day span rebuild"
-      - "P1-1 removes the mini-calendar button entirely (redundant beside the month/year selects) rather than only restyling it, so the header holds four controls, not five; the switcher itself is restyled as plain tabs, split into its own class family so the timeline/gantt's bordered pill is untouched"
-      - "P1-6's flex-basis fix is scoped to the week/day timed-event chip, not the month grid's own chip: the month grid's 8ch floor with shrink disabled is a swept, measured fix (T018-adjacent) that a blanket relax would have regressed"
+      - "The month chip keeps its 8ch floor: measured both ways, the wider clip beats an ellipsis by ~9 CSS px of glyph"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Calendar Anytype Parity
@@ -749,6 +742,32 @@ title and 44x44 close on phone.
       **G12** needs a second-theme capture the harness does not have yet; **G15** is the review's
       own P2-1, ranked after this leg's P0/P1 scope. This row stays unticked on that basis — its own
       "Green when" clause asks for all fifteen.
+
+      **Independently re-verified 2026-09-06, and the re-verification was not a formality.** Every
+      G row was re-read from the committed captures at DPR 2 and, where a capture cannot answer the
+      question, from a live headless-Chromium mount of the shipped renderer. Four rows did not
+      survive that read as written:
+      **G14** claimed the slot lines and the day columns were "identical in extent by construction";
+      measured, the hour lines ran device x 184 -> 2041 against columns running 184 -> 2783, so the
+      whole weekend pair carried no horizontal ruling. Cause: `.db-calendar-time-columns` is a
+      `z-index: 1` layer above the slot lines and its opaque weekend tint covered them. Fixed by
+      splitting the tint into a flat form for the month cell and a wash for the time grid, with a
+      negative control run both ways.
+      **G6** was closed by a live sweep at 1000 / 1200 / 1440 on a config carrying
+      `calendarColumnSizeMode: "custom"` — and the sweep found the month weekday header still
+      attaching a column-resize handle whose drag set `--db-calendar-col-width` on the month wrap,
+      the operator's own clipped-seventh-column red, reachable mid-drag. The handle is removed from
+      the month header; week and day keep theirs.
+      **G5** was overrunning its own column on the phone: the `+N more` line is a grid item, its
+      min-width was auto, and it ran 13 CSS px past its column's rule. Bounded and re-measured.
+      **G2**'s evidence claimed the week-grid scan lands on the identical `(45,45,45)`; it lands on
+      `(44,44,44)` for the hour lines and `(36,36,36)` for the half-hour lines — one token at two
+      declared opacity tiers, which the review's own P1-3 fix allows. The row is corrected rather
+      than re-asserted.
+      **Thirteen of fifteen now close: G1-G11, G13, G14.** This row still stays unticked, because
+      its "Green when" clause asks for all fifteen and **G12** (a second-theme *capture* in the
+      corpus — the relationship it tests is confirmed live on the operator's `#262626`, but a live
+      read is not a capture) and **G15** (the review's own P2-1) remain.
 - [x] T020 (2026-09-06 ~10:47 amendment) **Stagger overlapping phone-week blocks; put the minimum
       column back to 45px.** Operator ruling, verbatim *"Stagger overlaps at 45px"* — this
       **supersedes T018's landed 80px minimum**. Each later overlapping block is inset
@@ -760,11 +779,22 @@ title and 44x44 close on phone.
       `CALENDAR_TIMED_STAGGER_STEP` (10px) and keeps the column's own remaining width to the right,
       rather than splitting the column N ways; `--db-calendar-phone-week-col-min` is back to 45px.
       `calendar-pinned-values.test.ts` pins the reverted token and the stagger constant, with a
-      negative control against the removed equal-split formula. **Not yet re-run**: the live
-      device-pixel sweep of the staggered pair's title paint box (T018's own method) — the pin above
-      is a text-level guard on the source, not a re-measurement of the rendered pixels. Folded into
-      T019's rebuild, which holds the same renderer. `decision-record.md`'s ADR-005 amendment
-      carries the ruling and its landing note; T018 stays closed as the record of what landed first
+      negative control against the removed equal-split formula.
+
+      **Re-measured on the rendered pixels 2026-09-06, closing the "not yet re-run" clause.** On
+      `calendar-week-time-grid-mobile-dark.png` the phone week columns measure 90 device px pitch =
+      **45 CSS px exactly**, the ruled operator value. The overlapping pair on Friday: the first
+      block's glyph sits at device x 540-566 with its title painting 540 -> 565, **12.5 CSS px of
+      ink**; the staggered block's glyph sits at 569-590 with **4 device px = 2 CSS px** of title
+      ink. So the honest reading is that at a 45px column the stagger keeps both blocks separately
+      visible, hit-testable and identified by their icons, and it does **not** give the second block
+      a readable title — the ~27px the code comment claimed is box, not title, once the block's own
+      padding and 12px leading glyph are taken out. That is still strictly more than the equal
+      N-way split it replaced, which left neither block a title (4.5px and 0.5px paint boxes), and
+      45px is the operator's own ruling; a readable second title needs a wider column, not a smaller
+      inset. The comment on `CALENDAR_TIMED_STAGGER_STEP` is corrected to say that rather than the
+      claim it carried. `decision-record.md`'s ADR-005 amendment carries the ruling and its landing
+      note; T018 stays closed as the record of what landed first
 - [x] T021 (2026-09-06 ~10:33 amendment) **Make the unscheduled affordance subtle and integrated.**
       Operator, verbatim: *"For calendar the unscheduled pinned stuff needs to be done better. Like
       more subtlely integrated, check how anytype or other would do that."* (`../roadmap.md` §4 row
