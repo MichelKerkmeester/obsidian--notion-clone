@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-06T04:34:15.985Z",
+  "measuredAt": "2026-09-06T04:43:29.147Z",
   "inputs": {
     "tools/live/sheet-rebuild.mjs": "c0bf923ce8b9",
     "tools/live/sheet-rebuild-harness.ts": "d36bd65f96f3",
@@ -8,7 +8,7 @@
     "src/views/mobile-bottom-sheet.ts": "8d6b7775ca2a",
     "src/views/sort-panel-renderer.ts": "93fe09179ffc",
     "src/views/filter-panel-renderer.ts": "da38b7c640b9",
-    "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
+    "src/views/view-config-panel-renderer.ts": "08de99e9b786",
     "src/views/overlay-stack.ts": "943698865bdb",
     "src/views/popover-auto-close.ts": "b81714513ff4"
   },

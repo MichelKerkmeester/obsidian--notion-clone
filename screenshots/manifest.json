@@ -1618,7 +1618,7 @@
       "layoutHash": "9bcd1f820e51",
       "pixelHash": "c27637c76096",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2032ef237ee5",
+        "src/views/embedded-database-renderer.ts": "67975664ca1a",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -1642,7 +1642,7 @@
       "layoutHash": "9bcd1f820e51",
       "pixelHash": "16c408942267",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2032ef237ee5",
+        "src/views/embedded-database-renderer.ts": "67975664ca1a",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -1666,7 +1666,7 @@
       "layoutHash": "834c932f6aa8",
       "pixelHash": "f420ebc9f537",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2032ef237ee5",
+        "src/views/embedded-database-renderer.ts": "67975664ca1a",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -1690,7 +1690,7 @@
       "layoutHash": "834c932f6aa8",
       "pixelHash": "e6c4b0e9ed6b",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2032ef237ee5",
+        "src/views/embedded-database-renderer.ts": "67975664ca1a",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -1923,7 +1923,7 @@
       "layoutHash": "e776c311491e",
       "pixelHash": "84193c0c1375",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2032ef237ee5",
+        "src/views/embedded-database-renderer.ts": "67975664ca1a",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -1948,7 +1948,7 @@
       "layoutHash": "e776c311491e",
       "pixelHash": "b76f408f6bd8",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2032ef237ee5",
+        "src/views/embedded-database-renderer.ts": "67975664ca1a",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -1973,7 +1973,7 @@
       "layoutHash": "12cccabb2d4c",
       "pixelHash": "90087133812a",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2032ef237ee5",
+        "src/views/embedded-database-renderer.ts": "67975664ca1a",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -1998,7 +1998,7 @@
       "layoutHash": "12cccabb2d4c",
       "pixelHash": "a5875e79f225",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2032ef237ee5",
+        "src/views/embedded-database-renderer.ts": "67975664ca1a",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -2019,7 +2019,7 @@
       "sources": [
         "src/views/toast.ts"
       ],
-      "layoutHash": "5d4e87a8263a",
+      "layoutHash": "02d0836ee6f6",
       "pixelHash": "5f14c4d8c7aa",
       "sourceHashes": {
         "src/views/toast.ts": "c8fbb7c99cb0",
@@ -2067,7 +2067,7 @@
       "sources": [
         "src/views/toast.ts"
       ],
-      "layoutHash": "02d0836ee6f6",
+      "layoutHash": "5d4e87a8263a",
       "pixelHash": "821bf5e00874",
       "sourceHashes": {
         "src/views/toast.ts": "c8fbb7c99cb0",
@@ -2139,7 +2139,7 @@
       "sources": [
         "src/views/toast.ts"
       ],
-      "layoutHash": "7425a6d0cd70",
+      "layoutHash": "ec7335c12b6a",
       "pixelHash": "539cd21a1e38",
       "sourceHashes": {
         "src/views/toast.ts": "c8fbb7c99cb0",
@@ -2163,7 +2163,7 @@
       "sources": [
         "src/views/toast.ts"
       ],
-      "layoutHash": "ec7335c12b6a",
+      "layoutHash": "7425a6d0cd70",
       "pixelHash": "5ecc424ebfb5",
       "sourceHashes": {
         "src/views/toast.ts": "c8fbb7c99cb0",
@@ -2187,7 +2187,7 @@
       "sources": [
         "src/views/toast.ts"
       ],
-      "layoutHash": "ec7335c12b6a",
+      "layoutHash": "7425a6d0cd70",
       "pixelHash": "a22555652bf8",
       "sourceHashes": {
         "src/views/toast.ts": "c8fbb7c99cb0",
@@ -2633,7 +2633,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -2679,7 +2679,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -2725,7 +2725,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -2771,7 +2771,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -2817,7 +2817,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -2863,7 +2863,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -2909,7 +2909,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -2955,7 +2955,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -2999,7 +2999,7 @@
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "f5b7d455ec83",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3041,7 +3041,7 @@
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "f5b7d455ec83",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3083,7 +3083,7 @@
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "f5b7d455ec83",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3125,7 +3125,7 @@
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "f5b7d455ec83",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3167,7 +3167,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3208,7 +3208,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3249,7 +3249,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3290,7 +3290,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3333,7 +3333,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3379,7 +3379,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3425,7 +3425,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3471,7 +3471,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3514,7 +3514,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3554,7 +3554,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3594,7 +3594,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3634,7 +3634,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3676,7 +3676,7 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "add0b1c44798",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3719,7 +3719,7 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "add0b1c44798",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3762,7 +3762,7 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "add0b1c44798",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3805,7 +3805,7 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "add0b1c44798",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3846,7 +3846,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3886,7 +3886,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3926,7 +3926,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -3966,7 +3966,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4007,7 +4007,7 @@
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4048,7 +4048,7 @@
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4089,7 +4089,7 @@
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4130,7 +4130,7 @@
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4170,7 +4170,7 @@
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4210,7 +4210,7 @@
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4250,7 +4250,7 @@
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4290,7 +4290,7 @@
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4330,7 +4330,7 @@
       "sourceHashes": {
         "src/views/dropdown-field.ts": "87afc7a2ea82",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4370,7 +4370,7 @@
       "sourceHashes": {
         "src/views/dropdown-field.ts": "87afc7a2ea82",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4410,7 +4410,7 @@
       "sourceHashes": {
         "src/views/dropdown-field.ts": "87afc7a2ea82",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4450,7 +4450,7 @@
       "sourceHashes": {
         "src/views/dropdown-field.ts": "87afc7a2ea82",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4491,7 +4491,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4533,7 +4533,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4575,7 +4575,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4617,7 +4617,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4659,7 +4659,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4700,7 +4700,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4741,7 +4741,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4782,7 +4782,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4824,7 +4824,7 @@
       "sourceHashes": {
         "src/views/owned-menu.ts": "c5e1ea424001",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4868,7 +4868,7 @@
       "sourceHashes": {
         "src/views/owned-menu.ts": "c5e1ea424001",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4912,7 +4912,7 @@
       "sourceHashes": {
         "src/views/owned-menu.ts": "c5e1ea424001",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4956,7 +4956,7 @@
       "sourceHashes": {
         "src/views/owned-menu.ts": "c5e1ea424001",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -4998,7 +4998,7 @@
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5038,7 +5038,7 @@
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5078,7 +5078,7 @@
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5118,7 +5118,7 @@
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5160,13 +5160,13 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-footer-renderer.ts": "afa8af8391f8",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -5204,13 +5204,13 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-footer-renderer.ts": "afa8af8391f8",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -5248,13 +5248,13 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-footer-renderer.ts": "afa8af8391f8",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -5292,13 +5292,13 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-footer-renderer.ts": "afa8af8391f8",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -5336,7 +5336,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5380,7 +5380,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5424,7 +5424,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5468,7 +5468,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5512,7 +5512,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "afeef191db3c",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5555,7 +5555,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "afeef191db3c",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5598,7 +5598,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "afeef191db3c",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5641,7 +5641,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "afeef191db3c",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5684,7 +5684,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5728,7 +5728,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5772,7 +5772,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5816,7 +5816,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5858,7 +5858,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5898,7 +5898,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5938,7 +5938,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -5978,7 +5978,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -6018,7 +6018,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -6058,7 +6058,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -6098,7 +6098,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -6138,7 +6138,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -6180,7 +6180,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -6224,7 +6224,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -6268,7 +6268,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -6312,7 +6312,7 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "dc356b55b006",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -6842,15 +6842,15 @@
       "layoutHash": "2ba8b6f5f444",
       "pixelHash": "63a0eb9903f4",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
-        "src/data/column-types.ts": "c48057b05309",
+        "src/data/column-types.ts": "2a75b4f86688",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -6886,15 +6886,15 @@
       "layoutHash": "2ba8b6f5f444",
       "pixelHash": "6e31f198543a",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
-        "src/data/column-types.ts": "c48057b05309",
+        "src/data/column-types.ts": "2a75b4f86688",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -6930,15 +6930,15 @@
       "layoutHash": "8c48f8b91e30",
       "pixelHash": "d91a7332a252",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
-        "src/data/column-types.ts": "c48057b05309",
+        "src/data/column-types.ts": "2a75b4f86688",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -6974,15 +6974,15 @@
       "layoutHash": "8c48f8b91e30",
       "pixelHash": "21784076b584",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
-        "src/data/column-types.ts": "c48057b05309",
+        "src/data/column-types.ts": "2a75b4f86688",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -7018,9 +7018,9 @@
       "layoutHash": "2d94a0fb4f2b",
       "pixelHash": "7506ff00d4a5",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7062,9 +7062,9 @@
       "layoutHash": "2d94a0fb4f2b",
       "pixelHash": "646b22df31c2",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7106,9 +7106,9 @@
       "layoutHash": "1029a57892c7",
       "pixelHash": "8fcfc68646cc",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7150,9 +7150,9 @@
       "layoutHash": "1029a57892c7",
       "pixelHash": "9a5626ec0704",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7195,7 +7195,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "d5f17dee1185",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7237,7 +7237,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "d5f17dee1185",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7279,7 +7279,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "d5f17dee1185",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7321,7 +7321,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "d5f17dee1185",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7363,7 +7363,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "d5f17dee1185",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7405,7 +7405,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "d5f17dee1185",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7447,7 +7447,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "d5f17dee1185",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7489,7 +7489,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "d5f17dee1185",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7530,7 +7530,7 @@
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7570,7 +7570,7 @@
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7610,7 +7610,7 @@
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7650,7 +7650,7 @@
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7691,7 +7691,7 @@
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "958007c7439f",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7733,7 +7733,7 @@
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "958007c7439f",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7775,7 +7775,7 @@
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "958007c7439f",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7817,7 +7817,7 @@
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "958007c7439f",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7859,7 +7859,7 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7901,7 +7901,7 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7943,7 +7943,7 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -7985,7 +7985,7 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -8027,7 +8027,7 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "0949a4384246",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -8041,7 +8041,7 @@
       },
       "note": "openOptionColorPicker's own entry with the current colour that rings the matching swatch. Mounts on document.body like the icon picker, so the capture is full-page.",
       "capture": "viewport",
-      "bytes": 28319,
+      "bytes": 28171,
       "source": "constructed",
       "renderer": "color-picker",
       "bag": "file-view",
@@ -8069,7 +8069,7 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "0949a4384246",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -8083,7 +8083,7 @@
       },
       "note": "openOptionColorPicker's own entry with the current colour that rings the matching swatch. Mounts on document.body like the icon picker, so the capture is full-page.",
       "capture": "viewport",
-      "bytes": 31798,
+      "bytes": 31644,
       "source": "constructed",
       "renderer": "color-picker",
       "bag": "file-view",
@@ -8111,7 +8111,7 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "0949a4384246",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -8153,7 +8153,7 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "0949a4384246",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -8197,13 +8197,13 @@
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-renderer.ts": "0f8bcacb125d",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/data/record-icon.ts": "dd6940af82f2",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -8243,13 +8243,13 @@
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-renderer.ts": "0f8bcacb125d",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/data/record-icon.ts": "dd6940af82f2",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -8289,13 +8289,13 @@
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-renderer.ts": "0f8bcacb125d",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/data/record-icon.ts": "dd6940af82f2",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -8335,13 +8335,13 @@
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-renderer.ts": "0f8bcacb125d",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/data/record-icon.ts": "dd6940af82f2",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -8378,7 +8378,7 @@
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -8418,7 +8418,7 @@
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -8458,7 +8458,7 @@
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -8498,7 +8498,7 @@
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -8540,12 +8540,12 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/data/status-colors.ts": "954425583842",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -8584,12 +8584,12 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/data/status-colors.ts": "954425583842",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -8628,12 +8628,12 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/data/status-colors.ts": "954425583842",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -8672,12 +8672,12 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/data/status-colors.ts": "954425583842",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -8708,9 +8708,9 @@
       "layoutHash": "32bab5f095c0",
       "pixelHash": "de7337f8d1fc",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
-        "src/data/column-types.ts": "c48057b05309",
+        "src/data/column-types.ts": "2a75b4f86688",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -8737,9 +8737,9 @@
       "layoutHash": "32bab5f095c0",
       "pixelHash": "0b83e437687b",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
-        "src/data/column-types.ts": "c48057b05309",
+        "src/data/column-types.ts": "2a75b4f86688",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -8766,9 +8766,9 @@
       "layoutHash": "91228e884b70",
       "pixelHash": "c4943329183b",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
-        "src/data/column-types.ts": "c48057b05309",
+        "src/data/column-types.ts": "2a75b4f86688",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -8795,9 +8795,9 @@
       "layoutHash": "91228e884b70",
       "pixelHash": "88b913115b4e",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
-        "src/data/column-types.ts": "c48057b05309",
+        "src/data/column-types.ts": "2a75b4f86688",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -8824,7 +8824,7 @@
       "layoutHash": "20f5b87359d6",
       "pixelHash": "67b79951447b",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/views/record-surface/cell-editor-text.ts": "8a2d05c20a94",
         "src/views/record-surface/cell-editor-number.ts": "5bfafc025ffa",
         "styles.css": "0cec9cd820fb",
@@ -8853,7 +8853,7 @@
       "layoutHash": "20f5b87359d6",
       "pixelHash": "e74e592befc1",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/views/record-surface/cell-editor-text.ts": "8a2d05c20a94",
         "src/views/record-surface/cell-editor-number.ts": "5bfafc025ffa",
         "styles.css": "0cec9cd820fb",
@@ -8882,7 +8882,7 @@
       "layoutHash": "c5c840443af2",
       "pixelHash": "c1764ace473c",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/views/record-surface/cell-editor-text.ts": "8a2d05c20a94",
         "src/views/record-surface/cell-editor-number.ts": "5bfafc025ffa",
         "styles.css": "0cec9cd820fb",
@@ -8911,7 +8911,7 @@
       "layoutHash": "c5c840443af2",
       "pixelHash": "1f6603737f5f",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/views/record-surface/cell-editor-text.ts": "8a2d05c20a94",
         "src/views/record-surface/cell-editor-number.ts": "5bfafc025ffa",
         "styles.css": "0cec9cd820fb",
@@ -9796,7 +9796,7 @@
       "pixelHash": "558bf482d38d",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -9823,7 +9823,7 @@
       "pixelHash": "26848650ce8d",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -9850,7 +9850,7 @@
       "pixelHash": "8ff344fb4782",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -9877,7 +9877,7 @@
       "pixelHash": "8dc1c361162c",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -9912,8 +9912,8 @@
       "pixelHash": "f9c85246bfd0",
       "sourceHashes": {
         "src/views/board-card-properties-panel.ts": "36ee3fa444cc",
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -9958,8 +9958,8 @@
       "pixelHash": "6ef67abb1d97",
       "sourceHashes": {
         "src/views/board-card-properties-panel.ts": "36ee3fa444cc",
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10004,8 +10004,8 @@
       "pixelHash": "7155cbe2d48a",
       "sourceHashes": {
         "src/views/board-card-properties-panel.ts": "36ee3fa444cc",
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10050,8 +10050,8 @@
       "pixelHash": "7ce90022729b",
       "sourceHashes": {
         "src/views/board-card-properties-panel.ts": "36ee3fa444cc",
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10096,7 +10096,7 @@
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "1ffc42c33768",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10140,7 +10140,7 @@
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "1ffc42c33768",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10184,7 +10184,7 @@
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "1ffc42c33768",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10228,7 +10228,7 @@
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "1ffc42c33768",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10273,7 +10273,7 @@
       "sourceHashes": {
         "src/views/column-width.ts": "4610e6ddca61",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10319,7 +10319,7 @@
       "sourceHashes": {
         "src/views/column-width.ts": "4610e6ddca61",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10365,7 +10365,7 @@
       "sourceHashes": {
         "src/views/column-width.ts": "4610e6ddca61",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10411,7 +10411,7 @@
       "sourceHashes": {
         "src/views/column-width.ts": "4610e6ddca61",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10457,7 +10457,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "da38b7c640b9",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10503,7 +10503,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "da38b7c640b9",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10549,7 +10549,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "da38b7c640b9",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10595,7 +10595,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "da38b7c640b9",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10640,7 +10640,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "da38b7c640b9",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10684,7 +10684,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "da38b7c640b9",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10728,7 +10728,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "da38b7c640b9",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10772,7 +10772,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "da38b7c640b9",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10814,7 +10814,7 @@
       "sourceHashes": {
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10854,7 +10854,7 @@
       "sourceHashes": {
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10894,7 +10894,7 @@
       "sourceHashes": {
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10934,7 +10934,7 @@
       "sourceHashes": {
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -10974,7 +10974,7 @@
       "sourceHashes": {
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11014,7 +11014,7 @@
       "sourceHashes": {
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11054,7 +11054,7 @@
       "sourceHashes": {
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11094,7 +11094,7 @@
       "sourceHashes": {
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11138,7 +11138,7 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "c150d55fdd79",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11186,7 +11186,7 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "c150d55fdd79",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11234,7 +11234,7 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "c150d55fdd79",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11281,7 +11281,7 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "c150d55fdd79",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11328,7 +11328,7 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "c150d55fdd79",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11375,7 +11375,7 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "c150d55fdd79",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11422,7 +11422,7 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "c150d55fdd79",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11470,7 +11470,7 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "c150d55fdd79",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11516,13 +11516,13 @@
       "sourceHashes": {
         "src/views/table-record-peek.ts": "31dcefb0a474",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-renderer.ts": "0f8bcacb125d",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -11560,13 +11560,13 @@
       "sourceHashes": {
         "src/views/table-record-peek.ts": "31dcefb0a474",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-renderer.ts": "0f8bcacb125d",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -11604,13 +11604,13 @@
       "sourceHashes": {
         "src/views/table-record-peek.ts": "31dcefb0a474",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-renderer.ts": "0f8bcacb125d",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -11648,13 +11648,13 @@
       "sourceHashes": {
         "src/views/table-record-peek.ts": "31dcefb0a474",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/views/table-renderer.ts": "0f8bcacb125d",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -11690,7 +11690,7 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "93fe09179ffc",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11730,7 +11730,7 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "93fe09179ffc",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11770,7 +11770,7 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "93fe09179ffc",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11810,7 +11810,7 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "93fe09179ffc",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11851,7 +11851,7 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "93fe09179ffc",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11893,7 +11893,7 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "93fe09179ffc",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11935,7 +11935,7 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "93fe09179ffc",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -11977,7 +11977,7 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "93fe09179ffc",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -12014,12 +12014,12 @@
         "tools/storybook/obsidian-dom-shim.mjs",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "d4d989fcf206",
+      "layoutHash": "218300fc6484",
       "pixelHash": "1687b10a8f80",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -12056,12 +12056,12 @@
         "tools/storybook/obsidian-dom-shim.mjs",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "d4d989fcf206",
+      "layoutHash": "218300fc6484",
       "pixelHash": "2e72706a1b6f",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -12101,9 +12101,9 @@
       "layoutHash": "10f9330d584b",
       "pixelHash": "09e3104eab5e",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -12143,9 +12143,9 @@
       "layoutHash": "10f9330d584b",
       "pixelHash": "8780182ab817",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -12182,7 +12182,7 @@
       "pixelHash": "5a5a0a9fd302",
       "sourceHashes": {
         "src/views/board-card-properties-panel.ts": "36ee3fa444cc",
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
         "src/views/checkbox.ts": "3d770e9c2589",
         "styles.css": "0cec9cd820fb",
@@ -12213,7 +12213,7 @@
       "pixelHash": "421af70c5b66",
       "sourceHashes": {
         "src/views/board-card-properties-panel.ts": "36ee3fa444cc",
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
         "src/views/checkbox.ts": "3d770e9c2589",
         "styles.css": "0cec9cd820fb",
@@ -12244,7 +12244,7 @@
       "pixelHash": "1447ee857b35",
       "sourceHashes": {
         "src/views/board-card-properties-panel.ts": "36ee3fa444cc",
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
         "src/views/checkbox.ts": "3d770e9c2589",
         "styles.css": "0cec9cd820fb",
@@ -12275,7 +12275,7 @@
       "pixelHash": "eac6967af35a",
       "sourceHashes": {
         "src/views/board-card-properties-panel.ts": "36ee3fa444cc",
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
         "src/views/checkbox.ts": "3d770e9c2589",
         "styles.css": "0cec9cd820fb",
@@ -13353,7 +13353,7 @@
       "layoutHash": "3b17c1486e7e",
       "pixelHash": "d1449b67081e",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
         "src/views/dropdown-field.ts": "87afc7a2ea82",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -13380,7 +13380,7 @@
       "layoutHash": "3b17c1486e7e",
       "pixelHash": "8a54e9f33ee8",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
         "src/views/dropdown-field.ts": "87afc7a2ea82",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -13407,7 +13407,7 @@
       "layoutHash": "505cfb4a5c95",
       "pixelHash": "4c8dd8bee948",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
         "src/views/dropdown-field.ts": "87afc7a2ea82",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -13434,7 +13434,7 @@
       "layoutHash": "505cfb4a5c95",
       "pixelHash": "34530ae1f0d1",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
         "src/views/dropdown-field.ts": "87afc7a2ea82",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
@@ -13464,7 +13464,7 @@
       "layoutHash": "cfc50ba97f56",
       "pixelHash": "2e5988105209",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
         "src/views/mobile-bottom-sheet.ts": "8d6b7775ca2a",
         "src/views/popover-position.ts": "7edae5db0282",
         "src/views/checkbox.ts": "3d770e9c2589",
@@ -13497,7 +13497,7 @@
       "layoutHash": "cfc50ba97f56",
       "pixelHash": "671f22531ade",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "7e8e15c038dd",
+        "src/views/view-config-panel-renderer.ts": "08de99e9b786",
         "src/views/mobile-bottom-sheet.ts": "8d6b7775ca2a",
         "src/views/popover-position.ts": "7edae5db0282",
         "src/views/checkbox.ts": "3d770e9c2589",
@@ -13534,7 +13534,7 @@
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "5a32f26bf20f",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -13574,7 +13574,7 @@
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "5a32f26bf20f",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -13614,7 +13614,7 @@
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "5a32f26bf20f",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -13654,7 +13654,7 @@
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "5a32f26bf20f",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -13920,7 +13920,7 @@
         "src/views/record-surface/property-row.ts": "41a83528a00c",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -13955,7 +13955,7 @@
         "src/views/record-surface/property-row.ts": "41a83528a00c",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -13990,7 +13990,7 @@
         "src/views/record-surface/property-row.ts": "41a83528a00c",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -14025,7 +14025,7 @@
         "src/views/record-surface/property-row.ts": "41a83528a00c",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -14700,7 +14700,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -14743,7 +14743,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -14786,7 +14786,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -14829,7 +14829,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -14875,7 +14875,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -14884,7 +14884,7 @@
         "src/views/record-surface/property-row.ts": "41a83528a00c",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -14924,7 +14924,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -14933,7 +14933,7 @@
         "src/views/record-surface/property-row.ts": "41a83528a00c",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -14973,7 +14973,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -14982,7 +14982,7 @@
         "src/views/record-surface/property-row.ts": "41a83528a00c",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -15022,7 +15022,7 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "5fc4f0019470",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15031,7 +15031,7 @@
         "src/views/record-surface/property-row.ts": "41a83528a00c",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -15066,7 +15066,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15106,7 +15106,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15146,7 +15146,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15186,7 +15186,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15227,7 +15227,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15268,7 +15268,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15309,7 +15309,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15350,7 +15350,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15391,7 +15391,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15432,7 +15432,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15473,7 +15473,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15514,7 +15514,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15554,7 +15554,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15594,7 +15594,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15634,7 +15634,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15674,7 +15674,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15714,7 +15714,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15754,7 +15754,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15794,7 +15794,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15834,7 +15834,7 @@
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "abb6d7235e66",
         "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15874,7 +15874,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "470b6d400833",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15913,7 +15913,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "470b6d400833",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15952,7 +15952,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "470b6d400833",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -15991,7 +15991,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "470b6d400833",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16030,7 +16030,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "470b6d400833",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16069,7 +16069,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "470b6d400833",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16108,7 +16108,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "470b6d400833",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16147,7 +16147,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "470b6d400833",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16186,7 +16186,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "470b6d400833",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16225,7 +16225,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "470b6d400833",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16264,7 +16264,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "470b6d400833",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16303,7 +16303,7 @@
       "sourceHashes": {
         "src/views/chart-renderer.ts": "470b6d400833",
         "tools/bench/board-render-bench.ts": "ae9d4473372a",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16342,7 +16342,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16381,7 +16381,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16420,7 +16420,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16459,7 +16459,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16498,7 +16498,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16537,7 +16537,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16576,7 +16576,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16615,7 +16615,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16654,7 +16654,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16695,7 +16695,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16736,7 +16736,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16777,7 +16777,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16818,7 +16818,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16857,7 +16857,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16896,7 +16896,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16935,7 +16935,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -16974,7 +16974,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -17015,7 +17015,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -17056,7 +17056,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -17097,7 +17097,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -17138,7 +17138,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -17179,7 +17179,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -17220,7 +17220,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -17261,7 +17261,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -17305,14 +17305,14 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -17350,14 +17350,14 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -17395,14 +17395,14 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -17440,14 +17440,14 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -17482,7 +17482,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -17523,7 +17523,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -17564,7 +17564,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -17605,7 +17605,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-        "tools/live/render-assertion-harness.ts": "34a282145ee5",
+        "tools/live/render-assertion-harness.ts": "3b6a2d5f0987",
         "tools/live/render-assertion-bundle.mjs": "0daebe7df9ef",
         "tools/screenshots/constructed-scenarios.mjs": "ec0d26a6fca7",
         "tools/storybook/obsidian-stub.mjs": "214d8d26042d",
@@ -17647,7 +17647,7 @@
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/views/file-title-display.ts": "53ac58228638",
         "src/views/table-record-peek.ts": "31dcefb0a474",
         "styles.css": "0cec9cd820fb",
@@ -17683,7 +17683,7 @@
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/views/file-title-display.ts": "53ac58228638",
         "src/views/table-record-peek.ts": "31dcefb0a474",
         "styles.css": "0cec9cd820fb",
@@ -17719,7 +17719,7 @@
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/views/file-title-display.ts": "53ac58228638",
         "src/views/table-record-peek.ts": "31dcefb0a474",
         "styles.css": "0cec9cd820fb",
@@ -17755,7 +17755,7 @@
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "src/views/file-title-display.ts": "53ac58228638",
         "src/views/table-record-peek.ts": "31dcefb0a474",
         "styles.css": "0cec9cd820fb",
@@ -17786,7 +17786,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -17815,7 +17815,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -17844,7 +17844,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -17873,7 +17873,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "0f8bcacb125d",
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "src/views/cell-renderer.ts": "e781430a29b2",
+        "src/views/cell-renderer.ts": "55f6e6194b05",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -17904,7 +17904,7 @@
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -17935,7 +17935,7 @@
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -17966,7 +17966,7 @@
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
@@ -17997,7 +17997,7 @@
         "src/views/calendar-timeline-renderer.ts": "f0037380353b",
         "src/data/subtask-relation.ts": "1a1115c92bc8",
         "src/data/subtask-serialize.ts": "2b5c2207c25c",
-        "src/i18n.ts": "b621806368ae",
+        "src/i18n.ts": "5c9dc2fd2d57",
         "styles.css": "0cec9cd820fb",
         "tools/screenshots/theme.css": "f30f295f9cf0",
         "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
