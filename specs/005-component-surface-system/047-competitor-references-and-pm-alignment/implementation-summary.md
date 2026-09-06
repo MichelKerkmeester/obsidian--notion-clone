@@ -77,7 +77,11 @@ _memory:
 
 | File | Action | Purpose |
 |------|--------|---------|
-| None yet | — | The first change is a negative control, written red-first |
+| `tools/screenshots/manifest-schema.test.mjs` | Added | The reference-entry negative control, written red-first against the un-widened contract |
+| `tools/screenshots/manifest-schema.mjs` | Edited | Rejects a `file` whose path climbs out of its capture root through a `..` segment |
+
+No file under `src/` and no rule in `styles.css` was touched. The gantt comparison below is the
+reason: it found nothing in either file to change.
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -85,8 +89,70 @@ _memory:
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. When it is, the comparison tables appear here element by element, and every closed
-gap carries a before and an after number rather than a description.
+### The gantt comparison, measured in device pixels
+
+`scratch/gantt-comparison.md` is gitignored, so the table it holds is reproduced here, where it is
+committed. Every number below was read off the PNGs with a decoder, not estimated from a viewer.
+Desktop is 2880x1800 device px over a 1440x900 CSS viewport; phone is 804x1748 over 402x874. Both
+at DPR 2, so **CSS = device / 2**. Reference is `screenshots/project-manager/reference-gantt-*.png`;
+ours is `screenshots/notion-clone/views/constructed-timeline-*.png`, the twin its manifest entry
+names in `referenceOf`. All four device x theme pairs were opened, plus the four subtask pairs.
+
+#### Identical, measured rather than asserted
+
+| Element | Reference | Ours |
+|---------|-----------|------|
+| Row pitch | 88 dev / 44 CSS | 88 / 44 |
+| Header height, month band, week band | 112 / 56, 48 / 24, 64 / 32 | same |
+| Label pane width, desktop | 560 / 280 | 560 / 280 |
+| Resize handle | 8 / 4 | 8 / 4 |
+| Bar height | 56 / 28 | 56 / 28 |
+| Bar widths, rows 0-7 | 67, 48, 67, 111, 157, 199, 243, 287 dev | same, row for row |
+| Bar vertical run, row 0 | y 242-297 | y 242-297 |
+| Progress fill at 60% | 27 dev of a 44 dev bar | 27 of 44 |
+| Milestone diamond | 48x85 dev bbox, 1053 core px | same, to the pixel count |
+| Today line | 2 dev core, `rgb(176,58,62)` | same |
+| Today diamond | 71x37 dev bbox | same, identical colour histogram |
+| Dependency arrows | bbox and per-colour pixel counts | same (ref 2270 bar + 404 link = our 2674) |
+| Week column pitch | 308 dev / 154 CSS, i.e. 22 CSS/day | same |
+| Month tint edges, relative to today | -1056 and +308 dev | same |
+| Status dot | 16 dev / 8 CSS, pane-relative x 60 | same |
+| Subtask indentation, rows 0-4 | pane-relative 16, 96, 96, 60, 60 | same |
+
+Every timeline x in ours lands exactly **8 dev / 4 CSS** left of the reference's, and both windows
+sit centred on today at exactly 50% of their own chart width. That single offset is D3 below, not a
+geometry difference.
+
+#### Five differences, and what produces each
+
+| # | Difference | Reference | Ours | Mechanism |
+|---|------------|-----------|------|-----------|
+| D1 | Bar, progress, milestone, status dot and group-header label colour | bar `rgb(73,77,82)`, progress `rgb(132,141,152)`, dot and group label `rgb(138,148,160)` — all `#8a94a0` at the SVG opacities. Light: `rgb(208,212,217)` / `rgb(145,154,165)` / `rgb(138,148,160)` | bar `rgb(61,64,108)`, progress `rgb(103,111,213)`, dot `rgb(154,155,158)` (`--text-muted`), group label `rgb(107,116,224)` (`--interactive-accent`). Light: `rgb(189,194,239)` / `rgb(100,112,218)` / `rgb(110,118,129)` | The reference's `resolveProjectConfig` runs `withInUseExtras` (`ProjectConfig.ts:23-28`), which mints a status entry at `FALLBACK_COLOR = '#8a94a0'` for every in-use status id, so `GanttTaskBarRenderer.ts:31`'s `statusConfig?.color ?? --interactive-accent` never reaches its accent branch. Our timeline bench carries no status column at all, so `resolveGanttBarColor` (`calendar-timeline-renderer.ts:1892`) takes the accent and `resolveGanttStatusColor` (`:1898`) takes `--text-muted`. Both fallback chains are the same shape; only the reference reaches a colour first. Already recorded in `tools/bench/reference-fixture.ts`'s `config.statuses` comment |
+| D2 | The progress badge's inset from the label pane's right edge | 121 dev / 60.5 CSS | 73 dev / 36.5 CSS | The hover-only add-subtask affordance after the badge. `TaskLabelRenderer.ts:130-138` builds it through PM's `IconButton` -> `ExtraButtonComponent`, and the harness stub (`tools/storybook/obsidian-stub.mjs:241-249`) returns a bare `<button>` without Obsidian's `clickable-icon extra-setting-button` classes, so it lays out at ~46.5 CSS of UA button box. Ours writes those class names itself (`calendar-timeline-renderer.ts:1017`) and `theme.css` sizes it to ~22.5 CSS. A harness stand-in gap, not a port defect: on device both are the same `ExtraButtonComponent`. Rows with no badge match within 1 dev px, in both themes and both variants |
+| D3 | Whole-widget inset | 16 CSS left, 16 right; the view spans 1408 of 1440 CSS. Phone 16 / 16 | 40 left, 48 right; 1352 CSS. Phone 28 / 36 | Our capture mounts inside `.note-database-container`, whose `--db-container-padding-inline: var(--db-space-8)` is 24px (`styles.css:52`, `:863`). The reference page mounts `.pm-root` straight into `#shot` and has no analogue. Host chrome, not gantt geometry — it is what produces the uniform 8 dev x-offset above. The extra 8 CSS on our right beyond the 24 is **inferred** to be a reserved scroll gutter, not measured to a rule |
+| D4 | Text weight | 555 ink px / 79 297 ink mass on a row label; 394 / 34 753 on the `60%` badge; 485 / 48 225 on `TASK`; 163 core px on `W10` | 480 / 60 060; 339 / 26 624; 447 / 40 217; 128 | Same bbox, same position, same colour, 13-17% fewer ink pixels and 25-30% less ink mass throughout. `styles.css:36` sets `-webkit-font-smoothing: antialiased` on `.db-surface`; the reference page loads no stylesheet of ours and renders at the browser default. The `TASK` header also sits 4 dev / 2 CSS higher in ours (bbox y 182-198 against 185-202) though the pane and its padding are byte-identical — **inferred** to be the same host-stylesheet scope, not measured to a rule |
+| D5 | Phone label column | 560 dev / 280 CSS, unconditional (`TimelineConfig.ts:7`, `LABEL_WIDTH = 280`) | 320 dev / 160 CSS, phone only (`calendar-timeline-renderer.ts:72`, `GANTT_LABEL_PHONE_WIDTH`) | Deliberate, and now measured on both sides rather than estimated: on the same 402 CSS px viewport the reference leaves the chart **172 dev / 86 CSS**, under four `week`-scale day units; ours leaves **348 dev / 174 CSS**. The cost of ours is title truncation on rows carrying a progress badge (`row-0` renders `row...`). Kept |
+
+None of the five is a value in `src/views/calendar-timeline-renderer.ts` or in the `.pm-gantt-*`
+block of `styles.css`, which is why this leg changed neither. That block was also diffed rule by
+rule against the vendored `gantt.css`: **51 rules, 50 declaration-for-declaration identical**, the
+51st being our own phone touch-target override on the resize handle, whose base rule is identical
+too. The pinned constants agree with the pixels: `ROW_HEIGHT 44`, `HEADER_HEIGHT 56`,
+`LABEL_WIDTH 280`, `BAR_PADDING 8` (44 - 16 = the 28 CSS bar measured), week `DAY_WIDTH 22`.
+
+#### Three claims from the comparison leg, corrected
+
+1. **"Zero divergence, two differences"** is refuted on its count, not on its verdict. D2, D3 and
+   D4 are visible differences the leg did not list. None of them is a defect in the port, and each
+   traces to a file outside the two the leg was allowed to touch — which is why the verdict of
+   *nothing to fix in the gantt* survives, and why the count does not.
+2. **"The two capture rigs seed `--interactive-accent` with different constants"** is refuted with
+   a receipt. Both hosts load the same `tools/screenshots/theme.css`, and the reference's own
+   dependency-arrow pixels read `rgb(61,64,108)` — identical to ours. The reference's grey is
+   `#8a94a0` from its own fallback palette, not a differently-seeded accent.
+3. **"~122px for the chart"** on the phone was an estimate that omitted the container padding and
+   the resize handle. Measured: **86 CSS px**. The number is worse than the leg claimed, so the D5
+   exception rests on firmer ground than it was given.
 <!-- /ANCHOR:how-delivered -->
 
 ---

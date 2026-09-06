@@ -12,7 +12,7 @@ _memory:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T11:55:00Z"
     last_updated_by: "verify-and-land"
-    recent_action: "re-baselined the gantt measurement 047 left behind; 119 vs 56 unreconciled"
+    recent_action: "reconciled the gantt class baseline: 119 reproduces; one ratchet method pinned"
     next_safe_action: "Close T015 R1 and R2, the grid inset and the weekday alignment"
     blockers:
       - "AC-010 is operator-owned and nothing in this repository can close it"
@@ -81,11 +81,20 @@ HEAD before the fix (goal D2), recorded in `checklist.md`. Exit statuses are rea
 
 **Re-baselined 2026-09-06 by `047-competitor-references-and-pm-alignment` (`tasks.md` T013/T014) — this row's "identical" pins against the values below from here on, not against any earlier figure.** `047` is the one leg this program names as allowed to move the gantt (the parent's D-rulings and `../roadmap.md` §4 row 38 keep the gantt on Project Manager and give its fidelity pass to `047` alone); every *other* calendar leg's "the gantt is unmoved" claim, including this criterion's own, must read against the numbers `047` measured, not a number from before it ran. **What `047` actually did: measured, found nothing to close, changed no code.** Its full comparison (`047/scratch/gantt-comparison.md`) read the vendored reference source against `calendar-timeline-renderer.ts`/`styles.css` line by line — zero code or CSS divergence — and dispositioned the two visible differences a capture read shows (bar/label-dot colour, phone label column width) with a measured reason rather than closing them, so `styles.css`'s `.pm-gantt-*` surface and `calendar-timeline-renderer.ts`'s `renderGantt*` family are byte-for-byte what they were before `047` ran. The baseline this row should pin against, measured directly rather than assumed:
 
-  - **Distinct `.pm-gantt-*` class tokens in `styles.css`**: **56** (`grep -oE '\.pm-gantt-[a-zA-Z0-9_-]+' styles.css | sort -u | wc -l`). This does not reproduce the **119** figure named when this row's re-baseline was requested; no counting method tried against the current tree (total substring occurrences: 97; total class-token occurrences: 96; distinct tokens combined across `styles.css` and `calendar-timeline-renderer.ts`: 61) produces 119 either. Recorded as a discrepancy rather than silently adopted, per this program's own "never fabricate" rule — a future session reconciling it should re-derive the count method behind 119 before trusting either number.
+  - **The `pm-gantt-*` token count, with its method stated so the figure is unambiguous.** The **119** discrepancy recorded here on 2026-09-06 is **resolved 2026-09-06 by the verification leg: 119 reproduces exactly, and the method was already written down.** It is `checklist.md` C9's own command, carried identically by `../056-board-anytype-parity/checklist.md` C9:
+
+    | Figure | Command | Counts |
+    |--------|---------|--------|
+    | **119** | `grep -o "pm-gantt[a-z-]*" src/views/calendar-timeline-renderer.ts styles.css \| sort -u \| wc -l` | Two files at once, so `grep` prefixes every match with its filename and `sort -u` cannot collapse a token that appears in both. **62** unique in the renderer plus **57** unique in the stylesheet. Two are comment prose rather than classes (`pm-gantt` at `calendar-timeline-renderer.ts:2206`, `pm-gantt-` at `styles.css:18742`), so **117** are real tokens |
+    | 61 | `grep -hoE 'pm-gantt-[a-zA-Z0-9_-]+' src/views/calendar-timeline-renderer.ts styles.css \| sort -u \| wc -l` | The same two files with `-h`, so the filename prefix is dropped and a token used in both collapses to one |
+    | 56 | `grep -oE '\.pm-gantt-[a-zA-Z0-9_-]+' styles.css \| sort -u \| wc -l` | Distinct selector tokens in the stylesheet alone, leading dot required |
+    | 96 / 97 | class-token and raw-substring occurrences | Occurrences, not distinct tokens — they move when a rule is repeated and say nothing about coverage |
+
+    **The ratchet is the 119 command, and only that one**, because it is what `056` and `057` both already pin against and it is the only figure that sees both files — a class deleted from the renderer and left in the stylesheet moves it, and moves none of the others. A future leg quotes it with its command attached; the other three rows exist here so nobody mistakes one of them for it.
   - **`reference-gantt-*.png` sha256 (all 8 files, unchanged by `047` and required to stay pixelHash-identical — they render vendored code, not ours)**: `047/scratch/baseline.md` carries the full table (`reference-gantt-desktop-{dark,light}`, `-mobile-{dark,light}`, `-subtask-desktop-{dark,light}`, `-subtask-mobile-{dark,light}`).
   - **Our own gantt/timeline capture hashes** (`screenshots/notion-clone/views/*timeline*`, 56 files as of `047`): `047/scratch/baseline.md`.
 
-  A future calendar leg diffing against this row should diff against these values, not re-derive 119.
+  A future calendar leg diffing against this row diffs against these values, quoting the 119 command above with the figure, never a bare number.
 | AC-010 | OPERATOR | **Given** a release carrying the retargeted calendar, **When** the operator opens it on iOS and on desktop beside Anytype, **Then** they report it as Anytype-shaped, knowing the phone half was inferred | The operator's own words. Nothing in this repository can close this row, and an agent never ticks it | Unmet | - |
 
 ### Status values
