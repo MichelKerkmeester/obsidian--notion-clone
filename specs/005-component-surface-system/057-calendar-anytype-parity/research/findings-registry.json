@@ -1,0 +1,280 @@
+{
+  "mergedFrom": [
+    "glm-devpass-calendar"
+  ],
+  "openQuestions": [],
+  "resolvedQuestions": [],
+  "keyFindings": [
+    {
+      "id": "F2.4",
+      "title": "+N overflow: both references silent; our band stays red",
+      "source": "styles.css:16571-16576,17288-17293; renderer:484-535",
+      "threshold": "G8 zero non-surface px",
+      "rulingCheck": "—",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F4.1",
+      "title": "CONFLICT NAMED, CLOSED: P4 boxed pills vs landed A3 flat chip — zero-diff",
+      "source": "digest:100,:173-180,:284-292; styles.css:17081-17110,:17112-17114; icon half ours (calendar-renderer.ts:422)",
+      "threshold": "none — no change",
+      "rulingCheck": "A3 landed; reopen = fresh operator ruling naming digest §5",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F5.7",
+      "title": "Coverage audit: charter satisfied, non-goals held",
+      "source": "iteration-005.md F5.7",
+      "threshold": "—",
+      "rulingCheck": "—",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F4.3",
+      "title": "Device-only register D1-D6 consolidated",
+      "source": "F3.5, F2.5, ADR-005 amendment, F4.2",
+      "threshold": "per-row",
+      "rulingCheck": "—",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F1.4",
+      "title": "Live drag preview + per-week recompute already matched",
+      "source": "notion-screens-digest.md:102-103; calendar-renderer.ts:1302-1321,1385-1427,1165-1182",
+      "threshold": "n/a",
+      "rulingCheck": "—",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F3.1",
+      "title": "P6 = per-record editor, not A8's view-level surface; no 057 change",
+      "source": "digest:189-197,:251-266; styles.css:6913-6958",
+      "threshold": "none",
+      "rulingCheck": "scope-keeping",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F4.2",
+      "title": "Phone 7be7fafb = corroboration only; mobile asymmetry: month-dates renders on phone (no is-mobile rule) while month-time is hidden",
+      "source": "digest:99,:79-88,:181-187,:339-342; styles.css:17691-17692 vs sweep {17264,17284,17361}; renderer:2127-2167,425-429",
+      "threshold": "T019 all-breakpoints; red-first: renders on phone today",
+      "rulingCheck": "AC-007 posture stands",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F3.4",
+      "title": "Picker chrome = union of Notion variants; today-treatment divergence documented, deferred",
+      "source": "digest:114,117; styles.css:15812-15880,15923-15946",
+      "threshold": "if unified: 2-signal + 4.53:1/4.5:1",
+      "rulingCheck": "documented choice stands",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F3.5",
+      "title": "Picker day targets 34/28px unpinned",
+      "source": "styles.css:15890-15897,:6941-6945; touch blocks sweep negative",
+      "threshold": ">=44 phone / >=28 coarse; red-first 15896,6942",
+      "rulingCheck": "AC-007 rule applied beyond T008",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F5.1",
+      "title": "Q1 ranked pattern list",
+      "source": "iteration-005.md F5.1",
+      "threshold": "—",
+      "rulingCheck": "—",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F5.2",
+      "title": "Q2 change/threshold/red-first table",
+      "source": "iteration-005.md F5.2",
+      "threshold": "per-row",
+      "rulingCheck": "—",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F5.3",
+      "title": "Q3 already-have roll-up",
+      "source": "iteration-005.md F5.3",
+      "threshold": "—",
+      "rulingCheck": "—",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F5.4",
+      "title": "Q4 conflicts roll-up (two total)",
+      "source": "iteration-005.md F5.4",
+      "threshold": "—",
+      "rulingCheck": "—",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F5.5",
+      "title": "Q5 register stands as the answer",
+      "source": "iteration-005.md F5.5",
+      "threshold": "—",
+      "rulingCheck": "—",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F5.6",
+      "title": "Q6 remediation plan R1-R7 as child-phase tasks",
+      "source": "iteration-005.md F5.6; tasks.md:626-690 (T019/T020)",
+      "threshold": "per-row, negative control on R1",
+      "rulingCheck": "additive only",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F3.2",
+      "title": "Range shading: Notion self-disagrees; ours 0 in-range rules; owner = record editor",
+      "source": "digest:110,114,116; styles.css:15919-15968",
+      "threshold": ">=3:1; red = 0 occurrences",
+      "rulingCheck": "no ruling; recorded",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F3.3",
+      "title": "Relative format = format-owner question",
+      "source": "digest:107,109; calendar-renderer.ts:1749-1766",
+      "threshold": "none",
+      "rulingCheck": "out of packet",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F1.1",
+      "title": "Remove per-segment start-end date string from month spans (all breakpoints)",
+      "source": "notion-screens-digest.md:163-171; calendar-renderer.ts:425-429; styles.css:17264-17276,17284,17361; mobile asymmetry (styles.css:17691-17692 vs 3-selector sweep)",
+      "threshold": "0 .db-calendar-month-dates desktop+mobile; G3 10±1px; G4 32±1px",
+      "rulingCheck": "no Anytype position (C5) — open element, additive",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F1.5",
+      "title": "renderDropSnap date-key text = P2-class polish candidate",
+      "source": "calendar-renderer.ts:2282-2286",
+      "threshold": "none proposed",
+      "rulingCheck": "owned extension",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F4.4",
+      "title": "Scoped-out map (P7, connect-calendar, Relative, range shading, Date Property re-crawl, dark theme, recurrence, toolbar icons)",
+      "source": "digest §4 P7, §6",
+      "threshold": "none",
+      "rulingCheck": "boundary hygiene",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F1.2",
+      "title": "Today disc already matched",
+      "source": "notion-screens-digest.md:155-161 (P2); styles.css:16522-16533",
+      "threshold": "pin 26x24 #216DFA 4.53:1",
+      "rulingCheck": "hue = brand accent",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F2.3",
+      "title": "Toolbar one-row shape corroborated; Manage/Open-in-Calendar + inline filter rail = N/A",
+      "source": "digest:181-187; styles.css:16261-16304",
+      "threshold": "G13 12±1px",
+      "rulingCheck": "not a conflict",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F1.3",
+      "title": "Two-signal drop/resize target kept (Notion flat fill refused on 1.4.11)",
+      "source": "notion-screens-digest.md:102; styles.css:17219-17222,16606-16617",
+      "threshold": "target boundary >=3:1",
+      "rulingCheck": "ADR-004 WCAG ground",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F2.5",
+      "title": "Unscheduled: doubly-silent; ADR-006 chip stands; 44px touch = device-only",
+      "source": "renderer:165-211; styles.css:17736-17757",
+      "threshold": "D2 44px",
+      "rulingCheck": "ADR-006 landed",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F2.2",
+      "title": "Week start: 20-vs-6 cost symmetry; ours ships Notion's side today",
+      "source": "calendar-renderer.ts:2708-2710; calendar-toolbar-renderer.ts:371-380; digest:273-282",
+      "threshold": "G7 Monday, tint 6-7",
+      "rulingCheck": "P0-2 Proposed, operator's",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    },
+    {
+      "id": "F2.1",
+      "title": "Week/day: digest silence = negative result; ADR-002 label discipline stiffens",
+      "source": "digest §1-§2, :147-205; decision-record.md ADR-002",
+      "threshold": "G14 red stays",
+      "rulingCheck": "Anytype-side proceeds",
+      "_lineages": [
+        "glm-devpass-calendar"
+      ]
+    }
+  ],
+  "ruledOutDirections": [],
+  "metrics": {
+    "iterationsCompleted": 0,
+    "openQuestions": 0,
+    "resolvedQuestions": 0,
+    "keyFindings": 26,
+    "sourceFindings": 26,
+    "reconstructionGaps": 0,
+    "convergenceScore": 0,
+    "coverageBySources": {}
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "run_id": "1788710936140-5w5viz",
+  "loop_type": "research",
+  "spec_folder": "specs/005-component-surface-system/057-calendar-anytype-parity",
+  "base_artifact_dir": "specs/005-component-surface-system/057-calendar-anytype-parity/research",
+  "total_cli_lineages": 1,
+  "orphaned_lineages": [
+    {
+      "label": "glm-devpass-calendar",
+      "index": 0,
+      "started_at_iso": "2026-09-06T14:58:39.734Z"
+    }
+  ],
+  "total": 1,
+  "succeeded": 1,
+  "failed": 0,
+  "all_failed": false,
+  "gauges": {
+    "lag": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "failure_classes": {
+    "timeout": 0,
+    "exit": 0,
+    "salvage_miss": 0
+  },
+  "timestamp_anomalies": [
+    {
+      "label": "glm-devpass-calendar",
+      "state_log": "specs/005-component-surface-system/057-calendar-anytype-parity/research/lineages/glm-devpass-calendar/deep-research-state.jsonl",
+      "window": {
+        "start_at_iso": "2026-09-06T16:08:56.147Z",
+        "end_at_iso": "2026-09-06T16:28:30.446Z",
+        "tolerance_ms": 120000
+      },
+      "counts": {
+        "anomalous": 4,
+        "untimestamped": 1,
+        "unparseable": 0,
+        "total": 10
+      },
+      "sample": [
+        {
+          "index": 1,
+          "reason": "before_window",
+          "timestamp": "2026-09-06T14:32:00Z",
+          "deltaMs": 5696147
+        },
+        {
+          "index": 2,
+          "reason": "before_window",
+          "timestamp": "2026-09-06T14:40:00Z",
+          "deltaMs": 5216147
+        },
+        {
+          "index": 3,
+          "reason": "before_window",
+          "timestamp": "2026-09-06T15:05:00Z",
+          "deltaMs": 3716147
+        },
+        {
+          "index": 4,
+          "reason": "before_window",
+          "timestamp": "2026-09-06T15:20:00Z",
+          "deltaMs": 2816147
+        }
+      ]
+    }
+  ]
+}

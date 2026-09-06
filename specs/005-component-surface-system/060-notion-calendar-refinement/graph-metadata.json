@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/060-notion-calendar-refinement",
+  "spec_folder": "005-component-surface-system/060-notion-calendar-refinement",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "060 spec",
+      "notion calendar refinement",
+      "all-day strip date range",
+      "calendar mini day touch floor",
+      "060 plan",
+      "calendar refinement plan",
+      "all-day strip removal plan",
+      "mini day floor plan",
+      "060 tasks",
+      "calendar refinement tasks",
+      "red first calendar",
+      "calendar device checklist"
+    ],
+    "key_topics": [
+      "spec",
+      "notion",
+      "calendar",
+      "refinement",
+      "all-day",
+      "strip",
+      "date",
+      "range",
+      "mini",
+      "day",
+      "touch",
+      "floor"
+    ],
+    "importance_tier": "important",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md",
+      "src/views/calendar-renderer.ts",
+      "src/views/calendar-pinned-values.test.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-pinned-values.test.ts",
+        "kind": "test",
+        "path": "src/views/calendar-pinned-values.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Notion Calendar Refinement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Opus",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Two",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Renderer",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Notion's 40-screen calendar harvest changes exactly one design decision on this surface, and the calendar rebuild landed most of its consequences before this packet opened",
+    "created_at": "2026-09-06T16:38:53Z",
+    "last_save_at": "2026-09-06T16:50:43.833Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:6cf1c61ff008e5dcd04a257bf757492057796f19c2de144c496edddc2a033e2d",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "e8aa270ddc9164b690b21b11eb452ffea9a3151497083dfc2a65bac3e7d5be82",
+      "plan.md": "6bc864e029088f352ca3e57a24eb8b3dead7448080c41485e549b21c0490c114",
+      "tasks.md": "047b17810956f49abf94d9ab2fad07eb092cb323d03de9e2a4204bcb7eecf579",
+      "decision-record.md": "9eb48c39c89b35297ebb868c3e749f7a9368f559191bab9f059dd57a85ac79d3",
+      "implementation-summary.md": "4cde3ca1e61bf98209b91c829a7d5112472f3a7bc3caecf6e981eea3b0f2eca0"
+    },
+    "last_active_at": null
+  }
+}

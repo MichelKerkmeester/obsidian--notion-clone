@@ -48,6 +48,7 @@
       "goal.md",
       "decision-record.md",
       "implementation-summary.md",
+      "research/research.md",
       "src/views/calendar-renderer.ts",
       "src/views/calendar-toolbar-renderer.ts",
       "styles.css",
@@ -59,8 +60,7 @@
       "tools/live/render-assertion-harness.ts",
       "tools/screenshots/constructed-scenarios.mjs",
       "tools/screenshots/scenarios/temporal.mjs",
-      "tools/screenshots/scenarios/temporal-tick-parity.test.mjs",
-      "tools/live/replay.mjs"
+      "tools/screenshots/scenarios/temporal-tick-parity.test.mjs"
     ],
     "entities": [
       {
@@ -103,6 +103,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
         "source": "derived"
       },
       {
@@ -178,12 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "replay.mjs",
-        "kind": "file",
-        "path": "tools/live/replay.mjs",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The calendar is shaped by nobody's reference in particular",
     "created_at": "2026-09-05T20:25:00Z",
-    "last_save_at": "2026-09-06T16:32:44.888Z",
+    "last_save_at": "2026-09-06T16:53:05.364Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,16 +220,18 @@
       "acceptance-criteria.md",
       "goal.md",
       "decision-record.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "research/research.md"
     ],
-    "source_fingerprint": "sha256:243db6926474153436442f41f60b62260878302887559a0869dcb0e413767ecb",
+    "source_fingerprint": "sha256:a12bae130c6c497e8ffe81bc3608f2f177704b47b189da536bc4e5469537225f",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "616ede41765ba6b3ba89b12a8dc575fec1294ef219e2901a5d0d472ea31d0df4",
       "plan.md": "9c069123a3d90773888ca32e49e2eb912819c59b2fb8b7894a8e9c5dbd94fd43",
-      "tasks.md": "ecb88c8204297d7e3febdb304fc3948f54612318b235958a4a0658d1e76881ca",
+      "tasks.md": "ba296159715e50622bce917304ffac40cb709f0a66a100a4e64554125db036a8",
       "decision-record.md": "1bc295842c67f9775479d569a74f38023616920e64a3d520443762250061f0cc",
-      "implementation-summary.md": "39e092d0db844ddcfbf418ee78790d8639d66bbb8b323e7e398e1f14a034fe40"
+      "implementation-summary.md": "39e092d0db844ddcfbf418ee78790d8639d66bbb8b323e7e398e1f14a034fe40",
+      "research/research.md": "1ba436f7d772223fbf41c12088415d701c248ad057af6c4e907e107d53e761fe"
     },
     "last_active_at": null
   }

@@ -909,6 +909,7 @@ title and 44x44 close on phone.
 - **Closure gate**: See `acceptance-criteria.md`
 - **Decisions**: See `decision-record.md`
 - **Sibling**: `../056-board-anytype-parity/` — the board half of the same operator ruling
+- **Child**: `../060-notion-calendar-refinement/` — this surface's Notion refinement, opened 2026-09-06 from `research/research.md`. It carries the two rows the harvest still leaves standing on today's tree: the inline `start-end` string the week and day all-day strip still prints (`src/views/calendar-renderer.ts:862-864`, which P0-3 removed from the month grid but not from this scale), and the date picker's unpinned day-cell touch floors (`styles.css:15938`, `:6942`). It is additive under parent `goal.md` D15: it un-ticks no row here, and G3/G4/G5/G7/G8/G13 stay `Met`
 <!-- /ANCHOR:cross-refs -->
 
 ---
