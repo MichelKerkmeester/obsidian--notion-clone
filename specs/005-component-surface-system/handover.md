@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: orchestrate-handover-23, 2026-09-06 ~16:35. Eleven legs landed since 11:05 (calendar unscheduled chip, wrap precedence, the stacked-sheet fix, board palette, modal-sheet scenarios, the Wrap-row hint, icon-picker drift, the sheet-family reconciliation, no-confirm delete, the dropdown combobox, failing-values wording). Two operator programmes now run at once: Anytype parity, and a new Notion refinement that reserves children 059-066 across the eight UI surfaces, wave 1 (059-062) researching since 16:14 and wave 2 queued. Three fresh rulings are recorded verbatim: run the sheet-family research now, the Notion refinement instruction, and the OpenRouter-then-DevPass GLM route. Documentation only: no src/, styles.css, tools/ or main.js file was touched."
+description: "Resume point: orchestrate-handover-24, 2026-09-06 ~20:10. 0.0.30 shipped at e016e75c; fourteen legs landed since 16:35, six of the eight Notion-refinement children are open (059, 061, 062, 063, 065, 066), 067 and the 068 rename plan landed, and the cell interaction model was decided from four reference products. Delegation is now native Sonnet-implements / Opus-verifies alongside GLM 5.3 flash max on DevPass, OpenRouter credit having reached 0 at 20:10. Documentation only: no src/, styles.css, tools/ or main.js file was touched."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,39 +10,32 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-06T16:35:00Z"
-    last_updated_by: "orchestrate-handover-23"
-    recent_action: "Reserved 059-066 for the Notion refinement; recorded its additive-only rule as D15"
-    next_safe_action: "Land 165/167/170/171/173 then cut 0.0.30; wave-1 syntheses open 059-062"
+    last_updated_at: "2026-09-06T20:10:00Z"
+    last_updated_by: "orchestrate-handover-24"
+    recent_action: "Refreshed goal-prompt.md, goal.md's phase states and this handover after the 0.0.30 landings"
+    next_safe_action: "Land 058, 064 and the rulings fold leg"
     blockers:
-      - "059-066 are reserved, not created; only an Opus synthesis opens one, never a hand-made folder"
-      - "058 T003 onward pending: the format-routing and Title-slot-affordance code has not landed"
-      - "047: Fibery is running (worktree 150), ClickUp queued (151), Notion grouping query-derived (170)"
-      - "051 T013/T014 (the operator device pass and confirm-timing follow-ups) stay open"
-      - "056's ten T012 residuals: R6/R7 have a ruling to implement against; R1-R5, R8-R10 still open"
+      - "064 is still research/synthesis; only an Opus synthesis opens a child, never a hand-made folder"
+      - "058 T003 onward pending: no title format-routing code has landed"
+      - "047 T035 content reclassification owed for the Fibery harvest, and for ClickUp when it lands"
+      - "OpenRouter credit is 0 as of 20:10; GLM runs through llmgateway (DevPass) only"
+      - "Both claude logins share one session-cap window (hit 17:05 and 18:57, reset 19:40)"
     key_files:
-      - "specs/005-component-surface-system/roadmap.md"
+      - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
-      - "specs/005-component-surface-system/058-card-title-and-title-formats/goal.md"
-      - "specs/005-component-surface-system/051-modal-and-sheet-componentization/decision-record.md"
+      - "specs/005-component-surface-system/roadmap.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "surface-system-handover-23"
+      session_id: "surface-system-handover-24"
       parent_session_id: null
     completion_pct: 76
     open_questions:
       - "Does a Notion finding that contradicts a landed Anytype ruling ever become more than Proposed"
     answered_questions:
-      - "058's per-view title picker is not new work: ViewConfig.titleField already ships"
-      - "The real title gap is format routing (stringifyValue vs. the column's own formatter)"
-      - "051 ADR-007 E4 closes: single-row delete drops its confirm, keeps the existing Undo toast"
-      - "051 ADR-008: a new `side sheet` role, not a widened `panel` or a reused phone `sheet`"
-      - "052's combobox ruling is distinct from dropdown-field.ts's existing gated (>8) search box"
-      - "056 R6 reaffirms ADR-004 E1 as written; R7 is a fresh finding ADR-004 never addressed"
-      - "054's and 057's roadmap-derived ratios were stale (3/7, 0/10); corrected to 2/7 and 7/10"
-      - "a7db5035, previously cited as the wrap-toggle landing sha, is a post-rebase gate rebuild only"
-      - "The sheet-family research does not wait for 044/048/051 to verify; the operator lifted that gate"
-      - "GLM cannot read images, which is why every loop is fed a Sonnet digest instead of captures"
+      - "The cell model: tap edits, long-press selects, a 3-control anchored pill, an overflow sheet, the editor at the cell"
+      - "068 renames to obnotion- with a data.json migration and author MichelKerkmeester; 0.0.31 is the rename release"
+      - "GLM route once OpenRouter hits 0: --provider llmgateway --model glm-5.3-flash --thinking max"
+      - "The board scrollbar is edge-only; the calendar month chip's ellipsis sits inside the cell"
 ---
 # Session Handover: Component Surface System
 
@@ -51,6 +44,78 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-06 ~20:10, `orchestrate-handover-24`, read from `.worktrees/193-goal-refresh-0930`
+
+**Documentation only.** No `src/`, `styles.css`, `tools/` or `main.js` file was touched. Main moved
+under this leg as it has all week — `git worktree list` in the primary checkout read `92d5c00d` on
+main while this worktree sat on `64f9853f`. **Confirm branch tips yourself; every sha below records
+what was true at 20:10, not a pointer to follow.**
+
+**`0.0.30` shipped at `e016e75c`** — the calendar rebuild, the board page scroll, the sheet fixes
+and the rewritten README.
+
+**Landed since 16:35.** `c6fde2a2` the calendar (live evidence and graph metadata re-derived after
+the rebase) · `dc1d54a9` the board page scroll, dropping the inferred sticky header · `3e1c3c65` the
+phone month chip's ellipsis moved inside the cell · `52598819`, `dc6df4b4` and `e9cb2417` the
+`067-sheet-family-remediation` synthesis, its gate re-derivation and the comment-scan pointers ·
+`9d9515ae` opened `059` · `c49ca7f6` plus `870d87a2` opened `061` and recorded its cell interaction
+model · `f52109c1` opened `062` · `7e44e487` plus `21e6366a` opened `063` and ruled its colour
+picker · `cf15a636` opened `065` · `1b3aecf7` opened `066` · `b4c78e98` opened the `068` rename plan
+· `cb27def3` and `9ad2fb34` the README rewrite and its early-alpha status · `f88c17c9` the Notion
+web reclassification · `64f9853f` the Fibery Mobbin harvest, **1,800 files, with T035 content
+reclassification still owed**.
+
+**The cell interaction model is decided** (`870d87a2`, `061`), read from four reference products:
+a tap **edits**, a long press **selects**, selection presents as a **three-control anchored pill**,
+overflow moves to a **`···` sheet**, the editor is drawn **at the cell** and claims the bottom dock,
+and desktop gets a **30px** bar.
+
+**Rulings taken today.** `062` ADR-003/005/006/007 · `059` ADR-004/010/011 · `066` ADR-001/002 ·
+`065` ADR-005 through ADR-008 · `063` ADR-005 · `068`'s prefix and author · `057`'s month-chip
+ellipsis · `056`'s edge-only scrollbar. **The verbatim list lands in `roadmap.md` §6A when the fold
+leg lands** — this entry is the summary, and the fold is authoritative over it.
+
+**`068` is the rename, and its shape is now ruled**: the plugin id plus an `obnotion-` prefix
+everywhere, a `data.json` migration, and `manifest.json`'s author set to **MichelKerkmeester**. It
+runs as **one leg** after every in-flight landing, and **`0.0.31` is the rename release**.
+
+**Delegation, as ruled today.** Native in-session agents carry the work — **Sonnet implements, Opus
+verifies and lands**, one worktree per leg, *"do the work yourself, never spawn a sub-agent"*, and
+**never a Fable sub-agent**. **GLM 5.3 flash max runs alongside through cli-pi**, and the transport
+changed: **OpenRouter credit reached 0 at 20:10**, so the GLM route is
+`--provider llmgateway --model glm-5.3-flash --thinking max` (DevPass). **Use GLM where possible**
+on text-only legs; images and live verification stay native. **claude2 print-mode legs remain** for
+the Mobbin harvests, which need the MCP config. **Both logins share one session-cap window** — it
+was hit at **17:05** and **18:57** and reset at **19:40** — so **write a continuation prompt per leg
+under `scratchpad/continuations/`** before dispatching, or a capped leg is lost rather than resumed.
+
+**In flight at 20:10.** The `060` and `064` syntheses (GLM DevPass, Opus landers waiting) · the
+`058` lander · the `056` edge-only lander, which also fixes the always-visible vertical thumb · the
+rulings fold leg · the ClickUp harvest in `worktrees/151` · `061`'s implementation leg on GLM
+DevPass.
+
+**`060` and the `056` edge-only lander landed while this leg rebased.** `3ab83d8b` opened `060-notion-calendar-refinement`,
+`c0f96910` re-derived its citations and `92d5c00d` corrected five overstated claims in it. So
+**seven of the eight reserved children are open** and only `064` is still planned — this document's
+"in flight at 20:10" line above is the record of 20:10, and `goal.md`'s tables carry the corrected
+state. The board scrollbar followed: `a70dd113` confined the desktop reveal to its own edge and
+`dfb416ab` hid the desktop vertical scrollbar at rest, closing the `056` ruling taken this evening.
+
+**Worktrees, read from the primary checkout at 20:10.** `main` `92d5c00d` ·
+`065-anytype-research` `83fc7121` · `151-harvest-clickup` `3b3ac633` · `174-notion-board` `9d9515ae`
+· `176-notion-sheets` `c49ca7f6` · `177-notion-table` `f52109c1` · `179-notion-dropdowns` `7e44e487`
+· `180-notion-toolbar` `80c2bb48` · `181-notion-record` `cf15a636` · `182-notion-states` `1b3aecf7`
+· `185-card-title-formats` `90e6fe69` · `186-board-scrollbar-edge-reveal` `dfb416ab` ·
+`190-fold-rulings-notion-children` `e016e75c` · `192-notion-sheet-cell-model` `64f9853f` ·
+`193-goal-refresh-0930` `64f9853f`. **`175-notion-calendar` is gone from the list** — the `060` leg
+is running without the worktree it started in, so find it before assuming it died.
+
+**Order of work is `goal-prompt.md`'s.** Land `058`, the `056` edge-only lander, `060`, `064` and
+the fold; then ClickUp and the T035 content reclassification for Fibery and ClickUp; then the
+implementation legs per child in the recorded order (`061`, `063`, `059`, `062`, `065`, `066`,
+`060`, `064`, `067`), each implemented by GLM or Sonnet and landed by Opus; then `068` as one leg
+and `0.0.31`; then the device rows. Do not tick an operator row.
 
 ### 2026-09-06 ~16:35, `orchestrate-handover-23`, read from `.worktrees/178-docs-refresh-1630`
 
