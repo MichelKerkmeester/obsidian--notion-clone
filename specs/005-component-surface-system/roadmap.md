@@ -1155,7 +1155,24 @@ manual drag reorder under an active sort on board or table raises a confirm befo
 58 content-changed captures were reviewed across every migrated family and the css lane retaken against
 the fixed stylesheet (`56e656ef`). Carries forward 0.0.26's record-panel docking unchanged.
 `manifest.json`, `package.json` and `versions.json` on main read **0.0.27**, and the tag is on `origin`.
-None of 0.0.7 through 0.0.27 is operator-confirmed yet. The cadence continues at **0.0.28** onward —
+**0.0.28 is cut** (`d3433d81`), carrying: `044`'s phone-sheet fix — the mobile inline cell editor's
+sticky action row and the sheet title's unbreakable-word overflow, both producers fixed and every
+sheet swept for horizontal overflow on both engines (`05743c38`, guarded `555545a5`); `005`'s table
+row-height fix — a table cell's height is a minimum, so wrapping value containers now clip at the
+column edge instead of setting the row from an off-screen column (`03f44452`); and `046`'s
+row-insertion-seam fix inside a linked-view embed, where the embed's own row-height rule tied in
+specificity with the insertion line's zero-height rule and won by source order (`d24716f5`). Also
+carries the componentization work that shipped underneath these: one surface-shell primitive for
+every modal and sheet (`03032dcc`); the owned-menu primitive's real submenus and never-empty
+fallback (`fc730ed9`), migrated onto the view-tab context menu (`21b03842`/`79e453eb`); new
+record-surface primitives — header, property row, add-property and hidden-group — holding every
+property value left-aligned (`c7c373ce`, measured `464fb575`); the toast component's severity,
+action slot and motion tokens (`5e3647d0`); and the toolbar's last rows — the New menu's timed
+settings landing, a sort-conflict confirm on drop, and the measured collapse rung (`737116f7`,
+`bcd64c1f`). The gallery view renderer is removed; existing gallery views open as boards behind a
+one-time notice (`fb27ba5b`, closed `adce7c0d`). `manifest.json`, `package.json` and `versions.json`
+on main read **0.0.28**, and the tag is on `origin`.
+None of 0.0.7 through 0.0.28 is operator-confirmed yet. The cadence continues at **0.0.29** onward —
 always `0.0.N`, never a second `.N.N`.
 
 Each release since the operator's 2026-09-03 request also installs into the iCloud vault plugin
