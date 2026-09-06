@@ -22,9 +22,16 @@ Current state:
 - `property-row.ts`'s display value renderer is live: `card-field-renderer.ts` calls into it
   instead of keeping its own copy, so the record sheet, the board card, the gallery card and the
   list card already render through this module.
-- `record-header.ts`, `add-property-row.ts`, `hidden-properties.ts` and the corrected half of
-  `property-row.ts` (the trued-up row shell and the single-select/multi-select split) are built
-  and unit-tested but not yet wired to a live renderer — no existing capture depends on them.
+- `property-row.ts`'s option-value split (`renderOptionValue`) is live on the record sheet and the
+  board card, opted into through `renderPropertyValue`'s `splitOptionValue` flag; the gallery and
+  list cards leave the flag unset and keep the filled-badge path.
+- `record-header.ts` is live everywhere a record-style header renders: the record sheet, the table
+  peek's rail and the column manager's panel header all call `buildDesktopRecordHeader`.
+- `hidden-properties.ts` is live on the record sheet, now drawing a Shown/Hidden section split with
+  per-row drag-handle/type-icon/name/eye/chevron anatomy rather than a flat disclosure. The table
+  peek draws its own hidden-group disclosure by hand and does not consume this module.
+- `add-property-row.ts` is live on the record sheet's trailing add-property row and the column
+  manager's own add-property picker.
 - `cell-editor-contract.ts` pins `CellRenderer.startEdit`'s type-to-editor mapping ahead of any
   method body moving; every entry that names an extracted module is red until that module lands.
 
@@ -34,8 +41,8 @@ Current state:
 
 | Role | Modules |
 |---|---|
-| Wired today (via a shim) | `property-row.ts` (display value renderer) |
-| Built beside consumers, not yet wired | `record-header.ts`, `add-property-row.ts`, `hidden-properties.ts`, `property-row.ts` (row shell + option-value split) |
+| Wired today | `property-row.ts` (display value renderer, and the option-value split via `splitOptionValue`), `record-header.ts`, `add-property-row.ts`, `hidden-properties.ts` |
+| Built beside consumers, not yet wired | `property-row.ts` (`buildPropertyRow`, the trued-up row shell) |
 | Pinned contract, no code moved yet | `cell-editor-contract.ts` |
 
 ---
@@ -86,10 +93,11 @@ Main flow, for the primitives already wired:
 
 | Entrypoint | Type | Purpose |
 |---|---|---|
-| `renderPropertyValue` | Function (`property-row.ts`) | The value half of a property row, called by `card-field-renderer.ts` today |
-| `buildDesktopRecordHeader` / `buildPhoneRecordHeader` | Functions (`record-header.ts`) | The header block, awaiting its first consumer switch |
-| `createHiddenPropertiesGroup` | Factory (`hidden-properties.ts`) | The collapsed group, holding expanded state across rebuilds |
-| `buildAddPropertyRow` | Function (`add-property-row.ts`) | The search-first add-property affordance |
+| `renderPropertyValue` | Function (`property-row.ts`) | The value half of a property row, called by `card-field-renderer.ts` today; its `splitOptionValue` flag switches the option branch onto `renderOptionValue` for the record sheet and the board card |
+| `renderOptionValue` | Function (`property-row.ts`) | Single-select as coloured text, multi-select as filled chips; consumed through `renderPropertyValue`'s split flag |
+| `buildDesktopRecordHeader` / `buildPhoneRecordHeader` | Functions (`record-header.ts`) | The header block, consumed by the record sheet, the table peek's rail and the column manager's panel |
+| `createHiddenPropertiesGroup` | Factory (`hidden-properties.ts`) | The record sheet's Shown/Hidden property-visibility group, holding expanded state across rebuilds; the table peek's own disclosure is separate hand-rolled code |
+| `buildAddPropertyRow` | Function (`add-property-row.ts`) | The search-first add-property affordance, consumed by the record sheet's trailing row and the column manager's add button |
 | `CELL_EDITOR_DISPATCH_CONTRACT` | Data (`cell-editor-contract.ts`) | The pinned type-to-editor mapping the extraction is measured against |
 
 ---

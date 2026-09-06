@@ -530,3 +530,74 @@ describe("CardFieldRenderer keyboard accessibility", () => {
     }
   });
 });
+
+describe("CardFieldRenderer option split", () => {
+  function withStubbedDocument<T>(run: () => T): T {
+    const origWindow = globalThis.window;
+    (globalThis as unknown as { window: { activeDocument: { createElement: (tag: string) => MockElement } } }).window = {
+      activeDocument: {
+        createElement: (tag: string) => new MockElement(tag),
+      },
+    };
+    try {
+      return run();
+    } finally {
+      globalThis.window = origWindow;
+    }
+  }
+
+  it("draws a single-select value as coloured text with splitOptionValue set, a filled badge without it", () => {
+    const row: RowData = { file: { path: "notes/test.md" } as never, frontmatter: {}, computed: {} };
+    const col = { key: "stage", label: "stage", type: "select", statusOptions: [{ value: "Review", color: "purple" }] } as unknown as ColumnDef;
+    const config = { schema: { columns: [col] }, views: [] } as unknown as ViewConfig;
+    const renderArgs = {
+      app: {} as App,
+      row,
+      col,
+      config,
+      value: "Review",
+      displayType: "select" as const,
+      fieldClass: "db-card-field",
+      valueClass: "db-card-value",
+      labelClass: "db-card-label",
+      badgesClass: "db-card-badges",
+      linkClass: "db-card-link",
+    };
+
+    const split = withStubbedDocument(() => renderCardField({ ...renderArgs, splitOptionValue: true }) as unknown as MockElement);
+    const valueEl = split.children.find((child) => child.hasClass("db-card-value"));
+    expect(valueEl?.querySelectorAll(".status-badge")).toHaveLength(0);
+    expect(valueEl?.querySelector(".status-color-text-purple")).not.toBeNull();
+
+    const unsplit = withStubbedDocument(() => renderCardField(renderArgs) as unknown as MockElement);
+    const unsplitValueEl = unsplit.children.find((child) => child.hasClass("db-card-value"));
+    expect(unsplitValueEl?.querySelector(".status-badge")).not.toBeNull();
+  });
+
+  it("keeps multi-select as filled chips either way", () => {
+    const row: RowData = { file: { path: "notes/test.md" } as never, frontmatter: {}, computed: {} };
+    const col = {
+      key: "tags", label: "tags", type: "multi-select",
+      statusOptions: [{ value: "Backlog", color: "gray" }, { value: "Review", color: "purple" }],
+    } as unknown as ColumnDef;
+    const config = { schema: { columns: [col] }, views: [] } as unknown as ViewConfig;
+
+    const fieldEl = withStubbedDocument(() => renderCardField({
+      app: {} as App,
+      row,
+      col,
+      config,
+      value: ["Backlog", "Review"],
+      displayType: "multi-select",
+      fieldClass: "db-card-field",
+      valueClass: "db-card-value",
+      labelClass: "db-card-label",
+      badgesClass: "db-card-badges",
+      linkClass: "db-card-link",
+      splitOptionValue: true,
+    }) as unknown as MockElement);
+
+    const valueEl = fieldEl.children.find((child) => child.hasClass("db-card-value"));
+    expect(valueEl?.querySelectorAll(".status-badge")).toHaveLength(2);
+  });
+});

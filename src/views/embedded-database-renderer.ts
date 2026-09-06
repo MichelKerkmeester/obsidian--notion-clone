@@ -338,6 +338,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       host: this.containerEl,
       row,
       columns,
+      allColumns: getColumnsInOrder(config),
       config,
       app: this.app,
       actions: {

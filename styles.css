@@ -10375,7 +10375,9 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container .db-record-detail-field-label,
 .db-mobile-bottom-sheet .db-record-detail-field-label {
   color: var(--text-muted);
-  font-size: var(--font-smaller);
+  /* No font-size here: the label carries the same computed size as its value, with hierarchy
+     read from colour alone (the muted tone above). The phone sheet keeps its own size through
+     the more specific rule below, which this selector's specificity never reaches. */
   min-width: 72px;
   flex-shrink: 0;
 }
@@ -10431,6 +10433,181 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container .db-record-detail-hidden-fields.is-hidden,
 .db-mobile-bottom-sheet .db-record-detail-hidden-fields.is-hidden {
   display: none;
+}
+
+/* The group's Shown/Hidden split: one heading-and-bulk-link row per section, the rows
+   themselves below it. */
+.note-database-container .db-record-detail-hidden-section,
+.db-mobile-bottom-sheet .db-record-detail-hidden-section {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+
+.note-database-container .db-record-detail-hidden-section-header,
+.db-mobile-bottom-sheet .db-record-detail-hidden-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--db-space-3);
+  padding: 2px 6px;
+}
+
+.note-database-container .db-record-detail-hidden-section-title,
+.db-mobile-bottom-sheet .db-record-detail-hidden-section-title {
+  color: var(--text-faint);
+  font-size: var(--font-smaller, 0.8em);
+  text-transform: uppercase;
+}
+
+.note-database-container .db-record-detail-hidden-bulk-link,
+.db-mobile-bottom-sheet .db-record-detail-hidden-bulk-link {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  appearance: none;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-muted);
+  font-size: var(--font-smaller, 0.8em);
+  cursor: pointer;
+}
+
+.note-database-container .db-record-detail-hidden-bulk-link:hover,
+.db-mobile-bottom-sheet .db-record-detail-hidden-bulk-link:hover {
+  color: var(--text-normal);
+  text-decoration: underline;
+}
+
+/* One row per property: drag handle, type icon, name, eye toggle, chevron — the same five-part
+   grammar `.db-column-manager-row` already draws, laid out on its own grid rather than shared
+   with it, since this row carries no move buttons and no wrap/edit/delete actions. */
+.note-database-container .db-record-detail-hidden-row,
+.db-mobile-bottom-sheet .db-record-detail-hidden-row {
+  display: grid;
+  grid-template-columns: 18px 18px minmax(80px, 1fr) auto auto;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--db-sheet-row-min-height, 30px);
+  border-radius: var(--db-radius-sm);
+  padding: 2px 6px;
+}
+
+.note-database-container .db-record-detail-hidden-row:hover,
+.db-mobile-bottom-sheet .db-record-detail-hidden-row:hover {
+  background: var(--background-modifier-hover);
+}
+
+.note-database-container .db-record-detail-hidden-drag,
+.db-mobile-bottom-sheet .db-record-detail-hidden-drag {
+  color: var(--text-faint);
+  font-weight: 700;
+  text-align: center;
+  user-select: none;
+}
+
+.note-database-container .db-record-detail-hidden-name-wrap,
+.db-mobile-bottom-sheet .db-record-detail-hidden-name-wrap {
+  min-width: 0;
+}
+
+.note-database-container .db-record-detail-hidden-name,
+.db-mobile-bottom-sheet .db-record-detail-hidden-name {
+  display: block;
+  overflow: hidden;
+  font-size: var(--db-font-base);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note-database-container .db-record-detail-hidden-eye,
+.note-database-container .db-record-detail-hidden-chevron,
+.db-mobile-bottom-sheet .db-record-detail-hidden-eye,
+.db-mobile-bottom-sheet .db-record-detail-hidden-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  appearance: none;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-muted);
+}
+
+.note-database-container .db-record-detail-hidden-eye,
+.db-mobile-bottom-sheet .db-record-detail-hidden-eye {
+  cursor: pointer;
+}
+
+.note-database-container .db-record-detail-hidden-eye:disabled,
+.db-mobile-bottom-sheet .db-record-detail-hidden-eye:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.note-database-container .db-record-detail-hidden-chevron,
+.db-mobile-bottom-sheet .db-record-detail-hidden-chevron {
+  color: var(--text-faint);
+}
+
+.note-database-container .db-record-detail-hidden-eye svg,
+.note-database-container .db-record-detail-hidden-chevron svg,
+.db-mobile-bottom-sheet .db-record-detail-hidden-eye svg,
+.db-mobile-bottom-sheet .db-record-detail-hidden-chevron svg {
+  width: 14px;
+  height: 14px;
+}
+
+.note-database-container .db-record-detail-hidden-type-icon,
+.db-mobile-bottom-sheet .db-record-detail-hidden-type-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  color: var(--text-faint);
+}
+
+.note-database-container .db-record-detail-hidden-type-icon svg,
+.db-mobile-bottom-sheet .db-record-detail-hidden-type-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* The trailing add-property row — the hidden-group toggle's own muted-text row language, so the
+   sheet gains no new visual vocabulary for it. */
+.note-database-container .db-record-detail-add-row,
+.db-mobile-bottom-sheet .db-record-detail-add-row {
+  display: flex;
+  min-width: 0;
+}
+
+.note-database-container .db-record-detail-add-button,
+.db-mobile-bottom-sheet .db-record-detail-add-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--db-sheet-row-min-height, 44px);
+  margin: 0;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: var(--db-radius-sm);
+  appearance: none;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-muted);
+  font-size: var(--font-smaller, 0.8em);
+  cursor: pointer;
+}
+
+.note-database-container .db-record-detail-add-button:hover,
+.note-database-container .db-record-detail-add-button:focus-visible,
+.db-mobile-bottom-sheet .db-record-detail-add-button:hover,
+.db-mobile-bottom-sheet .db-record-detail-add-button:focus-visible {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
 }
 
 /* The sheet's chrome does not scroll, and only its content does.
@@ -12823,6 +13000,37 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   display: flex;
   gap: 0;
   align-items: center;
+}
+
+/* The list's own search field — the same input treatment `.db-add-property-search` already
+   carries, one file away. */
+.note-database-container .db-column-manager-search-row {
+  padding: 0 4px 4px;
+}
+
+.note-database-container .db-column-manager-search {
+  /* A percentage width measures the CONTENT box; without this, the input's own padding and
+     border add on top of that 100% and it paints past the sheet's right edge — the same defect
+     the status badge once carried, and for the same reason. */
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 4px 8px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--db-radius-sm);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  font: inherit;
+}
+
+.note-database-container .db-column-manager-search:focus {
+  border-color: var(--interactive-accent);
+  outline: none;
+}
+
+.note-database-container .db-column-manager-row-search-hidden {
+  display: none;
 }
 
 .note-database-container .db-column-manager-file-property-dropdown .db-dropdown-option.has-icon {

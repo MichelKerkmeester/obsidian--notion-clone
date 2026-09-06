@@ -8,13 +8,12 @@
 // unchanged so the record sheet, the board card, the gallery card and the list card keep
 // exactly what they render today; `renderCardFieldValue` becomes a one-line call into it.
 //
-// `buildPropertyRow` and `renderOptionValue` are the row this family is converging on —
-// label, then value, value left-aligned, one type size for both with colour carrying the
-// hierarchy, no format icon, and single-select drawn as text while multi-select stays a
-// filled chip. Nothing calls them yet: the desktop record sheet still right-aligns through
-// the board card's own stylesheet rule, and a later leg is what switches a consumer onto
-// this shape (and brings the CSS that makes it visible) — building it beside the still-live
-// display path is what keeps every existing capture unmoved.
+// `buildPropertyRow` and `renderOptionValue` are the row this family converged on — label, then
+// value, value left-aligned, one type size for both with colour carrying the hierarchy, no format
+// icon, and single-select drawn as text while multi-select stays a filled chip. The record sheet
+// and the board card opt into the split through `renderPropertyValue`'s `splitOptionValue` flag;
+// the gallery and list cards leave it unset and keep drawing the filled badge both kinds always
+// have.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -51,6 +50,13 @@ export interface PropertyValueRenderOptions {
   badgesClass: string;
   linkClass: string;
   readOnly?: boolean;
+  /**
+   * Opts an option value into the corrected split — single-select as coloured text, multi-select
+   * still a filled chip — instead of the filled badge both kinds draw by default. Scoped to the
+   * callers that asked for it rather than made the default, so the gallery and list cards this
+   * function also serves keep drawing exactly what they draw today.
+   */
+  splitOptionValue?: boolean;
   onEdit?: (target: HTMLElement, row: RowData, col: ColumnDef, event?: MouseEvent) => void;
   onEditFormula?: (col: ColumnDef) => void;
   onOpenTarget?: (row: RowData, target: string, external: boolean) => void | Promise<void>;
@@ -109,6 +115,10 @@ export function renderPropertyValue(
   })) return;
 
   if (col.type === "select" || col.type === "status") {
+    if (options.splitOptionValue) {
+      renderOptionValue(valueEl, false, [String(value)], splitOptionValueClasses(col));
+      return;
+    }
     const resolved = resolveOptionDisplay(col, String(value));
     const badge = valueEl.createSpan({ cls: "status-badge", text: resolved.value || t("common.empty") });
     badge.title = resolved.value || t("common.empty");
@@ -120,6 +130,10 @@ export function renderPropertyValue(
     const badges = valueEl.createDiv({ cls: options.badgesClass });
     badges.addClass("has-badges");
     setFieldTooltip(badges, values);
+    if (options.splitOptionValue) {
+      renderOptionValue(badges, true, values, splitOptionValueClasses(col));
+      return;
+    }
     for (const entry of values) {
       const resolved = resolveOptionDisplay(col, entry);
       const badge = badges.createSpan({ cls: "status-badge", text: resolved.value || t("common.empty") });
@@ -246,6 +260,14 @@ export interface OptionValueRenderOptions {
   textClass: string;
 }
 
+/** The production class pair `renderPropertyValue`'s split reaches for: multi-select's chip
+ *  stays the existing filled badge so it draws pixel-identically to before, and single-select's
+ *  text carries no rule of its own — the colour comes entirely from the `status-color-text-*`
+ *  class `renderOptionValue` already adds beside it. */
+function splitOptionValueClasses(col: ColumnDef): OptionValueRenderOptions {
+  return { col, chipClass: "status-badge", textClass: "db-option-value-text" };
+}
+
 /**
  * Single-select renders as coloured text with no chip; multi-select stays a filled chip. Today
  * both still render through the same filled badge everywhere a value is drawn, which is what
@@ -278,15 +300,22 @@ export function renderOptionValue(
 // ───────────────────────────────────────────────────────────────────
 
 /**
- * The prompt an empty relation, select or multi-select row shows in place of "Empty" — naming the
- * action rather than the absence. Scoped to just these three formats; every other empty format
- * keeps its existing text, and a table cell (denser than a property row) renders nothing for an
- * empty value on either platform, so this is never called there.
+ * The prompt an empty field with an editor shows in place of "Empty" — naming the action rather
+ * than the absence. Every format that opens an editor gets one; a format with no editor of its
+ * own (e.g. a computed value) returns `null` and keeps whatever its caller already renders. A
+ * table cell (denser than a property row) renders nothing for an empty value on either platform,
+ * so this is never called there.
  */
 export function getPropertyEmptyPrompt(displayType: ColumnDef["type"]): string | null {
   if (displayType === "select") return t("field.emptySelectPrompt");
   if (displayType === "multi-select") return t("field.emptyMultiSelectPrompt");
   if (displayType === "relation") return t("field.emptyRelationPrompt");
+  if (displayType === "number") return t("field.emptyNumberPrompt");
+  if (displayType === "date") return t("field.emptyDatePrompt");
+  if (displayType === "datetime") return t("field.emptyDatetimePrompt");
+  if (displayType === "currency") return t("field.emptyCurrencyPrompt");
+  if (displayType === "text") return t("field.emptyTextPrompt");
+  if (displayType === "files") return t("field.emptyFilesPrompt");
   return null;
 }
 

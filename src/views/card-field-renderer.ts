@@ -42,6 +42,8 @@ export interface CardFieldRendererOptions {
   fieldWidth?: number;
   wrap?: boolean;
   readOnly?: boolean;
+  /** Forwarded to `renderPropertyValue` — see its own doc for what the split changes. */
+  splitOptionValue?: boolean;
   applyConditionalFormat?: (element: HTMLElement, row: RowData, config: ViewConfig, targetField?: string) => void;
   onEdit?: (target: HTMLElement, row: RowData, col: ColumnDef, event?: MouseEvent) => void;
   onEditFormula?: (col: ColumnDef) => void;
@@ -108,6 +110,7 @@ export function renderCardField(options: CardFieldRendererOptions): HTMLElement 
     badgesClass,
     linkClass,
     readOnly: options.readOnly,
+    splitOptionValue: options.splitOptionValue,
     onEdit: options.onEdit,
     onEditFormula: options.onEditFormula,
     onOpenTarget: options.onOpenTarget,
@@ -153,6 +156,7 @@ interface CardFieldValueOptions {
   badgesClass: string;
   linkClass: string;
   readOnly?: boolean;
+  splitOptionValue?: boolean;
   onEdit?: (target: HTMLElement, row: RowData, col: ColumnDef, event?: MouseEvent) => void;
   onEditFormula?: (col: ColumnDef) => void;
   onOpenTarget?: (row: RowData, target: string, external: boolean) => void | Promise<void>;

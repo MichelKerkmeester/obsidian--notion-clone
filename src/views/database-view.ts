@@ -184,7 +184,9 @@ import { InteractionScopeRegistry } from "./interaction-scope";
 import { safeString } from "../data/safe-string";
 import { parseClipboardTable, serializeSelectedCells as serializeClipboardSelectedCells } from "../data/clipboard-serializer";
 import { openBulkEditFieldMenu } from "./bulk-edit-field-menu";
-import { calendarSearchResultsPlacement, getVisiblePopoverBounds, positionToolbarPopover, publishKeyboardInset } from "./popover-position";
+import { calendarSearchResultsPlacement, getVisiblePopoverBounds, positionToolbarPopover, publishKeyboardInset, releasePopoverPosition } from "./popover-position";
+import { buildAddPropertyRow } from "./record-surface/add-property-row";
+import { buildTypePickerOptions } from "./record-surface/type-picker";
 import { closeRecordDetailPanel, getOpenRecordDetailPath, openRecordDetailPanel, refreshRecordDetailPanel } from "./record-detail-panel";
 import { clearRenderedViewRoots } from "./rendered-view-roots";
 import {
@@ -11755,6 +11757,7 @@ export class DatabaseView extends FileView {
       placement,
       row,
       columns,
+      allColumns: getColumnsInOrder(config),
       config,
       app: this.app,
       actions: {
@@ -11771,9 +11774,58 @@ export class DatabaseView extends FileView {
         // writes on the same path rather than racing them.
         saveNoteBody: (r, body) =>
           this.dataSource.updateNoteBody(r.file, body, { sourceInstanceId: this.instanceId }),
+        setColumnVisible: (col, visible) => this.columnOperations.setColumnVisible(col, visible),
+        setColumnsVisible: (changes) => this.setColumnsVisible(changes),
+        addProperty: (anchorEl) => this.openRecordAddPropertyPicker(anchorEl),
         isReadOnly: false,
       },
     });
+  }
+
+  /**
+   * The record sheet's own trailing "+ Add a property" row opens the same search-first picker
+   * the column manager's add button does. Not shared as a common helper with that caller: the
+   * two mount from different hosts (a toolbar popover panel versus a sheet already anchored to a
+   * row) and a third consumer would be the point to factor the popover wiring out, not two.
+   */
+  private openRecordAddPropertyPicker(anchorEl: HTMLElement): void {
+    const host = anchorEl.ownerDocument.body;
+    const popover = host.createDiv({ cls: "db-dropdown-popover db-add-property-picker" });
+    let close: () => void = () => undefined;
+    let picker: ReturnType<typeof buildAddPropertyRow<ColumnDef["type"]>>;
+    picker = buildAddPropertyRow({
+      parent: popover,
+      rootClass: "db-add-property-row",
+      searchClass: "db-add-property-search",
+      optionListClass: "db-add-property-options",
+      optionClass: "db-add-property-option",
+      createRowClass: "db-add-property-create",
+      options: buildTypePickerOptions().map((option) => ({ value: option.value as ColumnDef["type"], label: option.text })),
+      searchPlaceholder: t("panel.addPropertySearchPlaceholder"),
+      createLabel: (query) => t("panel.createPropertyNamed", { name: query }),
+      renderIcon: (iconParent, value) => renderPropertyTypeIcon(iconParent, { key: "", label: "", type: value } as ColumnDef, "db-column-type-option-icon"),
+      onSelect: (type) => {
+        const query = picker.searchInput.value;
+        close();
+        void this.openCreatePropertyModal({ initialType: type, initialLabel: query });
+      },
+      onCreateNew: (query) => {
+        close();
+        void this.openCreatePropertyModal({ initialType: "text", initialLabel: query });
+      },
+    });
+    picker.searchInput.focus();
+    positionToolbarPopover(popover, anchorEl, { minWidth: 220, preferredWidth: 260, maxWidth: 320 });
+    const removeAutoClose = installPopoverAutoClose({
+      panel: popover,
+      anchorEl,
+      close: () => close(),
+    });
+    close = () => {
+      removeAutoClose();
+      releasePopoverPosition(popover);
+      popover.remove();
+    };
   }
 
   refresh(options: { viewport?: DatabaseViewportRequest } = {}): void {

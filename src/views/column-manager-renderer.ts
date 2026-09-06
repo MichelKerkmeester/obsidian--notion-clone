@@ -106,9 +106,12 @@ export class ColumnManagerRenderer {
     }
 
     this.renderHeader(panel, columns, config, state, actions);
+    const searchInput = this.renderSearchRow(panel);
+    const rowsByKey = new Map<string, HTMLElement>();
     columns.forEach((col, index) => {
-      this.renderColumnRow(panel, col, config, state, actions, columns, index, columns.length);
+      rowsByKey.set(col.key, this.renderColumnRow(panel, col, config, state, actions, columns, index, columns.length));
     });
+    this.wireVisibilitySearch(searchInput, columns, rowsByKey);
 
     if (!actions.isReadOnly) {
       const addRow = panel.createDiv({ cls: "db-column-manager-add-row" });
@@ -185,8 +188,11 @@ export class ColumnManagerRenderer {
     const popover = host.createDiv({ cls: "db-dropdown-popover db-add-property-picker" });
     let close: () => void = () => undefined;
     // Typing a name that matches no format is the create path — seeded as a text property, the
-    // way `create-property-modal.ts`'s own default does.
-    buildAddPropertyRow({
+    // way `create-property-modal.ts`'s own default does. Picking a format is the other one: the
+    // handle is read back inside `onSelect` rather than at construction time, since the row's
+    // click only fires once the picker (and so the handle) already exists.
+    let picker: ReturnType<typeof buildAddPropertyRow<ColumnDef["type"]>>;
+    picker = buildAddPropertyRow({
       parent: popover,
       rootClass: "db-add-property-row",
       searchClass: "db-add-property-search",
@@ -197,9 +203,14 @@ export class ColumnManagerRenderer {
       searchPlaceholder: t("panel.addPropertySearchPlaceholder"),
       createLabel: (query) => t("panel.createPropertyNamed", { name: query }),
       renderIcon: (iconParent, value) => renderPropertyTypeIcon(iconParent, { key: "", label: "", type: value } as ColumnDef, "db-column-type-option-icon"),
-      onSelect: (type) => { close(); createProperty(type); },
+      onSelect: (type) => {
+        const query = picker.searchInput.value;
+        close();
+        createProperty(type, query);
+      },
       onCreateNew: (query) => { close(); createProperty("text", query); },
-    }).searchInput.focus();
+    });
+    picker.searchInput.focus();
     positionToolbarPopover(popover, anchorEl, { minWidth: 220, preferredWidth: 260, maxWidth: 320 });
     const removeAutoClose = installPopoverAutoClose({
       panel: popover,
@@ -254,6 +265,33 @@ export class ColumnManagerRenderer {
     }
   }
 
+  /** The list's own search field, above the rows it filters — Notion's own placement for the same
+   *  affordance. Reuses no state across renders: the panel is rebuilt wholesale on every change
+   *  (see `render()`'s own comment), so a query typed before one commit does not survive the next
+   *  redraw, the same way the drag and range-selection state here never has either. */
+  private renderSearchRow(panel: HTMLElement): HTMLInputElement {
+    const row = panel.createDiv({ cls: "db-column-manager-search-row" });
+    return row.createEl("input", {
+      cls: "db-column-manager-search",
+      attr: { type: "text", placeholder: t("panel.searchProperties") },
+    }) as unknown as HTMLInputElement;
+  }
+
+  /** Filters by hiding a row's DOM node rather than by removing and re-adding it, so a row's own
+   *  checkbox — and the shift-range anchor it may be mid-selection with — is never touched by a
+   *  query that only narrows what is visible. */
+  private wireVisibilitySearch(searchInput: HTMLInputElement, columns: ColumnDef[], rowsByKey: Map<string, HTMLElement>): void {
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim().toLowerCase();
+      for (const col of columns) {
+        const rowEl = rowsByKey.get(col.key);
+        if (!rowEl) continue;
+        const matches = !query || col.label.toLowerCase().includes(query) || col.key.toLowerCase().includes(query);
+        rowEl.classList.toggle("db-column-manager-row-search-hidden", !matches);
+      }
+    });
+  }
+
   // ───────────────────────────────────────────────────────────────────
   // 4. COLUMN ROW RENDERING
   // ───────────────────────────────────────────────────────────────────
@@ -267,7 +305,7 @@ export class ColumnManagerRenderer {
     columns: ColumnDef[],
     index: number,
     total: number
-  ): void {
+  ): HTMLElement {
     const requiredReason = this.getRequiredColumnReason(config, state, col);
     const checked = requiredReason ? true : !state.hiddenColumns.has(col.key);
 
@@ -372,6 +410,7 @@ export class ColumnManagerRenderer {
       setTooltip(deleteBtn, t("common.delete"), { delay: 100 });
       deleteBtn.onclick = () => actions.deleteColumn(col);
     }
+    return handle.row;
   }
 
   // ───────────────────────────────────────────────────────────────────

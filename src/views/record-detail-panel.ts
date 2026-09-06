@@ -18,7 +18,7 @@
 
 import { App, Component, MarkdownRenderer } from "obsidian";
 import { isObsidianTagsKey, toMultiSelectValuesForKey } from "../data/column-types";
-import { getColumnDisplayType } from "../data/column-display";
+import { getColumnDisplayType, isDerivedColumn } from "../data/column-display";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/file-fields";
 import { isImeComposing } from "../data/keyboard-utils";
 import { ColumnDef, RowData, ViewConfig } from "../data/types";
@@ -39,7 +39,8 @@ import { trapFocus } from "./interaction-scope";
 import { openExternalUrl } from "./open-external";
 import { buildDesktopRecordHeader } from "./record-surface/record-header";
 import { getPropertyEmptyPrompt } from "./record-surface/property-row";
-import { createHiddenPropertiesGroup, type HiddenPropertiesGroupHandle } from "./record-surface/hidden-properties";
+import { createHiddenPropertiesGroup, type HiddenGroupRow, type HiddenPropertiesGroupHandle } from "./record-surface/hidden-properties";
+import { renderPropertyTypeIcon } from "./property-type-icon";
 
 /**
  * 日历 / 时间线事件卡片「展开为可编辑浮动面板」。
@@ -76,6 +77,14 @@ export interface RecordDetailActions {
   readNoteBody?: (row: RowData) => Promise<string>;
   /** Persist a new body. Serialization against the frontmatter writes is the implementer's job. */
   saveNoteBody?: (row: RowData, body: string) => void | Promise<void>;
+  /** Backs the hidden-properties group's eye toggle. Absent (the embedded read-only preview) means
+   *  the toggle stays inert — there is no view-config mutation a read-only surface may make. */
+  setColumnVisible?: (col: ColumnDef, visible: boolean) => void;
+  /** Backs a section's bulk link. Falls back to one `setColumnVisible` call per column when absent. */
+  setColumnsVisible?: (changes: Array<{ col: ColumnDef; visible: boolean }>) => void;
+  /** Opens the add-property picker, anchored on the trailing row. Absent means no row is drawn —
+   *  the affordance needs a picker host to open onto. */
+  addProperty?: (anchorEl: HTMLElement) => void;
   isReadOnly?: boolean;
 }
 
@@ -98,6 +107,11 @@ export interface OpenRecordDetailOptions {
   row: RowData;
   /** 调用方算好的可见列。 */
   columns: ColumnDef[];
+  /** The view's full column set, order included — the peek's own `allColumns`, same shape. The
+   *  hidden group's population is this set's complement against `columns`, not an empty-value
+   *  scan, so the caller must pass every column the view knows about rather than only the ones
+   *  it currently shows. */
+  allColumns: ColumnDef[];
   config: ViewConfig;
   app: App;
   actions: RecordDetailActions;
@@ -159,7 +173,7 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
   // 互斥：先关旧面板
   closeRecordDetailPanel();
 
-  const { anchorEl, host, row, columns, config, app, actions, placement = "anchored" } = opts;
+  const { anchorEl, host, row, columns, allColumns, config, app, actions, placement = "anchored" } = opts;
 
   // 记录从日历 overflow popover 打开时，定位必须先使用仍连接且可见的事件锚点。
   // 定位完成后只隐藏 overflow，不能 remove：CalendarRenderer 会保留节点引用供
@@ -193,8 +207,29 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     toggleClass: "db-record-detail-hidden-toggle",
     fieldsClass: "db-record-detail-hidden-fields",
     expandedClass: "is-expanded",
+    sectionClass: "db-record-detail-hidden-section",
+    sectionHeaderClass: "db-record-detail-hidden-section-header",
+    sectionTitleClass: "db-record-detail-hidden-section-title",
+    bulkLinkClass: "db-record-detail-hidden-bulk-link",
+    rowClass: "db-record-detail-hidden-row",
+    dragHandleClass: "db-record-detail-hidden-drag",
+    dragHandleTitle: t("panel.dragToSort"),
+    typeClass: "db-record-detail-hidden-type",
+    nameWrapClass: "db-record-detail-hidden-name-wrap",
+    nameClass: "db-record-detail-hidden-name",
+    eyeClass: "db-record-detail-hidden-eye",
+    chevronClass: "db-record-detail-hidden-chevron",
+    shownSectionTitle: t("panel.shownSection"),
+    hiddenSectionTitle: t("panel.hiddenSection"),
+    hideAllLabel: t("panel.hideAllProperties"),
+    showAllLabel: t("panel.showAllProperties"),
     label: (count) => t("panel.hiddenProperties", { count: String(count) }),
   });
+  // Local, mutable membership — updated the instant an eye toggles, independent of the outer
+  // view's own refresh cycle (which arrives later, through `refreshFields`, and re-derives the
+  // same state from `opts.columns`/`opts.allColumns`; those two stay static for this panel's
+  // whole lifetime, and are read only to seed this set once).
+  const localVisibleKeys = new Set(columns.map((col) => col.key));
   const close = (): void => {
     if (closed) return;
     closed = true;
@@ -377,22 +412,74 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
       // 常驻关闭按钮：桌面端 CSS 隐藏（保持锚定面板原貌），移动端底部抽屉显示，触摸可点关闭。
       onClose: () => close(),
     });
-    // 字段列表（跳过 titleField；空字段按 showEmptyFields 归入隐藏分组，而非整体丢弃）
+    // 字段列表（跳过 titleField；空的可见字段按 showEmptyFields 决定是否渲染，不再归入隐藏分组——
+    // 该分组现在持有的是视图中被隐藏的列，与看板卡片、peek 一致）
     // The scroll region, holding everything below the header. See `contentHost`.
     const scrollEl = panel.createDiv({ cls: "db-record-detail-scroll" });
     const fieldsEl = scrollEl.createDiv({ cls: "db-record-detail-fields" });
-    const hiddenFieldColumns: ColumnDef[] = [];
-    for (const col of columns) {
-      if (col.key === titleField) continue;
+    // `allColumns` filtered through the live, locally-owned membership rather than through
+    // `columns` itself — the eye toggle below mutates this set directly, so a field it just
+    // moved shows up here on the very next `renderContent` call rather than waiting on whatever
+    // the outer view's own refresh cycle recomputes later.
+    const shownColumns = allColumns.filter((col) => col.key !== titleField && localVisibleKeys.has(col.key));
+    // The peek's own complement (`table-record-peek.ts`'s `hiddenProperties`): every column the
+    // view does not currently show, minus a derived or read-only column with nothing in it — an
+    // empty rollup hidden from view is not a field worth recovering, on either surface.
+    const hiddenFieldColumns: ColumnDef[] = allColumns.filter((col) => {
+      if (col.key === titleField || localVisibleKeys.has(col.key)) return false;
+      const value = getRecordCellValue(r, col);
+      return !(isEmptyValue(value) && (isReadonlyFileField(col.key) || isDerivedColumn(col)));
+    });
+    for (const col of shownColumns) {
       const value = getRecordCellValue(r, col);
       const displayType = getRecordDisplayType(config, col);
       const empty = isEmptyValue(value) && displayType !== "checkbox";
-      if (empty && config.showEmptyFields !== true) { hiddenFieldColumns.push(col); continue; }
+      // An empty visible field without the switch on: the board card's own rule for the same
+      // state is to skip the field rather than park it — the hidden group holds a different
+      // population now, not a second home for this one.
+      if (empty && config.showEmptyFields !== true) continue;
       renderRecordField(fieldsEl, r, col, config, app, actions);
     }
-    hiddenPropertiesGroup.render(scrollEl, hiddenFieldColumns, (hiddenParent, col) => {
-      renderRecordField(hiddenParent, r, col, config, app, actions);
-    });
+    if (actions.addProperty) {
+      const addProperty = actions.addProperty;
+      const addRow = scrollEl.createDiv({ cls: "db-record-detail-add-row" });
+      const addButton = addRow.createEl("button", { cls: "db-record-detail-add-button", attr: { type: "button" } });
+      addButton.createSpan({ text: `+ ${t("panel.addColumn")}` });
+      addButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        addProperty(addButton);
+      });
+    }
+    const toggleColumnVisible = (col: ColumnDef, visible: boolean): void => {
+      if (visible) localVisibleKeys.add(col.key); else localVisibleKeys.delete(col.key);
+      actions.setColumnVisible?.(col, visible);
+      renderContent(r);
+    };
+    const bulkToggle = (cols: readonly ColumnDef[], visible: boolean): void => {
+      for (const col of cols) {
+        if (visible) localVisibleKeys.add(col.key); else localVisibleKeys.delete(col.key);
+      }
+      if (actions.setColumnsVisible) actions.setColumnsVisible(cols.map((col) => ({ col, visible })));
+      else for (const col of cols) actions.setColumnVisible?.(col, visible);
+      renderContent(r);
+    };
+    // The title's own column, if the schema carries one (most do — the title field is usually a
+    // real column, just rendered in the header rather than the field list). A title field with no
+    // matching column entry falls back to its key, the same way every other unlabelled row would.
+    const titleColumn: ColumnDef = allColumns.find((col) => col.key === titleField) ?? { key: titleField, label: titleField, type: "text" };
+    const shownRows: HiddenGroupRow<ColumnDef>[] = [
+      { item: titleColumn, key: titleColumn.key, label: titleColumn.label || titleColumn.key, visible: true, eyeDisabled: true, renderTypeIcon: (parent) => renderPropertyTypeIcon(parent, titleColumn, "db-record-detail-hidden-type-icon") },
+      ...shownColumns.map((col): HiddenGroupRow<ColumnDef> => ({
+        item: col, key: col.key, label: col.label || col.key, visible: true,
+        renderTypeIcon: (parent) => renderPropertyTypeIcon(parent, col, "db-record-detail-hidden-type-icon"),
+      })),
+    ];
+    const hiddenRows: HiddenGroupRow<ColumnDef>[] = hiddenFieldColumns.map((col) => ({
+      item: col, key: col.key, label: col.label || col.key, visible: false,
+      renderTypeIcon: (parent) => renderPropertyTypeIcon(parent, col, "db-record-detail-hidden-type-icon"),
+    }));
+    hiddenPropertiesGroup.render(scrollEl, shownRows, hiddenRows, toggleColumnVisible, bulkToggle);
     // Last, so the body reads as the note under its properties rather than as another property.
     mountBody(r);
   };
@@ -460,7 +547,7 @@ function renderRecordField(
     app, row, col, config, value: displayValue, displayType, empty,
     fieldClass: "db-record-detail-field", valueClass: "db-board-card-value", labelClass: "db-record-detail-field-label",
     badgesClass: "db-board-card-badges", linkClass: "db-board-card-link", fieldWidth: getFieldWidth(config, col),
-    wrap: col.wrap, readOnly: actions.isReadOnly || isReadonlyFileField(col.key),
+    wrap: col.wrap, readOnly: actions.isReadOnly || isReadonlyFileField(col.key), splitOptionValue: true,
     applyConditionalFormat: actions.applyConditionalFormat,
     onEdit: (target, editRow, editCol, event) => actions.editCell(target, editRow, editCol, event),
     onNumberChange: (targetRow, targetCol, next) => actions.saveCellValue?.(targetRow, targetCol, next),

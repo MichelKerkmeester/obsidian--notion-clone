@@ -37,6 +37,7 @@ import { resolveTitleFieldDisplay } from "../data/title-field-display";
 import { isImeComposing } from "../data/keyboard-utils";
 import { EmptyStateOptions, EmptyStateRenderer } from "./empty-state-renderer";
 import { renderCardField, renderCardFieldValue } from "./card-field-renderer";
+import { getPropertyEmptyPrompt } from "./record-surface/property-row";
 import { createCheckbox } from "./checkbox";
 import { isTouchDevice } from "../data/touch-environment";
 import { createOwnedMenuForEvent } from "./owned-menu";
@@ -755,7 +756,8 @@ export class BoardRenderer {
       app: this.app, row, col, config, value: displayValue, displayType, empty,
       fieldClass: "db-board-card-field", valueClass: "db-board-card-value", labelClass: "db-board-card-field-label",
       badgesClass: "db-board-card-badges", linkClass: "db-board-card-link", fieldWidth: this.getCardFieldWidth(config, col),
-      wrap: col.wrap, readOnly: displayOnly || this.actions.isReadOnly, applyConditionalFormat: this.actions.applyConditionalFormat,
+      wrap: col.wrap, readOnly: displayOnly || this.actions.isReadOnly, splitOptionValue: true,
+      applyConditionalFormat: this.actions.applyConditionalFormat,
       onEdit: (target, editRow, editCol, event) => this.actions.editCell(target, editRow, editCol, event),
       onEditFormula: (editCol) => this.actions.editFormula?.(editCol),
       onOpenTarget: (targetRow, target, external) => this.openTarget(targetRow, target, external),
@@ -773,7 +775,8 @@ export class BoardRenderer {
   }
 
   private getEmptyDisplayValue(col: ColumnDef, displayType: ColumnDef["type"] = col.type): unknown {
-    if (displayType === "multi-select") return [t("common.empty")];
+    const prompt = getPropertyEmptyPrompt(displayType);
+    if (prompt !== null) return displayType === "multi-select" ? [prompt] : prompt;
     if (displayType === "checkbox") return false;
     return t("common.empty");
   }

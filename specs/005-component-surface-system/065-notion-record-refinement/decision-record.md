@@ -11,12 +11,11 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/065-notion-record-refinement"
-    last_updated_at: "2026-09-06T17:05:00Z"
-    last_updated_by: "ruling-fold-session"
-    recent_action: "Folded the 19:05 rulings; ADR-005/006/008 Accepted, ADR-007 Deferred"
-    next_safe_action: "Land T012's population then T013's grammar; sweep rows stay recorded-not-built"
-    blockers:
-      - "The empty-fields home is owed an ADR before T012 lands"
+    last_updated_at: "2026-09-07T01:30:00Z"
+    last_updated_by: "implementation-session"
+    recent_action: "T012's population and T013's grammar both landed; ADR-005/006/008 fully implemented"
+    next_safe_action: "ADR-007's cover/icon strip stays Deferred; no further action here"
+    blockers: []
     key_files:
       - "specs/005-component-surface-system/054-record-and-relation-surfaces/design-trueup.md"
       - "specs/005-component-surface-system/054-record-and-relation-surfaces/notion-screens-digest.md"
@@ -26,10 +25,10 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-065-adr"
       parent_session_id: null
-    completion_pct: 0
-    open_questions:
-      - "Where the sheet's empty-fields reveal lives once the group holds view-hidden columns"
+    completion_pct: 95
+    open_questions: []
     answered_questions:
+      - "The empty-fields home is the existing showEmptyFields switch, resolved in the implementing leg"
       - "ADR-001 to ADR-004 are settled by landed Anytype rulings; Notion loses each"
       - "The hidden group adopts Notion's full row grammar (operator 19:05, 'Mimic notion also regarding other features we might be missing')"
       - "The group holds view-hidden columns, like Notion and the peek (operator 19:05)"
@@ -570,11 +569,14 @@ the count covers the population it names.
 *Threshold:* a column hidden in view config appears inside the sheet's group and is counted.
 *Red today:* it does not appear at all.
 
-**One consequence is named rather than resolved.** The sheet's group holds **empty fields** today
-(`record-detail-panel.ts:384-393`), and the ruling does not put them in the group. Where the
-empty-fields reveal goes — folded into the grammar's Shown section, or left to the column manager
-alone — is an implementation decision **owed an ADR in the implementing leg before T012 lands**. It
-does not block T013's row grammar, and it does not reopen A4's shape ruling.
+**Resolved in the implementing leg.** The sheet's group held **empty fields** before this leg
+(`record-detail-panel.ts:384-393`), and the ruling does not put them in the group. The operator's own
+fold of this ruling settled the home directly: an empty field stays visible inline, or behind the
+existing `showEmptyFields` switch — the same rule the board card already applies
+(`board-renderer.ts`'s `shouldShowEmptyField`), rather than a second population folded into the
+grammar's Shown section. T012 implements exactly this: an empty visible field with the switch off is
+skipped from the field list rather than parked anywhere, and the hidden group holds only view-hidden
+columns.
 <!-- /ANCHOR:adr-006-decision -->
 
 ---
@@ -590,14 +592,13 @@ does not block T013's row grammar, and it does not reopen A4's shape ruling.
 - The sheet's group holds the view's hidden columns, which on heavily-configured views is most of
   them — mitigated by the collapsed-by-default group and the only-when-non-empty Hidden section.
 - The caller's signature changes on one surface.
-- The empty-fields reveal needs a named home; owed an ADR before T012 lands, not resolved here.
 
 **Risks**:
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
 | Merging makes the group the largest thing on the sheet | M | The group is collapsed by default and stays conditional |
-| The empty-fields population is silently dropped with no home named | M | This ADR names the debt; the implementing leg's ADR discharges it before T012 |
+| An empty field disappears with no home named | Resolved | The operator's fold names the home: visible inline, or behind `showEmptyFields`, matching the board card's own rule |
 <!-- /ANCHOR:adr-006-consequences -->
 <!-- /ANCHOR:adr-006 -->
 

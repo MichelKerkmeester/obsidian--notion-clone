@@ -239,11 +239,18 @@ describe("getPropertyEmptyPrompt", () => {
     expect(getPropertyEmptyPrompt("relation")).toBe("Select options");
   });
 
-  it("leaves every other format alone", () => {
-    expect(getPropertyEmptyPrompt("text")).toBeNull();
-    expect(getPropertyEmptyPrompt("number")).toBeNull();
-    expect(getPropertyEmptyPrompt("date")).toBeNull();
+  it("names the action for every other format with an editor", () => {
+    expect(getPropertyEmptyPrompt("number")).toBe("Enter number");
+    expect(getPropertyEmptyPrompt("date")).toBe("Select date");
+    expect(getPropertyEmptyPrompt("datetime")).toBe("Select date and time");
+    expect(getPropertyEmptyPrompt("currency")).toBe("Enter amount");
+    expect(getPropertyEmptyPrompt("text")).toBe("Enter text");
+    expect(getPropertyEmptyPrompt("files")).toBe("Add file");
+  });
+
+  it("leaves a format with no editor of its own alone", () => {
     expect(getPropertyEmptyPrompt("checkbox")).toBeNull();
+    expect(getPropertyEmptyPrompt("computed")).toBeNull();
   });
 });
 

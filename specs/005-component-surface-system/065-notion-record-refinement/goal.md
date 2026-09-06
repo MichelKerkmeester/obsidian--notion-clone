@@ -11,39 +11,30 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/065-notion-record-refinement"
-    last_updated_at: "2026-09-06T17:05:00Z"
-    last_updated_by: "ruling-fold-session"
-    recent_action: "Folded the 19:05 rulings and their sweep; C8, C9 and C10 opened"
-    next_safe_action: "Start T001 (Leg A); Leg E runs T012 before T013"
-    blockers:
-      - "The empty-fields home is owed an ADR before T012 moves the group's population"
-      - "styles.css edits are serialized by the parent's CSS lane"
-      - "board-renderer.ts is 056's file group and is taken one leg at a time"
+    last_updated_at: "2026-09-07T01:30:00Z"
+    last_updated_by: "implementation-session"
+    recent_action: "Legs A-E landed: C1-C6 and C8-C10 all met, 26-lane gate green"
+    next_safe_action: "C7 is the operator's device read; nothing else is agent-schedulable"
+    blockers: []
     key_files:
       - "src/views/record-surface/property-row.ts"
       - "src/views/record-detail-panel.ts"
       - "src/views/board-renderer.ts"
       - "src/views/column-manager-renderer.ts"
       - "src/views/record-surface/hidden-properties.ts"
-      - "specs/005-component-surface-system/054-record-and-relation-surfaces/notion-screens-digest.md"
-      - "specs/005-component-surface-system/054-record-and-relation-surfaces/design-trueup.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-065-goal"
       parent_session_id: null
-    completion_pct: 0
-    open_questions:
-      - "Where the sheet's empty-fields reveal lives once the group holds view-hidden columns"
+    completion_pct: 90
+    open_questions: []
     answered_questions:
-      - "The hidden group holds view-hidden columns, like Notion and the peek (operator 19:05)"
-      - "The hidden group takes Notion's full row grammar, and the ruling widened to a sweep (operator 19:05)"
-      - "The record-level cover and icon question is Deferred, not unowned (operator 19:05)"
-      - "The add-property entry is Notion's trailing row (operator 19:05)"
-      - "The sweep found one gap, S1: the property-visibility list cannot be searched"
-      - "Notion's universal Empty is refused: A3's format-specific prompts are the landed ruling"
-      - "The phone label column stays at the 96px Anytype iOS model A2 ruled"
-      - "The add-property picker stays search-first: A5's grammar, with AI chips excluded by D6"
-      - "The featured line's content model is A1's featured relations, not Notion's freeform mention"
+      - "Empty-fields home: the existing showEmptyFields switch, resolved in the implementing leg"
+      - "Hidden group holds view-hidden columns and Notion's full row grammar (operator 19:05)"
+      - "Record-level cover is Deferred, not unowned (operator 19:05)"
+      - "Add-property entry is Notion's trailing row (operator 19:05)"
+      - "Sweep found one gap, S1: the property-visibility list cannot be searched"
+      - "Notion's universal Empty refused: A3's format-specific prompts are the landed ruling"
 ---
 # Goal: Notion Record Refinement
 
@@ -125,7 +116,7 @@ C8, C9 and C10 were opened by the operator's rulings of **2026-09-06 19:05** and
 this packet was written. C7 keeps its number: ids are stable, so the new rows are appended rather
 than inserted.
 
-- [ ] **C1 — The word "Empty" is gone from the board card where an editor exists.**
+- [x] **C1 — The word "Empty" is gone from the board card where an editor exists.**
   `getEmptyDisplayValue` delegates to `getPropertyEmptyPrompt`, preserving the
   `multi-select → [prompt]` array shape and the `checkbox → false` case exactly as
   `record-detail-panel.ts:514-519` already does.
@@ -137,7 +128,7 @@ than inserted.
   refused it (`054/design-trueup.md` §A3) and `054/goal.md` §3 criterion 2 names board cards
   explicitly.
 
-- [ ] **C2 — The prompt covers every format that has an editor, not three.**
+- [x] **C2 — The prompt covers every format that has an editor, not three.**
   `getPropertyEmptyPrompt` returns a verb+noun prompt for `number`, `date`, `datetime`, `currency`,
   `text` and `files` beside the three it already carries, with the new keys added to both locales.
   **Threshold:** on the record sheet and on the board card, no field with an editor renders the
@@ -148,7 +139,7 @@ than inserted.
   `054/design-trueup.md` §A3). The copy for the other five formats is minted in A3's shape and is
   an inference, recorded as one in `spec.md` §4.
 
-- [ ] **C3 — The desktop record-sheet label and its value are the same computed size.**
+- [x] **C3 — The desktop record-sheet label and its value are the same computed size.**
   The `font-size: var(--font-smaller)` declaration is dropped from the desktop arm of
   `.db-record-detail-field-label`; the phone arm is untouched.
   **Threshold:** in the `constructed-record-detail` scenario, the label's computed `font-size`
@@ -161,7 +152,7 @@ than inserted.
   **Guard:** the phone arm at `styles.css:10459-10468` keeps `--db-font-base` under the iOS 16px
   input-zoom floor, which A2 explicitly does not reopen. The change must not reach it.
 
-- [ ] **C4 — Single-select renders as coloured text and multi-select as chips, on both surfaces.**
+- [x] **C4 — Single-select renders as coloured text and multi-select as chips, on both surfaces.**
   The record sheet's and the board card's option branches consume `renderOptionValue` instead of the
   filled-badge path.
   **Threshold:** a single-select value carries a `status-color-text-*` class and no `.status-badge`
@@ -173,7 +164,7 @@ than inserted.
   **Evidence:** A2's C9 ruling (`054/design-trueup.md` §A2). Notion neither supports nor contradicts
   this: no screen in the 97 shows a single-select rendered as bare coloured text.
 
-- [ ] **C5 — Typing a name and picking a format produces a named column of that format, in one pass.**
+- [x] **C5 — Typing a name and picking a format produces a named column of that format, in one pass.**
   The add-property picker forwards its query on selection, not only on the create fall-through.
   **Threshold:** typing "Due Date" and selecting `date` yields a `date` column labelled "Due Date";
   the create fall-through's existing behaviour is unchanged.
@@ -184,7 +175,7 @@ than inserted.
   **Evidence:** Notion carries the name first and types second [digest screen `1589e7c8`]. This
   adapts that insight onto A5's search-first grammar without reordering it (ADR-003).
 
-- [ ] **C6 — The record sheet carries an add-property entry.** *(ADR-008, Accepted 2026-09-06
+- [x] **C6 — The record sheet carries an add-property entry.** *(ADR-008, Accepted 2026-09-06
   19:05 — operator, verbatim: "Trailing '+ Add a property' row")*
   A muted trailing row below the last field and above the hidden group opens the existing
   search-first picker through `052`'s picker host per `054` D8.
@@ -203,7 +194,7 @@ than inserted.
   landed.** ADR-005, ADR-006, ADR-007 and ADR-008 were taken on 2026-09-06 19:05, so this row no
   longer waits on a ruling — only on a device. *(operator-owned; never ticked by an agent)*
 
-- [ ] **C8 — The record sheet's hidden group holds view-hidden columns, not empty fields.**
+- [x] **C8 — The record sheet's hidden group holds view-hidden columns, not empty fields.**
   *(ADR-006, Accepted 2026-09-06 19:05 — operator, verbatim: "View-hidden columns, like Notion and
   the peek")*
   The caller passes visible columns only today, so the sheet never sees a view-hidden column at all;
@@ -222,7 +213,7 @@ than inserted.
   **Carries an open question, not a block:** where the sheet's *empty-fields* reveal lives once this
   group stops holding them. Owed an ADR before the code lands.
 
-- [ ] **C9 — Every hidden-group row carries Notion's full grammar.**
+- [x] **C9 — Every hidden-group row carries Notion's full grammar.**
   *(ADR-005, Accepted 2026-09-06 19:05 — operator, verbatim: "Mimic notion also regarding other
   features we might be missing")*
   Drag handle, type icon, name, eye toggle and chevron per row — the anatomy
@@ -239,7 +230,7 @@ than inserted.
   **Sequenced after C8**, and it moves the table peek with it: `HiddenPropertiesGroupHandle.render`'s
   signature changes and both consumers compile together.
 
-- [ ] **C10 — The property-visibility list can be searched.**
+- [x] **C10 — The property-visibility list can be searched.**
   *(the 2026-09-06 19:05 sweep, S1 — the one gap it found that no ADR above already carries)*
   Reuse the picker's own input rather than minting a second one.
   **Threshold:** typing filters the rows to name matches, leaves every row's eye state untouched,

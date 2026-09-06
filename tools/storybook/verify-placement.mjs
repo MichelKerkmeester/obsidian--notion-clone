@@ -2867,6 +2867,11 @@ const cellResults = await section("what a press on a table cell means", () => ce
         { key: "income", label: "Income", type: "number" },
         { key: "expenses", label: "Expenses", type: "number" },
       ],
+      allColumns: [
+        { key: "file.name", label: "Name", type: "text" },
+        { key: "income", label: "Income", type: "number" },
+        { key: "expenses", label: "Expenses", type: "number" },
+      ],
       config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
       app: {},
       actions: {
@@ -3255,6 +3260,7 @@ const sheetResults = await section("the record sheet's own header", async () => 
       host,
       row,
       columns: [{ key: "file.name", label: "Name", type: "text" }, { key: "income", label: "Income", type: "number" }],
+      allColumns: [{ key: "file.name", label: "Name", type: "text" }, { key: "income", label: "Income", type: "number" }],
       config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
       app: {},
       actions: {
@@ -3435,6 +3441,13 @@ const desktopPanelResults = await section("the desktop record panel's frozen val
       { key: "payment", label: "Payment", type: "text" },
       { key: "category", label: "Category", type: "text" },
     ],
+    allColumns: [
+      { key: "file.name", label: "Name", type: "text" },
+      { key: "cost", label: "Cost", type: "number" },
+      { key: "billing", label: "Billing", type: "text" },
+      { key: "payment", label: "Payment", type: "text" },
+      { key: "category", label: "Category", type: "text" },
+    ],
     config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
     app: {},
     actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
@@ -3562,7 +3575,7 @@ const stateResults = await section("the record sheet's identity and its subscrip
   const outstanding = () => [...live.values()].reduce((a, b) => a + b, 0);
   const before = outstanding();
 
-  openRecordDetailPanel({ anchorEl: anchor, host, row: recordA(100), columns, config, app: {}, actions });
+  openRecordDetailPanel({ anchorEl: anchor, host, row: recordA(100), columns, allColumns: columns, config, app: {}, actions });
   const openedPath = getOpenRecordDetailPath();
   const fieldFor = (key) => document.querySelector(
     `.db-record-detail-panel .db-record-detail-field[data-note-database-column-key="${key}"]`);
@@ -3606,7 +3619,7 @@ const stateResults = await section("the record sheet's identity and its subscrip
   //
   // One full cycle: open, drive a keyboard open and closed, close. Anything still subscribed after
   // that is a leak, and a leak here writes the inset for the NEXT sheet.
-  openRecordDetailPanel({ anchorEl: anchor, host, row: recordA(100), columns, config, app: {}, actions });
+  openRecordDetailPanel({ anchorEl: anchor, host, row: recordA(100), columns, allColumns: columns, config, app: {}, actions });
   const whileOpen = outstanding();
   document.documentElement.style.setProperty("--keyboard-height", "336px");
   window.visualViewport.dispatchEvent(new Event("resize"));
@@ -3712,6 +3725,7 @@ const keyboardParityResults = await section("both sheet families under one keybo
     host,
     row: { file: { path: "K.md", basename: "K", name: "K.md" }, frontmatter: { income: 1 }, computed: {} },
     columns: [{ key: "file.name", label: "Name", type: "text" }, { key: "income", label: "Income", type: "number" }],
+    allColumns: [{ key: "file.name", label: "Name", type: "text" }, { key: "income", label: "Income", type: "number" }],
     config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
     app: {},
     actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
@@ -3853,6 +3867,7 @@ const keyboardParityResults = await section("both sheet families under one keybo
     host,
     row: { file: { path: "thin.md", basename: "Thin", name: "thin.md" }, frontmatter: { one: 1 }, computed: {} },
     columns: [{ key: "file.name", label: "Name", type: "text" }, { key: "one", label: "One", type: "number" }],
+    allColumns: [{ key: "file.name", label: "Name", type: "text" }, { key: "one", label: "One", type: "number" }],
     config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
     app: {},
     actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
@@ -4173,6 +4188,7 @@ const keyboardParityResults = await section("both sheet families under one keybo
     host,
     row: { file: { path: "B.md", basename: "B", name: "B.md" }, frontmatter: { income: 1 }, computed: {} },
     columns: [{ key: "file.name", label: "Name", type: "text" }, { key: "income", label: "Income", type: "number" }],
+    allColumns: [{ key: "file.name", label: "Name", type: "text" }, { key: "income", label: "Income", type: "number" }],
     config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
     app: {},
     actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
@@ -6027,6 +6043,11 @@ await section("lifted probes: the sheet drag", async () => {
         { key: "income", label: "Income", type: "number" },
         { key: "status", label: "Status", type: "text" },
       ],
+      allColumns: [
+        { key: "file.name", label: "Name", type: "text" },
+        { key: "income", label: "Income", type: "number" },
+        { key: "status", label: "Status", type: "text" },
+      ],
       config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
       app: {},
       actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
@@ -6287,6 +6308,12 @@ await section("lifted probes: the sheet audit", async () => {
       host: document.querySelector(".note-database-container"),
       row: { file: { path: "33.md", basename: "Quarterly review", name: "33.md" }, frontmatter: { income: 1200, status: "Active", owner: "Michel" }, computed: {} },
       columns: [
+        { key: "file.name", label: "Name", type: "text" },
+        { key: "income", label: "Income", type: "number" },
+        { key: "status", label: "Status", type: "text" },
+        { key: "owner", label: "Owner", type: "text" },
+      ],
+      allColumns: [
         { key: "file.name", label: "Name", type: "text" },
         { key: "income", label: "Income", type: "number" },
         { key: "status", label: "Status", type: "text" },
@@ -6902,6 +6929,7 @@ await section("the sheet's inline editor", async () => {
       host: document.querySelector(".note-database-container"),
       row,
       columns,
+      allColumns: columns,
       config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
       app: {},
       actions: {
@@ -8400,7 +8428,7 @@ await section("the registry describes where these surfaces actually mount", asyn
       "record-detail-panel": () => {
         const anchor = host.createDiv({ cls: "anchor" });
         openRecordDetailPanel({
-          anchorEl: anchor, host, row, columns, config, app: {}, actions: {},
+          anchorEl: anchor, host, row, columns, allColumns: columns, config, app: {}, actions: {},
         });
         return {
           el: document.querySelector(".db-record-detail-panel"),
@@ -9712,7 +9740,7 @@ await section("a tap on a field edits that field", async () => {
     const edits = [];
     const anchor = host.createDiv({ cls: "anchor" });
     openRecordDetailPanel({
-      anchorEl: anchor, host, row, columns,
+      anchorEl: anchor, host, row, columns, allColumns: columns,
       config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
       app: {},
       actions: {
@@ -10464,6 +10492,10 @@ await section("a record sheet taller than its cap keeps its handle", async () =>
         { key: "file.name", label: "Name", type: "text" },
         ...PROPS.map((key) => ({ key, label: key, type: "text" })),
       ],
+      allColumns: [
+        { key: "file.name", label: "Name", type: "text" },
+        ...PROPS.map((key) => ({ key, label: key, type: "text" })),
+      ],
       config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
       app: {},
       actions: { editCell: () => {}, openRow: () => {}, isReadOnly: false },
@@ -10610,6 +10642,7 @@ await section("one thing owns the phone's bottom edge", async () => {
       host,
       row: { file: { path: "33.md", basename: "33", name: "33.md" }, frontmatter: { income: 1 }, computed: {} },
       columns: [{ key: "file.name", label: "Name", type: "text" }, { key: "income", label: "Income", type: "number" }],
+      allColumns: [{ key: "file.name", label: "Name", type: "text" }, { key: "income", label: "Income", type: "number" }],
       config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
       app: {},
       actions: { editCell: () => {}, openRow: () => {}, isReadOnly: false },

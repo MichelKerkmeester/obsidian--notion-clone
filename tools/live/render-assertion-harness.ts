@@ -2165,6 +2165,42 @@ function recordDetailAssertions(container: HTMLElement): AssertionResult[] {
     pass: Boolean(panel?.querySelector(".db-cell-edit-close")),
     detail: panel?.querySelector(".db-cell-edit-close") ? "close button present" : "close button missing",
   });
+  results.push({
+    name: "an empty field with an editor names the action, never the word Empty",
+    pass: Boolean(panel?.querySelector(".db-record-detail-field.is-empty-field .db-card-empty-placeholder"))
+      && !Array.from(panel?.querySelectorAll(".db-record-detail-field.is-empty-field .db-card-empty-placeholder") ?? [])
+        .some((el) => (el.textContent || "").trim() === "Empty"),
+    detail: `${panel?.querySelectorAll(".db-record-detail-field.is-empty-field").length ?? 0} empty field(s), none reading "Empty"`,
+  });
+  const hiddenGroup = panel?.querySelector(".db-record-detail-hidden-group");
+  results.push({
+    name: "the hidden-properties group always renders, even with nothing hidden",
+    pass: Boolean(hiddenGroup),
+    detail: hiddenGroup ? "group present" : "no .db-record-detail-hidden-group",
+  });
+  results.push({
+    name: "the group's Shown section carries the full row anatomy: drag handle, type icon, name, eye, chevron",
+    pass: (() => {
+      const row = hiddenGroup?.querySelector(".db-record-detail-hidden-row");
+      return Boolean(row)
+        && Boolean(row?.querySelector(".db-record-detail-hidden-drag"))
+        && Boolean(row?.querySelector(".db-record-detail-hidden-type"))
+        && Boolean(row?.querySelector(".db-record-detail-hidden-name"))
+        && Boolean(row?.querySelector(".db-record-detail-hidden-eye"))
+        && Boolean(row?.querySelector(".db-record-detail-hidden-chevron"));
+    })(),
+    detail: `${hiddenGroup?.querySelectorAll(".db-record-detail-hidden-row").length ?? 0} row(s) in the group`,
+  });
+  results.push({
+    name: "the title row's eye is disabled and every other row's is not",
+    pass: (() => {
+      const eyes = Array.from(hiddenGroup?.querySelectorAll<HTMLButtonElement>(".db-record-detail-hidden-eye") ?? []);
+      if (eyes.length === 0) return false;
+      const disabledCount = eyes.filter((eye) => eye.disabled).length;
+      return disabledCount === 1 && eyes[0]?.disabled === true;
+    })(),
+    detail: `${hiddenGroup?.querySelectorAll(".db-record-detail-hidden-eye").length ?? 0} eye control(s), one disabled`,
+  });
   return results;
 }
 
@@ -3187,6 +3223,7 @@ export function runRenderAssertions(
       placement: docked ? "docked" : "anchored",
       row,
       columns,
+      allColumns: columns,
       config,
       app: undefined as unknown as App,
       actions,
@@ -3258,6 +3295,7 @@ export function runRenderAssertions(
             host: container,
             row: openRow,
             columns,
+            allColumns: columns,
             config,
             app: undefined as unknown as App,
             actions: { editCell: () => undefined, openRow: () => undefined },
