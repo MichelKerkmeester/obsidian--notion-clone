@@ -102,16 +102,14 @@ describe("resolveTitleFieldDisplay", () => {
 // 3. CROSS-SURFACE AGREEMENT (board card / record header / phone sheet)
 // ───────────────────────────────────────────────────────────────────
 //
-// board-renderer.ts's getTitleField and record-detail-panel.ts:485-488's
+// board-renderer.ts's getTitleField and record-detail-panel.ts's
 // getRecordEventTitleField each derive a titleField from the same ViewConfig
-// before calling resolveTitleFieldDisplay — read from source in this packet's
-// own goal.md, not re-executed here, since this packet's scope excludes
-// editing either file (their existing agreement is what the packet formalizes,
-// not what it changes). What this suite locks is the resolver's own half of
-// that contract: given the exact titleField value each surface is documented
-// to pass in for a non-calendar/timeline view, the shared resolver always
-// agrees. The desktop and phone record sheet already read the identical
-// getRecordEventTitleField call, so proving record === board covers all three.
+// before calling resolveTitleFieldDisplay. Neither is re-executed here: what
+// this suite locks is the resolver's own half of that contract — given the
+// exact titleField value each surface passes in for a non-calendar/timeline
+// view, the shared resolver always agrees. The desktop and phone record sheet
+// already read the identical getRecordEventTitleField call, so proving
+// record === board covers all three.
 
 describe("cross-surface titleField agreement", () => {
   const NON_CALENDAR_VIEW_TYPES: ViewConfig["viewType"][] = ["table", "board", "gallery", "list"];
@@ -131,7 +129,7 @@ describe("cross-surface titleField agreement", () => {
     });
   }
 
-  it("does not extend to calendar/timeline, which read their own dedicated title fields (D5)", () => {
+  it("does not extend to calendar/timeline, which read their own dedicated title fields", () => {
     const view = config([col("price", "currency"), col("month", "text")], {
       viewType: "calendar",
       titleField: "price",
