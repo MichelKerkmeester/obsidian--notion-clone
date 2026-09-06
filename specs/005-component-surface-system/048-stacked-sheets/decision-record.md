@@ -13,10 +13,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/048-stacked-sheets"
-    last_updated_at: "2026-09-05T14:50:00Z"
-    last_updated_by: "adr-answers-051-053"
-    recent_action: "Recorded 051 ADR-002's scoped sub-page exception to this packet's stacking default"
-    next_safe_action: "Cut 0.0.24 for the operator device check"
+    last_updated_at: "2026-09-06T10:44:00Z"
+    last_updated_by: "host-modal-chrome-fix"
+    recent_action: "Fixed host-modal sheet chrome for the operator's 0.0.29 iOS report (row 59)"
+    next_safe_action: "Cut a build for the operator device check"
     blockers: []
     key_files:
       - "src/views/modals/db-modal.ts"
@@ -308,5 +308,65 @@ throughout.
 stacked child at **0.710**. `051/acceptance-criteria.md` AC-011 holds both to **± 0.02**. They are
 `051`'s measurement and this packet's value to own.
 <!-- /ANCHOR:parity-default-note -->
+
+---
+
+<!-- ANCHOR:host-modal-chrome-note -->
+## NOTE, 2026-09-06 (~10:44): root cause of the operator's 0.0.29 iOS report — Obsidian's own modal chrome, never modelled by any test
+
+Roadmap row 59, verbatim: *"This sheet is really bad bugged on current ios"*, "Edit property — Month"
+(`ColumnRenameModal`) stacked over the Properties sheet. Five symptoms, one producer.
+
+**The producer.** `DbModal`'s per-subclass sheet presentation (ADR-001 above) turns `modalEl` — a
+real Obsidian `Modal`'s element — into a `.db-mobile-bottom-sheet`. Obsidian creates two things
+inside every `modalEl` this packet never asked for and never accounted for: an always-present
+title element (`titleEl`, empty on every `DbModal` subclass, since none calls `setTitle()`) and a
+close button, neither exposed by name in `obsidian.d.ts` but both real. `attachSheetChromeToModal`
+built its own header and close beside them, never removed them. Separately, `.note-database-modal`
+(`contentEl`) carries its own desktop-dialog surface — `background: var(--db-surface-modal)`, a
+border, a box-shadow, a blur — a rule the sheet root itself (`.db-mobile-bottom-sheet`) never
+matches, since it declares no background of its own.
+
+**Why nothing caught it.** `tools/live/sheet-grammar.mjs`'s only host-modal stand-in
+(`openHostModalChild`) built a bare `modal-container`/`modal-content` pair with neither the title
+nor the close button — its own comment already named the reason: "ConfirmModal itself can never
+mount here: it extends Obsidian's Modal, which the bundle's stub throws on rather than fakes... same
+reason no lane anywhere mounts a real Modal subclass." No `*.test.ts` in the tree constructs a
+`Modal` either (`grep` over `src/**/*.test.ts` for `modal` outside a mock finds nothing; the vitest
+`obsidian` alias's `Modal` export is `outOfScope("Modal")`, which throws). Every registered stacked
+pair that exercises a K3 modal — `properties create property`, `confirm over a sheet`, both suggest-
+modal rows — inherited the same gap, silently: the lane read 0 failing assertions across all 31
+pairs (`implementation-summary.md`'s own number) while the CSS these five symptoms trace to had
+never been rendered against an element carrying the chrome it needed to hide.
+
+**The fix, at the one producer every `DbModal` subclass and both suggest-modal wrappers already
+route through (`attachSheetChromeToModal`, `mobile-bottom-sheet.ts`):** the native title (when
+empty) and the native close button are found by reference — not assumed to be a direct child a CSS
+selector can name — and hidden; restored on teardown, so `applyPresentation`'s rotation re-run gets
+the host's own chrome back when the surface returns to a desktop dialog. `styles.css` gives the
+modal-as-sheet root one background token, `var(--background-primary)` — the same one every other
+sheet type already uses — and turns off `.note-database-modal`'s desktop-dialog chrome specifically
+inside a `.db-mobile-bottom-sheet`. The pre-existing CSS rule that tried to hide the close button by
+selector alone (`.db-mobile-bottom-sheet > .modal-close-button { display: none !important; }`) is
+removed rather than kept as a second layer: left in place, it silently caught the negative control's
+own injected close button, which would have hidden a real regression exactly as it appears to have
+hidden this one.
+
+**What this note does not claim.** The harness's own reproduction of a faithful, direct-child
+`.modal-close-button` was hidden correctly by the pre-existing CSS rule — this record cannot say the
+old rule was broken on the operator's device, only that nothing had ever rendered it against the
+chrome it was meant to hide. The JS-based fix is the more defensible mechanism regardless (a
+reference lookup has no nesting or specificity assumption to be wrong about), not a proven
+replacement for a proven-broken one. Device confirmation is still owed, per AC-009 and every other
+row in this program.
+
+**Evidence:** `tools/live/sheet-grammar.mjs` gained a faithful host-modal fixture (`.modal-container`
+> `.modal-bg` + `.modal` > `.modal-title` + `.modal-content` + `.modal-close-button`), a new
+registered pair (`properties edit property`, the operator's exact scenario), three grammar columns
+(`exactly one visible close control`, `header and body share one background`,
+`handle-to-title gap`) and a dedicated negative control, run on both Chrome and WebKit. Red on the
+pre-fix tree: header/body background `rgba(0, 0, 0, 0)` vs `color(srgb 0.224 0.224 0.224)` on every
+host-modal pair; green after. `npm run gate`: 26/26.
+<!-- /ANCHOR:host-modal-chrome-note -->
 
 ---
