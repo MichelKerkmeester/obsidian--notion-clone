@@ -1960,7 +1960,11 @@ export class ViewConfigPanelRenderer {
         config.titleField = value || undefined;
         actions.onChange(t("undo.titleFieldConfig"));
       },
-      true
+      true,
+      false,
+      // Lets the board's Properties sheet find and open this same row from its own Title fixed
+      // slot, instead of building a second titleField picker for that surface to own.
+      { "data-config-row": "title-field" }
     );
   }
 
@@ -2058,9 +2062,10 @@ export class ViewConfigPanelRenderer {
     value: string,
     onChange: (value: string) => void,
     searchable = false,
-    disabled = false
+    disabled = false,
+    rowAttr?: Record<string, string>
   ): void {
-    const row = panel.createDiv({ cls: this.rowClass() });
+    const row = panel.createDiv({ cls: this.rowClass(), attr: rowAttr });
     row.createDiv({ cls: "db-view-config-label", text: label });
     const field = row.createDiv({ cls: "db-view-config-field" });
     const hasPropertyIcons = options.some((option) => isPropertyDropdownIcon(option.icon));

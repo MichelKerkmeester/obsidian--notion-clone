@@ -234,6 +234,31 @@ describe("renderBoardCardProperties", () => {
     expect(text).toContain(t("viewConfig.cover"));
     expect(text).toContain(t("viewConfig.titleField"));
   });
+
+  it("opens the titleField picker from the Title fixed slot, with no handler on the Cover row", () => {
+    const panel = new MockElement("div", "db-view-config-panel");
+    // Stands in for the general section's own titleField row, rendered earlier into this same
+    // scrolling panel in the real sheet — the Title fixed slot finds it by this same marker.
+    const titleFieldRow = panel.createDiv({ cls: "db-view-config-row", attr: { "data-config-row": "title-field" } });
+    const openPicker = vi.fn();
+    titleFieldRow.createDiv({ cls: "db-dropdown-field" }).onclick = openPicker;
+
+    renderBoardCardProperties(panel as unknown as HTMLElement, baseConfig(), {
+      onChange: vi.fn(),
+      readOnly: false,
+    });
+
+    const clickableRows = panel.querySelectorAll(".db-view-config-row-clickable");
+    expect(clickableRows).toHaveLength(1);
+    const [titleRow] = clickableRows;
+    const coverRow = panel.querySelectorAll(".db-view-config-row").find((row) => row !== titleFieldRow && row !== titleRow);
+
+    // Negative control: the Cover row directly above Title gains no click handler.
+    expect(coverRow?.onclick).toBeNull();
+
+    titleRow.onclick?.();
+    expect(openPicker).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe("card property labels", () => {

@@ -12,6 +12,9 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
+import { getColumnDisplayType, isEmptyValue } from "./column-display";
+import { formatDateTimeValueDisplay, formatDateValueDisplay } from "./date-time-format";
+import { formatEuroCurrency, formatEuroNumber } from "./euro-format";
 import { stringifyValue } from "./stringify";
 import { ColumnDef, NO_TITLE_FIELD, RowData, ViewConfig } from "./types";
 
@@ -50,7 +53,7 @@ export function resolveTitleFieldDisplay(row: RowData, config: ViewConfig, title
   }
 
   const value = getTitleFieldValue(row, config, field);
-  const text = stringifyValue(value).trim();
+  const text = formatTitleFieldText(config, field, value);
   return {
     field,
     text: text || EMPTY_TITLE_PLACEHOLDER,
@@ -58,6 +61,43 @@ export function resolveTitleFieldDisplay(row: RowData, config: ViewConfig, title
     isFileTitle: false,
     isHidden: false,
   };
+}
+
+/** A title carries no format of its own — it reads whichever column it points at, so a
+ *  currency- or date-titled card always agrees with what that same column shows as an
+ *  ordinary field. A field with no matching column (an unmapped file.* pseudo-field, or a
+ *  deleted column reference) keeps the prior plain-stringified behavior unchanged. */
+function formatTitleFieldText(config: ViewConfig, field: string, value: unknown): string {
+  const col = config.schema.columns.find((candidate) => candidate.key === field);
+  if (!col) return stringifyValue(value).trim();
+  const displayType = getColumnDisplayType(col, config.schema.computedFields);
+  if (displayType === "currency" || displayType === "number") {
+    const num = toTitleDisplayNumber(value);
+    if (Number.isNaN(num)) return nonNumericTitleText(value);
+    return displayType === "currency" ? formatEuroCurrency(num) : formatEuroNumber(num);
+  }
+  if (displayType === "date") return formatDateValueDisplay(value).trim();
+  if (displayType === "datetime") return formatDateTimeValueDisplay(value, { showTimeWhenMissing: true }).trim();
+  return stringifyValue(value).trim();
+}
+
+/** Mirrors the cell renderer's own numeric-cell reading: a real number stays a number, and
+ *  anything with genuinely nothing to print becomes NaN rather than the misleading 0 that
+ *  Number(undefined) or Number("") would otherwise produce. */
+function toTitleDisplayNumber(value: unknown): number {
+  if (typeof value === "number") return value;
+  return hasNothingToPrint(value) ? Number.NaN : Number(value);
+}
+
+/** What a numeric title prints when its value is not a number: the value itself, matching
+ *  the cell renderer's own fallback, so a currency/number title never renders "NaN". */
+function nonNumericTitleText(value: unknown): string {
+  if (hasNothingToPrint(value)) return "";
+  return Array.isArray(value) ? value.join(", ") : String(value);
+}
+
+function hasNothingToPrint(value: unknown): boolean {
+  return isEmptyValue(value) || String(value).trim() === "";
 }
 
 function getFileTitleText(row: RowData): string {

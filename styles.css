@@ -11196,6 +11196,18 @@ body.is-phone .note-database-container .db-record-detail-panel {
   padding: var(--db-space-3) 0;
 }
 
+/* A fixed slot that opens a picker elsewhere in the same sheet rather than reporting a
+   read-only value in place — the Cover row directly above it stays plain, unclickable text. */
+.note-database-container .db-view-config-row-clickable {
+  cursor: pointer;
+  border-radius: var(--db-radius-md);
+}
+
+.note-database-container .db-view-config-row-clickable:hover,
+.note-database-container .db-view-config-row-clickable:focus-visible {
+  background: var(--background-modifier-hover);
+}
+
 .note-database-container .db-view-config-name-field .db-view-config-text {
   min-height: 56px;
 }

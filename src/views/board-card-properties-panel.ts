@@ -40,7 +40,7 @@ export function renderBoardCardProperties(
     attr: { "data-scope": "view" },
   });
   renderFixedSlot(panel, t("viewConfig.cover"), coverLabel(config), actions.asSheet);
-  renderFixedSlot(panel, t("viewConfig.titleField"), titleLabel(config), actions.asSheet);
+  renderFixedSlot(panel, t("viewConfig.titleField"), titleLabel(config), actions.asSheet, () => openTitleFieldPicker(panel));
 
   const entries = listBoardCardFields(config, getColumnsInOrder(config), context);
   let draggedKey: string | null = null;
@@ -135,13 +135,38 @@ function persist(
   actions.onChange(t("undo.boardCardFieldsConfig"));
 }
 
-function renderFixedSlot(panel: HTMLElement, label: string, value: string, asSheet?: boolean): void {
-  const row = panel.createDiv({ cls: asSheet ? "db-panel-row" : "db-view-config-row" });
+function renderFixedSlot(panel: HTMLElement, label: string, value: string, asSheet?: boolean, onOpen?: () => void): void {
+  const baseCls = asSheet ? "db-panel-row" : "db-view-config-row";
+  const row = panel.createDiv({
+    cls: onOpen ? `${baseCls} db-view-config-row-clickable` : baseCls,
+    attr: onOpen ? { role: "button", tabindex: "0" } : undefined,
+  });
   row.createDiv({ cls: "db-view-config-label", text: label });
   row.createDiv({ cls: "db-view-config-field" }).createDiv({
     cls: "db-view-config-readonly-value",
     text: value,
   });
+  if (!onOpen) return;
+  row.onclick = () => onOpen();
+  row.onkeydown = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onOpen();
+    }
+  };
+}
+
+/** Jumps to the one canonical `titleField` picker (the general section's dropdown, rendered
+ *  earlier into this same scrolling panel) rather than building a second picker here — the
+ *  Title row's fixed slot only needed a way to reach the control that already exists. */
+function openTitleFieldPicker(panel: HTMLElement): void {
+  const row = panel.querySelector<HTMLElement>('[data-config-row="title-field"]');
+  if (!row) return;
+  row.scrollIntoView?.({ behavior: "smooth", block: "center" });
+  // The dropdown field's own onclick (dropdown-field.ts) ignores its event argument, so this
+  // reaches the same open-popover path a real click would without constructing a synthetic
+  // pointer event the test environment has no DOM to build.
+  row.querySelector<HTMLButtonElement>(".db-dropdown-field")?.onclick?.(undefined as unknown as PointerEvent);
 }
 
 function coverLabel(config: ViewConfig): string {
