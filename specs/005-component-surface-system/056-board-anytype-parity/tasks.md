@@ -12,13 +12,13 @@ _memory:
     packet_pointer: "005-component-surface-system/056-board-anytype-parity"
     last_updated_at: "2026-09-06T05:42:29Z"
     last_updated_by: "verification-leaf"
-    recent_action: "landed T012's eight fixable rows and T013's dead-branch removal; gate 27 green"
+    recent_action: "verified T012/T013, folded the geometry pins into render-assertions; gate 26 green"
     next_safe_action: "Nothing owed here; AC-010 is the operator's own device confirmation"
     blockers:
       - "AC-010 is operator-owned and nothing in this repository can close it"
     key_files:
       - "src/views/board-renderer.ts"
-      - "tools/live/board-geometry.mjs"
+      - "tools/live/render-assertions.mjs"
       - "specs/005-component-surface-system/056-board-anytype-parity/checklist.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
@@ -239,24 +239,62 @@ _memory:
 
       | # | Fix | Red (device px, DPR 2) | Green (device px, DPR 2) |
       |---|---|---|---|
-      | R1 | `.db-kanban-col-chip` gets `box-sizing: border-box` so the 1px border sits inside the declared height instead of adding to it | 52px painted (26 CSS × 2) | **48px painted (24 CSS × 2)** — confirmed both by `board-geometry.mjs` reading `getBoundingClientRect().height` inside the mount hook and by the recaptured `constructed-board-*` PNGs |
-      | R2 | `.db-kanban-card-meta .db-board-card-field` sets `padding: 0`, overriding the shared field's own 2px | 47–63px across row types (23.5–31.5 CSS × 2) | **50px uniform (25 CSS × 2)** — `board-geometry.mjs` read all 17 property rows on the first constructed card and found one value, 25px, repeated 17 times |
+      | R1 | `.db-kanban-col-chip` gets `box-sizing: border-box` so the 1px border sits inside the declared height instead of adding to it | 52px painted (26 CSS × 2) | **48px painted (24 CSS × 2)** — confirmed both by `render-assertions`' board geometry pass reading `getBoundingClientRect().height` inside the mount hook and by the recaptured `constructed-board-*` PNGs |
+      | R2 | `.db-kanban-card-meta .db-board-card-field` sets `padding: 0`, overriding the shared field's own 2px | 47–63px across row types (23.5–31.5 CSS × 2) | **50px uniform (25 CSS × 2)** — the board geometry pass read all 17 property rows on the first constructed card and found one value, 25px, repeated 17 times; the capture agrees, at a flat 50 device px between identical band types |
       | R3 | `renderRecordIcon` gains a `force` parameter; the kanban title row passes it so the slot renders regardless of `showRecordIcon`, and `.db-kanban-card-title-row .db-record-icon.is-compact` is resized to 16px (was the shared 18px) | slot absent by default; 36px (18 × 2) when present | **32px (16 × 2) when present, on every card** — verified by a new hierarchy test asserting `renderRecordIcon` is called with `force: true`; the fixture bag used by the screenshot harness does not wire an icon renderer (a declared stand-in gap, not a plugin defect), so the size fix is confirmed by the stylesheet rule and the unit test rather than by a capture |
-      | R4 | `.is-phone .note-database-container .db-kanban-col`/`.db-kanban-board`/`.db-kanban-card` set the phone's own width/gap/border-width | desktop values (246/24px) on phone | **254.7pt column, 23.3pt gap confirmed via `getComputedStyle` under a real `is-phone` mount (colWidth 254.688px, boardGap 23.3px)**. The 0.7pt hairline border is declared (`border-width: 0.7px`) and does paint thinner, but Chromium's `getComputedStyle` rounds any sub-1px `border-width` to a whole device pixel for every value tested (0.5px, 0.7px, 0.75px all reported "1px" in an isolated repro) — a CSSOM reporting limit, not a rule that failed to apply; the rule matches (`element.matches(...)` confirmed) and the border-style resolves solid, not none |
+      | R4 | `.is-phone .note-database-container .db-kanban-col`/`.db-kanban-board`/`.db-kanban-card` set the phone's own width/gap/border-width | desktop values (246/24px) on phone | **254.7pt column, 23.3pt gap confirmed via `getComputedStyle` under a real `is-phone` mount (colWidth 254.688px, boardGap 23.3px)**. **Confirmed off the capture at DPR 2 by the landing leg: the first card spans device x 64..573 (510px = 255 CSS px) and the gutter to the second runs 574..619 (46px = 23 CSS px)** — both inside half a CSS pixel of the declared values, and the desktop capture measures 246 on the same read, so the `.is-phone` rules are demonstrably the ones applying. The 0.7pt hairline is declared and computed but **does not paint thinner and the claim that it does is refuted**: the phone card's border reads two solid device pixels at `(45,45,45)` with no antialiased edge, byte-identical to the desktop card's 1px border on the same read. Chromium rounds a sub-1px `border-width` to a whole device pixel in `getComputedStyle` AND in paint, so the value is set, the rule matches, and nothing on screen distinguishes it from 1px |
       | R5 | `constructed-scenarios.mjs`'s board mount forces `matchMedia("(pointer: coarse)")` to `true` directly, rather than trusting Playwright's per-context `hasTouch` flag — the same reliability gap `touch-targets.mjs` already documented and worked around at the browser-engine level | `constructed-board-mobile-*.png` showed the desktop resting state | **the phone capture shows the permanent count and the permanent `···`/`+` — confirmed visually on `constructed-board-card-properties-hidden-mobile-dark.png`, which shows "4" beside "backlog" with no hover needed** |
-      | R8 | `.db-kanban-card-meta input.db-checkbox.db-checkbox-field` sets `border-radius: 50%` at the base rule's own specificity, and repeats `flex: 0 0 14px` — the base rule's own flex-basis otherwise wins the checkbox's main-axis size over a bare `width` | rounded square, 28px (14 × 2) | **circle, 28px (14 × 2)** — `board-geometry.mjs` reads `borderRadius: 50%` directly, and every recaptured board PNG shows a round glyph |
+      | R8 | `.db-kanban-card-meta input.db-checkbox.db-checkbox-field` sets `border-radius: 50%` at the base rule's own specificity, and repeats `flex: 0 0 14px` — the base rule's own flex-basis otherwise wins the checkbox's main-axis size over a bare `width` | rounded square, 28px (14 × 2) | **circle, 28px (14 × 2)** — the board geometry pass reads `borderRadius: 50%` directly, and every recaptured board PNG shows a round glyph |
       | R9 | `.db-kanban-empty-slot` gets `box-sizing: border-box` (the shared empty-card sized its content box to 100% and added padding/border on top, overflowing the column) plus `overflow-wrap: anywhere` on the title and message | title clipped mid-word at the column's right edge | **"No records in this group" wraps onto two lines and stays inside the card — confirmed on the recaptured `board-empty-column-desktop-dark.png` and `constructed-board-empty-column-*.png`** |
-      | R10 | `tools/live/board-geometry.mjs`, a new gate lane, mounts the shipped board through the same bundle the render-assertion lanes use and reads computed styles directly: card radius, column width, column gap, header chip height, property row pitch, checkbox shape | no check locked any of these values | **`board-geometry: PASS`** on every value; a negative control reverting the card radius to 2px reproduced the original failure (`FAIL — card radius: .db-kanban-card read "2px", expected "8px"`), then was reverted, proving the lane is non-vacuous the same way the original finding proved `pixelHash` was blind to it |
+      | R10 | The six pins live in `tools/live/render-assertions.mjs` as its own **board geometry** pass — no new lane. It mounts the same board scenario on its own page at `deviceScaleFactor: 2` with the token sheets attached, exactly the way that lane's row-rhythm pass already measures computed geometry, and reads card radius, column width, column gap, painted chip height, property row pitch and checkbox shape | no check locked any of these values | **7 PASS rows inside `render-assertions`**, and the gate stays at **26 lanes**. Negative control: reverting the card radius to 2px turns the whole lane red at exit 1 with `board geometry card radius: .db-kanban-card read "2px", expected "8px"`, then reverted. The first landing added a 27th lane, `tools/live/board-geometry.mjs`; that was against the brief's existing-lanes-only constraint and the file is deleted — see `decision-record.md` ADR-005 for why an existing lane could host it |
 
-      Verified: `npx tsc --noEmit` exit 0; `npx vitest run` 134 files / 1402 tests exit 0; `npm run
-      build` exit 0; the isolated `SURFACE_PHASE=056-board-anytype-parity npm run gate`, `$?` read
-      directly: **0**, 27 green (26 plus the new `board-geometry` lane). `npm run screenshots`: 542
-      entries, 44 moved pixelHash — 32 the board scenarios already reviewed by the prior leg on this
-      phase (still uncommitted, now also carrying R1/R2's geometry) plus 12 more R3/R9 touch (card
-      covers and the hidden-field scenarios, which share card layout with the fixed rows); 3 more
-      moved bytes only and were restored to committed bytes. `npm run screenshots:verify` exit 0.
-      Every `screenshots/project-manager/*` capture stayed pixelHash-identical. `touch-targets.mjs`
-      ratchet not raised (fixture 208 against a baseline of 209; constructed 1304 against 1304).
+      **Re-verified 2026-09-06 by the landing leg, on the rebased tree, and three of the leg's own
+      claims were corrected rather than repeated.** Rebased onto `origin/main` `3b3ac633` (59 commits,
+      `055`, `053`, `054`, `057` and `051` landed in between); the only code conflict was one import
+      line in `tools/screenshots/scenarios/chrome.mjs`, where upstream's added `tableHeader` and this
+      lane's dropped `boardSubgroupHeader` were merged rather than either side taken whole. Every
+      generated artefact — `main.js`, `screenshots/manifest.json`, `tools/lane/css-lane.json` and the
+      nine `tools/live/*.json` — took `origin/main`'s side and was re-derived from the merged tree,
+      so no upstream lane history or evidence stamp was overwritten.
+
+      Read back at DPR 2 on the recaptured PNGs rather than accepted from the report. Chip: ink band
+      device y 68..115 on `constructed-board-desktop-dark.png` = **48px, 24 CSS px**, against 66..117 =
+      **52px, 26 CSS** on the same file at the pre-fix commit. Pitch: the repeating property block's
+      identical band types sit **350 device px apart over seven rows across three repeats** — a flat
+      **50px, 25 CSS**, with no drift — against **406 over the same seven rows, 58px / 29 CSS**, before;
+      the leg's "~28.3px average" is close but was itself uniform at 29, not scattered. Checkbox: a
+      **28x28 device-px** glyph whose scanline profile tapers symmetrically at both ends — a circle at
+      14 CSS px. Phone: card 1 spans **510 device px** and the gutter **46**, i.e. 255 and 23 CSS px.
+
+      Verified from the final tree: `npx tsc --noEmit` exit 0; `npx vitest run` **137 files / 1425
+      tests** exit 0; `npm run build` exit 0; `node tools/screenshots/verify.mjs` **550 entries
+      current**, exit 0; `node tools/lane/check-lane.mjs` exit 0; the isolated
+      `SURFACE_PHASE=056-board-anytype-parity npm run gate </dev/null`, `$?` read from a file:
+      **0, 26 green** — the count the brief asked for, not 27. `npm run screenshots` (full run, needed
+      so the manifest drops the four retired scenarios): **550 entries**, **44 moved pixelHash against
+      `origin/main`** and every one of the 44 is a board capture; 2 moved bytes only and were restored
+      to committed bytes with their manifest `bytes` reconciled. Every `screenshots/project-manager/*`
+      capture stayed pixelHash-identical. Six were opened and read: `constructed-board-desktop-dark`,
+      `-desktop-light`, `-mobile-dark`, `constructed-board-empty-column-desktop-dark`,
+      `-mobile-light`, and `constructed-card-covers-desktop-dark`.
+
+      **R3 carries an evidence gap that the leg's own row understated and this one states plainly.**
+      No capture in this repository can show the title icon slot: every harness that mounts the board
+      wires `renderRecordIcon: () => null` (`tools/live/render-assertion-harness.ts`,
+      `tools/mock-data/capture.mjs`, `tools/storybook/verify-placement.mjs`), so the slot is absent
+      from all 44 board PNGs by construction. What IS confirmed: the renderer asks with `force`
+      (hierarchy test), the host honours it past its own `showRecordIcon` gate and renders read-only
+      (`database-view.ts`), the fallback glyph is `file-text` — a page icon, which is what the Anytype
+      kanban card shows on a record with no icon of its own, read directly off
+      `anytype-project-tracker-kanban-dark.png` — and the slot computes to 16px. What is NOT confirmed
+      is that any of it paints, and no gate can confirm it until a board scenario wires a real icon
+      renderer. Named here rather than left implied by a green row.
+
+      **R6 and R7 are the operator's, and the operator has since ruled on both.** Verbatim, 2026-09-06
+      ~05:25: R6 — *"Anytype tint fill"*; R7 — *"Neutral, match Anytype"*. Neither is implemented here:
+      this leg was instructed to record them and leave them, and a follow-up leg takes both. Recorded
+      in `decision-record.md` ADR-006 and ADR-007 and in the parent `roadmap.md` §6A.
+
 - [x] T013 **Delete the `boardExtensionsEnabled` branch, or record why it stays.** The flag and the
       `renderSwimlaneBoard` / extensions-mode `renderColumn` / `renderSubgroup` / `renderCard` path
       behind it are still in `src/views/board-renderer.ts`. T007 named this a deferred cleanup and
@@ -304,9 +342,41 @@ _memory:
       gained `role: "row"` back, matching what the retired card already had and what
       `accessibility-defects.test.ts` Item 10 checks for.
 
-      Verified: `npx tsc --noEmit` exit 0; `npx vitest run` 134/134 files, 1402/1402 tests, exit 0;
-      `npm run lint` 255 problems against a 262-problem baseline (net improvement, no new class of
-      finding); `npm run build` exit 0; the isolated gate exit 0, 27 green.
+      **The retirement was NOT complete, and the landing leg found the rest of it red.** The claim
+      that the two surfaces are unreferenced holds for the capture pipeline and the manifest; it did
+      not hold for `tools/live/constructed-state-assertions.mjs`, which is not one of the gate's 26
+      lanes and so went unnoticed. Run on the landed tree it exited **1 with five failures**: its
+      `constructed-group-selection-controls` and `constructed-board-extensions` entries mount a
+      renderer value and a spec option that no longer exist, and its `constructed-board-subtask`
+      paired case asserted `subtaskToggle`/`subtaskProgress`/`subtaskDepthChild` — markers the removed
+      extensions card was the only thing that drew. Fixed here: the two entries and their markers are
+      gone, and the board's subtask pair now asserts the kanban card's own child indicator,
+      `.db-kanban-card-type`, which the off side proves absent and the on side present. The tool now
+      exits **0**. `"boardExtensions"` was also still in `constructed-scenarios.mjs`'s `SPEC_OPTIONS`
+      allowlist and is dropped.
+
+      **Sixteen tracked PNGs of the two retired surfaces were still on disk**, orphaned: the manifest
+      no longer lists them (a full `npm run screenshots` regenerates it at 550 entries, four scenario
+      ids fewer) and `verify.mjs` has no orphan check, so nothing would ever have reported them.
+      Deleted with `git rm`.
+
+      **Three residuals are named rather than fixed, each with the reason.** (1) `ViewConfig`'s
+      `boardExtensionsEnabled?: boolean` and its doc comment still describe a layout that no longer
+      exists — removing it would force an edit to `board-card-properties-panel.test.ts`, which AC-006
+      pins at **0 lines changed**, so it stays and the criterion keeps its evidence. (2) The kanban
+      card's restored `role="row"` has no `role="grid"` or `rowgroup` ancestor: the removed branch put
+      `role: "grid"` on `.db-board`, and `.db-kanban-board` carries no role, so the pairing ARIA needs
+      is now broken. `accessibility-defects.test.ts` Item 10 greps the source for the literal
+      `role: "row"` and cannot see this; deciding between adding the container role and dropping the
+      row role is an accessibility change this packet was not asked to make. (3) `database-view.ts`'s
+      selection-sync loops still query `.db-board-card-checkbox` and `.db-board-column-checkbox`; they
+      are no-ops on markup nothing builds, and they sit beside the identically dead `.db-gallery-*`
+      and `.db-list-*` selectors two earlier retirements left, so cutting them is that cleanup's job
+      and not this one's.
+
+      Verified from the final tree: `npx tsc --noEmit` exit 0; `npx vitest run` **137/137 files,
+      1425/1425 tests**, exit 0; `npm run build` exit 0; `node tools/live/constructed-state-assertions.mjs`
+      exit 0 (was 1); the isolated gate exit **0, 26 green**.
 <!-- /ANCHOR:phase-3 -->
 
 ---

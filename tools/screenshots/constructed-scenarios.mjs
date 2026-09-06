@@ -337,7 +337,7 @@ function constructedSources(rendererFile, benchFile) {
 const SPEC_OPTIONS = [
   "subtaskTree", "sparseFields", "emptyState", "chartVariant", "miniCalendar",
   "toolbarPopover", "searchText", "rules", "ruleKind", "filterDepth", "calendarHint",
-  "recordBodyVariant", "editorKind", "includeTime", "boardExtensions", "boardImageField",
+  "recordBodyVariant", "editorKind", "includeTime", "boardImageField",
   "boardEmptyColumn", "tableGroups", "tableFooter", "fullStatusPalette",
   "recordIconColumn", "calendarRecordIcon", "columnHeaderController", "longHeaderLabel", "migratedFromList",
   "viewConfigVariant", "boardCardFieldsHidden", "tableColumnCount", "recordPlacement",

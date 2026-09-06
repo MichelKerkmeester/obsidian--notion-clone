@@ -104,7 +104,6 @@ window.__stateMarkers = (scenario) => {
     tableGrouped: !!container.querySelector(".db-grouped-table tr.db-group-divider-row"),
     summaryRow: !!container.querySelector(".db-summary .db-summary-item"),
     ownedMenu: !!doc.querySelector(".db-owned-menu .db-menu-item"),
-    groupSelectionBoxes: !!container.querySelector(".db-board-column-checkbox"),
     cardCovers: !!container.querySelector(".db-board-card-cover.is-empty .db-board-card-cover-placeholder"),
     cellEditorText: !!container.querySelector('.db-cell-edit-popover[data-note-database-editor-kind="text"] .db-md-toolbar'),
     cellEditorSelect: !!container.querySelector(".db-cell-option-popover .db-cell-option-item"),
@@ -128,8 +127,9 @@ window.__stateMarkers = (scenario) => {
       && !!container.querySelector(".db-resize-handle"),
     boardEmptyColumn: Array.from(container.querySelectorAll(".db-kanban-col"))
       .some((col) => col.querySelectorAll(".db-kanban-card").length === 0),
-    boardExtensions: !!container.querySelector(".db-board-column-checkbox")
-      && !!container.querySelector(".db-board-card-checkbox"),
+    // The kanban card names its parent instead of drawing a tree: a child card carries the
+    // parent's title in its own type line, and a card with no parent has no such line at all.
+    boardSubtaskParentTitle: !!container.querySelector(".db-kanban-card-type"),
     migratedListAsTable: !!container.querySelector("table.db-table")
       && !container.querySelector(".db-list-row"),
     };
@@ -171,11 +171,11 @@ const PAIRED_CASES = [
   {
     id: "constructed-board-subtask",
     off: { renderer: "board", bag: "file-view", captureData: true },
-    // The reference kanban card the default board reproduces has no subtask tree by design; the
-    // tree's markers live on the extensions card path, so the option side constructs the board
-    // the product actually draws them on.
-    on: { renderer: "board", bag: "file-view", captureData: true, subtaskTree: true, boardExtensions: true },
-    onMarkers: ["subtaskToggle", "subtaskProgress", "subtaskDepthChild"],
+    // The kanban card the board reproduces has no collapse toggle and no progress bar; a child
+    // card announces its parent by name in its own type line, so that line is what the option
+    // turns on and its absence is what the off side proves.
+    on: { renderer: "board", bag: "file-view", captureData: true, subtaskTree: true },
+    onMarkers: ["boardSubtaskParentTitle"],
   },
   {
     id: "constructed-timeline-subtask",
@@ -360,11 +360,6 @@ const SINGLE_CASES = [
     marker: "ownedMenu",
   },
   {
-    id: "constructed-group-selection-controls",
-    spec: { renderer: "group-selection-controls", bag: "file-view", captureData: true },
-    marker: "groupSelectionBoxes",
-  },
-  {
     id: "constructed-card-covers",
     spec: { renderer: "card-covers", bag: "file-view", captureData: true },
     marker: "cardCovers",
@@ -443,11 +438,6 @@ const SINGLE_CASES = [
     id: "constructed-board-empty-column",
     spec: { renderer: "board", bag: "file-view", captureData: true, boardEmptyColumn: true },
     marker: "boardEmptyColumn",
-  },
-  {
-    id: "constructed-board-extensions",
-    spec: { renderer: "board", bag: "file-view", captureData: true, boardExtensions: true },
-    marker: "boardExtensions",
   },
   {
     // A config built as `viewType: "list"`, run through the real `planListMigration`/

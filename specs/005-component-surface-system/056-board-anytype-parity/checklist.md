@@ -82,9 +82,24 @@ C9's gantt count and capture hashes are byte-identical to the pre-leg baseline. 
 filled cells did not all reach the rendered surface: `tasks.md` T012 named ten residuals against
 `design-trueup.md`'s own measurements. Eight are fixed and re-measured at DPR 2 (`tasks.md` T012's
 red/green table); R6 and R7 stay open, named for the operator rather than folded into a green row.
-T013's dead `boardExtensionsEnabled` branch is removed. `node tools/live/board-geometry.mjs`, a new
-lane added by this same leg, now locks card radius, column width, column gap, chip height, property
-pitch and checkbox shape against computed styles — proven non-vacuous by a negative control on the
-card radius. `npx tsc --noEmit`, `npx vitest run` (134 files, 1402 tests) and `npm run build` all
-exit 0; the isolated `SURFACE_PHASE=056-board-anytype-parity npm run gate` reports **27 green**, the
-new lane counted in.
+T013's dead `boardExtensionsEnabled` branch is removed. `render-assertions`' own board geometry pass
+now locks card radius, column width, column gap, chip height, property pitch and checkbox shape
+against computed styles — proven non-vacuous by a negative control on the card radius, and hosted by
+an existing lane rather than a new one (`decision-record.md` ADR-005), so the gate count is
+unchanged.
+
+**Re-verified 2026-09-06 on the rebased tree by a leg that wrote none of the fixes**, against
+`origin/main` `3b3ac633`. Read back in device pixels off the recaptured PNGs rather than taken from
+the report: chip band **48 device px** (24 CSS) against 52 (26) before; property rows a flat **50
+device px** (25 CSS) across three seven-row repeats against 406 over seven (58 / 29 CSS) before;
+checkbox a **28x28 device-px** disc with a symmetric taper, so a circle at 14 CSS px; phone card
+**510 device px** wide with a **46px** gutter, i.e. 255 / 23 CSS against the declared 254.7 / 23.3.
+Two of the leg's own claims are corrected: the 0.7pt phone hairline paints two solid device pixels,
+identical to the desktop 1px border, so nothing in a capture can tell them apart; and no capture can
+show the 16px title icon slot at all, because every board harness stubs `renderRecordIcon` to null.
+The T013 retirement was also incomplete — `constructed-state-assertions.mjs` exited 1 with five
+failures on the landed tree and 16 orphaned PNGs were still tracked; both are closed here.
+`npx tsc --noEmit`, `npx vitest run` (**137 files, 1425 tests**) and `npm run build` all exit 0;
+`node tools/screenshots/verify.mjs` reports 550 current; `node tools/lane/check-lane.mjs` exits 0;
+the isolated `SURFACE_PHASE=056-board-anytype-parity npm run gate </dev/null` reports **26 green**,
+`$?` read from a file.

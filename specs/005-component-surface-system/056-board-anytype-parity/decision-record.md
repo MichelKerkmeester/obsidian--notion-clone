@@ -12,7 +12,7 @@ _memory:
     packet_pointer: "005-component-surface-system/056-board-anytype-parity"
     last_updated_at: "2026-09-05T23:40:00Z"
     last_updated_by: "design-leaf"
-    recent_action: "added adr-004, the measured accessibility declines from t001"
+    recent_action: "added adr-005 on the gate lane and adr-006/007 for the operator R6/R7 rulings"
     next_safe_action: "Carry the superseding note into 038 and 047, then run T002"
     blockers:
       - "None: all four ADRs here are Accepted; the ungrouped-column string is the operator's"
@@ -209,4 +209,91 @@ sampled, 4.96:1 to 13.71:1, and is adopted verbatim.
   failures are below 4:1 rather than marginal.
 - *Decline the whole light theme and ship dark-only parity.* Rejected: only five colour roles fail,
   and every geometric value in the light captures matches its dark twin to the pixel.
+
+---
+
+## ADR-005: The board's geometry pins go into an existing gate lane, not a new one
+
+**Status**: **Accepted** — 2026-09-06, at the landing of T012/T013.
+
+**Context.** T012 R10 found that nothing in the gate reads a board geometry value. `pixelHash` is a
+coarse 16x16 bucketed grid — reverting the card radius from 8px to 2px and recapturing left it
+identical — and `screenshots:verify` only proves a capture's declared sources have not moved. The
+first landing closed R10 by adding a 27th gate lane, `tools/live/board-geometry.mjs`. The brief that
+authorised the work said existing lanes only, and a new lane is not a free addition: every lane is a
+process launch, a Chrome start and a bundle build on every gate run, and the count itself is quoted
+as evidence across this program's documents.
+
+**Decision.** The six pins move into `tools/live/render-assertions.mjs` as its own board geometry
+pass, and `tools/live/board-geometry.mjs`, its stamped `board-geometry.json` and the `gate.mjs`
+entry are deleted. The gate stays at 26 lanes.
+
+**Why an existing lane can host it, concretely.** `render-assertions.mjs` already does every single
+thing the new lane did. It builds the same bundle through `buildRenderAssertionBundle`, mounts the
+same `board/file-view` scenario, requires the same production-render provenance marker before it
+will assert on any DOM, and — this is the part that settles it — already runs a **second page** with
+`styles.css`, `theme.css` and `runtime-vars.css` attached purely so it can measure computed
+geometry, its row-rhythm pass, complete with a premise assertion that refuses to publish heights if
+the token sheets did not attach. The geometry pass is a third page of exactly that shape at
+`deviceScaleFactor: 2`. Nothing had to be invented, and the pass reads identical values to the
+retired lane's.
+
+**Consequences.**
+- `render-assertions`' evidence stamp gains `styles.css` as an input, so a stylesheet edit dates it
+  the way it dated `board-geometry.json`. Nothing else in the evidence lane changes: it discovers
+  artefacts by scanning `tools/live/*.json`, so a deleted artefact is simply not asked about.
+- The negative control moves with the pins and was re-run on the merged tree: card radius 8px to 2px
+  turns `render-assertions` red at exit 1, naming the pin, then reverted.
+- A failure here now says `render-assertions` rather than `board-geometry`, so the lane name is less
+  specific than the failure. The printed row names the selector and both values, which is what a
+  person reads anyway.
+
+**Alternatives rejected.**
+- *Keep the new lane and record the 27 count.* Rejected: the constraint was explicit, and the reason
+  the existing lane could not host it turned out not to exist.
+- *Pin the values in a vitest suite beside the stylesheet-reading tests.* Rejected on the finding
+  that opened R10 in the first place: the defect was `height: 24px` painting 26 under content-box
+  sizing, which a test reading the declaration in `styles.css` cannot see. These pins have to be
+  read from a laid-out document or they check the wrong thing.
+
+---
+
+## ADR-006: The header chip takes Anytype's tint fill (R6)
+
+**Status**: **Decided by the operator** — 2026-09-06 ~05:25. **Not implemented**; a follow-up leg
+takes it.
+
+**Context.** ADR-004's E1 declined Anytype's bare light-theme option colour on a WCAG 1.4.3 measure
+and named the replacement as Anytype's own card-chip treatment: tint fill plus darkened text. T012
+R6 found the landed board took only half of it — the chip stayed `background: transparent` and only
+the text was darkened. That clears 4.5:1 (amber `#915608` on white, 5.93:1) but it is not the
+pattern the ADR named, and it is a visible difference against the reference.
+
+**Decision.** The operator, verbatim: *"Anytype tint fill"*.
+
+**Consequences.** `.db-kanban-col-chip` gains the tint fill of the option's own hue, matching the
+card chip's existing tint/text pair rather than introducing a third treatment. It moves every board
+capture and is a stylesheet edit, so it needs the CSS lane. **Nothing is changed by this leg** — it
+was instructed to record the ruling and leave the code, and the row stays open in `tasks.md` T012.
+
+---
+
+## ADR-007: The grey option pair is neutral (R7)
+
+**Status**: **Decided by the operator** — 2026-09-06 ~05:25. **Not implemented**; a follow-up leg
+takes it.
+
+**Context.** `design-trueup.md` section 3 A9 measured Anytype's grey option pair as neutral: tint
+`#E3E3E3`, text `#888888` light and `#A8A8A8` dark. The landed board derives a **red-tinted** grey
+instead — `#7E5D5D` light, `#BAABAB` dark, hue 0 — which clears 4.5:1 (5.82:1 on white) but is a
+different hue from the reference, and it is also the colour the ungrouped column takes, so the
+divergence is visible on the empty-column captures as a warm chip.
+
+**Decision.** The operator, verbatim: *"Neutral, match Anytype"*.
+
+**Consequences.** `.db-kanban-view .status-color-gray` moves to the measured neutral pair. Contrast
+must be re-measured after the move rather than assumed: `#888888` on white is 3.54:1, which is one
+of the five ratios ADR-004 E1 declined, so the neutral hue and the contrast floor have to be
+reconciled in the same leg — most likely by taking the neutral hue with a darkened text step, the
+same shape ADR-006 takes for the fill. **Nothing is changed by this leg.**
 <!-- /ANCHOR:decisions -->

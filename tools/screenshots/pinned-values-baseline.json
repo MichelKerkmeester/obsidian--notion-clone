@@ -1,5 +1,5 @@
 {
-  "unsuppliedWhy": "Tokens styles.css reads as var(--x) with NO fallback and nothing declares — not the stylesheet, not src/, not a harness file. The substitution is invalid at computed-value time, so the whole declaration is dropped and every capture shows the rule missing. The number is the count of such declarations, and the ratchet is on both the names and the counts: a new name, or a known name gaining reads, is a red. --text-warning was the thirteenth-largest kind of this and the largest instance; it is stood in now, transcribed from the host, which is why it is not below.",
+  "unsuppliedWhy": "Tokens styles.css reads as var(--x) with NO fallback and nothing declares \u2014 not the stylesheet, not src/, not a harness file. The substitution is invalid at computed-value time, so the whole declaration is dropped and every capture shows the rule missing. The number is the count of such declarations, and the ratchet is on both the names and the counts: a new name, or a known name gaining reads, is a red. --text-warning was the thirteenth-largest kind of this and the largest instance; it is stood in now, transcribed from the host, which is why it is not below.",
   "unsuppliedRecorded": "2026-09-04",
   "unsupplied": {
     "--background-interactive-hover": 1,
@@ -11,16 +11,15 @@
     "--text-success": 1
   },
   "unsuppliedDisposition": {
-    "hostTokensStoodIn": "--color-blue and --color-purple are now transcribed into tools/screenshots/theme.css (TRANSCRIBED from the installed application stylesheet of Obsidian 1.13.4: light #086ddd/#7852ee, dark #027aff/#a882ff), the same board milestone/recurrence-chip gap --color-red/--color-orange/--color-green were stood in for. --color-green's own entry is dropped from this map for the same reason — theme.css already declares it and this scan no longer reads it back — rather than left here stale.",
+    "hostTokensStoodIn": "--color-blue and --color-purple are now transcribed into tools/screenshots/theme.css (TRANSCRIBED from the installed application stylesheet of Obsidian 1.13.4: light #086ddd/#7852ee, dark #027aff/#a882ff), the same board milestone/recurrence-chip gap --color-red/--color-orange/--color-green were stood in for. --color-green's own entry is dropped from this map for the same reason \u2014 theme.css already declares it and this scan no longer reads it back \u2014 rather than left here stale.",
     "hostTokensNotYetStoodIn": "--font-medium, --font-semibold and --font-smaller are all defined by the installed host stylesheet and are transcribable exactly as --text-warning was. They are not done in the same pass because each one changes a weight or a size in captures outside the surfaces under review, and a transcription nobody looks at is the failure this repository keeps removing.",
     "accentChain": "--interactive-accent-hsl and --text-accent-hover both resolve through the host's --accent-h/--accent-s/--accent-l triple (258, 88%, 66%). The harness pins --interactive-accent to #5a67d8 and #6b74e0, which that triple does not produce, so supplying them means first deciding which accent this harness represents. That is a decision, not a transcription.",
-    "productDefect": "--background-interactive-hover is read once, at styles.css:9153, and appears nowhere in the host stylesheet of Obsidian 1.13.7 — searched, zero occurrences. It is not a harness gap: it is a hover background the plugin asks for and no device can supply, so the declaration is dropped for every user. Recorded here because this scan is where it was found; it is fixed in the stylesheet, not here."
+    "productDefect": "--background-interactive-hover is read once, at styles.css:9153, and appears nowhere in the host stylesheet of Obsidian 1.13.7 \u2014 searched, zero occurrences. It is not a harness gap: it is a hover background the plugin asks for and no device can supply, so the declaration is dropped for every user. Recorded here because this scan is where it was found; it is fixed in the stylesheet, not here."
   },
-  "standIns": 38,
+  "standIns": 37,
   "recorded": "2026-09-01",
-  "why": "Harness declarations of a custom property that src/ also assigns. Not defects: a screenshot runs no plugin, so the harness supplies what the plugin would compute. Recorded so a NEW one cannot arrive unnoticed, which is what AC-016 was actually worried about — its own row names the fear as \"a fifth would be invisible\". The criterion asks for zero of these; zero would fail a correct harness, so what is enforced is the concern rather than the threshold.",
+  "why": "Harness declarations of a custom property that src/ also assigns. Not defects: a screenshot runs no plugin, so the harness supplies what the plugin would compute. Recorded so a NEW one cannot arrive unnoticed, which is what AC-016 was actually worried about \u2014 its own row names the fear as \"a fifth would be invisible\". The criterion asks for zero of these; zero would fail a correct harness, so what is enforced is the concern rather than the threshold.",
   "properties": [
-    "--db-board-column-width",
     "--db-board-image-fit",
     "--db-calendar-allday-rows",
     "--db-calendar-col-width",
@@ -58,5 +57,6 @@
     "--db-timeline-today-offset-units",
     "--db-timeline-unit-width",
     "--db-timeline-units"
-  ]
+  ],
+  "standInsLowering": "38 -> 37 on 2026-09-06. The board's local-extensions branch was the only code that ever assigned --db-board-column-width (board.style.setProperty on the .db-board container), so retiring that branch left the harness declaring a property src/ no longer sets, and the declaration went with it. styles.css still READS the property, at .db-board-column, which is itself unreachable markup now \u2014 recorded as an outstanding in the CSS lane rather than cut here, since the cut is a per-rule audit of the whole db-board-* family and moves captures. A ratchet left at 38 would leave room for a genuinely new stand-in to arrive unnoticed, which is the one thing this count is for."
 }
