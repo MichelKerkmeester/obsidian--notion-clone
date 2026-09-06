@@ -1,8 +1,8 @@
 {
-  "holder": "003-remove-renderer-and-harness",
-  "acquiredAt": "2026-09-06T00:20:00Z",
-  "baselineHash": "53d49be6d120",
-  "baselineCommit": "e3fb687d",
+  "holder": "046-linked-views-notion-parity",
+  "acquiredAt": "2026-09-06T02:10:00Z",
+  "baselineHash": "ef54a53db80f",
+  "baselineCommit": "932fa3a9",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -3636,6 +3636,34 @@
         "screenshots/notion-clone/components/constructed-group-selection-controls-mobile-light.png"
       ],
       "note": "Section 18 (GALLERY VIEW) deleted whole, 317 lines, its one shared rule (.db-card-empty-placeholder, which card-field-renderer.ts also paints for board) left in place above the cut. Proven by derivation rather than by reading the diff: the set of distinct .db-* classes the stylesheet still matches went from 1246 to 1217, and all 29 that left are db-gallery-*. Nothing non-gallery was lost and nothing was gained, so no comma-joined list lost a surviving member. --db-card-field-width lost one of five uses, the one inside the deleted section; its four consumers and the card-field-renderer.ts setter survive. npm run screenshots regenerated the whole corpus, now 550 entries after the eight gallery captures were removed. Thirteen captures moved content against the base commit and every one was opened in the theme and device it names. Four are card-cover-states, whose fixture lost its gallery card: the board card beside it is unmoved in position, size, cover placeholder and field row. Four are chrome-group-selection-controls, whose fixture lost galleryGroupHeader('Business', 7): the surviving row is boardSubgroupHeader('Monthly', 3), confirmed against the helper definitions rather than by eye, since the gallery header was the one carrying the + New button. Four are constructed-group-selection-controls, which changed subject rather than rendering: the harness built galleryHost before boardHost as sibling .db-group-selection-host children and the element capture crops to the first, so it photographed the gallery's grouped host while its own title said board. With gallery gone the board host is the sole child and the capture finally shows what the id always named. The thirteenth, chrome-board-extensions-selection-desktop-light, is the recurring one-arm-of-four mover and was chased down rather than waved through: identical layoutHash, its three sibling arms unmoved, its only declared source untouched, and a pixel-by-pixel decode puts every one of the 119 differing pixels on a single scanline where the two images hold (255,255,255,alpha=1) against (0,0,0,alpha=0) - both fully transparent, so the visible picture is identical and the move is in the alpha encoding."
+    },
+    {
+      "event": "acquire",
+      "phase": "046-linked-views-notion-parity",
+      "at": "2026-09-06T02:10:00Z",
+      "hash": "53d49be6d120",
+      "note": "Taken over from 003-remove-renderer-and-harness, already released at this hash, to land review-ui-2026-09-05.md P0 #1 on top of the gallery removal. This leg has now been rebased onto origin/main twice rather than merged; both times its capture and evidence commit was dropped whole and every generated artefact re-derived from the rebased tree, so no number recorded here is carried over from an earlier measurement."
+    },
+    {
+      "event": "edit",
+      "phase": "046-linked-views-notion-parity",
+      "at": "2026-09-06T02:12:00Z",
+      "hash": "ef54a53db80f",
+      "note": "One additive rule after the embed's own th/td height rule: .note-database-embed.note-database-container table.db-table tr.db-row-insert-line > td { height: 0; border: 0 }. The defect it closes is a cascade tie, not a renderer bug -- the base seam rule (.note-database-container .db-table tr.db-row-insert-line > td { height: 0 }, styles.css:8245) and the embed's th/td { height: 34px } rule (styles.css:15758) are both specificity (0,3,2) and the embed's comes later, so every insertion row table-renderer.ts:785 emits between a pair of data rows painted as an empty 34px band inside an embed and nowhere else. Negative control re-run on THIS tree rather than quoted from either earlier attempt: with the rule removed, tools/live/unstyled-links.mjs's constructed pass reports 1999 chrome-geometry findings, each '34px against a 1px ceiling', exit 1; with it restored, 0 findings, exit 0. Measured live in the constructed host over the same two states, the linked view's insertion-seam rows go 34px to 0px and its row pitch 68px to 34px. The measurement is chrome-geometry-measure.mjs's insertLineRows reading, judged by a pure function with its own 4-case unit test, and unstyled-links.mjs fails on an empty scan so the lane cannot go quiet."
+    },
+    {
+      "event": "release",
+      "phase": "046-linked-views-notion-parity",
+      "at": "2026-09-06T02:20:00Z",
+      "hash": "ef54a53db80f",
+      "note": "Full node tools/screenshots/capture.mjs run regenerated all 550 entries after the stylesheet edit. Twelve files moved bytes; five moved pixelHash, and all five are listed below. Four are the constructed-linked-view-host captures this edit reaches. The fifth, chrome-board-extensions-selection-desktop-light, is NOT this edit's and was proven so rather than assumed: reverting styles.css to origin/main's and re-capturing that scenario alone produces the same new pixelHash 4366b9d11218, three consecutive runs agree, so the capture committed on origin/main was already stale for it. Both versions were opened and differenced: 119 pixels of 560640 move, in a single one-pixel row at y=31 spanning x 232..351, a hard edge shifting by one pixel. Recorded here rather than left unnamed because a release must account for every capture it moved, not only the ones it caused. The seven byte-only captures are left at their newly captured bytes rather than restored to the committed ones, departing from what 053's and 049's releases record. Reason, checked rather than assumed: every one of origin/main's manifest entries carries a `bytes` field matching its committed PNG exactly, so restoring them would put the manifest out of step with the tree it describes to buy a smaller diff; check-lane.mjs already excludes them from the review a release owes. All four linked-view captures were opened and read on both devices and both themes: the empty inter-row bands are gone, and on the phone all six rows plus the SUM/AVERAGE/EARLIEST/UNIQUE footer now fit above the fold where row-5 and the footer used to fall below it. Row pitch was measured, not judged by eye: linked 68px before, 34px after, against the standalone table's 35px. That last 1px is NOT the seam and is not closed here -- the embed cell rule carries box-sizing: border-box (34px including its 1px bottom border) where the standalone cell is content-box (34px + 1px). Row 0 still sits under the sticky header, identically before and after, and the mechanism recorded on the first attempt was wrong: measured, the embed thead computes top: 20px and covers exactly 20px of row 0, because styles.css:15907 gives the embed top: calc(var(--db-table-header-top) - 2px), 22 - 2 against runtime-vars.css's 22px stand-in, where the standalone rule at styles.css:5408 subtracts a full 22 and lands on 0. The stand-in is correct; what the harness omits is the note-database-embed-headerless class that zeroes that rule (styles.css:15911), which production toggles at embedded-database-renderer.ts:672 alongside updateStickyOffsets() at :1803. Harness stand-in gap, still device-only. Evidence lane refreshed: 12 stamp files re-measured against the new stylesheet hash, evidence.mjs --check-all reports 15 of 15 fresh. GATE, read from the final state: npx tsc --noEmit exit 0 (352 src files), npm test 1339/1339 in 127 files exit 0, npm run build exit 0, node tools/screenshots/verify.mjs exit 0, npm run gate PASS 26 green 0 red exit 0.",
+      "reviewed": [
+        "screenshots/notion-clone/components/chrome-board-extensions-selection-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-linked-view-host-desktop-dark.png",
+        "screenshots/notion-clone/views/constructed-linked-view-host-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-linked-view-host-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-linked-view-host-mobile-light.png"
+      ]
     }
   ],
   "outstanding": [

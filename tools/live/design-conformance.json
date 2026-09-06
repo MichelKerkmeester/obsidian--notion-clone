@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-05T23:35:36.380Z",
+  "measuredAt": "2026-09-05T23:54:40.305Z",
   "inputs": {
-    "styles.css": "53d49be6d120",
+    "styles.css": "ef54a53db80f",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "7edae5db0282"
   },
@@ -27,7 +27,7 @@
     {
       "name": "reachability — buildable surfaces no fixture renders",
       "enforced": false,
-      "value": 140,
+      "value": 139,
       "target": 0,
       "note": "nothing photographs or measures these, so nothing would notice if they broke",
       "gated": false,
