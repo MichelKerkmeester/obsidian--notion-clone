@@ -207,19 +207,19 @@ A task missing any of the three is not ready to start.
       **Threshold:** a single delete whose content can be read shows no confirm and offers Undo; a
       single delete whose content cannot be read still confirms and offers no Undo; a bulk delete
       always confirms and never offers Undo.
-      **Red first:** `deletion-undo.test.ts` gained four new cases (no-confirm-when-readable and
-      confirm-when-unreadable, for both classes) plus a `confirmCalls` assertion on the existing
-      bulk-delete case. The two confirm-when-unreadable cases were run against the pre-change tree
-      first (the confirm mock's own call log, `confirmCalls`, at length 0 against a threshold of 1 —
-      the old code aborted a read failure silently, with no confirm and no delete), then green after
-      the predicate landed; the other eleven pre-existing cases and the bulk-delete case were
-      unaffected by the move.
-      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1449/1449 (15/15 in
-      `deletion-undo.test.ts`); `npm run build` 0, no unexpected `main.js` diff beyond this leg's
-      own source change; `npm run lint` unchanged at **266** problems (248 errors, 18 warnings) —
-      an earlier draft of this leg regressed it to 268 by hand-typing the toast action's type
-      narrower than `ToastAction` (`onClick(): void` instead of `onClick(): void | Promise<void>`),
-      caught by the lint count and fixed by importing `ToastAction` instead of inventing a shape.
+      **Ordering:** the snapshot is read before `trashNote` and the history entry is pushed before
+      the toast, so nothing that can throw after the file is gone can leave the deletion both
+      unconfirmed and unrecoverable. `pushHistory` itself unshifts before it refreshes the toolbar,
+      so even a throwing toolbar refresh leaves the entry on the stack for Ctrl+Z; only the toast's
+      Undo button is lost.
+      **Red first:** `deletion-undo.test.ts` gained six cases — no-confirm-when-readable and
+      confirm-when-unreadable for both classes, plus one per class asserting the ordering above —
+      and a `confirmCalls` assertion on the existing bulk-delete case. Each was watched red against
+      the behaviour it pins: the two confirm-when-unreadable cases at `confirmCalls` length 0
+      against a threshold of 1 on the pre-change tree, and the two ordering cases by moving the
+      history push after the toast, which fails exactly those two and no others.
+      **Negative control, observed:** the test mocks only `confirmWithModal` and spreads `importOriginal` for everything else, so the shipped `canUndoDeletion` runs rather than a copy. Breaking it to never return `false` — the change that would trash an unreadable row with neither confirm nor Undo — fails 7 of 17 cases, both "cannot be read" ones among them. An earlier draft that reimplemented the predicate inside the mock stayed 15/15 green under that same break, which is why it does not.
+      **Green:** `npx tsc --noEmit` 0; `npx vitest run` **1435/1435** in 138 files (17/17 in `deletion-undo.test.ts`, 1429/1429 on the landing base); `npm run build` 0; `node tools/screenshots/verify.mjs` 550 entries current, **0 `pixelHash` moves** — the eight `chrome-selection-status-bar` / `chrome-table-load-more` entries update only the `embedded-database-renderer.ts` source hash they track; `node tools/lane/check-lane.mjs` 0; `npm run lint` unchanged at **269** problems (244 errors, 25 warnings), the same count the landing base reports. The isolated `npm run gate` is **25 green / 1 RED, exit 1** — `failing-values`, which fails identically on the landing base (`scan-failing-values.mjs` exit 1, 334/188/146 against a baseline of 145, on two rows in `038` and `053` that this leg does not own and does not touch). No unexpected `main.js` diff beyond this leg's own source change.
       **Capture:** none (`src/views/database-view.ts`, `src/views/embedded-database-renderer.ts`,
       `src/views/row-menu.ts`, `src/views/modals/confirm-modal.ts`, `src/views/deletion-undo.test.ts`)
 

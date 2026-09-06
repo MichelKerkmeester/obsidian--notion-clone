@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/055-states-feedback-and-motion"
-    last_updated_at: "2026-09-06T07:50:00Z"
+    last_updated_at: "2026-09-06T21:00:00Z"
     last_updated_by: "no-confirm-delete-predicate"
-    recent_action: "ADR-010 built: no confirm for single delete, Undo toast"
+    recent_action: "ADR-010 built: no confirm for a single delete, Undo toast"
     next_safe_action: "T003's nothingToUndo gap, T015's isolated gate, T017's operator pass"
     blockers: []
     key_files:
@@ -21,6 +21,7 @@ _memory:
       - "src/views/database-view.ts"
       - "src/views/embedded-database-renderer.ts"
       - "src/views/row-menu.ts"
+      - "src/views/deletion-undo.test.ts"
       - "tools/live/sheet-grammar.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
@@ -1159,6 +1160,9 @@ precondition is met.
   confirm is the only safety net available to it, and removing it there would be a regression
   T018's own repair was written to prevent for a different failure mode (the toast outliving its
   entry).
+- Skipping the confirm makes the history entry the only thing between a mis-tap and a lost note, so
+  the ordering inside `deleteRow` becomes load-bearing: the snapshot has to be read before the file
+  is trashed, and the entry pushed before anything that can throw after it.
 
 ### Decision
 
@@ -1185,8 +1189,10 @@ rather than re-deriving the same read-or-fail logic a second time in a second fi
 live Obsidian `App`, vault and metadata cache no harness in this repository constructs; nothing
 about gating the confirm changes that. This ADR's proof is the same as T018's: the behavioural
 suite in `deletion-undo.test.ts`, driving the shipped prototype methods against a vault double that
-holds real bytes, with the two new "cannot be read" cases watched red against the pre-change tree
-before this leg's own commit.
+holds real bytes. That suite mocks only `confirmWithModal` and spreads `importOriginal` for the rest,
+so `canUndoDeletion` under test is the shipped function rather than a copy of it — breaking the real
+predicate to never return `false` reddens 7 of its 17 cases, both "cannot be read" ones among them,
+where a mock that reimplemented the predicate stayed green under the same break.
 
 ### Alternatives Considered
 
@@ -1209,12 +1215,18 @@ plugin now has the equivalent recovery surface (T018's Undo) to be parity with.
 **What it costs**: the rare unreadable-file path keeps asking, which is a slower path for a rarer
 case rather than a faster path for an unsafe one.
 
+**What the ordering guarantees**: `pushHistory` unshifts the entry before it refreshes the toolbar,
+and `deleteRow` pushes before it raises the toast, so a failure anywhere after the trash costs the
+toast's Undo button and never the note — the entry is still on the stack for Ctrl+Z. Two cases, one
+per class, pin that; moving the push after the toast reddens exactly those two.
+
 **Risks**:
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
 | A future bulk-undo leg forgets `canUndoDeletion` exists and re-derives the read-or-fail check inline | L | The predicate is exported and named for exactly this reuse; this ADR records the intent |
 | A caller elsewhere starts relying on the confirm firing for every single delete | L | Only `row-menu.ts`'s delete row called `confirmWithModal` for a single row before this change (confirmed by grep); no other call site existed to break |
+| A later change relaxes `canUndoDeletion` and no test notices, because the suite stubbed it | M | The suite spreads `importOriginal` and stubs only `confirmWithModal`, so the shipped predicate runs; breaking it reddens 7 of 17 cases |
 
 ### Five Checks Evaluation
 
@@ -1236,8 +1248,10 @@ case rather than a faster path for an unsafe one.
   classes calls the predicate first; the confirm and its message move here from `row-menu.ts`.
 - `src/views/row-menu.ts` — the confirm call removed from the delete-row entry; it now calls
   `actions.deleteRow(row)` unconditionally, and the now-unused `confirmWithModal` import is removed.
-- `src/views/deletion-undo.test.ts` — four new cases and one new assertion, red-first against the
-  pre-change tree for the two "cannot be read" cases.
+- `src/views/deletion-undo.test.ts` — six new cases and one new assertion: no-confirm-on-readable
+  and confirm-and-no-Undo-on-unreadable for both classes, plus one per class pinning that the
+  history entry is recorded before anything that can throw after the trash. The module mock stubs
+  only `confirmWithModal` so the shipped predicate is what runs.
 - `acceptance-criteria.md` AC-013 (new), `checklist.md` C15 (new), `tasks.md` T019 (new).
 
 **How to roll back**: revert this leg's commit. The confirm call returns to `row-menu.ts`

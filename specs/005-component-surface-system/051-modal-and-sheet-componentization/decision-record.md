@@ -496,6 +496,10 @@ the single-delete confirm and adding the undo toast is a separate leg's work, an
 code shipped alongside this ruling acts on it. The primitive is what a bulk-delete and
 not-undoable confirm will keep using.
 
+**Implemented at `f962d626`** by `055` T019 (its ADR-010), not here: `deleteRow` in both classes
+now gates the confirm on `canUndoDeletion(app, file)`, and this packet's primitive is what the
+surviving bulk and not-undoable confirms still call.
+
 **One value was over-generalised rather than under-adopted, and is corrected in the same pass.**
 `design-trueup.md` §6 C10: Anytype ships **two** phone frame shapes, not one. A **floating card** at
 device L 24 / R 1181 / bottom 2597 — 8.0 / 8.3 / 8.3pt with a 16pt radius, on 22 files — and a
