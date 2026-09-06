@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T08:23:32.141Z",
+  "measuredAt": "2026-09-06T08:39:59.643Z",
   "inputs": {
-    "styles.css": "4db0388c240d",
+    "styles.css": "10658011477a",
     "tools/live/checkbox-inventory.mjs": "e869ed91680a"
   },
   "totals": {
@@ -103,7 +103,7 @@
     },
     {
       "file": "src/views/toolbar-renderer.ts",
-      "line": 1875,
+      "line": 1899,
       "chain": [
         "db-database-popover",
         "db-new-preset-row db-menu-item"
@@ -116,7 +116,7 @@
     },
     {
       "file": "src/views/toolbar-renderer.ts",
-      "line": 1895,
+      "line": 1919,
       "chain": [
         "db-database-popover",
         "db-new-preset-row db-menu-item"
@@ -129,7 +129,7 @@
     },
     {
       "file": "src/views/toolbar-renderer.ts",
-      "line": 1967,
+      "line": 1991,
       "chain": [
         "db-database-popover",
         "db-new-preset-row db-menu-item"
@@ -142,7 +142,7 @@
     },
     {
       "file": "src/views/view-config-panel-renderer.ts",
-      "line": 2151,
+      "line": 2192,
       "chain": [
         "db-view-config-panel",
         "db-view-config-field"

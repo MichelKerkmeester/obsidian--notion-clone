@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T08:24:46.645Z",
+  "measuredAt": "2026-09-06T08:41:07.902Z",
   "inputs": {
-    "styles.css": "4db0388c240d",
+    "styles.css": "10658011477a",
     "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -360,9 +360,9 @@
     }
   ],
   "totals": {
-    "fixtures": 73,
-    "escaping": 620,
-    "growing": 268,
+    "fixtures": 74,
+    "escaping": 624,
+    "growing": 272,
     "scrolling": 352,
     "rhythmGroups": 8,
     "ragged": 0,
@@ -2119,6 +2119,17 @@
     },
     {
       "width": 320,
+      "fixture": "panel-settings-side-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-view-config-panel.db-shell-side-sheet",
+      "parentCls": "note-database-container",
+      "by": 4,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
       "fixture": "panel-column-manager",
       "kind": "escaping",
       "tag": "button",
@@ -2531,9 +2542,9 @@
       "tag": "div",
       "cls": "db-toolbar-left",
       "parentCls": "db-toolbar",
-      "by": 220.4,
+      "by": 252.4,
       "scrolls": true,
-      "pastHeader": 220.4
+      "pastHeader": 252.4
     },
     {
       "width": 320,
@@ -2542,9 +2553,9 @@
       "tag": "div",
       "cls": "db-toolbar-right",
       "parentCls": "db-toolbar",
-      "by": 220.4,
+      "by": 252.4,
       "scrolls": true,
-      "pastHeader": 220.4
+      "pastHeader": 252.4
     },
     {
       "width": 320,
@@ -4691,6 +4702,17 @@
     },
     {
       "width": 402,
+      "fixture": "panel-settings-side-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-view-config-panel.db-shell-side-sheet",
+      "parentCls": "note-database-container",
+      "by": 4,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
       "fixture": "panel-record-detail-sheet",
       "kind": "escaping",
       "tag": "div",
@@ -4960,9 +4982,9 @@
       "tag": "div",
       "cls": "db-toolbar-left",
       "parentCls": "db-toolbar",
-      "by": 138.4,
+      "by": 170.4,
       "scrolls": true,
-      "pastHeader": 138.4
+      "pastHeader": 170.4
     },
     {
       "width": 402,
@@ -4971,9 +4993,9 @@
       "tag": "div",
       "cls": "db-toolbar-right",
       "parentCls": "db-toolbar",
-      "by": 138.4,
+      "by": 170.4,
       "scrolls": true,
-      "pastHeader": 138.4
+      "pastHeader": 170.4
     },
     {
       "width": 402,
@@ -6196,6 +6218,17 @@
     },
     {
       "width": 768,
+      "fixture": "panel-settings-side-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-view-config-panel.db-shell-side-sheet",
+      "parentCls": "note-database-container",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
       "fixture": "panel-record-detail-sheet",
       "kind": "escaping",
       "tag": "div",
@@ -7041,6 +7074,17 @@
     },
     {
       "width": 1440,
+      "fixture": "panel-settings-side-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-view-config-panel.db-shell-side-sheet",
+      "parentCls": "note-database-container",
+      "by": 16,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
       "fixture": "panel-record-detail-sheet",
       "kind": "escaping",
       "tag": "div",
@@ -7428,6 +7472,11 @@
     },
     {
       "width": 320,
+      "fixture": "panel-settings-side-sheet",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "panel-board-card-properties",
       "probe": "4px"
     },
@@ -7793,6 +7842,11 @@
     },
     {
       "width": 402,
+      "fixture": "panel-settings-side-sheet",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "panel-board-card-properties",
       "probe": "4px"
     },
@@ -8158,6 +8212,11 @@
     },
     {
       "width": 768,
+      "fixture": "panel-settings-side-sheet",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "panel-board-card-properties",
       "probe": "4px"
     },
@@ -8519,6 +8578,11 @@
     {
       "width": 1440,
       "fixture": "panel-view-config-sheet",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "panel-settings-side-sheet",
       "probe": "4px"
     },
     {

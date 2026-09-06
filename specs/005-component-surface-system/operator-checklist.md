@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-06: **59 phases**, **6 with nothing left**, **173 rows** waiting on a device.
+Derived 2026-09-06: **59 phases**, **6 with nothing left**, **172 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -281,7 +281,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] The shell's geometry and motion read from the values `050` measured, not from per-surface literals. Today: per-surface literals, and the shell has no geometry of its own. The adopted values are `design-trueup.md` §2 and §4: 8px popover radius, 16px horizontal and 8px vertical padding, 8px divider clearance, 28px rows (adopted as the measured Anytype value *and* our own `design-system.md` §9 coarse-pointer floor — the named deviation from the 4/8/12/16/24/32 scale, recorded rather than absorbed), 360px for the `panel` role, and motion enter 200ms `ease-out` / exit 150ms `ease-in`. On the phone the floor is `044`'s 44px close, unchanged.
 - [ ] `npm run gate` exits 0 read from `$?`, with one permanent lane row per shell deliverable, each negative control observed red before green; `npm run replay` holds with reversed 0; the
 - [ ] The operator opens a modal, a sheet, a sub-page and a destructive confirm on iOS and on desktop and reads them as one surface family, debugged, refined, perfected. Only the operator closes this row; nothing in this repository can.
-- [ ] The desktop database Settings surface opens as a right side sheet: a full-height panel docked to the right edge, the database stays visible and interactive to its left, and the panel scrolls independently of it. Added 2026-09-06 from the operator's report and ruling (`goal.md` §4 amendment below). Today: the Settings surface is a tall anchored dropdown (`positionToolbarPopover`'s `PANEL_POPOVER`/general preset, `view-config-panel- renderer.ts`), a new shell shape distinct from every role in `design-system.md` §3.
+- [ ] The desktop database Settings surface opens as a right side sheet: a full-height panel docked to the right edge, the database stays visible and interactive to its left, and the panel scrolls independently of it. Added 2026-09-06 from the operator's report and ruling (`goal.md` §4 amendment below). Today: three of the four clauses are green and one is not. Red, measured on the shipped renderer before the change: a 360x560px anchored dropdown scrolling itself, header included, over 1776px of content in a 576px client box.
 
 ## 052-dropdown-menu-and-picker-componentization — 0/9
 
@@ -295,7 +295,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] Every desktop dropdown behaves as a combobox: clicking it opens the list and the trigger itself becomes an active text input, letting the operator type to filter. Added 2026-09-06 from the operator's report (`goal.md` §4 amendment below). Today: `dropdown- field.ts`'s search is a separate input inside the popover (`:201-214`), shown only when `searchable === true` and the option count exceeds 8 (`:193`) — the trigger itself never becomes an input, and most dropdowns carry no search field at all.
 - [ ] The filter/sort condition row's Operator dropdown anchors under its own trigger. Added 2026-09-06. Today: RED, measured on the operator's screenshot — the popover renders at x 123-489 under a trigger at x 290-480, a left-edge miscalculation, not a width one (the popover is wider than the trigger, but its left edge sits 167px further left than the trigger's own left edge).
 
-## 053-toolbar-and-view-controls — 1/10
+## 053-toolbar-and-view-controls — 2/10
 
 - [ ] The toolbar renders from composed primitives, and the replaced vocabularies are gone.
 - [ ] The filter and sort state is legible where the reader configures the view, and the leading sort chip is direction-coloured. Restated 2026-09-05 against `design-trueup.md` REQ-001, because the threshold this criterion used to carry could not be observed red. What was false: "0 chips and one fixed icon state" — our chip rail ships (`active-view-controls-renderer.ts`, auto-hiding at `:97`, on both the full-page and embedded renderers) and both triggers already carry a numeric count badge (`toolbar-renderer.ts:2575-2579`). What is rejected: Anytype's dual-mode icons. Scanning the four toolbar icons across all 120 catalogue captures returns one result 120 times, and the filter funnel measures `ink=52, blue=0` on a filtered view and on an unfiltered one — identical to the pixel. The sort glyph's blue is a static two-tone glyph, not a state.
@@ -305,7 +305,6 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] An embedded view's toolbar collapses by measurement. Today: the embed's only chrome control is a boolean — `shouldHideHeaderChrome()` reads three codeblock options and hides everything or nothing (`embedded-database-renderer.ts:2410-2416`); the tab strip's ResizeObserver overflow collapse (`toolbar-renderer.ts:895-917`) is the only measured behaviour, and it covers tabs only. `050` item 12's threshold, kept: no control overflows at any width in the sweep, collapse driven by measured natural width, read once per resize.
 - [ ] `npm run gate` exits 0 with one permanent lane row per criterion, each observed red before green, and `npm run replay` holds with reversed 0. `050` item thresholds ride the same lane rows.
 - [ ] The operator reads the rebuilt toolbar on device and names it the improvement they asked for. Only the operator closes this row; nothing in this repository can.
-- [ ] A gear icon opens the database Settings surface (`051`'s side sheet), in the toolbar rail, before the `···` overflow button. Added 2026-09-06 from the operator's ruling (`goal.md` §4 amendment below). Today: no such button exists — Settings opens only through `renderUtilitiesOverflowButton`'s (`toolbar-renderer.ts:420-426`) `···` menu, one level deep, in the `db-toolbar-utilities-cluster`.
 
 ## 054-record-and-relation-surfaces — 2/7
 

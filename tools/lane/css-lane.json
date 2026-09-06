@@ -1,8 +1,8 @@
 {
-  "holder": "057-calendar-anytype-parity",
-  "acquiredAt": "2026-09-06T23:55:00Z",
-  "baselineHash": "4db0388c240d",
-  "baselineCommit": "03aa151d",
+  "holder": "051-modal-and-sheet-componentization",
+  "acquiredAt": "2026-09-07T00:40:00Z",
+  "baselineHash": "10658011477a",
+  "baselineCommit": "396bcae7",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -4227,6 +4227,52 @@
         "screenshots/notion-clone/views/constructed-calendar-week-mobile-light.png"
       ],
       "note": "Phone week/day time grid given a minimum column width and a horizontal pan. Four new .is-phone rules, none of them an edit to a shared default: a --db-calendar-phone-week-col-min token on .db-calendar.db-calendar-week, and minmax(var(--db-calendar-phone-week-col-min, 80px), 1fr) tracks on .db-calendar-time-header-days, .db-calendar-week-allday-cols and .db-calendar-time-columns, with overflow-x: auto plus min-width: 0 on the first two and on .db-calendar-week-body so the overflow is contained rather than pushed onto the page. Desktop is untouched by construction. The value is 80px and NOT the month grid's phone cell the ruling's parenthetical named: measured at DPR 2 on calendar-month-view-mobile-light.png the month cell is an 87.4 device px pitch (43.7 CSS) with 84-86 device px of content, and at 45px a day carrying two events in the same hour halves its column to a 4.5px and 0.5px title paint box, zero glyphs. The 45px recapture decoded 8 and 2 device px of title ink for the overlap pair against 4 and 0 before the fix, a partial letter either way. Swept on the same fixture the split block regains one glyph at 64px, two at 72px and three plus the ellipsis at 80px, which is also the floor getCalendarColumnWidthRange already clamps a dragged desktop week column to. Read on the landed captures at DPR 2: the day-column pitch is exactly 160 device px = 80 CSS, and \"Figma sync\" goes from 5 glyph runs over a 33 device px extent (\"Fig...\") to 9 runs over 118 device px, the whole title. All four reviewed files were opened. Only these four moved pixelHash out of 554; twelve byte-only re-encodes were restored to their committed bytes, constructed-calendar-day-mobile-* among them since the day scale has one column and the minimum never binds. Gantt guards held: zero-line diff on src/views/calendar-timeline-renderer.ts, all eight reference-gantt-*.png MD5-identical to origin/main, pm-gantt occurrence counts unchanged. engine-parity re-derived on the merged tree carries no calendar row this edit added; the pan itself was confirmed in WebKit, where the seven columns resolve at 80px and the three tracks report scrollWidth 560 against clientWidth 294 while documentElement and body stay 402/402."
+    },
+    {
+      "event": "acquire",
+      "phase": "051-modal-and-sheet-componentization",
+      "at": "2026-09-07T00:40:00Z",
+      "hash": "4db0388c240d",
+      "note": "The desktop database Settings panel becomes a right-docked side sheet, and the toolbar rail gains the permanent gear that opens it \u2014 both from the operator's 2026-09-06 (~08:15) report and its two verbatim rulings."
+    },
+    {
+      "event": "release",
+      "phase": "051-modal-and-sheet-componentization",
+      "at": "2026-09-07T01:05:00Z",
+      "hash": "10658011477a",
+      "reviewed": [
+        "screenshots/notion-clone/panels/panel-settings-side-sheet-desktop-dark.png",
+        "screenshots/notion-clone/panels/panel-settings-side-sheet-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-view-config-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-view-config-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-desktop-light.png",
+        "screenshots/notion-clone/components/chrome-toolbar-desktop-dark.png",
+        "screenshots/notion-clone/components/chrome-toolbar-desktop-light.png",
+        "screenshots/notion-clone/components/chrome-toolbar-mobile-dark.png",
+        "screenshots/notion-clone/components/chrome-toolbar-mobile-light.png",
+        "screenshots/notion-clone/components/chrome-utilities-popover-desktop-dark.png",
+        "screenshots/notion-clone/components/chrome-utilities-popover-desktop-light.png",
+        "screenshots/notion-clone/components/chrome-utilities-popover-mobile-dark.png",
+        "screenshots/notion-clone/components/chrome-utilities-popover-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-search-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-search-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-search-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-search-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-utilities-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-utilities-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-utilities-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-utilities-mobile-light.png"
+      ],
+      "note": "One block added, `.db-view-config-panel.db-shell-side-sheet` and its four sub-rules: the desktop Settings panel docks `position: absolute` against `.note-database-container` at `inset: 0 0 0 auto`, 420px wide, full height, one hairline left border, no radius, `overflow: hidden` with `.db-view-config-body` taking `overflow-y: auto` so the header stays put, plus an 84px `min-height` on the description textarea and the reduced-motion entry for the slide. Measured on the shipped renderer in headless Chrome with the token sheets attached \u2014 red, the same mount with the marker class removed: 360x560px, the panel itself scrolling 1776px inside a 576px client box, textarea 58px in a 236px column; green: 420x844, body scrolling 1672px inside 776px, textarea 84px in 279px, no inline top/left written. Phone is untouched: `isMobileBottomSheet` still selects the bottom sheet and `positionToolbarPopover` still runs for it. The rail's own change is the permanent `db-toolbar-settings-btn` gear before `\u00b7\u00b7\u00b7`, with the `\u00b7\u00b7\u00b7` settings row and its i18n key deleted; the hand-written fixture's `settings` glyph was corrected from the retired slider stand-in to the real cog so it photographs the icon the product draws. Captures re-derived by a full `npm run screenshots` on this base, 556 entries, `verify.mjs` exit 0. The 30 listed here moved pixelHash or are new, and every one was opened; 14 further PNGs moved bytes at a matching pixelHash \u2014 none of them a toolbar, panel or settings surface, all of them mobile-dark rendering jitter of at most 14 channel units in one 20px band \u2014 and are restored to their committed bytes with the manifest's `bytes` reconciled to disk."
     }
   ],
   "outstanding": [
