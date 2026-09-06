@@ -359,6 +359,55 @@ describe("CardFieldRenderer keyboard accessibility", () => {
     }
   });
 
+  it("keeps a read-only checkbox field's base appearance instead of native disabled, and blocks the toggle at the click", () => {
+    // A board card's checked checkbox measured a
+    // #EEEEEE border on a #EEEEEE glyph in the default light theme — checked and unchecked read
+    // as the same picture — because every board/gallery/list card field is read-only in place
+    // (the card's own click opens the record), and that reached `checkbox.disabled`, which
+    // `input[type="checkbox"].db-checkbox:disabled` in styles.css halves opacity and desaturates.
+    // The fix keeps the checkbox out of the tab order and announced as non-interactive without
+    // the native `disabled` state, so the accent-filled base appearance stays legible.
+    const origWindow = globalThis.window;
+    (globalThis as unknown as { window: { activeDocument: { createElement: (tag: string) => MockElement } } }).window = {
+      activeDocument: { createElement: (tag: string) => new MockElement(tag) },
+    };
+
+    try {
+      const row: RowData = { file: { path: "notes/test.md" } as never, frontmatter: {}, computed: {} };
+      const col = column("checkbox", "done");
+      const config = { schema: { columns: [col] }, views: [] } as unknown as ViewConfig;
+
+      const fieldEl = renderCardField({
+        app: {} as App,
+        row,
+        col,
+        config,
+        value: true,
+        displayType: "checkbox",
+        fieldClass: "db-card-field",
+        valueClass: "db-card-value",
+        labelClass: "db-card-label",
+        badgesClass: "db-card-badges",
+        linkClass: "db-card-link",
+        readOnly: true,
+      }) as unknown as MockElement;
+
+      const checkboxEl = fieldEl.querySelector("input") as unknown as
+        (MockElement & { onclick?: (event: { preventDefault: () => void; stopPropagation: () => void }) => void });
+      expect(checkboxEl).not.toBeNull();
+      expect(checkboxEl.disabled).toBe(false);
+      expect(checkboxEl.tabIndex).toBe(-1);
+      expect(checkboxEl.getAttribute("aria-disabled")).toBe("true");
+
+      // Nothing is wired to persist a toggle in this path — the click must not flip the value.
+      const preventDefault = vi.fn();
+      checkboxEl.onclick?.({ preventDefault, stopPropagation: vi.fn() });
+      expect(preventDefault).toHaveBeenCalledOnce();
+    } finally {
+      globalThis.window = origWindow;
+    }
+  });
+
   it("ensures read-only fields are not focusable and do not attach edit handlers", () => {
     const origWindow = globalThis.window;
     (globalThis as unknown as { window: { activeDocument: { createElement: (tag: string) => MockElement } } }).window = {

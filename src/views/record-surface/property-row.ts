@@ -74,12 +74,26 @@ export function renderPropertyValue(
     valueEl.addClass("db-checkbox-cell");
     const checkbox = createCheckbox(valueEl, { role: "field" });
     checkbox.checked = toBooleanValue(value);
-    checkbox.disabled = !!options.readOnly;
+    // `readOnly` here means "the card's click opens the record, not this control" — every
+    // board/gallery/list card field is read-only in exactly that sense, not "unavailable to the
+    // user". Native `disabled` says the second thing: `input[type="checkbox"].db-checkbox:disabled`
+    // halves opacity and drops the border to --background-modifier-border, which measured a
+    // #EEEEEE border on a #EEEEEE checked glyph in the default light theme — checked and unchecked
+    // read as the same picture. The value stays legible if the toggle is blocked at the click
+    // instead of by graying out the control that shows it.
+    if (options.readOnly) {
+      checkbox.tabIndex = -1;
+      checkbox.setAttribute("aria-disabled", "true");
+    }
     checkbox.onclick = (event) => {
       event.stopPropagation();
+      if (options.readOnly) {
+        event.preventDefault();
+        return;
+      }
       if (col.type === "computed") {
         event.preventDefault();
-        if (!options.readOnly) options.onEditFormula?.(col);
+        options.onEditFormula?.(col);
       }
     };
     if (col.type !== "computed" && !options.readOnly) {

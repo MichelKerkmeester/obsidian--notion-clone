@@ -33,6 +33,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
 import { SCENARIOS } from "../screenshots/scenarios.mjs";
+import { decodePng } from "../screenshots/pixel-hash.mjs";
 import { stamp } from "./evidence.mjs";
 
 // ───────────────────────────────────────────────────────────────────
@@ -499,6 +500,102 @@ for (const scenario of scenarios) {
   }
 }
 await themePage.close();
+
+// ───────────────────────────────────────────────────────────────────
+// 6. BOARD CARD DISPLAY CHECKBOX — pixel-measured checked-vs-unchecked legibility
+// ───────────────────────────────────────────────────────────────────
+//
+// Every board/gallery/list card field routes its value through card-field-renderer.ts's shared
+// renderCardFieldValue, and every one of those fields is read-only in place — the card's own
+// click opens the record, never the control inside it. That readOnly flag reached
+// `checkbox.disabled`, and `input[type="checkbox"].db-checkbox:disabled` in styles.css halves
+// opacity and drops the border to `--background-modifier-border`: a treatment written for a
+// control nobody can use, painted here over informational content the reader still needs to
+// read. Nothing above measures this — the checked glyph is a `background-image`, not a colour
+// `getComputedStyle` exposes, and no existing scenario mounts a read-only card checkbox at all —
+// so this samples the actual rendered pixels the way the operator's screenshot did, the same
+// element-screenshot-and-decode path `tools/screenshots/pixel-hash.mjs` already uses for capture
+// verification.
+//
+// The harness's light theme values are `tools/screenshots/theme.css` stand-ins for Obsidian's
+// default light theme, not a value read off a device — the same caveat every other reading in
+// this file carries, restated here because this check's own pass/fail line quotes them directly.
+const boardCardMarkup = (checked) =>
+  `<input type="checkbox" class="db-checkbox db-checkbox-field" tabindex="-1" aria-disabled="true"${checked ? " checked" : ""}>`;
+
+function averageRegion(image, x0, y0, x1, y1) {
+  let r = 0, g = 0, b = 0, n = 0;
+  for (let y = y0; y < y1; y += 1) {
+    for (let x = x0; x < x1; x += 1) {
+      const at = (y * image.width + x) * image.channels;
+      r += image.pixels[at];
+      g += image.pixels[at + 1];
+      b += image.pixels[at + 2];
+      n += 1;
+    }
+  }
+  return [r / n, g / n, b / n];
+}
+
+function pixelLuminance([r, g, b]) {
+  const lin = (v) => { const c = v / 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+}
+
+function pixelContrast(a, b) {
+  const la = pixelLuminance(a);
+  const lb = pixelLuminance(b);
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+}
+
+const boardCardBg = { "theme-light": [255, 255, 255], "theme-dark": [30, 30, 30] };
+const boardCardPage = await browser.newPage({ viewport: { width: 160, height: 120 }, reducedMotion: "reduce" });
+const boardCardResults = [];
+for (const themeClass of ["theme-light", "theme-dark"]) {
+  const shots = {};
+  for (const checked of [false, true]) {
+    await boardCardPage.setContent(
+      `<html class="${themeClass}"><body class="${themeClass}" style="margin:0;">`
+      + `<div class="note-database-container"><div class="pm-kanban-card" style="display:inline-block;padding:16px;">`
+      + boardCardMarkup(checked)
+      + `</div></div></body></html>`,
+    );
+    for (const content of [styles, theme, runtime]) await boardCardPage.addStyleTag({ content });
+    await boardCardPage.addStyleTag({ content: "*{transition:none!important;animation:none!important;}" });
+    const buf = await boardCardPage.locator("input").screenshot();
+    shots[checked] = decodePng(buf);
+  }
+  const cardBg = boardCardBg[themeClass];
+  const unchecked = shots[false];
+  const checkedImg = shots[true];
+  // Border: the top edge row itself, skipping the rounded corners (the box radius
+  // antialiases the outermost few columns back toward the card background).
+  const borderOf = (img) => averageRegion(img, 4, 0, img.width - 4, 1);
+  // Interior: the centre block a checkmark's strokes pass through — the fill colour alone for
+  // the unchecked box, a fill/glyph blend for the checked one.
+  const interiorOf = (img) => averageRegion(img, 4, 4, img.width - 4, img.height - 4);
+  const borderContrastUnchecked = pixelContrast(borderOf(unchecked), cardBg);
+  const glyphContrast = pixelContrast(interiorOf(checkedImg), cardBg);
+  let diff = 0;
+  const n = Math.min(unchecked.pixels.length, checkedImg.pixels.length);
+  for (let i = 0; i < n; i += 1) diff += Math.abs(unchecked.pixels[i] - checkedImg.pixels[i]);
+  diff /= n;
+  boardCardResults.push({ themeClass, borderContrastUnchecked, glyphContrast, diff });
+}
+await boardCardPage.close();
+
+const BOARD_CARD_DIFF_FLOOR = 8; // mean per-channel delta a reader-visible checked/unchecked change clears
+const boardCardFailures = boardCardResults.filter((r) =>
+  r.borderContrastUnchecked < 3 || r.glyphContrast < 3 || r.diff < BOARD_CARD_DIFF_FLOOR);
+
+console.log("  board card display checkbox (read-only field value), pixel-measured "
+  + "(theme.css stand-ins, not a device reading):");
+for (const r of boardCardResults) {
+  console.log(`    ${r.themeClass.padEnd(12)} border ${r.borderContrastUnchecked.toFixed(2)}:1  `
+    + `glyph ${r.glyphContrast.toFixed(2)}:1  checked/unchecked diff ${r.diff.toFixed(1)}`);
+}
+console.log("");
+
 await browser.close();
 
 const themeMovedClasses = new Map();
@@ -625,7 +722,9 @@ stamp("tools/live/checkbox-appearance.json", {
     movedUnderAHostProfile: themeMovedBoxes.length,
     worstBorderContrast: worstContrast.contrast,
     belowNonTextMinimum: contrastFailures.length,
+    boardCardCheckboxFailures: boardCardFailures.length,
   },
+  boardCardCheckbox: boardCardResults,
   shapes: Object.fromEntries(shapes),
   states: stateResults,
   rows,
@@ -647,6 +746,11 @@ if (themeMovedBoxes.length) {
 }
 if (contrastFailures.length) {
   hostFailures.push(`${contrastFailures.length} checkbox border(s) below the 3:1 non-text minimum`);
+}
+if (boardCardFailures.length) {
+  hostFailures.push(`board card display checkbox failed in ${boardCardFailures.length} theme(s): `
+    + boardCardFailures.map((r) => `${r.themeClass} (border ${r.borderContrastUnchecked.toFixed(2)}:1, `
+      + `glyph ${r.glyphContrast.toFixed(2)}:1, diff ${r.diff.toFixed(1)})`).join("; "));
 }
 if (hostFailures.length) {
   console.error(`checkbox-appearance: FAIL — ${hostFailures.join("; ")}`);
