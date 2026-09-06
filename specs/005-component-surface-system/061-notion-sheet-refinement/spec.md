@@ -35,14 +35,23 @@ would do it."* Notion's own table captures answer it directly — a tap edits, s
 explicit mode, and its chrome is a compact anchored control set, never a bottom-docked bar of
 labelled words.
 
-**Key Decisions**: whether the confirm keeps its sheet mount and gains a declared card frame role
-or moves to the shell's `dialog` presentation (ADR-001); whether a phone tap on an editable cell
-stops painting a selection (ADR-002); where the value editor lives, given that Notion never renders
-one inline (ADR-003); and whether the three copy formats collapse behind one control (ADR-004).
+**Then the operator widened the evidence.** Asked to rule on the proposed tap-edits / one-row-bar /
+inline-editor design, they answered instead, verbatim (2026-09-06, 19:00): *"Check anytype,
+evernote, fibery and find best ui ux approach for this"*. Fifty captures were read directly
+across the four products, and one finding decided all three cell ADRs at once: **zero of four dock a
+labelled action bar to the frame's bottom edge.** The operator's first capture is therefore not a
+bar that wraps — it is a bar that should not exist on a phone.
+
+**Key Decisions**: the confirm keeps its sheet mount and gains a declared card frame role, accepted
+verbatim as *"Yes, centred card with stacked buttons"* (ADR-001); a phone tap edits and never paints
+a selection (ADR-002); the value editor is drawn at the cell and claims the bottom dock, because
+digest P9 was about pickers rather than cells (ADR-003); and the phone grows no bottom bar at all —
+a three-control anchored pill, with everything past `Copy` in a titled sheet behind `···`, and the
+desktop bar collapsed to five children with an anchored menu (ADR-004). The read itself is ADR-000.
 
 **Critical Dependencies**: `067-sheet-family-remediation` holds the same `surface-shell.ts` /
-`mobile-bottom-sheet.ts` file group and the same `styles.css`, so the two are serialized; five of
-the six ADRs are **Proposed** and wait on the operator.
+`mobile-bottom-sheet.ts` file group and the same `styles.css`, so the two are serialized. **The ADR
+gate is closed** — only ADR-006 stays parked, behind an Anytype re-read AC-007 accepts as a park.
 
 ---
 <!-- ANCHOR:metadata -->
@@ -93,11 +102,12 @@ pass, because `061` is the number the parent reserved for the sheet family's Not
 
 **Deliverables**:
 - A phone tap on an editable cell that opens the column's value editor and builds no bar.
-- Selection as an explicit mode, with a compact single-row bar that never wraps and clears the
-  phone navigation bar as well as the safe area.
+- Selection as an explicit mode entered by a long press, wearing a three-control anchored pill that
+  never wraps and is clamped clear of the phone navigation bar as well as the safe area.
 - A destructive confirm presenting as a margined centred card with stacked full-width actions, on
   both platforms.
-- Six ADRs — five Proposed, one recording that no landed ruling is overridden.
+- Seven ADRs — five Accepted on the operator's 19:00 ruling, one parked, one recording that no
+  landed ruling is overridden. Plus ADR-000, the four-product read they are decided from.
 - The grouped-band question decided or recorded as parked with its precondition named.
 
 **Changelog**:
@@ -137,8 +147,8 @@ and placed where the phone can actually show it.
 
 ### In Scope
 - The phone tap grammar on a table cell: what a single tap does, and what it stops doing.
-- The selection status bar's control set, its wrap behaviour and its bottom anchoring, on phone and
-  on desktop.
+- The selection's chrome: its control set, its frame, and where it is anchored, on phone and on
+  desktop — including the removal of the bottom-docked bar on a phone.
 - The bottom-dock claim, made consistent across the cell editors.
 - The destructive confirm's frame and action layout, on phone and on desktop.
 - The Notion-versus-Anytype conflict register, and the parked grouped-band decision.
@@ -166,11 +176,11 @@ and placed where the phone can actually show it.
 | `src/views/mobile-bottom-sheet.ts` | Modify | `:29-45` `SheetChromeOptions` gains the declared frame role; `:364` `classifySheetFrameShape` gains a third class applied from the declaration only |
 | `src/views/surface-shell.ts` | Modify | `:156-170` — the card inset constant beside the existing frame-shape constants |
 | `src/views/toolbar-renderer.ts` | Modify | `:2410-2420` — `--db-mobile-navbar-height` published unconditionally on a phone, not only when the FAB renders |
-| `styles.css` | Modify | `:2590-2665` the bar; `:230-282` the sheet frame; `:8592-8598` the action row |
-| `src/i18n.ts` | Modify | `:369-371` — the copy-format strings behind one control and an overflow |
+| `styles.css` | Modify | `:2590-2665` — the phone bar rule deleted and `.db-cell-selection-pill` added; `:230-282` the sheet frame; `:8592-8598` the action row |
+| `src/i18n.ts` | Modify | `:369-371` — the copy-format strings behind one control, plus the `···` sheet's row strings and its "N cells selected" title |
 | `tools/live/sheet-grammar.mjs` | Modify | The confirm row gains the card columns |
-| `tools/storybook/verify-placement.mjs` | Modify | The existing selection-bar legs gain a wrap assertion and a nav-bar clearance assertion |
-| `tools/live/touch-targets.mjs` | Modify | The bar's controls measured against the 44px floor in the single-row shape |
+| `tools/storybook/verify-placement.mjs` | Modify | The existing selection legs gain pill-shape, bar-absence, clamp, nav-bar clearance and action-reachability assertions |
+| `tools/live/touch-targets.mjs` | Modify | The pill's three controls measured against the 44px floor |
 <!-- /ANCHOR:scope -->
 
 ---
@@ -182,7 +192,7 @@ and placed where the phone can actually show it.
 
 | ID | Requirement |
 |----|-------------|
-| REQ-001 | **The table cell action menu, iOS.** A single tap on an editable, non-title cell on a phone opens **that column's value editor and nothing else** — no selection painted, no status bar built. Selection becomes an **explicit mode**, entered by a deliberate gesture rather than by an ordinary tap, and its bar is **one row that never wraps**: count, one Copy control, Paste, Clear and an overflow, at most **six** children under `flex-wrap: nowrap`, every control at or above the 44px floor. The bar is anchored above **both** the safe area and Obsidian's phone navigation bar, through the `--db-mobile-navbar-height` the mobile FAB already consumes. Every cell editor claims the bottom dock while it is open, so no editor is ever drawn over a bar that stayed. Desktop keeps a bar, in the same compact single-row shape at its own 30px height, with the same overflow. **Evidence:** Notion's iOS table captures — `screenshots/notion/ios/flows/reordering-a-table/notion-ios-flow-reordering-a-table-02-026940b3-e0de-443d-a948-6eb1e53e4ea1.webp` (a selected cell carries a blue outline, a corner handle and a **two-control anchored pill**, `↔` and `···`, and no bottom bar at all), `-01-d53b3912-f60a-4bd1-872e-18276fe2acd5.webp` (the same cell in edit, with a **single row** of icon-only controls above the keyboard that does not wrap), `-03-db2814d9-78bd-4b01-9d57-8e1c4dcbdbbc.webp` (the same pill on a column), and `screenshots/notion/ios/views/notion-ios-views-table-11-90277769-e407-4476-bc16-4309ee11276d.webp` plus `-13-6673816d-9c68-4275-8902-f6cf6982f982.webp` (a resting table view carrying **no** selection chrome). Desktop half: `screenshots/notion/web/views/notion-web-views-table-03-bd482935-9854-4f32-9e1d-47157eee4f1f.webp` — a cell's value editor opens as an anchored dropdown **under the cell**, with no persistent action bar anywhere on the page. |
+| REQ-001 | **The table cell action menu, phone and desktop.** A single tap on an editable, non-title cell on a phone opens **that column's value editor and nothing else** — no selection painted, no chrome built. Selection becomes an **explicit mode**, entered by a **long press** on a cell rather than by an ordinary tap. **A phone grows no bottom-docked selection bar at all**: the selection's chrome is a **three-control anchored pill** — the live count, one **Copy**, and **`···`** — one row at `flex-wrap: nowrap`, **44px** high, every child at or above the 44px floor, anchored 8px above the selection range (8px below when there is no room), clamped inside the grid's scroll viewport with an 8px margin and clamped clear of **both** the safe area and Obsidian's phone navigation bar through the `--db-mobile-navbar-height` the mobile FAB already consumes. Everything past `Copy` lives behind `···` in the shell's own titled bottom sheet — *Copy TSV · Copy Markdown · Copy CSV* | *Paste · Fill · Bulk edit <Column>* | ***Clear***. Every cell editor claims the bottom dock while it is open, so no editor is ever drawn over chrome that stayed. Desktop keeps its bar at its declared 30px and adopts the same collapse: at most five children, with the three copy formats and Fill in an anchored `···` menu. **Evidence:** the four-product read the operator ordered at 19:00, recorded in full as `decision-record.md` **ADR-000** — 50 captures across Notion (iOS and web), Anytype (phone and desktop), Evernote (iOS and web) and Fibery (desktop), carried there as a path manifest with every path checked against disk. Its finding: **zero of four dock a labelled action bar to the frame's bottom edge**, three of four edit on a plain tap, and all four collapse everything past one or two controls behind a single `···`. The shape adopted is Notion's own — a selected cell wearing a two-control anchored pill (`screenshots/notion/ios/flows/reordering-a-table/notion-ios-flow-reordering-a-table-02-026940b3-e0de-443d-a948-6eb1e53e4ea1.webp`, `-03-db2814d9-78bd-4b01-9d57-8e1c4dcbdbbc.webp`), with Notion's `···` sheet as its overflow (`screenshots/notion/ios/flows/turning-a-table-into-a-database/notion-ios-flow-turning-a-table-into-a-database-03-6ecea6c7-4682-4c35-b649-412a0a240738.webp`) and Fibery's single count-carrying control as the proof that eight controls collapse to one (`.worktrees/150-harvest-fibery/screenshots/fibery/web/flows/deleting-entities/fibery-web-flow-deleting-entities-02-904506e0-6d8d-437c-ad53-1f51bb23a350.webp`, `-03-0a207252-0899-4e33-8a10-a9c22005dbaa.webp`). |
 | REQ-002 | **The confirm card.** The destructive confirm presents as a card: inset **≥ 16px on every frame edge**, radius `--db-radius-xl` on all four corners, and its actions **stacked full width** in the card's content box at **≥ 44px** each with a **50pt** target (`SHELL_PRIMARY_ACTION_HEIGHT_PT`, `surface-shell.ts:167`). The footer grammar splits **by surface family, not by platform**: the stacked row is scoped to the confirm on both platforms, while the 16px card inset is phone-only. `openAndWait` still resolves `false` on Escape, outside press and drag (`confirm-modal.ts:6-8`). The sheet mount is unchanged — `super(app, "sheet")` (`confirm-modal.ts:44`) stays, because the shell's `dialog` presentation *"stays a centred dialog everywhere"* (`surface-shell.ts:41`) and a phone modal must become a stacked sheet under `048` **D1**. **Evidence:** digest A4, C9 (iOS) and G3 (web); `screenshots/notion/ios/database/notion-ios-database-property-editor-02-658fd83b-c23b-4573-aac8-a18e06e185a1.webp` shows the shape directly — a small centred card, margined on every side, three stacked full-width buttons. |
 
 ### P1 - Required (complete OR user-approved deferral)
@@ -208,10 +218,12 @@ and placed where the phone can actually show it.
 
 - **SC-001**: A phone tap on an editable non-title cell builds **0** selection status bars, measured
   by the existing `verify-placement.mjs` selection legs, against **1** today.
-- **SC-002**: The selection bar's rendered row count on a 390px viewport reads **1**, against **2**
-  today, with **≤ 6** children against **8** today.
-- **SC-003**: The bar's computed `bottom` includes the published navigation-bar height; with the bar
-  measured against the nav bar's rect, the intersection area reads **0px²**.
+- **SC-002**: On a 390px viewport with a live selection the phone renders **0** selection bars
+  against **1** today, and **1** anchored pill of **3** children against **0** pills and **8** bar
+  children today. Desktop's bar child count reads **≤ 5** against **8**.
+- **SC-003**: The pill's rect against the navigation bar's rect gives an intersection area of
+  **0px²**, and the pill's rect is fully inside the grid's scroll viewport; `--db-mobile-navbar-height`
+  resolves non-zero on a phone container with no FAB.
 - **SC-004**: The confirm's measured inset reads **≥ 16px** on all four edges against **0/0/0**
   today, and its action row's computed `flex-direction` reads `column` against `row` today.
 - **SC-005**: `sheet-grammar.mjs`'s registered set stays at or above **14 surfaces / 32 pairs**
@@ -226,9 +238,10 @@ and placed where the phone can actually show it.
 | Type | Item | Impact | Mitigation |
 |------|------|--------|------------|
 | Dependency | `067-sheet-family-remediation` | Holds the same `surface-shell.ts` / `mobile-bottom-sheet.ts` group and the same `styles.css` | Serialize; `061` restates none of `067`'s rows, so a merge conflict is a text conflict rather than a contested number |
-| Dependency | ADR-001 to ADR-004, ADR-006 | Five Proposed decisions gate the two P0 requirements | Each names both readings and the ruling of record; the operator rules once, on one document |
+| Dependency | ADR-001 to ADR-004 | **Closed 2026-09-06 19:00.** All four Accepted on the operator's four-reference ruling; ADR-006 stays parked and gates nothing P0 | ADR-000 carries the read they are decided from, 50 captures cited by path, each checked against disk |
 | Risk | Removing selection-on-tap breaks a desktop habit | Medium | The change is gated on `gesture === "touch"` in the resolver that already makes that distinction (`table-cell-gesture.ts:270`); a mouse press keeps `select-cell` unchanged |
-| Risk | Collapsing three copy formats loses a reachable action | Medium | Nothing is deleted — the three keep their strings (`i18n.ts:369-371`) and move behind the overflow; a lane row asserts all three are still reachable |
+| Risk | Collapsing three copy formats loses a reachable action | Medium | Nothing is deleted — the three keep their strings (`i18n.ts:369-371`) and move into the `···` sheet on a phone and the `···` menu on desktop; a lane row asserts all seven actions are reachable within one tap |
+| Risk | The pill re-anchors late on a fast scroll, or a selection taller than the viewport has no room above or below | Medium | It is repositioned on the same listener that keeps the sticky header current, and clamped into the grid viewport rather than positioned freely |
 | Risk | The nav-bar height is published only when the FAB renders | Medium | `toolbar-renderer.ts:2360` guards the publication; the leg makes it unconditional on a phone. A `var()` that misses does not fail, which is the trap `styles.css:2640-2644` already documents |
 | Risk | The confirm card changes a surface every bulk path routes through | High | `openAndWait`'s dismissal contract is asserted by the existing confirm lane row (T013, 8 of 8 columns); the card is a class, not a new mount |
 <!-- /ANCHOR:risks -->
@@ -338,20 +351,32 @@ thumb.
 
 ## 12. OPEN QUESTIONS
 
-- **ADR-001** — does the confirm keep its sheet mount and gain a declared card frame role, or is the
-  card a fourth presentation on the shell? The proposal keeps the mount; the operator decides.
-- **ADR-002** — does a phone tap on an editable cell stop painting a selection outright, or keep a
-  faint one under the editor? The proposal is outright.
-- **ADR-003** — Notion never renders a value editor inline (digest P9), and ours is an inline
-  overlay. Do the text editors become pushed surfaces like the select and date pickers already are?
-- **ADR-004** — do Copy TSV, Copy Markdown and Copy CSV collapse behind one Copy control with the
-  format in the overflow?
-- **ADR-006** — grouped gutter bands or dividers? Blocked on an Anytype multi-section capture
-  re-read; cannot be settled from Notion alone.
-- Does Notion's iOS table have a multi-cell selection at all? No capture in the 3,647-file harvest
-  shows one — the flow captures show single-cell and single-column selection only. The single-row
-  bar is therefore **our** shape at Notion's density, and it is labelled as such rather than claimed
-  as parity.
+**Five of the six closed on 2026-09-06 at 19:00.** The operator declined to rule on Notion's captures
+alone — *"Check anytype, evernote, fibery and find best ui ux approach for this"* — and the
+four-product read that answer produced is `decision-record.md` **ADR-000**.
+
+- ~~**ADR-001** — sheet mount plus a declared card frame role, or a fourth shell presentation?~~
+  **Closed.** The mount is kept and the role is declared. Operator, verbatim: *"Yes, centred card
+  with stacked buttons"*.
+- ~~**ADR-002** — does a phone tap stop painting a selection outright, or keep a faint one?~~
+  **Closed: outright.** Three of four references edit on a plain tap and none paints a selection
+  from one.
+- ~~**ADR-003** — does the text editor become a pushed surface, as digest P9 shows?~~ **Closed: no.**
+  P9 describes a **picker inside a property editor**, not a grid cell. Read against grid cells,
+  Notion iOS and Evernote iOS edit in place, Fibery and Anytype desktop anchor under the cell, and
+  Anytype phone alone pushes a sheet. The editor stays at the cell; the dissent is registered as
+  ADR-005 **C-I**.
+- ~~**ADR-004** — do the three copy formats collapse behind one Copy control?~~ **Closed, and
+  wider.** Zero of four references dock a labelled action bar to the frame's bottom edge, so the
+  phone bar is removed rather than collapsed: an anchored three-control pill, with everything past
+  `Copy` in a titled sheet behind `···`.
+- **ADR-006** — grouped gutter bands or dividers? **Still parked.** It is blocked on an Anytype
+  multi-section capture re-read, which is the operator's to schedule, and AC-007 accepts a recorded
+  park as closure.
+- Does any reference have a **multi-cell** selection at all? Only Fibery, and it selects **rows**
+  through a checkbox column. So the pill's contents are **our** shape at the references' density —
+  three controls where Notion carries two — and it is labelled as such rather than claimed as
+  parity.
 <!-- /ANCHOR:questions -->
 
 ---

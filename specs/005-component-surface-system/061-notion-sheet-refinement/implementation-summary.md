@@ -10,12 +10,12 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/061-notion-sheet-refinement"
-    last_updated_at: "2026-09-06T17:40:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Placed the closing-record placeholder at packet opening"
+    last_updated_at: "2026-09-06T19:30:00Z"
+    last_updated_by: "design-research-session"
+    recent_action: "Reconciled the placeholder to the closed ADR gate; no source touched"
     next_safe_action: "Write this document when Leg A lands, not before"
     blockers:
-      - "Nothing has been implemented; five ADRs are Proposed"
+      - "Nothing has been implemented; the ADR gate is closed but no leg has started"
     key_files: []
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
@@ -50,14 +50,19 @@ _memory:
 
 **Nothing yet.** This is a placeholder, and it says so rather than describing work that has not
 happened. The packet was opened by the Opus synthesis of the sheet family's five-iteration Notion
-research loop plus the operator's 2026-09-06 cell-menu report; **no source file has been touched**,
-and five of the six decisions in `decision-record.md` are `Proposed` and gate both legs.
+research loop plus the operator's 2026-09-06 cell-menu report; **no source file has been touched**.
+
+**The ADR gate is closed as of 2026-09-06 19:00 and this document is still a placeholder** — the two
+are not the same thing, and the second is the one that decides what goes here. `decision-record.md`
+now carries seven decisions: **ADR-000** records the four-product read the operator ordered, and
+**ADR-001 to ADR-004 are Accepted** on it. **ADR-006** stays parked and gates no P0.
 
 ### What this will describe when it is written
 
-- **Leg A, the cell action menu** — the tap that edits rather than selects, the explicit selection
-  mode, the six-child single-row bar, its clearance over Obsidian's phone navigation bar, and the
-  bottom-dock claim made consistent across the cell editors.
+- **Leg A, the cell action menu** — the tap that edits rather than selects, the long-press entry into
+  selection, the **three-control anchored pill that replaces the phone's bottom bar outright**, its
+  clamp clear of Obsidian's phone navigation bar, the titled `···` sheet behind it, the desktop bar's
+  collapse to five children, and the bottom-dock claim made consistent across the cell editors.
 - **Leg B, the confirm card** — the declared card frame role, the stacked full-width action row, and
   the two stylesheet blocks that carry them.
 
@@ -90,7 +95,7 @@ reference captures required by parent D5.
 | Open a child rather than amend `051` | Parent D15 reserves `059`-`066` for the Notion refinements and requires each to be opened by its own synthesis |
 | Restate none of `067`'s eleven rows | The two loops found the same scrim, motion band, pill, chip, row pitch and device pass; two owners for one number is how a figure drifts |
 | Take the operator's report as P0 above the loop's own rank-1 | A report with two captures outranks a ranking over thumbnails |
-| Leave five decisions `Proposed` | Parent D15 — a Notion finding that contradicts a landed ruling stops at a Proposed ADR |
+| Leave five decisions `Proposed`, then close them on one ruling | Parent D15 — a Notion finding that contradicts a landed ruling stops at a Proposed ADR. Put as one set, the operator widened the evidence instead of answering (*"Check anytype, evernote, fibery and find best ui ux approach for this"*), and the four-product read that followed changed the answer rather than confirming it: the phone bar is deleted, not collapsed |
 <!-- /ANCHOR:decisions -->
 
 ---

@@ -11,12 +11,11 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/061-notion-sheet-refinement"
-    last_updated_at: "2026-09-06T17:40:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Planned two legs against the seven thresholds"
-    next_safe_action: "Leg A first — it carries the operator's report and touches no file 067 holds"
-    blockers:
-      - "Five ADRs are Proposed and gate both legs"
+    last_updated_at: "2026-09-06T19:30:00Z"
+    last_updated_by: "design-research-session"
+    recent_action: "Reconciled the plan to the 19:00 ruling; the ADR gate is closed"
+    next_safe_action: "Leg A first; it touches no file 067 holds"
+    blockers: []
     key_files:
       - "src/views/database-view.ts"
       - "src/views/confirm-sheet.ts"
@@ -51,8 +50,10 @@ _memory:
 
 ### Overview
 Two independent legs. **Leg A** is the operator's cell menu: one early return so a phone tap edits
-rather than selects, a collapsed six-child single-row selection bar anchored above the phone
-navigation bar, and one missing `claimBottomDock` pair on the multi-line text editor. **Leg B** is
+rather than selects, a long press that enters selection, the phone's bottom-docked bar **deleted**
+in favour of a three-control pill anchored to the selection and clamped clear of the phone
+navigation bar, a titled `···` sheet behind it, the desktop bar collapsed to five children with an
+anchored menu, and one missing `claimBottomDock` pair on the multi-line text editor. **Leg B** is
 the confirm card: a declared third frame role on the sheet chrome, a `stackedActions` flag on the
 shipped confirm builder, and two CSS blocks. Neither leg invents a mechanism — the frame-shape
 classifier, the dock-claim registry and the published navigation-bar height all already ship and are
@@ -65,7 +66,7 @@ simply not reaching the surfaces that need them.
 ## 2. QUALITY GATES
 
 ### Definition of Ready
-- [ ] ADR-001 to ADR-004 and ADR-006 ruled on by the operator — all five are `Proposed`
+- [x] ADR-001 to ADR-004 and ADR-006 ruled on by the operator — **closed 2026-09-06 19:00**. ADR-001 to ADR-004 `Accepted`; ADR-006 stays parked behind the Anytype multi-section re-read that is its own stated precondition, which `AC-007` accepts as closure. ADR-000 records the four-product read they were decided from
 - [ ] `067`'s legs on `surface-shell.ts` / `mobile-bottom-sheet.ts` landed or explicitly interleaved
 - [ ] Every threshold in `acceptance-criteria.md` re-read as red on the commit the leg branches from
 
@@ -91,8 +92,10 @@ follow the discipline `051` already set for the floating/flush split and `067` r
 ### Key Components
 - **`resolveCellTapAction`** (`table-cell-gesture.ts:269-273`) — the existing single answer to what a
   press means. Unchanged; the change is that its `edit-cell` answer is finally honoured.
-- **`renderSelectionStatusBar`** (`database-view.ts:7607`) — the bar builder. Its cell branch
-  collapses from eight children to at most six plus an overflow.
+- **`renderSelectionStatusBar`** (`database-view.ts:7607`) — the chrome builder. Its cell branch
+  goes from eight children to **three** on a phone, in a pill rather than a bar, and to **five** in
+  the bar on desktop; the rest move into the `···` sheet or menu. One builder emits both — the
+  platform decides the frame, not the control set.
 - **`claimBottomDock`** (`mobile-bottom-sheet.ts:710-718`) — the named-owner registry for the bottom
   edge. Gains its second cell-editor claimant.
 - **`--db-mobile-navbar-height`** (`toolbar-renderer.ts:2410-2420`) — the measured navigation-bar
@@ -123,10 +126,10 @@ grammar and the same bar builder, and a fix in one leaves the other diverged.
 |---------|--------------|--------|--------------|
 | `database-view.ts:4786-4803` | The table view's cell press handler | update — early-return on `edit-cell` | `verify-placement.mjs` selection legs assert 0 bars after a touch tap |
 | `embedded-database-renderer.ts:4384-4401` | The embedded renderer's own copy of the same handler | update — the same early return | The embed's own placement leg |
-| `database-view.ts:7607-7712` | The bar builder, cell branch | update — six children plus overflow | Wrap and child-count assertions |
+| `database-view.ts:7607-7712` | The chrome builder, cell branch | update — a three-child pill on a phone, a five-child bar on desktop, the rest behind `···`; plus the pill's anchoring and clamp | Pill-shape, bar-absence, child-count, clamp and reachability assertions |
 | `database-view.ts:7713-7740` | The bar builder, row branch | unchanged in content, inherits the row shape and the anchoring | Existing row-selection legs still green |
 | `embedded-database-renderer.ts:4569-4579` | The embed's own bar builder | update — kept in step | The embed's own legs |
-| `styles.css:2645-2655` | The phone bar rule | update — `nowrap`, navigation-bar term | Clearance assertion against a stand-in `.mobile-navbar` |
+| `styles.css:2645-2655` | The phone bar rule | **delete**, and add `.db-cell-selection-pill` | Bar-absence assertion, plus the clearance and clamp assertions against a stand-in `.mobile-navbar` |
 | `styles.css:2590-2612` | The desktop bar rule | update — the same overflow shape at 30px | Desktop capture set |
 | `cell-editor-text.ts:331` | `openTextPopoverEditor` | update — claim and release the dock | The `body.db-bottom-dock-taken` class asserted while the editor is open |
 | `cell-editor-text.ts:190-233` | `openSingleLineEditor` | unchanged — already claims and releases | Regression only |
@@ -177,7 +180,7 @@ landed on and therefore passing the defect it was created for — is the failure
 
 | Dependency | Type | Status | Impact if Blocked |
 |------------|------|--------|-------------------|
-| ADR-001 to ADR-004, ADR-006 | Internal — operator | Red | Both legs are blocked; nothing may be implemented on a `Proposed` decision |
+| ADR-001 to ADR-004, ADR-006 | Internal — operator | **Green, 2026-09-06 19:00** | Was red: nothing may be implemented on a `Proposed` decision. ADR-001 to ADR-004 are now `Accepted` and ADR-006 is parked without gating a P0, so neither leg is blocked on a decision |
 | `067-sheet-family-remediation` | Internal | Yellow | Holds `surface-shell.ts`, `mobile-bottom-sheet.ts` and reaches `styles.css`; Leg B serializes against it, Leg A only against the stylesheet |
 | `067` AC-011 | Internal — operator | Red | AC-005 is read in that sitting and cannot be closed here |
 | `screenshots/notion/` | Reference | Green | Already harvested; every capture this packet cites is on disk and was opened |
@@ -319,7 +322,7 @@ carries the operator's own report and it touches no file `067` holds.
 
 | Milestone | Description | Success Criteria | Target |
 |-----------|-------------|------------------|--------|
-| M1 | ADRs ruled on | Five decisions Accepted or Waived, none left Proposed | Operator |
+| M1 | ADRs ruled on | Five decisions Accepted or Waived, none left Proposed | **Met 2026-09-06 19:00** — four Accepted, ADR-006 parked with its precondition named |
 | M2 | Leg A landed | AC-001, AC-002, AC-003 `Met` with each negative control observed red first | After M1 |
 | M3 | Leg B landed | AC-004 `Met`, Project Manager captures `pixelHash`-identical | After M1 |
 | M4 | Device sitting | AC-005 read against one build, in `067` AC-011's sitting | After M2, M3 and a release |
@@ -329,16 +332,25 @@ carries the operator's own report and it touches no file `067` holds.
 
 ## L3: ARCHITECTURE DECISION RECORD
 
-The six decisions live in `decision-record.md` and are not duplicated here. In one line each:
+The **seven** decisions live in `decision-record.md` and are not duplicated here. In one line each:
 
-- **ADR-001** — the confirm keeps its sheet mount and gains a declared card frame role. *Proposed.*
-- **ADR-002** — a phone tap on an editable cell edits and does not select. *Proposed.*
-- **ADR-003** — the inline value editor stays inline; the divergence from Notion's P9 is named, and
-  the missing dock claim is fixed. *Proposed.*
-- **ADR-004** — the selection bar is one row: count, Copy, Paste, Clear, overflow. *Proposed.*
+- **ADR-000** — the four-product read the operator ordered at 19:00: 50 captures across Notion,
+  Anytype, Evernote and Fibery, finding that **zero of four dock a labelled action bar to the frame's
+  bottom edge**. *Accepted.* It is the evidence ADR-002 to ADR-004 are decided from.
+- **ADR-001** — the confirm keeps its sheet mount and gains a declared card frame role. *Accepted*,
+  verbatim: *"Yes, centred card with stacked buttons"*.
+- **ADR-002** — a phone tap on an editable cell edits and does not select. *Accepted.*
+- **ADR-003** — the value editor is drawn **at the cell**, and claims the bottom dock for its whole
+  life. *Accepted.* The `Proposed` version's named divergence from digest P9 is **withdrawn**: P9 is
+  about a picker inside a property editor, not about a grid cell.
+- **ADR-004** — **no bottom-docked bar on a phone.** A three-control anchored pill, with everything
+  past `Copy` in a titled sheet behind `···`; desktop's bar collapses to five children with an
+  anchored menu. *Accepted*, superseding the `Proposed` six-child bar of the same number.
 - **ADR-005** — eight Notion-versus-Anytype conflicts, and none overrides a landed ruling.
-  *Accepted*, because it records the status quo.
-- **ADR-006** — grouped gutter bands stay parked behind an Anytype re-read. *Proposed.*
+  *Accepted*, because it records the status quo. The count survives the 19:00 read unchanged; the one
+  conflict that read added is carried as **C-I** in its own addendum so neither count is ambiguous.
+- **ADR-006** — grouped gutter bands stay parked behind an Anytype re-read. *Parked*, which `AC-007`
+  accepts as closure; it gates no P0.
 
 ---
 

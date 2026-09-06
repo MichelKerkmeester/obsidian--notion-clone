@@ -7,15 +7,16 @@ trigger_phrases:
   - "confirm card"
   - "cell action menu"
   - "selection mode bar"
+  - "cell selection pill"
 importance_tier: "important"
 contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/061-notion-sheet-refinement"
-    last_updated_at: "2026-09-06T17:40:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Opened the child from the Notion sheets research loop and the operator cell-menu report"
-    next_safe_action: "Take AC-002 red-first: the phone bar builds eight children into a wrapping row"
+    last_updated_at: "2026-09-06T19:30:00Z"
+    last_updated_by: "design-research-session"
+    recent_action: "Re-cut completion criteria 2 and 3 to the anchored-pill model; still seven criteria"
+    next_safe_action: "Take AC-002 red-first; no pill exists in the tree"
     blockers:
       - "AC-005 is the operator's sign-off on the confirm card and nothing here can close it"
       - "AC-007 is parked on an Anytype multi-section capture re-read the operator schedules"
@@ -31,12 +32,12 @@ _memory:
       session_id: "surface-system-061-goal"
       parent_session_id: null
     completion_pct: 0
-    open_questions:
-      - "Does the confirm keep its sheet mount and gain a card frame role, or move to the dialog presentation"
-      - "Do the three copy formats collapse behind one Copy control with an overflow"
+    open_questions: []
     answered_questions:
       - "Notion contributes shape and arrangement only; the digest's thumbnails carry no sampled colour or timing"
       - "Eight Notion-versus-Anytype conflicts exist and none overrides a landed ruling"
+      - "The confirm keeps its sheet mount and gains a declared card frame role — operator, 19:00"
+      - "The copy formats collapse, and the phone bar they sat in is deleted rather than narrowed"
 ---
 # Goal: Notion Sheet Refinement
 
@@ -87,14 +88,26 @@ this file. Whenever anything above the log changes, resend the full text of this
       nothing else** — the selection status bar is not built, and `renderSelectionStatusBar` is not
       reached on the `edit-cell` branch. Today the branch falls through and does both
       (`database-view.ts:4791-4803`), which is the second of the operator's two captures.
-- [ ] Selection is an **explicit mode**, and its bar is **one row that never wraps**: at most six
-      children, `flex-wrap: nowrap`, measured at 390px CSS width with no child clipped. Today the
-      bar builds **eight** children for a one-cell selection (`database-view.ts:7643-7712`) into a
-      `flex-wrap: wrap` row (`styles.css:2650`).
-- [ ] The bar's bottom edge clears Obsidian's phone navigation bar as well as the safe area:
-      `bottom` resolves through `--db-mobile-navbar-height` the way the mobile FAB already does
-      (`styles.css:22569`). Today it does not (`styles.css:2646`), which is why the operator's first
-      capture shows the second row under the nav pill.
+- [ ] Selection is an **explicit mode entered by a long press**, and a phone builds **no bottom-docked
+      bar at all**: `.db-selection-status-bar` renders **0** times and `.db-cell-selection-pill`
+      renders exactly **1**, holding exactly **three** children — the live count, one `Copy`, one
+      `···` — at `flex-wrap: nowrap`, 44px high, measured at 390px CSS width with every child's hit
+      box at or above 44 x 44px. Each of Copy TSV, Copy Markdown, Copy CSV, Paste, Fill, Bulk edit
+      and Clear is reachable within **one** tap of `···`. Desktop keeps its 30px bar at **five**
+      children with an anchored `···` menu. Today the bar builds **eight** children for a one-cell
+      selection (`database-view.ts:7643-7712`) into a `flex-wrap: wrap` row (`styles.css:2650`), and
+      no pill exists in the tree at all. **Re-cut 2026-09-06 19:30**: this row asked for a six-child
+      bar until the operator's four-reference ruling found that zero of four products dock one
+      (ADR-000, ADR-004).
+- [ ] The pill is anchored to the selection and clamped clear of Obsidian's phone navigation bar as
+      well as the safe area: it sits 8px above the range's top edge, or 8px below where there is no
+      room; its rect stays fully inside the grid's scroll viewport with a >= 8px margin; its bottom
+      edge resolves at or above `max(env(safe-area-inset-bottom), var(--db-mobile-navbar-height, 0px))
+      + 8px`, the same published value the mobile FAB already reads (`styles.css:22569`), and
+      `--db-mobile-navbar-height` resolves non-zero on a phone container with no FAB. Today the bar's
+      `bottom` carries no navigation term (`styles.css:2646`), which is why the operator's first
+      capture shows the second row under the nav pill, and the publisher runs only inside the
+      New-button build (`toolbar-renderer.ts:2362`).
 - [ ] The destructive confirm presents as a **card**: inset **≥ 16px on every frame edge**, radius
       `--db-radius-xl` on all four corners, actions **stacked full width** at **≥ 44px** each, on
       the phone and on desktop, with `openAndWait` still resolving `false` on Escape, outside press
@@ -131,6 +144,6 @@ Everything below is VOLATILE.
 |------|------|
 | **Four of the research loop's own citations did not survive the check** | Verified rather than taken on report, the way `067` verified its loop. (a) The loop cited `SheetChromeOptions` at `mobile-bottom-sheet.ts:64-94`; the interface is at **`:29-45`** and `:57-92` is `applySheetChrome`'s body. (b) The loop wrote *"AC-012 is the operator's row"* for the confirm's shape; `051` AC-012 is a count over `design-trueup.md`'s decision cells and has nothing to do with the confirm — **no existing acceptance row owns the confirm shape**, which is why AC-005 here is new. (c) The loop cited `.db-panel-row` at `styles.css:12366-12373`; that range is `.db-shell-header-leading` and the row rule is at **`:12408-12415`** — same content (`padding: 2px`, no `min-height`), wrong line. (d) The loop's R2, R3 and R4 (motion band, scrim measurement, device bundle) landed in `067` as REQ-006, REQ-003 and REQ-011 while the Notion lineage was still running; they are cited, not restated. |
 | **The operator's report arrived after the loop closed** | The five-iteration lineage read the sheets/menus/dialogs digest, which never covered the table view. The cell-menu requirement is therefore evidenced from the captures directly — `screenshots/notion/ios/flows/reordering-a-table/*` and `screenshots/notion/ios/views/notion-ios-views-table-11-*` — and each is cited by filename in `spec.md` §4 rather than by digest screen-id. |
-| **The mechanism the bar needs already exists** | `--db-mobile-navbar-height` is measured and published on the view container by `toolbar-renderer.ts:2410-2420`, and the mobile FAB already consumes it (`styles.css:22569`). The selection bar is a sibling under the same container and simply does not read it. One caveat is recorded rather than assumed away: the publisher runs only when the FAB is rendered (`toolbar-renderer.ts:2360`), so the leg must make the publication unconditional on a phone or the bar must fall back to its own measurement — a `var()` that misses does not fail, which is the trap `styles.css:2640-2644` already documents for `--db-keyboard-inset`. |
+| **The mechanism the bar needs already exists** | `--db-mobile-navbar-height` is measured and published on the view container by `toolbar-renderer.ts:2410-2420`, and the mobile FAB already consumes it (`styles.css:22569`). The chrome that needs it — the bar today, the anchored pill after ADR-004 — is a sibling under the same container and simply does not read it. One caveat is recorded rather than assumed away: the publisher runs only when the FAB is rendered (`toolbar-renderer.ts:2360`), so the leg must make the publication unconditional on a phone or the bar must fall back to its own measurement — a `var()` that misses does not fail, which is the trap `styles.css:2640-2644` already documents for `--db-keyboard-inset`. |
 | **The dock claim is inconsistent across cell editors** | `openSingleLineEditor` takes the bottom dock (`cell-editor-text.ts:212`) and releases it on close (`:233`); `openTextPopoverEditor` (`:331`) never claims it at all. That is exactly the operator's second capture: a multi-line text editor drawn over a bar that stayed docked. It is one line of a fix and it is inside REQ-001 rather than filed as a separate defect. |
 <!-- /ANCHOR:log -->

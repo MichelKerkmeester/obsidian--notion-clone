@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Tapping a cell on a phone does two things at once and shows the worse one",
     "created_at": "2026-09-06T16:03:53Z",
-    "last_save_at": "2026-09-06T16:23:04.645Z",
+    "last_save_at": "2026-09-06T18:03:19.923Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -223,14 +223,14 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:92747da8b535569c1a9c9b86c08dc86169f5ec50c10ea6322490ac609521ac8e",
+    "source_fingerprint": "sha256:f7482404a45af1676e39c10df49b819821cbd961aa33bbe1204372fdb9ce58a3",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "0f724f2c7d25ae9b9aa6e3952d8a149db614f2b2090f41e2559b6f10cd837341",
-      "plan.md": "68b73e1b491c308e942f0202ab28bce30a387223b7df9dc1f733cbdb4c846b0b",
-      "tasks.md": "28db4f25937b50c7ead3fddeb222cc17e738c8553e41aedeaa3bcffd7181784c",
-      "decision-record.md": "d7b3ec3564ba491bd495439610f66e6ed9df7424ff55288a9065de0b69b060e5",
-      "implementation-summary.md": "baf4a32c1661d1ac19ae110fc219ae09a9ec9a6fc2dc4e2ba8759253f3f387ab",
+      "spec.md": "ca28555087f3b82e63feb7ffb9b2dd027bb6e80eced4d7dd22152e5b625fcdfa",
+      "plan.md": "65e57c73fccfdca2c9ba7b34a52c4c7b7626976ae5b9f7f361f0bc361d1bdb96",
+      "tasks.md": "fd4a9e55d803e5def5eb0d4e1bc3e910c6c886f77790b281c93dc6ea37002b40",
+      "decision-record.md": "9ea12681150a71efa545152feed51ba98b430f114b14d91c739ffc4a1ea1a290",
+      "implementation-summary.md": "926bb576ace767a26c4dd518a19e5d7d6609bc0ff23020d865ee1f284c33f95f",
       "research/research.md": "40717726b482000cf2fb1645c3e057649717c6747ace587f6b048840873a5a74"
     },
     "last_active_at": null

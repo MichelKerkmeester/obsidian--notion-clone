@@ -11,12 +11,11 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/061-notion-sheet-refinement"
-    last_updated_at: "2026-09-06T17:40:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Broke the two legs into ten tasks with red-first proof per row"
-    next_safe_action: "T001 — put the five Proposed ADRs to the operator as one set"
-    blockers:
-      - "T003 to T010 are blocked on T001, the operator's ruling"
+    last_updated_at: "2026-09-06T19:30:00Z"
+    last_updated_by: "design-research-session"
+    recent_action: "Closed T001 and re-cut T005-T007; added T011 for the overflow sheet"
+    next_safe_action: "T002 baseline, then T004; the ADR gate is closed"
+    blockers: []
     key_files:
       - "src/views/database-view.ts"
       - "src/views/record-surface/cell-editor-text.ts"
@@ -30,6 +29,7 @@ _memory:
     open_questions: []
     answered_questions:
       - "No new lane is created; three existing lanes gain rows"
+      - "Zero of four reference products dock a labelled action bar to the frame's bottom edge"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Notion Sheet Refinement
@@ -59,12 +59,18 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup
 
-- [ ] **T001** [P0] Put ADR-001, ADR-002, ADR-003, ADR-004 and ADR-006 to the operator as **one
+- [x] **T001** [P0] Put ADR-001, ADR-002, ADR-003, ADR-004 and ADR-006 to the operator as **one
       set**, with the two captures and the Notion capture filenames beside them
       (`decision-record.md`).
-      **Threshold:** zero ADRs left `Proposed`. **Red-first proof:** all five are `Proposed` today.
+      **Threshold:** zero ADRs left `Proposed` on the cell surface and the confirm.
+      **Red-first proof:** all five were `Proposed` at 17:40.
       **Source:** parent D15 — a Notion finding that contradicts a landed ruling stops at a Proposed
-      ADR. **Nothing below may start until this closes.**
+      ADR. **Closed 2026-09-06 19:00.** The operator declined to rule on Notion alone and widened
+      the evidence — *"Check anytype, evernote, fibery and find best ui ux approach for this"* — and
+      accepted the confirm in the same sitting: *"Yes, centred card with stacked buttons"*. 51
+      captures were then read directly across the four products; **ADR-000** records that read,
+      **ADR-001 to ADR-004 are Accepted**, and **ADR-006** stays parked behind the Anytype
+      multi-section re-read that is its own stated precondition (AC-007 accepts a recorded park).
 
 - [ ] **T002** [P] Record the baseline before the first edit: the bar's child count, rendered row
       count and rect at 390px; the confirm's inset, radius and computed action `flex-direction`; and
@@ -73,7 +79,7 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
       commit the leg branches from. **Red-first proof:** this task *is* the red-first proof.
       **Source:** goal D3, parent D5.
 
-- [ ] **T003** [B] Inventory the cross-consumer surfaces before touching one:
+- [ ] **T003** [P0] Inventory the cross-consumer surfaces before touching one:
       `rg -n "resolveCellTapAction" src/`, `rg -n "db-selection-status-bar" src/`,
       `rg -n "claimBottomDock" src/`, `rg -n "selection\.copy(Tsv|Markdown|Csv)" src/ tools/`.
       **Threshold:** every producer named in `plan.md`'s affected-surfaces table, or a written
@@ -89,7 +95,7 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
 
 ### Leg A — the cell action menu (the operator's report)
 
-- [ ] **T004** [B] A phone tap on an editable, non-title cell edits and does not select
+- [ ] **T004** [P0] A phone tap on an editable, non-title cell edits and does not select
       (`src/views/database-view.ts:4786-4803`, `src/views/embedded-database-renderer.ts:4384-4401`).
       **Threshold:** `.db-selection-status-bar` count reads **0** after a touch tap; the desktop
       mouse grammar is byte-unchanged. **Red-first proof:** the caller returns early only on
@@ -100,42 +106,58 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
       `verify-placement.mjs` selection legs (`:884`, `:894`, `:10622`) gain a bar-absence assertion,
       with a negative control that restores the fall-through and requires the count to go to 1.
 
-- [ ] **T005** [B] Selection becomes an explicit mode with a deliberate entry gesture
+- [ ] **T005** [P0] Selection becomes an explicit mode entered by a **long press on a cell**
       (`src/views/table-cell-gesture.ts`, `src/views/database-view.ts`).
-      **Threshold:** the entry gesture reaches the bar from a phone with no other path doing so.
-      **Red-first proof:** today the only phone path into a cell selection is the ordinary tap T004
-      removes, so without this task the actions become unreachable — that is the red.
-      **Source:** ADR-002. **Lane:** the same selection legs assert the gesture reaches the bar.
+      **Threshold:** a long press on a cell enters selection mode and renders the pill; **no other
+      phone path** reaches selection; the gesture is `attachLongPress` (`table-cell-gesture.ts:243-249`),
+      so its threshold, movement tolerance and haptic are the row grammar's rather than a second set
+      matched to it. **Red-first proof:** today the only phone path into a cell selection is the
+      ordinary tap T004 removes, so without this task the actions become unreachable — that is the
+      red. **Source:** ADR-004 §1; the 2026-08-30 row-range ruling, which put the row's own range
+      select behind the same object. **Lane:** the same selection legs assert the long press reaches
+      the pill and that a plain tap does not, each with its own control.
 
-- [ ] **T006** [B] The bar collapses to one row: count, one Copy control, Paste, Clear, an overflow,
-      and the bulk-edit chip when exactly one column is selected
+- [ ] **T006** [P0] The phone grows **no bottom-docked selection bar**; the selection wears a
+      three-control anchored pill instead
       (`src/views/database-view.ts:7607-7712`, `src/views/embedded-database-renderer.ts:4569-4579`,
-      `src/i18n.ts:369-371`, `styles.css:2590-2665`).
-      **Threshold:** `flex-wrap` computes to `nowrap`, rendered row count **1**, child count **≤ 6**
-      at a 390px viewport, no child clipped, and all three copy formats still reachable.
+      `styles.css:2590-2665`).
+      **Threshold:** on a 390px viewport with a live selection, `.db-selection-status-bar` renders
+      **0** times and `.db-cell-selection-pill` renders exactly **1**; the pill holds exactly **3**
+      children — the live count, one `Copy`, one `···` — at `flex-wrap: nowrap`, height **44px**,
+      radius `--db-radius-full`, gap `--db-space-2`, padding `--db-space-3`, every child's hit box
+      **≥ 44 × 44px**. The count keeps its live region (`database-view.ts:7636-7641`, `:7660-7662`).
+      `× Esc` is **not** built on a phone.
       **Red-first proof:** eight children are built for one selected cell — clear pill (`:7643`),
       count badge (`:7657`), Copy TSV (`:7665`), Copy Markdown (`:7671`), Copy CSV (`:7677`), Paste
       (`:7683`), chip-or-Fill (`:7688-7705`), Clear (`:7707`) — into `flex-wrap: wrap` with `row-gap`
-      at `max-width: calc(100vw - 32px)` (`styles.css:2645-2655`). **Source:** ADR-004; Notion's own
-      single-row accessory bar at
-      `screenshots/notion/ios/flows/reordering-a-table/notion-ios-flow-reordering-a-table-01-d53b3912-f60a-4bd1-872e-18276fe2acd5.webp`.
-      **Lane:** wrap, child-count and reachability assertions on the same legs, each with a control.
+      at `max-width: calc(100vw - 32px)` (`styles.css:2645-2654`), and no `.db-cell-selection-pill`
+      exists in the tree. **Source:** ADR-004, decided on ADR-000's four-product read — zero of four
+      references dock a labelled action bar to the frame's bottom edge, and Notion's own selected
+      cell wears a two-control anchored pill
+      (`screenshots/notion/ios/flows/reordering-a-table/notion-ios-flow-reordering-a-table-02-026940b3-e0de-443d-a948-6eb1e53e4ea1.webp`).
+      **Lane:** pill-shape, child-count and bar-absence assertions on the existing selection legs,
+      control = restore the phone bar rule and require the bar count to go to 1.
 
-- [ ] **T007** [B] The bar clears Obsidian's phone navigation bar as well as the safe area, and the
-      height is published whether or not the FAB renders
-      (`styles.css:2645-2646`, `src/views/toolbar-renderer.ts:2360`, `:2410-2420`).
-      **Threshold:** the intersection area between the bar's rect and the navigation bar's rect reads
-      **0px²**, and `--db-mobile-navbar-height` resolves to a non-zero value on a phone container
-      with no FAB. **Red-first proof:** the bar's `bottom` is
+- [ ] **T007** [P0] The pill is anchored to the selection and clamped clear of Obsidian's phone
+      navigation bar, and the navigation height is published whether or not the FAB renders
+      (`src/views/database-view.ts`, `styles.css`, `src/views/toolbar-renderer.ts:2362`, `:2410-2419`).
+      **Threshold:** the pill sits **8px** above the selection range's top edge, or 8px below it when
+      there is no room above; its rect is fully inside the grid's scroll viewport with a **≥ 8px**
+      margin each side; its bottom edge resolves at or above
+      `max(env(safe-area-inset-bottom), var(--db-mobile-navbar-height, 0px)) + 8px`, so the
+      intersection area with the navigation bar's rect reads **0px²**; and
+      `--db-mobile-navbar-height` resolves non-zero on a phone container with no FAB.
+      **Red-first proof:** the bar's `bottom` is
       `max(16px, env(safe-area-inset-bottom), var(--db-keyboard-inset, 0px))` (`styles.css:2646`)
       with no navigation-bar term, while the mobile FAB on the same container already reads it
-      (`:22569`); and the publisher is guarded behind the FAB's own render
-      (`toolbar-renderer.ts:2360`). **Source:** ADR-004; the operator's first capture. **Lane:** the
-      clearance assertion against a stand-in `.mobile-navbar` rect, control = drop the term and
-      require overlap. **Trap:** a `var()` that misses does not fail — the same silence
+      (`:22569`); and the publisher `reserveMobileFabInset` runs only inside the New-button build
+      (`toolbar-renderer.ts:2362`). **Source:** ADR-004 §3; the operator's first capture. **Lane:**
+      the clearance and clamp assertions against a stand-in `.mobile-navbar` rect, controls = drop
+      the navbar term and require overlap, and widen the range past the viewport and require the
+      clamp to hold. **Trap:** a `var()` that misses does not fail — the same silence
       `styles.css:2639-2644` already documents for `--db-keyboard-inset`.
 
-- [ ] **T008** [B] Every cell editor claims the bottom dock while it is open
+- [ ] **T008** [P0] Every cell editor claims the bottom dock while it is open
       (`src/views/record-surface/cell-editor-text.ts:331` and its close path; the other editors per
       T003's inventory).
       **Threshold:** `body.db-bottom-dock-taken` is present for the whole life of every cell editor
@@ -146,9 +168,32 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
       operator's second capture. **Source:** ADR-003. **Lane:** the class asserted while the editor
       is open, control = remove the claim and require the bar to reappear.
 
+- [ ] **T011** [P0] `···` opens a titled sheet on the phone and an anchored menu on desktop, and
+      the desktop bar collapses to five children
+      (`src/views/database-view.ts:7607-7712`, `src/i18n.ts:369-371`, `styles.css:925`).
+      **Threshold:** the phone sheet is the shell's own bottom sheet — `044`'s grammar, header
+      everywhere, registered as an `048` stacked pair — titled **"N cells selected"**, carrying
+      labelled rows in three groups: *Copy TSV · Copy Markdown · Copy CSV* | *Paste · Fill · Bulk
+      edit <Column>* | ***Clear*** (destructive, last, the only red row); a group that would be empty
+      is not drawn. Every one of the seven actions is reachable within **one** tap of `···`. On
+      desktop the bar's child count reads **≤ 5** — count, Copy, Paste, Clear, `···` — at
+      `flex-wrap: nowrap` and the declared **30px** (`--db-selection-status-height`,
+      `styles.css:925`), with the three copy formats and Fill in the `···` anchored menu.
+      **Red-first proof:** there is no `···` control and no sheet on either platform; the same
+      builder emits eight children on both. **Source:** ADR-004 §4 and its desktop half — Notion's
+      `···` "Actions" sheet
+      (`screenshots/notion/ios/flows/turning-a-table-into-a-database/notion-ios-flow-turning-a-table-into-a-database-03-6ecea6c7-4682-4c35-b649-412a0a240738.webp`),
+      Evernote's titled sheets
+      (`screenshots/evernote/ios/flows/adding-a-table/evernote-ios-flow-adding-a-table-87fa2082-05-0487410c-2d35-470c-8dc8-39ae80077152.webp`)
+      and Fibery's Actions dropdown
+      (`.worktrees/150-harvest-fibery/screenshots/fibery/web/flows/deleting-entities/fibery-web-flow-deleting-entities-03-0a207252-0899-4e33-8a10-a9c22005dbaa.webp`).
+      **Lane:** a reachability assertion enumerating the sheet's rows and the menu's items, control =
+      drop a row and require the count to fall. **Constraint:** nothing is deleted — all three copy
+      strings stay (`i18n.ts:369-371`).
+
 ### Leg B — the confirm card
 
-- [ ] **T009** [B] The destructive confirm presents as a margined card with stacked full-width
+- [ ] **T009** [P0] The destructive confirm presents as a margined card with stacked full-width
       actions, on both platforms (`src/views/surface-shell.ts:156-170`,
       `src/views/mobile-bottom-sheet.ts:29-45` and `:364`, `src/views/modals/confirm-modal.ts`,
       `src/views/confirm-sheet.ts:46-71`, `styles.css:230-282` and `:8592-8598`).
@@ -171,7 +216,7 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] **T010** [B] Append two questions to `067` AC-011's device checklist, and add no fourth device
+- [ ] **T010** [P0] Append two questions to `067` AC-011's device checklist, and add no fourth device
       owner: does the selection bar clear the navigation pill on the real device, and does a tap on a
       cell open the editor without a bar flashing first
       (`../067-sheet-family-remediation/acceptance-criteria.md`).
@@ -189,7 +234,7 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
 - [ ] All tasks marked `[x]`
 - [ ] No `[B]` blocked tasks remaining
 - [ ] Every negative control observed red before its row was called green
-- [ ] `acceptance-criteria.md` AC-001 to AC-004, AC-006 and AC-007 `Met`, `Waived` or `Superseded`
+- [ ] `acceptance-criteria.md` AC-001 to AC-004, AC-006, AC-007 and AC-008 `Met`, `Waived` or `Superseded`
 - [ ] AC-005 answered by the operator, in `067` AC-011's sitting
 <!-- /ANCHOR:completion -->
 
@@ -227,7 +272,7 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
 
 - [ ] CHK-001 [P0] Requirements documented in spec.md
 - [ ] CHK-002 [P0] Technical approach defined in plan.md
-- [ ] CHK-003 [P1] Dependencies identified and available — the five Proposed ADRs are the blocker
+- [x] CHK-003 [P1] Dependencies identified and available — the five `Proposed` ADRs were the blocker and the operator closed them on 2026-09-06 at 19:00; ADR-006 is parked and gates no P0
 <!-- /ANCHOR:pre-impl -->
 
 ---
@@ -383,7 +428,7 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
 
 | Approver | Role | Status | Date |
 |----------|------|--------|------|
-| Operator | Decision authority on the five Proposed ADRs | [ ] Approved | |
+| Operator | Decision authority on the five `Proposed` ADRs | [x] Approved | 2026-09-06 19:00 |
 | Operator | Device read, in `067` AC-011's sitting | [ ] Approved | |
 | Fresh in-runtime verifier | Gate and `validate.sh --strict` run independently (parent D4) | [ ] Approved | |
 <!-- /ANCHOR:sign-off -->
