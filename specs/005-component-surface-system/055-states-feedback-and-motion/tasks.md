@@ -182,7 +182,7 @@ A task missing any of the three is not ready to start.
       (`Tasks/created.md` gone after the press). As a negative control for the snapshot itself,
       dropping `content` from the pushed entry turns 5 of the 11 cases red, and restoring it turns
       them green again.
-      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1404/1404 including
+      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1430/1430 including
       `deletion-undo.test.ts` (11/11) on the rebased tree; `npm run gate` 26 green.
       **Capture:** none (`src/views/database-view.ts`, `src/views/embedded-database-renderer.ts`,
       `src/i18n.ts`, `src/views/deletion-undo.test.ts`)
@@ -219,7 +219,7 @@ A task missing any of the three is not ready to start.
       wrong: `.db-toast.is-inline` took the stack's flat 384px, which at the host's 16px inset
       needs 400px of viewport and so hung 10px off a phone's left edge. Clamped to
       `min(384px, calc(100vw - 32px))`, unchanged at any desktop width.
-      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1404/1404, including two new
+      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1430/1430, including two new
       `toast.test.ts` assertions for the `container` placement; `npm run gate` 26 green.
       **Capture:** none — no capture shows the rail or the bar's button
       (`src/views/database-view.ts`, `src/views/toast.ts`, `styles.css`)
@@ -245,6 +245,27 @@ A task missing any of the three is not ready to start.
       designed from `047` §9 with the gap named; its destination is proved by
       `mobile/anytype-mobile-sheet-kanban-groupby-dark.png` (`src/views/empty-state-renderer.ts`,
       `src/views/database-view.ts`)
+      **Third state landed with the `050` sibling, 2026-09-06 (`f61b1dc9`, now on main); the first
+      two did not, so this stays `[ ]`.** `group-relation-deleted` is a thirteenth
+      `EmptyStateReason` with its own title, body and `folder-x` icon
+      (`empty-state-renderer.ts:38`, copy at `:205-209`), selected by the pure
+      `isBoardGroupFieldMissing` (`:231-234`) and rendered from both classes with a primary
+      "Open view settings" action (`database-view.ts:10627-10636`,
+      `embedded-database-renderer.ts:2025-2038`). Asserted by
+      `empty-state-renderer.test.ts` — *"gives every reason its own title and body, including the
+      deleted-group-relation state"* (`:284`), which also asserts it is distinct from
+      `empty-group`, plus three `isBoardGroupFieldMissing` cases at `:302-320`.
+      **What is not closed, and a contradiction between two of this packet's own documents.** This
+      row's first red — `getEmptyStateReason` returning `no-matching-data` for `sourceCount === 0`,
+      the same reason a no-match view gets — is unchanged on the landed tree
+      (`empty-state-renderer.ts:266`). AC-005's own Today cell reads that differently: it treats
+      `no-database` as the "target" flavour, and `no-database` is chosen on the hero path
+      (`:318`) for a view with no database at all, which is not the same condition as a view whose
+      **source folder** was deleted. So either a deleted source is a `no-database` (AC-005's
+      reading, and this row's first red is stale) or it is a `no-matching-data` (this row's
+      reading, and AC-005 is Met only on its third clause). **Not resolved here**, because picking
+      one silently would settle a threshold by assertion; the next leg on this row decides, and
+      the deleted-relation half is landed either way.
 - [x] T006 [P0] **REQ-055-6 — absorb chart's private vocabulary.** Done 2026-09-06.
       `renderEmptyState` now calls `EmptyStateRenderer.renderCard`, mapping each of chart's six
       reasons onto the nearest shared `EmptyStateReason` for its default title only (`no-columns`
@@ -278,7 +299,7 @@ A task missing any of the three is not ready to start.
       enough that changing it there would move their captures for a problem they do not have, so it
       is recorded for its owner rather than fixed under this task. Census back to main's 656/346
       exactly, and the eight captures re-taken and re-read after the fix.
-      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1404/1404; `npm run gate` 26 green; the
+      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1430/1430; `npm run gate` 26 green; the
       fixture and the real render opened side by side (both desktop-light) show the same shared
       card shape with the chart's own copy intact.
       **Capture:** `chrome-chart-empty` (fixture, rewritten to mirror the new markup) and
@@ -386,7 +407,7 @@ A task missing any of the three is not ready to start.
 
 ### L5 — capability-gated menus (050 item 8)
 
-- [ ] T011 [B] [P0] **REQ-055-9 — capability gate, never-empty fallback, selection caps**
+- [x] T011 [B] [P0] **REQ-055-9 — capability gate, never-empty fallback, selection caps**
       (050 REQ-008 at AC-008's threshold, verbatim). One predicate over the selection consulted by
       `row-menu.ts` and `bulk-edit-field-menu.ts`; the fully-restricted case renders a
       "No available actions" row; >1 disables open and link; >10 disables open-in-new-tab.
@@ -405,17 +426,40 @@ A task missing any of the three is not ready to start.
       never-empty answer is a **default row** rather than a message
       (`menus/anytype-menu-set-sort-empty-dark.png`) — `design-trueup.md` §4
       (`src/views/row-menu.ts`, `src/views/bulk-edit-field-menu.ts`)
+      **Closed by the `050` sibling, 2026-09-06 (`f61b1dc9`, now on main).** The one real red is
+      gone: `bulk-edit-field-menu.ts:38-40` now falls back to a single disabled
+      `t("menu.noActions")` row when `getBulkEditableColumns` returns nothing, so the option list
+      cannot be empty. `row-menu.ts`'s unconditional first row is asserted rather than rebuilt, as
+      ADR-004 restated. Both halves are covered: `bulk-edit-field-menu.test.ts` — *"renders the
+      shared no-actions row when nothing in the column set is bulk-editable"* (`:34`) and *"lists
+      the bulk-editable columns unchanged when at least one exists"* (`:49`) — and
+      `row-menu.test.ts` — *"adds the open-note row before any capability check runs"* (`:27`).
+      The selection caps stay unadopted with ADR-004's reason unchanged. The permanent lane row is
+      T014's, not this row's.
 
 ### L6 — scroll restore and load-more (050 items 5 and 14)
 
-- [ ] T012 [P1] **REQ-055-10 — per-view scroll restore** (050 REQ-005 at AC-005's threshold,
+- [x] T012 [P1] **REQ-055-10 — per-view scroll restore** (050 REQ-005 at AC-005's threshold,
       verbatim). One offset field in `view-state-store.ts`, written on switch-away, restored on
       return, within ±2px, per view independently. Off the critical path; no capture expected.
       **Threshold:** restore within ±2px; the no-field case renders byte-identically to today.
       **Red first:** the store carries no scroll state (`grep -n scroll src/views/view-state-store.ts`
       returns nothing) — every switch returns to the top.
       **Capture:** none needed; behaviour, not appearance (`src/views/view-state-store.ts`)
-- [ ] T013 [B] [P2] **REQ-055-11 — the embedded "Load more" row** (050 REQ-014 at AC-014's
+      **Closed by the `050` sibling, 2026-09-06 (`f61b1dc9`, now on main), by wiring rather than
+      by a second mechanism.** `ViewStateStore` holds a `viewports` map keyed per database and view
+      (`view-state-store.ts:68`) with `getViewport`/`setViewport` at `:112-119`, cleared alongside
+      the rest of a view's cached state at `:108` and `:102`; `DatabaseView.switchView` captures
+      through `captureDatabaseViewport` on the way out (`database-view.ts:3382`) and restores the
+      stored snapshot on the way back (`:3390`). The offset restored is the snapshot's own
+      `scrollTop`, which is exact rather than within ±2px. Asserted by `view-state-store.test.ts` —
+      *"remembers a view's scroll snapshot independently of every other view"* (`:133`), *"has
+      never been visited until a snapshot is stored"* (`:146`), *"drops a view's remembered
+      position along with the rest of its cached state"* (`:150`), *"clears every remembered
+      position along with every cached state"* (`:159`) — and *"captures and restores through
+      database-viewport.ts's own functions, not a second mechanism"* (`:176`), which is the
+      anti-pattern this row named. A rendered round-trip lane row is T014's.
+- [x] T013 [B] [P2] **REQ-055-11 — the embedded "Load more" row** (050 REQ-014 at AC-014's
       threshold, verbatim). An embedded view over one page renders its page plus an inline
       "Load more" row; the virtualization path is not entered.
       **Threshold:** the row's presence at a 60-row limit and the virtualization mount's absence,
@@ -427,6 +471,20 @@ A task missing any of the three is not ready to start.
       inline row **~40px** against **48px** full-page.
       **Capture:** `anytype-inlinecollection-empty-dark.png`,
       `anytype-collection-grid-populated-dark.png` (`src/views/embedded-database-renderer.ts`)
+      **Closed by the `050` sibling, 2026-09-06 (`f61b1dc9`, now on main).** A pure
+      `resolveEmbeddedTablePage` (`embedded-database-renderer.ts:173`) decides which rows paint and
+      whether a row is owed; the table branch pages before painting (`:1310`) and
+      `renderTableLoadMoreRow` (`:2011-2023`) appends one `tr` carrying a button whose colspan is
+      read off the header `TableRenderer` just built. The limit is 60 and the reveal count is
+      session-only per view. Asserted by `embedded-table-page-limit.test.ts` — *"pages to exactly
+      the reveal count and reports what is left, past the default 60"* (`:40`), *"declares
+      EMBEDDED_TABLE_PAGE_LIMIT as 60"* (`:62`), *"the table render branch pages before painting
+      and offers Load more only when rows remain"* (`:66`), *"the Load more row reads its colspan
+      off the real header rather than a second column count"* (`:77`), plus the never-mutates and
+      fits-inside cases at `:33` and `:54`. The never-virtualizes guard holds by construction, no
+      virtualization having arrived. **What this does not close is AC-011's other half:** nothing
+      measures the ≈40px inline row against the 48px full-page row, and no capture shows the state,
+      so that row stays `Unmet` on the height clause alone.
 <!-- /ANCHOR:phase-2 -->
 
 ---
