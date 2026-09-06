@@ -270,6 +270,34 @@ export const CORE_SCENARIOS = [
       </div>`,
   },
   {
+    id: "empty-state-source-missing",
+    title: "Empty state — source missing",
+    group: "states",
+    width: 720,
+    // Mirrors EmptyStateRenderer.renderCard() class-for-class for the "source-missing" reason
+    // (getEmptyStateReason routes a view whose source resolved to zero files here, distinct from
+    // "no-database" — a view that never named one — and "no-matching-data" — a source that
+    // resolves and matched nothing). Copy is EMPTY_STATE_COPY's real English strings, and the
+    // action is the state's own primary "Choose database" affordance, not a stand-in.
+    sources: ["src/views/empty-state-renderer.ts", "styles.css"],
+    html: () => `
+      <div class="note-database-container">
+        <div class="db-empty db-empty-card" data-empty-reason="source-missing">
+          <div class="db-empty-card-icon" aria-hidden="true">${ICONS.database}</div>
+          <div class="db-empty-card-content">
+            <h3 class="db-empty-card-title">This view's source is missing</h3>
+            <p class="db-empty-card-message">The folder or database this view pointed to was moved or deleted. Choose a database to continue.</p>
+            <div class="db-empty-action-group">
+              <button type="button" class="db-empty-action mod-cta" aria-label="Choose database">
+                <span class="db-empty-action-icon" aria-hidden="true">${ICONS.database}</span>
+                <span>Choose database</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>`,
+  },
+  {
     id: "table-mobile",
     title: "Table view — mobile auto-fit",
     group: "views",

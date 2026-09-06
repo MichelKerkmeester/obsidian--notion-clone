@@ -317,9 +317,13 @@ try {
   // (none/filter/sort/both) plus the tab-menu row each get their own scenario in STATE_SCENARIOS
   // and their own red-first pass/fail line. The chart's empty state joins them for the same
   // reason: chartEmptyAbsorptionAssertion (render-assertion-harness.ts) is the permanent lane row
-  // asserting the shared card, its action, and the retired private markup's absence.
+  // asserting the shared card, its action, and the retired private markup's absence. The two
+  // emptyReason scenarios join for the same reason again: the permanent row proving the
+  // source-missing and no-matching-data flavours render distinctly through getEmptyStateReason's
+  // own predicate, not a hand-supplied reason string.
   const rulesScenarios = STATE_SCENARIOS.filter((scenario) =>
-    scenario.rules != null || scenario.toolbarPopover === "tab-menu" || scenario.chartVariant === "empty");
+    scenario.rules != null || scenario.toolbarPopover === "tab-menu" || scenario.chartVariant === "empty"
+    || scenario.emptyReason != null);
   const rulesOutcomes = await page.evaluate(
     (scenarios) => scenarios.map((scenario) => window.__renderAssertions(scenario)),
     rulesScenarios,

@@ -226,7 +226,7 @@ A task missing any of the three is not ready to start.
 
 ### L2 — empty-state flavours and chart absorption
 
-- [ ] T005 [B] [P0] **REQ-055-5 — three empty-state flavours, one of them new**
+- [x] T005 [P0] **REQ-055-5 — three empty-state flavours, one of them new**
       (050 REQ-009 at AC-009's threshold, verbatim). A **missing or deleted source** renders its
       own flavour with its own copy and a primary **"Choose database"** action; `no-matching-data`
       renders when the source resolves and nothing matched; `group-relation-deleted` names the
@@ -273,6 +273,81 @@ A task missing any of the three is not ready to start.
       a fourteenth reason with its copy, its action wiring in both renderer classes, its i18n
       entries in three locales and its lane row is a feature, not a reconciliation. The follow-up
       leg on this row builds it.
+      **Follow-up leg landed, 2026-09-06.** `EmptyStateReason` gains `"source-missing"` as its
+      fourteenth member (`empty-state-renderer.ts`), with copy naming the action rather than the
+      absence (`emptyState.sourceMissingTitle`/`sourceMissingMessage`, all three locales) and a
+      `database` icon. `getEmptyStateReason` now routes `diagnostics.sourceCount === 0` to
+      `"source-missing"` instead of `"no-matching-data"` — the one line the predicate changes; every
+      other branch (search/filter/limit) is untouched, so a source that vanished under an active
+      search still reads as source-missing, not as a query result. Both renderer classes push a
+      primary `"Choose database"` action for the reason (`emptyState.chooseDatabase`, all three
+      locales), wired to the same view-settings popover `group-relation-deleted`'s "Open view
+      settings" already opens (`database-view.ts`'s `openViewSettingsAfterMutation`,
+      `embedded-database-renderer.ts`'s inline `toggleHeaderPopover(config, "view", anchor)`) — the
+      real source-rules editor (`view-config-panel-renderer.ts`'s `renderSourceRules`), not a stub.
+      **Green value:** `EmptyStateReason` holds **14** members; `getEmptyStateReason` returns
+      `"source-missing"` for `sourceCount === 0` regardless of active search/filter
+      (`empty-state-renderer.test.ts`'s dispatch table, three new rows); `EMPTY_STATE_COPY` holds
+      **14** entries with no two reasons sharing a title/body signature
+      (`empty-state-renderer.test.ts:286`); `rg -n "chooseDatabase" src/` finds the i18n key and its
+      two wiring sites.
+      **Distinctness proven three ways.** Unit: `getEmptyStateReason(diagnostics({ sourceCount: 0
+      }))` is `"source-missing"`, `getEmptyStateReason(diagnostics({ sourceCount: 12 }))` is
+      `"no-matching-data"`, and both titles differ from each other and from `"no-database"`'s
+      (`empty-state-renderer.test.ts`, "distinguishes a missing source from a source that matched
+      nothing"). `group-relation-deleted` is a separate condition entirely
+      (`isBoardGroupFieldMissing`, unaffected by this predicate) and was already asserted distinct
+      from every other reason at landing. Lane: two new permanent rows in
+      `tools/live/render-assertions.mjs` — `table-empty-source-missing/file-view` and
+      `table-empty-no-matching-data/file-view` (`render-assertion-bundle.mjs`'s `STATE_SCENARIOS`,
+      `emptyReason` field) — mount the real `TableRenderer` over the mock-data catalogue's own
+      columns at zero rows, drive the real `getEmptyStateReason` over a hand-built
+      `RowPipelineDiagnostics` for each condition, and assert the rendered `data-empty-reason`
+      matches (`render-assertion-harness.ts`'s `buildEmptyReasonOptions`/`emptyReasonAssertion`).
+      **Negative control, observed red then green**: reverting the predicate's one line
+      (`sourceCount === 0 -> "no-matching-data"`) turned exactly the source-missing scenario's own
+      assertion red — `data-empty-reason="no-matching-data" (want "source-missing")` — while its
+      sibling scenario and every other row in the lane (17 scenarios, 8 assertions each) stayed
+      green; restoring the line returned the whole lane to green, reproduced twice.
+      **Capture:** a new hand fixture, `empty-state-source-missing`
+      (`tools/screenshots/scenarios/core.mjs`, `sources: ["src/views/empty-state-renderer.ts",
+      "styles.css"]`), mirrors `EmptyStateRenderer.renderCard()` for the reason with the real English
+      copy and the primary action, using a new `database` glyph in `scenarios/shared.mjs`'s `ICONS`
+      map (Lucide's own icon, standing in for the runtime `setIcon` injection). Captured with
+      `node tools/screenshots/capture.mjs --only empty-state-source-missing` (desktop/mobile ×
+      dark/light, 4 PNGs) and all four opened and read: title, message and the "Choose database"
+      button render correctly in every combination. A full `npm run screenshots` afterward took the
+      corpus from 562 to **566** entries (this fixture's four, the only growth); `npm run
+      screenshots:verify` reports 566 fresh, none blank or identical across themes. Five unrelated
+      captures moved bytes only (re-encoder jitter this run's own churn triggered, not a paint
+      change) — confirmed `pixelHash`- and `layoutHash`-identical to `HEAD` for all five and restored
+      to their committed bytes, with the manifest's `bytes` field re-derived from the restored files.
+      `tools/lane/css-lane.json`'s current release (held by this phase, `baselineHash` still
+      `0cec9cd820fb` — no stylesheet edit lands here) now names all four new captures in its
+      `reviewed` array.
+      **One named, recorded side effect: the touch-targets constructed baseline moves.** The two new
+      lane scenarios mount a full `TableRenderer` over six catalogue columns at zero rows, and
+      `renderTable` always draws the summary footer regardless of row count — twelve more
+      `db-table-footer-trigger` buttons per scenario (26px tall, already this file's own largest
+      tracked shortfall since 2026-09-04's `raiseHistory`, not a new class). Isolated by measuring
+      with and without the two new scenarios: 1304 without, 1360 with, reproduced twice; the raw
+      per-scenario dump attributes both new instances to `table/file-view` rather than their own
+      names — the same `scenarioLabel()` collision this file's own `raiseHistory.verification`
+      already names for scenarios sharing a renderer/bag pair — so the diff was read by
+      tag/class/geometry signature instead. Recorded in
+      `tools/live/touch-targets-constructed-baseline.json`'s `emptyReasonScenariosRaise`, not
+      resized: the same operator-scale call the file's own `why` field reserves.
+      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1427/1427; `npm run build` 0;
+      `node tools/live/render-assertions.mjs` exit 0, both new rows passing; `node
+      tools/live/touch-targets.mjs` exit 0 against the re-pinned baseline; `node
+      tools/live/evidence.mjs --check-all` 15/15 fresh; `node tools/lane/check-lane.mjs` exit 0,
+      "release names all 4 changed capture(s)"; `npm run gate` — 26 green, 0 red, exit 0
+      (`src/views/empty-state-renderer.ts`, `src/views/empty-state-renderer.test.ts`,
+      `src/views/database-view.ts`, `src/views/embedded-database-renderer.ts`, `src/i18n.ts`,
+      `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`,
+      `tools/live/render-assertions.mjs`, `tools/live/touch-targets-constructed-baseline.json`,
+      `tools/screenshots/scenarios/core.mjs`, `tools/screenshots/scenarios/shared.mjs`,
+      `tools/lane/css-lane.json`)
 - [x] T006 [P0] **REQ-055-6 — absorb chart's private vocabulary.** Done 2026-09-06.
       `renderEmptyState` now calls `EmptyStateRenderer.renderCard`, mapping each of chart's six
       reasons onto the nearest shared `EmptyStateReason` for its default title only (`no-columns`

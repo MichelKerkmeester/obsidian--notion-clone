@@ -232,9 +232,23 @@ describe("empty state diagnosis", () => {
     [diagnostics({ hasActiveFilters: true, postFilterCount: 0 }), "filter-empty"],
     [diagnostics({ hasActiveSearch: true, hasActiveFilters: true }), "filter-and-search-empty"],
     [diagnostics({ hasActiveLimit: true, postLimitCount: 2 }), "limit-empty"],
-    [diagnostics({ sourceCount: 0, hasActiveSearch: true }), "no-matching-data"],
+    [diagnostics({ sourceCount: 0 }), "source-missing"],
+    // A source that vanished still names the source, not the query, as what to fix — an active
+    // search or filter over a zero-row source does not fall through to their own branches.
+    [diagnostics({ sourceCount: 0, hasActiveSearch: true }), "source-missing"],
+    [diagnostics({ sourceCount: 0, hasActiveFilters: true }), "source-missing"],
   ] as const)("dispatches to %s", (input, expected) => {
     expect(getEmptyStateReason(input)).toBe(expected);
+  });
+
+  it("distinguishes a missing source from a source that matched nothing", () => {
+    // Same shape (zero rows to show), different cause: sourceCount tells the two apart, and
+    // `no-database` is a third, unreachable-from-here condition — decided by a separate rendering
+    // path (the hero) before any diagnostics exist, never by this predicate.
+    expect(getEmptyStateReason(diagnostics({ sourceCount: 0 }))).toBe("source-missing");
+    expect(getEmptyStateReason(diagnostics({ sourceCount: 12 }))).toBe("no-matching-data");
+    expect(EMPTY_STATE_COPY["source-missing"].title).not.toBe(EMPTY_STATE_COPY["no-matching-data"].title);
+    expect(EMPTY_STATE_COPY["source-missing"].title).not.toBe(EMPTY_STATE_COPY["no-database"].title);
   });
 
   it("formats a stage count without changing the diagnostics object", () => {
@@ -283,7 +297,7 @@ describe("empty state diagnosis", () => {
 describe("empty state reason catalog", () => {
   it("gives every reason its own title and body, including the deleted-group-relation state", () => {
     const entries = Object.entries(EMPTY_STATE_COPY);
-    expect(entries).toHaveLength(13);
+    expect(entries).toHaveLength(14);
     const seen = new Set<string>();
     for (const [reason, copy] of entries) {
       const signature = `${copy.title}::${copy.body}`;

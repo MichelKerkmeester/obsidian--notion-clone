@@ -90,6 +90,9 @@ export const ICONS = {
   // empty-state card (empty-state-renderer.ts's EMPTY_STATE_COPY, the reason renderColumn falls
   // back to when a column has no visible rows).
   "folder-open": glyph('<path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/>'),
+  // Lucide's `database`, what `setIcon(icon, "database")` injects into both the no-database hero
+  // and the "source-missing" empty-state card (empty-state-renderer.ts's EMPTY_STATE_COPY).
+  database: glyph('<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>'),
 };
 
 /**

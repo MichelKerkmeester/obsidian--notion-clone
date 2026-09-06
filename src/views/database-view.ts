@@ -8261,6 +8261,14 @@ export class DatabaseView extends FileView {
         },
       });
     }
+    if (reason === "source-missing") {
+      actions.push({
+        label: t("emptyState.chooseDatabase"),
+        icon: "database",
+        primary: true,
+        onClick: () => this.openViewSettingsAfterMutation(),
+      });
+    }
     return {
       reason,
       title: reason === "search-empty"

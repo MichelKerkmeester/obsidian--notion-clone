@@ -1,7 +1,18 @@
 {
-  "under": 1304,
+  "under": 1360,
   "floor": 28,
   "recorded": "2026-09-06",
+  "emptyReasonScenariosRaise": {
+    "recorded": "2026-09-06",
+    "what": "1304 -> 1360, from two new STATE_SCENARIOS entries proving the source-missing/no-matching-data empty-state distinction (`table-empty-source-missing/file-view`, `table-empty-no-matching-data/file-view` in render-assertion-bundle.mjs), both a table renderer over the home-inventory catalogue's columns with zero rows. Not a new defect class: `TableRenderer.renderTable` always renders the summary footer row regardless of row count, and `db-table-footer-trigger` (the per-column \"+ Calculate\" button, 26px tall) is already this file's own largest tracked shortfall (raiseHistory's perClass: 32 -> 173 on 2026-09-04). Two more table mounts over the same six-column catalogue simply repeat it twelve more times each.",
+    "perClass": [
+      { "class": "db-table-footer-trigger", "before": 173, "after": 229 }
+    ],
+    "totalBefore": 1304,
+    "totalAfter": 1360,
+    "verification": "Isolated by commenting out the two new entries in render-assertion-bundle.mjs and running `node tools/live/touch-targets.mjs --json` before (1304, matching this file's own prior baseline exactly) and after restoring them (1360), both reproduced on a second run. The per-scenario attribution in the raw dump reads both new instances against `table/file-view` rather than their own names — the same `scenarioLabel()` collision for scenarios sharing a renderer/bag pair this file's own `raiseHistory.verification` already names — so the diff was read by `tag|classes|width x height` signature instead: every added row is `button|db-table-footer-trigger|<width>x26`, and no other class or scenario's count moved.",
+    "productFindings": "Not a new finding. `db-table-footer-trigger` is the same shortfall this file's raiseHistory already records (32 -> 173 on 2026-09-04); this entry only accounts for twelve more instances per new scenario. Resizing it is the same operator-scale decision this file's own `why` describes, not a repair this leg makes silently."
+  },
   "why": "Controls the constructed-renderer pass finds under this project's own 28px coarse-pointer floor, on real production renderer output no fixture in scenarios.mjs ever mounted. Not an allowance: every one of these is a real shortfall, exactly like the fixture baseline it sits beside. The remaining classes here are recurrences the fixture baseline already tracks, now also visible on the real renderer at production row counts (a control the fixture pass measured once shows up here dozens or hundreds of times because a 1600-2000 row bench table/gallery/calendar/timeline actually repeats it). Resizing them is the same operator-scale decision the fixture baseline's own `why` describes, not a repair this pass makes silently.",
   "smallest": "db-file-tag-remove at 10x14",
   "settingsBodyGrammarLowering": "1215 -> 1209 on 2026-09-05, found stale rather than lowered by 052-card-properties-capture: worktrees/050-settings-body-grammar's own landing (`4f090d2e`, `9ab96581`, `07be64fe`) converted the settings sheet's native `input[type=\"radio\"]` group and `.db-toggle-switch` checkboxes onto the shared row/segmented grammar so `sheet-grammar.mjs` could register `settings` as a seventh conforming surface, and that same conversion narrowed this ratchet without anyone re-measuring the constructed pass or writing the new number back here. `node tools/live/touch-targets.mjs` on the landed tree measures 1209 under the floor against this file's own prior baseline of 1215, three consecutive runs, still comfortably PASSing at the stale 1215 (1209 < 1215) — which is exactly why it went unnoticed rather than failing loudly. This entry only corrects the stale number to what every measurement agrees on; 052 raises nothing in the constructed pass and claims no credit for a conversion `050` made.",

@@ -2108,6 +2108,17 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         },
       });
     }
+    if (reason === "source-missing") {
+      actions.push({
+        label: t("emptyState.chooseDatabase"),
+        icon: "database",
+        primary: true,
+        onClick: () => {
+          const anchor = this.containerEl.querySelector<HTMLElement>(".db-view-config-btn");
+          if (anchor) this.toggleHeaderPopover(config, "view", anchor);
+        },
+      });
+    }
     return {
       reason,
       title: reason === "search-empty"

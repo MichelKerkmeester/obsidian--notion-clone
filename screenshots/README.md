@@ -1095,6 +1095,14 @@ Sources: `src/views/empty-state-renderer.ts`, `tools/bench/table-render-bench.ts
 
 Sources: `src/views/empty-state-renderer.ts`
 
+### Empty state — source missing
+
+| dark | light |
+|---|---|
+| ![empty-state-source-missing dark](notion-clone/states/empty-state-source-missing-mobile-dark.png) | ![empty-state-source-missing light](notion-clone/states/empty-state-source-missing-mobile-light.png) |
+
+Sources: `src/views/empty-state-renderer.ts`, `styles.css`
+
 ## views
 
 ### Board view — mobile

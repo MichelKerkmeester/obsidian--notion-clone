@@ -969,9 +969,38 @@ ADR exists to keep closed.
 
 | Field | Value |
 |-------|-------|
-| **Status** | Accepted — recorded here, built by a follow-up leg |
+| **Status** | Accepted — built |
 | **Date** | 2026-09-06 |
-| **Deciders** | Operator ruling; recorded by the landing verification that found the contradiction |
+| **Deciders** | Operator ruling; recorded by the landing verification that found the contradiction; built by the follow-up leg (T005) |
+
+### Landing note (2026-09-06)
+
+`EmptyStateReason` gains `"source-missing"` as its fourteenth member, with its own copy
+(`emptyState.sourceMissingTitle`/`sourceMissingMessage`, all three locales) and a `database` icon.
+`getEmptyStateReason` routes `diagnostics.sourceCount === 0` there instead of to
+`"no-matching-data"` — the one line the predicate changes, ahead of every other branch, so an
+active search or filter over a vanished source still reads as source-missing rather than as a
+query result. Both renderer classes push a primary `"Choose database"` action
+(`emptyState.chooseDatabase`, all three locales) wired to the same view-settings popover
+`group-relation-deleted`'s own action already opens — `database-view.ts`'s
+`openViewSettingsAfterMutation` and `embedded-database-renderer.ts`'s inline
+`toggleHeaderPopover(config, "view", anchor)` — the real source-rules editor
+(`view-config-panel-renderer.ts`'s `renderSourceRules`), not a new flow built for this state alone.
+
+Distinctness from the other two conditions this ADR names is proven three ways: a unit test
+asserting both predicate outcomes and that all three titles differ
+(`empty-state-renderer.test.ts`); two permanent lane rows
+(`table-empty-source-missing/file-view`, `table-empty-no-matching-data/file-view` in
+`tools/live/render-assertions.mjs`) mounting the real `TableRenderer` over the mock-data catalogue
+at zero rows and asserting the rendered `data-empty-reason` against the real predicate's own
+output; and a negative control — reverting the predicate's one line turned exactly the
+source-missing scenario's assertion red while its sibling and every other row in the lane (17
+scenarios) stayed green, restored to green again. A new hand fixture
+(`empty-state-source-missing`, `tools/screenshots/scenarios/core.mjs`) was captured with `--only`
+across both devices and themes and all four PNGs opened. The two new lane scenarios also draw the
+table's summary footer at zero rows, adding more instances of the already-tracked
+`db-table-footer-trigger` shortfall to the touch-targets constructed baseline (re-pinned 1304 →
+1360, named rather than resized). `npm run gate`: 26 green, 0 red, exit 0.
 
 ### Operator ruling (2026-09-06)
 

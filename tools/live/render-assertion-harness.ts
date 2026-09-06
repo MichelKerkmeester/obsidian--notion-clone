@@ -120,9 +120,16 @@ import { renderSpecialFileFieldValue } from "../../src/views/file-field-renderer
 import { renderRating, renderProgress, renderProgressRing } from "../../src/views/number-display-renderer";
 import { renderRecordIcon } from "../../src/views/record-icon-renderer";
 import { openDropdownMenu } from "../../src/views/dropdown-field";
-import { EmptyStateRenderer } from "../../src/views/empty-state-renderer";
+import {
+  EmptyStateRenderer,
+  EMPTY_STATE_COPY,
+  getEmptyStateReason,
+  type EmptyStateOptions,
+} from "../../src/views/empty-state-renderer";
 import { ColumnHeaderController, type ColumnHeaderActions } from "../../src/views/column-header-controller";
 import { withEmptyOptionGroups } from "../../src/data/group-visibility";
+import type { RowPipelineDiagnostics } from "../../src/data/row-pipeline";
+import { t } from "../../src/i18n";
 import type { DatabaseConfig, RecordSchema } from "../../src/data/types";
 import type { DatabaseViewState } from "../../src/views/view-state-store";
 import type { BoardGroup } from "../../src/views/board-renderer";
@@ -453,6 +460,15 @@ export interface ScenarioSpec {
    * what a cell renders, on the same catalogue mount `catalogueUseCase` builds.
    */
   wrapText?: boolean;
+  /**
+   * Opt-in, renderer "table" only: forces zero rows and drives the real `getEmptyStateReason`
+   * predicate over a hand-built `RowPipelineDiagnostics` matching the named condition —
+   * `"source-missing"` is `sourceCount: 0` (the view's source no longer resolves), `"no-matching-data"`
+   * is a positive `sourceCount` with no active search, filter or limit (a source that resolves and
+   * still has nothing to show). The predicate decides the reason, not the scenario, so a collapse of
+   * `getEmptyStateReason`'s branch order is exactly what turns this row red.
+   */
+  emptyReason?: "source-missing" | "no-matching-data";
 }
 
 export interface AssertionResult {
@@ -1349,6 +1365,47 @@ function tableAssertions(
     detail: `${container.querySelectorAll("td.db-select-col").length} selection cells for ${rows.length} rows`,
   });
   return results;
+}
+
+// The two `RowPipelineDiagnostics` shapes `getEmptyStateReason` actually distinguishes: a source
+// that no longer resolves (sourceCount 0) against one that resolves and simply has nothing to show
+// under no active search, filter or limit. Both fall through the predicate's early-return chain
+// rather than being asserted by name, so this is the real function deciding the reason, not a
+// scenario restating it.
+function buildEmptyReasonOptions(kind: "source-missing" | "no-matching-data"): EmptyStateOptions {
+  const diagnostics: RowPipelineDiagnostics = kind === "source-missing"
+    ? {
+      sourceCount: 0, postSearchCount: 0, postFilterCount: 0, postLimitCount: 0, visibleCount: 0,
+      hasActiveSearch: false, hasActiveFilters: false, hasActiveLimit: false,
+    }
+    : {
+      sourceCount: 12, postSearchCount: 12, postFilterCount: 12, postLimitCount: 12, visibleCount: 0,
+      hasActiveSearch: false, hasActiveFilters: false, hasActiveLimit: false,
+    };
+  const reason = getEmptyStateReason(diagnostics);
+  const copy = EMPTY_STATE_COPY[reason];
+  return {
+    reason,
+    title: t(copy.title),
+    message: t(copy.body),
+    actions: reason === "source-missing"
+      ? [{ label: t("emptyState.chooseDatabase"), icon: "database", primary: true, onClick: () => undefined }]
+      : undefined,
+  };
+}
+
+// Collapsing `getEmptyStateReason`'s branch order (routing `sourceCount === 0` back to
+// "no-matching-data") is exactly what turns this red: the two scenarios that read this assertion
+// share one predicate, so a regression there fails whichever scenario's expectation the collapse
+// no longer matches.
+function emptyReasonAssertion(container: HTMLElement, expected: "source-missing" | "no-matching-data"): AssertionResult {
+  const el = container.querySelector<HTMLElement>("[data-empty-reason]");
+  const actual = el?.getAttribute("data-empty-reason") ?? null;
+  return {
+    name: `the empty table renders the "${expected}" reason, not a collapsed neighbour`,
+    pass: actual === expected,
+    detail: `data-empty-reason="${actual}" (want "${expected}")`,
+  };
 }
 
 // Both date-driven views draw a window rather than the whole row set, so "rows rendered" is the
@@ -3581,10 +3638,15 @@ export function runRenderAssertions(
     // at the capture row count the row the scenario exists to show falls below the fold, so the
     // footer variant takes the shorter set that fits both devices.
     const captureRowCount = scenario.tableFooter ? FOOTER_CAPTURE_ROWS : CAPTURE_ROWS;
-    const rows = catalogueData
-      ? catalogueData.rows
-      : makeTableRows(scenario.captureData ? captureRowCount : TABLE_ROWS, columns);
+    // The catalogue's own columns stand — mounting the state on the catalogue, not a fixture — but
+    // its rows are dropped, the real condition an empty table renders under.
+    const rows = scenario.emptyReason
+      ? []
+      : catalogueData
+        ? catalogueData.rows
+        : makeTableRows(scenario.captureData ? captureRowCount : TABLE_ROWS, columns);
     if (scenario.captureData && !catalogueData) applyCaptureOptions(columns, rows);
+    const emptyOptions = scenario.emptyReason ? buildEmptyReasonOptions(scenario.emptyReason) : undefined;
     const currencyCol = columnOfType(columns, "currency") ?? columnOfType(columns, "number");
     const dateCol = columnOfType(columns, "date");
     const selectCols = columns.filter((col) => col.type === "select" || col.type === "status");
@@ -3723,13 +3785,17 @@ export function runRenderAssertions(
 
       const stopCounting = countRowAppendsToConnectedNodes();
       const stopReads = countLayoutReadsSplit();
-      renderer.renderTable(container, config, rows);
+      renderer.renderTable(container, config, rows, emptyOptions);
       const reads = stopReads();
       const rowAppends = stopCounting();
 
       results.push(provenanceResult(container, "table-renderer"));
       if (results[0].pass) {
-        results.push(...tableAssertions(container, rows, columns));
+        if (scenario.emptyReason) {
+          results.push(emptyReasonAssertion(container, scenario.emptyReason));
+        } else {
+          results.push(...tableAssertions(container, rows, columns));
+        }
         if (scenario.tableFooter) {
           results.push(multiMarkerAssertion(container,
             ["tfoot.db-table-footer", ".db-table-footer-trigger.has-calculation", ".db-table-footer-kind"],

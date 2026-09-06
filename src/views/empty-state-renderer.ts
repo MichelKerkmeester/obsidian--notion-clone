@@ -35,7 +35,8 @@ export type EmptyStateReason =
   | "no-events-in-range"
   | "read-failed"
   | "empty-group"
-  | "group-relation-deleted";
+  | "group-relation-deleted"
+  | "source-missing";
 
 export interface EmptyStateAction {
   label: string;
@@ -207,6 +208,11 @@ export const EMPTY_STATE_COPY: Record<EmptyStateReason, { title: string; body: s
     body: "emptyState.groupRelationDeletedMessage",
     icon: "folder-x",
   },
+  "source-missing": {
+    title: "emptyState.sourceMissingTitle",
+    body: "emptyState.sourceMissingMessage",
+    icon: "database",
+  },
 };
 
 // ───────────────────────────────────────────────────────────────────
@@ -214,7 +220,11 @@ export const EMPTY_STATE_COPY: Record<EmptyStateReason, { title: string; body: s
 // ───────────────────────────────────────────────────────────────────
 
 export function getEmptyStateReason(diagnostics: RowPipelineDiagnostics): EmptyStateReason {
-  if (diagnostics.sourceCount === 0) return "no-matching-data";
+  // A source that resolves to zero files is a missing/deleted source, not a view whose search or
+  // filters matched nothing — that is `no-matching-data`, below, which needs a positive source
+  // count to mean anything. Checked first and unconditionally: an active search or filter over a
+  // vanished source still names the source, not the query, as what to fix.
+  if (diagnostics.sourceCount === 0) return "source-missing";
   if (diagnostics.hasActiveSearch && diagnostics.hasActiveFilters) return "filter-and-search-empty";
   if (diagnostics.hasActiveSearch) return "search-empty";
   if (diagnostics.hasActiveFilters) return "filter-empty";

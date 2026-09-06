@@ -3952,8 +3952,13 @@
         "screenshots/notion-clone/states/constructed-empty-state-desktop-dark.png",
         "screenshots/notion-clone/states/constructed-empty-state-desktop-light.png",
         "screenshots/notion-clone/states/constructed-empty-state-mobile-dark.png",
-        "screenshots/notion-clone/states/constructed-empty-state-mobile-light.png"
-      ]
+        "screenshots/notion-clone/states/constructed-empty-state-mobile-light.png",
+        "screenshots/notion-clone/states/empty-state-source-missing-desktop-dark.png",
+        "screenshots/notion-clone/states/empty-state-source-missing-desktop-light.png",
+        "screenshots/notion-clone/states/empty-state-source-missing-mobile-dark.png",
+        "screenshots/notion-clone/states/empty-state-source-missing-mobile-light.png"
+      ],
+      "addendum": "No stylesheet edit lands in this leg either -- the hash above is still the tree's current sha256(styles.css) sliced to twelve, confirmed unmoved. The fourteenth EmptyStateReason (\"source-missing\") is a new hand fixture over existing .db-empty/.db-empty-card/.db-empty-action classes, none of them changed; the four captures above are additions this release names rather than a moved capture this release owns."
     },
     {
       "event": "acquire",
