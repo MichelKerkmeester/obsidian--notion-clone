@@ -6767,7 +6767,7 @@ export class DatabaseView extends FileView {
   /** Show a floating context menu on column header right-click */
   private showContextMenu(event: MouseEvent, col: ColumnDef, anchorEl?: HTMLElement, options?: ColumnMenuOptions): void {
     const config = this.getConfig();
-    const merged: ColumnMenuOptions = { ...options, computedFields: config?.schema.computedFields };
+    const merged: ColumnMenuOptions = { ...options, computedFields: config?.schema.computedFields, viewWrapText: config?.wrapText };
     // 鼠标打开列菜单时若存在单元格选区，菜单关闭后恢复焦点（对齐键盘路径
     // openFocusedColumnMenu 的 onClose）。已有 onClose（键盘路径）不覆盖，避免双重恢复。
     // 排序/清除排序等改 sortRules 的菜单项触发 refresh() 重建 DOM，焦点恢复必须等

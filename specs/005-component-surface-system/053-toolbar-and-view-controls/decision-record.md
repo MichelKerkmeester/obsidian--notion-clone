@@ -15,9 +15,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/053-toolbar-and-view-controls"
-    last_updated_at: "2026-09-07T00:40:00Z"
-    last_updated_by: "fix-053-wrap-off-rows"
-    recent_action: "Amended ADR-004: the wrap switch gates the column mode, and it reaches the phone"
+    last_updated_at: "2026-09-07T01:10:00Z"
+    last_updated_by: "fix-052-wrap-hint-row"
+    recent_action: "Noted (052 T018): the Wrap submenu's Wrap row now hints when the view switch is off"
     next_safe_action: "Operator device pass on the wrap switch, the gear and the footer"
     blockers: []
     key_files:
@@ -448,6 +448,8 @@ A column mode is now a refinement of a wrapping table rather than an exemption f
 **The narrower producer, kept.** `RenderInlineMarkdownOptions` gained `collapseBreaks?: boolean`; its `"br"` case appends a collapsed space instead of a `<br>` when set, and the markdown branch of `renderCell` passes `collapseBreaks: !isWrapping`. Without it a clipped markdown cell still grows the row through an element whose whole job is to force a break, which nowrap and ellipsis cannot out-argue. Measured on the desktop profile with the switch off: a three-line bullet list 58px and a heading-plus-body 95px, both 35px once collapsed. The width measurer collapses breaks for the same reason — auto-fit only ever measures a clipped column, and measuring a `<br>`-split value returned the widest of its lines rather than the single line the cell paints.
 
 **Evidence.** `cell-renderer-wrap.test.ts` covers the full 3x2 matrix plus the absent-switch case an upgraded vault has, and four markdown line-break cases. `column-width.test.ts` pins auto-fit to the same resolver; reverting it to read the column mode alone turns three cases red. `render-assertions.mjs` gained a text-wrap assertion on the phone pass and a desktop-profile pass over the operator's own catalogue. Two negative controls observed: restoring the phone `nowrap` override leaves the rows growing at 133px while no text-only cell exceeds 16px against a 28px one-line ceiling, and restoring the column-wins precedence reproduces the report exactly at 36/130/300px. Two screenshot scenarios, `table-wrap-off` and `table-wrap-on`, photograph the switch both ways; the phone captures of the wrap-on pair are the two whose content moved.
+
+**Note, 2026-09-06 (`052` T018).** The column menu's Wrap submenu never said the precedence above applied to it, so a column set to Wrap with the view switch off clipped silently; the "Wrap" option now carries the same trailing muted-text grammar the parent row's current-value already uses, reading that the view switch is off, only while it is off, and stays selectable either way.
 
 <!-- /ANCHOR:adr-004 -->
 

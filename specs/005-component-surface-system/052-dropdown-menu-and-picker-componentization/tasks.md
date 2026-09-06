@@ -479,6 +479,22 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       edge against the trigger's, observed failing before the fix.
       **Done 2026-09-06** — `align: "left"` on the shared placement call; measured 290px against
       the pre-fix 200px, with the viewport clamp asserted alongside it
+- [x] T018 Wrap submenu's "Wrap" option names the view switch it depends on
+      (`column-menu.ts`, `embedded-database-renderer.ts`): a column set to Wrap with `053` ADR-004's
+      view switch off still clips, silently, because the switch gates the mode — the row said
+      nothing about it. The "Wrap" option now carries a trailing muted hint (`db-menu-item-current`,
+      the same class the parent row's own current-value text already uses) reading the view switch
+      is off, only while it is off; Clip and Follow view carry no hint at either switch state; the
+      option stays selectable and its choice persists regardless. **Proof**: red-first —
+      `column-menu-wrap-hint.test.ts` drives the real `ColumnMenu.show` against a mock DOM; with the
+      fix reverted the hint-presence assertion fails (`undefined` vs the hint string) while the
+      switch-on and Clip/Follow negative controls still pass; restored, 3/3 green.
+      `node tools/live/sheet-grammar.mjs` unaffected (0 FAIL); the desktop combobox and phone sheet
+      grammar this leg's own T009/T016 cover are untouched. No registered capture depends on the
+      Wrap submenu's open state, so none needed recapturing; a full `npm run screenshots` refreshed
+      24 unrelated entries' stale `sourceHashes` (this row's own two touched files being shared
+      "sources" for scenarios that never render the submenu), with the incidental encoder-noise
+      re-encodes it also produced restored to their committed bytes.
 <!-- /ANCHOR:phase-4 -->
 
 ---

@@ -68,6 +68,9 @@ export interface ColumnMenuOptions {
   includeWidthActions?: boolean;
   /** Needed to resolve computed→number columns for the number display-style selector. */
   computedFields?: ComputedFieldDef[];
+  /** The view's own Wrap switch (`ViewConfig.wrapText`) — off clips every column regardless of its
+   *  own mode, so the Wrap submenu's "Wrap" row can say so. */
+  viewWrapText?: boolean;
   onClose?: () => void;
 }
 
@@ -198,6 +201,7 @@ export class ColumnMenu {
         for (const mode of WRAP_MODES) {
           child.addRow({
             label: t(WRAP_MODE_LABEL_KEYS[mode]),
+            value: mode === "wrap" && !options.viewWrapText ? t("menu.columnWrapNeedsViewSwitch") : undefined,
             selected: mode === current,
             onClick: () => {
               this.actions.setColumnWrap(col, columnWrapModeValue(mode));

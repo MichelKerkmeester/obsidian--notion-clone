@@ -2599,6 +2599,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         for (const mode of WRAP_MODES) {
           child.addRow({
             label: t(WRAP_MODE_LABEL_KEYS[mode]),
+            value: mode === "wrap" && !config.wrapText ? t("menu.columnWrapNeedsViewSwitch") : undefined,
             selected: mode === current,
             onClick: () => {
               col.wrap = columnWrapModeValue(mode);
