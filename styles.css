@@ -18252,13 +18252,24 @@ body.is-mobile .note-database-container .db-calendar-month-time {
    already come from the shared dropdown-menu component unmodified; the
    divider and "+ Add Property" row it also carries have no counterpart to
    divide from here (frontmatter keys are not a property registry, declined
-   on product grounds) and are not added just to host an empty divider. */
+   on product grounds) and are not added just to host an empty divider.
+
+   `!important` on the width, and only on the width: the shared anchored
+   positioner writes a flat 280px preference as an INLINE style on every
+   dropdown it places, so a plain stylesheet width for one dropdown can never
+   win. Teaching that positioner a per-caller width would change a component
+   this surface does not own, so the narrower lever is taken here instead. The
+   positioner re-measures the panel's own rect afterwards, so it places the
+   224px box correctly rather than around the width it asked for. */
 .note-database-container .db-calendar-date-field-dropdown.db-dropdown-popover {
-  width: 224px;
+  width: 224px !important;
 }
 
+/* `min-height` alone left the row at its content height (29.4px measured), so
+   the 28px floor never bound; the block padding is tightened until it does. */
 .note-database-container .db-calendar-date-field-dropdown .db-dropdown-option {
   min-height: 28px;
+  padding-block: 4px;
 }
 
 /* Keep empty calendar cards compact without changing the shared empty-state component. The
