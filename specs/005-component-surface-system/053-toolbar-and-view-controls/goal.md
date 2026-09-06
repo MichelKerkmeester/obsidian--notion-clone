@@ -186,7 +186,7 @@ never resolve them silently.
       through `renderUtilitiesOverflowButton`'s (`toolbar-renderer.ts:420-426`) `···` menu, one
       level deep, in the `db-toolbar-utilities-cluster`.
 - [x] **The table footer hides at zero rows, and is 44px otherwise.** **Added 2026-09-06, from an
-      operator ruling on the phone empty-state read. Red measured first** — the footer rendered
+      operator ruling on the phone empty-state read. Observed red first** — the footer rendered
       unconditionally regardless of row count, drawing **173** `+ Calculate` triggers at **26px** on
       an empty phone table, under the 44px touch floor. **Green on main the same day**
       (`81f7637c`, `a45afe17`, `0814accd`, `2588095b`): the guard is `table-renderer.ts`'s own

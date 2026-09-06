@@ -103,11 +103,11 @@ formatting, multi-select, roving keyboard, edge auto-scroll, touch, cover-target
       cross-group, blank-space) run once, before the rewrite, as the baseline the post-rewrite run
       must match.
 - [x] The board/gallery layout-read negative control (`tools/live/renderer-coverage.json`, the
-      bound `026`/`c5566db` wired) stays armed and passing after the rewrite. **Met.** Observed
-      red 2026-09-03 with the control armed (`RENDER_READ_CONTROL=per-item node
-      tools/live/render-assertions.mjs`): `board/file-view` and `board/embed` both go red at 1601
-      layout reads against the bound of 8, confirming the control is armed and would catch a
-      regression; disarmed (default) both pass at their normal count, same armed/disarmed shape
+      bound `026`/`c5566db` wired) stays armed and passing after the rewrite. **Met.**
+      Observed red 2026-09-03 with the control armed (`RENDER_READ_CONTROL=per-item node
+      tools/live/render-assertions.mjs`): `board/file-view` and `board/embed` both went red at
+      1601 layout reads against the bound of 8, confirming the control is armed and would catch
+      a regression; disarmed (default) both pass at their normal count, same armed/disarmed shape
       as before the rewrite; `renderer-coverage.json` stamped fresh in the disarmed re-run
       (`evidence --check-all`: 16/16 fresh).
 - [ ] `npm run gate` exits 0, `$?` read directly. **Not started as a goal-level criterion** — no
