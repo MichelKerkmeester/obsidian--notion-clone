@@ -22516,20 +22516,22 @@ body.is-tablet .note-database-container .db-record-open-btn {
 }
 
 /* The rule above is the desktop centred dialog's own frame: a bordered, blurred, elevated card
-   floating over the app. Presented as a phone sheet, `modalEl` already carries that frame from
-   the shared sheet rule below — a second background, border and blur midway through the same
-   surface is a bordered card drawn inside the sheet rather than the sheet itself, and its own
-   `--db-surface-modal` tint reads lighter than whatever the header beside it sits on, which has
-   no background of its own. One token, on the sheet root, for both. */
+   floating over the app. Presented as a phone sheet, `modalEl` is the sheet root, and the root
+   already paints one shared fill from `.db-mobile-bottom-sheet.db-mobile-bottom-sheet` — the
+   "one fill for every sheet" rule further down this file. So this frame is a second background,
+   border and blur drawn midway through the same surface: a bordered card inside the sheet rather
+   than the sheet itself, whose `--db-surface-modal` tint sits lighter than the root's own
+   `--db-surface-overlay`. That lighter tint is the body-lighter-than-its-header the operator
+   photographed; the header declares no background at all and so reads as the root's fill.
+   Measured on both engines against the host-modal stand-in: the body painted rgb(57, 57, 57)
+   over a root of rgb(46, 46, 46) before this rule, and is transparent after it. Nothing is
+   re-declared on the root here — the shared sheet fill already covers it, and a second
+   declaration would only be a different token to keep in step. */
 .db-mobile-bottom-sheet > .note-database-modal {
   background: none;
   border: 0;
   box-shadow: none;
   backdrop-filter: none;
-}
-
-.db-mobile-bottom-sheet:has(> .note-database-modal) {
-  background: var(--background-primary);
 }
 
 .db-color-picker-popup {
