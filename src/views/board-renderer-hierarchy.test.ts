@@ -963,12 +963,12 @@ describe("default board card properties", () => {
   }
 
   function todoCard(container: MockElement): MockElement {
-    return container.querySelectorAll<MockElement>(".pm-kanban-card")
+    return container.querySelectorAll<MockElement>(".db-kanban-card")
       .find((card) => card.getAttribute("data-note-database-row-path") === TODO_PATH)!;
   }
 
   function fieldKeys(card: MockElement): Array<string | null> {
-    return card.querySelectorAll<MockElement>(".db-board-card-meta .db-board-card-field")
+    return card.querySelectorAll<MockElement>(".db-kanban-card-meta .db-board-card-field")
       .map((field) => field.getAttribute("data-note-database-column-key"));
   }
 
@@ -988,14 +988,11 @@ describe("default board card properties", () => {
     expect(fieldKeys(card)).toEqual(["notes", "priority"]);
   });
 
-  function timeChipLabel(card: MockElement): string | undefined {
-    const body = card.querySelector<MockElement>(".pm-kanban-card-body")!;
-    return body.querySelector<MockElement>(":scope > .pm-chip")
-      ?.querySelector<MockElement>(".pm-chip-label")?.textContent;
-  }
-
-  it("drops the reference time chip when the stored list hides its column", () => {
-    expect(timeChipLabel(todoCard(renderReference()))).toBe("2h");
+  // No dedicated slots survive the Anytype retarget: every configured property, "hours"
+  // included, is an ordinary row in `db-kanban-card-meta` now, so hiding one is the same
+  // stored-list mechanism every other property already goes through.
+  it("drops a configured property from the row list when the stored list hides its column", () => {
+    expect(fieldKeys(todoCard(renderReference()))).toContain("hours");
 
     const withoutHours = todoCard(renderReference({
       ...REFERENCE_CONFIG,
@@ -1006,8 +1003,8 @@ describe("default board card properties", () => {
         { key: "due", visible: true },
       ],
     } as ViewConfig));
-    expect(timeChipLabel(withoutHours)).toBeUndefined();
-    expect(withoutHours.querySelector(".pm-kanban-card-tags")).not.toBeNull();
+    expect(fieldKeys(withoutHours)).not.toContain("hours");
+    expect(fieldKeys(withoutHours)).toContain("tags");
   });
 
   it("still renders the card title with every configured property hidden", () => {
@@ -1015,7 +1012,7 @@ describe("default board card properties", () => {
       ...REFERENCE_CONFIG,
       boardCardFields: COLUMNS.map((column) => ({ key: column.key, visible: false })),
     } as ViewConfig));
-    expect(card.querySelector<MockElement>(".pm-kanban-card-title")?.textContent).toBe("To Do Note");
-    expect(card.querySelectorAll(".db-board-card-meta .db-board-card-field")).toHaveLength(0);
+    expect(card.querySelector<MockElement>(".db-kanban-card-title")?.textContent).toBe("To Do Note");
+    expect(card.querySelectorAll(".db-kanban-card-meta .db-board-card-field")).toHaveLength(0);
   });
 });

@@ -858,8 +858,8 @@ export const CHROME_SCENARIOS = [
     sources: ["src/views/board-renderer.ts"],
     // The board's own card and column-header checkboxes only render when boardExtensionsEnabled
     // is on; the default board reproduces the reference kanban card, which has none. Reachable
-    // only through this extensions-mode surface, so it needs its own fixture the way the reference
-    // board's card and column families get theirs from the pm-kanban-* fixtures.
+    // only through this extensions-mode surface, so it needs its own fixture the way the default
+    // board's card and column families get theirs from the db-kanban-* fixtures.
     note: "The row-role select box the extensions board draws on a column header (select-all) and on a card, stacked.",
     // db-board-column-header is position:sticky with a negative margin that cancels its column
     // parent's own padding, and db-board-card-controls sits inside the card's padded flow — both

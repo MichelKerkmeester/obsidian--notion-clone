@@ -59,29 +59,10 @@ export const CORE_SCENARIOS = [
     sources: ["src/views/board-renderer.ts", "src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts"],
     fixtureOf: "constructed-board",
     html: () => `
-      <div class="note-database-container pm-kanban-view">
-        <div class="pm-kanban-board">
+      <div class="note-database-container db-kanban-view">
+        <div class="db-kanban-board">
           ${[...new Set(ROWS.map((r) => r.category))]
-            .map((cat) => boardColumn(cat, ROWS.filter((r) => r.category === cat), OPTION_TONES[cat], {
-              // Figma demonstrates a priority-bearing card, forced rather than derived from
-              // mapped data so the capture stays reproducible; no other card here carries a
-              // priority, since this schema maps no priority column. The kanban call site never
-              // reaches the reference's due-chip near tier (KanbanView.ts:126), so no card here
-              // demonstrates it either. Adobe/Sketch/Framer similarly force the milestone chip,
-              // the recurrence chip, and a mapped people column (with a fourth name to also show
-              // the avatar stack's overflow slot) — none of this fixture's rows carry those
-              // fields on their own, and without one forced here no board capture ever painted
-              // them.
-              cardRenderer: cat === "Design"
-                ? (row) => {
-                    if (row.name === "Figma") return boardCard(row, "", { priorityColor: "red" });
-                    if (row.name === "Adobe Creative Cloud") return boardCard({ ...row, milestone: true });
-                    if (row.name === "Sketch") return boardCard({ ...row, recurring: true });
-                    if (row.name === "Framer") return boardCard({ ...row, people: ["Alice Kim", "Bob Diaz", "Cy Chen", "Dana Lee"] });
-                    return boardCard(row);
-                  }
-                : undefined,
-            }))
+            .map((cat) => boardColumn(cat, ROWS.filter((r) => r.category === cat), OPTION_TONES[cat]))
             .join("")}
         </div>
       </div>`,
@@ -95,10 +76,10 @@ export const CORE_SCENARIOS = [
     fixtureOf: "constructed-board-subtask",
     note: "A parent and two child cards beside an ordinary lane, using the same card, title, chip, progress, and footer tree as the rendered board.",
     html: () => `
-      <div class="note-database-container pm-kanban-view">
-        <div class="pm-kanban-board">
+      <div class="note-database-container db-kanban-view">
+        <div class="db-kanban-board">
           ${subtaskBoardColumn("Projects", [
-            subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { depth: 0, children: true, done: 1, total: 2, explicit: 62, value: 62 }),
+            subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { depth: 0 }),
             subtaskBoardCard(SUBTASK_FIXTURE_ROWS.copy, { depth: 1, parent: SUBTASK_FIXTURE_ROWS.parent.name }),
             subtaskBoardCard(SUBTASK_FIXTURE_ROWS.launch, { depth: 1, parent: SUBTASK_FIXTURE_ROWS.parent.name }),
           ], "purple")}
@@ -113,10 +94,10 @@ export const CORE_SCENARIOS = [
     width: 660,
     fixtureOf: "constructed-board-empty-column",
     sources: ["src/views/board-renderer.ts"],
-    note: "A populated lane beside an empty lane, preserving the rendered column header, zero count, and empty cards container.",
+    note: "A populated lane beside an empty lane, preserving the rendered column header and empty cards container.",
     html: () => `
-      <div class="note-database-container pm-kanban-view">
-        <div class="pm-kanban-board">
+      <div class="note-database-container db-kanban-view">
+        <div class="db-kanban-board">
           ${boardColumn("Design", ROWS.filter((r) => r.category === "Design").slice(0, 2))}
           ${boardColumn("Personal", [])}
         </div>
@@ -128,14 +109,14 @@ export const CORE_SCENARIOS = [
     group: "components",
     width: 620,
     sources: ["src/views/board-renderer.ts"],
-    note: "A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (pm-kanban-drop-target), and the dragged card keeps the dragstart lift (pm-kanban-card--dragging) — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.",
+    note: "A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (db-kanban-drop-target), and the dragged card keeps the dragstart lift (db-kanban-card--dragging) — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.",
     html: () => {
       const rows = ROWS.filter((r) => r.category === "Business").slice(0, 3);
       const tone = OPTION_TONES.Business;
       const cardRenderer = (row, index) => (index === 1 ? boardCard(row, "", { dragState: "dragging" }) : boardCard(row));
       return `
-      <div class="note-database-container pm-kanban-view">
-        <div class="pm-kanban-board">
+      <div class="note-database-container db-kanban-view">
+        <div class="db-kanban-board">
           ${boardColumn("Business", rows, tone, { columnClass: "is-drop-target", cardRenderer })}
         </div>
       </div>`;
@@ -357,8 +338,8 @@ export const CORE_SCENARIOS = [
     fixtureOf: "constructed-board",
     note: "The reference board inside the default-width container: its fixed-width columns page horizontally on a phone while the card tree remains unchanged.",
     html: () => `
-      <div class="note-database-container pm-kanban-view db-width-default">
-        <div class="pm-kanban-board">
+      <div class="note-database-container db-kanban-view db-width-default">
+        <div class="db-kanban-board">
           ${[...new Set(ROWS.map((r) => r.category))]
             .map((cat) => boardColumn(cat, ROWS.filter((r) => r.category === cat)))
             .join("")}

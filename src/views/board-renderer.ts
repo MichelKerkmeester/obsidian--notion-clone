@@ -18,7 +18,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { App, Notice, setIcon, setTooltip } from "obsidian";
-import { isObsidianTagsKey, resolveOptionDisplay, toBooleanValue, toMultiSelectValuesForKey } from "../data/column-types";
+import { isObsidianTagsKey, resolveOptionDisplay, toMultiSelectValuesForKey } from "../data/column-types";
 import { STATUS_COLORS } from "../data/status-colors";
 import { OPTION_REGISTRATION_COLORS } from "../data/option-registration";
 import { getColumnsInOrder } from "../data/column-config";
@@ -43,7 +43,6 @@ import { isSameBoardGroup, resolveBoardCardDropIntent, resolveBoardColumnByPoint
 import { resolveBoardCardFields } from "./board-card-fields";
 import { resolveTitleFieldDisplay } from "../data/title-field-display";
 import { isImeComposing } from "../data/keyboard-utils";
-import { renderNow } from "../data/calendar-date-time";
 import { openOptionColorPicker } from "./option-color-picker";
 import { EmptyStateOptions, EmptyStateRenderer } from "./empty-state-renderer";
 import { renderCardField, renderCardFieldValue } from "./card-field-renderer";
@@ -303,14 +302,16 @@ export class BoardRenderer {
   }
 
   // ───────────────────────────────────────────────────────────────────
-  // 4b. REFERENCE KANBAN LAYOUT (default)
+  // 4b. ANYTYPE KANBAN LAYOUT (default)
   // ───────────────────────────────────────────────────────────────────
   //
-  // The default board reproduces obsidian-pm's kanban one-to-one: the same
-  // element tree and class vocabulary as its KanbanView / KanbanColumn /
-  // KanbanCard output, mapped to RowData. The local extensions above render
-  // only when the view opts in (boardExtensionsEnabled), so the default view
-  // is indistinguishable from the reference apart from data.
+  // The default board matches Anytype's kanban element by element rather than
+  // Project Manager's: a column strip with no background panel, a bordered
+  // option chip for a header whose "..." and "+" controls reveal on hover
+  // and stay permanent on touch, a card with property rows on one fixed
+  // rhythm (no per-type dedicated slots), and a bordered "+" control below
+  // the last card. The view's own configured card-field list still decides which properties
+  // appear and in what order; this layout only decides how a row reads.
 
   private renderReferenceBoard(
     container: HTMLElement,
@@ -327,8 +328,11 @@ export class BoardRenderer {
         : undefined,
       visibleKeys: this.legacyVisibleColumnKeys,
     });
-    container.addClass("pm-kanban-view");
-    const board = container.createDiv({ cls: "pm-kanban-board" });
+    container.addClass("db-kanban-view");
+    const board = container.createDiv({ cls: "db-kanban-board" });
+    // The column header shows its "..." and "+" only on hover on desktop and permanently on
+    // touch, where there is no hover to reveal them from.
+    board.toggleClass("is-touch", this.touchMode);
     const rows: RowData[] = [];
     for (const group of groups) {
       this.renderReferenceColumn(board, config, group, groupField, rows);
@@ -347,26 +351,74 @@ export class BoardRenderer {
     const visibleRows = this.getVisibleSubtaskRows(group.rows);
     allRows.push(...visibleRows);
 
-    const col = board.createDiv({ cls: "pm-kanban-col", attr: { "data-status": group.key } });
-    const header = col.createDiv({ cls: "pm-kanban-col-header" });
-    const resolvedColor = this.resolveReferenceColor(color);
-    if (resolvedColor) header.style.setProperty("--col-color", resolvedColor);
-    const topBar = header.createDiv({ cls: "pm-kanban-col-topbar" });
-    if (resolvedColor) topBar.setCssStyles({ background: resolvedColor });
-    const titleRow = header.createDiv({ cls: "pm-kanban-col-title-row" });
-    const badge = titleRow.createSpan({ cls: "pm-kanban-col-badge" });
-    // The reference only renders the badge-icon span when the status carries an icon
-    // (KanbanColumn.ts:52-57); the option model here has no per-option icon field, so the
-    // faithful else-branch is text-only, with no icon span standing in for one.
-    badge.appendText(formatGroupKeyDisplay(config, groupField, group.key));
-    if (resolvedColor) badge.style.color = resolvedColor;
-    const headerRight = titleRow.createDiv({ cls: "pm-kanban-col-header-right" });
-    headerRight.createSpan({ cls: "pm-kanban-col-count", text: String(visibleRows.length) });
+    const col = board.createDiv({ cls: "db-kanban-col", attr: { "data-status": group.key } });
+    const header = col.createDiv({ cls: "db-kanban-col-header" });
+    // At rest the header carries the option chip alone — no fill, a 1px border, the option
+    // colour on its text. The chip reuses the same status-color vocabulary every option value
+    // renders with elsewhere; only its hex pair is retinted, scoped to this view, because the
+    // raw hue fails WCAG 1.4.3 as bare text in light theme.
+    const chip = header.createSpan({ cls: "db-kanban-col-chip" });
+    // A palette name paints through the retinted status-color class below; any other authored
+    // color string (a custom hex/rgb value) has no bucket to retint, so it paints as an inline
+    // style instead of a malformed class name.
+    if (color) {
+      if (STATUS_COLORS.includes(color as StatusColor)) chip.addClass(`status-color-${color}`);
+      else chip.style.color = color;
+    }
+    chip.appendText(formatGroupKeyDisplay(config, groupField, group.key, { uncategorizedLabel: t("board.noValue") }));
 
-    const cardsEl = col.createDiv({ cls: "pm-kanban-cards", attr: { "data-status": group.key } });
+    const controls = header.createDiv({ cls: "db-kanban-col-controls" });
+    // Folds the "WIP counts" extension: the desktop header carries no record count, but the
+    // phone board always shows one as plain text beside the label.
+    if (this.touchMode) {
+      controls.createSpan({ cls: "db-kanban-col-count", text: String(visibleRows.length) });
+    }
+    // Folds "group controls" and "touch menus": the same sort/hide/delete menu the extensions
+    // layout already ships opens from this affordance, hover-revealed on desktop and permanent
+    // on touch, matching the capture's own visibility split rather than a separate component.
+    if (!this.actions.isReadOnly) {
+      this.renderBoardGroupOptions(controls, config, groupField, group, "more-horizontal");
+    }
+    if (!this.actions.isReadOnly && !this.actions.hideCreateEntry && !isComputedGroupField(config, groupField)) {
+      const addCard = controls.createEl("button", {
+        cls: "db-kanban-col-add",
+        attr: { type: "button", "aria-label": t("board.addCard"), title: t("board.addCard") },
+      });
+      setIcon(addCard, "plus");
+      addCard.onclick = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        this.createEntryNearEnd({ [groupField]: group.key || "" }, visibleRows);
+      };
+    }
+
+    const cardsEl = col.createDiv({ cls: "db-kanban-cards", attr: { "data-status": group.key } });
     this.attachReferenceDropHandlers(cardsEl, group, groupField);
-    for (const row of visibleRows) {
+    // The kanban page limit is 10, distinct from every other layout's own default; applied
+    // locally rather than through the shared unlimited-by-default config field so no other
+    // view's row limit moves.
+    const boardConfig = config.groupRowLimit && config.groupRowLimit > 0 ? config : { ...config, groupRowLimit: 10 };
+    const visibleCount = getGroupVisibleCount(boardConfig, groupField, group.key, visibleRows.length);
+    if (visibleCount === 0) {
+      // No reference capture holds an empty column. Design inferred: the shared empty-group
+      // card the rest of the app already uses.
+      const empty = this.emptyStateRenderer.renderCard(cardsEl, { reason: "empty-group" });
+      empty.addClass("db-kanban-empty-slot");
+    }
+    for (const row of visibleRows.slice(0, visibleCount)) {
       this.renderReferenceCard(cardsEl, config, group, row, groupField);
+    }
+    renderGroupExpandControls(cardsEl, boardConfig, groupField, group.key, visibleRows.length, this.actions);
+    if (!this.actions.isReadOnly && !this.actions.hideCreateEntry && !isComputedGroupField(config, groupField)) {
+      // The "+ New" control sits 8px below the last card, in the same flex rhythm as the
+      // inter-card gap — a bare "+" on desktop, a labelled row on touch.
+      const newRecord = cardsEl.createEl("button", {
+        cls: "db-kanban-new",
+        attr: { type: "button", "aria-label": t("toolbar.new") },
+      });
+      setIcon(newRecord.createSpan({ cls: "db-kanban-new-icon" }), "plus");
+      newRecord.createSpan({ cls: "db-kanban-new-label", text: t("toolbar.new") });
+      newRecord.onclick = () => this.createEntryNearEnd({ [groupField]: group.key || "" }, visibleRows);
     }
   }
 
@@ -379,21 +431,21 @@ export class BoardRenderer {
       if (this.actions.isReadOnly) return;
       if (!this.isCardDrag(event)) return;
       event.preventDefault();
-      cardsEl.addClass("pm-kanban-drop-target");
+      cardsEl.addClass("db-kanban-drop-target");
       const afterEl = getReferenceDragAfterElement(cardsEl, event.clientY);
-      const dragging = cardsEl.querySelector(".pm-kanban-card--dragging");
+      const dragging = cardsEl.querySelector(".db-kanban-card--dragging");
       if (dragging) {
         if (afterEl) cardsEl.insertBefore(dragging, afterEl);
         else cardsEl.appendChild(dragging);
       }
     });
     cardsEl.addEventListener("dragleave", () => {
-      cardsEl.removeClass("pm-kanban-drop-target");
+      cardsEl.removeClass("db-kanban-drop-target");
     });
     cardsEl.addEventListener("drop", (event) => {
       if (this.actions.isReadOnly) return;
       event.preventDefault();
-      cardsEl.removeClass("pm-kanban-drop-target");
+      cardsEl.removeClass("db-kanban-drop-target");
       const path = event.dataTransfer?.getData(CARD_MIME) || event.dataTransfer?.getData("text/plain") || "";
       if (!path) return;
       const row = this.rowByPath.get(path);
@@ -419,14 +471,11 @@ export class BoardRenderer {
     row: RowData,
     groupField: string,
   ): void {
-    const fields = this.getReferenceCardFields();
     const subtaskNode = this.subtaskRelation?.nodes.get(row.file.path);
 
     const card = cards.createDiv({
-      cls: "pm-kanban-card",
+      cls: "db-kanban-card",
       attr: {
-        // The reference's task-id slot carries our path identity so every
-        // drag payload and selection contract stays path-keyed.
         "data-task-id": row.file.path,
         "data-note-database-row-path": row.file.path,
       },
@@ -452,140 +501,49 @@ export class BoardRenderer {
         event.dataTransfer?.setData(CARD_MIME, row.file.path);
         event.dataTransfer?.setData(CARD_FROM_GROUP_MIME, group.key);
         event.dataTransfer?.setData("text/plain", row.file.path);
-        card.addClass("pm-kanban-card--dragging");
-        window.setTimeout(() => card.addClass("pm-dragging"), 0);
+        card.addClass("db-kanban-card--dragging");
+        // Not seen in any capture — no card mid-drag exists in the sweep. Design inferred: the
+        // raised state paints first, then the card itself fades a tick later.
+        window.setTimeout(() => card.addClass("db-kanban-card--drag-fade"), 0);
       });
       card.addEventListener("dragend", () => {
-        card.removeClass("pm-kanban-card--dragging");
-        card.removeClass("pm-dragging");
+        card.removeClass("db-kanban-card--dragging");
+        card.removeClass("db-kanban-card--drag-fade");
       });
     }
 
-    // The reference paints the strip from the card's own priority and omits
-    // it for tasks without one; the mapped priority column supplies the
-    // per-card option color, and with no such column there is no strip.
-    const priorityColor = this.getReferencePriorityColor(config, row);
-    if (priorityColor) {
-      const priorityBar = card.createDiv({ cls: "pm-kanban-card-priority-bar" });
-      priorityBar.setCssStyles({ background: this.resolveReferenceColor(priorityColor) });
-    }
+    // Folds the "covers" extension: the control (Cover: Select) is Anytype's, and it is off by
+    // default, same as this — a mapped image field is the only way a cover renders.
+    if (config.boardImageField) this.renderCover(card, config, row);
 
-    const body = card.createDiv({ cls: "pm-kanban-card-body" });
+    const body = card.createDiv({ cls: "db-kanban-card-body" });
 
+    // No Objects/Types data model exists here, so there is no literal "type name" to show in the
+    // slot Anytype uses for one. The nearest thing this schema already tracks in that position —
+    // a subtask's parent title — keeps its content and moves to the ordinary secondary rhythm
+    // rather than a smaller breadcrumb.
     const parentTitle = subtaskNode && subtaskNode.parentId
       ? this.getReferenceRowTitle(config, this.rowByPath.get(subtaskNode.parentId))
       : undefined;
-    if (parentTitle) body.createSpan({ cls: "pm-kanban-card-parent", text: parentTitle });
 
-    const titleRow = body.createDiv({ cls: "pm-kanban-card-title-row" });
-    titleRow.createSpan({ cls: "pm-kanban-card-title", text: this.getReferenceRowTitle(config, row) });
-    // The reference's type chips render in a fixed order: milestone,
-    // subtask, recurrence. Milestone reads the same frontmatter fields the
-    // timeline model uses; recurrence is any non-empty recurrence/repeat
-    // column value. Only a row with an actual parent is a subtask — the
-    // relation builds a node for every row.
-    if (this.isReferenceMilestoneRow(row)) {
-      this.renderReferenceChip(titleRow, {
-        label: "M",
-        variant: "solid",
-        size: "sm",
-        color: "var(--color-purple)",
-        tooltip: t("board.milestone"),
-      });
-    }
-    if (subtaskNode?.parentId) {
-      this.renderReferenceChip(titleRow, {
-        label: "Sub",
-        variant: "solid",
-        size: "sm",
-        color: "var(--color-green)",
-        tooltip: t("board.subtask"),
-      });
-    }
-    if (this.isReferenceRecurring(config, row)) {
-      this.renderReferenceChip(titleRow, {
-        label: "R",
-        variant: "solid",
-        size: "sm",
-        color: "var(--color-blue)",
-        tooltip: t("board.recurrence"),
-      });
-    }
+    const titleRow = body.createDiv({ cls: "db-kanban-card-title-row" });
+    this.actions.renderRecordIcon?.(titleRow, row, config, true);
+    titleRow.createSpan({ cls: "db-kanban-card-title", text: this.getReferenceRowTitle(config, row) });
 
+    if (parentTitle) body.createDiv({ cls: "db-kanban-card-type", text: parentTitle });
+
+    // Folded into the property rhythm rather than a dedicated clamped block: one line among the
+    // rest, same pitch, same secondary grey, truncated to one line by CSS.
     const description = this.hydratedDescriptions.get(row.file.path);
-    if (description) body.createDiv({ cls: "pm-kanban-card-description", text: description });
+    if (description) body.createDiv({ cls: "db-kanban-card-description", text: description });
 
-    // The reference's estimate field has no RowData equivalent; the time chip
-    // shows the mapped hours column alone.
-    if (fields.time) {
-      const logged = Number(this.getCellValue(row, fields.time));
-      if (logged > 0) this.renderReferenceChip(body, { label: `${logged}h`, size: "sm" });
-    }
-
-    if (fields.tags) {
-      const tags = toMultiSelectValuesForKey(fields.tags.key, row.frontmatter[fields.tags.key]);
-      if (tags.length > 0) {
-        const tagsEl = body.createDiv({ cls: "pm-kanban-card-tags" });
-        // Freeform Obsidian tags carry no palette; an option column's values
-        // are colored, standing in for the reference's tag-color setting.
-        const colored = !isObsidianTagsKey(fields.tags.key);
-        for (const tag of tags.slice(0, 3)) {
-          this.renderReferenceChip(tagsEl, {
-            label: tag,
-            variant: "outline",
-            tag: true,
-            dot: colored,
-            color: colored ? referenceStringToColor(tag) : undefined,
-          });
-        }
-      }
-    }
-
-    const progress = this.getReferenceProgress(config, row, fields, subtaskNode);
-    if (progress != null && progress > 0) {
-      const progressEl = body.createDiv({ cls: "pm-progress pm-progress--sm" });
-      const track = progressEl.createDiv({ cls: "pm-progress-track" });
-      track.createDiv({ cls: "pm-progress-fill" }).style.width = `${Math.max(0, Math.min(100, progress))}%`;
-    }
-
-    this.renderReferenceCardMeta(body, config, row, fields.rest);
-
-    const footer = body.createDiv({ cls: "pm-kanban-card-footer" });
-
-    // The reference always constructs the avatar stack; an unmapped people
-    // column just leaves it empty, which is what keeps the due chip pushed
-    // to the footer's right edge.
-    const stack = footer.createDiv({ cls: "pm-avatar-stack" });
-    if (fields.people) {
-      const people = toMultiSelectValuesForKey(fields.people.key, row.frontmatter[fields.people.key]);
-      for (const name of people.slice(0, 3)) {
-        const display = referenceDisplayName(name);
-        const avatar = stack.createSpan({ cls: "pm-avatar pm-avatar--sm", text: referenceInitialsFor(display) });
-        avatar.style.background = referenceStringToColor(display);
-        setTooltip(avatar, display);
-      }
-      const overflow = people.length - 3;
-      if (overflow > 0) {
-        stack.createSpan({ cls: "pm-avatar pm-avatar--more pm-avatar--sm", text: `+${overflow}` });
-      }
-    }
-
-    if (fields.due) {
-      const due = this.getCellValue(row, fields.due);
-      if (typeof due === "string" && due) {
-        const urgency = this.getReferenceDueUrgency(due, row, config);
-        this.renderReferenceChip(footer, {
-          label: referenceFormatDateShort(due),
-          size: "sm",
-          ...(urgency === "overdue" ? { variant: "solid" as const, color: "var(--color-red)", strong: true } : {}),
-        });
-      }
-    }
+    this.renderReferenceCardMeta(body, config, row, this.referenceCardFields);
   }
 
-  /** The configured properties the reference card's own five slots did not take, rendered in
-   *  the order the properties panel lists them. Nothing is emitted when there are none, so a
-   *  view whose fields all land in a reference slot keeps the reference card tree exactly. */
+  /** The view's configured card fields, rendered values-only on one fixed rhythm — no per-type
+   *  dedicated slots (time chip, avatar stack, progress bar, due chip) the way the Project
+   *  Manager card carried them; every property is an ordinary row in the same order the
+   *  properties panel lists them. */
   private renderReferenceCardMeta(body: HTMLElement, config: ViewConfig, row: RowData, columns: ColumnDef[]): void {
     if (columns.length === 0) return;
     const entries: HTMLElement[] = [];
@@ -600,57 +558,8 @@ export class BoardRenderer {
       entries.push(this.renderCardFieldContent(row, col, config, displayValue, displayType, empty, true));
     }
     if (entries.length === 0) return;
-    const meta = body.createDiv({ cls: "db-board-card-meta" });
+    const meta = body.createDiv({ cls: "db-kanban-card-meta" });
     for (const entry of entries) meta.appendChild(entry);
-  }
-
-  /** The reference card's five semantic slots, mapped to RowData columns by type and key
-   *  convention. First match per slot wins, in the order the properties panel lists them.
-   *
-   *  The slots are filled from the view's visible fields rather than from every column, so
-   *  hiding a property in the panel empties its slot. Whatever fills no slot is returned in
-   *  `rest` and renders beside them in panel order — the card shows the properties the view
-   *  is configured for, while the five the reference authored keep their reference positions. */
-  private getReferenceCardFields(): {
-    time?: ColumnDef;
-    progress?: ColumnDef;
-    due?: ColumnDef;
-    tags?: ColumnDef;
-    people?: ColumnDef;
-    rest: ColumnDef[];
-  } {
-    const fields: {
-      time?: ColumnDef;
-      progress?: ColumnDef;
-      due?: ColumnDef;
-      tags?: ColumnDef;
-      people?: ColumnDef;
-      rest: ColumnDef[];
-    } = { rest: [] };
-    for (const col of this.referenceCardFields) {
-      if (col.type === "number" && /progress/i.test(col.key) && !fields.progress) fields.progress = col;
-      else if (col.type === "number" && !fields.time) fields.time = col;
-      else if (col.type === "date" && !fields.due) fields.due = col;
-      else if (col.type === "multi-select" && /people|person|assignee|owner/i.test(col.key) && !fields.people) fields.people = col;
-      else if (col.type === "multi-select" && (isObsidianTagsKey(col.key) || /tag/i.test(col.key)) && !fields.tags) fields.tags = col;
-      else fields.rest.push(col);
-    }
-    return fields;
-  }
-
-  /** Progress maps from a progress-typed number column, then from the subtask
-   *  relation's derived completion — the two progress concepts RowData has. */
-  private getReferenceProgress(
-    config: ViewConfig,
-    row: RowData,
-    fields: { progress?: ColumnDef },
-    subtaskNode: SubtaskNode | undefined,
-  ): number | null {
-    if (fields.progress) {
-      const value = Number(this.getCellValue(row, fields.progress));
-      if (Number.isFinite(value)) return value;
-    }
-    return subtaskNode?.progress.value ?? null;
   }
 
   private getReferenceRowTitle(config: ViewConfig, row: RowData | undefined): string {
@@ -671,121 +580,6 @@ export class BoardRenderer {
     if (displayType !== "status" && displayType !== "select" && displayType !== "multi-select") return undefined;
     if (isUncategorizedGroupKey(key)) return undefined;
     return column ? resolveOptionDisplay(column, key).option?.color : undefined;
-  }
-
-  /** A palette name paints through the theme-aware foreground token so both
-   *  themes resolve the same option color; any other authored color string
-   *  (hex/rgb custom values) passes through unchanged. */
-  private resolveReferenceColor(color: string | undefined): string | undefined {
-    if (!color) return undefined;
-    return STATUS_COLORS.includes(color as StatusColor) ? `var(--status-color-fg-${color})` : color;
-  }
-
-  /** The reference's milestone flag, read from the same frontmatter fields
-   *  the timeline model uses: `milestone` or `type`, accepting the boolean
-   *  and the accepted true-ish spellings. */
-  private isReferenceMilestoneRow(row: RowData): boolean {
-    const value = row.frontmatter.milestone ?? row.frontmatter.type;
-    const text = typeof value === "string" ? value.trim().toLowerCase() : "";
-    return value === true || text === "milestone" || text === "true" || text === "yes";
-  }
-
-  /** A non-empty recurrence/repeat column value marks the card recurring. */
-  private isReferenceRecurring(config: ViewConfig, row: RowData): boolean {
-    const column = this.actions.getColumns(config).find((candidate) => /^(recurrence|repeat)$/i.test(candidate.key));
-    if (!column) return false;
-    const value = this.getCellValue(row, column);
-    const trimmed = typeof value === "string" ? value.trim() : value;
-    return Boolean(trimmed);
-  }
-
-  /** The select column named "priority" (case-insensitive), if any — the
-   *  per-card priority source the reference's strip is painted from. */
-  private getReferencePriorityColumn(config: ViewConfig): ColumnDef | undefined {
-    return this.actions.getColumns(config).find(
-      (candidate) => candidate.type === "select" && /^priority$/i.test(candidate.key),
-    );
-  }
-
-  /** The reference paints the strip for every priority except its two
-   *  lowest named tiers (KanbanView.ts:86-88: `!== 'medium' && !== 'low'`);
-   *  this port matches by option name case-insensitively and also omits
-   *  "none", the third non-urgent name a priority select commonly carries. */
-  private isReferenceLowPriorityTier(value: string): boolean {
-    return /^(medium|low|none)$/i.test(value.trim());
-  }
-
-  /** The priority option's color for a row, resolved like the group colors;
-   *  undefined when no priority column is mapped, the row has no value, or
-   *  the value names one of the reference's omitted low tiers. */
-  private getReferencePriorityColor(config: ViewConfig, row: RowData): string | undefined {
-    const column = this.getReferencePriorityColumn(config);
-    if (!column) return undefined;
-    const value = this.getCellValue(row, column);
-    if (value == null || value === "") return undefined;
-    const resolved = resolveOptionDisplay(column, value);
-    if (this.isReferenceLowPriorityTier(resolved.value)) return undefined;
-    return resolved.option?.color;
-  }
-
-  /** A checkbox column is the board's only native completion signal, the
-   *  same pattern the calendar renderer's isRowCompleted resolves from —
-   *  status columns carry display colors, not a terminal flag. */
-  private isReferenceRowCompleted(row: RowData, config: ViewConfig): boolean {
-    const checkboxColumn = config.schema.columns.find((column) => column.type === "checkbox");
-    if (!checkboxColumn) return false;
-    return toBooleanValue(row.frontmatter[checkboxColumn.key]);
-  }
-
-  /** Due urgency copied from the reference's kanban call site, not its dueChip.ts primitive:
-   *  the primitive supports a near tier (used by the table/list views), but KanbanView.ts
-   *  collapses urgency to a plain boolean before it ever reaches the card
-   *  (KanbanView.ts:126 `overdue: dueUrgency(...) === 'overdue'`, then KanbanCard.ts:97
-   *  `props.overdue ? 'overdue' : 'normal'`) — so the board only ever distinguishes overdue
-   *  from everything else. A terminal row is always plain (utils.ts:80-83: "Terminal tasks
-   *  are never urgent"). "Today" reads renderNow() rather than `new Date()` directly: a fixed
-   *  bench due date sits still while the real clock walks past it, so the same row's
-   *  classification (and the constructed card's solid-red chip) flipped as the wall clock
-   *  advanced, with no code or data change — renderNow() is the seam the render-assertion
-   *  harness freezes for capture and gate runs so that stops happening; production never
-   *  freezes it, so the shipped board keeps reading the real clock. */
-  private getReferenceDueUrgency(due: string, row: RowData, config: ViewConfig): "normal" | "overdue" {
-    if (this.isReferenceRowCompleted(row, config)) return "normal";
-    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(due);
-    if (!match) return "normal";
-    const dueDate = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
-    const now = renderNow();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const days = Math.round((dueDate.getTime() - today.getTime()) / 86_400_000);
-    return days < 0 ? "overdue" : "normal";
-  }
-
-  /** Reproduces the reference Chip's DOM from its builder calls: a span with
-   *  the pm-chip vocabulary and a label child, with the dot leading. */
-  private renderReferenceChip(
-    parent: HTMLElement,
-    options: {
-      label: string;
-      variant?: "solid" | "outline";
-      size?: "sm";
-      color?: string;
-      dot?: boolean;
-      strong?: boolean;
-      tag?: boolean;
-      tooltip?: string;
-    },
-  ): HTMLElement {
-    const chip = parent.createSpan({ cls: "pm-chip" });
-    if (options.dot) chip.createSpan({ cls: "pm-chip-dot" });
-    chip.createSpan({ cls: "pm-chip-label", text: options.label });
-    if (options.variant === "solid") chip.addClass("pm-chip--solid");
-    if (options.variant === "outline") chip.addClass("pm-chip--outline");
-    if (options.size === "sm") chip.addClass("pm-chip--sm");
-    if (options.tag) chip.addClass("pm-chip--tag");
-    if (options.strong) chip.addClass("pm-chip--strong");
-    if (options.color) chip.style.setProperty("--pm-chip-color", options.color);
-    if (options.tooltip) setTooltip(chip, options.tooltip);
-    return chip;
   }
 
   /** Lazy description hydration: bodies load after the first render, and the
@@ -819,12 +613,12 @@ export class BoardRenderer {
 
   // `parent` is the header's name row, not the header itself: mounting the button beside the
   // group name keeps it inline with the text instead of parked at the far header edge.
-  private renderBoardGroupOptions(parent: HTMLElement, config: ViewConfig, field: string, group: BoardGroup): void {
+  private renderBoardGroupOptions(parent: HTMLElement, config: ViewConfig, field: string, group: BoardGroup, icon = "more-vertical"): void {
     const button = parent.createEl("button", {
       cls: "db-board-column-options",
       attr: { type: "button", "aria-label": t("board.columnOptions"), title: t("board.columnOptions") },
     });
-    setIcon(button, "more-vertical");
+    setIcon(button, icon);
     button.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -2483,8 +2277,8 @@ export class BoardRenderer {
   }
 
   private clear(container: HTMLElement): void {
-    container.querySelectorAll(".db-board, .pm-kanban-board").forEach((el) => el.remove());
-    container.removeClass("pm-kanban-view");
+    container.querySelectorAll(".db-board, .db-kanban-board").forEach((el) => el.remove());
+    container.removeClass("db-kanban-view");
     this.detachBoardDropHighlight();
   }
 }
@@ -2514,9 +2308,10 @@ export class BoardRenderer {
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-/** MIT (notice above) — verbatim from obsidian-pm KanbanColumn.ts:118-131. */
+/** Adapted from obsidian-pm KanbanColumn.ts:118-131 (MIT, notice above) for the Anytype card
+ *  class names this board now constructs. */
 function getReferenceDragAfterElement(container: HTMLElement, y: number): Element | null {
-  const cards = Array.from(container.querySelectorAll(".pm-kanban-card:not(.pm-kanban-card--dragging)"));
+  const cards = Array.from(container.querySelectorAll(".db-kanban-card:not(.db-kanban-card--dragging)"));
   let closest: Element | null = null;
   let closestOffset = Number.NEGATIVE_INFINITY;
   for (const card of cards) {
@@ -2528,53 +2323,4 @@ function getReferenceDragAfterElement(container: HTMLElement, y: number): Elemen
     }
   }
   return closest;
-}
-
-/** MIT (notice above) — verbatim from obsidian-pm utils.ts:40-44. */
-function referenceStringToColor(s: string): string {
-  let hash = 0;
-  for (let i = 0; i < s.length; i++) hash = s.charCodeAt(i) + ((hash << 5) - hash);
-  return `hsl(${Math.abs(hash) % 360}, 55%, 45%)`;
-}
-
-/**
- * MIT (notice above) — from obsidian-pm utils.ts:7-22, rewritten to drop its
- * `parseLinktext` dependency: the reference resolves the wikilink target
- * through Obsidian, which this module cannot import without touching the
- * shared stub, so the plain wikilink forms people fields actually carry are
- * handled here instead. Heading/subpath suffixes are not split.
- */
-function referenceDisplayName(raw: string): string {
-  // Values come from frontmatter, where anything YAML allows can turn up in a list of names.
-  const trimmed = typeof raw === "string" ? raw.trim() : "";
-  const m = trimmed.match(/^\[\[([^\]]+)\]\]$/)
-  if (!m) return trimmed
-  const inner = m[1]
-  const pipe = inner.indexOf("|")
-  if (pipe >= 0) {
-    const alias = inner.slice(pipe + 1).trim()
-    if (alias) return alias
-  }
-  const target = pipe >= 0 ? inner.slice(0, pipe) : inner
-  const base = target.split("/").pop() ?? target
-  return (base.endsWith(".md") ? base.slice(0, -3) : base).trim()
-}
-
-/** MIT (notice above) — verbatim from obsidian-pm Avatar.ts:4-8. */
-function referenceInitialsFor(name: string): string {
-  const parts = name.trim().split(/\s+/).filter(Boolean)
-  const raw = parts.length >= 2 ? parts[0][0] + parts[1][0] : name.slice(0, 2)
-  return raw.toUpperCase()
-}
-
-/**
- * "Mar 28" for a YYYY-MM-DD value, in the runtime's locale — the reference's
- * formatDateShort (obsidian-pm dates.ts:27-30), rewritten from its Temporal
- * call to Intl, with UTC pinned so the formatted date never shifts a day.
- */
-function referenceFormatDateShort(iso: string): string {
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
-  if (!m) return "";
-  const date = new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])));
-  return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", timeZone: "UTC" }).format(date);
 }

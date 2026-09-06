@@ -330,35 +330,35 @@ const CLAIMS = [
     claim: "the board card carries the ported kanban hierarchy",
     was: 1,
     recorded: 10,
-    // The complete hierarchy is required so a card cannot look present while omitting its content
-    // region or the affordance that opens it. Rewritten for the T11 CSS leg: the default board's
-    // fixtures moved from the local db-board-* markup this claim originally checked to a one-to-one
-    // copy of the reference's pm-kanban-* element tree (T10 landed the renderer; T11 lands the
-    // fixtures and the stylesheet). `recorded` re-measures the same ten-point completeness against
-    // board-view's now pm-kanban-* markup rather than against a tree the fixture no longer builds.
+    // Rewritten: a later operator ruling replaced the board's Project Manager 1:1 copy with an
+    // Anytype-shaped rebuild, so the ten-point hierarchy this claim protects moves from the
+    // pm-kanban-* tree to the db-kanban-* one that replaced it. The claim itself — a card cannot
+    // look present while omitting its content region or the affordance that opens it — is
+    // unchanged; only the ten points that prove it are re-picked for the anatomy that replaced
+    // it: no topbar, no count pill, no priority bar, no tag block, no chip footer, in place of a
+    // chip header, a title row and property rows on one rhythm.
     async measure(page) {
       const s = SCENARIOS.find((x) => x.id === "board-view");
       if (!s) return -1;
       await load(page, s.html());
       return page.evaluate(() => {
-        const column = document.querySelector(".pm-kanban-col");
-        const card = document.querySelector(".pm-kanban-card");
+        const column = document.querySelector(".db-kanban-col");
+        const card = document.querySelector(".db-kanban-card");
         if (!column || !card) return 0;
-        const header = column.querySelector(".pm-kanban-col-header");
-        const body = card.querySelector(".pm-kanban-card-body");
-        const titleRow = body?.querySelector(".pm-kanban-card-title-row");
-        const footer = body?.querySelector(".pm-kanban-card-footer");
+        const header = column.querySelector(".db-kanban-col-header");
+        const body = card.querySelector(".db-kanban-card-body");
+        const titleRow = body?.querySelector(".db-kanban-card-title-row");
         const checks = [
-          column.querySelector(".pm-kanban-col-topbar") !== null,
+          column.querySelector(".db-kanban-cards") !== null,
           header !== null,
-          header?.querySelector(".pm-kanban-col-badge") !== null,
-          header?.querySelector(".pm-kanban-col-count") !== null,
-          card.querySelector(".pm-kanban-card-priority-bar") !== null,
+          header?.querySelector(".db-kanban-col-chip") !== null,
           body !== null,
+          card.getElementsByTagName("*").length > 0 && card.firstElementChild === body,
           titleRow !== null,
-          titleRow?.querySelector(".pm-kanban-card-title") !== null,
-          body?.querySelector(".pm-kanban-card-tags") !== null,
-          footer !== null && footer.querySelector(".pm-chip") !== null,
+          titleRow?.querySelector(".db-kanban-card-title") !== null,
+          body?.querySelector(".db-kanban-card-meta") !== null,
+          body?.querySelector(".db-kanban-card-meta .db-board-card-field") !== null,
+          card.hasAttribute("data-note-database-row-path"),
         ];
         return checks.filter(Boolean).length;
       });
@@ -366,30 +366,31 @@ const CLAIMS = [
   },
   {
     phase: "038-board-kanban-port",
-    claim: "the board topbar and priority strip resolve their status colours from the token ladder",
+    claim: "the board's per-card status colour resolves to a real paint, not an unresolved token",
     was: 2,
     recorded: 0,
-    // Both status-colour surfaces must exist before their computed paint can be meaningful.
-    // Rewritten for the T11 CSS leg: the reference board colours its topbar and priority strip
-    // through the same inline `setCssStyles({ background: color })` the reference itself uses,
-    // rather than a `status-color-*` class, so the selectors move to the new element names; the
-    // computed-style check (an unresolved inline colour still paints transparent) is unchanged.
+    // Rewritten: the topbar and priority strip this claim originally read are both retired with
+    // no Anytype counterpart — the option colour now lands on the header chip's text and the tag
+    // chip's fill, through retinted status-color-* classes rather than an inline style. The
+    // underlying claim survives unchanged: an unresolved colour still paints as no colour at
+    // all, and this checks the two surfaces that now carry it instead of the two that used to.
     async measure(page) {
       const s = SCENARIOS.find((x) => x.id === "board-view");
       if (!s) return -1;
       await load(page, s.html());
       return page.evaluate(() => {
         let bad = 0;
-        for (const selector of [".pm-kanban-col-topbar", ".pm-kanban-card-priority-bar"]) {
-          const elements = [...document.querySelectorAll(selector)];
-          if (elements.length === 0) {
-            bad += 1;
-            continue;
-          }
-          for (const el of elements) {
-            const bg = getComputedStyle(el).backgroundColor;
-            if (!bg || bg === "rgba(0, 0, 0, 0)" || bg === "transparent") bad += 1;
-          }
+        const chips = [...document.querySelectorAll(".db-kanban-col-chip")];
+        if (chips.length === 0) bad += 1;
+        for (const chip of chips) {
+          const fg = getComputedStyle(chip).color;
+          if (!fg || fg === "rgba(0, 0, 0, 0)" || fg === "transparent") bad += 1;
+        }
+        const tagChips = [...document.querySelectorAll(".db-kanban-card-meta .status-badge")];
+        if (tagChips.length === 0) bad += 1;
+        for (const tag of tagChips) {
+          const bg = getComputedStyle(tag).backgroundColor;
+          if (!bg || bg === "rgba(0, 0, 0, 0)" || bg === "transparent") bad += 1;
         }
         return bad;
       });
@@ -450,21 +451,20 @@ const CLAIMS = [
   },
   {
     phase: "040-subtask-tree-port",
-    claim: "the subtask tree fixtures carry the depth and progress markers the relation derives",
+    claim: "the subtask tree fixtures carry the depth marker the relation derives",
     was: 2,
     recorded: 0,
-    // Both rendered surfaces need their depth marker; a missing fixture must count as a failure.
-    // Both surfaces dropped `data-subtask-depth`: the board shows depth via a
-    // `.pm-kanban-card-parent` label on a child card and derived progress by `.pm-progress`,
-    // one-to-one with the reference's own KanbanCard; the timeline indents a child row via an
-    // inline `padding-left` computed from the relation's depth instead, matching the reference's
-    // own GanttView label row (`.pm-gantt-label-row`), so a child row's box is >8px (the base,
-    // non-subtask padding) rather than data-attribute-tagged.
+    // Rewritten: the board's progress bar (`.pm-progress`) is retired with no Anytype
+    // counterpart, so this claim narrows to the depth marker alone — the half both surfaces
+    // still carry. The board's depth marker moved from `.pm-kanban-card-parent`
+    // to `.db-kanban-card-type` (same content, the subtask's parent title; restyled to the
+    // ordinary secondary rhythm rather than a smaller breadcrumb). The timeline is unchanged: it
+    // indents a child row via an inline `padding-left` computed from the relation's depth, matching
+    // the reference's own GanttView label row (`.pm-gantt-label-row`), so a child row's box is
+    // >8px (the base, non-subtask padding) rather than data-attribute-tagged.
     async measure(page) {
       const checks = {
-        "board-subtask-tree": () =>
-          document.querySelector(".pm-kanban-card-parent") !== null
-          && document.querySelector(".pm-progress") !== null,
+        "board-subtask-tree": () => document.querySelector(".db-kanban-card-type") !== null,
         "timeline-subtask-tree": () =>
           [...document.querySelectorAll(".pm-gantt-label-row")]
             .some((el) => parseInt(el.style.paddingLeft || "0", 10) > 8),
@@ -486,12 +486,10 @@ const CLAIMS = [
     recorded: 2,
     // The surface leg's red was the data layer landing with no view reading it; its green is the
     // two surfaces that now do. The fixtures mirror both, so this holds that both still carry the
-    // tree markup. See the sibling claim above for why the two surfaces are checked differently.
+    // tree markup. See the sibling claim above for why the board's own probe changed.
     async measure(page) {
       const checks = {
-        "board-subtask-tree": () =>
-          document.querySelector(".pm-kanban-card-parent") !== null
-          && document.querySelector(".pm-progress") !== null,
+        "board-subtask-tree": () => document.querySelector(".db-kanban-card-type") !== null,
         "timeline-subtask-tree": () =>
           [...document.querySelectorAll(".pm-gantt-label-row")]
             .some((el) => parseInt(el.style.paddingLeft || "0", 10) > 8),
@@ -547,12 +545,12 @@ const CLAIMS = [
     was: 0,
     recorded: 2,
     // Neither scenario id existed on the landing commit's parent tree, so SCENARIOS.find returned
-    // undefined for both and this measure could not even load a fixture to check. Rewritten for the
-    // T11 CSS leg: the reference board has no empty-state placeholder (an empty column is just a
-    // hollow .pm-kanban-cards, matching kanban.css) and no separate drop-indicator element (the
-    // reference tints the drop target's cards container and raises the dragged card, both live
-    // classes rather than a synthesised line) — so the check now reads the reference's own two
-    // states instead of the local db-board-* ones this claim originally found.
+    // undefined for both and this measure could not even load a fixture to check. Rewritten: the
+    // class names moved from the Project Manager pm-kanban-* copy to the Anytype-shaped
+    // db-kanban-* one that replaced it; the states themselves are unchanged — an empty column is
+    // still a hollow cards container (now with the same shared empty-group card every other
+    // grouped renderer shows, since no reference capture shows this state) and the drop language
+    // still tints the drop target's cards container and raises the dragged card.
     async measure(page) {
       let ok = 0;
       const empty = SCENARIOS.find((x) => x.id === "board-empty-column");
@@ -560,10 +558,10 @@ const CLAIMS = [
         await load(page, empty.html());
         const good = await page.evaluate(() => {
           // The scenario mounts a populated column beside the empty one, so the first
-          // .pm-kanban-cards in document order is not reliably the one under test.
-          const containers = [...document.querySelectorAll(".pm-kanban-cards")];
+          // .db-kanban-cards in document order is not reliably the one under test.
+          const containers = [...document.querySelectorAll(".db-kanban-cards")];
           return containers.length > 0
-            && containers.some((el) => el.querySelector(".pm-kanban-card") === null);
+            && containers.some((el) => el.querySelector(".db-kanban-card") === null);
         });
         if (good) ok += 1;
       }
@@ -571,8 +569,8 @@ const CLAIMS = [
       if (drop) {
         await load(page, drop.html());
         const good = await page.evaluate(() => {
-          const dropTarget = document.querySelector(".pm-kanban-drop-target");
-          const dragging = document.querySelector(".pm-kanban-card--dragging");
+          const dropTarget = document.querySelector(".db-kanban-drop-target");
+          const dragging = document.querySelector(".db-kanban-card--dragging");
           return !!(dropTarget && dragging);
         });
         if (good) ok += 1;

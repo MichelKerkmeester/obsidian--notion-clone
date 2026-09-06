@@ -158,9 +158,14 @@ describe("board column header options button mirrors the table trigger", () => {
     expect(boardSource).not.toMatch(/renderBoardGroupOptions\(header,/);
   });
 
-  it("uses the vertical ellipsis icon", () => {
-    expect(boardSource).toContain('setIcon(button, "more-vertical")');
-    expect(boardSource).not.toContain("more-horizontal");
+  it("uses the vertical ellipsis icon by default, and the two extensions-path call sites take it", () => {
+    // The kanban header's own hover-revealed "..." takes the horizontal glyph explicitly; the
+    // extensions-path column/subgroup options mounts below take no override, so they keep the
+    // vertical ellipsis the default parameter still supplies.
+    expect(boardSource).toMatch(/renderBoardGroupOptions\([^)]*icon = "more-vertical"/);
+    expect(boardSource).toContain("this.renderBoardGroupOptions(title, config, groupField, group)");
+    expect(boardSource).toContain("this.renderBoardGroupOptions(headerText, config, groupField, group)");
+    expect(boardSource).toContain('this.renderBoardGroupOptions(controls, config, groupField, group, "more-horizontal")');
   });
 });
 

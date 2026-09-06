@@ -556,7 +556,7 @@ for (const themeClass of ["theme-light", "theme-dark"]) {
   for (const checked of [false, true]) {
     await boardCardPage.setContent(
       `<html class="${themeClass}"><body class="${themeClass}" style="margin:0;">`
-      + `<div class="note-database-container"><div class="pm-kanban-card" style="display:inline-block;padding:16px;">`
+      + `<div class="note-database-container"><div class="db-kanban-card" style="display:inline-block;padding:16px;">`
       + boardCardMarkup(checked)
       + `</div></div></body></html>`,
     );

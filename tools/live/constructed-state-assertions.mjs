@@ -72,8 +72,6 @@ window.__stateMarkers = (scenario) => {
     calendarOptionsPopover: !!container.querySelector(".db-calendar-options-popover"),
     timelineOptionsPopover: !!container.querySelector(".db-calendar-timeline-options-popover"),
     chartOptionsPopover: !!container.querySelector(".db-chart-options-popover"),
-    priorityBarCount: container.querySelectorAll(".pm-kanban-card-priority-bar").length,
-    priorityBarTotal: container.querySelectorAll(".pm-kanban-card").length,
     toolbar: !!container.querySelector(".db-toolbar .db-view-tab"),
     toolbarSearchActive: !!container.querySelector(".db-search-control.is-active"),
     toolbarUtilitiesPopover: !!container.querySelector(".db-toolbar-utilities-popover"),
@@ -128,8 +126,8 @@ window.__stateMarkers = (scenario) => {
     emptyStateCard: !!container.querySelector(".db-empty-card .db-empty-card-title"),
     columnHeaderTriggers: !!container.querySelector(".db-column-menu-trigger")
       && !!container.querySelector(".db-resize-handle"),
-    boardEmptyColumn: Array.from(container.querySelectorAll(".pm-kanban-col"))
-      .some((col) => col.querySelectorAll(".pm-kanban-card").length === 0),
+    boardEmptyColumn: Array.from(container.querySelectorAll(".db-kanban-col"))
+      .some((col) => col.querySelectorAll(".db-kanban-card").length === 0),
     boardExtensions: !!container.querySelector(".db-board-column-checkbox")
       && !!container.querySelector(".db-board-card-checkbox"),
     migratedListAsTable: !!container.querySelector("table.db-table")
@@ -463,25 +461,12 @@ const SINGLE_CASES = [
   },
 ];
 
-// Count case: priority is not a boolean captureData suboption like the cases above — it is an
-// always-present column whenever captureData is on (board-render-bench.ts's PRIORITY_COLUMN_INDEX
-// rename), and its own value distributes across four named tiers rather than flipping a single
-// marker (render-assertion-harness.ts's applyCapturePriorityTiers). The reference paints the
-// card-top strip for every tier except its two lowest ("medium"/"low"), so a mount that shows the
-// strip on every card or on none of them is the same defect this case exists to catch: the tier's
-// meaning never reached the DOM. CAPTURE_ROWS (18) cycling four tiers in urgent/high/medium/low
-// order gives urgent and high five rows each and medium and low four rows each — ten cards striped,
-// eight not.
-const COUNT_CASES = [
-  {
-    id: "constructed-board-priority",
-    spec: { renderer: "board", bag: "file-view", captureData: true },
-    marker: "priorityBarCount",
-    want: 10,
-    totalMarker: "priorityBarTotal",
-    wantTotal: 18,
-  },
-];
+// The priority-tier count case that lived here (a card-top strip painted for every tier except
+// the two lowest) is retired along with the strip itself: the board's Anytype-shaped rebuild has
+// no counterpart for it, and priority now renders as an ordinary property row like any other,
+// with no tier-based visibility split for this harness to distinguish. Left empty rather than
+// removed so a future count case has somewhere to land without re-adding the loop it feeds below.
+const COUNT_CASES = [];
 
 const failures = [];
 let browser;

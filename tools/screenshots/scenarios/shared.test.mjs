@@ -84,148 +84,70 @@ function expectDirectChildOrder(parent, classNames, label) {
 // ───────────────────────────────────────────────────────────────────
 
 describe("board screenshot fixture parity", () => {
-  it("nests the reference column header under the containers the renderer puts it in", () => {
-    const column = findDescendant(parseMarkup(boardColumn("Design", [ROWS[0]])), "pm-kanban-col");
+  it("nests the Anytype column header under the containers the renderer puts it in", () => {
+    const column = findDescendant(parseMarkup(boardColumn("Design", [ROWS[0]])), "db-kanban-col");
     expectDirectChildOrder(
       column,
-      ["pm-kanban-col-header", "pm-kanban-cards"],
+      ["db-kanban-col-header", "db-kanban-cards"],
       "the column",
     );
-    const header = findDescendant(column, "pm-kanban-col-header");
-    expectDirectChildOrder(
-      header,
-      ["pm-kanban-col-topbar", "pm-kanban-col-title-row"],
-      "the column header",
-    );
-    const titleRow = findDescendant(header, "pm-kanban-col-title-row");
-    expectDirectChildOrder(titleRow, ["pm-kanban-col-badge", "pm-kanban-col-header-right"], "the title row");
-    const headerRight = findDescendant(titleRow, "pm-kanban-col-header-right");
-    expectDirectChildOrder(headerRight, ["pm-kanban-col-count"], "the header right area");
+    const header = findDescendant(column, "db-kanban-col-header");
+    expectDirectChildOrder(header, ["db-kanban-col-chip"], "the column header");
   });
 
-  it("nests the card's priority bar and body content under the reference card", () => {
-    // The strip is per-card, from a mapped priority column — not from the group tone — so a
-    // priority-bearing state has to be requested explicitly to exercise this order.
-    const markup = boardCard(ROWS[0], "", { priorityColor: "red" });
-    expect(markup).not.toContain("db-board-");
-    const card = findDescendant(parseMarkup(markup), "pm-kanban-card");
-    expectDirectChildOrder(
-      card,
-      ["pm-kanban-card-priority-bar", "pm-kanban-card-body"],
-      "the card",
-    );
-    const body = findDescendant(card, "pm-kanban-card-body");
-    expectDirectChildOrder(
-      body,
-      ["pm-kanban-card-title-row", "pm-chip", "pm-kanban-card-tags", "pm-kanban-card-footer"],
-      "the card body",
-    );
-    const titleRow = findDescendant(body, "pm-kanban-card-title-row");
-    expectDirectChildOrder(titleRow, ["pm-kanban-card-title"], "the title row");
+  it("nests the card's title row and property meta under the card body", () => {
+    const markup = boardCard(ROWS[0], "");
+    // The property rows still share `card-field-renderer.ts`'s `db-board-card-field`/`-value`
+    // primitive (the same one gallery and list cards use) — only the card's own wrapper classes
+    // are Anytype-shaped.
+    expect(markup).not.toMatch(/class="db-board-card"/);
+    const card = findDescendant(parseMarkup(markup), "db-kanban-card");
+    expectDirectChildOrder(card, ["db-kanban-card-body"], "the card");
+    const body = findDescendant(card, "db-kanban-card-body");
+    expectDirectChildOrder(body, ["db-kanban-card-title-row", "db-kanban-card-meta"], "the card body");
+    const titleRow = findDescendant(body, "db-kanban-card-title-row");
+    expectDirectChildOrder(titleRow, ["db-kanban-card-title"], "the title row");
   });
 
-  it("omits the priority bar by default and the parent node without a parent title", () => {
+  it("renders every configured property as a values-only row, no type-specific card furniture", () => {
+    // Retired with the Project Manager card this fixture used to mirror: the priority strip, the
+    // milestone/subtask/recurrence chips, the avatar stack and the due chip. Every property is an
+    // ordinary row in `db-kanban-card-meta` now, values only.
     const card = boardCard(ROWS[0], "");
-    expect(card).not.toContain("pm-kanban-card-priority-bar");
-    expect(card).not.toContain("pm-kanban-card-parent");
-    expect(card).toContain("pm-kanban-card-title");
+    for (const retired of ["priority-bar", "pm-chip", "pm-avatar", "pm-progress", "card-footer", "card-tags"]) {
+      expect(card).not.toContain(retired);
+    }
+    const meta = findDescendant(parseMarkup(card), "db-kanban-card-meta");
+    expect(meta.children.every((row) => row.classes.includes("db-board-card-field"))).toBe(true);
+    expect(card).toContain(">Cost<");
+    expect(card).toContain("status-badge status-color-purple\">Yearly<");
   });
 
-  it("renders the milestone and recurrence type chips in the reference's fixed order, omitted by default", () => {
-    // board-renderer.ts's fixed order is milestone, subtask, recurrence (`:448-476`); boardCard
-    // never builds a subtask node, so only the two boolean-row-field chips apply here.
-    const plain = boardCard(ROWS[0], "");
-    expect(plain).not.toContain("--pm-chip-color: var(--color-purple)");
-    expect(plain).not.toContain("--pm-chip-color: var(--color-blue)");
-
-    const both = boardCard({ ...ROWS[0], milestone: true, recurring: true }, "");
-    const titleRow = findDescendant(parseMarkup(both), "pm-kanban-card-title-row");
-    const chipChildren = titleRow.children.filter((child) => child.classes.includes("pm-chip"));
-    expect(chipChildren, "exactly the milestone and recurrence chips are direct children").toHaveLength(2);
-    // Two identical "pm-chip" classes can't be told apart by class alone, so the order proof
-    // reads the actual rendered markup instead: the milestone chip's own colour-and-label
-    // sequence has to appear before the recurrence chip's.
-    const milestoneMarkup = '--pm-chip-color: var(--color-purple);"><span class="pm-chip-label">M</span>';
-    const recurrenceMarkup = '--pm-chip-color: var(--color-blue);"><span class="pm-chip-label">R</span>';
-    expect(both).toContain(milestoneMarkup);
-    expect(both).toContain(recurrenceMarkup);
-    expect(both.indexOf(milestoneMarkup)).toBeLessThan(both.indexOf(recurrenceMarkup));
-
-    const milestoneOnly = boardCard({ ...ROWS[0], milestone: true }, "");
-    expect(milestoneOnly).toContain("--pm-chip-color: var(--color-purple)");
-    expect(milestoneOnly).not.toContain("--pm-chip-color: var(--color-blue)");
-  });
-
-  it("builds an initialed avatar per person plus an overflow slot past three, empty without a people column", () => {
-    const empty = boardCard(ROWS[0], "");
-    expect(findDescendant(parseMarkup(empty), "pm-avatar-stack").children).toHaveLength(0);
-
-    const twoPeople = boardCard({ ...ROWS[0], people: ["Alice Kim", "Bob Diaz"] }, "");
-    const stack = findDescendant(parseMarkup(twoPeople), "pm-avatar-stack");
-    expect(stack.children).toHaveLength(2);
-    expect(stack.children.every((avatar) => avatar.classes.includes("pm-avatar") && avatar.classes.includes("pm-avatar--sm"))).toBe(true);
-    expect(twoPeople).toContain(">AK<");
-    expect(twoPeople).toContain(">BD<");
-    expect(twoPeople).not.toContain("pm-avatar--more");
-
-    const fourPeople = boardCard({ ...ROWS[0], people: ["Alice Kim", "Bob Diaz", "Cy Chen", "Dana Lee"] }, "");
-    const overflowStack = findDescendant(parseMarkup(fourPeople), "pm-avatar-stack");
-    expect(overflowStack.children).toHaveLength(4);
-    const overflowAvatar = overflowStack.children[3];
-    expect(overflowAvatar.classes).toContain("pm-avatar--more");
-    expect(fourPeople).toContain(">+1<");
-  });
-
-  it("formats the due chip through the renderer's short-date conversion, not the fixture's long literal", () => {
-    // ROWS/SUBTASK_FIXTURE_ROWS keep long literals ("January 4, 2027") for readability; the
-    // renderer's own referenceFormatDateShort (`board-renderer.ts:2491-2496`) always emits a
-    // short month-day form. Its exact characters are locale-dependent (this suite's own
-    // `board-renderer-parity.test.ts:692` checks the same renderer's due-chip label with
-    // `toBeTruthy()` rather than pinning one locale's text), so this proves the conversion ran —
-    // the long literal is gone and the due chip's label is materially shorter — instead of
-    // asserting one locale's exact output. The due chip is always the last `pm-chip-label` in
-    // the card: `pmCardFooter` renders it after the avatar stack, and the footer is the card
-    // body's last block.
-    expect(ROWS[0].renew).toBe("January 4, 2027");
-    const card = boardCard(ROWS[0], "");
-    expect(card).not.toContain("January 4, 2027");
-    const labels = [...card.matchAll(/class="pm-chip-label">([^<]*)<\/span>/g)].map((m) => m[1]);
-    const dueLabel = labels[labels.length - 1];
-    expect(dueLabel).not.toBe("January 4, 2027");
-    expect(dueLabel.length).toBeLessThan("January 4, 2027".length);
-  });
-
-  it("keeps an empty reference column as a hollow cards container", () => {
-    const column = findDescendant(parseMarkup(boardColumn("Personal", [])), "pm-kanban-col");
-    const cards = findDescendant(column, "pm-kanban-cards");
-    expect(findDescendant(cards, "pm-kanban-card"), "the empty column draws no card").toBeNull();
+  it("keeps an empty column as a hollow cards container", () => {
+    const column = findDescendant(parseMarkup(boardColumn("Personal", [])), "db-kanban-col");
+    const cards = findDescendant(column, "db-kanban-cards");
+    expect(findDescendant(cards, "db-kanban-card"), "the empty column draws no card").toBeNull();
     expect(cards.children).toHaveLength(0);
-    expect(boardColumn("Design", [ROWS[0]])).toContain("pm-kanban-card");
+    expect(boardColumn("Design", [ROWS[0]])).toContain("db-kanban-card");
     expect(boardColumn("Personal", [])).not.toContain("db-board-empty-slot");
   });
 
   it("puts the column-level dragover class on the cards container", () => {
-    const plain = findDescendant(parseMarkup(boardColumn("Design", [ROWS[0]])), "pm-kanban-cards");
-    expect(plain.classes).not.toContain("pm-kanban-drop-target");
+    const plain = findDescendant(parseMarkup(boardColumn("Design", [ROWS[0]])), "db-kanban-cards");
+    expect(plain.classes).not.toContain("db-kanban-drop-target");
     const highlighted = findDescendant(
       parseMarkup(boardColumn("Design", [ROWS[0]], "pink", { columnClass: "is-drop-target" })),
-      "pm-kanban-cards",
+      "db-kanban-cards",
     );
-    expect(highlighted.classes).toContain("pm-kanban-drop-target");
-    expect(findDescendant(parseMarkup(boardColumn("Design", [ROWS[0]], "pink", { columnClass: "is-drop-target" })), "pm-kanban-col").classes)
-      .not.toContain("pm-kanban-drop-target");
+    expect(highlighted.classes).toContain("db-kanban-drop-target");
+    expect(findDescendant(parseMarkup(boardColumn("Design", [ROWS[0]], "pink", { columnClass: "is-drop-target" })), "db-kanban-col").classes)
+      .not.toContain("db-kanban-drop-target");
   });
 
   it("puts the card-level dragstart class on the card root, raised above its neighbours", () => {
-    const dragging = findDescendant(parseMarkup(boardCard(ROWS[0], "", { dragState: "dragging" })), "pm-kanban-card");
-    expect(dragging.classes).toContain("pm-kanban-card--dragging");
-    expect(dragging.classes).not.toContain("pm-kanban-drop-target");
-  });
-
-  it("keeps insertion feedback on the reference container rather than inventing a card node", () => {
-    const markup = boardCard(ROWS[0], "", { dragState: "drop-target", dropPlacement: "before" });
-    expect(markup).not.toContain("pm-kanban-drop-target");
-    expect(markup).not.toContain("db-board-drop-indicator");
+    const dragging = findDescendant(parseMarkup(boardCard(ROWS[0], "", { dragState: "dragging" })), "db-kanban-card");
+    expect(dragging.classes).toContain("db-kanban-card--dragging");
+    expect(dragging.classes).not.toContain("db-kanban-drop-target");
   });
 });
 
@@ -235,68 +157,53 @@ describe("subtask screenshot fixture parity", () => {
   const styles = readFileSync(new URL("../../../styles.css", import.meta.url), "utf8");
 
   it("keeps the board hierarchy helper in the renderer's child order", () => {
-    // priorityColor is opt-in like the ordinary board card's — forced here so the strip's child
-    // order still has a documented, exercised path even though no fixture row maps a priority.
-    const markup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { children: true, done: 1, total: 2, explicit: 62, value: 62, priorityColor: "purple" });
-    const card = findDescendant(parseMarkup(markup), "pm-kanban-card");
-    const body = findDescendant(card, "pm-kanban-card-body");
-    expectDirectChildOrder(card, ["pm-kanban-card-priority-bar", "pm-kanban-card-body"], "the subtask card");
-    expectDirectChildOrder(body, ["pm-kanban-card-title-row", "pm-chip", "pm-kanban-card-tags", "pm-progress", "pm-kanban-card-footer"], "the subtask card body");
+    const markup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { depth: 0 });
+    const card = findDescendant(parseMarkup(markup), "db-kanban-card");
+    const body = findDescendant(card, "db-kanban-card-body");
+    expectDirectChildOrder(card, ["db-kanban-card-body"], "the subtask card");
+    expectDirectChildOrder(body, ["db-kanban-card-title-row", "db-kanban-card-meta"], "the subtask card body");
     const childMarkup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.copy, { depth: 1, parent: SUBTASK_FIXTURE_ROWS.parent.name });
-    expect(childMarkup).toContain("pm-kanban-card-parent");
-    expect(childMarkup).not.toContain("db-board-");
+    expect(childMarkup).toContain("db-kanban-card-type");
+    expect(childMarkup).not.toMatch(/class="db-board-card"/);
     expect(boardRenderer).toContain("db-subtask-toggle");
     expect(boardRenderer).toContain("db-subtask-progress-derived");
     expect(boardRenderer).toContain("db-subtask-progress-explicit");
     expect(boardRenderer).toContain("db-subtask-add-input");
   });
 
-  it("gates the Sub chip on an actual child depth, not on the card being the subtask helper's output", () => {
-    // The reference only renders the Sub chip for `task.type === 'subtask'` (KanbanCard.ts:60-67);
-    // the parent/root card the helper also draws (depth 0) must not carry it.
-    const rootCard = findDescendant(parseMarkup(subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { depth: 0 })), "pm-kanban-card");
-    const rootTitleRow = findDescendant(rootCard, "pm-kanban-card-title-row");
-    expect(findDescendant(rootTitleRow, "pm-chip")).toBeNull();
+  it("gates the type-name slot on an actual child depth, not on the card being the subtask helper's output", () => {
+    // No Objects/Types data model exists; the type-name slot keeps the schema's own nearest
+    // content — a subtask's parent title — and only a child (depth > 0) has one to show.
+    const rootCard = findDescendant(parseMarkup(subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { depth: 0 })), "db-kanban-card");
+    expect(findDescendant(rootCard, "db-kanban-card-type")).toBeNull();
 
     const childCard = findDescendant(
       parseMarkup(subtaskBoardCard(SUBTASK_FIXTURE_ROWS.copy, { depth: 1, parent: SUBTASK_FIXTURE_ROWS.parent.name })),
-      "pm-kanban-card",
+      "db-kanban-card",
     );
-    const childTitleRow = findDescendant(childCard, "pm-kanban-card-title-row");
-    expect(findDescendant(childTitleRow, "pm-chip")).not.toBeNull();
+    expect(findDescendant(childCard, "db-kanban-card-type")).not.toBeNull();
   });
 
-  it("prints the parent card's title on the child card's parent line, not the enclosing column's name", () => {
-    // The reference prints the parent TASK's title (KanbanCard.ts:44-46 `props.parentTitle`),
+  it("prints the parent card's title on the child card's type line, not the enclosing column's name", () => {
+    // The renderer prints the parent TASK's title (getReferenceRowTitle on subtaskNode.parentId),
     // not the group/column the board-subtask-tree scenario's own lane happens to share a name
     // with ("Projects" is this scenario's column label, coincidentally also the old default).
     const scenario = CORE_SCENARIOS.find((s) => s.id === "board-subtask-tree");
     const html = scenario.html();
-    expect(html).toContain(`class="pm-kanban-card-parent">${SUBTASK_FIXTURE_ROWS.parent.name}</span>`);
-    expect(html).not.toContain('class="pm-kanban-card-parent">Projects</span>');
+    expect(html).toContain(`class="db-kanban-card-type">${SUBTASK_FIXTURE_ROWS.parent.name}</div>`);
+    expect(html).not.toContain('class="db-kanban-card-type">Projects</div>');
   });
 
   it("keeps every new class in the hand-written board and timeline states styled and sourced", () => {
-    const boardMarkup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { children: true, done: 1, total: 2, explicit: 62, value: 62, priorityColor: "purple" });
-    const peopleMarkup = boardCard({ ...ROWS[0], people: ["Alice Kim", "Bob Diaz", "Cy Chen", "Dana Lee"], milestone: true, recurring: true });
+    const boardMarkup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { depth: 0 });
     const treeParent = TL_SUBTASK_LANES.find((lane) => lane.key === "business").events[0];
     const timelineMarkup = timelineEvent(treeParent, TIMELINE_FIXTURES.week);
     const contracts = [
-      ["pm-kanban-card", boardRenderer, boardMarkup],
-      ["pm-kanban-card-priority-bar", boardRenderer, boardMarkup],
-      ["pm-kanban-card-body", boardRenderer, boardMarkup],
-      ["pm-kanban-card-title-row", boardRenderer, boardMarkup],
-      ["pm-kanban-card-title", boardRenderer, boardMarkup],
-      ["pm-chip", boardRenderer, boardMarkup],
-      ["pm-kanban-card-tags", boardRenderer, boardMarkup],
-      ["pm-progress", boardRenderer, boardMarkup],
-      ["pm-progress-track", boardRenderer, boardMarkup],
-      ["pm-progress-fill", boardRenderer, boardMarkup],
-      ["pm-kanban-card-footer", boardRenderer, boardMarkup],
-      ["pm-avatar-stack", boardRenderer, peopleMarkup],
-      ["pm-avatar", boardRenderer, peopleMarkup],
-      ["pm-avatar--sm", boardRenderer, peopleMarkup],
-      ["pm-avatar--more", boardRenderer, peopleMarkup],
+      ["db-kanban-card", boardRenderer, boardMarkup],
+      ["db-kanban-card-body", boardRenderer, boardMarkup],
+      ["db-kanban-card-title-row", boardRenderer, boardMarkup],
+      ["db-kanban-card-title", boardRenderer, boardMarkup],
+      ["db-kanban-card-meta", boardRenderer, boardMarkup],
       ["pm-gantt-bar-group", timelineRenderer, timelineMarkup],
       ["pm-gantt-bar", timelineRenderer, timelineMarkup],
       ["pm-gantt-bar-progress", timelineRenderer, timelineMarkup],
@@ -315,51 +222,40 @@ describe("subtask screenshot fixture parity", () => {
   });
 
   it("scopes the view-level flex/overflow height chain to the compound container+view selector", () => {
-    // board-renderer.ts's renderReferenceBoard adds `pm-kanban-view` to the same element that
+    // board-renderer.ts's renderReferenceBoard adds `db-kanban-view` to the same element that
     // database-view.ts / embedded-database-renderer.ts already classed `note-database-container`
-    // — never a descendant — so a descendant-only selector never matches and `.pm-kanban-board`'s
+    // — never a descendant — so a descendant-only selector never matches and `.db-kanban-board`'s
     // `flex: 1; min-height: 0` has no flex parent to size against.
-    expect(boardRenderer).toMatch(/container\.addClass\("pm-kanban-view"\)/);
-    expect(styles).toMatch(/\.note-database-container\.pm-kanban-view\s*\{[^}]*display:\s*flex;[^}]*flex-direction:\s*column;[^}]*height:\s*100%;/);
+    expect(boardRenderer).toMatch(/container\.addClass\("db-kanban-view"\)/);
+    expect(styles).toMatch(/\.note-database-container\.db-kanban-view\s*\{[^}]*display:\s*flex;[^}]*flex-direction:\s*column;[^}]*height:\s*100%;/);
     // A solo descendant-only selector for this rule (no compound alternative) would silently
     // reintroduce the dead rule; it must not stand alone as its own rule opener anywhere.
-    expect(styles).not.toMatch(/(?:^|\n)\.note-database-container \.pm-kanban-view\s*\{/);
+    expect(styles).not.toMatch(/(?:^|\n)\.note-database-container \.db-kanban-view\s*\{/);
   });
 
   it("cancels the host's inline padding through the same token the mobile breakpoint overrides", () => {
-    // `.pm-kanban-board`'s negative margin has to cancel whatever `.note-database-container`'s
+    // `.db-kanban-board`'s negative margin has to cancel whatever `.note-database-container`'s
     // own left/right padding actually is, not a value assumed to always be 24px: a hardcoded
     // `--db-space-8` margin against the 760px breakpoint's narrower padding over-cancelled it by
     // 12px, pulling the board 12px past the container's own edge (measured as a 4px phone inset
     // against the reference's 16px, and a clipped right edge). Routing both through one custom
     // property — inherited by the board from its `.note-database-container` ancestor — keeps
     // them paired at every breakpoint instead of relying on two literals staying in sync by hand.
-    const kanbanBoardRule = styles.match(/\.note-database-container \.pm-kanban-board\s*\{[^}]*\}/)?.[0] ?? "";
+    const kanbanBoardRule = styles.match(/\.note-database-container \.db-kanban-board\s*\{[^}]*\}/)?.[0] ?? "";
     expect(kanbanBoardRule).toMatch(/margin-left:\s*calc\(-1 \* var\(--db-container-padding-inline\)\)/);
     expect(kanbanBoardRule).toMatch(/margin-right:\s*calc\(-1 \* var\(--db-container-padding-inline\)\)/);
     expect(styles).toMatch(/\.note-database-container\s*\{[^}]*--db-container-padding-inline:\s*var\(--db-space-8\)/);
     expect(styles).toMatch(/@media \(max-width: 760px\)\s*\{\s*\.note-database-container\s*\{[^}]*--db-container-padding-inline:\s*12px;/);
   });
 
-  it("resets the inherited container line-height on the ported kanban block", () => {
+  it("resets the inherited container line-height on the kanban block", () => {
     // `.note-database-container` sets `line-height: var(--db-font-md-line-height)` (1.45) for
-    // this plugin's own UI, but the reference project this board is a one-to-one port of never
-    // sets a line-height on its kanban tree at all — every element it leaves unset computes to
-    // the UA default `normal` (~1.2). Without a reset, ported elements that also leave
-    // line-height unset (the count pill, the subtask parent line) inherit the host's 1.45
-    // instead, growing 2-3px taller than the reference and shifting everything below them. The
-    // compound `.note-database-container.pm-kanban-view` selector is the one place this can be
-    // cancelled once for the whole tree, the same selector the flex/overflow height chain above
-    // already uses.
-    // Two separate rule blocks share this exact compound selector (the shadow/border token
-    // block above it, and the layout block below); match whichever one carries the reset
-    // rather than assuming block order.
-    const kanbanViewRules = [...styles.matchAll(/\.note-database-container\.pm-kanban-view\s*\{[^}]*\}/g)].map((m) => m[0]);
+    // this plugin's own UI; the kanban block resets it once at the view root so nothing in it
+    // grows 2-3px taller than its capture-measured rhythm by inheriting that value.
+    const kanbanViewRules = [...styles.matchAll(/\.note-database-container\.db-kanban-view\s*\{[^}]*\}/g)].map((m) => m[0]);
     expect(kanbanViewRules.some((rule) => /line-height:\s*normal;/.test(rule))).toBe(true);
-    // Elements the reference DOES author with their own line-height keep it — the reset must
-    // only fill in the gap, never override an explicit reference value.
-    expect(styles).toMatch(/\.note-database-container \.pm-kanban-card-title\s*\{[^}]*line-height:\s*1\.45;/);
-    expect(styles).toMatch(/\.note-database-container \.pm-kanban-card-description\s*\{[^}]*line-height:\s*1\.4;/);
+    // The shared `pm-chip` primitive the gantt still constructs keeps its own explicit
+    // line-height regardless of the kanban reset.
     expect(styles).toMatch(/\.note-database-container \.pm-chip\s*\{[^}]*line-height:\s*1\.5;/);
   });
 

@@ -451,7 +451,7 @@ function renderBoard(actions: BoardRendererActions = createActions()): {
   const renderer = new BoardRenderer({} as unknown as App, actions);
   const container = new MockElement("div");
   renderer.render(container as unknown as HTMLElement, CONFIG, GROUPS, "status");
-  const board = container.querySelector<MockElement>(".pm-kanban-board")!;
+  const board = container.querySelector<MockElement>(".db-kanban-board")!;
   return { container, board, renderer, actions };
 }
 
@@ -487,97 +487,57 @@ const fixtureBoardColumn = screenshotBoardColumn as (title: string, rows: Fixtur
 const fixtureBoardCard = screenshotBoardCard as (
   row: FixtureRow,
   parent?: string,
-  options?: { priorityColor?: string | null; dueUrgency?: "normal" | "near" | "overdue" },
+  options?: { dragState?: "dragging" },
 ) => string;
 
-describe("pm-kanban view and column shell parity", () => {
-  it("keeps the screenshot fixture helpers on the reference class contract", () => {
+describe("kanban view and column shell parity", () => {
+  it("keeps the screenshot fixture helpers on the Anytype-shaped class contract", () => {
     const column = fixtureBoardColumn("To Do", [fixtureRows[0]], "blue");
-    expect(column).toContain('class="pm-kanban-col"');
-    expect(column).toContain('class="pm-kanban-col-header"');
-    expect(column).toContain('class="pm-kanban-cards"');
-    // No badge icon span: the option model carries no per-option icon field, matching the
-    // reference's text-only else-branch (KanbanColumn.ts:52-57).
-    expect(column).not.toContain('class="pm-kanban-col-badge-icon"');
-    // A palette-name tone resolves through the theme-aware token, not the raw name.
-    expect(column).toContain("var(--status-color-fg-blue)");
-    expect(column).not.toContain('style="color: blue;"');
+    expect(column).toContain('class="db-kanban-col"');
+    expect(column).toContain('class="db-kanban-col-header"');
+    expect(column).toContain('class="db-kanban-cards"');
+    // The option colour lands on the chip's own status-color class, the same vocabulary every
+    // select/status value renders with elsewhere — not an inline style.
+    expect(column).toContain('class="db-kanban-col-chip status-color-blue"');
 
-    const card = fixtureBoardCard(fixtureRows[0], "", { priorityColor: "red" });
-    expect(card).toContain('class="pm-kanban-card"');
-    expect(card).toContain('class="pm-kanban-card-body"');
-    expect(card).not.toContain("db-board-");
-    // The strip is opt-in and unrelated to the group tone; without a priority-bearing state the
-    // fixture omits it exactly as the renderer does with no priority column mapped.
-    expect(fixtureBoardCard(fixtureRows[0], "")).not.toContain("pm-kanban-card-priority-bar");
-    // The footer avatar stack is unconditional, and the due chip carries the overdue-tier class
-    // contract when the fixture is asked to depict it.
-    expect(fixtureBoardCard(fixtureRows[0], "")).toContain('class="pm-avatar-stack"');
-    const overdueCard = fixtureBoardCard(fixtureRows[0], "", { dueUrgency: "overdue" });
-    expect(overdueCard).toContain("pm-chip--solid");
-    expect(overdueCard).toContain("pm-chip--strong");
-    expect(overdueCard).toContain("var(--color-red)");
-    // The kanban call site only ever passes `overdue: boolean` to the card (KanbanCard.ts:97);
-    // the near tier exists in the reference's dueChip.ts primitive but no kanban call site
-    // reaches it, so an explicit near request renders plain, matching the renderer.
-    expect(fixtureBoardCard(fixtureRows[0], "", { dueUrgency: "near" })).not.toContain("pm-chip--solid");
+    const card = fixtureBoardCard(fixtureRows[0], "");
+    expect(card).toContain('class="db-kanban-card"');
+    expect(card).toContain('class="db-kanban-card-body"');
+    expect(card).not.toMatch(/class="db-board-card"/);
   });
 
-  it("renders the reference view and board wrappers", () => {
+  it("renders the kanban view and board wrappers", () => {
     const { container, board } = renderBoard();
-    // The reference adds the view class to the container itself.
-    expect(container.className).toContain("pm-kanban-view");
+    // The renderer adds the view class to the container itself.
+    expect(container.className).toContain("db-kanban-view");
     expect(board).not.toBeNull();
     expect(board.parentElement).toBe(container);
   });
 
-  it("renders one reference column per group with status data and header hierarchy", () => {
+  it("renders one column per group with the option chip header", () => {
     const { board } = renderBoard();
-    const columns = board.querySelectorAll<MockElement>(":scope > .pm-kanban-col");
+    const columns = board.querySelectorAll<MockElement>(":scope > .db-kanban-col");
     expect(columns).toHaveLength(2);
     expect(columns[0].getAttribute("data-status")).toBe("To Do");
     expect(columns[1].getAttribute("data-status")).toBe("Done");
 
-    const header = columns[0].querySelector<MockElement>(":scope > .pm-kanban-col-header");
+    const header = columns[0].querySelector<MockElement>(":scope > .db-kanban-col-header");
     expect(header).not.toBeNull();
-    // The option color is a palette name, so the header token carries the
-    // theme-aware foreground variable, not the name itself.
-    expect(header?.style["--col-color"]).toBe("var(--status-color-fg-blue)");
-
-    const topbar = header?.querySelector<MockElement>(":scope > .pm-kanban-col-topbar");
-    expect(topbar).not.toBeNull();
-    expect(topbar?.style.background).toBe("var(--status-color-fg-blue)");
-
-    const titleRow = header?.querySelector<MockElement>(":scope > .pm-kanban-col-title-row");
-    expect(titleRow).not.toBeNull();
-
-    const badge = titleRow?.querySelector<MockElement>(":scope > .pm-kanban-col-badge");
-    expect(badge).not.toBeNull();
-    expect(badge?.textContent).toBe("To Do");
-    expect(badge?.style.color).toBe("var(--status-color-fg-blue)");
-    // The reference only renders the badge icon span when the status carries an icon
-    // (KanbanColumn.ts:52-57: `if (props.status.icon && isIconName(...))`); the option model
-    // here has no per-option icon field, so the faithful else-branch is text-only, with no
-    // icon span standing in for a status icon that was never authored.
-    expect(badge?.querySelector(":scope > .pm-kanban-col-badge-icon")).toBeNull();
-    expect(setIcon).not.toHaveBeenCalledWith(expect.anything(), "circle-dot");
-
-    const headerRight = titleRow?.querySelector<MockElement>(":scope > .pm-kanban-col-header-right");
-    expect(headerRight).not.toBeNull();
-    const count = headerRight?.querySelector<MockElement>(":scope > .pm-kanban-col-count");
-    expect(count).not.toBeNull();
-    expect(count?.textContent).toBe("2");
+    const chip = header?.querySelector<MockElement>(":scope > .db-kanban-col-chip");
+    expect(chip).not.toBeNull();
+    expect(chip?.textContent).toBe("To Do");
+    expect(chip?.className).toContain("status-color-blue");
   });
 
   it("renders the cards container with the reference status data", () => {
     const { board } = renderBoard();
-    const cards = board.querySelectorAll<MockElement>(".pm-kanban-cards");
+    const cards = board.querySelectorAll<MockElement>(".db-kanban-cards");
     expect(cards).toHaveLength(2);
     expect(cards[0].getAttribute("data-status")).toBe("To Do");
-    expect(cards[0].parentElement?.className).toBe("pm-kanban-col");
+    expect(cards[0].parentElement?.className).toBe("db-kanban-col");
   });
 
-  it("renders an empty column without local empty-state markup", () => {
+  it("renders an empty column with the shared empty-group card, no crash", () => {
     const emptyGroups: BoardGroup[] = [
       { key: "Done", rows: [], count: 0 },
     ];
@@ -585,11 +545,11 @@ describe("pm-kanban view and column shell parity", () => {
     const container = new MockElement("div");
     renderer.render(container as unknown as HTMLElement, CONFIG, emptyGroups, "status");
 
-    const column = container.querySelector<MockElement>(".pm-kanban-col")!;
-    expect(column.querySelectorAll(".pm-kanban-card")).toHaveLength(0);
-    expect(column.querySelector(".db-board-empty-slot")).toBeNull();
-    const count = column.querySelector<MockElement>(".pm-kanban-col-count");
-    expect(count?.textContent).toBe("0");
+    const column = container.querySelector<MockElement>(".db-kanban-col")!;
+    expect(column.querySelectorAll(".db-kanban-card")).toHaveLength(0);
+    // A11: not seen in any of the 62 captures. Design inferred: the same empty-group card every
+    // other grouped renderer already shows.
+    expect(column.querySelector(".db-kanban-empty-slot")).not.toBeNull();
   });
 });
 
@@ -597,12 +557,12 @@ describe("pm-kanban view and column shell parity", () => {
 // 6. CARD TREE PARITY
 // ───────────────────────────────────────────────────────────────────
 
-describe("pm-kanban card tree parity", () => {
+describe("kanban card tree parity", () => {
   function todoCard(): MockElement {
     const { board } = renderBoard();
-    const cards = board.querySelectorAll<MockElement>(":scope > .pm-kanban-col")[0]
-      .querySelectorAll<MockElement>(":scope > .pm-kanban-cards > .pm-kanban-card");
-    return cards[1]; // the subtask row exercises every mapped slot
+    const cards = board.querySelectorAll<MockElement>(":scope > .db-kanban-col")[0]
+      .querySelectorAll<MockElement>(":scope > .db-kanban-cards > .db-kanban-card");
+    return cards[1]; // the child row carries a subtask parent, exercising the type-name slot
   }
 
   it("keeps card identity path-keyed in both attribute slots", () => {
@@ -612,67 +572,40 @@ describe("pm-kanban card tree parity", () => {
     expect(card.draggable).toBe(true);
   });
 
-  it("omits the priority bar when no priority column is mapped, keeping body order", () => {
+  it("nests the title row and property meta directly under the card body, no per-type furniture", () => {
     const card = todoCard();
-    // The reference paints the strip from the card's own priority and omits
-    // it for tasks without one; with no priority column mapped there is no
-    // per-card priority, so no card renders a strip.
-    const priorityBar = card.querySelector<MockElement>(":scope > .pm-kanban-card-priority-bar");
-    expect(priorityBar).toBeNull();
-
-    const body = card.querySelector<MockElement>(":scope > .pm-kanban-card-body");
-    expect(body).not.toBeNull();
-    // With the strip omitted the body leads the card, exactly as the
-    // reference card's tree does for a task without priority.
+    const body = card.querySelector<MockElement>(":scope > .db-kanban-card-body")!;
     expect(card.children[0]).toBe(body);
+
+    const titleRow = body.querySelector<MockElement>(":scope > .db-kanban-card-title-row");
+    expect(titleRow?.querySelector<MockElement>(":scope > .db-kanban-card-title")?.textContent).toBe("Child");
+
+    // No Objects/Types data model exists; the type-name slot keeps the schema's nearest content
+    // — a subtask's parent title — rather than a smaller breadcrumb.
+    const type = body.querySelector<MockElement>(":scope > .db-kanban-card-type");
+    expect(type?.textContent).toBe("Parent");
+
+    expect(card.querySelector(".db-kanban-card-priority-bar")).toBeNull();
+    expect(card.querySelector(".pm-avatar-stack")).toBeNull();
+    expect(card.querySelector(".pm-progress")).toBeNull();
   });
 
-  it("renders parent, title row, time, tags, progress and footer in body order", () => {
+  it("renders every configured property as a values-only row on one fixed rhythm", () => {
     const card = todoCard();
-    const body = card.querySelector<MockElement>(".pm-kanban-card-body")!;
-
-    const parent = body.querySelector<MockElement>(":scope > .pm-kanban-card-parent");
-    expect(parent).not.toBeNull();
-    expect(parent?.textContent).toBe("Parent");
-
-    const titleRow = body.querySelector<MockElement>(":scope > .pm-kanban-card-title-row");
-    expect(titleRow).not.toBeNull();
-    const title = titleRow?.querySelector<MockElement>(":scope > .pm-kanban-card-title");
-    expect(title?.textContent).toBe("Child");
-
-    const timeChip = body.querySelector<MockElement>(":scope > .pm-chip.pm-chip--sm");
-    expect(timeChip?.querySelector<MockElement>(".pm-chip-label")?.textContent).toBe("2h");
-
-    const tags = body.querySelector<MockElement>(":scope > .pm-kanban-card-tags");
-    expect(tags).not.toBeNull();
-
-    const progress = body.querySelector<MockElement>(".pm-progress.pm-progress--sm");
-    expect(progress).not.toBeNull();
-    expect(progress?.querySelector(".pm-progress-track .pm-progress-fill")?.style.width).toBe("40%");
-
-    const footer = body.querySelector<MockElement>(":scope > .pm-kanban-card-footer");
-    expect(footer).not.toBeNull();
-
-    const order = [
-      parent, titleRow, timeChip, tags, progress, footer,
-    ].map((el) => body.children.indexOf(el!));
-    expect(order).toEqual([...order].sort((a, b) => a - b));
-  });
-
-  it("maps the reference card to the fixed time, progress, due, tags, and people slots", () => {
-    const card = todoCard();
-    const body = card.querySelector<MockElement>(".pm-kanban-card-body")!;
-    expect(body.querySelector<MockElement>(":scope > .pm-chip.pm-chip--sm")?.querySelector<MockElement>(".pm-chip-label")?.textContent).toBe("2h");
-    expect(body.querySelector<MockElement>(":scope > .pm-kanban-card-tags")).not.toBeNull();
-    expect(body.querySelector<MockElement>(".pm-progress.pm-progress--sm")).not.toBeNull();
-    const footer = body.querySelector<MockElement>(":scope > .pm-kanban-card-footer");
-    expect(footer?.querySelector<MockElement>(".pm-avatar-stack .pm-avatar")).not.toBeNull();
-    expect(footer?.querySelector<MockElement>(".pm-chip .pm-chip-label")?.textContent).toBeTruthy();
+    const meta = card.querySelector<MockElement>(".db-kanban-card-meta")!;
+    const rows = meta.querySelectorAll<MockElement>(":scope > .db-board-card-field");
+    // "status" is the group field and the title field is excluded by 045's mechanism, leaving
+    // progress, hours, due, tags and people from COLUMNS, in that order, unchanged by this leg.
+    expect(rows.map((row) => row.getAttribute("data-note-database-column-key"))).toEqual([
+      "progress", "hours", "due", "tags", "people",
+    ]);
+    expect(rows[1].querySelector<MockElement>(".db-board-card-value")?.textContent).toBe("2");
+    expect(rows[2].querySelector<MockElement>(".db-board-card-value")?.textContent).toBeTruthy();
   });
 
   // A card shows the properties the view is configured for, so a stored list empties the slot
   // of a property it hides. What the list may not do is move a slot: the ones it leaves visible
-  // still render where the reference put them, in the reference's own vocabulary.
+  // still render where 045 put them.
   it("empties a reference slot whose column the stored list hides, and moves none of them", () => {
     const listed = {
       ...CONFIG,
@@ -681,276 +614,41 @@ describe("pm-kanban card tree parity", () => {
     const renderer = new BoardRenderer({} as unknown as App, createActions());
     const container = new MockElement("div");
     renderer.render(container as unknown as HTMLElement, listed, GROUPS, "status");
-    const card = container.querySelectorAll<MockElement>(".pm-kanban-card")
+    const card = container.querySelectorAll<MockElement>(".db-kanban-card")
       .find((el) => el.getAttribute("data-note-database-row-path") === CHILD_PATH)!;
-    const body = card.querySelector<MockElement>(".pm-kanban-card-body")!;
-    expect(body.querySelector<MockElement>(":scope > .pm-chip.pm-chip--sm")).toBeNull();
-    expect(body.querySelector<MockElement>(":scope > .pm-kanban-card-tags")).toBeNull();
-
-    const footer = body.querySelector<MockElement>(":scope > .pm-kanban-card-footer")!;
-    expect(footer.querySelector<MockElement>(":scope > .pm-chip .pm-chip-label")?.textContent).toBeTruthy();
+    const meta = card.querySelector<MockElement>(".db-kanban-card-meta")!;
+    const keys = meta.querySelectorAll<MockElement>(":scope > .db-board-card-field")
+      .map((row) => row.getAttribute("data-note-database-column-key"));
+    expect(keys).not.toContain("hours");
+    expect(keys).not.toContain("tags");
+    expect(keys).toContain("due");
   });
 
-  it("renders the subtask type chip with the reference chip vocabulary", () => {
-    const card = todoCard();
-    const chip = card.querySelector<MockElement>(".pm-kanban-card-title-row .pm-chip");
-    expect(chip?.className).toContain("pm-chip--solid");
-    expect(chip?.className).toContain("pm-chip--sm");
-    expect(chip?.style["--pm-chip-color"]).toBe("var(--color-green)");
-    expect(chip?.querySelector<MockElement>(".pm-chip-label")?.textContent).toBe("Sub");
-  });
-
-  it("renders tag chips with the reference outline/tag vocabulary and no dot for freeform tags", () => {
-    const card = todoCard();
-    const tag = card.querySelector<MockElement>(".pm-kanban-card-tags .pm-chip");
-    expect(tag?.className).toContain("pm-chip--outline");
-    expect(tag?.className).toContain("pm-chip--tag");
-    expect(tag?.querySelector(".pm-chip-dot")).toBeNull();
-    expect(tag?.querySelector<MockElement>(".pm-chip-label")?.textContent).toBe("idea");
-  });
-
-  it("renders the footer avatar stack and overdue due chip", () => {
-    const card = todoCard();
-    const footer = card.querySelector<MockElement>(".pm-kanban-card-footer")!;
-    const stack = footer.querySelector<MockElement>(":scope > .pm-avatar-stack");
-    expect(stack).not.toBeNull();
-    const avatar = stack?.querySelector<MockElement>(":scope > .pm-avatar.pm-avatar--sm");
-    expect(avatar).not.toBeNull();
-    expect(avatar?.textContent).toBe("AB");
-    expect(avatar?.style.background).toBeTruthy();
-
-    const dueChip = footer.querySelector<MockElement>(":scope > .pm-chip");
-    expect(dueChip?.className).toContain("pm-chip--solid");
-    expect(dueChip?.className).toContain("pm-chip--strong");
-    expect(dueChip?.style["--pm-chip-color"]).toBe("var(--color-red)");
-    expect(dueChip?.querySelector<MockElement>(".pm-chip-label")?.textContent).toBeTruthy();
-  });
-
-  it("renders a plain due chip for a future date", () => {
+  it("gates the type-name slot on an actual parent relation, not row presence", () => {
     const { board } = renderBoard();
-    const card = board.querySelectorAll<MockElement>(":scope > .pm-kanban-col")[1]
-      .querySelector<MockElement>(":scope > .pm-kanban-cards > .pm-kanban-card")!;
-    const dueChip = card.querySelector<MockElement>(".pm-kanban-card-footer .pm-chip")!;
-    expect(dueChip.className).not.toContain("pm-chip--solid");
-  });
-});
-
-// ───────────────────────────────────────────────────────────────────
-// 6b. FIDELITY PASS — residual divergences against the reference sources
-// ───────────────────────────────────────────────────────────────────
-
-describe("pm-kanban reference fidelity pass", () => {
-  function configWith(columns: ColumnDef[]): ViewConfig {
-    return { ...CONFIG, schema: { columns, computedFields: [] } };
-  }
-
-  function rowInTodo(path: string, basename: string, frontmatter: Record<string, unknown>): RowData {
-    return { file: makeFile(path, basename, "Tasks"), frontmatter, computed: {} };
-  }
-
-  function renderWith(columns: ColumnDef[], groups: BoardGroup[]): MockElement {
-    const actions = createActions({ getColumns: () => columns });
-    const renderer = new BoardRenderer({} as unknown as App, actions);
-    const container = new MockElement("div");
-    renderer.render(container as unknown as HTMLElement, configWith(columns), groups, "status");
-    return container;
-  }
-
-  function firstCardOf(container: MockElement, rowPath: string): MockElement {
-    return container.querySelectorAll<MockElement>(".pm-kanban-card")
-      .find((card) => card.getAttribute("data-note-database-row-path") === rowPath)!;
-  }
-
-  /** Local YYYY-MM-DD for a date `days` from today, matching the renderer's
-   *  own local-date due comparison. */
-  function isoDaysFromNow(days: number): string {
-    const d = new Date();
-    d.setDate(d.getDate() + days);
-    const pad = (value: number) => String(value).padStart(2, "0");
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-  }
-
-  it("passes a real hex option color through the reference paint slots unchanged", () => {
-    const columns: ColumnDef[] = [
-      { key: "status", label: "Status", type: "status", statusOptions: [{ value: "Custom", color: "#ff6600" as StatusColor }] },
-    ];
-    const rows = [rowInTodo("Tasks/Custom.md", "Custom", { status: "Custom" })];
-    const container = renderWith(columns, [{ key: "Custom", rows, count: 1 }]);
-
-    const header = container.querySelector<MockElement>(".pm-kanban-col-header")!;
-    expect(header.style["--col-color"]).toBe("#ff6600");
-    expect(header.querySelector<MockElement>(".pm-kanban-col-topbar")?.style.background).toBe("#ff6600");
-    expect(header.querySelector<MockElement>(".pm-kanban-col-badge")?.style.color).toBe("#ff6600");
-  });
-
-  it("always renders the footer avatar stack, empty without a people column", () => {
-    const columns = COLUMNS.filter((col) => col.key !== "people");
-    const rows = [rowInTodo("Tasks/NoPeople.md", "NoPeople", { status: "To Do", due: "2099-01-01" })];
-    const container = renderWith(columns, [{ key: "To Do", rows, count: 1 }]);
-
-    const footer = container.querySelector<MockElement>(".pm-kanban-card-footer")!;
-    const stack = footer.querySelector<MockElement>(":scope > .pm-avatar-stack");
-    expect(stack).not.toBeNull();
-    expect(stack?.querySelectorAll(":scope > .pm-avatar")).toHaveLength(0);
-  });
-
-  it("gates the Sub chip on an actual parent relation, not row presence", () => {
-    const { board } = renderBoard();
-    const cards = board.querySelectorAll<MockElement>(".pm-kanban-card");
+    const cards = board.querySelectorAll<MockElement>(".db-kanban-card");
     const rootCard = cards.find((card) => card.getAttribute("data-note-database-row-path") === PARENT_PATH)!;
     const childCard = cards.find((card) => card.getAttribute("data-note-database-row-path") === CHILD_PATH)!;
 
-    expect(rootCard.querySelector(".pm-kanban-card-title-row .pm-chip")).toBeNull();
-    expect(childCard.querySelector<MockElement>(".pm-kanban-card-title-row .pm-chip .pm-chip-label")?.textContent).toBe("Sub");
+    expect(rootCard.querySelector(".db-kanban-card-type")).toBeNull();
+    expect(childCard.querySelector<MockElement>(".db-kanban-card-type")?.textContent).toBe("Parent");
   });
 
-  it("colors the priority bar from the mapped priority option per card and omits it without a value", () => {
+  it("passes a real hex option color through the header chip via a class, not an inline style", () => {
     const columns: ColumnDef[] = [
-      ...COLUMNS,
-      {
-        key: "priority",
-        label: "Priority",
-        type: "select",
-        statusOptions: [
-          { value: "High", color: "red" },
-          { value: "Custom", color: "#ff6600" as StatusColor },
-        ],
-      },
+      { key: "status", label: "Status", type: "status", statusOptions: [{ value: "Custom", color: "#ff6600" as StatusColor }] },
     ];
-    const rows = [
-      rowInTodo("Tasks/High.md", "High", { status: "To Do", priority: "High" }),
-      rowInTodo("Tasks/Custom.md", "Custom", { status: "To Do", priority: "Custom" }),
-      rowInTodo("Tasks/None.md", "None", { status: "To Do" }),
-    ];
-    const container = renderWith(columns, [{ key: "To Do", rows, count: rows.length }]);
+    const actions = createActions({ getColumns: () => columns });
+    const renderer = new BoardRenderer({} as unknown as App, actions);
+    const container = new MockElement("div");
+    const rows = [{ file: makeFile("Tasks/Custom.md", "Custom", "Tasks"), frontmatter: { status: "Custom" }, computed: {} }];
+    renderer.render(container as unknown as HTMLElement, { ...CONFIG, schema: { columns, computedFields: [] } }, [{ key: "Custom", rows, count: 1 }], "status");
 
-    const high = firstCardOf(container, "Tasks/High.md").querySelector<MockElement>(":scope > .pm-kanban-card-priority-bar")!;
-    expect(high.style.background).toBe("var(--status-color-fg-red)");
-    const custom = firstCardOf(container, "Tasks/Custom.md").querySelector<MockElement>(":scope > .pm-kanban-card-priority-bar")!;
-    expect(custom.style.background).toBe("#ff6600");
-    expect(firstCardOf(container, "Tasks/None.md").querySelector(".pm-kanban-card-priority-bar")).toBeNull();
-  });
-
-  it("omits the priority bar for the reference's non-urgent tiers, paints every other option name", () => {
-    const columns: ColumnDef[] = [
-      ...COLUMNS,
-      {
-        key: "priority",
-        label: "Priority",
-        type: "select",
-        statusOptions: [
-          { value: "Urgent", color: "red" },
-          { value: "Medium", color: "yellow" },
-          { value: "Low", color: "green" },
-          { value: "None", color: "gray" },
-          { value: "Backlog", color: "purple" },
-        ],
-      },
-    ];
-    const rows = [
-      rowInTodo("Tasks/Urgent.md", "Urgent", { status: "To Do", priority: "Urgent" }),
-      rowInTodo("Tasks/Medium.md", "Medium", { status: "To Do", priority: "Medium" }),
-      rowInTodo("Tasks/Low.md", "Low", { status: "To Do", priority: "low" }),
-      rowInTodo("Tasks/NoneOption.md", "NoneOption", { status: "To Do", priority: "None" }),
-      rowInTodo("Tasks/Backlog.md", "Backlog", { status: "To Do", priority: "Backlog" }),
-    ];
-    const container = renderWith(columns, [{ key: "To Do", rows, count: rows.length }]);
-
-    // The reference paints the strip for every priority except medium/low — this port also
-    // omits "none", the third non-urgent name select columns here commonly carry.
-    expect(firstCardOf(container, "Tasks/Urgent.md").querySelector(".pm-kanban-card-priority-bar")).not.toBeNull();
-    expect(firstCardOf(container, "Tasks/Medium.md").querySelector(".pm-kanban-card-priority-bar")).toBeNull();
-    expect(firstCardOf(container, "Tasks/Low.md").querySelector(".pm-kanban-card-priority-bar")).toBeNull();
-    expect(firstCardOf(container, "Tasks/NoneOption.md").querySelector(".pm-kanban-card-priority-bar")).toBeNull();
-    expect(firstCardOf(container, "Tasks/Backlog.md").querySelector(".pm-kanban-card-priority-bar")).not.toBeNull();
-  });
-
-  it("renders the milestone chip for a row whose type field marks a milestone", () => {
-    const rows = [rowInTodo("Tasks/Milestone.md", "Milestone", { status: "To Do", type: "milestone" })];
-    const container = renderWith(COLUMNS, [{ key: "To Do", rows, count: 1 }]);
-
-    const chip = container.querySelector<MockElement>(".pm-kanban-card-title-row .pm-chip")!;
-    expect(chip.className).toContain("pm-chip--solid");
-    expect(chip.className).toContain("pm-chip--sm");
-    expect(chip.style["--pm-chip-color"]).toBe("var(--color-purple)");
-    expect(chip.querySelector<MockElement>(".pm-chip-label")?.textContent).toBe("M");
-    expect(setTooltip).toHaveBeenCalledWith(chip, "board.milestone");
-  });
-
-  it("renders the recurrence chip when a recurrence/repeat column has a value", () => {
-    const columns: ColumnDef[] = [...COLUMNS, { key: "recurrence", label: "Recurrence", type: "text" }];
-    const rows = [
-      rowInTodo("Tasks/Repeats.md", "Repeats", { status: "To Do", recurrence: "monthly" }),
-      rowInTodo("Tasks/Once.md", "Once", { status: "To Do" }),
-    ];
-    const container = renderWith(columns, [{ key: "To Do", rows, count: rows.length }]);
-
-    const chip = firstCardOf(container, "Tasks/Repeats.md").querySelector<MockElement>(".pm-kanban-card-title-row .pm-chip")!;
-    expect(chip.className).toContain("pm-chip--solid");
-    expect(chip.style["--pm-chip-color"]).toBe("var(--color-blue)");
-    expect(chip.querySelector<MockElement>(".pm-chip-label")?.textContent).toBe("R");
-    expect(firstCardOf(container, "Tasks/Once.md").querySelector(".pm-kanban-card-title-row .pm-chip")).toBeNull();
-  });
-
-  it("never surfaces the near urgency tier the kanban call site does not reach", () => {
-    // The reference's dueChip.ts primitive supports a near tier, but KanbanView.ts collapses
-    // urgency to a plain boolean before it ever reaches KanbanCard (KanbanView.ts:126
-    // `overdue: dueUrgency(...) === 'overdue'`, then KanbanCard.ts:97
-    // `props.overdue ? 'overdue' : 'normal'`) — a due-in-two-days task renders plain on the
-    // board, exactly as the reference's own kanban card does.
-    const rows = [rowInTodo("Tasks/Near.md", "Near", { status: "To Do", due: isoDaysFromNow(2) })];
-    const container = renderWith(COLUMNS, [{ key: "To Do", rows, count: 1 }]);
-
-    const chip = container.querySelector<MockElement>(".pm-kanban-card-footer .pm-chip")!;
-    expect(chip.className).not.toContain("pm-chip--solid");
-  });
-
-  it("suppresses the due chip's urgency tiers once the row's checkbox column marks it complete", () => {
-    const columns: ColumnDef[] = [...COLUMNS, { key: "done", label: "Done", type: "checkbox" }];
-    const rows = [
-      rowInTodo("Tasks/OverdueDone.md", "OverdueDone", { status: "To Do", due: isoDaysFromNow(-5), done: true }),
-      rowInTodo("Tasks/NearDone.md", "NearDone", { status: "To Do", due: isoDaysFromNow(1), done: true }),
-      rowInTodo("Tasks/OverdueOpen.md", "OverdueOpen", { status: "To Do", due: isoDaysFromNow(-5), done: false }),
-    ];
-    const container = renderWith(columns, [{ key: "To Do", rows, count: rows.length }]);
-
-    // The reference's dueUrgency reads terminal tasks as always normal (utils.ts:80-83); this
-    // port's only native completion signal is a checkbox column, the same one the calendar
-    // renderer's isRowCompleted resolves from.
-    const overdueDoneChip = firstCardOf(container, "Tasks/OverdueDone.md").querySelector<MockElement>(".pm-kanban-card-footer .pm-chip")!;
-    expect(overdueDoneChip.className).not.toContain("pm-chip--solid");
-    const nearDoneChip = firstCardOf(container, "Tasks/NearDone.md").querySelector<MockElement>(".pm-kanban-card-footer .pm-chip")!;
-    expect(nearDoneChip.className).not.toContain("pm-chip--solid");
-    const overdueOpenChip = firstCardOf(container, "Tasks/OverdueOpen.md").querySelector<MockElement>(".pm-kanban-card-footer .pm-chip")!;
-    expect(overdueOpenChip.className).toContain("pm-chip--solid");
-    expect(overdueOpenChip.className).toContain("pm-chip--strong");
-  });
-
-  // The bench's due dates are fixed literals (tools/bench/board-render-bench.ts's date-typed
-  // column), not relative to "today" — so a row's overdue/normal classification depended
-  // entirely on which real day the check happened to run on, and flipped as the wall clock
-  // walked past the fixed date, moving the constructed board capture's due chip with no code
-  // or data change. Freezing renderNow() to two different instants around the SAME fixed due
-  // date proves the classification now follows the frozen clock rather than the real one.
-  describe("due urgency under a frozen render clock", () => {
-    afterEach(() => setFrozenRenderNow(null));
-
-    it("classifies a fixed due date by the frozen render clock, not the real one", () => {
-      const due = "2026-06-15";
-      const rows = [rowInTodo("Tasks/Frozen.md", "Frozen", { status: "To Do", due })];
-
-      setFrozenRenderNow(new Date(2026, 6, 1, 9, 0, 0)); // frozen "today" after the due date
-      const afterContainer = renderWith(COLUMNS, [{ key: "To Do", rows, count: 1 }]);
-      const afterChip = firstCardOf(afterContainer, "Tasks/Frozen.md")
-        .querySelector<MockElement>(".pm-kanban-card-footer .pm-chip")!;
-      expect(afterChip.className).toContain("pm-chip--solid");
-
-      setFrozenRenderNow(new Date(2026, 4, 1, 9, 0, 0)); // frozen "today" before the due date
-      const beforeContainer = renderWith(COLUMNS, [{ key: "To Do", rows, count: 1 }]);
-      const beforeChip = firstCardOf(beforeContainer, "Tasks/Frozen.md")
-        .querySelector<MockElement>(".pm-kanban-card-footer .pm-chip")!;
-      expect(beforeChip.className).not.toContain("pm-chip--solid");
-    });
+    // A hex value carries no status-color-* class to retint; it paints through an inline style
+    // instead, the same fallback the header always had for a custom author-chosen colour.
+    const chip = container.querySelector<MockElement>(".db-kanban-col-chip")!;
+    expect(chip.className).not.toMatch(/status-color-#/);
+    expect(chip.style.color).toBe("#ff6600");
   });
 });
 
@@ -958,11 +656,11 @@ describe("pm-kanban reference fidelity pass", () => {
 // 7. INTERACTION PARITY
 // ───────────────────────────────────────────────────────────────────
 
-describe("pm-kanban interaction parity", () => {
+describe("kanban interaction parity", () => {
   it("opens the note when a card is clicked", () => {
     const actions = createActions();
     const { board } = renderBoard(actions);
-    const card = board.querySelectorAll<MockElement>(".pm-kanban-card")[0];
+    const card = board.querySelectorAll<MockElement>(".db-kanban-card")[0];
     card.dispatchEvent({ type: "click", target: card });
     expect(actions.openRow).toHaveBeenCalledTimes(1);
     expect(vi.mocked(actions.openRow).mock.calls[0][0].file.path).toBe(PARENT_PATH);
@@ -972,7 +670,7 @@ describe("pm-kanban interaction parity", () => {
     const openRecordDetail = vi.fn<(anchorEl: HTMLElement, row: RowData) => void>();
     const actions = createActions({ openRecordDetail });
     const { board } = renderBoard(actions);
-    const card = board.querySelectorAll<MockElement>(".pm-kanban-card")[0];
+    const card = board.querySelectorAll<MockElement>(".db-kanban-card")[0];
     card.dispatchEvent({ type: "click", target: card });
 
     // Without an element to point at, the record surface anchors to the whole scrolling
@@ -988,7 +686,7 @@ describe("pm-kanban interaction parity", () => {
     const showRowMenu = vi.fn();
     const actions = createActions({ showRowMenu });
     const { board } = renderBoard(actions);
-    const card = board.querySelectorAll<MockElement>(".pm-kanban-card")[0];
+    const card = board.querySelectorAll<MockElement>(".db-kanban-card")[0];
     const preventDefault = vi.fn();
     card.dispatchEvent({ type: "contextmenu", preventDefault });
     expect(preventDefault).toHaveBeenCalled();
@@ -997,36 +695,36 @@ describe("pm-kanban interaction parity", () => {
 
   it("writes the path-keyed payload and dragging classes on dragstart", () => {
     const { board } = renderBoard();
-    const card = board.querySelectorAll<MockElement>(".pm-kanban-card")[0];
+    const card = board.querySelectorAll<MockElement>(".db-kanban-card")[0];
     const setData = vi.fn();
     card.dispatchEvent({ type: "dragstart", dataTransfer: { setData } });
     expect(setData).toHaveBeenCalledWith("text/plain", PARENT_PATH);
     expect(setData).toHaveBeenCalledWith("application/x-note-database-card", PARENT_PATH);
-    expect(card.className).toContain("pm-kanban-card--dragging");
+    expect(card.className).toContain("db-kanban-card--dragging");
   });
 
   it("adds and removes the reference drop-target class on the cards container", () => {
     const { board } = renderBoard();
-    const cards = board.querySelectorAll<MockElement>(".pm-kanban-cards")[0];
+    const cards = board.querySelectorAll<MockElement>(".db-kanban-cards")[0];
     cards.dispatchEvent({
       type: "dragover",
       preventDefault: vi.fn(),
       dataTransfer: { types: ["application/x-note-database-card"], getData: () => "" },
     });
-    expect(cards.className).toContain("pm-kanban-drop-target");
+    expect(cards.className).toContain("db-kanban-drop-target");
 
     cards.dispatchEvent({
       type: "dragleave",
       preventDefault: vi.fn(),
       dataTransfer: { types: ["application/x-note-database-card"], getData: () => "" },
     });
-    expect(cards.className).not.toContain("pm-kanban-drop-target");
+    expect(cards.className).not.toContain("db-kanban-drop-target");
   });
 
   it("updates status once for a cross-column drop and refreshes via the transaction", async () => {
     const actions = createActions();
     const { board } = renderBoard(actions);
-    const doneCards = board.querySelectorAll<MockElement>(".pm-kanban-cards")[1];
+    const doneCards = board.querySelectorAll<MockElement>(".db-kanban-cards")[1];
     doneCards.dispatchEvent(dropEvent(CHILD_PATH, "To Do"));
     await flush();
 
@@ -1037,13 +735,13 @@ describe("pm-kanban interaction parity", () => {
     expect(beforePath).toBe(OTHER_PATH);
     expect(afterPath).toBeUndefined();
     expect(movedPaths).toEqual([CHILD_PATH]);
-    expect(doneCards.className).not.toContain("pm-kanban-drop-target");
+    expect(doneCards.className).not.toContain("db-kanban-drop-target");
   });
 
   it("keeps a same-status drop in place without touching the transaction", async () => {
     const actions = createActions();
     const { board } = renderBoard(actions);
-    const todoCards = board.querySelectorAll<MockElement>(".pm-kanban-cards")[0];
+    const todoCards = board.querySelectorAll<MockElement>(".db-kanban-cards")[0];
     todoCards.dispatchEvent(dropEvent(CHILD_PATH, "To Do"));
     await flush();
 
@@ -1071,9 +769,9 @@ describe("pm-kanban interaction parity", () => {
   it("moves the card across columns through a real dragstart-to-drop cycle", async () => {
     const actions = createActions();
     const { board } = renderBoard(actions);
-    const todoCards = board.querySelectorAll<MockElement>(".pm-kanban-cards")[0];
-    const doneCards = board.querySelectorAll<MockElement>(".pm-kanban-cards")[1];
-    const card = todoCards.querySelectorAll<MockElement>(":scope > .pm-kanban-card")[1]; // child row
+    const todoCards = board.querySelectorAll<MockElement>(".db-kanban-cards")[0];
+    const doneCards = board.querySelectorAll<MockElement>(".db-kanban-cards")[1];
+    const card = todoCards.querySelectorAll<MockElement>(":scope > .db-kanban-card")[1]; // child row
     const dataTransfer = realDrag();
 
     card.dispatchEvent({ type: "dragstart", dataTransfer });
@@ -1089,8 +787,8 @@ describe("pm-kanban interaction parity", () => {
   it("keeps a real same-column drag in place without a spurious reorder", async () => {
     const actions = createActions();
     const { board } = renderBoard(actions);
-    const todoCards = board.querySelectorAll<MockElement>(".pm-kanban-cards")[0];
-    const card = todoCards.querySelectorAll<MockElement>(":scope > .pm-kanban-card")[1]; // child row
+    const todoCards = board.querySelectorAll<MockElement>(".db-kanban-cards")[0];
+    const card = todoCards.querySelectorAll<MockElement>(":scope > .db-kanban-card")[1]; // child row
     const dataTransfer = realDrag();
 
     card.dispatchEvent({ type: "dragstart", dataTransfer });
@@ -1106,7 +804,7 @@ describe("pm-kanban interaction parity", () => {
 // 8. LAZY DESCRIPTION HYDRATION PARITY
 // ───────────────────────────────────────────────────────────────────
 
-describe("pm-kanban lazy description hydration", () => {
+describe("kanban lazy description hydration", () => {
   it("loads descriptions after the first render and re-renders once", async () => {
     const loadRowDescription = vi.fn(async (row: RowData) => {
       if (row.file.path !== CHILD_PATH) return undefined;
@@ -1115,13 +813,13 @@ describe("pm-kanban lazy description hydration", () => {
     const actions = createActions({ loadRowDescription });
     const { container, renderer } = renderBoard(actions);
 
-    expect(container.querySelector(".pm-kanban-card-description")).toBeNull();
+    expect(container.querySelector(".db-kanban-card-description")).toBeNull();
 
     await flush();
     await flush();
 
     expect(loadRowDescription).toHaveBeenCalled();
-    const description = container.querySelector<MockElement>(".pm-kanban-card-description");
+    const description = container.querySelector<MockElement>(".db-kanban-card-description");
     expect(description).not.toBeNull();
     expect(description?.textContent).toBe("Body text from the note");
     expect(renderer).toBeTruthy();
@@ -1135,14 +833,14 @@ describe("pm-kanban lazy description hydration", () => {
 describe("switching away from the default board", () => {
   it("leaves no board root or board container class behind", () => {
     const { container } = renderBoard();
-    expect(container.querySelector(".pm-kanban-board")).not.toBeNull();
-    expect(container.hasClass("pm-kanban-view")).toBe(true);
+    expect(container.querySelector(".db-kanban-board")).not.toBeNull();
+    expect(container.hasClass("db-kanban-view")).toBe(true);
 
     clearRenderedViewRoots(container as unknown as HTMLElement);
 
     // Whatever renders next mounts into this container. A surviving root stacks above it,
     // and a surviving container class keeps the board's flex/overflow layout on it.
-    expect(container.querySelector(".pm-kanban-board")).toBeNull();
-    expect(container.hasClass("pm-kanban-view")).toBe(false);
+    expect(container.querySelector(".db-kanban-board")).toBeNull();
+    expect(container.hasClass("db-kanban-view")).toBe(false);
   });
 });

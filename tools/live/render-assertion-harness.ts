@@ -1347,18 +1347,23 @@ function tableAssertions(
 // The card views render one card per row with no window, so unlike the two date-driven views
 // their drawn count is the row count and a shortfall is a real failure rather than a fixture slip.
 
-function boardAssertions(container: HTMLElement, rows: RowData[]): AssertionResult[] {
+function boardAssertions(container: HTMLElement, rows: RowData[], groups: BoardGroup[]): AssertionResult[] {
   const results: AssertionResult[] = [];
-  // The default board (boardExtensionsEnabled unset) renders the reference's
-  // pm-kanban-* vocabulary, not the local extension classes; probe that
+  // The default board (boardExtensionsEnabled unset) renders the Anytype-shaped
+  // db-kanban-* vocabulary, not the local extension classes; probe that
   // vocabulary rather than opting the scenario into the extensions.
-  const cards = container.querySelectorAll<HTMLElement>(".pm-kanban-card").length;
-  const columns = container.querySelectorAll<HTMLElement>(".pm-kanban-col").length;
+  const cards = container.querySelectorAll<HTMLElement>(".db-kanban-card").length;
+  const columns = container.querySelectorAll<HTMLElement>(".db-kanban-col").length;
 
+  // The captured kanban page limit is 10 per column (`053` D4, adopted at
+  // board-renderer.ts's own render call — AC-008), applied locally to the board rather than
+  // through the shared config field every other view's own default still reads as unlimited.
+  // A group under the limit shows every row; one at or over it shows exactly 10.
+  const expectedCards = groups.reduce((sum, group) => sum + Math.min(group.rows.length, 10), 0);
   results.push({
-    name: "every row becomes a card",
-    pass: cards === rows.length,
-    detail: `${cards} cards for ${rows.length} rows`,
+    name: "every row becomes a card, up to the kanban page limit",
+    pass: cards === expectedCards,
+    detail: `${cards} cards for ${rows.length} rows across ${groups.length} groups, want ${expectedCards}`,
   });
   results.push({
     name: "the board drew its columns",
@@ -2382,15 +2387,15 @@ export function runRenderAssertions(
             "the board cards drew their empty covers"));
         }
       } else if (scenario.boardEmptyColumn) {
-        const columnsEls = Array.from(container.querySelectorAll<HTMLElement>(".pm-kanban-col"));
-        const empties = columnsEls.filter((col) => col.querySelectorAll(".pm-kanban-card").length === 0);
+        const columnsEls = Array.from(container.querySelectorAll<HTMLElement>(".db-kanban-col"));
+        const empties = columnsEls.filter((col) => col.querySelectorAll(".db-kanban-card").length === 0);
         results.push({
           name: "the board drew an empty column beside its populated lanes",
           pass: columnsEls.length === BOARD_GROUPS + 1 && empties.length === 1,
           detail: `${columnsEls.length} column(s), ${empties.length} with zero cards`,
         });
       } else {
-        results.push(...boardAssertions(container, rows));
+        results.push(...boardAssertions(container, rows, groups));
       }
       if (scenario.subtaskTree) results.push(subtaskTreeAssertion(container, "board"));
       if (scenario.boardCardFieldsHidden) {

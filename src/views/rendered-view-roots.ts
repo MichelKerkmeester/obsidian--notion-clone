@@ -19,7 +19,7 @@ const VIEW_ROOT_CLASSES = [
   "db-table-wrap",
   "db-grouped-table",
   "db-board",
-  "pm-kanban-board",
+  "db-kanban-board",
   "db-gallery",
   "db-gallery-grouped",
   "db-gallery-total-header",
@@ -38,7 +38,7 @@ const VIEW_ROOT_CLASSES = [
 
 /** Classes a view puts on the container itself rather than on its root, and
  *  which therefore outlive the root unless they come off with it. */
-const VIEW_CONTAINER_CLASSES = ["pm-kanban-view"];
+const VIEW_CONTAINER_CLASSES = ["db-kanban-view"];
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TEARDOWN

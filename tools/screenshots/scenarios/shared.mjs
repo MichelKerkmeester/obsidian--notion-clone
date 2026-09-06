@@ -241,115 +241,39 @@ export function tableRows() {
     </tr>`).join("");
 }
 
-/** Mirrors board-renderer.ts's resolveReferenceColor: a name from this project's closed palette
- *  (src/data/status-colors.ts) paints through the theme-aware foreground token so both themes
- *  resolve the same option color; any other authored color string (hex/rgb custom values, or a
- *  CSS var the fixture already carries) passes through unchanged. */
-const STATUS_COLOR_NAMES = new Set([
-  "gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink",
-  "red", "slate", "cyan", "teal", "lime", "indigo", "violet", "rose",
-]);
-const resolveTone = (tone) => (tone && STATUS_COLOR_NAMES.has(tone) ? `var(--status-color-fg-${tone})` : tone);
-
-const pmChip = (label, { variant, size, tag = false, color, dot = false, strong = false } = {}) => {
-  const classes = [
-    "pm-chip",
-    variant === "solid" ? "pm-chip--solid" : "",
-    variant === "outline" ? "pm-chip--outline" : "",
-    size === "sm" ? "pm-chip--sm" : "",
-    tag ? "pm-chip--tag" : "",
-    strong ? "pm-chip--strong" : "",
-  ].filter(Boolean).join(" ");
-  const style = color ? ` style="--pm-chip-color: ${color};"` : "";
-  return `<span class="${classes}"${style}>${dot ? `<span class="pm-chip-dot"></span>` : ""}<span class="pm-chip-label">${label}</span></span>`;
-};
-
-const pmCardPath = (row, parent = "") => row.path || `${parent ? `${parent}/` : ""}${row.name}.md`;
-
-const pmCardFields = (row) => `
-      ${pmChip(row.hours || "8h", { size: "sm" })}
-      <div class="pm-kanban-card-tags">
-        ${[row.category, row.payment].filter(Boolean).map((tag) => pmChip(tag, { variant: "outline", tag })).join("")}
+/** One property row exactly as `card-field-renderer.ts`'s `renderCardField` plus
+ *  `record-surface/property-row.ts`'s `renderPropertyValue` build it for the board: a label span
+ *  (hidden by CSS except on a checkbox row) then the value. A `tone` renders the value as a
+ *  `status-badge`, matching a select or status column; omitted, the value is plain text, matching
+ *  a date, number or text column — Anytype's card shows every property this way, values only,
+ *  one per line. */
+const kanbanCardField = (label, value, tone) => `
+      <div class="db-board-card-field" data-note-database-column-key="${label.toLowerCase()}" role="gridcell">
+        <span class="db-board-card-field-label">${label}</span>
+        <div class="db-board-card-value">${tone ? pill(value, tone) : value}</div>
       </div>`;
 
-/** "January 4, 2027" -> "Jan 4", matching board-renderer.ts's referenceFormatDateShort (month
- *  short + day, no year, `board-renderer.ts:2491-2496`) so a captured due chip reads the same
- *  shape the real renderer emits instead of this fixture's own long-form literal. Parsing and
- *  formatting both default to the run's local time, so a fixed literal in stays the same day
- *  out regardless of timezone — no wall-clock read, so the capture stays reproducible. */
-const pmShortDate = (label) => {
-  const date = new Date(label);
-  if (Number.isNaN(date.getTime())) return label;
-  return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" }).format(date);
-};
-
-/** The due chip's urgency, matching the renderer's getReferenceDueUrgency: past due paints solid
- *  strong red, anything else stays plain — the reference's dueChip.ts primitive also supports a
- *  near tier, but the kanban call site collapses to a boolean before it ever reaches the card
- *  (KanbanView.ts:126, KanbanCard.ts:97), so this fixture never paints it either. */
-const pmDueChip = (label, urgency = "normal") => {
-  const short = pmShortDate(label);
-  if (urgency === "overdue") return pmChip(short, { size: "sm", variant: "solid", color: "var(--color-red)", strong: true });
-  return pmChip(short, { size: "sm" });
-};
-
-/** Deterministic per-name fill, echoing board-renderer.ts's referenceStringToColor hash
- *  (`:2450-2454`) so a captured avatar's background isn't an arbitrary constant. */
-const pmAvatarColor = (name) => {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  return `hsl(${Math.abs(hash) % 360}, 55%, 45%)`;
-};
-
-/** First+last initials, or the first two characters of a single word — mirrors
- *  board-renderer.ts's referenceInitialsFor (`:2480-2484`). */
-const pmInitials = (name) => {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  const raw = parts.length >= 2 ? parts[0][0] + parts[1][0] : name.slice(0, 2);
-  return raw.toUpperCase();
-};
-
-/** Up to three initialed avatars plus a "+N" overflow slot, mirroring the reference's unconditional
- *  `new AvatarStack(footer)` (`board-renderer.ts:522-535`): the stack is always constructed, only
- *  its contents depend on whether a people column is mapped. */
-const pmAvatarStack = (people = []) => {
-  const shown = people.slice(0, 3)
-    .map((name) => `<span class="pm-avatar pm-avatar--sm" style="background: ${pmAvatarColor(name)};" title="${name}">${pmInitials(name)}</span>`)
-    .join("");
-  const overflow = people.length - 3;
-  const more = overflow > 0 ? `<span class="pm-avatar pm-avatar--more pm-avatar--sm">+${overflow}</span>` : "";
-  return `<div class="pm-avatar-stack">${shown}${more}</div>`;
-};
-
-/** The footer always constructs the avatar stack (empty when the row carries no people), which
- *  is what keeps the due chip pushed to the footer's right edge. */
-const pmCardFooter = (row, dueUrgency = "normal") => `
-      <div class="pm-kanban-card-footer">
-        ${pmAvatarStack(row.people)}
-        ${row.renew ? pmDueChip(row.renew, dueUrgency) : ""}
+const kanbanCardFields = (row) => `
+      <div class="db-kanban-card-meta">
+        ${kanbanCardField("Cost", row.cost)}
+        ${kanbanCardField("Billing", row.cycle, optionTone(row.cycle))}
+        ${kanbanCardField("Payment", row.payment, optionTone(row.payment))}
+        ${kanbanCardField("Next Renewal", row.renew)}
       </div>`;
 
-/** The reference's fixed type-chip order — milestone, subtask, recurrence
- *  (`board-renderer.ts:448-476`); boardCard never builds a subtask node, so only the two
- *  boolean-row-field chips apply here. */
-const pmTypeChips = (row) => `
-        ${row.milestone ? pmChip("M", { size: "sm", variant: "solid", color: "var(--color-purple)" }) : ""}
-        ${row.recurring ? pmChip("R", { size: "sm", variant: "solid", color: "var(--color-blue)" }) : ""}`;
+const kanbanCardPath = (row, parent = "") => row.path || `${parent ? `${parent}/` : ""}${row.name}.md`;
 
-export const boardCard = (r, parent = "", { dragState, priorityColor = null, dueUrgency = "normal" } = {}) => {
-  const path = pmCardPath(r, parent);
-  const cardClasses = ["pm-kanban-card", dragState === "dragging" ? "pm-kanban-card--dragging" : ""]
+export const boardCard = (r, parent = "", { dragState } = {}) => {
+  const path = kanbanCardPath(r, parent);
+  const cardClasses = ["db-kanban-card", dragState === "dragging" ? "db-kanban-card--dragging" : ""]
     .filter(Boolean).join(" ");
   return `
   <div class="${cardClasses}" data-task-id="${path}" data-note-database-row-path="${path}">
-    ${priorityColor ? `<div class="pm-kanban-card-priority-bar" style="background: ${priorityColor};"></div>` : ""}
-    <div class="pm-kanban-card-body">
-      ${parent ? `<span class="pm-kanban-card-parent">${parent}</span>` : ""}
-      <div class="pm-kanban-card-title-row">
-        <span class="pm-kanban-card-title">${r.name}</span>${pmTypeChips(r)}
+    <div class="db-kanban-card-body">
+      <div class="db-kanban-card-title-row">
+        <span class="db-kanban-card-title">${r.name}</span>
       </div>
-      ${pmCardFields(r)}
-      ${pmCardFooter(r, dueUrgency)}
+      ${kanbanCardFields(r)}
     </div>
   </div>`;
 };
@@ -360,34 +284,23 @@ export const SUBTASK_FIXTURE_ROWS = {
   launch: { name: "Launch checklist", cost: "€ 0,00", cycle: "Monthly", payment: "ING", renew: "April 22, 2026", category: "Design", path: "Projects/Launch checklist.md" },
 };
 
-export const subtaskBoardCard = (r, {
-  depth = 0,
-  // No default: the renderer prints the actual parent TASK's title (KanbanCard.ts:44-46), which
-  // this helper has no way to derive on its own — a coincidental string here (the old default,
-  // "Projects", also happened to be a plausible column name) would silently paper over a caller
-  // that forgot to pass the real one. Callers rendering a depth > 0 card must pass it explicitly.
-  parent = "",
-  done = 0,
-  total = 0,
-  explicit = null,
-  value = null,
-  priorityColor = null,
-  dueUrgency = "normal",
-} = {}) => {
-  const progressValue = value ?? explicit ?? (total > 0 ? (done / total) * 100 : 0);
-  const cardPath = pmCardPath(r, parent);
+/** A subtask card keeps the same tree as an ordinary one; only a child (depth > 0) carries the
+ *  type-name slot, and its content is the actual parent TASK's title (`board-renderer.ts`'s
+ *  `getReferenceRowTitle` call for `subtaskNode.parentId`) — a coincidental string here would
+ *  silently paper over a caller that forgot to pass the real one. Callers rendering a depth > 0
+ *  card must pass it explicitly. Batch drag and the progress bar are retired with the Project
+ *  Manager card this fixture used to mirror; a subtask's own completion no longer paints a bar
+ *  this fixture needs to reproduce. */
+export const subtaskBoardCard = (r, { depth = 0, parent = "" } = {}) => {
+  const cardPath = kanbanCardPath(r, parent);
   return `
-  <div class="pm-kanban-card" data-task-id="${cardPath}" data-note-database-row-path="${cardPath}">
-    ${priorityColor ? `<div class="pm-kanban-card-priority-bar" style="background: ${priorityColor};"></div>` : ""}
-    <div class="pm-kanban-card-body">
-      ${depth > 0 && parent ? `<span class="pm-kanban-card-parent">${parent}</span>` : ""}
-      <div class="pm-kanban-card-title-row">
-        <span class="pm-kanban-card-title">${r.name}</span>
-        ${depth > 0 ? `<span class="pm-chip pm-chip--solid pm-chip--sm" style="--pm-chip-color: var(--color-green);"><span class="pm-chip-label">Sub</span></span>` : ""}
+  <div class="db-kanban-card" data-task-id="${cardPath}" data-note-database-row-path="${cardPath}">
+    <div class="db-kanban-card-body">
+      <div class="db-kanban-card-title-row">
+        <span class="db-kanban-card-title">${r.name}</span>
       </div>
-      ${pmCardFields(r)}
-      ${progressValue > 0 ? `<div class="pm-progress pm-progress--sm"><div class="pm-progress-track"><div class="pm-progress-fill" style="width: ${Math.max(0, Math.min(100, progressValue))}%;"></div></div></div>` : ""}
-      ${pmCardFooter(r, dueUrgency)}
+      ${depth > 0 && parent ? `<div class="db-kanban-card-type">${parent}</div>` : ""}
+      ${kanbanCardFields(r)}
     </div>
   </div>`;
 };
@@ -397,18 +310,19 @@ export const subtaskBoardColumn = (title, cards, tone = OPTION_TONES[title]) =>
 
 export const boardEmptySlot = () => "";
 
+/** The column shell: a bordered option chip alone at rest — no fill, no record count, no
+ *  background panel — matching Anytype's kanban header. The hover-revealed
+ *  "..."/"+" pair and the phone's plain-text count are real DOM the renderer always builds, but
+ *  invisible at rest on desktop; this static fixture leaves them out; the renderer's own test
+ *  (`board-renderer-parity.test.ts`) exercises them against the live TypeScript. */
 export function boardColumn(title, rows, tone = OPTION_TONES[title], { columnClass = "", cardRenderer } = {}) {
   const renderRow = cardRenderer || ((row) => boardCard(row));
-  const cardsClass = columnClass === "is-drop-target" ? "pm-kanban-cards pm-kanban-drop-target" : "pm-kanban-cards";
-  const resolvedTone = resolveTone(tone);
+  const cardsClass = columnClass === "is-drop-target" ? "db-kanban-cards db-kanban-drop-target" : "db-kanban-cards";
+  const toneClass = tone ? ` status-color-${tone}` : "";
   return `
-  <div class="pm-kanban-col" data-status="${title}">
-    <div class="pm-kanban-col-header"${resolvedTone ? ` style="--col-color: ${resolvedTone};"` : ""}>
-      <div class="pm-kanban-col-topbar"${resolvedTone ? ` style="background: ${resolvedTone};"` : ""}></div>
-      <div class="pm-kanban-col-title-row">
-        <span class="pm-kanban-col-badge"${resolvedTone ? ` style="color: ${resolvedTone};"` : ""}>${title}</span>
-        <div class="pm-kanban-col-header-right"><span class="pm-kanban-col-count">${rows.length}</span></div>
-      </div>
+  <div class="db-kanban-col" data-status="${title}">
+    <div class="db-kanban-col-header">
+      <span class="db-kanban-col-chip${toneClass}">${title}</span>
     </div>
     <div class="${cardsClass}" data-status="${title}">${rows.map(renderRow).join("")}</div>
   </div>`;
