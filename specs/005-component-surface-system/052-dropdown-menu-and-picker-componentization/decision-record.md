@@ -1,6 +1,6 @@
 ---
 title: "Decision Record: Dropdown, Menu and Picker Componentization"
-description: "ADR-001 the submenu is a child surface in the overlay stack, not an inline region. ADR-002 the create-affordance slot is preserveValueOnSelect, not a new option kind. ADR-003 the geometric grid navigator is one function keyed by layout. ADR-004 amends the create row's placement against the capture read and confirms ADR-001 and ADR-003. ADR-005 rules on which measured Anytype values the family adopts and which it refuses. ADR-006 keeps the existing > 8 search-count gate against the operator's search-every-dropdown report and Anytype's own no-search condition menus."
+description: "ADR-001 the submenu is a child surface in the overlay stack, not an inline region. ADR-002 the create-affordance slot is preserveValueOnSelect, not a new option kind. ADR-003 the geometric grid navigator is one function keyed by layout. ADR-004 amends the create row's placement against the capture read and confirms ADR-001 and ADR-003. ADR-005 rules on which measured Anytype values the family adopts and which it refuses. ADR-006 rules, on the operator's instruction, that every desktop dropdown is a combobox whose trigger becomes the query field, a named deviation from Anytype's no-search condition menus."
 trigger_phrases:
   - "052 decision record"
   - "submenu child surface decision"
@@ -13,9 +13,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/052-dropdown-menu-and-picker-componentization"
-    last_updated_at: "2026-09-06T06:50:00Z"
-    last_updated_by: "operator-report-56"
-    recent_action: "Added ADR-006 (search-count gate kept); fixed dropdown popover left-align default"
+    last_updated_at: "2026-09-06T09:40:00Z"
+    last_updated_by: "operator-report-56-combobox"
+    recent_action: "ADR-006 rewritten: every desktop dropdown is a combobox, trigger becomes the input"
     next_safe_action: "Execute T002, the red baselines, with the corrected census figures"
     blockers: []
     key_files:
@@ -366,77 +366,94 @@ derivation stands.
 ---
 
 <!-- ANCHOR:adr-006 -->
-## ADR-006: Does every desktop dropdown get a search field, or only lists above a threshold — and what is the threshold?
+## ADR-006: Does every desktop dropdown get a search field, and where does that field live?
 
-**Status: DECIDED — 2026-09-06 (operator report, this leg).**
+**Status: DECIDED — 2026-09-06 (operator ruling; supersedes this ADR's first, refused answer).**
 
 ### Context
 
-The operator's report — *"every dropdown on desktop should support search"* — read literally would
-put a search field on a 2-item checkbox condition and a 5-item filter operator. `dropdown-field.ts`
-already gates its search row behind `options.searchable === true && options.options.length > 8`
-(`:193`); this ADR asks whether that gate survives the report or should be removed.
+The operator's report, verbatim (2026-09-06 ~08:15): *"every dropdown on desktop should support
+search. So you click on it, the dropdown opens and input becomes input active state allowing you to
+also search for the item"*, with a screenshot of the filter panel's operator dropdown open and
+mis-anchored.
 
-Anytype ships both shapes, and the operator's own screenshot of the reference product's filter
-condition menu is the one this packet already holds captures of. Read against the pixels rather
-than the words:
-
-| Capture | Item count | Search field? |
-|---|---|---|
-| `anytype-menu-set-filter-checkbox-condition-*` | 2 (Is / Is not) | **No** |
-| `anytype-menu-set-filter-select-condition-*`, `-object-condition-*` | 5 (Contains any / Contains all / Doesn't contain / Is empty / Is not empty) | **No** |
-| `anytype-menu-set-filter-email-condition-*` | 6 (Contains / Doesn't contain / Is / Is not / Is empty / Is not empty) | **No** |
-| `anytype-menu-set-filter-property-picker-*` | 30+ properties | **Yes** — `Click to filter…`, first in the panel (G10) |
-| `anytype-menu-object-featured-tag-*` | tag list | **Yes** — `Filter or create options…` |
-
-Every captured **condition/operator** menu in the reference product — the exact family the
-operator's screenshot showed — ships with no search field, up to 6 items. Every captured
-**property/value** picker ships with one, from single digits up through 30+. The report is a report
-of a broken surface (row below, ADR-006's other half), not a literal request to search a 2-item
-list — the operator saw the popover land off its trigger and read the surface as un-searchable
-because it read as broken, not because a search box was visibly missing from a 5-item menu that
-Anytype itself never puts one on either.
+**This ADR first answered no, and that answer was wrong.** It read the words against Anytype's own
+captured condition menus — 2, 5 and 6 items, none of them carrying a search field — and concluded
+that the report was really a report of the anchoring defect visible in the same screenshot, so
+`dropdown-field.ts`'s `options.searchable === true && options.options.length > 8` gate was kept.
+The anchoring defect was real and was fixed. The refusal was not this record's to make: a
+measurement outranks a default, and an operator instruction outranks a measurement. Parity with a
+reference product is a means of deciding what we cannot otherwise decide, not a veto over an
+instruction that decides it.
 
 ### Decision
 
-**Keep the threshold, do not remove it.** `dropdown-field.ts`'s existing `> 8` gate is **adopted by
-agreement**: it already sits strictly above every captured no-search condition menu (2, 5, 6) and
-strictly below the smallest captured search-bearing picker this packet has a count for. No capture
-in `screenshots/anytype/` shows a list sized 7-30 to place the true crossover more precisely, so `8`
-is not re-derived from a tighter number — it is confirmed as already consistent with every data
-point held, and changing it now would be a guess dressed as a correction.
+**Every desktop dropdown built through the shared primitive is a combobox, whatever its length, and
+the query field is the trigger itself wherever the trigger is one of ours.**
 
-**What does change**: every desktop dropdown built through `createDropdownField`/`openDropdownMenu`
-already receives this gate automatically, with no per-call-site opt-out of the *count* rule (a
-caller can still omit `searchable: true` entirely, which is a separate question — whether search is
-*offered at all* for that field's data shape — from whether the count justifies it once offered).
-The operator's actual defect is ADR unnecessary for: it is the anchoring bug fixed in this same leg
-(`popover-position.ts` `align` default), not a missing search field on a 5-item menu.
+1. **The count gate is the phone's alone.** `openDropdownPopover` reads `searchable` as
+   `phoneSheet ? options.searchable === true && options.options.length > 8 : true`. On a desktop a
+   five-item operator list filters exactly like a thirty-item property picker. On a phone sheet the
+   old condition is untouched, so `044`'s sheet grammar and its registered pairs are unchanged.
+2. **The trigger becomes the input.** `createDropdownField` inserts an `<input>` into the trigger's
+   own layout slot and hides the button (`.db-dropdown-field.is-editing`), so one click opens the
+   list and arms the caret with no second control to reach for. The input carries the trigger's
+   layout classes, so the row it sits in keeps its columns; it is also the popover's anchor, which
+   is what keeps the placement arithmetic and the outside-press dismissal pointed at the surface
+   the user is actually typing into.
+3. **The current value is the placeholder; the query starts empty.** This is what Anytype's own
+   property picker does — its field opens on a hint (`Click to filter…`), not on a selection — and
+   it is the half of the parity read that survives. The first keystroke filters instead of deleting
+   a value the user may not have meant to replace, and the value stays legible while the list
+   narrows. Escape restores nothing because nothing was replaced.
+4. **A menu with no field-shaped trigger keeps its query field first in the panel.** `openDropdownMenu`
+   is anchored to a cell, a view tab or an icon button — elements the caller owns and that are not
+   text fields — so its search row stays where `050`'s G10 puts it, at the top of the panel, and is
+   now rendered for every list rather than for lists over eight. **This is a named deviation from the
+   instruction's literal words** ("the trigger itself"), taken because replacing a caller-owned cell
+   or tab in the DOM is outside this primitive's authority and would break the callers that hold it.
+   Both halves deliver the instruction's substance: on a desktop, opening any dropdown puts a live,
+   focused query field on screen.
+5. **The keyboard contract is one contract.** Arrow keys move the highlight without taking the caret
+   out of the query field (`aria-activedescendant`, not focus); Enter picks the highlighted row
+   rather than the first match; Tab commits the highlighted row; Escape closes and restores the
+   trigger; a press outside closes without change.
+
+**What is a deviation from parity, and is recorded as one.** Anytype's condition menus at 2, 5 and 6
+items ship with no search field. Ours now do. That is the operator's instruction, taken with the
+evidence against it on the record rather than filed away.
 
 ### Alternatives
 
 | Option | For | Against |
 |---|---|---|
-| **Remove the threshold; search every dropdown regardless of size** | Matches the report's literal words | Contradicts every captured reference condition menu (2, 5 and 6 items, zero search); adds a focus-stealing input to a 2-item Yes/No-shaped menu no product in the reference set does |
-| **Lower the threshold below 8** | — | No capture exists between 6 (confirmed no-search) and 30+ (confirmed search) to justify a specific lower number; would be invented, not measured |
-| **Keep `> 8`** | Already consistent with every measured data point; already shipped, no migration | Does not, by itself, add search to a field that never passed `searchable: true` — a separate, per-field question |
+| **Keep the `> 8` gate** (this ADR's first answer) | Matches every captured reference condition menu | Refuses an explicit operator instruction on the strength of a parity read; the instruction is the higher authority and the reading was never the question |
+| **Search row in the panel everywhere, trigger untouched** | One code path, no trigger swap | Leaves the reported behaviour half-built: the instruction names the trigger's own active state, not a second field below it |
+| **Trigger swap for menus too**, replacing the caller's anchor | Literal on every surface | The anchor is a cell, a tab or an icon the caller owns and holds a reference to; replacing it in the DOM breaks the caller and buys nothing a panel-first field does not |
 
 ### Consequences
 
-- No change to `dropdown-field.ts`'s search-count gate.
-- The operator's filter-operator screenshot is read as an anchoring defect, not a missing-search
-  defect; the fix lands in `popover-position.ts` / `dropdown-field.ts`'s placement call, not in the
-  search gate.
-- `roadmap.md` §4's new row for this report says so, rather than recording a search field that was
-  never the right fix.
+- `dropdown-field.ts`: an internal `comboboxInput` option, `openTriggerInput`, one shared
+  `moveActive`, Escape handled on the query field, and the count gate scoped to the phone.
+- `styles.css`: three rules — `.db-dropdown-field-input`, its focus ring, and the hidden trigger.
+  The stylesheet hash moved, which invalidated every capture's recorded source hash and forced a
+  full 570-capture sweep; 9 captures moved content and each was opened and named in the css lane.
+- The `> 8` literal survives in exactly one place, the phone branch, where it still describes a
+  sheet row rather than a trigger.
+- **The census that made this cheap:** every desktop dropdown in `src/` is built through
+  `createDropdownField` (37 call sites) or `openDropdownMenu` (15), so no consumer changed. `grep`
+  for `<select`, `createEl("select"` and `HTMLSelectElement` across `src/**/*.ts` returns nothing
+  outside a comment and a test assertion. The two exceptions are `settings.ts:147` and `:164`, which
+  are Obsidian's own `Setting.addDropdown` host component in the plugin-settings tab — the host's
+  native control, not this primitive's, and not converted here.
 
 ### Five checks
 
 | Check | Answer |
 |-------|--------|
-| **Does this need to exist at all?** | Yes — the report's literal words and the reference product's own captures disagree, and a future leg would otherwise re-litigate the threshold without this record |
-| **Is there a simpler existing thing?** | The `> 8` gate already in `dropdown-field.ts`; this ADR confirms it rather than adding a new mechanism |
-| **What does it touch?** | Nothing — no code changes from this ADR alone |
-| **What is the real caller that must not break?** | Every dropdown under 8 items that currently renders without a search row (the filter operator, checkbox conditions, and similar small enums) |
-| **What contract must not break?** | Anytype's own measured grammar (G10), which this ADR reads rather than overrides |
+| **Does this need to exist at all?** | Yes — an operator instruction and a parity read disagreed, and the first answer picked the wrong one. The reversal has to be legible or the next leg re-litigates it |
+| **Is there a simpler existing thing?** | The shared search this packet already built: the trigger swap reuses it whole, and the input is the same element the filter, the empty row and the a11y wiring already drive |
+| **What does it touch?** | `dropdown-field.ts`, three `styles.css` rules, and the two dropdown capture scenarios |
+| **What is the real caller that must not break?** | All 52 primitive call sites, none of which changed; and the phone sheet, whose grammar is asserted unchanged by `sheet-grammar.mjs` and by a unit case |
+| **What contract must not break?** | `044`'s sheet grammar, `048`'s registered pairs, `DropdownOption`'s public shape, and `DropdownFieldHandle` — callers keep holding the same button and value element while the input stands in |
 <!-- /ANCHOR:adr-006 -->

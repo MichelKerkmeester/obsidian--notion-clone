@@ -198,7 +198,20 @@ class MockElement {
     return (this.querySelectorAll<T>(selector)[0] as T) ?? null;
   }
 
+  insertBefore(node: MockElement, before: MockElement | null): MockElement {
+    node.parentElement = this;
+    node.ownerDocument = this.ownerDocument;
+    const index = before ? this.children.indexOf(before) : -1;
+    if (index >= 0) this.children.splice(index, 0, node);
+    else this.children.push(node);
+    return node;
+  }
+
   replaceChildren(): void {
+    this.children = [];
+  }
+
+  empty(): void {
     this.children = [];
   }
 
@@ -370,36 +383,80 @@ describe("dropdown popover — anchoring", () => {
 });
 
 // ───────────────────────────────────────────────────────────────────
-// 3. TESTS — SEARCH THRESHOLD
+// 3. TESTS — SEARCH AVAILABILITY
 // ───────────────────────────────────────────────────────────────────
 
-describe("dropdown popover — search threshold", () => {
+describe("dropdown popover — search availability", () => {
   beforeEach(() => {
     vi.resetModules();
   });
 
-  it("renders no search field for a searchable dropdown at or under the threshold", async () => {
+  it("gives a five-item desktop menu the same search field a long one gets", async () => {
     const { doc, container } = createMockDoc();
     const { openDropdownMenu } = await import("./dropdown-field");
     const anchor = container.createEl("button", {}) as unknown as HTMLElement;
     (anchor as unknown as MockElement).ownerDocument = doc;
     (anchor as unknown as MockElement).setRect({ left: 0, top: 0, right: 100, bottom: 30, width: 100, height: 30 });
 
+    // No `searchable` flag and five options: both of the conditions the old count gate used to
+    // refuse on. A menu opened from a cell or a tab has no field-shaped trigger to type into, so
+    // its query field is the panel's own first row.
     openDropdownMenu({
       anchor,
       label: "Operator",
-      options: makeOptions(8),
+      options: makeOptions(5),
       value: "v0",
-      searchable: true,
       onChange: () => {},
     });
 
     const panel = container.querySelector<MockElement>(".db-dropdown-popover");
-    expect(panel!.hasClass("is-searchable")).toBe(false);
-    expect(panel!.querySelector(".db-dropdown-search")).toBeNull();
+    expect(panel!.hasClass("is-searchable")).toBe(true);
+    const input = panel!.querySelector<MockElement>(".db-dropdown-search")!.children[0];
+    input.value = "Option 3";
+    input.dispatch("input");
+    const visible = panel!
+      .querySelectorAll<MockElement>(".db-dropdown-option")
+      .filter((row) => !row.hasClass("is-hidden"));
+    expect(visible.map((row) => row.getAttribute("data-value"))).toEqual(["v3"]);
   });
 
-  it("renders a focused, filterable search field above the threshold", async () => {
+  it("leaves the phone sheet's own search grammar untouched", async () => {
+    const { doc, body, container } = createMockDoc();
+    body.addClass("is-phone");
+    // The sheet's chrome and placement are the phone stack's own machinery, driven by
+    // `sheet-grammar.mjs` rather than by this suite; stubbed so the assertion is about the search
+    // row a phone sheet renders, and nothing else.
+    vi.doMock("./surface-shell", () => ({ buildShellHeader: () => ({}) }));
+    vi.doMock("./popover-position", async (importOriginal) => ({
+      ...(await importOriginal<typeof import("./popover-position")>()),
+      positionToolbarPopover: () => {},
+    }));
+    try {
+      const { openDropdownMenu } = await import("./dropdown-field");
+      const anchor = container.createEl("button", {}) as unknown as HTMLElement;
+      (anchor as unknown as MockElement).ownerDocument = doc;
+
+      openDropdownMenu({
+        anchor,
+        label: "Operator",
+        options: makeOptions(5),
+        value: "v0",
+        searchable: true,
+        onChange: () => {},
+      });
+
+      // Five items, `searchable: true`: the count gate the desktop no longer applies still decides
+      // the phone sheet's search row, so this list keeps rendering without one.
+      const panel = container.querySelector<MockElement>(".db-dropdown-popover");
+      expect(panel).not.toBeNull();
+      expect(panel!.querySelector(".db-dropdown-search")).toBeNull();
+    } finally {
+      vi.doUnmock("./surface-shell");
+      vi.doUnmock("./popover-position");
+    }
+  });
+
+  it("renders a focused, filterable search field for a long list", async () => {
     const { doc, container } = createMockDoc();
     const { openDropdownMenu } = await import("./dropdown-field");
     const anchor = container.createEl("button", {}) as unknown as HTMLElement;
@@ -499,5 +556,112 @@ describe("dropdown popover — search-field keyboard contract", () => {
     // Typing and arrowing never call `onChange` on their own — only a row's own selection does, so
     // there is nothing for Escape to revert. `installPopoverAutoClose` (mocked here) owns the close.
     expect(onChange).not.toHaveBeenCalled();
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 5. TESTS — THE TRIGGER AS THE QUERY FIELD
+// ───────────────────────────────────────────────────────────────────
+
+/** Opens a labelled field on a desktop document and hands back the pieces each case reads. */
+async function openField(optionCount: number, onChange: (value: string) => void = () => {}) {
+  const { doc, container } = createMockDoc();
+  const { createDropdownField } = await import("./dropdown-field");
+  const row = container.createDiv({ cls: "db-panel-row" });
+  const handle = createDropdownField({
+    parent: row as unknown as HTMLElement,
+    label: "Operator",
+    className: "db-panel-dropdown db-filter-operator-dropdown",
+    options: makeOptions(optionCount),
+    value: "v0",
+    onChange,
+  });
+  const button = handle.button as unknown as MockElement;
+  button.setRect({ left: 290, top: 100, right: 480, bottom: 130, width: 190, height: 30 });
+  button.dispatch("click");
+  const input = row.querySelector<MockElement>(".db-dropdown-field-input")!;
+  const panel = container.querySelector<MockElement>(".db-dropdown-popover")!;
+  return { doc, container, row, handle, button, input, panel };
+}
+
+describe("dropdown field — the trigger becomes the query field", () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
+  it("swaps the trigger for a focused text input in the trigger's own slot", async () => {
+    const { doc, row, button, input, panel } = await openField(5);
+
+    // In the trigger's slot, not appended after it: a field inside a panel row keeps its column.
+    expect(row.children.map((child) => child.tagName)).toEqual(["INPUT", "BUTTON"]);
+    expect(button.hasClass("is-editing")).toBe(true);
+    expect(doc.activeElement).toBe(input as unknown as Element);
+    expect(input.getAttribute("role")).toBe("combobox");
+    expect(input.getAttribute("aria-expanded")).toBe("true");
+    // The current value is the placeholder and the query starts empty, so the first keystroke
+    // filters rather than replacing a value the user may not have meant to lose.
+    expect(input.getAttribute("placeholder")).toBe("Option 0");
+    expect(input.value).toBe("");
+    // The trigger's layout classes come with it, or the row reflows the moment the field opens.
+    expect(input.hasClass("db-filter-operator-dropdown")).toBe(true);
+    // One caret, not two: the panel renders no search row of its own behind the trigger's.
+    expect(panel.querySelector(".db-dropdown-search")).toBeNull();
+    expect(panel.hasClass("is-searchable")).toBe(false);
+  });
+
+  it("filters a five-item list as the trigger is typed into", async () => {
+    const { input, panel } = await openField(5);
+
+    input.value = "option 3";
+    input.dispatch("input");
+
+    const visible = panel
+      .querySelectorAll<MockElement>(".db-dropdown-option")
+      .filter((option) => !option.hasClass("is-hidden"));
+    expect(visible.map((option) => option.getAttribute("data-value"))).toEqual(["v3"]);
+    expect(input.getAttribute("aria-activedescendant")).toBe(visible[0].getAttribute("id"));
+  });
+
+  it("moves the highlight on ArrowDown without taking the caret out of the field, and Enter picks it", async () => {
+    const picked: string[] = [];
+    const { doc, input, panel } = await openField(5, (value) => { picked.push(value); });
+    const rows = panel.querySelectorAll<MockElement>(".db-dropdown-option");
+
+    input.dispatch("keydown", { key: "ArrowDown" });
+    expect(doc.activeElement).toBe(input as unknown as Element);
+    expect(input.getAttribute("aria-activedescendant")).toBe(rows[1].getAttribute("id"));
+
+    input.dispatch("keydown", { key: "Enter" });
+    expect(picked).toEqual(["v1"]);
+  });
+
+  it("Escape restores the trigger and its value, and commits nothing", async () => {
+    const onChange = vi.fn();
+    const { doc, row, handle, button, input, container } = await openField(5, onChange);
+
+    input.value = "option 3";
+    input.dispatch("input");
+    input.dispatch("keydown", { key: "ArrowDown" });
+    const event = input.dispatch("keydown", { key: "Escape" });
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(container.querySelector(".db-dropdown-popover")).toBeNull();
+    expect(row.querySelector(".db-dropdown-field-input")).toBeNull();
+    expect(button.hasClass("is-editing")).toBe(false);
+    expect(doc.activeElement).toBe(button as unknown as Element);
+    // `setText` is the only thing that rewrites the displayed value, and only a selected row calls
+    // it — so an unchanged value here is the value the field was opened with.
+    expect((handle.valueEl as unknown as MockElement).getAttribute("data-text")).toBeNull();
+    expect(onChange).not.toHaveBeenCalled();
+    expect(button.getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("puts the trigger back when a row is picked", async () => {
+    const { row, button, panel } = await openField(5);
+
+    panel.querySelectorAll<MockElement>(".db-dropdown-option")[2].dispatch("click");
+
+    expect(row.querySelector(".db-dropdown-field-input")).toBeNull();
+    expect(button.hasClass("is-editing")).toBe(false);
   });
 });

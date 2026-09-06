@@ -89,6 +89,16 @@ interface DropdownRow {
   option: DropdownOption;
 }
 
+/**
+ * Internal: the popover's own options, plus the trigger the field already turned into a text input.
+ *
+ * When it is present the popover renders no search row of its own — the trigger IS the query field,
+ * so a second input inside the panel would be two carets for one search.
+ */
+interface DropdownPopoverOptions extends DropdownFieldOptions {
+  comboboxInput?: HTMLInputElement;
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 4. DROPDOWN FIELD
 // ───────────────────────────────────────────────────────────────────
@@ -123,9 +133,24 @@ export function createDropdownField(options: DropdownFieldOptions): DropdownFiel
   setIcon(button.createSpan({ cls: "db-dropdown-field-chevron" }), "chevron-down");
 
   let cleanup: (() => void) | undefined;
+  let combobox: HTMLInputElement | undefined;
+  // Putting the trigger back is part of closing, whatever closed it — Escape, a click outside, a
+  // second click on the field, or a row being picked. The field's displayed value is never touched
+  // while the query field is open, so restoring it restores the value the user came in with.
+  const restoreTrigger = () => {
+    if (!combobox) return;
+    const hadFocus = button.ownerDocument.activeElement === combobox;
+    combobox.remove();
+    combobox = undefined;
+    button.removeClass("is-editing");
+    // Only when the caret was still in the query field: a click that landed somewhere else has
+    // already chosen where focus belongs, and pulling it back to the trigger would fight the user.
+    if (hadFocus) button.focus();
+  };
   const close = () => {
     cleanup?.();
     cleanup = undefined;
+    restoreTrigger();
     button.setAttr("aria-expanded", "false");
   };
   button.onclick = () => {
@@ -134,9 +159,16 @@ export function createDropdownField(options: DropdownFieldOptions): DropdownFiel
       close();
       return;
     }
-    cleanup = openDropdownPopover(button, {
+    // On a desktop the trigger itself becomes the query field: one click opens the list and arms
+    // the caret, with no second control to reach for. The phone sheet keeps its own header-and-
+    // search grammar, where the list is a sheet rather than a panel hanging off a trigger.
+    if (!isMobileBottomSheet(button.ownerDocument)) {
+      combobox = openTriggerInput(options, button, currentValue);
+    }
+    cleanup = openDropdownPopover(combobox ?? button, {
       ...options,
       value: currentValue,
+      comboboxInput: combobox,
       onChange: (value) => {
         const action = options.options.find((option) => option.value === value)?.preserveValueOnSelect === true;
         if (!action) {
@@ -186,20 +218,26 @@ export function openDropdownMenu(options: DropdownMenuOptions): () => void {
 // 6. POPOVER
 // ───────────────────────────────────────────────────────────────────
 
-function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions, valueEl: HTMLElement, close: () => void): () => void {
+function openDropdownPopover(anchor: HTMLElement, options: DropdownPopoverOptions, valueEl: HTMLElement, close: () => void): () => void {
   const contextClass = getDropdownPopoverContextClass(anchor);
   const host = getDropdownPopoverHost(anchor);
   const phoneSheet = isMobileBottomSheet(anchor.ownerDocument);
-  const searchable = options.searchable === true && options.options.length > 8;
-  const panel = host.createDiv({ cls: `db-dropdown-popover ${contextClass}${searchable ? " is-searchable" : ""}${options.popoverClassName ? ` ${options.popoverClassName}` : ""}` });
+  // Every desktop dropdown is a combobox: the list filters as you type, whatever its length. The
+  // count gate that used to decide this ("long lists only") is the phone sheet's alone now, where
+  // a search row is a row in a sheet rather than the trigger the finger already touched.
+  const searchable = phoneSheet ? options.searchable === true && options.options.length > 8 : true;
+  // A field-shaped trigger brings its own query field; a menu opened from a cell, a tab or an icon
+  // has no field to type into, so the panel carries the search row first, above the list.
+  const panelSearch = searchable && !options.comboboxInput;
+  const panel = host.createDiv({ cls: `db-dropdown-popover ${contextClass}${panelSearch ? " is-searchable" : ""}${options.popoverClassName ? ` ${options.popoverClassName}` : ""}` });
   const popupId = `db-dropdown-${++nextDropdownId}`;
   panel.setAttr("id", popupId);
   panel.setAttr("role", "listbox");
   panel.setAttr("aria-label", options.label);
   anchor.setAttr("aria-controls", popupId);
   if (phoneSheet) buildShellHeader(panel, { title: options.label, onClose: close });
-  let searchInput: HTMLInputElement | undefined;
-  if (searchable) {
+  let searchInput = options.comboboxInput;
+  if (panelSearch) {
     const searchWrap = panel.createDiv({ cls: "db-dropdown-search" });
     searchInput = searchWrap.createEl("input", {
       attr: {
@@ -213,9 +251,9 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
       },
     });
   }
-  // When searchable, options live in their own scroll container so the search box stays
-  // fixed at the top (no sticky drift). Otherwise the panel itself scrolls.
-  const optionsHost = searchable || phoneSheet ? panel.createDiv({ cls: "db-dropdown-options" }) : panel;
+  // When the panel carries the search box, options live in their own scroll container so the box
+  // stays fixed at the top (no sticky drift). Otherwise the panel itself scrolls.
+  const optionsHost = panelSearch || phoneSheet ? panel.createDiv({ cls: "db-dropdown-options" }) : panel;
   let currentSection = "";
   let currentSectionEl: HTMLElement | undefined;
   const sectionRows: DropdownRow[] = [];
@@ -258,6 +296,19 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
       row.focus();
       row.scrollIntoView?.({ block: "nearest" });
     }
+  };
+
+  // Moves the highlight by one visible row. `focusRow` is the older, row-focused behaviour a plain
+  // list keeps once a row itself has focus; a query field keeps the caret where it is and moves
+  // `aria-activedescendant` instead, which is what lets typing continue after an arrow key.
+  const moveActive = (delta: number, focusRow: boolean) => {
+    const visibleRows = getVisibleRows();
+    if (!visibleRows.length) return;
+    const visibleIndex = visibleRows.findIndex((item) => sectionRows.indexOf(item) === activeIndex);
+    const next = Math.max(0, Math.min(visibleRows.length - 1, (visibleIndex < 0 ? 0 : visibleIndex) + delta));
+    activeIndex = sectionRows.indexOf(visibleRows[next]);
+    syncActiveOption(focusRow);
+    if (!focusRow) sectionRows[activeIndex]?.row.scrollIntoView?.({ block: "nearest" });
   };
 
   const selectRow = (item: { row: HTMLButtonElement; value: string; option: DropdownOption }) => {
@@ -324,26 +375,28 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
     };
     searchInput.onkeydown = (event) => {
       if (isImeComposing(event)) return;
+      if (event.key === "Escape") {
+        // Nothing typed here ever writes to the field — only a row's own selection does — so
+        // leaving restores the previous value by having never replaced it. What this adds is the
+        // close itself, from the one element holding focus while the list is open.
+        event.preventDefault();
+        close();
+        return;
+      }
       const visibleRows = getVisibleRows();
-      if (event.key === "ArrowDown") {
-        if (!visibleRows.length) return;
+      if (!visibleRows.length) return;
+      const active = sectionRows[activeIndex];
+      if (event.key === "ArrowDown" || event.key === "ArrowUp") {
         event.preventDefault();
-        syncActiveOption(true);
-      } else if (event.key === "ArrowUp") {
-        if (!visibleRows.length) return;
-        event.preventDefault();
-        activeIndex = sectionRows.indexOf(visibleRows[visibleRows.length - 1]);
-        syncActiveOption(true);
+        moveActive(event.key === "ArrowDown" ? 1 : -1, false);
       } else if (event.key === "Enter") {
-        if (!visibleRows.length) return;
         event.preventDefault();
-        selectRow(visibleRows[0]);
+        selectRow(active && visibleRows.includes(active) ? active : visibleRows[0]);
       } else if (event.key === "Tab") {
         // Tab commits the highlighted row rather than leaving the popover open behind whatever the
         // browser's own tab order focuses next — the same "leaving without choosing shouldn't lose
         // the highlight" contract Enter already carries, just for the key a user reaches for to move
         // on rather than to confirm.
-        const active = sectionRows[activeIndex];
         if (active && visibleRows.includes(active)) {
           event.preventDefault();
           selectRow(active);
@@ -382,22 +435,18 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
     const visibleRows = getVisibleRows();
     if (!visibleRows.length) return;
     if (currentRowIndex >= 0) activeIndex = currentRowIndex;
-    const visibleIndex = visibleRows.findIndex((item) => sectionRows.indexOf(item) === activeIndex);
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
-      const delta = event.key === "ArrowDown" ? 1 : -1;
-      const next = Math.max(0, Math.min(visibleRows.length - 1, (visibleIndex < 0 ? 0 : visibleIndex) + delta));
-      activeIndex = sectionRows.indexOf(visibleRows[next]);
-      syncActiveOption(true);
+      moveActive(event.key === "ArrowDown" ? 1 : -1, true);
     } else if (event.key === "Home" || event.key === "End") {
       event.preventDefault();
       activeIndex = sectionRows.indexOf(event.key === "Home" ? visibleRows[0] : visibleRows[visibleRows.length - 1]);
       syncActiveOption(true);
     } else if (event.key === "Enter" || event.key === " " || (searchable && event.key === "Tab")) {
       // Tab-commits-highlighted is part of the combobox contract (`searchable` dropdowns only):
-      // once ArrowDown has moved focus off the search input and onto a row (below), Tab reaches
-      // this handler rather than the search input's own — same commit, different entry point. A
-      // plain, non-searchable dropdown keeps Tab as ordinary focus movement, unchanged.
+      // a row that took focus on its own — clicked into, or tabbed to — routes Tab through this
+      // handler rather than the query field's, so the same commit is reachable from either entry
+      // point. A plain, non-searchable list keeps Tab as ordinary focus movement, unchanged.
       event.preventDefault();
       const activeRow = sectionRows[activeIndex];
       if (activeRow) selectRow(activeRow);
@@ -428,6 +477,38 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
 // ───────────────────────────────────────────────────────────────────
 // 7. HELPERS
 // ───────────────────────────────────────────────────────────────────
+
+/**
+ * Turn the trigger into the combobox's text input, in the trigger's own layout slot.
+ *
+ * The input is inserted where the button sits rather than appended, and the button is hidden rather
+ * than removed, so a field inside a grid or flex row keeps its column and its width: the surface
+ * the user clicked becomes typable in place instead of a panel growing a second control. The button
+ * survives so the field's handle, its icon and its value element stay the objects every caller
+ * already holds.
+ *
+ * The current value becomes the PLACEHOLDER and the query starts empty, which is what Anytype's own
+ * property picker does — its field opens on a hint, not on a selection. The first keystroke filters
+ * rather than deleting a value the user may not have meant to replace, and the value stays legible
+ * while the list narrows.
+ */
+function openTriggerInput(options: DropdownFieldOptions, button: HTMLButtonElement, value: string): HTMLInputElement {
+  const input = button.ownerDocument.createElement("input");
+  input.type = "text";
+  input.addClass("db-dropdown-field-input");
+  // The trigger's own layout classes come along: whatever sizes the button in its row has to size
+  // the input that replaces it, or the row reflows the moment the field is opened.
+  for (const cls of (options.className || "").split(/\s+/).filter(Boolean)) input.addClass(cls);
+  input.setAttr("placeholder", getOptionText(options.options, value) || options.placeholder || options.label);
+  input.setAttr("aria-label", options.label);
+  input.setAttr("role", "combobox");
+  input.setAttr("aria-expanded", "true");
+  input.setAttr("aria-autocomplete", "list");
+  button.addClass("is-editing");
+  options.parent.insertBefore(input, button);
+  input.focus();
+  return input;
+}
 
 function getDropdownPopoverHost(anchor: HTMLElement): HTMLElement {
   if (anchor.closest(".db-mobile-bottom-sheet, .note-database-settings, .note-database-modal")) return anchor.ownerDocument.body;

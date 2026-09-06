@@ -3111,6 +3111,43 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   white-space: nowrap;
 }
 
+/* The trigger, mid-search.
+
+   A desktop dropdown opens by turning its own trigger into this field, so it has to occupy exactly
+   the trigger's box: the button is hidden and the input is inserted into its slot, carrying the
+   trigger's own layout classes (`db-panel-dropdown`, `db-filter-operator-dropdown`) so the row it
+   sits in keeps its columns. What is declared here is only what the trigger's own classes do not
+   already say — a control with no layout class of its own still has to be field-shaped. */
+.db-dropdown-field-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 30px;
+  padding: 4px 6px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--db-radius-sm);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-family: inherit;
+  font-size: 12px;
+}
+
+/* The active state, drawn as an inset ring rather than a border colour. A panel row states its own
+   `border` on this same control through the layout class it inherited, at a specificity a
+   context-free class rule cannot reach; a ring reads identically and contends with nothing. */
+.db-dropdown-field-input:focus {
+  border-color: var(--interactive-accent);
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--interactive-accent);
+}
+
+/* Hidden while its input stands in, not removed: the handle, the icon and the value element are
+   objects every caller already holds. `!important` because four context rules each declare this
+   control's own `display`, one of them at a higher specificity than any class rule here. */
+.db-dropdown-field.is-editing {
+  display: none !important;
+}
+
 /* Named twice for the same reason the panel chrome is: this rule's subject is the popover itself,
    so a portalled one keeps everything aimed at its rows and loses its own border, radius, padding
    and type. `column-menu.ts` already mounts sub-popovers of this family on the body. */

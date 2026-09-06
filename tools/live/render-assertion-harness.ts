@@ -119,7 +119,7 @@ import { renderRelationValue } from "../../src/views/relation-value-renderer";
 import { renderSpecialFileFieldValue } from "../../src/views/file-field-renderer";
 import { renderRating, renderProgress, renderProgressRing } from "../../src/views/number-display-renderer";
 import { renderRecordIcon } from "../../src/views/record-icon-renderer";
-import { openDropdownMenu } from "../../src/views/dropdown-field";
+import { createDropdownField, openDropdownMenu } from "../../src/views/dropdown-field";
 import {
   EmptyStateRenderer,
   EMPTY_STATE_COPY,
@@ -441,10 +441,9 @@ export interface ScenarioSpec {
    */
   migratedFromList?: boolean;
   /**
-   * Opt-in, renderer "dropdown" only: mounts the nine-plus-option shape that crosses
-   * `dropdown-field.ts`'s own `> 8` search-count gate instead of the three-option disabled-row
-   * shape the plain `dropdown` scenario photographs, and types into the resulting search input
-   * so the capture shows the combobox mid-filter rather than merely open.
+   * Opt-in, renderer "dropdown" only: mounts a labelled field rather than the plain `dropdown`
+   * scenario's anchored menu, opens it the way a click does, and types into the input its trigger
+   * turned into, so the capture shows the combobox mid-filter rather than merely open.
    */
   dropdownSearch?: boolean;
   /**
@@ -3417,15 +3416,24 @@ export function runRenderAssertions(
         "the record-icon gutter rendered with its default and emoji variants"));
     }
   } else if (scenario.renderer === "dropdown" && scenario.dropdownSearch) {
-    // The combobox shape: nine properties, one past `dropdown-field.ts`'s own `> 8` search-count
-    // gate, so `openDropdownMenu` renders the search input `dropdown-field.ts` adds above the
-    // list once the option count crosses it. Typing is simulated the same way a keyboard user would drive it —
-    // set the input's value and dispatch the real `input` event `oninput` listens for — so the
-    // capture photographs the list mid-filter, not merely an empty search box over a full list.
-    const anchor = makeHiddenAnchor(container, "db-dropdown-search-anchor");
-    openDropdownMenu({
-      anchor,
+    // The combobox shape, driven the way a person drives it: a real labelled field is built, its
+    // trigger is clicked, and the query is typed into the input the trigger turned into. Nine
+    // properties, so the phone profile of this same scenario photographs the sheet's own search
+    // row — the grammar the desktop change deliberately leaves alone — while the desktop profile
+    // photographs the trigger mid-search. Typing goes through the real `input` event `oninput`
+    // listens for, so the capture shows the list narrowed to the query rather than an empty box
+    // over a full list.
+    const row = container.createDiv({
+      cls: "db-panel-row",
+      attr: { style: "width:320px;margin:16px" },
+    });
+    createDropdownField({
+      parent: row,
       label: "Property",
+      className: "db-panel-dropdown db-filter-field-dropdown",
+      hideLabel: true,
+      // Declared, so the phone profile of this scenario renders the sheet's own search row: the
+      // desktop no longer reads this flag (every desktop list filters), and the phone still does.
       searchable: true,
       options: [
         { value: "title", text: "Title" },
@@ -3441,7 +3449,9 @@ export function runRenderAssertions(
       value: "title",
       onChange: () => undefined,
     });
-    const searchInput = container.querySelector<HTMLInputElement>(".db-dropdown-search input");
+    row.querySelector<HTMLButtonElement>(".db-dropdown-field")?.click();
+    const searchInput = container.querySelector<HTMLInputElement>(".db-dropdown-field-input")
+      || container.querySelector<HTMLInputElement>(".db-dropdown-search input");
     if (searchInput) {
       searchInput.value = "ri";
       searchInput.dispatchEvent(new Event("input", { bubbles: true }));
@@ -3452,8 +3462,8 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "dropdown-field"));
     if (results[0].pass) {
       results.push(multiMarkerAssertion(container,
-        [".db-dropdown-popover.is-searchable", ".db-dropdown-search input", ".db-dropdown-option:not(.is-hidden)"],
-        "the combobox rendered a focused search field and filtered the list to the typed query"));
+        [".db-dropdown-popover", ".db-dropdown-option:not(.is-hidden)"],
+        "the combobox opened its list and filtered it to the typed query"));
     }
   } else if (scenario.renderer === "dropdown") {
     // The dropdown popover: openDropdownMenu's own entry, the same call the column manager's

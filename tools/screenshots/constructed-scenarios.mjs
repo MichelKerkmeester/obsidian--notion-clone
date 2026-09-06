@@ -1007,7 +1007,9 @@ export const CONSTRUCTED_SCENARIOS = [
     fixtureOf: "dropdown-field",
     sources: constructedSources("src/views/dropdown-field.ts", "tools/bench/table-render-bench.ts"),
     note: "openDropdownMenu's own entry with a selected option, a plain one and a disabled one "
-      + "carrying the reason its tooltip exists to surface.",
+      + "carrying the reason its tooltip exists to surface. Three options, and the desktop panel "
+      + "still carries a search row: a menu with no field-shaped trigger to type into gets its "
+      + "query field first in the panel, whatever the list's length.",
   }),
   constructedScenario("dropdown-search", {
     renderer: "dropdown",
@@ -1017,9 +1019,10 @@ export const CONSTRUCTED_SCENARIOS = [
     title: "Searchable dropdown with a typed filter (constructed)",
     sources: constructedSources("src/views/dropdown-field.ts", "tools/bench/table-render-bench.ts")
       .concat(["src/views/popover-position.ts"]),
-    note: "openDropdownMenu's own combobox entry: nine properties (past the shared dropdown's "
-      + "own > 8 search-count gate) with \"ri\" typed into the search field, narrowing the list "
-      + "live the way a keyboard user would see it.",
+    note: "createDropdownField's own combobox entry: a labelled field clicked open, its trigger "
+      + "replaced in place by the query input, and \"ri\" typed into it so the list narrows live. "
+      + "The phone profile of the same scenario shows the sheet's own search row instead, the "
+      + "grammar the desktop change leaves alone.",
   }),
   constructedScenario("empty-state", {
     renderer: "empty-state",

@@ -236,13 +236,21 @@ export const CORE_SCENARIOS = [
             <span class="db-dropdown-option-check db-menu-item-check">${checked ? ICONS.check : ""}</span>
             <span class="db-dropdown-option-text db-menu-item-label"><span class="db-dropdown-option-label">${label}</span></span>
           </button>`;
+      // The desktop panel opens with its query field first and the options in their own scroll
+      // container beneath it — every desktop menu is searchable, so a three-option list carries
+      // the same row a thirty-option one does.
       return `
       <div class="note-database-container">
-        <div class="db-dropdown-popover db-dropdown-popover-context-container">
-          <div class="db-dropdown-section-title">Aggregate</div>
-          ${option("Sum", "is-selected", "", true)}
-          ${option("Average")}
-          ${option("Rollup", "is-disabled", 'aria-disabled="true" title="Rollup needs a numeric target field"')}
+        <div class="db-dropdown-popover db-dropdown-popover-context-container is-searchable">
+          <div class="db-dropdown-search">
+            <input type="search" placeholder="Aggregate" role="combobox" aria-expanded="true" aria-autocomplete="list">
+          </div>
+          <div class="db-dropdown-options">
+            <div class="db-dropdown-section-title">Aggregate</div>
+            ${option("Sum", "is-selected", "", true)}
+            ${option("Average")}
+            ${option("Rollup", "is-disabled", 'aria-disabled="true" title="Rollup needs a numeric target field"')}
+          </div>
         </div>
       </div>`;
     },
