@@ -58,8 +58,17 @@ export interface ToastHandle {
 // 3. STACK
 // ───────────────────────────────────────────────────────────────────
 
-/** A success toast clears itself after this long — the budget the operation-result rail already runs. */
+/** A plain success toast — no action attached — clears itself after this long: the budget the
+ *  operation-result rail already runs. */
 const AUTO_DISMISS_MS = 2200;
+
+/**
+ * A success toast that carries an action (an Undo, a Retry) stays connected this much longer
+ * instead: an affordance the reader has not yet had time to reach for is not one they can act on.
+ * Inferred rather than measured — the shortest window that comfortably covers reading the
+ * message, aiming for the button and pressing it, without claiming parity with any reference.
+ */
+const ACTION_DISMISS_MS = 5000;
 
 const stacks = new WeakMap<Document, HTMLElement>();
 
@@ -134,7 +143,9 @@ export function showToast(doc: Document, options: ToastOptions): ToastHandle {
     };
   }
 
-  if (options.severity === "success") timer = window.setTimeout(close, AUTO_DISMISS_MS);
+  if (options.severity === "success") {
+    timer = window.setTimeout(close, options.action ? ACTION_DISMISS_MS : AUTO_DISMISS_MS);
+  }
 
   return { close };
 }
