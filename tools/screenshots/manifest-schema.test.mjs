@@ -66,17 +66,26 @@ describe("validateManifestEntry rejects a second reference product today", () =>
     expect(result.problems.some((p) => p.includes("referenceOf"))).toBe(true);
   });
 
-  // Found while writing this suite, not assumed: `startsWith` is a textual prefix check, so a
-  // `file` value carrying a literal ".." segment still reads as prefixed by its capture root
-  // string even though the path it resolves to escapes that root. A future widening of this
-  // contract to a second reference product must close this alongside the group/renderer
-  // allowlist — recorded here as the current, observed behavior rather than fixed in this suite,
-  // since closing it is coupled to a still-undecided design question (what a reference entry with
-  // no constructed counterpart should carry) that a partial fix cannot answer on its own.
-  it("does not yet reject a file path escaping its capture root (today's real gap, not a fix)", () => {
+  // `startsWith` is a textual prefix check on its own, so a `file` value carrying a literal ".."
+  // segment reads as prefixed by its capture root string even though the path it resolves to
+  // escapes that root. The prefix test alone therefore says nothing about where the file lands,
+  // which is the only thing it is asked for.
+  it("rejects a file path escaping its capture root through a .. segment", () => {
     const result = validateManifestEntry(
       pmGanttEntry({ file: "screenshots/project-manager/../../etc/passwd.png" })
     );
-    expect(result.ok).toBe(true);
+    expect(result.ok).toBe(false);
+    expect(result.problems.some((p) => p.includes("escapes"))).toBe(true);
+  });
+
+  // The same escape spelled through the constructed root, so the guard is shown to sit on the
+  // path rather than on the one reference prefix.
+  it("rejects the same escape under the constructed capture root", () => {
+    const result = validateManifestEntry(
+      pmGanttEntry({ source: undefined, renderer: undefined, group: undefined, referenceOf: undefined,
+        file: "screenshots/notion-clone/../../etc/passwd.png" })
+    );
+    expect(result.ok).toBe(false);
+    expect(result.problems.some((p) => p.includes("escapes"))).toBe(true);
   });
 });

@@ -69,6 +69,14 @@ export function validateManifestEntry(entry) {
       : `screenshots/${CAPTURE_ROOT}/`;
     if (!entry.file.startsWith(wantPrefix)) {
       problems.push(`entry ${entry.id ?? "?"} has file ${JSON.stringify(entry.file)}, want ${wantPrefix}...`);
+    } else if (entry.file.split("/").includes("..")) {
+      // The prefix test above compares strings, so a path that starts with the capture root and
+      // then climbs back out of it satisfies it while resolving somewhere else entirely. What
+      // this contract is asked for is where the file lands, not how it is spelled, so a parent
+      // segment anywhere in the path is rejected rather than normalised: every path the capture
+      // run writes is already built from a root and a basename, so a ".." here is never a
+      // legitimate spelling of a capture and silently rewriting it would hide whatever produced it.
+      problems.push(`entry ${entry.id ?? "?"} has file ${JSON.stringify(entry.file)}, which escapes ${wantPrefix}`);
     }
   }
   if (entry.theme !== "dark" && entry.theme !== "light") {
