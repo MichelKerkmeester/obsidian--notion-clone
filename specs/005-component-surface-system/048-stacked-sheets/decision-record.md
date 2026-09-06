@@ -324,8 +324,11 @@ title element (`titleEl`, empty on every `DbModal` subclass, since none calls `s
 close button, neither exposed by name in `obsidian.d.ts` but both real. `attachSheetChromeToModal`
 built its own header and close beside them, never removed them. Separately, `.note-database-modal`
 (`contentEl`) carries its own desktop-dialog surface — `background: var(--db-surface-modal)`, a
-border, a box-shadow, a blur — a rule the sheet root itself (`.db-mobile-bottom-sheet`) never
-matches, since it declares no background of its own.
+border, a box-shadow, a blur — drawn on top of the fill the sheet root already has. The root is not
+unpainted: `.db-mobile-bottom-sheet.db-mobile-bottom-sheet` gives every sheet one shared
+`--db-surface-overlay`, and the two tokens do not agree. Measured on both engines, the body painted
+rgb(57, 57, 57) inside a root of rgb(46, 46, 46) — a bordered, blurred card sitting inside the
+sheet rather than being the sheet, which is the "body lighter than its header" the report names.
 
 **Why nothing caught it.** `tools/live/sheet-grammar.mjs`'s only host-modal stand-in
 (`openHostModalChild`) built a bare `modal-container`/`modal-content` pair with neither the title
@@ -343,10 +346,16 @@ never been rendered against an element carrying the chrome it needed to hide.
 route through (`attachSheetChromeToModal`, `mobile-bottom-sheet.ts`):** the native title (when
 empty) and the native close button are found by reference — not assumed to be a direct child a CSS
 selector can name — and hidden; restored on teardown, so `applyPresentation`'s rotation re-run gets
-the host's own chrome back when the surface returns to a desktop dialog. `styles.css` gives the
-modal-as-sheet root one background token, `var(--background-primary)` — the same one every other
-sheet type already uses — and turns off `.note-database-modal`'s desktop-dialog chrome specifically
-inside a `.db-mobile-bottom-sheet`. The pre-existing CSS rule that tried to hide the close button by
+the host's own chrome back when the surface returns to a desktop dialog. The container is recognised by
+class rather than taken as whatever `modalEl.parentElement` happens to be: the same function is also
+handed panels the shell presents, whose parent lives in the view tree, and hiding or un-styling THAT
+parent reaches outside this function's subject entirely. `styles.css` turns off
+`.note-database-modal`'s desktop-dialog chrome specifically inside a `.db-mobile-bottom-sheet` and
+declares nothing on the root. A first version of the fix added a `:has(> .note-database-modal)` rule
+painting `var(--background-primary)` there; removing that rule and re-reading the root moved the
+measured value on neither engine, because the shared sheet fill wins on source order at equal
+specificity, so it is not shipped — a rule that cannot apply is worse than no rule, since it reads
+as an explanation. The pre-existing CSS rule that tried to hide the close button by
 selector alone (`.db-mobile-bottom-sheet > .modal-close-button { display: none !important; }`) is
 removed rather than kept as a second layer: left in place, it silently caught the negative control's
 own injected close button, which would have hidden a real regression exactly as it appears to have
@@ -362,11 +371,32 @@ row in this program.
 
 **Evidence:** `tools/live/sheet-grammar.mjs` gained a faithful host-modal fixture (`.modal-container`
 > `.modal-bg` + `.modal` > `.modal-title` + `.modal-content` + `.modal-close-button`), a new
-registered pair (`properties edit property`, the operator's exact scenario), three grammar columns
-(`exactly one visible close control`, `header and body share one background`,
-`handle-to-title gap`) and a dedicated negative control, run on both Chrome and WebKit. Red on the
-pre-fix tree: header/body background `rgba(0, 0, 0, 0)` vs `color(srgb 0.224 0.224 0.224)` on every
-host-modal pair; green after. `npm run gate`: 26/26.
+registered pair (`properties edit property`, the operator's exact scenario), four grammar columns
+(`exactly one visible close control`, `header and body share one background`, `sheet root paints an
+opaque fill`, `handle-to-title gap`) and two injection controls, run on both Chrome and WebKit. Red
+on the pre-fix tree: header/body background `rgba(0, 0, 0, 0)` vs `color(srgb 0.224 0.224 0.224)` on
+every host-modal pair, and the empty native title adding 40px of dead band above the title
+(handle-to-title 74.4px against 34.4px once it is hidden); green after. `npm run gate`: 26/26.
+
+**Two things verification added that the first pass did not have.** The background column compared
+the header against the body and nothing else, which two transparent boxes satisfy — it read green on
+a mount whose root was painted and would have read green on one whose root was not, which is this
+note's own subject. A fourth column now reads the root's own fill and requires it opaque, with its
+own control that blanks it on a live conforming mount and requires the row to go red. And the
+container capture originally took `modalEl.parentElement` outright, which is right for a `Modal` and
+wrong for a shell-presented panel: watched red on both engines, that version hid the panel's own
+parent while presented as a sheet and cleared its inline `display` on teardown and on the desktop
+presentation. No consumer reaches that path today, so nothing shipped broken, but the shell's
+contract already accepts a panel and the side-sheet leg is heading there.
+
+**What the stacking model was cleared of.** The report reads the parent as undimmed, and that was
+measured rather than assumed: on both engines the child registers with the overlay stack, derives
+its parent from the sheet beneath it, resolves depth 2, and one scrim sits at z-index 1001 between
+the parent's 1000 and the child's 1002 while the parent carries `is-stack-parent` at opacity 0.88 —
+the same reading before the fix as after it. The parent visible above the child is the floating
+frame doing what it is specified to do: inset 8px on left, right and bottom, radius 16px, measured
+at 8/382/836 in a 390x844 viewport. So the parent treatment is not a defect here, and the ink the
+report reads through the child is the child's own missing surface.
 <!-- /ANCHOR:host-modal-chrome-note -->
 
 ---
