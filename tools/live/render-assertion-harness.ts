@@ -60,7 +60,7 @@ import {
   type CalendarTimelineRendererActions,
 } from "../../src/views/calendar-timeline-renderer";
 import { buildTimelineRangeGeometry } from "../../src/data/calendar-timeline-model";
-import { dateKeyDaysBetween, getLocalDateKey, renderNow, setFrozenRenderNow } from "../../src/data/calendar-date-time";
+import { addDateKeyDays, dateKeyDaysBetween, getLocalDateKey, renderNow, setFrozenRenderNow } from "../../src/data/calendar-date-time";
 import { ChartToolbarRenderer, type ChartToolbarActions } from "../../src/views/chart-toolbar-renderer";
 import { CalendarToolbarRenderer, type CalendarToolbarActions } from "../../src/views/calendar-toolbar-renderer";
 import {
@@ -456,6 +456,17 @@ export interface ScenarioSpec {
    * room for a title in.
    */
   calendarOverlapTimed?: boolean;
+   * Opt-in, renderer "calendar" only: strips the date field from one bench row so the grid draws
+   * a real unscheduled record and the header's "Unscheduled · N" chip has something to count,
+   * rather than every calendar capture stubbing that surface to zero rows.
+   */
+  calendarUnscheduled?: boolean;
+  /**
+   * Opt-in, renderer "calendar" only: gives one bench row a real end-date field spanning several
+   * days, so a multi-day all-day segment actually exists somewhere in the capture corpus instead
+   * of every calendar scenario drawing single-day segments alone.
+   */
+  calendarMultiDay?: boolean;
   /**
    * Opt-in, renderer "table" only: wires the `setupColumnHeader` bag member to a real
    * `ColumnHeaderController.setup` — the same wiring `database-view.ts` uses — so every header
@@ -1472,9 +1483,57 @@ function boardAssertions(container: HTMLElement, rows: RowData[], groups: BoardG
   return results;
 }
 
-function calendarAssertions(container: HTMLElement): AssertionResult[] {
+function calendarAssertions(container: HTMLElement, scenario: ScenarioSpec): AssertionResult[] {
   const results: AssertionResult[] = [];
   const dayCells = container.querySelectorAll<HTMLElement>(".db-calendar-day").length;
+
+  // The unscheduled surface is a header chip, never a band above the grid: this class named a
+  // full-width drawer element that no longer exists anywhere in the renderer's output, on any
+  // scenario — a regression that reintroduced it would still pass every check above.
+  const drawerBands = container.querySelectorAll<HTMLElement>(".db-calendar-backlog").length;
+  results.push({
+    name: "no unscheduled band renders above the grid",
+    pass: drawerBands === 0,
+    detail: `${drawerBands} .db-calendar-backlog element(s), want 0`,
+  });
+
+  // The chip is present exactly when the scenario put an unscheduled row in the data, and absent
+  // otherwise — never a band with nothing to hold, never a hidden-but-present control either.
+  const chip = container.querySelector<HTMLElement>(".db-calendar-unscheduled-chip");
+  const wantsChip = Boolean(scenario.calendarUnscheduled);
+  results.push({
+    name: "the unscheduled chip's presence matches whether any row is undated",
+    pass: wantsChip ? Boolean(chip) : !chip,
+    detail: wantsChip
+      ? (chip ? `present: "${(chip.textContent || "").trim()}"` : "absent, but the scenario put an unscheduled row in the data")
+      : (chip ? `present ("${(chip.textContent || "").trim()}"), but every row in this scenario carries a date` : "absent, as expected with zero unscheduled rows"),
+  });
+
+  // A multi-day segment's title can flex-grow to fill the whole spanning box when nothing bounds
+  // it, stranding the date range at the segment's far edge instead of right after the title — the
+  // defect an operator screenshot showed as a centred/detached range. Bound the gap between them
+  // rather than an exact pixel, since the title's own width varies with its text.
+  const spanning = Array.from(container.querySelectorAll<HTMLElement>(".db-calendar-month-segment"))
+    .filter((segment) => segment.querySelector(":scope > .db-calendar-month-dates"));
+  const detached: string[] = [];
+  for (const segment of spanning) {
+    const title = segment.querySelector<HTMLElement>(":scope > .db-calendar-month-title");
+    const dates = segment.querySelector<HTMLElement>(":scope > .db-calendar-month-dates");
+    if (!title || !dates) continue;
+    const titleBox = title.getBoundingClientRect();
+    const datesBox = dates.getBoundingClientRect();
+    if (titleBox.width === 0 || datesBox.width === 0) continue;
+    const gap = Math.round(datesBox.left - titleBox.right);
+    if (gap > 20) detached.push(`"${(title.textContent || "").trim()}" ${gap}px before its own date range`);
+  }
+  results.push({
+    name: "a multi-day chip's date range sits right after its title, not stranded at the segment's far edge",
+    pass: spanning.length === 0 || detached.length === 0,
+    detail: spanning.length === 0
+      ? "no multi-day (ranged) segment in this scenario, so this asserts nothing"
+      : `${spanning.length} ranged segment(s), ${detached.length} with the range detached from its title`
+        + (detached.length ? `: ${detached.join("; ")}` : ""),
+  });
   const segments = container.querySelectorAll<HTMLElement>(
     ".db-calendar-month-segment, .db-calendar-week-allday-segment, .db-calendar-timed-event",
   ).length;
@@ -2570,13 +2629,28 @@ export function runRenderAssertions(
     const iconKey = scenario.calendarRecordIcon
       ? columns.find((col) => col.type === "text" && col.key !== "file.name")?.key
       : undefined;
-    const config: ViewConfig = scenario.emptyState
+    let config: ViewConfig = scenario.emptyState
       ? { ...baseConfig, calendarStartDateField: undefined }
       : scenario.calendarRecordIcon
         ? { ...baseConfig, showRecordIcon: true, recordIconFieldOverrideEnabled: true, recordIconField: iconKey }
         : scenario.calendarOverlapTimed
           ? { ...baseConfig, calendarEndDateField: "event_end", calendarWeekStart: OVERLAP_TIMED_DATE, calendarDay: OVERLAP_TIMED_DATE }
           : baseConfig;
+    if (scenario.calendarUnscheduled && baseConfig.calendarStartDateField) {
+      // Row 1, not row 0: row 0 stays a normal drawn event so a scenario combining this with
+      // calendarRecordIcon still has one to carry the icon.
+      const fm = (rows[1] as unknown as { frontmatter: Record<string, unknown> }).frontmatter;
+      delete fm[baseConfig.calendarStartDateField];
+    }
+    if (scenario.calendarMultiDay && baseConfig.calendarStartDateField) {
+      const endField = `${baseConfig.calendarStartDateField}_end`;
+      config = { ...config, calendarEndDateField: endField };
+      // Row 2: distinct from the icon row (0) and the unscheduled row (1), so all three options
+      // can combine on one capture without one opt-in overwriting another's row.
+      const fm = (rows[2] as unknown as { frontmatter: Record<string, unknown> }).frontmatter;
+      const start = fm[baseConfig.calendarStartDateField];
+      if (typeof start === "string") fm[endField] = addDateKeyDays(start, 4);
+    }
     const bag = scenario.bag === "file-view" ? fileViewCalendarBag(columns) : embedCalendarBag(columns);
     if (scenario.calendarRecordIcon) {
       // Every bench row already carries an event date (calendar-render-bench.ts's makeRows sets
@@ -2615,7 +2689,7 @@ export function runRenderAssertions(
         : scenario.miniCalendar
           ? [miniCalendarAssertion(container)]
           : scale === "month"
-            ? calendarAssertions(container)
+            ? calendarAssertions(container, scenario)
             : weekAssertions(container, scale)));
       results.push({
         name: "no forced layout inside the segment loop",

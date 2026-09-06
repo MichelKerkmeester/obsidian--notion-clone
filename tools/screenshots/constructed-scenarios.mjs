@@ -339,7 +339,7 @@ const SPEC_OPTIONS = [
   "toolbarPopover", "searchText", "rules", "ruleKind", "filterDepth", "calendarHint",
   "recordBodyVariant", "editorKind", "includeTime", "boardImageField",
   "boardEmptyColumn", "tableGroups", "tableFooter", "fullStatusPalette",
-  "recordIconColumn", "calendarRecordIcon", "columnHeaderController", "longHeaderLabel", "migratedFromList",
+  "recordIconColumn", "calendarRecordIcon", "calendarUnscheduled", "calendarMultiDay", "columnHeaderController", "longHeaderLabel", "migratedFromList",
   "viewConfigVariant", "boardCardFieldsHidden", "tableColumnCount", "recordPlacement", "dropdownSearch",
 ];
 
@@ -420,6 +420,16 @@ export const CONSTRUCTED_SCENARIOS = [
     title: "Calendar month view (constructed)",
     sources: constructedSources("src/views/calendar-renderer.ts", "tools/bench/calendar-render-bench.ts"),
     note: "The shipped month grid anchored on the bench's event dates, one chip carrying a real leading icon; the unscheduled drawer is absent because every bench row has an event date.",
+  }),
+  constructedScenario("calendar-month-unscheduled", {
+    renderer: "calendar",
+    scale: "month",
+    calendarUnscheduled: true,
+    calendarMultiDay: true,
+    title: "Calendar month view, unscheduled chip and a multi-day chip (constructed)",
+    sources: constructedSources("src/views/calendar-renderer.ts", "tools/bench/calendar-render-bench.ts"),
+    note: "The shipped month grid with one row carrying no date (the header's \"Unscheduled · N\" chip) "
+      + "and one row spanning several days (a multi-day all-day chip), the two states the bench shape alone never draws.",
   }),
   constructedScenario("calendar-week", {
     renderer: "calendar",

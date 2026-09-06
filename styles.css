@@ -18015,6 +18015,16 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   white-space: nowrap;
 }
 
+/* A multi-day segment's grid-column can span the whole week, and the title's
+   own flex-grow (above) fills that entire width when nothing bounds it —
+   pushing this date range to the segment's far right edge instead of right
+   after the title. Zeroing the title's grow whenever a range follows it
+   keeps both clustered at the segment's left edge, matching every other
+   chip in the grid; the title still ellipsises via its own basis. */
+.note-database-container .db-calendar-month-segment:has(> .db-calendar-month-dates) > .db-calendar-month-title {
+  flex-grow: 0;
+}
+
 .note-database-container .db-calendar-month-week .db-calendar-more-events {
   z-index: 4;
   align-self: end;
@@ -18466,98 +18476,26 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   text-decoration-thickness: 1px;
 }
 
-/* The unscheduled drawer stays: a note with unparseable or missing date
-   frontmatter has no other surface in this plugin that flags it as "needs a
-   date", so removing the drawer would remove its only home. Restyled to the
-   grid's own rule colour and surface instead of a tinted card, so it reads
-   as part of one surface rather than a leftover. */
-.note-database-container .db-calendar-backlog {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  overflow: hidden;
-  border: 1px solid #EBEBEB;
-  border-radius: var(--db-radius-md);
-  background: var(--background-primary);
-}
-
-.theme-dark .note-database-container .db-calendar-backlog {
-  border-color: #292929;
-}
-
-.note-database-container .db-calendar-backlog-header {
-  display: flex;
-  align-items: center;
-  min-height: 32px;
-  padding: 2px 8px;
-  border-bottom: 1px solid #EBEBEB;
-}
-
-.theme-dark .note-database-container .db-calendar-backlog-header {
-  border-bottom-color: #292929;
-}
-
-.note-database-container .db-calendar-backlog-toggle {
-  min-width: 28px;
-  min-height: 28px;
-  padding: 3px 8px;
-  border: 0;
-  border-radius: var(--db-radius-sm);
-  background: transparent;
+/* The unscheduled surface is a header chip beside the month/year title, not a
+   band above the grid: a note with unparseable or missing date frontmatter
+   has no other surface in this plugin that flags it as "needs a date", so
+   the affordance stays, just subtler — present only when N >= 1 (the
+   renderer never creates the element at N = 0), opening the shared
+   owned-menu popover/sheet rather than an always-visible empty-feeling
+   drawer. */
+.note-database-container .db-calendar-unscheduled-chip {
   color: var(--text-muted);
-  cursor: pointer;
-  font-size: var(--db-font-sm);
-  font-weight: 600;
-  line-height: 1.2;
-  text-align: left;
 }
 
-.note-database-container .db-calendar-backlog-toggle:hover,
-.note-database-container .db-calendar-backlog-toggle:focus-visible {
-  background: var(--background-modifier-hover);
+.note-database-container .db-calendar-unscheduled-chip:hover {
   color: var(--text-normal);
 }
 
-.note-database-container .db-calendar-backlog-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-  padding: 6px 8px 8px;
-}
-
-.note-database-container .db-calendar-backlog.is-collapsed .db-calendar-backlog-list {
-  display: none;
-}
-
-.note-database-container .db-calendar-backlog-item {
-  display: flex;
-  min-width: 0;
-  min-height: 28px;
-  align-items: center;
-  padding: 4px 8px;
-  border: 0;
-  border-radius: var(--db-radius-sm);
-  background: transparent;
-  color: var(--text-normal);
-  cursor: pointer;
-  font: inherit;
-  overflow: hidden;
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.note-database-container .db-calendar-backlog-item:hover,
-.note-database-container .db-calendar-backlog-item:focus-visible {
-  background: var(--background-modifier-hover);
-}
-
-.note-database-container .db-calendar-backlog-item.is-completed {
-  border-inline-start: 3px solid var(--db-calendar-done-accent);
-  background: var(--db-calendar-done-bg);
+/* Only the completed-row treatment in that popover/sheet is calendar-
+   specific — everything else is the shared owned-menu row grammar. Mirrors
+   the month chip's own completed style (line-through in the done accent). */
+.note-database-container .db-owned-menu .db-menu-item.is-completed .db-menu-item-label {
   color: var(--text-muted);
-  opacity: 0.82;
   text-decoration: line-through;
   text-decoration-color: var(--db-calendar-done-accent);
   text-decoration-thickness: 1px;

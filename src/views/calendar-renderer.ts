@@ -121,7 +121,6 @@ export class CalendarRenderer {
 	private pendingFlashDateKey: string | null = null;
 	private pendingBottomScrollDateKey: string | null = null;
 	private calendarRoot: HTMLElement | null = null;
-	private backlogCollapsed = false;
 	private currentVisibleRange: CalendarTimelineSearchVisibleRange | null = null;
 	private emptyStateRenderer = new EmptyStateRenderer();
 
@@ -163,45 +162,52 @@ export class CalendarRenderer {
 		return this.currentVisibleRange;
 	}
 
-	private renderUnscheduledBacklog(parent: HTMLElement, config: ViewConfig, rows: RowData[], startField: string): void {
+	/** The unscheduled surface is a header chip, not a band above the grid: a
+	 *  compact "Unscheduled · N" control beside the month/year title, present
+	 *  only when N >= 1, opening a popover (desktop) or a phone sheet listing
+	 *  the undated rows — the reference has no unscheduled surface at all, and
+	 *  a full-width band with one centred row was the opposite of subtle. */
+	private renderUnscheduledChip(title: HTMLElement, config: ViewConfig, rows: RowData[], startField: string): void {
 		const unscheduled = collectUnscheduledTimelineRows(rows, config, startField);
-		// An empty pool renders nothing rather than a header and an empty line at
-		// full height: the reference has no surface here at all, and there is
-		// nothing for the drawer to hold or for a reader to toggle.
 		if (unscheduled.length === 0) return;
-		const drawer = parent.createDiv({ cls: `db-calendar-backlog${this.backlogCollapsed ? " is-collapsed" : ""}` });
-		const header = drawer.createDiv({ cls: "db-calendar-backlog-header" });
-		const toggle = header.createEl("button", {
-			cls: "db-calendar-backlog-toggle",
-			text: `${t("calendar.unscheduled")} (${unscheduled.length})`,
-			attr: { type: "button", "aria-expanded": this.backlogCollapsed ? "false" : "true" },
+		const label = t("calendar.unscheduled");
+		const chip = title.createEl("button", {
+			cls: "db-calendar-nav-button is-text db-calendar-unscheduled-chip",
+			text: `${label} · ${unscheduled.length}`,
+			attr: { type: "button", "aria-haspopup": "true", "aria-label": label },
 		});
-		toggle.onclick = () => {
-			this.backlogCollapsed = !this.backlogCollapsed;
-			drawer.toggleClass("is-collapsed", this.backlogCollapsed);
-			toggle.setAttribute("aria-expanded", this.backlogCollapsed ? "false" : "true");
+		chip.onclick = (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			this.openUnscheduledMenu(event, chip, config, unscheduled);
 		};
-		const list = drawer.createDiv({ cls: "db-calendar-backlog-list" });
+	}
+
+	/** Builds the popover/sheet listing every unscheduled row, one owned-menu
+	 *  row each — drag from a row onto a day still moves it there, same as the
+	 *  drawer this replaces. Shares the owned-menu primitive every other
+	 *  calendar menu already uses, so this adds no new sheet-grammar surface. */
+	private openUnscheduledMenu(event: MouseEvent, anchor: HTMLElement, config: ViewConfig, unscheduled: RowData[]): void {
+		const menu = createOwnedMenuForEvent(event, { returnFocus: anchor, title: t("calendar.unscheduled") });
 		for (const row of unscheduled) {
-			const item = list.createEl("button", {
-				cls: `db-calendar-backlog-item${this.isRowCompleted(row, config) ? " is-completed" : ""}`,
-				text: row.file.basename || row.file.name,
-				attr: { type: "button", title: row.file.path },
+			const rowEl = menu.addRow({
+				label: row.file.basename || row.file.name,
+				cls: this.isRowCompleted(row, config) ? "is-completed" : undefined,
+				tooltip: row.file.path,
+				onClick: () => {
+					if (this.actions.openRecordDetail) this.actions.openRecordDetail(rowEl, row);
+					else this.actions.openRow(row);
+				},
 			});
-			item.onclick = (event) => {
-				event.preventDefault();
-				event.stopPropagation();
-				if (this.actions.openRecordDetail) this.actions.openRecordDetail(item, row);
-				else this.actions.openRow(row);
-			};
 			if (!this.actions.isReadOnly && this.actions.updateEventDates) {
-				item.draggable = true;
-				item.addEventListener("dragstart", (event) => {
-					event.dataTransfer?.setData(UNSCHEDULED_MIME, row.file.path);
-					event.dataTransfer?.setData("text/plain", row.file.path);
+				rowEl.draggable = true;
+				rowEl.addEventListener("dragstart", (dragEvent) => {
+					dragEvent.dataTransfer?.setData(UNSCHEDULED_MIME, row.file.path);
+					dragEvent.dataTransfer?.setData("text/plain", row.file.path);
 				});
 			}
 		}
+		menu.showAt({ anchor });
 	}
 
 	private safeUpdateEventDates(
@@ -273,8 +279,8 @@ export class CalendarRenderer {
 		const wrap = container.createDiv({ cls: "db-calendar db-calendar-month" });
 		this.calendarRoot = wrap;
 		this.applyMonthSizingVars(wrap, config);
-		this.renderMonthHeader(wrap, config, model);
-		this.renderUnscheduledBacklog(wrap, config, rows, startField);
+		const monthTitleEl = this.renderMonthHeader(wrap, config, model);
+		this.renderUnscheduledChip(monthTitleEl, config, rows, startField);
 		this.renderWeekdayLabels(wrap, config, weekStartsOn);
 
 		const monthTitle = formatCalendarTitleParts({
@@ -666,8 +672,8 @@ export class CalendarRenderer {
 		const wrap = container.createDiv({ cls: "db-calendar db-calendar-week" });
 		this.calendarRoot = wrap;
 		this.applyTimeGridSizingVars(wrap, config, weekDays.length);
-		this.renderWeekHeader(wrap, config, weekDays);
-		this.renderUnscheduledBacklog(wrap, config, rows, startField);
+		const weekTitle = this.renderWeekHeader(wrap, config, weekDays);
+		this.renderUnscheduledChip(weekTitle, config, rows, startField);
 		// Sticky wrapper keeps the day-name row + all-day strip pinned while the
 		// time grid scrolls beneath it.
 		const sticky = wrap.createDiv({ cls: "db-calendar-week-sticky" });
@@ -697,8 +703,8 @@ export class CalendarRenderer {
 		const wrap = container.createDiv({ cls: "db-calendar db-calendar-week db-calendar-day-view" });
 		this.calendarRoot = wrap;
 		this.applyTimeGridSizingVars(wrap, config, 1);
-		this.renderDayHeader(wrap, config, day.dateKey);
-		this.renderUnscheduledBacklog(wrap, config, rows, startField);
+		const dayTitle = this.renderDayHeader(wrap, config, day.dateKey);
+		this.renderUnscheduledChip(dayTitle, config, rows, startField);
 		const sticky = wrap.createDiv({ cls: "db-calendar-week-sticky" });
 		this.renderTimeHeaderRow(sticky, wrap, config, [day]);
 		this.renderAllDaySection(sticky, config, [day]);
@@ -1759,10 +1765,10 @@ export class CalendarRenderer {
 		return formatDateTimeRangeDisplay(startDateKey, endDateKey, startTimeMinutes, endTimeMinutes, { contextYear });
 	}
 
-	private renderWeekHeader(wrap: HTMLElement, config: ViewConfig, weekDays: CalendarDayModel[]): void {
+	private renderWeekHeader(wrap: HTMLElement, config: ViewConfig, weekDays: CalendarDayModel[]): HTMLElement {
 		const header = wrap.createDiv({ cls: "db-calendar-header" });
 		const anchorKey = weekDays[0]?.dateKey || this.getTodayDateKey();
-		this.renderScaleTitleSelects(header, anchorKey, formatCalendarTitleParts({
+		const title = this.renderScaleTitleSelects(header, anchorKey, formatCalendarTitleParts({
 			scale: "week",
 			startDateKey: weekDays[0]?.dateKey,
 			endDateKey: weekDays[weekDays.length - 1]?.dateKey,
@@ -1775,11 +1781,12 @@ export class CalendarRenderer {
 		this.renderNavButton(controls, "calendar.nextWeek", () => this.shiftWeek(config, weekDays, 1), "chevron-right");
 		this.renderMiniCalendarButton(controls, header, config);
 		this.renderCalendarInvalidWarning(controls);
+		return title;
 	}
 
-	private renderDayHeader(wrap: HTMLElement, config: ViewConfig, dateKey: string): void {
+	private renderDayHeader(wrap: HTMLElement, config: ViewConfig, dateKey: string): HTMLElement {
 		const header = wrap.createDiv({ cls: "db-calendar-header" });
-		this.renderScaleTitleSelects(header, dateKey, formatCalendarTitleParts({
+		const title = this.renderScaleTitleSelects(header, dateKey, formatCalendarTitleParts({
 			scale: "day",
 			startDateKey: dateKey,
 			locale: getEffectiveLocale(),
@@ -1791,6 +1798,7 @@ export class CalendarRenderer {
 		this.renderNavButton(controls, "calendar.nextDay", () => this.shiftDay(config, dateKey, 1), "chevron-right");
 		this.renderMiniCalendarButton(controls, header, config);
 		this.renderCalendarInvalidWarning(controls);
+		return title;
 	}
 
 	private renderMiniCalendarButton(controls: HTMLElement, header: HTMLElement, config: ViewConfig): void {
@@ -2115,11 +2123,11 @@ export class CalendarRenderer {
 		this.actions.onConfigChange?.(t("undo.calendarMonthConfig"));
 	}
 
-	private renderMonthHeader(wrap: HTMLElement, config: ViewConfig, model: { year: number; monthIndex: number }): void {
+	private renderMonthHeader(wrap: HTMLElement, config: ViewConfig, model: { year: number; monthIndex: number }): HTMLElement {
 		const header = wrap.createDiv({ cls: "db-calendar-header" });
 		// The month title is two selects, not one static string — month opens a
 		// 12-row list, year a scrollable one, each checkmarking the current value.
-		this.renderMonthTitleSelects(header, config, model);
+		const title = this.renderMonthTitleSelects(header, config, model);
 		const controls = header.createDiv({ cls: "db-calendar-controls" });
 		this.renderCalendarScaleControl(controls, config, "month", `${String(model.year).padStart(4, "0")}-${String(model.monthIndex + 1).padStart(2, "0")}-01`);
 		this.renderNavButton(controls, "calendar.prevMonth", () => this.shiftMonth(config, model, -1), "chevron-left");
@@ -2127,11 +2135,13 @@ export class CalendarRenderer {
 		this.renderNavButton(controls, "calendar.nextMonth", () => this.shiftMonth(config, model, 1), "chevron-right");
 		this.renderMiniCalendarButton(controls, header, config);
 		this.renderCalendarInvalidWarning(controls);
+		return title;
 	}
 
 	/** The month and year selects: two buttons, each opening the shared dropdown-menu
-	 *  listbox already used for the scale menu, rather than a bespoke pair. */
-	private renderMonthTitleSelects(header: HTMLElement, config: ViewConfig, model: { year: number; monthIndex: number }): void {
+	 *  listbox already used for the scale menu, rather than a bespoke pair. Returns the
+	 *  title element so the unscheduled chip can sit beside it. */
+	private renderMonthTitleSelects(header: HTMLElement, config: ViewConfig, model: { year: number; monthIndex: number }): HTMLElement {
 		const title = header.createDiv({
 			cls: "db-calendar-title",
 			attr: { title: this.formatMonthTitle(model.year, model.monthIndex), "aria-label": this.formatMonthTitle(model.year, model.monthIndex) },
@@ -2174,6 +2184,7 @@ export class CalendarRenderer {
 				onChange: (value) => this.setCalendarMonthIndex(config, Number(value), model.monthIndex),
 			});
 		};
+		return title;
 	}
 
 	private setCalendarMonthIndex(config: ViewConfig, year: number, monthIndex: number): void {
@@ -2575,7 +2586,7 @@ export class CalendarRenderer {
 		anchorDateKey: string,
 		parts: CalendarTitleParts,
 		onNavigate: (year: number, monthIndex: number) => void,
-	): void {
+	): HTMLElement {
 		const title = header.createDiv({
 			cls: "db-calendar-title",
 			attr: { title: parts.ariaLabel, "aria-label": parts.ariaLabel },
@@ -2600,7 +2611,7 @@ export class CalendarRenderer {
 				onChange: (value) => onNavigate(year, Number(value)),
 			});
 		};
-		if (!parts.year) return;
+		if (!parts.year) return title;
 		const yearButton = title.createEl("button", {
 			cls: "db-calendar-title-year db-calendar-title-select",
 			text: parts.year,
@@ -2619,6 +2630,7 @@ export class CalendarRenderer {
 				onChange: (value) => onNavigate(Number(value), monthIndex),
 			});
 		};
+		return title;
 	}
 
 	/** Jumps a week/day scale's anchor to the chosen year/month, clamping the

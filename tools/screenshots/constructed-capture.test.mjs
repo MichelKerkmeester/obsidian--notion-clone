@@ -102,6 +102,7 @@ describe("constructed scenario registry", () => {
       "constructed-calendar-empty",
       "constructed-calendar-mini",
       "constructed-calendar-month",
+      "constructed-calendar-month-unscheduled",
       "constructed-calendar-toolbar-options",
       "constructed-calendar-week",
       "constructed-card-covers",

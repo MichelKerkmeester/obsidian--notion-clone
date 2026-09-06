@@ -532,23 +532,18 @@ describe("Calendar parity behaviours", () => {
     expect(openEvent?.className.split(/\s+/)).not.toContain("is-completed");
   });
 
-  it("marks a completed row in the unscheduled backlog", () => {
-    const renderer = new CalendarRenderer(createMockActions());
-    const container = new MockElement("div") as unknown as HTMLElement;
-
-    renderer.render(container, parityConfig, [
-      makeRow("unscheduled-done.md", { done: true }),
-      makeRow("unscheduled-open.md", { done: false }),
-    ]);
-
-    const root = container as unknown as MockElement;
-    const items = root.querySelectorAll(".db-calendar-backlog-item");
-    const doneItem = items.find((el) => el.getAttribute("title") === "unscheduled-done.md");
-    const openItem = items.find((el) => el.getAttribute("title") === "unscheduled-open.md");
-    expect(doneItem).toBeDefined();
-    expect(openItem).toBeDefined();
-    expect(doneItem?.className.split(/\s+/)).toContain("is-completed");
-    expect(openItem?.className.split(/\s+/)).not.toContain("is-completed");
+  it("identifies completed vs open rows for the unscheduled popover", () => {
+    // The popover itself opens through the shared owned-menu primitive, which needs a real
+    // document this lightweight harness does not provide (see owned-menu.test.ts for that
+    // coverage). What is calendar-specific is which rows the popover marks completed, and that
+    // is `isRowCompleted` — the same call `openUnscheduledMenu` makes per row.
+    const renderer = new CalendarRenderer(createMockActions()) as unknown as {
+      isRowCompleted(row: RowData, config: ViewConfig): boolean;
+    };
+    const doneRow = makeRow("unscheduled-done.md", { done: true });
+    const openRow = makeRow("unscheduled-open.md", { done: false });
+    expect(renderer.isRowCompleted(doneRow, parityConfig)).toBe(true);
+    expect(renderer.isRowCompleted(openRow, parityConfig)).toBe(false);
   });
 
   it("marks weekend day cells and matching header labels in the month grid", () => {
@@ -596,27 +591,30 @@ describe("Calendar parity behaviours", () => {
     }
   });
 
-  it("renders no backlog drawer at all when nothing is unscheduled", () => {
+  it("renders no unscheduled chip, and no band of any kind, when nothing is unscheduled", () => {
     const renderer = new CalendarRenderer(createMockActions());
     const container = new MockElement("div") as unknown as HTMLElement;
 
     renderer.render(container, parityConfig, [makeRow("scheduled.md", { due: "2026-08-15", done: false })]);
 
     const root = container as unknown as MockElement;
+    expect(root.querySelector(".db-calendar-unscheduled-chip")).toBeNull();
     expect(root.querySelector(".db-calendar-backlog")).toBeNull();
   });
 
-  it("renders the backlog drawer and its one item once an unscheduled row exists", () => {
+  it("renders the unscheduled chip beside the title, and no band, once an unscheduled row exists", () => {
     const renderer = new CalendarRenderer(createMockActions());
     const container = new MockElement("div") as unknown as HTMLElement;
 
     renderer.render(container, parityConfig, [makeRow("unscheduled.md", { done: false })]);
 
     const root = container as unknown as MockElement;
-    const drawer = root.querySelector(".db-calendar-backlog");
-    expect(drawer).not.toBeNull();
-    const items = root.querySelectorAll(".db-calendar-backlog-item");
-    expect(items.length).toBe(1);
+    const chip = root.querySelector(".db-calendar-unscheduled-chip");
+    expect(chip).not.toBeNull();
+    expect(chip?.textContent).toContain("1");
+    // Beside the title, not a sibling band: the chip is a child of .db-calendar-title.
+    expect(chip?.parentElement?.className.split(/\s+/)).toContain("db-calendar-title");
+    expect(root.querySelector(".db-calendar-backlog")).toBeNull();
   });
 
   it("renders the calm empty-state title for no-events through the renderer", () => {

@@ -83,6 +83,25 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     expect(body).toContain("background: #216DFA");
   });
 
+  it("pins the unscheduled surface to a header chip: no band rule survives in styles.css", () => {
+    // The band's own rule (a bordered, always-laid-out drawer above the grid) is gone, not just
+    // unreferenced — this greps the raw stylesheet text rather than one selector's block, so a
+    // rule reintroduced under a new selector name would still be caught by its class name.
+    expect(STYLES).not.toContain(".db-calendar-backlog");
+    const body = ruleBody(".note-database-container .db-calendar-unscheduled-chip");
+    expect(body).toContain("color: var(--text-muted)");
+  });
+
+  it("pins a multi-day chip's date range to sit right after its title, not stranded at the segment's far edge", () => {
+    // The title's own flex-grow (below) fills a multi-day segment's whole grid-column span when
+    // nothing bounds it, so a segment carrying a date range zeroes its title's grow — the fix for
+    // an operator report of a multi-day chip's range reading as centred, detached text.
+    const title = ruleBody(".note-database-container .db-calendar-month-title");
+    expect(title).toContain("flex: 1 0 min(8ch, 100%)");
+    const bounded = ruleBody(".note-database-container .db-calendar-month-segment:has(> .db-calendar-month-dates) > .db-calendar-month-title");
+    expect(bounded.replace(/\s+/g, " ").trim()).toBe("flex-grow: 0;");
+  });
+
   it("pins the week/day timed block to the month chip's flat ink: no fill, no accent bar, no radius", () => {
     const body = ruleBody(".note-database-container .db-calendar-week-timed-event");
     expect(body).toContain("background: none");
