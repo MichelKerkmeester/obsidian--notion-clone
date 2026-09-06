@@ -1165,13 +1165,13 @@ Sources: `src/views/calendar-renderer.ts`, `src/views/empty-state-renderer.ts`
 
 ### Mini calendar date picker
 
-Days with events carry a short accent underline; the visible week reads as the selected pill run.
+Days with events carry a short accent underline; the visible week reads as the selected pill run. The calendar view's own header trigger for this popover is gone; the date-value-picker field editor is the shipped surface that still opens it, so this hand-built fixture documents the popover's own markup rather than a constructed capture of a button that no longer exists.
 
 | dark | light |
 |---|---|
 | ![calendar-mini-calendar dark](notion-clone/views/calendar-mini-calendar-mobile-dark.png) | ![calendar-mini-calendar light](notion-clone/views/calendar-mini-calendar-mobile-light.png) |
 
-Sources: `src/views/calendar-mini-calendar-renderer.ts`, `src/views/calendar-renderer.ts`
+Sources: `src/views/calendar-mini-calendar-renderer.ts`, `src/views/date-value-picker.ts`
 
 ### Calendar month view
 
@@ -1242,16 +1242,6 @@ The shipped calendar renderer with every date-typed column removed from its sche
 | ![constructed-calendar-empty dark](notion-clone/views/constructed-calendar-empty-mobile-dark.png) | ![constructed-calendar-empty light](notion-clone/views/constructed-calendar-empty-mobile-light.png) |
 
 Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/empty-state-renderer.ts`
-
-### Calendar view — mini date-picker popover (constructed)
-
-The shipped month calendar with its own mini date-picker trigger clicked, opening renderMiniCalendar's real popover rather than a hand-applied class.
-
-| dark | light |
-|---|---|
-| ![constructed-calendar-mini dark](notion-clone/views/constructed-calendar-mini-mobile-dark.png) | ![constructed-calendar-mini light](notion-clone/views/constructed-calendar-mini-mobile-light.png) |
-
-Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/calendar-mini-calendar-renderer.ts`
 
 ### Calendar month view (constructed)
 
