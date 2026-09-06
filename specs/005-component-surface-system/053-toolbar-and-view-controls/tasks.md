@@ -326,5 +326,11 @@ and stay unticked — an agent never ticks them.
       is `Boolean(viewWrapText) && colWrap !== false` (`column-types.ts:425-427`), the view switch
       gating every column, not the `col.wrap ?? config.wrapText` precedence ADR-004 originally
       recorded. `064-notion-toolbar-refinement` — this packet's *own* Notion child, for the toolbar
-      and view controls — is wave 2 and still reserved
+      and view controls — opened 2026-09-06: the toolbar's five-iteration loop ran in this packet's own
+      `research/notion-toolbar/` (lineage `glm-openrouter-toolbar`, `cli-pi` on `z-ai/glm-5.3-flash` at
+      `reasoningEffort: max`, 5/5, 34 findings), and the synthesis landed
+      `064-notion-toolbar-refinement/` beside this packet. Its handoff criteria sequence it after any
+      leg of this packet still in `toolbar-renderer.ts`, `filter-panel-renderer.ts`,
+      `sort-panel-renderer.ts` or `active-view-controls-renderer.ts`, with the `styles.css` lane the
+      parent's; it is additive under parent D15 and restates none of this packet's rows
 <!-- /ANCHOR:phase-7 -->

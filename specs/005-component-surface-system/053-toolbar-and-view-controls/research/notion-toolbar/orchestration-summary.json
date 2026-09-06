@@ -1,0 +1,71 @@
+{
+  "run_id": "1788710516212-ggxm3z",
+  "loop_type": "research",
+  "spec_folder": "specs/005-component-surface-system/053-toolbar-and-view-controls",
+  "base_artifact_dir": "specs/005-component-surface-system/053-toolbar-and-view-controls/research",
+  "total_cli_lineages": 1,
+  "orphaned_lineages": [],
+  "total": 1,
+  "succeeded": 1,
+  "failed": 0,
+  "all_failed": false,
+  "gauges": {
+    "lag": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "failure_classes": {
+    "timeout": 0,
+    "exit": 0,
+    "salvage_miss": 0
+  },
+  "timestamp_anomalies": [
+    {
+      "label": "glm-openrouter-toolbar",
+      "state_log": "specs/005-component-surface-system/053-toolbar-and-view-controls/research/lineages/glm-openrouter-toolbar/deep-research-state.jsonl",
+      "window": {
+        "start_at_iso": "2026-09-06T16:01:56.216Z",
+        "end_at_iso": "2026-09-06T16:40:59.490Z",
+        "tolerance_ms": 120000
+      },
+      "counts": {
+        "anomalous": 8,
+        "untimestamped": 0,
+        "unparseable": 0,
+        "total": 16
+      },
+      "sample": [
+        {
+          "index": 8,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T18:47:00+02:00",
+          "deltaMs": 240510
+        },
+        {
+          "index": 9,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T18:55:00+02:00",
+          "deltaMs": 720510
+        },
+        {
+          "index": 10,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T18:56:00+02:00",
+          "deltaMs": 780510
+        },
+        {
+          "index": 11,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T18:56:00+02:00",
+          "deltaMs": 780510
+        },
+        {
+          "index": 12,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T19:00:00+02:00",
+          "deltaMs": 1020510
+        }
+      ]
+    }
+  ]
+}

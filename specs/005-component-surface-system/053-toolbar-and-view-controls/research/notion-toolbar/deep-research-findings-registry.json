@@ -1,0 +1,369 @@
+{
+  "mergedFrom": [
+    "glm-openrouter-toolbar"
+  ],
+  "openQuestions": [],
+  "resolvedQuestions": [
+    {
+      "id": "q2",
+      "question": "For each improvement, the concrete change to our code and CSS (file, rule/function, value) and its measurable threshold?",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "q6",
+      "question": "What is the ranked remediation plan as concrete phase tasks with thresholds and red-first checks?",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "q5",
+      "question": "Which findings need a device-only check?",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "q4",
+      "question": "Which Notion behaviours conflict with a landed Anytype ruling, and which side prevails with what reason?",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "q3",
+      "question": "Which Notion behaviours do we already have (census with file:line and screen-id evidence)?",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "q1",
+      "question": "Which Notion patterns from the digest would improve this surface for a user, ranked by user impact?",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    }
+  ],
+  "keyFindings": [
+    {
+      "id": "F-502",
+      "iteration": 5,
+      "label": "Q3 census: 12/13 digest patterns present",
+      "severity": "answer",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-503",
+      "iteration": 5,
+      "label": "Q4 conflict ledger closed",
+      "severity": "answer",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-504",
+      "iteration": 5,
+      "label": "Q5 device-check ledger",
+      "severity": "answer",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-101",
+      "iteration": 1,
+      "label": "P1 toolbar-row grammar already ours",
+      "severity": "census",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-102",
+      "iteration": 1,
+      "label": "P10 inline search already ours",
+      "severity": "census",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-103",
+      "iteration": 1,
+      "label": "P12 column menu converged",
+      "severity": "census",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-104",
+      "iteration": 1,
+      "label": "P13 view-type toolbar additions already ours",
+      "severity": "census",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-205",
+      "iteration": 2,
+      "label": "P5 sort chip/panel census",
+      "severity": "census",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-206",
+      "iteration": 2,
+      "label": "P4 builder anatomy corroborates condition panel role",
+      "severity": "census",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-301",
+      "iteration": 3,
+      "label": "P3 summaries census; side-sheet shape landed; digest row stale",
+      "severity": "census",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-305",
+      "iteration": 3,
+      "label": "P8 hub census — exceeds both references",
+      "severity": "census",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-401",
+      "iteration": 4,
+      "label": "Wrap rule measured and hedged; Notion thumbnails add nothing on narrow widths",
+      "severity": "census",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-403",
+      "iteration": 4,
+      "label": "Badge text signal — guard against colour-only drift",
+      "severity": "census",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-404",
+      "iteration": 4,
+      "label": "Chip rail scroller census",
+      "severity": "census",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-207",
+      "iteration": 2,
+      "label": "Chip aggregation doubly rejected (Anytype catalogue + Notion)",
+      "severity": "corroboration",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-306",
+      "iteration": 3,
+      "label": "No open Anytype conflict after iter3",
+      "severity": "corroboration",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-108",
+      "iteration": 1,
+      "label": "Icon-only rail discoverability on phone — device check",
+      "severity": "device-check",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-208",
+      "iteration": 2,
+      "label": "Entry tier in phone sheet — device check",
+      "severity": "device-check",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-307",
+      "iteration": 3,
+      "label": "Eye toggles + stacked confirm — device check",
+      "severity": "device-check",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-402",
+      "iteration": 4,
+      "label": "Phone tabs vs both references' switcher — device-gated",
+      "severity": "device-check",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-107",
+      "iteration": 1,
+      "label": "P11 two-scope default needs a view-scoped template system we lack",
+      "severity": "note",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-204",
+      "iteration": 2,
+      "label": "Multi-value filter picker — data-model constrained",
+      "severity": "note",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-303",
+      "iteration": 3,
+      "label": "P6 split declined; optional sectioning recorded",
+      "severity": "note",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-405",
+      "iteration": 4,
+      "label": "Dark-theme one-capture ceiling; token-based CSS",
+      "severity": "note",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-304",
+      "iteration": 3,
+      "label": "Delete-view unconfirmed on two call sites — confirm via 051's primitive",
+      "severity": "P1",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-202",
+      "iteration": 2,
+      "label": "Zero-rule filter entry tier (flat searchable list)",
+      "severity": "P2",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-105",
+      "iteration": 1,
+      "label": "Collapse ladder vs Notion's never-drop-New — additive label-collapse rung proposed",
+      "severity": "P3",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-203",
+      "iteration": 2,
+      "label": "Searchable condition-row dropdowns (one flag)",
+      "severity": "P3",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-302",
+      "iteration": 3,
+      "label": "Per-group visibility eye toggles proposed (P7)",
+      "severity": "P3",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-201",
+      "iteration": 2,
+      "label": "Chip rail add-control missing (both references have it)",
+      "severity": "P4",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-501",
+      "iteration": 5,
+      "label": "Ranked remediation plan: six additive tasks with thresholds and red-first proofs",
+      "severity": "plan",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-106",
+      "iteration": 1,
+      "label": "Text-label toolbar density ruled out",
+      "severity": "ruled-out",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-406",
+      "iteration": 4,
+      "label": "Citable CSS value inventory for all proposals",
+      "severity": "substrate",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    },
+    {
+      "id": "F-505",
+      "iteration": 5,
+      "label": "Convergence telemetry; 6/6 questions answered",
+      "severity": "telemetry",
+      "_lineages": [
+        "glm-openrouter-toolbar"
+      ]
+    }
+  ],
+  "ruledOutDirections": [],
+  "metrics": {
+    "iterationsCompleted": 0,
+    "openQuestions": 0,
+    "resolvedQuestions": 6,
+    "keyFindings": 34,
+    "sourceFindings": 34,
+    "reconstructionGaps": 0,
+    "convergenceScore": 0,
+    "coverageBySources": {}
+  }
+}

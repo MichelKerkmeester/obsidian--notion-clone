@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/064-notion-toolbar-refinement",
+  "spec_folder": "005-component-surface-system/064-notion-toolbar-refinement",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "064 spec",
+      "notion toolbar refinement",
+      "delete view confirm",
+      "filter entry tier",
+      "064 plan",
+      "notion toolbar refinement plan",
+      "delete confirm approach",
+      "collapse rung approach",
+      "064 tasks",
+      "notion toolbar refinement tasks",
+      "delete confirm task",
+      "collapse rung task"
+    ],
+    "key_topics": [
+      "spec",
+      "notion",
+      "toolbar",
+      "refinement",
+      "delete",
+      "view",
+      "confirm",
+      "filter",
+      "entry",
+      "tier",
+      "plan",
+      "approach"
+    ],
+    "importance_tier": "important",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md",
+      "specs/005-component-surface-system/053-toolbar-and-view-controls/research/notion-toolbar/research.md",
+      "src/views/toolbar-renderer.ts",
+      "src/views/filter-panel-renderer.ts",
+      "src/views/sort-panel-renderer.ts",
+      "src/views/active-view-controls-renderer.ts",
+      "src/views/board-renderer.ts",
+      "src/views/table-renderer.ts",
+      "tools/live/toolbar-collapse-sweep.ts",
+      "src/views/toolbar-renderer.test.ts",
+      "tools/live/run-toolbar-collapse-sweep.mjs",
+      "specs/005-component-surface-system/064-notion-toolbar-refinement/tasks.md",
+      "tools/lane/css-lane.json",
+      "specs/005-component-surface-system/064-notion-toolbar-refinement/decision-record.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/064-notion-toolbar-refinement/tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/064-notion-toolbar-refinement/decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "filter-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/filter-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sort-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/sort-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "active-view-controls-renderer.ts",
+        "kind": "code",
+        "path": "src/views/active-view-controls-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "table-renderer.ts",
+        "kind": "code",
+        "path": "src/views/table-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-collapse-sweep.ts",
+        "kind": "code",
+        "path": "tools/live/toolbar-collapse-sweep.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/toolbar-renderer.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "run-toolbar-collapse-sweep.mjs",
+        "kind": "file",
+        "path": "tools/live/run-toolbar-collapse-sweep.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Notion Toolbar Refinement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context This",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Scope Boundary",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "A five-iteration Notion research loop read 104 captures against this surface and found that twelve",
+    "created_at": "2026-09-06T16:50:17Z",
+    "last_save_at": "2026-09-06T22:27:05.533Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:531f643a33f4d17a6941e28b52bc84aa600f18d9c4b9c488d8daad326d87bf6e",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "a1ea4e2456417c759e8a0104dc34c6392ee065f1203c757f05bb6d51daaf11d3",
+      "plan.md": "ad3a4abadc6b023f89bff48ae5646e05784b1b115b30e979dade125d14980879",
+      "tasks.md": "8a5a163ad840fabf1872f34e58556eb21d58e60f8540773e04b068ee4ff1c946",
+      "decision-record.md": "df524863635e32349a0c86a466246bb507fa64eb1e5039692c336667218dd2b3",
+      "implementation-summary.md": "6b7d7cdfa9d45d7b3bd9260fbf6c93895999adf7c6e9d5557e60e33dfbfaa381"
+    },
+    "last_active_at": null
+  }
+}

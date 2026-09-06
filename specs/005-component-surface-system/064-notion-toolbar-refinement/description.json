@@ -1,0 +1,22 @@
+{
+  "specFolder": "005-component-surface-system/064-notion-toolbar-refinement",
+  "description": "Notion toolbar and view-controls refinement for 053",
+  "keywords": [
+    "notion",
+    "toolbar",
+    "view-controls",
+    "delete-confirm",
+    "filter-entry-tier",
+    "collapse-rung",
+    "chip-add-control"
+  ],
+  "lastUpdated": "2026-09-06T16:50:18.257Z",
+  "specId": "064",
+  "folderSlug": "notion-toolbar-refinement",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}
