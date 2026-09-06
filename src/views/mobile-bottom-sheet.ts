@@ -235,7 +235,14 @@ export function attachSheetChromeToModal(
   // to the body — still on the body, still painting its own backdrop, over whatever the stack
   // dims. A CSS selector hiding these depends on guessing their exact nesting; finding the real
   // elements here and hiding them by reference does not.
-  const nativeContainer = modalEl.parentElement;
+  //
+  // The container is only ever the host's own `.modal-container`. Not every caller is a modal:
+  // the shell presents panels that live in the view tree, and their parent is somebody else's
+  // element entirely — writing or clearing an inline `display` on that would reach outside this
+  // function's subject and, on a parent that legitimately carries one, silently change a layout
+  // this call knows nothing about.
+  const hostParent = modalEl.parentElement;
+  const nativeContainer = hostParent?.classList.contains("modal-container") ? hostParent : null;
   const nativeTitle = modalEl.querySelector<HTMLElement>(".modal-title");
   const nativeClose = modalEl.querySelector<HTMLElement>(".modal-close-button");
   applySheetChrome(modalEl, isSheet, {
@@ -249,9 +256,7 @@ export function attachSheetChromeToModal(
     // its own close button and whatever title a subclass set back exactly as they were.
     nativeClose?.style.setProperty("display", "none");
     if (nativeTitle && !nativeTitle.textContent?.trim()) nativeTitle.style.setProperty("display", "none");
-    if (nativeContainer && nativeContainer !== modalEl.ownerDocument.body) {
-      nativeContainer.style.setProperty("display", "none");
-    }
+    nativeContainer?.style.setProperty("display", "none");
   } else {
     nativeClose?.style.removeProperty("display");
     nativeTitle?.style.removeProperty("display");

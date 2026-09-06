@@ -1147,6 +1147,28 @@ window.__stackedSheetChromeNegativeControl = async () => {
   };
 };
 
+// Not every caller of attachSheetChromeToModal is a host modal. The shell presents panels that
+// live in the view tree, whose parent belongs to whoever built it — so the native-chrome
+// neutralising must recognise the host's own .modal-container and leave any other parent's own
+// inline display exactly as it found it, in both presentations and after the teardown.
+window.__shellPanelParentUntouched = () => {
+  const host = document.createElement("div");
+  host.style.setProperty("display", "flex");
+  const panel = document.createElement("div");
+  panel.className = "db-view-config-panel db-surface";
+  host.appendChild(panel);
+  document.body.appendChild(host);
+  const release = attachSheetChromeToModal(panel, true, () => {}, { title: "Settings" });
+  const asSheet = host.style.display;
+  release();
+  const afterRelease = host.style.display;
+  attachSheetChromeToModal(panel, false, () => {});
+  const asDesktop = host.style.display;
+  if (panel.isConnected) panel.remove();
+  host.remove();
+  return { asSheet, afterRelease, asDesktop };
+};
+
 // --- the all-sheets overflow sweep ---
 
 const OVERFLOW_TOLERANCE = ${OVERFLOW_TOLERANCE_PX};
@@ -1449,6 +1471,19 @@ async function runHostModalChromeCheck(engineName, engine, launchOptions) {
       console.log(`  ${backgroundWentRed ? "PASS" : "FAIL"}  a mismatched background registers red (${engineName})`);
       console.log(`  ${rootFillWentRed ? "PASS" : "FAIL"}  an unpainted sheet root registers red (${engineName})`);
       console.log(`  ${gapWentRed ? "PASS" : "FAIL"}  an oversized gap registers red (${engineName})`);
+    }
+    console.log("");
+
+    const parentGuard = await page.evaluate(() => window.__shellPanelParentUntouched());
+    console.log(`sheet-grammar: a shell panel's own parent is not the host's container (${engineName})\n`);
+    for (const [label, value] of [
+      ["presented as a sheet", parentGuard.asSheet],
+      ["after the teardown", parentGuard.afterRelease],
+      ["presented as a desktop panel", parentGuard.asDesktop],
+    ]) {
+      const ok = value === "flex";
+      if (!ok) failures.push(`shell panel parent guard ${engineName}: inline display was "${value}" ${label}, wanted "flex"`);
+      console.log(`  ${ok ? "PASS" : "FAIL"}  the parent keeps its own inline display ${label} (${engineName})`);
     }
     console.log("");
 
