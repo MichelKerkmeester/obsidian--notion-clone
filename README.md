@@ -1,181 +1,96 @@
-# Note Database
+# Obnotion
 
-<p align="center">
-  <strong>Turn Markdown notes into editable, visual databases inside Obsidian.</strong><br>
-  Same notes. Five views. Still plain Markdown.
-</p>
+Obnotion adds database views to [Obsidian](https://obsidian.md). Each database is an ordinary Markdown file with `db_view: true` in its frontmatter; its records are notes in your vault, and their property values live in frontmatter. Table, board, chart, calendar, and timeline views read and write those same files, and each view's configuration is saved in the database file beside the data. Records, properties, and relations stay in the vault as plain Markdown.
 
-<p align="center">
-  <a href="obsidian://show-plugin?id=note-database"><img alt="Install Note Database in Obsidian" src="https://img.shields.io/static/v1?style=for-the-badge&amp;label=Install&amp;message=Obsidian&amp;logo=obsidian&amp;logoColor=white&amp;labelColor=363A4F&amp;color=7C3AED"></a>
-  <a href="https://github.com/pangy9/obsidian-note-database"><img alt="GitHub stars" src="https://img.shields.io/github/stars/pangy9/obsidian-note-database?style=for-the-badge&amp;label=Stars&amp;logo=github&amp;logoColor=white&amp;labelColor=363A4F&amp;color=E3B341"></a>
-  <a href="https://obsidian.md/plugins?id=note-database"><img alt="Obsidian community downloads" src="https://img.shields.io/badge/dynamic/json?style=for-the-badge&amp;url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json&amp;query=%24%5B%22note-database%22%5D.downloads&amp;label=Downloads&amp;logo=obsidian&amp;logoColor=white&amp;labelColor=363A4F&amp;color=7C3AED"></a>
-  <a href="https://github.com/pangy9/obsidian-note-database/releases/latest"><img alt="Latest GitHub release" src="https://img.shields.io/github/v/release/pangy9/obsidian-note-database?style=for-the-badge&amp;label=Release&amp;labelColor=363A4F&amp;color=0969DA"></a>
-  <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/static/v1?style=for-the-badge&amp;label=License&amp;message=MIT&amp;labelColor=363A4F&amp;color=2DA44E"></a>
-</p>
+Obnotion is a fork of pangy9's [Note Database](https://github.com/pangy9/obsidian-note-database).
 
-Edit frontmatter in place, save several views of the same notes, and keep every record in the vault you already use.
+Source: [MichelKerkmeester/obsidian--notion-clone](https://github.com/MichelKerkmeester/obsidian--notion-clone)
 
-![Note Database table with active filters, grouped records, summaries, formulas, and file properties](assets/screenshots/en-1.2.7-overview.png)
+## Views
 
-## Highlights
+A database can hold several saved views over the same notes, each with its own filters, sorting, grouping, visible properties, and layout. Five view types are available:
 
-- **Five database views:** see the same notes as a table, board, chart, calendar, or timeline.
-- **Local Markdown storage:** each database is an ordinary Markdown file with `db_view: true`; records, properties, and relations also stay inside your vault.
-- **Direct property editing:** edit text, numbers, currency, dates, options, statuses, checkboxes, and file names without opening every note; one dialog confirms the display name, property key, and type for new properties.
-- **Spreadsheet-style workflows:** use keyboard navigation, range selection, copy/paste, fill, paste-to-create, bulk editing, and single-step undo.
-- **Flexible organization:** combine search, filters, sorting, groups, subgroups, manual order, quick facet chips, and result limits.
-- **Source-aware creation:** select records by folder, tag, property, link, or expression, then preserve source/group defaults and apply templates when creating notes.
-- **Visual presentation:** use database/record icons, database/card covers, inline Markdown, option colors, number styles, and conditional formatting.
-- **Summaries and charts:** aggregate the current result, show several summaries in groups, and inspect the notes behind a chart value.
-- **Formulas, Relations, and Rollups:** calculate properties safely, connect notes with Obsidian wikilinks, and derive count, sum, average, or list values.
-- **Native Obsidian links:** use `file.*` metadata and the core Page preview plugin for record titles, Relations, and internal links inside text.
-- **Date planning:** drag and resize date or time ranges in month/week/day calendars and day/week/month/quarter timelines.
-- **Embedding and portability:** place read-only database views in notes, copy or export data, and convert Obsidian `.base` files.
-- **Local and private:** no cloud data copy and no external transmission of vault content, metadata, formulas, or settings.
+- **Table** — editable cells, column resize and reorder, range selection with copy, cut, paste, and fill, keyboard navigation, bulk editing, and single-step undo.
+- **Board** — cards grouped by a select or status property, with optional subgroups, card covers (property, fit mode, and aspect ratio), a configurable card field list, hidden groups, and manual card order.
+- **Chart** — bar, horizontal bar, line, area, pie, donut, number, stacked, grouped, percent-stacked, and mixed charts, with count, sum, average, and other aggregations, date and numeric bucketing, color palettes, reference lines, and drilldown into the records behind a value.
+- **Calendar** — month, week, and day grids. Records are placed by date or datetime properties, with an optional end date for multi-day events and optional title and color properties.
+- **Timeline** — day, week, month, quarter, and year scales, with optional grouping lanes, title, color, and end-date properties.
 
-## Five views, one vault
+Databases configured as gallery or list views in older versions are migrated on first open: a gallery becomes a board, a list becomes a table, and each conversion shows a one-time notice. The gallery notice offers an Undo action.
 
-| Table | Board |
-| --- | --- |
-| ![Table view](assets/screenshots/en-1.2.7-overview.png) | ![Board view](assets/screenshots/status-board.png) |
-| Edit dense records, paste ranges, fill cells, group, sort, and navigate by keyboard. | Move cards through stages, use subgroups, covers, colored options, and drag-and-drop. |
+A database view can be embedded in any note as a code block; the **Create linked view** command inserts one.
 
-| Chart | Timeline |
-| --- | --- |
-| ![Chart view](assets/screenshots/chart-view.png) | ![Timeline view](assets/screenshots/timeline-view.png) |
-| Turn the current filtered result into charts, summaries, drilldowns, and PNG exports. | Plan across day, week, month, or quarter scales; drag and resize date ranges. |
+## Properties
 
-| Calendar month | Calendar week |
-| --- | --- |
-| ![Calendar month view](assets/screenshots/calendar-view-month.png) | ![Calendar week view](assets/screenshots/calendar-view-week.png) |
-| Arrange all-day and multi-day records in a monthly overview. | Work with all-day and timed records on a detailed weekly grid. |
+Records expose frontmatter as typed properties:
 
-Each view keeps its own filters, sorting, grouping, visible properties, title property, and layout—without duplicating the notes.
+- Text, number, currency, date, datetime, checkbox
+- Select, multi-select, and status, with colored options and reusable status presets
+- Files
 
-## New in 1.2.8
+## Formulas and relations
 
-| Faster filter and sort controls |
-| --- |
-| ![Active filter and sort facet chips](assets/screenshots/en-1.2.7-facet-controls.png) |
-| See active rules as compact chips. Edit one rule in place or remove it directly. |
+- **Formulas** — computed properties defined by an expression, producing number, text, date, datetime, or checkbox values. A formula can stay display-only or write its result back to frontmatter.
+- **Relations** — connect a record to records of another database. Relation values are stored as Obsidian wikilinks in frontmatter.
+- **Rollups** — derive a value over a relation property: count, sum, average, median, min, max, range, earliest, latest, percent empty, percent filled, or a list of values. Rollups are display-only and are never written to frontmatter.
 
-| Record covers on boards |
-| --- |
-| ![Board cards with record covers and cover settings](assets/screenshots/en-1.2.7-board-covers.png) |
-| Choose a cover property, crop mode, and ratio independently for every board view. |
+## Filters, sorts, groups
 
-| Clearer formulas | One new-property dialog |
-| --- | --- |
-| ![Formula editor with field details and value preview](assets/screenshots/en-1.2.7-formula-editor.png) | ![New property dialog](assets/screenshots/en-1.2.7-new-property-dialog.png) |
-| Distinguish display names from frontmatter keys, preview substituted values, use `file.name` / `file.tags`, and recover with `IFERROR`. | Confirm the display name, frontmatter key, and property type from every creation entry point. |
+- **Filters** — per-property rules (equals, contains, has tag, greater/less than, empty, not empty), combined with AND/OR logic, nested NOT groups, or a raw expression.
+- **Source rules** — choose which notes a view collects by folder, tag, property, link, or expression, with the same AND/OR/NOT logic.
+- **Sorts** — an ordered list of sort rules per view, drag-reordered, each ascending or descending.
+- **Groups** — group by one or more properties, reorder groups, hide or collapse empty groups, group date properties by exact value or by day, and attach per-group summaries such as count, sum, average, median, min/max, checked, or earliest/latest.
 
-| Relations | Rollups |
-| --- | --- |
-| ![Relation picker](assets/screenshots/en-1.2.7-relation-rollup_1.png) | ![Rollup configuration](assets/screenshots/en-1.2.7-relation-rollup_2.png) |
-| Store relations as wikilinks and clear old values as one undoable target change. | Double-click a table cell to configure its Rollup. |
+## Mobile sheets
 
-| Native note preview |
-| --- |
-| ![Obsidian Page Preview opened from a record link](assets/screenshots/en-1.2.7-page-preview.png) |
-| Preview internal links with Obsidian's Page Preview and the user's chosen modifier key. |
+On a phone, most panels, menus, and dialogs present as bottom sheets rather than desktop popovers. A sheet has a grab handle that closes it when dragged down, a titled header with a close button, padded rows, segmented choices, keyboard-aware repositioning, and safe-area padding for notched devices. Record detail panels and the table row peek are bottom sheets with drag-to-dismiss. Wide surfaces such as the formula editor open full-screen; some short prompts stay centred dialogs on every device.
 
-Enable Obsidian's core **Page preview** plugin first. Preview works on record titles, Relation properties, clickable `file.*` metadata, text properties in Link display mode, and internal links or `[[wikilinks]]` in inline-Markdown text/computed-text properties. Table, Board, Calendar, Timeline, the record detail panel, database-file views, and embedded views share the same behavior.
+The plugin runs on both desktop and mobile. The **Trace sheet lifecycle** setting records what happens to a phone sheet — taps, rebuilds, dismissals, viewport changes, element tags and classes only, never note content — and the **Copy sheet trace** command puts that log on the clipboard for reporting a phone-only defect.
 
-## Edit many notes without opening them
+## Commands
 
-Field-aware editors cover text, numbers, currency, dates, checkboxes, selects, multi-selects, statuses, and file names. Table workflows include range selection, copy/paste, fill, overflow row creation, safe file renaming, and single-step undo.
+A ribbon icon opens the dashboard. The command palette offers:
 
-| Typed bulk editing | Inline Markdown and number displays |
-| --- | --- |
-| ![Editing one property across several records](assets/screenshots/en-bulk-edit.png) | ![Inline Markdown and number display styles](assets/screenshots/markdown-number.png) |
-| Preview the affected records, confirm risky writes, and roll back a failed transaction. | Render text as links or inline Markdown; show numbers as ratings, bars, or rings without changing stored values. |
+- Open dashboard
+- Show database files
+- Create linked view
+- Undo last database edit
+- Convert .base file to database
+- Import CSV + Markdown files
+- Export current database view as CSV + Markdown ZIP
+- Copy sheet trace
+- Configure Reports computed fields
 
-## Organize, highlight, and summarize
+## Settings
 
-| Conditional formatting | Group summaries |
-| --- | --- |
-| ![Conditional formatting rules](assets/screenshots/en-conditional-format.png) | ![Board groups with summaries](assets/screenshots/en-board-groups-summaries.png) |
-| Highlight a matching property or the whole record with view-specific rules. | Add and reorder count, sum, average, min/max, and other summaries in grouped views. |
-
-Active filter and sort chips use the same rules as the full toolbar panels. Source rules can combine folders, tags, properties, links, and expressions with `AND`, `OR`, and `NOT`.
-
-## Calculate and connect
-
-| Formulas | Relations and Rollups |
-| --- | --- |
-| ![Formula editor](assets/screenshots/en-formula-editor.png) | ![Linked notes and their Rollup result](assets/screenshots/en-relation-rollup.png) |
-| Build computed properties with field references, date/text/number functions, live previews, and optional frontmatter sync. | Keep relationships as ordinary Obsidian wikilinks and calculate count, sum, average, or list values from linked notes. |
-
-No `eval`, hidden relation database, or cloud copy is used.
-
-## Make records easier to scan
-
-| Database and record icons | Covers and visual cards |
-| --- | --- |
-| ![Database and record icons](assets/screenshots/en-database-icons.png) | ![Database and board cover settings](assets/screenshots/en-dataset-covers-setting.png) ![](assets/screenshots/en-board-covers-setting.png) |
-| Use Unicode Emoji or Lucide icons, with database defaults and per-view record-icon fields. | Add a draggable database cover and choose independent cover settings for board views. |
-
-Option-based group titles keep their colors across table and board views. Search highlights file names and visible values, including localized dates.
-
-## Plan dates and inspect results
-
-| Search across Calendar and Timeline | Chart drilldown and summaries |
-| --- | --- |
-| ![Calendar and timeline search results](assets/screenshots/en-calendar-timeline-search-results.png) | ![Chart drilldown](assets/screenshots/en-chart-drilldown.png) |
-| Search the fields visible on event cards, then drag or resize date and datetime records. | Click a chart value to inspect its records before applying a filter. |
-
-Calendar supports month, week, and day. Timeline supports day, week, month, and quarter.
-
-## Use database views anywhere
-
-| Embedded view | Headerless embed |
-| --- | --- |
-| ![A database view embedded in a note](assets/screenshots/en-embed-view.png) | ![A compact headerless embedded view](assets/screenshots/en-embed-headerless.png) |
-| Paste a generated `note-database` block into any note. | Hide the database header when the surrounding note already provides context. |
-
-Embedded records stay read-only, while view switching, filters, sorting, grouping, computed values, and copy/export tools remain available.
-
-## Markdown remains the source of truth
-
-| What | Stored as |
-| --- | --- |
-| Database | A normal Markdown file with `db_view: true` |
-| Records and property values | Markdown notes and their frontmatter |
-| Relations | Obsidian wikilinks in frontmatter |
-| Templates | Existing Obsidian Templates or Templater files |
-| Views | Saved configuration in the database file |
-
-Create records from source rules, groups, subgroups, or row insertion. Apply templates at creation. Export CSV + Markdown ZIP, copy CSV/Markdown tables, or convert an Obsidian `.base` file.
-
-## Start in three steps
-
-1. Install and enable Note Database, then open the dashboard from the ribbon or command palette.
-2. Create a database and choose a folder or source rules for its notes.
-3. Add properties and views. Edits write back to the original Markdown files.
-
-![](assets/screenshots/en-create-dataset.png)
-![Note Database commands in the command palette](assets/screenshots/en-command-list.png)
+- **Language** — System, English, Simplified Chinese, or Traditional Chinese.
+- **Default output folder** — the vault path for generated database files and for new notes when a database has no folder of its own.
+- **Where a record opens** — Record panel, Preview layer, Current tab, Split pane, or New window.
+- **Default view for new databases** — table, board, chart, calendar, or timeline.
+- **Always open database files in new tab** and **Prevent duplicate database file tabs**.
+- **Show database icon** — the icon slot in the database header.
+- **Trace sheet lifecycle** — phone sheet diagnostics.
+- **CSV + Markdown import/export** — import a CSV with Markdown files, or export the current view as a ZIP of CSV, Markdown, and metadata.
+- **Plugin trash** — deleted databases are kept in a plugin trash and can be restored or permanently deleted.
+- **Global status presets** — reusable option lists for status properties, with a global default.
+- **File-type databases** — the list of database files, with reordering, open, delete, and a **New database file** button.
 
 ## Installation
 
-1. Open **Settings → Community plugins**.
-2. Search for **Note Database**.
-3. Install and enable it.
+Requires Obsidian 1.7.2 or later.
 
-For manual installation, download `main.js`, `styles.css`, and `manifest.json` from the [latest release](https://github.com/pangy9/obsidian-note-database/releases/latest) and copy them to `.obsidian/plugins/note-database/`.
+**BRAT** — install the BRAT community plugin, then add `MichelKerkmeester/obsidian--notion-clone` as a beta plugin.
 
-## Privacy
+**Manual** — download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/MichelKerkmeester/obsidian--notion-clone/releases/latest) into `<vault>/.obsidian/plugins/obnotion/`, reload Obsidian, and enable Obnotion under Community plugins.
 
-Note Database runs locally in Obsidian. It does not send vault content, metadata, formulas, or settings to an external service. Read the full [privacy policy](PRIVACY.md).
+## Releases
 
-## Support
+Every milestone is published as a [GitHub release](https://github.com/MichelKerkmeester/obsidian--notion-clone/releases). Publishing a release is what makes the build installable through BRAT and on mobile.
 
-If Note Database is useful to you, [star the repository](https://github.com/pangy9/obsidian-note-database) or support continued development:
+## Credits
 
-<a href="https://paypal.me/pangy9">
-  <img src="https://img.shields.io/badge/PayPal-Support-00457C?style=for-the-badge&logo=paypal&logoColor=white" alt="Support through PayPal">
-</a>
+Obnotion is a fork of [Note Database](https://github.com/pangy9/obsidian-note-database) by pangy9. The original plugin, its design, and its implementation are upstream's work.
 
-<img src="assets/screenshots/wechat_sponsor.jpg" width="220" alt="Sponsor on WeChat">
+## License
 
-Release notes and the full change history are available on [GitHub Releases](https://github.com/pangy9/obsidian-note-database/releases).
+[MIT](LICENSE), inherited from the upstream project.
