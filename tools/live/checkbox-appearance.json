@@ -1,17 +1,17 @@
 {
-  "measuredAt": "2026-09-06T06:15:11.738Z",
+  "measuredAt": "2026-09-06T06:42:51.780Z",
   "inputs": {
-    "styles.css": "a908655be7ef",
+    "styles.css": "27c8ee6c9ce0",
     "tools/live/checkbox-appearance.mjs": "8e751058f620",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
-    "checkboxes": 154,
-    "fixtures": 75,
-    "owned": 154,
+    "checkboxes": 151,
+    "fixtures": 73,
+    "owned": 151,
     "appearanceOwnedByAncestor": 0,
-    "appearanceSelfOwned": 154,
-    "tokenDependent": 143,
+    "appearanceSelfOwned": 151,
+    "tokenDependent": 140,
     "platformBox": 0,
     "distinctShapes": 4,
     "stateFamilies": 4,
@@ -21,7 +21,7 @@
     "mountGroups": 7,
     "mountShapeSplits": 0,
     "hostProfilesApplied": 3,
-    "boxesUnderHostProfiles": 154,
+    "boxesUnderHostProfiles": 151,
     "movedUnderAHostProfile": 0,
     "worstBorderContrast": 3.09,
     "belowNonTextMinimum": 0,
@@ -42,7 +42,7 @@
     }
   ],
   "shapes": {
-    "16x16 r=4px": 105,
+    "16x16 r=4px": 102,
     "18x18 r=4px": 26,
     "28x28 r=4px": 12,
     "34x18 r=9999px": 11
@@ -3365,72 +3365,6 @@
       },
       "appearanceOwnedBy": null,
       "tokensFrom": null
-    },
-    {
-      "scenario": "chrome-group-selection-controls",
-      "index": 0,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-board-subgroup-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-board-subgroup",
-        "db-board-subgroup-header"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
-    },
-    {
-      "scenario": "chrome-board-extensions-selection",
-      "index": 0,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-board-column-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-board-column",
-        "db-board-column-header"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
-    },
-    {
-      "scenario": "chrome-board-extensions-selection",
-      "index": 1,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row",
-        "db-board-card-checkbox"
-      ],
-      "chain": [
-        "note-database-container",
-        "db-board-card",
-        "db-board-card-controls"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 16,
-        "height": 16
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
     },
     {
       "scenario": "chrome-selection-status-bar",

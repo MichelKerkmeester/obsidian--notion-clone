@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T06:16:31.458Z",
+  "measuredAt": "2026-09-06T06:44:02.918Z",
   "inputs": {
-    "styles.css": "a908655be7ef",
+    "styles.css": "27c8ee6c9ce0",
     "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -360,10 +360,10 @@
     }
   ],
   "totals": {
-    "fixtures": 75,
-    "escaping": 629,
-    "growing": 276,
-    "scrolling": 353,
+    "fixtures": 73,
+    "escaping": 620,
+    "growing": 268,
+    "scrolling": 352,
     "rhythmGroups": 8,
     "ragged": 0,
     "probeBlind": 24
@@ -718,17 +718,6 @@
       "cls": "db-kanban-col",
       "parentCls": "db-kanban-board",
       "by": 808,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "card-cover-states",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-board-column",
-      "parentCls": "note-database-container",
-      "by": 32,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -2709,28 +2698,6 @@
       "parentCls": "db-grouped-table",
       "by": 999744,
       "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-group-selection-controls",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-board-subgroup-header",
-      "parentCls": "db-board-subgroup",
-      "by": 8,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-board-extensions-selection",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-board-column-header",
-      "parentCls": "db-board-column",
-      "by": 8,
-      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -5153,28 +5120,6 @@
     },
     {
       "width": 402,
-      "fixture": "chrome-group-selection-controls",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-board-subgroup-header",
-      "parentCls": "db-board-subgroup",
-      "by": 8,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-board-extensions-selection",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-board-column-header",
-      "parentCls": "db-board-column",
-      "by": 8,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
       "fixture": "chrome-selection-status-bar",
       "kind": "escaping",
       "tag": "div",
@@ -6427,28 +6372,6 @@
     },
     {
       "width": 768,
-      "fixture": "chrome-group-selection-controls",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-board-subgroup-header",
-      "parentCls": "db-board-subgroup",
-      "by": 8,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 768,
-      "fixture": "chrome-board-extensions-selection",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-board-column-header",
-      "parentCls": "db-board-column",
-      "by": 8,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 768,
       "fixture": "field-icon-picker",
       "kind": "escaping",
       "tag": "button",
@@ -7272,28 +7195,6 @@
     },
     {
       "width": 1440,
-      "fixture": "chrome-group-selection-controls",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-board-subgroup-header",
-      "parentCls": "db-board-subgroup",
-      "by": 8,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 1440,
-      "fixture": "chrome-board-extensions-selection",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-board-column-header",
-      "parentCls": "db-board-column",
-      "by": 8,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 1440,
       "fixture": "field-icon-picker",
       "kind": "escaping",
       "tag": "button",
@@ -7662,16 +7563,6 @@
     },
     {
       "width": 320,
-      "fixture": "chrome-group-selection-controls",
-      "probe": "4px"
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-board-extensions-selection",
-      "probe": "4px"
-    },
-    {
-      "width": 320,
       "fixture": "chrome-selection-status-bar",
       "probe": "4px"
     },
@@ -8033,16 +7924,6 @@
     {
       "width": 402,
       "fixture": "chrome-owned-menu-sheet",
-      "probe": "4px"
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-group-selection-controls",
-      "probe": "4px"
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-board-extensions-selection",
       "probe": "4px"
     },
     {
@@ -8412,16 +8293,6 @@
     },
     {
       "width": 768,
-      "fixture": "chrome-group-selection-controls",
-      "probe": "4px"
-    },
-    {
-      "width": 768,
-      "fixture": "chrome-board-extensions-selection",
-      "probe": "4px"
-    },
-    {
-      "width": 768,
       "fixture": "chrome-selection-status-bar",
       "probe": "4px"
     },
@@ -8783,16 +8654,6 @@
     {
       "width": 1440,
       "fixture": "chrome-owned-menu-sheet",
-      "probe": "4px"
-    },
-    {
-      "width": 1440,
-      "fixture": "chrome-group-selection-controls",
-      "probe": "4px"
-    },
-    {
-      "width": 1440,
-      "fixture": "chrome-board-extensions-selection",
       "probe": "4px"
     },
     {

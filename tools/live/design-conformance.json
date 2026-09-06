@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T06:16:05.560Z",
+  "measuredAt": "2026-09-06T06:43:40.628Z",
   "inputs": {
-    "styles.css": "a908655be7ef",
+    "styles.css": "27c8ee6c9ce0",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "7edae5db0282"
   },
@@ -138,7 +138,7 @@
     "src/views/column-width.ts:398  .db-panel-row",
     "src/views/database-view.ts:3147  .db-group-order-popover",
     "src/views/database-view.ts:3261  .db-panel-button",
-    "src/views/database-view.ts:7051  .db-calendar-search-results-popover",
+    "src/views/database-view.ts:7054  .db-calendar-search-results-popover",
     "src/views/date-value-picker.ts:139  .db-cell-edit-popover",
     "src/views/date-value-picker.ts:216  .db-calendar-mini-popover",
     "src/views/dropdown-field.ts:117  .db-dropdown-field-text",
