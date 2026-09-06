@@ -48,6 +48,7 @@
       "goal.md",
       "decision-record.md",
       "implementation-summary.md",
+      "research/research.md",
       "screenshots/anytype/README.md",
       "src/views/owned-menu.ts",
       "src/views/menu-row.ts",
@@ -59,8 +60,7 @@
       "src/views/cell-renderer.ts",
       "src/views/column-menu.ts",
       "src/views/toolbar-renderer.ts",
-      "src/views/bulk-edit-field-menu.ts",
-      "src/views/row-menu.ts"
+      "src/views/bulk-edit-field-menu.ts"
     ],
     "entities": [
       {
@@ -103,6 +103,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
         "source": "derived"
       },
       {
@@ -178,12 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "row-menu.ts",
-        "kind": "code",
-        "path": "src/views/row-menu.ts",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The family works surface by surface and drifts as a family",
     "created_at": "2026-09-05T11:32:58.144Z",
-    "last_save_at": "2026-09-06T14:40:07.246Z",
+    "last_save_at": "2026-09-06T16:21:23.241Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,16 +220,18 @@
       "acceptance-criteria.md",
       "goal.md",
       "decision-record.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "research/research.md"
     ],
-    "source_fingerprint": "sha256:116d50bf38983af73ea5a37a419e0ea726bbca627dbc4b8c4dc36b666edab2a5",
+    "source_fingerprint": "sha256:7fd738e29a8dfa2100c77de9ddf57eb4ed67f5da4f53b6b7944b01973663f6dd",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "3d677c7e022b37434cf8ab222f6c30af372c27cfdd19aa3ecdece0e3a59b9083",
       "plan.md": "c919065806f85176eb95ec6c76cfe29b4386a64ea5589e16710837a56d04e005",
-      "tasks.md": "20ebb0f0ce06848e7ff0a7ebb8ee803951013defc57c4e7e3406e76e652ba5c6",
+      "tasks.md": "3982b35d18024058ab987a9552902e51486bda0acd2eb714f536beba839c26fd",
       "decision-record.md": "46a78add24f43d13fefe879fc5f56b287acea05fdaf3ac2e4b3ccaa81acc909d",
-      "implementation-summary.md": "2e842b2a803b3fa0446aadab2c9a0d486e66571b3f0ff1a8c0d86f02c7127e33"
+      "implementation-summary.md": "2e842b2a803b3fa0446aadab2c9a0d486e66571b3f0ff1a8c0d86f02c7127e33",
+      "research/research.md": "1d9e504b61319f6c1accbaaf9c4e90c718fb686a58f058e46b362485b1e878e3"
     },
     "last_active_child_id": null,
     "last_active_at": null

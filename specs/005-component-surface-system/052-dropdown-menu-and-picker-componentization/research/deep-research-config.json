@@ -1,0 +1,119 @@
+{
+  "topic": "Research how Notion's UI for dropdowns, context menus, option and relation pickers, icon and colour pickers, date pickers, search-in-menu, and submenus should refine the note-database Obsidian plugin's surface. Use the Notion screen digest at specs/005-component-surface-system/052-dropdown-menu-and-picker-componentization/notion-screens-digest.md as the ONLY source of Notion facts (written by an image-capable analyst from Mobbin captures; you cannot read PNG files - NEVER open image files). Compare against our implementation and design record: src/views/dropdown-field.ts, src/views/owned-menu.ts, src/views/menu-row.ts, src/views/popover-host.ts, src/views/popover-position.ts, src/views/record-surface/cell-editor-*.ts, the menu/popover blocks of styles.css, specs/005-component-surface-system/052-dropdown-menu-and-picker-componentization/{goal.md,design-trueup.md,decision-record.md,tasks.md}, specs/005-component-surface-system/design-system.md, and roadmap.md section 6A rulings. BOUNDED SCOPE: read those files and nothing beyond them unless a finding requires one more source file. OPERATOR CONTEXT: Anytype parity is the default ruling for these surfaces (051 ADR-007, 056, 057); Notion refinements are additive - where Notion and Anytype disagree, name the conflict and propose which to adopt with the reason, and NEVER override a landed operator ruling. Questions to answer with file:line and screen-id evidence: (1) which Notion patterns from the digest would improve this surface for a user, ranked by user impact; (2) for each, the concrete change to our code and CSS (file, rule/function, value) and its measurable threshold; (3) which Notion behaviours we already have; (4) which conflict with an Anytype ruling; (5) which need a device-only check; (6) a ranked remediation plan as concrete phase tasks with thresholds and red-first checks suitable for a new child phase. Cite every claim; mark inferences as inferences.",
+  "maxIterations": 5,
+  "convergenceThreshold": 0.05,
+  "antiConvergence": {
+    "minIterations": 3,
+    "convergenceMode": "default",
+    "stopPolicy": "fail-closed",
+    "divergent": {}
+  },
+  "stuckThreshold": 3,
+  "maxDurationMinutes": 120,
+  "maxToolCallsPerIteration": 12,
+  "maxMinutesPerIteration": 10,
+  "progressiveSynthesis": true,
+  "specFolder": "specs/005-component-surface-system/052-dropdown-menu-and-picker-componentization",
+  "createdAt": "2026-09-06T14:58:07.066Z",
+  "status": "complete",
+  "executionMode": "auto",
+  "executor": {
+    "kind": "cli-pi",
+    "model": "z-ai/glm-5.3-flash",
+    "reasoningEffort": "max",
+    "serviceTier": null,
+    "sandboxMode": null,
+    "timeoutSeconds": 900
+  },
+  "lineage": {
+    "sessionId": "dr-20260906-165807",
+    "parentSessionId": null,
+    "lineageMode": "new",
+    "allowedModes": [
+      "new",
+      "resume",
+      "restart"
+    ],
+    "deferredModes": [
+      "fork",
+      "completed-continue"
+    ],
+    "generation": 1,
+    "continuedFromRun": null
+  },
+  "reducer": {
+    "enabled": true,
+    "version": "1.0",
+    "registryFile": "research/findings-registry.json",
+    "dashboardFile": "research/deep-research-dashboard.md",
+    "strategyFile": "research/deep-research-strategy.md",
+    "machineOwnedSections": [
+      "key-questions",
+      "answered-questions",
+      "what-worked",
+      "what-failed",
+      "exhausted-approaches",
+      "ruled-out-directions",
+      "divergence-frontier",
+      "next-focus"
+    ]
+  },
+  "capabilityMatrixPath": ".opencode/skills/system-deep-loop/deep-research/assets/runtime-capabilities.json",
+  "capabilityMatrixDocPath": ".opencode/skills/system-deep-loop/deep-research/references/guides/capability-matrix.md",
+  "runtimeCapabilityResolver": ".opencode/skills/system-deep-loop/deep-research/scripts/runtime-capabilities.cjs",
+  "reducerScriptPath": ".opencode/skills/system-deep-loop/deep-research/scripts/reduce-state.cjs",
+  "pauseSentinelPath": "research/.deep-research-pause",
+  "archiveRoot": "research_archive",
+  "migrationWindowDays": 28,
+  "fileProtection": {
+    "deep-research-config.json": "immutable",
+    "deep-research-state.jsonl": "append-only",
+    "deep-research-strategy.md": "mutable",
+    "deep-research-dashboard.md": "auto-generated",
+    "findings-registry.json": "auto-generated",
+    "iteration-*.md": "write-once",
+    "research/research.md": "mutable"
+  },
+  "_optimizerManaged": {
+    "description": "Fields managed by the offline loop optimizer (042.004). See optimizer-manifest.json for the canonical tunable/locked field registry.",
+    "manifestPath": ".opencode/skills/system-spec-kit/runtime/cli/optimizer/optimizer-manifest.json",
+    "tunableFields": [
+      "convergenceThreshold",
+      "stuckThreshold",
+      "maxIterations"
+    ],
+    "lockedFields": [
+      "lineage",
+      "reducer",
+      "fileProtection",
+      "sessionId",
+      "status",
+      "antiConvergence.convergenceMode",
+      "antiConvergence.stopPolicy"
+    ],
+    "promotionMode": "advisory-only"
+  },
+  "researchTopic": "Research how Notion's UI for dropdowns, context menus, option and relation pickers, icon and colour pickers, date pickers, search-in-menu, and submenus should refine the note-database Obsidian plugin's surface. Use the Notion screen digest at specs/005-component-surface-system/052-dropdown-menu-and-picker-componentization/notion-screens-digest.md as the ONLY source of Notion facts (written by an image-capable analyst from Mobbin captures; you cannot read PNG files - NEVER open image files). Compare against our implementation and design record: src/views/dropdown-field.ts, src/views/owned-menu.ts, src/views/menu-row.ts, src/views/popover-host.ts, src/views/popover-position.ts, src/views/record-surface/cell-editor-*.ts, the menu/popover blocks of styles.css, specs/005-component-surface-system/052-dropdown-menu-and-picker-componentization/{goal.md,design-trueup.md,decision-record.md,tasks.md}, specs/005-component-surface-system/design-system.md, and roadmap.md section 6A rulings. BOUNDED SCOPE: read those files and nothing beyond them unless a finding requires one more source file. OPERATOR CONTEXT: Anytype parity is the default ruling for these surfaces (051 ADR-007, 056, 057); Notion refinements are additive - where Notion and Anytype disagree, name the conflict and propose which to adopt with the reason, and NEVER override a landed operator ruling. Questions to answer with file:line and screen-id evidence: (1) which Notion patterns from the digest would improve this surface for a user, ranked by user impact; (2) for each, the concrete change to our code and CSS (file, rule/function, value) and its measurable threshold; (3) which Notion behaviours we already have; (4) which conflict with an Anytype ruling; (5) which need a device-only check; (6) a ranked remediation plan as concrete phase tasks with thresholds and red-first checks suitable for a new child phase. Cite every claim; mark inferences as inferences.",
+  "minIterations": 3,
+  "stopPolicy": "max-iterations",
+  "resource_map_present": false,
+  "resource_map": {
+    "emit": true
+  },
+  "fanout": {
+    "executors": [
+      {
+        "kind": "cli-pi",
+        "model": "z-ai/glm-5.3-flash",
+        "reasoningEffort": "max",
+        "timeoutSeconds": 900,
+        "label": "glm-openrouter-dropdowns",
+        "count": 1,
+        "iterations": 5
+      }
+    ],
+    "concurrency": 1
+  },
+  "nextRunAt": null,
+  "remainingDelayMs": null
+}

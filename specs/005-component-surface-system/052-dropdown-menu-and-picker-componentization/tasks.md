@@ -526,6 +526,24 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       re-encodes restored to their committed bytes; `check-lane` exit 0 with the release naming
       both captures; both PNGs opened.
 
+- [x] T020 The Notion refinement child is opened (`specs/005-component-surface-system/063-notion-dropdown-refinement/`).
+      **Done 2026-09-06.** This packet's five-iteration `/deep:research:auto` loop
+      (`research/research.md`, lineage `glm-openrouter-dropdowns`, GLM 5.3 flash max, stop reason
+      `maxIterationsReached` at 5/5, 28 findings, 6 of 6 questions answered) was synthesised into
+      **`063-notion-dropdown-refinement`** under the parent's D15. What it hands back to this packet
+      is three things, and none of them un-ticks a row here. **One un-owned fix**: the dropdown
+      popover's selection check still renders leading (`dropdown-field.ts:349`,
+      `styles.css:3237-3241`) against the landed G14 / ADR-005 ruling, and **T009 does not open that
+      file** — `063` REQ-001 owns it. **Two riders on the open legs**: `063` REQ-002 contributes the
+      trailing current value to T008's `toolbar-renderer.ts:1312` row and to T009's
+      `column-menu.ts:128`, `:144` and `:160` rows, through the `menu-row.ts:107-119` slot that
+      already exists — take them with those legs rather than as separate work. **One prose
+      correction owed here**: two of this packet's `goal.md` §3 criteria still describe a
+      pre-landing tree — the combobox criterion, against a `dropdown-field.ts:160-166` that now
+      opens the trigger as the query field, and the picker-host criterion, against a
+      `popover-host.ts` that now provides all five shared pieces it asks for. `063` T010 refreshes
+      that prose and ticks nothing.
+
 <!-- /ANCHOR:phase-4 -->
 
 ---
@@ -549,4 +567,5 @@ oracle-tested; `sheet-grammar` pairs unchanged.
 - Overlapping `050` items: `spec.md` §7, confirmed at T001 in `design-trueup.md` §6
 - Capture read of record: `design-trueup.md` — T001's output
 - Red-first protocol: `checklist.md` VERIFICATION PROTOCOL
+- Notion refinement child: [`../063-notion-dropdown-refinement/goal.md`](../063-notion-dropdown-refinement/goal.md), opened from `research/research.md` (T020)
 <!-- /ANCHOR:cross-refs -->

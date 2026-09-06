@@ -1,0 +1,286 @@
+{
+  "mergedFrom": [
+    "glm-openrouter-dropdowns"
+  ],
+  "openQuestions": [],
+  "resolvedQuestions": [],
+  "keyFindings": [
+    {
+      "id": "f-001-1",
+      "severity": "P1",
+      "label": "Leading check",
+      "iteration": 1,
+      "supersededBy": "f-012-1",
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-012-1",
+      "severity": "P1",
+      "label": "Check-side lag confined to dropdown-field.ts:240-253 + styles.css:3239-3256; fix = DOM order + grid reorder, trailing at 16px right inset; UN-OWNED by any pending task",
+      "iteration": 2,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-029-1",
+      "severity": "P1",
+      "label": "PLAN P1: flip dropdown check to trailing",
+      "iteration": 5,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-001-2",
+      "severity": "P2",
+      "label": "Phone search gate",
+      "iteration": 1,
+      "resolvedBy": "f-010-1",
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-001-5",
+      "severity": "P2",
+      "label": "Already-have (dropdown stack)",
+      "iteration": 1,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-010-1",
+      "severity": "P2",
+      "label": "Phone-sheet search gate is a landed ruling (ADR-006); Notion iOS evidence non-adopted",
+      "iteration": 2,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-011-1",
+      "severity": "P2",
+      "label": "goal.md combobox criterion Today-text stale; reconcile-leg refresh needed",
+      "iteration": 2,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-013-1",
+      "severity": "P2",
+      "label": "Option editor search-as-create-field candidate; 054-scoped per D8",
+      "iteration": 2,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-014-1",
+      "severity": "P2",
+      "label": "Relation picker: optional subtitle rows + suggested captioned section (G12 kinds-rule)",
+      "iteration": 2,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-015-1",
+      "severity": "P2",
+      "label": "CONFLICT NAMED, NOT ADOPTED: entity-picker filled circle vs ADR-005 refusal 4",
+      "iteration": 2,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-017-1",
+      "severity": "P2",
+      "label": "Already-have completed (pickers + menus)",
+      "iteration": 2,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-018-1",
+      "severity": "P2",
+      "label": "Picker-family host landed; second stale goal.md criterion",
+      "iteration": 3,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-019-1",
+      "severity": "P2",
+      "label": "Colour-picker question already disposed (G15 + landed aria-label/check); visible labels = operator question",
+      "iteration": 3,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-021-1",
+      "severity": "P2",
+      "label": "Device-only check inventory (five checks)",
+      "iteration": 3,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-022-1",
+      "severity": "P2",
+      "label": "Design-system constraints for the plan",
+      "iteration": 3,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-024-1",
+      "severity": "P2",
+      "label": "KQ4 authority check: E3 stands; 051 ADR-008 closes N12; combobox ruling confirmed in 6A",
+      "iteration": 4,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-025-1",
+      "severity": "P2",
+      "label": "Trailing current-value text on submenu parent rows: trueup M7 + digest N1/N9 agree; rides T008/T009",
+      "iteration": 4,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-026-1",
+      "severity": "P2",
+      "label": "Remaining task inventory; check flip UN-OWNED; 054 items separated per D8",
+      "iteration": 4,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-030-1",
+      "severity": "P2",
+      "label": "PLAN P2: trailing current values on submenu rows",
+      "iteration": 5,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-032-1",
+      "severity": "P2",
+      "label": "PLAN P4-P6: 054-facing, metadata reconcile, operator questions",
+      "iteration": 5,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-001-3",
+      "severity": "P3",
+      "label": "Menu-row trailing slot grammar covers 3 of N1's 5 slots; toggle slot conditional",
+      "iteration": 1,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-001-4",
+      "severity": "P3",
+      "label": "G6 carve-out",
+      "iteration": 1,
+      "resolvedBy": "f-024-1",
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-016-1",
+      "severity": "P3",
+      "label": "Status bucket grouping: additive 054-scoped candidate",
+      "iteration": 2,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-020-1",
+      "severity": "P3",
+      "label": "Date preset literal-date sublines candidate; 052-scoped; file unread by this lineage",
+      "iteration": 3,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-023-1",
+      "severity": "P3",
+      "label": "Already-have (date + host)",
+      "iteration": 3,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-027-1",
+      "severity": "P3",
+      "label": "Trueup width disposition closed on the tree",
+      "iteration": 4,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-028-1",
+      "severity": "P3",
+      "label": "Evidence-discipline guardrails",
+      "iteration": 4,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    },
+    {
+      "id": "f-031-1",
+      "severity": "P3",
+      "label": "PLAN P3: date preset sublines",
+      "iteration": 5,
+      "_lineages": [
+        "glm-openrouter-dropdowns"
+      ]
+    }
+  ],
+  "ruledOutDirections": [],
+  "metrics": {
+    "iterationsCompleted": 5,
+    "openQuestions": 0,
+    "resolvedQuestions": 0,
+    "keyFindings": 28,
+    "sourceFindings": 28,
+    "reconstructionGaps": 0,
+    "convergenceScore": 0,
+    "coverageBySources": {}
+  },
+  "schema_mismatch": [
+    {
+      "type": "schema_mismatch",
+      "severity": "warn",
+      "lineage": "glm-openrouter-dropdowns",
+      "message": "Registry uses non-canonical key \"findings\" instead of \"keyFindings\"; coerced 28 entries.",
+      "aliasKey": "findings",
+      "canonicalKey": "keyFindings",
+      "coercedCount": 28
+    }
+  ]
+}
