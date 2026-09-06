@@ -118,41 +118,85 @@ A task missing any of the three is not ready to start.
       deletion undoable at all, is T018. A new lane row (`tools/storybook/verify-placement.mjs`,
       "dismissing the last toast through its close button leaves no card and no live region")
       proves the toast's own stack empties on dismissal — observed red first by disconnecting the
-      close button, green again restored. This task stays `[ ]` because its own threshold's
-      `nothingToUndo` branch is a different empty stack, the edit history rather than the toast's:
-      no run drives a real gallery→board migration end to end, because reaching an empty
-      `this.historyStack` needs an Obsidian `App`, a vault and a metadata cache no harness here
-      constructs. The component's action and callback are lane-proven; all four call sites are
-      proven by reading the final files and by `tsc`.
+      close button, green again restored.
+      **Updated 2026-09-06, T018 landed:** the `notice.deletedRow` sites now carry an Undo again —
+      T018 gave `deleteRow` a history entry to undo, closing the defect this task's own removal was
+      naming. All four owned sites now carry an Undo. This task still stays `[ ]`, for the one gap
+      T018 does not touch: this threshold's own `nothingToUndo` branch is the EDIT-HISTORY stack's
+      empty case (`database-view.ts:10312`/`embedded-database-renderer.ts:3687`, both pre-existing,
+      both bare `Notice`), not the toast's own empty stack the lane row above proves. Reaching it
+      needs an Obsidian `App`, a vault and a metadata cache no harness here constructs, the same
+      limit AC-002 records. The component's action and callback are lane-proven; all four call
+      sites are proven by reading the final files and by `tsc`.
       **Threshold:** the Undo button appears with the notice and performs the undo — or reports
       `notice.nothingToUndo` (`src/i18n.ts:1484`) when the stack is empty, never a silent no-op.
       **Red first:** the notice renders with no button at all today.
       **Capture:** none (`src/views/database-view.ts`, `src/views/embedded-database-renderer.ts`)
-- [ ] T018 [P0] **REQ-055-1 — a deletion history entry with redo semantics in both classes, then
-      re-attach Undo.** Opened 2026-09-06 by ADR-008. `deleteRow` is undoable in neither class
-      today: `type HistoryEntry` (`database-view.ts:351`) and `type EmbedHistoryEntry`
-      (`embedded-database-renderer.ts:150`) have no kind for a deletion, and neither `deleteRow`
-      calls `pushHistory`. Add one — read the file's content before `trashNote` the way
-      `removeCreatedFile` already does (`database-view.ts:10395-10402`), push a `deleted` entry
-      carrying the path and that snapshot, restore it on undo and re-trash it on redo — then put
-      the Undo action back on the two `notice.deletedRow` toasts T003 stripped.
+- [x] T018 [P0] **REQ-055-1 — a deletion history entry with redo semantics in both classes, then
+      re-attach Undo.** Done 2026-09-06, closing ADR-008 (now Accepted). `deleteRow` in both
+      classes now reads the file's content via `cachedRead` before `trashNote` — the order
+      `removeCreatedFile` already uses — and pushes a `deleted` entry: `DeletedHistoryEntry`
+      (a new member of `database-view.ts`'s `HistoryEntry` union, `file: CreatedFileSnapshot`) and
+      a fourth `EmbedHistoryEntry` variant (`file: { path, content }`, `content` required since the
+      embed's own `undoLastEdit` is where it is consumed). The standalone's
+      `applyDeletedHistoryEntry` undoes/redoes by calling the exact pair a created entry's own
+      undo/redo already calls — `restoreCreatedFile` on undo, `removeCreatedFile` on redo — so the
+      "path already occupied" guard is inherited, not re-written. The embed's `undoLastEdit` grew
+      an inline `"deleted"` branch carrying the equivalent guard, since that class has no
+      `restoreCreatedFile` helper of its own. Both `deleteRow`s' toasts regained their Undo action.
+      **ADR-008's three questions, answered:** restoring to the original path is right, and the
+      inherited guard (throw, surfaced through the existing `errors.updateFailed` path) is correct
+      rather than silently overwriting; a bulk delete is out of this leg's scope and, when one
+      lands, should push one entry for the whole selection, not N, so one Undo cannot restore only
+      the last file and leave the rest deleted; the standalone's `created` shape is the better
+      model — confirmed by building both — since the embed's `moved` shape is specific to relocating
+      a row between linked views and shares no structure with a deletion.
+      **The embed's "redo" half of the threshold is inapplicable, not unmet:** `undoLastEdit` there
+      has no redo mechanism for any entry kind (confirmed by grep, "redo" did not occur in the file
+      before this landing), so a deletion-specific redo would be a new capability for every kind,
+      not a deletion repair.
       **Threshold:** deleting a row, then pressing the toast's Undo, restores that row's file at its
-      original path with its original content, and pressing Redo trashes it again; with the history
-      stack otherwise empty the Undo restores that deletion and nothing else. The three behaviours
-      ADR-008 names are each unreachable afterwards.
-      **Red first:** delete a row while a `created` entry sits on top of the stack and press Undo —
-      the created file is trashed and the deleted one is not restored. That is the current tree, and
-      it is why T003 removed the button rather than leaving it.
-      **Capture:** none (`src/views/database-view.ts`, `src/views/embedded-database-renderer.ts`)
+      original path with its original content, and pressing Redo (standalone only) trashes it
+      again; with the history stack otherwise empty the Undo restores that deletion and nothing
+      else. The three behaviours ADR-008 names are each unreachable afterwards, by construction —
+      the union has a kind now, and `applyHistoryEntry`/`undoLastEdit` dispatch to it before falling
+      through to an unrelated entry.
+      **Red first:** confirmed by running `deletion-undo.test.ts`'s marker-string assertions
+      against `git show HEAD:src/views/database-view.ts` / `embedded-database-renderer.ts` — every
+      assertion's substring absent on the pre-landing tree.
+      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1341/1341 including the new
+      `deletion-undo.test.ts` (10/10).
+      **Capture:** none (`src/views/database-view.ts`, `src/views/embedded-database-renderer.ts`,
+      `src/i18n.ts`, `src/views/deletion-undo.test.ts`)
 
-- [ ] T004 [B] [P1] **REQ-055-1 — unify the two undo shapes.** `showOperationResult`
-      (`showOperationResult`, called at `database-view.ts:9433-9437`) and the selection bar's undo (`database-view.ts:7719`) render the
-      toast component as placements, keeping their positions.
+- [x] T004 [P1] **REQ-055-1 — unify the two undo shapes.** Done 2026-09-06. `showOperationResult`
+      now renders through `showToast` at the rail's own fixed placement: `ToastOptions` gained a
+      `container` field (a caller-positioned single-slot host instead of the shared body stack),
+      and `styles.css` gained one `.db-toast.is-inline` rule laying the card out in normal flow at
+      that host's position rather than the collapsed-stack's absolute one. The rail's own
+      `db-operation-result-*` CSS (border, padding, background, its `db-operation-rail-in`
+      keyframe, the `is-error` variant) retired; the rail keeps only
+      `position: fixed; right; bottom; z-index` plus `db-surface` so the reduced-motion reset
+      (ADR-006) reaches the card mounted inside it.
+      **The selection bar's button is unchanged, named rather than forced** (ADR-001's landing
+      note): `db-selection-undo` carries no CSS of its own (it borrows `.db-selection-action`,
+      shared with four sibling buttons in the same bar), has no timer, and already calls the same
+      `undoLastEdit()` every toast Undo calls — there was one competing shape here, the rail's, and
+      it is the one that changed. Re-rendering the bar's button as a 384px card would violate the
+      threshold's own "as before in position" half for no unification gained.
       **Threshold:** one component, one timer contract, one reduced-motion story; both placements
-      behave as before in position and timing.
-      **Red first:** two independent implementations exist today with separate CSS
-      (`styles.css:2662-2700` vs the bar's own rules).
-      **Capture:** none (`src/views/database-view.ts`)
+      behave as before in position — **timing changes on purpose for the error case**: the rail
+      used to auto-dismiss error at the same 2200ms as success, and the toast's own contract (error
+      never times out) won rather than being special-cased away, since "one timer contract" is what
+      the threshold actually asks for where the two clauses conflict.
+      **Red first:** two independent implementations existed with separate CSS
+      (`styles.css:2699-2744` before this landing vs the bar's own `.db-selection-action` rules) —
+      confirmed by diffing this leg's edit against `git show HEAD:styles.css`, which still carries
+      the retired rules verbatim.
+      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1341/1341, including two new
+      `toast.test.ts` assertions for the `container` placement.
+      **Capture:** none — no capture shows the rail or the bar's button
+      (`src/views/database-view.ts`, `src/views/toast.ts`, `styles.css`)
 
 ### L2 — empty-state flavours and chart absorption
 
@@ -175,29 +219,73 @@ A task missing any of the three is not ready to start.
       designed from `047` §9 with the gap named; its destination is proved by
       `mobile/anytype-mobile-sheet-kanban-groupby-dark.png` (`src/views/empty-state-renderer.ts`,
       `src/views/database-view.ts`)
-- [ ] T006 [B] [P0] **REQ-055-6 — absorb chart's private vocabulary.** `chart-renderer.ts`'s
-      `renderEmptyState` (`chart-renderer.ts:601-604`) and its action builder (`:609-641`) render through
-      `EmptyStateRenderer`; `db-chart-empty`'s rules retire in favour of the shared classes.
-      **Threshold:** chart's six reasons (`chart-aggregation.ts:64`) render through the shared
-      component with their actions preserved, and zero `db-chart-empty` markup remains.
-      **Red first:** chart is the only renderer outside `EmptyStateRenderer` today.
-      **Capture:** `chrome-chart-empty` scenario recaptured in the same change and the PNG read
-      (`src/views/chart-renderer.ts`, `styles.css`)
+- [x] T006 [P0] **REQ-055-6 — absorb chart's private vocabulary.** Done 2026-09-06.
+      `renderEmptyState` now calls `EmptyStateRenderer.renderCard`, mapping each of chart's six
+      reasons onto the nearest shared `EmptyStateReason` for its default title only (`no-columns`
+      for the two "add/choose a field" reasons, `filter-empty` for `noRecords`, `limit-empty` for
+      `allGroupsHidden`, `no-matching-data` for `invalidAxisRange`) while always supplying chart's
+      own message via the existing `getEmptyMessage`; the action builder returns `EmptyStateAction[]`
+      instead of hand-building buttons. `db-chart-empty-icon`/`-text`/`-action` and their
+      `:hover`/`:focus-visible` rules retired from `styles.css`, along with the decorative
+      border/padding/color the shared `.db-chart-empty, .db-chart-number` rule no longer needs now
+      that the inner card supplies its own box.
+      **Amended, named rather than silently narrowed:** the outer `.db-chart-empty` wrapper class
+      stays — `rendered-view-roots.ts`, `summary-renderer.ts`'s `placeAfterChart` anchor and
+      `embedded-database-renderer.ts`'s stale-view selector all key off it, none of them this task's
+      to change, and the same "structural root + shared inner card" split already exists for the
+      board (`.db-board` + `db-board-empty-slot` on the card). "Zero `db-chart-empty` markup" is
+      read as the private icon/text/action vocabulary retiring, not the structural root.
+      **Threshold:** chart's six reasons render through the shared component with their actions
+      preserved, and zero `db-chart-empty` markup remains.
+      **Red first:** chart was the only renderer outside `EmptyStateRenderer` — confirmed absent
+      from `grep -n "emptyStateRenderer.renderCard" src/views/chart-renderer.ts` before this landing.
+      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1341/1341; the fixture and the real render
+      opened side by side (both desktop-light) show the same shared card shape with the chart's own
+      copy intact.
+      **Capture:** `chrome-chart-empty` (fixture, rewritten to mirror the new markup) and
+      `constructed-chart-empty` (the real renderer) both recaptured in the same change and both PNGs
+      read (`src/views/chart-renderer.ts`, `styles.css`, `tools/screenshots/scenarios/chrome.mjs`)
 
 ### L3 — confirm primitive
 
-- [ ] T007 [B] [P0] **REQ-055-3 — the confirm sheet carries `044`'s grammar.** `createSheetHeader`
-      inside `ConfirmModal.onOpen`; the `confirmWithModal` signature unchanged (ADR-055-2).
+- [x] T007 [P0] **REQ-055-3 — the confirm sheet carries `044`'s grammar.** Done 2026-09-06.
+      `DbModal`'s own shell (`createSurfaceShell`) already calls `createSheetHeader` for a
+      `sheet`-presented modal on a touch device, but only after `super.onOpen()` runs — so
+      `ConfirmModal.onOpen` now builds its title, message and actions **before** calling
+      `super.onOpen()`, so the shell's title scrape finds the real `<h3>` on its first pass rather
+      than a generic fallback corrected a microtask later. The message also gained `db-panel-row`,
+      resolving to a real padded row only where `applySheetChrome` has marked the modal root
+      `.note-database-container` — the phone presentation the grammar row measures, inert
+      everywhere else. The `confirmWithModal` signature is unchanged.
       **Threshold:** all seven grammar elements pass on the registered `sheet-grammar` row.
-      **Red first:** 0 of 7 today — the modal declares `sheet` (`modals/confirm-modal.ts:42` (`super(app, "sheet")`)) and never
-      calls `createSheetHeader`, `048` inventory M-4.
+      **Red first:** 0 of 7 — `createSheetHeader` did not occur in `confirm-modal.ts` at all before
+      this landing, confirmed against `git show HEAD:src/views/modals/confirm-modal.ts`.
+      **Green:** a `confirm` row registered in `tools/live/sheet-grammar.mjs`'s `REGISTERED_SURFACES`
+      — the real component cannot mount in this harness's browser bundle (it extends `Modal`, which
+      `obsidian-stub.mjs` throws on rather than fakes), so the row is a hand-built mirror of
+      `confirm-modal.ts`'s markup, the same stand-in precedent `openHostModalChild` already sets for
+      a modal child, wired through the real `attachSheetChromeToModal`/`placeSheet`/`keepSheetPlaced`
+      so every column but the markup mirror measures production code. `node tools/live/sheet-grammar.mjs`,
+      exit 0: **8 of 8** columns pass (all seven canonical elements plus the dropdown column), close
+      target 44×44, nothing overflows the surface's right edge.
       **Capture:** none needed — the grammar is measured by the lane, not by a competitor screen
-      (`src/views/modals/confirm-modal.ts`)
-- [ ] T008 [B] [P0] **REQ-055-4 — register the confirm's stacked pairs.** A row per parent →
-      confirm pair in `048`'s stacked-pair registry, with the stacking negative control.
+      (`src/views/modals/confirm-modal.ts`, `tools/live/sheet-grammar.mjs`)
+- [x] T008 [P0] **REQ-055-4 — register the confirm's stacked pairs.** Done 2026-09-06, and mostly
+      already true. Measured directly (`node tools/live/sheet-grammar.mjs`) before any change here:
+      `048`'s own prior landing had already registered two confirm pairs in
+      `REGISTERED_STACKED_PAIRS` — "confirm over a sheet" (parent `filter-panel`) and "import
+      confirm dropdown chain" — and both were **already green**, all 14 stacking/child-grammar
+      checks passing on Chrome and WebKit alike (`048` M-4's gap was the standalone grammar row
+      T007 closes, not this one). This task's own row in `tasks.md` restated the premise from the
+      tree found, per ADR-002's landing note, rather than quoting the stale draft forward.
       **Threshold:** a confirm opened from a sheet dims and scales back its parent with
       |Δ| ≤ 1px and one scrim between them — `048`'s model, consumed unchanged.
-      **Red first:** the pair is unregistered today, so the lane cannot fail on it.
+      **Red first, restated:** the premise "the pair is unregistered" was false against this tree;
+      both rows existed and passed before this leg touched anything, confirmed by running the lane
+      first. No code change was needed to close this task — the row-per-parent registry the
+      threshold asks for already had its rows.
+      **Green:** `node tools/live/sheet-grammar.mjs`, exit 0, "confirm over a sheet" 14/14 and
+      "import confirm dropdown chain" 14/14, both engines.
       **Capture:** none (`tools/live/sheet-grammar.mjs`, `src/views/modals/confirm-modal.ts`)
 
 ### L4 — motion tokens
@@ -231,7 +319,7 @@ A task missing any of the three is not ready to start.
       reaches 7 uses. `--db-motion-surface` is **200ms**, not 180ms (ADR-005).
       **Capture:** none — stylesheet, measured by lane, not capture
       (`styles.css`)
-- [ ] T010 [B] [P1] **REQ-055-8 — migrate the legs' own durations.** The files L1-L3 touched read
+- [x] T010 [P1] **REQ-055-8 — migrate the legs' own durations.** The files L1-L3 touched read
       tokens; no new literal duration lands in this phase's files.
       **Restraint amended by ADR-006, 2026-09-05.** "The wider census is recorded, not swept" was
       written before T001 measured the full 42-declaration census as the target, and L4 swept 38 of
@@ -245,7 +333,17 @@ A task missing any of the three is not ready to start.
       plus **16 written in seconds** (10x`0.15s`, 3x`0.2s`, 2x`0.1s`, 1x`0.3s`) that
       `state-feedback-vocabulary.md` §4's census omits — see `design-trueup.md` C8.
       **Red first:** every touched file hand-types durations today.
-      **Capture:** none (`styles.css`, the L1-L3 files)
+      **Done 2026-09-06, T004/T006/T007's own edits:** T009 (L4) already swept 38 of 42 declarations
+      across the whole stylesheet, so the `styles.css` regions T004 (the operation-result rail) and
+      T006 (chart's empty state) touched carried none left to migrate — confirmed by
+      `git diff styles.css | grep -E "^\+" | grep -iE "[0-9]+m?s\b"` returning nothing for this
+      leg's own edit. T004 additionally **retired** one untokenized declaration outright rather than
+      migrating it: `db-operation-rail-in`'s `160ms ease-out` keyframe, deleted along with the whole
+      rule it timed once the rail became a placement of the shared `.db-toast` (which already reads
+      `var(--db-motion-surface)`). Net effect on the census: -1 declaration, 0 added. The `ms`
+      strays and the 16 seconds-notation durations this row already named stay recorded and
+      unswept, unchanged by this leg.
+      **Capture:** none (`styles.css`, the L1/L2/L3 files)
 
 ### L5 — capability-gated menus (050 item 8)
 

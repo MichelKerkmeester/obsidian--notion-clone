@@ -10,19 +10,23 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/055-states-feedback-and-motion"
-    last_updated_at: "2026-09-06T01:55:00Z"
+    last_updated_at: "2026-09-06T02:30:00Z"
     last_updated_by: "landing-verification"
-    recent_action: "ADR-007 Accepted, sixth role feedback; ADR-008 Proposed on the unbacked deletion Undo"
-    next_safe_action: "Start L2 (T005/T006) — the empty-state flavours and chart absorption"
+    recent_action: "ADR-001/002/007/008 Accepted; T004/T006/T007/T008/T010/T018 landed"
+    next_safe_action: "Run the full gate and recapture screenshots after this leg's styles.css edits"
     blockers: []
     key_files:
       - "src/views/toast.ts"
       - "src/views/modals/confirm-modal.ts"
+      - "src/views/database-view.ts"
+      - "src/views/embedded-database-renderer.ts"
+      - "src/views/chart-renderer.ts"
+      - "tools/live/sheet-grammar.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-055-adr"
       parent_session_id: null
-    completion_pct: 8
+    completion_pct: 55
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +43,34 @@ _memory:
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-05 |
-| **Deciders** | Phase author (operator rule pending) |
+| **Status** | Accepted |
+| **Date** | 2026-09-05, landed 2026-09-06 |
+| **Deciders** | Phase author; landed by T004 |
+
+### Landing note (2026-09-06)
+
+`showOperationResult` now renders through `showToast` at its own fixed placement:
+`ToastOptions` gained a `container` field — a caller-supplied single-slot host instead of the
+shared body stack — and `.db-toast.is-inline` lays the card out in normal flow at that host's own
+position rather than the collapsed-stack's absolute one. `styles.css`'s `.db-operation-result-*`
+rules (border, padding, background, its own `db-operation-rail-in` keyframe) retired along with
+the `is-error` variant; the rail keeps only its `position: fixed; right; bottom; z-index`, now
+carrying `db-surface` so the reduced-motion reset (ADR-006) reaches the card mounted inside it.
+One behaviour changed on purpose rather than by oversight: the rail's error case used to
+auto-dismiss at the same 2200ms as success; the toast component's own contract is that error never
+times out, and that contract won rather than being special-cased away for one caller — the
+"one timer contract" half of this ADR's own threshold outranks the "as before" half for exactly
+the case where the two conflict.
+
+**The selection bar's button is unchanged, and that is the finding, not a gap.** `db-selection-undo`
+(`database-view.ts:7719`) carries no CSS of its own — grep confirms zero rules named
+`.db-selection-undo`; it borrows `.db-selection-action`, shared with four sibling buttons in the
+same persistent bar. It has no timer, no message text, and already calls the same `undoLastEdit()`
+every toast Undo action calls. Re-rendering it as a floating `.db-toast` card would swap a compact
+icon+label button for a 384px card with a close control and no auto-dismiss, sitting inside an
+already-populated row of buttons — a size and shape change the ADR's own "behave as before in
+position" clause forbids, not a unification of two competing shapes. There was only one competing
+shape here (the rail's), and it is the one that changed.
 
 ---
 
@@ -140,9 +169,38 @@ exactly the sites the leg touched — the component is leaf-shaped and nothing e
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-05 |
-| **Deciders** | Phase author (operator rule pending) |
+| **Status** | Accepted |
+| **Date** | 2026-09-05, landed 2026-09-06 |
+| **Deciders** | Phase author; landed by T007/T008 |
+
+### Landing note (2026-09-06)
+
+Measured against the shipped tree, `DbModal`'s own shell (`createSurfaceShell`, added since this
+ADR's draft) already calls `createSheetHeader` for any `sheet`-presented modal, but only when the
+device is touch — so a second, explicit call from `ConfirmModal.onOpen` would have duplicated the
+header on phone. The landing carries the ADR's intent (the confirm gains the shared header through
+`createSheetHeader`, not a second mechanism) without that duplication: `onOpen` now builds its own
+title, message and actions **before** calling `super.onOpen()`, so when the shell's scrape-based
+title resolver runs, the real `<h3>` already exists and the header renders correctly on its first
+pass rather than a generic fallback corrected a microtask later. The message also gains
+`db-panel-row`, the sheet grammar's own row shape, which resolves to a real padded row only where
+`applySheetChrome` has marked the modal root `.note-database-container` — i.e. on the phone
+presentation the grammar row is asking about, and inertly nowhere else.
+
+`sheet-grammar.mjs`'s `REGISTERED_SURFACES` gained a `confirm` row. `ConfirmModal` cannot be
+mounted inside this harness's browser bundle — it extends Obsidian's `Modal`, which
+`obsidian-stub.mjs` deliberately throws on rather than fakes, the same constraint that already
+forced the stacked-pair registry's `openHostModalChild` stand-in for a modal child. The new row
+follows that precedent: a hand-built mirror of `confirm-modal.ts`'s markup, wired through the real
+`attachSheetChromeToModal`/`placeSheet`/`keepSheetPlaced` functions so every column but the markup
+mirror itself measures production code. Run directly: **8 of 8** columns pass (the seven canonical
+elements plus the dropdown column), the close target measures 44×44, and nothing overflows the
+surface's right edge — confirmed on a from-scratch run of `node tools/live/sheet-grammar.mjs`,
+exit 0. The two pre-existing `REGISTERED_STACKED_PAIRS` rows this ADR names — "confirm over a
+sheet" and "import confirm dropdown chain" — were found **already registered and already green**
+(`048`'s own prior landing), closing AC-004/T008 without a further code change there; the row's own
+"Red first: the pair is unregistered today" was stale against the tree this leg found, restated
+here rather than quoted forward.
 
 ---
 
@@ -684,9 +742,9 @@ move together, so reverting returns the toast to unregistered rather than to a h
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-06 |
-| **Deciders** | Landing verification; the removal ruled by the operator 2026-09-06, the repair still open |
+| **Status** | Accepted |
+| **Date** | 2026-09-06, repair landed 2026-09-06 |
+| **Deciders** | Landing verification; the removal ruled by the operator 2026-09-06; the repair landed by T018 |
 
 ### Operator ruling (2026-09-06)
 
@@ -752,16 +810,43 @@ notice still migrates to the shared surface, which is what T003 was for, and `sh
 action row unconditionally while `.db-toast-actions:empty` hides it (`styles.css:2859`), so a
 deletion toast renders with no stray gap — the shape the `chrome-toast-error` capture already shows.
 
-**Proposed, not decided:** whether `deleteRow` should record a `deleted` history entry so the Undo
-can come back. T018 sketches the shape — snapshot the content before `trashNote` as
-`removeCreatedFile` already does, restore on undo, re-trash on redo — but three questions are open
-and belong to the operator rather than to a landing pass:
+**Decided, and landed (T018):** `deleteRow` in both classes now snapshots the file's content via
+`cachedRead` before `trashNote` runs, pushes a `deleted` history entry carrying `{ path, content }`,
+and the toast's Undo action is back, wired to `undoLastEdit()`. The three questions:
 
-- Whether restoring to the original path is right when something else now occupies it.
-- Whether a bulk delete (`database-view.ts:5001-5003`, which deletes a selection in a loop) records
-  one entry or many.
-- Whether the embed's `moved` entry shape or the standalone's `created` shape is the better model,
-  since the two classes keep separate stacks and separate unions.
+- **Restoring to the original path when something else now occupies it: yes, and the existing
+  guard is the right one.** The standalone's `applyDeletedHistoryEntry` calls the same
+  `restoreCreatedFile`/`removeCreatedFile` pair a created entry's undo/redo already calls —
+  `restoreCreatedFile` already throws `Cannot redo create because the path already exists` when the
+  target path is occupied, and reusing the function inherits that guard unchanged rather than
+  writing a second one. The embed's own undo branch carries the equivalent check inline (it has no
+  `restoreCreatedFile` helper to call), throwing `Cannot undo delete because the path already
+  exists` for the same reason. Either way the failure surfaces through the existing generic error
+  path (`errors.updateFailed`) rather than silently overwriting or renaming.
+- **A bulk delete: out of this leg's scope, and the answer for when one lands is one entry, not
+  many.** `deleteSelectedRows` (`database-view.ts`, the loop that trashes a selection) pushes no
+  history today and this leg does not add any — T003/T018 name the two single-row `deleteRow`
+  sites only. If a later leg gives it undo, it should push **one** entry carrying every deleted
+  file's snapshot, mirroring `ConfigHistoryEntry.createdFiles`'s array shape, not N entries: N
+  entries would let one Undo press restore only the most recently deleted file of the selection,
+  silently leaving the rest deleted — a bulk action that reads to the person who triggered it as
+  one thing should undo as one thing.
+- **The standalone's `created` shape is the better model, confirmed by building both.** The
+  embed's `moved` entry (`sourcePath`/`destPath`/`snapshot: LinkedViewMoveResult`) is specific to
+  relocating a row between linked views and shares no structure with a deletion. Both classes'
+  `deleted` entries instead mirror `created`'s `{ path, content }` snapshot exactly — the embed's
+  own `created` entry has no `content` field because it never needed one (its `undoLastEdit` has no
+  redo of any kind, for any entry type), so the embed's `deleted` entry carries `content` as a
+  required field precisely because its own undo is where that snapshot gets consumed, while the
+  standalone's `deleted` entry reuses `CreatedFileSnapshot` (`content` optional) since the same
+  interface already models exactly this shape for its `created` counterpart.
+
+**The embed's "redo" half of the threshold is inapplicable, not unmet.** `embedded-database-
+renderer.ts`'s `undoLastEdit` has no redo mechanism at all — not for `created`, not for `cell`, not
+for `moved`, confirmed by grep (`redo` does not occur in the file before this landing). T018's
+threshold names "pressing Redo trashes it again" against the standalone class, where a redo stack
+already exists for every other entry kind; extending redo to the embed would be a new capability
+for every entry type, not a deletion-specific repair, and stays out of this leg's scope.
 
 ---
 
@@ -802,14 +887,29 @@ which T018 now tracks rather than leaving implicit.
 
 ### Implementation
 
-**What changes**:
-- `src/views/database-view.ts` — `deleteRow`'s toast loses its `action`, with the reason recorded at
-  the call site.
-- `src/views/embedded-database-renderer.ts` — the same, for the embed's `deleteRow`.
-- `tasks.md` — T003's body corrected; T018 opened for the repair.
-- `acceptance-criteria.md` AC-001 and AC-002, and `checklist.md` C2 — the "each with Undo wired to
-  the existing `undoLastEdit`" claim corrected to what the tree does.
+**What changed (T003, then T018 in the same landing):**
+- `src/views/database-view.ts` — `deleteRow`'s toast lost its `action` (T003), then regained it
+  (T018) once `deleteRow` reads the file's content before `trashNote`, pushes a `DeletedHistoryEntry`
+  (a new member of `HistoryEntry`), and `applyDeletedHistoryEntry` restores on undo / re-trashes on
+  redo by calling the same `restoreCreatedFile`/`removeCreatedFile` pair a created entry's undo
+  already uses.
+- `src/views/embedded-database-renderer.ts` — the same shape: `deleteRow` snapshots and pushes a
+  `deleted` entry, `undoLastEdit` grew a branch that restores it with its own path-exists guard
+  (this class has no `restoreCreatedFile` of its own to call), and the toast's Undo returned.
+- `src/i18n.ts` — `undo.deleteRow` added (all three locales), the label the new entry's `label`
+  field carries into `notice.undone`/`notice.redone`.
+- `src/views/deletion-undo.test.ts` — new source-assertion suite (the same idiom `toast.test.ts`
+  uses for a module a vault-less vitest run cannot mount): the read-before-trash order, the pushed
+  entry, the re-attached action, and each class's undo/redo pair, for both classes. Confirmed red
+  against `git show HEAD:src/views/database-view.ts` / `embedded-database-renderer.ts` (every
+  assertion's marker string absent from the pre-landing tree) and green on the landed one (10/10).
+- `tasks.md` — T003's body corrected; T018 closed.
+- `acceptance-criteria.md` AC-002 and `checklist.md` C2 — the Undo/`nothingToUndo` claim updated to
+  what the landed tree does.
 
-**How to roll back**: re-add the two `action:` properties. That restores the destructive path, so it
-should only ever happen as part of T018, with the history entry landing in the same change.
+**How to roll back**: revert this leg's `deleteRow`/`applyDeletedHistoryEntry`/`undoLastEdit`
+changes in both files together with `DeletedHistoryEntry`'s addition to the union. Reverting only
+the toast's `action:` property without reverting the history-entry plumbing would restore ADR-008's
+original destructive path (an Undo that can trash a second file), which is exactly the state this
+ADR exists to keep closed.
 <!-- /ANCHOR:adr-008 -->

@@ -59,8 +59,8 @@
       "src/views/database-view.ts",
       "repo-rules/screenshot-currency.md",
       "tools/storybook/verify-placement.mjs",
-      "tools/live/sheet-grammar.mjs",
-      "src/views/motion-tokens.test.ts"
+      "src/i18n.ts",
+      "src/views/deletion-undo.test.ts"
     ],
     "entities": [
       {
@@ -172,15 +172,15 @@
         "source": "derived"
       },
       {
-        "name": "sheet-grammar.mjs",
-        "kind": "file",
-        "path": "tools/live/sheet-grammar.mjs",
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
         "source": "derived"
       },
       {
-        "name": "motion-tokens.test.ts",
+        "name": "deletion-undo.test.ts",
         "kind": "test",
-        "path": "src/views/motion-tokens.test.ts",
+        "path": "src/views/deletion-undo.test.ts",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Every surface has states; nothing owns them",
     "created_at": "2026-09-05T11:08:14Z",
-    "last_save_at": "2026-09-05T23:54:08.799Z",
+    "last_save_at": "2026-09-06T01:30:30.083Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,13 +222,13 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:34939d41b80a9b36234bb71d82cea78b80d32db2b6ab757c0daee333701b4b26",
+    "source_fingerprint": "sha256:0808fe3a7a01e64a5c2256f999b9a383b0ae980584dd83cb5bd3fc8f7060c909",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "34440444221b62c83fb89dc9a7d3a321e9bacfe5fd9982ca72def658dfbd3437",
       "plan.md": "0b06ddc242ef7e734b6c322ef1a0bbea144830214e756d85b4cb911e3bbd172a",
-      "tasks.md": "d1da7761e312820dce8b610dc656ad91610482425c76c668df26e668d1348cb8",
-      "decision-record.md": "7e7e2952868a82000c36fd9aaf416cb2bb43a8bb9e4a87ceba46cafdc71f773a",
+      "tasks.md": "88e4a6a5ac8deed2dafda3a7229d56299ab426e84ee9638919f00d8a33bbed80",
+      "decision-record.md": "f12265a543534d1ec4d42d35663ededcaf9bfca6ca62f02e3e8d6d0b0c5944b9",
       "implementation-summary.md": "a414291ec061f721a3cdba745dcacfcca02a0a1d17730215dd35360abfbc25c7"
     },
     "last_active_child_id": null,
