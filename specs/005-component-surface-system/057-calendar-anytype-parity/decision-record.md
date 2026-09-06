@@ -11,9 +11,9 @@ _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T20:30:00Z"
-    last_updated_by: "land-057-rebuild-leg"
-    recent_action: "ADR-007 ruled Monday default; ADR-005's stagger amendment landed"
-    next_safe_action: "Recapture calendar screenshots on HEAD, re-measure G1-G15 against them"
+    last_updated_by: "land-057-rebuild-leg-p1"
+    recent_action: "P1 rows landed on P0/T020; corpus recaptured; twelve of fifteen G rows Met"
+    next_safe_action: "Sweep G6 live at a custom column width; add a second-theme capture for G12"
     blockers: []
     key_files:
       - "src/views/calendar-renderer.ts"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-adr"
       parent_session_id: null
-    completion_pct: 80
+    completion_pct: 90
     open_questions: []
     answered_questions:
       - "ADR-002 is ruled: keep week and day, styled to the month grid"

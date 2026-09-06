@@ -12,13 +12,13 @@ _memory:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T20:30:00Z"
     last_updated_by: "land-057-rebuild-leg-p1"
-    recent_action: "P1-1, P1-2, P1-3, P1-4, P1-6, P1-7 code-landed on top of the P0/T020 leg"
-    next_safe_action: "Recapture calendar screenshots on HEAD, re-measure G1-G15 against them"
+    recent_action: "Corpus recaptured; G1-G15 re-measured: twelve Met, three Unmet"
+    next_safe_action: "Sweep G6 live at a custom column width; add a second-theme capture for G12"
     blockers:
       - "AC-010 is the operator's own device read and nothing in this repository can close it"
       - "Five AC-002 sub-rows stay pixel read owed — a static capture cannot answer hover/focus/press/drag/overflow"
       - "AC-004's layout-tile panel has no measured value in design-trueup.md and is named out of scope"
-      - "G1-G15 need a screenshot recapture and a live device-pixel re-measurement before any can tick; only the code and its own unit/CSS pins have been verified so far"
+      - "G6 needs a live pane-width sweep on a custom-column-width view; G12 needs a second-theme capture; G15 is P2-1"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "src/views/calendar-toolbar-renderer.ts"
@@ -31,7 +31,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-tasks"
       parent_session_id: null
-    completion_pct: 84
+    completion_pct: 90
     open_questions: []
     answered_questions:
       - "T001 landed: nine elements trued, both absences established across twenty"
@@ -737,8 +737,18 @@ title and 44x44 close on phone.
       the custom-column-width CSS this leg found already in the tree appears purpose-built to solve
       exactly that alignment, and a static read cannot tell whether it already does; P1-5 (the
       unscheduled drawer's own chip grammar — already superseded once by ADR-006's header-chip move,
-      unclear whether anything remains); P1-8's corpus recapture and every G-row's live
-      re-measurement, which needs the same recapture this row has needed since the P0 landing.
+      unclear whether anything remains).
+
+      **Corpus recaptured, G1-G15 re-measured 2026-09-06, same day.** `temporal.mjs`'s hand-built
+      month/week fixtures were rebuilt to Monday-first per-day chips (P1-8), a full `npm run
+      screenshots` recapture ran (556 entries; `tools/lane/css-lane.json` carries the release),
+      and `acceptance-criteria.md`'s G-row table was re-measured against the recaptured corpus and
+      the declaring CSS rather than re-asserted from the code change alone. **Twelve of fifteen
+      close: G1-G5, G7-G11, G13, G14.** Three stay open, each for a reason recorded on its own row,
+      not folded into this one: **G6** needs a live pane-width sweep on a custom-column-width view;
+      **G12** needs a second-theme capture the harness does not have yet; **G15** is the review's
+      own P2-1, ranked after this leg's P0/P1 scope. This row stays unticked on that basis — its own
+      "Green when" clause asks for all fifteen.
 - [x] T020 (2026-09-06 ~10:47 amendment) **Stagger overlapping phone-week blocks; put the minimum
       column back to 45px.** Operator ruling, verbatim *"Stagger overlaps at 45px"* — this
       **supersedes T018's landed 80px minimum**. Each later overlapping block is inset

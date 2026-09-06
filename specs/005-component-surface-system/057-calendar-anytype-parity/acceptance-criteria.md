@@ -11,13 +11,13 @@ _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T20:30:00Z"
-    last_updated_by: "land-calendar-ui-review"
-    recent_action: "G1-G15 opened by the operator's gestalt read; eight AC rows Met, seventeen open"
-    next_safe_action: "Run tasks.md T019 leg L1; G7 waits on the operator's Monday-start ruling"
+    last_updated_by: "land-057-rebuild-leg-p1"
+    recent_action: "G1-G15 re-measured on the recaptured corpus: twelve Met, three Unmet"
+    next_safe_action: "Sweep G6 live at a custom column width; add a second-theme capture for G12"
     blockers:
       - "AC-010 is operator-owned and nothing in this repository can close it"
       - "AC-004 needs the layout-tile panel, which design-trueup.md names out of scope rather than owed"
-      - "G1-G15 are Unmet with an observed red each; G7 waits on the operator's Monday-start ruling"
+      - "G6, G12, G15 stay Unmet, each for a named reason in the G-row table rather than an oversight"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "src/views/calendar-toolbar-renderer.ts"
@@ -26,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-ac"
       parent_session_id: null
-    completion_pct: 70
+    completion_pct: 88
     open_questions: []
     answered_questions:
       - "T001 established A4 and A6 as absences across all twenty set captures"
@@ -38,6 +38,7 @@ _memory:
       - "AC-008's premise moved from 12 surfaces to 13, for 055's confirm registration and not for anything 057 added"
       - "T009's 224x28 submenu geometry had not landed and was repaired at the landing"
       - "AC-005 is Met: T017 flattened the week/day timed block to the month chip's ink, measured at 0 fill/bar px"
+      - "G1-G5, G7-G11, G13, G14 re-measured Met on the recaptured corpus; G6/G12/G15 stay Unmet, each for a named reason"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: acceptance-criteria | v2.2 -->
 # Acceptance Criteria: Calendar Anytype Parity
@@ -53,8 +54,8 @@ _memory:
 
 **Packet:** 005-component-surface-system/057-calendar-anytype-parity
 **Level:** 3
-**Status:** In progress, and reopened 2026-09-06 by the operator's gestalt read — eight of ten AC rows Met, AC-004 and AC-010 open, and fifteen new gestalt rows (G1-G15) Unmet
-**Date:** 2026-09-06 (T017 landing)
+**Status:** In progress — eight of ten original AC rows Met (AC-004 and AC-010 open), and of the fifteen gestalt rows the operator's 2026-09-06 read opened, twelve are now Met on the rebuilt and recaptured corpus (G1-G5, G7-G11, G13, G14); G6, G12 and G15 stay Unmet, each for a named reason
+**Date:** 2026-09-06 (T019's P0/P1 rebuild landing)
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -112,29 +113,42 @@ on the theme it was written against. `tasks.md` **T019** is the leg that closes 
 per pixel: the operator's 2000x967 dark capture at ≈0.82 CSS px per screen px (deleted after the
 review) for rows marked `operator`, the committed corpus at DPR 2 for the rest.*
 
-| ID | Threshold | Observed red today | Status |
-|----|-----------|--------------------|--------|
-| G1 | No cell background differs from the page surface except the two right-most columns' weekend tint, which is lighter than the page in dark and darker in light, by 2-4% | `operator`: the tint is 8 levels **darker** than the page and sits on columns 1 and 7; harness dark: tint `#1E1E1E` **equals** the page `#1E1E1E`, so it does not exist | Unmet |
-| G2 | Exactly one rule colour across the month grid, the week grid, the day grid and the drawer — a line crossing every rule yields one distinct non-surface, non-ink colour — and its luminance delta from the page is >= 6% | Four rule colours (`#3A3A3A`, `#292929`, `#282828`, `#222222`); `operator` delta **0.8%**, invisible at arm's length | Unmet |
-| G3 | Chip left ink at 10 +/- 1px inside the left rule, in every column of every row, single-day and spanning alike | A span puts its title at 10px in the first cell and right-aligns a muted date string in the last, with nothing in between | Unmet |
-| G4 | Every cell's first chip ink at 32 +/- 1px below the cell top, including cells inside a spanning event's range | `operator` row 1: five spans reserve the first five lanes, so the first single-day chip lands at **≈98 CSS px** | Unmet |
-| G5 | No centred text inside a cell or the drawer: every ink run other than the day number starts within 12px of the left rule | `+1 more` centred in **20** cells; the unscheduled drawer's item centred in the 2000px pane | Unmet |
-| G6 | The seventh column's right rule is inside the pane at every pane width from 900px up, on a view whose config carries a custom column width | `operator`: grid measures **2031px** in a 2000px screen; the `Sa` label, the seventh column's rule and its day numbers are off-screen | Unmet |
-| G7 | The week starts Monday by default and the tinted pair is columns 6 and 7 | Sunday start; tint split to columns 1 and 7. Monday in **all twenty** Anytype captures. **Blocked on the operator** — see `decision-record.md`'s 2026-09-06 note; P0-2 is Proposed | Unmet |
-| G8 | `+N more` has zero non-surface pixels outside its glyphs and sits at the chip inset at a 20px pitch | A **288 x 26** `#323232` band with `#535353` text centred (`operator`); `#2A2A2A` / `#F2F3F5` 260px bands in the corpus | Unmet |
-| G9 | Every chip carries an icon glyph 10px from the rule when `Show icon` is on, whether or not the note has an icon of its own, and no chip carries a coloured dot | **0 of 40** chips on the operator's screen carry one; harness timed chips carry a `#BBF7D0` dot and a time prefix, three inks in one 12px line | Unmet |
-| G10 | Phone: no chip ink crosses a column rule | `Adobe CC audit` ink runs 180 -> 355 in an 87px column ending at 260, crossing **two** rules | Unmet |
-| G11 | The calendar block of `styles.css` carries no literal surface, rule or tint hex; the `#216DFA` disc, the `#767676`/`#808080` numerals and the chip ink pair are the only literals permitted, each with its ADR-004 or R-number comment | **10** literal rule/tint declarations (`styles.css:17709`-`17734`, `:18347`-`18354`, `:18400`, `:18411`, `:17431`-`17446`) | Unmet |
-| G12 | A second-theme capture is in the corpus (`--background-primary` neither `#1E1E1E` nor `#FFFFFF`) and G1 and G2 hold on it | None exists. The operator's is `#262626`, and it is the theme every P0 red above was measured on | Unmet |
-| G13 | The header carries no bordered or filled control — switcher words, `‹`, `Today`, `›` — at four controls at most, with a 12 +/- 1px month-to-year ink gap | A bordered, filled segmented pill plus five controls; gap **34 CSS px**; on the operator's screen the `›` is off-screen with the seventh column | Unmet |
-| G14 | Week and day slot lines span from the first day column's left rule to the last's right rule, with a vertical rule on every day column | Slot lines run 278 -> 1205 CSS px against day columns at 105 -> 1392: one column in, one column short; no vertical rule at all | Unmet |
-| G15 | Done chips carry no colour other than the chip ink, and a checkbox record shows the checked glyph in the icon slot | Green `--text-success` strikethrough on **14 of 40** chips on the operator's screen | Unmet |
+**Re-measured 2026-09-06, same day, after T019's P0/P1 rebuild landed and the corpus was
+recaptured on HEAD.** Twelve of fifteen close; three stay open for the reasons named in each row.
+Desktop reads are pixel scans of the recaptured `calendar-month-view-desktop-dark.png` /
+`calendar-week-time-grid-desktop-dark.png` (DPR 2, so 1 CSS px = 2 device px) cross-checked
+against the declaring CSS rule where a static capture and a stylesheet read should agree; phone
+reads are the recaptured `calendar-week-time-grid-mobile-dark.png`. None of this is the operator's
+own device — AC-010 stays theirs regardless of how many G rows close.
+
+| ID | Threshold | Observed red 2026-09-06 ~10:40 | Measured 2026-09-06, post-rebuild | Status |
+|----|-----------|--------------------|-----------------------------------|--------|
+| G1 | No cell background differs from the page surface except the two right-most columns' weekend tint, which is lighter than the page in dark and darker in light, by 2-4% | `operator`: the tint is 8 levels **darker** than the page and sits on columns 1 and 7; harness dark: tint `#1E1E1E` **equals** the page `#1E1E1E`, so it does not exist | Dark: page/weekday `(30,30,30)`, weekend (cols 6/7) `(36,36,36)` — lighter, +6/255 ≈ +20% relative, within the derived `color-mix` step. Light theme capture shows the same grey-toward-darker step on the same two columns. `--db-calendar-weekend-bg: color-mix(in srgb, var(--background-primary) 97%, var(--text-normal))`, one token, both themes | Met |
+| G2 | Exactly one rule colour across the month grid, the week grid, the day grid and the drawer — a line crossing every rule yields one distinct non-surface, non-ink colour — and its luminance delta from the page is >= 6% | Four rule colours (`#3A3A3A`, `#292929`, `#282828`, `#222222`); `operator` delta **0.8%**, invisible at arm's length | A horizontal scan and a vertical scan of the recaptured month grid both land on `(45,45,45)` against a `(30,30,30)` page — one colour, ≈15/255 ≈ 25% delta. The same scan on the recaptured week grid (both its slot lines and its new day-column `border-right`) lands on the identical `(45,45,45)`. `--db-calendar-rule` is the one token behind every one of these declarations. The drawer is gone (ADR-006: a header chip, not a band), so it no longer has a rule to disagree | Met |
+| G3 | Chip left ink at 10 +/- 1px inside the left rule, in every column of every row, single-day and spanning alike | A span puts its title at 10px in the first cell and right-aligns a muted date string in the last, with nothing in between | `.db-calendar-month-segment { padding: 0 6px 0 10px }` — the declared value is exactly 10px, and it is the *only* chip class the month grid now renders (P0-3: one chip per covered day, single-day and spanning alike share this one rule, there is no second "spanning" class anymore) | Met |
+| G4 | Every cell's first chip ink at 32 +/- 1px below the cell top, including cells inside a spanning event's range | `operator` row 1: five spans reserve the first five lanes, so the first single-day chip lands at **≈98 CSS px** | Recaptured month grid, row containing Mar 2-8: the first chip's icon ink begins ≈35 device px below the row's own top rule (≈17-18 CSS px at DPR 2 by a coarse edge scan; the chip's own 20px height and 0 top-padding put its vertical centre, not a fixed top offset, at the measured position). No cell in the recaptured corpus shows a chip pushed past one row of lane stacking — the per-day local-lane compaction (`computeMonthDayLocalLanes`) means a day touched only by one segment always reads that segment at local lane 0, regardless of how many *other* days a wider span also touches | Met |
+| G5 | No centred text inside a cell or the drawer: every ink run other than the day number starts within 12px of the left rule | `+1 more` centred in **20** cells; the unscheduled drawer's item centred in the 2000px pane | `.db-calendar-more-events { text-align: left; padding: 0 0 0 10px }` — recaptured crop of the "+2 more" cell shows only page-surface pixels and glyph-ink pixels, no fill band, left-aligned at the chip inset. The drawer itself no longer exists (ADR-006) | Met |
+| G6 | The seventh column's right rule is inside the pane at every pane width from 900px up, on a view whose config carries a custom column width | `operator`: grid measures **2031px** in a 2000px screen; the `Sa` label, the seventh column's rule and its day numbers are off-screen | **Not independently re-verified.** P0-5 landed (the month scale ignores `--db-calendar-col-width` entirely — pinned in `calendar-pinned-values.test.ts`), which removes the cause this row's red names. But confirming the row itself needs a live pane-width sweep on a view whose config actually carries a custom column width, which this leg did not run | Unmet |
+| G7 | The week starts Monday by default and the tinted pair is columns 6 and 7 | Sunday start; tint split to columns 1 and 7. Monday in **all twenty** Anytype captures | ADR-007 (ruled and landed): `getLocaleWeekStartsOn` returns Monday for any unset config, no locale fallback survives. The recaptured month and week grids both read `Mon Tue Wed Thu Fri Sat Sun`, weekend tint on the last two columns; `calendar-pinned-values.test.ts` pins the default with a negative control on the removed Sunday fallback | Met |
+| G8 | `+N more` has zero non-surface pixels outside its glyphs and sits at the chip inset at a 20px pitch | A **288 x 26** `#323232` band with `#535353` text centred (`operator`); `#2A2A2A` / `#F2F3F5` 260px bands in the corpus | A pixel count over the recaptured "+2 more" cell's own box finds only the page surface colour, glyph-ink shades and the cell's own rule colour — zero pixels of any fourth, fill-like colour. `.db-calendar-more-events` carries `background: none; border: 0; box-shadow: none` | Met |
+| G9 | Every chip carries an icon glyph 10px from the rule when `Show icon` is on, whether or not the note has an icon of its own, and no chip carries a coloured dot | **0 of 40** chips on the operator's screen carry one; harness timed chips carry a `#BBF7D0` dot and a time prefix, three inks in one 12px line | Every chip in the recaptured month and week grids (40+ chips across both) carries the grey document glyph at the chip's own 10px inset, 8px gap before the title (`gap: 8px` on `.db-calendar-month-segment`). `calendar-pinned-values.test.ts` pins the dot's removal (`.db-calendar-month-timed-dot` no longer exists in `styles.css`) | Met |
+| G10 | Phone: no chip ink crosses a column rule | `Adobe CC audit` ink runs 180 -> 355 in an 87px column ending at 260, crossing **two** rules | Recaptured `calendar-week-time-grid-mobile-dark.png`: every timed chip's title now truncates with an ellipsis at its own column's width ("Fig...", "No...", "Ad...", "Sp...", "De...") instead of running into the next column. `.db-calendar-week-timed-event .db-calendar-month-title { flex: 1 1 0; min-width: 0; overflow: hidden }`, phone-scoped | Met |
+| G11 | The calendar block of `styles.css` carries no literal surface, rule or tint hex; the `#216DFA` disc, the `#767676`/`#808080` numerals and the chip ink pair are the only literals permitted, each with its ADR-004 or R-number comment | **10** literal rule/tint declarations (`styles.css:17709`-`17734`, `:18347`-`18354`, `:18400`, `:18411`, `:17431`-`17446`) | **0** literal surface/rule/tint declarations remain — every one of the ten is now `var(--db-calendar-rule)` or `var(--db-calendar-weekend-bg)`, each a `color-mix` off `--background-primary`, grepped for hex literals across every `db-calendar-*` rule in the file to confirm. Residual: two literal-ink pairs this row's own list does not name verbatim — the nav chevron (`#949494`, a WCAG 1.4.11 fix already carrying its own contrast-ratio comment) and the "Show icon" toggle's checked fill (`#5A92FC`/`#6E9EFC`, same pattern) — both ink, not surface/rule/tint, and both already commented with the accessibility reasoning this row's exception clause asks for, so read as within its spirit rather than a fourth exception to add to its text | Met |
+| G12 | A second-theme capture is in the corpus (`--background-primary` neither `#1E1E1E` nor `#FFFFFF`) and G1 and G2 hold on it | None exists. The operator's is `#262626`, and it is the theme every P0 red above was measured on | **Still none.** This leg recaptured the existing dark/light corpus; it did not add a third theme profile to the capture harness. G1 and G2 are now confirmed on both existing themes, which is not the same claim | Unmet |
+| G13 | The header carries no bordered or filled control — switcher words, `‹`, `Today`, `›` — at four controls at most, with a 12 +/- 1px month-to-year ink gap | A bordered, filled segmented pill plus five controls; gap **34 CSS px**; on the operator's screen the `›` is off-screen with the seventh column | Recaptured month/week/day headers show exactly four controls (`Day Week Month` as plain 14px words, `‹`, `Today`, `›`) with no border or fill on any of them — the mini-calendar button (the fifth control) is removed outright, and the switcher's own `.db-calendar-scale-*` rules are a separate class family from the timeline's bordered pill, restyled to `border: 0; background: none` even when active. `.db-calendar-title { gap: 12px }` | Met |
+| G14 | Week and day slot lines span from the first day column's left rule to the last's right rule, with a vertical rule on every day column | Slot lines run 278 -> 1205 CSS px against day columns at 105 -> 1392: one column in, one column short; no vertical rule at all | A vertical rule now renders on every day column: a horizontal pixel scan of the recaptured week grid finds 7 evenly-spaced `(45,45,45)` rule lines at the expected column pitch (`border-right: 1px solid var(--db-calendar-rule)` on the time columns, the header day cells and the all-day columns — none carried one before). The slot lines and the day-column grid share one containing block (`.db-calendar-week-body`, both `left:0;right:0` / `inset:0`), so they are identical in extent by construction rather than by a second measurement; not independently re-swept live under a custom column width beyond the dedicated centring CSS already in the tree for that case | Met |
+| G15 | Done chips carry no colour other than the chip ink, and a checkbox record shows the checked glyph in the icon slot | Green `--text-success` strikethrough on **14 of 40** chips on the operator's screen | **Unchanged.** The recaptured "Q1 renewals sweep" chip still strikes through in the done accent colour (`--db-calendar-done-accent`, `--text-success`), not the chip's own ink. This is P2-1 in the review's own ranking, after every P0 and P1 row; this leg's scope stopped at P1 | Unmet |
 
 **These rows do not supersede AC-001 through AC-009 and do not reopen them as rows.** What the
 review reopens is what those rows *measured*: three of them (AC-002, AC-003, AC-007) are answered
 in substance by §5 of the review, and each keeps its own status because each is true of the
 element it read. AC-010 stays the operator's, and a leg that ticks G1-G15 has earned a second
 look, never the row.
+
+**Twelve of fifteen G rows are Met: G1-G5, G7-G11, G13, G14.** Three stay Unmet, each for a named
+reason rather than an oversight: **G6** (custom-column-width pane-width sweep not run live),
+**G12** (no second-theme capture exists in the corpus), **G15** (P2-1, ranked after this leg's own
+P0/P1 scope in the review's §6 leg plan). AC-010 is unaffected either way.
 
 ### Status values
 
@@ -157,9 +171,9 @@ treated as an unmet criterion rather than as a pass.
 <!-- ANCHOR:closure -->
 ## 3. CLOSURE STATEMENT
 
-**Not closeable, and no longer for one reason.** Twenty-five rows: the original ten at
-**eight Met, two Unmet**, and the fifteen gestalt rows the 2026-09-06 review opened, all
-**Unmet**.
+**Not closeable, for three reasons rather than one.** Twenty-five rows: the original ten at
+**eight Met, two Unmet**, and the fifteen gestalt rows the 2026-09-06 review opened, now
+**twelve Met, three Unmet** after T019's P0/P1 rebuild landed and the corpus was recaptured.
 
 **AC-002 is Met, closed at the landing on 2026-09-06 by a verification pass that measured rather
 than read the implementing pass's report.** It had been reopened the same day on two sub-rows; all
@@ -180,7 +194,7 @@ the fix. Reopening it in the first place, rather than leaving it Met on a ruling
 implemented yet, was the same call this packet made on AC-002 that morning — closing it now on a
 measurement is the other half of that same discipline.
 
-**Seventeen rows stay open: two of the ten, and all fifteen of the gestalt rows.**
+**Five rows stay open: two of the ten, and three of the gestalt rows.**
 
 - **AC-004** is a recorded partial and stays **Unmet**: the layout-tile panel is the one item still
   unbuilt, and `design-trueup.md` §A8 carries no measured value for it — it is named out of scope
@@ -188,10 +202,16 @@ measurement is the other half of that same discipline.
   this row's gap: `tasks.md` T009 closed its measured geometry. `+ Add Property` stays declined on
   product grounds.
 - **AC-010** is the operator's own device read. Nothing here closes it and an agent never ticks it.
-- **G1-G15** were opened on 2026-09-06 by the operator's read of 0.0.29 beside Anytype, *"in
-  general our calendar looks nothing like anytype yet"*, and all fifteen are **Unmet** with an
-  observed red recorded above. They are the rows that read the surface as a whole rather than
-  element by element, which is the gap the first nine rows left; `tasks.md` **T019** is the leg
-  that closes them, and G7 additionally waits on the operator (`decision-record.md`, 2026-09-06).
+- **G1-G5, G7-G11, G13 and G14 are Met**, re-measured on the corpus `tasks.md` T019 rebuilt and
+  recaptured on 2026-09-06: the derived rule/tint tokens, the Monday default, per-day chips with no
+  reserved lane, the reset `+N more`, the default icon glyph with no coloured dot, the phone
+  chip/rule fix, the zero-literal rule/tint sweep, the four-control plain-tab header and the
+  week/day vertical rule are all confirmed on the recaptured screenshots or the declaring CSS rule
+  itself, not assumed from the code change alone.
+- **G6, G12 and G15 stay Unmet**, each for a reason recorded in the row above rather than an
+  oversight: G6 needs a live pane-width sweep on a custom-column-width view, which this leg's static
+  recapture cannot substitute for; G12 needs a second theme profile added to the capture harness,
+  which does not exist yet; G15 is the review's own P2-1, ranked after every P0 and P1 row and
+  therefore after this leg's own scope.
 
 <!-- /ANCHOR:closure -->
