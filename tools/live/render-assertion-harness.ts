@@ -456,6 +456,7 @@ export interface ScenarioSpec {
    * room for a title in.
    */
   calendarOverlapTimed?: boolean;
+  /**
    * Opt-in, renderer "calendar" only: strips the date field from one bench row so the grid draws
    * a real unscheduled record and the header's "Unscheduled · N" chip has something to count,
    * rather than every calendar capture stubbing that surface to zero rows.

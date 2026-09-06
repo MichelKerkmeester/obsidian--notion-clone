@@ -88,7 +88,11 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     // unreferenced — this greps the raw stylesheet text rather than one selector's block, so a
     // rule reintroduced under a new selector name would still be caught by its class name.
     expect(STYLES).not.toContain(".db-calendar-backlog");
-    const body = ruleBody(".note-database-container .db-calendar-unscheduled-chip");
+    // The selector carries the shared control classes deliberately: the Today-label rule matches
+    // `.is-text` at the same weight, so the chip class alone would lose the cascade and paint the
+    // normal ink while this pin still read green. The rendered pair is compared in the browser
+    // harness's own calendar assertions; this pin holds the declaration it depends on.
+    const body = ruleBody(".note-database-container .db-calendar-nav-button.is-text.db-calendar-unscheduled-chip");
     expect(body).toContain("color: var(--text-muted)");
   });
 

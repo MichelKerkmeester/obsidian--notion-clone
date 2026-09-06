@@ -18482,12 +18482,22 @@ body.is-mobile .note-database-container .db-calendar-month-time {
    the affordance stays, just subtler — present only when N >= 1 (the
    renderer never creates the element at N = 0), opening the shared
    owned-menu popover/sheet rather than an always-visible empty-feeling
-   drawer. */
-.note-database-container .db-calendar-unscheduled-chip {
+   drawer.
+
+   Carries `.db-calendar-nav-button.is-text` in the selector rather than the
+   chip class alone: the Today-label rule above matches `.is-text` at the same
+   three-class weight plus a `:not()`, so a lone `.db-calendar-unscheduled-chip`
+   rule loses the cascade and the muted colour never paints — measured at
+   `#DCDDDE` (`--text-normal`) in a real render before this selector was
+   widened. Matching that weight and sitting later in the file is what makes
+   the declaration below the one that wins. Height, radius, padding and the
+   52px minimum stay the shared control grammar's; only the ink is the chip's
+   own, because a count beside the title should read quieter than `Today`. */
+.note-database-container .db-calendar-nav-button.is-text.db-calendar-unscheduled-chip {
   color: var(--text-muted);
 }
 
-.note-database-container .db-calendar-unscheduled-chip:hover {
+.note-database-container .db-calendar-nav-button.is-text.db-calendar-unscheduled-chip:hover {
   color: var(--text-normal);
 }
 
