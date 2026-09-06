@@ -156,7 +156,7 @@ Nothing is migrated before the list of what must be migrated exists. `044`'s ins
       specifies: inset 8px left, right and bottom, radius 16px, measured 8/382/836 in a 390x844
       viewport. So there is no stacking defect here, and the ink the report read through the child
       was the child's own missing surface, which `be578988` closes.
-- [ ] T025 (2026-09-06 amendment) Recapture the depth-2 and depth-3 stacked scenarios after T024 and
+- [x] T025 (2026-09-06 amendment) Recapture the depth-2 and depth-3 stacked scenarios after T024 and
       read them by eye across both themes, then re-run `node tools/live/sheet-grammar.mjs` and
       require the registry to still read 13 surfaces and 31 pairs at exit 0 from `$?`
 
@@ -183,6 +183,50 @@ Nothing is migrated before the list of what must be migrated exists. `044`'s ins
       operator's own `properties edit property` pair at `5fccf193`. The threshold is left as written
       rather than edited, because the number a future run should require is a decision about what
       the registry ought to hold, not a transcription of what it holds today.
+
+      **Closed, 2026-09-06 — the depth-3 gap.** Three `constructed-depth3-*` scenarios
+      (`tools/screenshots/constructed-scenarios.mjs`) register the three chains
+      `sheet-grammar.mjs`'s `REGISTERED_STACKED_PAIRS` mounts at `depth: 3`, each built through the
+      same two production openers the lane's own `openPairChild`/`openSingleChild` use (a host-modal
+      stand-in or an owned menu for the first level, `openDropdownMenu` for the second), never a
+      hand-built approximation: **`constructed-depth3-property-type-picker`** (parent
+      `column-manager`, first a "Create property" host-modal stand-in, second a real dropdown —
+      `properties property type picker`), **`constructed-depth3-column-submenu`** (parent
+      `record-detail`, first an owned "Column" menu, second a real dropdown — `record column
+      submenu`), **`constructed-depth3-import-confirm-dropdown`** (parent `filter-panel`, first an
+      "Import" host-modal stand-in, second a real dropdown — `import confirm dropdown chain`). Phone
+      only, both themes, 6 PNGs. Sources name `surface-shell.ts`, `mobile-bottom-sheet.ts`,
+      `popover-position.ts`, `overlay-stack.ts` and `dropdown-field.ts` on every chain, plus each
+      chain's own parent renderer and first-level opener (`owned-menu.ts` for the menu chain only).
+      `manifest-schema.mjs`'s `CONSTRUCTED_RENDERERS` gained `"depth3-stack"`;
+      `constructed-capture.test.mjs`'s exhaustive id list gained the three ids.
+
+      **Captured with `--only`**, one scenario per invocation, then a full `npm run screenshots` to
+      write the manifest (`--only` runs leave it unchanged by design) — 582 entries, exit 0.
+      `node tools/screenshots/verify.mjs` → exit 0, `582 entries match their sources, and none is
+      blank or identical across themes`.
+
+      **All six opened and read.** Each shows the same structural shape: the parent sheet dimmed
+      underneath (two scrim steps stacking, per `051/design-trueup.md` §2b's measured 0.519 then
+      0.710), and the top (second) child — the real dropdown, which on phone presents as its own
+      bottom sheet — floating over it per C10's floating frame shape, with its own single close
+      control top-right. The first-level child (the host-modal stand-in or the owned menu) is
+      structurally mounted beneath the dropdown but visually fully occluded by it: opening a real
+      dropdown over a same-height phone sheet buries the sheet under it rather than revealing both,
+      which is production behaviour, not a capture defect — the same reason
+      `051/design-trueup.md` §4 argues for converting the sheet-shaped chains to an in-place
+      sub-page rather than stacking a third sheet at all. `property-type-picker` and
+      `column-submenu` show the parent's own rows peeking above the child stack (`column-manager`'s
+      property list; `record-detail`'s `row-0` fields); `import-confirm-dropdown`'s parent
+      (`filter-panel` with no configured rules) renders no visible content of its own, so the two
+      scrims read as a plain dimmed field behind the child, not as a defect — checked against
+      `filter-panel`'s own empty-state fixture before being read as correct.
+
+      **`css-lane` untouched**, per this leg's own instruction: `styles.css` did not change, so no
+      release entry was added or edited. `node tools/lane/check-lane.mjs` reads its ordinary,
+      unrelated exit (a stylesheet-driven review obligation the current holder, `056-board-anytype-
+      parity`, owes, not this leg) plus this leg's own six new captures, which is the expected state
+      of a lane this leg has no standing to sign off — not a claim that command exited 0.
 - [x] T026 The permanent regress-test for the gap `048`'s landing named: no screenshot scenario
       modelled a `DbModal` presented as a phone sheet, so the corpus could not regress-test row 59's
       fix. Four `constructed-modal-sheet-*` scenarios (`tools/screenshots/constructed-scenarios.mjs`)
@@ -217,7 +261,7 @@ Nothing is migrated before the list of what must be migrated exists. `044`'s ins
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-- [ ] All tasks marked `[x]` — T022 (the operator's) and T025 (no depth-3 capture scenario exists) open
+- [ ] All tasks marked `[x]` — T022 (the operator's) open; T025 closed 2026-09-06
 - [x] No `[B]` blocked tasks remaining — D1 was the only block and it is ACCEPTED
 - [ ] Manual verification passed — awaits the operator's device read; 0.0.24 through 0.0.29 have shipped with no reply on this surface
 <!-- /ANCHOR:completion -->

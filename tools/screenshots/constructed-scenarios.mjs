@@ -168,11 +168,111 @@ window.__mountConstructedModalSheet = (spec) => {
 };
 `;
 
+// A depth-3 stacked chain: a parent sheet, a first child (a host-modal stand-in or an owned
+// menu) opened over it, and a dropdown opened over that child in turn — the same three shapes
+// `tools/live/sheet-grammar.mjs`'s `openPairChild`/`openSingleChild` build to measure its own
+// `depth: 3` registry rows, reused here rather than re-invented so the capture shows the exact
+// chain the lane already asserts against, not an approximation of it. `runRenderAssertions` and
+// `createHostModalStandIn` are already in scope from the preamble and `MODAL_SHEET_ENTRY_BODY`
+// respectively; only the openers this chain adds are imported here.
+const STACKED_DEPTH3_ENTRY_BODY = `
+import { attachSheetChromeToModal } from "${fileURLToPath(new URL("../../src/views/mobile-bottom-sheet.ts", import.meta.url)).replace(/\\/g, "/")}";
+import { keepSheetPlaced, placeSheet } from "${fileURLToPath(new URL("../../src/views/popover-position.ts", import.meta.url)).replace(/\\/g, "/")}";
+import { openDropdownMenu } from "${fileURLToPath(new URL("../../src/views/dropdown-field.ts", import.meta.url)).replace(/\\/g, "/")}";
+import { createOwnedMenu } from "${fileURLToPath(new URL("../../src/views/owned-menu.ts", import.meta.url)).replace(/\\/g, "/")}";
+
+const stackedLaneNewestSheet = () => Array.from(document.body.querySelectorAll(".db-mobile-bottom-sheet")).at(-1) || null;
+
+// Out of flow so the anchor cannot change the parent's own height, and inside the parent because
+// that is what the production opener resolves the anchored surface against.
+const stackedLaneAnchor = (parent, label) => {
+  const anchor = document.createElement("button");
+  anchor.className = "stacked-lane-anchor";
+  anchor.type = "button";
+  anchor.textContent = label;
+  anchor.style.position = "absolute";
+  anchor.style.left = "0";
+  anchor.style.top = "0";
+  anchor.style.width = "1px";
+  anchor.style.height = "1px";
+  anchor.style.opacity = "0";
+  anchor.style.pointerEvents = "none";
+  parent.appendChild(anchor);
+  return anchor;
+};
+
+const stackedLaneDropdownOptions = () => Array.from({ length: 7 }, (_, index) => ({
+  value: "stacked-option-" + index,
+  text: "Option " + (index + 1),
+}));
+
+// The first level's "modal" shape: the same faithful host-modal stand-in the two-level
+// constructed-modal-sheet-* scenarios above use and sheet-grammar.mjs's own openHostModalChild
+// mounts — a native title element and a native close button beside the shipped form, chromed by
+// the real attachSheetChromeToModal.
+const openStackedLaneModal = (title) => {
+  const { contentEl: content, modalEl } = createHostModalStandIn();
+  const heading = document.createElement("h3");
+  heading.textContent = title;
+  content.appendChild(heading);
+  const body = document.createElement("div");
+  body.className = "db-modal-help";
+  body.textContent = "Confirm this change";
+  content.appendChild(body);
+  attachSheetChromeToModal(modalEl, true, () => {}, { title, getTitle: () => title });
+  placeSheet(modalEl);
+  keepSheetPlaced(modalEl);
+  return modalEl;
+};
+
+// The first level's "menu" shape: the same owned-menu construction sheet-grammar.mjs's
+// openMenuChild builds.
+const openStackedLaneMenu = (parent, title) => {
+  const anchor = stackedLaneAnchor(parent, title);
+  const menu = createOwnedMenu(document, { title });
+  menu.addSection(title);
+  menu.addRow({ icon: "check", label: "Selected item", selected: true });
+  menu.addRow({ icon: "settings-2", label: "More options", submenu: true });
+  menu.addRow({ icon: "trash-2", label: "Remove", warning: true });
+  menu.showAt({ anchor });
+  return menu.el;
+};
+
+// The second level, always a dropdown, anchored inside whichever first-level panel was built.
+const openStackedLaneDropdown = (parent, title) => {
+  const anchor = stackedLaneAnchor(parent, title);
+  openDropdownMenu({
+    anchor,
+    label: title,
+    options: stackedLaneDropdownOptions(),
+    value: "stacked-option-0",
+    closeOnSelect: false,
+  });
+  return stackedLaneNewestSheet();
+};
+
+window.__mountConstructedDepth3Stack = (spec) => {
+  let parentSheet = null;
+  runRenderAssertions(document.body, spec.parent, "", () => {
+    parentSheet = document.body.querySelector(".db-mobile-bottom-sheet");
+  });
+  if (!parentSheet) return false;
+
+  const firstPanel = spec.first === "menu"
+    ? openStackedLaneMenu(parentSheet, spec.title)
+    : openStackedLaneModal(spec.title);
+  if (!firstPanel) return false;
+
+  const secondPanel = openStackedLaneDropdown(firstPanel, spec.title);
+  return Boolean(secondPanel);
+};
+`;
+
 let constructedBundle = null;
 
 export async function prepareConstructedBundle() {
   if (constructedBundle) return constructedBundle;
-  const built = await buildRenderAssertionBundle(CONSTRUCTED_ENTRY_BODY + MODAL_SHEET_ENTRY_BODY);
+  const built = await buildRenderAssertionBundle(CONSTRUCTED_ENTRY_BODY + MODAL_SHEET_ENTRY_BODY + STACKED_DEPTH3_ENTRY_BODY);
   if (built.missingSources.length > 0) {
     throw new Error("constructed capture: the bundle no longer imports "
       + `${built.missingSources.join(", ")} — a capture that does not bundle the shipped `
@@ -364,6 +464,20 @@ export async function mountConstructedModalSheet(page, device, theme, spec) {
   return ready ? page.$("#shot") : null;
 }
 
+// A depth-3 stacked chain portals every one of its three surfaces onto `document.body`, exactly
+// like the two-level `mountConstructedModalSheet` above, so the subject is captured off the
+// whole viewport rather than `#shot`.
+export async function mountConstructedDepth3Stack(page, device, theme, spec) {
+  if (!constructedBundle) {
+    throw new Error("constructed capture: no bundle prepared — build it before mounting");
+  }
+  const host = join(constructedBundle.work, `host-depth3-stack-${spec.id}-${device.id}-${theme}.html`);
+  writeFileSync(host, constructedHostHtml(device, theme));
+  await page.goto(pathToFileURL(host).href, { waitUntil: "load" });
+  const ready = await page.evaluate((s) => window.__mountConstructedDepth3Stack(s), spec);
+  return ready ? page.$("#shot") : null;
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 4. THE CONSTRUCTED SCENARIO CONTRACT
 // ───────────────────────────────────────────────────────────────────
@@ -501,6 +615,42 @@ function constructedModalSheetScenario(name, opts) {
       id: name,
       modal: opts.modal,
       stacked: Boolean(opts.stacked),
+    }),
+  };
+}
+
+// The shared shell mechanics every depth-3 chain below rests on, regardless of which two openers
+// build its first level. Chain-specific sources — the parent's own renderer, and `owned-menu.ts`
+// for the one chain whose first level is a menu rather than a host-modal stand-in — are added per
+// scenario rather than folded in here, so a change to one chain's own opener does not mark the
+// other two stale.
+const DEPTH3_SHELL_SOURCES = [
+  "src/views/surface-shell.ts",
+  "src/views/mobile-bottom-sheet.ts",
+  "src/views/popover-position.ts",
+  "src/views/overlay-stack.ts",
+  "src/views/dropdown-field.ts",
+  "tools/live/host-modal-stand-in.ts",
+].concat(SHARED_CONSTRUCTED_SOURCES);
+
+function constructedDepth3Scenario(name, opts) {
+  return {
+    id: `constructed-depth3-${name}`,
+    title: opts.title,
+    group: "panels",
+    capture: "viewport",
+    // Same reasoning as the two-level modal-sheet family: the sheet presentation these three
+    // levels all take is phone-only.
+    devices: ["mobile"],
+    renderer: "depth3-stack",
+    bag: "file-view",
+    sources: opts.sources,
+    note: opts.note,
+    mount: async (page, device, theme) => mountConstructedDepth3Stack(page, device, theme, {
+      id: name,
+      parent: opts.parent,
+      first: opts.first,
+      title: opts.chainTitle,
     }),
   };
 }
@@ -1273,6 +1423,57 @@ export const CONSTRUCTED_SCENARIOS = [
       .concat(["src/views/modals/confirm-modal.ts", "src/views/confirm-sheet.ts"], STACKED_PARENT_SOURCES),
     note: "The same real ConfirmModal, stacked over the column-manager sheet — the operator's pair, "
       + "the confirm leg.",
+  }),
+
+  // ── Depth-3 stacked chains. `tools/live/sheet-grammar.mjs`'s `REGISTERED_STACKED_PAIRS`
+  // registers exactly three pairs at `depth: 3`; the lane mounts and measures all three, but no
+  // scenario here photographed any of them until now. Each chain below is the same parent
+  // renderer and the same two openers the lane's own `openPairChild` builds, so the capture shows
+  // what the lane already asserts against.
+  constructedDepth3Scenario("property-type-picker", {
+    title: "Create property → format picker, stacked three deep over the Properties sheet (constructed)",
+    parent: { renderer: "column-manager", bag: "file-view", captureData: true },
+    first: "modal",
+    chainTitle: "Create property",
+    sources: DEPTH3_SHELL_SOURCES.concat(STACKED_PARENT_SOURCES),
+    note: "sheet-grammar.mjs's own \"properties property type picker\" pair (depth: 3): the "
+      + "Properties sheet, a \"Create property\" host-modal stand-in stacked over it, and a real "
+      + "dropdown opened over that in turn. The sheet family's own true-up converts this chain's "
+      + "real counterpart to an in-place sub-page on the strength of Anytype's own capture; the "
+      + "pair stays registered at depth 3 here because that conversion has not landed.",
+  }),
+  constructedDepth3Scenario("column-submenu", {
+    title: "Column menu → submenu, stacked three deep over the record sheet (constructed)",
+    parent: { renderer: "record-detail", bag: "file-view", captureData: true },
+    first: "menu",
+    chainTitle: "Column",
+    sources: DEPTH3_SHELL_SOURCES.concat([
+      "src/views/owned-menu.ts",
+      "src/views/record-detail-panel.ts",
+      "tools/bench/board-render-bench.ts",
+      "src/views/card-field-renderer.ts",
+      "src/views/record-surface/property-row.ts",
+    ]),
+    note: "sheet-grammar.mjs's own \"record column submenu\" pair (depth: 3): the record sheet, an "
+      + "owned menu titled \"Column\" stacked over it, and a real dropdown opened over the menu in "
+      + "turn — a menu-over-menu chain, the one shape Anytype's own captures confirm does stack "
+      + "three deep.",
+  }),
+  constructedDepth3Scenario("import-confirm-dropdown", {
+    title: "Import confirm → dropdown, stacked three deep over the filter sheet (constructed)",
+    parent: { renderer: "filter-panel", bag: "file-view", captureData: true },
+    first: "modal",
+    chainTitle: "Import",
+    sources: DEPTH3_SHELL_SOURCES.concat([
+      "src/views/filter-panel-renderer.ts",
+      "tools/bench/table-render-bench.ts",
+      "src/views/date-value-picker.ts",
+      "src/data/view-filter-tree.ts",
+    ]),
+    note: "sheet-grammar.mjs's own \"import confirm dropdown chain\" pair (depth: 3): the filter "
+      + "sheet, an \"Import\" host-modal stand-in stacked over it, and a real dropdown opened over "
+      + "that in turn — a dropdown-over-confirm chain, the other shape kept at depth 3 because it "
+      + "stacks a menu family, not a second sheet.",
   }),
 ];
 

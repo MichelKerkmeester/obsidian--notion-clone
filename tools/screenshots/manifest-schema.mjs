@@ -45,7 +45,7 @@ export const CONSTRUCTED_RENDERERS = [
   "column-width-adjuster",
   "summary", "owned-menu", "cell-editors", "date-picker", "icon-picker", "color-picker",
   "relation-values", "file-fields", "number-display", "record-icon", "dropdown",
-  "empty-state", "column-header", "card-covers", "modal-sheet",
+  "empty-state", "column-header", "card-covers", "modal-sheet", "depth3-stack",
 ];
 export const CONSTRUCTED_BAGS = ["file-view", "embed"];
 export const CONSTRUCTED_SCALES = ["month", "week", "day", "quarter", "year"];

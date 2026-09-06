@@ -763,6 +763,36 @@ openColumnWidthAdjuster's own module entry over a real currency column from the 
 
 Sources: `src/views/column-width.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `src/views/popover-auto-close.ts`
 
+### Column menu → submenu, stacked three deep over the record sheet (constructed)
+
+sheet-grammar.mjs's own "record column submenu" pair (depth: 3): the record sheet, an owned menu titled "Column" stacked over it, and a real dropdown opened over the menu in turn — a menu-over-menu chain, the one shape Anytype's own captures confirm does stack three deep.
+
+| dark | light |
+|---|---|
+| ![constructed-depth3-column-submenu dark](notion-clone/panels/constructed-depth3-column-submenu-mobile-dark.png) | ![constructed-depth3-column-submenu light](notion-clone/panels/constructed-depth3-column-submenu-mobile-light.png) |
+
+Sources: `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `src/views/overlay-stack.ts`, `src/views/dropdown-field.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/owned-menu.ts`, `src/views/record-detail-panel.ts`, `tools/bench/board-render-bench.ts`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`
+
+### Import confirm → dropdown, stacked three deep over the filter sheet (constructed)
+
+sheet-grammar.mjs's own "import confirm dropdown chain" pair (depth: 3): the filter sheet, an "Import" host-modal stand-in stacked over it, and a real dropdown opened over that in turn — a dropdown-over-confirm chain, the other shape kept at depth 3 because it stacks a menu family, not a second sheet.
+
+| dark | light |
+|---|---|
+| ![constructed-depth3-import-confirm-dropdown dark](notion-clone/panels/constructed-depth3-import-confirm-dropdown-mobile-dark.png) | ![constructed-depth3-import-confirm-dropdown light](notion-clone/panels/constructed-depth3-import-confirm-dropdown-mobile-light.png) |
+
+Sources: `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `src/views/overlay-stack.ts`, `src/views/dropdown-field.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/filter-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `src/views/date-value-picker.ts`, `src/data/view-filter-tree.ts`
+
+### Create property → format picker, stacked three deep over the Properties sheet (constructed)
+
+sheet-grammar.mjs's own "properties property type picker" pair (depth: 3): the Properties sheet, a "Create property" host-modal stand-in stacked over it, and a real dropdown opened over that in turn. The sheet family's own true-up converts this chain's real counterpart to an in-place sub-page on the strength of Anytype's own capture; the pair stays registered at depth 3 here because that conversion has not landed.
+
+| dark | light |
+|---|---|
+| ![constructed-depth3-property-type-picker dark](notion-clone/panels/constructed-depth3-property-type-picker-mobile-dark.png) | ![constructed-depth3-property-type-picker light](notion-clone/panels/constructed-depth3-property-type-picker-mobile-light.png) |
+
+Sources: `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `src/views/overlay-stack.ts`, `src/views/dropdown-field.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/column-manager-renderer.ts`, `tools/bench/table-render-bench.ts`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
+
 ### Filter panel with active conditions (constructed)
 
 FilterPanelRenderer's own render over a flat AND group of three rules, so the panel header defers its logic button to the group's own dropdown.

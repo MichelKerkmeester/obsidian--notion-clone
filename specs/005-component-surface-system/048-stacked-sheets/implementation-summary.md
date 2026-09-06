@@ -222,15 +222,21 @@ rather than live-only: four `constructed-modal-sheet-*` scenarios mount a real `
 through the real `attachSheetChromeToModal`, standalone and stacked, both themes. The parent-bleed
 half of the report was cleared by measurement rather than fixed, and `e632a1e1` records that.
 
-**The open rows.** Two, and the first is the operator's. **AC-009 / `goal.md`'s seventh criterion /
+**The open rows.** One now, and it is the operator's. **AC-009 / `goal.md`'s seventh criterion /
 `tasks.md` T022** is the device read: the operator opens the Properties sheet, the filter sheet's
 operator dropdown and its property picker on iOS and reports each as one stack rather than two
 sheets. Nothing here closes it, and 0.0.24 through 0.0.29 have shipped with no reply on it.
-**`tasks.md` T025** is not the operator's and stays open on one concrete gap: no depth-3 stacked
-capture scenario exists — `tools/screenshots/constructed-scenarios.mjs` registers only the two
-depth-2 stacked ids, so the three depth-3 chains the lane mounts and measures are never photographed.
-That row's registry threshold (13 surfaces, 31 pairs) is also stale against the observed 14 and 32
-and is left as written rather than transcribed forward.
+**`tasks.md` T025 closed, 2026-09-06**: three `constructed-depth3-*` scenarios
+(`tools/screenshots/constructed-scenarios.mjs`) register the three depth-3 chains the lane mounts
+and measures — `properties property type picker`, `record column submenu`, `import confirm dropdown
+chain` — each built through the same production openers (`openDropdownMenu`, `createOwnedMenu`,
+`attachSheetChromeToModal` over the host-modal stand-in) the lane's own `openPairChild` uses. Six
+PNGs, phone only, both themes, all opened and read: each shows the parent dimmed under two stacked
+scrims and the top (second) child floating over it per C10, with the first-level child structurally
+mounted but visually occluded by the third layer sitting at the same frame — production behaviour,
+not a capture defect, and the same reason `051/design-trueup.md` §4 argues for converting the
+sheet-shaped chains to an in-place sub-page. That row's registry threshold (13 surfaces, 31 pairs) is
+still stale against the observed 14 and 32 and is left as written rather than transcribed forward.
 
 **Two counts in the sections above are dated, not wrong.** "31 stacked pairs" and "253 failing
 assertions against the pre-fix tree" were read when 31 pairs were registered. `3ae2818e` added the
