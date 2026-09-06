@@ -340,7 +340,7 @@ const SPEC_OPTIONS = [
   "recordBodyVariant", "editorKind", "includeTime", "boardImageField",
   "boardEmptyColumn", "tableGroups", "tableFooter", "fullStatusPalette",
   "recordIconColumn", "calendarRecordIcon", "columnHeaderController", "longHeaderLabel", "migratedFromList",
-  "viewConfigVariant", "boardCardFieldsHidden", "tableColumnCount", "recordPlacement",
+  "viewConfigVariant", "boardCardFieldsHidden", "tableColumnCount", "recordPlacement", "dropdownSearch",
 ];
 
 function constructedScenario(view, opts) {
@@ -1008,6 +1008,18 @@ export const CONSTRUCTED_SCENARIOS = [
     sources: constructedSources("src/views/dropdown-field.ts", "tools/bench/table-render-bench.ts"),
     note: "openDropdownMenu's own entry with a selected option, a plain one and a disabled one "
       + "carrying the reason its tooltip exists to surface.",
+  }),
+  constructedScenario("dropdown-search", {
+    renderer: "dropdown",
+    dropdownSearch: true,
+    group: "components",
+    capture: "viewport",
+    title: "Searchable dropdown with a typed filter (constructed)",
+    sources: constructedSources("src/views/dropdown-field.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/popover-position.ts"]),
+    note: "openDropdownMenu's own combobox entry: nine properties (past the shared dropdown's "
+      + "own > 8 search-count gate) with \"ri\" typed into the search field, narrowing the list "
+      + "live the way a keyboard user would see it.",
   }),
   constructedScenario("empty-state", {
     renderer: "empty-state",

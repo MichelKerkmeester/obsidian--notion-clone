@@ -1,6 +1,6 @@
 ---
 title: "Decision Record: Dropdown, Menu and Picker Componentization"
-description: "ADR-001 the submenu is a child surface in the overlay stack, not an inline region. ADR-002 the create-affordance slot is preserveValueOnSelect, not a new option kind. ADR-003 the geometric grid navigator is one function keyed by layout. ADR-004 amends the create row's placement against the capture read and confirms ADR-001 and ADR-003. ADR-005 rules on which measured Anytype values the family adopts and which it refuses."
+description: "ADR-001 the submenu is a child surface in the overlay stack, not an inline region. ADR-002 the create-affordance slot is preserveValueOnSelect, not a new option kind. ADR-003 the geometric grid navigator is one function keyed by layout. ADR-004 amends the create row's placement against the capture read and confirms ADR-001 and ADR-003. ADR-005 rules on which measured Anytype values the family adopts and which it refuses. ADR-006 keeps the existing > 8 search-count gate against the operator's search-every-dropdown report and Anytype's own no-search condition menus."
 trigger_phrases:
   - "052 decision record"
   - "submenu child surface decision"
@@ -13,9 +13,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/052-dropdown-menu-and-picker-componentization"
-    last_updated_at: "2026-09-05T16:10:00Z"
-    last_updated_by: "design-trueup"
-    recent_action: "Added ADR-004 and ADR-005 after T001's capture read; amended ADR-002's placement clause"
+    last_updated_at: "2026-09-06T06:50:00Z"
+    last_updated_by: "operator-report-56"
+    recent_action: "Added ADR-006 (search-count gate kept); fixed dropdown popover left-align default"
     next_safe_action: "Execute T002, the red baselines, with the corrected census figures"
     blockers: []
     key_files:
@@ -362,3 +362,81 @@ derivation stands.
 | **What is the real caller that must not break?** | Every registered `sheet-grammar` pair whose selectors sit on the rows being re-measured — updated in the same leg (TASK-SYNC) |
 | **What contract must not break?** | `design-system.md` §5's role widths, §9's 28×28 coarse-pointer floor, `044`'s 44px close |
 <!-- /ANCHOR:adr-005 -->
+
+---
+
+<!-- ANCHOR:adr-006 -->
+## ADR-006: Does every desktop dropdown get a search field, or only lists above a threshold — and what is the threshold?
+
+**Status: DECIDED — 2026-09-06 (operator report, this leg).**
+
+### Context
+
+The operator's report — *"every dropdown on desktop should support search"* — read literally would
+put a search field on a 2-item checkbox condition and a 5-item filter operator. `dropdown-field.ts`
+already gates its search row behind `options.searchable === true && options.options.length > 8`
+(`:193`); this ADR asks whether that gate survives the report or should be removed.
+
+Anytype ships both shapes, and the operator's own screenshot of the reference product's filter
+condition menu is the one this packet already holds captures of. Read against the pixels rather
+than the words:
+
+| Capture | Item count | Search field? |
+|---|---|---|
+| `anytype-menu-set-filter-checkbox-condition-*` | 2 (Is / Is not) | **No** |
+| `anytype-menu-set-filter-select-condition-*`, `-object-condition-*` | 5 (Contains any / Contains all / Doesn't contain / Is empty / Is not empty) | **No** |
+| `anytype-menu-set-filter-email-condition-*` | 6 (Contains / Doesn't contain / Is / Is not / Is empty / Is not empty) | **No** |
+| `anytype-menu-set-filter-property-picker-*` | 30+ properties | **Yes** — `Click to filter…`, first in the panel (G10) |
+| `anytype-menu-object-featured-tag-*` | tag list | **Yes** — `Filter or create options…` |
+
+Every captured **condition/operator** menu in the reference product — the exact family the
+operator's screenshot showed — ships with no search field, up to 6 items. Every captured
+**property/value** picker ships with one, from single digits up through 30+. The report is a report
+of a broken surface (row below, ADR-006's other half), not a literal request to search a 2-item
+list — the operator saw the popover land off its trigger and read the surface as un-searchable
+because it read as broken, not because a search box was visibly missing from a 5-item menu that
+Anytype itself never puts one on either.
+
+### Decision
+
+**Keep the threshold, do not remove it.** `dropdown-field.ts`'s existing `> 8` gate is **adopted by
+agreement**: it already sits strictly above every captured no-search condition menu (2, 5, 6) and
+strictly below the smallest captured search-bearing picker this packet has a count for. No capture
+in `screenshots/anytype/` shows a list sized 7-30 to place the true crossover more precisely, so `8`
+is not re-derived from a tighter number — it is confirmed as already consistent with every data
+point held, and changing it now would be a guess dressed as a correction.
+
+**What does change**: every desktop dropdown built through `createDropdownField`/`openDropdownMenu`
+already receives this gate automatically, with no per-call-site opt-out of the *count* rule (a
+caller can still omit `searchable: true` entirely, which is a separate question — whether search is
+*offered at all* for that field's data shape — from whether the count justifies it once offered).
+The operator's actual defect is ADR unnecessary for: it is the anchoring bug fixed in this same leg
+(`popover-position.ts` `align` default), not a missing search field on a 5-item menu.
+
+### Alternatives
+
+| Option | For | Against |
+|---|---|---|
+| **Remove the threshold; search every dropdown regardless of size** | Matches the report's literal words | Contradicts every captured reference condition menu (2, 5 and 6 items, zero search); adds a focus-stealing input to a 2-item Yes/No-shaped menu no product in the reference set does |
+| **Lower the threshold below 8** | — | No capture exists between 6 (confirmed no-search) and 30+ (confirmed search) to justify a specific lower number; would be invented, not measured |
+| **Keep `> 8`** | Already consistent with every measured data point; already shipped, no migration | Does not, by itself, add search to a field that never passed `searchable: true` — a separate, per-field question |
+
+### Consequences
+
+- No change to `dropdown-field.ts`'s search-count gate.
+- The operator's filter-operator screenshot is read as an anchoring defect, not a missing-search
+  defect; the fix lands in `popover-position.ts` / `dropdown-field.ts`'s placement call, not in the
+  search gate.
+- `roadmap.md` §4's new row for this report says so, rather than recording a search field that was
+  never the right fix.
+
+### Five checks
+
+| Check | Answer |
+|-------|--------|
+| **Does this need to exist at all?** | Yes — the report's literal words and the reference product's own captures disagree, and a future leg would otherwise re-litigate the threshold without this record |
+| **Is there a simpler existing thing?** | The `> 8` gate already in `dropdown-field.ts`; this ADR confirms it rather than adding a new mechanism |
+| **What does it touch?** | Nothing — no code changes from this ADR alone |
+| **What is the real caller that must not break?** | Every dropdown under 8 items that currently renders without a search row (the filter operator, checkbox conditions, and similar small enums) |
+| **What contract must not break?** | Anytype's own measured grammar (G10), which this ADR reads rather than overrides |
+<!-- /ANCHOR:adr-006 -->

@@ -208,6 +208,8 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
         "aria-label": options.label,
         "aria-controls": popupId,
         "aria-autocomplete": "list",
+        role: "combobox",
+        "aria-expanded": "true",
       },
     });
   }
@@ -244,6 +246,14 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
     }
     for (const item of sectionRows) item.row.setAttr("tabindex", item === sectionRows[activeIndex] ? "0" : "-1");
     const row = sectionRows[activeIndex]?.row;
+    // The search input keeps DOM focus while typing, so the active option is announced through
+    // `aria-activedescendant` rather than by moving focus onto the row — moving focus there would
+    // drop the caret and end the search a keystroke after it started.
+    if (searchInput) {
+      const rowId = row?.getAttribute("id");
+      if (rowId) searchInput.setAttr("aria-activedescendant", rowId);
+      else searchInput.removeAttribute("aria-activedescendant");
+    }
     if (focus && row) {
       row.focus();
       row.scrollIntoView?.({ block: "nearest" });
@@ -272,6 +282,7 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
     });
     row.setAttr("data-value", option.value);
     row.setAttr("data-search-text", `${option.text} ${option.value} ${option.disabledReason || ""}`.toLowerCase());
+    row.setAttr("id", `${popupId}-option-${sectionRows.length}`);
     if (option.disabled && option.disabledReason) {
       // A natively-disabled <button> swallows hover events in Chromium, so its
       // title tooltip never appears. Keep it enabled but aria-disabled so the
@@ -327,6 +338,16 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
         if (!visibleRows.length) return;
         event.preventDefault();
         selectRow(visibleRows[0]);
+      } else if (event.key === "Tab") {
+        // Tab commits the highlighted row rather than leaving the popover open behind whatever the
+        // browser's own tab order focuses next — the same "leaving without choosing shouldn't lose
+        // the highlight" contract Enter already carries, just for the key a user reaches for to move
+        // on rather than to confirm.
+        const active = sectionRows[activeIndex];
+        if (active && visibleRows.includes(active)) {
+          event.preventDefault();
+          selectRow(active);
+        }
       }
     };
     window.setTimeout(() => searchInput?.focus(), 0);
@@ -338,7 +359,13 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
     panel.toggleClass("has-scroll-overflow", canScroll && !atEnd);
   };
   if (phoneSheet) optionsHost.addEventListener("scroll", updateScrollAffordance, { passive: true });
-  positionToolbarPopover(panel, anchor, { preferredWidth: 280, maxWidth: 360, minWidth: 180, gap: 6 });
+  // Left-aligned, like a native <select>: the panel's left edge sits under the trigger's left
+  // edge rather than its right edge. `positionToolbarPopover` defaults to `align: "right"` for
+  // callers that hang a small popover off an icon-only trigger (the "..." overflow button, where
+  // a right edge is the only shared coordinate); a labelled dropdown field has a left edge worth
+  // keeping level with, and `resolvePopoverHorizontalLeft`'s own fallback already clamps into the
+  // viewport when a left-aligned panel would run past the right edge.
+  positionToolbarPopover(panel, anchor, { preferredWidth: 280, maxWidth: 360, minWidth: 180, gap: 6, align: "left" });
   if (!searchInput) {
     syncActiveOption(true);
   }
@@ -348,7 +375,10 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
     if (isImeComposing(event) || event.target === searchInput) return;
     const target = event.target as HTMLElement | null;
     const currentRowIndex = target ? sectionRows.findIndex((item) => item.row === target) : -1;
-    if (!["ArrowDown", "ArrowUp", "Home", "End", "Enter", " "].includes(event.key) && event.key.length !== 1) return;
+    const recognized = searchable
+      ? ["ArrowDown", "ArrowUp", "Home", "End", "Enter", " ", "Tab"]
+      : ["ArrowDown", "ArrowUp", "Home", "End", "Enter", " "];
+    if (!recognized.includes(event.key) && event.key.length !== 1) return;
     const visibleRows = getVisibleRows();
     if (!visibleRows.length) return;
     if (currentRowIndex >= 0) activeIndex = currentRowIndex;
@@ -363,7 +393,11 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
       event.preventDefault();
       activeIndex = sectionRows.indexOf(event.key === "Home" ? visibleRows[0] : visibleRows[visibleRows.length - 1]);
       syncActiveOption(true);
-    } else if (event.key === "Enter" || event.key === " ") {
+    } else if (event.key === "Enter" || event.key === " " || (searchable && event.key === "Tab")) {
+      // Tab-commits-highlighted is part of the combobox contract (`searchable` dropdowns only):
+      // once ArrowDown has moved focus off the search input and onto a row (below), Tab reaches
+      // this handler rather than the search input's own — same commit, different entry point. A
+      // plain, non-searchable dropdown keeps Tab as ordinary focus movement, unchanged.
       event.preventDefault();
       const activeRow = sectionRows[activeIndex];
       if (activeRow) selectRow(activeRow);

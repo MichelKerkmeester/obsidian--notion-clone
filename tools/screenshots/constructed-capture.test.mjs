@@ -117,6 +117,7 @@ describe("constructed scenario registry", () => {
       "constructed-date-picker",
       "constructed-date-picker-datetime",
       "constructed-dropdown",
+      "constructed-dropdown-search",
       "constructed-empty-state",
       "constructed-file-fields",
       "constructed-filter-panel",
