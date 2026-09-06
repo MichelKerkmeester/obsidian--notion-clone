@@ -1,17 +1,25 @@
 {
+  "level": "3",
   "specFolder": "005-component-surface-system/056-board-anytype-parity",
-  "description": "Phase 1: board-anytype-parity",
+  "description": "The board renders Project Manager's kanban, not Anytype's: `src/views/board-renderer.ts` constructs",
   "keywords": [
-    "phase",
-    "board-anytype-parity"
+    "board",
+    "renders",
+    "project",
+    "manager",
+    "kanban",
+    "anytype",
+    "src",
+    "views",
+    "board-renderer",
+    "constructs"
   ],
-  "lastUpdated": "2026-09-05T20:25:00.756Z",
+  "lastUpdated": "2026-09-06T18:28:52.963Z",
   "specId": "056",
   "folderSlug": "board-anytype-parity",
   "parentChain": [
     "005-component-surface-system"
   ],
   "memorySequence": 0,
-  "memoryNameHistory": [],
-  "level": "3"
+  "memoryNameHistory": []
 }

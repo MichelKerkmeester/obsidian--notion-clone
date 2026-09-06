@@ -224,6 +224,18 @@ html.capture-element #shot > .note-database-container {
   padding: 0;
 }
 
+/* The board is the one surface that spends the container's inline padding rather than sitting
+   inside it: `.db-kanban-board` carries negative inline margins of exactly that width, so its
+   own 16px padding starts at the container's border box. Zeroing the padding above leaves those
+   margins with nothing to cancel, and the board hangs 8px past the container on each side, where
+   `#shot` clips it — invisible until the container stopped reserving a scrollbar lane on the
+   right, which had been absorbing the overhang by coincidence. Restoring the inline half only
+   puts the fixture back on the product's own geometry; the block half stays zeroed, since that
+   is what keeps a component capture from being padded out to a pane's reserve. */
+html.capture-element #shot > .note-database-container.db-kanban-view {
+  padding-inline: var(--db-container-padding-inline);
+}
+
 html.capture-element,
 html.capture-element body {
   background: transparent;

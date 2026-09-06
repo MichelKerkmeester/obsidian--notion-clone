@@ -348,19 +348,30 @@ window.__boardGeometry = (scenario) => {
     const firstCard = container.querySelector(".db-kanban-card");
     const checkbox = container.querySelector(".db-kanban-card-meta .db-checkbox-field");
 
-    // The scrollbar height is read off the ::-webkit-scrollbar pseudo-element of the container,
+    // The scrollbar box is read off the ::-webkit-scrollbar pseudo-element of the container,
     // which is the element that scrolls — at rest, again with "is-scrolling" applied the way the
     // renderer's own scroll listener would, and again with "is-edge-hover" applied the way its
     // pointermove listener would once the pointer sits within the bar's own edge band. A later
     // reinstatement of the painted-at-rest bar, or a reversion of the edge-only reveal back to a
     // pane-wide hover pseudo-class, both have a number here to turn red against.
+    //
+    // Width as well as height, and not for symmetry: the height half alone shipped a board whose
+    // VERTICAL bar stayed painted at rest, because the app-wide 8px width was never overridden
+    // here and the board's own thumb rule outranks the app-wide transparency by source order.
+    // One number per axis per state is what tells the two bars apart.
     const board = container.querySelector(".db-kanban-board");
-    const scrollbarRestHeight = getComputedStyle(container, "::-webkit-scrollbar").height;
+    const restBar = getComputedStyle(container, "::-webkit-scrollbar");
+    const scrollbarRestHeight = restBar.height;
+    const scrollbarRestWidth = restBar.width;
     container.classList.add("is-scrolling");
-    const scrollbarActiveHeight = getComputedStyle(container, "::-webkit-scrollbar").height;
+    const activeBar = getComputedStyle(container, "::-webkit-scrollbar");
+    const scrollbarActiveHeight = activeBar.height;
+    const scrollbarActiveWidth = activeBar.width;
     container.classList.remove("is-scrolling");
     container.classList.add("is-edge-hover");
-    const scrollbarEdgeHoverHeight = getComputedStyle(container, "::-webkit-scrollbar").height;
+    const edgeHoverBar = getComputedStyle(container, "::-webkit-scrollbar");
+    const scrollbarEdgeHoverHeight = edgeHoverBar.height;
+    const scrollbarEdgeHoverWidth = edgeHoverBar.width;
     container.classList.remove("is-edge-hover");
     const boardOverflowY = board ? getComputedStyle(board).overflowY : null;
 
@@ -378,6 +389,9 @@ window.__boardGeometry = (scenario) => {
       scrollbarRestHeight,
       scrollbarActiveHeight,
       scrollbarEdgeHoverHeight,
+      scrollbarRestWidth,
+      scrollbarActiveWidth,
+      scrollbarEdgeHoverWidth,
     };
 
     // Reachability, measured, not inferred from an overflow keyword. A container whose overflow
@@ -961,6 +975,24 @@ if (!geometryOutcome || !geometryOutcome.provenance) {
   if (!scrollbarEdgeHoverOk) failures.push(`board geometry scrollbar (edge-hover): height read `
     + `${JSON.stringify(geometryOutcome.scrollbarEdgeHoverHeight)}, expected "10px" — the "Edge only" ruling still reveals `
     + `the bar once the pointer is within its edge band, only a pane-wide hover is declined`);
+
+  // The vertical bar, on the same three states as the horizontal one above. Its own row rather
+  // than a fourth height read: the three rules above set `height` only, which left the app-wide
+  // 8px width standing and shipped a board whose vertical thumb was painted at rest on any pane
+  // with vertical overflow — the exact state the ruling declines, invisible to a height-only pin.
+  // All three states are read together so the row cannot go green the other way either, by a
+  // width of 0 that never reveals.
+  const restWidth = geometryOutcome.scrollbarRestWidth;
+  const activeWidth = geometryOutcome.scrollbarActiveWidth;
+  const edgeWidth = geometryOutcome.scrollbarEdgeHoverWidth;
+  const scrollbarWidthOk = restWidth === "0px" && activeWidth === "10px" && edgeWidth === "10px";
+  console.log(`  ${scrollbarWidthOk ? "PASS" : "FAIL"}  ${"scrollbar (vertical)".padEnd(16)} `
+    + `${".db-kanban-view ::-webkit-scrollbar width".padEnd(42)} `
+    + `${JSON.stringify(restWidth)} / ${JSON.stringify(activeWidth)} / ${JSON.stringify(edgeWidth)}`);
+  if (!scrollbarWidthOk) failures.push(`board geometry scrollbar (vertical): ::-webkit-scrollbar width read `
+    + `${JSON.stringify(restWidth)} at rest, ${JSON.stringify(activeWidth)} scrolling, ${JSON.stringify(edgeWidth)} `
+    + `edge-hovered, expected "0px" / "10px" / "10px" — the same ruling that hides the horizontal bar at rest `
+    + `hides the vertical one, and the app-wide 8px width is what it has to override to do it`);
 
 }
 

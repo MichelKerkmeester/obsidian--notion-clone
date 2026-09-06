@@ -487,9 +487,60 @@ removing `"scroll"` where it expected `"pointermove"`; both pass against the lan
 `tools/live/render-assertions.mjs` gains a third scrollbar row reading the container's
 `::-webkit-scrollbar` height with `.is-edge-hover` applied the way it already does for
 `.is-scrolling`: `"0px"` at rest, `"10px"` scrolling, `"10px"` edge-hover, all three PASS against
-a live Chromium mount. `npx tsc --noEmit`, `npx vitest run` (141 files / 1503 tests) and
-`npm run build` all exit 0. A full detached `npm run screenshots` recapture (578 entries) moved no
-capture's `pixelHash` — the amendment only narrows when a class is set, not any rest-state
-geometry — and 18 byte-only re-encodes were restored to their committed bytes. `npm run gate`: 26
-green, 0 red.
+a live Chromium mount. `npx tsc --noEmit`, `npx vitest run` (141 files / 1503 tests, counted
+before the rebase onto `3e1c3c65`) and `npm run build` all exit 0.
+
+**The same amendment, second half — the vertical bar.** Both the ruling above and the "hidden at
+rest" threshold it narrows are written per bar, and the stylesheet implemented only one of them:
+every rule in this block names `height`, which sizes the horizontal bar and says nothing about the
+vertical one. Underneath, `.note-database-container::-webkit-scrollbar` (`styles.css:961`) gives
+every bar in the plugin an 8px width, and
+`.note-database-container:not(.is-scrolling)::-webkit-scrollbar-thumb` (`styles.css:1064`) is
+meant to keep the thumb transparent until a scroll — but
+`.note-database-container.db-kanban-view::-webkit-scrollbar-thumb` carries the same (0,2,0)
+specificity and sits ~8,300 lines later, so it wins on source order and paints the thumb
+unconditionally. The visible consequence, on any pane where the board overflows vertically: a
+permanent vertical thumb, at rest, on the surface whose whole ruling is that no bar is painted at
+rest. It was invisible to every check here because both the pin and the ADR asked only about
+height. **Reproduced live before the fix**, on the real `BoardRenderer` in headless Chromium (35
+cards, container 900x600 at 1440x900 DPR 2, both axes overflowing): `::-webkit-scrollbar` **width**
+reads `"8px"` at rest, mid-pane, at both edges, after `pointerleave` and while `.is-scrolling` —
+one number in every state, which is the shape of a rule that was never written — with the thumb's
+computed background resolving to `--db-scrollbar-thumb` rather than `transparent` at rest, the
+source-order tie made visible. **Fixed** by naming `width` beside `height` in the two rules this
+amendment already owns: `0` at rest, `10px` under `.is-edge-hover` or `.is-scrolling`, transition
+on both axes. The thumb rule keeps the tie it wins — deliberately, and now with a comment saying
+so, because it is also what paints the thumb once either class reveals a bar; hiding the thumb
+instead of sizing the box to 0 would have left a 10px empty lane on the reveal. `render-assertions.mjs`
+gains one row, `scrollbar (vertical)`, reading rest, scrolling and edge-hover together so it cannot
+be satisfied either by a bar painted at rest or by one that never appears: red `"8px" / "8px" /
+"8px"` against the pre-fix stylesheet and red `"0px" / "0px" / "0px"` against a mirror mutation,
+green `"0px" / "10px" / "10px"` on the landed tree. The 8px the bar used to reserve returns to the
+board as content: container `clientWidth` 940 -> 948. `npx tsc --noEmit`, `npx vitest run` (141
+files / 1506 tests) and `npm run build` all exit 0.
+
+The 8px also stopped hiding something in the capture harness, which is recorded here because the
+fix landed in the same commit and is not a board change. `.db-kanban-board` cancels the container's
+inline padding with negative margins of the same width, so in the product it spans the container's
+border box exactly. `tools/screenshots/theme.css` zeroes that padding for element captures — to
+stop a component being padded out to a pane's reserve — which leaves the margins with nothing to
+cancel and the board hanging 8px past the container on each side, where `#shot` clips it. The
+vertical scrollbar lane had been absorbing the right-hand 8px, so the harness's own crop check
+only reported it once the lane went away: 4 captures (`board-empty-column`, `board-drop-language`,
+both themes). Controls, both run: the same scenarios recapture clean against the pre-fix
+stylesheet, and widening the declared width moves the overhang rather than removing it (660 -> 676
+becomes 676 -> 692), which is what identifies it as the harness's stand-in rather than a width
+that was ever right. The rule restores `padding-inline` for an element capture of a
+`.db-kanban-view` container only; the block half stays zeroed. Full recapture: 578 entries, 0
+failed, 8 captures moved `pixelHash` (those two fixtures, both themes, both devices), all eight
+opened and read and all eight named in the lane's release; 17 byte-only re-encodes restored to
+their committed bytes. `npm run screenshots:verify`: 578 entries current, exit 0.
+
+`npm run gate` ran twice and both runs are reported. The first: 25 green, `evidence` red on 8 of 15
+artefacts still fingerprinting the previous holder's stylesheet hash. None of those eight is a gate
+lane, so no gate run refreshes them; re-running each tool and re-running the gate gives 26 green, 0
+red, exit 0. This also corrects the amendment's first half above, which claimed 26 green: it landed
+with `baselineHash` and all eight census artefacts still on the previous holder's hash, so
+`css-lane` and `evidence` were red on that tree. The lane record and the artefacts are closed here,
+in this commit.
 <!-- /ANCHOR:decisions -->

@@ -1,7 +1,7 @@
 {
   "holder": "056-board-anytype-parity",
   "acquiredAt": "2026-09-06T21:10:00Z",
-  "baselineHash": "f7ed89a8e7f5",
+  "baselineHash": "76bc949c272b",
   "baselineCommit": null,
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -4532,6 +4532,30 @@
       "at": "2026-09-06T21:10:00Z",
       "hash": "f7ed89a8e7f5",
       "note": "Taken back from 057-calendar-anytype-parity at its released hash f7ed89a8e7f5, with nothing outstanding against it. One board-scoped edit follows, inside .note-database-container.db-kanban-view scrollbar rules only: the \"Edge only\" ruling, plus the vertical thumb that the board rule kept painted at rest."
+    },
+    {
+      "event": "edit",
+      "phase": "056-board-anytype-parity",
+      "at": "2026-09-06T21:40:00Z",
+      "hash": "76bc949c272b",
+      "note": "Two rules inside .note-database-container.db-kanban-view scrollbar chrome, no other selector touched. The \"Edge only\" ruling: the bare :hover that revealed the horizontal bar becomes .is-edge-hover, a class the renderer's own pointermove listener sets within 16px of the container's right or bottom edge. And the vertical half of the same ruling, which the height-only rules had never implemented: ::-webkit-scrollbar now takes width 0 at rest and 10px under .is-edge-hover or .is-scrolling, so the app-wide 8px width no longer leaves a permanently painted vertical thumb on a board with vertical overflow. The thumb rule below keeps the source-order tie it wins over the app-wide :not(.is-scrolling) transparency, deliberately: it is what paints the thumb once either class reveals a bar."
+    },
+    {
+      "event": "release",
+      "phase": "056-board-anytype-parity",
+      "at": "2026-09-06T21:55:00Z",
+      "hash": "76bc949c272b",
+      "reviewed": [
+        "screenshots/notion-clone/components/board-drop-language-desktop-dark.png",
+        "screenshots/notion-clone/components/board-drop-language-desktop-light.png",
+        "screenshots/notion-clone/components/board-drop-language-mobile-dark.png",
+        "screenshots/notion-clone/components/board-drop-language-mobile-light.png",
+        "screenshots/notion-clone/components/board-empty-column-desktop-dark.png",
+        "screenshots/notion-clone/components/board-empty-column-desktop-light.png",
+        "screenshots/notion-clone/components/board-empty-column-mobile-dark.png",
+        "screenshots/notion-clone/components/board-empty-column-mobile-light.png"
+      ],
+      "note": "Full recapture (578 entries). Eight captures moved pixels, all eight opened and read, and none of them moved because of the stylesheet edit itself: the two board element-capture fixtures shifted by the container's inline padding, which tools/screenshots/theme.css now restores for a .db-kanban-view element capture. It had been zeroing that padding, which left .db-kanban-board's negative inline margins with nothing to cancel and the board hanging 8px past its container, where #shot clips it — absorbed until now by the vertical scrollbar lane this edit removed, and reported by capture.mjs's own crop check as 4 failed captures the moment it went away. Controls run before the harness was touched: the same two scenarios recapture clean against the pre-edit stylesheet, and widening the declared width moves the overhang instead of removing it. The desktop four now frame the whole board; the mobile pair keeps the right-edge clip of the empty lane's chip it already had at HEAD, shifted by the same padding, because that fixture is wider than the phone frame. Everything else in the corpus moved bytes only: 17 byte-only re-encodes were restored to their committed bytes rather than recommitted as churn, their manifest pixelHash/layoutHash unchanged."
     }
   ],
   "outstanding": [
