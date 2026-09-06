@@ -161,11 +161,29 @@ A task missing any of the three is not ready to start.
       else. The three behaviours ADR-008 names are each unreachable afterwards, by construction —
       the union has a kind now, and `applyHistoryEntry`/`undoLastEdit` dispatch to it before falling
       through to an unrelated entry.
-      **Red first:** confirmed by running `deletion-undo.test.ts`'s marker-string assertions
-      against `git show HEAD:src/views/database-view.ts` / `embedded-database-renderer.ts` — every
-      assertion's substring absent on the pre-landing tree.
-      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1341/1341 including the new
-      `deletion-undo.test.ts` (10/10).
+      **Verified at landing, and one behaviour repaired.** `deletion-undo.test.ts` was rewritten
+      from marker-string assertions into a behavioural suite: it drives the shipped prototype
+      methods (`deleteRow`, `pushHistory`, `undoLastEdit`, `replayHistory`,
+      `applyDeletedHistoryEntry`, `restoreCreatedFile`, `removeCreatedFile`) against an object
+      whose prototype IS the class and a vault double that holds bytes, so what is measured is the
+      restore rather than the shape of the source line. Six hostile cases: restore returns the same
+      path with the same content; a path re-occupied since the deletion refuses rather than
+      overwrites and leaves the entry on the stack; an edit landing on top of the deletion undoes
+      in stack order and trashes nothing unrelated; Redo re-trashes exactly the restored file and a
+      further Undo restores it again; a multi-row delete records nothing and offers no Undo, which
+      is ADR-008's own answer rather than a gap; and the Undo action exists only alongside the
+      pushed entry. **The seventh case failed and was fixed here:** the toast outlives its entry,
+      so a row created inside the card's 2200ms life becomes the top of the stack and a bare
+      `undoLastEdit()` trashed that new file — the same one-press-two-deletions shape ADR-008 was
+      written about, narrowed to the toast's own lifetime. Both classes now replay the deletion by
+      entry identity or decline with `notice.undoSuperseded` (new, three locales), which says why
+      rather than the inaccurate `notice.nothingToUndo`.
+      **Red first:** the two identity-guard cases were watched failing on the pre-repair tree
+      (`Tasks/created.md` gone after the press). As a negative control for the snapshot itself,
+      dropping `content` from the pushed entry turns 5 of the 11 cases red, and restoring it turns
+      them green again.
+      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1404/1404 including
+      `deletion-undo.test.ts` (11/11) on the rebased tree; `npm run gate` 26 green.
       **Capture:** none (`src/views/database-view.ts`, `src/views/embedded-database-renderer.ts`,
       `src/i18n.ts`, `src/views/deletion-undo.test.ts`)
 
@@ -193,8 +211,16 @@ A task missing any of the three is not ready to start.
       (`styles.css:2699-2744` before this landing vs the bar's own `.db-selection-action` rules) —
       confirmed by diffing this leg's edit against `git show HEAD:styles.css`, which still carries
       the retired rules verbatim.
-      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1341/1341, including two new
-      `toast.test.ts` assertions for the `container` placement.
+      **Verified at landing, with one measurement correction.** The rail's placement rule is
+      untouched (`position: fixed; right: 16px; bottom: max(16px, env(safe-area-inset-bottom))`),
+      so the card still appears at the corner the pill appeared at. No capture renders the rail, so
+      that half is read from the rule rather than from a picture, and is stated as such. What the
+      card's own width does at that placement is a different question and the first answer was
+      wrong: `.db-toast.is-inline` took the stack's flat 384px, which at the host's 16px inset
+      needs 400px of viewport and so hung 10px off a phone's left edge. Clamped to
+      `min(384px, calc(100vw - 32px))`, unchanged at any desktop width.
+      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1404/1404, including two new
+      `toast.test.ts` assertions for the `container` placement; `npm run gate` 26 green.
       **Capture:** none — no capture shows the rail or the bar's button
       (`src/views/database-view.ts`, `src/views/toast.ts`, `styles.css`)
 
@@ -239,9 +265,22 @@ A task missing any of the three is not ready to start.
       preserved, and zero `db-chart-empty` markup remains.
       **Red first:** chart was the only renderer outside `EmptyStateRenderer` — confirmed absent
       from `grep -n "emptyStateRenderer.renderCard" src/views/chart-renderer.ts` before this landing.
-      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1341/1341; the fixture and the real render
-      opened side by side (both desktop-light) show the same shared card shape with the chart's own
-      copy intact.
+      **Verified at landing, with one regression repaired.** All eight recaptures were opened, in
+      both themes on both device profiles, and each shows the shared card — icon tile, title, the
+      chart's own message, the recovery button — where the dashed centred box used to be. The phone
+      pair showed the card running past the chart body's right edge, and the view census named it:
+      two new `escaping` rows, `db-empty.db-empty-card` inside `db-chart-empty`, 34px at both 320
+      and 402, taking the ratchets from 656/346 to 658/348. The cause is the shared card, not
+      chart: it declares `width: min(100%, 620px)` with its 20px padding and 1px border outside
+      that width, so it overflows any host narrower than 620 and the chart body is the first narrow
+      host it has had. Corrected with `box-sizing: border-box` scoped to `.db-chart-empty
+      .db-empty-card` — the component's own box is a real defect but every other host is wide
+      enough that changing it there would move their captures for a problem they do not have, so it
+      is recorded for its owner rather than fixed under this task. Census back to main's 656/346
+      exactly, and the eight captures re-taken and re-read after the fix.
+      **Green:** `npx tsc --noEmit` 0; `npx vitest run` 1404/1404; `npm run gate` 26 green; the
+      fixture and the real render opened side by side (both desktop-light) show the same shared
+      card shape with the chart's own copy intact.
       **Capture:** `chrome-chart-empty` (fixture, rewritten to mirror the new markup) and
       `constructed-chart-empty` (the real renderer) both recaptured in the same change and both PNGs
       read (`src/views/chart-renderer.ts`, `styles.css`, `tools/screenshots/scenarios/chrome.mjs`)

@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/055-states-feedback-and-motion"
-    last_updated_at: "2026-09-06T02:30:00Z"
+    last_updated_at: "2026-09-06T14:10:00Z"
     last_updated_by: "landing-verification"
-    recent_action: "ADR-001/002/007/008 Accepted; T004/T006/T007/T008/T010/T018 landed"
-    next_safe_action: "Run the full gate and recapture screenshots after this leg's styles.css edits"
+    recent_action: "ADR-008 verified on seven hostile cases; the seventh failed and was repaired"
+    next_safe_action: "Give the shared empty card its own box-sizing where that component is owned"
     blockers: []
     key_files:
       - "src/views/toast.ts"
@@ -840,6 +840,25 @@ and the toast's Undo action is back, wired to `undoLastEdit()`. The three questi
   required field precisely because its own undo is where that snapshot gets consumed, while the
   standalone's `deleted` entry reuses `CreatedFileSnapshot` (`content` optional) since the same
   interface already models exactly this shape for its `created` counterpart.
+
+**Verified at landing, and a fourth wrong behaviour found and closed.** The three above were
+derived statically. They are now measured: `deletion-undo.test.ts` drives the shipped prototype
+methods against an object whose prototype is the class and a vault double that holds bytes, so the
+restore, the refusal, the stack order, the redo and the multi-row path are observations rather than
+readings. Six of the seven hostile cases held on the code as landed. The seventh did not, and it is
+the same defect this record was opened for, narrowed rather than removed: **the toast outlives the
+entry it was raised for.** The card lives 2,200ms; anything pushed inside that window becomes
+`historyStack[0]`, and a `created` entry there undoes by trashing the file it created. So a reader
+who deletes a row, creates one, and then presses the Undo still sitting on the deletion toast loses
+the row they just made — one press, two deletions, again. Watched failing before the repair.
+
+The repair is the guard alternative 3 rejected, which is now the right one for a reason that did not
+hold then: the top entry IS the deletion at the moment the button is built, so binding the button to
+that entry by identity is meaningful where binding it to a type was not. Both classes' toasts now
+call `undoDeletion(entry)`, which replays only while `historyStack[0] === entry` and otherwise
+reports `notice.undoSuperseded` — a new key in all three locales, because `notice.nothingToUndo` is
+false there: there is something to undo, just not this. Identity rather than type, so two deletions
+in the same second stay two buttons that each own only their own entry.
 
 **The embed's "redo" half of the threshold is inapplicable, not unmet.** `embedded-database-
 renderer.ts`'s `undoLastEdit` has no redo mechanism at all — not for `created`, not for `cell`, not
