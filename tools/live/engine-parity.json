@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T00:45:26.672Z",
+  "measuredAt": "2026-09-06T01:11:29.681Z",
   "inputs": {
-    "styles.css": "213a349fab9b",
+    "styles.css": "313238cfdae5",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -239,7 +239,7 @@
       "selector": "input[type=\"checkbox\"]",
       "index": 0,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.043)"
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
       ]
     },
     {
@@ -247,7 +247,7 @@
       "selector": "input[type=\"checkbox\"]",
       "index": 1,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.043)"
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
       ]
     },
     {
@@ -255,7 +255,7 @@
       "selector": "input[type=\"checkbox\"]",
       "index": 2,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.043)"
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
       ]
     },
     {
@@ -263,7 +263,7 @@
       "selector": "input[type=\"checkbox\"]",
       "index": 3,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.043)"
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
       ]
     },
     {
@@ -271,7 +271,7 @@
       "selector": "input[type=\"checkbox\"]",
       "index": 4,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.043)"
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
       ]
     },
     {
@@ -311,7 +311,7 @@
       "selector": ".db-checkbox",
       "index": 0,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.043)"
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
       ]
     },
     {
@@ -319,7 +319,7 @@
       "selector": ".db-checkbox",
       "index": 1,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.043)"
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
       ]
     },
     {
@@ -327,7 +327,7 @@
       "selector": ".db-checkbox",
       "index": 2,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.043)"
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
       ]
     },
     {
@@ -335,7 +335,7 @@
       "selector": ".db-checkbox",
       "index": 3,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.043)"
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
       ]
     },
     {
@@ -343,7 +343,7 @@
       "selector": ".db-checkbox",
       "index": 4,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.043)"
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
       ]
     },
     {

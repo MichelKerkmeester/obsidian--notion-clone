@@ -1,8 +1,8 @@
 {
-  "holder": "051-modal-and-sheet-componentization",
-  "acquiredAt": "2026-09-06T10:30:00Z",
-  "baselineHash": "213a349fab9b",
-  "baselineCommit": "a7188274",
+  "holder": "054-record-and-relation-surfaces",
+  "acquiredAt": "2026-09-06T08:30:00Z",
+  "baselineHash": "313238cfdae5",
+  "baselineCommit": "c6dce7b4",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -3739,6 +3739,34 @@
         "screenshots/notion-clone/panels/constructed-view-config-mobile-dark.png",
         "screenshots/notion-clone/panels/constructed-view-config-mobile-light.png"
       ]
+    },
+    {
+      "event": "acquire",
+      "phase": "054-record-and-relation-surfaces",
+      "at": "2026-09-06T08:30:00Z",
+      "hash": "213a349fab9b",
+      "note": "Taken over from 051-modal-and-sheet-componentization (already released at this hash) after rebasing this leg onto its header-migration landing. The edit is additive: a status-color-text-* foreground palette, a direct-child override stripping the chip fill from a single-select value on the record sheet and the peek, text-align:left on the record sheet's own value, justify-content:flex-start on that field's badge wrapper, and the hidden-properties group's and add-property picker's rules. Pure insertion against the base stylesheet with zero deletions, so the board card's right-aligned value and flex-end badges, the phone sheet's 96px label column and its 44px row floor all still read exactly as they did."
+    },
+    {
+      "event": "release",
+      "phase": "054-record-and-relation-surfaces",
+      "at": "2026-09-06T08:55:00Z",
+      "hash": "313238cfdae5",
+      "reviewed": [
+        "screenshots/notion-clone/panels/constructed-record-detail-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-docked-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-docked-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-docked-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-docked-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-record-peek-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-peek-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-record-peek-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-peek-mobile-light.png"
+      ],
+      "note": "A full npm run screenshots on this rebase moved zero captures: all 558 decode pixel-identical to what is committed, so this release owes no new review, and the reviewed list names the twelve record surfaces this change moved when it made them, each opened and read at the time. Three byte-changed but pixel-identical re-encode noise captures were restored rather than committed; only the PNGs are restored, never the manifest, because restoring the manifest with them re-points every entry at the previous stylesheet hash and reads as hundreds of stale captures. Measured on constructed-record-detail-desktop-dark (2880x1800, a 2x capture; CSS px, 21 property rows) and unchanged across five rebases: value-left was 138.0-263.0, a 125.0px spread, right edge pinned at 379.5 on the three multi-select rows; it now holds 138.0-143.5, a 5.5px spread, right edge released to 155.5-254.5. Nineteen of 21 sit at 138.0-140.0, a 2.0px spread that is glyph left-bearing; the two at 143.5 are file chips carrying their own padding. Labels unmoved at 58.0-59.0. The phone half went 261.0 -> 129.0. Single-select renders as coloured text with no fill while multi-select keeps its filled chip, sampled per row in both themes; all 16 option foregrounds clear 4.5:1 against both panel backgrounds, lowest light yellow 6.85:1."
     }
   ],
   "outstanding": [

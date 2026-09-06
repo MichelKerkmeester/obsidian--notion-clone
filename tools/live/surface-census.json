@@ -1,16 +1,16 @@
 {
-  "measuredAt": "2026-09-06T00:43:32.784Z",
+  "measuredAt": "2026-09-06T01:11:41.346Z",
   "inputs": {
-    "styles.css": "213a349fab9b",
+    "styles.css": "313238cfdae5",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ca203fa23a84"
   },
   "totals": {
     "rendered": 83,
-    "buildable": 222,
+    "buildable": 223,
     "declared": 6,
     "renderedOnly": 0,
-    "buildableNotRendered": 139,
+    "buildableNotRendered": 140,
     "untokened": 0,
     "unroled": 83
   },
@@ -1515,6 +1515,7 @@
     "db-chart-visible-groups-popover",
     "db-chart-dropdown-popover",
     "db-column-manager-file-property-dropdown",
+    "db-add-property-picker",
     "db-column-type-popover",
     "db-dropdown-option-icon",
     "db-column-display-style-popover",

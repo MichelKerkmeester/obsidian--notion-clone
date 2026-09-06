@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T00:43:42.990Z",
+  "measuredAt": "2026-09-06T01:10:35.047Z",
   "inputs": {
-    "styles.css": "213a349fab9b",
+    "styles.css": "313238cfdae5",
     "tools/live/checkbox-inventory.mjs": "e869ed91680a"
   },
   "totals": {
@@ -83,7 +83,7 @@
     },
     {
       "file": "src/views/column-menu.ts",
-      "line": 462,
+      "line": 465,
       "chain": [
         "db-displayopt-row db-displayopt-colors"
       ],

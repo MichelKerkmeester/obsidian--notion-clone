@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-06T00:54:15.805Z",
+  "measuredAt": "2026-09-06T01:14:23.362Z",
   "inputs": {
     "tools/live/render-assertions.mjs": "018f79c64ced",
     "tools/live/render-assertion-harness.ts": "4aabc6bc8fd0",
@@ -12,7 +12,7 @@
     "tools/bench/board-render-bench.ts": "ae9d4473372a",
     "tools/bench/calendar-render-bench.ts": "1010e40bfe64",
     "tools/bench/timeline-render-bench.ts": "511b2fcebf88",
-    "src/views/database-view.ts": "e4ee0565edd7",
+    "src/views/database-view.ts": "a1bbfc44f164",
     "src/views/embedded-database-renderer.ts": "59d112776c54"
   },
   "constructed": 5,
