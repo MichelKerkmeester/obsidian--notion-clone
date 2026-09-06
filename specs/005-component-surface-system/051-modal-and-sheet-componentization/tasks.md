@@ -364,6 +364,24 @@ with the owner named, never self-closed.
       flex-start` are scoped under `body.is-phone`, so a hypothetical desktop consumer of this same
       header keeps the leading-edge title the desktop captures show (`anytype-menu-set-view-layout-
       dark.png`'s `‹ Layout`) instead of inheriting a centring no desktop reference carries.
+      **Second landing verification, 2026-09-06 — the census of twelve was short.** Nine more raw
+      `db-panel-header`/`db-panel-title` sites, found by re-reading every `*-renderer.ts` for the
+      literal class pair rather than trusting the count: `column-width.ts:362`,
+      `chart-toolbar-renderer.ts` (four popovers: options, value-aggregation, style, visible-groups),
+      `toolbar-renderer.ts:608` and `:1770`, `view-config-panel-renderer.ts:358`'s desktop-only
+      second header, `column-manager-renderer.ts:187`'s desktop-only second header, and
+      `record-surface/record-header.ts:106`'s phone builder (named above as an out-of-scope finding
+      and left as `createSheetHeader` at the time; now pointed at `buildShellHeader` instead, since
+      it is the one header on this list with no other owner to coordinate with). All nine now call
+      `buildShellHeader`. **Two sites deliberately left untouched and named rather than migrated**:
+      `calendar-toolbar-renderer.ts:89` and `calendar-timeline-toolbar-renderer.ts:69` both still
+      build a raw `.db-panel-header`/`.db-panel-title` pair — `057`'s calendar leg owns both files
+      while it is in flight, and a migration here would edit a file group this leg does not hold
+      (goal D7). **Blocked on 057**, not this leg's to close. `surface-shell.test.ts`'s consumer-file
+      census is re-pinned from eleven files to fifteen (the twelve-minus-record-header original list
+      plus `column-width.ts`, `chart-toolbar-renderer.ts`, `toolbar-renderer.ts`, and
+      `record-surface/record-header.ts`), with the two calendar files recorded in the suite's own
+      comment as the named gap rather than silently absent.
 
 **Addendum, 2026-09-06 — the two files this leg named as blocked-on-057 are migrated.** T011's own
 note above names `calendar-toolbar-renderer.ts:89` and `calendar-timeline-toolbar-renderer.ts:69`
@@ -395,6 +413,26 @@ excluded on its own recorded terms.
       rendered, so no pair's title match moves either. Confirmed by running the live lane itself —
       `node tools/live/sheet-grammar.mjs` and the full isolated `npm run gate` — rather than by
       inspection alone; see the closing verification block for the read exit codes and counts.
+      **Second landing verification, 2026-09-06 — REQ-006's C10 implementation regressed two
+      dependent lanes the first pass did not re-run.** `npm run gate` at T012's own close predates
+      the C10 stylesheet work entirely (T007's geometry task named the floating/flush split as
+      "not closed" and left both phone frame shapes as per-surface literals); once C10 shipped, a
+      fresh isolated gate run read three lanes RED rather than the 26-green the checklist's T008-
+      T012 entry describes. Two were process lanes needing a re-derive (`evidence`, `css-lane` — see
+      C10's own row below) and one was a real regression: `tools/storybook/verify-placement.mjs` and
+      `tools/live/sheet-rebuild.mjs` both hardcoded "every phone sheet is flush" (a 0px floor inset,
+      a full-viewport width) into fifteen and one assertions respectively, which C10's floating
+      shape now legitimately fails for any short surface. Fixed by reading the sheet's own resting
+      inset (`getComputedStyle(panel).bottom`, or the `db-sheet-floating` class) at each site rather
+      than assuming the flush shape, plus one content-representativeness fix (the record-detail
+      floor stub was given 20 fields instead of 6, so its own navbar-coverage claim is about a
+      realistically tall record rather than one short enough to legitimately float). `sheet-
+      rebuild.mjs` additionally needed a genuine timing fix, not just a threshold correction: a
+      fixed-coordinate tap landing on a floating filter sheet's `+ Add` button after a background
+      toolbar rebuild occasionally missed while the frame-shape classifier was still settling,
+      reproduced at roughly one run in three before the fix and clean across 14 consecutive runs
+      after moving the settle wait to 500ms wall-clock and retrying the whole open-rebuild-tap
+      sequence up to three times. Full detail and the read exit codes are in `checklist.md` C6/C8/C10.
 <!-- /ANCHOR:phase-3 -->
 
 ---
@@ -421,18 +459,45 @@ excluded on its own recorded terms.
       `051`. One thing is adopted regardless: a destructive row is red **and** carries a trash icon,
       a second signal beside the colour (ADR-007 exception **E3**, which also overrides Anytype's own
       unmarked `Empty Bin`).
+      **Left alone, 2026-09-06** — untouched by this session's landing-verification pass. E4 is
+      still an open operator ruling and a sibling leg (`055`) is migrating the confirm sheet onto its
+      own primitive right now; touching `modals/confirm-modal.ts` here would edit a file two legs are
+      about to converge on from different directions, which is exactly the two-writer collision goal
+      D7 exists to prevent. Stays blocked on the operator's E4 ruling and `055`'s own landing.
 - [ ] **T014 — [P] Register `053`'s sort-conflict confirm and `055`'s destructive-confirm as
       consumers, not as new surfaces.** **Threshold**: zero second confirm implementations across
       the three packets. **Red-first proof**: both sibling packets currently name a primitive that
       does not exist.
+      **Left alone, 2026-09-06** — same reason as T013: nothing here can register a consumer of a
+      primitive T013 has not exported yet, and `055`'s own in-flight migration is the leg actually
+      touching the confirm sheet at this moment.
 - [ ] **T015 — Add one permanent lane row per shell deliverable, each with a negative control.**
       **Threshold**: `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0; each control observed red
       before its green. **Red-first proof**: the rows do not exist.
-- [ ] **T016 — [P] Re-read the board and gantt parity captures against T003's baseline.**
+      **Partial, 2026-09-06** — two permanent rows landed as part of fixing the two defects they
+      guard, each with its own negative control observed red before green: title centring across
+      every header-bearing census surface (`tools/live/sheet-grammar.mjs`'s
+      `TITLE_CENTERED_SURFACES` block, negative control neutralises the grid rule itself) and the
+      C10 floating/flush frame geometry on `sort-panel`/`settings` (`FRAME_SHAPE_SURFACES`, negative
+      control neutralises `.db-sheet-floating`'s own CSS). Both are permanent — they run on every
+      `node tools/live/sheet-grammar.mjs` invocation, including inside `npm run gate`, not only when
+      this leg happens to touch them. **Not closed**: "one row per shell deliverable" is the packet's
+      full geometry and motion set (AC-006, AC-007), most of which (the primary action, the trailing
+      chip, motion timing) still has no lane row at all — broader than the two rows this leg's own
+      defects needed.
+- [x] **T016 — [P] Re-read the board and gantt parity captures against T003's baseline.**
       **Threshold**: `pixelHash`-identical, or an operator ruling on the difference (parent goal
       D5). **Red-first proof**: T003's recorded hashes.
-- [ ] **T017 — Run `npm run replay` and confirm it holds with reversed 0.** **Threshold**: reversed
+      **Done 2026-09-06** — read from the working manifest after this leg's own full recapture (558
+      entries) against the last commit's manifest: the 32 Project Manager board/gantt entries
+      (`constructed-board`, `constructed-board-subtask`, `constructed-timeline`,
+      `constructed-timeline-subtask`, `reference-kanban`, `reference-kanban-subtask`,
+      `reference-gantt`, `reference-gantt-subtask`, each device/theme) are `pixelHash`-identical, 32
+      of 32 — the C10 stylesheet work and the header-migration census correction both reach only
+      phone bottom sheets, and none of these eight scenarios is one.
+- [x] **T017 — Run `npm run replay` and confirm it holds with reversed 0.** **Threshold**: reversed
       0. **Red-first proof**: the reversal is the control.
+      **Done 2026-09-06** — `npm run replay` → exit 0, `PASS — all 28 results still hold`, reversed 0.
 - [ ] **T018 — [B] Operator device pass.** The operator opens a modal, a sheet, a sub-page and a
       destructive confirm on iOS and on desktop. **Threshold**: they read them as one surface
       family. **Owner**: the operator. **This row stays unticked until they say so** — an agent

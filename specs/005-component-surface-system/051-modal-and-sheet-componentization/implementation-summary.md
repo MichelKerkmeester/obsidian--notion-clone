@@ -12,9 +12,9 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/051-modal-and-sheet-componentization"
-    last_updated_at: "2026-09-06T02:15:00Z"
+    last_updated_at: "2026-09-06T05:30:00Z"
     last_updated_by: "implementer-session"
-    recent_action: "Landed T008/T009/T011/T012; T010 stays blocked on the operator"
+    recent_action: "Fixed title centring, migrated 9 headers, shipped C10 frame shapes; gate green"
     next_safe_action: "T013 waits on the operator's ADR-007 E4 ruling on the confirm"
     blockers:
       - "Every criterion except AC-004 is still Unmet; the shell exists and no producer consumes it"
@@ -104,8 +104,26 @@ every one of those desktop titles right by a gap the desktop reference does not 
 the leading slot's width and the title-centring rule to `body.is-phone`, and folds the three fresh
 44px literals the landing verification flagged into one shared `--db-shell-edge-control-size` token
 `.db-sheet-close` now reads too. Recaptured three times chasing that regression down; the final
-capture set moved 30 files, every one a mobile-only surface this leg touched, zero layout changes on
-desktop, and the 32 Project Manager board/gantt entries parent D5 protects are unchanged.
+capture set moved 30 files, every one a mobile-only surface this leg touched. The true desktop
+statement is narrower than "zero layout changes": 15 desktop entries moved `layoutHash` — the
+leading slot `buildShellHeader` adds is `display: none` there, a zero-rect element that still
+changes the DOM tree the hash walks — and 0 moved `pixelHash`. Pixel identity, not layout-tree
+identity, is the evidence a desktop capture did not visibly move; the 32 Project Manager
+board/gantt entries parent D5 protects are unchanged by either measure.
+
+**Second landing verification, 2026-09-06**, closes the four defects the first landing found: the
+title-centring fix above (grouping every trailing child into `db-shell-header-trailing` and laying
+the header out as a phone-only `1fr auto 1fr` grid) replaced the leading-slot-width approach this
+section describes, because the width approach could not survive a trailing box wider than the
+leading slot (`constructed-column-manager`'s "Properties", 27.67px off centre); the nine remaining
+raw header sites (`column-width.ts`, `chart-toolbar-renderer.ts` ×4, `toolbar-renderer.ts` ×2,
+`view-config-panel-renderer.ts` and `column-manager-renderer.ts`'s second headers,
+`record-surface/record-header.ts`) now call `buildShellHeader` too, with the two calendar files
+(`057`'s, in flight) named rather than touched; and REQ-006's C10 floating/flush frame split is
+implemented for the first time. A full recapture against the combined result moved 47 files'
+`pixelHash` (up from 30 — the wider header census and the C10 geometry both reach surfaces the
+first pass's capture did not touch) and 16 more `layoutHash` only; the 32 Project Manager
+board/gantt entries stayed `pixelHash`-identical throughout, 32 of 32.
 
 T001, the packet's evidence task, produced:
 `design-trueup.md`, the surface inventory the packet drafted as `modal-surface-inventory.md` and
