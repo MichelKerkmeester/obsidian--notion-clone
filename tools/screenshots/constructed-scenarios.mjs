@@ -878,7 +878,8 @@ export const CONSTRUCTED_SCENARIOS = [
     capture: "viewport",
     title: "Text cell in edit state (constructed)",
     fixtureOf: "field-cell-edit-text",
-    sources: constructedSources("src/views/cell-renderer.ts", "tools/bench/table-render-bench.ts"),
+    sources: constructedSources("src/views/cell-renderer.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/record-surface/cell-editor-text.ts", "src/views/record-surface/cell-editor-number.ts"]),
     note: "CellRenderer's own startEdit — the entry database-view.ts wires into its editCell "
       + "action — opened on a markdown text cell (toolbar and textarea) and on a number cell "
       + "(single-line editor). Captured full-page because the editors position themselves "
@@ -892,7 +893,7 @@ export const CONSTRUCTED_SCENARIOS = [
     title: "Select cell in edit state (constructed)",
     fixtureOf: "field-cell-edit-select",
     sources: constructedSources("src/views/cell-renderer.ts", "tools/bench/table-render-bench.ts")
-      .concat(["src/data/column-types.ts"]),
+      .concat(["src/views/record-surface/cell-editor-option.ts", "src/data/column-types.ts"]),
     note: "The same startEdit entry on a select cell, opening the option-list editor over the "
       + "column's own configured options. Captured full-page for the same positioning reason.",
   }),

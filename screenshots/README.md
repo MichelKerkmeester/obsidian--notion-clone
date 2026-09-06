@@ -539,7 +539,7 @@ The same startEdit entry on a select cell, opening the option-list editor over t
 |---|---|
 | ![constructed-cell-editor-select dark](notion-clone/fields/constructed-cell-editor-select-mobile-dark.png) | ![constructed-cell-editor-select light](notion-clone/fields/constructed-cell-editor-select-mobile-light.png) |
 
-Sources: `src/views/cell-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/column-types.ts`
+Sources: `src/views/cell-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/record-surface/cell-editor-option.ts`, `src/data/column-types.ts`
 
 ### Text cell in edit state (constructed)
 
@@ -549,7 +549,7 @@ CellRenderer's own startEdit — the entry database-view.ts wires into its editC
 |---|---|
 | ![constructed-cell-editor-text dark](notion-clone/fields/constructed-cell-editor-text-mobile-dark.png) | ![constructed-cell-editor-text light](notion-clone/fields/constructed-cell-editor-text-mobile-light.png) |
 
-Sources: `src/views/cell-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
+Sources: `src/views/cell-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/record-surface/cell-editor-text.ts`, `src/views/record-surface/cell-editor-number.ts`
 
 ### Date value picker (constructed)
 
@@ -649,7 +649,7 @@ Each row carries a drag handle, a colour dot that opens the colour picker, the c
 |---|---|
 | ![field-cell-edit-select dark](notion-clone/fields/field-cell-edit-select-mobile-dark.png) | ![field-cell-edit-select light](notion-clone/fields/field-cell-edit-select-mobile-light.png) |
 
-Sources: `src/views/cell-renderer.ts`, `src/data/column-types.ts`
+Sources: `src/views/cell-renderer.ts`, `src/views/record-surface/cell-editor-option.ts`, `src/data/column-types.ts`
 
 ### Text cell in edit state
 
@@ -659,7 +659,7 @@ Both editors keep the cell's rendered value visible underneath. The multi-line e
 |---|---|
 | ![field-cell-edit-text dark](notion-clone/fields/field-cell-edit-text-mobile-dark.png) | ![field-cell-edit-text light](notion-clone/fields/field-cell-edit-text-mobile-light.png) |
 
-Sources: `src/views/cell-renderer.ts`
+Sources: `src/views/cell-renderer.ts`, `src/views/record-surface/cell-editor-text.ts`, `src/views/record-surface/cell-editor-number.ts`
 
 ### Date value picker
 

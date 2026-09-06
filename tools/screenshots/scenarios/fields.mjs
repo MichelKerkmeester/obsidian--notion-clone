@@ -222,7 +222,7 @@ export const FIELDS_SCENARIOS = [
     group: "fields",
     width: 560,
     fixtureOf: "constructed-cell-editor-text",
-    sources: ["src/views/cell-renderer.ts"],
+    sources: ["src/views/cell-renderer.ts", "src/views/record-surface/cell-editor-text.ts", "src/views/record-surface/cell-editor-number.ts"],
     note: "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
     captureCss: STATIC_POPOVERS,
     html: () => `
@@ -256,7 +256,7 @@ export const FIELDS_SCENARIOS = [
     group: "fields",
     width: 460,
     fixtureOf: "constructed-cell-editor-select",
-    sources: ["src/views/cell-renderer.ts", "src/data/column-types.ts"],
+    sources: ["src/views/cell-renderer.ts", "src/views/record-surface/cell-editor-option.ts", "src/data/column-types.ts"],
     note: "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
     captureCss: STATIC_POPOVERS,
     html: () => `
