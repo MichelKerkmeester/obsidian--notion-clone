@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-06: **64 phases**, **6 with nothing left**, **208 rows** waiting on a device.
+Derived 2026-09-06: **65 phases**, **6 with nothing left**, **215 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -382,6 +382,16 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] Every desktop dropdown still opens with a search input active, including any surface the escalation converts to a sheet. `dropdown-field.ts:228`'s desktop branch is unconditional today (`searchable = phoneSheet ? … : true`, landed at `a952e5e7` / ADR-006) and the criterion is that it stays that way through the escalation — Notion agrees at any option count (N3 `8ff7ae4b` on a 3-option list, `86a8e66c`). Today: unexercised, because no desktop sheet surface exists yet to carry it. The phone sheet's `> 8` count gate at `dropdown-field.ts:228` is untouched: ADR-006 ruled it the phone's alone.
 - [ ] `npm run gate` exits 0 with the `constructed-dropdown` lane asserting the trailing check, observed red first. The lane exists — `tools/live/constructed-state-assertions.mjs:417-420` with the `dropdownPopover` marker at `:123` — and is extended, not replaced; its fixture counterpart at `tools/screenshots/scenarios/core.mjs:251-256` moves with it. Today: RED, because the marker asserts only that a disabled option exists. Threshold: the extended marker fails on today's tree with its exit status read, passes after, and the `constructed-dropdown` capture is re-taken and opened, with the pixel read owed to an image-capable leg per D5.
 - [ ] The operator opens dropdowns, menus and pickers on iOS and on desktop and reads them as refined. Only the operator closes this row.
+
+## 065-notion-record-refinement — 0/7
+
+- [ ] C1 — The word "Empty" is gone from the board card where an editor exists. `getEmptyDisplayValue` delegates to `getPropertyEmptyPrompt`, preserving the `multi-select → [prompt]` array shape and the `checkbox → false` case exactly as `record-detail-panel.ts:514-519` already does.
+- [ ] C2 — The prompt covers every format that has an editor, not three. `getPropertyEmptyPrompt` returns a verb+noun prompt for `number`, `date`, `datetime`, `currency`, `text` and `files` beside the three it already carries, with the new keys added to both locales.
+- [ ] C3 — The desktop record-sheet label and its value are the same computed size. The `font-size: var(--font-smaller)` declaration is dropped from the desktop arm of `.db-record-detail-field-label`; the phone arm is untouched.
+- [ ] C4 — Single-select renders as coloured text and multi-select as chips, on both surfaces. The record sheet's and the board card's option branches consume `renderOptionValue` instead of the filled-badge path.
+- [ ] C5 — Typing a name and picking a format produces a named column of that format, in one pass. The add-property picker forwards its query on selection, not only on the create fall-through.
+- [ ] C6 — The record sheet carries an add-property entry. *(gated on ADR-008)* A muted trailing row below the last field and above the hidden group opens the existing search-first picker through `052`'s picker host per `054` D8.
+- [ ] C7 — The operator reads a record on iOS and on desktop and reports the refinement as landed, with ADR-005, ADR-006, ADR-007 and ADR-008 taken. *(operator-owned; never ticked by an agent)*
 
 ## 066-notion-states-refinement — 0/6
 

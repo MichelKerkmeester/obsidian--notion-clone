@@ -1,0 +1,22 @@
+{
+  "specFolder": "005-component-surface-system/065-notion-record-refinement",
+  "description": "Refine the record and relation surfaces against the Notion screen digest: finish two half-landed Anytype rulings, consume the built-but-unwired option renderer, fix the add-property picker's dropped name, and route four extensions to the operator as rulings.",
+  "keywords": [
+    "phase",
+    "notion-record-refinement",
+    "record surface",
+    "empty value prompt",
+    "option split",
+    "add property picker",
+    "hidden properties"
+  ],
+  "lastUpdated": "2026-09-06T18:10:00.000Z",
+  "specId": "065",
+  "folderSlug": "notion-record-refinement",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

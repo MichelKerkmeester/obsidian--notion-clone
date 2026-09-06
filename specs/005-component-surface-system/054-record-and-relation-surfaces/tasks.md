@@ -688,6 +688,27 @@ in the parent program's escalation format rather than retrying. A task blocked o
 
 ---
 
+## What this packet handed to `065-notion-record-refinement`
+
+The Notion research loop over `notion-screens-digest.md` finished on 2026-09-06 and its synthesis
+opened **[`../065-notion-record-refinement/`](../065-notion-record-refinement/goal.md)**. Three of
+its six criteria are this packet's own unfinished halves rather than new Notion work, so they are
+recorded here as pointers and are `065`'s to land — not new rows in this packet:
+
+- **The empty-prompt rollout's board half.** This packet's `goal.md` §3 criterion 2 names "the
+  record sheet **and board cards**"; `board-renderer.ts:754-757` still returns `t("common.empty")`
+  for every non-checkbox format. `065` C1 and C2.
+- **A2's label/value size equalisation.** Still open at `styles.css:10300-10306`. `065` C3.
+- **A2 C9's option split.** `renderOptionValue` (`record-surface/property-row.ts:255`) was built,
+  documented and tested here, and no production file consumes it. `065` C4.
+
+`065` also carries the two findings the loop originated — the add-property picker dropping the typed
+name (`column-manager-renderer.ts:200`) and the record sheet's missing add affordance — plus four
+Proposed ADRs the operator owes, one of which (the hidden group's population semantics) concerns a
+primitive this packet built.
+
+---
+
 ## Operator rows — device confirmation
 
 Nothing in this repository closes these. An agent never ticks one.

@@ -1,0 +1,71 @@
+{
+  "run_id": "1788706801235-vlgapr",
+  "loop_type": "research",
+  "spec_folder": "specs/005-component-surface-system/054-record-and-relation-surfaces",
+  "base_artifact_dir": "specs/005-component-surface-system/054-record-and-relation-surfaces/research",
+  "total_cli_lineages": 1,
+  "orphaned_lineages": [],
+  "total": 1,
+  "succeeded": 1,
+  "failed": 0,
+  "all_failed": false,
+  "gauges": {
+    "lag": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "failure_classes": {
+    "timeout": 0,
+    "exit": 0,
+    "salvage_miss": 0
+  },
+  "timestamp_anomalies": [
+    {
+      "label": "glm-openrouter-record",
+      "state_log": "specs/005-component-surface-system/054-record-and-relation-surfaces/research/lineages/glm-openrouter-record/deep-research-state.jsonl",
+      "window": {
+        "start_at_iso": "2026-09-06T15:00:01.238Z",
+        "end_at_iso": "2026-09-06T15:28:16.631Z",
+        "tolerance_ms": 120000
+      },
+      "counts": {
+        "anomalous": 6,
+        "untimestamped": 0,
+        "unparseable": 0,
+        "total": 12
+      },
+      "sample": [
+        {
+          "index": 6,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T17:31:20+02:00",
+          "deltaMs": 63369
+        },
+        {
+          "index": 7,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T17:40:05+02:00",
+          "deltaMs": 588369
+        },
+        {
+          "index": 8,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T17:49:30+02:00",
+          "deltaMs": 1153369
+        },
+        {
+          "index": 9,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T17:55:10+02:00",
+          "deltaMs": 1493369
+        },
+        {
+          "index": 10,
+          "reason": "after_window",
+          "timestamp": "2026-09-06T18:00:30+02:00",
+          "deltaMs": 1813369
+        }
+      ]
+    }
+  ]
+}

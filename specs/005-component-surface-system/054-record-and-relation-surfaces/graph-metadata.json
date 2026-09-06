@@ -48,6 +48,7 @@
       "goal.md",
       "decision-record.md",
       "implementation-summary.md",
+      "research/research.md",
       "src/views/record-surface/record-header.ts",
       "src/views/record-surface/property-row.ts",
       "src/views/record-surface/add-property-row.ts",
@@ -59,8 +60,7 @@
       "src/views/table-record-peek.ts",
       "src/views/column-manager-renderer.ts",
       "src/views/board-card-properties-panel.ts",
-      "src/views/modals/create-property-modal.ts",
-      "src/views/modals/property-type-conflict-modal.ts"
+      "src/views/modals/create-property-modal.ts"
     ],
     "entities": [
       {
@@ -103,6 +103,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
         "source": "derived"
       },
       {
@@ -178,12 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "property-type-conflict-modal.ts",
-        "kind": "code",
-        "path": "src/views/modals/property-type-conflict-modal.ts",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The same three UI ideas — a record's header, a property row, a property editor — are built three",
     "created_at": "2026-09-05T11:19:44.951Z",
-    "last_save_at": "2026-09-06T14:40:10.014Z",
+    "last_save_at": "2026-09-06T16:18:37.149Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,16 +220,18 @@
       "acceptance-criteria.md",
       "goal.md",
       "decision-record.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "research/research.md"
     ],
-    "source_fingerprint": "sha256:c3843a36ab9164add674c1930c615c9ae60d28bc84a441721293eba93fbecc69",
+    "source_fingerprint": "sha256:04142981a762270a89f4a822ee3066432ba2df92b2142fd4889940262dd4a936",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "50f470cd7cf2edb7cfab0196a5a42b5011c8dc5988af4515becbdc766c1f925f",
       "plan.md": "24cd0245479ee276caf3a5df6b566b61596ad981890334df69650a845e19ca6c",
-      "tasks.md": "377bd88eae3e0d2e819dc4c906c5b884bc50ab393b7ce35acee206352eee77a8",
+      "tasks.md": "181f2e7d0066eeb237fcedc54c2eb705cc129e100e05f0d7a516adadf5814ef7",
       "decision-record.md": "e0d7bdf7eb3faae93c354b6eb1aaddeac2a3763601e7faa62da26878cd055d6c",
-      "implementation-summary.md": "eb60fa5fe0d8b3b1ae9416c321a8adafc6ab5d8232e70829a942b3b99c1de139"
+      "implementation-summary.md": "eb60fa5fe0d8b3b1ae9416c321a8adafc6ab5d8232e70829a942b3b99c1de139",
+      "research/research.md": "cff8c31241fc6325f222ce57f26de863dbb587574c1ff5cf8e6dca953dc1ccc4"
     },
     "last_active_child_id": null,
     "last_active_at": null

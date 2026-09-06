@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/065-notion-record-refinement",
+  "spec_folder": "005-component-surface-system/065-notion-record-refinement",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "065 spec",
+      "notion record refinement",
+      "record surface empty prompt",
+      "add property picker name",
+      "065 plan",
+      "record refinement legs",
+      "empty prompt leg",
+      "option split leg",
+      "065 tasks",
+      "record refinement tasks",
+      "empty prompt task",
+      "add property row task"
+    ],
+    "key_topics": [
+      "spec",
+      "notion",
+      "record",
+      "refinement",
+      "surface",
+      "empty",
+      "prompt",
+      "property",
+      "picker",
+      "name",
+      "plan",
+      "legs"
+    ],
+    "importance_tier": "important",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md",
+      "src/i18n.ts",
+      "src/views/board-renderer.ts",
+      "src/views/record-surface/property-row.ts",
+      "src/views/record-detail-panel.ts",
+      "src/views/column-manager-renderer.ts",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/live/constructed-state-assertions.mjs",
+      "tools/live/render-assertions.mjs",
+      "tools/live/touch-targets.mjs",
+      "tools/screenshots/scan-option-tones.mjs",
+      "src/views/record-surface/CODE.md",
+      "src/views/table-record-peek.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "property-row.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/property-row.ts",
+        "source": "derived"
+      },
+      {
+        "name": "record-detail-panel.ts",
+        "kind": "code",
+        "path": "src/views/record-detail-panel.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-manager-renderer.ts",
+        "kind": "code",
+        "path": "src/views/column-manager-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-state-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/constructed-state-assertions.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertions.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "touch-targets.mjs",
+        "kind": "file",
+        "path": "tools/live/touch-targets.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "scan-option-tones.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scan-option-tones.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "CODE.md",
+        "kind": "doc",
+        "path": "src/views/record-surface/CODE.md",
+        "source": "derived"
+      },
+      {
+        "name": "table-record-peek.ts",
+        "kind": "code",
+        "path": "src/views/table-record-peek.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Notion Record Refinement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context This",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Three changes this program already ruled on Anytype evidence are half-landed on the record surface:",
+    "created_at": "2026-09-06T16:06:31Z",
+    "last_save_at": "2026-09-06T16:18:37.052Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:c20cab3f29ebbc6e42c9108ab14d2880f2aa01e97b637ea07fef1675f8ebc736",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "f44f27fbe4d7421401d66976c233318977e39fa924f49c02f9b78c766d052205",
+      "plan.md": "ba73480370cd3f8f7cea9b2b5f17a08eec466a3bb048c6ba382fac47ea448fb9",
+      "tasks.md": "fff68d9ad929ae51c0bcf246fcca7c58de8750e1cccad933c4d2b61d8325a926",
+      "decision-record.md": "9ad9e7b438d23bab70ef43cf3fac903a5e887f68166ca9599d2ae63fbaf2850a",
+      "implementation-summary.md": "2fe44b6a7dde529ecc33342e78738761eac13338368b40ff211141b3b6d6f232"
+    },
+    "last_active_at": null
+  }
+}

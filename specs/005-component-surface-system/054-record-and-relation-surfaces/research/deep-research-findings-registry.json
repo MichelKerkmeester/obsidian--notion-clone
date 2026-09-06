@@ -1,0 +1,398 @@
+{
+  "mergedFrom": [
+    "glm-openrouter-record"
+  ],
+  "openQuestions": [],
+  "resolvedQuestions": [],
+  "keyFindings": [
+    {
+      "id": "F1.4",
+      "title": "Adopt P7 side-peek/center-peek/full-page naming; 006 placement ruling untouched",
+      "iteration": 1,
+      "kind": "improvement-docs",
+      "sources": [
+        "notion-screens-digest.md §3 P7, screen 0cb59457",
+        "054 goal.md §5"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F3.3",
+      "title": "Bulk show/hide: one select-all in the column manager (renderTrailing), no per-section link in the group",
+      "iteration": 3,
+      "kind": "partially-have",
+      "sources": [
+        "column-manager-renderer.ts:245-252,333"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F5.1",
+      "title": "Comments: three surfaces in Notion, none ours, unowned; future packet must scope which; zone-grammar guidance recorded",
+      "iteration": 5,
+      "kind": "inventory-unowned",
+      "sources": [
+        "grep record files (zero tokens)",
+        "notion-screens-digest.md §3 P6, §4 P6, §6 third bullet"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F3.4",
+      "title": "Conditional section, entry-point count, re-render survival already shipped",
+      "iteration": 3,
+      "kind": "already-have",
+      "sources": [
+        "hidden-properties.ts:18-21,47-56",
+        "i18n.ts:569",
+        "notion-screens-digest.md screens 9867cb76, cc8b241a, 52348672, 794591f5"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F3.5",
+      "title": "Deleted-properties tier: unowned lifecycle, lowest rank, operator question at most",
+      "iteration": 3,
+      "kind": "decision-question",
+      "sources": [
+        "notion-screens-digest.md §3 P3, §6 second bullet, screens 01cde7f6, 7ffa073f"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F2.2",
+      "title": "Desktop label/value type size equalisation open (styles.css:10258-10264); Notion third-source agreement; phone arm stays under the iOS zoom floor",
+      "iteration": 2,
+      "kind": "improvement-ranked-2",
+      "sources": [
+        "styles.css:10258-10264,10417-10437",
+        "design-trueup.md A2",
+        "notion-screens-digest.md §4 P1 row 3"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F5.3",
+      "title": "Device-only set consolidated: cover-claims if adopted + standing operator rows; R1-R5 lane-verifiable",
+      "iteration": 5,
+      "kind": "verification-plan",
+      "sources": [
+        "notion-screens-digest.md screens bfddb457, ab313e42"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F1.6",
+      "title": "Empty-title styling and body ghost copy already shipped",
+      "iteration": 1,
+      "kind": "already-have",
+      "sources": [
+        "record-header.ts:57-58",
+        "record-detail-panel.ts:294",
+        "i18n.ts:564",
+        "notion-screens-digest.md screen bf2171ff"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F2.1",
+      "title": "Empty-value prompts: A3 wins over Notion's universal Empty; board-card half unlanded (board-renderer.ts:728-732 never consults the primitive); formats beyond three unruled-but-evidenced",
+      "iteration": 2,
+      "kind": "improvement-ranked-1",
+      "sources": [
+        "board-renderer.ts:728-732",
+        "record-detail-panel.ts:515",
+        "property-row.ts:280-292",
+        "i18n.ts:78-81",
+        "design-trueup.md A3",
+        "notion-screens-digest.md §5(1)"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F1.2",
+      "title": "Featured/metadata line under the title: A1-ruled, unlanded; Notion corroborates placement",
+      "iteration": 1,
+      "kind": "improvement-operator-gated",
+      "sources": [
+        "record-header.ts:50-57",
+        "design-trueup.md A1",
+        "notion-screens-digest.md screens d2b6da49, 62fe716c"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F4.2",
+      "title": "Flow order conflict named: Anytype A5 search-first stays; Notion name-first+AI chips rejected (D6)",
+      "iteration": 4,
+      "kind": "conflict-resolved",
+      "sources": [
+        "notion-screens-digest.md §3 P4, §5(3)",
+        "design-trueup.md A5",
+        "054 goal.md D6"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F4.5",
+      "title": "Gated formats (disabled-never-omitted with reason) stay; stricter than Notion's plain list",
+      "iteration": 4,
+      "kind": "already-have",
+      "sources": [
+        "type-picker.ts:37-72"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F1.5",
+      "title": "Header open/close matches the need; P8 page menu out of scope (051/052)",
+      "iteration": 1,
+      "kind": "already-have",
+      "sources": [
+        "record-header.ts:66-90",
+        "styles.css:21046-21070",
+        "notion-screens-digest.md §4 P8"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F3.1",
+      "title": "Hidden population split: sheet group counts empties, peek group holds view-hidden columns, Notion's section holds view-hidden — operator question",
+      "iteration": 3,
+      "kind": "decision-question",
+      "sources": [
+        "record-detail-panel.ts:118-119,392-396",
+        "table-record-peek.ts:105-106,247-253",
+        "notion-screens-digest.md §3 P3"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F1.1",
+      "title": "Icon picker already matches Notion's read grammar (recents, colours, categories, search)",
+      "iteration": 1,
+      "kind": "already-have",
+      "sources": [
+        "src/views/icon-picker-popover.ts:3-13,43,69-71",
+        "notion-screens-digest.md screens b1b9d218, 4dd0854f"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F3.6",
+      "title": "Management-vs-visibility destinations: visibility anatomy have; management sheet named non-defect; title eye-disable state UNKNOWN",
+      "iteration": 3,
+      "kind": "partially-have",
+      "sources": [
+        "property-row.ts:330-395",
+        "notion-screens-digest.md §3 P2, screen 8bb9115f"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F5.4",
+      "title": "Nine-candidate ranked table with provenance, status and gate",
+      "iteration": 5,
+      "kind": "consolidation",
+      "sources": [
+        "iterations/iteration-005.md F5.4"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F3.2",
+      "title": "Per-row eye toggle in the hidden group: A4-ruled shape does not cover the extension; operator question",
+      "iteration": 3,
+      "kind": "improvement-operator-gated",
+      "sources": [
+        "hidden-properties.ts:32-76",
+        "property-row.ts:330-395",
+        "notion-screens-digest.md §3 P3, §6 first bullet"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F5.2",
+      "title": "Phone record sheet matches the ruled grammar; remaining deltas are iteration-002 items; phone value size pinned by the iOS zoom floor",
+      "iteration": 5,
+      "kind": "already-have",
+      "sources": [
+        "styles.css:10335-10545",
+        "roadmap.md rows 3, 4, 33, 40"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F4.1",
+      "title": "Picker drops the typed name on format selection (onSelect) and forces text on create (onCreateNew); createPropertyOfType already accepts initialLabel",
+      "iteration": 4,
+      "kind": "improvement-ranked-1-slice",
+      "sources": [
+        "column-manager-renderer.ts:200-201",
+        "database-view.ts:5088",
+        "add-property-row.ts:91-95,110-112",
+        "notion-screens-digest.md §3 P4"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F2.6",
+      "title": "Record sheet lacks any add-property entry; propose Notion's trailing plain-text row on the existing picker",
+      "iteration": 2,
+      "kind": "improvement-ranked-3",
+      "sources": [
+        "record-detail-panel.ts:41-46",
+        "add-property-row.ts:37-116",
+        "notion-screens-digest.md §3 P1, screens 16ddd22c, bf2171ff",
+        "design-trueup.md A4"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F1.3",
+      "title": "Record-level cover: real unowned gap; propose operator decision, not a task",
+      "iteration": 1,
+      "kind": "decision-question",
+      "sources": [
+        "notion-screens-digest.md §4 P5, screens 18d621d0, bfddb457, 9d90280d, 3ebe4893, 56e2ae1a, ab313e42"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F4.3",
+      "title": "Relation rows and editor already match the grammar the sample carries; no Notion per-format editor evidence exists in this harvest",
+      "iteration": 4,
+      "kind": "already-have",
+      "sources": [
+        "cell-editor-relation.ts:96-224",
+        "property-row.ts:102-105",
+        "notion-screens-digest.md §2 relation table, §6 fifth bullet"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F4.4",
+      "title": "Rollup rows render as ordinary rows both sides; ADR-003 keeps them ours",
+      "iteration": 4,
+      "kind": "already-have",
+      "sources": [
+        "record-detail-panel.ts:604-609",
+        "notion-screens-digest.md screens b69c8a59, 16ddd22c",
+        "054 decision-record.md ADR-003"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F2.5",
+      "title": "Row-shell consumption asymmetry: peek on buildPropertyRow, record sheet via renderCardField; already planned (ADR-004/L2, ADR-007 census)",
+      "iteration": 2,
+      "kind": "already-planned",
+      "sources": [
+        "property-row.ts:216-235",
+        "table-record-peek.ts:351",
+        "record-detail-panel.ts:520-535",
+        "054 decision-record.md ADR-004, ADR-007"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F2.4",
+      "title": "Single-select text / multi chip: A2 C9 ruled, renderOptionValue built with zero consumers",
+      "iteration": 2,
+      "kind": "improvement-ranked-3",
+      "sources": [
+        "property-row.ts:76-101,246-273",
+        "design-trueup.md A2 C9",
+        "notion-screens-digest.md §6 last bullet"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    },
+    {
+      "id": "F2.3",
+      "title": "Value alignment already resolved left (styles.css:10213-10235); trueup's drifted :10161 citation flagged",
+      "iteration": 2,
+      "kind": "already-have",
+      "sources": [
+        "styles.css:10213-10235",
+        "notion-screens-digest.md §4 P1 row 2"
+      ],
+      "_lineages": [
+        "glm-openrouter-record"
+      ]
+    }
+  ],
+  "ruledOutDirections": [],
+  "metrics": {
+    "iterationsCompleted": 0,
+    "openQuestions": 0,
+    "resolvedQuestions": 0,
+    "keyFindings": 27,
+    "sourceFindings": 27,
+    "reconstructionGaps": 0,
+    "convergenceScore": 0,
+    "coverageBySources": {}
+  },
+  "schema_mismatch": [
+    {
+      "type": "schema_mismatch",
+      "severity": "warn",
+      "lineage": "glm-openrouter-record",
+      "message": "Registry uses non-canonical key \"findings\" instead of \"keyFindings\"; coerced 27 entries.",
+      "aliasKey": "findings",
+      "canonicalKey": "keyFindings",
+      "coercedCount": 27
+    }
+  ]
+}
