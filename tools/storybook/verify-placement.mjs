@@ -3154,10 +3154,10 @@ const cellResults = await section("what a press on a table cell means", () => ce
 
 // ── every check above must have been watched failing ──
 //
-// `012-mobile-touch-semantics` asked for "every check watched failing first on a deliberately broken
-// tree, with the failing number recorded", and for most of a year that was prose in a spec doc: seven
-// checks had a control, the section grew to eleven, and nothing noticed. The two that were named as
-// missing were found by reading the run against the doc — which is exactly the method that stops
+// The mobile touch-semantics work asked for "every check watched failing first on a deliberately
+// broken tree, with the failing number recorded", and for most of a year that was prose in a spec
+// doc: seven checks had a control, the section grew to eleven, and nothing noticed. The two that
+// were named as missing were found by reading the run against the doc — which is exactly the method that stops
 // happening the next time someone is in a hurry.
 //
 // So the attribution is on the SECTION, not on each check. A check added to this section inherits the
@@ -7506,7 +7506,7 @@ await section("the peek's layer sits inside the token scale", async () => {
 // So this drives a real click on every element of a real row. Not a synthetic dispatch on the one
 // button that is expected to answer — every element, so a second path is discoverable rather than
 // assumed absent. The identity half then clicks the delete on a NAMED row and reads which column
-// object arrived, which is the assertion AC-008 asks for and no positional check can make.
+// object arrived, which is what "in the row's primary line" requires and no positional check can make.
 
 // ───────────────────────────────────────────────────────────────────
 // THE PROPERTY ROW'S OWN GEOMETRY, ON BOTH VIEWPORTS

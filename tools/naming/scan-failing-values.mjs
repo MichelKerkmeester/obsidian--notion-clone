@@ -11,11 +11,11 @@
 // Saying so was the whole job and nothing computed it. This does.
 //
 // WHY THIS IS A RATCHET AND NOT A FLOOR. A criterion that was never broken has no failing value to
-// record, and demanding one would be demanding fiction — the same mistake as `AC-016`'s threshold
-// of zero, which failed a correct harness for doing its job. Several rows here are honestly in that
-// state: they measured a property that already held. So the count is recorded and may not GROW. A
-// new tick has to bring its evidence. The existing set gets converted deliberately, or argued down
-// one row at a time by someone who reads it.
+// record, and demanding one would be demanding fiction — the same mistake a zero-tolerance
+// threshold made elsewhere in this program, which failed a correct harness for doing its job.
+// Several rows here are honestly in that state: they measured a property that already held. So the
+// count is recorded and may not GROW. A new tick has to bring its evidence. The existing set gets
+// converted deliberately, or argued down one row at a time by someone who reads it.
 //
 // WHAT COUNTS AS EVIDENCE is the vocabulary this corpus already uses, not a convention invented
 // here and imposed on 216 rows: a watched red, a "was N", a "recorded N", a "Today: N", a named

@@ -1108,7 +1108,7 @@ describe("timeline gantt DOM-structure parity", () => {
     expect(label?.getAttribute("x")).toBe(String(expectedCx));
   });
 
-  it("raises a milestone label off the month-band baseline when the two would overpaint (operator amendment to REQ-007, roadmap.md row 39)", () => {
+  it("raises a milestone label off the month-band baseline when the two would overpaint (operator amendment, roadmap.md row 39)", () => {
     // GanttHeaderRenderer's month-band label paints at bandX1+6/y=18 and GanttTaskBarRenderer's
     // milestone label at y=14 on the same header SVG — a milestone due on a band's first day
     // centres its label right beside that band's own left-anchored one. The reference itself

@@ -610,8 +610,9 @@ describe("kanban card tree parity", () => {
     const card = todoCard();
     const meta = card.querySelector<MockElement>(".db-kanban-card-meta")!;
     const rows = meta.querySelectorAll<MockElement>(":scope > .db-board-card-field");
-    // "status" is the group field and the title field is excluded by 045's mechanism, leaving
-    // progress, hours, due, tags and people from COLUMNS, in that order, unchanged by this leg.
+    // "status" is the group field and the title field is excluded by the card-field resolver's
+    // own reserved-key rule, leaving progress, hours, due, tags and people from COLUMNS, in that
+    // order, unchanged by this leg.
     expect(rows.map((row) => row.getAttribute("data-note-database-column-key"))).toEqual([
       "progress", "hours", "due", "tags", "people",
     ]);

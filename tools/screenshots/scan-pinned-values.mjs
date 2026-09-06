@@ -130,9 +130,10 @@ if (runtime.size === 0 || sheet.empty || sheet.fallbacks.size === 0) {
 
 const contradictions = [];
 const unread = [];
-// The population `AC-016` actually names: a harness assignment of a property `src/` also assigns.
-// The loop below SKIPS these, which is the criterion's population exactly — so the checker was
-// implementing the opposite of the criterion it answers to, and the phase's own goal.md says so.
+// The population the criterion actually names: a harness assignment of a property `src/` also
+// assigns. The loop below SKIPS these, which is the criterion's population exactly — so the
+// checker was implementing the opposite of the criterion it answers to, and the phase's own
+// goal.md says so.
 const standIns = [];
 
 for (const relPath of HARNESS_FILES) {
@@ -154,8 +155,8 @@ console.log(`scan-pinned-values: ${runtime.size} runtime-assigned, ${sheet.fallb
 // 4b. THE STAND-INS — COUNTED, NAMED, AND NOT CONDEMNED
 // ───────────────────────────────────────────────────────────────────
 //
-// `AC-016` asks for a scan of "an assignment of a custom property that `src/` also assigns" and
-// wants zero of them. There are 41, and every one is the harness doing its job: a screenshot runs
+// The criterion asks for a scan of "an assignment of a custom property that `src/` also assigns"
+// and wants zero of them. There are 41, and every one is the harness doing its job: a screenshot runs
 // no plugin, so something has to supply what the plugin would compute. A rule failing all 41 would
 // fail a correct harness, which is the shape this program keeps deleting — and the header above
 // says as much, which is WHY the loop skips them.

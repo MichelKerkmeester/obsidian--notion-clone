@@ -93,8 +93,8 @@ describe("the .base importer keeps landing a cards view on board", () => {
 
 describe("the frontmatter parser keeps accepting a persisted gallery", () => {
   it("still parses viewType: gallery from a db_view file rather than coercing it at read time", () => {
-    // 001's audit found this as the second accepting surface and recommended it stay open: closing
-    // it here would strand the cover the same way closing the sanitizer naively would. The on-open
+    // This parser is the second accepting surface, and it stays open on purpose: closing it here
+    // would strand the cover the same way closing the sanitizer naively would. The on-open
     // migration in both hosts is what actually redirects it.
     const parseViewTypeStart = dataSourceSource.indexOf("private parseViewType(");
     expect(parseViewTypeStart).toBeGreaterThanOrEqual(0);

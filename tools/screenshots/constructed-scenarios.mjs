@@ -580,7 +580,7 @@ export const CONSTRUCTED_SCENARIOS = [
       + "per-row currency/number column into each bar rather than only counting rows.",
   }),
 
-  // ── 043's thirteen fixture-only scenarios: per-view state variants, chart chrome and toolbar
+  // ── thirteen fixture-only scenarios: per-view state variants, chart chrome and toolbar
   // popovers, constructed through the same renderers and — for the popovers — the same real
   // togglePopover() their production toolbars call, never a hand-applied class. Declared with
   // fixtureOf from the fixture side (tools/screenshots/scenarios/*.mjs).
