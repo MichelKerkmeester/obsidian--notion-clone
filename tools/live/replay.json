@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-09-06T03:05:22.747Z",
+  "measuredAt": "2026-09-06T03:21:29.057Z",
   "inputs": {
-    "styles.css": "41c974032f7f",
+    "styles.css": "009892516d8e",
     "tools/screenshots/theme.css": "f30f295f9cf0",
     "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a",
-    "tools/live/replay.mjs": "b7b29df46982"
+    "tools/live/replay.mjs": "773d7e8bcb88"
   },
   "claims": [
     {
@@ -124,7 +124,7 @@
     },
     {
       "phase": "038-board-kanban-port",
-      "claim": "the board topbar and priority strip resolve their status colours from the token ladder",
+      "claim": "the board's per-card status colour resolves to a real paint, not an unresolved token",
       "was": 2,
       "recorded": 0,
       "actual": 0,
@@ -148,7 +148,7 @@
     },
     {
       "phase": "040-subtask-tree-port",
-      "claim": "the subtask tree fixtures carry the depth and progress markers the relation derives",
+      "claim": "the subtask tree fixtures carry the depth marker the relation derives",
       "was": 2,
       "recorded": 0,
       "actual": 0,
