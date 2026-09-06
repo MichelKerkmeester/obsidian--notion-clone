@@ -289,6 +289,42 @@ function findTestNameViolations(lines) {
 // 4. SCAN
 // ───────────────────────────────────────────────────────────────────
 
+// The per-file decision, pulled out on its own so a test can drive it over a
+// fixture string and filename without touching the real tree — everything
+// above this point is pure text-in, verdict-out, and this is the one place
+// that combines it into the shape scan() and the CLI report both consume.
+// Returns null for a clean file so a caller can tell "nothing to report"
+// apart from "reported, but every list happens to be empty".
+export function scanText(text, filename) {
+  const isCss = path.extname(filename) === ".css";
+  const artifactHits = isCss
+    ? findArtifactIdViolations(extractCssCommentSpans(text))
+    : [
+        ...findArtifactIdViolations(extractJsCommentSpans(text.split("\n"))),
+        ...findTestNameViolations(text.split("\n")),
+      ];
+
+  if (isCss) {
+    if (artifactHits.length === 0) return null;
+    return { file: filename, missingBanner: false, missingSections: false, commentedOutCodeLines: [], artifactIdHits: artifactHits };
+  }
+
+  const lines = text.split("\n");
+  const bannerOk = hasModuleBanner(lines);
+  const sectionsOk = hasPairedSection(lines);
+  const codeHits = findCommentedOutCode(lines);
+
+  if (bannerOk && sectionsOk && codeHits.length === 0 && artifactHits.length === 0) return null;
+
+  return {
+    file: filename,
+    missingBanner: !bannerOk,
+    missingSections: !sectionsOk,
+    commentedOutCodeLines: codeHits,
+    artifactIdHits: artifactHits,
+  };
+}
+
 function scan() {
   const files = [];
   for (const root of SCAN_ROOTS) {
@@ -308,31 +344,16 @@ function scan() {
   const violations = [];
 
   for (const file of files) {
-    const lines = readFileSync(file, "utf8").split("\n");
+    const text = readFileSync(file, "utf8");
     const rel = path.relative(REPO_ROOT, file);
+    const result = scanText(text, rel);
+    if (!result) continue;
 
-    const bannerOk = hasModuleBanner(lines);
-    const sectionsOk = hasPairedSection(lines);
-    const codeHits = findCommentedOutCode(lines);
-    const artifactHits = [
-      ...findArtifactIdViolations(extractJsCommentSpans(lines)),
-      ...findTestNameViolations(lines),
-    ];
-
-    if (!bannerOk) missingBanner++;
-    if (!sectionsOk) missingSections++;
-    commentedOutCodeLines += codeHits.length;
-    artifactIdHits += artifactHits.length;
-
-    if (!bannerOk || !sectionsOk || codeHits.length > 0 || artifactHits.length > 0) {
-      violations.push({
-        file: rel,
-        missingBanner: !bannerOk,
-        missingSections: !sectionsOk,
-        commentedOutCodeLines: codeHits,
-        artifactIdHits: artifactHits,
-      });
-    }
+    if (result.missingBanner) missingBanner++;
+    if (result.missingSections) missingSections++;
+    commentedOutCodeLines += result.commentedOutCodeLines.length;
+    artifactIdHits += result.artifactIdHits.length;
+    violations.push(result);
   }
 
   // styles.css is not under either SCAN_ROOT and carries no MODULE banner or
@@ -344,16 +365,11 @@ function scan() {
   try {
     const cssText = readFileSync(STYLES_CSS_PATH, "utf8");
     scanned += 1;
-    const cssHits = findArtifactIdViolations(extractCssCommentSpans(cssText));
-    artifactIdHits += cssHits.length;
-    if (cssHits.length > 0) {
-      violations.push({
-        file: path.relative(REPO_ROOT, STYLES_CSS_PATH),
-        missingBanner: false,
-        missingSections: false,
-        commentedOutCodeLines: [],
-        artifactIdHits: cssHits,
-      });
+    const cssRel = path.relative(REPO_ROOT, STYLES_CSS_PATH);
+    const cssResult = scanText(cssText, cssRel);
+    if (cssResult) {
+      artifactIdHits += cssResult.artifactIdHits.length;
+      violations.push(cssResult);
     }
   } catch {
     // styles.css always exists in this repo; a missing file is a different
@@ -395,4 +411,6 @@ function main() {
   process.exit(result.violations.length === 0 ? 0 : 1);
 }
 
-main();
+// Guarded so scanText() is importable for tests without triggering this CLI's own process.exit().
+const isMain = process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
+if (isMain) main();
