@@ -1,0 +1,250 @@
+{
+  "mergedFrom": [
+    "glm-devpass-board"
+  ],
+  "openQuestions": [],
+  "resolvedQuestions": [],
+  "keyFindings": [
+    {
+      "id": "state-finding-1-1-c49883e97ac8",
+      "title": "F1 desktop always-count declined: Notion P1 (digest :109-117) vs Anytype A1 (design-trueup.md:33-36); Anytype ruling stands (digest :236-238); phone count already shipped (board-renderer.ts:267-269, styles.css:9461-9464)",
+      "text": "F1 desktop always-count declined: Notion P1 (digest :109-117) vs Anytype A1 (design-trueup.md:33-36); Anytype ruling stands (digest :236-238); phone count already shipped (board-renderer.ts:267-269, styles.css:9461-9464)",
+      "addedAtIteration": 1,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-3-2-2876843a4d89",
+      "title": "F10 drag silent in BOTH reference sets; our states stay design-inferred (design-trueup.md:201,260); no change",
+      "text": "F10 drag silent in BOTH reference sets; our states stay design-inferred (design-trueup.md:201,260); no change",
+      "addedAtIteration": 3,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-3-3-bdc33f4ee003",
+      "title": "F11 board wrap toggle: mechanism exists (board-renderer.ts:711; -field-wrap per tasks.md:405-407) but adoption conflicts with Anytype A4 single-line (design-trueup.md:264) and AC-013's ellipsis threshold (acceptance-criteria.md:80); recommend no task",
+      "text": "F11 board wrap toggle: mechanism exists (board-renderer.ts:711; -field-wrap per tasks.md:405-407) but adoption conflicts with Anytype A4 single-line (design-trueup.md:264) and AC-013's ellipsis threshold (acceptance-criteria.md:80); recommend no task",
+      "addedAtIteration": 3,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-3-4-a5858b76b942",
+      "title": "F12 load limit: mechanism matches (board-renderer.ts:291-294), magnitude 10 stands per digest :256-257",
+      "text": "F12 load limit: mechanism matches (board-renderer.ts:291-294), magnitude 10 stands per digest :256-257",
+      "addedAtIteration": 3,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-3-5-f171c681d7f3",
+      "title": "F13 option checklist: page icon/Color columns/Open pages in/Card preview all have equivalents; card-size presets not recommended; Show data source title unverified in bounded scope",
+      "text": "F13 option checklist: page icon/Color columns/Open pages in/Card preview all have equivalents; card-size presets not recommended; Show data source title unverified in bounded scope",
+      "addedAtIteration": 3,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-4-1-b4fcd81e819a",
+      "title": "F14 sub-grouping staleness recorded; P3 conclusion (not a gap) holds; no change",
+      "text": "F14 sub-grouping staleness recorded; P3 conclusion (not a gap) holds; no change",
+      "addedAtIteration": 4,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-4-2-2d5332e6475d",
+      "title": "F15 phone parity: count, permanent controls, labelled + New, own geometry all shipped (board-renderer.ts:267-269; styles.css:9430-9437, 9642-9678)",
+      "text": "F15 phone parity: count, permanent controls, labelled + New, own geometry all shipped (board-renderer.ts:267-269; styles.css:9430-9437, 9642-9678)",
+      "addedAtIteration": 4,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-4-3-5bdcb2a05f39",
+      "title": "F15b inference: phone card emptiness attributable to Card preview → None (9d7ffd05 :74); no phone card-body change",
+      "text": "F15b inference: phone card emptiness attributable to Card preview → None (9d7ffd05 :74); no phone card-body change",
+      "addedAtIteration": 4,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-4-4-2f72a468c452",
+      "title": "F16 loading placeholders: transient state (:75-77), ours renders synchronously (board-renderer.ts:180-194); skeleton system not recommended",
+      "text": "F16 loading placeholders: transient state (:75-77), ours renders synchronously (board-renderer.ts:180-194); skeleton system not recommended",
+      "addedAtIteration": 4,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-4-5-404994beec4b",
+      "title": "F17 six device-only checks filed: page scroll/chrome (AC-012), dark theme, desktop hover reveal, real-handset phone board (AC-010; R5 harness-synthetic per tasks.md:246), swimlane board (dormant), past-limit/empty columns",
+      "text": "F17 six device-only checks filed: page scroll/chrome (AC-012), dark theme, desktop hover reveal, real-handset phone board (AC-010; R5 harness-synthetic per tasks.md:246), swimlane board (dormant), past-limit/empty columns",
+      "addedAtIteration": 4,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-1-2-00d8b5feb68c",
+      "title": "F2 Notion dot+plain-label header (98dde396) conflicts with ADR-006 tint-fill chip (styles.css:9412; decision-record.md ADR-006); resolved for ADR-006; digest §4 :173-179 is stale vs the current tree",
+      "text": "F2 Notion dot+plain-label header (98dde396) conflicts with ADR-006 tint-fill chip (styles.css:9412; decision-record.md ADR-006); resolved for ADR-006; digest §4 :173-179 is stale vs the current tree",
+      "addedAtIteration": 1,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-1-3-efba02aecde9",
+      "title": "F3 P2 group-management depth is the digest's own flagged operator question (digest :246-247, :277-281); concrete proposal: Groups panel from a new menu row at board-renderer.ts:520-535, eye toggles to hideGroup/new showGroup (:84), reorder via updateGroupOrder (:83) reusing board-card-properties-panel.ts:57-94 drag grammar; red-first: hidden-group restoration without leaving the board fails today",
+      "text": "F3 P2 group-management depth is the digest's own flagged operator question (digest :246-247, :277-281); concrete proposal: Groups panel from a new menu row at board-renderer.ts:520-535, eye toggles to hideGroup/new showGroup (:84), reorder via updateGroupOrder (:83) reusing board-card-properties-panel.ts:57-94 drag grammar; red-first: hidden-group restoration without leaving the board fails today",
+      "addedAtIteration": 1,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-2-1-e2142d65fd7f",
+      "title": "F4 property-visibility panel: already have (board-card-properties-panel.ts:31-127 covers 98dde396/69f98d1d/56e2ae1a behaviour incl. reorder)",
+      "text": "F4 property-visibility panel: already have (board-card-properties-panel.ts:31-127 covers 98dde396/69f98d1d/56e2ae1a behaviour incl. reorder)",
+      "addedAtIteration": 2,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-2-2-b534723c2292",
+      "title": "F5 P5 per-type property icons declined: conflicts A4 values-only (design-trueup.md:198); Anytype ruling stands (digest :253-255); ours ships label-hidden rows at styles.css:9583-9585",
+      "text": "F5 P5 per-type property icons declined: conflicts A4 values-only (design-trueup.md:198); Anytype ruling stands (digest :253-255); ours ships label-hidden rows at styles.css:9583-9585",
+      "addedAtIteration": 2,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-2-3-96d64299073f",
+      "title": "F6 P4 bare-text add-card declined: conflicts A5 bordered box (design-trueup.md:199); ours ships styles.css:9618-9656; placement agrees (bottom of column) and survives the T014 page-scroll leg unchanged",
+      "text": "F6 P4 bare-text add-card declined: conflicts A5 bordered box (design-trueup.md:199); ours ships styles.css:9618-9656; placement agrees (bottom of column) and survives the T014 page-scroll leg unchanged",
+      "addedAtIteration": 2,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-2-4-a260c18c19af",
+      "title": "F7 empty-property row behaviour is a digest gap (digest card rows :78,:146-147 silent; board-renderer.ts:451-452,724-726 gates on showEmptyFields) — recorded, no change",
+      "text": "F7 empty-property row behaviour is a digest gap (digest card rows :78,:146-147 silent; board-renderer.ts:451-452,724-726 gates on showEmptyFields) — recorded, no change",
+      "addedAtIteration": 2,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-2-5-a9e0d533756c",
+      "title": "F8 inference only: digest gives no evidence on whether Notion's grouping property renders as a card row; our board-card-fields.ts:62-63 rule stands (AC-006-pinned mechanism)",
+      "text": "F8 inference only: digest gives no evidence on whether Notion's grouping property renders as a card row; our board-card-fields.ts:62-63 rule stands (AC-006-pinned mechanism)",
+      "addedAtIteration": 2,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-3-1-7a67cddd87ec",
+      "title": "F9 P7 confirms the digest cannot arbitrate ADR-008/AC-012; page-scroll reds remain styles.css:9342-9352, 9466-9474, 9367-9379; filed device-only, not a research finding",
+      "text": "F9 P7 confirms the digest cannot arbitrate ADR-008/AC-012; page-scroll reds remain styles.css:9342-9352, 9466-9474, 9367-9379; filed device-only, not a research finding",
+      "addedAtIteration": 3,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-5-3-0387455efd21",
+      "title": "N3 errata: digest staleness at :173-179 (pre-ADR-006 chip) and :193-195 (sub-grouping)",
+      "text": "N3 errata: digest staleness at :173-179 (pre-ADR-006 chip) and :193-195 (sub-grouping)",
+      "addedAtIteration": 5,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-5-4-80278e963d16",
+      "title": "N4 evidence-only: drag-state captures; both reference sets silent",
+      "text": "N4 evidence-only: drag-state captures; both reference sets silent",
+      "addedAtIteration": 5,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-5-5-fe881b13ac0c",
+      "title": "Not recommended with reasons: wrap toggle, card-size presets, loading skeletons, phone card-body reduction, property icons, bare-text add-card, desktop count, swimlane revival",
+      "text": "Not recommended with reasons: wrap toggle, card-size presets, loading skeletons, phone card-body reduction, property icons, bare-text add-card, desktop count, swimlane revival",
+      "addedAtIteration": 5,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-5-1-7567c76fd15c",
+      "title": "Rank 1 adoption candidate: P2 Groups panel, operator-gated (digest :246-247, :277-281); concrete shape in iteration-001 §4",
+      "text": "Rank 1 adoption candidate: P2 Groups panel, operator-gated (digest :246-247, :277-281); concrete shape in iteration-001 §4",
+      "addedAtIteration": 5,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    },
+    {
+      "id": "state-finding-5-2-0a52eb407ada",
+      "title": "Rank 2: T014-T016 already tasked; Notion contributes only device-verification items (F17)",
+      "text": "Rank 2: T014-T016 already tasked; Notion contributes only device-verification items (F17)",
+      "addedAtIteration": 5,
+      "_reconstructed_from_state": true,
+      "_lineages": [
+        "glm-devpass-board"
+      ]
+    }
+  ],
+  "ruledOutDirections": [],
+  "metrics": {
+    "iterationsCompleted": 5,
+    "openQuestions": 0,
+    "resolvedQuestions": 0,
+    "keyFindings": 23,
+    "sourceFindings": 23,
+    "reconstructionGaps": 0,
+    "convergenceScore": 0.3,
+    "coverageBySources": {}
+  }
+}

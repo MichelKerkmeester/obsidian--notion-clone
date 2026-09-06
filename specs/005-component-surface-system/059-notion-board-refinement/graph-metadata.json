@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "packet_id": "005-component-surface-system/056-board-anytype-parity",
-  "spec_folder": "005-component-surface-system/056-board-anytype-parity",
+  "packet_id": "005-component-surface-system/059-notion-board-refinement",
+  "spec_folder": "005-component-surface-system/059-notion-board-refinement",
   "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
@@ -11,32 +11,32 @@
   },
   "derived": {
     "trigger_phrases": [
-      "056 spec",
-      "board anytype parity",
-      "kanban anatomy",
-      "board element migration table",
-      "056 plan",
-      "board anytype parity plan",
-      "kanban rebuild legs",
-      "056 tasks",
-      "board anytype parity tasks",
-      "kanban true-up task",
-      "056 acceptance criteria",
-      "board anytype closure gate"
+      "059 spec",
+      "notion board refinement",
+      "board groups panel",
+      "notion vs anytype board conflicts",
+      "059 plan",
+      "board groups panel plan",
+      "notion board refinement plan",
+      "showGroup wiring plan",
+      "059 tasks",
+      "board groups panel tasks",
+      "notion board refinement tasks",
+      "showGroup wiring tasks"
     ],
     "key_topics": [
       "spec",
+      "notion",
       "board",
+      "refinement",
+      "groups",
+      "panel",
       "anytype",
-      "parity",
-      "kanban",
-      "anatomy",
-      "element",
-      "migration",
-      "table",
+      "conflicts",
       "plan",
-      "rebuild",
-      "legs"
+      "showgroup",
+      "wiring",
+      "tasks"
     ],
     "importance_tier": "important",
     "status": "draft",
@@ -48,19 +48,18 @@
       "goal.md",
       "decision-record.md",
       "implementation-summary.md",
-      "research/research.md",
       "src/views/board-renderer.ts",
-      "src/views/board-card-fields.ts",
-      "styles.css",
+      "src/views/database-view.ts",
+      "src/views/embedded-database-renderer.ts",
       "src/data/types.ts",
+      "src/data/data-source.ts",
       "src/i18n.ts",
-      "src/views/rendered-view-roots.ts",
-      "src/views/board-renderer-parity.test.ts",
-      "src/views/board-renderer-hierarchy.test.ts",
-      "src/views/column-header-menu-affordance.test.ts",
-      "tools/screenshots/scenarios/shared.mjs",
-      "tools/live/render-assertion-harness.ts",
-      "tools/live/replay.mjs"
+      "tools/live/render-assertions.mjs",
+      "screenshots/manifest.json",
+      "tools/live/sheet-grammar.mjs",
+      "src/views/board-card-fields.ts",
+      "src/views/record-surface/property-row.ts",
+      "tools/gate.mjs"
     ],
     "entities": [
       {
@@ -106,27 +105,21 @@
         "source": "derived"
       },
       {
-        "name": "research.md",
-        "kind": "doc",
-        "path": "research/research.md",
-        "source": "derived"
-      },
-      {
         "name": "board-renderer.ts",
         "kind": "code",
         "path": "src/views/board-renderer.ts",
         "source": "derived"
       },
       {
-        "name": "board-card-fields.ts",
+        "name": "database-view.ts",
         "kind": "code",
-        "path": "src/views/board-card-fields.ts",
+        "path": "src/views/database-view.ts",
         "source": "derived"
       },
       {
-        "name": "styles.css",
-        "kind": "file",
-        "path": "styles.css",
+        "name": "embedded-database-renderer.ts",
+        "kind": "code",
+        "path": "src/views/embedded-database-renderer.ts",
         "source": "derived"
       },
       {
@@ -136,51 +129,51 @@
         "source": "derived"
       },
       {
+        "name": "data-source.ts",
+        "kind": "code",
+        "path": "src/data/data-source.ts",
+        "source": "derived"
+      },
+      {
         "name": "i18n.ts",
         "kind": "code",
         "path": "src/i18n.ts",
         "source": "derived"
       },
       {
-        "name": "rendered-view-roots.ts",
-        "kind": "code",
-        "path": "src/views/rendered-view-roots.ts",
-        "source": "derived"
-      },
-      {
-        "name": "board-renderer-parity.test.ts",
-        "kind": "test",
-        "path": "src/views/board-renderer-parity.test.ts",
-        "source": "derived"
-      },
-      {
-        "name": "board-renderer-hierarchy.test.ts",
-        "kind": "test",
-        "path": "src/views/board-renderer-hierarchy.test.ts",
-        "source": "derived"
-      },
-      {
-        "name": "column-header-menu-affordance.test.ts",
-        "kind": "test",
-        "path": "src/views/column-header-menu-affordance.test.ts",
-        "source": "derived"
-      },
-      {
-        "name": "shared.mjs",
+        "name": "render-assertions.mjs",
         "kind": "file",
-        "path": "tools/screenshots/scenarios/shared.mjs",
+        "path": "tools/live/render-assertions.mjs",
         "source": "derived"
       },
       {
-        "name": "render-assertion-harness.ts",
-        "kind": "code",
-        "path": "tools/live/render-assertion-harness.ts",
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
         "source": "derived"
       },
       {
-        "name": "replay.mjs",
+        "name": "sheet-grammar.mjs",
         "kind": "file",
-        "path": "tools/live/replay.mjs",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "board-card-fields.ts",
+        "kind": "code",
+        "path": "src/views/board-card-fields.ts",
+        "source": "derived"
+      },
+      {
+        "name": "property-row.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/property-row.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
         "source": "derived"
       },
       {
@@ -190,27 +183,33 @@
         "source": "derived"
       },
       {
-        "name": "Board Anytype Parity",
+        "name": "Notion Board Refinement",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
       },
       {
-        "name": "Project Manager",
+        "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
       },
       {
-        "name": "Key Decisions",
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context This",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
       }
     ],
-    "causal_summary": "The board renders Project Manager's kanban, not Anytype's: `src/views/board-renderer.ts` constructs",
-    "created_at": "2026-09-05T20:25:00Z",
-    "last_save_at": "2026-09-06T16:14:19.886Z",
+    "causal_summary": "The board can put a group out of sight and offers nothing that brings it back",
+    "created_at": "2026-09-06T15:01:03Z",
+    "last_save_at": "2026-09-06T16:16:50.465Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,18 +219,16 @@
       "acceptance-criteria.md",
       "goal.md",
       "decision-record.md",
-      "implementation-summary.md",
-      "research/research.md"
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:68772556c262d4d8e69d9fa7122915cc50d04d7272d45cca34324c0a79cff5d9",
+    "source_fingerprint": "sha256:7ae2cd35c71e1e3af53a4f47012bc967bbf4068849b02ea0175ec1839271e915",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "69a81acb0a3212ef5976de467fb7c8c1f5ca9956ec48b90a3aa30780f271865f",
-      "plan.md": "3424b933d260f02c6a5571e2422b5860f28fffbc51825219ec9d609980b5e8dc",
-      "tasks.md": "23b957c20be6e19995ac4094521721c3837ce4756af6a8f66e4846bcaf2e6fa4",
-      "decision-record.md": "6fc1e59c7904f6f5bdcc6d1b3a5abed5e51bc34c971693c403933780502e3d08",
-      "implementation-summary.md": "ca81a042210a7505de100a41a7928b782f5be96832c7106a01a1106a3cf35177",
-      "research/research.md": "d2d6e1eb57dfb8c04473636e6a3861bbd68d029226336939e939e9307a2e7e27"
+      "spec.md": "2328b34fbc6af8d613aed109d5b8f9e2d7a2f00f20e1967b3b0503c16b551493",
+      "plan.md": "8f58de998eac5b9e8a7abb302ea15f50a09723a11da84f7eab8c873ac28672a0",
+      "tasks.md": "94f3f3b1aef02355b4d2c7316107c89591860a4a41d6ff35d040ec61fa4efe5e",
+      "decision-record.md": "1375a59ed5916c02443970a7a2caa5811b541c91dad03244a308d8b815a71954",
+      "implementation-summary.md": "b80e271603ea0db9a34689c459f86ee0f02fa8634048aeb7d9002e1df8460612"
     },
     "last_active_at": null
   }

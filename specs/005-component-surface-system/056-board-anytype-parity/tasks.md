@@ -559,6 +559,14 @@ _memory:
 - **Thresholds with their failing values**: See `checklist.md`
 - **Closure gate**: See `acceptance-criteria.md`
 - **Decisions**: See `decision-record.md`
+- **Notion refinement, and where it went**: the five-iteration research loop on this board's Notion
+  screens is [`research/research.md`](research/research.md); its Notion fact source is
+  [`notion-screens-digest.md`](notion-screens-digest.md); and the child packet it opened is
+  [`../059-notion-board-refinement/`](../059-notion-board-refinement/goal.md). **Nothing in this
+  packet moves because of it** — `../roadmap.md` §7.15 makes the Notion refinement additive, so
+  `059` may add a criterion, a task or an ADR and may not un-tick a row here. Two things do arrive
+  from it: four errata notes against `notion-screens-digest.md`, and four device-only checks named
+  on this packet's AC-010 operator pass. Both are `059` T003 and T004, and neither changes a Met row.
 <!-- /ANCHOR:cross-refs -->
 
 ---

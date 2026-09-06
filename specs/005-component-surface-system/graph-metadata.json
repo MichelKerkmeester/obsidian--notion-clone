@@ -64,6 +64,7 @@
     "005-component-surface-system/057-calendar-anytype-parity",
     "005-component-surface-system/058-card-title-and-title-formats",
     "005-component-surface-system/067-sheet-family-remediation",
+    "005-component-surface-system/059-notion-board-refinement",
     "005-component-surface-system/062-notion-table-refinement"
   ],
   "manual": {
@@ -113,6 +114,7 @@
       "001-overlay-placement-and-menu-language/spec.md",
       "tools/live/probe.mjs",
       "tools/storybook/verify-placement.mjs",
+      "src/views/board-renderer.ts",
       "tools/live/renderer-coverage.json",
       "tools/live/replay.json",
       "src/data/calendar-timeline-model.ts",
@@ -121,8 +123,7 @@
       "tools/live/touch-targets.mjs",
       "tools/live/unstyled-links.mjs",
       "tools/screenshots/capture.mjs",
-      "tools/screenshots/theme.css",
-      "tools/storybook/obsidian-stub.mjs"
+      "tools/screenshots/theme.css"
     ],
     "entities": [
       {
@@ -180,6 +181,12 @@
         "source": "derived"
       },
       {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
         "name": "renderer-coverage.json",
         "kind": "config",
         "path": "tools/live/renderer-coverage.json",
@@ -234,12 +241,6 @@
         "source": "derived"
       },
       {
-        "name": "obsidian-stub.mjs",
-        "kind": "file",
-        "path": "tools/storybook/obsidian-stub.mjs",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -272,7 +273,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-06T16:17:39.119Z",
+    "last_save_at": "2026-09-06T16:19:30.701Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -280,10 +281,10 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:b2f07b46414de9f5b3bf88b6c3098f136823d8b4377a56dacae3ca2126022758",
+    "source_fingerprint": "sha256:e8878a76754f16febc83c99aac891397878aa4c8db13ede57ab203dfaa0b2dbd",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "fe85c5044c7b54c5ac7329ea6a2874194879914cf13d477c3b434b5990b84efe",
+      "spec.md": "5cf6157d85f0ae9df89cced12880e86b7f2ef2f8af63d520c1666ced1ceed96b",
       "handover.md": "230fa68fd184e5190d21f4e9c3987a2ea68999bb7746a8e7e0336f2b41452a7e"
     },
     "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",

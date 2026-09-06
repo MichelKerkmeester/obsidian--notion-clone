@@ -1,0 +1,19 @@
+{
+  "specFolder": "005-component-surface-system/059-notion-board-refinement",
+  "description": "The board can put a group out of sight and offers nothing that brings it back",
+  "keywords": [
+    "phase",
+    "notion-board-refinement",
+    "board-groups-panel",
+    "notion-vs-anytype"
+  ],
+  "lastUpdated": "2026-09-06T18:40:00.000Z",
+  "specId": "059",
+  "folderSlug": "notion-board-refinement",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}
