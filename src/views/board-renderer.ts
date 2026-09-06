@@ -221,7 +221,9 @@ export class BoardRenderer {
       visibleKeys: this.legacyVisibleColumnKeys,
     });
     container.addClass("db-kanban-view");
-    const board = container.createDiv({ cls: "db-kanban-board" });
+    // The card carries role="row" below; without a role="grid" ancestor that role has no grid to
+    // pair with, which is an ARIA relationship the browser and assistive tech both expect intact.
+    const board = container.createDiv({ cls: "db-kanban-board", attr: { role: "grid" } });
     // The column header shows its "..." and "+" only on hover on desktop and permanently on
     // touch, where there is no hover to reveal them from.
     board.toggleClass("is-touch", this.touchMode);
@@ -245,8 +247,8 @@ export class BoardRenderer {
 
     const col = board.createDiv({ cls: "db-kanban-col", attr: { "data-status": group.key } });
     const header = col.createDiv({ cls: "db-kanban-col-header" });
-    // At rest the header carries the option chip alone — no fill, a 1px border, the option
-    // colour on its text. The chip reuses the same status-color vocabulary every option value
+    // At rest the header carries the option chip alone — a 1px border, the option's own tint
+    // fill and darkened text. The chip reuses the same status-color vocabulary every option value
     // renders with elsewhere; only its hex pair is retinted, scoped to this view, because the
     // raw hue fails WCAG 1.4.3 as bare text in light theme.
     const chip = header.createSpan({ cls: "db-kanban-col-chip" });

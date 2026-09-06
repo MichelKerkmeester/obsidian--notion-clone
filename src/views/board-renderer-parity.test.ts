@@ -514,6 +514,22 @@ describe("kanban view and column shell parity", () => {
     expect(board.parentElement).toBe(container);
   });
 
+  it("gives every card row its grid ancestor in the built DOM, not just a matching literal", () => {
+    const { board } = renderBoard();
+    expect(board.getAttribute("role")).toBe("grid");
+    const card = board.querySelectorAll<MockElement>(".db-kanban-card")[0];
+    expect(card.getAttribute("role")).toBe("row");
+    // Walk up from the card rather than re-reading the source: this fails if the grid role
+    // ever moves off the card's actual ancestor chain, independent of where each role is set.
+    let ancestor = card.parentElement;
+    let foundGrid = false;
+    while (ancestor) {
+      if (ancestor.getAttribute("role") === "grid") { foundGrid = true; break; }
+      ancestor = ancestor.parentElement;
+    }
+    expect(foundGrid).toBe(true);
+  });
+
   it("renders one column per group with the option chip header", () => {
     const { board } = renderBoard();
     const columns = board.querySelectorAll<MockElement>(":scope > .db-kanban-col");

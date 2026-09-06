@@ -115,18 +115,11 @@ describe("mobile table and panel UX", () => {
     expect(field).toMatch(/min-width:\s*0/);
   });
 
-  it("takes the board group header out of sticky flow on the phone so it cannot float over cards", () => {
-    const header = declarationsFor(".is-phone .note-database-container .db-board-column-header");
-    expect(header).toMatch(/position:\s*relative/);
-    expect(header).toMatch(/top:\s*auto/);
-  });
-
   it("guards the load-bearing hover states behind @media (hover: hover) so a tap leaves nothing stuck", () => {
     const hover = hoverHoverBlocks();
     expect(hover).toContain(".note-database-container .db-table tr:hover td");
     expect(hover).toContain(".note-database-container .db-table td:hover");
     expect(hover).toContain(".note-database-container .db-list-row:hover");
-    expect(hover).toContain(".note-database-container .db-board-card:hover");
     expect(hover).toContain(".note-database-container .db-board-card-field:hover");
     expect(hover).toContain(".note-database-container .db-record-detail-field:hover");
   });

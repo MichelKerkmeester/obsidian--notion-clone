@@ -331,20 +331,3 @@ export function boardColumn(title, rows, tone = OPTION_TONES[title], { columnCla
   </div>`;
 }
 
-/**
- * The board's group-level selection header — the control that selects a whole subgroup at once,
- * a different family from the per-row box beside it. Keeps its title and count in
- * `db-board-header-text`.
- */
-export const boardSubgroupHeader = (title, count, tone = OPTION_TONES[title]) => `
-  <div class="db-board-subgroup">
-    <div class="db-board-subgroup-header">
-      ${collapseToggle("db-board-subgroup-toggle")}
-      ${rowCheckbox("db-board-subgroup-checkbox")}
-      <div class="db-board-header-text">
-        ${groupTitle("db-board-subgroup-title", title, tone)}
-        <span class="db-board-subgroup-count">${count}</span>
-      </div>
-    </div>
-    <div class="db-board-cards" role="rowgroup"></div>
-  </div>`;

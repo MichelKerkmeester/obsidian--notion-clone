@@ -263,8 +263,7 @@ retired lane's.
 
 ## ADR-006: The header chip takes Anytype's tint fill (R6)
 
-**Status**: **Decided by the operator** — 2026-09-06 ~05:25. **Not implemented**; a follow-up leg
-takes it.
+**Status**: **Decided by the operator** — 2026-09-06 ~05:25. **Implemented** 2026-09-06.
 
 **Context.** ADR-004's E1 declined Anytype's bare light-theme option colour on a WCAG 1.4.3 measure
 and named the replacement as Anytype's own card-chip treatment: tint fill plus darkened text. T012
@@ -279,15 +278,29 @@ card chip's existing tint/text pair rather than introducing a third treatment. C
 **per colour**: E1's 5.93:1 amber figure was one sample, not a guarantee for all seven option hues,
 so each hue is re-measured against its own tint fill and any that fails is named as its own
 exception rather than assumed to clear with the rest. It moves every board capture and is a
-stylesheet edit, so it needs the CSS lane. **Nothing is changed by this leg** — it was instructed to
-record the ruling and leave the code, and the row stays open in `tasks.md` T012.
+stylesheet edit, so it needs the CSS lane.
+
+**Done.** `background: transparent` on `.db-kanban-col-chip` became `background:
+var(--db-status-bg, transparent)` — the same custom property the card's own tag chip already reads,
+so the header and the card share one fill rather than the header inventing a second treatment. No
+new colour was introduced: every `--db-status-bg`/`--db-status-fg` pair this chip can select was
+already declared for the tag-chip family, so the header simply started reading the fill half of a
+pair it was already reading the text half of. Every tint stayed exactly the value `design-trueup.md`
+section 3's A9 table measured off Anytype — all ten, both themes, unaltered — and only the text was
+darkened, which is what the ruling asks for. Re-measured independently against WCAG 1.4.3, per
+colour, both themes, text-on-tint **and** text-on-page: twenty-two pairs, every one at or above
+4.5:1, **no exceptions to name**. Tightest is light teal `#1B7471` on `#CFEEED` at **4.52:1**;
+widest is light blue `#0B35DA` on `#DDE3FB` at **6.49:1**. Confirmed visually on the recaptured
+`constructed-board-desktop-{dark,light}`, `board-view-desktop-light` and `board-view-mobile-dark`:
+each column header now reads as a filled pill (grey/blue/purple/olive/amber tint per column) rather
+than bare coloured text on the page background, with the header chip measured off the capture at
+**24px** tall and the card's property rhythm still at **25px**.
 
 ---
 
 ## ADR-007: The grey option pair is neutral (R7)
 
-**Status**: **Decided by the operator** — 2026-09-06 ~05:25. **Not implemented**; a follow-up leg
-takes it.
+**Status**: **Decided by the operator** — 2026-09-06 ~05:25. **Implemented** 2026-09-06.
 
 **Context.** `design-trueup.md` section 3 A9 measured Anytype's grey option pair as neutral: tint
 `#E3E3E3`, text `#888888` light and `#A8A8A8` dark. The landed board derives a **red-tinted** grey
@@ -301,7 +314,24 @@ divergence is visible on the empty-column captures as a warm chip.
 must be re-measured after the move rather than assumed: `#888888` on white is 3.54:1, which is one
 of the five ratios ADR-004 E1 declined, so the neutral hue and the contrast floor have to be
 reconciled in the same leg — most likely by taking the neutral hue with a darkened text step, the
-same shape ADR-006 takes for the fill. **Nothing is changed by this leg.**
+same shape ADR-006 takes for the fill.
+
+**Done.** The trap named above is exactly what closing this row ran into and exactly how it was
+closed: the source's own `#888888`/`#A8A8A8` text values are declined again, for the same reason
+ADR-004 E1 declined them the first time, and a darkened neutral step is taken instead, the same
+move ADR-006 took for the fill. Landed pair, kept a true neutral (equal R/G/B, zero saturation) at
+every step rather than a same-hue derivation: light tint `#E3E3E3` / text `#656565` (4.54:1 on the
+tint, 5.83:1 on `#FFFFFF`); dark tint `#414141` / text `#ADADAD` (4.55:1 on the tint, 7.99:1 on
+`#171717`). Both tints are Anytype's own measured grey; only the text moved. `#656565`/`#ADADAD` are
+further from mid-grey than the source's `#888888`/`#A8A8A8` precisely because this text sits on the
+tint rather than on the page, which is the reconciliation this ADR anticipated. The ungrouped
+("No value") column reads the same pair through
+`.db-kanban-col-chip:not([class*="status-color-"])`, so the un-tagged bucket and the explicit grey
+bucket cannot drift apart. Confirmed on `board-empty-column-desktop-light` and
+`constructed-board-empty-column-mobile-light`: the ungrouped chip reads as a neutral grey pill with
+no warm cast.
+
+---
 
 ## ADR-008: The board scrolls as a page and hides desktop scrollbar chrome — an operator ground for declining a measured value
 

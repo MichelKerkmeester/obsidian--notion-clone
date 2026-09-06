@@ -291,9 +291,32 @@ _memory:
       renderer. Named here rather than left implied by a green row.
 
       **R6 and R7 are the operator's, and the operator has since ruled on both.** Verbatim, 2026-09-06
-      ~05:25: R6 — *"Anytype tint fill"*; R7 — *"Neutral, match Anytype"*. Neither is implemented here:
-      this leg was instructed to record them and leave them, and a follow-up leg takes both. Recorded
-      in `decision-record.md` ADR-006 and ADR-007 and in the parent `roadmap.md` §6A.
+      ~05:25: R6 — *"Anytype tint fill"*; R7 — *"Neutral, match Anytype"*. Recorded in
+      `decision-record.md` ADR-006 and ADR-007 and in the parent `roadmap.md` §6A.
+
+      **Landed 2026-09-06 by the follow-up leg.** Both fixed and re-measured in the same
+      stylesheet edit, the CSS lane released once for both:
+
+      | # | Fix | Red | Green |
+      |---|---|---|---|
+      | R6 | `.db-kanban-col-chip` reads `background: var(--db-status-bg, transparent)` instead of a bare `transparent` — the same custom property the card's own tag chip already fills from, so the header stops inventing a third treatment | chip painted with no fill, option colour on bare text only (`background: transparent`) | chip painted with the option's own tint, text unchanged — confirmed on `constructed-board-desktop-dark`/`-light` and `constructed-board-mobile-dark`: every column header reads as a filled pill (grey/blue/purple/olive/red per column) |
+      | R7 | `.status-color-gray`/`.status-color-slate` and the ungrouped chip's fallback move off the red-tinted derivation onto a true neutral (equal R/G/B), text darkened past the source's own value because it now sits on the tint rather than the page | `#7E5D5D` light / `#BAABAB` dark, hue 0 against the neutral reference, visible as a warm chip on the empty-column captures | `#656565` on `#E3E3E3` light (4.54:1 tint, 5.83:1 page), `#ADADAD` on `#414141` dark (4.55:1 tint, 7.99:1 page) — confirmed on `constructed-board-empty-column-desktop-{dark,light}`, no warm cast on the ungrouped chip in either theme |
+
+      All ten option-colour tint/text pairs plus the ungrouped fallback were re-measured against
+      WCAG 1.4.3 in both themes, text-on-tint and text-on-page, with a throwaway script
+      (`scratch/palette-contrast.mjs`, not part of the gate): all twelve rows clear 4.5:1 on both
+      measures, from grey's 4.54:1 (the tightest) to purple's 8.38:1 (dark, on page). `npx tsc
+      --noEmit`, `npx vitest run` (137 files / 1424 tests) and `npm run build` exit 0;
+      `node tools/live/render-assertions.mjs`'s board geometry pass still reads all seven pins
+      green, unaffected by a colour-only edit; `node tools/screenshots/verify.mjs` reports 550
+      current; the isolated `SURFACE_PHASE=056-board-anytype-parity npm run gate </dev/null`
+      reports 26 green, exit 0. `npm run screenshots` (full run): 44 board captures moved
+      pixelHash a second time against the same pre-fix baseline the prior release already named,
+      0 byte-only re-encodes; every `screenshots/project-manager/*` capture and every non-board
+      capture stayed pixelHash-identical. Six captures opened and read against the Anytype
+      reference: `constructed-board-desktop-dark`, `-desktop-light`, `-mobile-dark`,
+      `constructed-board-empty-column-desktop-dark`, `-desktop-light`, and
+      `constructed-card-covers-desktop-dark`.
 
 - [x] T013 **Delete the `boardExtensionsEnabled` branch, or record why it stays.** The flag and the
       `renderSwimlaneBoard` / extensions-mode `renderColumn` / `renderSubgroup` / `renderCard` path
@@ -360,23 +383,58 @@ _memory:
       ids fewer) and `verify.mjs` has no orphan check, so nothing would ever have reported them.
       Deleted with `git rm`.
 
-      **Three residuals are named rather than fixed, each with the reason.** (1) `ViewConfig`'s
-      `boardExtensionsEnabled?: boolean` and its doc comment still describe a layout that no longer
-      exists — removing it would force an edit to `board-card-properties-panel.test.ts`, which AC-006
-      pins at **0 lines changed**, so it stays and the criterion keeps its evidence. (2) The kanban
-      card's restored `role="row"` has no `role="grid"` or `rowgroup` ancestor: the removed branch put
-      `role: "grid"` on `.db-board`, and `.db-kanban-board` carries no role, so the pairing ARIA needs
-      is now broken. `accessibility-defects.test.ts` Item 10 greps the source for the literal
-      `role: "row"` and cannot see this; deciding between adding the container role and dropping the
-      row role is an accessibility change this packet was not asked to make. (3) `database-view.ts`'s
-      selection-sync loops still query `.db-board-card-checkbox` and `.db-board-column-checkbox`; they
-      are no-ops on markup nothing builds, and they sit beside the identically dead `.db-gallery-*`
-      and `.db-list-*` selectors two earlier retirements left, so cutting them is that cleanup's job
-      and not this one's.
+      **Three residuals were named rather than fixed here; two are closed by the follow-up leg, one
+      stays by the same reason it was named.** (1) `ViewConfig`'s `boardExtensionsEnabled?: boolean`
+      and its doc comment still describe a layout that no longer exists — removing it would force an
+      edit to `board-card-properties-panel.test.ts`, which AC-006 pins at **0 lines changed**, so it
+      stays and the criterion keeps its evidence. This one is not fixed and is not owed: the field is
+      inert (nothing reads it), and undoing the pin would cost the exact evidence AC-006 exists to
+      keep. (2) The kanban card's restored `role="row"` had no `role="grid"` or `rowgroup` ancestor:
+      the removed branch put `role: "grid"` on `.db-board`, and `.db-kanban-board` carried no role, so
+      the pairing ARIA needs was broken. **Fixed by the follow-up leg**: `.db-kanban-board` gains
+      `attr: { role: "grid" }` at construction, and a new test walks the built DOM from the card
+      upward looking for a `role="grid"` ancestor — checking the ancestry the browser and assistive
+      tech actually see, not a literal source grep, which is what let this residual go unnoticed the
+      first time. (3) `database-view.ts`'s selection-sync loops still queried `.db-board-card-checkbox`
+      and `.db-board-column-checkbox`, no-ops on markup nothing builds. **Fixed by the follow-up leg**:
+      both dead loops are removed; the identically dead `.db-gallery-*`/`.db-list-*` selectors two
+      earlier retirements left are untouched, since they are that cleanup's job and not this one's.
 
-      Verified from the final tree: `npx tsc --noEmit` exit 0; `npx vitest run` **137/137 files,
-      1426/1426 tests**, exit 0; `npm run build` exit 0; `node tools/live/constructed-state-assertions.mjs`
-      exit 0 (was 1); the isolated gate exit **0, 26 green**.
+      **The CSS audit the same leg carried out, beyond the two R6/R7 colour rows.** The `db-board-*`
+      stylesheet family — the outstanding CSS-lane debt already named as *"largely dead and
+      deliberately not cut"* — was cut to a per-rule audit rather than a section delete: kept every
+      rule the kanban card still builds (`db-board-card-field`, `-field-label`, `-field-wrap`
+      (built dynamically by `card-field-renderer.ts` when a field opts into wrap), `-value`,
+      `-badges`, `-link`, `-cover` and its two children, `-open` (shared with the record detail
+      panel's open button), `-column-options`), and deleted the rest — the whole `.db-board-column`/
+      `-header`/`-cards`/`-card` family the retired extensions branch alone built, its drag/drop
+      states, its resize handle, and the three empty rule husks (two `@media (hover: …)` blocks, one
+      `@media (prefers-reduced-motion: reduce)` block) the cut left behind. `--db-board-column-width`
+      had exactly one reader, `.db-board-column`'s own `flex-basis` fallback; deleting that rule with
+      the rest of the family removes the unassigned custom property along with its only reader, rather
+      than assigning it a value nothing then uses. Verified: `grep -oP '\.db-board-[a-z-]+'
+      styles.css | sort -u` returns 11 selectors, each cross-checked against a live construction site
+      in `src/views/board-renderer.ts`, `record-detail-panel.ts` or `record-surface/record-header.ts`;
+      zero orphaned selectors remain.
+
+      Verified from the final tree, after the rebase onto `2c3c499a`: `npx tsc --noEmit` exit 0;
+      `npx vitest run` **139 files / 1458 tests**, exit 0 (main is 1460 — this leg deletes three
+      stylesheet pins whose rules it removed and adds the grid-ancestry test, net −2); `npm run
+      build` exit 0; `node tools/live/render-assertions.mjs` exit 0 with the board geometry pass
+      **7/7** — card radius 8px, column 246px, gap 24px, checkbox 14px and a 50% radius, **chip
+      height 24px painted**, and a **flat 25px** property pitch across seventeen rows;
+      `node tools/screenshots/verify.mjs` exit 0, **568 current**; `node tools/lane/check-lane.mjs`
+      exit 0 with the lane held by this phase at `cdc3ea497d56`; the isolated
+      `SURFACE_PHASE=056-board-anytype-parity npm run gate </dev/null` exit **0, 26 green**.
+      `cascade-audit`'s ratchets all fell: rules 3076 → 2977, duplicated selectors 256 → 251,
+      conflicts 131 → 130, stylesheet lines 23563 → 22737; `token-census` is level.
+
+      **Two corrections to the leg's own report, made at the landing.** The tightest contrast row is
+      **light teal `#1B7471` on `#CFEEED` at 4.52:1**, not grey at 4.54:1 — grey is second. And the
+      automated stylesheet cut had blanked three comment lines to trailing whitespace and lost the
+      indentation of two selector blocks inside their media queries; both are restored, and the
+      three whitespace-only lines are gone (main carries none).
+
 - [ ] T014 (2026-09-06 amendment) **Make the page scroll, not the column, and hide desktop
       scrollbar chrome.** Operator ruling, ~10:30 desktop (ADR-008). **Red first, from the landed
       stylesheet**: `.db-kanban-cards` has `overflow-y: auto` (`styles.css:9569-9573`) so each

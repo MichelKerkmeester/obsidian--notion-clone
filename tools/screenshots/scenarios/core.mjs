@@ -445,16 +445,20 @@ export const CORE_SCENARIOS = [
     note: "The empty cover in the board's card: the same Lucide image glyph on --background-secondary at a 0.75 aspect ratio the board has always drawn.",
     // The card sits in its real parent rather than on the container. The cover's height is its
     // width over a 0.75 ratio, so a card photographed at the scenario's own width is a cover eight
-    // hundred pixels tall — a shape no lane or grid column ever gives it. `.db-board-column`
-    // carries the shipped width (280px).
+    // hundred pixels tall — a shape no lane or grid column ever gives it. `.db-kanban-col`
+    // carries the shipped width (246px).
     html: () => `
       <div class="note-database-container" style="display: flex; gap: 16px; align-items: flex-start">
-        <div class="db-board-column">
-          <div class="db-board-cards" role="rowgroup">
-            <div class="db-board-card" role="row" tabindex="-1">
+        <div class="db-kanban-col">
+          <div class="db-kanban-cards" role="rowgroup">
+            <div class="db-kanban-card" role="row" tabindex="-1">
               ${emptyCover(COVER_BASES.board)}
-              <div class="db-board-card-title">Figma</div>
-              <div class="db-board-card-field"><span class="db-board-card-field-label">Cost</span><span class="db-board-card-value">€ 18,75</span></div>
+              <div class="db-kanban-card-body">
+                <div class="db-kanban-card-title-row"><div class="db-kanban-card-title">Figma</div></div>
+                <div class="db-kanban-card-meta">
+                  <div class="db-board-card-field"><span class="db-board-card-field-label">Cost</span><span class="db-board-card-value">€ 18,75</span></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

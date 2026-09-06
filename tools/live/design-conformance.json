@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T10:11:58.327Z",
+  "measuredAt": "2026-09-06T10:26:54.723Z",
   "inputs": {
-    "styles.css": "deb7e368824b",
+    "styles.css": "cdc3ea497d56",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "7edae5db0282"
   },
@@ -72,16 +72,16 @@
     {
       "name": "layering — z-index literals above the declared tiers",
       "enforced": false,
-      "value": 1,
+      "value": 0,
       "target": 0,
-      "note": "highest 2147483646",
+      "note": "every layer comes from a token",
       "gated": false,
-      "conforms": false
+      "conforms": true
     },
     {
       "name": "cascade — property values overridden by a later duplicate block",
       "enforced": false,
-      "value": 131,
+      "value": 130,
       "target": 0,
       "note": "each needs a disposition: intended, or a defect",
       "gated": false,

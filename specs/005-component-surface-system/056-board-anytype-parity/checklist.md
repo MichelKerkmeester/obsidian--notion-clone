@@ -88,6 +88,27 @@ against computed styles — proven non-vacuous by a negative control on the card
 an existing lane rather than a new one (`decision-record.md` ADR-005), so the gate count is
 unchanged.
 
+**2026-09-06, the operator's ruling on R6/R7 landed, closing T012 in full.** `.db-kanban-col-chip`
+now fills from `--db-status-bg` (was `transparent`), and the grey/ungrouped bucket moved off its
+red-tinted derivation onto a true neutral, `#656565`/`#E3E3E3` light and `#ADADAD`/`#414141` dark.
+All ten tint/text pairs plus the ungrouped fallback re-verified at WCAG 1.4.3, text-on-tint and
+text-on-page, both themes: every row clears 4.5:1, worst case grey at 4.54:1. Two of T013's three
+named residuals are also closed in the same leg: `.db-kanban-board` gains `role="grid"` so the
+card's `role="row"` has its ancestor (checked by walking the built DOM, not a source grep), and
+`database-view.ts`'s dead `.db-board-card-checkbox`/`.db-board-column-checkbox` selection loops are
+removed. `ViewConfig.boardExtensionsEnabled` stays, per AC-006's zero-lines-changed pin. The same
+leg also closed the CSS lane's own outstanding note on the `db-board-*` family: eleven selectors
+still built by the kanban card or the record detail panel's shared open button are kept, the rest —
+the retired-extensions column/header/card family, its drag states, its resize handle, and
+`--db-board-column-width`'s one dead reader — are deleted.
+
+Verified from this leg: `npx tsc --noEmit`, `npx vitest run` (137 files, 1424 tests) and `npm run
+build` all exit 0; `node tools/live/render-assertions.mjs`'s board geometry pass 7/7 green;
+`node tools/screenshots/verify.mjs` reports 550 current; `node tools/lane/check-lane.mjs` (with
+`SURFACE_PHASE=056-board-anytype-parity`) exits 0, naming the 44 board captures that moved a second
+time against the same pre-fix baseline; the isolated `SURFACE_PHASE=056-board-anytype-parity npm run
+gate </dev/null` reports **26 green**, exit 0, `$?` read from a file.
+
 **Re-verified 2026-09-06 on the rebased tree by a leg that wrote none of the fixes**, against
 `origin/main` `6c718f63`. Read back in device pixels off the recaptured PNGs rather than taken from
 the report: chip band **48 device px** (24 CSS) against 52 (26) before; property rows a flat **50

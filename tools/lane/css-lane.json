@@ -1,8 +1,8 @@
 {
-  "holder": "053-toolbar-and-view-controls",
-  "acquiredAt": "2026-09-07T03:10:00Z",
-  "baselineHash": "deb7e368824b",
-  "baselineCommit": "41513bd3",
+  "holder": "056-board-anytype-parity",
+  "acquiredAt": "2026-09-07T04:05:00Z",
+  "baselineHash": "cdc3ea497d56",
+  "baselineCommit": "4e4856e9",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -4335,6 +4335,65 @@
         "screenshots/notion-clone/views/table-wrap-on-mobile-light.png"
       ],
       "note": "Operator report (2026-09-06 ~10:25, verbatim: \"with wrap disabled you still have these huge table rows with too large height in current desktop version\"), and the two rulings that closed it (~11:25): \"View switch off clips everything\" and \"Honour the switch on phone\". The stylesheet edit is the second ruling's. .is-phone .note-database-container .db-table td:not(.db-select-col):not(.db-record-icon-col) set white-space: nowrap at five classes against td.db-cell-wrap's three, so on a phone the wrap switch had never wrapped text: turning it on stacked the value-container chips and left every sentence on one line. The wrapping cell is excluded from that declaration and keeps its 60vw width cap in a rule of its own, because the cap answers how much width a narrow screen may spend and the nowrap answered whether a cell may take a second line, which is the switch's question. The first ruling changed no CSS: it reversed the resolver so the view's switch gates the column's mode instead of losing to it. Sweep: 564 scenarios recaptured on this tree. Nothing already on main moved content -- 556 captures were byte-only re-encodes and were restored to their committed bytes rather than recommitted as churn. The eight named above are this lane's own; six were unchanged from the first commit and the two table-wrap-on-mobile pair are the only images in the whole sweep whose content moved, which is the phone fix photographed: the long sentence and the multi-line entry take real second lines on the phone where they used to clip. All eight were opened in both themes and both device profiles. The wrap-off pair holds uniform single-line rows with an ellipsis on the long entry; the wrap-on pair shows the same entries wrapped. screenshots:verify, the render-assertions wrap passes on both device profiles, and the 26-lane gate exit 0 on this tree."
+    },
+    {
+      "event": "acquire",
+      "phase": "056-board-anytype-parity",
+      "at": "2026-09-07T04:05:00Z",
+      "hash": "deb7e368824b"
+    },
+    {
+      "event": "release",
+      "phase": "056-board-anytype-parity",
+      "at": "2026-09-07T04:25:00Z",
+      "hash": "cdc3ea497d56",
+      "reviewed": [
+        "screenshots/notion-clone/components/board-drop-language-desktop-dark.png",
+        "screenshots/notion-clone/components/board-drop-language-desktop-light.png",
+        "screenshots/notion-clone/components/board-drop-language-mobile-dark.png",
+        "screenshots/notion-clone/components/board-drop-language-mobile-light.png",
+        "screenshots/notion-clone/components/board-empty-column-desktop-dark.png",
+        "screenshots/notion-clone/components/board-empty-column-desktop-light.png",
+        "screenshots/notion-clone/components/board-empty-column-mobile-dark.png",
+        "screenshots/notion-clone/components/board-empty-column-mobile-light.png",
+        "screenshots/notion-clone/components/card-cover-states-desktop-dark.png",
+        "screenshots/notion-clone/components/card-cover-states-desktop-light.png",
+        "screenshots/notion-clone/components/card-cover-states-mobile-dark.png",
+        "screenshots/notion-clone/components/card-cover-states-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-board-card-properties-hidden-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-board-card-properties-hidden-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-board-card-properties-hidden-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-board-card-properties-hidden-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-board-empty-column-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-board-empty-column-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-board-empty-column-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-board-empty-column-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-card-covers-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-card-covers-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-card-covers-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-card-covers-mobile-light.png",
+        "screenshots/notion-clone/views/board-mobile-desktop-dark.png",
+        "screenshots/notion-clone/views/board-mobile-desktop-light.png",
+        "screenshots/notion-clone/views/board-mobile-mobile-dark.png",
+        "screenshots/notion-clone/views/board-mobile-mobile-light.png",
+        "screenshots/notion-clone/views/board-subtask-tree-desktop-dark.png",
+        "screenshots/notion-clone/views/board-subtask-tree-desktop-light.png",
+        "screenshots/notion-clone/views/board-subtask-tree-mobile-dark.png",
+        "screenshots/notion-clone/views/board-subtask-tree-mobile-light.png",
+        "screenshots/notion-clone/views/board-view-desktop-dark.png",
+        "screenshots/notion-clone/views/board-view-desktop-light.png",
+        "screenshots/notion-clone/views/board-view-mobile-dark.png",
+        "screenshots/notion-clone/views/board-view-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-board-desktop-dark.png",
+        "screenshots/notion-clone/views/constructed-board-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-board-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-board-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-desktop-dark.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-mobile-light.png"
+      ],
+      "note": "The operator's two board-palette rulings (2026-09-06 ~05:25, verbatim \"Anytype tint fill\" and \"Neutral, match Anytype\"), plus a per-rule audit of the db-board-* family this lane's own outstanding note had named as largely dead and deliberately not cut. The colour edit is two declarations wide: .db-kanban-col-chip reads background: var(--db-status-bg, transparent) instead of staying unfilled, so the column header and the card's own tag chip share one fill rather than the header inventing a second treatment; and the grey/slate bucket plus the ungrouped fallback move off a red-tinted derivation (#7E5D5D light / #BAABAB dark) onto a true achromatic pair, #656565 on #E3E3E3 light and #ADADAD on #414141 dark. No tint moved: all ten are byte-for-byte the values 056/design-trueup.md section 3's A9 table measured off Anytype's own column menu, and only the text was darkened, which is what the ruling asks for. Contrast re-measured independently at this landing against WCAG 1.4.3, per colour, both themes, text-on-tint and text-on-page: twenty-two pairs, every one at or above 4.5:1, no exception to name. Tightest is light teal #1B7471 on #CFEEED at 4.52:1; widest light blue #0B35DA on #DDE3FB at 6.49:1 (an earlier report put grey tightest at 4.54:1, which is one row off). The audit kept the eleven db-board-* selectors the kanban card and the record detail panel still build and deleted the rest, along with --db-board-column-width's one dead reader and three empty rule husks; a word-boundary scan over src/ and tools/ finds no renderer building any deleted class, only negative assertions pinning their absence and dead querySelectorAll reads that predate this cut and belong to their own retirements. Three comment lines the automated cut had blanked to trailing whitespace are restored, with the indentation the same cut had lost. Sweep: 568 scenarios recaptured on this tree. 524 were byte-only re-encodes and were restored to their committed bytes rather than recommitted as churn; the 44 named above are the whole content move, every one a board capture, and no Project Manager or non-board capture moved. Six were opened and read beside the Anytype reference (screenshots/anytype/desktop/sets/project-tracker/anytype-project-tracker-kanban-{dark,light}.png): constructed-board-desktop-{dark,light}, board-view-desktop-light, board-view-mobile-dark, board-empty-column-desktop-light and constructed-board-empty-column-mobile-light. Each column header now reads as a filled pill in the option's own tint with darkened text, on desktop and on phone, in both themes; the card's tag chips carry the same pair; and the ungrouped \"No value\" column reads neutral grey with no warm cast. The R1/R2 geometry survives the fill, re-measured off the light desktop capture at DPR 2: the chip's painted band is 48 device px (24 CSS) between its two 1px borders, and the card's property rows repeat at 50 device px (25 CSS)."
     }
   ],
   "outstanding": [
@@ -4344,7 +4403,6 @@
     "--text-muted on the plugin's own panel measures 4.1:1 in the light capture theme at 12px, below the 4.5:1 floor for body text. It is the token .db-menu-section, .db-add-view-field-label and every muted caption in the plugin share, so this is a program-wide decision rather than one surface's. Dark measures 4.89:1 and passes.",
     "The select-column appearance block (border, accent fill, custom checkmark) is still guarded :not(the shared checkbox class) and is therefore dead code, as are the equivalent modal and CSV-option blocks. The shared component supplies all of it, so nothing is visibly missing \u2014 but three dead blocks remain in the sheet and the next reader will believe they are live. Removing them is a separate, capture-affecting change.",
     "DECLINED, with the shortfall stated: the table's main-item cell measures 169x34 against WCAG 2.5.5 AAA's 44px (40px at the loosest density). The operator chose density - row height stays at 34px and no phone-only override is added, because raising it would override the reader's own density setting, which is a deliberate preference. WCAG 2.5.8 AA's 24px floor is met. verify-placement reports the 33px reach on every run, so the number stays visible rather than being closed by silence.",
-    "The list roving-tabindex selector at src/views/card-roving-tabindex.ts:313 queries .db-card-field, .db-gallery-card-field and .db-list-row-field. None of the three is built or styled anywhere: the renderers pass db-board-card-field, db-gallery-field and db-list-field. Not a behaviour defect - card-field-renderer.ts sets data-note-database-column-key and role=gridcell on every field, and the selector's other two arms match through those - so the three names are dead weight rather than broken navigation. Found while closing the row matrix's invented classes and left alone: it is outside 005's scope, and the same rot in one more place is worth recording rather than folding into an unrelated diff.",
-    "The db-board-* stylesheet family is now largely dead and was deliberately not cut here. The default board is the only board, and it builds db-kanban-* markup; the extensions branch that built .db-board-column, .db-board-subgroup, .db-board-add-column and their checkboxes is gone. Some of the family is still live and must survive any cut \u2014 .db-board-card-cover and .db-board-card-field are both built by the kanban card \u2014 so this is a per-rule audit, not a section delete, and it moves captures. One concrete consequence is already measurable: styles.css reads var(--db-board-column-width, 220px) for .db-board-column and nothing assigns that property any more, so the rule resolves its fallback for every user. It is dead rather than wrong, but it is exactly the class scan-pinned-values.mjs exists to catch, and it will stay invisible while the rule it belongs to is unreachable."
+    "The list roving-tabindex selector at src/views/card-roving-tabindex.ts:313 queries .db-card-field, .db-gallery-card-field and .db-list-row-field. None of the three is built or styled anywhere: the renderers pass db-board-card-field, db-gallery-field and db-list-field. Not a behaviour defect - card-field-renderer.ts sets data-note-database-column-key and role=gridcell on every field, and the selector's other two arms match through those - so the three names are dead weight rather than broken navigation. Found while closing the row matrix's invented classes and left alone: it is outside 005's scope, and the same rot in one more place is worth recording rather than folding into an unrelated diff."
   ]
 }

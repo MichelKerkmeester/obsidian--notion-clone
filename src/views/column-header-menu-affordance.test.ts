@@ -136,22 +136,6 @@ describe("board column header options button mirrors the table trigger", () => {
     expect(declaration(options, "position")).not.toBe("absolute");
   });
 
-  it("lets only the group name shrink inside the header text row", () => {
-    const row = rulesFor(".note-database-container .db-board-header-text")[0];
-    expect(declaration(row, "display")).toBe("flex");
-    expect(declaration(row, "flex")).toBe("0 1 auto");
-    expect(declaration(row, "min-width")).toBe("0");
-
-    const title = rulesFor(".note-database-container .db-board-header-text > .db-board-column-title")[0];
-    expect(declaration(title, "flex")).toBe("0 1 auto");
-    expect(declaration(title, "overflow")).toBe("hidden");
-    expect(declaration(title, "text-overflow")).toBe("ellipsis");
-
-    for (const fixed of [".note-database-container .db-board-count", ".note-database-container .db-board-header-summaries"]) {
-      expect(declaredIn(fixed, "flex")).toBe("0 0 auto");
-    }
-  });
-
   it("mounts the options button in the header's controls row, not a floating header edge", () => {
     expect(boardSource).toContain('this.renderBoardGroupOptions(controls, config, groupField, group, "more-horizontal")');
     expect(boardSource).not.toMatch(/renderBoardGroupOptions\(header,/);
@@ -180,11 +164,5 @@ describe("drag cursor is scoped to the column header background", () => {
   it("returns the pointer over the name and the menu button", () => {
     expect(declaredIn(".note-database-container .db-table th .db-th-label", "cursor")).toBe("pointer");
     expect(declaredIn(".note-database-container .db-column-menu-trigger", "cursor")).toBe("pointer");
-  });
-
-  it("keeps the board header background on grab while its name row takes the pointer", () => {
-    expect(declaredIn(".note-database-container .db-board-column-header", "cursor")).toBe("grab");
-    expect(declaredIn(".note-database-container .db-board-column-header .db-board-header-text", "cursor")).toBe("pointer");
-    expect(declaredIn(".note-database-container .db-board-column-options", "cursor")).toBe("pointer");
   });
 });

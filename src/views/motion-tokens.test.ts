@@ -66,11 +66,13 @@ describe("motion tokens", () => {
     expect(stylesContent).toContain("scale(var(--db-motion-scale-from))");
   });
 
-  it("leaves the seven existing --db-transition-fast call sites unchanged, at their own declaration lines", () => {
-    // Counted by declaration line, not by substring occurrence: several of the seven lines name
+  it("leaves the five existing --db-transition-fast call sites unchanged, at their own declaration lines", () => {
+    // Counted by declaration line, not by substring occurrence: several of the five lines name
     // the token more than once (one property per comma-separated transition), so a raw substring
-    // count reads far higher than the number of call sites the true-up measured.
+    // count reads far higher than the number of call sites the true-up measured. Two of the
+    // original seven lived on the board's retired extensions-mode column and card hover-lift
+    // rules and were removed with that dead markup, not edited in place.
     const callSites = transitionDeclarationLines().filter((line) => line.includes("var(--db-transition-fast)"));
-    expect(callSites).toHaveLength(7);
+    expect(callSites).toHaveLength(5);
   });
 });

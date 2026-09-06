@@ -36,7 +36,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  OPTION_TONES, ROWS, boardSubgroupHeader, groupTitle,
+  OPTION_TONES, ROWS,
   optionPill, tableGroupTitle,
 } from "./scenarios/shared.mjs";
 
@@ -105,19 +105,11 @@ for (const name of scenarioFiles) {
 // only thing the renderer builds for one. Each helper is called with a value drawn from the fixture
 // rows, so a helper that stopped badging is caught with its own data rather than a chosen constant.
 const bareTitles = [];
-// Every helper that builds a group title, not the three that were wrong first. The board lane was
-// the fourth and it was missed: the extensions-mode board (boardExtensionsEnabled) writes
-// `db-board-column-title` through the same `renderGroupLabel` call as the other three, and the
-// first version of this check did not know it existed — so the board view kept photographing a
-// bare lane title while the check reported the family clean. The reference (default) board's own
-// `pm-kanban-col-badge` colours by inline style, not a `status-color-*` class — a different, real
-// contract this check does not model — so `db-board-column-title` is exercised directly through
-// `groupTitle`, the same badge-or-text primitive `boardSubgroupHeader` already calls, rather than
-// through a fixture that no longer builds this class.
+// Every helper that builds a group title, not the one that was wrong first. The board's own
+// extensions-mode column/subgroup titles this list used to also carry are gone along with the
+// branch that built them — the reference (default) board's `pm-kanban-col-badge` colours by
+// inline style, not a `status-color-*` class, a different contract this check does not model.
 const HEADERS = [
-  ["boardSubgroupHeader", boardSubgroupHeader, ROWS[2].cycle, "db-board-subgroup-title"],
-  ["db-board-column-title", (title) => groupTitle("db-board-column-title", title, OPTION_TONES[title]),
-    ROWS[11].category, "db-board-column-title"],
   ["tableGroupTitle", (title) => tableGroupTitle(title), ROWS[18].category, "db-group-title-text"],
 ];
 for (const [name, helper, title, cls] of HEADERS) {

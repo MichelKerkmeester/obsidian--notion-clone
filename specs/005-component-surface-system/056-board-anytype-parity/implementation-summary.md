@@ -10,14 +10,13 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/056-board-anytype-parity"
-    last_updated_at: "2026-09-06T04:55:00Z"
+    last_updated_at: "2026-09-06T22:15:00Z"
     last_updated_by: "verification-leaf"
-    recent_action: "rebased onto main, re-verified every criterion and opened t012 and t013 on the residuals"
-    next_safe_action: "Land T012 R1 and R2, then recapture the 32 board scenarios"
+    recent_action: "landed R6/R7, closed two of T013's three residuals, audited the db-board-* family per-rule"
+    next_safe_action: "Nothing owed here; AC-010 is the operator's own device confirmation"
     blockers:
       - "AC-010 is operator-owned and open by design"
-      - "AC-011 is Unmet: ten measured values did not reach the rendered surface (tasks.md T012)"
-      - "boardExtensionsEnabled and its now-fully-unreachable-from-default-board render branch (renderSwimlaneBoard and the rest) are a named, deferred code deletion — not claimed done here"
+      - "boardExtensionsEnabled and its now-fully-unreachable-from-default-board render branch (renderSwimlaneBoard and the rest) are a named, deferred code deletion — not claimed done here, pinned by AC-006's zero-lines-changed guard on board-card-properties-panel.test.ts"
     key_files:
       - "src/views/board-renderer.ts"
       - "styles.css"
@@ -27,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-056-impl"
       parent_session_id: null
-    completion_pct: 85
+    completion_pct: 100
     open_questions: []
     answered_questions:
       - "045's card-property mechanism needed zero code changes; the values-only row shape is CSS-scoped under .db-kanban-card-meta"
@@ -199,16 +198,11 @@ live, and named for the operator to reconcile against their own record.
 4. **AC-010 is the operator's.** The rebuilt board has not yet been read by the operator on iOS and
    desktop beside Anytype. Nothing in this repository can close that row.
 5. **Ten measured values did not reach the rendered surface**, found on a read-back after the
-   rebase and open as `tasks.md` T012 R1-R10 and `acceptance-criteria.md` AC-011. The header chip
-   paints 26px against a measured 24 and the property rows a ~28.3px pitch against a measured
-   uniform 25 — one cause, a content-box element whose `height`/`min-height` sits beside padding
-   and a border. The card title icon slot renders only when the view opts into record icons. The
-   phone board takes the desktop column geometry rather than its own measured values, and no
-   `-mobile-` capture photographs the phone anatomy because `isTouchDevice()` is false in the
-   harness. ADR-004 E1's stated replacement — a tint fill on the light-theme header chip — is not
-   what shipped; the chip stayed unfilled with only its text darkened. And nothing in the
-   repository locks any board geometry value: reverting the card radius to 2px moves 8,640 channel
-   bytes and no check.
+   rebase and tracked as `tasks.md` T012 R1-R10 and `acceptance-criteria.md` AC-011. All ten are now
+   fixed — see "R6/R7 Landing and the CSS Audit" below for the last two, and `tasks.md` T012's own
+   red/green tables for the full set. `render-assertions.mjs`'s board geometry pass now locks card
+   radius, column width, column gap, chip height, property pitch and checkbox shape against computed
+   styles, proven non-vacuous by a negative control on the card radius.
 <!-- /ANCHOR:limitations -->
 
 ---
@@ -242,5 +236,88 @@ column, twenty controls newly under the project's 28px coarse-pointer floor — 
 `min-height` it clears the floor, so `touch-targets-constructed-baseline.json` stays at **1304**
 rather than being raised. No capture moved for it.
 <!-- /ANCHOR:reverification -->
+
+---
+
+<!-- ANCHOR:r6r7-and-css-audit -->
+## R6/R7 Landing and the CSS Audit
+
+The follow-up leg the operator's ruling opened. Two colour rows plus the CSS-lane's own outstanding
+note on the `db-board-*` family, landed together in one stylesheet edit.
+
+### The tint/text pairs, per colour, per theme
+
+Every option colour the kanban view can render, `--db-status-bg` (tint) and `--db-status-fg` (text),
+checked against WCAG 1.4.3's 4.5:1 both on the tint (what the chip actually shows) and on the page
+background (`#FFFFFF` light / `#171717` dark), with a throwaway script
+(`scratch/palette-contrast.mjs`, not part of the gate — the repo's own WCAG relative-luminance
+formula, cross-checked against the figures already in `design-trueup.md` A9).
+
+| Colour | Theme | Tint | Text | Text-on-tint | Text-on-page |
+|---|---|---|---|---|---|
+| Grey / slate / ungrouped | light | `#E3E3E3` | `#656565` | 4.54:1 | 5.83:1 |
+| Grey / slate / ungrouped | dark | `#414141` | `#ADADAD` | 4.55:1 | 7.99:1 |
+| Brown / orange (amber) | light | `#F9DEBA` | `#915608` | 4.57:1 | 5.93:1 |
+| Brown / orange (amber) | dark | `#74390D` | `#F7A669` | 4.55:1 | 9.06:1 |
+| Yellow | light | `#FCEFB4` | `#7E6807` | 4.69:1 | 5.43:1 |
+| Yellow | dark | `#6C621A` | `#EBDF89` | 4.54:1 | 13.19:1 |
+| Green / lime | light | `#DEF2C1` | `#49730D` | 4.70:1 | 5.61:1 |
+| Green / lime | dark | `#3C5115` | `#A4DB3D` | 5.37:1 | 10.91:1 |
+| Blue / indigo | light | `#DDE3FB` | `#0B35DA` | 6.49:1 | 8.28:1 |
+| Blue / indigo | dark | `#20347C` | `#8FA3EA` | 4.66:1 | 7.34:1 |
+| Purple / violet | light | `#E6D7FE` | `#5B0BDA` | 6.19:1 | 8.38:1 |
+| Purple / violet | dark | `#512789` | `#BF9EEB` | 4.65:1 | 7.94:1 |
+| Pink / rose | light | `#F6D2E7` | `#B51271` | 4.65:1 | 6.38:1 |
+| Pink / rose | dark | `#7D2543` | `#EA9FB8` | 4.58:1 | 8.67:1 |
+| Red | light | `#F8DFD2` | `#AD420B` | 4.63:1 | 5.90:1 |
+| Red | dark | `#7A271C` | `#EE9C91` | 4.59:1 | 8.37:1 |
+| Cyan | light | `#C9E6F9` | `#0967A5` | 4.63:1 | 6.01:1 |
+| Cyan | dark | `#174A6F` | `#79BCEC` | 4.55:1 | 8.72:1 |
+| Teal | light | `#CFEEED` | `#1B7471` | 4.52:1 | 5.55:1 |
+| Teal | dark | `#204D4A` | `#51C7BF` | 4.62:1 | 8.77:1 |
+
+All 20 rows (10 colours x 2 themes) clear 4.5:1 on both measures. Grey is the tightest pair at
+4.54:1; every other colour carries more headroom. Only the grey/slate/ungrouped row changed in this
+leg (R7); the header chip's fill (R6) is a structural change — `background: var(--db-status-bg,
+transparent)` instead of `transparent` — that applies this same table to the header for the first
+time rather than changing any of the values in it. **Neutral pair chosen for R7**: a true achromatic
+grey (equal R/G/B, zero saturation) at `#656565`/`#E3E3E3` light and `#ADADAD`/`#414141` dark —
+darker than the source's own `#888888`/`#A8A8A8` because this text sits on the tint rather than on
+the page, which is the reconciliation `decision-record.md` ADR-007 named as the likely shape and
+this leg confirms.
+
+### The `db-board-*` CSS audit
+
+The CSS lane's own outstanding note called this family *"largely dead"* and asked for *"a per-rule
+audit, not a section delete."* Every `db-board-*` selector in `styles.css` before this leg, checked
+against a live construction site in `src/views/*.ts` (excluding tests):
+
+| Selector | Built by | Disposition |
+|---|---|---|
+| `.db-board-card-field`, `.db-board-card-field-label` | `board-renderer.ts` (`renderReferenceBoard`'s field call) | **Kept** — live |
+| `.db-board-card-field-wrap` | `card-field-renderer.ts` (`${fieldClass}-wrap`, appended when a field opts into wrap) | **Kept** — live, built dynamically |
+| `.db-board-card-value` | `board-renderer.ts`; also `record-detail-panel.ts` (shared field renderer) | **Kept** — live |
+| `.db-board-card-badges` | `board-renderer.ts`; also `record-detail-panel.ts` | **Kept** — live |
+| `.db-board-card-link` | `board-renderer.ts`; also `record-detail-panel.ts` | **Kept** — live |
+| `.db-board-card-cover`, `-cover-button`, `-cover-placeholder` | `board-renderer.ts` | **Kept** — live |
+| `.db-board-card-open` | `record-surface/record-header.ts` (record detail panel's open-note button) | **Kept** — live, shared with the detail panel |
+| `.db-board-column-options` | `board-renderer.ts` (kanban column's `···`/`+` controls, under `.db-kanban-col-controls`) | **Kept** — live |
+| `.db-board-column`, `-column-header`, `-column-header::before`, `-column-topbar`, `-column-checkbox`, `-column-resize-handle(::after)`, `-column-title`, `-count`, `-header-text`, `-header-summaries` (+ children) | Only the retired extensions-mode `renderColumn` | **Deleted** — dead |
+| `.db-board-cards`, `-drop-target`, `-drop-indicator(.is-before/.is-after)`, `-empty-slot` (both selector forms) | Only the retired extensions-mode board | **Deleted** — dead |
+| `.db-board-subgroups`, `-subgroup(.is-drop-target)`, `-subgroup-header(::before)`, `-subgroup-checkbox`, `-subgroup-title`, `-subgroup-count`, `-subgroup-toggle` | Only the retired extensions-mode `renderSubgroup` | **Deleted** — dead |
+| `.db-board-card` (base, `:hover`, `.is-dragging`, `.is-drop-target`, `.is-drop-before`, `.is-drop-after`, `[data-subtask-depth]`), `-card-priority-strip`, `-card-body`, `-card-parent`, `-card-title`, `-card-chips`, `-card-chip`, `-card-controls`, `-card-checkbox`, `-card-meta`, `-card-meta .db-cell-progress`, `-card-images`, `-card-image-button`, `-card-more` | Only the retired extensions-mode `renderCard` | **Deleted** — dead |
+| `.db-board-new-card`, `-add-group-trigger`, `-add-column`, `-add-group-*` (confirm/cancel/color-preview) | Only the retired extensions-mode column footer | **Deleted** — dead |
+| `.db-board-drag-group-preview` (+ children `-drag-count`, `-drag-stack`, `-drag-stack-card`) | Only the retired extensions-mode drag handler | **Deleted** — dead |
+| `.db-board-header-text > .db-board-column-title`/`-subgroup-title`, `.db-board-column-title`/`-subgroup-title > .status-badge`, `.db-board-column-header .db-board-group-toggle`, `.db-board-subgroup-header .db-board-subgroup-toggle` | Only the retired extensions-mode header row | **Deleted** — dead |
+| `.db-board-card-title .db-file-title-name`, `.db-board-card:hover .db-file-title-prefix` | Only the retired extensions-mode card title | **Deleted** — dead |
+| `@media (hover: hover) { .db-board-column-header:hover … }`, `@media (hover: hover) { .db-board-card:hover … }`, `@media (hover: none) { .db-board-column-resize-handle … }`, `@media (prefers-reduced-motion: reduce) { .db-board … }` | Only the deleted rules above | **Deleted** — empty husks the cut left behind, removed rather than left as dead braces |
+
+**Count.** 11 selector families kept (all cross-checked against a real construction site above), 24
+selector families plus 4 now-empty media-query husks deleted. `--db-board-column-width` had exactly
+one reader — `.db-board-column`'s own `flex-basis` fallback — and left with the rest of that rule
+rather than being assigned a value nothing then reads; `grep -rn "db-board-column-width"
+styles.css src/` now returns nothing. Verified: `grep -oP '\.db-board-[a-z-]+' styles.css | sort -u`
+returns exactly the 11 kept selector roots, zero of which lack a live construction site.
+<!-- /ANCHOR:r6r7-and-css-audit -->
 
 ---

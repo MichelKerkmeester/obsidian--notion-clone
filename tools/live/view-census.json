@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T10:11:04.281Z",
+  "measuredAt": "2026-09-06T10:27:14.684Z",
   "inputs": {
-    "styles.css": "deb7e368824b",
+    "styles.css": "cdc3ea497d56",
     "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -727,7 +727,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-board-card-cover.is-empty",
-      "parentCls": "db-board-card",
+      "parentCls": "db-kanban-card",
       "by": 8,
       "scrolls": false,
       "pastHeader": 0
@@ -3838,7 +3838,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-board-card-cover.is-empty",
-      "parentCls": "db-board-card",
+      "parentCls": "db-kanban-card",
       "by": 8,
       "scrolls": false,
       "pastHeader": 0
@@ -5838,7 +5838,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-board-card-cover.is-empty",
-      "parentCls": "db-board-card",
+      "parentCls": "db-kanban-card",
       "by": 8,
       "scrolls": false,
       "pastHeader": 0
@@ -6694,7 +6694,7 @@
       "kind": "escaping",
       "tag": "div",
       "cls": "db-board-card-cover.is-empty",
-      "parentCls": "db-board-card",
+      "parentCls": "db-kanban-card",
       "by": 8,
       "scrolls": false,
       "pastHeader": 0

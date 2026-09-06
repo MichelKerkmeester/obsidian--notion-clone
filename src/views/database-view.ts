@@ -7806,7 +7806,6 @@ export class DatabaseView extends FileView {
     if (!this.containerEl_) return;
     const rowSelectors = [
       [".db-table tbody tr[data-note-database-row-path]", ".db-select-col input[type='checkbox']"],
-      [".db-board-card[data-note-database-row-path]", ".db-board-card-checkbox"],
       [".db-gallery-card[data-note-database-row-path]", ".db-gallery-card-checkbox"],
       [".db-list-row[data-note-database-row-path]", ".db-list-row-checkbox"],
     ] as const;
@@ -7833,18 +7832,6 @@ export class DatabaseView extends FileView {
       this.syncScopeSelectionInput(
         divider.querySelector<HTMLInputElement>(".db-group-divider-checkbox"),
         this.getGroupDividerSelectionPaths(divider),
-      );
-    });
-    this.containerEl_.querySelectorAll<HTMLElement>(".db-board-column").forEach((column) => {
-      this.syncScopeSelectionInput(
-        column.querySelector<HTMLInputElement>(".db-board-column-checkbox"),
-        this.getSelectionPaths(column, ".db-board-card[data-note-database-row-path]")
-      );
-    });
-    this.containerEl_.querySelectorAll<HTMLElement>(".db-board-subgroup").forEach((subgroup) => {
-      this.syncScopeSelectionInput(
-        subgroup.querySelector<HTMLInputElement>(".db-board-subgroup-checkbox"),
-        this.getSelectionPaths(subgroup, ".db-board-card[data-note-database-row-path]")
       );
     });
     this.containerEl_.querySelectorAll<HTMLElement>(".db-gallery-group").forEach((group) => {

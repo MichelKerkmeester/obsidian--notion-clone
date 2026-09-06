@@ -9,7 +9,6 @@
    measured from the toolbar height at runtime.
 ─────────────────────────────────────────────────────────────── */
 
-
 /* ───────────────────────────────────────────────────────────────
    1. CONTAINER BASE
    The .note-database-container is the outermost wrapper, shared by the
@@ -955,7 +954,6 @@
   line-height: var(--db-font-md-line-height);
 }
 
-
 .theme-dark .note-database-container {
   --db-current-time-lightness: clamp(58%, calc(var(--accent-l, 56%) + 10%), 70%);
 }
@@ -1494,54 +1492,6 @@
   border-radius: var(--db-radius-sm);
   background: transparent;
   box-shadow: none;
-}
-
-/* A flex row that hugs its content so the options button can sit right beside the group
-   name instead of being flung to the far edge of the header. Only the title shrinks; the
-   count, summaries and options button keep their intrinsic width. */
-.note-database-container .db-board-header-text {
-  display: flex;
-  flex: 0 1 auto;
-  align-items: center;
-  min-width: 0;
-  white-space: nowrap;
-}
-
-.note-database-container .db-board-header-text > .db-board-column-title,
-.note-database-container .db-board-header-text > .db-board-subgroup-title {
-  display: block;
-  flex: 0 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.note-database-container .db-board-header-summaries {
-  display: inline;
-  flex: 0 0 auto;
-  margin-left: 8px;
-  white-space: nowrap;
-}
-
-.note-database-container .db-board-header-summaries .db-group-summary-item {
-  display: inline;
-  max-width: none;
-  margin-left: 8px;
-}
-
-.note-database-container .db-board-header-summaries .db-group-summary-item:first-child {
-  margin-left: 0;
-}
-
-.note-database-container .db-board-header-summaries .db-group-summary-label {
-  display: inline;
-  overflow: visible;
-}
-
-.note-database-container .db-board-header-summaries .db-group-summary-value {
-  display: inline;
-  margin-left: 4px;
 }
 
 .note-database-container .db-heading-row {
@@ -2323,7 +2273,6 @@
   width: var(--db-composite-badge-icon-size);
   height: var(--db-composite-badge-icon-size);
 }
-
 
 input[type="checkbox"].db-toggle-switch {
   appearance: none;
@@ -4209,7 +4158,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   line-height: 1.3;
 }
 
-
 .db-calendar-search-result {
   appearance: none;
   box-sizing: border-box;
@@ -4594,7 +4542,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   background: var(--background-modifier-hover);
 }
 
-
 .note-database-settings .db-settings-file-database-section {
   margin: var(--db-space-6) 0 var(--db-space-5);
 }
@@ -4817,7 +4764,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container:not(.note-database-embed) > .db-summary {
   margin-left: 6px;
 }
-
 
 .note-database-container .db-summary-item {
   position: relative;
@@ -6423,13 +6369,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   white-space: nowrap;
 }
 
-.note-database-container .db-board-card-title .db-file-title-name {
-  white-space: normal;
-  display: flex;
-  flex-wrap: wrap;         /* 允许换行 */
-  align-items: baseline;
-}
-
 .note-database-container .db-file-title-stacked {
   display: block;
   min-width: 0;
@@ -6451,11 +6390,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   opacity: 0;
   margin-bottom: -2px;
 }
-
-.note-database-container .db-board-card:hover .db-file-title-prefix {
-  opacity: 0.6;
-}
-
 
 .note-database-container .db-editable-cell {
   cursor: text;
@@ -6720,34 +6654,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container .db-multi-select-badge.is-removing {
   opacity: .45;
   pointer-events: none;
-}
-
-.note-database-container .db-board-card {
-  position: relative;
-}
-
-.note-database-container .db-board-card.is-drop-target {
-  background: color-mix(in srgb, var(--interactive-accent) 7%, var(--background-primary));
-}
-
-.note-database-container .db-board-drop-indicator {
-  position: absolute;
-  right: 8px;
-  left: 8px;
-  height: 2px;
-  border-radius: 999px;
-  background: var(--interactive-accent);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--interactive-accent) 18%, transparent);
-  pointer-events: none;
-  z-index: 4;
-}
-
-.note-database-container .db-board-drop-indicator.is-before {
-  top: -6px;
-}
-
-.note-database-container .db-board-drop-indicator.is-after {
-  bottom: -6px;
 }
 
 /* Embedded view: hide edit-only buttons in selection status bar */
@@ -7910,7 +7816,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   height: 44px;
 }
 
-.note-database-container .db-board-new-card.is-disabled,
 .note-database-container .db-new-row-button.is-disabled { opacity: 0.5; cursor: not-allowed; }
 .note-database-changelog {
   max-height: 80vh;
@@ -8257,13 +8162,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   width: min(100%, 520px);
 }
 
-.note-database-container .db-board-empty-slot {
-  min-height: 104px;
-  align-items: center;
-  border: 1px dashed color-mix(in srgb, var(--interactive-accent) 45%, var(--background-modifier-border));
-  background: color-mix(in srgb, var(--interactive-accent) 3%, transparent);
-}
-
 @media (max-width: 640px) {
   .note-database-container .db-empty-hero {
     align-items: stretch;
@@ -8364,10 +8262,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   font-weight: 500;
 }
 
-
-.note-database-container .db-group-collapse-toggle,
-.note-database-container .db-board-group-toggle,
-.note-database-container .db-board-subgroup-toggle {
+.note-database-container .db-group-collapse-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -8385,9 +8280,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   margin-left: 2px;
 }
 
-.note-database-container .db-group-collapse-toggle:hover,
-.note-database-container .db-board-group-toggle:hover,
-.note-database-container .db-board-subgroup-toggle:hover {
+.note-database-container .db-group-collapse-toggle:hover {
   color: var(--text-normal);
 }
 
@@ -8637,7 +8530,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   min-width: 42px;
   padding: 0;
 }
-
 
 /* ───────────────────────────────────────────────────────────────
    14. GROUP ORDER MODAL
@@ -9504,9 +9396,11 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   gap: 6px;
 }
 
-/* At rest the header is the chip alone: 24px tall, fully rounded, no fill, the option colour on
-   its text. Border-box keeps the 1px border inside the declared height rather than adding to it —
-   a content-box chip painted 26px. */
+/* At rest the header is the chip alone: 24px tall, fully rounded, the option's own tint fill and
+   its darkened text — the same tint/text pair the card's own tag chip already carries, so the
+   column header and the card agree on how a colour reads instead of inventing a bare-text
+   treatment the source never uses. Border-box keeps the 1px border inside the declared height
+   rather than adding to it — a content-box chip painted 26px. */
 .note-database-container .db-kanban-col-chip {
   display: inline-flex;
   align-items: center;
@@ -9515,7 +9409,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   padding: 0 10px;
   border-radius: 12px;
   border: 1px solid var(--db-border-subtle);
-  background: transparent;
+  background: var(--db-status-bg, transparent);
   font-size: 13px;
   font-weight: 500;
   color: var(--db-status-fg, var(--text-muted));
@@ -9787,9 +9681,12 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
    4.5:1 against both the tint and the page background in both themes. This plugin's own
    sixteen-name colour vocabulary buckets into Anytype's ten hues; only amber's card-chip pair
    was pixel-measured against a real screen — the rest are derived by the same rule, named per
-   bucket below. */
+   bucket below. Grey/slate is the one bucket kept a true neutral (equal R/G/B, no hue at all)
+   rather than a same-hue derivation, matching the source's own achromatic grey; the text step is
+   darkened past the source's own value because the source's ratio was measured against the page,
+   and this text sits on the tint instead. */
 .note-database-container.db-kanban-view .status-color-gray,
-.note-database-container.db-kanban-view .status-color-slate { --db-status-bg: #E3E3E3; --db-status-fg: #7E5D5D; }
+.note-database-container.db-kanban-view .status-color-slate { --db-status-bg: #E3E3E3; --db-status-fg: #656565; }
 .note-database-container.db-kanban-view .status-color-brown,
 .note-database-container.db-kanban-view .status-color-orange { --db-status-bg: #F9DEBA; --db-status-fg: #915608; }
 .note-database-container.db-kanban-view .status-color-yellow { --db-status-bg: #FCEFB4; --db-status-fg: #7E6807; }
@@ -9804,10 +9701,10 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container.db-kanban-view .status-color-red { --db-status-bg: #F8DFD2; --db-status-fg: #AD420B; }
 .note-database-container.db-kanban-view .status-color-cyan { --db-status-bg: #C9E6F9; --db-status-fg: #0967A5; }
 .note-database-container.db-kanban-view .status-color-teal { --db-status-bg: #CFEEED; --db-status-fg: #1B7471; }
-.note-database-container.db-kanban-view .db-kanban-col-chip:not([class*="status-color-"]) { --db-status-fg: #7E5D5D; }
+.note-database-container.db-kanban-view .db-kanban-col-chip:not([class*="status-color-"]) { --db-status-bg: #E3E3E3; --db-status-fg: #656565; }
 
 .theme-dark .note-database-container.db-kanban-view .status-color-gray,
-.theme-dark .note-database-container.db-kanban-view .status-color-slate { --db-status-bg: #414141; --db-status-fg: #BAABAB; }
+.theme-dark .note-database-container.db-kanban-view .status-color-slate { --db-status-bg: #414141; --db-status-fg: #ADADAD; }
 .theme-dark .note-database-container.db-kanban-view .status-color-brown,
 .theme-dark .note-database-container.db-kanban-view .status-color-orange { --db-status-bg: #74390D; --db-status-fg: #F7A669; }
 .theme-dark .note-database-container.db-kanban-view .status-color-yellow { --db-status-bg: #6C621A; --db-status-fg: #EBDF89; }
@@ -9822,7 +9719,7 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .theme-dark .note-database-container.db-kanban-view .status-color-red { --db-status-bg: #7A271C; --db-status-fg: #EE9C91; }
 .theme-dark .note-database-container.db-kanban-view .status-color-cyan { --db-status-bg: #174A6F; --db-status-fg: #79BCEC; }
 .theme-dark .note-database-container.db-kanban-view .status-color-teal { --db-status-bg: #204D4A; --db-status-fg: #51C7BF; }
-.theme-dark .note-database-container.db-kanban-view .db-kanban-col-chip:not([class*="status-color-"]) { --db-status-fg: #BAABAB; }
+.theme-dark .note-database-container.db-kanban-view .db-kanban-col-chip:not([class*="status-color-"]) { --db-status-bg: #414141; --db-status-fg: #ADADAD; }
 
 /* Shared card primitives the gantt still constructs (`pm-chip`, `pm-chip--sm`, `pm-chip--plain`,
    `pm-chip-label`) stay defined here; the board's own variants above were retired with the
@@ -9896,126 +9793,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   height: 12px;
 }
 
-/* 看板整体：横向排列，水平滚动 */
-.note-database-container .db-board {
-  display: flex;
-  align-items: flex-start;
-  gap: calc(var(--db-space-5) + var(--db-space-1));
-  width: max-content;
-  min-width: 100%;
-  min-height: 360px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: var(--db-space-6) 0;
-  scrollbar-gutter: stable;
-}
-
-/* 单个看板列 */
-.note-database-container .db-board-column {
-  position: relative;
-  /* Column width, resized by dragging the handle: the JS clamp (220-520px) keeps
-     --db-board-column-width in range, so the 220px fallback here only matters before that
-     property is ever set. */
-  flex: 0 0 var(--db-board-column-width, 220px);
-  /* min-width:0 lets the flex item shrink below its content's min-content, so a
-     long group title no longer pins the column open and the resize clamp (220px)
-     actually takes effect. The whole flex chain (column → header → title) must
-     carry min-width:0 for text-overflow:ellipsis to win over min-width:auto. */
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--db-space-4);
-  min-height: 260px;
-  border-radius: var(--db-radius-lg);
-  background: var(--background-secondary);
-  padding: var(--db-space-4);
-}
-
-.note-database-container .db-board-column.is-drop-target {
-  background: color-mix(in srgb, var(--interactive-accent) 5%, var(--background-secondary));
-  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--interactive-accent) 68%, transparent);
-}
-
-.note-database-container .db-board-column.is-dragging {
-  opacity: 0.55;
-}
-
-.note-database-container .db-board-column.is-collapsed {
-  min-height: 0;
-}
-
-/* 看板列头部（分组名 + 数量） */
-.note-database-container .db-board-column-header {
-  position: sticky;
-  top: calc(var(--db-board-header-top) + 10px + var(--db-selection-status-offset));
-  z-index: 24;
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  /* justify-content: space-between; */
-  gap: var(--db-space-3);
-  min-height: 40px;
-  max-height: none;
-  margin: calc(-1 * var(--db-space-4)) calc(-1 * var(--db-space-4)) 0;
-  border: 1px solid transparent;
-  border-radius: var(--db-radius-lg) var(--db-radius-lg) var(--db-radius-md) var(--db-radius-md);
-  background: var(--background-secondary);
-  box-shadow: 0 2px 0 var(--background-modifier-border);
-  box-sizing: border-box;
-  cursor: grab;
-  padding: calc(var(--db-space-3) + 3px) var(--db-space-2) var(--db-space-2);
-}
-
-.note-database-container .db-board-column-topbar {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 3px;
-  border-radius: var(--db-radius-lg) var(--db-radius-lg) 0 0;
-  background: var(--db-status-fg, var(--interactive-accent));
-  opacity: 0.55;
-  pointer-events: none;
-}
-
-.note-database-container .db-board-column-header::before {
-  position: absolute;
-  inset: -6px -4px 0;
-  z-index: -1;
-  border-radius: var(--db-radius-lg);
-  background: var(--background-secondary);
-  content: "";
-  pointer-events: none;
-}
-
-.note-database-container .db-board.is-card-dragging {
-  align-items: stretch;
-}
-
-.note-database-container .db-board-drag-group-preview {
-  position: fixed;
-  z-index: 2147483646;
-  padding: 3px 8px;
-  border-radius: var(--db-radius-full);
-  background: var(--interactive-accent);
-  color: var(--text-on-accent);
-  font-size: 11px;
-  font-weight: 700;
-  white-space: nowrap;
-  pointer-events: none;
-  box-shadow: var(--db-elevation-1);
-  transition: opacity var(--db-motion-fast);
-}
-
-.note-database-container .db-board-drag-group-preview.is-hidden {
-  opacity: 0;
-}
-
-.note-database-container .db-board-column-checkbox {
-  flex: 0 0 auto;
-  margin: 0;
-}
-
 /* Mirrors the table column trigger: an inline, fixed-width, non-shrinking sibling of the
    group name, so a long name ellipsises before the button ever moves or wraps. */
 .note-database-container .db-board-column-options {
@@ -10045,17 +9822,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   height: 16px;
 }
 
-.note-database-container .db-board-column-header .db-board-group-toggle,
-.note-database-container .db-board-subgroup-header .db-board-subgroup-toggle {
-  flex-basis: 28px;
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  min-height: 28px;
-}
-
-.note-database-container .db-board-column-header:hover .db-board-column-options,
-.note-database-container .db-board-column-header:focus-within .db-board-column-options,
 .note-database-container .db-board-column-options:focus-visible {
   opacity: 1;
 }
@@ -10065,302 +9831,18 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   color: var(--text-normal);
 }
 
-/* The header background owns the grab affordance; the name group carves out the pointer so
-   grab only ever appears over draggable chrome. */
-.note-database-container .db-board-column-header .db-board-header-text {
-  cursor: pointer;
-}
-
-/* 列宽拖拽手柄（列右边缘的隐形拖拽区域） */
-.note-database-container .db-board-column-resize-handle {
-  position: absolute;
-  top: 0;
-  right: -5px;
-  bottom: 0;
-  z-index: 25;
-  width: 10px;
-  cursor: col-resize;
-}
-
-.note-database-container .db-board-column-resize-handle::after {
-  position: absolute;
-  top: 10px;
-  right: 4px;
-  bottom: 10px;
-  width: 2px;
-  border-radius: var(--db-radius-xs);
-  background: transparent;
-  content: "";
-}
-
-@media (hover: hover) {
-  .note-database-container .db-board-column-resize-handle:hover::after {
-    background: var(--interactive-accent);
-  }
-}
-
-@media (hover: none) {
-  .note-database-container .db-board-column-resize-handle {
-    display: none;
-  }
-}
-
-.note-database-container .db-board-column-title {
-  display: inline-flex;
-  color: var(--text-normal);
-  font-size: 13px;
-  font-weight: 600;
-  vertical-align: middle;
-}
-
 .note-database-container .db-group-title-text {
   display: inline-flex;
   min-width: 0;
   max-width: 100%;
 }
 
-.note-database-container .db-board-column-title > .status-badge,
-.note-database-container .db-board-subgroup-title > .status-badge,
 .note-database-container .db-group-title-text > .status-badge {
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
   white-space: nowrap;
-}
-
-.note-database-container .db-board-count {
-  display: inline;
-  flex: 0 0 auto;
-  margin-left: 8px;
-  color: var(--text-faint);
-  font-size: 12px;
-}
-
-/* 卡片列表容器 */
-.note-database-container .db-board-cards {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  gap: var(--db-space-4);
-  min-height: 0;
-  min-width: 0;
-  overflow-y: auto;
-  padding: var(--db-space-3) var(--db-space-2);
-  border-radius: var(--db-radius-md);
-  transition: background-color var(--db-transition-fast);
-}
-
-.note-database-container .db-board-column.is-drop-target > .db-board-cards,
-.note-database-container .db-board-subgroup.is-drop-target > .db-board-cards {
-  background: color-mix(in srgb, var(--interactive-accent) 8%, transparent);
-}
-
-.note-database-container .db-board-column > .db-board-cards > .db-board-empty-slot,
-.note-database-container .db-board > .db-board-empty-slot {
-  display: flex;
-  flex: 1 0 auto;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 104px;
-  margin: 0;
-  border-color: color-mix(in srgb, var(--interactive-accent) 45%, var(--background-modifier-border));
-  background: color-mix(in srgb, var(--interactive-accent) 3%, transparent);
-}
-
-.note-database-container .db-board-subgroups {
-  display: flex;
-  flex-direction: column;
-  gap: var(--db-space-4);
-}
-
-.note-database-container .db-board-subgroup {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-width: 0;
-  border-radius: var(--db-radius-lg);
-  transition: background-color var(--db-motion-fast), box-shadow var(--db-motion-fast);
-}
-
-.note-database-container .db-board-subgroup:not(:last-child) {
-  padding-bottom: 10px;
-}
-
-.note-database-container .db-board-subgroup.is-drop-target {
-  background: color-mix(in srgb, var(--interactive-accent) 8%, transparent);
-  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--interactive-accent) 62%, transparent);
-}
-
-.note-database-container .db-board-subgroup-header {
-  position: sticky;
-  top: calc(var(--db-board-header-top) + 43px + var(--db-selection-status-offset));
-  z-index: 23;
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  gap: 8px;
-  min-height: 26px;
-  margin: calc(-1 * var(--db-space-4)) calc(-1 * var(--db-space-4)) 0;
-  border-radius: var(--db-radius-md);
-  background: var(--background-primary);
-  /* box-shadow: 0 1px 0 var(--background-modifier-border); */
-  color: var(--text-muted);
-  padding: 6px 4px;
-}
-
-.note-database-container .db-board-subgroup-header::before {
-  position: absolute;
-  inset: -6px -4px 0;
-  z-index: -1;
-  border-radius: var(--db-radius-lg) var(--db-radius-lg) var(--db-radius-md) var(--db-radius-md);
-  background: var(--background-primary);
-  content: "";
-  pointer-events: none;
-}
-
-.note-database-container .db-board-subgroup-checkbox {
-  flex: 0 0 auto;
-  margin: 0;
-}
-
-.note-database-container .db-board-subgroup-title {
-  display: inline-flex;
-  color: var(--text-normal);
-  font-size: 12px;
-  font-weight: 600;
-  vertical-align: middle;
-}
-
-.note-database-container .db-board-subgroup-count {
-  display: inline;
-  flex: 0 0 auto;
-  margin-left: 8px;
-  color: var(--text-faint);
-  font-size: 11px;
-}
-
-/* 单张看板卡片 */
-.note-database-container .db-board-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-height: 112px;
-  min-width: 0;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: var(--db-radius-lg);
-  background: var(--db-surface-raised);
-  cursor: pointer;
-  padding: var(--db-space-4);
-  box-shadow: var(--db-elevation-1);
-  transition: background-color var(--db-transition-fast), box-shadow var(--db-transition-fast), transform var(--db-transition-fast);
-}
-
-/* 卡片悬停抬升 —— 悬停指针专用，触摸单击后不残留抬升/阴影。 */
-@media (hover: hover) {
-  .note-database-container .db-board-card:hover {
-    background: color-mix(in srgb, var(--db-hover-bg) 82%, var(--db-surface-raised));
-    border-color: var(--background-modifier-border-hover);
-    box-shadow: var(--db-elevation-2);
-    transform: translateY(-1px);
-  }
-}
-
-.note-database-container .db-board-card-priority-strip {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: 3px;
-  min-height: 3px;
-  border-radius: var(--db-radius-lg) var(--db-radius-lg) 0 0;
-  background: var(--db-status-fg, var(--interactive-accent));
-  opacity: 0.62;
-  pointer-events: none;
-}
-
-.note-database-container .db-board-card-body {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  gap: var(--db-space-3);
-  min-width: 0;
-}
-
-.note-database-container .db-board-card-parent {
-  align-self: flex-start;
-  max-width: 100%;
-  overflow: hidden;
-  border-radius: var(--db-radius-full);
-  background: color-mix(in srgb, var(--background-modifier-hover) 72%, transparent);
-  color: var(--text-muted);
-  font-size: var(--db-font-xs);
-  line-height: 1.25;
-  padding: var(--db-space-1) var(--db-space-2);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.note-database-container .db-board-card-body > .db-record-title-line {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--db-space-2);
-  min-width: 0;
-}
-
-.note-database-container .db-board-card-body > .db-record-title-line > .db-board-card-title {
-  flex: 1 1 auto;
-}
-
-.note-database-container .db-board-card-chips {
-  display: flex;
-  flex: 0 1 auto;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: var(--db-space-1);
-  min-width: 0;
-  max-width: 50%;
-}
-
-.note-database-container .db-board-card-chip {
-  display: inline-flex;
-  align-items: center;
-  min-width: 0;
-  max-width: 100%;
-  cursor: pointer;
-}
-
-.note-database-container .db-board-card-chip .status-badge {
-  min-width: 0;
-  overflow: hidden;
-  padding-inline: var(--db-space-2);
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.note-database-container .db-board-card.is-dragging {
-  opacity: 0.45;
-  border-color: color-mix(in srgb, var(--interactive-accent) 55%, var(--background-modifier-border));
-  box-shadow: var(--db-elevation-2);
-  cursor: grabbing;
-}
-
-.note-database-container .db-board-card.is-drop-target {
-  border-color: color-mix(in srgb, var(--interactive-accent) 68%, var(--background-modifier-border));
-  background: color-mix(in srgb, var(--interactive-accent) 10%, var(--db-surface-raised));
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--interactive-accent) 36%, transparent);
-}
-
-.note-database-container .db-board-card.is-drop-before {
-  box-shadow: none;
-  transition: none;
-}
-
-.note-database-container .db-board-card.is-drop-after {
-  box-shadow: none;
-  transition: none;
 }
 
 .note-database-container .db-drag-count-badge {
@@ -10377,46 +9859,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   font-weight: 700;
   pointer-events: none;
   white-space: nowrap;
-}
-
-.note-database-container .db-board-drag-group-preview .db-board-drag-count {
-  margin-left: 5px;
-  opacity: .9;
-}
-
-.note-database-container .db-board-drag-group-preview .db-board-drag-stack {
-  position: relative;
-  display: inline-block;
-  width: 17px;
-  height: 13px;
-  vertical-align: -2px;
-}
-
-.note-database-container .db-board-drag-group-preview .db-board-drag-stack-card {
-  position: absolute;
-  width: 11px;
-  height: 9px;
-  border: 1px solid color-mix(in srgb, var(--text-on-accent) 70%, transparent);
-  border-radius: 2px;
-  background: color-mix(in srgb, var(--text-on-accent) 22%, var(--interactive-accent));
-}
-
-.note-database-container .db-board-drag-group-preview .db-board-drag-stack-card:nth-child(1) { left: 0; top: 0; }
-.note-database-container .db-board-drag-group-preview .db-board-drag-stack-card:nth-child(2) { left: 3px; top: 2px; }
-.note-database-container .db-board-drag-group-preview .db-board-drag-stack-card:nth-child(3) { left: 6px; top: 4px; }
-
-/* 卡片顶部：复选框 + 打开按钮 */
-.note-database-container .db-board-card-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--db-space-3);
-  min-height: 28px;
-  margin-bottom: var(--db-space-3);
-}
-
-.note-database-container .db-board-card[data-subtask-depth] {
-  margin-inline-start: calc(var(--db-subtask-depth, 0) * var(--db-space-8));
 }
 
 .note-database-container .db-subtask-toggle {
@@ -10516,11 +9958,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   color: var(--text-faint);
 }
 
-.note-database-container .db-board-card-checkbox {
-  flex: 0 0 auto;
-  margin: 0;
-}
-
 .note-database-container .db-board-card-open {
   display: inline-flex;
   align-items: center;
@@ -10541,15 +9978,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 .note-database-container .db-board-card-open:hover {
   background: var(--background-modifier-hover);
   color: var(--text-normal);
-}
-
-/* 卡片标题（笔记名） */
-.note-database-container .db-board-card-title {
-  min-width: 0;
-  color: var(--text-normal);
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.35;
 }
 
 .note-database-container .is-empty-title {
@@ -10592,15 +10020,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   width: 100%;
   height: 100%;
   object-fit: var(--db-board-image-fit, cover);
-}
-
-/* 卡片属性字段区域 */
-.note-database-container .db-board-card-meta {
-  display: flex;
-  flex-direction: column;
-  gap: var(--db-space-2);
-  margin-top: 0;
-  min-width: 0;
 }
 
 /* 单个属性字段：标签名 | 值 */
@@ -10692,11 +10111,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   gap: var(--db-space-1);
 }
 
-.note-database-container .db-board-card-meta .db-cell-progress {
-  width: 100%;
-  min-width: 0;
-}
-
 .note-database-container .db-board-card-field.is-checkbox-field .db-board-card-value {
   display: flex;
   align-items: center;
@@ -10706,46 +10120,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 
 .note-database-container .db-board-card-field.is-checkbox-field .db-checkbox-cell input {
   margin: 0;
-}
-
-/* 卡片内图片网格 */
-.note-database-container .db-board-card-images {
-  display: grid;
-  grid-template-columns: 1fr;
-  align-items: center;
-  gap: 6px;
-}
-
-/* 图片按钮（点击可放大） */
-.note-database-container .db-board-card-image-button {
-  display: block;
-  overflow: visible;
-  width: 100%;
-  height: auto;
-  min-height: 0;
-  max-height: none;
-  margin: 0;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: var(--db-radius-lg);
-  background: var(--background-secondary);
-  box-shadow: none;
-  cursor: zoom-in;
-  line-height: 0;
-  padding: 0;
-}
-
-.note-database-container .db-board-card-image-button img {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  max-height: none;
-  object-fit: contain;
-}
-
-.note-database-container .db-board-card-more {
-  color: var(--text-faint);
-  font-size: 11px;
 }
 
 /* 卡片内笔记链接 */
@@ -11209,107 +10583,6 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 
 body.is-phone .note-database-container .db-record-detail-panel {
   max-height: 50vh;
-}
-
-/* 看板底部“新建卡片”和末端“新建分组” */
-.note-database-container .db-board-new-card,
-.note-database-container .db-board-add-group-trigger {
-  width: 100%;
-  min-height: 30px;
-  border: 0;
-  border-radius: var(--db-radius-lg);
-  background: transparent;
-  color: var(--text-faint);
-  cursor: pointer;
-  text-align: left;
-}
-
-.note-database-container .db-board-new-card:hover,
-.note-database-container .db-board-add-group-trigger:hover {
-  background: var(--background-modifier-hover);
-  color: var(--text-normal);
-}
-
-.note-database-container .db-board-add-column {
-  flex: 0 0 180px;
-  padding: 8px;
-}
-
-.note-database-container .db-board-add-group-editor {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 30px 30px;
-  align-items: center;
-  gap: 4px 6px;
-}
-
-.note-database-container .db-board-add-group-input {
-  grid-column: 1;
-  width: 100%;
-  min-width: 0;
-  height: 30px;
-}
-
-.note-database-container .db-board-add-group-input:focus,
-.note-database-container .db-board-add-group-input:focus-visible {
-  outline: none;
-  box-shadow: none;
-  border-color: var(--background-modifier-border);
-}
-
-.note-database-container .db-board-add-group-confirm,
-.note-database-container .db-board-add-group-cancel {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-  color: var(--text-muted);
-  border-radius: var(--db-radius-sm);
-}
-
-.note-database-container .db-board-add-group-confirm:hover {
-  color: var(--interactive-accent);
-}
-
-.note-database-container .db-board-add-group-cancel:hover {
-  color: var(--text-error);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .note-database-container .db-board,
-  .note-database-container .db-board * {
-    scroll-behavior: auto;
-    transition: none;
-  }
-}
-
-.note-database-container .db-board-add-group-color-preview {
-  grid-column: 1 / -1;
-  grid-row: 2;
-  display: block;
-  width: 16px;
-  height: 16px;
-  min-width: 16px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  border-radius: var(--db-radius-xs);
-  cursor: pointer;
-}
-
-.note-database-container .db-board-add-group-color-preview:focus-visible {
-  outline: 2px solid var(--interactive-accent);
-  outline-offset: 2px;
-}
-
-.note-database-container .db-board-add-group-confirm svg,
-.note-database-container .db-board-add-group-cancel svg {
-  width: 15px;
-  height: 15px;
 }
 
 .note-database-container .db-card-empty-placeholder {
@@ -13760,7 +13033,6 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   font-size: 13px;
 }
 
-
 .note-database-modal textarea {
   min-height: 140px;
   padding: 8px;
@@ -14818,7 +14090,6 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   background: var(--background-modifier-hover);
 }
 
-
 .db-status-preset-default-indicator.is-active {
   opacity: 1;
 }
@@ -14826,7 +14097,6 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
 .note-database-modal .db-status-preset-manager-row:hover .db-status-preset-default-indicator {
   opacity: 1;
 }
-
 
 .note-database-modal .db-status-preset-name-input {
   grid-area: name;
@@ -14907,7 +14177,6 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   color: var(--text-normal);
   background: none;
 }
-
 
 /* 激活态：主色填充 + 文字反色，形成强烈对比 */
 .note-database-modal .db-status-preset-button.is-active {
@@ -16447,11 +15716,6 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   margin-top: 0;
 }
 
-/* 看板列的水平滚动 */
-.note-database-embed .db-board-columns {
-  overflow-x: auto;
-}
-
 /* Embed: header 固定在容器顶部 */
 .note-database-embed.note-database-container > .db-header {
   top: 0;
@@ -16687,7 +15951,6 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
    three states separately and never combines them. Whenever today falls inside the selected week
    this is every reader's view of it. The fill wins: a day that is both is selected first. */
 
-
 /* Event marker: a short accent underline beneath the number. */
 .note-database-container .db-calendar-mini-day-dot {
   width: 13px;
@@ -16748,8 +16011,6 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
 .note-database-container .db-calendar-mini-view-cell.is-today.is-selected {
   color: var(--text-on-accent);
 }
-
-
 
 .note-database-container .db-calendar-mini-view-label {
   overflow: hidden;
@@ -16814,7 +16075,6 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   background: var(--background-modifier-hover);
   color: var(--interactive-accent);
 }
-
 
 /* Brief column highlight after jumping to a date from the mini picker. */
 .note-database-container .db-calendar-week-day-col.is-flash,
@@ -18084,7 +17344,6 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   padding-bottom: 2px;
 }
 
-
 .note-database-container .db-calendar-day-popover-events .db-calendar-month-segment.is-timed {
   align-items: center;
 }
@@ -18114,7 +17373,6 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   grid-template-columns: 52px minmax(0, 1fr);
   background: var(--background-primary);
 }
-
 
 .note-database-container .db-calendar-time-header-days {
   display: grid;
@@ -18305,7 +17563,6 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   min-width: 0;
   background: transparent;
 }
-
 
 /* Flattened to the month chip's own flat ink: no per-event fill, no accent
    bar, no radius — the same background: none / border: 0 / border-radius: 0
@@ -19212,7 +18469,6 @@ body.pm-resize-active * {
   background: var(--background-primary);
 }
 
-
 /* On a phone the temporal title takes its own line, and it is not conditional.
  *
  * The title is a RANGE on two of these three surfaces — "Mar 23 – Apr 5" wants 153px and the header
@@ -19282,7 +18538,6 @@ body.pm-resize-active * {
   color: var(--text-muted);
   font-size: var(--font-ui-smaller);
 }
-
 
 /* 拖拽重排序插入线：横跨整个 lane 宽度的细水平线，紧贴目标事件的上/下边缘——延续
    旧「卡片边缘 box-shadow」的贴边质感，但跨整行更显眼。无圆点；用细线 + 柔和发光定位。 */
@@ -19476,8 +18731,6 @@ body.pm-resize-active * {
   background: var(--db-timeline-grid-line-color);
   pointer-events: none;
 }
-
-
 
 .note-database-container .db-timeline-tick .db-timeline-tick-label {
   display: inline-flex;
@@ -20549,7 +19802,6 @@ body.pm-resize-active * {
   bottom: max(16px, env(safe-area-inset-bottom));
 }
 
-
 /* ───────────────────────────────────────────────────────────────
    32. RESPONSIVE AND MOBILE
    Narrow screens: reduced padding, stacked toolbar and full-width search.
@@ -20774,7 +20026,6 @@ body.pm-resize-active * {
 .is-phone .note-database-container .db-option-drag-handle,
 .is-phone .note-database-container .db-resize-handle,
 .is-phone .note-database-container .db-cell-fill-handle,
-.is-phone .note-database-container .db-board-column-resize-handle,
 .is-phone .note-database-modal .db-status-option-drag,
 .is-phone .note-database-modal .db-group-order-drag,
 .is-phone .note-database-modal .db-file-list-drag,
@@ -21012,7 +20263,6 @@ body.pm-resize-active * {
   padding: 0;
 }
 
-.is-phone .note-database-container .db-board-card,
 .is-phone .note-database-container .db-list-row {
   position: relative;
 }
@@ -21354,8 +20604,6 @@ img.db-text-md-image {
 .note-database-container .db-active-control-edit,
 .note-database-container .db-active-control-remove,
 .note-database-container .db-group-collapse-toggle,
-.note-database-container .db-board-group-toggle,
-.note-database-container .db-board-subgroup-toggle,
 .note-database-container .db-table-mobile-move-btn,
 .note-database-container .db-card-mobile-move-btn,
 .note-database-container .db-timeline-window-jump,
@@ -21372,8 +20620,6 @@ img.db-text-md-image {
     .db-column-menu-trigger,
     .db-board-column-options,
     .db-group-collapse-toggle,
-    .db-board-group-toggle,
-    .db-board-subgroup-toggle,
     .db-timeline-window-jump,
     .db-calendar-nav-button,
     .db-calendar-add-button,
@@ -21443,8 +20689,6 @@ img.db-text-md-image {
   .note-database-container .db-toolbar-button::before,
   .note-database-container .db-active-control-edit::before,
   .note-database-container .db-group-collapse-toggle::before,
-  .note-database-container .db-board-group-toggle::before,
-  .note-database-container .db-board-subgroup-toggle::before,
   .note-database-container .db-table-mobile-move-btn::before,
   .note-database-container .db-card-mobile-move-btn::before,
   .note-database-container .db-timeline-window-jump::before,
@@ -21571,7 +20815,6 @@ img.db-text-md-image {
 }
 
 .note-database-container .db-table td[data-note-database-column-key],
-.note-database-container .db-board-card,
 .note-database-container .db-list-row {
   scroll-margin-top: calc(var(--db-header-height, 34px) + 8px);
   scroll-margin-bottom: calc(var(--db-mobile-bar-height, 48px) + 8px);
@@ -21588,65 +20831,11 @@ img.db-text-md-image {
 }
 
 .note-database-container .db-table,
-.note-database-container .db-board,
 .note-database-container .db-list {
   touch-action: manipulation;
 }
 
-.note-database-container .db-board-pagination {
-  display: none;
-}
-
 @media (pointer: coarse), (max-width: 760px) {
-  .note-database-container .db-board {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 12px;
-  }
-
-  .note-database-container .db-board-column {
-    scroll-snap-align: center;
-  }
-
-  .note-database-container .db-board-pagination {
-    position: sticky;
-    left: 12px;
-    z-index: 30;
-    bottom: 8px;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    width: max-content;
-    margin: 0 auto;
-    padding: var(--db-space-3) var(--db-space-5);
-    border-radius: 999px;
-    background: var(--background-primary-alt);
-  }
-
-  .note-database-container .db-board-pagination button {
-    position: relative;
-    width: 12px;
-    height: 12px;
-    min-width: 12px;
-    min-height: 12px;
-    padding: 0;
-    border: 1px solid var(--text-muted);
-    border-radius: 50%;
-    background: transparent;
-  }
-
-  .note-database-container .db-board-pagination button::before {
-    position: absolute;
-    inset: -16px;
-    content: "";
-  }
-
-  .note-database-container .db-board-pagination button[aria-selected="true"] {
-    border-color: var(--interactive-accent);
-    background: var(--interactive-accent);
-  }
 
   .note-database-container .db-table td[data-note-database-column-key],
   .note-database-container .db-table th {
@@ -21660,7 +20849,7 @@ img.db-text-md-image {
  *  Every database view is authored for a wide, horizontally-scrollable canvas:
  *  the table uses fixed px column widths, list rows and the board grid grow to
  *  `width: max-content`, and their children are rigid (`.db-list-field` a fixed
- *  150px, `.db-board-column` a fixed 280px). On a phone those intrinsic widths
+ *  150px, `.db-kanban-col` a fixed 246px). On a phone those intrinsic widths
  *  dwarf the viewport, so content clips at the edges and the desktop
  *  `db-width-default` centring (max-width + auto side margins) throws the
  *  overflow off-screen. These rules key strictly off `is-phone` — a merely
@@ -21840,20 +21029,6 @@ img.db-text-md-image {
   max-width: 100%;
 }
 
-/* Board — stop the sticky group header floating down over the cards. */
-
-/* On the phone the board becomes an overflow scroller on both axes (mobile
-   overflow-x:auto pairs with the base overflow:visible, which computes to
-   auto), so the board box becomes the containing block for the sticky column
-   header. Its sticky `top` — seeded from the desktop-measured toolbar height —
-   then resolves inside the column and the opaque header floats down over the
-   first cards. Take it out of sticky flow on the phone so it sits at the column
-   top; keep it positioned so its ::before background still anchors to it. */
-.is-phone .note-database-container .db-board-column-header {
-  position: relative;
-  top: auto;
-}
-
 /* Record detail panel — mobile bottom-sheet close affordance. */
 
 /* positionToolbarPopover already renders this panel as a bottom sheet with a
@@ -21898,7 +21073,6 @@ img.db-text-md-image {
 
 @media (forced-colors: active) {
   .note-database-container :is(.db-cell-selected, .db-cell-range-selected, .db-cell-focus),
-  .note-database-container .db-board-card:focus-visible,
   .note-database-container .db-list-row:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: -2px;
@@ -21908,7 +21082,7 @@ img.db-text-md-image {
     forced-color-adjust: none;
   }
 
-  .note-database-container :is(.db-group-collapse-toggle, .db-board-group-toggle, .db-board-subgroup-toggle):focus-visible,
+  .note-database-container .db-group-collapse-toggle:focus-visible,
   .db-column-menu-subpopover :is(button, input, select, textarea):focus-visible,
   .db-icon-picker-popover :is(button, input, select, textarea):focus-visible,
   .db-color-picker-popup :is(button, input, select, textarea):focus-visible,
