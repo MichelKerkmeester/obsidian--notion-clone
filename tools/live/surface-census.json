@@ -1,9 +1,12 @@
 {
-  "measuredAt": "2026-09-06T04:59:04.200Z",
+  "measuredAt": "2026-09-06T05:27:47.190Z",
   "inputs": {
     "styles.css": "a849b979b394",
-    "tools/live/surface-census.mjs": "8eddb1d0c81c",
-    "src/views/surface-contract.ts": "ca203fa23a84"
+    "tools/live/surface-census.mjs": "ea52a1e1e8f5",
+    "src/views/surface-contract.ts": "ca203fa23a84",
+    "src/views/record-detail-panel.ts": "c150d55fdd79",
+    "src/views/table-record-peek.ts": "31dcefb0a474",
+    "src/views/board-card-properties-panel.ts": "36ee3fa444cc"
   },
   "totals": {
     "rendered": 83,
@@ -12,7 +15,8 @@
     "renderedOnly": 0,
     "buildableNotRendered": 141,
     "untokened": 0,
-    "unroled": 83
+    "unroled": 83,
+    "recordSurfaceHandBuilt": 0
   },
   "rendered": {
     "db-column-menu-trigger": {
@@ -1643,5 +1647,33 @@
     "filter-panel",
     "date-value-picker",
     "toast"
+  ],
+  "recordSurfaceCensus": [
+    {
+      "file": "src/views/record-detail-panel.ts",
+      "headerBuilderCalls": 1,
+      "rowBuilderCalls": 1,
+      "handBuiltHeaders": [],
+      "handBuiltRows": [],
+      "nonRowReuse": []
+    },
+    {
+      "file": "src/views/table-record-peek.ts",
+      "headerBuilderCalls": 1,
+      "rowBuilderCalls": 1,
+      "handBuiltHeaders": [],
+      "handBuiltRows": [],
+      "nonRowReuse": [
+        "db-record-peek-field (:255)"
+      ]
+    },
+    {
+      "file": "src/views/board-card-properties-panel.ts",
+      "headerBuilderCalls": 0,
+      "rowBuilderCalls": 1,
+      "handBuiltHeaders": [],
+      "handBuiltRows": [],
+      "nonRowReuse": []
+    }
   ]
 }
