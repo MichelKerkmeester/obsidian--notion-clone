@@ -41,11 +41,11 @@ _memory:
 <!-- SPECKIT_TEMPLATE_SOURCE: decision-record | v2.2 -->
 
 > Four decisions. **Two were ruled by the operator on 2026-09-06 18:50** — ADR-001, *"Keep one
-> weight"*, and ADR-002, *"Centre on phone, keep corner on desktop"*, both quoted verbatim below —
-> and two remain open: ADR-003's 5000ms is an inference the device pass can move, and ADR-004 is the
-> implementer's to record at T002. Nothing here re-decides what
-> `055`'s `design-trueup.md` measured — these are about which reading governs, not about what a
-> reference shows.
+> weight"*, and ADR-002, *"Centre on phone, keep corner on desktop"*, both quoted verbatim below.
+> **ADR-004 is now decided** — a dedicated `ease-out` token, so the fast-band migration changes no
+> surface's curve. **ADR-003 stays open**: 5000ms is an inference the device pass can move. Nothing
+> here re-decides what `055`'s `design-trueup.md` measured — these are about which reading governs,
+> not about what a reference shows.
 
 ---
 
@@ -277,9 +277,9 @@ both computed budgets apart, so a later single-budget regression goes red rather
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-06 |
-| **Deciders** | Implementer at T002, before T009 reads it |
+| **Status** | Accepted — option 1, a dedicated `ease-out` token |
+| **Date** | 2026-09-06 (opened) · 2026-09-07 (decided) |
+| **Deciders** | Implementer, at the fast-band migration itself |
 
 ---
 
@@ -305,15 +305,21 @@ its own and the reason the raw grep count of 7 (which also matches the definitio
 <!-- ANCHOR:adr-004-decision -->
 ### Decision
 
-**Record the choice explicitly at T002, before T009 migrates anything.** Two admissible options:
+**Option 1 — add `--db-motion-fast-out: 120ms ease-out` beside `--db-motion-fast` and alias the four
+sites to it.** Two admissible options were on the table:
 
-1. Add `--db-motion-fast-out: 120ms ease-out` to the token block (`styles.css:142-146`) and alias the
-   four sites — preserves every current curve, at the cost of a second fast-band token.
+1. Add `--db-motion-fast-out: 120ms ease-out` to the token block and alias the four sites —
+   preserves every current curve, at the cost of a second fast-band token.
 2. Migrate the four sites to `var(--db-motion-fast)` and accept `ease` as the one fast-band curve —
    one token, at the cost of a deliberate curve change on four surfaces.
 
-**Either satisfies the threshold; absorbing the choice does not.** The failure this ADR prevents is a
-census that reaches zero by changing four surfaces' motion without anyone deciding to.
+Option 1 is taken. A popover entrance and three hover/state transitions are read-heavy, frequent
+interactions with an established feel; nothing in this packet's scope asked for that feel to change,
+and REQ-005 is satisfied by the census alone — it does not prefer one curve over the other. Trading
+a second small token for zero visual change on four live surfaces is the smaller, safer move, and it
+keeps the migration mechanical: every site keeps the value it already rendered, named instead of
+hand-typed. **Absorbing the choice silently was the failure this ADR exists to prevent — deciding is
+what discharges it, not which option is picked.**
 <!-- /ANCHOR:adr-004-decision -->
 
 <!-- ANCHOR:adr-004-consequences -->

@@ -128,6 +128,10 @@ A task missing any of the three is not ready to start.
       needs an Obsidian `App`, a vault and a metadata cache no harness here constructs, the same
       limit AC-002 records. The component's action and callback are lane-proven; all four call
       sites are proven by reading the final files and by `tsc`.
+      **Reconciled 2026-09-07 against the tree by `066` T010: correctly stays `[ ]`.** The gap this
+      row names — the `nothingToUndo` branch needs a live `App`/vault/metadata cache — is still
+      true of the tree; nothing in `066`'s scope touches it, so this row's own reasoning is left
+      standing rather than ticked on the strength of a sibling packet's unrelated fixes.
       **Threshold:** the Undo button appears with the notice and performs the undo — or reports
       `notice.nothingToUndo` (`src/i18n.ts:1484`) when the stack is empty, never a silent no-op.
       **Red first:** the notice renders with no button at all today.
@@ -649,12 +653,17 @@ A task missing any of the three is not ready to start.
 - [ ] T017 [P0] **The operator exercises the states on device** — filtered view, row deletion,
       board group-field deletion, drag under sort — and reads them as debugged, refined, perfected
       (the §6A bar). Not tickable by an agent (goal D8)
-- [ ] T019 (2026-09-06 amendment) Remove `row-menu.ts:166-176`'s `confirmWithModal` call on the
+- [x] T019 (2026-09-06 amendment) Remove `row-menu.ts:166-176`'s `confirmWithModal` call on the
       single-row delete action, leaving `deleteRow`'s existing `showToast`/Undo path as the only
       safety net. Red-first: today a single-row delete raises a confirm dialog before the toast
       ever shows; assert no confirm surface opens after the fix, and the Undo toast still restores
-      the file. `deleteSelectedRows` (bulk, `database-view.ts:4962`) is untouched by this task
-- [ ] T020 (2026-09-06) **The Notion refinement of this phase lives in
+      the file. `deleteSelectedRows` (bulk, `database-view.ts:4962`) is untouched by this task.
+      **Reconciled 2026-09-07 against the tree by `066` T010: landed.** `row-menu.ts:163-171`'s
+      single-row `onClick` calls `this.actions.deleteRow(row)` directly — no `confirmWithModal` —
+      with the file's own comment recording why; `deleteRow` (`database-view.ts:8349-8390`) still
+      shows the Undo toast on success and confirms only its own unreadable-snapshot case, unrelated
+      to this task's target.
+- [x] T020 (2026-09-06) **The Notion refinement of this phase lives in
       `../066-notion-states-refinement/`, not here.** The five-iteration `/deep:research:auto` loop
       on the Notion screen digest (`research/research.md`, one lineage `glm-openrouter-states` on
       GLM 5.3 flash max, 23 findings, 5 of 5 questions answered) found three gaps this phase's

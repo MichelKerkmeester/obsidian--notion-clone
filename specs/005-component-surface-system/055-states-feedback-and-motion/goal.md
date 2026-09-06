@@ -102,7 +102,7 @@ Name conflicts; never resolve them silently.
       surface must render and which it renders today, citing `file:line`.** **Today: the table
       exists in this packet's `spec.md` §5** as the authored baseline; it is the document the
       implementation is checked against.
-- [ ] **A missing source, a present source with no matches, and a deleted board group relation
+- [x] **A missing source, a present source with no matches, and a deleted board group relation
       render three distinct declared states.** **Restated 2026-09-05 against `design-trueup.md`
       REQ-009**, because "today: 1" was false by a wide margin. **Twelve** reasons already ship
       (`empty-state-renderer.ts:24-36`), each with its own title, body and icon (`:143-203`),
@@ -112,13 +112,18 @@ Name conflicts; never resolve them silently.
       "view" flavour Anytype's source describes as one. **The one real gap is the third state**:
       `empty-group` means "this group has no rows", not "the relation this board groups by no
       longer exists" — and a deleted group field falls back to `getDefaultBoardField`
-      (`database-view.ts:2678`, `:2890`, `:3378`) with no state at all. **Today: 12 reasons ship,
-      0 of them is the deleted-relation state.** Done is: the existing mapping asserted so it
-      cannot regress, plus the one missing state built and pointing at view settings.
+      (`database-view.ts:2678`, `:2890`, `:3378`) with no state at all. **Restated 2026-09-07
+      against the tree: 14 reasons ship** (`empty-state-renderer.ts:25-39`), and the deleted-relation
+      state is among them as `group-relation-deleted`, alongside `source-missing` for the other gap
+      this row once claimed was still open. Done is: the existing mapping asserted so it cannot
+      regress, plus the built state pointing at view settings — both landed.
 - [ ] **One toast component carries severity and an optional action, and every notice this phase
-      owns routes through it.** **Today: 0 of 247** `new Notice(...)` call sites
-      (`grep -rn "new Notice(" src --include="*.ts"`, tests excluded) carry an action affordance,
-      and `notice.galleryMigrated` (`src/i18n.ts:1455`) promises an Undo the notice cannot carry.
+      owns routes through it.** **Restated 2026-09-07 against the tree: 239** `new Notice(...)`
+      call sites remain (`rg -n "new Notice\(" src --glob '!*.test.ts' | wc -l`, down from a
+      same-day-measured 242 after three owned `database-view.ts` catches moved to the toast), and
+      `notice.galleryMigrated` (`src/i18n.ts:1473`) is delivered by `showToast` carrying an `Undo`
+      action (`database-view.ts:2718-2723`) — it no longer promises one the notice cannot carry,
+      because it is not a notice.
 - [ ] **The confirm sheet passes `044`'s seven grammar elements — through `051`'s primitive, not a
       second one.** **Today: 0 of 7 asserted.** `ConfirmModal` declares `sheet` at
       `modals/confirm-modal.ts:42` (`super(app, "sheet")`, class at `:35`) and inherits `DbModal`'s
@@ -156,12 +161,15 @@ Name conflicts; never resolve them silently.
       **Today: 0 embedded views honour a page limit and 0 render a `Load more` row.**
 - [ ] **Motion durations and easings are tokenized at the measured values, and reduced-motion
       coverage holds for every surface the phase touches.** The surface pair is **enter 200ms
-      `ease-out`, exit 150ms `ease-in`** (`design-trueup.md` §4). **Today: 42** transition
-      declarations hand-type `120ms` outside any token — **recounted at landing 2026-09-05**;
-      the draft's 78 was measured against a different tree and does not reproduce
-      (`grep -o "transition:[^;]*" styles.css | grep -c 120ms` → 42). One shared
-      `--db-transition-fast` (`styles.css:113`, `120ms ease`) exists, and the reduced-motion reset
-      covers container descendants and `.db-surface` (`styles.css:918`, proven by
+      `ease-out`, exit 150ms `ease-in`** (`design-trueup.md` §4). **Restated 2026-09-07 against the
+      tree: 0** raw fast-band duration declarations remain, comments excluded
+      (`grep -c "120ms ease-out" styles.css` reads 1 — the `--db-motion-fast-out` token definition
+      itself, not a declaration). The 42 this row once counted was never the shared
+      `--db-transition-fast` token's own surface: it fell to 4 hand-typed `ease-out` declarations by
+      the time this packet's own tree was read, and a sibling packet's fast-band pass took those to
+      zero, adding `--db-motion-fast-out` (`styles.css:146`) beside `--db-transition-fast`
+      (`styles.css:122`, `120ms ease`) rather than silently changing their curve. The reduced-motion
+      reset still covers container descendants and `.db-surface` (`styles.css:1011`, proven by
       `owned-menu-reduced-motion.test.ts`).
 - [ ] **`npm run gate` exits 0 read from `$?`, with one permanent lane row per deliverable, each
       negative control observed red before green, and the board and gantt reference captures
@@ -169,12 +177,18 @@ Name conflicts; never resolve them silently.
 - [ ] **The operator opens a filtered view, deletes a row, deletes a board group field and drags a
       card under a sort, and reads the states as debugged, refined, perfected.** Only the operator
       closes this row; nothing in this repository can.
-- [ ] **A single-row delete has no confirm and shows an Undo toast; bulk delete and anything not
+- [x] **A single-row delete has no confirm and shows an Undo toast; bulk delete and anything not
       undoable keep the confirm.** **Added 2026-09-06** from the operator's E4 ruling on `051`
-      ADR-007 (`goal.md` §4 amendment below). **Today: RED, and belt-and-suspenders rather than
-      missing** — `row-menu.ts:166-176`'s single-row delete calls `confirmWithModal` **and**
-      `deleteRow` (`database-view.ts:8354-8371`) **already** shows a `showToast` with an `Undo`
-      action after it deletes. Both exist; the confirm is the one to remove.
+      ADR-007 (`goal.md` §4 amendment below). **Restated 2026-09-07 against the tree: GREEN, and
+      landed, not belt-and-suspenders** — `row-menu.ts:163-171`'s single-row delete calls
+      `this.actions.deleteRow(row)` directly, with the file's own comment recording why
+      (`row-menu.ts:167-169`): *"No confirm here: Anytype parity for a single row is
+      delete-then-Undo, and deleteRow itself is where that decision is made — it still confirms
+      when the row can't be snapshotted for the toast's Undo to restore."* `deleteRow`
+      (`database-view.ts:8349-8390`) confirms only that one unreadable-snapshot case and otherwise
+      shows a `showToast` with an `Undo` action after it deletes (`:8373-8379`). Both halves of the
+      original claim were true independently — the confirm this row worried about was never the
+      one still standing.
       `database-view.ts:4962`'s `deleteSelectedRows` (bulk) keeps its confirm, unchanged.
 <!-- /ANCHOR:completion -->
 
