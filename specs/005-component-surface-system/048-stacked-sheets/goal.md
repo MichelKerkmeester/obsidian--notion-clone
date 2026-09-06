@@ -12,10 +12,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/048-stacked-sheets"
-    last_updated_at: "2026-09-05T09:35:00Z"
+    last_updated_at: "2026-09-06T14:00:00Z"
     last_updated_by: "code-agent"
-    recent_action: "Closed the stacking model, the migrations and the lane rows against measured evidence"
-    next_safe_action: "Cut 0.0.24 and collect the operator device confirmation"
+    recent_action: "Ticked the host-modal chrome criterion and T024 against 5aeb7087"
+    next_safe_action: "Add a depth-3 stacked capture scenario, then the operator device read"
     blockers:
       - "Operator device confirmation is the only row that closes this phase"
     key_files:
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-048-goal"
       parent_session_id: null
-    completion_pct: 86
+    completion_pct: 88
     open_questions: []
     answered_questions: []
 ---
@@ -105,7 +105,7 @@ Frozen choices. Changing one is an amendment.
 - [ ] **The operator opens the Properties sheet, the filter sheet's operator dropdown and its
       property picker on iOS and reports each as one stack rather than two sheets.** Only the
       operator closes this row; nothing in this repository can.
-- [ ] **The stacked pair on iOS draws one close control, one continuous surface, no dead space
+- [x] **The stacked pair on iOS draws one close control, one continuous surface, no dead space
       above the title, and no parent bleed.** **Added 2026-09-06** from the operator's 10:04 report
       on 0.0.29 (`../roadmap.md` §4 row 59; capture `operator-ios-stacked-sheet-bug-20260906.png`,
       the operator's own, not committed to this repository). Four defects observed red on device,
@@ -119,6 +119,31 @@ Frozen choices. Changing one is an amendment.
       box, and **0** parent ink above the child's top edge. Fix leg
       `worktrees/159-fix-048-ios-stacked-sheet`; the grammar half is `044`'s, the shell half
       `051`'s, and both are cross-referenced rather than restated here.
+
+      **Fourth clause amended in place and dated, 2026-09-06.** "0 parent ink above the child's top
+      edge" was written from the report and did not survive being measured. The stacking model was
+      **observed red nowhere**: on both engines, before the fix as much as after it, the child
+      registers with the overlay stack, derives its parent, resolves depth 2, and one scrim sits at
+      z-index 1001 between the parent's 1000 and the child's 1002 while the parent holds
+      `is-stack-parent` at opacity 0.88. The parent visible above the child is C10's floating frame
+      doing what it specifies — inset 8px left, right and bottom, radius 16px, measured 8/382/836 in
+      a 390x844 viewport. The clause now reads: **the parent below is dimmed and pulled back with
+      one scrim between the two, and no parent ink reaches the child's own frame.** Recorded at
+      `e632a1e1`, in `decision-record.md`'s 2026-09-06 ~10:44 note.
+
+      **Met, on the amended clause set.** Fix `be578988`, guard `772b24d2` (`tasks.md` T024 carries
+      both). Measured at `main` `5aeb7087` on the `properties edit property` pair, Chrome and
+      WebKit: `exactly one visible close control (found 1)`; `header and body share one background`;
+      `sheet root paints an opaque fill (color(srgb 0.179412 0.179412 0.179412))`; `handle-to-title
+      gap <=80px (measured 34.4px)` against the **74.4px** the empty native title produced pre-fix;
+      `parent dims and scales back`; `exactly one scrim`; `child depth 2 (want 2)`. Read by eye on
+      the recaptured depth-2 pair landed at `5aeb7087`
+      (`screenshots/notion-clone/panels/constructed-modal-sheet-property-editor-stacked-mobile-{dark,light}.png`,
+      opened directly in this reconciliation): one `×` in the child's header, one continuous fill
+      from the child's grab handle through its Save row, the title sitting inside the header's own
+      padding box, and the parent Properties sheet behind and above the child's frame rather than
+      through it. **The device read itself is not this row** — that is the criterion above, and it
+      is the operator's.
 <!-- /ANCHOR:completion -->
 
 ---

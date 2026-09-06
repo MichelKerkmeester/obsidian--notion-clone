@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-044-spec"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 86
     open_questions:
       - "Does the Obsidian-owned PluginSettingTab body get a local row grammar, or a wrapper that restyles Setting rows in place?"
       - "Which sheet owns keyboard avoidance: applySheetChrome for every sheet, or an opt-in per instance?"

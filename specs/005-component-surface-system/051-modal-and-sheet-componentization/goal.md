@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/051-modal-and-sheet-componentization"
-    last_updated_at: "2026-09-06T08:15:00Z"
+    last_updated_at: "2026-09-06T14:00:00Z"
     last_updated_by: "implementer-session-fourth-landing"
-    recent_action: "Landed T021/T022: the desktop Settings panel docks as a 420px right side sheet"
-    next_safe_action: "Settle AC-013: the sheet still dismisses on a pointer-down over the database"
+    recent_action: "Closed AC-013 by the Keep-the-overlay ruling and ticked T024 against 5aeb7087"
+    next_safe_action: "Take T015's three missing lane rows, then T010's operator question"
     blockers:
       - "styles.css edits are serialized by the parent's CSS lane"
       - "T010 stays blocked on the operator (spec.md §11's second open question, unanswerable from any capture)"
@@ -29,7 +29,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-051-goal"
       parent_session_id: null
-    completion_pct: 55
+    completion_pct: 22
     open_questions:
       - "Do the three FuzzySuggestModal subclasses join the shell, or stay Obsidian-native with a shim"
       - "Does the fullscreen presentation survive as a third mode, or collapse into the sheet with a height role"
@@ -161,27 +161,51 @@ never resolve them silently.
       **12** registered `sheet-grammar` surfaces and **31** registered stacked pairs still pass; and
       the board and gantt reference captures are `pixelHash`-identical to their baseline or the
       difference carries an operator ruling.
+      **Open on the lane-row clause alone, re-derived 2026-09-06 at `main` `5aeb7087`.** Three of
+      the four clauses hold: the gate read 26 green / 0 red at this tree's own landing, `npm run
+      replay` held at 28/28 with reversed 0 (T017), and the 32 protected board and gantt entries
+      are `pixelHash`-identical (T016). The registry figures in this row are the ones it was written
+      with; the lane now registers **14** surfaces and **32** pairs and passes all of them (2041
+      PASS / 0 FAIL, exit 0), the growth being `column-manager` at `3ae2818e` and the operator's own
+      `properties edit property` pair at `5fccf193`. What keeps the row open is "one permanent lane
+      row per shell deliverable": three deliverables have none, named in `tasks.md` T015 — the
+      primary action pill, the trailing header chip, and the motion timing band; the sub-page shape
+      has no row because it has no production producer.
 - [ ] **The operator opens a modal, a sheet, a sub-page and a destructive confirm on iOS and on
       desktop and reads them as one surface family, debugged, refined, perfected.** Only the
       operator closes this row; nothing in this repository can.
-- [ ] **The desktop database Settings surface opens as a right side sheet: a full-height panel
+- [x] **The desktop database Settings surface opens as a right side sheet: a full-height panel
       docked to the right edge, the database stays visible and interactive to its left, and the
       panel scrolls independently of it.** **Added 2026-09-06** from the operator's report and
-      ruling (`goal.md` §4 amendment below). **Today: three of the four clauses are green and one
-      is not.** Red, measured on the shipped renderer before the change: a 360x560px anchored
-      dropdown scrolling itself, header included, over 1776px of content in a 576px client box.
-      Green now: docked right, 420px wide, the container's full height, header fixed with the body
-      the only scroller (1672px inside 776px), and the database visible and independently
-      scrollable to its left. **Still open, which is why this row is not ticked**: *interactive* —
-      a pointer-down on the database dismisses the sheet through the shared `overlayStack`
-      outside-pointerdown contract (a wheel scroll does not). Recorded on AC-013 and ADR-008.
+      ruling (`goal.md` §4 amendment below). **Observed red** on the shipped renderer before the
+      change, measured on the `view-config` scenario through the render-assertion bundle in
+      headless Chrome at 1200x900: a 360x560px anchored dropdown, the panel itself the scroller
+      with its header carried off the top, 1776px of content in a 576px client box, description
+      textarea 58px in a 236px column. Green now, same mount: `position: absolute`,
+      `inset 0 0 0 auto`, **420px** wide, height 844px which is the container's own,
+      `border-left 1px`, `border-radius 0`, `overflow: hidden` on the panel with
+      `.db-view-config-body` the only scroller at 1672px inside 776px, textarea 84px in a 279px
+      column, no inline `top`/`left` written; focus trapped, and a picker opened from a row inside
+      it mounting as a container sibling at `z-index` 100 against the panel's 50.
+      **The fourth clause is closed by ruling, 2026-09-06 (~10:55), operator: *"Keep the
+      overlay."*** *Interactive* means the database stays visible and independently scrollable; a
+      pointer-down on it still dismisses the sheet through the shared `overlayStack`
+      outside-pointerdown contract, and no surface becomes exempt from it. Recorded in ADR-008's
+      amendment and on AC-013, which is now `Met`. **What this row does not close:** T023, the
+      lane row for the shape, deliberately not taken while one surface uses it.
 - [ ] **The sheet family's device pass runs an extra deep-research loop before this family is
       called done.** **Added 2026-09-06** from the operator's 10:04 standing instruction
       (`../roadmap.md` §4 row 59, §6A). It is not a code criterion and it is not a substitute for
       any row above: it starts only once `044`, `048` and `051` are each done **and verified as
       planned**, and it closes when the Opus synthesis has landed its phase updates. Executor spec
-      in §4's amendment below. **Today: no such loop has run** — `deep-research-state.jsonl` at the
-      program root is 0 bytes.
+      in §4's amendment below, and the exact dispatch in `tasks.md` T025. **Today: no such loop has
+      run** — `deep-research-state.jsonl` at the program root is 0 bytes.
+      **Precondition verdict, 2026-09-06 at `main` `5aeb7087`: NOT MET.** *Verified as planned* is
+      the operator's device read under D3, and none of the three packets has one: `044` AC-006,
+      `048` AC-009 and this packet's AC-010 are all open, with no reply landed since the 0.0.23
+      check. Two non-operator rows also remain: `048`'s T025 (no depth-3 stacked capture scenario
+      exists) and this packet's own T010, T015 and T023. The full row-by-row table is in `tasks.md`
+      T025.
 <!-- /ANCHOR:completion -->
 
 ---

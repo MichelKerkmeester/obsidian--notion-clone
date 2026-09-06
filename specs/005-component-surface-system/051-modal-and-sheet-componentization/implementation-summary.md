@@ -33,7 +33,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-051-impl"
       parent_session_id: null
-    completion_pct: 55
+    completion_pct: 22
     open_questions:
       - "Do the three FuzzySuggestModal subclasses join the shell or stay Obsidian-native behind a shim?"
     answered_questions:
@@ -395,3 +395,45 @@ first `RESULT:` **PASSED** after the graph-metadata backfill and one `next_safe_
 session; no capture recapture was owed.
 <!-- /ANCHOR:fourth-landing -->
 
+
+<!-- ANCHOR:final-state -->
+## Final state, 2026-09-06 — reconciled against `main` `5aeb7087`
+
+**What shipped.** `src/views/surface-shell.ts` is the one shell definition: presentation resolution,
+a declared title with a counted scrape fallback, engine composition, idempotent teardown, the
+measured geometry and motion as named constants, a replace-in-place sub-page stack behind a
+three-slot header, and the C10 floating/flush frame classifier. `DbModal.applyPresentation`
+delegates to it, four raw chrome call sites collapse to two decision-making groups, and 17 of 20
+subclasses declare a title and a role where 0 did. `buildShellHeader` owns 11 of the 12 registered
+header sites plus the nine the census had missed, with phone titles centred to within 0.01px.
+`src/views/confirm-sheet.ts` exports the confirm primitive and `ConfirmModal` consumes it, so
+`sheet-grammar.mjs` measures the shipped module rather than a mirror of it. The desktop Settings
+surface docks as a 420px full-height side sheet (ADR-008), and `048`'s host-modal chrome fix landed
+on this packet's `mobile-bottom-sheet.ts` at `be578988` / `772b24d2` without touching
+`surface-shell.ts`.
+
+**Where it stands.** 2 of 9 goal criteria and 3 of 14 acceptance rows. That ratio is honest rather
+than disappointing: every criterion is written about the whole family, and the shell has one
+consumer for its presentation switch and none at all for its sub-page half.
+
+**The open rows, and which of them an agent can close.**
+
+*Not ours.* AC-010, `goal.md`'s seventh criterion and `tasks.md` T018 are one row: the operator opens
+a modal, a sheet, a sub-page and a destructive confirm on iOS and on desktop and reads them as one
+surface family. T010 is also the operator's, blocked on `spec.md` §11's second open question, which
+no Anytype capture can answer because it is a question about our host.
+
+*Ours, and named.* **T015** is the biggest one: three shell deliverables carry no lane row at all
+(the primary action pill, the trailing header chip, the motion timing band) and the sub-page shape
+carries none because no production caller reaches `pushSubPage`/`popSubPage`. **T023** stays open by
+choice, not by omission: one surface uses the side-sheet shape, so a `design-system.md` role row
+would describe a taxonomy entry with a single member. **T025** is the sheet family's deep-research
+loop, whose precondition is measured NOT MET below.
+
+**T025's precondition, measured rather than assumed.** *Done and verified as planned* is the
+operator's device read under parent D3, and none of `044`, `048` or `051` has one: their operator
+rows are all open with no reply since the 0.0.23 check, through 0.0.24 to 0.0.29. Two non-operator
+rows remain beside them, `048`'s T025 (no depth-3 stacked capture scenario exists) and this packet's
+T010 / T015 / T023. The exact dispatch to run once the precondition clears is written out in
+`tasks.md` T025 rather than left to be reconstructed.
+<!-- /ANCHOR:final-state -->

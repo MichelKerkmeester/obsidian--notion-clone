@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Three operator reports arrived inside eight minutes on 2026-09-04 and they are one defect seen from",
     "created_at": "2026-09-04T18:46:24Z",
-    "last_save_at": "2026-09-06T08:52:49.120Z",
+    "last_save_at": "2026-09-06T13:38:50.679Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8a336975160d589dc9c227662da592a5fdb62a7aa68d71255f7cb127e30d9186",
+    "source_fingerprint": "sha256:cf4990e0bf83331e02fb7af99cb5f82a9e7242235b62869bb62048913f83c9aa",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "8d446eac3c613ef3acf79e04282bc373a69da2ae9e005b079291df59479548e6",
+      "spec.md": "793e0071be2b6e2c287cb64ccd671a41363e55a5f132d52e832a3524770bd554",
       "plan.md": "220be2579bff6607d196d9b02b0b4b8426c00cc4e1ac6b1a987ea42efb64cff2",
-      "tasks.md": "fcde1e423fc27c982c761500f6440db9decf52916e91cb400bb918ef1efdc8b0",
-      "decision-record.md": "b11d6ab2d24bf01d6a43a3e79990c853385ca93383c643893429aaf8fa94601d",
-      "implementation-summary.md": "7d2ac6a654d32d5cd6a145041c5fc052030387a4c483e6bc537da9a742320f50"
+      "tasks.md": "93f845a8315c77727d2fe9cc0a4f47958667f48780147ebcaf2f33c36ce86216",
+      "decision-record.md": "c66d560ccb630b16709b9d5a30b77949e294bf26312d6ca2ac25d7274dd24aa7",
+      "implementation-summary.md": "98825d21ad2c7571c3eaa1a3063a76148a9a4e1812bbd1cd01276330f12884e7"
     },
     "last_active_child_id": null,
     "last_active_at": null

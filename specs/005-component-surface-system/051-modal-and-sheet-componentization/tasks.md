@@ -588,6 +588,32 @@ excluded on its own recorded terms.
       primary action pill and the trailing header chip (AC-006) and the motion timing band (AC-007)
       carry no lane row yet — narrower than at the last landing (two gaps closed, one clarified as
       already covered, one left open with its reason), not fully closed.
+
+      **Partial, re-derived 2026-09-06 from an actual `node tools/live/sheet-grammar.mjs` run at
+      `main` `5aeb7087` (2041 PASS / 0 FAIL, exit 0), so the two lists below are read off the run
+      rather than off this document.**
+
+      *The rows that exist, each permanent and each with its own control observed red between two
+      greens:* **title centring** across all 13 header-bearing census rows, control `the old
+      two-slot row goes off-centre (27.67px)` then `the grid rule restores centring (0.01px)`;
+      **frame shape**, `sort-panel` classified floating at 8/8/8px and radius 16px and `settings`
+      classified flush at 0/0/0px and radius 8px, control `neutralised CSS goes flush despite the
+      floating classification` then restored; **the 44px edge-control token**, `close measures
+      44.0x44.0`, control `overriding the token moves the close control (60.0x60.0)` then `removing
+      the override restores 44px`; **the confirm primitive**, mounted from the shipped
+      `confirm-sheet.ts` and green on all eight grammar columns plus the centring probe; **the
+      grammar itself**, 14 surfaces x 8 columns with the handle-removal control red on that row
+      alone; **stacking**, 32 registered pairs with the old-way-mount control red between two
+      greens; **host-modal chrome**, four columns with four injection controls; **horizontal
+      overflow**, every phone-presentable surface on Chrome and WebKit, twice, with a 600px-child
+      control; and **the shell panel's own parent**, three rows guarding `772b24d2`'s narrowing.
+
+      *The rows that do not exist, which is why this task stays open:* **the primary action pill**
+      and **the trailing header chip** (AC-006) have no row on any lane; **the motion timing band**
+      (AC-007, enter 200ms ease-out / exit 150ms ease-in) has no row and no measurement harness;
+      **the sub-page shape** has no row because it has no production producer — `rg -n
+      "pushSubPage|popSubPage" src` outside tests and stories returns only `surface-shell.ts`'s own
+      definition and its internal call, so there is nothing to mount. Three deliverables, no rows.
 - [x] **T016 — [P] Re-read the board and gantt parity captures against T003's baseline.**
       **Threshold**: `pixelHash`-identical, or an operator ruling on the difference (parent goal
       D5). **Red-first proof**: T003's recorded hashes.
@@ -679,17 +705,94 @@ excluded on its own recorded terms.
       the negative control as written asserts the interactivity clause T021 records as still open.
       Revisit when a second surface takes this shape — the row stays open rather than being ticked
       or waived, because nothing about it was proven
-- [ ] **T024 (2026-09-06 amendment) — Land the stacked-sheet fix leg on this packet's files.**
+- [x] **T024 (2026-09-06 amendment) — Land the stacked-sheet fix leg on this packet's files.**
       `048` T024 owns the four defects the operator's 10:04 iOS report names; the edits land in
       `surface-shell.ts` and `mobile-bottom-sheet.ts`, which are this packet's, so the leg is
       sequenced **after** T021-T023 rather than beside them. Red first: pre-fix the depth-2 stack
       draws 2 close controls and 2 background values on one sheet
+
+      **Done 2026-09-06 — landed on `main`, and the file list is narrower than this row predicted.**
+      `be578988` changes `src/views/mobile-bottom-sheet.ts` and `styles.css`;
+      `772b24d2` changes `src/views/mobile-bottom-sheet.ts` and `tools/live/sheet-grammar.mjs`.
+      **`surface-shell.ts` is not touched by either commit**, so the sequencing this row asked for
+      held on the one file it actually needed. The fix is at `attachSheetChromeToModal`, the one
+      function every `DbModal` subclass and both suggest-modal wrappers route through: Obsidian's
+      empty native `titleEl` and its `.modal-close-button` are found **by reference** and hidden
+      while the surface is presented as a sheet, restored on teardown so `applyPresentation`'s
+      rotation back to a desktop dialog gets the host's chrome back; `.note-database-modal`'s
+      desktop-dialog frame is turned off inside a `.db-mobile-bottom-sheet`; the pre-existing
+      selector-only close hide is deleted rather than kept, because it silently caught a negative
+      control's own injected close button. `772b24d2` then narrows the container capture to the
+      host's own `.modal-container` **by class** rather than taking `modalEl.parentElement`, since
+      the shell also hands this function panels whose parent belongs to the view tree —
+      **watched red on both engines** first, the panel's own parent reading `none` presented as a
+      sheet and `""` after teardown against the `flex` it was given, which is the case the side
+      sheet's own panel path was heading into.
+      **Red first, this row's own numbers**: 2 close controls and 2 background values
+      (`rgba(0, 0, 0, 0)` against `color(srgb 0.224 0.224 0.224)`) on 5 of 31 registered pairs, and
+      a handle-to-title gap of 74.4px. **Green at `main` `5aeb7087`**, re-measured this session on
+      both engines: one visible close control, one shared background, an opaque root fill
+      (`color(srgb 0.179412 0.179412 0.179412)`), 34.4px, with four injection controls each red then
+      green. `048/tasks.md` T024 and `048/decision-record.md`'s 2026-09-06 ~10:44 note carry the
+      full account; this row records only that the leg landed on the files this packet owns.
 - [ ] **T025 (2026-09-06 amendment) — Run the sheet family's deep-research loop**, to the executor
       spec in `goal.md` §4's amendment: `/deep:research:auto`, 10 iterations,
       `--stop-policy=max-iterations`, `cli-pi` on GLM 5.3 flash max (OpenRouter, DevPass fallback),
       bounded prompts with an explicit file list and no image reads, a fresh worktree, then an Opus
       synthesis that updates or adds phases. **Starts only once `044`, `048` and `051` are done and
       verified** — an operator-set precondition, not a scheduling preference
+
+      **The dispatch, written out so it is executed rather than reconstructed.** Read
+      `.opencode/skills/cli-external-orchestration/cli-pi/SKILL.md` before composing any prompt
+      (AGENTS.md §10 CLI dispatch), and `/deep:research`'s own SKILL.md before invoking it: the loop
+      owns its state machine, and hand-rolling a substitute is a PLAN-WORKFLOW LOCK violation.
+
+      ```
+      /deep:research:auto --max-iterations 10 --stop-policy=max-iterations \
+        --spec-folder specs/005-component-surface-system/051-modal-and-sheet-componentization
+      ```
+
+      | Field | Value |
+      |---|---|
+      | **Executor** | `cli-pi`, model `openrouter/z-ai/glm-5.3-flash`, thinking **max** |
+      | **Fallback** | `llmgateway/glm-5.3-flash` (DevPass), transport fallback only — same model, not a second opinion |
+      | **Containment** | A fresh worktree for the run. Deep-loop containment scans the whole tree and a dirty parent checkout is what makes a run stall |
+      | **Synthesis** | An **Opus** pass reads the loop's findings and updates or adds phases. The loop writes findings; only the synthesis touches a phase document |
+
+      **The bounded topic**, because the operator's own words are *"properly prompt them so they
+      dont get stuck"*: the phone-sheet family's **remaining defects and parity gaps against the
+      Anytype sheet captures**, plus the operator's own iOS reports (`../roadmap.md` §4 rows 40, 41,
+      43 and 59). **No image reads** — GLM cannot read a PNG, so every capture reaches it as the
+      measured list, numbers and `file:line`, never as a picture. Every iteration carries an
+      explicit file list and no exploration budget. The list:
+
+      - `src/views/mobile-bottom-sheet.ts`, `src/views/surface-shell.ts`, `src/views/sheet-grammar.ts`,
+        `src/views/confirm-sheet.ts`, `src/views/overlay-stack.ts`, `src/views/popover-position.ts`
+      - `src/views/modals/db-modal.ts`, `src/views/modals/confirm-modal.ts`
+      - `src/views/view-config-panel-renderer.ts`, `src/views/column-width.ts`,
+        `src/views/toolbar-renderer.ts`, `src/views/record-detail-panel.ts`
+      - `tools/live/sheet-grammar.mjs`, `tools/live/host-modal-stand-in.ts`,
+        `tools/screenshots/constructed-scenarios.mjs`
+      - `specs/005-component-surface-system/044-phone-sheet-alignment/{goal,acceptance-criteria,tasks}.md`
+      - `specs/005-component-surface-system/048-stacked-sheets/{goal,acceptance-criteria,tasks,decision-record}.md`
+      - `specs/005-component-surface-system/051-modal-and-sheet-componentization/{goal,acceptance-criteria,tasks,decision-record,design-trueup}.md`
+      - `specs/005-component-surface-system/050-anytype-adoption/` for the measured Anytype values,
+        and `../roadmap.md` §4 rows 40/41/43/59 plus §6A for the rulings already taken
+
+      **Precondition verdict, 2026-09-06 at `main` `5aeb7087`: NOT MET, and what blocks it is
+      named rather than waived.** *Done* is close on two of the three and open on the third;
+      *verified as planned* is open on all three, because under D3 that is the operator's device
+      read and none of the three has one.
+
+      | Packet | Non-operator rows still open | Operator row |
+      |---|---|---|
+      | `044` | none — 6 of 7 goal criteria ticked, 8 of 9 AC rows Met, `checklist.md` CHK-043 (P2, README naming) the only unticked box | AC-006 / criterion 7, no reply since the 0.0.23 check |
+      | `048` | `tasks.md` T025 — no depth-3 stacked capture scenario exists | AC-009 / criterion 7, no reply on 0.0.24 through 0.0.29 |
+      | `051` | T010 `[B]`, T015 (three lane rows missing), T023 (declined until a second consumer), and 7 of 9 goal criteria | AC-010 / criterion 7 and T018 |
+
+      So the loop does not start yet. `044` is the closest: it needs only the operator's read.
+      `048` needs one capture scenario and then the operator's read. `051` is the packet that
+      actually gates the family, and its own shell criteria are the work, not the waiting.
 <!-- /ANCHOR:phase-4 -->
 
 ---

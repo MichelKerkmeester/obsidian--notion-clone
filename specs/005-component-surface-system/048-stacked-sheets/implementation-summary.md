@@ -26,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-048-impl"
       parent_session_id: null
-    completion_pct: 86
+    completion_pct: 88
     open_questions: []
     answered_questions:
       - "Level 2, standard child: recommend-level.sh 64/100, phase score 10/50 against a 25 threshold"
@@ -200,3 +200,40 @@ same offset.
 <!-- /ANCHOR:limitations -->
 
 ---
+
+<!-- ANCHOR:final-state -->
+## Final state, 2026-09-06 — reconciled against `main` `5aeb7087`
+
+**What shipped.** Depth is a property of the stack, asked of it rather than computed by any surface.
+`overlay-stack.ts`'s `parentId` is load-bearing, one mount pass owns per-depth z-index, the parent
+below dims and pulls back, the sheet under the top holds a zero inset, and exactly one scrim sits
+between the top two. Every stacked child carries `044`'s header with a 44px close.
+`tools/live/sheet-grammar.mjs` registers the pairs permanently: **32** at `main` `5aeb7087`, three
+of them three deep, each measured on Chrome and again on WebKit, with the stacking negative control
+(a child mounted the old way, no parent treatment) observed red between two greens.
+
+**The 2026-09-06 reopening is closed in-repo.** The operator's 10:04 iOS report (`../roadmap.md` §4
+row 59) named five symptoms with one producer: Obsidian's own always-created chrome inside a
+`modalEl` that `DbModal`'s sheet presentation never accounted for. `be578988` hides the empty native
+title and the native close by reference and restores both on teardown, and turns off
+`.note-database-modal`'s desktop-dialog frame inside a sheet; `772b24d2` narrows the container
+capture to the host's own `.modal-container` by class. `5aeb7087` makes the regress-test permanent
+rather than live-only: four `constructed-modal-sheet-*` scenarios mount a real `DbModal` subclass
+through the real `attachSheetChromeToModal`, standalone and stacked, both themes. The parent-bleed
+half of the report was cleared by measurement rather than fixed, and `e632a1e1` records that.
+
+**The open rows.** Two, and the first is the operator's. **AC-009 / `goal.md`'s seventh criterion /
+`tasks.md` T022** is the device read: the operator opens the Properties sheet, the filter sheet's
+operator dropdown and its property picker on iOS and reports each as one stack rather than two
+sheets. Nothing here closes it, and 0.0.24 through 0.0.29 have shipped with no reply on it.
+**`tasks.md` T025** is not the operator's and stays open on one concrete gap: no depth-3 stacked
+capture scenario exists — `tools/screenshots/constructed-scenarios.mjs` registers only the two
+depth-2 stacked ids, so the three depth-3 chains the lane mounts and measures are never photographed.
+That row's registry threshold (13 surfaces, 31 pairs) is also stale against the observed 14 and 32
+and is left as written rather than transcribed forward.
+
+**Two counts in the sections above are dated, not wrong.** "31 stacked pairs" and "253 failing
+assertions against the pre-fix tree" were read when 31 pairs were registered. `3ae2818e` added the
+`column-manager` surface and `5fccf193` added the `properties edit property` pair, so a run today
+reads 14 surfaces and 32 pairs.
+<!-- /ANCHOR:final-state -->

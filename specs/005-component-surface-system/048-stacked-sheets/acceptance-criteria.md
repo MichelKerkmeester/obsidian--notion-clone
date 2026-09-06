@@ -12,10 +12,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/048-stacked-sheets"
-    last_updated_at: "2026-09-05T09:35:00Z"
+    last_updated_at: "2026-09-06T14:00:00Z"
     last_updated_by: "code-agent"
-    recent_action: "Recorded the measured red and green value behind every criterion"
-    next_safe_action: "Operator re-checks the three captures on 0.0.24"
+    recent_action: "Closed AC-010 on the amended fourth clause; 9 of 10 rows Met"
+    next_safe_action: "Operator re-checks the stacked pair on the shipped build"
     blockers:
       - "AC-009 is operator-owned and nothing here can close it"
     key_files:
@@ -26,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-048-ac"
       parent_session_id: null
-    completion_pct: 89
+    completion_pct: 88
     open_questions: []
     answered_questions: []
 ---
@@ -72,7 +72,7 @@ profile with a navbar present, and every threshold carries a failing number obse
 | AC-007 | REQ-007 | **Given** a child whose content exceeds the viewport — the 14-property picker in `stacked-filter-property-picker.png` — **When** it is mounted, **Then** it scrolls inside its own sheet and a fade or scrollbar is present at the cut, so no row is bisected by the sheet's bottom edge with nothing to say the list continues | `sheet-grammar` stacked row on the 26-option picker. **Threshold: `scrollHeight > clientHeight` with a fade or scrollbar at the cut. Red: 985 > 424 with no fade** — clipped exactly as the operator's capture shows. **Green: 932 > 344 with the mask present**; the child's chrome is now fixed and the option list owns the scrolling, which is why `clientHeight` dropped | Met | - |
 | AC-008 | REQ-008 | **Given** the gate, **When** `npm run gate` runs to completion and its status is read from `$?`, **Then** it exits **0** with one `sheet-grammar` row per registered stacked pair including at least one depth-3 chain, and the stacking negative control was observed **red then green** | `npm run gate`, status read from `$?` without a pipe → **0, 25 lanes green, 0 red**. `sheet-grammar` carries **31 stacked pairs** including three depth-3 chains (`properties property type picker`, `record column submenu`, `import confirm dropdown chain`). Red-first evidence: the same lane against the pre-fix tree reported **253 failing assertions**; against the fixed tree, **0**. The stacking negative control reads rendered style, not the marking class: parent opacity **0.88 → 1 → 0.88** with the content transform going `matrix(...) → none → matrix(...)` | Met | - |
 | AC-009 | REQ-002, REQ-004 | **Given** a released build on the operator's iPhone, **When** they open the Properties sheet, the filter sheet's operator dropdown and its property picker, **Then** they report each as one stack rather than two sheets | The operator's own words. **Only the operator closes this row; nothing in this repository can** | Unmet | - |
-| AC-010 | REQ-002, REQ-004 (2026-09-06 amendment) | **Given** the depth-2 stack the operator's 10:04 report captures on iOS 0.0.29 — Edit property → Month over Properties — **When** it is recaptured after the T024 leg and read device-pixel by device-pixel, **Then** the child draws **1** close control, **1** background value across header and body, the title's ink inside the header's own padding box, and **0** parent ink above the child's top edge | Pre-fix on the operator's capture: **2** close controls, **2** background values, roughly **200** CSS px of dead space above the title, and parent rows plus a "14" count badge visible over the toolbar. Green is the four numbers above, read off a recaptured constructed depth-2 scenario in both themes | Unmet | - |
+| AC-010 | REQ-002, REQ-004 (2026-09-06 amendment) | **Given** the depth-2 stack the operator's 10:04 report captures on iOS 0.0.29 — Edit property → Month over Properties — **When** it is recaptured after the T024 leg and read device-pixel by device-pixel, **Then** the child draws **1** close control, **1** background value across header and body, the title's ink inside the header's own padding box, and (**fourth clause amended in place, 2026-09-06**) the parent below is dimmed and pulled back with one scrim between the two and no parent ink reaching the child's own frame | Pre-fix on the operator's capture: **2** close controls, **2** background values, roughly **200** CSS px of dead space above the title, and parent rows plus a "14" count badge visible over the toolbar. In the lane's own vocabulary, **observed red** against the pre-fix tree on the faithful host-modal stand-in: header/body `rgba(0, 0, 0, 0)` against `color(srgb 0.224 0.224 0.224)` on **5 of 31** pairs, handle-to-title **74.4px** against **34.4px**, **2** visible close controls. **Why the fourth clause was amended rather than measured as written:** "0 parent ink above the child's top edge" describes a defect the stacking model does not have. Read out of the DOM on both engines, before the fix as much as after it, the child registers, derives its parent, resolves depth 2, and one scrim sits at z-index 1001 between the parent's 1000 and the child's 1002 while the parent holds `is-stack-parent` at 0.88; the parent visible above the child is C10's floating frame at inset 8px and radius 16px, measured 8/382/836 in 390x844 (`decision-record.md`, 2026-09-06 ~10:44, as corrected at `e632a1e1`). **Met** on the amended set: fix `be578988`, guard `772b24d2`; at `main` `5aeb7087` the `properties edit property` pair reads `exactly one visible close control (found 1)`, `header and body share one background`, `sheet root paints an opaque fill (color(srgb 0.179412 0.179412 0.179412))`, `handle-to-title gap <=80px (measured 34.4px)`, `parent dims and scales back`, `exactly one scrim`, `child depth 2` on Chrome and WebKit, with four injection controls each red then green; and the recaptured depth-2 pair landed at `5aeb7087` (`constructed-modal-sheet-property-editor-stacked-mobile-{dark,light}.png`) was opened and read in both themes | Met | - |
 
 ### Status values
 
@@ -104,6 +104,13 @@ same `sheet-grammar` lane, with the same 31 stacked pairs registered, reports **
 assertions** against the pre-fix tree and **0** against the fixed one, and `npm run gate` exits **0**
 with 25 lanes green. D1 is answered — ACCEPTED, present as a sheet (`decision-record.md` ADR-001) —
 so the modal rows are migrated rather than deferred.
+
+**AC-010 joined and closed, 2026-09-06.** The host-modal chrome report (§4 row 59) is fixed at
+`be578988` and guarded at `772b24d2`; three of its four clauses were measured green on the operator's
+own `properties edit property` pair at `main` `5aeb7087`, and the fourth was amended in place after
+measurement cleared the stacking model of it. **9 of 10 rows Met.** The registry the paragraph above
+quotes has since grown to 14 surfaces and 32 pairs (`3ae2818e`, `5fccf193`); the 253-to-0 figure is
+left as the reading it was, against the 31 pairs registered when it was taken.
 
 **AC-009 is unmet and only the operator closes it** (parent D3). Everything above it is a
 measurement taken in headless Chrome against the production render path; none of it is a person

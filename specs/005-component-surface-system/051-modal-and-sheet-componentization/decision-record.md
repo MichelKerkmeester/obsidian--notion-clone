@@ -30,7 +30,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-051-adr"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 22
     open_questions: []
     answered_questions:
       - "ADR-002: a registered stacked pair may become an in-place sub-page where the Anytype capture shows that pattern; 048's stacking model stays the default for every other pair"
@@ -694,5 +694,32 @@ changes, no migration.
 | **What does it touch?** | `surface-shell.ts` (two constants), `view-config-panel-renderer.ts` (`presentPanel`, focus trap), `styles.css` (`.db-shell-side-sheet` and its sub-rules), `toolbar-renderer.ts` (the gear, the removed "···" row) — recorded jointly with `053` ADR-006 |
 | **What is the real caller that must not break?** | `048`'s stacking model (a picker opened from the side sheet must still dock over it) and `044`'s twelve registered `sheet-grammar` surfaces (phone's `settings` row, unchanged) |
 | **What contract must not break?** | Focus return on close (WCAG 2.4.3) and Escape-dismissal, both already provided by `overlayStack`/`trapFocus` and asserted unchanged here rather than reimplemented |
+
+---
+
+### Amendment, 2026-09-06 (~10:55) — the interactivity clause is settled by ruling
+
+**Operator: *"Keep the overlay."*** The one clause the landing left open is closed by decision
+rather than by code. The side sheet keeps the shared `overlayStack` outside-pointerdown contract: a
+pointer-down on the database dismisses it, exactly as it dismisses every other toolbar panel. No
+surface becomes exempt, `048`'s stacking and dismissal model is untouched, and the fourth row of the
+planned-versus-shipped table above stops being a divergence awaiting a decision and becomes the
+shipped behaviour with the operator's name on it.
+
+**What that leaves the surface with**, all of it already measured at the landing and unchanged by
+this amendment: docked to the pane's right edge at 420px, the container's full height, the header
+fixed with the body the only scroller (1672px inside 776px), the database visible and independently
+scrollable to its left, focus trapped, and a picker opened from inside it docking over it at
+`z-index` 100 against the sheet's 50.
+
+**What it does not close.** T023 stays open on its own reasons, which are not this ruling's:
+ADR-008 shipped one marker class for one surface rather than a fifth `design-system.md` role, so a
+role row would describe a taxonomy entry with a single member, and no gate lane asserts the shape.
+The ruling settles *what the surface should do*, not *whether a lane watches it*.
+
+**Provenance.** Relayed into this record by the 2026-09-06 family reconciliation, which carried the
+ruling from the operator's own dispatch. Recorded here, on `acceptance-criteria.md` AC-013,
+on `goal.md`'s side-sheet criterion, and in `../roadmap.md` §6A's dated tables.
+
 <!-- /ANCHOR:adr-008 -->
 

@@ -31,7 +31,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-044-closing-leg"
       parent_session_id: null
-    completion_pct: 95
+    completion_pct: 86
     open_questions: []
     answered_questions: []
 ---
@@ -299,3 +299,39 @@ to committed bytes.
 <!-- /ANCHOR:limitations -->
 
 ---
+
+<!-- ANCHOR:final-state -->
+## Final state, 2026-09-06 — reconciled against `main` `5aeb7087`
+
+**What shipped.** One sheet grammar, owned by the sheet module and enforced by a lane rather than by
+memory. `src/views/sheet-grammar.ts` holds the eight columns as predicates;
+`tools/live/sheet-grammar.mjs` mounts every registered surface on a 390x844 phone page and fails on
+any missing element; `tools/gate.mjs` runs it as the `sheet-grammar` check. The three reported
+surfaces are on the grammar — the column-width adjuster (T005, `worktrees/039`), the settings sheet
+(T007, `dbdec603`, body grammar later T015) and the Add view sheet (T008) — and so are the four
+ranked instances T009 owns, the four dropdown families T016 registered, and the settings body T015
+put on shared rows. Re-measured this session at `main` `5aeb7087`: **14 registered surfaces x 8
+columns, 2041 PASS / 0 FAIL, exit 0**, every close target 44.0x44.0, nothing past any surface's
+right edge on either engine in either the as-built or the unbreakable-word pass, and eight negative
+controls each observed red on its injection before returning green.
+
+**Where the numbers in this document sit against the tree.** Two counts moved after they were
+written and both are named rather than quietly corrected: the registry read 13 surfaces / 31 pairs
+when T016 closed, and reads **14 / 32** now — `column-manager` registered at `3ae2818e`, and the
+`properties edit property` stacked pair at `5fccf193`, which is `048`'s landing for the operator's
+10:04 report, not this packet's work.
+
+**The open rows, all of them the operator's.** `goal.md`'s seventh criterion, `acceptance-criteria.md`
+AC-006 and `tasks.md`'s "Manual verification passed" are one row said three times: the operator opens
+the column-width adjuster, the settings sheet and the Add view sheet on iOS and reports each as
+aligned with the other sheets. Nothing in this repository closes it, and the phase's own D6 is why
+it is written that way — every previous sheet fix on this program passed its own gate and still
+reached the operator broken. The last operator reading of these three surfaces is the 0.0.23 device
+check (*"all should be debugged, refined, perfected"*), recorded on `../roadmap.md` §4 rows 40, 41
+and 43; 0.0.24 through 0.0.29 have shipped since and none of them carries a reply on these three
+surfaces.
+
+**One non-operator row stays open and it is not this criterion set's.** `checklist.md` CHK-043 (P2)
+— `src/views/README.md` naming the sheet module as the grammar owner — was left rather than guessed
+at, because no per-file convention exists there to extend.
+<!-- /ANCHOR:final-state -->

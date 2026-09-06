@@ -105,7 +105,7 @@ Nothing is migrated before the list of what must be migrated exists. `044`'s ins
       — **open. Ships in 0.0.24; nothing in this repository can close it**
 - [x] T023 Update `checklist.md` "today" cells with the measured before-numbers and mark each row
       with its evidence
-- [ ] T024 (2026-09-06 amendment) Fix the four defects the operator's 10:04 iOS report names on a
+- [x] T024 (2026-09-06 amendment) Fix the four defects the operator's 10:04 iOS report names on a
       depth-2 stack (Edit property → Month over Properties): the duplicate close control, the
       header/body background split, the ~200px dead space above the title, and the parent bleed.
       **Red first**, on the operator's own capture and on a constructed depth-2 recapture:
@@ -113,9 +113,76 @@ Nothing is migrated before the list of what must be migrated exists. `044`'s ins
       px above the title's ink, and parent ink above the child's top edge. Green is 1, 1, the
       header's own padding box, and 0. Leg `worktrees/159-fix-048-ios-stacked-sheet`; lands after
       `051`'s side-sheet leg frees `surface-shell.ts` and `mobile-bottom-sheet.ts`
+
+      **Landed on `main` in three commits.** `be578988` is the fix, at the one producer every
+      `DbModal` subclass and both suggest-modal wrappers route through: `attachSheetChromeToModal`
+      (`src/views/mobile-bottom-sheet.ts`) finds Obsidian's own always-created chrome **by
+      reference** — the empty `titleEl` and the `.modal-close-button` — hides both while presented
+      as a sheet and restores them on teardown, and `styles.css` turns off `.note-database-modal`'s
+      desktop-dialog frame inside a `.db-mobile-bottom-sheet` while declaring nothing on the root.
+      The pre-existing selector-only close hide is deleted rather than kept as a second layer,
+      because it silently caught a negative control's own injected close button. `772b24d2` is the
+      follow-on guard: the container is recognised as the host's `.modal-container` by class instead
+      of taken as whatever `modalEl.parentElement` happens to be, since the same function is also
+      handed panels the shell presents. **Watched red on both engines** before that guard, the
+      panel's own parent reading `none` presented as a sheet and `""` after the teardown against the
+      `flex` it was given. `e632a1e1` corrects the record where the first pass did not survive
+      measurement.
+
+      **Red first, in the lane's own vocabulary.** Against the pre-fix tree, on the faithful
+      host-modal stand-in (`.modal-container` > `.modal-bg` + `.modal` > `.modal-title` +
+      `.modal-content` + `.modal-close-button`): header/body backgrounds `rgba(0, 0, 0, 0)` against
+      `color(srgb 0.224 0.224 0.224)` on **5 of 31** registered pairs, every one of them a
+      host-modal child; handle-to-title gap **74.4px** against **34.4px** once the empty native
+      title is hidden — the ~200 CSS px the operator's own capture shows, reproduced in the harness
+      as the native title's own 40px band; **2** visible close controls where 1 is wanted.
+
+      **Green, re-measured this session at `main` `5aeb7087`** on the `properties edit property`
+      pair, the operator's exact scenario, on Chrome and again on WebKit: `exactly one visible close
+      control (found 1)`; `header and body share one background (rgba(0, 0, 0, 0) vs rgba(0, 0, 0,
+      0))`; `sheet root paints an opaque fill (color(srgb 0.179412 0.179412 0.179412))`;
+      `handle-to-title gap <=80px (measured 34.4px)`; `parent dims and scales back`; `child depth 2
+      (want 2)`; `parent bounding box delta <=1px (max 0.00px)`; `exactly one scrim` and `scrim
+      between the top two sheets`. Four injection controls each go red and come back: a second close
+      control reads 2, a mismatched body background reads red, an unpainted root reads red, an
+      oversized gap reads **314.4px**.
+
+      **The fourth defect is closed by re-derivation, not by a fix, and the row says so.** "Parent
+      bleed" was measured rather than accepted (`decision-record.md`'s 2026-09-06 ~10:44 note, as
+      corrected at `e632a1e1`): on both engines the child registers with the overlay stack, derives
+      its parent, resolves depth 2, and one scrim sits at z-index 1001 between the parent's 1000 and
+      the child's 1002 while the parent holds `is-stack-parent` at opacity 0.88 — identically before
+      and after the fix. The parent visible above the child is the floating frame doing what C10
+      specifies: inset 8px left, right and bottom, radius 16px, measured 8/382/836 in a 390x844
+      viewport. So there is no stacking defect here, and the ink the report read through the child
+      was the child's own missing surface, which `be578988` closes.
 - [ ] T025 (2026-09-06 amendment) Recapture the depth-2 and depth-3 stacked scenarios after T024 and
       read them by eye across both themes, then re-run `node tools/live/sheet-grammar.mjs` and
       require the registry to still read 13 surfaces and 31 pairs at exit 0 from `$?`
+
+      **Half landed, and the row stays open on the other half. Reconciled 2026-09-06 against `main`
+      `5aeb7087`.** The **depth-2** recapture landed at `5aeb7087` as **T026**, not as this row:
+      four `constructed-modal-sheet-*` scenarios mount a real `DbModal` subclass through the real
+      `attachSheetChromeToModal` over the shared host-modal stand-in, standalone and stacked over
+      the column-manager sheet, both themes, phone only, 8 PNGs, all read by eye and named in the
+      `reviewed` array of `048`'s own lane release entry. **Observed red** first by reverting the
+      by-reference hide and recapturing: `constructed-modal-sheet-property-editor`'s `pixelHash`
+      moved `cf8ae04b3b21` / `4b5b728e1872` (green, dark / light) to `51e0683b4efb` /
+      `ed039953a5c9` (red), the native title's dead band back at 74.4px against 34.4px.
+
+      **The gap, in one line: no depth-3 stacked capture scenario exists.**
+      `tools/screenshots/constructed-scenarios.mjs` registers exactly two stacked ids
+      (`constructed-modal-sheet-property-editor-stacked`, `constructed-modal-sheet-confirm-stacked`),
+      both depth 2; the three depth-3 chains the lane carries (`properties property type picker`,
+      `record column submenu`, `import confirm dropdown chain`) are mounted and measured but never
+      photographed.
+
+      **This row's own registry threshold is stale and is not ticked against.** It asks for 13
+      surfaces and 31 pairs; the lane at `5aeb7087` reads **14 surfaces and 32 pairs** at exit 0,
+      and both additions are deliberate: `column-manager` registered at `3ae2818e`, and the
+      operator's own `properties edit property` pair at `5fccf193`. The threshold is left as written
+      rather than edited, because the number a future run should require is a decision about what
+      the registry ought to hold, not a transcription of what it holds today.
 - [x] T026 The permanent regress-test for the gap `048`'s landing named: no screenshot scenario
       modelled a `DbModal` presented as a phone sheet, so the corpus could not regress-test row 59's
       fix. Four `constructed-modal-sheet-*` scenarios (`tools/screenshots/constructed-scenarios.mjs`)
@@ -150,9 +217,9 @@ Nothing is migrated before the list of what must be migrated exists. `044`'s ins
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-- [ ] All tasks marked `[x]` — T022 open, and it is the operator's
+- [ ] All tasks marked `[x]` — T022 (the operator's) and T025 (no depth-3 capture scenario exists) open
 - [x] No `[B]` blocked tasks remaining — D1 was the only block and it is ACCEPTED
-- [ ] Manual verification passed — awaits the 0.0.24 device pass
+- [ ] Manual verification passed — awaits the operator's device read; 0.0.24 through 0.0.29 have shipped with no reply on this surface
 <!-- /ANCHOR:completion -->
 
 ---

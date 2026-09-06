@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-06: **59 phases**, **6 with nothing left**, **178 rows** waiting on a device.
+Derived 2026-09-06: **59 phases**, **6 with nothing left**, **170 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -217,14 +217,8 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] screenshots-fresh (`verify.mjs`) judges a DECLARED scenario's staleness against the constructed capture's `sourceHashes`. Today: N/A — `verify.mjs` iterates only `scenarios.mjs`'s `SCENARIOS` (`tools/screenshots/verify.mjs:41`); no DECLARED concept exists yet for it to read.
 - [ ] A parity check compares fixture and constructed `pixelHash` for every DECLARED scenario where both exist, stating its comparison basis explicitly. Today: 0 — no such test file exists, and the basis itself is an open question (data-aligned pixel equality vs. structural) pending the capture-sized data option above.
 
-## 044-phone-sheet-alignment — 0/7
+## 044-phone-sheet-alignment — 6/7
 
-- [ ] No surface presenting as a bottom sheet on the phone bypasses `applySheetChrome`.
-- [ ] The column-width adjuster carries all seven grammar elements. Today: 0 of 7 — the operator's capture shows a bare bottom strip, its title starting at x=0 and its slider clipped by the left edge.
-- [ ] A field focused inside a sheet stays inside the reduced `visualViewport` rect, proven by a negative control that places it below the reduced bottom with the inset publisher disabled.
-- [ ] The settings sheet closes from its grab band, and no label in its body wraps against its control. Today: the handle does nothing and "Leave empty to scan the vault root." is clipped at the right edge.
-- [ ] The Add view sheet renders every control on a shared row type, with Title property as a dropdown row. Today: 0 controls on a row type — three bare inputs, a select rendered as a text input, a bare checkbox and a flat icon list.
-- [ ] `npm run gate` exits 0 with `sheet-grammar` registered, and the negative control was observed red on one surface and green again after restore. Today: the lane does not exist.
 - [ ] The operator opens the column-width adjuster, the settings sheet and the Add view sheet on iOS and reports each as aligned with the other sheets. Only the operator closes this row; nothing in this repository can.
 
 ## 045-board-card-properties — 0/6
@@ -254,10 +248,9 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] The board and the gantt are compared against Project Manager with named elements and measured values, and every gap is closed with a before/after number or dispositioned with a reason.
 - [ ] The operator reads the board and the timeline on a released build and no longer says "align closer". Only the operator closes this row.
 
-## 048-stacked-sheets — 6/8
+## 048-stacked-sheets — 7/8
 
 - [ ] The operator opens the Properties sheet, the filter sheet's operator dropdown and its property picker on iOS and reports each as one stack rather than two sheets. Only the operator closes this row; nothing in this repository can.
-- [ ] The stacked pair on iOS draws one close control, one continuous surface, no dead space above the title, and no parent bleed. Added 2026-09-06 from the operator's 10:04 report on 0.0.29 (`../roadmap.md` §4 row 59; capture `operator-ios-stacked-sheet-bug-20260906.png`, the operator's own, not committed to this repository). Four defects observed red on device, pre-fix, on Edit property → Month stacked over Properties: a second oversized circular close control floating above the child's header beside the header's own `×`; the child's body painting a lighter surface than its own header, so one sheet reads as two; roughly 200 CSS px of blank sheet above the title; and the parent Properties sheet bleeding through with its rows and a "14" count badge over the toolbar, its own header offset. Done is a device-pixel read of a recaptured depth-2 pair: 1 close control in the child's header, one background value across header and body, the title's ink inside the header's own padding box, and 0 parent ink above the child's top edge. Fix leg `worktrees/159-fix-048-ios-stacked-sheet`; the grammar half is `044`'s, the shell half `051`'s, and both are cross-referenced rather than restated here.
 
 ## 049-test-environments-and-mock-data — 6/8
 
@@ -274,7 +267,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] `npm run gate` exits 0 with one permanent lane row per item, each observed red before green, and `npm run replay` holds with reversed 0.
 - [ ] The operator opens the board and a table on iOS and on desktop and reads the adopted surfaces as the improvement they asked for. Only the operator closes this row; nothing in this repository can.
 
-## 051-modal-and-sheet-componentization — 1/9
+## 051-modal-and-sheet-componentization — 2/9
 
 - [ ] One shell primitive produces every modal and every sheet, and the replaced vocabularies are gone. Today: four. `DbModal.applyPresentation` (`modals/db-modal.ts:92-113`) decides one; `attachSheetChromeToModal` is called directly by three non-`DbModal` surfaces (`src/main.ts:3047`, `image-file-suggest-modal.ts:40`, `markdown-file-suggest-modal.ts:34`); `createSheetHeader` is called independently at twelve sites; and `getSheetTitle` (`db-modal.ts:83-88`) recovers a title by scraping the first `h1`/`h2`/`h3` in the content because no surface declares one. Done is one constructor, one declared title per surface, and the three direct `attachSheetChromeToModal` callers routed through it or dispositioned in `modal-surface-inventory.md` with a written reason.
 - [ ] Every modal surface in the family is dispositioned in `modal-surface-inventory.md`: surface → shell role → presentation → changes → Anytype pattern with its capture or its named gap → stays ours. Today: no such table exists. The census it is built from is real and counted from source at HEAD: 20 `extends DbModal` subclasses, of which 13 declare `sheet`, 4 declare `fullscreen` and 3 inherit the `sheet` default; 3 `FuzzySuggestModal` subclasses outside `DbModal` entirely; 12 `createSheetHeader` call sites; and `mobile-bottom-sheet.ts` at 840 lines with 19 exports.
@@ -282,8 +275,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] The shell's geometry and motion read from the values `050` measured, not from per-surface literals. Today: per-surface literals, and the shell has no geometry of its own. The adopted values are `design-trueup.md` §2 and §4: 8px popover radius, 16px horizontal and 8px vertical padding, 8px divider clearance, 28px rows (adopted as the measured Anytype value *and* our own `design-system.md` §9 coarse-pointer floor — the named deviation from the 4/8/12/16/24/32 scale, recorded rather than absorbed), 360px for the `panel` role, and motion enter 200ms `ease-out` / exit 150ms `ease-in`. On the phone the floor is `044`'s 44px close, unchanged.
 - [ ] `npm run gate` exits 0 read from `$?`, with one permanent lane row per shell deliverable, each negative control observed red before green; `npm run replay` holds with reversed 0; the
 - [ ] The operator opens a modal, a sheet, a sub-page and a destructive confirm on iOS and on desktop and reads them as one surface family, debugged, refined, perfected. Only the operator closes this row; nothing in this repository can.
-- [ ] The desktop database Settings surface opens as a right side sheet: a full-height panel docked to the right edge, the database stays visible and interactive to its left, and the panel scrolls independently of it. Added 2026-09-06 from the operator's report and ruling (`goal.md` §4 amendment below). Today: three of the four clauses are green and one is not. Red, measured on the shipped renderer before the change: a 360x560px anchored dropdown scrolling itself, header included, over 1776px of content in a 576px client box.
-- [ ] The sheet family's device pass runs an extra deep-research loop before this family is called done. Added 2026-09-06 from the operator's 10:04 standing instruction (`../roadmap.md` §4 row 59, §6A). It is not a code criterion and it is not a substitute for any row above: it starts only once `044`, `048` and `051` are each done and verified as planned, and it closes when the Opus synthesis has landed its phase updates. Executor spec in §4's amendment below. Today: no such loop has run — `deep-research-state.jsonl` at the program root is 0 bytes.
+- [ ] The sheet family's device pass runs an extra deep-research loop before this family is called done. Added 2026-09-06 from the operator's 10:04 standing instruction (`../roadmap.md` §4 row 59, §6A). It is not a code criterion and it is not a substitute for any row above: it starts only once `044`, `048` and `051` are each done and verified as planned, and it closes when the Opus synthesis has landed its phase updates. Executor spec in §4's amendment below, and the exact dispatch in `tasks.md` T025. Today: no such loop has run — `deep-research-state.jsonl` at the program root is 0 bytes.
 
 ## 052-dropdown-menu-and-picker-componentization — 0/9
 

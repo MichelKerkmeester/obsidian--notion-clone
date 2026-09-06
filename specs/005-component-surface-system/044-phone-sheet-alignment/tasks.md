@@ -33,8 +33,37 @@ contextType: "general"
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup
 
-- [ ] T001 Read the two contracts this phase consumes and record what may not change: `003`'s portal and phone predicate, `016`'s drag, flick thresholds and the operator-accepted 35px grab band (`../003-mobile-sheet-presentation/spec.md`, `../016-sheet-drag-and-audit/acceptance-criteria.md`, `src/views/mobile-bottom-sheet.ts`)
-- [ ] T002 [B] Read `../003-mobile-sheet-presentation/sheet-and-dropdown-inventory.md` and turn its ranking into T007's per-instance subtask list. Blocked on the inventory landing; do not wait for it to start T003 (`044/tasks.md`)
+- [x] T001 Read the two contracts this phase consumes and record what may not change: `003`'s portal and phone predicate, `016`'s drag, flick thresholds and the operator-accepted 35px grab band (`../003-mobile-sheet-presentation/spec.md`, `../016-sheet-drag-and-audit/acceptance-criteria.md`, `src/views/mobile-bottom-sheet.ts`)
+
+      **Ticked 2026-09-06 in the family reconciliation, against what landed rather than against a
+      fresh read.** What may not change was recorded in two places and both are on `main`:
+      `goal.md`'s D3 (`003` stays the portal owner, `016` stays the drag owner, `attachSheetDragToDismiss`
+      and the flick constants are consumed unchanged) and D4 (the 35px grab band is an
+      operator-confirmed accepted shortfall, reused rather than reopened). `checklist.md` CHK-002
+      carries the observation that closes the row: `src/data/touch-environment.ts` — the collapsed
+      phone predicate `003` owns — carries zero diff against every base this phase rebased onto, and
+      `sheet-flick.test.ts` plus the flick and drag constants in `mobile-bottom-sheet.ts` carry zero
+      diff. T004's own tick repeats the same constraint from the other side: `applySheetChrome`'s
+      signature, `attachSheetDragToDismiss` and the flick constants stay byte-identical, which is
+      what keeps `016`'s measurements valid.
+- [x] T002 [B] Read `../003-mobile-sheet-presentation/sheet-and-dropdown-inventory.md` and turn its ranking into T007's per-instance subtask list. Blocked on the inventory landing; do not wait for it to start T003 (`044/tasks.md`)
+
+      **Unblocked and ticked 2026-09-06 in the family reconciliation.** The inventory landed
+      (`../003-mobile-sheet-presentation/sheet-and-dropdown-inventory.md`, §11 "Ranked
+      non-conforming list (worst first)", seven ranked items), and every one of the seven is
+      dispositioned by a task in this list. The per-instance list is **T009**, not the T007 this
+      row's original text names — the numbering moved when the three reported sheets became named
+      tasks of their own, and the row is ticked against where the work actually went rather than
+      renumbered after the fact. The mapping, item by item: §11.1 column-width adjuster → T005;
+      §11.2 table record peek → T009(a); §11.3 View Settings panel → T007 (body grammar later
+      T015); §11.4 the one surviving `new Menu()` on the Gantt depends-elsewhere chip → T009(b);
+      §11.5 the three `FuzzySuggestModal` subclasses → T009(c); §11.6 the Add-view native
+      `<select>` → T008; §11.7 `GroupOrderModal` dead code → T009(d), deleted after `rg -n
+      "GroupOrderModal|group-order-modal"` proved it dead. T009's own tick names the four instances
+      it owns and records why the `icon-picker-popover.ts` / `option-color-picker.ts` /
+      `column-menu.ts` popovers stay: the inventory ranks them conforming, and
+      `tools/live/sheet-grammar.mjs` now registers `icon-picker` and `option-color-picker` and
+      measures both green on all eight columns.
 - [x] T003 [P] Define the seven grammar elements as one checkable contract, with the class names and the DOM shape each one requires, so `sheet-grammar.mjs` and the consumer legs read the same list (`src/views/sheet-grammar.ts`) — written as `src/views/sheet-grammar.ts` (the contract module the plan left the location open for): `SHEET_GRAMMAR_ELEMENTS` (seven predicates: surface, handle with drag-to-close, header with title and close, padded rows, dropdowns via the shared dropdown, segmented/toggle rows, keyboard avoidance) and `describeSheetGrammar(panel): SheetGrammarReport`. Red first, run against the unchanged tree with the new lane (T011): `add-view — rows: false`, `add-view — dropdown: false`, `sort-panel — header: false`, `record-detail — keyboard: false` — 14 failures, exit 1, full output recorded at the T011 tick. The record sheet's own header/row classes are the two accepted legacy synonyms, documented in the module; the ≥44px close floor and safe-area inset are geometry, owned by the measurement lanes rather than the structural predicates
 <!-- /ANCHOR:phase-1 -->
 
@@ -192,8 +221,8 @@ contextType: "general"
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-- [ ] All tasks marked `[x]`
-- [ ] No `[B]` blocked tasks remaining
+- [x] All tasks marked `[x]` — T001-T016, with T001 and T002 ticked 2026-09-06 against what landed
+- [x] No `[B]` blocked tasks remaining — T002's block (the inventory) landed and its ranking is mapped task by task
 - [ ] Manual verification passed — the operator opens all three reported sheets on iOS and reports each as aligned
 <!-- /ANCHOR:completion -->
 
