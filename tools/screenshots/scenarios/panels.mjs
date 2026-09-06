@@ -769,6 +769,92 @@ export const PANEL_SCENARIOS = [
     },
   },
   {
+    id: "panel-record-detail-title-currency",
+    title: "Record detail header titled by a currency column",
+    group: "panels",
+    width: 392,
+    sources: [
+      "src/data/title-field-display.ts", "src/views/record-detail-panel.ts",
+      "src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts",
+    ],
+    note: "The same view's titleField as the board card capture: the header reads the Cost "
+      + "column's own euro-formatted text, the identical value the board card shows for the "
+      + "same row — resolveTitleFieldDisplay is the one place both surfaces read it from. Cost "
+      + "is left out of the fields grid below, matching the title-field exclusion every "
+      + "property list already applies.",
+    captureCss: `.note-database-container .db-record-detail-panel { max-height: none !important; }`,
+    html: () => {
+      const row = ROWS[2];
+      const field = (col, value, valueClass = "") => `
+        <div class="db-record-detail-field" data-note-database-column-key="${col.key}" role="gridcell">
+          <span class="db-record-detail-field-label">${col.label}</span>
+          <div class="db-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
+        </div>`;
+      const badge = (text) => `<span class="status-badge status-color-${optionTone(text)}" title="${text}">${text}</span>`;
+      return `
+      <div class="note-database-container">
+        <div class="db-record-detail-panel" role="dialog" aria-modal="true" aria-label="${row.cost}">
+          <div class="db-record-detail-header">
+            <div class="db-record-detail-title">${row.cost}</div>
+            <button type="button" class="db-board-card-open" aria-label="Open note">${I.maximize2}</button>
+          </div>
+          <div class="db-record-detail-fields">
+            ${field(COLUMN_DEFS[2], badge(row.cycle))}
+            ${field(COLUMN_DEFS[3], badge(row.payment))}
+            ${field(COLUMN_DEFS[4], row.renew, "db-date-value")}
+            ${field(COLUMN_DEFS[5], badge(row.category))}
+          </div>
+          ${BODY_RENDERED}
+        </div>
+      </div>`;
+    },
+  },
+  {
+    id: "panel-record-detail-sheet-title-currency",
+    title: "Record detail — mobile bottom sheet, titled by a currency column",
+    group: "panels",
+    width: 402,
+    capture: "viewport",
+    // Photographed on the phone only — same reason panel-record-detail-sheet gives above.
+    devices: ["mobile"],
+    sources: [
+      "src/data/title-field-display.ts", "src/views/record-detail-panel.ts",
+      "src/views/popover-position.ts", "src/views/card-field-renderer.ts",
+      "src/views/record-surface/property-row.ts",
+    ],
+    note: "The phone form of the same currency-titled header: getRecordEventTitleField falls "
+      + "through to the identical titleField the desktop panel and the board card read, so the "
+      + "phone sheet's main name agrees with both rather than forking its own value.",
+    html: () => {
+      const row = ROWS[3];
+      const closeGlyph = glyph('<path d="M18 6 6 18M6 6l12 12"/>');
+      const field = (col, value, valueClass = "") => `
+        <div class="db-record-detail-field" data-note-database-column-key="${col.key}" role="gridcell">
+          <span class="db-record-detail-field-label">${col.label}</span>
+          <div class="db-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
+        </div>`;
+      const badge = (text) => `<span class="status-badge status-color-${optionTone(text)}" title="${text}">${text}</span>`;
+      return `
+      <div class="note-database-container db-width-default">
+        <div class="db-record-detail-panel db-anchored-popover db-mobile-bottom-sheet is-visible" role="dialog" aria-modal="true" aria-label="${row.cost}">
+          <div class="db-mobile-bottom-sheet-handle" aria-hidden="true"></div>
+          <div class="db-record-detail-header">
+            <div class="db-record-detail-title">${row.cost}</div>
+            <button type="button" class="db-board-card-open" aria-label="Open note">${I.maximize2}</button>
+            <button type="button" class="db-cell-edit-close" aria-label="Close">${closeGlyph}</button>
+          </div>
+          <div class="db-record-detail-fields">
+            ${field(COLUMN_DEFS[2], badge(row.cycle))}
+            ${field(COLUMN_DEFS[3], badge(row.payment))}
+            ${field(COLUMN_DEFS[4], row.renew, "db-date-value")}
+            ${field(COLUMN_DEFS[5], badge(row.category))}
+          </div>
+          ${BODY_RENDERED}
+        </div>
+      </div>`;
+    },
+  },
+  {
     id: "panel-record-detail-sheet-body-editing",
     title: "Record detail — note body being typed",
     group: "panels",

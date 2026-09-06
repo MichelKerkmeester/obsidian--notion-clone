@@ -19,6 +19,16 @@ Settings above, actions below, one row grammar for both the seven types and the 
 
 Sources: `src/views/toolbar-renderer.ts`
 
+### Board card titled by a currency column
+
+The view's titleField points at the Cost column: the card's main name reads that column's own euro-formatted text (resolveTitleFieldDisplay's typed-format routing) instead of the raw stored number — the operator's phone report, closed. Cost is left out of the meta list below the title, matching how a card's own property list already excludes whichever column is chosen as its title.
+
+| dark | light |
+|---|---|
+| ![board-card-title-currency dark](notion-clone/components/board-card-title-currency-mobile-dark.png) | ![board-card-title-currency light](notion-clone/components/board-card-title-currency-mobile-light.png) |
+
+Sources: `src/data/title-field-display.ts`, `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`
+
 ### Board view — drag and drop-target language
 
 A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (db-kanban-drop-target), and the dragged card keeps the dragstart lift (db-kanban-card--dragging) — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.
@@ -1022,6 +1032,26 @@ A record whose note has frontmatter and nothing else. One faint line rather than
 | ![panel-record-detail-sheet-body-empty dark](notion-clone/panels/panel-record-detail-sheet-body-empty-mobile-dark.png) | ![panel-record-detail-sheet-body-empty light](notion-clone/panels/panel-record-detail-sheet-body-empty-mobile-light.png) |
 
 Sources: `src/views/record-detail-panel.ts`, `src/views/note-body-region.ts`
+
+### Record detail — mobile bottom sheet, titled by a currency column
+
+The phone form of the same currency-titled header: getRecordEventTitleField falls through to the identical titleField the desktop panel and the board card read, so the phone sheet's main name agrees with both rather than forking its own value.
+
+| dark | light |
+|---|---|
+| ![panel-record-detail-sheet-title-currency dark](notion-clone/panels/panel-record-detail-sheet-title-currency-mobile-dark.png) | ![panel-record-detail-sheet-title-currency light](notion-clone/panels/panel-record-detail-sheet-title-currency-mobile-light.png) |
+
+Sources: `src/data/title-field-display.ts`, `src/views/record-detail-panel.ts`, `src/views/popover-position.ts`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`
+
+### Record detail header titled by a currency column
+
+The same view's titleField as the board card capture: the header reads the Cost column's own euro-formatted text, the identical value the board card shows for the same row — resolveTitleFieldDisplay is the one place both surfaces read it from. Cost is left out of the fields grid below, matching the title-field exclusion every property list already applies.
+
+| dark | light |
+|---|---|
+| ![panel-record-detail-title-currency dark](notion-clone/panels/panel-record-detail-title-currency-mobile-dark.png) | ![panel-record-detail-title-currency light](notion-clone/panels/panel-record-detail-title-currency-mobile-light.png) |
+
+Sources: `src/data/title-field-display.ts`, `src/views/record-detail-panel.ts`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`
 
 ### Table record peek
 

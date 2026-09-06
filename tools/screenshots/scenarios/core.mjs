@@ -8,7 +8,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { COLUMNS, COVER_BASES, ICONS, OPTION_TONES, ROWS, SUBTASK_FIXTURE_ROWS, boardCard, boardColumn, dots,
-  emptyCover, glyph, optionPill, rowCheckbox, subtaskBoardCard, subtaskBoardColumn, tableHeader, tableRows } from "./shared.mjs";
+  emptyCover, glyph, optionPill, optionTone, rowCheckbox, subtaskBoardCard, subtaskBoardColumn, tableHeader, tableRows } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. SCENARIOS
@@ -463,5 +463,45 @@ export const CORE_SCENARIOS = [
           </div>
         </div>
       </div>`,
+  },
+  {
+    id: "board-card-title-currency",
+    title: "Board card titled by a currency column",
+    group: "components",
+    width: 300,
+    sources: [
+      "src/data/title-field-display.ts", "src/views/board-renderer.ts",
+      "src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts",
+    ],
+    note: "The view's titleField points at the Cost column: the card's main name reads that "
+      + "column's own euro-formatted text (resolveTitleFieldDisplay's typed-format routing) "
+      + "instead of the raw stored number — the operator's phone report, closed. Cost is left "
+      + "out of the meta list below the title, matching how a card's own property list already "
+      + "excludes whichever column is chosen as its title.",
+    html: () => {
+      const currencyTitleField = (label, value, tone) => `
+        <div class="db-board-card-field" data-note-database-column-key="${label.toLowerCase()}" role="gridcell">
+          <span class="db-board-card-field-label">${label}</span>
+          <div class="db-board-card-value">${tone ? optionPill(value) : value}</div>
+        </div>`;
+      const currencyTitleCard = (row) => `
+      <div class="db-kanban-card" role="row" tabindex="-1">
+        <div class="db-kanban-card-body">
+          <div class="db-kanban-card-title-row">
+            <span class="db-kanban-card-title">${row.cost}</span>
+          </div>
+          <div class="db-kanban-card-meta">
+            ${currencyTitleField("Billing", row.cycle, true)}
+            ${currencyTitleField("Payment", row.payment, true)}
+            ${currencyTitleField("Next Renewal", row.renew)}
+          </div>
+        </div>
+      </div>`;
+      const [first, second] = ROWS;
+      return `
+      <div class="note-database-container db-kanban-view">
+        ${boardColumn(first.category, [first, second], optionTone(first.category), { cardRenderer: currencyTitleCard })}
+      </div>`;
+    },
   },
 ];
