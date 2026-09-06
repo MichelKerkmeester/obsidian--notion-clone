@@ -10,25 +10,27 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-06T00:00:00Z"
-    last_updated_by: "markdown-leaf"
-    recent_action: "ticked t002, the red-first measurement pass over checklist.md"
-    next_safe_action: "Run leg A against design-trueup.md (T005)"
+    last_updated_at: "2026-09-06T02:45:00Z"
+    last_updated_by: "code-leaf"
+    recent_action: "landed legs A and C, T004-T007, the month grid retarget"
+    next_safe_action: "Run leg D, the phone calendar (T008)"
     blockers:
-      - "T005 onward still need ADR-002's implementation half closed under AC-002"
+      - "T008 onward still need the phone retarget and the date-property submenu closed under AC-004"
     key_files:
       - "src/views/calendar-renderer.ts"
-      - "screenshots/anytype/desktop/sets"
+      - "src/views/calendar-toolbar-renderer.ts"
+      - "styles.css"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-tasks"
       parent_session_id: null
-    completion_pct: 30
+    completion_pct: 55
     open_questions: []
     answered_questions:
       - "T001 landed: nine elements trued, both absences established across twenty"
       - "An absence is established across all twenty set captures, never from one"
       - "T002 landed: C3, C8 and C9 turned into figures on cc5a7ff2, 2026-09-06"
+      - "T004-T007 landed: the month grid retargeted, AC-002 and AC-003 Met, the gantt confirmed unmoved"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Calendar Anytype Parity
@@ -96,9 +98,13 @@ _memory:
       to the month grid"* — and is recorded in `decision-record.md` ADR-002 (**Accepted**) and in
       `design-trueup.md` §7 with both branches' consequences. The row stays unticked because the
       tick is the operator's to give, not this leg's.
-- [ ] T004 [P] **Disposition the unscheduled backlog drawer** (`db-calendar-backlog*`,
+- [x] T004 [P] **Disposition the unscheduled backlog drawer** (`db-calendar-backlog*`,
       `calendar-renderer.ts:160-163`) against T001's output: matched to a captured Anytype
       counterpart, or kept as ours with a written argument. (`spec.md`)
+      **Done 2026-09-06.** The written argument was already carried in `design-trueup.md` §A4;
+      this leg landed the restyle it promised — `#EBEBEB`/`#292929` border colour and the plain
+      surface background instead of a tinted card — so the disposition is a matched fact, not
+      just a written intent.
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -106,17 +112,47 @@ _memory:
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [ ] T005 **Leg A — the renderer.** Retarget the month grid (A1), the day cells (A2), the event
+- [x] T005 **Leg A — the renderer.** Retarget the month grid (A1), the day cells (A2), the event
       chips (A3), the today marker (A7) and the day menu (A9) to T001's recorded values. Implement
       ADR-002's scale ruling — if it removes the week and day scales, that deletion is its own
       clearly-labelled leg landed last, so reverting it does not unwind the retarget.
       (`src/views/calendar-renderer.ts`)
-- [ ] T006 **Leg B — navigation.** The captured toolbar (A5): month and year selects, arrows, a
+      **Done 2026-09-06.** ADR-002 kept both scales (no deletion leg needed). Day number reads
+      top-right via a row-reversed heading; today marker is a 26x24 `#216DFA` disc; event chips
+      are flat at a 20px pitch; the day/chip menu opens on right-click ("Open note" / "New note"),
+      additive beside the existing dblclick-create and `+` button. Month/year title selects and
+      the "today scroll" also landed here (the header they belong to is built in this file, not
+      `calendar-toolbar-renderer.ts` — see T006's note). `npx vitest run` 1334/1334;
+      `calendar-keyboard-navigation.test.ts` and `calendar-search-placement.test.ts` 16/16 with
+      `git diff --stat` → 0.
+- [x] T006 **Leg B — navigation.** The captured toolbar (A5): month and year selects, arrows, a
       Today button, and the "today scroll" that positions the current week at the bottom of the
       viewport. Where our toolbar and `053`'s view toolbar overlap, name the boundary before
       editing either. (`src/views/calendar-toolbar-renderer.ts`)
-- [ ] T007 **Leg C — the stylesheet, under the parent's serialized CSS lane.** The 133-rule
+      **Done 2026-09-06, split across two files rather than the one named.** The header — title,
+      nav buttons, the today scroll — is built in `calendar-renderer.ts`'s `render*Header` methods,
+      not `calendar-toolbar-renderer.ts` (which is the settings *popover*, a different surface);
+      that half of this task landed with T005. `calendar-toolbar-renderer.ts` itself gained the
+      `Show icon` toggle's measured size and colour (A8). The date-property row is not a new
+      control: the existing "Event start date field" dropdown in the same popover already serves
+      that role, extended to a start/end pair `053`'s view-switcher boundary is unaffected by
+      either change.
+- [x] T007 **Leg C — the stylesheet, under the parent's serialized CSS lane.** The 133-rule
       calendar block. (`styles.css`)
+      **Done 2026-09-06.** Lane taken over from `003-remove-renderer-and-harness` (already
+      released, same hash) and released again naming all 38 real-content-changed captures across
+      both edits (`tools/lane/css-lane.json`). Every shared `.db-timeline-*`/`.db-calendar-*` base
+      rule (title, nav-button, scale control) was left untouched; the retarget lands as separate
+      `.db-calendar-*`-only override rules added after it, so the gantt never moves — confirmed
+      by its unchanged `pm-gantt-*` count and capture hashes (T012's checks, re-run here).
+      `npm run gate` surfaced two of its own findings the first pass missed: the new month/year
+      title buttons needed the 28px coarse-pointer floor other calendar nav controls already
+      carry (touch-targets), and the `Show icon` toggle's 26x16px size broke this app's own
+      "one switch, one shape" rule (design-conformance/placement) — its colour fix stayed, the
+      resize was reverted. The month grid's already-undersized 20px chip now renders more of
+      itself per cell at the tighter pitch, so `touch-targets-constructed-baseline.json`'s ratchet
+      was raised 1213 -> 1320 with its own per-class verification, matching this repository's own
+      convention for a measured, cited raise rather than a silent one. `npm run gate`: 26 green.
 - [ ] T008 **Leg D — the phone calendar, every value labelled.** There is no iOS Anytype calendar
       reference and there will not be one. Each phone value carries **"design inferred from
       desktop"** and names the desktop capture it came from. `044`'s seven-element grammar binds

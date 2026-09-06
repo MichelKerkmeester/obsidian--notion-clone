@@ -10,12 +10,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
-    last_updated_at: "2026-09-05T23:40:00Z"
-    last_updated_by: "markdown-leaf"
-    recent_action: "recorded the operator ruling accepting adr-002"
-    next_safe_action: "Run T002's red-first pass, then leg A against design-trueup.md"
+    last_updated_at: "2026-09-06T02:45:00Z"
+    last_updated_by: "code-leaf"
+    recent_action: "landed ADR-002's implementation half: month retargeted, week/day tokens shared"
+    next_safe_action: "T008, the phone calendar leg"
     blockers:
-      - "T002's red-first figures are owed before the first implementation leg"
+      - "T008 onward still owe the phone retarget and the date-property submenu"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "specs/005-component-surface-system/039-calendar-parity-port/decision-record.md"
@@ -23,12 +23,13 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-adr"
       parent_session_id: null
-    completion_pct: 25
+    completion_pct: 55
     open_questions: []
     answered_questions:
       - "ADR-002 is ruled: keep week and day, styled to the month grid"
       - "The calendar's thresholds are per-element because it carries zero pm-* classes"
       - "Parity by default is inherited from 051 ADR-007 without re-asking"
+      - "ADR-002's implementation half is landed: the week/day timed-event blocks keep their own presentation, named rather than silently retargeted"
 ---
 # Decision Record: Calendar Anytype Parity
 
@@ -132,6 +133,13 @@ ground.
   three (`design-trueup.md` §A5, §7). That deviation is created by this ruling, sits inside its
   scope, and is not presented as a measured value.
 - `plan.md` section 7's "deletion lands as its own last leg" contingency is moot and does not run.
+- **Landed 2026-09-06 (T005/T007).** The shared tokens (rule colour, weekend tint, today marker,
+  header grammar) now apply to week and day. One further scope line was drawn implementing it: the
+  week/day time grid's own timed-event blocks (`db-calendar-week-timed-event`) are duration-
+  proportional cards, not fixed-pitch rows, and Anytype ships no time-grid view to measure a flat
+  chip treatment against — they keep their existing coloured presentation rather than being
+  flattened to the month chip's grammar. Named here rather than left for a later reader to wonder
+  whether it was missed.
 
 **Alternatives rejected.**
 - *Decide it in-repo.* Rejected under goal D6. Inferring a deletion of shipped, tested,

@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The calendar is shaped by nobody's reference in particular",
     "created_at": "2026-09-05T20:25:00Z",
-    "last_save_at": "2026-09-05T23:24:42.131Z",
+    "last_save_at": "2026-09-06T01:10:38.561Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,13 +222,13 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a130990197710d1ba16c0a6c222ff0caee710471761574f1d910a6a55d11e913",
+    "source_fingerprint": "sha256:6ed16e73d0373ed26ffff41dea5616494eca2d8e7be3fc0ec671497d9418842d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "616ede41765ba6b3ba89b12a8dc575fec1294ef219e2901a5d0d472ea31d0df4",
       "plan.md": "9c069123a3d90773888ca32e49e2eb912819c59b2fb8b7894a8e9c5dbd94fd43",
-      "tasks.md": "61a8e1ac3408abf67b7b43bd751824c4101803ec3a0efe638a71158804811d0b",
-      "decision-record.md": "5c39dcb211cd57741ff95d0168f25dcc16afd699d8cb485140bc89c0f553ad8b",
+      "tasks.md": "d43bb31df67af0f9ebbaddf2617fee8c963c0a1d63af24b23dc80f0342f44859",
+      "decision-record.md": "db06f262143ce94e48a87cad2caafb67997df9f478439c41f1e7cba7ee9a7f00",
       "implementation-summary.md": "cae1f8630d9b6808b6ef491e27161a7309ad758cee30c8f8604c9c5d242c2508"
     },
     "last_active_at": null
