@@ -272,11 +272,27 @@ and stay unticked — an agent never ticks them.
 - [ ] **T013 — Operator device pass.** The operator opens the rebuilt toolbar on iOS and desktop
       and reads it as the improvement asked for. **Operator/device row — stays unticked until the
       operator says so; nothing in this repository can close it.**
-- [ ] **T014 (2026-09-06 amendment) — Add the gear button.** In `db-toolbar-utilities-cluster`
-      (`toolbar-renderer.ts:412`), before `renderUtilitiesOverflowButton`'s `···` trigger, add a
-      gear icon calling `createSettingsEntry` (the same primitive the `···` button already uses)
-      that opens the database Settings surface through `051`'s new `side sheet` role. Red-first:
-      today no gear button exists; a query for it returns nothing
+- [x] **T014 (2026-09-06 amendment) — Add the gear button.** **Done 2026-09-06.**
+      `renderSettingsButton` (`toolbar-renderer.ts`) draws a `settings` gear in
+      `db-toolbar-utilities-cluster` before `renderUtilitiesOverflowButton`'s `···` trigger and
+      wires `createSettingsEntry`'s `open` to the same `actions.toggleViewConfig` the deleted
+      `···` row called. **Observed red first**: a query for `.db-toolbar-settings-btn` returned
+      nothing, and the collapse sweep's new `settingsButtonVisible` reading was false at every
+      width. **Green, measured on the shipped toolbar** (`toolbar` scenario through the
+      render-assertion bundle, headless Chrome, `styles.css` + `theme.css` + `runtime-vars.css`
+      attached, desktop 1200x900 and phone 390x844 with `is-phone`): the cluster holds exactly two
+      children, gear then `···`, gear at x 832 against `···` at x 864 on desktop and 144 against
+      176 on phone; `<button type="button">`, `aria-label` "Settings" (`toolbar.settings`, present
+      in en, zh-CN and zh-TW), `aria-haspopup="dialog"`, `aria-controls="db-view-config-panel"`,
+      `tabIndex` 0 and focusable, a real gear SVG rather than the unrecognised-icon placeholder.
+      The three settings fallback classes moved onto it and off `···`, so
+      `openViewSettingsAfterMutation`'s anchor queries still resolve. Geometry is the rail's own,
+      28x28 on both devices — the same box `···` beside it has, which clears this repository's
+      enforced 28px coarse-pointer floor and sits in the reported-not-enforced 28-44px band with
+      every other rail control; neither touch-target ratchet moved. The `···` menu no longer lists
+      a settings row (Display width, Save formula results, Refresh database, Export to clipboard,
+      Open database file remain), and the dead `toolbar.viewSettings` key is deleted in all three
+      locales
 - [x] **T015 (2026-09-06 amendment) — Hide the table footer at zero rows, 44px otherwise.**
       Red-first: an empty phone table drew 173 `+ Calculate` triggers at 26px, under the 44px floor.
       **Landed on main 2026-09-06** (`81f7637c` the zero-row skip, `a45afe17` the 44px floor,

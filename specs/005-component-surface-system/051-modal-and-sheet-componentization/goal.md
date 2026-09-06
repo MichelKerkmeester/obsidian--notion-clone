@@ -167,9 +167,14 @@ never resolve them silently.
 - [ ] **The desktop database Settings surface opens as a right side sheet: a full-height panel
       docked to the right edge, the database stays visible and interactive to its left, and the
       panel scrolls independently of it.** **Added 2026-09-06** from the operator's report and
-      ruling (`goal.md` §4 amendment below). **Today: the Settings surface is a tall anchored
-      dropdown** (`positionToolbarPopover`'s `PANEL_POPOVER`/general preset, `view-config-panel-
-      renderer.ts`), a new shell shape distinct from every role in `design-system.md` §3.
+      ruling (`goal.md` §4 amendment below). **Today: three of the four clauses are green and one
+      is not.** Red, measured on the shipped renderer before the change: a 360x560px anchored
+      dropdown scrolling itself, header included, over 1776px of content in a 576px client box.
+      Green now: docked right, 420px wide, the container's full height, header fixed with the body
+      the only scroller (1672px inside 776px), and the database visible and independently
+      scrollable to its left. **Still open, which is why this row is not ticked**: *interactive* —
+      a pointer-down on the database dismisses the sheet through the shared `overlayStack`
+      outside-pointerdown contract (a wheel scroll does not). Recorded on AC-013 and ADR-008.
 <!-- /ANCHOR:completion -->
 
 ---

@@ -180,11 +180,17 @@ never resolve them silently.
       lane rows.
 - [ ] **The operator reads the rebuilt toolbar on device** and names it the improvement they asked
       for. Only the operator closes this row; nothing in this repository can.
-- [ ] **A gear icon opens the database Settings surface (`051`'s side sheet), in the toolbar rail,
+- [x] **A gear icon opens the database Settings surface (`051`'s side sheet), in the toolbar rail,
       before the `···` overflow button.** **Added 2026-09-06** from the operator's ruling
-      (`goal.md` §4 amendment below). **Today: no such button exists** — Settings opens only
-      through `renderUtilitiesOverflowButton`'s (`toolbar-renderer.ts:420-426`) `···` menu, one
-      level deep, in the `db-toolbar-utilities-cluster`.
+      (`goal.md` §4 amendment below). **Observed red first**: no such button existed — a query for
+      `.db-toolbar-settings-btn` returned nothing and the collapse sweep's new
+      `settingsButtonVisible` reading was **false at every width** in its 250-900px sweep, with
+      Settings reachable only through `renderUtilitiesOverflowButton`'s `···` menu, one level deep.
+      **Green the same day**: `renderSettingsButton` draws it before `···` in
+      `db-toolbar-utilities-cluster` (measured on the shipped toolbar at x 832 against `···` at
+      864 on desktop, 144 against 176 on a phone body), the `···` row and its `toolbar.viewSettings`
+      key are deleted in all three locales, and the sweep now fails if the control is missing at any
+      width. ADR-006 Accepted.
 - [x] **The table footer hides at zero rows, and is 44px otherwise.** **Added 2026-09-06, from an
       operator ruling on the phone empty-state read. Observed red first** — the footer rendered
       unconditionally regardless of row count, drawing **173** `+ Calculate` triggers at **26px** on

@@ -633,18 +633,43 @@ excluded on its own recorded terms.
       first doc pass, once more after a `SPECDOC_FRONTMATTER_004` finding
       (`implementation-summary.md`'s `next_safe_action` read as narrative, not compact; corrected
       to an imperative phrase). `node "$(realpath .opencode)/skills/system-spec-kit/runtime/dist/lib/validation/orchestrator.js" <this folder> --strict` → first `RESULT:` **PASSED**, `Errors: 0 Warnings: 0`, re-run after the fix. Isolated `npm run gate </dev/null > ".gate-<pid>.log" 2>&1; echo $?` → **0**, 26 green (two lanes needed a run after this leg's own edits, not a regression: `operator-list` regenerated after `goal.md`'s confirm row ticked, `story-coverage` closed by writing `confirm-sheet.stories.ts` rather than an allowlist entry, since the module is genuinely renderable). `npx tsc --noEmit` → 0; `npx vitest run` → 0, 1442 passing across 137 files; `npm run build` → 0. `styles.css` untouched this session, so no capture recapture is owed.
-- [ ] **T021 — Build the `side sheet` role (ADR-008).** A new `surface-shell.ts` presentation:
-      full-height, docked right, no scrim, independent internal scroll, dismissed by outside click
-      (database side), Escape, or the gear button. **Threshold**: the database's own scroll position
-      and interactivity are unchanged while the side sheet is open. **Red-first proof**: today's
-      anchored dropdown clips at the viewport bottom on a short desktop window and steals outside-click
-      dismissal from the database beneath it — both observed on the operator's screenshots
-- [ ] **T022 — Wire the desktop database Settings surface onto the `side sheet` role**, replacing
-      `view-config-panel-renderer.ts`'s `positionToolbarPopover` mount when opened from `053`'s new
-      gear button. `PANEL_POPOVER`'s derived-width workaround is no longer needed for this caller
+- [x] **T021 — Build the side-sheet shape (ADR-008).** **Done 2026-09-06.** Shipped as a marker
+      class and two named constants (`SHELL_SIDE_SHEET_CLASS`, `SHELL_SIDE_SHEET_WIDTH_PX` in
+      `surface-shell.ts`) plus one `styles.css` block, **not** as a `createSurfaceShell`
+      presentation — ADR-008's planned-versus-shipped table records why, and the same table records
+      that the shape overlays the pane's right 420px rather than reflowing the table into a
+      narrower column. **Measured on the shipped renderer** (`view-config` scenario mounted through
+      the render-assertion bundle in headless Chrome, `styles.css` + `theme.css` +
+      `runtime-vars.css` attached, 1200x900): red, with the marker class removed on the same mount,
+      `width 360px / max-height 560px`, the panel itself the scroller at `overflow: auto` with
+      1776px of content inside a 576px client box, description textarea `min-height 58px` in a
+      236px column; green, `position: absolute`, `inset 0 0 0 auto`, `width 420px`, height 844px =
+      the container's own, `border-left 1px`, `border-radius 0`, `overflow: hidden` on the panel
+      with `.db-view-config-body` at `overflow-y: auto` scrolling 1672px inside 776px so the header
+      stays put, textarea `min-height 84px` in a 279px column, and no inline `top`/`left` written
+      at all. **Threshold, honestly**: the database's own scroll is unchanged and it stays visible
+      to the left, but its *interactivity* is not — a pointer-down on it dismisses the sheet through
+      the same `overlayStack` outside-pointerdown contract every toolbar panel already carries. That
+      half is recorded as still open on AC-013 rather than counted here
+- [x] **T022 — Wire the desktop database Settings surface onto the side-sheet shape.** **Done
+      2026-09-06.** `view-config-panel-renderer.ts` gains `presentPanel`, which every one of the
+      four render exits now calls: the phone branch still hands the panel to
+      `positionToolbarPopover` unchanged, and the desktop branch stamps the marker class, plays the
+      enter transition on a first open only (a rebuild carries `is-visible` forward, so a settings
+      toggle does not replay the slide), and installs `trapFocus`. Measured on the same mount: Tab
+      from the last focusable lands on the header's own Close and Shift+Tab from the first lands
+      back on the last, both still inside the panel; a picker opened from a row inside the sheet
+      mounts as a `.note-database-container` **sibling** (never a descendant, so the panel's
+      `overflow: hidden` cannot clip it) at `z-index` 100 against the panel's 50, and Escape closes
+      the picker first with the sheet still connected, then the sheet
 - [ ] **T023 — Register the new role in `design-system.md` §3/§4** and add its grammar row to the
       lane that checks role widths and dismissal, with a negative control (the database becomes
-      non-interactive while the side sheet is open) observed red before green
+      non-interactive while the side sheet is open) observed red before green. **Not taken at the
+      2026-09-06 landing, deliberately**: ADR-008 shipped one marker class for one surface rather
+      than a fifth role, so a role row would describe a taxonomy entry with a single member, and
+      the negative control as written asserts the interactivity clause T021 records as still open.
+      Revisit when a second surface takes this shape — the row stays open rather than being ticked
+      or waived, because nothing about it was proven
 <!-- /ANCHOR:phase-4 -->
 
 ---
