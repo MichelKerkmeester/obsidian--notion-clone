@@ -1,7 +1,22 @@
 {
-  "under": 974,
+  "under": 801,
   "floor": 28,
   "recorded": "2026-09-06",
+  "footerTriggerRaisedFloorLowering": {
+    "recorded": "2026-09-06",
+    "what": "974 -> 801, the footer trigger's own shortfall closed rather than deferred. Operator ruling, 2026-09-06 (verbatim): \"Hide the footer at zero rows, 44px otherwise\" -- table-renderer.ts's private renderFooter now returns before drawing anything when rows.length === 0 (the summary config is untouched, so the footer reappears the moment a row exists), and `.is-phone .note-database-container .db-table-footer-trigger` gains `min-height: 44px` in styles.css, the same floor `.is-phone .db-menu-item` and the load-more row's own `.is-phone` rule (raiseHistory/RAISED entry `db-table-load-more-button`, 2026-09-06) already raise their own phone rows to. touch-targets.mjs's RAISED list gained a matching `db-table-footer-trigger` entry at the 44px (ENHANCED) floor, so a regression back under 44px on phone fails this lane outright rather than only showing up as a bigger informational 28-44px count. All 173 of the class's constructed-pass instances (raiseHistory's own 32 -> 173 entry, still true of the pre-fix tree) now measure above their named 44px floor and drop out of the general 28px ratchet entirely -- not exempted, cleared.",
+    "perClass": [
+      {
+        "class": "db-table-footer-trigger",
+        "before": 173,
+        "after": 0
+      }
+    ],
+    "totalBefore": 974,
+    "totalAfter": 801,
+    "verification": "Measured on the pristine pre-fix tree (table-renderer.ts, styles.css and touch-targets.mjs checked out at HEAD via `git diff`/`git checkout --`/`git apply`, so nothing else in the repository could move between the two reads): `node tools/live/touch-targets.mjs --json` reports 974 under the 28px floor, 173 of them `db-table-footer-trigger`, matching this file's own `raiseHistory`/`emptyReasonScenariosNotRaised` records exactly. The same command against the fixed tree reports 801, `db-table-footer-trigger` absent from the undeclared list entirely (grepped the fresh dump for the class name -- zero hits) and 0 raisedMisses for it, reproduced on three consecutive runs (801, 801, 801). No other class's count moved between the two reads. A negative control -- forcing `.is-phone .db-table-footer-trigger`'s `min-height` back to 26px with the RAISED entry left in place -- reports 176 raisedMisses for the class (a different, stricter count than the general ratchet, since a RAISED miss fails unconditionally rather than accumulating into `under`), confirmed and then reverted.",
+    "productFindings": "Closes the finding `raiseHistory` opened on 2026-09-04 (32 -> 173) and `emptyReasonScenariosNotRaised` carried forward on 2026-09-06 rather than deferring it again: the operator ruling above is the resizing decision this file's own `why` field says is an operator-scale call, not a repair a pass should make silently -- it has now been made."
+  },
   "emptyReasonScenariosNotRaised": {
     "recorded": "2026-09-06",
     "what": "The two new STATE_SCENARIOS entries that would have raised this ratchet are read past instead, and the number itself is re-pinned DOWN to what the rebased tree measures. `table-empty-source-missing/file-view` and `table-empty-no-matching-data/file-view` (render-assertion-bundle.mjs) mount a table over the home-inventory catalogue's columns with its rows dropped, purely to read one attribute off the empty-state card. `TableRenderer.renderTable` draws the summary footer row whether or not there are rows, so each mount adds 28 more `db-table-footer-trigger` buttons (the per-column \"+ Calculate\" control, 26px tall) -- 56 in total, every one a second copy of a control this corpus already counts at that same table's own scenarios. That is the corpus growing, not the tree getting worse, and a ratchet that rises whenever a scenario is added stops meaning what it says. touch-targets.mjs now filters scenarios carrying `emptyReason` out of the constructed sweep (MEASURED_SCENARIOS) and measures 75 scenarios as before. The control is not exempted anywhere: its 173 instances stay counted against the scenarios that own it, and resizing it remains the operator-scale decision this file's own `why` describes.",

@@ -136,6 +136,14 @@ const RAISED = [
     reason: "the embedded table's Load more row, operator-ruled 2026-09-06 at 44px on phone"
       + " (30px desktop, out of this floor's reach since the fixture only renders on a phone body)",
   },
+  {
+    match: "db-table-footer-trigger",
+    floor: ENHANCED,
+    reason: "the table's summary-footer \"+ Calculate\" trigger, operator-ruled 2026-09-06 at 44px"
+      + " on phone (26px desktop, out of this floor's reach since the fixture only renders on a"
+      + " phone body); the footer itself is now absent at zero rows, so every trigger this measures"
+      + " belongs to a table that actually has rows to summarize",
+  },
 ];
 
 // ───────────────────────────────────────────────────────────────────
