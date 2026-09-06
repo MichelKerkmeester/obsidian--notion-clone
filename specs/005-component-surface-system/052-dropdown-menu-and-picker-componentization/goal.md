@@ -100,11 +100,15 @@ their own header/grid/search wiring.
       sites** across four files build `db-menu-item` markup by hand beside `createMenuRow`'s 76
       legitimate call sites.
 - [ ] **The picker family shares one host: search, grid, header, phone-sheet branch, placement
-      widths and the one-per-document active-picker registry.** **Today the four pickers each wire
-      their own**: `activePickers` WeakMaps are declared three times (`date-value-picker.ts:71`,
-      `icon-picker-popover.ts:50`, `option-color-picker.ts:29`), the phone header dance is repeated
-      per picker, and widths are four bespoke numbers (252, 318, 124, plus the dropdown's
-      280/360/180).
+      widths and the one-per-document active-picker registry.** **Refreshed 2026-09-06 (`063`
+      T010) against the landed tree — this ticks nothing.** `popover-host.ts` now owns the single
+      `activePickers` registry (`setActivePicker`/`getActivePicker`/`closeActivePicker`) all three
+      pickers call into, the phone header dance (`mountPickerSheetHeader`) and the geometric grid
+      navigation (`getGridNavigationTarget`); `date-value-picker.ts`, `icon-picker-popover.ts` and
+      `option-color-picker.ts` no longer declare their own `activePickers` WeakMap. The named width
+      roles remain four bespoke numbers by design (`DATE_PICKER_POPOVER` 252,
+      `GRID_PICKER_POPOVER` 318, `SWATCH_PICKER_POPOVER` 224 as of `063`'s labelled-list rebuild,
+      the dropdown's own 280/360/180) — each picker's content floor, not drift.
 - [ ] **The Anytype menu grammar worth taking is written down with, per pattern, the capture that
       shows it or the named gap.** **Today: no menu-grammar document exists.** The inputs exist —
       `anytype-object-more-menu-dark.png` (a full sectioned context menu), the filter and property
@@ -126,10 +130,14 @@ their own header/grid/search wiring.
       componentized and improved.** Only the operator closes this row.
 - [ ] **Every desktop dropdown behaves as a combobox: clicking it opens the list and the trigger
       itself becomes an active text input, letting the operator type to filter.** **Added
-      2026-09-06** from the operator's report (`goal.md` §4 amendment below). **Today: `dropdown-
-      field.ts`'s search is a separate input inside the popover** (`:201-214`), shown only when
-      `searchable === true` **and** the option count exceeds 8 (`:193`) — the trigger itself never
-      becomes an input, and most dropdowns carry no search field at all.
+      2026-09-06** from the operator's report (`goal.md` §4 amendment below). **Refreshed
+      2026-09-06 (`063` T010) against the landed tree — this ticks nothing.** Landed at `a952e5e7`:
+      `dropdown-field.ts`'s desktop branch (`button.onclick`, `:156-182`) now turns the trigger
+      itself into a text input via `openTriggerInput` before opening the popover, and
+      `openDropdownPopover`'s own `searchable` gate (`:228`) reads
+      `phoneSheet ? options.searchable === true && options.options.length > 8 : true` — every
+      desktop dropdown is searchable regardless of option count; the phone sheet keeps the
+      `> 8`-option gate alone (ADR-006, ADR-001 in `063`).
 - [ ] **The filter/sort condition row's Operator dropdown anchors under its own trigger.** **Added
       2026-09-06.** **Today: RED, measured on the operator's screenshot** — the popover renders at
       x 123-489 under a trigger at x 290-480, a left-edge miscalculation, not a width one (the
