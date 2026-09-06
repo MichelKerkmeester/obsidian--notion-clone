@@ -185,11 +185,14 @@ never resolve them silently.
       (`goal.md` §4 amendment below). **Today: no such button exists** — Settings opens only
       through `renderUtilitiesOverflowButton`'s (`toolbar-renderer.ts:420-426`) `···` menu, one
       level deep, in the `db-toolbar-utilities-cluster`.
-- [ ] **The table footer hides at zero rows, and is 44px otherwise.** **Added 2026-09-06, from an
-      operator ruling on the phone empty-state read.** **Today: RED, unimplemented** —
-      `table-footer-renderer.ts` renders unconditionally regardless of row count; no
-      `rows.length === 0` branch exists. On an empty phone table this draws **173** `+ Calculate`
-      triggers at **26px**, under the 44px touch floor.
+- [x] **The table footer hides at zero rows, and is 44px otherwise.** **Added 2026-09-06, from an
+      operator ruling on the phone empty-state read. Red measured first** — the footer rendered
+      unconditionally regardless of row count, drawing **173** `+ Calculate` triggers at **26px** on
+      an empty phone table, under the 44px touch floor. **Green on main the same day**
+      (`81f7637c`, `a45afe17`, `0814accd`, `2588095b`): the guard is `table-renderer.ts`'s own
+      private `renderFooter` (`:801-804`), not `table-footer-renderer.ts`, and the floor is
+      `.is-phone .note-database-container .db-table-footer-trigger { min-height: 44px }`
+      (`styles.css:8553-8555`). ADR-005 Accepted.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -249,9 +252,11 @@ dropdown.
 
 **Table footer ruling.** Operator, ~08:10: *"Hide the footer at zero rows, 44px otherwise."*
 Answers the batch question this program recorded the same night — an empty phone table draws its
-`+ Calculate` triggers at 26px, under the 44px touch floor, 173 instances observed. `table-footer-
-renderer.ts` has no `rows.length === 0` branch today; this is new work, not a resize of an existing
-one.
+`+ Calculate` triggers at 26px, under the 44px touch floor, 173 instances observed. It was new work,
+not a resize of an existing rule, and it **landed on main the same day** — the zero-row guard went
+into `table-renderer.ts`'s own private `renderFooter` rather than into `table-footer-renderer.ts` as
+this paragraph first predicted, because that is the wrapper holding the row list. ADR-005 records
+it.
 
 **Owner:** both are this packet's — the gear button is a toolbar-rail addition consuming `051`'s
 side-sheet role, and the footer rule is this packet's own `TableFooterRenderer`. Recorded in

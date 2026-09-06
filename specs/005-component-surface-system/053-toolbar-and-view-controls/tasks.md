@@ -277,8 +277,13 @@ and stay unticked — an agent never ticks them.
       gear icon calling `createSettingsEntry` (the same primitive the `···` button already uses)
       that opens the database Settings surface through `051`'s new `side sheet` role. Red-first:
       today no gear button exists; a query for it returns nothing
-- [ ] **T015 (2026-09-06 amendment) — Hide the table footer at zero rows, 44px otherwise.**
-      `table-footer-renderer.ts` gains a `rows.length === 0` branch. Red-first: an empty phone table
-      draws 173 `+ Calculate` triggers at 26px, under the 44px floor — measure this count before the
-      fix, assert 0 footer rows rendered and no sub-44px trigger after
+- [x] **T015 (2026-09-06 amendment) — Hide the table footer at zero rows, 44px otherwise.**
+      Red-first: an empty phone table drew 173 `+ Calculate` triggers at 26px, under the 44px floor.
+      **Landed on main 2026-09-06** (`81f7637c` the zero-row skip, `a45afe17` the 44px floor,
+      `0814accd` the re-pinned touch-target baselines, `2588095b` the test, `4ff181bf`/`0688fe1a`
+      the records). The guard is **`table-renderer.ts`'s own private `renderFooter`** (`:801-804`,
+      `if (rows.length === 0) return;`), not `table-footer-renderer.ts` as this row first stated —
+      the summary config is untouched, so the footer reappears the moment a row exists. The floor is
+      `.is-phone .note-database-container .db-table-footer-trigger { min-height: 44px }`
+      (`styles.css:8553-8555`); the desktop 26px pair is unchanged. Recorded as ADR-005 (Accepted)
 <!-- /ANCHOR:phase-7 -->
