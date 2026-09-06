@@ -1,6 +1,6 @@
 ---
 title: "Decision Record: Toolbar and View Controls"
-description: "ADR-001 the existing chip rail is extended rather than rebuilt. ADR-002 dead settings-entry methods are deleted with their classes kept. ADR-003 the sort-conflict confirm fires at commit, not at gesture start. ADR-004 the wrap control is a per-view default with a per-column override, column wins."
+description: "ADR-001 the existing chip rail is extended rather than rebuilt. ADR-002 dead settings-entry methods are deleted with their classes kept. ADR-003 the sort-conflict confirm fires at commit, not at gesture start. ADR-004 the wrap control is a per-view default with a per-column override, column wins. ADR-005 the summary footer is hidden at zero rows and its phone trigger meets the 44px floor."
 trigger_phrases:
   - "053 decision record"
   - "chip rail decision"
@@ -8,15 +8,17 @@ trigger_phrases:
   - "sort conflict decision"
   - "wrap toggle decision"
   - "wrap text default"
+  - "table footer decision"
+  - "footer trigger touch target"
 importance_tier: "important"
 contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/053-toolbar-and-view-controls"
-    last_updated_at: "2026-09-06T06:40:00Z"
-    last_updated_by: "verify-053-wrap-toggle"
-    recent_action: "Verified ADR-004 red-first; added the Anytype parity read"
-    next_safe_action: "Operator device pass on the wrap toggle; nothing else here is blocked"
+    last_updated_at: "2026-09-06T21:00:00Z"
+    last_updated_by: "impl-053-table-footer"
+    recent_action: "Landed ADR-005: footer hidden at zero rows, phone trigger raised to 44px"
+    next_safe_action: "Operator device pass on the footer; nothing else here is blocked"
     blockers: []
     key_files:
       - "src/views/active-view-controls-renderer.ts"
@@ -24,6 +26,10 @@ _memory:
       - "src/views/cell-renderer.ts"
       - "src/views/column-menu.ts"
       - "src/views/view-config-panel-renderer.ts"
+      - "src/views/table-renderer.ts"
+      - "src/views/table-footer-renderer.ts"
+      - "styles.css"
+      - "tools/live/touch-targets.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-053-adr"
@@ -37,6 +43,7 @@ _memory:
       - "ADR-001 amendment 2 (T001): the rail's in-toolbar band move is withdrawn — the capture puts Anytype's rail where ours already renders"
       - "ADR-001 amendment 2 (T001): the direction colour is demoted to a redundant third signal at 3.14:1 accent-on-tint and 1.19:1 fill-on-bar; direction rides the arrow glyph and the direction word"
       - "ADR-004: the view carries a wrapText default (table view settings only); a column's own wrap always overrides it; undefined follows the view"
+      - "ADR-005: the summary footer is hidden entirely at zero rows; its phone trigger is raised to the shared 44px floor, desktop unchanged at 26px"
 ---
 
 # Decision Record: Toolbar and View Controls
@@ -411,3 +418,77 @@ needs to see: the whole point of `Follow view` is that it is not self-evident fr
 | **What is the real caller that must not break?** | Every existing `renderCell` call site — the new fourth parameter is optional and every scenario that never sets it keeps its exact prior output, proved by pixelHash-identical screenshots after a full recapture |
 | **What contract must not break?** | `005` ADR-001's `td:not(.db-cell-wrap)` rule for the four value containers — the wrap control reaches it only by adding `.db-cell-wrap` through the same class, never by touching the containers directly |
 <!-- /ANCHOR:adr-004 -->
+
+---
+
+<!-- ANCHOR:adr-005 -->
+## ADR-005: The summary footer is hidden at zero rows; its phone trigger meets the 44px floor
+
+**Status: Accepted, 2026-09-06 (~08:10).**
+
+### Context
+
+`renderTable` draws the `tfoot.db-table-footer` summary row — one `db-table-footer-trigger`
+"+ Calculate" button per visible column — at any row count, including zero: an empty table showed
+a footer of controls with nothing to summarize. Separately, `tools/live/touch-targets.mjs`'s
+constructed pass records 173 `db-table-footer-trigger` instances under its own 28px coarse-pointer
+floor (`raiseHistory`, 2026-09-04), because the trigger's phone height was never raised past its
+desktop `calc(var(--db-row-height) - 8px)` (26px). This is the same shape the embedded table's
+Load-more row carried before its own operator ruling the same day (`../../roadmap.md` §6A, "taken
+2026-09-06 (~04:45)"): a row that stays useful on a mouse but sits under the thumb floor on a
+phone.
+
+### Decision
+
+**Operator, 2026-09-06 (~08:10), verbatim option:** *"Hide the footer at zero rows, 44px
+otherwise."*
+
+**Zero rows draws no footer at all.** `table-renderer.ts`'s private `renderFooter` returns before
+calling `TableFooterRenderer.renderFooter` when `rows.length === 0`, on every path that reaches it
+(the windowed branch, the flat branch and the grouped branch all call the same private method) —
+both the full-page and embedded renderers share one `TableRenderer`, so the fix is not duplicated.
+`config.summaryRules` is never touched: the footer reappears with its prior calculations intact
+the instant a row exists, because the guard is purely a render-time skip.
+
+**When rows exist, the phone trigger meets the same 44px floor every other phone row does.**
+`.is-phone .note-database-container .db-table-footer-trigger` gains `min-height: 44px` (its
+`tfoot` cell gains `height: 44px` alongside it), the same floor `.is-phone .db-menu-item` and the
+load-more row's own `.is-phone` rule already raise their rows to. Desktop is untouched at 26px.
+`tools/live/touch-targets.mjs` gained a matching `RAISED` entry holding the class to 44px outright
+on phone, so a regression back under it fails the lane rather than only widening the informational
+28-44px band.
+
+### Consequences
+
+- Both touch-targets ratchets move down, never up, on this fix alone: the constructed baseline's
+  974 drops to 801 (all 173 `db-table-footer-trigger` instances clear their new 44px floor and
+  leave the general 28px ratchet), and the fixture baseline's 209 (already stale; the untouched
+  tree measures 197) drops to 196.
+- No fixture or constructed scenario in `tools/screenshots/` mounts a table at zero rows, so the
+  hidden-footer half of this decision has no capture to move — it is proven by
+  `table-renderer-footer-visibility.test.ts` instead (zero rows → no `.db-table-footer` in the
+  DOM; one row → footer present). Named here rather than silently left unverified.
+- 12 mobile captures moved pixelHash/layoutHash from the 44px trigger height (a table's footer row
+  growing from a 26px-tall "+ Calculate" hint); the css lane's 2026-09-06T21:00:00Z release names
+  all twelve. A further 12 moved bytes only, on tables whose footer already carried two-line
+  calculated results (a stacked kind/value label already exceeding 44px of content), and were
+  restored to their committed bytes.
+
+### Alternatives
+
+| Option | For | Against |
+|---|---|---|
+| **Keep the footer at zero rows, raise the trigger anyway** | Smaller diff; the touch-target fix stands alone | Leaves a row of controls with nothing to summarize, which is the defect the operator named first |
+| **Hide the footer at zero rows, leave the phone trigger at 26px** | Smaller diff | Does not answer the operator's second clause, and leaves the 173-instance touch-target shortfall recorded rather than closed |
+| **Both, as ruled (chosen)** | Answers both clauses of the verbatim option; closes a real touch-target shortfall this file's own history already tracked | None — the desktop trigger is unaffected and the summary config survives the toggle in both directions |
+
+### Five checks
+
+| Check | Answer |
+|---|---|
+| **Does this need to exist at all?** | Yes — an operator-observed defect (a footer of controls with nothing to summarize) plus a measured touch-target shortfall (173 instances under this project's own 28px floor) |
+| **Is there a simpler existing thing?** | Yes on both halves: the private `renderFooter` wrapper already gates every call site, so one early return covers all three render paths; and `.is-phone .db-menu-item`'s own 44px rule is the floor this reuses rather than inventing a new number |
+| **What does it touch?** | `src/views/table-renderer.ts` (`renderFooter`), `styles.css` (`.db-table-footer-trigger` and its `tfoot` cell, `.is-phone`-scoped), `tools/live/touch-targets.mjs` (one `RAISED` entry) |
+| **What is the real caller that must not break?** | The three `renderFooter` call sites in `table-renderer.ts` (flat, windowed, grouped) — all three still call through the one private method, and `config.summaryRules` is read exactly as before once a row exists |
+| **What contract must not break?** | `TableFooterRenderer.renderFooter`'s own contract (columns, options, calculation values) is unchanged; the guard sits entirely outside it |
+<!-- /ANCHOR:adr-005 -->

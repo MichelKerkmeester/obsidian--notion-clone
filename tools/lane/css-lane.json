@@ -1,8 +1,8 @@
 {
-  "holder": "056-board-anytype-parity",
-  "acquiredAt": "2026-09-06T21:10:00Z",
+  "holder": "053-toolbar-and-view-controls",
+  "acquiredAt": "2026-09-06T22:10:00Z",
   "baselineHash": "27c8ee6c9ce0",
-  "baselineCommit": "39ba7d98",
+  "baselineCommit": "03aa151d",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -4153,6 +4153,13 @@
         "screenshots/notion-clone/views/constructed-board-subtask-mobile-light.png"
       ],
       "note": "Eight measured-geometry residuals on the kanban board, each read back off its own capture at DPR 2 rather than off the declaration that was supposed to produce it. box-sizing: border-box on the column header chip (the 1px border was adding to the declared 24px, painting 26); padding: 0 on the card's property row so the shared field's own 2px stops inflating the 25px pitch; a 16px title icon slot scoped to the kanban title row rather than the shared 18px compact size; the phone's own 254.7/23.3/0.7 column, gap and card-border numbers under .is-phone; a 14px circular checkbox scoped to the kanban card meta at the base rule's own specificity; and border-box plus overflow-wrap on the empty-column slot so its title wraps inside the 246px column instead of overflowing it. 44 captures moved pixelHash against origin/main and every one is a board capture \u2014 no calendar, table, timeline, chart or panel capture moved, and none of the 16 Project Manager references did. Six were opened and read in the theme and device they name: constructed-board desktop dark, desktop light and mobile dark, constructed-board-empty-column desktop dark and mobile light, and constructed-card-covers desktop dark. Measured off the decoded pixels of constructed-board-desktop-dark: the header chip's painted band is 48 device px tall (24 CSS) against 52 (26) on the pre-fix capture; the property rows repeat at exactly 350 device px over seven rows across three repeats, a flat 50 device px (25 CSS) per row against 406/7 = 58 (29) before; the card's meta checkbox is a 28x28 device-px disc whose scanline profile tapers symmetrically at both ends, so it is a circle at 14 CSS px and not a rounded square. On the phone capture the first card spans 510 device px and the gutter to the second 46, giving 255 and 23 CSS px against the declared 254.7 and 23.3 \u2014 inside half a pixel of both, and the same read on the desktop capture measures 246, so the .is-phone rules are demonstrably the ones applying. The 0.7px card border is set and computed but is NOT distinguishable in the capture: it paints the same two solid device pixels the desktop's 1px border does, with no antialiased edge, so nothing in a picture can tell the two apart. constructed-board-empty-column shows the empty slot's title wrapping onto a second line inside a card that ends flush with its column. constructed-card-covers moved because its harness scenario stopped opting into the retired extensions layout, so it now photographs the card the product actually draws; the cover's own tall aspect ratio on a 246px column is pre-existing and unchanged by this release. The title icon slot itself is NOT visible in any capture: every board harness stubs renderRecordIcon to null, so no capture can show it, and its evidence is the renderer unit test plus the computed 16px box rather than a picture. Two captures moved pixelHash on the second capture run after the rebase, board-view-desktop-dark and board-mobile-desktop-dark; both were decoded against the bytes committed an hour earlier and differ by exactly 2 pixels at a maximum channel delta of 1 \u2014 rasteriser jitter that pixelHash is fine-grained enough to flip. They are kept at the fresh bytes rather than restored, since both are already in this reviewed list and the manifest describes the file on disk."
+    },
+    {
+      "event": "acquire",
+      "phase": "053-toolbar-and-view-controls",
+      "at": "2026-09-06T22:10:00Z",
+      "hash": "27c8ee6c9ce0",
+      "note": "Taken over from 056-board-anytype-parity, which released at this hash at 21:55 with its 44 board captures signed off. This leg lands the table's summary footer: hidden entirely at zero rows, and its phone trigger raised to the 44px floor the operator ruled on 2026-09-06 (~08:10, verbatim): \"Hide the footer at zero rows, 44px otherwise.\""
     }
   ],
   "outstanding": [
