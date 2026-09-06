@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The same three UI ideas — a record's header, a property row, a property editor — are built three",
     "created_at": "2026-09-05T11:19:44.951Z",
-    "last_save_at": "2026-09-06T04:51:58.575Z",
+    "last_save_at": "2026-09-06T05:15:47.621Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,13 +222,13 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:0efc6149f004f7913b27be83f92292f2d00f87596842391a70224e42a7afaec0",
+    "source_fingerprint": "sha256:2d32a42c3bdf78af4f4095c0ae300b1c3277f2fcfc66dcfa83f6c3fdcbacfb35",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "50f470cd7cf2edb7cfab0196a5a42b5011c8dc5988af4515becbdc766c1f925f",
       "plan.md": "24cd0245479ee276caf3a5df6b566b61596ad981890334df69650a845e19ca6c",
-      "tasks.md": "97d04bb40389ceda0ca8135d7dc975b4505b490f4be36883f2fac086236c2b10",
-      "decision-record.md": "7ac99979d6f4cdeeaff13198a2d51d0549ea2d792a8cd7bca02bfa3f938c5047",
+      "tasks.md": "377bd88eae3e0d2e819dc4c906c5b884bc50ab393b7ce35acee206352eee77a8",
+      "decision-record.md": "e0d7bdf7eb3faae93c354b6eb1aaddeac2a3763601e7faa62da26878cd055d6c",
       "implementation-summary.md": "eb60fa5fe0d8b3b1ae9416c321a8adafc6ab5d8232e70829a942b3b99c1de139"
     },
     "last_active_child_id": null,

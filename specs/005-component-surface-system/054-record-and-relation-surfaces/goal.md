@@ -14,8 +14,8 @@ _memory:
     packet_pointer: "005-component-surface-system/054-record-and-relation-surfaces"
     last_updated_at: "2026-09-06T00:00:00Z"
     last_updated_by: "implementer-leg"
-    recent_action: "Landed T071's predicate amendment and T011/T023/T070's source census (ADR-006/ADR-007)"
-    next_safe_action: "Operator call on D3's census observable; hand T071's one-line predicate fix to 044's owner"
+    recent_action: "D3's observable amended to a source census by operator ruling"
+    next_safe_action: "Close the remaining acceptance criteria now that D3 has a readable observable"
     blockers:
       - "T070/T071 remain: T070 waits on a D3 observable ruling; T071 needs one line in 044's sheet-grammar predicate, measured green and reverted as out of scope"
       - "OPS-001..003 are the operator's; nothing here can close them"

@@ -13,8 +13,8 @@ _memory:
     packet_pointer: "005-component-surface-system/054-record-and-relation-surfaces"
     last_updated_at: "2026-09-06T00:00:00Z"
     last_updated_by: "implementer-leg"
-    recent_action: "Added ADR-006 (predicate amendment) and ADR-007 (D3 census observable amendment)"
-    next_safe_action: "Build the census lane (T011/T023); resolve the column-manager row-class gap named at T071"
+    recent_action: "Quoted both operator rulings verbatim in ADR-006 and ADR-007"
+    next_safe_action: "None — both ADRs are decided and landed"
     blockers: []
     key_files:
       - "src/views/cell-renderer.ts"

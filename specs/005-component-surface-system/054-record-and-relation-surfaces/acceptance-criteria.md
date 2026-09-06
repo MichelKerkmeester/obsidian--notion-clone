@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "005-component-surface-system/054-record-and-relation-surfaces"
     last_updated_at: "2026-09-06T00:00:00Z"
     last_updated_by: "implementer-leg"
-    recent_action: "T071 predicate amendment landed (ADR-006); T011/T023 source census closed (ADR-007)"
-    next_safe_action: "Build the census lane (T011/T023) or close the column-manager row-class gap (T071)"
+    recent_action: "Agreed AC-006's standalone-mount clause stays open, on the editor context's own cost"
+    next_safe_action: "Close AC-001/003/004/005/007 on their remaining thresholds"
     blockers:
       - "AC-006's standalone-mount clause and T070's census-lane proof both need infrastructure T011/T023 did not build"
       - "T071 found column-manager-renderer.ts's row class does not match sheet-grammar.ts's selector; fix touches styles.css, outside this leg"

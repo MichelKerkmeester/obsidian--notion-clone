@@ -14,7 +14,7 @@ _memory:
     packet_pointer: "005-component-surface-system/044-phone-sheet-alignment"
     last_updated_at: "2026-09-05T04:50:00Z"
     last_updated_by: "code-agent"
-    recent_action: "Amended REQ-007 (header everywhere)"
+    recent_action: "Recorded the row-predicate amendment the properties panel needed"
     next_safe_action: "Seek the operator's device report for AC-006"
     blockers:
       - "AC-006 is operator-only; nothing in this repository can close it"
