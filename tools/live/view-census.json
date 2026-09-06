@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T01:53:36.847Z",
+  "measuredAt": "2026-09-06T02:05:58.054Z",
   "inputs": {
-    "styles.css": "9121dbe4ac66",
+    "styles.css": "74c3554251ff",
     "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -361,9 +361,9 @@
   ],
   "totals": {
     "fixtures": 73,
-    "escaping": 656,
-    "growing": 310,
-    "scrolling": 346,
+    "escaping": 626,
+    "growing": 247,
+    "scrolling": 379,
     "rhythmGroups": 8,
     "ragged": 0,
     "probeBlind": 40
@@ -805,7 +805,7 @@
       "tag": "div",
       "cls": "db-calendar-controls",
       "parentCls": "db-calendar-header",
-      "by": 55.9,
+      "by": 74.3,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -816,7 +816,7 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.is-weekend",
-      "by": 4,
+      "by": 11,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -827,7 +827,7 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
+      "by": 11,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -838,7 +838,7 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
+      "by": 11,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -849,7 +849,7 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
+      "by": 11,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -860,7 +860,7 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
+      "by": 11,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -871,7 +871,7 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
+      "by": 11,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -882,7 +882,18 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.is-weekend",
-      "by": 4,
+      "by": 11,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "calendar-month-view",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-calendar-grid.db-calendar-month-grid",
+      "parentCls": "db-calendar.db-calendar-month",
+      "by": 32,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -893,7 +904,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 3.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -904,7 +915,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -915,7 +926,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -926,7 +937,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -937,7 +948,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -948,7 +959,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -959,7 +970,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -992,7 +1003,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 3.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1003,7 +1014,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1014,7 +1025,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1025,7 +1036,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1036,7 +1047,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1047,7 +1058,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1058,7 +1069,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1091,7 +1102,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 3.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1102,7 +1113,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1113,7 +1124,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1124,7 +1135,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1135,7 +1146,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1146,7 +1157,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1157,7 +1168,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1179,7 +1190,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 3.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1190,7 +1201,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1201,7 +1212,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1212,7 +1223,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1223,7 +1234,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1234,7 +1245,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1245,7 +1256,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1267,7 +1278,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 3.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1278,7 +1289,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1289,7 +1300,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1300,7 +1311,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1311,7 +1322,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1322,7 +1333,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1333,7 +1344,7 @@
       "tag": "button",
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
-      "by": 2,
+      "by": 2.4,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -1344,7 +1355,7 @@
       "tag": "div",
       "cls": "db-calendar-controls",
       "parentCls": "db-calendar-header",
-      "by": 55.9,
+      "by": 74.3,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -3858,11 +3869,22 @@
       "width": 402,
       "fixture": "calendar-month-view",
       "kind": "escaping",
-      "tag": "span",
-      "cls": "db-calendar-title-year",
+      "tag": "button",
+      "cls": "db-calendar-title-main.db-calendar-title-select",
       "parentCls": "db-calendar-title",
-      "by": 16.6,
-      "scrolls": false,
+      "by": 20.3,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "calendar-month-view",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-calendar-title-year.db-calendar-title-select",
+      "parentCls": "db-calendar-title",
+      "by": 93.5,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -3872,8 +3894,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.is-weekend",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -3883,8 +3905,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -3894,8 +3916,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -3905,8 +3927,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -3916,8 +3938,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -3927,8 +3949,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -3938,85 +3960,19 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.is-weekend",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
       "width": 402,
       "fixture": "calendar-month-view",
       "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
+      "tag": "div",
+      "cls": "db-calendar-grid.db-calendar-month-grid",
+      "parentCls": "db-calendar.db-calendar-month",
+      "by": 32,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -4027,7 +3983,7 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 11,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -4038,84 +3994,7 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 11,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -4126,7 +4005,7 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 11,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -4137,84 +4016,7 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 11,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -4225,84 +4027,7 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 11,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -4313,84 +4038,7 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 11,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 402,
-      "fixture": "calendar-month-view",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-calendar-add-button",
-      "parentCls": "db-calendar-day-heading",
-      "by": 2,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -4400,7 +4048,7 @@
       "tag": "span",
       "cls": "db-calendar-title-year",
       "parentCls": "db-calendar-title",
-      "by": 16.6,
+      "by": 41.5,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -6180,8 +5828,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.is-weekend",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -6191,8 +5839,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -6202,8 +5850,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -6213,8 +5861,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -6224,8 +5872,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -6235,8 +5883,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -6246,8 +5894,19 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.is-weekend",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "calendar-month-view",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-calendar-grid.db-calendar-month-grid",
+      "parentCls": "db-calendar.db-calendar-month",
+      "by": 32,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -7047,8 +6706,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.is-weekend",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -7058,8 +6717,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -7069,8 +6728,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -7080,8 +6739,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -7091,8 +6750,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -7102,8 +6761,8 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -7113,8 +6772,19 @@
       "tag": "div",
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday.is-weekend",
-      "by": 4,
-      "scrolls": false,
+      "by": 11,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "calendar-month-view",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-calendar-grid.db-calendar-month-grid",
+      "parentCls": "db-calendar.db-calendar-month",
+      "by": 32,
+      "scrolls": true,
       "pastHeader": 0
     },
     {

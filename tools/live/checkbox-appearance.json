@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T01:52:11.635Z",
+  "measuredAt": "2026-09-06T02:04:51.068Z",
   "inputs": {
-    "styles.css": "9121dbe4ac66",
+    "styles.css": "74c3554251ff",
     "tools/live/checkbox-appearance.mjs": "ad706bb20d4a",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -971,7 +971,8 @@
       "scenario": "calendar-toolbar-options",
       "index": 1,
       "classes": [
-        "db-toggle-switch"
+        "db-toggle-switch",
+        "db-calendar-show-icon-toggle"
       ],
       "chain": [
         "note-database-container",

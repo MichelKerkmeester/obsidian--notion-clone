@@ -1,8 +1,8 @@
 {
-  "holder": "050-anytype-adoption",
-  "acquiredAt": "2026-09-06T12:10:00Z",
-  "baselineHash": "9121dbe4ac66",
-  "baselineCommit": "e76fcfd4",
+  "holder": "057-calendar-anytype-parity",
+  "acquiredAt": "2026-09-06T13:10:00Z",
+  "baselineHash": "74c3554251ff",
+  "baselineCommit": "b2128def",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -3817,6 +3817,43 @@
       "hash": "9121dbe4ac66",
       "reviewed": [],
       "note": "Two full node tools/screenshots/capture.mjs runs, one before and one after the rebase onto e76fcfd4, and neither moved a picture. Across 558 entries the second run left 0 pixelHash changes attributable to this edit; six captures re-encoded to different bytes at identical pixelHash and layoutHash, three toast fixtures flapped layoutHash between the same two values at identical bytes, and one -- notion-clone/fields/field-date-value-picker-mobile-light.png -- moved pixelHash on a 107x2px strip of antialiasing inside its date field, measured at 206 differing pixels of 547,792 with both images opened and read side by side and no visible difference. All of it is harness nondeterminism: neither new selector matches anything any registered scenario mounts, so this edit cannot reach a fixture. Every one was restored to its committed bytes and its committed manifest hashes rather than recommitted, leaving the manifest diff nothing but the stylesheet re-stamp. The reviewed list is empty because nothing moved for a reviewer to open, which has a cost worth recording rather than hiding: this row is a new rendered state and tools/screenshots/scenarios/ registers no fixture for it, so no capture of it exists and none of the checks above can see it. Registering one is left open. Read from the final state: npm run gate exit 0 with 26 green, npx tsc --noEmit exit 0, node tools/screenshots/verify.mjs exit 0 with 558 fresh."
+    },
+    {
+      "event": "release",
+      "phase": "057-calendar-anytype-parity",
+      "at": "2026-09-06T13:10:00Z",
+      "hash": "74c3554251ff",
+      "note": "Calendar month-grid retarget, taken over from 050-anytype-adoption at its own released hash 9121dbe4ac66 with nothing outstanding against it. Rebased onto origin/main three times, at fea6f241, e76fcfd4 and 6245dde6; styles.css auto-merged with no conflict at any of them, and every conflicted file was a generated artefact resolved to main and then re-derived from the merged tree. Stylesheet change and its whole extent, all of it inside .db-calendar-*: header padding 25px 0 12px -> 27px 0 20px; a calendar-scoped title block overriding size and letter-spacing rather than editing the shared .db-timeline/.db-calendar base, so the gantt title never moves; a nav-chevron contrast rule at #949494 for light only (2.78:1 -> 3.03:1 against WCAG 1.4.11); a Today-label rule scoped off the scale menu; the weekday band given an explicit 22px height, a 16px inset and right-aligned 12px labels at an 11px inset; the day heading row-reversed for a top-right number with 12px top padding, a 16px/400 number, explicit #767676/#808080 outside-month greys (1.67:1 -> 4.54:1), no outside-month fill, a 7px today-state padding and a 26x24 #216DFA today disc (white on it 3.74:1 -> 4.53:1); the month grid given a 16px inset, 136px rows and #EBEBEB/#292929 rules; the month segment flattened to no background, no accent bar, no radius, a 20px pitch, a 10px icon inset, an 8px icon gap and #292929/#DDDDDD ink; the weekend tint moved off --background-modifier-hover onto the measured #F7F7F7/#1E1E1E pair, which also fixes a weekend cell reading identically to a hovered one; the backlog drawer restyled onto the grid rule colour and the plain surface; a Show-icon toggle colour pair at #5A92FC/#6E9EFC (2.64:1 -> 3.02:1); a phone 44px nav-button floor; and .db-calendar-title-select added to the coarse-pointer 28px list. Captures re-derived by a full node tools/screenshots/capture.mjs run, 558 entries, then node tools/screenshots/verify.mjs exit 0. The 28 in-scope captures that moved content are listed in reviewed and every one was opened and read against the Anytype calendar references under screenshots/anytype/desktop/sets/, checked by measurement rather than by eye. Six further entries moved and none is claimed as a render change: four moved bytes without moving pixelHash or layoutHash and are restored to origin/main bytes with their manifest fields restored to match, and two are chrome-toast layoutHash-only moves with identical pixels, left as measured. The gantt did not move: src/views/calendar-timeline-renderer.ts and both guard tests have a zero-line diff against the pre-leg tree, pm-gantt-* still counts 119, and all eight reference-gantt captures re-rendered MD5-identical across all three capture runs. Two residual deltas were measured on the landed captures rather than waved through, and are carried as open packet rows rather than as a lane debt: the weekday header row does not share the day grid geometry (377.3 device px column pitch against the grid 386.2, so each label drifts 15.5px to 43.5px out of its own column), and the month grid takes the new 16px inset on its left edge only, overrunning its container by 16px on the right.",
+      "reviewed": [
+        "screenshots/notion-clone/views/calendar-month-view-desktop-dark.png",
+        "screenshots/notion-clone/views/calendar-month-view-desktop-light.png",
+        "screenshots/notion-clone/views/calendar-month-view-mobile-dark.png",
+        "screenshots/notion-clone/views/calendar-month-view-mobile-light.png",
+        "screenshots/notion-clone/views/calendar-toolbar-options-desktop-dark.png",
+        "screenshots/notion-clone/views/calendar-toolbar-options-desktop-light.png",
+        "screenshots/notion-clone/views/calendar-toolbar-options-mobile-dark.png",
+        "screenshots/notion-clone/views/calendar-toolbar-options-mobile-light.png",
+        "screenshots/notion-clone/views/calendar-week-time-grid-desktop-dark.png",
+        "screenshots/notion-clone/views/calendar-week-time-grid-desktop-light.png",
+        "screenshots/notion-clone/views/calendar-week-time-grid-mobile-dark.png",
+        "screenshots/notion-clone/views/calendar-week-time-grid-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-calendar-day-desktop-dark.png",
+        "screenshots/notion-clone/views/constructed-calendar-day-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-calendar-day-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-calendar-day-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-calendar-mini-desktop-dark.png",
+        "screenshots/notion-clone/views/constructed-calendar-mini-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-calendar-mini-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-calendar-mini-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-calendar-month-desktop-dark.png",
+        "screenshots/notion-clone/views/constructed-calendar-month-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-calendar-month-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-calendar-month-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-calendar-week-desktop-dark.png",
+        "screenshots/notion-clone/views/constructed-calendar-week-desktop-light.png",
+        "screenshots/notion-clone/views/constructed-calendar-week-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-calendar-week-mobile-light.png"
+      ]
     }
   ],
   "outstanding": [

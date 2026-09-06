@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-06T01:53:43.125Z",
+  "measuredAt": "2026-09-06T02:05:44.936Z",
   "inputs": {
-    "styles.css": "9121dbe4ac66",
+    "styles.css": "74c3554251ff",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
     "fixtures": 73,
-    "differences": 50
+    "differences": 43
   },
   "differences": [
     {
@@ -96,62 +96,6 @@
       "index": 2,
       "notes": [
         "width 1094 vs 1102"
-      ]
-    },
-    {
-      "scenarioId": "calendar-month-view",
-      "selector": "button",
-      "index": 17,
-      "notes": [
-        "width 472.58 vs 476"
-      ]
-    },
-    {
-      "scenarioId": "calendar-month-view",
-      "selector": "button",
-      "index": 26,
-      "notes": [
-        "width 790.3 vs 796"
-      ]
-    },
-    {
-      "scenarioId": "calendar-month-view",
-      "selector": "button",
-      "index": 37,
-      "notes": [
-        "width 790.3 vs 796"
-      ]
-    },
-    {
-      "scenarioId": "calendar-month-view",
-      "selector": "button",
-      "index": 47,
-      "notes": [
-        "width 472.58 vs 476"
-      ]
-    },
-    {
-      "scenarioId": "calendar-month-view",
-      "selector": "button",
-      "index": 55,
-      "notes": [
-        "width 631.42 vs 636"
-      ]
-    },
-    {
-      "scenarioId": "calendar-week-time-grid",
-      "selector": "button",
-      "index": 9,
-      "notes": [
-        "background color(srgb 0 0 0 / 0.0784314) vs color(srgb 0 0 0 / 0.08)"
-      ]
-    },
-    {
-      "scenarioId": "calendar-week-time-grid",
-      "selector": "button",
-      "index": 15,
-      "notes": [
-        "background color(srgb 0 0 0 / 0.0784314) vs color(srgb 0 0 0 / 0.08)"
       ]
     },
     {

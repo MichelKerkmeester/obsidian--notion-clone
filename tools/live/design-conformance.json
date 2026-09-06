@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T01:52:59.916Z",
+  "measuredAt": "2026-09-06T02:05:39.901Z",
   "inputs": {
-    "styles.css": "9121dbe4ac66",
+    "styles.css": "74c3554251ff",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "7edae5db0282"
   },
@@ -81,7 +81,7 @@
     {
       "name": "cascade — property values overridden by a later duplicate block",
       "enforced": false,
-      "value": 126,
+      "value": 132,
       "target": 0,
       "note": "each needs a disposition: intended, or a defect",
       "gated": false,
@@ -113,12 +113,12 @@
     "src/settings.ts:609  .db-panel-empty",
     "src/settings.ts:685  .db-delete-modal-info",
     "src/settings.ts:687  .db-delete-modal-buttons",
-    "src/views/calendar-renderer.ts:537  .db-calendar-day-popover",
-    "src/views/calendar-renderer.ts:547  .db-calendar-day-popover-events",
-    "src/views/calendar-renderer.ts:861  .db-calendar-week-allday-popover",
-    "src/views/calendar-renderer.ts:862  .db-calendar-day-popover-events",
-    "src/views/calendar-renderer.ts:1812  .db-calendar-mini-popover",
-    "src/views/calendar-renderer.ts:2256  .db-calendar-scale-menu",
+    "src/views/calendar-renderer.ts:553  .db-calendar-day-popover",
+    "src/views/calendar-renderer.ts:563  .db-calendar-day-popover-events",
+    "src/views/calendar-renderer.ts:879  .db-calendar-week-allday-popover",
+    "src/views/calendar-renderer.ts:880  .db-calendar-day-popover-events",
+    "src/views/calendar-renderer.ts:1830  .db-calendar-mini-popover",
+    "src/views/calendar-renderer.ts:2393  .db-calendar-scale-menu",
     "src/views/calendar-timeline-renderer.ts:2791  .db-timeline-scale-menu",
     "src/views/calendar-timeline-renderer.ts:2916  .db-calendar-mini-popover",
     "src/views/calendar-timeline-renderer.ts:3821  .db-timeline-mobile-menu-button",

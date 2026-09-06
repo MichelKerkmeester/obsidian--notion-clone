@@ -1,16 +1,26 @@
 {
-  "measuredAt": "2026-09-06T01:52:12.142Z",
+  "measuredAt": "2026-09-06T02:04:51.668Z",
   "inputs": {
-    "styles.css": "9121dbe4ac66",
+    "styles.css": "74c3554251ff",
     "tools/live/checkbox-inventory.mjs": "e869ed91680a"
   },
   "totals": {
     "sites": 10,
-    "classless": 2,
+    "classless": 3,
     "unmentioned": 0,
     "noAppearanceRule": 0
   },
   "classless": [
+    {
+      "file": "src/views/calendar-toolbar-renderer.ts",
+      "line": 484,
+      "chain": [
+        "db-chart-options-row db-calendar-range-row"
+      ],
+      "classes": [],
+      "computedClass": true,
+      "borrowed": null
+    },
     {
       "file": "src/views/card-field-renderer.stories.ts",
       "line": 34,
@@ -49,10 +59,8 @@
       "chain": [
         "db-chart-options-row db-calendar-range-row"
       ],
-      "classes": [
-        "db-toggle-switch"
-      ],
-      "computedClass": false,
+      "classes": [],
+      "computedClass": true,
       "borrowed": null
     },
     {
