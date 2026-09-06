@@ -12,10 +12,10 @@ _memory:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T11:55:00Z"
     last_updated_by: "verify-and-land"
-    recent_action: "corrected the adr-002 landing note and raised the timed-block colour question"
-    next_safe_action: "Close T015 R1 and R2, then put the ADR-002 colour question to the operator"
+    recent_action: "closed adr-002's colour question with the operator's ruling; t017 carries it"
+    next_safe_action: "Land T017, the timed blocks' flat chip ink, the last thing ADR-002 still owes"
     blockers:
-      - "T008 onward still owe the phone retarget and the date-property submenu"
+      - "T017 owes the flatten-to-chip-ink repaint of the week and day timed blocks"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "specs/005-component-surface-system/039-calendar-parity-port/decision-record.md"
@@ -23,14 +23,15 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-057-adr"
       parent_session_id: null
-    completion_pct: 55
+    completion_pct: 90
     open_questions:
-      - "Does styled to the month grid strip the week/day timed blocks per-event colour, or does a duration block keep it"
+      - "None. The colour question was answered 2026-09-06 ~04:45: flatten to chip ink. tasks.md T017 carries the unlanded implementation"
     answered_questions:
       - "ADR-002 is ruled: keep week and day, styled to the month grid"
       - "The calendar's thresholds are per-element because it carries zero pm-* classes"
       - "Parity by default is inherited from 051 ADR-007 without re-asking"
       - "ADR-002's implementation half is partly landed: the weekend tint and nav cluster carried to week and day, the rule colour and today marker did not"
+      - "ADR-002's colour question is answered: the timed blocks flatten to chip ink, carried as T017"
 ---
 # Decision Record: Calendar Anytype Parity
 
@@ -173,8 +174,23 @@ scales*, which is not the same permission. So the question is narrow and it is t
 > distinction the month chip carries in text?**
 
 Both answers are defensible and neither is inferable from a reference that ships no time grid.
-Until it is answered, the blocks keep their colour and this row is the record of why, rather than
-drift nobody wrote down.
+
+**ANSWERED 2026-09-06 ~04:45, operator, verbatim:**
+
+> *"Flatten to chip ink"*
+
+**The colour question closes the first way.** The week and day timed blocks take the month chip's
+flat ink: no per-event fill, no accent bar, the same text-carried distinction the month chip
+already uses. The geometry half of the block stays exactly as this ADR settled it — a
+duration-proportional height is not a fixed 20px pitch, and the ruling does not touch it.
+
+**Not implemented in the leg that recorded this.** The ruling arrived after that leg's stylesheet
+edits had landed and been captured, and repainting every timed block is a visible change to a
+shipped surface that owes its own recapture and its own read-back. It is carried as `tasks.md`
+T017 with the threshold it has to meet and the value that is red today, rather than folded in
+unmeasured — the same treatment T015's own residuals got. Until T017 lands, the blocks still carry
+their colour, and `screenshots/notion-clone/views/calendar-week-time-grid-desktop-light.png` is
+the record of what that looks like.
 
 ---
 

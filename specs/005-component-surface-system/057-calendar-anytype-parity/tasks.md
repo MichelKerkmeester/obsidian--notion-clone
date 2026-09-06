@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T16:30:00Z"
     last_updated_by: "verify-and-land"
-    recent_action: "landed T015 R1-R7, T016, T008, T009; gate 26 green"
-    next_safe_action: "await operator AC-010 device read"
+    recent_action: "landed T015 R1-R7, T016, T008, T009 and T009's missed 224x28; T017 opened"
+    next_safe_action: "land T017, the timed blocks' flat chip ink, then the AC-010 device read"
     blockers:
       - "AC-010 is the operator's own device read and nothing in this repository can close it"
       - "Five AC-002 sub-rows stay pixel read owed — a static capture cannot answer hover/focus/press/drag/overflow"
@@ -29,7 +29,7 @@ _memory:
       parent_session_id: null
     completion_pct: 95
     open_questions:
-      - "Does 'styled to the month grid' strip the week/day timed blocks' per-event colour too? (decision-record.md ADR-002, the operator's)"
+      - "None. ADR-002's colour question was answered 2026-09-06 ~04:45; T017 carries the unlanded implementation"
     answered_questions:
       - "T001 landed: nine elements trued, both absences established across twenty"
       - "An absence is established across all twenty set captures, never from one"
@@ -37,6 +37,7 @@ _memory:
       - "T004-T007 landed: the month grid retargeted, AC-003 Met, the gantt confirmed unmoved"
       - "AC-002 was claimed Met and is reopened: seven measured residuals are carried as T015 and T016"
       - "T015 R1-R7, T016, T008, T009 all landed: gate 26 green, gantt confirmed unmoved throughout"
+      - "ADR-002 colour question answered by the operator: flatten the timed blocks to chip ink (T017, not yet landed)"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
 # Tasks: Calendar Anytype Parity
@@ -219,6 +220,21 @@ _memory:
       1420/1420, `npx tsc --noEmit` exit 0; the closed-row capture is confirmed pixel-identical
       (the geometry only exists once the dropdown opens) and the gantt/timeline toolbar files carry
       a zero-line diff.
+      **Corrected 2026-09-06 at the landing, after opening the dropdown in the capture harness's
+      own Chrome at DPR 2 and reading the panel's box: neither measured value had actually
+      landed.** The width read **280px**, not 224 — `positionToolbarPopover`, which every dropdown
+      in the app is placed by, writes a flat `preferredWidth: 280` as an *inline* style
+      (`dropdown-field.ts`), and an inline declaration outranks a stylesheet rule, so the scoped
+      `width: 224px` was dead the moment it was written. The row height read **29.39px**, not 28:
+      `min-height` cannot shrink a row whose content already measures 29.39, so the floor never
+      bound. The scoping half was correct and is what the test pins, which is exactly why the test
+      stayed green — it asserted the class reached the right two rows, and the class reaching a row
+      is not the geometry applying to it. Fixed by carrying `!important` on the width, and only on
+      the width, in preference to teaching the shared positioner a per-caller width (a component
+      this packet does not own, the same boundary the row already draws), and by tightening the
+      row's block padding so the 28px floor binds. Re-measured live: the two date-field rows render
+      **224 x 28** and every other dropdown in the same popover stays **280 x 30**, which is the
+      scoping assertion and its own negative control in one read.
 - [x] T010 **Follow the tests.** `calendar-renderer.test.ts` follows the retargeted shape.
       `calendar-keyboard-navigation.test.ts` and `calendar-search-placement.test.ts` must stay green
       **without modification** — REQ-010's guard. (`src/views/calendar-renderer.test.ts`)
@@ -428,6 +444,29 @@ title and 44x44 close on phone.
       unshipped, operator-unconfirmed work would overstate status, so this row is recorded as a
       named gap against a path that is not this repository's convention, not filled with an
       invented entry.
+- [ ] T017 **The week and day timed blocks take the month chip's flat ink.** The operator answered
+      ADR-002's open colour question on 2026-09-06 ~04:45, verbatim *"Flatten to chip ink"*, after
+      this packet's stylesheet legs had already landed and been captured. Repainting every timed
+      block is a visible change to a shipped surface and owes its own recapture and read-back, so it
+      is carried here with a threshold rather than folded in unmeasured.
+      (`styles.css`, `src/views/calendar-renderer.ts`)
+      **Red today, measured on `screenshots/notion-clone/views/calendar-week-time-grid-desktop-light.png`
+      at DPR 2**: `.db-calendar-week-timed-event` (`styles.css`) carries a
+      `3px solid var(--db-calendar-event-accent, var(--interactive-accent))` left bar and a
+      `linear-gradient` of `var(--db-calendar-event-bg, ...)` over `--background-primary`, so the
+      body of the time grid holds **138,411** device px of `#DEEAF1`, **9,873** of `#E6EFEA` and
+      **8,336** of `#F9E9D8` — three distinct per-event fills — with a `#1E3A8A` accent bar at each
+      block's left edge.
+      **Green when**: the same read of the same capture returns **0** device px of any per-event
+      fill and **0** of any per-event accent bar inside the time-grid body, with the block reading
+      the month chip's own flat ink (`.db-calendar-month-segment`: `background: none`, `border: 0`,
+      `border-radius: 0`, `color: #292929`) and the per-event distinction carried in the title text
+      exactly as the month chip carries it. The block's **height stays duration-proportional** —
+      ADR-002's geometry half is settled and this ruling does not reach it — and
+      `db-calendar-timed-current-line`, the today disc and the slot lines keep the `#216DFA` /
+      `#EBEBEB` pair T015 R3 already landed. The gantt's own `db-timeline-*` colours are not this
+      row's to touch: `git diff --stat -- src/views/calendar-timeline-renderer.ts` must stay empty
+      and all eight `reference-gantt-*.png` MD5s identical, the same guard every leg here held.
 <!-- /ANCHOR:phase-3 -->
 
 ---

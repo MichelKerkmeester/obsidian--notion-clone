@@ -12,12 +12,12 @@ _memory:
     packet_pointer: "005-component-surface-system/057-calendar-anytype-parity"
     last_updated_at: "2026-09-06T16:30:00Z"
     last_updated_by: "code-implementer"
-    recent_action: "landed T015 R1-R7, T016, T008, T009; gate 26 green"
-    next_safe_action: "await operator AC-010 device read"
+    recent_action: "verified every claim at the landing; repaired t009 and the replay damage"
+    next_safe_action: "land T017, then the operator AC-010 device read"
     blockers:
       - "AC-010 is the operator's device read, unclosable here"
       - "Five AC-002 sub-rows stay pixel read owed"
-      - "Timed-block per-event colour is an open operator question"
+      - "T017 owes the flatten-to-chip-ink repaint; AC-005's implementation half is reopened on it"
     key_files:
       - "src/views/calendar-renderer.ts"
       - "src/views/calendar-toolbar-renderer.ts"
@@ -29,7 +29,7 @@ _memory:
       parent_session_id: null
     completion_pct: 90
     open_questions:
-      - "Does the month-grid styling strip the timed blocks' colour too?"
+      - "None. Answered 2026-09-06 ~04:45: flatten to chip ink. T017 carries the unlanded implementation"
     answered_questions:
       - "ADR-002 ruled: keep week and day, styled to the month grid"
       - "T015 R1-R7 closed: inset, pitch, rule colour, marker, header, offset, label, drawer"
@@ -123,6 +123,20 @@ every consumer in the app is not this packet's to do — the same boundary `desi
 draws for the layout-tile panel. A new class, `db-calendar-date-field-dropdown`, scopes the geometry
 to the start/end date-field dropdowns only.
 
+**Neither measured value had actually landed, and the verification pass at the landing found it.**
+Opened in the capture harness's own Chrome at DPR 2, the panel measured **280px** and its rows
+**29.39px**. Two independent causes: `positionToolbarPopover` — the placer every dropdown in the app
+goes through — writes a flat `preferredWidth: 280` as an **inline** style, and an inline declaration
+outranks any stylesheet rule, so the scoped `width: 224px` was dead the moment it was written; and
+`min-height` cannot shrink a row whose content already measures 29.39px, so the 28px floor never
+bound. The scoping was correct, which is exactly why the test stayed green: it pinned that the class
+reaches the right two rows, and a class reaching a row is not the geometry applying to it. Repaired
+by carrying `!important` on the width — scoped to this one class, and only on the width, in
+preference to teaching the shared positioner a per-caller width it does not own — and by tightening
+the row's block padding until the floor binds. Re-measured live: **224 x 28** on the two date-field
+rows, **280 x 30** on every other dropdown in the same popover, which is the scoping assertion and
+its own negative control in one read.
+
 ### Ancillary — the two toolbar headers `051` could not reach
 
 `calendar-toolbar-renderer.ts:89` and `calendar-timeline-toolbar-renderer.ts:69`'s hand-built
@@ -197,14 +211,14 @@ across the whole leg).
 | Check | Result |
 |-------|--------|
 | `npx tsc --noEmit` | Exit 0, read at every landing commit |
-| `npm test` | 1425/1425, final count (started this leg at 1418/1418 before T015 R7's two rewritten tests and T009/pinned-values' three new ones) |
-| `npm run build` | Exit 0; the regenerated `main.js` is restored to `HEAD` rather than committed, per this repository's own rule |
+| `npx vitest run` | **1436/1436** in 137 files, from the final landed state (this leg started at 1418/1418; the rest of the delta is upstream's) |
+| `npm run build` | Exit 0; `main.js` is tracked here and the rebuilt bundle is committed |
 | `npm run gate` (foreground, exit read from a file, no pipe) | **26 green, 0 red** |
-| `node tools/live/sheet-grammar.mjs` | Exit 0, 12 surfaces, 31 stacked pairs, unchanged throughout |
-| `node tools/screenshots/verify.mjs` | Exit 0, 558 fresh |
-| Gantt unmoved | All eight `reference-gantt-*.png` MD5-identical to `T002`'s recorded values; `git diff --stat 793ab9b4..HEAD -- src/views/calendar-timeline-renderer.ts` empty |
-| Guard tests unedited | `git diff --stat 793ab9b4..HEAD -- calendar-keyboard-navigation.test.ts calendar-search-placement.test.ts` empty; both 16/16 |
-| Acceptance criteria | AC-001, AC-003, AC-005, AC-006 Met; AC-002/004 measurably narrower (T015/T009 closed what they could) but still carry "pixel read owed" rows a static capture cannot answer; AC-007/008/009 hold after this leg; AC-010 is the operator's |
+| `node tools/live/sheet-grammar.mjs` | Exit 0, **13** surfaces and **31** stacked pairs. The thirteenth is `055`'s `confirm`, registered while this packet was open; 057 registered none |
+| `node tools/screenshots/verify.mjs` | Exit 0, **562** current |
+| Gantt unmoved | All eight `reference-gantt-*.png` MD5-identical to `T002`'s recorded values; `git diff --stat origin/main -- src/views/calendar-timeline-renderer.ts` empty; `pm-gantt-*` still **119** |
+| Guard tests unedited | `git diff --stat origin/main -- calendar-keyboard-navigation.test.ts calendar-search-placement.test.ts` empty; with `calendar-renderer.test.ts`, 32/32 |
+| Acceptance criteria | **Seven Met** — AC-001, AC-002, AC-003, AC-006, AC-007, AC-008, AC-009, each re-measured at the landing rather than accepted on this leg's own report. **Three open** — AC-004's two unbuilt surfaces, AC-005's *implementation* half (reopened at ~04:45 on the flatten-to-chip-ink ruling, carried as T017), and AC-010, the operator's |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -215,9 +229,14 @@ across the whole leg).
 1. **Five `AC-002` sub-rows stay pixel read owed.** Hover, focus, press, drag, the overflow
    affordance, chip truncation, multi-day spans, a two-digit today, and a six-week month's row
    height cannot be answered from a static capture. Unchanged by this leg.
-2. **The timed-block per-event colour is an open operator question.** `decision-record.md` ADR-002
-   names it explicitly; this leg's R3 fix deliberately stops at rule/marker geometry and does not
-   touch it.
+2. **The timed-block per-event colour is answered and not yet implemented.** The operator ruled at
+   2026-09-06 ~04:45, verbatim *"Flatten to chip ink"* — after this leg's stylesheet edits had
+   landed and been captured. `tasks.md` **T017** carries it with its threshold and its red value
+   (138,411 device px of `#DEEAF1`, 9,873 of `#E6EFEA`, 8,336 of `#F9E9D8`, plus a `#1E3A8A` accent
+   bar per block, measured on `calendar-week-time-grid-desktop-light.png`). **AC-005 is reopened on
+   its implementation half because of it**, which is the same call this packet made on AC-002 that
+   morning: repainting a shipped surface owes its own recapture and read-back, and ticking a row on
+   a ruling nobody has implemented is the shape of claim the verification pass exists to catch.
 3. **`AC-004`'s layout-tile panel and `+ Add Property` stay unbuilt.** Named as out of scope
    (`053` owns the view switcher) and declined on product grounds (frontmatter keys are not a
    property registry), respectively — recorded, not silently missing.
@@ -227,6 +246,12 @@ across the whole leg).
    accessibility ground.
 5. **`AC-010` is the operator's own device read**, on iOS and desktop, knowing the phone half was
    inferred. Nothing in this repository closes this row, and it is not ticked here.
+6. **The weekday labels take the reference's two-letter form, but not its Monday start.** The
+   capture corpus renders `Su Mo Tu We Th Fr Sa` against the reference's `Mo Tu We Th Fr Sa Su`,
+   because which day starts the week is locale- and `calendarFirstDayOfWeek`-driven and the harness
+   runs `en-US`. T015 R6 moved the label's character count deliberately and left the week start
+   alone; changing a default week start is a product decision and no capture in the corpus is
+   evidence for it. Recorded here rather than left for a reader to notice in an image.
 <!-- /ANCHOR:limitations -->
 
 ---

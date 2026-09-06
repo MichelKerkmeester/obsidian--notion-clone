@@ -110,19 +110,32 @@ never resolve them silently.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] **Every element in `spec.md` section 4's anatomy is trued against a named capture, measured,
+- [x] **Every element in `spec.md` section 4's anatomy is trued against a named capture, measured,
       and matched.** **Today: no such record exists.** Done is `design-trueup.md` written with a
       capture filename per element and either a measurement or the **design inferred** label with
       its reason.
-- [ ] **The month grid, the day cell and the event chip match the captures.** **Today: ours.**
+      **Closed 2026-09-05, recorded 0 of 9.** `design-trueup.md` did not exist and the capture set
+      was unread; it now carries 9 of 9 elements with a capture filename each.
+- [x] **The month grid, the day cell and the event chip match the captures.** **Today: ours.**
       `src/views/calendar-renderer.ts` constructs **91** distinct `db-calendar-*` classes and
       `styles.css` carries **133** `db-calendar` rules, none of them trued against an Anytype
       screen. Done is each of the three matched to a measured value or carrying a named
       accessibility deviation.
-- [ ] **Navigation matches the captured toolbar.** `047` section 5 records Anytype's as month and
+      **Closed 2026-09-06 and re-measured at the landing.** The failing values it moved from, each
+      observed red on the pre-fix capture at DPR 2: the grid's rules sat at device x 112..2815
+      against a container of 80..2783, so the 16px inset landed on the **left edge only**; the
+      weekday row's pitch was **377.3** device px against the grid's **386.2**, drifting each label
+      **15.5px at Monday to 43.5px at Sunday** out of its own column; the day number's ink sat
+      **18px** below the cell top against a 12px reference; the labels read three-letter `Sun`
+      `Mon`; and the empty unscheduled drawer occupied **85 CSS px**. Now: 16px on both edges,
+      pitch delta **0.00**, ink at **12.5px**, two-letter labels, and no drawer element at all.
+- [x] **Navigation matches the captured toolbar.** `047` section 5 records Anytype's as month and
       year selects spanning years 0-3000, arrows, and a Today button; plus a "today scroll" that
       positions the current week at the bottom of the viewport. Done is our navigation matching
       that or declining a part of it with a reason.
+      **Closed 2026-09-06.** Was **6 controls beside a one-string title and no today scroll**,
+      measured on `cc5a7ff2`; now two title selects opening the shared listbox, and the today
+      scroll lands the current week at the viewport bottom.
 - [ ] **The date-property picker matches the captured calendar settings menu.**
       `anytype-menu-set-layout-calendar-date-property-{light,dark}-full.png` is the reference.
       **Today: unread.**
@@ -131,16 +144,30 @@ never resolve them silently.
       (`calendar-renderer.ts:82`) with a scale control, menu, popover and segment class family.
       Anytype's capture sweep shows one calendar layout and no scale switch. Done is the operator's
       ruling recorded as an ADR, whichever way it goes.
-- [ ] **The unscheduled area is dispositioned.** **Today: ours** — a collapsible backlog drawer
+- [x] **The unscheduled area is dispositioned.** **Today: ours** — a collapsible backlog drawer
       (`db-calendar-backlog*`, `calendar-renderer.ts:160-163`). Done is either a captured Anytype
       counterpart it is matched to, or a written argument for keeping it as ours.
-- [ ] **The phone calendar's every value is labelled "design inferred from desktop".** **Today: no
+      **Closed 2026-09-06, was 85 CSS px of drawer above a surface the reference does not have** —
+      **0** non-background px below the grid rule in any of the twenty set captures, so there was
+      no counterpart to match. Kept as ours with the argument written, and an empty drawer now
+      renders nothing.
+- [x] **The phone calendar's every value is labelled "design inferred from desktop".** **Today: no
       phone reference exists and none is coming** — iOS Anytype has no calendar layout. Done is
       zero phone values presented as measured.
-- [ ] **`044`'s grammar and `048`'s stacking still hold.** Done is `node
+      **Closed 2026-09-06, was 1 unlabelled.** The pre-retarget `body.is-mobile` chip override
+      (`height: 18px; padding: 0 4px; font-size: 11px`) carried no label and no ground; it is
+      replaced by a single `.is-phone` 44px height labelled against the measured 20px desktop pitch
+      and the touch floor it takes instead. Unlabelled count now **0**.
+- [x] **`044`'s grammar and `048`'s stacking still hold.** Done is `node
       tools/live/sheet-grammar.mjs` exit 0 with 12 surfaces and 31 pairs green, read from `$?`.
-- [ ] **The gantt did not move.** Done is the `pm-gantt-*` class count and the gantt capture hashes
+      **Closed 2026-09-06**, was 12 surfaces and 31 pairs recorded at `cc5a7ff2`; the landing
+      reads **13** and **31** at exit 0, the thirteenth being `055`'s `confirm`, registered while
+      this packet was open. 057 added none.
+- [x] **The gantt did not move.** Done is the `pm-gantt-*` class count and the gantt capture hashes
       unchanged against their pre-leg baseline, or any move explained by a named gap.
+      **Closed 2026-09-06**, was 119 `pm-gantt-*` tokens and eight capture MD5s recorded at
+      `cc5a7ff2`; the landing reproduces **119** and all eight MD5s byte-identical, with a
+      zero-line diff on `calendar-timeline-renderer.ts` and on both guard tests.
 - [ ] **OPERATOR:** the operator reads the rebuilt calendar on iOS and on desktop and reports it as
       Anytype-shaped, knowing the phone half was inferred. Nothing in this repository closes this row.
 <!-- /ANCHOR:completion -->

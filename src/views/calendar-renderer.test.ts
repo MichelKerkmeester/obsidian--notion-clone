@@ -606,7 +606,7 @@ describe("Calendar parity behaviours", () => {
     expect(root.querySelector(".db-calendar-backlog")).toBeNull();
   });
 
-  it("renders the backlog drawer with an empty line once an unscheduled row exists", () => {
+  it("renders the backlog drawer and its one item once an unscheduled row exists", () => {
     const renderer = new CalendarRenderer(createMockActions());
     const container = new MockElement("div") as unknown as HTMLElement;
 

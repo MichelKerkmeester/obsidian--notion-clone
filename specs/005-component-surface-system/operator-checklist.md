@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-06: **58 phases**, **6 with nothing left**, **171 rows** waiting on a device.
+Derived 2026-09-06: **58 phases**, **6 with nothing left**, **164 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -334,17 +334,10 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] The gantt did not move. Done is the `pm-gantt-*` class count and the gantt capture hashes unchanged against their pre-leg baseline, or any move explained by a named gap.
 - [ ] OPERATOR: the operator reads the rebuilt board on iOS and on desktop and reports it as Anytype-shaped. Nothing in this repository can close this row.
 
-## 057-calendar-anytype-parity — 0/10
+## 057-calendar-anytype-parity — 7/10
 
-- [ ] Every element in `spec.md` section 4's anatomy is trued against a named capture, measured, and matched. Today: no such record exists. Done is `design-trueup.md` written with a capture filename per element and either a measurement or the design inferred label with its reason.
-- [ ] The month grid, the day cell and the event chip match the captures. Today: ours. `src/views/calendar-renderer.ts` constructs 91 distinct `db-calendar-*` classes and `styles.css` carries 133 `db-calendar` rules, none of them trued against an Anytype screen. Done is each of the three matched to a measured value or carrying a named accessibility deviation.
-- [ ] Navigation matches the captured toolbar. `047` section 5 records Anytype's as month and year selects spanning years 0-3000, arrows, and a Today button; plus a "today scroll" that positions the current week at the bottom of the viewport. Done is our navigation matching that or declining a part of it with a reason.
 - [ ] The date-property picker matches the captured calendar settings menu. `anytype-menu-set-layout-calendar-date-property-{light,dark}-full.png` is the reference.
 - [ ] The scale switch question is answered by the operator, not inferred. Today: three scales — `updateCalendarScale?(scale: "month" | "week" | "day", ...)` (`calendar-renderer.ts:82`) with a scale control, menu, popover and segment class family.
-- [ ] The unscheduled area is dispositioned. Today: ours — a collapsible backlog drawer (`db-calendar-backlog*`, `calendar-renderer.ts:160-163`). Done is either a captured Anytype counterpart it is matched to, or a written argument for keeping it as ours.
-- [ ] The phone calendar's every value is labelled "design inferred from desktop". Today: no phone reference exists and none is coming — iOS Anytype has no calendar layout. Done is zero phone values presented as measured.
-- [ ] `044`'s grammar and `048`'s stacking still hold. Done is `node tools/live/sheet-grammar.mjs` exit 0 with 12 surfaces and 31 pairs green, read from `$?`.
-- [ ] The gantt did not move. Done is the `pm-gantt-*` class count and the gantt capture hashes unchanged against their pre-leg baseline, or any move explained by a named gap.
 - [ ] OPERATOR: the operator reads the rebuilt calendar on iOS and on desktop and reports it as Anytype-shaped, knowing the phone half was inferred. Nothing in this repository closes this row.
 
 ## Nothing left to check
