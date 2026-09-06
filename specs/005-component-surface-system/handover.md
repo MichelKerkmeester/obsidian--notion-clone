@@ -447,6 +447,26 @@ ticks an operator row.**
 - **An ownership written in the handover and not in the packet is invisible.** The condition row and
   the inline editors each had one owner in this document's family table and nothing in `053`'s or
   `054`'s own files. An implementation leg opens the packet, not the handover.
+- **`check-lane` reads only the NEWEST history entry, so an older release's `reviewed` list is
+  never re-checked.** `reviewVerdict` takes `history[history.length - 1]` and returns pass
+  immediately unless that entry is a `release` whose `hash` equals `baselineHash`. Grandfathering
+  older releases is deliberate — back-filling `reviewed` onto reviews nobody did would manufacture
+  the evidence the rule exists to require — but it has a live consequence: if your commit moves a
+  capture and the newest entry is somebody else's release sitting on the current stylesheet, the
+  fix is to **append your own release entry at the same hash naming your captures**, never to add
+  your paths to their list. There is ample precedent for a "not a CSS edit" release at an unchanged
+  `baselineHash`; roughly two dozen entries already are one.
+- **One capture depends on the host's pointing device, not on this repository.**
+  `field-icon-picker-desktop-{dark,light}` moves 10 device px whenever the machine flips between
+  classic and overlay scrollbars (macOS "Show scroll bars: Automatically" resolves on whether a
+  mouse is attached). `.db-icon-picker-scroll` asks for `scrollbar-gutter: stable`, which Blink
+  honours with real width only under classic scrollbars, and `.db-icon-picker-grid` centres an
+  `auto-fill` track set inside it, so a 10px content-width change moves the partially-filled Recent
+  row 5 CSS px. It is the only capture in the 576 with this sensitivity — a full run on a flipped
+  host moves exactly those two and nothing else. **Do not bisect it.** If it reappears, recapture,
+  append a lane release naming the two files, and move on; removing the sensitivity for real means
+  either left-aligning the picker's grid (a product change, needs the operator) or pinning
+  scrollbar metrics in `tools/screenshots/theme.css` (re-renders every scrollable surface).
 <!-- /ANCHOR:next-session -->
 
 ---

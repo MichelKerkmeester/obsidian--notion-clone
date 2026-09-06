@@ -495,6 +495,37 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       24 unrelated entries' stale `sourceHashes` (this row's own two touched files being shared
       "sources" for scenarios that never render the submenu), with the incidental encoder-noise
       re-encodes it also produced restored to their committed bytes.
+- [x] T019 The icon picker's two desktop captures stopped reproducing their committed pixelHash
+      (`field-icon-picker-desktop-dark/-light`: 62fbc4a52c93 / d54c0c6e2fc8 against a recapture's
+      fe3261b9cd73 / 98f0947dda5a) while every declared source hashed identically, with the Recent
+      row 10 device px right of the committed frame. **Not a landing.** The scenario was recaptured
+      at four main commits spanning the window in which the manifest held the old hash --
+      `6b5729f0`, `537bbb61` (the popover left-align), `0c3f6410` (the combobox) and `28b505f3`,
+      the commit that committed the images -- and all four produce `fe3261b9cd73` today. The bisect
+      is flat, so the repository is not the variable.
+      **Root cause, one sentence**: `.db-icon-picker-scroll`'s `scrollbar-width: thin;
+      scrollbar-gutter: stable` (`styles.css`) reserves gutter width only while the host paints
+      classic scrollbars -- nothing under macOS overlay scrollbars -- and `.db-icon-picker-grid`'s
+      `repeat(auto-fill, 28px)` with `justify-content: center` centres the nine-track set in that
+      content box, so the host's pointing device moves the Recent row 5 CSS px. Measured in-page:
+      reserving 0/6/10/11/15px puts the first Recent icon at x = 42/39/37/36.5/34.5; the committed
+      images read 37 and the recapture 42, column count unchanged at nine.
+      **Verdict**: neither image is a regression and neither is wrong -- each is the surface on a
+      host with a different pointing device. The corpus is pinned to the one this machine
+      reproduces, and the dependency is recorded as a trap in the parent `handover.md`.
+      **Source-declaration fix**: the premise that a file outside the declared sources moved the
+      paint was right about the hole even though it was not the cause here.
+      `tools/screenshots/capture.mjs` fingerprinted `tools/screenshots/scenarios.mjs`, a sixty-line
+      barrel, and never the five modules under `scenarios/` that hold every fixture's markup, so a
+      fixture could be rewritten with every capture still reporting fresh -- `dd71114f` deleted a
+      helper from `scenarios/shared.mjs` and no capture went stale. `CAPTURE_INPUTS` now reads that
+      directory (tests excluded).
+      **Proof**: negative control at `28b505f3` -- appending a line to `scenarios/fields.mjs`
+      leaves `verify.mjs` exit 0; with the fix the same edit exits 1 naming all 576 entries, and
+      reverting returns exit 0. Full recapture moves 2 pixelHashes out of 576 with 13 byte-only
+      re-encodes restored to their committed bytes; `check-lane` exit 0 with the release naming
+      both captures; both PNGs opened.
+
 <!-- /ANCHOR:phase-4 -->
 
 ---
