@@ -11,23 +11,26 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/051-modal-and-sheet-componentization"
-    last_updated_at: "2026-09-05T14:00:00Z"
-    last_updated_by: "orchestrate-handover-19"
-    recent_action: "Authored the packet in-runtime from a source census"
-    next_safe_action: "Execute T001, the shell census true-up, then T002's red-first measurements"
+    last_updated_at: "2026-09-06T08:15:00Z"
+    last_updated_by: "implementer-session-fourth-landing"
+    recent_action: "Exported the confirm primitive (T013/T014); added the edge-control token row (T015)"
+    next_safe_action: "T015's remaining geometry/motion lane rows, then the sub-page producer once one exists"
     blockers:
-      - "The external leaf that drafted this packet wrote only create.sh scaffolding; every document here is in-runtime work and has no upstream draft to reconcile against"
       - "styles.css edits are serialized by the parent's CSS lane"
+      - "T010 stays blocked on the operator (spec.md §11's second open question, unanswerable from any capture)"
+      - "AC-012's E4 row (whether a destructive confirm is shown at all) needs the operator's ruling"
     key_files:
       - "src/views/modals/db-modal.ts"
       - "src/views/mobile-bottom-sheet.ts"
       - "src/views/modals/confirm-modal.ts"
+      - "src/views/confirm-sheet.ts"
+      - "tools/live/sheet-grammar.mjs"
       - "specs/005-component-surface-system/050-anytype-adoption/design-trueup.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-051-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 55
     open_questions:
       - "Do the three FuzzySuggestModal subclasses join the shell, or stay Obsidian-native with a shim"
       - "Does the fullscreen presentation survive as a third mode, or collapse into the sheet with a height role"
@@ -131,11 +134,21 @@ never resolve them silently.
       overlaps its parent, which stays fully visible and undimmed), and it is the phone-correct
       pattern `048` REQ-002 already prefers — a parent that does not move is cheaper than a parent
       that dims and scales back.
-- [ ] **One confirm primitive, carrying `044`'s seven grammar elements, is the only confirm path.**
+- [x] **One confirm primitive, carrying `044`'s seven grammar elements, is the only confirm path.**
       **Today: 0 of 7.** `ConfirmModal` declares `sheet` (`modals/confirm-modal.ts:42`,
       `super(app, "sheet")`) and inherits `DbModal`'s chrome, but the phase that owns the confirm as
       a *primitive* does not exist, so `053`'s sort-conflict confirm and `055`'s destructive-confirm
       state each name a confirm nobody exports.
+      **Fourth landing, 2026-09-06 — 7 of 7, one path.** `src/views/confirm-sheet.ts` exports
+      `buildConfirmSheetBody`; `modals/confirm-modal.ts` now `export class ConfirmModal`, consuming
+      it rather than hand-building the same markup a second time. `tools/live/sheet-grammar.mjs`'s
+      `confirm` row mounts the real primitive (imported, not mirrored) and is asserted at 7 of 7
+      canonical grammar elements plus the dropdown column, including in the title-centring probe it
+      was previously excluded from. `053` and `055` were already consumers of the `confirmWithModal`
+      wrapper around this primitive at every sort-conflict and destructive call site. This bullet is
+      silent on E4 (whether a destructive confirm is shown at all) by design — that stays the
+      operator's, tracked at AC-012 — and answers only whether one exported path exists, which it
+      does.
 - [ ] **The shell's geometry and motion read from the values `050` measured, not from per-surface
       literals.** **Today: per-surface literals**, and the shell has no geometry of its own. The
       adopted values are `design-trueup.md` §2 and §4: **8px** popover radius, **16px** horizontal
@@ -171,10 +184,10 @@ Everything below is VOLATILE.
 | Designs trued against the captures | Done first-hand | This packet's own `design-trueup.md` — 151 desktop states, 600 menu files, 118 iOS sheets, every number sampled per pixel. `050`'s read is extended, not consumed: it had no phone captures, so the phone half of every shell value is measured here for the first time |
 | `modal-surface-inventory.md` | Done | Landed as `design-trueup.md` — the filename changed and nothing else did. 35 of 35 census rows, 31 of 31 registered pairs |
 | **Retargeted to Anytype parity by default** | Done | Operator 2026-09-05 (~18:30): *"Yes, parity by default."* `decision-record.md` ADR-007 (Accepted); `design-trueup.md` §8. **18** declines flipped, **3** accessibility exceptions named with their measurements, **1** hold flagged for the operator (the confirm), **1** over-generalisation corrected (two phone frame shapes, not one) |
-| Red-first measurements | Pending | T002 fills `checklist.md`'s Today column |
-| Shell and confirm legs | Pending | T003-T009, one leg per file group |
-| Lane rows | Pending | T010-T011 |
-| Device pass | Pending | T012, operator-owned, stays unticked |
+| Red-first measurements | Done | `checklist.md`'s Today column filled across every criterion, 2026-09-05 onward |
+| Shell and confirm legs | Done | T003-T009 (shell, 2026-09-05/06) and T013 (confirm, fourth landing 2026-09-06 — `confirm-sheet.ts` exported, `ConfirmModal` exported, `053`/`055` already consuming it) |
+| Lane rows | Partial | Title centring and the C10 frame shape (T011/T012), plus the confirm grammar's fidelity and the 44px edge-control token (T015, fourth landing) are permanent rows with negative controls. The primary-action pill, the trailing chip and motion timing (AC-006/AC-007) still have none |
+| Device pass | Pending | T018, operator-owned, stays unticked |
 
 ### Deviations and findings
 

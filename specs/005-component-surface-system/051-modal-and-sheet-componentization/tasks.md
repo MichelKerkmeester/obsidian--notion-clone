@@ -475,13 +475,57 @@ excluded on its own recorded terms.
       own primitive right now; touching `modals/confirm-modal.ts` here would edit a file two legs are
       about to converge on from different directions, which is exactly the two-writer collision goal
       D7 exists to prevent. Stays blocked on the operator's E4 ruling and `055`'s own landing.
-- [ ] **T014 — [P] Register `053`'s sort-conflict confirm and `055`'s destructive-confirm as
+      **Fourth landing, 2026-09-06 — the operator separated the two questions this row was blocked
+      on conflating.** E4 (whether a destructive confirm is shown at all) stays theirs to rule on and
+      is untouched here; the primitive that builds whatever confirm sheet IS shown was never itself
+      in question, and `055`'s migration onto `DbModal`/`getDeclaredTitle`/`getShellRole` had already
+      landed (`7663423b`), so the two-writer collision this task was waiting out no longer exists.
+      **Done.** `src/views/confirm-sheet.ts` (new) exports `buildConfirmSheetBody` — the title, the
+      message row and the actions row, with the destructive action carrying the `mod-warning` class
+      the confirm surface's design was always going to keep (`design-trueup.md` row 1, "inferred from
+      source code, not seen" — nothing here was measured against a capture, since none exists).
+      `modals/confirm-modal.ts` now `export class ConfirmModal` (was unexported) and its `onOpen`
+      calls the shared builder instead of hand-building the same three elements a second time.
+      **Grammar, 7 of 7**: `tools/live/sheet-grammar.mjs`'s `confirm` row already asserted this in
+      the main loop; what it measured until now was a hand-mirrored copy of `confirm-modal.ts`'s
+      markup, kept in sync "by the same discipline," not by import. It now imports
+      `buildConfirmSheetBody` (and `buildShellHeader`, wired through `attachSheetChromeToModal`'s
+      `buildHeader` option exactly as `createSurfaceShell` wires it) so the mounted instance is the
+      real primitive, not a mirror of it. **Title centring, newly assertable**: `confirm` was
+      excluded from `TITLE_CENTERED_SURFACES` because its stand-in built the legacy two-slot
+      `createSheetHeader` shape, not `buildShellHeader`'s three-slot one — the exclusion is removed
+      and `__shellHeaderCentering` gained a `confirm` branch mirroring `__sheetGrammar`'s own.
+      **Red-first proof, observed directly**: reverting the stand-in's `buildHeader` wiring (kept as
+      a local, uncommitted diff, re-run, reverted) took the lane from exit 0 to exit 1 —
+      `FAIL confirm — no .db-shell-header title to measure` — then back to exit 0 with the fix
+      restored, confirmed twice. `node tools/live/sheet-grammar.mjs` → exit 0, 0 `FAIL` lines,
+      confirm's 8 columns (7 canonical plus dropdown) and its title-centring row both green.
+      `npx tsc --noEmit` → 0; `npx vitest run` → 0, 1442 passing across 137 files (confirm-modal's
+      three existing mocking suites and `surface-shell.test.ts`'s `getDeclaredTitle`/`getShellRole`
+      literal-source check on `modals/confirm-modal.ts` all unaffected, since neither method's
+      signature moved).
+- [x] **T014 — [P] Register `053`'s sort-conflict confirm and `055`'s destructive-confirm as
       consumers, not as new surfaces.** **Threshold**: zero second confirm implementations across
       the three packets. **Red-first proof**: both sibling packets currently name a primitive that
       does not exist.
       **Left alone, 2026-09-06** — same reason as T013: nothing here can register a consumer of a
       primitive T013 has not exported yet, and `055`'s own in-flight migration is the leg actually
       touching the confirm sheet at this moment.
+      **Fourth landing, 2026-09-06 — done, and mostly already true.** `053`'s sort-conflict confirm
+      (`database-view.ts:3934`, `embedded-database-renderer.ts:2470`) and every destructive-confirm
+      call site `055` touches (`database-view.ts:4428,4965,7545,9401,9948`,
+      `embedded-database-renderer.ts:2471`, `column-operations.ts`, `row-menu.ts`,
+      `cell-editor-option.ts`, `status-options-modal.ts`, `formula-modal.ts`, `settings.ts`) already
+      call the exported `confirmWithModal` wrapper, not a hand-built dialog — `rg -c
+      "confirmWithModal\(" src/ --type ts` finds every one of them, and none builds its own
+      `.db-modal-actions` row. What T013 closes is the primitive underneath that wrapper; T014's own
+      remaining threshold — a census of hand-built confirm markup — reads **0** in `src/`:
+      `rg -n "db-modal-actions" src/ --type ts` resolves to exactly the one declaration inside
+      `confirm-sheet.ts` plus its one consumer, `confirm-modal.ts`. The generic modal-child stand-in
+      the stacked-pair registry's `openHostModalChild` builds (`tools/live/sheet-grammar.mjs`) is
+      unrelated — it fakes "some modal child" for two different stacking scenarios (`Confirm` and
+      `Import`) and was never a confirm implementation to begin with; it carries no actions row and
+      is not counted here.
 - [ ] **T015 — Add one permanent lane row per shell deliverable, each with a negative control.**
       **Threshold**: `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0; each control observed red
       before its green. **Red-first proof**: the rows do not exist.
@@ -496,6 +540,30 @@ excluded on its own recorded terms.
       full geometry and motion set (AC-006, AC-007), most of which (the primary action, the trailing
       chip, motion timing) still has no lane row at all — broader than the two rows this leg's own
       defects needed.
+      **Fourth landing, 2026-09-06 — one more permanent row, plus the state of the rest named
+      honestly.** Of the four candidates still open: **the confirm grammar** closes with T013 above
+      — it is now a real, mounted-instance assertion rather than a hand-mirrored one, and it already
+      ran on every invocation before this leg (the gap this leg closed was fidelity, not existence).
+      **The 44px edge-control token** gets its own new row: `tools/live/sheet-grammar.mjs` §2e
+      measures `.db-sheet-close`'s rendered size on `sort-panel` (44 × 44px), then a negative control
+      overrides `--db-shell-edge-control-size` on `.db-surface` (the class the token is actually
+      declared under, `styles.css:94` — a `:root` override was tried first and read 44×44 unchanged,
+      because `.db-surface`'s own declaration on the panel element wins over anything merely
+      inherited) to 60px, confirms the close control measures 60 × 60, then removes the override and
+      confirms it returns to 44 × 44. Observed red-then-green directly: the mis-scoped `:root`
+      version read `FAIL overriding the token moves the close control (44.0x44.0)`, exit 1; the
+      `.db-surface`-scoped version reads `PASS … (60.0x60.0)` and `PASS … restores 44px (44.0x44.0)`,
+      exit 0. **Declared-title coverage** is not a new row here — it already has a permanent,
+      regression-sensitive check, just not in this lane: `surface-shell.test.ts`'s
+      `it.each(DECLARING_SUBCLASS_FILES)` reads the shipped source of all seventeen declaring
+      subclasses (thirteen `sheet` plus four `fullscreen`) on every `npx vitest run`/`npm test`, and
+      goes red the moment any one of them stops overriding `getDeclaredTitle`/`getShellRole`. **The
+      sub-page shape** stays unclosed for the reason `goal.md`'s own log already names: no producer
+      calls `pushSubPage`/`popSubPage` in production yet (`view-config-panel-renderer.ts` is outside
+      this leg's file group), so there is nothing to mount and measure. **Still not closed**: the
+      primary action pill and the trailing header chip (AC-006) and the motion timing band (AC-007)
+      carry no lane row yet — narrower than at the last landing (two gaps closed, one clarified as
+      already covered, one left open with its reason), not fully closed.
 - [x] **T016 — [P] Re-read the board and gantt parity captures against T003's baseline.**
       **Threshold**: `pixelHash`-identical, or an operator ruling on the difference (parent goal
       D5). **Red-first proof**: T003's recorded hashes.
@@ -532,9 +600,24 @@ excluded on its own recorded terms.
       bands would manufacture a disagreement rather than confirm one. **Conflicts named, not taken**:
       rows 29, 33 and 35 retarget widths and a row shape `design-system.md` §5 owns, and row 21's
       bottom-anchored search is `053`'s — recorded at `../roadmap.md` §7.11.
-- [ ] **T019 — Reconcile completion metadata and validate.**
+- [x] **T019 — Reconcile completion metadata and validate.**
       `validate.sh <this folder> --strict` first `RESULT:` PASSED; `checklist.md` every item marked
       with evidence; `goal.md`'s log updated; graph metadata regenerated after the last doc edit.
+      **Fourth landing, 2026-09-06.** `acceptance-criteria.md` AC-005 moved to `Met` with its green
+      evidence appended beside the original red baseline; `checklist.md` C5 ticked with the same
+      evidence, C10 gained a fourth-landing paragraph for the new edge-control-token row;
+      `tasks.md` T013/T014 ticked, T015 left unticked with an honest account of what it closed
+      (confirm grammar, edge-control token, declared-title already covered elsewhere) against what
+      it still does not (the primary-action pill, the trailing chip, motion timing); `goal.md`'s
+      §3 confirm-primitive bullet ticked with its green result, its §4 Progress table's four stale
+      "Pending" rows corrected against the current task numbering, and its frontmatter
+      (`recent_action`, `next_safe_action`, `completion_pct`) brought current;
+      `implementation-summary.md`'s metadata table, frontmatter and Known Limitations updated, plus
+      a "Fourth landing" section appended matching the Third landing's own format. Graph metadata
+      regenerated twice (`backfill-graph-metadata.ts`, scoped to this folder) — once after the
+      first doc pass, once more after a `SPECDOC_FRONTMATTER_004` finding
+      (`implementation-summary.md`'s `next_safe_action` read as narrative, not compact; corrected
+      to an imperative phrase). `node "$(realpath .opencode)/skills/system-spec-kit/runtime/dist/lib/validation/orchestrator.js" <this folder> --strict` → first `RESULT:` **PASSED**, `Errors: 0 Warnings: 0`, re-run after the fix. Isolated `npm run gate </dev/null > ".gate-<pid>.log" 2>&1; echo $?` → **0**, 26 green (two lanes needed a run after this leg's own edits, not a regression: `operator-list` regenerated after `goal.md`'s confirm row ticked, `story-coverage` closed by writing `confirm-sheet.stories.ts` rather than an allowlist entry, since the module is genuinely renderable). `npx tsc --noEmit` → 0; `npx vitest run` → 0, 1442 passing across 137 files; `npm run build` → 0. `styles.css` untouched this session, so no capture recapture is owed.
 <!-- /ANCHOR:phase-4 -->
 
 ---

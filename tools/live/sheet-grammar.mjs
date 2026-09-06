@@ -100,12 +100,10 @@ const REGISTERED_SURFACES = [
   // ConfirmModal itself can never mount here: it extends Obsidian's Modal, which the bundle's
   // stub throws on rather than fakes (obsidian-stub.mjs's own module comment — out of scope for
   // a vault-less bundle, same reason no lane anywhere mounts a real Modal subclass). The
-  // "confirm" case in __sheetGrammar below is the same stand-in the stacked-pair registry's
-  // openHostModalChild already uses for a modal child, kept in sync with confirm-modal.ts's own
-  // markup by hand rather than by import: title, then the message as a .db-panel-row, then the
-  // action row, wired through the real attachSheetChromeToModal/placeSheet/keepSheetPlaced so the
-  // header, keyboard and safe-area columns measure the shared production mechanism rather than a
-  // second, parallel one.
+  // "confirm" case in __sheetGrammar below stands in for the Modal wrapper only: the body
+  // inside it is built by the shipped confirm-sheet.ts primitive, imported rather than
+  // hand-copied, wired through the real attachSheetChromeToModal/placeSheet/keepSheetPlaced so
+  // every column measures the shared production mechanism, not a second, parallel one.
   { name: "confirm", spec: { renderer: "confirm" } },
 ];
 
@@ -113,20 +111,23 @@ const REGISTERED_SURFACES = [
 // 2c. TITLE CENTRING
 // ───────────────────────────────────────────────────────────────────
 
-// Every registered header-bearing surface, minus the three whose header is not `buildShellHeader`'s
+// Every registered header-bearing surface, minus the two whose header is not `buildShellHeader`'s
 // at all — `record-detail` and `record-peek` draw `.db-record-detail-header` by hand in
 // `record-detail-panel.ts`, a third header shape this leg does not touch (`record-header.ts`'s own
-// phone builder now calls `buildShellHeader` too, but no production caller has reached it yet),
-// and `confirm` draws the host modal's own title, has no `renderer` case to mount through, and is
-// the one surface still waiting on the shared confirm primitive (the overflow sweep below excludes
-// it for the same reason, through its own stand-in instead) — plus the one this defect was
-// actually found on: `column-manager` pairs a fixed-width leading
+// phone builder now calls `buildShellHeader` too, but no production caller has reached it yet) —
+// plus the one this defect was actually found on: `column-manager` pairs a fixed-width leading
 // slot with a wider trailing one (the "All" toggle beside the close), so it is the one member of
 // this list guaranteed to expose an unmirrored slot if the centring rule regresses —
 // constructed-column-manager's "Properties" measured off centre before buildShellHeader grouped
 // its trailing children into one box the grid could mirror.
+//
+// `confirm` has no `renderer` case in the generic dispatcher (`runRenderAssertions`), so it is
+// measured through its own mount below (`__shellHeaderCentering`'s "confirm" branch) rather than
+// through the loop the other rows share — it is included in this list, not excluded from it, and
+// the overflow sweep's own exclusion (§2b) is unrelated: that one is already covered by the
+// stacked-pair rows.
 const TITLE_CENTERED_SURFACES = [
-  ...REGISTERED_SURFACES.filter((s) => s.name !== "record-detail" && s.name !== "record-peek" && s.name !== "confirm"),
+  ...REGISTERED_SURFACES.filter((s) => s.name !== "record-detail" && s.name !== "record-peek"),
   { name: "column-manager", spec: { renderer: "column-manager", bag: "file-view", captureData: true } },
 ];
 
@@ -152,6 +153,18 @@ const FRAME_INSET_PX = 8;
 const FRAME_RADIUS_FLOATING_PX = 16;
 const FRAME_RADIUS_FLUSH_PX = 8;
 const FRAME_GEOMETRY_TOLERANCE_PX = 0.5;
+
+// ───────────────────────────────────────────────────────────────────
+// 2e. THE EDGE-CONTROL TOKEN
+// ───────────────────────────────────────────────────────────────────
+
+// The close control and the sub-page back control read one shared custom property
+// (`--db-shell-edge-control-size`, styles.css) rather than each repeating 44px at its own
+// selector. Reusing `sort-panel` costs no new fixture — it is already registered above and
+// already the drag-handle negative control's own surface.
+const EDGE_CONTROL_TOKEN_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "sort-panel");
+const EDGE_CONTROL_TOKEN_DEFAULT_PX = 44;
+const EDGE_CONTROL_TOKEN_OVERRIDE_PX = 60;
 
 // Each entry names a real parent shape from the render harness and the production opener family
 // used by the child. The adapter below keeps the row contract identical for dropdowns, menus,
@@ -272,6 +285,8 @@ import { createOwnedMenu } from "${fileURLToPath(new URL("../../src/views/owned-
 import { closeActiveDateValuePicker, renderDateValuePicker } from "${fileURLToPath(new URL("../../src/views/date-value-picker.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { openIconPickerPopover } from "${fileURLToPath(new URL("../../src/views/icon-picker-popover.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { openOptionColorPicker } from "${fileURLToPath(new URL("../../src/views/option-color-picker.ts", import.meta.url)).replace(/\\/g, "/")}";
+import { buildConfirmSheetBody } from "${fileURLToPath(new URL("../../src/views/confirm-sheet.ts", import.meta.url)).replace(/\\/g, "/")}";
+import { buildShellHeader } from "${fileURLToPath(new URL("../../src/views/surface-shell.ts", import.meta.url)).replace(/\\/g, "/")}";
 
 setLocale("en");
 
@@ -308,35 +323,25 @@ const measureMountedSheet = (sheet) => {
 };
 
 // ConfirmModal extends Obsidian's Modal, which this bundle's stub deliberately cannot fake (see
-// the "confirm" registry entry's comment). This mirrors confirm-modal.ts's own onOpen markup by
-// hand — title, then the message as a .db-panel-row, then the action row — and wires it through
-// the real chrome/placement functions so every column but the markup mirror itself measures the
-// production mechanism. Kept in sync with confirm-modal.ts by the same discipline the stacked-
-// pair registry's openHostModalChild already carries for a modal child.
+// the "confirm" registry entry's comment). This builds the same host shape confirm-modal.ts's
+// onOpen does — a plain modal-container/modal-content pair — but the content inside it is the
+// real, shipped buildConfirmSheetBody, and the header is the real, shipped buildShellHeader, the
+// same pair createSurfaceShell wires together for every other DbModal subclass. Nothing about the
+// markup is mirrored by hand any more; only the Modal host itself is stood in for.
 const mountConfirmStandIn = () => {
   const panel = document.createElement("div");
   panel.className = "modal-container";
   const content = document.createElement("div");
   content.className = "modal-content note-database-modal";
-  const heading = document.createElement("h3");
-  heading.textContent = "Delete this row?";
-  content.appendChild(heading);
-  const message = document.createElement("div");
-  message.className = "db-modal-help db-panel-row";
-  message.textContent = "This action cannot be undone.";
-  content.appendChild(message);
-  const actionsRow = document.createElement("div");
-  actionsRow.className = "db-modal-actions";
-  const cancelBtn = document.createElement("button");
-  cancelBtn.type = "button";
-  cancelBtn.textContent = "Cancel";
-  actionsRow.appendChild(cancelBtn);
-  const confirmBtn = document.createElement("button");
-  confirmBtn.type = "button";
-  confirmBtn.className = "mod-warning";
-  confirmBtn.textContent = "Delete";
-  actionsRow.appendChild(confirmBtn);
-  content.appendChild(actionsRow);
+  buildConfirmSheetBody(content, {
+    title: "Delete this row?",
+    message: "This action cannot be undone.",
+    cancelText: "Cancel",
+    confirmText: "Delete",
+    danger: true,
+    onCancel: () => {},
+    onConfirm: () => {},
+  });
   panel.appendChild(content);
   document.body.appendChild(panel);
   let closed = false;
@@ -348,7 +353,9 @@ const mountConfirmStandIn = () => {
     releaseChrome?.();
     if (panel.isConnected) panel.remove();
   };
-  const releaseChrome = attachSheetChromeToModal(panel, true, close);
+  const releaseChrome = attachSheetChromeToModal(panel, true, close, {
+    buildHeader: (headerPanel, title, onClose) => buildShellHeader(headerPanel, { title, onClose }),
+  });
   placeSheet(panel);
   releasePlacement = keepSheetPlaced(panel);
   return { panel, close };
@@ -416,6 +423,12 @@ const measureTitleCenter = (sheet) => {
 };
 
 window.__shellHeaderCentering = (scenario) => {
+  if (scenario.renderer === "confirm") {
+    const { panel, close } = mountConfirmStandIn();
+    const result = { mounted: true, sheetFound: panel.classList.contains("db-mobile-bottom-sheet"), ...measureTitleCenter(panel) };
+    close();
+    return result;
+  }
   let result = { mounted: false };
   runRenderAssertions(document.body, scenario, "", () => {
     const sheet = mountedSheet();
@@ -509,6 +522,45 @@ window.__sheetFrameShapeNegativeControl = (scenario) => {
   runRenderAssertions(document.body, scenario, "", () => {
     const sheet = mountedSheet();
     if (sheet) fixed = measureFrameShape(sheet);
+  });
+  return { broken, fixed };
+};
+
+const measureEdgeControl = (sheet) => {
+  const close = sheet?.querySelector(".db-sheet-close");
+  if (!close) return null;
+  const rect = close.getBoundingClientRect();
+  return { width: rect.width, height: rect.height };
+};
+
+window.__shellEdgeControlToken = (scenario) => {
+  let measured = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    measured = measureEdgeControl(mountedSheet());
+  });
+  return measured;
+};
+
+// The negative control overrides the token itself, not the rule that reads it, so a close
+// control still hardcoding 44px somewhere else would stay green here while failing the plain
+// measurement above — the pairing is what proves there is one declared value, not a literal
+// that happens to agree with it today.
+window.__shellEdgeControlTokenNegativeControl = (scenario, overridePx) => {
+  const style = document.createElement("style");
+  // Overridden on .db-surface, not :root: the sheet panel carries that class itself
+  // (mobile-bottom-sheet.ts), which is where the token is actually declared (styles.css), so an
+  // ancestor-scoped override would only ever reach an element nothing inherits it FROM — a
+  // custom property re-declared at the element itself always wins over one merely inherited.
+  style.textContent = ".db-surface { --db-shell-edge-control-size: " + overridePx + "px !important; }";
+  document.head.appendChild(style);
+  let broken = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    broken = measureEdgeControl(mountedSheet());
+  });
+  style.remove();
+  let fixed = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    fixed = measureEdgeControl(mountedSheet());
   });
   return { broken, fixed };
 };
@@ -1356,6 +1408,38 @@ try {
     if (!cleanAfter) failures.push("frame shape negative control: the real rule did not restore the floating geometry");
     console.log(`  ${wentRed ? "PASS" : "FAIL"}  neutralised CSS goes flush despite the floating classification (left ${frameShapeControl.broken.left}px, radius ${frameShapeControl.broken.topLeftRadius}px)`);
     console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  the real rule restores the floating geometry (left ${frameShapeControl.fixed.left}px, radius ${frameShapeControl.fixed.topLeftRadius}px)`);
+  }
+  console.log("");
+
+  console.log("sheet-grammar: edge control token — the close control reads --db-shell-edge-control-size\n");
+  const edgeControlMeasured = await page.evaluate((scenario) => window.__shellEdgeControlToken(scenario), EDGE_CONTROL_TOKEN_SURFACE.spec);
+  if (!edgeControlMeasured) {
+    failures.push("edge control token: no close control to measure");
+    console.log("  FAIL  edge control token — no close control to measure");
+  } else {
+    const atDefault = Math.abs(edgeControlMeasured.width - EDGE_CONTROL_TOKEN_DEFAULT_PX) <= FRAME_GEOMETRY_TOLERANCE_PX
+      && Math.abs(edgeControlMeasured.height - EDGE_CONTROL_TOKEN_DEFAULT_PX) <= FRAME_GEOMETRY_TOLERANCE_PX;
+    if (!atDefault) failures.push(`edge control token: close measured ${edgeControlMeasured.width.toFixed(1)}x${edgeControlMeasured.height.toFixed(1)}, wanted ${EDGE_CONTROL_TOKEN_DEFAULT_PX}x${EDGE_CONTROL_TOKEN_DEFAULT_PX}`);
+    console.log(`  ${atDefault ? "PASS" : "FAIL"}  edge control token — close measures ${edgeControlMeasured.width.toFixed(1)}x${edgeControlMeasured.height.toFixed(1)}, wanted ${EDGE_CONTROL_TOKEN_DEFAULT_PX}x${EDGE_CONTROL_TOKEN_DEFAULT_PX}`);
+  }
+
+  const edgeControlControl = await page.evaluate(
+    ({ scenario, overridePx }) => window.__shellEdgeControlTokenNegativeControl(scenario, overridePx),
+    { scenario: EDGE_CONTROL_TOKEN_SURFACE.spec, overridePx: EDGE_CONTROL_TOKEN_OVERRIDE_PX },
+  );
+  console.log(`sheet-grammar: edge control token negative control — ${EDGE_CONTROL_TOKEN_SURFACE.name}'s token overridden\n`);
+  if (!edgeControlControl.broken || !edgeControlControl.fixed) {
+    failures.push("edge control token negative control: the surface did not mount a sheet to measure");
+    console.log("  FAIL  edge control token negative control — the surface did not mount a sheet to measure");
+  } else {
+    const wentRed = Math.abs(edgeControlControl.broken.width - EDGE_CONTROL_TOKEN_OVERRIDE_PX) <= FRAME_GEOMETRY_TOLERANCE_PX
+      && Math.abs(edgeControlControl.broken.height - EDGE_CONTROL_TOKEN_OVERRIDE_PX) <= FRAME_GEOMETRY_TOLERANCE_PX;
+    const cleanAfter = Math.abs(edgeControlControl.fixed.width - EDGE_CONTROL_TOKEN_DEFAULT_PX) <= FRAME_GEOMETRY_TOLERANCE_PX
+      && Math.abs(edgeControlControl.fixed.height - EDGE_CONTROL_TOKEN_DEFAULT_PX) <= FRAME_GEOMETRY_TOLERANCE_PX;
+    if (!wentRed) failures.push(`edge control token negative control: overriding the token did not move the close control (measured ${edgeControlControl.broken.width.toFixed(1)}x${edgeControlControl.broken.height.toFixed(1)})`);
+    if (!cleanAfter) failures.push(`edge control token negative control: removing the override did not restore ${EDGE_CONTROL_TOKEN_DEFAULT_PX}px (measured ${edgeControlControl.fixed.width.toFixed(1)}x${edgeControlControl.fixed.height.toFixed(1)})`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  overriding the token moves the close control (${edgeControlControl.broken.width.toFixed(1)}x${edgeControlControl.broken.height.toFixed(1)})`);
+    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores ${EDGE_CONTROL_TOKEN_DEFAULT_PX}px (${edgeControlControl.fixed.width.toFixed(1)}x${edgeControlControl.fixed.height.toFixed(1)})`);
   }
   console.log("");
 

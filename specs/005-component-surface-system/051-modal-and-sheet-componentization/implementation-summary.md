@@ -12,25 +12,28 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/051-modal-and-sheet-componentization"
-    last_updated_at: "2026-09-06T05:30:00Z"
+    last_updated_at: "2026-09-06T08:15:00Z"
     last_updated_by: "implementer-session"
-    recent_action: "Fixed title centring, migrated 9 headers, shipped C10 frame shapes; gate green"
-    next_safe_action: "T013 waits on the operator's ADR-007 E4 ruling on the confirm"
+    recent_action: "Exported the confirm primitive, wired both lane rows to it, added the edge-control-token row"
+    next_safe_action: "T015: add the primary-action, trailing-chip and motion-timing lane rows"
     blockers:
-      - "Every criterion except AC-004 is still Unmet; the shell exists and no producer consumes it"
+      - "AC-004/AC-005 are Met; the rest of the criterion set still needs the sub-page producer, motion consumption and the remaining geometry lane rows"
       - "T010 stays blocked on spec.md §11's second open question, which no capture can answer"
       - "AC-012's E4 row needs the operator's ruling before the parity rule can read Met"
     key_files:
       - "src/views/surface-shell.ts"
       - "src/views/surface-shell.test.ts"
       - "src/views/modals/db-modal.ts"
+      - "src/views/modals/confirm-modal.ts"
+      - "src/views/confirm-sheet.ts"
       - "src/views/mobile-bottom-sheet.ts"
+      - "tools/live/sheet-grammar.mjs"
       - "specs/005-component-surface-system/051-modal-and-sheet-componentization/design-trueup.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-051-impl"
       parent_session_id: null
-    completion_pct: 45
+    completion_pct: 55
     open_questions:
       - "Do the three FuzzySuggestModal subclasses join the shell or stay Obsidian-native behind a shim?"
     answered_questions:
@@ -51,7 +54,7 @@ _memory:
 |-------|-------|
 | **Spec Folder** | 051-modal-and-sheet-componentization |
 | **Status** | Draft |
-| **Completed** | Not complete — opened 2026-09-05; T001-T007 landed the same day, T008/T009/T011/T012 landed 2026-09-06, T010 blocked on the operator, T013 onward unstarted |
+| **Completed** | Not complete — opened 2026-09-05; T001-T007 landed the same day, T008/T009/T011/T012/T016/T017/T020 landed 2026-09-06, T013/T014 landed 2026-09-06 (fourth landing), T015 partial (two of its four named gaps closed, one clarified as already covered elsewhere, one open pending a producer), T010 blocked on the operator, T018 the operator's device pass, T019 this reconciliation |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -208,13 +211,15 @@ division is wrong by 3× and the row heights read as 150.
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-- **The shell now has consumers for two of its five behaviours.** Seventeen of twenty surfaces
+- **The shell now has consumers for three of its five behaviours.** Seventeen of twenty surfaces
   declare a title and a role (T008/T009); eleven of twelve independent header sites call the shell's
-  header builder (T011). No producer pushes a sub-page, no transition reads the motion constants, and
-  no confirm primitive is exported — which is why `053` and `055` both still name one that is not
-  there. Three outlier `FuzzySuggestModal` callers still reach the engine directly, and T010 stays
-  blocked on the operator: `spec.md`'s own reconciliation log says the question is unanswerable from
-  any capture, because Anytype has no host application to be native to.
+  header builder (T011); the confirm primitive is exported and consumed (T013/T014, fourth landing) —
+  `src/views/confirm-sheet.ts`'s `buildConfirmSheetBody` and `modals/confirm-modal.ts`'s now-exported
+  `ConfirmModal`, both `053`'s sort-conflict confirm and `055`'s destructive-confirm call sites already
+  routing through the `confirmWithModal` wrapper around it. No producer pushes a sub-page and no
+  transition reads the motion constants. Three outlier `FuzzySuggestModal` callers still reach the
+  engine directly, and T010 stays blocked on the operator: `spec.md`'s own reconciliation log says the
+  question is unanswerable from any capture, because Anytype has no host application to be native to.
 - **The shell's DOM half has no unit coverage.** `buildShellHeader`, its back control and the header
   refresh are the only markup this leg ships, and they are proven by two Storybook stories and by
   nothing that runs in the gate. The suite says a live document would be needed;
@@ -229,9 +234,13 @@ division is wrong by 3× and the row heights read as 150.
   literals the landing verification flagged (`.db-shell-header-leading`'s `min-width`,
   `.db-shell-back`'s `width`/`height`) with one shared `--db-shell-edge-control-size` token, also
   adopted by `.db-sheet-close`.
-- **Ten of the thirty-five rows have no reference at all**, including row 1, the confirm — the
-  subject of AC-005. No destructive confirm appears in the 118 iOS states or the 600 menu files, and
-  the desktop crawler refuses destructive actions by name. Their designs stay inferred from source.
+- **Ten of the thirty-five rows have no reference at all**, including row 1, the confirm. No
+  destructive confirm appears in the 118 iOS states or the 600 menu files, and the desktop crawler
+  refuses destructive actions by name. Their designs stay inferred from source — this is unaffected by
+  AC-005 reading `Met`, which is about the primitive existing and being exported, not about a capture
+  for its own design existing. **AC-012's E4 row is still the operator's**: whether a destructive
+  confirm is shown at all remains open; the primitive built here is what any confirm the operator
+  keeps would use, not a decision on whether one stays.
 - **`spec.md` §11's second open question is unanswerable from captures.** Whether the three
   `FuzzySuggestModal` subclasses join the shell or stay Obsidian-native behind a shim is a question
   about our host application, and the reference has no host. T010 stays blocked.
@@ -310,4 +319,75 @@ the one new class name this leg adds.
 isolated `npm run gate` **PASS 26 green / 0 red** exit 0, `npm run replay` **28/28 held**,
 `evidence.mjs --check-all` 15 of 15 fresh.
 <!-- /ANCHOR:third-landing -->
+
+---
+
+<!-- ANCHOR:fourth-landing -->
+## Fourth landing, 2026-09-06 — T013/T014 closed, T015 deepened
+
+**T013 — the confirm primitive, exported.** `src/views/confirm-sheet.ts` (new) exports
+`buildConfirmSheetBody`: a declared title, the message as a `.db-panel-row`, and an actions row of
+cancel, an optional secondary action, then confirm — the destructive action carrying `mod-warning`.
+`modals/confirm-modal.ts` now `export class ConfirmModal` (was module-private) and its `onOpen`
+calls the shared builder instead of building the same three elements a second time. This was
+possible without waiting on `055` because that packet's own migration onto `DbModal`/
+`getDeclaredTitle`/`getShellRole` had already landed (`7663423b`); the two-writer collision the task
+was left blocked on no longer existed, and E4 (whether a destructive confirm is shown at all)
+stayed the operator's, untouched.
+
+**The lane's own gap, closed.** `tools/live/sheet-grammar.mjs`'s `confirm` row already asserted all
+seven grammar elements plus the dropdown column, but through markup hand-mirrored from
+`confirm-modal.ts`'s onOpen — "kept in sync by the same discipline," per its own comment, not by
+import. It now imports `buildConfirmSheetBody` directly, and its header is now `buildShellHeader`
+(imported, wired through `attachSheetChromeToModal`'s `buildHeader` option exactly as
+`createSurfaceShell` wires it), rather than the legacy two-slot builder. This closed a second gap:
+`confirm` was excluded from `TITLE_CENTERED_SURFACES` because its old header shape had no
+`.db-shell-header` to measure; `__shellHeaderCentering` gained a `confirm` branch mirroring
+`__sheetGrammar`'s own, and the exclusion is lifted. **Red-then-green, observed directly rather than
+assumed**: reverting the header's `buildHeader` wiring took `node tools/live/sheet-grammar.mjs` from
+exit 0 to exit 1 (`FAIL confirm — no .db-shell-header title to measure`); restoring it returned exit
+0, confirmed twice.
+
+**T014 — the census, and it was mostly already true.** Every sort-conflict and destructive-confirm
+call site (`database-view.ts`, `embedded-database-renderer.ts`, `column-operations.ts`,
+`row-menu.ts`, `cell-editor-option.ts`, `status-options-modal.ts`, `formula-modal.ts`,
+`settings.ts`) already called the exported `confirmWithModal` wrapper, not a hand-built dialog. What
+T013 closed was the primitive underneath that wrapper being real and exported; T014's own remaining
+threshold — a count of hand-built confirm markup in `src/` — reads **1** (`confirm-sheet.ts`'s own
+declaration, `confirm-modal.ts` its one consumer), read via `rg -n "db-modal-actions" src/ --type ts`.
+
+**T015 — one more permanent row, and the other three candidates dispositioned.** Of the four gaps
+the last landing named still open: the **confirm grammar** closes with T013 above (fidelity, not a
+new assertion — it already ran on every invocation). The **44px edge-control token** gets a new row
+(`tools/live/sheet-grammar.mjs` §2e): `.db-sheet-close` measures 44 × 44px on `sort-panel`; a
+negative control overrides `--db-shell-edge-control-size` — scoped to `.db-surface`, the class the
+token is actually declared under, after a first attempt scoped to `:root` read unchanged (a direct
+declaration on the panel element wins over anything merely inherited) — to 60px, confirms the
+close control follows to 60 × 60px, then restores 44 × 44px on removal. Both directions observed
+directly: the mis-scoped version failed (`FAIL overriding the token moves the close control
+(44.0x44.0)`, exit 1), the corrected version passed twice (exit 0). **Declared-title coverage** was
+never a gap in this lane specifically: `surface-shell.test.ts`'s `it.each(DECLARING_SUBCLASS_FILES)`
+already reads all seventeen declaring subclasses' shipped source on every `vitest run`, regression-
+sensitive by construction. **The sub-page shape** stays open for the reason already on record: no
+producer calls `pushSubPage`/`popSubPage` in production. Still open: the primary-action pill, the
+trailing header chip and the motion-timing band (AC-006, AC-007) carry no lane row yet.
+
+**A new module needed a story, and got one honestly rather than an allowlist entry.**
+`confirm-sheet.ts` sits in `src/views/` (not `src/views/modals/`, which the story-coverage scanner
+does not walk), and `buildConfirmSheetBody` takes an `HTMLElement` parameter, so it registered as
+renderable. `src/views/confirm-sheet.stories.ts` demonstrates both the destructive and the
+secondary-action shape, matching the pattern `surface-shell.stories.ts` already set for
+`buildShellHeader`.
+
+**Gate from the final state**, each exit status read from a file rather than a pipe:
+`npx tsc --noEmit` 0, `npx vitest run` **1442/1442** in 137 files, `npm run build` 0,
+`npm run story:coverage` 0 (18/39 renderable, `confirm-sheet.ts` now covered),
+`node tools/naming/build-operator-checklist.mjs --check` 0 (regenerated after `goal.md`'s confirm
+row ticked), `node tools/live/sheet-grammar.mjs` 0 with 0 `FAIL` lines, isolated
+`npm run gate </dev/null > ".gate-<pid>.log" 2>&1; echo $?` **0**, 26 green, confirmed twice in
+direct succession. `validate.sh`-equivalent (`runtime/dist/lib/validation/orchestrator.js --strict`)
+first `RESULT:` **PASSED** after the graph-metadata backfill and one `next_safe_action` wording fix
+(`SPECDOC_FRONTMATTER_004`, narrative rather than compact — corrected). `styles.css` untouched this
+session; no capture recapture was owed.
+<!-- /ANCHOR:fourth-landing -->
 

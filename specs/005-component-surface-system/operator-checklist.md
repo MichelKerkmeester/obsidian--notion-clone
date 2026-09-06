@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-06: **58 phases**, **6 with nothing left**, **164 rows** waiting on a device.
+Derived 2026-09-06: **58 phases**, **6 with nothing left**, **163 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -273,12 +273,11 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] `npm run gate` exits 0 with one permanent lane row per item, each observed red before green, and `npm run replay` holds with reversed 0.
 - [ ] The operator opens the board and a table on iOS and on desktop and reads the adopted surfaces as the improvement they asked for. Only the operator closes this row; nothing in this repository can.
 
-## 051-modal-and-sheet-componentization — 0/7
+## 051-modal-and-sheet-componentization — 1/7
 
 - [ ] One shell primitive produces every modal and every sheet, and the replaced vocabularies are gone. Today: four. `DbModal.applyPresentation` (`modals/db-modal.ts:92-113`) decides one; `attachSheetChromeToModal` is called directly by three non-`DbModal` surfaces (`src/main.ts:3047`, `image-file-suggest-modal.ts:40`, `markdown-file-suggest-modal.ts:34`); `createSheetHeader` is called independently at twelve sites; and `getSheetTitle` (`db-modal.ts:83-88`) recovers a title by scraping the first `h1`/`h2`/`h3` in the content because no surface declares one. Done is one constructor, one declared title per surface, and the three direct `attachSheetChromeToModal` callers routed through it or dispositioned in `modal-surface-inventory.md` with a written reason.
 - [ ] Every modal surface in the family is dispositioned in `modal-surface-inventory.md`: surface → shell role → presentation → changes → Anytype pattern with its capture or its named gap → stays ours. Today: no such table exists. The census it is built from is real and counted from source at HEAD: 20 `extends DbModal` subclasses, of which 13 declare `sheet`, 4 declare `fullscreen` and 3 inherit the `sheet` default; 3 `FuzzySuggestModal` subclasses outside `DbModal` entirely; 12 `createSheetHeader` call sites; and `mobile-bottom-sheet.ts` at 840 lines with 19 exports.
 - [ ] A sub-page inside a shell replaces in place with a back affordance, and a picker opened from a shell opens as its own surface over an undimmed parent. Today: neither pattern exists as a shell affordance — a sub-page is whatever its own surface builds, and `048`'s stacking is the only thing a child surface inherits. This is `design-trueup.md` REQ-002's captured finding (`anytype-view-settings-panel-dark.png`: tapping `Layout` swaps the panel body inside the same 360px frame and the header becomes `‹ Layout`; `+ New filter` opens a 256px picker that overlaps its parent, which stays fully visible and undimmed), and it is the phone-correct pattern `048` REQ-002 already prefers — a parent that does not move is cheaper than a parent that dims and scales back.
-- [ ] One confirm primitive, carrying `044`'s seven grammar elements, is the only confirm path.
 - [ ] The shell's geometry and motion read from the values `050` measured, not from per-surface literals. Today: per-surface literals, and the shell has no geometry of its own. The adopted values are `design-trueup.md` §2 and §4: 8px popover radius, 16px horizontal and 8px vertical padding, 8px divider clearance, 28px rows (adopted as the measured Anytype value *and* our own `design-system.md` §9 coarse-pointer floor — the named deviation from the 4/8/12/16/24/32 scale, recorded rather than absorbed), 360px for the `panel` role, and motion enter 200ms `ease-out` / exit 150ms `ease-in`. On the phone the floor is `044`'s 44px close, unchanged.
 - [ ] `npm run gate` exits 0 read from `$?`, with one permanent lane row per shell deliverable, each negative control observed red before green; `npm run replay` holds with reversed 0; the
 - [ ] The operator opens a modal, a sheet, a sub-page and a destructive confirm on iOS and on desktop and reads them as one surface family, debugged, refined, perfected. Only the operator closes this row; nothing in this repository can.

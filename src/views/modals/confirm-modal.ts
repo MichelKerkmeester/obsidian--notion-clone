@@ -13,6 +13,7 @@
 
 import { App } from "obsidian";
 import { t } from "../../i18n";
+import { buildConfirmSheetBody } from "../confirm-sheet";
 import { DbModal } from "./db-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 
@@ -33,7 +34,7 @@ export interface ConfirmModalOptions {
 // 3. MODAL
 // ───────────────────────────────────────────────────────────────────
 
-class ConfirmModal extends DbModal {
+export class ConfirmModal extends DbModal {
   private resolve?: (result: boolean | string) => void;
 
   constructor(
@@ -59,40 +60,23 @@ class ConfirmModal extends DbModal {
   }
 
   onOpen(): void {
-    // Content is built BEFORE the base class presents the shell, not after: on a phone,
-    // DbModal's shell (createSurfaceShell) scrapes the first heading in contentEl to title
-    // the header it builds inside super.onOpen() itself — 044's grammar, carried through the
-    // shared createSheetHeader machinery every phone sheet already reads rather than a second,
-    // parallel header this modal would otherwise have to build and deduplicate against it.
-    // Building afterward left the scrape empty on its first pass and the correct title arriving
-    // only on the next microtask, a visible flash this ordering removes.
+    // Content is built before the base class presents the shell (super.onOpen(), below): the
+    // title comes from getDeclaredTitle() above rather than a scrape of contentEl, so the
+    // shell's phone header never has to wait on this body existing — the order is simply the
+    // simpler one to read, not load-bearing the way it was before the title was declared.
     this.contentEl.empty();
     this.contentEl.addClass("note-database-modal");
-    this.contentEl.createEl("h3", { text: this.options.title });
-    // db-panel-row is the sheet grammar's shared row shape (044): on a phone, the shell marks
-    // this modal's own root as the .note-database-container the row's padding rule is scoped
-    // under, so the confirm's body reads as a padded row like every other phone sheet's content
-    // rather than as bare, unpadded text.
-    this.contentEl.createDiv({ cls: "db-modal-help db-panel-row", text: this.options.message });
-
-    const actions = this.contentEl.createDiv({ cls: "db-modal-actions" });
-    actions.createEl("button", {
-      text: t("common.cancel"),
-      attr: { type: "button" },
-    }).onclick = () => this.finish(false);
-
-    if (this.options.secondaryButton) {
-      actions.createEl("button", {
-        text: this.options.secondaryButton.text,
-        attr: { type: "button" },
-      }).onclick = () => this.finish(this.options.secondaryButton!.value);
-    }
-
-    actions.createEl("button", {
-      cls: this.options.danger ? "mod-warning" : "mod-cta",
-      text: this.options.confirmText || t("common.delete"),
-      attr: { type: "button" },
-    }).onclick = () => this.finish(true);
+    buildConfirmSheetBody(this.contentEl, {
+      title: this.options.title,
+      message: this.options.message,
+      cancelText: t("common.cancel"),
+      confirmText: this.options.confirmText || t("common.delete"),
+      danger: this.options.danger,
+      secondaryButton: this.options.secondaryButton,
+      onCancel: () => this.finish(false),
+      onConfirm: () => this.finish(true),
+      onSecondary: (value) => this.finish(value),
+    });
 
     super.onOpen();
   }

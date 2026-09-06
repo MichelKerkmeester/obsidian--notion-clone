@@ -1,0 +1,73 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    confirm-sheet
+// COMPONENT: the shared confirm body — title, message row and actions row
+// ───────────────────────────────────────────────────────────────────
+//
+// `ConfirmModal` already gets its handle, header, placement, keyboard avoidance and
+// stacked-over-parent behaviour from the shell (`createSurfaceShell`, composed through
+// `DbModal`). What it built by hand was the content inside that chrome — a title, a
+// message row and an actions row — and a live-lane probe that measures the same shape
+// had to rebuild that markup itself, by hand, to stand in for a modal it cannot mount.
+// Two hand-built copies of one dialog's body is the shape this module removes: one
+// builder, read by the production modal and by the probe that measures it.
+
+// ───────────────────────────────────────────────────────────────────
+// 1. TYPES
+// ───────────────────────────────────────────────────────────────────
+
+export interface ConfirmSheetSecondaryAction {
+  text: string;
+  value: string;
+}
+
+export interface ConfirmSheetBodyOptions {
+  title: string;
+  message: string;
+  cancelText: string;
+  confirmText: string;
+  /** Styles the confirm action as the destructive one. */
+  danger?: boolean;
+  /** An optional third button between cancel and confirm. */
+  secondaryButton?: ConfirmSheetSecondaryAction;
+  onCancel(): void;
+  onConfirm(): void;
+  onSecondary?(value: string): void;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 2. BODY
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * Build a confirm dialog's content into an already-chromed host: a declared title, the
+ * message as a padded row, and an actions row of cancel, an optional secondary action,
+ * then confirm — the destructive action carrying the danger styling.
+ */
+export function buildConfirmSheetBody(host: HTMLElement, options: ConfirmSheetBodyOptions): void {
+  host.createEl("h3", { text: options.title });
+  // db-panel-row is the sheet grammar's shared row shape (044): on a phone, the shell marks
+  // this modal's own root as the .note-database-container the row's padding rule is scoped
+  // under, so the confirm's body reads as a padded row like every other phone sheet's content
+  // rather than as bare, unpadded text.
+  host.createDiv({ cls: "db-modal-help db-panel-row", text: options.message });
+
+  const actions = host.createDiv({ cls: "db-modal-actions" });
+  actions.createEl("button", {
+    text: options.cancelText,
+    attr: { type: "button" },
+  }).onclick = () => options.onCancel();
+
+  if (options.secondaryButton) {
+    const secondary = options.secondaryButton;
+    actions.createEl("button", {
+      text: secondary.text,
+      attr: { type: "button" },
+    }).onclick = () => options.onSecondary?.(secondary.value);
+  }
+
+  actions.createEl("button", {
+    cls: options.danger ? "mod-warning" : "mod-cta",
+    text: options.confirmText,
+    attr: { type: "button" },
+  }).onclick = () => options.onConfirm();
+}
