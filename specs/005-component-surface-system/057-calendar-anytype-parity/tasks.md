@@ -220,7 +220,16 @@ _memory:
       the gantt did not move.
       **R4**: the week and day headers still build the one-string static title
       (`calendar-renderer.ts:1731`, `:1748`) while only the month header takes the two selects, so
-      "the same header grammar" is half true. **R5**: the day number's ink sits **18px** below the
+      "the same header grammar" is half true.
+      **R4 done 2026-09-06.** `renderCalendarTitle` (the shared static-title renderer week/day both
+      called) is replaced by `renderScaleTitleSelects`, the same two-button
+      `db-calendar-title-select` component the month header uses, opening the same shared
+      dropdown-menu listbox — button text stays each scale's own range/day text
+      (`parts.main`/`parts.year`, week and day have no single "current month" a month view has),
+      and choosing an option calls a new `navigateCalendarTitleTo`, which jumps that scale's anchor
+      into the picked month/year, clamping the existing day-of-month to the target month's last day
+      rather than always resetting to day 1. `calendar-renderer.test.ts` (15/15) and the two guard
+      tests (16/16) stay green with no modification; `npx tsc --noEmit` exit 0. **R5**: the day number's ink sits **18px** below the
       cell top and **7-8px** inside the right rule against the reference's 12px and 5px — the
       12px heading padding is applied above a flex row that then centres a 16px line, so the
       padding and the ink offset are not the same number. **R6**: the weekday labels read `Sun`

@@ -1728,12 +1728,13 @@ export class CalendarRenderer {
 
 	private renderWeekHeader(wrap: HTMLElement, config: ViewConfig, weekDays: CalendarDayModel[]): void {
 		const header = wrap.createDiv({ cls: "db-calendar-header" });
-		this.renderCalendarTitle(header, formatCalendarTitleParts({
+		const anchorKey = weekDays[0]?.dateKey || this.getTodayDateKey();
+		this.renderScaleTitleSelects(header, anchorKey, formatCalendarTitleParts({
 			scale: "week",
 			startDateKey: weekDays[0]?.dateKey,
 			endDateKey: weekDays[weekDays.length - 1]?.dateKey,
 			locale: getEffectiveLocale(),
-		}));
+		}), (year, monthIndex) => this.navigateCalendarTitleTo(config, anchorKey, year, monthIndex));
 		const controls = header.createDiv({ cls: "db-calendar-controls" });
 		this.renderCalendarScaleControl(controls, config, "week", weekDays[0]?.dateKey || this.getTodayDateKey());
 		this.renderNavButton(controls, "calendar.prevWeek", () => this.shiftWeek(config, weekDays, -1), "chevron-left");
@@ -1745,11 +1746,11 @@ export class CalendarRenderer {
 
 	private renderDayHeader(wrap: HTMLElement, config: ViewConfig, dateKey: string): void {
 		const header = wrap.createDiv({ cls: "db-calendar-header" });
-		this.renderCalendarTitle(header, formatCalendarTitleParts({
+		this.renderScaleTitleSelects(header, dateKey, formatCalendarTitleParts({
 			scale: "day",
 			startDateKey: dateKey,
 			locale: getEffectiveLocale(),
-		}));
+		}), (year, monthIndex) => this.navigateCalendarTitleTo(config, dateKey, year, monthIndex));
 		const controls = header.createDiv({ cls: "db-calendar-controls" });
 		this.renderCalendarScaleControl(controls, config, "day", dateKey);
 		this.renderNavButton(controls, "calendar.prevDay", () => this.shiftDay(config, dateKey, -1), "chevron-left");
@@ -2513,13 +2514,77 @@ export class CalendarRenderer {
 		this.actions.onConfigChange?.(t("undo.calendarMonthConfig"));
 	}
 
-	private renderCalendarTitle(parent: HTMLElement, parts: CalendarTitleParts): void {
-		const title = parent.createDiv({
+	/** Week and day are styled to the month grid's own vocabulary, header included:
+	 *  the same two select buttons the month header uses (`renderMonthTitleSelects`) rather than a
+	 *  static title, opening the same shared dropdown-menu listbox. The button
+	 *  text stays each scale's own range/day text (`parts.main`/`parts.year`) —
+	 *  a week or day has no single "current month" the way a month view does —
+	 *  and choosing an option jumps that scale's anchor into the chosen
+	 *  month/year, preserving the day-of-month where the target month has it. */
+	private renderScaleTitleSelects(
+		header: HTMLElement,
+		anchorDateKey: string,
+		parts: CalendarTitleParts,
+		onNavigate: (year: number, monthIndex: number) => void,
+	): void {
+		const title = header.createDiv({
 			cls: "db-calendar-title",
 			attr: { title: parts.ariaLabel, "aria-label": parts.ariaLabel },
 		});
-		title.createSpan({ cls: "db-calendar-title-main", text: parts.main });
-		if (parts.year) title.createSpan({ cls: "db-calendar-title-year", text: parts.year });
+		const anchor = parseDateTimeParts(anchorDateKey);
+		const year = anchor ? anchor.year : new Date().getFullYear();
+		const monthIndex = anchor ? Number(anchor.month) - 1 : new Date().getMonth();
+		const monthNames = this.getMonthNames();
+		const monthButton = title.createEl("button", {
+			cls: "db-calendar-title-main db-calendar-title-select",
+			text: parts.main,
+			attr: { type: "button", "aria-haspopup": "listbox" },
+		});
+		monthButton.onclick = (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			openDropdownMenu({
+				anchor: monthButton,
+				label: t("calendar.selectMonth"),
+				options: monthNames.map((name, index) => ({ value: String(index), text: name })),
+				value: String(monthIndex),
+				onChange: (value) => onNavigate(year, Number(value)),
+			});
+		};
+		if (!parts.year) return;
+		const yearButton = title.createEl("button", {
+			cls: "db-calendar-title-year db-calendar-title-select",
+			text: parts.year,
+			attr: { type: "button", "aria-haspopup": "listbox" },
+		});
+		yearButton.onclick = (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			const years: string[] = [];
+			for (let y = year - 100; y <= year + 100; y++) years.push(String(y));
+			openDropdownMenu({
+				anchor: yearButton,
+				label: t("calendar.selectYear"),
+				options: years.map((y) => ({ value: y, text: y })),
+				value: String(year),
+				onChange: (value) => onNavigate(Number(value), monthIndex),
+			});
+		};
+	}
+
+	/** Jumps a week/day scale's anchor to the chosen year/month, clamping the
+	 *  existing day-of-month to that month's last day rather than always
+	 *  resetting to the 1st (e.g. picking February keeps the 28th, not Feb 1). */
+	private navigateCalendarTitleTo(config: ViewConfig, currentDateKey: string, year: number, monthIndex: number): void {
+		const current = parseDateTimeParts(currentDateKey);
+		const day = current ? Number(current.day) : 1;
+		const daysInMonth = new Date(Date.UTC(year, monthIndex + 1, 0)).getUTCDate();
+		const clampedDay = Math.min(day, daysInMonth);
+		const dateKey = `${String(year).padStart(4, "0")}-${String(monthIndex + 1).padStart(2, "0")}-${String(clampedDay).padStart(2, "0")}`;
+		config.calendarDay = dateKey;
+		config.calendarWeekStart = dateKey;
+		config.calendarMonth = dateKey.slice(0, 7);
+		this.actions.onConfigChange?.(t("undo.calendarMonthConfig"));
 	}
 
 	private formatMonthTitle(year: number, monthIndex: number): string {

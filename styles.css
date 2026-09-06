@@ -17240,7 +17240,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   height: var(--db-week-grid-height, 1152px);
 }
 
-/* Week grid slot lines: ADR-002 styles week/day to the month grid, so the rule
+/* Week grid slot lines: week/day are styled to the month grid, so the rule
    colour is the same measured #EBEBEB/#292929 the month grid's day-cell
    borders use (src/views/calendar-renderer.ts's day-cell rules, above), not
    the theme's own --background-modifier-border. The hour/sub-hour opacity
@@ -18027,10 +18027,11 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   pointer-events: none;
 }
 
-/* ADR-002 styles week/day to the month grid, whose today marker is the
+/* Week/day are styled to the month grid, whose today marker is the
    measured #216DFA (above) rather than the theme's --db-current-time-color —
    the literal colour is repeated here rather than reassigning that variable,
-   because it is also `db-timeline-*`'s and the gantt does not move (goal D7). */
+   because it is also `db-timeline-*`'s, and the gantt (a Project Manager
+   port) is not this view's to recolour. */
 .note-database-container .db-calendar-timed-current-line {
   position: absolute;
   left: 0;
@@ -19207,9 +19208,10 @@ body.pm-resize-active * {
   font-weight: 700;
 }
 
-/* ADR-002: the calendar's own current-time tick takes the month grid's
-   measured #216DFA rather than --db-current-time-color, which stays
-   --db-timeline-*'s and the gantt's own (goal D7, unmoved). */
+/* The calendar's own current-time tick takes the month grid's measured
+   #216DFA rather than --db-current-time-color, which stays --db-timeline-*'s
+   and the gantt's own — the gantt is a Project Manager port and its colours
+   are not this view's to change. */
 .note-database-container .db-calendar-week-hour-label.is-current-time-tick {
   color: #216DFA;
   font-weight: 700;
