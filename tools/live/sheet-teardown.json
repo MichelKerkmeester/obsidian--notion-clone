@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-09-06T00:49:17.480Z",
+  "measuredAt": "2026-09-06T00:45:13.446Z",
   "inputs": {
     "tools/live/sheet-teardown.mjs": "41e92c7d1071",
     "tools/live/sheet-teardown-harness.ts": "c53bc9ae20d3",
     "src/views/mobile-bottom-sheet.ts": "8d6b7775ca2a",
     "src/views/popover-position.ts": "7edae5db0282",
-    "src/views/owned-menu.ts": "00981471a65c"
+    "src/views/owned-menu.ts": "c5e1ea424001"
   },
   "producers": 12,
   "leaking": 0,

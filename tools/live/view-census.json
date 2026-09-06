@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-06T00:26:56.932Z",
+  "measuredAt": "2026-09-06T00:43:42.573Z",
   "inputs": {
     "styles.css": "213a349fab9b",
     "tools/live/view-census.mjs": "1fad37270f0b",
@@ -360,7 +360,7 @@
     }
   ],
   "totals": {
-    "fixtures": 71,
+    "fixtures": 73,
     "escaping": 656,
     "growing": 310,
     "scrolling": 346,
@@ -7969,6 +7969,16 @@
     },
     {
       "width": 320,
+      "fixture": "chrome-toast-success",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
+      "fixture": "chrome-toast-error",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "field-cell-edit-text",
       "probe": "4px"
     },
@@ -8324,6 +8334,16 @@
     },
     {
       "width": 402,
+      "fixture": "chrome-toast-success",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-toast-error",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "field-cell-edit-text",
       "probe": "4px"
     },
@@ -8679,6 +8699,16 @@
     },
     {
       "width": 768,
+      "fixture": "chrome-toast-success",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
+      "fixture": "chrome-toast-error",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "field-cell-edit-text",
       "probe": "4px"
     },
@@ -9030,6 +9060,16 @@
     {
       "width": 1440,
       "fixture": "chrome-selection-status-bar",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "chrome-toast-success",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "chrome-toast-error",
       "probe": "4px"
     },
     {
