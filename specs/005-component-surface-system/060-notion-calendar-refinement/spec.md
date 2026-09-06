@@ -22,7 +22,7 @@ contextType: "planning"
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Draft |
+| **Status** | Implemented — AC-001 through AC-007 Met; D1-D4 operator-owned (`acceptance-criteria.md` section 4) |
 | **Created** | 2026-09-06 |
 | **Owner surface** | `057-calendar-anytype-parity` |
 | **Opened by** | The Opus synthesis of `057`'s five-iteration `/deep:research:auto` loop on GLM 5.3 flash max |

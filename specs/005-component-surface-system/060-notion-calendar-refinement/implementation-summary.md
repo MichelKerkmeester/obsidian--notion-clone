@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Notion Calendar Refinement"
-description: "Placeholder. The packet is open and no code has changed; this document is written when the two legs land."
+description: "Both legs landed: the all-day strip's inline range string is gone and the mini day-cell's phone touch floor is pinned at 44px, each proven red first."
 trigger_phrases:
   - "060 implementation summary"
   - "calendar refinement summary"
@@ -10,21 +10,26 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/060-notion-calendar-refinement"
-    last_updated_at: "2026-09-06T16:45:00Z"
-    last_updated_by: "opus-synthesis"
-    recent_action: "Placed the placeholder; nothing has shipped"
-    next_safe_action: "Leave this file alone until T003 and T005 land"
-    blockers: []
+    last_updated_at: "2026-09-07T00:00:00Z"
+    last_updated_by: "claude-code-implementer"
+    recent_action: "Landed both legs, pinned both with negative controls, ran the full verification chain"
+    next_safe_action: "Recapture and review the screenshot corpus (T008), then hand D1-D4 to the operator"
+    blockers:
+      - "Device check D1 (phone date-edit chrome) stays open; the 44px lift targets the popover's current selector regardless"
     key_files:
       - "src/views/calendar-renderer.ts"
+      - "src/views/calendar-renderer.test.ts"
+      - "src/views/calendar-pinned-values.test.ts"
       - "styles.css"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-060-summary"
       parent_session_id: null
-    completion_pct: 0
-    open_questions: []
-    answered_questions: []
+    completion_pct: 80
+    open_questions:
+      - "D1: does a phone date-edit present as a popover or an 044 sheet"
+    answered_questions:
+      - "T004's CSS retirement finds nothing inert: the base .db-calendar-month-dates rule and its :has() flex bound stay live for the day popover, overflow popover and drag ghost"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
 # Implementation Summary
@@ -41,9 +46,10 @@ _memory:
 |-------|-------|
 | **Spec Folder** | 060-notion-calendar-refinement |
 | **Opened** | 2026-09-06 |
-| **Completed** | Not yet |
+| **Completed** | 2026-09-07 |
 | **Level** | 2 |
 | **Baseline tree** | `3e1c3c65` |
+| **Implementation tree** | `e5830232` (`3e1c3c65` plus unrelated commits already on `origin/main`) |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -51,18 +57,45 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-**Nothing yet.** The packet is open and no source file has changed. This document is a placeholder
-until T003 and T005 land; writing it before then would claim work that has not happened.
+Both legs of `goal.md` D4 landed, each proven red first and pinned with a negative control.
 
-What exists today is the record: a five-iteration research loop
-(`../057-calendar-anytype-parity/research/research.md`), a reconciliation of every one of its findings
-against `main` at `3e1c3c65`, seven ADRs, seven acceptance rows and four device checks.
+**Leg 1 — the all-day strip's inline range string is gone.** The week and day all-day strip's
+spanning bar no longer prints its own `start-end` date string. The range stays reachable exactly
+where Notion's own frames leave it: the chip's `title` tooltip (`getSegmentTitle`, unchanged) and the
+day and overflow popovers (unchanged). The day popover, the overflow popover and the drag ghost are
+not in-grid resting chips and were left alone.
+
+**T004's own finding.** Retiring the CSS the removal "makes inert" turned up nothing to retire.
+Tracing the DOM each producer actually builds (not the diff) showed the all-day strip's span was
+nested two levels down (`eventEl > content > .db-calendar-month-dates`), so the shared `:has(>
+.db-calendar-month-dates)` flex bound never matched it, before or after this change. Its live matches
+are the day popover, the overflow popover (both share `.db-calendar-day-popover-events`) and the drag
+ghost — all three still emit `.db-calendar-month-dates` as a direct child of `.db-calendar-month-segment`,
+and the drag ghost's dates span is unconditional. The base `.db-calendar-month-dates` rule and the
+`:has()` bound both stay, and a pin now asserts both by name so a future cleanup pass does not delete
+either while these three producers still need them.
+
+**Leg 2 — the mini day-cell clears its touch floor on phone.** `.db-calendar-mini-day` (34px toolbar
+variant, 28px date-edit popover variant) now reads 44px under `.is-phone`, in both variants, via one
+shared rule. The `(pointer: coarse)` 28px floor needed no new CSS: both variants' unconditional bases
+already clear 28px, confirmed by a stylesheet-wide sweep that found no coarse-pointer or `hover: none`
+block shrinking either. Device check D1 (which chrome a phone date-edit takes) stays open for the
+operator; the lift targets the popover's current known selector regardless of the answer.
+
+**One correction to the packet's own record.** `acceptance-criteria.md`'s AC-003 describes the
+date-edit popover's 28px rule as sitting inside a `(hover: hover)` block. `git blame` on
+`styles.css:6941-6945` shows it unconditional since `33d526f08` (2026-07-04) — no such block has ever
+wrapped it. The observed 28px value and the phone-floor gap it names are unchanged; only that one
+framing detail was wrong, and this document records the correction rather than repeating it.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| - | - | No source file changed by this packet yet |
+| `src/views/calendar-renderer.ts` | Modify | Deleted the guarded `content.createSpan({ cls: "db-calendar-month-dates", ... })` call and its `endDateKey > startDateKey` guard from the all-day strip's segment loop (`:862-864` on `3e1c3c65`; same relative position on `e5830232`) |
+| `styles.css` | Modify | Added one rule lifting `.db-calendar-mini-day` to 44px under `.is-phone`, covering the toolbar variant (`.note-database-container .db-calendar-mini-day`) and the date-edit popover variant (`.db-cell-edit-popover.db-date-edit-popover .db-calendar-mini-day`) together (`:18667`). No rule deleted — T004 found the shared `.db-calendar-month-dates` rule and its `:has()` bound both still reachable |
+| `src/views/calendar-renderer.test.ts` | Modify | Added one constructed-render test proving 0 `.db-calendar-month-dates` inside `.db-calendar-week-allday-cols` for a multi-day event, with the tooltip's range preserved. Not in `spec.md`'s file list; added because the file already carries every mock and fixture this proof needs and duplicating that harness elsewhere would have been the larger change |
+| `src/views/calendar-pinned-values.test.ts` | Modify | Three new pins: the range-string removal (source-text, with the three surviving producers as a positive control), the still-reachable `.db-calendar-month-dates` / `:has()` rules, and the mini day-cell's phone floor (44px, both variants) alongside its unconditional 34px/28px bases |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -70,9 +103,14 @@ against `main` at `3e1c3c65`, seven ADRs, seven acceptance rows and four device 
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Written when the legs land. The delivery shape is in `plan.md`: red-first proof, then two independent
-edits, then pins with negative controls, then the three gates and a recapture that is looked at rather
-than counted.
+Red first, both legs. T001(a) was proven red by writing the constructed-render test against the
+unfixed renderer (`expected 0, received 1`), then fixing `calendar-renderer.ts` and re-running it
+green. T001(b) was proven red by writing the phone-floor pin against the unfixed stylesheet (`selector
+not found verbatim`, reconfirmed by stashing the CSS addition and re-running), then adding the rule and
+re-running green. T002's shared-class inventory was written before T004's CSS decision, not after.
+`npx tsc --noEmit`, `npm run build`, the full `npx vitest run` (1524/1524), `tools/live/sheet-grammar.mjs`
+and `tools/live/render-assertions.mjs` all ran from the final tree and are recorded in Verification
+below, alongside the two naming scans and the full `npm run gate`.
 <!-- /ANCHOR:how-delivered -->
 
 ---

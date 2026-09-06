@@ -39,7 +39,7 @@
       "floor"
     ],
     "importance_tier": "important",
-    "status": "draft",
+    "status": "complete",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -49,7 +49,12 @@
       "decision-record.md",
       "implementation-summary.md",
       "src/views/calendar-renderer.ts",
-      "src/views/calendar-pinned-values.test.ts"
+      "src/views/calendar-renderer.test.ts",
+      "src/views/calendar-pinned-values.test.ts",
+      "tools/live/sheet-grammar.mjs",
+      "tools/live/render-assertions.mjs",
+      "tools/lane/css-lane.json",
+      "tools/naming/scan-comments.mjs"
     ],
     "entities": [
       {
@@ -101,9 +106,39 @@
         "source": "derived"
       },
       {
+        "name": "calendar-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/calendar-renderer.test.ts",
+        "source": "derived"
+      },
+      {
         "name": "calendar-pinned-values.test.ts",
         "kind": "test",
         "path": "src/views/calendar-pinned-values.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertions.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "scan-comments.mjs",
+        "kind": "file",
+        "path": "tools/naming/scan-comments.mjs",
         "source": "derived"
       },
       {
@@ -165,41 +200,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Key Components",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Notion's 40-screen calendar harvest changes exactly one design decision on this surface, and the calendar rebuild landed most of its consequences before this packet opened",
     "created_at": "2026-09-06T16:38:53Z",
-    "last_save_at": "2026-09-06T18:19:27.654Z",
+    "last_save_at": "2026-09-06T22:54:50.351Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -211,14 +216,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:42bd7deb9f61508fe4749c45001849838b996b5e67f8204f14bf25f1599c1363",
+    "source_fingerprint": "sha256:abeda36b0c258e3e9f7e3c5d15afbbff57b2947b29cd115c5def3cde9fef1c97",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "6ed41abfd8ff2cc30a9874c8dfeab6ce0f760ddd5bdbe76272e37b08d1a3695d",
+      "spec.md": "86aaeda3c1c26ad2728dab6b435e83985b5716aea3d19e6e72694a9e1590a842",
       "plan.md": "a8eda29118349ba05aa91f349912acd1015da39b72d98c28162e2b512ff3921a",
-      "tasks.md": "8764501af3316eaecd9d07ccb17bdf405f5145c41ba6a6dcfdce6b20f0b8ade9",
+      "tasks.md": "2a0b9da74ff9ed2c90b4a393c2d3becbdcd5e9d04da1753d14fef78d2741ed36",
       "decision-record.md": "71bc88bcea41fc399f8034a5b8a9f8ec93f93f9545c1c242a4aa25b1d6ef94ec",
-      "implementation-summary.md": "2c55902e72c3331e3b2bf8f3cce862e0e96452956f4985afa50bbc7ea205cd9e"
+      "implementation-summary.md": "de7216caea9f98a50385085e7090d3e667b90f171e92c9a495462f3463f37f58"
     },
     "last_active_at": null
   }

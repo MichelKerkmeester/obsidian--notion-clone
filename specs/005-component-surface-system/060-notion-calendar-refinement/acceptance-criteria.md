@@ -47,9 +47,9 @@ _memory:
 
 **Packet:** 005-component-surface-system/060-notion-calendar-refinement
 **Level:** 2
-**Status:** Draft
+**Status:** Implemented — AC-001 through AC-007 Met; D1-D4 operator-owned (section 4)
 **Date:** 2026-09-06
-**Baseline tree:** `3e1c3c65` - every observed red below was read on `origin/main` at it after the rebase, not carried from the research loop; the first read happened pre-rebase on the tree whose digest commit was then `fe6ee9de` and is now `38db667a`, and every anchor it cited is re-derived here
+**Baseline tree:** `3e1c3c65` - every observed red below was read on `origin/main` at it after the rebase, not carried from the research loop; the first read happened pre-rebase on the tree whose digest commit was then `fe6ee9de` and is now `38db667a`, and every anchor it cited is re-derived here. **Implementation tree:** `e5830232` (`3e1c3c65` plus unrelated commits already landed on `origin/main` by the time this packet's code legs started) - both observed-red values re-confirmed on it before either fix; line numbers moved, the values and the defects did not
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -61,13 +61,13 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
-| AC-001 | REQ-001 | Given a week-scale render carrying one all-day event whose `endDateKey > startDateKey`, When the all-day strip paints its spanning bar, Then **0** `.db-calendar-month-dates` elements exist inside `.db-calendar-week-allday-cols`, on the desktop profile and the phone profile alike | Constructed render assertion plus a pin in `calendar-pinned-values.test.ts`, with the negative control that restoring the emitter turns red. **Observed red on `3e1c3c65`: 1**, emitted at `src/views/calendar-renderer.ts:862-864`; styled `styles.css:17361-17373`; no `is-mobile` rule exists against it, while the sibling `.db-calendar-month-time` is hidden on mobile at `styles.css:17791`. Notion prints no such string on any multi-day bar it draws: three frames of one entry observed across a drag, eleven weeks of bar between them (`057/notion-screens-digest.md:163-171` and `:226-231`; screens `23cdb6d5`, `1c3f11f8`, `132e14f0`) | Unmet | - |
-| AC-002 | REQ-001 | Given the same event, When a user reads the chip's tooltip or opens the day or overflow popover, Then the full `start-end` range is still present | Assert `getSegmentTitle`'s output still carries the range after AC-001 lands; render `calendar-renderer.ts:628` and `:930` and read the span | Unmet | - |
-| AC-003 | REQ-002 | Given the phone profile, When the toolbar mini calendar or the date-edit popover paints a day cell, Then every `.db-calendar-mini-day` hit target reads **>= 44 CSS px** | Computed-style read per profile, pinned with a negative control. **Observed red on `3e1c3c65`: 34px** (`styles.css:15938`) and **28px** in the date-edit variant (`styles.css:6942`, inside a `(hover: hover)` block a touch device never enters). No `mini-*` selector carries a touch floor anywhere in the stylesheet - swept across all eight `(pointer: coarse)` / `(hover: none)` blocks and every `.is-phone` / `body.is-mobile` calendar rule. The calendar's own touch floors sit at `styles.css:20733-20856`, `:18492-18511` and the `.is-phone` rule at `:18628-18630`, and none of the three reaches a `mini-*` selector | Unmet | - |
-| AC-004 | REQ-002 | Given `(pointer: coarse)`, When either picker variant paints a day cell, Then the hit target reads **>= 28 CSS px**, and the hover-scoped desktop density at `styles.css:6942` is unchanged | Six-row matrix: {toolbar mini, date-edit} x {phone, coarse, hover desktop}, all six read from computed style | Unmet | - |
-| AC-005 | REQ-003 | Given the four Notion-versus-Anytype conflicts the harvest named, When `decision-record.md` is read, Then each has an ADR citing the Notion screen id and our `file:line` for both readings, and none un-ticks a `Met` row in `057/acceptance-criteria.md` | ADR-001 (chip presentation), ADR-002 (week start), ADR-003 (drop target), ADR-004 (today hue); re-read `057/acceptance-criteria.md` and confirm it still reads 13 `Met` of 15 | Unmet | - |
-| AC-006 | REQ-004 | Given the four research rows the calendar rebuild closed while the loop ran, When this packet is read, Then each is recorded as verification with its `main`-side evidence rather than proposed as work | Section 3 below | Unmet | - |
-| AC-007 | REQ-005 | Given the device-only checks the loop consolidated, When this packet closes, Then D1-D4 are recorded as an operator checklist and none is ticked by any agent | Section 4 below; the rows stay unticked until the operator reports | Unmet | - |
+| AC-001 | REQ-001 | Given a week-scale render carrying one all-day event whose `endDateKey > startDateKey`, When the all-day strip paints its spanning bar, Then **0** `.db-calendar-month-dates` elements exist inside `.db-calendar-week-allday-cols`, on the desktop profile and the phone profile alike | Constructed render assertion plus a pin in `calendar-pinned-values.test.ts`, with the negative control that restoring the emitter turns red. **Observed red on `3e1c3c65`: 1**, emitted at `src/views/calendar-renderer.ts:862-864`; styled `styles.css:17361-17373`; no `is-mobile` rule exists against it, while the sibling `.db-calendar-month-time` is hidden on mobile at `styles.css:17791`. Notion prints no such string on any multi-day bar it draws: three frames of one entry observed across a drag, eleven weeks of bar between them (`057/notion-screens-digest.md:163-171` and `:226-231`; screens `23cdb6d5`, `1c3f11f8`, `132e14f0`) | Met | - |
+| AC-002 | REQ-001 | Given the same event, When a user reads the chip's tooltip or opens the day or overflow popover, Then the full `start-end` range is still present | Assert `getSegmentTitle`'s output still carries the range after AC-001 lands; render `calendar-renderer.ts:628` and `:930` and read the span | Met | - |
+| AC-003 | REQ-002 | Given the phone profile, When the toolbar mini calendar or the date-edit popover paints a day cell, Then every `.db-calendar-mini-day` hit target reads **>= 44 CSS px** | Computed-style read per profile, pinned with a negative control. **Observed red on `3e1c3c65`: 34px** (`styles.css:15938`) and **28px** in the date-edit variant (`styles.css:6942`, inside a `(hover: hover)` block a touch device never enters). No `mini-*` selector carries a touch floor anywhere in the stylesheet - swept across all eight `(pointer: coarse)` / `(hover: none)` blocks and every `.is-phone` / `body.is-mobile` calendar rule. The calendar's own touch floors sit at `styles.css:20733-20856`, `:18492-18511` and the `.is-phone` rule at `:18628-18630`, and none of the three reaches a `mini-*` selector | Met | - |
+| AC-004 | REQ-002 | Given `(pointer: coarse)`, When either picker variant paints a day cell, Then the hit target reads **>= 28 CSS px**, and the hover-scoped desktop density at `styles.css:6942` is unchanged | Six-row matrix: {toolbar mini, date-edit} x {phone, coarse, hover desktop}, all six read from computed style | Met | - |
+| AC-005 | REQ-003 | Given the four Notion-versus-Anytype conflicts the harvest named, When `decision-record.md` is read, Then each has an ADR citing the Notion screen id and our `file:line` for both readings, and none un-ticks a `Met` row in `057/acceptance-criteria.md` | ADR-001 (chip presentation), ADR-002 (week start), ADR-003 (drop target), ADR-004 (today hue); re-read `057/acceptance-criteria.md` and confirm it still reads 13 `Met` of 15 | Met | - |
+| AC-006 | REQ-004 | Given the four research rows the calendar rebuild closed while the loop ran, When this packet is read, Then each is recorded as verification with its `main`-side evidence rather than proposed as work | Section 3 below | Met | - |
+| AC-007 | REQ-005 | Given the device-only checks the loop consolidated, When this packet closes, Then D1-D4 are recorded as an operator checklist and none is ticked by any agent | Section 4 below; the rows stay unticked until the operator reports | Met | - |
 
 ### Status values
 
@@ -125,7 +125,8 @@ Consolidated from the research loop's D-register. **No agent ticks a row here.**
 <!-- ANCHOR:closure -->
 ## 5. CLOSURE STATEMENT
 
-**Closeable:** No
+**Closeable:** Yes
 
-Written when the packet closes, not before.
+AC-001 through AC-007 are `Met`. The device checklist (section 4, D1-D4) is operator-owned by design
+(AC-007) and never gates this packet's own closure - it is handed off, not blocked on.
 <!-- /ANCHOR:closure -->
