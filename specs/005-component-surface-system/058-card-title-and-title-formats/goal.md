@@ -33,7 +33,7 @@ _memory:
     answered_questions:
       - "The per-view title picker is not new work: ViewConfig.titleField already exists (types.ts:570)"
       - "The record surface and phone sheet already read the same titleField as the board, for every view but calendar/timeline (record-detail-panel.ts:485-488)"
-      - "Implementation landed and verified: gate 26 green, replay 28 hold, vitest 1518/1518 (re-proven on the rebased tree); AC-008 stays the operator's"
+      - "Implementation landed and verified: gate 26 green, replay 28 hold, vitest 1520/1520 (re-proven on the rebased tree); AC-008 stays the operator's"
 ---
 # Goal: Card Title and Title Formats
 

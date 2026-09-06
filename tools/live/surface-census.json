@@ -1,12 +1,12 @@
 {
-  "measuredAt": "2026-09-06T18:24:55.013Z",
+  "measuredAt": "2026-09-06T18:42:21.068Z",
   "inputs": {
-    "styles.css": "76bc949c272b",
+    "styles.css": "f0119d333849",
     "tools/live/surface-census.mjs": "ea52a1e1e8f5",
     "src/views/surface-contract.ts": "ca203fa23a84",
     "src/views/record-detail-panel.ts": "c150d55fdd79",
     "src/views/table-record-peek.ts": "31dcefb0a474",
-    "src/views/board-card-properties-panel.ts": "36ee3fa444cc"
+    "src/views/board-card-properties-panel.ts": "20052347713c"
   },
   "totals": {
     "rendered": 85,
@@ -993,6 +993,7 @@
       "scenarios": [
         "panel-view-config-sheet",
         "panel-record-detail-sheet",
+        "panel-record-detail-sheet-title-currency",
         "panel-record-detail-sheet-body-editing",
         "panel-record-detail-sheet-body-empty",
         "panel-column-width-sheet",
@@ -1031,6 +1032,8 @@
       "scenarios": [
         "panel-record-detail",
         "panel-record-detail-sheet",
+        "panel-record-detail-title-currency",
+        "panel-record-detail-sheet-title-currency",
         "panel-record-detail-sheet-body-editing",
         "panel-record-detail-sheet-body-empty"
       ]

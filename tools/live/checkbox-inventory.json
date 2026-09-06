@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T18:23:58.239Z",
+  "measuredAt": "2026-09-06T18:41:25.441Z",
   "inputs": {
-    "styles.css": "76bc949c272b",
+    "styles.css": "f0119d333849",
     "tools/live/checkbox-inventory.mjs": "e869ed91680a"
   },
   "totals": {
@@ -142,7 +142,7 @@
     },
     {
       "file": "src/views/view-config-panel-renderer.ts",
-      "line": 2192,
+      "line": 2197,
       "chain": [
         "db-view-config-panel",
         "db-view-config-field"

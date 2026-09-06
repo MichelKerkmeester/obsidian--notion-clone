@@ -207,7 +207,7 @@
     ],
     "causal_summary": "A view's card and record title can already be set to any column (`ViewConfig.titleField`), but the",
     "created_at": "2026-09-06T06:27:07Z",
-    "last_save_at": "2026-09-06T18:33:33.138Z",
+    "last_save_at": "2026-09-06T18:46:28.698Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,14 +219,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8155c73d4393466e4bb326e951c7f68345ae15dd7236341c9f7989f8c495372c",
+    "source_fingerprint": "sha256:3dd011239076a6472740ba3846ddd98c0cd9ae8b4931d9458ed13878e3a5d168",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "e5d5f1f87dbc3eb60f999f1fa7a81d1da0b7094423a43492428909f102fccc1f",
       "plan.md": "2b114b644bc945f12ee7465c2af969119ddfe3690907644d0c0bb158b02b9063",
-      "tasks.md": "283958474e422df0c7153cd641ae0108e3734787a23082827552d8b77ec4392f",
+      "tasks.md": "c4d494c0cd12921d07f0250ec72a6572bb80fbf47303b03458059d1682d7acda",
       "decision-record.md": "11706a89e750bdfe7b1b1f7afb99cebd4d2df8e129dc800535e20980a8b0632e",
-      "implementation-summary.md": "d94056b52342404c3b4a49472aa0119888a2ff41661c3c5690c34d62aef5c63e"
+      "implementation-summary.md": "5d80ca8b70564321f404c2dee3ec97c65888523bcd3e2c71f91e52606c11444d"
     },
     "last_active_at": null
   }

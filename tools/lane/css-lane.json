@@ -1,7 +1,7 @@
 {
   "holder": "058-card-title-and-title-formats",
   "acquiredAt": "2026-09-06T22:05:00Z",
-  "baselineHash": "PENDING_HASH",
+  "baselineHash": "f0119d333849",
   "baselineCommit": null,
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -4568,7 +4568,7 @@
       "event": "release",
       "phase": "058-card-title-and-title-formats",
       "at": "2026-09-06T22:07:00Z",
-      "hash": "PENDING_HASH",
+      "hash": "f0119d333849",
       "reviewed": [
         "screenshots/notion-clone/components/board-card-title-currency-desktop-dark.png",
         "screenshots/notion-clone/components/board-card-title-currency-desktop-light.png",
@@ -4581,7 +4581,7 @@
         "screenshots/notion-clone/panels/panel-record-detail-sheet-title-currency-mobile-dark.png",
         "screenshots/notion-clone/panels/panel-record-detail-sheet-title-currency-mobile-light.png"
       ],
-      "note": "One additive rule pair, .db-view-config-row-clickable (cursor + hover/focus-visible background), marking board-card-properties-panel.ts's Title fixed slot as a row that opens the titleField picker rather than only reporting it — no existing declaration touched. cascade-audit.mjs confirms 131 conflicts before and after (0 new). Full recapture: 588 entries, verify.mjs exit 0. Ten captures carry this edit's content, all three new title-field-display scenarios (board-card-title-currency, panel-record-detail-title-currency, panel-record-detail-sheet-title-currency), each opened and read in both themes; the board fixture needed db-kanban-view added to its own container class list for the kanban-scoped chip-text-colour override to apply — a fixture-markup fix, not a stylesheet one. Seventeen further captures moved bytes at identical pixelHash and are restored to their committed bytes."
+      "note": "One additive rule pair, .db-view-config-row-clickable (cursor + hover/focus-visible background), marking board-card-properties-panel.ts's Title fixed slot as a row that opens the titleField picker rather than only reporting it — no existing declaration touched. cascade-audit.mjs confirms 131 conflicts before and after (0 new). Full recapture: 588 entries, verify.mjs exit 0. Ten captures carry this edit's content, all three new title-field-display scenarios (board-card-title-currency, panel-record-detail-title-currency, panel-record-detail-sheet-title-currency), each opened and read in both themes; the board fixture needed db-kanban-view added to its own container class list for the kanban-scoped chip-text-colour override to apply — a fixture-markup fix, not a stylesheet one. Sixteen further captures moved bytes at identical pixelHash and are restored to their committed bytes. Re-derived on the rebase onto origin/main: the four board-card captures above moved content again, not from this edit but from the board scrollbar-reveal landing that took the lane in between (the card column shifts right where the reserved gutter used to be); all four were reopened and still read the euro-formatted title. The six record-detail captures did not move."
     }
   ],
   "outstanding": [
