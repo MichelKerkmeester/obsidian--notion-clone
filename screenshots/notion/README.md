@@ -8,33 +8,35 @@ Operator request (2026-09-06): "harvest all screenshots from Notion that can be 
 
 Grouped by platform, then by subject. Filenames carry the platform, group, a slug for the query or flow that found the screen, a sequence number, and the Mobbin screen id: `notion-<platform>-<group>-<slug>-<nn>-<screen-id>.webp`. Flow files use `notion-<platform>-flow-<flow>-<nn>-<screen-id>.webp` inside `flows/<flow>/`. A screen that both a query and a flow returned is stored once per place it belongs, so the same screen id can appear in a group folder and in one or more flow folders; the unique-screen counts below are by id.
 
-**The group is the query, not a verified reading of the image.** Every file was filed under the group of the Mobbin query or flow that returned it, and Mobbin's relevance is loose: of nine web files opened during the landing check, five sit in a group they do not depict (a screen found by `Notion form` that shows an AI feedback modal, one found by `Notion filters` that shows a slash menu, one found by `Notion buttons` that shows a calendar-connect dialog, one found by `Notion columns layout` that shows an AI chat answer, one found by `Notion command palette` that shows the AI chat home). Treat a folder name as the search term that surfaced the screen and the image as the evidence; the iOS spot-checks were closer to their group but carry the same caveat.
+**Non-flow groups are classified by content; flows stay grouped by flow name.** The harvest originally filed every file under the Mobbin query that returned it, and Mobbin’s relevance is loose — a spot check found five of nine web non-flow files in a group they did not depict. On 2026-09-06 every non-flow file on both platforms was opened and reassigned to the group its screen primarily shows, and 862 of them moved; `reclassification-2026-09-06.tsv` records each move with its old path, new path and a one-line reason. The `<slug>` inside a filename still names the query that found the screen, so it will often disagree with the folder — that is the record of where the file came from, not a claim about what it shows. Files under `flows/` were not reclassified: their folder is the Mobbin flow name, which is already a reading of the sequence rather than a search term.
 
 | Folder | Files | Holds |
 |--------|------:|-------|
-| `ios/navigation/` | 100 | home, sidebar, search, tabs, breadcrumbs, favourites, recents, inbox |
-| `ios/views/` | 153 | table, board, calendar, timeline, gallery, list, form and chart views |
-| `ios/database/` | 94 | properties, property editors, filters, sorts, group-by, templates, relations, automations |
-| `ios/editors/` | 94 | page editor, blocks, slash and block menus, media, code, callouts, AI writing |
-| `ios/menus/` | 12 | context, more and page-options menus |
-| `ios/sheets/` | 27 | iOS bottom sheets: pickers, confirmations, move-to, share |
-| `ios/settings/` | 46 | account, workspace, appearance, notifications, billing, connections, import/export |
-| `ios/collaboration/` | 12 | sharing, permissions, comments, mentions, members, guests |
-| `ios/onboarding/` | 34 | sign-up, login, first-run and workspace creation |
-| `ios/states/` | 21 | empty, loading, offline and error states |
-| `ios/extra/` | 17 | screens a query surfaced that fit no group above (analytics, feedback, marketing, sites) |
+| `ios/navigation/` | 36 | home, sidebar, search, tabs, breadcrumbs, favourites, recents, inbox, trash |
+| `ios/views/` | 43 | rendered table, board, calendar, timeline, gallery, list, chart and dashboard views |
+| `ios/database/` | 120 | properties, property editors, filters, sorts, group-by, view options, data sources, automations |
+| `ios/editors/` | 125 | page editor, blocks, slash and block menus, formatting, covers, media, code, embeds |
+| `ios/ai/` | 126 | Notion AI chat, agents, AI writing, AI meeting notes, AI autofill prompts and feedback |
+| `ios/menus/` | 4 | context, more and overflow menus that are not page or property menus |
+| `ios/sheets/` | 33 | iOS bottom sheets: pickers, confirmations, move-to, share |
+| `ios/settings/` | 24 | account, workspace, appearance, notifications, billing, connections, import/export |
+| `ios/collaboration/` | 47 | sharing, publishing, permissions, comments, suggestions, members, guests |
+| `ios/onboarding/` | 29 | sign-up, login, first-run, workspace creation, plan pickers and checkout |
+| `ios/states/` | 17 | empty, loading, offline and error states |
+| `ios/marketing/` | 6 | marketplace, template gallery and other pages that are not the product UI |
 | `ios/flows/<flow>/` | 705 | 149 flows, one folder per Mobbin flow, files numbered in flow order |
-| `web/navigation/` | 244 | home, sidebar, search, tabs, breadcrumbs, favourites, recents, inbox |
-| `web/views/` | 142 | table, board, calendar, timeline, gallery, list, form and chart views |
-| `web/database/` | 77 | properties, property editors, filters, sorts, group-by, templates, relations, automations |
-| `web/editors/` | 69 | page editor, blocks, slash and block menus, media, code, callouts, AI writing |
-| `web/menus/` | 8 | context, more and page-options menus |
-| `web/dialogs/` | 6 | web modal dialogs |
-| `web/settings/` | 14 | account, workspace, appearance, notifications, billing, connections, import/export |
-| `web/collaboration/` | 9 | sharing, permissions, comments, mentions, members, guests |
-| `web/onboarding/` | 8 | sign-up, login, first-run and workspace creation |
-| `web/states/` | 4 | empty, loading, offline and error states |
-| `web/extra/` | 14 | screens a query surfaced that fit no group above (analytics, feedback, marketing, sites) |
+| `web/navigation/` | 16 | home, sidebar, search, tabs, breadcrumbs, favourites, recents, inbox, trash |
+| `web/views/` | 52 | rendered table, board, calendar, timeline, gallery, list, chart and dashboard views |
+| `web/database/` | 75 | properties, property editors, filters, sorts, group-by, view options, data sources, automations |
+| `web/editors/` | 145 | page editor, blocks, slash and block menus, formatting, covers, media, code, embeds |
+| `web/ai/` | 109 | Notion AI chat, agents, AI writing, AI meeting notes, AI autofill prompts and feedback |
+| `web/menus/` | 3 | context, more and overflow menus that are not page or property menus |
+| `web/settings/` | 51 | account, workspace, appearance, notifications, billing, connections, import/export |
+| `web/collaboration/` | 67 | sharing, publishing, permissions, comments, suggestions, members, guests |
+| `web/onboarding/` | 48 | sign-up, login, first-run, workspace creation, plan pickers and checkout |
+| `web/states/` | 3 | empty, loading, offline and error states |
+| `web/marketing/` | 23 | marketplace, template gallery and other pages that are not the product UI |
+| `web/extra/` | 3 | screens that fit no group above |
 | `web/flows/<flow>/` | 1737 | 323 flows, one folder per Mobbin flow, files numbered in flow order |
 
 | Platform | Files | Unique screens (by id) | Flows |
@@ -49,12 +51,13 @@ Grouped by platform, then by subject. Filenames carry the platform, group, a slu
 - **Mobbin app pages**: iOS https://mobbin.com/apps/notion-ios-265a7a8a-0006-441c-8c17-ae6fc822c366/73c83097-c61a-48ae-bb7b-e38dec8d5ff4/screens — web https://mobbin.com/apps/notion-web-33c9cc81-4dd5-46cd-8a0b-15d46b137668/17ff231d-68df-43ef-9952-f2a4d677318d/screens
 - **Capture date**: 2026-09-06 (all downloads). Images are the `webp` Mobbin served through each result's `image_url`, unmodified; every file carries the "curated by Mobbin" footer Mobbin adds.
 - **App version**: not reported. Neither Mobbin tool returns an app version, so none is recorded; the screens show the Notion release Mobbin had catalogued on the capture date (visible dates in the screens run to mid-2026).
-- **Ledger**: `ios/harvest.json` and `web/harvest.json` are the per-platform harvest ledgers written by the sweep: every query with its group, mode, limit, returned and new-Notion counts, every screen and flow with its `image_url`, `mobbin_url` and the query that found it, the request count, and every error event. They are the machine-readable form of the tables below and are kept for that reason.
+- **Ledger**: `ios/harvest.json` and `web/harvest.json` are the per-platform harvest ledgers written by the sweep: every query with its group, mode, limit, returned and new-Notion counts, every screen and flow with its `image_url`, `mobbin_url` and the query that found it, the request count, and every error event. They are the machine-readable form of the tables below and are kept for that reason. They record the harvest as it was fetched, so the `group` they carry is the query group, not the content group the files now sit in; `reclassification-2026-09-06.tsv` is the map between the two (862 rows: 372 iOS, 490 web).
 - **Sweep shape**: one scripted loop per platform inside single Code Mode executions (synchronous calls, 3 to 8.5 s apart, under 40 requests per minute in total), iterating app-scoped queries ("Notion <surface>") and repeating each query with the grown exclude list until it returned no new Notion id. Both platforms ran concurrently as one lane each.
 - **ios request ledger**: 278 Mobbin requests counted in the main sweep, of which the ledger itemizes 168 tool calls (163 `search_screens` over 115 distinct queries, 5 `search_flows`); the remaining 110 requests are counted but not itemized, and `ios/harvest.json` attributes flows to three further flow queries whose calls were never logged (`Notion adding a database view`, `Notion login`, `Notion sharing a page` — 24 of the 149 flows), so the iOS flow query set below is eight, not the five that were logged; 2 error event(s): `Notion toggle block` — MCP operation on 'mobbin:stdio' timed out after 30s.; `Notion error` — MCP operation on 'mobbin:stdio' timed out after 30s.. No 401 and no 429 occurred.
 - **web request ledger**: 297 Mobbin requests counted in the main sweep, of which the ledger itemizes 136 tool calls (120 `search_screens` over 120 distinct queries, 16 `search_flows` over the 16 flow queries the flow records name); the remaining 161 requests are counted but not itemized; 0 error event(s). No 401 and no 429 occurred.
 - **Exhaustion check (continuation, 2026-09-06 afternoon)**: after the main sweep, one more scripted exclusion sweep per platform seeded with every id on disk (801 iOS, 1540 web) issued 3 `search_screens` calls each (`Notion table view`, `Notion timeline view`, `Notion teamspaces`) and every call returned zero screens, meeting the stop rule of three consecutive queries adding nothing. Because those replies came back in under a second, a control call per platform with an empty exclude list was run: it returned 15 Notion screens each, and all 30 ids were already on disk. Total for the continuation: 8 requests, no errors.
 - **Verification**: file count on disk equals the index below; every file is larger than 1 KB; ten files (five per platform, chosen at random) were opened and confirmed to be real Notion screens. Re-checked independently before landing on 2026-09-06: the index and the disk agree 1:1 on all 3647 paths, every file is a valid RIFF/WebP whose declared length matches its size (3514 VP8, 133 VP8X), no file is under 1 KB, no screen id repeats inside a folder (1013 ids appear in more than one folder, which is the group-plus-flow storage rule above), iOS files are all 299x678/680 and web files all 768x521/523, and fourteen images were opened and read.
+- **Reclassification (2026-09-06)**: every non-flow file on both platforms was opened and judged by content, and 862 were moved into the group their screen primarily shows; 33 of the web moves were independently re-opened and confirmed. After the pass the file count on disk is unchanged at 3647, no path repeats, and the per-file index below resolves 1:1 to the files on disk.
 
 ### Query sets
 
@@ -74,54 +77,233 @@ One row per file. "Found by" is the query (screens) or the flow name (flow files
 
 | File | Found by | Mobbin |
 |------|----------|--------|
+| `ios/ai/notion-ios-ai-account-14-8b19ce05-ee6b-429e-81d5-865419c0d614.webp` | `Notion account settings` | [screen](https://mobbin.com/screens/8b19ce05-ee6b-429e-81d5-865419c0d614) |
+| `ios/ai/notion-ios-ai-account-15-d4c7a09a-a25c-422a-a179-81cac7176f56.webp` | `Notion account settings` | [screen](https://mobbin.com/screens/d4c7a09a-a25c-422a-a179-81cac7176f56) |
+| `ios/ai/notion-ios-ai-ai-writing-01-e1b01f24-3790-4b66-8204-ce83a8f176a8.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/e1b01f24-3790-4b66-8204-ce83a8f176a8) |
+| `ios/ai/notion-ios-ai-ai-writing-02-37220613-e225-443a-a382-a5159b205c55.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/37220613-e225-443a-a382-a5159b205c55) |
+| `ios/ai/notion-ios-ai-ai-writing-03-0f491d11-af8f-428d-815e-78977c2a4402.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/0f491d11-af8f-428d-815e-78977c2a4402) |
+| `ios/ai/notion-ios-ai-ai-writing-04-3205af8c-01ff-4ff9-9d74-efaf421a803c.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/3205af8c-01ff-4ff9-9d74-efaf421a803c) |
+| `ios/ai/notion-ios-ai-ai-writing-05-7708c12a-439a-4d1a-a2a7-488b8c2ecdb8.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/7708c12a-439a-4d1a-a2a7-488b8c2ecdb8) |
+| `ios/ai/notion-ios-ai-ai-writing-06-5899b962-5edf-437d-993a-a8d72f65f06b.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/5899b962-5edf-437d-993a-a8d72f65f06b) |
+| `ios/ai/notion-ios-ai-ai-writing-07-116fa290-07ba-4e68-bc42-4832deffeb9b.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/116fa290-07ba-4e68-bc42-4832deffeb9b) |
+| `ios/ai/notion-ios-ai-ai-writing-08-0e2458ee-69d1-4d05-a6f0-7932fafcad3e.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/0e2458ee-69d1-4d05-a6f0-7932fafcad3e) |
+| `ios/ai/notion-ios-ai-ai-writing-09-96126981-3a81-4063-8b1e-df486764a755.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/96126981-3a81-4063-8b1e-df486764a755) |
+| `ios/ai/notion-ios-ai-ai-writing-10-bae7276b-6b3b-4d4a-8c64-9ec09637db15.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/bae7276b-6b3b-4d4a-8c64-9ec09637db15) |
+| `ios/ai/notion-ios-ai-ai-writing-11-8c3affc7-741b-4e49-b4fe-27e9471d0177.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/8c3affc7-741b-4e49-b4fe-27e9471d0177) |
+| `ios/ai/notion-ios-ai-ai-writing-12-0f612952-7e93-4c44-b1ae-8879847d69f5.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/0f612952-7e93-4c44-b1ae-8879847d69f5) |
+| `ios/ai/notion-ios-ai-ai-writing-15-1d4664ff-f9ce-4f49-9d26-e9e5443d3304.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/1d4664ff-f9ce-4f49-9d26-e9e5443d3304) |
+| `ios/ai/notion-ios-ai-ai-writing-16-24aa4e82-e084-4a67-a9aa-fae4bdf4dc4b.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/24aa4e82-e084-4a67-a9aa-fae4bdf4dc4b) |
+| `ios/ai/notion-ios-ai-ai-writing-17-f35c1c72-6ebc-42c1-bd6f-96392966ef7f.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/f35c1c72-6ebc-42c1-bd6f-96392966ef7f) |
+| `ios/ai/notion-ios-ai-ai-writing-18-4a882eac-b96e-402b-80fc-94dc353502ad.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/4a882eac-b96e-402b-80fc-94dc353502ad) |
+| `ios/ai/notion-ios-ai-analytics-01-895e9f73-b510-4140-b4f9-73630a3f65e3.webp` | `Notion analytics` | [screen](https://mobbin.com/screens/895e9f73-b510-4140-b4f9-73630a3f65e3) |
+| `ios/ai/notion-ios-ai-analytics-02-d2b8a984-9704-4e13-9e22-2976bd4152e0.webp` | `Notion analytics` | [screen](https://mobbin.com/screens/d2b8a984-9704-4e13-9e22-2976bd4152e0) |
+| `ios/ai/notion-ios-ai-ask-ai-05-5415dd8d-025e-435b-a395-077684dbd4fd.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/5415dd8d-025e-435b-a395-077684dbd4fd) |
+| `ios/ai/notion-ios-ai-ask-ai-09-fa05cd20-e1d7-454e-957f-460523ad5f73.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/fa05cd20-e1d7-454e-957f-460523ad5f73) |
+| `ios/ai/notion-ios-ai-ask-ai-12-6a216e4f-97a1-4751-8239-3960c05b8ee1.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/6a216e4f-97a1-4751-8239-3960c05b8ee1) |
+| `ios/ai/notion-ios-ai-ask-ai-14-2aeeb92a-7fcd-4fa4-ba2b-88712303552f.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/2aeeb92a-7fcd-4fa4-ba2b-88712303552f) |
+| `ios/ai/notion-ios-ai-ask-ai-15-db0116c6-f370-472a-adbb-5dada1ba5e7c.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/db0116c6-f370-472a-adbb-5dada1ba5e7c) |
+| `ios/ai/notion-ios-ai-ask-ai-16-b0c5b10f-47f4-45cd-ad78-8ce9a21a8fad.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/b0c5b10f-47f4-45cd-ad78-8ce9a21a8fad) |
+| `ios/ai/notion-ios-ai-ask-ai-17-691c72b9-0f92-4752-9170-170f48aa00c2.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/691c72b9-0f92-4752-9170-170f48aa00c2) |
+| `ios/ai/notion-ios-ai-ask-ai-18-05594bc8-6a07-49c1-aaed-ead081109d9c.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/05594bc8-6a07-49c1-aaed-ead081109d9c) |
+| `ios/ai/notion-ios-ai-ask-ai-19-d22b4989-ae95-477f-a756-628546ab3e0a.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/d22b4989-ae95-477f-a756-628546ab3e0a) |
+| `ios/ai/notion-ios-ai-ask-ai-20-80d07c1b-b56f-4b06-a69a-8fe23be0f637.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/80d07c1b-b56f-4b06-a69a-8fe23be0f637) |
+| `ios/ai/notion-ios-ai-automations-02-833ddc8a-9144-4390-b89d-592eadb6486d.webp` | `Notion automations` | [screen](https://mobbin.com/screens/833ddc8a-9144-4390-b89d-592eadb6486d) |
+| `ios/ai/notion-ios-ai-automations-04-e9f83899-6841-44ee-bb2c-e0c4e638eb69.webp` | `Notion automations` | [screen](https://mobbin.com/screens/e9f83899-6841-44ee-bb2c-e0c4e638eb69) |
+| `ios/ai/notion-ios-ai-automations-07-43ff3045-82a1-479b-a219-5ff69b548529.webp` | `Notion automations` | [screen](https://mobbin.com/screens/43ff3045-82a1-479b-a219-5ff69b548529) |
+| `ios/ai/notion-ios-ai-buttons-01-f1f5e9d7-c3f3-433f-8a38-8856464dd56f.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/f1f5e9d7-c3f3-433f-8a38-8856464dd56f) |
+| `ios/ai/notion-ios-ai-buttons-02-6ccdfc13-82d6-4f67-88ce-2700a0aa6a51.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/6ccdfc13-82d6-4f67-88ce-2700a0aa6a51) |
+| `ios/ai/notion-ios-ai-buttons-03-8a7eeea7-95ba-4ce1-ae07-2bb8063f3b16.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/8a7eeea7-95ba-4ce1-ae07-2bb8063f3b16) |
+| `ios/ai/notion-ios-ai-connections-05-e5a1caed-db9f-48d5-9083-4c31c8feb3ec.webp` | `Notion connections integrations` | [screen](https://mobbin.com/screens/e5a1caed-db9f-48d5-9083-4c31c8feb3ec) |
+| `ios/ai/notion-ios-ai-connections-07-5113ad18-d46f-4c15-b5e1-459b1bc99963.webp` | `Notion connections integrations` | [screen](https://mobbin.com/screens/5113ad18-d46f-4c15-b5e1-459b1bc99963) |
+| `ios/ai/notion-ios-ai-connections-09-f9fd244c-70e9-43b5-844e-d6967a371cc4.webp` | `Notion connections integrations` | [screen](https://mobbin.com/screens/f9fd244c-70e9-43b5-844e-d6967a371cc4) |
+| `ios/ai/notion-ios-ai-cover-icon-11-6f5b6ad1-9582-4d7f-8053-edf3bff564a6.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/6f5b6ad1-9582-4d7f-8053-edf3bff564a6) |
+| `ios/ai/notion-ios-ai-empty-04-dd3458f6-5d45-41f3-a44f-3065215bf6f6.webp` | `Notion empty state` | [screen](https://mobbin.com/screens/dd3458f6-5d45-41f3-a44f-3065215bf6f6) |
+| `ios/ai/notion-ios-ai-empty-database-01-a984fe81-e471-4d22-a451-2684fd5983ac.webp` | `Notion empty database` | [screen](https://mobbin.com/screens/a984fe81-e471-4d22-a451-2684fd5983ac) |
+| `ios/ai/notion-ios-ai-filters-05-4c195b27-50ed-4a63-9658-f5fc5c979598.webp` | `Notion filters` | [screen](https://mobbin.com/screens/4c195b27-50ed-4a63-9658-f5fc5c979598) |
+| `ios/ai/notion-ios-ai-filters-06-a56c9b04-41bc-4875-84f2-d3757a73ddc4.webp` | `Notion filters` | [screen](https://mobbin.com/screens/a56c9b04-41bc-4875-84f2-d3757a73ddc4) |
+| `ios/ai/notion-ios-ai-filters-09-7174b226-1497-4754-bf60-43ecba835669.webp` | `Notion filters` | [screen](https://mobbin.com/screens/7174b226-1497-4754-bf60-43ecba835669) |
+| `ios/ai/notion-ios-ai-filters-10-ae3beaf9-9095-4831-ae5e-430bb28d9dd4.webp` | `Notion filters` | [screen](https://mobbin.com/screens/ae3beaf9-9095-4831-ae5e-430bb28d9dd4) |
+| `ios/ai/notion-ios-ai-form-03-0585206f-fe1b-459c-9b5d-7f31a602eac0.webp` | `Notion form` | [screen](https://mobbin.com/screens/0585206f-fe1b-459c-9b5d-7f31a602eac0) |
+| `ios/ai/notion-ios-ai-form-07-4944cf22-bef5-4f13-abc2-6d8ee041fef1.webp` | `Notion form` | [screen](https://mobbin.com/screens/4944cf22-bef5-4f13-abc2-6d8ee041fef1) |
+| `ios/ai/notion-ios-ai-form-10-1079b05c-bdcb-48b3-981e-be8299f5415a.webp` | `Notion form` | [screen](https://mobbin.com/screens/1079b05c-bdcb-48b3-981e-be8299f5415a) |
+| `ios/ai/notion-ios-ai-form-11-58b53baf-7e33-4932-bcaa-bdb7e77b0a9f.webp` | `Notion form` | [screen](https://mobbin.com/screens/58b53baf-7e33-4932-bcaa-bdb7e77b0a9f) |
+| `ios/ai/notion-ios-ai-form-16-e7c30962-cb10-41a3-b71e-ebbdaa1405f7.webp` | `Notion form` | [screen](https://mobbin.com/screens/e7c30962-cb10-41a3-b71e-ebbdaa1405f7) |
+| `ios/ai/notion-ios-ai-form-21-b34ff003-cc48-4af9-a3ff-98d2c9836636.webp` | `Notion form` | [screen](https://mobbin.com/screens/b34ff003-cc48-4af9-a3ff-98d2c9836636) |
+| `ios/ai/notion-ios-ai-form-22-aef33900-aec6-452e-af47-728694e0ab18.webp` | `Notion form` | [screen](https://mobbin.com/screens/aef33900-aec6-452e-af47-728694e0ab18) |
+| `ios/ai/notion-ios-ai-home-11-191a2416-092d-487a-ab01-0ae3c3c64873.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/191a2416-092d-487a-ab01-0ae3c3c64873) |
+| `ios/ai/notion-ios-ai-home-13-c119cf0c-6553-47b2-aead-63d060159283.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/c119cf0c-6553-47b2-aead-63d060159283) |
+| `ios/ai/notion-ios-ai-home-17-ce07c4fc-d036-459e-8326-4d6b1a7edfaa.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/ce07c4fc-d036-459e-8326-4d6b1a7edfaa) |
+| `ios/ai/notion-ios-ai-home-19-f77fbd91-117c-45a0-9fbd-7fafc562ef9c.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/f77fbd91-117c-45a0-9fbd-7fafc562ef9c) |
+| `ios/ai/notion-ios-ai-inbox-06-ac829a85-6eb1-4c89-80f2-668d3ca1c1c2.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/ac829a85-6eb1-4c89-80f2-668d3ca1c1c2) |
+| `ios/ai/notion-ios-ai-inbox-07-ad288189-8efc-4c78-abdc-665dc9f088f5.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/ad288189-8efc-4c78-abdc-665dc9f088f5) |
+| `ios/ai/notion-ios-ai-inbox-08-15e84c82-9a6a-45f8-b13a-7bc58081b573.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/15e84c82-9a6a-45f8-b13a-7bc58081b573) |
+| `ios/ai/notion-ios-ai-inbox-11-9be8e292-f314-4c8c-9170-a1a3b66f3c84.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/9be8e292-f314-4c8c-9170-a1a3b66f3c84) |
+| `ios/ai/notion-ios-ai-inbox-12-65fda74c-72e4-4ab1-8912-6d13f0fba125.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/65fda74c-72e4-4ab1-8912-6d13f0fba125) |
+| `ios/ai/notion-ios-ai-language-05-919207fa-2f12-4c5f-8298-93ded326bf4b.webp` | `Notion language and region` | [screen](https://mobbin.com/screens/919207fa-2f12-4c5f-8298-93ded326bf4b) |
+| `ios/ai/notion-ios-ai-language-06-56dea59d-358c-43b8-ac1c-99da310e6d7c.webp` | `Notion language and region` | [screen](https://mobbin.com/screens/56dea59d-358c-43b8-ac1c-99da310e6d7c) |
+| `ios/ai/notion-ios-ai-list-08-0f175af2-39b8-4393-bfd1-881c1c93b835.webp` | `Notion list view` | [screen](https://mobbin.com/screens/0f175af2-39b8-4393-bfd1-881c1c93b835) |
+| `ios/ai/notion-ios-ai-loading-04-19af1746-3789-4c9e-b777-51f4933602e1.webp` | `Notion loading` | [screen](https://mobbin.com/screens/19af1746-3789-4c9e-b777-51f4933602e1) |
+| `ios/ai/notion-ios-ai-loading-06-a483c1af-bd45-4751-aa6b-d510acd34ac2.webp` | `Notion loading` | [screen](https://mobbin.com/screens/a483c1af-bd45-4751-aa6b-d510acd34ac2) |
+| `ios/ai/notion-ios-ai-loading-08-a36c0cce-9fbf-4a7d-85d2-cb49b46eab6f.webp` | `Notion loading` | [screen](https://mobbin.com/screens/a36c0cce-9fbf-4a7d-85d2-cb49b46eab6f) |
+| `ios/ai/notion-ios-ai-meeting-notes-01-06d2fab6-dd3e-4376-817f-977134cc6614.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/06d2fab6-dd3e-4376-817f-977134cc6614) |
+| `ios/ai/notion-ios-ai-meeting-notes-02-11f27879-5e6f-4a52-9f12-623ba6a4e494.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/11f27879-5e6f-4a52-9f12-623ba6a4e494) |
+| `ios/ai/notion-ios-ai-meeting-notes-03-c7890bf3-767a-46d5-bc49-cc8ceaf9cdde.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/c7890bf3-767a-46d5-bc49-cc8ceaf9cdde) |
+| `ios/ai/notion-ios-ai-new-database-16-c22698a6-8fee-4f1e-ba01-19b86ed72ecb.webp` | `Notion new database` | [screen](https://mobbin.com/screens/c22698a6-8fee-4f1e-ba01-19b86ed72ecb) |
+| `ios/ai/notion-ios-ai-notifications-04-d40064c8-ea3b-417c-b760-5180febdd867.webp` | `Notion notifications` | [screen](https://mobbin.com/screens/d40064c8-ea3b-417c-b760-5180febdd867) |
+| `ios/ai/notion-ios-ai-onboarding-13-d4e5b550-e54a-4e1e-97e1-d31e7d07f31d.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/d4e5b550-e54a-4e1e-97e1-d31e7d07f31d) |
+| `ios/ai/notion-ios-ai-page-01-576504b1-908e-49af-a46e-95c3a00921f3.webp` | `Notion page` | [screen](https://mobbin.com/screens/576504b1-908e-49af-a46e-95c3a00921f3) |
+| `ios/ai/notion-ios-ai-page-07-fb7988f5-18a7-4cce-ae50-5d61196980b9.webp` | `Notion page` | [screen](https://mobbin.com/screens/fb7988f5-18a7-4cce-ae50-5d61196980b9) |
+| `ios/ai/notion-ios-ai-properties-06-7d7b5690-df66-49a7-ab4e-de6503244fbc.webp` | `Notion properties` | [screen](https://mobbin.com/screens/7d7b5690-df66-49a7-ab4e-de6503244fbc) |
+| `ios/ai/notion-ios-ai-properties-11-52294205-f7ad-41c9-b766-836c6af988d9.webp` | `Notion properties` | [screen](https://mobbin.com/screens/52294205-f7ad-41c9-b766-836c6af988d9) |
+| `ios/ai/notion-ios-ai-properties-14-0d940540-26d4-4bbf-8df5-60982ec567b2.webp` | `Notion properties` | [screen](https://mobbin.com/screens/0d940540-26d4-4bbf-8df5-60982ec567b2) |
+| `ios/ai/notion-ios-ai-property-editor-14-fd5e59c9-124c-4ee9-b282-cd43cafc5c3c.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/fd5e59c9-124c-4ee9-b282-cd43cafc5c3c) |
+| `ios/ai/notion-ios-ai-quick-note-01-02ba7855-7392-4218-acc7-1c9521149bdb.webp` | `Notion quick note` | [screen](https://mobbin.com/screens/02ba7855-7392-4218-acc7-1c9521149bdb) |
+| `ios/ai/notion-ios-ai-quick-note-02-3f7d6a14-0672-40c7-8c5f-35c22ed22e01.webp` | `Notion quick note` | [screen](https://mobbin.com/screens/3f7d6a14-0672-40c7-8c5f-35c22ed22e01) |
+| `ios/ai/notion-ios-ai-relation-04-987fddc4-ead0-4b7b-a0b6-c07a10fab299.webp` | `Notion relation property` | [screen](https://mobbin.com/screens/987fddc4-ead0-4b7b-a0b6-c07a10fab299) |
+| `ios/ai/notion-ios-ai-relation-05-03c1c9bf-7597-4e55-86f0-abdf7e96d027.webp` | `Notion relation property` | [screen](https://mobbin.com/screens/03c1c9bf-7597-4e55-86f0-abdf7e96d027) |
+| `ios/ai/notion-ios-ai-row-page-13-ec0eb4a9-5cc1-4dd0-892c-5b46cedab204.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/ec0eb4a9-5cc1-4dd0-892c-5b46cedab204) |
+| `ios/ai/notion-ios-ai-row-page-14-256622cb-33aa-4441-a5a5-d0e762a5c11d.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/256622cb-33aa-4441-a5a5-d0e762a5c11d) |
+| `ios/ai/notion-ios-ai-search-02-d8873d9d-0ce3-43a6-aa75-820d932ad1b1.webp` | `Notion search` | [screen](https://mobbin.com/screens/d8873d9d-0ce3-43a6-aa75-820d932ad1b1) |
+| `ios/ai/notion-ios-ai-search-04-db5d19e4-072d-4b8f-8a30-26f9c282a867.webp` | `Notion search` | [screen](https://mobbin.com/screens/db5d19e4-072d-4b8f-8a30-26f9c282a867) |
+| `ios/ai/notion-ios-ai-search-07-f7efabb4-f1f3-41e7-a92b-77bc94abe2b3.webp` | `Notion search` | [screen](https://mobbin.com/screens/f7efabb4-f1f3-41e7-a92b-77bc94abe2b3) |
+| `ios/ai/notion-ios-ai-search-08-372164b6-d1fc-4dda-80a7-4b5566674b28.webp` | `Notion search` | [screen](https://mobbin.com/screens/372164b6-d1fc-4dda-80a7-4b5566674b28) |
+| `ios/ai/notion-ios-ai-search-09-61d4d543-12c6-491d-9a81-e1c5adf6a55c.webp` | `Notion search` | [screen](https://mobbin.com/screens/61d4d543-12c6-491d-9a81-e1c5adf6a55c) |
+| `ios/ai/notion-ios-ai-search-10-fa244828-c114-41f3-87d9-aea375b364a0.webp` | `Notion search` | [screen](https://mobbin.com/screens/fa244828-c114-41f3-87d9-aea375b364a0) |
+| `ios/ai/notion-ios-ai-search-11-0d0ee9c7-4841-4e07-b8bc-e2f6602f8bc2.webp` | `Notion search` | [screen](https://mobbin.com/screens/0d0ee9c7-4841-4e07-b8bc-e2f6602f8bc2) |
+| `ios/ai/notion-ios-ai-search-12-e69b5a4a-6e33-4570-8cbc-84105299e19b.webp` | `Notion search` | [screen](https://mobbin.com/screens/e69b5a4a-6e33-4570-8cbc-84105299e19b) |
+| `ios/ai/notion-ios-ai-search-14-6a524e27-e401-4806-b36e-b07c07a468da.webp` | `Notion search` | [screen](https://mobbin.com/screens/6a524e27-e401-4806-b36e-b07c07a468da) |
+| `ios/ai/notion-ios-ai-settings-12-2de6c428-1ad4-43ef-b077-68ce6773dba9.webp` | `Notion settings` | [screen](https://mobbin.com/screens/2de6c428-1ad4-43ef-b077-68ce6773dba9) |
+| `ios/ai/notion-ios-ai-settings-15-34541a79-8f3d-405a-bc1e-a4d3b5e5f284.webp` | `Notion settings` | [screen](https://mobbin.com/screens/34541a79-8f3d-405a-bc1e-a4d3b5e5f284) |
+| `ios/ai/notion-ios-ai-settings-16-4cc9aad0-a791-449d-a9a6-bd85558b77e6.webp` | `Notion settings` | [screen](https://mobbin.com/screens/4cc9aad0-a791-449d-a9a6-bd85558b77e6) |
+| `ios/ai/notion-ios-ai-sheet-04-05b9a158-e0a7-4679-a403-6105e6a3d57f.webp` | `Notion bottom sheet` | [screen](https://mobbin.com/screens/05b9a158-e0a7-4679-a403-6105e6a3d57f) |
+| `ios/ai/notion-ios-ai-slash-menu-04-7a8eec44-aeb1-40f6-9e01-8d349d6fb9f5.webp` | `Notion slash menu` | [screen](https://mobbin.com/screens/7a8eec44-aeb1-40f6-9e01-8d349d6fb9f5) |
+| `ios/ai/notion-ios-ai-slash-menu-06-f380f296-9d59-48a0-89f5-d78fe16d37fd.webp` | `Notion slash menu` | [screen](https://mobbin.com/screens/f380f296-9d59-48a0-89f5-d78fe16d37fd) |
+| `ios/ai/notion-ios-ai-slash-menu-07-04b18cc3-6d66-4cfc-84b3-4fe61448d3a1.webp` | `Notion slash menu` | [screen](https://mobbin.com/screens/04b18cc3-6d66-4cfc-84b3-4fe61448d3a1) |
+| `ios/ai/notion-ios-ai-sort-03-988277d3-0dc6-4e66-86f5-45c796178ff8.webp` | `Notion sort` | [screen](https://mobbin.com/screens/988277d3-0dc6-4e66-86f5-45c796178ff8) |
+| `ios/ai/notion-ios-ai-tabs-02-1c807ff3-120e-47ad-9e6b-66f2c6386e17.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/1c807ff3-120e-47ad-9e6b-66f2c6386e17) |
+| `ios/ai/notion-ios-ai-tabs-03-6aa9f662-f883-4ac2-9c18-c72b1d42958f.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/6aa9f662-f883-4ac2-9c18-c72b1d42958f) |
+| `ios/ai/notion-ios-ai-tabs-22-2c91507a-4037-445d-b67a-ccb63266e82e.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/2c91507a-4037-445d-b67a-ccb63266e82e) |
+| `ios/ai/notion-ios-ai-templates-06-ac479277-3ad0-4ded-bd18-1ad7bd3c49d0.webp` | `Notion templates` | [screen](https://mobbin.com/screens/ac479277-3ad0-4ded-bd18-1ad7bd3c49d0) |
+| `ios/ai/notion-ios-ai-toggle-02-d60c23c3-5b27-418a-9090-e3f8a2c3c21a.webp` | `Notion toggle block` | [screen](https://mobbin.com/screens/d60c23c3-5b27-418a-9090-e3f8a2c3c21a) |
+| `ios/ai/notion-ios-ai-toggle-06-614fd719-85a2-4337-afa3-73f9836556ad.webp` | `Notion toggle block` | [screen](https://mobbin.com/screens/614fd719-85a2-4337-afa3-73f9836556ad) |
+| `ios/ai/notion-ios-ai-toggle-09-b490942d-880c-4494-a740-095e145ee4f1.webp` | `Notion toggle block` | [screen](https://mobbin.com/screens/b490942d-880c-4494-a740-095e145ee4f1) |
+| `ios/ai/notion-ios-ai-toggle-10-391fecf4-0fea-4224-906f-51d3b63070f6.webp` | `Notion toggle block` | [screen](https://mobbin.com/screens/391fecf4-0fea-4224-906f-51d3b63070f6) |
+| `ios/ai/notion-ios-ai-toggle-14-5aecea81-c725-4814-937f-e7ce0c1f7d51.webp` | `Notion toggle block` | [screen](https://mobbin.com/screens/5aecea81-c725-4814-937f-e7ce0c1f7d51) |
+| `ios/ai/notion-ios-ai-trash-07-7a4a6fbf-2de4-4ece-a325-23106a03f3ed.webp` | `Notion trash` | [screen](https://mobbin.com/screens/7a4a6fbf-2de4-4ece-a325-23106a03f3ed) |
+| `ios/ai/notion-ios-ai-trash-08-4c8425ee-2ae6-4d71-a405-6e9236ad57df.webp` | `Notion trash` | [screen](https://mobbin.com/screens/4c8425ee-2ae6-4d71-a405-6e9236ad57df) |
+| `ios/ai/notion-ios-ai-trash-14-4e97a1c9-f2b4-44b3-b6f3-da339fceda0a.webp` | `Notion trash` | [screen](https://mobbin.com/screens/4e97a1c9-f2b4-44b3-b6f3-da339fceda0a) |
+| `ios/ai/notion-ios-ai-trash-15-086dcd9f-a800-46af-90d4-e0c62f7f581a.webp` | `Notion trash` | [screen](https://mobbin.com/screens/086dcd9f-a800-46af-90d4-e0c62f7f581a) |
+| `ios/ai/notion-ios-ai-wiki-01-ca309b0a-cf15-409c-94e4-c22e2e639ce9.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/ca309b0a-cf15-409c-94e4-c22e2e639ce9) |
+| `ios/ai/notion-ios-ai-wiki-16-f31b3053-de17-4d89-b65d-7d48a24d7a54.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/f31b3053-de17-4d89-b65d-7d48a24d7a54) |
+| `ios/ai/notion-ios-ai-wiki-17-a0e4a505-c8f1-4850-a575-94d68ff8dfba.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/a0e4a505-c8f1-4850-a575-94d68ff8dfba) |
+| `ios/ai/notion-ios-ai-wiki-18-20aeb3fe-f645-4b66-ac13-a5fae2f343e0.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/20aeb3fe-f645-4b66-ac13-a5fae2f343e0) |
+| `ios/ai/notion-ios-ai-wiki-19-716c0d70-dd24-4621-9f45-50049c33e731.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/716c0d70-dd24-4621-9f45-50049c33e731) |
+| `ios/ai/notion-ios-ai-wiki-20-91018867-e081-4c8f-b370-250159b7badc.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/91018867-e081-4c8f-b370-250159b7badc) |
+| `ios/ai/notion-ios-ai-wiki-21-1be86f23-19d6-449e-8aaa-6184bc511294.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/1be86f23-19d6-449e-8aaa-6184bc511294) |
+| `ios/ai/notion-ios-ai-wiki-22-b8051ca3-1eef-499b-b542-a23bc9575274.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/b8051ca3-1eef-499b-b542-a23bc9575274) |
+| `ios/ai/notion-ios-ai-wiki-23-8f254198-0665-49e1-bdf1-2afa73ceda7b.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/8f254198-0665-49e1-bdf1-2afa73ceda7b) |
+| `ios/ai/notion-ios-ai-wiki-24-442295aa-3ddc-4510-938d-b5ea92c9354f.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/442295aa-3ddc-4510-938d-b5ea92c9354f) |
+| `ios/collaboration/notion-ios-collaboration-block-menu-06-c41e3d47-63a3-4682-b040-23822833df27.webp` | `Notion block menu` | [screen](https://mobbin.com/screens/c41e3d47-63a3-4682-b040-23822833df27) |
 | `ios/collaboration/notion-ios-collaboration-comments-08-531ce76e-984a-4827-a50d-879ca10a2c04.webp` | `Notion comments` | [screen](https://mobbin.com/screens/531ce76e-984a-4827-a50d-879ca10a2c04) |
 | `ios/collaboration/notion-ios-collaboration-comments-09-1da73ef6-c2fd-4abb-a268-f22cd0e7aa9c.webp` | `Notion comments` | [screen](https://mobbin.com/screens/1da73ef6-c2fd-4abb-a268-f22cd0e7aa9c) |
-| `ios/collaboration/notion-ios-collaboration-notifications-04-d40064c8-ea3b-417c-b760-5180febdd867.webp` | `Notion notifications` | [screen](https://mobbin.com/screens/d40064c8-ea3b-417c-b760-5180febdd867) |
-| `ios/collaboration/notion-ios-collaboration-notifications-05-493dcc3c-8306-4669-a6c3-353452d0d5fb.webp` | `Notion notifications` | [screen](https://mobbin.com/screens/493dcc3c-8306-4669-a6c3-353452d0d5fb) |
-| `ios/collaboration/notion-ios-collaboration-notifications-10-b4c44a47-6f68-47c5-8875-ddbb2975d441.webp` | `Notion notifications` | [screen](https://mobbin.com/screens/b4c44a47-6f68-47c5-8875-ddbb2975d441) |
+| `ios/collaboration/notion-ios-collaboration-date-picker-12-ca4fd83f-fca7-4e85-9232-3b747854779b.webp` | `Notion date picker` | [screen](https://mobbin.com/screens/ca4fd83f-fca7-4e85-9232-3b747854779b) |
+| `ios/collaboration/notion-ios-collaboration-embed-08-ccd246a9-47c1-4baa-b767-d3dc794ad548.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/ccd246a9-47c1-4baa-b767-d3dc794ad548) |
+| `ios/collaboration/notion-ios-collaboration-embed-14-503e4dbf-9cef-4203-8223-66861f494597.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/503e4dbf-9cef-4203-8223-66861f494597) |
+| `ios/collaboration/notion-ios-collaboration-embed-15-db917d76-7160-4bb2-97b5-9f11b940ad60.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/db917d76-7160-4bb2-97b5-9f11b940ad60) |
+| `ios/collaboration/notion-ios-collaboration-export-06-98fc61d6-4ce0-4be5-b023-ae548dd5984a.webp` | `Notion export` | [screen](https://mobbin.com/screens/98fc61d6-4ce0-4be5-b023-ae548dd5984a) |
+| `ios/collaboration/notion-ios-collaboration-export-07-70eb611d-5a70-4f73-8f3a-78ad19df172e.webp` | `Notion export` | [screen](https://mobbin.com/screens/70eb611d-5a70-4f73-8f3a-78ad19df172e) |
+| `ios/collaboration/notion-ios-collaboration-export-08-a2ea5e8a-533b-4b1f-87be-e1b62eb6d062.webp` | `Notion export` | [screen](https://mobbin.com/screens/a2ea5e8a-533b-4b1f-87be-e1b62eb6d062) |
+| `ios/collaboration/notion-ios-collaboration-feedback-01-586e3409-ef7e-4b6e-a1a3-841b7ecd5c3d.webp` | `Notion feedback` | [screen](https://mobbin.com/screens/586e3409-ef7e-4b6e-a1a3-841b7ecd5c3d) |
+| `ios/collaboration/notion-ios-collaboration-form-06-53d7b310-2bd0-4532-bbcc-04cc4710d7b7.webp` | `Notion form` | [screen](https://mobbin.com/screens/53d7b310-2bd0-4532-bbcc-04cc4710d7b7) |
+| `ios/collaboration/notion-ios-collaboration-formatting-07-dfa0cc25-c898-4d50-a761-5c0ed5ef05e4.webp` | `Notion text formatting toolbar` | [screen](https://mobbin.com/screens/dfa0cc25-c898-4d50-a761-5c0ed5ef05e4) |
+| `ios/collaboration/notion-ios-collaboration-inbox-13-516d483c-0901-4271-b863-b1c9d39a5340.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/516d483c-0901-4271-b863-b1c9d39a5340) |
+| `ios/collaboration/notion-ios-collaboration-members-01-0152dd19-0a9e-487d-8cce-8ebcf62f9b0d.webp` | `Notion members` | [screen](https://mobbin.com/screens/0152dd19-0a9e-487d-8cce-8ebcf62f9b0d) |
+| `ios/collaboration/notion-ios-collaboration-members-07-f657a4fb-b6a9-4713-94b0-061f3f3b7055.webp` | `Notion members` | [screen](https://mobbin.com/screens/f657a4fb-b6a9-4713-94b0-061f3f3b7055) |
+| `ios/collaboration/notion-ios-collaboration-members-08-8e294384-5844-49df-ba4d-2374a8556a18.webp` | `Notion members` | [screen](https://mobbin.com/screens/8e294384-5844-49df-ba4d-2374a8556a18) |
+| `ios/collaboration/notion-ios-collaboration-members-09-abe97223-ef07-4ec7-8a8e-395983035fdd.webp` | `Notion members` | [screen](https://mobbin.com/screens/abe97223-ef07-4ec7-8a8e-395983035fdd) |
+| `ios/collaboration/notion-ios-collaboration-members-10-46a2efa1-d94e-4c55-808f-63016e7c63b1.webp` | `Notion members` | [screen](https://mobbin.com/screens/46a2efa1-d94e-4c55-808f-63016e7c63b1) |
+| `ios/collaboration/notion-ios-collaboration-members-11-f38ef962-54e7-4987-8aab-14d083028b18.webp` | `Notion members` | [screen](https://mobbin.com/screens/f38ef962-54e7-4987-8aab-14d083028b18) |
+| `ios/collaboration/notion-ios-collaboration-mentions-01-f25b2b41-8ef6-49d5-8642-76aaf1ae88e8.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/f25b2b41-8ef6-49d5-8642-76aaf1ae88e8) |
+| `ios/collaboration/notion-ios-collaboration-mentions-03-7dc6941c-654d-414e-8019-c7ab6d3ba26b.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/7dc6941c-654d-414e-8019-c7ab6d3ba26b) |
+| `ios/collaboration/notion-ios-collaboration-mentions-04-5bdf0904-f36e-4ef2-8a3e-f7ffbc012e2b.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/5bdf0904-f36e-4ef2-8a3e-f7ffbc012e2b) |
+| `ios/collaboration/notion-ios-collaboration-mentions-05-e0639cb0-62e3-48c6-a01c-7c8518d4b78f.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/e0639cb0-62e3-48c6-a01c-7c8518d4b78f) |
+| `ios/collaboration/notion-ios-collaboration-mentions-08-31fb308a-eeb6-4a7d-bae6-1d4a8b2bcc46.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/31fb308a-eeb6-4a7d-bae6-1d4a8b2bcc46) |
+| `ios/collaboration/notion-ios-collaboration-mentions-09-9db949ed-7d46-4283-b55e-3e55d69ccd0d.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/9db949ed-7d46-4283-b55e-3e55d69ccd0d) |
+| `ios/collaboration/notion-ios-collaboration-mentions-10-643f5320-db6a-446c-ae15-ea08a48fea79.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/643f5320-db6a-446c-ae15-ea08a48fea79) |
+| `ios/collaboration/notion-ios-collaboration-more-menu-04-5d02e087-c6c6-499e-813d-dd867ce04e92.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/5d02e087-c6c6-499e-813d-dd867ce04e92) |
+| `ios/collaboration/notion-ios-collaboration-more-menu-09-5f81b365-9ff7-4d05-9ba5-512534bac006.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/5f81b365-9ff7-4d05-9ba5-512534bac006) |
+| `ios/collaboration/notion-ios-collaboration-more-menu-13-93da6545-7cd8-449c-9bfc-c36f9658786f.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/93da6545-7cd8-449c-9bfc-c36f9658786f) |
+| `ios/collaboration/notion-ios-collaboration-move-to-05-937a87d9-a9d1-4b8c-b092-cf5ef8014858.webp` | `Notion move to` | [screen](https://mobbin.com/screens/937a87d9-a9d1-4b8c-b092-cf5ef8014858) |
+| `ios/collaboration/notion-ios-collaboration-move-to-10-14c789e1-24e8-403f-8409-ad77449fe86c.webp` | `Notion move to` | [screen](https://mobbin.com/screens/14c789e1-24e8-403f-8409-ad77449fe86c) |
+| `ios/collaboration/notion-ios-collaboration-move-to-11-6d241d3c-f480-42cf-a012-00723d30201f.webp` | `Notion move to` | [screen](https://mobbin.com/screens/6d241d3c-f480-42cf-a012-00723d30201f) |
+| `ios/collaboration/notion-ios-collaboration-page-options-03-ca092fc7-be5c-41fc-8530-621e1186f06b.webp` | `Notion page options menu` | [screen](https://mobbin.com/screens/ca092fc7-be5c-41fc-8530-621e1186f06b) |
+| `ios/collaboration/notion-ios-collaboration-page-options-13-17ab32de-dfee-404e-865b-3d12b866bccd.webp` | `Notion page options menu` | [screen](https://mobbin.com/screens/17ab32de-dfee-404e-865b-3d12b866bccd) |
+| `ios/collaboration/notion-ios-collaboration-properties-15-bb16fd8a-b2cf-432e-9097-9f5105b09569.webp` | `Notion properties` | [screen](https://mobbin.com/screens/bb16fd8a-b2cf-432e-9097-9f5105b09569) |
 | `ios/collaboration/notion-ios-collaboration-publish-01-7e855081-02a2-45b3-be6d-21c62bb92326.webp` | `Notion publish to web` | [screen](https://mobbin.com/screens/7e855081-02a2-45b3-be6d-21c62bb92326) |
 | `ios/collaboration/notion-ios-collaboration-publish-05-bd1e1a7a-0328-4880-bc41-7c870d88099e.webp` | `Notion publish to web` | [screen](https://mobbin.com/screens/bd1e1a7a-0328-4880-bc41-7c870d88099e) |
 | `ios/collaboration/notion-ios-collaboration-publish-06-80450381-9922-4123-b6d2-b3b624b4c3d9.webp` | `Notion publish to web` | [screen](https://mobbin.com/screens/80450381-9922-4123-b6d2-b3b624b4c3d9) |
 | `ios/collaboration/notion-ios-collaboration-publish-07-deb2b9aa-5d71-4931-8b1d-8c4161eba33a.webp` | `Notion publish to web` | [screen](https://mobbin.com/screens/deb2b9aa-5d71-4931-8b1d-8c4161eba33a) |
+| `ios/collaboration/notion-ios-collaboration-reminders-06-de63b43f-1dce-44e2-8f93-96bae259b5c8.webp` | `Notion reminders` | [screen](https://mobbin.com/screens/de63b43f-1dce-44e2-8f93-96bae259b5c8) |
 | `ios/collaboration/notion-ios-collaboration-share-page-01-3f8c39fa-9a18-43db-b318-3dae8a6dfd1e.webp` | `Notion share page` | [screen](https://mobbin.com/screens/3f8c39fa-9a18-43db-b318-3dae8a6dfd1e) |
 | `ios/collaboration/notion-ios-collaboration-sharing-05-42c70a6f-1dcc-4823-9cd5-a94a6d1d1574.webp` | `Notion sharing` | [screen](https://mobbin.com/screens/42c70a6f-1dcc-4823-9cd5-a94a6d1d1574) |
 | `ios/collaboration/notion-ios-collaboration-sharing-10-5a0a4bb3-711f-47d9-861d-8b229d41ac83.webp` | `Notion sharing` | [screen](https://mobbin.com/screens/5a0a4bb3-711f-47d9-861d-8b229d41ac83) |
+| `ios/collaboration/notion-ios-collaboration-sheet-10-35f96f21-b420-4cc2-bfde-76326d04f3ad.webp` | `Notion bottom sheet` | [screen](https://mobbin.com/screens/35f96f21-b420-4cc2-bfde-76326d04f3ad) |
+| `ios/collaboration/notion-ios-collaboration-sheet-11-11f9da9e-d759-40cb-b203-62815e78bf2f.webp` | `Notion bottom sheet` | [screen](https://mobbin.com/screens/11f9da9e-d759-40cb-b203-62815e78bf2f) |
+| `ios/collaboration/notion-ios-collaboration-trash-11-46521fc7-bd51-43fa-aa8e-cc0c8ccf6c3b.webp` | `Notion trash` | [screen](https://mobbin.com/screens/46521fc7-bd51-43fa-aa8e-cc0c8ccf6c3b) |
 | `ios/database/notion-ios-database-automations-01-7dd0e017-2e66-4c15-a310-46e40740c904.webp` | `Notion automations` | [screen](https://mobbin.com/screens/7dd0e017-2e66-4c15-a310-46e40740c904) |
-| `ios/database/notion-ios-database-automations-02-833ddc8a-9144-4390-b89d-592eadb6486d.webp` | `Notion automations` | [screen](https://mobbin.com/screens/833ddc8a-9144-4390-b89d-592eadb6486d) |
-| `ios/database/notion-ios-database-automations-03-fe745ffa-e0de-4dc1-b955-d9b723d19f6f.webp` | `Notion automations` | [screen](https://mobbin.com/screens/fe745ffa-e0de-4dc1-b955-d9b723d19f6f) |
-| `ios/database/notion-ios-database-automations-04-e9f83899-6841-44ee-bb2c-e0c4e638eb69.webp` | `Notion automations` | [screen](https://mobbin.com/screens/e9f83899-6841-44ee-bb2c-e0c4e638eb69) |
 | `ios/database/notion-ios-database-automations-05-3bb80d6e-3fab-4fd4-a8f7-04a596ae67af.webp` | `Notion automations` | [screen](https://mobbin.com/screens/3bb80d6e-3fab-4fd4-a8f7-04a596ae67af) |
-| `ios/database/notion-ios-database-automations-06-6db5ca8f-737b-470e-9a9d-6b775f913667.webp` | `Notion automations` | [screen](https://mobbin.com/screens/6db5ca8f-737b-470e-9a9d-6b775f913667) |
-| `ios/database/notion-ios-database-automations-07-43ff3045-82a1-479b-a219-5ff69b548529.webp` | `Notion automations` | [screen](https://mobbin.com/screens/43ff3045-82a1-479b-a219-5ff69b548529) |
-| `ios/database/notion-ios-database-automations-08-cd32157c-a8d5-4b8a-b240-097a3911add5.webp` | `Notion automations` | [screen](https://mobbin.com/screens/cd32157c-a8d5-4b8a-b240-097a3911add5) |
 | `ios/database/notion-ios-database-automations-09-dcbae204-8b71-4d33-90d6-ae9be2d27e50.webp` | `Notion automations` | [screen](https://mobbin.com/screens/dcbae204-8b71-4d33-90d6-ae9be2d27e50) |
 | `ios/database/notion-ios-database-automations-10-05943027-e932-4442-964d-3cef89cf8705.webp` | `Notion automations` | [screen](https://mobbin.com/screens/05943027-e932-4442-964d-3cef89cf8705) |
-| `ios/database/notion-ios-database-buttons-01-f1f5e9d7-c3f3-433f-8a38-8856464dd56f.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/f1f5e9d7-c3f3-433f-8a38-8856464dd56f) |
-| `ios/database/notion-ios-database-buttons-02-6ccdfc13-82d6-4f67-88ce-2700a0aa6a51.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/6ccdfc13-82d6-4f67-88ce-2700a0aa6a51) |
-| `ios/database/notion-ios-database-buttons-03-8a7eeea7-95ba-4ce1-ae07-2bb8063f3b16.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/8a7eeea7-95ba-4ce1-ae07-2bb8063f3b16) |
-| `ios/database/notion-ios-database-buttons-04-a34f2a5a-be47-40ef-98e7-9aea97faeb39.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/a34f2a5a-be47-40ef-98e7-9aea97faeb39) |
+| `ios/database/notion-ios-database-block-menu-07-9acbba50-e88a-4e2c-b3ae-a8de35da6a92.webp` | `Notion block menu` | [screen](https://mobbin.com/screens/9acbba50-e88a-4e2c-b3ae-a8de35da6a92) |
+| `ios/database/notion-ios-database-block-menu-11-b3e1dff9-f427-4e82-ab85-19cc5ac7d187.webp` | `Notion block menu` | [screen](https://mobbin.com/screens/b3e1dff9-f427-4e82-ab85-19cc5ac7d187) |
+| `ios/database/notion-ios-database-board-03-9d7ffd05-6eaa-4e65-954c-e0e09c99b577.webp` | `Notion board view` | [screen](https://mobbin.com/screens/9d7ffd05-6eaa-4e65-954c-e0e09c99b577) |
+| `ios/database/notion-ios-database-calendar-02-2413d15d-1ec7-4d3f-9855-9436fc479326.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/2413d15d-1ec7-4d3f-9855-9436fc479326) |
+| `ios/database/notion-ios-database-calendar-13-11caf701-71c3-49aa-93e5-0c91e8144bf3.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/11caf701-71c3-49aa-93e5-0c91e8144bf3) |
+| `ios/database/notion-ios-database-calendar-14-5b2ae35d-4cce-4340-a973-e6e2db005345.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/5b2ae35d-4cce-4340-a973-e6e2db005345) |
+| `ios/database/notion-ios-database-calendar-15-320f03de-6340-4a6a-ad48-f38383f18c58.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/320f03de-6340-4a6a-ad48-f38383f18c58) |
+| `ios/database/notion-ios-database-chart-01-4c5082c4-585a-49cc-b942-06f21e5b3e3f.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/4c5082c4-585a-49cc-b942-06f21e5b3e3f) |
+| `ios/database/notion-ios-database-chart-05-eb167dde-eec3-4199-8c49-5d89b7d045e4.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/eb167dde-eec3-4199-8c49-5d89b7d045e4) |
+| `ios/database/notion-ios-database-chart-07-593763f1-5ce7-4e9b-845b-233ce82e222d.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/593763f1-5ce7-4e9b-845b-233ce82e222d) |
+| `ios/database/notion-ios-database-chart-10-40879755-3948-4fdb-b555-3216033235c7.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/40879755-3948-4fdb-b555-3216033235c7) |
+| `ios/database/notion-ios-database-color-picker-04-e5accf4d-d2be-4c81-bb01-de4424af9da2.webp` | `Notion color picker` | [screen](https://mobbin.com/screens/e5accf4d-d2be-4c81-bb01-de4424af9da2) |
+| `ios/database/notion-ios-database-connections-15-34843808-b661-4c19-b9ed-5e30600428f2.webp` | `Notion connections integrations` | [screen](https://mobbin.com/screens/34843808-b661-4c19-b9ed-5e30600428f2) |
+| `ios/database/notion-ios-database-cover-icon-06-404d254a-57eb-4bd2-af62-c0797d86fe66.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/404d254a-57eb-4bd2-af62-c0797d86fe66) |
+| `ios/database/notion-ios-database-database-01-2cb53019-fd9e-4f13-8497-df283445101c.webp` | `Notion database` | [screen](https://mobbin.com/screens/2cb53019-fd9e-4f13-8497-df283445101c) |
+| `ios/database/notion-ios-database-database-11-1589e7c8-87af-4c7d-8b1a-a7ec6ec103f8.webp` | `Notion database` | [screen](https://mobbin.com/screens/1589e7c8-87af-4c7d-8b1a-a7ec6ec103f8) |
+| `ios/database/notion-ios-database-database-12-5db722f5-3e96-4285-aa6c-fcf7f0f05691.webp` | `Notion database` | [screen](https://mobbin.com/screens/5db722f5-3e96-4285-aa6c-fcf7f0f05691) |
+| `ios/database/notion-ios-database-database-13-50c18234-0645-48b1-a580-e2ebf95efa26.webp` | `Notion database` | [screen](https://mobbin.com/screens/50c18234-0645-48b1-a580-e2ebf95efa26) |
+| `ios/database/notion-ios-database-database-14-d1de51a5-69b4-4a0f-b916-9bf082abe6ad.webp` | `Notion database` | [screen](https://mobbin.com/screens/d1de51a5-69b4-4a0f-b916-9bf082abe6ad) |
+| `ios/database/notion-ios-database-database-15-cc8b241a-76d5-4192-8a33-5b970ea2f9ab.webp` | `Notion database` | [screen](https://mobbin.com/screens/cc8b241a-76d5-4192-8a33-5b970ea2f9ab) |
 | `ios/database/notion-ios-database-database-template-01-a5ffc340-ac7e-4476-ae29-ae64b903f6c2.webp` | `Notion database template` | [screen](https://mobbin.com/screens/a5ffc340-ac7e-4476-ae29-ae64b903f6c2) |
 | `ios/database/notion-ios-database-database-template-15-faaf3dc5-741b-41d9-aa33-e29444769c81.webp` | `Notion database template` | [screen](https://mobbin.com/screens/faaf3dc5-741b-41d9-aa33-e29444769c81) |
+| `ios/database/notion-ios-database-delete-confirm-13-2822ab78-01e5-4410-ae73-c813e72fb55a.webp` | `Notion delete confirmation` | [screen](https://mobbin.com/screens/2822ab78-01e5-4410-ae73-c813e72fb55a) |
 | `ios/database/notion-ios-database-filters-01-1d5d6adc-4e6f-41d9-9831-245a420d790b.webp` | `Notion filters` | [screen](https://mobbin.com/screens/1d5d6adc-4e6f-41d9-9831-245a420d790b) |
 | `ios/database/notion-ios-database-filters-02-890dd17e-5553-47fb-9637-c8bc43392e2a.webp` | `Notion filters` | [screen](https://mobbin.com/screens/890dd17e-5553-47fb-9637-c8bc43392e2a) |
 | `ios/database/notion-ios-database-filters-03-5843bb8a-6fdb-46c5-9101-81d493f7f1eb.webp` | `Notion filters` | [screen](https://mobbin.com/screens/5843bb8a-6fdb-46c5-9101-81d493f7f1eb) |
 | `ios/database/notion-ios-database-filters-04-1f10ae24-57fe-4c4b-92b1-048456640ee1.webp` | `Notion filters` | [screen](https://mobbin.com/screens/1f10ae24-57fe-4c4b-92b1-048456640ee1) |
-| `ios/database/notion-ios-database-filters-05-4c195b27-50ed-4a63-9658-f5fc5c979598.webp` | `Notion filters` | [screen](https://mobbin.com/screens/4c195b27-50ed-4a63-9658-f5fc5c979598) |
-| `ios/database/notion-ios-database-filters-06-a56c9b04-41bc-4875-84f2-d3757a73ddc4.webp` | `Notion filters` | [screen](https://mobbin.com/screens/a56c9b04-41bc-4875-84f2-d3757a73ddc4) |
 | `ios/database/notion-ios-database-filters-07-8b59d2b6-dc19-42af-ac49-fd9cf95c8c0a.webp` | `Notion filters` | [screen](https://mobbin.com/screens/8b59d2b6-dc19-42af-ac49-fd9cf95c8c0a) |
 | `ios/database/notion-ios-database-filters-08-d6d8022a-b391-45c1-8901-8200803b9baa.webp` | `Notion filters` | [screen](https://mobbin.com/screens/d6d8022a-b391-45c1-8901-8200803b9baa) |
-| `ios/database/notion-ios-database-filters-09-7174b226-1497-4754-bf60-43ecba835669.webp` | `Notion filters` | [screen](https://mobbin.com/screens/7174b226-1497-4754-bf60-43ecba835669) |
-| `ios/database/notion-ios-database-filters-10-ae3beaf9-9095-4831-ae5e-430bb28d9dd4.webp` | `Notion filters` | [screen](https://mobbin.com/screens/ae3beaf9-9095-4831-ae5e-430bb28d9dd4) |
 | `ios/database/notion-ios-database-filters-11-4acbc134-f8aa-42e5-bf4d-0d10ba691ee9.webp` | `Notion filters` | [screen](https://mobbin.com/screens/4acbc134-f8aa-42e5-bf4d-0d10ba691ee9) |
 | `ios/database/notion-ios-database-filters-12-6c740ed6-969e-427c-828d-00b779664287.webp` | `Notion filters` | [screen](https://mobbin.com/screens/6c740ed6-969e-427c-828d-00b779664287) |
-| `ios/database/notion-ios-database-filters-13-e20dff9f-f089-4d08-8f54-d32decbca5e9.webp` | `Notion filters` | [screen](https://mobbin.com/screens/e20dff9f-f089-4d08-8f54-d32decbca5e9) |
 | `ios/database/notion-ios-database-filters-14-bdd3608f-ed64-4909-b79e-3f1983539e0c.webp` | `Notion filters` | [screen](https://mobbin.com/screens/bdd3608f-ed64-4909-b79e-3f1983539e0c) |
-| `ios/database/notion-ios-database-filters-15-aeb6d373-0c84-4b69-a591-029ea8938b83.webp` | `Notion filters` | [screen](https://mobbin.com/screens/aeb6d373-0c84-4b69-a591-029ea8938b83) |
-| `ios/database/notion-ios-database-group-by-03-3cb253aa-3a56-462b-9cee-76decd1366a6.webp` | `Notion group by` | [screen](https://mobbin.com/screens/3cb253aa-3a56-462b-9cee-76decd1366a6) |
+| `ios/database/notion-ios-database-form-04-d06fde93-69df-43e8-b2d8-d6f4ada608e5.webp` | `Notion form` | [screen](https://mobbin.com/screens/d06fde93-69df-43e8-b2d8-d6f4ada608e5) |
+| `ios/database/notion-ios-database-form-12-1e23e6fa-7b8a-4782-916b-d8de0899286d.webp` | `Notion form` | [screen](https://mobbin.com/screens/1e23e6fa-7b8a-4782-916b-d8de0899286d) |
+| `ios/database/notion-ios-database-form-13-1067756c-30d6-49b8-bffe-8ae440649969.webp` | `Notion form` | [screen](https://mobbin.com/screens/1067756c-30d6-49b8-bffe-8ae440649969) |
+| `ios/database/notion-ios-database-form-15-946acd58-032e-49b3-a09e-fae2fdeeca23.webp` | `Notion form` | [screen](https://mobbin.com/screens/946acd58-032e-49b3-a09e-fae2fdeeca23) |
+| `ios/database/notion-ios-database-form-17-826a0d88-e2e2-4f48-af12-e467bab5e6aa.webp` | `Notion form` | [screen](https://mobbin.com/screens/826a0d88-e2e2-4f48-af12-e467bab5e6aa) |
+| `ios/database/notion-ios-database-form-18-09e43e43-4ca3-4ecf-9dd1-0d27ac28e976.webp` | `Notion form` | [screen](https://mobbin.com/screens/09e43e43-4ca3-4ecf-9dd1-0d27ac28e976) |
+| `ios/database/notion-ios-database-form-19-cf2de3d6-0f1a-4342-9aff-29e4cf9f05e2.webp` | `Notion form` | [screen](https://mobbin.com/screens/cf2de3d6-0f1a-4342-9aff-29e4cf9f05e2) |
+| `ios/database/notion-ios-database-gallery-03-ebf826cb-2d14-4482-bcdf-00b6c863bcb4.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/ebf826cb-2d14-4482-bcdf-00b6c863bcb4) |
+| `ios/database/notion-ios-database-gallery-05-470f3cb0-2950-4016-aa8e-44886bd6e282.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/470f3cb0-2950-4016-aa8e-44886bd6e282) |
+| `ios/database/notion-ios-database-gallery-06-ddcba3da-9557-4a83-adca-3aa6a81e16b0.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/ddcba3da-9557-4a83-adca-3aa6a81e16b0) |
+| `ios/database/notion-ios-database-gallery-07-29af3ec7-cbca-4369-8daf-9c1d9457fb06.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/29af3ec7-cbca-4369-8daf-9c1d9457fb06) |
+| `ios/database/notion-ios-database-gallery-08-f2f3317f-3920-467b-b68f-f6bf97d564e0.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/f2f3317f-3920-467b-b68f-f6bf97d564e0) |
+| `ios/database/notion-ios-database-gallery-09-a1126d2d-97e1-4133-ab53-c1be7f035b8f.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/a1126d2d-97e1-4133-ab53-c1be7f035b8f) |
 | `ios/database/notion-ios-database-group-by-07-b4e4ca0d-add7-432e-a61c-e127243d086e.webp` | `Notion group by` | [screen](https://mobbin.com/screens/b4e4ca0d-add7-432e-a61c-e127243d086e) |
-| `ios/database/notion-ios-database-group-by-11-6b0b6aa6-7d3a-4a0a-9f56-e548f0f4d6dd.webp` | `Notion group by` | [screen](https://mobbin.com/screens/6b0b6aa6-7d3a-4a0a-9f56-e548f0f4d6dd) |
-| `ios/database/notion-ios-database-group-by-12-dddf6bca-8a57-4ca8-9878-5a1d4329af52.webp` | `Notion group by` | [screen](https://mobbin.com/screens/dddf6bca-8a57-4ca8-9878-5a1d4329af52) |
 | `ios/database/notion-ios-database-group-by-13-c3125904-93f8-4a92-b022-a7f85d4ef4d9.webp` | `Notion group by` | [screen](https://mobbin.com/screens/c3125904-93f8-4a92-b022-a7f85d4ef4d9) |
+| `ios/database/notion-ios-database-list-01-4ad41221-d2e4-4534-bd0b-855f4b939eb8.webp` | `Notion list view` | [screen](https://mobbin.com/screens/4ad41221-d2e4-4534-bd0b-855f4b939eb8) |
+| `ios/database/notion-ios-database-list-15-b6306973-8008-4115-b49c-806fad5023ce.webp` | `Notion list view` | [screen](https://mobbin.com/screens/b6306973-8008-4115-b49c-806fad5023ce) |
+| `ios/database/notion-ios-database-more-menu-15-56d9b984-7f99-4ae1-acae-833ee1c31eb2.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/56d9b984-7f99-4ae1-acae-833ee1c31eb2) |
 | `ios/database/notion-ios-database-new-database-02-f08c2a28-c70e-4644-8d9c-33c5b9c7ad09.webp` | `Notion new database` | [screen](https://mobbin.com/screens/f08c2a28-c70e-4644-8d9c-33c5b9c7ad09) |
 | `ios/database/notion-ios-database-new-database-03-7c144591-ab95-42d5-ada9-fb96648c79ba.webp` | `Notion new database` | [screen](https://mobbin.com/screens/7c144591-ab95-42d5-ada9-fb96648c79ba) |
 | `ios/database/notion-ios-database-new-database-04-b3c1a971-b01f-48eb-84a7-ed544991215d.webp` | `Notion new database` | [screen](https://mobbin.com/screens/b3c1a971-b01f-48eb-84a7-ed544991215d) |
@@ -131,17 +313,15 @@ One row per file. "Found by" is the query (screens) or the flow name (flow files
 | `ios/database/notion-ios-database-new-database-12-07cec641-aacc-45b9-a558-ca28e8ed9c38.webp` | `Notion new database` | [screen](https://mobbin.com/screens/07cec641-aacc-45b9-a558-ca28e8ed9c38) |
 | `ios/database/notion-ios-database-new-database-14-8c589716-e322-4609-81da-3ad26a37de42.webp` | `Notion new database` | [screen](https://mobbin.com/screens/8c589716-e322-4609-81da-3ad26a37de42) |
 | `ios/database/notion-ios-database-new-database-15-1d806d05-b0c2-4c72-878f-2db22f802572.webp` | `Notion new database` | [screen](https://mobbin.com/screens/1d806d05-b0c2-4c72-878f-2db22f802572) |
-| `ios/database/notion-ios-database-new-database-16-c22698a6-8fee-4f1e-ba01-19b86ed72ecb.webp` | `Notion new database` | [screen](https://mobbin.com/screens/c22698a6-8fee-4f1e-ba01-19b86ed72ecb) |
+| `ios/database/notion-ios-database-notifications-10-b4c44a47-6f68-47c5-8875-ddbb2975d441.webp` | `Notion notifications` | [screen](https://mobbin.com/screens/b4c44a47-6f68-47c5-8875-ddbb2975d441) |
+| `ios/database/notion-ios-database-onboarding-09-37a68ec0-b6c3-4a19-adef-c9ffbbb4ce15.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/37a68ec0-b6c3-4a19-adef-c9ffbbb4ce15) |
+| `ios/database/notion-ios-database-page-13-aca6f562-a565-4e3d-bd59-5a4e6675857e.webp` | `Notion page` | [screen](https://mobbin.com/screens/aca6f562-a565-4e3d-bd59-5a4e6675857e) |
 | `ios/database/notion-ios-database-properties-01-8bb9115f-e0da-4e01-bd9d-2b627a4b6727.webp` | `Notion properties` | [screen](https://mobbin.com/screens/8bb9115f-e0da-4e01-bd9d-2b627a4b6727) |
 | `ios/database/notion-ios-database-properties-02-63512550-9381-42d2-839e-528e416275da.webp` | `Notion properties` | [screen](https://mobbin.com/screens/63512550-9381-42d2-839e-528e416275da) |
 | `ios/database/notion-ios-database-properties-04-9a0b56b7-2f3a-46e2-b0b6-8a549eea5627.webp` | `Notion properties` | [screen](https://mobbin.com/screens/9a0b56b7-2f3a-46e2-b0b6-8a549eea5627) |
 | `ios/database/notion-ios-database-properties-05-086606f1-d300-4d22-a236-46180752ed89.webp` | `Notion properties` | [screen](https://mobbin.com/screens/086606f1-d300-4d22-a236-46180752ed89) |
-| `ios/database/notion-ios-database-properties-06-7d7b5690-df66-49a7-ab4e-de6503244fbc.webp` | `Notion properties` | [screen](https://mobbin.com/screens/7d7b5690-df66-49a7-ab4e-de6503244fbc) |
 | `ios/database/notion-ios-database-properties-08-050083af-8fc7-4f2b-9e96-defe72762eb6.webp` | `Notion properties` | [screen](https://mobbin.com/screens/050083af-8fc7-4f2b-9e96-defe72762eb6) |
-| `ios/database/notion-ios-database-properties-11-52294205-f7ad-41c9-b766-836c6af988d9.webp` | `Notion properties` | [screen](https://mobbin.com/screens/52294205-f7ad-41c9-b766-836c6af988d9) |
 | `ios/database/notion-ios-database-properties-13-dd06bc90-912a-4c12-aa35-c53fed682cad.webp` | `Notion properties` | [screen](https://mobbin.com/screens/dd06bc90-912a-4c12-aa35-c53fed682cad) |
-| `ios/database/notion-ios-database-properties-14-0d940540-26d4-4bbf-8df5-60982ec567b2.webp` | `Notion properties` | [screen](https://mobbin.com/screens/0d940540-26d4-4bbf-8df5-60982ec567b2) |
-| `ios/database/notion-ios-database-properties-15-bb16fd8a-b2cf-432e-9097-9f5105b09569.webp` | `Notion properties` | [screen](https://mobbin.com/screens/bb16fd8a-b2cf-432e-9097-9f5105b09569) |
 | `ios/database/notion-ios-database-properties-16-142cef4e-fe09-4fc9-bab5-59d0e4e72de1.webp` | `Notion properties` | [screen](https://mobbin.com/screens/142cef4e-fe09-4fc9-bab5-59d0e4e72de1) |
 | `ios/database/notion-ios-database-property-editor-02-658fd83b-c23b-4573-aac8-a18e06e185a1.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/658fd83b-c23b-4573-aac8-a18e06e185a1) |
 | `ios/database/notion-ios-database-property-editor-03-a7a087bb-4cc7-4ef8-913b-becb3a6e09f8.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/a7a087bb-4cc7-4ef8-913b-becb3a6e09f8) |
@@ -151,26 +331,18 @@ One row per file. "Found by" is the query (screens) or the flow name (flow files
 | `ios/database/notion-ios-database-property-editor-10-0568e792-f357-4298-8d32-d373273b836e.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/0568e792-f357-4298-8d32-d373273b836e) |
 | `ios/database/notion-ios-database-property-editor-11-8d28fcb9-c6a8-4028-8012-e0b0a91aa8c9.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/8d28fcb9-c6a8-4028-8012-e0b0a91aa8c9) |
 | `ios/database/notion-ios-database-property-editor-12-4593d681-5b8a-4959-a93f-8d3b740e2f54.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/4593d681-5b8a-4959-a93f-8d3b740e2f54) |
-| `ios/database/notion-ios-database-property-editor-13-3ebe4893-48ad-4eb8-9aec-0dc51d5cbffd.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/3ebe4893-48ad-4eb8-9aec-0dc51d5cbffd) |
-| `ios/database/notion-ios-database-property-editor-14-fd5e59c9-124c-4ee9-b282-cd43cafc5c3c.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/fd5e59c9-124c-4ee9-b282-cd43cafc5c3c) |
 | `ios/database/notion-ios-database-relation-02-b4fd8ac7-ef9d-4cb4-81ae-c76c94a86764.webp` | `Notion relation property` | [screen](https://mobbin.com/screens/b4fd8ac7-ef9d-4cb4-81ae-c76c94a86764) |
 | `ios/database/notion-ios-database-relation-03-d7b8f655-fecf-4dff-a46f-8049823ff8d2.webp` | `Notion relation property` | [screen](https://mobbin.com/screens/d7b8f655-fecf-4dff-a46f-8049823ff8d2) |
-| `ios/database/notion-ios-database-relation-04-987fddc4-ead0-4b7b-a0b6-c07a10fab299.webp` | `Notion relation property` | [screen](https://mobbin.com/screens/987fddc4-ead0-4b7b-a0b6-c07a10fab299) |
-| `ios/database/notion-ios-database-relation-05-03c1c9bf-7597-4e55-86f0-abdf7e96d027.webp` | `Notion relation property` | [screen](https://mobbin.com/screens/03c1c9bf-7597-4e55-86f0-abdf7e96d027) |
 | `ios/database/notion-ios-database-relation-07-beb4a541-29ca-4203-a89e-a0f5d504e113.webp` | `Notion relation property` | [screen](https://mobbin.com/screens/beb4a541-29ca-4203-a89e-a0f5d504e113) |
 | `ios/database/notion-ios-database-row-page-03-0cb59457-00da-4154-b7c0-5bb2a4831ba2.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/0cb59457-00da-4154-b7c0-5bb2a4831ba2) |
 | `ios/database/notion-ios-database-row-page-04-16ddd22c-d559-4bd7-ab48-9557843441f9.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/16ddd22c-d559-4bd7-ab48-9557843441f9) |
-| `ios/database/notion-ios-database-row-page-07-900136e2-a920-4c8e-81f7-65bc7d92cb62.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/900136e2-a920-4c8e-81f7-65bc7d92cb62) |
-| `ios/database/notion-ios-database-row-page-08-28ece649-ec8f-46d2-982d-764e3353e7d2.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/28ece649-ec8f-46d2-982d-764e3353e7d2) |
-| `ios/database/notion-ios-database-row-page-09-c2e215ad-0e3a-4670-8be5-f340de5fcfb7.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/c2e215ad-0e3a-4670-8be5-f340de5fcfb7) |
-| `ios/database/notion-ios-database-row-page-10-fcde1e20-a77e-4235-a96a-cee150b8c81f.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/fcde1e20-a77e-4235-a96a-cee150b8c81f) |
-| `ios/database/notion-ios-database-row-page-11-1ef7f4f0-3770-466c-b703-19ece318d7bd.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/1ef7f4f0-3770-466c-b703-19ece318d7bd) |
 | `ios/database/notion-ios-database-row-page-12-bf2171ff-ff70-4e91-b417-170af24a056c.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/bf2171ff-ff70-4e91-b417-170af24a056c) |
-| `ios/database/notion-ios-database-row-page-13-ec0eb4a9-5cc1-4dd0-892c-5b46cedab204.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/ec0eb4a9-5cc1-4dd0-892c-5b46cedab204) |
-| `ios/database/notion-ios-database-row-page-14-256622cb-33aa-4441-a5a5-d0e762a5c11d.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/256622cb-33aa-4441-a5a5-d0e762a5c11d) |
+| `ios/database/notion-ios-database-search-13-bb605e5e-3ad9-418b-be9c-5b217026487b.webp` | `Notion search` | [screen](https://mobbin.com/screens/bb605e5e-3ad9-418b-be9c-5b217026487b) |
+| `ios/database/notion-ios-database-search-17-9e15f49d-0505-40c0-abde-96c56b8e2774.webp` | `Notion search` | [screen](https://mobbin.com/screens/9e15f49d-0505-40c0-abde-96c56b8e2774) |
+| `ios/database/notion-ios-database-settings-09-0193b407-2676-4f20-a428-06c7f8cff72a.webp` | `Notion settings` | [screen](https://mobbin.com/screens/0193b407-2676-4f20-a428-06c7f8cff72a) |
+| `ios/database/notion-ios-database-slash-menu-10-12c8b938-aafe-4bbb-8b91-997347a6976b.webp` | `Notion slash menu` | [screen](https://mobbin.com/screens/12c8b938-aafe-4bbb-8b91-997347a6976b) |
 | `ios/database/notion-ios-database-sort-01-84653307-d85f-4766-991d-f060f6cfe1ac.webp` | `Notion sort` | [screen](https://mobbin.com/screens/84653307-d85f-4766-991d-f060f6cfe1ac) |
 | `ios/database/notion-ios-database-sort-02-21c3130a-93ae-4e6f-ba00-a4e67aef5afd.webp` | `Notion sort` | [screen](https://mobbin.com/screens/21c3130a-93ae-4e6f-ba00-a4e67aef5afd) |
-| `ios/database/notion-ios-database-sort-03-988277d3-0dc6-4e66-86f5-45c796178ff8.webp` | `Notion sort` | [screen](https://mobbin.com/screens/988277d3-0dc6-4e66-86f5-45c796178ff8) |
 | `ios/database/notion-ios-database-sort-05-1c2f52ce-3d48-4252-a65e-c255db2fab3b.webp` | `Notion sort` | [screen](https://mobbin.com/screens/1c2f52ce-3d48-4252-a65e-c255db2fab3b) |
 | `ios/database/notion-ios-database-sort-06-e9698e1b-5bfb-4588-b07f-343900daf469.webp` | `Notion sort` | [screen](https://mobbin.com/screens/e9698e1b-5bfb-4588-b07f-343900daf469) |
 | `ios/database/notion-ios-database-sort-08-ff7fd824-ac65-4de0-9c97-ffbc39d87b54.webp` | `Notion sort` | [screen](https://mobbin.com/screens/ff7fd824-ac65-4de0-9c97-ffbc39d87b54) |
@@ -178,55 +350,43 @@ One row per file. "Found by" is the query (screens) or the flow name (flow files
 | `ios/database/notion-ios-database-sort-10-ac0d576b-6e42-4ee3-b8b1-e74f0d998a9e.webp` | `Notion sort` | [screen](https://mobbin.com/screens/ac0d576b-6e42-4ee3-b8b1-e74f0d998a9e) |
 | `ios/database/notion-ios-database-sort-13-52348672-5d4a-4133-8ffb-f1845d73f826.webp` | `Notion sort` | [screen](https://mobbin.com/screens/52348672-5d4a-4133-8ffb-f1845d73f826) |
 | `ios/database/notion-ios-database-sort-14-94f0fd50-1baa-47ad-a966-34a55e4c8d5f.webp` | `Notion sort` | [screen](https://mobbin.com/screens/94f0fd50-1baa-47ad-a966-34a55e4c8d5f) |
-| `ios/database/notion-ios-database-sort-15-fe199502-0dd2-44d7-8000-901596adb1fd.webp` | `Notion sort` | [screen](https://mobbin.com/screens/fe199502-0dd2-44d7-8000-901596adb1fd) |
 | `ios/database/notion-ios-database-sort-16-77d0dd56-a31b-4e7a-9f84-12ea27bdd889.webp` | `Notion sort` | [screen](https://mobbin.com/screens/77d0dd56-a31b-4e7a-9f84-12ea27bdd889) |
-| `ios/editors/notion-ios-editors-ai-writing-01-e1b01f24-3790-4b66-8204-ce83a8f176a8.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/e1b01f24-3790-4b66-8204-ce83a8f176a8) |
-| `ios/editors/notion-ios-editors-ai-writing-02-37220613-e225-443a-a382-a5159b205c55.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/37220613-e225-443a-a382-a5159b205c55) |
-| `ios/editors/notion-ios-editors-ai-writing-03-0f491d11-af8f-428d-815e-78977c2a4402.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/0f491d11-af8f-428d-815e-78977c2a4402) |
-| `ios/editors/notion-ios-editors-ai-writing-04-3205af8c-01ff-4ff9-9d74-efaf421a803c.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/3205af8c-01ff-4ff9-9d74-efaf421a803c) |
-| `ios/editors/notion-ios-editors-ai-writing-05-7708c12a-439a-4d1a-a2a7-488b8c2ecdb8.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/7708c12a-439a-4d1a-a2a7-488b8c2ecdb8) |
-| `ios/editors/notion-ios-editors-ai-writing-06-5899b962-5edf-437d-993a-a8d72f65f06b.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/5899b962-5edf-437d-993a-a8d72f65f06b) |
-| `ios/editors/notion-ios-editors-ai-writing-07-116fa290-07ba-4e68-bc42-4832deffeb9b.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/116fa290-07ba-4e68-bc42-4832deffeb9b) |
-| `ios/editors/notion-ios-editors-ai-writing-08-0e2458ee-69d1-4d05-a6f0-7932fafcad3e.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/0e2458ee-69d1-4d05-a6f0-7932fafcad3e) |
-| `ios/editors/notion-ios-editors-ai-writing-09-96126981-3a81-4063-8b1e-df486764a755.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/96126981-3a81-4063-8b1e-df486764a755) |
-| `ios/editors/notion-ios-editors-ai-writing-10-bae7276b-6b3b-4d4a-8c64-9ec09637db15.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/bae7276b-6b3b-4d4a-8c64-9ec09637db15) |
-| `ios/editors/notion-ios-editors-ai-writing-11-8c3affc7-741b-4e49-b4fe-27e9471d0177.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/8c3affc7-741b-4e49-b4fe-27e9471d0177) |
-| `ios/editors/notion-ios-editors-ai-writing-12-0f612952-7e93-4c44-b1ae-8879847d69f5.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/0f612952-7e93-4c44-b1ae-8879847d69f5) |
-| `ios/editors/notion-ios-editors-ai-writing-15-1d4664ff-f9ce-4f49-9d26-e9e5443d3304.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/1d4664ff-f9ce-4f49-9d26-e9e5443d3304) |
-| `ios/editors/notion-ios-editors-ai-writing-16-24aa4e82-e084-4a67-a9aa-fae4bdf4dc4b.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/24aa4e82-e084-4a67-a9aa-fae4bdf4dc4b) |
-| `ios/editors/notion-ios-editors-ai-writing-17-f35c1c72-6ebc-42c1-bd6f-96392966ef7f.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/f35c1c72-6ebc-42c1-bd6f-96392966ef7f) |
-| `ios/editors/notion-ios-editors-ai-writing-18-4a882eac-b96e-402b-80fc-94dc353502ad.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/4a882eac-b96e-402b-80fc-94dc353502ad) |
-| `ios/editors/notion-ios-editors-ask-ai-05-5415dd8d-025e-435b-a395-077684dbd4fd.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/5415dd8d-025e-435b-a395-077684dbd4fd) |
-| `ios/editors/notion-ios-editors-ask-ai-09-fa05cd20-e1d7-454e-957f-460523ad5f73.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/fa05cd20-e1d7-454e-957f-460523ad5f73) |
-| `ios/editors/notion-ios-editors-ask-ai-12-6a216e4f-97a1-4751-8239-3960c05b8ee1.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/6a216e4f-97a1-4751-8239-3960c05b8ee1) |
-| `ios/editors/notion-ios-editors-ask-ai-14-2aeeb92a-7fcd-4fa4-ba2b-88712303552f.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/2aeeb92a-7fcd-4fa4-ba2b-88712303552f) |
-| `ios/editors/notion-ios-editors-ask-ai-15-db0116c6-f370-472a-adbb-5dada1ba5e7c.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/db0116c6-f370-472a-adbb-5dada1ba5e7c) |
-| `ios/editors/notion-ios-editors-ask-ai-16-b0c5b10f-47f4-45cd-ad78-8ce9a21a8fad.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/b0c5b10f-47f4-45cd-ad78-8ce9a21a8fad) |
-| `ios/editors/notion-ios-editors-ask-ai-17-691c72b9-0f92-4752-9170-170f48aa00c2.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/691c72b9-0f92-4752-9170-170f48aa00c2) |
-| `ios/editors/notion-ios-editors-ask-ai-18-05594bc8-6a07-49c1-aaed-ead081109d9c.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/05594bc8-6a07-49c1-aaed-ead081109d9c) |
-| `ios/editors/notion-ios-editors-ask-ai-19-d22b4989-ae95-477f-a756-628546ab3e0a.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/d22b4989-ae95-477f-a756-628546ab3e0a) |
-| `ios/editors/notion-ios-editors-ask-ai-20-80d07c1b-b56f-4b06-a69a-8fe23be0f637.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/80d07c1b-b56f-4b06-a69a-8fe23be0f637) |
+| `ios/database/notion-ios-database-sub-pages-01-b680d7b4-32d9-4ad7-a9c1-437fbad1d7cc.webp` | `Notion sub-pages` | [screen](https://mobbin.com/screens/b680d7b4-32d9-4ad7-a9c1-437fbad1d7cc) |
+| `ios/database/notion-ios-database-sub-pages-02-11da7ea4-fb46-43a7-838d-3f93a0599381.webp` | `Notion sub-pages` | [screen](https://mobbin.com/screens/11da7ea4-fb46-43a7-838d-3f93a0599381) |
+| `ios/database/notion-ios-database-sub-pages-03-cc29c27b-0f54-4d02-bb5e-e95f51e81dbb.webp` | `Notion sub-pages` | [screen](https://mobbin.com/screens/cc29c27b-0f54-4d02-bb5e-e95f51e81dbb) |
+| `ios/database/notion-ios-database-table-01-d3acf726-47cf-46f4-bd0d-65788523dc3b.webp` | `Notion table view` | [screen](https://mobbin.com/screens/d3acf726-47cf-46f4-bd0d-65788523dc3b) |
+| `ios/database/notion-ios-database-table-02-9867cb76-74ed-4ff0-9254-398aeff2265e.webp` | `Notion table view` | [screen](https://mobbin.com/screens/9867cb76-74ed-4ff0-9254-398aeff2265e) |
+| `ios/database/notion-ios-database-table-03-e7391344-2ba8-491f-b940-966f1a329459.webp` | `Notion table view` | [screen](https://mobbin.com/screens/e7391344-2ba8-491f-b940-966f1a329459) |
+| `ios/database/notion-ios-database-table-04-a0d1e399-b713-46a7-abec-15ea7e7cdc06.webp` | `Notion table view` | [screen](https://mobbin.com/screens/a0d1e399-b713-46a7-abec-15ea7e7cdc06) |
+| `ios/database/notion-ios-database-table-10-8d6dcf3b-3197-4244-86b6-f901f7df6079.webp` | `Notion table view` | [screen](https://mobbin.com/screens/8d6dcf3b-3197-4244-86b6-f901f7df6079) |
+| `ios/database/notion-ios-database-table-14-7f2dbda0-d1e7-4086-8ef8-fe998e0f6174.webp` | `Notion table view` | [screen](https://mobbin.com/screens/7f2dbda0-d1e7-4086-8ef8-fe998e0f6174) |
+| `ios/database/notion-ios-database-table-15-2517d4cf-7998-4f68-a689-20489ef18ec0.webp` | `Notion table view` | [screen](https://mobbin.com/screens/2517d4cf-7998-4f68-a689-20489ef18ec0) |
+| `ios/database/notion-ios-database-templates-02-4bf5c754-459f-4422-af47-05a6215f3294.webp` | `Notion templates` | [screen](https://mobbin.com/screens/4bf5c754-459f-4422-af47-05a6215f3294) |
+| `ios/database/notion-ios-database-timeline-02-a908be65-7167-4cdd-9e72-809a5dbf6431.webp` | `Notion timeline view` | [screen](https://mobbin.com/screens/a908be65-7167-4cdd-9e72-809a5dbf6431) |
+| `ios/database/notion-ios-database-timeline-03-ee96920e-cf00-4aa1-b1b8-75750e1aace1.webp` | `Notion timeline view` | [screen](https://mobbin.com/screens/ee96920e-cf00-4aa1-b1b8-75750e1aace1) |
+| `ios/database/notion-ios-database-timeline-04-c7480761-5836-4c2d-b6fc-d6a1d845a9b3.webp` | `Notion timeline view` | [screen](https://mobbin.com/screens/c7480761-5836-4c2d-b6fc-d6a1d845a9b3) |
+| `ios/database/notion-ios-database-trash-05-3829e8ca-ff60-43ab-9451-45320dd1810e.webp` | `Notion trash` | [screen](https://mobbin.com/screens/3829e8ca-ff60-43ab-9451-45320dd1810e) |
+| `ios/database/notion-ios-database-widgets-05-1c5ba4ba-217e-4c3a-8c2c-abdf94dbb026.webp` | `Notion widgets` | [screen](https://mobbin.com/screens/1c5ba4ba-217e-4c3a-8c2c-abdf94dbb026) |
+| `ios/database/notion-ios-database-wiki-03-3f8aeae7-855a-48d8-9c22-3b9e16b315f3.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/3f8aeae7-855a-48d8-9c22-3b9e16b315f3) |
+| `ios/database/notion-ios-database-wiki-04-0d3c2408-d865-417e-82f8-319bdc103301.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/0d3c2408-d865-417e-82f8-319bdc103301) |
+| `ios/database/notion-ios-database-wiki-15-6e1d8bb8-6ebc-4889-aedb-d1abd09ca66c.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/6e1d8bb8-6ebc-4889-aedb-d1abd09ca66c) |
+| `ios/editors/notion-ios-editors-automations-03-fe745ffa-e0de-4dc1-b955-d9b723d19f6f.webp` | `Notion automations` | [screen](https://mobbin.com/screens/fe745ffa-e0de-4dc1-b955-d9b723d19f6f) |
+| `ios/editors/notion-ios-editors-automations-06-6db5ca8f-737b-470e-9a9d-6b775f913667.webp` | `Notion automations` | [screen](https://mobbin.com/screens/6db5ca8f-737b-470e-9a9d-6b775f913667) |
+| `ios/editors/notion-ios-editors-automations-08-cd32157c-a8d5-4b8a-b240-097a3911add5.webp` | `Notion automations` | [screen](https://mobbin.com/screens/cd32157c-a8d5-4b8a-b240-097a3911add5) |
 | `ios/editors/notion-ios-editors-block-menu-02-ffbb0bcf-8417-4242-a446-dd95101be27f.webp` | `Notion block menu` | [screen](https://mobbin.com/screens/ffbb0bcf-8417-4242-a446-dd95101be27f) |
-| `ios/editors/notion-ios-editors-block-menu-06-c41e3d47-63a3-4682-b040-23822833df27.webp` | `Notion block menu` | [screen](https://mobbin.com/screens/c41e3d47-63a3-4682-b040-23822833df27) |
-| `ios/editors/notion-ios-editors-block-menu-07-9acbba50-e88a-4e2c-b3ae-a8de35da6a92.webp` | `Notion block menu` | [screen](https://mobbin.com/screens/9acbba50-e88a-4e2c-b3ae-a8de35da6a92) |
 | `ios/editors/notion-ios-editors-block-menu-09-daec87cc-e96b-4046-b14c-eff3ac281e29.webp` | `Notion block menu` | [screen](https://mobbin.com/screens/daec87cc-e96b-4046-b14c-eff3ac281e29) |
 | `ios/editors/notion-ios-editors-block-menu-10-7950fc99-d6a3-4c91-a9c9-d00e339483c1.webp` | `Notion block menu` | [screen](https://mobbin.com/screens/7950fc99-d6a3-4c91-a9c9-d00e339483c1) |
-| `ios/editors/notion-ios-editors-block-menu-11-b3e1dff9-f427-4e82-ab85-19cc5ac7d187.webp` | `Notion block menu` | [screen](https://mobbin.com/screens/b3e1dff9-f427-4e82-ab85-19cc5ac7d187) |
 | `ios/editors/notion-ios-editors-block-menu-12-b6f52bc7-9d96-4cb0-b5fd-708db38b9d3f.webp` | `Notion block menu` | [screen](https://mobbin.com/screens/b6f52bc7-9d96-4cb0-b5fd-708db38b9d3f) |
 | `ios/editors/notion-ios-editors-block-menu-14-7e1fda1e-b5df-4801-9a04-676cbead7612.webp` | `Notion block menu` | [screen](https://mobbin.com/screens/7e1fda1e-b5df-4801-9a04-676cbead7612) |
 | `ios/editors/notion-ios-editors-checklist-01-79d09f65-92d8-4cdb-a041-9c3c6b429452.webp` | `Notion checklist` | [screen](https://mobbin.com/screens/79d09f65-92d8-4cdb-a041-9c3c6b429452) |
 | `ios/editors/notion-ios-editors-checklist-02-449ce8e8-87c1-49af-8818-b5b0864f27d9.webp` | `Notion checklist` | [screen](https://mobbin.com/screens/449ce8e8-87c1-49af-8818-b5b0864f27d9) |
 | `ios/editors/notion-ios-editors-code-block-02-b07b6a5c-21e1-4e46-87ce-ed91a8bfd1b2.webp` | `Notion code block` | [screen](https://mobbin.com/screens/b07b6a5c-21e1-4e46-87ce-ed91a8bfd1b2) |
 | `ios/editors/notion-ios-editors-code-block-03-597ec612-a723-4769-891c-0b181fdec00c.webp` | `Notion code block` | [screen](https://mobbin.com/screens/597ec612-a723-4769-891c-0b181fdec00c) |
-| `ios/editors/notion-ios-editors-cover-icon-01-b1b9d218-f175-44f7-9272-9c26ee18d793.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/b1b9d218-f175-44f7-9272-9c26ee18d793) |
-| `ios/editors/notion-ios-editors-cover-icon-02-4dd0854f-794a-4157-8b4e-83c58d74fa62.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/4dd0854f-794a-4157-8b4e-83c58d74fa62) |
-| `ios/editors/notion-ios-editors-cover-icon-04-e9e94681-2120-4697-aadd-814c1f9464c1.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/e9e94681-2120-4697-aadd-814c1f9464c1) |
 | `ios/editors/notion-ios-editors-cover-icon-05-62fe716c-ef93-48cd-8317-782fdeca6152.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/62fe716c-ef93-48cd-8317-782fdeca6152) |
-| `ios/editors/notion-ios-editors-cover-icon-06-404d254a-57eb-4bd2-af62-c0797d86fe66.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/404d254a-57eb-4bd2-af62-c0797d86fe66) |
 | `ios/editors/notion-ios-editors-cover-icon-07-9d90280d-cf5f-4b9d-a8d4-3c96cfff5ec4.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/9d90280d-cf5f-4b9d-a8d4-3c96cfff5ec4) |
 | `ios/editors/notion-ios-editors-cover-icon-10-b5352c94-5145-44c8-a6af-9ee40677b88f.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/b5352c94-5145-44c8-a6af-9ee40677b88f) |
-| `ios/editors/notion-ios-editors-cover-icon-11-6f5b6ad1-9582-4d7f-8053-edf3bff564a6.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/6f5b6ad1-9582-4d7f-8053-edf3bff564a6) |
 | `ios/editors/notion-ios-editors-cover-icon-15-080d7a29-6cc6-43d1-9487-642462aa0247.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/080d7a29-6cc6-43d1-9487-642462aa0247) |
+| `ios/editors/notion-ios-editors-delete-confirm-09-3c913eb7-2aaa-43a5-935f-4958ad58340a.webp` | `Notion delete confirmation` | [screen](https://mobbin.com/screens/3c913eb7-2aaa-43a5-935f-4958ad58340a) |
 | `ios/editors/notion-ios-editors-editor-02-b689e6c5-62b4-48e9-83d0-76cc61b9966e.webp` | `Notion editor` | [screen](https://mobbin.com/screens/b689e6c5-62b4-48e9-83d0-76cc61b9966e) |
 | `ios/editors/notion-ios-editors-editor-04-4f773fc9-7d28-4915-998c-637ac1014804.webp` | `Notion editor` | [screen](https://mobbin.com/screens/4f773fc9-7d28-4915-998c-637ac1014804) |
 | `ios/editors/notion-ios-editors-editor-05-109b1095-20e7-45bb-8a61-e4814d569000.webp` | `Notion editor` | [screen](https://mobbin.com/screens/109b1095-20e7-45bb-8a61-e4814d569000) |
@@ -242,55 +402,99 @@ One row per file. "Found by" is the query (screens) or the flow name (flow files
 | `ios/editors/notion-ios-editors-embed-02-165bc0c5-95b9-42b2-9e71-9b5725722c4f.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/165bc0c5-95b9-42b2-9e71-9b5725722c4f) |
 | `ios/editors/notion-ios-editors-embed-03-2f99a08e-bb58-450d-87d3-b4c7a4073e82.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/2f99a08e-bb58-450d-87d3-b4c7a4073e82) |
 | `ios/editors/notion-ios-editors-embed-05-76f6fcdb-592b-4f22-bc9c-bec759415e6a.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/76f6fcdb-592b-4f22-bc9c-bec759415e6a) |
-| `ios/editors/notion-ios-editors-embed-08-ccd246a9-47c1-4baa-b767-d3dc794ad548.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/ccd246a9-47c1-4baa-b767-d3dc794ad548) |
 | `ios/editors/notion-ios-editors-embed-11-9db81f63-b365-4131-8ebb-3e441202725d.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/9db81f63-b365-4131-8ebb-3e441202725d) |
-| `ios/editors/notion-ios-editors-embed-14-503e4dbf-9cef-4203-8223-66861f494597.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/503e4dbf-9cef-4203-8223-66861f494597) |
-| `ios/editors/notion-ios-editors-embed-15-db917d76-7160-4bb2-97b5-9f11b940ad60.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/db917d76-7160-4bb2-97b5-9f11b940ad60) |
+| `ios/editors/notion-ios-editors-empty-14-e1f4852b-5b5c-4f70-858d-bb024afd4dc2.webp` | `Notion empty state` | [screen](https://mobbin.com/screens/e1f4852b-5b5c-4f70-858d-bb024afd4dc2) |
+| `ios/editors/notion-ios-editors-empty-database-09-d658e522-8558-4546-aea8-8993c6dd4d3a.webp` | `Notion empty database` | [screen](https://mobbin.com/screens/d658e522-8558-4546-aea8-8993c6dd4d3a) |
+| `ios/editors/notion-ios-editors-favorites-01-f72f259f-acd3-400f-a6ad-66f736d32aea.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/f72f259f-acd3-400f-a6ad-66f736d32aea) |
+| `ios/editors/notion-ios-editors-favorites-02-ee317f0a-d52d-4dee-98db-60918c55de7b.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/ee317f0a-d52d-4dee-98db-60918c55de7b) |
+| `ios/editors/notion-ios-editors-form-01-b326a703-5651-442c-a83e-5c5f5817c553.webp` | `Notion form` | [screen](https://mobbin.com/screens/b326a703-5651-442c-a83e-5c5f5817c553) |
+| `ios/editors/notion-ios-editors-form-05-a0e2265c-1423-4072-bfdc-86246e45db89.webp` | `Notion form` | [screen](https://mobbin.com/screens/a0e2265c-1423-4072-bfdc-86246e45db89) |
+| `ios/editors/notion-ios-editors-form-09-3c1fea37-d0b5-42a6-9ba3-01207890cb19.webp` | `Notion form` | [screen](https://mobbin.com/screens/3c1fea37-d0b5-42a6-9ba3-01207890cb19) |
+| `ios/editors/notion-ios-editors-form-20-28b22ab3-d927-4da7-ab36-608083ed1e8b.webp` | `Notion form` | [screen](https://mobbin.com/screens/28b22ab3-d927-4da7-ab36-608083ed1e8b) |
+| `ios/editors/notion-ios-editors-form-23-447a6412-0567-47c4-bd5e-806220db5879.webp` | `Notion form` | [screen](https://mobbin.com/screens/447a6412-0567-47c4-bd5e-806220db5879) |
 | `ios/editors/notion-ios-editors-formatting-01-011e1303-32b9-4882-8d28-71b5b233c517.webp` | `Notion text formatting toolbar` | [screen](https://mobbin.com/screens/011e1303-32b9-4882-8d28-71b5b233c517) |
 | `ios/editors/notion-ios-editors-formatting-02-39700986-5ab0-4ed9-b654-5d1a6ac92f38.webp` | `Notion text formatting toolbar` | [screen](https://mobbin.com/screens/39700986-5ab0-4ed9-b654-5d1a6ac92f38) |
 | `ios/editors/notion-ios-editors-formatting-03-1cbd6884-2c4a-4911-9fb4-296a30ba3979.webp` | `Notion text formatting toolbar` | [screen](https://mobbin.com/screens/1cbd6884-2c4a-4911-9fb4-296a30ba3979) |
 | `ios/editors/notion-ios-editors-formatting-04-0a7fe54e-e77c-4548-a036-5637eb5de737.webp` | `Notion text formatting toolbar` | [screen](https://mobbin.com/screens/0a7fe54e-e77c-4548-a036-5637eb5de737) |
 | `ios/editors/notion-ios-editors-formatting-05-bbf8caf9-a3ed-42e3-aad9-0b1d489d6014.webp` | `Notion text formatting toolbar` | [screen](https://mobbin.com/screens/bbf8caf9-a3ed-42e3-aad9-0b1d489d6014) |
 | `ios/editors/notion-ios-editors-formatting-06-bb04ea66-02e0-43ff-97ca-21dca43e7947.webp` | `Notion text formatting toolbar` | [screen](https://mobbin.com/screens/bb04ea66-02e0-43ff-97ca-21dca43e7947) |
-| `ios/editors/notion-ios-editors-formatting-07-dfa0cc25-c898-4d50-a761-5c0ed5ef05e4.webp` | `Notion text formatting toolbar` | [screen](https://mobbin.com/screens/dfa0cc25-c898-4d50-a761-5c0ed5ef05e4) |
-| `ios/editors/notion-ios-editors-mentions-01-f25b2b41-8ef6-49d5-8642-76aaf1ae88e8.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/f25b2b41-8ef6-49d5-8642-76aaf1ae88e8) |
+| `ios/editors/notion-ios-editors-gallery-01-6db99f87-62f1-4e09-bfd3-151cbe473a42.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/6db99f87-62f1-4e09-bfd3-151cbe473a42) |
+| `ios/editors/notion-ios-editors-gallery-02-20a94d24-d598-46d6-ba3b-ca775d3b3121.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/20a94d24-d598-46d6-ba3b-ca775d3b3121) |
+| `ios/editors/notion-ios-editors-group-by-03-3cb253aa-3a56-462b-9cee-76decd1366a6.webp` | `Notion group by` | [screen](https://mobbin.com/screens/3cb253aa-3a56-462b-9cee-76decd1366a6) |
+| `ios/editors/notion-ios-editors-home-16-8c354deb-824f-409c-bb1f-41101da26be2.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/8c354deb-824f-409c-bb1f-41101da26be2) |
+| `ios/editors/notion-ios-editors-home-20-a8717385-4ff4-4d3e-aead-e4a483d6a5f1.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/a8717385-4ff4-4d3e-aead-e4a483d6a5f1) |
+| `ios/editors/notion-ios-editors-home-21-46932813-dd09-4278-85e4-d008937fd016.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/46932813-dd09-4278-85e4-d008937fd016) |
+| `ios/editors/notion-ios-editors-import-03-82536e88-e39f-4cb4-935b-51682f33b08b.webp` | `Notion import` | [screen](https://mobbin.com/screens/82536e88-e39f-4cb4-935b-51682f33b08b) |
+| `ios/editors/notion-ios-editors-import-06-a0c66da6-7cb2-456a-8f24-1c4c362611ce.webp` | `Notion import` | [screen](https://mobbin.com/screens/a0c66da6-7cb2-456a-8f24-1c4c362611ce) |
+| `ios/editors/notion-ios-editors-import-07-f8a28b02-df6d-4e22-aea6-11aaad821828.webp` | `Notion import` | [screen](https://mobbin.com/screens/f8a28b02-df6d-4e22-aea6-11aaad821828) |
+| `ios/editors/notion-ios-editors-import-08-2683a24b-a08e-4f85-b79a-eea7bb463921.webp` | `Notion import` | [screen](https://mobbin.com/screens/2683a24b-a08e-4f85-b79a-eea7bb463921) |
+| `ios/editors/notion-ios-editors-import-13-0414adfa-20ae-468d-b1c3-6d4c069d496e.webp` | `Notion import` | [screen](https://mobbin.com/screens/0414adfa-20ae-468d-b1c3-6d4c069d496e) |
+| `ios/editors/notion-ios-editors-import-15-725de4a2-84f0-4cd4-ae94-395031756bca.webp` | `Notion import` | [screen](https://mobbin.com/screens/725de4a2-84f0-4cd4-ae94-395031756bca) |
+| `ios/editors/notion-ios-editors-language-07-12781a0c-9ef3-4086-8581-252bda8c0bf7.webp` | `Notion language and region` | [screen](https://mobbin.com/screens/12781a0c-9ef3-4086-8581-252bda8c0bf7) |
+| `ios/editors/notion-ios-editors-language-08-88285fb7-0c9b-496f-80d4-5d0a3ecc05dd.webp` | `Notion language and region` | [screen](https://mobbin.com/screens/88285fb7-0c9b-496f-80d4-5d0a3ecc05dd) |
+| `ios/editors/notion-ios-editors-list-03-4d8a1f66-aa12-46ea-9306-fa9d1f1a4b45.webp` | `Notion list view` | [screen](https://mobbin.com/screens/4d8a1f66-aa12-46ea-9306-fa9d1f1a4b45) |
+| `ios/editors/notion-ios-editors-list-06-3958c573-f95a-4e46-8c4d-3b046e27e942.webp` | `Notion list view` | [screen](https://mobbin.com/screens/3958c573-f95a-4e46-8c4d-3b046e27e942) |
+| `ios/editors/notion-ios-editors-list-09-6e674534-c702-471a-ad27-346033d12856.webp` | `Notion list view` | [screen](https://mobbin.com/screens/6e674534-c702-471a-ad27-346033d12856) |
+| `ios/editors/notion-ios-editors-list-12-fb6838a2-c6ff-46c1-986e-c05ef71ee638.webp` | `Notion list view` | [screen](https://mobbin.com/screens/fb6838a2-c6ff-46c1-986e-c05ef71ee638) |
+| `ios/editors/notion-ios-editors-list-13-1d748074-5dd5-4a6e-8791-2098334f937a.webp` | `Notion list view` | [screen](https://mobbin.com/screens/1d748074-5dd5-4a6e-8791-2098334f937a) |
+| `ios/editors/notion-ios-editors-list-14-019b0ddd-abc3-44f3-9932-ae74e98ae7e7.webp` | `Notion list view` | [screen](https://mobbin.com/screens/019b0ddd-abc3-44f3-9932-ae74e98ae7e7) |
+| `ios/editors/notion-ios-editors-list-16-e1799f0b-b09f-429d-a9e2-6517a193228b.webp` | `Notion list view` | [screen](https://mobbin.com/screens/e1799f0b-b09f-429d-a9e2-6517a193228b) |
+| `ios/editors/notion-ios-editors-list-17-7019fb1c-3660-4afa-9ce9-f3a8d1a7edf4.webp` | `Notion list view` | [screen](https://mobbin.com/screens/7019fb1c-3660-4afa-9ce9-f3a8d1a7edf4) |
+| `ios/editors/notion-ios-editors-list-18-0e9f660f-46e9-4438-99b0-185ab6dfab4a.webp` | `Notion list view` | [screen](https://mobbin.com/screens/0e9f660f-46e9-4438-99b0-185ab6dfab4a) |
+| `ios/editors/notion-ios-editors-list-19-6d00fbcd-2484-4f24-b37e-d4132a216c42.webp` | `Notion list view` | [screen](https://mobbin.com/screens/6d00fbcd-2484-4f24-b37e-d4132a216c42) |
+| `ios/editors/notion-ios-editors-list-20-8d3fc9e2-d392-41da-bb1a-070f3274964d.webp` | `Notion list view` | [screen](https://mobbin.com/screens/8d3fc9e2-d392-41da-bb1a-070f3274964d) |
+| `ios/editors/notion-ios-editors-list-21-61a0b623-e12c-461b-b3b9-74200476189c.webp` | `Notion list view` | [screen](https://mobbin.com/screens/61a0b623-e12c-461b-b3b9-74200476189c) |
+| `ios/editors/notion-ios-editors-list-22-63bd2913-d0b2-499d-b06d-9009f0ca669d.webp` | `Notion list view` | [screen](https://mobbin.com/screens/63bd2913-d0b2-499d-b06d-9009f0ca669d) |
+| `ios/editors/notion-ios-editors-list-23-692eaaa1-1245-4109-a68b-6605daee286c.webp` | `Notion list view` | [screen](https://mobbin.com/screens/692eaaa1-1245-4109-a68b-6605daee286c) |
+| `ios/editors/notion-ios-editors-list-24-061d2fda-e4d6-460b-a6f7-146ec885fd95.webp` | `Notion list view` | [screen](https://mobbin.com/screens/061d2fda-e4d6-460b-a6f7-146ec885fd95) |
 | `ios/editors/notion-ios-editors-mentions-02-d2589d77-3862-43e8-ad86-72b08b2a9efa.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/d2589d77-3862-43e8-ad86-72b08b2a9efa) |
-| `ios/editors/notion-ios-editors-mentions-03-7dc6941c-654d-414e-8019-c7ab6d3ba26b.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/7dc6941c-654d-414e-8019-c7ab6d3ba26b) |
-| `ios/editors/notion-ios-editors-mentions-04-5bdf0904-f36e-4ef2-8a3e-f7ffbc012e2b.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/5bdf0904-f36e-4ef2-8a3e-f7ffbc012e2b) |
-| `ios/editors/notion-ios-editors-mentions-05-e0639cb0-62e3-48c6-a01c-7c8518d4b78f.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/e0639cb0-62e3-48c6-a01c-7c8518d4b78f) |
-| `ios/editors/notion-ios-editors-mentions-08-31fb308a-eeb6-4a7d-bae6-1d4a8b2bcc46.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/31fb308a-eeb6-4a7d-bae6-1d4a8b2bcc46) |
-| `ios/editors/notion-ios-editors-mentions-09-9db949ed-7d46-4283-b55e-3e55d69ccd0d.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/9db949ed-7d46-4283-b55e-3e55d69ccd0d) |
-| `ios/editors/notion-ios-editors-mentions-10-643f5320-db6a-446c-ae15-ea08a48fea79.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/643f5320-db6a-446c-ae15-ea08a48fea79) |
+| `ios/editors/notion-ios-editors-move-to-14-4cc485b1-c852-4262-8133-251d16bac526.webp` | `Notion move to` | [screen](https://mobbin.com/screens/4cc485b1-c852-4262-8133-251d16bac526) |
+| `ios/editors/notion-ios-editors-page-02-23ebacc5-4ddd-4afc-ae8e-3a07063e80cd.webp` | `Notion page` | [screen](https://mobbin.com/screens/23ebacc5-4ddd-4afc-ae8e-3a07063e80cd) |
+| `ios/editors/notion-ios-editors-page-03-11003827-5de7-47ea-8fba-84f2985477cf.webp` | `Notion page` | [screen](https://mobbin.com/screens/11003827-5de7-47ea-8fba-84f2985477cf) |
+| `ios/editors/notion-ios-editors-page-05-58478632-42e4-4545-b49e-fd9177431940.webp` | `Notion page` | [screen](https://mobbin.com/screens/58478632-42e4-4545-b49e-fd9177431940) |
+| `ios/editors/notion-ios-editors-page-09-0167447d-0609-4232-a79f-d1466381e3aa.webp` | `Notion page` | [screen](https://mobbin.com/screens/0167447d-0609-4232-a79f-d1466381e3aa) |
+| `ios/editors/notion-ios-editors-page-11-d5a610ea-b60f-4233-9e17-40fedb8af3a4.webp` | `Notion page` | [screen](https://mobbin.com/screens/d5a610ea-b60f-4233-9e17-40fedb8af3a4) |
+| `ios/editors/notion-ios-editors-page-12-d53b3912-f60a-4bd1-872e-18276fe2acd5.webp` | `Notion page` | [screen](https://mobbin.com/screens/d53b3912-f60a-4bd1-872e-18276fe2acd5) |
+| `ios/editors/notion-ios-editors-page-14-598aef7e-8f89-4e7f-acd6-e55ec176cf2a.webp` | `Notion page` | [screen](https://mobbin.com/screens/598aef7e-8f89-4e7f-acd6-e55ec176cf2a) |
+| `ios/editors/notion-ios-editors-page-15-18df725c-244b-4974-86fc-7a4f17473f19.webp` | `Notion page` | [screen](https://mobbin.com/screens/18df725c-244b-4974-86fc-7a4f17473f19) |
+| `ios/editors/notion-ios-editors-page-history-02-b2a85e9c-88c4-4e9c-9391-65d27ba95d20.webp` | `Notion page history` | [screen](https://mobbin.com/screens/b2a85e9c-88c4-4e9c-9391-65d27ba95d20) |
+| `ios/editors/notion-ios-editors-page-history-03-dab6009c-4b30-48c0-8048-1b526ce872c3.webp` | `Notion page history` | [screen](https://mobbin.com/screens/dab6009c-4b30-48c0-8048-1b526ce872c3) |
+| `ios/editors/notion-ios-editors-property-editor-13-3ebe4893-48ad-4eb8-9aec-0dc51d5cbffd.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/3ebe4893-48ad-4eb8-9aec-0dc51d5cbffd) |
+| `ios/editors/notion-ios-editors-quick-note-03-0f96c4df-8895-4620-b4e8-726f350589bb.webp` | `Notion quick note` | [screen](https://mobbin.com/screens/0f96c4df-8895-4620-b4e8-726f350589bb) |
+| `ios/editors/notion-ios-editors-row-page-07-900136e2-a920-4c8e-81f7-65bc7d92cb62.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/900136e2-a920-4c8e-81f7-65bc7d92cb62) |
+| `ios/editors/notion-ios-editors-row-page-08-28ece649-ec8f-46d2-982d-764e3353e7d2.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/28ece649-ec8f-46d2-982d-764e3353e7d2) |
+| `ios/editors/notion-ios-editors-row-page-09-c2e215ad-0e3a-4670-8be5-f340de5fcfb7.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/c2e215ad-0e3a-4670-8be5-f340de5fcfb7) |
+| `ios/editors/notion-ios-editors-row-page-10-fcde1e20-a77e-4235-a96a-cee150b8c81f.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/fcde1e20-a77e-4235-a96a-cee150b8c81f) |
+| `ios/editors/notion-ios-editors-row-page-11-1ef7f4f0-3770-466c-b703-19ece318d7bd.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/1ef7f4f0-3770-466c-b703-19ece318d7bd) |
 | `ios/editors/notion-ios-editors-slash-menu-01-6d541d61-ef40-4190-a91a-815925e83657.webp` | `Notion slash menu` | [screen](https://mobbin.com/screens/6d541d61-ef40-4190-a91a-815925e83657) |
 | `ios/editors/notion-ios-editors-slash-menu-02-cf573f99-fcd7-4e70-886b-8f13dd56f660.webp` | `Notion slash menu` | [screen](https://mobbin.com/screens/cf573f99-fcd7-4e70-886b-8f13dd56f660) |
-| `ios/editors/notion-ios-editors-slash-menu-04-7a8eec44-aeb1-40f6-9e01-8d349d6fb9f5.webp` | `Notion slash menu` | [screen](https://mobbin.com/screens/7a8eec44-aeb1-40f6-9e01-8d349d6fb9f5) |
-| `ios/editors/notion-ios-editors-slash-menu-06-f380f296-9d59-48a0-89f5-d78fe16d37fd.webp` | `Notion slash menu` | [screen](https://mobbin.com/screens/f380f296-9d59-48a0-89f5-d78fe16d37fd) |
-| `ios/editors/notion-ios-editors-slash-menu-07-04b18cc3-6d66-4cfc-84b3-4fe61448d3a1.webp` | `Notion slash menu` | [screen](https://mobbin.com/screens/04b18cc3-6d66-4cfc-84b3-4fe61448d3a1) |
-| `ios/editors/notion-ios-editors-slash-menu-10-12c8b938-aafe-4bbb-8b91-997347a6976b.webp` | `Notion slash menu` | [screen](https://mobbin.com/screens/12c8b938-aafe-4bbb-8b91-997347a6976b) |
-| `ios/editors/notion-ios-editors-toggle-02-d60c23c3-5b27-418a-9090-e3f8a2c3c21a.webp` | `Notion toggle block` | [screen](https://mobbin.com/screens/d60c23c3-5b27-418a-9090-e3f8a2c3c21a) |
+| `ios/editors/notion-ios-editors-tabs-01-01407f53-f9fb-4cf6-8d3e-16f5eda0fd5f.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/01407f53-f9fb-4cf6-8d3e-16f5eda0fd5f) |
+| `ios/editors/notion-ios-editors-tabs-04-496b5103-bd70-4506-b81c-14ffe84af1eb.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/496b5103-bd70-4506-b81c-14ffe84af1eb) |
+| `ios/editors/notion-ios-editors-tabs-05-96e2efe2-c304-4a6c-91cd-ba59175dbaf2.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/96e2efe2-c304-4a6c-91cd-ba59175dbaf2) |
+| `ios/editors/notion-ios-editors-tabs-06-2e5cb588-cd9d-46c8-8851-2735dd54340d.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/2e5cb588-cd9d-46c8-8851-2735dd54340d) |
+| `ios/editors/notion-ios-editors-tabs-07-b68168b3-c0f7-4a08-9c74-aca74beacfb3.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/b68168b3-c0f7-4a08-9c74-aca74beacfb3) |
+| `ios/editors/notion-ios-editors-tabs-08-65b57cc5-b8e4-49c6-858d-2e55c22402d7.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/65b57cc5-b8e4-49c6-858d-2e55c22402d7) |
+| `ios/editors/notion-ios-editors-tabs-10-76bf7fba-4ee5-4460-8237-92c9dfa335cb.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/76bf7fba-4ee5-4460-8237-92c9dfa335cb) |
+| `ios/editors/notion-ios-editors-tabs-11-46c4435f-ae2c-4bbf-bf06-0cc1744ae5f5.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/46c4435f-ae2c-4bbf-bf06-0cc1744ae5f5) |
+| `ios/editors/notion-ios-editors-tabs-12-a9d65905-221e-4963-a226-515a05f659c1.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/a9d65905-221e-4963-a226-515a05f659c1) |
+| `ios/editors/notion-ios-editors-tabs-13-f38d86b0-c5b2-4c6b-ad26-af039b029929.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/f38d86b0-c5b2-4c6b-ad26-af039b029929) |
+| `ios/editors/notion-ios-editors-tabs-16-35d98e8b-03d1-4b8b-95de-738608113465.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/35d98e8b-03d1-4b8b-95de-738608113465) |
+| `ios/editors/notion-ios-editors-tabs-17-228e7c08-eba2-40df-9103-1bb72a8f304f.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/228e7c08-eba2-40df-9103-1bb72a8f304f) |
+| `ios/editors/notion-ios-editors-tabs-18-0bfd74c0-52b5-4b13-97ef-1d9fa03f9a85.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/0bfd74c0-52b5-4b13-97ef-1d9fa03f9a85) |
+| `ios/editors/notion-ios-editors-tabs-19-c6b21fd5-1559-4859-b298-8c9a78aa0fc0.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/c6b21fd5-1559-4859-b298-8c9a78aa0fc0) |
+| `ios/editors/notion-ios-editors-tabs-20-35aad5d2-ff37-4fb8-8804-5cf1f5950725.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/35aad5d2-ff37-4fb8-8804-5cf1f5950725) |
+| `ios/editors/notion-ios-editors-tabs-23-08149fda-8e4f-4e70-a21b-7dcd9e551288.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/08149fda-8e4f-4e70-a21b-7dcd9e551288) |
 | `ios/editors/notion-ios-editors-toggle-03-4891d4a4-81c8-40bd-84e6-5806ccc558e3.webp` | `Notion toggle block` | [screen](https://mobbin.com/screens/4891d4a4-81c8-40bd-84e6-5806ccc558e3) |
 | `ios/editors/notion-ios-editors-toggle-05-aba9719a-b2bf-442b-9b07-8930f90bca9f.webp` | `Notion toggle block` | [screen](https://mobbin.com/screens/aba9719a-b2bf-442b-9b07-8930f90bca9f) |
-| `ios/editors/notion-ios-editors-toggle-06-614fd719-85a2-4337-afa3-73f9836556ad.webp` | `Notion toggle block` | [screen](https://mobbin.com/screens/614fd719-85a2-4337-afa3-73f9836556ad) |
-| `ios/editors/notion-ios-editors-toggle-09-b490942d-880c-4494-a740-095e145ee4f1.webp` | `Notion toggle block` | [screen](https://mobbin.com/screens/b490942d-880c-4494-a740-095e145ee4f1) |
-| `ios/editors/notion-ios-editors-toggle-10-391fecf4-0fea-4224-906f-51d3b63070f6.webp` | `Notion toggle block` | [screen](https://mobbin.com/screens/391fecf4-0fea-4224-906f-51d3b63070f6) |
-| `ios/editors/notion-ios-editors-toggle-14-5aecea81-c725-4814-937f-e7ce0c1f7d51.webp` | `Notion toggle block` | [screen](https://mobbin.com/screens/5aecea81-c725-4814-937f-e7ce0c1f7d51) |
-| `ios/extra/notion-ios-extra-analytics-01-895e9f73-b510-4140-b4f9-73630a3f65e3.webp` | `Notion analytics` | [screen](https://mobbin.com/screens/895e9f73-b510-4140-b4f9-73630a3f65e3) |
-| `ios/extra/notion-ios-extra-analytics-02-d2b8a984-9704-4e13-9e22-2976bd4152e0.webp` | `Notion analytics` | [screen](https://mobbin.com/screens/d2b8a984-9704-4e13-9e22-2976bd4152e0) |
-| `ios/extra/notion-ios-extra-feedback-01-586e3409-ef7e-4b6e-a1a3-841b7ecd5c3d.webp` | `Notion feedback` | [screen](https://mobbin.com/screens/586e3409-ef7e-4b6e-a1a3-841b7ecd5c3d) |
-| `ios/extra/notion-ios-extra-help-01-1b0462d6-2d22-445f-a701-06e7f7158570.webp` | `Notion help` | [screen](https://mobbin.com/screens/1b0462d6-2d22-445f-a701-06e7f7158570) |
-| `ios/extra/notion-ios-extra-meeting-notes-01-06d2fab6-dd3e-4376-817f-977134cc6614.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/06d2fab6-dd3e-4376-817f-977134cc6614) |
-| `ios/extra/notion-ios-extra-meeting-notes-02-11f27879-5e6f-4a52-9f12-623ba6a4e494.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/11f27879-5e6f-4a52-9f12-623ba6a4e494) |
-| `ios/extra/notion-ios-extra-meeting-notes-03-c7890bf3-767a-46d5-bc49-cc8ceaf9cdde.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/c7890bf3-767a-46d5-bc49-cc8ceaf9cdde) |
-| `ios/extra/notion-ios-extra-page-history-02-b2a85e9c-88c4-4e9c-9391-65d27ba95d20.webp` | `Notion page history` | [screen](https://mobbin.com/screens/b2a85e9c-88c4-4e9c-9391-65d27ba95d20) |
-| `ios/extra/notion-ios-extra-page-history-03-dab6009c-4b30-48c0-8048-1b526ce872c3.webp` | `Notion page history` | [screen](https://mobbin.com/screens/dab6009c-4b30-48c0-8048-1b526ce872c3) |
-| `ios/extra/notion-ios-extra-quick-note-01-02ba7855-7392-4218-acc7-1c9521149bdb.webp` | `Notion quick note` | [screen](https://mobbin.com/screens/02ba7855-7392-4218-acc7-1c9521149bdb) |
-| `ios/extra/notion-ios-extra-quick-note-02-3f7d6a14-0672-40c7-8c5f-35c22ed22e01.webp` | `Notion quick note` | [screen](https://mobbin.com/screens/3f7d6a14-0672-40c7-8c5f-35c22ed22e01) |
-| `ios/extra/notion-ios-extra-quick-note-03-0f96c4df-8895-4620-b4e8-726f350589bb.webp` | `Notion quick note` | [screen](https://mobbin.com/screens/0f96c4df-8895-4620-b4e8-726f350589bb) |
-| `ios/extra/notion-ios-extra-reminders-01-080172ab-c00b-43c4-bcba-eedce982bd7b.webp` | `Notion reminders` | [screen](https://mobbin.com/screens/080172ab-c00b-43c4-bcba-eedce982bd7b) |
-| `ios/extra/notion-ios-extra-reminders-06-de63b43f-1dce-44e2-8f93-96bae259b5c8.webp` | `Notion reminders` | [screen](https://mobbin.com/screens/de63b43f-1dce-44e2-8f93-96bae259b5c8) |
-| `ios/extra/notion-ios-extra-sites-09-d6f67603-7bc9-47d0-ba17-6740a5d3964d.webp` | `Notion sites` | [screen](https://mobbin.com/screens/d6f67603-7bc9-47d0-ba17-6740a5d3964d) |
-| `ios/extra/notion-ios-extra-widgets-05-1c5ba4ba-217e-4c3a-8c2c-abdf94dbb026.webp` | `Notion widgets` | [screen](https://mobbin.com/screens/1c5ba4ba-217e-4c3a-8c2c-abdf94dbb026) |
-| `ios/extra/notion-ios-extra-widgets-10-3865275b-8a95-4463-bfba-c2eb64d01fa5.webp` | `Notion widgets` | [screen](https://mobbin.com/screens/3865275b-8a95-4463-bfba-c2eb64d01fa5) |
+| `ios/editors/notion-ios-editors-trash-04-4f659aea-8857-45bf-bc1f-75e62781a1ef.webp` | `Notion trash` | [screen](https://mobbin.com/screens/4f659aea-8857-45bf-bc1f-75e62781a1ef) |
+| `ios/editors/notion-ios-editors-trash-06-a7648225-1014-4f85-975e-298c777b803a.webp` | `Notion trash` | [screen](https://mobbin.com/screens/a7648225-1014-4f85-975e-298c777b803a) |
+| `ios/editors/notion-ios-editors-trash-09-2e703f82-a0f1-4038-9e98-44764ca3bf20.webp` | `Notion trash` | [screen](https://mobbin.com/screens/2e703f82-a0f1-4038-9e98-44764ca3bf20) |
+| `ios/editors/notion-ios-editors-trash-13-e5a2b74d-fc71-468d-b195-0353e00c787e.webp` | `Notion trash` | [screen](https://mobbin.com/screens/e5a2b74d-fc71-468d-b195-0353e00c787e) |
+| `ios/editors/notion-ios-editors-wiki-02-de4d6e75-b471-4e3b-959b-8271b1b36561.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/de4d6e75-b471-4e3b-959b-8271b1b36561) |
+| `ios/editors/notion-ios-editors-wiki-06-3b18ceec-d222-4dae-8af6-66d94321d04e.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/3b18ceec-d222-4dae-8af6-66d94321d04e) |
+| `ios/editors/notion-ios-editors-wiki-09-3c0f2e54-c676-42f3-9dc9-745a66cf755e.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/3c0f2e54-c676-42f3-9dc9-745a66cf755e) |
+| `ios/editors/notion-ios-editors-wiki-12-de033fb7-8d36-4c24-9e2d-40f95d1f7ff5.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/de033fb7-8d36-4c24-9e2d-40f95d1f7ff5) |
+| `ios/editors/notion-ios-editors-wiki-26-4e06919e-e092-457a-b5a1-548a33e9f8a7.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/4e06919e-e092-457a-b5a1-548a33e9f8a7) |
 | `ios/flows/accounts/notion-ios-flow-accounts-01-66b134a1-409f-46e4-9d7c-f21d178142c7.webp` | flow: Accounts | [screen](https://mobbin.com/screens/66b134a1-409f-46e4-9d7c-f21d178142c7) · [flow](https://mobbin.com/flows/c71ec018-d614-4d0b-bd36-141a2baffd2e) |
 | `ios/flows/accounts/notion-ios-flow-accounts-02-cff07b83-3835-4847-99dd-678e32ee2872.webp` | flow: Accounts | [screen](https://mobbin.com/screens/cff07b83-3835-4847-99dd-678e32ee2872) · [flow](https://mobbin.com/flows/c71ec018-d614-4d0b-bd36-141a2baffd2e) |
 | `ios/flows/adding-a-button/notion-ios-flow-adding-a-button-01-b689e6c5-62b4-48e9-83d0-76cc61b9966e.webp` | flow: Adding a button | [screen](https://mobbin.com/screens/b689e6c5-62b4-48e9-83d0-76cc61b9966e) · [flow](https://mobbin.com/flows/777f616b-478f-4a2b-bfb5-eaf3a08ffa61) |
@@ -996,20 +1200,18 @@ One row per file. "Found by" is the query (screens) or the flow name (flow files
 | `ios/flows/widgets/notion-ios-flow-widgets-01-aaec51cd-8a6d-4e32-8c54-5c5641397cc7.webp` | flow: Widgets | [screen](https://mobbin.com/screens/aaec51cd-8a6d-4e32-8c54-5c5641397cc7) · [flow](https://mobbin.com/flows/74c01573-9c27-4101-a0c2-41d4dc1b5d32) |
 | `ios/flows/widgets/notion-ios-flow-widgets-02-ac92c17b-2777-4f07-b061-8367f0eb503d.webp` | flow: Widgets | [screen](https://mobbin.com/screens/ac92c17b-2777-4f07-b061-8367f0eb503d) · [flow](https://mobbin.com/flows/74c01573-9c27-4101-a0c2-41d4dc1b5d32) |
 | `ios/flows/widgets/notion-ios-flow-widgets-03-6a216e4f-97a1-4751-8239-3960c05b8ee1.webp` | flow: Widgets | [screen](https://mobbin.com/screens/6a216e4f-97a1-4751-8239-3960c05b8ee1) · [flow](https://mobbin.com/flows/74c01573-9c27-4101-a0c2-41d4dc1b5d32) |
+| `ios/marketing/notion-ios-marketing-help-01-1b0462d6-2d22-445f-a701-06e7f7158570.webp` | `Notion help` | [screen](https://mobbin.com/screens/1b0462d6-2d22-445f-a701-06e7f7158570) |
+| `ios/marketing/notion-ios-marketing-search-15-de3bd0d3-f1ec-41f0-bb94-96b615ab9b9e.webp` | `Notion search` | [screen](https://mobbin.com/screens/de3bd0d3-f1ec-41f0-bb94-96b615ab9b9e) |
+| `ios/marketing/notion-ios-marketing-templates-04-3e946975-9e30-4df3-930b-ce2072bc65f3.webp` | `Notion templates` | [screen](https://mobbin.com/screens/3e946975-9e30-4df3-930b-ce2072bc65f3) |
+| `ios/marketing/notion-ios-marketing-templates-07-df15d751-3809-4b14-871a-e3af4ab99070.webp` | `Notion templates` | [screen](https://mobbin.com/screens/df15d751-3809-4b14-871a-e3af4ab99070) |
+| `ios/marketing/notion-ios-marketing-templates-09-91da788b-e21e-49a9-aff8-9f27edfbd940.webp` | `Notion templates` | [screen](https://mobbin.com/screens/91da788b-e21e-49a9-aff8-9f27edfbd940) |
+| `ios/marketing/notion-ios-marketing-templates-13-6a4d8cfb-c074-46a1-9fec-b00470bad788.webp` | `Notion templates` | [screen](https://mobbin.com/screens/6a4d8cfb-c074-46a1-9fec-b00470bad788) |
 | `ios/menus/notion-ios-menus-context-menu-13-3601882d-0003-4794-bd98-d9eb9ccf2234.webp` | `Notion context menu` | [screen](https://mobbin.com/screens/3601882d-0003-4794-bd98-d9eb9ccf2234) |
+| `ios/menus/notion-ios-menus-filters-15-aeb6d373-0c84-4b69-a591-029ea8938b83.webp` | `Notion filters` | [screen](https://mobbin.com/screens/aeb6d373-0c84-4b69-a591-029ea8938b83) |
 | `ios/menus/notion-ios-menus-menu-10-0d1a034d-fbe8-4bbd-aecd-4fab8a778c2f.webp` | `Notion menu` | [screen](https://mobbin.com/screens/0d1a034d-fbe8-4bbd-aecd-4fab8a778c2f) |
 | `ios/menus/notion-ios-menus-menu-13-6ecea6c7-4682-4c35-b649-412a0a240738.webp` | `Notion menu` | [screen](https://mobbin.com/screens/6ecea6c7-4682-4c35-b649-412a0a240738) |
-| `ios/menus/notion-ios-menus-menu-14-ac33be32-036a-4a22-bfd0-9c09d306c617.webp` | `Notion menu` | [screen](https://mobbin.com/screens/ac33be32-036a-4a22-bfd0-9c09d306c617) |
-| `ios/menus/notion-ios-menus-menu-15-213bded5-a06d-4282-ade7-4407f7ec911b.webp` | `Notion menu` | [screen](https://mobbin.com/screens/213bded5-a06d-4282-ade7-4407f7ec911b) |
-| `ios/menus/notion-ios-menus-more-menu-04-5d02e087-c6c6-499e-813d-dd867ce04e92.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/5d02e087-c6c6-499e-813d-dd867ce04e92) |
-| `ios/menus/notion-ios-menus-more-menu-07-66657546-8477-4df4-8e88-20879199b7e3.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/66657546-8477-4df4-8e88-20879199b7e3) |
-| `ios/menus/notion-ios-menus-more-menu-09-5f81b365-9ff7-4d05-9ba5-512534bac006.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/5f81b365-9ff7-4d05-9ba5-512534bac006) |
-| `ios/menus/notion-ios-menus-more-menu-13-93da6545-7cd8-449c-9bfc-c36f9658786f.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/93da6545-7cd8-449c-9bfc-c36f9658786f) |
-| `ios/menus/notion-ios-menus-more-menu-15-56d9b984-7f99-4ae1-acae-833ee1c31eb2.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/56d9b984-7f99-4ae1-acae-833ee1c31eb2) |
-| `ios/menus/notion-ios-menus-page-options-03-ca092fc7-be5c-41fc-8530-621e1186f06b.webp` | `Notion page options menu` | [screen](https://mobbin.com/screens/ca092fc7-be5c-41fc-8530-621e1186f06b) |
-| `ios/menus/notion-ios-menus-page-options-13-17ab32de-dfee-404e-865b-3d12b866bccd.webp` | `Notion page options menu` | [screen](https://mobbin.com/screens/17ab32de-dfee-404e-865b-3d12b866bccd) |
-| `ios/navigation/notion-ios-navigation-favorites-01-f72f259f-acd3-400f-a6ad-66f736d32aea.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/f72f259f-acd3-400f-a6ad-66f736d32aea) |
-| `ios/navigation/notion-ios-navigation-favorites-02-ee317f0a-d52d-4dee-98db-60918c55de7b.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/ee317f0a-d52d-4dee-98db-60918c55de7b) |
+| `ios/navigation/notion-ios-navigation-filters-13-e20dff9f-f089-4d08-8f54-d32decbca5e9.webp` | `Notion filters` | [screen](https://mobbin.com/screens/e20dff9f-f089-4d08-8f54-d32decbca5e9) |
+| `ios/navigation/notion-ios-navigation-gallery-04-aaec51cd-8a6d-4e32-8c54-5c5641397cc7.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/aaec51cd-8a6d-4e32-8c54-5c5641397cc7) |
 | `ios/navigation/notion-ios-navigation-home-01-5a34685d-5de9-4783-b666-8383df2e6294.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/5a34685d-5de9-4783-b666-8383df2e6294) |
 | `ios/navigation/notion-ios-navigation-home-02-ac92c17b-2777-4f07-b061-8367f0eb503d.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/ac92c17b-2777-4f07-b061-8367f0eb503d) |
 | `ios/navigation/notion-ios-navigation-home-03-e7689c02-0bc0-49f7-bc5c-71f516844d33.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/e7689c02-0bc0-49f7-bc5c-71f516844d33) |
@@ -1018,108 +1220,45 @@ One row per file. "Found by" is the query (screens) or the flow name (flow files
 | `ios/navigation/notion-ios-navigation-home-06-d120561c-525c-42e5-a177-c5bfa948a721.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/d120561c-525c-42e5-a177-c5bfa948a721) |
 | `ios/navigation/notion-ios-navigation-home-07-56bedefe-9bc9-4103-a9cb-b1433206ffa1.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/56bedefe-9bc9-4103-a9cb-b1433206ffa1) |
 | `ios/navigation/notion-ios-navigation-home-08-1d364040-ca74-40f4-a675-27492539f171.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/1d364040-ca74-40f4-a675-27492539f171) |
-| `ios/navigation/notion-ios-navigation-home-09-df0b15e9-c80a-496c-8982-1fbe4374eb05.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/df0b15e9-c80a-496c-8982-1fbe4374eb05) |
 | `ios/navigation/notion-ios-navigation-home-10-0e1837f1-ba32-447d-ad32-04461492235a.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/0e1837f1-ba32-447d-ad32-04461492235a) |
-| `ios/navigation/notion-ios-navigation-home-11-191a2416-092d-487a-ab01-0ae3c3c64873.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/191a2416-092d-487a-ab01-0ae3c3c64873) |
 | `ios/navigation/notion-ios-navigation-home-12-635d1b61-bb91-458d-ac98-3dc7497b9436.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/635d1b61-bb91-458d-ac98-3dc7497b9436) |
-| `ios/navigation/notion-ios-navigation-home-13-c119cf0c-6553-47b2-aead-63d060159283.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/c119cf0c-6553-47b2-aead-63d060159283) |
-| `ios/navigation/notion-ios-navigation-home-14-91b4adae-123f-4e65-be11-47627eb4d6c2.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/91b4adae-123f-4e65-be11-47627eb4d6c2) |
 | `ios/navigation/notion-ios-navigation-home-15-39a94725-425f-49c9-af53-a1071f24c53b.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/39a94725-425f-49c9-af53-a1071f24c53b) |
-| `ios/navigation/notion-ios-navigation-home-16-8c354deb-824f-409c-bb1f-41101da26be2.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/8c354deb-824f-409c-bb1f-41101da26be2) |
-| `ios/navigation/notion-ios-navigation-home-17-ce07c4fc-d036-459e-8326-4d6b1a7edfaa.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/ce07c4fc-d036-459e-8326-4d6b1a7edfaa) |
-| `ios/navigation/notion-ios-navigation-home-18-7ae6e62d-874a-4757-b017-2f96db8c0cce.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/7ae6e62d-874a-4757-b017-2f96db8c0cce) |
-| `ios/navigation/notion-ios-navigation-home-19-f77fbd91-117c-45a0-9fbd-7fafc562ef9c.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/f77fbd91-117c-45a0-9fbd-7fafc562ef9c) |
-| `ios/navigation/notion-ios-navigation-home-20-a8717385-4ff4-4d3e-aead-e4a483d6a5f1.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/a8717385-4ff4-4d3e-aead-e4a483d6a5f1) |
-| `ios/navigation/notion-ios-navigation-home-21-46932813-dd09-4278-85e4-d008937fd016.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/46932813-dd09-4278-85e4-d008937fd016) |
 | `ios/navigation/notion-ios-navigation-inbox-01-5f76aca8-07db-4f96-bbde-9240c43e2dc5.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/5f76aca8-07db-4f96-bbde-9240c43e2dc5) |
 | `ios/navigation/notion-ios-navigation-inbox-02-d60253f9-da05-4c96-b846-7c0a7751da94.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/d60253f9-da05-4c96-b846-7c0a7751da94) |
 | `ios/navigation/notion-ios-navigation-inbox-03-2698358f-af6d-4ffd-b53f-fbfac1cf5ad5.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/2698358f-af6d-4ffd-b53f-fbfac1cf5ad5) |
 | `ios/navigation/notion-ios-navigation-inbox-04-f81b9c00-c675-40ab-9e05-037c9fabb01e.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/f81b9c00-c675-40ab-9e05-037c9fabb01e) |
 | `ios/navigation/notion-ios-navigation-inbox-05-090ce9c3-b3da-4c6c-8ec2-936e30da61a4.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/090ce9c3-b3da-4c6c-8ec2-936e30da61a4) |
-| `ios/navigation/notion-ios-navigation-inbox-06-ac829a85-6eb1-4c89-80f2-668d3ca1c1c2.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/ac829a85-6eb1-4c89-80f2-668d3ca1c1c2) |
-| `ios/navigation/notion-ios-navigation-inbox-07-ad288189-8efc-4c78-abdc-665dc9f088f5.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/ad288189-8efc-4c78-abdc-665dc9f088f5) |
-| `ios/navigation/notion-ios-navigation-inbox-08-15e84c82-9a6a-45f8-b13a-7bc58081b573.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/15e84c82-9a6a-45f8-b13a-7bc58081b573) |
 | `ios/navigation/notion-ios-navigation-inbox-09-a731a0b2-ef16-4bfb-b5c8-6a623390dfee.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/a731a0b2-ef16-4bfb-b5c8-6a623390dfee) |
 | `ios/navigation/notion-ios-navigation-inbox-10-97a17109-8022-42e1-bbe4-c43480ba8cfe.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/97a17109-8022-42e1-bbe4-c43480ba8cfe) |
-| `ios/navigation/notion-ios-navigation-inbox-11-9be8e292-f314-4c8c-9170-a1a3b66f3c84.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/9be8e292-f314-4c8c-9170-a1a3b66f3c84) |
-| `ios/navigation/notion-ios-navigation-inbox-12-65fda74c-72e4-4ab1-8912-6d13f0fba125.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/65fda74c-72e4-4ab1-8912-6d13f0fba125) |
-| `ios/navigation/notion-ios-navigation-inbox-13-516d483c-0901-4271-b863-b1c9d39a5340.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/516d483c-0901-4271-b863-b1c9d39a5340) |
-| `ios/navigation/notion-ios-navigation-private-pages-01-be583e04-1a80-4518-a990-27584835b81c.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/be583e04-1a80-4518-a990-27584835b81c) |
-| `ios/navigation/notion-ios-navigation-private-pages-02-364a1fa7-332c-42bc-a5ab-fe686fbf82f2.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/364a1fa7-332c-42bc-a5ab-fe686fbf82f2) |
+| `ios/navigation/notion-ios-navigation-notifications-05-493dcc3c-8306-4669-a6c3-353452d0d5fb.webp` | `Notion notifications` | [screen](https://mobbin.com/screens/493dcc3c-8306-4669-a6c3-353452d0d5fb) |
+| `ios/navigation/notion-ios-navigation-reminders-01-080172ab-c00b-43c4-bcba-eedce982bd7b.webp` | `Notion reminders` | [screen](https://mobbin.com/screens/080172ab-c00b-43c4-bcba-eedce982bd7b) |
 | `ios/navigation/notion-ios-navigation-search-01-149d05a0-f1cf-483f-8703-9aa253c1a46b.webp` | `Notion search` | [screen](https://mobbin.com/screens/149d05a0-f1cf-483f-8703-9aa253c1a46b) |
-| `ios/navigation/notion-ios-navigation-search-02-d8873d9d-0ce3-43a6-aa75-820d932ad1b1.webp` | `Notion search` | [screen](https://mobbin.com/screens/d8873d9d-0ce3-43a6-aa75-820d932ad1b1) |
 | `ios/navigation/notion-ios-navigation-search-03-4f81deb2-bc12-4606-b9c8-564249087651.webp` | `Notion search` | [screen](https://mobbin.com/screens/4f81deb2-bc12-4606-b9c8-564249087651) |
-| `ios/navigation/notion-ios-navigation-search-04-db5d19e4-072d-4b8f-8a30-26f9c282a867.webp` | `Notion search` | [screen](https://mobbin.com/screens/db5d19e4-072d-4b8f-8a30-26f9c282a867) |
 | `ios/navigation/notion-ios-navigation-search-05-f78b07ed-7338-4cce-9f23-0df19c0630f4.webp` | `Notion search` | [screen](https://mobbin.com/screens/f78b07ed-7338-4cce-9f23-0df19c0630f4) |
 | `ios/navigation/notion-ios-navigation-search-06-8448eb86-b663-41c1-9871-c60863335e69.webp` | `Notion search` | [screen](https://mobbin.com/screens/8448eb86-b663-41c1-9871-c60863335e69) |
-| `ios/navigation/notion-ios-navigation-search-07-f7efabb4-f1f3-41e7-a92b-77bc94abe2b3.webp` | `Notion search` | [screen](https://mobbin.com/screens/f7efabb4-f1f3-41e7-a92b-77bc94abe2b3) |
-| `ios/navigation/notion-ios-navigation-search-08-372164b6-d1fc-4dda-80a7-4b5566674b28.webp` | `Notion search` | [screen](https://mobbin.com/screens/372164b6-d1fc-4dda-80a7-4b5566674b28) |
-| `ios/navigation/notion-ios-navigation-search-09-61d4d543-12c6-491d-9a81-e1c5adf6a55c.webp` | `Notion search` | [screen](https://mobbin.com/screens/61d4d543-12c6-491d-9a81-e1c5adf6a55c) |
-| `ios/navigation/notion-ios-navigation-search-10-fa244828-c114-41f3-87d9-aea375b364a0.webp` | `Notion search` | [screen](https://mobbin.com/screens/fa244828-c114-41f3-87d9-aea375b364a0) |
-| `ios/navigation/notion-ios-navigation-search-11-0d0ee9c7-4841-4e07-b8bc-e2f6602f8bc2.webp` | `Notion search` | [screen](https://mobbin.com/screens/0d0ee9c7-4841-4e07-b8bc-e2f6602f8bc2) |
-| `ios/navigation/notion-ios-navigation-search-12-e69b5a4a-6e33-4570-8cbc-84105299e19b.webp` | `Notion search` | [screen](https://mobbin.com/screens/e69b5a4a-6e33-4570-8cbc-84105299e19b) |
-| `ios/navigation/notion-ios-navigation-search-13-bb605e5e-3ad9-418b-be9c-5b217026487b.webp` | `Notion search` | [screen](https://mobbin.com/screens/bb605e5e-3ad9-418b-be9c-5b217026487b) |
-| `ios/navigation/notion-ios-navigation-search-14-6a524e27-e401-4806-b36e-b07c07a468da.webp` | `Notion search` | [screen](https://mobbin.com/screens/6a524e27-e401-4806-b36e-b07c07a468da) |
-| `ios/navigation/notion-ios-navigation-search-15-de3bd0d3-f1ec-41f0-bb94-96b615ab9b9e.webp` | `Notion search` | [screen](https://mobbin.com/screens/de3bd0d3-f1ec-41f0-bb94-96b615ab9b9e) |
-| `ios/navigation/notion-ios-navigation-search-16-54b6517e-0aab-43c6-82bc-7c19f2366d7a.webp` | `Notion search` | [screen](https://mobbin.com/screens/54b6517e-0aab-43c6-82bc-7c19f2366d7a) |
-| `ios/navigation/notion-ios-navigation-search-17-9e15f49d-0505-40c0-abde-96c56b8e2774.webp` | `Notion search` | [screen](https://mobbin.com/screens/9e15f49d-0505-40c0-abde-96c56b8e2774) |
-| `ios/navigation/notion-ios-navigation-search-18-f7db9a50-a95b-4b7a-85b9-545d60b3a4cf.webp` | `Notion search` | [screen](https://mobbin.com/screens/f7db9a50-a95b-4b7a-85b9-545d60b3a4cf) |
 | `ios/navigation/notion-ios-navigation-sidebar-01-d4cb108c-790e-4e1c-88ce-b727e817adb4.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/d4cb108c-790e-4e1c-88ce-b727e817adb4) |
 | `ios/navigation/notion-ios-navigation-sidebar-02-27dfe1df-5eea-4e4f-9272-cb3ec0b265e3.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/27dfe1df-5eea-4e4f-9272-cb3ec0b265e3) |
 | `ios/navigation/notion-ios-navigation-sidebar-03-fd81a99c-88ed-4274-a3cd-dfb4c04ad275.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/fd81a99c-88ed-4274-a3cd-dfb4c04ad275) |
 | `ios/navigation/notion-ios-navigation-sidebar-04-3779c4f7-a6f6-4cee-b379-32e512d53f49.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/3779c4f7-a6f6-4cee-b379-32e512d53f49) |
 | `ios/navigation/notion-ios-navigation-sidebar-05-4c66fe68-6eda-4495-84c6-c7829f5e95ae.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/4c66fe68-6eda-4495-84c6-c7829f5e95ae) |
-| `ios/navigation/notion-ios-navigation-tabs-01-01407f53-f9fb-4cf6-8d3e-16f5eda0fd5f.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/01407f53-f9fb-4cf6-8d3e-16f5eda0fd5f) |
-| `ios/navigation/notion-ios-navigation-tabs-02-1c807ff3-120e-47ad-9e6b-66f2c6386e17.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/1c807ff3-120e-47ad-9e6b-66f2c6386e17) |
-| `ios/navigation/notion-ios-navigation-tabs-03-6aa9f662-f883-4ac2-9c18-c72b1d42958f.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/6aa9f662-f883-4ac2-9c18-c72b1d42958f) |
-| `ios/navigation/notion-ios-navigation-tabs-04-496b5103-bd70-4506-b81c-14ffe84af1eb.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/496b5103-bd70-4506-b81c-14ffe84af1eb) |
-| `ios/navigation/notion-ios-navigation-tabs-05-96e2efe2-c304-4a6c-91cd-ba59175dbaf2.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/96e2efe2-c304-4a6c-91cd-ba59175dbaf2) |
-| `ios/navigation/notion-ios-navigation-tabs-06-2e5cb588-cd9d-46c8-8851-2735dd54340d.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/2e5cb588-cd9d-46c8-8851-2735dd54340d) |
-| `ios/navigation/notion-ios-navigation-tabs-07-b68168b3-c0f7-4a08-9c74-aca74beacfb3.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/b68168b3-c0f7-4a08-9c74-aca74beacfb3) |
-| `ios/navigation/notion-ios-navigation-tabs-08-65b57cc5-b8e4-49c6-858d-2e55c22402d7.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/65b57cc5-b8e4-49c6-858d-2e55c22402d7) |
-| `ios/navigation/notion-ios-navigation-tabs-09-54ea40ae-707f-4d08-be98-bfb92c2f3c7a.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/54ea40ae-707f-4d08-be98-bfb92c2f3c7a) |
-| `ios/navigation/notion-ios-navigation-tabs-10-76bf7fba-4ee5-4460-8237-92c9dfa335cb.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/76bf7fba-4ee5-4460-8237-92c9dfa335cb) |
-| `ios/navigation/notion-ios-navigation-tabs-11-46c4435f-ae2c-4bbf-bf06-0cc1744ae5f5.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/46c4435f-ae2c-4bbf-bf06-0cc1744ae5f5) |
-| `ios/navigation/notion-ios-navigation-tabs-12-a9d65905-221e-4963-a226-515a05f659c1.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/a9d65905-221e-4963-a226-515a05f659c1) |
-| `ios/navigation/notion-ios-navigation-tabs-13-f38d86b0-c5b2-4c6b-ad26-af039b029929.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/f38d86b0-c5b2-4c6b-ad26-af039b029929) |
-| `ios/navigation/notion-ios-navigation-tabs-14-cdaeb122-7969-4393-ba83-97b6ea759575.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/cdaeb122-7969-4393-ba83-97b6ea759575) |
-| `ios/navigation/notion-ios-navigation-tabs-15-08d60803-d5a6-45dd-92c4-fe1e85e1420c.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/08d60803-d5a6-45dd-92c4-fe1e85e1420c) |
-| `ios/navigation/notion-ios-navigation-tabs-16-35d98e8b-03d1-4b8b-95de-738608113465.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/35d98e8b-03d1-4b8b-95de-738608113465) |
-| `ios/navigation/notion-ios-navigation-tabs-17-228e7c08-eba2-40df-9103-1bb72a8f304f.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/228e7c08-eba2-40df-9103-1bb72a8f304f) |
-| `ios/navigation/notion-ios-navigation-tabs-18-0bfd74c0-52b5-4b13-97ef-1d9fa03f9a85.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/0bfd74c0-52b5-4b13-97ef-1d9fa03f9a85) |
-| `ios/navigation/notion-ios-navigation-tabs-19-c6b21fd5-1559-4859-b298-8c9a78aa0fc0.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/c6b21fd5-1559-4859-b298-8c9a78aa0fc0) |
-| `ios/navigation/notion-ios-navigation-tabs-20-35aad5d2-ff37-4fb8-8804-5cf1f5950725.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/35aad5d2-ff37-4fb8-8804-5cf1f5950725) |
-| `ios/navigation/notion-ios-navigation-tabs-21-399a6a5c-9bc2-4200-9e98-789ddfbf13f0.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/399a6a5c-9bc2-4200-9e98-789ddfbf13f0) |
-| `ios/navigation/notion-ios-navigation-tabs-22-2c91507a-4037-445d-b67a-ccb63266e82e.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/2c91507a-4037-445d-b67a-ccb63266e82e) |
-| `ios/navigation/notion-ios-navigation-tabs-23-08149fda-8e4f-4e70-a21b-7dcd9e551288.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/08149fda-8e4f-4e70-a21b-7dcd9e551288) |
+| `ios/navigation/notion-ios-navigation-sites-09-d6f67603-7bc9-47d0-ba17-6740a5d3964d.webp` | `Notion sites` | [screen](https://mobbin.com/screens/d6f67603-7bc9-47d0-ba17-6740a5d3964d) |
+| `ios/navigation/notion-ios-navigation-sort-15-fe199502-0dd2-44d7-8000-901596adb1fd.webp` | `Notion sort` | [screen](https://mobbin.com/screens/fe199502-0dd2-44d7-8000-901596adb1fd) |
 | `ios/navigation/notion-ios-navigation-trash-01-8897295c-5351-4edf-9418-3d12fd7bef40.webp` | `Notion trash` | [screen](https://mobbin.com/screens/8897295c-5351-4edf-9418-3d12fd7bef40) |
 | `ios/navigation/notion-ios-navigation-trash-02-6bc1d784-f603-45ae-9ef9-008f644762e5.webp` | `Notion trash` | [screen](https://mobbin.com/screens/6bc1d784-f603-45ae-9ef9-008f644762e5) |
-| `ios/navigation/notion-ios-navigation-trash-03-28751c29-0ac0-4e22-b089-4613ef3f4798.webp` | `Notion trash` | [screen](https://mobbin.com/screens/28751c29-0ac0-4e22-b089-4613ef3f4798) |
-| `ios/navigation/notion-ios-navigation-trash-04-4f659aea-8857-45bf-bc1f-75e62781a1ef.webp` | `Notion trash` | [screen](https://mobbin.com/screens/4f659aea-8857-45bf-bc1f-75e62781a1ef) |
-| `ios/navigation/notion-ios-navigation-trash-05-3829e8ca-ff60-43ab-9451-45320dd1810e.webp` | `Notion trash` | [screen](https://mobbin.com/screens/3829e8ca-ff60-43ab-9451-45320dd1810e) |
-| `ios/navigation/notion-ios-navigation-trash-06-a7648225-1014-4f85-975e-298c777b803a.webp` | `Notion trash` | [screen](https://mobbin.com/screens/a7648225-1014-4f85-975e-298c777b803a) |
-| `ios/navigation/notion-ios-navigation-trash-07-7a4a6fbf-2de4-4ece-a325-23106a03f3ed.webp` | `Notion trash` | [screen](https://mobbin.com/screens/7a4a6fbf-2de4-4ece-a325-23106a03f3ed) |
-| `ios/navigation/notion-ios-navigation-trash-08-4c8425ee-2ae6-4d71-a405-6e9236ad57df.webp` | `Notion trash` | [screen](https://mobbin.com/screens/4c8425ee-2ae6-4d71-a405-6e9236ad57df) |
-| `ios/navigation/notion-ios-navigation-trash-09-2e703f82-a0f1-4038-9e98-44764ca3bf20.webp` | `Notion trash` | [screen](https://mobbin.com/screens/2e703f82-a0f1-4038-9e98-44764ca3bf20) |
-| `ios/navigation/notion-ios-navigation-trash-10-28efc85b-d36f-4856-b8b2-2dcf032dc9a0.webp` | `Notion trash` | [screen](https://mobbin.com/screens/28efc85b-d36f-4856-b8b2-2dcf032dc9a0) |
-| `ios/navigation/notion-ios-navigation-trash-11-46521fc7-bd51-43fa-aa8e-cc0c8ccf6c3b.webp` | `Notion trash` | [screen](https://mobbin.com/screens/46521fc7-bd51-43fa-aa8e-cc0c8ccf6c3b) |
-| `ios/navigation/notion-ios-navigation-trash-12-2ce0cee9-e7f4-42f0-b174-f1de2c282aac.webp` | `Notion trash` | [screen](https://mobbin.com/screens/2ce0cee9-e7f4-42f0-b174-f1de2c282aac) |
-| `ios/navigation/notion-ios-navigation-trash-13-e5a2b74d-fc71-468d-b195-0353e00c787e.webp` | `Notion trash` | [screen](https://mobbin.com/screens/e5a2b74d-fc71-468d-b195-0353e00c787e) |
-| `ios/navigation/notion-ios-navigation-trash-14-4e97a1c9-f2b4-44b3-b6f3-da339fceda0a.webp` | `Notion trash` | [screen](https://mobbin.com/screens/4e97a1c9-f2b4-44b3-b6f3-da339fceda0a) |
-| `ios/navigation/notion-ios-navigation-trash-15-086dcd9f-a800-46af-90d4-e0c62f7f581a.webp` | `Notion trash` | [screen](https://mobbin.com/screens/086dcd9f-a800-46af-90d4-e0c62f7f581a) |
 | `ios/navigation/notion-ios-navigation-workspace-switcher-01-34d622a6-633d-4491-b592-c6d3ebea08a0.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/34d622a6-633d-4491-b592-c6d3ebea08a0) |
+| `ios/onboarding/notion-ios-onboarding-billing-01-84fda203-97f7-4344-b563-e41aaf2687f2.webp` | `Notion billing upgrade plan` | [screen](https://mobbin.com/screens/84fda203-97f7-4344-b563-e41aaf2687f2) |
+| `ios/onboarding/notion-ios-onboarding-form-02-98b76102-1ad4-46a5-a969-02ddaa41c091.webp` | `Notion form` | [screen](https://mobbin.com/screens/98b76102-1ad4-46a5-a969-02ddaa41c091) |
+| `ios/onboarding/notion-ios-onboarding-form-08-325da841-4dfb-45b5-b36f-db6bfc71eda1.webp` | `Notion form` | [screen](https://mobbin.com/screens/325da841-4dfb-45b5-b36f-db6bfc71eda1) |
+| `ios/onboarding/notion-ios-onboarding-home-09-df0b15e9-c80a-496c-8982-1fbe4374eb05.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/df0b15e9-c80a-496c-8982-1fbe4374eb05) |
+| `ios/onboarding/notion-ios-onboarding-import-11-f999e32c-f6d8-4251-846b-2da3a4d3df2d.webp` | `Notion import` | [screen](https://mobbin.com/screens/f999e32c-f6d8-4251-846b-2da3a4d3df2d) |
 | `ios/onboarding/notion-ios-onboarding-login-01-289dd2c0-d098-4eb6-bd68-0a4d076e7ecd.webp` | `Notion login` | [screen](https://mobbin.com/screens/289dd2c0-d098-4eb6-bd68-0a4d076e7ecd) |
 | `ios/onboarding/notion-ios-onboarding-login-02-b8728e48-9749-46f1-8633-6383e2d6639c.webp` | `Notion login` | [screen](https://mobbin.com/screens/b8728e48-9749-46f1-8633-6383e2d6639c) |
-| `ios/onboarding/notion-ios-onboarding-login-03-6902a099-ef25-419f-bc1a-faa62a9c7ce3.webp` | `Notion login` | [screen](https://mobbin.com/screens/6902a099-ef25-419f-bc1a-faa62a9c7ce3) |
-| `ios/onboarding/notion-ios-onboarding-login-06-9deea1a2-d475-4959-8e88-6f476e099d5a.webp` | `Notion login` | [screen](https://mobbin.com/screens/9deea1a2-d475-4959-8e88-6f476e099d5a) |
-| `ios/onboarding/notion-ios-onboarding-login-07-35aecace-f562-4dd2-9a01-8a29d7067e4f.webp` | `Notion login` | [screen](https://mobbin.com/screens/35aecace-f562-4dd2-9a01-8a29d7067e4f) |
 | `ios/onboarding/notion-ios-onboarding-login-08-0bbd7620-b775-4251-81cd-f2b70e259617.webp` | `Notion login` | [screen](https://mobbin.com/screens/0bbd7620-b775-4251-81cd-f2b70e259617) |
 | `ios/onboarding/notion-ios-onboarding-login-09-c8c59ff3-5816-4851-bc3a-26353af6fe63.webp` | `Notion login` | [screen](https://mobbin.com/screens/c8c59ff3-5816-4851-bc3a-26353af6fe63) |
 | `ios/onboarding/notion-ios-onboarding-login-10-d0827150-598e-4304-abe8-c5cc86113a29.webp` | `Notion login` | [screen](https://mobbin.com/screens/d0827150-598e-4304-abe8-c5cc86113a29) |
 | `ios/onboarding/notion-ios-onboarding-login-11-8befacc7-c2e1-4b20-b640-f1a230a645a7.webp` | `Notion login` | [screen](https://mobbin.com/screens/8befacc7-c2e1-4b20-b640-f1a230a645a7) |
 | `ios/onboarding/notion-ios-onboarding-login-12-940f5bfd-91ce-4f50-a530-5c91ddc89e57.webp` | `Notion login` | [screen](https://mobbin.com/screens/940f5bfd-91ce-4f50-a530-5c91ddc89e57) |
 | `ios/onboarding/notion-ios-onboarding-login-13-8773a88b-712a-4d98-9ee4-72b3050ffc7e.webp` | `Notion login` | [screen](https://mobbin.com/screens/8773a88b-712a-4d98-9ee4-72b3050ffc7e) |
-| `ios/onboarding/notion-ios-onboarding-login-14-ca8b5101-42b2-4ab9-b8e8-ae02d0ef0844.webp` | `Notion login` | [screen](https://mobbin.com/screens/ca8b5101-42b2-4ab9-b8e8-ae02d0ef0844) |
 | `ios/onboarding/notion-ios-onboarding-onboarding-01-1892ba9a-7747-4a71-9b97-bd71f2dcdfa5.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/1892ba9a-7747-4a71-9b97-bd71f2dcdfa5) |
 | `ios/onboarding/notion-ios-onboarding-onboarding-02-249f6555-6fc6-4931-adce-d2b4302e8ce1.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/249f6555-6fc6-4931-adce-d2b4302e8ce1) |
 | `ios/onboarding/notion-ios-onboarding-onboarding-03-f87f927a-6dfa-407a-aa2f-54ba3bd96414.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/f87f927a-6dfa-407a-aa2f-54ba3bd96414) |
@@ -1127,142 +1266,96 @@ One row per file. "Found by" is the query (screens) or the flow name (flow files
 | `ios/onboarding/notion-ios-onboarding-onboarding-06-8a755986-2ee7-4107-92cf-e378c30f3d2b.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/8a755986-2ee7-4107-92cf-e378c30f3d2b) |
 | `ios/onboarding/notion-ios-onboarding-onboarding-07-2fec40ff-8959-456d-9039-cbec0009b5d9.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/2fec40ff-8959-456d-9039-cbec0009b5d9) |
 | `ios/onboarding/notion-ios-onboarding-onboarding-08-49354e7f-e8e5-476f-8b88-31cee8e52ec7.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/49354e7f-e8e5-476f-8b88-31cee8e52ec7) |
-| `ios/onboarding/notion-ios-onboarding-onboarding-09-37a68ec0-b6c3-4a19-adef-c9ffbbb4ce15.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/37a68ec0-b6c3-4a19-adef-c9ffbbb4ce15) |
 | `ios/onboarding/notion-ios-onboarding-onboarding-10-dc75d307-8438-40ad-b031-f59978ebdb5c.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/dc75d307-8438-40ad-b031-f59978ebdb5c) |
 | `ios/onboarding/notion-ios-onboarding-onboarding-11-c1bda483-fc18-48f3-8921-2a10c07e65b3.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/c1bda483-fc18-48f3-8921-2a10c07e65b3) |
 | `ios/onboarding/notion-ios-onboarding-onboarding-12-b99fa43a-7873-4bf8-98db-c30b8f64a51a.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/b99fa43a-7873-4bf8-98db-c30b8f64a51a) |
-| `ios/onboarding/notion-ios-onboarding-onboarding-13-d4e5b550-e54a-4e1e-97e1-d31e7d07f31d.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/d4e5b550-e54a-4e1e-97e1-d31e7d07f31d) |
 | `ios/onboarding/notion-ios-onboarding-onboarding-15-7a50c0ea-35c8-4aa7-ae8c-7276763b226a.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/7a50c0ea-35c8-4aa7-ae8c-7276763b226a) |
 | `ios/onboarding/notion-ios-onboarding-signup-01-7decb1dc-778e-4c02-8da1-e61107912bf6.webp` | `Notion sign up` | [screen](https://mobbin.com/screens/7decb1dc-778e-4c02-8da1-e61107912bf6) |
-| `ios/onboarding/notion-ios-onboarding-templates-02-4bf5c754-459f-4422-af47-05a6215f3294.webp` | `Notion templates` | [screen](https://mobbin.com/screens/4bf5c754-459f-4422-af47-05a6215f3294) |
-| `ios/onboarding/notion-ios-onboarding-templates-04-3e946975-9e30-4df3-930b-ce2072bc65f3.webp` | `Notion templates` | [screen](https://mobbin.com/screens/3e946975-9e30-4df3-930b-ce2072bc65f3) |
-| `ios/onboarding/notion-ios-onboarding-templates-06-ac479277-3ad0-4ded-bd18-1ad7bd3c49d0.webp` | `Notion templates` | [screen](https://mobbin.com/screens/ac479277-3ad0-4ded-bd18-1ad7bd3c49d0) |
-| `ios/onboarding/notion-ios-onboarding-templates-07-df15d751-3809-4b14-871a-e3af4ab99070.webp` | `Notion templates` | [screen](https://mobbin.com/screens/df15d751-3809-4b14-871a-e3af4ab99070) |
-| `ios/onboarding/notion-ios-onboarding-templates-09-91da788b-e21e-49a9-aff8-9f27edfbd940.webp` | `Notion templates` | [screen](https://mobbin.com/screens/91da788b-e21e-49a9-aff8-9f27edfbd940) |
-| `ios/onboarding/notion-ios-onboarding-templates-13-6a4d8cfb-c074-46a1-9fec-b00470bad788.webp` | `Notion templates` | [screen](https://mobbin.com/screens/6a4d8cfb-c074-46a1-9fec-b00470bad788) |
+| `ios/onboarding/notion-ios-onboarding-success-02-1325061c-830b-4dd2-b3e2-d7b3905481b0.webp` | `Notion success confirmation` | [screen](https://mobbin.com/screens/1325061c-830b-4dd2-b3e2-d7b3905481b0) |
+| `ios/onboarding/notion-ios-onboarding-upgrade-paywall-01-adbb1910-8073-4a06-a560-f9abf947d101.webp` | `Notion upgrade paywall` | [screen](https://mobbin.com/screens/adbb1910-8073-4a06-a560-f9abf947d101) |
 | `ios/onboarding/notion-ios-onboarding-welcome-01-df6a041c-45e3-4ea7-8012-fedfc4198aab.webp` | `Notion welcome` | [screen](https://mobbin.com/screens/df6a041c-45e3-4ea7-8012-fedfc4198aab) |
 | `ios/onboarding/notion-ios-onboarding-welcome-02-4251f304-9b9f-4d89-9274-8b12e0d54815.webp` | `Notion welcome` | [screen](https://mobbin.com/screens/4251f304-9b9f-4d89-9274-8b12e0d54815) |
 | `ios/settings/notion-ios-settings-account-06-a222535d-6717-4b81-a926-97bba433941b.webp` | `Notion account settings` | [screen](https://mobbin.com/screens/a222535d-6717-4b81-a926-97bba433941b) |
 | `ios/settings/notion-ios-settings-account-08-9deb176c-85af-4cdd-9bdf-4e28fcba1d74.webp` | `Notion account settings` | [screen](https://mobbin.com/screens/9deb176c-85af-4cdd-9bdf-4e28fcba1d74) |
 | `ios/settings/notion-ios-settings-account-11-f2828a10-42c0-415f-adb0-bb151122e6ac.webp` | `Notion account settings` | [screen](https://mobbin.com/screens/f2828a10-42c0-415f-adb0-bb151122e6ac) |
-| `ios/settings/notion-ios-settings-account-14-8b19ce05-ee6b-429e-81d5-865419c0d614.webp` | `Notion account settings` | [screen](https://mobbin.com/screens/8b19ce05-ee6b-429e-81d5-865419c0d614) |
-| `ios/settings/notion-ios-settings-account-15-d4c7a09a-a25c-422a-a179-81cac7176f56.webp` | `Notion account settings` | [screen](https://mobbin.com/screens/d4c7a09a-a25c-422a-a179-81cac7176f56) |
-| `ios/settings/notion-ios-settings-billing-01-84fda203-97f7-4344-b563-e41aaf2687f2.webp` | `Notion billing upgrade plan` | [screen](https://mobbin.com/screens/84fda203-97f7-4344-b563-e41aaf2687f2) |
 | `ios/settings/notion-ios-settings-billing-02-feb095c4-37c5-4af5-8eef-4f67a80e57ad.webp` | `Notion billing upgrade plan` | [screen](https://mobbin.com/screens/feb095c4-37c5-4af5-8eef-4f67a80e57ad) |
+| `ios/settings/notion-ios-settings-buttons-04-a34f2a5a-be47-40ef-98e7-9aea97faeb39.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/a34f2a5a-be47-40ef-98e7-9aea97faeb39) |
 | `ios/settings/notion-ios-settings-connections-01-43ac2f1a-4aa0-47c8-870b-2522de00e239.webp` | `Notion connections integrations` | [screen](https://mobbin.com/screens/43ac2f1a-4aa0-47c8-870b-2522de00e239) |
-| `ios/settings/notion-ios-settings-connections-05-e5a1caed-db9f-48d5-9083-4c31c8feb3ec.webp` | `Notion connections integrations` | [screen](https://mobbin.com/screens/e5a1caed-db9f-48d5-9083-4c31c8feb3ec) |
-| `ios/settings/notion-ios-settings-connections-07-5113ad18-d46f-4c15-b5e1-459b1bc99963.webp` | `Notion connections integrations` | [screen](https://mobbin.com/screens/5113ad18-d46f-4c15-b5e1-459b1bc99963) |
-| `ios/settings/notion-ios-settings-connections-09-f9fd244c-70e9-43b5-844e-d6967a371cc4.webp` | `Notion connections integrations` | [screen](https://mobbin.com/screens/f9fd244c-70e9-43b5-844e-d6967a371cc4) |
-| `ios/settings/notion-ios-settings-connections-15-34843808-b661-4c19-b9ed-5e30600428f2.webp` | `Notion connections integrations` | [screen](https://mobbin.com/screens/34843808-b661-4c19-b9ed-5e30600428f2) |
 | `ios/settings/notion-ios-settings-export-01-66b45c28-74a8-4b6b-a686-d325891c0c51.webp` | `Notion export` | [screen](https://mobbin.com/screens/66b45c28-74a8-4b6b-a686-d325891c0c51) |
 | `ios/settings/notion-ios-settings-export-03-9e637686-27c5-4b54-816c-b9ecabfa81f7.webp` | `Notion export` | [screen](https://mobbin.com/screens/9e637686-27c5-4b54-816c-b9ecabfa81f7) |
-| `ios/settings/notion-ios-settings-export-06-98fc61d6-4ce0-4be5-b023-ae548dd5984a.webp` | `Notion export` | [screen](https://mobbin.com/screens/98fc61d6-4ce0-4be5-b023-ae548dd5984a) |
-| `ios/settings/notion-ios-settings-export-07-70eb611d-5a70-4f73-8f3a-78ad19df172e.webp` | `Notion export` | [screen](https://mobbin.com/screens/70eb611d-5a70-4f73-8f3a-78ad19df172e) |
-| `ios/settings/notion-ios-settings-export-08-a2ea5e8a-533b-4b1f-87be-e1b62eb6d062.webp` | `Notion export` | [screen](https://mobbin.com/screens/a2ea5e8a-533b-4b1f-87be-e1b62eb6d062) |
-| `ios/settings/notion-ios-settings-import-03-82536e88-e39f-4cb4-935b-51682f33b08b.webp` | `Notion import` | [screen](https://mobbin.com/screens/82536e88-e39f-4cb4-935b-51682f33b08b) |
-| `ios/settings/notion-ios-settings-import-06-a0c66da6-7cb2-456a-8f24-1c4c362611ce.webp` | `Notion import` | [screen](https://mobbin.com/screens/a0c66da6-7cb2-456a-8f24-1c4c362611ce) |
-| `ios/settings/notion-ios-settings-import-07-f8a28b02-df6d-4e22-aea6-11aaad821828.webp` | `Notion import` | [screen](https://mobbin.com/screens/f8a28b02-df6d-4e22-aea6-11aaad821828) |
-| `ios/settings/notion-ios-settings-import-08-2683a24b-a08e-4f85-b79a-eea7bb463921.webp` | `Notion import` | [screen](https://mobbin.com/screens/2683a24b-a08e-4f85-b79a-eea7bb463921) |
-| `ios/settings/notion-ios-settings-import-11-f999e32c-f6d8-4251-846b-2da3a4d3df2d.webp` | `Notion import` | [screen](https://mobbin.com/screens/f999e32c-f6d8-4251-846b-2da3a4d3df2d) |
 | `ios/settings/notion-ios-settings-import-12-25255c04-281a-4aca-8851-0228b9ec1174.webp` | `Notion import` | [screen](https://mobbin.com/screens/25255c04-281a-4aca-8851-0228b9ec1174) |
-| `ios/settings/notion-ios-settings-import-13-0414adfa-20ae-468d-b1c3-6d4c069d496e.webp` | `Notion import` | [screen](https://mobbin.com/screens/0414adfa-20ae-468d-b1c3-6d4c069d496e) |
-| `ios/settings/notion-ios-settings-import-15-725de4a2-84f0-4cd4-ae94-395031756bca.webp` | `Notion import` | [screen](https://mobbin.com/screens/725de4a2-84f0-4cd4-ae94-395031756bca) |
 | `ios/settings/notion-ios-settings-language-01-efd159f7-2317-46c1-bca2-bfc495769903.webp` | `Notion language and region` | [screen](https://mobbin.com/screens/efd159f7-2317-46c1-bca2-bfc495769903) |
 | `ios/settings/notion-ios-settings-language-02-facceb52-53cf-4905-9b8a-6d56f2ba1108.webp` | `Notion language and region` | [screen](https://mobbin.com/screens/facceb52-53cf-4905-9b8a-6d56f2ba1108) |
-| `ios/settings/notion-ios-settings-language-05-919207fa-2f12-4c5f-8298-93ded326bf4b.webp` | `Notion language and region` | [screen](https://mobbin.com/screens/919207fa-2f12-4c5f-8298-93ded326bf4b) |
-| `ios/settings/notion-ios-settings-language-06-56dea59d-358c-43b8-ac1c-99da310e6d7c.webp` | `Notion language and region` | [screen](https://mobbin.com/screens/56dea59d-358c-43b8-ac1c-99da310e6d7c) |
-| `ios/settings/notion-ios-settings-language-07-12781a0c-9ef3-4086-8581-252bda8c0bf7.webp` | `Notion language and region` | [screen](https://mobbin.com/screens/12781a0c-9ef3-4086-8581-252bda8c0bf7) |
-| `ios/settings/notion-ios-settings-language-08-88285fb7-0c9b-496f-80d4-5d0a3ecc05dd.webp` | `Notion language and region` | [screen](https://mobbin.com/screens/88285fb7-0c9b-496f-80d4-5d0a3ecc05dd) |
-| `ios/settings/notion-ios-settings-members-01-0152dd19-0a9e-487d-8cce-8ebcf62f9b0d.webp` | `Notion members` | [screen](https://mobbin.com/screens/0152dd19-0a9e-487d-8cce-8ebcf62f9b0d) |
-| `ios/settings/notion-ios-settings-members-07-f657a4fb-b6a9-4713-94b0-061f3f3b7055.webp` | `Notion members` | [screen](https://mobbin.com/screens/f657a4fb-b6a9-4713-94b0-061f3f3b7055) |
-| `ios/settings/notion-ios-settings-members-08-8e294384-5844-49df-ba4d-2374a8556a18.webp` | `Notion members` | [screen](https://mobbin.com/screens/8e294384-5844-49df-ba4d-2374a8556a18) |
-| `ios/settings/notion-ios-settings-members-09-abe97223-ef07-4ec7-8a8e-395983035fdd.webp` | `Notion members` | [screen](https://mobbin.com/screens/abe97223-ef07-4ec7-8a8e-395983035fdd) |
-| `ios/settings/notion-ios-settings-members-10-46a2efa1-d94e-4c55-808f-63016e7c63b1.webp` | `Notion members` | [screen](https://mobbin.com/screens/46a2efa1-d94e-4c55-808f-63016e7c63b1) |
-| `ios/settings/notion-ios-settings-members-11-f38ef962-54e7-4987-8aab-14d083028b18.webp` | `Notion members` | [screen](https://mobbin.com/screens/f38ef962-54e7-4987-8aab-14d083028b18) |
+| `ios/settings/notion-ios-settings-login-06-9deea1a2-d475-4959-8e88-6f476e099d5a.webp` | `Notion login` | [screen](https://mobbin.com/screens/9deea1a2-d475-4959-8e88-6f476e099d5a) |
+| `ios/settings/notion-ios-settings-login-07-35aecace-f562-4dd2-9a01-8a29d7067e4f.webp` | `Notion login` | [screen](https://mobbin.com/screens/35aecace-f562-4dd2-9a01-8a29d7067e4f) |
+| `ios/settings/notion-ios-settings-login-14-ca8b5101-42b2-4ab9-b8e8-ae02d0ef0844.webp` | `Notion login` | [screen](https://mobbin.com/screens/ca8b5101-42b2-4ab9-b8e8-ae02d0ef0844) |
+| `ios/settings/notion-ios-settings-menu-14-ac33be32-036a-4a22-bfd0-9c09d306c617.webp` | `Notion menu` | [screen](https://mobbin.com/screens/ac33be32-036a-4a22-bfd0-9c09d306c617) |
+| `ios/settings/notion-ios-settings-menu-15-213bded5-a06d-4282-ade7-4407f7ec911b.webp` | `Notion menu` | [screen](https://mobbin.com/screens/213bded5-a06d-4282-ade7-4407f7ec911b) |
+| `ios/settings/notion-ios-settings-more-menu-07-66657546-8477-4df4-8e88-20879199b7e3.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/66657546-8477-4df4-8e88-20879199b7e3) |
+| `ios/settings/notion-ios-settings-search-16-54b6517e-0aab-43c6-82bc-7c19f2366d7a.webp` | `Notion search` | [screen](https://mobbin.com/screens/54b6517e-0aab-43c6-82bc-7c19f2366d7a) |
 | `ios/settings/notion-ios-settings-settings-01-d710fe22-f919-4fa8-8f2b-c57a5087ce17.webp` | `Notion settings` | [screen](https://mobbin.com/screens/d710fe22-f919-4fa8-8f2b-c57a5087ce17) |
 | `ios/settings/notion-ios-settings-settings-02-b86ac678-2438-4180-9fa6-efce9f1e43ea.webp` | `Notion settings` | [screen](https://mobbin.com/screens/b86ac678-2438-4180-9fa6-efce9f1e43ea) |
 | `ios/settings/notion-ios-settings-settings-04-a44e2c67-75d0-4bca-9672-bfb3a4bcef1a.webp` | `Notion settings` | [screen](https://mobbin.com/screens/a44e2c67-75d0-4bca-9672-bfb3a4bcef1a) |
 | `ios/settings/notion-ios-settings-settings-07-0728149c-34f1-451e-b694-197bc8d15ac7.webp` | `Notion settings` | [screen](https://mobbin.com/screens/0728149c-34f1-451e-b694-197bc8d15ac7) |
-| `ios/settings/notion-ios-settings-settings-09-0193b407-2676-4f20-a428-06c7f8cff72a.webp` | `Notion settings` | [screen](https://mobbin.com/screens/0193b407-2676-4f20-a428-06c7f8cff72a) |
-| `ios/settings/notion-ios-settings-settings-12-2de6c428-1ad4-43ef-b077-68ce6773dba9.webp` | `Notion settings` | [screen](https://mobbin.com/screens/2de6c428-1ad4-43ef-b077-68ce6773dba9) |
-| `ios/settings/notion-ios-settings-settings-15-34541a79-8f3d-405a-bc1e-a4d3b5e5f284.webp` | `Notion settings` | [screen](https://mobbin.com/screens/34541a79-8f3d-405a-bc1e-a4d3b5e5f284) |
-| `ios/settings/notion-ios-settings-settings-16-4cc9aad0-a791-449d-a9a6-bd85558b77e6.webp` | `Notion settings` | [screen](https://mobbin.com/screens/4cc9aad0-a791-449d-a9a6-bd85558b77e6) |
-| `ios/settings/notion-ios-settings-upgrade-paywall-01-adbb1910-8073-4a06-a560-f9abf947d101.webp` | `Notion upgrade paywall` | [screen](https://mobbin.com/screens/adbb1910-8073-4a06-a560-f9abf947d101) |
-| `ios/sheets/notion-ios-sheets-color-picker-04-e5accf4d-d2be-4c81-bb01-de4424af9da2.webp` | `Notion color picker` | [screen](https://mobbin.com/screens/e5accf4d-d2be-4c81-bb01-de4424af9da2) |
+| `ios/settings/notion-ios-settings-trash-10-28efc85b-d36f-4856-b8b2-2dcf032dc9a0.webp` | `Notion trash` | [screen](https://mobbin.com/screens/28efc85b-d36f-4856-b8b2-2dcf032dc9a0) |
+| `ios/settings/notion-ios-settings-trash-12-2ce0cee9-e7f4-42f0-b174-f1de2c282aac.webp` | `Notion trash` | [screen](https://mobbin.com/screens/2ce0cee9-e7f4-42f0-b174-f1de2c282aac) |
+| `ios/sheets/notion-ios-sheets-calendar-03-812c6468-f2fd-4015-ae83-e2e88f6ffb71.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/812c6468-f2fd-4015-ae83-e2e88f6ffb71) |
+| `ios/sheets/notion-ios-sheets-calendar-04-365eabc0-4a33-4d0c-81ee-60ce8a8b5af9.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/365eabc0-4a33-4d0c-81ee-60ce8a8b5af9) |
+| `ios/sheets/notion-ios-sheets-calendar-05-e58d8c68-9f11-40ea-932c-9f743d730098.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/e58d8c68-9f11-40ea-932c-9f743d730098) |
+| `ios/sheets/notion-ios-sheets-calendar-06-73217bdc-f67c-4315-8cdd-1c8afd6db409.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/73217bdc-f67c-4315-8cdd-1c8afd6db409) |
+| `ios/sheets/notion-ios-sheets-calendar-07-0022bdd6-430a-46c8-897b-342f19a1e710.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/0022bdd6-430a-46c8-897b-342f19a1e710) |
+| `ios/sheets/notion-ios-sheets-calendar-08-5bac3734-42a0-4868-a77e-a9be29ce8502.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/5bac3734-42a0-4868-a77e-a9be29ce8502) |
+| `ios/sheets/notion-ios-sheets-calendar-09-ab24efe6-5118-4b74-a400-b15bfb96fc8d.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/ab24efe6-5118-4b74-a400-b15bfb96fc8d) |
+| `ios/sheets/notion-ios-sheets-calendar-10-d7432519-3d48-45cf-8a09-dc046ed8d402.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/d7432519-3d48-45cf-8a09-dc046ed8d402) |
+| `ios/sheets/notion-ios-sheets-calendar-11-3d1ba4aa-ab76-4d9e-b7e3-2a8d90156c3c.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/3d1ba4aa-ab76-4d9e-b7e3-2a8d90156c3c) |
+| `ios/sheets/notion-ios-sheets-calendar-12-6a6e6e87-dc75-4980-a186-947b283d5d13.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/6a6e6e87-dc75-4980-a186-947b283d5d13) |
+| `ios/sheets/notion-ios-sheets-cover-icon-01-b1b9d218-f175-44f7-9272-9c26ee18d793.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/b1b9d218-f175-44f7-9272-9c26ee18d793) |
+| `ios/sheets/notion-ios-sheets-cover-icon-02-4dd0854f-794a-4157-8b4e-83c58d74fa62.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/4dd0854f-794a-4157-8b4e-83c58d74fa62) |
 | `ios/sheets/notion-ios-sheets-date-picker-03-cb9d8cab-f85b-438f-bb06-4d1d07b90322.webp` | `Notion date picker` | [screen](https://mobbin.com/screens/cb9d8cab-f85b-438f-bb06-4d1d07b90322) |
 | `ios/sheets/notion-ios-sheets-date-picker-04-fd9402ee-7d2b-4998-aab8-40ae08c6fc10.webp` | `Notion date picker` | [screen](https://mobbin.com/screens/fd9402ee-7d2b-4998-aab8-40ae08c6fc10) |
 | `ios/sheets/notion-ios-sheets-date-picker-09-cfca14fb-a833-4bf6-b549-9e646bac5ec9.webp` | `Notion date picker` | [screen](https://mobbin.com/screens/cfca14fb-a833-4bf6-b549-9e646bac5ec9) |
-| `ios/sheets/notion-ios-sheets-date-picker-12-ca4fd83f-fca7-4e85-9232-3b747854779b.webp` | `Notion date picker` | [screen](https://mobbin.com/screens/ca4fd83f-fca7-4e85-9232-3b747854779b) |
 | `ios/sheets/notion-ios-sheets-delete-confirm-01-55602f6a-072b-47bd-af28-c234ec299245.webp` | `Notion delete confirmation` | [screen](https://mobbin.com/screens/55602f6a-072b-47bd-af28-c234ec299245) |
 | `ios/sheets/notion-ios-sheets-delete-confirm-02-1dc2682d-9a06-41b9-86f9-28e2e5155ab8.webp` | `Notion delete confirmation` | [screen](https://mobbin.com/screens/1dc2682d-9a06-41b9-86f9-28e2e5155ab8) |
 | `ios/sheets/notion-ios-sheets-delete-confirm-03-75bfaa3d-4324-4edb-a6cc-ad799884d6af.webp` | `Notion delete confirmation` | [screen](https://mobbin.com/screens/75bfaa3d-4324-4edb-a6cc-ad799884d6af) |
 | `ios/sheets/notion-ios-sheets-delete-confirm-06-35c95dac-d6ae-4af1-9507-8121e69f5551.webp` | `Notion delete confirmation` | [screen](https://mobbin.com/screens/35c95dac-d6ae-4af1-9507-8121e69f5551) |
 | `ios/sheets/notion-ios-sheets-delete-confirm-07-72b98d55-fe7b-4d9a-bd4f-f82df0491524.webp` | `Notion delete confirmation` | [screen](https://mobbin.com/screens/72b98d55-fe7b-4d9a-bd4f-f82df0491524) |
-| `ios/sheets/notion-ios-sheets-delete-confirm-09-3c913eb7-2aaa-43a5-935f-4958ad58340a.webp` | `Notion delete confirmation` | [screen](https://mobbin.com/screens/3c913eb7-2aaa-43a5-935f-4958ad58340a) |
-| `ios/sheets/notion-ios-sheets-delete-confirm-13-2822ab78-01e5-4410-ae73-c813e72fb55a.webp` | `Notion delete confirmation` | [screen](https://mobbin.com/screens/2822ab78-01e5-4410-ae73-c813e72fb55a) |
 | `ios/sheets/notion-ios-sheets-delete-confirm-14-175805d3-c376-4434-ab7a-96ca1b4bbdf2.webp` | `Notion delete confirmation` | [screen](https://mobbin.com/screens/175805d3-c376-4434-ab7a-96ca1b4bbdf2) |
 | `ios/sheets/notion-ios-sheets-delete-confirm-15-348fd2b7-e0d1-4b91-90ad-690f5bf2d98c.webp` | `Notion delete confirmation` | [screen](https://mobbin.com/screens/348fd2b7-e0d1-4b91-90ad-690f5bf2d98c) |
+| `ios/sheets/notion-ios-sheets-error-09-a059332d-338e-4f55-9433-72acc02dae01.webp` | `Notion error` | [screen](https://mobbin.com/screens/a059332d-338e-4f55-9433-72acc02dae01) |
 | `ios/sheets/notion-ios-sheets-icon-picker-01-0c4e7197-170b-44d6-adea-534219b9dd35.webp` | `Notion icon picker` | [screen](https://mobbin.com/screens/0c4e7197-170b-44d6-adea-534219b9dd35) |
 | `ios/sheets/notion-ios-sheets-icon-picker-02-754eb37a-90aa-492c-96b5-84471070b61f.webp` | `Notion icon picker` | [screen](https://mobbin.com/screens/754eb37a-90aa-492c-96b5-84471070b61f) |
 | `ios/sheets/notion-ios-sheets-icon-picker-05-28548045-a9e1-478a-9548-112ac74bbb01.webp` | `Notion icon picker` | [screen](https://mobbin.com/screens/28548045-a9e1-478a-9548-112ac74bbb01) |
 | `ios/sheets/notion-ios-sheets-icon-picker-06-4df35a24-1e3a-423c-b9b8-4ea5c3bd9162.webp` | `Notion icon picker` | [screen](https://mobbin.com/screens/4df35a24-1e3a-423c-b9b8-4ea5c3bd9162) |
 | `ios/sheets/notion-ios-sheets-icon-picker-07-79c6ccc5-babf-450d-a868-b38f2e07fecc.webp` | `Notion icon picker` | [screen](https://mobbin.com/screens/79c6ccc5-babf-450d-a868-b38f2e07fecc) |
-| `ios/sheets/notion-ios-sheets-move-to-05-937a87d9-a9d1-4b8c-b092-cf5ef8014858.webp` | `Notion move to` | [screen](https://mobbin.com/screens/937a87d9-a9d1-4b8c-b092-cf5ef8014858) |
+| `ios/sheets/notion-ios-sheets-login-03-6902a099-ef25-419f-bc1a-faa62a9c7ce3.webp` | `Notion login` | [screen](https://mobbin.com/screens/6902a099-ef25-419f-bc1a-faa62a9c7ce3) |
 | `ios/sheets/notion-ios-sheets-move-to-06-b81ab79d-db24-4e78-b2f6-bcec25dd299e.webp` | `Notion move to` | [screen](https://mobbin.com/screens/b81ab79d-db24-4e78-b2f6-bcec25dd299e) |
-| `ios/sheets/notion-ios-sheets-move-to-10-14c789e1-24e8-403f-8409-ad77449fe86c.webp` | `Notion move to` | [screen](https://mobbin.com/screens/14c789e1-24e8-403f-8409-ad77449fe86c) |
-| `ios/sheets/notion-ios-sheets-move-to-11-6d241d3c-f480-42cf-a012-00723d30201f.webp` | `Notion move to` | [screen](https://mobbin.com/screens/6d241d3c-f480-42cf-a012-00723d30201f) |
-| `ios/sheets/notion-ios-sheets-move-to-14-4cc485b1-c852-4262-8133-251d16bac526.webp` | `Notion move to` | [screen](https://mobbin.com/screens/4cc485b1-c852-4262-8133-251d16bac526) |
-| `ios/sheets/notion-ios-sheets-sheet-04-05b9a158-e0a7-4679-a403-6105e6a3d57f.webp` | `Notion bottom sheet` | [screen](https://mobbin.com/screens/05b9a158-e0a7-4679-a403-6105e6a3d57f) |
-| `ios/sheets/notion-ios-sheets-sheet-10-35f96f21-b420-4cc2-bfde-76326d04f3ad.webp` | `Notion bottom sheet` | [screen](https://mobbin.com/screens/35f96f21-b420-4cc2-bfde-76326d04f3ad) |
-| `ios/sheets/notion-ios-sheets-sheet-11-11f9da9e-d759-40cb-b203-62815e78bf2f.webp` | `Notion bottom sheet` | [screen](https://mobbin.com/screens/11f9da9e-d759-40cb-b203-62815e78bf2f) |
+| `ios/sheets/notion-ios-sheets-private-pages-02-364a1fa7-332c-42bc-a5ab-fe686fbf82f2.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/364a1fa7-332c-42bc-a5ab-fe686fbf82f2) |
+| `ios/sheets/notion-ios-sheets-trash-03-28751c29-0ac0-4e22-b089-4613ef3f4798.webp` | `Notion trash` | [screen](https://mobbin.com/screens/28751c29-0ac0-4e22-b089-4613ef3f4798) |
+| `ios/sheets/notion-ios-sheets-widgets-10-3865275b-8a95-4463-bfba-c2eb64d01fa5.webp` | `Notion widgets` | [screen](https://mobbin.com/screens/3865275b-8a95-4463-bfba-c2eb64d01fa5) |
+| `ios/states/notion-ios-states-cover-icon-04-e9e94681-2120-4697-aadd-814c1f9464c1.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/e9e94681-2120-4697-aadd-814c1f9464c1) |
 | `ios/states/notion-ios-states-empty-01-e186b09b-f60d-4f28-9344-85683722e2ad.webp` | `Notion empty state` | [screen](https://mobbin.com/screens/e186b09b-f60d-4f28-9344-85683722e2ad) |
 | `ios/states/notion-ios-states-empty-02-1885a9b9-fa20-43ee-9ba6-79fa92c79ecc.webp` | `Notion empty state` | [screen](https://mobbin.com/screens/1885a9b9-fa20-43ee-9ba6-79fa92c79ecc) |
-| `ios/states/notion-ios-states-empty-04-dd3458f6-5d45-41f3-a44f-3065215bf6f6.webp` | `Notion empty state` | [screen](https://mobbin.com/screens/dd3458f6-5d45-41f3-a44f-3065215bf6f6) |
 | `ios/states/notion-ios-states-empty-09-15f3126a-3623-4471-a6f9-2d6e06ba148a.webp` | `Notion empty state` | [screen](https://mobbin.com/screens/15f3126a-3623-4471-a6f9-2d6e06ba148a) |
-| `ios/states/notion-ios-states-empty-14-e1f4852b-5b5c-4f70-858d-bb024afd4dc2.webp` | `Notion empty state` | [screen](https://mobbin.com/screens/e1f4852b-5b5c-4f70-858d-bb024afd4dc2) |
-| `ios/states/notion-ios-states-empty-database-01-a984fe81-e471-4d22-a451-2684fd5983ac.webp` | `Notion empty database` | [screen](https://mobbin.com/screens/a984fe81-e471-4d22-a451-2684fd5983ac) |
 | `ios/states/notion-ios-states-empty-database-03-0192421d-531e-4b0a-9e49-50e4e674c990.webp` | `Notion empty database` | [screen](https://mobbin.com/screens/0192421d-531e-4b0a-9e49-50e4e674c990) |
-| `ios/states/notion-ios-states-empty-database-09-d658e522-8558-4546-aea8-8993c6dd4d3a.webp` | `Notion empty database` | [screen](https://mobbin.com/screens/d658e522-8558-4546-aea8-8993c6dd4d3a) |
 | `ios/states/notion-ios-states-error-02-53f4023b-ecc4-4615-a5fa-0fc95c5bb085.webp` | `Notion error` | [screen](https://mobbin.com/screens/53f4023b-ecc4-4615-a5fa-0fc95c5bb085) |
 | `ios/states/notion-ios-states-error-03-f318b5e0-2c9e-4db2-9bb3-128f468ccc0a.webp` | `Notion error` | [screen](https://mobbin.com/screens/f318b5e0-2c9e-4db2-9bb3-128f468ccc0a) |
 | `ios/states/notion-ios-states-error-08-a335360d-a12e-4032-8d58-c465a9fc181a.webp` | `Notion error` | [screen](https://mobbin.com/screens/a335360d-a12e-4032-8d58-c465a9fc181a) |
-| `ios/states/notion-ios-states-error-09-a059332d-338e-4f55-9433-72acc02dae01.webp` | `Notion error` | [screen](https://mobbin.com/screens/a059332d-338e-4f55-9433-72acc02dae01) |
 | `ios/states/notion-ios-states-error-11-9748e66c-c364-47f1-a62e-78448c2e9826.webp` | `Notion error` | [screen](https://mobbin.com/screens/9748e66c-c364-47f1-a62e-78448c2e9826) |
+| `ios/states/notion-ios-states-group-by-12-dddf6bca-8a57-4ca8-9878-5a1d4329af52.webp` | `Notion group by` | [screen](https://mobbin.com/screens/dddf6bca-8a57-4ca8-9878-5a1d4329af52) |
+| `ios/states/notion-ios-states-home-14-91b4adae-123f-4e65-be11-47627eb4d6c2.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/91b4adae-123f-4e65-be11-47627eb4d6c2) |
+| `ios/states/notion-ios-states-list-04-c7f05e88-5da7-41fd-baa2-efd47f661088.webp` | `Notion list view` | [screen](https://mobbin.com/screens/c7f05e88-5da7-41fd-baa2-efd47f661088) |
+| `ios/states/notion-ios-states-list-07-0f1bdb52-5389-4d5e-aede-bffc17f99ea5.webp` | `Notion list view` | [screen](https://mobbin.com/screens/0f1bdb52-5389-4d5e-aede-bffc17f99ea5) |
 | `ios/states/notion-ios-states-loading-01-47ecb9cf-7929-49db-86c8-f6403ba412eb.webp` | `Notion loading` | [screen](https://mobbin.com/screens/47ecb9cf-7929-49db-86c8-f6403ba412eb) |
-| `ios/states/notion-ios-states-loading-04-19af1746-3789-4c9e-b777-51f4933602e1.webp` | `Notion loading` | [screen](https://mobbin.com/screens/19af1746-3789-4c9e-b777-51f4933602e1) |
-| `ios/states/notion-ios-states-loading-06-a483c1af-bd45-4751-aa6b-d510acd34ac2.webp` | `Notion loading` | [screen](https://mobbin.com/screens/a483c1af-bd45-4751-aa6b-d510acd34ac2) |
-| `ios/states/notion-ios-states-loading-08-a36c0cce-9fbf-4a7d-85d2-cb49b46eab6f.webp` | `Notion loading` | [screen](https://mobbin.com/screens/a36c0cce-9fbf-4a7d-85d2-cb49b46eab6f) |
 | `ios/states/notion-ios-states-offline-02-ccc30760-909d-4667-a7d0-bb0c8d32a20b.webp` | `Notion offline` | [screen](https://mobbin.com/screens/ccc30760-909d-4667-a7d0-bb0c8d32a20b) |
 | `ios/states/notion-ios-states-offline-07-712f6960-bd55-4e4d-9398-53c70322deaa.webp` | `Notion offline` | [screen](https://mobbin.com/screens/712f6960-bd55-4e4d-9398-53c70322deaa) |
 | `ios/states/notion-ios-states-success-01-c839e4dc-f714-444e-8cce-1f4038b66840.webp` | `Notion success confirmation` | [screen](https://mobbin.com/screens/c839e4dc-f714-444e-8cce-1f4038b66840) |
-| `ios/states/notion-ios-states-success-02-1325061c-830b-4dd2-b3e2-d7b3905481b0.webp` | `Notion success confirmation` | [screen](https://mobbin.com/screens/1325061c-830b-4dd2-b3e2-d7b3905481b0) |
 | `ios/views/notion-ios-views-board-01-71f9dba2-130f-406e-b4fe-781f227f51b8.webp` | `Notion board view` | [screen](https://mobbin.com/screens/71f9dba2-130f-406e-b4fe-781f227f51b8) |
-| `ios/views/notion-ios-views-board-03-9d7ffd05-6eaa-4e65-954c-e0e09c99b577.webp` | `Notion board view` | [screen](https://mobbin.com/screens/9d7ffd05-6eaa-4e65-954c-e0e09c99b577) |
 | `ios/views/notion-ios-views-board-04-c9d34319-8700-442b-8806-2f2fcb475034.webp` | `Notion board view` | [screen](https://mobbin.com/screens/c9d34319-8700-442b-8806-2f2fcb475034) |
 | `ios/views/notion-ios-views-calendar-01-7be7fafb-3dfb-42e9-855a-832a431a053b.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/7be7fafb-3dfb-42e9-855a-832a431a053b) |
-| `ios/views/notion-ios-views-calendar-02-2413d15d-1ec7-4d3f-9855-9436fc479326.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/2413d15d-1ec7-4d3f-9855-9436fc479326) |
-| `ios/views/notion-ios-views-calendar-03-812c6468-f2fd-4015-ae83-e2e88f6ffb71.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/812c6468-f2fd-4015-ae83-e2e88f6ffb71) |
-| `ios/views/notion-ios-views-calendar-04-365eabc0-4a33-4d0c-81ee-60ce8a8b5af9.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/365eabc0-4a33-4d0c-81ee-60ce8a8b5af9) |
-| `ios/views/notion-ios-views-calendar-05-e58d8c68-9f11-40ea-932c-9f743d730098.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/e58d8c68-9f11-40ea-932c-9f743d730098) |
-| `ios/views/notion-ios-views-calendar-06-73217bdc-f67c-4315-8cdd-1c8afd6db409.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/73217bdc-f67c-4315-8cdd-1c8afd6db409) |
-| `ios/views/notion-ios-views-calendar-07-0022bdd6-430a-46c8-897b-342f19a1e710.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/0022bdd6-430a-46c8-897b-342f19a1e710) |
-| `ios/views/notion-ios-views-calendar-08-5bac3734-42a0-4868-a77e-a9be29ce8502.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/5bac3734-42a0-4868-a77e-a9be29ce8502) |
-| `ios/views/notion-ios-views-calendar-09-ab24efe6-5118-4b74-a400-b15bfb96fc8d.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/ab24efe6-5118-4b74-a400-b15bfb96fc8d) |
-| `ios/views/notion-ios-views-calendar-10-d7432519-3d48-45cf-8a09-dc046ed8d402.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/d7432519-3d48-45cf-8a09-dc046ed8d402) |
-| `ios/views/notion-ios-views-calendar-11-3d1ba4aa-ab76-4d9e-b7e3-2a8d90156c3c.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/3d1ba4aa-ab76-4d9e-b7e3-2a8d90156c3c) |
-| `ios/views/notion-ios-views-calendar-12-6a6e6e87-dc75-4980-a186-947b283d5d13.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/6a6e6e87-dc75-4980-a186-947b283d5d13) |
-| `ios/views/notion-ios-views-calendar-13-11caf701-71c3-49aa-93e5-0c91e8144bf3.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/11caf701-71c3-49aa-93e5-0c91e8144bf3) |
-| `ios/views/notion-ios-views-calendar-14-5b2ae35d-4cce-4340-a973-e6e2db005345.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/5b2ae35d-4cce-4340-a973-e6e2db005345) |
-| `ios/views/notion-ios-views-calendar-15-320f03de-6340-4a6a-ad48-f38383f18c58.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/320f03de-6340-4a6a-ad48-f38383f18c58) |
-| `ios/views/notion-ios-views-chart-01-4c5082c4-585a-49cc-b942-06f21e5b3e3f.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/4c5082c4-585a-49cc-b942-06f21e5b3e3f) |
 | `ios/views/notion-ios-views-chart-02-c25d9bc0-5aa2-4c6e-89a1-71d3e6c6c6b4.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/c25d9bc0-5aa2-4c6e-89a1-71d3e6c6c6b4) |
 | `ios/views/notion-ios-views-chart-03-3bb234a6-7fef-4b2a-a5a6-f625933c5537.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/3bb234a6-7fef-4b2a-a5a6-f625933c5537) |
-| `ios/views/notion-ios-views-chart-05-eb167dde-eec3-4199-8c49-5d89b7d045e4.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/eb167dde-eec3-4199-8c49-5d89b7d045e4) |
 | `ios/views/notion-ios-views-chart-06-f4326e64-00e9-405a-b513-211e4da55f95.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/f4326e64-00e9-405a-b513-211e4da55f95) |
-| `ios/views/notion-ios-views-chart-07-593763f1-5ce7-4e9b-845b-233ce82e222d.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/593763f1-5ce7-4e9b-845b-233ce82e222d) |
 | `ios/views/notion-ios-views-chart-09-d7586e7e-c5e6-46fa-ae9d-e7ee35507b14.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/d7586e7e-c5e6-46fa-ae9d-e7ee35507b14) |
-| `ios/views/notion-ios-views-chart-10-40879755-3948-4fdb-b555-3216033235c7.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/40879755-3948-4fdb-b555-3216033235c7) |
-| `ios/views/notion-ios-views-database-01-2cb53019-fd9e-4f13-8497-df283445101c.webp` | `Notion database` | [screen](https://mobbin.com/screens/2cb53019-fd9e-4f13-8497-df283445101c) |
 | `ios/views/notion-ios-views-database-02-6494c048-3824-413c-a5ca-3f3b0c8f21ee.webp` | `Notion database` | [screen](https://mobbin.com/screens/6494c048-3824-413c-a5ca-3f3b0c8f21ee) |
 | `ios/views/notion-ios-views-database-03-74da3d7a-b6b7-4ab8-ba38-9a17f04de3da.webp` | `Notion database` | [screen](https://mobbin.com/screens/74da3d7a-b6b7-4ab8-ba38-9a17f04de3da) |
 | `ios/views/notion-ios-views-database-04-89f232fa-0ec1-4c35-87d7-7d7c4d73f866.webp` | `Notion database` | [screen](https://mobbin.com/screens/89f232fa-0ec1-4c35-87d7-7d7c4d73f866) |
@@ -1272,246 +1365,307 @@ One row per file. "Found by" is the query (screens) or the flow name (flow files
 | `ios/views/notion-ios-views-database-08-d426cb7f-abd5-4933-b5c7-edaedd98f442.webp` | `Notion database` | [screen](https://mobbin.com/screens/d426cb7f-abd5-4933-b5c7-edaedd98f442) |
 | `ios/views/notion-ios-views-database-09-ea532678-a727-44b3-ba6d-72bf3b119ba4.webp` | `Notion database` | [screen](https://mobbin.com/screens/ea532678-a727-44b3-ba6d-72bf3b119ba4) |
 | `ios/views/notion-ios-views-database-10-d3de8071-5d1a-4418-aa12-d6ff44af3128.webp` | `Notion database` | [screen](https://mobbin.com/screens/d3de8071-5d1a-4418-aa12-d6ff44af3128) |
-| `ios/views/notion-ios-views-database-11-1589e7c8-87af-4c7d-8b1a-a7ec6ec103f8.webp` | `Notion database` | [screen](https://mobbin.com/screens/1589e7c8-87af-4c7d-8b1a-a7ec6ec103f8) |
-| `ios/views/notion-ios-views-database-12-5db722f5-3e96-4285-aa6c-fcf7f0f05691.webp` | `Notion database` | [screen](https://mobbin.com/screens/5db722f5-3e96-4285-aa6c-fcf7f0f05691) |
-| `ios/views/notion-ios-views-database-13-50c18234-0645-48b1-a580-e2ebf95efa26.webp` | `Notion database` | [screen](https://mobbin.com/screens/50c18234-0645-48b1-a580-e2ebf95efa26) |
-| `ios/views/notion-ios-views-database-14-d1de51a5-69b4-4a0f-b916-9bf082abe6ad.webp` | `Notion database` | [screen](https://mobbin.com/screens/d1de51a5-69b4-4a0f-b916-9bf082abe6ad) |
-| `ios/views/notion-ios-views-database-15-cc8b241a-76d5-4192-8a33-5b970ea2f9ab.webp` | `Notion database` | [screen](https://mobbin.com/screens/cc8b241a-76d5-4192-8a33-5b970ea2f9ab) |
 | `ios/views/notion-ios-views-database-16-026940b3-e0de-443d-a948-6eb1e53e4ea1.webp` | `Notion database` | [screen](https://mobbin.com/screens/026940b3-e0de-443d-a948-6eb1e53e4ea1) |
-| `ios/views/notion-ios-views-form-01-b326a703-5651-442c-a83e-5c5f5817c553.webp` | `Notion form` | [screen](https://mobbin.com/screens/b326a703-5651-442c-a83e-5c5f5817c553) |
-| `ios/views/notion-ios-views-form-02-98b76102-1ad4-46a5-a969-02ddaa41c091.webp` | `Notion form` | [screen](https://mobbin.com/screens/98b76102-1ad4-46a5-a969-02ddaa41c091) |
-| `ios/views/notion-ios-views-form-03-0585206f-fe1b-459c-9b5d-7f31a602eac0.webp` | `Notion form` | [screen](https://mobbin.com/screens/0585206f-fe1b-459c-9b5d-7f31a602eac0) |
-| `ios/views/notion-ios-views-form-04-d06fde93-69df-43e8-b2d8-d6f4ada608e5.webp` | `Notion form` | [screen](https://mobbin.com/screens/d06fde93-69df-43e8-b2d8-d6f4ada608e5) |
-| `ios/views/notion-ios-views-form-05-a0e2265c-1423-4072-bfdc-86246e45db89.webp` | `Notion form` | [screen](https://mobbin.com/screens/a0e2265c-1423-4072-bfdc-86246e45db89) |
-| `ios/views/notion-ios-views-form-06-53d7b310-2bd0-4532-bbcc-04cc4710d7b7.webp` | `Notion form` | [screen](https://mobbin.com/screens/53d7b310-2bd0-4532-bbcc-04cc4710d7b7) |
-| `ios/views/notion-ios-views-form-07-4944cf22-bef5-4f13-abc2-6d8ee041fef1.webp` | `Notion form` | [screen](https://mobbin.com/screens/4944cf22-bef5-4f13-abc2-6d8ee041fef1) |
-| `ios/views/notion-ios-views-form-08-325da841-4dfb-45b5-b36f-db6bfc71eda1.webp` | `Notion form` | [screen](https://mobbin.com/screens/325da841-4dfb-45b5-b36f-db6bfc71eda1) |
-| `ios/views/notion-ios-views-form-09-3c1fea37-d0b5-42a6-9ba3-01207890cb19.webp` | `Notion form` | [screen](https://mobbin.com/screens/3c1fea37-d0b5-42a6-9ba3-01207890cb19) |
-| `ios/views/notion-ios-views-form-10-1079b05c-bdcb-48b3-981e-be8299f5415a.webp` | `Notion form` | [screen](https://mobbin.com/screens/1079b05c-bdcb-48b3-981e-be8299f5415a) |
-| `ios/views/notion-ios-views-form-11-58b53baf-7e33-4932-bcaa-bdb7e77b0a9f.webp` | `Notion form` | [screen](https://mobbin.com/screens/58b53baf-7e33-4932-bcaa-bdb7e77b0a9f) |
-| `ios/views/notion-ios-views-form-12-1e23e6fa-7b8a-4782-916b-d8de0899286d.webp` | `Notion form` | [screen](https://mobbin.com/screens/1e23e6fa-7b8a-4782-916b-d8de0899286d) |
-| `ios/views/notion-ios-views-form-13-1067756c-30d6-49b8-bffe-8ae440649969.webp` | `Notion form` | [screen](https://mobbin.com/screens/1067756c-30d6-49b8-bffe-8ae440649969) |
-| `ios/views/notion-ios-views-form-15-946acd58-032e-49b3-a09e-fae2fdeeca23.webp` | `Notion form` | [screen](https://mobbin.com/screens/946acd58-032e-49b3-a09e-fae2fdeeca23) |
-| `ios/views/notion-ios-views-form-16-e7c30962-cb10-41a3-b71e-ebbdaa1405f7.webp` | `Notion form` | [screen](https://mobbin.com/screens/e7c30962-cb10-41a3-b71e-ebbdaa1405f7) |
-| `ios/views/notion-ios-views-form-17-826a0d88-e2e2-4f48-af12-e467bab5e6aa.webp` | `Notion form` | [screen](https://mobbin.com/screens/826a0d88-e2e2-4f48-af12-e467bab5e6aa) |
-| `ios/views/notion-ios-views-form-18-09e43e43-4ca3-4ecf-9dd1-0d27ac28e976.webp` | `Notion form` | [screen](https://mobbin.com/screens/09e43e43-4ca3-4ecf-9dd1-0d27ac28e976) |
-| `ios/views/notion-ios-views-form-19-cf2de3d6-0f1a-4342-9aff-29e4cf9f05e2.webp` | `Notion form` | [screen](https://mobbin.com/screens/cf2de3d6-0f1a-4342-9aff-29e4cf9f05e2) |
-| `ios/views/notion-ios-views-form-20-28b22ab3-d927-4da7-ab36-608083ed1e8b.webp` | `Notion form` | [screen](https://mobbin.com/screens/28b22ab3-d927-4da7-ab36-608083ed1e8b) |
-| `ios/views/notion-ios-views-form-21-b34ff003-cc48-4af9-a3ff-98d2c9836636.webp` | `Notion form` | [screen](https://mobbin.com/screens/b34ff003-cc48-4af9-a3ff-98d2c9836636) |
-| `ios/views/notion-ios-views-form-22-aef33900-aec6-452e-af47-728694e0ab18.webp` | `Notion form` | [screen](https://mobbin.com/screens/aef33900-aec6-452e-af47-728694e0ab18) |
-| `ios/views/notion-ios-views-form-23-447a6412-0567-47c4-bd5e-806220db5879.webp` | `Notion form` | [screen](https://mobbin.com/screens/447a6412-0567-47c4-bd5e-806220db5879) |
-| `ios/views/notion-ios-views-gallery-01-6db99f87-62f1-4e09-bfd3-151cbe473a42.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/6db99f87-62f1-4e09-bfd3-151cbe473a42) |
-| `ios/views/notion-ios-views-gallery-02-20a94d24-d598-46d6-ba3b-ca775d3b3121.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/20a94d24-d598-46d6-ba3b-ca775d3b3121) |
-| `ios/views/notion-ios-views-gallery-03-ebf826cb-2d14-4482-bcdf-00b6c863bcb4.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/ebf826cb-2d14-4482-bcdf-00b6c863bcb4) |
-| `ios/views/notion-ios-views-gallery-04-aaec51cd-8a6d-4e32-8c54-5c5641397cc7.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/aaec51cd-8a6d-4e32-8c54-5c5641397cc7) |
-| `ios/views/notion-ios-views-gallery-05-470f3cb0-2950-4016-aa8e-44886bd6e282.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/470f3cb0-2950-4016-aa8e-44886bd6e282) |
-| `ios/views/notion-ios-views-gallery-06-ddcba3da-9557-4a83-adca-3aa6a81e16b0.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/ddcba3da-9557-4a83-adca-3aa6a81e16b0) |
-| `ios/views/notion-ios-views-gallery-07-29af3ec7-cbca-4369-8daf-9c1d9457fb06.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/29af3ec7-cbca-4369-8daf-9c1d9457fb06) |
-| `ios/views/notion-ios-views-gallery-08-f2f3317f-3920-467b-b68f-f6bf97d564e0.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/f2f3317f-3920-467b-b68f-f6bf97d564e0) |
-| `ios/views/notion-ios-views-gallery-09-a1126d2d-97e1-4133-ab53-c1be7f035b8f.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/a1126d2d-97e1-4133-ab53-c1be7f035b8f) |
+| `ios/views/notion-ios-views-group-by-11-6b0b6aa6-7d3a-4a0a-9f56-e548f0f4d6dd.webp` | `Notion group by` | [screen](https://mobbin.com/screens/6b0b6aa6-7d3a-4a0a-9f56-e548f0f4d6dd) |
+| `ios/views/notion-ios-views-home-18-7ae6e62d-874a-4757-b017-2f96db8c0cce.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/7ae6e62d-874a-4757-b017-2f96db8c0cce) |
 | `ios/views/notion-ios-views-kanban-01-efc302e8-36bc-4dc5-aa8b-675376875b16.webp` | `Notion kanban board` | [screen](https://mobbin.com/screens/efc302e8-36bc-4dc5-aa8b-675376875b16) |
 | `ios/views/notion-ios-views-kanban-02-e1897baf-cdc7-4a5b-920a-8dcef731a495.webp` | `Notion kanban board` | [screen](https://mobbin.com/screens/e1897baf-cdc7-4a5b-920a-8dcef731a495) |
-| `ios/views/notion-ios-views-list-01-4ad41221-d2e4-4534-bd0b-855f4b939eb8.webp` | `Notion list view` | [screen](https://mobbin.com/screens/4ad41221-d2e4-4534-bd0b-855f4b939eb8) |
-| `ios/views/notion-ios-views-list-03-4d8a1f66-aa12-46ea-9306-fa9d1f1a4b45.webp` | `Notion list view` | [screen](https://mobbin.com/screens/4d8a1f66-aa12-46ea-9306-fa9d1f1a4b45) |
-| `ios/views/notion-ios-views-list-04-c7f05e88-5da7-41fd-baa2-efd47f661088.webp` | `Notion list view` | [screen](https://mobbin.com/screens/c7f05e88-5da7-41fd-baa2-efd47f661088) |
-| `ios/views/notion-ios-views-list-06-3958c573-f95a-4e46-8c4d-3b046e27e942.webp` | `Notion list view` | [screen](https://mobbin.com/screens/3958c573-f95a-4e46-8c4d-3b046e27e942) |
-| `ios/views/notion-ios-views-list-07-0f1bdb52-5389-4d5e-aede-bffc17f99ea5.webp` | `Notion list view` | [screen](https://mobbin.com/screens/0f1bdb52-5389-4d5e-aede-bffc17f99ea5) |
-| `ios/views/notion-ios-views-list-08-0f175af2-39b8-4393-bfd1-881c1c93b835.webp` | `Notion list view` | [screen](https://mobbin.com/screens/0f175af2-39b8-4393-bfd1-881c1c93b835) |
-| `ios/views/notion-ios-views-list-09-6e674534-c702-471a-ad27-346033d12856.webp` | `Notion list view` | [screen](https://mobbin.com/screens/6e674534-c702-471a-ad27-346033d12856) |
 | `ios/views/notion-ios-views-list-11-5b76071b-1098-461d-b8e4-223c41bd02b2.webp` | `Notion list view` | [screen](https://mobbin.com/screens/5b76071b-1098-461d-b8e4-223c41bd02b2) |
-| `ios/views/notion-ios-views-list-12-fb6838a2-c6ff-46c1-986e-c05ef71ee638.webp` | `Notion list view` | [screen](https://mobbin.com/screens/fb6838a2-c6ff-46c1-986e-c05ef71ee638) |
-| `ios/views/notion-ios-views-list-13-1d748074-5dd5-4a6e-8791-2098334f937a.webp` | `Notion list view` | [screen](https://mobbin.com/screens/1d748074-5dd5-4a6e-8791-2098334f937a) |
-| `ios/views/notion-ios-views-list-14-019b0ddd-abc3-44f3-9932-ae74e98ae7e7.webp` | `Notion list view` | [screen](https://mobbin.com/screens/019b0ddd-abc3-44f3-9932-ae74e98ae7e7) |
-| `ios/views/notion-ios-views-list-15-b6306973-8008-4115-b49c-806fad5023ce.webp` | `Notion list view` | [screen](https://mobbin.com/screens/b6306973-8008-4115-b49c-806fad5023ce) |
-| `ios/views/notion-ios-views-list-16-e1799f0b-b09f-429d-a9e2-6517a193228b.webp` | `Notion list view` | [screen](https://mobbin.com/screens/e1799f0b-b09f-429d-a9e2-6517a193228b) |
-| `ios/views/notion-ios-views-list-17-7019fb1c-3660-4afa-9ce9-f3a8d1a7edf4.webp` | `Notion list view` | [screen](https://mobbin.com/screens/7019fb1c-3660-4afa-9ce9-f3a8d1a7edf4) |
-| `ios/views/notion-ios-views-list-18-0e9f660f-46e9-4438-99b0-185ab6dfab4a.webp` | `Notion list view` | [screen](https://mobbin.com/screens/0e9f660f-46e9-4438-99b0-185ab6dfab4a) |
-| `ios/views/notion-ios-views-list-19-6d00fbcd-2484-4f24-b37e-d4132a216c42.webp` | `Notion list view` | [screen](https://mobbin.com/screens/6d00fbcd-2484-4f24-b37e-d4132a216c42) |
-| `ios/views/notion-ios-views-list-20-8d3fc9e2-d392-41da-bb1a-070f3274964d.webp` | `Notion list view` | [screen](https://mobbin.com/screens/8d3fc9e2-d392-41da-bb1a-070f3274964d) |
-| `ios/views/notion-ios-views-list-21-61a0b623-e12c-461b-b3b9-74200476189c.webp` | `Notion list view` | [screen](https://mobbin.com/screens/61a0b623-e12c-461b-b3b9-74200476189c) |
-| `ios/views/notion-ios-views-list-22-63bd2913-d0b2-499d-b06d-9009f0ca669d.webp` | `Notion list view` | [screen](https://mobbin.com/screens/63bd2913-d0b2-499d-b06d-9009f0ca669d) |
-| `ios/views/notion-ios-views-list-23-692eaaa1-1245-4109-a68b-6605daee286c.webp` | `Notion list view` | [screen](https://mobbin.com/screens/692eaaa1-1245-4109-a68b-6605daee286c) |
-| `ios/views/notion-ios-views-list-24-061d2fda-e4d6-460b-a6f7-146ec885fd95.webp` | `Notion list view` | [screen](https://mobbin.com/screens/061d2fda-e4d6-460b-a6f7-146ec885fd95) |
-| `ios/views/notion-ios-views-page-01-576504b1-908e-49af-a46e-95c3a00921f3.webp` | `Notion page` | [screen](https://mobbin.com/screens/576504b1-908e-49af-a46e-95c3a00921f3) |
-| `ios/views/notion-ios-views-page-02-23ebacc5-4ddd-4afc-ae8e-3a07063e80cd.webp` | `Notion page` | [screen](https://mobbin.com/screens/23ebacc5-4ddd-4afc-ae8e-3a07063e80cd) |
-| `ios/views/notion-ios-views-page-03-11003827-5de7-47ea-8fba-84f2985477cf.webp` | `Notion page` | [screen](https://mobbin.com/screens/11003827-5de7-47ea-8fba-84f2985477cf) |
 | `ios/views/notion-ios-views-page-04-6f48bcb1-7b45-4fc2-ba41-eb18df943d72.webp` | `Notion page` | [screen](https://mobbin.com/screens/6f48bcb1-7b45-4fc2-ba41-eb18df943d72) |
-| `ios/views/notion-ios-views-page-05-58478632-42e4-4545-b49e-fd9177431940.webp` | `Notion page` | [screen](https://mobbin.com/screens/58478632-42e4-4545-b49e-fd9177431940) |
 | `ios/views/notion-ios-views-page-06-9813d2c0-84ec-4c41-bfdc-8c2127914c91.webp` | `Notion page` | [screen](https://mobbin.com/screens/9813d2c0-84ec-4c41-bfdc-8c2127914c91) |
-| `ios/views/notion-ios-views-page-07-fb7988f5-18a7-4cce-ae50-5d61196980b9.webp` | `Notion page` | [screen](https://mobbin.com/screens/fb7988f5-18a7-4cce-ae50-5d61196980b9) |
 | `ios/views/notion-ios-views-page-08-db2814d9-78bd-4b01-9d57-8e1c4dcbdbbc.webp` | `Notion page` | [screen](https://mobbin.com/screens/db2814d9-78bd-4b01-9d57-8e1c4dcbdbbc) |
-| `ios/views/notion-ios-views-page-09-0167447d-0609-4232-a79f-d1466381e3aa.webp` | `Notion page` | [screen](https://mobbin.com/screens/0167447d-0609-4232-a79f-d1466381e3aa) |
 | `ios/views/notion-ios-views-page-10-b2a0288b-a074-45b7-8b47-05fb57431ff0.webp` | `Notion page` | [screen](https://mobbin.com/screens/b2a0288b-a074-45b7-8b47-05fb57431ff0) |
-| `ios/views/notion-ios-views-page-11-d5a610ea-b60f-4233-9e17-40fedb8af3a4.webp` | `Notion page` | [screen](https://mobbin.com/screens/d5a610ea-b60f-4233-9e17-40fedb8af3a4) |
-| `ios/views/notion-ios-views-page-12-d53b3912-f60a-4bd1-872e-18276fe2acd5.webp` | `Notion page` | [screen](https://mobbin.com/screens/d53b3912-f60a-4bd1-872e-18276fe2acd5) |
-| `ios/views/notion-ios-views-page-13-aca6f562-a565-4e3d-bd59-5a4e6675857e.webp` | `Notion page` | [screen](https://mobbin.com/screens/aca6f562-a565-4e3d-bd59-5a4e6675857e) |
-| `ios/views/notion-ios-views-page-14-598aef7e-8f89-4e7f-acd6-e55ec176cf2a.webp` | `Notion page` | [screen](https://mobbin.com/screens/598aef7e-8f89-4e7f-acd6-e55ec176cf2a) |
-| `ios/views/notion-ios-views-page-15-18df725c-244b-4974-86fc-7a4f17473f19.webp` | `Notion page` | [screen](https://mobbin.com/screens/18df725c-244b-4974-86fc-7a4f17473f19) |
-| `ios/views/notion-ios-views-sub-pages-01-b680d7b4-32d9-4ad7-a9c1-437fbad1d7cc.webp` | `Notion sub-pages` | [screen](https://mobbin.com/screens/b680d7b4-32d9-4ad7-a9c1-437fbad1d7cc) |
-| `ios/views/notion-ios-views-sub-pages-02-11da7ea4-fb46-43a7-838d-3f93a0599381.webp` | `Notion sub-pages` | [screen](https://mobbin.com/screens/11da7ea4-fb46-43a7-838d-3f93a0599381) |
-| `ios/views/notion-ios-views-sub-pages-03-cc29c27b-0f54-4d02-bb5e-e95f51e81dbb.webp` | `Notion sub-pages` | [screen](https://mobbin.com/screens/cc29c27b-0f54-4d02-bb5e-e95f51e81dbb) |
-| `ios/views/notion-ios-views-table-01-d3acf726-47cf-46f4-bd0d-65788523dc3b.webp` | `Notion table view` | [screen](https://mobbin.com/screens/d3acf726-47cf-46f4-bd0d-65788523dc3b) |
-| `ios/views/notion-ios-views-table-02-9867cb76-74ed-4ff0-9254-398aeff2265e.webp` | `Notion table view` | [screen](https://mobbin.com/screens/9867cb76-74ed-4ff0-9254-398aeff2265e) |
-| `ios/views/notion-ios-views-table-03-e7391344-2ba8-491f-b940-966f1a329459.webp` | `Notion table view` | [screen](https://mobbin.com/screens/e7391344-2ba8-491f-b940-966f1a329459) |
-| `ios/views/notion-ios-views-table-04-a0d1e399-b713-46a7-abec-15ea7e7cdc06.webp` | `Notion table view` | [screen](https://mobbin.com/screens/a0d1e399-b713-46a7-abec-15ea7e7cdc06) |
+| `ios/views/notion-ios-views-private-pages-01-be583e04-1a80-4518-a990-27584835b81c.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/be583e04-1a80-4518-a990-27584835b81c) |
+| `ios/views/notion-ios-views-search-18-f7db9a50-a95b-4b7a-85b9-545d60b3a4cf.webp` | `Notion search` | [screen](https://mobbin.com/screens/f7db9a50-a95b-4b7a-85b9-545d60b3a4cf) |
 | `ios/views/notion-ios-views-table-05-19745d87-2fe8-4767-9da9-20946b445bd7.webp` | `Notion table view` | [screen](https://mobbin.com/screens/19745d87-2fe8-4767-9da9-20946b445bd7) |
 | `ios/views/notion-ios-views-table-06-e33466b4-6be5-4e19-9d56-1b112f7aed10.webp` | `Notion table view` | [screen](https://mobbin.com/screens/e33466b4-6be5-4e19-9d56-1b112f7aed10) |
 | `ios/views/notion-ios-views-table-07-664b0f07-e153-4231-af93-70a084d10a18.webp` | `Notion table view` | [screen](https://mobbin.com/screens/664b0f07-e153-4231-af93-70a084d10a18) |
 | `ios/views/notion-ios-views-table-08-35c64a84-58d0-43ca-a023-3258e5d91090.webp` | `Notion table view` | [screen](https://mobbin.com/screens/35c64a84-58d0-43ca-a023-3258e5d91090) |
 | `ios/views/notion-ios-views-table-09-c5fc5db2-33f2-4e5e-9bfa-dd284ad9408d.webp` | `Notion table view` | [screen](https://mobbin.com/screens/c5fc5db2-33f2-4e5e-9bfa-dd284ad9408d) |
-| `ios/views/notion-ios-views-table-10-8d6dcf3b-3197-4244-86b6-f901f7df6079.webp` | `Notion table view` | [screen](https://mobbin.com/screens/8d6dcf3b-3197-4244-86b6-f901f7df6079) |
 | `ios/views/notion-ios-views-table-11-90277769-e407-4476-bc16-4309ee11276d.webp` | `Notion table view` | [screen](https://mobbin.com/screens/90277769-e407-4476-bc16-4309ee11276d) |
 | `ios/views/notion-ios-views-table-12-d95ea247-b077-4e8a-89f7-9cee67b4921a.webp` | `Notion table view` | [screen](https://mobbin.com/screens/d95ea247-b077-4e8a-89f7-9cee67b4921a) |
 | `ios/views/notion-ios-views-table-13-6673816d-9c68-4275-8902-f6cf6982f982.webp` | `Notion table view` | [screen](https://mobbin.com/screens/6673816d-9c68-4275-8902-f6cf6982f982) |
-| `ios/views/notion-ios-views-table-14-7f2dbda0-d1e7-4086-8ef8-fe998e0f6174.webp` | `Notion table view` | [screen](https://mobbin.com/screens/7f2dbda0-d1e7-4086-8ef8-fe998e0f6174) |
-| `ios/views/notion-ios-views-table-15-2517d4cf-7998-4f68-a689-20489ef18ec0.webp` | `Notion table view` | [screen](https://mobbin.com/screens/2517d4cf-7998-4f68-a689-20489ef18ec0) |
+| `ios/views/notion-ios-views-tabs-09-54ea40ae-707f-4d08-be98-bfb92c2f3c7a.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/54ea40ae-707f-4d08-be98-bfb92c2f3c7a) |
+| `ios/views/notion-ios-views-tabs-14-cdaeb122-7969-4393-ba83-97b6ea759575.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/cdaeb122-7969-4393-ba83-97b6ea759575) |
+| `ios/views/notion-ios-views-tabs-15-08d60803-d5a6-45dd-92c4-fe1e85e1420c.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/08d60803-d5a6-45dd-92c4-fe1e85e1420c) |
+| `ios/views/notion-ios-views-tabs-21-399a6a5c-9bc2-4200-9e98-789ddfbf13f0.webp` | `Notion bottom tab bar` | [screen](https://mobbin.com/screens/399a6a5c-9bc2-4200-9e98-789ddfbf13f0) |
 | `ios/views/notion-ios-views-timeline-01-9bd85504-52e9-4947-8e7d-11ddc7e9e4d8.webp` | `Notion timeline view` | [screen](https://mobbin.com/screens/9bd85504-52e9-4947-8e7d-11ddc7e9e4d8) |
-| `ios/views/notion-ios-views-timeline-02-a908be65-7167-4cdd-9e72-809a5dbf6431.webp` | `Notion timeline view` | [screen](https://mobbin.com/screens/a908be65-7167-4cdd-9e72-809a5dbf6431) |
-| `ios/views/notion-ios-views-timeline-03-ee96920e-cf00-4aa1-b1b8-75750e1aace1.webp` | `Notion timeline view` | [screen](https://mobbin.com/screens/ee96920e-cf00-4aa1-b1b8-75750e1aace1) |
-| `ios/views/notion-ios-views-timeline-04-c7480761-5836-4c2d-b6fc-d6a1d845a9b3.webp` | `Notion timeline view` | [screen](https://mobbin.com/screens/c7480761-5836-4c2d-b6fc-d6a1d845a9b3) |
-| `ios/views/notion-ios-views-wiki-01-ca309b0a-cf15-409c-94e4-c22e2e639ce9.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/ca309b0a-cf15-409c-94e4-c22e2e639ce9) |
-| `ios/views/notion-ios-views-wiki-02-de4d6e75-b471-4e3b-959b-8271b1b36561.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/de4d6e75-b471-4e3b-959b-8271b1b36561) |
-| `ios/views/notion-ios-views-wiki-03-3f8aeae7-855a-48d8-9c22-3b9e16b315f3.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/3f8aeae7-855a-48d8-9c22-3b9e16b315f3) |
-| `ios/views/notion-ios-views-wiki-04-0d3c2408-d865-417e-82f8-319bdc103301.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/0d3c2408-d865-417e-82f8-319bdc103301) |
-| `ios/views/notion-ios-views-wiki-06-3b18ceec-d222-4dae-8af6-66d94321d04e.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/3b18ceec-d222-4dae-8af6-66d94321d04e) |
-| `ios/views/notion-ios-views-wiki-09-3c0f2e54-c676-42f3-9dc9-745a66cf755e.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/3c0f2e54-c676-42f3-9dc9-745a66cf755e) |
 | `ios/views/notion-ios-views-wiki-11-8ce401b5-4d65-493e-988c-0cb7c7d11900.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/8ce401b5-4d65-493e-988c-0cb7c7d11900) |
-| `ios/views/notion-ios-views-wiki-12-de033fb7-8d36-4c24-9e2d-40f95d1f7ff5.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/de033fb7-8d36-4c24-9e2d-40f95d1f7ff5) |
-| `ios/views/notion-ios-views-wiki-15-6e1d8bb8-6ebc-4889-aedb-d1abd09ca66c.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/6e1d8bb8-6ebc-4889-aedb-d1abd09ca66c) |
-| `ios/views/notion-ios-views-wiki-16-f31b3053-de17-4d89-b65d-7d48a24d7a54.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/f31b3053-de17-4d89-b65d-7d48a24d7a54) |
-| `ios/views/notion-ios-views-wiki-17-a0e4a505-c8f1-4850-a575-94d68ff8dfba.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/a0e4a505-c8f1-4850-a575-94d68ff8dfba) |
-| `ios/views/notion-ios-views-wiki-18-20aeb3fe-f645-4b66-ac13-a5fae2f343e0.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/20aeb3fe-f645-4b66-ac13-a5fae2f343e0) |
-| `ios/views/notion-ios-views-wiki-19-716c0d70-dd24-4621-9f45-50049c33e731.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/716c0d70-dd24-4621-9f45-50049c33e731) |
-| `ios/views/notion-ios-views-wiki-20-91018867-e081-4c8f-b370-250159b7badc.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/91018867-e081-4c8f-b370-250159b7badc) |
-| `ios/views/notion-ios-views-wiki-21-1be86f23-19d6-449e-8aaa-6184bc511294.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/1be86f23-19d6-449e-8aaa-6184bc511294) |
-| `ios/views/notion-ios-views-wiki-22-b8051ca3-1eef-499b-b542-a23bc9575274.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/b8051ca3-1eef-499b-b542-a23bc9575274) |
-| `ios/views/notion-ios-views-wiki-23-8f254198-0665-49e1-bdf1-2afa73ceda7b.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/8f254198-0665-49e1-bdf1-2afa73ceda7b) |
-| `ios/views/notion-ios-views-wiki-24-442295aa-3ddc-4510-938d-b5ea92c9354f.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/442295aa-3ddc-4510-938d-b5ea92c9354f) |
 | `ios/views/notion-ios-views-wiki-25-ab8a0288-8ebc-4b3c-adc6-7559118e0dc1.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/ab8a0288-8ebc-4b3c-adc6-7559118e0dc1) |
-| `ios/views/notion-ios-views-wiki-26-4e06919e-e092-457a-b5a1-548a33e9f8a7.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/4e06919e-e092-457a-b5a1-548a33e9f8a7) |
 
 ### web (2332 files, 1540 unique screens)
 
 | File | Found by | Mobbin |
 |------|----------|--------|
+| `web/ai/notion-web-ai-ai-chat-01-f9ac8f67-4813-4e30-9a68-88bbceee49c8.webp` | `Notion AI chat` | [screen](https://mobbin.com/screens/f9ac8f67-4813-4e30-9a68-88bbceee49c8) |
+| `web/ai/notion-web-ai-ai-writing-01-7f5c8c5c-01c0-4b83-a505-cf3fe0bd49bc.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/7f5c8c5c-01c0-4b83-a505-cf3fe0bd49bc) |
+| `web/ai/notion-web-ai-ai-writing-02-27745a27-64ea-45dc-942a-8451998a50b3.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/27745a27-64ea-45dc-942a-8451998a50b3) |
+| `web/ai/notion-web-ai-ai-writing-03-0c407e3c-fb16-43d9-8be0-0c980374698d.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/0c407e3c-fb16-43d9-8be0-0c980374698d) |
+| `web/ai/notion-web-ai-ai-writing-04-fbc30f35-7e02-43fb-875d-f1a4b8eba372.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/fbc30f35-7e02-43fb-875d-f1a4b8eba372) |
+| `web/ai/notion-web-ai-ai-writing-05-5a169bb1-12fa-4bfe-88c4-ff2210b15d32.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/5a169bb1-12fa-4bfe-88c4-ff2210b15d32) |
+| `web/ai/notion-web-ai-ai-writing-06-a1d949f4-fc76-450d-afe8-6477510a848b.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/a1d949f4-fc76-450d-afe8-6477510a848b) |
+| `web/ai/notion-web-ai-ai-writing-07-1de6d932-63c7-4838-b317-800e02aab879.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/1de6d932-63c7-4838-b317-800e02aab879) |
+| `web/ai/notion-web-ai-ai-writing-09-85c67e9a-2900-4097-9e7a-5fb04d510b31.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/85c67e9a-2900-4097-9e7a-5fb04d510b31) |
+| `web/ai/notion-web-ai-ai-writing-10-0317bced-be59-439c-a6b9-9032b93835b4.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/0317bced-be59-439c-a6b9-9032b93835b4) |
+| `web/ai/notion-web-ai-ai-writing-11-58188761-2d93-43a2-be51-df5fee96707a.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/58188761-2d93-43a2-be51-df5fee96707a) |
+| `web/ai/notion-web-ai-ai-writing-12-a1cd6f83-aac0-4df6-9297-3cc36fb6de4d.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/a1cd6f83-aac0-4df6-9297-3cc36fb6de4d) |
+| `web/ai/notion-web-ai-ask-ai-01-2c72548e-6813-4575-8861-29ebf927a221.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/2c72548e-6813-4575-8861-29ebf927a221) |
+| `web/ai/notion-web-ai-ask-ai-02-644841b3-6633-4075-bd1e-bb494c50d67f.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/644841b3-6633-4075-bd1e-bb494c50d67f) |
+| `web/ai/notion-web-ai-ask-ai-03-0f4fe415-27b5-4837-9274-7bc1af9b26a3.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/0f4fe415-27b5-4837-9274-7bc1af9b26a3) |
+| `web/ai/notion-web-ai-ask-ai-04-b970f2e3-608c-4766-889d-e4385d1862cf.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/b970f2e3-608c-4766-889d-e4385d1862cf) |
+| `web/ai/notion-web-ai-ask-ai-05-f4e326dd-cdf0-48cb-b85e-7e8cd988294c.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/f4e326dd-cdf0-48cb-b85e-7e8cd988294c) |
+| `web/ai/notion-web-ai-ask-ai-06-bdd16068-7909-4fad-bc32-3924e7aca22a.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/bdd16068-7909-4fad-bc32-3924e7aca22a) |
+| `web/ai/notion-web-ai-ask-ai-07-6fa64275-4ae9-4963-8540-bc8b1e2a3615.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/6fa64275-4ae9-4963-8540-bc8b1e2a3615) |
+| `web/ai/notion-web-ai-ask-ai-08-d5d67c31-6e01-45d1-b24f-e898e7463c12.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/d5d67c31-6e01-45d1-b24f-e898e7463c12) |
+| `web/ai/notion-web-ai-ask-ai-09-5aa152a9-f916-4d87-ae36-ac22c1f1404c.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/5aa152a9-f916-4d87-ae36-ac22c1f1404c) |
+| `web/ai/notion-web-ai-automations-01-cfe886d9-1f11-46b6-8bef-01bc1d1e1901.webp` | `Notion automations` | [screen](https://mobbin.com/screens/cfe886d9-1f11-46b6-8bef-01bc1d1e1901) |
+| `web/ai/notion-web-ai-automations-06-e173b891-b6af-4af8-9a64-532d1fbfec29.webp` | `Notion automations` | [screen](https://mobbin.com/screens/e173b891-b6af-4af8-9a64-532d1fbfec29) |
+| `web/ai/notion-web-ai-automations-08-cd858178-8f6c-4e87-9d4f-a1d3b10aa36a.webp` | `Notion automations` | [screen](https://mobbin.com/screens/cd858178-8f6c-4e87-9d4f-a1d3b10aa36a) |
+| `web/ai/notion-web-ai-automations-10-14e68cd1-ffe9-4398-9c27-e062cf58f678.webp` | `Notion automations` | [screen](https://mobbin.com/screens/14e68cd1-ffe9-4398-9c27-e062cf58f678) |
+| `web/ai/notion-web-ai-automations-13-370d5a2a-4a94-4dcc-8d6b-dc8f13ffdd1b.webp` | `Notion automations` | [screen](https://mobbin.com/screens/370d5a2a-4a94-4dcc-8d6b-dc8f13ffdd1b) |
+| `web/ai/notion-web-ai-automations-14-3b637c7b-3361-4de8-b3d4-fb488007cf5c.webp` | `Notion automations` | [screen](https://mobbin.com/screens/3b637c7b-3361-4de8-b3d4-fb488007cf5c) |
+| `web/ai/notion-web-ai-automations-15-b4cea329-857c-40e1-bb19-f45bcefdb443.webp` | `Notion automations` | [screen](https://mobbin.com/screens/b4cea329-857c-40e1-bb19-f45bcefdb443) |
+| `web/ai/notion-web-ai-automations-17-9a45b305-7f6e-45b5-acd9-7d22c8606a33.webp` | `Notion automations` | [screen](https://mobbin.com/screens/9a45b305-7f6e-45b5-acd9-7d22c8606a33) |
+| `web/ai/notion-web-ai-automations-18-3a5fce3e-978c-4cbe-82d8-e6f0c375bd30.webp` | `Notion automations` | [screen](https://mobbin.com/screens/3a5fce3e-978c-4cbe-82d8-e6f0c375bd30) |
+| `web/ai/notion-web-ai-automations-19-7203dca7-721a-45a6-89e3-06893fecbd5f.webp` | `Notion automations` | [screen](https://mobbin.com/screens/7203dca7-721a-45a6-89e3-06893fecbd5f) |
+| `web/ai/notion-web-ai-automations-20-32259d5d-a29d-461c-94a5-5d9f4819fa16.webp` | `Notion automations` | [screen](https://mobbin.com/screens/32259d5d-a29d-461c-94a5-5d9f4819fa16) |
+| `web/ai/notion-web-ai-automations-21-47bffc95-700e-43d4-bc86-2d42d53b2ac6.webp` | `Notion automations` | [screen](https://mobbin.com/screens/47bffc95-700e-43d4-bc86-2d42d53b2ac6) |
+| `web/ai/notion-web-ai-automations-22-02985367-b9d8-4892-b322-1c0ee9406f0b.webp` | `Notion automations` | [screen](https://mobbin.com/screens/02985367-b9d8-4892-b322-1c0ee9406f0b) |
+| `web/ai/notion-web-ai-automations-23-1a9a8b69-8779-4b5c-a882-e4a9c6c7b5ea.webp` | `Notion automations` | [screen](https://mobbin.com/screens/1a9a8b69-8779-4b5c-a882-e4a9c6c7b5ea) |
+| `web/ai/notion-web-ai-breadcrumbs-03-d845db8f-ec76-45c7-a98f-37835280bf37.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/d845db8f-ec76-45c7-a98f-37835280bf37) |
+| `web/ai/notion-web-ai-breadcrumbs-05-f9b9cd0f-383d-45c0-af2f-893c1b5e612d.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/f9b9cd0f-383d-45c0-af2f-893c1b5e612d) |
+| `web/ai/notion-web-ai-breadcrumbs-07-8ffe347d-1e78-4524-bbaf-a1af66841366.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/8ffe347d-1e78-4524-bbaf-a1af66841366) |
+| `web/ai/notion-web-ai-breadcrumbs-14-2d0fd0b0-b97a-40ec-ae1d-ec8d9141b49c.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/2d0fd0b0-b97a-40ec-ae1d-ec8d9141b49c) |
+| `web/ai/notion-web-ai-buttons-11-63a02abf-7d33-425d-98f4-be001aa3d1f9.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/63a02abf-7d33-425d-98f4-be001aa3d1f9) |
+| `web/ai/notion-web-ai-buttons-17-ffe6cfb5-227d-4cfd-9d20-9d8da267b935.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/ffe6cfb5-227d-4cfd-9d20-9d8da267b935) |
+| `web/ai/notion-web-ai-callout-01-23c7329d-6df7-415b-b1b8-52ac3f536dc5.webp` | `Notion callout block` | [screen](https://mobbin.com/screens/23c7329d-6df7-415b-b1b8-52ac3f536dc5) |
+| `web/ai/notion-web-ai-columns-01-56f4584c-8948-4599-9901-8f110f0dfd3b.webp` | `Notion columns layout` | [screen](https://mobbin.com/screens/56f4584c-8948-4599-9901-8f110f0dfd3b) |
+| `web/ai/notion-web-ai-columns-02-c134a2f8-c4b9-4f0b-9b94-26712c15f52f.webp` | `Notion columns layout` | [screen](https://mobbin.com/screens/c134a2f8-c4b9-4f0b-9b94-26712c15f52f) |
+| `web/ai/notion-web-ai-command-palette-01-e0bcd679-56a2-44ac-8a4b-e97188edae28.webp` | `Notion command palette` | [screen](https://mobbin.com/screens/e0bcd679-56a2-44ac-8a4b-e97188edae28) |
+| `web/ai/notion-web-ai-connections-01-8e527687-f4b3-4f7a-b4e6-b91d3629d290.webp` | `Notion connections integrations` | [screen](https://mobbin.com/screens/8e527687-f4b3-4f7a-b4e6-b91d3629d290) |
+| `web/ai/notion-web-ai-database-template-02-95b38733-cbb4-4244-8db1-0885e3772914.webp` | `Notion database template` | [screen](https://mobbin.com/screens/95b38733-cbb4-4244-8db1-0885e3772914) |
+| `web/ai/notion-web-ai-dialog-03-ad51a8b8-e251-447e-8a17-502d2159b3c5.webp` | `Notion modal dialog` | [screen](https://mobbin.com/screens/ad51a8b8-e251-447e-8a17-502d2159b3c5) |
+| `web/ai/notion-web-ai-editor-04-708f8650-9301-486a-960c-4fffdab5f195.webp` | `Notion editor` | [screen](https://mobbin.com/screens/708f8650-9301-486a-960c-4fffdab5f195) |
+| `web/ai/notion-web-ai-editor-12-fe636b00-83ba-4864-82ed-02cfb03d40fc.webp` | `Notion editor` | [screen](https://mobbin.com/screens/fe636b00-83ba-4864-82ed-02cfb03d40fc) |
+| `web/ai/notion-web-ai-favorites-08-b418691f-d7a1-4faf-8301-87dd4c1aadbb.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/b418691f-d7a1-4faf-8301-87dd4c1aadbb) |
+| `web/ai/notion-web-ai-favorites-12-11cf6a93-dc32-4bb6-90e7-74e28389d6e0.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/11cf6a93-dc32-4bb6-90e7-74e28389d6e0) |
+| `web/ai/notion-web-ai-favorites-25-974d66d2-eeb3-434f-b904-1e58baa8659a.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/974d66d2-eeb3-434f-b904-1e58baa8659a) |
+| `web/ai/notion-web-ai-form-14-e2938808-8e04-4638-bca8-adc8848c8a6b.webp` | `Notion form` | [screen](https://mobbin.com/screens/e2938808-8e04-4638-bca8-adc8848c8a6b) |
+| `web/ai/notion-web-ai-form-17-536b61f3-89d5-49cb-9b04-c9f42829ef5b.webp` | `Notion form` | [screen](https://mobbin.com/screens/536b61f3-89d5-49cb-9b04-c9f42829ef5b) |
+| `web/ai/notion-web-ai-form-18-f3a444eb-19b7-4f8d-9ee9-a9656add9eae.webp` | `Notion form` | [screen](https://mobbin.com/screens/f3a444eb-19b7-4f8d-9ee9-a9656add9eae) |
+| `web/ai/notion-web-ai-form-19-7447d652-5d5f-4d9c-b65c-fb566116c362.webp` | `Notion form` | [screen](https://mobbin.com/screens/7447d652-5d5f-4d9c-b65c-fb566116c362) |
+| `web/ai/notion-web-ai-form-22-93840eea-5ae9-4eac-bc44-3cc70e9ccdbb.webp` | `Notion form` | [screen](https://mobbin.com/screens/93840eea-5ae9-4eac-bc44-3cc70e9ccdbb) |
+| `web/ai/notion-web-ai-form-23-ff8e618b-a9a8-487b-a3f4-07ec75a397ef.webp` | `Notion form` | [screen](https://mobbin.com/screens/ff8e618b-a9a8-487b-a3f4-07ec75a397ef) |
+| `web/ai/notion-web-ai-form-25-031ca22c-4e38-4a3d-962d-b28df53f9c8d.webp` | `Notion form` | [screen](https://mobbin.com/screens/031ca22c-4e38-4a3d-962d-b28df53f9c8d) |
+| `web/ai/notion-web-ai-form-28-121677f8-449d-4e68-a28d-467bae46d1c6.webp` | `Notion form` | [screen](https://mobbin.com/screens/121677f8-449d-4e68-a28d-467bae46d1c6) |
+| `web/ai/notion-web-ai-home-07-e26db240-0cba-4c1e-bab0-acb2faeb4b56.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/e26db240-0cba-4c1e-bab0-acb2faeb4b56) |
+| `web/ai/notion-web-ai-home-08-ea2779fd-e45e-4c16-b01d-044722f9b255.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/ea2779fd-e45e-4c16-b01d-044722f9b255) |
+| `web/ai/notion-web-ai-home-22-9a9b1268-e0d5-4873-900b-aa75e9a81177.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/9a9b1268-e0d5-4873-900b-aa75e9a81177) |
+| `web/ai/notion-web-ai-home-29-7e25606f-869e-4867-8400-cfac83d7e1b1.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/7e25606f-869e-4867-8400-cfac83d7e1b1) |
+| `web/ai/notion-web-ai-home-33-176a7fae-1de4-4d50-a28b-cb14eef8b18b.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/176a7fae-1de4-4d50-a28b-cb14eef8b18b) |
+| `web/ai/notion-web-ai-home-45-a6cb612c-0b41-4a21-afb5-761f4512a48d.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/a6cb612c-0b41-4a21-afb5-761f4512a48d) |
+| `web/ai/notion-web-ai-meeting-notes-01-816adf8d-e17f-43d3-bb42-e0a2442cfafe.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/816adf8d-e17f-43d3-bb42-e0a2442cfafe) |
+| `web/ai/notion-web-ai-meeting-notes-02-4891ce58-19b2-4484-be91-6ae675b6b1c3.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/4891ce58-19b2-4484-be91-6ae675b6b1c3) |
+| `web/ai/notion-web-ai-meeting-notes-03-de0a5768-86d1-4daa-ab66-b79e82776fcc.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/de0a5768-86d1-4daa-ab66-b79e82776fcc) |
+| `web/ai/notion-web-ai-meeting-notes-04-c34214cd-f0fa-4b2c-ba7b-e3df1acf5c68.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/c34214cd-f0fa-4b2c-ba7b-e3df1acf5c68) |
+| `web/ai/notion-web-ai-meeting-notes-05-4bea74b8-6734-4303-895e-cb98770d280f.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/4bea74b8-6734-4303-895e-cb98770d280f) |
+| `web/ai/notion-web-ai-meeting-notes-06-4f5455f9-bd96-4d45-ae56-33838f2e4d71.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/4f5455f9-bd96-4d45-ae56-33838f2e4d71) |
+| `web/ai/notion-web-ai-more-menu-02-7adbbfc8-75aa-484d-b736-f91969faa01c.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/7adbbfc8-75aa-484d-b736-f91969faa01c) |
+| `web/ai/notion-web-ai-page-01-a2f2432c-3e0f-4c82-a191-b24b3cfb88cb.webp` | `Notion page` | [screen](https://mobbin.com/screens/a2f2432c-3e0f-4c82-a191-b24b3cfb88cb) |
+| `web/ai/notion-web-ai-page-05-fa353249-a50d-499c-9c72-ffc28f1bd0f0.webp` | `Notion page` | [screen](https://mobbin.com/screens/fa353249-a50d-499c-9c72-ffc28f1bd0f0) |
+| `web/ai/notion-web-ai-page-12-166f090a-af4b-4872-a9fa-9acafc69e41c.webp` | `Notion page` | [screen](https://mobbin.com/screens/166f090a-af4b-4872-a9fa-9acafc69e41c) |
+| `web/ai/notion-web-ai-page-15-2a6fbffa-9e9d-45f2-a3ae-1a3fce26bd0d.webp` | `Notion page` | [screen](https://mobbin.com/screens/2a6fbffa-9e9d-45f2-a3ae-1a3fce26bd0d) |
+| `web/ai/notion-web-ai-private-pages-05-e91c0e04-d5b9-474b-90f7-ecab1caf8200.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/e91c0e04-d5b9-474b-90f7-ecab1caf8200) |
+| `web/ai/notion-web-ai-private-pages-16-91532c16-c4c5-44e9-84d3-42a06ce34f47.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/91532c16-c4c5-44e9-84d3-42a06ce34f47) |
+| `web/ai/notion-web-ai-properties-01-39684b6e-3307-402e-bdaf-7a0f3e668673.webp` | `Notion properties` | [screen](https://mobbin.com/screens/39684b6e-3307-402e-bdaf-7a0f3e668673) |
+| `web/ai/notion-web-ai-properties-04-0b5a0ef9-73e1-44b8-8852-51a314fdeb6c.webp` | `Notion properties` | [screen](https://mobbin.com/screens/0b5a0ef9-73e1-44b8-8852-51a314fdeb6c) |
+| `web/ai/notion-web-ai-property-editor-01-c08e8ce9-74ff-41c3-ab52-a750a3ad1f1d.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/c08e8ce9-74ff-41c3-ab52-a750a3ad1f1d) |
+| `web/ai/notion-web-ai-property-editor-02-48e206a0-312b-465c-a580-a2fadcda82a0.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/48e206a0-312b-465c-a580-a2fadcda82a0) |
+| `web/ai/notion-web-ai-property-editor-03-c36224b0-dffd-42e8-b0ea-7b36b77d9a6d.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/c36224b0-dffd-42e8-b0ea-7b36b77d9a6d) |
+| `web/ai/notion-web-ai-property-editor-08-445696a8-052f-401a-8106-81eefa1bd411.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/445696a8-052f-401a-8106-81eefa1bd411) |
+| `web/ai/notion-web-ai-property-editor-09-97869a67-378d-4d4c-b083-c373a930b2e5.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/97869a67-378d-4d4c-b083-c373a930b2e5) |
+| `web/ai/notion-web-ai-property-editor-10-5df2fdae-e41f-46fa-932c-3181ed65349f.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/5df2fdae-e41f-46fa-932c-3181ed65349f) |
+| `web/ai/notion-web-ai-property-editor-11-7b8e6d7b-1519-4d71-8b1d-b31b1f9d660a.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/7b8e6d7b-1519-4d71-8b1d-b31b1f9d660a) |
+| `web/ai/notion-web-ai-property-editor-12-eb375741-eee6-4a3e-be4b-70187cff0d2b.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/eb375741-eee6-4a3e-be4b-70187cff0d2b) |
+| `web/ai/notion-web-ai-row-page-01-263196dd-fec5-49cb-85b5-cde50e0cfbfe.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/263196dd-fec5-49cb-85b5-cde50e0cfbfe) |
+| `web/ai/notion-web-ai-search-14-e4b33dac-a24d-4886-bd95-db57821c97d7.webp` | `Notion search` | [screen](https://mobbin.com/screens/e4b33dac-a24d-4886-bd95-db57821c97d7) |
+| `web/ai/notion-web-ai-search-15-2ebb9cd7-d444-40ea-b34b-ec262c0ade60.webp` | `Notion search` | [screen](https://mobbin.com/screens/2ebb9cd7-d444-40ea-b34b-ec262c0ade60) |
+| `web/ai/notion-web-ai-search-16-3fc97855-95f0-4876-877d-2e5f3208c2db.webp` | `Notion search` | [screen](https://mobbin.com/screens/3fc97855-95f0-4876-877d-2e5f3208c2db) |
+| `web/ai/notion-web-ai-search-18-2f4d60f9-478c-40aa-a0d8-94e2608929a1.webp` | `Notion search` | [screen](https://mobbin.com/screens/2f4d60f9-478c-40aa-a0d8-94e2608929a1) |
+| `web/ai/notion-web-ai-settings-03-7f5b216c-2bd4-4fa4-b8d2-d98d07036159.webp` | `Notion settings` | [screen](https://mobbin.com/screens/7f5b216c-2bd4-4fa4-b8d2-d98d07036159) |
+| `web/ai/notion-web-ai-side-peek-05-81e875fa-61d6-4010-b5d7-201bcaa2e4b1.webp` | `Notion side peek` | [screen](https://mobbin.com/screens/81e875fa-61d6-4010-b5d7-201bcaa2e4b1) |
+| `web/ai/notion-web-ai-sidebar-03-fec09ec2-fba4-45b2-98ad-28e6366bd642.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/fec09ec2-fba4-45b2-98ad-28e6366bd642) |
+| `web/ai/notion-web-ai-sidebar-06-a886f554-9037-455b-b9af-562bb12420b0.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/a886f554-9037-455b-b9af-562bb12420b0) |
+| `web/ai/notion-web-ai-sidebar-22-ec1eddc9-37e7-45d3-bf7a-cbb30ab6b38b.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/ec1eddc9-37e7-45d3-bf7a-cbb30ab6b38b) |
+| `web/ai/notion-web-ai-sidebar-27-98a561c2-6276-4f1f-8ae3-156af8e4e0e0.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/98a561c2-6276-4f1f-8ae3-156af8e4e0e0) |
+| `web/ai/notion-web-ai-sidebar-32-5da9af88-3032-45af-954a-fe8f57d9b09c.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/5da9af88-3032-45af-954a-fe8f57d9b09c) |
+| `web/ai/notion-web-ai-sidebar-33-8eb72dab-402b-4e35-9965-c6e0e1a12628.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/8eb72dab-402b-4e35-9965-c6e0e1a12628) |
+| `web/ai/notion-web-ai-wiki-02-ad22b91a-4ffd-4033-be3e-82146bf14cf5.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/ad22b91a-4ffd-4033-be3e-82146bf14cf5) |
+| `web/ai/notion-web-ai-wiki-03-2092e9ae-963f-4585-ad69-ba6fd0abb76d.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/2092e9ae-963f-4585-ad69-ba6fd0abb76d) |
+| `web/ai/notion-web-ai-wiki-06-f893ebcb-9ca5-46c1-90fd-8941a21602af.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/f893ebcb-9ca5-46c1-90fd-8941a21602af) |
+| `web/ai/notion-web-ai-wiki-12-2822bad8-ba93-42dc-b7a3-9d5af0574ff9.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/2822bad8-ba93-42dc-b7a3-9d5af0574ff9) |
+| `web/ai/notion-web-ai-workspace-switcher-01-d4fd770a-f919-4d8f-b5b3-7191eaa36c07.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/d4fd770a-f919-4d8f-b5b3-7191eaa36c07) |
+| `web/ai/notion-web-ai-workspace-switcher-11-87b3b927-3e49-4732-9837-1520b902cbc8.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/87b3b927-3e49-4732-9837-1520b902cbc8) |
+| `web/collaboration/notion-web-collaboration-breadcrumbs-08-f1c0cbe0-4db7-4edd-b7b6-581ebe9fedc9.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/f1c0cbe0-4db7-4edd-b7b6-581ebe9fedc9) |
+| `web/collaboration/notion-web-collaboration-breadcrumbs-15-543cdd5e-8674-49e9-9d66-cb2606f4fbfc.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/543cdd5e-8674-49e9-9d66-cb2606f4fbfc) |
+| `web/collaboration/notion-web-collaboration-breadcrumbs-16-b1c3f1e1-f9f0-45b0-942b-d7b5d48a7066.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/b1c3f1e1-f9f0-45b0-942b-d7b5d48a7066) |
+| `web/collaboration/notion-web-collaboration-breadcrumbs-18-e4bba6ab-9b19-4bb4-b66b-8f8d37d066cf.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/e4bba6ab-9b19-4bb4-b66b-8f8d37d066cf) |
 | `web/collaboration/notion-web-collaboration-comments-01-39835a00-402b-4616-a83e-96a13f0eef04.webp` | `Notion comments` | [screen](https://mobbin.com/screens/39835a00-402b-4616-a83e-96a13f0eef04) |
-| `web/collaboration/notion-web-collaboration-comments-02-d3ea7850-e228-4a7e-a157-f5d05e389c4b.webp` | `Notion comments` | [screen](https://mobbin.com/screens/d3ea7850-e228-4a7e-a157-f5d05e389c4b) |
 | `web/collaboration/notion-web-collaboration-comments-03-388a29da-0afb-467b-a46b-3439b0ca4f6b.webp` | `Notion comments` | [screen](https://mobbin.com/screens/388a29da-0afb-467b-a46b-3439b0ca4f6b) |
 | `web/collaboration/notion-web-collaboration-comments-04-372450ee-4dc0-4f80-8070-cb4c4720278b.webp` | `Notion comments` | [screen](https://mobbin.com/screens/372450ee-4dc0-4f80-8070-cb4c4720278b) |
-| `web/collaboration/notion-web-collaboration-comments-05-1a00da21-21a0-496e-8b9e-5b16102b593c.webp` | `Notion comments` | [screen](https://mobbin.com/screens/1a00da21-21a0-496e-8b9e-5b16102b593c) |
 | `web/collaboration/notion-web-collaboration-comments-06-2a906c09-0cb5-40cb-9a52-ab718ce0efe3.webp` | `Notion comments` | [screen](https://mobbin.com/screens/2a906c09-0cb5-40cb-9a52-ab718ce0efe3) |
+| `web/collaboration/notion-web-collaboration-cover-icon-10-42f72d81-0036-4b07-87ed-9ac157f0ac4f.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/42f72d81-0036-4b07-87ed-9ac157f0ac4f) |
+| `web/collaboration/notion-web-collaboration-cover-icon-14-2526cc8c-1636-4e80-9e8c-498927a4a5d5.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/2526cc8c-1636-4e80-9e8c-498927a4a5d5) |
+| `web/collaboration/notion-web-collaboration-editor-13-8b8ab65e-65fe-404a-8a35-53cef6673d17.webp` | `Notion editor` | [screen](https://mobbin.com/screens/8b8ab65e-65fe-404a-8a35-53cef6673d17) |
+| `web/collaboration/notion-web-collaboration-embed-10-5581e67a-678c-4571-b986-f272ece6f29a.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/5581e67a-678c-4571-b986-f272ece6f29a) |
+| `web/collaboration/notion-web-collaboration-favorites-03-6aece4f4-0094-4d4f-b281-511bfa58ca9e.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/6aece4f4-0094-4d4f-b281-511bfa58ca9e) |
+| `web/collaboration/notion-web-collaboration-favorites-04-dac14735-ff9c-44bc-9acb-71f91712e4dd.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/dac14735-ff9c-44bc-9acb-71f91712e4dd) |
+| `web/collaboration/notion-web-collaboration-favorites-28-557dfb84-ff40-425d-b473-f0487e6cfc3e.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/557dfb84-ff40-425d-b473-f0487e6cfc3e) |
+| `web/collaboration/notion-web-collaboration-form-27-113c3b1d-eb4f-4fc0-96d2-7fe753bba785.webp` | `Notion form` | [screen](https://mobbin.com/screens/113c3b1d-eb4f-4fc0-96d2-7fe753bba785) |
+| `web/collaboration/notion-web-collaboration-home-27-77bf884f-8c9b-478c-a3c0-dfec8d462e80.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/77bf884f-8c9b-478c-a3c0-dfec8d462e80) |
+| `web/collaboration/notion-web-collaboration-inbox-01-e7b668c8-648a-46c6-a32a-e65cd4c31dd7.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/e7b668c8-648a-46c6-a32a-e65cd4c31dd7) |
+| `web/collaboration/notion-web-collaboration-marketing-01-aedea57f-f35d-4fc7-93f3-0a9b5bed5f42.webp` | `Notion landing page` | [screen](https://mobbin.com/screens/aedea57f-f35d-4fc7-93f3-0a9b5bed5f42) |
+| `web/collaboration/notion-web-collaboration-page-02-b1a58a58-58ba-4dc0-a99f-7c9541052cc8.webp` | `Notion page` | [screen](https://mobbin.com/screens/b1a58a58-58ba-4dc0-a99f-7c9541052cc8) |
+| `web/collaboration/notion-web-collaboration-page-03-03943fe2-9af9-43a3-996c-77a494633c51.webp` | `Notion page` | [screen](https://mobbin.com/screens/03943fe2-9af9-43a3-996c-77a494633c51) |
+| `web/collaboration/notion-web-collaboration-page-04-a60f2b3c-b22c-4bc6-bc98-19f02a13a905.webp` | `Notion page` | [screen](https://mobbin.com/screens/a60f2b3c-b22c-4bc6-bc98-19f02a13a905) |
+| `web/collaboration/notion-web-collaboration-page-10-aa878ea4-b9c5-46c5-8610-30a6e72d0bf8.webp` | `Notion page` | [screen](https://mobbin.com/screens/aa878ea4-b9c5-46c5-8610-30a6e72d0bf8) |
+| `web/collaboration/notion-web-collaboration-page-18-4aa99865-6419-46e3-a168-87a24b1d6e38.webp` | `Notion page` | [screen](https://mobbin.com/screens/4aa99865-6419-46e3-a168-87a24b1d6e38) |
+| `web/collaboration/notion-web-collaboration-page-20-d159ca21-3df4-4d98-964a-189a5be1ddf3.webp` | `Notion page` | [screen](https://mobbin.com/screens/d159ca21-3df4-4d98-964a-189a5be1ddf3) |
+| `web/collaboration/notion-web-collaboration-page-27-48776329-2569-43cb-9257-9e6451b58ccf.webp` | `Notion page` | [screen](https://mobbin.com/screens/48776329-2569-43cb-9257-9e6451b58ccf) |
+| `web/collaboration/notion-web-collaboration-page-31-e99bdc9b-c22c-48ac-a2fc-50e3e8636a13.webp` | `Notion page` | [screen](https://mobbin.com/screens/e99bdc9b-c22c-48ac-a2fc-50e3e8636a13) |
+| `web/collaboration/notion-web-collaboration-private-pages-09-794e8c1c-b6fc-4dde-a06b-a854aa63aa60.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/794e8c1c-b6fc-4dde-a06b-a854aa63aa60) |
+| `web/collaboration/notion-web-collaboration-private-pages-11-e38b5407-ffab-4687-9307-f98de674919a.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/e38b5407-ffab-4687-9307-f98de674919a) |
+| `web/collaboration/notion-web-collaboration-private-pages-13-24044826-a40f-440e-92f8-d4e8ab1190c2.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/24044826-a40f-440e-92f8-d4e8ab1190c2) |
+| `web/collaboration/notion-web-collaboration-private-pages-19-054a9436-afe5-4c41-a308-3f79a8baf0d1.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/054a9436-afe5-4c41-a308-3f79a8baf0d1) |
+| `web/collaboration/notion-web-collaboration-private-pages-21-68b45618-e0bc-487f-8370-3ec16faa79c0.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/68b45618-e0bc-487f-8370-3ec16faa79c0) |
+| `web/collaboration/notion-web-collaboration-private-pages-24-18d74f1c-b537-43e7-adec-0bbe0d0b96a4.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/18d74f1c-b537-43e7-adec-0bbe0d0b96a4) |
+| `web/collaboration/notion-web-collaboration-private-pages-25-427fb870-9f77-4075-b78b-d465925bcbc8.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/427fb870-9f77-4075-b78b-d465925bcbc8) |
+| `web/collaboration/notion-web-collaboration-private-pages-26-2570c72a-06a7-464d-be3b-856e19ee263d.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/2570c72a-06a7-464d-be3b-856e19ee263d) |
+| `web/collaboration/notion-web-collaboration-private-pages-30-96246e2c-bfae-4bc1-807d-769e8b09f1c1.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/96246e2c-bfae-4bc1-807d-769e8b09f1c1) |
+| `web/collaboration/notion-web-collaboration-private-pages-31-9e5e7ddb-6ed5-4d2e-b0ad-9ada4dd4f694.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/9e5e7ddb-6ed5-4d2e-b0ad-9ada4dd4f694) |
+| `web/collaboration/notion-web-collaboration-private-pages-32-eabf7caa-4c9e-4b56-887e-b3be0dff7f4a.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/eabf7caa-4c9e-4b56-887e-b3be0dff7f4a) |
+| `web/collaboration/notion-web-collaboration-private-pages-33-28053954-5b3f-44e8-80ae-d958716a5883.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/28053954-5b3f-44e8-80ae-d958716a5883) |
+| `web/collaboration/notion-web-collaboration-search-20-a77b3925-5702-47db-81db-caa255dc8996.webp` | `Notion search` | [screen](https://mobbin.com/screens/a77b3925-5702-47db-81db-caa255dc8996) |
+| `web/collaboration/notion-web-collaboration-shared-01-1ef5d7e6-0ccb-4997-afb3-d55ba1b56af3.webp` | `Notion shared with me` | [screen](https://mobbin.com/screens/1ef5d7e6-0ccb-4997-afb3-d55ba1b56af3) |
 | `web/collaboration/notion-web-collaboration-sharing-01-73dcda15-ca25-4045-aa3e-a2aea4c57591.webp` | `Notion sharing` | [screen](https://mobbin.com/screens/73dcda15-ca25-4045-aa3e-a2aea4c57591) |
 | `web/collaboration/notion-web-collaboration-sharing-02-9f21214a-059d-482f-8d52-44488ae31cf4.webp` | `Notion sharing` | [screen](https://mobbin.com/screens/9f21214a-059d-482f-8d52-44488ae31cf4) |
 | `web/collaboration/notion-web-collaboration-sharing-03-b955a383-dfa3-43c1-b3f3-6269445c6964.webp` | `Notion sharing` | [screen](https://mobbin.com/screens/b955a383-dfa3-43c1-b3f3-6269445c6964) |
-| `web/database/notion-web-database-automations-01-cfe886d9-1f11-46b6-8bef-01bc1d1e1901.webp` | `Notion automations` | [screen](https://mobbin.com/screens/cfe886d9-1f11-46b6-8bef-01bc1d1e1901) |
+| `web/collaboration/notion-web-collaboration-side-peek-03-a1c31875-094e-4623-b543-e095a9e36853.webp` | `Notion side peek` | [screen](https://mobbin.com/screens/a1c31875-094e-4623-b543-e095a9e36853) |
+| `web/collaboration/notion-web-collaboration-side-peek-04-f6b952f0-d9d3-496f-b2a1-4d18ff556a68.webp` | `Notion side peek` | [screen](https://mobbin.com/screens/f6b952f0-d9d3-496f-b2a1-4d18ff556a68) |
+| `web/collaboration/notion-web-collaboration-side-peek-07-2c1900c8-c7d2-4559-aa5a-4f468674c901.webp` | `Notion side peek` | [screen](https://mobbin.com/screens/2c1900c8-c7d2-4559-aa5a-4f468674c901) |
+| `web/collaboration/notion-web-collaboration-sidebar-31-566fb146-4381-433e-a104-5babae37a003.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/566fb146-4381-433e-a104-5babae37a003) |
+| `web/collaboration/notion-web-collaboration-teamspaces-06-c089346c-4d77-4b5e-b16c-8abc932dada4.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/c089346c-4d77-4b5e-b16c-8abc932dada4) |
+| `web/collaboration/notion-web-collaboration-teamspaces-07-e78d4c10-2356-4a90-9021-f3179d6435d2.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/e78d4c10-2356-4a90-9021-f3179d6435d2) |
+| `web/collaboration/notion-web-collaboration-teamspaces-08-1ccc0cfc-e746-4dbf-8bfb-36c250a042c2.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/1ccc0cfc-e746-4dbf-8bfb-36c250a042c2) |
+| `web/collaboration/notion-web-collaboration-teamspaces-09-50e47d55-b05e-4035-a953-f325e18a95ff.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/50e47d55-b05e-4035-a953-f325e18a95ff) |
+| `web/collaboration/notion-web-collaboration-teamspaces-11-371196b5-5a7b-4387-b676-9e34781f31a7.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/371196b5-5a7b-4387-b676-9e34781f31a7) |
+| `web/collaboration/notion-web-collaboration-teamspaces-12-bc4d8998-2ffe-4921-bc3f-8b82b08d06b2.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/bc4d8998-2ffe-4921-bc3f-8b82b08d06b2) |
+| `web/collaboration/notion-web-collaboration-teamspaces-13-74996d4b-da8e-4462-8af2-9a430323573c.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/74996d4b-da8e-4462-8af2-9a430323573c) |
+| `web/collaboration/notion-web-collaboration-teamspaces-15-20688f55-9254-4af9-b5ac-df3bfcf467f2.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/20688f55-9254-4af9-b5ac-df3bfcf467f2) |
+| `web/collaboration/notion-web-collaboration-teamspaces-16-c50943fc-0717-4026-a7d3-22700c066813.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/c50943fc-0717-4026-a7d3-22700c066813) |
+| `web/collaboration/notion-web-collaboration-teamspaces-17-d090c786-2124-47a7-9263-c60dd49019f3.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/d090c786-2124-47a7-9263-c60dd49019f3) |
+| `web/collaboration/notion-web-collaboration-teamspaces-18-09019fa8-b8ea-47f0-9441-5ed4e558dadc.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/09019fa8-b8ea-47f0-9441-5ed4e558dadc) |
+| `web/collaboration/notion-web-collaboration-teamspaces-19-d197acab-453b-4c1b-b46f-87ef523f814d.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/d197acab-453b-4c1b-b46f-87ef523f814d) |
+| `web/collaboration/notion-web-collaboration-trash-01-6b4b7ad9-e165-4f74-9ea9-d513fe0ec8ae.webp` | `Notion trash` | [screen](https://mobbin.com/screens/6b4b7ad9-e165-4f74-9ea9-d513fe0ec8ae) |
+| `web/collaboration/notion-web-collaboration-wiki-01-2f1cef88-df7a-4c03-ad7a-da0ebc6ba822.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/2f1cef88-df7a-4c03-ad7a-da0ebc6ba822) |
+| `web/collaboration/notion-web-collaboration-wiki-11-9e98f76a-2d5c-4cfb-9131-a4325f42f167.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/9e98f76a-2d5c-4cfb-9131-a4325f42f167) |
+| `web/collaboration/notion-web-collaboration-wiki-13-f70f3807-8825-4a81-926f-54447ffa0665.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/f70f3807-8825-4a81-926f-54447ffa0665) |
+| `web/collaboration/notion-web-collaboration-wiki-14-5c24f766-595f-465a-af97-35ed5fc8e009.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/5c24f766-595f-465a-af97-35ed5fc8e009) |
+| `web/collaboration/notion-web-collaboration-wiki-15-47f4f9f7-a92a-4d5c-872b-e07655765f96.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/47f4f9f7-a92a-4d5c-872b-e07655765f96) |
+| `web/collaboration/notion-web-collaboration-wiki-16-072bc230-1366-4039-9d25-cce13e422214.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/072bc230-1366-4039-9d25-cce13e422214) |
 | `web/database/notion-web-database-automations-02-1778a256-23da-4db0-b4a5-be74937101f0.webp` | `Notion automations` | [screen](https://mobbin.com/screens/1778a256-23da-4db0-b4a5-be74937101f0) |
-| `web/database/notion-web-database-automations-03-bbfffca8-3af2-498f-bb94-549ade092e36.webp` | `Notion automations` | [screen](https://mobbin.com/screens/bbfffca8-3af2-498f-bb94-549ade092e36) |
 | `web/database/notion-web-database-automations-04-77502188-5de8-4c8d-98dd-94311b821784.webp` | `Notion automations` | [screen](https://mobbin.com/screens/77502188-5de8-4c8d-98dd-94311b821784) |
-| `web/database/notion-web-database-automations-05-5955adb3-d4e7-4885-9913-b7d127b3567b.webp` | `Notion automations` | [screen](https://mobbin.com/screens/5955adb3-d4e7-4885-9913-b7d127b3567b) |
-| `web/database/notion-web-database-automations-06-e173b891-b6af-4af8-9a64-532d1fbfec29.webp` | `Notion automations` | [screen](https://mobbin.com/screens/e173b891-b6af-4af8-9a64-532d1fbfec29) |
 | `web/database/notion-web-database-automations-07-8963cbf1-5ecf-4013-bab0-e5e5ee03d0d4.webp` | `Notion automations` | [screen](https://mobbin.com/screens/8963cbf1-5ecf-4013-bab0-e5e5ee03d0d4) |
-| `web/database/notion-web-database-automations-08-cd858178-8f6c-4e87-9d4f-a1d3b10aa36a.webp` | `Notion automations` | [screen](https://mobbin.com/screens/cd858178-8f6c-4e87-9d4f-a1d3b10aa36a) |
 | `web/database/notion-web-database-automations-09-99139fa6-898a-4c27-9f87-811501c63ee8.webp` | `Notion automations` | [screen](https://mobbin.com/screens/99139fa6-898a-4c27-9f87-811501c63ee8) |
-| `web/database/notion-web-database-automations-10-14e68cd1-ffe9-4398-9c27-e062cf58f678.webp` | `Notion automations` | [screen](https://mobbin.com/screens/14e68cd1-ffe9-4398-9c27-e062cf58f678) |
 | `web/database/notion-web-database-automations-11-395f5cd9-fa13-4e89-bb48-5fb576931225.webp` | `Notion automations` | [screen](https://mobbin.com/screens/395f5cd9-fa13-4e89-bb48-5fb576931225) |
-| `web/database/notion-web-database-automations-12-b37ad2ea-a876-422d-82b5-3a97410a7344.webp` | `Notion automations` | [screen](https://mobbin.com/screens/b37ad2ea-a876-422d-82b5-3a97410a7344) |
-| `web/database/notion-web-database-automations-13-370d5a2a-4a94-4dcc-8d6b-dc8f13ffdd1b.webp` | `Notion automations` | [screen](https://mobbin.com/screens/370d5a2a-4a94-4dcc-8d6b-dc8f13ffdd1b) |
-| `web/database/notion-web-database-automations-14-3b637c7b-3361-4de8-b3d4-fb488007cf5c.webp` | `Notion automations` | [screen](https://mobbin.com/screens/3b637c7b-3361-4de8-b3d4-fb488007cf5c) |
-| `web/database/notion-web-database-automations-15-b4cea329-857c-40e1-bb19-f45bcefdb443.webp` | `Notion automations` | [screen](https://mobbin.com/screens/b4cea329-857c-40e1-bb19-f45bcefdb443) |
 | `web/database/notion-web-database-automations-16-a6047f93-52df-40de-a6f7-679a606b1ea5.webp` | `Notion automations` | [screen](https://mobbin.com/screens/a6047f93-52df-40de-a6f7-679a606b1ea5) |
-| `web/database/notion-web-database-automations-17-9a45b305-7f6e-45b5-acd9-7d22c8606a33.webp` | `Notion automations` | [screen](https://mobbin.com/screens/9a45b305-7f6e-45b5-acd9-7d22c8606a33) |
-| `web/database/notion-web-database-automations-18-3a5fce3e-978c-4cbe-82d8-e6f0c375bd30.webp` | `Notion automations` | [screen](https://mobbin.com/screens/3a5fce3e-978c-4cbe-82d8-e6f0c375bd30) |
-| `web/database/notion-web-database-automations-19-7203dca7-721a-45a6-89e3-06893fecbd5f.webp` | `Notion automations` | [screen](https://mobbin.com/screens/7203dca7-721a-45a6-89e3-06893fecbd5f) |
-| `web/database/notion-web-database-automations-20-32259d5d-a29d-461c-94a5-5d9f4819fa16.webp` | `Notion automations` | [screen](https://mobbin.com/screens/32259d5d-a29d-461c-94a5-5d9f4819fa16) |
-| `web/database/notion-web-database-automations-21-47bffc95-700e-43d4-bc86-2d42d53b2ac6.webp` | `Notion automations` | [screen](https://mobbin.com/screens/47bffc95-700e-43d4-bc86-2d42d53b2ac6) |
-| `web/database/notion-web-database-automations-22-02985367-b9d8-4892-b322-1c0ee9406f0b.webp` | `Notion automations` | [screen](https://mobbin.com/screens/02985367-b9d8-4892-b322-1c0ee9406f0b) |
-| `web/database/notion-web-database-automations-23-1a9a8b69-8779-4b5c-a882-e4a9c6c7b5ea.webp` | `Notion automations` | [screen](https://mobbin.com/screens/1a9a8b69-8779-4b5c-a882-e4a9c6c7b5ea) |
-| `web/database/notion-web-database-buttons-01-b9897a10-73de-4b6a-920f-76f290947954.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/b9897a10-73de-4b6a-920f-76f290947954) |
-| `web/database/notion-web-database-buttons-02-96537568-43ba-4af1-b792-51e3da4a3887.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/96537568-43ba-4af1-b792-51e3da4a3887) |
-| `web/database/notion-web-database-buttons-03-1bc1d1e4-32eb-47c1-b0ef-65afdbca7c31.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/1bc1d1e4-32eb-47c1-b0ef-65afdbca7c31) |
-| `web/database/notion-web-database-buttons-04-330736ce-75b0-42f4-a631-6a9e86178adb.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/330736ce-75b0-42f4-a631-6a9e86178adb) |
-| `web/database/notion-web-database-buttons-05-865da2ba-9d23-4f02-b24e-b0e4fe577224.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/865da2ba-9d23-4f02-b24e-b0e4fe577224) |
-| `web/database/notion-web-database-buttons-06-dc48a33a-0557-4a66-ba2c-cd8cf7018a49.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/dc48a33a-0557-4a66-ba2c-cd8cf7018a49) |
-| `web/database/notion-web-database-buttons-07-99396b7b-c21d-4cea-8956-4942c2b9aae6.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/99396b7b-c21d-4cea-8956-4942c2b9aae6) |
-| `web/database/notion-web-database-buttons-08-a3711e01-92ec-4dce-ab2c-41e795f9736e.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/a3711e01-92ec-4dce-ab2c-41e795f9736e) |
-| `web/database/notion-web-database-buttons-09-81df8bca-0457-4584-a5e3-8516bfdc734f.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/81df8bca-0457-4584-a5e3-8516bfdc734f) |
-| `web/database/notion-web-database-buttons-10-cc865690-f319-4b7b-ba18-ea37ac09e40e.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/cc865690-f319-4b7b-ba18-ea37ac09e40e) |
-| `web/database/notion-web-database-buttons-11-63a02abf-7d33-425d-98f4-be001aa3d1f9.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/63a02abf-7d33-425d-98f4-be001aa3d1f9) |
-| `web/database/notion-web-database-buttons-12-8a4a3100-dfad-4de5-93db-8cadd1fb0b69.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/8a4a3100-dfad-4de5-93db-8cadd1fb0b69) |
+| `web/database/notion-web-database-board-01-98dde396-5c07-422d-a99c-885c83220249.webp` | `Notion board view` | [screen](https://mobbin.com/screens/98dde396-5c07-422d-a99c-885c83220249) |
 | `web/database/notion-web-database-buttons-13-f0d6f054-30a5-4602-99b2-66a9593093c7.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/f0d6f054-30a5-4602-99b2-66a9593093c7) |
-| `web/database/notion-web-database-buttons-14-cfe86298-5344-4766-9cfc-52bd7261e2a8.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/cfe86298-5344-4766-9cfc-52bd7261e2a8) |
-| `web/database/notion-web-database-buttons-15-e46933bc-a321-4bde-811c-dfe1bc826468.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/e46933bc-a321-4bde-811c-dfe1bc826468) |
-| `web/database/notion-web-database-buttons-16-cac4198f-ae26-4a30-b146-ff7eebcde31d.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/cac4198f-ae26-4a30-b146-ff7eebcde31d) |
-| `web/database/notion-web-database-buttons-17-ffe6cfb5-227d-4cfd-9d20-9d8da267b935.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/ffe6cfb5-227d-4cfd-9d20-9d8da267b935) |
-| `web/database/notion-web-database-database-template-01-db686263-c5af-44cb-b9db-d1b8727d2616.webp` | `Notion database template` | [screen](https://mobbin.com/screens/db686263-c5af-44cb-b9db-d1b8727d2616) |
-| `web/database/notion-web-database-database-template-02-95b38733-cbb4-4244-8db1-0885e3772914.webp` | `Notion database template` | [screen](https://mobbin.com/screens/95b38733-cbb4-4244-8db1-0885e3772914) |
-| `web/database/notion-web-database-database-template-03-68756656-cc5e-448f-a8d1-e2235d91118e.webp` | `Notion database template` | [screen](https://mobbin.com/screens/68756656-cc5e-448f-a8d1-e2235d91118e) |
-| `web/database/notion-web-database-database-template-04-4d94f414-f33f-4e7b-adf3-e8f58285ffe0.webp` | `Notion database template` | [screen](https://mobbin.com/screens/4d94f414-f33f-4e7b-adf3-e8f58285ffe0) |
-| `web/database/notion-web-database-filters-01-56aa9350-dfa8-4b57-a296-5ad2aa18137c.webp` | `Notion filters` | [screen](https://mobbin.com/screens/56aa9350-dfa8-4b57-a296-5ad2aa18137c) |
-| `web/database/notion-web-database-filters-02-8cbe99a8-57a4-40e6-85c8-5f55712b6cf3.webp` | `Notion filters` | [screen](https://mobbin.com/screens/8cbe99a8-57a4-40e6-85c8-5f55712b6cf3) |
-| `web/database/notion-web-database-filters-03-53858386-6aba-40c7-a0f6-bc3b5aed0e49.webp` | `Notion filters` | [screen](https://mobbin.com/screens/53858386-6aba-40c7-a0f6-bc3b5aed0e49) |
-| `web/database/notion-web-database-group-by-01-935b4300-77d3-47f8-aa2e-5277e745d7ec.webp` | `Notion group by` | [screen](https://mobbin.com/screens/935b4300-77d3-47f8-aa2e-5277e745d7ec) |
+| `web/database/notion-web-database-chart-01-420dd630-80ee-4048-9348-f4a1342d2435.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/420dd630-80ee-4048-9348-f4a1342d2435) |
+| `web/database/notion-web-database-database-01-2f7bbc1f-a8a0-4fd4-ba5f-aa6c5ef86ceb.webp` | `Notion database` | [screen](https://mobbin.com/screens/2f7bbc1f-a8a0-4fd4-ba5f-aa6c5ef86ceb) |
+| `web/database/notion-web-database-database-02-2c0dd9a9-d39d-4050-8e94-4b953ca5d8ee.webp` | `Notion database` | [screen](https://mobbin.com/screens/2c0dd9a9-d39d-4050-8e94-4b953ca5d8ee) |
+| `web/database/notion-web-database-database-03-72d235a2-0a23-4879-98d7-8622bf128873.webp` | `Notion database` | [screen](https://mobbin.com/screens/72d235a2-0a23-4879-98d7-8622bf128873) |
+| `web/database/notion-web-database-database-04-8c6b79a1-e340-4d49-9eb7-31ca94b0b289.webp` | `Notion database` | [screen](https://mobbin.com/screens/8c6b79a1-e340-4d49-9eb7-31ca94b0b289) |
+| `web/database/notion-web-database-database-05-4e6e1f98-a567-4370-b392-ac28802481c7.webp` | `Notion database` | [screen](https://mobbin.com/screens/4e6e1f98-a567-4370-b392-ac28802481c7) |
+| `web/database/notion-web-database-database-06-f695d792-ae7c-45c0-ba2e-1243fd951060.webp` | `Notion database` | [screen](https://mobbin.com/screens/f695d792-ae7c-45c0-ba2e-1243fd951060) |
+| `web/database/notion-web-database-database-09-bb630188-29e6-4746-8b03-b71e875c5de2.webp` | `Notion database` | [screen](https://mobbin.com/screens/bb630188-29e6-4746-8b03-b71e875c5de2) |
+| `web/database/notion-web-database-database-10-2fb67d89-7bc2-4708-8ece-34cdfa8fea33.webp` | `Notion database` | [screen](https://mobbin.com/screens/2fb67d89-7bc2-4708-8ece-34cdfa8fea33) |
+| `web/database/notion-web-database-database-11-3566cf8b-e58f-4694-afda-d57b15a3cac0.webp` | `Notion database` | [screen](https://mobbin.com/screens/3566cf8b-e58f-4694-afda-d57b15a3cac0) |
+| `web/database/notion-web-database-database-12-b801453a-b5a3-4a54-913d-c5381b7113c5.webp` | `Notion database` | [screen](https://mobbin.com/screens/b801453a-b5a3-4a54-913d-c5381b7113c5) |
+| `web/database/notion-web-database-database-14-433ade8f-0d6c-48e0-9f5c-c06041622933.webp` | `Notion database` | [screen](https://mobbin.com/screens/433ade8f-0d6c-48e0-9f5c-c06041622933) |
+| `web/database/notion-web-database-database-15-82d66d47-ccea-421c-8ef8-94e855c1163f.webp` | `Notion database` | [screen](https://mobbin.com/screens/82d66d47-ccea-421c-8ef8-94e855c1163f) |
+| `web/database/notion-web-database-database-16-8440d5d2-b026-429f-b638-69d4fe28dbc6.webp` | `Notion database` | [screen](https://mobbin.com/screens/8440d5d2-b026-429f-b638-69d4fe28dbc6) |
+| `web/database/notion-web-database-database-17-d41e1c3f-7554-4129-af21-b8d1c8eace43.webp` | `Notion database` | [screen](https://mobbin.com/screens/d41e1c3f-7554-4129-af21-b8d1c8eace43) |
+| `web/database/notion-web-database-database-19-47458249-bdf2-4159-8ed7-9bf33b8ab8d6.webp` | `Notion database` | [screen](https://mobbin.com/screens/47458249-bdf2-4159-8ed7-9bf33b8ab8d6) |
+| `web/database/notion-web-database-database-21-841ae11d-d9e0-43ce-9d45-0405415af97f.webp` | `Notion database` | [screen](https://mobbin.com/screens/841ae11d-d9e0-43ce-9d45-0405415af97f) |
+| `web/database/notion-web-database-database-22-e57c782d-f578-4d24-ac76-4c5ef616f256.webp` | `Notion database` | [screen](https://mobbin.com/screens/e57c782d-f578-4d24-ac76-4c5ef616f256) |
+| `web/database/notion-web-database-database-23-1c8cb199-0669-4652-810b-5e7ffed10e10.webp` | `Notion database` | [screen](https://mobbin.com/screens/1c8cb199-0669-4652-810b-5e7ffed10e10) |
+| `web/database/notion-web-database-database-24-d9d59162-2dec-4d32-8d1a-2852ef8e6be6.webp` | `Notion database` | [screen](https://mobbin.com/screens/d9d59162-2dec-4d32-8d1a-2852ef8e6be6) |
+| `web/database/notion-web-database-database-25-24295cd3-d92b-453e-8566-2f4f50fe14db.webp` | `Notion database` | [screen](https://mobbin.com/screens/24295cd3-d92b-453e-8566-2f4f50fe14db) |
+| `web/database/notion-web-database-database-26-fffb95e6-b486-471e-936a-fdfec96f1039.webp` | `Notion database` | [screen](https://mobbin.com/screens/fffb95e6-b486-471e-936a-fdfec96f1039) |
+| `web/database/notion-web-database-database-27-b6111d53-25d0-4bf6-a90a-1881eaf81a38.webp` | `Notion database` | [screen](https://mobbin.com/screens/b6111d53-25d0-4bf6-a90a-1881eaf81a38) |
+| `web/database/notion-web-database-database-28-b2794985-3883-4a08-83a5-fa32039044ed.webp` | `Notion database` | [screen](https://mobbin.com/screens/b2794985-3883-4a08-83a5-fa32039044ed) |
+| `web/database/notion-web-database-database-29-b0faaf29-7dc3-4b90-8808-151a94555b7d.webp` | `Notion database` | [screen](https://mobbin.com/screens/b0faaf29-7dc3-4b90-8808-151a94555b7d) |
+| `web/database/notion-web-database-database-30-f63163ee-9eaa-4c17-9095-9e00d896a659.webp` | `Notion database` | [screen](https://mobbin.com/screens/f63163ee-9eaa-4c17-9095-9e00d896a659) |
+| `web/database/notion-web-database-favorites-30-bb37c98b-4f9a-4fef-967c-40225bc2e9b6.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/bb37c98b-4f9a-4fef-967c-40225bc2e9b6) |
+| `web/database/notion-web-database-favorites-31-e3ebbca9-048c-4025-931e-3d4038ef82e5.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/e3ebbca9-048c-4025-931e-3d4038ef82e5) |
+| `web/database/notion-web-database-favorites-33-d89efb14-f7fd-4d1f-8395-1bfda1c7e6ae.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/d89efb14-f7fd-4d1f-8395-1bfda1c7e6ae) |
+| `web/database/notion-web-database-form-15-52c0cf24-c177-475a-95f4-06267ea2a0fa.webp` | `Notion form` | [screen](https://mobbin.com/screens/52c0cf24-c177-475a-95f4-06267ea2a0fa) |
+| `web/database/notion-web-database-form-20-7c4bb26e-a30a-48e7-a8b2-15179d6e2809.webp` | `Notion form` | [screen](https://mobbin.com/screens/7c4bb26e-a30a-48e7-a8b2-15179d6e2809) |
+| `web/database/notion-web-database-home-19-8859ba39-fc79-499d-a756-0085c2bf502f.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/8859ba39-fc79-499d-a756-0085c2bf502f) |
+| `web/database/notion-web-database-home-28-aa36caaa-ea00-43b4-9d9a-77039d5dade6.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/aa36caaa-ea00-43b4-9d9a-77039d5dade6) |
+| `web/database/notion-web-database-home-44-ce2c247e-ff27-4d79-b379-208a662de3b1.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/ce2c247e-ff27-4d79-b379-208a662de3b1) |
+| `web/database/notion-web-database-kanban-01-69f98d1d-b556-4a33-90f4-a0e98b6b9032.webp` | `Notion kanban board` | [screen](https://mobbin.com/screens/69f98d1d-b556-4a33-90f4-a0e98b6b9032) |
+| `web/database/notion-web-database-list-03-bbf24360-e55d-48d6-9277-89bdcb72e61a.webp` | `Notion list view` | [screen](https://mobbin.com/screens/bbf24360-e55d-48d6-9277-89bdcb72e61a) |
+| `web/database/notion-web-database-list-06-d8abbe0b-4c55-4316-91b7-2e6b4baecb52.webp` | `Notion list view` | [screen](https://mobbin.com/screens/d8abbe0b-4c55-4316-91b7-2e6b4baecb52) |
 | `web/database/notion-web-database-new-database-01-e00ca642-dcfd-4797-aec7-9ae0d780ec3d.webp` | `Notion new database` | [screen](https://mobbin.com/screens/e00ca642-dcfd-4797-aec7-9ae0d780ec3d) |
-| `web/database/notion-web-database-new-database-02-8a1f646f-da51-4baa-a89d-489e6e7035a5.webp` | `Notion new database` | [screen](https://mobbin.com/screens/8a1f646f-da51-4baa-a89d-489e6e7035a5) |
-| `web/database/notion-web-database-properties-01-39684b6e-3307-402e-bdaf-7a0f3e668673.webp` | `Notion properties` | [screen](https://mobbin.com/screens/39684b6e-3307-402e-bdaf-7a0f3e668673) |
+| `web/database/notion-web-database-onboarding-05-a674b30c-c77b-4ff1-83ae-3436e01982af.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/a674b30c-c77b-4ff1-83ae-3436e01982af) |
 | `web/database/notion-web-database-properties-02-b69c8a59-0612-4e4a-9535-957f5a6efa92.webp` | `Notion properties` | [screen](https://mobbin.com/screens/b69c8a59-0612-4e4a-9535-957f5a6efa92) |
 | `web/database/notion-web-database-properties-03-35c32af9-0c3b-4ecb-a2e4-aa293fafb9dc.webp` | `Notion properties` | [screen](https://mobbin.com/screens/35c32af9-0c3b-4ecb-a2e4-aa293fafb9dc) |
-| `web/database/notion-web-database-properties-04-0b5a0ef9-73e1-44b8-8852-51a314fdeb6c.webp` | `Notion properties` | [screen](https://mobbin.com/screens/0b5a0ef9-73e1-44b8-8852-51a314fdeb6c) |
-| `web/database/notion-web-database-property-editor-01-c08e8ce9-74ff-41c3-ab52-a750a3ad1f1d.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/c08e8ce9-74ff-41c3-ab52-a750a3ad1f1d) |
-| `web/database/notion-web-database-property-editor-02-48e206a0-312b-465c-a580-a2fadcda82a0.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/48e206a0-312b-465c-a580-a2fadcda82a0) |
-| `web/database/notion-web-database-property-editor-03-c36224b0-dffd-42e8-b0ea-7b36b77d9a6d.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/c36224b0-dffd-42e8-b0ea-7b36b77d9a6d) |
 | `web/database/notion-web-database-property-editor-04-aedc1359-0c91-4f65-80a8-7b4986276c1b.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/aedc1359-0c91-4f65-80a8-7b4986276c1b) |
 | `web/database/notion-web-database-property-editor-05-deb747e2-2093-4228-b366-4957da0b3ca2.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/deb747e2-2093-4228-b366-4957da0b3ca2) |
-| `web/database/notion-web-database-property-editor-06-0651cbba-6c7b-4e1d-b266-08671901e696.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/0651cbba-6c7b-4e1d-b266-08671901e696) |
-| `web/database/notion-web-database-property-editor-07-6ff60437-cdbb-4ef5-b1a4-d0901d13dfdb.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/6ff60437-cdbb-4ef5-b1a4-d0901d13dfdb) |
-| `web/database/notion-web-database-property-editor-08-445696a8-052f-401a-8106-81eefa1bd411.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/445696a8-052f-401a-8106-81eefa1bd411) |
-| `web/database/notion-web-database-property-editor-09-97869a67-378d-4d4c-b083-c373a930b2e5.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/97869a67-378d-4d4c-b083-c373a930b2e5) |
-| `web/database/notion-web-database-property-editor-10-5df2fdae-e41f-46fa-932c-3181ed65349f.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/5df2fdae-e41f-46fa-932c-3181ed65349f) |
-| `web/database/notion-web-database-property-editor-11-7b8e6d7b-1519-4d71-8b1d-b31b1f9d660a.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/7b8e6d7b-1519-4d71-8b1d-b31b1f9d660a) |
-| `web/database/notion-web-database-property-editor-12-eb375741-eee6-4a3e-be4b-70187cff0d2b.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/eb375741-eee6-4a3e-be4b-70187cff0d2b) |
 | `web/database/notion-web-database-property-editor-13-2e44a0e9-376b-4cff-9190-e05a2e94de92.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/2e44a0e9-376b-4cff-9190-e05a2e94de92) |
-| `web/database/notion-web-database-relation-01-932bb81c-6d25-4521-80bf-ae17aba01f0f.webp` | `Notion relation property` | [screen](https://mobbin.com/screens/932bb81c-6d25-4521-80bf-ae17aba01f0f) |
-| `web/database/notion-web-database-relation-02-b95c9bf0-6d2c-489f-814b-c35d192310eb.webp` | `Notion relation property` | [screen](https://mobbin.com/screens/b95c9bf0-6d2c-489f-814b-c35d192310eb) |
-| `web/database/notion-web-database-row-page-01-263196dd-fec5-49cb-85b5-cde50e0cfbfe.webp` | `Notion database row opened as page` | [screen](https://mobbin.com/screens/263196dd-fec5-49cb-85b5-cde50e0cfbfe) |
-| `web/database/notion-web-database-side-peek-01-3647446f-f959-4e58-baba-ef7e4f9ab6b0.webp` | `Notion side peek` | [screen](https://mobbin.com/screens/3647446f-f959-4e58-baba-ef7e4f9ab6b0) |
-| `web/database/notion-web-database-side-peek-02-e8ed9805-4357-4690-8bfc-9185f37c0a93.webp` | `Notion side peek` | [screen](https://mobbin.com/screens/e8ed9805-4357-4690-8bfc-9185f37c0a93) |
-| `web/database/notion-web-database-side-peek-03-a1c31875-094e-4623-b543-e095a9e36853.webp` | `Notion side peek` | [screen](https://mobbin.com/screens/a1c31875-094e-4623-b543-e095a9e36853) |
-| `web/database/notion-web-database-side-peek-04-f6b952f0-d9d3-496f-b2a1-4d18ff556a68.webp` | `Notion side peek` | [screen](https://mobbin.com/screens/f6b952f0-d9d3-496f-b2a1-4d18ff556a68) |
-| `web/database/notion-web-database-side-peek-05-81e875fa-61d6-4010-b5d7-201bcaa2e4b1.webp` | `Notion side peek` | [screen](https://mobbin.com/screens/81e875fa-61d6-4010-b5d7-201bcaa2e4b1) |
-| `web/database/notion-web-database-side-peek-06-780626a3-20f5-4795-ac3b-bdbaef325210.webp` | `Notion side peek` | [screen](https://mobbin.com/screens/780626a3-20f5-4795-ac3b-bdbaef325210) |
-| `web/database/notion-web-database-side-peek-07-2c1900c8-c7d2-4559-aa5a-4f468674c901.webp` | `Notion side peek` | [screen](https://mobbin.com/screens/2c1900c8-c7d2-4559-aa5a-4f468674c901) |
-| `web/dialogs/notion-web-dialogs-command-palette-01-e0bcd679-56a2-44ac-8a4b-e97188edae28.webp` | `Notion command palette` | [screen](https://mobbin.com/screens/e0bcd679-56a2-44ac-8a4b-e97188edae28) |
-| `web/dialogs/notion-web-dialogs-dialog-01-af8c3aec-a932-4988-adde-b5baba6d6a01.webp` | `Notion modal dialog` | [screen](https://mobbin.com/screens/af8c3aec-a932-4988-adde-b5baba6d6a01) |
-| `web/dialogs/notion-web-dialogs-dialog-02-ba93ce22-6dd3-4eda-ace5-0b78d593f8e0.webp` | `Notion modal dialog` | [screen](https://mobbin.com/screens/ba93ce22-6dd3-4eda-ace5-0b78d593f8e0) |
-| `web/dialogs/notion-web-dialogs-dialog-03-ad51a8b8-e251-447e-8a17-502d2159b3c5.webp` | `Notion modal dialog` | [screen](https://mobbin.com/screens/ad51a8b8-e251-447e-8a17-502d2159b3c5) |
-| `web/dialogs/notion-web-dialogs-dialog-04-27ae8065-9cc6-48ca-989f-cfb95b1f220a.webp` | `Notion modal dialog` | [screen](https://mobbin.com/screens/27ae8065-9cc6-48ca-989f-cfb95b1f220a) |
-| `web/dialogs/notion-web-dialogs-dialog-05-9150b32f-ddb0-46e4-bc7b-59da95f2c751.webp` | `Notion modal dialog` | [screen](https://mobbin.com/screens/9150b32f-ddb0-46e4-bc7b-59da95f2c751) |
-| `web/editors/notion-web-editors-ai-writing-01-7f5c8c5c-01c0-4b83-a505-cf3fe0bd49bc.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/7f5c8c5c-01c0-4b83-a505-cf3fe0bd49bc) |
-| `web/editors/notion-web-editors-ai-writing-02-27745a27-64ea-45dc-942a-8451998a50b3.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/27745a27-64ea-45dc-942a-8451998a50b3) |
-| `web/editors/notion-web-editors-ai-writing-03-0c407e3c-fb16-43d9-8be0-0c980374698d.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/0c407e3c-fb16-43d9-8be0-0c980374698d) |
-| `web/editors/notion-web-editors-ai-writing-04-fbc30f35-7e02-43fb-875d-f1a4b8eba372.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/fbc30f35-7e02-43fb-875d-f1a4b8eba372) |
-| `web/editors/notion-web-editors-ai-writing-05-5a169bb1-12fa-4bfe-88c4-ff2210b15d32.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/5a169bb1-12fa-4bfe-88c4-ff2210b15d32) |
-| `web/editors/notion-web-editors-ai-writing-06-a1d949f4-fc76-450d-afe8-6477510a848b.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/a1d949f4-fc76-450d-afe8-6477510a848b) |
-| `web/editors/notion-web-editors-ai-writing-07-1de6d932-63c7-4838-b317-800e02aab879.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/1de6d932-63c7-4838-b317-800e02aab879) |
+| `web/database/notion-web-database-search-01-0ab41735-95f1-4bbc-a3bf-ec15253d2699.webp` | `Notion search` | [screen](https://mobbin.com/screens/0ab41735-95f1-4bbc-a3bf-ec15253d2699) |
+| `web/database/notion-web-database-search-13-1e96fe0b-1406-4833-8779-1d862d64f320.webp` | `Notion search` | [screen](https://mobbin.com/screens/1e96fe0b-1406-4833-8779-1d862d64f320) |
+| `web/database/notion-web-database-search-17-a084d97f-c100-49d2-8aaf-7e4fff163de5.webp` | `Notion search` | [screen](https://mobbin.com/screens/a084d97f-c100-49d2-8aaf-7e4fff163de5) |
+| `web/database/notion-web-database-search-19-a5f6de01-073b-4448-bc15-7203c9af6f8b.webp` | `Notion search` | [screen](https://mobbin.com/screens/a5f6de01-073b-4448-bc15-7203c9af6f8b) |
+| `web/database/notion-web-database-sidebar-04-0fd15513-eb9f-4407-b3cc-ae27db947a8b.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/0fd15513-eb9f-4407-b3cc-ae27db947a8b) |
+| `web/database/notion-web-database-sidebar-13-84735c71-690d-4cf0-87e1-d6df98e442df.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/84735c71-690d-4cf0-87e1-d6df98e442df) |
+| `web/database/notion-web-database-sidebar-24-fb9142f9-c78f-4f2b-82a0-f3e35fb94ec1.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/fb9142f9-c78f-4f2b-82a0-f3e35fb94ec1) |
+| `web/database/notion-web-database-table-03-bd482935-9854-4f32-9e1d-47157eee4f1f.webp` | `Notion table view` | [screen](https://mobbin.com/screens/bd482935-9854-4f32-9e1d-47157eee4f1f) |
+| `web/database/notion-web-database-table-04-74fe28d3-82c4-4fe8-b982-5c04e708b27c.webp` | `Notion table view` | [screen](https://mobbin.com/screens/74fe28d3-82c4-4fe8-b982-5c04e708b27c) |
+| `web/database/notion-web-database-table-05-f19c6f50-e006-40f1-aaf6-0eaeb6dcc315.webp` | `Notion table view` | [screen](https://mobbin.com/screens/f19c6f50-e006-40f1-aaf6-0eaeb6dcc315) |
+| `web/database/notion-web-database-table-07-0159ba7f-b03b-4b57-b6fe-d44d8ade6ac7.webp` | `Notion table view` | [screen](https://mobbin.com/screens/0159ba7f-b03b-4b57-b6fe-d44d8ade6ac7) |
+| `web/database/notion-web-database-teamspaces-05-0b10f8d0-2acb-4d7f-87f4-0bfd14e463bc.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/0b10f8d0-2acb-4d7f-87f4-0bfd14e463bc) |
+| `web/database/notion-web-database-teamspaces-20-c77e81b2-da35-4adc-b499-1c7576522c2b.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/c77e81b2-da35-4adc-b499-1c7576522c2b) |
+| `web/database/notion-web-database-teamspaces-22-9d9885cf-a496-458d-b5c9-be8d1453e655.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/9d9885cf-a496-458d-b5c9-be8d1453e655) |
+| `web/database/notion-web-database-teamspaces-31-b8321456-c846-4ad8-b634-2d1b729e595c.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/b8321456-c846-4ad8-b634-2d1b729e595c) |
+| `web/database/notion-web-database-teamspaces-32-0b94c9f8-5d71-4d6b-9058-74bf3e9f0b18.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/0b94c9f8-5d71-4d6b-9058-74bf3e9f0b18) |
+| `web/database/notion-web-database-teamspaces-33-d2078c4c-7a15-46cd-bb3b-f1ff3213241e.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/d2078c4c-7a15-46cd-bb3b-f1ff3213241e) |
+| `web/database/notion-web-database-workspace-switcher-02-83e2d66a-d836-406f-b72d-d5bc20e1d16f.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/83e2d66a-d836-406f-b72d-d5bc20e1d16f) |
+| `web/database/notion-web-database-workspace-switcher-03-aea403dc-b079-460c-807a-0d4c515a5fb1.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/aea403dc-b079-460c-807a-0d4c515a5fb1) |
+| `web/database/notion-web-database-workspace-switcher-05-2bf06d40-1b37-44ed-bfc0-f4d42216bc83.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/2bf06d40-1b37-44ed-bfc0-f4d42216bc83) |
+| `web/database/notion-web-database-workspace-switcher-09-a0aefa76-13df-4622-a136-fb6d8eacc416.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/a0aefa76-13df-4622-a136-fb6d8eacc416) |
+| `web/database/notion-web-database-workspace-switcher-12-f58cc5eb-41a3-4f0a-b1e0-57f40d76b786.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/f58cc5eb-41a3-4f0a-b1e0-57f40d76b786) |
+| `web/database/notion-web-database-workspace-switcher-15-7c8cc7b0-8165-41ca-bbba-3085667ade1d.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/7c8cc7b0-8165-41ca-bbba-3085667ade1d) |
 | `web/editors/notion-web-editors-ai-writing-08-f57eac1e-10c4-4343-adfb-b66283af3171.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/f57eac1e-10c4-4343-adfb-b66283af3171) |
-| `web/editors/notion-web-editors-ai-writing-09-85c67e9a-2900-4097-9e7a-5fb04d510b31.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/85c67e9a-2900-4097-9e7a-5fb04d510b31) |
-| `web/editors/notion-web-editors-ai-writing-10-0317bced-be59-439c-a6b9-9032b93835b4.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/0317bced-be59-439c-a6b9-9032b93835b4) |
-| `web/editors/notion-web-editors-ai-writing-11-58188761-2d93-43a2-be51-df5fee96707a.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/58188761-2d93-43a2-be51-df5fee96707a) |
-| `web/editors/notion-web-editors-ai-writing-12-a1cd6f83-aac0-4df6-9297-3cc36fb6de4d.webp` | `Notion AI writing` | [screen](https://mobbin.com/screens/a1cd6f83-aac0-4df6-9297-3cc36fb6de4d) |
-| `web/editors/notion-web-editors-ask-ai-01-2c72548e-6813-4575-8861-29ebf927a221.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/2c72548e-6813-4575-8861-29ebf927a221) |
-| `web/editors/notion-web-editors-ask-ai-02-644841b3-6633-4075-bd1e-bb494c50d67f.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/644841b3-6633-4075-bd1e-bb494c50d67f) |
-| `web/editors/notion-web-editors-ask-ai-03-0f4fe415-27b5-4837-9274-7bc1af9b26a3.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/0f4fe415-27b5-4837-9274-7bc1af9b26a3) |
-| `web/editors/notion-web-editors-ask-ai-04-b970f2e3-608c-4766-889d-e4385d1862cf.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/b970f2e3-608c-4766-889d-e4385d1862cf) |
-| `web/editors/notion-web-editors-ask-ai-05-f4e326dd-cdf0-48cb-b85e-7e8cd988294c.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/f4e326dd-cdf0-48cb-b85e-7e8cd988294c) |
-| `web/editors/notion-web-editors-ask-ai-06-bdd16068-7909-4fad-bc32-3924e7aca22a.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/bdd16068-7909-4fad-bc32-3924e7aca22a) |
-| `web/editors/notion-web-editors-ask-ai-07-6fa64275-4ae9-4963-8540-bc8b1e2a3615.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/6fa64275-4ae9-4963-8540-bc8b1e2a3615) |
-| `web/editors/notion-web-editors-ask-ai-08-d5d67c31-6e01-45d1-b24f-e898e7463c12.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/d5d67c31-6e01-45d1-b24f-e898e7463c12) |
-| `web/editors/notion-web-editors-ask-ai-09-5aa152a9-f916-4d87-ae36-ac22c1f1404c.webp` | `Notion ask AI` | [screen](https://mobbin.com/screens/5aa152a9-f916-4d87-ae36-ac22c1f1404c) |
+| `web/editors/notion-web-editors-automations-03-bbfffca8-3af2-498f-bb94-549ade092e36.webp` | `Notion automations` | [screen](https://mobbin.com/screens/bbfffca8-3af2-498f-bb94-549ade092e36) |
+| `web/editors/notion-web-editors-automations-05-5955adb3-d4e7-4885-9913-b7d127b3567b.webp` | `Notion automations` | [screen](https://mobbin.com/screens/5955adb3-d4e7-4885-9913-b7d127b3567b) |
+| `web/editors/notion-web-editors-automations-12-b37ad2ea-a876-422d-82b5-3a97410a7344.webp` | `Notion automations` | [screen](https://mobbin.com/screens/b37ad2ea-a876-422d-82b5-3a97410a7344) |
 | `web/editors/notion-web-editors-block-menu-01-959f1824-ebfd-4660-a603-1980f3af990a.webp` | `Notion block menu` | [screen](https://mobbin.com/screens/959f1824-ebfd-4660-a603-1980f3af990a) |
+| `web/editors/notion-web-editors-breadcrumbs-01-a464a775-3c8b-47bb-b081-1aa75595639e.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/a464a775-3c8b-47bb-b081-1aa75595639e) |
+| `web/editors/notion-web-editors-breadcrumbs-02-037aecf3-f55c-4932-ae84-a14dfba74227.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/037aecf3-f55c-4932-ae84-a14dfba74227) |
+| `web/editors/notion-web-editors-breadcrumbs-04-f45a639a-28e6-4a02-82a4-ccbe15e5bc13.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/f45a639a-28e6-4a02-82a4-ccbe15e5bc13) |
+| `web/editors/notion-web-editors-breadcrumbs-06-53a4dce8-3423-4813-9e46-d36b5847ff80.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/53a4dce8-3423-4813-9e46-d36b5847ff80) |
+| `web/editors/notion-web-editors-breadcrumbs-12-efb1d927-14b6-44f0-a098-8bae0a2083dc.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/efb1d927-14b6-44f0-a098-8bae0a2083dc) |
+| `web/editors/notion-web-editors-breadcrumbs-19-ff1d684c-08e6-454d-af4c-f0d0d57e6308.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/ff1d684c-08e6-454d-af4c-f0d0d57e6308) |
+| `web/editors/notion-web-editors-buttons-02-96537568-43ba-4af1-b792-51e3da4a3887.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/96537568-43ba-4af1-b792-51e3da4a3887) |
+| `web/editors/notion-web-editors-buttons-12-8a4a3100-dfad-4de5-93db-8cadd1fb0b69.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/8a4a3100-dfad-4de5-93db-8cadd1fb0b69) |
+| `web/editors/notion-web-editors-buttons-16-cac4198f-ae26-4a30-b146-ff7eebcde31d.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/cac4198f-ae26-4a30-b146-ff7eebcde31d) |
+| `web/editors/notion-web-editors-calendar-01-4c2cbe60-ba3b-43b3-8fbc-e98c8fb486d2.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/4c2cbe60-ba3b-43b3-8fbc-e98c8fb486d2) |
 | `web/editors/notion-web-editors-code-block-01-4caaca0b-fecc-42e2-b326-f557f94bb289.webp` | `Notion code block` | [screen](https://mobbin.com/screens/4caaca0b-fecc-42e2-b326-f557f94bb289) |
-| `web/editors/notion-web-editors-columns-01-56f4584c-8948-4599-9901-8f110f0dfd3b.webp` | `Notion columns layout` | [screen](https://mobbin.com/screens/56f4584c-8948-4599-9901-8f110f0dfd3b) |
-| `web/editors/notion-web-editors-columns-02-c134a2f8-c4b9-4f0b-9b94-26712c15f52f.webp` | `Notion columns layout` | [screen](https://mobbin.com/screens/c134a2f8-c4b9-4f0b-9b94-26712c15f52f) |
-| `web/editors/notion-web-editors-columns-03-0616d54f-6fba-4d7e-bf92-2780564f5363.webp` | `Notion columns layout` | [screen](https://mobbin.com/screens/0616d54f-6fba-4d7e-bf92-2780564f5363) |
+| `web/editors/notion-web-editors-comments-02-d3ea7850-e228-4a7e-a157-f5d05e389c4b.webp` | `Notion comments` | [screen](https://mobbin.com/screens/d3ea7850-e228-4a7e-a157-f5d05e389c4b) |
+| `web/editors/notion-web-editors-comments-05-1a00da21-21a0-496e-8b9e-5b16102b593c.webp` | `Notion comments` | [screen](https://mobbin.com/screens/1a00da21-21a0-496e-8b9e-5b16102b593c) |
 | `web/editors/notion-web-editors-cover-icon-01-18d621d0-2f20-4f36-80e8-9193d214b160.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/18d621d0-2f20-4f36-80e8-9193d214b160) |
 | `web/editors/notion-web-editors-cover-icon-02-c21465fc-28fd-4c7e-992d-0a7d02c6466d.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/c21465fc-28fd-4c7e-992d-0a7d02c6466d) |
 | `web/editors/notion-web-editors-cover-icon-03-c562f7e8-d22a-45ac-b255-b73d72b34d34.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/c562f7e8-d22a-45ac-b255-b73d72b34d34) |
@@ -1521,15 +1675,12 @@ One row per file. "Found by" is the query (screens) or the flow name (flow files
 | `web/editors/notion-web-editors-cover-icon-07-ab313e42-7ab7-46d5-8a8c-119796663c86.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/ab313e42-7ab7-46d5-8a8c-119796663c86) |
 | `web/editors/notion-web-editors-cover-icon-08-3ef5663d-4ab1-4479-a942-4af54bcff6e5.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/3ef5663d-4ab1-4479-a942-4af54bcff6e5) |
 | `web/editors/notion-web-editors-cover-icon-09-d2b6da49-6ec2-49b9-abfe-d82adfb280af.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/d2b6da49-6ec2-49b9-abfe-d82adfb280af) |
-| `web/editors/notion-web-editors-cover-icon-10-42f72d81-0036-4b07-87ed-9ac157f0ac4f.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/42f72d81-0036-4b07-87ed-9ac157f0ac4f) |
 | `web/editors/notion-web-editors-cover-icon-11-aa987df0-1513-49d0-85e4-1e345b268002.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/aa987df0-1513-49d0-85e4-1e345b268002) |
 | `web/editors/notion-web-editors-cover-icon-12-9484e185-ebe8-4a16-8b2a-ece1fec877a8.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/9484e185-ebe8-4a16-8b2a-ece1fec877a8) |
 | `web/editors/notion-web-editors-cover-icon-13-92c51f39-b156-4369-90d1-8e001f5acad1.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/92c51f39-b156-4369-90d1-8e001f5acad1) |
-| `web/editors/notion-web-editors-cover-icon-14-2526cc8c-1636-4e80-9e8c-498927a4a5d5.webp` | `Notion page cover and icon` | [screen](https://mobbin.com/screens/2526cc8c-1636-4e80-9e8c-498927a4a5d5) |
 | `web/editors/notion-web-editors-editor-01-694c9fac-97d6-4007-8880-18cac3e67d7e.webp` | `Notion editor` | [screen](https://mobbin.com/screens/694c9fac-97d6-4007-8880-18cac3e67d7e) |
 | `web/editors/notion-web-editors-editor-02-0f81af95-53ed-4cd5-9045-0464e87d95a9.webp` | `Notion editor` | [screen](https://mobbin.com/screens/0f81af95-53ed-4cd5-9045-0464e87d95a9) |
 | `web/editors/notion-web-editors-editor-03-cf5c2543-9ace-4b28-8a6a-80eea1d04d43.webp` | `Notion editor` | [screen](https://mobbin.com/screens/cf5c2543-9ace-4b28-8a6a-80eea1d04d43) |
-| `web/editors/notion-web-editors-editor-04-708f8650-9301-486a-960c-4fffdab5f195.webp` | `Notion editor` | [screen](https://mobbin.com/screens/708f8650-9301-486a-960c-4fffdab5f195) |
 | `web/editors/notion-web-editors-editor-05-6089ea12-478b-4a9a-bcd7-ee7e92f65ba4.webp` | `Notion editor` | [screen](https://mobbin.com/screens/6089ea12-478b-4a9a-bcd7-ee7e92f65ba4) |
 | `web/editors/notion-web-editors-editor-06-cbf5b766-ae76-4189-8ab8-5389e706c7a4.webp` | `Notion editor` | [screen](https://mobbin.com/screens/cbf5b766-ae76-4189-8ab8-5389e706c7a4) |
 | `web/editors/notion-web-editors-editor-07-179a38ee-8134-41f0-988e-441caa783e64.webp` | `Notion editor` | [screen](https://mobbin.com/screens/179a38ee-8134-41f0-988e-441caa783e64) |
@@ -1537,8 +1688,6 @@ One row per file. "Found by" is the query (screens) or the flow name (flow files
 | `web/editors/notion-web-editors-editor-09-44d8637b-d32a-4041-8ee7-a0ea013a078d.webp` | `Notion editor` | [screen](https://mobbin.com/screens/44d8637b-d32a-4041-8ee7-a0ea013a078d) |
 | `web/editors/notion-web-editors-editor-10-c05fdc8a-929a-4671-a457-90388898d76b.webp` | `Notion editor` | [screen](https://mobbin.com/screens/c05fdc8a-929a-4671-a457-90388898d76b) |
 | `web/editors/notion-web-editors-editor-11-fa966f8d-1a15-4105-99b9-e3fd46c5575e.webp` | `Notion editor` | [screen](https://mobbin.com/screens/fa966f8d-1a15-4105-99b9-e3fd46c5575e) |
-| `web/editors/notion-web-editors-editor-12-fe636b00-83ba-4864-82ed-02cfb03d40fc.webp` | `Notion editor` | [screen](https://mobbin.com/screens/fe636b00-83ba-4864-82ed-02cfb03d40fc) |
-| `web/editors/notion-web-editors-editor-13-8b8ab65e-65fe-404a-8a35-53cef6673d17.webp` | `Notion editor` | [screen](https://mobbin.com/screens/8b8ab65e-65fe-404a-8a35-53cef6673d17) |
 | `web/editors/notion-web-editors-embed-01-9af6bf1f-bb50-4c01-8549-51ab74bb263a.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/9af6bf1f-bb50-4c01-8549-51ab74bb263a) |
 | `web/editors/notion-web-editors-embed-02-138bfa27-a315-4d24-811c-dec9cbfbaed0.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/138bfa27-a315-4d24-811c-dec9cbfbaed0) |
 | `web/editors/notion-web-editors-embed-03-e3569198-324a-4969-8665-bfc36ee9d2fa.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/e3569198-324a-4969-8665-bfc36ee9d2fa) |
@@ -1548,27 +1697,105 @@ One row per file. "Found by" is the query (screens) or the flow name (flow files
 | `web/editors/notion-web-editors-embed-07-a4112bc3-5019-4bf9-ae84-ad935eea79a9.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/a4112bc3-5019-4bf9-ae84-ad935eea79a9) |
 | `web/editors/notion-web-editors-embed-08-43cce1ad-0a72-4e04-890f-c62d35f0aabb.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/43cce1ad-0a72-4e04-890f-c62d35f0aabb) |
 | `web/editors/notion-web-editors-embed-09-571991d0-c6ed-432a-b6a4-e52e0b8cac50.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/571991d0-c6ed-432a-b6a4-e52e0b8cac50) |
-| `web/editors/notion-web-editors-embed-10-5581e67a-678c-4571-b986-f272ece6f29a.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/5581e67a-678c-4571-b986-f272ece6f29a) |
 | `web/editors/notion-web-editors-embed-11-c475ea11-568a-4613-baeb-e7bc99378333.webp` | `Notion embed and media block` | [screen](https://mobbin.com/screens/c475ea11-568a-4613-baeb-e7bc99378333) |
+| `web/editors/notion-web-editors-empty-03-e4e12e4b-a7eb-4e47-a491-502fa8c06b11.webp` | `Notion empty state` | [screen](https://mobbin.com/screens/e4e12e4b-a7eb-4e47-a491-502fa8c06b11) |
+| `web/editors/notion-web-editors-favorites-09-536cd46b-0e91-41e2-adaf-7da374e4587f.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/536cd46b-0e91-41e2-adaf-7da374e4587f) |
+| `web/editors/notion-web-editors-favorites-15-cd57a30b-df17-486f-ad11-bb305b444858.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/cd57a30b-df17-486f-ad11-bb305b444858) |
+| `web/editors/notion-web-editors-favorites-16-88f5836e-3788-4707-9da3-7fcbb0d0e7bb.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/88f5836e-3788-4707-9da3-7fcbb0d0e7bb) |
+| `web/editors/notion-web-editors-favorites-17-1692b8c9-f461-41a1-b3b7-4e1cab72ffc2.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/1692b8c9-f461-41a1-b3b7-4e1cab72ffc2) |
+| `web/editors/notion-web-editors-favorites-21-90d0883c-3558-40ed-a5e5-319f3308acee.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/90d0883c-3558-40ed-a5e5-319f3308acee) |
+| `web/editors/notion-web-editors-favorites-22-d144e5ae-54eb-49cf-8590-6fcc704e0664.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/d144e5ae-54eb-49cf-8590-6fcc704e0664) |
+| `web/editors/notion-web-editors-favorites-23-111be222-6003-43a2-a2fd-4c8e1c8caac9.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/111be222-6003-43a2-a2fd-4c8e1c8caac9) |
+| `web/editors/notion-web-editors-favorites-32-4acb3a13-ddf8-4b60-9eae-e6ade2cc4dd3.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/4acb3a13-ddf8-4b60-9eae-e6ade2cc4dd3) |
+| `web/editors/notion-web-editors-filters-02-8cbe99a8-57a4-40e6-85c8-5f55712b6cf3.webp` | `Notion filters` | [screen](https://mobbin.com/screens/8cbe99a8-57a4-40e6-85c8-5f55712b6cf3) |
+| `web/editors/notion-web-editors-filters-03-53858386-6aba-40c7-a0f6-bc3b5aed0e49.webp` | `Notion filters` | [screen](https://mobbin.com/screens/53858386-6aba-40c7-a0f6-bc3b5aed0e49) |
+| `web/editors/notion-web-editors-full-width-01-2e85147b-f90b-4f69-995e-a64206411df0.webp` | `Notion full width page` | [screen](https://mobbin.com/screens/2e85147b-f90b-4f69-995e-a64206411df0) |
+| `web/editors/notion-web-editors-full-width-02-a99dd612-0fd8-4f03-b178-dba44ae3dd7b.webp` | `Notion full width page` | [screen](https://mobbin.com/screens/a99dd612-0fd8-4f03-b178-dba44ae3dd7b) |
+| `web/editors/notion-web-editors-full-width-03-55a514bb-4e4b-4378-88bd-0226e5329b2a.webp` | `Notion full width page` | [screen](https://mobbin.com/screens/55a514bb-4e4b-4378-88bd-0226e5329b2a) |
+| `web/editors/notion-web-editors-full-width-04-21f47747-cf19-42ff-a620-178253de454a.webp` | `Notion full width page` | [screen](https://mobbin.com/screens/21f47747-cf19-42ff-a620-178253de454a) |
+| `web/editors/notion-web-editors-full-width-05-e01574e7-e595-4a74-aacd-001d3dc445f8.webp` | `Notion full width page` | [screen](https://mobbin.com/screens/e01574e7-e595-4a74-aacd-001d3dc445f8) |
+| `web/editors/notion-web-editors-gallery-08-125caaed-3514-482f-a37d-b933389c15ac.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/125caaed-3514-482f-a37d-b933389c15ac) |
+| `web/editors/notion-web-editors-home-04-03c9e00d-9d01-4f50-90e4-04f969e0442e.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/03c9e00d-9d01-4f50-90e4-04f969e0442e) |
+| `web/editors/notion-web-editors-home-05-a8c412e9-2b79-42db-8795-117e568e1dd5.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/a8c412e9-2b79-42db-8795-117e568e1dd5) |
+| `web/editors/notion-web-editors-home-06-476ee6f7-704c-47f8-bb08-50ba4e7438d2.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/476ee6f7-704c-47f8-bb08-50ba4e7438d2) |
+| `web/editors/notion-web-editors-home-09-2d5a61ef-ab49-49e3-8299-7f683c03fa17.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/2d5a61ef-ab49-49e3-8299-7f683c03fa17) |
+| `web/editors/notion-web-editors-home-10-0a23cec5-a009-4847-bcef-33467e2e0b20.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/0a23cec5-a009-4847-bcef-33467e2e0b20) |
+| `web/editors/notion-web-editors-home-13-56f376d3-6a51-429c-a008-a37f968b4679.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/56f376d3-6a51-429c-a008-a37f968b4679) |
+| `web/editors/notion-web-editors-home-21-57363461-9d4f-4b99-869e-4cc8216f3b20.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/57363461-9d4f-4b99-869e-4cc8216f3b20) |
+| `web/editors/notion-web-editors-home-30-b6260a73-990c-4e6e-80d6-e4aa05d804cf.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/b6260a73-990c-4e6e-80d6-e4aa05d804cf) |
+| `web/editors/notion-web-editors-home-36-96596a0d-32a0-4dcc-aa99-573ff6e90b64.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/96596a0d-32a0-4dcc-aa99-573ff6e90b64) |
+| `web/editors/notion-web-editors-home-38-f13ba85e-b673-4583-a5a6-164a0b7228ab.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/f13ba85e-b673-4583-a5a6-164a0b7228ab) |
+| `web/editors/notion-web-editors-home-43-86ebd0a0-d8a9-4022-adb7-d3cd9bc927c9.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/86ebd0a0-d8a9-4022-adb7-d3cd9bc927c9) |
+| `web/editors/notion-web-editors-image-block-01-027989fd-c25a-4552-a929-c2bc94f3e5a3.webp` | `Notion image block` | [screen](https://mobbin.com/screens/027989fd-c25a-4552-a929-c2bc94f3e5a3) |
+| `web/editors/notion-web-editors-link-preview-01-83bc0e57-543c-4fda-a646-a26252f1099b.webp` | `Notion link preview` | [screen](https://mobbin.com/screens/83bc0e57-543c-4fda-a646-a26252f1099b) |
 | `web/editors/notion-web-editors-mentions-01-44650693-5283-421a-b978-d4cf1a8de987.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/44650693-5283-421a-b978-d4cf1a8de987) |
 | `web/editors/notion-web-editors-mentions-02-9f7bcb4e-d95c-423d-b298-f40d338e310e.webp` | `Notion mentions` | [screen](https://mobbin.com/screens/9f7bcb4e-d95c-423d-b298-f40d338e310e) |
+| `web/editors/notion-web-editors-menu-01-78e7f802-2ece-4893-8542-90fe84170ce8.webp` | `Notion menu` | [screen](https://mobbin.com/screens/78e7f802-2ece-4893-8542-90fe84170ce8) |
+| `web/editors/notion-web-editors-more-menu-01-49ebf525-3275-423a-9dda-725fdb0c1d68.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/49ebf525-3275-423a-9dda-725fdb0c1d68) |
+| `web/editors/notion-web-editors-new-database-02-8a1f646f-da51-4baa-a89d-489e6e7035a5.webp` | `Notion new database` | [screen](https://mobbin.com/screens/8a1f646f-da51-4baa-a89d-489e6e7035a5) |
+| `web/editors/notion-web-editors-page-06-6c391514-2cbc-4fdb-8ece-ed52adc08ad0.webp` | `Notion page` | [screen](https://mobbin.com/screens/6c391514-2cbc-4fdb-8ece-ed52adc08ad0) |
+| `web/editors/notion-web-editors-page-07-1b58f34a-4b59-4472-a281-4b1ed312a63a.webp` | `Notion page` | [screen](https://mobbin.com/screens/1b58f34a-4b59-4472-a281-4b1ed312a63a) |
+| `web/editors/notion-web-editors-page-09-bcc9e7b1-e95c-487c-a6e7-1ee9028daa32.webp` | `Notion page` | [screen](https://mobbin.com/screens/bcc9e7b1-e95c-487c-a6e7-1ee9028daa32) |
+| `web/editors/notion-web-editors-page-11-3b5c9c6b-bd7a-4519-ab67-c13de99a042b.webp` | `Notion page` | [screen](https://mobbin.com/screens/3b5c9c6b-bd7a-4519-ab67-c13de99a042b) |
+| `web/editors/notion-web-editors-page-13-eb1f804d-2396-44b5-ac66-0a4ad3923afd.webp` | `Notion page` | [screen](https://mobbin.com/screens/eb1f804d-2396-44b5-ac66-0a4ad3923afd) |
+| `web/editors/notion-web-editors-page-14-6338b901-75f2-4e7d-9cc9-07f89bc4d7a5.webp` | `Notion page` | [screen](https://mobbin.com/screens/6338b901-75f2-4e7d-9cc9-07f89bc4d7a5) |
+| `web/editors/notion-web-editors-page-16-86acc928-4fd2-42fe-8ce4-e91b2658fe34.webp` | `Notion page` | [screen](https://mobbin.com/screens/86acc928-4fd2-42fe-8ce4-e91b2658fe34) |
+| `web/editors/notion-web-editors-page-17-5e0de26e-3e6b-4892-9a94-31acb58635e1.webp` | `Notion page` | [screen](https://mobbin.com/screens/5e0de26e-3e6b-4892-9a94-31acb58635e1) |
+| `web/editors/notion-web-editors-page-19-39d9860e-ef56-4eb5-8bcb-d06c0836d866.webp` | `Notion page` | [screen](https://mobbin.com/screens/39d9860e-ef56-4eb5-8bcb-d06c0836d866) |
+| `web/editors/notion-web-editors-page-21-e5b42913-e2f2-4d9c-9b14-2b210a3a2cf3.webp` | `Notion page` | [screen](https://mobbin.com/screens/e5b42913-e2f2-4d9c-9b14-2b210a3a2cf3) |
+| `web/editors/notion-web-editors-page-22-8a6a33e6-ab41-4afb-9e51-dc4f108e39ee.webp` | `Notion page` | [screen](https://mobbin.com/screens/8a6a33e6-ab41-4afb-9e51-dc4f108e39ee) |
+| `web/editors/notion-web-editors-page-23-e9553f06-46ea-4a12-ae98-a7da3dae7a57.webp` | `Notion page` | [screen](https://mobbin.com/screens/e9553f06-46ea-4a12-ae98-a7da3dae7a57) |
+| `web/editors/notion-web-editors-page-24-f496e09a-815b-4c2e-9253-3db3b53db191.webp` | `Notion page` | [screen](https://mobbin.com/screens/f496e09a-815b-4c2e-9253-3db3b53db191) |
+| `web/editors/notion-web-editors-page-25-042e5a4e-5020-4d8a-9881-2cf392a725cd.webp` | `Notion page` | [screen](https://mobbin.com/screens/042e5a4e-5020-4d8a-9881-2cf392a725cd) |
+| `web/editors/notion-web-editors-page-26-6b0f5671-9acd-45c2-bb56-22261949ddbf.webp` | `Notion page` | [screen](https://mobbin.com/screens/6b0f5671-9acd-45c2-bb56-22261949ddbf) |
+| `web/editors/notion-web-editors-page-28-e5546d96-31cf-47fe-984f-cdacb55a01fd.webp` | `Notion page` | [screen](https://mobbin.com/screens/e5546d96-31cf-47fe-984f-cdacb55a01fd) |
+| `web/editors/notion-web-editors-page-29-789e9836-c03b-4fb7-a80e-85a38e06d857.webp` | `Notion page` | [screen](https://mobbin.com/screens/789e9836-c03b-4fb7-a80e-85a38e06d857) |
+| `web/editors/notion-web-editors-page-30-e7603296-81cf-4983-89c2-7bd849892786.webp` | `Notion page` | [screen](https://mobbin.com/screens/e7603296-81cf-4983-89c2-7bd849892786) |
+| `web/editors/notion-web-editors-page-32-69f6637c-0fba-40c5-9504-9c0de6a16d27.webp` | `Notion page` | [screen](https://mobbin.com/screens/69f6637c-0fba-40c5-9504-9c0de6a16d27) |
+| `web/editors/notion-web-editors-page-33-854f8746-db79-4e4e-9659-9af8988aa08f.webp` | `Notion page` | [screen](https://mobbin.com/screens/854f8746-db79-4e4e-9659-9af8988aa08f) |
+| `web/editors/notion-web-editors-page-34-b8778e0e-13d3-49a6-9f01-3680ea66249b.webp` | `Notion page` | [screen](https://mobbin.com/screens/b8778e0e-13d3-49a6-9f01-3680ea66249b) |
 | `web/editors/notion-web-editors-page-history-01-4cc47c52-d4a1-4cef-8405-ef7e06d2d91c.webp` | `Notion page history` | [screen](https://mobbin.com/screens/4cc47c52-d4a1-4cef-8405-ef7e06d2d91c) |
 | `web/editors/notion-web-editors-page-history-02-64fbcfff-f27d-4a3f-9ff0-43a6c6187bbb.webp` | `Notion page history` | [screen](https://mobbin.com/screens/64fbcfff-f27d-4a3f-9ff0-43a6c6187bbb) |
+| `web/editors/notion-web-editors-page-options-01-5e7e723d-8a09-4a0b-ac77-58cd66bce4e5.webp` | `Notion page options menu` | [screen](https://mobbin.com/screens/5e7e723d-8a09-4a0b-ac77-58cd66bce4e5) |
+| `web/editors/notion-web-editors-private-pages-01-6f55a7cb-2468-4a7b-b306-61a31b0f2241.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/6f55a7cb-2468-4a7b-b306-61a31b0f2241) |
+| `web/editors/notion-web-editors-private-pages-22-0df641e3-d047-4712-9479-d491e52d984f.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/0df641e3-d047-4712-9479-d491e52d984f) |
+| `web/editors/notion-web-editors-relation-01-932bb81c-6d25-4521-80bf-ae17aba01f0f.webp` | `Notion relation property` | [screen](https://mobbin.com/screens/932bb81c-6d25-4521-80bf-ae17aba01f0f) |
+| `web/editors/notion-web-editors-relation-02-b95c9bf0-6d2c-489f-814b-c35d192310eb.webp` | `Notion relation property` | [screen](https://mobbin.com/screens/b95c9bf0-6d2c-489f-814b-c35d192310eb) |
+| `web/editors/notion-web-editors-search-02-f8b9e579-2820-4706-80e7-36a7f30d8786.webp` | `Notion search` | [screen](https://mobbin.com/screens/f8b9e579-2820-4706-80e7-36a7f30d8786) |
+| `web/editors/notion-web-editors-search-04-fb444dc7-3d55-4361-8c3a-f23d9d285096.webp` | `Notion search` | [screen](https://mobbin.com/screens/fb444dc7-3d55-4361-8c3a-f23d9d285096) |
+| `web/editors/notion-web-editors-search-11-69fb61ae-341d-4e57-b65c-d27c144777e8.webp` | `Notion search` | [screen](https://mobbin.com/screens/69fb61ae-341d-4e57-b65c-d27c144777e8) |
+| `web/editors/notion-web-editors-side-peek-01-3647446f-f959-4e58-baba-ef7e4f9ab6b0.webp` | `Notion side peek` | [screen](https://mobbin.com/screens/3647446f-f959-4e58-baba-ef7e4f9ab6b0) |
+| `web/editors/notion-web-editors-side-peek-02-e8ed9805-4357-4690-8bfc-9185f37c0a93.webp` | `Notion side peek` | [screen](https://mobbin.com/screens/e8ed9805-4357-4690-8bfc-9185f37c0a93) |
+| `web/editors/notion-web-editors-side-peek-06-780626a3-20f5-4795-ac3b-bdbaef325210.webp` | `Notion side peek` | [screen](https://mobbin.com/screens/780626a3-20f5-4795-ac3b-bdbaef325210) |
+| `web/editors/notion-web-editors-sidebar-01-fa0f3ae6-c4cc-432f-87ba-77e66f63146e.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/fa0f3ae6-c4cc-432f-87ba-77e66f63146e) |
+| `web/editors/notion-web-editors-sidebar-05-4cb25201-e4e1-4446-a1f8-813eba8c43af.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/4cb25201-e4e1-4446-a1f8-813eba8c43af) |
+| `web/editors/notion-web-editors-sidebar-07-91d50cb3-d231-4a5c-9502-575d4fec5eab.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/91d50cb3-d231-4a5c-9502-575d4fec5eab) |
+| `web/editors/notion-web-editors-sidebar-12-c9388934-7f88-4b5c-a22f-bfad8ac38942.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/c9388934-7f88-4b5c-a22f-bfad8ac38942) |
+| `web/editors/notion-web-editors-sidebar-14-5bf17a00-6ed3-43cf-b4a8-aee58f12f35f.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/5bf17a00-6ed3-43cf-b4a8-aee58f12f35f) |
+| `web/editors/notion-web-editors-sidebar-15-9c0c8998-0a70-4bda-89b9-1b43e43751b7.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/9c0c8998-0a70-4bda-89b9-1b43e43751b7) |
+| `web/editors/notion-web-editors-sidebar-16-53285746-8593-4bc2-bc5d-9f39ee7f9044.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/53285746-8593-4bc2-bc5d-9f39ee7f9044) |
+| `web/editors/notion-web-editors-sidebar-17-db708423-a3f6-44f5-85a8-2630b940a599.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/db708423-a3f6-44f5-85a8-2630b940a599) |
+| `web/editors/notion-web-editors-sidebar-19-899cb181-5770-47d2-92c8-332ca9d9a733.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/899cb181-5770-47d2-92c8-332ca9d9a733) |
+| `web/editors/notion-web-editors-sidebar-23-f2dcf700-2fe5-4633-a706-e0391c025432.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/f2dcf700-2fe5-4633-a706-e0391c025432) |
+| `web/editors/notion-web-editors-sidebar-25-ce8877c5-606b-43fd-80c4-d8f6286aaee4.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/ce8877c5-606b-43fd-80c4-d8f6286aaee4) |
+| `web/editors/notion-web-editors-sidebar-26-a7c67122-92ad-48b5-aae6-38c53b3edf8b.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/a7c67122-92ad-48b5-aae6-38c53b3edf8b) |
+| `web/editors/notion-web-editors-sidebar-28-c74751e5-ca94-40e0-92d0-5e4fbb942d14.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/c74751e5-ca94-40e0-92d0-5e4fbb942d14) |
+| `web/editors/notion-web-editors-sidebar-29-5840d7b8-6098-4288-a55f-02f4232fd051.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/5840d7b8-6098-4288-a55f-02f4232fd051) |
 | `web/editors/notion-web-editors-toggle-01-67a8339c-58b2-43e4-8ded-6c003882cdd9.webp` | `Notion toggle block` | [screen](https://mobbin.com/screens/67a8339c-58b2-43e4-8ded-6c003882cdd9) |
-| `web/extra/notion-web-extra-ai-chat-01-f9ac8f67-4813-4e30-9a68-88bbceee49c8.webp` | `Notion AI chat` | [screen](https://mobbin.com/screens/f9ac8f67-4813-4e30-9a68-88bbceee49c8) |
-| `web/extra/notion-web-extra-callout-01-23c7329d-6df7-415b-b1b8-52ac3f536dc5.webp` | `Notion callout block` | [screen](https://mobbin.com/screens/23c7329d-6df7-415b-b1b8-52ac3f536dc5) |
-| `web/extra/notion-web-extra-help-01-0cd9f3ba-5e43-483f-9d6f-00f9aababeaa.webp` | `Notion help center` | [screen](https://mobbin.com/screens/0cd9f3ba-5e43-483f-9d6f-00f9aababeaa) |
-| `web/extra/notion-web-extra-image-block-01-027989fd-c25a-4552-a929-c2bc94f3e5a3.webp` | `Notion image block` | [screen](https://mobbin.com/screens/027989fd-c25a-4552-a929-c2bc94f3e5a3) |
-| `web/extra/notion-web-extra-link-preview-01-83bc0e57-543c-4fda-a646-a26252f1099b.webp` | `Notion link preview` | [screen](https://mobbin.com/screens/83bc0e57-543c-4fda-a646-a26252f1099b) |
-| `web/extra/notion-web-extra-marketing-01-aedea57f-f35d-4fc7-93f3-0a9b5bed5f42.webp` | `Notion landing page` | [screen](https://mobbin.com/screens/aedea57f-f35d-4fc7-93f3-0a9b5bed5f42) |
-| `web/extra/notion-web-extra-marketing-02-3e6a2b3d-3bd8-4fa5-b2b9-d4889b32ebe9.webp` | `Notion landing page` | [screen](https://mobbin.com/screens/3e6a2b3d-3bd8-4fa5-b2b9-d4889b32ebe9) |
-| `web/extra/notion-web-extra-meeting-notes-01-816adf8d-e17f-43d3-bb42-e0a2442cfafe.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/816adf8d-e17f-43d3-bb42-e0a2442cfafe) |
-| `web/extra/notion-web-extra-meeting-notes-02-4891ce58-19b2-4484-be91-6ae675b6b1c3.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/4891ce58-19b2-4484-be91-6ae675b6b1c3) |
-| `web/extra/notion-web-extra-meeting-notes-03-de0a5768-86d1-4daa-ab66-b79e82776fcc.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/de0a5768-86d1-4daa-ab66-b79e82776fcc) |
-| `web/extra/notion-web-extra-meeting-notes-04-c34214cd-f0fa-4b2c-ba7b-e3df1acf5c68.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/c34214cd-f0fa-4b2c-ba7b-e3df1acf5c68) |
-| `web/extra/notion-web-extra-meeting-notes-05-4bea74b8-6734-4303-895e-cb98770d280f.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/4bea74b8-6734-4303-895e-cb98770d280f) |
-| `web/extra/notion-web-extra-meeting-notes-06-4f5455f9-bd96-4d45-ae56-33838f2e4d71.webp` | `Notion meeting notes` | [screen](https://mobbin.com/screens/4f5455f9-bd96-4d45-ae56-33838f2e4d71) |
-| `web/extra/notion-web-extra-sites-01-51cae267-6b32-4e06-b59e-302028fb9ce1.webp` | `Notion sites` | [screen](https://mobbin.com/screens/51cae267-6b32-4e06-b59e-302028fb9ce1) |
+| `web/editors/notion-web-editors-wiki-04-3facb243-64fc-4593-a9f7-23573b392f44.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/3facb243-64fc-4593-a9f7-23573b392f44) |
+| `web/editors/notion-web-editors-wiki-07-1f0fc9bc-fb0c-4787-8c9b-f6a3be5dbe4b.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/1f0fc9bc-fb0c-4787-8c9b-f6a3be5dbe4b) |
+| `web/editors/notion-web-editors-wiki-08-f0cb57d4-fee1-49e5-9028-0847c6a95bcd.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/f0cb57d4-fee1-49e5-9028-0847c6a95bcd) |
+| `web/editors/notion-web-editors-wiki-09-e179bd50-883b-4d9d-8018-e8fb1fbf43a3.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/e179bd50-883b-4d9d-8018-e8fb1fbf43a3) |
+| `web/editors/notion-web-editors-wiki-10-9a1f30e2-c4b9-45d1-92b1-2bc406252559.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/9a1f30e2-c4b9-45d1-92b1-2bc406252559) |
+| `web/editors/notion-web-editors-wiki-17-fbcc8487-5e96-4250-b711-f6168aa3ba15.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/fbcc8487-5e96-4250-b711-f6168aa3ba15) |
+| `web/editors/notion-web-editors-workspace-switcher-04-8289a0ff-9297-4497-823f-2ddd9819eab9.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/8289a0ff-9297-4497-823f-2ddd9819eab9) |
+| `web/editors/notion-web-editors-workspace-switcher-06-e33ad64f-678f-4975-b3eb-1be9da1bd4db.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/e33ad64f-678f-4975-b3eb-1be9da1bd4db) |
+| `web/editors/notion-web-editors-workspace-switcher-07-45a51bbd-c469-4654-bc61-2d2ecafaa79c.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/45a51bbd-c469-4654-bc61-2d2ecafaa79c) |
+| `web/editors/notion-web-editors-workspace-switcher-10-a66a81c9-3fc2-4b92-8f19-0e1f178c798e.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/a66a81c9-3fc2-4b92-8f19-0e1f178c798e) |
+| `web/editors/notion-web-editors-workspace-switcher-13-66993875-5cf8-4310-924a-722d72f32c3b.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/66993875-5cf8-4310-924a-722d72f32c3b) |
+| `web/extra/notion-web-extra-more-menu-04-6a542fc1-91ac-44d1-ba25-23cfda9d0a8d.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/6a542fc1-91ac-44d1-ba25-23cfda9d0a8d) |
+| `web/extra/notion-web-extra-page-08-540ccf92-c1e0-4998-8ade-c5b504441fa6.webp` | `Notion page` | [screen](https://mobbin.com/screens/540ccf92-c1e0-4998-8ade-c5b504441fa6) |
+| `web/extra/notion-web-extra-wiki-05-ef8965c6-72c3-4683-83b3-4b9e0d23e29f.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/ef8965c6-72c3-4683-83b3-4b9e0d23e29f) |
 | `web/flows/accepting-a-suggestion/notion-web-flow-accepting-a-suggestion-01-d159ca21-3df4-4d98-964a-189a5be1ddf3.webp` | flow: Accepting a suggestion | [screen](https://mobbin.com/screens/d159ca21-3df4-4d98-964a-189a5be1ddf3) · [flow](https://mobbin.com/flows/bbda6c3f-0904-4504-a923-ac03f2be068a) |
 | `web/flows/accepting-a-suggestion/notion-web-flow-accepting-a-suggestion-02-a60f2b3c-b22c-4bc6-bc98-19f02a13a905.webp` | flow: Accepting a suggestion | [screen](https://mobbin.com/screens/a60f2b3c-b22c-4bc6-bc98-19f02a13a905) · [flow](https://mobbin.com/flows/bbda6c3f-0904-4504-a923-ac03f2be068a) |
 | `web/flows/accepting-a-suggestion/notion-web-flow-accepting-a-suggestion-03-92c51f39-b156-4369-90d1-8e001f5acad1.webp` | flow: Accepting a suggestion | [screen](https://mobbin.com/screens/92c51f39-b156-4369-90d1-8e001f5acad1) · [flow](https://mobbin.com/flows/bbda6c3f-0904-4504-a923-ac03f2be068a) |
@@ -3306,424 +3533,199 @@ One row per file. "Found by" is the query (screens) or the flow name (flow files
 | `web/flows/workspace-settings/notion-web-flow-workspace-settings-19-23543807-20a8-42e6-b5f4-824e4240a8d9.webp` | flow: Workspace settings | [screen](https://mobbin.com/screens/23543807-20a8-42e6-b5f4-824e4240a8d9) · [flow](https://mobbin.com/flows/5776ad0e-b2c7-4ed2-b07e-54d921157eb6) |
 | `web/flows/workspace-settings/notion-web-flow-workspace-settings-20-2ba64e0c-5cc2-44ea-be20-f08fbc8ac048.webp` | flow: Workspace settings | [screen](https://mobbin.com/screens/2ba64e0c-5cc2-44ea-be20-f08fbc8ac048) · [flow](https://mobbin.com/flows/5776ad0e-b2c7-4ed2-b07e-54d921157eb6) |
 | `web/flows/workspace-settings/notion-web-flow-workspace-settings-21-40cb45c6-983a-4d52-aaba-ed8a7659cd5b.webp` | flow: Workspace settings | [screen](https://mobbin.com/screens/40cb45c6-983a-4d52-aaba-ed8a7659cd5b) · [flow](https://mobbin.com/flows/5776ad0e-b2c7-4ed2-b07e-54d921157eb6) |
-| `web/menus/notion-web-menus-menu-01-78e7f802-2ece-4893-8542-90fe84170ce8.webp` | `Notion menu` | [screen](https://mobbin.com/screens/78e7f802-2ece-4893-8542-90fe84170ce8) |
-| `web/menus/notion-web-menus-more-menu-01-49ebf525-3275-423a-9dda-725fdb0c1d68.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/49ebf525-3275-423a-9dda-725fdb0c1d68) |
-| `web/menus/notion-web-menus-more-menu-02-7adbbfc8-75aa-484d-b736-f91969faa01c.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/7adbbfc8-75aa-484d-b736-f91969faa01c) |
-| `web/menus/notion-web-menus-more-menu-03-8aff7e5c-7473-4965-807f-92cb8d55eba2.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/8aff7e5c-7473-4965-807f-92cb8d55eba2) |
-| `web/menus/notion-web-menus-more-menu-04-6a542fc1-91ac-44d1-ba25-23cfda9d0a8d.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/6a542fc1-91ac-44d1-ba25-23cfda9d0a8d) |
-| `web/menus/notion-web-menus-more-menu-05-09777bcb-7748-472e-9801-2b411d4bca6f.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/09777bcb-7748-472e-9801-2b411d4bca6f) |
-| `web/menus/notion-web-menus-more-menu-06-878083d9-f5bf-4a48-80c4-5fb59814524d.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/878083d9-f5bf-4a48-80c4-5fb59814524d) |
-| `web/menus/notion-web-menus-page-options-01-5e7e723d-8a09-4a0b-ac77-58cd66bce4e5.webp` | `Notion page options menu` | [screen](https://mobbin.com/screens/5e7e723d-8a09-4a0b-ac77-58cd66bce4e5) |
-| `web/navigation/notion-web-navigation-breadcrumbs-01-a464a775-3c8b-47bb-b081-1aa75595639e.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/a464a775-3c8b-47bb-b081-1aa75595639e) |
-| `web/navigation/notion-web-navigation-breadcrumbs-02-037aecf3-f55c-4932-ae84-a14dfba74227.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/037aecf3-f55c-4932-ae84-a14dfba74227) |
-| `web/navigation/notion-web-navigation-breadcrumbs-03-d845db8f-ec76-45c7-a98f-37835280bf37.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/d845db8f-ec76-45c7-a98f-37835280bf37) |
-| `web/navigation/notion-web-navigation-breadcrumbs-04-f45a639a-28e6-4a02-82a4-ccbe15e5bc13.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/f45a639a-28e6-4a02-82a4-ccbe15e5bc13) |
-| `web/navigation/notion-web-navigation-breadcrumbs-05-f9b9cd0f-383d-45c0-af2f-893c1b5e612d.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/f9b9cd0f-383d-45c0-af2f-893c1b5e612d) |
-| `web/navigation/notion-web-navigation-breadcrumbs-06-53a4dce8-3423-4813-9e46-d36b5847ff80.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/53a4dce8-3423-4813-9e46-d36b5847ff80) |
-| `web/navigation/notion-web-navigation-breadcrumbs-07-8ffe347d-1e78-4524-bbaf-a1af66841366.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/8ffe347d-1e78-4524-bbaf-a1af66841366) |
-| `web/navigation/notion-web-navigation-breadcrumbs-08-f1c0cbe0-4db7-4edd-b7b6-581ebe9fedc9.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/f1c0cbe0-4db7-4edd-b7b6-581ebe9fedc9) |
-| `web/navigation/notion-web-navigation-breadcrumbs-09-daa02b84-d359-4df5-8a11-7c969de5abce.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/daa02b84-d359-4df5-8a11-7c969de5abce) |
-| `web/navigation/notion-web-navigation-breadcrumbs-10-bd93b9a2-7e96-4cbf-bf01-d9a25f258a72.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/bd93b9a2-7e96-4cbf-bf01-d9a25f258a72) |
-| `web/navigation/notion-web-navigation-breadcrumbs-11-931e370b-de32-4fa8-b245-85150ce159ab.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/931e370b-de32-4fa8-b245-85150ce159ab) |
-| `web/navigation/notion-web-navigation-breadcrumbs-12-efb1d927-14b6-44f0-a098-8bae0a2083dc.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/efb1d927-14b6-44f0-a098-8bae0a2083dc) |
-| `web/navigation/notion-web-navigation-breadcrumbs-13-ef1b77fc-345b-4e4e-ba0f-cb3310e88dcb.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/ef1b77fc-345b-4e4e-ba0f-cb3310e88dcb) |
-| `web/navigation/notion-web-navigation-breadcrumbs-14-2d0fd0b0-b97a-40ec-ae1d-ec8d9141b49c.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/2d0fd0b0-b97a-40ec-ae1d-ec8d9141b49c) |
-| `web/navigation/notion-web-navigation-breadcrumbs-15-543cdd5e-8674-49e9-9d66-cb2606f4fbfc.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/543cdd5e-8674-49e9-9d66-cb2606f4fbfc) |
-| `web/navigation/notion-web-navigation-breadcrumbs-16-b1c3f1e1-f9f0-45b0-942b-d7b5d48a7066.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/b1c3f1e1-f9f0-45b0-942b-d7b5d48a7066) |
-| `web/navigation/notion-web-navigation-breadcrumbs-17-74b3a02c-d1f3-4631-9bcf-593c8f4c44fe.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/74b3a02c-d1f3-4631-9bcf-593c8f4c44fe) |
-| `web/navigation/notion-web-navigation-breadcrumbs-18-e4bba6ab-9b19-4bb4-b66b-8f8d37d066cf.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/e4bba6ab-9b19-4bb4-b66b-8f8d37d066cf) |
-| `web/navigation/notion-web-navigation-breadcrumbs-19-ff1d684c-08e6-454d-af4c-f0d0d57e6308.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/ff1d684c-08e6-454d-af4c-f0d0d57e6308) |
+| `web/marketing/notion-web-marketing-breadcrumbs-09-daa02b84-d359-4df5-8a11-7c969de5abce.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/daa02b84-d359-4df5-8a11-7c969de5abce) |
+| `web/marketing/notion-web-marketing-breadcrumbs-10-bd93b9a2-7e96-4cbf-bf01-d9a25f258a72.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/bd93b9a2-7e96-4cbf-bf01-d9a25f258a72) |
+| `web/marketing/notion-web-marketing-breadcrumbs-11-931e370b-de32-4fa8-b245-85150ce159ab.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/931e370b-de32-4fa8-b245-85150ce159ab) |
+| `web/marketing/notion-web-marketing-breadcrumbs-13-ef1b77fc-345b-4e4e-ba0f-cb3310e88dcb.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/ef1b77fc-345b-4e4e-ba0f-cb3310e88dcb) |
+| `web/marketing/notion-web-marketing-breadcrumbs-17-74b3a02c-d1f3-4631-9bcf-593c8f4c44fe.webp` | `Notion breadcrumb top bar` | [screen](https://mobbin.com/screens/74b3a02c-d1f3-4631-9bcf-593c8f4c44fe) |
+| `web/marketing/notion-web-marketing-database-template-01-db686263-c5af-44cb-b9db-d1b8727d2616.webp` | `Notion database template` | [screen](https://mobbin.com/screens/db686263-c5af-44cb-b9db-d1b8727d2616) |
+| `web/marketing/notion-web-marketing-database-template-03-68756656-cc5e-448f-a8d1-e2235d91118e.webp` | `Notion database template` | [screen](https://mobbin.com/screens/68756656-cc5e-448f-a8d1-e2235d91118e) |
+| `web/marketing/notion-web-marketing-database-template-04-4d94f414-f33f-4e7b-adf3-e8f58285ffe0.webp` | `Notion database template` | [screen](https://mobbin.com/screens/4d94f414-f33f-4e7b-adf3-e8f58285ffe0) |
+| `web/marketing/notion-web-marketing-favorites-10-9e23224f-ff17-4016-841c-8641f42ea1f0.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/9e23224f-ff17-4016-841c-8641f42ea1f0) |
+| `web/marketing/notion-web-marketing-gallery-01-9232120f-819a-4e89-9f15-0aeee7d849c6.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/9232120f-819a-4e89-9f15-0aeee7d849c6) |
+| `web/marketing/notion-web-marketing-gallery-02-5c2b1f52-eb69-48c2-8ae3-a4bb9169d9d3.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/5c2b1f52-eb69-48c2-8ae3-a4bb9169d9d3) |
+| `web/marketing/notion-web-marketing-gallery-03-270a12be-4dbb-4eaf-9ae3-6fa704925cab.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/270a12be-4dbb-4eaf-9ae3-6fa704925cab) |
+| `web/marketing/notion-web-marketing-gallery-05-44453ef6-a197-4976-97ef-dbd753bb7559.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/44453ef6-a197-4976-97ef-dbd753bb7559) |
+| `web/marketing/notion-web-marketing-gallery-06-fed35388-895f-480a-b2fd-0dc0a671b266.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/fed35388-895f-480a-b2fd-0dc0a671b266) |
+| `web/marketing/notion-web-marketing-gallery-07-ebdc364d-4eba-40f7-97e1-d28e1a61bae8.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/ebdc364d-4eba-40f7-97e1-d28e1a61bae8) |
+| `web/marketing/notion-web-marketing-list-01-d6621c97-f36f-469d-ab54-77d753630d4d.webp` | `Notion list view` | [screen](https://mobbin.com/screens/d6621c97-f36f-469d-ab54-77d753630d4d) |
+| `web/marketing/notion-web-marketing-marketing-02-3e6a2b3d-3bd8-4fa5-b2b9-d4889b32ebe9.webp` | `Notion landing page` | [screen](https://mobbin.com/screens/3e6a2b3d-3bd8-4fa5-b2b9-d4889b32ebe9) |
+| `web/marketing/notion-web-marketing-onboarding-04-0351bc1d-fb88-403e-b249-85dc6a2f3b72.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/0351bc1d-fb88-403e-b249-85dc6a2f3b72) |
+| `web/marketing/notion-web-marketing-search-03-e64600ed-50cd-401b-b52b-a32b66f8f2f3.webp` | `Notion search` | [screen](https://mobbin.com/screens/e64600ed-50cd-401b-b52b-a32b66f8f2f3) |
+| `web/marketing/notion-web-marketing-search-06-6be13a4a-ee5d-49c2-9a98-9e3de78b63a0.webp` | `Notion search` | [screen](https://mobbin.com/screens/6be13a4a-ee5d-49c2-9a98-9e3de78b63a0) |
+| `web/marketing/notion-web-marketing-search-07-cfa500e0-8651-4217-8004-836d71f06c69.webp` | `Notion search` | [screen](https://mobbin.com/screens/cfa500e0-8651-4217-8004-836d71f06c69) |
+| `web/marketing/notion-web-marketing-search-09-5aec445a-35fa-40de-9b65-753f36bb41a5.webp` | `Notion search` | [screen](https://mobbin.com/screens/5aec445a-35fa-40de-9b65-753f36bb41a5) |
+| `web/marketing/notion-web-marketing-sites-01-51cae267-6b32-4e06-b59e-302028fb9ce1.webp` | `Notion sites` | [screen](https://mobbin.com/screens/51cae267-6b32-4e06-b59e-302028fb9ce1) |
+| `web/menus/notion-web-menus-home-20-de444c91-0c1c-4da3-9165-b57b5c5d07a4.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/de444c91-0c1c-4da3-9165-b57b5c5d07a4) |
+| `web/menus/notion-web-menus-sidebar-02-69be6087-ffb8-42f6-b549-49adb1cae5c7.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/69be6087-ffb8-42f6-b549-49adb1cae5c7) |
+| `web/menus/notion-web-menus-sidebar-11-1574fef0-d39a-405f-8215-e5cea83b0172.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/1574fef0-d39a-405f-8215-e5cea83b0172) |
 | `web/navigation/notion-web-navigation-favorites-01-3016a8cd-0f3c-442d-b3b5-e8711dd66753.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/3016a8cd-0f3c-442d-b3b5-e8711dd66753) |
-| `web/navigation/notion-web-navigation-favorites-02-96160820-25ad-459e-a5bd-538e96fd6f04.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/96160820-25ad-459e-a5bd-538e96fd6f04) |
-| `web/navigation/notion-web-navigation-favorites-03-6aece4f4-0094-4d4f-b281-511bfa58ca9e.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/6aece4f4-0094-4d4f-b281-511bfa58ca9e) |
-| `web/navigation/notion-web-navigation-favorites-04-dac14735-ff9c-44bc-9acb-71f91712e4dd.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/dac14735-ff9c-44bc-9acb-71f91712e4dd) |
-| `web/navigation/notion-web-navigation-favorites-05-39237dbd-06dc-4bd1-856b-be2a115ab7bc.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/39237dbd-06dc-4bd1-856b-be2a115ab7bc) |
-| `web/navigation/notion-web-navigation-favorites-06-aed88d60-a44c-4aad-8831-2b60cde60bac.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/aed88d60-a44c-4aad-8831-2b60cde60bac) |
-| `web/navigation/notion-web-navigation-favorites-07-7d6c6ffc-ef05-4887-9a5f-7d4e09878a85.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/7d6c6ffc-ef05-4887-9a5f-7d4e09878a85) |
-| `web/navigation/notion-web-navigation-favorites-08-b418691f-d7a1-4faf-8301-87dd4c1aadbb.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/b418691f-d7a1-4faf-8301-87dd4c1aadbb) |
-| `web/navigation/notion-web-navigation-favorites-09-536cd46b-0e91-41e2-adaf-7da374e4587f.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/536cd46b-0e91-41e2-adaf-7da374e4587f) |
-| `web/navigation/notion-web-navigation-favorites-10-9e23224f-ff17-4016-841c-8641f42ea1f0.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/9e23224f-ff17-4016-841c-8641f42ea1f0) |
 | `web/navigation/notion-web-navigation-favorites-11-41ffb1f0-3828-452f-ac0b-520f84322668.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/41ffb1f0-3828-452f-ac0b-520f84322668) |
-| `web/navigation/notion-web-navigation-favorites-12-11cf6a93-dc32-4bb6-90e7-74e28389d6e0.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/11cf6a93-dc32-4bb6-90e7-74e28389d6e0) |
-| `web/navigation/notion-web-navigation-favorites-13-ad65c5dd-4172-4ce3-9c17-57637e4be840.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/ad65c5dd-4172-4ce3-9c17-57637e4be840) |
-| `web/navigation/notion-web-navigation-favorites-14-792336a7-3064-4872-95c3-4387f9b344d0.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/792336a7-3064-4872-95c3-4387f9b344d0) |
-| `web/navigation/notion-web-navigation-favorites-15-cd57a30b-df17-486f-ad11-bb305b444858.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/cd57a30b-df17-486f-ad11-bb305b444858) |
-| `web/navigation/notion-web-navigation-favorites-16-88f5836e-3788-4707-9da3-7fcbb0d0e7bb.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/88f5836e-3788-4707-9da3-7fcbb0d0e7bb) |
-| `web/navigation/notion-web-navigation-favorites-17-1692b8c9-f461-41a1-b3b7-4e1cab72ffc2.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/1692b8c9-f461-41a1-b3b7-4e1cab72ffc2) |
-| `web/navigation/notion-web-navigation-favorites-18-795eb9b5-5985-4a31-b9bb-ba1919448c40.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/795eb9b5-5985-4a31-b9bb-ba1919448c40) |
-| `web/navigation/notion-web-navigation-favorites-19-69069dd6-401b-48eb-940d-cea4b951adac.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/69069dd6-401b-48eb-940d-cea4b951adac) |
-| `web/navigation/notion-web-navigation-favorites-20-84d4508b-80cb-403c-bea7-b69551aa4d19.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/84d4508b-80cb-403c-bea7-b69551aa4d19) |
-| `web/navigation/notion-web-navigation-favorites-21-90d0883c-3558-40ed-a5e5-319f3308acee.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/90d0883c-3558-40ed-a5e5-319f3308acee) |
-| `web/navigation/notion-web-navigation-favorites-22-d144e5ae-54eb-49cf-8590-6fcc704e0664.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/d144e5ae-54eb-49cf-8590-6fcc704e0664) |
-| `web/navigation/notion-web-navigation-favorites-23-111be222-6003-43a2-a2fd-4c8e1c8caac9.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/111be222-6003-43a2-a2fd-4c8e1c8caac9) |
 | `web/navigation/notion-web-navigation-favorites-24-17246d68-439e-4fc9-8fed-ddf71b05e034.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/17246d68-439e-4fc9-8fed-ddf71b05e034) |
-| `web/navigation/notion-web-navigation-favorites-25-974d66d2-eeb3-434f-b904-1e58baa8659a.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/974d66d2-eeb3-434f-b904-1e58baa8659a) |
 | `web/navigation/notion-web-navigation-favorites-26-efba4a5c-d108-4388-9210-12a819599453.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/efba4a5c-d108-4388-9210-12a819599453) |
-| `web/navigation/notion-web-navigation-favorites-27-1d24ce90-eaf5-47e1-b46a-5ff8591146f0.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/1d24ce90-eaf5-47e1-b46a-5ff8591146f0) |
-| `web/navigation/notion-web-navigation-favorites-28-557dfb84-ff40-425d-b473-f0487e6cfc3e.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/557dfb84-ff40-425d-b473-f0487e6cfc3e) |
-| `web/navigation/notion-web-navigation-favorites-29-6c6b018e-3227-461b-8426-4bdb502bc2e1.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/6c6b018e-3227-461b-8426-4bdb502bc2e1) |
-| `web/navigation/notion-web-navigation-favorites-30-bb37c98b-4f9a-4fef-967c-40225bc2e9b6.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/bb37c98b-4f9a-4fef-967c-40225bc2e9b6) |
-| `web/navigation/notion-web-navigation-favorites-31-e3ebbca9-048c-4025-931e-3d4038ef82e5.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/e3ebbca9-048c-4025-931e-3d4038ef82e5) |
-| `web/navigation/notion-web-navigation-favorites-32-4acb3a13-ddf8-4b60-9eae-e6ade2cc4dd3.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/4acb3a13-ddf8-4b60-9eae-e6ade2cc4dd3) |
-| `web/navigation/notion-web-navigation-favorites-33-d89efb14-f7fd-4d1f-8395-1bfda1c7e6ae.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/d89efb14-f7fd-4d1f-8395-1bfda1c7e6ae) |
-| `web/navigation/notion-web-navigation-favorites-34-6fe5cbd1-6cf3-4440-a633-174aeb1522ad.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/6fe5cbd1-6cf3-4440-a633-174aeb1522ad) |
-| `web/navigation/notion-web-navigation-home-01-2dccc406-a707-4d26-9453-9a8eeb2d4acb.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/2dccc406-a707-4d26-9453-9a8eeb2d4acb) |
-| `web/navigation/notion-web-navigation-home-02-41f32a46-0aa4-4205-a6ab-627135308029.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/41f32a46-0aa4-4205-a6ab-627135308029) |
-| `web/navigation/notion-web-navigation-home-03-bbe96eb7-1f0c-4cb4-b64b-6947abec45a8.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/bbe96eb7-1f0c-4cb4-b64b-6947abec45a8) |
-| `web/navigation/notion-web-navigation-home-04-03c9e00d-9d01-4f50-90e4-04f969e0442e.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/03c9e00d-9d01-4f50-90e4-04f969e0442e) |
-| `web/navigation/notion-web-navigation-home-05-a8c412e9-2b79-42db-8795-117e568e1dd5.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/a8c412e9-2b79-42db-8795-117e568e1dd5) |
-| `web/navigation/notion-web-navigation-home-06-476ee6f7-704c-47f8-bb08-50ba4e7438d2.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/476ee6f7-704c-47f8-bb08-50ba4e7438d2) |
-| `web/navigation/notion-web-navigation-home-07-e26db240-0cba-4c1e-bab0-acb2faeb4b56.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/e26db240-0cba-4c1e-bab0-acb2faeb4b56) |
-| `web/navigation/notion-web-navigation-home-08-ea2779fd-e45e-4c16-b01d-044722f9b255.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/ea2779fd-e45e-4c16-b01d-044722f9b255) |
-| `web/navigation/notion-web-navigation-home-09-2d5a61ef-ab49-49e3-8299-7f683c03fa17.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/2d5a61ef-ab49-49e3-8299-7f683c03fa17) |
-| `web/navigation/notion-web-navigation-home-10-0a23cec5-a009-4847-bcef-33467e2e0b20.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/0a23cec5-a009-4847-bcef-33467e2e0b20) |
-| `web/navigation/notion-web-navigation-home-11-d2d83cc0-5446-48da-85b2-110057095c9d.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/d2d83cc0-5446-48da-85b2-110057095c9d) |
-| `web/navigation/notion-web-navigation-home-12-2c07206e-b7b4-4631-8d6a-03fa62ac66fa.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/2c07206e-b7b4-4631-8d6a-03fa62ac66fa) |
-| `web/navigation/notion-web-navigation-home-13-56f376d3-6a51-429c-a008-a37f968b4679.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/56f376d3-6a51-429c-a008-a37f968b4679) |
-| `web/navigation/notion-web-navigation-home-14-729d268e-6a55-4f38-9ca1-d4caef8c5c48.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/729d268e-6a55-4f38-9ca1-d4caef8c5c48) |
 | `web/navigation/notion-web-navigation-home-15-2d3fa125-ebc1-4b23-b3d2-86bc778b9da0.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/2d3fa125-ebc1-4b23-b3d2-86bc778b9da0) |
-| `web/navigation/notion-web-navigation-home-16-6f460796-c4d9-4d90-8694-f7d7346f2b78.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/6f460796-c4d9-4d90-8694-f7d7346f2b78) |
-| `web/navigation/notion-web-navigation-home-17-a77baf41-df18-476f-aa48-c1023269bb8c.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/a77baf41-df18-476f-aa48-c1023269bb8c) |
-| `web/navigation/notion-web-navigation-home-18-bb44b319-bbfe-4dd7-a199-dcc3d6143fe5.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/bb44b319-bbfe-4dd7-a199-dcc3d6143fe5) |
-| `web/navigation/notion-web-navigation-home-19-8859ba39-fc79-499d-a756-0085c2bf502f.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/8859ba39-fc79-499d-a756-0085c2bf502f) |
-| `web/navigation/notion-web-navigation-home-20-de444c91-0c1c-4da3-9165-b57b5c5d07a4.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/de444c91-0c1c-4da3-9165-b57b5c5d07a4) |
-| `web/navigation/notion-web-navigation-home-21-57363461-9d4f-4b99-869e-4cc8216f3b20.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/57363461-9d4f-4b99-869e-4cc8216f3b20) |
-| `web/navigation/notion-web-navigation-home-22-9a9b1268-e0d5-4873-900b-aa75e9a81177.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/9a9b1268-e0d5-4873-900b-aa75e9a81177) |
 | `web/navigation/notion-web-navigation-home-23-3c1cca91-ee25-43ab-86a4-9d5f450a8197.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/3c1cca91-ee25-43ab-86a4-9d5f450a8197) |
 | `web/navigation/notion-web-navigation-home-24-eaeb359a-5eb0-44eb-b4ae-f163be46a8f8.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/eaeb359a-5eb0-44eb-b4ae-f163be46a8f8) |
 | `web/navigation/notion-web-navigation-home-25-7d92c438-ee81-4dda-8eaf-f7ee1ffb4ed3.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/7d92c438-ee81-4dda-8eaf-f7ee1ffb4ed3) |
-| `web/navigation/notion-web-navigation-home-26-1f723a3f-92a2-4bbc-a127-3ee266cd2ba3.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/1f723a3f-92a2-4bbc-a127-3ee266cd2ba3) |
-| `web/navigation/notion-web-navigation-home-27-77bf884f-8c9b-478c-a3c0-dfec8d462e80.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/77bf884f-8c9b-478c-a3c0-dfec8d462e80) |
-| `web/navigation/notion-web-navigation-home-28-aa36caaa-ea00-43b4-9d9a-77039d5dade6.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/aa36caaa-ea00-43b4-9d9a-77039d5dade6) |
-| `web/navigation/notion-web-navigation-home-29-7e25606f-869e-4867-8400-cfac83d7e1b1.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/7e25606f-869e-4867-8400-cfac83d7e1b1) |
-| `web/navigation/notion-web-navigation-home-30-b6260a73-990c-4e6e-80d6-e4aa05d804cf.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/b6260a73-990c-4e6e-80d6-e4aa05d804cf) |
-| `web/navigation/notion-web-navigation-home-31-6ad9e8d1-ebba-4221-9934-9e82ae321802.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/6ad9e8d1-ebba-4221-9934-9e82ae321802) |
 | `web/navigation/notion-web-navigation-home-32-0b8e7f83-f2a1-4498-b721-b06be74c78f5.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/0b8e7f83-f2a1-4498-b721-b06be74c78f5) |
-| `web/navigation/notion-web-navigation-home-33-176a7fae-1de4-4d50-a28b-cb14eef8b18b.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/176a7fae-1de4-4d50-a28b-cb14eef8b18b) |
-| `web/navigation/notion-web-navigation-home-34-08414c0b-b6e0-4be9-b43d-8157c7b3bc8f.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/08414c0b-b6e0-4be9-b43d-8157c7b3bc8f) |
 | `web/navigation/notion-web-navigation-home-35-d32a48bc-bcce-4ffa-85f0-04e12508b41e.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/d32a48bc-bcce-4ffa-85f0-04e12508b41e) |
-| `web/navigation/notion-web-navigation-home-36-96596a0d-32a0-4dcc-aa99-573ff6e90b64.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/96596a0d-32a0-4dcc-aa99-573ff6e90b64) |
-| `web/navigation/notion-web-navigation-home-37-3e4abb15-6065-40ad-8b59-a8bc1bcfe857.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/3e4abb15-6065-40ad-8b59-a8bc1bcfe857) |
-| `web/navigation/notion-web-navigation-home-38-f13ba85e-b673-4583-a5a6-164a0b7228ab.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/f13ba85e-b673-4583-a5a6-164a0b7228ab) |
 | `web/navigation/notion-web-navigation-home-39-fa7a1586-e22b-433e-aaca-333b90f495ac.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/fa7a1586-e22b-433e-aaca-333b90f495ac) |
 | `web/navigation/notion-web-navigation-home-40-ef26f2c9-b9db-42ff-b4d8-64ff27490b93.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/ef26f2c9-b9db-42ff-b4d8-64ff27490b93) |
 | `web/navigation/notion-web-navigation-home-41-eb0b0242-8e97-41c0-b2b0-f7446a6f7b3c.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/eb0b0242-8e97-41c0-b2b0-f7446a6f7b3c) |
-| `web/navigation/notion-web-navigation-home-42-f49ef73e-f5ea-4da3-b785-f9c768aaca1b.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/f49ef73e-f5ea-4da3-b785-f9c768aaca1b) |
-| `web/navigation/notion-web-navigation-home-43-86ebd0a0-d8a9-4022-adb7-d3cd9bc927c9.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/86ebd0a0-d8a9-4022-adb7-d3cd9bc927c9) |
-| `web/navigation/notion-web-navigation-home-44-ce2c247e-ff27-4d79-b379-208a662de3b1.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/ce2c247e-ff27-4d79-b379-208a662de3b1) |
-| `web/navigation/notion-web-navigation-home-45-a6cb612c-0b41-4a21-afb5-761f4512a48d.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/a6cb612c-0b41-4a21-afb5-761f4512a48d) |
-| `web/navigation/notion-web-navigation-inbox-01-e7b668c8-648a-46c6-a32a-e65cd4c31dd7.webp` | `Notion inbox notifications` | [screen](https://mobbin.com/screens/e7b668c8-648a-46c6-a32a-e65cd4c31dd7) |
-| `web/navigation/notion-web-navigation-private-pages-01-6f55a7cb-2468-4a7b-b306-61a31b0f2241.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/6f55a7cb-2468-4a7b-b306-61a31b0f2241) |
-| `web/navigation/notion-web-navigation-private-pages-02-bf9d807b-0267-4aa3-ae19-8e99f55d0751.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/bf9d807b-0267-4aa3-ae19-8e99f55d0751) |
-| `web/navigation/notion-web-navigation-private-pages-03-d533b91f-619b-4a96-adb9-e23c0f98a98e.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/d533b91f-619b-4a96-adb9-e23c0f98a98e) |
-| `web/navigation/notion-web-navigation-private-pages-04-b8c55702-23b9-4c60-b8d4-5212cb000bbe.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/b8c55702-23b9-4c60-b8d4-5212cb000bbe) |
-| `web/navigation/notion-web-navigation-private-pages-05-e91c0e04-d5b9-474b-90f7-ecab1caf8200.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/e91c0e04-d5b9-474b-90f7-ecab1caf8200) |
-| `web/navigation/notion-web-navigation-private-pages-06-c10168a0-730b-4a72-933c-22614ff4c648.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/c10168a0-730b-4a72-933c-22614ff4c648) |
-| `web/navigation/notion-web-navigation-private-pages-07-b287f274-3f13-4c94-af6b-f4d7790adc26.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/b287f274-3f13-4c94-af6b-f4d7790adc26) |
-| `web/navigation/notion-web-navigation-private-pages-08-e5c936ef-ec6a-40bd-aaaf-7edb2b5e1053.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/e5c936ef-ec6a-40bd-aaaf-7edb2b5e1053) |
-| `web/navigation/notion-web-navigation-private-pages-09-794e8c1c-b6fc-4dde-a06b-a854aa63aa60.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/794e8c1c-b6fc-4dde-a06b-a854aa63aa60) |
-| `web/navigation/notion-web-navigation-private-pages-10-74f733b1-9ec6-4e2a-82aa-ca82a3ddb4bd.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/74f733b1-9ec6-4e2a-82aa-ca82a3ddb4bd) |
-| `web/navigation/notion-web-navigation-private-pages-11-e38b5407-ffab-4687-9307-f98de674919a.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/e38b5407-ffab-4687-9307-f98de674919a) |
-| `web/navigation/notion-web-navigation-private-pages-12-dc810fa9-2527-4ecf-ae95-de35661f7873.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/dc810fa9-2527-4ecf-ae95-de35661f7873) |
-| `web/navigation/notion-web-navigation-private-pages-13-24044826-a40f-440e-92f8-d4e8ab1190c2.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/24044826-a40f-440e-92f8-d4e8ab1190c2) |
-| `web/navigation/notion-web-navigation-private-pages-14-827aab71-32c6-4100-a697-f98b5d7ef092.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/827aab71-32c6-4100-a697-f98b5d7ef092) |
-| `web/navigation/notion-web-navigation-private-pages-15-ef4aba01-ca49-4180-9ef3-96c3fc6be970.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/ef4aba01-ca49-4180-9ef3-96c3fc6be970) |
-| `web/navigation/notion-web-navigation-private-pages-16-91532c16-c4c5-44e9-84d3-42a06ce34f47.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/91532c16-c4c5-44e9-84d3-42a06ce34f47) |
-| `web/navigation/notion-web-navigation-private-pages-17-293d3145-22c7-4d16-9394-709dba74b6f7.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/293d3145-22c7-4d16-9394-709dba74b6f7) |
-| `web/navigation/notion-web-navigation-private-pages-18-76afe9db-3899-4fb6-80e2-f06b007d37b6.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/76afe9db-3899-4fb6-80e2-f06b007d37b6) |
-| `web/navigation/notion-web-navigation-private-pages-19-054a9436-afe5-4c41-a308-3f79a8baf0d1.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/054a9436-afe5-4c41-a308-3f79a8baf0d1) |
-| `web/navigation/notion-web-navigation-private-pages-20-a18501a9-c8e0-499c-95ac-4dccbf365163.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/a18501a9-c8e0-499c-95ac-4dccbf365163) |
-| `web/navigation/notion-web-navigation-private-pages-21-68b45618-e0bc-487f-8370-3ec16faa79c0.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/68b45618-e0bc-487f-8370-3ec16faa79c0) |
-| `web/navigation/notion-web-navigation-private-pages-22-0df641e3-d047-4712-9479-d491e52d984f.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/0df641e3-d047-4712-9479-d491e52d984f) |
-| `web/navigation/notion-web-navigation-private-pages-23-22e19537-5895-44e4-b3be-2f29b1f1d7e9.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/22e19537-5895-44e4-b3be-2f29b1f1d7e9) |
-| `web/navigation/notion-web-navigation-private-pages-24-18d74f1c-b537-43e7-adec-0bbe0d0b96a4.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/18d74f1c-b537-43e7-adec-0bbe0d0b96a4) |
-| `web/navigation/notion-web-navigation-private-pages-25-427fb870-9f77-4075-b78b-d465925bcbc8.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/427fb870-9f77-4075-b78b-d465925bcbc8) |
-| `web/navigation/notion-web-navigation-private-pages-26-2570c72a-06a7-464d-be3b-856e19ee263d.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/2570c72a-06a7-464d-be3b-856e19ee263d) |
-| `web/navigation/notion-web-navigation-private-pages-27-075eb7ad-74fd-4b3d-a57f-84068e572596.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/075eb7ad-74fd-4b3d-a57f-84068e572596) |
-| `web/navigation/notion-web-navigation-private-pages-28-9909017c-ef46-4364-a2b4-f9c1a656cfdc.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/9909017c-ef46-4364-a2b4-f9c1a656cfdc) |
-| `web/navigation/notion-web-navigation-private-pages-29-854dd489-e050-40d0-8567-05e5a4731aed.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/854dd489-e050-40d0-8567-05e5a4731aed) |
-| `web/navigation/notion-web-navigation-private-pages-30-96246e2c-bfae-4bc1-807d-769e8b09f1c1.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/96246e2c-bfae-4bc1-807d-769e8b09f1c1) |
-| `web/navigation/notion-web-navigation-private-pages-31-9e5e7ddb-6ed5-4d2e-b0ad-9ada4dd4f694.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/9e5e7ddb-6ed5-4d2e-b0ad-9ada4dd4f694) |
-| `web/navigation/notion-web-navigation-private-pages-32-eabf7caa-4c9e-4b56-887e-b3be0dff7f4a.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/eabf7caa-4c9e-4b56-887e-b3be0dff7f4a) |
-| `web/navigation/notion-web-navigation-private-pages-33-28053954-5b3f-44e8-80ae-d958716a5883.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/28053954-5b3f-44e8-80ae-d958716a5883) |
-| `web/navigation/notion-web-navigation-search-01-0ab41735-95f1-4bbc-a3bf-ec15253d2699.webp` | `Notion search` | [screen](https://mobbin.com/screens/0ab41735-95f1-4bbc-a3bf-ec15253d2699) |
-| `web/navigation/notion-web-navigation-search-02-f8b9e579-2820-4706-80e7-36a7f30d8786.webp` | `Notion search` | [screen](https://mobbin.com/screens/f8b9e579-2820-4706-80e7-36a7f30d8786) |
-| `web/navigation/notion-web-navigation-search-03-e64600ed-50cd-401b-b52b-a32b66f8f2f3.webp` | `Notion search` | [screen](https://mobbin.com/screens/e64600ed-50cd-401b-b52b-a32b66f8f2f3) |
-| `web/navigation/notion-web-navigation-search-04-fb444dc7-3d55-4361-8c3a-f23d9d285096.webp` | `Notion search` | [screen](https://mobbin.com/screens/fb444dc7-3d55-4361-8c3a-f23d9d285096) |
-| `web/navigation/notion-web-navigation-search-05-11ade510-9ac7-48fc-91ac-f815d841eb57.webp` | `Notion search` | [screen](https://mobbin.com/screens/11ade510-9ac7-48fc-91ac-f815d841eb57) |
-| `web/navigation/notion-web-navigation-search-06-6be13a4a-ee5d-49c2-9a98-9e3de78b63a0.webp` | `Notion search` | [screen](https://mobbin.com/screens/6be13a4a-ee5d-49c2-9a98-9e3de78b63a0) |
-| `web/navigation/notion-web-navigation-search-07-cfa500e0-8651-4217-8004-836d71f06c69.webp` | `Notion search` | [screen](https://mobbin.com/screens/cfa500e0-8651-4217-8004-836d71f06c69) |
 | `web/navigation/notion-web-navigation-search-08-b1273bdd-d65d-44be-a422-ffc0f601bacd.webp` | `Notion search` | [screen](https://mobbin.com/screens/b1273bdd-d65d-44be-a422-ffc0f601bacd) |
-| `web/navigation/notion-web-navigation-search-09-5aec445a-35fa-40de-9b65-753f36bb41a5.webp` | `Notion search` | [screen](https://mobbin.com/screens/5aec445a-35fa-40de-9b65-753f36bb41a5) |
-| `web/navigation/notion-web-navigation-search-10-f8e60bf2-639b-4edf-9331-294556537eb5.webp` | `Notion search` | [screen](https://mobbin.com/screens/f8e60bf2-639b-4edf-9331-294556537eb5) |
-| `web/navigation/notion-web-navigation-search-11-69fb61ae-341d-4e57-b65c-d27c144777e8.webp` | `Notion search` | [screen](https://mobbin.com/screens/69fb61ae-341d-4e57-b65c-d27c144777e8) |
 | `web/navigation/notion-web-navigation-search-12-1ad05716-44a3-48d5-9150-5780546dd323.webp` | `Notion search` | [screen](https://mobbin.com/screens/1ad05716-44a3-48d5-9150-5780546dd323) |
-| `web/navigation/notion-web-navigation-search-13-1e96fe0b-1406-4833-8779-1d862d64f320.webp` | `Notion search` | [screen](https://mobbin.com/screens/1e96fe0b-1406-4833-8779-1d862d64f320) |
-| `web/navigation/notion-web-navigation-search-14-e4b33dac-a24d-4886-bd95-db57821c97d7.webp` | `Notion search` | [screen](https://mobbin.com/screens/e4b33dac-a24d-4886-bd95-db57821c97d7) |
-| `web/navigation/notion-web-navigation-search-15-2ebb9cd7-d444-40ea-b34b-ec262c0ade60.webp` | `Notion search` | [screen](https://mobbin.com/screens/2ebb9cd7-d444-40ea-b34b-ec262c0ade60) |
-| `web/navigation/notion-web-navigation-search-16-3fc97855-95f0-4876-877d-2e5f3208c2db.webp` | `Notion search` | [screen](https://mobbin.com/screens/3fc97855-95f0-4876-877d-2e5f3208c2db) |
-| `web/navigation/notion-web-navigation-search-17-a084d97f-c100-49d2-8aaf-7e4fff163de5.webp` | `Notion search` | [screen](https://mobbin.com/screens/a084d97f-c100-49d2-8aaf-7e4fff163de5) |
-| `web/navigation/notion-web-navigation-search-18-2f4d60f9-478c-40aa-a0d8-94e2608929a1.webp` | `Notion search` | [screen](https://mobbin.com/screens/2f4d60f9-478c-40aa-a0d8-94e2608929a1) |
-| `web/navigation/notion-web-navigation-search-19-a5f6de01-073b-4448-bc15-7203c9af6f8b.webp` | `Notion search` | [screen](https://mobbin.com/screens/a5f6de01-073b-4448-bc15-7203c9af6f8b) |
-| `web/navigation/notion-web-navigation-search-20-a77b3925-5702-47db-81db-caa255dc8996.webp` | `Notion search` | [screen](https://mobbin.com/screens/a77b3925-5702-47db-81db-caa255dc8996) |
-| `web/navigation/notion-web-navigation-shared-01-1ef5d7e6-0ccb-4997-afb3-d55ba1b56af3.webp` | `Notion shared with me` | [screen](https://mobbin.com/screens/1ef5d7e6-0ccb-4997-afb3-d55ba1b56af3) |
-| `web/navigation/notion-web-navigation-sidebar-01-fa0f3ae6-c4cc-432f-87ba-77e66f63146e.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/fa0f3ae6-c4cc-432f-87ba-77e66f63146e) |
-| `web/navigation/notion-web-navigation-sidebar-02-69be6087-ffb8-42f6-b549-49adb1cae5c7.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/69be6087-ffb8-42f6-b549-49adb1cae5c7) |
-| `web/navigation/notion-web-navigation-sidebar-03-fec09ec2-fba4-45b2-98ad-28e6366bd642.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/fec09ec2-fba4-45b2-98ad-28e6366bd642) |
-| `web/navigation/notion-web-navigation-sidebar-04-0fd15513-eb9f-4407-b3cc-ae27db947a8b.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/0fd15513-eb9f-4407-b3cc-ae27db947a8b) |
-| `web/navigation/notion-web-navigation-sidebar-05-4cb25201-e4e1-4446-a1f8-813eba8c43af.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/4cb25201-e4e1-4446-a1f8-813eba8c43af) |
-| `web/navigation/notion-web-navigation-sidebar-06-a886f554-9037-455b-b9af-562bb12420b0.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/a886f554-9037-455b-b9af-562bb12420b0) |
-| `web/navigation/notion-web-navigation-sidebar-07-91d50cb3-d231-4a5c-9502-575d4fec5eab.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/91d50cb3-d231-4a5c-9502-575d4fec5eab) |
-| `web/navigation/notion-web-navigation-sidebar-08-d138214d-5351-4bd6-a2bb-c7b3648ea6a5.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/d138214d-5351-4bd6-a2bb-c7b3648ea6a5) |
-| `web/navigation/notion-web-navigation-sidebar-09-a535975a-c988-47a1-89fd-a5bf46a0123a.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/a535975a-c988-47a1-89fd-a5bf46a0123a) |
 | `web/navigation/notion-web-navigation-sidebar-10-6573e834-dc7c-42e4-812f-be159ac1f887.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/6573e834-dc7c-42e4-812f-be159ac1f887) |
-| `web/navigation/notion-web-navigation-sidebar-11-1574fef0-d39a-405f-8215-e5cea83b0172.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/1574fef0-d39a-405f-8215-e5cea83b0172) |
-| `web/navigation/notion-web-navigation-sidebar-12-c9388934-7f88-4b5c-a22f-bfad8ac38942.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/c9388934-7f88-4b5c-a22f-bfad8ac38942) |
-| `web/navigation/notion-web-navigation-sidebar-13-84735c71-690d-4cf0-87e1-d6df98e442df.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/84735c71-690d-4cf0-87e1-d6df98e442df) |
-| `web/navigation/notion-web-navigation-sidebar-14-5bf17a00-6ed3-43cf-b4a8-aee58f12f35f.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/5bf17a00-6ed3-43cf-b4a8-aee58f12f35f) |
-| `web/navigation/notion-web-navigation-sidebar-15-9c0c8998-0a70-4bda-89b9-1b43e43751b7.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/9c0c8998-0a70-4bda-89b9-1b43e43751b7) |
-| `web/navigation/notion-web-navigation-sidebar-16-53285746-8593-4bc2-bc5d-9f39ee7f9044.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/53285746-8593-4bc2-bc5d-9f39ee7f9044) |
-| `web/navigation/notion-web-navigation-sidebar-17-db708423-a3f6-44f5-85a8-2630b940a599.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/db708423-a3f6-44f5-85a8-2630b940a599) |
-| `web/navigation/notion-web-navigation-sidebar-18-9cb6b951-3dc3-49f3-a82d-1e7fd7951d72.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/9cb6b951-3dc3-49f3-a82d-1e7fd7951d72) |
-| `web/navigation/notion-web-navigation-sidebar-19-899cb181-5770-47d2-92c8-332ca9d9a733.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/899cb181-5770-47d2-92c8-332ca9d9a733) |
-| `web/navigation/notion-web-navigation-sidebar-20-f3758e63-6b03-49b8-82af-96bd6ee6edbf.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/f3758e63-6b03-49b8-82af-96bd6ee6edbf) |
-| `web/navigation/notion-web-navigation-sidebar-21-9edd43f8-6e14-4c48-8d04-26c1f76e949d.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/9edd43f8-6e14-4c48-8d04-26c1f76e949d) |
-| `web/navigation/notion-web-navigation-sidebar-22-ec1eddc9-37e7-45d3-bf7a-cbb30ab6b38b.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/ec1eddc9-37e7-45d3-bf7a-cbb30ab6b38b) |
-| `web/navigation/notion-web-navigation-sidebar-23-f2dcf700-2fe5-4633-a706-e0391c025432.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/f2dcf700-2fe5-4633-a706-e0391c025432) |
-| `web/navigation/notion-web-navigation-sidebar-24-fb9142f9-c78f-4f2b-82a0-f3e35fb94ec1.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/fb9142f9-c78f-4f2b-82a0-f3e35fb94ec1) |
-| `web/navigation/notion-web-navigation-sidebar-25-ce8877c5-606b-43fd-80c4-d8f6286aaee4.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/ce8877c5-606b-43fd-80c4-d8f6286aaee4) |
-| `web/navigation/notion-web-navigation-sidebar-26-a7c67122-92ad-48b5-aae6-38c53b3edf8b.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/a7c67122-92ad-48b5-aae6-38c53b3edf8b) |
-| `web/navigation/notion-web-navigation-sidebar-27-98a561c2-6276-4f1f-8ae3-156af8e4e0e0.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/98a561c2-6276-4f1f-8ae3-156af8e4e0e0) |
-| `web/navigation/notion-web-navigation-sidebar-28-c74751e5-ca94-40e0-92d0-5e4fbb942d14.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/c74751e5-ca94-40e0-92d0-5e4fbb942d14) |
-| `web/navigation/notion-web-navigation-sidebar-29-5840d7b8-6098-4288-a55f-02f4232fd051.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/5840d7b8-6098-4288-a55f-02f4232fd051) |
-| `web/navigation/notion-web-navigation-sidebar-30-2bff1cce-ab31-4a39-b4ce-c93554c0b799.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/2bff1cce-ab31-4a39-b4ce-c93554c0b799) |
-| `web/navigation/notion-web-navigation-sidebar-31-566fb146-4381-433e-a104-5babae37a003.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/566fb146-4381-433e-a104-5babae37a003) |
-| `web/navigation/notion-web-navigation-sidebar-32-5da9af88-3032-45af-954a-fe8f57d9b09c.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/5da9af88-3032-45af-954a-fe8f57d9b09c) |
-| `web/navigation/notion-web-navigation-sidebar-33-8eb72dab-402b-4e35-9965-c6e0e1a12628.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/8eb72dab-402b-4e35-9965-c6e0e1a12628) |
-| `web/navigation/notion-web-navigation-teamspaces-01-adece65d-977b-418a-b2fd-b101a92d8f21.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/adece65d-977b-418a-b2fd-b101a92d8f21) |
-| `web/navigation/notion-web-navigation-teamspaces-02-46c17681-bc6e-4490-9855-8ae5c3bd6002.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/46c17681-bc6e-4490-9855-8ae5c3bd6002) |
-| `web/navigation/notion-web-navigation-teamspaces-03-eb5ad598-c7c9-4e53-904c-db76cbc94b6e.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/eb5ad598-c7c9-4e53-904c-db76cbc94b6e) |
-| `web/navigation/notion-web-navigation-teamspaces-04-3691d82c-04d3-4e75-bbdd-f9c61baf3972.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/3691d82c-04d3-4e75-bbdd-f9c61baf3972) |
-| `web/navigation/notion-web-navigation-teamspaces-05-0b10f8d0-2acb-4d7f-87f4-0bfd14e463bc.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/0b10f8d0-2acb-4d7f-87f4-0bfd14e463bc) |
-| `web/navigation/notion-web-navigation-teamspaces-06-c089346c-4d77-4b5e-b16c-8abc932dada4.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/c089346c-4d77-4b5e-b16c-8abc932dada4) |
-| `web/navigation/notion-web-navigation-teamspaces-07-e78d4c10-2356-4a90-9021-f3179d6435d2.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/e78d4c10-2356-4a90-9021-f3179d6435d2) |
-| `web/navigation/notion-web-navigation-teamspaces-08-1ccc0cfc-e746-4dbf-8bfb-36c250a042c2.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/1ccc0cfc-e746-4dbf-8bfb-36c250a042c2) |
-| `web/navigation/notion-web-navigation-teamspaces-09-50e47d55-b05e-4035-a953-f325e18a95ff.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/50e47d55-b05e-4035-a953-f325e18a95ff) |
-| `web/navigation/notion-web-navigation-teamspaces-10-f3ddb137-660e-4685-8d9f-aabe7a7bfd61.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/f3ddb137-660e-4685-8d9f-aabe7a7bfd61) |
-| `web/navigation/notion-web-navigation-teamspaces-11-371196b5-5a7b-4387-b676-9e34781f31a7.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/371196b5-5a7b-4387-b676-9e34781f31a7) |
-| `web/navigation/notion-web-navigation-teamspaces-12-bc4d8998-2ffe-4921-bc3f-8b82b08d06b2.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/bc4d8998-2ffe-4921-bc3f-8b82b08d06b2) |
-| `web/navigation/notion-web-navigation-teamspaces-13-74996d4b-da8e-4462-8af2-9a430323573c.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/74996d4b-da8e-4462-8af2-9a430323573c) |
-| `web/navigation/notion-web-navigation-teamspaces-14-ea5ef1bf-11ab-4c3c-9427-925103388942.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/ea5ef1bf-11ab-4c3c-9427-925103388942) |
-| `web/navigation/notion-web-navigation-teamspaces-15-20688f55-9254-4af9-b5ac-df3bfcf467f2.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/20688f55-9254-4af9-b5ac-df3bfcf467f2) |
-| `web/navigation/notion-web-navigation-teamspaces-16-c50943fc-0717-4026-a7d3-22700c066813.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/c50943fc-0717-4026-a7d3-22700c066813) |
-| `web/navigation/notion-web-navigation-teamspaces-17-d090c786-2124-47a7-9263-c60dd49019f3.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/d090c786-2124-47a7-9263-c60dd49019f3) |
-| `web/navigation/notion-web-navigation-teamspaces-18-09019fa8-b8ea-47f0-9441-5ed4e558dadc.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/09019fa8-b8ea-47f0-9441-5ed4e558dadc) |
-| `web/navigation/notion-web-navigation-teamspaces-19-d197acab-453b-4c1b-b46f-87ef523f814d.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/d197acab-453b-4c1b-b46f-87ef523f814d) |
-| `web/navigation/notion-web-navigation-teamspaces-20-c77e81b2-da35-4adc-b499-1c7576522c2b.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/c77e81b2-da35-4adc-b499-1c7576522c2b) |
-| `web/navigation/notion-web-navigation-teamspaces-21-a02b7db0-4885-4c93-b2a2-428335de64f1.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/a02b7db0-4885-4c93-b2a2-428335de64f1) |
-| `web/navigation/notion-web-navigation-teamspaces-22-9d9885cf-a496-458d-b5c9-be8d1453e655.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/9d9885cf-a496-458d-b5c9-be8d1453e655) |
-| `web/navigation/notion-web-navigation-teamspaces-23-6d9641f2-a575-4695-92ef-aea771018018.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/6d9641f2-a575-4695-92ef-aea771018018) |
-| `web/navigation/notion-web-navigation-teamspaces-24-5b3dd0a5-2981-487b-9510-c7d46f221c53.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/5b3dd0a5-2981-487b-9510-c7d46f221c53) |
-| `web/navigation/notion-web-navigation-teamspaces-25-ebecde02-4ae9-4a4f-b234-d62d646d82bc.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/ebecde02-4ae9-4a4f-b234-d62d646d82bc) |
-| `web/navigation/notion-web-navigation-teamspaces-26-36c2dc20-1ed3-4ec0-b2f5-7cf15ae5de81.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/36c2dc20-1ed3-4ec0-b2f5-7cf15ae5de81) |
-| `web/navigation/notion-web-navigation-teamspaces-27-2cb05fc6-258f-485e-bd43-bff095a90cbc.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/2cb05fc6-258f-485e-bd43-bff095a90cbc) |
-| `web/navigation/notion-web-navigation-teamspaces-28-f1724632-5d42-47ff-96cc-7884f9733a00.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/f1724632-5d42-47ff-96cc-7884f9733a00) |
-| `web/navigation/notion-web-navigation-teamspaces-29-6f13a52e-d5d2-427a-b6a0-7318eb1affce.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/6f13a52e-d5d2-427a-b6a0-7318eb1affce) |
-| `web/navigation/notion-web-navigation-teamspaces-30-02910ed9-397e-4784-8db6-9dcb5d119d64.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/02910ed9-397e-4784-8db6-9dcb5d119d64) |
-| `web/navigation/notion-web-navigation-teamspaces-31-b8321456-c846-4ad8-b634-2d1b729e595c.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/b8321456-c846-4ad8-b634-2d1b729e595c) |
-| `web/navigation/notion-web-navigation-teamspaces-32-0b94c9f8-5d71-4d6b-9058-74bf3e9f0b18.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/0b94c9f8-5d71-4d6b-9058-74bf3e9f0b18) |
-| `web/navigation/notion-web-navigation-teamspaces-33-d2078c4c-7a15-46cd-bb3b-f1ff3213241e.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/d2078c4c-7a15-46cd-bb3b-f1ff3213241e) |
-| `web/navigation/notion-web-navigation-teamspaces-34-25dc46e9-2bc6-440e-aa45-01a49bcc2184.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/25dc46e9-2bc6-440e-aa45-01a49bcc2184) |
-| `web/navigation/notion-web-navigation-teamspaces-35-22e09ab9-e9e1-4568-8b58-a8f583d2241e.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/22e09ab9-e9e1-4568-8b58-a8f583d2241e) |
-| `web/navigation/notion-web-navigation-trash-01-6b4b7ad9-e165-4f74-9ea9-d513fe0ec8ae.webp` | `Notion trash` | [screen](https://mobbin.com/screens/6b4b7ad9-e165-4f74-9ea9-d513fe0ec8ae) |
-| `web/navigation/notion-web-navigation-trash-02-b6b3586d-26c8-425e-b5a2-8cde4069b6eb.webp` | `Notion trash` | [screen](https://mobbin.com/screens/b6b3586d-26c8-425e-b5a2-8cde4069b6eb) |
-| `web/navigation/notion-web-navigation-trash-03-80904cb6-9a47-4bd2-ac41-1452de5fc687.webp` | `Notion trash` | [screen](https://mobbin.com/screens/80904cb6-9a47-4bd2-ac41-1452de5fc687) |
-| `web/navigation/notion-web-navigation-trash-04-1ebb0d66-8334-4931-8648-963f7410e71d.webp` | `Notion trash` | [screen](https://mobbin.com/screens/1ebb0d66-8334-4931-8648-963f7410e71d) |
-| `web/navigation/notion-web-navigation-trash-05-eea69fb0-1ce1-4c5f-98f6-b6b331006d28.webp` | `Notion trash` | [screen](https://mobbin.com/screens/eea69fb0-1ce1-4c5f-98f6-b6b331006d28) |
-| `web/navigation/notion-web-navigation-trash-06-88f124f0-3e30-4516-8120-3d132fb4fa45.webp` | `Notion trash` | [screen](https://mobbin.com/screens/88f124f0-3e30-4516-8120-3d132fb4fa45) |
-| `web/navigation/notion-web-navigation-trash-07-f5eb867f-c7b7-4d78-ae37-f0580cb61a3c.webp` | `Notion trash` | [screen](https://mobbin.com/screens/f5eb867f-c7b7-4d78-ae37-f0580cb61a3c) |
-| `web/navigation/notion-web-navigation-trash-08-47531ba0-b958-4934-a28a-7d9dbac0ce94.webp` | `Notion trash` | [screen](https://mobbin.com/screens/47531ba0-b958-4934-a28a-7d9dbac0ce94) |
-| `web/navigation/notion-web-navigation-workspace-switcher-01-d4fd770a-f919-4d8f-b5b3-7191eaa36c07.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/d4fd770a-f919-4d8f-b5b3-7191eaa36c07) |
-| `web/navigation/notion-web-navigation-workspace-switcher-02-83e2d66a-d836-406f-b72d-d5bc20e1d16f.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/83e2d66a-d836-406f-b72d-d5bc20e1d16f) |
-| `web/navigation/notion-web-navigation-workspace-switcher-03-aea403dc-b079-460c-807a-0d4c515a5fb1.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/aea403dc-b079-460c-807a-0d4c515a5fb1) |
-| `web/navigation/notion-web-navigation-workspace-switcher-04-8289a0ff-9297-4497-823f-2ddd9819eab9.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/8289a0ff-9297-4497-823f-2ddd9819eab9) |
-| `web/navigation/notion-web-navigation-workspace-switcher-05-2bf06d40-1b37-44ed-bfc0-f4d42216bc83.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/2bf06d40-1b37-44ed-bfc0-f4d42216bc83) |
-| `web/navigation/notion-web-navigation-workspace-switcher-06-e33ad64f-678f-4975-b3eb-1be9da1bd4db.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/e33ad64f-678f-4975-b3eb-1be9da1bd4db) |
-| `web/navigation/notion-web-navigation-workspace-switcher-07-45a51bbd-c469-4654-bc61-2d2ecafaa79c.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/45a51bbd-c469-4654-bc61-2d2ecafaa79c) |
-| `web/navigation/notion-web-navigation-workspace-switcher-08-0cf4b424-6b2a-40a7-b88e-0143fc81a826.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/0cf4b424-6b2a-40a7-b88e-0143fc81a826) |
-| `web/navigation/notion-web-navigation-workspace-switcher-09-a0aefa76-13df-4622-a136-fb6d8eacc416.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/a0aefa76-13df-4622-a136-fb6d8eacc416) |
-| `web/navigation/notion-web-navigation-workspace-switcher-10-a66a81c9-3fc2-4b92-8f19-0e1f178c798e.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/a66a81c9-3fc2-4b92-8f19-0e1f178c798e) |
-| `web/navigation/notion-web-navigation-workspace-switcher-11-87b3b927-3e49-4732-9837-1520b902cbc8.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/87b3b927-3e49-4732-9837-1520b902cbc8) |
-| `web/navigation/notion-web-navigation-workspace-switcher-12-f58cc5eb-41a3-4f0a-b1e0-57f40d76b786.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/f58cc5eb-41a3-4f0a-b1e0-57f40d76b786) |
-| `web/navigation/notion-web-navigation-workspace-switcher-13-66993875-5cf8-4310-924a-722d72f32c3b.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/66993875-5cf8-4310-924a-722d72f32c3b) |
-| `web/navigation/notion-web-navigation-workspace-switcher-14-121f0606-5b04-4871-8d8a-6335e937ed08.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/121f0606-5b04-4871-8d8a-6335e937ed08) |
-| `web/navigation/notion-web-navigation-workspace-switcher-15-7c8cc7b0-8165-41ca-bbba-3085667ade1d.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/7c8cc7b0-8165-41ca-bbba-3085667ade1d) |
+| `web/onboarding/notion-web-onboarding-billing-01-b46ed765-ae98-4cd1-af53-d385289bbc3e.webp` | `Notion billing upgrade plan` | [screen](https://mobbin.com/screens/b46ed765-ae98-4cd1-af53-d385289bbc3e) |
+| `web/onboarding/notion-web-onboarding-billing-02-dd7ee17a-6f75-451e-9913-4dd61f03062f.webp` | `Notion billing upgrade plan` | [screen](https://mobbin.com/screens/dd7ee17a-6f75-451e-9913-4dd61f03062f) |
+| `web/onboarding/notion-web-onboarding-buttons-01-b9897a10-73de-4b6a-920f-76f290947954.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/b9897a10-73de-4b6a-920f-76f290947954) |
+| `web/onboarding/notion-web-onboarding-buttons-06-dc48a33a-0557-4a66-ba2c-cd8cf7018a49.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/dc48a33a-0557-4a66-ba2c-cd8cf7018a49) |
+| `web/onboarding/notion-web-onboarding-buttons-07-99396b7b-c21d-4cea-8956-4942c2b9aae6.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/99396b7b-c21d-4cea-8956-4942c2b9aae6) |
+| `web/onboarding/notion-web-onboarding-buttons-10-cc865690-f319-4b7b-ba18-ea37ac09e40e.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/cc865690-f319-4b7b-ba18-ea37ac09e40e) |
+| `web/onboarding/notion-web-onboarding-dialog-01-af8c3aec-a932-4988-adde-b5baba6d6a01.webp` | `Notion modal dialog` | [screen](https://mobbin.com/screens/af8c3aec-a932-4988-adde-b5baba6d6a01) |
+| `web/onboarding/notion-web-onboarding-dialog-02-ba93ce22-6dd3-4eda-ace5-0b78d593f8e0.webp` | `Notion modal dialog` | [screen](https://mobbin.com/screens/ba93ce22-6dd3-4eda-ace5-0b78d593f8e0) |
+| `web/onboarding/notion-web-onboarding-form-01-87a061ed-745e-41bd-86c4-66e09907a65f.webp` | `Notion form` | [screen](https://mobbin.com/screens/87a061ed-745e-41bd-86c4-66e09907a65f) |
+| `web/onboarding/notion-web-onboarding-form-02-cfff79d6-aa89-4c6e-83c4-af61c5a8856c.webp` | `Notion form` | [screen](https://mobbin.com/screens/cfff79d6-aa89-4c6e-83c4-af61c5a8856c) |
+| `web/onboarding/notion-web-onboarding-form-03-651bd8c4-cdab-456e-9f19-6f1d7e6b2076.webp` | `Notion form` | [screen](https://mobbin.com/screens/651bd8c4-cdab-456e-9f19-6f1d7e6b2076) |
+| `web/onboarding/notion-web-onboarding-form-04-bee637d3-5f14-4ba1-a829-0663dacf3652.webp` | `Notion form` | [screen](https://mobbin.com/screens/bee637d3-5f14-4ba1-a829-0663dacf3652) |
+| `web/onboarding/notion-web-onboarding-form-05-2b4df644-5878-4aae-b039-f48fbc0a7e9b.webp` | `Notion form` | [screen](https://mobbin.com/screens/2b4df644-5878-4aae-b039-f48fbc0a7e9b) |
+| `web/onboarding/notion-web-onboarding-form-06-4e05f32b-ae4a-44fd-8f3e-75cf288978c3.webp` | `Notion form` | [screen](https://mobbin.com/screens/4e05f32b-ae4a-44fd-8f3e-75cf288978c3) |
+| `web/onboarding/notion-web-onboarding-form-07-b5041174-ea32-4d7b-b32e-040b4b13e615.webp` | `Notion form` | [screen](https://mobbin.com/screens/b5041174-ea32-4d7b-b32e-040b4b13e615) |
+| `web/onboarding/notion-web-onboarding-form-08-ca310dc7-f4ec-4838-9e38-e618a0445aad.webp` | `Notion form` | [screen](https://mobbin.com/screens/ca310dc7-f4ec-4838-9e38-e618a0445aad) |
+| `web/onboarding/notion-web-onboarding-form-10-0cce1200-df08-49f4-805f-6692e6f26b49.webp` | `Notion form` | [screen](https://mobbin.com/screens/0cce1200-df08-49f4-805f-6692e6f26b49) |
+| `web/onboarding/notion-web-onboarding-form-11-3d65078b-6aef-48ac-bea8-db17660ec401.webp` | `Notion form` | [screen](https://mobbin.com/screens/3d65078b-6aef-48ac-bea8-db17660ec401) |
+| `web/onboarding/notion-web-onboarding-form-12-9d2ee6ac-55f3-4ad7-be06-0ef9c8c1320e.webp` | `Notion form` | [screen](https://mobbin.com/screens/9d2ee6ac-55f3-4ad7-be06-0ef9c8c1320e) |
+| `web/onboarding/notion-web-onboarding-form-13-ea9a10ed-4e0d-4c85-a28a-c5c4792964f9.webp` | `Notion form` | [screen](https://mobbin.com/screens/ea9a10ed-4e0d-4c85-a28a-c5c4792964f9) |
+| `web/onboarding/notion-web-onboarding-form-16-9d0f9030-c81c-4cf2-9529-c32b67e08316.webp` | `Notion form` | [screen](https://mobbin.com/screens/9d0f9030-c81c-4cf2-9529-c32b67e08316) |
+| `web/onboarding/notion-web-onboarding-form-21-3934d9e2-d212-4a31-a5bd-a67f120833b9.webp` | `Notion form` | [screen](https://mobbin.com/screens/3934d9e2-d212-4a31-a5bd-a67f120833b9) |
+| `web/onboarding/notion-web-onboarding-form-26-2e595e28-1d50-4c6b-9737-7d88fe423a62.webp` | `Notion form` | [screen](https://mobbin.com/screens/2e595e28-1d50-4c6b-9737-7d88fe423a62) |
+| `web/onboarding/notion-web-onboarding-help-01-0cd9f3ba-5e43-483f-9d6f-00f9aababeaa.webp` | `Notion help center` | [screen](https://mobbin.com/screens/0cd9f3ba-5e43-483f-9d6f-00f9aababeaa) |
+| `web/onboarding/notion-web-onboarding-home-03-bbe96eb7-1f0c-4cb4-b64b-6947abec45a8.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/bbe96eb7-1f0c-4cb4-b64b-6947abec45a8) |
+| `web/onboarding/notion-web-onboarding-home-11-d2d83cc0-5446-48da-85b2-110057095c9d.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/d2d83cc0-5446-48da-85b2-110057095c9d) |
+| `web/onboarding/notion-web-onboarding-home-26-1f723a3f-92a2-4bbc-a127-3ee266cd2ba3.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/1f723a3f-92a2-4bbc-a127-3ee266cd2ba3) |
+| `web/onboarding/notion-web-onboarding-language-01-89ff35d8-d58d-4ea6-8afa-4c1832d36ef9.webp` | `Notion language and region` | [screen](https://mobbin.com/screens/89ff35d8-d58d-4ea6-8afa-4c1832d36ef9) |
+| `web/onboarding/notion-web-onboarding-language-02-1f794a8f-3b4d-4f47-99a5-158c604317dc.webp` | `Notion language and region` | [screen](https://mobbin.com/screens/1f794a8f-3b4d-4f47-99a5-158c604317dc) |
+| `web/onboarding/notion-web-onboarding-more-menu-05-09777bcb-7748-472e-9801-2b411d4bca6f.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/09777bcb-7748-472e-9801-2b411d4bca6f) |
 | `web/onboarding/notion-web-onboarding-onboarding-01-a5950f8e-163d-439f-9a9a-f8ef680474ab.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/a5950f8e-163d-439f-9a9a-f8ef680474ab) |
 | `web/onboarding/notion-web-onboarding-onboarding-02-a8a31a8c-2a1f-4d2d-9aee-ea8bddfac529.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/a8a31a8c-2a1f-4d2d-9aee-ea8bddfac529) |
 | `web/onboarding/notion-web-onboarding-onboarding-03-2a8c0c5d-b189-48bd-ad18-5aeba4645d2c.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/2a8c0c5d-b189-48bd-ad18-5aeba4645d2c) |
-| `web/onboarding/notion-web-onboarding-onboarding-04-0351bc1d-fb88-403e-b249-85dc6a2f3b72.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/0351bc1d-fb88-403e-b249-85dc6a2f3b72) |
-| `web/onboarding/notion-web-onboarding-onboarding-05-a674b30c-c77b-4ff1-83ae-3436e01982af.webp` | `Notion onboarding` | [screen](https://mobbin.com/screens/a674b30c-c77b-4ff1-83ae-3436e01982af) |
+| `web/onboarding/notion-web-onboarding-private-pages-03-d533b91f-619b-4a96-adb9-e23c0f98a98e.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/d533b91f-619b-4a96-adb9-e23c0f98a98e) |
+| `web/onboarding/notion-web-onboarding-private-pages-04-b8c55702-23b9-4c60-b8d4-5212cb000bbe.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/b8c55702-23b9-4c60-b8d4-5212cb000bbe) |
+| `web/onboarding/notion-web-onboarding-private-pages-06-c10168a0-730b-4a72-933c-22614ff4c648.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/c10168a0-730b-4a72-933c-22614ff4c648) |
+| `web/onboarding/notion-web-onboarding-private-pages-07-b287f274-3f13-4c94-af6b-f4d7790adc26.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/b287f274-3f13-4c94-af6b-f4d7790adc26) |
+| `web/onboarding/notion-web-onboarding-private-pages-08-e5c936ef-ec6a-40bd-aaaf-7edb2b5e1053.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/e5c936ef-ec6a-40bd-aaaf-7edb2b5e1053) |
+| `web/onboarding/notion-web-onboarding-private-pages-10-74f733b1-9ec6-4e2a-82aa-ca82a3ddb4bd.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/74f733b1-9ec6-4e2a-82aa-ca82a3ddb4bd) |
+| `web/onboarding/notion-web-onboarding-private-pages-15-ef4aba01-ca49-4180-9ef3-96c3fc6be970.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/ef4aba01-ca49-4180-9ef3-96c3fc6be970) |
+| `web/onboarding/notion-web-onboarding-private-pages-18-76afe9db-3899-4fb6-80e2-f06b007d37b6.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/76afe9db-3899-4fb6-80e2-f06b007d37b6) |
+| `web/onboarding/notion-web-onboarding-private-pages-23-22e19537-5895-44e4-b3be-2f29b1f1d7e9.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/22e19537-5895-44e4-b3be-2f29b1f1d7e9) |
+| `web/onboarding/notion-web-onboarding-private-pages-27-075eb7ad-74fd-4b3d-a57f-84068e572596.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/075eb7ad-74fd-4b3d-a57f-84068e572596) |
+| `web/onboarding/notion-web-onboarding-private-pages-29-854dd489-e050-40d0-8567-05e5a4731aed.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/854dd489-e050-40d0-8567-05e5a4731aed) |
 | `web/onboarding/notion-web-onboarding-signup-01-09c6a582-6d39-42ff-a9ed-b1a7ee39cc8e.webp` | `Notion sign up` | [screen](https://mobbin.com/screens/09c6a582-6d39-42ff-a9ed-b1a7ee39cc8e) |
 | `web/onboarding/notion-web-onboarding-signup-02-0d0a0279-39dc-44c9-bae7-f4cd616336d0.webp` | `Notion sign up` | [screen](https://mobbin.com/screens/0d0a0279-39dc-44c9-bae7-f4cd616336d0) |
 | `web/onboarding/notion-web-onboarding-welcome-01-c237ff84-9781-4b8d-a530-0c0752322c0a.webp` | `Notion welcome` | [screen](https://mobbin.com/screens/c237ff84-9781-4b8d-a530-0c0752322c0a) |
+| `web/onboarding/notion-web-onboarding-workspace-switcher-08-0cf4b424-6b2a-40a7-b88e-0143fc81a826.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/0cf4b424-6b2a-40a7-b88e-0143fc81a826) |
 | `web/settings/notion-web-settings-account-01-7d7a052d-4263-438e-9a9e-e7978df03784.webp` | `Notion account settings` | [screen](https://mobbin.com/screens/7d7a052d-4263-438e-9a9e-e7978df03784) |
-| `web/settings/notion-web-settings-billing-01-b46ed765-ae98-4cd1-af53-d385289bbc3e.webp` | `Notion billing upgrade plan` | [screen](https://mobbin.com/screens/b46ed765-ae98-4cd1-af53-d385289bbc3e) |
-| `web/settings/notion-web-settings-billing-02-dd7ee17a-6f75-451e-9913-4dd61f03062f.webp` | `Notion billing upgrade plan` | [screen](https://mobbin.com/screens/dd7ee17a-6f75-451e-9913-4dd61f03062f) |
-| `web/settings/notion-web-settings-connections-01-8e527687-f4b3-4f7a-b4e6-b91d3629d290.webp` | `Notion connections integrations` | [screen](https://mobbin.com/screens/8e527687-f4b3-4f7a-b4e6-b91d3629d290) |
+| `web/settings/notion-web-settings-buttons-03-1bc1d1e4-32eb-47c1-b0ef-65afdbca7c31.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/1bc1d1e4-32eb-47c1-b0ef-65afdbca7c31) |
+| `web/settings/notion-web-settings-buttons-04-330736ce-75b0-42f4-a631-6a9e86178adb.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/330736ce-75b0-42f4-a631-6a9e86178adb) |
+| `web/settings/notion-web-settings-buttons-05-865da2ba-9d23-4f02-b24e-b0e4fe577224.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/865da2ba-9d23-4f02-b24e-b0e4fe577224) |
+| `web/settings/notion-web-settings-buttons-08-a3711e01-92ec-4dce-ab2c-41e795f9736e.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/a3711e01-92ec-4dce-ab2c-41e795f9736e) |
+| `web/settings/notion-web-settings-buttons-09-81df8bca-0457-4584-a5e3-8516bfdc734f.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/81df8bca-0457-4584-a5e3-8516bfdc734f) |
+| `web/settings/notion-web-settings-buttons-14-cfe86298-5344-4766-9cfc-52bd7261e2a8.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/cfe86298-5344-4766-9cfc-52bd7261e2a8) |
+| `web/settings/notion-web-settings-buttons-15-e46933bc-a321-4bde-811c-dfe1bc826468.webp` | `Notion buttons` | [screen](https://mobbin.com/screens/e46933bc-a321-4bde-811c-dfe1bc826468) |
+| `web/settings/notion-web-settings-chart-02-d8bab0ad-6e67-4c1d-a9a3-cbe5fdacbdf6.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/d8bab0ad-6e67-4c1d-a9a3-cbe5fdacbdf6) |
+| `web/settings/notion-web-settings-columns-03-0616d54f-6fba-4d7e-bf92-2780564f5363.webp` | `Notion columns layout` | [screen](https://mobbin.com/screens/0616d54f-6fba-4d7e-bf92-2780564f5363) |
 | `web/settings/notion-web-settings-connections-02-f6bf47e4-bdeb-49ea-b32a-8dd986b0a54a.webp` | `Notion connections integrations` | [screen](https://mobbin.com/screens/f6bf47e4-bdeb-49ea-b32a-8dd986b0a54a) |
+| `web/settings/notion-web-settings-dialog-04-27ae8065-9cc6-48ca-989f-cfb95b1f220a.webp` | `Notion modal dialog` | [screen](https://mobbin.com/screens/27ae8065-9cc6-48ca-989f-cfb95b1f220a) |
+| `web/settings/notion-web-settings-dialog-05-9150b32f-ddb0-46e4-bc7b-59da95f2c751.webp` | `Notion modal dialog` | [screen](https://mobbin.com/screens/9150b32f-ddb0-46e4-bc7b-59da95f2c751) |
+| `web/settings/notion-web-settings-favorites-29-6c6b018e-3227-461b-8426-4bdb502bc2e1.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/6c6b018e-3227-461b-8426-4bdb502bc2e1) |
+| `web/settings/notion-web-settings-form-09-4aa10ac3-1157-4e50-801a-927e0fd40546.webp` | `Notion form` | [screen](https://mobbin.com/screens/4aa10ac3-1157-4e50-801a-927e0fd40546) |
+| `web/settings/notion-web-settings-form-24-74a91612-9a24-49ac-84f6-6e3a10c098c1.webp` | `Notion form` | [screen](https://mobbin.com/screens/74a91612-9a24-49ac-84f6-6e3a10c098c1) |
+| `web/settings/notion-web-settings-gallery-04-cf5e63d0-c13a-417f-aa0d-29c77c0fa8b0.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/cf5e63d0-c13a-417f-aa0d-29c77c0fa8b0) |
 | `web/settings/notion-web-settings-import-01-244b511b-a7ea-4a87-ab0e-024b867294cd.webp` | `Notion import` | [screen](https://mobbin.com/screens/244b511b-a7ea-4a87-ab0e-024b867294cd) |
 | `web/settings/notion-web-settings-import-02-62ceb90b-9f1a-43e0-bf99-1d6b862fbaa1.webp` | `Notion import` | [screen](https://mobbin.com/screens/62ceb90b-9f1a-43e0-bf99-1d6b862fbaa1) |
 | `web/settings/notion-web-settings-import-03-444bcbf7-e7fa-487f-9a30-eda099a37a81.webp` | `Notion import` | [screen](https://mobbin.com/screens/444bcbf7-e7fa-487f-9a30-eda099a37a81) |
-| `web/settings/notion-web-settings-language-01-89ff35d8-d58d-4ea6-8afa-4c1832d36ef9.webp` | `Notion language and region` | [screen](https://mobbin.com/screens/89ff35d8-d58d-4ea6-8afa-4c1832d36ef9) |
-| `web/settings/notion-web-settings-language-02-1f794a8f-3b4d-4f47-99a5-158c604317dc.webp` | `Notion language and region` | [screen](https://mobbin.com/screens/1f794a8f-3b4d-4f47-99a5-158c604317dc) |
+| `web/settings/notion-web-settings-more-menu-03-8aff7e5c-7473-4965-807f-92cb8d55eba2.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/8aff7e5c-7473-4965-807f-92cb8d55eba2) |
+| `web/settings/notion-web-settings-more-menu-06-878083d9-f5bf-4a48-80c4-5fb59814524d.webp` | `Notion more menu` | [screen](https://mobbin.com/screens/878083d9-f5bf-4a48-80c4-5fb59814524d) |
+| `web/settings/notion-web-settings-private-pages-02-bf9d807b-0267-4aa3-ae19-8e99f55d0751.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/bf9d807b-0267-4aa3-ae19-8e99f55d0751) |
+| `web/settings/notion-web-settings-private-pages-12-dc810fa9-2527-4ecf-ae95-de35661f7873.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/dc810fa9-2527-4ecf-ae95-de35661f7873) |
+| `web/settings/notion-web-settings-private-pages-14-827aab71-32c6-4100-a697-f98b5d7ef092.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/827aab71-32c6-4100-a697-f98b5d7ef092) |
+| `web/settings/notion-web-settings-private-pages-17-293d3145-22c7-4d16-9394-709dba74b6f7.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/293d3145-22c7-4d16-9394-709dba74b6f7) |
+| `web/settings/notion-web-settings-private-pages-20-a18501a9-c8e0-499c-95ac-4dccbf365163.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/a18501a9-c8e0-499c-95ac-4dccbf365163) |
+| `web/settings/notion-web-settings-private-pages-28-9909017c-ef46-4364-a2b4-f9c1a656cfdc.webp` | `Notion private pages` | [screen](https://mobbin.com/screens/9909017c-ef46-4364-a2b4-f9c1a656cfdc) |
+| `web/settings/notion-web-settings-property-editor-06-0651cbba-6c7b-4e1d-b266-08671901e696.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/0651cbba-6c7b-4e1d-b266-08671901e696) |
+| `web/settings/notion-web-settings-property-editor-07-6ff60437-cdbb-4ef5-b1a4-d0901d13dfdb.webp` | `Notion property editor` | [screen](https://mobbin.com/screens/6ff60437-cdbb-4ef5-b1a4-d0901d13dfdb) |
+| `web/settings/notion-web-settings-search-05-11ade510-9ac7-48fc-91ac-f815d841eb57.webp` | `Notion search` | [screen](https://mobbin.com/screens/11ade510-9ac7-48fc-91ac-f815d841eb57) |
+| `web/settings/notion-web-settings-search-10-f8e60bf2-639b-4edf-9331-294556537eb5.webp` | `Notion search` | [screen](https://mobbin.com/screens/f8e60bf2-639b-4edf-9331-294556537eb5) |
 | `web/settings/notion-web-settings-settings-01-aa59f603-76b1-49d1-82e7-9932068618fe.webp` | `Notion settings` | [screen](https://mobbin.com/screens/aa59f603-76b1-49d1-82e7-9932068618fe) |
 | `web/settings/notion-web-settings-settings-02-587b57d1-eb56-4f4a-b517-5e1fdfb160a2.webp` | `Notion settings` | [screen](https://mobbin.com/screens/587b57d1-eb56-4f4a-b517-5e1fdfb160a2) |
-| `web/settings/notion-web-settings-settings-03-7f5b216c-2bd4-4fa4-b8d2-d98d07036159.webp` | `Notion settings` | [screen](https://mobbin.com/screens/7f5b216c-2bd4-4fa4-b8d2-d98d07036159) |
 | `web/settings/notion-web-settings-settings-04-4f467b8f-6519-4b53-9dc3-2e89d4bddbf7.webp` | `Notion settings` | [screen](https://mobbin.com/screens/4f467b8f-6519-4b53-9dc3-2e89d4bddbf7) |
-| `web/states/notion-web-states-empty-01-0725c79d-9a42-438d-a887-97073843dcea.webp` | `Notion empty state` | [screen](https://mobbin.com/screens/0725c79d-9a42-438d-a887-97073843dcea) |
+| `web/settings/notion-web-settings-sidebar-08-d138214d-5351-4bd6-a2bb-c7b3648ea6a5.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/d138214d-5351-4bd6-a2bb-c7b3648ea6a5) |
+| `web/settings/notion-web-settings-sidebar-09-a535975a-c988-47a1-89fd-a5bf46a0123a.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/a535975a-c988-47a1-89fd-a5bf46a0123a) |
+| `web/settings/notion-web-settings-sidebar-21-9edd43f8-6e14-4c48-8d04-26c1f76e949d.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/9edd43f8-6e14-4c48-8d04-26c1f76e949d) |
+| `web/settings/notion-web-settings-teamspaces-01-adece65d-977b-418a-b2fd-b101a92d8f21.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/adece65d-977b-418a-b2fd-b101a92d8f21) |
+| `web/settings/notion-web-settings-teamspaces-02-46c17681-bc6e-4490-9855-8ae5c3bd6002.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/46c17681-bc6e-4490-9855-8ae5c3bd6002) |
+| `web/settings/notion-web-settings-teamspaces-03-eb5ad598-c7c9-4e53-904c-db76cbc94b6e.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/eb5ad598-c7c9-4e53-904c-db76cbc94b6e) |
+| `web/settings/notion-web-settings-teamspaces-10-f3ddb137-660e-4685-8d9f-aabe7a7bfd61.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/f3ddb137-660e-4685-8d9f-aabe7a7bfd61) |
+| `web/settings/notion-web-settings-teamspaces-21-a02b7db0-4885-4c93-b2a2-428335de64f1.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/a02b7db0-4885-4c93-b2a2-428335de64f1) |
+| `web/settings/notion-web-settings-teamspaces-26-36c2dc20-1ed3-4ec0-b2f5-7cf15ae5de81.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/36c2dc20-1ed3-4ec0-b2f5-7cf15ae5de81) |
+| `web/settings/notion-web-settings-trash-02-b6b3586d-26c8-425e-b5a2-8cde4069b6eb.webp` | `Notion trash` | [screen](https://mobbin.com/screens/b6b3586d-26c8-425e-b5a2-8cde4069b6eb) |
+| `web/settings/notion-web-settings-trash-03-80904cb6-9a47-4bd2-ac41-1452de5fc687.webp` | `Notion trash` | [screen](https://mobbin.com/screens/80904cb6-9a47-4bd2-ac41-1452de5fc687) |
+| `web/settings/notion-web-settings-trash-04-1ebb0d66-8334-4931-8648-963f7410e71d.webp` | `Notion trash` | [screen](https://mobbin.com/screens/1ebb0d66-8334-4931-8648-963f7410e71d) |
+| `web/settings/notion-web-settings-trash-05-eea69fb0-1ce1-4c5f-98f6-b6b331006d28.webp` | `Notion trash` | [screen](https://mobbin.com/screens/eea69fb0-1ce1-4c5f-98f6-b6b331006d28) |
+| `web/settings/notion-web-settings-trash-06-88f124f0-3e30-4516-8120-3d132fb4fa45.webp` | `Notion trash` | [screen](https://mobbin.com/screens/88f124f0-3e30-4516-8120-3d132fb4fa45) |
+| `web/settings/notion-web-settings-trash-07-f5eb867f-c7b7-4d78-ae37-f0580cb61a3c.webp` | `Notion trash` | [screen](https://mobbin.com/screens/f5eb867f-c7b7-4d78-ae37-f0580cb61a3c) |
+| `web/settings/notion-web-settings-trash-08-47531ba0-b958-4934-a28a-7d9dbac0ce94.webp` | `Notion trash` | [screen](https://mobbin.com/screens/47531ba0-b958-4934-a28a-7d9dbac0ce94) |
 | `web/states/notion-web-states-empty-02-7d42dbdc-202e-487f-b496-15a481e9c077.webp` | `Notion empty state` | [screen](https://mobbin.com/screens/7d42dbdc-202e-487f-b496-15a481e9c077) |
-| `web/states/notion-web-states-empty-03-e4e12e4b-a7eb-4e47-a491-502fa8c06b11.webp` | `Notion empty state` | [screen](https://mobbin.com/screens/e4e12e4b-a7eb-4e47-a491-502fa8c06b11) |
 | `web/states/notion-web-states-empty-04-120f4d36-a239-43f8-bede-b41ef7d96dab.webp` | `Notion empty state` | [screen](https://mobbin.com/screens/120f4d36-a239-43f8-bede-b41ef7d96dab) |
-| `web/views/notion-web-views-board-01-98dde396-5c07-422d-a99c-885c83220249.webp` | `Notion board view` | [screen](https://mobbin.com/screens/98dde396-5c07-422d-a99c-885c83220249) |
-| `web/views/notion-web-views-calendar-01-4c2cbe60-ba3b-43b3-8fbc-e98c8fb486d2.webp` | `Notion calendar view` | [screen](https://mobbin.com/screens/4c2cbe60-ba3b-43b3-8fbc-e98c8fb486d2) |
-| `web/views/notion-web-views-chart-01-420dd630-80ee-4048-9348-f4a1342d2435.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/420dd630-80ee-4048-9348-f4a1342d2435) |
-| `web/views/notion-web-views-chart-02-d8bab0ad-6e67-4c1d-a9a3-cbe5fdacbdf6.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/d8bab0ad-6e67-4c1d-a9a3-cbe5fdacbdf6) |
+| `web/states/notion-web-states-sidebar-30-2bff1cce-ab31-4a39-b4ce-c93554c0b799.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/2bff1cce-ab31-4a39-b4ce-c93554c0b799) |
 | `web/views/notion-web-views-chart-03-2a3c9ede-fa76-4e52-8b0d-b1ae025ec0c6.webp` | `Notion chart view` | [screen](https://mobbin.com/screens/2a3c9ede-fa76-4e52-8b0d-b1ae025ec0c6) |
-| `web/views/notion-web-views-database-01-2f7bbc1f-a8a0-4fd4-ba5f-aa6c5ef86ceb.webp` | `Notion database` | [screen](https://mobbin.com/screens/2f7bbc1f-a8a0-4fd4-ba5f-aa6c5ef86ceb) |
-| `web/views/notion-web-views-database-02-2c0dd9a9-d39d-4050-8e94-4b953ca5d8ee.webp` | `Notion database` | [screen](https://mobbin.com/screens/2c0dd9a9-d39d-4050-8e94-4b953ca5d8ee) |
-| `web/views/notion-web-views-database-03-72d235a2-0a23-4879-98d7-8622bf128873.webp` | `Notion database` | [screen](https://mobbin.com/screens/72d235a2-0a23-4879-98d7-8622bf128873) |
-| `web/views/notion-web-views-database-04-8c6b79a1-e340-4d49-9eb7-31ca94b0b289.webp` | `Notion database` | [screen](https://mobbin.com/screens/8c6b79a1-e340-4d49-9eb7-31ca94b0b289) |
-| `web/views/notion-web-views-database-05-4e6e1f98-a567-4370-b392-ac28802481c7.webp` | `Notion database` | [screen](https://mobbin.com/screens/4e6e1f98-a567-4370-b392-ac28802481c7) |
-| `web/views/notion-web-views-database-06-f695d792-ae7c-45c0-ba2e-1243fd951060.webp` | `Notion database` | [screen](https://mobbin.com/screens/f695d792-ae7c-45c0-ba2e-1243fd951060) |
 | `web/views/notion-web-views-database-07-46742c3a-ff30-4212-92d4-626064ed4c95.webp` | `Notion database` | [screen](https://mobbin.com/screens/46742c3a-ff30-4212-92d4-626064ed4c95) |
 | `web/views/notion-web-views-database-08-2dfccee7-f2ab-4a97-a181-8f416710c4f1.webp` | `Notion database` | [screen](https://mobbin.com/screens/2dfccee7-f2ab-4a97-a181-8f416710c4f1) |
-| `web/views/notion-web-views-database-09-bb630188-29e6-4746-8b03-b71e875c5de2.webp` | `Notion database` | [screen](https://mobbin.com/screens/bb630188-29e6-4746-8b03-b71e875c5de2) |
-| `web/views/notion-web-views-database-10-2fb67d89-7bc2-4708-8ece-34cdfa8fea33.webp` | `Notion database` | [screen](https://mobbin.com/screens/2fb67d89-7bc2-4708-8ece-34cdfa8fea33) |
-| `web/views/notion-web-views-database-11-3566cf8b-e58f-4694-afda-d57b15a3cac0.webp` | `Notion database` | [screen](https://mobbin.com/screens/3566cf8b-e58f-4694-afda-d57b15a3cac0) |
-| `web/views/notion-web-views-database-12-b801453a-b5a3-4a54-913d-c5381b7113c5.webp` | `Notion database` | [screen](https://mobbin.com/screens/b801453a-b5a3-4a54-913d-c5381b7113c5) |
 | `web/views/notion-web-views-database-13-0cde5947-edec-42c3-8f0f-300765fd8f32.webp` | `Notion database` | [screen](https://mobbin.com/screens/0cde5947-edec-42c3-8f0f-300765fd8f32) |
-| `web/views/notion-web-views-database-14-433ade8f-0d6c-48e0-9f5c-c06041622933.webp` | `Notion database` | [screen](https://mobbin.com/screens/433ade8f-0d6c-48e0-9f5c-c06041622933) |
-| `web/views/notion-web-views-database-15-82d66d47-ccea-421c-8ef8-94e855c1163f.webp` | `Notion database` | [screen](https://mobbin.com/screens/82d66d47-ccea-421c-8ef8-94e855c1163f) |
-| `web/views/notion-web-views-database-16-8440d5d2-b026-429f-b638-69d4fe28dbc6.webp` | `Notion database` | [screen](https://mobbin.com/screens/8440d5d2-b026-429f-b638-69d4fe28dbc6) |
-| `web/views/notion-web-views-database-17-d41e1c3f-7554-4129-af21-b8d1c8eace43.webp` | `Notion database` | [screen](https://mobbin.com/screens/d41e1c3f-7554-4129-af21-b8d1c8eace43) |
 | `web/views/notion-web-views-database-18-05780c62-927b-43bc-a79a-be9df73d25e7.webp` | `Notion database` | [screen](https://mobbin.com/screens/05780c62-927b-43bc-a79a-be9df73d25e7) |
-| `web/views/notion-web-views-database-19-47458249-bdf2-4159-8ed7-9bf33b8ab8d6.webp` | `Notion database` | [screen](https://mobbin.com/screens/47458249-bdf2-4159-8ed7-9bf33b8ab8d6) |
 | `web/views/notion-web-views-database-20-8c00f776-d602-412f-9340-d8811fddf7e8.webp` | `Notion database` | [screen](https://mobbin.com/screens/8c00f776-d602-412f-9340-d8811fddf7e8) |
-| `web/views/notion-web-views-database-21-841ae11d-d9e0-43ce-9d45-0405415af97f.webp` | `Notion database` | [screen](https://mobbin.com/screens/841ae11d-d9e0-43ce-9d45-0405415af97f) |
-| `web/views/notion-web-views-database-22-e57c782d-f578-4d24-ac76-4c5ef616f256.webp` | `Notion database` | [screen](https://mobbin.com/screens/e57c782d-f578-4d24-ac76-4c5ef616f256) |
-| `web/views/notion-web-views-database-23-1c8cb199-0669-4652-810b-5e7ffed10e10.webp` | `Notion database` | [screen](https://mobbin.com/screens/1c8cb199-0669-4652-810b-5e7ffed10e10) |
-| `web/views/notion-web-views-database-24-d9d59162-2dec-4d32-8d1a-2852ef8e6be6.webp` | `Notion database` | [screen](https://mobbin.com/screens/d9d59162-2dec-4d32-8d1a-2852ef8e6be6) |
-| `web/views/notion-web-views-database-25-24295cd3-d92b-453e-8566-2f4f50fe14db.webp` | `Notion database` | [screen](https://mobbin.com/screens/24295cd3-d92b-453e-8566-2f4f50fe14db) |
-| `web/views/notion-web-views-database-26-fffb95e6-b486-471e-936a-fdfec96f1039.webp` | `Notion database` | [screen](https://mobbin.com/screens/fffb95e6-b486-471e-936a-fdfec96f1039) |
-| `web/views/notion-web-views-database-27-b6111d53-25d0-4bf6-a90a-1881eaf81a38.webp` | `Notion database` | [screen](https://mobbin.com/screens/b6111d53-25d0-4bf6-a90a-1881eaf81a38) |
-| `web/views/notion-web-views-database-28-b2794985-3883-4a08-83a5-fa32039044ed.webp` | `Notion database` | [screen](https://mobbin.com/screens/b2794985-3883-4a08-83a5-fa32039044ed) |
-| `web/views/notion-web-views-database-29-b0faaf29-7dc3-4b90-8808-151a94555b7d.webp` | `Notion database` | [screen](https://mobbin.com/screens/b0faaf29-7dc3-4b90-8808-151a94555b7d) |
-| `web/views/notion-web-views-database-30-f63163ee-9eaa-4c17-9095-9e00d896a659.webp` | `Notion database` | [screen](https://mobbin.com/screens/f63163ee-9eaa-4c17-9095-9e00d896a659) |
-| `web/views/notion-web-views-form-01-87a061ed-745e-41bd-86c4-66e09907a65f.webp` | `Notion form` | [screen](https://mobbin.com/screens/87a061ed-745e-41bd-86c4-66e09907a65f) |
-| `web/views/notion-web-views-form-02-cfff79d6-aa89-4c6e-83c4-af61c5a8856c.webp` | `Notion form` | [screen](https://mobbin.com/screens/cfff79d6-aa89-4c6e-83c4-af61c5a8856c) |
-| `web/views/notion-web-views-form-03-651bd8c4-cdab-456e-9f19-6f1d7e6b2076.webp` | `Notion form` | [screen](https://mobbin.com/screens/651bd8c4-cdab-456e-9f19-6f1d7e6b2076) |
-| `web/views/notion-web-views-form-04-bee637d3-5f14-4ba1-a829-0663dacf3652.webp` | `Notion form` | [screen](https://mobbin.com/screens/bee637d3-5f14-4ba1-a829-0663dacf3652) |
-| `web/views/notion-web-views-form-05-2b4df644-5878-4aae-b039-f48fbc0a7e9b.webp` | `Notion form` | [screen](https://mobbin.com/screens/2b4df644-5878-4aae-b039-f48fbc0a7e9b) |
-| `web/views/notion-web-views-form-06-4e05f32b-ae4a-44fd-8f3e-75cf288978c3.webp` | `Notion form` | [screen](https://mobbin.com/screens/4e05f32b-ae4a-44fd-8f3e-75cf288978c3) |
-| `web/views/notion-web-views-form-07-b5041174-ea32-4d7b-b32e-040b4b13e615.webp` | `Notion form` | [screen](https://mobbin.com/screens/b5041174-ea32-4d7b-b32e-040b4b13e615) |
-| `web/views/notion-web-views-form-08-ca310dc7-f4ec-4838-9e38-e618a0445aad.webp` | `Notion form` | [screen](https://mobbin.com/screens/ca310dc7-f4ec-4838-9e38-e618a0445aad) |
-| `web/views/notion-web-views-form-09-4aa10ac3-1157-4e50-801a-927e0fd40546.webp` | `Notion form` | [screen](https://mobbin.com/screens/4aa10ac3-1157-4e50-801a-927e0fd40546) |
-| `web/views/notion-web-views-form-10-0cce1200-df08-49f4-805f-6692e6f26b49.webp` | `Notion form` | [screen](https://mobbin.com/screens/0cce1200-df08-49f4-805f-6692e6f26b49) |
-| `web/views/notion-web-views-form-11-3d65078b-6aef-48ac-bea8-db17660ec401.webp` | `Notion form` | [screen](https://mobbin.com/screens/3d65078b-6aef-48ac-bea8-db17660ec401) |
-| `web/views/notion-web-views-form-12-9d2ee6ac-55f3-4ad7-be06-0ef9c8c1320e.webp` | `Notion form` | [screen](https://mobbin.com/screens/9d2ee6ac-55f3-4ad7-be06-0ef9c8c1320e) |
-| `web/views/notion-web-views-form-13-ea9a10ed-4e0d-4c85-a28a-c5c4792964f9.webp` | `Notion form` | [screen](https://mobbin.com/screens/ea9a10ed-4e0d-4c85-a28a-c5c4792964f9) |
-| `web/views/notion-web-views-form-14-e2938808-8e04-4638-bca8-adc8848c8a6b.webp` | `Notion form` | [screen](https://mobbin.com/screens/e2938808-8e04-4638-bca8-adc8848c8a6b) |
-| `web/views/notion-web-views-form-15-52c0cf24-c177-475a-95f4-06267ea2a0fa.webp` | `Notion form` | [screen](https://mobbin.com/screens/52c0cf24-c177-475a-95f4-06267ea2a0fa) |
-| `web/views/notion-web-views-form-16-9d0f9030-c81c-4cf2-9529-c32b67e08316.webp` | `Notion form` | [screen](https://mobbin.com/screens/9d0f9030-c81c-4cf2-9529-c32b67e08316) |
-| `web/views/notion-web-views-form-17-536b61f3-89d5-49cb-9b04-c9f42829ef5b.webp` | `Notion form` | [screen](https://mobbin.com/screens/536b61f3-89d5-49cb-9b04-c9f42829ef5b) |
-| `web/views/notion-web-views-form-18-f3a444eb-19b7-4f8d-9ee9-a9656add9eae.webp` | `Notion form` | [screen](https://mobbin.com/screens/f3a444eb-19b7-4f8d-9ee9-a9656add9eae) |
-| `web/views/notion-web-views-form-19-7447d652-5d5f-4d9c-b65c-fb566116c362.webp` | `Notion form` | [screen](https://mobbin.com/screens/7447d652-5d5f-4d9c-b65c-fb566116c362) |
-| `web/views/notion-web-views-form-20-7c4bb26e-a30a-48e7-a8b2-15179d6e2809.webp` | `Notion form` | [screen](https://mobbin.com/screens/7c4bb26e-a30a-48e7-a8b2-15179d6e2809) |
-| `web/views/notion-web-views-form-21-3934d9e2-d212-4a31-a5bd-a67f120833b9.webp` | `Notion form` | [screen](https://mobbin.com/screens/3934d9e2-d212-4a31-a5bd-a67f120833b9) |
-| `web/views/notion-web-views-form-22-93840eea-5ae9-4eac-bc44-3cc70e9ccdbb.webp` | `Notion form` | [screen](https://mobbin.com/screens/93840eea-5ae9-4eac-bc44-3cc70e9ccdbb) |
-| `web/views/notion-web-views-form-23-ff8e618b-a9a8-487b-a3f4-07ec75a397ef.webp` | `Notion form` | [screen](https://mobbin.com/screens/ff8e618b-a9a8-487b-a3f4-07ec75a397ef) |
-| `web/views/notion-web-views-form-24-74a91612-9a24-49ac-84f6-6e3a10c098c1.webp` | `Notion form` | [screen](https://mobbin.com/screens/74a91612-9a24-49ac-84f6-6e3a10c098c1) |
-| `web/views/notion-web-views-form-25-031ca22c-4e38-4a3d-962d-b28df53f9c8d.webp` | `Notion form` | [screen](https://mobbin.com/screens/031ca22c-4e38-4a3d-962d-b28df53f9c8d) |
-| `web/views/notion-web-views-form-26-2e595e28-1d50-4c6b-9737-7d88fe423a62.webp` | `Notion form` | [screen](https://mobbin.com/screens/2e595e28-1d50-4c6b-9737-7d88fe423a62) |
-| `web/views/notion-web-views-form-27-113c3b1d-eb4f-4fc0-96d2-7fe753bba785.webp` | `Notion form` | [screen](https://mobbin.com/screens/113c3b1d-eb4f-4fc0-96d2-7fe753bba785) |
-| `web/views/notion-web-views-form-28-121677f8-449d-4e68-a28d-467bae46d1c6.webp` | `Notion form` | [screen](https://mobbin.com/screens/121677f8-449d-4e68-a28d-467bae46d1c6) |
-| `web/views/notion-web-views-full-width-01-2e85147b-f90b-4f69-995e-a64206411df0.webp` | `Notion full width page` | [screen](https://mobbin.com/screens/2e85147b-f90b-4f69-995e-a64206411df0) |
-| `web/views/notion-web-views-full-width-02-a99dd612-0fd8-4f03-b178-dba44ae3dd7b.webp` | `Notion full width page` | [screen](https://mobbin.com/screens/a99dd612-0fd8-4f03-b178-dba44ae3dd7b) |
-| `web/views/notion-web-views-full-width-03-55a514bb-4e4b-4378-88bd-0226e5329b2a.webp` | `Notion full width page` | [screen](https://mobbin.com/screens/55a514bb-4e4b-4378-88bd-0226e5329b2a) |
-| `web/views/notion-web-views-full-width-04-21f47747-cf19-42ff-a620-178253de454a.webp` | `Notion full width page` | [screen](https://mobbin.com/screens/21f47747-cf19-42ff-a620-178253de454a) |
-| `web/views/notion-web-views-full-width-05-e01574e7-e595-4a74-aacd-001d3dc445f8.webp` | `Notion full width page` | [screen](https://mobbin.com/screens/e01574e7-e595-4a74-aacd-001d3dc445f8) |
-| `web/views/notion-web-views-gallery-01-9232120f-819a-4e89-9f15-0aeee7d849c6.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/9232120f-819a-4e89-9f15-0aeee7d849c6) |
-| `web/views/notion-web-views-gallery-02-5c2b1f52-eb69-48c2-8ae3-a4bb9169d9d3.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/5c2b1f52-eb69-48c2-8ae3-a4bb9169d9d3) |
-| `web/views/notion-web-views-gallery-03-270a12be-4dbb-4eaf-9ae3-6fa704925cab.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/270a12be-4dbb-4eaf-9ae3-6fa704925cab) |
-| `web/views/notion-web-views-gallery-04-cf5e63d0-c13a-417f-aa0d-29c77c0fa8b0.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/cf5e63d0-c13a-417f-aa0d-29c77c0fa8b0) |
-| `web/views/notion-web-views-gallery-05-44453ef6-a197-4976-97ef-dbd753bb7559.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/44453ef6-a197-4976-97ef-dbd753bb7559) |
-| `web/views/notion-web-views-gallery-06-fed35388-895f-480a-b2fd-0dc0a671b266.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/fed35388-895f-480a-b2fd-0dc0a671b266) |
-| `web/views/notion-web-views-gallery-07-ebdc364d-4eba-40f7-97e1-d28e1a61bae8.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/ebdc364d-4eba-40f7-97e1-d28e1a61bae8) |
-| `web/views/notion-web-views-gallery-08-125caaed-3514-482f-a37d-b933389c15ac.webp` | `Notion gallery view` | [screen](https://mobbin.com/screens/125caaed-3514-482f-a37d-b933389c15ac) |
-| `web/views/notion-web-views-kanban-01-69f98d1d-b556-4a33-90f4-a0e98b6b9032.webp` | `Notion kanban board` | [screen](https://mobbin.com/screens/69f98d1d-b556-4a33-90f4-a0e98b6b9032) |
+| `web/views/notion-web-views-empty-01-0725c79d-9a42-438d-a887-97073843dcea.webp` | `Notion empty state` | [screen](https://mobbin.com/screens/0725c79d-9a42-438d-a887-97073843dcea) |
+| `web/views/notion-web-views-favorites-02-96160820-25ad-459e-a5bd-538e96fd6f04.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/96160820-25ad-459e-a5bd-538e96fd6f04) |
+| `web/views/notion-web-views-favorites-05-39237dbd-06dc-4bd1-856b-be2a115ab7bc.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/39237dbd-06dc-4bd1-856b-be2a115ab7bc) |
+| `web/views/notion-web-views-favorites-06-aed88d60-a44c-4aad-8831-2b60cde60bac.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/aed88d60-a44c-4aad-8831-2b60cde60bac) |
+| `web/views/notion-web-views-favorites-07-7d6c6ffc-ef05-4887-9a5f-7d4e09878a85.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/7d6c6ffc-ef05-4887-9a5f-7d4e09878a85) |
+| `web/views/notion-web-views-favorites-13-ad65c5dd-4172-4ce3-9c17-57637e4be840.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/ad65c5dd-4172-4ce3-9c17-57637e4be840) |
+| `web/views/notion-web-views-favorites-14-792336a7-3064-4872-95c3-4387f9b344d0.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/792336a7-3064-4872-95c3-4387f9b344d0) |
+| `web/views/notion-web-views-favorites-18-795eb9b5-5985-4a31-b9bb-ba1919448c40.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/795eb9b5-5985-4a31-b9bb-ba1919448c40) |
+| `web/views/notion-web-views-favorites-19-69069dd6-401b-48eb-940d-cea4b951adac.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/69069dd6-401b-48eb-940d-cea4b951adac) |
+| `web/views/notion-web-views-favorites-20-84d4508b-80cb-403c-bea7-b69551aa4d19.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/84d4508b-80cb-403c-bea7-b69551aa4d19) |
+| `web/views/notion-web-views-favorites-27-1d24ce90-eaf5-47e1-b46a-5ff8591146f0.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/1d24ce90-eaf5-47e1-b46a-5ff8591146f0) |
+| `web/views/notion-web-views-favorites-34-6fe5cbd1-6cf3-4440-a633-174aeb1522ad.webp` | `Notion favorites` | [screen](https://mobbin.com/screens/6fe5cbd1-6cf3-4440-a633-174aeb1522ad) |
+| `web/views/notion-web-views-filters-01-56aa9350-dfa8-4b57-a296-5ad2aa18137c.webp` | `Notion filters` | [screen](https://mobbin.com/screens/56aa9350-dfa8-4b57-a296-5ad2aa18137c) |
+| `web/views/notion-web-views-group-by-01-935b4300-77d3-47f8-aa2e-5277e745d7ec.webp` | `Notion group by` | [screen](https://mobbin.com/screens/935b4300-77d3-47f8-aa2e-5277e745d7ec) |
+| `web/views/notion-web-views-home-01-2dccc406-a707-4d26-9453-9a8eeb2d4acb.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/2dccc406-a707-4d26-9453-9a8eeb2d4acb) |
+| `web/views/notion-web-views-home-02-41f32a46-0aa4-4205-a6ab-627135308029.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/41f32a46-0aa4-4205-a6ab-627135308029) |
+| `web/views/notion-web-views-home-12-2c07206e-b7b4-4631-8d6a-03fa62ac66fa.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/2c07206e-b7b4-4631-8d6a-03fa62ac66fa) |
+| `web/views/notion-web-views-home-14-729d268e-6a55-4f38-9ca1-d4caef8c5c48.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/729d268e-6a55-4f38-9ca1-d4caef8c5c48) |
+| `web/views/notion-web-views-home-16-6f460796-c4d9-4d90-8694-f7d7346f2b78.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/6f460796-c4d9-4d90-8694-f7d7346f2b78) |
+| `web/views/notion-web-views-home-17-a77baf41-df18-476f-aa48-c1023269bb8c.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/a77baf41-df18-476f-aa48-c1023269bb8c) |
+| `web/views/notion-web-views-home-18-bb44b319-bbfe-4dd7-a199-dcc3d6143fe5.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/bb44b319-bbfe-4dd7-a199-dcc3d6143fe5) |
+| `web/views/notion-web-views-home-31-6ad9e8d1-ebba-4221-9934-9e82ae321802.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/6ad9e8d1-ebba-4221-9934-9e82ae321802) |
+| `web/views/notion-web-views-home-34-08414c0b-b6e0-4be9-b43d-8157c7b3bc8f.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/08414c0b-b6e0-4be9-b43d-8157c7b3bc8f) |
+| `web/views/notion-web-views-home-37-3e4abb15-6065-40ad-8b59-a8bc1bcfe857.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/3e4abb15-6065-40ad-8b59-a8bc1bcfe857) |
+| `web/views/notion-web-views-home-42-f49ef73e-f5ea-4da3-b785-f9c768aaca1b.webp` | `Notion home screen` | [screen](https://mobbin.com/screens/f49ef73e-f5ea-4da3-b785-f9c768aaca1b) |
 | `web/views/notion-web-views-kanban-02-0bd76f5f-9281-4d76-933e-cafe385ef965.webp` | `Notion kanban board` | [screen](https://mobbin.com/screens/0bd76f5f-9281-4d76-933e-cafe385ef965) |
-| `web/views/notion-web-views-list-01-d6621c97-f36f-469d-ab54-77d753630d4d.webp` | `Notion list view` | [screen](https://mobbin.com/screens/d6621c97-f36f-469d-ab54-77d753630d4d) |
 | `web/views/notion-web-views-list-02-34dafa90-1faa-494d-9c82-b85ce80843f3.webp` | `Notion list view` | [screen](https://mobbin.com/screens/34dafa90-1faa-494d-9c82-b85ce80843f3) |
-| `web/views/notion-web-views-list-03-bbf24360-e55d-48d6-9277-89bdcb72e61a.webp` | `Notion list view` | [screen](https://mobbin.com/screens/bbf24360-e55d-48d6-9277-89bdcb72e61a) |
 | `web/views/notion-web-views-list-04-9aed23d0-f039-4685-aeb1-8a0f81628796.webp` | `Notion list view` | [screen](https://mobbin.com/screens/9aed23d0-f039-4685-aeb1-8a0f81628796) |
 | `web/views/notion-web-views-list-05-2cd00c24-ae3a-41bd-aa77-8e03bd8132e3.webp` | `Notion list view` | [screen](https://mobbin.com/screens/2cd00c24-ae3a-41bd-aa77-8e03bd8132e3) |
-| `web/views/notion-web-views-list-06-d8abbe0b-4c55-4316-91b7-2e6b4baecb52.webp` | `Notion list view` | [screen](https://mobbin.com/screens/d8abbe0b-4c55-4316-91b7-2e6b4baecb52) |
-| `web/views/notion-web-views-page-01-a2f2432c-3e0f-4c82-a191-b24b3cfb88cb.webp` | `Notion page` | [screen](https://mobbin.com/screens/a2f2432c-3e0f-4c82-a191-b24b3cfb88cb) |
-| `web/views/notion-web-views-page-02-b1a58a58-58ba-4dc0-a99f-7c9541052cc8.webp` | `Notion page` | [screen](https://mobbin.com/screens/b1a58a58-58ba-4dc0-a99f-7c9541052cc8) |
-| `web/views/notion-web-views-page-03-03943fe2-9af9-43a3-996c-77a494633c51.webp` | `Notion page` | [screen](https://mobbin.com/screens/03943fe2-9af9-43a3-996c-77a494633c51) |
-| `web/views/notion-web-views-page-04-a60f2b3c-b22c-4bc6-bc98-19f02a13a905.webp` | `Notion page` | [screen](https://mobbin.com/screens/a60f2b3c-b22c-4bc6-bc98-19f02a13a905) |
-| `web/views/notion-web-views-page-05-fa353249-a50d-499c-9c72-ffc28f1bd0f0.webp` | `Notion page` | [screen](https://mobbin.com/screens/fa353249-a50d-499c-9c72-ffc28f1bd0f0) |
-| `web/views/notion-web-views-page-06-6c391514-2cbc-4fdb-8ece-ed52adc08ad0.webp` | `Notion page` | [screen](https://mobbin.com/screens/6c391514-2cbc-4fdb-8ece-ed52adc08ad0) |
-| `web/views/notion-web-views-page-07-1b58f34a-4b59-4472-a281-4b1ed312a63a.webp` | `Notion page` | [screen](https://mobbin.com/screens/1b58f34a-4b59-4472-a281-4b1ed312a63a) |
-| `web/views/notion-web-views-page-08-540ccf92-c1e0-4998-8ade-c5b504441fa6.webp` | `Notion page` | [screen](https://mobbin.com/screens/540ccf92-c1e0-4998-8ade-c5b504441fa6) |
-| `web/views/notion-web-views-page-09-bcc9e7b1-e95c-487c-a6e7-1ee9028daa32.webp` | `Notion page` | [screen](https://mobbin.com/screens/bcc9e7b1-e95c-487c-a6e7-1ee9028daa32) |
-| `web/views/notion-web-views-page-10-aa878ea4-b9c5-46c5-8610-30a6e72d0bf8.webp` | `Notion page` | [screen](https://mobbin.com/screens/aa878ea4-b9c5-46c5-8610-30a6e72d0bf8) |
-| `web/views/notion-web-views-page-11-3b5c9c6b-bd7a-4519-ab67-c13de99a042b.webp` | `Notion page` | [screen](https://mobbin.com/screens/3b5c9c6b-bd7a-4519-ab67-c13de99a042b) |
-| `web/views/notion-web-views-page-12-166f090a-af4b-4872-a9fa-9acafc69e41c.webp` | `Notion page` | [screen](https://mobbin.com/screens/166f090a-af4b-4872-a9fa-9acafc69e41c) |
-| `web/views/notion-web-views-page-13-eb1f804d-2396-44b5-ac66-0a4ad3923afd.webp` | `Notion page` | [screen](https://mobbin.com/screens/eb1f804d-2396-44b5-ac66-0a4ad3923afd) |
-| `web/views/notion-web-views-page-14-6338b901-75f2-4e7d-9cc9-07f89bc4d7a5.webp` | `Notion page` | [screen](https://mobbin.com/screens/6338b901-75f2-4e7d-9cc9-07f89bc4d7a5) |
-| `web/views/notion-web-views-page-15-2a6fbffa-9e9d-45f2-a3ae-1a3fce26bd0d.webp` | `Notion page` | [screen](https://mobbin.com/screens/2a6fbffa-9e9d-45f2-a3ae-1a3fce26bd0d) |
-| `web/views/notion-web-views-page-16-86acc928-4fd2-42fe-8ce4-e91b2658fe34.webp` | `Notion page` | [screen](https://mobbin.com/screens/86acc928-4fd2-42fe-8ce4-e91b2658fe34) |
-| `web/views/notion-web-views-page-17-5e0de26e-3e6b-4892-9a94-31acb58635e1.webp` | `Notion page` | [screen](https://mobbin.com/screens/5e0de26e-3e6b-4892-9a94-31acb58635e1) |
-| `web/views/notion-web-views-page-18-4aa99865-6419-46e3-a168-87a24b1d6e38.webp` | `Notion page` | [screen](https://mobbin.com/screens/4aa99865-6419-46e3-a168-87a24b1d6e38) |
-| `web/views/notion-web-views-page-19-39d9860e-ef56-4eb5-8bcb-d06c0836d866.webp` | `Notion page` | [screen](https://mobbin.com/screens/39d9860e-ef56-4eb5-8bcb-d06c0836d866) |
-| `web/views/notion-web-views-page-20-d159ca21-3df4-4d98-964a-189a5be1ddf3.webp` | `Notion page` | [screen](https://mobbin.com/screens/d159ca21-3df4-4d98-964a-189a5be1ddf3) |
-| `web/views/notion-web-views-page-21-e5b42913-e2f2-4d9c-9b14-2b210a3a2cf3.webp` | `Notion page` | [screen](https://mobbin.com/screens/e5b42913-e2f2-4d9c-9b14-2b210a3a2cf3) |
-| `web/views/notion-web-views-page-22-8a6a33e6-ab41-4afb-9e51-dc4f108e39ee.webp` | `Notion page` | [screen](https://mobbin.com/screens/8a6a33e6-ab41-4afb-9e51-dc4f108e39ee) |
-| `web/views/notion-web-views-page-23-e9553f06-46ea-4a12-ae98-a7da3dae7a57.webp` | `Notion page` | [screen](https://mobbin.com/screens/e9553f06-46ea-4a12-ae98-a7da3dae7a57) |
-| `web/views/notion-web-views-page-24-f496e09a-815b-4c2e-9253-3db3b53db191.webp` | `Notion page` | [screen](https://mobbin.com/screens/f496e09a-815b-4c2e-9253-3db3b53db191) |
-| `web/views/notion-web-views-page-25-042e5a4e-5020-4d8a-9881-2cf392a725cd.webp` | `Notion page` | [screen](https://mobbin.com/screens/042e5a4e-5020-4d8a-9881-2cf392a725cd) |
-| `web/views/notion-web-views-page-26-6b0f5671-9acd-45c2-bb56-22261949ddbf.webp` | `Notion page` | [screen](https://mobbin.com/screens/6b0f5671-9acd-45c2-bb56-22261949ddbf) |
-| `web/views/notion-web-views-page-27-48776329-2569-43cb-9257-9e6451b58ccf.webp` | `Notion page` | [screen](https://mobbin.com/screens/48776329-2569-43cb-9257-9e6451b58ccf) |
-| `web/views/notion-web-views-page-28-e5546d96-31cf-47fe-984f-cdacb55a01fd.webp` | `Notion page` | [screen](https://mobbin.com/screens/e5546d96-31cf-47fe-984f-cdacb55a01fd) |
-| `web/views/notion-web-views-page-29-789e9836-c03b-4fb7-a80e-85a38e06d857.webp` | `Notion page` | [screen](https://mobbin.com/screens/789e9836-c03b-4fb7-a80e-85a38e06d857) |
-| `web/views/notion-web-views-page-30-e7603296-81cf-4983-89c2-7bd849892786.webp` | `Notion page` | [screen](https://mobbin.com/screens/e7603296-81cf-4983-89c2-7bd849892786) |
-| `web/views/notion-web-views-page-31-e99bdc9b-c22c-48ac-a2fc-50e3e8636a13.webp` | `Notion page` | [screen](https://mobbin.com/screens/e99bdc9b-c22c-48ac-a2fc-50e3e8636a13) |
-| `web/views/notion-web-views-page-32-69f6637c-0fba-40c5-9504-9c0de6a16d27.webp` | `Notion page` | [screen](https://mobbin.com/screens/69f6637c-0fba-40c5-9504-9c0de6a16d27) |
-| `web/views/notion-web-views-page-33-854f8746-db79-4e4e-9659-9af8988aa08f.webp` | `Notion page` | [screen](https://mobbin.com/screens/854f8746-db79-4e4e-9659-9af8988aa08f) |
-| `web/views/notion-web-views-page-34-b8778e0e-13d3-49a6-9f01-3680ea66249b.webp` | `Notion page` | [screen](https://mobbin.com/screens/b8778e0e-13d3-49a6-9f01-3680ea66249b) |
+| `web/views/notion-web-views-sidebar-18-9cb6b951-3dc3-49f3-a82d-1e7fd7951d72.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/9cb6b951-3dc3-49f3-a82d-1e7fd7951d72) |
+| `web/views/notion-web-views-sidebar-20-f3758e63-6b03-49b8-82af-96bd6ee6edbf.webp` | `Notion sidebar` | [screen](https://mobbin.com/screens/f3758e63-6b03-49b8-82af-96bd6ee6edbf) |
 | `web/views/notion-web-views-table-01-3b3c3c26-58ac-42ec-9ddd-f4783d4f5f4f.webp` | `Notion table view` | [screen](https://mobbin.com/screens/3b3c3c26-58ac-42ec-9ddd-f4783d4f5f4f) |
 | `web/views/notion-web-views-table-02-b184ec4c-7b84-4cba-b7e1-bc727bde0eea.webp` | `Notion table view` | [screen](https://mobbin.com/screens/b184ec4c-7b84-4cba-b7e1-bc727bde0eea) |
-| `web/views/notion-web-views-table-03-bd482935-9854-4f32-9e1d-47157eee4f1f.webp` | `Notion table view` | [screen](https://mobbin.com/screens/bd482935-9854-4f32-9e1d-47157eee4f1f) |
-| `web/views/notion-web-views-table-04-74fe28d3-82c4-4fe8-b982-5c04e708b27c.webp` | `Notion table view` | [screen](https://mobbin.com/screens/74fe28d3-82c4-4fe8-b982-5c04e708b27c) |
-| `web/views/notion-web-views-table-05-f19c6f50-e006-40f1-aaf6-0eaeb6dcc315.webp` | `Notion table view` | [screen](https://mobbin.com/screens/f19c6f50-e006-40f1-aaf6-0eaeb6dcc315) |
 | `web/views/notion-web-views-table-06-a9f53856-c9f0-47cf-8f22-7e74e4a11b5d.webp` | `Notion table view` | [screen](https://mobbin.com/screens/a9f53856-c9f0-47cf-8f22-7e74e4a11b5d) |
-| `web/views/notion-web-views-table-07-0159ba7f-b03b-4b57-b6fe-d44d8ade6ac7.webp` | `Notion table view` | [screen](https://mobbin.com/screens/0159ba7f-b03b-4b57-b6fe-d44d8ade6ac7) |
-| `web/views/notion-web-views-wiki-01-2f1cef88-df7a-4c03-ad7a-da0ebc6ba822.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/2f1cef88-df7a-4c03-ad7a-da0ebc6ba822) |
-| `web/views/notion-web-views-wiki-02-ad22b91a-4ffd-4033-be3e-82146bf14cf5.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/ad22b91a-4ffd-4033-be3e-82146bf14cf5) |
-| `web/views/notion-web-views-wiki-03-2092e9ae-963f-4585-ad69-ba6fd0abb76d.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/2092e9ae-963f-4585-ad69-ba6fd0abb76d) |
-| `web/views/notion-web-views-wiki-04-3facb243-64fc-4593-a9f7-23573b392f44.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/3facb243-64fc-4593-a9f7-23573b392f44) |
-| `web/views/notion-web-views-wiki-05-ef8965c6-72c3-4683-83b3-4b9e0d23e29f.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/ef8965c6-72c3-4683-83b3-4b9e0d23e29f) |
-| `web/views/notion-web-views-wiki-06-f893ebcb-9ca5-46c1-90fd-8941a21602af.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/f893ebcb-9ca5-46c1-90fd-8941a21602af) |
-| `web/views/notion-web-views-wiki-07-1f0fc9bc-fb0c-4787-8c9b-f6a3be5dbe4b.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/1f0fc9bc-fb0c-4787-8c9b-f6a3be5dbe4b) |
-| `web/views/notion-web-views-wiki-08-f0cb57d4-fee1-49e5-9028-0847c6a95bcd.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/f0cb57d4-fee1-49e5-9028-0847c6a95bcd) |
-| `web/views/notion-web-views-wiki-09-e179bd50-883b-4d9d-8018-e8fb1fbf43a3.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/e179bd50-883b-4d9d-8018-e8fb1fbf43a3) |
-| `web/views/notion-web-views-wiki-10-9a1f30e2-c4b9-45d1-92b1-2bc406252559.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/9a1f30e2-c4b9-45d1-92b1-2bc406252559) |
-| `web/views/notion-web-views-wiki-11-9e98f76a-2d5c-4cfb-9131-a4325f42f167.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/9e98f76a-2d5c-4cfb-9131-a4325f42f167) |
-| `web/views/notion-web-views-wiki-12-2822bad8-ba93-42dc-b7a3-9d5af0574ff9.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/2822bad8-ba93-42dc-b7a3-9d5af0574ff9) |
-| `web/views/notion-web-views-wiki-13-f70f3807-8825-4a81-926f-54447ffa0665.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/f70f3807-8825-4a81-926f-54447ffa0665) |
-| `web/views/notion-web-views-wiki-14-5c24f766-595f-465a-af97-35ed5fc8e009.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/5c24f766-595f-465a-af97-35ed5fc8e009) |
-| `web/views/notion-web-views-wiki-15-47f4f9f7-a92a-4d5c-872b-e07655765f96.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/47f4f9f7-a92a-4d5c-872b-e07655765f96) |
-| `web/views/notion-web-views-wiki-16-072bc230-1366-4039-9d25-cce13e422214.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/072bc230-1366-4039-9d25-cce13e422214) |
-| `web/views/notion-web-views-wiki-17-fbcc8487-5e96-4250-b711-f6168aa3ba15.webp` | `Notion wiki` | [screen](https://mobbin.com/screens/fbcc8487-5e96-4250-b711-f6168aa3ba15) |
-
+| `web/views/notion-web-views-teamspaces-04-3691d82c-04d3-4e75-bbdd-f9c61baf3972.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/3691d82c-04d3-4e75-bbdd-f9c61baf3972) |
+| `web/views/notion-web-views-teamspaces-14-ea5ef1bf-11ab-4c3c-9427-925103388942.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/ea5ef1bf-11ab-4c3c-9427-925103388942) |
+| `web/views/notion-web-views-teamspaces-23-6d9641f2-a575-4695-92ef-aea771018018.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/6d9641f2-a575-4695-92ef-aea771018018) |
+| `web/views/notion-web-views-teamspaces-24-5b3dd0a5-2981-487b-9510-c7d46f221c53.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/5b3dd0a5-2981-487b-9510-c7d46f221c53) |
+| `web/views/notion-web-views-teamspaces-25-ebecde02-4ae9-4a4f-b234-d62d646d82bc.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/ebecde02-4ae9-4a4f-b234-d62d646d82bc) |
+| `web/views/notion-web-views-teamspaces-27-2cb05fc6-258f-485e-bd43-bff095a90cbc.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/2cb05fc6-258f-485e-bd43-bff095a90cbc) |
+| `web/views/notion-web-views-teamspaces-28-f1724632-5d42-47ff-96cc-7884f9733a00.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/f1724632-5d42-47ff-96cc-7884f9733a00) |
+| `web/views/notion-web-views-teamspaces-29-6f13a52e-d5d2-427a-b6a0-7318eb1affce.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/6f13a52e-d5d2-427a-b6a0-7318eb1affce) |
+| `web/views/notion-web-views-teamspaces-30-02910ed9-397e-4784-8db6-9dcb5d119d64.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/02910ed9-397e-4784-8db6-9dcb5d119d64) |
+| `web/views/notion-web-views-teamspaces-34-25dc46e9-2bc6-440e-aa45-01a49bcc2184.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/25dc46e9-2bc6-440e-aa45-01a49bcc2184) |
+| `web/views/notion-web-views-teamspaces-35-22e09ab9-e9e1-4568-8b58-a8f583d2241e.webp` | `Notion teamspaces` | [screen](https://mobbin.com/screens/22e09ab9-e9e1-4568-8b58-a8f583d2241e) |
+| `web/views/notion-web-views-workspace-switcher-14-121f0606-5b04-4871-8d8a-6335e937ed08.webp` | `Notion workspace switcher` | [screen](https://mobbin.com/screens/121f0606-5b04-4871-8d8a-6335e937ed08) |

@@ -212,6 +212,24 @@ One app landed and verified before the next opens. Never a parallel fan-out acro
       README before landing: the folder groups are query-derived, not content-verified (5 of 9 web
       spot-checks sit in a group they do not depict), and the request-ledger breakdown itemizes 168
       of the 278 iOS and 136 of the 297 web requests
+- [x] T030a Reclassify the Notion non-flow captures by what each image shows, replacing the
+      query-derived grouping T030 landed.
+      **Done 2026-09-06.** All 1,205 non-flow files (iOS 610, web 595) were opened and judged by
+      content against a fixed vocabulary, and **862 moved** — iOS 372, web 490 — with the group
+      token inside each filename renamed to match while the screen-id suffix stayed. iOS
+      destinations: 126 ai, 85 editors, 63 database, 38 collaboration, 17 sheets, 10 settings,
+      8 views, 7 onboarding, 6 navigation, 6 marketing, 5 states, 1 menus. Web destinations:
+      109 ai, 105 editors, 62 database, 60 collaboration, 43 settings, 42 onboarding, 39 views,
+      23 marketing, 3 menus, 3 extra, 1 states. Two groups were added (`ai`, `marketing`) and
+      `ios/extra` emptied. `flows/` was left alone: its folder is the Mobbin flow name, already a
+      reading of the sequence rather than a search term. Ledger:
+      `screenshots/notion/reclassification-2026-09-06.tsv` — old path, new path, one-line reason per
+      move. `screenshots/notion/README.md` was regenerated: layout table counts, the grouping
+      paragraph, and all 3647 per-file index rows repointed to their new paths with the `mobbin_url`
+      and query columns intact. Verified: 3647 files on disk before and after, no duplicate path,
+      index and disk agree 1:1, `screenshots/manifest.json` untouched and
+      `node tools/screenshots/verify.mjs` exit 0, and 33 of the web moves re-opened independently
+      and confirmed
 - [x] T031 [B] Harvest Evernote (iOS + web) via Mobbin, same orchestration, into
       `screenshots/evernote/{ios,web}/<group>/`; landed by a fresh verifier before T032 opens.
       **Done and landed 2026-09-06** from `worktrees/149-harvest-evernote`, on the operator's words

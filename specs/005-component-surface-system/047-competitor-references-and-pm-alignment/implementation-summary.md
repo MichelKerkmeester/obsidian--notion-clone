@@ -85,7 +85,7 @@ reason: it found nothing in either file to change.
 
 ### Notion reference captures (2026-09-06)
 
-`screenshots/notion/` now holds 3647 Notion screens harvested from Mobbin (iOS 1315 files, 801 unique; web 2332 files, 1540 unique; 472 flows), each cited by `mobbin_url` in `screenshots/notion/README.md`, untracked by the manifest like `anytype/` — T030. The group folders name the query that returned a screen, not a verified property of the image, so read a file's folder as a search term and the image as the evidence.
+`screenshots/notion/` now holds 3647 Notion screens harvested from Mobbin (iOS 1315 files, 801 unique; web 2332 files, 1540 unique; 472 flows), each cited by `mobbin_url` in `screenshots/notion/README.md`, untracked by the manifest like `anytype/` — T030. The 1205 non-flow files were then opened one by one and regrouped by what each screen shows, moving 862 of them and adding an `ai` and a `marketing` group — T030a, ledger `screenshots/notion/reclassification-2026-09-06.tsv`. So a folder now names the content, while the `<slug>` inside a filename still names the Mobbin query that found the screen and will often disagree with it; `flows/` stays grouped by flow name.
 <!-- /ANCHOR:what-built -->
 
 ---
