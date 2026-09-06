@@ -26,11 +26,6 @@ export const MINUTES_PER_HOUR = 60;
 export const MINUTES_PER_DAY = 1440;
 export const MS_PER_DAY = 86400000;
 
-interface LocaleWithWeekInfo {
-  weekInfo?: { firstDay?: number };
-  getWeekInfo?: () => { firstDay?: number };
-}
-
 export interface VisibleMinuteRange {
   startHour: number;
   endHour: number;
@@ -177,13 +172,11 @@ export function normalizeVisibleHourRange(
 export function getLocaleWeekStartsOn(config?: Pick<ViewConfig, "calendarFirstDayOfWeek">): number {
   const override = config?.calendarFirstDayOfWeek;
   if (override === 0 || override === 1 || override === 6) return override;
-  const locale = Intl.DateTimeFormat().resolvedOptions().locale;
-  const LocaleCtor = (Intl as unknown as { Locale?: new (locale: string) => LocaleWithWeekInfo }).Locale;
-  if (!LocaleCtor) return 0;
-  const localeInfo = new LocaleCtor(locale);
-  const weekInfo = typeof localeInfo.getWeekInfo === "function" ? localeInfo.getWeekInfo() : localeInfo.weekInfo;
-  const firstDay = weekInfo?.firstDay;
-  return typeof firstDay === "number" && Number.isInteger(firstDay) ? firstDay % 7 : 0;
+  // Monday default (operator ruling, 2026-09-06): new and existing views read
+  // Monday-first unless calendarFirstDayOfWeek was set explicitly. The setting
+  // stays an override; the locale's own week-start is no longer consulted —
+  // all twenty Anytype captures start on Monday regardless of locale.
+  return 1;
 }
 
 export function getWeekdayLabels(locale: string, weekStartsOn: number): string[] {

@@ -306,13 +306,18 @@ export class CalendarToolbarRenderer {
 	private renderRecordIconSettings(parent: HTMLElement, config: ViewConfig, actions: CalendarToolbarActions): void {
 		const database = actions.database;
 		if (!database) return;
-		this.renderSwitch(parent, t("recordIcon.show"), config.showRecordIcon === true, (value) => {
-			config.showRecordIcon = value || undefined;
+		// Show icon on by default (operator ruling, 2026-09-06): every Anytype chip
+		// carries a document glyph, so the toggle only overrides the default when
+		// explicitly turned off — off must persist a literal `false`, not `undefined`,
+		// or a never-configured view would be indistinguishable from one the operator
+		// turned off (see calendar-renderer.ts's withRecordIconDefault).
+		this.renderSwitch(parent, t("recordIcon.show"), config.showRecordIcon !== false, (value) => {
+			config.showRecordIcon = value;
 			if (value && !resolveRecordIconField(database, config) && !database.recordIconField) config.recordIconFieldOverrideEnabled = true;
 			actions.onChange(t("recordIcon.show"));
 			if (this.popoverContent) this.renderSections(this.popoverContent, config, actions);
 		}, "smile-plus", "db-calendar-show-icon-toggle");
-		if (config.showRecordIcon !== true) return;
+		if (config.showRecordIcon === false) return;
 		this.renderSwitch(parent, t("recordIcon.override"), config.recordIconFieldOverrideEnabled === true, (value) => {
 			config.recordIconFieldOverrideEnabled = value || undefined;
 			actions.onChange(t("recordIcon.override"));
@@ -338,8 +343,11 @@ export class CalendarToolbarRenderer {
 
 	/** Render the sizing rows (used by renderSizingSection and refreshSizingRows). */
 	private renderSizingRows(sizing: HTMLElement, config: ViewConfig, actions: CalendarToolbarActions): void {
-		// Column width applies to all scales (month / week / day).
-			// Column width mode dropdown, which replaced an earlier two-state switch
+		// Column width mode dropdown, which replaced an earlier two-state switch.
+		// Month ignores it outright (seven fluid columns regardless of this
+		// setting, so a custom width never clips the seventh column) — the row is
+		// hidden there rather than shown and silently doing nothing; week/day keep it.
+		if (config.calendarScale !== "month") {
 			this.renderSelect(sizing, t("viewConfig.calendarColumnSizeMode"), [
 				{ value: "adaptive", text: t("viewConfig.calendarColumnSizeMode.adaptive") },
 				{ value: "custom", text: t("viewConfig.calendarColumnSizeMode.custom") },
@@ -366,8 +374,11 @@ export class CalendarToolbarRenderer {
 					}, setColumnWidth);
 
 			}
+		}
 		// First day of the week applies to every scale (month weekday rows + week/day
-		// columns), so it is always shown. "" = follow the system locale.
+		// columns), so it is always shown. "" = Monday by default (operator ruling,
+		// 2026-09-06); the locale is no longer consulted, so this is an explicit
+		// override of that default rather than a reflection of the system locale.
 		this.renderSelect(sizing, t("viewConfig.calendarFirstDayOfWeek"), [
 			{ value: "", text: t("viewConfig.calendarFirstDayOfWeek.auto") },
 			{ value: "0", text: t("viewConfig.calendarFirstDayOfWeek.0") },

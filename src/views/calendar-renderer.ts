@@ -68,6 +68,13 @@ import { createOwnedMenuForEvent } from "./owned-menu";
 const TIME_SNAP_MINUTES = CALENDAR_TIME_SNAP_MINUTES;
 const TIMED_EVENT_TIME_VISIBILITY_HEIGHT = 42;
 const UNSCHEDULED_MIME = "application/x-note-database-unscheduled";
+// Fixed per-lane cascade inset for overlapping week/day timed blocks (renderWeekTimedEvent),
+// chosen to match this file's other 10px chip insets — at the 45px phone minimum column
+// (--db-calendar-phone-week-col-min) a two-way overlap still leaves ~27px of title paint box
+// (45 - 10 - 8px outer gutter) on the staggered block, comfortably past the point where a
+// title reads as three glyphs and an ellipsis rather than a sliver of one letter, which is
+// what an equal N-way split of the same column left it at.
+const CALENDAR_TIMED_STAGGER_STEP = 10;
 
 // ───────────────────────────────────────────────────────────────────
 // 3. TYPES
@@ -389,58 +396,83 @@ export class CalendarRenderer {
 		return { startDateKey: dateKeys[0], endDateKey: dateKeys[dateKeys.length - 1] };
 	}
 
+	/** A spanning event is drawn as one independent chip per day it covers
+	 *  rather than one element spanning grid columns, so a day's own stacking
+	 *  never reserves a lane for an event that doesn't touch it. `segment.lane`
+	 *  (assignSegmentLanes, calendar-layout-model.ts) is a WEEK-global bin-pack —
+	 *  correct for sizing the row (its max is exactly the busiest single day's
+	 *  simultaneous count) but wrong for an individual day's stacking order,
+	 *  since a day can be skipped by several lower-lane segments that simply
+	 *  don't reach it. This re-ranks, per day, only the segments that actually
+	 *  touch it — preserving their relative (global-lane) order so the same
+	 *  event lands at a consistent rank across the days it spans — and returns
+	 *  one map per day index the caller can read a segment's local rank from. */
+	private computeMonthDayLocalLanes(layout: CalendarMonthWeekLayout): Map<CalendarMonthSegment, number>[] {
+		return layout.days.map((_, dayIndex) => {
+			const touching = layout.segments
+				.filter((segment) => segment.startDayIndex <= dayIndex && segment.endDayIndex >= dayIndex)
+				.sort((a, b) => a.lane - b.lane);
+			const ranks = new Map<CalendarMonthSegment, number>();
+			touching.forEach((segment, rank) => ranks.set(segment, rank));
+			return ranks;
+		});
+	}
+
 	private renderMonthSegments(weekEl: HTMLElement, config: ViewConfig, layout: CalendarMonthWeekLayout, laneLimit: number): void {
-		// Segments are direct children of the week grid, sharing the same columns as day cells
+		const dayLocalLanes = this.computeMonthDayLocalLanes(layout);
+		const iconConfig = this.withRecordIconDefault(config);
+		// Chips are direct children of the week grid, sharing the same columns as day
+		// cells — one per (segment, day it covers) pair, each spanning exactly one
+		// column. No date-range text renders in the grid: it lives in the
+		// chip's own title tooltip (getSegmentTitle) and in the day popover.
 		for (const segment of layout.segments) {
-			if (segment.lane >= laneLimit) continue;
-			const eventEl = weekEl.createEl("button", {
-				cls: [
-					"db-calendar-month-segment",
-					segment.isTimed ? "is-timed" : "is-all-day",
-					segment.isStart ? "is-start" : "is-continuation",
-					segment.isEnd ? "is-end" : "continues-after",
-					this.isRowCompleted(segment.event.row, config) ? "is-completed" : "",
-				].join(" "),
-				attr: {
-					type: "button",
-					title: this.getSegmentTitle(segment),
-					"data-note-database-row-path": segment.event.row.file.path,
-				},
-			});
-			eventEl.style.setProperty("--db-calendar-segment-start", String(segment.startDayIndex + 1));
-			eventEl.style.setProperty("--db-calendar-segment-span", String(segment.spanDays));
-			// +2 offset: +1 for heading row, +1 for 1-based grid index
-			eventEl.style.setProperty("--db-calendar-segment-lane", String(segment.lane + 2));
-			this.applyEventColor(eventEl, segment.event.color);
-			this.actions.applyConditionalFormat?.(eventEl, segment.event.row, config);
-			if (segment.isTimed) {
-				eventEl.createSpan({ cls: "db-calendar-month-timed-dot" });
-				if (segment.startMinutes != null) {
+			for (let dayIndex = segment.startDayIndex; dayIndex <= segment.endDayIndex; dayIndex++) {
+				const localLane = dayLocalLanes[dayIndex].get(segment);
+				if (localLane == null || localLane >= laneLimit) continue;
+				const isChipStart = dayIndex === segment.startDayIndex;
+				const isChipEnd = dayIndex === segment.endDayIndex;
+				const eventEl = weekEl.createEl("button", {
+					cls: [
+						"db-calendar-month-segment",
+						segment.isTimed ? "is-timed" : "is-all-day",
+						this.isRowCompleted(segment.event.row, config) ? "is-completed" : "",
+					].join(" "),
+					attr: {
+						type: "button",
+						title: this.getSegmentTitle(segment),
+						"data-note-database-row-path": segment.event.row.file.path,
+					},
+				});
+				eventEl.style.setProperty("--db-calendar-segment-start", String(dayIndex + 1));
+				// +2 offset: +1 for heading row, +1 for 1-based grid index
+				eventEl.style.setProperty("--db-calendar-segment-lane", String(localLane + 2));
+				this.applyEventColor(eventEl, segment.event.color);
+				this.actions.applyConditionalFormat?.(eventEl, segment.event.row, config);
+				this.actions.renderRecordIcon?.(eventEl, segment.event.row, iconConfig, true);
+				const titleEl = eventEl.createSpan({ cls: `db-calendar-month-title${segment.event.titleIsEmpty ? " is-empty-title" : ""}`, text: segment.event.title });
+				markNoteHoverLink(titleEl, segment.event.row.file.path, segment.event.row.file.path);
+				// Time renders after the title as a muted suffix, never a
+				// coloured prefix — timed events can appear in the month grid too.
+				if (segment.isTimed && segment.startMinutes != null) {
 					eventEl.createSpan({ cls: "db-calendar-month-time", text: formatCalendarTime(segment.startMinutes) });
 				}
-			}
-			this.actions.renderRecordIcon?.(eventEl, segment.event.row, config, true);
-			const titleEl = eventEl.createSpan({ cls: `db-calendar-month-title${segment.event.titleIsEmpty ? " is-empty-title" : ""}`, text: segment.event.title });
-			markNoteHoverLink(titleEl, segment.event.row.file.path, segment.event.row.file.path);
-			// Show the start–end date range on multi-day all-day segments so a spanning
-			// event reads as a date range rather than just a title bar.
-			if (!segment.isTimed && segment.event.endDateKey > segment.event.startDateKey) {
-				eventEl.createSpan({ cls: "db-calendar-month-dates", text: this.formatMonthDateRange(segment.event.startDateKey, segment.event.endDateKey, segment.event.startMinutes, segment.event.endMinutes) });
-			}
-			this.attachEventOpenHandlers(eventEl, segment.event);
-			eventEl.oncontextmenu = (event) => {
-				event.preventDefault();
-				event.stopPropagation();
-				this.showDayEntryMenu(event, config, segment.event.startDateKey, segment.event.row);
-			};
-			this.attachMonthMoveHandler(eventEl, weekEl, layout.days, segment, config, ".db-calendar-month-week", ".db-calendar-day", 7);
-			// Left/right resize grab zones for month segments when an end-date field
-			// exists. Only real start/end edges are resizable: a segment
-			// carried over from the previous week exposes only its trailing edge, and
-			// one that continues past this week only its leading edge.
-			if (!this.actions.isReadOnly && this.actions.updateEventDates && config.calendarEndDateField) {
-				if (segment.isStart) this.attachMonthResizeHandle(eventEl, weekEl, layout.days, segment, config, "resize-start", ".db-calendar-month-week", ".db-calendar-day", 7);
-				if (segment.isEnd) this.attachMonthResizeHandle(eventEl, weekEl, layout.days, segment, config, "resize-end", ".db-calendar-month-week", ".db-calendar-day", 7);
+				this.attachEventOpenHandlers(eventEl, segment.event);
+				eventEl.oncontextmenu = (event) => {
+					event.preventDefault();
+					event.stopPropagation();
+					this.showDayEntryMenu(event, config, segment.event.startDateKey, segment.event.row);
+				};
+				// Any day's chip grabs the whole event (all of its per-day chips share
+				// the same row-path attribute, so setCalendarEventPreviewHidden already
+				// hides them together during a drag).
+				this.attachMonthMoveHandler(eventEl, weekEl, layout.days, segment, config, ".db-calendar-month-week", ".db-calendar-day", 7);
+				// Resize handles attach only to the chip at the segment's real edge: a
+				// segment carried over from the previous week has no leading edge in
+				// this row, and one continuing past this week has no trailing edge.
+				if (!this.actions.isReadOnly && this.actions.updateEventDates && config.calendarEndDateField) {
+					if (isChipStart && segment.isStart) this.attachMonthResizeHandle(eventEl, weekEl, layout.days, segment, config, "resize-start", ".db-calendar-month-week", ".db-calendar-day", 7);
+					if (isChipEnd && segment.isEnd) this.attachMonthResizeHandle(eventEl, weekEl, layout.days, segment, config, "resize-end", ".db-calendar-month-week", ".db-calendar-day", 7);
+				}
 			}
 		}
 	}
@@ -483,10 +515,14 @@ export class CalendarRenderer {
 	}
 
 	private renderMonthOverflowButtons(weekEl: HTMLElement, config: ViewConfig, layout: CalendarMonthWeekLayout, laneLimit: number, dayCells: HTMLElement[], gridRow: number): void {
+		// Overflow is per day, from that day's own local rank (computeMonthDayLocalLanes)
+		// — not the segment's week-global lane, which would hide a chip this specific day has
+		// room for just because another day's busier stacking pushed the segment's lane up.
+		const dayLocalLanes = this.computeMonthDayLocalLanes(layout);
 		for (let dayIndex = 0; dayIndex < layout.days.length; dayIndex++) {
 			const day = layout.days[dayIndex];
 			const hiddenEvents = layout.segments
-				.filter((segment) => segment.lane >= laneLimit && segment.startDayIndex <= dayIndex && segment.endDayIndex >= dayIndex)
+				.filter((segment) => (dayLocalLanes[dayIndex].get(segment) ?? -1) >= laneLimit)
 				.map((segment) => segment.event);
 			if (hiddenEvents.length === 0) continue;
 			const dayCell = dayCells[dayIndex];
@@ -585,15 +621,14 @@ export class CalendarRenderer {
 			});
 			this.applyEventColor(eventEl, event.color);
 			this.actions.applyConditionalFormat?.(eventEl, event.row, config);
-			if (timing.isTimed) {
-				eventEl.createSpan({ cls: "db-calendar-month-timed-dot" });
-				if (timing.startMinutes != null) {
-					eventEl.createSpan({ cls: "db-calendar-month-time", text: formatCalendarTime(timing.startMinutes) });
-				}
-			}
-			this.actions.renderRecordIcon?.(eventEl, event.row, config, true);
+			this.actions.renderRecordIcon?.(eventEl, event.row, this.withRecordIconDefault(config), true);
 			const titleEl = eventEl.createSpan({ cls: `db-calendar-month-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
 			markNoteHoverLink(titleEl, event.row.file.path, event.row.file.path);
+			// Time renders after the title as a muted suffix, never a coloured
+			// dot-prefixed pair.
+			if (timing.isTimed && timing.startMinutes != null) {
+				eventEl.createSpan({ cls: "db-calendar-month-time", text: formatCalendarTime(timing.startMinutes) });
+			}
 			eventEl.createSpan({ cls: "db-calendar-month-dates", text: this.formatMonthDateRange(event.startDateKey, event.endDateKey, event.startMinutes, event.endMinutes) });
 			this.attachEventOpenHandlers(eventEl, event);
 		}
@@ -825,7 +860,7 @@ export class CalendarRenderer {
 			this.applyEventColor(eventEl, segment.event.color);
 			this.actions.applyConditionalFormat?.(eventEl, segment.event.row, config);
 			const content = eventEl.createSpan({ cls: "db-calendar-week-allday-content" });
-			this.actions.renderRecordIcon?.(content, segment.event.row, config, true);
+			this.actions.renderRecordIcon?.(content, segment.event.row, this.withRecordIconDefault(config), true);
 			const titleEl = content.createSpan({ cls: `db-calendar-month-title${segment.event.titleIsEmpty ? " is-empty-title" : ""}`, text: segment.event.title });
 			markNoteHoverLink(titleEl, segment.event.row.file.path, segment.event.row.file.path);
 			if (segment.event.endDateKey > segment.event.startDateKey) {
@@ -893,7 +928,7 @@ export class CalendarRenderer {
 			});
 			this.applyEventColor(eventEl, event.color);
 			this.actions.applyConditionalFormat?.(eventEl, event.row, config);
-			this.actions.renderRecordIcon?.(eventEl, event.row, config, true);
+			this.actions.renderRecordIcon?.(eventEl, event.row, this.withRecordIconDefault(config), true);
 			const titleEl = eventEl.createSpan({ cls: `db-calendar-month-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
 			markNoteHoverLink(titleEl, event.row.file.path, event.row.file.path);
 			eventEl.createSpan({ cls: "db-calendar-month-dates", text: this.formatMonthDateRange(event.startDateKey, event.endDateKey, event.startMinutes, event.endMinutes) });
@@ -1011,14 +1046,21 @@ export class CalendarRenderer {
 		// Below this height the card cannot fit title + time + padding cleanly, so
 		// the time range stays in the tooltip and the title keeps priority.
 		const isCompact = height < TIMED_EVENT_TIME_VISIBILITY_HEIGHT;
-		const left = (layout.columnIndex / layout.columnCount) * 100;
-		const width = 100 / layout.columnCount;
+		// An overlapping block is inset a fixed pixel step per lane and keeps the
+		// column's own remaining width, rather than splitting the column N ways —
+		// splitting a narrow phone column N ways left every half too thin for a
+		// title at all. Left offset grows with columnIndex; width only loses what
+		// earlier lanes already claimed on the left, so every block — including
+		// the last, narrowest one — keeps a readable title box. Later
+		// (further-staggered) blocks paint on top so the sliver each earlier
+		// block still shows behind them stays their own to click.
+		const left = 4 + layout.columnIndex * CALENDAR_TIMED_STAGGER_STEP;
 		const eventTitle = `${formatCalendarTime(layout.startMinutes)} - ${formatCalendarTime(layout.endMinutes)} ${layout.event.title}`;
 		const eventEl = dayCol.createEl("button", {
 			cls: `db-calendar-week-timed-event${isCompact ? " is-compact" : ""}${this.isRowCompleted(layout.event.row, config) ? " is-completed" : ""}`,
 			attr: {
 				type: "button",
-				style: `top: ${top}px; height: ${height}px; left: calc(${left}% + 4px); width: calc(${width}% - 8px);`,
+				style: `top: ${top}px; height: ${height}px; left: ${left}px; width: calc(100% - ${left + 4}px); z-index: ${3 + layout.columnIndex};`,
 				title: eventTitle,
 				"aria-label": eventTitle,
 				"data-note-database-row-path": layout.event.row.file.path,
@@ -1032,7 +1074,7 @@ export class CalendarRenderer {
 		const content = eventEl.createDiv({ cls: "db-calendar-week-event-content" });
 		// Title first (top) so a short card still shows what the event is; the
 		// time range renders below only when there's room.
-		this.actions.renderRecordIcon?.(content, layout.event.row, config, true);
+		this.actions.renderRecordIcon?.(content, layout.event.row, this.withRecordIconDefault(config), true);
 		const titleEl = content.createDiv({ cls: `db-calendar-week-event-title${layout.event.titleIsEmpty ? " is-empty-title" : ""}`, text: layout.event.title });
 		markNoteHoverLink(titleEl, layout.event.row.file.path, layout.event.row.file.path);
 		if (!isCompact) {
@@ -2357,7 +2399,10 @@ export class CalendarRenderer {
 	}
 
 	private applyMonthSizingVars(wrap: HTMLElement, config: ViewConfig): void {
-		if (config.calendarColumnSizeMode === "custom") wrap.style.setProperty("--db-calendar-col-width", `${this.getColumnWidth(config)}px`);
+		// The month scale ignores a custom column width outright — seven fluid
+		// columns always, regardless of calendarColumnSizeMode — so a config carried
+		// over from week/day (or set before this ruling) never clips the seventh
+		// column against the pane. Week/day keep the setting via applyTimeGridSizingVars.
 		wrap.style.setProperty("--db-calendar-day-min-height", `${this.getCellMinHeight(config)}px`);
 	}
 
@@ -2673,6 +2718,18 @@ export class CalendarRenderer {
 	private isWeekendWeekday(weekStartsOn: number, index: number): boolean {
 		const day = (weekStartsOn + index) % 7;
 		return day === 0 || day === 6;
+	}
+
+	/** Show icon on by default: every reference chip carries a document glyph, so
+	 *  the calendar's own default should match it. `renderRowRecordIcon`'s shared
+	 *  gate (used by every view type, not just the calendar) reads
+	 *  `showRecordIcon === true`, so a never-configured calendar renders none —
+	 *  this resolves the calendar's own default without touching that shared
+	 *  gate or any other view's behaviour. The toolbar's toggle persists an
+	 *  explicit `false` on off (see calendar-toolbar-renderer.ts), so only that
+	 *  literal opts back out. */
+	private withRecordIconDefault(config: ViewConfig): ViewConfig {
+		return config.showRecordIcon === false ? config : { ...config, showRecordIcon: true };
 	}
 
 	/** A checkbox column is the view's only native completion signal; status columns carry display colors, not a terminal flag. */

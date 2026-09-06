@@ -16493,16 +16493,10 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   color: var(--text-normal);
 }
 
-/* --text-faint measures 1.67:1 (light) / 2.29:1 (dark) here, under WCAG 1.4.3's
-   4.5:1 for informational text — this numeral is the only thing naming which
-   date the cell holds. These explicit greys keep the same dimmed hierarchy at
-   the lightest value that still clears the bar. */
+/* This numeral is the only thing naming which date the cell holds — see
+   --db-calendar-muted-ink's own comment for the contrast-floor reasoning. */
 .note-database-container .db-calendar-day.is-outside-month .db-calendar-day-number {
-  color: #767676;
-}
-
-.theme-dark .note-database-container .db-calendar-day.is-outside-month .db-calendar-day-number {
-  color: #808080;
+  color: var(--db-calendar-muted-ink);
 }
 
 /* An outside-month cell carries no fill of its own — only its number dims. */
@@ -16567,16 +16561,27 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   overflow: visible;
 }
 
-/* More events */
+/* More events: a real <button>, so this must reset every one of
+   Obsidian's own button defaults (background, border, box-shadow, centred
+   text) that the old rule never touched — one grey text line at the chip's
+   own 10px inset, no fill, no border, no button chrome. */
 .note-database-container .db-calendar-more-events {
-  font-size: 11px;
-  color: var(--text-faint);
-  padding: 1px 4px;
+  height: 20px;
+  padding: 0 0 0 10px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: var(--db-calendar-muted-ink);
+  font-size: 12px;
+  line-height: 20px;
+  text-align: left;
+  white-space: nowrap;
   cursor: pointer;
 }
 
 .note-database-container .db-calendar-more-events:hover {
-  color: var(--text-muted);
+  color: var(--text-normal);
 }
 
 /* Expanded events popover */
@@ -16666,13 +16671,16 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
    Week and day time grids with the all-day strip and current-time ruler.
 ─────────────────────────────────────────────────────────────── */
 
-/* Sticky wrapper: pins the day-name row + all-day strip above the scrolling time grid */
+/* Sticky wrapper: pins the day-name row + all-day strip above the scrolling time grid.
+   The header rule reads the same --db-calendar-rule token as the month grid and the
+   slot lines, rather than the theme's own --background-modifier-border, so the whole
+   calendar reads one rule colour instead of several unrelated ones. */
 .note-database-container .db-calendar-week-sticky {
   position: sticky;
   top: calc(var(--db-table-header-top)  - 16pt);
   z-index: 10;
   background: var(--background-primary);
-  border-bottom: 1px solid var(--background-modifier-border);
+  border-bottom: 1px solid var(--db-calendar-rule);
   margin-bottom: 8pt;
 }
 
@@ -16693,15 +16701,23 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   text-align: right;
 }
 
-/* All-day overflow "+N" link (spans all columns) and its hover popover */
+/* All-day overflow "+N" link (spans all columns) and its hover popover. Same
+   Obsidian button reset as the month grid's own "+N more": a real
+   <button> with no fill/border/box-shadow, matching the month affordance's
+   grammar rather than a filled control. */
 .note-database-container .db-calendar-week-allday-more {
   position: relative;
   z-index: 4;
   align-self: center;
   justify-self: start;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
   padding: 0 8px;
   font-size: 11px;
   color: var(--text-muted);
+  text-align: left;
   cursor: pointer;
 }
 
@@ -16768,30 +16784,23 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
 }
 
 /* Week grid slot lines: week/day are styled to the month grid, so the rule
-   colour is the same measured #EBEBEB/#292929 the month grid's day-cell
-   borders use (src/views/calendar-renderer.ts's day-cell rules, above), not
-   the theme's own --background-modifier-border. The hour/sub-hour opacity
-   tiers are this view's own geometry and are unchanged by that ruling. */
+   colour is the shared --db-calendar-rule token the month grid's
+   day-cell borders use (src/views/calendar-renderer.ts's day-cell rules,
+   above), not the theme's own --background-modifier-border. The hour/sub-hour
+   opacity tiers are this view's own geometry and are unchanged by that ruling;
+   the token is already theme-adaptive, so one declaration covers both themes. */
 .note-database-container .db-calendar-week-slot-line {
   position: absolute;
   left: 0;
   right: 0;
   height: 1px;
-  background: color-mix(in srgb, #EBEBEB 40%, transparent);
+  background: color-mix(in srgb, var(--db-calendar-rule) 40%, transparent);
   pointer-events: none;
 }
 
-.theme-dark .note-database-container .db-calendar-week-slot-line {
-  background: color-mix(in srgb, #292929 40%, transparent);
-}
-
 .note-database-container .db-calendar-week-slot-line.is-hour {
-  background: color-mix(in srgb, #EBEBEB 90%, transparent);
+  background: color-mix(in srgb, var(--db-calendar-rule) 90%, transparent);
   height: 1px;
-}
-
-.theme-dark .note-database-container .db-calendar-week-slot-line.is-hour {
-  background: color-mix(in srgb, #292929 90%, transparent);
 }
 
 .note-database-container .db-calendar-week-day-col.is-today {
@@ -16902,31 +16911,21 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
 /* Phone week/day time grid: a minimum column width, so the week pans
  * sideways instead of dividing an already-narrow column further.
  *
- * The floor has to clear the WORST case a column carries, not the common
- * one, because a day with two events overlapping the same hour splits its
- * column in half (`left: calc(N% + 4px); width: calc(W% - 8px)` in the
- * renderer) and the halved block then pays the block inset and the
- * content's own padding out of that half. Measured at 402px against the
- * week fixture, title paint box per split block: at 45px it is 4.5px and
- * 0.5px — zero glyphs, a sub-pixel sliver of the first letter; 64px gives
- * 14px, one glyph; 72px gives 18px, two; 80px gives 22px, three glyphs
- * plus the ellipsis, which is the same legibility an UNSPLIT block already
- * has at the phone month grid's own cell width. So 80px is where a split
- * block reads as a title rather than as ink.
- *
- * 80px is also the min this product already calls a readable week/month
- * calendar column: it is the floor `getCalendarColumnWidthRange` clamps a
- * dragged custom column to. The two arrived independently and agree.
- *
- * The cost is the pan: seven 80px columns need 560px against the ~286px a
- * 402px phone leaves for them, so roughly half a week is in frame at a
- * time and today's column is scrolled to on open.
+ * The operator's ruling ("stagger overlaps") replaces an earlier, wider
+ * minimum column this token once carried: the producer of an unreadable
+ * split was never the column width, it was the equal-N-way split an overlap
+ * used to divide it by. renderWeekTimedEvent now staggers overlapping blocks
+ * by a fixed per-lane inset instead (CALENDAR_TIMED_STAGGER_STEP), so a
+ * split block keeps the column's own remaining width rather than 1/N of it.
+ * The floor this token protects is back to the phone month grid's own cell
+ * width, 45px: a stack of overlaps then reads exactly as readable as an
+ * unsplit block already does there, with no extra panning bought for it.
  *
  * Scoped to `.db-calendar-week` so it covers the day scale too (renderDay
  * adds that same class). These are new selectors, not edits to the shared
  * default rules above — desktop is untouched. */
 .is-phone .note-database-container .db-calendar.db-calendar-week {
-  --db-calendar-phone-week-col-min: 80px;
+  --db-calendar-phone-week-col-min: 45px;
 }
 
 /* Each of the two in-flow tracks (header day-names, all-day segments) gets
@@ -16939,7 +16938,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
  * declared above), so it never needs `position: sticky` — it simply is not
  * part of the box that scrolls. */
 .is-phone .note-database-container .db-calendar-time-header-days {
-  grid-template-columns: repeat(var(--db-calendar-time-day-count, 7), minmax(var(--db-calendar-phone-week-col-min, 80px), 1fr));
+  grid-template-columns: repeat(var(--db-calendar-time-day-count, 7), minmax(var(--db-calendar-phone-week-col-min, 45px), 1fr));
   min-width: 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -16948,7 +16947,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
 }
 
 .is-phone .note-database-container .db-calendar-week-allday-cols {
-  grid-template-columns: repeat(var(--db-calendar-time-day-count, 7), minmax(var(--db-calendar-phone-week-col-min, 80px), 1fr));
+  grid-template-columns: repeat(var(--db-calendar-time-day-count, 7), minmax(var(--db-calendar-phone-week-col-min, 45px), 1fr));
   min-width: 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -16970,7 +16969,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
 }
 
 .is-phone .note-database-container .db-calendar-time-columns {
-  grid-template-columns: repeat(var(--db-calendar-time-day-count, 7), minmax(var(--db-calendar-phone-week-col-min, 80px), 1fr));
+  grid-template-columns: repeat(var(--db-calendar-time-day-count, 7), minmax(var(--db-calendar-phone-week-col-min, 45px), 1fr));
 }
 
 /* Calendar options popover (reuse existing chart options styles) */
@@ -17045,46 +17044,38 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
 }
 
 /* Day cells: right + bottom border; first-row gets top, first-col gets left.
-   136px rows and the measured #EBEBEB/#292929 rule colour. */
+   136px rows and the shared --db-calendar-rule colour, already theme-adaptive
+   so one declaration covers both themes. */
 .note-database-container .db-calendar-month-week > .db-calendar-day {
   grid-row: 1 / -1;
   position: relative;
   min-width: 0;
   min-height: var(--db-calendar-day-min-height, 136px);
-  border-right: 1px solid #EBEBEB;
-  border-bottom: 1px solid #EBEBEB;
-}
-
-.theme-dark .note-database-container .db-calendar-month-week > .db-calendar-day {
-  border-right-color: #292929;
-  border-bottom-color: #292929;
+  border-right: 1px solid var(--db-calendar-rule);
+  border-bottom: 1px solid var(--db-calendar-rule);
 }
 
 /* First row: add top border */
 .note-database-container .db-calendar-month-grid > .db-calendar-month-week:first-child > .db-calendar-day {
-  border-top: 1px solid #EBEBEB;
-}
-
-.theme-dark .note-database-container .db-calendar-month-grid > .db-calendar-month-week:first-child > .db-calendar-day {
-  border-top-color: #292929;
+  border-top: 1px solid var(--db-calendar-rule);
 }
 
 /* First column: add left border (day cells are div, segments are button, so :first-of-type picks col 1) */
 .note-database-container .db-calendar-month-week > .db-calendar-day:first-of-type {
-  border-left: 1px solid #EBEBEB;
-}
-
-.theme-dark .note-database-container .db-calendar-month-week > .db-calendar-day:first-of-type {
-  border-left-color: #292929;
+  border-left: 1px solid var(--db-calendar-rule);
 }
 
 /* Event segments are direct children of the week grid: no background, no
    accent bar, no radius — the cell surface shows through; a 20px-pitch row
    (row-gap now 0 on the week grid, above) with a 10px inset to the icon and
-   an 8px icon-to-label gap, and the measured ink colour. */
+   an 8px icon-to-label gap, and the measured ink colour. The month grid's own
+   chips span exactly one column each (one chip per covered day) and never set
+   --db-calendar-segment-span, so the `, 1` fallback is what places them — only
+   the week all-day strip and the drag-preview ghost still span multiple
+   columns and still set that var explicitly. */
 .note-database-container .db-calendar-month-segment {
   position: relative;
-  grid-column: var(--db-calendar-segment-start) / span var(--db-calendar-segment-span);
+  grid-column: var(--db-calendar-segment-start) / span var(--db-calendar-segment-span, 1);
   grid-row: var(--db-calendar-segment-lane);
   display: flex;
   align-items: center;
@@ -17221,14 +17212,6 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   box-shadow: inset 0 0 0 2px var(--db-calendar-event-accent, var(--interactive-accent));
 }
 
-.note-database-container .db-calendar-month-timed-dot {
-  width: 7px;
-  height: 7px;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  background: var(--db-calendar-event-accent, var(--interactive-accent));
-}
-
 .note-database-container .db-calendar-month-time {
   position: relative;
   z-index: 1;
@@ -17288,12 +17271,6 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
 .note-database-container .db-calendar-month-week .db-calendar-more-events {
   z-index: 4;
   align-self: end;
-  padding: 2px 6px;
-  cursor: pointer;
-}
-
-.note-database-container .db-calendar-month-week .db-calendar-more-events:hover {
-  color: var(--text-muted);
 }
 
 /* Day popover: an enlarged copy of the day cell, floating over it */
@@ -17693,17 +17670,33 @@ body.is-mobile .note-database-container .db-calendar-month-time {
 }
 
 /* Calendar state tokens keep date-column and milestone emphasis local to this
-   surface. The weekend tint is now a measured colour pair, not the hover
-   token — reusing --background-modifier-hover made a weekend cell and a
-   hovered one the same colour. */
+   surface. The rule and the weekend tint are derived from the page surface
+   itself rather than from a fixed reference page colour, so both read
+   correctly on every theme a host page might set — a literal pair tuned to
+   one specific page colour reads as invisible or inverted on any other.
+   color-mix toward --text-normal is theme-adaptive by construction: text-normal
+   is always the higher-contrast direction from background-primary, so the same
+   expression lightens in dark and darkens in light without a per-theme override.
+   One rule colour is shared by month, week, day and the drawer; the weekend
+   tint is one step lighter/darker than the page in that same direction. The
+   weekend tint was previously a measured literal pair, not the hover token —
+   reusing --background-modifier-hover made a weekend cell and a hovered one
+   the same colour; that reasoning still holds, only the value's source moved. */
 .note-database-container .db-calendar {
-  --db-calendar-weekend-bg: #F7F7F7;
+  --db-calendar-rule: color-mix(in srgb, var(--background-primary) 92%, var(--text-normal));
+  --db-calendar-weekend-bg: color-mix(in srgb, var(--background-primary) 97%, var(--text-normal));
   --db-calendar-done-accent: var(--text-success, var(--interactive-accent));
   --db-calendar-done-bg: color-mix(in srgb, var(--db-calendar-done-accent) 12%, var(--background-primary));
+  /* --text-faint measures under WCAG 1.4.3's 4.5:1 against the day-cell
+     surface — these explicit greys keep the same dimmed hierarchy at the
+     lightest value that still clears the bar. One declaration, shared by the
+     outside-month day number and the "+N more" affordance, so the same grey
+     isn't declared twice. */
+  --db-calendar-muted-ink: #767676;
 }
 
 .theme-dark .note-database-container .db-calendar {
-  --db-calendar-weekend-bg: #1E1E1E;
+  --db-calendar-muted-ink: #808080;
 }
 
 /* The header band carries no weekend tint at all — only the grid columns

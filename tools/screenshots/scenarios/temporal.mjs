@@ -257,12 +257,13 @@ export const monthSegment = (seg) => {
   const geometry =
     `--db-calendar-segment-start: ${seg.column}; --db-calendar-segment-span: ${seg.span};` +
     ` --db-calendar-segment-lane: ${seg.lane + 2}; ${eventColor(seg.tone)}`;
+  // No coloured dot — every chip is icon + title, with a timed event's
+  // time as a muted suffix after the title rather than a coloured prefix.
   return `
     <button type="button" class="db-calendar-month-segment ${seg.timed ? "is-timed" : "is-all-day"} ${edges}${seg.completed ? " is-completed" : ""}"
       title="${seg.title}" data-note-database-row-path="Subscriptions/${seg.title}.md" style="${geometry}">
-      ${seg.timed ? `<span class="db-calendar-month-timed-dot"></span>
-      <span class="db-calendar-month-time">${seg.time}</span>` : ""}
       <span class="db-calendar-month-title">${seg.title}</span>
+      ${seg.timed ? `<span class="db-calendar-month-time">${seg.time}</span>` : ""}
       ${seg.dates ? `<span class="db-calendar-month-dates">${seg.dates}</span>` : ""}
     </button>`;
 };
