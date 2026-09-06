@@ -1463,6 +1463,16 @@ The shipped timeline renderer at its year scale.
 
 Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
+### Table with a frozen column, scrolled sideways
+
+The title column pinned via the column menu's Freeze row, table scrolled sideways so content passes under it. Nothing at rest — the right-edge shadow paints only once is-scrolled-x is present, which is table-renderer.ts's own scroll listener toggling it.
+
+| dark | light |
+|---|---|
+| ![table-frozen-column dark](notion-clone/views/table-frozen-column-mobile-dark.png) | ![table-frozen-column light](notion-clone/views/table-frozen-column-mobile-light.png) |
+
+Sources: `src/views/table-renderer.ts`, `styles.css`
+
 ### Table view — mobile auto-fit
 
 The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.
@@ -1472,6 +1482,16 @@ The full table the renderer builds: a select gutter, a record-icon gutter and a 
 | ![table-mobile dark](notion-clone/views/table-mobile-mobile-dark.png) | ![table-mobile light](notion-clone/views/table-mobile-mobile-light.png) |
 
 Sources: `src/views/table-renderer.ts`, `src/views/table-column-layout-sync.ts`, `src/views/table-layout.ts`, `src/views/cell-renderer.ts`, `src/views/file-title-display.ts`, `src/views/table-record-peek.ts`, `styles.css`
+
+### Table with vertical grid lines off
+
+The Show vertical lines view switch off: db-no-vertical-lines on the table removes every td/th right border, and nothing else — row backgrounds, the bottom border and conditional-format tints are unaffected.
+
+| dark | light |
+|---|---|
+| ![table-vertical-lines-off dark](notion-clone/views/table-vertical-lines-off-mobile-dark.png) | ![table-vertical-lines-off light](notion-clone/views/table-vertical-lines-off-mobile-light.png) |
+
+Sources: `src/views/table-renderer.ts`, `styles.css`
 
 ### Table view
 

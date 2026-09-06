@@ -71,6 +71,60 @@ export const CORE_SCENARIOS = [
       </div>`,
   },
   {
+    id: "table-frozen-column",
+    title: "Table with a frozen column, scrolled sideways",
+    group: "views",
+    width: 720,
+    sources: ["src/views/table-renderer.ts", "styles.css"],
+    note: "The title column pinned via the column menu's Freeze row, table scrolled sideways so "
+      + "content passes under it. Nothing at rest — the right-edge shadow paints only once "
+      + "is-scrolled-x is present, which is table-renderer.ts's own scroll listener toggling it.",
+    html: () => `
+      <div class="note-database-container is-scrolled-x">
+        <table class="db-table"><thead><tr>
+          <th class="db-frozen-col db-frozen-col-last" style="--db-frozen-left:0px" data-note-database-column-key="name">
+            <div class="db-th-content"><span class="db-property-icon">${ICONS["file-text"]}</span><span class="db-th-label">Name</span></div>
+          </th>
+          <th data-note-database-column-key="cost"><div class="db-th-content"><span class="db-property-icon">${ICONS.hash}</span><span class="db-th-label">Cost</span></div></th>
+          <th data-note-database-column-key="billing"><div class="db-th-content"><span class="db-property-icon">${ICONS["circle-dot"]}</span><span class="db-th-label">Billing</span></div></th>
+          <th data-note-database-column-key="renewal"><div class="db-th-content"><span class="db-property-icon">${ICONS.calendar}</span><span class="db-th-label">Next Renewal</span></div></th>
+        </tr></thead><tbody>
+          <tr>
+            <td class="db-cell db-frozen-col db-frozen-col-last" style="--db-frozen-left:0px">Adobe Creative Cloud</td>
+            <td class="db-cell">$54.99</td>
+            <td class="db-cell">${optionPill("Monthly")}</td>
+            <td class="db-cell">2026-03-14</td>
+          </tr>
+          <tr>
+            <td class="db-cell db-frozen-col db-frozen-col-last" style="--db-frozen-left:0px">Figma</td>
+            <td class="db-cell">$15.00</td>
+            <td class="db-cell">${optionPill("Monthly")}</td>
+            <td class="db-cell">2026-02-28</td>
+          </tr>
+          <tr>
+            <td class="db-cell db-frozen-col db-frozen-col-last" style="--db-frozen-left:0px">Sketch</td>
+            <td class="db-cell">$120.00</td>
+            <td class="db-cell">${optionPill("Yearly")}</td>
+            <td class="db-cell">2026-08-02</td>
+          </tr>
+        </tbody></table>
+      </div>`,
+  },
+  {
+    id: "table-vertical-lines-off",
+    title: "Table with vertical grid lines off",
+    group: "views",
+    width: 620,
+    sources: ["src/views/table-renderer.ts", "styles.css"],
+    note: "The Show vertical lines view switch off: db-no-vertical-lines on the table removes "
+      + "every td/th right border, and nothing else — row backgrounds, the bottom border and "
+      + "conditional-format tints are unaffected.",
+    html: () => `
+      <div class="note-database-container">
+        <table class="db-table db-no-vertical-lines"><thead><tr>${tableHeader()}</tr></thead><tbody>${tableRows()}</tbody></table>
+      </div>`,
+  },
+  {
     id: "table-column-header",
     title: "Column header affordances",
     group: "components",
