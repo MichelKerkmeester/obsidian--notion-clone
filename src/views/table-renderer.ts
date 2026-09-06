@@ -799,6 +799,9 @@ export class TableRenderer {
   }
 
   private renderFooter(table: HTMLElement, config: ViewConfig, columns: ColumnDef[], rows: RowData[]): void {
+    // Nothing to summarize over zero rows, so the footer is skipped rather than drawn empty. The
+    // summary config itself is untouched — it reappears the moment a row exists.
+    if (rows.length === 0) return;
     this.footerRenderer.renderFooter(table as HTMLTableElement, config, columns, rows, {
       isReadOnly: this.actions.isReadOnly,
       hasRecordIcon: this.shouldRenderRecordIcon(config),
