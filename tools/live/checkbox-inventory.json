@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T04:30:43.800Z",
+  "measuredAt": "2026-09-06T04:58:04.455Z",
   "inputs": {
-    "styles.css": "0cec9cd820fb",
+    "styles.css": "a849b979b394",
     "tools/live/checkbox-inventory.mjs": "e869ed91680a"
   },
   "totals": {
@@ -13,7 +13,7 @@
   "classless": [
     {
       "file": "src/views/calendar-toolbar-renderer.ts",
-      "line": 484,
+      "line": 490,
       "chain": [
         "db-chart-options-row db-calendar-range-row"
       ],
@@ -43,7 +43,7 @@
   "sites": [
     {
       "file": "src/views/calendar-timeline-toolbar-renderer.ts",
-      "line": 333,
+      "line": 338,
       "chain": [
         "db-chart-options-row db-calendar-range-row db-calendar-timeline-range-row"
       ],
@@ -55,7 +55,7 @@
     },
     {
       "file": "src/views/calendar-toolbar-renderer.ts",
-      "line": 484,
+      "line": 490,
       "chain": [
         "db-chart-options-row db-calendar-range-row"
       ],
@@ -91,7 +91,7 @@
     },
     {
       "file": "src/views/column-menu.ts",
-      "line": 465,
+      "line": 491,
       "chain": [
         "db-displayopt-row db-displayopt-colors"
       ],
@@ -142,7 +142,7 @@
     },
     {
       "file": "src/views/view-config-panel-renderer.ts",
-      "line": 2149,
+      "line": 2156,
       "chain": [
         "db-view-config-panel",
         "db-view-config-field"

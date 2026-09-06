@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T04:31:50.035Z",
+  "measuredAt": "2026-09-06T04:59:04.936Z",
   "inputs": {
-    "styles.css": "0cec9cd820fb",
+    "styles.css": "a849b979b394",
     "tools/live/token-census.mjs": "f20e5a646c11"
   },
   "tokenRoots": [
@@ -9,9 +9,9 @@
     ".db-surface"
   ],
   "totals": {
-    "classes": 76,
-    "differOnBody": 76,
-    "tokenlessOnBody": 73
+    "classes": 77,
+    "differOnBody": 77,
+    "tokenlessOnBody": 74
   },
   "rows": [
     {
@@ -89,6 +89,30 @@
     },
     {
       "cls": "db-base-import-type-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "tokensWhenMarked": true,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      },
+      "marked": {
+        "radius": "0px",
+        "font": "16px",
+        "token": "8px"
+      }
+    },
+    {
+      "cls": "db-calendar-date-field-dropdown",
       "differing": [
         "fontSize"
       ],

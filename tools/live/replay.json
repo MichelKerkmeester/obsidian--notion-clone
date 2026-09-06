@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-09-06T04:42:03.573Z",
+  "measuredAt": "2026-09-06T04:59:24.424Z",
   "inputs": {
-    "styles.css": "0cec9cd820fb",
+    "styles.css": "a849b979b394",
     "tools/screenshots/theme.css": "f30f295f9cf0",
     "tools/screenshots/runtime-vars.css": "2dc315ed9b94",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a",
-    "tools/live/replay.mjs": "773d7e8bcb88"
+    "tools/live/replay.mjs": "12aab7a66fc2"
   },
   "claims": [
     {
@@ -132,7 +132,7 @@
     },
     {
       "phase": "039-calendar-parity-port",
-      "claim": "the calendar parity surface carries completion, weekend and calm-empty markers",
+      "claim": "the calendar parity surface carries completion and weekend markers; the calm-empty backlog marker 039 recorded is superseded by 057 (the drawer is omitted entirely, not shown empty, when nothing is unscheduled)",
       "was": 4,
       "recorded": 0,
       "actual": 0,

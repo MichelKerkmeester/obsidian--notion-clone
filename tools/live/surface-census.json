@@ -1,16 +1,16 @@
 {
-  "measuredAt": "2026-09-06T04:31:49.151Z",
+  "measuredAt": "2026-09-06T04:59:04.200Z",
   "inputs": {
-    "styles.css": "0cec9cd820fb",
+    "styles.css": "a849b979b394",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ca203fa23a84"
   },
   "totals": {
     "rendered": 83,
-    "buildable": 223,
+    "buildable": 224,
     "declared": 6,
     "renderedOnly": 0,
-    "buildableNotRendered": 140,
+    "buildableNotRendered": 141,
     "untokened": 0,
     "unroled": 83
   },
@@ -1512,6 +1512,7 @@
     "db-timeline-mobile-menu-button",
     "db-chart-options-dropdown",
     "db-calendar-timeline-options-dropdown",
+    "db-calendar-date-field-dropdown",
     "db-calendar-options-dropdown",
     "db-chart-drilldown-modal",
     "db-anchored-popover",

@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T04:30:43.317Z",
+  "measuredAt": "2026-09-06T04:58:03.900Z",
   "inputs": {
-    "styles.css": "0cec9cd820fb",
+    "styles.css": "a849b979b394",
     "tools/live/checkbox-appearance.mjs": "8e751058f620",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
