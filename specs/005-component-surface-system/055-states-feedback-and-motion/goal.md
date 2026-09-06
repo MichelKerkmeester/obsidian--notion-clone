@@ -169,6 +169,13 @@ Name conflicts; never resolve them silently.
 - [ ] **The operator opens a filtered view, deletes a row, deletes a board group field and drags a
       card under a sort, and reads the states as debugged, refined, perfected.** Only the operator
       closes this row; nothing in this repository can.
+- [ ] **A single-row delete has no confirm and shows an Undo toast; bulk delete and anything not
+      undoable keep the confirm.** **Added 2026-09-06** from the operator's E4 ruling on `051`
+      ADR-007 (`goal.md` §4 amendment below). **Today: RED, and belt-and-suspenders rather than
+      missing** — `row-menu.ts:166-176`'s single-row delete calls `confirmWithModal` **and**
+      `deleteRow` (`database-view.ts:8354-8371`) **already** shows a `showToast` with an `Undo`
+      action after it deletes. Both exist; the confirm is the one to remove.
+      `database-view.ts:4962`'s `deleteSelectedRows` (bulk) keeps its confirm, unchanged.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -200,4 +207,31 @@ Everything below is VOLATILE.
 | **Landed in-runtime 2026-09-05, and renamed** | Reviewed against the parent's D1-D14, `050`'s `design-trueup.md` and the current tree, then copied from `worktrees/084-phase-states-feedback` and renamed from `051-states-feedback-and-motion` to **`055-states-feedback-and-motion`**. **This packet carried the most true-up damage of the five**, because all four of the `050` items it implements are in the six `design-trueup.md` §4 found could not be observed red as written. Every one of its four `050` reds was rewritten: item 5 (the restore machinery exists), item 8 (false for `row-menu.ts`, true only for `bulk-edit-field-menu.ts:31-45`, caps not adopted), item 9 (twelve reasons ship, not one), item 14 (no virtualization exists at all). D1, D3, D5 and D6 were amended; AC-003, AC-005, AC-009, AC-010, AC-011 and C3, C5, C10 rewritten. **Counts and citations corrected**: the untokenized `120ms` transitions recount to **42**, not 78; `confirm-modal.ts:45` → `:42`; `database-view.ts:10594` → `:2678`/`:2890`/`:3378`; `:11230` → `:9433-9437`; `:7716` → `:7719`; `chart-renderer.ts:600` → `:601`. **Spot-checked and confirmed exact**: the **247** `new Notice(` call sites, `empty-state-renderer.ts:210` `getEmptyStateReason`, `styles.css:113` `--db-transition-fast`, `src/i18n.ts:1455` `notice.galleryMigrated`. |
 | Chart keeps a second empty-state vocabulary | `chart-renderer.ts:601-604` builds `db-chart-empty` with its own reason type (`chart-aggregation.ts:64`), parallel to `EmptyStateRenderer`'s twelve reasons. This is the concrete instance D5's one-component rule exists to end; absorbing it is L2. |
 | The undo affordance is ours, not copied | No Anytype capture shows an undo surface and no `047` finding names one. The plugin already has two (`showOperationResult`, `database-view.ts:9433-9437`; the selection bar's undo, `database-view.ts:7719`); this phase makes them one component and gives `notice.galleryMigrated` the button its text promises. The Anytype contribution is the consistency requirement, not a screen. |
+
+### 2026-09-06 amendment: single-row delete drops its confirm, closing `051` ADR-007's E4
+
+**E4 ruling, ~07:50, operator: *"No confirm for single delete, Undo toast."*** `051`'s ADR-007
+flagged the destructive-confirm hold rather than resolving it, because Anytype's own answer —
+delete straight into a Bin, no confirm anywhere — has no precondition here (no Bin) and the packet
+would not authorise a data-loss deviation on its own. The operator's ruling is a third path: keep
+the toast-and-undo safety net this program already built, and let it stand in for the confirm on
+the one case that already has an undo path.
+
+**Read from source, not assumed.** `row-menu.ts:166-176`'s single-row delete action calls
+`confirmWithModal` and then `deleteRow`; `deleteRow` (`database-view.ts:8354-8371`,
+`embedded-database-renderer.ts:3302` mirrors it) already reads the file before trashing it, pushes a
+`DeletedHistoryEntry`, and shows a `showToast` carrying an `Undo` action that restores the file.
+**Both the confirm and the undo toast already exist for this path** — the fix removes the confirm
+call, not the toast, and touches one call site (`row-menu.ts`) since both hosts share the same
+`RowMenu` component through `actions.deleteRow`.
+
+**What keeps its confirm.** `database-view.ts:4962`'s `deleteSelectedRows` (bulk row delete) and
+every column-deletion confirm in `column-operations.ts` (a different destructive action, not a row)
+are unaffected — the ruling names single-row delete specifically, and bulk/non-undoable operations
+are the ADR-007 E4 text's own carve-out.
+
+**Owner:** this phase, since it owns the `deleteRow` call sites and the toast/undo primitive
+(`showOperationResult`/`showToast`) the confirm's removal now leans on entirely. `051`'s own
+`decision-record.md` records the ADR-007 E4 closure and points here for the implementation.
+Recorded in `roadmap.md` §6A.
 <!-- /ANCHOR:log -->

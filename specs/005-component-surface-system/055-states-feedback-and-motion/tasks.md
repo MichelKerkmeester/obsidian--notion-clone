@@ -613,6 +613,11 @@ A task missing any of the three is not ready to start.
 - [ ] T017 [P0] **The operator exercises the states on device** — filtered view, row deletion,
       board group-field deletion, drag under sort — and reads them as debugged, refined, perfected
       (the §6A bar). Not tickable by an agent (goal D8)
+- [ ] T019 (2026-09-06 amendment) Remove `row-menu.ts:166-176`'s `confirmWithModal` call on the
+      single-row delete action, leaving `deleteRow`'s existing `showToast`/Undo path as the only
+      safety net. Red-first: today a single-row delete raises a confirm dialog before the toast
+      ever shows; assert no confirm surface opens after the fix, and the Undo toast still restores
+      the file. `deleteSelectedRows` (bulk, `database-view.ts:4962`) is untouched by this task
 <!-- /ANCHOR:phase-3 -->
 
 ---
