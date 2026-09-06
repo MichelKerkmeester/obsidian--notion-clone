@@ -9,7 +9,8 @@
 // whether an in-progress name edit moves a row reduces to one thing: does anything inside the
 // name editor's own keystroke handlers ask for a fresh sort before the edit commits?
 //
-// It does not. cell-renderer.ts's editFileName delegates to editSingleLinePopover, whose
+// It does not. cell-renderer.ts's editFileName delegates to the extracted single-line editor
+// (record-surface/cell-editor-text.ts's openSingleLineEditor), whose
 // popover editor never touches the cell's own DOM and whose per-keystroke handler
 // (input.onkeydown) only reacts to Enter, Tab and Escape — each of which calls `save` or
 // `cancel`, and both close the editor rather than reordering mid-keystroke. There is no
@@ -31,6 +32,9 @@ import { resolve } from "path";
 import { describe, expect, it } from "vitest";
 
 const cellRendererSource = readFileSync(resolve(__dirname, "./cell-renderer.ts"), "utf-8");
+// The single-line editor moved out from behind `CellRenderer` into its own module; the keystroke
+// shape this suite pins travelled with the body, so it is read where the function now lives.
+const textEditorSource = readFileSync(resolve(__dirname, "./record-surface/cell-editor-text.ts"), "utf-8");
 const tableRendererSource = readFileSync(resolve(__dirname, "./table-renderer.ts"), "utf-8");
 
 // ───────────────────────────────────────────────────────────────────
@@ -44,19 +48,19 @@ describe("the name editor never re-sorts mid-keystroke", () => {
     const end = cellRendererSource.indexOf("\n  }", start);
     const body = cellRendererSource.slice(start, end);
 
-    expect(body).toContain("this.editSingleLinePopover(");
+    expect(body).toContain("openSingleLineEditor(");
     // The popover renders detached from the cell; nothing here writes the in-progress draft back
     // into `td`, which is what would make a live rename visible (and sortable) before it commits.
     expect(body).not.toContain("td.textContent =");
     expect(body).not.toContain("td.setText(");
   });
 
-  it("editSingleLinePopover's own keystroke handler only ever commits on Enter, Tab or Escape", () => {
-    const start = cellRendererSource.indexOf("private editSingleLinePopover(");
+  it("the single-line editor's own keystroke handler only ever commits on Enter, Tab or Escape", () => {
+    const start = textEditorSource.indexOf("export function openSingleLineEditor(");
     expect(start).toBeGreaterThan(-1);
-    const end = cellRendererSource.indexOf("\n  private mountInput(", start);
+    const end = textEditorSource.indexOf("\nexport function openTextPopoverEditor(", start);
     expect(end).toBeGreaterThan(start);
-    const body = cellRendererSource.slice(start, end);
+    const body = textEditorSource.slice(start, end);
 
     expect(body).not.toContain("input.oninput");
     expect(body).toContain('event.key === "Enter"');

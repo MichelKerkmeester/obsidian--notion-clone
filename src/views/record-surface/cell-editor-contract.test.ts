@@ -36,6 +36,21 @@ const ALL_COLUMN_TYPES = [
 
 const cellRendererSource = readFileSync(resolve(__dirname, "../cell-renderer.ts"), "utf-8");
 
+/**
+ * `startEdit`'s own body, sliced off the shipped source. Reading the whole file instead lets a
+ * needle from a different method — `startEditSession`'s bulk branch tests the same column types —
+ * stand in for a dispatch branch that has been deleted, which is the one regression this pin
+ * exists to catch.
+ */
+function startEditBody(source: string): string {
+  const start = source.indexOf("\n  startEdit(");
+  const end = source.indexOf("\n  startEditSession(", start);
+  if (start < 0 || end < 0) throw new Error("startEdit / startEditSession no longer bound the dispatch");
+  return source.slice(start, end);
+}
+
+const startEditSource = startEditBody(cellRendererSource);
+
 /** The private method `startEdit` dispatches to today, read off the shipped source rather than assumed. */
 const TODAY_DISPATCH_METHOD: Record<string, string> = {
   status: "editOptionPopover",
@@ -47,7 +62,6 @@ const TODAY_DISPATCH_METHOD: Record<string, string> = {
   date: "editDatePopover",
   datetime: "editDatePopover",
   files: "editText",
-  text: "editText",
 };
 
 // ───────────────────────────────────────────────────────────────────
@@ -59,19 +73,19 @@ describe("CELL_EDITOR_DISPATCH_CONTRACT", () => {
     expect(Object.keys(CELL_EDITOR_DISPATCH_CONTRACT).sort()).toEqual([...ALL_COLUMN_TYPES].sort());
   });
 
-  it("pins today's dispatch: each mapped type still routes to the method this contract names", () => {
+  it("pins today's dispatch: each guarded type's branch still calls the method this contract names", () => {
     for (const [type, method] of Object.entries(TODAY_DISPATCH_METHOD)) {
-      const needle = `col.type === "${type}"`;
-      expect(cellRendererSource, `dispatch branch for "${type}" moved or was removed`).toContain(needle);
-      // The branch for a type is one `startEdit` region; asserting the target method's name
-      // appears in that same neighbourhood (rather than anywhere in a 3,000-line file) would need
-      // a parser this suite does not carry. Requiring the method to still be declared privately
-      // on the class is the cheaper half of the same pin: a renamed or removed method fails here
-      // before dispatch is ever reached.
-      expect(cellRendererSource, `"${method}" is no longer declared on CellRenderer`).toMatch(
-        new RegExp(`\\b(private|public|protected)?\\s*${method}\\s*\\(`),
-      );
+      const branch = startEditSource.indexOf(`col.type === "${type}"`);
+      expect(branch, `dispatch branch for "${type}" moved out of startEdit or was removed`).toBeGreaterThan(-1);
+      const untilNextBranch = startEditSource.slice(branch, branch + 400);
+      expect(untilNextBranch, `"${type}" no longer dispatches to ${method}`).toContain(`this.${method}(`);
     }
+  });
+
+  it("an unguarded text column falls through to the text editor", () => {
+    // `text` carries no branch of its own; it is what `startEdit` reaches when nothing else matched,
+    // so the pin is the closing statement rather than a `col.type` needle.
+    expect(startEditSource.trimEnd()).toMatch(/this\.editText\([^;]*\);\s*\}\s*$/);
   });
 
   it("checkbox toggles in place rather than opening an editor", () => {
@@ -89,12 +103,21 @@ describe("CELL_EDITOR_DISPATCH_CONTRACT", () => {
     expect(CELL_EDITOR_DISPATCH_CONTRACT["file.name"]).toBeUndefined();
   });
 
-  it("green after extraction: every named editor module now exists on disk", () => {
+  it("green after extraction: every named editor module exists and exports the name it declares", () => {
     const missing: string[] = [];
     for (const [type, shell] of Object.entries(CELL_EDITOR_DISPATCH_CONTRACT)) {
       if (shell.kind !== "extracted-module") continue;
       const modulePath = resolve(__dirname, `${shell.module}.ts`);
-      if (!existsSync(modulePath)) missing.push(type);
+      if (!existsSync(modulePath)) {
+        missing.push(type);
+        continue;
+      }
+      // A file on disk is not an editor. The contract names the export each type resolves to, and
+      // the class has to reach it — otherwise the module can exist beside a dispatch that still
+      // runs its own private copy.
+      const moduleSource = readFileSync(modulePath, "utf-8");
+      if (!new RegExp(`export function ${shell.export}\\b`).test(moduleSource)) missing.push(`${type} (export)`);
+      if (!cellRendererSource.includes(`${shell.export}(`)) missing.push(`${type} (unreached)`);
     }
     // Was every module-backed type before the extraction landed — the designed red this contract
     // pins ahead of any body moving. Every type now resolves to its extracted module, so `missing`

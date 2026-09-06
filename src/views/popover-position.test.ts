@@ -167,15 +167,22 @@ describe("a pane that has not laid out", () => {
 // suite exercises directly, and its status/select/relation popover through
 // `resolvePopoverHorizontalLeft`, already covered above. Both share one guarantee:
 // the returned left plus the popover's own width never exceeds the bounds' right edge.
-// The source check below pins that the three private placement methods still make
+// The source check below pins that the three placement functions still make
 // that exact call, so a change removing it fails here rather than only on a screen.
 describe("a cell editor's popover near the viewport's right edge", () => {
-  const source = readFileSync(resolve(__dirname, "./cell-renderer.ts"), "utf-8");
+  // Each positioner moved from a `CellRenderer` private method to a plain function in its
+  // editor's own module; the clamp travelled with the body, so the check reads the module the
+  // function actually lives in.
+  const POSITIONERS: ReadonlyArray<readonly [string, string]> = [
+    ["function positionDateEditPopover(", "./record-surface/cell-editor-date.ts"],
+    ["function positionTextEditPopover(", "./record-surface/cell-editor-text.ts"],
+    ["function positionOptionPopover(", "./record-surface/cell-editor-option.ts"],
+  ];
   const CLAMP_CALL = "clamp(rect.left, bounds.left + margin, bounds.right - width - margin)";
 
-  it("clamps the left edge in the date, single-line and option positioning methods", () => {
-    const methodStarts = ["private positionDateEditPopover(", "private positionTextEditPopover(", "private positionOptionPopover("];
-    for (const methodStart of methodStarts) {
+  it("clamps the left edge in the date, single-line and option positioning functions", () => {
+    for (const [methodStart, modulePath] of POSITIONERS) {
+      const source = readFileSync(resolve(__dirname, modulePath), "utf-8");
       const start = source.indexOf(methodStart);
       expect(start).toBeGreaterThan(-1);
       const body = source.slice(start, start + 1200);
