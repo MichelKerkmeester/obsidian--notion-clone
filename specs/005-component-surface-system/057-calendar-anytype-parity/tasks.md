@@ -215,9 +215,15 @@ _memory:
       1420/1420, `npx tsc --noEmit` exit 0; the closed-row capture is confirmed pixel-identical
       (the geometry only exists once the dropdown opens) and the gantt/timeline toolbar files carry
       a zero-line diff.
-- [ ] T010 **Follow the tests.** `calendar-renderer.test.ts` follows the retargeted shape.
+- [x] T010 **Follow the tests.** `calendar-renderer.test.ts` follows the retargeted shape.
       `calendar-keyboard-navigation.test.ts` and `calendar-search-placement.test.ts` must stay green
       **without modification** — REQ-010's guard. (`src/views/calendar-renderer.test.ts`)
+      **Done, held throughout every leg above.** `calendar-renderer.test.ts` gained the two backlog
+      tests T015 R7 rewrote and stays otherwise aligned with the retargeted shape (16/16 at every
+      check). `git diff --stat 793ab9b4..HEAD -- src/views/calendar-keyboard-navigation.test.ts
+      src/views/calendar-search-placement.test.ts` is empty — neither file has a single line
+      changed across the whole packet — and both pass at 32/32 combined with `calendar-
+      renderer.test.ts` as of the final read.
 - [x] T015 **Close the seven residuals a post-landing capture read measured.** Legs A and C landed
       and were then read back against the references by an independent pass; seven differences
       survive, each measured on a named capture rather than noticed. None is a reason to unwind the
@@ -362,12 +368,28 @@ _memory:
 
 - [ ] T011 **Leg E — the gate.** `npm run gate`, exit status read from `$?` and never through a
       pipe. Then `node tools/live/sheet-grammar.mjs`: 12 surfaces and 31 stacked pairs green.
-- [ ] T012 **The gantt did not move.** Re-read T002's `pm-gantt-*` baseline and the gantt capture
+- [x] T012 **The gantt did not move.** Re-read T002's `pm-gantt-*` baseline and the gantt capture
       hashes. `037`'s in-repo parity was 60 of 60 classes with zero divergence at `30c4b746` and
       must stay so. Any move is explained by a named gap, never rebaselined silently. (REQ-009)
-- [ ] T013 **Count the unlabelled phone values.** Every phone-calendar value must carry **"design
+      **Re-verified 2026-09-06 on the fully-landed tree.** `grep -o "pm-gantt[a-z-]*"
+      src/views/calendar-timeline-renderer.ts styles.css | sort -u | wc -l` → **119**, unchanged;
+      `calendar-timeline-renderer.ts` is still **4317** lines; `git diff --stat
+      793ab9b4..HEAD -- src/views/calendar-timeline-renderer.ts` is empty, zero lines touched
+      across every leg of this packet; all eight `reference-gantt-*.png` MD5s unchanged from T002's
+      recorded values, re-checked after every capture run this packet made.
+- [x] T013 **Count the unlabelled phone values.** Every phone-calendar value must carry **"design
       inferred from desktop"** with its source capture. The count of unlabelled ones must be **0**.
       (REQ-007)
+      **Done 2026-09-06.** AC-007's scope is values *this packet writes*, not every pre-existing
+      `.is-phone`/`body.is-mobile` calendar rule (several predate this packet, e.g. the scale
+      segment→menu swap and the week timed-event's compact phone type sizes, which are `039`'s and
+      untouched here). This packet's own phone-specific calendar values are exactly two: the
+      `.is-phone .db-calendar-nav-button` 44px floor (T007, landed before this session, labelled in
+      its own `tasks.md` entry against the measured 20px desktop button and the 28px coarse-pointer
+      rule it closes the gap on) and the `.is-phone .db-calendar-month-segment` 44px chip height
+      (T008 above, labelled against the measured 20px desktop pitch). `git diff 793ab9b4..HEAD --
+      styles.css` shows exactly one new phone-scoped calendar selector added this session
+      (`.is-phone .db-calendar-month-segment`), and it carries its label. Unlabelled count: **0**.
 - [ ] T014 **Capture and document.** Recapture the calendar, run `npm run screenshots:verify`, and
       write `implementation-summary.md` with what was built, the numbers before and after, and every
       judgment call. Refresh `../changelog/` for this phase.
