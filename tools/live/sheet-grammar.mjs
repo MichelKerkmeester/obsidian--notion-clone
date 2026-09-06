@@ -179,6 +179,12 @@ const REGISTERED_STACKED_PAIRS = [
   { name: "sort field picker", parent: { renderer: "sort-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".db-sort-field-dropdown" } },
   { name: "sort direction picker", parent: { renderer: "sort-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".db-sort-direction-dropdown" } },
   { name: "properties create property", parent: { renderer: "column-manager", bag: "file-view", captureData: true }, child: { kind: "modal", title: "Create property" } },
+  // The operator's own report, 2026-09-06: "Edit property — Month" opened from the per-column
+  // overflow row on a shipped column, not the "+ Add column" row above. Same K3 opener family as
+  // the row above (`ColumnRenameModal extends DbModal`, `applyPresentation`'s shared mechanism),
+  // reached through the row this packet already registers as "properties column overflow menu"
+  // rather than through the toolbar's own add-column action.
+  { name: "properties edit property", parent: { renderer: "column-manager", bag: "file-view", captureData: true }, child: { kind: "modal", title: "Edit property — Month" } },
   { name: "properties property type picker", parent: { renderer: "column-manager", bag: "file-view", captureData: true }, child: { kind: "dropdown", depth: 3, first: "modal", title: "Create property" } },
   { name: "properties column overflow menu", parent: { renderer: "column-manager", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".db-column-manager-file-property-dropdown" } },
   { name: "settings dropdown field", parent: { renderer: "view-config", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".db-dropdown-field" } },
@@ -213,6 +219,13 @@ const REGISTERED_STACKED_PAIRS = [
 // group's long option text overflowing the surface — a settings sheet an operator screenshot once
 // showed with the same option text mid-word-broken to stay inside its own button, still overflowing.
 const CLOSE_TARGET_FLOOR_PX = 44;
+
+// The grab handle's own band (8px top margin + 4px height + 4px bottom margin = 16px) plus the
+// header's own top margin (20px, `.db-mobile-bottom-sheet > .db-panel-header:has(.db-sheet-close)`)
+// and its row height (~28-40px depending on the title's own line-height) is every pixel a
+// conforming sheet spends between the handle and the title — roughly 80px, measured against the
+// registered pairs below. A gap past that is unclaimed space, not chrome any surface declares.
+const HANDLE_TO_TITLE_GAP_MAX_PX = 80;
 
 // The element removed by the negative control: the grab handle, whose loss is exactly the
 // "drag handler doesnt work" shape the operator reported.
@@ -289,6 +302,13 @@ import { buildConfirmSheetBody } from "${fileURLToPath(new URL("../../src/views/
 import { buildShellHeader } from "${fileURLToPath(new URL("../../src/views/surface-shell.ts", import.meta.url)).replace(/\\/g, "/")}";
 
 setLocale("en");
+
+// This lane links only styles.css (no theme.css/runtime-vars.css — those pull in real font
+// metrics that shift text width a fraction of a pixel across most surfaces, which is a change
+// to every other check's rendering rather than this one's). --background-primary is the one
+// token the background-match check below needs resolved to something other than the browser's
+// unstyled default, so it is set directly rather than by pulling in the whole stand-in sheet.
+document.documentElement.style.setProperty("--background-primary", "#1e1e1e");
 
 const mountedSheet = () => document.body.querySelector(".db-mobile-bottom-sheet");
 const stackedPairRegistry = ${JSON.stringify(REGISTERED_STACKED_PAIRS)};
@@ -718,9 +738,33 @@ const openPickerChild = (parent, child) => {
   };
 };
 
+// Obsidian's real Modal wraps its own \`modalEl\` (\`.modal\`) in a \`.modal-container\` it appends to
+// the body directly, with a \`.modal-bg\` backdrop beside it — and every Modal carries a title
+// element and a close button of its own inside \`modalEl\`, whether or not a subclass ever uses
+// them. The DbModal-backed rows below (\`kind: "modal"\`) build that real shape rather than a bare
+// \`modal-container\`/\`modal-content\` pair, so the native chrome \`attachSheetChromeToModal\` has to
+// neutralise is actually present to neutralise — a stand-in missing it would pass whether or not
+// that neutralising code does anything at all.
 const openHostModalChild = (parent, child) => {
-  const panel = document.createElement("div");
-  panel.className = "modal-container";
+  const container = document.createElement("div");
+  container.className = "modal-container";
+  const bg = document.createElement("div");
+  bg.className = "modal-bg";
+  container.appendChild(bg);
+  const modalEl = document.createElement("div");
+  modalEl.className = "modal";
+  container.appendChild(modalEl);
+  // Neither carries plugin or theme styling of its own — production leaves both sized and
+  // painted by Obsidian's own host CSS, which this repository does not vendor. An explicit size
+  // stands in for that, approximated rather than measured, so each element renders as the
+  // present, non-collapsing thing it is on a device instead of the zero-height, zero-width div
+  // a bare unstyled element would otherwise be — a fact about this stand-in, not the code under
+  // test. Without it every check below would read clean whether or not the neutralising code in
+  // attachSheetChromeToModal does anything at all.
+  const titleEl = document.createElement("div");
+  titleEl.className = "modal-title";
+  titleEl.style.cssText = "display: block; height: 40px;";
+  modalEl.appendChild(titleEl);
   const content = document.createElement("div");
   content.className = "modal-content note-database-modal";
   const heading = document.createElement("h3");
@@ -730,8 +774,14 @@ const openHostModalChild = (parent, child) => {
   body.className = "db-modal-help";
   body.textContent = child.kind === "fuzzy" ? "Search files" : "Confirm this change";
   content.appendChild(body);
-  panel.appendChild(content);
-  parent.appendChild(panel);
+  modalEl.appendChild(content);
+  const closeButton = document.createElement("div");
+  closeButton.className = "modal-close-button";
+  closeButton.style.cssText = "display: block; width: 32px; height: 32px;";
+  modalEl.appendChild(closeButton);
+  // Always a direct child of the body, never of \`parent\`: that is where Obsidian's own
+  // \`Modal.open()\` puts \`containerEl\`, independent of whatever sheet was already open.
+  document.body.appendChild(container);
   let releaseChrome;
   let releasePlacement;
   let closed = false;
@@ -740,15 +790,16 @@ const openHostModalChild = (parent, child) => {
     closed = true;
     releasePlacement?.();
     releaseChrome?.();
-    if (panel.isConnected) panel.remove();
+    if (container.isConnected) container.remove();
   };
-  releaseChrome = attachSheetChromeToModal(panel, true, close, {
+  closeButton.addEventListener("click", close);
+  releaseChrome = attachSheetChromeToModal(modalEl, true, close, {
     title: child.title || "Choose file",
     getTitle: () => child.title || "Choose file",
   });
-  placeSheet(panel);
-  releasePlacement = keepSheetPlaced(panel);
-  return { panel, close };
+  placeSheet(modalEl);
+  releasePlacement = keepSheetPlaced(modalEl);
+  return { panel: modalEl, close };
 };
 
 const openSingleChild = (parent, child) => {
@@ -861,6 +912,28 @@ const measureStackedPair = async (pair) => {
   const hasFade = top.classList.contains("has-scroll-overflow")
     || scrollStyle.maskImage !== "none"
     || scrollStyle.webkitMaskImage !== "none";
+  // Exactly one close affordance for the child: its own .db-sheet-close, scoped to the child so
+  // the dimmed parent's own close button — still on screen, only dimmed, never hidden — is not
+  // counted against it. .modal-close-button is read from the whole document instead of the
+  // child alone, because a host modal's native close button that survives the portal can end up
+  // orphaned in the leftover native container beside the child rather than inside it.
+  const isVisible = (el) => {
+    const style = getComputedStyle(el);
+    if (style.display === "none" || style.visibility === "hidden") return false;
+    const rect = el.getBoundingClientRect();
+    return rect.width > 0 && rect.height > 0;
+  };
+  const childCloseControls = Array.from(top.querySelectorAll(".db-sheet-close")).filter(isVisible);
+  const nativeCloseControls = Array.from(document.querySelectorAll(".modal-close-button")).filter(isVisible);
+  const visibleCloseControls = [...childCloseControls, ...nativeCloseControls];
+  const singleCloseControl = childCloseControls.length === 1 && nativeCloseControls.length === 0;
+  // The header carries no background of its own — every sheet's surface paints one shared token
+  // behind both the header and the row directly beneath it, so the two read as one surface rather
+  // than two backgrounds meeting at the header's own bottom edge.
+  const bodyHost = header?.nextElementSibling ?? null;
+  const headerBackground = header ? getComputedStyle(header).backgroundColor : null;
+  const bodyBackground = bodyHost ? getComputedStyle(bodyHost).backgroundColor : null;
+  const headerBodyBackgroundMatch = Boolean(headerBackground && bodyBackground && headerBackground === bodyBackground);
   // Read every stack-derived fact before the gesture below. A drag past the flick threshold is
   // meant to dismiss the child, so a depth or inset sampled afterwards describes a stack that has
   // already come apart rather than the one under test.
@@ -870,6 +943,12 @@ const measureStackedPair = async (pair) => {
   const parentDragBefore = rectSnapshot(parent);
   let dragParentUnchanged = false;
   const handle = top.querySelector(".db-mobile-bottom-sheet-handle");
+  // The band between the grab handle and the title: the handle's own margins plus the header's
+  // own top margin and row height account for every pixel a conforming sheet spends here, so a
+  // gap past that budget is unclaimed space rather than chrome.
+  const handleRect = handle ? rectSnapshot(handle) : null;
+  const titleRect = title ? rectSnapshot(title) : null;
+  const handleToTitleGap = handleRect && titleRect ? titleRect.top - handleRect.bottom : null;
   // Synthetic pointer events carry no active pointer, so the browser rejects the capture the drag
   // takes on a real finger. Standing it in keeps the gesture under test rather than the event
   // plumbing, the same way the harness stands in for the theme variables Obsidian supplies.
@@ -907,6 +986,12 @@ const measureStackedPair = async (pair) => {
     closeTarget: Boolean(closeRect && closeRect.width >= 44 && closeRect.height >= 44),
     headerInset: Boolean(headerStyle && Math.min(Number.parseFloat(headerStyle.paddingLeft), Number.parseFloat(headerStyle.paddingRight)) >= 16),
     titleSize: Boolean(titleStyle && Number.parseFloat(titleStyle.fontSize) >= 16),
+    singleCloseControl,
+    closeControlCount: visibleCloseControls.length,
+    headerBodyBackgroundMatch,
+    headerBackground,
+    bodyBackground,
+    handleToTitleGap,
     childKeyboard: childBottom === 336,
     parentKeyboard: parentBottom === 0,
     dragParentUnchanged,
@@ -947,6 +1032,88 @@ window.__stackedSheetGrammarNegativeControl = async () => {
   opened.close();
   await Promise.resolve();
   return { before, oldWay, restored };
+};
+
+// The three columns this leg adds, proven the same way every other column in this lane is: each
+// one is pushed red by hand on a live, conforming mount, then restored, so a check that never
+// goes red is not trusted just because it currently reads green.
+window.__stackedSheetChromeNegativeControl = async () => {
+  const pair = stackedPairRegistry.find((entry) => entry.name === "properties edit property");
+  let parent = null;
+  let opened = null;
+  runRenderAssertions(document.body, pair.parent, "", () => {
+    parent = mountedSheet();
+    if (parent) opened = openPairChild(parent, pair.child);
+  });
+  await waitForStackSettle();
+  if (!parent || !opened?.panel) return { error: "parent or child did not mount" };
+  const top = opened.panel;
+  const header = top.querySelector(".db-panel-header, .db-record-detail-header");
+  const title = header?.querySelector(".db-panel-title, .db-record-detail-title");
+  const handle = top.querySelector(".db-mobile-bottom-sheet-handle");
+
+  const isVisible = (el) => {
+    const style = getComputedStyle(el);
+    if (style.display === "none" || style.visibility === "hidden") return false;
+    const rect = el.getBoundingClientRect();
+    return rect.width > 0 && rect.height > 0;
+  };
+  // Scoped the same way the row's own predicate is: the child's own .db-sheet-close, so the
+  // dimmed parent's close button underneath (still on screen, only dimmed) is not counted against
+  // it, plus .modal-close-button read from the whole document since an orphaned native one can
+  // land beside the child rather than inside it.
+  const countCloseControls = () => Array.from(top.querySelectorAll(".db-sheet-close")).filter(isVisible).length
+    + Array.from(document.querySelectorAll(".modal-close-button")).filter(isVisible).length;
+  const backgroundsMatch = () => {
+    const bodyHost = header?.nextElementSibling ?? null;
+    const headerBg = header ? getComputedStyle(header).backgroundColor : null;
+    const bodyBg = bodyHost ? getComputedStyle(bodyHost).backgroundColor : null;
+    return Boolean(headerBg && bodyBg && headerBg === bodyBg);
+  };
+  const gap = () => {
+    if (!handle || !title) return null;
+    return title.getBoundingClientRect().top - handle.getBoundingClientRect().bottom;
+  };
+
+  // A second close control: the exact shape a host modal's own close button takes if the shell's
+  // neutralising code ever stops finding it.
+  const closeControlBefore = countCloseControls();
+  const injectedClose = document.createElement("div");
+  injectedClose.className = "modal-close-button";
+  // This harness carries no styling for the native close button at all — production leaves it
+  // sized and painted by Obsidian's own host CSS. An explicit size stands in for that so the
+  // injected element measures as present rather than as the empty, zero-height div it would
+  // otherwise be, which is a fact about this stand-in, not about the code under test.
+  injectedClose.style.cssText = "width: 32px; height: 32px; display: block;";
+  top.appendChild(injectedClose);
+  const closeControlDuring = countCloseControls();
+  injectedClose.remove();
+  const closeControlAfter = countCloseControls();
+
+  // A body painted a different surface than its header.
+  const backgroundBefore = backgroundsMatch();
+  const bodyHost = header?.nextElementSibling ?? null;
+  const previousBodyBackground = bodyHost ? bodyHost.style.backgroundColor : "";
+  if (bodyHost) bodyHost.style.backgroundColor = "rgb(1, 2, 3)";
+  const backgroundDuring = backgroundsMatch();
+  if (bodyHost) bodyHost.style.backgroundColor = previousBodyBackground;
+  const backgroundAfter = backgroundsMatch();
+
+  // Unclaimed space between the handle and the title, past the grammar's own budget.
+  const gapBefore = gap();
+  const previousHeaderMargin = header ? header.style.marginTop : "";
+  if (header) header.style.marginTop = "300px";
+  const gapDuring = gap();
+  if (header) header.style.marginTop = previousHeaderMargin;
+  const gapAfter = gap();
+
+  opened.close();
+  await Promise.resolve();
+  return {
+    closeControl: { before: closeControlBefore, during: closeControlDuring, after: closeControlAfter },
+    background: { before: backgroundBefore, during: backgroundDuring, after: backgroundAfter },
+    gap: { before: gapBefore, during: gapDuring, after: gapAfter },
+  };
 };
 
 // --- the all-sheets overflow sweep ---
@@ -1197,6 +1364,68 @@ async function runOverflowSweep(engineName, engine, launchOptions) {
   }
 }
 
+// The phone is WebKit, and every other check above runs on Chrome alone (matching the rest of
+// this lane's own precedent). The host-modal defect the operator reported is specifically an
+// engine-observable one — a native element two engines may or may not agree on hiding the same
+// way — so this pair and its negative control run on both rather than joining the Chrome-only
+// registry checks above.
+async function runHostModalChromeCheck(engineName, engine, launchOptions) {
+  let chromeBrowser;
+  try {
+    chromeBrowser = await engine.launch(launchOptions);
+    const page = await chromeBrowser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true });
+    const pageErrors = [];
+    page.on("pageerror", (error) => pageErrors.push(error.message));
+    await page.goto(`file://${join(work, "index.html")}`);
+
+    const pair = REGISTERED_STACKED_PAIRS.find((entry) => entry.name === "properties edit property");
+    const report = await page.evaluate((shape) => window.__stackedSheetGrammar(shape), pair);
+    console.log(`sheet-grammar: stacked pair — ${pair.name} (${engineName})\n`);
+    if (report.error) {
+      failures.push(`${pair.name} ${engineName}: ${report.error}`);
+      console.log(`  FAIL  ${pair.name} (${engineName}) — ${report.error}`);
+    } else {
+      const checks = [
+        [`exactly one visible close control (found ${report.closeControlCount})`, report.singleCloseControl],
+        [`header and body share one background (${report.headerBackground} vs ${report.bodyBackground})`, report.headerBodyBackgroundMatch],
+        [`handle-to-title gap ≤${HANDLE_TO_TITLE_GAP_MAX_PX}px (measured ${report.handleToTitleGap == null ? "n/a" : report.handleToTitleGap.toFixed(1) + "px"})`, report.handleToTitleGap != null && report.handleToTitleGap <= HANDLE_TO_TITLE_GAP_MAX_PX],
+        ["parent dims and scales back", report.parentTreatment],
+        [`parent bounding box Δ≤1px (max ${report.parentDelta.toFixed(2)}px)`, report.parentBox],
+      ];
+      for (const [label, ok] of checks) {
+        if (!ok) failures.push(`${pair.name} ${engineName}: ${label}`);
+        console.log(`  ${ok ? "PASS" : "FAIL"}  ${pair.name} (${engineName}) — ${label}`);
+      }
+    }
+    console.log("");
+
+    const control = await page.evaluate(() => window.__stackedSheetChromeNegativeControl());
+    console.log(`sheet-grammar: host-modal chrome negative control — properties edit property (${engineName})\n`);
+    if (control.error) {
+      failures.push(`host-modal chrome negative control ${engineName}: ${control.error}`);
+      console.log(`  FAIL  host-modal chrome negative control (${engineName}) — ${control.error}`);
+    } else {
+      const closeWentRed = control.closeControl.during > 1;
+      const backgroundWentRed = control.background.during === false;
+      const gapWentRed = control.gap.during != null && control.gap.during > HANDLE_TO_TITLE_GAP_MAX_PX;
+      if (!closeWentRed) failures.push(`host-modal chrome negative control ${engineName}: a second close control did not register`);
+      if (!backgroundWentRed) failures.push(`host-modal chrome negative control ${engineName}: a mismatched background did not register`);
+      if (!gapWentRed) failures.push(`host-modal chrome negative control ${engineName}: an oversized gap did not register`);
+      console.log(`  ${closeWentRed ? "PASS" : "FAIL"}  a second close control registers red (${engineName})`);
+      console.log(`  ${backgroundWentRed ? "PASS" : "FAIL"}  a mismatched background registers red (${engineName})`);
+      console.log(`  ${gapWentRed ? "PASS" : "FAIL"}  an oversized gap registers red (${engineName})`);
+    }
+    console.log("");
+
+    await page.close();
+    for (const error of pageErrors) failures.push(`host-modal chrome check ${engineName} page error: ${error}`);
+  } catch (error) {
+    failures.push(`host-modal chrome check ${engineName} failed to run: ${error.message}`);
+  } finally {
+    if (chromeBrowser) await chromeBrowser.close();
+  }
+}
+
 let browser;
 try {
   browser = await chromium.launch({ executablePath: findChrome() });
@@ -1298,6 +1527,9 @@ try {
       ["child close target ≥44×44", report.closeTarget],
       ["child header inset ≥16px", report.headerInset],
       ["child title ≥16px", report.titleSize],
+      [`exactly one visible close control (found ${report.closeControlCount})`, report.singleCloseControl],
+      [`header and body share one background (${report.headerBackground} vs ${report.bodyBackground})`, report.headerBodyBackgroundMatch],
+      [`handle-to-title gap ≤${HANDLE_TO_TITLE_GAP_MAX_PX}px (measured ${report.handleToTitleGap == null ? "n/a" : report.handleToTitleGap.toFixed(1) + "px"})`, report.handleToTitleGap != null && report.handleToTitleGap <= HANDLE_TO_TITLE_GAP_MAX_PX],
       ["keyboard inset belongs to child", report.childKeyboard && report.parentKeyboard],
       [`child depth ${report.depth} (want ${report.expectedDepth})`, report.depth === report.expectedDepth],
       ["child drag leaves parent in place", report.dragParentUnchanged],
@@ -1332,6 +1564,45 @@ try {
     console.log(`  ${controlBeforeGreen ? "PASS" : "FAIL"}  parent treatment green before the old-way mount (opacity ${before.dim}, content transform ${before.transform})`);
     console.log(`  ${oldWayRed ? "PASS" : "FAIL"}  parent treatment red for the old-way mount (opacity ${oldWay.dim}, content transform ${oldWay.transform})`);
     console.log(`  ${controlRestoredGreen ? "PASS" : "FAIL"}  parent treatment green after restoration (opacity ${restored.dim}, content transform ${restored.transform})`);
+  }
+  console.log("");
+
+  const chromeControl = await page.evaluate(() => window.__stackedSheetChromeNegativeControl());
+  console.log("sheet-grammar: host-modal chrome negative control — properties edit property\n");
+  if (chromeControl.error) {
+    failures.push(`host-modal chrome negative control: ${chromeControl.error}`);
+    console.log(`  FAIL  host-modal chrome negative control — ${chromeControl.error}`);
+  } else {
+    const { closeControl, background, gap } = chromeControl;
+    const closeCleanBefore = closeControl.before === 1;
+    const closeWentRed = closeControl.during > 1;
+    const closeCleanAfter = closeControl.after === 1;
+    if (!closeCleanBefore) failures.push(`host-modal chrome negative control: close control count was ${closeControl.before} before the injection, wanted 1`);
+    if (!closeWentRed) failures.push("host-modal chrome negative control: an injected second close control did not register");
+    if (!closeCleanAfter) failures.push(`host-modal chrome negative control: close control count was ${closeControl.after} after removal, wanted 1`);
+    console.log(`  ${closeCleanBefore ? "PASS" : "FAIL"}  exactly one close control before the injection (${closeControl.before})`);
+    console.log(`  ${closeWentRed ? "PASS" : "FAIL"}  a second close control registers red (${closeControl.during})`);
+    console.log(`  ${closeCleanAfter ? "PASS" : "FAIL"}  exactly one close control again after removal (${closeControl.after})`);
+
+    const backgroundCleanBefore = background.before === true;
+    const backgroundWentRed = background.during === false;
+    const backgroundCleanAfter = background.after === true;
+    if (!backgroundCleanBefore) failures.push("host-modal chrome negative control: header/body background did not match before the injection");
+    if (!backgroundWentRed) failures.push("host-modal chrome negative control: a mismatched body background did not register");
+    if (!backgroundCleanAfter) failures.push("host-modal chrome negative control: header/body background did not match again after restoration");
+    console.log(`  ${backgroundCleanBefore ? "PASS" : "FAIL"}  header and body share one background before the injection`);
+    console.log(`  ${backgroundWentRed ? "PASS" : "FAIL"}  a mismatched body background registers red`);
+    console.log(`  ${backgroundCleanAfter ? "PASS" : "FAIL"}  header and body share one background again after restoration`);
+
+    const gapCleanBefore = gap.before != null && gap.before <= HANDLE_TO_TITLE_GAP_MAX_PX;
+    const gapWentRed = gap.during != null && gap.during > HANDLE_TO_TITLE_GAP_MAX_PX;
+    const gapCleanAfter = gap.after != null && gap.after <= HANDLE_TO_TITLE_GAP_MAX_PX;
+    if (!gapCleanBefore) failures.push(`host-modal chrome negative control: handle-to-title gap was ${gap.before}px before the injection, wanted <= ${HANDLE_TO_TITLE_GAP_MAX_PX}px`);
+    if (!gapWentRed) failures.push("host-modal chrome negative control: an oversized handle-to-title gap did not register");
+    if (!gapCleanAfter) failures.push(`host-modal chrome negative control: handle-to-title gap was ${gap.after}px after restoration, wanted <= ${HANDLE_TO_TITLE_GAP_MAX_PX}px`);
+    console.log(`  ${gapCleanBefore ? "PASS" : "FAIL"}  handle-to-title gap within budget before the injection (${gap.before?.toFixed(1)}px)`);
+    console.log(`  ${gapWentRed ? "PASS" : "FAIL"}  an oversized handle-to-title gap registers red (${gap.during?.toFixed(1)}px)`);
+    console.log(`  ${gapCleanAfter ? "PASS" : "FAIL"}  handle-to-title gap within budget again after restoration (${gap.after?.toFixed(1)}px)`);
   }
   console.log("");
 
@@ -1454,6 +1725,7 @@ try {
     ["WebKit", webkit, {}],
   ]) {
     await runOverflowSweep(engineName, engine, launchOptions);
+    await runHostModalChromeCheck(engineName, engine, launchOptions);
   }
 } catch (error) {
   failures.push(`harness run failed: ${error.message}`);
