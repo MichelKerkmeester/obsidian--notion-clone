@@ -24,12 +24,27 @@ files in the repository to follow the grammar they enforce.
 | File | Convention it gates |
 |---|---|
 | `scan-naming.mjs` | Filenames are lowercase kebab-case |
-| `scan-comments.mjs` | Every source file carries a `MODULE:` banner and numbered box-drawing sections, and no commented-out code |
+| `scan-comments.mjs` | Every source file carries a `MODULE:` banner and numbered box-drawing sections, no commented-out code, and no ephemeral artifact id (comment hygiene, below) |
 | `scan-folder-docs.mjs` | Folders carry `README.md` and, above the threshold, `CODE.md` |
 
 ---
 
-## 2. QUICK START
+## 2. COMMENT HYGIENE (ARTIFACT IDS)
+
+`scan-comments.mjs` also enforces the comment-hygiene hard block: a task id (`T001`), an
+ADR/REQ/CHK/AC id, a packet number used as a label (`045-`, `045's`, `per 045`), or a numbered
+spec-folder path (`specs/047-...`) planted in a comment or a `describe`/`it`/`test` name rots the
+day the id it points at is renamed or closed. It scans `src/**/*.ts`, `tools/**/*.{ts,mjs,js}` and
+`styles.css`. This has no baseline — a hard block with a ratchet is a suggestion — so the target is
+always zero. A durable spec-folder path (`specs/context/...`, a vendored fixture that is not a
+numbered packet) is not matched; a numbered packet path is.
+
+A commit that reintroduces one is rejected before it lands: see
+[`../git-hooks/README.md`](../git-hooks/README.md).
+
+---
+
+## 3. QUICK START
 
 ```bash
 node tools/naming/scan-folder-docs.mjs
@@ -41,7 +56,7 @@ Expected result: each prints its counts and exits `0` when the tree is clean, `1
 
 ---
 
-## 3. RELATED
+## 4. RELATED
 
 - [`CODE.md`](./CODE.md) — the code map for this folder.
 - [`../README.md`](../README.md) — the tooling root.

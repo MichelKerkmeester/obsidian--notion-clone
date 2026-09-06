@@ -11,9 +11,21 @@
 // all — it exists so that count stops being a hand audit and starts being a
 // re-runnable gate.
 //
+// It also enforces comment hygiene's hard block: an ephemeral artifact label
+// (a task id, an ADR/REQ/CHK/AC id, a packet number used as a label, or a
+// spec-folder path) planted in a comment or a test name reads fine the day
+// it is written and rots the day the id it points at is renamed, closed, or
+// renumbered. The rule says keep the durable WHY instead, and until this
+// lane existed nothing checked that comments actually did — the MODULE/
+// section checks above scan grammar, not content, so a criterion id sitting
+// in a comment left them green. A hard block with no enforcement is a
+// suggestion, so this has no baseline: every hit is a violation and the
+// count target is zero.
+//
 // Usage: node tools/naming/scan-comments.mjs [--json]
 // Exit:  0 when every scanned file has a banner, paired numbered
-//        sections and no commented-out code; 1 otherwise.
+//        sections, no commented-out code and no artifact-id violation;
+//        1 otherwise.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -58,6 +70,35 @@ const CODE_KEYWORD_START =
   /^(const|let|var|function|class|interface|type|enum|import|export|return|if|else|for|while|switch|case|catch|try|throw|await|async|new|super|break|continue)\b.*[(){};=]/;
 const CODE_TAIL = /[;{}]\s*$/;
 const CODE_OPERATOR = /=>|[^=!<>]=[^=]|\+\+|--/;
+
+// Comment hygiene's artifact-id block: each pattern is one shape an ephemeral
+// pointer takes in this repo's own comments, drawn from the violations found
+// authoring this check (a task id, an ADR/REQ/CHK/AC id, a packet number
+// used as a label two different ways, and a numbered spec-folder path).
+// `specs/context` is deliberately unmatched — it is a durable, non-packet
+// path (a symlinked vendored-reference fixture, not a spec doc that rots),
+// so the spec-path pattern requires the digit a real packet path starts with.
+const ARTIFACT_ID_PATTERNS = [
+  { kind: "task id", re: /\bT\d{3}\b/ },
+  { kind: "ADR id", re: /\bADR-\d+\b/ },
+  { kind: "REQ id", re: /\bREQ-\d+\b/ },
+  { kind: "CHK id", re: /\bCHK-\d+\b/ },
+  { kind: "AC id", re: /\bAC-\d+\b/ },
+  { kind: "packet id", re: /\b0\d{2}-[a-z][a-z0-9-]*\b/ },
+  { kind: "packet number used as a label", re: /\b0\d{2}'s\b/ },
+  { kind: "packet number used as a label", re: /\bper\s+0\d{2}\b/i },
+  { kind: "spec path", re: /\bspecs\/\d{3}[a-z0-9-]*\b/i },
+];
+
+// A describe/it/test string literal is a name, and this repo's own harness
+// has planted the same ids there that the rule forbids in a comment — a
+// name rots exactly the way a comment does, and "test file headers" in the
+// rule this check enforces means this call, not only the block comment atop
+// the file.
+const TEST_CALL_NAME =
+  /\b(?:describe|it|test)(?:\.(?:only|skip|each|todo|concurrent))?\s*\(\s*(['"`])((?:\\.|(?!\1)[\s\S])*)\1/;
+
+const STYLES_CSS_PATH = path.join(REPO_ROOT, "styles.css");
 
 // ───────────────────────────────────────────────────────────────────
 // 3. HELPERS
@@ -112,6 +153,130 @@ function findCommentedOutCode(lines) {
   return hits;
 }
 
+// The index of `needle` on `line`, skipping any occurrence inside a quoted
+// string — a `//` inside a URL string or a `/*` inside a regex literal is
+// not a comment opener, and treating it as one would corrupt every line
+// after it for the rest of the file.
+function findUnquotedIndex(line, needle) {
+  let inStr = false;
+  let quote = "";
+  let escaping = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (inStr) {
+      if (escaping) escaping = false;
+      else if (ch === "\\") escaping = true;
+      else if (ch === quote) inStr = false;
+      continue;
+    }
+    if (ch === "'" || ch === '"' || ch === "`") {
+      inStr = true;
+      quote = ch;
+      continue;
+    }
+    if (line.startsWith(needle, i)) return i;
+  }
+  return -1;
+}
+
+// One line's worth of `//` or `/* */` text, tracked across lines so a block
+// comment's second and later lines are still checked — the artifact-id
+// violations found authoring this check included prose that reads across
+// several `//` lines, so a single-line-only extractor would have missed
+// the ones that only appear mid-paragraph.
+function extractJsCommentSpans(lines) {
+  const spans = [];
+  let inBlock = false;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (inBlock) {
+      const end = line.indexOf("*/");
+      if (end === -1) {
+        spans.push({ line: i + 1, text: line });
+        continue;
+      }
+      spans.push({ line: i + 1, text: line.slice(0, end) });
+      inBlock = false;
+      continue;
+    }
+    const slashSlash = findUnquotedIndex(line, "//");
+    const slashStar = findUnquotedIndex(line, "/*");
+    if (slashSlash !== -1 && (slashStar === -1 || slashSlash < slashStar)) {
+      spans.push({ line: i + 1, text: line.slice(slashSlash) });
+      continue;
+    }
+    if (slashStar !== -1) {
+      const end = line.indexOf("*/", slashStar + 2);
+      if (end === -1) {
+        spans.push({ line: i + 1, text: line.slice(slashStar) });
+        inBlock = true;
+        continue;
+      }
+      spans.push({ line: i + 1, text: line.slice(slashStar, end) });
+    }
+  }
+  return spans;
+}
+
+// CSS carries only the block form, and a rule's comment can span many
+// lines, so this walks the raw text once rather than re-deciding per line
+// whether an unterminated block is still open.
+function extractCssCommentSpans(text) {
+  const spans = [];
+  let i = 0;
+  let line = 1;
+  while (i < text.length) {
+    if (text[i] === "\n") {
+      line += 1;
+      i += 1;
+      continue;
+    }
+    if (text.startsWith("/*", i)) {
+      const startLine = line;
+      const end = text.indexOf("*/", i + 2);
+      const commentEnd = end === -1 ? text.length : end + 2;
+      const commentText = text.slice(i, commentEnd);
+      spans.push({ line: startLine, text: commentText });
+      for (const ch of commentText) if (ch === "\n") line += 1;
+      i = commentEnd;
+      continue;
+    }
+    i += 1;
+  }
+  return spans;
+}
+
+function matchArtifactId(text) {
+  for (const pattern of ARTIFACT_ID_PATTERNS) {
+    if (pattern.re.test(text)) return pattern.kind;
+  }
+  return null;
+}
+
+function findArtifactIdViolations(spans) {
+  const hits = [];
+  for (const span of spans) {
+    const kind = matchArtifactId(span.text);
+    if (kind) hits.push({ line: span.line, kind, excerpt: span.text.trim().slice(0, 160) });
+  }
+  return hits;
+}
+
+// A describe/it/test name is checked on the raw line, not the comment
+// spans — it is a string literal, not a comment, and the two extractors
+// disagree on purpose about what counts as text worth reading.
+function findTestNameViolations(lines) {
+  const hits = [];
+  for (let i = 0; i < lines.length; i++) {
+    const match = TEST_CALL_NAME.exec(lines[i]);
+    if (!match) continue;
+    const name = match[2];
+    const kind = matchArtifactId(name);
+    if (kind) hits.push({ line: i + 1, kind: `test name: ${kind}`, excerpt: name.slice(0, 160) });
+  }
+  return hits;
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 4. SCAN
 // ───────────────────────────────────────────────────────────────────
@@ -131,6 +296,7 @@ function scan() {
   let missingBanner = 0;
   let missingSections = 0;
   let commentedOutCodeLines = 0;
+  let artifactIdHits = 0;
   const violations = [];
 
   for (const file of files) {
@@ -140,22 +306,54 @@ function scan() {
     const bannerOk = hasModuleBanner(lines);
     const sectionsOk = hasPairedSection(lines);
     const codeHits = findCommentedOutCode(lines);
+    const artifactHits = [
+      ...findArtifactIdViolations(extractJsCommentSpans(lines)),
+      ...findTestNameViolations(lines),
+    ];
 
     if (!bannerOk) missingBanner++;
     if (!sectionsOk) missingSections++;
     commentedOutCodeLines += codeHits.length;
+    artifactIdHits += artifactHits.length;
 
-    if (!bannerOk || !sectionsOk || codeHits.length > 0) {
+    if (!bannerOk || !sectionsOk || codeHits.length > 0 || artifactHits.length > 0) {
       violations.push({
         file: rel,
         missingBanner: !bannerOk,
         missingSections: !sectionsOk,
         commentedOutCodeLines: codeHits,
+        artifactIdHits: artifactHits,
       });
     }
   }
 
-  return { scanned: files.length, missingBanner, missingSections, commentedOutCodeLines, violations };
+  // styles.css is not under either SCAN_ROOT and carries no MODULE banner or
+  // box-drawing sections — it is a stylesheet, not a script — so only the
+  // artifact-id check applies to it, folded into the same violation list
+  // rather than a second lane, per the rule this check enforces naming one
+  // lane for comments.
+  let scanned = files.length;
+  try {
+    const cssText = readFileSync(STYLES_CSS_PATH, "utf8");
+    scanned += 1;
+    const cssHits = findArtifactIdViolations(extractCssCommentSpans(cssText));
+    artifactIdHits += cssHits.length;
+    if (cssHits.length > 0) {
+      violations.push({
+        file: path.relative(REPO_ROOT, STYLES_CSS_PATH),
+        missingBanner: false,
+        missingSections: false,
+        commentedOutCodeLines: [],
+        artifactIdHits: cssHits,
+      });
+    }
+  } catch {
+    // styles.css always exists in this repo; a missing file is a different
+    // problem than this scanner reports on, so it is silently left unscanned
+    // rather than failing this check for a reason unrelated to comments.
+  }
+
+  return { scanned, missingBanner, missingSections, commentedOutCodeLines, artifactIdHits, violations };
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -169,12 +367,18 @@ function main() {
   if (asJson) {
     console.log(JSON.stringify(result, null, 2));
   } else {
-    console.log(`scan-comments: ${result.scanned} files scanned under ${SCAN_ROOTS.join(", ")}`);
+    console.log(`scan-comments: ${result.scanned} files scanned under ${SCAN_ROOTS.join(", ")}, styles.css`);
     console.log(`scan-comments: missing MODULE banner: ${result.missingBanner}`);
     console.log(`scan-comments: missing numbered box-drawing sections: ${result.missingSections}`);
     console.log(`scan-comments: commented-out code lines: ${result.commentedOutCodeLines}`);
+    console.log(`scan-comments: artifact-id violations: ${result.artifactIdHits}`);
+    for (const v of result.violations) {
+      for (const hit of v.artifactIdHits ?? []) {
+        console.log(`  ${v.file}:${hit.line}: [${hit.kind}] ${hit.excerpt}`);
+      }
+    }
     if (result.violations.length === 0) {
-      console.log("scan-comments: PASS — every file carries the comment grammar");
+      console.log("scan-comments: PASS — every file carries the comment grammar and no artifact id");
     } else {
       console.log(`scan-comments: ${result.violations.length} file(s) with a violation`);
     }

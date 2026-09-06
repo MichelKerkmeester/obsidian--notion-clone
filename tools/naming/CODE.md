@@ -30,7 +30,7 @@ Current state:
 | File | Responsibility |
 |---|---|
 | `scan-naming.mjs` | Walks `src/` and `tools/`, checks each file stem against a lowercase-kebab regex |
-| `scan-comments.mjs` | Checks each source file for a `MODULE:` banner, paired numbered box-drawing sections, and commented-out code |
+| `scan-comments.mjs` | Checks each source file for a `MODULE:` banner, paired numbered box-drawing sections, commented-out code, and (over `src/`, `tools/` and `styles.css`) an ephemeral artifact id in a comment or a `describe`/`it`/`test` name |
 | `scan-folder-docs.mjs` | Builds a folder tree and enforces the `README.md`/`CODE.md` threshold in both directions |
 
 ---
@@ -66,7 +66,7 @@ owes `README.md` only, and a `CODE.md` sitting there anyway is a stray-doc viola
 | Entrypoint | Type | Purpose |
 |---|---|---|
 | `node tools/naming/scan-naming.mjs [--json]` | CLI | Report non-kebab filenames |
-| `node tools/naming/scan-comments.mjs [--json]` | CLI | Report missing banners, missing sections and commented-out code |
+| `node tools/naming/scan-comments.mjs [--json]` | CLI | Report missing banners, missing sections, commented-out code and artifact-id violations |
 | `node tools/naming/scan-folder-docs.mjs [--json]` | CLI | Report missing, stray or unpaired folder docs |
 
 ---
