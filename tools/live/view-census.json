@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T14:38:02.507Z",
+  "measuredAt": "2026-09-06T15:39:58.008Z",
   "inputs": {
-    "styles.css": "8aa5238bdcfb",
+    "styles.css": "c29425ed5800",
     "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -362,8 +362,8 @@
   "totals": {
     "fixtures": 76,
     "escaping": 659,
-    "growing": 316,
-    "scrolling": 343,
+    "growing": 305,
+    "scrolling": 354,
     "rhythmGroups": 8,
     "ragged": 0,
     "probeBlind": 24
@@ -443,7 +443,7 @@
       "cls": "db-kanban-board",
       "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -487,7 +487,7 @@
       "cls": "db-kanban-board",
       "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -509,7 +509,7 @@
       "cls": "db-kanban-board",
       "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -685,7 +685,7 @@
       "cls": "db-kanban-board",
       "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -3455,7 +3455,7 @@
       "cls": "db-kanban-board",
       "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -3499,7 +3499,7 @@
       "cls": "db-kanban-board",
       "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -3521,7 +3521,7 @@
       "cls": "db-kanban-board",
       "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -3697,7 +3697,7 @@
       "cls": "db-kanban-board",
       "parentCls": "note-database-container.db-kanban-view",
       "by": 4,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -5708,7 +5708,7 @@
       "cls": "db-kanban-board",
       "parentCls": "note-database-container.db-kanban-view",
       "by": 16,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -5906,7 +5906,7 @@
       "cls": "db-kanban-board",
       "parentCls": "note-database-container.db-kanban-view",
       "by": 16,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -7048,7 +7048,7 @@
       "cls": "db-kanban-board",
       "parentCls": "note-database-container.db-kanban-view",
       "by": 16,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {

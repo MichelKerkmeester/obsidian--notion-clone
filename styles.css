@@ -9339,42 +9339,66 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
    hexes verbatim, because the raw hue fails WCAG 1.4.3 as bare header text in light theme — only
    amber's card-chip pair was pixel-measured against a real screen; the other nine are derived by
    the same darken-until-4.5:1 rule against both the tint and the page background. */
+/* No `overflow: hidden`: the operator asked to scroll the page rather than a column, so this
+   element falls back to the base `.note-database-container` rule above — `overflow: auto` — and
+   is the one scrolling region for both axes, the same role it already plays for the table's
+   sticky header. Both axes matters: the reference paints its horizontal bar at the bottom of the
+   viewport, over the cards, which only a pane-height scroller can do. A board-height scroller
+   puts that bar thousands of pixels below the fold. */
 .note-database-container.db-kanban-view {
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   height: 100%;
   line-height: normal;
-  /* The sticky scrollbar sits 8px above the viewport bottom rather than flush with it —
-     shrinking the scrolling board by that much, rather than the scrollbar's own position, keeps
-     every browser's native scrollbar paint at its usual place inside a shorter box. */
+  /* The reference's horizontal bar clears the viewport bottom by 8px rather than sitting flush
+     with it. Spending the gap as padding inside the scroll box keeps the browser's native
+     scrollbar paint at its usual place and still leaves the measured air below the last card. */
   padding-bottom: 8px;
 }
 
+/* The board scrolls nothing itself. It carries neither `flex: 1; min-height: 0` (which pinned it
+   to the container's height and made a column's own vertical overflow the only way to reach a
+   card past the fold) nor an `overflow` of its own: both axes belong to the container above, so
+   the board is simply as tall and as wide as its columns and rides the page.
+
+   `flex-shrink: 0` is what keeps that true. As a flex item in a fixed-height column container it
+   would otherwise shrink back to the container's height, and a shrunk box with any non-visible
+   overflow clips every card below the fold with nothing left to scroll — the exact defect
+   removing the scroller was meant to fix.
+
+   `align-items: flex-start` (not `stretch`) so one column's card count does not stretch its
+   neighbours to match — the reference's own columns end at different heights. */
 .note-database-container .db-kanban-board {
   display: flex;
-  align-items: stretch;
+  align-items: flex-start;
+  flex-shrink: 0;
   gap: 24px;
-  flex: 1;
-  min-height: 0;
   padding: 16px;
-  overflow-x: auto;
-  overflow-y: hidden;
   box-sizing: border-box;
   margin-left: calc(-1 * var(--db-container-padding-inline));
   margin-right: calc(-1 * var(--db-container-padding-inline));
 }
-.note-database-container .db-kanban-board::-webkit-scrollbar {
+/* The horizontal bar is invisible until hover or an active scroll, rather than the measured 10px
+   lane painted at rest: the operator asked for it hidden, which the parity rule's own decline
+   list did not previously allow for. Once shown it is exactly the measured geometry. It hangs off
+   the container because the container is the scroller; the `:has()` guard keeps touch on the
+   platform's own overlay indicator, since touch has no hover to reveal a bar from. */
+.note-database-container.db-kanban-view:not(:has(.db-kanban-board.is-touch))::-webkit-scrollbar {
+  height: 0;
+  transition: height 0.15s ease;
+}
+.note-database-container.db-kanban-view:not(:has(.db-kanban-board.is-touch)):hover::-webkit-scrollbar,
+.note-database-container.db-kanban-view:not(:has(.db-kanban-board.is-touch)).is-scrolling::-webkit-scrollbar {
   height: 10px;
 }
-.note-database-container .db-kanban-board::-webkit-scrollbar-track {
+.note-database-container.db-kanban-view::-webkit-scrollbar-track {
   background: transparent;
 }
-.note-database-container .db-kanban-board::-webkit-scrollbar-thumb {
+.note-database-container.db-kanban-view::-webkit-scrollbar-thumb {
   background: var(--db-scrollbar-thumb);
   border-radius: 5px;
 }
-.note-database-container .db-kanban-board::-webkit-scrollbar-thumb:hover {
+.note-database-container.db-kanban-view::-webkit-scrollbar-thumb:hover {
   background: var(--db-scrollbar-thumb-hover);
 }
 
@@ -9386,6 +9410,10 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   min-width: 246px;
 }
 
+/* Not pinned. Every kanban capture in the reference set shows the column header as flat page
+   content that scrolls with its cards, and the operator asked for page scrolling in the same
+   words — a header that stayed while the page moved under it would be this project's invention,
+   not the reference's behaviour. */
 .note-database-container .db-kanban-col-header {
   flex-shrink: 0;
   display: flex;
@@ -9463,10 +9491,10 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
   color: var(--text-muted);
 }
 
+/* No `flex: 1; min-height: 0; overflow-y: auto` — a column is no longer its own vertical scroll
+   container. It grows to its own cards' height and the page (the `.db-kanban-view` container)
+   scrolls in its place, which is what the operator asked for. */
 .note-database-container .db-kanban-cards {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -9588,6 +9616,20 @@ body.db-bottom-dock-taken .note-database-container .db-selection-status-bar {
 }
 .note-database-container .db-kanban-card-meta .db-board-card-field.is-checkbox-field > .db-board-card-value {
   order: 1;
+}
+/* A card text value read right-aligned where the card's own grammar reads left throughout, and a
+   single-token value (a URL, an email) broke mid-word instead of ellipsising. The shared
+   `.db-board-card-value` rule sets both `text-align: right` and `word-break: break-word` for the
+   gallery card it was written for; scoped back here rather than
+   changed at the shared rule, since gallery's own alignment is untouched. Multi-word text still
+   wraps up to two lines (the shared field's own `-webkit-line-clamp: 2`); a single unbreakable
+   token now has nowhere to break, so it ellipsises at the line's edge instead. The checkbox row's
+   own value keeps its shared right/flex-end rule below, at higher specificity — it holds a glyph,
+   not a text value. */
+.note-database-container .db-kanban-card-meta .db-board-card-value {
+  text-align: left;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 /* The reference's checkbox glyph is a circle, not this project's usual rounded square —
    scoped to the kanban card only, since every other checkbox family keeps the app-wide shape.

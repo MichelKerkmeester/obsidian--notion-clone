@@ -216,8 +216,8 @@ describe("subtask screenshot fixture parity", () => {
   it("scopes the view-level flex/overflow height chain to the compound container+view selector", () => {
     // board-renderer.ts's renderReferenceBoard adds `db-kanban-view` to the same element that
     // database-view.ts / embedded-database-renderer.ts already classed `note-database-container`
-    // — never a descendant — so a descendant-only selector never matches and `.db-kanban-board`'s
-    // `flex: 1; min-height: 0` has no flex parent to size against.
+    // — never a descendant — so a descendant-only selector never matches, and the board's own
+    // `flex-shrink: 0` has no flex parent to hold it against.
     expect(boardRenderer).toMatch(/container\.addClass\("db-kanban-view"\)/);
     expect(styles).toMatch(/\.note-database-container\.db-kanban-view\s*\{[^}]*display:\s*flex;[^}]*flex-direction:\s*column;[^}]*height:\s*100%;/);
     // A solo descendant-only selector for this rule (no compound alternative) would silently

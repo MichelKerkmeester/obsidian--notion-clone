@@ -171,6 +171,10 @@ export class BoardRenderer {
   private hydratedDescriptions = new Map<string, string>();
   /** Render arguments replayed once when a lazy description load lands. */
   private referenceRenderArgs?: { container: HTMLElement; config: ViewConfig; groups: BoardGroup[]; groupField: string };
+  /** The scroll listener that reveals the horizontal bar, kept so a re-render can detach the
+   *  previous one. The container outlives a render — every render would otherwise leave its
+   *  listener behind and stack another timer on the same element. */
+  private scrollbarRevealTeardown?: () => void;
   /** The view's visible card fields in the order the properties panel shows them,
    *  resolved once per render and shared by every card. */
   private referenceCardFields: ColumnDef[] = [];
@@ -227,6 +231,28 @@ export class BoardRenderer {
     // The column header shows its "..." and "+" only on hover on desktop and permanently on
     // touch, where there is no hover to reveal them from.
     board.toggleClass("is-touch", this.touchMode);
+    // The horizontal scrollbar paints only on hover or while actively scrolling — hover is plain
+    // CSS, but "while scrolling" needs a class an event can toggle, cleared a moment after the
+    // last scroll so the bar does not linger once the reader has stopped, the way a true hover
+    // state would not either. It listens on the container rather than the board: the container is
+    // the element that scrolls, so the board never fires a scroll event to hear. Touch has no such
+    // bar to reveal; it keeps the platform's own overlay indicator.
+    this.scrollbarRevealTeardown?.();
+    this.scrollbarRevealTeardown = undefined;
+    if (!this.touchMode) {
+      let hideScrollbarTimer: number | undefined;
+      const onScroll = () => {
+        container.addClass("is-scrolling");
+        window.clearTimeout(hideScrollbarTimer);
+        hideScrollbarTimer = window.setTimeout(() => container.removeClass("is-scrolling"), 600);
+      };
+      container.addEventListener("scroll", onScroll, { passive: true });
+      this.scrollbarRevealTeardown = () => {
+        container.removeEventListener("scroll", onScroll);
+        window.clearTimeout(hideScrollbarTimer);
+        container.removeClass("is-scrolling");
+      };
+    }
     const rows: RowData[] = [];
     for (const group of groups) {
       this.renderReferenceColumn(board, config, group, groupField, rows);
@@ -759,6 +785,10 @@ export class BoardRenderer {
   private clear(container: HTMLElement): void {
     container.querySelectorAll(".db-kanban-board").forEach((el) => el.remove());
     container.removeClass("db-kanban-view");
+    // The container is the host's, not the board's — a listener left on it would keep firing for
+    // whichever view takes the pane next.
+    this.scrollbarRevealTeardown?.();
+    this.scrollbarRevealTeardown = undefined;
   }
 }
 

@@ -370,4 +370,101 @@ rule always allowed taste"* are different claims and the second one is false.
   deleted, for the same reason.
 - Named in `../roadmap.md` §7 as a conflict on record, per §7's rule that a phase's disagreements
   are reported rather than tidied.
+
+**Landed 2026-09-06 (T014-T016), on the second take. The first take is recorded here, not
+overwritten, because what it got wrong is the more useful half of this entry.**
+
+**First take, and why it did not deliver the ruling.** `.db-kanban-view` dropped `overflow:
+hidden`; `.db-kanban-board` and `.db-kanban-cards` dropped `flex: 1; min-height: 0` (and the
+latter its `overflow-y: auto`); `.db-kanban-col-header` was pinned `position: sticky`. Read on a
+device at DPR 2, in a container with a definite height — which is what a real pane gives it, and
+what the capture harness gives it too (`tools/screenshots/theme.css`: `#shot >
+.note-database-container { height: 100% }`) — **nothing scrolled**. `.db-kanban-board` was still a
+flex item at the default `flex-shrink: 1`, so it shrank back to the container's height; its own
+`overflow-y: hidden` then clipped everything below. At 1440x900: board `scrollHeight 7750 /
+clientHeight 900`, container `scrollHeight 908 / clientHeight 908`, a real trusted wheel of 600px
+moving `scrollTop` 0, and the last card of a 35-card column unreachable by any means. The prior
+behaviour — a per-column scroller — at least reached every card. **The regression was strictly
+worse than the defect the operator reported.**
+
+The check that certified it read `getComputedStyle(container).overflowY === "auto"` on a page
+whose body had no height, so the keyword was true and the behaviour was never asked about. An
+`overflow: auto` that scrolls nothing is exactly the shape a keyword read cannot see.
+
+**Second take.** Both scroll axes belong to the container. `.db-kanban-view` keeps the base
+`.note-database-container` `overflow: auto`; `.db-kanban-board` drops its own `overflow-x` and
+`overflow-y` and takes `flex-shrink: 0`, so it is as tall and as wide as its columns and rides the
+page. Both axes and not merely the vertical, because the reference's horizontal bar sits at the
+**bottom of the viewport, over the cards** (`anytype-project-tracker-kanban-dark.png`, the bar at
+y 1199..1208 of a 1217px window — the same geometry `design-trueup.md` A10 measured). Only a
+pane-height scroller paints a bar there; a board-height scroller puts it thousands of pixels below
+the fold. So the scrollbar rules move from `.db-kanban-board` to
+`.note-database-container.db-kanban-view`, still `0` at rest and `10px` on hover or while an
+`.is-scrolling` class is set, with touch guarded out through `:has(.db-kanban-board.is-touch)`.
+The renderer's scroll listener moves to the container for the same reason — the board no longer
+fires a scroll event to hear — and carries a teardown, since the container outlives a render and
+a listener per render would stack.
+
+**Measured green**, 1440x900 and 390x844 at DPR 2, against a board with one 35-card column:
+`overflow-y` computes `visible` on the board, the column and the cards container; the container
+measures `scrollHeight 7758 / clientHeight 908`; a trusted wheel of 600px moves the container 600
+and the board and column 0; `PageDown` moves it 868; the end of the scroll is `6857 = scrollHeight
+- clientHeight` with the last card fully inside the container box. The 10-per-group page limit and
+its "Show 10 more" control still render on every column. At 390px the container reports
+`scrollWidth 1383 / clientWidth 382`, a trusted horizontal wheel moves `scrollLeft` 300, and
+scrolling to the end puts the last column's right edge exactly at the container's right edge — the
+board's negative margins cut nothing off. Drag under scroll: with the container scrolled 400px, a
+real `dragstart` on a `backlog` card followed by `dragover`+`drop` on `doing`'s cards container
+tints the right column and calls `moveCardAndOrder` with `groupKey "doing"`, `fromGroup
+"backlog"`; a same-column drag at the same offset lands immediately before the card it was aimed
+at. Both hold structurally: the drop handler is bound per column, and
+`getReferenceDragAfterElement` reads `event.clientY` against `getBoundingClientRect()`, so the
+scroll offset cancels.
+
+**The column-header pin is withdrawn. The reference does not pin its headers.** ADR-002 lets this
+board adopt captured values and decline them on three named grounds; it does not license adding
+chrome the reference does not have. Every kanban capture in this set —
+`anytype-project-tracker-kanban-{dark,light}.png`, `anytype-set-kanban-view-dark.png`,
+`anytype-mobile-set-kanban-{dark,light}.png` — shows the column header as flat page content in the
+same rhythm as the page title above it, and **none** shows one held against the top or caught
+mid-scroll. Absent a captured answer the first take inferred a pin from this app's own
+table/group-header convention; that inference is the wrong default here, because the operator's
+words are *"just have page scrolling so you scroll down the page"* and a header that stays while
+the page moves under it is the one part of the page that would not. The pin was also inert: with
+`overflow-x: auto` on `.db-kanban-board` the header's nearest scrollport was the board, which
+never scrolled vertically, so `position: sticky; top: var(--db-board-header-top)` — computing to
+`-3px` — could never engage against the page scroller. `.db-kanban-col-header` is now `static`,
+and `render-assertions.mjs` pins it there so the inference cannot return unnoticed.
+
+**The two card-text defects landed in the same edit.** The shared `.db-board-card-value` rule
+(authored for the gallery card) sets `text-align: right; word-break: break-word`; the kanban card
+inherited both through the shared class. `.db-kanban-card-meta .db-board-card-value` now overrides
+to `text-align: left; word-break: normal; overflow-wrap: normal`, scoped to the kanban card only —
+gallery's own alignment is untouched, and the checkbox row's own value keeps the shared right/
+flex-end rule at higher selector specificity, since it holds a glyph rather than a text value.
+Multi-word text still wraps up to two lines through the shared field's own
+`-webkit-line-clamp: 2`; a single-token value now has nowhere to force a mid-word break, so
+`text-overflow: ellipsis` truncates it at the line's edge instead.
+
+**Evidence.** Seven `render-assertions.mjs` board-geometry pins (page-scroll reachability,
+column/board scroll, scrollbar rest, scrollbar active, header position, value align, value wrap).
+The page-scroll row is a reachability measurement, not an overflow-keyword read: it gives the
+mounted container a pane's definite height, overfills a column by 30 cards, scrolls to the end and
+asserts both that the scroll moved and that the last card came with it. Negative control run
+against the first take's own stylesheet: `page scroll` `"auto" / 0 / false`, `column scroll`
+`"visible" / "hidden"`, both scrollbar rows `"8px"`, `header position` `"sticky"` — five red.
+Against the landed tree: `"auto" / 16239 / true`, `"visible" / "visible"`, `"0px"`, `"10px"`,
+`"static"` — all green. `npx tsc --noEmit`, `npx vitest run` (141 files / 1501 tests, including
+the cross-column dragstart-to-drop tests in `board-renderer-parity.test.ts`) and `npm run build`
+all exit 0, unaffected by a scroll/scrollbar/alignment-only edit. `node
+tools/screenshots/verify.mjs` reports 578 current after a full recapture; **30** board captures
+moved pixelHash (the uneven column heights, the removed sticky-header background and the
+left-aligned text all repaint), and every `screenshots/project-manager/*` capture and every other
+non-board capture stayed pixelHash-identical — 16 byte-only re-encodes elsewhere in the sweep
+(identical pixelHash, different bytes) were restored to their committed bytes rather than
+recommitted as churn. Two exceptions are named rather than absorbed: the
+`field-icon-picker-desktop-{dark,light}` captures moved pixels on this machine **against the
+unmodified tree as well** — verified by rebuilding from `HEAD` sources and re-capturing, which
+reproduced the same moved hash — so they are environment drift, not this edit, and were restored
+along with their manifest `layoutHash`/`pixelHash` rather than committed.
 <!-- /ANCHOR:decisions -->

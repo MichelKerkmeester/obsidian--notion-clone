@@ -435,7 +435,7 @@ _memory:
       indentation of two selector blocks inside their media queries; both are restored, and the
       three whitespace-only lines are gone (main carries none).
 
-- [ ] T014 (2026-09-06 amendment) **Make the page scroll, not the column, and hide desktop
+- [x] T014 (2026-09-06 amendment) **Make the page scroll, not the column, and hide desktop
       scrollbar chrome.** Operator ruling, ~10:30 desktop (ADR-008). **Red first, from the landed
       stylesheet**: `.db-kanban-cards` has `overflow-y: auto` (`styles.css:9569-9573`) so each
       column scrolls itself; `.db-kanban-view` has `overflow: hidden; height: 100%`
@@ -444,14 +444,98 @@ _memory:
       board, the page scrolling in their place on phone and desktop, and 0 px of scrollbar chrome
       painted on desktop at rest, with the sticky horizontal bar invisible-until-hover. A negative
       control that goes red when `overflow-y: auto` is put back
-- [ ] T015 (2026-09-06 amendment) **Left-align card text values and ellipsise a single token.**
+      **Done 2026-09-06, on the second take. The first take did not deliver the ruling and is
+      recorded here rather than overwritten.** The first take dropped `overflow: hidden` from
+      `.db-kanban-view` and `flex: 1; min-height: 0` from `.db-kanban-board` and
+      `.db-kanban-cards`, and pinned `.db-kanban-col-header` with `position: sticky`. Measured in
+      a real pane — a container with a definite height, which is what the host and the capture
+      harness (`tools/screenshots/theme.css`, `#shot > .note-database-container { height: 100% }`)
+      both give it — **nothing scrolled at all**. `.db-kanban-board` was still a flex item with
+      the default `flex-shrink: 1`, so it shrank back to the container's height, and its own
+      `overflow-y: hidden` clipped the rest: at 1440x900 the board measured `scrollHeight 7750 /
+      clientHeight 900`, the container measured `scrollHeight 908 / clientHeight 908`, a real
+      wheel of 600px moved `scrollTop` 0, and the last card of a 35-card column was unreachable.
+      The check that certified it read `getComputedStyle(container).overflowY === "auto"` on a
+      page whose body had no height, so the keyword was true and the behaviour was not.
+
+      **Second take.** Both scroll axes belong to the container. `.db-kanban-board` drops its own
+      `overflow-x`/`overflow-y` and takes `flex-shrink: 0`, so it is as tall and as wide as its
+      columns and rides the page. Both axes, not just the vertical: the reference paints its
+      horizontal bar at the bottom of the viewport over the cards
+      (`anytype-project-tracker-kanban-dark.png`, bar at y 1199..1208 of 1217), which only a
+      pane-height scroller can do — a board-height scroller puts that bar thousands of pixels
+      below the fold. `.db-kanban-board` keeps `align-items: flex-start`, so one column's card
+      count does not stretch its neighbours, matching the reference's own uneven column heights.
+      `.db-kanban-col-header` is **not** pinned: see the ADR-008 amendment for why the first
+      take's inference was withdrawn.
+
+      **Measured green**, 1440x900 and 390x844 at DPR 2, against a board with one 35-card column:
+      no element inside a column (nor the board itself) computes `overflow-y` other than
+      `visible`; the container measures `scrollHeight 7758 / clientHeight 908`; a real trusted
+      wheel of 600px moves the container 600px and the board and column 0; `PageDown` moves it
+      868px; scrolling to the end reaches `scrollTop 6857 = scrollHeight - clientHeight` with the
+      last card fully inside the container box. The 10-per-group page limit and its
+      "Show 10 more" control still render on all five columns. Horizontal: at 390px the container
+      reports `scrollWidth 1383 / clientWidth 382`, a trusted horizontal wheel moves `scrollLeft`
+      300, and scrolling to the end leaves the last column's right edge exactly at the container's
+      right edge — the board's negative margins cut nothing off. Drag under scroll, measured
+      rather than assumed: with the container scrolled 400px, a real `dragstart` on a card in
+      `backlog` followed by `dragover`+`drop` on `doing`'s cards container tints the right column
+      and calls `moveCardAndOrder` with `groupKey "doing"`, `fromGroup "backlog"`; a same-column
+      drag at the same offset lands the card immediately before the card it was aimed at. Both
+      hold because the drop handler is bound per column in `attachReferenceDropHandlers` and
+      `getReferenceDragAfterElement` reads `event.clientY` against `getBoundingClientRect()`, so
+      the scroll offset cancels.
+- [x] T015 (2026-09-06 amendment) **Left-align card text values and ellipsise a single token.**
       Same report. **Red first**: a card text value renders right-aligned
       (*"Procurement asked for a security questionnaire."*) and a URL breaks mid-word
       (*"northwin d-logistics"*). Green is `text-align: left` on every card text value and a
       single-token value ellipsised at the content edge, read off a recaptured board in both themes
-- [ ] T016 (2026-09-06 amendment) **Re-run the geometry pins after T014.** The scrollbar row in
+      **Done 2026-09-06.** The shared `.db-board-card-value` rule (styles.css) carries
+      `text-align: right; word-break: break-word` — written for the gallery card and inherited by
+      the kanban card through the same class. `.db-kanban-card-meta .db-board-card-value` now
+      overrides both, scoped to the kanban card only: `text-align: left; word-break: normal;
+      overflow-wrap: normal`. The checkbox row's own value keeps the shared right/flex-end rule,
+      at higher selector specificity, since it holds a glyph rather than a text value. Multi-word
+      text still wraps up to two lines (the shared field's own `-webkit-line-clamp: 2`); a
+      single-token value has nowhere to force a break now, so `text-overflow: ellipsis` truncates
+      it at the line's edge instead of breaking mid-word. Two new `render-assertions.mjs` pins
+      ("value align", "value wrap") read `"right"`/`"break-word"` on the pre-edit tree and
+      `"left"`/`"normal"` after. Re-measured on the second take at DPR 2: every card property
+      value computes `text-align: left`, and its painted ink starts 1px from the card's own inner
+      left inset on every row of the card, at both 1440x900 and 390x844. A single unbreakable
+      68-character token stays on one line (ink height 16px, one line box) and is clipped at the
+      value box, which itself ends 1px inside the card — it ellipsises rather than breaking.
+      Multi-word text still wraps. Eight recaptured board PNGs opened across both themes and both
+      devices: every text value reads left-aligned, no mid-word break in any.
+- [x] T016 (2026-09-06 amendment) **Re-run the geometry pins after T014.** The scrollbar row in
       `render-assertions.mjs` asserts a bar this ruling hides; re-express it as the ruling's own
       threshold rather than deleting it, so a later reinstatement still has a check
+      **Done 2026-09-06, second take.** No pre-existing scrollbar pin was found in
+      `render-assertions.mjs`'s `GEOMETRY_PINS` (the six pins T012/ADR-005 folded in were card
+      radius, column width, column gap, checkbox size, chip height and row pitch — none of them
+      the scrollbar). The pin this row asks to re-express is added new, at the ruling's own
+      threshold rather than the declined 10px-at-rest value: the `::-webkit-scrollbar` height is
+      read via `getComputedStyle(el, "::-webkit-scrollbar")` (Chromium exposes the pseudo-element
+      to this API) on the container, which is the element that scrolls — once at rest (expected
+      `"0px"`) and once with `.is-scrolling` applied programmatically (expected `"10px"`, the
+      measured reference geometry, declined only at rest).
+
+      Seven pins in total, not six, and the page-scroll one is no longer a keyword read. The
+      first take's `pageOverflowY === "auto"` passed on a document whose body had no height and
+      so could not have failed for the defect it was meant to catch. It now measures
+      **reachability**: the check gives the mounted container a pane's definite height, overfills
+      one column by 30 cards, scrolls to the end and asserts both that the scroll moved and that
+      the last card came with it. The seventh pin holds `.db-kanban-col-header` at
+      `position: static`, so a sticky header cannot be reintroduced as an inference.
+
+      Negative control, run against the first take's own stylesheet: `page scroll` reads
+      `"auto" / 0 / false` (*scrolled to 0 of 608/608, last card reachable false*),
+      `column scroll` reads `"visible" / "hidden"`, both scrollbar rows read `"8px"`, and
+      `header position` reads `"sticky"` — five red. Against the landed tree: `"auto" / 16239 /
+      true`, `"visible" / "visible"`, `"0px"`, `"10px"`, `"static"` — all green,
+      `render-assertions.mjs` exit 0. The gate stays at 26 lanes — no new lane, folded into the
+      existing board-geometry pass per the same constraint ADR-005 already named.
 <!-- /ANCHOR:phase-3 -->
 
 ---

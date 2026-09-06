@@ -173,6 +173,27 @@ const GEOMETRY_PINS = [
   { label: "column width", selector: ".db-kanban-col", prop: "width", expected: "246px" },
   { label: "column gap", selector: ".db-kanban-board", prop: "gap", expected: "24px" },
   { label: "checkbox size", selector: ".db-kanban-card-meta .db-checkbox-field", prop: "boxWidth", expected: 14 },
+  // A card text value read right-aligned and a single-token value broke mid-word. The first
+  // non-checkbox property value on the mounted card proves both: it reads from the left, and has
+  // nowhere to force a break a single unbreakable token would take.
+  {
+    label: "value align",
+    selector: ".db-kanban-card-meta .db-board-card-field:not(.is-checkbox-field) .db-board-card-value",
+    prop: "textAlign",
+    expected: "left",
+  },
+  {
+    label: "value wrap",
+    selector: ".db-kanban-card-meta .db-board-card-field:not(.is-checkbox-field) .db-board-card-value",
+    prop: "wordBreak",
+    expected: "normal",
+  },
+  // The column header rides the page like every other row of it. No capture in the reference set
+  // shows one caught mid-scroll or held against the top, and the operator asked for the page to
+  // scroll — so a pin here is the check that a sticky header does not get reintroduced as an
+  // inference. It is inert as well as unwanted: the header's nearest scrollport would be the
+  // board, which scrolls in neither axis.
+  { label: "header position", selector: ".db-kanban-col-header", prop: "position", expected: "static" },
 ];
 
 /** The board scenario this pass mounts: the shipped renderer at its production entry. */
@@ -327,6 +348,17 @@ window.__boardGeometry = (scenario) => {
     const firstCard = container.querySelector(".db-kanban-card");
     const checkbox = container.querySelector(".db-kanban-card-meta .db-checkbox-field");
 
+    // The scrollbar height is read off the ::-webkit-scrollbar pseudo-element of the container,
+    // which is the element that scrolls — at rest, and again with "is-scrolling" applied the way
+    // the renderer's own scroll listener would, so a later reinstatement of the painted-at-rest
+    // bar has a number to turn red against either state.
+    const board = container.querySelector(".db-kanban-board");
+    const scrollbarRestHeight = getComputedStyle(container, "::-webkit-scrollbar").height;
+    container.classList.add("is-scrolling");
+    const scrollbarActiveHeight = getComputedStyle(container, "::-webkit-scrollbar").height;
+    container.classList.remove("is-scrolling");
+    const boardOverflowY = board ? getComputedStyle(board).overflowY : null;
+
     measurement = {
       pins: ${JSON.stringify(GEOMETRY_PINS)}.map((pin) => ({ ...pin, ...read(pin.selector, pin.prop) })),
       chipHeight: chip ? Math.round(chip.getBoundingClientRect().height) : null,
@@ -335,7 +367,36 @@ window.__boardGeometry = (scenario) => {
           .map((row) => Math.round(row.getBoundingClientRect().height))
         : [],
       checkboxRadius: checkbox ? getComputedStyle(checkbox).borderRadius : null,
+      pageOverflowY: getComputedStyle(container).overflowY,
+      columnOverflowY: read(".db-kanban-cards", "overflowY").value ?? null,
+      boardOverflowY,
+      scrollbarRestHeight,
+      scrollbarActiveHeight,
     };
+
+    // Reachability, measured, not inferred from an overflow keyword. A container whose overflow
+    // computes to "auto" still scrolls nothing when its only child has been flex-shrunk back to
+    // the container's own height and clips what does not fit — which is precisely how a board
+    // that reported "overflow-y: auto" left every card past the first screen unreachable. So the
+    // check gives the container a pane's definite height (the shape a real host gives it; this
+    // page's body has none), overfills one column, and asks whether the scroll actually moved and
+    // the last card came with it. Destructive to the DOM, so it runs after every read above.
+    const cardsEl = container.querySelector(".db-kanban-cards");
+    const template = cardsEl && cardsEl.querySelector(".db-kanban-card");
+    if (cardsEl && template) {
+      container.style.height = "600px";
+      for (let i = 0; i < 30; i += 1) cardsEl.appendChild(template.cloneNode(true));
+      const cards = cardsEl.querySelectorAll(".db-kanban-card");
+      const last = cards[cards.length - 1];
+      container.scrollTop = 1e6;
+      const reached = container.scrollTop;
+      const rect = container.getBoundingClientRect();
+      const lastRect = last.getBoundingClientRect();
+      measurement.pageScrollReached = reached;
+      measurement.lastCardReachable = lastRect.bottom <= rect.bottom + 1 && lastRect.top >= rect.top - 1;
+      measurement.pageScrollHeight = container.scrollHeight;
+      measurement.pageClientHeight = container.clientHeight;
+    }
   });
   return { provenance, ...measurement };
 };
@@ -840,6 +901,47 @@ if (!geometryOutcome || !geometryOutcome.provenance) {
     + `${".db-checkbox-field border-radius".padEnd(42)} ${JSON.stringify(geometryOutcome.checkboxRadius)}`);
   if (!radiusOk) failures.push(`board geometry checkbox shape: border-radius ${JSON.stringify(geometryOutcome.checkboxRadius)}, `
     + 'expected "50%" — a circle, not the app-wide rounded square');
+
+  // The page scrolls far enough to reach the last card of an overfilled column, no column and no
+  // board is its own vertical scroll container, and the horizontal bar paints 0px at rest and
+  // 10px while scrolling rather than a bar painted at rest — a threshold on the declined-at-rest
+  // value rather than a deletion of the pin, so a later reinstatement still has a check to redden.
+  const pageScrollOk = geometryOutcome.pageOverflowY === "auto"
+    && geometryOutcome.pageScrollReached > 0
+    && geometryOutcome.lastCardReachable === true;
+  console.log(`  ${pageScrollOk ? "PASS" : "FAIL"}  ${"page scroll".padEnd(16)} `
+    + `${"overflow-y / scrollTop / last card".padEnd(42)} `
+    + `${JSON.stringify(geometryOutcome.pageOverflowY)} / ${geometryOutcome.pageScrollReached} / ${geometryOutcome.lastCardReachable}`);
+  if (!pageScrollOk) failures.push(`board geometry page scroll: .db-kanban-view overflow-y read `
+    + `${JSON.stringify(geometryOutcome.pageOverflowY)}, scrolled to ${geometryOutcome.pageScrollReached} of `
+    + `${geometryOutcome.pageScrollHeight}/${geometryOutcome.pageClientHeight}, last card reachable `
+    + `${geometryOutcome.lastCardReachable} — the container must scroll far enough to reach the last card of an `
+    + `overfilled column. An "auto" that scrolls 0 is the shape this check exists to catch: a board flex-shrunk `
+    + `back to the container's height, clipping everything past the first screen with nothing left to scroll`);
+
+  const columnScrollOk = geometryOutcome.columnOverflowY === "visible" && geometryOutcome.boardOverflowY === "visible";
+  console.log(`  ${columnScrollOk ? "PASS" : "FAIL"}  ${"column scroll".padEnd(16)} `
+    + `${".db-kanban-cards / .db-kanban-board overflow-y".padEnd(42)} `
+    + `${JSON.stringify(geometryOutcome.columnOverflowY)} / ${JSON.stringify(geometryOutcome.boardOverflowY)}`);
+  if (!columnScrollOk) failures.push(`board geometry column scroll: .db-kanban-cards overflow-y read `
+    + `${JSON.stringify(geometryOutcome.columnOverflowY)} and .db-kanban-board read ${JSON.stringify(geometryOutcome.boardOverflowY)}, `
+    + `expected "visible" for both — neither a column nor the board may be its own scroll container `
+    + `(the negative control: putting "overflow-y: auto" back on .db-kanban-cards turns this red)`);
+
+  const scrollbarRestOk = geometryOutcome.scrollbarRestHeight === "0px";
+  console.log(`  ${scrollbarRestOk ? "PASS" : "FAIL"}  ${"scrollbar (rest)".padEnd(16)} `
+    + `${".db-kanban-view ::-webkit-scrollbar".padEnd(42)} ${JSON.stringify(geometryOutcome.scrollbarRestHeight)}`);
+  if (!scrollbarRestOk) failures.push(`board geometry scrollbar (rest): height read `
+    + `${JSON.stringify(geometryOutcome.scrollbarRestHeight)}, expected "0px" — the operator's ruling declines the `
+    + `measured 10px lane at rest`);
+
+  const scrollbarActiveOk = geometryOutcome.scrollbarActiveHeight === "10px";
+  console.log(`  ${scrollbarActiveOk ? "PASS" : "FAIL"}  ${"scrollbar (active)".padEnd(16)} `
+    + `${".db-kanban-view.is-scrolling ::-webkit-scrollbar".padEnd(42)} ${JSON.stringify(geometryOutcome.scrollbarActiveHeight)}`);
+  if (!scrollbarActiveOk) failures.push(`board geometry scrollbar (active): height read `
+    + `${JSON.stringify(geometryOutcome.scrollbarActiveHeight)}, expected "10px" — the measured reference geometry still applies `
+    + `once the bar is shown, only "at rest" is declined`);
+
 }
 
 // ───────────────────────────────────────────────────────────────────
