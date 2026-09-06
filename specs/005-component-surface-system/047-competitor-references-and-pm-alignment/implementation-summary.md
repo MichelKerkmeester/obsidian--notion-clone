@@ -10,9 +10,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/047-competitor-references-and-pm-alignment"
-    last_updated_at: "2026-09-06T18:15:00Z"
-    last_updated_by: "fibery-mobbin-harvest"
-    recent_action: "Harvested 1,800 Fibery web references from Mobbin into screenshots/fibery"
+    last_updated_at: "2026-09-06T20:30:00Z"
+    last_updated_by: "fibery-reclassification"
+    recent_action: "Reclassified the 702 non-flow Fibery captures by content (T035 Fibery half); ClickUp half stays open"
     next_safe_action: "Write the negative control red-first against the current schema"
     blockers:
       - "manifest-schema.mjs rejects any reference group but project-manager"
@@ -165,7 +165,13 @@ too. The pinned constants agree with the pixels: `ROW_HEIGHT 44`, `HEADER_HEIGHT
 
 #### Fibery captures, 2026-09-06
 
-`screenshots/fibery/` now holds the Fibery web references harvested from Mobbin's MCP search tools (T032): 1,800 files carrying 860 distinct screen ids — 105 sidebar screens, 597 standalone screens and 1,098 files across 233 flow folders, with 700 ids filed both standalone and inside a flow and 158 only inside a flow. Web only, so there is no `ios/` lane. The index in `screenshots/fibery/README.md` is **per file for the 702 non-flow captures and per flow folder for the 1,098 flow files**, a flow's single `mobbin_url` citing every image in its folder; at landing the index and disk agreed 1:1 on all 1,800 paths, every file was a valid RIFF/WebP 768 px wide, and twelve images opened at random were Fibery desktop chrome with the Mobbin footer. Unlike Evernote and like the first Notion pass, the grouping is query-derived rather than content-verified — `web/screens/` is deliberately flat because a screen is reached by many queries — so the T035 reclassification pass is owed here in full.
+`screenshots/fibery/` now holds the Fibery web references harvested from Mobbin's MCP search tools (T032): 1,800 files carrying 860 distinct screen ids — 105 sidebar screens, 597 standalone screens and 1,098 files across 233 flow folders, with 700 ids filed both standalone and inside a flow and 158 only inside a flow. Web only, so there is no `ios/` lane. The index in `screenshots/fibery/README.md` is **per file for the 702 non-flow captures and per flow folder for the 1,098 flow files**, a flow's single `mobbin_url` citing every image in its folder; at landing the index and disk agreed 1:1 on all 1,800 paths, every file was a valid RIFF/WebP 768 px wide, and twelve images opened at random were Fibery desktop chrome with the Mobbin footer. Unlike Evernote and like the first Notion pass, the grouping is query-derived rather than content-verified — `web/screens/` is deliberately flat because a screen is reached by many queries.
+
+#### Fibery reclassification pass, 2026-09-06 (T035)
+
+The 702 non-flow files (597 `web/screens/` + 105 `web/navigation/`) were each opened with the Read tool and refiled into the group its content actually shows, the same method as the Notion pass; `web/flows/` (1,098 files, 233 folders) was left alone because its folder name is already a content read (the Mobbin flow name). 694 files moved; 8 `web/navigation/` files were already correctly grouped and kept their path. `screenshots/fibery/reclassification-2026-09-06.tsv` records every move (old path, new path, reason) and agrees 1:1 with both the git renames and the corrected README index — no duplicate path either side.
+
+45 images were spot-checked with the Read tool across every group (more than double the required 20), and it surfaced two real defects rather than zero, both fixed before landing rather than reported and left: the harvest's `ai` group had conflated Fibery's **Insight** database name with "AI-generated insight" — 8 of its 11 files showed no AI feature at all (5 moved to `database` as view-configuration popovers, 2 to `views` as plain rendered list views, 1 to `reports` as a report wizard); a rendered, populated Feed view had been filed as an empty state (moved to `views`); and one Settings > General screen carried a reason string duplicated from a neighboring whiteboard capture and sat in `web/whiteboard/` (moved to `settings`). Final per-group counts (702 total, unchanged): `navigation` 35, `views` 115, `database` 136, `editors` 76, `reports` 87, `onboarding` 68, `settings` 54, `automations` 30, `whiteboard` 30, `collaboration` 31, `forms` 21, `marketing` 11, `ai` 3, `states` 2, `dialogs` 3. `screenshots/manifest.json` is untouched and `node tools/screenshots/verify.mjs` exits 0. The ClickUp half of T035 stays open, owed once T033 lands.
 
 <!-- /ANCHOR:how-delivered -->
 

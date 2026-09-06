@@ -291,9 +291,25 @@ One app landed and verified before the next opens. Never a parallel fan-out acro
       reads the images in batches of ~50, moves each file into the group its pixels depict and
       rewrites the README index. Opened 2026-09-06 because the harvest's grouping is
       **query-derived** — 5 of 9 web spot checks sat in a group they do not show, and the README
-      says so. **Running in `worktrees/170`.** The same pass is owed to Evernote only if a spot
-      check finds it needed (its grouping was content-derived at harvest time), and to Fibery and
-      ClickUp once they land
+      says so. **Notion half done** (`screenshots/notion/reclassification-2026-09-06.tsv`).
+      **Fibery half done** in `worktrees/195-fibery-reclassify`: same pass over
+      `screenshots/fibery/web/` (`flows/` untouched — its folders are already a content read, the
+      Mobbin flow name). 702 non-flow files (597 `web/screens/` + 105 `web/navigation/`) opened
+      and reassigned by content; 694 moved. 45 images spot-checked with the Read tool across every
+      group (not just the required 20) surfaced two real defects, both fixed before landing: the
+      `ai` group's harvest queries had conflated Fibery's **Insight** database name with
+      "AI-generated insight," misfiling 8 of 11 files there (5 into `database`, 2 into `views`, 1
+      into `reports`); a rendered, populated Feed view had been filed as an empty state (moved to
+      `views`); and one Settings > General screen carried a duplicated whiteboard-canvas reason
+      string and sat in `web/whiteboard/` (moved to `settings`). Final per-group counts (702
+      total): `views` 115, `database` 136, `editors` 76, `reports` 87, `onboarding` 68,
+      `settings` 54, `navigation` 35, `automations` 30, `whiteboard` 30, `collaboration` 31,
+      `forms` 21, `marketing` 11, `ai` 3, `dialogs` 3, `states` 2.
+      `screenshots/fibery/reclassification-2026-09-06.tsv` records every move (old path, new path,
+      reason); ledger and README index agree 1:1 with disk, no duplicate path.
+      `screenshots/manifest.json` untouched, `node tools/screenshots/verify.mjs` exits 0.
+      **ClickUp half stays open** — owed once T033 lands. The same pass is owed to Evernote only if
+      a spot check finds it needed (its grouping was content-derived at harvest time)
 <!-- /ANCHOR:phase-mobbin -->
 
 ---

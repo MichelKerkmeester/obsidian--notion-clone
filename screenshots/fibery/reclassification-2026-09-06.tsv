@@ -1,0 +1,695 @@
+old_path	new_path	reason
+web/navigation/fibery-web-navigation-sidebar-4da33a94-00f6-4fff-994c-1cfb7236f24c.webp	web/views/fibery-web-views-4da33a94-00f6-4fff-994c-1cfb7236f24c.webp	Full month calendar grid rendered as main content
+web/navigation/fibery-web-navigation-sidebar-50c7362e-1691-496d-958b-a33a949a9671.webp	web/onboarding/fibery-web-onboarding-50c7362e-1691-496d-958b-a33a949a9671.webp	Home Getting Started welcome checklist panel
+web/navigation/fibery-web-navigation-sidebar-51cd7582-9372-45e5-97f4-9f8b9e78831d.webp	web/collaboration/fibery-web-collaboration-51cd7582-9372-45e5-97f4-9f8b9e78831d.webp	User Group Databases access/permission configuration
+web/navigation/fibery-web-navigation-sidebar-521a4758-b38f-4140-83d5-6136122c460c.webp	web/onboarding/fibery-web-onboarding-521a4758-b38f-4140-83d5-6136122c460c.webp	Getting Started welcome checklist dominates panel
+web/navigation/fibery-web-navigation-sidebar-53b097b5-9e72-45c4-9358-52bf03392997.webp	web/reports/fibery-web-reports-53b097b5-9e72-45c4-9358-52bf03392997.webp	New Report setup modal (Set up your report)
+web/navigation/fibery-web-navigation-sidebar-56c6a3a0-6209-432a-a414-e1ee2705aa06.webp	web/editors/fibery-web-editors-56c6a3a0-6209-432a-a414-e1ee2705aa06.webp	New document title/summary editor
+web/navigation/fibery-web-navigation-sidebar-56d364d2-12cd-4beb-9833-e38466fa6ec2.webp	web/database/fibery-web-database-56d364d2-12cd-4beb-9833-e38466fa6ec2.webp	Import wizard selecting destination Space
+web/navigation/fibery-web-navigation-sidebar-5b68009c-1ccb-486a-96f5-db0840baff33.webp	web/onboarding/fibery-web-onboarding-5b68009c-1ccb-486a-96f5-db0840baff33.webp	Getting Started welcome checklist dominates panel
+web/navigation/fibery-web-navigation-sidebar-5f1c7409-72b0-4af2-97f5-58d540176e5c.webp	web/views/fibery-web-views-5f1c7409-72b0-4af2-97f5-58d540176e5c.webp	New calendar view creation panel
+web/navigation/fibery-web-navigation-sidebar-61f89f3f-4703-498a-bfef-97ee8f654654.webp	web/database/fibery-web-database-61f89f3f-4703-498a-bfef-97ee8f654654.webp	New table field color-coding picker
+web/navigation/fibery-web-navigation-sidebar-620cb491-c5fd-48a5-86fd-1f2ef3372da2.webp	web/editors/fibery-web-editors-620cb491-c5fd-48a5-86fd-1f2ef3372da2.webp	New document with pasted image + image source picker
+web/navigation/fibery-web-navigation-sidebar-629af65d-55c9-4b52-8a06-bca57f4cbec2.webp	web/database/fibery-web-database-629af65d-55c9-4b52-8a06-bca57f4cbec2.webp	Person entity detail record with typed fields
+web/navigation/fibery-web-navigation-sidebar-63fe8c58-245b-413b-9cba-eae57c49a94f.webp	web/database/fibery-web-database-63fe8c58-245b-413b-9cba-eae57c49a94f.webp	New table field type picker list
+web/navigation/fibery-web-navigation-sidebar-6528a4b9-44fa-4475-98ad-d887867678e7.webp	web/editors/fibery-web-editors-6528a4b9-44fa-4475-98ad-d887867678e7.webp	New document blank empty editor
+web/navigation/fibery-web-navigation-sidebar-68319dc2-cada-408d-a0b2-44ae679ceaa9.webp	web/database/fibery-web-database-68319dc2-cada-408d-a0b2-44ae679ceaa9.webp	Import wizard selecting destination Space
+web/navigation/fibery-web-navigation-sidebar-6b610910-2be1-4a05-a24d-5c055ca152eb.webp	web/database/fibery-web-database-6b610910-2be1-4a05-a24d-5c055ca152eb.webp	Import summary of additional data created
+web/navigation/fibery-web-navigation-sidebar-6c26d20a-1baa-46ec-8cbd-433b8222bdcf.webp	web/database/fibery-web-database-6c26d20a-1baa-46ec-8cbd-433b8222bdcf.webp	New Item quick-create popover (Name + Discard/Create)
+web/navigation/fibery-web-navigation-sidebar-714aa790-1b39-4ef7-ab48-9402ebeb7aea.webp	web/editors/fibery-web-editors-714aa790-1b39-4ef7-ab48-9402ebeb7aea.webp	Document version history panel
+web/navigation/fibery-web-navigation-sidebar-720880db-3704-4172-bd24-f829144c8247.webp	web/editors/fibery-web-editors-720880db-3704-4172-bd24-f829144c8247.webp	Document with pasted image, video thumbnail and description text
+web/navigation/fibery-web-navigation-sidebar-7a760b37-07f2-4e0f-b50b-375b00acdebb.webp	web/editors/fibery-web-editors-7a760b37-07f2-4e0f-b50b-375b00acdebb.webp	Document with pasted image, video thumbnail and description text
+web/navigation/fibery-web-navigation-sidebar-7b37cfc8-8d0d-419d-874f-0bd22055414a.webp	web/database/fibery-web-database-7b37cfc8-8d0d-419d-874f-0bd22055414a.webp	Person entity detail record with typed fields, verification toast
+web/navigation/fibery-web-navigation-sidebar-7b4b28a8-b399-4a1b-b5f3-1ac2057acfc6.webp	web/database/fibery-web-database-7b4b28a8-b399-4a1b-b5f3-1ac2057acfc6.webp	New table field/grouping config panel
+web/navigation/fibery-web-navigation-sidebar-7d1c6c5c-eaa7-41c3-b705-68fa0058a6d7.webp	web/views/fibery-web-views-7d1c6c5c-eaa7-41c3-b705-68fa0058a6d7.webp	Rendered table view with populated rows and columns
+web/navigation/fibery-web-navigation-sidebar-7eca9340-8e5b-4f28-84f0-0f7453b8249e.webp	web/editors/fibery-web-editors-7eca9340-8e5b-4f28-84f0-0f7453b8249e.webp	New document with code/formula placeholder block
+web/navigation/fibery-web-navigation-sidebar-83898220-9599-42f4-9a60-4ef374ef228c.webp	web/editors/fibery-web-editors-83898220-9599-42f4-9a60-4ef374ef228c.webp	Document with pasted image, video thumbnail and description text
+web/navigation/fibery-web-navigation-sidebar-85009a0e-9537-4a88-b732-903f182ce341.webp	web/marketing/fibery-web-marketing-85009a0e-9537-4a88-b732-903f182ce341.webp	Template gallery detail page (30-60-90 Onboarding Template)
+web/navigation/fibery-web-navigation-sidebar-8902c31f-08a2-4fb0-a3bc-84a545eff0d9.webp	web/onboarding/fibery-web-onboarding-8902c31f-08a2-4fb0-a3bc-84a545eff0d9.webp	Getting Started welcome checklist dominates panel
+web/navigation/fibery-web-navigation-sidebar-89d22ddd-c22f-4714-98aa-f368ff3cda60.webp	web/onboarding/fibery-web-onboarding-89d22ddd-c22f-4714-98aa-f368ff3cda60.webp	Getting Started welcome checklist dominates panel
+web/navigation/fibery-web-navigation-sidebar-8d9b55e8-241c-417c-ad8d-647b89e58719.webp	web/automations/fibery-web-automations-8d9b55e8-241c-417c-ad8d-647b89e58719.webp	Canvas diagram with automation/button description text
+web/navigation/fibery-web-navigation-sidebar-8e7cc0fb-3ef6-4211-bf5c-43b513f2602f.webp	web/editors/fibery-web-editors-8e7cc0fb-3ef6-4211-bf5c-43b513f2602f.webp	New document blank empty editor with title
+web/navigation/fibery-web-navigation-sidebar-8e82db2c-ddf6-4a47-87a2-6bffd725fabc.webp	web/database/fibery-web-database-8e82db2c-ddf6-4a47-87a2-6bffd725fabc.webp	Person entity detail record with typed fields
+web/navigation/fibery-web-navigation-sidebar-94ad5a19-976a-4301-a5b9-c62e1c3f7b00.webp	web/collaboration/fibery-web-collaboration-94ad5a19-976a-4301-a5b9-c62e1c3f7b00.webp	Activity log audit trail of member actions
+web/navigation/fibery-web-navigation-sidebar-96353a1d-cf61-4a8a-8dc5-b965923573ef.webp	web/reports/fibery-web-reports-96353a1d-cf61-4a8a-8dc5-b965923573ef.webp	New Report chart config panel (data source, chart type)
+web/navigation/fibery-web-navigation-sidebar-98869498-692b-4c9a-97c6-d6d6ea2a97e9.webp	web/whiteboard/fibery-web-whiteboard-98869498-692b-4c9a-97c6-d6d6ea2a97e9.webp	Whiteboard diagram with connected relationship nodes
+web/navigation/fibery-web-navigation-sidebar-98eddcb5-b11d-4dc2-8916-4deac0a30172.webp	web/onboarding/fibery-web-onboarding-98eddcb5-b11d-4dc2-8916-4deac0a30172.webp	Getting Started welcome checklist dominates panel
+web/navigation/fibery-web-navigation-sidebar-9969ec62-b754-47a7-8246-e21b6224bd5f.webp	web/views/fibery-web-views-9969ec62-b754-47a7-8246-e21b6224bd5f.webp	New calendar view creation panel
+web/navigation/fibery-web-navigation-sidebar-99741643-6f33-4727-8a4a-594c33d3b2ba.webp	web/database/fibery-web-database-99741643-6f33-4727-8a4a-594c33d3b2ba.webp	New table field color-coding picker (dominant card)
+web/navigation/fibery-web-navigation-sidebar-9c826c0d-8a63-42ca-a85f-573fe10104aa.webp	web/reports/fibery-web-reports-9c826c0d-8a63-42ca-a85f-573fe10104aa.webp	New Report wizard (Client Report Directory)
+web/navigation/fibery-web-navigation-sidebar-a0357d42-3cb0-4f06-aa30-524352dfcf03.webp	web/onboarding/fibery-web-onboarding-a0357d42-3cb0-4f06-aa30-524352dfcf03.webp	Getting Started welcome checklist dominates panel
+web/navigation/fibery-web-navigation-sidebar-a0f4b2f8-30ec-48e4-ac84-ddf21f4d52c2.webp	web/editors/fibery-web-editors-a0f4b2f8-30ec-48e4-ac84-ddf21f4d52c2.webp	Document version history panel
+web/navigation/fibery-web-navigation-sidebar-a0fe139c-6bb2-4750-93c5-0c88c2e19061.webp	web/views/fibery-web-views-a0fe139c-6bb2-4750-93c5-0c88c2e19061.webp	Home page project cards rendered as gallery-style list
+web/navigation/fibery-web-navigation-sidebar-a300aca1-5b8f-4f02-8178-681bcb44bb43.webp	web/onboarding/fibery-web-onboarding-a300aca1-5b8f-4f02-8178-681bcb44bb43.webp	Getting Started welcome checklist dominates panel
+web/navigation/fibery-web-navigation-sidebar-a4934de3-ded7-453c-8050-486f64c42ca8.webp	web/editors/fibery-web-editors-a4934de3-ded7-453c-8050-486f64c42ca8.webp	New document bullet-list draft
+web/navigation/fibery-web-navigation-sidebar-a4f10ecb-fd0b-4235-b7e6-f9098eb169b4.webp	web/settings/fibery-web-settings-a4f10ecb-fd0b-4235-b7e6-f9098eb169b4.webp	Preferences panel (regional format, appearance theme)
+web/navigation/fibery-web-navigation-sidebar-a59259a4-0c72-45a4-b37a-286c93906e07.webp	web/editors/fibery-web-editors-a59259a4-0c72-45a4-b37a-286c93906e07.webp	New document emoji picker popover
+web/navigation/fibery-web-navigation-sidebar-a6a73809-0383-4ebf-8964-363282fb5efc.webp	web/editors/fibery-web-editors-a6a73809-0383-4ebf-8964-363282fb5efc.webp	New document emoji picker popover
+web/navigation/fibery-web-navigation-sidebar-a878a4ad-ff7d-4571-a704-c9d3b882f12a.webp	web/editors/fibery-web-editors-a878a4ad-ff7d-4571-a704-c9d3b882f12a.webp	Document with pasted image, video thumbnail and description text
+web/navigation/fibery-web-navigation-sidebar-a990bed9-126f-4ff8-8419-fdff7afe497c.webp	web/editors/fibery-web-editors-a990bed9-126f-4ff8-8419-fdff7afe497c.webp	New document blank plus small New whiteboard window
+web/navigation/fibery-web-navigation-sidebar-aacc9efa-7f77-47b7-94a3-98e98c300296.webp	web/editors/fibery-web-editors-aacc9efa-7f77-47b7-94a3-98e98c300296.webp	Document with image/video and entity metadata side panel
+web/navigation/fibery-web-navigation-sidebar-abbe76ad-9e8c-49b7-a2a6-d3bc5a6580a0.webp	web/editors/fibery-web-editors-abbe76ad-9e8c-49b7-a2a6-d3bc5a6580a0.webp	New document blank empty editor
+web/navigation/fibery-web-navigation-sidebar-af871e63-3718-4893-8968-ec99e9c1ffd7.webp	web/whiteboard/fibery-web-whiteboard-af871e63-3718-4893-8968-ec99e9c1ffd7.webp	Whiteboard canvas with text and drawing toolbar
+web/navigation/fibery-web-navigation-sidebar-b055ccb8-1b35-45c5-94f2-fe466a7ec28d.webp	web/ai/fibery-web-ai-b055ccb8-1b35-45c5-94f2-fe466a7ec28d.webp	Fibery AI chat panel prompt content
+web/navigation/fibery-web-navigation-sidebar-b17fe4dd-1408-4729-8f51-81e44cdea773.webp	web/database/fibery-web-database-b17fe4dd-1408-4729-8f51-81e44cdea773.webp	Group Database members/access config panel
+web/navigation/fibery-web-navigation-sidebar-b1c1016d-82db-4150-83c4-32f8eb6d761f.webp	web/database/fibery-web-database-b1c1016d-82db-4150-83c4-32f8eb6d761f.webp	New table field color config with values list
+web/navigation/fibery-web-navigation-sidebar-b3d6302f-cf7d-4c32-b0e0-b68d0c456d78.webp	web/database/fibery-web-database-b3d6302f-cf7d-4c32-b0e0-b68d0c456d78.webp	New table field color grouping logic and swatches
+web/navigation/fibery-web-navigation-sidebar-b685338f-0684-4625-9096-1f93d555b329.webp	web/reports/fibery-web-reports-b685338f-0684-4625-9096-1f93d555b329.webp	New Report chart wizard (chart type, filters, icon picker)
+web/navigation/fibery-web-navigation-sidebar-b777e868-fb0f-462f-99b4-c01e0ceafc23.webp	web/database/fibery-web-database-b777e868-fb0f-462f-99b4-c01e0ceafc23.webp	New table field/grouping config panel
+web/navigation/fibery-web-navigation-sidebar-b7effa46-f37d-4c1a-b10a-3337f01cbbdd.webp	web/editors/fibery-web-editors-b7effa46-f37d-4c1a-b10a-3337f01cbbdd.webp	New document block-insert layout menu (columns, table, lists)
+web/navigation/fibery-web-navigation-sidebar-ba007df0-c925-4b57-82e1-d14750b3f7c9.webp	web/database/fibery-web-database-ba007df0-c925-4b57-82e1-d14750b3f7c9.webp	New table relation/link picker list
+web/navigation/fibery-web-navigation-sidebar-ba12f893-a958-4ded-ab57-b00e9718ece5.webp	web/database/fibery-web-database-ba12f893-a958-4ded-ab57-b00e9718ece5.webp	New table basic field name creation
+web/navigation/fibery-web-navigation-sidebar-bc294597-4af1-4e9a-9b40-5fc43b2a9cee.webp	web/database/fibery-web-database-bc294597-4af1-4e9a-9b40-5fc43b2a9cee.webp	New table column Created-by filter with context menu
+web/navigation/fibery-web-navigation-sidebar-bd898227-ac4b-451f-b393-0068d8a7e5b5.webp	web/database/fibery-web-database-bd898227-ac4b-451f-b393-0068d8a7e5b5.webp	New table Sort config panel
+web/navigation/fibery-web-navigation-sidebar-c1f8250b-8082-4c8f-a408-7dfe71af1be2.webp	web/database/fibery-web-database-c1f8250b-8082-4c8f-a408-7dfe71af1be2.webp	New table field grouping with created-on rows
+web/navigation/fibery-web-navigation-sidebar-c37a1c94-8960-42b8-8349-3108521452b6.webp	web/onboarding/fibery-web-onboarding-c37a1c94-8960-42b8-8349-3108521452b6.webp	Getting Started concept walkthrough (Space/Document/Database/Table/View)
+web/navigation/fibery-web-navigation-sidebar-c6c99e44-475c-4cf6-9774-c5e87781f606.webp	web/reports/fibery-web-reports-c6c99e44-475c-4cf6-9774-c5e87781f606.webp	New Report chart-type wizard step
+web/navigation/fibery-web-navigation-sidebar-c8802ed3-80a8-4af0-986b-2a5fe00996c3.webp	web/whiteboard/fibery-web-whiteboard-c8802ed3-80a8-4af0-986b-2a5fe00996c3.webp	Workspace Map canvas diagram with connected nodes
+web/navigation/fibery-web-navigation-sidebar-cbd8a5a4-5ace-4f44-ab72-f34d3fd8105c.webp	web/marketing/fibery-web-marketing-cbd8a5a4-5ace-4f44-ab72-f34d3fd8105c.webp	All Templates gallery listing template cards
+web/navigation/fibery-web-navigation-sidebar-cbe36c71-b63b-4fb8-88dd-b918858b0170.webp	web/editors/fibery-web-editors-cbe36c71-b63b-4fb8-88dd-b918858b0170.webp	New document blank with title
+web/navigation/fibery-web-navigation-sidebar-cdd21558-d6d6-4dec-aa5e-8907723c259f.webp	web/settings/fibery-web-settings-cdd21558-d6d6-4dec-aa5e-8907723c259f.webp	Integrate with GitHub connection panel
+web/navigation/fibery-web-navigation-sidebar-cf11411e-c2b2-429f-abe5-056ca36e8fc2.webp	web/onboarding/fibery-web-onboarding-cf11411e-c2b2-429f-abe5-056ca36e8fc2.webp	Getting Started welcome checklist dominates panel
+web/navigation/fibery-web-navigation-sidebar-cf43eee5-8c2d-4378-bc35-29d8ee5c3687.webp	web/database/fibery-web-database-cf43eee5-8c2d-4378-bc35-29d8ee5c3687.webp	New table field type/reference dropdown list
+web/navigation/fibery-web-navigation-sidebar-cffbe9a3-3e32-41cf-aaf3-16fb3391079e.webp	web/editors/fibery-web-editors-cffbe9a3-3e32-41cf-aaf3-16fb3391079e.webp	New document blank editor with placeholder text
+web/navigation/fibery-web-navigation-sidebar-d3b873bd-209e-458a-ad5b-7fe54a90b9c1.webp	web/editors/fibery-web-editors-d3b873bd-209e-458a-ad5b-7fe54a90b9c1.webp	Document with pasted image, video thumbnail and description text
+web/navigation/fibery-web-navigation-sidebar-d68293ff-2be5-44d6-b9d2-cf4cdee6eb22.webp	web/onboarding/fibery-web-onboarding-d68293ff-2be5-44d6-b9d2-cf4cdee6eb22.webp	Getting Started checklist dominates alongside small New calendar panel
+web/navigation/fibery-web-navigation-sidebar-d868ebec-3f34-4390-b8ae-73ed3d956de4.webp	web/ai/fibery-web-ai-d868ebec-3f34-4390-b8ae-73ed3d956de4.webp	AI writing assistant suggestions popup in document
+web/navigation/fibery-web-navigation-sidebar-d9bfc14d-e2a6-429e-8791-ed3d35173d3c.webp	web/database/fibery-web-database-d9bfc14d-e2a6-429e-8791-ed3d35173d3c.webp	Additional data created import summary
+web/navigation/fibery-web-navigation-sidebar-db2c7a2b-ba20-4051-8561-0d08e0ba00d3.webp	web/onboarding/fibery-web-onboarding-db2c7a2b-ba20-4051-8561-0d08e0ba00d3.webp	Getting Started welcome checklist dominates panel
+web/navigation/fibery-web-navigation-sidebar-db491fe7-4703-4c76-9cee-8d1357e02850.webp	web/settings/fibery-web-settings-db491fe7-4703-4c76-9cee-8d1357e02850.webp	Workspace General settings (name, logo, delete workspace), not a whiteboard
+web/navigation/fibery-web-navigation-sidebar-ddb73936-897b-4eff-a347-118adfe32b60.webp	web/settings/fibery-web-settings-ddb73936-897b-4eff-a347-118adfe32b60.webp	Workspace General settings (name, logo, delete workspace)
+web/navigation/fibery-web-navigation-sidebar-de252a6d-4fcf-4d6d-b056-48a3a21d698a.webp	web/onboarding/fibery-web-onboarding-de252a6d-4fcf-4d6d-b056-48a3a21d698a.webp	Onboarding checklist text with small New whiteboard panel
+web/navigation/fibery-web-navigation-sidebar-e0df536e-c3be-4864-92b3-ecae82372639.webp	web/editors/fibery-web-editors-e0df536e-c3be-4864-92b3-ecae82372639.webp	Document slash/heading formatting menu popup
+web/navigation/fibery-web-navigation-sidebar-e26c782b-9fcd-4587-97f9-c9db9b18ac16.webp	web/onboarding/fibery-web-onboarding-e26c782b-9fcd-4587-97f9-c9db9b18ac16.webp	Learn the basics hub with templates and import CTA
+web/navigation/fibery-web-navigation-sidebar-e2d656a6-35ba-4e9a-b5c7-a14e4fa61bb3.webp	web/collaboration/fibery-web-collaboration-e2d656a6-35ba-4e9a-b5c7-a14e4fa61bb3.webp	Activity log detailed audit table
+web/navigation/fibery-web-navigation-sidebar-e3791780-91a3-42ef-9e70-30f57bddaf69.webp	web/database/fibery-web-database-e3791780-91a3-42ef-9e70-30f57bddaf69.webp	New table field/grouping panel with automation button
+web/navigation/fibery-web-navigation-sidebar-e8c02f4c-3991-4a96-aaaf-38ed64b1a891.webp	web/database/fibery-web-database-e8c02f4c-3991-4a96-aaaf-38ed64b1a891.webp	Database schema description panel (relationships, how it works)
+web/navigation/fibery-web-navigation-sidebar-e999d5de-38c4-4b67-955e-e5e20710b888.webp	web/onboarding/fibery-web-onboarding-e999d5de-38c4-4b67-955e-e5e20710b888.webp	Getting Started welcome checklist dominates panel
+web/navigation/fibery-web-navigation-sidebar-ea13b251-aac6-4966-a557-04c2efc37aa3.webp	web/editors/fibery-web-editors-ea13b251-aac6-4966-a557-04c2efc37aa3.webp	Document with pasted image, video thumbnail and description text
+web/navigation/fibery-web-navigation-sidebar-ea376c63-7413-4ebc-b2e5-9ad31a62b9bb.webp	web/onboarding/fibery-web-onboarding-ea376c63-7413-4ebc-b2e5-9ad31a62b9bb.webp	Getting Started welcome checklist dominates panel
+web/navigation/fibery-web-navigation-sidebar-ea4f9d3b-5f32-4abf-8cce-9ba113d63db9.webp	web/editors/fibery-web-editors-ea4f9d3b-5f32-4abf-8cce-9ba113d63db9.webp	Document with pasted image, video thumbnail and description text
+web/navigation/fibery-web-navigation-sidebar-ede191c3-8032-4aa0-80c9-c15b1d78d4da.webp	web/editors/fibery-web-editors-ede191c3-8032-4aa0-80c9-c15b1d78d4da.webp	Document with quoted philosophy/process text body
+web/navigation/fibery-web-navigation-sidebar-ef1e4556-966c-4f9e-bdca-172e3c87a7fd.webp	web/collaboration/fibery-web-collaboration-ef1e4556-966c-4f9e-bdca-172e3c87a7fd.webp	Activity log detailed audit table
+web/navigation/fibery-web-navigation-sidebar-ef416a9a-eca4-46b8-af50-3a45291eb0ce.webp	web/editors/fibery-web-editors-ef416a9a-eca4-46b8-af50-3a45291eb0ce.webp	New document blank empty editor
+web/navigation/fibery-web-navigation-sidebar-f02195b6-ac9a-4b22-abd8-552b4fba2849.webp	web/views/fibery-web-views-f02195b6-ac9a-4b22-abd8-552b4fba2849.webp	View-type picker dropdown (Table/Board/Gallery/List/Timeline/Gantt/Chart/Form/Map)
+web/navigation/fibery-web-navigation-sidebar-f2ab5ca9-8437-4bb7-935a-6dc2da2f4dc9.webp	web/reports/fibery-web-reports-f2ab5ca9-8437-4bb7-935a-6dc2da2f4dc9.webp	Client report chart wizard panel
+web/navigation/fibery-web-navigation-sidebar-f8a0f26b-cead-43ea-9e51-e2c24a22b9be.webp	web/onboarding/fibery-web-onboarding-f8a0f26b-cead-43ea-9e51-e2c24a22b9be.webp	Getting Started welcome checklist dominates panel
+web/navigation/fibery-web-navigation-sidebar-f908d58e-b057-4b39-9011-b4a3bbd0ebb6.webp	web/database/fibery-web-database-f908d58e-b057-4b39-9011-b4a3bbd0ebb6.webp	Import upload panel (drop file or select from disk)
+web/navigation/fibery-web-navigation-sidebar-fd082957-c4ff-4fab-ba56-22fbd584c4da.webp	web/whiteboard/fibery-web-whiteboard-fd082957-c4ff-4fab-ba56-22fbd584c4da.webp	New whiteboard blank canvas with toolbar
+web/screens/fibery-web-screen-005c8b47-cd9c-4a32-9872-63cc69c2d3d2.webp	web/views/fibery-web-views-005c8b47-cd9c-4a32-9872-63cc69c2d3d2.webp	Rendered Problems grid/table view with status and device columns
+web/screens/fibery-web-screen-00850ddb-7f39-42b2-874c-2946f4430e91.webp	web/whiteboard/fibery-web-whiteboard-00850ddb-7f39-42b2-874c-2946f4430e91.webp	Whiteboard diagram with connected relationship nodes
+web/screens/fibery-web-screen-0138b814-db3d-4b91-982d-7ffbbc11262c.webp	web/navigation/fibery-web-navigation-0138b814-db3d-4b91-982d-7ffbbc11262c.webp	Trash Bin destination listing deleted items
+web/screens/fibery-web-screen-01a18e46-eab5-4476-839d-e57d955bb406.webp	web/reports/fibery-web-reports-01a18e46-eab5-4476-839d-e57d955bb406.webp	Problem database report with bar charts and filters
+web/screens/fibery-web-screen-020c70cc-1081-482c-a47e-8df7e610b70c.webp	web/reports/fibery-web-reports-020c70cc-1081-482c-a47e-8df7e610b70c.webp	Client report chart config with filters and chart-type picker
+web/screens/fibery-web-screen-026ee5e9-9f37-414f-af6a-9268a685809c.webp	web/views/fibery-web-views-026ee5e9-9f37-414f-af6a-9268a685809c.webp	New calendar view creation panel with database/field filters
+web/screens/fibery-web-screen-0319b0ac-c743-49ae-b32c-4c9cd4d8571d.webp	web/onboarding/fibery-web-onboarding-0319b0ac-c743-49ae-b32c-4c9cd4d8571d.webp	Read.me workspace intro doc with getting-started checklist steps
+web/screens/fibery-web-screen-03318b9b-5560-4bd8-81ff-2e1372fc3541.webp	web/editors/fibery-web-editors-03318b9b-5560-4bd8-81ff-2e1372fc3541.webp	Read.me document body explaining feature purpose
+web/screens/fibery-web-screen-03aa0ecb-94e0-4852-ae7e-a48ad29985c0.webp	web/editors/fibery-web-editors-03aa0ecb-94e0-4852-ae7e-a48ad29985c0.webp	Document with pasted image, video thumbnail and description text
+web/screens/fibery-web-screen-03c651dd-0e52-4baf-91ad-ffeb753f759d.webp	web/automations/fibery-web-automations-03c651dd-0e52-4baf-91ad-ffeb753f759d.webp	Automation rule builder (When/Then trigger and action)
+web/screens/fibery-web-screen-03cce245-76b5-495c-bd3d-8ac19ece4217.webp	web/views/fibery-web-views-03cce245-76b5-495c-bd3d-8ac19ece4217.webp	Rendered Problems table with quick-add side panel
+web/screens/fibery-web-screen-0436dd80-3159-46bb-a424-5e59948d1993.webp	web/database/fibery-web-database-0436dd80-3159-46bb-a424-5e59948d1993.webp	Table filter logic configuration panel
+web/screens/fibery-web-screen-04750d65-b11b-4dd2-8541-963992807b02.webp	web/views/fibery-web-views-04750d65-b11b-4dd2-8541-963992807b02.webp	Rendered full calendar month grid
+web/screens/fibery-web-screen-049ff5fa-2992-4a16-bcc6-cc8d4fc6c49b.webp	web/dialogs/fibery-web-dialogs-049ff5fa-2992-4a16-bcc6-cc8d4fc6c49b.webp	Delete-all-data confirmation modal for a Space
+web/screens/fibery-web-screen-04b7bbcd-dca1-4725-af32-8bcd52973ceb.webp	web/database/fibery-web-database-04b7bbcd-dca1-4725-af32-8bcd52973ceb.webp	New table Sort config panel
+web/screens/fibery-web-screen-06024252-58ed-405a-8ba2-89a48cd2e6b8.webp	web/database/fibery-web-database-06024252-58ed-405a-8ba2-89a48cd2e6b8.webp	Field visibility/property config for a table
+web/screens/fibery-web-screen-066e7ada-e14f-4a95-a869-c431b449bd52.webp	web/views/fibery-web-views-066e7ada-e14f-4a95-a869-c431b449bd52.webp	Entity Tree view configuration on canvas
+web/screens/fibery-web-screen-0735ba00-b48e-41cc-b886-3a468f4d04cc.webp	web/database/fibery-web-database-0735ba00-b48e-41cc-b886-3a468f4d04cc.webp	Import field-mapping panel (new vs existing database)
+web/screens/fibery-web-screen-0744d81a-6035-498a-b181-190ada8a16f2.webp	web/views/fibery-web-views-0744d81a-6035-498a-b181-190ada8a16f2.webp	Rendered timeline/Gantt view with date bars
+web/screens/fibery-web-screen-0772ade8-9a33-4c63-932b-4136f4eb50b2.webp	web/database/fibery-web-database-0772ade8-9a33-4c63-932b-4136f4eb50b2.webp	Import Choose File drag-drop panel
+web/screens/fibery-web-screen-087083fc-9a2b-463d-8df3-b69ee56995e1.webp	web/forms/fibery-web-forms-087083fc-9a2b-463d-8df3-b69ee56995e1.webp	Share Form panel (link, embed, form style)
+web/screens/fibery-web-screen-08c26ab4-67f9-4179-921e-a3585c73521d.webp	web/views/fibery-web-views-08c26ab4-67f9-4179-921e-a3585c73521d.webp	Rendered Kanban board with cards and toolbar
+web/screens/fibery-web-screen-08d7b60d-c231-4aa7-96e8-0520c41bfae0.webp	web/database/fibery-web-database-08d7b60d-c231-4aa7-96e8-0520c41bfae0.webp	Opened card/entity detail with structured fields and description
+web/screens/fibery-web-screen-08e19bee-7c9b-4314-a417-4fa01fbef1b9.webp	web/database/fibery-web-database-08e19bee-7c9b-4314-a417-4fa01fbef1b9.webp	Rendered table with column Delete Field context action
+web/screens/fibery-web-screen-0a207252-0899-4e33-8a10-a9c22005dbaa.webp	web/views/fibery-web-views-0a207252-0899-4e33-8a10-a9c22005dbaa.webp	Rendered table with bulk row selection action bar
+web/screens/fibery-web-screen-0a4080bf-c8da-461e-95e9-8be89cc813f5.webp	web/reports/fibery-web-reports-0a4080bf-c8da-461e-95e9-8be89cc813f5.webp	Creation dynamic of Problem report wizard (chart types, table setup)
+web/screens/fibery-web-screen-0a49e756-1e9f-45b4-ae85-1cac3f1e579a.webp	web/views/fibery-web-views-0a49e756-1e9f-45b4-ae85-1cac3f1e579a.webp	Rendered Problems grid with relation quick-add popover
+web/screens/fibery-web-screen-0a579613-dabd-434b-8c04-2d3ebee8e6d2.webp	web/settings/fibery-web-settings-0a579613-dabd-434b-8c04-2d3ebee8e6d2.webp	Change-email confirmation dialog (account setting)
+web/screens/fibery-web-screen-0b1101af-3ee5-46e4-8fdb-ba531f96e467.webp	web/database/fibery-web-database-0b1101af-3ee5-46e4-8fdb-ba531f96e467.webp	New field type picker dropdown list
+web/screens/fibery-web-screen-0c3706ec-661e-460d-917c-a4c6ca36ea98.webp	web/automations/fibery-web-automations-0c3706ec-661e-460d-917c-a4c6ca36ea98.webp	Automation rule builder (When/Then conditions)
+web/screens/fibery-web-screen-0c551f3d-d703-4499-b17a-42aacff9248f.webp	web/settings/fibery-web-settings-0c551f3d-d703-4499-b17a-42aacff9248f.webp	Notifications settings panel (sources and configuration)
+web/screens/fibery-web-screen-0c9bca46-fc33-4350-8584-e419953c40d4.webp	web/reports/fibery-web-reports-0c9bca46-fc33-4350-8584-e419953c40d4.webp	Creation dynamic of Problem report table-view builder
+web/screens/fibery-web-screen-0cb87164-db8e-40f8-8076-c33137efe977.webp	web/views/fibery-web-views-0cb87164-db8e-40f8-8076-c33137efe977.webp	Rendered Problems grid table
+web/screens/fibery-web-screen-0d385e48-2ee8-40e0-b967-51643add17fa.webp	web/database/fibery-web-database-0d385e48-2ee8-40e0-b967-51643add17fa.webp	New table Color coding config panel
+web/screens/fibery-web-screen-0da82235-b24d-4755-b782-a64c8c2af607.webp	web/views/fibery-web-views-0da82235-b24d-4755-b782-a64c8c2af607.webp	Rendered Problems grid table
+web/screens/fibery-web-screen-0dfa5e18-0eee-450b-923d-1b48054ea527.webp	web/collaboration/fibery-web-collaboration-0dfa5e18-0eee-450b-923d-1b48054ea527.webp	Workspace Users list with roles and invite action
+web/screens/fibery-web-screen-0f215f61-a831-4f54-bb9a-78bd6ab45627.webp	web/automations/fibery-web-automations-0f215f61-a831-4f54-bb9a-78bd6ab45627.webp	Automation rule builder (Enter Rule Title, When/Then, Save Rule)
+web/screens/fibery-web-screen-0f4f3c30-5d27-4b72-a9a8-f806d1f57cdf.webp	web/views/fibery-web-views-0f4f3c30-5d27-4b72-a9a8-f806d1f57cdf.webp	Rendered List view grouped by the Insight entity level, not an AI feature
+web/screens/fibery-web-screen-0faf78da-f474-4e06-9f9f-c08ff615389d.webp	web/whiteboard/fibery-web-whiteboard-0faf78da-f474-4e06-9f9f-c08ff615389d.webp	Connections diagram linking Product/Strategy/Research/Execution/Feedback
+web/screens/fibery-web-screen-1039d5ed-5d41-4f9d-8d12-237350cea973.webp	web/views/fibery-web-views-1039d5ed-5d41-4f9d-8d12-237350cea973.webp	Rendered full month calendar
+web/screens/fibery-web-screen-1122955a-5781-4dfb-b874-257add90f32b.webp	web/database/fibery-web-database-1122955a-5781-4dfb-b874-257add90f32b.webp	Add Location Field dialog
+web/screens/fibery-web-screen-11bc62e0-9141-49ac-bc8a-3835df66bb5f.webp	web/database/fibery-web-database-11bc62e0-9141-49ac-bc8a-3835df66bb5f.webp	Import mapping panel with field-type dropdown
+web/screens/fibery-web-screen-11d83909-9067-410a-9c7d-bdbeeca06c4a.webp	web/database/fibery-web-database-11d83909-9067-410a-9c7d-bdbeeca06c4a.webp	Opened card/entity detail with field action menu
+web/screens/fibery-web-screen-11df74dd-5122-49c5-a601-14a1574a026e.webp	web/reports/fibery-web-reports-11df74dd-5122-49c5-a601-14a1574a026e.webp	Client report Set up Metric (KPI) wizard
+web/screens/fibery-web-screen-11fce818-33b5-4b1d-8dcf-154853b475e1.webp	web/views/fibery-web-views-11fce818-33b5-4b1d-8dcf-154853b475e1.webp	Rendered timeline/Gantt with date bars
+web/screens/fibery-web-screen-12705e4c-306c-4dbb-9c11-86a5debf129d.webp	web/whiteboard/fibery-web-whiteboard-12705e4c-306c-4dbb-9c11-86a5debf129d.webp	New whiteboard description panel with shape tools
+web/screens/fibery-web-screen-13137d0e-2692-4c9e-aa1f-970fa8ab9bbe.webp	web/automations/fibery-web-automations-13137d0e-2692-4c9e-aa1f-970fa8ab9bbe.webp	Button automation config (When Button Clicked / Then actions)
+web/screens/fibery-web-screen-138da10f-de4f-4115-98ac-c860f5996cd5.webp	web/navigation/fibery-web-navigation-138da10f-de4f-4115-98ac-c860f5996cd5.webp	Home with Recent Workspaces switcher panel
+web/screens/fibery-web-screen-13c9e639-46d9-4652-ac42-fd6856581f9d.webp	web/editors/fibery-web-editors-13c9e639-46d9-4652-ac42-fd6856581f9d.webp	Document with pasted image, video thumbnail and description text
+web/screens/fibery-web-screen-13e4470d-9b69-4d9b-8631-bde987a80e7b.webp	web/editors/fibery-web-editors-13e4470d-9b69-4d9b-8631-bde987a80e7b.webp	Notes/bullet document of user feedback observations
+web/screens/fibery-web-screen-14782894-abd9-4e01-9900-ae7eb40c2663.webp	web/automations/fibery-web-automations-14782894-abd9-4e01-9900-ae7eb40c2663.webp	Automation rule draft (When/Then structure)
+web/screens/fibery-web-screen-1479551b-4c52-452a-ba5c-9c4ef002cda0.webp	web/views/fibery-web-views-1479551b-4c52-452a-ba5c-9c4ef002cda0.webp	Rendered Features Kanban board with cards
+web/screens/fibery-web-screen-14dc6056-7c13-479c-bbaf-93a80de0270a.webp	web/editors/fibery-web-editors-14dc6056-7c13-479c-bbaf-93a80de0270a.webp	Document with pasted image, video thumbnail and description text
+web/screens/fibery-web-screen-15025304-ac6a-4537-86f0-e14aadb8c813.webp	web/marketing/fibery-web-marketing-15025304-ac6a-4537-86f0-e14aadb8c813.webp	Share Spaces as a Template dialog
+web/screens/fibery-web-screen-157894c4-4085-4869-9295-1b78e576a072.webp	web/database/fibery-web-database-157894c4-4085-4869-9295-1b78e576a072.webp	Table sort/filter config popover
+web/screens/fibery-web-screen-15ca209d-4476-4a23-807b-f07ce1e63f43.webp	web/reports/fibery-web-reports-15ca209d-4476-4a23-807b-f07ce1e63f43.webp	Creation dynamic of Problem report bar chart
+web/screens/fibery-web-screen-167ff319-732a-4f7f-811b-5aeadb5cb884.webp	web/editors/fibery-web-editors-167ff319-732a-4f7f-811b-5aeadb5cb884.webp	Document Embed Youtube panel
+web/screens/fibery-web-screen-16c41932-42ae-4701-85a6-3055e7f873aa.webp	web/reports/fibery-web-reports-16c41932-42ae-4701-85a6-3055e7f873aa.webp	Client report wizard chart view setup
+web/screens/fibery-web-screen-172ed7d6-abee-4dec-b26c-667bfd45ef49.webp	web/database/fibery-web-database-172ed7d6-abee-4dec-b26c-667bfd45ef49.webp	Person entity detail record with typed fields
+web/screens/fibery-web-screen-17ed2a53-b4ff-42d8-a700-3ce94ab65f16.webp	web/reports/fibery-web-reports-17ed2a53-b4ff-42d8-a700-3ce94ab65f16.webp	Creation dynamic of Problem report table-view prompt
+web/screens/fibery-web-screen-17fd552d-d44c-4f5e-8a3d-c9deb6d4ac14.webp	web/reports/fibery-web-reports-17fd552d-d44c-4f5e-8a3d-c9deb6d4ac14.webp	Creation dynamic report Source Data table
+web/screens/fibery-web-screen-18342389-b731-46f9-8f78-bab9473ca8ae.webp	web/views/fibery-web-views-18342389-b731-46f9-8f78-bab9473ca8ae.webp	Rendered timeline view with dates and database selector
+web/screens/fibery-web-screen-186ff36f-1e55-48b2-9a8f-6298e50e03dc.webp	web/automations/fibery-web-automations-186ff36f-1e55-48b2-9a8f-6298e50e03dc.webp	Automation rule (When/Then) for new problem notice
+web/screens/fibery-web-screen-18a4532c-e57a-4dd5-a37b-0270f2a2b22d.webp	web/settings/fibery-web-settings-18a4532c-e57a-4dd5-a37b-0270f2a2b22d.webp	Account settings panel (conversations, features, preferences)
+web/screens/fibery-web-screen-1a1a38dc-dec1-4eac-a807-950385369df7.webp	web/editors/fibery-web-editors-1a1a38dc-dec1-4eac-a807-950385369df7.webp	New document emoji picker popover
+web/screens/fibery-web-screen-1a67bb2d-5f38-4877-8ca6-f9d3fce12557.webp	web/settings/fibery-web-settings-1a67bb2d-5f38-4877-8ca6-f9d3fce12557.webp	Workspace General settings (name, logo, delete workspace)
+web/screens/fibery-web-screen-1b0c2671-516a-412f-afcf-8757fe169a3e.webp	web/marketing/fibery-web-marketing-1b0c2671-516a-412f-afcf-8757fe169a3e.webp	Share Space as a Template dialog
+web/screens/fibery-web-screen-1bcef99c-3903-4879-8321-0edd047ebff9.webp	web/views/fibery-web-views-1bcef99c-3903-4879-8321-0edd047ebff9.webp	Rendered Feed view populated with entries, not an empty state
+web/screens/fibery-web-screen-1c89018d-a92e-42de-ab96-1383e8c73594.webp	web/views/fibery-web-views-1c89018d-a92e-42de-ab96-1383e8c73594.webp	Rendered timeline view with dates
+web/screens/fibery-web-screen-1cd41121-b49f-4f15-aedc-bc9329ae60cf.webp	web/views/fibery-web-views-1cd41121-b49f-4f15-aedc-bc9329ae60cf.webp	Entity Tree view configuration on canvas
+web/screens/fibery-web-screen-1e2df515-bb0a-4c83-8545-ee6dd4a8be60.webp	web/database/fibery-web-database-1e2df515-bb0a-4c83-8545-ee6dd4a8be60.webp	New table Color config popover
+web/screens/fibery-web-screen-1faaf41b-0536-4ac9-9b05-fa014601c064.webp	web/views/fibery-web-views-1faaf41b-0536-4ac9-9b05-fa014601c064.webp	Rendered My Problems table
+web/screens/fibery-web-screen-1ffb38c9-fd2d-4f62-a719-ea1aa8aa6927.webp	web/editors/fibery-web-editors-1ffb38c9-fd2d-4f62-a719-ea1aa8aa6927.webp	New document blank with inline mention link
+web/screens/fibery-web-screen-200d3220-dc64-41d5-b315-bc546356b189.webp	web/database/fibery-web-database-200d3220-dc64-41d5-b315-bc546356b189.webp	Problems grid field type add popover
+web/screens/fibery-web-screen-205ea35e-cfc4-48cf-9c00-53762ef38310.webp	web/views/fibery-web-views-205ea35e-cfc4-48cf-9c00-53762ef38310.webp	View-type picker modal (Grid/Board/List/Timeline/Calendar/Form/Map/Chart)
+web/screens/fibery-web-screen-20f8c308-5b05-440f-b60b-ea8d2961e4b8.webp	web/navigation/fibery-web-navigation-20f8c308-5b05-440f-b60b-ea8d2961e4b8.webp	Home welcome with My Work and Recent panel
+web/screens/fibery-web-screen-213c7ed2-daa6-4b53-964d-006f71fd2752.webp	web/views/fibery-web-views-213c7ed2-daa6-4b53-964d-006f71fd2752.webp	Rendered empty-month calendar view
+web/screens/fibery-web-screen-214bcb32-3f6a-4518-84ad-76214bef6e02.webp	web/views/fibery-web-views-214bcb32-3f6a-4518-84ad-76214bef6e02.webp	Rendered calendar with Add Database popover
+web/screens/fibery-web-screen-21c9e1f2-3ee1-476b-90e9-b67cdd25672c.webp	web/onboarding/fibery-web-onboarding-21c9e1f2-3ee1-476b-90e9-b67cdd25672c.webp	Getting Started checklist dominates alongside small New table panel
+web/screens/fibery-web-screen-22059e28-921c-4632-a10a-28033ced36c7.webp	web/whiteboard/fibery-web-whiteboard-22059e28-921c-4632-a10a-28033ced36c7.webp	Connections diagram linking Product/Strategy/Research nodes
+web/screens/fibery-web-screen-22d83d97-e491-474d-97b6-2cae1a315043.webp	web/views/fibery-web-views-22d83d97-e491-474d-97b6-2cae1a315043.webp	Rendered feed view listing entities
+web/screens/fibery-web-screen-23014d15-193a-45ae-808e-e8ab2d584c32.webp	web/whiteboard/fibery-web-whiteboard-23014d15-193a-45ae-808e-e8ab2d584c32.webp	Whiteboard diagram with connected relationship nodes
+web/screens/fibery-web-screen-235a741f-d359-4c38-8285-50cb645be434.webp	web/views/fibery-web-views-235a741f-d359-4c38-8285-50cb645be434.webp	Rendered Problems list view
+web/screens/fibery-web-screen-244ec40b-14f4-4904-909e-684d30e2c901.webp	web/onboarding/fibery-web-onboarding-244ec40b-14f4-4904-909e-684d30e2c901.webp	Getting Started concept walkthrough (Space/Document/Views/Databases)
+web/screens/fibery-web-screen-24729fac-a1f9-4024-b3ca-c39acf6db2bb.webp	web/settings/fibery-web-settings-24729fac-a1f9-4024-b3ca-c39acf6db2bb.webp	Preferences Appearance (theme, dark sidebar, panel navigation)
+web/screens/fibery-web-screen-24f47777-8501-422c-b250-c1ce63a1282b.webp	web/onboarding/fibery-web-onboarding-24f47777-8501-422c-b250-c1ce63a1282b.webp	Getting Started checklist alongside rendered New calendar panel
+web/screens/fibery-web-screen-2524edb8-35a4-4561-8202-58bb6e443459.webp	web/navigation/fibery-web-navigation-2524edb8-35a4-4561-8202-58bb6e443459.webp	Search overlay dropdown with recent results
+web/screens/fibery-web-screen-25c267eb-0e32-4035-aec5-c7dc3e24a76b.webp	web/navigation/fibery-web-navigation-25c267eb-0e32-4035-aec5-c7dc3e24a76b.webp	Search overlay results list
+web/screens/fibery-web-screen-2669b291-6998-4d88-aac0-dd303c58b0f9.webp	web/database/fibery-web-database-2669b291-6998-4d88-aac0-dd303c58b0f9.webp	New field type dropdown list
+web/screens/fibery-web-screen-27612e4d-c803-4330-9fa3-a82ac28e99cc.webp	web/whiteboard/fibery-web-whiteboard-27612e4d-c803-4330-9fa3-a82ac28e99cc.webp	Whiteboard diagram with color palette toolbar
+web/screens/fibery-web-screen-278f6636-9f4b-4be0-be80-e2f468aba2df.webp	web/settings/fibery-web-settings-278f6636-9f4b-4be0-be80-e2f468aba2df.webp	Emoji settings panel (add emoji, import from Slack)
+web/screens/fibery-web-screen-28061776-b4aa-4963-8db5-09225289918e.webp	web/collaboration/fibery-web-collaboration-28061776-b4aa-4963-8db5-09225289918e.webp	Workspace Users table with roles
+web/screens/fibery-web-screen-2806ea27-8b2f-4a98-8688-235262d93c24.webp	web/onboarding/fibery-web-onboarding-2806ea27-8b2f-4a98-8688-235262d93c24.webp	Set new password account-creation step
+web/screens/fibery-web-screen-2938792d-e7f6-477a-86c6-975e53ecd510.webp	web/database/fibery-web-database-2938792d-e7f6-477a-86c6-975e53ecd510.webp	New table field/grouping panel
+web/screens/fibery-web-screen-29ee053d-4eb0-417c-852e-25026db97791.webp	web/settings/fibery-web-settings-29ee053d-4eb0-417c-852e-25026db97791.webp	Preferences Appearance (theme, dark sidebar, panel navigation)
+web/screens/fibery-web-screen-2a32f1c2-97d4-4ec7-8f7a-b804ecc91613.webp	web/views/fibery-web-views-2a32f1c2-97d4-4ec7-8f7a-b804ecc91613.webp	Rendered List view with a No Insight entity group, not an AI feature
+web/screens/fibery-web-screen-2a5a43c6-d29b-4461-9c87-a49aba0d6234.webp	web/collaboration/fibery-web-collaboration-2a5a43c6-d29b-4461-9c87-a49aba0d6234.webp	Activity log detailed audit table
+web/screens/fibery-web-screen-2c1aeda4-4657-4ea2-9bb7-fbbf0de47009.webp	web/settings/fibery-web-settings-2c1aeda4-4657-4ea2-9bb7-fbbf0de47009.webp	Plan and Billing upgrade with billing address modal
+web/screens/fibery-web-screen-2c370ce3-3e40-42cf-9717-397930f338b3.webp	web/editors/fibery-web-editors-2c370ce3-3e40-42cf-9717-397930f338b3.webp	New document blank empty editor
+web/screens/fibery-web-screen-2d82b8bb-0be5-4cb1-8ab2-98a70bec26d2.webp	web/editors/fibery-web-editors-2d82b8bb-0be5-4cb1-8ab2-98a70bec26d2.webp	Read.me document body with recent items panel
+web/screens/fibery-web-screen-2dacb77f-cdd1-48da-99c0-22d05f5785d1.webp	web/database/fibery-web-database-2dacb77f-cdd1-48da-99c0-22d05f5785d1.webp	Cards view Add Database config popover linking the Insight entity, a view-options screen not AI
+web/screens/fibery-web-screen-2e2bcb6d-6531-4dcb-ac2d-01f4667a510a.webp	web/database/fibery-web-database-2e2bcb6d-6531-4dcb-ac2d-01f4667a510a.webp	Rendered grid with Color picker popover
+web/screens/fibery-web-screen-2e65fc54-766b-4d74-a453-0a8d5d48c3ca.webp	web/views/fibery-web-views-2e65fc54-766b-4d74-a453-0a8d5d48c3ca.webp	Rendered Problems list with quick-add popover
+web/screens/fibery-web-screen-30169a83-8a78-4f12-a4c9-e3ca568a2056.webp	web/reports/fibery-web-reports-30169a83-8a78-4f12-a4c9-e3ca568a2056.webp	Creation dynamic of Problem report edit-format settings
+web/screens/fibery-web-screen-308ed3b9-d340-49cc-885e-394b57f28b83.webp	web/database/fibery-web-database-308ed3b9-d340-49cc-885e-394b57f28b83.webp	Add Multi Select Field dialog
+web/screens/fibery-web-screen-30b66e72-1f4d-46ba-ba15-0ac59f497b6f.webp	web/editors/fibery-web-editors-30b66e72-1f4d-46ba-ba15-0ac59f497b6f.webp	Document with inserted table columns
+web/screens/fibery-web-screen-30c90edf-b1a8-4c89-a1f1-cb79a9ae2e13.webp	web/settings/fibery-web-settings-30c90edf-b1a8-4c89-a1f1-cb79a9ae2e13.webp	Notifications settings panel (sources and configuration)
+web/screens/fibery-web-screen-30fcc021-6991-4d19-a4f4-2f78340913c2.webp	web/whiteboard/fibery-web-whiteboard-30fcc021-6991-4d19-a4f4-2f78340913c2.webp	Whiteboard diagram with minimal toolbar
+web/screens/fibery-web-screen-31311c7e-27d5-454a-abc7-35fe43a2e9ae.webp	web/navigation/fibery-web-navigation-31311c7e-27d5-454a-abc7-35fe43a2e9ae.webp	Search overlay results list
+web/screens/fibery-web-screen-32681070-75b3-4c85-a2f6-3dfc7cff4a97.webp	web/editors/fibery-web-editors-32681070-75b3-4c85-a2f6-3dfc7cff4a97.webp	Document with image and learn-the-basics footer beside small whiteboard
+web/screens/fibery-web-screen-32d43676-b7a3-476c-9c4e-b8ef42dc6131.webp	web/database/fibery-web-database-32d43676-b7a3-476c-9c4e-b8ef42dc6131.webp	Rendered grid with row context menu (duplicate/convert/delete)
+web/screens/fibery-web-screen-33193a0e-b108-4fc0-9cc9-0af80002a836.webp	web/reports/fibery-web-reports-33193a0e-b108-4fc0-9cc9-0af80002a836.webp	Creation dynamic report Set up Metric (KPI) wizard
+web/screens/fibery-web-screen-3406c64b-1a5b-4744-8a37-949cbcf7c8e9.webp	web/editors/fibery-web-editors-3406c64b-1a5b-4744-8a37-949cbcf7c8e9.webp	Document with pasted photo and description text
+web/screens/fibery-web-screen-3411921f-2811-4334-af3b-f926d859fc33.webp	web/editors/fibery-web-editors-3411921f-2811-4334-af3b-f926d859fc33.webp	Document with pasted image, video thumbnail and description text
+web/screens/fibery-web-screen-34873bdf-a564-400d-a720-5aa249dc366a.webp	web/collaboration/fibery-web-collaboration-34873bdf-a564-400d-a720-5aa249dc366a.webp	Workspace Users table with roles and field toolbar
+web/screens/fibery-web-screen-349b2a81-48a8-4955-8118-76062dca5bff.webp	web/editors/fibery-web-editors-349b2a81-48a8-4955-8118-76062dca5bff.webp	Document with pasted image, video thumbnail and description text
+web/screens/fibery-web-screen-34f2840a-af95-4f62-9717-db812c444c21.webp	web/views/fibery-web-views-34f2840a-af95-4f62-9717-db812c444c21.webp	Rendered calendar view with empty-state message
+web/screens/fibery-web-screen-35819f59-0eef-401a-86ab-5eea1f34485c.webp	web/editors/fibery-web-editors-35819f59-0eef-401a-86ab-5eea1f34485c.webp	Read.me document body with outline sections
+web/screens/fibery-web-screen-37395a20-8be7-42b6-a424-fba61b9f3a73.webp	web/onboarding/fibery-web-onboarding-37395a20-8be7-42b6-a424-fba61b9f3a73.webp	Getting Started checklist alongside small New table panel
+web/screens/fibery-web-screen-374ba702-d3bc-49bf-a7d5-69f6a7eff23d.webp	web/database/fibery-web-database-374ba702-d3bc-49bf-a7d5-69f6a7eff23d.webp	Add Select Field dialog with options
+web/screens/fibery-web-screen-377a8444-642d-4a1e-ae09-234ddef45d4c.webp	web/database/fibery-web-database-377a8444-642d-4a1e-ae09-234ddef45d4c.webp	New Client entity-creation dialog over the Home dashboard, not an Ask AI popup
+web/screens/fibery-web-screen-3981eba3-8c0d-4d61-b76c-8a690547bce3.webp	web/marketing/fibery-web-marketing-3981eba3-8c0d-4d61-b76c-8a690547bce3.webp	All Templates gallery with Ask AI panel
+web/screens/fibery-web-screen-3a89588e-b717-46d0-9385-c9df9d0a47b0.webp	web/editors/fibery-web-editors-3a89588e-b717-46d0-9385-c9df9d0a47b0.webp	Document with pasted image, video thumbnail and description text
+web/screens/fibery-web-screen-3c1e916b-3fe1-4eec-8335-09d976983fb0.webp	web/database/fibery-web-database-3c1e916b-3fe1-4eec-8335-09d976983fb0.webp	Add Select Field dialog with options list
+web/screens/fibery-web-screen-3c2b2892-e291-49f2-addc-d0cebe0a8968.webp	web/reports/fibery-web-reports-3c2b2892-e291-49f2-addc-d0cebe0a8968.webp	New Report wizard (chart view, data fields)
+web/screens/fibery-web-screen-3c66e741-fe96-47d9-9813-106389f7bcbe.webp	web/reports/fibery-web-reports-3c66e741-fe96-47d9-9813-106389f7bcbe.webp	New Report wizard (chart view, data fields)
+web/screens/fibery-web-screen-3c84c831-3a0a-4d0a-bd73-983d038f2558.webp	web/editors/fibery-web-editors-3c84c831-3a0a-4d0a-bd73-983d038f2558.webp	New document slash command menu (mention/table/checklist)
+web/screens/fibery-web-screen-3c89a6c3-0538-4a7a-81a8-88423ac6995c.webp	web/forms/fibery-web-forms-3c89a6c3-0538-4a7a-81a8-88423ac6995c.webp	New form creation panel (name, description, style)
+web/screens/fibery-web-screen-3cf2d578-d96f-4704-8c12-bce3b550da9a.webp	web/reports/fibery-web-reports-3cf2d578-d96f-4704-8c12-bce3b550da9a.webp	Client report wizard with bar chart and filters
+web/screens/fibery-web-screen-3d23c483-b654-4ad4-b574-1ee7787c1848.webp	web/collaboration/fibery-web-collaboration-3d23c483-b654-4ad4-b574-1ee7787c1848.webp	Workspace Users table with New Field dropdown
+web/screens/fibery-web-screen-3d6b6c57-e466-42b1-84a7-f73d9ee1358a.webp	web/settings/fibery-web-settings-3d6b6c57-e466-42b1-84a7-f73d9ee1358a.webp	Emoji settings panel
+web/screens/fibery-web-screen-3dae7779-730a-4a35-bc7a-a3fc0a794850.webp	web/editors/fibery-web-editors-3dae7779-730a-4a35-bc7a-a3fc0a794850.webp	Document with pasted image, video thumbnail and description text
+web/screens/fibery-web-screen-3e047a76-c0d1-48ae-8c3b-36347dc6720e.webp	web/views/fibery-web-views-3e047a76-c0d1-48ae-8c3b-36347dc6720e.webp	Rendered timeline/Gantt view with dates
+web/screens/fibery-web-screen-3e5fb285-0c38-4a9e-883e-9585d79fecba.webp	web/forms/fibery-web-forms-3e5fb285-0c38-4a9e-883e-9585d79fecba.webp	New form Form Style customization (color, image source)
+web/screens/fibery-web-screen-3e809c06-128a-4b1a-af72-0e00024e2b1d.webp	web/editors/fibery-web-editors-3e809c06-128a-4b1a-af72-0e00024e2b1d.webp	Document with pasted image, video thumbnail and description text
+web/screens/fibery-web-screen-3e934311-48a8-4049-acc8-c5097887435e.webp	web/database/fibery-web-database-3e934311-48a8-4049-acc8-c5097887435e.webp	Import Select source to import data (CSV/Airtable/ClickUp/Trello/Jira)
+web/screens/fibery-web-screen-40021061-83fe-449c-85f7-bd55dc1947c8.webp	web/editors/fibery-web-editors-40021061-83fe-449c-85f7-bd55dc1947c8.webp	Read.me document with added-to-space toast
+web/screens/fibery-web-screen-40ad6297-5ada-4003-b980-5aa0063dd328.webp	web/editors/fibery-web-editors-40ad6297-5ada-4003-b980-5aa0063dd328.webp	Document with pasted image, video thumbnail and description text
+web/screens/fibery-web-screen-4108e4c0-c2f1-44d0-8940-8440b139e776.webp	web/views/fibery-web-views-4108e4c0-c2f1-44d0-8940-8440b139e776.webp	Rendered Features Kanban board with heading outline panel
+web/screens/fibery-web-screen-41126de4-5341-436d-83a8-551cc857836d.webp	web/dialogs/fibery-web-dialogs-41126de4-5341-436d-83a8-551cc857836d.webp	Delete-all-data confirmation modal for a Space
+web/screens/fibery-web-screen-423229a8-9bfa-454f-9067-2e05b6cf9827.webp	web/database/fibery-web-database-423229a8-9bfa-454f-9067-2e05b6cf9827.webp	New table Color coding Add Group values
+web/screens/fibery-web-screen-4396dbcf-ff11-40d8-8bed-728019ce2128.webp	web/reports/fibery-web-reports-4396dbcf-ff11-40d8-8bed-728019ce2128.webp	Client report Set up your chart wizard
+web/screens/fibery-web-screen-43b2893e-1fa4-4b20-9e80-9f4165b79789.webp	web/views/fibery-web-views-43b2893e-1fa4-4b20-9e80-9f4165b79789.webp	Rendered timeline/Gantt view with dates
+web/screens/fibery-web-screen-441ad4c2-e7bd-4ece-9092-22006f4abce9.webp	web/views/fibery-web-views-441ad4c2-e7bd-4ece-9092-22006f4abce9.webp	Rendered full month calendar with entries
+web/screens/fibery-web-screen-44242486-a17b-4a76-8af5-cd8b427567d8.webp	web/onboarding/fibery-web-onboarding-44242486-a17b-4a76-8af5-cd8b427567d8.webp	Getting Started concept walkthrough (Space/Document/Database)
+web/screens/fibery-web-screen-44b4f7c6-ced4-4154-8fa9-575fe22f48c8.webp	web/views/fibery-web-views-44b4f7c6-ced4-4154-8fa9-575fe22f48c8.webp	Rendered feed view listing entities
+web/screens/fibery-web-screen-45196409-e3f2-403b-add6-702eec7a5611.webp	web/database/fibery-web-database-45196409-e3f2-403b-add6-702eec7a5611.webp	Settings Import source picker with integrations panel
+web/screens/fibery-web-screen-454548ed-2cd2-49cf-ae11-57dcbaa8726b.webp	web/collaboration/fibery-web-collaboration-454548ed-2cd2-49cf-ae11-57dcbaa8726b.webp	User Group Databases access/permission configuration
+web/screens/fibery-web-screen-4581c1a3-1df2-4542-a698-e4f130e07d63.webp	web/views/fibery-web-views-4581c1a3-1df2-4542-a698-e4f130e07d63.webp	Rendered calendar view with entries
+web/screens/fibery-web-screen-45a010d5-ee70-43ff-82bc-4ccce42917f2.webp	web/editors/fibery-web-editors-45a010d5-ee70-43ff-82bc-4ccce42917f2.webp	New document blank empty editor
+web/screens/fibery-web-screen-45c348c7-8ab6-426f-84bb-f8b4af4dae18.webp	web/views/fibery-web-views-45c348c7-8ab6-426f-84bb-f8b4af4dae18.webp	Rendered timeline/Gantt view with highlighted date range
+web/screens/fibery-web-screen-461d760b-bd29-4dcf-9738-b5a467632503.webp	web/views/fibery-web-views-461d760b-bd29-4dcf-9738-b5a467632503.webp	Rendered Features Kanban board with code snippet
+web/screens/fibery-web-screen-47f25087-85b9-48b5-a2de-e04bdd9e1005.webp	web/views/fibery-web-views-47f25087-85b9-48b5-a2de-e04bdd9e1005.webp	Rendered feed view listing entities
+web/screens/fibery-web-screen-492b3e00-32ea-469a-b2d5-eb96a32b457b.webp	web/database/fibery-web-database-492b3e00-32ea-469a-b2d5-eb96a32b457b.webp	Add Assignments Field popover on grid
+web/screens/fibery-web-screen-49a9e1ca-5c81-4d9e-9c8a-93a922d642e5.webp	web/onboarding/fibery-web-onboarding-49a9e1ca-5c81-4d9e-9c8a-93a922d642e5.webp	Reset your password auth screen
+web/screens/fibery-web-screen-49ad0339-2d1e-40ea-8d79-b7f4c7a276a8.webp	web/database/fibery-web-database-49ad0339-2d1e-40ea-8d79-b7f4c7a276a8.webp	New feed Color coding popover
+web/screens/fibery-web-screen-49b104f6-6031-46c5-8023-483b2e878423.webp	web/editors/fibery-web-editors-49b104f6-6031-46c5-8023-483b2e878423.webp	New document slash command hint
+web/screens/fibery-web-screen-4a887b38-9aa4-4a9d-a9b4-0bf30a641977.webp	web/settings/fibery-web-settings-4a887b38-9aa4-4a9d-a9b4-0bf30a641977.webp	Export workspace data settings panel
+web/screens/fibery-web-screen-4ad738bc-8f98-472a-af26-b820a7559274.webp	web/views/fibery-web-views-4ad738bc-8f98-472a-af26-b820a7559274.webp	Rendered calendar view with entries
+web/screens/fibery-web-screen-4c1d7942-8da3-4082-93d3-f0c706851101.webp	web/database/fibery-web-database-4c1d7942-8da3-4082-93d3-f0c706851101.webp	New table Created-by column config
+web/screens/fibery-web-screen-4d038b64-0241-4ad3-9d15-5f436cc73ae1.webp	web/views/fibery-web-views-4d038b64-0241-4ad3-9d15-5f436cc73ae1.webp	Rendered Problems list with Insight/Features menu
+web/screens/fibery-web-screen-4d6ab5a9-073d-4369-aaf1-88034791c682.webp	web/views/fibery-web-views-4d6ab5a9-073d-4369-aaf1-88034791c682.webp	Rendered Problems board with New Problem action
+web/screens/fibery-web-screen-4db2ebfa-c3bd-42ac-86be-ff7f6c3b94c1.webp	web/editors/fibery-web-editors-4db2ebfa-c3bd-42ac-86be-ff7f6c3b94c1.webp	Read.me document body with search/recent panel
+web/screens/fibery-web-screen-4df4b0fb-4b71-490f-8f60-b78a1a8b39cb.webp	web/views/fibery-web-views-4df4b0fb-4b71-490f-8f60-b78a1a8b39cb.webp	Rendered calendar view with entries
+web/screens/fibery-web-screen-4e3b7a3c-ccf3-43b2-9707-9db92257434f.webp	web/views/fibery-web-views-4e3b7a3c-ccf3-43b2-9707-9db92257434f.webp	Rendered map view with style picker
+web/screens/fibery-web-screen-4e3e9ad9-8c44-4de4-a35f-ae865c41e657.webp	web/reports/fibery-web-reports-4e3e9ad9-8c44-4de4-a35f-ae865c41e657.webp	Creation dynamic of Problem combined bar/line chart report
+web/screens/fibery-web-screen-4f290a2e-92e2-4d3f-9645-0468df349084.webp	web/database/fibery-web-database-4f290a2e-92e2-4d3f-9645-0468df349084.webp	Space/database management dropdown menu (import/share/delete)
+web/screens/fibery-web-screen-4fcb80bb-4def-4765-87dd-207c0313d4f4.webp	web/collaboration/fibery-web-collaboration-4fcb80bb-4def-4765-87dd-207c0313d4f4.webp	Invite Users panel (link/email, member role)
+web/screens/fibery-web-screen-5018d854-4f24-4f36-955e-9a3bc04b84d0.webp	web/forms/fibery-web-forms-5018d854-4f24-4f36-955e-9a3bc04b84d0.webp	Product Design Survey Share Form panel
+web/screens/fibery-web-screen-5027654d-637b-4c0c-b183-1253c1b8849d.webp	web/automations/fibery-web-automations-5027654d-637b-4c0c-b183-1253c1b8849d.webp	Automation button config (When Button Clicked / Then Create Fields)
+web/screens/fibery-web-screen-5038a4e3-6922-41e7-8156-2487b025e229.webp	web/whiteboard/fibery-web-whiteboard-5038a4e3-6922-41e7-8156-2487b025e229.webp	Whiteboard diagram with connected relationship nodes
+web/screens/fibery-web-screen-508bc07f-dcda-444d-b3b1-655c0ab04f4b.webp	web/database/fibery-web-database-508bc07f-dcda-444d-b3b1-655c0ab04f4b.webp	Add Select Field dialog with options
+web/screens/fibery-web-screen-50a76661-68e6-43cd-ab5e-b747793e3424.webp	web/settings/fibery-web-settings-50a76661-68e6-43cd-ab5e-b747793e3424.webp	Slack integration permission/connection screen
+web/screens/fibery-web-screen-50e31c4b-f103-41e7-bfaf-1f5ce5204389.webp	web/automations/fibery-web-automations-50e31c4b-f103-41e7-bfaf-1f5ce5204389.webp	Automation button config (When Button Clicked / Then Update Fields)
+web/screens/fibery-web-screen-515d5b4d-74da-4d6e-b02b-e7bf3669930a.webp	web/forms/fibery-web-forms-515d5b4d-74da-4d6e-b02b-e7bf3669930a.webp	Form submission success screen (Thank you!)
+web/screens/fibery-web-screen-51deb964-cbeb-4860-a2f6-fc987fca100a.webp	web/database/fibery-web-database-51deb964-cbeb-4860-a2f6-fc987fca100a.webp	CSV import field-mapping table
+web/screens/fibery-web-screen-51ec5622-4de7-426d-99d1-f2f9aba959de.webp	web/views/fibery-web-views-51ec5622-4de7-426d-99d1-f2f9aba959de.webp	Rendered Product Design table with rows
+web/screens/fibery-web-screen-5212defb-5248-49ce-92d3-1ac2993e0e63.webp	web/collaboration/fibery-web-collaboration-5212defb-5248-49ce-92d3-1ac2993e0e63.webp	Document comment thread beside code and Kanban board
+web/screens/fibery-web-screen-5238351a-83be-45e2-9ecc-ef2589816f6a.webp	web/database/fibery-web-database-5238351a-83be-45e2-9ecc-ef2589816f6a.webp	Rendered grid with property/duplicate context menu
+web/screens/fibery-web-screen-526ccc0d-ba9a-4437-bb0d-d1271e3ecbd9.webp	web/settings/fibery-web-settings-526ccc0d-ba9a-4437-bb0d-d1271e3ecbd9.webp	Plan and Billing upgrade with billing address modal
+web/screens/fibery-web-screen-5309f587-3651-4e93-9ff4-214ea39d9580.webp	web/whiteboard/fibery-web-whiteboard-5309f587-3651-4e93-9ff4-214ea39d9580.webp	Whiteboard diagram (Product Designer to UI/UX to database)
+web/screens/fibery-web-screen-5415a9ff-2309-4491-9cd3-7bf897c9989a.webp	web/editors/fibery-web-editors-5415a9ff-2309-4491-9cd3-7bf897c9989a.webp	Read.me document body explaining feature purpose
+web/screens/fibery-web-screen-5431c4af-380f-4d95-98c3-592eeb6d4b87.webp	web/automations/fibery-web-automations-5431c4af-380f-4d95-98c3-592eeb6d4b87.webp	Automation Notify Users panel
+web/screens/fibery-web-screen-55558d38-a4c6-4f06-912e-5f86247f8ab2.webp	web/reports/fibery-web-reports-55558d38-a4c6-4f06-912e-5f86247f8ab2.webp	Creation dynamic of Problem report line chart table view
+web/screens/fibery-web-screen-56a3f4ea-5f41-44bd-8de7-449cafa9b139.webp	web/forms/fibery-web-forms-56a3f4ea-5f41-44bd-8de7-449cafa9b139.webp	New form panel (fields, location, type)
+web/screens/fibery-web-screen-57619f39-3862-4f1a-9dfc-5ccbba2b7b19.webp	web/reports/fibery-web-reports-57619f39-3862-4f1a-9dfc-5ccbba2b7b19.webp	Client report chart wizard setup
+web/screens/fibery-web-screen-57f5d21c-5fae-4113-bcb4-7b28fb9e2d82.webp	web/navigation/fibery-web-navigation-57f5d21c-5fae-4113-bcb4-7b28fb9e2d82.webp	Trash Bin destination listing deleted items
+web/screens/fibery-web-screen-58c50b56-38eb-4419-b96e-01281bbc0ee5.webp	web/database/fibery-web-database-58c50b56-38eb-4419-b96e-01281bbc0ee5.webp	Rendered grid with row context menu (copy/export/delete)
+web/screens/fibery-web-screen-59b68706-022a-4537-892a-e73b87951b1d.webp	web/dialogs/fibery-web-dialogs-59b68706-022a-4537-892a-e73b87951b1d.webp	Delete-all-data confirmation modal for a Space
+web/screens/fibery-web-screen-59bac0c5-d2c9-4cca-82e5-3d59ffefab0c.webp	web/views/fibery-web-views-59bac0c5-d2c9-4cca-82e5-3d59ffefab0c.webp	Rendered Problems grid table
+web/screens/fibery-web-screen-59e6b9fe-673a-4672-9563-f455d6f34183.webp	web/states/fibery-web-states-59e6b9fe-673a-4672-9563-f455d6f34183.webp	Inbox empty state illustration and message
+web/screens/fibery-web-screen-5a10d91e-980d-410f-9ba3-036b1def6a58.webp	web/views/fibery-web-views-5a10d91e-980d-410f-9ba3-036b1def6a58.webp	Rendered timeline/Gantt view with lane/type dropdown
+web/screens/fibery-web-screen-5a4c62da-be7b-4ebd-bf5a-75208db841b5.webp	web/settings/fibery-web-settings-5a4c62da-be7b-4ebd-bf5a-75208db841b5.webp	Preferences Appearance (theme, dark sidebar, panel navigation)
+web/screens/fibery-web-screen-5a7902ab-5836-4521-bea3-5c181c959e51.webp	web/views/fibery-web-views-5a7902ab-5836-4521-bea3-5c181c959e51.webp	Rendered Problems grid with selected rows
+web/screens/fibery-web-screen-5abe3bc2-27fd-4a30-a78c-102fb76ce865.webp	web/settings/fibery-web-settings-5abe3bc2-27fd-4a30-a78c-102fb76ce865.webp	Emoji settings panel
+web/screens/fibery-web-screen-5bb82c9c-9404-495d-a27e-44e2cdc18e68.webp	web/reports/fibery-web-reports-5bb82c9c-9404-495d-a27e-44e2cdc18e68.webp	Client report chart wizard setup
+web/screens/fibery-web-screen-5c3389e2-9dc8-488b-988d-8b046f2e4be4.webp	web/views/fibery-web-views-5c3389e2-9dc8-488b-988d-8b046f2e4be4.webp	Rendered calendar view (no matches found)
+web/screens/fibery-web-screen-5caf3193-9dca-47ee-96b7-716c76abd1a3.webp	web/database/fibery-web-database-5caf3193-9dca-47ee-96b7-716c76abd1a3.webp	New feed field config popover
+web/screens/fibery-web-screen-5da9c1e1-c0e7-4985-8450-51fc41617571.webp	web/views/fibery-web-views-5da9c1e1-c0e7-4985-8450-51fc41617571.webp	Rendered Problems board with status indicators
+web/screens/fibery-web-screen-5e5a248b-4a8a-41ce-ae5e-2079c7683e7b.webp	web/settings/fibery-web-settings-5e5a248b-4a8a-41ce-ae5e-2079c7683e7b.webp	Authorize Fibery GitHub Integration OAuth screen
+web/screens/fibery-web-screen-5f5a0b79-2537-4bb4-8bd4-1809dd3ab71b.webp	web/onboarding/fibery-web-onboarding-5f5a0b79-2537-4bb4-8bd4-1809dd3ab71b.webp	Confirm your email address signup step
+web/screens/fibery-web-screen-600f7865-44e0-45f0-a20d-017499f9eb85.webp	web/views/fibery-web-views-600f7865-44e0-45f0-a20d-017499f9eb85.webp	Rendered map view with pins
+web/screens/fibery-web-screen-6062a64e-b176-403a-8dd1-9a2649b62c98.webp	web/settings/fibery-web-settings-6062a64e-b176-403a-8dd1-9a2649b62c98.webp	Export workspace data settings panel
+web/screens/fibery-web-screen-608215e0-b22f-41ea-be2d-6db59bd004ba.webp	web/reports/fibery-web-reports-608215e0-b22f-41ea-be2d-6db59bd004ba.webp	Creation dynamic report Count of Records config
+web/screens/fibery-web-screen-6257816c-cb3a-4bd3-8810-ba5c44f2b0ee.webp	web/settings/fibery-web-settings-6257816c-cb3a-4bd3-8810-ba5c44f2b0ee.webp	Plan and Billing account details modal
+web/screens/fibery-web-screen-62811183-f474-4c2a-a813-85e6c5e13907.webp	web/views/fibery-web-views-62811183-f474-4c2a-a813-85e6c5e13907.webp	Rendered feed view listing entries
+web/screens/fibery-web-screen-62a97688-a482-4d0b-b56a-5d36e7ee21eb.webp	web/reports/fibery-web-reports-62a97688-a482-4d0b-b56a-5d36e7ee21eb.webp	Client report wizard with source data table
+web/screens/fibery-web-screen-6303bd09-04da-4809-80f0-f92020616cfd.webp	web/reports/fibery-web-reports-6303bd09-04da-4809-80f0-f92020616cfd.webp	Client report chart wizard setup
+web/screens/fibery-web-screen-6349cfbd-4753-4759-91cb-9d0a462a4fd0.webp	web/onboarding/fibery-web-onboarding-6349cfbd-4753-4759-91cb-9d0a462a4fd0.webp	Set new password account-creation step
+web/screens/fibery-web-screen-63ee7a8e-358a-4e7d-a282-210cead76876.webp	web/views/fibery-web-views-63ee7a8e-358a-4e7d-a282-210cead76876.webp	Rendered Problems grid small dataset
+web/screens/fibery-web-screen-64ae2190-20c2-451a-b096-ee3642d2d505.webp	web/collaboration/fibery-web-collaboration-64ae2190-20c2-451a-b096-ee3642d2d505.webp	Users admin table with avatar/emoji picker
+web/screens/fibery-web-screen-64d70073-9615-4110-8e7d-4f52ceac520e.webp	web/views/fibery-web-views-64d70073-9615-4110-8e7d-4f52ceac520e.webp	Rendered Problems grid with tooltip
+web/screens/fibery-web-screen-6538d535-45de-498d-b8e4-2416209871d7.webp	web/navigation/fibery-web-navigation-6538d535-45de-498d-b8e4-2416209871d7.webp	New Folder creation panel with icon picker
+web/screens/fibery-web-screen-6580ffbb-261d-4c92-a491-e58c9411c3fd.webp	web/collaboration/fibery-web-collaboration-6580ffbb-261d-4c92-a491-e58c9411c3fd.webp	Document comment thread beside code and Kanban board
+web/screens/fibery-web-screen-65b484d9-036d-4664-99ec-b132fa573a64.webp	web/database/fibery-web-database-65b484d9-036d-4664-99ec-b132fa573a64.webp	Cards view Add Database config popover linking the Insight entity, a view-options screen not AI
+web/screens/fibery-web-screen-66327cd4-0075-446b-a31f-768465f0535d.webp	web/views/fibery-web-views-66327cd4-0075-446b-a31f-768465f0535d.webp	Rendered Problems grid table
+web/screens/fibery-web-screen-67288eb8-4c73-4dbe-b141-83a1a35e6a46.webp	web/collaboration/fibery-web-collaboration-67288eb8-4c73-4dbe-b141-83a1a35e6a46.webp	Settings Users list with deactivate popup
+web/screens/fibery-web-screen-67602200-dc48-4471-af19-070db75a13f5.webp	web/automations/fibery-web-automations-67602200-dc48-4471-af19-070db75a13f5.webp	Automation Notify Users panel (recipients/subject/message)
+web/screens/fibery-web-screen-676444c3-e9b2-49d2-bba9-5bcfe7fb752c.webp	web/collaboration/fibery-web-collaboration-676444c3-e9b2-49d2-bba9-5bcfe7fb752c.webp	Document comment thread beside Kanban board
+web/screens/fibery-web-screen-67e57251-5d66-4993-9fdf-17ba23b0c408.webp	web/views/fibery-web-views-67e57251-5d66-4993-9fdf-17ba23b0c408.webp	Rendered Problems grid table
+web/screens/fibery-web-screen-680307fc-3b63-4cd2-bbf0-e8846ea9e2f4.webp	web/reports/fibery-web-reports-680307fc-3b63-4cd2-bbf0-e8846ea9e2f4.webp	Creation dynamic of Problem report bar chart
+web/screens/fibery-web-screen-68249419-f400-402c-bf1e-fdd1150c7a6b.webp	web/onboarding/fibery-web-onboarding-68249419-f400-402c-bf1e-fdd1150c7a6b.webp	Getting Started checklist alongside New table sort panel
+web/screens/fibery-web-screen-6a3f8982-d007-41b7-a32c-135bd8c0baa8.webp	web/navigation/fibery-web-navigation-6a3f8982-d007-41b7-a32c-135bd8c0baa8.webp	Search overlay results list
+web/screens/fibery-web-screen-6ab74325-229e-43f5-917a-cde8ab5b3c44.webp	web/forms/fibery-web-forms-6ab74325-229e-43f5-917a-cde8ab5b3c44.webp	New form color/image source panel
+web/screens/fibery-web-screen-6b509625-b287-4e5b-a36b-bb36b8296a05.webp	web/reports/fibery-web-reports-6b509625-b287-4e5b-a36b-bb36b8296a05.webp	Chart Data Source Data table
+web/screens/fibery-web-screen-6b5f3106-091e-4e6e-a927-572d184c1c46.webp	web/editors/fibery-web-editors-6b5f3106-091e-4e6e-a927-572d184c1c46.webp	Read.me document body with comment annotation
+web/screens/fibery-web-screen-6c19c34f-a1d2-41b3-8e7f-58cffd8aab20.webp	web/settings/fibery-web-settings-6c19c34f-a1d2-41b3-8e7f-58cffd8aab20.webp	Workspace General settings (name, logo, delete workspace)
+web/screens/fibery-web-screen-6c27509b-9185-4d93-bf39-b34ff97a3d98.webp	web/database/fibery-web-database-6c27509b-9185-4d93-bf39-b34ff97a3d98.webp	Select a Database dropdown popover
+web/screens/fibery-web-screen-6d2eedff-707a-47d7-8f99-416059c1ed54.webp	web/collaboration/fibery-web-collaboration-6d2eedff-707a-47d7-8f99-416059c1ed54.webp	Document comment thread beside Kanban board
+web/screens/fibery-web-screen-6e0b22b0-ec0e-4153-8cb3-93624f0812e9.webp	web/reports/fibery-web-reports-6e0b22b0-ec0e-4153-8cb3-93624f0812e9.webp	Creation dynamic of Problem report bar chart
+web/screens/fibery-web-screen-6f42b0ea-a5b7-4f0c-8334-7d4db375e950.webp	web/editors/fibery-web-editors-6f42b0ea-a5b7-4f0c-8334-7d4db375e950.webp	Read.me document body with code snippet
+web/screens/fibery-web-screen-6f96ae86-4aff-4a98-acf1-24c5009cdf7d.webp	web/database/fibery-web-database-6f96ae86-4aff-4a98-acf1-24c5009cdf7d.webp	Import Drop CSV file panel
+web/screens/fibery-web-screen-6fb1edd5-5e67-4bac-9571-abdeff438768.webp	web/reports/fibery-web-reports-6fb1edd5-5e67-4bac-9571-abdeff438768.webp	Creation dynamic report Edit Calculation formula panel
+web/screens/fibery-web-screen-7118a2f9-49ad-40c1-b527-ff040a5cabb4.webp	web/views/fibery-web-views-7118a2f9-49ad-40c1-b527-ff040a5cabb4.webp	Rendered Problems grid table
+web/screens/fibery-web-screen-71739693-7da1-4a2c-94e3-f5e12d166881.webp	web/onboarding/fibery-web-onboarding-71739693-7da1-4a2c-94e3-f5e12d166881.webp	Password reset link sent confirmation
+web/screens/fibery-web-screen-71841999-df14-4c49-8aeb-b6829b3d532f.webp	web/onboarding/fibery-web-onboarding-71841999-df14-4c49-8aeb-b6829b3d532f.webp	Generate the workspace for your team AI setup step
+web/screens/fibery-web-screen-721f5e69-d7d2-44e2-a071-f7b89667bc62.webp	web/onboarding/fibery-web-onboarding-721f5e69-d7d2-44e2-a071-f7b89667bc62.webp	Welcome to Fibery company name/workspace claim step
+web/screens/fibery-web-screen-7270b4b2-c4f3-4ef2-9a82-c687881e1de0.webp	web/settings/fibery-web-settings-7270b4b2-c4f3-4ef2-9a82-c687881e1de0.webp	Configuration notification preferences matrix
+web/screens/fibery-web-screen-728e3ec8-4fab-4678-9b39-4bfaea003558.webp	web/views/fibery-web-views-728e3ec8-4fab-4678-9b39-4bfaea003558.webp	Rendered Problems grid with New Field popover
+web/screens/fibery-web-screen-74c183f4-d990-4c8c-bc99-2b829e0c947e.webp	web/automations/fibery-web-automations-74c183f4-d990-4c8c-bc99-2b829e0c947e.webp	Automation Big Red Button config
+web/screens/fibery-web-screen-75544218-1415-440a-a7de-f294f7163d5e.webp	web/views/fibery-web-views-75544218-1415-440a-a7de-f294f7163d5e.webp	Rendered Problems grid table
+web/screens/fibery-web-screen-75ce0fea-8d41-46cb-a374-340820905253.webp	web/database/fibery-web-database-75ce0fea-8d41-46cb-a374-340820905253.webp	Person entity field type picker (schema config)
+web/screens/fibery-web-screen-76010187-bd6f-4856-964a-7cd2c12609ec.webp	web/views/fibery-web-views-76010187-bd6f-4856-964a-7cd2c12609ec.webp	Rendered Problems grid with checked rows
+web/screens/fibery-web-screen-762eacbd-2fb7-452d-a5c5-f631a55cc564.webp	web/navigation/fibery-web-navigation-762eacbd-2fb7-452d-a5c5-f631a55cc564.webp	Trash destination listing deleted items
+web/screens/fibery-web-screen-7630d249-a5ce-4283-9428-573cb1cbdb1a.webp	web/automations/fibery-web-automations-7630d249-a5ce-4283-9428-573cb1cbdb1a.webp	Automation rule builder (When/Then/Create fields)
+web/screens/fibery-web-screen-765cb6ab-d4e5-47ee-aab1-c1873e34233e.webp	web/views/fibery-web-views-765cb6ab-d4e5-47ee-aab1-c1873e34233e.webp	Entity Tree view configuration on canvas
+web/screens/fibery-web-screen-772d6ad2-4ffa-434e-8af1-7276ffc44bdb.webp	web/settings/fibery-web-settings-772d6ad2-4ffa-434e-8af1-7276ffc44bdb.webp	Change-email confirmation dialog (account setting)
+web/screens/fibery-web-screen-777d1f1a-050b-4cca-b467-4bc9bb80fa9b.webp	web/reports/fibery-web-reports-777d1f1a-050b-4cca-b467-4bc9bb80fa9b.webp	Creation dynamic of Problem report bar chart
+web/screens/fibery-web-screen-79c7dbbc-ece8-4f72-8a09-07906ba746f3.webp	web/reports/fibery-web-reports-79c7dbbc-ece8-4f72-8a09-07906ba746f3.webp	Creation dynamic report Count of Records config
+web/screens/fibery-web-screen-7a89971b-f558-4a16-979b-aa66aa67a9ab.webp	web/onboarding/fibery-web-onboarding-7a89971b-f558-4a16-979b-aa66aa67a9ab.webp	Getting Started checklist alongside New table panel
+web/screens/fibery-web-screen-7aed7366-d9e7-4a1a-88ea-7198c227a7c9.webp	web/settings/fibery-web-settings-7aed7366-d9e7-4a1a-88ea-7198c227a7c9.webp	Emoji settings panel
+web/screens/fibery-web-screen-7b1b113f-74d5-4820-916d-7ddcf264bd2a.webp	web/reports/fibery-web-reports-7b1b113f-74d5-4820-916d-7ddcf264bd2a.webp	Creation dynamic of Problem report bar chart
+web/screens/fibery-web-screen-7b35b327-8c05-4345-92da-96354632cc7b.webp	web/navigation/fibery-web-navigation-7b35b327-8c05-4345-92da-96354632cc7b.webp	Search overlay results list
+web/screens/fibery-web-screen-7c4faced-3a3f-4ec3-a324-a89657499f88.webp	web/views/fibery-web-views-7c4faced-3a3f-4ec3-a324-a89657499f88.webp	Rendered Features Kanban board with cards
+web/screens/fibery-web-screen-7c734ceb-8261-4bf5-88b9-f88e8b32dcb7.webp	web/database/fibery-web-database-7c734ceb-8261-4bf5-88b9-f88e8b32dcb7.webp	Problems board card-size display option popover
+web/screens/fibery-web-screen-7c88171e-5a39-4f61-86ed-4b4994e4c75e.webp	web/views/fibery-web-views-7c88171e-5a39-4f61-86ed-4b4994e4c75e.webp	Rendered Problems grid small dataset
+web/screens/fibery-web-screen-7d096ccd-083b-490d-be97-dd3450ef3ae8.webp	web/whiteboard/fibery-web-whiteboard-7d096ccd-083b-490d-be97-dd3450ef3ae8.webp	New whiteboard shape/color config panel
+web/screens/fibery-web-screen-7d7a4544-617e-400f-9239-67eb639d0a83.webp	web/database/fibery-web-database-7d7a4544-617e-400f-9239-67eb639d0a83.webp	Opened card/entity detail with Activity tab and fields
+web/screens/fibery-web-screen-7de05362-85fa-4111-8110-43b69e3c1215.webp	web/reports/fibery-web-reports-7de05362-85fa-4111-8110-43b69e3c1215.webp	Creation dynamic of Problem report big-number stat display
+web/screens/fibery-web-screen-7f9247fd-7537-48fe-bfc4-206c1360129f.webp	web/navigation/fibery-web-navigation-7f9247fd-7537-48fe-bfc4-206c1360129f.webp	Search overlay results list
+web/screens/fibery-web-screen-80175fab-86ec-4ba5-89ce-072cfa49c56d.webp	web/views/fibery-web-views-80175fab-86ec-4ba5-89ce-072cfa49c56d.webp	Rendered feed view listing entities
+web/screens/fibery-web-screen-801d3968-e5ea-4fcd-a96c-f7ccd3c55afa.webp	web/forms/fibery-web-forms-801d3968-e5ea-4fcd-a96c-f7ccd3c55afa.webp	New form blank (name, description)
+web/screens/fibery-web-screen-80a43c07-1d56-4084-9574-72dc3998c6ec.webp	web/database/fibery-web-database-80a43c07-1d56-4084-9574-72dc3998c6ec.webp	Person entity detail record with typed fields
+web/screens/fibery-web-screen-80f77d53-0025-4e35-8a34-a9eb9c8dbc32.webp	web/whiteboard/fibery-web-whiteboard-80f77d53-0025-4e35-8a34-a9eb9c8dbc32.webp	Connections diagram linking Product/Strategy/Research nodes
+web/screens/fibery-web-screen-820bb07d-1302-41b9-9d7a-46052326c943.webp	web/onboarding/fibery-web-onboarding-820bb07d-1302-41b9-9d7a-46052326c943.webp	Read.me getting-started hub (how to start checklist)
+web/screens/fibery-web-screen-8216447b-6270-4e00-9e96-4b255656df5a.webp	web/views/fibery-web-views-8216447b-6270-4e00-9e96-4b255656df5a.webp	Rendered timeline/Gantt view with entries
+web/screens/fibery-web-screen-828bd24d-b93d-419c-b96c-3c4887fdc6c8.webp	web/forms/fibery-web-forms-828bd24d-b93d-419c-b96c-3c4887fdc6c8.webp	New form panel with cover image sidebar
+web/screens/fibery-web-screen-830fbbd6-79de-4e8c-b649-630e7eb35df8.webp	web/views/fibery-web-views-830fbbd6-79de-4e8c-b649-630e7eb35df8.webp	Rendered Product Design table with rows
+web/screens/fibery-web-screen-833c971a-d6ed-4608-ab43-16d9503ad0b7.webp	web/automations/fibery-web-automations-833c971a-d6ed-4608-ab43-16d9503ad0b7.webp	Automation rule builder (When Problem Created / Then)
+web/screens/fibery-web-screen-83a93411-48bf-42bb-9fda-62314c18e7aa.webp	web/navigation/fibery-web-navigation-83a93411-48bf-42bb-9fda-62314c18e7aa.webp	Trash Bin destination listing deleted items
+web/screens/fibery-web-screen-842bb18e-4560-48d8-ba40-64dbe0c0b794.webp	web/settings/fibery-web-settings-842bb18e-4560-48d8-ba40-64dbe0c0b794.webp	Customization Custom Emoji panel
+web/screens/fibery-web-screen-8574fa59-7cc3-48f8-93e6-314cc3567f4e.webp	web/editors/fibery-web-editors-8574fa59-7cc3-48f8-93e6-314cc3567f4e.webp	Read.me document body explaining feature purpose
+web/screens/fibery-web-screen-8583fd27-468f-49ac-b347-e917c18b0296.webp	web/reports/fibery-web-reports-8583fd27-468f-49ac-b347-e917c18b0296.webp	Creation dynamic report source data (loading state)
+web/screens/fibery-web-screen-8587d3a1-f55b-4a00-a34f-8bb9f06a08fa.webp	web/reports/fibery-web-reports-8587d3a1-f55b-4a00-a34f-8bb9f06a08fa.webp	Creation dynamic report table columns setup
+web/screens/fibery-web-screen-85e4cc54-135d-41a2-b1de-153905807417.webp	web/views/fibery-web-views-85e4cc54-135d-41a2-b1de-153905807417.webp	Rendered Problems board with status indicators
+web/screens/fibery-web-screen-85f98468-26f4-4411-8c6e-ec175c3a1b2a.webp	web/onboarding/fibery-web-onboarding-85f98468-26f4-4411-8c6e-ec175c3a1b2a.webp	Generate the workspace for your team AI setup step
+web/screens/fibery-web-screen-8620f369-4974-425e-9028-96d5bf8b4768.webp	web/onboarding/fibery-web-onboarding-8620f369-4974-425e-9028-96d5bf8b4768.webp	Company workspace branding/color customization setup step
+web/screens/fibery-web-screen-869412d8-65a4-4e33-8b82-fff41856ac6e.webp	web/reports/fibery-web-reports-869412d8-65a4-4e33-8b82-fff41856ac6e.webp	Creation dynamic of Problem report bar chart
+web/screens/fibery-web-screen-86f7fb5e-1962-4fc7-8e46-55562aa9a526.webp	web/database/fibery-web-database-86f7fb5e-1962-4fc7-8e46-55562aa9a526.webp	Add Multi Select Field dialog
+web/screens/fibery-web-screen-8765e408-f6ad-44fd-944a-2d547c603a52.webp	web/settings/fibery-web-settings-8765e408-f6ad-44fd-944a-2d547c603a52.webp	Customization Custom Emoji panel
+web/screens/fibery-web-screen-87904a7a-e216-408a-9e6b-a2c6200a4052.webp	web/settings/fibery-web-settings-87904a7a-e216-408a-9e6b-a2c6200a4052.webp	Preferences (regional format, appearance theme)
+web/screens/fibery-web-screen-8791570d-8e5b-4666-bbef-be19d5e829da.webp	web/views/fibery-web-views-8791570d-8e5b-4666-bbef-be19d5e829da.webp	Rendered Problems grid compared with duplicate copy
+web/screens/fibery-web-screen-87d1fb28-8f01-4c8e-97ab-e9f00a149700.webp	web/views/fibery-web-views-87d1fb28-8f01-4c8e-97ab-e9f00a149700.webp	Rendered Problems grid with automation-complete toast
+web/screens/fibery-web-screen-87fd265a-6059-44a5-8e5a-0f1bf0e520f7.webp	web/forms/fibery-web-forms-87fd265a-6059-44a5-8e5a-0f1bf0e520f7.webp	Issue Submission form with image and fields
+web/screens/fibery-web-screen-8ac9dc00-070d-47ae-a12f-7c30df1c383a.webp	web/database/fibery-web-database-8ac9dc00-070d-47ae-a12f-7c30df1c383a.webp	Date field picker popover on grid
+web/screens/fibery-web-screen-8ace1992-4080-46a9-87bb-26e53dd6420b.webp	web/views/fibery-web-views-8ace1992-4080-46a9-87bb-26e53dd6420b.webp	Rendered map view with Add Database popover
+web/screens/fibery-web-screen-8b2f5545-39ca-4687-99e9-32c56bc15869.webp	web/editors/fibery-web-editors-8b2f5545-39ca-4687-99e9-32c56bc15869.webp	Read.me document body explaining feature purpose
+web/screens/fibery-web-screen-8b328f2a-6be4-42e3-86a1-caedbd724986.webp	web/database/fibery-web-database-8b328f2a-6be4-42e3-86a1-caedbd724986.webp	Choose existing Database picker popover
+web/screens/fibery-web-screen-8b5155af-07a3-4bae-bc0b-2b043a8bfb09.webp	web/database/fibery-web-database-8b5155af-07a3-4bae-bc0b-2b043a8bfb09.webp	Rendered grid with share/duplicate/sort context menu
+web/screens/fibery-web-screen-8b5bf881-d879-4451-bd75-a5bfda5a1a2a.webp	web/reports/fibery-web-reports-8b5bf881-d879-4451-bd75-a5bfda5a1a2a.webp	Creation dynamic of Problem report wizard
+web/screens/fibery-web-screen-8b68e39c-3288-471f-bef0-833efb8d9ef8.webp	web/whiteboard/fibery-web-whiteboard-8b68e39c-3288-471f-bef0-833efb8d9ef8.webp	Whiteboard sticky-note decision diagram
+web/screens/fibery-web-screen-8bf1c5a1-c644-45ea-8dcc-11cb497dea5d.webp	web/settings/fibery-web-settings-8bf1c5a1-c644-45ea-8dcc-11cb497dea5d.webp	Customization Custom Emoji list
+web/screens/fibery-web-screen-8c84407d-8184-4298-aceb-525286778699.webp	web/automations/fibery-web-automations-8c84407d-8184-4298-aceb-525286778699.webp	Automation Add Filter / Notify Users config
+web/screens/fibery-web-screen-8d743d36-4809-4128-9a4f-7887f1f843ef.webp	web/reports/fibery-web-reports-8d743d36-4809-4128-9a4f-7887f1f843ef.webp	Creation dynamic report Count of Records config
+web/screens/fibery-web-screen-8e0eefbb-dcc6-470f-957b-14710e07df5b.webp	web/reports/fibery-web-reports-8e0eefbb-dcc6-470f-957b-14710e07df5b.webp	Creation dynamic report Count of Records config
+web/screens/fibery-web-screen-8e84e739-8f8c-4e00-8db1-e32a255c480e.webp	web/whiteboard/fibery-web-whiteboard-8e84e739-8f8c-4e00-8db1-e32a255c480e.webp	Whiteboard diagram with sticky note
+web/screens/fibery-web-screen-8e8a7b5e-612b-4b25-8141-dd45b558bbbd.webp	web/settings/fibery-web-settings-8e8a7b5e-612b-4b25-8141-dd45b558bbbd.webp	Notifications settings panel (sources and configuration)
+web/screens/fibery-web-screen-8ebb779a-53f5-4ba8-b717-ea5b9cda1017.webp	web/collaboration/fibery-web-collaboration-8ebb779a-53f5-4ba8-b717-ea5b9cda1017.webp	Audit Log table of entity events
+web/screens/fibery-web-screen-8ec948fe-e144-4bca-9ec7-15ed18a11bd9.webp	web/automations/fibery-web-automations-8ec948fe-e144-4bca-9ec7-15ed18a11bd9.webp	Automation rule builder (When/Then, Add Filter)
+web/screens/fibery-web-screen-8f6cceb1-c8bb-4b1b-9213-3b4503bba1e5.webp	web/settings/fibery-web-settings-8f6cceb1-c8bb-4b1b-9213-3b4503bba1e5.webp	Customization Custom Emoji edit
+web/screens/fibery-web-screen-8f845c7b-1f68-497d-a588-805bf1f8aa50.webp	web/onboarding/fibery-web-onboarding-8f845c7b-1f68-497d-a588-805bf1f8aa50.webp	Company workspace setup step (use case, team size)
+web/screens/fibery-web-screen-8fc02f84-8cb3-4e1c-b16d-3d2af42d43e9.webp	web/onboarding/fibery-web-onboarding-8fc02f84-8cb3-4e1c-b16d-3d2af42d43e9.webp	Feature selection cards during setup (timeline board, customer feedback)
+web/screens/fibery-web-screen-8fd42332-a1f1-4d03-ab46-b7c08c4c119f.webp	web/database/fibery-web-database-8fd42332-a1f1-4d03-ab46-b7c08c4c119f.webp	Problems board display options popover (size/show/created by)
+web/screens/fibery-web-screen-8ffc14ac-1d7a-434b-a2ce-4ed8052a6338.webp	web/editors/fibery-web-editors-8ffc14ac-1d7a-434b-a2ce-4ed8052a6338.webp	Read.me document body with outline nav
+web/screens/fibery-web-screen-902001d9-7b1a-4ecc-93ca-55b4a8dd8884.webp	web/reports/fibery-web-reports-902001d9-7b1a-4ecc-93ca-55b4a8dd8884.webp	New Report Create from Fibery wizard
+web/screens/fibery-web-screen-903c7de6-3b7d-4f47-9f42-faea600bb3b1.webp	web/reports/fibery-web-reports-903c7de6-3b7d-4f47-9f42-faea600bb3b1.webp	Client report wizard with chart preview
+web/screens/fibery-web-screen-904506e0-6d8d-437c-ad53-1f51bb23a350.webp	web/views/fibery-web-views-904506e0-6d8d-437c-ad53-1f51bb23a350.webp	Rendered Problems grid with highlighted rows
+web/screens/fibery-web-screen-90c40053-d70d-41c8-a438-c8bb144333a6.webp	web/collaboration/fibery-web-collaboration-90c40053-d70d-41c8-a438-c8bb144333a6.webp	Invite People dialog (link/email)
+web/screens/fibery-web-screen-919aab02-6e1f-4794-87ac-eee3614d6fb1.webp	web/settings/fibery-web-settings-919aab02-6e1f-4794-87ac-eee3614d6fb1.webp	Workspace General settings (name, logo, delete workspace)
+web/screens/fibery-web-screen-91c07c2f-bf1a-4454-a659-414e4e6f11e6.webp	web/forms/fibery-web-forms-91c07c2f-bf1a-4454-a659-414e4e6f11e6.webp	Product Design Survey Share Form panel
+web/screens/fibery-web-screen-9203101d-3cd0-46b9-9739-dc23796adba1.webp	web/settings/fibery-web-settings-9203101d-3cd0-46b9-9739-dc23796adba1.webp	Customization Custom Emoji panel
+web/screens/fibery-web-screen-92e6e8f4-0b60-4230-b886-22bab8a3bc05.webp	web/navigation/fibery-web-navigation-92e6e8f4-0b60-4230-b886-22bab8a3bc05.webp	Search overlay results list
+web/screens/fibery-web-screen-92faad84-9922-4869-b802-cfed0649ed82.webp	web/onboarding/fibery-web-onboarding-92faad84-9922-4869-b802-cfed0649ed82.webp	Company workspace setup step with feature preview cards
+web/screens/fibery-web-screen-9365c813-8e28-4c34-b970-25f827efae69.webp	web/onboarding/fibery-web-onboarding-9365c813-8e28-4c34-b970-25f827efae69.webp	Read.me getting-started hub (how to start checklist)
+web/screens/fibery-web-screen-93692df0-338a-4fb3-ba48-bb08311dfa09.webp	web/views/fibery-web-views-93692df0-338a-4fb3-ba48-bb08311dfa09.webp	Rendered Problems grid empty with New View list popup
+web/screens/fibery-web-screen-93f23008-08b0-4d6f-854c-2e5d39346f1d.webp	web/database/fibery-web-database-93f23008-08b0-4d6f-854c-2e5d39346f1d.webp	Opened card/entity detail header (title, description)
+web/screens/fibery-web-screen-9454b4cf-8d8a-4d16-bebf-2a081b4bbebd.webp	web/views/fibery-web-views-9454b4cf-8d8a-4d16-bebf-2a081b4bbebd.webp	Rendered Product Design table with import-progress toast
+web/screens/fibery-web-screen-94eec80e-c3f2-4d8c-9caf-3eab71d2f73a.webp	web/database/fibery-web-database-94eec80e-c3f2-4d8c-9caf-3eab71d2f73a.webp	Problems grid tag/label color-select popover
+web/screens/fibery-web-screen-9609ea53-2e9f-4628-9ba5-1d7437f20be7.webp	web/database/fibery-web-database-9609ea53-2e9f-4628-9ba5-1d7437f20be7.webp	Problems grid New Field type dropdown
+web/screens/fibery-web-screen-96626867-28de-4fa1-b7ec-4fb2d2e4510c.webp	web/collaboration/fibery-web-collaboration-96626867-28de-4fa1-b7ec-4fb2d2e4510c.webp	Activity Log table of entity events
+web/screens/fibery-web-screen-9695ed0c-c1d2-47fd-9c07-21e6d140c41d.webp	web/database/fibery-web-database-9695ed0c-c1d2-47fd-9c07-21e6d140c41d.webp	Users table New Field type menu (schema config)
+web/screens/fibery-web-screen-987af778-7014-4cb2-bddb-10f9e57a4f26.webp	web/views/fibery-web-views-987af778-7014-4cb2-bddb-10f9e57a4f26.webp	Rendered Problems grid table
+web/screens/fibery-web-screen-9893d761-be04-44b5-8393-6fd5049aa943.webp	web/onboarding/fibery-web-onboarding-9893d761-be04-44b5-8393-6fd5049aa943.webp	Confirm email address step with new workspace preview
+web/screens/fibery-web-screen-9961676a-ab74-4301-ba98-977c8ea52667.webp	web/database/fibery-web-database-9961676a-ab74-4301-ba98-977c8ea52667.webp	Add URL Field dialog
+web/screens/fibery-web-screen-99e4c270-3bea-4e89-a78b-5aca8693f963.webp	web/database/fibery-web-database-99e4c270-3bea-4e89-a78b-5aca8693f963.webp	Users database Fields management panel (schema config)
+web/screens/fibery-web-screen-9a242a5d-f060-40fe-addf-47b962f5b818.webp	web/editors/fibery-web-editors-9a242a5d-f060-40fe-addf-47b962f5b818.webp	Document with flowchart/mermaid diagram and code block
+web/screens/fibery-web-screen-9a654094-c5ea-4117-921f-7c04cab49f52.webp	web/views/fibery-web-views-9a654094-c5ea-4117-921f-7c04cab49f52.webp	Rendered Problems grid with automation-complete toast
+web/screens/fibery-web-screen-9b708b5d-418a-4b41-b2a2-519ed42053ec.webp	web/whiteboard/fibery-web-whiteboard-9b708b5d-418a-4b41-b2a2-519ed42053ec.webp	Connections diagram linking Product/Strategy/Research nodes
+web/screens/fibery-web-screen-9c953702-1a3c-436f-807e-8a146f4961c7.webp	web/automations/fibery-web-automations-9c953702-1a3c-436f-807e-8a146f4961c7.webp	Automation button config (When/Then/Create fields)
+web/screens/fibery-web-screen-9cc76ebd-deaa-456e-976b-73ef56076868.webp	web/automations/fibery-web-automations-9cc76ebd-deaa-456e-976b-73ef56076868.webp	Automation rule builder (Provide notice of new problem)
+web/screens/fibery-web-screen-9d2fd3bb-dac5-4c2d-b772-4f4842e388d0.webp	web/views/fibery-web-views-9d2fd3bb-dac5-4c2d-b772-4f4842e388d0.webp	Rendered Problems list with add-first-level popover
+web/screens/fibery-web-screen-9ddc568b-cb4e-43ee-941e-a0987799282e.webp	web/marketing/fibery-web-marketing-9ddc568b-cb4e-43ee-941e-a0987799282e.webp	Share Spaces as a Template dialog
+web/screens/fibery-web-screen-9e8c6498-766a-435d-86ba-854d8176832a.webp	web/collaboration/fibery-web-collaboration-9e8c6498-766a-435d-86ba-854d8176832a.webp	Workspace Users table with roles
+web/screens/fibery-web-screen-9eac90b6-d7e5-45a6-8887-f5fe0a2118d7.webp	web/editors/fibery-web-editors-9eac90b6-d7e5-45a6-8887-f5fe0a2118d7.webp	Document Embed Youtube panel
+web/screens/fibery-web-screen-9fd3c3b8-622d-42a7-9e0b-59e0a9d1f9b5.webp	web/reports/fibery-web-reports-9fd3c3b8-622d-42a7-9e0b-59e0a9d1f9b5.webp	Creation dynamic report Edit format settings
+web/screens/fibery-web-screen-9fe20eca-b589-4df3-a3dd-05057997cfde.webp	web/settings/fibery-web-settings-9fe20eca-b589-4df3-a3dd-05057997cfde.webp	Workspace General settings (name, logo, delete workspace)
+web/screens/fibery-web-screen-a0f7dc5b-3b70-48f1-b194-4806ce5e31be.webp	web/onboarding/fibery-web-onboarding-a0f7dc5b-3b70-48f1-b194-4806ce5e31be.webp	Let's Get You Started teammate workspace creation prompt
+web/screens/fibery-web-screen-a119a87a-d0c0-475a-8017-8bec8b9706a8.webp	web/database/fibery-web-database-a119a87a-d0c0-475a-8017-8bec8b9706a8.webp	Opened card/entity detail with automation popup
+web/screens/fibery-web-screen-a1cbb76b-8cbe-412a-b48c-e892394d11df.webp	web/database/fibery-web-database-a1cbb76b-8cbe-412a-b48c-e892394d11df.webp	Users table New Field type dropdown
+web/screens/fibery-web-screen-a1d440f4-4c07-42a4-bfee-e6995ad56a20.webp	web/collaboration/fibery-web-collaboration-a1d440f4-4c07-42a4-bfee-e6995ad56a20.webp	Settings Users list with roles
+web/screens/fibery-web-screen-a265060d-82a6-4d1e-81f9-4f982c687f2b.webp	web/forms/fibery-web-forms-a265060d-82a6-4d1e-81f9-4f982c687f2b.webp	Product Design Survey Share Form panel
+web/screens/fibery-web-screen-a286c8fc-645e-41a8-8af6-8d67d70660ac.webp	web/database/fibery-web-database-a286c8fc-645e-41a8-8af6-8d67d70660ac.webp	Cards view Add Database config popover linking the Insight entity, a view-options screen not AI
+web/screens/fibery-web-screen-a2a7b74e-d436-480b-9f7e-6852951deabe.webp	web/database/fibery-web-database-a2a7b74e-d436-480b-9f7e-6852951deabe.webp	Problems grid set-due-date popover
+web/screens/fibery-web-screen-a2fa99a8-c17e-47a6-96c8-65a18cd2736f.webp	web/database/fibery-web-database-a2fa99a8-c17e-47a6-96c8-65a18cd2736f.webp	Problems grid date/time picker popover
+web/screens/fibery-web-screen-a3adf8b1-b5fd-4982-ba22-c92c3c9a3913.webp	web/reports/fibery-web-reports-a3adf8b1-b5fd-4982-ba22-c92c3c9a3913.webp	Creation dynamic of Problem report wizard
+web/screens/fibery-web-screen-a3f9bb38-a1c8-4c8d-a8cb-9a06c56dc229.webp	web/onboarding/fibery-web-onboarding-a3f9bb38-a1c8-4c8d-a8cb-9a06c56dc229.webp	Read.me getting-started hub (how to start checklist)
+web/screens/fibery-web-screen-a46cc262-eef8-4b00-8362-ce0fb827fd88.webp	web/reports/fibery-web-reports-a46cc262-eef8-4b00-8362-ce0fb827fd88.webp	Creation dynamic of Problem report pie/donut charts
+web/screens/fibery-web-screen-a4b87a3b-5090-4776-989e-3479b3da56ba.webp	web/onboarding/fibery-web-onboarding-a4b87a3b-5090-4776-989e-3479b3da56ba.webp	Read.me getting-started hub with workspace sidebar
+web/screens/fibery-web-screen-a4ff4d45-040b-4127-aa3b-14cd507564fe.webp	web/database/fibery-web-database-a4ff4d45-040b-4127-aa3b-14cd507564fe.webp	Choose existing Database picker popover
+web/screens/fibery-web-screen-a513cef1-51af-45b9-a0b7-55a473266888.webp	web/views/fibery-web-views-a513cef1-51af-45b9-a0b7-55a473266888.webp	Rendered map view with location marker popup
+web/screens/fibery-web-screen-a53c0089-20b0-49c1-b0b0-41099859ae99.webp	web/collaboration/fibery-web-collaboration-a53c0089-20b0-49c1-b0b0-41099859ae99.webp	Workspace Users table with roles
+web/screens/fibery-web-screen-a55dbc07-bdfb-4e53-84f4-74a504d30d8f.webp	web/database/fibery-web-database-a55dbc07-bdfb-4e53-84f4-74a504d30d8f.webp	Problems grid date/time picker popover
+web/screens/fibery-web-screen-a5670341-2bbd-488c-b14b-d051688af3c0.webp	web/whiteboard/fibery-web-whiteboard-a5670341-2bbd-488c-b14b-d051688af3c0.webp	Whiteboard shape drawing tool with color palette
+web/screens/fibery-web-screen-a59cfab1-1925-4a34-b478-f90becad540c.webp	web/reports/fibery-web-reports-a59cfab1-1925-4a34-b478-f90becad540c.webp	Client report big-number stat display
+web/screens/fibery-web-screen-a5aa4693-1d48-4c9b-a9ba-ddccca88a0cd.webp	web/editors/fibery-web-editors-a5aa4693-1d48-4c9b-a9ba-ddccca88a0cd.webp	Read.me document body with comment field
+web/screens/fibery-web-screen-a5e090a9-1c35-4b5b-b232-9107b4ec835f.webp	web/database/fibery-web-database-a5e090a9-1c35-4b5b-b232-9107b4ec835f.webp	Generate Name using Formula panel
+web/screens/fibery-web-screen-a6205e03-fb82-4524-991d-cf38366cc04b.webp	web/collaboration/fibery-web-collaboration-a6205e03-fb82-4524-991d-cf38366cc04b.webp	User Group Databases access/permission configuration
+web/screens/fibery-web-screen-a624cc0a-c157-43b3-b933-80274057f9ad.webp	web/database/fibery-web-database-a624cc0a-c157-43b3-b933-80274057f9ad.webp	Problems grid New Field type dropdown
+web/screens/fibery-web-screen-a65f7102-cfcc-477a-9f74-1825fd4a51c4.webp	web/views/fibery-web-views-a65f7102-cfcc-477a-9f74-1825fd4a51c4.webp	Users relation/org-chart diagram
+web/screens/fibery-web-screen-a6a4a5b5-c600-4a72-8d07-24eb818110ac.webp	web/database/fibery-web-database-a6a4a5b5-c600-4a72-8d07-24eb818110ac.webp	Problems grid location field search box
+web/screens/fibery-web-screen-a6a5d4a7-37d9-4690-8268-4ba6a180bac5.webp	web/views/fibery-web-views-a6a5d4a7-37d9-4690-8268-4ba6a180bac5.webp	Rendered Problems grid small dataset
+web/screens/fibery-web-screen-a6be63ba-6fdb-4cc4-9caf-95eb07f7b10e.webp	web/views/fibery-web-views-a6be63ba-6fdb-4cc4-9caf-95eb07f7b10e.webp	Rendered Problems grid with tag label
+web/screens/fibery-web-screen-a6c7efbc-4aeb-452a-9957-45d9bac9296b.webp	web/reports/fibery-web-reports-a6c7efbc-4aeb-452a-9957-45d9bac9296b.webp	Chart Data Source Data table
+web/screens/fibery-web-screen-a74ddc05-8605-4f1b-8b91-2c8367f854b6.webp	web/onboarding/fibery-web-onboarding-a74ddc05-8605-4f1b-8b91-2c8367f854b6.webp	Workspaces create/login screen
+web/screens/fibery-web-screen-a7b6d827-863d-4e2c-85ed-23f2d0dc2306.webp	web/whiteboard/fibery-web-whiteboard-a7b6d827-863d-4e2c-85ed-23f2d0dc2306.webp	Whiteboard diagram with simple text box
+web/screens/fibery-web-screen-a7c1f3a8-dcd9-4c64-8b97-7257a0e53dc3.webp	web/database/fibery-web-database-a7c1f3a8-dcd9-4c64-8b97-7257a0e53dc3.webp	Add Multi Select Field dialog with options
+web/screens/fibery-web-screen-a7cc0e52-3219-4605-90dc-4e9a5df09b08.webp	web/onboarding/fibery-web-onboarding-a7cc0e52-3219-4605-90dc-4e9a5df09b08.webp	Workspaces create/login screen
+web/screens/fibery-web-screen-a81106b6-1ad3-45a0-927a-f92341f8be35.webp	web/automations/fibery-web-automations-a81106b6-1ad3-45a0-927a-f92341f8be35.webp	Automation Big Red Button execution result
+web/screens/fibery-web-screen-a82263dc-55c2-4c9f-83ef-b4f41dd17c67.webp	web/editors/fibery-web-editors-a82263dc-55c2-4c9f-83ef-b4f41dd17c67.webp	Read.me document page (minimal content)
+web/screens/fibery-web-screen-a82e9b37-1b3a-4ac4-8b41-64d4b3ad0214.webp	web/onboarding/fibery-web-onboarding-a82e9b37-1b3a-4ac4-8b41-64d4b3ad0214.webp	Set your password account-creation step
+web/screens/fibery-web-screen-a8eb45e6-ca91-450d-a459-5fcfc3a0325f.webp	web/marketing/fibery-web-marketing-a8eb45e6-ca91-450d-a459-5fcfc3a0325f.webp	Fibery marketing/pricing landing page
+web/screens/fibery-web-screen-a9b6676c-b98c-4528-9a40-e4c809c93885.webp	web/forms/fibery-web-forms-a9b6676c-b98c-4528-9a40-e4c809c93885.webp	New form panel with fields list
+web/screens/fibery-web-screen-a9c5c062-aa31-4bcc-a91c-493b7be27faa.webp	web/views/fibery-web-views-a9c5c062-aa31-4bcc-a91c-493b7be27faa.webp	Rendered Problems grid small dataset
+web/screens/fibery-web-screen-aa0c09a9-d8a7-45d4-aa4e-49d8f49c97dd.webp	web/views/fibery-web-views-aa0c09a9-d8a7-45d4-aa4e-49d8f49c97dd.webp	Rendered timeline/Gantt view with entries
+web/screens/fibery-web-screen-aa198079-c02c-470f-9446-cef30fc7bf36.webp	web/whiteboard/fibery-web-whiteboard-aa198079-c02c-470f-9446-cef30fc7bf36.webp	Whiteboard diagram with sticky note and configure panel
+web/screens/fibery-web-screen-aa1d4c8e-5a15-42fe-bb80-e7f47449ca58.webp	web/navigation/fibery-web-navigation-aa1d4c8e-5a15-42fe-bb80-e7f47449ca58.webp	Search overlay results list
+web/screens/fibery-web-screen-aa6a7e17-1af5-4621-9c82-00d6c3e208dc.webp	web/reports/fibery-web-reports-aa6a7e17-1af5-4621-9c82-00d6c3e208dc.webp	Creation dynamic report Count of Records config
+web/screens/fibery-web-screen-aad59315-a7a3-40c9-91fb-d99ce933343c.webp	web/reports/fibery-web-reports-aad59315-a7a3-40c9-91fb-d99ce933343c.webp	Creation dynamic of Problem report bar chart with filter
+web/screens/fibery-web-screen-ab45b4a4-7b34-407d-b64b-3057a8caae9f.webp	web/navigation/fibery-web-navigation-ab45b4a4-7b34-407d-b64b-3057a8caae9f.webp	Search overlay with emoji suggestion grid
+web/screens/fibery-web-screen-ab5503a2-3e74-4c38-9bd5-25f2fffcb281.webp	web/onboarding/fibery-web-onboarding-ab5503a2-3e74-4c38-9bd5-25f2fffcb281.webp	Almost there create-your-account step
+web/screens/fibery-web-screen-ab5a1c6b-c624-4b26-93eb-b75744f849e2.webp	web/automations/fibery-web-automations-ab5a1c6b-c624-4b26-93eb-b75744f849e2.webp	Automation Big Red Button config
+web/screens/fibery-web-screen-ab6f7064-0358-46f5-8dce-9fa46e411009.webp	web/whiteboard/fibery-web-whiteboard-ab6f7064-0358-46f5-8dce-9fa46e411009.webp	Whiteboard sticky-note decision diagram
+web/screens/fibery-web-screen-ab75f041-4568-4459-b179-30df350e1f75.webp	web/database/fibery-web-database-ab75f041-4568-4459-b179-30df350e1f75.webp	Rendered Problems board with opened card detail
+web/screens/fibery-web-screen-ad2650e2-d69e-476e-9939-67f0ea3332c1.webp	web/database/fibery-web-database-ad2650e2-d69e-476e-9939-67f0ea3332c1.webp	Opened card/entity detail Show/Hide Fields panel
+web/screens/fibery-web-screen-ad4b754f-77e8-44f3-b05a-1bd0ed5c7ee7.webp	web/settings/fibery-web-settings-ad4b754f-77e8-44f3-b05a-1bd0ed5c7ee7.webp	Customization Custom Emoji panel
+web/screens/fibery-web-screen-ae126527-aca8-400b-9783-bf902e2000ef.webp	web/collaboration/fibery-web-collaboration-ae126527-aca8-400b-9783-bf902e2000ef.webp	Workspace Users table with roles
+web/screens/fibery-web-screen-aec022d4-9b58-4a3d-8bc2-1475467913ca.webp	web/editors/fibery-web-editors-aec022d4-9b58-4a3d-8bc2-1475467913ca.webp	Document with pasted image, video thumbnail and description text
+web/screens/fibery-web-screen-aef935a2-cc36-4ab0-9d09-f11c159b8e56.webp	web/database/fibery-web-database-aef935a2-cc36-4ab0-9d09-f11c159b8e56.webp	Opened card/entity Description field editor
+web/screens/fibery-web-screen-af0d5fee-626f-4183-b6f1-e90e2b16bc45.webp	web/views/fibery-web-views-af0d5fee-626f-4183-b6f1-e90e2b16bc45.webp	Rendered feed view listing entities
+web/screens/fibery-web-screen-af254e4b-4c55-40bd-a229-292003cb21be.webp	web/forms/fibery-web-forms-af254e4b-4c55-40bd-a229-292003cb21be.webp	New form blank with entity dropdown selector
+web/screens/fibery-web-screen-af2d3fe6-3097-4b71-b798-df90e7005dc4.webp	web/onboarding/fibery-web-onboarding-af2d3fe6-3097-4b71-b798-df90e7005dc4.webp	Set your password account-creation step
+web/screens/fibery-web-screen-af9ae313-0190-44ef-8f8d-a7ac76bd5212.webp	web/views/fibery-web-views-af9ae313-0190-44ef-8f8d-a7ac76bd5212.webp	Rendered Problems grid with tag label
+web/screens/fibery-web-screen-affa8cc4-8e7d-4bc9-928d-28e3990df26f.webp	web/editors/fibery-web-editors-affa8cc4-8e7d-4bc9-928d-28e3990df26f.webp	Read.me document with embedded Features Kanban board
+web/screens/fibery-web-screen-b0d971c1-f820-4b1b-b390-2ed93a4fc8df.webp	web/ai/fibery-web-ai-b0d971c1-f820-4b1b-b390-2ed93a4fc8df.webp	Read.me document with AI writing assistant menu
+web/screens/fibery-web-screen-b16b2640-b23e-4e47-b515-49b5729e80f3.webp	web/database/fibery-web-database-b16b2640-b23e-4e47-b515-49b5729e80f3.webp	Users table New Field type dropdown
+web/screens/fibery-web-screen-b18920c5-581d-4dfb-941c-44c2191e1ad5.webp	web/whiteboard/fibery-web-whiteboard-b18920c5-581d-4dfb-941c-44c2191e1ad5.webp	Whiteboard diagram with shape palette
+web/screens/fibery-web-screen-b2034515-b146-4de7-b914-f6dc6839e5b5.webp	web/forms/fibery-web-forms-b2034515-b146-4de7-b914-f6dc6839e5b5.webp	New form field configuration panel
+web/screens/fibery-web-screen-b257c91b-eee6-42c1-82cb-3843a630c010.webp	web/database/fibery-web-database-b257c91b-eee6-42c1-82cb-3843a630c010.webp	Problems grid New Template dropdown
+web/screens/fibery-web-screen-b31664fb-80b7-46bf-91c5-b91d8d8bdecb.webp	web/views/fibery-web-views-b31664fb-80b7-46bf-91c5-b91d8d8bdecb.webp	Rendered 30-60-90 onboarding table
+web/screens/fibery-web-screen-b35c38a6-436a-4269-84a0-25fef770a5d1.webp	web/reports/fibery-web-reports-b35c38a6-436a-4269-84a0-25fef770a5d1.webp	Client report wizard with chart preview
+web/screens/fibery-web-screen-b40b4666-ceb8-409d-a40c-88b736538bab.webp	web/automations/fibery-web-automations-b40b4666-ceb8-409d-a40c-88b736538bab.webp	Automation rule builder (When user Created / Then)
+web/screens/fibery-web-screen-b4c9353a-3e6c-4a65-98de-d95fd05c7543.webp	web/collaboration/fibery-web-collaboration-b4c9353a-3e6c-4a65-98de-d95fd05c7543.webp	Document comment thread beside Kanban board
+web/screens/fibery-web-screen-b4d297a1-6555-426e-a3f2-94c7924d2c34.webp	web/onboarding/fibery-web-onboarding-b4d297a1-6555-426e-a3f2-94c7924d2c34.webp	Almost there create-account step (Google/Microsoft)
+web/screens/fibery-web-screen-b545398c-0580-4b58-abfc-1ad0eff683ae.webp	web/reports/fibery-web-reports-b545398c-0580-4b58-abfc-1ad0eff683ae.webp	Creation dynamic of Problem report bar chart
+web/screens/fibery-web-screen-b7909680-e6cd-401c-8aad-314d84dfb5f9.webp	web/navigation/fibery-web-navigation-b7909680-e6cd-401c-8aad-314d84dfb5f9.webp	Trash destination listing deleted items
+web/screens/fibery-web-screen-b8b582bc-96d5-4276-a8c2-d10b2863eac3.webp	web/database/fibery-web-database-b8b582bc-96d5-4276-a8c2-d10b2863eac3.webp	Add Multi Select Field dialog
+web/screens/fibery-web-screen-b91a7c4d-d7f2-4a02-b85a-24b971929025.webp	web/settings/fibery-web-settings-b91a7c4d-d7f2-4a02-b85a-24b971929025.webp	Workspace General settings (name, logo, delete workspace)
+web/screens/fibery-web-screen-b9538fdf-afa5-4dae-b6e0-42e782b60bb4.webp	web/onboarding/fibery-web-onboarding-b9538fdf-afa5-4dae-b6e0-42e782b60bb4.webp	Workspaces create/login screen
+web/screens/fibery-web-screen-b9581196-369d-4868-9358-461381138a5d.webp	web/settings/fibery-web-settings-b9581196-369d-4868-9358-461381138a5d.webp	Export workspace data settings panel
+web/screens/fibery-web-screen-b95f4a01-136b-4cb9-ae93-0f0bb7eee150.webp	web/settings/fibery-web-settings-b95f4a01-136b-4cb9-ae93-0f0bb7eee150.webp	Customization Custom Emoji panel
+web/screens/fibery-web-screen-b96c0928-1338-42c6-8a28-bf79c38cf44f.webp	web/database/fibery-web-database-b96c0928-1338-42c6-8a28-bf79c38cf44f.webp	Users table New Field type dropdown
+web/screens/fibery-web-screen-b9ed1645-abb1-4254-b7bd-fe572eb32626.webp	web/views/fibery-web-views-b9ed1645-abb1-4254-b7bd-fe572eb32626.webp	Rendered feed view with posts popup
+web/screens/fibery-web-screen-babc67e8-4ecd-4955-8ca7-d1d94486bfa3.webp	web/reports/fibery-web-reports-babc67e8-4ecd-4955-8ca7-d1d94486bfa3.webp	Creation dynamic of Problem report Set up Pie Chart wizard
+web/screens/fibery-web-screen-bb0c8afd-696e-4b35-8703-bf8267fd159c.webp	web/database/fibery-web-database-bb0c8afd-696e-4b35-8703-bf8267fd159c.webp	Person entity detail record with typed fields
+web/screens/fibery-web-screen-bb22e7dd-c8fd-418e-ba5f-1f7502fc3481.webp	web/editors/fibery-web-editors-bb22e7dd-c8fd-418e-ba5f-1f7502fc3481.webp	Read.me document with heading outline nav
+web/screens/fibery-web-screen-bb8e23d0-bc69-4b2f-8b62-d91ea0bc833c.webp	web/collaboration/fibery-web-collaboration-bb8e23d0-bc69-4b2f-8b62-d91ea0bc833c.webp	Deactivate user confirmation dialog
+web/screens/fibery-web-screen-bbcdf1ad-507d-4bfa-99ea-29ffde7df1bb.webp	web/settings/fibery-web-settings-bbcdf1ad-507d-4bfa-99ea-29ffde7df1bb.webp	Plan and Billing upgrade pricing plans
+web/screens/fibery-web-screen-bbd2f5c3-573f-4c72-ad7d-554079303b02.webp	web/whiteboard/fibery-web-whiteboard-bbd2f5c3-573f-4c72-ad7d-554079303b02.webp	Whiteboard diagram with connected relationship nodes
+web/screens/fibery-web-screen-bbf4c773-1c21-465a-a185-a7d3bb9351de.webp	web/settings/fibery-web-settings-bbf4c773-1c21-465a-a185-a7d3bb9351de.webp	Integrate with GitHub connection field-mapping panel
+web/screens/fibery-web-screen-bebc80e4-9d63-4e9e-8344-2c7f5a732978.webp	web/database/fibery-web-database-bebc80e4-9d63-4e9e-8344-2c7f5a732978.webp	Opened card/entity detail with automation panel
+web/screens/fibery-web-screen-bf826964-ad6d-496c-8f65-05b5cc71f2cf.webp	web/views/fibery-web-views-bf826964-ad6d-496c-8f65-05b5cc71f2cf.webp	Rendered feed view listing entities
+web/screens/fibery-web-screen-bf9fbb68-525a-4efa-b772-57c67be9f226.webp	web/reports/fibery-web-reports-bf9fbb68-525a-4efa-b772-57c67be9f226.webp	Client report wizard with chart preview
+web/screens/fibery-web-screen-c0192191-9d22-4079-8c89-6a97f62c9943.webp	web/onboarding/fibery-web-onboarding-c0192191-9d22-4079-8c89-6a97f62c9943.webp	Company workspace setup step (use case, team size)
+web/screens/fibery-web-screen-c0b59b05-d7b2-4399-9a9a-11bd6b210231.webp	web/views/fibery-web-views-c0b59b05-d7b2-4399-9a9a-11bd6b210231.webp	Rendered timeline/Gantt view with rows and columns
+web/screens/fibery-web-screen-c0d7344b-6bcf-4e4c-9bf2-0b221c1215fb.webp	web/navigation/fibery-web-navigation-c0d7344b-6bcf-4e4c-9bf2-0b221c1215fb.webp	Search overlay results list
+web/screens/fibery-web-screen-c0ff8700-0378-43a2-9879-e64197cde8da.webp	web/reports/fibery-web-reports-c0ff8700-0378-43a2-9879-e64197cde8da.webp	Creation dynamic of Problem report Set up Pie Chart wizard
+web/screens/fibery-web-screen-c13aec90-6b83-44b6-bae9-f87648c962db.webp	web/editors/fibery-web-editors-c13aec90-6b83-44b6-bae9-f87648c962db.webp	Read.me document body explaining feature purpose
+web/screens/fibery-web-screen-c18ecb2c-4cf9-4ff9-88e6-ae72e27fdd45.webp	web/whiteboard/fibery-web-whiteboard-c18ecb2c-4cf9-4ff9-88e6-ae72e27fdd45.webp	Whiteboard diagram with simple text box
+web/screens/fibery-web-screen-c1bc1b2d-495f-4ff3-8174-9437110bbe46.webp	web/reports/fibery-web-reports-c1bc1b2d-495f-4ff3-8174-9437110bbe46.webp	Chart report source data configuration
+web/screens/fibery-web-screen-c2377105-d1d0-45f3-b0f0-1a44438d61e8.webp	web/views/fibery-web-views-c2377105-d1d0-45f3-b0f0-1a44438d61e8.webp	Rendered Problems board
+web/screens/fibery-web-screen-c30e7fcc-ca7c-4b55-8d57-f08dea258040.webp	web/database/fibery-web-database-c30e7fcc-ca7c-4b55-8d57-f08dea258040.webp	Users table New Field type dropdown
+web/screens/fibery-web-screen-c31c8f5f-463f-442b-b9c5-13e039214803.webp	web/views/fibery-web-views-c31c8f5f-463f-442b-b9c5-13e039214803.webp	Rendered Problems grid with AI Database button
+web/screens/fibery-web-screen-c3a84dce-9b39-4f58-9805-2b086756c12d.webp	web/database/fibery-web-database-c3a84dce-9b39-4f58-9805-2b086756c12d.webp	Problems grid color-coding popover with description
+web/screens/fibery-web-screen-c3a8c042-5479-4e6e-a71b-38b543876308.webp	web/automations/fibery-web-automations-c3a8c042-5479-4e6e-a71b-38b543876308.webp	Automation button action dropdown (create/notify/update)
+web/screens/fibery-web-screen-c3c7004f-a43b-4e79-9a13-395bf13749a5.webp	web/forms/fibery-web-forms-c3c7004f-a43b-4e79-9a13-395bf13749a5.webp	New form field configuration panel
+web/screens/fibery-web-screen-c3c9d643-8ebb-4997-b250-6a23e6dee7b0.webp	web/settings/fibery-web-settings-c3c9d643-8ebb-4997-b250-6a23e6dee7b0.webp	Plan and Billing upgrade pricing plans
+web/screens/fibery-web-screen-c4107d5f-4c66-47be-9ff8-7050c2d0aee8.webp	web/views/fibery-web-views-c4107d5f-4c66-47be-9ff8-7050c2d0aee8.webp	Rendered Problems grid with highlighted rows
+web/screens/fibery-web-screen-c462001c-9385-413b-bde8-c171b31cfc47.webp	web/database/fibery-web-database-c462001c-9385-413b-bde8-c171b31cfc47.webp	Problems grid Sort dropdown popover
+web/screens/fibery-web-screen-c51a3b50-26bd-450c-8752-f3d0058234a4.webp	web/whiteboard/fibery-web-whiteboard-c51a3b50-26bd-450c-8752-f3d0058234a4.webp	New whiteboard blank canvas with shape tool palette
+web/screens/fibery-web-screen-c5fcaba4-1c58-4a0f-bd74-441c94e28786.webp	web/database/fibery-web-database-c5fcaba4-1c58-4a0f-bd74-441c94e28786.webp	Generate Name using Formula panel
+web/screens/fibery-web-screen-c64ab346-0e3b-4a58-a9fd-1b7905bfadb5.webp	web/reports/fibery-web-reports-c64ab346-0e3b-4a58-a9fd-1b7905bfadb5.webp	Creation dynamic of Problem report bar chart
+web/screens/fibery-web-screen-c693c0c2-6419-499d-805d-32d35dfc1f6d.webp	web/database/fibery-web-database-c693c0c2-6419-499d-805d-32d35dfc1f6d.webp	Problems grid color coding popover with automation panel
+web/screens/fibery-web-screen-c6b25f8a-349b-432d-9244-b0b288a8be14.webp	web/settings/fibery-web-settings-c6b25f8a-349b-432d-9244-b0b288a8be14.webp	Plan and Billing payment details modal
+web/screens/fibery-web-screen-c6c3ead9-d1b8-4da6-af0e-9acc995f56b1.webp	web/automations/fibery-web-automations-c6c3ead9-d1b8-4da6-af0e-9acc995f56b1.webp	Automation Notify Users panel (email/subject/message)
+web/screens/fibery-web-screen-c90b4c89-214a-4a44-a56e-3e6d6f958378.webp	web/views/fibery-web-views-c90b4c89-214a-4a44-a56e-3e6d6f958378.webp	Entity Tree view configuration on canvas
+web/screens/fibery-web-screen-c9673f21-a332-4071-9689-9e66b84b14e7.webp	web/reports/fibery-web-reports-c9673f21-a332-4071-9689-9e66b84b14e7.webp	Creation dynamic report Count of Records config
+web/screens/fibery-web-screen-c9817067-ab0e-43c8-96e0-954492da25cd.webp	web/database/fibery-web-database-c9817067-ab0e-43c8-96e0-954492da25cd.webp	Choose existing Database popover
+web/screens/fibery-web-screen-c98ac48c-eec9-4d52-b033-f7980ed2cead.webp	web/reports/fibery-web-reports-c98ac48c-eec9-4d52-b033-f7980ed2cead.webp	Creation dynamic of Problem report bar chart
+web/screens/fibery-web-screen-c9d39f99-beeb-40ae-8a96-1d0c6e808e1a.webp	web/onboarding/fibery-web-onboarding-c9d39f99-beeb-40ae-8a96-1d0c6e808e1a.webp	Almost there create-account step (Google/Microsoft)
+web/screens/fibery-web-screen-c9d57997-9fcd-42c3-8db7-e47b0c2f2661.webp	web/automations/fibery-web-automations-c9d57997-9fcd-42c3-8db7-e47b0c2f2661.webp	Automation Big Red Button config
+web/screens/fibery-web-screen-ca43c363-5b44-41f5-80ad-1f44ec2e421d.webp	web/views/fibery-web-views-ca43c363-5b44-41f5-80ad-1f44ec2e421d.webp	Rendered calendar week view with entries
+web/screens/fibery-web-screen-ccf5a5b9-c0e3-48cc-be8a-68580deb46be.webp	web/onboarding/fibery-web-onboarding-ccf5a5b9-c0e3-48cc-be8a-68580deb46be.webp	Company workspace setup step (name, URL)
+web/screens/fibery-web-screen-cd166589-0fc4-49ce-ba52-945582f88537.webp	web/database/fibery-web-database-cd166589-0fc4-49ce-ba52-945582f88537.webp	Problems grid Save Set filter popup
+web/screens/fibery-web-screen-cdb3e4cd-9334-4485-bf99-165640f33d91.webp	web/automations/fibery-web-automations-cdb3e4cd-9334-4485-bf99-165640f33d91.webp	Automation rule builder (When/Then)
+web/screens/fibery-web-screen-ce9712d1-4068-488f-a6e8-5be935c61d2f.webp	web/database/fibery-web-database-ce9712d1-4068-488f-a6e8-5be935c61d2f.webp	Opened card/entity Description field confirm popup
+web/screens/fibery-web-screen-cf29abf8-c4c5-4337-b964-30dc61a23cfd.webp	web/onboarding/fibery-web-onboarding-cf29abf8-c4c5-4337-b964-30dc61a23cfd.webp	Reset password auth screen
+web/screens/fibery-web-screen-d00bbfd6-9f6f-4add-b9fa-f3678fe69160.webp	web/database/fibery-web-database-d00bbfd6-9f6f-4add-b9fa-f3678fe69160.webp	Problems grid Assignee filter popover
+web/screens/fibery-web-screen-d04f579a-2473-48b8-9aa6-c040b99ab499.webp	web/reports/fibery-web-reports-d04f579a-2473-48b8-9aa6-c040b99ab499.webp	Chart Data Source Data table with Add Filter
+web/screens/fibery-web-screen-d05eee07-3292-464f-bb61-87633f877771.webp	web/editors/fibery-web-editors-d05eee07-3292-464f-bb61-87633f877771.webp	Read.me document body explaining feature purpose
+web/screens/fibery-web-screen-d088c33d-399b-4153-883f-df40a5d3aede.webp	web/reports/fibery-web-reports-d088c33d-399b-4153-883f-df40a5d3aede.webp	Creation dynamic of Problem report bar chart
+web/screens/fibery-web-screen-d092d645-8550-431c-a0cb-161afec6a90c.webp	web/reports/fibery-web-reports-d092d645-8550-431c-a0cb-161afec6a90c.webp	Creation dynamic report Count of Records config
+web/screens/fibery-web-screen-d0a38af4-06e2-4dbb-bdae-562adef1ffbe.webp	web/reports/fibery-web-reports-d0a38af4-06e2-4dbb-bdae-562adef1ffbe.webp	Creation dynamic report data source (databases) config
+web/screens/fibery-web-screen-d0b8a1c0-8ba0-4ed3-b866-b362917bb5bb.webp	web/automations/fibery-web-automations-d0b8a1c0-8ba0-4ed3-b866-b362917bb5bb.webp	Automation rule builder (create/update/delete actions)
+web/screens/fibery-web-screen-d0f3ce1b-e3ae-460d-a8df-c6678243f6c3.webp	web/automations/fibery-web-automations-d0f3ce1b-e3ae-460d-a8df-c6678243f6c3.webp	Automation rule builder (When/Then, Add Field/Group)
+web/screens/fibery-web-screen-d130ed3d-3eab-4e93-bdca-582b213e17c6.webp	web/database/fibery-web-database-d130ed3d-3eab-4e93-bdca-582b213e17c6.webp	Problems grid assignee dropdown popover
+web/screens/fibery-web-screen-d1325dff-1535-489a-81c3-3c798dd9377e.webp	web/reports/fibery-web-reports-d1325dff-1535-489a-81c3-3c798dd9377e.webp	Creation dynamic report Count of Records config
+web/screens/fibery-web-screen-d150fdc6-f179-4ff5-987f-c38ff22d9615.webp	web/navigation/fibery-web-navigation-d150fdc6-f179-4ff5-987f-c38ff22d9615.webp	Inbox destination listing notifications
+web/screens/fibery-web-screen-d15d531d-2b1d-42f5-85f1-49d00dfbd954.webp	web/collaboration/fibery-web-collaboration-d15d531d-2b1d-42f5-85f1-49d00dfbd954.webp	Document comment thread beside code and Kanban board
+web/screens/fibery-web-screen-d2973978-0368-4460-90f9-1c4f69955e96.webp	web/onboarding/fibery-web-onboarding-d2973978-0368-4460-90f9-1c4f69955e96.webp	Read.me getting-started hub (how to start checklist)
+web/screens/fibery-web-screen-d314839d-394e-40ac-b332-acbecece1f2c.webp	web/navigation/fibery-web-navigation-d314839d-394e-40ac-b332-acbecece1f2c.webp	Search overlay results list
+web/screens/fibery-web-screen-d34b4f1e-5425-4867-bbee-1fabcc84bca5.webp	web/database/fibery-web-database-d34b4f1e-5425-4867-bbee-1fabcc84bca5.webp	Problems grid date picker popover
+web/screens/fibery-web-screen-d3d0c0da-6fdd-4c43-b657-2e6f09b9d645.webp	web/views/fibery-web-views-d3d0c0da-6fdd-4c43-b657-2e6f09b9d645.webp	Rendered calendar view with entries
+web/screens/fibery-web-screen-d3df2ddf-28ba-43f2-8985-97ff3290d106.webp	web/views/fibery-web-views-d3df2ddf-28ba-43f2-8985-97ff3290d106.webp	Rendered timeline view with Group by dropdown
+web/screens/fibery-web-screen-d40726cc-48e8-4aff-b162-188d402df937.webp	web/database/fibery-web-database-d40726cc-48e8-4aff-b162-188d402df937.webp	Problems grid date picker popover
+web/screens/fibery-web-screen-d4810381-b56a-432c-a338-7e1ca52bbadc.webp	web/editors/fibery-web-editors-d4810381-b56a-432c-a338-7e1ca52bbadc.webp	Read.me document with heading outline nav
+web/screens/fibery-web-screen-d4a41bd8-766f-4d05-bf23-88babfe927c5.webp	web/views/fibery-web-views-d4a41bd8-766f-4d05-bf23-88babfe927c5.webp	Rendered calendar view with entries
+web/screens/fibery-web-screen-d4c22f98-16ea-4ecd-8152-4cb6475cdcea.webp	web/editors/fibery-web-editors-d4c22f98-16ea-4ecd-8152-4cb6475cdcea.webp	Read.me document body with comment box
+web/screens/fibery-web-screen-d4dc4134-b7d1-4dac-9219-96608db65db3.webp	web/views/fibery-web-views-d4dc4134-b7d1-4dac-9219-96608db65db3.webp	Rendered feed view listing entities
+web/screens/fibery-web-screen-d4dfd6b4-c0c4-4845-972a-d9e2d0a3b059.webp	web/database/fibery-web-database-d4dfd6b4-c0c4-4845-972a-d9e2d0a3b059.webp	Problems grid field type dropdown
+web/screens/fibery-web-screen-d522b1a7-37c8-473d-88c7-71f4cb83342b.webp	web/onboarding/fibery-web-onboarding-d522b1a7-37c8-473d-88c7-71f4cb83342b.webp	Read.me getting-started hub (how to start checklist)
+web/screens/fibery-web-screen-d575d663-afc3-4bc8-a24b-f0ca6815100a.webp	web/editors/fibery-web-editors-d575d663-afc3-4bc8-a24b-f0ca6815100a.webp	New document blank with pasted photo
+web/screens/fibery-web-screen-d5e084bd-3f31-430d-b106-56ae796e3013.webp	web/marketing/fibery-web-marketing-d5e084bd-3f31-430d-b106-56ae796e3013.webp	Workspace Map with Share Spaces as a Template dialog
+web/screens/fibery-web-screen-d609260c-de4a-44a7-9308-065b3f037139.webp	web/onboarding/fibery-web-onboarding-d609260c-de4a-44a7-9308-065b3f037139.webp	Company workspace setup step (name, URL)
+web/screens/fibery-web-screen-d6b2b6b0-c15c-452b-b2c7-ca6eb0811f38.webp	web/reports/fibery-web-reports-d6b2b6b0-c15c-452b-b2c7-ca6eb0811f38.webp	Creation dynamic report Count of Records config
+web/screens/fibery-web-screen-d737e505-4808-4429-ad6e-f29cb06dee93.webp	web/onboarding/fibery-web-onboarding-d737e505-4808-4429-ad6e-f29cb06dee93.webp	Almost there create-account step (Google/Microsoft)
+web/screens/fibery-web-screen-d7492806-b077-4a5e-9e57-d14e50c7e003.webp	web/onboarding/fibery-web-onboarding-d7492806-b077-4a5e-9e57-d14e50c7e003.webp	Generate the workspace for your team AI setup step
+web/screens/fibery-web-screen-d7798090-514e-4884-8fe9-1afd950251d6.webp	web/database/fibery-web-database-d7798090-514e-4884-8fe9-1afd950251d6.webp	Add Date Field dialog
+web/screens/fibery-web-screen-d78219c4-91e4-4ec9-8be4-fb1dc21ea664.webp	web/database/fibery-web-database-d78219c4-91e4-4ec9-8be4-fb1dc21ea664.webp	Import Select source to import data
+web/screens/fibery-web-screen-d8b32b04-5783-4ae9-8241-e67e522a12d6.webp	web/editors/fibery-web-editors-d8b32b04-5783-4ae9-8241-e67e522a12d6.webp	Read.me document body explaining feature purpose
+web/screens/fibery-web-screen-d8c818ca-98a2-40b8-99be-ef92015738ae.webp	web/views/fibery-web-views-d8c818ca-98a2-40b8-99be-ef92015738ae.webp	Rendered timeline view minimal with filters
+web/screens/fibery-web-screen-d8dbe581-0333-449b-9721-79c5a0f66012.webp	web/onboarding/fibery-web-onboarding-d8dbe581-0333-449b-9721-79c5a0f66012.webp	Password successfully changed confirmation
+web/screens/fibery-web-screen-d92d0f91-750b-49bc-85d7-8b35b23c605b.webp	web/database/fibery-web-database-d92d0f91-750b-49bc-85d7-8b35b23c605b.webp	Add Date and Time Field dialog
+web/screens/fibery-web-screen-d98e4a5a-c330-42dc-9132-712b2346448e.webp	web/editors/fibery-web-editors-d98e4a5a-c330-42dc-9132-712b2346448e.webp	Read.me document slash command hint
+web/screens/fibery-web-screen-d9c4e8e3-358c-4ca5-b173-bbe4845965e1.webp	web/reports/fibery-web-reports-d9c4e8e3-358c-4ca5-b173-bbe4845965e1.webp	Creation dynamic of Problem report pie chart rendered
+web/screens/fibery-web-screen-da9d9ff3-30ac-468a-87c4-4be946237755.webp	web/navigation/fibery-web-navigation-da9d9ff3-30ac-468a-87c4-4be946237755.webp	Search overlay results list
+web/screens/fibery-web-screen-db0bfd7e-0270-4ff5-a3a9-71ea494a8f07.webp	web/database/fibery-web-database-db0bfd7e-0270-4ff5-a3a9-71ea494a8f07.webp	Opened card/entity detail with automation panel
+web/screens/fibery-web-screen-db0d583b-43ec-4f98-b093-3c11a8f8c452.webp	web/navigation/fibery-web-navigation-db0d583b-43ec-4f98-b093-3c11a8f8c452.webp	New Space creation panel with icon picker
+web/screens/fibery-web-screen-dc7cc8e8-7d81-49fa-be14-35e64d8a0da0.webp	web/views/fibery-web-views-dc7cc8e8-7d81-49fa-be14-35e64d8a0da0.webp	Rendered calendar view with entries
+web/screens/fibery-web-screen-dd43acaf-0487-4c01-84b1-933a29c8ed40.webp	web/reports/fibery-web-reports-dd43acaf-0487-4c01-84b1-933a29c8ed40.webp	New Report panel (loading state)
+web/screens/fibery-web-screen-de058348-5759-4124-9cef-761fe610fb07.webp	web/marketing/fibery-web-marketing-de058348-5759-4124-9cef-761fe610fb07.webp	Workspace Map with Share Spaces as a Template dialog
+web/screens/fibery-web-screen-de8075c4-600e-4429-a392-e357049d408b.webp	web/settings/fibery-web-settings-de8075c4-600e-4429-a392-e357049d408b.webp	AI Assistant settings panel (API key, AI search)
+web/screens/fibery-web-screen-de9757b0-6e9e-4522-8334-427b8e3a7683.webp	web/onboarding/fibery-web-onboarding-de9757b0-6e9e-4522-8334-427b8e3a7683.webp	Password reset email sent confirmation
+web/screens/fibery-web-screen-deb67981-f66e-4a22-ba1a-fe75b313da21.webp	web/reports/fibery-web-reports-deb67981-f66e-4a22-ba1a-fe75b313da21.webp	Client report wizard with field list
+web/screens/fibery-web-screen-df05817e-0cfd-4871-be10-92de5c78a577.webp	web/settings/fibery-web-settings-df05817e-0cfd-4871-be10-92de5c78a577.webp	Workspace General settings (name, logo, delete workspace)
+web/screens/fibery-web-screen-df09329c-5143-4565-a92a-ce2beef8cdc1.webp	web/settings/fibery-web-settings-df09329c-5143-4565-a92a-ce2beef8cdc1.webp	Account conversations panel
+web/screens/fibery-web-screen-df4ef8dd-8ccb-4bf5-bc03-006f23237854.webp	web/automations/fibery-web-automations-df4ef8dd-8ccb-4bf5-bc03-006f23237854.webp	Automation rule builder (Provide notice of new problem)
+web/screens/fibery-web-screen-df81f33e-4345-44ed-8aa3-ae1de89f059a.webp	web/navigation/fibery-web-navigation-df81f33e-4345-44ed-8aa3-ae1de89f059a.webp	Trash Bin destination listing deleted items
+web/screens/fibery-web-screen-df8d4eb5-b22d-4347-8012-075080223a3e.webp	web/views/fibery-web-views-df8d4eb5-b22d-4347-8012-075080223a3e.webp	Rendered calendar view with entries
+web/screens/fibery-web-screen-e00d8479-f9c7-442b-b159-814e0d622cd5.webp	web/views/fibery-web-views-e00d8479-f9c7-442b-b159-814e0d622cd5.webp	Rendered feed view with database/view switch dropdown
+web/screens/fibery-web-screen-e0212d68-df73-4664-a0ab-9f35688c6032.webp	web/forms/fibery-web-forms-e0212d68-df73-4664-a0ab-9f35688c6032.webp	New form panel (name, description, style)
+web/screens/fibery-web-screen-e087d90b-e28a-4e11-beef-09fe8faffa29.webp	web/database/fibery-web-database-e087d90b-e28a-4e11-beef-09fe8faffa29.webp	Select a Database popover
+web/screens/fibery-web-screen-e0a9a1f6-483f-4fdc-9e9a-4430d95fb325.webp	web/reports/fibery-web-reports-e0a9a1f6-483f-4fdc-9e9a-4430d95fb325.webp	Creation dynamic of Problem report bar chart
+web/screens/fibery-web-screen-e1307065-6455-4e17-abb0-ce9ce89370d8.webp	web/settings/fibery-web-settings-e1307065-6455-4e17-abb0-ce9ce89370d8.webp	Plan and Billing payment details modal
+web/screens/fibery-web-screen-e143b162-e97d-495b-9db8-f7b93dbba131.webp	web/collaboration/fibery-web-collaboration-e143b162-e97d-495b-9db8-f7b93dbba131.webp	Workspace Users table with New Field panel
+web/screens/fibery-web-screen-e1a34add-6360-4785-bd90-93a22a9569f7.webp	web/forms/fibery-web-forms-e1a34add-6360-4785-bd90-93a22a9569f7.webp	Issue Submission form panel
+web/screens/fibery-web-screen-e1b6f757-4cbb-4ac6-9368-5f92d6ad4233.webp	web/database/fibery-web-database-e1b6f757-4cbb-4ac6-9368-5f92d6ad4233.webp	Multi Select field type dropdown
+web/screens/fibery-web-screen-e1cde025-323c-4e9a-a48a-45ac9e7781b5.webp	web/database/fibery-web-database-e1cde025-323c-4e9a-a48a-45ac9e7781b5.webp	Users table New Field type dropdown
+web/screens/fibery-web-screen-e1f475cd-9340-4b6d-98c3-9ad852993175.webp	web/editors/fibery-web-editors-e1f475cd-9340-4b6d-98c3-9ad852993175.webp	New document with descriptive text
+web/screens/fibery-web-screen-e373e1da-d49d-45f7-93dd-413004ca4aa7.webp	web/reports/fibery-web-reports-e373e1da-d49d-45f7-93dd-413004ca4aa7.webp	New Report Set up Pie Chart wizard
+web/screens/fibery-web-screen-e4142ce1-b470-4337-83f5-862583d124f9.webp	web/views/fibery-web-views-e4142ce1-b470-4337-83f5-862583d124f9.webp	Rendered calendar week view with entries
+web/screens/fibery-web-screen-e46f1274-a6d1-4b53-955f-e151f7aac2d1.webp	web/reports/fibery-web-reports-e46f1274-a6d1-4b53-955f-e151f7aac2d1.webp	Creation dynamic report Set up Table wizard
+web/screens/fibery-web-screen-e4b13b53-639c-4a0e-8d8c-fb6c9a964c27.webp	web/reports/fibery-web-reports-e4b13b53-639c-4a0e-8d8c-fb6c9a964c27.webp	Creation dynamic report formula editor
+web/screens/fibery-web-screen-e4f871c1-122b-45b0-9622-e80deb0c1a49.webp	web/database/fibery-web-database-e4f871c1-122b-45b0-9622-e80deb0c1a49.webp	Problems grid Edit Calculation formula panel
+web/screens/fibery-web-screen-e54fe6ae-a190-4d7b-b1d9-655fd584b3da.webp	web/onboarding/fibery-web-onboarding-e54fe6ae-a190-4d7b-b1d9-655fd584b3da.webp	Sign Up screen (Google/Microsoft/email)
+web/screens/fibery-web-screen-e5eeaa68-1238-48a3-bdb1-2b4316fd8745.webp	web/database/fibery-web-database-e5eeaa68-1238-48a3-bdb1-2b4316fd8745.webp	Users table column context menu (sort/hide)
+web/screens/fibery-web-screen-e5ff1298-563b-4a21-a22e-72ac19a7fc4e.webp	web/settings/fibery-web-settings-e5ff1298-563b-4a21-a22e-72ac19a7fc4e.webp	Workspace General settings (name, logo, delete workspace)
+web/screens/fibery-web-screen-e645ba0b-a9f1-4d8d-86be-66ef521e0b47.webp	web/whiteboard/fibery-web-whiteboard-e645ba0b-a9f1-4d8d-86be-66ef521e0b47.webp	Whiteboard shape/color palette with sticky note
+web/screens/fibery-web-screen-e67a313e-4271-471d-9632-30be4b43f827.webp	web/navigation/fibery-web-navigation-e67a313e-4271-471d-9632-30be4b43f827.webp	Sidebar view-type tree under a database
+web/screens/fibery-web-screen-e6a3193c-564d-4c10-9375-ac6a2e3c4eb2.webp	web/onboarding/fibery-web-onboarding-e6a3193c-564d-4c10-9375-ac6a2e3c4eb2.webp	Read.me getting-started hub with workspace sidebar
+web/screens/fibery-web-screen-e6b139bd-ee66-4581-9193-bf546c9835f8.webp	web/navigation/fibery-web-navigation-e6b139bd-ee66-4581-9193-bf546c9835f8.webp	New Space creation dialog
+web/screens/fibery-web-screen-e736f07a-43a2-4734-92df-f398a6003df2.webp	web/settings/fibery-web-settings-e736f07a-43a2-4734-92df-f398a6003df2.webp	Customization Custom Emoji panel
+web/screens/fibery-web-screen-e7504ee5-9597-4f42-b2e9-145e499f4fe8.webp	web/settings/fibery-web-settings-e7504ee5-9597-4f42-b2e9-145e499f4fe8.webp	Workspace General settings (name, logo, delete workspace)
+web/screens/fibery-web-screen-e7649ba0-e27d-4b9c-8f4b-b7a7176e343c.webp	web/onboarding/fibery-web-onboarding-e7649ba0-e27d-4b9c-8f4b-b7a7176e343c.webp	Company workspace setup step with Customer Feedback preview card
+web/screens/fibery-web-screen-e7a08398-d347-4002-b98a-ba5f46148ec6.webp	web/forms/fibery-web-forms-e7a08398-d347-4002-b98a-ba5f46148ec6.webp	Product Design Survey form panel
+web/screens/fibery-web-screen-e7cc3d88-0597-4822-8b5e-9e228f2afa0c.webp	web/navigation/fibery-web-navigation-e7cc3d88-0597-4822-8b5e-9e228f2afa0c.webp	Search overlay results list
+web/screens/fibery-web-screen-e802825f-919e-4e95-bc61-8da5ebc5259a.webp	web/database/fibery-web-database-e802825f-919e-4e95-bc61-8da5ebc5259a.webp	Users table formula-generated name tooltip
+web/screens/fibery-web-screen-e89244fc-0c63-4719-98ef-85dfb39f46a7.webp	web/reports/fibery-web-reports-e89244fc-0c63-4719-98ef-85dfb39f46a7.webp	New Report wizard (chart types, database filter)
+web/screens/fibery-web-screen-e899c4c6-a9f6-4a2f-8563-caef84bcddbf.webp	web/editors/fibery-web-editors-e899c4c6-a9f6-4a2f-8563-caef84bcddbf.webp	Read.me document body explaining feature purpose
+web/screens/fibery-web-screen-e9aa9085-9cf1-416e-8db1-ecd9d2bb5fbc.webp	web/database/fibery-web-database-e9aa9085-9cf1-416e-8db1-ecd9d2bb5fbc.webp	Backlog table with an opened Feature entity detail panel, no AI classifier visible
+web/screens/fibery-web-screen-ea2cb980-ee56-4330-ad72-5e5185767711.webp	web/reports/fibery-web-reports-ea2cb980-ee56-4330-ad72-5e5185767711.webp	Creation dynamic of Problem report scatter chart
+web/screens/fibery-web-screen-ea83acbf-857c-4dfa-a946-541d3cca315b.webp	web/reports/fibery-web-reports-ea83acbf-857c-4dfa-a946-541d3cca315b.webp	Creation dynamic of Problem report bar chart
+web/screens/fibery-web-screen-ea98a81d-e03c-415c-99b1-d3450f548e39.webp	web/settings/fibery-web-settings-ea98a81d-e03c-415c-99b1-d3450f548e39.webp	AI Assistant settings panel (API key, AI search)
+web/screens/fibery-web-screen-eaa04fc1-c325-4479-b1de-4636a7f3b794.webp	web/views/fibery-web-views-eaa04fc1-c325-4479-b1de-4636a7f3b794.webp	Rendered calendar view with month/week/day toggle
+web/screens/fibery-web-screen-eac029f2-a1db-49bd-9281-3d5ddf341288.webp	web/views/fibery-web-views-eac029f2-a1db-49bd-9281-3d5ddf341288.webp	Rendered Problems grid table
+web/screens/fibery-web-screen-eaeca967-4d49-4199-ad13-afe15659dc33.webp	web/forms/fibery-web-forms-eaeca967-4d49-4199-ad13-afe15659dc33.webp	New form field configuration panel
+web/screens/fibery-web-screen-eb05e8be-4a16-47f0-94fe-08ad3da74171.webp	web/editors/fibery-web-editors-eb05e8be-4a16-47f0-94fe-08ad3da74171.webp	Document restore-version confirmation dialog
+web/screens/fibery-web-screen-eb9a076a-f398-461d-90d6-d0f879da44c7.webp	web/database/fibery-web-database-eb9a076a-f398-461d-90d6-d0f879da44c7.webp	Settings Import panel with field mapping
+web/screens/fibery-web-screen-ec013dd5-e616-4c74-a314-3050a64c6194.webp	web/editors/fibery-web-editors-ec013dd5-e616-4c74-a314-3050a64c6194.webp	Read.me Employee Management document body
+web/screens/fibery-web-screen-ed561f95-77a4-46d4-b139-9da885a3ed8b.webp	web/onboarding/fibery-web-onboarding-ed561f95-77a4-46d4-b139-9da885a3ed8b.webp	Read.me getting-started hub (how to start checklist)
+web/screens/fibery-web-screen-ed6751f4-abfc-4b3d-824f-7f7a7f50796a.webp	web/views/fibery-web-views-ed6751f4-abfc-4b3d-824f-7f7a7f50796a.webp	Rendered timeline/Gantt view with dates
+web/screens/fibery-web-screen-ee5a8135-9f7d-4193-8bfd-5fcfee766c45.webp	web/reports/fibery-web-reports-ee5a8135-9f7d-4193-8bfd-5fcfee766c45.webp	Creation dynamic of Problem report bar chart
+web/screens/fibery-web-screen-ef47a409-ff9b-4654-ad87-8a9ff1e598df.webp	web/settings/fibery-web-settings-ef47a409-ff9b-4654-ad87-8a9ff1e598df.webp	Workspace General settings (name, logo, delete workspace)
+web/screens/fibery-web-screen-efc9d7c9-ea3a-4745-8e55-744422df8f78.webp	web/database/fibery-web-database-efc9d7c9-ea3a-4745-8e55-744422df8f78.webp	Onboarding Task Template entity fields form
+web/screens/fibery-web-screen-f031c01e-8c50-4ff1-b6cc-398f91b9512b.webp	web/reports/fibery-web-reports-f031c01e-8c50-4ff1-b6cc-398f91b9512b.webp	Creation dynamic of Problem report wizard
+web/screens/fibery-web-screen-f136b74c-6ec9-41cf-a24f-4e778f56b34b.webp	web/views/fibery-web-views-f136b74c-6ec9-41cf-a24f-4e778f56b34b.webp	Rendered feed view listing entities
+web/screens/fibery-web-screen-f1572734-9bc6-4082-bc4e-c0783303db6c.webp	web/onboarding/fibery-web-onboarding-f1572734-9bc6-4082-bc4e-c0783303db6c.webp	Login to Fibery screen (Google/Microsoft/Email/SSO)
+web/screens/fibery-web-screen-f1dd49f3-81cf-44d6-88fc-66638df9623e.webp	web/reports/fibery-web-reports-f1dd49f3-81cf-44d6-88fc-66638df9623e.webp	New Report wizard with bar chart preview
+web/screens/fibery-web-screen-f1ddfe29-a8fe-4392-ad9b-332e97207cef.webp	web/reports/fibery-web-reports-f1ddfe29-a8fe-4392-ad9b-332e97207cef.webp	Creation dynamic of Problem report bar chart
+web/screens/fibery-web-screen-f1ec31e1-45c4-49db-932a-05767b30b27d.webp	web/reports/fibery-web-reports-f1ec31e1-45c4-49db-932a-05767b30b27d.webp	Creation dynamic of Problem report bar chart
+web/screens/fibery-web-screen-f240dbe2-52e2-4d60-9049-4c017bbbd21f.webp	web/database/fibery-web-database-f240dbe2-52e2-4d60-9049-4c017bbbd21f.webp	Problems grid Assignee search popover
+web/screens/fibery-web-screen-f41f3068-0202-4983-baab-a69c56c89249.webp	web/settings/fibery-web-settings-f41f3068-0202-4983-baab-a69c56c89249.webp	GitHub Integration repository data table
+web/screens/fibery-web-screen-f44149e7-70a8-41a0-ada8-17284b37b646.webp	web/navigation/fibery-web-navigation-f44149e7-70a8-41a0-ada8-17284b37b646.webp	Search overlay results list
+web/screens/fibery-web-screen-f4481d64-5137-424f-80b4-ca3a65304b42.webp	web/automations/fibery-web-automations-f4481d64-5137-424f-80b4-ca3a65304b42.webp	Automation rule builder (Notify Users / Create Branch)
+web/screens/fibery-web-screen-f46e6813-1dbf-49aa-815f-c5fea78b6454.webp	web/states/fibery-web-states-f46e6813-1dbf-49aa-815f-c5fea78b6454.webp	Users Fields empty state (select a field to get started)
+web/screens/fibery-web-screen-f4e8d90d-b2d1-477b-86a9-2fe31a4bf9ac.webp	web/whiteboard/fibery-web-whiteboard-f4e8d90d-b2d1-477b-86a9-2fe31a4bf9ac.webp	Whiteboard diagram with connected relationship nodes
+web/screens/fibery-web-screen-f507b85d-2a6f-4599-83d4-4324af428b41.webp	web/database/fibery-web-database-f507b85d-2a6f-4599-83d4-4324af428b41.webp	Problems grid Add Color Coding/Group popover
+web/screens/fibery-web-screen-f56aaecf-da87-4afb-b879-94ad1137a5e7.webp	web/database/fibery-web-database-f56aaecf-da87-4afb-b879-94ad1137a5e7.webp	Opened card/entity detail Show/Hide Fields panel
+web/screens/fibery-web-screen-f58e4c68-7fda-4abd-b0f4-31694fd20347.webp	web/database/fibery-web-database-f58e4c68-7fda-4abd-b0f4-31694fd20347.webp	Add Select Field dialog
+web/screens/fibery-web-screen-f5bfd72f-e907-4bd6-a38b-60349722a0c3.webp	web/reports/fibery-web-reports-f5bfd72f-e907-4bd6-a38b-60349722a0c3.webp	Creation dynamic report Edit Calculation formula panel
+web/screens/fibery-web-screen-f6247652-9745-4915-846f-2757de5a1e16.webp	web/editors/fibery-web-editors-f6247652-9745-4915-846f-2757de5a1e16.webp	Customize.me document explaining Fibery platform concepts
+web/screens/fibery-web-screen-f6be0661-6661-4515-b67d-c29bf2bc81e5.webp	web/forms/fibery-web-forms-f6be0661-6661-4515-b67d-c29bf2bc81e5.webp	New form field configuration panel
+web/screens/fibery-web-screen-f72751b2-2d65-481f-9f3b-ad9edc737f09.webp	web/database/fibery-web-database-f72751b2-2d65-481f-9f3b-ad9edc737f09.webp	Import field-mapping panel (new vs existing database)
+web/screens/fibery-web-screen-f729fa81-2d81-4c9c-99fd-7db55f7a4f0e.webp	web/automations/fibery-web-automations-f729fa81-2d81-4c9c-99fd-7db55f7a4f0e.webp	Automation Big Red Button execution log (entries added)
+web/screens/fibery-web-screen-f78f4673-4d2e-48dd-ae02-e484ad3f7f41.webp	web/reports/fibery-web-reports-f78f4673-4d2e-48dd-ae02-e484ad3f7f41.webp	Creation dynamic of Problem report line chart
+web/screens/fibery-web-screen-f891007b-f54f-4ba4-b30c-28fd36d20c5d.webp	web/views/fibery-web-views-f891007b-f54f-4ba4-b30c-28fd36d20c5d.webp	Rendered calendar view with entries
+web/screens/fibery-web-screen-f8ffc50c-fcca-46a0-8dee-d5f484d0b3c2.webp	web/views/fibery-web-views-f8ffc50c-fcca-46a0-8dee-d5f484d0b3c2.webp	Rendered Problems grid small dataset
+web/screens/fibery-web-screen-f90065f2-ed2f-48c8-be8f-3c399c04633d.webp	web/database/fibery-web-database-f90065f2-ed2f-48c8-be8f-3c399c04633d.webp	Problems grid Ease-of-use/Onboarding dropdown popover
+web/screens/fibery-web-screen-f967102f-daee-40f0-ad8b-29bfd04e29a3.webp	web/onboarding/fibery-web-onboarding-f967102f-daee-40f0-ad8b-29bfd04e29a3.webp	Generate the workspace for your team AI setup step
+web/screens/fibery-web-screen-f96f89cc-952d-4369-acb1-fb1f1b4b487f.webp	web/marketing/fibery-web-marketing-f96f89cc-952d-4369-acb1-fb1f1b4b487f.webp	Share Space as a Template dialog
+web/screens/fibery-web-screen-f98d4446-7359-4727-81c5-be8ddc75f0d8.webp	web/views/fibery-web-views-f98d4446-7359-4727-81c5-be8ddc75f0d8.webp	Rendered Problems grid table
+web/screens/fibery-web-screen-f9a85b2a-26a8-4b53-81f3-3de33fad7ace.webp	web/marketing/fibery-web-marketing-f9a85b2a-26a8-4b53-81f3-3de33fad7ace.webp	Template gallery detail page (30-60-90 Onboarding Template)
+web/screens/fibery-web-screen-faad62c1-81bc-4813-93f1-b5de7fccd249.webp	web/whiteboard/fibery-web-whiteboard-faad62c1-81bc-4813-93f1-b5de7fccd249.webp	Whiteboard diagram with color palette
+web/screens/fibery-web-screen-fad513a4-5086-4437-bdea-a0e4e5472086.webp	web/reports/fibery-web-reports-fad513a4-5086-4437-bdea-a0e4e5472086.webp	New Report Set up your chart wizard
+web/screens/fibery-web-screen-faeb1efe-acd7-442f-a5e2-e3c6153f0fcf.webp	web/collaboration/fibery-web-collaboration-faeb1efe-acd7-442f-a5e2-e3c6153f0fcf.webp	Workspace Users table with tooltip
+web/screens/fibery-web-screen-fc1aaea0-59df-4cb3-8747-69a9469f0962.webp	web/collaboration/fibery-web-collaboration-fc1aaea0-59df-4cb3-8747-69a9469f0962.webp	Invite Users panel (link/email)
+web/screens/fibery-web-screen-fc28b3df-f800-41b8-a56f-0e7ea5489634.webp	web/settings/fibery-web-settings-fc28b3df-f800-41b8-a56f-0e7ea5489634.webp	Workspace General settings (name, logo, delete workspace)
+web/screens/fibery-web-screen-fc6ef7fe-9a8e-4e4b-9cbd-c078290dbddd.webp	web/views/fibery-web-views-fc6ef7fe-9a8e-4e4b-9cbd-c078290dbddd.webp	Rendered Problems grid with location field
+web/screens/fibery-web-screen-fc7b490f-98c3-4b2e-afac-106d83df0913.webp	web/database/fibery-web-database-fc7b490f-98c3-4b2e-afac-106d83df0913.webp	Problems grid New View filter popover
+web/screens/fibery-web-screen-fcbfa233-7fc0-4236-9719-230581655db8.webp	web/views/fibery-web-views-fcbfa233-7fc0-4236-9719-230581655db8.webp	Rendered Problems grid small dataset with tag
+web/screens/fibery-web-screen-fd06eec4-aad0-4072-811a-9c20811041e2.webp	web/whiteboard/fibery-web-whiteboard-fd06eec4-aad0-4072-811a-9c20811041e2.webp	Whiteboard diagram (Product Designer to UI/UX to database)
+web/screens/fibery-web-screen-fdbcfecb-f949-4d36-b89a-fb4516609a9e.webp	web/database/fibery-web-database-fdbcfecb-f949-4d36-b89a-fb4516609a9e.webp	Problems grid New View field-select popover
+web/screens/fibery-web-screen-fe025429-8a04-4a5c-871d-c6c139056541.webp	web/reports/fibery-web-reports-fe025429-8a04-4a5c-871d-c6c139056541.webp	New Report wizard with cache-duration dropdown, not a Smart Folder or AI panel
+web/screens/fibery-web-screen-fe33eb7c-d267-4929-849f-9b7d9016ffa7.webp	web/reports/fibery-web-reports-fe33eb7c-d267-4929-849f-9b7d9016ffa7.webp	New Report wizard with cache-duration dropdown
+web/screens/fibery-web-screen-ff0b7c0d-9a34-41d9-aed5-000b85cc322b.webp	web/database/fibery-web-database-ff0b7c0d-9a34-41d9-aed5-000b85cc322b.webp	Choose existing Database popover
+web/screens/fibery-web-screen-ffa6368d-4264-4a74-a875-558a1d5bdae8.webp	web/database/fibery-web-database-ffa6368d-4264-4a74-a875-558a1d5bdae8.webp	Problems grid column header context menu (hide/delete field)
+web/screens/fibery-web-screen-fff3401b-971e-4c03-ad34-a467604071e6.webp	web/onboarding/fibery-web-onboarding-fff3401b-971e-4c03-ad34-a467604071e6.webp	Almost there create-account step (Google/Microsoft)
+web/screens/fibery-web-screen-fff9e7c1-3872-4760-8cff-7eac9b7e43b7.webp	web/reports/fibery-web-reports-fff9e7c1-3872-4760-8cff-7eac9b7e43b7.webp	Creation dynamic report formula guide and Set up Metric (KPI)
