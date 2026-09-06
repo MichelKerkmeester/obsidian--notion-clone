@@ -176,7 +176,24 @@ _memory:
       its container by 16px on the right (R2); and because the weekday row did take the inset on
       both sides, the two no longer share a column pitch — 377.3 device px against the grid's
       386.2 — so each weekday label's inset from its own day column's right rule drifts **15.5px
-      at Monday to 43.5px at Sunday** where the reference holds a constant 11px (R1). **R3**: the
+      at Monday to 43.5px at Sunday** where the reference holds a constant 11px (R1).
+      **R1/R2 done 2026-09-06.** Root cause: `.db-calendar-month-grid` carries both the
+      `db-calendar-grid` class (which sets `width: 100%`, content-box) and its own
+      `padding: 0 16px`, with no `box-sizing` override — the padding added on top of an
+      already-100%-wide content box, so the rendered content stayed a full container-width wide
+      and merely shifted 16px right, landing the inset on the left only and pushing the right edge
+      16px past the container. Fix: `box-sizing: border-box;` added to `.db-calendar-month-grid`
+      (`styles.css:17397`), one line, no other rule touched. **Recaptured and read pixel-by-pixel
+      on `screenshots/notion-clone/views/calendar-month-view-desktop-{light,dark}.png`** (both
+      themes, identical columns): the grid's 8 vertical rules now sit at device x
+      112/489/865/1243/1619/1997/2373/2751, i.e. a 16px CSS inset on **both** edges of the 80..2783
+      container, matching the weekday row's own box (which was never the bug — it uses `width:
+      auto` and always computed the inset correctly on both sides). Column pitch is now
+      **377.0 device px**, matching the weekday row's own 377.3 (previously 386.2, the give-away
+      that the grid alone was 100%-of-container wide). The weekday label insets, re-measured off
+      their own column's right rule in the same recapture: Sun 12.0px, Mon 11.5px, Tue 11.5px,
+      Wed 11.5px, Thu 12.0px, Fri 11.0px, Sat 11.5px CSS — a constant ~11-12px, not the prior
+      15.5-43.5px drift. **R3**: the
       week and day scales did not take the month grid's rule colour or today marker, both of which
       the scale ruling names explicitly — the week body's slot lines measure `#F1F1F1`/`#E1E1E1`
       (`styles.css:16922`, `:16931`, untouched) and the today marker measures `#5E33EB` off

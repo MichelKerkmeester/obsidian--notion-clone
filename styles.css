@@ -17404,10 +17404,16 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
 }
 
 /* Calendar month single-grid layout: a 16px horizontal inset, matching the
-   reference layout's grid box inset within its content pane. */
+   reference layout's grid box inset within its content pane. box-sizing is
+   border-box because .db-calendar-grid already sets width: 100% on this same
+   element (content-box); without it the padding added on top of that 100%
+   pushed the rendered content a full container-width wide, so the inset only
+   ever showed on the left edge and the grid overran the right edge by the
+   same 16px it was missing on the right. */
 .note-database-container .db-calendar-month-grid {
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
   padding: 0 16px;
   background: var(--background-primary);
 }
