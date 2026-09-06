@@ -180,6 +180,16 @@ never resolve them silently.
       lane rows.
 - [ ] **The operator reads the rebuilt toolbar on device** and names it the improvement they asked
       for. Only the operator closes this row; nothing in this repository can.
+- [ ] **A gear icon opens the database Settings surface (`051`'s side sheet), in the toolbar rail,
+      before the `···` overflow button.** **Added 2026-09-06** from the operator's ruling
+      (`goal.md` §4 amendment below). **Today: no such button exists** — Settings opens only
+      through `renderUtilitiesOverflowButton`'s (`toolbar-renderer.ts:420-426`) `···` menu, one
+      level deep, in the `db-toolbar-utilities-cluster`.
+- [ ] **The table footer hides at zero rows, and is 44px otherwise.** **Added 2026-09-06, from an
+      operator ruling on the phone empty-state read.** **Today: RED, unimplemented** —
+      `table-footer-renderer.ts` renders unconditionally regardless of row count; no
+      `rows.length === 0` branch exists. On an empty phone table this draws **173** `+ Calculate`
+      triggers at **26px**, under the 44px touch floor.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -213,4 +223,37 @@ Everything below is VOLATILE.
 | `050`'s item 1 and item 4 Today cells were written against a tree that no longer matches | Both corrections are in §2. The thresholds are `050`'s and are kept; only the red values are re-measured. This is the same honesty the parent demands for every "Today" cell: written from the tree, not from the prior document. |
 | Seven dead button methods are scope, not cleanup | `renderViewConfigButton`, `renderChartOptionsButton`, `renderCalendarTimelineOptionsButton`, `renderComputedSyncButton`, `renderDatabaseRefreshButton`, `renderExportButton` and `renderWidthSelect` have zero `this.` call sites at HEAD. Deleting them is part of the settings-entry primitive (D3), because their continued existence is what makes "one settings entry" unreadable. Their CSS hooks are still queried as anchor fallbacks (`database-view.ts:3129`, `embedded-database-renderer.ts:1921`) — the primitive keeps the classes, removes the dead methods. |
 | **T007/T008 closed 2026-09-05 (this session)** | AC-103, AC-105 and AC-107 were the three rows the prior landing left honestly Unmet for lacking a live-driven or timed proof, not for a missing implementation — `confirmSortConflict` and `openViewSettingsAfterMutation` already shipped. This session added the missing proofs: a `performance.now()` reading on a constructed `DatabaseView` mount for AC-103 (create 4.7ms, duplicate 0.8ms); live decline/accept branches with the confirm resolved async on both renderers for AC-105, on the local-extension board layout rather than the Project Manager 1:1 reference kanban; and, for AC-107, the missing tab-row-to-dropdown rung itself (`collapseTabStripToDropdown`) plus a 250px-900px headless-Chrome sweep reading zero overflow throughout. Zero production edits to `board-renderer.ts` or `table-renderer.ts`; the only shipped-behaviour change is the new collapse rung in `toolbar-renderer.ts`. Each proof carries a negative control, run and reverted. |
+
+### 2026-09-06 amendment: the gear button, the table footer ruling, and the wrap toggle confirmed shipped
+
+**Row 53, the wrap toggle, is confirmed shipped and this is where it is recorded against this
+packet's own criteria** (`roadmap.md` §4 row 53 carries the operator-facing account). Commits:
+`d647e5cd` (a tri-state wrap resolution in the data layer), `793d3b95` (the per-column wrap override
+in the column menu), `3e22afdb` (the per-view Wrap text table-settings switch), `f17d4c12` (i18n
+strings, all three locales), `edfb2927` (red-first live proof against the row floor), `865ef04c`
+(the decision record and the roadmap ship), `bfef2989` (persistence/precedence unit tests, red
+first), `a36d9332` (a stale-doc correction plus the wrap verification write-up), and `a7db5035` (the
+post-rebase gate rebuild that re-derived the evidence artefacts this row's own proof cites — not a
+behaviour commit itself, corrected here after this amendment's first pass named it as one). ADR-004
+(`decision-record.md`) records the resolution rule: `col.wrap ?? config.wrapText`, a column's own
+choice always wins. **Status stays "Shipped, awaiting device read"** — not operator-confirmed.
+
+**Gear button.** Operator, ~08:15: *"btw this dropdown on desktop is horrible … should probably
+become a sheet, on desktop at least, and get dedicated button."* `051`'s amendment owns the side-sheet
+shape; this packet owns the second half — a gear icon in the toolbar rail, placed in the
+`db-toolbar-utilities-cluster` **before** `renderUtilitiesOverflowButton`'s `···` trigger
+(`toolbar-renderer.ts:412`), so Settings is a first-class rail button rather than one level deep in
+the overflow menu. It calls the same `createSettingsEntry` primitive (D3) the `···` button already
+uses, and opens `051`'s new `side sheet` role rather than the current `PANEL_POPOVER` anchored
+dropdown.
+
+**Table footer ruling.** Operator, ~08:10: *"Hide the footer at zero rows, 44px otherwise."*
+Answers the batch question this program recorded the same night — an empty phone table draws its
+`+ Calculate` triggers at 26px, under the 44px touch floor, 173 instances observed. `table-footer-
+renderer.ts` has no `rows.length === 0` branch today; this is new work, not a resize of an existing
+one.
+
+**Owner:** both are this packet's — the gear button is a toolbar-rail addition consuming `051`'s
+side-sheet role, and the footer rule is this packet's own `TableFooterRenderer`. Recorded in
+`roadmap.md` §4 (new rows) and §6A.
 <!-- /ANCHOR:log -->

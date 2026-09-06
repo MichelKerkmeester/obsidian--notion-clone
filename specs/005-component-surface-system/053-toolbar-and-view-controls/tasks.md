@@ -272,4 +272,13 @@ and stay unticked — an agent never ticks them.
 - [ ] **T013 — Operator device pass.** The operator opens the rebuilt toolbar on iOS and desktop
       and reads it as the improvement asked for. **Operator/device row — stays unticked until the
       operator says so; nothing in this repository can close it.**
+- [ ] **T014 (2026-09-06 amendment) — Add the gear button.** In `db-toolbar-utilities-cluster`
+      (`toolbar-renderer.ts:412`), before `renderUtilitiesOverflowButton`'s `···` trigger, add a
+      gear icon calling `createSettingsEntry` (the same primitive the `···` button already uses)
+      that opens the database Settings surface through `051`'s new `side sheet` role. Red-first:
+      today no gear button exists; a query for it returns nothing
+- [ ] **T015 (2026-09-06 amendment) — Hide the table footer at zero rows, 44px otherwise.**
+      `table-footer-renderer.ts` gains a `rows.length === 0` branch. Red-first: an empty phone table
+      draws 173 `+ Calculate` triggers at 26px, under the 44px floor — measure this count before the
+      fix, assert 0 footer rows rendered and no sub-44px trigger after
 <!-- /ANCHOR:phase-7 -->
