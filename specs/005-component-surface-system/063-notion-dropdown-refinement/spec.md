@@ -182,7 +182,7 @@ landed ruling.
 |------|------|--------|------------|
 | Dependency | `052` T008 / T009 | REQ-002's rows live in files those legs own | Ride them: this packet contributes the row change, it does not open the files alone (D4) |
 | Dependency | The parent's serialized CSS lane | REQ-001 and REQ-004 both write `styles.css` | Acquire and release the lane in the same commit, naming the captures that moved |
-| Dependency | ADR-004, ADR-005 | Two Proposed decisions are the operator's | Neither gates any P0; both are recorded and left open |
+| Dependency | ADR-004, ADR-005 | Two decisions were the operator's | Both ruled 2026-09-06 19:08 — ADR-004 Accepted, ADR-005's carve-out Declined. Neither ever gated a P0 |
 | Risk | The capture harness renders fixture markup, not the real renderers | A green capture can hide a real regression, and a red one can be a stand-in gap | D5: the fixture at `core.mjs:251-256` moves with the code, and the pixel read is owed to an image-capable leg |
 | Risk | "Cramped" is a judgement unless it is measured | REQ-004 becomes unfalsifiable | The threshold is code-derived: the anchored placement cannot honour `preferredWidth: 280` and falls toward `minWidth: 180` (`dropdown-field.ts:421`), or the panel height reaches `owned-menu.ts:360`'s viewport cap |
 | Risk | Line drift between the research and the tree | Citations point at the wrong code | Already hit once and corrected: the loop cited the pre-rebase `:240-253`; every citation here is re-derived on `c9966433` |
@@ -264,8 +264,10 @@ landed ruling.
   yet taken.
 - Does a colour swatch carry a visible label (Notion `e5accf4d` is a one-column labelled list), or
   do the landed accessible name, hover title and check icon suffice? ADR-004, the operator's.
-- Does E3's red-plus-trash rule take a carve-out for rows that remove structure without destroying
-  content (`e9698e1b` "Remove grouping", `299e69bb` "Delete filter")? ADR-005, the operator's.
+- ~~Does E3's red-plus-trash rule take a carve-out for rows that remove structure without destroying
+  content (`e9698e1b` "Remove grouping", `299e69bb` "Delete filter")?~~ **Closed 2026-09-06 19:08.**
+  No — operator, verbatim: *"Keep red plus icon everywhere"*. The carve-out is Declined and `051` E3
+  stands whole. Kept rather than deleted so the question is not re-asked from the same captures.
 - Does `052` T008's layout panel produce a consumer for N1's fifth trailing slot, the toggle? If it
   does not, the slot is not built.
 <!-- /ANCHOR:questions -->

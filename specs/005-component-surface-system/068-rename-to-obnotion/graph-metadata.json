@@ -47,6 +47,8 @@
       "acceptance-criteria.md",
       "goal.md",
       "decision-record.md",
+      "implementation-summary.md",
+      "screenshots/manifest.json",
       "tools/lane/css-lane.json",
       "repo-rules/spec-tree-layout.md",
       "src/main.ts",
@@ -57,10 +59,8 @@
       "src/data/csv-markdown-zip-export.ts",
       "src/data/conditional-formatting.ts",
       ".storybook/preview.ts",
-      "screenshots/manifest.json",
       ".github/workflows/release.yml",
-      "tools/naming/failing-values-baseline.json",
-      "tools/naming/build-operator-checklist.mjs"
+      "tools/naming/failing-values-baseline.json"
     ],
     "entities": [
       {
@@ -97,6 +97,18 @@
         "name": "decision-record.md",
         "kind": "doc",
         "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
         "source": "derived"
       },
       {
@@ -160,12 +172,6 @@
         "source": "derived"
       },
       {
-        "name": "manifest.json",
-        "kind": "config",
-        "path": "screenshots/manifest.json",
-        "source": "derived"
-      },
-      {
         "name": "release.yml",
         "kind": "config",
         "path": ".github/workflows/release.yml",
@@ -175,12 +181,6 @@
         "name": "failing-values-baseline.json",
         "kind": "config",
         "path": "tools/naming/failing-values-baseline.json",
-        "source": "derived"
-      },
-      {
-        "name": "build-operator-checklist.mjs",
-        "kind": "file",
-        "path": "tools/naming/build-operator-checklist.mjs",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The product has one name in the operator's head and a different one in every file",
     "created_at": "2026-09-06T16:08:10Z",
-    "last_save_at": "2026-09-06T16:23:35.424Z",
+    "last_save_at": "2026-09-06T21:48:40.614Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,15 +219,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "decision-record.md"
+      "decision-record.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:ad41b1ceb4ad6788102869df910e890763e29b1834d1fdcf744f3aff205d0427",
+    "source_fingerprint": "sha256:92a361f9e6aedf1ad4de3ae340eaa6a3925f29b096b72bd9f26e5bb6fa8251c7",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "166de64170b14a4b65f76c437fcbd2c34c0e997e950118509e75ee673c13cc62",
-      "plan.md": "489a1b13eeec5bb252860c5f46c88953b6715cf7c087b90c4c19b5daabc35620",
-      "tasks.md": "06aa5a5f39d1b9df691b6fc6d252510a2e0536703031fe03f9cd5de56fb5fd71",
-      "decision-record.md": "e292516da9610de62d12bae1376513a09c61585e69362660ed431f67bdc312c5"
+      "spec.md": "83aefe0c0e155f3e2f7d959db00742e9bb36af8000d7ad3e20e485ba02f2c4b0",
+      "plan.md": "74ea00d69175896961e54654a1d66593b87013b5a9ecf906e3e91aa2cd52e6e2",
+      "tasks.md": "bbd2943b2d0405479ae60dab33151b85440c90ad911c500e6197c0070e94cf6f",
+      "decision-record.md": "04104ea0f1bae42c69ca0a838ccba7006305bc78a06880cf47a7c7c362572e56",
+      "implementation-summary.md": "72a2254a6f7f94a62ec8a473f20a336ebfb16d193670e6a76e4d515ed7886f90"
     },
     "last_active_at": null
   }

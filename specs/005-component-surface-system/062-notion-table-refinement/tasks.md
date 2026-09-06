@@ -1,6 +1,6 @@
 ---
 title: "Task Breakdown: Notion Table Refinement"
-description: "Eighteen rows from the Notion table research synthesis, each carrying the threshold it closes and the value already observed red on this tree."
+description: "Nineteen rows from the Notion table research synthesis, each carrying the threshold it closes and the value already observed red on this tree, with the operator's 2026-09-06 18:32 rulings folded in."
 trigger_phrases:
   - "062 tasks"
   - "notion table refinement tasks"
@@ -107,14 +107,18 @@ already works, so it cannot regress. Every row extends an existing lane —
       `039351aa`, worded *"Freeze up to and including this column"* (digest P7).
 - [ ] **T012 Make frozen columns stick** (`src/views/table-renderer.ts`, `styles.css`).
       **Threshold:** a frozen `th` and its `td`s compute `position: sticky` with `left` equal to the
-      sum of the preceding frozen columns' widths within **±1px** in the render harness; a divider
-      appears only while the table is scrolled horizontally; unfreezing collapses the offset to 0.
+      sum of the preceding frozen columns' widths within **±1px** in the render harness; the last frozen
+      column paints **no** right-edge shadow at `scrollLeft === 0` and a soft token-derived shadow
+      once the table is scrolled sideways, so content is visibly passing *under* the frozen column
+      rather than beside it; unfreezing collapses the offset to 0.
       **Desktop only** — the phone switches to content-driven auto layout with no horizontal
       overflow (`styles.css:21021-21035`), and the reason is stated in the code comment rather than
       left as a silent no-phone (`050` D3). **Observed red:** no sticky rule for a column anywhere;
       `.db-table thead` is the only sticky block (`styles.css:5425-5429`). **The visual design is
       ours, marked inference** — no capture in the 98-screen read shows a frozen state (digest P7,
-      §6 Q3), so nothing here is copied and ADR-005 carries the divider question.
+      §6 Q3), so nothing here is copied and the shadow value derives from our own tokens under ADR-004,
+      measured in **both** themes. **ADR-005 is Accepted** — operator, 2026-09-06 18:32, verbatim:
+      *"Subtle shadow when scrolled past"*; desktop-only stays.
 - [ ] **T013 Pin the round-trip** (`src/data/`, unit).
       **Threshold:** `frozenColumnKeys` survives serialise → parse; an unknown key is preserved
       rather than dropped, so a downgrade does not destroy the setting.
@@ -131,20 +135,35 @@ Independent of each other. They share `styles.css` and serialize through the par
       **Observed red:** no end or range concept in any of the 546 lines of `cell-editor-date.ts`,
       and `renderDate` formats exactly one value (`src/views/cell-renderer.ts:537-541`). Notion:
       `bd482935`. Timezone and Remind rows are out of scope.
-- [ ] **T021 [B] Bring the four type registries into step**
+- [ ] **T021 Bring the four type registries into step**
       (`src/data/types.ts`, `src/views/record-surface/type-picker.ts`,
       `src/views/property-type-icon.ts`, `src/data/column-types.ts`, `src/views/column-menu.ts`).
-      **Threshold:** eighteen types, one glyph and one label each, the four registries the same
-      length and the same members, and the grouped submenu's slice boundaries corrected so the new
-      types land in the right group. **Observed red: thirteen, in four places that must move
+      **Threshold:** **twenty-one** types, one glyph and one label each, the four registries the
+      same length and the same members, and the grouped submenu's slice boundaries corrected so the
+      new types land in the right group. The eight added are **Person, URL, Email, Phone, created
+      time, created by, last edited time, last edited by** — every type on `af7a18b0`'s canonical
+      list that our union lacks (digest §P2). Notion's Formula and Rollup are already ours as
+      `computed` and `rollup`, and Files & media as `files`, so the set is eight and not more.
+      Each row ships **enabled with a real renderer behind it**; the four audit types are read-only
+      and computed from the note. **Observed red: thirteen, in four places that must move
       together** — the union at `src/data/types.ts:82`, `PROPERTY_TYPES` at
       `src/views/record-surface/type-picker.ts:28-32`, `PROPERTY_TYPE_ICON_NAMES` at
       `src/views/property-type-icon.ts:32-46`, `COLUMN_TYPE_LABELS` at
       `src/data/column-types.ts:135-151`; the submenu slices `PROPERTY_TYPES` at 6 and 9
       (`src/views/column-menu.ts:262-264`), so a bare append lands in Advanced whatever it is. The
       guard is part of the row: one assertion that the four lists agree. Notion: `af7a18b0`,
-      `7f2dbda0`, `3b3c3c26`. **Blocked on ADR-007** — whether a picker row ships before the data
-      type behind it is the operator's.
+      `7f2dbda0`, `3b3c3c26`. **ADR-007 Accepted, option 1 widened** — operator, 2026-09-06 18:32,
+      verbatim: *"All types or add more as needed"*. The research's estimate of eighteen is
+      superseded; the count is **13 → 21**.
+- [ ] **T021a Settle Person's vault value source in writing, before its renderer**
+      (`decision-record.md` of the implementing packet).
+      **Threshold:** an ADR that names whether a Person value stores a wikilink to a person note or
+      plain text, and that states the storage shape, the cell rendering and the editor that follow
+      from it. Written **before** the Person renderer exists, not alongside it.
+      **Why it is a row and not a block:** an Obsidian vault has no user directory, so unlike the
+      other seven types Person has no obvious value source (ADR-007's own constraint). The operator
+      recorded it as an open implementation decision rather than a gate — the other seven types do
+      not wait on it, and T021 can land them first.
 - [ ] **T022 [P] Make the resize handle visible on header hover** (`styles.css`).
       **Threshold:** the handle's computed background changes on `th:hover`, from a token-derived
       colour clearing 3:1 non-text contrast in **both** themes (`050` ADR-005,
@@ -168,12 +187,18 @@ Independent of each other. They share `styles.css` and serialize through the par
       **page-view only** — Notion's own table cells are blank exactly as ours are
       (`src/views/cell-renderer.ts:263-264`, `styles.css:6766-6771`), so changing the cells would
       break parity rather than create it.
-- [ ] **T025 [B] Derive the add-row noun** (`src/views/table-renderer.ts`, i18n × 3 locales).
-      **Threshold:** `+ New <noun>` where a noun is derivable, today's string where it is not, in
-      all three locales. **Observed red:** fixed. `` `+ ${t("toolbar.new")}` `` at
+- [ ] **T025 Give a view a configured add-row noun**
+      (`src/data/types.ts`, `src/views/table-renderer.ts`, the view-settings surface,
+      i18n × 3 locales).
+      **Threshold:** a per-view noun on `ViewConfig` that survives serialise → parse; `+ New <noun>`
+      where it is set, today's string where it is unset, empty or whitespace-only — with no trailing
+      space in the fallback; the `+ New` framing and its fallback present in all three locales. The
+      noun itself is reader-authored text and is **not** a translation key; the framing around it
+      is. **Observed red:** fixed. `` `+ ${t("toolbar.new")}` `` at
       `src/views/table-renderer.ts:982`. Notion varies it by data source — `+ New page`
-      (`19745d87`) against `+ New task` (`e33466b4`). **Blocked on ADR-006** — where the noun comes
-      from is a product decision and the operator's.
+      (`19745d87`) against `+ New task` (`e33466b4`), which is a data-source concept an Obsidian
+      vault does not have — hence a configured noun rather than a derived one. **ADR-006 Accepted** —
+      operator, 2026-09-06 18:32, verbatim: *"Per-view configured noun, fallback 'New'"*.
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -224,7 +249,11 @@ Independent of each other. They share `styles.css` and serialize through the par
 
 - Every row in `acceptance-criteria.md` is `Met`, `Waived` with an ADR or `Superseded` with an ADR,
   except AC-009 which only the operator closes.
-- ADR-005, ADR-006 and ADR-007 have moved from Proposed to a recorded decision.
+- ADR-003, ADR-005, ADR-006 and ADR-007 have moved from Proposed to a recorded decision. **All four
+  were ruled on 2026-09-06 18:32 and no row in this packet is blocked on the operator any more**,
+  except AC-009 / T033, which are a device read rather than a decision.
+- Person's value source has its own ADR, written before the Person renderer (T021a).
+- The `064` pointer in ADR-003 has been carried into `064`'s own tasks once that packet exists.
 - `npm run gate` exits 0 and the three build gates with it.
 - The two new capture scenarios exist, are current, and have been looked at.
 <!-- /ANCHOR:completion -->

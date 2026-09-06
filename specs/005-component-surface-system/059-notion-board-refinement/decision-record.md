@@ -12,12 +12,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/059-notion-board-refinement"
-    last_updated_at: "2026-09-06T18:40:00Z"
-    last_updated_by: "opus-synthesis"
-    recent_action: "Opened eleven ADRs from the board research loop: seven Accepted, four Proposed"
-    next_safe_action: "Put ADR-004, ADR-010 and ADR-011 to the operator; ADR-009 goes with them but gates nothing"
-    blockers:
-      - "ADR-004, ADR-010 and ADR-011 are the operator's; no capture and no measurement can answer them"
+    last_updated_at: "2026-09-06T16:36:00Z"
+    last_updated_by: "ruling-fold-session"
+    recent_action: "Folded the 18:36 rulings; ADR-004, ADR-010, ADR-011 Accepted"
+    next_safe_action: "Build the Groups panel; hide-empty-groups defaults ON"
+    blockers: []
     key_files:
       - "src/views/board-renderer.ts"
       - "specs/005-component-surface-system/056-board-anytype-parity/notion-screens-digest.md"
@@ -27,12 +26,12 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "ADR-004: is Notion's group management adopted at all"
-      - "ADR-009: does a board-level wrap switch belong here, against a criterion that asks for the opposite"
-      - "ADR-010: does Hide empty groups default off, against Notion's own default"
-      - "ADR-011: are hideGroup and deleteGroup wired, or deleted"
+      - "ADR-009: does a board-level wrap switch belong here, against a criterion that asks for the opposite — Proposed, and it proposes no change"
     answered_questions:
       - "Seven of the nine conflicts the research named are already decided by a landed operator ruling"
+      - "Notion's group management is adopted as one Groups panel"
+      - "Hide empty groups defaults ON, matching Notion and reversing this packet's proposal"
+      - "hideGroup is wired; deleteGroup is deleted with its i18n keys"
 ---
 # Decision Record: Notion Board Refinement
 
@@ -41,8 +40,10 @@ _memory:
 
 **How to read the status column.** `goal.md` D1 sets the rule: a Notion-vs-Anytype conflict that a
 landed operator ruling already decides is **Accepted** citing that ruling; one no ruling has touched
-is **Proposed** and waits for the operator. Seven are Accepted here. Four are Proposed, and only
-three of those four gate any code — ADR-009 proposes doing nothing, so nothing waits on it.
+is **Proposed** and waits for the operator. **Ten are Accepted here and one is Proposed.** Seven were
+Accepted at opening on a landed ruling; three more — ADR-004, ADR-010 and ADR-011 — were ruled by the
+operator on **2026-09-06 18:36** and are quoted verbatim below. ADR-009 is the one still Proposed,
+and it proposes doing nothing, so nothing waits on it. **No code leg in this packet is gated.**
 
 The research's conflict register (`../056-board-anytype-parity/research/research.md` §9) carries
 nine rows. The digest's own list (`../056-board-anytype-parity/notion-screens-digest.md:236-257`)
@@ -122,7 +123,8 @@ in both themes.
 
 ## ADR-004: Adopt Notion's group management, as a `panel` rather than a screen
 
-**Status**: **Proposed** — the operator's, and the gate on every code leg in this packet.
+**Status**: **Accepted 2026-09-06 18:36.** Operator, verbatim: *"Yes, one Groups panel"*. It was the
+gate on every code leg in this packet; it is not any more.
 
 **Context.** Notion puts per-group visibility, hide-all, show-all, drag-handle reorder and "Remove
 grouping" on one dedicated surface (`30ba5533`, `f6d1e7e6`, `e9698e1b`, `2ef31bd5`; digest
@@ -137,7 +139,8 @@ them at `:558-559` have never rendered, and `config.boardHiddenGroups` has no bo
 or restorer at all. The board has a visibility axis in its data model and no visibility at all in
 its UI.
 
-**Decision, proposed.** Adopt the pattern, not the presentation. A **Groups panel** in the `panel`
+**Decision, accepted.** Adopt the pattern, not the presentation — and the operator's own words name
+the shape as well as the answer: **one** panel, not a panel per concern. A **Groups panel** in the `panel`
 role — 292-360px, local anchor, trapped focus, Escape or outside click to dismiss
 (`../design-system.md:77`, `:126`) — entered from one new row in the column menu the reader already
 opened to hide the group (`renderBoardGroupOptions`, `:540-560`). Not a full screen: Notion's is a
@@ -153,9 +156,11 @@ along with a pattern. The phone presentation goes through `044`'s sheet grammar.
 | A full Notion-shaped screen | Matches the reference exactly | Imports Notion's mobile grammar into a plugin whose grammar is `044`'s sheet — D2 |
 | Do nothing | Anytype parity is preserved exactly | The dead visibility axis stays dead, and two i18n keys keep shipping in three locales for rows nothing renders |
 
-**Consequences if accepted.** One new file, one member on `BoardRendererActions`, one flag, four
-captures, two assertion rows, zero new gate lanes. **If declined**, ADR-011 still needs an answer:
-the two dead members are a defect either way.
+**Consequences.** One new file, one member on `BoardRendererActions`, one flag, four captures, two
+assertion rows, zero new gate lanes. The panel is the single surface: per-group visibility, hide-all,
+show-all, drag-handle reorder and "Remove grouping" all live on it rather than being scattered across
+the column menu, which is what *"one Groups panel"* settles beyond the yes. ADR-011 needed an answer
+independently of this one and now has it: `hideGroup` becomes the panel's toggle-off.
 
 ---
 
@@ -253,28 +258,45 @@ red-first per row.
 
 ---
 
-## ADR-010: "Hide empty groups" defaults off
+## ADR-010: "Hide empty groups" defaults on
 
-**Status**: **Proposed** — the operator's, and part of the ADR-004 gate.
+**Status**: **Accepted 2026-09-06 18:36.** Operator, verbatim: *"On by default, like Notion"*.
+**This reverses the packet's own proposal**, which was to ship the setting defaulted `false`; the
+title of this ADR was changed with it so the record does not read as the opposite of what was
+decided.
 
 **Context.** Notion ships the toggle **on** in all three of its group-management captures
 (`30ba5533`, `e9698e1b`, `2ef31bd5`). Our board renders a shared empty card for an empty column
 (`board-renderer.ts:324-327`), and that state is committed to eight captures and pinned by `056`
 AC-011.
 
-**Decision, proposed.** Ship the setting, default it `false`. Adopting Notion's default would delete
-a designed state our own reference set commits to, silently, on first open.
+**Decision, accepted.** Ship the setting and default it **`true`**, matching Notion's own default in
+all three of its group-management captures.
 
-**Consequences if accepted.** One flag on `ViewConfig` (`src/data/types.ts:560`), one entry in the
-persisted key allowlist (`src/data/data-source.ts:1352`), one filter beside the hidden-group filter
-at `:192-193`. **If declined** — meaning the toggle is not shipped at all — the panel loses one row
-and nothing else changes.
+The argument this overturns is kept rather than deleted, because it names the work the ruling
+creates: our board renders a shared empty card for an empty column (`board-renderer.ts:324-327`), and
+that state is committed to **eight captures** and pinned by `056` AC-011. Defaulting the toggle on
+means a default-configured board **no longer shows those columns at all**, so the empty-column state
+is reachable only with the toggle switched off. Two things follow and are part of this decision:
+
+- The eight captures and `056` AC-011 need a **named configuration** — the fixture that photographs
+  the empty-column state sets `hideEmptyGroups: false` explicitly, rather than relying on a default
+  that has now moved. A capture whose content depends on an unstated default is a capture that
+  silently changes when the default does.
+- The empty-column card is **not deleted**. It stays a designed state; the ruling changes which
+  configuration reaches it, not whether it exists.
+
+**Consequences.** One flag on `ViewConfig` (`src/data/types.ts:560`) defaulting `true`, one entry in
+the persisted key allowlist (`src/data/data-source.ts:1352`), one filter beside the hidden-group
+filter at `:192-193`, and the capture-fixture pin above.
 
 ---
 
 ## ADR-011: `hideGroup` and `deleteGroup` are wired or deleted, not left declared
 
-**Status**: **Proposed** — the operator's, because one branch of it is destructive.
+**Status**: **Accepted 2026-09-06 18:36 — branch two.** Operator, verbatim: *"Wire hide, delete the
+delete action"*. One branch of this was destructive, which is why it was the operator's; the branch
+taken is the one that removes the destructive affordance rather than shipping it.
 
 **Context.** Both members are declared optional on `BoardRendererActions`
 (`board-renderer.ts:84-85`) and implemented by neither host. `grep -rn "hideGroup" src/` returns two
@@ -283,16 +305,21 @@ build, so the column menu ships three rows rather than five, and `src/i18n.ts:13
 column" and "Delete group" in three locales for rows nothing renders. This is a **cross-consumer**
 defect — one contract, two hosts, neither supplying it — not a local one.
 
-**Decision, proposed.** Take one of the two, in the same leg, and do not leave the third state:
+**Decision, accepted — branch two of the three.** `hideGroup` is wired and becomes the Groups
+panel's toggle-off; `deleteGroup` is **deleted**, along with its guard at `board-renderer.ts:558-559`
+and its `src/i18n.ts:136-137` "Delete group" key in all three locales. The third state — a
+declaration with no implementation — is not an option in any branch. The three branches, with the one
+taken marked:
 
 | Branch | What it means | Cost |
 |---|---|---|
 | **Wire both** | `hideGroup` becomes the panel's toggle-off; `deleteGroup` becomes a real destructive action in the column menu | Ships a group-deleting affordance nobody has asked for, on a board whose records are notes |
-| **Wire `hideGroup`, delete `deleteGroup`** | Visibility becomes real; the destructive one goes with its guard and its i18n keys | The safe default, and the one this packet recommends |
+| **Wire `hideGroup`, delete `deleteGroup`** — **taken** | Visibility becomes real; the destructive one goes with its guard and its i18n keys | The safe default, the one this packet recommended, and the one the operator chose |
 | **Delete both** | The board keeps no group actions and ADR-004 supplies visibility from the panel alone | Leaves the menu at three rows; makes the panel the only route |
 
-**Recommendation.** Branch two. Deleting a dead destructive action is cheaper to reverse than
-shipping a live one, and nothing in the record asks for group deletion from the board.
+**Why branch two.** Deleting a dead destructive action is cheaper to reverse than shipping a live
+one, and nothing in the record asks for group deletion from the board. The recommendation and the
+ruling agree; the ruling is what binds.
 
 **Consequences.** Whichever branch is taken, the end state is one implementation per declaration in
 both hosts — the property a test locks, so this cannot silently return.
@@ -308,14 +335,16 @@ both hosts — the property a test locks, so this cannot silently return.
 | ADR-001 | Notion is additive | Accepted (parent D15, §7.15) | No |
 | ADR-002 | No desktop header count | Accepted (`056` ADR-002, A1) | No |
 | ADR-003 | Header chip keeps the tint fill | Accepted (`056` ADR-006, operator) | No |
-| ADR-004 | Adopt group management as a `panel` | **Proposed** | **Yes** |
+| ADR-004 | Adopt group management as one Groups `panel` | **Accepted 2026-09-06 18:36** (operator) | Was the gate; settled |
 | ADR-005 | `···`/`+` hover-only on desktop | Accepted (`056` D3, A1) | No |
 | ADR-006 | Sub-grouping stays unrendered | Accepted (`056` D6) | No |
 | ADR-007 | Add-card stays the bordered box | Accepted (`056` D3, A5) | No |
 | ADR-008 | Property rows stay icon-free | Accepted (`056` D3/D5, A4) | No |
 | ADR-009 | No wrap switch; limit stays 10 | **Proposed** | No — it proposes no change |
-| ADR-010 | "Hide empty groups" defaults off | **Proposed** | **Yes** |
-| ADR-011 | Two dead actions wired or deleted | **Proposed** | **Yes** |
+| ADR-010 | "Hide empty groups" defaults **on**, reversing the proposal | **Accepted 2026-09-06 18:36** (operator) | Settled |
+| ADR-011 | `hideGroup` wired, `deleteGroup` deleted | **Accepted 2026-09-06 18:36** (operator) | Settled |
 
-Seven Accepted, four Proposed, three of which gate code. Eight patterns land **0** lines of code:
+**Ten Accepted, one Proposed, and the one Proposed proposes no change.** Seven were Accepted at
+opening on a landed ruling; ADR-004, ADR-010 and ADR-011 were ruled by the operator on 2026-09-06
+18:36. Nothing in this packet is gated on a decision any more. Eight patterns land **0** lines of code:
 the seven Accepted declines plus ADR-009's proposed one.

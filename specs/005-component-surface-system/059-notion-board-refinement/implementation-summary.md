@@ -10,9 +10,9 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/059-notion-board-refinement"
-    last_updated_at: "2026-09-06T18:40:00Z"
-    last_updated_by: "opus-synthesis"
-    recent_action: "Placed the placeholder; nothing has shipped"
+    last_updated_at: "2026-09-06T16:36:00Z"
+    last_updated_by: "ruling-fold-session"
+    recent_action: "Recorded the 18:36 gate discharge in status and limitations"
     next_safe_action: "Leave this file alone until a leg lands"
     blockers:
       - "Nothing to summarise: the packet is opened, not started"
@@ -50,8 +50,10 @@ _memory:
 
 **Nothing yet, and saying so is the point.** This packet was opened by the Opus synthesis of the
 board's five-iteration Notion research loop. No source file, stylesheet, capture or lane has been
-touched. Every code task is `[B]` behind an operator decision (`decision-record.md` ADR-004,
-ADR-010, ADR-011) that has been asked and not answered.
+touched. Every code task was `[B]` behind an operator decision (`decision-record.md` ADR-004,
+ADR-010, ADR-011). **All three were answered on 2026-09-06 18:36** — *"Yes, one Groups panel"*, *"On
+by default, like Notion"* and *"Wire hide, delete the delete action"* — so the decision gate is
+discharged and the code half waits only on `058` releasing `src/views/board-renderer.ts`.
 
 ### Files Changed
 
@@ -78,7 +80,7 @@ research that produced it is `../056-board-anytype-parity/research/research.md`.
 
 | Decision | Why |
 |----------|-----|
-| The packet opened with nothing built | ADR-004 asks whether the one adoption candidate is wanted at all. Building first and asking after is how a program acquires a surface nobody wanted |
+| The packet opened with nothing built | ADR-004 asked whether the one adoption candidate was wanted at all. Building first and asking after is how a program acquires a surface nobody wanted. The answer came back yes on 2026-09-06 18:36, which is the outcome that makes the order worth keeping rather than the one that vindicates it |
 | The research's own P0 became a verification row | `dc1d54a9` landed the page scroll and the card text while the loop was still running. `goal.md` D7 says a finding already fixed is re-read, not redone |
 | One load-bearing inference was checked and came back worse | The loop inferred that a hidden group needs the view-config surface to restore. Reading both hosts shows neither implements `hideGroup` at all, so the board cannot hide a group either — erratum E-4 |
 <!-- /ANCHOR:decisions -->
@@ -101,7 +103,8 @@ research that produced it is `../056-board-anytype-parity/research/research.md`.
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **The whole code half is blocked on a person.** ADR-004, ADR-010 and ADR-011 are the operator's
+1. ~~**The whole code half is blocked on a person.**~~ **Unblocked 2026-09-06 18:36.** ADR-004,
+   ADR-010 and ADR-011 were the operator's
    and nothing in this repository can answer them. There is no workaround, and inventing one would
    be the failure `goal.md` D6 exists to prevent.
 2. **The Notion evidence is second-hand.** Every Notion fact here comes through

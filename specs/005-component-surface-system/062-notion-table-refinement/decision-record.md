@@ -12,12 +12,11 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/062-notion-table-refinement"
-    last_updated_at: "2026-09-06T16:17:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Opened seven ADRs from the Notion table research synthesis, four Proposed and three Accepted"
-    next_safe_action: "Put ADR-005, ADR-006 and ADR-007 to the operator; they gate three criteria"
-    blockers:
-      - "ADR-005, ADR-006 and ADR-007 are the operator's"
+    last_updated_at: "2026-09-06T16:32:00Z"
+    last_updated_by: "ruling-fold-session"
+    recent_action: "Folded the 18:32 rulings; all seven ADRs now Accepted"
+    next_safe_action: "Start T021 at twenty-one types; the type set, the divider and the noun source are all named"
+    blockers: []
     key_files:
       - "src/views/column-menu.ts"
       - "src/data/column-types.ts"
@@ -30,13 +29,14 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "The frozen divider in dark theme"
-      - "The add-row noun source"
-      - "A type-picker row ahead of its data type"
-      - "Notion's first-class Conditional color naming"
+      - "Person's vault value source — wikilink or plain text — owed an ADR before its renderer"
     answered_questions:
       - "No candidate in this packet contradicts a landed Anytype ruling; ten were checked"
       - "The wrap control is closed on main and is not reopened here"
+      - "The frozen divider is a soft right-edge shadow shown only once content scrolls under it"
+      - "The add-row noun is a per-view configured string with 'New' as its fallback"
+      - "All eight missing Notion types ship as real data types; the count is 13 to 21"
+      - "Conditional colour gets its own view-settings row, and the work is 064's"
 ---
 # Decision Record: Notion Table Refinement
 
@@ -219,10 +219,10 @@ is re-read against the tree, and the tree moves under a five-iteration loop.
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-06 |
+| **Status** | Accepted |
+| **Date** | 2026-09-06 (opened) · 2026-09-06 18:32 (ruled) |
 | **Deciders** | The operator |
-| **Criterion** | None — a presentation question, deliberately not a task |
+| **Criterion** | None here — the work lands in `064`, not in this packet |
 
 <!-- ANCHOR:adr-003-context -->
 ### Context
@@ -248,17 +248,28 @@ lives in database settings. That is a discoverability question, not a capability
 <!-- ANCHOR:adr-003-decision -->
 ### Decision
 
-**Proposed, and deliberately not scheduled.** The question for the operator is narrow: *do you want
-the conditional-colour rules surfaced as their own named view-settings row with an explainer, the
-way Notion presents them, rather than living in database settings?* If yes, it is a `053` toolbar
-item and belongs to `064`, not here. If no, this ADR closes as Declined and the digest's row stands
-corrected without further work.
+**Accepted — the control gets its own view-settings row.** Operator, 2026-09-06 18:32, verbatim:
+*"Yes, own row in view settings"*.
+
+The question put to them was narrow: *do you want the conditional-colour rules surfaced as their own
+named view-settings row with an explainer, the way Notion presents them, rather than living in
+database settings?* The answer is yes, and it lands where the earlier text said it would: **it is a
+`053` toolbar item and belongs to `064`, not to this packet.** No criterion and no task opens here.
+
+**`064` does not exist on `main` at the time of this ruling**, so the pointer is carried here until
+it does. What `064` inherits, stated so nothing has to be re-derived: a first-class *Conditional
+color* row in the view-settings list with an explainer line, presenting the rules
+`applyConditionalFormat` already evaluates (`src/data/conditional-formatting.ts:168-206`, wired at
+`src/views/table-renderer.ts:85`, `:866`, `:911`, painted at `styles.css:1317-1319`). The capability
+does not move; only its home does. Notion's own presentation is `142cef4e`, listed in `a0d1e399` and
+`794591f5`.
 <!-- /ANCHOR:adr-003-decision -->
 
 <!-- ANCHOR:adr-003-consequences -->
 ### Consequences
 
-Either answer leaves the capability exactly as it is. The value of writing it down is that the next
+The ruling leaves the capability exactly as it is and moves only where it is found. The value of
+writing it down is that the next
 person to grep for conditional colour finds the correction rather than repeating the digest's
 mistake — which is the same failure mode `goal.md` D2 names generally: **an absence grep is a claim,
 not evidence.**
@@ -324,10 +335,10 @@ device read finds that.
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-06 |
+| **Status** | Accepted |
+| **Date** | 2026-09-06 (opened) · 2026-09-06 18:32 (ruled) |
 | **Deciders** | The operator |
-| **Criterion** | AC-001 (the mechanism proceeds; the divider waits) |
+| **Criterion** | AC-001, no longer split — the divider has its value |
 
 <!-- ANCHOR:adr-005-context -->
 ### Context
@@ -356,19 +367,30 @@ captures cover.
 <!-- ANCHOR:adr-005-decision -->
 ### Decision
 
-**Proposed, in two parts.** Part one: freeze ships **desktop-only**, with the phone reason stated in
-the code comment. Part two: **the divider treatment is the operator's** — a shadow, a solid line, or
-nothing at all until the column edge is scrolled past — and it is not chosen here, because choosing
-it would be inventing a Notion detail that no capture supports and then citing Notion for it.
+**Accepted, in two parts, both now settled.** Part one stands as proposed: freeze ships
+**desktop-only**, with the phone reason stated in the code comment. Part two is the operator's,
+2026-09-06 18:32, verbatim: *"Subtle shadow when scrolled past"*.
 
-The mechanism does not wait on part two. T010 to T013 can land with the offsets working and no
-divider; the divider is one rule added afterwards.
+That resolves to a threshold rather than a taste: **nothing at rest, and a soft shadow off the
+frozen column's right edge once content scrolls under it.** At `scrollLeft === 0` the frozen
+boundary is indistinguishable from any other column boundary — no shadow, no extra line, no width
+change. Once the table is scrolled sideways, the last frozen column paints a soft right-edge shadow
+so the reader can see that the content is passing *under* it rather than beside it. The shadow is a
+token-derived value under ADR-004 and is measured in both themes; nothing is sampled from a Notion
+capture, because none shows a frozen state (digest P7, §6 Q3).
+
+The mechanism does not wait on the shadow. T010 to T013 can land with the offsets working and the
+shadow added as one rule; the difference is that the rule now has a specified behaviour instead of
+an open question.
 <!-- /ANCHOR:adr-005-decision -->
 
 <!-- ANCHOR:adr-005-consequences -->
 ### Consequences
 
-If the operator declines the desktop-only scoping, the phone half needs a different mechanism
+The scroll-conditional shadow costs a scroll listener or a CSS-only equivalent that the plain
+always-on line would not have needed, and it buys the property the operator asked for: the frozen
+column is invisible until it is doing something. The desktop-only scoping was not declined; had it
+been, the phone half needs a different mechanism
 entirely — the auto layout would have to go, which reopens a landed phone decision and is a much
 larger change than this packet. That is the reason the scoping is proposed explicitly rather than
 assumed.
@@ -384,10 +406,10 @@ assumed.
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-06 |
+| **Status** | Accepted |
+| **Date** | 2026-09-06 (opened) · 2026-09-06 18:32 (ruled) |
 | **Deciders** | The operator |
-| **Criterion** | AC-008 (blocked until this closes) |
+| **Criterion** | AC-008, unblocked — the source is named |
 
 <!-- ANCHOR:adr-006-context -->
 ### Context
@@ -411,8 +433,21 @@ produces a bad one for a view called *All* or *Board*.
 <!-- ANCHOR:adr-006-decision -->
 ### Decision
 
-**Proposed.** The operator picks the source. Whatever it is, the fallback is today's string, so the
-change can never make the button worse than it is now.
+**Accepted — the noun is a per-view setting.** Operator, 2026-09-06 18:32, verbatim: *"Per-view
+configured noun, fallback 'New'"*.
+
+Of the four candidate sources — the view's own name, the folder the notes live in, a per-view
+configured noun, and a fixed improvement on "New" — the operator took the third, with the fourth as
+its fallback. That eliminates the failure mode the alternatives carried: a derived noun cannot
+produce `+ New All` or `+ New Board`, because nothing is derived. The reader types the noun for the
+view, or types nothing and keeps today's string.
+
+Three consequences follow from the shape and are part of the decision rather than notes on it. The
+noun is **view-scoped**, so it belongs to `ViewConfig` and survives serialise → parse like any other
+view field. It is **reader-authored text**, so it is not a translation key — but the *fallback* and
+the surrounding `+ New` framing are, and the key has to exist in **all three locales** so the
+unconfigured button reads correctly in each. And an **empty or whitespace-only** configured noun is
+the unconfigured case, not a button that reads `+ New ` with a trailing space.
 
 A related idea is **already eliminated and should not come back with this one**: restyling our open
 affordance as Notion's *OPEN* pill. Ours is a button with an `aria-label`, not a pill label, and
@@ -423,8 +458,10 @@ energy belongs, and it is here.
 <!-- ANCHOR:adr-006-consequences -->
 ### Consequences
 
-Declining is a complete answer and costs nothing: the button keeps a string that is correct
-everywhere and specific nowhere.
+A view that nobody configures is exactly as good as it is today, which is the property that made
+this safe to accept. A view that is configured gains a button that names what it adds. The cost is
+one more field in `ViewConfig` and one more row in whatever surface edits a view's settings — small,
+and paid once.
 <!-- /ANCHOR:adr-006-consequences -->
 <!-- /ANCHOR:adr-006 -->
 
@@ -437,10 +474,10 @@ everywhere and specific nowhere.
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-06 |
+| **Status** | Accepted — option 1, widened |
+| **Date** | 2026-09-06 (opened) · 2026-09-06 18:32 (ruled) |
 | **Deciders** | The operator |
-| **Criterion** | AC-004 (blocked until this closes) |
+| **Criterion** | AC-004, unblocked — the type set is named and counted |
 
 <!-- ANCHOR:adr-007-context -->
 ### Context
@@ -475,7 +512,33 @@ can render or edit is neither.
 <!-- ANCHOR:adr-007-decision -->
 ### Decision
 
-**Proposed, with three options rather than a recommendation dressed as a decision:**
+**Accepted: option 1, and widened past what option 1 asked for.** Operator, 2026-09-06 18:32,
+verbatim: *"All types or add more as needed"*.
+
+That is the largest of the three options below and it is taken deliberately: the rows ship
+**enabled, with a real data type behind each**, and the set is not capped at the four the research
+named. Concretely, this packet ships **Person, URL, Email and Phone** *and* the four audit types —
+**created time, created by, last edited time, last edited by** — as real types across **all four
+registries**, plus any further Notion property type the digest shows we lack.
+
+Reading `af7a18b0`'s canonical list (digest §P2 and the type-list row at digest `:203-204`) against
+our union, the set of types we lack is exactly eight: Person, URL, Email, Phone, Created time,
+Created by, Last edited time, Last edited by. Notion's Formula and Rollup are already ours as
+`computed` and `rollup`; Files & media is `files`; Multi-select, Status, Date and Checkbox are all
+present. So **the type count moves 13 → 21**, not 13 → 18 as the research estimated, and that
+correction is the operative half of this ruling for anyone reading AC-004.
+
+The four audit types are read-only and computed from the note, which makes them the cheapest half of
+the work: `row.computed` already carries values of that shape.
+
+**One implementation decision stays open and is recorded here rather than blocking the row.**
+**Person has no vault value source.** An Obsidian vault has no user directory, so a Person value is
+either a wikilink to a person note or plain text, and the two produce different storage, different
+rendering and a different editor. That choice is **owed an ADR in the implementing packet, written
+before the Person renderer** — it is an open implementation decision, not a block on this one, and
+the other seven types do not wait on it.
+
+The three options originally put, kept for the record:
 
 1. **Ship the rows enabled**, with a minimal text-backed renderer behind each, so a URL column is a
    text column that knows it is a URL. Largest, and the only option where the row is honest.
@@ -484,17 +547,22 @@ can render or edit is neither.
 3. **Defer the whole item** until a data type earns its way in on its own. Zero cost, and the type
    set stays at thirteen.
 
-The one option that is **not** on the table is shipping enabled rows with nothing behind them.
-Whichever is chosen, the four-registry agreement check lands with it — that guard is the durable
-part of this row and does not depend on the answer.
+The one option that was **not** on the table is shipping enabled rows with nothing behind them, and
+the ruling does not put it back: option 1 is chosen precisely because it is the one where every row
+is honest. The four-registry agreement check lands with it — that guard is the durable part of this
+row and did not depend on the answer.
 <!-- /ANCHOR:adr-007-decision -->
 
 <!-- ANCHOR:adr-007-consequences -->
 ### Consequences
 
-Under option 3 the packet loses its fourth item and AC-004 is `Waived` naming this ADR. Under option
-2 the popover grows by five greyed rows and the product becomes more explainable at no functional
-cost. Under option 1 the packet grows by roughly the size of everything else in it combined, which is
-the honest reason it is not the default.
+The packet grows by roughly the size of everything else in it combined — eight types, each with a
+glyph, a label, a renderer and, for the four editable ones, an editor, across four registries plus
+the grouped submenu's slice boundaries. That was named as the honest reason option 1 was not the
+default, and the operator took it anyway. The two consequences that need watching: the submenu slices
+`PROPERTY_TYPES` at 6 and 9 (`src/views/column-menu.ts:262-264`), so eight appended types land in
+Advanced unless the boundaries move with them; and Person's value source is an open decision that
+must be settled in writing before its renderer exists, or the type ships with a storage shape nobody
+chose.
 <!-- /ANCHOR:adr-007-consequences -->
 <!-- /ANCHOR:adr-007 -->

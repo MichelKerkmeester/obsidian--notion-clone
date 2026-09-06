@@ -27,7 +27,7 @@ interop half, not a find-and-replace.
 
 **Key Decisions**: the plugin id changes to `obnotion` and the old vault folder's `data.json` is
 **copied, never moved** (ADR-002); the DOM/CSS prefixes go `note-database-container` →
-`obnotion-container` and `db-` → `obn-` (ADR-003, operator-vetoable); every string a user typed or
+`obnotion-container` and `db-` → `obnotion-` (ADR-003, ruled 2026-09-06 19:08); every string a user typed or
 a workspace file stored keeps a permanent backward-compatible alias (ADR-004).
 
 **Critical Dependencies**: release 0.0.30 must be cut and every in-flight leg landed before this
@@ -132,7 +132,7 @@ its notes working without the user doing anything.
   `database-view`; the view types `note-database-view` and `note-database-file-view`, which
   Obsidian persists in the vault's `workspace.json`; the CSV/markdown export format marker
   `note-database-csv-markdown`.
-- **CSS/DOM prefixes.** `note-database-container` → `obnotion-container`, `db-` → `obn-`, and the
+- **CSS/DOM prefixes.** `note-database-container` → `obnotion-container`, `db-` → `obnotion-`, and the
   **209** `--db-*` custom properties, across `styles.css`, `src/`, `tools/` (live pins, capture
   harness selectors, sheet-grammar, render-assertions, storybook), `.storybook/`, `screenshots/`
   and the root `README.md`.
@@ -142,8 +142,9 @@ its notes working without the user doing anything.
 ### Out of Scope
 
 - **The GitHub repository name.** Stays `obsidian--notion-clone`. Renaming it breaks every BRAT
-  install and every release URL, and the operator has not asked for it — recorded as an open row
-  (§12 Q1) rather than assumed either way.
+  install and every release URL. §12 Q1 put it to the operator on 2026-09-06 19:08 and the answer
+  was no — a decision taken by default, and a reversible one: a GitHub rename leaves a redirect and
+  can be done at any later date.
 - **The root `README.md` rewrite.** A GLM leg is rewriting it in parallel and lands separately.
   This packet only applies the mechanical prefix rewrite to whatever `README.md` is on `main` when
   its leg starts, and does not re-author the prose.
@@ -156,14 +157,16 @@ its notes working without the user doing anything.
   the product name, and it is explicitly excluded from the `db-` sweep (ADR-003).
 - **Any behaviour change.** No view, no control, no value moves. A pixel that moves is a defect in
   this packet, not a feature of it.
-- **Upstream attribution.** `manifest.json` still names pangy9 as `author`; changing that is the
-  operator's call, recorded as §12 Q2.
+- **Upstream attribution's prose.** The operator ruled the `manifest.json` half **in** on 2026-09-06
+  19:08 (§12 Q2), so `author`, `authorUrl` and `fundingUrl` move in this packet. What stays out is
+  the README's fork-credit paragraph itself: the parallel README leg authors that prose, and this
+  packet only guarantees the manifest no longer credits the wrong person.
 
 ### Files to Change
 
 | File Path | Change Type | Description |
 |-----------|-------------|-------------|
-| `manifest.json` | Modify | `id`, `name`, `description`; `author`/`authorUrl`/`fundingUrl` pending §12 Q2 |
+| `manifest.json` | Modify | `id`, `name`, `description`; `author` → `MichelKerkmeester`, `authorUrl` → `https://github.com/MichelKerkmeester`, `fundingUrl` **removed** (§12 Q2, ruled 2026-09-06 19:08) |
 | `package.json` | Modify | `name` → `obsidian-obnotion` |
 | `src/main.ts` | Modify | Plugin class, hover-link display, changelog modal + deep link, the two code-block registrations (aliased), the nav-file tag class |
 | `src/i18n.ts` | Modify | **15** `Note Database` strings across `en`, `zhCN`, `zhTW` |
@@ -238,7 +241,7 @@ its notes working without the user doing anything.
 | Risk | A user's `workspace.json` holds the old view types | Open database tabs fail to restore and the user sees empty panes | REQ-005 registers the old view types as aliases, permanently |
 | Risk | The `db-` sweep catches `db_view`, the frontmatter key in user notes | Silent data corruption in the user's own files | Excluded by name in the rewrite script, asserted by a test (AC-009) |
 | Risk | The rewrite lands on a stale capture manifest | 1,467 captures read green against a tree they were not taken from | Recapture and regenerate `screenshots/manifest.json` in the same commit; check the manifest blob id before believing capture churn |
-| Risk | pangy9's attribution stays in `manifest.json` under a renamed product | Reads as passing off upstream's work, or as failing to credit it | §12 Q2 is the operator's, with a recommendation attached; nothing changes until it is answered |
+| ~~Risk~~ **Closed** | pangy9's attribution stays in `manifest.json` under a renamed product | Reads as passing off upstream's work, or as failing to credit it | §12 Q2 ruled 2026-09-06 19:08: `author`/`authorUrl` move to MichelKerkmeester, `fundingUrl` is removed, and upstream credit moves to the README as an explicit fork line. The risk closes when T005 lands, not when the ruling was taken |
 <!-- /ANCHOR:risks -->
 
 ---
@@ -338,12 +341,16 @@ update, **so that** a rename costs me nothing.
 
 ## 12. OPEN QUESTIONS
 
-| ID | Question | Recommendation | Owner |
-|----|----------|----------------|-------|
-| Q1 | Does the GitHub repository rename from `obsidian--notion-clone`? | **No.** Renaming it breaks BRAT installs and every published release URL for no user-visible gain; the repo name is not shown in the plugin panel. Revisit only if the operator wants the URL to match | Operator |
-| Q2 | `manifest.json` still reads `author: pangy9`, `authorUrl: github.com/pangy9`, `fundingUrl: paypal.me/pangy9` — upstream's, from the fork point | **Attribute the fork to MichelKerkmeester** in `author`/`authorUrl`, drop or repoint `fundingUrl`, and **keep upstream credit in the README** with an explicit "forked from pangy9/obsidian-note-database" line. Leaving pangy9 as the author of a product they did not name is worse for both parties than a clear fork notice | Operator |
-| Q3 | `db-` → `obn-` as the new class prefix | Proposed in ADR-003 and vetoable. `obn-` is short, unambiguous and grep-safe against `obsidian-`; `obnotion-` would add 6 characters to 17,099 occurrences | Operator |
-| Q4 | `update-fork.sh` names `MichelKerkmeester/obsidian-note-database`, which is not this repository's origin (`obsidian--notion-clone`) | Fix it to the real origin as part of this packet. It is a pre-existing defect the census surfaced, in a file the rename touches anyway | Operator, to confirm the script is still wanted |
+**All four were answered by the operator on 2026-09-06 19:08.** The questions and their
+recommendations are left standing beside each answer rather than replaced by it, so a reader can see
+which recommendation was taken and which was not — Q3's was not.
+
+| ID | Question | Recommendation, as written | Ruling, 2026-09-06 19:08 | Owner |
+|----|----------|----------------------------|--------------------------|-------|
+| Q1 | Does the GitHub repository rename from `obsidian--notion-clone`? | **No.** Renaming it breaks BRAT installs and every published release URL for no user-visible gain; the repo name is not shown in the plugin panel | **No — taken by default.** The operator did not ask for the rename when they were shown the row, which is a decision and is recorded as one rather than left as silence. It is also the most reversible of the four: a GitHub rename can be done at any later date and leaves a redirect behind, so nothing here forecloses it | Operator |
+| Q2 | `manifest.json` still reads `author: pangy9`, `authorUrl: github.com/pangy9`, `fundingUrl: paypal.me/pangy9` — upstream's, from the fork point | **Attribute the fork to MichelKerkmeester** in `author`/`authorUrl`, drop or repoint `fundingUrl`, and **keep upstream credit in the README** | **Accepted, unchanged.** Operator, verbatim: *"Attribute to MichelKerkmeester, credit upstream in README"*. `author` → `MichelKerkmeester`, `authorUrl` → `https://github.com/MichelKerkmeester`, and `fundingUrl` **removed** rather than repointed — the recommendation offered "drop or repoint" and the ruling took drop. Upstream credit moves to `README.md` as an explicit fork line | Operator |
+| Q3 | `db-` → `obn-` as the new class prefix | `obn-` is short, unambiguous and grep-safe against `obsidian-`; `obnotion-` would add 6 characters to every occurrence | **Declined in favour of `obnotion-`.** Operator, verbatim: *"obnotion- everywhere"*. `db-` → `obnotion-`, `--db-` → `--obnotion-`, `note-database-container` → `obnotion-container`. Re-measured on `e5830232`: 17,181 occurrences at +6 characters, less 3,185 container occurrences at −5, is a **net ≈ +87,000 characters** — about 29 KB of it on a 750 KB `styles.css`. ADR-003 carries the full table and why the trade was taken | Operator |
+| Q4 | `update-fork.sh` names `MichelKerkmeester/obsidian-note-database`, which is not this repository's origin (`obsidian--notion-clone`) | Fix it to the real origin as part of this packet | **Yes, fix it.** It was already a task and stays one: `tasks.md` **T009**. The script stays wanted; only its `REPO` constant is wrong | Operator |
 
 ---
 

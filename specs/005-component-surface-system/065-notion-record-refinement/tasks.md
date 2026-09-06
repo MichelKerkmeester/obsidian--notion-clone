@@ -1,6 +1,6 @@
 ---
 title: "Tasks: Notion Record Refinement"
-description: "Nine tasks in four legs: the empty-copy and type-size leg, the option split, the add-property surface, and the operator-gated set that carries thresholds but no schedulable row."
+description: "Fourteen tasks in five legs: the empty-copy and type-size leg, the option split, the add-property surface, the three rows the 2026-09-06 19:05 rulings opened, and the one item still operator-gated."
 trigger_phrases:
   - "065 tasks"
   - "record refinement tasks"
@@ -107,10 +107,10 @@ never ticked by an agent.
   - **Proof:** a unit test over the wiring, or over `database-view.ts:5088`'s `initialLabel` path
   - **Closes:** C5 · REQ-005 · digest screen `1589e7c8`
 
-- [ ] T007 [B] [P1] Add a trailing add-property row to the record sheet
+- [ ] T007 [P1] Add a trailing add-property row to the record sheet
   (`src/views/record-detail-panel.ts`, `styles.css`)
-  - **BLOCKED on ADR-008.** Neither Notion's trailing row nor Anytype's section-header `+` is ruled
-    for this surface, and D4 forbids writing the code before the ruling
+  - **Unblocked.** ADR-008 was ruled Accepted on 2026-09-06 19:05 — operator, verbatim: *"Trailing
+    '+ Add a property' row"*. Sequenced after T012 so "above the hidden group" means one thing
   - Muted trailing row below the last field and above the hidden group, reusing the hidden-toggle
     idiom (`styles.css:10319-10346`), opening `buildAddPropertyRow` through `052`'s picker host
     per `054` D8
@@ -118,6 +118,56 @@ never ticked by an agent.
     the row measures at or above 44px on the phone sheet
   - **Red first:** zero add affordances on the record sheet today
   - **Closes:** C6 · REQ-006 · digest screens `16ddd22c`, `bf2171ff`
+
+### Leg E — the 19:05 rulings
+
+Ruling order is load-bearing: the population first, the grammar on it. An eye that toggles *view*
+visibility inside a group that holds *empty fields* means nothing, which is why T012 cannot follow
+T013.
+
+- [ ] T012 [P0] Make the record sheet's hidden group hold view-hidden columns, not empty fields
+  (`src/views/record-detail-panel.ts:384-393`)
+  - **ADR-006, Accepted 2026-09-06 19:05** — operator, verbatim: *"View-hidden columns, like Notion
+    and the peek"*
+  - The caller passes visible columns only today, so the sheet never sees a view-hidden column at
+    all; the population has to reach it before the group can hold it. The peek already computes the
+    complement of `visibleKeys` (`src/views/table-record-peek.ts:246-248`) and is the shape to match
+  - **Threshold:** a column hidden in view config appears in the record sheet's hidden group and is
+    counted there; an empty but visible field does not
+  - **Red first:** hide a column in view config and it vanishes from the sheet entirely, while
+    "Hidden properties (n)" sits beside it counting empty fields
+  - **Carries an open question, not a block:** where the sheet's *empty-fields* reveal lives once
+    this group stops holding them. Recorded in `decision-record.md` ADR-006 rather than answered by
+    this task
+  - **Closes:** C8 · REQ-009 · digest screens `cc8b241a`, `7ffa073f`
+
+- [ ] T013 [P0] Give every hidden-group row Notion's full grammar
+  (`src/views/record-surface/hidden-properties.ts`, `src/views/record-surface/property-row.ts:330-395`)
+  - **ADR-005, Accepted 2026-09-06 19:05** — operator, verbatim: *"Mimic notion also regarding other
+    features we might be missing"*
+  - Drag handle, type icon, name, eye toggle and chevron per row — the anatomy
+    `buildCheckboxPropertyRow` already carries; "Shown" and "Hidden" sections each with their own
+    bulk link; the Hidden section rendered only when non-empty; the count staying on the entry row;
+    the title row's eye disabled
+  - `HiddenPropertiesGroupHandle.render`'s signature changes, so the **table peek moves with it**
+    (`src/views/table-record-peek.ts`). The host is optional — the peek opts in or does not — but it
+    must compile either way
+  - **Threshold:** toggling the eye shows or hides the field in place without leaving the sheet; the
+    group count updates; each section's bulk link acts on its own section; the Hidden section is
+    absent while nothing is hidden
+  - **Red first:** zero eye controls inside `db-record-detail-hidden-group`
+  - **Sequenced after T012.** Closes: C9 · REQ-010 · digest screens `2f52d1bc`, `406e67e2`,
+    `9867cb76`, `cc8b241a`, `01cde7f6`, `7ffa073f`, `794591f5`
+
+- [ ] T014 [P1] Add a search field to the property-visibility list
+  (`src/views/column-manager-renderer.ts:222-235`)
+  - **Sweep S1** — the one gap the 19:05 sweep found that no ADR above already carries
+  - Reuse the picker's own input rather than minting a second one
+    (`src/views/record-surface/add-property-row.ts:58-60`, `:105`)
+  - **Threshold:** typing filters the rows to name matches, leaves every row's eye state untouched,
+    and clearing restores the full list
+  - **Red first:** zero `input` elements inside the column manager's list
+  - **Closes:** C10 · REQ-011 · digest screens `9867cb76`, `2f52d1bc`, `01cde7f6`
 
 ### Docs
 
@@ -137,9 +187,14 @@ never ticked by an agent.
     arm's guard (C3); the empty-prompt text on the record sheet (C2)
   - `tools/live/render-assertions.mjs`: the board card's empty `select` text (C1) and its option
     rendering (C4)
-  - `tools/live/touch-targets.mjs`: the add row's 44px floor (C6, only if T007 lands)
+  - `tools/live/touch-targets.mjs`: the add row's 44px floor (C6) and the hidden-group row's
+    (C9) — both rows are new touch targets on the phone sheet
+  - The hidden group's population (C8), its per-row grammar and section conditionality (C9), and the
+    visibility list's search filter (C10). T012's assertion reads the group's membership, not its
+    count, so a group that happens to hold the same number of the wrong things fails
   - `tools/screenshots/constructed-scenarios.mjs`: scenarios for the empty-prompt state, the option
-    split, and the add row; each new scenario declares the `sources` it depicts
+    split, the add row, and the hidden group in **both** states — nothing hidden (no Hidden section)
+    and something hidden (both sections); each new scenario declares the `sources` it depicts
   - **Each assertion is committed or run against the pre-change tree first**, so its red is
     recorded rather than assumed
 
@@ -157,22 +212,26 @@ never ticked by an agent.
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-- [ ] T001-T006 and T009-T011 marked `[x]`, each with its red-first evidence recorded
-- [ ] T007 either `[x]` with ADR-008 Accepted, or still `[B]` with the ruling named as open
+- [ ] T001-T007 and T009-T014 marked `[x]`, each with its red-first evidence recorded
+- [ ] T012 landed **before** T013 and before T007 — the population decides what the eye and the
+      trailing row's position mean
 - [ ] No `[B]` task claimed as done or as deferred without the ruling that blocks it named
-- [ ] `goal.md` C1-C6 ticked only where the threshold was met and the red was observed first
+- [ ] `goal.md` C1-C6 and C8-C10 ticked only where the threshold was met and the red was observed
+      first
 - [ ] C7, the operator's device read, left unticked — it is not an agent's to close
+- [ ] The sweep's non-adopted rows (S3, S4, S5) still carry no code and no task
 
-### Leg D — operator-gated, deliberately carrying no task row
+### Leg D — what is still gated, after the 19:05 rulings
 
-These have thresholds and red-first checks written and **no schedulable task**. A ruling converts
-each directly into a row; until then, writing the code is the failure D4 names.
+Two of the three rows that sat here became task rows on 2026-09-06 19:05 — the hidden-group
+population is **T012** and its row grammar is **T013**, both in Leg E below. One row stays: it has a
+threshold and a red-first check written and **no schedulable task**, because writing the code before
+the ruling is the failure D4 names.
 
 | Item | Ruling needed | Threshold, already written | Red today |
 |---|---|---|---|
-| Hidden-group per-row eye and bulk link | ADR-005 | The eye toggles field visibility in place and the group count updates | Zero eye controls inside `db-record-detail-hidden-group` |
-| Hidden-group population semantics | ADR-006 | A column hidden in view config appears in the sheet's group and is counted | It does not: the sheet's group holds empty fields (`record-detail-panel.ts:384-393`), the peek's holds view-hidden columns (`table-record-peek.ts:246-248`) |
 | Featured line under the title | ADR-004's landing | One line, `--text-muted`, single-line clamp, under the title, above the field list | Zero `featured` tokens in any record-surface file |
+| Record-level cover, icon and the third ghost button, "+ Add description" | **Deferred** by the operator 2026-09-06 19:05 (ADR-007, sweep S2) | The three hover ghost buttons appear together or not at all | No cover, icon or description on any record file |
 | Record-level cover and icon | ADR-007 | — (an ownership question, not a value) | No cover surface exists on any record file |
 <!-- /ANCHOR:completion -->
 

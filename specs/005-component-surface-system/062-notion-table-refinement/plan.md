@@ -36,9 +36,11 @@ moved risk rather than reduced it. Then the **freeze adoption**, the only struct
 **quality-of-life batch**, whose rows are independent of each other and mostly one file each. Then
 the **harness, captures and the operator's read**.
 
-Three rows are gated on an operator decision and do not start until it lands: C4 on ADR-007, C8 on
-ADR-006, and C1's divider treatment on ADR-005. The freeze mechanism itself does not wait — only
-what the divider looks like in dark theme does.
+**No row is gated on an operator decision any more.** ADR-003, ADR-005, ADR-006 and ADR-007 were all
+ruled on **2026-09-06 18:32**, so C4 starts at twenty-one types, C8 starts against a per-view
+configured noun, and C1's divider has its value: nothing at rest, a soft right-edge shadow once
+content scrolls under the frozen column. The one thing still owed in writing is Person's vault value
+source, an implementation ADR due before its renderer (T021a) and not a gate on anything else.
 <!-- /ANCHOR:summary -->
 
 ---
@@ -160,7 +162,8 @@ hit areas. Those are C9 and they are the operator's.
 <!-- ANCHOR:dependencies -->
 ## 6. DEPENDENCIES
 
-- **ADR-005, ADR-006, ADR-007** — operator decisions gating C1's divider, C8 and C4.
+- **ADR-005, ADR-006, ADR-007** — operator decisions, **all Accepted 2026-09-06 18:32**; they now
+  supply C1's divider value, C8's noun source and C4's type count rather than gating them.
 - **`053` and `052` file groups** — one leg holds one group (D7); `styles.css` is serialized by the
   parent's CSS lane.
 - **`050` ADR-005 and `../design-system.md` §12** — bind every new colour, in both themes.
@@ -195,8 +198,8 @@ Leg 1 (guards) ──► Leg 2 (freeze) ──► Leg 4 (harness, captures, devi
 | Leg | Depends On | Blocks |
 |-----|------------|--------|
 | Leg 1 — guards | None | Nothing; it runs first by rule, not by dependency |
-| Leg 2 — freeze | Leg 1 (so a regression is visible), ADR-005 for the divider only | Leg 4's capture |
-| Leg 3 — quality of life | ADR-006 for C8, ADR-007 for C4; the rest are independent | Leg 4's recapture |
+| Leg 2 — freeze | Leg 1 (so a regression is visible) | Leg 4's capture |
+| Leg 3 — quality of life | None; the two former ADR gates are settled | Leg 4's recapture |
 | Leg 4 — harness and read | Legs 2 and 3 | Closure |
 <!-- /ANCHOR:phase-deps -->
 
@@ -263,8 +266,9 @@ Leg 1 (guards) ──► Leg 2 (freeze) ──► Leg 4 (harness, captures, devi
 | Guards (T001-T005) | None | Five permanent assertions | Nothing, by design — they protect everything after |
 | `frozenColumnKeys` (T010) | None | The config field | T011, T012, T013 |
 | Freeze action and row (T011) | T010 | A menu row with checked state | T012 |
-| Sticky CSS (T012) | T010, T011 | The offsets and the divider | T030's capture |
-| Type registries (T021) | ADR-007 | Eighteen agreeing rows | T031's recapture |
+| Sticky CSS (T012) | T010, T011 | The offsets and the scroll-conditional shadow | T030's capture |
+| Type registries (T021) | None | Twenty-one agreeing rows | T031's recapture |
+| Person's value source (T021a) | None | An ADR naming wikilink or plain text | T021's Person renderer only |
 | Border switch (T023) | None | A gated `td` border | T031's recapture |
 | Captures (T030) | T012, T023 | Two new visual states, dark and light | T032 |
 | Device read (T033) | Everything | AC-009 | Closure |
@@ -312,12 +316,14 @@ Leg 1 (guards) ──► Leg 2 (freeze) ──► Leg 4 (harness, captures, devi
 
 The decisions live in `decision-record.md` in full. In short: **ADR-001** keeps our title-column
 menu convention against Notion's shorter one; **ADR-002** records that the wrap defect landed on
-`main` and corrects the resolution rule the research quoted; **ADR-003** puts the *Conditional
-color* naming question to the operator; **ADR-004** restates the colour guardrail as binding on
-every new tint; **ADR-005** scopes freeze to desktop and asks what its divider does in dark theme;
-**ADR-006** asks where the add-row noun comes from; **ADR-007** asks whether a type-picker row ships
-before the data type behind it. ADR-001, ADR-002 and ADR-004 are Accepted because a landed ruling or
-a landed commit already decides them. The other four are **Proposed** and the operator moves them.
+`main` and corrects the resolution rule the research quoted; **ADR-003** gives the *Conditional
+color* rules their own view-settings row, as `064`'s work; **ADR-004** restates the colour guardrail
+as binding on every new tint; **ADR-005** scopes freeze to desktop and gives its divider a value —
+nothing at rest, a soft shadow once scrolled past; **ADR-006** makes the add-row noun a per-view
+configured string with today's word as its fallback; **ADR-007** ships all eight missing types as
+real types, moving the count 13 to 21. ADR-001, ADR-002 and ADR-004 were Accepted on a landed ruling
+or a landed commit. **The other four were ruled by the operator on 2026-09-06 18:32 and are now
+Accepted too, so all seven are Accepted and none is Proposed.**
 
 ---
 
@@ -353,6 +359,9 @@ as incomplete, not as done.
 
 ### Blocked Task Protocol
 
-A row blocked on an operator decision (T021, T025, T033) stops and says so, naming the ADR and what
-the operator has to choose between. It does not pick the likely answer and proceed — ADR-007's three
-options exist because the likely answer was the wrong one.
+The only row still owned by the operator is **T033**, the device read, and an agent never ticks it.
+T021 and T025 were blocked and are not any more — the 2026-09-06 18:32 rulings settled both. The
+protocol stays written down because it is the rule, not because a row is currently under it: a row
+blocked on an operator decision stops and says so, naming the ADR and what the operator has to
+choose between, and it does not pick the likely answer and proceed. ADR-007's three options existed
+because the likely answer — defer — was the wrong one, and the operator took the largest instead.

@@ -1,6 +1,6 @@
 ---
 title: "Implementation Plan: Notion Record Refinement"
-description: "Four legs over the record and property surfaces: empty copy and type size, the option split, the add-property surface, and the operator-gated rows that stay unscheduled until their rulings land."
+description: "Five legs over the record and property surfaces: empty copy and type size, the option split, the add-property surface, the hidden-group work the 2026-09-06 19:05 rulings opened, and the one row still operator-gated."
 trigger_phrases:
   - "065 plan"
   - "record refinement legs"
@@ -29,11 +29,17 @@ contextType: "general"
 | **Testing** | `vitest` for units; `tools/live/*.mjs` computed-style lanes over constructed scenarios; `tools/screenshots` for captures |
 
 ### Overview
-Four legs, sequenced so the capture baselines settle once rather than three times. Leg A takes the
+Five legs, sequenced so the capture baselines settle once rather than four times. Leg A takes the
 empty copy on both surfaces plus the one CSS declaration; Leg B switches the option renderer on the
-same two consumer groups; Leg C fixes the picker's dropped query and, if ADR-008 lands, adds the
-record sheet's trailing add row; Leg D is the operator-gated set and carries no task row until its
-rulings are taken. Every leg's proof is a check observed red before the change.
+same two consumer groups; Leg C fixes the picker's dropped query and adds the record sheet's
+trailing add row, ungated since 2026-09-06 19:05; **Leg E** carries the hidden-group population, its
+row grammar and the visibility-list search that the same sitting opened; Leg D is what remains
+operator-gated and carries no task row. Every leg's proof is a check observed red before the change.
+
+**Leg E's internal order is not a preference.** The population (T012) lands before the grammar
+(T013), because an eye that toggles view visibility inside a group of empty fields toggles nothing a
+user asked for. T007's position — "above the hidden group" — also depends on T012, so it queues
+there too.
 <!-- /ANCHOR:summary -->
 
 ---
@@ -43,13 +49,14 @@ rulings are taken. Every leg's proof is a check observed red before the change.
 
 ### Definition of Ready
 - [x] Problem statement clear and scope documented — `spec.md` §2, §3
-- [x] Success criteria measurable — `goal.md` §3 C1-C7, each with a threshold and an observed red
+- [x] Success criteria measurable — `goal.md` §3 C1-C10, each with a threshold and an observed red
 - [x] Dependencies identified — `spec.md` §6; `052`'s picker host and the serialized CSS lane
-- [ ] ADR-008 taken, before Leg C's second half is scheduled
+- [x] ADR-008 taken (operator, 2026-09-06 19:05), so Leg C's second half is schedulable
+- [ ] The empty-fields home is owed an ADR before T012 moves the group's population
 
 ### Definition of Done
-- [ ] C1-C5 met, each proved by the check that was observed red first
-- [ ] C6 met, or recorded unscheduled with ADR-008 still open
+- [ ] C1-C6 and C8-C10 met, each proved by the check that was observed red first
+- [ ] C8 landed before C9 and before C6, with the ordering evidenced rather than asserted
 - [ ] `npx tsc --noEmit`, `npm run build` and `npx vitest run` all pass, output and exit status read
 - [ ] `npm run screenshots:verify` exits 0 and every changed PNG was opened and looked at
 - [ ] `npm run gate` exits 0, read from `$?`
@@ -139,10 +146,13 @@ The four legs, and why they are in this order:
   primitive. Sequenced after A so the capture baselines settle once.
 - **Leg C — the add-property surface** (T006, T007). The wiring fix is two lines and a unit test and
   can land at any time; the trailing row is new DOM on the sheet, needs a constructed scenario and a
-  capture entry, and is gated on ADR-008.
-- **Leg D — operator-gated** (T009). No task row until the ruling. Each item's threshold and
-  red-first check are already written, so a ruling converts into a row rather than into a fresh
-  investigation.
+  capture entry, and queues behind Leg E's T012 for its position rather than behind a ruling.
+- **Leg E — the 19:05 rulings** (T012, T013, T014). The hidden group's population, then its row
+  grammar on top of it, then the visibility list's search field. T013 changes
+  `HiddenPropertiesGroupHandle.render`'s signature, so the table peek compiles in the same commit.
+- **Leg D — what stays operator-gated.** No task row, and after 19:05 it holds two items rather than
+  four: the featured line waits on ADR-004's landing, and the cover, icon and "+ Add description"
+  strip is **Deferred** by ruling. Each keeps its threshold and red-first check written.
 <!-- /ANCHOR:phases -->
 
 ---
@@ -172,11 +182,13 @@ red is recorded from a run before the edit.
 
 | Dependency | Type | Status | Impact if Blocked |
 |------------|------|--------|-------------------|
-| `052`'s picker host | Internal | Yellow | C6 cannot mount its picker; C6 is gated on ADR-008 regardless |
+| `052`'s picker host | Internal | Yellow | C6 cannot mount its picker. This is now C6's **only** external precondition — ADR-008 was taken on 2026-09-06 19:05 |
 | The parent's serialized `styles.css` lane | Internal | Green | C3 queues behind any other CSS leg; it is one declaration |
 | `054`'s `property-row.ts` file group | Internal | Green | Legs are taken one at a time in this file; no two run concurrently |
 | `board-renderer.ts` (`056`'s file group) | Internal | Yellow | C1 and C4 touch its card-field path; sequence after any open `056` leg in that file |
-| ADR-005 / ADR-006 / ADR-007 / ADR-008 | Operator | Red | Leg D and C6 stay unscheduled. This is the designed state, not a blocker to work around |
+| ADR-005 / ADR-006 / ADR-007 / ADR-008 | Operator | **Green — taken 2026-09-06 19:05** | Three Accepted, one Deferred. C6 is unblocked and Leg E exists |
+| The empty-fields reveal's new home | Operator | Yellow | T012 moves the hidden group's population; nothing yet says where the empty-fields reveal goes. Owed an ADR before T012 lands, not before it is planned |
+| ADR-004's landing | Internal | Red | Leg D's featured line stays unscheduled. This is the designed state, not a blocker to work around |
 <!-- /ANCHOR:dependencies -->
 
 ---
@@ -199,23 +211,28 @@ red is recorded from a run before the edit.
 ## L2: PHASE DEPENDENCIES
 
 ```
-T001 (inventories + red baselines) ──► Leg A (T002-T004) ──► Leg B (T005) ──► T008 (gate)
-                                   └──► Leg C wiring (T006) ─────────────────┘
-                                                    │
-                            ADR-008 ──► Leg C row (T007) ──────────────────────┘
+T001 (inventories + red baselines) ──► Leg A (T002-T004) ──► Leg B (T005) ──► T009-T011 (verify)
+                                   └──► Leg C wiring (T006) ─────────────────────┘
+                                   └──► Leg E: T012 ──► T013 ──────────────────────┤
+                                                 └──► Leg C row (T007) ────────────┤
+                                   └──► Leg E: T014 ───────────────────────────────┘
 
-ADR-005 / ADR-006 / ADR-007 ──► Leg D (T009) — unscheduled
+ADR-004's landing ──► Leg D featured line — unscheduled
+ADR-007 (Deferred) ──► Leg D cover / icon / description strip — not scheduled by ruling
 ```
 
 | Phase | Depends On | Blocks |
 |-------|------------|--------|
 | T001 Setup | None | Every leg |
 | Leg A | T001 | Leg B (capture baselines) |
-| Leg B | Leg A | T008 |
-| Leg C wiring (T006) | T001 | T008 |
-| Leg C row (T007) | ADR-008, `052`'s host | T008 |
-| Leg D (T009) | ADR-005, ADR-006, ADR-007 | Nothing here; it is a separate scheduling decision |
-| T008 Verification | Leg A, Leg B, T006, T007 if taken | C7 |
+| Leg B | Leg A | T009-T011 |
+| Leg C wiring (T006) | T001 | T009-T011 |
+| Leg C row (T007) | T012, `052`'s host | T009-T011 |
+| Leg E T012 (population) | T001 | T013, T007 |
+| Leg E T013 (row grammar) | T012 | T009-T011 |
+| Leg E T014 (visibility search) | T001 | T009-T011 |
+| Leg D | ADR-004's landing; ADR-007 is Deferred | Nothing here; it is a separate scheduling decision |
+| T009-T011 Verification | Leg A, Leg B, T006, T007, Leg E | C7 |
 <!-- /ANCHOR:phase-deps -->
 
 ---
@@ -229,9 +246,12 @@ ADR-005 / ADR-006 / ADR-007 ──► Leg D (T009) — unscheduled
 | Leg A (C1, C2, C3) | Med | 3-5 hours — the copy for five formats is the slow half, not the mechanism |
 | Leg B (C4) | Low | 1-2 hours plus the contrast sweep |
 | Leg C wiring (C5) | Low | 1 hour including the unit test |
-| Leg C row (C6, gated) | Med | 2-3 hours — new DOM, a scenario and a capture entry |
+| Leg C row (C6) | Med | 2-3 hours — new DOM, a scenario and a capture entry |
+| Leg E T012 (C8, population) | Med | 2-3 hours — the caller's column set changes, and the empty-fields reveal needs somewhere to go |
+| Leg E T013 (C9, row grammar) | High | 4-6 hours — a shared primitive's signature, two consumers, two group states to capture |
+| Leg E T014 (C10, search) | Low | 1 hour — the input already exists one file away |
 | Verification (gates, captures, evidence rows) | Med | 2-3 hours |
-| **Total** | | **11-17 hours**, of which 2-3 do not start until ADR-008 |
+| **Total** | | **18-27 hours**. The 19:05 rulings added 7-10 of that, most of it T013's shared-primitive change rather than the eye control itself |
 <!-- /ANCHOR:effort -->
 
 ---

@@ -58,8 +58,9 @@
       "tools/live/render-assertions.mjs",
       "tools/live/touch-targets.mjs",
       "tools/screenshots/scan-option-tones.mjs",
-      "src/views/record-surface/CODE.md",
-      "src/views/table-record-peek.ts"
+      "src/views/record-surface/hidden-properties.ts",
+      "src/views/table-record-peek.ts",
+      "src/views/record-surface/CODE.md"
     ],
     "entities": [
       {
@@ -165,15 +166,21 @@
         "source": "derived"
       },
       {
-        "name": "CODE.md",
-        "kind": "doc",
-        "path": "src/views/record-surface/CODE.md",
+        "name": "hidden-properties.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/hidden-properties.ts",
         "source": "derived"
       },
       {
         "name": "table-record-peek.ts",
         "kind": "code",
         "path": "src/views/table-record-peek.ts",
+        "source": "derived"
+      },
+      {
+        "name": "CODE.md",
+        "kind": "doc",
+        "path": "src/views/record-surface/CODE.md",
         "source": "derived"
       },
       {
@@ -199,17 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Phase Context This",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Three changes this program already ruled on Anytype evidence are half-landed on the record surface:",
     "created_at": "2026-09-06T16:06:31Z",
-    "last_save_at": "2026-09-06T16:18:37.052Z",
+    "last_save_at": "2026-09-06T21:46:25.298Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:c20cab3f29ebbc6e42c9108ab14d2880f2aa01e97b637ea07fef1675f8ebc736",
+    "source_fingerprint": "sha256:e499e8b3685fc77827d2d5ff478bd1622a102ae1bb4e4d58413954e82eedb4f5",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "f44f27fbe4d7421401d66976c233318977e39fa924f49c02f9b78c766d052205",
-      "plan.md": "ba73480370cd3f8f7cea9b2b5f17a08eec466a3bb048c6ba382fac47ea448fb9",
-      "tasks.md": "fff68d9ad929ae51c0bcf246fcca7c58de8750e1cccad933c4d2b61d8325a926",
-      "decision-record.md": "9ad9e7b438d23bab70ef43cf3fac903a5e887f68166ca9599d2ae63fbaf2850a",
-      "implementation-summary.md": "2fe44b6a7dde529ecc33342e78738761eac13338368b40ff211141b3b6d6f232"
+      "spec.md": "3da496d0dc014c6d9af273db0ed2ef90bca485f5d023a8f1d7eefcfb3618b2ce",
+      "plan.md": "5674cba8d4bc7c134c91d0aa22500e205d8d70ae3cae0ea511475f67abf2ccaf",
+      "tasks.md": "147f4b582670dc0d8d348d3eceb1c1199ec9cdf94e684646bd59254ba14c4b0d",
+      "decision-record.md": "28bf82ffc7e76e6b5a2bbc8fe93f5c820f0259c8401460d2f6390d16fe56a125",
+      "implementation-summary.md": "07a1a1d374a421693d95a2330a53adf8b2c008da270d9c338058efb450aefd97"
     },
     "last_active_at": null
   }

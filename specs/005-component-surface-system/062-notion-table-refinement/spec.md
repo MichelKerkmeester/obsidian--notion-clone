@@ -37,14 +37,17 @@ the in-header multi-sort ordinal with `aria-sort`, per-chip inline removal, sele
 selection, and an inline-edit lifecycle stricter than a screenshot catalogue can show — and five of
 the thirteen carry no permanent assertion at all.
 
-**Key Decisions**: whether Freeze ships desktop-only and what its divider does in a theme no capture
-covers (ADR-005); where the add-row noun comes from (ADR-006); whether a type-picker row ships ahead
-of the data type behind it (ADR-007); and whether the operator wants Notion's first-class
-*Conditional color* naming for a capability we already have (ADR-003).
+**Key Decisions**: all seven ADRs are now Accepted — the four that were the operator's were ruled on
+**2026-09-06 18:32**. Freeze ships desktop-only with a soft right-edge shadow shown only once content
+scrolls under the frozen column (ADR-005); the add-row noun is a **per-view configured** string with
+today's "New" as its fallback (ADR-006); the type set ships **enabled with real types behind every
+row**, moving 13 to **21** (ADR-007); and the *Conditional color* rules get their own view-settings
+row, which is `064`'s work rather than this packet's (ADR-003).
 
 **Critical Dependencies**: `053` owns the toolbar, the wrap switch and the column menu; `052` owns
-the cell editors; `styles.css` is serialized by the parent's CSS lane; ADR-005, ADR-006 and ADR-007
-are Proposed and block C1's divider, C8 and C4 respectively.
+the cell editors; `styles.css` is serialized by the parent's CSS lane. No criterion is blocked on an
+operator decision any more; the one thing still owed in writing is **Person's vault value source**,
+an implementation ADR due before the Person renderer.
 
 ---
 
@@ -92,7 +95,8 @@ from the contract-backed templates directly, following `053`'s own recorded fall
   Notion fact. No image file was opened by the research loop, by construction.
 - `053` and `052` own the files this packet changes and are cited rather than co-assigned.
 - `050` ADR-005's contrast bar and `../design-system.md` §12's token rule bind every new colour.
-- ADR-005, ADR-006 and ADR-007 are the operator's and gate C1's divider treatment, C8 and C4.
+- ADR-005, ADR-006 and ADR-007 were the operator's and are **Accepted as of 2026-09-06 18:32**;
+  nothing is gated on them. Person's value source is owed its own ADR before its renderer.
 
 **Deliverables**:
 - Per-column freeze: a config field, a menu row, sticky offsets and a divider, desktop-only.
@@ -167,7 +171,8 @@ finds out immediately when they break it.
 - **A row-expand triangle** (`90277769`) — the record-open affordance and the docked peek already
   resolve the need, and `006`/`054` own it.
 - **A new "Conditional color" feature.** The capability ships; only its naming could move, and that
-  is ADR-003's question, not a task.
+  has now moved: ADR-003 is Accepted (operator 18:32, *"Yes, own row in view settings"*) and the work
+  is a `064` toolbar item, not a task here.
 
 ### Files to Change
 
@@ -205,16 +210,16 @@ finds out immediately when they break it.
 
 - **REQ-003**: A date column can carry an optional end value, edited through an End date row and
   rendered as a range in the cell.
-- **REQ-004**: The four type registries agree, the type popover shows one glyph per type, and the
-  grouped submenu's slice boundaries hold. Gated on ADR-007.
+- **REQ-004**: The four type registries agree at **twenty-one** members, the type popover shows one
+  glyph per type, and the grouped submenu's slice boundaries hold. ADR-007 Accepted; ungated.
 - **REQ-005**: The resize handle's computed background changes on `th:hover`, from a token-derived
   colour clearing 3:1 in both themes.
 - **REQ-006**: A view switch controls vertical lines; off, no `td` computes a right border; on, the
   computed borders are unchanged from today.
 - **REQ-007**: An empty visible property renders a muted placeholder in the peek. Table cells are
   untouched.
-- **REQ-008**: The add-row affordance renders a derived noun where one exists and today's string
-  where it does not, in all three locales. Gated on ADR-006.
+- **REQ-008**: The add-row affordance renders the view's **configured** noun where one is set and
+  today's string where it is not, in all three locales. ADR-006 Accepted; ungated.
 - **REQ-009**: The operator reads the refined table on iOS and in both themes, and answers the
   three questions no harness here can.
 <!-- /ANCHOR:requirements -->
@@ -246,9 +251,10 @@ sentence each:
 
 | Dependency | Type | Status | Impact if unavailable |
 |------------|------|--------|-----------------------|
-| ADR-005 (freeze scope and divider) | Operator decision | Proposed | C1 lands without a dark-theme divider treatment |
-| ADR-006 (noun source) | Operator decision | Proposed | C8 cannot start |
-| ADR-007 (type row before data type) | Operator decision | Proposed | C4 cannot start |
+| ADR-005 (freeze scope and divider) | Operator decision | **Accepted 2026-09-06 18:32** | Settled: desktop-only, soft right-edge shadow once scrolled past |
+| ADR-006 (noun source) | Operator decision | **Accepted 2026-09-06 18:32** | Settled: per-view configured noun, fallback today's string |
+| ADR-007 (type row before data type) | Operator decision | **Accepted 2026-09-06 18:32** | Settled: all eight missing types ship as real types, 13 to 21 |
+| Person's vault value source | Implementation decision | Open, owed an ADR | The Person renderer cannot be written until it is named; the other seven types are unaffected |
 | `053` / `052` file ownership | Coordination | Live | Legs serialize on the same files |
 | The parent CSS lane | Coordination | Live | `styles.css` rows queue |
 <!-- /ANCHOR:risks -->
@@ -321,7 +327,7 @@ answer would be the wrong way round.
 | Risk ID | Description | Impact | Likelihood | Mitigation |
 |---------|-------------|--------|------------|------------|
 | R-001 | The freeze CSS is our design, not an adoption — no capture shows a frozen state | M | H | Marked inference in `goal.md` C1 and ADR-005; the iOS read is a criterion, not an assumption |
-| R-002 | A new type row ships with no renderer, editor or storage behind it | H | M | ADR-007 puts the question to the operator and names deferral as the alternative |
+| R-002 | A new type row ships with no renderer, editor or storage behind it | H | M | Closed by ADR-007's ruling: every one of the eight ships **enabled with a real renderer**, so an empty row is not a shape this packet can produce. The residual risk moves to Person specifically, whose value source is owed an ADR before its renderer (T021a) |
 | R-003 | The four type registries drift again after this packet | M | M | The guard is the deliverable: one assertion that the four lists are the same length and the same members |
 | R-004 | The border gate moves every table capture and hides a real regression in the noise | M | M | Recapture in the same leg; assert the protected entries `pixelHash`-identical; read the movers by scenario |
 | R-005 | A guard is written that passes on presence rather than value, the family's standing harness failure | M | M | Every guard row reads a computed style or a measured rect and is observed red under its own control before it is trusted |
@@ -361,16 +367,21 @@ the footer or restacks the chips.
 
 ## 12. OPEN QUESTIONS
 
-- **Where does the add-row noun come from?** Notion derives it from the data source (`19745d87`,
-  `e33466b4`). Ours would need the view's source name or a fixed word. A product decision; ADR-006
-  carries it and C8 is gated on it.
-- **What does the frozen divider look like in dark theme?** No Notion capture exists — all 102
-  screens are light — so the shadow or line is ours to derive from tokens. ADR-005; the operator's.
-- **Does the operator want Notion's first-class *Conditional color* naming and explainer**
-  (`142cef4e`, listed in `a0d1e399` and `794591f5`), given that our rules live in database settings?
-  The capability ships either way. ADR-003; presentation only.
-- **Does a type-picker row ship before the data type behind it?** ADR-007. The alternative is
-  deferring the whole item until a type has a renderer, an editor and a storage form.
+- ~~**Where does the add-row noun come from?**~~ **Answered 2026-09-06 18:32** — *"Per-view
+  configured noun, fallback 'New'"*. ADR-006 Accepted; the noun is a `ViewConfig` field, not a
+  derivation.
+- ~~**What does the frozen divider look like in dark theme?**~~ **Answered 2026-09-06 18:32** —
+  *"Subtle shadow when scrolled past"*. ADR-005 Accepted; nothing at rest, a soft token-derived
+  right-edge shadow once content scrolls under the frozen column, measured in both themes.
+- ~~**Does the operator want Notion's first-class *Conditional color* naming and explainer**~~
+  (`142cef4e`, listed in `a0d1e399` and `794591f5`)? **Answered 2026-09-06 18:32** — *"Yes, own row
+  in view settings"*. ADR-003 Accepted; the work is `064`'s.
+- ~~**Does a type-picker row ship before the data type behind it?**~~ **Answered 2026-09-06 18:32** —
+  *"All types or add more as needed"*. ADR-007 Accepted; every row ships with a real type behind it
+  and the count is 13 to 21.
+- **What is a Person value in an Obsidian vault — a wikilink to a person note, or plain text?** Open,
+  and the one question this packet's rulings did not settle. Owed its own ADR before the Person
+  renderer is written (T021a). It does not gate the other seven types.
 - **Show data source title** — the sixth P10 view toggle was not located in the loop's reads and is
   deliberately **not guessed at**. C6's first read should answer it.
 - **Create-on-type inside a table cell** — unresolved verification debt, not a finding of absence.

@@ -209,7 +209,7 @@
     ],
     "causal_summary": "The board can put a group out of sight and offers nothing that brings it back",
     "created_at": "2026-09-06T15:01:03Z",
-    "last_save_at": "2026-09-06T16:16:50.465Z",
+    "last_save_at": "2026-09-06T21:53:04.331Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,14 +221,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:7ae2cd35c71e1e3af53a4f47012bc967bbf4068849b02ea0175ec1839271e915",
+    "source_fingerprint": "sha256:7ef4a79588b9b50e8901bb071a8b0dae0a53db50a7caf7112da838aa4c2d7186",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "2328b34fbc6af8d613aed109d5b8f9e2d7a2f00f20e1967b3b0503c16b551493",
-      "plan.md": "8f58de998eac5b9e8a7abb302ea15f50a09723a11da84f7eab8c873ac28672a0",
-      "tasks.md": "94f3f3b1aef02355b4d2c7316107c89591860a4a41d6ff35d040ec61fa4efe5e",
-      "decision-record.md": "1375a59ed5916c02443970a7a2caa5811b541c91dad03244a308d8b815a71954",
-      "implementation-summary.md": "b80e271603ea0db9a34689c459f86ee0f02fa8634048aeb7d9002e1df8460612"
+      "spec.md": "e1ab708abf45c047945e8a8627b2e2d47c1e47f214f7467652b36795e108582e",
+      "plan.md": "cd9d42fd48bd14a0ea6d317bed778ecc4a58182a133093419e19e2257b50cada",
+      "tasks.md": "dc8135c5236f8bc1ba8621a97b0fc02d518787a93a9ad2e01f855b126e4f6b59",
+      "decision-record.md": "bae39fa0aea7da98f0211b40ca795f555edda2dbe551fc3dce588aa80b566cb9",
+      "implementation-summary.md": "50990e23f9214fc8c067c7f8ed9dfad3f48558e7e140588fd0326ccea12b8544"
     },
     "last_active_at": null
   }

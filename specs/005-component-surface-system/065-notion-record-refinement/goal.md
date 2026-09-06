@@ -11,12 +11,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/065-notion-record-refinement"
-    last_updated_at: "2026-09-06T18:10:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Opened the packet from the Notion record research synthesis"
-    next_safe_action: "Take ADR-005 through ADR-008, then start T001 (Leg A)"
+    last_updated_at: "2026-09-06T17:05:00Z"
+    last_updated_by: "ruling-fold-session"
+    recent_action: "Folded the 19:05 rulings and their sweep; C8, C9 and C10 opened"
+    next_safe_action: "Start T001 (Leg A); Leg E runs T012 before T013"
     blockers:
-      - "ADR-005, ADR-006, ADR-007 and ADR-008 are the operator's and gate C6 and Leg D"
+      - "The empty-fields home is owed an ADR before T012 moves the group's population"
       - "styles.css edits are serialized by the parent's CSS lane"
       - "board-renderer.ts is 056's file group and is taken one leg at a time"
     key_files:
@@ -33,11 +33,13 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "Does the record sheet's hidden group hold empty fields, view-hidden columns, or both"
-      - "Does the hidden group grow a per-row eye and a bulk Show all link"
-      - "Which packet owns a record-level cover and icon, and is one wanted at all"
-      - "Does the record sheet's add-property entry sit as a trailing row or on a section header"
+      - "Where the sheet's empty-fields reveal lives once the group holds view-hidden columns"
     answered_questions:
+      - "The hidden group holds view-hidden columns, like Notion and the peek (operator 19:05)"
+      - "The hidden group takes Notion's full row grammar, and the ruling widened to a sweep (operator 19:05)"
+      - "The record-level cover and icon question is Deferred, not unowned (operator 19:05)"
+      - "The add-property entry is Notion's trailing row (operator 19:05)"
+      - "The sweep found one gap, S1: the property-visibility list cannot be searched"
       - "Notion's universal Empty is refused: A3's format-specific prompts are the landed ruling"
       - "The phone label column stays at the 96px Anytype iOS model A2 ruled"
       - "The add-property picker stays search-first: A5's grammar, with AI chips excluded by D6"
@@ -115,9 +117,13 @@ the calendar (`057`), formulas, rollups and calculations (`054` ADR-003), or com
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-Seven criteria. Six are agent-closable against a threshold; the seventh is the operator's and is
-never ticked by an agent. Each cites the Notion screen ids behind it and the `file:line` that is red
-today, re-derived against this tree at `37207535`.
+Ten criteria. Nine are agent-closable against a threshold; C7 is the operator's and is never ticked
+by an agent. Each cites the Notion screen ids behind it and the `file:line` that is red today,
+re-derived against this tree at `37207535`.
+
+C8, C9 and C10 were opened by the operator's rulings of **2026-09-06 19:05** and did not exist when
+this packet was written. C7 keeps its number: ids are stable, so the new rows are appended rather
+than inserted.
 
 - [ ] **C1 — The word "Empty" is gone from the board card where an editor exists.**
   `getEmptyDisplayValue` delegates to `getPropertyEmptyPrompt`, preserving the
@@ -178,7 +184,8 @@ today, re-derived against this tree at `37207535`.
   **Evidence:** Notion carries the name first and types second [digest screen `1589e7c8`]. This
   adapts that insight onto A5's search-first grammar without reordering it (ADR-003).
 
-- [ ] **C6 — The record sheet carries an add-property entry.** *(gated on ADR-008)*
+- [ ] **C6 — The record sheet carries an add-property entry.** *(ADR-008, Accepted 2026-09-06
+  19:05 — operator, verbatim: "Trailing '+ Add a property' row")*
   A muted trailing row below the last field and above the hidden group opens the existing
   search-first picker through `052`'s picker host per `054` D8.
   **Threshold:** the row renders in that position; activating it opens `buildAddPropertyRow`'s
@@ -188,20 +195,74 @@ today, re-derived against this tree at `37207535`.
   `buildAddPropertyRow` across the record surface returns zero hits.
   **Evidence:** Notion ends its property list with a plain-text "+ Add a property" row [digest
   screens `16ddd22c`, `bf2171ff`]; Anytype puts a `+` on the section header instead
-  (`054/design-trueup.md` §A4). Neither placement is ruled for the record sheet, which is why
-  ADR-008 exists and why this row is gated.
+  (`054/design-trueup.md` §A4). The operator named Notion's placement, which is also the one the
+  record sheet can actually take: it has **no section header** for Anytype's `+` to sit on.
+  **Sequenced after C8**, so "above the hidden group" means one thing rather than two.
 
 - [ ] **C7 — The operator reads a record on iOS and on desktop and reports the refinement as
-  landed**, with ADR-005, ADR-006, ADR-007 and ADR-008 taken. *(operator-owned; never ticked by an
-  agent)*
+  landed.** ADR-005, ADR-006, ADR-007 and ADR-008 were taken on 2026-09-06 19:05, so this row no
+  longer waits on a ruling — only on a device. *(operator-owned; never ticked by an agent)*
+
+- [ ] **C8 — The record sheet's hidden group holds view-hidden columns, not empty fields.**
+  *(ADR-006, Accepted 2026-09-06 19:05 — operator, verbatim: "View-hidden columns, like Notion and
+  the peek")*
+  The caller passes visible columns only today, so the sheet never sees a view-hidden column at all;
+  the population has to reach it before the group can hold it. The peek already computes the
+  complement of `visibleKeys` and is the shape to match.
+  **Threshold:** a column hidden in view config appears in the sheet's group and is counted there;
+  an empty but visible field does not. The assertion reads the group's **membership**, not its
+  count — a group holding the same number of the wrong things must fail.
+  **Observed red:** the sheet's group holds empty fields
+  (`src/views/record-detail-panel.ts:384-393`) while the peek's holds view-hidden columns
+  (`src/views/table-record-peek.ts:246-248`), and both render under the same label
+  (`src/i18n.ts:569`). Hide a column in view config and it vanishes from the sheet entirely, while
+  "Hidden properties (3)" sits beside it counting something else.
+  **Evidence:** Notion's "Hidden in `<surface>`" section holds view-hidden columns [digest screens
+  `cc8b241a`, `7ffa073f`].
+  **Carries an open question, not a block:** where the sheet's *empty-fields* reveal lives once this
+  group stops holding them. Owed an ADR before the code lands.
+
+- [ ] **C9 — Every hidden-group row carries Notion's full grammar.**
+  *(ADR-005, Accepted 2026-09-06 19:05 — operator, verbatim: "Mimic notion also regarding other
+  features we might be missing")*
+  Drag handle, type icon, name, eye toggle and chevron per row — the anatomy
+  `buildCheckboxPropertyRow` already carries (`src/views/record-surface/property-row.ts:330-395`);
+  Shown and Hidden sections with a bulk link each; the Hidden section rendered only when non-empty;
+  the count staying on the entry row per A4; the title row's eye disabled.
+  **Threshold:** toggling the eye shows or hides the field in place without leaving the sheet; the
+  group count updates; each section's bulk link acts on its own section; the Hidden section is
+  absent while nothing is hidden.
+  **Observed red:** zero eye controls inside `db-record-detail-hidden-group`; the group is a single
+  disclosure (`src/views/record-surface/hidden-properties.ts:44-73`).
+  **Evidence:** three independent captures of the same grammar [digest screens `2f52d1bc`,
+  `406e67e2`, `9867cb76`, `cc8b241a`, `01cde7f6`, `7ffa073f`, `794591f5`].
+  **Sequenced after C8**, and it moves the table peek with it: `HiddenPropertiesGroupHandle.render`'s
+  signature changes and both consumers compile together.
+
+- [ ] **C10 — The property-visibility list can be searched.**
+  *(the 2026-09-06 19:05 sweep, S1 — the one gap it found that no ADR above already carries)*
+  Reuse the picker's own input rather than minting a second one.
+  **Threshold:** typing filters the rows to name matches, leaves every row's eye state untouched,
+  and clearing restores the full list.
+  **Observed red:** zero `input` elements inside the column manager's list — its header carries only
+  the select-all toggle (`src/views/column-manager-renderer.ts:222-235`), while the add-property
+  picker has the input one file away (`src/views/record-surface/add-property-row.ts:58-60`, `:105`).
+  **Evidence:** Notion's visibility sheet opens with a search field [digest screens `9867cb76`,
+  `2f52d1bc`, `01cde7f6`].
 
 ### What this packet deliberately does not promise
 
-The nine ranked candidates the research produced are not nine criteria. Three are operator rulings
-with no agent-closable half until the ruling lands (the hidden-group enrichment, the featured line,
-the cover), and one is documentation with no threshold (the display-mode vocabulary, `tasks.md`
-T005). Criteria C1-C6 are the six that carry a measurable threshold and a red that can be observed
-before the change.
+The nine ranked candidates the research produced were not nine criteria when this packet opened.
+Three were operator rulings with no agent-closable half until the ruling landed; two of those —
+the hidden-group population and its row grammar — **became C8 and C9 on 2026-09-06 19:05**, and the
+third, the featured line, still waits on ADR-004's landing. The cover is **Deferred** by ruling
+rather than pending (ADR-007). One remains documentation with no threshold: the display-mode
+vocabulary (`tasks.md` T008).
+
+The 19:05 sweep added exactly one criterion, C10. What it did **not** add is the more useful half:
+three Notion features that read as gaps in the digest's prose dissolve against the code — the
+two-destination Properties split, the Deleted-properties tier and the AI-autofill chips. They are
+recorded in `decision-record.md` as read-and-not-adopted so nobody re-finds them and builds them.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -259,5 +320,29 @@ fields (`record-detail-panel.ts:384-393`); the table peek's holds view-hidden co
 (`table-record-peek.ts:246-248`); Notion's "Hidden in `<surface>`" section holds view-hidden columns
 [digest screens `cc8b241a`, `7ffa073f`]. A user who hides a column in view config sees it vanish
 from the record sheet and sees an unrelated "Hidden properties (3)" counting empties. Neither the
-digest nor the true-up carries this. It is ADR-006, and it is the operator's.
+digest nor the true-up carries this. It was ADR-006, and the operator took it on 2026-09-06 19:05.
+
+### Ruled 2026-09-06 19:05, and one ruling widened the packet
+
+Four decisions came back in one sitting, each quoted verbatim in `decision-record.md`:
+
+- **ADR-005**, *"Mimic notion also regarding other features we might be missing"* — Accepted **and
+  widened**. The question was a per-row eye and a bulk link; the answer took Notion's whole
+  hidden-row grammar, and its second clause commissioned a sweep of everything else Notion's record
+  surface carries that ours does not.
+- **ADR-006**, *"View-hidden columns, like Notion and the peek"* — Accepted. It settles the
+  population above, and it creates the one question this sitting left open: where the sheet's
+  *empty-fields* reveal lives afterwards.
+- **ADR-007** — **Deferred**. The record-level cover and icon stay unowned by decision rather than by
+  oversight, which is a different thing to record.
+- **ADR-008**, *"Trailing '+ Add a property' row"* — Accepted, unchanged from the recommendation.
+
+**The sweep found one gap, not seven, and that is its useful half.** S1 — the property-visibility
+list cannot be searched while Notion's can — became C10. Three candidates that read as gaps in the
+digest's prose dissolved against the code: we merge Notion's two Properties destinations onto one
+row that carries *more* affordances than Notion's, our property delete already pairs a confirm with
+an undo entry where Notion has a trash tier, and the AI chips were excluded by `054` D6 before any
+of this. Those are recorded as read-and-not-adopted rather than dropped, so the next sweep does not
+re-find them. Three more are real and owned elsewhere — the comments zone (`023`/`051`), the
+display-mode *setting* as against its vocabulary (`006`), and the page "···" menu (`051`/`052`).
 <!-- /ANCHOR:log -->

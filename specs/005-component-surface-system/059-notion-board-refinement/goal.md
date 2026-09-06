@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/059-notion-board-refinement"
-    last_updated_at: "2026-09-06T18:40:00Z"
-    last_updated_by: "opus-synthesis"
-    recent_action: "Opened the packet from the Notion board research loop, reconciled against the landed page scroll"
-    next_safe_action: "Put ADR-004, ADR-010 and ADR-011 to the operator before any code leg"
+    last_updated_at: "2026-09-06T16:36:00Z"
+    last_updated_by: "ruling-fold-session"
+    recent_action: "Folded the 18:36 rulings; D6 discharged, T005 answered"
+    next_safe_action: "Start the code half once 058 releases board-renderer.ts"
     blockers:
       - "T004 onward are gated on the operator answering the adoption question at notion-screens-digest.md:277-281"
       - "board-renderer.ts goes to 058 next; this packet queues behind it"
@@ -81,7 +81,7 @@ Frozen choices. Changing one is an amendment.
 | D3 | **Red first, per criterion, on a threshold, with the failing value observed red before any code is written.** Parent D2. A threshold that cannot be made to fail is not a threshold. |
 | D4 | **Existing lanes only.** Every check this packet adds extends a lane `tools/gate.mjs` already runs — `render-assertions`, `screenshots-fresh`, `sheet-grammar`, `tests`, `evidence`. This packet adds **0** new lanes; the gate stays at its current lane count. |
 | D5 | **`044`'s seven-element sheet grammar and `048`'s stacking are constraints, not deliverables.** The Groups surface presents as a sheet on phone and must leave `tools/live/sheet-grammar.mjs` at 12 surfaces and 31 stacked pairs green. |
-| D6 | **The operator gate is real and blocks code, not documentation.** T001-T003 (the verification pass, the errata, the ADR pack) may run today. T004 onward may not start until the operator answers ADR-004, ADR-010 and ADR-011. |
+| D6 | **The operator gate is real and blocks code, not documentation.** T001-T003 (the verification pass, the errata, the ADR pack) may run today. T004 onward may not start until the operator answers ADR-004, ADR-010 and ADR-011. **Discharged 2026-09-06 18:36** — all three ruled: *"Yes, one Groups panel"*, *"On by default, like Notion"*, *"Wire hide, delete the delete action"*. The gate stays written down because it is the rule; it is no longer holding anything. |
 | D7 | **A research finding is checked against the tree before it becomes a row.** The loop ran against a tree that has since moved: `dc1d54a9` landed the page scroll and the card-text fix, and `056` T014-T016 and AC-012/AC-013 all closed with it. A finding this packet found already fixed becomes a **verification** row that re-reads the landed state, never a task that would redo it. |
 | D8 | Shipped, verified and operator-confirmed are three states (parent D3). A green lane does not close this phase, and an agent never ticks the operator's row. |
 
@@ -214,10 +214,11 @@ never resolve them silently.
       observed red first, `tools/live/sheet-grammar.mjs` still reporting 12 surfaces and 31 stacked
       pairs at exit 0, and **0** new gate lanes.
 - [ ] **OPERATOR:** the operator answers the adoption question at
-      `../056-board-anytype-parity/notion-screens-digest.md:277-281` — ADR-004, ADR-010 and ADR-011
-      — before any code leg starts, and afterwards reads the Groups panel on iOS and on desktop and
-      reports it as an improvement rather than a fourth place to hunt for a setting. Nothing in this
-      repository can close this row, and an agent never ticks it.
+      `../056-board-anytype-parity/notion-screens-digest.md:277-281` — ADR-004, ADR-010 and
+      ADR-011, **all three Accepted on the operator's 2026-09-06 18:36 rulings** — before any code
+      leg starts, and afterwards reads the Groups panel on iOS and on desktop and reports it as an
+      improvement rather than a fourth place to hunt for a setting. Nothing in this repository can
+      close this row, and an agent never ticks it.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -273,7 +274,7 @@ commit deleted.
 | Packet opened | Done | This file; `spec.md`, `plan.md`, `tasks.md`, `acceptance-criteria.md`, `decision-record.md` |
 | Reconciliation against `dc1d54a9` | Done | The two corrections above; the verification criterion carries the commands |
 | Red-first measurement (T002) | Pending | The criterion reds above are read off the rebased tree; T002 pins them into `acceptance-criteria.md` |
-| Operator adoption gate (T003) | Pending | ADR-004, ADR-010, ADR-011 all `Proposed` |
+| Operator adoption gate (T003) | **Discharged 2026-09-06 18:36** | ADR-004, ADR-010, ADR-011 all `Accepted`; ADR-009 stays `Proposed` and proposes no change |
 | Any code leg | Blocked | D6, and `board-renderer.ts` goes to `058` next |
 
 ### Deviations and findings

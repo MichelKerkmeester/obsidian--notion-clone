@@ -33,7 +33,8 @@ Two halves that do not overlap. The **paper half** — the eight declines, the f
 device-only checks — needs no source file and runs today; it is what goes to the operator. The
 **code half** is one new `panel`-role surface, a `showGroup` member on `BoardRendererActions`
 implemented by both hosts, and one `boardHideEmptyGroups` flag defaulted off; it does not start
-until the operator answers ADR-004, ADR-010 and ADR-011 (`goal.md` D6). The research's own P0 is in
+until the operator answered ADR-004, ADR-010 and ADR-011 (`goal.md` D6) — **answered 2026-09-06
+18:36, so that half of the gate is open**. The research's own P0 is in
 neither half: `dc1d54a9` landed it, so T001 re-reads that landing instead of repeating it
 (`goal.md` D7).
 <!-- /ANCHOR:summary -->
@@ -45,7 +46,9 @@ neither half: `dc1d54a9` landed it, so T001 re-reads that landing instead of rep
 
 ### Definition of Ready
 - [ ] The reds in `acceptance-criteria.md` are observed on the tree, not asserted — T002.
-- [ ] ADR-004, ADR-010 and ADR-011 are in front of the operator with both readings each — T003.
+- [x] ADR-004, ADR-010 and ADR-011 are in front of the operator with both readings each — T003.
+      **All three ruled 2026-09-06 18:36**: one Groups panel; hide-empty-groups on by default; wire
+      `hideGroup` and delete `deleteGroup`.
 - [ ] `src/views/board-renderer.ts` is released by `058`.
 
 ### Definition of Done
@@ -78,7 +81,8 @@ members no host implements**, so the fix is a wiring change plus one surface, no
   controls and the checkbox, which is why the panel reuses it rather than writing a second drag
   vocabulary — `src/views/board-card-properties-panel.ts:48-125` is the working example to copy.
 - **`BoardRendererActions` (`src/views/board-renderer.ts:77-132`)**: gains `showGroup`. `hideGroup`
-  and `deleteGroup` are decided by ADR-011 — wired, or deleted with their guards and their i18n
+  and `deleteGroup` are decided by ADR-011 (Accepted 2026-09-06 18:36, branch two) — `hideGroup`
+  wired, `deleteGroup` deleted with its guard and its i18n
   keys. Leaving them declared and unimplemented is the state this packet exists to end.
 - **`src/data/types.ts` / `src/data/data-source.ts`**: `boardHideEmptyGroups` beside
   `boardHiddenGroups` (`types.ts:560`), added to the view-config key allowlist
@@ -104,9 +108,9 @@ required rather than optional.
 
 | Surface | Current Role | Action | Verification |
 |---------|--------------|--------|--------------|
-| `src/views/board-renderer.ts:84-85` | Declares `hideGroup?` and `deleteGroup?` on the actions contract | Update: add `showGroup`; resolve the two dead members per ADR-011 | `grep -rn "hideGroup\|showGroup\|deleteGroup" src/` shows an implementation per declaration, in both hosts |
+| `src/views/board-renderer.ts:84-85` | Declares `hideGroup?` and `deleteGroup?` on the actions contract | Update: add `showGroup`, wire `hideGroup`, delete `deleteGroup` (ADR-011, branch two) | `grep -rn "hideGroup\|showGroup\|deleteGroup" src/` shows an implementation per declaration, in both hosts |
 | `src/views/board-renderer.ts:558-559` | Two menu rows guarded on those members, so they never build | Update: the guards become live, or the rows go with the members | A renderer test asserting the column menu's row count moves from **3** to its post-ADR figure |
-| `src/views/database-view.ts:791-830` | The host actions object — the producer that is missing | Update: supply `showGroup` and the ADR-011 outcome | `database-view.test.ts`'s `boardRenderer.actions` fixture asserts the member exists |
+| `src/views/database-view.ts:791-830` | The host actions object — the producer that is missing | Update: supply `showGroup` and `hideGroup`; carry no `deleteGroup` | `database-view.test.ts`'s `boardRenderer.actions` fixture asserts the member exists |
 | `src/views/embedded-database-renderer.ts:532-563` | The second host, same gap, plus no `createGroup` | Update: same members; `createGroup` stays out of scope and is named, not fixed | `embedded-database-renderer.test.ts`'s same fixture |
 | `src/data/data-source.ts:1352` | The view-config key allowlist — the persistence boundary | Update: one key added | A parse test proving an unlisted board flag is still dropped, the property `056` AC-005 locks for `boardExtensionsEnabled` |
 | `src/views/board-renderer.ts:192-193` | The hidden-group filter — the only consumer of `boardHiddenGroups` | Unchanged in shape; gains the empty-group filter beside it | The default-config render still shows every group, and the empty-column card still builds (`:324-327`) |
@@ -142,7 +146,7 @@ checkboxes and task state.
 | Test Type | Scope | Tools |
 |-----------|-------|-------|
 | Unit | The panel's row model: every option listed, hidden keys included, an orphan key listed as unknown-and-restorable, toggle and reorder callbacks fired with the right arguments | `vitest`, beside `board-card-properties-panel.test.ts` |
-| Unit | Both hosts supply `showGroup` and the ADR-011 outcome; the persisted key allowlist still drops an unlisted board flag | `vitest`, `database-view.test.ts`, `embedded-database-renderer.test.ts`, `data-source.test.ts` |
+| Unit | Both hosts supply `showGroup` and `hideGroup`, and neither declares `deleteGroup`; the persisted key allowlist still drops an unlisted board flag | `vitest`, `database-view.test.ts`, `embedded-database-renderer.test.ts`, `data-source.test.ts` |
 | Integration | The column menu's row count, and the panel opening from it at the declared role and width | `tools/live/render-assertions.mjs`, with a negative control read red first |
 | Integration | The phone presentation still leaves 12 surfaces and 31 stacked pairs green | `tools/live/sheet-grammar.mjs`, exit read from `$?` |
 | Manual | The operator's own read on iOS and on desktop | The device, which is the only thing that closes the last criterion |
@@ -160,7 +164,7 @@ irreversible. No test is added per branch, and none re-asserts the framework.
 
 | Dependency | Type | Status | Impact if Blocked |
 |------------|------|--------|-------------------|
-| The operator's answer to ADR-004 / ADR-010 / ADR-011 | External | **Red** — asked, unanswered | The whole code half. T001-T003 are unaffected |
+| The operator's answer to ADR-004 / ADR-010 / ADR-011 | External | **Green** — answered 2026-09-06 18:36 | Nothing. The code half is unblocked; only `058`'s file release remains |
 | `058-card-title-and-title-formats` holding `src/views/board-renderer.ts` | Internal | Yellow — `058` is opened, not started | The code half queues; the paper half does not |
 | `056` T014-T016 holding the same file | Internal | **Green** — landed at `dc1d54a9` | None. Released |
 | The serialized `styles.css` lane (`parent` D11) | Internal | Yellow — acquired per leg | The panel's treatment waits for the lane, not for a rewrite |

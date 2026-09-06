@@ -11,12 +11,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/063-notion-dropdown-refinement"
-    last_updated_at: "2026-09-06T19:40:00Z"
-    last_updated_by: "option-colour-picker-research-session"
-    recent_action: "Added the eighth completion criterion from the ~19:08 colour-picker ruling"
+    last_updated_at: "2026-09-06T17:08:00Z"
+    last_updated_by: "ruling-fold-session"
+    recent_action: "Folded the 19:08 carve-out ruling; no ADR in this packet is open"
     next_safe_action: "Run T001, the red-first DOM-order assertion, and read its exit status"
     blockers:
-      - "ADR-005 is Proposed and operator-owned"
       - "styles.css edits are serialized by the parent's CSS lane"
       - "dropdown-field.ts and menu-row.ts are 052's file group, taken one leg at a time"
       - "T005 and T006 ride 052's open T008/T009 legs and do not open those files alone"
@@ -36,10 +35,10 @@ _memory:
     completion_pct: 0
     open_questions:
       - "Does a colour swatch carry a visible label, or do the accessible name and the check icon suffice"
-      - "Does E3's red-plus-trash rule take a carve-out for rows that remove structure without destroying content"
       - "Which anchored dropdown surfaces the operator reads as cramped, and at what measured width or height"
     answered_questions:
-      - "The trailing check is a landed ruling (G14, ADR-005) that only dropdown-field.ts still lags"
+      - "E3 takes no carve-out: red plus a trash icon on every destructive row (operator 19:08)"
+      - "The trailing check is a landed ruling (G14, 052 ADR-005) that only dropdown-field.ts still lags"
       - "Every desktop dropdown is a combobox and the count gate is the phone's alone (ADR-006, a952e5e7)"
       - "The colour picker's grid is settled: G15 kept the grid and its accessible-name clause has landed"
 ---
@@ -183,7 +182,7 @@ and findings belong here.
 |------|-------|----------|
 | Packet opened from the research synthesis | Done | `052/research/research.md`, five iterations, 28 findings, stop reason `maxIterationsReached` |
 | Level scored | Done | `recommend-level.sh --loc 450 --files 8 --architectural` → 58/100, confidence 92%, Level 2; phase score 10/50, below the 25 threshold, so a standard child |
-| Eight ADRs written | Done | `decision-record.md`; six restate landed rulings, ADR-004 and ADR-005 are Proposed and operator-owned |
+| Eight ADRs written | Done | `decision-record.md`; six restate landed rulings. The two that were the operator's were both ruled on 2026-09-06 19:08 — ADR-004 **Accepted**, ADR-005's carve-out **Declined** |
 | Implementation | Pending | No code changed by this packet |
 
 ### Deviations and findings

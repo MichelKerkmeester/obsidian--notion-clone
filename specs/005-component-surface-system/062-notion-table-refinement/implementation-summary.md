@@ -11,12 +11,11 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/062-notion-table-refinement"
-    last_updated_at: "2026-09-06T16:17:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Opened the packet from the Notion table research synthesis; no code touched"
+    last_updated_at: "2026-09-06T16:32:00Z"
+    last_updated_by: "ruling-fold-session"
+    recent_action: "Folded the 18:32 rulings; no criterion gated on a decision"
     next_safe_action: "Run Leg 1 — the five guards, each observed red under its own control"
     blockers:
-      - "ADR-005, ADR-006 and ADR-007 are the operator's and gate three criteria"
       - "T033 is the operator's device read"
     key_files:
       - "specs/005-component-surface-system/062-notion-table-refinement/goal.md"
@@ -118,11 +117,18 @@ recorded when the same script misparsed in a worktree.
 |-----|----------|--------|
 | ADR-001 | The title column keeps our disabled-row menu convention | Accepted |
 | ADR-002 | The wrap phase is superseded; the resolution rule the research quoted is stale | Accepted |
-| ADR-003 | Conditional row colour ships; only its naming could move | Proposed |
+| ADR-003 | Conditional row colour gets its own view-settings row; the work is `064`'s | **Accepted 2026-09-06 18:32** |
 | ADR-004 | Every new colour derives from our tokens and clears the bar in both themes | Accepted |
-| ADR-005 | Freeze is desktop-only; the divider treatment is undecided | Proposed |
-| ADR-006 | Where the add-row noun comes from | Proposed |
-| ADR-007 | Whether a type-picker row ships before its data type | Proposed |
+| ADR-005 | Freeze is desktop-only; the divider is a soft right-edge shadow once scrolled past | **Accepted 2026-09-06 18:32** |
+| ADR-006 | The add-row noun is a per-view configured string, fallback today's "New" | **Accepted 2026-09-06 18:32** |
+| ADR-007 | All eight missing Notion types ship as real types; the count is 13 to 21 | **Accepted 2026-09-06 18:32** |
+
+The four operator ADRs were ruled in one pass on **2026-09-06 18:32**, quoted verbatim in
+`decision-record.md`. What each supplies: *"Yes, own row in view settings"* (ADR-003), *"Subtle
+shadow when scrolled past"* (ADR-005), *"Per-view configured noun, fallback 'New'"* (ADR-006) and
+*"All types or add more as needed"* (ADR-007). One question survives them and is an implementation
+decision rather than a block: **Person's vault value source**, owed its own ADR before the Person
+renderer (T021a).
 <!-- /ANCHOR:decisions -->
 
 ---
@@ -154,7 +160,9 @@ recorded when the same script misparsed in a worktree.
   are thumbnail-scale so ratios beat absolute pixels, hover state is structurally unobservable, and
   all 102 screens are light theme.
 - **The freeze design is inference.** Notion's frozen state appears in no capture; the sticky offset
-  and the divider are ours, and ADR-005 says so rather than citing Notion for them.
+  and the shadow are ours, and ADR-005 says so rather than citing Notion for them — the operator
+  chose the shadow's behaviour on 2026-09-06 18:32, and its colour still derives from our tokens
+  under ADR-004 because no capture could supply one.
 - **One loose end is recorded and not scheduled.** `.db-numeric-value` is stamped
   (`src/views/cell-renderer.ts:318-321`, `:419`) and no stylesheet rule matches it, so numbers are
   left-aligned by inheritance and at parity by accident. A `text-align: left` assertion would pass

@@ -1,6 +1,6 @@
 ---
 title: "Decision Record: Notion Record Refinement"
-description: "Eight decisions: the four Notion-versus-Anytype conflicts a landed ruling already settles, and the four extensions no ruling covers, each Proposed pending the operator."
+description: "Eight decisions: the four Notion-versus-Anytype conflicts a landed ruling already settles, and the four extensions the operator ruled on 2026-09-06 19:05, quoted verbatim below."
 trigger_phrases:
   - "065 adr"
   - "notion versus anytype record"
@@ -11,12 +11,12 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/065-notion-record-refinement"
-    last_updated_at: "2026-09-06T18:10:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Recorded the eight decisions the Notion record research loop produced"
-    next_safe_action: "Put ADR-005 through ADR-008 in front of the operator"
+    last_updated_at: "2026-09-06T17:05:00Z"
+    last_updated_by: "ruling-fold-session"
+    recent_action: "Folded the 19:05 rulings; ADR-005/006/008 Accepted, ADR-007 Deferred"
+    next_safe_action: "Land T012's population then T013's grammar; sweep rows stay recorded-not-built"
     blockers:
-      - "ADR-005, ADR-006, ADR-007 and ADR-008 are Proposed and the operator's to take"
+      - "The empty-fields home is owed an ADR before T012 lands"
     key_files:
       - "specs/005-component-surface-system/054-record-and-relation-surfaces/design-trueup.md"
       - "specs/005-component-surface-system/054-record-and-relation-surfaces/notion-screens-digest.md"
@@ -28,12 +28,13 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "ADR-005: does the hidden group grow a per-row eye and a bulk link"
-      - "ADR-006: which population does the record sheet's hidden group hold"
-      - "ADR-007: which packet owns a record-level cover and icon"
-      - "ADR-008: trailing row or section-header plus for the record sheet's add entry"
+      - "Where the sheet's empty-fields reveal lives once the group holds view-hidden columns"
     answered_questions:
       - "ADR-001 to ADR-004 are settled by landed Anytype rulings; Notion loses each"
+      - "The hidden group adopts Notion's full row grammar (operator 19:05, 'Mimic notion also regarding other features we might be missing')"
+      - "The group holds view-hidden columns, like Notion and the peek (operator 19:05)"
+      - "The record-level cover question is Deferred (operator 19:05)"
+      - "The add-property entry is Notion's trailing row (operator 19:05)"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: decision-record | v2.2 -->
 # Decision Record: Notion Record Refinement
@@ -43,9 +44,11 @@ _memory:
 > **How to read the statuses.** Anytype parity is the default for these surfaces (`051` ADR-007,
 > `056`, `057`, `054` D6) and the parent's D15 makes Notion refinements additive. So a Notion
 > pattern that contradicts a **landed** ruling is settled by that ruling and is recorded `Accepted`
-> here — ADR-001 to ADR-004. A Notion pattern that extends past what any ruling covers is not a
-> contradiction and cannot be settled by inference; it is `Proposed` and the operator's — ADR-005 to
-> ADR-008.
+> here — ADR-001 to ADR-004. The four extensions past any ruling — ADR-005 to ADR-008 — were put to
+> the operator with their thresholds written and were **ruled on 2026-09-06 19:05**: three
+> `Accepted`, one `Deferred`, each quoted verbatim below. ADR-005's ruling also asked for a sweep of
+> everything else Notion's record surface carries that ours does not; that sweep is the last section
+> of this document, and it found **one** gap rather than the seven the digest's prose implies.
 >
 > All Notion evidence cites a screen id in `../054-record-and-relation-surfaces/notion-screens-digest.md`,
 > the only permitted source of Notion facts. No image was opened by the loop or by this packet.
@@ -409,15 +412,15 @@ scope is the refinement the Notion loop justified — not the Anytype ruling's i
 ---
 
 <!-- ANCHOR:adr-005 -->
-## ADR-005: A per-row eye and a bulk link in the hidden-properties group
+## ADR-005: The hidden-properties group adopts Notion's full hidden-row grammar
 
 ### Metadata
 
 | Field | Value |
 |-------|-------|
-| **Status** | **Proposed** — pending the operator |
-| **Date** | 2026-09-06 |
-| **Deciders** | Operator |
+| **Status** | **Accepted 2026-09-06 19:05** — and widened past what it asked |
+| **Date** | 2026-09-06 (opened) · 2026-09-06 19:05 (ruled) |
+| **Deciders** | The operator |
 
 ---
 
@@ -457,15 +460,28 @@ and the column manager already owns the visibility persist path
 <!-- ANCHOR:adr-005-decision -->
 ### Decision
 
-**Proposed**: extend `HiddenPropertiesGroupOptions` with a per-row affordance host, wire the eye to
-the same column-visibility persist path the column manager's checkbox uses, and add a "Show all" link
-in the group header as part of the same task rather than as a second one.
+**Accepted, and widened.** Operator, 2026-09-06 19:05, verbatim: *"Mimic notion also regarding other
+features we might be missing"*. The question put was the per-row eye and a bulk link; the answer
+adopts **Notion's whole hidden-row grammar** (P3 in the digest), not just its two cheapest rows:
 
-**Threshold, already written**: toggling the eye shows or hides the field in place without leaving
-the sheet, and the group count updates.
-**Red today**: zero eye controls inside `db-record-detail-hidden-group`.
+- every row carries a **drag handle**, the property's **type icon**, its **name**, an **eye toggle**
+  and a **chevron** — the anatomy `buildCheckboxPropertyRow`
+  (`src/views/record-surface/property-row.ts:330-395`) already has and this group's rows lack;
+- the group splits into **"Shown" and "Hidden" sections**, each with its **bulk link** ("Hide all" /
+  "Show all"), and the Hidden section renders **only when non-empty**;
+- the **count stays on the entry row**, exactly as A4 already ruled; Notion's own title row keeps its
+  eye disabled — the title cannot be hidden — and ours does the same for whatever occupies that slot.
 
-**Not written**: any of the code. D4 forbids it until this is Accepted.
+**Threshold, extended:** toggling the eye shows or hides the field in place without leaving the
+sheet; the group count updates; each section's bulk link acts on its own section; the Hidden section
+is absent while nothing is hidden.
+**Red today:** zero eye controls inside `db-record-detail-hidden-group`.
+
+The ruling's second half — *"also regarding other features we might be missing"* — is the sweep
+recorded in its own section below.
+
+**Not written**: any of the code. The gated legs now convert to task rows (T012, T013) in ruling
+order: the population first (ADR-006), the grammar on it.
 <!-- /ANCHOR:adr-005-decision -->
 
 ---
@@ -473,20 +489,23 @@ the sheet, and the group count updates.
 <!-- ANCHOR:adr-005-consequences -->
 ### Consequences
 
-**What improves**, if accepted:
-- A hidden field becomes recoverable from the surface that reports it hidden.
-- One bulk control instead of one that only reaches the column manager's list.
+**What improves**:
+- A hidden field becomes recoverable from the surface that reports it hidden, with the full row
+  anatomy to do it precisely.
+- One bulk control per section instead of one that only reaches the column manager's list.
 
 **What it costs**:
 - An exported primitive's contract changes, and both its consumers move together.
-- It is an extension past a closed ruling, so it needs the ruling this ADR asks for.
+- The sheet's group becomes a two-section surface rather than a single disclosure — more DOM on the
+  phone sheet, mitigated by the collapsed-by-default group.
 
 **Risks**:
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Accepted before ADR-006, giving the eye an ambiguous meaning | H | Sequence: ADR-006 first, and this ADR says so |
+| The grammar lands before ADR-006's population, giving the eye an ambiguous meaning | H | Ruling order: population first (T012), grammar on it (T013) |
 | The peek's group inherits an affordance nobody asked for there | M | The host is optional; the peek opts in or does not |
+| A section header row or bulk link renders while empty | L | The threshold asserts the Hidden section is absent while nothing is hidden |
 <!-- /ANCHOR:adr-005-consequences -->
 <!-- /ANCHOR:adr-005 -->
 
@@ -499,9 +518,9 @@ the sheet, and the group count updates.
 
 | Field | Value |
 |-------|-------|
-| **Status** | **Proposed** — pending the operator |
-| **Date** | 2026-09-06 |
-| **Deciders** | Operator |
+| **Status** | **Accepted 2026-09-06 19:05** |
+| **Date** | 2026-09-06 (opened) · 2026-09-06 19:05 (ruled) |
+| **Deciders** | The operator |
 
 ---
 
@@ -539,20 +558,23 @@ populations side by side, and it is the reason ADR-005 cannot be taken first.
 <!-- ANCHOR:adr-006-decision -->
 ### Decision
 
-**Proposed**, three ways to answer it:
+**Accepted — view-hidden columns, like Notion and the peek.** Operator, 2026-09-06 19:05, verbatim:
+*"View-hidden columns, like Notion and the peek"*.
 
-1. **Merge on the sheet.** The record sheet's group holds empty fields *and* view-hidden columns; the
-   caller passes `allColumns` plus a hidden-keys set, as the peek already receives both. The count
-   covers both. *Threshold:* a column hidden in view config appears inside the sheet's group and is
-   counted. *Red today:* it does not appear at all.
-2. **Split the label.** Two names for two populations, leaving both surfaces as they are. Cheapest,
-   and it makes the divergence explicit rather than removing it.
-3. **Leave it.** Record the divergence and close the question. Defensible if the sheet is understood
-   as a record view rather than a column-config view.
+Of the three ways offered, the ruling names the population: the record sheet's hidden-properties
+group holds **view-hidden columns** — the same population Notion's "Hidden in `<surface>`" section
+(`cc8b241a`, `7ffa073f`) and our table peek (`table-record-peek.ts:246-248`) hold, and neither of
+which carries an empty-fields population. The mechanism is the one option 1 already wrote: the
+caller passes the full column list plus the hidden-keys set, as the peek already receives both, and
+the count covers the population it names.
+*Threshold:* a column hidden in view config appears inside the sheet's group and is counted.
+*Red today:* it does not appear at all.
 
-**Recommendation (inference, and marked as one): option 1.** It is the reading a user brings to the
-words "hidden properties", it matches Notion and the peek, and the data is already in the caller's
-hands. But it changes what the sheet shows, so it is a ruling and not an inference to act on.
+**One consequence is named rather than resolved.** The sheet's group holds **empty fields** today
+(`record-detail-panel.ts:384-393`), and the ruling does not put them in the group. Where the
+empty-fields reveal goes — folded into the grammar's Shown section, or left to the column manager
+alone — is an implementation decision **owed an ADR in the implementing leg before T012 lands**. It
+does not block T013's row grammar, and it does not reopen A4's shape ruling.
 <!-- /ANCHOR:adr-006-decision -->
 
 ---
@@ -560,20 +582,22 @@ hands. But it changes what the sheet shows, so it is a ruling and not an inferen
 <!-- ANCHOR:adr-006-consequences -->
 ### Consequences
 
-**What improves**, under option 1:
-- One label means one thing across two surfaces.
-- ADR-005's eye acquires an unambiguous meaning.
+**What improves**:
+- One label means one thing across two surfaces — the exact divergence this ADR was opened to name.
+- ADR-005's eye acquires an unambiguous meaning before the grammar lands.
 
 **What it costs**:
-- The sheet's group grows, sometimes considerably, on views that hide many columns.
+- The sheet's group holds the view's hidden columns, which on heavily-configured views is most of
+  them — mitigated by the collapsed-by-default group and the only-when-non-empty Hidden section.
 - The caller's signature changes on one surface.
+- The empty-fields reveal needs a named home; owed an ADR before T012 lands, not resolved here.
 
 **Risks**:
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
 | Merging makes the group the largest thing on the sheet | M | The group is collapsed by default and stays conditional |
-| An answer is inferred rather than ruled, and the sheet quietly changes what it shows | H | This ADR stays Proposed until the operator answers |
+| The empty-fields population is silently dropped with no home named | M | This ADR names the debt; the implementing leg's ADR discharges it before T012 |
 <!-- /ANCHOR:adr-006-consequences -->
 <!-- /ANCHOR:adr-006 -->
 
@@ -586,9 +610,9 @@ hands. But it changes what the sheet shows, so it is a ruling and not an inferen
 
 | Field | Value |
 |-------|-------|
-| **Status** | **Proposed** — pending the operator |
-| **Date** | 2026-09-06 |
-| **Deciders** | Operator |
+| **Status** | **Deferred 2026-09-06 19:05** (operator) |
+| **Date** | 2026-09-06 (opened) · 2026-09-06 19:05 (ruled) |
+| **Deciders** | The operator |
 
 ---
 
@@ -621,14 +645,17 @@ No operator ruling is overridden either way. This is unowned, not contested.
 <!-- ANCHOR:adr-007-decision -->
 ### Decision
 
-**Proposed, and the recommendation is to decline for now (inference, marked as one).** Do not fold a
-cover into this refinement phase. It is a new feature sized like the entire icon picker multiplied by
-upload, reposition and alt-text states; its AI half is already excluded; and no Anytype evidence
-supports it in the bounded sources. Route the ownership question — which packet owns record-level
-cover and icon placement — rather than opening a task.
+**Deferred.** Operator, 2026-09-06 19:05, verbatim: *"Deferred"*. Neither wanted-now nor refused:
+the ownership question and the feature are parked together, and the packet ships without a cover.
+The recommendation this ADR carried — decline for now, route the ownership question rather than open
+a task — is the state the ruling makes permanent for this packet, with the difference that it is now
+the operator's deliberate disposition rather than this packet's inference.
 
-What this ADR asks the operator for is one of: *not wanted*, *wanted and owned by `051`*, or *wanted
-and owned by a new packet*. It does not ask for a design.
+What the deferral preserves: the sizing argument (a feature sized like the icon picker multiplied by
+upload, reposition and alt-text states), the AI tab's standing exclusion (`054` D6), the absence of
+Anytype evidence in the bounded sources, and the digest's named gaps — the six-tab picker, the
+Reposition mode, the ALT badge and dialog, the upload-in-progress state — all stay written here so
+reopening the question does not re-derive them.
 <!-- /ANCHOR:adr-007-decision -->
 
 ---
@@ -637,19 +664,18 @@ and owned by a new packet*. It does not ask for a design.
 ### Consequences
 
 **What improves**:
-- The largest Notion pattern in the harvest gets a disposition instead of sitting as an unanswered
-  gap in a digest nobody re-reads.
+- The largest Notion pattern in the harvest carries the operator's own disposition instead of an
+  unanswered gap in a digest nobody re-reads.
 
 **What it costs**:
-- The record surface stays without the most visually obvious Notion feature. That is a deliberate
-  ranking: it would delay the higher-impact property-row work for a feature with low certainty of
-  being wanted.
+- The record surface stays without the most visually obvious Notion feature — deliberately, by
+  ruling, and revisitable without re-litigating the reasoning.
 
 **Risks**:
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| The question is read as answered because the recommendation is written | M | Status is Proposed; no code and no task row exists |
+| The deferral is read as a refusal and the pattern is never re-examined | M | This ADR keeps the evidence, the sizing and the ownership question written for whoever reopens it |
 <!-- /ANCHOR:adr-007-consequences -->
 <!-- /ANCHOR:adr-007 -->
 
@@ -662,9 +688,9 @@ and owned by a new packet*. It does not ask for a design.
 
 | Field | Value |
 |-------|-------|
-| **Status** | **Proposed** — pending the operator. Gates C6 / AC-009 / T007 |
-| **Date** | 2026-09-06 |
-| **Deciders** | Operator |
+| **Status** | **Accepted 2026-09-06 19:05** — C6 / AC-009 / T007 unblocked |
+| **Date** | 2026-09-06 (opened) · 2026-09-06 19:05 (ruled) |
+| **Deciders** | The operator |
 
 ---
 
@@ -700,18 +726,32 @@ not start.
 <!-- ANCHOR:adr-008-decision -->
 ### Decision
 
-**Proposed**: adopt Notion's trailing row.
+**Accepted — Notion's trailing row.** Operator, 2026-09-06 19:05, verbatim: *"Trailing '+ Add a
+property' row"*.
 
-**Rationale (inference, marked as one)**: it matches an idiom the sheet already has — the
-hidden-group toggle is the same muted-text row language (`styles.css:10319-10346`) — so it costs no
-new visual vocabulary, and the record sheet has no section header for Anytype's `+` to sit on.
+The question put was a straight two-way: Notion's plain-text row under the last property [screens
+`16ddd22c`, `bf2171ff`] against Anytype's `+` on the section header
+(`../054-record-and-relation-surfaces/design-trueup.md` §A4). The operator named the first, and it is
+the placement the recommendation carried — so this row is an accepted proposal, not a reversed one.
 
-**Threshold, already written**: the row renders below the last field and above the hidden group;
-activating it opens the search-first picker; it measures at or above 44px on the phone sheet.
-**Red today**: zero add affordances on the record sheet.
+The reasoning the recommendation gave survives the ruling and is worth keeping, because it is what
+the implementer needs: the placement matches an idiom the sheet already has — the hidden-group toggle
+is the same muted-text row language (`styles.css:10319-10346`) — so it costs no new visual
+vocabulary, and the record sheet has **no section header** for Anytype's `+` to sit on. Adopting
+Anytype's placement here would have meant inventing a section header first.
 
-**Not written**: any of the code. If the operator prefers Anytype's placement, the threshold moves to
-a section-header `+` and the rest of the task is unchanged.
+**One thing the ruling does not settle, and it is not a block**: whether the row sits above or below
+the hidden-properties group once ADR-006 moves that group's population to view-hidden columns. The
+threshold below fixes it above the group, matching Notion's own order [`16ddd22c`], and a later
+ruling can move one line.
+
+**Threshold**: the row renders below the last field and above the hidden group; activating it opens
+the search-first picker; it measures at or above 44px on the phone sheet.
+**Red today**: zero add affordances on the record sheet —
+`src/views/record-detail-panel.ts` imports nothing from `add-property-row.ts`.
+
+**Not written**: any of the code. The gate that made this `[B]` is lifted; T007 is schedulable and
+carries `052`'s picker-host dependency as its only remaining precondition.
 <!-- /ANCHOR:adr-008-decision -->
 
 ---
@@ -719,7 +759,7 @@ a section-header `+` and the rest of the task is unchanged.
 <!-- ANCHOR:adr-008-consequences -->
 ### Consequences
 
-**What improves**, if accepted:
+**What improves**:
 - A property becomes addable from the surface where its absence is noticed, on the most-used surface
   in the plugin.
 - The existing picker gets a second consumer rather than a second implementation.
@@ -732,10 +772,58 @@ a section-header `+` and the rest of the task is unchanged.
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| The row is built before the ruling and presented as done | H | D4; T007 is `[B]` and stays blocked |
+| The row lands before ADR-006 moves the group's population, so "above the hidden group" means one thing now and another later | M | T007 is sequenced after T012; the threshold names the position rather than a line number |
 | `052`'s picker host is not ready | M | The dependency is Yellow in `plan.md` §6 and checked before scheduling |
 | A trailing row on a phone sheet pushes the hidden group below the fold | L | The group is collapsed by default; the row is one 44px line |
 <!-- /ANCHOR:adr-008-consequences -->
 <!-- /ANCHOR:adr-008 -->
+
+---
+
+<!-- ANCHOR:sweep -->
+## The 19:05 sweep — every other Notion record-surface feature, checked against the tree
+
+ADR-005's ruling has two halves. The first adopted Notion's hidden-row grammar. The second —
+*"also regarding other features we might be missing"* — asked for a sweep, and this is it: every
+pattern and divergence in `../054-record-and-relation-surfaces/notion-screens-digest.md` that no ADR
+above already carries, read against `src/` rather than against the digest's own prose.
+
+**The sweep's honest result is one gap, not seven.** Three of the candidates dissolve when the code
+is actually read, and that is worth more than a longer list would be — a sweep that reports
+capabilities we already have as gaps is how a packet grows work nobody needs. Each row below says
+which it is.
+
+### Adopted — carries a threshold
+
+| # | Notion feature | What we have | Threshold | Red today |
+|---|---|---|---|---|
+| **S1** | The property-visibility list opens with a **search field** above its rows [screens `9867cb76`, `2f52d1bc`, `01cde7f6`; digest P2] | Nothing. The column manager's header carries a select-all toggle (`src/views/column-manager-renderer.ts:222-235`) and no filter input; the *add-property* picker has one (`src/views/record-surface/add-property-row.ts:58-60`, `:105`), so the primitive exists one file away | Typing in the visibility list's search field filters the rows to name matches, leaves every row's eye state untouched, and clearing it restores the full list | Zero `input` elements inside the column manager's list |
+
+### Deferred with ADR-007, because it is the same strip
+
+| # | Notion feature | What we have | Threshold, if ADR-007 is ever taken |
+|---|---|---|---|
+| **S2** | On an unset header, desktop reveals three hover ghost buttons: **"+ Add icon / + Add cover / + Add description"** [screen `56e2ae1a`; digest P5] | ADR-007 defers the first two. The **third** is neither cover nor icon and no ADR above reaches it: we carry no record-level description line at all | The three ghost buttons appear together or not at all — a description entry that ships without the cover it sits beside is a strip with one button, which is not the pattern being adopted |
+
+### Read and **not** adopted — the divergence is real, the gap is not
+
+| # | Notion feature | Why it is not a gap |
+|---|---|---|
+| **S3** | Two "Properties" destinations from one label: a **visibility** sheet and a separate **management** sheet whose chevron opens the property's own type/format editor [screen `8bb9115f`; digest P2] | We merge the two onto one row rather than splitting them across two sheets. `buildCheckboxPropertyRow` draws the handle, type icon and name, and the same row then carries a wrap toggle, an **edit** button that opens the property's editor and a **delete** button (`src/views/column-manager-renderer.ts:354-374`), with a double-click on the name doing the same (`:346`). Notion needs a second destination because its rows have only a chevron; ours do not. Adopting the split would **remove** affordances |
+| **S4** | A desktop-only third tier under a divider, **"Deleted properties › 11"** [screens `01cde7f6`, `7ffa073f`; digest P3] — a soft-delete list a property can be restored from | Our delete is not the irreversible action the tier exists to soften. It goes through a confirm with a keep-the-note-data branch (`src/views/column-operations.ts:363-373`) and registers an undo entry (`:428`, `t("undo.deleteColumnConfig")`). Confirm-plus-undo and a persistent trash solve the same problem two ways; we have one. The digest's own §6 asks whether the tier collides with `045`'s card hiding, and nothing here answers that — it stays an open program question, not a row in this packet |
+| **S5** | **AI Autofill suggestion chips** above the format search in the add-property flow [screen `1589e7c8`; digest P4] | Excluded by `054` D6 before any of this. Recorded so a future reader does not re-derive the exclusion from the digest and take it for an oversight |
+
+### Named, owned elsewhere — a pointer, not a row
+
+| # | Notion feature | Owner |
+|---|---|---|
+| **S6** | An **"Add a comment…"** zone below a hairline under the last property [screens `16ddd22c`, `bf2171ff`, `8bb9115f`; digest P1] — and, behind it, three separate comment surfaces rather than one: a page-level thread, an inline-anchored composer and a discussions panel [digest P6] | `023` owns the note body and `051` the shell (`goal.md` D5/D8). The pointer carried forward is the digest's own warning: whichever packet specs comments must name **which of the three** it means before it scopes anything |
+| **S7** | Row-open display mode as a **named three-way user setting** — Side peek / Center peek / Full page, with a stated per-view default [screen `0cb59457`; digest P7] | This packet already borrows the **vocabulary** (REQ-007, `tasks.md` T008). The **setting** is a placement decision and stays `006`'s per the landed ruling. Naming the shells is not offering the choice, and the two should not be confused |
+| **S8** | The page **"···" menu**: 17 rows mixing page actions, display toggles, page management and AI [screen `9484e185`; digest P8] | `051`/`052` per `goal.md` D8. Out of this packet's file group |
+
+**What the sweep changes here**: one criterion, one requirement and one task, for S1. S2 rides on
+ADR-007's deferral and builds nothing. S3, S4 and S5 build nothing and are recorded so they are not
+re-found. S6, S7 and S8 build nothing here and name their owner.
+<!-- /ANCHOR:sweep -->
 
 ---

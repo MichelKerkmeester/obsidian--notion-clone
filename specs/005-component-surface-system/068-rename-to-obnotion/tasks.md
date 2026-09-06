@@ -46,11 +46,16 @@ Every implementation row below names the **red** it must observe before the chan
       exits 0
 - [ ] T003 Re-run the census on the leg's actual base and record the numbers in `goal.md` §4.
       **Check:** all five commands in `plan.md` §"Required inventories" run, and the counts are
-      written down before any edit. On `dc1d54a9` they were 3,375 / 17,099 / 3,181 / 4,314 / 134
-- [ ] T004 Get the operator's answers to `spec.md` §12 Q2 (attribution) and Q3 (`obn-` prefix), or
-      record the recommendations as taken.
-      **Check:** `decision-record.md` ADR-003's Status is `Accepted` (not `Proposed`) before T012
-      runs
+      written down before any edit. On `dc1d54a9` they were 3,375 / 17,099 / 3,181 / 4,314 / 134;
+      re-measured on `e5830232` the `db-` count is **17,181**, `--db-` **2,330**,
+      `note-database-container` **3,185** and `note-database` **4,446**, so the census is expected to
+      drift upward and the leg's own base is the number that binds
+- [x] T004 Get the operator's answers to `spec.md` §12 Q1-Q4.
+      **Answered 2026-09-06 19:08.** Q1 no (repo keeps its name, by default and reversibly); Q2
+      *"Attribute to MichelKerkmeester, credit upstream in README"*; Q3 *"obnotion- everywhere"*,
+      **declining** this packet's own `obn-` recommendation; Q4 yes, fix `update-fork.sh` — T009.
+      **Check:** `decision-record.md` ADR-003's Status reads `Accepted 2026-09-06 19:08` and names
+      `obnotion-`, and `spec.md` §12 carries all four rulings
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -60,11 +65,18 @@ Every implementation row below names the **red** it must observe before the chan
 
 ### Stage A — Identity
 
-- [ ] T005 Change `manifest.json`: `id` → `obnotion`, `name` → `Obnotion`, and reword `description`
-      so it does not open with the old product name (`manifest.json`).
-      **Red:** `jq -r .id manifest.json` prints `note-database`.
-      **Green:** it prints `obnotion`, and a scratch-vault install lands in
-      `.obsidian/plugins/obnotion/`
+- [ ] T005 Change `manifest.json`: `id` → `obnotion`, `name` → `Obnotion`, reword `description` so it
+      does not open with the old product name, and **settle the attribution** — `author` →
+      `MichelKerkmeester`, `authorUrl` → `https://github.com/MichelKerkmeester`, `fundingUrl`
+      **removed** (`manifest.json`). §12 Q2, ruled 2026-09-06 19:08.
+      **Red:** `jq -r .id manifest.json` prints `note-database`, and
+      `jq -r '.author, .authorUrl, .fundingUrl' manifest.json` prints pangy9's three values.
+      **Green:** the id prints `obnotion`; `jq -r .author manifest.json` prints
+      `MichelKerkmeester`; `jq 'has("fundingUrl")' manifest.json` prints `false`; and a
+      scratch-vault install lands in `.obsidian/plugins/obnotion/`.
+      **Not this task's:** the README's fork-credit prose. The ruling's second half — *"credit
+      upstream in README"* — lands in the parallel README leg, and T021's release notes name it as
+      the ruling's other half so it cannot be quietly dropped
 - [ ] T006 [P] Change `package.json` `name` to `obsidian-obnotion` (`package.json`).
       **Red:** `jq -r .name package.json` prints `obsidian-note-database`.
       **Green:** it prints `obsidian-obnotion`, and `npm run build` still emits `main.js`
@@ -117,7 +129,8 @@ Every implementation row below names the **red** it must observe before the chan
 
 - [ ] T012 Write the rewrite script and commit it (`tools/naming/rename-prefixes.mjs`, new).
       It rewrites `note-database-container` → `obnotion-container`, the other 39 `note-database*`
-      identifiers to their `obnotion*` forms, `db-` → `obn-` and `--db-` → `--obn-`, across
+      identifiers to their `obnotion*` forms, `db-` → `obnotion-` and `--db-` → `--obnotion-`
+      (§12 Q3, ruled 2026-09-06 19:08 — **not** the `obn-` this packet recommended), across
       `styles.css`, `src/`, `tools/`, `.storybook/`, `README.md`, `manifest.json`, `package.json`
       and `screenshots/manifest.json`. It carries an **explicit exclusion list**: `db_view`,
       `specs/`, `node_modules/`, `main.js`, and every alias string T011 introduced.
@@ -324,7 +337,7 @@ Every implementation row below names the **red** it must observe before the chan
 ## L3+: Architecture Verification
 
 - [ ] CHK-100 [P0] Architecture decisions documented in decision-record.md
-- [ ] CHK-101 [P1] All six ADRs have status; ADR-003 is Accepted, not Proposed, before the sweep
+- [ ] CHK-101 [P1] All six ADRs have status; ADR-003 reads `Accepted 2026-09-06 19:08` and names `obnotion-`, not `obn-`, before the sweep
 - [ ] CHK-102 [P1] Alternatives documented with rejection rationale
 - [ ] CHK-103 [P0] Migration path documented and tested
 <!-- /ANCHOR:arch-verify -->
@@ -355,7 +368,7 @@ Every implementation row below names the **red** it must observe before the chan
 <!-- ANCHOR:compliance-verify -->
 ## L3+: Compliance Verification
 
-- [ ] CHK-130 [P1] `spec.md` §12 Q2 answered: upstream attribution settled before release
+- [ ] CHK-130 [P1] `spec.md` §12 Q2 landed, not merely answered: `manifest.json` credits MichelKerkmeester, carries no `fundingUrl`, and the README's fork line exists before release
 - [ ] CHK-131 [P1] The fork's LICENSE and upstream credit unchanged or improved, never removed
 - [ ] CHK-132 [P2] `fundingUrl` points somewhere the operator intends
 <!-- /ANCHOR:compliance-verify -->

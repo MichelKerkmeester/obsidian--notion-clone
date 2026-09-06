@@ -11,12 +11,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/062-notion-table-refinement"
-    last_updated_at: "2026-09-06T16:17:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Opened the packet from the Notion table research loop"
+    last_updated_at: "2026-09-06T16:32:00Z"
+    last_updated_by: "ruling-fold-session"
+    recent_action: "Folded the 18:32 rulings into C4 and C8 thresholds"
     next_safe_action: "Take T001 — the five guards on the already-haves, each red under its own control"
     blockers:
-      - "ADR-005, ADR-006 and ADR-007 are Proposed and the operator owns them"
       - "styles.css edits are serialized by the parent's CSS lane"
       - "C9 is the operator's device read and no agent ticks it"
     key_files:
@@ -33,13 +32,14 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "Where does the add-row noun come from, the view's source name or a fixed word"
-      - "What does the frozen divider look like in dark theme, where no capture exists"
-      - "Does a type-picker row ship before the data type behind it does"
+      - "What is a Person value in an Obsidian vault — wikilink or plain text — owed an ADR before its renderer"
     answered_questions:
       - "The wrap-off row-height defect landed on main at 41513bd3 and 1a2c7e00; it is not this packet's work"
       - "Conditional row colour already ships; only its naming could move"
       - "The digest's two second-hand line citations are exact, and a third registry it never named exists"
+      - "The frozen divider: nothing at rest, a soft right-edge shadow once scrolled past (operator 18:32, verbatim 'Subtle shadow when scrolled past')"
+      - "The add-row noun is a per-view configured string, fallback today's 'New' (operator 18:32)"
+      - "A type-picker row ships enabled with a real data type behind it — all eight missing types, 13 to 21 (operator 18:32)"
 ---
 
 <!-- SPECKIT_TEMPLATE_SOURCE: goal-core | v2.2 -->
@@ -85,7 +85,9 @@ are **exact** — `src/data/types.ts:82` is the thirteen-member `ColumnDef["type
 and reading them turned up a **third registry the digest never named**, `PROPERTY_TYPES` at
 `src/views/record-surface/type-picker.ts:28-32`, plus `COLUMN_TYPE_LABELS` at
 `src/data/column-types.ts:135-151`. A type is four registries, not one, which is why C4's threshold
-counts four and ADR-007 asks whether the row should ship before the data type does. The resize
+counts four. ADR-007 asked whether the row should ship before the data type does, and the operator
+answered on 2026-09-06 18:32 — *"All types or add more as needed"* — so every row ships with a real
+type behind it and the target count is twenty-one rather than eighteen. The resize
 handle's red is also sharper than reported: `.db-resize-handle` (`styles.css:5655-5663`) declares no
 background **and carries no hover rule at all**, so it paints nothing ever rather than nothing until
 hover.
@@ -147,13 +149,15 @@ never resolve them silently.
       (`src/data/types.ts:531`); one menu row beside the wrap row
       (`src/views/column-menu.ts:194-213`); a frozen `th` whose computed `left` equals the sum of
       the preceding frozen widths within **±1px** in the render harness; a checked state that
-      persists per column through a serialise/parse round-trip; a divider gated on horizontal
-      scroll; and an unfreeze negative control that collapses the offset. **Desktop only, with the
+      persists per column through a serialise/parse round-trip; **no** right-edge shadow at
+      `scrollLeft === 0` and a soft token-derived one once the table is scrolled sideways
+      (**ADR-005 Accepted 2026-09-06 18:32**, operator verbatim: *"Subtle shadow when scrolled
+      past"*); and an unfreeze negative control that collapses the offset. **Desktop only, with the
       reason in the task** — the phone switches to content-driven auto layout and has no horizontal
       overflow to freeze against (`styles.css:21021-21035`), which satisfies `050` D3's "no silent
       no-phone". The frozen state appears in **no** capture in the 98-screen read (digest P7, §6
-      Q3), so the sticky offset and the divider are **our design, marked inference**, not an
-      adoption.
+      Q3), so the sticky offset and the shadow are **our design, marked inference**, not an
+      adoption — and the shadow's behaviour is the operator's 18:32 ruling, not a Notion fact.
 - [ ] **C2 — The thirteen behaviours already at parity each carry a permanent assertion that goes
       red under its own negative control.** **Today: observed red — five of them have no assertion
       at all.** The footer's zero-row skip is a bare `if (rows.length === 0) return`
@@ -185,11 +189,14 @@ never resolve them silently.
       `PROPERTY_TYPE_ICON_NAMES` (`src/views/property-type-icon.ts:32-46`) and
       `COLUMN_TYPE_LABELS` (`src/data/column-types.ts:135-151`), with the grouped Basic/Options/
       Advanced submenu slicing `PROPERTY_TYPES` at 6 and 9
-      (`src/views/column-menu.ts:262-264`) so a bare append lands in the wrong group. Done is
-      eighteen rows with one glyph each in the type popover, all four registries in step, and the
-      slice boundaries corrected in the same change. **Gated on ADR-007** — whether a picker row
-      ships before the data type behind it exists is the operator's call, and the alternative
-      (defer the whole item) is named there.
+      (`src/views/column-menu.ts:262-264`) so a bare append lands in the wrong group. Done is the
+      full **twenty-one** rows with one glyph each in the type popover, all four registries in
+      step, and the slice boundaries corrected in the same change. **ADR-007 is Accepted** — operator,
+      2026-09-06 18:32, verbatim: *"All types or add more as needed"*. The eight added are Person,
+      URL, Email, Phone, created time, created by, last edited time and last edited by — every type
+      on `af7a18b0`'s canonical list our union lacks — each **enabled with a real renderer behind
+      it**. Person's vault value source is owed its own ADR before its renderer and does not gate
+      the other seven.
 - [ ] **C5 — The resize handle is visible before you need it.** Notion's grip becomes visible on
       column selection (`d53b3912`). **Today: observed red, and worse than the research reported.**
       `.db-resize-handle` (`styles.css:5655-5663`) is a 4px absolutely-positioned strip with
@@ -217,9 +224,11 @@ never resolve them silently.
 - [ ] **C8 — The add-row affordance names what it adds.** Notion derives the noun from the data
       source — `+ New page` on one board (`19745d87`), `+ New task` on another (`e33466b4`).
       **Today: observed red — the string is fixed.** `src/views/table-renderer.ts:982` builds
-      `` `+ ${t("toolbar.new")}` ``. Done is `+ New <noun>` where the noun is derivable, today's
-      string where it is not, and the key in all three locales. **Gated on ADR-006** — where the
-      noun comes from is a product decision and the operator's.
+      `` `+ ${t("toolbar.new")}` ``. Done is `+ New <noun>` where the view carries a **configured**
+      noun, today's string where it is unset, empty or whitespace-only, and the framing plus its
+      fallback in all three locales. **ADR-006 is Accepted** — operator, 2026-09-06 18:32, verbatim:
+      *"Per-view configured noun, fallback 'New'"*. The noun is a `ViewConfig` field rather than a
+      derivation, so no view can produce `+ New All` or `+ New Board`.
 - [ ] **C9 — The operator reads the refined table on a device, in both themes.** Three things no
       headless harness in this repository can answer. **The frozen column mid-scroll on iOS**:
       WebKit's sticky-inside-table behaviour is not something the render harness stands in for, and

@@ -1,6 +1,6 @@
 ---
 title: "Tasks: Notion States Refinement"
-description: "Twelve legs: two decisions, five builds, one reconciliation, the lane rows and the device read. Task Format: T### [P?] Description (file path)"
+description: "Seventeen legs: two decisions, six builds, one reconciliation, the lane rows and the device read. Task Format: T### [P?] Description (file path)"
 trigger_phrases:
   - "066 tasks"
   - "notion states refinement tasks"
@@ -50,11 +50,11 @@ creates no new lane file and never ticks an operator device row.
       they migrate to `var(--db-motion-fast)` and `ease` becomes the one fast-band curve. The ADR
       picks one and says why; absorbing the choice silently is what left four `ease-out` declarations
       outside a token that is `ease`. (`decision-record.md`)
-- [ ] T003 [P] [P1] **Record ADR-001 and ADR-002, both Proposed, both the operator's.** The second
-      destructive red weight (`screen:28751c29` against `screen:348fd2b7`) and the toast placement
-      (`screen:56f376d3`) each contradict a landed Anytype ruling. Both name the two readings, the
-      reason to hold, and the threshold that would apply if the operator reverses. Neither is applied.
-      (`decision-record.md`)
+- [x] T003 [P] [P1] **Record ADR-001 and ADR-002.** Both were ruled by the operator on
+      **2026-09-06 18:50**: *"Keep one weight"* (ADR-001 — the single `danger` boolean holds, zero
+      code) and *"Centre on phone, keep corner on desktop"* (ADR-002 — the phone half is T017, the
+      desktop corner stays). Both quotes are verbatim in `decision-record.md`, each with its date and
+      time. (`decision-record.md`)
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -103,6 +103,14 @@ creates no new lane file and never ticks an operator device row.
       **Red-first proof:** the comment-excluded declaration census reads **4** today and must read
       **0**; the raw grep reads 7, which is why the lane row counts declarations. Serialized behind
       the parent's CSS lane. (`styles.css`)
+- [ ] T017 [P1] **Centre the shared placement on phone; keep the desktop corner, per ADR-002.**
+      The toast stack (`styles.css:2724-2736`) and the operation-result rail host (`:2714-2719`) are
+      one placement; within the phone band (`@media (pointer: coarse), (max-width: 760px)`,
+      `:20945`) the card centres horizontally with symmetric margins, and outside the band neither
+      anchor moves. **Red-first proof:** at 390px the stack's computed left margin is **−6px**
+      (384px wide, `right: 12px` — it overflows the left edge outright), and at 430px the rail reads
+      left **30px** against right **16px**, its `calc(100vw - 32px)` clamp being symmetric at 390px
+      only by accident. Serialized behind the parent's CSS lane. (`styles.css`)
 - [ ] T010 [P1] **Reconcile `055`'s five stale rows and two lagging checkboxes.** In
       `../055-states-feedback-and-motion/goal.md`: the toast row (`:118-121`, *0 of 247* → the census
       is 242, and `notice.galleryMigrated` at `src/i18n.ts:1473` is delivered by `showToast` with an
@@ -130,12 +138,14 @@ creates no new lane file and never ticks an operator device row.
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] T012 [P0] **Extend the existing lanes with the computed rows.** Four assertions, each on an
+- [ ] T012 [P0] **Extend the existing lanes with the computed rows.** Five assertions, each on an
       existing `tools/live/` lane, each reading a computed value and each with its own negative
       control watched red first: the two dwell budgets read apart; `.db-toast.is-error` rendering on
       a forced owned-operation failure, with the notice census figure recorded; the chip's background
       resolving from a host token with no hex literal; the comment-excluded fast-band declaration
-      census. **No new lane file**, and no operator device row is ticked by this packet.
+      census; and the phone-band placement margins reading symmetric at 390px and 430px with the
+      desktop anchors unchanged (AC-009, per ADR-002's 18:50 ruling). **No new lane file**, and no
+      operator device row is ticked by this packet.
       (`tools/live/*.json`)
 - [ ] T013 [P0] **Run the three gates and read each exit status.** `npx tsc --noEmit`,
       `npm run build`, `npx vitest run`. A green run that exercised nothing is recorded as such
@@ -143,15 +153,19 @@ creates no new lane file and never ticks an operator device row.
 - [ ] T014 [P1] **Re-derive the captures for the chip.** The chip is a rendering change, so the
       screenshot gate applies: a current capture of a compact context carrying the chip, looked at
       rather than assumed. (`screenshots/`)
-- [ ] T015 [B] [P1] **The operator device read, D-1 and D-2.** D-1: iOS `Reduce Motion` stops the
-      skeleton shimmer and snaps entrances inside the plugin's WKWebView — unverifiable from source
-      or captures, because media-query behaviour in a webview is exactly the class of fact the device
-      pass owns. D-2: the Undo target is one-hand reachable at the rail's clamped phone width
-      `min(384px, calc(100vw - 32px))` (`styles.css:2756-2767`), without which the 5000ms window is a
-      number and not an affordance. Both ride `055` `tasks.md` T017 rather than opening a new pass.
-      Blocked on the operator.
-- [ ] T016 [B] [P1] **The operator rules ADR-001 and ADR-002.** Both hold a landed Anytype ruling
-      against new Notion evidence. Blocked on the operator; neither blocks any other criterion.
+- [ ] T015 [B] [P1] **The operator device read, D-1, D-2 and the centred placement.** D-1: iOS
+      `Reduce Motion` stops the skeleton shimmer and snaps entrances inside the plugin's WKWebView —
+      unverifiable from source or captures, because media-query behaviour in a webview is exactly the
+      class of fact the device pass owns. D-2: the Undo target is one-hand reachable at the rail's
+      clamped phone width `min(384px, calc(100vw - 32px))` (`styles.css:2756-2767`), without which
+      the 5000ms window is a number and not an affordance. A third read joins them, owed by ADR-002's
+      18:50 ruling: the centred stack reads as placed for the thumb on the same handset (AC-008's
+      third clause). All ride `055` `tasks.md` T017 rather than opening a new pass. Blocked on the
+      operator.
+- [x] T016 [P1] **The operator rules ADR-001 and ADR-002.** **Ruled 2026-09-06 18:50** — *"Keep one
+      weight"* and *"Centre on phone, keep corner on desktop"*, both quoted verbatim in
+      `decision-record.md`. This row records the operator's own completed act; the packet's device
+      rows are the ones still waiting on them.
 <!-- /ANCHOR:phase-3 -->
 
 ---
@@ -192,8 +206,10 @@ creates no new lane file and never ticks an operator device row.
 1. Stop at the first failed check; do not retry the same command twice without new evidence.
 2. Restate the problem one level up — the interface, the data flow, or the module boundary.
 3. If the block is a landed ruling this packet holds (ADR-001, ADR-002), name the conflict in the
-   task row and stop; parent `goal.md` D15 forbids resolving it silently.
-4. Operator-owned rows (T015, T016, AC-007, AC-008) are never unblocked by an agent.
+   task row and stop; parent `goal.md` D15 forbids resolving it silently. Both of this packet's
+   conflicts were ruled on 2026-09-06 18:50 and the ruling path is the one this rule names.
+4. Operator-owned rows (T015, AC-008) are never unblocked by an agent. T016 was closed by the
+   operator's own ruling, recorded above; AC-007 closed with it.
 <!-- /ANCHOR:ai-protocol -->
 
 ---

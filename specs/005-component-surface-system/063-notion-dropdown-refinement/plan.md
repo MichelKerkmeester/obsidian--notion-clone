@@ -150,7 +150,7 @@ nothing.
 | `052` T008 (toolbar action panels) | Internal | Yellow — open | REQ-002's `toolbar-renderer.ts:1312` row waits; the other three rows are unaffected |
 | `052` T009 (column-menu submenus) | Internal | Yellow — open | REQ-002's three `column-menu.ts` rows wait; REQ-001 does not, because T009 never opens `dropdown-field.ts` |
 | The parent's serialized CSS lane | Internal | Green | REQ-001 and REQ-004 both wait on the hold, not on each other |
-| ADR-004, ADR-005 | Operator | Red — Proposed | Neither gates a P0. Both stay open until the operator rules |
+| ADR-004, ADR-005 | Operator | **Green — both ruled 2026-09-06 19:08** | ADR-004 Accepted (the labelled colour list, and it opens REQ-008 / AC-012-016 / T014-017); ADR-005's carve-out Declined, so `051` E3 stands whole and no row changes |
 | `044` sheet grammar, `048` stacking model | Internal | Green | REQ-004 must hold both green; it re-specifies neither |
 <!-- /ANCHOR:dependencies -->
 

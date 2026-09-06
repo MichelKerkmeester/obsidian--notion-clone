@@ -208,7 +208,7 @@
     ],
     "causal_summary": "Our table view has never been read side by side against the product it is most often compared to",
     "created_at": "2026-09-06T16:15:18.332Z",
-    "last_save_at": "2026-09-06T16:17:37.398Z",
+    "last_save_at": "2026-09-06T21:53:05.708Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,14 +220,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:fa8c6131c3410825ab5846876387b161dec986265b01be91184348a974e09133",
+    "source_fingerprint": "sha256:e63e657ea0352d0be1b85004934b90955f2cd9faceafb919e0ef8247c81667e7",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "ab40dffe867549df96d8310135637e9ed95c4c2ede2f62f97e6761027dd938b6",
-      "plan.md": "4d3ceb5f4bccea3d5a6fe7af8be6564164cc42d84ebf20f39f34e26f56d76bd1",
-      "tasks.md": "845c34d36854f106e37880638e550cfeee09251ec2df162a58aa5818e3cf199b",
-      "decision-record.md": "6df6ebd073a46dd4db0cf7b685be7beab7fdb3a52d92628b010d6a9bf53a7f6a",
-      "implementation-summary.md": "3bcd0c4de996e95ffb427315c745a854706230cd747261222e3739ac3d8975e5"
+      "spec.md": "894c0ea0bc60510096919d4823c24a207696c877d8ae563f6a5237035808ede2",
+      "plan.md": "4671b14c815b1d8e35224dbadbf368e97df6c44c4eb396001a09eb8b6bbdbafe",
+      "tasks.md": "b217fe02d8b9bee0684f2a620a16567fe09c0041df989cf0e3840eec0a1f76db",
+      "decision-record.md": "e7708936bff298f141510d9abea6ac3aada48814326b4a13e61ce2a7873713c7",
+      "implementation-summary.md": "7ea304b5cdd09199e7ad24d946c1194a294065cc25d09d11863648eeccbbe621"
     },
     "last_active_child_id": null,
     "last_active_at": null

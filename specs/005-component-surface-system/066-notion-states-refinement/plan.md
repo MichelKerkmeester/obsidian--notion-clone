@@ -38,6 +38,10 @@ own negative controls; the census is four declarations behind one recorded curve
 Nothing here widens the toast's public surface. `ToastOptions` already carries `action`, so the dwell
 split reads a field the callers already pass — the change is in the component's own dismissal branch,
 not in its contract.
+
+A sixth leg joins them on the operator's 2026-09-06 18:50 ruling of ADR-002 (*"Centre on phone, keep
+corner on desktop"*): the shared toast/rail placement centres on phone with symmetric margins, the
+desktop corner stays measured-Anytype, and the device pass owes a read of the centred stack.
 <!-- /ANCHOR:summary -->
 
 ---
@@ -103,6 +107,7 @@ returns `source-missing` or `group-relation-deleted`, and the compact context ca
 | `database-view.ts` `showOperationResult` (`:11316-11334`) | the correct model: severity plus action, rail-hosted | unchanged — it is the pattern being followed | read the range; no edit |
 | `empty-state-renderer.ts` `renderCard` (`:295-330`) | the full-card shape for all fourteen reasons | unchanged — the chip is additive | `rg -n "renderCard" src/views` |
 | `styles.css` fast-band literals (`:200`, `:473`, `:7431`, `:22745`) | four `120ms ease-out` declarations outside the token | update per ADR-004 | `grep -n "120ms" styles.css` minus the definition at `:122` and the comment at `:430` |
+| `styles.css` toast/rail placement (`:2714-2719`, `:2724-2736`, `:2755-2763`) | one shared placement: stack corner-anchored, rail host fixed right, `is-inline` clamp | update per ADR-002's 18:50 ruling — centre within the phone band (`:20945`), desktop untouched | lane row reading computed left/right margins at 390px and 430px, and a desktop read showing both anchors unchanged |
 | `styles.css` `--db-transition-fast` (`:122`) / `--db-motion-fast` (`:142`) | the fast-band token and its alias | unchanged unless ADR-004 adds a curve variant | read `:114-150` |
 | `tools/live/*.json` lane rows | the permanent evidence surface | update — existing lanes extended, no new lane file | `node tools/live/...` per lane, exit status read |
 | `055/goal.md` §3, `055/tasks.md` | the owner packet's tracking documents | update — five rows and two checkboxes | each restatement re-derived from the tree the same day |
@@ -132,8 +137,8 @@ Follow the ordered tasks in `tasks.md`. It owns the Setup, Implementation and Ve
 |-----------|-------|-------|
 | Unit | The dwell matrix (severity × action), the chip's shape and `aria-live`, the reason-to-shape selection | Vitest, fake timers, production module import |
 | Integration | A forced delete failure rendering `.db-toast.is-error`; a deleted group relation rendering the chip in a compact header | Vitest against the rendered container |
-| Lane | The two computed dwell budgets, the owned-operation notice census, the chip's token-only background, the comment-excluded fast-band census | `tools/live/` rows, each with its own negative control watched red |
-| Manual | D-1 and D-2 on a handset — reduced motion inside the WKWebView, and one-hand reach to the Undo at the clamped rail width | Operator device pass, `055` `tasks.md` T017 |
+| Lane | The two computed dwell budgets, the owned-operation notice census, the chip's token-only background, the comment-excluded fast-band census, and the phone-band placement margins | `tools/live/` rows, each with its own negative control watched red |
+| Manual | D-1 and D-2 on a handset — reduced motion inside the WKWebView, and one-hand reach to the Undo at the clamped rail width — plus the centred-placement read ADR-002's 18:50 ruling owes | Operator device pass, `055` `tasks.md` T017 |
 
 Every lane row asserts a computed value, never a presence (`goal.md` D6). The census rows count
 declarations rather than grep hits, because the raw counts mix comments and definitions — that is the
@@ -149,9 +154,9 @@ specific error the research corrected in the digest's own numbers.
 |------------|------|--------|-------------------|
 | Parent CSS lane | Internal | Yellow | `styles.css` legs serialize; the chip and the census cannot land together |
 | `055` toast component | Internal | Green | Shipped at `a7188274`; this packet widens its dismissal rule only |
-| Operator ruling, ADR-001 | External | Red | The confirm-weight question stays open; no criterion depends on the answer to close |
-| Operator ruling, ADR-002 | External | Red | The placement question stays open; no criterion depends on the answer to close |
-| Operator device pass (`055` T017) | External | Yellow | D-1 and D-2 ride it; the packet's own row cannot close without it |
+| Operator ruling, ADR-001 | External | **Green — ruled 2026-09-06 18:50** | Settled: one destructive weight; zero code |
+| Operator ruling, ADR-002 | External | **Green — ruled 2026-09-06 18:50** | Settled: phone centred, desktop corner kept; the phone half is T017 and AC-009 |
+| Operator device pass (`055` T017) | External | Yellow | D-1 and D-2 ride it, plus the centred-placement read ADR-002 owes; the packet's own row cannot close without it |
 <!-- /ANCHOR:dependencies -->
 
 ---

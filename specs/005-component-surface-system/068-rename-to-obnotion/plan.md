@@ -49,8 +49,8 @@ verification in Stage D is exercising the compatibility layer rather than assumi
 ### Definition of Ready
 - [ ] Release 0.0.30 is cut and every in-flight leg has landed on `main` (`058`, `056` edge-reveal,
       `057` month-chip, `059`-`067`)
-- [ ] `spec.md` §12 Q2 and Q3 are answered by the operator, or the leg starts with the recommended
-      defaults recorded as taken
+- [x] `spec.md` §12 Q1-Q4 answered by the operator, 2026-09-06 19:08. Q3 **declined** this packet's
+      recommended default, so the sweep's target prefix is `obnotion-`, not `obn-`
 - [ ] The css lane is acquired by this packet in `tools/lane/css-lane.json`
 
 ### Definition of Done
@@ -134,7 +134,7 @@ checkboxes and task state.
 | Test Type | Scope | Tools |
 |-----------|-------|-------|
 | Unit | The migration branch, the alias resolvers, the fence matcher, the export-marker reader | vitest |
-| Integration | The 26 gate lanes over the rewritten tree; live probes re-anchored on `obn-` | `npm run gate` |
+| Integration | The 26 gate lanes over the rewritten tree; live probes re-anchored on `obnotion-` | `npm run gate` |
 | Visual | 1,467 captures re-derived; every one expected to move pixelHash, judged by opening PNGs | `npm run screenshots`, `screenshots:verify` |
 | Manual | Fresh-vault smoke: install, enable, migrate, open a database note, render an old fence | Obsidian on desktop, then the iCloud vault on the phone |
 
@@ -154,7 +154,7 @@ probe that fails against an un-rewritten pin.
 | `058`, `056` edge-reveal, `057` month-chip, `059`-`067` | Internal | In flight | Any unlanded leg collides across thousands of stylesheet lines |
 | css lane (`tools/lane/css-lane.json`) | Internal | Held by `056` today | Two stylesheet writers is the failure the lane prevents |
 | The GLM README rewrite leg | Internal | Running in parallel, lands separately | None if it lands first; if it lands second, its author reapplies the prefix rename to the new prose |
-| Operator answers to §12 Q2 and Q3 | External | Open | Q3 blocks the sweep's target prefix; Q2 blocks only the `manifest.json` attribution fields |
+| Operator answers to §12 Q1-Q4 | External | **Green — answered 2026-09-06 19:08** | Q3 set the sweep's target prefix to `obnotion-` (not the recommended `obn-`); Q2 settled the `manifest.json` attribution fields; Q1 keeps the repository name; Q4 confirms T009 |
 <!-- /ANCHOR:dependencies -->
 
 ---
@@ -163,7 +163,8 @@ probe that fails against an un-rewritten pin.
 ## 7. ROLLBACK PLAN
 
 - **Trigger**: the gate fails and cannot be made green inside the leg; or the fresh-vault smoke
-  shows an existing install losing data; or the operator vetoes the prefix (§12 Q3) after the sweep.
+  shows an existing install losing data; or the operator reverses the prefix (§12 Q3, ruled
+  `obnotion-` on 2026-09-06 19:08) after the sweep.
 - **Procedure**: the whole leg is one branch and one rebase window, so rollback is `git revert` of
   the leg's commits on `main`, then `npm run build` and a re-release. Nothing in the working tree
   needs untangling because nothing else landed inside the window.
@@ -279,7 +280,7 @@ thing running beside it, and it lands separately.
 ## L3: ARCHITECTURE DECISION RECORD
 
 The ADRs live in `decision-record.md`: ADR-001 (the name and the id), ADR-002 (copy, never move),
-ADR-003 (`db-` → `obn-`), ADR-004 (permanent aliases for user-facing syntax), ADR-005 (`specs/` is
+ADR-003 (`db-` → `obnotion-`, ruled 2026-09-06 19:08), ADR-004 (permanent aliases for user-facing syntax), ADR-005 (`specs/` is
 not rewritten), ADR-006 (one leg, one rebase window, sequenced last).
 
 

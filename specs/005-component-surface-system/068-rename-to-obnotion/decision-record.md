@@ -1,6 +1,6 @@
 ---
 title: "Decision Record: Rename to Obnotion"
-description: "The six decisions the rename rests on: the name and the id, copy-never-move for the data file, the obn- prefix, permanent aliases for user-facing syntax, specs left as history, and one leg in one rebase window."
+description: "The six decisions the rename rests on: the name and the id, copy-never-move for the data file, the obnotion- prefix the operator ruled on 2026-09-06 19:08, permanent aliases for user-facing syntax, specs left as history, and one leg in one rebase window."
 trigger_phrases:
   - "decision record"
   - "068 adr"
@@ -26,7 +26,7 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "Is obn- the prefix"
+      - "The prefix is obnotion-, ruled 2026-09-06 19:08 against this ADR's obn- recommendation"
     answered_questions:
       - "The data file is copied, never moved"
 ---
@@ -267,15 +267,15 @@ restoring.
 ---
 
 <!-- ANCHOR:adr-003 -->
-## ADR-003: The class prefix becomes `obn-`, and `note-database-container` becomes `obnotion-container`
+## ADR-003: The class prefix becomes `obnotion-`, and `note-database-container` becomes `obnotion-container`
 
 ### Metadata
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed — the operator can veto |
-| **Date** | 2026-09-06 |
-| **Deciders** | Operator (pending) |
+| **Status** | **Accepted 2026-09-06 19:08** — `obnotion-`, not the `obn-` this ADR proposed |
+| **Date** | 2026-09-06 (opened) · 2026-09-06 19:08 (ruled) |
+| **Deciders** | The operator |
 
 ---
 
@@ -293,7 +293,8 @@ What the new prefix is was not specified, so this ADR proposes one rather than a
 
 ### Constraints
 
-- The prefix appears 17,099 times, so each extra character is 17,099 extra characters.
+- The prefix appears 17,181 times (re-measured on `e5830232`), so each extra character is 17,181
+  extra characters. The ruling chose six of them.
 - It must not collide with Obsidian's own `is-`, `nav-`, `mod-`, `workspace-` families, nor read as
   a truncation of `obsidian-`.
 - It must be greppable: a prefix that is also an English word makes the sweep unverifiable.
@@ -306,12 +307,41 @@ What the new prefix is was not specified, so this ADR proposes one rather than a
 <!-- ANCHOR:adr-003-decision -->
 ### Decision
 
-**We chose**: `db-` → `obn-`, `--db-` → `--obn-`, and `note-database-container` →
-`obnotion-container`. The other 39 `note-database*` identifiers take their `obnotion*` forms.
+**Accepted, against the recommendation.** Operator, 2026-09-06 19:08, verbatim: *"obnotion-
+everywhere"*.
+
+**The ruling**: `db-` → `obnotion-`, `--db-` → `--obnotion-`, and `note-database-container` →
+`obnotion-container`. The other 39 `note-database*` identifiers take their `obnotion*` forms, except
+the five ADR-004 pins that keep permanent aliases.
+
+**This reverses the ADR's own recommendation**, which was `obn-`, and the alternatives table below is
+left exactly as it was scored rather than re-scored to agree with the answer. The argument for
+`obn-` was character count and nothing else; the operator weighed self-documenting DOM against
+bytes and chose the DOM. Recording that plainly is the point — an ADR rewritten to look like it
+recommended what was chosen teaches the next reader nothing.
 
 **How it works**: one committed script (`tools/naming/rename-prefixes.mjs`) with an explicit
 exclusion list, run once, its diff reviewed, and re-runnable as a `--check` that must report zero
-afterwards.
+afterwards. The ruling changes the script's two constants, not its shape.
+
+**Size, re-measured on `e5830232` rather than carried from the ADR's own `dc1d54a9` reading**, since
+the ruling made the number six times larger and a stale count would understate it:
+
+| Family | Occurrences | Per occurrence | Delta |
+|---|---:|---:|---:|
+| `db-` → `obnotion-` (`--db-` → `--obnotion-` is 2,330 of these) | 17,181 | +6 chars | **+103,086** |
+| `note-database-container` → `obnotion-container` | 3,185 | −5 chars | **−15,925** |
+| **Net** | | | **≈ +87,000 characters, about 85 KB** |
+
+`styles.css` carries 6,658 of the `db-` occurrences and 2,172 of the container ones, so the
+stylesheet grows by roughly **29 KB** on a 750 KB file — about 4%. `src/` carries 3,620 `db-`
+occurrences. The distinct-token count is **1,728**, four more than the ADR measured, which is drift
+in the tree rather than in the method.
+
+**Is the 85 KB a problem?** No, and it is worth saying why rather than leaving it implied: none of
+it reaches the user's vault, none of it is parsed at runtime more than once, and the stylesheet is
+already 750 KB. The cost of `obnotion-` is legibility bought with bytes nobody pays for at
+interaction time. The `obn-` argument was real and it was simply outweighed.
 <!-- /ANCHOR:adr-003-decision -->
 
 ---
@@ -321,13 +351,20 @@ afterwards.
 
 | Option | Pros | Cons | Score |
 |--------|------|------|-------|
-| **`obn-` (chosen)** | 4 characters, unique, greppable, obviously Obnotion's | Slightly cryptic to a first-time reader | 8/10 |
-| `obnotion-` | Unambiguous, self-documenting | Adds 6 characters to 17,099 occurrences and lengthens every selector in a 1,201-rule stylesheet | 6/10 |
+| `obn-` (recommended, **not** taken) | 4 characters, unique, greppable, obviously Obnotion's | Slightly cryptic to a first-time reader | 8/10 |
+| **`obnotion-` (ruled)** | Unambiguous, self-documenting | Adds 6 characters to 17,181 occurrences and lengthens every selector in a 1,201-rule stylesheet | 6/10 — the score the recommendation gave it, left as it was |
 | Keep `db-` | Zero diff, zero capture churn, zero risk | Directly contradicts the operator's stated scope | 2/10 |
 | `on-` | Shortest | Collides with the word "on" and with event-handler naming; unverifiable by grep | 1/10 |
 
-**Why this one**: it is the shortest prefix that is still unique and greppable, and the cost of
-`obnotion-` is paid 17,099 times for readability that the surrounding class name already provides.
+**Why this one was recommended**: it is the shortest prefix that is still unique and greppable, and
+the cost of `obnotion-` is paid 17,181 times for readability that the surrounding class name already
+provides.
+
+**Why the operator chose otherwise, and why the table stands**: the scores above weigh characters.
+The ruling weighs what a user sees when they inspect an element — `obnotion-board-card` names the
+product, `obn-board-card` names an abbreviation of it — and the 85 KB that buys is not paid at
+interaction time. The row scored 6/10 on a scale that never included that. The table is left
+un-rescored so the trade is visible rather than retconned.
 <!-- /ANCHOR:adr-003-alternatives -->
 
 ---
@@ -350,6 +387,7 @@ afterwards.
 | Risk | Impact | Mitigation |
 |------|--------|------------|
 | The script over-matches a token that merely contains `db-` | H | Explicit exclusion list plus adversarial unit tests (AC-009) |
+| `--obnotion-` custom-property names collide with an Obsidian variable | L | 2,330 occurrences, all under one prefix no other vendor uses; the `--check` pass reports any survivor |
 | A harness pin built by string concatenation is missed | M | T014 re-anchors by hand, with a deliberately un-rewritten pin as the negative control |
 <!-- /ANCHOR:adr-003-consequences -->
 
@@ -366,8 +404,11 @@ afterwards.
 | 4 | **Fits Goal?** | PASS | REQ-003 |
 | 5 | **Open Horizons?** | PASS | A future prefix change is the same script with two constants |
 
-**Checks Summary**: 5/5 PASS — but the Status stays **Proposed** until the operator accepts `obn-`,
-because the checks measure the reasoning, not the operator's taste.
+**Checks Summary**: 5/5 PASS — and the operator ruled `obnotion-` rather than the `obn-` the checks
+were run against, on 2026-09-06 19:08. The checks measured the reasoning, not the operator's taste,
+which is exactly why passing them did not settle the answer. Every one of the five holds unchanged
+under `obnotion-`: the script, the exclusion list and the rollback are identical, and only two
+constants differ.
 <!-- /ANCHOR:adr-003-five-checks -->
 
 ---
@@ -379,7 +420,8 @@ because the checks measure the reasoning, not the operator's taste.
 `screenshots/manifest.json`, and the 1,467 PNGs by recapture.
 
 **How to roll back**: re-run the script with the two constants swapped, then recapture. It is
-idempotent and symmetric, which is the main reason it is a script rather than an editor session.
+idempotent and symmetric, which is the main reason it is a script rather than an editor session —
+and the reason the ruling costs nothing to have taken late.
 <!-- /ANCHOR:adr-003-impl -->
 <!-- /ANCHOR:adr-003 -->
 

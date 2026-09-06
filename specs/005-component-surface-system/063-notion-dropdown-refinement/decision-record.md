@@ -12,12 +12,11 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/063-notion-dropdown-refinement"
-    last_updated_at: "2026-09-06T19:40:00Z"
-    last_updated_by: "option-colour-picker-research-session"
-    recent_action: "Amended ADR-004 to Accepted from the Fibery, Anytype and Notion capture sweep"
-    next_safe_action: "Put ADR-005 to the operator"
-    blockers:
-      - "ADR-005 is Proposed and operator-owned"
+    last_updated_at: "2026-09-06T17:08:00Z"
+    last_updated_by: "ruling-fold-session"
+    recent_action: "Folded the 19:08 ruling; the E3 carve-out is Declined and no ADR is open"
+    next_safe_action: "Run T001, the red-first DOM-order assertion, and read its exit status"
+    blockers: []
     key_files:
       - "specs/005-component-surface-system/052-dropdown-menu-and-picker-componentization/decision-record.md"
       - "specs/005-component-surface-system/roadmap.md"
@@ -28,11 +27,11 @@ _memory:
       session_id: "surface-system-063-decisions"
       parent_session_id: null
     completion_pct: 0
-    open_questions:
-      - "A structure-removal carve-out to E3, or E3 whole"
+    open_questions: []
     answered_questions:
       - "Six Notion-versus-Anytype conflicts already have a landed ruling and it stands"
       - "The option colour picker becomes a one-column labelled list, on both platforms"
+      - "E3 stands whole: the structure-removal carve-out is Declined (operator 19:08)"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: decision-record | v2.2 -->
 # Decision Record: Notion Dropdown, Menu and Picker Refinement
@@ -41,8 +40,9 @@ _memory:
 
 > Under the parent's **D15**, a Notion finding never silently overrides a landed Anytype ruling.
 > Where the two disagree, the record names both readings. Six of the eight decisions below do exactly
-> that and change nothing; two are the operator's, and ADR-004 was ruled on 2026-09-06 ~19:08
-> against the Fibery, Anytype and Notion captures, leaving ADR-005 the only open question.
+> that and change nothing; two were the operator's, and both were ruled on 2026-09-06 19:08 —
+> ADR-004 against the Fibery, Anytype and Notion captures, and ADR-005 **Declined**. Nothing in this
+> packet is open.
 
 ---
 
@@ -486,9 +486,9 @@ nothing outside the picker moves.
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-06 |
-| **Deciders** | Operator — open |
+| **Status** | **Declined 2026-09-06 19:08** — the carve-out, not E3 |
+| **Date** | 2026-09-06 (opened) · 2026-09-06 19:08 (ruled) |
+| **Deciders** | The operator |
 
 ---
 
@@ -519,11 +519,24 @@ the carve-out is not a recommendation this packet can make.
 <!-- ANCHOR:adr-005-decision -->
 ### Decision
 
-**We chose**: E3 stands whole. The carve-out is recorded as an operator question and nothing else.
+**Declined.** Operator, 2026-09-06 19:08, verbatim: *"Keep red plus icon everywhere"*.
 
-**How it works**: no code change. If the operator wants the carve-out, it needs a definition of
-"removes structure without destroying content" that a reviewer can apply to a row without asking,
-and that definition belongs in `051`'s record, not this packet's.
+**Read the status carefully: what is Declined is the carve-out, not E3.** The ADR asked whether E3
+takes an exception for rows that remove structure without destroying content. The answer is no, so
+`051` ADR-007 **E3** stands whole and unamended — red plus a trash icon on **every** destructive row,
+`Remove grouping` and `Delete filter` included.
+
+**How it works**: no code change, and now none is owed. The recommendation and the ruling agree, and
+the value of the ruling is that the question is closed rather than merely un-acted-on — the next
+reader who finds Notion's three-way split in a capture (`5f81b365`, `ca4fd83f`, `e9698e1b`,
+`299e69bb`) finds this row rather than re-opening it.
+
+**What the ruling does not do**: it does not claim Notion is wrong. Notion's split is real and its
+logic is legible. It loses here because E3's ground is WCAG 1.4.1, not visual weight — two of
+Notion's three dispositions carry no non-colour signal at all, which is the failure E3 exists to
+prevent. A future case for the carve-out would have to answer that, and would still need a boundary
+definition a reviewer can apply without asking. Either way it belongs to `051`'s record, not this
+packet's.
 <!-- /ANCHOR:adr-005-decision -->
 
 ---
@@ -556,7 +569,7 @@ accessibility ground behind it. That is precisely the kind of call the operator 
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Red fatigue: everything red means nothing is | M | Recorded here; the operator has the data to decide |
+| Red fatigue: everything red means nothing is | M | Accepted with the ruling. The operator had the three dispositions and the WCAG ground in front of them and chose one rule over three |
 <!-- /ANCHOR:adr-005-consequences -->
 
 ---
@@ -566,13 +579,15 @@ accessibility ground behind it. That is precisely the kind of call the operator 
 
 | # | Check | Result | Evidence |
 |---|-------|--------|----------|
-| 1 | **Necessary?** | FAIL | No defect is open against E3; this is a visual-weight preference |
+| 1 | **Necessary?** | FAIL | No defect was open against E3; the carve-out was a visual-weight preference, and the ruling declined it |
 | 2 | **Beyond Local Maxima?** | PASS | Three dispositions weighed above |
 | 3 | **Sufficient?** | FAIL | The two-way carve-out needs a boundary definition that does not exist yet |
 | 4 | **Fits Goal?** | FAIL | Outside this packet's scope; `051` owns the rule |
 | 5 | **Open Horizons?** | PASS | Recording the question costs nothing and keeps it findable |
 
-**Checks Summary**: 2/5 PASS — Proposed, and recommended against.
+**Checks Summary**: 2/5 PASS — recommended against, and **Declined** by the operator on 2026-09-06
+19:08. The checks were written before the ruling and are left as they were: they are the argument
+that was put, not a summary of the answer.
 <!-- /ANCHOR:adr-005-five-checks -->
 <!-- /ANCHOR:adr-005 -->
 

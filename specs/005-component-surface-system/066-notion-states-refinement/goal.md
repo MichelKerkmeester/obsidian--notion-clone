@@ -12,14 +12,14 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/066-notion-states-refinement"
-    last_updated_at: "2026-09-06T16:10:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Opened the packet from the Notion states research loop"
-    next_safe_action: "Take ADR-001 and ADR-002 to the operator, then start T001"
+    last_updated_at: "2026-09-06T16:50:00Z"
+    last_updated_by: "ruling-fold-session"
+    recent_action: "Folded the 18:50 rulings; ADR-002 adds the phone-centring leg"
+    next_safe_action: "Start T001; ADR-004 is decided at T002 before T009 migrates"
     blockers:
-      - "ADR-001 and ADR-002 are the operator's: both hold a landed Anytype ruling against new Notion evidence"
       - "styles.css edits are serialized by the parent's CSS lane"
       - "the 5000ms dwell in REQ-001 is an inference with no measured source, pending ADR-003"
+      - "the device read (T015, AC-008) waits on the operator's handset pass"
     key_files:
       - "src/views/toast.ts"
       - "src/views/database-view.ts"
@@ -33,14 +33,14 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "Does a second destructive red weight enter the confirm primitive, or does the single danger boolean hold"
-      - "Does the toast stack stay in the Anytype-measured bottom-right corner"
       - "Is 5000ms the right dwell for an action-carrying toast, or does the device pass move it"
       - "Does the fast band get an explicit ease-out token, or does ease become the one fast-band curve"
+      - "Does the centred placement read correctly on a handset — device-only"
     answered_questions:
       - "Notion corroborates the E4 confirm/undo split rather than contesting it"
       - "The empty-state ladder and the reduced-motion coverage are richer here than in either reference"
       - "Notion offline is not applicable: connectivity is Obsidian's domain, not this plugin's"
+      - "One destructive weight is kept, and toast placement splits by form factor (operator 18:50)"
 ---
 # Goal: Notion States Refinement
 
@@ -80,10 +80,14 @@ radius in a way we do not: a blocking modal for a failed action (`screen:53f4023
 against a permanent inline chip for a stale reference (`screen:9748e66c`). We ship the persistent card
 and the transient toast; the chip has no shape at all.
 
-**Nothing here overrides a landed ruling.** Two Notion patterns contradict one: the destructive-red
-weight and the toast placement. Both are recorded as **Proposed** ADRs holding the Anytype ruling,
-with the reason, and both are the operator's to close. Parent `goal.md` D15 binds: the refinement is
-additive, and a Notion finding never silently overrides a landed Anytype ruling.
+**Nothing here overrides a landed ruling.** Two Notion patterns contradicted one: the destructive-red
+weight and the toast placement. Both were held as **Proposed** ADRs naming the conflict, and the
+operator ruled on **2026-09-06 18:50** — *"Keep one weight"* (ADR-001: the single `danger` boolean
+holds, zero code) and *"Centre on phone, keep corner on desktop"* (ADR-002: the shared toast/rail
+placement centres on phone with symmetric margins and the measured corner stays on desktop; the
+phone half is this packet's T017 and AC-009, and the device pass owes a read of the centred stack).
+Parent `goal.md` D15 binds: the refinement is additive, and a Notion finding never silently overrides
+a landed Anytype ruling — the ruling path is exactly how a conflict is allowed to move.
 
 **Corrected against what landed on `main` while this packet was being written**, because a synthesis
 that reports a fixed defect is worse than one that reports nothing. `a7188274` gave the toast its
@@ -104,7 +108,7 @@ Frozen choices. Changing one is an amendment.
 | D1 | **The digest is the only source of Notion facts, and the tree is the only source of ours.** No image file is opened by this packet; every Notion claim carries a `screen:<id>` that resolves in `../055-states-feedback-and-motion/notion-screens-digest.md` §2. Where the loop's report and the tree disagree, the tree wins and the finding is corrected in place, dated — five of the loop's own line anchors were corrected that way at this packet's opening. |
 | D2 | **No Notion number is adopted.** The digest states no device-pixel ratio, so every Notion figure in it is capture-scale-relative. This packet adopts Notion **shapes and behaviours**; every number comes from the Anytype-measured token system, from an in-tree constant, or from an ADR that says it is an inference. |
 | D3 | **Red first, per criterion, on a threshold.** Every row in `acceptance-criteria.md` carries one number or one boolean observed failing on the tree at `38bba1e3` before its fix is written, with the failing figure recorded. Four of the five buildable criteria were already red on arrival; none needed a failure invented for it. |
-| D4 | **A conflict is named and proposed, never applied.** Parent D15 and `051` ADR-007 bind: where a Notion finding contradicts a landed Anytype ruling, this packet records a **Proposed** ADR naming both readings and stops there. It may add a criterion, a task or an ADR; it may not un-tick a measured row or rewrite a ruling. |
+| D4 | **A conflict is named and proposed, never applied.** Parent D15 and `051` ADR-007 bind: where a Notion finding contradicts a landed Anytype ruling, this packet records a **Proposed** ADR naming both readings and stops there. It may add a criterion, a task or an ADR; it may not un-tick a measured row or rewrite a ruling. **Discharged for this packet's two conflicts 2026-09-06 18:50** — both were ruled, ADR-001 and ADR-002 quoting the operator verbatim; the rule stays written. |
 | D5 | **The toast is the pattern for the rest**, carried from `055` D5. This packet does not migrate 242 notice sites; it migrates the owned operation-failure paths and leaves the lane open with a census that has to move. |
 | D6 | **A lane row asserts a computed value, never a presence.** Every row added here reads a computed style, a measured rect or a census count and carries its own negative control, watched red first. Existing lanes are extended; no new lane file is created, and the operator device rows are never ticked by this packet. |
 | D7 | **`055` owns the vocabulary; this packet owns the refinement.** The seven-state vocabulary, the motion token set and the confirm/undo split are `055`'s contracts and are constraints here, not deliverables. This packet does not re-specify any of them. |
@@ -205,17 +209,18 @@ never resolve them silently.
       is not a duration. Done is: raw fast-band duration literals **= 0** with comments excluded,
       the ease-versus-ease-out choice recorded as an ADR rather than absorbed, and the lane row
       counting declarations rather than grep hits.
-- [ ] **The operator rules the two held conflicts and reads the refined surface on a device.**
-      Two Notion findings contradict a landed Anytype ruling and are held as **Proposed**: the
-      second destructive red weight (`screen:28751c29` text-only against `screen:348fd2b7` filled,
-      against one `danger` boolean at `src/views/modals/confirm-modal.ts:28` themed to `mod-warning`
-      at `src/views/confirm-sheet.ts:69`) and the toast placement (`screen:56f376d3` centred iOS
-      pill against the Anytype-measured bottom-right card at `styles.css:2724-2736`). Two device
-      facts ride the existing operator pass: **D-1**, iOS `Reduce Motion` stops the shimmer and
-      snaps entrances inside the plugin's WKWebView, and **D-2**, the Undo target is one-hand
-      reachable at the rail's clamped phone width `min(384px, calc(100vw - 32px))`
-      (`styles.css:2756-2767`), without which a 5000ms window is a number and not an affordance.
-      Only the operator closes this row; nothing in this repository can.
+- [ ] **The operator's rulings are recorded and the refined surface is read on a device.**
+      The two conflicts that held landed Anytype rulings were **ruled on 2026-09-06 18:50**: the
+      second destructive red weight — *"Keep one weight"*, so the single `danger` boolean at
+      `src/views/modals/confirm-modal.ts:28` themed to `mod-warning` at `src/views/confirm-sheet.ts:69`
+      stays with **0** lines of code — and the toast placement — *"Centre on phone, keep corner on
+      desktop"*, so the shared toast/rail placement centres on phone with symmetric margins (T017,
+      AC-009) while the Anytype-measured corner at `styles.css:2724-2736` stays. Three device facts
+      ride the existing operator pass: **D-1**, iOS `Reduce Motion` stops the shimmer and snaps
+      entrances inside the plugin's WKWebView, and **D-2**, the Undo target is one-hand reachable at
+      the rail's clamped phone width `min(384px, calc(100vw - 32px))` (`styles.css:2756-2767`),
+      without which a 5000ms window is a number and not an affordance; plus the **centred-placement
+      read** ADR-002's ruling owes. Only the operator closes this row; nothing in this repository can.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -230,6 +235,7 @@ Everything below is a running record. It never overrides the directive above.
 | Date | Entry |
 |------|-------|
 | 2026-09-06 | Packet opened from the Opus synthesis of the Notion states research loop: one lineage (`glm-openrouter-states`, cli-pi on `z-ai/glm-5.3-flash` at reasoning max), 5 of 5 iterations under `stopPolicy: max-iterations`, 23 findings merged, 5 of 5 questions answered, zero image reads. Level 3 by the go-higher rule over `recommend-level.sh --loc 500 --files 14 --architectural` (64/100, confidence 82%; phase score 10/50, so a standard child, not a phase parent). |
+| 2026-09-06 | **The operator ruled the two held conflicts at 18:50.** ADR-001 — *"Keep one weight"*; ADR-002 — *"Centre on phone, keep corner on desktop"*, which reverses ADR-002's hold-everywhere proposal and moves the phone half of the shared toast/rail placement into this packet's scope as T017 and AC-009, the desktop corner staying measured-Anytype. The centred stack owes the device pass a read, recorded on AC-008 and T015. ADR-003 and ADR-004 remain open by their own terms. |
 
 ### Deviations and findings
 

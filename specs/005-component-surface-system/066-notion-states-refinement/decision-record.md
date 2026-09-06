@@ -12,12 +12,12 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/066-notion-states-refinement"
-    last_updated_at: "2026-09-06T16:10:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Opened four ADRs from the Notion states research synthesis, all four Proposed"
-    next_safe_action: "Take ADR-001 and ADR-002 to the operator; decide ADR-004 before T009"
+    last_updated_at: "2026-09-06T16:50:00Z"
+    last_updated_by: "ruling-fold-session"
+    recent_action: "Folded the 18:50 rulings; ADR-001 and ADR-002 Accepted"
+    next_safe_action: "Decide ADR-004 at T002 before T009 migrates anything"
     blockers:
-      - "ADR-001 and ADR-002 are the operator's: each holds a landed Anytype ruling against new Notion evidence"
+      - "The centred phone stack still owes its device read (T015, AC-008)"
     key_files:
       - "src/views/toast.ts"
       - "src/views/confirm-sheet.ts"
@@ -29,19 +29,21 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "Does blast radius earn a second destructive weight here, or does it have no consumer"
       - "Is 5000ms the dwell, or does the device pass move it"
     answered_questions:
       - "Notion's own two platforms disagree about toast placement, which is evidence against switching"
       - "The 2200ms budget is an unmeasured inheritance from the operation-result rail, not a landed ruling"
+      - "The confirm keeps one destructive weight (operator 18:50, verbatim 'Keep one weight')"
+      - "Toast placement splits by form factor: centred on phone, corner kept on desktop (operator 18:50)"
 ---
 # Decision Record: Notion States Refinement
 
 <!-- SPECKIT_TEMPLATE_SOURCE: decision-record | v2.2 -->
 
-> Four decisions. **All four are Proposed**: two hold a landed Anytype ruling against new Notion
-> evidence and are the operator's to close (parent `goal.md` D15, `051` ADR-007); two settle a value
-> nobody has measured and must be recorded before the code reads them. Nothing here re-decides what
+> Four decisions. **Two were ruled by the operator on 2026-09-06 18:50** — ADR-001, *"Keep one
+> weight"*, and ADR-002, *"Centre on phone, keep corner on desktop"*, both quoted verbatim below —
+> and two remain open: ADR-003's 5000ms is an inference the device pass can move, and ADR-004 is the
+> implementer's to record at T002. Nothing here re-decides what
 > `055`'s `design-trueup.md` measured — these are about which reading governs, not about what a
 > reference shows.
 
@@ -54,9 +56,9 @@ _memory:
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-06 |
-| **Deciders** | Operator, pending |
+| **Status** | Accepted |
+| **Date** | 2026-09-06 (opened) · 2026-09-06 18:50 (ruled) |
+| **Deciders** | The operator |
 
 ---
 
@@ -86,12 +88,14 @@ Anytype red that a themed host does not adopt.
 <!-- ANCHOR:adr-001-decision -->
 ### Decision
 
-**Hold the single `danger` boolean.** The case Notion's split exists for — an action that destroys a
+**Accepted — hold the single `danger` boolean.** Operator, 2026-09-06 18:50, verbatim: *"Keep one
+weight"*. The case Notion's split exists for — an action that destroys a
 data source rather than a view of one — has no consumer in this tree: our views are configurations
 over vault notes, and nothing here deletes a data source. A second weight would be an abstraction no
-current requirement earns, bought with a 17-site classification pass.
+current requirement earns, bought with a 17-site classification pass. The recommendation and the
+ruling agree; the ruling is what binds.
 
-If the operator reverses this, the threshold that would apply is stated now so the pass is scoped
+If a future packet reopens this, the threshold that would apply is stated so the pass is scoped
 before it starts: **the heavier weight is reserved for an action that destroys a data source or a
 batch beyond the undo snapshot's capacity; `mod-warning` stays for every single-object delete.**
 <!-- /ANCHOR:adr-001-decision -->
@@ -109,9 +113,9 @@ batch beyond the undo snapshot's capacity; `mod-warning` stays for every single-
 <!-- ANCHOR:adr-001-consequences -->
 ### Consequences
 
-The confirm surface is unchanged by this packet. `AC-007` records the conflict as named-and-held, so
-the packet can close without the operator, and the operator's answer changes a future packet rather
-than this one.
+The confirm surface is unchanged by this packet — now by ruling rather than by proposal. `AC-007`
+records the ruling with its verbatim quote, and nothing waits on the operator for this conflict any
+more.
 <!-- /ANCHOR:adr-001-consequences -->
 
 <!-- ANCHOR:adr-001-five-checks -->
@@ -136,15 +140,15 @@ None. T003 records the ADR; no source file changes.
 ---
 
 <!-- ANCHOR:adr-002 -->
-## ADR-002: The toast stack keeps its measured corner
+## ADR-002: The toast placement splits by form factor — centred on phone, corner kept on desktop
 
 ### Metadata
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-06 |
-| **Deciders** | Operator, pending |
+| **Status** | Accepted — placement split by form factor |
+| **Date** | 2026-09-06 (opened) · 2026-09-06 18:50 (ruled) |
+| **Deciders** | The operator |
 
 ---
 
@@ -167,17 +171,31 @@ card (`styles.css:2724-2736`), shared with the operation-result rail through the
 <!-- ANCHOR:adr-002-decision -->
 ### Decision
 
-**Hold the Anytype-measured corner.** A reference whose two platforms disagree is not evidence for
-either placement, and switching would trade one measured, unified placement for one of two unmeasured
-ones — while splitting the stack from the rail, which `055` deliberately unified.
+**Accepted, and it reverses this ADR's proposal — by form factor.** Operator, 2026-09-06 18:50,
+verbatim: *"Centre on phone, keep corner on desktop"*.
+
+The proposal was to hold the Anytype-measured corner everywhere, on the argument that a reference
+whose two platforms disagree is not evidence for either placement. The operator took one reading
+from each side: **on a phone viewport the shared placement centres horizontally with symmetric
+margins** — Notion's iOS reading, `screen:56f376d3` — **and on desktop the measured Anytype corner
+stays.** The constraint that moving the stack moves the rail is honoured, not dissolved: the toast
+stack and the operation-result rail are one placement and stay one, so one phone-band change
+centres both and no desktop rule moves.
+
+What the ruling supplies that the proposal could not: a decision where the reference was split, and
+a phone placement that no longer hugs the right edge — which is also the form factor where the
+unclamped 384px stack anchored at `right: var(--db-space-5)` (12px) overflows a 390px viewport
+today.
 <!-- /ANCHOR:adr-002-decision -->
 
 <!-- ANCHOR:adr-002-consequences -->
 ### Consequences
 
-`styles.css:2724-2771` is untouched by this packet. D-2 on the device pass reads reachability at the
-current placement, so an operator reversal would arrive with a device fact behind it rather than a
-capture.
+The desktop block is untouched by this packet: the stack's corner anchor at `styles.css:2724-2736`
+and the rail host's `right: 16px` at `:2714-2719` both stay. The phone band is now in scope — one
+placement change centring the shared card, with the threshold in AC-009 — and the device pass owes
+a read of the centred stack on a handset, riding beside D-1 and D-2 (AC-008). An operator reversal
+of that read would arrive with a device fact behind it rather than a capture.
 <!-- /ANCHOR:adr-002-consequences -->
 <!-- /ANCHOR:adr-002 -->
 

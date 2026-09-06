@@ -29,8 +29,9 @@ A fourth item is bookkeeping: five load-bearing rows in `055`'s own tracking doc
 phase whose implementation has largely landed.
 
 **Key Decisions**: no Notion number is adopted — shapes and behaviours only, because the digest states
-no device-pixel ratio; two Notion-versus-Anytype conflicts are held as Proposed ADRs rather than
-applied.
+no device-pixel ratio; the two Notion-versus-Anytype conflicts were **ruled by the operator on
+2026-09-06 18:50** — one destructive weight kept (ADR-001), toast placement split by form factor:
+centred on phone, corner kept on desktop (ADR-002).
 
 **Critical Dependencies**: `055`'s toast component, empty-state vocabulary and motion token set are
 constraints, not deliverables. `styles.css` is serialized by the parent's CSS lane.
@@ -115,13 +116,17 @@ context allows, with the failure path reporting through the same component as th
 - Add an inline, permanent, actionable chip for stale references in compact contexts.
 - Reconcile `055`'s `goal.md` §3 Today column and its two lagging `tasks.md` checkboxes.
 - Take the fast motion band's raw duration literals to zero and record the curve choice.
-- Record the two Notion-versus-Anytype conflicts as Proposed ADRs.
+- Centre the shared toast/rail placement on phone with symmetric margins, per ADR-002's 18:50
+  ruling; the desktop corner is untouched.
+- Record the two Notion-versus-Anytype rulings with their verbatim quotes.
 
 ### Out of Scope
 - The radio-choice consequence picker (`screen:348fd2b7`) — no consumer: our views are configs over
   vault notes and nothing here destroys a data source.
-- A second destructive red weight — conflicts with a landed ruling; see ADR-001.
-- Re-placing the toast stack — conflicts with a landed ruling; see ADR-002.
+- A second destructive red weight — ruled out by the operator (ADR-001, 2026-09-06 18:50, *"Keep one
+  weight"*).
+- Re-placing the toast stack on desktop — the corner is the measured Anytype value and stays; only
+  the phone half moved, and it is in scope per ADR-002's 18:50 ruling.
 - The in-trash persistent banner (`screen:15f3126a`) — belongs to a future trash/restore phase and
   inherits a Bin-shaped design question from E4's own logic.
 - Two-tier loading (`screen:a483c1af`) — conditional on a multi-step async surface that does not exist.
@@ -164,7 +169,8 @@ context allows, with the failure path reporting through the same component as th
 | REQ-003 | `renderInlineChip` renders a stale reference in a compact context as a permanent inline chip: warning icon, label, chevron action, `aria-live="polite"`, no dismiss control, host-token background composed with `color-mix`, zero hex literals, tap target at the host's interactive floor. |
 | REQ-004 | The five stale rows in `055`'s `goal.md` §3 and the two lagging `tasks.md` checkboxes state what the tree states, each restatement carrying a same-day `file:line` verification. |
 | REQ-005 | Raw fast-band duration literals in `styles.css` reach zero with comments excluded, and the ease-versus-ease-out choice is recorded as an ADR rather than absorbed. |
-| REQ-006 | The two Notion-versus-Anytype conflicts are recorded as Proposed ADRs naming both readings, and neither is applied before the operator rules. |
+| REQ-006 | The two Notion-versus-Anytype conflicts carry the operator's 2026-09-06 18:50 rulings quoted verbatim: ADR-001 keeps the single destructive weight, ADR-002 splits toast placement by form factor — centred on phone, corner kept on desktop. |
+| REQ-007 | Within the phone band, the toast stack and the operation-result rail — one shared placement — render horizontally centred with symmetric computed margins; outside the band, both measured Anytype corner anchors are unchanged. |
 
 > Acceptance criteria for these requirements live in `acceptance-criteria.md`,
 > which is the document that decides whether this packet may close.
@@ -190,7 +196,7 @@ context allows, with the failure path reporting through the same component as th
 | Type | Item | Impact | Mitigation |
 |------|------|--------|------------|
 | Dependency | Parent CSS lane | `styles.css` edits serialize; two legs cannot land together | Sequence T005 and T008 behind whichever lane holder is open |
-| Dependency | Operator ruling on ADR-001 / ADR-002 | Neither conflict can be applied or dismissed without it | Both are Proposed; the packet closes on the operator row either way |
+| Dependency | Operator ruling on ADR-001 / ADR-002 | **Ruled 2026-09-06 18:50** | Settled: one weight kept; placement split — the phone half is tasked (T017, AC-009) |
 | Risk | The 5000ms dwell is an inference | A number nobody measured becomes a landed value | ADR-003 marks it as an inference; D-2 on the device pass is the check that would move it |
 | Risk | Migrating a literal to `--db-transition-fast` changes `ease-out` to `ease` | A silent curve change across four surfaces | ADR-004 forces the choice to be recorded; the lane row counts declarations, not grep hits |
 | Risk | The census threshold rewards deleting notices rather than routing them | A green lane over a worse surface | The lane row asserts `.db-toast.is-error` renders, not only that the census moved |
@@ -251,7 +257,7 @@ decisions and holds two operator rulings, which is what the architecture addendu
 | R-002 | The fast-band migration silently changes four surfaces' easing | M | M | ADR-004; the census counts declarations |
 | R-003 | The notice census is met by deleting rather than routing | H | L | The lane row asserts the toast renders |
 | R-004 | `055`'s restated rows are copied from this packet rather than re-read | M | M | Each restatement carries a same-day `file:line` |
-| R-005 | An operator ruling reverses ADR-001 and the confirm surface needs a 17-site severity pass | M | L | The ADR names the threshold that would apply, so the pass is scoped before it starts |
+| R-005 | A future ruling reverses ADR-001 and the confirm surface needs a 17-site severity pass | M | L | The 2026-09-06 18:50 ruling kept one weight; the threshold that would scope any future reversal stays written in the ADR |
 
 ---
 
@@ -287,9 +293,10 @@ is empty.
 
 ## 12. OPEN QUESTIONS
 
-- Does a second destructive red weight enter the confirm primitive, or does the single `danger`
-  boolean hold? ADR-001, the operator's.
-- Does the toast stack stay in the Anytype-measured bottom-right corner? ADR-002, the operator's.
+- Does a second destructive red weight enter the confirm primitive? **Answered 2026-09-06 18:50** —
+  *"Keep one weight"*; ADR-001 Accepted.
+- Does the toast stack stay in the Anytype-measured bottom-right corner? **Answered 2026-09-06 18:50**
+  — *"Centre on phone, keep corner on desktop"*; ADR-002 Accepted and the phone half is in scope.
 - Is 5000ms the right dwell, or does the device pass move it? ADR-003 and D-2.
 - Does the fast band get an explicit `ease-out` token, or does `ease` become the one fast-band curve?
   ADR-004.

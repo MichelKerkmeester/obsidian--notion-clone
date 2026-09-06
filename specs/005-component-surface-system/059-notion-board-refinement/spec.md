@@ -29,7 +29,7 @@ contextType: "planning"
 | **Phase** | 59 of 67 |
 | **Predecessor** | 058-card-title-and-title-formats |
 | **Successor** | None |
-| **Handoff Criteria** | `058`'s title-resolver leg has released `src/views/board-renderer.ts`, and the operator has answered ADR-004 / ADR-010 / ADR-011. `056` T014-T016 already released it — they landed on `main` at `dc1d54a9` |
+| **Handoff Criteria** | `058`'s title-resolver leg has released `src/views/board-renderer.ts`. The operator answered ADR-004 / ADR-010 / ADR-011 on **2026-09-06 18:36**, so only the file half of the handoff remains. `056` T014-T016 already released it — they landed on `main` at `dc1d54a9` |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -60,8 +60,9 @@ AC-012/AC-013 — so what the research ranked P0 is a **verification** row here 
 - A Groups `panel` reachable from the board's own column menu, carrying per-group visibility and
   drag reorder in one place.
 - A `showGroup` member on `BoardRendererActions`, implemented by both hosts, with `hideGroup` and
-  `deleteGroup` either wired or removed (ADR-011).
-- Eleven ADRs: seven Accepted on a landed ruling, four Proposed — and only three of the four gate
+  `deleteGroup` **removed** and `hideGroup` **wired** (ADR-011, Accepted 2026-09-06 18:36).
+- Eleven ADRs: seven Accepted at opening on a landed ruling, three Accepted by the operator on
+  2026-09-06 18:36, one still Proposed — and it proposes no change, so nothing gates
   code, because ADR-009 proposes changing nothing.
 - Four errata notes (E-1, E-2, E-4, E-5; E-3 was closed by `dc1d54a9`), and four device-only
   checks named on `056` AC-010.
@@ -108,7 +109,10 @@ so the question is never re-litigated from a stale citation.
   `buildCheckboxPropertyRow` (`src/views/record-surface/property-row.ts:353`) exactly as
   `src/views/board-card-properties-panel.ts:48-125` already uses it.
 - A `showGroup` member on `BoardRendererActions`, implemented in both hosts.
-- A "Hide empty groups" setting, default **off** (ADR-010).
+- A "Hide empty groups" setting, default **on** (ADR-010, Accepted 2026-09-06 18:36 — *"On by
+  default, like Notion"*, reversing this packet's opening `false` proposal), with the eight
+  empty-column capture fixtures pinned to an explicit `false` so they no longer depend on the
+  default.
 - Eleven ADRs and four errata notes (E-1, E-2, E-4, E-5).
 - Four device-only checks appended to `056` AC-010's operator pass.
 - Four constructed captures and two assertion rows on lanes that already exist.
@@ -131,7 +135,7 @@ so the question is never re-litigated from a stale citation.
 |-----------|-------------|-------------|
 | `src/views/board-groups-panel.ts` | Create | The Groups panel: visibility toggles, bulk actions, drag reorder, "Hide empty groups" |
 | `src/views/board-renderer.ts` | Modify | `showGroup` on the actions interface; one entry row in `renderBoardGroupOptions` (`:540-560`); the hidden-group filter at `:192-193` and a new empty-group filter beside it |
-| `src/views/database-view.ts` | Modify | Supply `showGroup`, and wire or remove `hideGroup`/`deleteGroup` per ADR-011 |
+| `src/views/database-view.ts` | Modify | Supply `showGroup`, wire `hideGroup`, remove `deleteGroup` (ADR-011, branch two) |
 | `src/views/embedded-database-renderer.ts` | Modify | Same, for the embedded host |
 | `src/data/types.ts` | Modify | The "Hide empty groups" flag beside `boardHiddenGroups` (`:560`) |
 | `src/data/data-source.ts` | Modify | Add the flag to the persisted key allowlist (`:1352`) |
@@ -157,7 +161,7 @@ so the question is never re-litigated from a stale citation.
 | REQ-003 | Every group option — visible and hidden — carries a live visibility toggle, with hide-all and show-all bulk actions on the same surface |
 | REQ-004 | Group order is drag-reorderable from the same rows and round-trips through `updateGroupOrder` across a re-render |
 | REQ-005 | "Hide empty groups" defaults to `false`, so the shared empty-column state at `src/views/board-renderer.ts:324-327` is never auto-deleted |
-| REQ-006 | Each of the nine Notion-vs-Anytype conflicts the research named carries an ADR, plus two more for the adoption's own shape; the seven a landed ruling decides are `Accepted` citing it, and the four it does not are `Proposed` pending the operator |
+| REQ-006 | Each of the nine Notion-vs-Anytype conflicts the research named carries an ADR, plus two more for the adoption's own shape; the seven a landed ruling decides are `Accepted` citing it, three more are `Accepted` on the operator's 2026-09-06 18:36 rulings, and the one remaining is `Proposed` and proposes no change |
 
 ### P1 - Required (complete OR user-approved deferral)
 
@@ -191,9 +195,9 @@ so the question is never re-litigated from a stale citation.
 | Dependency | `src/views/board-renderer.ts` file lane | Blocked until `058` releases it; `056` T014-T016 already did, at `dc1d54a9` | Queue behind `058`; T001-T003 need none of it |
 | Dependency | The operator's adoption answer (`notion-screens-digest.md:277-281`) | Every code leg blocked | `goal.md` D6 makes the gate explicit; the ADR pack is what goes to the operator |
 | Risk | A fourth surface a reader must hunt through for a setting | Medium | The entry row lives in the column menu the reader already opened to hide the group; no new toolbar entry |
-| Risk | Wiring `deleteGroup` resurrects a destructive action nobody asked for | Medium | ADR-011 puts the choice to the operator rather than assuming it; the safe default is removing the dead guard, not implementing it |
+| Risk | Wiring `deleteGroup` resurrects a destructive action nobody asked for | Closed | ADR-011 was put to the operator rather than assumed, and they took branch two on 2026-09-06 18:36: *"Wire hide, delete the delete action"*. `deleteGroup` is removed with its guard and its i18n keys, so the risk has no surface left |
 | Risk | Adopting Notion's screen shape imports Notion's mobile grammar | Medium | `goal.md` D2 and `../design-system.md:526-528`; the surface is a `panel`, phone-presented through `044`'s sheet grammar |
-| Risk | "Hide empty groups" quietly deletes a captured state | High | REQ-005 pins the default to `false` and ADR-010 records why Notion's own default is not adopted |
+| Risk | "Hide empty groups" quietly deletes a captured state | High, and now **realised by choice** | The operator adopted Notion's default on 2026-09-06 18:36, so a default-configured board no longer renders an empty column. The mitigation moves from the default to the fixture: the eight empty-column captures set `hideEmptyGroups: false` **explicitly**, and the empty card itself is kept rather than deleted (ADR-010, AC-005, T009) |
 <!-- /ANCHOR:risks -->
 
 ---
@@ -256,8 +260,8 @@ so the question is never re-litigated from a stale citation.
 
 ## 10. OPEN QUESTIONS
 
-- Does the operator adopt Notion's group-management surface at all? `notion-screens-digest.md:277-281` asks it and declines to answer; ADR-004 carries it.
-- Does hide/unhide belong to the new panel alone, or are the two dead host actions wired as well? ADR-011.
+- ~~Does the operator adopt Notion's group-management surface at all?~~ **Answered 2026-09-06 18:36** — *"Yes, one Groups panel"*. `notion-screens-digest.md:277-281` asked it and declined to answer; ADR-004 carries the ruling.
+- ~~Does hide/unhide belong to the new panel alone, or are the two dead host actions wired as well?~~ **Answered 2026-09-06 18:36** — *"Wire hide, delete the delete action"*. `hideGroup` is wired as the panel's toggle-off; `deleteGroup` is deleted. ADR-011.
 - Does Notion render rows for empty properties? A genuine digest gap (`:78`, `:146-147`); ours skip an empty field unless `config.showEmptyFields === true` (`src/views/board-renderer.ts`, the card-field gate). No adoption and no rejection is proposed.
 - Does Notion's board hide the *grouping* property from its own cards? Inference-only territory; `045`'s mechanism deliberately drops the grouped field (`src/views/board-card-fields.ts`) and `056` D5 pins it. No change proposed.
 <!-- /ANCHOR:questions -->

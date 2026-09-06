@@ -11,9 +11,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/066-notion-states-refinement"
-    last_updated_at: "2026-09-06T16:10:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Opened the packet; nothing implemented yet"
+    last_updated_at: "2026-09-06T16:50:00Z"
+    last_updated_by: "ruling-fold-session"
+    recent_action: "Recorded the 18:50 rulings; ADR-002 adds the phone-centring leg"
     next_safe_action: "Record ADR-003 and ADR-004, then land T004's dwell split"
     blockers:
       - "Nothing implemented; this document is a placeholder until the first leg lands"
@@ -56,7 +56,11 @@ _memory:
 
 Nothing yet. This packet was opened from the Opus synthesis of the Notion states research loop and no
 source file has been touched. The document is a placeholder so the packet carries its Level 3 shape
-from the start; it is rewritten when the first leg lands.
+from the start; it is rewritten when the first leg lands. **The operator's 2026-09-06 18:50 rulings
+on ADR-001 and ADR-002 discharged the packet's two decision gates** — one destructive weight kept;
+toast placement centred on phone, corner kept on desktop — and the ruling added the phone-centring
+leg (T017, AC-009) to the build list; it touches `styles.css`, which is already among the four files
+named below.
 
 The four files it will touch are already named and already measured: `src/views/toast.ts:62` holds
 the single `AUTO_DISMISS_MS = 2200` the dwell split divides and `:137` is the only `setTimeout` that
@@ -90,7 +94,7 @@ in `../055-states-feedback-and-motion/research/`, with the lineage trail on disk
 
 | Decision | Why |
 |----------|-----|
-| Hold both Anytype rulings the Notion harvest contradicts | Neither Notion pattern has a consumer here, and parent `goal.md` D15 makes the refinement additive; ADR-001 and ADR-002 name both readings and stop |
+| Ruled 2026-09-06 18:50: one weight kept; toast placement split — phone centred, desktop corner kept | ADR-001's recommendation and the ruling agree; ADR-002's ruling reverses its hold-everywhere proposal and tasks the phone half (T017, AC-009) rather than leaving the conflict held |
 | Split the toast dwell rather than raise it | A plain success has nothing to act on; only an action-carrying toast needs a window, and ADR-003 marks the 5000ms as an inference |
 | Record the fast-band curve choice before migrating | The four literals are `ease-out` against a token that is `ease`, so a blind migration changes four surfaces' motion silently |
 <!-- /ANCHOR:decisions -->
@@ -116,6 +120,8 @@ in `../055-states-feedback-and-motion/research/`, with the lineage trail on disk
    5000ms dwell in ADR-003 is an inference until D-2 reads it on a handset.
 2. **The bare-notice lane stays open.** This packet moves the owned operation failures, not the
    242-site population; `055` D5 makes the toast the pattern for the rest.
-3. **Two decisions belong to the operator.** ADR-001 and ADR-002 hold landed Anytype rulings against
-   new Notion evidence, and the packet closes on the operator row either way.
+3. **One decision set is still open, by its own terms.** ADR-003's 5000ms dwell and ADR-004's curve
+   choice were never the operator's; the device pass moves the first and the implementer records the
+   second at T002. The two conflicts that were the operator's were ruled on 2026-09-06 18:50, and
+   the centred placement they chose owes its own device read.
 <!-- /ANCHOR:limitations -->

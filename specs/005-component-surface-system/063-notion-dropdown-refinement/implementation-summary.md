@@ -11,9 +11,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/063-notion-dropdown-refinement"
-    last_updated_at: "2026-09-06T18:20:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Created the placeholder at packet open; no implementation yet"
+    last_updated_at: "2026-09-06T17:08:00Z"
+    last_updated_by: "ruling-fold-session"
+    recent_action: "Recorded the 19:08 rulings; still no implementation"
     next_safe_action: "Run T001 and record its red exit status here"
     blockers:
       - "Nothing has been implemented, so there is nothing to summarize"
@@ -27,7 +27,8 @@ _memory:
     completion_pct: 0
     open_questions:
       - "None yet — the packet has not started implementing"
-    answered_questions: []
+    answered_questions:
+      - "Both operator decisions were taken on 2026-09-06 19:08: ADR-004 Accepted, ADR-005 Declined"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
 # Implementation Summary
@@ -119,8 +120,11 @@ never ticked by an agent.
 
 1. **Nothing is implemented.** Every criterion in `goal.md` §3 is red, and four of them carry a
    measured value read on `c9966433` rather than an estimate.
-2. **Two decisions are the operator's and are open.** ADR-004 (visible colour labels) and ADR-005 (a
-   structure-removal carve-out to E3) are Proposed. Neither gates a P0.
+2. **Both operator decisions are closed, and neither ever gated a P0.** ADR-004 (the option colour
+   picker) was **Accepted** on 2026-09-06 19:08 against the Fibery, Anytype and Notion captures, and
+   ADR-005's structure-removal carve-out to E3 was **Declined** the same night — operator, verbatim:
+   *"Keep red plus icon everywhere"*. What is declined is the carve-out; `051` E3 stands whole.
+   ADR-004's acceptance is the one that adds work: REQ-008, AC-012 to AC-016 and T014 to T017.
 3. **One file was never read by the research loop.** `date-value-picker.ts` was cited second-hand
    through `design-trueup.md` G13 and re-derived at `:157-171` before T009 was written; the leg reads
    the file itself before writing its check.

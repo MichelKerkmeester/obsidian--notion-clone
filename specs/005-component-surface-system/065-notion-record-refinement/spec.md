@@ -142,15 +142,18 @@ threshold or recorded as a ruling the operator still owes.
 | REQ-002 | `getPropertyEmptyPrompt` returns a prompt for every format with an editor — `number`, `date`, `datetime`, `currency`, `text`, `files` beside the three it carries — in the verb+noun shape A3 captured. Red today at `property-row.ts:286-291`. **The copy for the five formats A3 did not capture is minted here and is an inference**, marked as one in `decision-record.md` ADR-001 |
 | REQ-003 | The desktop record-sheet label and its value compute to the same `font-size`, with the phone arm at `styles.css:10459-10468` untouched. Red today at `styles.css:10300-10306` |
 | REQ-004 | The record sheet's and the board card's option branches consume `renderOptionValue`, so single-select renders as coloured text and multi-select keeps its chips, every pair at or above 4.5:1. Red today: zero production consumers of `property-row.ts:255`, both kinds filled at `property-row.ts:76-101` |
+| REQ-009 | The record sheet's hidden-properties group holds **view-hidden columns**, not empty fields, matching the table peek and Notion. Red today: the sheet's group holds empty fields (`record-detail-panel.ts:384-393`), the peek's holds view-hidden columns (`table-record-peek.ts:246-248`), and both render under the same label (`src/i18n.ts:569`). ADR-006 |
+| REQ-010 | Every hidden-group row carries a drag handle, type icon, name, eye toggle and chevron; the group splits into Shown and Hidden sections with a bulk link each; the Hidden section renders only when non-empty; the count stays on the entry row. Red today: the group is a single disclosure with zero eye controls (`record-surface/hidden-properties.ts:44-73`). ADR-005. `HiddenPropertiesGroupHandle.render`'s signature changes, so the table peek moves with it |
 
 ### P1 - Required (complete OR user-approved deferral)
 
 | ID | Requirement |
 |----|-------------|
 | REQ-005 | The add-property picker forwards its typed query when a format is selected, so a named column of a chosen format is possible in one pass. Red today at `column-manager-renderer.ts:200`; the layers below already forward the label (`:180-181`, `database-view.ts:5088`) |
-| REQ-006 | *(gated on ADR-008)* The record sheet carries a muted trailing add-property row below the last field and above the hidden group, opening the existing search-first picker through `052`'s host, at or above the 44px touch floor. Red today: zero add affordances on the record sheet |
+| REQ-006 | The record sheet carries a muted trailing add-property row below the last field and above the hidden group, opening the existing search-first picker through `052`'s host, at or above the 44px touch floor. Red today: zero add affordances on the record sheet. **Ungated** — ADR-008 Accepted 2026-09-06 19:05, operator verbatim *"Trailing '+ Add a property' row"* |
 | REQ-007 | The three display-mode shells are named Side peek / Center peek / Full page in this program's docs and in any user-facing label that names them. Zero code; `006`'s placement ruling is untouched |
-| REQ-008 | ADR-005, ADR-006, ADR-007 and ADR-008 are in front of the operator with a threshold and a red-first check each, so a ruling converts directly into a task row |
+| REQ-008 | ADR-005, ADR-006, ADR-007 and ADR-008 are in front of the operator with a threshold and a red-first check each, so a ruling converts directly into a task row. **Satisfied on 2026-09-06 19:05**: three Accepted, one Deferred, each quoted verbatim, and each converted below |
+| REQ-011 | The property-visibility list carries a search field that filters its rows by name without touching any eye state. Red today: zero `input` elements in the column manager's list (`column-manager-renderer.ts:222-235`). The 19:05 sweep, S1 |
 
 > Acceptance criteria for these requirements live in `acceptance-criteria.md`,
 > which is the document that decides whether this packet may close.
@@ -265,13 +268,23 @@ threshold or recorded as a ruling the operator still owes.
 
 ## 10. OPEN QUESTIONS
 
-- **ADR-006** — does the record sheet's hidden group hold empty fields, view-hidden columns, or
-  both? One label names two populations today and neither is Notion's.
-- **ADR-005** — does the hidden group grow Notion's per-row eye and a bulk "Show all" link? A4 ruled
-  the group's shape and never ruled on per-row affordances.
-- **ADR-007** — which packet owns a record-level cover and icon, and is one wanted at all?
-- **ADR-008** — does the record sheet's add-property entry sit as Notion's trailing row or on
-  Anytype's section header? Neither placement is ruled for this surface.
+**Four of these were closed by the operator on 2026-09-06 19:05.** They are kept rather than deleted,
+each with the answer beside it, because a question erased on the day it is answered leaves no record
+that it was ever open:
+
+- **ADR-006 — closed.** The group holds **view-hidden columns**, like Notion and the peek.
+- **ADR-005 — closed, and widened.** The group takes Notion's **full** row grammar, and the ruling's
+  second half asked for a sweep of everything else Notion carries that we do not
+  (`decision-record.md`, final section).
+- **ADR-007 — Deferred.** The record-level cover and icon question stays unowned by decision, not by
+  oversight. Sweep S2 rides with it.
+- **ADR-008 — closed.** The add-property entry is Notion's **trailing row**.
+
+Still open:
+
+- **Where the sheet's empty-fields reveal lives** once REQ-009 moves the hidden group's population
+  to view-hidden columns. The group stops holding them; nothing yet says what does. This is owed an
+  ADR before T012 lands, and it is the one question the 19:05 sitting created rather than closed.
 - **UNKNOWN, verification gap** — does the title row already disable its visibility checkbox?
   `checkboxDisabled` exists at `property-row.ts:355` and the state was never verified. A one-line
   check the next time a column-manager leg runs.
