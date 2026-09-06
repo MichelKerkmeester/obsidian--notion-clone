@@ -1,7 +1,7 @@
 {
   "holder": "053-toolbar-and-view-controls",
   "acquiredAt": "2026-09-06T22:10:00Z",
-  "baselineHash": "27c8ee6c9ce0",
+  "baselineHash": "274311fff7f4",
   "baselineCommit": "03aa151d",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -4160,6 +4160,27 @@
       "at": "2026-09-06T22:10:00Z",
       "hash": "27c8ee6c9ce0",
       "note": "Taken over from 056-board-anytype-parity, which released at this hash at 21:55 with its 44 board captures signed off. This leg lands the table's summary footer: hidden entirely at zero rows, and its phone trigger raised to the 44px floor the operator ruled on 2026-09-06 (~08:10, verbatim): \"Hide the footer at zero rows, 44px otherwise.\""
+    },
+    {
+      "event": "release",
+      "phase": "053-toolbar-and-view-controls",
+      "at": "2026-09-06T22:40:00Z",
+      "hash": "274311fff7f4",
+      "reviewed": [
+        "screenshots/notion-clone/components/chrome-table-footer-mobile-dark.png",
+        "screenshots/notion-clone/components/chrome-table-footer-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-column-header-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-column-header-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-list-migrated-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-cell-editor-select-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-cell-editor-text-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-record-icon-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-status-colors-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-linked-view-host-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-linked-view-host-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-table-mobile-light.png"
+      ],
+      "note": "Two rules added, both scoped to `.is-phone .note-database-container`: `.db-table tfoot.db-table-footer td` takes `height: 44px` and `.db-table-footer-trigger` takes `min-height: 44px`, the same thumb floor `.is-phone .db-menu-item` and the load-more row's own `.is-phone` rule already hold every other phone row to; the unscoped desktop pair (`calc(var(--db-row-height) - 8px)`, 26px) is untouched. `table-renderer.ts`'s private `renderFooter` now returns before drawing anything when `rows.length === 0`, on the one method all three render paths call, so the file view and the codeblock embed both lose the footer at zero rows; `config.summaryRules` is never touched, and `table-renderer-footer-visibility.test.ts` drives one renderer from zero rows to one and asserts the COUNT comes back. No capture in this corpus mounts a zero-row table, so that half has no picture to move; the render-assertion bundle's own two empty-table probes were mounted and read instead, and both come back with no `tfoot.db-table-footer` and the empty-state card in its place. Captures re-derived by a full `node tools/screenshots/capture.mjs` run on this base, 550 entries; `node tools/screenshots/verify.mjs` exit 0. 26 files moved bytes; 12 moved pixelHash and are listed here, every one a table's footer row growing on phone from a 26px '+ Calculate' hint to the 44px floor, opened in both themes across components/fields/views and read as correctly taller with no clipping and no column misalignment. The other 14 moved bytes without moving pixelHash -- 10 of them mobile tables whose footer sits below the fold (layoutHash moved, pixels did not) and 4 unrelated encoder/rasteriser noise, two of which 056's own release already recorded as jitter -- and all 14 are restored to their committed bytes with the manifest's `bytes` reconciled to the files on disk. `screenshots/project-manager/`: 0 files changed, and no desktop capture moved pixelHash, matching the `.is-phone` scope. A `tools/live/touch-targets.mjs` `RAISED` entry holds `db-table-footer-trigger` to 44px outright on phone -- observed red first at a forced 26px (176 constructed + 5 fixture raisedMisses), green again at 44px. Both ratchet baselines re-pinned downward to the measured tree, never upward: fixture 209 -> 196 (the pristine tree measures 197, so the fix itself drops one and the 209 pin was already stale) and constructed 974 -> 801 (the pristine tree measures 974, 173 of them this class). The trigger was measured at 44 CSS px / 88 device px at DPR 2 in the chrome-table-footer fixture and in both the file-view and embed constructed scenarios; its `tfoot` cell measures 53 CSS px."
     }
   ],
   "outstanding": [

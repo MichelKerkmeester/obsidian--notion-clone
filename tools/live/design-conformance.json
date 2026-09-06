@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-06T06:43:40.628Z",
+  "measuredAt": "2026-09-06T07:13:53.332Z",
   "inputs": {
-    "styles.css": "27c8ee6c9ce0",
+    "styles.css": "274311fff7f4",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "7edae5db0282"
   },
@@ -136,6 +136,8 @@
     "src/views/column-width.ts:348  .db-mobile-column-width-panel",
     "src/views/column-width.ts:374  .db-panel-row",
     "src/views/column-width.ts:398  .db-panel-row",
+    "src/views/confirm-sheet.ts:52  .db-modal-help",
+    "src/views/confirm-sheet.ts:54  .db-modal-actions",
     "src/views/database-view.ts:3147  .db-group-order-popover",
     "src/views/database-view.ts:3261  .db-panel-button",
     "src/views/database-view.ts:7054  .db-calendar-search-results-popover",
@@ -180,8 +182,6 @@
     "src/views/modals/base-import-confirm-modal.ts:96  .db-modal-help",
     "src/views/modals/computed-frontmatter-cleanup-modal.ts:53  .db-modal-help",
     "src/views/modals/computed-frontmatter-cleanup-modal.ts:91  .db-modal-actions",
-    "src/views/modals/confirm-modal.ts:76  .db-modal-help",
-    "src/views/modals/confirm-modal.ts:78  .db-modal-actions",
     "src/views/modals/create-linked-view-modal.ts:68  .db-panel-row",
     "src/views/modals/create-linked-view-modal.ts:80  .db-panel-row",
     "src/views/modals/create-linked-view-modal.ts:93  .db-panel-row",
