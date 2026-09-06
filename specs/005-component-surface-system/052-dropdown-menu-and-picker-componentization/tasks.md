@@ -413,16 +413,36 @@ oracle-tested; `sheet-grammar` pairs unchanged.
       review P1 #9 is `constructed-option-color-picker-mobile-dark/-light`, which mounts the real
       renderer and shows the sheet presentation — grab handle, header, and sixteen 44px swatches
       wrapping on `.db-color-picker-body`. Opened and read.
-      Named and left alone: that same frame shows the picker's sheet header is not laid out — its
-      close button sits against the title rather than at the trailing edge, because
-      `.db-panel-header`'s `display: flex`/`justify-content: space-between` is scoped under
-      `.note-database-container` and this picker is created on `document.body`. It predates this
-      leg (the pre-T012 code called `createSheetHeader` on the same root) and is a shared-header
-      question, not this row's; `constructed-cell-
-      editor-select-*` and `field-cell-edit-select-*` also moved (T010's check-icon change) and were
-      opened in the same pass. `screenshots:verify` and `check-lane` (`SURFACE_PHASE=052-dropdown-
-      menu-and-picker-componentization`) both exit 0 with the 13 real content moves named in
-      `tools/lane/css-lane.json`'s release entry, 3 byte-only re-encodes excluded.
+      **Retracted 2026-09-06, measured against the rebased tree.** This row previously recorded
+      that the same frame showed the picker's sheet header unlaid-out, its close button against the
+      title, because `.db-panel-header`'s flex rules are scoped under `.note-database-container`
+      while the picker is created on `document.body`. Both halves are wrong and the reading it was
+      taken from was a different symptom. Measured in the constructed mount with the matched-rule
+      list read off the live node, not inferred: the popup root **is itself** a
+      `.note-database-container` — `openOptionColorPicker`'s panel resolves to
+      `db-color-picker-popup db-anchored-popover db-mobile-bottom-sheet note-database-container
+      db-overlay-enter is-visible` once the sheet chrome attaches — so
+      `.note-database-container .db-panel-header` matches it and the header computes
+      `display: flex; align-items: center; justify-content: flex-start; gap: 8px;
+      padding-inline: 16px`, with the title at `flex: 1 1 auto; text-align: center` and the 44×44
+      close at the trailing edge (measured header x=13 w=377, close x=330 w=44).
+      What actually moved between the pre-rebase and post-rebase captures is the **title's
+      alignment**: before, the header carried only `db-panel-header`, so `space-between` put the
+      title hard left; after, routing `mountPickerSheetHeader` through the shell's three-slot
+      builder adds `db-shell-header`, and the phone rules centre the title. Both states are in the
+      record — `constructed-option-color-picker-mobile-dark.png` at this landing shows the centred
+      title, the drag handle and the trailing close.
+      One real residue, named and left alone because the element is the shell's, not this
+      packet's: `.db-shell-header-leading` renders 44px wide and **0px tall** on this surface (it
+      has no content and no height of its own), so the leading slot is a width reservation the
+      header's `align-items: center` centres a zero-height box inside. Nothing depends on its
+      height today.
+      `constructed-cell-editor-select-*` and `field-cell-edit-select-*` also moved (T010's
+      check-icon change) and were opened in the same pass. `screenshots:verify` and `check-lane`
+      (`SURFACE_PHASE=052-dropdown-menu-and-picker-componentization`) both exit 0, with the twelve
+      real content moves this leg makes against `origin/main` named in `tools/lane/css-lane.json`'s
+      release entry and the byte-only re-encodes restored to their committed bytes rather than
+      committed as churn.
 <!-- /ANCHOR:phase-3 -->
 
 ---
