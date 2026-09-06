@@ -74,6 +74,11 @@ const REGISTERED_SURFACES = [
   // seven elements measured green against the real `openColumnWidthAdjuster` module entry.
   { name: "column-width", spec: { renderer: "column-width-adjuster", bag: "file-view", captureData: true } },
   { name: "settings", spec: { renderer: "view-config", bag: "file-view", captureData: true } },
+  // The properties panel. Its row carries a class the padded-rows predicate did not originally
+  // recognise, even though the row already cleared the padding floor under its own pre-existing
+  // rule — the gap was the predicate's vocabulary, not this panel's markup, so the predicate grew
+  // one more accepted synonym rather than this panel's markup changing.
+  { name: "column-manager", spec: { renderer: "column-manager", bag: "file-view", captureData: true } },
   // The board's own Properties section (`renderBoardCardProperties`), reached through the same
   // `view-config` sheet body as `settings` but with `viewConfigVariant: "board"` so the board
   // branch — cover/title fixed rows plus the reorderable field list — mounts instead of the
@@ -166,10 +171,10 @@ const NEGATIVE_CONTROL = { surface: "sort-panel", element: "handle" };
 // it whether or not that surface has earned a header — which is why the sweep below runs over
 // every sheet the plugin can present, not only the ones the columns cover. The extra rows are the
 // surfaces the sheet and stacked-surface inventories enumerate that the grammar registry does not
-// carry: the Properties sheet, the toolbar's two other popovers, the single-rule editor the chip
-// rail opens, both mobile inline cell editors, and the deeper filter and picker states.
+// carry: the toolbar's two other popovers, the single-rule editor the chip rail opens, both
+// mobile inline cell editors, and the deeper filter and picker states. The Properties sheet
+// (`column-manager`) moved to the registry above once its row synonym was accepted there.
 const OVERFLOW_ONLY_SURFACES = [
-  { name: "column-manager", spec: { renderer: "column-manager", bag: "file-view", captureData: true } },
   { name: "toolbar-utilities", spec: { renderer: "toolbar", bag: "file-view", captureData: true, toolbarPopover: "utilities" } },
   { name: "toolbar-tab-menu", spec: { renderer: "toolbar", bag: "file-view", captureData: true, toolbarPopover: "tab-menu" } },
   { name: "filter-panel-nested", spec: { renderer: "filter-panel", bag: "file-view", captureData: true, filterDepth: "nested" } },

@@ -334,3 +334,73 @@ The existing PNG-based numbers stay in the row's history as what was true of tha
 | **What contract must not break?** | ADR-004's ruling that P2's anatomy is "label, then value, value left-aligned" — this ADR does not touch that, only how the current-state number is taken |
 
 <!-- /ANCHOR:adr-005 -->
+
+---
+
+<!-- ANCHOR:adr-006 -->
+## ADR-006: Amending `044`'s frozen row-padding predicate to accept `.db-column-manager-row`
+
+**Status: DECIDED — 2026-09-06 (operator ruling, T071).**
+
+### Context
+
+`044-phone-sheet-alignment` owns `src/views/sheet-grammar.ts`'s eight grammar predicates outright;
+`spec.md` §3 of this packet names that ownership and says this phase may add *rows* to
+`tools/live/sheet-grammar.mjs`'s registry, never *columns* to the predicate module. T071 registered
+the properties panel (`column-manager`) into the full eight-column check as this phase's own row
+addition and hit a real, reproducible red: `column-manager — rows: false`. Traced to source:
+`hasPaddedRows` (`sheet-grammar.ts:99`, before this amendment) matched only `.db-panel-row,
+.db-record-detail-field, .db-menu-item`, and `column-manager-renderer.ts` builds its rows with
+`rowClass: "db-column-manager-row"` — a class that predates this phase and satisfies none of the
+three synonyms, so the predicate read zero rows on a panel that visibly has them. The row already
+clears the padding floor the predicate measures (`.db-column-manager-row` declares `padding: 2px
+4px`, `styles.css:13321-13329`) — the gap is the selector's own vocabulary, not the panel's markup.
+
+### Decision
+
+Widen `hasPaddedRows`'s selector by the one class the properties panel already uses:
+`.db-panel-row, .db-record-detail-field, .db-menu-item, .db-column-manager-row`. This is an
+amendment to `044`'s freeze, not a bypass of it — recorded here, in `044`'s own `spec.md` (one
+sentence, `sheet-grammar.mjs`'s registry) and in the module's own header comment, so the freeze's
+next reader sees the exception rather than rediscovering it. No `styles.css` change and no
+recapture are owed: the class's padding rule already existed and already cleared the floor; only
+the predicate's vocabulary was blind to it.
+
+### Alternatives
+
+| Option | For | Against |
+|---|---|---|
+| Add `db-panel-row` to the properties panel's own rows instead | Fixes the class vocabulary at its narrower point | A `styles.css`-adjacent DOM/class change on a surface `screenshot-currency.md` gates, needing the recapture-and-review cycle this leg's file group does not own |
+| Leave the gap named and unregistered, as the prior leg did | No predicate change, no risk | Leaves `column-manager` permanently measured only by the overflow sweep, never the full eight-column contract — the exact gap T071 exists to close once ruled |
+| Widen the selector (chosen) | One line, no CSS change, no recapture; the row already passes the measurement the moment the predicate looks at it | Grows the accepted-synonym list from two to three; the module's own comment already commits to naming each addition rather than letting the list grow silently, which this amendment now does |
+
+### Consequences
+
+- Positive: `column-manager` now measures under all eight grammar columns rather than the
+  overflow-only sweep; `settings` and `board-card-properties`, which contain column-manager rows,
+  are now measured rather than skipped, with no regression (verified below).
+- Negative: none recorded on this tree. A future predicate audit that wants the properties panel
+  renamed onto `.db-panel-row` outright can still do it; this amendment does not block that, it
+  only stops blocking the panel in the meantime.
+- Neutral: `044`'s freeze stands for every other predicate in the module; this is the one
+  documented amendment, not a reopening of the whole contract.
+
+### Proof
+
+`node tools/live/sheet-grammar.mjs`, before this amendment (registry entry added, predicate
+unchanged): `column-manager — rows: false`, red, all seven other columns green. After (predicate
+widened): `column-manager` 8/8 green, `settings` and `board-card-properties` still 8/8 green (both
+measured, not skipped), and the lane's own summary line unchanged in shape — no other registered
+surface regressed.
+
+### Five checks
+
+| Check | Answer |
+|---|---|
+| **Does this need to exist at all?** | Yes — T071's own proof clause ("run the whole gate", zero red) cannot close while a genuine, reproducible red sits in the registry addition it names |
+| **Is there a simpler existing thing?** | Considered: renaming the panel's own row class. Rejected above — it is a `styles.css`/DOM change outside this leg's file group, not a predicate question |
+| **What does it touch?** | `src/views/sheet-grammar.ts` (one selector), `tools/live/sheet-grammar.mjs` (one registry entry), `044`'s `spec.md` (one sentence) |
+| **What is the real caller that must not break?** | Every other registered surface's `rows` column — re-run green after the widening, not merely assumed |
+| **What contract must not break?** | The predicate still requires every matched row to clear `ROW_PADDING_FLOOR_PX` — the amendment adds a selector branch, not a lowered floor |
+
+<!-- /ANCHOR:adr-006 -->

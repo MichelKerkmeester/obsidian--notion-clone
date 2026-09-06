@@ -12,10 +12,13 @@
 // surface, so a lane can ask "which elements does this surface satisfy" and
 // fail on the answer rather than on an operator's screenshot. The class names
 // below are the contract: a producer that draws an element under a different
-// class has not drawn that element. Two surfaces carry legacy synonyms the
-// phase did not re-dress — the record sheet's own header and row classes,
-// which were operator-verified before this module existed — and the
-// predicates accept exactly those, never a growing list.
+// class has not drawn that element. Three surfaces now carry legacy synonyms
+// this phase did not re-dress — the record sheet's own header and row classes
+// and the properties panel's own row class, each operator-verified before
+// this module existed, and each already clearing the padding floor under its
+// own rule rather than a borrowed one. The predicates accept exactly those,
+// added one at a time as a surface is brought under the contract, never a
+// blanket allowance.
 //
 // spec.md's seven canonical elements are surface, handle, header, padded
 // rows, segmented choices, keyboard avoidance and safe-area inset. A review
@@ -96,7 +99,11 @@ function hasPaddedRows(panel: HTMLElement): boolean {
   // beside it, and were verified on a device before this contract existed; every other surface
   // uses the shared row. Existence alone used to pass a surface with one conforming row and a
   // dozen bare ones beside it; every match found is now measured, not just counted.
-  const rows = Array.from(panel.querySelectorAll<HTMLElement>(".db-panel-row, .db-record-detail-field, .db-menu-item"));
+  //
+  // The properties panel's row predates this contract too: it already clears the padding floor
+  // (a rule of its own, not a borrowed one), so it joins the accepted-synonyms list rather than
+  // being asked to rename onto one of the other three for a predicate that already passes it.
+  const rows = Array.from(panel.querySelectorAll<HTMLElement>(".db-panel-row, .db-record-detail-field, .db-menu-item, .db-column-manager-row"));
   if (rows.length === 0) return false;
   const view = panel.ownerDocument.defaultView;
   if (!view) return false;

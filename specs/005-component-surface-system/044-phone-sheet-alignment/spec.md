@@ -140,6 +140,10 @@ instance fails a check in this repository instead of being found by the operator
 - One task per non-conforming instance the inventory ranks, after those three.
 - A conformance check with a negative control.
 
+**Amended 2026-09-06** (`054-record-and-relation-surfaces` ADR-006): the padded-rows predicate
+(`src/views/sheet-grammar.ts`) now accepts `.db-column-manager-row` as a fourth row synonym, so the
+properties panel measures under the shared eight-column check instead of the overflow-only sweep.
+
 ### Out of Scope
 - The sheet drag mechanism and the grab band's height — `016` owns them, and the 35px shortfall is
   an operator-confirmed accepted decision (`../roadmap.md` §4 row 10). Reusing it is in scope;

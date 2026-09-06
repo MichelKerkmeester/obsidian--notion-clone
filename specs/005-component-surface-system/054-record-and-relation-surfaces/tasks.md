@@ -546,7 +546,7 @@ in the parent program's escalation format rather than retrying. A task blocked o
       property row off the DOM while `buildPropertyRow` takes its classes from the caller. So this
       row closes on one of two operator decisions, not on more implementation: amend D3's observable
       to a source-level census, or accept the source read as the proof. Neither is a leg's to take.
-- [ ] T071 [P0] Register the phone surfaces this phase changed in `sheet-grammar.mjs`'s registry
+- [x] T071 [P0] Register the phone surfaces this phase changed in `sheet-grammar.mjs`'s registry
       where not already registered; run the whole gate.
       **Proof:** `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0, every negative control observed
       red then green; `npm run replay` holds with reversed 0.
@@ -589,6 +589,19 @@ in the parent program's escalation format rather than retrying. A task blocked o
       `".db-panel-row, .db-record-detail-field, .db-menu-item, .db-column-manager-row"`, then add
       `{ name: "column-manager", spec: { renderer: "column-manager", bag: "file-view", captureData: true } }`
       to `REGISTERED_SURFACES` in `tools/live/sheet-grammar.mjs`. Both halves measured, both reverted.
+      **Landed 2026-09-06, operator ruling: amend the predicate.** The operator chose the amendment
+      over leaving the gap: `hasPaddedRows` (`sheet-grammar.ts:99`) now accepts
+      `.db-column-manager-row` as a fourth row synonym, recorded as `decision-record.md` ADR-006,
+      which names the `044` freeze this amends and the reason (the row already clears the padding
+      floor under its own rule; only the predicate's vocabulary was blind to it). One sentence added
+      to `044`'s own `spec.md` §3 noting the amendment. `column-manager` registered into
+      `REGISTERED_SURFACES` (moved out of the overflow-only registry, which duplicated it). **Proof,
+      read directly:** before the predicate change, `node tools/live/sheet-grammar.mjs` with the
+      registry addition alone reproduces `column-manager — rows: false`, red, exit 1; after the
+      predicate widening, the same run reads `column-manager` 8/8 green, `settings` and
+      `board-card-properties` (both containing column-manager rows) still 8/8 green — measured, not
+      skipped — and the lane's own summary line reports every registered surface passing, exit 0. No
+      other registered surface regressed.
 
 ---
 
