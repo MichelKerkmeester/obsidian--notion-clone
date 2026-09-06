@@ -124,10 +124,10 @@ const DECLARED = [
 ];
 
 /**
- * Controls a sibling document holds to the WCAG 44px floor outright rather than this file's
- * default 28px — the 28-44px band is informational everywhere else, but 055 AC-011 reads this
- * control's phone height as a fixed number, so a regression back into that band has to fail here
- * rather than only show up as a bigger "between floors" count nobody gates on.
+ * Controls held to the WCAG 44px floor outright rather than this file's default 28px — the
+ * 28-44px band is informational everywhere else, but each control listed here has an
+ * operator-ruled phone height that is a fixed number, so a regression back into that band has to
+ * fail here rather than only show up as a bigger "between floors" count nobody gates on.
  */
 const RAISED = [
   {

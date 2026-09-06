@@ -31,8 +31,8 @@ export function findDeclaredExcuse(classes, declared) {
 /**
  * The first raised-floor entry whose class fragment appears in the element's class list, if any.
  * `DECLARED` lowers the bar for a control this project accepts under 28px; this is the opposite
- * shape — a control a sibling document (055 AC-011) reads as a fixed phone number rather than
- * "clears the floor", so the generic 28px sweep would let a regression back to 29px pass silently.
+ * shape — a control whose phone height is an operator-ruled fixed number rather than "clears the
+ * floor", so the generic 28px sweep would let a regression back to 29px pass silently.
  */
 export function findRaisedFloor(classes, raised) {
   const hit = raised.find((entry) => classes.includes(entry.match));

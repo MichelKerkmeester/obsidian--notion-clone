@@ -295,7 +295,7 @@ try {
   // (none/filter/sort/both) plus the tab-menu row each get their own scenario in STATE_SCENARIOS
   // and their own red-first pass/fail line. The chart's empty state joins them for the same
   // reason: chartEmptyAbsorptionAssertion (render-assertion-harness.ts) is the permanent lane row
-  // for AC-006, asserting the shared card, its action, and the retired private markup's absence.
+  // asserting the shared card, its action, and the retired private markup's absence.
   const rulesScenarios = STATE_SCENARIOS.filter((scenario) =>
     scenario.rules != null || scenario.toolbarPopover === "tab-menu" || scenario.chartVariant === "empty");
   const rulesOutcomes = await page.evaluate(
