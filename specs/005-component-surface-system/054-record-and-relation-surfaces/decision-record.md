@@ -340,7 +340,11 @@ The existing PNG-based numbers stay in the row's history as what was true of tha
 <!-- ANCHOR:adr-006 -->
 ## ADR-006: Amending `044`'s frozen row-padding predicate to accept `.db-column-manager-row`
 
-**Status: DECIDED — 2026-09-06 (operator ruling, T071).**
+**Status: DECIDED — 2026-09-06 ~05:25 CEST. Operator ruling, verbatim: _"Amend the predicate"_.**
+
+The option was offered against the alternatives tabled below; the operator chose the first word
+of the amendment column, so the quote is the whole of what was said and the reasoning under it is
+this record's, not the operator's.
 
 ### Context
 
@@ -410,7 +414,11 @@ surface regressed.
 <!-- ANCHOR:adr-007 -->
 ## ADR-007: Goal D3's census observable is amended from a DOM census to a source census
 
-**Status: DECIDED — 2026-09-06 (T011/T023, re-read and closed).**
+**Status: DECIDED — 2026-09-06 ~05:25 CEST. Operator ruling, verbatim: _"Source census of builder
+calls"_.**
+
+Offered alongside the DOM-census and leave-it-unmeasured alternatives tabled below. The quote is
+the whole of what was said; the reasoning under it is this record's.
 
 ### Context
 

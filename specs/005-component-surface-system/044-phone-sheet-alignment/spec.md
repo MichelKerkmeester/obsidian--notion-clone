@@ -140,7 +140,7 @@ instance fails a check in this repository instead of being found by the operator
 - One task per non-conforming instance the inventory ranks, after those three.
 - A conformance check with a negative control.
 
-**Amended 2026-09-06** (`054-record-and-relation-surfaces` ADR-006): the padded-rows predicate
+**Amended 2026-09-06 by operator ruling** (`054-record-and-relation-surfaces` ADR-006): the padded-rows predicate
 (`src/views/sheet-grammar.ts`) now accepts `.db-column-manager-row` as a fourth row synonym, so the
 properties panel measures under the shared eight-column check instead of the overflow-only sweep.
 

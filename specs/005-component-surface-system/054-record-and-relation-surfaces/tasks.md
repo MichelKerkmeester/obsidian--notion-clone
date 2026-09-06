@@ -250,6 +250,34 @@ in the parent program's escalation format rather than retrying. A task blocked o
       carries the counts and the command. This is scoped to the three surfaces this leg's own task
       names, not the full four-consumer family C2/C14 measure (`column-manager-renderer.ts` is
       outside this row's named scope) — C2/C14 stay their own hand counts, unsuperseded.
+      **Tightened at landing verification, because the first shape of the check could not see the
+      bypass this codebase actually shipped.** It read only `createDiv`/`createSpan`/`createEl` with
+      a `cls:` string in the FIRST argument, so `createEl("div", { cls })` (the class is in the
+      second argument), a `className =` assignment, `classList.add`, `addClass`, and any helper that
+      forwards a class string were all invisible — and `table-record-peek.ts`'s own
+      `createChild(parent, tag, className)` helper, which assigns `child.className`, is exactly that
+      last form and is how the peek's now-retired header and rows were built. A control injecting
+      `strayA.classList.add("db-record-detail-field")` into `record-detail-panel.ts` passed the check
+      **silently, exit 0, count 0**. The census now reads every string literal in the three files and
+      treats a literal naming a primitive's own header/row class as hand-built unless it is a CSS
+      selector (leading `.`, or a `querySelector`/`closest`/`matches` argument) or a class option
+      inside a call to one of the five shared builders — so it no longer asks HOW the class was
+      applied. Five controls, each observed red at exit 1 and each reverted: `classList.add`,
+      `createEl("div", { cls })`, `element.className =`, `createChild(parent, "div", cls)`, and a
+      hand-built `db-record-detail-header`. Green again after each, exit 0.
+      **One real occurrence the narrow check could not see, now visible:**
+      `table-record-peek.ts:255` builds `db-record-peek-field db-record-peek-empty is-muted` through
+      `createChild` for the "no properties" notice. It is a message that borrows the row's styling,
+      not a property row, so the census reports it on its own line — `row classes reused by something
+      that is not a row: 1 (documented, not counted)` — rather than counting it against the zero
+      threshold or hiding it. A second such literal without the `db-record-peek-empty` marker goes
+      red.
+      **The three files are NOT the complete consumer set of these five builders.** Verified by
+      grep at landing: `buildCheckboxPropertyRow` and `buildDesktopRecordHeader` are also called from
+      `column-manager-renderer.ts:274`/`:246`, and `renderCardField` from `board-renderer.ts:1996`.
+      Five consumer files in total, three of them censused — the scope the operator's ruling named.
+      The two uncovered sites are recorded here rather than folded in, and neither is a known
+      bypass: both reach the shared builders.
 
 ## Phase 3 — Consumers
 
@@ -579,6 +607,16 @@ in the parent program's escalation format rather than retrying. A task blocked o
       `record-surface/type-picker.ts` returns nothing, unchanged from the prior re-reads — no new
       lane was built for it because no gap was ever named there, only for headers/rows. The four
       named retirements re-confirmed once more against the current tree: unchanged.
+      **This leg retired nothing. The census read 0 on its very first run, because the retirement
+      had already landed** in `dec3062c5b07` *(feat(record-surface): switch record/relation consumers
+      onto the primitives, 2026-09-06)*, whose diff removes all four by name: the peek's hand-built
+      header and field (`createChild(panel, "div", "db-record-peek-header")` and
+      `createChild(parent, "div", "db-record-peek-field")` plus its label/value children), the board
+      panel's hand-built row (`panel.createDiv({ cls: "db-column-manager-row" })`), the duplicated
+      `function shouldIgnoreDrag(event: DragEvent)` (also in `a79d7421`'s copy), and
+      `const PROPERTY_TYPES: ColumnDef["type"][]`. What this leg added is the check that keeps them
+      retired; the tick belongs to that commit's work, and this row records the measurement, not new
+      retirement work.
 - [x] T071 [P0] Register the phone surfaces this phase changed in `sheet-grammar.mjs`'s registry
       where not already registered; run the whole gate.
       **Proof:** `npm run gate >/tmp/gate.log 2>&1; echo $?` → 0, every negative control observed
@@ -635,6 +673,18 @@ in the parent program's escalation format rather than retrying. A task blocked o
       `board-card-properties` (both containing column-manager rows) still 8/8 green — measured, not
       skipped — and the lane's own summary line reports every registered surface passing, exit 0. No
       other registered surface regressed.
+      **The registry now holds 14 registered surfaces, not 13** — `column-manager` is the fourteenth,
+      and it moved out of the overflow-only list rather than being added twice. Re-read at landing
+      from the lane's own output: 112 element assertions, 14 surfaces x 8 columns, every one PASS
+      (`sort-panel`, `filter-panel`, `add-view`, `record-detail`, `record-peek`, `column-width`,
+      `settings`, `board-card-properties`, `column-manager`, `owned-menu`, `date-picker`,
+      `icon-picker`, `option-color-picker`, `confirm`). **One correction to the leg's own report:**
+      `settings` and `board-card-properties` were already registered before this change and were
+      already measured; what changed for them is that their rows check now also measures the
+      `.db-column-manager-row` elements they contain, which is strictly stricter, not newly measured.
+      Widening a `querySelectorAll` feeding a `rows.every(...)` can only add rows that must clear the
+      padding floor; the one case it can turn from red to green is a surface that matched zero rows
+      before, which is `column-manager` alone.
 
 ---
 
