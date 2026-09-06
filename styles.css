@@ -16251,7 +16251,7 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   align-items: flex-end;
   justify-content: space-between;
   min-height: 32px;
-  padding: 25px 0 12px;
+  padding: 27px 0 20px;
   gap: 8px;
 }
 
@@ -16593,11 +16593,38 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   letter-spacing: 0.04em;
 }
 
+/* The calendar's own title sizing overrides the shared base above, kept as
+   separate rules rather than edits to the shared block, so the gantt's
+   title — which reads the same declarations — never moves. */
+.note-database-container .db-calendar-title-main {
+  font-size: 16px;
+  letter-spacing: normal;
+}
+
+.note-database-container .db-calendar-title-year {
+  color: var(--text-normal);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: normal;
+}
+
+.note-database-container .db-calendar-title-select {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.note-database-container .db-calendar-title-select:hover {
+  background: var(--background-modifier-hover);
+  border-radius: var(--db-radius-sm);
+}
+
 .note-database-container .db-calendar-controls {
   display: inline-flex;
   align-items: center;
   flex: 0 0 auto;
-  gap: 4px;
+  gap: 8px;
   white-space: nowrap;
 }
 
@@ -16617,6 +16644,24 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   padding: 0 var(--db-space-5);
   box-shadow: none;
   transition: background-color var(--db-motion-fast), border-color var(--db-motion-fast), color var(--db-motion-fast);
+}
+
+/* The chevrons at #9B9B9B/#A09F93 measure 2.78:1 in light against WCAG 1.4.11's
+   3:1 floor for an icon-only control with no text label. #949494 clears it
+   (3.03:1); dark already clears 1.4.11 as shipped, so only light changes. */
+.note-database-container .db-calendar-nav-chevron {
+  color: #949494;
+}
+
+.theme-dark .note-database-container .db-calendar-nav-chevron {
+  color: var(--text-muted);
+}
+
+/* The Today label reads 14px/normal, not the shared 13px/muted the scale-menu
+   label (also `.is-text`) keeps — scoped off it so that control is untouched. */
+.note-database-container .db-calendar-nav-button.is-text:not(.db-calendar-scale-menu) {
+  color: var(--text-normal);
+  font-size: 14px;
 }
 
 .note-database-container .db-timeline-nav-button.is-icon,
@@ -16760,19 +16805,25 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   display: inline-flex;
 }
 
-/* Weekday labels (standalone div row above the table) */
+/* Weekday labels (standalone div row above the table): an explicit 22px band,
+   replacing the negative margin that stood in for a height, and the same 16px
+   horizontal inset as the grid below it so the two stay column-aligned. */
 .note-database-container .db-calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
+  height: 22px;
+  padding: 0 16px;
   border-bottom: none;
-  margin-bottom: -7pt;
+  margin-bottom: 0;
 }
 
 .note-database-container .db-calendar-weekday {
   position: relative;
-  padding: 4px;
-  text-align: left;
-  font-size: var(--db-font-md);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 11px 0 0;
+  font-size: 12px;
   font-weight: 500;
   color: var(--text-normal);
 }
@@ -16883,12 +16934,15 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   margin-right: auto;
 }
 
-/* Day cell */
+/* Day cell: the number reads top-right — `row-reverse` swaps which child
+   `space-between` pushes to which edge without touching the heading's DOM
+   order, so the `+` add button (still the first child) lands on the left. */
 .note-database-container .db-calendar-day-heading {
   display: flex;
+  flex-direction: row-reverse;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 6px 2px;
+  padding: 12px 6px 2px;
   position: sticky;
   top: 0;
   z-index: 1;
@@ -16896,34 +16950,48 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
 }
 
 .note-database-container .db-calendar-day-number {
-  font-size: var(--db-font-md);
+  font-size: 16px;
   font-weight: 400;
   color: var(--text-normal);
 }
 
+/* --text-faint measures 1.67:1 (light) / 2.29:1 (dark) here, under WCAG 1.4.3's
+   4.5:1 for informational text — this numeral is the only thing naming which
+   date the cell holds. These explicit greys keep the same dimmed hierarchy at
+   the lightest value that still clears the bar. */
 .note-database-container .db-calendar-day.is-outside-month .db-calendar-day-number {
-  color: var(--text-faint);
+  color: #767676;
 }
 
-.note-database-container .db-calendar-day.is-outside-month {
-  background: var(--background-secondary);
+.theme-dark .note-database-container .db-calendar-day.is-outside-month .db-calendar-day-number {
+  color: #808080;
 }
 
+/* An outside-month cell carries no fill of its own — only its number dims. */
 .note-database-container .db-calendar-day.is-today {
   background: var(--background-primary);
 }
 
+/* The today disc sits closer to the cell top than an ordinary number, so the
+   heading's own top padding is tightened only in this state. */
+.note-database-container .db-calendar-day.is-today .db-calendar-day-heading {
+  padding-top: 7px;
+}
+
+/* White on the reference blue #3C7FFB is 3.74:1, under WCAG 1.4.3's 4.5:1 for a
+   ≈16px numeral. #216DFA keeps the same hue/saturation darkened just enough to
+   clear it (4.53:1) without inverting the marker's read to "outlined". */
 .note-database-container .db-calendar-day.is-today .db-calendar-day-number {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 26px;
+  height: 24px;
   border-radius: 50%;
-  background: var(--db-current-time-color);
-  color: var(--text-on-accent);
-  font-size: 11px;
-  font-weight: 600;
+  background: #216DFA;
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 400;
 }
 
 /* Add button */
@@ -17324,20 +17392,24 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   min-width: 0;
 }
 
-/* Calendar month single-grid layout */
+/* Calendar month single-grid layout: a 16px horizontal inset, matching the
+   reference layout's grid box inset within its content pane. */
 .note-database-container .db-calendar-month-grid {
   display: flex;
   flex-direction: column;
+  padding: 0 16px;
   background: var(--background-primary);
 }
 
-/* Week row: single CSS grid shared by day cells and event segments */
+/* Week row: single CSS grid shared by day cells and event segments. 136px
+   rows; the row-gap drops so event lanes carry their own 20px pitch instead
+   of a gap adding to it (see .db-calendar-month-segment below). */
 .note-database-container .db-calendar-month-week {
   position: relative;
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  row-gap: 2px;
-  min-height: var(--db-calendar-month-week-min-height, var(--db-calendar-day-min-height, 112px));
+  row-gap: 0;
+  min-height: var(--db-calendar-month-week-min-height, var(--db-calendar-day-min-height, 136px));
 }
 
 .note-database-container .db-calendar-month-flash-column {
@@ -17351,27 +17423,44 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   animation: db-calendar-col-flash 1.2s ease-out;
 }
 
-/* Day cells: right + bottom border; first-row gets top, first-col gets left */
+/* Day cells: right + bottom border; first-row gets top, first-col gets left.
+   136px rows and the measured #EBEBEB/#292929 rule colour. */
 .note-database-container .db-calendar-month-week > .db-calendar-day {
   grid-row: 1 / -1;
   position: relative;
   min-width: 0;
-  min-height: var(--db-calendar-day-min-height, 112px);
-  border-right: 1px solid var(--background-modifier-border);
-  border-bottom: 1px solid var(--background-modifier-border);
+  min-height: var(--db-calendar-day-min-height, 136px);
+  border-right: 1px solid #EBEBEB;
+  border-bottom: 1px solid #EBEBEB;
+}
+
+.theme-dark .note-database-container .db-calendar-month-week > .db-calendar-day {
+  border-right-color: #292929;
+  border-bottom-color: #292929;
 }
 
 /* First row: add top border */
 .note-database-container .db-calendar-month-grid > .db-calendar-month-week:first-child > .db-calendar-day {
-  border-top: 1px solid var(--background-modifier-border);
+  border-top: 1px solid #EBEBEB;
+}
+
+.theme-dark .note-database-container .db-calendar-month-grid > .db-calendar-month-week:first-child > .db-calendar-day {
+  border-top-color: #292929;
 }
 
 /* First column: add left border (day cells are div, segments are button, so :first-of-type picks col 1) */
 .note-database-container .db-calendar-month-week > .db-calendar-day:first-of-type {
-  border-left: 1px solid var(--background-modifier-border);
+  border-left: 1px solid #EBEBEB;
 }
 
-/* Event segments are direct children of the week grid */
+.theme-dark .note-database-container .db-calendar-month-week > .db-calendar-day:first-of-type {
+  border-left-color: #292929;
+}
+
+/* Event segments are direct children of the week grid: no background, no
+   accent bar, no radius — the cell surface shows through; a 20px-pitch row
+   (row-gap now 0 on the week grid, above) with a 10px inset to the icon and
+   an 8px icon-to-label gap, and the measured ink colour. */
 .note-database-container .db-calendar-month-segment {
   position: relative;
   grid-column: var(--db-calendar-segment-start) / span var(--db-calendar-segment-span);
@@ -17380,18 +17469,14 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   align-items: center;
   justify-content: flex-start;
   min-width: 0;
-  gap: 4px;
+  gap: 8px;
   height: 20px;
-  margin: 0 2px;
-  padding: 0 6px;
+  margin: 0;
+  padding: 0 6px 0 10px;
   border: 0;
-  border-left: 3px solid var(--db-calendar-event-accent, var(--interactive-accent));
-  border-radius: var(--db-radius-md);
-  /* Solid base first (so the day-cell grid lines never show through), then the
-     tint on top — mirrors the week timed-event treatment. */
-  background-color: var(--background-primary);
-  background-image: linear-gradient(var(--db-calendar-event-bg, color-mix(in srgb, var(--interactive-accent) 7%, transparent)), var(--db-calendar-event-bg, color-mix(in srgb, var(--interactive-accent) 7%, transparent)));
-  color: var(--text-normal);
+  border-radius: 0;
+  background: none;
+  color: #292929;
   font-size: 12px;
   line-height: 20px;
   text-align: left;
@@ -17402,14 +17487,15 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   transition: box-shadow 150ms ease, transform 150ms ease;
 }
 
+.theme-dark .note-database-container .db-calendar-month-segment {
+  color: #DDDDDD;
+}
+
 .note-database-container .db-calendar-month-segment.is-timed {
-  background: transparent;
-  border-left-color: transparent;
   padding-left: 2px;
 }
 
 .note-database-container .db-calendar-month-segment.is-all-day.is-continuation {
-  border-left-color: transparent;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
@@ -17418,8 +17504,6 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   padding-right: 18px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
-  background-color: transparent;
-  background-image: none;
   box-shadow: none;
 }
 
@@ -17433,8 +17517,6 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   width: 14px;
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
-  background-color: var(--background-primary);
-  background-image: linear-gradient(var(--db-calendar-event-bg, color-mix(in srgb, var(--interactive-accent) 7%, transparent)), var(--db-calendar-event-bg, color-mix(in srgb, var(--interactive-accent) 7%, transparent)));
   mask-image: linear-gradient(to right, transparent 0, black 100%);
   -webkit-mask-image: linear-gradient(to right, transparent 0, black 100%);
   pointer-events: none;
@@ -17447,8 +17529,6 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   inset: 0;
   display: block;
   border-radius: inherit;
-  background-color: var(--background-primary);
-  background-image: linear-gradient(var(--db-calendar-event-bg, color-mix(in srgb, var(--interactive-accent) 7%, transparent)), var(--db-calendar-event-bg, color-mix(in srgb, var(--interactive-accent) 7%, transparent)));
   box-shadow: inherit;
   mask-image: linear-gradient(to right, black 0, black calc(100% - 18px), transparent 100%);
   -webkit-mask-image: linear-gradient(to right, black 0, black calc(100% - 18px), transparent 100%);
@@ -17963,29 +18043,26 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   display: none;
 }
 
-/* Calendar state tokens keep date-column and milestone emphasis local to this surface. */
+/* Calendar state tokens keep date-column and milestone emphasis local to this
+   surface. The weekend tint is now a measured colour pair, not the hover
+   token — reusing --background-modifier-hover made a weekend cell and a
+   hovered one the same colour. */
 .note-database-container .db-calendar {
-  --db-calendar-weekend-header-bg: color-mix(in srgb, var(--background-modifier-active-hover) 100%, transparent);
-  --db-calendar-weekend-bg: color-mix(in srgb, var(--background-modifier-hover) 100%, transparent);
+  --db-calendar-weekend-bg: #F7F7F7;
   --db-calendar-done-accent: var(--text-success, var(--interactive-accent));
   --db-calendar-done-bg: color-mix(in srgb, var(--db-calendar-done-accent) 12%, var(--background-primary));
 }
 
-/* Weekend headers and columns use a quiet fill while today keeps its stronger marker. */
-.note-database-container .db-calendar-weekday.is-weekend,
-.note-database-container .db-calendar-time-header-day.is-weekend:not(.is-today) {
-  background: var(--db-calendar-weekend-header-bg);
-  color: var(--text-muted);
+.theme-dark .note-database-container .db-calendar {
+  --db-calendar-weekend-bg: #1E1E1E;
 }
 
+/* The header band carries no weekend tint at all — only the grid columns
+   below it do; the two were previously conflated. */
 .note-database-container .db-calendar-month-week > .db-calendar-day.is-weekend:not(.is-today),
 .note-database-container .db-calendar-week-allday-col.is-weekend:not(.is-today),
 .note-database-container .db-calendar-time-columns .db-calendar-week-day-col.is-weekend:not(.is-today) {
   background: var(--db-calendar-weekend-bg);
-}
-
-.note-database-container .db-calendar-month-week > .db-calendar-day.is-weekend.is-outside-month:not(.is-today) {
-  background: color-mix(in srgb, var(--background-secondary) 78%, var(--db-calendar-weekend-bg));
 }
 
 .note-database-container .db-calendar-week-allday-date.is-weekend:not(.is-today) {
@@ -18007,15 +18084,23 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   text-decoration-thickness: 1px;
 }
 
-/* The unscheduled drawer is deliberately quiet, but its controls remain easy to reach. */
+/* The unscheduled drawer stays: a note with unparseable or missing date
+   frontmatter has no other surface in this plugin that flags it as "needs a
+   date", so removing the drawer would remove its only home. Restyled to the
+   grid's own rule colour and surface instead of a tinted card, so it reads
+   as part of one surface rather than a leftover. */
 .note-database-container .db-calendar-backlog {
   display: flex;
   flex-direction: column;
   min-width: 0;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--background-modifier-border) 82%, transparent);
+  border: 1px solid #EBEBEB;
   border-radius: var(--db-radius-md);
-  background: color-mix(in srgb, var(--background-secondary) 42%, transparent);
+  background: var(--background-primary);
+}
+
+.theme-dark .note-database-container .db-calendar-backlog {
+  border-color: #292929;
 }
 
 .note-database-container .db-calendar-backlog-header {
@@ -18023,7 +18108,11 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   align-items: center;
   min-height: 32px;
   padding: 2px 8px;
-  border-bottom: 1px solid color-mix(in srgb, var(--background-modifier-border) 68%, transparent);
+  border-bottom: 1px solid #EBEBEB;
+}
+
+.theme-dark .note-database-container .db-calendar-backlog-header {
+  border-bottom-color: #292929;
 }
 
 .note-database-container .db-calendar-backlog-toggle {
@@ -18100,6 +18189,38 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   text-decoration: line-through;
   text-decoration-color: var(--db-calendar-done-accent);
   text-decoration-thickness: 1px;
+}
+
+/* The calendar's own "Show icon" toggle, sized to the reference 26x16px
+   control — scoped off the shared .db-toggle-switch base so no other toggle
+   in the app resizes or recolours with it. */
+.note-database-container input[type="checkbox"].db-calendar-show-icon-toggle {
+  flex: 0 0 26px;
+  width: 26px;
+  min-width: 26px;
+  height: 16px;
+}
+
+.note-database-container input[type="checkbox"].db-calendar-show-icon-toggle::before {
+  width: 12px;
+  height: 12px;
+}
+
+.note-database-container input[type="checkbox"].db-calendar-show-icon-toggle:checked::before {
+  transform: translateX(10px);
+}
+
+/* The reference #6E9EFC on white is 2.64:1, under WCAG 1.4.11's 3:1 for the
+   only cue distinguishing on from off. #5A92FC clears it (3.02:1); dark
+   already clears 1.4.11 as shipped (6.79:1) and is left unchanged. */
+.note-database-container input[type="checkbox"].db-calendar-show-icon-toggle:checked {
+  border-color: #5A92FC;
+  background: #5A92FC;
+}
+
+.theme-dark .note-database-container input[type="checkbox"].db-calendar-show-icon-toggle:checked {
+  border-color: #6E9EFC;
+  background: #6E9EFC;
 }
 
 /* Keep empty calendar cards compact without changing the shared empty-state component. */
@@ -18782,6 +18903,15 @@ body.pm-resize-active * {
 .is-phone .note-database-container .db-calendar-title,
 .is-phone .note-database-container .db-timeline-title {
   flex: 1 0 100%;
+}
+
+/* The nav button is 20px, under the 44px phone touch-target floor this
+   plugin sets elsewhere; the coarse-pointer rule only lifts it to 28px.
+   Scoped to the calendar's own nav button so the gantt's phone floor, a
+   separate surface, does not move. */
+.is-phone .note-database-container .db-calendar-nav-button {
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .note-database-container .db-timeline-empty-range {
@@ -20968,10 +21098,13 @@ img.db-text-md-image {
     min-height: 28px;
   }
 
+  /* The day number now flows to the right (row-reverse, above), so the
+     absolutely-positioned add button moves to the opposite corner rather
+     than sitting under it. */
   .note-database-container .db-calendar-day-heading .db-calendar-add-button {
     position: absolute;
     top: 0;
-    right: 4px;
+    left: 4px;
     z-index: 2;
   }
 

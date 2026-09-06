@@ -107,11 +107,11 @@ const dropdownRow = (icon, label, value) => `
     <span class="db-dropdown-field-chevron">${glyph(ICON.chevronDown)}</span>
   </button>`;
 
-const switchRow = (icon, label, on) => `
+const switchRow = (icon, label, on, extraClass) => `
   <label class="db-chart-options-row db-chart-options-switch-row">
     <span class="db-chart-options-row-icon">${glyph(icon)}</span>
     <div class="db-chart-options-row-text"><span class="db-chart-options-label">${label}</span></div>
-    <input type="checkbox" role="switch" class="db-toggle-switch"${on ? " checked" : ""}>
+    <input type="checkbox" role="switch" class="db-toggle-switch${extraClass ? ` ${extraClass}` : ""}"${on ? " checked" : ""}>
   </label>`;
 
 const rangeRow = (label, value, min, max, step, extraClass) => `
@@ -145,7 +145,7 @@ const STATIC_POPOVER = `position: static !important; top: auto !important; right
 
 const navButton = (icon, label) =>
   icon
-    ? `<button type="button" class="db-calendar-nav-button is-icon" title="${label}" aria-label="${label}">
+    ? `<button type="button" class="db-calendar-nav-button is-icon db-calendar-nav-chevron" title="${label}" aria-label="${label}">
         <span class="db-calendar-nav-icon">${glyph(icon)}</span></button>`
     : `<button type="button" class="db-calendar-nav-button is-text" title="${label}" aria-label="${label}">${label}</button>`;
 
@@ -162,12 +162,22 @@ const scaleControl = (active) => `
     </button>
   </div>`;
 
+// The month scale's title is two selects, each a button that opens the shared
+// dropdown-menu listbox; week and day keep the plain static title.
+const calendarTitle = (main, year, activeScale) =>
+  activeScale === "Month"
+    ? `<div class="db-calendar-title" title="${main} ${year}" aria-label="${main} ${year}">
+        <button type="button" class="db-calendar-title-main db-calendar-title-select" aria-haspopup="listbox">${main}</button>
+        <button type="button" class="db-calendar-title-year db-calendar-title-select" aria-haspopup="listbox">${year}</button>
+      </div>`
+    : `<div class="db-calendar-title" title="${main} ${year}" aria-label="${main} ${year}">
+        <span class="db-calendar-title-main">${main}</span>
+        <span class="db-calendar-title-year">${year}</span>
+      </div>`;
+
 const calendarHeader = (main, year, activeScale, prev, next) => `
   <div class="db-calendar-header">
-    <div class="db-calendar-title" title="${main} ${year}" aria-label="${main} ${year}">
-      <span class="db-calendar-title-main">${main}</span>
-      <span class="db-calendar-title-year">${year}</span>
-    </div>
+    ${calendarTitle(main, year, activeScale)}
     <div class="db-calendar-controls">
       ${scaleControl(activeScale)}
       ${navButton(ICON.chevronLeft, prev)}
@@ -268,18 +278,18 @@ export const monthSegment = (seg) => {
 };
 
 /**
- * A week row. The renderer sizes the row from JavaScript: a 28px heading band, one 22px
- * track per visible lane plus one more for the "+N" affordance when the week overflows,
- * and a filler track that absorbs the spare height so a sparse week does not stretch its
- * event spacing.
+ * A week row. The renderer sizes the row from JavaScript: a 32px heading band (the
+ * measured Anytype offset), one 20px track per visible lane plus one more for the "+N"
+ * affordance when the week overflows, and a filler track that absorbs the spare height
+ * so a sparse week does not stretch its event spacing.
  */
 const monthWeek = (week) => {
   const laneRows = week.lanes + (week.overflow ? 1 : 0);
-  const rows = `grid-template-rows: 28px repeat(${laneRows}, 22px) minmax(0, 1fr);`;
+  const rows = `grid-template-rows: 32px repeat(${laneRows}, 20px) minmax(0, 1fr);`;
   return `
     <div class="db-calendar-month-week" role="row" data-week-index="${week.index}"
       data-calendar-visible-lanes="${week.lanes}"
-      style="${rows} --db-calendar-month-week-min-height: 112px">
+      style="${rows} --db-calendar-month-week-min-height: 136px">
       ${week.days.map((day, i) => monthDayCell(day, i + 1)).join("")}
       ${week.segments.map(monthSegment).join("")}
       ${week.overflow ? `<button type="button" class="db-calendar-more-events" aria-haspopup="dialog"
@@ -1390,15 +1400,15 @@ export const TEMPORAL_SCENARIOS = [
     sources: ["src/views/calendar-renderer.ts"],
     fixtureOf: "constructed-calendar-month",
     /* The wrapper carries --db-calendar-day-min-height because applyMonthSizingVars() writes it
-       there on every month render, from config.calendarCellMinHeight ?? 112 clamped to 72-400
-       (calendar-renderer.ts:2165-2199). Nothing in that renderer measures the pane, so 112px is
-       the product's row height at any viewport; runtime-vars.css derives this one variable from
-       viewport height instead, and without the renderer's own write mirrored here the grid would
-       photograph a denser month than the product draws. */
+       there on every month render, from config.calendarCellMinHeight ?? 136 clamped to 72-400
+       (calendar-renderer.ts). 136px is the reference row height; runtime-vars.css derives this
+       one variable from viewport height instead, and without the
+       renderer's own write mirrored here the grid would photograph a different row height than
+       the product draws. */
     note: "Multi-day all-day bars, timed events, weekend headers, a completed milestone treatment, an overflow week and a calm unscheduled empty line.",
     html: () => `
       <div class="note-database-container">
-        <div class="db-calendar db-calendar-month" style="--db-calendar-day-min-height: 112px">
+        <div class="db-calendar db-calendar-month" style="--db-calendar-day-min-height: 136px">
           ${calendarHeader("March", "2026", "Month", "Previous month", "Next month")}
           ${calendarBacklogEmptyMarkup()}
           <div class="db-calendar-weekdays" role="row">
@@ -1438,7 +1448,7 @@ export const TEMPORAL_SCENARIOS = [
             <div class="db-calendar-week-allday" style="--db-calendar-allday-rows: 1">
               <div class="db-calendar-week-allday-gutter"></div>
               <div class="db-calendar-week-allday-cols" data-calendar-visible-lanes="1"
-                style="--db-calendar-time-day-count: 7; grid-template-rows: 28px repeat(1, 22px)">
+                style="--db-calendar-time-day-count: 7; grid-template-rows: 28px repeat(1, 20px)">
                 ${WEEK_DAYS.map((day, i) => `
                   <div class="db-calendar-week-allday-col ${day.today ? "is-today" : ""} ${day.weekend ? "is-weekend" : ""} ${i === 6 ? "is-last-col" : ""}"
                     data-date-key="${day.key}" style="grid-column: ${i + 1}"></div>`).join("")}
@@ -1565,7 +1575,7 @@ export const TEMPORAL_SCENARIOS = [
               ${dropdownRow(ICON.clock, "Slot duration", "30 minutes")}`)}
             ${section("Appearance", `
               ${dropdownRow(ICON.palette, "Event colour", "Category")}
-              ${switchRow(ICON.smilePlus, "Show record icon", true)}`)}
+              ${switchRow(ICON.smilePlus, "Show record icon", true, "db-calendar-show-icon-toggle")}`)}
           </div>
         </div>
       </div>`,

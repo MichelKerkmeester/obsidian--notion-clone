@@ -306,7 +306,7 @@ export class CalendarToolbarRenderer {
 			if (value && !resolveRecordIconField(database, config) && !database.recordIconField) config.recordIconFieldOverrideEnabled = true;
 			actions.onChange(t("recordIcon.show"));
 			if (this.popoverContent) this.renderSections(this.popoverContent, config, actions);
-		}, "smile-plus");
+		}, "smile-plus", "db-calendar-show-icon-toggle");
 		if (config.showRecordIcon !== true) return;
 		this.renderSwitch(parent, t("recordIcon.override"), config.recordIconFieldOverrideEnabled === true, (value) => {
 			config.recordIconFieldOverrideEnabled = value || undefined;
@@ -397,7 +397,7 @@ export class CalendarToolbarRenderer {
 				const setRowHeight = (value: number) => {
 					config.calendarCellMinHeight = Math.max(72, Math.min(400, Math.round(value)));
 				};
-				this.renderRange(sizing, t("viewConfig.calendarRowHeightValue"), config.calendarCellMinHeight ?? 104, 72, 400, 4, (value) => {
+				this.renderRange(sizing, t("viewConfig.calendarRowHeightValue"), config.calendarCellMinHeight ?? 136, 72, 400, 4, (value) => {
 					setRowHeight(value);
 					// Rebuild the sizing rows so the "events per day" slider's max tracks
 					// the new row height (a smaller row must cap the lane count lower).
@@ -410,7 +410,7 @@ export class CalendarToolbarRenderer {
 			// so the slider starts at the current effective value. Under a custom row
 			// height the max is capped at what that height fits, so a high setting can't
 			// stretch the grid taller than the chosen row height.
-			const derivedMonthLanes = Math.max(1, Math.floor(((config.calendarCellMinHeight ?? 112) - 36) / 24));
+			const derivedMonthLanes = Math.max(1, Math.floor(((config.calendarCellMinHeight ?? 136) - 32) / 20));
 			const monthLanesMax = config.calendarRowSizeMode === "custom" ? derivedMonthLanes : 15;
 			const monthLanesValue = Math.min(config.calendarMonthVisibleLanes ?? derivedMonthLanes, monthLanesMax);
 			this.renderRange(sizing, t("viewConfig.calendarMonthVisibleLanes"), monthLanesValue, 1, monthLanesMax, 1, (value) => {
@@ -477,11 +477,11 @@ export class CalendarToolbarRenderer {
 		});
 	}
 
-	private renderSwitch(parent: HTMLElement, label: string, value: boolean, onChange: (value: boolean) => void, icon: string): void {
+	private renderSwitch(parent: HTMLElement, label: string, value: boolean, onChange: (value: boolean) => void, icon: string, extraClass?: string): void {
 		const row = parent.createEl("label", { cls: "db-chart-options-row db-chart-options-switch-row" });
 		setIcon(row.createSpan({ cls: "db-chart-options-row-icon" }), icon);
 		row.createDiv({ cls: "db-chart-options-row-text" }).createSpan({ cls: "db-chart-options-label", text: label });
-		const input = row.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch" } });
+		const input = row.createEl("input", { cls: `db-toggle-switch${extraClass ? ` ${extraClass}` : ""}`, attr: { type: "checkbox", role: "switch" } });
 		input.checked = value;
 		input.onchange = () => onChange(input.checked);
 	}

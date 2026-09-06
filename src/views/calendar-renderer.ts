@@ -119,6 +119,7 @@ export class CalendarRenderer {
 	private miniCalendarCleanup: (() => void) | null = null;
 	private calendarScaleMenuCleanup: (() => void) | null = null;
 	private pendingFlashDateKey: string | null = null;
+	private pendingBottomScrollDateKey: string | null = null;
 	private calendarRoot: HTMLElement | null = null;
 	private backlogCollapsed = false;
 	private currentVisibleRange: CalendarTimelineSearchVisibleRange | null = null;
@@ -148,6 +149,13 @@ export class CalendarRenderer {
 			const key = this.pendingFlashDateKey;
 			this.pendingFlashDateKey = null;
 			window.requestAnimationFrame(() => this.flashDayColumn(key));
+		}
+		// The "today scroll": positions the current week at the bottom of the
+		// viewport after a Today jump.
+		if (this.pendingBottomScrollDateKey) {
+			const key = this.pendingBottomScrollDateKey;
+			this.pendingBottomScrollDateKey = null;
+			window.requestAnimationFrame(() => this.scrollWeekToBottom(key));
 		}
 	}
 
@@ -327,11 +335,13 @@ export class CalendarRenderer {
 		// appended as an extra row so it never hides one of the configured events.
 		const totalLaneRows = visibleRowCount + (hasOverflow ? 1 : 0);
 
-		// Single grid: heading row + fixed-height event lanes + row-gap budget + a filler row.
-		// The filler absorbs spare height so sparse weeks do not stretch event spacing.
-		weekEl.style.gridTemplateRows = `28px repeat(${totalLaneRows}, 22px) minmax(0, 1fr)`;
+		// Single grid: heading row + fixed-height event lanes + a filler row. The heading
+		// row (32px) and the lane pitch (20px, no row-gap — the week grid's own row-gap
+		// is 0) are the measured Anytype offsets; the filler absorbs spare height so
+		// sparse weeks do not stretch event spacing.
+		weekEl.style.gridTemplateRows = `32px repeat(${totalLaneRows}, 20px) minmax(0, 1fr)`;
 
-		const neededHeight = 30 + totalLaneRows * 24 + 10;
+		const neededHeight = 32 + totalLaneRows * 20 + 10;
 		weekEl.style.setProperty("--db-calendar-month-week-min-height", `${Math.max(rowHeight || 0, neededHeight, this.getCellMinHeight(config))}px`);
 
 		const dayCells: HTMLElement[] = [];
@@ -356,6 +366,7 @@ export class CalendarRenderer {
 			this.renderDayHeading(cell, config, day.dateKey);
 			this.setupBacklogDropTarget(cell, config, day.dateKey);
 			this.setupMonthCreateDrag(cell, config, day.dateKey, weekEl);
+			this.setupDayEntryMenu(cell, config, day.dateKey);
 			dayCells.push(cell);
 		}
 
@@ -411,6 +422,11 @@ export class CalendarRenderer {
 				eventEl.createSpan({ cls: "db-calendar-month-dates", text: this.formatMonthDateRange(segment.event.startDateKey, segment.event.endDateKey, segment.event.startMinutes, segment.event.endMinutes) });
 			}
 			this.attachEventOpenHandlers(eventEl, segment.event);
+			eventEl.oncontextmenu = (event) => {
+				event.preventDefault();
+				event.stopPropagation();
+				this.showDayEntryMenu(event, config, segment.event.startDateKey, segment.event.row);
+			};
 			this.attachMonthMoveHandler(eventEl, weekEl, layout.days, segment, config, ".db-calendar-month-week", ".db-calendar-day", 7);
 			// Left/right resize grab zones for month segments when an end-date field
 			// exists. Only real start/end edges are resizable: a segment
@@ -731,7 +747,9 @@ export class CalendarRenderer {
 		const stage = section.createDiv({ cls: "db-calendar-week-allday-cols" });
 		stage.dataset.calendarVisibleLanes = String(visibleLanes);
 		stage.style.setProperty("--db-calendar-time-day-count", String(days.length));
-		stage.style.gridTemplateRows = `28px repeat(${visibleLanes + (hasOverflow ? 1 : 0)}, 22px)`;
+		// Lane pitch matches the month grid's flat chip; the detached day-number
+		// row above it keeps its own 28px.
+		stage.style.gridTemplateRows = `28px repeat(${visibleLanes + (hasOverflow ? 1 : 0)}, 20px)`;
 		const todayKey = this.getTodayDateKey();
 		let firstAllDayCol: HTMLElement | null = null;
 
@@ -1936,6 +1954,20 @@ export class CalendarRenderer {
 		this.pendingFlashDateKey = dateKey;
 	}
 
+	private requestCalendarBottomScroll(dateKey: string): void {
+		this.pendingBottomScrollDateKey = dateKey;
+	}
+
+	/** The "today scroll": after a Today jump in month view, the current week
+	 *  scrolls to the bottom of the viewport instead of leaving the page at
+	 *  whatever it scrolled to before the jump. */
+	private scrollWeekToBottom(dateKey: string): void {
+		const root = this.calendarRoot ?? window.activeDocument;
+		const cell = root.querySelector<HTMLElement>(`.db-calendar-day[data-date-key="${dateKey}"]`);
+		const week = cell?.closest<HTMLElement>(".db-calendar-month-week");
+		week?.scrollIntoView({ block: "end" });
+	}
+
 	/** Date keys that make up the active selection in the main view (the current
 	 *  week for week view, the current day for day view; empty for month). */
 	private resolveSelectedKeys(config: ViewConfig): Set<string> {
@@ -2051,18 +2083,87 @@ export class CalendarRenderer {
 
 	private renderMonthHeader(wrap: HTMLElement, config: ViewConfig, model: { year: number; monthIndex: number }): void {
 		const header = wrap.createDiv({ cls: "db-calendar-header" });
-		this.renderCalendarTitle(header, formatCalendarTitleParts({
-			scale: "month",
-			startDateKey: `${String(model.year).padStart(4, "0")}-${String(model.monthIndex + 1).padStart(2, "0")}-01`,
-			locale: getEffectiveLocale(),
-		}));
+		// The month title is two selects, not one static string — month opens a
+		// 12-row list, year a scrollable one, each checkmarking the current value.
+		this.renderMonthTitleSelects(header, config, model);
 		const controls = header.createDiv({ cls: "db-calendar-controls" });
 		this.renderCalendarScaleControl(controls, config, "month", `${String(model.year).padStart(4, "0")}-${String(model.monthIndex + 1).padStart(2, "0")}-01`);
 		this.renderNavButton(controls, "calendar.prevMonth", () => this.shiftMonth(config, model, -1), "chevron-left");
-		this.renderNavButton(controls, "calendar.today", () => this.setMonth(config, new Date()));
+		this.renderNavButton(controls, "calendar.today", () => this.goToTodayMonth(config));
 		this.renderNavButton(controls, "calendar.nextMonth", () => this.shiftMonth(config, model, 1), "chevron-right");
 		this.renderMiniCalendarButton(controls, header, config);
 		this.renderCalendarInvalidWarning(controls);
+	}
+
+	/** The month and year selects: two buttons, each opening the shared dropdown-menu
+	 *  listbox already used for the scale menu, rather than a bespoke pair. */
+	private renderMonthTitleSelects(header: HTMLElement, config: ViewConfig, model: { year: number; monthIndex: number }): void {
+		const title = header.createDiv({
+			cls: "db-calendar-title",
+			attr: { title: this.formatMonthTitle(model.year, model.monthIndex), "aria-label": this.formatMonthTitle(model.year, model.monthIndex) },
+		});
+		const monthNames = this.getMonthNames();
+		const monthButton = title.createEl("button", {
+			cls: "db-calendar-title-main db-calendar-title-select",
+			text: monthNames[model.monthIndex],
+			attr: { type: "button", "aria-haspopup": "listbox" },
+		});
+		monthButton.onclick = (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			openDropdownMenu({
+				anchor: monthButton,
+				label: t("calendar.selectMonth"),
+				options: monthNames.map((name, index) => ({ value: String(index), text: name })),
+				value: String(model.monthIndex),
+				onChange: (value) => this.setCalendarMonthIndex(config, model.year, Number(value)),
+			});
+		};
+		const yearButton = title.createEl("button", {
+			cls: "db-calendar-title-year db-calendar-title-select",
+			text: String(model.year),
+			attr: { type: "button", "aria-haspopup": "listbox" },
+		});
+		yearButton.onclick = (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			// The reference product's year range spans many centuries, which is not
+			// practical to enumerate; a window around the current year gives the same
+			// scrollable-list affordance without pretending to reproduce that range.
+			const years: string[] = [];
+			for (let year = model.year - 100; year <= model.year + 100; year++) years.push(String(year));
+			openDropdownMenu({
+				anchor: yearButton,
+				label: t("calendar.selectYear"),
+				options: years.map((year) => ({ value: year, text: year })),
+				value: String(model.year),
+				onChange: (value) => this.setCalendarMonthIndex(config, Number(value), model.monthIndex),
+			});
+		};
+	}
+
+	private setCalendarMonthIndex(config: ViewConfig, year: number, monthIndex: number): void {
+		const normalizedMonth = ((monthIndex % 12) + 12) % 12;
+		const normalizedYear = year + Math.floor(monthIndex / 12);
+		config.calendarMonth = `${String(normalizedYear).padStart(4, "0")}-${String(normalizedMonth + 1).padStart(2, "0")}`;
+		this.actions.onConfigChange?.(t("undo.calendarMonthConfig"));
+	}
+
+	private getMonthNames(): string[] {
+		const formatter = new Intl.DateTimeFormat(getEffectiveLocale(), { month: "long" });
+		return Array.from({ length: 12 }, (_, index) => formatter.format(new Date(2000, index, 1)));
+	}
+
+	/** Today, from the month view: jumps the anchor and requests the "today scroll"
+	 *  that positions the current week at the viewport bottom. */
+	private goToTodayMonth(config: ViewConfig): void {
+		const today = new Date();
+		config.calendarMonth = this.monthKeyFromDate(today);
+		config.calendarDay = this.getTodayDateKey(today);
+		config.calendarWeekStart = config.calendarDay;
+		this.requestCalendarDateFlash(config.calendarDay);
+		this.requestCalendarBottomScroll(config.calendarDay);
+		this.actions.onConfigChange?.(t("undo.calendarMonthConfig"));
 	}
 
 	private renderWeekdayLabels(wrap: HTMLElement, config: ViewConfig, weekStartsOn: number): void {
@@ -2097,6 +2198,40 @@ export class CalendarRenderer {
 				this.actions.createEntryForDate?.(config, dateKey);
 			};
 		}
+	}
+
+	/** The day/item menu: open the note under the pointer, or create one for this
+	 *  date. Right-click rather than a plain click, matching the equivalent menu
+	 *  this codebase already opens on right-click (showDayViewNavigationMenu); the
+	 *  dblclick-create and `+` button stay as they are rather than losing their
+	 *  fast path. */
+	private setupDayEntryMenu(cell: HTMLElement, config: ViewConfig, dateKey: string): void {
+		cell.oncontextmenu = (event) => {
+			if ((event.target as HTMLElement | null)?.closest(".db-calendar-month-segment, .db-calendar-more-events")) return;
+			event.preventDefault();
+			event.stopPropagation();
+			this.showDayEntryMenu(event, config, dateKey);
+		};
+	}
+
+	private showDayEntryMenu(event: MouseEvent, config: ViewConfig, dateKey: string, row?: RowData): void {
+		if (!row && !this.actions.createEntryForDate) return;
+		const menu = createOwnedMenuForEvent(event);
+		if (row) {
+			menu.addRow({
+				icon: "file-text",
+				label: t("calendar.openNote"),
+				onClick: () => this.actions.openRow(row),
+			});
+		}
+		if (!this.actions.isReadOnly && this.actions.createEntryForDate) {
+			menu.addRow({
+				icon: "plus",
+				label: t("calendar.newNoteForDate"),
+				onClick: () => this.actions.createEntryForDate?.(config, dateKey),
+			});
+		}
+		menu.showAt({ x: event.clientX, y: event.clientY });
 	}
 
 	private renderDropSnap(cell: HTMLElement, dateKey: string): void {
@@ -2194,7 +2329,7 @@ export class CalendarRenderer {
 	}
 
 	private getCellMinHeight(config: ViewConfig): number {
-		const value = config.calendarCellMinHeight ?? 112;
+		const value = config.calendarCellMinHeight ?? 136;
 		return Math.max(72, Math.min(400, Math.round(value)));
 	}
 
@@ -2206,8 +2341,10 @@ export class CalendarRenderer {
 		// row grows to fit, so the explicit setting is honored up to the hard cap —
 		// that is the point of adaptive (otherwise a tall setting would be silently
 		// capped by the default height and never take effect).
+		// 32/20 mirror the heading offset and lane pitch set in renderMonthWeek — at
+		// the 136px default this floors to 5, matching the busiest captured cell.
 		if (config.calendarRowSizeMode === "custom") {
-			const byRowHeight = Math.max(1, Math.floor((this.getCellMinHeight(config) - 36) / 24));
+			const byRowHeight = Math.max(1, Math.floor((this.getCellMinHeight(config) - 32) / 20));
 			const cap = Math.min(hardMax, byRowHeight);
 			if (config.calendarMonthVisibleLanes != null) {
 				return Math.max(1, Math.min(cap, Math.floor(config.calendarMonthVisibleLanes)));
@@ -2218,7 +2355,7 @@ export class CalendarRenderer {
 			return Math.max(1, Math.min(hardMax, Math.floor(config.calendarMonthVisibleLanes)));
 		}
 		// Adaptive, no explicit setting: fall back to what the default height fits.
-		return Math.max(1, Math.min(hardMax, Math.floor((this.getCellMinHeight(config) - 36) / 24)));
+		return Math.max(1, Math.min(hardMax, Math.floor((this.getCellMinHeight(config) - 32) / 20)));
 	}
 
 	private getDefaultColumnWidth(config: ViewConfig): number {
@@ -2311,8 +2448,11 @@ export class CalendarRenderer {
 	}
 
 	private renderNavButton(parent: HTMLElement, labelKey: string, onClick: () => void, icon?: string): void {
+		// Every icon this renderer passes here is a prev/next chevron — the modifier
+		// class scopes their contrast fix to those two buttons, not the mini-calendar
+		// or invalid-warning icons built separately below.
 		const button = parent.createEl("button", {
-			cls: `db-calendar-nav-button${icon ? " is-icon" : " is-text"}`,
+			cls: `db-calendar-nav-button${icon ? " is-icon db-calendar-nav-chevron" : " is-text"}`,
 			attr: { type: "button", title: t(labelKey), "aria-label": t(labelKey) },
 		});
 		if (icon) {
@@ -2370,14 +2510,6 @@ export class CalendarRenderer {
 
 	private shiftMonth(config: ViewConfig, model: { year: number; monthIndex: number }, delta: number): void {
 		config.calendarMonth = shiftCalendarMonth(`${String(model.year).padStart(4, "0")}-${String(model.monthIndex + 1).padStart(2, "0")}`, delta);
-		this.actions.onConfigChange?.(t("undo.calendarMonthConfig"));
-	}
-
-	private setMonth(config: ViewConfig, date: Date): void {
-		config.calendarMonth = this.monthKeyFromDate(date);
-		config.calendarDay = this.getTodayDateKey(date);
-		config.calendarWeekStart = config.calendarDay;
-		this.requestCalendarDateFlash(config.calendarDay);
 		this.actions.onConfigChange?.(t("undo.calendarMonthConfig"));
 	}
 
