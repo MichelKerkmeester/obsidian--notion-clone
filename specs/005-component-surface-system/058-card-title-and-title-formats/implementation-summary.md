@@ -139,7 +139,7 @@ affordance test was run against a `git stash`-reverted panel before the handler 
 landed as a seven-commit sequence on this worktree: the resolver + Title-slot fix with its tests
 (`7b50fed5`), the screenshot scenarios and refreshed corpus (`67856d6a`), the `main.js` rebuild
 (`bb529a69`), the live-evidence refresh (`133a7d71`), the css-lane takeover from
-`056-board-anytype-parity` (`b1ebb098`), and two evidence re-stamps from the gate's own lane re-run
+`057-calendar-anytype-parity` (`5b0c6a0b`, re-based from the `056` hold), and two evidence re-stamps from the gate's own lane re-run
 and the T009 replay (`149aa5ed`, `f10cbf77`).
 <!-- /ANCHOR:how-delivered -->
 
@@ -164,7 +164,7 @@ and the T009 replay (`149aa5ed`, `f10cbf77`).
 |-------|--------|
 | `npx tsc --noEmit` | exit 0 |
 | `npm run build` | exit 0 (esbuild production) |
-| `npx vitest run` | exit 0 — 1515/1515 tests across 142 files |
+| `npx vitest run` | exit 0 — 1518/1518 tests across 142 files (rebased onto origin/main) |
 | `npm run gate` | exit 0 — 26 green, 0 red |
 | `npm run replay` | exit 0 — all 28 results hold, 0 reversed |
 | `npm run screenshots:verify` | exit 0 — 588/588 entries match their sources; all ten new PNGs opened and read, both themes |

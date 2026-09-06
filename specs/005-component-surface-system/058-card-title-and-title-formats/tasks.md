@@ -102,10 +102,10 @@ contextType: "general"
       product defect). `npm run screenshots:verify`: PASS, 588/588.
 - [x] T008 `npx tsc --noEmit`, `npm run build`, `npx vitest run` — all exit 0, read directly.
       `npx tsc --noEmit`: exit 0. `npm run build`: exit 0 (esbuild production). `npx vitest run`:
-      exit 0, 1515/1515 tests across 142 files.
+      exit 0, 1518/1518 tests across 142 files (re-proven after the rebase onto origin/main).
 - [x] T009 `npm run gate` exits 0 with the new lane row observed red before green; `npm run replay`
       holds with reversed 0. `npm run gate`: PASS, 26 green, 0 red — after taking the
-      `css-lane` over from `056-board-anytype-parity` (its release left nothing outstanding) and
+      `css-lane` over from `057-calendar-anytype-parity` (its release left nothing outstanding) and
       re-running the eight `tools/live/*.mjs` tools `evidence.mjs` reported stale against the
       moved `styles.css`/`board-card-properties-panel.ts`. `npm run replay`: PASS, all 28 results
       hold, 0 reversed. Red-before-green for the new coverage itself: see T003/T005's own evidence
@@ -180,7 +180,7 @@ status.
       line this packet edited) — confirmed identical against `dc1d54a9` (the branch point). Zero
       new lint findings from this packet's own edits. `npm run gate`'s own lint lane
       (`lint:tools`) is green.
-- [x] CHK-011 [P0] No console errors or warnings. None introduced; `npx vitest run` (1515/1515) and
+- [x] CHK-011 [P0] No console errors or warnings. None introduced; `npx vitest run` (1518/1518) and
       the gate's `render-assertions`/`sheet-rebuild`/`sheet-teardown` lanes, which fail on a
       console error, are all green.
 - [x] CHK-012 [P1] Non-numeric values in a number/currency-typed title column fall back to the
