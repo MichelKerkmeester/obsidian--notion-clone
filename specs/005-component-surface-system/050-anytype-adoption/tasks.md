@@ -136,6 +136,14 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       header**; pickers open as a separate anchored popover. 360px is the top of our own `panel`
       role, so no new role. Anytype's ~50ms remains source-derived and unphotographed; our 100ms
       budget is unchanged. See `design-trueup.md` REQ-002
+      **Reconciled 2026-09-06, not closed — the timing half ships, the geometry half is unbuilt.**
+      `openViewSettingsAfterMutation` (`database-view.ts:3922`) already existed on this tree and is
+      called from `addView` (`:3433`) and `duplicateView` (`:3917`), so the recorded failing value
+      "never" is stale. `database-view-settings-landing.test.ts` measures the shipped chain on a
+      constructed mount: 2.239ms on create, 0.366ms on duplicate, against the 100ms budget. **What
+      remains is the geometry clause alone** — 360px width, 28px rows, 8px radius, 16px horizontal
+      padding, and the board's extra `Groups` row. **Owner: `src/views/view-config-panel-renderer.ts`,
+      this leg (L2).** Nothing in the item-closing leg touched that file and it stays open
       (`src/views/database-view.ts`, `src/views/view-config-panel-renderer.ts`)
 - [x] T006 [P1] **REQ-010 — per-view new-row default presets.** The adopted slice of templates
       and only that slice (ADR-002, goal D6).
@@ -213,7 +221,7 @@ Ordered by leg, and legs ordered by their best fit rank. A leg opens its files o
       show it, which closes the second of `spec.md` §12's open questions. `047` §8 names the mechanism
       and the release point, both source-derived: **design inferred from source code, not seen**
       (`src/views/table-renderer.ts`)
-      **Restated and closed 2026-09-06 — the premise does not hold on this tree.**
+      **Restated and closed 2026-09-06 (ADR-007) — the premise does not hold on this tree.**
       `cell-renderer.ts`'s `editFileName` delegates to `editSingleLinePopover`, which never writes
       into the cell's own DOM and whose keystroke handler reacts only to Enter/Tab/Escape; the
       rename commits only through `save()`, reachable only those three ways or a blur. Since

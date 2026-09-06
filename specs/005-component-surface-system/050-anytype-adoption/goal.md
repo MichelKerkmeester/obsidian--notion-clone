@@ -12,10 +12,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/050-anytype-adoption"
-    last_updated_at: "2026-09-05T08:10:00Z"
+    last_updated_at: "2026-09-06T04:00:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Authored the directive from 047's ranked adoption items"
-    next_safe_action: "Execute T001, the capture read and design true-up"
+    recent_action: "Closed the six-item completion row and corrected two stale today-values"
+    next_safe_action: "Build the chip row, the settings-panel geometry and the toolbar collapse"
     blockers:
       - "The Anytype capture sweep is still running; no item may be implemented before T001 reads it"
       - "The first capture pass reached no mouse-driven surface, so five items have no reference screen yet"
@@ -100,19 +100,34 @@ Frozen choices. Changing one is an amendment.
       chips and one fixed icon state** — `filter-panel-renderer.ts` and `sort-panel-renderer.ts`
       render panels with no chip surface, and the toolbar's filter and sort icons do the same thing
       whether or not a filter is active.
-- [ ] **Creating or duplicating a view lands in that view's settings within 100ms.** **Today: it
-      lands nowhere** — `database-view.ts` creates the view and returns to the board.
+- [ ] **Creating or duplicating a view lands in that view's settings within 100ms.** **The "today"
+      recorded here is stale as of 2026-09-06: it lands, and inside the budget.**
+      `openViewSettingsAfterMutation` (`database-view.ts:3922`) is called from both `addView` and
+      `duplicateView`, measured at 2.239ms and 0.366ms against 100ms in
+      `database-view-settings-landing.test.ts`. The row stays unticked because AC-002 also carries a
+      geometry clause — 360px width, 28px rows, 8px radius, 16px horizontal padding — that nothing
+      asserts, and `view-config-panel-renderer.ts` has not been opened.
 - [ ] **The board's horizontal scrollbar is sticky at the viewport bottom while the board is taller
       than the viewport.** **Today: it sits at the bottom of the board**, which on a tall board is
       off-screen until you scroll to it.
 - [ ] **A view can be duplicated and the duplicate is config-identical with a new id**, and the
-      view tab carries a context menu. **Today: neither exists** in
-      `active-view-controls-renderer.ts`.
-- [ ] **Scroll position is restored per view within ±2px**, a cell editor near the right edge flips
+      view tab carries a context menu. **The "today" recorded here is stale as of 2026-09-06: both
+      exist, landed by other legs.** `duplicateView` (`database-view.ts:3899`) is proven
+      config-identical-but-for-id in `database-view-settings-landing.test.ts`, and the view-tab menu
+      ships from `toolbar-renderer.ts:1144, :1280` rather than
+      `active-view-controls-renderer.ts`. The row stays unticked because AC-004 also asks for
+      `Duplicate view` / `Remove view` as the settings panel's last section, which is not built.
+- [x] **Scroll position is restored per view within ±2px**, a cell editor near the right edge flips
       instead of clipping at **92px**, a drag reorder under an active sort asks first, no context
       menu is ever empty, the empty state has its two flavours, and a per-view new-row preset is
-      applied at creation. **Today: every one of these six is absent**, and each carries its own
-      failing number in `checklist.md`.
+      applied at creation. **Closed 2026-09-06 — all six, AC-005 through AC-010 each `Met`.** Three
+      landed on `main` ahead of this packet and were proven rather than rebuilt (the sort-conflict
+      confirm, the new-row presets, and the editor clamp — which is unconditional rather than a
+      92px-gated flip, so it is stronger than the threshold asked for and the 92px figure is not
+      claimed as measured); three were built here (the per-view viewport map wired into
+      `switchView`, the never-empty floor on the bulk field menu, and the deleted-group-relation
+      empty state). Each carries a red-then-green control, re-run at verification for four of the
+      six. The original failing numbers stay in `checklist.md` as the before.
 - [ ] **`npm run gate` exits 0 with one permanent lane row per item, each observed red before
       green**, and `npm run replay` holds with reversed 0.
 - [ ] **The operator opens the board and a table on iOS and on desktop and reads the adopted

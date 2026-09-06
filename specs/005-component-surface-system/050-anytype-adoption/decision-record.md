@@ -1,21 +1,22 @@
 ---
 title: "Decision Record: Anytype Adoption"
-description: "ADR-003 the capture outranks the research where they disagree, and the seven places they do. ADR-004 six thresholds are restated before any of them may be observed red. ADR-005 the measured Anytype geometry is adopted and its two contrast values are refused."
+description: "ADR-003 the capture outranks the research where they disagree, and the seven places they do. ADR-004 six thresholds are restated before any of them may be observed red. ADR-005 the measured Anytype geometry is adopted and its two contrast values are refused. ADR-007 a seventh threshold restates to a regression guard on a measured false premise."
 trigger_phrases:
   - "050 decision record"
   - "anytype adoption adr"
   - "capture wins decision"
   - "threshold restatement decision"
   - "anytype contrast refusal"
+  - "typing position regression guard"
 importance_tier: "important"
 contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/050-anytype-adoption"
-    last_updated_at: "2026-09-05T22:45:00Z"
+    last_updated_at: "2026-09-06T04:00:00Z"
     last_updated_by: "markdown-leaf"
-    recent_action: "recorded adr-006, the boundary with the new 056 and 057 whole-view packets"
-    next_safe_action: "Execute T002 against the restated thresholds"
+    recent_action: "recorded adr-007, the seventh threshold restated on a measured false premise"
+    next_safe_action: "Execute T002, T003, T007 and T015, the four items still open"
     blockers: []
     key_files:
       - "specs/005-component-surface-system/050-anytype-adoption/design-trueup.md"
@@ -33,6 +34,7 @@ _memory:
       - "Does the sweep reach the six surfaces the first pass could not? Partly — view settings, the layout picker, the filter panel, the property and value pickers and the object context menu were reached; a view-tab right-click, an open cell editor, a drag under a sort and any phone filter surface were not."
       - "Do REQ-005 and REQ-011 need a visual reference? No. Confirmed at T001; both are behaviour and their tasks should stop carrying a capture field."
       - "Does the sticky scrollbar belong to the board only? No. The grid carries it at identical geometry."
+      - "Does a row jump mid-keystroke in a sorted view? No. The popover editor installs no oninput handler and the table renderer carries no sort, so the threshold is a guard rather than a build."
 ---
 # Decision Record: Anytype Adoption
 
@@ -396,3 +398,98 @@ The boundary, stated so neither side re-litigates it:
   implements; it does not inherit the requirement.
 <!-- /ANCHOR:adr-006-alternatives -->
 <!-- /ANCHOR:adr-006 -->
+
+---
+
+<!-- ANCHOR:adr-007 -->
+## ADR-007: The typing-position threshold restates to a regression guard, because its premise is false on this tree
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-06 |
+| **Deciders** | Operator (the restatement rule), implementation leg (the measurement), verification leg (the confirmation) |
+
+---
+
+<!-- ANCHOR:adr-007-context -->
+### Context
+
+Item 11 was written as a build: *the row jumps mid-keystroke in a sorted view, so add a position
+lock that holds it until the edit commits.* The failing value it asked for — a keystroke count
+before the first jump — was to be recorded in `checklist.md` before anything was implemented.
+
+ADR-004 restated six thresholds because their premises did not survive first contact with this
+tree. This is a seventh, found later, and it is recorded here rather than only in the task row
+because a restatement that lives only beside the work it excuses is not reviewable.
+
+**The premise was measured, not argued.** Four readings of the shipped source, each re-run
+independently during verification:
+
+1. `cell-renderer.ts:2992` — `editFileName` builds a `save` closure and hands the whole edit to
+   `editSingleLinePopover`. It writes nothing into the cell itself; the comment at `:3025` already
+   said so, and the delegation confirms it.
+2. `cell-renderer.ts:2658-2786` — that popover installs exactly one handler on its input,
+   `input.onkeydown` at `:2758`, and it reacts to three keys: Enter, Tab, Escape. **There is no
+   `oninput`**, so no keystroke reaches anything beyond the input's own value.
+3. `cell-renderer.ts:3013` — the rename write, `dataSource.renameNote`, sits inside `save()`.
+   `save()` is reachable from three places only: the two committing keys above, and the
+   outside-mousedown handler at `:2749`. A keystroke that is not Enter or Tab cannot reach it.
+4. `table-renderer.ts` — `grep -c '\.sort('` returns **0**. The renderer carries no ordering of its
+   own; it paints the array the pipeline hands it, and a fresh array arrives only through
+   `refresh()`.
+
+A row therefore cannot move before the edit that would move it has committed. The failing value the
+task asked for cannot be produced, because the defect it describes is not present.
+<!-- /ANCHOR:adr-007-context -->
+
+<!-- ANCHOR:adr-007-decision -->
+### Decision
+
+**The threshold restates from a build to a regression guard.** It now reads: the edited row holds
+its index through every keystroke, and repositions at most once, on commit or blur — which is what
+the four readings above show the code already does.
+
+Two constraints come with the restatement, both taken from ADR-004:
+
+- **The guard must be able to fail.** `table-renderer-position-lock.test.ts` pins the four facts as
+  a source contract and was observed red by adding a live `input.oninput` handler that would have
+  violated fact 2, green with it removed. A guard nobody can turn red is a comment.
+- **The item is not counted as an adoption.** Nothing was borrowed from the reference here; the
+  behaviour is ours and predates the packet. The row closes as *already true and now guarded*, not
+  as *implemented*.
+<!-- /ANCHOR:adr-007-decision -->
+
+<!-- ANCHOR:adr-007-consequences -->
+### Consequences
+
+- Seven of this packet's thresholds have now been restated against the tree rather than the
+  research — the six in ADR-004 plus this one. The pattern is consistent enough to be worth naming:
+  a threshold derived from reading another product's source will describe our defect only by
+  coincidence.
+- The reference's own mechanism, named in the research as a release point after an edit, is **not
+  adopted and not needed**. Adopting it would have added a lock around a race this tree does not
+  have.
+- The guard is a source contract, not a behavioural test, and that is a real limit: it proves the
+  four facts hold in the source, not that a browser honours them. What would confirm the stronger
+  claim is a mounted editor driven through a keystroke sequence with the row index read between
+  each; nothing in this repository mounts a live cell editor today.
+<!-- /ANCHOR:adr-007-consequences -->
+
+<!-- ANCHOR:adr-007-alternatives -->
+### Alternatives rejected
+
+- **Implement the lock anyway, defensively.** Rejected: it would guard a race that cannot occur on
+  this tree, and the restraint rule is explicit that a mechanism no current requirement earns does
+  not get built. It would also be untestable red-first, which is the same defect the original row
+  had.
+- **Close the row as "already met" with no guard.** Rejected: the property is cheap to break — one
+  `oninput` handler added to the popover for an unrelated reason would do it silently, and no other
+  test in the suite would notice.
+- **Leave the row open until a live editor harness exists.** Rejected: that makes an item's status
+  depend on test infrastructure nobody has scheduled, and the consequence above records the gap
+  where a reader will find it.
+<!-- /ANCHOR:adr-007-alternatives -->
+<!-- /ANCHOR:adr-007 -->
