@@ -93,4 +93,21 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     const dark = ruleBody(".theme-dark .note-database-container .db-calendar-week-timed-event");
     expect(dark.replace(/\s+/g, " ").trim()).toBe("color: #DDDDDD;");
   });
+
+  it("pins the phone week/day time grid's minimum column width to the width a split overlap block still reads at", () => {
+    const body = ruleBody(".is-phone .note-database-container .db-calendar.db-calendar-week");
+    expect(body.replace(/\s+/g, " ").trim()).toBe("--db-calendar-phone-week-col-min: 80px;");
+
+    // Both synchronised in-flow tracks read the same token, so a future edit that widens one
+    // without the other silently un-syncs the header from the columns beneath it.
+    const headerDays = ruleBody(".is-phone .note-database-container .db-calendar-time-header-days");
+    const alldayCols = ruleBody(".is-phone .note-database-container .db-calendar-week-allday-cols");
+    for (const track of [headerDays, alldayCols]) {
+      expect(track).toContain("minmax(var(--db-calendar-phone-week-col-min, 80px), 1fr)");
+      expect(track).toContain("overflow-x: auto");
+    }
+
+    const timeColumns = ruleBody(".is-phone .note-database-container .db-calendar-time-columns");
+    expect(timeColumns).toContain("minmax(var(--db-calendar-phone-week-col-min, 80px), 1fr)");
+  });
 });

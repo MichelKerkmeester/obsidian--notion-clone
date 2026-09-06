@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-06T08:11:09.408Z",
+  "measuredAt": "2026-09-06T08:28:36.569Z",
   "inputs": {
-    "styles.css": "894436af439b",
+    "styles.css": "4db0388c240d",
     "tools/screenshots/theme.css": "f30f295f9cf0",
     "tools/live/unstyled-links.mjs": "ab2e6ac25fc1",
     "tools/live/unstyled-links-measure.mjs": "d7730f407670",
     "tools/live/chrome-geometry-measure.mjs": "38d07f77ad63",
     "tools/live/render-assertion-bundle.mjs": "7a7b4222cbd7",
-    "tools/live/render-assertion-harness.ts": "86e5a99923be"
+    "tools/live/render-assertion-harness.ts": "ab1aca347a0f"
   },
   "fixture": {
     "links": 112,

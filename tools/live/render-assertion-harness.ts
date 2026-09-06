@@ -174,6 +174,32 @@ export const MAX_LAYOUT_READS = 8;
 export const CALENDAR_COLUMNS = 21;
 export const CALENDAR_ROWS = 1600;
 export const CALENDAR_FILL = 0.3;
+
+// Two genuinely timed events sharing an hour on the same day, so renderWeekTimedEvent splits
+// their day column instead of stacking two all-day segments. A Wednesday well inside the bench's
+// own February window, matching EVENT_MONTH in calendar-render-bench.ts, so
+// calendarWeekStart/calendarDay resolve inside a model the calendar actually builds rather than
+// pinning a week the row set never populates.
+export const OVERLAP_TIMED_DATE = "2026-02-04";
+
+/** calendarOverlapTimed's fixture: exactly two rows, both `datetime`-timed and both landing on
+ *  `OVERLAP_TIMED_DATE`, so `buildCalendarTimedEventLayouts` puts them in the same two-column
+ *  overlap `assignTimedColumns` packs — the shape a phone-width overlap column's title has no
+ *  room in only exists on this path. */
+function makeOverlapTimedRows(): RowData[] {
+  return [
+    {
+      file: { path: "notes/notion-sync.md", basename: "Notion sync", name: "Notion sync.md" },
+      frontmatter: { event_date: `${OVERLAP_TIMED_DATE}T14:00`, event_end: `${OVERLAP_TIMED_DATE}T15:30` },
+      computed: {},
+    },
+    {
+      file: { path: "notes/q1-renewals-sweep.md", basename: "Q1 renewals sweep", name: "Q1 renewals sweep.md" },
+      frontmatter: { event_date: `${OVERLAP_TIMED_DATE}T14:30`, event_end: `${OVERLAP_TIMED_DATE}T15:00` },
+      computed: {},
+    },
+  ] as unknown as RowData[];
+}
 export const TIMELINE_COLUMNS = 21;
 export const TIMELINE_ROWS = 1600;
 export const TIMELINE_FILL = 0.3;
@@ -420,6 +446,16 @@ export interface ScenarioSpec {
    * scenario stubbing the bag member to `() => null`.
    */
   calendarRecordIcon?: boolean;
+  /**
+   * Opt-in, renderer "calendar", scale "week"/"day" only: replaces the bench fixture's rows with
+   * exactly two genuinely timed events overlapping the same hour on the same day — real
+   * `datetime` start and end fields (the bench's own rows are `date`-typed, so they always land
+   * in the all-day lane and never exercise `renderWeekTimedEvent`'s overlap-column split at all).
+   * A phone-width overlap column's title has nowhere to sit only on this path: two blocks
+   * sharing a day column, each halved to `calc(50% - 8px)`, is what a narrow column leaves no
+   * room for a title in.
+   */
+  calendarOverlapTimed?: boolean;
   /**
    * Opt-in, renderer "table" only: wires the `setupColumnHeader` bag member to a real
    * `ColumnHeaderController.setup` — the same wiring `database-view.ts` uses — so every header
@@ -2512,12 +2548,20 @@ export function runRenderAssertions(
     const baseColumns = makeCalendarColumns(CALENDAR_COLUMNS, scenario.captureData ? "mixed" : "text");
     const columns = scenario.emptyState
       ? baseColumns.filter((col) => col.type !== "date" && col.type !== "datetime")
-      : baseColumns;
-    const rows = makeCalendarRows(
-      scenario.captureData ? CAPTURE_ROWS : CALENDAR_ROWS,
-      columns,
-      scenario.captureData ? CAPTURE_FILL : CALENDAR_FILL,
-    );
+      : scenario.calendarOverlapTimed
+        ? [...baseColumns, { key: "event_end", label: "Event end", type: "datetime" } as ColumnDef]
+        : baseColumns;
+    if (scenario.calendarOverlapTimed) {
+      const eventDateColumn = columns.find((col) => col.key === "event_date");
+      if (eventDateColumn) eventDateColumn.type = "datetime";
+    }
+    const rows = scenario.calendarOverlapTimed
+      ? makeOverlapTimedRows()
+      : makeCalendarRows(
+        scenario.captureData ? CAPTURE_ROWS : CALENDAR_ROWS,
+        columns,
+        scenario.captureData ? CAPTURE_FILL : CALENDAR_FILL,
+      );
     if (scenario.captureData) applyCaptureOptions(columns, rows);
     const baseConfig = makeCalendarConfig(columns, scale);
     const iconKey = scenario.calendarRecordIcon
@@ -2527,7 +2571,9 @@ export function runRenderAssertions(
       ? { ...baseConfig, calendarStartDateField: undefined }
       : scenario.calendarRecordIcon
         ? { ...baseConfig, showRecordIcon: true, recordIconFieldOverrideEnabled: true, recordIconField: iconKey }
-        : baseConfig;
+        : scenario.calendarOverlapTimed
+          ? { ...baseConfig, calendarEndDateField: "event_end", calendarWeekStart: OVERLAP_TIMED_DATE, calendarDay: OVERLAP_TIMED_DATE }
+          : baseConfig;
     const bag = scenario.bag === "file-view" ? fileViewCalendarBag(columns) : embedCalendarBag(columns);
     if (scenario.calendarRecordIcon) {
       // Every bench row already carries an event date (calendar-render-bench.ts's makeRows sets

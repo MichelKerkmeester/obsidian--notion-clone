@@ -675,6 +675,7 @@ export class CalendarRenderer {
 		this.renderAllDaySection(sticky, config, weekDays);
 		this.renderTimeGrid(wrap, config, weekDays);
 		this.scrollTimeGridToWorkday(wrap, config, weekDays.map((day) => day.dateKey));
+		this.syncPhoneWeekHorizontalScroll(wrap);
 	}
 
 	private renderDay(container: HTMLElement, config: ViewConfig, rows: RowData[]): void {
@@ -703,6 +704,7 @@ export class CalendarRenderer {
 		this.renderAllDaySection(sticky, config, [day]);
 		this.renderTimeGrid(wrap, config, [day]);
 		this.scrollTimeGridToWorkday(wrap, config, [day.dateKey]);
+		this.syncPhoneWeekHorizontalScroll(wrap);
 	}
 
 	private renderTimeHeaderRow(parent: HTMLElement, sizingWrap: HTMLElement, config: ViewConfig, days: CalendarDayModel[]): void {
@@ -1509,6 +1511,37 @@ export class CalendarRenderer {
 			const startHour = Number.isFinite(config.calendarStartHour) ? (config.calendarStartHour as number) : 0;
 			const top = ((minutes / 60) - startHour) * getCalendarHourHeight(config);
 			if (top > 0) scroller.scrollTop = Math.max(0, wrap.offsetTop + top - 72);
+		});
+	}
+
+	/** Phone only. The header day-names, the all-day segments and the timed-event columns
+	 *  each get their own `overflow-x: auto` (styles.css) rather than one shared scroller, because
+	 *  the header/all-day pair sits inside the vertically `position: sticky` wrap and wrapping it
+	 *  in a new horizontally-scrolling ancestor would swallow that stickiness — its scrollport
+	 *  would become the sticky element's own reference frame instead of the page. Mirroring
+	 *  `scrollLeft` across the three keeps them panning together without touching that ancestor. */
+	private syncPhoneWeekHorizontalScroll(wrap: HTMLElement): void {
+		if (!this.isPhoneLayout()) return;
+		const panels = [
+			wrap.querySelector<HTMLElement>(".db-calendar-time-header-days"),
+			wrap.querySelector<HTMLElement>(".db-calendar-week-allday-cols"),
+			wrap.querySelector<HTMLElement>(".db-calendar-week-body"),
+		].filter((el): el is HTMLElement => el != null);
+		if (panels.length < 2) return;
+		let syncing = false;
+		for (const panel of panels) {
+			panel.addEventListener("scroll", () => {
+				if (syncing) return;
+				syncing = true;
+				for (const other of panels) if (other !== panel) other.scrollLeft = panel.scrollLeft;
+				syncing = false;
+			}, { passive: true });
+		}
+		// Deferred a frame so the columns have their laid-out widths (and scrollWidth) before
+		// scrollIntoView measures them — the same reason scrollTimeGridToWorkday above defers.
+		window.requestAnimationFrame(() => {
+			const todayCol = panels[panels.length - 1]?.querySelector<HTMLElement>(".db-calendar-week-day-col.is-today");
+			todayCol?.scrollIntoView({ inline: "center", block: "nearest" });
 		});
 	}
 

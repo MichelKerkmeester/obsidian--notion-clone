@@ -17554,6 +17554,79 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   justify-content: center;
 }
 
+/* Phone week/day time grid: a minimum column width, so the week pans
+ * sideways instead of dividing an already-narrow column further.
+ *
+ * The floor has to clear the WORST case a column carries, not the common
+ * one, because a day with two events overlapping the same hour splits its
+ * column in half (`left: calc(N% + 4px); width: calc(W% - 8px)` in the
+ * renderer) and the halved block then pays the block inset and the
+ * content's own padding out of that half. Measured at 402px against the
+ * week fixture, title paint box per split block: at 45px it is 4.5px and
+ * 0.5px — zero glyphs, a sub-pixel sliver of the first letter; 64px gives
+ * 14px, one glyph; 72px gives 18px, two; 80px gives 22px, three glyphs
+ * plus the ellipsis, which is the same legibility an UNSPLIT block already
+ * has at the phone month grid's own cell width. So 80px is where a split
+ * block reads as a title rather than as ink.
+ *
+ * 80px is also the min this product already calls a readable week/month
+ * calendar column: it is the floor `getCalendarColumnWidthRange` clamps a
+ * dragged custom column to. The two arrived independently and agree.
+ *
+ * The cost is the pan: seven 80px columns need 560px against the ~286px a
+ * 402px phone leaves for them, so roughly half a week is in frame at a
+ * time and today's column is scrolled to on open.
+ *
+ * Scoped to `.db-calendar-week` so it covers the day scale too (renderDay
+ * adds that same class). These are new selectors, not edits to the shared
+ * default rules above — desktop is untouched. */
+.is-phone .note-database-container .db-calendar.db-calendar-week {
+  --db-calendar-phone-week-col-min: 80px;
+}
+
+/* Each of the two in-flow tracks (header day-names, all-day segments) gets
+ * its own horizontal scroll: `min-width: 0` overrides the grid item's
+ * implicit auto min-width, which would otherwise refuse to shrink below the
+ * seven-column content and push the row wider than the viewport — a
+ * page-level overflow, not a contained one — and `overflow-x: auto` turns
+ * the resulting minmax() overflow into a pan instead of a silent clip. The
+ * hour gutter is a separate, un-scrolled grid column in each row (52px,
+ * declared above), so it never needs `position: sticky` — it simply is not
+ * part of the box that scrolls. */
+.is-phone .note-database-container .db-calendar-time-header-days {
+  grid-template-columns: repeat(var(--db-calendar-time-day-count, 7), minmax(var(--db-calendar-phone-week-col-min, 80px), 1fr));
+  min-width: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.is-phone .note-database-container .db-calendar-week-allday-cols {
+  grid-template-columns: repeat(var(--db-calendar-time-day-count, 7), minmax(var(--db-calendar-phone-week-col-min, 80px), 1fr));
+  min-width: 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+/* The time-grid body: `.db-calendar-time-columns` is absolutely positioned
+ * (`inset: 0`) so it never gets its own overflow box — the minmax()
+ * overflow spills into its containing block, `.db-calendar-week-body`,
+ * which is where the scroll actually lives. The existing `overflow: hidden`
+ * there (desktop rule, above) clips vertical overscroll; this only widens
+ * the x-axis to auto, leaving that y clip untouched. */
+.is-phone .note-database-container .db-calendar-week-body {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.is-phone .note-database-container .db-calendar-time-columns {
+  grid-template-columns: repeat(var(--db-calendar-time-day-count, 7), minmax(var(--db-calendar-phone-week-col-min, 80px), 1fr));
+}
 
 /* Calendar options popover (reuse existing chart options styles) */
 .note-database-container .db-calendar-options-popover {

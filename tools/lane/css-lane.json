@@ -1,7 +1,7 @@
 {
-  "holder": "052-dropdown-menu-and-picker-componentization",
-  "acquiredAt": "2026-09-06T23:05:00Z",
-  "baselineHash": "894436af439b",
+  "holder": "057-calendar-anytype-parity",
+  "acquiredAt": "2026-09-06T23:55:00Z",
+  "baselineHash": "4db0388c240d",
   "baselineCommit": "03aa151d",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -4207,6 +4207,26 @@
         "screenshots/notion-clone/components/dropdown-field-mobile-light.png"
       ],
       "note": "Operator instruction (2026-09-06 ~08:15, verbatim: \"every dropdown on desktop should support search. So you click on it, the dropdown opens and input becomes input active state allowing you to also search for the item\"): every desktop dropdown built through the shared primitive is now a combobox. A field's own trigger is replaced in place by the query input (`.db-dropdown-field-input`, the button hidden by `.db-dropdown-field.is-editing`); a menu whose anchor the caller owns keeps its query field first in the panel and now renders it for every list. The `> 8` count gate is the phone sheet's alone, so 044's grammar is untouched. Three rules added, nothing existing changed. The stylesheet hash moved, which invalidates every capture's recorded source hash: full sweep, 554 captured, and the ten named above are the ones whose picture actually moved against origin/main. All ten were opened and read in both themes and both device profiles: `constructed-dropdown` (three options) now carries the panel search row a short list gets; `constructed-dropdown-search` is rebuilt on `createDropdownField`, so its desktop profile shows the trigger mid-search (\"ri\" narrowing nine properties to Priority and Risk burn) and its phone profile the sheet's own search row under its header, with the trigger still a button; the `dropdown-field` fixture's markup was brought back into line with the panel the code now builds. Sixteen captures moved bytes with identical pixelHash and layoutHash across two sweeps of the same tree and were restored to their committed bytes rather than committed as churn. `screenshots:verify`, `check-lane` and the 26-lane gate all exit 0 on this tree."
+    },
+    {
+      "event": "acquire",
+      "phase": "057-calendar-anytype-parity",
+      "at": "2026-09-06T23:55:00Z",
+      "hash": "894436af439b",
+      "note": ""
+    },
+    {
+      "event": "release",
+      "phase": "057-calendar-anytype-parity",
+      "at": "2026-09-07T00:20:00Z",
+      "hash": "4db0388c240d",
+      "reviewed": [
+        "screenshots/notion-clone/views/calendar-week-time-grid-mobile-dark.png",
+        "screenshots/notion-clone/views/calendar-week-time-grid-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-calendar-week-mobile-dark.png",
+        "screenshots/notion-clone/views/constructed-calendar-week-mobile-light.png"
+      ],
+      "note": "Phone week/day time grid given a minimum column width and a horizontal pan. Four new .is-phone rules, none of them an edit to a shared default: a --db-calendar-phone-week-col-min token on .db-calendar.db-calendar-week, and minmax(var(--db-calendar-phone-week-col-min, 80px), 1fr) tracks on .db-calendar-time-header-days, .db-calendar-week-allday-cols and .db-calendar-time-columns, with overflow-x: auto plus min-width: 0 on the first two and on .db-calendar-week-body so the overflow is contained rather than pushed onto the page. Desktop is untouched by construction. The value is 80px and NOT the month grid's phone cell the ruling's parenthetical named: measured at DPR 2 on calendar-month-view-mobile-light.png the month cell is an 87.4 device px pitch (43.7 CSS) with 84-86 device px of content, and at 45px a day carrying two events in the same hour halves its column to a 4.5px and 0.5px title paint box, zero glyphs. The 45px recapture decoded 8 and 2 device px of title ink for the overlap pair against 4 and 0 before the fix, a partial letter either way. Swept on the same fixture the split block regains one glyph at 64px, two at 72px and three plus the ellipsis at 80px, which is also the floor getCalendarColumnWidthRange already clamps a dragged desktop week column to. Read on the landed captures at DPR 2: the day-column pitch is exactly 160 device px = 80 CSS, and \"Figma sync\" goes from 5 glyph runs over a 33 device px extent (\"Fig...\") to 9 runs over 118 device px, the whole title. All four reviewed files were opened. Only these four moved pixelHash out of 554; twelve byte-only re-encodes were restored to their committed bytes, constructed-calendar-day-mobile-* among them since the day scale has one column and the minimum never binds. Gantt guards held: zero-line diff on src/views/calendar-timeline-renderer.ts, all eight reference-gantt-*.png MD5-identical to origin/main, pm-gantt occurrence counts unchanged. engine-parity re-derived on the merged tree carries no calendar row this edit added; the pan itself was confirmed in WebKit, where the seven columns resolve at 80px and the three tracks report scrollWidth 560 against clientWidth 294 while documentElement and body stay 402/402."
     }
   ],
   "outstanding": [

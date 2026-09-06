@@ -271,4 +271,101 @@ its measured ratio or size.
   deviation on product grounds, which is why it needs its own accepted ADR rather than a footnote.
 - `050`'s two refusals carry over: the `#232323` row highlight at 1.14:1, and colour-only
   active-state signalling.
+
+---
+
+## ADR-005: T018's phone week/day time grid gets a minimum column width, not a wrapped title or a hairline
+
+**Status**: **Accepted** — 2026-09-06 ~08:55, operator, verbatim option: *"Phone week scrolls
+horizontally with a minimum column width."* `roadmap.md` §6A carries the same ruling as an
+operator decision on record.
+
+**Context.** T018 found that ADR-002's flatten (T017) costs the phone an overlap-column timed
+block its only remaining way to read as "an event is here": with no per-event fill, a halved
+column at the phone's default width leaves the title's own text box a handful of device pixels
+wide, decoding as a clipped glyph or no ink at all. Three candidate remedies were named and none
+of them is free: a minimum column width (widens the grid, may need horizontal scroll), a wrapped
+rather than clipped phone title (reopens the flat 20px/44px chip pitch T015 and the phone touch
+floor both settled), or the 1px shared hairline ADR-002 itself declined when it ruled the existing
+slot lines were separator enough. Each spends a value or a geometry this packet had already
+closed, which is why T018 named the choice the operator's rather than picking one in-repo.
+
+**Decision.** **A minimum column width, sized to what a SPLIT column still reads at.** The exact
+figure is **80px**.
+
+The first pass took the ruling's parenthetical literally and landed **45px**, the month grid's own
+phone cell. That value is faithful to the wording and fails the sentence beside it. Measured on
+the recaptured phone capture at DPR 2, the month grid's phone cell is a 87.4 device px pitch
+(43.7 CSS px) with 84-86 device px of content, so 45px is indeed "about the month grid's cell" —
+but a day carrying two events in the same hour splits its column, and the halved block pays the
+block inset and the content padding out of that half. At 45px the split block's title paint box is
+**4.5px and 0.5px** — zero glyphs. The recaptured 45px files read the same way: the overlap pair
+decoded **8 and 2 device px** of title ink, a partial "D" and a sliver of "1", against **4 and 0**
+before the fix. The ruling says blocks always have room for a title; 45px moved that reading from
+nothing to nothing.
+
+80px is the measured point where it stops being nothing. Swept on the week fixture at 402px, the
+split block's title paint box goes 4.5px at 45px → 14px at 64px (one glyph) → 18px at 72px (two)
+→ **22px at 80px, three glyphs plus the ellipsis** — the same legibility an UNSPLIT block already
+has at the month cell's own width. A literal first word ("Design" in the fixture) would need
+114px, which spends more than the defect costs. 80px is also the floor this product already calls
+a readable week/month calendar column: `getCalendarColumnWidthRange` clamps a dragged custom
+column to it. The two arrived independently and agree, and the operator's "readable minimum" is
+the half of the ruling that binds when the two halves cannot both hold.
+
+Below that width the week and day time grids (`.is-phone` only; the day scale carries the same
+`db-calendar-week` class) now pan horizontally inside their own scroll boxes rather than shrinking
+columns further — three independent tracks (header day-names, all-day segments, timed-event
+columns) since the header/all-day pair sits inside the vertically `position: sticky` wrap and a
+single new scrolling ancestor there would swallow that stickiness; `syncPhoneWeekHorizontalScroll`
+(`calendar-renderer.ts`) mirrors `scrollLeft` across the three so they read as one surface, and
+scrolls today's column into view on open. The hour gutter is a separate, un-scrolled 52px grid
+column in each row, so it never leaves the viewport. Desktop is untouched — every new rule is
+`.is-phone`-scoped, added beside the shared default rules rather than edited into them.
+
+**What it costs.** Seven 80px columns need 560px against the ~286px a 402px phone leaves for them,
+so roughly half a week is in frame at a time. That is the trade the ruling chose when it chose
+scrolling, taken at the width the readability half of the ruling actually requires.
+
+**Why not the other two.** A wrapped title reopens the flat chip pitch (20px desktop, 44px phone)
+T015 and the touch floor both fixed at a specific number — the timed block's height is
+duration-proportional, but its *title* taking two lines mid-block is a font-metrics change the
+chip grammar was never asked to carry, and nothing in twenty Anytype captures shows a two-line
+week/day title to measure it against. The 1px hairline is ADR-002's own declined option, kept
+declined here: the defect is a title with nowhere to sit, not an ambiguous boundary between two
+blocks, and a separator does not widen anything.
+
+**Consequences.**
+- `styles.css` gains one new token, `--db-calendar-phone-week-col-min: 80px`, read by
+  `minmax(var(--db-calendar-phone-week-col-min, 80px), 1fr)` everywhere the phone week/day grid
+  used to read `minmax(0, 1fr)` — a token per the ruling's own instruction to write the value
+  once, not a literal repeated at each call site.
+- The grid's per-track `min-width: auto` (the implicit grid-item floor, distinct from the
+  `minmax()` track minimum above) has to be overridden to `0` on the header and all-day tracks, or
+  the un-overridden implicit floor would grow those rows past the viewport instead of letting the
+  new `overflow-x: auto` contain it — a page-level overflow, which `tools/live/sheet-grammar.mjs`'s
+  overflow sweep must stay green against.
+- `calendar-pinned-values.test.ts` pins the token's value and the two synchronised tracks'
+  `minmax()` + `overflow-x` declarations, and `render-assertions.mjs` gained a phone-profile
+  scenario (`calendarOverlapTimed`) asserting the overlap pair's title carries visible ink past a
+  measured floor — red on the pre-ruling geometry, green after. The floor is **16px**, set between
+  the two states the real renderer measures at a 286px container: token at `0px` gives a 8px block
+  and **3px and 1px** of title ink; the shipped 80px gives a 32px block and **27px and 25px**.
+- The pan was confirmed on the engine a phone actually runs. In WebKit and in Chromium alike the
+  seven columns resolve at 80px, the three tracks report `scrollWidth` 560 against `clientWidth`
+  286/294, driving the body track to `scrollLeft` 200 moves the header and all-day tracks to 200,
+  and today's column scrolls itself into the body's box on open (`scrollLeft` 0 → 137 Chromium,
+  0 → 133 WebKit). `document.documentElement` and `document.body` both stay 402/402 with
+  `scrollLeft` 0, so the pan is contained and the page does not scroll sideways.
+- **Named, not taken:** the halving itself is the producer. Staggering overlapping blocks the way
+  a phone calendar usually does — each later block inset a fixed amount and keeping the column's
+  remaining width — would give every block a readable title at the month cell's own 45px and cost
+  no extra panning at all. It changes `calendar-renderer.ts`'s overlap layout rather than a width,
+  which is a different mechanism from the one the ruling named, so it is recorded here for the
+  operator rather than folded into this landing.
+
+**Alternatives rejected.** Decide it in-repo, without naming a candidate to the operator: rejected
+under the same reasoning ADR-002 gave its own open question — the geometry a fixed value spends is
+one this packet already closed once (T015's chip pitch, the phone touch floor), and re-closing it
+silently is the class of decision goal D6 exists to route to the operator instead.
 <!-- /ANCHOR:decisions -->
