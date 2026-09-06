@@ -1,7 +1,7 @@
 {
-  "holder": "056-board-anytype-parity",
-  "acquiredAt": "2026-09-06T21:10:00Z",
-  "baselineHash": "76bc949c272b",
+  "holder": "058-card-title-and-title-formats",
+  "acquiredAt": "2026-09-06T22:05:00Z",
+  "baselineHash": "PENDING_HASH",
   "baselineCommit": null,
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -4556,6 +4556,32 @@
         "screenshots/notion-clone/components/board-empty-column-mobile-light.png"
       ],
       "note": "Full recapture (578 entries). Eight captures moved pixels, all eight opened and read, and none of them moved because of the stylesheet edit itself: the two board element-capture fixtures shifted by the container's inline padding, which tools/screenshots/theme.css now restores for a .db-kanban-view element capture. It had been zeroing that padding, which left .db-kanban-board's negative inline margins with nothing to cancel and the board hanging 8px past its container, where #shot clips it — absorbed until now by the vertical scrollbar lane this edit removed, and reported by capture.mjs's own crop check as 4 failed captures the moment it went away. Controls run before the harness was touched: the same two scenarios recapture clean against the pre-edit stylesheet, and widening the declared width moves the overhang instead of removing it. The desktop four now frame the whole board; the mobile pair keeps the right-edge clip of the empty lane's chip it already had at HEAD, shifted by the same padding, because that fixture is wider than the phone frame. Everything else in the corpus moved bytes only: 17 byte-only re-encodes were restored to their committed bytes rather than recommitted as churn, their manifest pixelHash/layoutHash unchanged."
+    },
+    {
+      "event": "acquire",
+      "phase": "058-card-title-and-title-formats",
+      "at": "2026-09-06T22:05:00Z",
+      "hash": "76bc949c272b",
+      "note": "Taken over from 056-board-anytype-parity at its own released hash, with nothing outstanding against it. This hold has been re-based twice: it was first taken from 056 at c29425ed5800 on a parallel branch, then from 057-calendar-anytype-parity at f7ed89a8e7f5, and each time another holder landed the same lane first. The edit below sits on top of whatever the lane released last rather than beside it."
+    },
+    {
+      "event": "release",
+      "phase": "058-card-title-and-title-formats",
+      "at": "2026-09-06T22:07:00Z",
+      "hash": "PENDING_HASH",
+      "reviewed": [
+        "screenshots/notion-clone/components/board-card-title-currency-desktop-dark.png",
+        "screenshots/notion-clone/components/board-card-title-currency-desktop-light.png",
+        "screenshots/notion-clone/components/board-card-title-currency-mobile-dark.png",
+        "screenshots/notion-clone/components/board-card-title-currency-mobile-light.png",
+        "screenshots/notion-clone/panels/panel-record-detail-title-currency-desktop-dark.png",
+        "screenshots/notion-clone/panels/panel-record-detail-title-currency-desktop-light.png",
+        "screenshots/notion-clone/panels/panel-record-detail-title-currency-mobile-dark.png",
+        "screenshots/notion-clone/panels/panel-record-detail-title-currency-mobile-light.png",
+        "screenshots/notion-clone/panels/panel-record-detail-sheet-title-currency-mobile-dark.png",
+        "screenshots/notion-clone/panels/panel-record-detail-sheet-title-currency-mobile-light.png"
+      ],
+      "note": "One additive rule pair, .db-view-config-row-clickable (cursor + hover/focus-visible background), marking board-card-properties-panel.ts's Title fixed slot as a row that opens the titleField picker rather than only reporting it — no existing declaration touched. cascade-audit.mjs confirms 131 conflicts before and after (0 new). Full recapture: 588 entries, verify.mjs exit 0. Ten captures carry this edit's content, all three new title-field-display scenarios (board-card-title-currency, panel-record-detail-title-currency, panel-record-detail-sheet-title-currency), each opened and read in both themes; the board fixture needed db-kanban-view added to its own container class list for the kanban-scoped chip-text-colour override to apply — a fixture-markup fix, not a stylesheet one. Seventeen further captures moved bytes at identical pixelHash and are restored to their committed bytes."
     }
   ],
   "outstanding": [
