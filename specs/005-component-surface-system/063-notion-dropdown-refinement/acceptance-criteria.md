@@ -11,15 +11,16 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/063-notion-dropdown-refinement"
-    last_updated_at: "2026-09-06T18:20:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Authored the acceptance criteria from the Notion research synthesis"
+    last_updated_at: "2026-09-06T19:40:00Z"
+    last_updated_by: "option-colour-picker-research-session"
+    recent_action: "Added AC-012 to AC-016 for ADR-004's labelled colour list"
     next_safe_action: "Observe AC-001's assertion red, then close it"
     blockers:
       - "AC-005 is blocked on 052's open T008 and T009"
       - "AC-009 is the operator's and is never ticked by an agent"
     key_files:
       - "src/views/dropdown-field.ts"
+      - "src/views/option-color-picker.ts"
       - "styles.css"
       - "tools/live/constructed-state-assertions.mjs"
     session_dedup:
@@ -31,6 +32,7 @@ _memory:
       - "Which surfaces does the measured cramped condition actually select"
     answered_questions:
       - "The trailing check is a landed ruling, not a new decision"
+      - "The colour picker is a labelled list, ruled 2026-09-06 ~19:08 (ADR-004)"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: acceptance-criteria | v2.2 -->
 # Acceptance Criteria: Notion Dropdown, Menu and Picker Refinement
@@ -76,6 +78,11 @@ rebase, not carried over from the research loop's pre-rebase citations.
 | AC-009 | REQ-006 | Given the whole packet, When `npm run gate` runs, Then it exits 0 with the extended `constructed-dropdown` row green, having been observed red first | `npm run gate`, `$?` read; T001's red recorded in `tasks.md` with its own exit status | Unmet | - |
 | AC-010 | REQ-007 | Given `052`'s two stale completion-criterion "Today:" texts, When they are refreshed, Then they describe the landed tree and no checkbox anywhere changed state | `git diff` on `052/goal.md` showing prose-only changes; no `- [ ]` → `- [x]` and no reverse | Unmet | - |
 | AC-011 | REQ-004 | Given the operator, When they open dropdowns, menus and pickers on iOS and on desktop, Then they read the family as refined and the escalation as selecting the surfaces they called cramped | The operator's own report. Never ticked by an agent | Unmet | - |
+| AC-012 | REQ-008 | Given the option colour picker on desktop, When it opens, Then it emits sixteen `.db-dropdown-option` rows and zero `.db-color-picker-swatch` elements, each row carrying a 16px leading colour dot, the colour's visible name, and `.db-dropdown-option-check` as its last element child on the current one only | `rg -n 'db-color-picker-swatch' src styles.css` returns 0 hits, plus a case in `src/views/option-color-picker.test.ts`, a file this packet creates, counting the rows and asserting the check's position. Red today: 16 swatches, 0 rows, check drawn inside the swatch (`option-color-picker.ts:72-88`) | Unmet | - |
+| AC-013 | REQ-008 | Given the picker's geometry, When it is measured, Then the desktop row is at least 30px tall and the panel resolves to 224px, and the phone row is at least 44px tall — the family's own floors, not new numbers | Read `popover-host.ts` `SWATCH_PICKER_POPOVER` (`minWidth`/`preferredWidth`/`maxWidth` all 224, was 124 at `:236-240`) and the computed box of a rendered row against `styles.css:3245` (30px) and `:3188` (44px). Anytype's measured 28px row is declined with its reason in ADR-004's Constraints | Unmet | - |
+| AC-014 | REQ-008 | Given the phone sheet holding sixteen rows, When it opens, Then the sheet does not exceed the grammar's existing `90svh` cap, the list scrolls inside it rather than the sheet growing, and the current colour's row is scrolled into view | A case in the same new `src/views/option-color-picker.test.ts` asserting the scroll-into-view call, plus the re-taken `constructed-option-color-picker-mobile-*` pair opened and read. 16 x 44px is 704px before chrome, so on a 844px viewport the cap binds and the assertion is not vacuous | Unmet | - |
+| AC-015 | REQ-008 | Given each of the sixteen `OPTION_COLORS`, When its row renders, Then the visible label resolves through `t()` and no raw enum value reaches the DOM as text | A case iterating `OPTION_COLORS` and asserting each label differs from the raw key in at least one shipped locale, plus `rg -n 'title: color' src/views/option-color-picker.ts` returning 0 hits (1 today, at `:79`) | Unmet | - |
+| AC-016 | REQ-008 | Given `048`'s registered pair for this picker, When the shape changes, Then both halves are re-taken and the phone scenario photographs the sheet rather than the desktop popover | `npm run screenshots:verify` `$?` read, then the four PNGs opened and looked at. Red today in a second way: `field-option-color-picker-mobile-light.png` is shape-identical to its desktop twin, so the registered phone capture shows no sheet at all | Unmet | - |
 
 ### Status values
 
@@ -102,7 +109,10 @@ waiver is treated as an unmet criterion rather than as a pass.
 
 **Closeable:** No
 
-Eleven criteria, all `Unmet`, none waived. The packet was opened by a research synthesis and no
+Sixteen criteria, all `Unmet`, none waived. The packet was opened by a research synthesis and no
 code has changed yet. AC-011 is the operator's and cannot be closed here; AC-007 waits on `052`'s
-open T008 and T009, which own the caller files.
+open T008 and T009, which own the caller files. AC-012 to AC-016 arrived with the operator's
+2026-09-06 ~19:08 ruling on the option colour picker and are ADR-004's; AC-016 also carries a
+capture defect that predates the ruling — the registered phone pair does not photograph the phone
+grammar.
 <!-- /ANCHOR:closure -->

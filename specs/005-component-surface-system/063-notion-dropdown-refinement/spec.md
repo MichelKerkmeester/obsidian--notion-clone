@@ -142,6 +142,7 @@ landed ruling.
 | REQ-001 | The dropdown popover's selection check is the row's last element child and occupies a trailing 16px track, in every context variant that re-specs `.db-dropdown-option`'s grid, with `aria-selected` and `aria-activedescendant` behaviour unchanged. |
 | REQ-004 | A desktop dropdown whose anchored placement is measurably cramped presents instead as a sheet opened by a dedicated button, decided once in the dropdown primitive rather than per call site, with `044`'s sheet grammar and `048`'s stacking model held green. |
 | REQ-006 | The `constructed-dropdown` lane marker asserts the trailing check, is observed failing on today's tree with its exit status read, and `npm run gate` exits 0 afterwards. |
+| REQ-008 | The option colour picker presents its sixteen colours as a one-column labelled list — a leading colour dot, the colour's visible translated name, and the family's trailing check on the current one — on desktop and on the phone alike, built from `.db-dropdown-option` rather than a new layout, with the swatch width role widened to Anytype's measured 224px. |
 
 ### P1 - Required (complete OR user-approved deferral)
 

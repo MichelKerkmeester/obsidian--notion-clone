@@ -11,12 +11,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/063-notion-dropdown-refinement"
-    last_updated_at: "2026-09-06T18:20:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Opened the packet from the dropdown family's Notion research synthesis"
+    last_updated_at: "2026-09-06T19:40:00Z"
+    last_updated_by: "option-colour-picker-research-session"
+    recent_action: "Added the eighth completion criterion from the ~19:08 colour-picker ruling"
     next_safe_action: "Run T001, the red-first DOM-order assertion, and read its exit status"
     blockers:
-      - "ADR-004 and ADR-005 are Proposed and operator-owned"
+      - "ADR-005 is Proposed and operator-owned"
       - "styles.css edits are serialized by the parent's CSS lane"
       - "dropdown-field.ts and menu-row.ts are 052's file group, taken one leg at a time"
       - "T005 and T006 ride 052's open T008/T009 legs and do not open those files alone"
@@ -25,6 +25,7 @@ _memory:
       - "src/views/menu-row.ts"
       - "src/views/date-value-picker.ts"
       - "src/views/popover-host.ts"
+      - "src/views/option-color-picker.ts"
       - "styles.css"
       - "tools/live/constructed-state-assertions.mjs"
       - "specs/005-component-surface-system/052-dropdown-menu-and-picker-componentization/research/research.md"
@@ -153,6 +154,16 @@ motivate it, and our own `file:line`.
       fails on today's tree with its exit status read, passes after, and the
       `constructed-dropdown` capture is re-taken and opened, with the pixel read owed to an
       image-capable leg per D5.
+- [ ] **The option colour picker is a one-column labelled list — dot, visible name, trailing tick —
+      on desktop and on the phone alike.** Added 2026-09-06 ~19:08 from the operator's ruling,
+      verbatim: *"Check fibery, anytype and notion and suggest best ui ux"* (ADR-004, REQ-008).
+      **Today: RED, 16 of 16.** `option-color-picker.ts:72-88` emits sixteen unlabelled
+      `db-color-picker-swatch` buttons into a 96px wrapping flex box, with the check drawn inside
+      the selected swatch rather than trailing in a row. Thresholds: sixteen `.db-dropdown-option`
+      rows and zero swatches; a 16px leading dot; the desktop row at the family's 30px floor
+      (`styles.css:3245`) and the phone row at 44px (`:3188`); the panel at Anytype's measured
+      224px; the phone sheet inside the grammar's existing `90svh` cap with the list scrolling and
+      the current row scrolled into view; every one of the sixteen names resolving through `t()`.
 - [ ] **The operator opens dropdowns, menus and pickers on iOS and on desktop and reads them as
       refined.** Only the operator closes this row.
 <!-- /ANCHOR:completion -->

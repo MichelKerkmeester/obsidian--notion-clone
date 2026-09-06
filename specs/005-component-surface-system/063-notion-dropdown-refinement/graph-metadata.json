@@ -58,7 +58,9 @@
       "tools/screenshots/scenarios/core.mjs",
       "tools/lane/css-lane.json",
       "specs/005-component-surface-system/052-dropdown-menu-and-picker-componentization/goal.md",
-      "repo-rules/screenshot-currency.md"
+      "src/views/option-color-picker.ts",
+      "src/views/popover-host.ts",
+      "tools/screenshots/scenarios.mjs"
     ],
     "entities": [
       {
@@ -152,9 +154,21 @@
         "source": "derived"
       },
       {
-        "name": "screenshot-currency.md",
-        "kind": "doc",
-        "path": "repo-rules/screenshot-currency.md",
+        "name": "option-color-picker.ts",
+        "kind": "code",
+        "path": "src/views/option-color-picker.ts",
+        "source": "derived"
+      },
+      {
+        "name": "popover-host.ts",
+        "kind": "code",
+        "path": "src/views/popover-host.ts",
+        "source": "derived"
+      },
+      {
+        "name": "scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios.mjs",
         "source": "derived"
       },
       {
@@ -192,23 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The dropdown, menu and picker family came out of `052` substantially aligned with both of its",
     "created_at": "2026-09-06T16:06:28Z",
-    "last_save_at": "2026-09-06T16:21:23.123Z",
+    "last_save_at": "2026-09-06T18:09:20.888Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,13 +222,13 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:64f6b1f65363bae8e7d112ac587fdd21f50797d4bb67fcba63b1c490653e602f",
+    "source_fingerprint": "sha256:fb2db22803e2ba2cd32c2231c037243c004a10498b5a62cbd00bf8f79bb0df2d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "33d2ee10d82f602f0432132299ca316acfe432fb2666547b43d79706461aa8b8",
+      "spec.md": "27ba9d37ce6fc505921920ab08bd0981b86fd907451ad7a801d6760aca3248a5",
       "plan.md": "673736d52eb35ad469a88a07199339d36dffb4f0b871f201f95d577566499199",
-      "tasks.md": "2ed7184cee1489bdb743a79d5d22ff313a87dac9387692040758544d90555d02",
-      "decision-record.md": "a2097c11acb593cf48e49ebdaf69b112955e475fff2498cdb63b1f7d9232b59f",
+      "tasks.md": "815bc34bdb65be848ff56e170dca4fa17ad35766b3c22edeabee96f05cfd45bd",
+      "decision-record.md": "8857972197e9e1964907ed605051933fcd447ef7f4e9dbfe5772390e35347499",
       "implementation-summary.md": "b92b5233e9324960d961dd2d9bd84e53d644fd1614f27375ec7a83ce459d5c7f"
     },
     "last_active_at": null

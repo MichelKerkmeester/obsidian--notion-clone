@@ -1,11 +1,12 @@
 ---
 title: "Tasks: Notion Dropdown, Menu and Picker Refinement"
-description: "Twelve legs: three that make the reds visible, six that close them, and three that verify — each naming its command and reading its exit status."
+description: "Seventeen legs: four that make the reds visible, nine that close them, and four that verify — each naming its command and reading its exit status."
 trigger_phrases:
   - "063 tasks"
   - "notion dropdown refinement tasks"
   - "check flip task"
   - "sheet escalation task"
+  - "colour picker labelled list task"
 importance_tier: "important"
 contextType: "general"
 ---
@@ -116,6 +117,37 @@ red states the value it observed before and after, not the value it expected.
       nothing and un-ticks nothing** (D1); it corrects prose that describes a pre-landing tree.
       Runnable immediately and independent of every other leg.
       (`specs/005-component-surface-system/052-dropdown-menu-and-picker-componentization/goal.md`)
+- [ ] T014 [P0] Take the colour-picker inventory before touching it, and paste the output here:
+      `rg -n 'SWATCH_PICKER_POPOVER|db-color-picker-swatch|db-color-picker-popup|db-color-picker-body' src tools styles.css`
+      and `rg -n 'openOptionColorPicker' src`. Known today and to be confirmed, not assumed: the
+      width role has exactly one consumer (`option-color-picker.ts:124`), and the stylesheet pins
+      `width: 96px` (`styles.css:7277-7294`) over that role's declared 124
+      (`popover-host.ts:236-240`), so the rendered panel is 96 and the role is dead weight. A leg
+      that widens the role without this list is guessing which surfaces move. (`specs/.../063-.../tasks.md`)
+- [ ] T015 [P0] Rebuild the picker as a labelled list (ADR-004, REQ-008). `option-color-picker.ts`
+      emits `.db-dropdown-option.has-swatches` rows — 16px leading dot, translated colour name,
+      `.db-dropdown-option-check` trailing on the current one — instead of
+      `db-color-picker-swatch` buttons, and list navigation replaces `getGridNavigationTarget`
+      (`:118`). `SWATCH_PICKER_POPOVER` goes 124 -> **224**, Anytype's measured panel width
+      (`052/anytype-menu-grammar.md` G15). Sixteen colour-name keys join `src/i18n/`, and
+      `title: color` (`:79`) goes with the swatch it labelled. **Red first:** a new
+      `src/views/option-color-picker.test.ts` asserting 16 rows and 0 swatches, observed failing
+      with `$?` read against today's 16 swatches and 0 rows. Requires T003's CSS lane hold.
+      (`src/views/option-color-picker.ts`, `src/views/popover-host.ts`, `src/i18n/`, `styles.css`)
+- [ ] T016 [P0] Delete the grid's own stylesheet block rather than leaving it inert:
+      `.db-color-picker-popup`'s `width: 96px` and swatch rules (`styles.css:7277-7322`) and the
+      phone sheet's 44px swatch rules (`:12895-12920`). The list takes the family's
+      `.db-dropdown-option` geometry, so the phone row's 44px floor comes from `:3188` rather than
+      from a rule of its own. Assert afterwards that `rg -n 'db-color-picker-swatch' src styles.css`
+      returns 0. Same CSS lane hold as T015. (`styles.css`)
+- [ ] T017 [P0] Re-register and re-take the `048` pair, and fix the phone scenario while doing it.
+      `field-option-color-picker-mobile-light.png` is currently shape-identical to its desktop twin
+      — a 4x4 anchored grid with no sheet and no header — so the registered phone capture has never
+      photographed the phone grammar; only the `constructed-` pair does. Update the scenario's
+      `sources` to name `option-color-picker.ts`, `popover-host.ts` and `styles.css`, run
+      `npm run screenshots`, then `npm run screenshots:verify` and read `$?`, then **open all four
+      PNGs and look at them** (`screenshot-currency.md` §1 and §5).
+      (`tools/screenshots/scenarios.mjs`, `screenshots/notion-clone/fields/`)
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -134,8 +166,9 @@ red states the value it observed before and after, not the value it expected.
       `roadmap.md` §6A). (`tools/lane/css-lane.json`, `screenshots/`)
 - [ ] T013 [P0] **Operator row — never ticked by an agent.** The operator opens dropdowns, menus and
       pickers on iOS and on desktop and reads them as refined: the check trailing under their own
-      theme, the submenu rows saying what is currently chosen, the date presets resolved, and the
-      escalated sheet appearing on the surfaces they called cramped rather than on others.
+      theme, the submenu rows saying what is currently chosen, the date presets resolved, the
+      escalated sheet appearing on the surfaces they called cramped rather than on others, and the
+      colour picker reading as a named list rather than a block of hues.
 <!-- /ANCHOR:phase-3 -->
 
 ---
