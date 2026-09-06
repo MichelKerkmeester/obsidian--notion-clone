@@ -2,7 +2,7 @@
   "holder": "051-modal-and-sheet-componentization",
   "acquiredAt": "2026-09-06T20:00:00Z",
   "baselineHash": "c6c1ce7e15f4",
-  "baselineCommit": "pending",
+  "baselineCommit": "fe2d3be7",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
