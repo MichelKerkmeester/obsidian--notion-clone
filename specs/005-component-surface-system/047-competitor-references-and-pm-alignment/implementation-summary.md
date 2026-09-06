@@ -10,9 +10,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/047-competitor-references-and-pm-alignment"
-    last_updated_at: "2026-09-06T14:30:00Z"
-    last_updated_by: "evernote-mobbin-harvest"
-    recent_action: "Harvested 1,557 Evernote iOS and web references from Mobbin into screenshots/evernote"
+    last_updated_at: "2026-09-06T18:15:00Z"
+    last_updated_by: "fibery-mobbin-harvest"
+    recent_action: "Harvested 1,800 Fibery web references from Mobbin into screenshots/fibery"
     next_safe_action: "Write the negative control red-first against the current schema"
     blockers:
       - "manifest-schema.mjs rejects any reference group but project-manager"
@@ -79,6 +79,7 @@ _memory:
 |------|--------|---------|
 | `tools/screenshots/manifest-schema.test.mjs` | Added | The reference-entry negative control, written red-first against the un-widened contract |
 | `tools/screenshots/manifest-schema.mjs` | Edited | Rejects a `file` whose path climbs out of its capture root through a `..` segment |
+| `screenshots/fibery/` | Added | 1,800 Mobbin preview captures of Fibery web (860 distinct screen ids: 105 sidebar, 597 standalone, 1,098 across 233 flows) with a README index citing a `mobbin_url` for every capture; untracked by the manifest like Anytype — `tasks.md` T032 |
 
 No file under `src/` and no rule in `styles.css` was touched. The gantt comparison below is the
 reason: it found nothing in either file to change.
@@ -161,6 +162,10 @@ too. The pinned constants agree with the pixels: `ROW_HEIGHT 44`, `HEADER_HEIGHT
 #### Evernote captures, 2026-09-06
 
 `screenshots/evernote/` now holds the Evernote iOS and web references harvested from Mobbin's MCP search tools (T031): 105 search screens per platform, 105 iOS and 170 web flows, 1,557 files, each cited by Mobbin URL in its README; the harvest ran as scripted Code Mode loops, and a bare `Evernote` query with every known id excluded returned nothing on both platforms, so 105 per platform is the whole search index rather than a sample. Unlike the Notion harvest, the group folders are content-derived: one query returned every screen, so each file was filed and described from the image, and six group files opened at landing all sat in a folder they depict.
+
+#### Fibery captures, 2026-09-06
+
+`screenshots/fibery/` now holds the Fibery web references harvested from Mobbin's MCP search tools (T032): 1,800 files carrying 860 distinct screen ids — 105 sidebar screens, 597 standalone screens and 1,098 files across 233 flow folders, with 700 ids filed both standalone and inside a flow and 158 only inside a flow. Web only, so there is no `ios/` lane. The index in `screenshots/fibery/README.md` is **per file for the 702 non-flow captures and per flow folder for the 1,098 flow files**, a flow's single `mobbin_url` citing every image in its folder; at landing the index and disk agreed 1:1 on all 1,800 paths, every file was a valid RIFF/WebP 768 px wide, and twelve images opened at random were Fibery desktop chrome with the Mobbin footer. Unlike Evernote and like the first Notion pass, the grouping is query-derived rather than content-verified — `web/screens/` is deliberately flat because a screen is reached by many queries — so the T035 reclassification pass is owed here in full.
 
 <!-- /ANCHOR:how-delivered -->
 

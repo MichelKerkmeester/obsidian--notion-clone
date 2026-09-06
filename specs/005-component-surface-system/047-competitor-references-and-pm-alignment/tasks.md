@@ -254,10 +254,33 @@ One app landed and verified before the next opens. Never a parallel fan-out acro
       all carrying the Mobbin footer). One claim corrected in the README before landing: the
       provenance said a few web captures differ in size, and none does. App version unknown — neither
       Mobbin tool returns one and the app pages 403 without a browser session
-- [ ] T032 [B] Harvest Fibery (web only) via Mobbin, same orchestration, into
+- [x] T032 [B] Harvest Fibery (web only) via Mobbin, same orchestration, into
       `screenshots/fibery/web/<group>/`; landed by a fresh verifier before T033 opens.
-      **Running since 2026-09-06 ~16:04** in `worktrees/150-harvest-fibery`. Unmerged and
-      unverified, which under D3 is shipped-at-most: no count from it is quotable as landed
+      **Done and landed 2026-09-06** from `worktrees/150-harvest-fibery`, on the operator's words
+      "let fresh fable (medium) orchestrator through claude2 use sonnet agents to harvest all
+      screenshots from Fibery that can be harvested from Mobbin" — web only, so there is no `ios/`
+      lane. **1,800 `webp` files, 860 distinct screen ids** — `web/navigation/` 105,
+      `web/screens/` 597, `web/flows/` 1,098 files across 233 flow folders; 700 ids appear both
+      standalone and inside a flow, 158 only inside a flow. Pulled across two sessions (the first
+      was cut off by a session cap after 1,755 downloads; the second fetched the 45 it had found
+      but not downloaded, then re-swept to convergence) through the Mobbin MCP: `search_screens`
+      (55 app-scoped surface queries, `mode: "standard"`, `limit: 15`) and `search_flows` (28
+      journey queries, paged to `has_next_page`). The sweep stopped after nine consecutive screen
+      queries and eight consecutive flow queries returned only known ids. No 401 and no 429. Two
+      things worth keeping: an `exclude_screen_ids` list of ~860 ids makes the API return zero
+      screens silently, so exclusion is per query with client-side dedup; and Mobbin serves 768 px
+      WebP previews with its footer strip, not full-resolution captures. Verified before landing:
+      `screenshots/fibery/README.md` and disk agree 1:1 on all 1,800 paths with no duplicate path
+      and every row carrying an `https://mobbin.com` URL, every file is a valid RIFF/WebP with none
+      under 1 KB and every one 768 px wide, no screen id repeats inside a folder, the folder is
+      38.6 MB, and twelve images were opened and read (all Fibery desktop web chrome, all carrying
+      the Mobbin footer). One shape correction to the claim it landed under: the index is
+      **per file for the 702 non-flow captures and per flow folder for the 1,098 flow files** —
+      a flow's single `mobbin_url` cites every file in its folder — and the README says so rather
+      than claiming a row per image. `screenshots/manifest.json` is untouched and
+      `node tools/screenshots/verify.mjs` exits 0, for the same schema reason as Anytype (T034).
+      Grouping is query-derived, not content-verified: `web/screens/` is deliberately flat, so the
+      T035 reclassification pass is owed here in full
 - [ ] T033 [B] Harvest ClickUp (iOS + web) via Mobbin, same orchestration, into
       `screenshots/clickup/{ios,web}/<group>/`; landed by a fresh verifier.
       **Queued under Opus xhigh** in `worktrees/151-harvest-clickup`, opening when T032 lands —
