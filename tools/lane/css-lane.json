@@ -1,8 +1,8 @@
 {
-  "holder": "057-calendar-anytype-parity",
-  "acquiredAt": "2026-09-06T11:55:00Z",
-  "baselineHash": "78ceeb6f89b3",
-  "baselineCommit": "575d40fa",
+  "holder": "053-toolbar-and-view-controls",
+  "acquiredAt": "2026-09-07T03:10:00Z",
+  "baselineHash": "fb7ad189edbc",
+  "baselineCommit": "c7fed705",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -4312,6 +4312,29 @@
         "screenshots/notion-clone/views/constructed-calendar-month-unscheduled-mobile-light.png"
       ],
       "note": "Operator report, 2026-09-06 ~10:33, verbatim: \"For calendar the unscheduled pinned stuff needs to be done better. Like more subtlely integrated, check how anytype or other would do that.\" The decision record's ADR-006 compares four integrations - keep the band restyled, drop the surface entirely (rejected: an undated note has no other home in this plugin), a persistent sidebar list (rejected: no sidebar role exists in this app's shell), and the chosen header chip plus shared owned-menu popover/sheet - and picks the chip. Stylesheet change and its whole extent: the entire .db-calendar-backlog block (drawer, header, toggle, list, item, and the collapsed and completed states) deleted; two rules added - .db-calendar-nav-button.is-text.db-calendar-unscheduled-chip at var(--text-muted) with a --text-normal hover, and .db-owned-menu .db-menu-item.is-completed .db-menu-item-label taking the month chip's own line-through in the done accent - plus one grid rule, .db-calendar-month-segment:has(> .db-calendar-month-dates) > .db-calendar-month-title { flex-grow: 0; }. Two reds measured and re-measured green in a real Chromium mount of the shipped renderer rather than read off the stylesheet text. FIRST: the chip's ink painted #DCDDDE (--text-normal) while the stylesheet said --text-muted, because the Today-label rule matches .is-text at the same weight and outranked a chip-class-only selector; the rule now carries the same control classes and measures #9A9B9E on both device profiles. SECOND: a multi-day title's flex box grew to 776px inside a 977px five-column segment and stranded its date range 784px from the title's own text; after the :has() rule the gap is the row's own 8px. Chip behaviour was read in that same mount rather than inferred: a <button> at tabIndex 0 carrying aria-haspopup and an aria-label, 20px tall on desktop and 44px on the phone, 8px after the year select, opening role=menu on desktop and a db-mobile-bottom-sheet with a drag handle on the phone, its row a role=menuitem button at tabIndex 0 with draggable true and a dragstart carrying application/x-note-database-unscheduled plus text/plain - so the drawer's drop payload survived the move to the popover. No sheet-grammar surface was added: the phone sheet is the already-registered owned-menu primitive, and sheet-grammar.mjs has a zero-line diff in this leg. Full sweep, 560 captured. Four captures carry this leg's pixels, all four opened in both themes and both device profiles: the constructed-calendar-month-unscheduled set, one chip reading \"Unscheduled . 1\" in muted ink beside the title, one multi-day chip reading title-then-range adjacent, and no band above the grid at any point. The four calendar-month-view fixture captures carry this lane's earlier multi-day fix and did not move again. Thirteen further captures re-encoded to different bytes at identical pixelHash and layoutHash and are restored to their committed bytes with the manifest's bytes field reconciled. Gantt guards held: git diff --stat on src/views/calendar-timeline-renderer.ts is empty against origin/main, all eight reference-gantt-*.png MD5s are identical to the pre-leg baseline, and the pm-gantt-* ratchet is 119. Gate from the final state: tsc 0, vitest 1453/1453 in 139 files, build 0, screenshots/verify.mjs 560 current exit 0."
+    },
+    {
+      "event": "acquire",
+      "phase": "053-toolbar-and-view-controls",
+      "at": "2026-09-07T03:10:00Z",
+      "hash": "78ceeb6f89b3"
+    },
+    {
+      "event": "release",
+      "phase": "053-toolbar-and-view-controls",
+      "at": "2026-09-07T03:35:00Z",
+      "hash": "fb7ad189edbc",
+      "reviewed": [
+        "screenshots/notion-clone/views/table-wrap-off-desktop-dark.png",
+        "screenshots/notion-clone/views/table-wrap-off-desktop-light.png",
+        "screenshots/notion-clone/views/table-wrap-off-mobile-dark.png",
+        "screenshots/notion-clone/views/table-wrap-off-mobile-light.png",
+        "screenshots/notion-clone/views/table-wrap-on-desktop-dark.png",
+        "screenshots/notion-clone/views/table-wrap-on-desktop-light.png",
+        "screenshots/notion-clone/views/table-wrap-on-mobile-dark.png",
+        "screenshots/notion-clone/views/table-wrap-on-mobile-light.png"
+      ],
+      "note": "Operator report (2026-09-06 ~10:25, verbatim: \"with wrap disabled you still have these huge table rows with too large height in current desktop version\"), and the two rulings that closed it (~11:25): \"View switch off clips everything\" and \"Honour the switch on phone\". The stylesheet edit is the second ruling's. .is-phone .note-database-container .db-table td:not(.db-select-col):not(.db-record-icon-col) set white-space: nowrap at five classes against td.db-cell-wrap's three, so on a phone the wrap switch had never wrapped text: turning it on stacked the value-container chips and left every sentence on one line. The wrapping cell is excluded from that declaration and keeps its 60vw width cap in a rule of its own, because the cap answers how much width a narrow screen may spend and the nowrap answered whether a cell may take a second line, which is the switch's question. The first ruling changed no CSS: it reversed the resolver so the view's switch gates the column's mode instead of losing to it. Sweep: 564 scenarios recaptured on this tree. Nothing already on main moved content -- 556 captures were byte-only re-encodes and were restored to their committed bytes rather than recommitted as churn. The eight named above are this lane's own; six were unchanged from the first commit and the two table-wrap-on-mobile pair are the only images in the whole sweep whose content moved, which is the phone fix photographed: the long sentence and the multi-line entry take real second lines on the phone where they used to clip. All eight were opened in both themes and both device profiles. The wrap-off pair holds uniform single-line rows with an ellipsis on the long entry; the wrap-on pair shows the same entries wrapped. screenshots:verify, the render-assertions wrap passes on both device profiles, and the 26-lane gate exit 0 on this tree."
     }
   ],
   "outstanding": [
