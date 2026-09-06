@@ -23,6 +23,7 @@ import { installPopoverAutoClose } from "./popover-auto-close";
 import { positionToolbarPopover } from "./popover-position";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "./property-type-icon";
 import { getOrderedRecordIconColumns, getRecordIconFieldLabel, resolveRecordIconField } from "../data/record-icon";
+import { buildShellHeader } from "./surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -66,8 +67,12 @@ export class CalendarTimelineToolbarRenderer {
     this.closePopover();
     const panel = containerEl.createDiv({ cls: "db-calendar-timeline-options-popover db-chart-options-popover" });
     this.popover = panel;
-    const header = panel.createDiv({ cls: "db-panel-header" });
-    header.createDiv({ cls: "db-panel-title", text: t("timeline.options") });
+    // Grab handle, centred title, 44x44 trailing close — the same shell every
+    // migrated sheet/popover header uses (surface-shell.ts).
+    buildShellHeader(panel, {
+      title: t("timeline.options"),
+      onClose: () => this.closePopover(),
+    });
     const content = panel.createDiv({ cls: "db-calendar-timeline-options-content" });
     this.popoverContent = content;
     this.renderTimelineOptions(content, config, actions);

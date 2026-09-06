@@ -364,6 +364,25 @@ with the owner named, never self-closed.
       flex-start` are scoped under `body.is-phone`, so a hypothetical desktop consumer of this same
       header keeps the leading-edge title the desktop captures show (`anytype-menu-set-view-layout-
       dark.png`'s `‹ Layout`) instead of inheriting a centring no desktop reference carries.
+
+**Addendum, 2026-09-06 — the two files this leg named as blocked-on-057 are migrated.** T011's own
+note above names `calendar-toolbar-renderer.ts:89` and `calendar-timeline-toolbar-renderer.ts:69`
+as sites this leg could not reach because the 057 calendar packet held both files. 057 migrated
+both to `buildShellHeader` itself, in its own commit, once its own legs touching those two files
+had landed: `calendar-toolbar-renderer.ts`'s `openPopover` (still line 89 in the pre-migration
+tree) and `calendar-timeline-toolbar-renderer.ts`'s `openPopover` (still line 69) each replace a
+hand-built `db-panel-header`/`db-panel-title` pair with `buildShellHeader(panel, { title, onClose:
+() => this.closePopover() })`, the same call shape T011's other eleven sites use. Verified rather
+than assumed: `node tools/live/sheet-grammar.mjs` still reports 12 surfaces and 31 pairs at exit 0
+(T012's own predicate reasoning above — `.db-panel-header > .db-panel-title` and `.db-sheet-close`
+still both exist, unchanged in shape — held for these two sites too); `calendar-timeline-
+renderer.ts` (the gantt itself, a different file from its toolbar) carries a zero-line diff; both
+popovers were recaptured (`constructed-calendar-toolbar-options-*`,
+`constructed-timeline-toolbar-options-*`) and read back showing the grab handle, centred title and
+44x44 close on phone, matching the other eleven sites. The count this file's own headline now
+reaches is 13 of 13 knowingly-migratable sites, `record-header.ts:106`'s named legacy synonym still
+excluded on its own recorded terms.
+
 - [x] **T012 — [P] Update `tools/live/sheet-grammar.mjs` rows in the same commit as any markup
       move.** **Threshold**: the twelve registered surfaces and thirty-one registered pairs stay
       green after every leg. **Red-first proof**: the negative control each row already carries.

@@ -25,6 +25,7 @@ import { positionToolbarPopover } from "./popover-position";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "./property-type-icon";
 import { getOrderedRecordIconColumns, getRecordIconFieldLabel, resolveRecordIconField } from "../data/record-icon";
 import { getCalendarColumnWidthRange, resolveCalendarCustomColumnWidth } from "../data/calendar-date-time";
+import { buildShellHeader } from "./surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -85,9 +86,12 @@ export class CalendarToolbarRenderer {
 		const panel = containerEl.createDiv({ cls: "db-calendar-options-popover db-chart-options-popover" });
 		this.popover = panel;
 
-		// Panel header
-		const header = panel.createDiv({ cls: "db-panel-header" });
-		header.createDiv({ cls: "db-panel-title", text: t("calendar.options") });
+		// Grab handle, centred title, 44x44 trailing close — the same shell every
+		// migrated sheet/popover header uses (surface-shell.ts).
+		buildShellHeader(panel, {
+			title: t("calendar.options"),
+			onClose: () => this.closePopover(),
+		});
 
 		// Sections render into a content wrapper so a scale change can rebuild them
 		// in place (week/day expose different settings than month) without reopening.

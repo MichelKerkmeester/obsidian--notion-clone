@@ -359,6 +359,17 @@ _memory:
       `constructed-calendar-month-desktop-light.png` carries a leading icon, one the real emoji
       variant and the rest the default file-icon fallback. `npm test` 1419/1419,
       `npx tsc --noEmit` exit 0, gantt confirmed unmoved by MD5.
+
+**Ancillary, not a numbered task: the two calendar toolbar headers `051` could not reach.**
+`051`'s own header-componentization leg named `calendar-toolbar-renderer.ts:89` and
+`calendar-timeline-toolbar-renderer.ts:69` as blocked-on-057 in its `tasks.md`. Both settings
+popovers' hand-built `db-panel-header`/`db-panel-title` pairs are replaced with
+`buildShellHeader(panel, { title, onClose })`, the same call every other migrated site in that
+packet uses — `calendar-timeline-renderer.ts` (the gantt itself, a different file from its own
+toolbar) is untouched, a zero-line diff. Recorded with file:line in `051`'s own `tasks.md` as its
+addendum. `node tools/live/sheet-grammar.mjs` still 12/31 at exit 0; `npm test` 1420/1420;
+`npx tsc --noEmit` exit 0; both popovers recaptured and read back showing the grab handle, centred
+title and 44x44 close on phone.
 <!-- /ANCHOR:phase-2 -->
 
 ---
