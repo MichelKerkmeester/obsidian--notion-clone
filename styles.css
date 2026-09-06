@@ -13279,10 +13279,10 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   border-radius: 0;
 }
 
-/* The desktop swatch is 18px, a mouse-only size the phone review flagged (P1 #9): a thumb needs the
-   same 44px floor `044`'s close button and every other coarse-pointer target in this plugin already
-   carries. The grid wraps rather than scaling the popup's own width, the same way every other sheet
-   grid in this family wraps its rows. */
+/* The desktop swatch is 18px, a mouse-only size: a thumb needs the same 44px floor the sheet close
+   button and every other coarse-pointer target in this plugin already carries. The grid wraps
+   rather than scaling the popup's own width, the same way every other sheet grid in this family
+   wraps its rows. */
 .db-mobile-bottom-sheet .db-color-picker-body .db-color-picker-swatch {
   width: 44px;
   height: 44px;
