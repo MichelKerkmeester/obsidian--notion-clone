@@ -236,6 +236,12 @@ const SCRIM_ALPHA_OVERRIDE = 0.9;
 // The Notion-measured menu band: alpha 0.61 gives a ratio of 0.39, inside the measured 0.35-0.44
 // band at the precision a single CSS constant can state.
 const SCRIM_ALPHA_MENU_DEFAULT = 0.61;
+// The four production `menu`-role surfaces (`design-trueup.md` row 26 and its siblings): read
+// their own real parent dim off the shared scrim rather than trusting the synthetic
+// `createSurfaceShell({ role: "menu" })` stand-in `__shellMenuScrimAlpha` proves the branch with.
+const MENU_ROLE_SURFACE_NAMES = ["owned-menu", "date-picker", "icon-picker", "option-color-picker"];
+const MENU_SCRIM_RATIO_MIN = 0.35;
+const MENU_SCRIM_RATIO_MAX = 0.44;
 
 // ───────────────────────────────────────────────────────────────────
 // 2h. THE ROW PITCH FLOOR
@@ -603,10 +609,15 @@ window.__sheetGrammar = (scenario) => {
     close();
     return report;
   }
-  let report = { mounted: false, sheetFound: false, grammar: null, listViewRow: null, closeBox: null, rightOverflow: null };
+  let report = { mounted: false, sheetFound: false, grammar: null, listViewRow: null, closeBox: null, rightOverflow: null, scrimAlphaRatio: null };
   runRenderAssertions(document.body, scenario, "", () => {
     const sheet = mountedSheet();
     const { closeBox, rightOverflow } = measureMountedSheet(sheet);
+    // Read while the sheet -- and so its scrim -- is still mounted. \`1 - alpha\` is the same
+    // computed-alpha method the page/stack/menu scrim rows already use rather than a decoded-pixel
+    // read, so a \`menu\`-role production surface's OWN band is asserted here rather than only the
+    // synthetic \`createSurfaceShell({ role: "menu" })\` stand-in \`__shellMenuScrimAlpha\` mounts.
+    const alpha = measureScrimAlpha();
     report = {
       mounted: true,
       sheetFound: Boolean(sheet),
@@ -615,6 +626,7 @@ window.__sheetGrammar = (scenario) => {
         .some((el) => el.textContent?.trim() === t("common.listView")) : null,
       closeBox,
       rightOverflow,
+      scrimAlphaRatio: alpha == null ? null : 1 - alpha,
     };
   });
   return report;
@@ -1423,6 +1435,10 @@ const measureStackedPair = async (pair) => {
   const parentDragBefore = rectSnapshot(parent);
   let dragParentUnchanged = false;
   const handle = top.querySelector(".db-mobile-bottom-sheet-handle");
+  // A menu-role child (design-trueup.md row 26) is satisfied by the ABSENCE of a handle, so
+  // neither the gap this handle would leave above the title nor the drag it would offer applies --
+  // both checks below are read as vacuously satisfied for this child rather than as "n/a" red.
+  const childIsMenuCard = top.classList.contains("db-mobile-menu-card");
   // The band between the grab handle and the title: the handle's own margins plus the header's
   // own top margin and row height account for every pixel a conforming sheet spends here, so a
   // gap past that budget is unclaimed space rather than chrome.
@@ -1474,6 +1490,7 @@ const measureStackedPair = async (pair) => {
     rootBackground,
     rootOpaque,
     handleToTitleGap,
+    childIsMenuCard,
     childKeyboard: childBottom === 336,
     parentKeyboard: parentBottom === 0,
     dragParentUnchanged,
@@ -2006,6 +2023,14 @@ try {
       if (!ok) failures.push(`${name}: ${report.rightOverflow.length} descendant(s) overflow the surface's right edge (${report.rightOverflow.slice(0, 3).join(", ")})`);
       console.log(`  ${ok ? "PASS" : "FAIL"}  ${name} — no descendant overflows the right edge${ok ? "" : `: ${report.rightOverflow.slice(0, 3).join(", ")}`}`);
     }
+    // The Notion-measured menu band, measured on the real production surface rather than only the
+    // synthetic `role: "menu"` stand-in the "menu scrim alpha" row below mounts.
+    if (MENU_ROLE_SURFACE_NAMES.includes(name)) {
+      const ratio = report.scrimAlphaRatio;
+      const ok = ratio != null && ratio >= MENU_SCRIM_RATIO_MIN && ratio <= MENU_SCRIM_RATIO_MAX;
+      if (!ok) failures.push(`${name}: parent dim ratio ${ratio == null ? "n/a" : ratio.toFixed(3)}, wanted ${MENU_SCRIM_RATIO_MIN}-${MENU_SCRIM_RATIO_MAX}`);
+      console.log(`  ${ok ? "PASS" : "FAIL"}  ${name} — parent dim ratio ${ratio == null ? "n/a" : ratio.toFixed(3)} (want ${MENU_SCRIM_RATIO_MIN}-${MENU_SCRIM_RATIO_MAX})`);
+    }
     console.log("");
   }
 
@@ -2061,10 +2086,18 @@ try {
       [`exactly one visible close control (found ${report.closeControlCount})`, report.singleCloseControl],
       [`header and body share one background (${report.headerBackground} vs ${report.bodyBackground})`, report.headerBodyBackgroundMatch],
       [`sheet root paints an opaque fill (${report.rootBackground})`, report.rootOpaque],
-      [`handle-to-title gap ≤${HANDLE_TO_TITLE_GAP_MAX_PX}px (measured ${report.handleToTitleGap == null ? "n/a" : report.handleToTitleGap.toFixed(1) + "px"})`, report.handleToTitleGap != null && report.handleToTitleGap <= HANDLE_TO_TITLE_GAP_MAX_PX],
+      // A `menu`-role child (design-trueup.md row 26) is satisfied by having no handle at all, so
+      // neither the gap a handle would leave nor the drag it would offer applies to it — both are
+      // read as satisfied-by-absence rather than as the "n/a"/false a handle-bearing child would
+      // report for a genuinely missing element.
+      report.childIsMenuCard
+        ? [`handle-to-title gap: n/a (menu-role child has no handle)`, true]
+        : [`handle-to-title gap ≤${HANDLE_TO_TITLE_GAP_MAX_PX}px (measured ${report.handleToTitleGap == null ? "n/a" : report.handleToTitleGap.toFixed(1) + "px"})`, report.handleToTitleGap != null && report.handleToTitleGap <= HANDLE_TO_TITLE_GAP_MAX_PX],
       ["keyboard inset belongs to child", report.childKeyboard && report.parentKeyboard],
       [`child depth ${report.depth} (want ${report.expectedDepth})`, report.depth === report.expectedDepth],
-      ["child drag leaves parent in place", report.dragParentUnchanged],
+      report.childIsMenuCard
+        ? ["child drag: n/a (menu-role child dismisses on tap, not drag)", true]
+        : ["child drag leaves parent in place", report.dragParentUnchanged],
       [`stack settles (${report.settleRecords} body mutations while idle)`, report.settleRecords === 0],
       ["parent entrance settled before measurement", report.parentSettled],
       ["child entrance settled before measurement", report.childSettled],

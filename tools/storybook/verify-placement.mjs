@@ -1558,46 +1558,35 @@ const menuResults = await section("the phone menu presentation", () => menuPhone
       + `content=${el.scrollHeight} visible=${el.clientHeight} `
       + `(unclamped these rows measure ${rowCount * 44}px, past a ${vh}px screen)`,
   });
+  // A menu-role card dismisses on a tap, not a drag, and carries no grab handle at all — the
+  // opposite of what this row asserted before that presentation shipped, when a menu still
+  // carried a bottom-sheet handle it had no gesture wired to.
   out.push({
-    name: "a phone menu carries the sheet's grab handle",
-    pass: Boolean(el.querySelector(".db-mobile-bottom-sheet-handle")),
+    name: "a phone menu carries no grab handle",
+    pass: !el.querySelector(".db-mobile-bottom-sheet-handle"),
     detail: `handle=${el.querySelector(".db-mobile-bottom-sheet-handle") ? "present" : "absent"} `
       + `classes=${el.className}`,
   });
-  // The owned menu is the tighter of the two surfaces that share the handle rule — its first row
-  // starts closer to the top than the add-view sheet's first field does — so it is the one that
-  // decides how far the band may reach. It had no check of its own: its band was a number written
-  // into a comment on another surface's check, and a number nothing re-asserts is how the
-  // double-counted arithmetic survived. Both ends are asserted here, because a band that clears the
-  // thumb minimum by eating the first row is not a fix.
+  // With no handle there is no band to test for stealing a row — the question becomes its
+  // opposite: does the tap that lands on the first row's own painted rect actually reach that
+  // row, with nothing invisible layered over it stealing the hit the way a handle's band used to.
   {
-    const h = el.querySelector(".db-mobile-bottom-sheet-handle");
-    const hb2 = h.getBoundingClientRect();
-    const hit2 = (x, y) => {
-      const e2 = document.elementFromPoint(Math.round(x), Math.round(y));
-      return Boolean(e2) && (e2 === h || h.contains(e2));
-    };
-    const cx2 = hb2.left + hb2.width / 2;
-    const cy2 = hb2.top + hb2.height / 2;
-    let u2 = 0;
-    let d2 = 0;
-    while (u2 < 80 && hit2(cx2, cy2 - u2 - 1)) u2 += 1;
-    while (d2 < 80 && hit2(cx2, cy2 + d2 + 1)) d2 += 1;
-    const band2 = u2 + d2 + 1;
     const rows = [...el.querySelectorAll(".db-menu-item")];
-    const stolenRows = rows.filter((row) => {
-      const rr = row.getBoundingClientRect();
-      const mid = document.elementFromPoint(Math.round(rr.left + rr.width / 2), Math.round(rr.top + rr.height / 2));
-      return Boolean(mid) && (mid === h || h.contains(mid));
-    });
-    const firstRowTop = rows.length ? Math.round(rows[0].getBoundingClientRect().top - r.top) : 0;
+    const firstRow = rows[0];
+    const rr = firstRow ? firstRow.getBoundingClientRect() : null;
+    const hitsFirstRow = rr
+      ? (() => {
+        const e2 = document.elementFromPoint(Math.round(rr.left + rr.width / 2), Math.round(rr.top + rr.height / 2));
+        return Boolean(e2) && (e2 === firstRow || firstRow.contains(e2));
+      })()
+      : false;
+    const firstRowTop = rr ? Math.round(rr.top - r.top) : null;
     out.push({
-      name: "a menu sheet's grab band is a thumb-sized target and takes no row with it",
-      pass: band2 >= 44 && hit2(cx2 + 120, cy2) && stolenRows.length === 0,
-      detail: `band ${band2}px (${u2} above the bar + ${d2} below + the centre pixel; want >= 44), `
-        + `reaching 120px sideways=${hit2(cx2 + 120, cy2)}; the band ends `
-        + `${Math.round(cy2 + d2 - r.top)}px from the sheet's top edge and the first row starts at `
-        + `${firstRowTop}px, ${stolenRows.length} of ${rows.length} rows answered by the band`,
+      name: "a handle-less menu sheet's first row takes its own tap, nothing steals it",
+      pass: rows.length > 0 && hitsFirstRow,
+      detail: rr
+        ? `first row starts ${firstRowTop}px below the sheet's top edge (header + section label), hit-test lands on it=${hitsFirstRow}`
+        : "no rows found",
     });
   }
 
@@ -1757,10 +1746,14 @@ const dragCase = async (distance, { pauseMs = 0, steps = 2 } = {}) => {
 };
 
 await section("the menu sheet's drag-to-dismiss gesture", async () => {
+  // A menu-role card carries no handle at all — it dismisses on
+  // a tap, not a drag. `dragCase` already detects that and returns `handle: false` rather than
+  // driving a gesture on nothing, so the pass condition treats "no handle" as the current, correct
+  // outcome, not a crash to route around.
   const longDrag = await dragCase(140);
   menuResults.push({
-    name: "dragging a menu sheet's handle down past the threshold dismisses it",
-    pass: longDrag.handle && !longDrag.mounted && !longDrag.scrim,
+    name: "a menu sheet carries no grab handle for a drag to dismiss by",
+    pass: !longDrag.handle,
     detail: longDrag.handle
       ? `dragged 140px (threshold 96): menu still mounted=${longDrag.mounted} backdrop=${longDrag.scrim ? "left behind" : "gone"}`
       : "the menu has no grab handle, so there is no gesture to drive",
@@ -1769,8 +1762,8 @@ await section("the menu sheet's drag-to-dismiss gesture", async () => {
   // reading rather than dismissing.
   const shortDrag = await dragCase(40, { pauseMs: 120, steps: 4 });
   menuResults.push({
-    name: "a short SLOW drag on the handle springs back instead of dismissing",
-    pass: shortDrag.handle && shortDrag.mounted && shortDrag.scrim,
+    name: "a menu sheet still carries no grab handle after a short slow drag attempt",
+    pass: !shortDrag.handle,
     detail: shortDrag.handle
       ? `dragged 40px slowly (distance threshold 96): menu still mounted=${shortDrag.mounted} backdrop=${shortDrag.scrim ? "present" : "gone"}`
       : "the menu has no grab handle, so there is no gesture to drive",
@@ -1786,7 +1779,10 @@ await section("the menu sheet's drag-to-dismiss gesture", async () => {
   //
   // The gesture is still driven, because reaching the handler is a real claim; what is asserted is
   // the decision, which is three numbers in and one out.
-  const flick = await dragCase(40, { pauseMs: 0, steps: 4 });
+  // The rule itself is pure and shared by every sheet, draggable or not — a menu-role card no
+  // longer has a bar to drive this gesture at, but the rule it would have consulted is still the
+  // one every OTHER sheet's drag-to-dismiss runs on, so it is asserted directly rather than
+  // dropped along with the handle.
   const flickRule = await menuPhone.evaluate(() => {
     const { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS } = globalThis.__flick;
     return {
@@ -1799,15 +1795,11 @@ await section("the menu sheet's drag-to-dismiss gesture", async () => {
   });
   menuResults.push({
     name: "the flick rule dismisses on speed and refuses a brisk drag, a tap and a rest",
-    pass: flick.handle && flickRule.genuine && !flickRule.brisk && !flickRule.tap && !flickRule.rested,
-    detail: flick.handle
-      ? `the shipped rule takes a genuine flick at 1.18 px/ms (${flickRule.genuine}), refuses a brisk`
-        + ` drag at 0.5 (${flickRule.brisk}), refuses a tap that travelled nowhere (${flickRule.tap})`
-        + ` and refuses a finger that rested before lifting (${flickRule.rested}), against a`
-        + ` ${flickRule.threshold} px/ms threshold. A real 40px gesture was driven at the bar and`
-        + ` left the menu mounted=${flick.mounted} — NOT asserted, because that number moved with`
-        + ` machine load rather than with the tree`
-      : "the menu has no grab handle, so there is no gesture to drive",
+    pass: flickRule.genuine && !flickRule.brisk && !flickRule.tap && !flickRule.rested,
+    detail: `the shipped rule takes a genuine flick at 1.18 px/ms (${flickRule.genuine}), refuses a brisk`
+      + ` drag at 0.5 (${flickRule.brisk}), refuses a tap that travelled nowhere (${flickRule.tap})`
+      + ` and refuses a finger that rested before lifting (${flickRule.rested}), against a`
+      + ` ${flickRule.threshold} px/ms threshold`,
   });
 });
 
@@ -2427,7 +2419,7 @@ await motionPhone.addScriptTag({ content: positionerJs });
 
 const motionResults = await section("the sheet entrance with motion allowed", () => motionPhone.evaluate(async () => {
   const out = [];
-  const { createOwnedMenu } = globalThis.__place;
+  const { createOwnedMenu, applySheetChrome } = globalThis.__place;
   // The vertical translation out of the computed matrix. Parsed rather than read through
   // DOMMatrixReadOnly so this stays inside the lint's browser-globals set.
   const offsetY = (el) => {
@@ -2478,10 +2470,17 @@ const motionResults = await section("the sheet entrance with motion allowed", ()
   // A gesture must be able to interrupt an entrance. The drag writes an inline transform, and an
   // inline value outranks the class the transition is running on — so the thumb takes the surface
   // over mid-flight instead of waiting the animation out.
-  const second = createOwnedMenu(document);
-  for (let i = 0; i < 10; i += 1) second.addRow({ icon: "pencil", label: `Row ${i}` });
-  second.showAt({ x: 200, y: 200 });
-  const rising = second.el;
+  //
+  // A menu-role card is the wrong fixture for this one: it dismisses on a tap, not a drag, and
+  // carries no grab handle to seize in the first place. A plain sheet is what this question is
+  // actually about, so it is built directly rather than borrowed from the menu builder above —
+  // and the handle only exists once the gesture itself draws it, so that call is made explicitly
+  // rather than assumed to follow from chrome alone.
+  const { attachSheetDragToDismiss } = globalThis.__a;
+  const rising = document.body.createDiv({ cls: "note-database-container" });
+  for (let i = 0; i < 10; i += 1) rising.createDiv({ text: `Row ${i}` });
+  applySheetChrome(rising, true);
+  attachSheetDragToDismiss(rising, () => undefined);
   const bar = rising.querySelector(".db-mobile-bottom-sheet-handle");
   const bb = bar.getBoundingClientRect();
   const grabX = bb.x + bb.width / 2;
@@ -3909,21 +3908,30 @@ const keyboardParityResults = await section("both sheet families under one keybo
   anchor.remove();
 
   const lifted = (before, after) => after.bottom < before.bottom - 1;
+  // A menu-role card bails out of the floating/flush classifier outright (`design-trueup.md` row
+  // 26 docks it, never floats it), so its resting bottom sits flush with the viewport while a
+  // panel's own 8px float inset (`--db-sheet-float-inset`) sits 8px short of it — the two were
+  // never going to share one absolute resting position once the menu stopped participating in
+  // that split. What both must still share is the LIFT itself: the same keyboard signal moving
+  // each sheet up by the same amount, whatever edge each one started from.
+  const menuLift = menuAtRest.bottom - menuLifted.bottom;
+  const panelLift = panelAtRest.bottom - panelLifted.bottom;
   out.push({
     name: "a menu sheet answers the keyboard the way a panel sheet does",
     pass: lifted(panelAtRest, panelLifted) && lifted(menuAtRest, menuLifted)
-      && Math.abs(menuLifted.bottom - panelLifted.bottom) <= 1
+      && Math.abs(menuLift - panelLift) <= 1
       && Math.abs(menuBack.bottom - menuAtRest.bottom) <= 1
       && Math.abs(panelBack.bottom - panelAtRest.bottom) <= 1,
     detail: `under one declared ${KEYBOARD}px keyboard (harness-supplied --keyboard-height=${KEYBOARD}px; `
       + `a device where the host publishes nothing is covered by "the sheet clears a keyboard `
       + `no host reported") — menu sheet bottom`
       + ` ${menuAtRest.bottom} -> ${menuLifted.bottom} -> ${menuBack.bottom} (lever`
-      + ` ${menuAtRest.lever} -> ${menuLifted.lever} -> ${menuBack.lever}); panel sheet bottom`
+      + ` ${menuAtRest.lever} -> ${menuLifted.lever} -> ${menuBack.lever}, lift ${menuLift}px);`
+      + ` panel sheet bottom`
       + ` ${panelAtRest.bottom} -> ${panelLifted.bottom} -> ${panelBack.bottom} (lever`
-      + ` ${panelAtRest.lever} -> ${panelLifted.lever} -> ${panelBack.lever}).`
-      + ` Stated across the two surfaces rather than about one: two sheets on one screen answering`
-      + ` the same signal differently is the defect, whichever of them is right`,
+      + ` ${panelAtRest.lever} -> ${panelLifted.lever} -> ${panelBack.lever}, lift ${panelLift}px).`
+      + ` Compared by lift amount, not absolute position — the menu docks flush and the panel`
+      + ` floats with an 8px inset, so their resting edges differ by design`,
   });
 
   // ── resource ownership, over ten cycles rather than one ──
@@ -4367,16 +4375,16 @@ const keyboardParityResults = await section("both sheet families under one keybo
   bandAnchor.remove();
   await tick();
 
+  // A menu-role card carries no handle at all — `walkBand` already answers 0px for a
+  // sheet with none, so the menu side of this comparison is now "has no band", not "has a
+  // smaller one". The record sheet's own band against the control floor is still the live
+  // question for a sheet that DOES keep its handle.
   out.push({
-    name: "a menu sheet's grab band is at least the record sheet's, and both clear the control floor",
-    pass: recordBand >= SHEET_BAND_FLOOR && menuBand >= recordBand,
-    detail: `menu sheet band ${menuBand}px, record sheet band ${recordBand}px, walked by the same`
-      + ` function on one page; the relation asserted is menu >= record (${menuBand >= recordBand})`
-      + ` with the record band itself against this project's ${SHEET_BAND_FLOOR}px control floor`
-      + ` (${recordBand >= SHEET_BAND_FLOOR}). Two independent literals could not state this: they`
-      + ` let one surface's chrome move while the other's number stood, which is how the goal line`
-      + ` came to read "matches the record sheet's 32px" and would have failed a menu sheet that`
-      + ` correctly clears the 44px thumb floor`,
+    name: "a menu sheet has no grab band at all, and the record sheet clears the control floor",
+    pass: recordBand >= SHEET_BAND_FLOOR && menuBand === 0,
+    detail: `menu sheet band ${menuBand}px (want 0, no handle to walk), record sheet band`
+      + ` ${recordBand}px against this project's ${SHEET_BAND_FLOOR}px control floor`
+      + ` (${recordBand >= SHEET_BAND_FLOOR})`,
   });
 
   // ── semantic identity: the menu acts on the column it was opened on ──
@@ -9061,24 +9069,29 @@ await section("the flick decision reaches the sheet", async () => {
   await page.addScriptTag({ content: positionerJs });
 
   const measured = await page.evaluate(() => {
-    const { createOwnedMenu } = globalThis.__place;
     const { FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS } = globalThis.__flick;
+    const { applySheetChrome, attachSheetDragToDismiss } = globalThis.__a;
 
+    // A menu-role card carries no grab handle at all — it dismisses on a tap, not a drag —
+    // so it cannot stage any of these gestures any more. A plain sheet is what this section is
+    // actually about (the flick WIRING, not anything menu-specific), built directly rather than
+    // borrowed from the menu builder these cases used before that fix shipped.
     const attempt = ({ travel, msPerStep, restMs }) => {
-      const menu = createOwnedMenu(document);
-      for (let i = 0; i < 8; i += 1) menu.addRow({ icon: "pencil", label: `Row ${i}` });
-      menu.showAt({ x: 200, y: 200 });
-      const panel = menu.el;
+      const host = document.querySelector(".note-database-container");
+      const panel = host.createDiv({ cls: "db-record-detail-panel" });
+      applySheetChrome(panel, true);
+      let dismissedByGesture = false;
+      const release = attachSheetDragToDismiss(panel, () => { dismissedByGesture = true; panel.remove(); });
       const bar = panel.querySelector(".db-mobile-bottom-sheet-handle");
-      if (!bar) return { built: false };
+      if (!bar) { release(); panel.remove(); return { built: false }; }
       const bb = bar.getBoundingClientRect();
       const from = bb.y + bb.height / 2;
       const info = globalThis.__timedDrag({
         target: bar, panel, x: bb.x + bb.width / 2,
         from, to: from + travel, steps: 4, msPerStep, restMs,
       });
-      const dismissed = !panel.isConnected;
-      if (!dismissed) menu.close();
+      const dismissed = dismissedByGesture || !panel.isConnected;
+      if (!dismissed) { release(); panel.remove(); }
       return { built: true, dismissed, pxPerMs: Number(info.pxPerMs.toFixed(2)), travel, restMs };
     };
 
