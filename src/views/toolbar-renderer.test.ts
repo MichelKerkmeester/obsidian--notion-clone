@@ -58,3 +58,24 @@ describe("ToolbarRenderer toggle state language", () => {
     expect(toolbarContent).toContain("actions.moveLinkedView");
   });
 });
+
+// ───────────────────────────────────────────────────────────────────
+// 3. DELETE-VIEW CALL SITES CARRY NO CONFIRM
+// ───────────────────────────────────────────────────────────────────
+//
+// database-view.test.ts pins the undo behaviour itself (deleteView folds into the generic
+// config-history stack). This suite pins the other half: neither call site here raises a
+// confirm — an existing undo path already covers the deletion, so a second gate here would be
+// exactly the dialog the operator's ruling declined to build.
+
+describe("ToolbarRenderer delete-view call sites", () => {
+  const toolbarPath = resolve(__dirname, "toolbar-renderer.ts");
+  const toolbarContent = readFileSync(toolbarPath, "utf-8");
+
+  it("calls actions.deleteView directly at both call sites, with no confirm primitive in between", () => {
+    expect(toolbarContent).not.toContain("buildConfirmSheetBody");
+    expect(toolbarContent).not.toContain("confirmWithModal");
+    expect(toolbarContent).toMatch(/run: \(\) => actions\.deleteView\(index\)/);
+    expect(toolbarContent).toMatch(/onClick: \(\) => actions\.deleteView\(viewIndex\)/);
+  });
+});

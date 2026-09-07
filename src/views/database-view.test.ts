@@ -123,6 +123,8 @@ interface DatabaseViewHarness {
   instanceId: string;
   historyStack: TestHistoryEntry[];
   refresh(options?: { viewport?: unknown }): void;
+  deleteView(viewIndex: number): void;
+  undoLastEdit(): Promise<void>;
 }
 
 interface FakeDataSource {
@@ -151,7 +153,10 @@ const windowStub = {
     nodeSetTimeout(() => callback(Date.now()), 0);
     return 0;
   },
-  activeDocument: { addEventListener: vi.fn(), removeEventListener: vi.fn() },
+  // querySelectorAll is here for closeUtilitiesPopover's fallback (no toolbarRoot exists in
+  // this harness, since no test mounts the real toolbar renderer): config-history undo/redo
+  // closes toolbar popovers on the way out, and needs something iterable to call it on.
+  activeDocument: { addEventListener: vi.fn(), removeEventListener: vi.fn(), querySelectorAll: () => [] },
 };
 
 function makeRow(path: string, frontmatter: Record<string, unknown> = {}): RowData {
@@ -173,7 +178,7 @@ function treeFixture(): RowData[] {
   ];
 }
 
-function createView(): { harness: DatabaseViewHarness; dataSource: FakeDataSource; viewConfig: ViewConfig } {
+function createView(extraViews: ViewConfig[] = []): { harness: DatabaseViewHarness; dataSource: FakeDataSource; viewConfig: ViewConfig; dbConfig: DatabaseConfig } {
   const dbFile = new TFile();
   dbFile.path = "db.md";
   const viewConfig: ViewConfig = {
@@ -188,7 +193,7 @@ function createView(): { harness: DatabaseViewHarness; dataSource: FakeDataSourc
     name: "Tasks",
     sourceFolder: "Tasks",
     schema: { columns: [], computedFields: [] },
-    views: [viewConfig],
+    views: [viewConfig, ...extraViews],
   };
   const dataSource: FakeDataSource = {
     getViewDefFiles: () => [{ file: dbFile, config: dbConfig }],
@@ -223,7 +228,7 @@ function createView(): { harness: DatabaseViewHarness; dataSource: FakeDataSourc
   );
   const harness = view as unknown as DatabaseViewHarness;
   harness.rows = treeFixture();
-  return { harness, dataSource, viewConfig };
+  return { harness, dataSource, viewConfig, dbConfig };
 }
 
 function planFor(request: SubtaskMoveRequest, rows: RowData[]): { request: SubtaskMoveRequest; plan: SubtaskMovePlan } {
@@ -430,5 +435,60 @@ describe("DatabaseView board group visibility host bindings", () => {
     await flushConfigWrite();
     expect(dataSource.updateViewDefFile).toHaveBeenCalledTimes(1);
     expect(dataSource.updateViewDefFile.mock.calls[0][1].views[0].boardHideEmptyGroups).toBe(false);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 5. DELETE VIEW — NO CONFIRM, AN EXISTING UNDO PATH ALREADY COVERS IT
+// ───────────────────────────────────────────────────────────────────
+//
+// The persistence layer already answers whether a deleted view is recoverable: deleteView saves
+// through saveCurrentViewConfigInBackground -> saveViewEntryConfig -> recordConfigHistory, the
+// same generic before/after snapshot every other view mutation here takes, and that already
+// pushes an undoable "config" history entry. So no confirm is needed — an Undo toast instead —
+// and this suite pins the undo path itself: the deletion is folded into the same history stack
+// addView/renameView/moveView already use, and undoLastEdit() reverses it.
+
+describe("DatabaseView deleteView (no confirm — an existing undo path already covers it)", () => {
+  it("deletes exactly one view, with no confirm, and folds the deletion into the generic config-history undo path", async () => {
+    const secondView: ViewConfig = {
+      name: "Table",
+      sourceFolder: "Tasks",
+      schema: { columns: [], computedFields: [] },
+      viewType: "table",
+    };
+    const { harness, dataSource, dbConfig } = createView([secondView]);
+    expect(dbConfig.views).toHaveLength(2);
+
+    harness.deleteView(1);
+    await flushConfigWrite();
+
+    // The view is gone and the save reached the writer — no dialog stood in front of it.
+    expect(dbConfig.views).toHaveLength(1);
+    expect(dbConfig.views[0].name).toBe("Board");
+    expect(dataSource.updateViewDefFile).toHaveBeenCalled();
+
+    // The generic config-history path recorded it, labeled as a view deletion rather than the
+    // catch-all "view configuration" every other unlabeled config write falls back to.
+    expect(harness.historyStack).toHaveLength(1);
+    expect(harness.historyStack[0].type).toBe("config");
+    expect(harness.historyStack[0].label).toBe("undo.deleteViewConfig");
+
+    // The toolbar's own Undo action reaches this entry: undoing restores the deleted view.
+    await harness.undoLastEdit();
+    expect(dbConfig.views).toHaveLength(2);
+    expect(dbConfig.views.map((view) => view.name)).toEqual(["Board", "Table"]);
+  });
+
+  it("raises no confirm and pushes no history entry for the one-view guard — a delete that cannot happen asks nothing", async () => {
+    const { harness, dataSource, dbConfig } = createView();
+    expect(dbConfig.views).toHaveLength(1);
+
+    harness.deleteView(0);
+    await flushConfigWrite();
+
+    expect(dbConfig.views).toHaveLength(1);
+    expect(harness.historyStack).toHaveLength(0);
+    expect(dataSource.updateViewDefFile).not.toHaveBeenCalled();
   });
 });

@@ -2198,6 +2198,8 @@ export class DatabaseView extends FileView {
       toggleFilterLogic: () => this.toggleActiveFilterLogic(),
       clearAll: () => this.clearActiveViewControls(),
       getStatusMessage: () => this.getAccessibilityStatusMessage(),
+      addFilter: (anchorEl) => this.toggleHeaderPopover("filter", anchorEl),
+      addSort: (anchorEl) => this.toggleHeaderPopover("sort", anchorEl),
     });
     this.updateStickyOffsets();
   }
@@ -3453,18 +3455,35 @@ export class DatabaseView extends FileView {
     this.refresh({ viewport: "reset-top" });
   }
 
-  /** Delete a view from the current database (must keep at least 1) */
+  /**
+   * Delete a view from the current database (must keep at least 1).
+   *
+   * No confirm stands in front of this: the save below already runs through the generic
+   * config-history path (`saveViewEntryConfig` -> `recordConfigHistory`), the same one every
+   * other view mutation here already takes, and that path makes the deletion undoable — the
+   * toolbar's own Undo action and Ctrl+Z both reach it — before this method returns. A confirm
+   * would be asking the operator to guard against a loss that already has a way back; the toast
+   * is what tells them the way back exists.
+   */
   private deleteView(viewIndex: number): void {
     const db = this.getActiveDb();
     if (!db || db.views.length <= 1) return;
-    db.views.splice(viewIndex, 1);
+    const [removed] = db.views.splice(viewIndex, 1);
     if (this.currentViewIndex >= db.views.length) {
       this.currentViewIndex = db.views.length - 1;
     }
     this.clearViewStateCache();
+    this.pendingUndoLabel = t("undo.deleteViewConfig");
     this.saveCurrentViewConfigInBackground();
     this.rerenderToolbar();
     this.refresh({ viewport: "reset-top" });
+    if (this.containerEl_) {
+      showToast(this.containerEl_.ownerDocument, {
+        severity: "success",
+        message: t("notice.deletedView", { name: removed?.name || t("common.untitled") }),
+        action: { label: t("toolbar.undo"), onClick: () => this.undoLastEdit() },
+      });
+    }
   }
 
   /** Rename a view */
