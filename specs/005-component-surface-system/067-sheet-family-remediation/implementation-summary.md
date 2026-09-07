@@ -13,7 +13,7 @@ _memory:
     packet_pointer: "005-component-surface-system/067-sheet-family-remediation"
     last_updated_at: "2026-09-07T12:00:00Z"
     last_updated_by: "follow-up-leg-session"
-    recent_action: "T006 closed live; ADR-003 pull-back reverted; gate 26/26"
+    recent_action: "T006 closed live; ADR-003 pull-back dropped on the operator ruling; landed on main"
     next_safe_action: "Close T015 header block, T020, T021, and the lane-pair rewiring"
     blockers:
       - "T023 is the operator's device read"
@@ -74,7 +74,10 @@ behaviour (a menu sheet with a handle that drags); those are rewritten to match 
 contract. ADR-003's `scale(0.96)` page-pull-back extension was ALSO attempted, but broke
 `position: fixed` for the row-selection bar (a CSS transform on `.note-database-container`
 creates a new containing block for its fixed-position descendants) — caught by the same
-`verify-placement.mjs` run, fully reverted rather than shipped or patched around. T021's divider
+`verify-placement.mjs` run, fully reverted rather than shipped or patched around, and then
+**dropped outright by the operator** on 2026-09-07 ~14:50 ("Drop the scale cue"), with the
+containing-block conflict quoted as the reason. ADR-003 is now **Accepted-as-amended**: the
+0.52 ± 0.02 page dim stands, the pull-back does not. T021's divider
 audit got a partial, styles.css-only reading (not a reference-capture comparison).
 `buildPrimaryActionPill`/`buildShellHeaderChip` were reviewed and deliberately kept as documented
 producers rather than removed or force-wired.
@@ -107,7 +110,6 @@ and the 17 stale sheet-family captures named on `tools/lane/css-lane.json`'s `ou
 | `src/views/popover-position.ts` (follow-up leg) | Modified | A pin recording why a `menu`-role card still docks full-width in `place()`'s `mobileSheet` branch rather than anchoring to its trigger (comment only, no behaviour change) |
 | `tools/live/sheet-grammar.mjs` | Modified | Three FuzzySuggest surfaces registered; new lane rows for scrim alpha (page + menu), motion exit band, row pitch, handle geometry, the depth-cap replace mechanism (positive + negative control); the constants bridge reads `surface-shell.ts`'s shipped source directly; follow-up leg adds the menu-role parent-dim assertion on all four production surfaces. A page-pull-back scale/layout-shift/reduced-motion row set was added and then removed in the same leg when the underlying feature was reverted |
 | `tools/storybook/verify-placement.mjs` (follow-up leg) | Modified | Rewrote assertions across three sections that assumed a menu sheet still carries a grab handle and drags to dismiss (T006 now correctly removes both): the menu-presentation section, the motion-allowed section's drag-interrupt case, and the dedicated flick-gesture section all now build a plain draggable sheet for anything that genuinely needs a handle, and assert absence directly where a menu-role card is what is being measured. Also fixed the keyboard-lift comparison to compare lift AMOUNT rather than absolute position, since a menu-role card now bails out of the floating/flush classifier and docks flush while a panel floats with an 8px inset |
-| `tools/live/touch-target-measure.mjs` (follow-up leg) | Modified | `measureInteractiveBoxes` skips any control behind an active `.db-page-pulled-back` container — it is covered by the scrim and cannot be tapped, so measuring its (then visually shrunken) box against the touch floor reported a false regression from the page-pull-back attempt. Kept, dormant, after that feature's revert: the class it checks for is no longer applied anywhere, so this exemption currently matches nothing, but it is a correct general rule (a scrim-covered control is not a small target, it is an uncovered one) worth keeping for a future re-attempt rather than churning it out and back in |
 | `src/views/overlay-stack.test.ts` | Modified | Three new unit tests for the depth-cap redirect |
 | `tools/storybook/verify-placement.mjs` | Modified | Three assertions' expected values corrected (200ms entrance, 48% scrim, 31px grab band) to match the packet's own deliverables |
 | `screenshots/**/*.png` (73 files at landing, 19 more on the follow-up leg), `screenshots/manifest.json` | Modified | Recaptured after the scrim/handle/motion/row-pitch changes, then again after the follow-up leg's menu-card and page-pull-back rules; byte-only re-encodes restored to their committed bytes both times |
@@ -195,8 +197,9 @@ re-encodes falls under `screenshots/project-manager/`).
    were built for the full-width docked sheet, not a narrower anchored card. Recorded in
    `decision-record.md` ADR-002 with a pin left at `popover-position.ts`'s `mobileSheet` branch;
    narrowing each picker body for a card's footprint is a separate, larger change.
-4. **ADR-003's `scale(0.96)` extension to the first-sheet page was attempted and reverted — it
-   broke a real, unrelated behaviour.** `setPagePulledBack` applied `transform: scale(0.96)`
+4. **ADR-003's `scale(0.96)` extension to the first-sheet page was attempted, reverted, and then
+   dropped by the operator — it broke a real, unrelated behaviour, and is now a closed question
+   rather than an open gap.** `setPagePulledBack` applied `transform: scale(0.96)`
    directly to `.note-database-container`, and a CSS `transform` on an element creates a new
    containing block for every `position: fixed` descendant of it. `.db-cell-selection-pill` (the
    row-selection bar) is `position: fixed` and lives inside that container, so it stopped
@@ -209,7 +212,12 @@ re-encodes falls under `screenshots/project-manager/`).
    (`> :not(.db-mobile-bottom-sheet-handle)`), never the sheet or a shared container — a future
    attempt at the first-sheet case needs an equivalent inner wrapper, which
    `.note-database-container` does not currently have (every renderer builds directly into it).
-   Full reasoning in `decision-record.md` ADR-003. **The light-theme stacked-parent figure
+   Full reasoning in `decision-record.md` ADR-003, amended on the operator's 2026-09-07 ~14:50
+   ruling to **Accepted-as-amended**: the page dim clause stands, the pull-back clause is
+   withdrawn, and the "safe re-attempt" note is retained as the record of what the attempt cost,
+   not as a plan. The `.db-page-pulled-back` exemption this attempt had added to
+   `tools/live/touch-target-measure.mjs` is removed with it, so no reference to the dropped class
+   survives anywhere in `src`, `styles.css` or `tools`. **The light-theme stacked-parent figure
    (0.758, from AC-003) remains open and was investigated further, not fixed**: an alpha-composite
    model built from the recorded luminance pairs shows light theme's own workspace background sits
    ABOVE the sheet's opaque background, which bounds `.is-stack-parent`'s bare `opacity` constant

@@ -46,7 +46,7 @@ serialized by the parent's CSS lane; ADR-004 is blocked on the operator.
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P0 |
-| **Status** | In Progress — landed on `main` 2026-09-07; 7 of 11 rows Met, AC-002 refuted and reopened, AC-007 and AC-010 partly closed, AC-011 the operator's |
+| **Status** | In Progress — landed on `main` 2026-09-07, follow-up leg landed 2026-09-07; **8 of 11 rows Met**. AC-002 is now Met (the follow-up leg closed T006: all four production `menu`-role surfaces measured handle-less at 402px, 44.0×44.0 close, parent dim ratio 0.390 in the 0.35-0.44 band), AC-003 lost its `scale(0.96)` clause to the operator's 2026-09-07 ~14:50 ruling and stays Met on its two luminance clauses, AC-007 and AC-010 are partly closed and still Unmet, AC-011 is the operator's device read |
 | **Created** | 2026-09-06 |
 | **Branch** | `worktrees/172-research-sheet-family` (documentation only; implementation legs get their own) |
 | **Parent Spec** | ../spec.md |

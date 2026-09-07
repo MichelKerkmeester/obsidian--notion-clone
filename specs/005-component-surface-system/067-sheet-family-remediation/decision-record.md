@@ -32,7 +32,7 @@ _memory:
       - "The depth cap itself is decided: design-trueup.md C4 adopts it in full as a shell rule"
       - "The 44px close survives the handle-less card: ADR-007 exception E1"
       - "Dimmed or undimmed parent under a menu card: Notion, per the operator's 2026-09-07 ruling — ADR-002"
-      - "The page-under-sheet dim and the scale(0.96) pull-back: 0.52 scrim plus the pull-back, per the operator's 2026-09-07 ruling — ADR-003"
+      - "The page-under-sheet dim and the scale(0.96) pull-back: the 0.52 scrim stays; the pull-back is dropped, per the operator's 2026-09-07 ~14:50 ruling — ADR-003"
       - "The three FuzzySuggestModal surfaces: route through the shell, per the operator's 2026-09-07 ruling — ADR-004"
 ---
 # Decision Record: Sheet Family Remediation
@@ -347,9 +347,9 @@ differently (`popover-position.ts`'s `mobileSheet` branch in `place()`).
 
 | Field | Value |
 |-------|-------|
-| **Status** | **Accepted** |
-| **Date** | 2026-09-06; ruled 2026-09-07 |
-| **Deciders** | Operator (2026-09-07 ~00:05 Europe/Amsterdam) |
+| **Status** | **Accepted-as-amended** — the dim clause stands as ruled; the pull-back clause is withdrawn by the amending ruling below |
+| **Date** | 2026-09-06; ruled 2026-09-07 ~00:05; amended 2026-09-07 ~14:50 |
+| **Deciders** | Operator (2026-09-07 ~00:05 Europe/Amsterdam; amended 2026-09-07 ~14:50 Europe/Amsterdam) |
 
 ---
 
@@ -403,16 +403,28 @@ corrected in place rather than rewritten, and AC-003 here supersedes it.
 **Operator ruling, 2026-09-07 ~00:05 Europe/Amsterdam, verbatim**: *"0.52 scrim plus the 0.96 scale
 cue"*.
 
-**Read as two clauses, both Accepted:**
+**Amending operator ruling, 2026-09-07 ~14:50 Europe/Amsterdam, verbatim**: *"Drop the scale
+cue"*. Clause 1 below stands exactly as ruled. Clause 2 is **withdrawn**, and the reason is the
+containing-block conflict the implementation attempt surfaced and this ADR records below: a CSS
+`transform` on `.note-database-container` *"establishes a new containing block for every
+`position: fixed` descendant of it (CSS Transforms spec, not a browser quirk) — and
+`.note-database-container .db-cell-selection-pill` (the selection bar shown while rows are
+selected) is declared `position: fixed` and IS such a descendant"*. The page under a first sheet
+therefore carries the **scrim dim alone**, with no transform of its own; the `.is-stack-parent`
+cue on a stacked parent's own children is a different mechanism, is untouched by this ruling, and
+stays. This is a decision, not a deferral: the pull-back is not a residual gap awaiting a safe
+re-attempt, it is declined. The "what would make this safe to re-attempt" note that closes this
+section is retained as the record of what the attempt cost, not as a plan.
+
+**Read as two clauses — the first Accepted, the second withdrawn by the amendment above:**
 
 1. **The page under a first sheet dims to 0.52 ± 0.02** of undimmed luminance (Anytype measured,
    `design-trueup.md` §6 C3's 0.519/0.520/0.505 three-band read — 0.52 is that figure at the
    precision the ruling gave it, and 0.519 stays the recorded measurement underneath it).
-2. **The `scale(0.96)` pull-back is adopted**, not merely dispositioned either way, and the ruling
-   extends its reach: a `scale(0.96)` push-back now applies **to the page under a first sheet**, the
-   same depth cue the `.is-stack-parent` case already carries, rather than being a stacked-only
-   affordance. The `translateY(4px)` component is not named in the ruling and is not re-opened by
-   it — it rides with the existing `.is-stack-parent` declaration unchanged.
+2. ~~**The `scale(0.96)` pull-back is adopted** … extended to the page under a first sheet.~~
+   **Withdrawn by the 2026-09-07 ~14:50 ruling.** The page under a first sheet gets no transform.
+   The `.is-stack-parent` declaration — `scale(0.96) translateY(4px)` on a stacked parent's own
+   children — was never in scope of either clause and is unchanged by the withdrawal.
 
 **The stacked-parent case stays at parity — the same 0.710 ± 0.02 *result*, not the same
 inputs.** `93205d4d`'s measured **0.717** is a composite of two steps sharing one scrim: the single
@@ -433,7 +445,8 @@ stacked one. Re-measurement uses the same decoded-pixel method `93205d4d` used, 
 so the after-numbers are comparable to the before-numbers rather than to an assertion.
 
 **The `scale(0.96)` extension to the first-sheet page was attempted, found to break a real
-production behaviour, and reverted — it stays a residual gap, not closed.** `setPagePulledBack`
+production behaviour, reverted, and is now declined outright by the amending ruling — it is not a
+residual gap, it is a closed question.** `setPagePulledBack`
 (`mobile-bottom-sheet.ts`) toggled a `.db-page-pulled-back` class directly on
 `.note-database-container` itself, and the stylesheet rule applied `transform: scale(0.96)` to
 that same element. A CSS `transform` on an element establishes a new containing block for every
@@ -456,7 +469,8 @@ transform that no longer exists. `node tools/storybook/verify-placement.mjs` ret
 green state (413/415, 2 red for a declared reason, matching the pre-attempt baseline) once the
 revert lands.
 
-**What would make this safe to re-attempt**: the stacked-parent case already avoids this exact
+**What a re-attempt would have cost, recorded because the amending ruling closed the question
+rather than because a re-attempt is planned**: the stacked-parent case already avoids this exact
 trap — its own `scale(0.96) translateY(4px)` applies to the sheet's own children
 (`> :not(.db-mobile-bottom-sheet-handle)`), never to the sheet or the container itself, so nothing
 inside that transformed subtree needs viewport-relative fixed positioning the transform would
@@ -487,7 +501,7 @@ prerequisite for a future attempt, not a detail to skip.
 | Risk | Impact | Mitigation |
 |------|--------|------------|
 | The recapture noise hides a real regression | H | Assert the 32 protected entries identical; diff the movers scenario by scenario |
-| Giving the first-sheet page its own `scale(0.96)` step reads as a second, uncoordinated depth cue next to the already-adopted `.is-stack-parent` one | M | Reuse the `.is-stack-parent` declaration's own transform rather than writing a second one; measure the composite, not the declarations — the lane samples luminance, which is what the true-up measured |
+| ~~Giving the first-sheet page its own `scale(0.96)` step reads as a second, uncoordinated depth cue next to the already-adopted `.is-stack-parent` one~~ | — | **Retired.** The amending ruling drops that step, so the second cue is never introduced; the first-sheet page carries the scrim dim alone |
 <!-- /ANCHOR:adr-003-consequences -->
 <!-- /ANCHOR:adr-003 -->
 

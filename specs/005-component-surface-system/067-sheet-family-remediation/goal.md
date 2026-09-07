@@ -34,8 +34,8 @@ _memory:
     open_questions:
       - "Does a stacked menu leave its parent dimmed (trueup row 26) or undimmed (row 31)"
       - "Do the three FuzzySuggestModal subclasses join the shell, or take one shim"
-      - "Is the scale(0.96) pull-back a deliberate extra cue, or does it retire with the scrim fix"
     answered_questions:
+      - "The scale(0.96) pull-back: dropped, per the operator's 2026-09-07 ~14:50 ruling — the page under a first sheet carries the scrim dim alone"
       - "The depth cap is a measured value and a shell rule, adopted in full at design-trueup.md C4"
       - "The 44px close survives on the menu-role card: ADR-007 exception E1, an accessibility deviation with a number"
       - "The loop's precondition was waived by the operator at 2026-09-06 ~15:50, Run it now on the current state"
@@ -153,9 +153,11 @@ never resolve them silently.
       against the measured 0.710 ± 0.02, produced by two steps rather than two scrims —
       `.is-stack-parent` at opacity 0.88 composited under the single scrim. **No lane row asserts
       scrim opacity at all**; the motion row reads the scrim's `animation-duration`, not its colour.
-      Done is: 0.519 ± 0.02 on the page under a first sheet, 0.710 ± 0.02 held on the parent, a lane
-      row on the computed alpha, and the `scale(0.96) translateY(4px)` cue dispositioned in
-      `decision-record.md` rather than left design-inferred.
+      Done is: **0.52 ± 0.02** on the page under a first sheet (the operator's 2026-09-07 ruling,
+      inside the measured 0.519 ± 0.02 band), 0.710 ± 0.02 held on the parent, and a lane row on
+      the computed alpha. The `scale(0.96) translateY(4px)` cue is no longer part of this line: it
+      was attempted, broke `position: fixed` for the row-selection bar, and the operator dropped it
+      outright on 2026-09-07 ~14:50 — the page under a first sheet is dimmed, not scaled.
 - [x] **Zero surfaces bypass the shell, and every shipping phone sheet is registered.** **Today: 3
       bypasses and 3 unregistered surfaces, and they are the same three.**
       `attachSheetChromeToModal` is called outside `surface-shell.ts` at `main.ts:3047`,
