@@ -11,12 +11,11 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/067-sheet-family-remediation"
-    last_updated_at: "2026-09-07T09:50:00Z"
-    last_updated_by: "landing-verifier"
-    recent_action: "Landed on main; gate 26/26, T006 refuted at landing"
-    next_safe_action: "Repair T006 with its positioning half, then T015, T020, T021"
+    last_updated_at: "2026-09-07T12:00:00Z"
+    last_updated_by: "follow-up-leg-session"
+    recent_action: "T006 closed live; ADR-003 pull-back reverted; gate 26/26"
+    next_safe_action: "Close T015 header block, T020, T021, and the lane-pair rewiring"
     blockers:
-      - "T008 and ADR-004 are the operator's, carried from 051 T010"
       - "T023 is the operator's device read"
     key_files:
       - "specs/005-component-surface-system/067-sheet-family-remediation/goal.md"
@@ -25,13 +24,14 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-067-impl"
       parent_session_id: null
-    completion_pct: 43
+    completion_pct: 62
     open_questions:
-      - "How the menu card should sit once it survives the placement pass: anchored or docked"
+      - "Whether a theme-scoped darkening mechanism (e.g. filter: brightness()) should close the light stacked-parent figure, and at what value"
     answered_questions:
       - "The commit-id discrepancy the research flagged is not one: be578988, 772b24d2 and e632a1e1 are three commits with three roles"
       - "Dimmed parent under a stacked menu, per the operator's 2026-09-07 Notion ruling (ADR-002)"
       - "The FuzzySuggest disposition: route through the shell (ADR-004), landed with 0 call sites left"
+      - "How the menu card sits once it survives the placement pass: docked, not anchored — anchoring was tried and reverted (24 overflowing calendar-grid cells, a broken keyboard-avoidance handoff)"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
 # Implementation Summary
@@ -47,7 +47,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 067-sheet-family-remediation |
-| **Completed** | Landed on `main` 2026-09-07, not device-verified — T006 (refuted at landing), T020, T021, AC-007's header-block clause and AC-011 remain open |
+| **Completed** | Landed on `main` 2026-09-07, follow-up leg closed T006 and ADR-003's page pull-back the same day; not device-verified — T015's header-block clause, T020, T021 (partial), the two named lane pairs' rewiring and AC-011 remain open |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -64,15 +64,30 @@ geometry (T014), primary-action-pill and header-chip producers (T015, partial), 
 titles with one surviving scrape chain (T016), the re-derived gap cap (T017), a declared height
 role (T018), and focus restoration wired for sheet dismissal (T019).
 
-**Not built**: the `menu`-role handle-less card (T006 — the class and its two guards are in the
-tree and correct in isolation, but `setSheetMount` strips the class on the placement pass, so no
-production `menu`-family surface is handle-less and only `owned-menu` reaches the menu dim band;
-reopened at landing and paired with the anchored-vs-docked positioning for one follow-up change),
-the header-block margin re-tune (T015's third clause — left red to avoid
+**Follow-up leg (this session), on top of the landing above**: T006's `menu`-role handle-less card
+is now built and measured live on all four production surfaces — `setSheetMount`'s toggle is
+add-only, so `mountPickerSheetHeader`'s earlier class no longer gets stripped on the placement
+pass — with the anchored-vs-docked geometry half deliberately declined (tried, reverted, pinned
+at `popover-position.ts`) rather than left unattempted. Fixing T006 for real exposed that
+`tools/storybook/verify-placement.mjs` had several assertions written against the OLD, broken
+behaviour (a menu sheet with a handle that drags); those are rewritten to match the now-correct
+contract. ADR-003's `scale(0.96)` page-pull-back extension was ALSO attempted, but broke
+`position: fixed` for the row-selection bar (a CSS transform on `.note-database-container`
+creates a new containing block for its fixed-position descendants) — caught by the same
+`verify-placement.mjs` run, fully reverted rather than shipped or patched around. T021's divider
+audit got a partial, styles.css-only reading (not a reference-capture comparison).
+`buildPrimaryActionPill`/`buildShellHeaderChip` were reviewed and deliberately kept as documented
+producers rather than removed or force-wired.
+
+**Still not built**: the header-block margin re-tune (T015's third clause — left red to avoid
 reintroducing a documented close/grab-band touch-target regression), the replace-pair capture
-scenarios (T020), the divider-inset audit (T021), and the `scale(0.96)` extension to the
-first-sheet page ADR-003 describes (a selector-scoping risk, named in that ADR rather than forced).
-AC-011 is the operator's device read and is untouched.
+scenarios (T020), the two named lane pairs' (`properties property type picker`, `add view
+property picker`) rewiring to the real depth-cap call graph (proven generically instead — see
+Known Limitations #2, unchanged this session), the light-theme stacked-parent recalibration (a
+model was built showing `.is-stack-parent`'s bare `opacity` cannot reach the target for light
+theme alone; a theme-scoped darkening mechanism was identified but not implemented or verified),
+and the 17 stale sheet-family captures named on `tools/lane/css-lane.json`'s `outstanding` row
+(not reviewed this session). AC-011 is the operator's device read and is untouched.
 
 ### Files Changed
 
@@ -81,16 +96,22 @@ AC-011 is the operator's device read and is untouched.
 | `src/views/overlay-stack.ts` | Modified | The depth cap in `register`, scoped to sheets via an opt-in `replace` callback; a focus-restoration anchor |
 | `src/views/surface-shell.ts` | Modified | The sub-page replace producer (`attemptReplace`), `menu`/`panel`/`condition panel` role wiring into chrome, a header-chip producer, and the landing repair that stops an absorbed panel being placed as its own sheet |
 | `src/views/mobile-bottom-sheet.ts` | Modified | Handle geometry unchanged in code (styles.css owns the numbers), `SheetChromeOptions.heightRole`/`.menuCard`/`.replace`, three-band scrim-alpha selection, focus-restoration anchor capture, the depth-cap short-circuit in `setSheetMount`/`applySheetChrome` |
-| `src/views/popover-host.ts` | Modified | `mountPickerSheetHeader` marks its callers `db-mobile-menu-card` and strips the handle — landed, but `setSheetMount`'s own toggle strips the class again on the placement pass that follows, so it has no effect today (T006, reopened) |
+| `src/views/popover-host.ts` | Modified | `mountPickerSheetHeader` marks its callers `db-mobile-menu-card` and strips the handle — now effective end to end since `setSheetMount`'s toggle no longer strips it back off (T006, closed on the follow-up leg) |
 | `src/views/confirm-sheet.ts` | Modified | `buildPrimaryActionPill` producer |
 | `src/main.ts`, `src/views/image-file-suggest-modal.ts`, `src/views/markdown-file-suggest-modal.ts` | Modified | Route through `createSurfaceShell`; the double-title scrape removed as a side effect |
 | `src/views/modals/csv-markdown-export-modal.ts`, `src/settings.ts` | Modified | Declared title/role, closing two of the three T016 survivors |
-| `styles.css` | Modified | Scrim alpha (three bands), motion tokens and transitions, row-pitch floor, handle geometry, pill/chip classes |
-| `tools/live/sheet-grammar.mjs` | Modified | Three FuzzySuggest surfaces registered; new lane rows for scrim alpha (page + menu), motion exit band, row pitch, handle geometry, the depth-cap replace mechanism (positive + negative control); the constants bridge reads `surface-shell.ts`'s shipped source directly |
+| `styles.css` | Modified | Scrim alpha (three bands), motion tokens and transitions, row-pitch floor, handle geometry, pill/chip classes, plus the follow-up leg's menu-card handle-hide rule. The `.db-page-pulled-back` `scale(0.96)` rule was added and then removed in the same leg — see the mobile-bottom-sheet.ts row below |
+| `src/views/mobile-bottom-sheet.ts` (follow-up leg) | Modified | `setSheetMount`'s `menuCard` toggle made add-only; `attachSheetDragToDismiss` refuses a handle for a menu-card. `setPagePulledBack`/`syncSheetStack` wiring for the page-under-first-sheet scale cue was added, found to break `position: fixed` for the selection bar (transforming `.note-database-container` creates a new containing block for its `position: fixed` descendants), and fully removed in the same leg — net zero diff on this file for that piece |
+| `src/views/owned-menu.ts` (follow-up leg) | Modified | Passes `menuCard: true` into `applySheetChrome` |
+| `src/views/sheet-grammar.ts` (follow-up leg) | Modified | `hasSheetHandle` reads backwards for `.db-mobile-menu-card` (satisfied by absence, not presence) |
+| `src/views/popover-position.ts` (follow-up leg) | Modified | A pin recording why a `menu`-role card still docks full-width in `place()`'s `mobileSheet` branch rather than anchoring to its trigger (comment only, no behaviour change) |
+| `tools/live/sheet-grammar.mjs` | Modified | Three FuzzySuggest surfaces registered; new lane rows for scrim alpha (page + menu), motion exit band, row pitch, handle geometry, the depth-cap replace mechanism (positive + negative control); the constants bridge reads `surface-shell.ts`'s shipped source directly; follow-up leg adds the menu-role parent-dim assertion on all four production surfaces. A page-pull-back scale/layout-shift/reduced-motion row set was added and then removed in the same leg when the underlying feature was reverted |
+| `tools/storybook/verify-placement.mjs` (follow-up leg) | Modified | Rewrote assertions across three sections that assumed a menu sheet still carries a grab handle and drags to dismiss (T006 now correctly removes both): the menu-presentation section, the motion-allowed section's drag-interrupt case, and the dedicated flick-gesture section all now build a plain draggable sheet for anything that genuinely needs a handle, and assert absence directly where a menu-role card is what is being measured. Also fixed the keyboard-lift comparison to compare lift AMOUNT rather than absolute position, since a menu-role card now bails out of the floating/flush classifier and docks flush while a panel floats with an 8px inset |
+| `tools/live/touch-target-measure.mjs` (follow-up leg) | Modified | `measureInteractiveBoxes` skips any control behind an active `.db-page-pulled-back` container — it is covered by the scrim and cannot be tapped, so measuring its (then visually shrunken) box against the touch floor reported a false regression from the page-pull-back attempt. Kept, dormant, after that feature's revert: the class it checks for is no longer applied anywhere, so this exemption currently matches nothing, but it is a correct general rule (a scrim-covered control is not a small target, it is an uncovered one) worth keeping for a future re-attempt rather than churning it out and back in |
 | `src/views/overlay-stack.test.ts` | Modified | Three new unit tests for the depth-cap redirect |
 | `tools/storybook/verify-placement.mjs` | Modified | Three assertions' expected values corrected (200ms entrance, 48% scrim, 31px grab band) to match the packet's own deliverables |
-| `screenshots/**/*.png` (73 files), `screenshots/manifest.json` | Modified | Recaptured after the scrim/handle/motion/row-pitch changes; 32 further byte-only re-encodes restored to their committed bytes |
-| `tools/lane/css-lane.json` | Modified | CSS lane handed over from `063-notion-dropdown-refinement` to this phase, with all 73 real capture changes named |
+| `screenshots/**/*.png` (73 files at landing, 19 more on the follow-up leg), `screenshots/manifest.json` | Modified | Recaptured after the scrim/handle/motion/row-pitch changes, then again after the follow-up leg's menu-card and page-pull-back rules; byte-only re-encodes restored to their committed bytes both times |
+| `tools/lane/css-lane.json` | Modified | CSS lane handed over from `063-notion-dropdown-refinement` to this phase at landing (73 real changes named); acquired and released TWICE on the follow-up leg — once at 19 real changes for the menu-card fix plus the (then still present) page-pull-back, and again after the page-pull-back's revert moved the baseline hash a second time, correcting the set to the 12 changes the menu-card fix alone produces (2 excluded both times as already fixed on `main` by an unrelated packet) |
 | `tools/live/*.json` (evidence artefacts) | Modified | Regenerated against the moved `styles.css`/`mobile-bottom-sheet.ts` |
 <!-- /ANCHOR:what-built -->
 
@@ -142,6 +163,13 @@ re-encodes falls under `screenshots/project-manager/`).
 | Landing verification at 402px, through the shipped modules | The depth cap holds (2 sheets before and after a three-deep `panel` chain, content grafted, title swapped, back control shown and reversible; a `dialog` chain still stacks to 3) — but the absorbed panel was still being placed as its own sheet, **repaired here**. Scrim measured off decoded PNGs: page under a first sheet **0.521 light / 0.533 dark**, stacked parent **0.7065 dark / 0.7580 light** against **0.7074 / 0.7575** on the pre-packet tree. Handle 34.0x5.0 at a 6.0 drop; close 44x44; phone row pitch 48px against the 44px floor. T006 **refuted**: no production `menu`-family surface carries `db-mobile-menu-card` or loses its handle |
 | Mutation testing, one per new surface | The three depth-cap unit tests go red when the cap's threshold moves (`>= 2` -> `>= 3`); the scrim-alpha, menu-scrim-alpha, motion-band, motion-exit-band, row-pitch and handle-geometry lane rows each go red when their own stylesheet value is mutated; the two new depth-cap geometry assertions go red when the placement guard is removed, while the four structural ones stay green |
 | `npm run gate` (foreground, exit read from `$?`) | **PASS — 26/26 lanes green**, 0 red for a declared reason. Two lanes needed real follow-up work beyond the code change itself: `screenshots-fresh` (a full recapture on the rebased tree, 604 entries; 21 real content changes reviewed and named, 22 byte-only re-encodes restored to their committed bytes) and `css-lane` (handed over from `063-notion-dropdown-refinement` to this phase, in `tools/lane/css-lane.json`'s own history). `sheet-teardown` and `verify-placement` briefly regressed during implementation (a deferred scrim-removal attempt broke synchronous-teardown assumptions in both) and were fixed by reverting the deferral, not by loosening either check |
+| **Follow-up leg** — `npx tsc --noEmit` | PASS — exit 0 |
+| **Follow-up leg** — `npx vitest run` | PASS — 1607/1607 tests, 149/149 files (one transient failure caught and fixed mid-session: a new comment in `sheet-grammar.mjs` started with the word "class" followed later by a parenthesis, tripping `scan-comments.mjs`'s commented-out-code heuristic — `tools/naming/scan-comments.test.mjs`'s own CLI-contract test caught it; reworded, not suppressed) |
+| **Follow-up leg** — `node tools/live/sheet-grammar.mjs` | PASS — exit 0, plus one new permanent row: the menu-role parent-dim band read on all four production surfaces (`owned-menu`/`date-picker`/`icon-picker`/`option-color-picker`, all 0.390). A page-pull-back row was added and then removed when the underlying feature was reverted |
+| **Follow-up leg** — `node tools/live/render-assertions.mjs`, `node tools/live/sheet-teardown.mjs`, `node tools/live/touch-targets.mjs` | PASS — exit 0 all three. `touch-targets` needed a real fix mid-session: `record-peek`'s table footer trigger measured under its 44px floor because the (later-reverted) page-pull-back transform shrank it visually behind the open sheet's own scrim; fixed by skipping elements behind an active `.db-page-pulled-back` container in `touch-target-measure.mjs`'s shared walk — left in place since it is a correct, general exemption (a scrim-covered control is not a small target, it is an uncovered one) independent of the reverted feature |
+| **Follow-up leg** — `node tools/storybook/verify-placement.mjs` | PASS — exit 0, 413/415 (2 red for a declared reason, the pre-existing baseline). This is what caught the page-pull-back regression: two sections crashed outright (`TypeError: Cannot read properties of null`, reading the now-absent handle) and, once unblocked, eleven more genuinely failed — nine because a menu sheet no longer drags or carries a handle (rewritten to assert the new contract, using a plain draggable sheet fixture where the test's real subject was the drag/flick mechanism rather than anything menu-specific) and the keyboard-lift/selection-bar ones because of the page-pull-back containing-block bug (resolved by the revert, not by a test change) |
+| **Follow-up leg** — `node tools/naming/scan-comments.mjs`, `node tools/naming/scan-failing-values.mjs` | PASS — exit 0 both (one artifact-id violation and one commented-out-code false-positive introduced by this session's own comments, both fixed by rewording, not by loosening the scanner) |
+| **Follow-up leg** — `npm run screenshots` + css-lane acquire/review/release, run TWICE | First pass (with page-pull-back still present): 48 files moved on a 606-entry recapture (baseline `4edd4f3da2ef` -> `db7a393f8759`); 19 real by decoded pixel delta, named; 2 excluded (see below); 26 pixelHash-identical restored. Page-pull-back was then reverted (styles.css moved again, `db7a393f8759` -> `191652d50658`), so the lane was acquired and recaptured a SECOND time rather than hand-editing the first release's file list: 38 files moved, of which 12 are real (byte-for-byte the same decoded-pixel numbers as the first pass for the same files — the menu-card fix that produces them is unchanged by the revert) and 26 are pixelHash-identical, restored. The 7 files that moved ONLY because of the (now-reverted) page-pull-back — `constructed-toolbar-add-view-mobile-{dark,light}`, `constructed-toolbar-utilities-mobile-{dark,light}`, `constructed-board-groups-panel-mobile-{dark,light}`, `constructed-record-peek-mobile-light` — no longer move at all and are folded back into the restored set. Both passes exclude `field-icon-picker-desktop-{dark,light}`: origin/main's `9d798c69` already recaptured and reviewed these as part of a different, unrelated 4-file fix this worktree (8 commits behind) does not yet have; claiming them from a stale base would fight that commit's rebase rather than help it. The 32 protected Project Manager entries carry no content change in either pass. `SURFACE_PHASE=067-sheet-family-remediation node tools/lane/check-lane.mjs` exits 0 against the final (second) release |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -156,37 +184,72 @@ re-encodes falls under `screenshots/project-manager/`).
    still assert their pre-existing stack shape; both hops in that harness are synthetic stand-ins,
    not the real production call graph, so retargeting them was judged higher-risk than adding a
    dedicated, real-`createSurfaceShell` depth-cap check (which exists and passes).
-3. **T006 does not reach a production surface, and its positioning half was never started.** The
-   `db-mobile-menu-card` class, `applySheetChrome`'s rebuild guard and `setScrim`'s third alpha band
-   are all in the tree and correct in isolation, but `setSheetMount` re-runs
-   `panel.toggleClass("db-mobile-menu-card", Boolean(options.menuCard))` on the placement pass that
-   follows `mountPickerSheetHeader`, with `menuCard` undefined for every caller that arrives that
-   way — so the class is stripped and the handle grows back. Measured at 402px: `owned-menu`, the
-   icon picker, the date-value picker and the option colour picker all still carry the 34x5pt handle
-   and none carries the class; only `owned-menu` reaches the 0.61 dim band, and it does so through
-   its own pre-existing `role="menu"` ARIA attribute. The lane's `menu scrim alpha` row is green on
-   a synthetic `createSurfaceShell({ role: "menu" })` mount and **no `DbModal` subclass declares
-   that role**, so it proves the branch rather than the surface. Left unrepaired at landing on
-   purpose: making four surfaces handle-less and moving three of them to a stronger dim is a visible
-   change whose other half — ADR-002's anchored-vs-docked geometry, which lives in
-   `popover-position.ts` — is already deferred, and the two should land together in front of the
-   operator rather than one at a time.
-4. **ADR-003's `scale(0.96)` extension to the first-sheet page is not implemented.** The selector
-   that would apply it to the workspace view root (not the sheet itself, not every `.note-database-
-   container`) was not identified without risking an unverified, broad visual change. Named here
-   and in `decision-record.md` rather than forced.
-5. **T015's header-block clause and T020/T021 are open.** The header block's 20px top margin is the
-   same rule a prior phase tuned specifically to keep the close button clear of the grab band's own
-   hit-test; reducing it toward the measured 70pt without a real hit-test re-verification risked
-   reintroducing that regression, so it was left red. The replace-pair capture scenarios (T020) and
-   the divider-inset audit (T021) were not reached in this session.
-6. **T019's focus-restoration wiring has no dedicated unit test.** `mobile-bottom-sheet.ts` has no
+3. **T006 is now closed on the follow-up leg — the class-stripping regression is fixed and
+   measured on all four production surfaces.** `setSheetMount`'s toggle is add-only, so a
+   placement pass with `menuCard` undefined no longer undoes a class `mountPickerSheetHeader`
+   already set. Measured at 402px: `owned-menu`, `date-picker`, `icon-picker` and
+   `option-color-picker` all carry no handle, a 44.0×44.0 close target and a parent dim ratio of
+   0.390. **The anchored-vs-docked geometry half is deliberately declined, not merely deferred**:
+   tried at the desktop popover's own narrow width, it measured 24 overflowing calendar-grid cells
+   and a broken keyboard-avoidance handoff, because the picker bodies these four surfaces share
+   were built for the full-width docked sheet, not a narrower anchored card. Recorded in
+   `decision-record.md` ADR-002 with a pin left at `popover-position.ts`'s `mobileSheet` branch;
+   narrowing each picker body for a card's footprint is a separate, larger change.
+4. **ADR-003's `scale(0.96)` extension to the first-sheet page was attempted and reverted — it
+   broke a real, unrelated behaviour.** `setPagePulledBack` applied `transform: scale(0.96)`
+   directly to `.note-database-container`, and a CSS `transform` on an element creates a new
+   containing block for every `position: fixed` descendant of it. `.db-cell-selection-pill` (the
+   row-selection bar) is `position: fixed` and lives inside that container, so it stopped
+   positioning against the viewport the instant the transform landed — caught by
+   `tools/storybook/verify-placement.mjs`'s pre-existing keyboard/selection-bar checks (no update
+   needed to catch it) reading 1545px/1940px against an 844px viewport instead of ~513px. Fully
+   reverted: the function, its two `syncSheetStack` call sites, the CSS rule and the lane row
+   asserting it are all removed rather than left half-shipped. The already-shipped stacked-parent
+   cue does not have this problem because it transforms the sheet's own children
+   (`> :not(.db-mobile-bottom-sheet-handle)`), never the sheet or a shared container — a future
+   attempt at the first-sheet case needs an equivalent inner wrapper, which
+   `.note-database-container` does not currently have (every renderer builds directly into it).
+   Full reasoning in `decision-record.md` ADR-003. **The light-theme stacked-parent figure
+   (0.758, from AC-003) remains open and was investigated further, not fixed**: an alpha-composite
+   model built from the recorded luminance pairs shows light theme's own workspace background sits
+   ABOVE the sheet's opaque background, which bounds `.is-stack-parent`'s bare `opacity` constant
+   between composite ratios of roughly 0.75 and 0.80 for light theme regardless of value — it
+   cannot reach 0.710 through that one property alone. A theme-scoped darkening mechanism
+   independent of `opacity` (e.g. a `filter: brightness()` step, reset for dark) was identified as
+   the likely fix but not implemented or verified.
+5. **T015's header-block clause, T020, and the two named lane pairs' rewiring are still open.**
+   The header block's 20px top margin is the same rule a prior phase tuned specifically to keep
+   the close button clear of the grab band's own hit-test; reducing it toward the measured 70pt
+   without a real hit-test re-verification risked reintroducing that regression, so it was left
+   red. `properties property type picker` and `add view property picker` in
+   `REGISTERED_STACKED_PAIRS` still assert their pre-existing stack shape rather than the shell's
+   real replace mechanism, for the reason limitation 2 above already gives; retargeting them to
+   drive real `createSurfaceShell` composition (the way the depth-cap's own dedicated check does)
+   is a distinct, deeper harness change not attempted this session. The replace-pair capture
+   scenarios (T020) were not reached either. `buildPrimaryActionPill`/`buildShellHeaderChip` were
+   reviewed and deliberately kept as documented producers rather than removed or force-wired,
+   matching T018's `heightRole` precedent in this same packet.
+6. **T021's divider audit is partial — a styles.css reading, not a reference-capture comparison.**
+   The leading-icon row case has a real mechanism (`.db-menu-item`'s inset hairline) that matches
+   the described shape. The plain-row symmetric-20pt case has no mechanism at all anywhere in the
+   stylesheet. The between-section full-bleed case is ambiguous: the existing separator carries an
+   8px margin, not a literal 0, and whether that counts as "full-bleed" against the reference was
+   not checked against an actual capture.
+7. **T019's focus-restoration wiring has no dedicated unit test.** `mobile-bottom-sheet.ts` has no
    jsdom-backed suite; the anchor-capture logic is verified by code reading and by the live lane's
    mount/dismiss cycles staying green, not by an assertion on `document.activeElement` capture
    specifically.
-7. **`design-system.md` §7 is stale on the scrim**, stating *"There is no sheet scrim … A scrim is
+8. **`design-system.md` §7 is stale on the scrim**, stating *"There is no sheet scrim … A scrim is
    new construction"* when one has shipped since `048`. Named here rather than fixed: the design
    system is the parent's document and this packet does not own it.
+9. **This worktree is 8 commits behind origin/main**, missing (among others) `9d798c69`, which
+   already recaptured and reviewed 17 sheet-family captures plus 4 icon-picker ones as a byproduct
+   of an unrelated packet's (`064`'s) own evidence regeneration. This session's own css-lane
+   release explicitly excludes and restores the 2 of those (`field-icon-picker-desktop-{dark,
+   light}`) that this session's own recapture also happened to move, rather than claim them from a
+   stale base — the eventual rebase onto `main` carries the real fix. `pixelHash` is not trusted as
+   proof of "unchanged" anywhere in this packet's own recapture review; every judgement used
+   decoded pixel delta (changed-pixel count, max channel delta) against the committed PNG instead.
 <!-- /ANCHOR:limitations -->
 
 ---

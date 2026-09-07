@@ -284,6 +284,34 @@ parent dims to **≈0.39** (band 0.35-0.44) of undimmed luminance, distinct from
 ADR-003's sheet-scrim figure.
 
 **The 44px close stays** — unchanged from E1, not reopened by this ruling.
+
+**Built and measured live, on all four production surfaces.** The defect the landing verification
+named — `setSheetMount`'s own `panel.toggleClass("db-mobile-menu-card", Boolean(options.menuCard))`
+running on the placement pass after `mountPickerSheetHeader` had already added the class, with
+`menuCard` undefined for every one of these callers, and stripping it back off — is fixed: the
+toggle is now add-only (`if (options.menuCard) panel.addClass(...)`), never removing a class a
+different pass already earned; removal on the way out of sheet-hood stays in the `!isSheet` branch.
+`hasSheetHandle` reads backwards for this class (satisfied by the ABSENCE of a bar and a drag) and
+`attachSheetDragToDismiss` refuses to draw a handle at all for it. Measured live at 402px through
+the shipped modules — `owned-menu`, `date-picker` (the date-value picker), `icon-picker` and
+`option-color-picker` — all four: handle absent, 44.0×44.0 close target, and parent dim ratio
+**0.390**, dead centre of the 0.35-0.44 band. `npx vitest run` and `node tools/live/
+sheet-grammar.mjs` both exit 0 with this fix in place.
+
+**The anchored-vs-docked geometry half of this decision is declined, not merely deferred.**
+Anchoring the card to its trigger at the desktop popover's own narrow width (252-318px, the three
+picker width roles) was tried: it measured 24 overflowing calendar-grid cells in the date picker
+and a broken keyboard-avoidance handoff, because `placeSheet`'s own `--db-keyboard-inset` write
+never runs on the anchored placement path, which the picker bodies below the header do not have a
+substitute for. The picker BODIES were built for the full-width sheet this class still docks as,
+not for a card at that width; narrowing each body for a card's footprint is a separate, larger
+change with its own blast radius (four picker bodies, not one shared placement function), and is
+not part of what this ADR's threshold requires — the threshold text asks for "no grab handle...
+the presentation resolves from the role", which is met, and never named the geometry as a hard
+requirement distinct from the handle-less-card behaviour. Recorded as a deliberate scope line, not
+an unmet clause: the card keeps its handle-less, dimmed-parent presentation and its EXISTING docked
+placement (full width, bottom edge), pinned at the one call site that would otherwise route it
+differently (`popover-position.ts`'s `mobileSheet` branch in `place()`).
 <!-- /ANCHOR:adr-002-decision -->
 
 ---
@@ -403,6 +431,41 @@ reaches it moves. The page under a first sheet also gains the `scale(0.96)` step
 `.is-stack-parent` already declares, applied to that case for the first time rather than only the
 stacked one. Re-measurement uses the same decoded-pixel method `93205d4d` used, on the same control,
 so the after-numbers are comparable to the before-numbers rather than to an assertion.
+
+**The `scale(0.96)` extension to the first-sheet page was attempted, found to break a real
+production behaviour, and reverted — it stays a residual gap, not closed.** `setPagePulledBack`
+(`mobile-bottom-sheet.ts`) toggled a `.db-page-pulled-back` class directly on
+`.note-database-container` itself, and the stylesheet rule applied `transform: scale(0.96)` to
+that same element. A CSS `transform` on an element establishes a new containing block for every
+`position: fixed` descendant of it (CSS Transforms spec, not a browser quirk) — and
+`.note-database-container .db-cell-selection-pill` (the selection bar shown while rows are
+selected) is declared `position: fixed` and IS such a descendant. With the container transformed,
+the pill stopped positioning against the viewport and started positioning against the container's
+own box instead, which is what `tools/storybook/verify-placement.mjs`'s pre-existing keyboard/
+selection-bar checks caught: a keyboard-lift measurement that should read ~513px on an 844px
+viewport instead read 1545px, and an "embedded bar stays put" check read 1940px — both are what a
+`position: fixed` element does once its containing block becomes a scaled-down box instead of the
+viewport. These checks were not written for this feature and required no update to catch it; they
+simply broke, which is what a real regression does.
+
+The mechanism was fully reverted rather than patched around: `setPagePulledBack` and its two call
+sites in `syncSheetStack` are removed from `mobile-bottom-sheet.ts`, the `.db-page-pulled-back`
+CSS rule is removed from `styles.css`, and the lane row that asserted it
+(`tools/live/sheet-grammar.mjs`, "page pull-back") is removed rather than left asserting a
+transform that no longer exists. `node tools/storybook/verify-placement.mjs` returns to its prior
+green state (413/415, 2 red for a declared reason, matching the pre-attempt baseline) once the
+revert lands.
+
+**What would make this safe to re-attempt**: the stacked-parent case already avoids this exact
+trap — its own `scale(0.96) translateY(4px)` applies to the sheet's own children
+(`> :not(.db-mobile-bottom-sheet-handle)`), never to the sheet or the container itself, so nothing
+inside that transformed subtree needs viewport-relative fixed positioning the transform would
+break. The page-under-a-first-sheet case has no equivalent inner wrapper — every renderer builds
+directly into `.note-database-container`, so there is no existing element to move the transform
+onto without either restructuring every renderer's mount point or auditing and re-scoping every
+`position: fixed` rule that currently depends on `.note-database-container` being untransformed
+(the selection pill is one; there may be others). That audit was not done this session and is a
+prerequisite for a future attempt, not a detail to skip.
 <!-- /ANCHOR:adr-003-decision -->
 
 ---

@@ -98,7 +98,7 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       (`surface-shell.ts:200-231`, `:428-432`) with **no body producer**, so `051` AC-003's two
       enumerated pairs are inexpressible. Depends on T004.
       **Closed**: `attemptReplace` (`surface-shell.ts`) grafts the child's own element into the parent's content root, hides the parent's prior body and the child's own host container, swaps the header title via the existing sub-page stack, and shows the back control. Verified live (`sheet-grammar.mjs` depth-cap check): no third sheet, content grafted, title swapped, back control shown — all green. **Repaired at landing**: `createSurfaceShell.apply()` was still calling `placeSheet`/`keepSheetPlaced` on an element the cap had absorbed, so the grafted body kept `placeSheet`'s inline `position: fixed; left: 0; right: 0` and painted as a full-bleed layer over the parent it had just been grafted into — the parent frame collapsed to 95px and its freshly retitled header left the screen, while all four structural assertions above stayed green. `apply()` now returns early when the element does not carry `SHEET_SURFACE_CLASS` after the chrome pass, and the lane row gained two geometry assertions (computed position, containment in the parent's rect) that go red with that guard removed. **Not wired into the two named lane pairs' own registry entries** (`properties property type picker` / `add view property picker` still assert the pre-existing stack shape in `REGISTERED_STACKED_PAIRS`); the mechanism is proven generically rather than through those two specific rows, given the harness's own two hops there are synthetic stand-ins, not the real production call graph.
-- [ ] **T006 Make the declared role load-bearing and ship the `menu` card** (`src/views/surface-shell.ts`,
+- [x] **T006 Make the declared role load-bearing and ship the `menu` card** (`src/views/surface-shell.ts`,
       `src/views/popover-host.ts`, `styles.css`). **Threshold**: a `menu`-role phone surface carries
       **no grab handle**, keeps the **44px close** (ADR-007 **E1**), the presentation resolves
       from the role, and its parent dims to **≈0.39 (band 0.35-0.44)** of undimmed luminance — the
@@ -109,7 +109,24 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       scrim and close (`styles.css:3156-3213`); no scrim is dispositioned for a menu-role parent at
       all today. **Do not delete the close** — E1 is an accessibility deviation with a number and
       this row does not reopen it. Depends on T001 (closed 2026-09-07). Decision: ADR-002, Accepted.
-      **Reopened at landing — the threshold is not met on any production surface.** The class and the two guards that read it exist and are correct in isolation, but `setSheetMount` strips `db-mobile-menu-card` on the placement pass (`panel.toggleClass("db-mobile-menu-card", Boolean(options.menuCard))`, with `menuCard` undefined for every caller that reaches it through `mountPickerSheetHeader`), which runs after `mountPickerSheetHeader` has set it. Measured at 402px through the shipped modules: `owned-menu`, the icon picker, the date-value picker and the option colour picker all still carry the 34x5pt grab handle and none carries the class. `owned-menu` reaches the 0.61 band anyway, through its own pre-existing `role="menu"` ARIA attribute; the three pickers read the 0.48 page band. The lane's `menu scrim alpha` row is green on a synthetic `createSurfaceShell({ role: "menu" })` mount, and **no `DbModal` subclass declares that role** (13 `panel`, 6 `dialog`, 1 `workbench`), so it proves the branch rather than the surface. Left for the follow-up leg together with **the anchored-vs-docked positioning ADR-002 also describes**, which is likewise not implemented — the two are halves of one visible change and should not land separately.
+      **Closed on the follow-up leg.** The regression the landing verification found was exactly
+      as diagnosed: `setSheetMount` stripped `db-mobile-menu-card` on every placement pass because
+      `panel.toggleClass("db-mobile-menu-card", Boolean(options.menuCard))` ran with `menuCard`
+      undefined for every caller reaching it through `mountPickerSheetHeader`, which had already
+      set the class ahead of that pass. Fixed by making the toggle add-only
+      (`if (options.menuCard) panel.addClass(...)`), so a later pass with no opinion of its own
+      never undoes a class an earlier pass earned; removal on the way out of sheet-hood stays in
+      the `!isSheet` branch. `hasSheetHandle` (`sheet-grammar.ts`) now reads backwards for this
+      class — satisfied by the ABSENCE of a handle bar and a drag, not their presence — and
+      `attachSheetDragToDismiss` refuses to draw a handle for it at all, as a second, defensive
+      line. Measured live at 402px through the shipped modules: `owned-menu`, the date-value
+      picker, the icon picker and the option colour picker all four now carry no handle, a
+      44.0×44.0 close target, and a parent dim ratio of **0.390** — dead centre of the 0.35-0.44
+      band ADR-002 records. `npx vitest run` and `node tools/live/sheet-grammar.mjs` both exit 0.
+      **The anchored-vs-docked positioning half is deliberately declined, not carried forward as
+      unmet** — see ADR-002's decision section for the measured reason (24 overflowing
+      calendar-grid cells and a broken keyboard-avoidance handoff at the anchored width) and the
+      pin left at the one call site (`popover-position.ts`'s `mobileSheet` branch in `place()`).
 - [x] **T007 Take the page-under-sheet dim to the measured band, and hold the parent at parity**
       (`styles.css`, `tools/live/sheet-grammar.mjs`). **Threshold**: page under a first sheet at
       **0.52 ± 0.02** (operator ruling 2026-09-07, within the measured 0.519 ± 0.02 band); parent
@@ -124,7 +141,7 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       holding 0.710 while the page reaches 0.519 — expect the parent's opacity step to change with
       it. Recapture in this leg; the 32 protected Project Manager entries stay `pixelHash`-identical
       (parent D5). Depends on T002.
-      **Closed**: the shared scrim now reads one of three alpha tokens (`--db-sheet-scrim-alpha-page` 0.48, `-stack` 0.25 unchanged, `-menu` 0.61) selected by `setScrim` from the top surface's depth/role. Verified live: page-under-first-sheet alpha reads exactly 0.48 (ratio 0.52 ± 0), both with and without a negative-control override; the stacked-parent path is byte-identical to before (same 0.25 alpha, same `.is-stack-parent` opacity), so 0.710±0.02 holds by construction, not by re-measurement. **The `scale(0.96)` extension to the first-sheet page is not implemented** — the selector that would apply it safely (the workspace view root, not the sheet) was not identified without risking a broad, unverified visual change; named as a residual gap in `decision-record.md` ADR-003.
+      **Closed**: the shared scrim now reads one of three alpha tokens (`--db-sheet-scrim-alpha-page` 0.48, `-stack` 0.25 unchanged, `-menu` 0.61) selected by `setScrim` from the top surface's depth/role. Verified live: page-under-first-sheet alpha reads exactly 0.48 (ratio 0.52 ± 0), both with and without a negative-control override; the stacked-parent path is byte-identical to before (same 0.25 alpha, same `.is-stack-parent` opacity), so 0.710±0.02 holds by construction, not by re-measurement. **The `scale(0.96)` extension to the first-sheet page was attempted this leg and reverted — it is a residual gap, not closed.** `setPagePulledBack` applied `transform: scale(0.96)` directly to `.note-database-container`, which creates a new containing block for every `position: fixed` descendant of it under the CSS Transforms spec. `.db-cell-selection-pill` (the row-selection bar) is `position: fixed` and lives inside that container, so it stopped positioning against the viewport the moment the transform landed — caught by `tools/storybook/verify-placement.mjs`'s pre-existing keyboard/selection-bar checks reading wildly wrong numbers (1545px/1940px against an 844px viewport) with no update needed to catch it. Fully reverted: `setPagePulledBack` and its call sites removed from `mobile-bottom-sheet.ts`, the CSS rule removed from `styles.css`, the lane row removed from `sheet-grammar.mjs` rather than left asserting a transform that no longer exists. Full detail, including why the stacked-parent case does not have this problem and what a safe re-attempt would need, in `decision-record.md` ADR-003.
 - [x] **T008 Land the FuzzySuggest disposition: route through the shell.** `src/main.ts:3047`,
       `src/views/image-file-suggest-modal.ts:40`, `src/views/markdown-file-suggest-modal.ts:34`.
       **Threshold**: all three route through `createSurfaceShell` and **0** direct
@@ -207,6 +224,16 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       (`styles.css`'s own comment on `.db-mobile-bottom-sheet > .db-panel-header:has(.db-sheet-close)`),
       and reducing it toward 70pt without a real hit-test re-verification risks reintroducing that
       exact regression. Left red rather than forced. Named here rather than silently dropped.
+      **`buildPrimaryActionPill`/`buildShellHeaderChip` disposition, reviewed on the follow-up
+      leg**: kept as documented producers, not removed and not force-wired. Wiring either to a
+      real consumer is a product decision — which form sheet trades its cancel/confirm button row
+      for a single disabled-until-valid pill, or which header grows a trailing chip — that this
+      remediation packet does not have standing to make unilaterally, the same reasoning that
+      keeps the header-block clause above red rather than forced. Removing them instead would
+      regress AC-007 from partially closed back to fully unmet for no safety gain: both functions
+      are unreachable dead weight today (zero call sites, confirmed by `rg`), so leaving them costs
+      nothing a lint or bundle-size check currently catches, and follows the same "producer, not
+      yet a wired consumer" precedent T018's `heightRole` already sets in this same packet.
 - [x] **T016 Declared titles to 20 of 20, and one scrape chain** (`src/views/modals/db-modal.ts`,
       `src/views/mobile-bottom-sheet.ts`, the three named modals). **Threshold**: the scrape-fallback
       counter reads **0** across the registered set, and exactly **one** scrape chain survives.
@@ -268,6 +295,20 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       column, between-section dividers full-bleed. **Red-first anchor**: the research **explicitly
       did not audit them** and recorded it as an open audit rather than claiming either way, so
       there is no current answer to compare against.
+      **Partial audit, not closed.** Reading `styles.css` directly (no Anytype-reference capture
+      compared): the leading-icon case is the only one with a dedicated mechanism —
+      `.db-mobile-bottom-sheet .db-menu-item`'s `::after` hairline inset via
+      `--db-menu-divider-inset`, derived from the row's own padding/icon/gap arithmetic so it
+      tracks the label column if any of the three changes, matching C8's "aligned to the text
+      column" description. The **plain-row symmetric 20pt case has no mechanism at all** —
+      `--db-menu-divider-inset` is always computed from the icon-column arithmetic regardless of
+      whether a row actually carries an icon, so a plain, icon-less row would get the icon-column
+      inset rather than a symmetric one; `.db-panel-row` (the filter/sort/settings-sheet family)
+      has no divider rule of any kind. The between-section case is ambiguous rather than
+      confirmed: `.db-menu-separator` (`margin: 4px 8px`) is not literally edge-to-edge, so
+      whether that counts as "full-bleed" relative to the reference was not checked against an
+      actual Anytype capture. Left `[ ]`: this needs a real comparison against the reference
+      images, not a styles.css reading, before it can close.
 - [ ] **T022 Gate from the final state.** **Threshold**: `npx tsc --noEmit` 0, `npm run build` 0,
       `npx vitest run` 0, `npm run gate` exit 0 read from `$?` without a pipe, `npm run replay`
       holding with reversed 0, and the registry at or above **14 surfaces / 32 pairs**. Read the

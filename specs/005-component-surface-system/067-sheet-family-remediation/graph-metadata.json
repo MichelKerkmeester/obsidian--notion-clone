@@ -48,6 +48,8 @@
       "goal.md",
       "decision-record.md",
       "implementation-summary.md",
+      "tools/storybook/verify-placement.mjs",
+      "tools/lane/css-lane.json",
       "src/views/overlay-stack.ts",
       "src/views/surface-shell.ts",
       "src/views/mobile-bottom-sheet.ts",
@@ -58,9 +60,7 @@
       "src/views/markdown-file-suggest-modal.ts",
       "src/views/modals/csv-markdown-export-modal.ts",
       "src/settings.ts",
-      "tools/live/sheet-grammar.mjs",
-      "src/views/overlay-stack.test.ts",
-      "tools/storybook/verify-placement.mjs"
+      "src/views/owned-menu.ts"
     ],
     "entities": [
       {
@@ -103,6 +103,18 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
         "source": "derived"
       },
       {
@@ -166,21 +178,9 @@
         "source": "derived"
       },
       {
-        "name": "sheet-grammar.mjs",
-        "kind": "file",
-        "path": "tools/live/sheet-grammar.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "overlay-stack.test.ts",
-        "kind": "test",
-        "path": "src/views/overlay-stack.test.ts",
-        "source": "derived"
-      },
-      {
-        "name": "verify-placement.mjs",
-        "kind": "file",
-        "path": "tools/storybook/verify-placement.mjs",
+        "name": "owned-menu.ts",
+        "kind": "code",
+        "path": "src/views/owned-menu.ts",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The family reads as one surface set until you measure it",
     "created_at": "2026-09-06T15:02:09Z",
-    "last_save_at": "2026-09-07T07:49:52.399Z",
+    "last_save_at": "2026-09-07T12:40:46.753Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a542b476c0d48607c26d701534a30c089bbf8789e4200edf33ac641165a63ea1",
+    "source_fingerprint": "sha256:f6e8c89af8915b8a98e7bbbbd7046677cb3d03ff30aeec9e5a2fff1f0b8731f9",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "e45029c2cd69f0c7cafc1ffc364a3291c9f66aae3765b1d34396322a8d3b2d40",
       "plan.md": "78821cc220bcb362b54e1d6fc531d8aa50f7691dc7694cecabb13554e55a8e1a",
-      "tasks.md": "a2670ea0a228ec752376e9cf3fcbbc785a6a6328f0eb215cd671e3075cf622d6",
-      "decision-record.md": "974f05a8e00da095aa5ac32152c2e3bd52ee44e94711c7ec148cd7738f8999d4",
-      "implementation-summary.md": "c18f855a72ad041d45c6c47e30a3ea9ea582907eb3c9975f7660c58b4d135f37"
+      "tasks.md": "3a7f2ec9243abe641248370c16c3361fcbba81153f5568d46b1e336d646e1f45",
+      "decision-record.md": "f00011def8dd7696408a772cb796acad8e0ff8c0fcc6f59d8207d45481c0c7d6",
+      "implementation-summary.md": "3ac7d96e769f1dfd5ffeab387a46617603c496f123affdcc5511b274d5090273"
     },
     "last_active_at": null
   }

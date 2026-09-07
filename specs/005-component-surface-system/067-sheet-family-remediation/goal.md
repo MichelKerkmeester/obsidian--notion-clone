@@ -131,14 +131,19 @@ never resolve them silently.
       `record column submenu` and `import confirm dropdown chain` keep `depth: 3` untouched, being
       menu-stacks the cap does not govern.
 - [ ] **A `menu`-role surface presents on the phone as a handle-less anchored card, and the
-      presentation path reads the role.** **Today: the role is stored and never read.**
-      `SurfaceShellRole` is declared (`surface-shell.ts:332`, `:347-348`) and exposed through a
-      getter (`:394-395`), and **nothing in the presentation path consumes it**; `menu`-role
-      surfaces mount `mountPickerSheetHeader` (`popover-host.ts:168-176`) and ship handle, scrim and
-      close as `.db-dropdown-popover.db-mobile-bottom-sheet` (`styles.css:3156-3213`) — the opposite
-      affordance set from `design-trueup.md` row 26. Done is: no grab handle on a `menu`-role phone
-      surface, the **44px close retained** (E1), and the parent treatment settled against the
-      captures rather than chosen.
+      presentation path reads the role.** **Follow-up leg: handle-less, close-retained, parent-
+      dimmed are all done and measured live; the "anchored" half of this row's own wording is
+      deliberately declined.** All four production `menu`-role surfaces (`owned-menu`,
+      `date-picker`, `icon-picker`, `option-color-picker`) now read the role through
+      `mountPickerSheetHeader` + `setSheetMount`'s add-only `db-mobile-menu-card` toggle: no grab
+      handle, a 44.0×44.0 close target, and a parent dim ratio of **0.390** (band 0.35-0.44),
+      measured at 402px. What is NOT done, and not attempted further after one measured trial:
+      anchoring the card to its trigger rather than docking it full-width — tried and reverted
+      (24 overflowing calendar-grid cells, a broken keyboard-avoidance handoff at the anchored
+      width), recorded in `decision-record.md` ADR-002 with a pin at
+      `popover-position.ts`'s `mobileSheet` branch. This checkbox stays unchecked because its own
+      text says "anchored"; `acceptance-criteria.md` AC-002, whose Given/When/Then never named
+      anchoring as a separate clause, is `Met`.
 - [x] **The page under a first sheet is dimmed to the measured level, and no lane row is missing
       for it.** **Today: 0.75 of undimmed against a measured 0.519.** `.db-mobile-sheet-scrim` is
       `rgba(0,0,0,0.25)` (`styles.css:319`) against `0.519 / 0.520 / 0.505` luminance across three
