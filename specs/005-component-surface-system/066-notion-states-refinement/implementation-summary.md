@@ -102,7 +102,9 @@ anything in this packet's scope.
 | `src/views/toast.test.ts` | Modify | Dwell matrix against the production `showToast`, fake timers |
 | `src/views/database-view.ts` | Modify | Three owned `errors.*` catches route through `showToast` |
 | `src/views/deletion-undo.test.ts` | Modify | Integration test forcing a delete failure; one stale assertion fixed |
-| `src/views/empty-state-renderer.ts` | Modify | `renderInlineChip` beside `renderCard` |
+| `src/views/empty-state-renderer.ts` | Modify | `renderInlineChip` beside `renderCard`; `STALE_REFERENCE_REASONS` beside the reason union |
+| `src/views/board-renderer.ts` | Modify | **Landing.** `render`'s `emptyState` parameter, accepted and dropped since it was introduced, now renders the chip for a stale reference |
+| `src/views/board-renderer-hierarchy.test.ts` | Modify | **Landing.** Four cases driving the real `BoardRenderer` down that path |
 | `src/views/empty-state-renderer.test.ts` | Modify | Chip render, aria-live, chevron action, no-action case |
 | `src/views/motion-tokens.test.ts` | Modify | Permanent census guard updated to the post-migration counts |
 | `styles.css` | Modify | `.db-inline-chip` block; `--db-motion-fast-out` token; fast-band literals resolved; phone-band centring |
@@ -136,7 +138,7 @@ the lineage trail on disk and git-ignored.
 | Decision | Why |
 |----------|-----|
 | ADR-004: option 1, a dedicated `--db-motion-fast-out` token | Zero current requirement asks for the four surfaces' curve to change; a second small token buys zero visual change on four live surfaces, which is the smaller, safer move |
-| `renderInlineChip` ships unwired | Its own frozen file scope (`empty-state-renderer.ts` + its test) does not include `board-renderer.ts` or `database-view.ts`'s call sites; wiring it into the board's own dead `emptyState` parameter is real, separate, scoped work |
+| ~~`renderInlineChip` ships unwired~~ — **reversed at landing** | The original reasoning was scope, and scope is a good reason to defer work but not to call a criterion met. AC-004's `When` is a board rendering; a producer nothing invokes proves the producer compiles. The wiring is four lines against a parameter both call sites already pass, and the parameter being dead was itself a defect: a board grouped by a deleted relation rendered a blank strip. `spec.md`'s Files to Change carries the amendment |
 | `tools/live/` lane-row extension (T012) deferred | None of the fourteen `.mjs` scripts bundles `toast.ts` or measures a forced `database-view.ts` failure; building that scenario plumbing safely against a 26-lane gate, without a live Obsidian to rehearse against, is follow-on work rather than a same-session addition |
 | `055` `tasks.md` T003 left unticked | Its own documented gap is unrelated to anything in this packet's scope; ticking it on the strength of sibling fixes would be the same kind of stale claim this packet exists to correct |
 <!-- /ANCHOR:decisions -->
@@ -150,13 +152,14 @@ the lineage trail on disk and git-ignored.
 |-------|--------|
 | `npx tsc --noEmit` | Exit 0, no output |
 | `npm run build` | Exit 0 |
-| `npx vitest run` | Exit 0, 1530/1530 across 142 files (1520 before this packet's new tests) |
+| `npx vitest run` | Exit 0, 1548/1548 across 143 files, from the final rebased tree (1530 before landing added the four production-path board cases; the rest arrived with `origin/main`) |
 | `node tools/live/sheet-grammar.mjs` | Exit 0, every registered surface and control PASS |
 | `node tools/live/render-assertions.mjs` | Exit 0, every scenario PASS |
 | `node tools/naming/scan-comments.mjs` | Exit 0, 0 artifact-id violations |
 | `node tools/naming/scan-failing-values.mjs` | Exit 0, 144 unmarked ≤ baseline 145 |
-| Red-first proofs | Seven of nine acceptance criteria `Met`, each with an observed red value before its fix; see `acceptance-criteria.md` |
-| `npm run gate` (26 lanes) | Run once from the final tree; see the landing report for the exit code and log |
+| Red-first proofs | Eight of nine acceptance criteria `Met`, each with an observed red value before its fix; every new test re-checked at landing by mutating the production file it guards and watching it go red. See `acceptance-criteria.md` |
+| Phone-band placement, measured | Chrome against the shipped `styles.css`, mounting the DOM `showToast` builds, at 390px / 402px / 430px: stack and rail cards both left 16px / right 16px. Desktop 1280px unchanged. The measurement found a 32px overflow the arithmetic had missed |
+| `npm run gate` (26 lanes) | Exit 0 — 26 green, 0 red, from the final rebased tree |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -169,12 +172,14 @@ the lineage trail on disk and git-ignored.
    for this landing, but not the regression guard the packet's own testing strategy called for.
    Building it means adding `toast.ts` and a forced-failure scenario to the render-assertion bundle's
    scenario list, which no existing lane currently does.
-2. **`renderInlineChip` is not wired into any live call site.** It is additive and directly tested,
-   but no board, table or embed context renders it yet — `T014`'s screenshot re-derivation has
-   nothing new to capture as a result.
-3. **AC-008 and AC-009's rendered-layout half are still open.** D-1, D-2 and the centred-placement
-   read all ride `055`'s operator device pass; AC-009's margins are verified by CSS arithmetic on the
-   same constants the rule states, not by a live-rendered measurement.
+2. **`renderInlineChip` is wired on the board only.** Landing wired the board's stale-reference
+   path, which is the one AC-004 names. The table renderer and the embed still render the card for
+   every reason, and no capture exercises the chip yet: reaching it needs a schema whose group
+   property has been deleted, which no fixture builds.
+3. **AC-008 is still open, and AC-009 has no permanent guard.** D-1, D-2 and the handset read of the
+   centred placement all ride `055`'s operator device pass. AC-009's margins are now measured rather
+   than argued, but the measurement was a one-off run at landing — T012's lane row, which would have
+   caught the `box-sizing` overflow without a person going looking for it, still does not exist.
 4. **ADR-003's 5000ms dwell is still an inference**, as recorded — the device pass is the check that
    would move it, unchanged by this landing.
 <!-- /ANCHOR:limitations -->

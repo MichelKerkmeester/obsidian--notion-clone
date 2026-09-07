@@ -1,7 +1,7 @@
 {
   "holder": "066-notion-states-refinement",
   "acquiredAt": "2026-09-07T00:35:00Z",
-  "baselineHash": "PENDING",
+  "baselineHash": "f1a1aa9fb153",
   "baselineCommit": null,
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -4767,14 +4767,14 @@
       "event": "release",
       "phase": "066-notion-states-refinement",
       "at": "2026-09-07T00:40:00Z",
-      "hash": "PENDING",
+      "hash": "f1a1aa9fb153",
       "reviewed": [
         "screenshots/notion-clone/components/chrome-toast-error-mobile-dark.png",
         "screenshots/notion-clone/components/chrome-toast-error-mobile-light.png",
         "screenshots/notion-clone/components/chrome-toast-success-mobile-dark.png",
         "screenshots/notion-clone/components/chrome-toast-success-mobile-light.png"
       ],
-      "note": "Full recapture: 588 entries. Four captures carry this edit's content, all four the phone-band toast placement change — both toast variants, both themes — each opened and read: the card is narrower (fills the phone-band's symmetric margins rather than the unclamped 384px) and both read correctly. Twenty-five further captures moved bytes, none from a selector this edit touched: twenty-one moved bytes only (identical pixelHash/layoutHash) and were restored to their committed bytes, manifest entries left at the fresh capture's sourceHashes since the content is verified unchanged; four (constructed-date-picker(-datetime)-mobile-{dark,light}) moved a real pixel — the calendar grid's 'today' highlight, driven by the real wall-clock date the fixture reads, not by any styles.css selector — restored to their committed bytes with pixelHash/layoutHash/bytes patched back to match, sourceHashes left at the fresh capture so a future recapture is still asked to look rather than reading as already reviewed."
+      "note": "Full recapture: 588 entries. Four captures carry this edit's content, all four the phone-band toast placement change — both toast variants, both themes — each opened and read: the card is narrower (fills the phone-band's symmetric margins rather than the unclamped 384px) and both read correctly. Twenty-five further captures moved bytes, none from a selector this edit touched: twenty-one moved bytes only (identical pixelHash/layoutHash) and were restored to their committed bytes, manifest entries left at the fresh capture's sourceHashes since the content is verified unchanged; four (constructed-date-picker(-datetime)-mobile-{dark,light}) moved a real pixel — the calendar grid's 'today' highlight, driven by the real wall-clock date the fixture reads, not by any styles.css selector — restored to their committed bytes with pixelHash/layoutHash/bytes patched back to match, sourceHashes left at the fresh capture so a future recapture is still asked to look rather than reading as already reviewed. Re-derived on the rebase onto origin/main, which took the lane through 063's release at 07578ed6d5e4: a seventh edit landed here — box-sizing: border-box beside the band's width: 100%, after a browser measurement found the inline card overflowing its host by 32px — and a full recapture reproduced all four toast captures byte-for-byte, so the placement change is unmoved by the fix. Sixteen unrelated captures moved bytes at identical pixelHash AND layoutHash and were restored to their committed bytes; screenshots:verify exit 0 on 588 entries."
     }
   ],
   "outstanding": [

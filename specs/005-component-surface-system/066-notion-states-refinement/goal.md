@@ -157,6 +157,10 @@ never resolve them silently.
       cannot show a duration, so **no Notion number is adopted** (D2). Done is: a toast carrying an
       action stays connected **≥5000ms**, a plain success still clears at **2200ms**, an `error`
       still waits for the reader, and one lane row reads the two computed budgets apart.
+      **Substantively green 2026-09-07, deliberately left unticked:** `ACTION_DISMISS_MS = 5000`
+      selected on `options.action`, proven by a fake-timer matrix driving the production
+      `showToast` across all four severity × action cells. The lane row this row names is `tasks.md`
+      T012 and was not built.
 - [ ] **Every operation failure this plugin owns reports through the toast, with the census moving.**
       **Observed red 2026-09-06: 242 bare `new Notice(` sites, and three of them are the same
       `errors.deleteFailed` key.** `deleteRow`'s catch (`src/views/database-view.ts:8378`),
@@ -170,7 +174,11 @@ never resolve them silently.
       `errors.*` catch in `database-view.ts` that reports an owned operation renders
       `.db-toast.is-error`, `is-error` never auto-dismisses, and the bare-notice census for owned
       operations has moved from **242** with the new figure recorded in the lane row.
-- [ ] **A stale reference has an inline, permanent, actionable shape.**
+      **Substantively green 2026-09-07, deliberately left unticked:** all three catches route
+      through `showToast`, the census reads **239**, and `deletion-undo.test.ts` drives the real
+      catch. What this row asks for and does not have is the *lane row* — the figure lives in this
+      packet's documents, so nothing re-derives it on the next landing (`tasks.md` T012).
+- [x] **A stale reference has an inline, permanent, actionable shape.**
       **Observed red 2026-09-06: `grep -c "db-inline-chip" styles.css` is 0.** `source-missing` and
       `group-relation-deleted` both ship as `EmptyStateReason` members
       (`src/views/empty-state-renderer.ts:25-39`) and both render through `renderCard`
@@ -181,7 +189,14 @@ never resolve them silently.
       compact-context stale reference renders the chip, the chip never auto-dismisses, it carries
       `aria-live="polite"` that today's rail does not, its background is a host token composed with
       `color-mix` and **zero hex literals**, and its tap target meets the host's interactive floor.
-- [ ] **`055`'s own tracking documents say what the tree says.**
+      **Green 2026-09-07:** `renderInlineChip` (`empty-state-renderer.ts`) renders the triangle,
+      label and chevron with `aria-live="polite"` and no dismiss control; `.db-inline-chip`'s
+      background is `color-mix(in srgb, var(--text-error) 10%, var(--background-primary))` with the
+      action at a 30px target. The *compact-context* half was landed late: the chip shipped
+      additive, called by nothing, and `BoardRenderer.render` was dropping the `EmptyStateOptions`
+      both of its call sites already pass — so a board grouped by a deleted relation rendered a
+      blank strip. Wired, and driven end to end by `board-renderer-hierarchy.test.ts`.
+- [x] **`055`'s own tracking documents say what the tree says.**
       **Observed red 2026-09-06: five load-bearing rows are stale, verified one at a time.**
       (1) The toast criterion (`../055-states-feedback-and-motion/goal.md:118-121`) reads *0 of 247*
       notice sites and says `notice.galleryMigrated` "promises an Undo the notice cannot carry" —
@@ -198,8 +213,11 @@ never resolve them silently.
       amendment (`:652`) are unticked against work the tree shows landed. Done is: every restated
       figure carries a same-day `file:line` verification taken from the tree, no figure is copied
       from this packet or from the digest without re-checking, and each old claim is reproduced as
-      false before its replacement lands.
-- [ ] **The fast motion band has one owner and no raw literals.**
+      false before its replacement lands. **Green 2026-09-07:** all five restated, each against a
+      same-day read — 239 notices, 14 reasons, E4 confirmed green, 0 motion declarations, T019's
+      amendment and T020 ticked; T003 confirmed still open rather than ticked on a sibling's
+      strength.
+- [x] **The fast motion band has one owner and no raw literals.**
       **Observed red 2026-09-06: 4 untokenized declarations, all `ease-out` against a token that is
       `ease`.** `styles.css:200`, `:473`, `:7431` and `:22745` hand-type `120ms ease-out`, while
       `--db-transition-fast` is `120ms ease` (`:122`) — so a blind migration to the token silently
@@ -208,7 +226,10 @@ never resolve them silently.
       against `--db-motion-fast` (`:142`). The digest contributes nothing here and cannot: a still
       is not a duration. Done is: raw fast-band duration literals **= 0** with comments excluded,
       the ease-versus-ease-out choice recorded as an ADR rather than absorbed, and the lane row
-      counting declarations rather than grep hits.
+      counting declarations rather than grep hits. **Green 2026-09-07:** 0 raw declarations
+      (`grep -c "120ms ease-out" styles.css` reads 1, the new `--db-motion-fast-out` definition);
+      ADR-004 records option 1; and `motion-tokens.test.ts` counts declaration lines rather than
+      substring hits, going red when a single call site is reverted.
 - [ ] **The operator's rulings are recorded and the refined surface is read on a device.**
       The two conflicts that held landed Anytype rulings were **ruled on 2026-09-06 18:50**: the
       second destructive red weight — *"Keep one weight"*, so the single `danger` boolean at
