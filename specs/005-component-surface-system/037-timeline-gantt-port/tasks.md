@@ -994,6 +994,57 @@ This leg ran in-runtime against the tree at `30c4b746`, after Phase 7's closing 
 
 ---
 
+<!-- ANCHOR:phase-9 -->
+## Phase 9: View-Switch Teardown Residue (2026-09-07, T054)
+
+Operator report on 0.0.31, `../roadmap.md` §4 row 67: switching from timeline back to table left
+the timeline sitting on top of the table, glitching.
+
+- [x] **T054** Fix: the outgoing view's DOM and observers now come down on every switch away from
+      timeline or calendar, on both hosts.
+      **Root cause, measured on the shipped renderers, not inferred:** `database-view.ts`'s
+      `refresh()` removes the outgoing view's DOM via `clearRenderedViewRoots`
+      (`src/views/rendered-view-roots.ts`)'s `VIEW_ROOT_CLASSES` list before the next view renders
+      into the same container; `embedded-database-renderer.ts`'s `renderResults()` carries a second,
+      inline copy of that list. Both named `obnotion-timeline` (the opt-in local-extensions
+      timeline's root) but not `pm-gantt-view` — the root the timeline's actual default render
+      (`renderTimelineGantt`; `timelineLocalExtensions` is opt-in and off for every database that
+      has not turned it on) creates. So the gantt root, including its
+      `.pm-gantt-header-sticky` (`position: sticky; top: 0; z-index: 4`, `styles.css:19010-19013`),
+      stayed attached inside the same scroll container the next view now occupied — the reported
+      overlap and glitch. Separately, neither host's switch path called the outgoing timeline's or
+      calendar's own `destroy()` (only chart had that guard, inline in `setViewType`/
+      `setEmbeddedViewType`), so the timeline's resize observer, gantt keydown/drag listeners and
+      the calendar's running current-time interval kept firing past the switch.
+      **Fix:** `pm-gantt-view` added to `rendered-view-roots.ts`'s `VIEW_ROOT_CLASSES` and to the
+      embedded host's inline copy (`embedded-database-renderer.ts`'s `staleViewSelector`); both
+      hosts gained a `teardownOutgoingViewRenderer` step (`database-view.ts`'s `render()`;
+      `embedded-database-renderer.ts`'s `renderResults()`, its own single owner of
+      `lastRenderedViewType`) that calls `destroy()` on the outgoing timeline, calendar or chart
+      renderer whenever the view type actually changes; `CalendarRenderer` gained a `destroy()`
+      method mirroring `CalendarTimelineRenderer`'s own, and both hosts' unload paths (`onClose`,
+      `onunload`) now call it too, closing the same gap on a full view close.
+      **Evidence, red first:** a new `runViewSwitchResidueCheck` (`tools/live/render-assertion-
+      harness.ts`) reproduces the production sequence — mount timeline or calendar via the shipped
+      renderer, run the real teardown call, mount table, on one shared container — in real headless
+      Chrome. Against the pre-fix tree: **1 leftover `.pm-gantt-view` root** after timeline ->
+      table (calendar -> table already read **0**, since `obnotion-calendar` was already named).
+      Against the fixed tree: **0** for both. Wired as a permanent `render-assertions.mjs` lane
+      ("view-switch teardown residue"). Three new `database-view.test.ts` assertions: switching
+      away from timeline, and separately from calendar, calls that renderer's `destroy()` exactly
+      once; a negative control (re-rendering the same view type) proves the guard gates on a real
+      change — both positive assertions were confirmed failing (`0` calls, not `1`) against the
+      pre-fix code, then passing once the fix was restored.
+      `npx tsc --noEmit` exit 0; `npx vitest run` 1644/1644 (153 files); `npm run build` exit 0;
+      `node tools/live/render-assertions.mjs` exit 0 (26-check gate lane, including the new
+      residue pair); `node tools/live/sheet-grammar.mjs` exit 0; `npm run gate` 26/26 green
+      (`screenshots-fresh` recaptured after the source-hash bump the harness edit caused — 608
+      entries, `layoutHash`/`pixelHash` unchanged for every capture the fix's own code paths do not
+      touch; one unrelated PNG re-encode restored to its committed bytes).
+<!-- /ANCHOR:phase-9 -->
+
+---
+
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 

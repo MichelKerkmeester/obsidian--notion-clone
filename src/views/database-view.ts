@@ -1462,6 +1462,8 @@ export class DatabaseView extends FileView {
     this.refreshCoordinator.destroy();
     this.chartRenderer.destroy();
     this.closeCalendarTimelineSearchResultsPanel();
+    // 清理日历渲染器的当前时间定时器/缩放菜单，避免视图关闭后泄漏
+    this.calendarRenderer.destroy();
     // 清理时间线渲染器的 observer/popover/定时器和进行中的拖拽监听，避免视图关闭后泄漏
     this.calendarTimelineRenderer.destroy();
     // 取消可能仍在调度的无效时间事件分块扫描，避免视图关闭后继续占用 idle 回调
@@ -7021,6 +7023,7 @@ export class DatabaseView extends FileView {
     // scroll to the top. Filter/sort/data refreshes keep the same viewType and
     // must preserve the user's scroll position.
     const viewTypeChanged = this.lastRenderedViewType !== viewType;
+    if (viewTypeChanged) this.teardownOutgoingViewRenderer(this.lastRenderedViewType);
     this.applyViewTypeClass(viewType);
     if (!config.schema || !config.schema.columns || config.schema.columns.length === 0) {
       if (this.containerEl_) {
@@ -7115,6 +7118,21 @@ export class DatabaseView extends FileView {
     if (viewTypeChanged && (viewType === "calendar" || viewType === "timeline")) {
       this.resetCalendarTimelineScroll();
     }
+  }
+
+  /** Disconnects the outgoing view's own observers, timers and popover/drag listeners before
+   *  the next view type renders into the same container. `clearRenderedViewRoots` (called by
+   *  `refresh` before `render`) takes down the outgoing view's DOM; it cannot reach state that
+   *  lives outside the DOM it removes — the timeline's resize observer (which watches the
+   *  container itself, not its own root) and gantt keydown/drag listeners, or the calendar's
+   *  running current-time interval. Left alone, those keep firing against nodes the next view
+   *  never sees, which is how a switch away from timeline reappeared on top of the view that
+   *  replaced it. Chart already tore itself down on this same transition inside `setViewType`;
+   *  this covers every path that changes `lastRenderedViewType`, including switching view tabs. */
+  private teardownOutgoingViewRenderer(outgoing: DatabaseViewType | null): void {
+    if (outgoing === "timeline") this.calendarTimelineRenderer.destroy();
+    else if (outgoing === "calendar") this.calendarRenderer.destroy();
+    else if (outgoing === "chart") this.chartRenderer.destroy();
   }
 
   /** Reset the scroll container to the top when switching INTO a calendar or

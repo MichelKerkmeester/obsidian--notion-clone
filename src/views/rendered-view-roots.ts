@@ -31,6 +31,12 @@ const VIEW_ROOT_CLASSES = [
   "obnotion-chart-number",
   "obnotion-calendar",
   "obnotion-timeline",
+  // The reference-gantt path is the timeline's own default render (config.timelineLocalExtensions
+  // is opt-in and off for every database that has not turned it on), and it roots itself under
+  // this class instead of "obnotion-timeline" — omitting it here left the gantt DOM, its sticky
+  // header and its resize handle behind on every switch away from timeline, stacked over whatever
+  // rendered next in the same container.
+  "pm-gantt-view",
   "obnotion-summary",
   "obnotion-selection-status-bar",
   "obnotion-empty",

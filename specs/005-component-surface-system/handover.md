@@ -1479,3 +1479,30 @@ program-level decision record only.
   DONE table updated, `operator-checklist.md` regenerated (109 rows / 48 phases, up from 103/47),
   three worktrees with uncommitted, unread content discovered and flagged rather than assumed
   (`.worktrees/059-linked-views-chrome`, `062-stacked-sheets`, `061-competitor-captures`).
+- **2026-09-07, `225-timeline-view-teardown`: `roadmap.md` §4 row 67 fixed and verified, main
+  unchanged.** Operator report ~21:55 on 0.0.31, main at `5e7f1426`: switching from timeline back
+  to table left the timeline sitting on top of the table, glitching. Root cause, measured on the
+  shipped renderers rather than inferred: `rendered-view-roots.ts`'s `VIEW_ROOT_CLASSES` list —
+  and `embedded-database-renderer.ts`'s own inline copy of it — named `obnotion-timeline` (the
+  opt-in local-extensions timeline's root) but not `pm-gantt-view`, the root the timeline's actual
+  default render (`renderTimelineGantt`) creates; the leftover root's own `position: sticky;
+  top: 0; z-index: 4` header (`styles.css:19010-19013`) then pinned inside the same scroll
+  container the next view occupied. Neither host's switch path called the outgoing timeline's or
+  calendar's own `destroy()` either (only chart had that guard), so the timeline's resize
+  observer, gantt keydown/drag listeners and the calendar's running current-time interval kept
+  firing past the switch. **Fixed**: `pm-gantt-view` added to both root-class lists; both hosts
+  gained a `teardownOutgoingViewRenderer` step that calls `destroy()` on the outgoing
+  timeline/calendar/chart renderer on every real view-type change; `CalendarRenderer` gained a
+  `destroy()` method mirroring `CalendarTimelineRenderer`'s own, wired into both hosts' unload
+  paths too. **Evidence**: a new `runViewSwitchResidueCheck` (`tools/live/render-assertion-
+  harness.ts`), wired as a permanent `render-assertions.mjs` lane, read **1** leftover
+  `.pm-gantt-view` root after timeline -> table before the fix (calendar -> table already read
+  **0**) and **0** for both after; three new `database-view.test.ts` assertions, including a
+  negative control, confirmed failing against the pre-fix code and passing after. `npx tsc
+  --noEmit`, `npx vitest run` (1644/1644), `npm run build`, `render-assertions.mjs`,
+  `sheet-grammar.mjs` and `npm run gate` (26/26) all exit 0. Owned by `037-timeline-gantt-port`
+  (`tasks.md` T054, `acceptance-criteria.md` AC-008, `spec.md` REQ-008); both `037` and the parent
+  `005-component-surface-system` validate `--strict` with `Errors: 0`. Landed on
+  `worktrees/225-timeline-view-teardown` at HEAD (see that branch's own commit); **not pushed** —
+  a fresh verifier lands it. Row 67 stays awaiting the operator's own device read, never ticked
+  by an agent.

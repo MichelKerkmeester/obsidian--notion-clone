@@ -190,7 +190,7 @@ export async function buildRenderAssertionBundle(entryBody) {
 
   writeFileSync(entry, `
 import { installObsidianDomShim } from "${resolve(HERE, "../storybook/obsidian-dom-shim.mjs")}";
-import { runRenderAssertions } from "${resolve(HERE, "render-assertion-harness")}";
+import { runRenderAssertions, runViewSwitchResidueCheck } from "${resolve(HERE, "render-assertion-harness")}";
 import { readSheetFrameShapeActivity } from "${resolve(HERE, "../../src/views/mobile-bottom-sheet")}";
 
 installObsidianDomShim(window);
@@ -198,6 +198,7 @@ installObsidianDomShim(window);
 // still be mid-answer when a caller measures or photographs the surface. Every consumer of this
 // bundle gets its settle signal from the shipped module rather than a wait each one guesses at.
 window.__sheetFrameShapeActivity = () => readSheetFrameShapeActivity();
+window.__viewSwitchResidue = (from) => runViewSwitchResidueCheck(document.body, from);
 ${entryBody}
 `);
 

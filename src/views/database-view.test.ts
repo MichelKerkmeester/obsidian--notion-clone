@@ -523,3 +523,63 @@ describe("DatabaseView deleteView (no confirm — an existing undo path already 
     expect(dataSource.updateViewDefFile).not.toHaveBeenCalled();
   });
 });
+
+// ───────────────────────────────────────────────────────────────────
+// 5. VIEW-SWITCH TEARDOWN
+// ───────────────────────────────────────────────────────────────────
+//
+// `render()` reused the container across a view-type switch but only ever tore the outgoing
+// renderer down when it happened to be chart (a check inline in `setViewType`, not `render()`
+// itself). Switching away from timeline or calendar left that renderer's resize observer,
+// gantt listeners and current-time interval running against a container the next view had
+// already taken over — see `rendered-view-roots.ts` and `tools/live/render-assertions.mjs`'s
+// "view-switch residue" checks for what that left behind in the DOM itself. This covers the
+// half a DOM check cannot reach: that leaving a view type actually calls that renderer's own
+// `destroy()`, and only when the type is really changing.
+
+interface ViewSwitchHarness {
+  lastRenderedViewType: string | null;
+  render(): void;
+  calendarTimelineRenderer: { destroy: () => void };
+  calendarRenderer: { destroy: () => void };
+}
+
+describe("DatabaseView view-switch teardown", () => {
+  it("switching away from timeline calls the timeline renderer's destroy", () => {
+    const { harness, viewConfig } = createView();
+    const target = harness as unknown as ViewSwitchHarness;
+    const destroySpy = vi.spyOn(target.calendarTimelineRenderer, "destroy");
+
+    target.lastRenderedViewType = "timeline";
+    viewConfig.viewType = "table";
+    target.render();
+
+    expect(destroySpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("switching away from calendar calls the calendar renderer's destroy", () => {
+    const { harness, viewConfig } = createView();
+    const target = harness as unknown as ViewSwitchHarness;
+    const destroySpy = vi.spyOn(target.calendarRenderer, "destroy");
+
+    target.lastRenderedViewType = "calendar";
+    viewConfig.viewType = "table";
+    target.render();
+
+    expect(destroySpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("negative control: re-rendering the same view type skips the teardown", () => {
+    // Proves the guard actually gates on a real type change rather than firing on every
+    // render — without it, this call would also destroy a timeline the user never left.
+    const { harness, viewConfig } = createView();
+    const target = harness as unknown as ViewSwitchHarness;
+    const destroySpy = vi.spyOn(target.calendarTimelineRenderer, "destroy");
+
+    target.lastRenderedViewType = "timeline";
+    viewConfig.viewType = "timeline";
+    target.render();
+
+    expect(destroySpy).not.toHaveBeenCalled();
+  });
+});

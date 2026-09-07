@@ -646,6 +646,8 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.refreshCoordinator.destroy();
     this.chartRenderer.destroy();
     this.closeCalendarTimelineSearchResultsPanel();
+    // 清理日历渲染器的当前时间定时器/缩放菜单，避免卸载后泄漏
+    this.calendarRenderer.destroy();
     // 清理时间线渲染器的 observer/popover/定时器和进行中的拖拽监听，避免卸载后泄漏
     this.calendarTimelineRenderer.destroy();
     this.chartToolbarRenderer.closePopover();
@@ -1230,14 +1232,15 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     // (selectViewInView / setViewType / onViewTypeChange).
     const viewType = config.viewType || "table";
     const viewTypeChanged = this.lastRenderedViewType !== viewType;
+    if (viewTypeChanged) this.teardownOutgoingViewRenderer(this.lastRenderedViewType);
     this.lastRenderedViewType = viewType;
     this.containerEl.toggleClass("obnotion-width-wide", config.displayWidth === "wide");
     this.updateFileViewWidthClass(config);
     this.applyViewTypeClass(config.viewType || "table");
     const target = this.containerEl;
     const staleViewSelector = config.viewType === "chart"
-      ? ".obnotion-summary, .obnotion-table-wrap, .obnotion-grouped-table, .obnotion-board, .obnotion-gallery, .obnotion-gallery-grouped, .obnotion-gallery-total-header, .obnotion-list, .obnotion-list-grouped, .obnotion-list-total-header, .obnotion-calendar, .obnotion-timeline, .obnotion-empty"
-      : ".obnotion-summary, .obnotion-table-wrap, .obnotion-grouped-table, .obnotion-board, .obnotion-gallery, .obnotion-gallery-grouped, .obnotion-gallery-total-header, .obnotion-list, .obnotion-list-grouped, .obnotion-list-total-header, .obnotion-chart, .obnotion-chart-empty, .obnotion-chart-number, .obnotion-calendar, .obnotion-timeline, .obnotion-empty";
+      ? ".obnotion-summary, .obnotion-table-wrap, .obnotion-grouped-table, .obnotion-board, .obnotion-gallery, .obnotion-gallery-grouped, .obnotion-gallery-total-header, .obnotion-list, .obnotion-list-grouped, .obnotion-list-total-header, .obnotion-calendar, .obnotion-timeline, .pm-gantt-view, .obnotion-empty"
+      : ".obnotion-summary, .obnotion-table-wrap, .obnotion-grouped-table, .obnotion-board, .obnotion-gallery, .obnotion-gallery-grouped, .obnotion-gallery-total-header, .obnotion-list, .obnotion-list-grouped, .obnotion-list-total-header, .obnotion-chart, .obnotion-chart-empty, .obnotion-chart-number, .obnotion-calendar, .obnotion-timeline, .pm-gantt-view, .obnotion-empty";
     target.querySelectorAll(staleViewSelector).forEach((el) => el.remove());
     if (!config.schema.columns || config.schema.columns.length === 0) {
       this.emptyStateRenderer.renderCard(target, {
@@ -2372,6 +2375,20 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     config.viewType = value;
     this.stateStore.delete(0, this.currentViewIndex);
     this.state = undefined;
+  }
+
+  /** Disconnects the outgoing view's own observers, timers and popover/drag listeners before
+   *  the next view type renders. The stale-root removal above (and `render`'s own `.empty()`
+   *  on its own call path) takes down the outgoing view's DOM; it cannot reach state that lives
+   *  outside the DOM it removes — the timeline's resize observer (which watches the container
+   *  itself, not its own root) and gantt keydown/drag listeners, or the calendar's running
+   *  current-time interval. `renderResults` is this host's single owner of
+   *  `lastRenderedViewType` (its own comment above explains why), so this is the one place a
+   *  switch through any of `render`, `selectViewInView` or `setEmbeddedViewType` is covered. */
+  private teardownOutgoingViewRenderer(outgoing: string | null): void {
+    if (outgoing === "timeline") this.calendarTimelineRenderer.destroy();
+    else if (outgoing === "calendar") this.calendarRenderer.destroy();
+    else if (outgoing === "chart") this.chartRenderer.destroy();
   }
 
   private initializeEmbeddedViewTypeDefaults(config: ViewConfig, value: NonNullable<ViewConfig["viewType"]>): void {

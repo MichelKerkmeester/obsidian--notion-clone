@@ -130,6 +130,17 @@ export class CalendarRenderer {
 
 	constructor(private actions: CalendarRendererActions) {}
 
+	/** Cleanup before the host switches away from calendar to another view type, or closes:
+	 *  stops the running current-time interval and closes the scale menu so neither keeps
+	 *  running against a calendar root the host is about to replace. `render` already runs
+	 *  the same two calls at its own top for a re-render within calendar, so this only needs
+	 *  to cover the case where calendar never renders again to do it itself. */
+	destroy(): void {
+		this.cleanupCurrentTimeTimer();
+		this.closeCalendarScaleMenu();
+		this.calendarRoot = null;
+	}
+
 	render(container: HTMLElement, config: ViewConfig, rows: RowData[]): void {
 		this.cleanupCurrentTimeTimer();
 		this.closeCalendarScaleMenu();

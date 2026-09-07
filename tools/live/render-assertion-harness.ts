@@ -134,6 +134,7 @@ import type { DatabaseConfig, RecordSchema } from "../../src/data/types";
 import type { DatabaseViewState } from "../../src/views/view-state-store";
 import type { BoardGroup } from "../../src/views/board-renderer";
 import type { TableGroup } from "../../src/views/table-renderer";
+import { clearRenderedViewRoots } from "../../src/views/rendered-view-roots";
 
 // The constructed timeline capture mounts the real CalendarTimelineRenderer against the real
 // bench fixture, and both anchor their dates on "today" (the bars, the gantt's today line and
@@ -4361,4 +4362,75 @@ export function runRenderAssertions(
 
   container.remove();
   return { scenario, bagKeys, results, chartValueField };
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 5. VIEW-SWITCH TEARDOWN RESIDUE
+// ───────────────────────────────────────────────────────────────────
+//
+// `database-view.ts`'s `refresh()` and `embedded-database-renderer.ts`'s `renderResults()` each
+// tear down the outgoing view's DOM (`clearRenderedViewRoots`, or that same root-class list
+// inlined) before the next view type renders into the SAME container the host reuses across a
+// switch. Neither host's own unit suite constructs that container-reuse sequence — the unit
+// tests mount one renderer at a time into a fresh container — so a renderer whose root uses a
+// class the teardown's list does not name regressed silently until an operator saw the outgoing
+// view's stale root sitting on top of whatever replaced it: the timeline's default render (the
+// reference-gantt path; `config.timelineLocalExtensions` is opt-in and off for every database
+// that has not turned it on) roots itself as "pm-gantt-view", not "obnotion-timeline", and the
+// class list before this fix named only the latter.
+//
+// This reproduces that exact sequence — mount the outgoing view, run the production teardown,
+// mount table — on the real renderers in the real browser, and counts what the outgoing view
+// left in the container afterward. Zero is the only passing count. The mounted-before and
+// table-rendered checks are the negative control: a residue count of zero because the outgoing
+// view or the table never actually mounted would be an empty-set pass proving nothing.
+
+export interface ViewSwitchResidueResult {
+  name: string;
+  pass: boolean;
+  detail: string;
+}
+
+const VIEW_SWITCH_RESIDUE_SELECTOR: Record<"timeline" | "calendar", string> = {
+  timeline: ".obnotion-timeline, .pm-gantt-view",
+  calendar: ".obnotion-calendar",
+};
+
+export function runViewSwitchResidueCheck(host: HTMLElement, from: "timeline" | "calendar"): ViewSwitchResidueResult {
+  const container = host.createDiv({ cls: "obnotion-container" });
+  const selector = VIEW_SWITCH_RESIDUE_SELECTOR[from];
+
+  if (from === "timeline") {
+    const columns = makeTimelineColumns(TIMELINE_COLUMNS, "mixed");
+    const rows = makeTimelineRows(CAPTURE_ROWS, columns, CAPTURE_FILL);
+    new CalendarTimelineRenderer(fileViewTimelineBag())
+      .renderTimeline(container, makeTimelineConfig(columns, "week"), rows);
+  } else {
+    const columns = makeCalendarColumns(CALENDAR_COLUMNS, "mixed");
+    const rows = makeCalendarRows(CAPTURE_ROWS, columns, CAPTURE_FILL);
+    new CalendarRenderer(fileViewCalendarBag(columns)).render(container, makeCalendarConfig(columns, "month"), rows);
+  }
+  const mounted = container.querySelectorAll(selector).length;
+
+  // The exact call `refresh()` makes before `render()` rebuilds into the next view type.
+  clearRenderedViewRoots(container);
+
+  const tableColumns = makeTableColumns(TABLE_COLUMNS, "mixed");
+  const tableRows = makeTableRows(CAPTURE_ROWS, tableColumns);
+  const tableConfig = {
+    ...makeTableConfig(tableColumns),
+    schema: { columns: tableColumns, computedFields: [] },
+  } as ViewConfig;
+  new TableRenderer(fileViewTableBag(tableColumns, true)).renderTable(container, tableConfig, tableRows);
+
+  const residue = container.querySelectorAll(selector).length;
+  const tableMounted = container.querySelector("table.obnotion-table") != null;
+  container.remove();
+
+  return {
+    name: `view-switch residue: ${from} -> table`,
+    pass: mounted > 0 && tableMounted && residue === 0,
+    detail: `${residue} leftover ${from} root(s) after the switch (selector "${selector}"); `
+      + `${mounted} mounted before the switch, table rendered: ${tableMounted}`,
+  };
 }

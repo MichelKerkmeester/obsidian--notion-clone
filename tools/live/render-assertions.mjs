@@ -668,6 +668,7 @@ let phoneOverlapInk = null;
 let footerFloorOutcome = null;
 let wrapDesktopOutcomes = null;
 let frozenColumnCssOutcome = null;
+let viewSwitchOutcomes = null;
 try {
   browser = await chromium.launch({ executablePath: findChrome() });
   const page = await browser.newPage({ viewport: { width: 1100, height: 900 } });
@@ -705,6 +706,17 @@ try {
   const guardOutcomes = await page.evaluate(
     (scenarios) => scenarios.map((scenario) => window.__renderAssertions(scenario)),
     TABLE_GUARD_SCENARIOS,
+  );
+  // Reproduces the exact sequence database-view.ts's refresh() and embedded-database-renderer.ts's
+  // renderResults() run on a real view-type switch — mount the outgoing view, run the production
+  // teardown, mount table, on the SAME container the host reuses — and asserts the outgoing view
+  // left nothing behind. This is a permanent regression pin for the operator-reported bug where
+  // switching from timeline (or calendar) back to table left the outgoing view's root sitting over
+  // the table: the timeline's default render roots itself as "pm-gantt-view", a class the teardown's
+  // root-name list did not carry.
+  viewSwitchOutcomes = await page.evaluate(
+    (froms) => froms.map((from) => window.__viewSwitchResidue(from)),
+    ["timeline", "calendar"],
   );
   await page.close();
 
@@ -944,6 +956,13 @@ try {
       console.log(`  ${mark}  ${label.padEnd(38)} ${result.name}`);
       if (!result.pass) console.log(`       ${result.detail}`);
     }
+  }
+
+  console.log(`\nrender-assertions: view-switch teardown residue, ${viewSwitchOutcomes.length} scenario(s)\n`);
+  for (const outcome of viewSwitchOutcomes) {
+    const mark = outcome.pass ? "PASS" : "FAIL";
+    if (!outcome.pass) failures.push(`${outcome.name} — ${outcome.detail}`);
+    console.log(`  ${mark}  ${outcome.name.padEnd(38)} ${outcome.detail}`);
   }
 } catch (error) {
   failures.push(`harness run failed: ${error.message}`);
