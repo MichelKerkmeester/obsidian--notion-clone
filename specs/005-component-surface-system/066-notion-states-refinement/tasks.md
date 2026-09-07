@@ -187,26 +187,43 @@ creates no new lane file and never ticks an operator device row.
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [B] T012 [P0] **Extend the existing lanes with the computed rows.** BLOCKED — not built this
-      pass. All five thresholds are proven at the level below the browser-driven `tools/live/`
-      lanes instead: the two dwell budgets and the notice-routing shape are proven by Vitest against
-      the production `showToast` (T004, T005); the notice census, the chip's hex-free background and
-      the fast-band declaration census are proven by direct `grep`/`rg` reads against the shipped
-      `styles.css` and source (T006, T008, T009); the phone-band placement is proven by CSS
-      arithmetic against the same constants a lane row would read (T017) — arithmetic that landing
-      then caught out on the rail, exactly the kind of miss a browser-measured row exists to prevent.
-      What is missing is the
-      *permanent, browser-measured* form: none of the fourteen `tools/live/*.mjs` scripts currently
-      builds a scenario that mounts `toast.ts`, forces a `database-view.ts` failure, or resizes a
-      viewport against `.db-toast-stack`/`.db-operation-result-rail` — the closest infrastructure
-      (`render-assertion-bundle.mjs`'s `RENDERER_SOURCES`) bundles only the five view renderers, not
-      the toast or empty-state modules, so wiring these five rows in means building new scenario
-      plumbing across `render-assertion-bundle.mjs`, `render-assertions.mjs` and `touch-targets.mjs`
-      (for the chip's tap target) rather than appending a row to a file that already does this
-      measurement. That is real, scoped follow-on work this pass did not have the room to do safely
-      against a 26-lane gate with no live Obsidian to rehearse against. **No new lane file was
-      created and no operator device row was touched** — the constraint holds even though the
-      deliverable does not yet. (`tools/live/*.json`)
+- [x] T012 [P0] **Extend the existing lanes with the computed rows.** Built into
+      `tools/storybook/verify-placement.mjs` — the file that already drives the production
+      `showToast` for AC-001/AC-002's own geometry rows, so this is a new section in an owning lane
+      rather than a 27th one. `npm run storybook:placement` is the gate's `placement` check, one of
+      the 26.
+      Five permanent rows: the toast stack centred within 1px at 390/402/430px; the
+      operation-result rail centred within 1px at the same three widths, built by mounting
+      `showToast(document, { severity, message, container })` against a `db-operation-result-rail
+      db-surface` host constructed exactly as `showOperationResult` (`database-view.ts:11336`)
+      builds it, not a fixture copy of the CSS; the stack's desktop corner unmoved by the phone band
+      (384px wide, `right: 12px`); the rail's desktop corner unmoved (`right: 16px`); and the owned
+      bare-notice census, read fresh every run by walking `src/**/*.ts` (test files excluded) and
+      ratcheting a ceiling of 239 rather than trusting a number written into a document.
+      Each of the first four carries its own negative control, watched red then restored: forcing
+      `.db-toast.is-inline`'s phone-band rule to `box-sizing: content-box` reproduced T017's own
+      landing reading exactly — left 16px against right **−16px**, a 32px difference, at all three
+      phone widths — then `git checkout -- styles.css` restored it and the same run read 16px/16px
+      again; reverting the phone-band `.db-toast-stack` rule to its pre-fix `right`-only form
+      reproduced the pre-fix arithmetic (−6px left margin equivalent at 390px, a 30px-vs-16px split
+      at 430px), then restored; widening the desktop stack's `width` and moving the desktop rail's
+      `right` each turned only their own row red, then restored. The census row's control added one
+      temporary `new Notice(` call to `database-view.ts` (240, one over the ceiling, row red), then
+      `git checkout -- src/views/database-view.ts` restored it (239, green).
+      A geometry read taken directly off the animated `.db-toast` card during the entrance keyframe
+      is not a layout — even under `reducedMotion: "reduce"`, which shortens the duration but does
+      not skip the keyframes — so the harness settles 60ms before reading, matching how the
+      pre-existing toast section in this same file avoids the same trap with `offsetWidth`. Margins
+      are read against each card's own containing block rather than uniformly against
+      `window.innerWidth`: the body-mounted stack resolves `position: fixed` against the true
+      viewport, but the rail mounts inside `.note-database-container`, and the reproduced
+      `contain: strict` on `.workspace-leaf` makes the leaf — not the window — the containing block
+      for everything positioned inside it, exactly as it does in the shipped app.
+      **What stays at the level below this lane, deliberately:** the dwell budget. `goal.md`'s own
+      completion criterion asks for a lane row reading the two computed budgets apart, and that
+      criterion stays unticked — see `goal.md` for why a millisecond-scale timer is the wrong shape
+      for a browser-driven row and the fake-timer Vitest matrix (T004) is the right strength.
+      (`tools/storybook/verify-placement.mjs`)
 - [x] T013 [P0] **Run the three gates and read each exit status.** `npx tsc --noEmit` → exit 0,
       no output. `npm run build` → exit 0. `npx vitest run` → exit 0, 1530/1530 across 142 files
       (up from 1520 before this packet's new tests: +6 in `toast.test.ts`, +3 in

@@ -159,9 +159,18 @@ never resolve them silently.
       still waits for the reader, and one lane row reads the two computed budgets apart.
       **Substantively green 2026-09-07, deliberately left unticked:** `ACTION_DISMISS_MS = 5000`
       selected on `options.action`, proven by a fake-timer matrix driving the production
-      `showToast` across all four severity × action cells. The lane row this row names is `tasks.md`
-      T012 and was not built.
-- [ ] **Every operation failure this plugin owns reports through the toast, with the census moving.**
+      `showToast` across all four severity × action cells.
+      **Stays unticked 2026-09-07, and stays a Vitest row on purpose.** `tasks.md` T012 built four
+      permanent browser-measured rows for this packet's other named lane row (the phone-band
+      placement) and the census below, but not this one. A row that "reads the two computed budgets
+      apart" against a real `setTimeout` either waits out the real 2200ms/5000ms on every gate run —
+      turning one `placement` invocation into seconds longer for a fact a fake-timer test already
+      proves exactly — or fakes the clock inside the browser page, which is the same mechanism
+      `toast.test.ts`'s fake-timer matrix already uses, just re-implemented across a Playwright
+      boundary for no new coverage. Neither buys anything a `setTimeout`-reading Vitest test does
+      not already buy at a fraction of the cost, so the matrix (T004) stays the row of record and
+      this criterion stays open rather than ticked on a row that would exist only to say so.
+- [x] **Every operation failure this plugin owns reports through the toast, with the census moving.**
       **Observed red 2026-09-06: 242 bare `new Notice(` sites, and three of them are the same
       `errors.deleteFailed` key.** `deleteRow`'s catch (`src/views/database-view.ts:8378`),
       `duplicateRow`'s catch (`:8468`) and the third site at `:3681` all raise a host notice with no
@@ -174,10 +183,13 @@ never resolve them silently.
       `errors.*` catch in `database-view.ts` that reports an owned operation renders
       `.db-toast.is-error`, `is-error` never auto-dismisses, and the bare-notice census for owned
       operations has moved from **242** with the new figure recorded in the lane row.
-      **Substantively green 2026-09-07, deliberately left unticked:** all three catches route
-      through `showToast`, the census reads **239**, and `deletion-undo.test.ts` drives the real
-      catch. What this row asks for and does not have is the *lane row* — the figure lives in this
-      packet's documents, so nothing re-derives it on the next landing (`tasks.md` T012).
+      **Green 2026-09-07:** all three catches route through `showToast`, the census reads **239**,
+      and `deletion-undo.test.ts` drives the real catch. **The lane row now exists too:**
+      `tools/storybook/verify-placement.mjs`'s "the owned bare-notice census has not grown past its
+      recorded ceiling" row (`storybook:placement` gate lane) walks `src/**/*.ts` fresh every gate
+      run and ratchets a ceiling of 239, rather than trusting a figure written into this document. A
+      temporary line pushed the count to 240 and the row read red before being reverted (`tasks.md`
+      T012).
 - [x] **A stale reference has an inline, permanent, actionable shape.**
       **Observed red 2026-09-06: `grep -c "db-inline-chip" styles.css` is 0.** `source-missing` and
       `group-relation-deleted` both ship as `EmptyStateReason` members
@@ -257,6 +269,7 @@ Everything below is a running record. It never overrides the directive above.
 |------|-------|
 | 2026-09-06 | Packet opened from the Opus synthesis of the Notion states research loop: one lineage (`glm-openrouter-states`, cli-pi on `z-ai/glm-5.3-flash` at reasoning max), 5 of 5 iterations under `stopPolicy: max-iterations`, 23 findings merged, 5 of 5 questions answered, zero image reads. Level 3 by the go-higher rule over `recommend-level.sh --loc 500 --files 14 --architectural` (64/100, confidence 82%; phase score 10/50, so a standard child, not a phase parent). |
 | 2026-09-06 | **The operator ruled the two held conflicts at 18:50.** ADR-001 — *"Keep one weight"*; ADR-002 — *"Centre on phone, keep corner on desktop"*, which reverses ADR-002's hold-everywhere proposal and moves the phone half of the shared toast/rail placement into this packet's scope as T017 and AC-009, the desktop corner staying measured-Anytype. The centred stack owes the device pass a read, recorded on AC-008 and T015. ADR-003 and ADR-004 remain open by their own terms. |
+| 2026-09-07 | **T012 landed** as a new section in `tools/storybook/verify-placement.mjs` (the file already driving `showToast` for AC-001/AC-002, kept as the owning lane rather than a 27th one): five permanent rows for AC-009's phone-band and desktop-corner geometry and this packet's own notice census, each watched red under a targeted negative control and restored. The dwell criterion's own named lane row stays unbuilt on purpose — a fake-timer Vitest matrix is the right strength for a millisecond-scale timer, and that criterion stays open rather than ticked on a row that would add cost without adding coverage. |
 
 ### Deviations and findings
 

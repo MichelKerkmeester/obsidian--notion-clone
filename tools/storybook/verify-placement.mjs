@@ -25,7 +25,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -8882,6 +8882,153 @@ await section("the toast pairs severity with a glyph and its action reaches its 
 });
 
 // ───────────────────────────────────────────────────────────────────
+// THE PHONE BAND CENTRES THE STACK AND THE RAIL; THE DESKTOP CORNER STAYS
+// ───────────────────────────────────────────────────────────────────
+//
+// A prior pass proved this with arithmetic against the declared CSS values and was wrong about the
+// rail: `.db-toast` is `content-box`, so the band's `width: 100%` added the card's own padding to
+// its host's width instead of counting it inside, and the card measured 32px past the edge the
+// centring exists to square up. Arithmetic reasons about declared values; the defect was in how the
+// box model resolves them, which only a rendered measurement can see. This mounts the production
+// `showToast` — on its own body-anchored stack, and again inside a `db-operation-result-rail`
+// div built exactly as the call site builds it — and reads `getBoundingClientRect` at three phone
+// widths and once on desktop, rather than trusting the declared rule.
+
+const bandResults = [];
+
+const measureBand = async (viewport, phone) => {
+  const bandPage = await browser.newPage({ viewport, reducedMotion: "reduce" });
+  // `is-phone` hides the two 300px sidebars page_html always builds (`SIDEBAR`), which a real phone
+  // never carries. Left standing, they push the workspace-leaf — the rail's true containing block,
+  // per the `contain: strict` note above — 300px off the window's own left edge, so a margin read
+  // against `window.innerWidth` would be measuring a desktop chrome the phone band never sees.
+  await bandPage.setContent(phone ? page_html.replace("<body>", '<body class="is-phone">') : page_html);
+  await bandPage.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await bandPage.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await bandPage.addScriptTag({ content: positionerJs });
+
+  const measured = await bandPage.evaluate(async () => {
+    const { showToast } = globalThis.__toast;
+    const host = document.querySelector(".note-database-container");
+    // The card itself is measured, not its host: the box-model defect this guards against (a
+    // `content-box` card rendering 32px wider than its `width: 100%` host) shows up on the CARD's
+    // own edges, not on the fixed-position container around it, which keeps its declared inset
+    // regardless of what its child does. Read after a settle rather than immediately: the card
+    // carries `animation: db-toast-in`, a transform-scale entrance that moves `getBoundingClientRect`
+    // for as long as it runs — even under `reducedMotion: "reduce"`, which shortens the duration to
+    // near-zero but does not skip the keyframes — so a rect read on the same tick is an animation
+    // frame, not a layout.
+    const settle = () => new Promise((resolve) => setTimeout(resolve, 60));
+
+    // `right`/`left` are read against EACH card's own containing block, not uniformly against
+    // `window.innerWidth`: the stack mounts on `doc.body`, outside the `contain: strict` leaf, so its
+    // card's `position: absolute` resolves against the true viewport — but the rail mounts inside
+    // `.note-database-container`, and `contain: strict` on `.workspace-leaf` (reproduced from the
+    // shipped host stylesheet above) makes the LEAF the containing block for everything positioned
+    // inside it. A desktop reading taken against the window would report the leaf's sidebar-narrowed
+    // width as a broken inset the rail's own CSS never declared.
+    const rectAgainst = (rect, edge) => ({
+      left: Math.round(rect.left - edge.left),
+      right: Math.round(edge.right - rect.right),
+      width: Math.round(rect.width),
+    });
+    const viewportEdge = { left: 0, right: window.innerWidth };
+    const leafEdge = document.querySelector(".workspace-leaf").getBoundingClientRect();
+
+    const stackHandle = showToast(document, { severity: "success", message: "Migrated" });
+    await settle();
+    const stackCard = document.querySelector(".db-toast-stack .db-toast");
+    const stack = rectAgainst(stackCard.getBoundingClientRect(), viewportEdge);
+    stackHandle.close();
+
+    // Built exactly as `showOperationResult` builds it — the rail's own host `div`, carrying the
+    // two classes that call site stamps, holding a single-slot `container` toast rather than a
+    // fixture copy of the CSS.
+    const rail = host.createDiv({ cls: "db-operation-result-rail db-surface" });
+    const railHandle = showToast(document, { severity: "success", message: "Moved", container: rail });
+    await settle();
+    const railCard = rail.querySelector(".db-toast");
+    const railGeometry = rectAgainst(railCard.getBoundingClientRect(), leafEdge);
+    railHandle.close();
+    rail.remove();
+
+    return { stack, rail: railGeometry, innerWidth: window.innerWidth };
+  });
+
+  await bandPage.close();
+  return measured;
+};
+
+const bandRecord = (name, pass, detail) => bandResults.push({ name, pass, detail });
+const PHONE_BAND_WIDTHS = [390, 402, 430];
+const phoneBand = {};
+for (const width of PHONE_BAND_WIDTHS) {
+  phoneBand[width] = await measureBand({ width, height: 844 }, true);
+}
+const desktopBand = await measureBand(VIEWPORT, false);
+
+for (const width of PHONE_BAND_WIDTHS) {
+  const { stack, rail, innerWidth } = phoneBand[width];
+  const stackDiff = Math.abs(stack.left - stack.right);
+  bandRecord(`the toast stack is centred within 1px at ${width}px`,
+    stackDiff <= 1,
+    `left ${stack.left}px, right ${stack.right}px against a ${innerWidth}px viewport — a ${stackDiff}px `
+      + `difference (want <= 1px). Unfixed, this read a -6px left margin at 390px and a 30px-vs-16px `
+      + `split at 430px`);
+  const railDiff = Math.abs(rail.left - rail.right);
+  bandRecord(`the operation-result rail is centred within 1px at ${width}px`,
+    railDiff <= 1,
+    `left ${rail.left}px, right ${rail.right}px (card ${rail.width}px wide against a ${innerWidth}px `
+      + `viewport) — a ${railDiff}px difference (want <= 1px). Read as \`content-box\` before the fix, `
+      + `this same card measured left 16px against right -16px, 32px past the edge the centring `
+      + `exists to square up`);
+}
+
+bandRecord("the toast stack keeps its measured desktop corner outside the band",
+  desktopBand.stack.right === 12 && desktopBand.stack.width === 384,
+  `right ${desktopBand.stack.right}px, ${desktopBand.stack.width}px wide at ${VIEWPORT.width}px — `
+    + `wanted the Anytype-measured 12px/384px, unmoved by the phone-band rule`);
+
+bandRecord("the operation-result rail keeps its measured desktop corner outside the band",
+  desktopBand.rail.right === 16,
+  `right ${desktopBand.rail.right}px at ${VIEWPORT.width}px — wanted the rail's own fixed 16px, `
+    + `unmoved by the phone-band rule`);
+
+// ───────────────────────────────────────────────────────────────────
+// THE OWNED NOTICE CENSUS, READ FROM THE TREE RATHER THAN FROM A DOCUMENT
+// ───────────────────────────────────────────────────────────────────
+//
+// A figure that lives only in a packet's own prose does not move when the tree does: nothing
+// re-derives it on the next landing. This reads the same population a source grep already named —
+// every bare `new Notice(` call under `src`, test files excluded — and ratchets it: the count may
+// fall as more owned sites migrate onto the toast, and a run that finds it higher than the last
+// recorded figure is a regression this row exists to catch, not a document someone forgot to edit.
+
+const NOTICE_CENSUS_CEILING = 239;
+
+const listTsFiles = (dir, out = []) => {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name === "node_modules" || entry.name.startsWith(".")) continue;
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) listTsFiles(full, out);
+    else if (entry.isFile() && entry.name.endsWith(".ts") && !entry.name.endsWith(".test.ts")) out.push(full);
+  }
+  return out;
+};
+
+const bareNoticeLines = listTsFiles(join(REPO, "src")).reduce((total, file) => {
+  const lines = readFileSync(file, "utf8").split("\n");
+  return total + lines.filter((line) => /new Notice\(/.test(line)).length;
+}, 0);
+
+bandRecord("the owned bare-notice census has not grown past its recorded ceiling",
+  bareNoticeLines <= NOTICE_CENSUS_CEILING,
+  `${bareNoticeLines} line(s) call \`new Notice(\` under src (test files excluded), against a `
+    + `recorded ceiling of ${NOTICE_CENSUS_CEILING}. Before the owned operation-failure catches `
+    + `routed through the toast this read 242; the count may fall as more sites migrate and must `
+    + `not climb back past what has already been fixed`);
+
+// ───────────────────────────────────────────────────────────────────
 // THE FLICK, DRIVEN THROUGH THE GESTURE RATHER THAN ASKED OF THE RULE
 // ───────────────────────────────────────────────────────────────────
 //
@@ -11063,7 +11210,7 @@ await section("a view-switcher row on a phone carries one trailing control", asy
 results.push(...tallSheetResults, ...dockResults, ...viewRowResults, ...phoneResults, ...menuResults, ...columnWidthKeyboardResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...propertyGeometryResults, ...openTargetResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...toastResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...rowSlackResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...propertyGeometryResults, ...openTargetResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...toastResults, ...bandResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...rowSlackResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });
