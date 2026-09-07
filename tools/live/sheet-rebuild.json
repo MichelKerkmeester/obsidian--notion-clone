@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-07T14:09:15.717Z",
+  "measuredAt": "2026-09-07T14:59:54.482Z",
   "inputs": {
     "tools/live/sheet-rebuild.mjs": "ff3f4850b7f4",
     "tools/live/sheet-rebuild-harness.ts": "896933a3454c",
@@ -131,7 +131,7 @@
     {
       "name": "the filter sheet holds still while it rebuilds",
       "pass": true,
-      "detail": "settled at top 836, rebuilt to 836; the deepest point during the rebuild was 836",
+      "detail": "settled at top 527, rebuilt to 627; the deepest point during the rebuild was 627",
       "preFixFailure": "settled at top 701 and the rebuild dropped it to 844 on an 844px screen"
     },
     {
