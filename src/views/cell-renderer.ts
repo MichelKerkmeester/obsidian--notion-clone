@@ -332,10 +332,13 @@ export class CellRenderer {
         break;
       }
       case "date":
-      case "created-time":
-      case "last-edited-time":
         this.renderDate(td, row, col, value, false);
         break;
+      // The vault's own ctime/mtime carry a time component, not only a day, so these two read
+      // through the datetime formatter the same way an explicit "datetime" column does — a plain
+      // date display would silently drop the time half of a value the file system actually stores.
+      case "created-time":
+      case "last-edited-time":
       case "datetime":
         this.renderDate(td, row, col, value, true);
         break;
