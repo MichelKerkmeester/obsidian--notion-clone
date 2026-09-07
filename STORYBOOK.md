@@ -1,4 +1,4 @@
-# The Note Database component catalogue
+# The Obnotion component catalogue
 
 Storybook is a live catalogue of the plugin's visual pieces — menu rows, dropdowns, checkboxes,
 number displays, icons — each shown on its own so you can look at it, flip it between light and

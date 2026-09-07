@@ -1,4 +1,4 @@
-# Repo Rules, Obsidian Note Database
+# Repo Rules, Obsidian Obnotion
 
 > Per-repository router. `AGENTS.md` carries what is true in every repository. The rules
 > below carry how to think and act; the ones marked **local** carry what is true only here, > the paths, the commands, the numbers, the traps.

@@ -1,11 +1,10 @@
 {
-  "id": "note-database",
-  "name": "Note Database",
+  "id": "obnotion",
+  "name": "Obnotion",
   "version": "0.0.30",
   "minAppVersion": "1.7.2",
   "description": "Database views for notes with table, board, chart, calendar, timeline, formulas, filters, and inline editing.",
-  "author": "pangy9",
-  "authorUrl": "https://github.com/pangy9",
-  "fundingUrl": "https://paypal.me/pangy9",
+  "author": "MichelKerkmeester",
+  "authorUrl": "https://github.com/MichelKerkmeester",
   "isDesktopOnly": false
 }

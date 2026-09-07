@@ -1,6 +1,6 @@
 # Changelog
 
-Notable changes to Note Database, most recent first.
+Notable changes to Obnotion, most recent first.
 
 ## 0.0.28
 

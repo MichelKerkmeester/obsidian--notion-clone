@@ -9,7 +9,7 @@
 #
 set -euo pipefail
 cd "$(dirname "$0")"
-REPO="MichelKerkmeester/obsidian-note-database"
+REPO="MichelKerkmeester/obsidian_notion-clone"
 
 git fetch upstream --tags
 NEW="$(git ls-remote --tags upstream \

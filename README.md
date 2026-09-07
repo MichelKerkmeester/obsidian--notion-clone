@@ -8,7 +8,7 @@ This plugin is in early alpha. It is currently built and verified by AI agents, 
 
 Obnotion is a fork of pangy9's [Note Database](https://github.com/pangy9/obsidian-note-database).
 
-Source: [MichelKerkmeester/obsidian--notion-clone](https://github.com/MichelKerkmeester/obsidian--notion-clone)
+Source: [MichelKerkmeester/obsidian_notion-clone](https://github.com/MichelKerkmeester/obsidian_notion-clone)
 
 ## Views
 
@@ -83,13 +83,13 @@ A ribbon icon opens the dashboard. The command palette offers:
 
 Requires Obsidian 1.7.2 or later.
 
-**BRAT** — install the BRAT community plugin, then add `MichelKerkmeester/obsidian--notion-clone` as a beta plugin.
+**BRAT** — install the BRAT community plugin, then add `MichelKerkmeester/obsidian_notion-clone` as a beta plugin.
 
-**Manual** — download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/MichelKerkmeester/obsidian--notion-clone/releases/latest) into `<vault>/.obsidian/plugins/obnotion/`, reload Obsidian, and enable Obnotion under Community plugins.
+**Manual** — download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/MichelKerkmeester/obsidian_notion-clone/releases/latest) into `<vault>/.obsidian/plugins/obnotion/`, reload Obsidian, and enable Obnotion under Community plugins.
 
 ## Releases
 
-Every milestone is published as a [GitHub release](https://github.com/MichelKerkmeester/obsidian--notion-clone/releases). Publishing a release is what makes the build installable through BRAT and on mobile.
+Every milestone is published as a [GitHub release](https://github.com/MichelKerkmeester/obsidian_notion-clone/releases). Publishing a release is what makes the build installable through BRAT and on mobile.
 
 ## Credits
 
