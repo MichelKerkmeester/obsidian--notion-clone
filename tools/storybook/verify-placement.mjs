@@ -52,49 +52,17 @@ const CHROME = [
 // 2b. WHAT THE HOST DECLARES ON A BARE CONTROL
 // ───────────────────────────────────────────────────────────────────
 //
-// Copied verbatim out of Obsidian's own app.css, the same way the leaf's `contain: strict` is
-// reproduced in the page below: a harness that omits what the app declares certifies a rendering
-// nobody ships.
+// This is the one rule that made a shared menu row measure as correctly aligned here and arrive
+// centred on a phone. A row is a `<button>`, and the plugin's row rule outranks this type selector
+// on every property BOTH of them name — but `justify-content` was named by only one, so the host's
+// `center` applied uncontested and nothing in a plugin-only page could show it. The defect was
+// invisible not because the check was weak but because the document it ran against was missing a
+// declaration the device has.
 //
-// This one rule is the reason a shared menu row could be measured as correctly aligned here and
-// arrive centred on a phone. A row is a `<button>`, and the plugin's row rule outranks this type
-// selector on every property BOTH of them name — but `justify-content` was named by only one, so
-// the host's `center` applied uncontested and nothing in a plugin-only page could show it. The
-// defect was invisible not because the check was weak but because the document it ran against was
-// missing a declaration the device has.
-//
-// It is loaded on every page rather than only the ones being investigated. A property the plugin
-// leaves unstated is not a phone problem or a menu problem; it is a gap anywhere a host rule
-// reaches, and the whole point is that the gap is silent until something models it.
-const HOST_BARE_CONTROLS = `
-/* The variable the rule below has always read and never had.
- *
- * This block was transcribed from the host's own button rule, including its
- * height declaration — but not the token that declaration resolves through, so
- * every button here measured content height while a real one measures a fixed
- * 30. A rule modelled without its variable is worse than a rule left out: it
- * looks like the host is represented and it answers every question with auto.
- * Read from the installed app stylesheet rather than recalled, which is the
- * only reason it is a number and not an estimate. */
-:root { --input-height: 30px; }
-button {
-  --text-color: var(--text-normal);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-color);
-  font-size: var(--font-ui-small);
-  border-radius: var(--button-radius);
-  border: 0;
-  padding: var(--size-4-1) var(--size-4-3);
-  height: var(--input-height);
-  font-weight: var(--input-font-weight);
-  cursor: var(--cursor);
-  font-family: inherit;
-  outline: none;
-  user-select: none;
-  white-space: nowrap;
-}`;
+// It is loaded on every page rather than only the ones being investigated, and it is the same
+// file `tools/live/`'s lanes load, so both harnesses model the host from one source rather than
+// two copies that can drift apart.
+const HOST_BARE_CONTROLS = readFileSync(join(REPO, "tools/screenshots/host-bare-controls.css"), "utf8");
 
 // ───────────────────────────────────────────────────────────────────
 // 3. BUNDLE THE SHIPPED POSITIONER

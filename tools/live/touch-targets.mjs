@@ -189,6 +189,9 @@ const page = await browser.newPage({
 });
 
 const styles = readFileSync(join(REPO, "styles.css"), "utf8");
+// The host's own bare-control rules — no `--input-height`, no host `button` rule — so a control
+// this file measures sees the same cascade a device applies, not only what the plugin declares.
+const hostBareControls = readFileSync(join(REPO, "tools/screenshots/host-bare-controls.css"), "utf8");
 const theme = readFileSync(join(REPO, "tools/screenshots/theme.css"), "utf8");
 const runtime = readFileSync(join(REPO, "tools/screenshots/runtime-vars.css"), "utf8");
 
@@ -252,7 +255,7 @@ for (const scenario of SCENARIOS) {
     continue;
   }
   await page.setContent(`<body class="is-phone theme-dark"><div id="shot">${html}</div></body>`);
-  for (const content of [styles, theme, runtime]) await page.addStyleTag({ content });
+  for (const content of [styles, hostBareControls, theme, runtime]) await page.addStyleTag({ content });
   // `setContent` replaces the document, so both the stylesheets and the measurement script are
   // re-attached every scenario — a premise or a function established before the loop says nothing
   // about the page any particular scenario was measured on.
@@ -310,7 +313,7 @@ writeFileSync(join(work, "index.html"), `<!doctype html>
 <body class="is-phone theme-dark"><script src="render-bundle.js"></script></body></html>`);
 
 await page.goto(`file://${join(work, "index.html")}`);
-for (const content of [styles, theme, runtime]) await page.addStyleTag({ content });
+for (const content of [styles, hostBareControls, theme, runtime]) await page.addStyleTag({ content });
 
 // The bundle's page is navigated once and every scenario mounts and unmounts inside it — unlike
 // the fixture loop, nothing here calls setContent per scenario, so one premise check after the

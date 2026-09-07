@@ -101,6 +101,79 @@ releases on scripted numbered briefs, judged by decoded pixel-delta, monitored e
 four agents at once; every leg keeps `<worktree>/.handover.md` and writes the packet's handover
 entry.
 
+### 2026-09-07 late evening, `221-live-host-model` — `tools/live/` gained the host stylesheet model, committed, NOT pushed
+
+**Owner: `009-live-verification`, not `054`.** 009's whole charter is measuring the plugin's real
+surfaces with the real host chrome and saying honestly what a harness cannot; 054 (record/relation
+surfaces) is a *consumer* of one of this leg's findings (its ink row, below) but does not own
+live-lane infrastructure. Worked from a worktree fresh off `origin/main` at `6f4d026c` (after the
+068 rename landed), so every class referenced below is `obnotion-`.
+
+**The gap.** `tools/storybook/verify-placement.mjs` modelled the host's own bare-`<button>` rule
+(`white-space: nowrap`, `justify-content: center`, `height: var(--input-height)`) so its checks see
+what a device's cascade actually does; `tools/live/`'s five lanes never did. Extracted the block to
+one shared file, `tools/screenshots/host-bare-controls.css` (padding hardcoded to its resolved
+4px/12px too — `--size-4-1`/`--size-4-3` are undefined in the three lanes that don't load
+`theme.css`, and an unresolved `var()` in a shorthand computes to nothing rather than falling back
+to the UA default, which is roomier than the real device and had been silently *hiding* overflow).
+Both `verify-placement.mjs` and all five named lanes (`sheet-grammar`, `render-assertions`,
+`touch-targets`, `sheet-rebuild`, `sheet-teardown`) now load it.
+
+**Every row that moved, reconciled:**
+- **`sheet-grammar`'s 054 ink row — re-derived, now proven.** The negative control used to hand-type
+  the host's three declarations (including a guessed 44px height); it now reads them live off a
+  bare `<button>` probe, so it can never drift from the shared file. Under the real cascade the
+  wrap-rule's own threshold (19px, chosen when the option box was 217.7px) no longer overflows at
+  the box's current 358-369px width — swept 15-64px, first real overflow at 24px but under 1px on
+  two of three buttons, robust at 30px (18-81px on all three). Re-pinned to 30px, with the reasoning
+  in `tools/live/sheet-grammar.mjs`'s own comment. **Literally proved**: commented out the real
+  `.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-new-placement-option` rule in
+  `styles.css`, reran — `settings sheet placement-button ink: 3/3 buttons paint ink outside their
+  own box at 30px (worst 81.0px)` — then restored it clean.
+- **A real device-only defect, deferred as a task, not guessed at.** The same padding fix also
+  showed `.obnotion-panel-button` (sort-panel, used across six renderers) declares no padding of
+  its own, so the host's real 4px/12px pushes it ~10px past its surface's right edge on both
+  engines — invisible to every harness before this leg. Recorded as `009`'s T26 rather than fixed
+  (the right padding is a per-surface call across icon-only/text/icon+label buttons, not a line
+  this lane can prove); `tools/gate.mjs`'s `sheet-grammar` check carries a matching `expectFail`
+  until T26 lands. Gate: **25 green, 1 red for a declared reason**.
+- **`touch-targets`' two ratchets tightened, not loosened.** The real host geometry made 13 fixture
+  and 7 constructed (scenario, class) pairs clear the 28px floor that couldn't under the UA-default
+  approximation (calendar mini-nav controls, a couple of mod-warnings, the record-peek hidden
+  toggle, the file-tag remove, the all-day-more/all-day-date calendar cells) — zero regressions
+  either direction. `touch-targets-baseline.json` 185→171, `touch-targets-constructed-baseline.json`
+  807→785, each with a dated `hostStylesheetModelLowering` entry naming the diff and the three
+  reproducing runs.
+- **`render-assertions` and `sheet-teardown`**: no row moved.
+- **`sheet-rebuild`'s real finding — a harness race, not the product.** Its filter-sheet "holds
+  still" row re-measured ~530-640 where the committed `sheet-rebuild.json` recorded 836/836 on
+  byte-identical source hashes. Root cause: `openSettled`'s settle-detection accepted two
+  consecutive equal `requestAnimationFrame` samples as "stopped," with no minimum-elapsed-time
+  floor — so the very first sheet a fresh page opens can read its pre-transition top (the entrance
+  class is added a frame after the off-screen mount, and that frame's timing raced the poll) on two
+  samples 11ms apart, long before the real 200ms transition runs. Reproduced deterministically: 4/4
+  clean runs before the fix gave sort=836/836/836 (the false, frozen pre-transition top) and
+  filter=541/641/641 (already correct, matching this session's own remeasure and the far session's
+  527/627 in kind); 4/4 runs after adding `ENTRANCE_SETTLE_FLOOR_MS = 260` (the 200ms token plus
+  margin) as a required condition give sort=674/655/674 and filter=541/641/641 — stable, and
+  matching the true animated resting positions.
+- **`check-lane.mjs`'s `git show` had no `maxBuffer`**, and `screenshots/manifest.json` (1,254,317
+  bytes) now exceeds Node's 1MB `spawnSync` default: reproduced `ENOBUFS`/`status: null`, read as
+  "no manifest at HEAD" by the caller with no error surfaced. Fixed with an explicit 64MB
+  `maxBuffer`; added `tools/lane/check-lane.test.mjs`'s disposable-repo test (commits a >1MB
+  manifest, reads it back) — confirmed it fails without the fix and passes with it.
+
+**Verification, this worktree, final state:** `npx tsc --noEmit` 0; `npx vitest run` 153 files /
+1642 tests; all five named lanes run individually (sheet-grammar exits 1 for the declared T26
+defect, the other four exit 0); `npm run gate </dev/null` once in the foreground — **25 green, 1
+red for a declared reason, exit 0**; `scan-comments`/`scan-failing-values` exit 0 standalone;
+`009-live-verification` validated `--strict` — `RESULT: PASSED`, 0 errors, 0 warnings (after
+`backfill-graph-metadata.js` re-derived its `graph-metadata.json` for the `tasks.md` edit).
+
+**Not done, and not this leg's to do:** `009`'s T26 (the `.obnotion-panel-button` padding
+decision). **Not pushed** — this worktree's HEAD is a local, unpushed commit; a fresh verifier
+rebases onto whatever landed at main in the meantime and lands it.
+
 ### 2026-09-07 ~21:05, `068-rename-to-obnotion` LANDING VERIFICATION PASSED — leg PUSHED to `origin/main` at `e80f0775`
 
 **The rename is landed on `origin/main`; the worktree's job is done.** A fresh Opus verifier (this

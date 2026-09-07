@@ -594,7 +594,8 @@ if (missingSources.length > 0) {
 }
 
 writeFileSync(join(work, "index.html"), `<!doctype html>
-<html><head><meta charset="utf-8"><link rel="stylesheet" href="file://${REPO}styles.css"></head>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="file://${REPO}styles.css">
+<link rel="stylesheet" href="file://${REPO}tools/screenshots/host-bare-controls.css"></head>
 <body class="theme-dark"><script src="render-bundle.js"></script></body></html>`);
 
 // ───────────────────────────────────────────────────────────────────
@@ -719,7 +720,7 @@ try {
   const rhythmErrors = [];
   rhythmPage.on("pageerror", (error) => rhythmErrors.push(error.message));
   await rhythmPage.goto(`file://${join(work, "index.html")}`);
-  for (const sheet of ["styles.css", "tools/screenshots/theme.css", "tools/screenshots/runtime-vars.css"]) {
+  for (const sheet of ["styles.css", "tools/screenshots/host-bare-controls.css", "tools/screenshots/theme.css", "tools/screenshots/runtime-vars.css"]) {
     await rhythmPage.addStyleTag({ content: readFileSync(join(REPO, sheet), "utf8") });
   }
   // The surface this measures is the phone table the row heights were reported against, so the
@@ -788,7 +789,7 @@ try {
     const geometryErrors = [];
     geometryPage.on("pageerror", (error) => geometryErrors.push(error.message));
     await geometryPage.goto(`file://${join(work, "index.html")}`);
-    for (const sheet of ["styles.css", "tools/screenshots/theme.css", "tools/screenshots/runtime-vars.css"]) {
+    for (const sheet of ["styles.css", "tools/screenshots/host-bare-controls.css", "tools/screenshots/theme.css", "tools/screenshots/runtime-vars.css"]) {
       await geometryPage.addStyleTag({ content: readFileSync(join(REPO, sheet), "utf8") });
     }
     geometryOutcome = await geometryPage.evaluate(
@@ -825,7 +826,7 @@ try {
 <div id="ground-probe" style="background-color: var(--obnotion-surface-canvas);"></div>
 </div>
 </body></html>`);
-  for (const sheet of ["styles.css", "tools/screenshots/theme.css", "tools/screenshots/runtime-vars.css"]) {
+  for (const sheet of ["styles.css", "tools/screenshots/host-bare-controls.css", "tools/screenshots/theme.css", "tools/screenshots/runtime-vars.css"]) {
     await colorPage.addStyleTag({ content: readFileSync(join(REPO, sheet), "utf8") });
   }
   // Both measurements below read getComputedStyle immediately after a class toggle or a

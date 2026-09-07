@@ -293,29 +293,42 @@ const HANDLE_GEOMETRY_TOLERANCE_PT = 1;
 // plus two capture-corpus-wide fidelity fixes before it can run everywhere. Scoped to exactly the
 // buttons this sheet draws, the same predicate has nothing else to misfire on.
 //
-// What the ink row can and cannot see, stated so it is not over-trusted: this file models no host
-// stylesheet, and the overflow it guards only exists under Obsidian's own `button` rule
-// (`white-space: nowrap`, `justify-content: center`, `height: var(--input-height)`), which
-// `tools/storybook/verify-placement.mjs` carries and this file does not. Deleting the wrap fix from
-// `styles.css` therefore leaves this row green here; the row goes red on the pre-fix DEVICE state —
-// the fix rule replaced by those three host declarations — which is what the negative control below
-// reinstates. The stacking row above has no such dependency and goes red on the tree alone.
+// What the ink row can and cannot see, stated so it is not over-trusted: this page now links
+// `tools/screenshots/host-bare-controls.css`, the same host model `tools/storybook/verify-
+// placement.mjs` carries, so the overflow this row guards — Obsidian's own `button` rule
+// (`white-space: nowrap`, `justify-content: center`, `height: var(--input-height)`) outranking the
+// plugin's fix once the fix is gone — is a real cascade on this page, not a fact the check has to
+// take on faith. The negative control below reads that cascade live off a bare `<button>` rather
+// than re-typing its three declarations, so deleting the wrap fix from `styles.css` and deleting
+// the negative control's override converge on the same measurement. The stacking row above has no
+// such dependency and goes red on the tree alone.
 const SETTINGS_SHEET_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "settings");
 // A control fills the row's full inset-to-inset span, not a fraction of it — 90% leaves room for
 // a control that legitimately shares its line with an icon or a unit label.
 const SETTINGS_ROW_WIDTH_RATIO_MIN = 0.9;
-// `--font-ui-small` at the operator's 16px default (15px) and at the text size that measured the
-// shipped 78px-of-ink defect (19px, derived from the operator's own capture). Set directly on
-// the button rather than resolved from `--font-text-size`: this harness, unlike a real host, never
-// defines that token, and deriving it everywhere is a gap this guard deliberately leaves alone.
-// `expectRed` names what was actually measured: at this sheet's widened option width the 15px row
-// measures 0px of ink outside even before the wrap fix — the string is short enough to fit nowrap
-// at that size regardless — so the negative control below only requires red at the size that was
-// actually measured red (19px, ~3px of ink outside pre-fix), while both sizes still have to come
-// back clean once the override is removed.
+// `--font-ui-small` at the operator's 16px default (15px) and at a size proven to overflow under
+// the host model this page now carries. Set directly on the button rather than resolved from
+// `--font-text-size`: this harness, unlike a real host, never defines that token, and deriving it
+// everywhere is a gap this guard deliberately leaves alone.
+//
+// The second size was 19px — the text size that measured the shipped 78px-of-ink defect before the
+// stacked row landed and widened the option box from 217.7px to its current 358-369px. Loading the
+// real host model here re-measured that assumption: `display: inline-flex` on a bare `<button>`
+// (never modelled before this page carried the host stylesheet) changes how the box's own text
+// intrinsic-sizing interacts with `white-space: nowrap`, and at the current, wider box the 19px
+// string now measures 0px of ink outside even with the wrap rule reverted — the box widened enough
+// to absorb it, and the pre-existing (host-less) negative control had been reporting that as red
+// only because it never modelled `display` at all. Swept 15-64px against the real cascade: 24px is
+// the first size that overflows, but by a margin under 1px on two of the three buttons — too close
+// to the sweep's own 0.5px tolerance to trust as a control. 30px overflows all three buttons by
+// 18-81px, a margin no rendering jitter closes, so that is the re-derived size. `expectRed` still
+// names what was actually measured: at 15px the row measures 0px of ink outside even before the
+// wrap fix — the string is short enough to fit nowrap at that size regardless — so the negative
+// control below only requires red at the size that was actually measured red (30px), while both
+// sizes still have to come back clean once the override is removed.
 const SETTINGS_PLACEMENT_FONT_SIZES = [
   { px: 15, expectRed: false },
-  { px: 19, expectRed: true },
+  { px: 30, expectRed: true },
 ];
 
 // Each entry names a real parent shape from the render harness and the production opener family
@@ -457,11 +470,14 @@ import { createHostModalStandIn } from "${fileURLToPath(new URL("./host-modal-st
 
 setLocale("en");
 
-// This lane links only styles.css (no theme.css/runtime-vars.css — those pull in real font
-// metrics that shift text width a fraction of a pixel across most surfaces, which is a change
-// to every other check's rendering rather than this one's). --background-primary is the one
-// token the background-match check below needs resolved to something other than the browser's
-// unstyled default, so it is set directly rather than by pulling in the whole stand-in sheet.
+// This lane links styles.css plus the host's own bare-control rules (no theme.css/runtime-vars.css
+// — those pull in real font metrics that shift text width a fraction of a pixel across most
+// surfaces, which is a change to every other check's rendering rather than this one's). The host
+// model is what a real device applies to every unclaimed button property; without it this page
+// could certify a fix that only works because nothing here contested it. --background-primary is
+// the one token the background-match check below needs resolved to something other than the
+// browser's unstyled default, so it is set directly rather than by pulling in the whole stand-in
+// sheet.
 document.documentElement.style.setProperty("--background-primary", "#1e1e1e");
 
 // One engine serialises a colour as rgb()/rgba(), the other as color(srgb ...), with or without a
@@ -1200,11 +1216,23 @@ window.__shellSettingsPlacementInk = (scenario, fontSizePx) => {
 };
 
 window.__shellSettingsPlacementInkNegativeControl = (scenario, fontSizePx) => {
+  // The three properties a bare \`<button>\` carries under the host model this page now links
+  // (\`tools/screenshots/host-bare-controls.css\`), read live off the cascade rather than
+  // hand-copied: a probe with no other class picks up exactly what that shared file declares, so
+  // this override can never drift from it even if the file's values change.
+  const probe = document.createElement("button");
+  document.body.appendChild(probe);
+  const hostRules = getComputedStyle(probe);
+  const hostWhiteSpace = hostRules.whiteSpace;
+  const hostJustifyContent = hostRules.justifyContent;
+  const hostHeight = hostRules.height;
+  probe.remove();
+
   const brokenStyle = document.createElement("style");
-  // The placement-button wrap rule, reverted: the three host button declarations the shipped fix answered —
-  // nowrap, centred, a fixed height — reinstated on exactly this selector so the sentence-length
-  // option cannot wrap again.
-  brokenStyle.textContent = ".obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-new-placement-option { font-size: " + fontSizePx + "px !important; white-space: nowrap !important; justify-content: center !important; height: 44px !important; }";
+  // The placement-button wrap rule, reverted: the three host button declarations the shipped fix
+  // answered — nowrap, centred, a fixed height — reinstated on exactly this selector so the
+  // sentence-length option cannot wrap again.
+  brokenStyle.textContent = ".obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-new-placement-option { font-size: " + fontSizePx + "px !important; white-space: " + hostWhiteSpace + " !important; justify-content: " + hostJustifyContent + " !important; height: " + hostHeight + " !important; }";
   document.head.appendChild(brokenStyle);
   let broken = null;
   runRenderAssertions(document.body, scenario, "", () => {
@@ -2101,7 +2129,8 @@ if (missingSources.length > 0) {
 }
 
 writeFileSync(join(work, "index.html"), `<!doctype html>
-<html><head><meta charset="utf-8"><link rel="stylesheet" href="file://${REPO}styles.css"></head>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="file://${REPO}styles.css">
+<link rel="stylesheet" href="file://${REPO}tools/screenshots/host-bare-controls.css"></head>
 <body class="is-phone theme-dark"><script src="render-bundle.js"></script></body></html>`);
 
 // ───────────────────────────────────────────────────────────────────

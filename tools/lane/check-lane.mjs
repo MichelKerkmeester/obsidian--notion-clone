@@ -194,12 +194,18 @@ function readManifestFile(path) {
 }
 
 /** Reads and parses screenshots/manifest.json as it exists in the last commit — "before" for the
- * content compare, distinct from the working-tree copy `capture.mjs` just wrote. */
-function readManifestAtHead() {
+ * content compare, distinct from the working-tree copy `capture.mjs` just wrote. `cwd` is
+ * parameterised so a test can point this at a disposable repository rather than this one. */
+export function readManifestAtHead(cwd = REPO) {
   const show = spawnSync("git", ["show", "HEAD:screenshots/manifest.json"], {
-    cwd: REPO,
+    cwd,
     encoding: "utf8",
     shell: false,
+    // Node's spawnSync default is 1MB and the manifest has grown past it, which failed silently:
+    // status came back null with an ENOBUFS on `error`, and the check below reads null the same
+    // way it reads "no such path at HEAD" — a truncated read and a missing file looked identical.
+    // 64MB is headroom over today's file, not a measured ceiling on it.
+    maxBuffer: 64 * 1024 * 1024,
   });
   if (show.status !== 0) return null;
   try {

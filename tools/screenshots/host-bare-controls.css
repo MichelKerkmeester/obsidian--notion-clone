@@ -1,0 +1,50 @@
+/* Copied verbatim out of Obsidian's own app.css, the same way a leaf's `contain: strict` is
+ * reproduced elsewhere: a harness that omits what the app declares certifies a rendering nobody
+ * ships.
+ *
+ * This one rule is the reason a shared menu row could be measured as correctly aligned in a
+ * plugin-only page and arrive centred on a phone. A row is a `<button>`, and the plugin's row rule
+ * outranks this type selector on every property BOTH of them name — but `justify-content` was
+ * named by only one, so the host's `center` applied uncontested and nothing in a plugin-only page
+ * could show it. The defect was invisible not because the check was weak but because the document
+ * it ran against was missing a declaration the device has.
+ *
+ * It belongs on every page a lane builds, not only the ones under active investigation. A property
+ * the plugin leaves unstated is not a phone problem or a menu problem; it is a gap anywhere a host
+ * rule reaches, and the whole point is that the gap is silent until something models it.
+ */
+
+/* The variables the rule below has always read and never had.
+ *
+ * This block was transcribed from the host's own button rule, including its height and padding
+ * declarations — but not the tokens those declarations resolve through, so every button measured
+ * content height and UA-default padding while a real one measures a fixed 30px height and a
+ * resolved 4px/12px padding. A rule modelled without its variables is worse than a rule left out:
+ * it looks like the host is represented, `var()` with no fallback and no declaration in scope
+ * computes to nothing (padding's shorthand initial value, not the browser's own button padding),
+ * and the box this rule draws ends up ROOMIER than the device's — which measured as LESS ink
+ * overflow than a real button on the same fix, the opposite direction a silent gap usually fails
+ * in. Read from the installed app stylesheet rather than recalled, which is the only reason these
+ * are numbers and not an estimate. `--text-color`, `--font-ui-small`, `--button-radius`,
+ * `--input-font-weight` and `--cursor` are left as-is: none of them affect a box's own geometry,
+ * so a page that also carries theme.css resolves them and one that does not loses only paint, not
+ * measurement. */
+:root { --input-height: 30px; }
+button {
+  --text-color: var(--text-normal);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color);
+  font-size: var(--font-ui-small);
+  border-radius: var(--button-radius);
+  border: 0;
+  padding: 4px 12px;
+  height: var(--input-height);
+  font-weight: var(--input-font-weight);
+  cursor: var(--cursor);
+  font-family: inherit;
+  outline: none;
+  user-select: none;
+  white-space: nowrap;
+}

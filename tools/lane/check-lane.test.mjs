@@ -19,12 +19,17 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { describe, expect, it } from "vitest";
+import { spawnSync } from "node:child_process";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { afterEach, describe, expect, it } from "vitest";
 import {
   changedCaptures,
   contentChangedCaptures,
   inScopeCaptures,
   isContentChange,
+  readManifestAtHead,
   reviewVerdict,
 } from "./check-lane.mjs";
 
@@ -247,5 +252,43 @@ describe("a competitor reference photograph never forces a release to name it", 
     expect(verdict.exit).toBe(1);
     expect(verdict.err.join("\n")).toContain(notionClone);
     expect(verdict.err.join("\n")).not.toContain(ANYTYPE);
+  });
+});
+
+describe("reading the committed manifest past node's default 1MB pipe", () => {
+  // node:child_process.spawnSync truncates a subprocess's stdout at a default 1MB and reports
+  // it as ENOBUFS rather than partial output — and this repository's own screenshots/manifest.json
+  // has grown past that floor. A disposable repository proves the read survives a blob the same
+  // shape, rather than trusting the byte count in the real one to stay above it forever.
+  let repo;
+
+  afterEach(() => {
+    if (repo) rmSync(repo, { recursive: true, force: true });
+    repo = undefined;
+  });
+
+  it("parses a committed manifest bigger than the default pipe buffer", () => {
+    repo = mkdtempSync(join(tmpdir(), "check-lane-manifest-"));
+    const git = (...args) => spawnSync("git", args, { cwd: repo, encoding: "utf8", shell: false });
+    git("init", "--quiet");
+    git("config", "user.email", "test@example.com");
+    git("config", "user.name", "test");
+    git("config", "commit.gpgsign", "false");
+    mkdirSync(join(repo, "screenshots"), { recursive: true });
+    // Padding rather than many small entries: what has to survive the round trip is byte count,
+    // and one long string is the smallest file that proves it.
+    const manifest = { padding: "x".repeat(1_200_000), entries: { real: "value" } };
+    writeFileSync(join(repo, "screenshots", "manifest.json"), JSON.stringify(manifest));
+    expect(Buffer.byteLength(JSON.stringify(manifest))).toBeGreaterThan(1024 * 1024);
+    git("add", "screenshots/manifest.json");
+    // This machine's own commit-msg hook enforces the conventional-commit subject line even
+    // inside a disposable scratch repository, so the fixture commit has to satisfy it too.
+    const commit = git("commit", "--quiet", "-m", "test(check-lane): add oversized manifest fixture");
+    expect(commit.status).toBe(0);
+
+    const read = readManifestAtHead(repo);
+    expect(read).not.toBeNull();
+    expect(read.entries.real).toBe("value");
+    expect(read.padding).toHaveLength(1_200_000);
   });
 });

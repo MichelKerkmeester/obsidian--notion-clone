@@ -90,7 +90,8 @@ if (!Object.keys(built.metafile.inputs).includes(SOURCE)) {
 }
 
 writeFileSync(join(work, "index.html"), `<!doctype html>
-<html><head><meta charset="utf-8"><link rel="stylesheet" href="file://${REPO}styles.css"></head>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="file://${REPO}styles.css">
+<link rel="stylesheet" href="file://${REPO}tools/screenshots/host-bare-controls.css"></head>
 <body class="theme-dark"><script src="bundle.js"></script></body></html>`);
 
 // ───────────────────────────────────────────────────────────────────

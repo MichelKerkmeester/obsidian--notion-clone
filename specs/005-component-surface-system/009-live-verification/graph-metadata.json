@@ -52,7 +52,10 @@
       "tools/live/README.md",
       "tools/lane/css-lane.json",
       "tools/gate.mjs",
-      "src/main.ts"
+      "src/main.ts",
+      "tools/storybook/verify-placement.mjs",
+      "tools/screenshots/host-bare-controls.css",
+      "tools/live/sheet-grammar.mjs"
     ],
     "entities": [
       {
@@ -128,6 +131,24 @@
         "source": "derived"
       },
       {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "host-bare-controls.css",
+        "kind": "file",
+        "path": "tools/screenshots/host-bare-controls.css",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -180,29 +201,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Its Stage",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Breakdown",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "evidence",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The program's founding fact is that a release passed every gate and changed nothing on device",
     "created_at": "2026-08-29T14:34:47.371Z",
-    "last_save_at": "2026-09-04T20:07:56.285Z",
+    "last_save_at": "2026-09-07T19:48:17.185Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,12 +216,12 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:be0c994d18575dc1517c7853fbb58e55251a16855a1fd5afbe03b5318e4e9922",
+    "source_fingerprint": "sha256:1e2ba45bf55a7f209811bdb0aa11b1bca757f1bab6c86d28dfd5cf258533eb87",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "921838990aa54b2ca12c6785e34e0c3295b7d9e3137a66615357213b59adf55f",
       "plan.md": "1c6dcf824de8a59d2f89ff36f7d49b59643e58687beab07d557868e9cf8cb4f7",
-      "tasks.md": "250d6a2d48b1f123f93c4bd97955654275b5a9c4c051b0a0d3ed87d2dc171003",
+      "tasks.md": "cf2c4e3b7a8d7df43738c91faf3ffa613fd6da5387ba259d5c96ea6e82adc0de",
       "implementation-summary.md": "a6ce3320fca498ee46a01db1bcca34e6180f5a8ae283d2358dbc9435b4487cb0"
     },
     "last_active_child_id": null,

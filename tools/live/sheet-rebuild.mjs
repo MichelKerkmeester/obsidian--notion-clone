@@ -158,7 +158,8 @@ if (unguarded.length > 0) {
 }
 
 writeFileSync(join(work, "index.html"), `<!doctype html>
-<html><head><meta charset="utf-8"><link rel="stylesheet" href="file://${REPO}styles.css"></head>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="file://${REPO}styles.css">
+<link rel="stylesheet" href="file://${REPO}tools/screenshots/host-bare-controls.css"></head>
 <body class="theme-dark"><script src="bundle.js"></script></body></html>`);
 
 // A second page for the two-engine section, carrying the same bundle and the same stylesheet with
@@ -167,7 +168,8 @@ writeFileSync(join(work, "index.html"), `<!doctype html>
 // below as an engine disagreement rather than as the missing file it is.
 writeFileSync(join(work, "parity.html"), `<!doctype html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<style>${readFileSync(join(REPO, "styles.css"), "utf8")}</style></head>
+<style>${readFileSync(join(REPO, "styles.css"), "utf8")}</style>
+<style>${readFileSync(join(REPO, "tools/screenshots/host-bare-controls.css"), "utf8")}</style></head>
 <body class="theme-dark"><script>${readFileSync(join(work, "bundle.js"), "utf8")}</script></body></html>`);
 
 // ───────────────────────────────────────────────────────────────────
@@ -192,6 +194,17 @@ const DRAG_PX = 120;
 // number is used for both the flick and its slow control, because the pair is only meaningful if
 // the distance is identical and speed is the single thing that differs.
 const SHORT_PX = 40;
+
+// The entrance's own duration (200ms, styles.css `--obnotion-sheet-enter`) plus margin. The class
+// that starts the transition is added on a later frame than the one that mounts the sheet at its
+// off-screen start position (styles.css: the start rule declares `transition: none` on purpose, so
+// the step INTO it never animates), and that later frame's own timing is not guaranteed relative to
+// this harness's polling. Measured: the very first sheet a fresh page opens can still read its
+// pre-transition top on two consecutive animation frames 11ms apart — a real position, not a
+// glitch, but the WRONG one, one `--obnotion-sheet-enter` short of where the surface actually
+// stops. Refusing to call two-equal-samples "settled" before this floor has elapsed closes that
+// window regardless of how warmed up the page is.
+const ENTRANCE_SETTLE_FLOOR_MS = 260;
 
 // ───────────────────────────────────────────────────────────────────
 // 3b. A TOOLBAR REBUILD BEHIND AN OPEN SHEET, IN BOTH ENGINES
@@ -715,22 +728,24 @@ try {
   const openSettled = async (kind) => {
     const setup = await page.evaluate((k) => window.__openAddRowSheet(k), kind);
     if (!setup.ready) return null;
-    // Past the 260ms entrance with room to spare, and confirmed settled rather than assumed: the
-    // coordinate is only meaningful once the surface has stopped moving.
-    // Unmoving is not enough. The entrance holds its start state for a frame or two before it
-    // begins interpolating, so two identical samples are also what the BEGINNING of a rise looks
-    // like — and a coordinate taken there is a coordinate on a sheet that is about to leave. The
-    // surface must have stopped moving AND be on screen.
-    await page.waitForFunction(() => {
+    // Confirmed settled rather than assumed: the coordinate is only meaningful once the surface has
+    // stopped moving. Unmoving is not enough — the entrance holds its start state for a frame or
+    // two before it begins interpolating, so two identical samples are also what the BEGINNING of a
+    // rise looks like, and a coordinate taken there is a coordinate on a sheet that is about to
+    // leave. The elapsed-time floor is what tells the two apart: it is not enough for the surface to
+    // look unmoving, it must have been given the entrance's own duration to move in first.
+    await page.evaluate(() => { window.__settleStart = performance.now(); });
+    await page.waitForFunction((floorMs) => {
       const probe = window.__addRowProbe();
       const last = window.__settleTop;
       window.__settleTop = probe.panelTop;
       return probe.panelTop !== null
         && probe.panelTop < window.innerHeight - 1
         && last !== undefined
-        && Math.abs(last - probe.panelTop) < 0.5;
-    }, null, { timeout: 4000, polling: "raf" });
-    await page.evaluate(() => { delete window.__settleTop; });
+        && Math.abs(last - probe.panelTop) < 0.5
+        && performance.now() - window.__settleStart >= floorMs;
+    }, ENTRANCE_SETTLE_FLOOR_MS, { timeout: 4000, polling: "raf" });
+    await page.evaluate(() => { delete window.__settleTop; delete window.__settleStart; });
     return page.evaluate(() => window.__addRowProbe());
   };
 

@@ -52,6 +52,7 @@ export default defineConfig([
         navigator: "readonly",
         matchMedia: "readonly",
         CSS: "readonly",
+        performance: "readonly",
       },
     },
   },

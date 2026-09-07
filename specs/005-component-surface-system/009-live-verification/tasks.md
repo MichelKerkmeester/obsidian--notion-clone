@@ -191,6 +191,27 @@ VERIFIED. These three tasks close the other two, or leave them honestly labelled
 - [ ] **T24** Confirm the production bundle contains no probe API and the working tree is clean.
 - [ ] **T25** Produce the shrunken operator review list: only the checks §3B marks as requiring human
       judgement, with emulated and device results distinguished.
+- [ ] **T26** Give `.obnotion-panel-button` an explicit padding decision. Giving `tools/live/`'s
+      lanes the same host stylesheet model `tools/storybook/verify-placement.mjs` already carried
+      (`tools/screenshots/host-bare-controls.css`, loaded by `sheet-grammar.mjs`,
+      `render-assertions.mjs`, `touch-targets.mjs`, `sheet-rebuild.mjs` and `sheet-teardown.mjs`)
+      surfaced that `.obnotion-container .obnotion-panel-button` (styles.css) declares no `padding`
+      of its own, so Obsidian's own `button` rule supplies its real 4px/12px — never modelled before
+      this lane carried the host stylesheet. `tools/live/sheet-grammar.mjs`'s overflow sweep now
+      measures the sort-panel's own two `.obnotion-panel-button` controls (its add-sort and its "×"
+      remove) at ~9.8-10.8px past the panel's own right edge, on both Chrome and WebKit, in the
+      panel as built, stacked over its field or direction picker, and with a long field name —
+      consistently, not a rendering jitter. This is a real, previously-invisible device defect:
+      `.obnotion-panel-button` is used across `board-groups-panel.ts`, `column-manager-renderer.ts`,
+      `database-view.ts`, `embedded-database-renderer.ts`, `filter-panel-renderer.ts` and
+      `sort-panel-renderer.ts`, each with different content (icon-only, text, icon+label), so the
+      right padding is a real per-surface design decision this leg did not make — it recorded the
+      gap instead of guessing at the fix. `tools/gate.mjs`'s `sheet-grammar` check carries an
+      `expectFail` naming this task until it lands.
+      *Evidence to close:* every `.obnotion-panel-button` surface reviewed for its intended padding
+      under the real host button rule; a decision recorded (explicit `padding`, or a documented
+      reason the host's 4px/12px is correct as-is) for each; `tools/live/sheet-grammar.mjs`'s
+      overflow sweep green with the `expectFail` removed from `tools/gate.mjs`.
 
 <!-- /ANCHOR:phase-3 -->
 ---
