@@ -278,6 +278,14 @@ const HANDLE_GEOMETRY_TOLERANCE_PT = 1;
 // a checkbox, a dropdown chevron, this lane's own test anchors) and needs its own exemption list
 // plus two capture-corpus-wide fidelity fixes before it can run everywhere. Scoped to exactly the
 // buttons this sheet draws, the same predicate has nothing else to misfire on.
+//
+// What the ink row can and cannot see, stated so it is not over-trusted: this file models no host
+// stylesheet, and the overflow it guards only exists under Obsidian's own `button` rule
+// (`white-space: nowrap`, `justify-content: center`, `height: var(--input-height)`), which
+// `tools/storybook/verify-placement.mjs` carries and this file does not. Deleting the wrap fix from
+// `styles.css` therefore leaves this row green here; the row goes red on the pre-fix DEVICE state —
+// the fix rule replaced by those three host declarations — which is what the negative control below
+// reinstates. The stacking row above has no such dependency and goes red on the tree alone.
 const SETTINGS_SHEET_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "settings");
 // A control fills the row's full inset-to-inset span, not a fraction of it — 90% leaves room for
 // a control that legitimately shares its line with an icon or a unit label.
@@ -1087,8 +1095,8 @@ window.__shellSettingsRowStackingNegativeControl = (scenario) => {
 
 // The placement-button ink guard. Raw scrollWidth/clientWidth/overflowX per button, scoped
 // to exactly the buttons this sheet draws — the node-side caller applies the same predicate a
-// wider, document-wide sweep already tried and reverted, here with
-// tried document-wide and reverted, here with nothing else in scope to misfire on.
+// wider, document-wide sweep already tried and reverted, here with nothing else in scope to
+// misfire on.
 const measureSettingsPlacementInk = () => {
   const sheet = document.querySelector(".db-view-config-panel.db-mobile-bottom-sheet");
   if (!sheet) return null;
@@ -1115,7 +1123,7 @@ window.__shellSettingsPlacementInk = (scenario, fontSizePx) => {
 
 window.__shellSettingsPlacementInkNegativeControl = (scenario, fontSizePx) => {
   const brokenStyle = document.createElement("style");
-  // The placement-button wrap rule, reverted: the host button rule's three declarations that fix answered —
+  // The placement-button wrap rule, reverted: the three host button declarations the shipped fix answered —
   // nowrap, centred, a fixed height — reinstated on exactly this selector so the sentence-length
   // option cannot wrap again.
   brokenStyle.textContent = ".db-view-config-panel.db-mobile-bottom-sheet .db-new-placement-option { font-size: " + fontSizePx + "px !important; white-space: nowrap !important; justify-content: center !important; height: 44px !important; }";
