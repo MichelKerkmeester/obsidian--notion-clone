@@ -13029,7 +13029,10 @@ body.is-phone .note-database-container .db-shell-header .db-panel-title {
   outline: none;
 }
 
-.note-database-container .db-column-manager-row-search-hidden {
+/* Both classes on the one selector, not the filter class alone: `.db-column-manager-row`'s own
+   `display: grid` carries the identical specificity and is declared further down this file, so a
+   single-class rule here loses the cascade and the query marks rows it never hides. */
+.note-database-container .db-column-manager-row.db-column-manager-row-search-hidden {
   display: none;
 }
 

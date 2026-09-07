@@ -237,6 +237,7 @@ describe("getPropertyEmptyPrompt", () => {
     expect(getPropertyEmptyPrompt("select")).toBe("Select option");
     expect(getPropertyEmptyPrompt("multi-select")).toBe("Select options");
     expect(getPropertyEmptyPrompt("relation")).toBe("Select options");
+    expect(getPropertyEmptyPrompt("status")).toBe("Select option");
   });
 
   it("names the action for every other format with an editor", () => {

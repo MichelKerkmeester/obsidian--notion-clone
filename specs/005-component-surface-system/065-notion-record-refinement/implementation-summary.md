@@ -147,6 +147,27 @@ any assertion could pass), and a 2-4px overflow from the new column-manager sear
 | `node tools/naming/scan-comments.mjs` | PASS, exit 0, 0 artifact-id violations |
 | `node tools/naming/scan-failing-values.mjs` | PASS, exit 0 |
 | `node tools/lane/check-lane.mjs` | PASS, exit 0, release names all 49 git-reported capture changes |
+
+### Landing verification
+
+An independent pass drove the real record sheet, the real visibility list and the real picker in
+headless Chrome at 402x874 and 1440x900, through the same constructed seam the `tools/live` lanes
+build. It confirmed the row anatomy on all eight hidden-group rows at both widths, the Hidden
+section's absence when nothing is hidden, the eye toggle moving a field between sections without
+closing the sheet, the trailing add row calling the picker, the picker forwarding a typed name to
+the chosen format, and equal label/value `font-size` on the desktop arm (13px/13px) against the
+phone arm unchanged at 14px/16px. Six mutations — one per new public surface — were each killed by
+exactly one test.
+
+It also found two things the leg's own pass had not, both since fixed and re-measured:
+
+| Found | Evidence | Fix |
+|-------|----------|-----|
+| An empty `status` field still read the literal "Empty" on both the record sheet and the board card | Measured on the live sheet at 402px and 1440: `status` was the one editor-bearing format `getPropertyEmptyPrompt` did not answer, so the shared `getEmptyDisplayValue` fell through to `t("common.empty")` | `status` joins `select` on the same prompt, matching `renderPropertyValue`, which already routes the two through one branch |
+| The visibility list's search field marked rows it never hid | `.db-column-manager-row-search-hidden` tied `.db-column-manager-row`'s own `display: grid` on specificity and lost on source order; the non-matching rows measured `display: grid` at both widths with a query typed | Both classes on one selector, which wins on specificity regardless of order; the same measurement now reads `none` for non-matches and `grid` for the one match |
+
+Neither fix moves a capture — no capture types a query, and no capture fixture carries an empty
+`status` column — and `check-lane.mjs` reports 0 changed captures against the new baseline.
 <!-- /ANCHOR:verification -->
 
 ---
@@ -177,7 +198,11 @@ any assertion could pass), and a 2-4px overflow from the new column-manager sear
 5. **The sweep is bounded by the digest.** It swept `054/notion-screens-digest.md` against `src/`,
    which is the only permitted source of Notion facts here. A Notion record-surface feature that
    never reached the digest could not be found by it.
-6. **Five empty-value strings have no capture behind them.** A3 captured the shape and one
+6. **The status prompt reuses the select string rather than minting its own.** `status` and
+   `select` share one branch in `renderPropertyValue` and open the same option editor, so they
+   take the same "Select option" prompt. A program that later wants status to read differently
+   changes one `if`.
+7. **Five empty-value strings have no capture behind them.** A3 captured the shape and one
    example; the copy for `date`, `datetime`, `currency`, `text` and `files` is minted here and
    marked an inference in ADR-001. Re-wording is one i18n key each.
 <!-- /ANCHOR:limitations -->

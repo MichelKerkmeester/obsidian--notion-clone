@@ -1,7 +1,7 @@
 {
   "holder": "065-notion-record-refinement",
   "acquiredAt": "2026-09-06T22:53:00Z",
-  "baselineHash": "c1e36218715b",
+  "baselineHash": "9b3146f3aeb6",
   "baselineCommit": null,
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -4738,6 +4738,14 @@
         "screenshots/notion-clone/views/timeline-view-day-mobile-light.png"
       ],
       "note": "Full recapture: 588 entries, verify.mjs exit 0. Every capture git reports as moved is named above rather than narrowed to a pixelHash-different subset — this run's own re-encode noise moved a different byte-only set on each of several successive recaptures taken while iterating, so the safe list is the whole git-reported set, all of it opened and read. The captures that carry this leg's actual content: the column-manager and its two stacked-popover captures show the new search row above the list, unclipped on the 390px sheet after box-sizing: border-box was added to .db-column-manager-search (it first overflowed the sheet's right edge by 2-4px, caught by sheet-grammar.mjs's own overflow sweep — a genuine red, not a false alarm); the record-detail and record-detail-docked captures show the label and value at one size and a 'Hidden properties (0)' entry row that now always renders, matching the group's own new role as the entry point for hiding a currently-shown field, not only a report of what already is; record-peek's four captures reach the same record-detail-panel path through this harness's own touch hand-off (isTouchDevice reads the hidden, zero-size anchor as narrow regardless of the 'desktop' pass), so they carry the same content correctly. The eight date-picker captures moved for an unrelated reason: the mini-calendar's own 'today' cell tracks the real system date, and the capture run crossed a real calendar day (2026-09-06 to 2026-09-07) during this session; the committed capture's highlighted '6' is absent from the new one for that reason alone, confirmed by diffing the two images directly, and the fresh capture is kept as the accurate current-date rendering rather than reverted. The remainder (card-covers, list-migrated, table-footer, table-grouped, cell-editor, icon-picker, record-icon, status-colors, depth3-column-submenu-light, board-view, constructed-table, timeline-view-day) measured pixelHash-identical to their committed entries at some point during iteration and are re-encoder noise, kept at the fresh capture's bytes rather than hand-reverted: every entry's sourceHashes must describe the tree that produced the file beside it, and this stylesheet edit is real for all 588 entries whether or not a given one's pixels moved. (One further noise file, chrome-chart-options-popover-mobile-dark, appeared transiently mid-iteration with a stray text-caret artifact and pixelHash difference against HEAD, unrelated to any file in this diff — chart-toolbar-renderer.ts is untouched; it settled back to pixelHash-identical on the final recapture and does not appear in the git-reported changed set this release names.)"
+    },
+    {
+      "event": "release",
+      "phase": "065-notion-record-refinement",
+      "at": "2026-09-07T05:40:00Z",
+      "hash": "9b3146f3aeb6",
+      "reviewed": [],
+      "note": "Landing verification of 065 raised the visibility-list filter rule's specificity to .db-column-manager-row.db-column-manager-row-search-hidden. The single-class form it replaced tied .db-column-manager-row's own display:grid on specificity and lost on order, so a typed query marked rows it never hid — measured live at 402px and 1440 (display stayed 'grid' before, 'none' after). No capture moves: no capture types a query."
     }
   ],
   "outstanding": [

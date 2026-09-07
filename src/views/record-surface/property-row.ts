@@ -307,7 +307,9 @@ export function renderOptionValue(
  * so this is never called there.
  */
 export function getPropertyEmptyPrompt(displayType: ColumnDef["type"]): string | null {
-  if (displayType === "select") return t("field.emptySelectPrompt");
+  // `status` shares the select branch in `renderPropertyValue` and opens the same option editor,
+  // so it takes the same prompt rather than falling through to the word it is meant to replace.
+  if (displayType === "select" || displayType === "status") return t("field.emptySelectPrompt");
   if (displayType === "multi-select") return t("field.emptyMultiSelectPrompt");
   if (displayType === "relation") return t("field.emptyRelationPrompt");
   if (displayType === "number") return t("field.emptyNumberPrompt");
