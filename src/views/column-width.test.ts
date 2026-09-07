@@ -74,6 +74,40 @@ describe("estimateAutoColumnWidth resolves wrap the way the cell renderer does",
 });
 
 // ───────────────────────────────────────────────────────────────────
+// 4a. THE MULTI-SELECT CHIP MEASURER'S CAP
+// ───────────────────────────────────────────────────────────────────
+//
+// estimateCellContentWidth's multi-select branch mins the badge sum against 560, so a column
+// carrying dozens of long option values never grows past a table anybody could still use.
+// Nothing asserted this before: removing the cap left vitest and render-assertions both green.
+// The two cases bound it from both sides — a short chip set sizes to its own content, well under
+// 560, and a long one collapses to exactly 560 rather than growing further — so a cap widened,
+// dropped, or never applied goes red against either row.
+
+const multiSelectRows = (values: string[]) =>
+  [{ file: { path: "n.md" }, frontmatter: { categories: values }, computed: {} }] as unknown as
+    Parameters<typeof estimateAutoColumnWidth>[1];
+
+function multiSelectWidth(values: string[]): number {
+  const column = { key: "categories", label: "Tags", type: "multi-select" } as ColumnDef;
+  return estimateAutoColumnWidth(column, multiSelectRows(values), () => "");
+}
+
+describe("estimateAutoColumnWidth caps the multi-select chip measurer at 560", () => {
+  it("sizes a short chip set to its own content, well under the cap", () => {
+    const width = multiSelectWidth(["ok", "done"]);
+    expect(width).toBeGreaterThan(36);
+    expect(width).toBeLessThan(560);
+  });
+
+  it("caps a long chip set at 560 rather than growing with every added value", () => {
+    const manyLongValues = Array.from({ length: 20 }, (_unused, i) =>
+      `option-value-number-${i}-long-enough-to-matter`);
+    expect(multiSelectWidth(manyLongValues)).toBe(560);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
 // 5. THE WIDTH ADJUSTER IS A SHARED SHEET ON A PHONE
 // ───────────────────────────────────────────────────────────────────
 

@@ -434,6 +434,43 @@ describe("TableRecordPeek option values", () => {
   });
 });
 
+describe("TableRecordPeek empty property value", () => {
+  // The peek is a page-view surface — Notion writes the word here and leaves its own table cells
+  // blank, and ours already matches that blank convention (cell-renderer.ts's own
+  // `.db-empty-value`, asserted separately in cell-renderer-wrap.test.ts, which this class name
+  // must stay distinct from). A label beside nothing used to read as a rendering gap rather than
+  // "this property has no value"; the muted placeholder says so directly.
+  function openWith(column: ColumnDef, frontmatter: Record<string, unknown>) {
+    const { container } = makeContainer();
+    const anchor = container.appendChild(container.ownerDocument.createElement("span"));
+    openTableRecordPeek({
+      anchor: anchor as unknown as HTMLElement,
+      row: row({ frontmatter }),
+      config,
+      visibleColumns: [col({ key: "file.name", label: "Name" }), column],
+      allColumns: [col({ key: "file.name", label: "Name" }), column],
+      container: container as unknown as HTMLElement,
+    });
+    return container;
+  }
+
+  it("renders a muted placeholder rather than a label beside nothing", () => {
+    const container = openWith(col({ key: "cost", label: "Cost" }), { cost: "" });
+    const values = findByClass(container, "db-record-peek-field-value");
+    expect(values).toHaveLength(1);
+    expect(values[0].className).toContain("db-record-peek-field-value-empty");
+    expect(values[0].textContent.length).toBeGreaterThan(0);
+    closeTableRecordPeek();
+  });
+
+  it("leaves a populated value without the empty placeholder class", () => {
+    const container = openWith(col({ key: "cost", label: "Cost" }), { cost: "€ 18,75" });
+    const values = findByClass(container, "db-record-peek-field-value");
+    expect(values[0].className).not.toContain("db-record-peek-field-value-empty");
+    closeTableRecordPeek();
+  });
+});
+
 describe("TableRecordPeek open/close and hidden-toggle state", () => {
   function open(overrides: { returnFocus?: () => void } = {}) {
     const { container, document, win } = makeContainer();

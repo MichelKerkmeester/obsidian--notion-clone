@@ -56,8 +56,10 @@ class MockElement {
     for (const name of names) this.classes.add(name);
   }
 
-  createSpan(): MockElement {
+  createSpan(options?: { cls?: string }): MockElement {
     const child = new MockElement();
+    child.tagName = "SPAN";
+    if (options?.cls) child.addClass(options.cls);
     this.nodes.push(child);
     return child;
   }
@@ -83,6 +85,10 @@ class MockElement {
 
   hasChildTag(tag: string): boolean {
     return this.nodes.some((node) => typeof node !== "string" && node.tagName === tag.toUpperCase());
+  }
+
+  hasChildClass(name: string): boolean {
+    return this.nodes.some((node) => typeof node !== "string" && node.classes.has(name));
   }
 
   get textContent(): string {
@@ -182,5 +188,21 @@ describe("CellRenderer markdown wrap: line-break collapse", () => {
     const td = renderMarkdown(true, false);
     expect(td.hasChildTag("br")).toBe(false);
     expect(td.textContent).toBe("Line one Line two");
+  });
+});
+
+// The table cell's own blank convention, pinned unchanged alongside the docked peek's muted
+// placeholder for the same empty property. Ours already matches Notion's blank table cell;
+// `.db-empty-value` is distinct from the peek's own `.db-record-peek-field-value-empty`
+// (table-record-peek.test.ts), and this pins the cell side of that pair so a later change to the
+// peek cannot leak text into this one too.
+describe("CellRenderer leaves an empty value blank in the table cell", () => {
+  it("renders the empty marker with no text for an empty text column", () => {
+    const td = new MockElement();
+    const col = { key: "notes", label: "Notes", type: "text" } as ColumnDef;
+    const emptyRow = { file: { path: "Notes/One.md" }, frontmatter: { notes: "" }, computed: {} } as unknown as RowData;
+    renderer().renderCell(td as unknown as HTMLElement, emptyRow, col, false);
+    expect(td.hasChildClass("db-empty-value")).toBe(true);
+    expect(td.textContent).toBe("");
   });
 });
