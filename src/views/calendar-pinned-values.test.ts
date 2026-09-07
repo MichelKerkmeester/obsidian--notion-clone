@@ -317,4 +317,21 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     const phone = ruleBody(".is-phone .note-database-container .db-calendar-mini-day,\n.is-phone .db-cell-edit-popover.db-date-edit-popover .db-calendar-mini-day");
     expect(phone.replace(/\s+/g, " ").trim()).toBe("min-width: 44px; min-height: 44px;");
   });
+
+  it("pins both picker hosts wide enough on phone to hold seven 44px columns without clipping one", () => {
+    // Observed red when the 44px floor landed alone: both hosts stayed at their 252px width, whose
+    // 12px padding leaves 228px for a `repeat(7, 1fr)` grid. Seven 44px cells want 308px, so the
+    // toolbar popover spilled its seventh column 22px past its own border and the date-edit popover
+    // clipped Sunday in half against `overflow: hidden`, both read off the phone captures.
+    const cellFloor = 44;
+    const padding = 12;
+    const hosts = ruleBody(".is-phone .note-database-container .db-calendar-mini-popover,\n.is-phone .db-cell-edit-popover.db-date-edit-popover");
+    const width = Number(/width:\s*(\d+)px/.exec(hosts)?.[1]);
+    expect(width).toBe(cellFloor * 7 + padding * 2);
+    // The 402px phone frame the capture harness renders has to hold it.
+    expect(width).toBeLessThanOrEqual(402);
+    // Both unconditional widths this overrides are the ones the arithmetic above assumes.
+    expect(ruleBody(".note-database-container .db-calendar-mini-popover")).toContain("width: 252px");
+    expect(ruleBody(".db-cell-edit-popover.db-date-edit-popover")).toContain("width: 252px");
+  });
 });

@@ -18713,6 +18713,18 @@ body.pm-resize-active * {
   min-height: 44px;
 }
 
+/* Both hosts of that grid are 252px wide with 12px of horizontal padding, which leaves 228px for
+   seven columns — 32.6px each. Raising the cell floor to 44px makes the grid want 308px, and a
+   fixed-width host cannot give it: the toolbar popover spilled its last column past its own
+   border, the date-edit popover clipped Sunday in half against its `overflow: hidden`, and the
+   weekday header — a separate `repeat(7, 1fr)` grid that never widened — stopped lining up with
+   the days beneath it. Both hosts are widened here to exactly 7 x 44 plus their padding, which
+   the 402px phone frame holds with room over. */
+.is-phone .note-database-container .db-calendar-mini-popover,
+.is-phone .db-cell-edit-popover.db-date-edit-popover {
+  width: 332px;
+}
+
 .note-database-container .db-timeline-empty-range {
   min-height: 160px;
   margin: 0;
