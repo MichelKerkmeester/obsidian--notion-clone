@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: orchestrate-handover-25, 2026-09-07 13:15. 0.0.30 still shipped at e016e75c; all eight Notion-refinement children (059-066) are open and each has a first implementation leg landed, 068's rename plan is ruled, and the GitHub repo itself was renamed to obsidian_notion-clone. In flight: worktrees 215 and 216, landed one Opus lander at a time (212 and 214 have landed), then the 068 rename as one leg, then the operator device rows. Documentation only: no src/, styles.css, tools/ or main.js file was touched."
+description: "Resume point: 219-lander, 2026-09-07 18:40. 0.0.30 still shipped at e016e75c; all eight Notion-refinement children (059-066) are open and each has a first implementation leg landed, 068's rename plan is ruled, and the GitHub repo itself was renamed to obsidian_notion-clone. In flight: worktree 216, landed one Opus lander at a time (212, 214, 215 and 219 have landed), then the 068 rename as one leg, then the operator device rows. 219 touched styles.css and the lane tools: it closed 067 AC-003 in both themes and narrowed AC-007's header block to a measured 77px, which stays red."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,14 +10,14 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-07T13:15:00Z"
-    last_updated_by: "orchestrate-handover-25"
-    recent_action: "Landed 066 T018 and 063's T018 addendum from .worktrees/214-toast-capture-settle"
-    next_safe_action: "Land 215, then 216, one Opus lander at a time"
+    last_updated_at: "2026-09-07T18:40:00Z"
+    last_updated_by: "219-sheet-family-followup-2-lander"
+    recent_action: "Landed 067 second follow-up leg from .worktrees/219-sheet-family-followup-2"
+    next_safe_action: "Land 216, then run the 068 rename as one leg"
     blockers:
-      - "068 runs as one leg with nothing else in flight; do not start it while 215/216 land"
+      - "068 runs as one leg with nothing else in flight; do not start it while 216 lands"
       - "061's device row (AC-005) and 067's gate row stay open behind the operator's iOS pass"
-      - "The primary checkout carries live uncommitted edits to 067's docs (likely 215 landing)"
+      - "The primary checkout carries live uncommitted edits to 067's docs; reconcile before editing them"
       - "Both claude logins share one session-cap window; write a continuation prompt per leg"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
@@ -25,7 +25,7 @@ _memory:
       - "specs/005-component-surface-system/roadmap.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "surface-system-handover-25"
+      session_id: "219-sheet-family-followup-2-lander"
       parent_session_id: null
     completion_pct: 82
     open_questions:
@@ -43,6 +43,53 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-07 ~18:40, `067`'s SECOND follow-up leg LANDED, from `.worktrees/219-sheet-family-followup-2`
+
+**AC-003 is fully closed in both themes; AC-007's header block narrows and stays red on purpose;
+the packet stays 3/7 = 43%.** Rebased from `443061d4` onto `dad4ccc1`; `npm run gate` **26/26
+green, exit 0** from the final state, `npx vitest run` **1630/1630** in 151 files, `npx tsc
+--noEmit` 0.
+
+**All five claims re-measured, not read off the leg's report.** *AC-003*: three bands of the parent
+sheet against the same undimmed control, decoded off PNG — light **242 → 172, ratio 0.7107**, dark
+**46 → 33, ratio 0.7174**, both inside 0.710 ± 0.02, with the **pre-fix blobs as the negative
+control** (light **0.7562**, outside; dark **0.7174**, bit-identical, so the `.theme-dark` reset is
+proven a no-op by measurement). The undimmed control capture is 0 changed pixels pre versus post,
+and text contrast on the dimmed light parent only falls 5.45:1 → 5.04:1, above the AA floor.
+*AC-007 / T015*: the sort-panel's header block reads **91px at 20px** and **77px at 6px** on a live
+mount, and the grab-band hit-test answers **0 of 11** controls at 6px but **1 of 11 —
+`db-sheet-close` — at 5px and again at 4px**, so 6px is the floor by observation; 77 against 66-74
+correctly stays `Unmet`. *T020*: both new replace-pair captures opened in both themes and they show
+the real replaced state; the `add view property picker` chain was traced on production and is
+genuinely two-level (`toolbar-renderer.ts:1382` builds ONE `createPopoverShell`, the key field's
+`createDropdownField` is level 2, the type rows call `actions.addView` and close), and
+`overlay-stack.ts:129` fires the cap only at `depthOf(parent) >= 2` so nothing there could be
+absorbed anyway. *The depth-cap check*: green on the real call graph (1 → 2 → still 2) with its
+dialog-role control at 3, and **mutated to prove it bites** — forcing the positive case to `dialog`
+and the filter to `brightness(0.99)` takes the lane to exit 1 on exactly those rows. *T021*:
+confirmed untouched.
+
+**One new cosmetic finding, carried rather than fixed**: in the replaced state the option labels
+render truncated to `O..` in both themes where the stacking capture renders `Option 1`..`Option 7`
+in full — the replaced body's label column collapses. The capture is new, so nothing regressed, and
+it is named here rather than folded into a leg that did not own it.
+
+**Two harness facts this landing pins.** `tools/lane/check-lane.mjs`'s `readManifestAtHead()` calls
+`spawnSync` with no `maxBuffer` and the manifest is now 1,254,897 bytes, so it fails **ENOBUFS,
+`status` null**, returns null, and every byte-changed PNG is then treated as content-changed — the
+bug the previous leg worked around is confirmed by direct reproduction here, and this landing did
+**not** need the workaround because the two byte-moved captures were restored instead. And the
+previous leg's manifest carried **332 `\u2014`-escaped em-dashes** that no `JSON.stringify` writes,
+the fingerprint of a hand-patch through a `ensure_ascii` JSON writer; regenerating with the capture
+tool restored the canonical literal form and corrected one stale `bytes` value
+(`reference-gantt-desktop-dark`, 112474 → 112460) plus two more the leg had left pointing at
+regenerated bytes for restored files.
+
+**Still open in `067`, unchanged by this leg**: the depth-cap criterion (both named pairs must
+assert replace; `properties property type picker`'s registry entry still says `depth: 3`), the
+lane-row-per-deliverable criterion (no row for the pill, the chip or the header block), **T021**'s
+divider audit, and **AC-011**, the operator's device read.
 
 ### 2026-09-07 ~16:20, `067`'s follow-up leg LANDED, from `.worktrees/215-sheet-family-followup`
 
