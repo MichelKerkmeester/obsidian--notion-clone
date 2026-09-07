@@ -292,6 +292,27 @@ export function buildShellHeader(
   return { ...built, leadingEl, trailingEl };
 }
 
+/** Class for the measured 44 x 44pt trailing header control (a `+`, a toggle, an overflow). */
+export const SHELL_HEADER_CHIP_CLASS = "db-shell-header-chip";
+
+/** Build a trailing header chip at the shell's own measured size, into the trailing slot. */
+export function buildShellHeaderChip(
+  parent: HTMLElement,
+  options: { icon: string; label: string; onClick(): void },
+): HTMLButtonElement {
+  const chip = parent.createEl("button", {
+    cls: SHELL_HEADER_CHIP_CLASS,
+    attr: { type: "button", "aria-label": options.label },
+  });
+  setIcon(chip, options.icon);
+  chip.onclick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    options.onClick();
+  };
+  return chip;
+}
+
 function attachBackControl(leadingEl: HTMLElement, onBack: () => void): HTMLButtonElement {
   const back = leadingEl.createEl("button", {
     cls: SHELL_HEADER_BACK_CLASS,
@@ -316,6 +337,74 @@ function refreshShellHeader(
   handle.titleEl.setText(title);
   handle.leadingEl.empty();
   if (hasBack) attachBackControl(handle.leadingEl, onBack);
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 5c. REPLACE-IN-PLACE
+// ───────────────────────────────────────────────────────────────────
+//
+// `design-trueup.md` §6 C4: no third stacked sheet, the third level replaces the second. The
+// stack (`overlay-stack.ts`) decides *whether* — a new sheet whose resolved parent is already two
+// deep is offered here before it is ever registered; this decides *how*. Scoped to the two roles
+// `design-trueup.md` §5 calls form-like (`panel`, a form-like editor; `condition panel`, a
+// filter/sort/column configuration surface) — a `dialog` or `menu`-role sheet never sets this at
+// all, which is what keeps a menu-stack governed by nothing rather than by a role read here.
+
+const REPLACEABLE_ROLES: ReadonlySet<SurfaceShellRole> = new Set(["panel", "condition panel"]);
+
+/** A would-be third sheet's own title, read from what it already declared rather than guessed. */
+function readReplacementTitle(panel: HTMLElement): string {
+  const declared = panel.getAttribute("data-db-sheet-title")?.trim();
+  if (declared) return declared;
+  // Every Modal carries a `.modal-title` whether or not a subclass ever fills it in (the same
+  // fact `attachSheetChromeToModal`'s own native-title guard reads elsewhere), so the first MATCH
+  // is not necessarily the first one that says anything — the candidate list is walked in order
+  // and the first with real text wins, rather than `querySelector`'s own document-order pick
+  // stopping at an empty native title ahead of the real heading.
+  for (const candidate of Array.from(panel.querySelectorAll<HTMLElement>(".db-panel-title, .modal-title, h1, h2, h3"))) {
+    const text = candidate.textContent?.trim();
+    if (text) return text;
+  }
+  return "";
+}
+
+/**
+ * Absorb a would-be third sheet into this shell's own body, in place of stacking it.
+ *
+ * The child keeps its own element — reparented, not rebuilt — so whatever it already rendered and
+ * whatever handlers it already wired (its own close included) keep working; it never becomes an
+ * independent `.db-mobile-bottom-sheet` at all (`mobile-bottom-sheet.ts`'s `applySheetChrome`
+ * short-circuits before the sheet class, the handle or a scrim ever reach it). Its own host
+ * container — a real `Modal`'s `.modal-container`, when it has one — is hidden rather than
+ * removed: the child's own teardown still owns detaching it eventually, and hiding is what a
+ * caller that later needs the un-replaced state back would have to undo.
+ */
+function attemptReplace(
+  parentElement: HTMLElement,
+  childPanel: HTMLElement,
+  onAccepted: (title: string, restore: () => void) => void,
+): boolean {
+  if (childPanel === parentElement || parentElement.contains(childPanel)) return false;
+  const contentRoot = parentElement.querySelector<HTMLElement>(".note-database-modal") ?? parentElement;
+  const bodyChildren = Array.from(contentRoot.children).filter((node) =>
+    !node.classList.contains(SHELL_HEADER_CLASS) && node !== childPanel) as HTMLElement[];
+  for (const node of bodyChildren) node.style.setProperty("display", "none");
+
+  const hostContainer = childPanel.parentElement?.classList.contains("modal-container")
+    ? childPanel.parentElement
+    : null;
+  hostContainer?.style.setProperty("display", "none");
+
+  const title = readReplacementTitle(childPanel);
+  childPanel.addClass("db-shell-replaced-body");
+  contentRoot.appendChild(childPanel);
+
+  onAccepted(title, () => {
+    childPanel.remove();
+    hostContainer?.style.removeProperty("display");
+    for (const node of bodyChildren) node.style.removeProperty("display");
+  });
+  return true;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -370,6 +459,10 @@ export function createSurfaceShell(options: SurfaceShellOptions): SurfaceShellHa
   let releasePlacement: (() => void) | undefined;
   let headerHandle: SurfaceShellHeaderHandle | undefined;
   let subPageState = createSubPageState();
+  // Kept in lockstep with `subPageState.stack`: index-for-index, the cleanup a replaced sub-page
+  // needs on the way back out, or a no-op for a sub-page pushed the ordinary way (a title only,
+  // no absorbed element behind it).
+  let replacementRestores: Array<() => void> = [];
   let sheet = false;
   let fullscreen = false;
 
@@ -386,6 +479,7 @@ export function createSurfaceShell(options: SurfaceShellOptions): SurfaceShellHa
 
   const popCurrentSubPage = (): void => {
     subPageState = popSubPageTitle(subPageState);
+    replacementRestores.pop()?.();
     if (headerHandle) refreshShellHeader(headerHandle, currentTitle(), shellHasBack(subPageState), popCurrentSubPage);
   };
 
@@ -412,20 +506,31 @@ export function createSurfaceShell(options: SurfaceShellOptions): SurfaceShellHa
         return;
       }
       subPageState = createSubPageState();
+      replacementRestores = [];
+      const canReplace = options.role !== undefined && REPLACEABLE_ROLES.has(options.role);
       releaseChrome = attachSheetChromeToModal(options.element, true, options.close, {
         getTitle: currentTitle,
         closeOnOutsidePointerDown: options.closeOnOutsidePointerDown,
         closeOnEscape: options.closeOnEscape,
         frameRole: options.frameRole,
+        menuCard: options.role === "menu",
         buildHeader: (panel, title, onClose) => {
           headerHandle = buildShellHeader(panel, { title, onClose });
           return headerHandle;
         },
+        replace: canReplace
+          ? (childPanel) => attemptReplace(options.element, childPanel, (title, restore) => {
+              subPageState = pushSubPageTitle(subPageState, title);
+              replacementRestores.push(restore);
+              if (headerHandle) refreshShellHeader(headerHandle, currentTitle(), shellHasBack(subPageState), popCurrentSubPage);
+            })
+          : undefined,
       });
       placeSheet(options.element);
       releasePlacement = keepSheetPlaced(options.element);
     },
     destroy(): void {
+      replacementRestores.splice(0).forEach((restore) => restore());
       teardownChromeAndPlacement();
       attachSheetChromeToModal(options.element, false, options.close);
       sheet = false;
@@ -433,6 +538,7 @@ export function createSurfaceShell(options: SurfaceShellOptions): SurfaceShellHa
     },
     pushSubPage(title: string): void {
       subPageState = pushSubPageTitle(subPageState, title);
+      replacementRestores.push(() => undefined);
       if (headerHandle) refreshShellHeader(headerHandle, currentTitle(), shellHasBack(subPageState), popCurrentSubPage);
     },
     popSubPage: popCurrentSubPage,

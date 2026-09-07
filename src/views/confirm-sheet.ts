@@ -41,6 +41,35 @@ export interface ConfirmSheetBodyOptions {
 }
 
 // ───────────────────────────────────────────────────────────────────
+// 1b. THE PRIMARY-ACTION PILL
+// ───────────────────────────────────────────────────────────────────
+//
+// The full-width, disabled-until-valid commit row a phone form sheet ends with instead of a
+// button row — measured at 341.7 x 50.0pt with ~21pt insets. One builder so the geometry, the
+// class and the disabled styling live in one place a lane row can import and assert against,
+// rather than each form re-declaring its own button and drifting from the measured shape.
+
+export const SHELL_PRIMARY_PILL_CLASS = "db-shell-primary-pill";
+
+export interface PrimaryActionPillOptions {
+  text: string;
+  disabled?: boolean;
+  onClick(): void;
+}
+
+/** Build the full-width primary-action pill into an already-chromed sheet body. */
+export function buildPrimaryActionPill(container: HTMLElement, options: PrimaryActionPillOptions): HTMLButtonElement {
+  const pill = container.createEl("button", {
+    cls: SHELL_PRIMARY_PILL_CLASS,
+    text: options.text,
+    attr: { type: "button" },
+  });
+  pill.disabled = Boolean(options.disabled);
+  pill.onclick = () => options.onClick();
+  return pill;
+}
+
+// ───────────────────────────────────────────────────────────────────
 // 2. BODY
 // ───────────────────────────────────────────────────────────────────
 

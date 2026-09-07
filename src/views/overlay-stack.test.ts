@@ -155,6 +155,71 @@ describe("OverlayStack", () => {
     expect(stack.isInsideSurfaceAbove(parent, null)).toBe(false);
   });
 
+  it("offers a would-be third sheet to its parent's replace callback instead of stacking it", () => {
+    const stack = new OverlayStack();
+    const doc = createDocument();
+    const grandparent = createElement(doc);
+    const parent = createElement(doc);
+    const child = createElement(doc);
+    const offered: HTMLElement[] = [];
+
+    stack.register({ id: "grandparent", panel: grandparent, isSheet: true, close: () => undefined });
+    stack.register({
+      id: "parent",
+      panel: parent,
+      isSheet: true,
+      close: () => undefined,
+      replace: (childPanel) => { offered.push(childPanel); return true; },
+    });
+
+    const registration = stack.register({ id: "child", panel: child, isSheet: true, close: () => undefined });
+
+    expect(offered).toEqual([child]);
+    expect(registration.replaced).toBe(true);
+    // The child never joined the stack: size stays at two, and it has no depth of its own.
+    expect(stack.size()).toBe(2);
+    expect(stack.hasPanel(child)).toBe(false);
+  });
+
+  it("stacks a third sheet normally when its parent never registered a replace callback", () => {
+    const stack = new OverlayStack();
+    const doc = createDocument();
+    const grandparent = createElement(doc);
+    const parent = createElement(doc);
+    const child = createElement(doc);
+
+    stack.register({ id: "grandparent", panel: grandparent, isSheet: true, close: () => undefined });
+    stack.register({ id: "parent", panel: parent, isSheet: true, close: () => undefined });
+    const registration = stack.register({ id: "child", panel: child, isSheet: true, close: () => undefined });
+
+    // A menu-stack — no `replace` on the parent — is exactly what the depth cap must not touch:
+    // it stacks exactly as it always did, and the third surface reaches its own real depth.
+    expect(registration.replaced).toBeUndefined();
+    expect(stack.size()).toBe(3);
+    expect(stack.getDepth(child)).toBe(3);
+  });
+
+  it("does not offer a replace when the parent itself is not yet two deep", () => {
+    const stack = new OverlayStack();
+    const doc = createDocument();
+    const parent = createElement(doc);
+    const child = createElement(doc);
+    let offered = false;
+
+    stack.register({
+      id: "parent",
+      panel: parent,
+      isSheet: true,
+      close: () => undefined,
+      replace: () => { offered = true; return true; },
+    });
+    const registration = stack.register({ id: "child", panel: child, isSheet: true, close: () => undefined });
+
+    expect(offered).toBe(false);
+    expect(registration.replaced).toBeUndefined();
+    expect(stack.getDepth(child)).toBe(2);
+  });
+
   it("keeps a child attached to a parent that is rebuilt in place", () => {
     const stack = new OverlayStack();
     const doc = createDocument();

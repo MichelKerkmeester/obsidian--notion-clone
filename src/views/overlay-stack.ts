@@ -48,6 +48,17 @@ export interface OverlaySurfaceOptions {
   close?(reason: OverlayCloseReason): void;
   closeOnOutsidePointerDown?: boolean;
   closeOnEscape?: boolean;
+  /**
+   * Accept a would-be third stacked sheet as a replacement of this surface's own content instead.
+   *
+   * Set only by a surface whose role can absorb one (`design-trueup.md` §6 C4's depth cap): a
+   * `register()` for a new sheet whose resolved parent is already at depth 2 offers that parent
+   * this callback with the new panel, and only registers the new panel as an independent stacked
+   * sheet when no such callback exists or it declines. A surface that never sets this is exactly a
+   * surface the cap does not govern — a menu-stack survives for that reason alone, not because
+   * anything here classifies it as one.
+   */
+  replace?(childPanel: HTMLElement): boolean;
 }
 
 export interface OverlaySurface {
@@ -61,6 +72,14 @@ export interface OverlaySurface {
   isSheet: boolean;
   closeOnOutsidePointerDown: boolean;
   closeOnEscape: boolean;
+  replace?(childPanel: HTMLElement): boolean;
+}
+
+export interface OverlayRegistration {
+  id: string;
+  unregister(restoreFocus?: boolean): void;
+  /** True when this registration was absorbed as a replacement rather than stacked. */
+  replaced?: boolean;
 }
 
 interface DocumentListeners {
@@ -83,7 +102,7 @@ export class OverlayStack {
   private readonly surfaces: OverlaySurface[] = [];
   private readonly listeners = new WeakMap<Document, DocumentListeners>();
 
-  register(options: OverlaySurfaceOptions): { id: string; unregister(restoreFocus?: boolean): void } {
+  register(options: OverlaySurfaceOptions): OverlayRegistration {
     const doc = options.panel.ownerDocument;
     const existingIndex = this.surfaces.findIndex((surface) =>
       surface.panel.ownerDocument === doc
@@ -95,6 +114,23 @@ export class OverlayStack {
       ? options.parentId ?? existing.parentId
       : options.parentId ?? this.getTopSurfaceForDocument(doc, { sheetsOnly: true })?.id;
     const safeParentId = parentId === id ? undefined : parentId;
+    const isSheet = options.isSheet ?? existing?.isSheet ?? false;
+
+    // The depth cap (`design-trueup.md` §6 C4), scoped to sheets and opt-in on the parent's side:
+    // a brand-new sheet whose resolved parent is already two deep is offered to that parent's own
+    // `replace` callback before it is ever added to the stack. A parent that never registered one
+    // — an owned menu, a plain dropdown, a `dialog`-role confirm — has nothing to hand it to, so
+    // the surface stacks exactly as it always did; that absence, not a role read here, is what
+    // keeps a menu-stack governed by nothing. Only a genuinely new registration is checked: a
+    // rebuild of a surface already three deep keeps whatever depth it already has.
+    if (!existing && isSheet && safeParentId) {
+      const parentSurface = this.surfaces.find((candidate) =>
+        candidate.panel.ownerDocument === doc && candidate.id === safeParentId);
+      if (parentSurface?.replace && this.depthOf(parentSurface) >= 2 && parentSurface.replace(options.panel)) {
+        return { id: parentSurface.id, unregister: () => undefined, replaced: true };
+      }
+    }
+
     const surface: OverlaySurface = {
       id,
       panel: options.panel,
@@ -105,7 +141,7 @@ export class OverlayStack {
       // existing surface means "keep the relationship this owner already established"; a new
       // sheet derives its parent from the top sheet that was open before it mounted.
       parentId: safeParentId,
-      isSheet: options.isSheet ?? existing?.isSheet ?? false,
+      isSheet,
       close: options.close ? (reason) => options.close?.(reason) : existing?.close ?? (() => undefined),
       closeOnOutsidePointerDown: options.closeOnOutsidePointerDown === undefined
         ? existing?.closeOnOutsidePointerDown ?? true
@@ -113,6 +149,7 @@ export class OverlayStack {
       closeOnEscape: options.closeOnEscape === undefined
         ? existing?.closeOnEscape ?? true
         : options.closeOnEscape,
+      replace: options.replace ?? existing?.replace,
     };
     if (existingIndex >= 0) this.surfaces[existingIndex] = surface;
     else this.surfaces.push(surface);
@@ -194,13 +231,18 @@ export class OverlayStack {
   getDepth(panel: HTMLElement): number {
     const surface = this.surfaces.find((candidate) => this.livePanel(candidate) === panel);
     if (!surface) return 1;
+    return this.depthOf(surface);
+  }
+
+  /** The same walk `getDepth` does, starting from a surface already in hand rather than a panel. */
+  private depthOf(surface: OverlaySurface): number {
     let depth = 1;
     let current = surface;
     const visited = new Set<string>();
     while (current.parentId && !visited.has(current.id)) {
       visited.add(current.id);
       const parent = this.surfaces.find((candidate) =>
-        candidate.panel.ownerDocument === panel.ownerDocument && candidate.id === current.parentId);
+        candidate.panel.ownerDocument === current.panel.ownerDocument && candidate.id === current.parentId);
       if (!parent) break;
       depth += 1;
       current = parent;

@@ -49,6 +49,29 @@ export interface SheetChromeOptions {
    * how its own content resizes.
    */
   frameRole?: "card";
+  /**
+   * Accept a would-be third stacked sheet as a replacement of this sheet's own content.
+   *
+   * Threaded straight through to `overlayStack.register` — see its own doc for what sets this
+   * and why a surface that never does is exactly the surface the depth cap does not govern.
+   */
+  replace?(childPanel: HTMLElement): boolean;
+  /**
+   * Which of the two measured phone frame shapes this surface is, declared rather than left to
+   * the `ResizeObserver` classifier's own midpoint guess (`design-trueup.md` C10).
+   *
+   * `floating` narrows the sheet by the phone insets and caps its height for a short, form-like
+   * surface; `flush` spans the viewport for a near-full-height picker or search surface. Omitted,
+   * the classifier stays the documented fallback for a surface that has not declared one — nothing
+   * about an undeclared surface's behaviour changes.
+   */
+  heightRole?: "floating" | "flush";
+  /**
+   * Present as a `menu`-role, handle-less anchored card rather than an ordinary sheet
+   * (`design-trueup.md` row 26): no grab handle, and the shared backdrop dims to the measured
+   * menu band instead of the sheet band. The 44px close is unaffected either way.
+   */
+  menuCard?: boolean;
 }
 
 /**
@@ -67,8 +90,7 @@ export function applySheetChrome(
   panel: HTMLElement,
   isSheet: boolean,
   options: SheetChromeOptions = {},
-): void {
-  panel.toggleClass("db-mobile-bottom-sheet", isSheet);
+): boolean {
   // The portal is back on, and it is the only mechanism that works.
   //
   // Obsidian's workspace leaf carries `contain: strict`, which makes it the containing block for
@@ -79,7 +101,19 @@ export function applySheetChrome(
   //
   // The first attempt at this shipped broken because the sheet left the subtree its rules are
   // written against. It now carries that root with it, so the rules still match.
-  setSheetMount(panel, isSheet, options);
+  //
+  // The class carries every one of the sheet's own layout rules — fixed position, the height cap,
+  // the frame-shape classifier's own measurement — so it has to be on the element before
+  // `setSheetMount` ever measures anything, exactly as it was before this function had a reason
+  // to take it back off again. A panel the depth cap absorbs into its parent's own body
+  // (`setSheetMount` returning `false`) never becomes an independent sheet, so that one case
+  // reverses the class rather than never having applied it.
+  panel.toggleClass("db-mobile-bottom-sheet", isSheet);
+  const stayedIndependent = setSheetMount(panel, isSheet, options);
+  if (isSheet && !stayedIndependent) {
+    panel.removeClass("db-mobile-bottom-sheet");
+    return false;
+  }
   const existingHandle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
   // A grab bar is drawn by the GESTURE, never by the chrome — so one cannot exist unwired.
   //
@@ -93,11 +127,14 @@ export function applySheetChrome(
   // bar while the gesture — bound to the panel, not the bar — survives. Re-asserting chrome then
   // legitimately restores it, and the `hasSheetDrag` guard is what distinguishes that from a
   // producer that never wired anything.
-  if (isSheet && !existingHandle && activeSheetDrag.has(panel)) {
+  // A `menu`-role card never grows a handle back, rebuild or not (`design-trueup.md` row 26):
+  // it advertises a tap, not a drag, and re-asserting chrome on it must not undo that.
+  if (isSheet && !existingHandle && activeSheetDrag.has(panel) && !panel.hasClass("db-mobile-menu-card")) {
     createSheetHandle(panel);
-    return;
+    return true;
   }
   if (!isSheet) existingHandle?.remove();
+  return true;
 }
 
 const SHEET_SURFACE_ID_ATTR = "data-db-sheet-surface-id";
@@ -213,6 +250,12 @@ export interface SheetModalChromeOptions {
    * the header it always did.
    */
   buildHeader?(panel: HTMLElement, title: string, onClose: () => void): SheetHeaderHandle;
+  /** Accept a would-be third stacked sheet as a replacement of this modal's own content. */
+  replace?(childPanel: HTMLElement): boolean;
+  /** Which of the two measured phone frame shapes this surface is. See `SheetChromeOptions`. */
+  heightRole?: "floating" | "flush";
+  /** Present as a `menu`-role, handle-less anchored card. See `SheetChromeOptions`. */
+  menuCard?: boolean;
 }
 
 /**
@@ -254,35 +297,39 @@ export function attachSheetChromeToModal(
   const nativeContainer = hostParent?.classList.contains("modal-container") ? hostParent : null;
   const nativeTitle = modalEl.querySelector<HTMLElement>(".modal-title");
   const nativeClose = modalEl.querySelector<HTMLElement>(".modal-close-button");
-  applySheetChrome(modalEl, isSheet, {
+  const stayedIndependent = applySheetChrome(modalEl, isSheet, {
     close: isSheet ? () => close() : undefined,
     closeOnOutsidePointerDown: isSheet ? options.closeOnOutsidePointerDown ?? true : false,
     closeOnEscape: isSheet ? options.closeOnEscape ?? true : false,
     frameRole: isSheet ? options.frameRole : undefined,
+    replace: isSheet ? options.replace : undefined,
+    heightRole: isSheet ? options.heightRole : undefined,
+    menuCard: isSheet ? options.menuCard : undefined,
   });
-  if (isSheet) {
+  // The depth cap absorbed this element into another shell's own body instead of letting it
+  // present on its own — `attemptReplace` (surface-shell.ts) already hid whatever host container
+  // it arrived in. Nothing below applies to an element that never became an independent sheet.
+  const asSheet = isSheet && stayedIndependent;
+  if (asSheet) {
     // Hidden, not removed: `applyPresentation` re-runs on a layout change (a rotation moving the
     // surface back across the touch boundary), and the desktop presentation that returns wants
     // its own close button and whatever title a subclass set back exactly as they were.
     nativeClose?.style.setProperty("display", "none");
     if (nativeTitle && !nativeTitle.textContent?.trim()) nativeTitle.style.setProperty("display", "none");
     nativeContainer?.style.setProperty("display", "none");
-  } else {
+  } else if (!isSheet) {
     nativeClose?.style.removeProperty("display");
     nativeTitle?.style.removeProperty("display");
     nativeContainer?.style.removeProperty("display");
   }
-  const releaseDrag = isSheet ? attachSheetDragToDismiss(modalEl, close) : undefined;
+  const releaseDrag = asSheet ? attachSheetDragToDismiss(modalEl, close) : undefined;
   let header: SheetHeaderHandle | undefined;
-  if (isSheet) {
-    const resolveTitle = (): string => {
-      const supplied = options.getTitle?.()?.trim();
-      if (supplied) return supplied;
-      const heading = Array.from(modalEl.querySelectorAll<HTMLElement>(".note-database-modal h1, .note-database-modal h2, .note-database-modal h3"))
-        .find((candidate) => !candidate.closest(".db-sheet-modal-header"))
-        ?.textContent?.trim();
-      return heading || options.title?.trim() || t("menu.title");
-    };
+  if (asSheet) {
+    // The one surviving scrape chain is `DbModal.getSheetTitle` (a heading scrape of its own),
+    // reached through `options.getTitle` before this ever runs — every caller of this function
+    // supplies one, all the way down to its own last-resort default, so a second heading scrape
+    // here duplicated a fallback that already always answers rather than adding one of its own.
+    const resolveTitle = (): string => options.getTitle?.()?.trim() || options.title?.trim() || t("menu.title");
     const buildHeader = options.buildHeader
       ?? ((panel: HTMLElement, title: string, onClose: () => void) => createSheetHeader(panel, { title, onClose }));
     header = buildHeader(modalEl, resolveTitle(), close);
@@ -292,8 +339,10 @@ export function attachSheetChromeToModal(
       contentRoot = contentRoot.parentElement;
     }
     modalEl.insertBefore(header.header, contentRoot || modalEl.firstElementChild);
-    // Modal subclasses populate their content after calling the base lifecycle. Resolve the
-    // heading on the next microtask so the persistent chrome names the actual surface.
+    // Modal subclasses populate their content after calling the base lifecycle, and their own
+    // declared title can depend on state set up during that same open — a role picked in the
+    // constructor, a record loaded async. Re-resolving on the next microtask still catches that
+    // without needing a second, DOM-scraping source of truth to do it.
     void Promise.resolve().then(() => {
       if (!modalEl.isConnected || !header) return;
       header.titleEl.setText(resolveTitle());
@@ -353,6 +402,15 @@ const FLUSH_HEIGHT_RATIO_MIN = FLOATING_HEIGHT_RATIO_MAX + FLOATING_HYSTERESIS_R
 
 const frameShapeObservers = new WeakMap<HTMLElement, { disconnect(): void }>();
 
+/**
+ * Surfaces whose height role was declared rather than left to this classifier.
+ *
+ * The classifier is the documented fallback (`design-trueup.md` C10) for a surface that never
+ * declares one — a declared surface's shape is a fact about the surface, not a measurement of it,
+ * so the `ResizeObserver` below must never overwrite it with a guess at its own midpoint.
+ */
+const declaredFrameShapes = new WeakSet<HTMLElement>();
+
 // How many classifications are queued behind a debounce right now, and how many have run since
 // this module loaded. Together they are the classifier's own settle signal: a reader that sees no
 // queued work AND an unchanged classification count across two consecutive frames is looking at a
@@ -397,6 +455,7 @@ function classifySheetFrameShape(panel: HTMLElement): void {
  * having to know which of its many callers changed the content or why.
  */
 function watchSheetFrameShape(panel: HTMLElement): void {
+  if (declaredFrameShapes.has(panel)) return;
   if (frameShapeObservers.has(panel)) return;
   classifySheetFrameShape(panel);
   const ResizeObserverCtor = panel.ownerDocument.defaultView?.ResizeObserver;
@@ -501,6 +560,20 @@ export function carrySheetEntrance(panel: HTMLElement): void {
   panel.addClass("is-visible");
 }
 
+/**
+ * Start a sheet's own descent, the mirror of `playSheetEntrance`.
+ *
+ * A caller that keeps the node mounted across the resulting delay sees the surface actually leave
+ * rather than vanish; a caller whose host (Obsidian's own `Modal.close()`, for one) detaches the
+ * node synchronously right after gets the same instant removal it always had; this toggle costs it
+ * nothing either way. `db-overlay-exit` is a distinct class from the entrance's own start state so
+ * the two transitions — sliding in, sliding out — never collide on the same selector.
+ */
+export function playSheetExit(panel: HTMLElement): void {
+  panel.removeClass("is-visible");
+  panel.addClass("db-overlay-exit");
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 1b. THE MOUNT POINT
 // ───────────────────────────────────────────────────────────────────
@@ -525,21 +598,25 @@ const originalMount = new WeakMap<HTMLElement, { parent: HTMLElement; before: Ch
  * close would reorder it against its siblings, and the sheet's owner may well be relying on that
  * order for anything from focus sequence to a nth-child rule.
  */
-function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChromeOptions = {}): void {
+function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChromeOptions = {}): boolean {
   const doc = panel.ownerDocument;
   const remembered = originalMount.get(panel);
 
   if (isSheet) {
-    // Registered before either branch returns. A surface that already lives on the body takes an
-    // early exit below, and registering only after the move would leave exactly those sheets
-    // unknown to the watcher — so the backdrop could be taken down while one was still open.
-    sheetsFor(doc).add(panel);
-    sheetPointerCapture.set(panel, options.scrimCapturesPointer);
     const alreadyRegistered = overlayStack.hasPanel(panel);
-    overlayStack.register({
+    // The trigger that opened this sheet, so dismissal has somewhere to hand focus back to.
+    // Captured only on a genuinely new registration: on a rebuild the active element is already
+    // inside the sheet itself, which would make the sheet its own anchor.
+    const activeElement = doc.activeElement;
+    const trigger = !alreadyRegistered && activeElement instanceof HTMLElement && !panel.contains(activeElement)
+      ? activeElement
+      : undefined;
+    const registration = overlayStack.register({
       panel,
       id: getSheetSurfaceId(panel),
       isSheet: true,
+      replace: options.replace,
+      ...(trigger ? { anchor: trigger } : {}),
       ...(options.close || !alreadyRegistered ? { close: options.close || (() => invokeSheetClose(panel)) } : {}),
       ...(options.closeOnOutsidePointerDown !== undefined || !alreadyRegistered
         ? { closeOnOutsidePointerDown: options.closeOnOutsidePointerDown ?? false }
@@ -548,6 +625,25 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
         ? { closeOnEscape: options.closeOnEscape ?? false }
         : {}),
     });
+    // The depth cap (`overlay-stack.ts`, `register`): a parent two deep absorbed this panel as a
+    // replacement of its own content rather than letting it stack a third sheet. It must never
+    // become an independent sheet — no portal, no scrim, no handle, no frame-shape watcher.
+    if (registration.replaced) return false;
+    // Registered before either branch returns. A surface that already lives on the body takes an
+    // early exit below, and registering only after the move would leave exactly those sheets
+    // unknown to the watcher — so the backdrop could be taken down while one was still open.
+    sheetsFor(doc).add(panel);
+    sheetPointerCapture.set(panel, options.scrimCapturesPointer);
+    panel.toggleClass("db-mobile-menu-card", Boolean(options.menuCard));
+    if (options.heightRole) {
+      // A declared shape wins outright: it is the documented fallback the classifier itself now
+      // defers to, so an undeclared surface's behaviour is unchanged and a declared one stops
+      // waiting on a `ResizeObserver` guess of its own height.
+      panel.toggleClass("db-sheet-floating", options.heightRole === "floating");
+      declaredFrameShapes.add(panel);
+    } else {
+      declaredFrameShapes.delete(panel);
+    }
     // A generation begins when a surface mounts, so a device trace reads as one sheet's whole life
     // rather than as a stream to be correlated by timestamp afterwards.
     if (isSheetTraceEnabled()) beginSheetGeneration(panel.className);
@@ -577,7 +673,7 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
       panel.addClass("note-database-container");
       panel.setCssProps({ "--db-mobile-sheet-bottom": "0px" });
       syncSheetStack(doc);
-      return;
+      return true;
     }
     if (panel.parentElement) {
       originalMount.set(panel, { parent: panel.parentElement, before: panel.nextSibling });
@@ -600,24 +696,27 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     panel.setCssProps({ "--db-mobile-sheet-bottom": "0px" });
     doc.body.appendChild(panel);
     syncSheetStack(doc);
-    return;
+    return true;
   }
 
+  if (sheetsFor(doc).has(panel) && panel.isConnected) playSheetExit(panel);
   const wasSheet = sheetsFor(doc).delete(panel);
   sheetPointerCapture.delete(panel);
+  declaredFrameShapes.delete(panel);
   unwatchSheetFrameShape(panel);
   if (wasSheet) overlayStack.unregisterPanel(panel, false);
   panel.style.removeProperty("--db-sheet-depth");
   panel.style.removeProperty("--db-sheet-z-index");
   panel.removeClass("is-stack-parent");
   panel.removeClass("db-sheet-card");
+  panel.removeClass("db-mobile-menu-card");
   syncSheetStack(doc);
   // After the stack has been resynchronized, a document that still holds another sheet keeps the claim.
   claimBottomDock(doc, "sheet", sheetsFor(doc).size > 0);
   if (!remembered) {
     if (isSheetTraceEnabled()) traceSheet("sheet-unmount", panel.className);
     panel.style.removeProperty("--db-mobile-sheet-bottom");
-    return;
+    return true;
   }
   originalMount.delete(panel);
   panel.removeClass("db-surface");
@@ -628,9 +727,10 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
   // surface is recoverable, an invisible one is not.
   if (!remembered.parent.isConnected) {
     panel.remove();
-    return;
+    return true;
   }
   remembered.parent.insertBefore(panel, remembered.before);
+  return true;
 }
 
 /**
@@ -785,6 +885,12 @@ function setScrim(doc: Document, wanted: boolean, capturesPointer: boolean | und
   const existing = scrims.shift();
   for (const duplicate of scrims) duplicate.remove();
   if (!wanted) {
+    // Removed synchronously, not deferred for the exit animation to finish: teardown elsewhere in
+    // this plugin — the caller's own close(), a host that detaches its container the instant it
+    // takes a surface down — already assumes the backdrop is gone the moment a dismissal returns,
+    // and a scrim left behind for a fade is exactly the frozen-app shape this module exists to
+    // prevent. `--db-sheet-exit` stays a real, asserted token for whatever CAN afford to wait on
+    // it (the sheet's own transform, which a caller that keeps the node mounted still sees).
     existing?.remove();
     stopWatching(doc);
     return;
@@ -802,6 +908,22 @@ function setScrim(doc: Document, wanted: boolean, capturesPointer: boolean | und
   const depth = topPanel ? overlayStack.getDepth(topPanel) : 1;
   const topZ = baseSheetZIndex(doc, topPanel) + Math.max(0, depth - 1) * 2;
   scrim.style.setProperty("--db-sheet-scrim-z-index", String(topZ - 1));
+  // A `menu`-role top dims its parent to the Notion-measured band (≈0.39), distinct from an
+  // ordinary sheet's own band — the same shared backdrop, a different strength, rather than a
+  // second element. `role="menu"` is `owned-menu.ts`'s own pre-existing ARIA attribute, read here
+  // rather than duplicated as a second marker.
+  const menuTop = Boolean(topPanel && (topPanel.hasClass("db-mobile-menu-card") || topPanel.getAttribute("role") === "menu"));
+  // Three bands, one element: the page under a first sheet is dimmed hardest, a sheet that is
+  // itself the parent of a stacked child holds the weaker, already-measured band (unchanged, so
+  // the stacked composite is not regressed by the page band's own increase), and a `menu`-role
+  // top uses its own Notion-measured band. `depth` here is the TOP surface's own depth — 1 means
+  // the scrim sits directly on the page, 2+ means it sits on a sheet that is itself a parent.
+  const scrimAlphaToken = menuTop
+    ? "var(--db-sheet-scrim-alpha-menu)"
+    : depth > 1
+      ? "var(--db-sheet-scrim-alpha-stack)"
+      : "var(--db-sheet-scrim-alpha-page)";
+  scrim.style.setProperty("--db-sheet-scrim-alpha", scrimAlphaToken);
   // Move it only when it is not already there. The watcher below reacts to childList changes on the
   // body, and re-inserting a node at the position it already occupies still emits a mutation record,
   // so an unconditional move would wake the watcher, which would call back here, forever.
