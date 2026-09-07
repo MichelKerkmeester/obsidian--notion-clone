@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: 223-goal-refresh-0031, 2026-09-07 22:05. 0.0.31 shipped at 5e7f1426 as the RENAME release (id obnotion, vault obnotion/, repo obsidian_notion-clone). Four legs in flight, each awaiting a GLM lander: live-host-model (009 T26 device defect), 067 follow-up 3, the new 069-board-cross-group-drag child, and the timeline-to-table view-switch teardown fix. NO Opus agents (operator 2026-09-07 18:40); GLM 5.3 flash max via cli-pi DevPass carries landings/docs/releases, monitored every 5 min with a 15-min stall relaunch."
+description: "Resume point: 221-live-host-model LANDED at 6f679e5e, 2026-09-07 21:47. 0.0.31 shipped at 5e7f1426 as the RENAME release (id obnotion, vault obnotion/, repo obsidian_notion-clone). Three legs in flight, each awaiting a GLM lander: 067 follow-up 3, the 069-board-cross-group-drag child, and the timeline-to-table view-switch teardown fix. NO Opus agents (operator 2026-09-07 18:40); GLM 5.3 flash max via cli-pi DevPass carries landings/docs/releases, monitored every 5 min with a 15-min stall relaunch."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,22 +10,22 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-07T22:16:00Z"
-    last_updated_by: "223-goal-refresh-0031"
-    recent_action: "Refreshed 005 state after 0.0.31 shipped; queued 069, timeline fix, 009 T26 padding"
-    next_safe_action: "Land the four in-flight legs via GLM landers, one at a time, then cut 0.0.32"
+    last_updated_at: "2026-09-07T21:47:00Z"
+    last_updated_by: "221-live-host-model-lander"
+    recent_action: "Verified and pushed 221-live-host-model to main at 6f679e5e; gate 25+1 declared, T26 open"
+    next_safe_action: "Land 067 follow-up 3, 069 and the timeline fix, then cut 0.0.32"
     blockers:
       - "009 T26: .obnotion-panel-button sort-panel overflow ~10px under real host cascade (expectFail)"
       - "069-board-cross-group-drag touch drag-and-drop leg in progress (worktree 224)"
       - "timeline-to-table view-switch teardown residue in progress (worktree 225)"
-      - "live-host-model (wt 221) and 067 follow-up 3 (wt 222) landers pending"
+      - "067 follow-up 3 (wt 222) lander still pending (221-live-host-model landed 6f679e5e)"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
       - "specs/005-component-surface-system/roadmap.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "223-goal-refresh-0031"
+      session_id: "221-live-host-model-lander"
       parent_session_id: null
     completion_pct: 85
     open_questions:
@@ -44,6 +44,40 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-07 ~21:47, `221-live-host-model` LANDED — verified, rebased onto 0.0.31, pushed to `origin/main` at `6f679e5e`
+
+**Landed.** The leg's `e795fc55` (replayed from `77397c4b` onto `c5b20ee4`, the 0.0.31 state) plus this
+verifier's `6f679e5e` are on `origin/main`; `git log --oneline -1 origin/main` = `6f679e5e`. Owner:
+`009-live-verification`. Every claim was re-proven from the final state, in the worktree, before the
+push:
+
+- **The shared host-stylesheet module** `tools/screenshots/host-bare-controls.css` is referenced by
+  `verify-placement.mjs` and all five lanes — 12 inclusion sites (sheet-grammar 1, render-assertions
+  4, touch-targets 1, sheet-rebuild 2, sheet-teardown 1); verify-placement's inline copy is gone.
+- **The 054 ink row trips without the wrap rule**: rule commented out, `sheet-grammar.mjs` printed
+  "3/3 buttons paint ink outside their own box at 30px (worst 81.0px)", restored clean.
+- **Touch-targets ratchets moved DOWN only**: fixture 185→171, constructed 807→785, no number raised.
+- **`sheet-rebuild.mjs` nondeterminism**: `ENTRANCE_SETTLE_FLOOR_MS = 260`; 3 runs, sort settled 674
+  and filter settled 541 identical in every run — the 836/836 pre-transition race is gone.
+- **`check-lane.mjs`**: 64MB `maxBuffer` on the `git show`; the >1MB-manifest test goes red without
+  it (1 failed | 26 passed) and green with it (27/27).
+- **The gate**: `PASS — 25 green, 1 red for a declared reason`, exit 0, 2m31s. The one red is
+  `sheet-grammar`'s declared `expectFail` = `009`'s T26 (`.obnotion-panel-button` ~10px past the
+  sort-panel's right edge, both engines); 26/0 returns when T26's padding decision lands and the
+  declaration is discharged.
+- **Everything else**: tsc 0; vitest 153 files / 1642; `npm run screenshots` twice, 608/608, 0 moved
+  PNGs; 15/15 evidence artefacts fresh; operator checklist current (179 rows); 009 and 005 validate
+  `--strict` → `RESULT: PASSED` after their backfills; scan-comments / scan-failing-values 0.
+
+**The only rebase conflicts** were the parent's `graph-metadata.json` (resolved to main's side, then
+re-derived by the backfill) and this file (223's continuity kept; BOTH §1 sections kept, newest
+first). 009's roadmap figure re-counted 2/6 — unchanged and still correct; nothing named the
+operator or a device, so nothing was ticked.
+
+**Still open here:** `009`'s T26 — the `.obnotion-panel-button` padding decision across the six
+renderers that draw the class (the gate's expectFail waits on it); 067 follow-up 3, 069 and the
+timeline-to-table teardown are other legs, unchanged.
 
 ### 2026-09-07 ~22:05, 0.0.31 SHIPPED as the RENAME release — four legs queued for GLM landers
 
