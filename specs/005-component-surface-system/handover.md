@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: 221-live-host-model LANDED at 6f679e5e, 2026-09-07 21:47. 0.0.31 shipped at 5e7f1426 as the RENAME release (id obnotion, vault obnotion/, repo obsidian_notion-clone). Three legs in flight, each awaiting a GLM lander: 067 follow-up 3, the 069-board-cross-group-drag child, and the timeline-to-table view-switch teardown fix. NO Opus agents (operator 2026-09-07 18:40); GLM 5.3 flash max via cli-pi DevPass carries landings/docs/releases, monitored every 5 min with a 15-min stall relaunch."
+description: "Resume point: 225-timeline-view-teardown LANDED at b6a0f847, 2026-09-08 01:20. 0.0.31 shipped at 5e7f1426 as the RENAME release (id obnotion, vault obnotion/, repo obsidian_notion-clone). Two legs in flight, each awaiting a GLM lander: 067 follow-up 3 (wt 222) and the 069-board-cross-group-drag child (wt 224); the timeline-to-table view-switch teardown fix landed at b6a0f847. NO Opus agents (operator 2026-09-07 18:40); GLM 5.3 flash max via cli-pi DevPass carries landings/docs/releases, monitored every 5 min with a 15-min stall relaunch."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,14 +10,13 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-07T21:47:00Z"
-    last_updated_by: "221-live-host-model-lander"
-    recent_action: "Verified and pushed 221-live-host-model to main at 6f679e5e; gate 25+1 declared, T26 open"
-    next_safe_action: "Land 067 follow-up 3, 069 and the timeline fix, then cut 0.0.32"
+    last_updated_at: "2026-09-08T01:20:00Z"
+    last_updated_by: "225-timeline-view-teardown-lander"
+    recent_action: "Verified and pushed 225-timeline-view-teardown to main at b6a0f847; gate 25+1 declared, T26 open"
+    next_safe_action: "Land 067 follow-up 3 (wt 222) and 069 (wt 224), then cut 0.0.32"
     blockers:
       - "009 T26: .obnotion-panel-button sort-panel overflow ~10px under real host cascade (expectFail)"
       - "069-board-cross-group-drag touch drag-and-drop leg in progress (worktree 224)"
-      - "timeline-to-table view-switch teardown residue in progress (worktree 225)"
       - "067 follow-up 3 (wt 222) lander still pending (221-live-host-model landed 6f679e5e)"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
@@ -44,6 +43,48 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08 ~01:20, `225-timeline-view-teardown` LANDED — verified, rebased onto 221's `3005e5bd`, pushed to `origin/main` at `b6a0f847`
+
+**Landed.** The leg's `4ba1b75e` (24 files; replayed as `f56931f8` onto `3005e5bd` after
+221-live-host-model landed first) plus this verifier's `b6a0f847` are on `origin/main`;
+`git log --oneline -1 origin/main` = `b6a0f847`. Owner: `037-timeline-gantt-port` (§4 row 67). Every
+claim was re-proven from the final state, in the worktree, before the push:
+
+- **Root cause and fix, read back at source**: `pm-gantt-view` present in BOTH teardown lists
+  (`rendered-view-roots.ts`'s `VIEW_ROOT_CLASSES` and the inline copy inside
+  `embedded-database-renderer.ts`'s `renderResults`); `teardownOutgoingViewRenderer` at
+  `database-view.ts:7132`, called at `:7026` only when `viewTypeChanged`, and its twin in the
+  embedded host (call `:1235`, definition `:2388`), each destroying the outgoing timeline, calendar
+  or chart renderer; `CalendarRenderer.destroy()` NEW (`calendar-renderer.ts:138`).
+- **Mutation proofs, both directions**: (a) the `pm-gantt-view` entry deleted from
+  `rendered-view-roots.ts` → the permanent residue lane went red, `1 leftover timeline root(s)` after
+  timeline -> table (calendar -> table still 0, exactly the leg's pre-fix read); restored. (b) the
+  `if (viewTypeChanged) this.teardownOutgoingViewRenderer(...)` guard commented out in
+  `database-view.ts` → exactly the 2 new positive `database-view.test.ts` tests red (2 failed |
+  14 passed, the negative control still green); restored, 16/16.
+- **The permanent lane on the restored, post-rebase source**: `view-switch residue: timeline -> table`
+  **0** and `calendar -> table` **0** — the shipped renderers in headless Chrome, production teardown.
+- **The gate**: exit 0, `PASS — 25 green, 1 red for a declared reason`. The one red is
+  `sheet-grammar`'s declared 009/T26 — main's own landed state since 221; 26/0 returns when T26's
+  padding decision lands and the declaration is discharged.
+- **Everything else**: tsc 0; build 0; vitest 153 files / 1645 (the +1 over the leg's 1644 is 221's
+  >1MB-manifest `check-lane` test); `npm run screenshots` twice, 608/608 — one jitter PNG
+  (`calendar-empty-state-desktop-light`, 5 px, channel delta 1, moved in run 2 only) reverted with its
+  manifest `bytes` restored, and one honest correction kept (`board-view-desktop-dark`'s manifest row
+  now records the 216993 bytes the committed PNG actually is); the 4 stale evidence artefacts
+  re-stamped by their own owners (render-assertions, touch-targets, unstyled-links,
+  capture-device-parity), then 15/15 fresh; `scan-comments` / `scan-failing-values` 0.
+- **Docs**: §4 row 67 and 037's AC-008/REQ-008/T054 read back; no operator/device row ticked (the leg
+  ticked only its own T054); §5.A's `037` figure recounted against `goal.md` §3: 10/20, unchanged and
+  still correct; 037 and 005 both validate `--strict` → `RESULT: PASSED` (the parent's only
+  pre-backfill violation was its own `SOURCE_FINGERPRINT_MISMATCH`; backfilled; this section's own
+  edit re-derives it again in the same commit, `3005e5bd`'s precedent).
+
+**Rebase conflicts** were 8 generated artefacts — the parent's `graph-metadata.json` plus 7
+`tools/live/*.json` — all resolved to main's side and then re-derived; `tools/lane/css-lane.json`
+needed nothing (styles.css unchanged, so no acquire/edit/release triplet); the working root
+`.handover.md` (221's, now this leg's) carries the full verifier log, mutation numbers included.
 
 ### 2026-09-07 ~21:47, `221-live-host-model` LANDED — verified, rebased onto 0.0.31, pushed to `origin/main` at `6f679e5e`
 
