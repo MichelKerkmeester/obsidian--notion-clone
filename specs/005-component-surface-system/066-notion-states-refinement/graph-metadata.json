@@ -207,7 +207,7 @@
     ],
     "causal_summary": "An Undo the reader cannot reach is not an Undo",
     "created_at": "2026-09-06T16:04:47Z",
-    "last_save_at": "2026-09-07T04:31:59.869Z",
+    "last_save_at": "2026-09-07T04:45:59.686Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,14 +219,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:60a3e9cf365bf86bdd9721f417c7324ebdd82e6b25b89ae86ef3f3b753f08611",
+    "source_fingerprint": "sha256:4148f0db17849c78cff1bdc315f97a81e315f49e3cb0e27424afe731e690d2b4",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "ccbda4d44abcf9f0a76cf3c09484757fac86e0be9f86f30567ecf3562fa084e3",
       "plan.md": "a77962864b2871a7ef29a4410576af4e82f4c0b06380b32eee754fa88e849544",
       "tasks.md": "33429cdc37077201dd28cd61669d2ec9e669c213fe101b2a5a33c06a0e7b9411",
       "decision-record.md": "e6f90220cbba18015e27a942eab09c56c00fbf89bfca9be15e878f0eae872431",
-      "implementation-summary.md": "34cd7769d223a83c5d6e0fe2e8e0ed83d9dce835cb764f2651e68cca5768b052"
+      "implementation-summary.md": "fda68c68d667f50f72d83186b4b7a3aa7783215813f1c71912cd6808e9c16db9"
     },
     "last_active_at": null
   }
