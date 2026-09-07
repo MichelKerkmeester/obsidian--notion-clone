@@ -152,7 +152,7 @@ the lineage trail on disk and git-ignored.
 |-------|--------|
 | `npx tsc --noEmit` | Exit 0, no output |
 | `npm run build` | Exit 0 |
-| `npx vitest run` | Exit 0, 1553/1553 across 143 files, from the final rebased tree (1530 before landing added the four production-path board cases; the rest arrived with `origin/main`) |
+| `npx vitest run` | Exit 0, 1562/1562 across 144 files, from the final rebased tree (1530 before landing added the four production-path board cases; the rest arrived with `origin/main`) |
 | `node tools/live/sheet-grammar.mjs` | Exit 0, every registered surface and control PASS |
 | `node tools/live/render-assertions.mjs` | Exit 0, every scenario PASS |
 | `node tools/naming/scan-comments.mjs` | Exit 0, 0 artifact-id violations |
