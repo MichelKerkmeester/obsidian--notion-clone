@@ -12,12 +12,11 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/067-sheet-family-remediation"
-    last_updated_at: "2026-09-06T16:30:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Opened four ADRs from the sheet family research synthesis, three Proposed and one part-Accepted"
-    next_safe_action: "Re-read trueup rows 26 and 31 against their captures to settle ADR-002's parent clause"
-    blockers:
-      - "ADR-004 is the operator's; no capture can answer a question about our host"
+    last_updated_at: "2026-09-07T00:05:00+02:00"
+    last_updated_by: "operator-ruling-session"
+    recent_action: "Flipped ADR-002, ADR-003, ADR-004 to Accepted per 2026-09-07 operator rulings"
+    next_safe_action: "Implement T004-T008 per the four ADRs; ADR-001 is the only one still Proposed"
+    blockers: []
     key_files:
       - "src/views/overlay-stack.ts"
       - "src/views/surface-shell.ts"
@@ -28,11 +27,13 @@ _memory:
       session_id: "surface-system-067-adr"
       parent_session_id: null
     completion_pct: 0
-    open_questions:
-      - "Dimmed or undimmed parent under a stacked menu"
+    open_questions: []
     answered_questions:
       - "The depth cap itself is decided: design-trueup.md C4 adopts it in full as a shell rule"
       - "The 44px close survives the handle-less card: ADR-007 exception E1"
+      - "Dimmed or undimmed parent under a menu card: Notion, per the operator's 2026-09-07 ruling — ADR-002"
+      - "The page-under-sheet dim and the scale(0.96) pull-back: 0.52 scrim plus the pull-back, per the operator's 2026-09-07 ruling — ADR-003"
+      - "The three FuzzySuggestModal surfaces: route through the shell, per the operator's 2026-09-07 ruling — ADR-004"
 ---
 # Decision Record: Sheet Family Remediation
 
@@ -176,9 +177,9 @@ additive and can stay unreferenced without changing behaviour.
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed on the parent clause; **Accepted** on the close, which ADR-007 **E1** already decided |
-| **Date** | 2026-09-06 |
-| **Deciders** | Operator (E1 taken 2026-09-05 ~18:30); the parent clause pending |
+| **Status** | **Accepted** — the parent clause ruled 2026-09-07 ~00:05 Europe/Amsterdam; the close was already Accepted on ADR-007 **E1** |
+| **Date** | 2026-09-06; parent clause 2026-09-07 |
+| **Deciders** | Operator (E1 taken 2026-09-05 ~18:30; parent clause 2026-09-07 ~00:05) |
 
 ---
 
@@ -205,10 +206,10 @@ hypothesis; this one was checked and corrected rather than carried.
 
 ### Constraints
 
-- **Rows 26 and 31 disagree about the parent.** Row 26 resolves the card over a **dimmed** parent;
-  row 31 resolves the popover shape over an **undimmed** one (`trueup:320`). Both are ADOPT and both
-  are about §3's third move. They were measured off different surface classes and at most one is
-  right for the other's case.
+- **Rows 26 and 31 disagreed about the parent** — row 26 dimmed, row 31 undimmed (`trueup:320`) —
+  and the operator's 2026-09-07 ruling settled it by citing a third reference (Notion) rather than
+  picking between them. Kept here as history: the disagreement is why the question was asked, not
+  something still open.
 - The desktop anchored popover must not move. A `menu` role on desktop is already correct.
 - `052` owns the rows inside a picker. This decision is about chrome and presentation only.
 <!-- /ANCHOR:adr-002-context -->
@@ -228,10 +229,37 @@ rather than docked to the bottom edge. Picker width roles cite the measured 256 
 (`design-trueup.md` §2a) through the constants that already exist for two of the three
 (`surface-shell.ts:148-149`).
 
-**What is not decided**: whether the parent dims. That clause stays **Proposed** until rows 26 and
-31 are re-read against their own captures. Choosing between two ADOPT rows without re-reading them
-is exactly the "measure a reference, then decline it surface by surface" pattern `051`'s log records
-as the family's original defect.
+**The parent clause is now Accepted.** Operator ruling, **2026-09-07 ~00:05 Europe/Amsterdam**,
+verbatim: *"Notion"* — asked whether the handle-less menu card should dim the parent the way Anytype
+shows (row 26) or leave it undimmed (row 31), the operator named a third reference instead of
+choosing between the two ADOPT rows. **The ruling is read as: dim the parent, the way Notion's own
+phone menus do** — this does not choose row 26's *reading* of Anytype, it supersedes the row
+26-versus-31 question with a different source entirely, so re-reading either row no longer settles
+anything here.
+
+**The Notion reference and its measured band.** `051/notion-screens-digest.md` records the pattern
+directly: row **B1** — *"'Insert Media' sheet … over a dimmed 'To do list' page"*
+(`ios/menus/notion-ios-menus-context-menu-13-3601882d….webp`) — and row **A4** — *"a centred floating
+dialog over a dimmed 'View options' sheet"*
+(`ios/sheets/notion-ios-sheets-delete-confirm-01-55602f6a….webp`) both show a handle-less card over a
+measurably dimmed parent, and both sit beside an unmodified before-frame of the same screen in the
+harvest, which is what makes them measurable rather than merely described. Read with a one-off
+Pillow script sampling background patches away from text, icons and the card itself, mean of RGB
+channels as luminance:
+
+| Capture | Dimmed patch (RGB, mean) | Undimmed control | Ratio |
+|---|---|---|---|
+| B1 — Insert Media over "To do list" | `(88, 88, 88)` — 3 patches, exact | `notion-ios-flow-page-actions-01-71f786c5…` — `(255,255,255)` / `(245,245,245)` at the same page, pre-menu | **0.349** |
+| A4 — Delete-view dialog over "View options" | `(108, 108, 108)` — 3 patches, exact | `notion-ios-flow-deleting-a-view-02-2f0d2563…` — the identical sheet, one step before the dialog opens | **0.435** |
+
+Two independent Notion captures, **0.35 and 0.44**, mean **≈0.39** — both markedly stronger than
+`048`/`051`'s own Anytype-measured **0.519** for a page under a first sheet (ADR-003), which is
+expected: this is a different product's dim on a different surface class, cited because the operator
+named it, not because it is expected to match Anytype's number. **Threshold**: the menu-role card's
+parent dims to **≈0.39** (band 0.35-0.44) of undimmed luminance, distinct from and not overriding
+ADR-003's sheet-scrim figure.
+
+**The 44px close stays** — unchanged from E1, not reopened by this ruling.
 <!-- /ANCHOR:adr-002-decision -->
 
 ---
@@ -253,7 +281,7 @@ as the family's original defect.
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Landing on the wrong parent treatment | M | The parent clause stays Proposed; the handle clause can land without it |
+| The ≈0.39 Notion band drifts from whatever a first implementation renders | M | Re-measure the same two patches against the shipped `menu`-role card once T006 lands, the way ADR-003's own composite was re-verified rather than assumed |
 | Desktop popovers move | H | Assert the desktop capture set `pixelHash`-identical, as `051` T011 did after the leading slot shipped unscoped |
 <!-- /ANCHOR:adr-002-consequences -->
 <!-- /ANCHOR:adr-002 -->
@@ -267,9 +295,9 @@ as the family's original defect.
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-06 |
-| **Deciders** | Operator, pending |
+| **Status** | **Accepted** |
+| **Date** | 2026-09-06; ruled 2026-09-07 |
+| **Deciders** | Operator (2026-09-07 ~00:05 Europe/Amsterdam) |
 
 ---
 
@@ -320,16 +348,37 @@ corrected in place rather than rewritten, and AC-003 here supersedes it.
 <!-- ANCHOR:adr-003-decision -->
 ### Decision
 
-**We chose**: raise the page-under-sheet dim to the measured band **while holding the
-parent-under-child figure at the 0.717 it already measures**, and disposition the pull-back either
-way. What is not acceptable is the current state: a page at half the measured dim, and a transform
-nobody decided.
+**Operator ruling, 2026-09-07 ~00:05 Europe/Amsterdam, verbatim**: *"0.52 scrim plus the 0.96 scale
+cue"*.
 
-**How it works**: the scrim alpha moves toward the measured value and the `.is-stack-parent` opacity
-step moves with it, because the two compose — raising the scrim alone would push the parent past
-0.710. Both figures are re-measured by the same decoded-PNG method `93205d4d` used, on the same
-control, so the after-numbers are comparable to the before-numbers rather than to an assertion. The
-pull-back is then either recorded here as adopted, with its reason, or removed.
+**Read as two clauses, both Accepted:**
+
+1. **The page under a first sheet dims to 0.52 ± 0.02** of undimmed luminance (Anytype measured,
+   `design-trueup.md` §6 C3's 0.519/0.520/0.505 three-band read — 0.52 is that figure at the
+   precision the ruling gave it, and 0.519 stays the recorded measurement underneath it).
+2. **The `scale(0.96)` pull-back is adopted**, not merely dispositioned either way, and the ruling
+   extends its reach: a `scale(0.96)` push-back now applies **to the page under a first sheet**, the
+   same depth cue the `.is-stack-parent` case already carries, rather than being a stacked-only
+   affordance. The `translateY(4px)` component is not named in the ruling and is not re-opened by
+   it — it rides with the existing `.is-stack-parent` declaration unchanged.
+
+**The stacked-parent case stays at parity — the same 0.710 ± 0.02 *result*, not the same
+inputs.** `93205d4d`'s measured **0.717** is a composite of two steps sharing one scrim: the single
+scrim is hoisted between levels and composites onto *every* dimmed surface, so it is the same element
+whether the sheet above it is the first or the second. Raising that scrim's alpha to reach the 0.52
+band therefore also darkens the stacked composite, which currently reads `0.88 opacity × scrim`. Parity
+is held by moving `.is-stack-parent`'s `opacity: 0.88` the other way, enough that
+`new-opacity × new-scrim` still lands at 0.710 ± 0.02 — the ADR's title, "**one dim**", means one
+scrim serving both cases with one recalibration, not two independent dims left alone.
+
+**How it works**: the scrim alpha rises until the page under a first sheet reads 0.52 ± 0.02; because
+that same scrim also composites under `.is-stack-parent`, its opacity constant is recalibrated in
+the same commit so the two-step stacked composite still lands at 0.710 ± 0.02 — recalibrated, not
+independently re-decided, since the *target* is unchanged and only the intermediate constant that
+reaches it moves. The page under a first sheet also gains the `scale(0.96)` step
+`.is-stack-parent` already declares, applied to that case for the first time rather than only the
+stacked one. Re-measurement uses the same decoded-pixel method `93205d4d` used, on the same control,
+so the after-numbers are comparable to the before-numbers rather than to an assertion.
 <!-- /ANCHOR:adr-003-decision -->
 
 ---
@@ -351,7 +400,7 @@ pull-back is then either recorded here as adopted, with its reason, or removed.
 | Risk | Impact | Mitigation |
 |------|--------|------------|
 | The recapture noise hides a real regression | H | Assert the 32 protected entries identical; diff the movers scenario by scenario |
-| Keeping the pull-back and raising the scrim overshoots 0.710 | M | Measure the composite, not the declarations — the lane samples luminance, which is what the true-up measured |
+| Giving the first-sheet page its own `scale(0.96)` step reads as a second, uncoordinated depth cue next to the already-adopted `.is-stack-parent` one | M | Reuse the `.is-stack-parent` declaration's own transform rather than writing a second one; measure the composite, not the declarations — the lane samples luminance, which is what the true-up measured |
 <!-- /ANCHOR:adr-003-consequences -->
 <!-- /ANCHOR:adr-003 -->
 
@@ -364,8 +413,8 @@ pull-back is then either recorded here as adopted, with its reason, or removed.
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed — **the decision is the operator's**, carried unchanged from `051` T010 |
-| **Date** | 2026-09-06 |
+| **Status** | **Accepted** — option (a), ruled 2026-09-07 ~00:05 Europe/Amsterdam |
+| **Date** | 2026-09-06; ruled 2026-09-07 |
 | **Deciders** | Operator |
 
 ---
@@ -410,16 +459,27 @@ its title twice. Distinct from row 59's defect, which was an empty title's dead 
 <!-- ANCHOR:adr-004-decision -->
 ### Decision
 
-**We chose**: nothing yet. Two options, put to the operator with the cost of each.
+**Operator ruling, 2026-09-07 ~00:05 Europe/Amsterdam, verbatim**: *"Route through the shell"*.
 
-**(a) Route through `createSurfaceShell`.** The three surfaces stop hand-rolling placement and gain
-the three-slot header, the role, the stack rule and the title counter. Smaller than it looks —
-`DbModal` already demonstrates the whole integration at `db-modal.ts:120-133`, and that is an
-inference from the call shape rather than a measured estimate.
+**We chose (a): route through `createSurfaceShell`.** The three surfaces — `BaseFileSuggestModal`
+(`main.ts:3047`), `ImageFileSuggestModal` (`image-file-suggest-modal.ts:40`) and
+`MarkdownFileSuggestModal` (`markdown-file-suggest-modal.ts:34`) — stop hand-rolling
+`isTouchDevice` → `attachSheetChromeToModal` → `placeSheet` → `keepSheetPlaced` and gain the
+composition's centred three-slot header, a declared role and a declared title, the same way
+`DbModal` already demonstrates the whole integration at `db-modal.ts:120-133`. Option (b), the
+FuzzySuggest-specific shim, is declined: it would have kept the surfaces Obsidian-native and left the
+header divergence and the missing `048` stack rule in place, closing only the duplication rather than
+the coverage hole AC-004 names.
 
-**(b) Extract the four-call dance into one FuzzySuggest-specific shim.** So it is at least written
-once. Keeps the surfaces Obsidian-native; leaves the header, the role and the stack rule where they
-are.
+**Threshold, now concrete**: the three named call sites are removed — **0** direct
+`attachSheetChromeToModal` callers outside `surface-shell.ts`, no "or a written reason" survivor
+clause needed, because the ruling picked the option that removes all three rather than the one that
+would have kept them. `051` T010's `[B]` lifts: the question it was blocked on — join the shell or
+stay native — now has an answer, and the disposition is (a).
+
+**What ships alongside it, named in the same ruling's scope**: `BaseFileSuggestModal`'s double-title
+defect (§ Context above) is fixed by the same route, since `createSurfaceShell` owns title rendering
+and the duplicate-title path it replaces goes with it.
 <!-- /ANCHOR:adr-004-decision -->
 
 ---
@@ -427,18 +487,19 @@ are.
 <!-- ANCHOR:adr-004-consequences -->
 ### Consequences
 
-**What improves** under either option: one written definition instead of three copies, and three
-surfaces enter the lane.
+**What improves**: one written definition instead of three copies, three surfaces enter the lane
+(`sheet-grammar.mjs`, T009), and the double-title defect closes as a side effect rather than a
+separate fix.
 
-**What it costs**: (a) changes what these surfaces look like on a phone — three-slot header,
-declared title — so it needs its own captures. (b) leaves the header divergence and the missing
-stack rule in place and closes only the duplication.
+**What it costs**: the three surfaces change what they look like on a phone — three-slot header,
+declared title — so the route needs its own captures, same as any other `048`/`051` surface that
+gained the composition.
 
 **Risks**:
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Deciding it here instead of asking | H | It is `051` T010's own recorded reason for being blocked; this ADR restates the question and does not answer it |
-| The double-title defect ships either way | M | It is named above and belongs to whichever option lands, as its own task row |
+| Row 21's flip (`BaseFileSuggestModal` becoming Anytype's full-screen search) gets folded into this route instead of staying its own task | M | Named in Constraints as a separate task either way; this ADR is chrome-routing only |
+| The double-title fix regresses silently once title ownership moves to the shell | M | Assert one title, not two, the same way `051` T016's scrape-fallback counter is asserted rather than eyeballed |
 <!-- /ANCHOR:adr-004-consequences -->
 <!-- /ANCHOR:adr-004 -->

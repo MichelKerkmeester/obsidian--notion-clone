@@ -300,19 +300,19 @@ with the owner named, never self-closed.
       seventeenth, eighteenth, nineteenth and twentieth declaring subclasses alongside T008's
       thirteen. `FormulaModal`'s `fullscreen` call is unchanged; a source-text check asserts it stays
       and that the other three no longer contain the literal.
-- [B] **T010 — Route or disposition the 3 non-`DbModal` outliers.**
+- [ ] **T010 — Route the 3 non-`DbModal` outliers through the shell.**
       `src/main.ts:3047`, `image-file-suggest-modal.ts:40`,
-      `markdown-file-suggest-modal.ts:34`. **Threshold**: chrome-deciding sites 2 → 1, or a written
-      reason per survivor. **Red-first proof**: 3 direct callers today. **Blocked on** `spec.md`
-      §11's second open question.
-      **Still blocked 2026-09-06 — owner: operator, unstarted, no code touched.** `spec.md`'s own
-      reconciliation log (`RECONCILIATION`/`T001` sections) states this plainly twice: the iOS
-      captures answered the sub-page-versus-stack question but "did not answer §11's second
-      question, and could not: whether the three `FuzzySuggestModal` subclasses join the shell or
-      stay Obsidian-native behind a shim is a question about our host, and Anytype has no host. T010
-      stays blocked." No capture can resolve a question about which host API surface this plugin's
-      own suggest modals target, so nothing here decides it in the operator's place; `AC-001` and
-      `checklist.md` C1 stay exactly as T005 left them (4 raw call sites, 2 decision-making groups).
+      `markdown-file-suggest-modal.ts:34`. **Threshold**: chrome-deciding sites 2 → 1 — all three
+      route through `createSurfaceShell`, no survivor and no written-reason clause needed. **Red-first
+      proof**: 3 direct callers today.
+      **Unblocked 2026-09-07 ~00:05 Europe/Amsterdam — operator ruling, verbatim "Route through the
+      shell."** This answers `spec.md` §11's second open question directly: the three
+      `FuzzySuggestModal` subclasses join the shell rather than staying Obsidian-native behind a shim.
+      Recorded as `067/decision-record.md` ADR-004 (Accepted), the sibling remediation packet's own
+      decision record, rather than re-litigated here — `067` T008 carries the same disposition for
+      its own tasks.md. **Still not implemented**: the ruling is recorded, `AC-001` and
+      `checklist.md` C1 stay exactly as T005 left them (4 raw call sites, 2 decision-making groups)
+      until the code moves.
       **Found while building `048`'s modal-sheet screenshot scenario, not fixed here**: one of the
       three outliers, `BaseFileSuggestModal` (`src/main.ts:3047`), calls
       `this.titleEl.setText(t("baseImport.chooseBaseFile"))` before its own

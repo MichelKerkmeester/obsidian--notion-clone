@@ -209,7 +209,7 @@
     ],
     "causal_summary": "The family reads as one surface set until you measure it",
     "created_at": "2026-09-06T15:02:09Z",
-    "last_save_at": "2026-09-06T15:29:45.922Z",
+    "last_save_at": "2026-09-07T04:06:22.892Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b49f2c6267767c4612afcc3a88d80e77d0160ec626ff8415d94224a1ca2ab45a",
+    "source_fingerprint": "sha256:eca5f2f2302b877d817ab1317200b2b544c8673f13fa24d2e6d49ff30fea1682",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "bb92164537e8d88f73d985c6a2f9b96a6bfb95ba08f6c326da962dbdb71740ed",
       "plan.md": "78821cc220bcb362b54e1d6fc531d8aa50f7691dc7694cecabb13554e55a8e1a",
-      "tasks.md": "c2a9f621d4d655341e1f9d91c01faffaadac0993b6ee5271cd406442b5d33894",
-      "decision-record.md": "650ae06099e48d78f089a073bd08ec3456e3b9720635e6125583b51180981c2b",
+      "tasks.md": "13e477f202fdee0983ff43575ced1220eada53ba04fc8cff33d4ccb4815e2959",
+      "decision-record.md": "c69828d1432d9b68ae05c3faf08b153e3b659f6fda4964fd775868064a6847b6",
       "implementation-summary.md": "f3702daba4ee1893931dfa7262f22b9e97de8abdcbe3a040f8bc22ca0a9659a7"
     },
     "last_active_at": null

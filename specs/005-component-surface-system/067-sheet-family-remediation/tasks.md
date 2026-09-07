@@ -42,14 +42,16 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
 <!-- ANCHOR:phase-1 -->
 ## Phase 1 — Settle what is not yet decided
 
-- [ ] **T001 Re-read `design-trueup.md` rows 26 and 31 against their own captures and settle the
-      parent-dim clause.** The two rows are both ADOPT and both describe §3's third move, and they
-      disagree: row 26 resolves the menu card over a **dimmed** parent, row 31 over an **undimmed**
-      one (`trueup:320`). **Threshold**: one recorded answer per surface class, with the capture
-      filename beside it, written into ADR-002's parent clause. **Red-first anchor**: not a code
-      row — the red is that ADR-002 cannot leave `Proposed` on that clause while both readings
-      stand. **Do not choose between them without re-reading**; picking the convenient one is the
-      pattern `051`'s log names as the family's original defect.
+- [x] **T001 Settle the parent-dim clause.** The two rows are both ADOPT and both describe §3's
+      third move, and they disagree: row 26 resolves the menu card over a **dimmed** parent, row 31
+      over an **undimmed** one (`trueup:320`). **Threshold**: one recorded answer per surface class,
+      with the capture filename beside it, written into ADR-002's parent clause. **Red-first
+      anchor**: not a code row — the red is that ADR-002 could not leave `Proposed` on that clause
+      while both readings stood. **Closed by the operator's 2026-09-07 ~00:05 ruling, not by
+      re-reading rows 26/31**: the operator named a third reference (*"Notion"*) instead of choosing
+      between the two ADOPT rows, so the originally planned re-read is superseded rather than
+      performed — `decision-record.md` ADR-002 carries the ruling with two measured Notion captures
+      (B1, A4) beside it, in the capture-filename shape this row asked for.
 - [ ] **T002 [P] Record the two figures ADR-003 needs before the scrim moves.** The parent-under-
       child composite is currently produced by three declarations and the true-up measured one dim.
       **Threshold**: the composite luminance measured on the same three bands the true-up used,
@@ -85,16 +87,21 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       enumerated pairs are inexpressible. Depends on T004.
 - [ ] **T006 Make the declared role load-bearing and ship the `menu` card** (`src/views/surface-shell.ts`,
       `src/views/popover-host.ts`, `styles.css`). **Threshold**: a `menu`-role phone surface carries
-      **no grab handle**, keeps the **44px close** (ADR-007 **E1**), and the presentation resolves
-      from the role. **Red-first anchor**: `SurfaceShellRole` is declared (`surface-shell.ts:332`,
+      **no grab handle**, keeps the **44px close** (ADR-007 **E1**), the presentation resolves
+      from the role, and its parent dims to **≈0.39 (band 0.35-0.44)** of undimmed luminance — the
+      Notion-measured band ADR-002 records, distinct from ADR-003's sheet-scrim figure. **Red-first
+      anchor**: `SurfaceShellRole` is declared (`surface-shell.ts:332`,
       `:347-348`), exposed by a getter (`:394-395`) and **read by nothing in the presentation path**;
       `menu` surfaces mount `mountPickerSheetHeader` (`popover-host.ts:168-176`) and ship handle,
-      scrim and close (`styles.css:3156-3213`). **Do not delete the close** — E1 is an accessibility
-      deviation with a number and this row does not reopen it. Depends on T001. Decision: ADR-002.
+      scrim and close (`styles.css:3156-3213`); no scrim is dispositioned for a menu-role parent at
+      all today. **Do not delete the close** — E1 is an accessibility deviation with a number and
+      this row does not reopen it. Depends on T001 (closed 2026-09-07). Decision: ADR-002, Accepted.
 - [ ] **T007 Take the page-under-sheet dim to the measured band, and hold the parent at parity**
       (`styles.css`, `tools/live/sheet-grammar.mjs`). **Threshold**: page under a first sheet at
-      **0.519 ± 0.02**; parent under a child **stays** at **0.710 ± 0.02**; the `scale(0.96)`
-      pull-back dispositioned in ADR-003. **Red-first anchor**: computed scrim alpha **0.25**
+      **0.52 ± 0.02** (operator ruling 2026-09-07, within the measured 0.519 ± 0.02 band); parent
+      under a child **stays** at **0.710 ± 0.02**, `.is-stack-parent`'s opacity constant recalibrated
+      to hold it; the `scale(0.96)` pull-back **adopted** (ADR-003, Accepted) and extended to the
+      page under a first sheet, not only the stacked case. **Red-first anchor**: computed scrim alpha **0.25**
       (`styles.css:319`) puts the page at 0.75 against a 0.519 threshold, and **no lane row asserts
       scrim opacity at all** — the row landed at `311f957a` reads the scrim's `animation-duration`,
       not its colour. **The parent half is green and must not regress**: measured off decoded PNGs
@@ -103,12 +110,14 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       holding 0.710 while the page reaches 0.519 — expect the parent's opacity step to change with
       it. Recapture in this leg; the 32 protected Project Manager entries stay `pixelHash`-identical
       (parent D5). Depends on T002.
-- [ ] **T008 [B] Land the FuzzySuggest disposition.** `src/main.ts:3047`,
+- [ ] **T008 Land the FuzzySuggest disposition: route through the shell.** `src/main.ts:3047`,
       `src/views/image-file-suggest-modal.ts:40`, `src/views/markdown-file-suggest-modal.ts:34`.
-      **Threshold**: **0** direct `attachSheetChromeToModal` call sites outside `surface-shell.ts`,
-      or a written reason per survivor. **Red-first anchor**: three sites today, each repeating
-      `isTouchDevice` → chrome → `placeSheet` → `keepSheetPlaced`. **Blocked on the operator** —
-      ADR-004, carried unchanged from `051` T010; no capture can answer a question about our host.
+      **Threshold**: all three route through `createSurfaceShell` and **0** direct
+      `attachSheetChromeToModal` call sites remain outside `surface-shell.ts` — no survivor, no
+      written-reason clause; the ruling picked the option that removes all three. **Red-first
+      anchor**: three sites today, each repeating `isTouchDevice` → chrome → `placeSheet` →
+      `keepSheetPlaced`. **Unblocked** — ADR-004 Accepted, operator ruling 2026-09-07 ~00:05
+      Europe/Amsterdam, verbatim *"Route through the shell"*; `051` T010's `[B]` lifts with it.
 - [ ] **T009 [P] Register the three suggest surfaces in the lane** (`tools/live/sheet-grammar.mjs`).
       **Threshold**: all three appear in the registered set and pass the grammar columns.
       **Red-first anchor**: none of the three is among the 14 registered surfaces
@@ -242,7 +251,8 @@ The packet closes when every row in `acceptance-criteria.md` is `Met`, `Waived` 
 `Superseded` with an ADR — except **AC-011**, which is the operator's and which nothing in this
 repository can close (parent D3).
 
-- [ ] All tasks marked `[x]` — T008 and T023 are the operator's and are marked `[B]`
+- [ ] All tasks marked `[x]` — T023 is the operator's and is marked `[B]`; T008 unblocked 2026-09-07
+      (ADR-004 Accepted) and is an ordinary agent-closeable row now
 - [ ] No `[B]` blocked task remaining that an agent could have closed
 - [ ] Manual verification passed — AC-011, on one build
 <!-- /ANCHOR:completion -->
