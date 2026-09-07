@@ -44,6 +44,53 @@ _memory:
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
 
+### 2026-09-07 ~16:20, `067`'s follow-up leg LANDED, from `.worktrees/215-sheet-family-followup`
+
+**T006 is closed and independently re-verified; the `scale(0.96)` cue is dropped by operator
+ruling; the packet stays 3/7.** Landed on `main` after a rebase from `173f7d3a` onto `b8876332`
+(eight commits of 064 follow-ups, the toast settle, a goal refresh and the Settings-sheet fix,
+several of them touching `styles.css` and the lane files). Nine commits; `npm run gate` **26/26
+green, exit 0** from the final state.
+
+**Confirmed by re-measurement, not by reading the leg's report.** All four production `menu`-role
+surfaces — `owned-menu`, `date-picker`, `icon-picker`, `option-color-picker` — measure at 402px
+with the handle absent, a **44.0×44.0** close target and a **parent dim ratio of 0.390** inside the
+0.35-0.44 band. A `panel`-role sheet still keeps its handle: the same column reads forwards for all
+thirteen non-card surfaces, and the stacked-pair rows still measure a real 34.4px handle-to-title
+gap for every handle-bearing child, with exactly one row reading `n/a`. Two negative controls
+proved the assertions bite rather than pass vacuously: restoring `setSheetMount`'s old
+`toggleClass` takes the three pickers to `parent dim ratio 0.520` (exit 1), and removing
+`owned-menu`'s `menuCard: true` takes `verify-placement.mjs` from 413/415 to **409/415**, red on
+exactly the four rewritten menu-handle rows.
+
+**Operator ruling folded in (2026-09-07 ~14:50, verbatim: *"Drop the scale cue"*).** ADR-003 is now
+**Accepted-as-amended** — the 0.52 ± 0.02 page dim stands, the `scale(0.96)` pull-back is withdrawn
+with the containing-block conflict quoted as the reason, AC-003's third Given/When/Then clause is
+removed rather than marked satisfied, and `roadmap.md` §6A carries the amending row in the shape of
+the sittings above it. The pull-back is a **closed question now, not a residual gap**: its last
+trace in the tree — a dormant `.db-page-pulled-back` guard in `touch-target-measure.mjs` whose
+comment asserted behaviour the code no longer has — was removed with it.
+
+**`§5.A`'s 067 row is re-derived and stays 3/7 = 43%.** The leg genuinely closed T006 and AC-002 is
+`Met`, but the goal criterion's own wording asks for an **anchored** card and anchored geometry was
+tried and declined (24 overflowing calendar-grid cells, a broken keyboard-avoidance handoff), so
+the box stays unchecked against its own text rather than being ticked on a near-match.
+
+**Still open in `067`, and a second follow-up leg owns them** — do not treat any of these as
+landed: AC-003's light stacked-parent figure (0.758 against 0.710 ± 0.02, investigated to a real
+physical bound on `.is-stack-parent`'s bare `opacity`, `filter: brightness()` named as the
+candidate, not implemented), **T015**'s header-block margin, **T020**'s replace-pair captures,
+**T021**'s full divider audit, and the two named lane pairs' rewiring to the real depth-cap call
+graph.
+
+**Two harness facts this landing re-confirmed the hard way.** `pixelHash` is blind here: main's
+committed manifest carries `pixelHash` **and** `layoutHash` values identical to the ones the rebased
+tree regenerates for all twelve moved captures, whose byte sizes differ by as much as 39379 → 36980
+— judging by hash alone would have signed off a tree with none of this leg's work in it. And the
+capture harness jitters a different set each run: pass 1 moved eight files, pass 2 moved five, only
+two in both, and nothing new moved for a real reason, so a single recapture cannot tell jitter from
+content.
+
 ### 2026-09-07, `066` T018 + `063` T018 addendum landed, from `.worktrees/214-toast-capture-settle`
 
 **Base `18b6d866`.** Two capture-pipeline defects closed at the root, and both of the leg's own
@@ -155,10 +202,13 @@ first implementation leg.** `goal.md`'s tables carry the per-child fractions abo
 next) · `214-toast-capture-settle` (paused, a lander) · `215-sheet-family-followup` (`067`'s next
 builder: the menu card, scale 0.96, AC-003 under light theme, lane pairs, 17 stale captures) ·
 `216-settings-sheet-phone` (the operator's 10:20 report on `0.0.30` — a two-column grid and an
-overflowing select list on the phone Settings sheet). **The primary checkout itself carries live
-uncommitted edits to `067`'s docs right now** (`acceptance-criteria.md`, `decision-record.md`,
-`goal.md`, `implementation-summary.md`, `tasks.md`) — almost certainly `215` landing while this leg
-ran; confirm before assuming any `067` figure above still holds.
+overflowing select list on the phone Settings sheet). ~~**The primary checkout itself carries live
+uncommitted edits to `067`'s docs right now**~~ — **resolved.** Those were `215`'s builder editing
+the un-prefixed path, which resolves to the primary checkout rather than to the worktree. The edits
+were recovered into the worktree as a patch and the primary checkout reverted to clean; they landed
+with `215` at ~16:20 (see the top of this section). The trap itself is real and worth knowing: an
+unchanged `git status --porcelain specs/` in a worktree right after an edit you just made is the
+tell that you wrote to the primary checkout instead.
 
 **Order of work.** 1) Land `212`, then `214`, then `215` and `216` — one Opus lander at a time. 2)
 `068` runs as **one leg** with nothing else in flight: id `obnotion`, `obnotion-` prefix everywhere,
@@ -795,6 +845,22 @@ ticks an operator row.**
 
 ## 5. CONTINUITY LOG
 
+- **2026-09-07 ~16:20, `067`'s follow-up leg LANDED on `main`, and the operator dropped the scale
+  cue.** Landed from `.worktrees/215-sheet-family-followup` after rebasing `173f7d3a` onto
+  `b8876332`; nine commits, `npm run gate` 26/26 green exit 0, orchestrator `--strict` PASSED on
+  both `067` and `051-modal-and-sheet-componentization` (0 errors, 0 warnings each). The leg's
+  own claims were re-measured rather than accepted: T006 confirmed on all four production
+  `menu`-role surfaces (handle absent, 44.0×44.0 close, parent dim ratio 0.390), a `panel`-role
+  sheet confirmed to keep its handle, and two negative controls used to prove the rewritten
+  assertions fail for a real reason (the old `toggleClass` takes three pickers to a 0.520 dim
+  ratio; dropping `owned-menu`'s `menuCard: true` takes `verify-placement.mjs` to 409/415 with
+  exactly the four menu-handle rows red). The operator's ~14:50 *"Drop the scale cue"* ruling was
+  folded in at this landing: ADR-003 **Accepted-as-amended**, AC-003's scale clause removed, a
+  §6A row added, `goal.md`'s criterion re-derived, and the cue's last dormant trace deleted from
+  `touch-target-measure.mjs`. `§5.A`'s 067 row re-derived from goal ticks and honestly unmoved at
+  3/7, because the menu criterion's own text asks for an *anchored* card and anchored geometry
+  stays declined. Left for a second follow-up leg, all still open: AC-003's light stacked-parent
+  figure, T015, T020, T021 and the two lane pairs. Details in the entry at the top of §1.
 - **2026-09-07, `067` follow-up leg: T006 closed live, ADR-003's page pull-back attempted and
   reverted.** Ran in `.worktrees/215-sheet-family-followup` on top of `173f7d3a`, continuing a
   paused agent's own uncommitted work (the menu-card add-only toggle fix, already correct on
