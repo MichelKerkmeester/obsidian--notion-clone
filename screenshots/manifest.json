@@ -12121,7 +12121,7 @@
       "layoutHash": "a3d3e052475e",
       "pixelHash": "0f18c2dd4c91",
       "sourceHashes": {
-        "src/views/column-width.ts": "52ecdd5d6887",
+        "src/views/column-width.ts": "c413ca2fe321",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
         "tools/live/render-assertion-harness.ts": "31d0580b670e",
         "tools/live/render-assertion-bundle.mjs": "3d06baf693a2",
@@ -12173,7 +12173,7 @@
       "layoutHash": "a3d3e052475e",
       "pixelHash": "46a03828386f",
       "sourceHashes": {
-        "src/views/column-width.ts": "52ecdd5d6887",
+        "src/views/column-width.ts": "c413ca2fe321",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
         "tools/live/render-assertion-harness.ts": "31d0580b670e",
         "tools/live/render-assertion-bundle.mjs": "3d06baf693a2",
@@ -12225,7 +12225,7 @@
       "layoutHash": "0e06630faad4",
       "pixelHash": "3490531b17a1",
       "sourceHashes": {
-        "src/views/column-width.ts": "52ecdd5d6887",
+        "src/views/column-width.ts": "c413ca2fe321",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
         "tools/live/render-assertion-harness.ts": "31d0580b670e",
         "tools/live/render-assertion-bundle.mjs": "3d06baf693a2",
@@ -12277,7 +12277,7 @@
       "layoutHash": "0e06630faad4",
       "pixelHash": "3f8fa9256ebc",
       "sourceHashes": {
-        "src/views/column-width.ts": "52ecdd5d6887",
+        "src/views/column-width.ts": "c413ca2fe321",
         "tools/bench/table-render-bench.ts": "936ddb8fad9e",
         "tools/live/render-assertion-harness.ts": "31d0580b670e",
         "tools/live/render-assertion-bundle.mjs": "3d06baf693a2",
@@ -15548,7 +15548,7 @@
       "layoutHash": "521c493f18ac",
       "pixelHash": "133a0e6cbe91",
       "sourceHashes": {
-        "src/views/column-width.ts": "52ecdd5d6887",
+        "src/views/column-width.ts": "c413ca2fe321",
         "src/views/mobile-bottom-sheet.ts": "8ac56dda1369",
         "src/views/popover-position.ts": "a10fd5ca2091",
         "styles.css": "5d6065aaa347",
@@ -15583,7 +15583,7 @@
       "layoutHash": "521c493f18ac",
       "pixelHash": "62296898224f",
       "sourceHashes": {
-        "src/views/column-width.ts": "52ecdd5d6887",
+        "src/views/column-width.ts": "c413ca2fe321",
         "src/views/mobile-bottom-sheet.ts": "8ac56dda1369",
         "src/views/popover-position.ts": "a10fd5ca2091",
         "styles.css": "5d6065aaa347",
