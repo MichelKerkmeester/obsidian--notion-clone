@@ -815,11 +815,21 @@ Sources: `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/
 
 ### Create property → format picker, stacked three deep over the Properties sheet (constructed)
 
-sheet-grammar.mjs's own "properties property type picker" pair (depth: 3): the Properties sheet, a "Create property" host-modal stand-in stacked over it, and a real dropdown opened over that in turn. The sheet family's own true-up converts this chain's real counterpart to an in-place sub-page on the strength of Anytype's own capture; the pair stays registered at depth 3 here because that conversion has not landed.
+sheet-grammar.mjs's own "properties property type picker" pair (depth: 3): the Properties sheet, a "Create property" host-modal stand-in stacked over it, and a real dropdown opened over that in turn — the BEFORE picture of the pair the depth cap now governs for real. The first level here is a bare stand-in on purpose, the same shape the cap does not reach; the replaced-in-place AFTER picture is the "property-type-picker-replaced" scenario beside this one.
 
 | dark | light |
 |---|---|
 | ![constructed-depth3-property-type-picker dark](notion-clone/panels/constructed-depth3-property-type-picker-mobile-dark.png) | ![constructed-depth3-property-type-picker light](notion-clone/panels/constructed-depth3-property-type-picker-mobile-light.png) |
+
+Sources: `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `src/views/overlay-stack.ts`, `src/views/dropdown-field.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/column-manager-renderer.ts`, `tools/bench/table-render-bench.ts`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
+
+### Create property → format picker, replaced in place over the Properties sheet (constructed)
+
+The AFTER half of the pair beside this one: the same Properties sheet and the same "Create property" chain title, but the first level is a real createSurfaceShell({ role: "panel" }) consumer — the same call CreatePropertyModal itself makes — so the real dropdown opened over it is offered a replace instead of stacking as a third sheet. Two sheets on screen, not three; sheet-grammar.mjs's own "properties property type picker — the real call graph under the depth cap" check asserts the same outcome live, this scenario is the photograph of it.
+
+| dark | light |
+|---|---|
+| ![constructed-depth3-property-type-picker-replaced dark](notion-clone/panels/constructed-depth3-property-type-picker-replaced-mobile-dark.png) | ![constructed-depth3-property-type-picker-replaced light](notion-clone/panels/constructed-depth3-property-type-picker-replaced-mobile-light.png) |
 
 Sources: `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `src/views/overlay-stack.ts`, `src/views/dropdown-field.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/column-manager-renderer.ts`, `tools/bench/table-render-bench.ts`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
 

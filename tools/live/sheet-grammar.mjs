@@ -243,6 +243,20 @@ const MENU_ROLE_SURFACE_NAMES = ["owned-menu", "date-picker", "icon-picker", "op
 const MENU_SCRIM_RATIO_MIN = 0.35;
 const MENU_SCRIM_RATIO_MAX = 0.44;
 
+// `.is-stack-parent`'s own bare `opacity` cannot reach 0.710 ± 0.02 for light theme alone — an
+// alpha-composite model built from the recorded before/after luminance pairs bounds it between
+// roughly 0.75 and 0.80 there, because light theme's own workspace background sits ABOVE the
+// sheet's opaque fill. `filter: brightness()` darkens the sheet's own rendered pixels before that
+// composite runs, reaching the band a plain opacity change cannot; dark theme's workspace sits
+// below the fill, so opacity alone already lands inside the band and the filter resets to `none`
+// there rather than compounding a fix dark theme does not need. 0.93 was chosen analytically from
+// the recorded composite model, then confirmed against decoded pixels (`242 -> 171`, ratio 0.707,
+// inside 0.710 ± 0.02) — this row asserts the computed value the browser actually resolves it to,
+// not the pixel ratio the decoded-PNG confirmation used, so it stays a live DOM read like every
+// other row in this family.
+const STACK_PARENT_FILTER_LIGHT_BRIGHTNESS = 0.93;
+const STACK_PARENT_FILTER_TOLERANCE = 0.01;
+
 // ───────────────────────────────────────────────────────────────────
 // 2h. THE ROW PITCH FLOOR
 // ───────────────────────────────────────────────────────────────────
@@ -977,6 +991,70 @@ window.__shellMenuScrimAlpha = () => {
   return alpha;
 };
 
+// The stacked parent's own theme-scoped filter: a plain two-deep stack (any role -- is-stack-
+// parent is toggled by stack position alone, mobile-bottom-sheet.ts's syncSheetStack, never by
+// role) is enough to mark the bottom sheet is-stack-parent, exactly as the depth-cap checks above
+// build their own parent/child pair.
+const mountStackParentPair = () => {
+  clearStrayOverlays();
+  const parent = createHostModalStandIn();
+  const parentShell = createSurfaceShell({ presentation: "sheet", element: parent.modalEl, close: () => parentShell.destroy(), title: "Parent", role: "dialog" });
+  parentShell.apply();
+  const child = createHostModalStandIn();
+  const childShell = createSurfaceShell({ presentation: "sheet", element: child.modalEl, close: () => childShell.destroy(), title: "Child", role: "dialog" });
+  childShell.apply();
+  const teardown = () => {
+    childShell.destroy();
+    parentShell.destroy();
+    for (const standIn of [parent, child]) {
+      if (standIn.container.isConnected) standIn.container.remove();
+    }
+  };
+  return { parentEl: parent.modalEl, teardown };
+};
+
+// The class toggle that marks a parent is-stack-parent runs on an already-painted element (the
+// parent was on screen alone before the child arrived), and both \`opacity\` and \`filter\` carry a
+// \`transition\` at \`--db-motion-surface\` (200ms). Reading computed style before that transition
+// has finished returns an interpolated mid-transition value, not the target — two frames
+// (\`waitForStackSettle\`) is long enough for the class toggle itself to commit but not for a
+// 200ms transition to finish, so this waits out the transition's own declared duration instead.
+const waitStackParentTransition = () => new Promise((resolve) => { window.setTimeout(resolve, 260); });
+
+window.__shellStackParentFilter = async () => {
+  const { parentEl, teardown } = mountStackParentPair();
+  await waitStackParentTransition();
+  const darkFilter = getComputedStyle(parentEl).filter;
+  document.body.classList.remove("theme-dark");
+  await waitStackParentTransition();
+  const lightFilter = getComputedStyle(parentEl).filter;
+  document.body.classList.add("theme-dark");
+  teardown();
+  return { darkFilter, lightFilter };
+};
+
+window.__shellStackParentFilterNegativeControl = async () => {
+  const style = document.createElement("style");
+  style.textContent = ".db-mobile-bottom-sheet.is-stack-parent.is-stack-parent { filter: none !important; }";
+  document.head.appendChild(style);
+  const broken = mountStackParentPair();
+  await waitStackParentTransition();
+  document.body.classList.remove("theme-dark");
+  await waitStackParentTransition();
+  const brokenLightFilter = getComputedStyle(broken.parentEl).filter;
+  document.body.classList.add("theme-dark");
+  broken.teardown();
+  style.remove();
+  const fixed = mountStackParentPair();
+  await waitStackParentTransition();
+  document.body.classList.remove("theme-dark");
+  await waitStackParentTransition();
+  const fixedLightFilter = getComputedStyle(fixed.parentEl).filter;
+  document.body.classList.add("theme-dark");
+  fixed.teardown();
+  return { brokenLightFilter, fixedLightFilter };
+};
+
 // The 44px accessibility floor a phone menu row must clear, against the 30px the row's own
 // unscoped base rule ships everywhere else. Measured on a live row's own rect, not the class.
 // The newest match, not the first: earlier scenarios in this same lane can leave their own
@@ -1428,16 +1506,49 @@ const openHostModalChild = (parent, child) => {
   return { panel: modalEl, close };
 };
 
+// The synthetic stand-in above proves the chrome-neutralising code path, not the depth cap: it
+// calls \`attachSheetChromeToModal\` directly, with no \`role\` and so no \`replace\` callback ever
+// offered to \`overlayStack.register\` (\`surface-shell.ts\`'s own \`canReplace\` gate reads
+// \`options.role\`, which this stand-in never sets). A real \`panel\`-role \`DbModal\` subclass —
+// \`CreatePropertyModal\` is the shipped example this pair's own "Create property" title names —
+// goes through \`createSurfaceShell({ role: "panel" })\` instead, which DOES offer replace, so it is
+// the one hop where the synthetic and the real call graph actually diverge in what they can prove.
+// Reused rather than duplicated: the same construction \`window.__shellDepthCapReplace\` above
+// already built and proved generically.
+const openRealPanelShellChild = (parent, child) => {
+  const standIn = createHostModalStandIn();
+  const heading = document.createElement("h3");
+  heading.textContent = child.title || "Choose file";
+  standIn.contentEl.appendChild(heading);
+  let shellRef;
+  shellRef = createSurfaceShell({
+    presentation: "sheet",
+    element: standIn.modalEl,
+    close: () => shellRef.destroy(),
+    title: child.title || "Choose file",
+    role: child.shellRole || "panel",
+  });
+  shellRef.apply();
+  return {
+    panel: standIn.modalEl,
+    close: () => {
+      shellRef.destroy();
+      if (standIn.container.isConnected) standIn.container.remove();
+    },
+  };
+};
+
 const openSingleChild = (parent, child) => {
   if (child.kind === "dropdown") return openDropdownChild(parent, child);
   if (child.kind === "menu") return openMenuChild(parent, child);
   if (child.kind === "date" || child.kind === "icon" || child.kind === "color") return openPickerChild(parent, child);
+  if (child.realShell) return openRealPanelShellChild(parent, child);
   return openHostModalChild(parent, child);
 };
 
 const openPairChild = (parent, child) => {
   if (!child.first) return openSingleChild(parent, child);
-  const first = openSingleChild(parent, { kind: child.first, title: child.title });
+  const first = openSingleChild(parent, { kind: child.first, title: child.title, realShell: child.realShell });
   if (!first.panel) return first;
   const second = openSingleChild(first.panel, { kind: child.kind, title: child.title, overflow: child.overflow });
   return {
@@ -1649,6 +1760,72 @@ const measureStackedPair = async (pair) => {
 };
 
 window.__stackedSheetGrammar = (pair) => measureStackedPair(pair);
+
+// The named pair's own real call graph, not the generic proof \`__shellDepthCapReplace\` above
+// already gives. That generic check builds all three levels out of host-modal stand-ins; this one
+// builds the REAL parent renderer (\`column-manager\`, the same one \`REGISTERED_STACKED_PAIRS\`
+// mounts for this pair) and routes the \`first\` hop through \`openRealPanelShellChild\` — a real
+// \`createSurfaceShell({ role: "panel" })\` call, the same one the production \`CreatePropertyModal\`
+// makes for its own "Create property" title — so the depth cap the third hop trips is offered to a
+// REAL panel-role shell rather than a synthetic stand-in with no role at all.
+// \`measureStackedPair\`'s own 18-assertion battery assumes the child stays an independent,
+// separately-measurable sheet, which an absorbed third hop no longer is; this is a smaller,
+// purpose-built set of facts for exactly that outcome instead.
+// shellRole defaults to "panel" -- CreatePropertyModal's own declared role, and the positive case
+// this pair's own threshold is about. The negative control below passes "dialog" instead, so the
+// same real dropdown can be shown stacking normally when the real hop it opens over does not offer
+// a replace -- proving this check can tell the two apart rather than always reading "absorbed".
+const measureNamedPairPropertyTypeReplace = async (shellRole) => {
+  clearStrayOverlays();
+  let parent = null;
+  let mountError = null;
+  try {
+    runRenderAssertions(document.body, { renderer: "column-manager", bag: "file-view", captureData: true }, "", () => {
+      parent = mountedSheet();
+    });
+  } catch (error) {
+    mountError = String(error);
+  }
+  if (!parent || mountError) return { error: mountError || "the column-manager parent did not mount" };
+  await settleSheetGeometry(parent);
+  const beforeSheets = document.querySelectorAll(".db-mobile-bottom-sheet").length;
+  let first = null;
+  let second = null;
+  let firstPanelMissing = false;
+  try {
+    first = openSingleChild(parent, { kind: "modal", title: "Create property", realShell: true, shellRole });
+    if (!first.panel) { firstPanelMissing = true; throw new Error("no panel"); }
+    await settleSheetGeometry(first.panel);
+    second = openSingleChild(first.panel, { kind: "dropdown", title: "Create property" });
+  } catch (error) {
+    if (firstPanelMissing) return { error: "the real Create-property panel did not mount" };
+    return { error: String(error) };
+  }
+  await waitForStackSettle();
+  const afterFirstHop = beforeSheets + 1;
+  const afterSecondHop = document.querySelectorAll(".db-mobile-bottom-sheet").length;
+  const result = {
+    // 1 before (the column-manager parent alone), 2 after the first hop (parent + the real
+    // "Create property" panel), and — the fact this check exists to prove — still 2 after the
+    // second hop (the real dropdown) rather than 3 for the panel-role case: the dropdown
+    // genuinely opened (a real production panel resolved, not null) but was offered to the
+    // "Create property" panel's own replace callback instead of stacking as an independent third
+    // sheet. The dialog-role negative control expects 3, not 2 -- the same real dropdown, over a
+    // real hop that never offers a replace.
+    beforeSheets,
+    afterFirstHop,
+    afterSecondHop,
+    dropdownResolved: Boolean(second?.panel && second.panel.isConnected),
+    dropdownBecameOwnSheet: Boolean(second?.panel && second.panel !== first.panel && second.panel.classList.contains("db-mobile-bottom-sheet")),
+    parentStillConnected: parent.isConnected,
+  };
+  second?.close?.();
+  first?.close?.();
+  return result;
+};
+
+window.__namedPairPropertyTypeReplace = () => measureNamedPairPropertyTypeReplace("panel");
+window.__namedPairPropertyTypeReplaceNegativeControl = () => measureNamedPairPropertyTypeReplace("dialog");
 
 window.__stackedSheetGrammarNegativeControl = async () => {
   const pair = stackedPairRegistry[0];
@@ -2557,6 +2734,37 @@ try {
   }
   console.log("");
 
+  console.log(`sheet-grammar: stacked-parent filter — light theme darkens through brightness(${STACK_PARENT_FILTER_LIGHT_BRIGHTNESS}), dark theme carries none\n`);
+  const stackParentFilter = await page.evaluate(() => window.__shellStackParentFilter());
+  {
+    const parseBrightness = (value) => {
+      if (value === "none") return 1;
+      const match = /brightness\(([0-9.]+)\)/.exec(value || "");
+      return match ? Number.parseFloat(match[1]) : null;
+    };
+    const darkValue = parseBrightness(stackParentFilter.darkFilter);
+    const lightValue = parseBrightness(stackParentFilter.lightFilter);
+    const darkOk = darkValue === 1;
+    const lightOk = lightValue != null && Math.abs(lightValue - STACK_PARENT_FILTER_LIGHT_BRIGHTNESS) <= STACK_PARENT_FILTER_TOLERANCE;
+    if (!darkOk) failures.push(`stacked-parent filter: dark theme computed "${stackParentFilter.darkFilter}", wanted none (brightness 1)`);
+    if (!lightOk) failures.push(`stacked-parent filter: light theme computed "${stackParentFilter.lightFilter}", wanted brightness(${STACK_PARENT_FILTER_LIGHT_BRIGHTNESS})`);
+    console.log(`  ${darkOk ? "PASS" : "FAIL"}  dark theme filter is "${stackParentFilter.darkFilter}"`);
+    console.log(`  ${lightOk ? "PASS" : "FAIL"}  light theme filter is "${stackParentFilter.lightFilter}", wanted brightness(${STACK_PARENT_FILTER_LIGHT_BRIGHTNESS})`);
+  }
+
+  const stackParentFilterControl = await page.evaluate(() => window.__shellStackParentFilterNegativeControl());
+  console.log("sheet-grammar: stacked-parent filter negative control — light theme's filter forced to none\n");
+  {
+    const wentRed = stackParentFilterControl.brokenLightFilter === "none";
+    const cleanAfter = /brightness\(([0-9.]+)\)/.test(stackParentFilterControl.fixedLightFilter || "")
+      && Math.abs(Number.parseFloat(/brightness\(([0-9.]+)\)/.exec(stackParentFilterControl.fixedLightFilter)[1]) - STACK_PARENT_FILTER_LIGHT_BRIGHTNESS) <= STACK_PARENT_FILTER_TOLERANCE;
+    if (!wentRed) failures.push(`stacked-parent filter negative control: forcing none did not read back as none (measured "${stackParentFilterControl.brokenLightFilter}")`);
+    if (!cleanAfter) failures.push(`stacked-parent filter negative control: removing the override did not restore brightness(${STACK_PARENT_FILTER_LIGHT_BRIGHTNESS}) (measured "${stackParentFilterControl.fixedLightFilter}")`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  forcing filter: none reads back as "${stackParentFilterControl.brokenLightFilter}"`);
+    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores "${stackParentFilterControl.fixedLightFilter}"`);
+  }
+  console.log("");
+
   console.log(`sheet-grammar: row pitch — a phone menu row clears the ${ROW_PITCH_FLOOR_PX}px floor\n`);
   const rowPitchMeasured = await page.evaluate((scenario) => window.__shellRowPitch(scenario), ROW_PITCH_SURFACE.spec);
   if (rowPitchMeasured == null) {
@@ -2714,6 +2922,45 @@ try {
     const stackedNormally = depthCapControl.sheetCount === 3 && depthCapControl.childBecameSheet === true;
     if (!stackedNormally) failures.push(`depth cap negative control: a dialog-role chain measured ${depthCapControl.sheetCount} sheets (childBecameSheet=${depthCapControl.childBecameSheet}), wanted 3 sheets and true — the cap must not govern a role that never offers a replace`);
     console.log(`  ${stackedNormally ? "PASS" : "FAIL"}  a dialog-role three-deep chain stacks normally (${depthCapControl.sheetCount} sheets, childBecameSheet=${depthCapControl.childBecameSheet})`);
+  }
+  console.log("");
+
+  console.log("sheet-grammar: properties property type picker — the real call graph under the depth cap\n");
+  const namedPairReplace = await page.evaluate(() => window.__namedPairPropertyTypeReplace());
+  if (namedPairReplace.error) {
+    failures.push(`properties property type picker (real call graph): ${namedPairReplace.error}`);
+    console.log(`  FAIL  properties property type picker — ${namedPairReplace.error}`);
+  } else {
+    const oneSheetBefore = namedPairReplace.beforeSheets === 1;
+    const twoAfterFirstHop = namedPairReplace.afterFirstHop === 2;
+    const stillTwoAfterSecondHop = namedPairReplace.afterSecondHop === 2;
+    const dropdownGenuinelyOpened = namedPairReplace.dropdownResolved === true;
+    const dropdownNotItsOwnSheet = namedPairReplace.dropdownBecameOwnSheet === false;
+    if (!oneSheetBefore) failures.push(`properties property type picker: measured ${namedPairReplace.beforeSheets} sheet(s) before the parent mounted, wanted 1`);
+    if (!twoAfterFirstHop) failures.push(`properties property type picker: measured ${namedPairReplace.afterFirstHop} sheet(s) after the real "Create property" panel opened, wanted 2`);
+    if (!stillTwoAfterSecondHop) failures.push(`properties property type picker: measured ${namedPairReplace.afterSecondHop} sheet(s) after the real dropdown opened, wanted 2 — the depth cap should have absorbed it rather than letting it stack as a third`);
+    if (!dropdownGenuinelyOpened) failures.push("properties property type picker: the real dropdown never resolved a panel at all");
+    if (!dropdownNotItsOwnSheet) failures.push("properties property type picker: the real dropdown became its own independent sheet instead of being absorbed");
+    console.log(`  ${oneSheetBefore ? "PASS" : "FAIL"}  the column-manager parent mounts alone (${namedPairReplace.beforeSheets} sheet)`);
+    console.log(`  ${twoAfterFirstHop ? "PASS" : "FAIL"}  the real "Create property" panel (CreatePropertyModal's own panel role) stacks over it (${namedPairReplace.afterFirstHop} sheets)`);
+    console.log(`  ${stillTwoAfterSecondHop ? "PASS" : "FAIL"}  the real dropdown does not add a third sheet (${namedPairReplace.afterSecondHop} sheets)`);
+    console.log(`  ${dropdownGenuinelyOpened ? "PASS" : "FAIL"}  the real dropdown genuinely resolved a panel (not a no-op)`);
+    console.log(`  ${dropdownNotItsOwnSheet ? "PASS" : "FAIL"}  the dropdown was absorbed rather than becoming independent`);
+  }
+  console.log("");
+
+  console.log("sheet-grammar: properties property type picker negative control — a dialog-role \"Create property\" hop never offers a replace\n");
+  const namedPairControl = await page.evaluate(() => window.__namedPairPropertyTypeReplaceNegativeControl());
+  if (namedPairControl.error) {
+    failures.push(`properties property type picker negative control: ${namedPairControl.error}`);
+    console.log(`  FAIL  properties property type picker negative control — ${namedPairControl.error}`);
+  } else {
+    const stackedToThree = namedPairControl.afterSecondHop === 3;
+    const dropdownBecameOwnSheet = namedPairControl.dropdownBecameOwnSheet === true;
+    if (!stackedToThree) failures.push(`properties property type picker negative control: measured ${namedPairControl.afterSecondHop} sheet(s) over a dialog-role hop, wanted 3 — the cap must not fire on a role that never offers a replace`);
+    if (!dropdownBecameOwnSheet) failures.push("properties property type picker negative control: the dropdown did not become its own sheet over a dialog-role hop");
+    console.log(`  ${stackedToThree ? "PASS" : "FAIL"}  the same real dropdown stacks to a third sheet over a dialog-role hop (${namedPairControl.afterSecondHop} sheets)`);
+    console.log(`  ${dropdownBecameOwnSheet ? "PASS" : "FAIL"}  the dropdown became its own independent sheet rather than being absorbed`);
   }
   console.log("");
 

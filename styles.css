@@ -342,9 +342,23 @@
    equal-weight rule here loses on position alone. Doubling wins on specificity instead, which holds
    wherever this block sits and whatever is added after it. Measured: without it a parent under an
    open child painted at opacity 1 — the dim was written and never rendered. */
+/* Light theme's own workspace background sits ABOVE the sheet's opaque fill (an alpha-composite
+   model built from the measured before/after luminance pairs shows it, ≈258.7 against the sheet's
+   242), which bounds `opacity` alone between composite ratios of roughly 0.75 and 0.80 for light
+   theme regardless of value — raising or lowering 0.88 cannot reach 0.710 through that one
+   property. `filter: brightness()` is a second, independent step: it darkens the sheet's own
+   rendered pixels before the opacity composite runs, so it reaches the target where opacity alone
+   cannot. Dark theme's own workspace background sits far below the sheet's fill, so opacity alone
+   already lands inside the measured band there (0.7065) — the reset below keeps dark unmoved
+   rather than compounding a fix it does not need. */
 .db-mobile-bottom-sheet.is-stack-parent.is-stack-parent {
   opacity: 0.88;
-  transition: opacity var(--db-motion-surface);
+  filter: brightness(0.93);
+  transition: opacity var(--db-motion-surface), filter var(--db-motion-surface);
+}
+
+.theme-dark .db-mobile-bottom-sheet.is-stack-parent.is-stack-parent {
+  filter: none;
 }
 
 .db-mobile-bottom-sheet.is-stack-parent.is-stack-parent > :not(.db-mobile-bottom-sheet-handle) {
@@ -12998,9 +13012,23 @@ body.is-phone .note-database-container .db-record-detail-panel {
    close button as a press on the handle instead: verified with a real hit-test on the add-view
    sheet, not assumed. Extra top margin here, rather than shrinking the band, keeps the band's own
    calibration untouched for the surfaces it already fits and gives this family the same clearance
-   the tuning comment on the band itself describes. */
+   the tuning comment on the band itself describes.
+
+   Re-measured against the header-block target (the frame's top edge to the first row, measured
+   ~70pt on the reference this family is built against): 20px put the sort-panel's own block at
+   91px. Swept live against the add-view sheet's own hit-test
+   ("the sheet's grab band is a thumb-sized target", tools/storybook/verify-placement.mjs) at every
+   integer from 0 to 20 — 6px is the lowest value at which the close button still clears the band
+   (0 of 11 controls answered by it; 5px and below swallow db-sheet-close, confirming this margin
+   is load-bearing rather than decorative). 6px measures 77px on the sort-panel, closer but still
+   past the target's own tolerance: the remaining gap is bounded by the shared grab-band geometry
+   (`.db-mobile-bottom-sheet-handle::before`'s own -40px/-28px, tuned separately against the owned
+   menu's own tighter 45px clearance) rather than by this margin, and closing it further means
+   either retuning that shared band per-family — a wider blast radius, every close-button sheet
+   plus the handle-bearing menu surfaces it also governs — or shrinking the handle's own measured
+   drop below the top edge, which this family does not own. Left named rather than forced. */
 .db-mobile-bottom-sheet > .db-panel-header:has(.db-sheet-close) {
-  margin-top: 20px;
+  margin-top: 6px;
 }
 
 .note-database-container .db-panel-header-actions {

@@ -97,7 +97,7 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       anchor**: both register as stacks today; the replace move is a title swap and a back control
       (`surface-shell.ts:200-231`, `:428-432`) with **no body producer**, so `051` AC-003's two
       enumerated pairs are inexpressible. Depends on T004.
-      **Closed**: `attemptReplace` (`surface-shell.ts`) grafts the child's own element into the parent's content root, hides the parent's prior body and the child's own host container, swaps the header title via the existing sub-page stack, and shows the back control. Verified live (`sheet-grammar.mjs` depth-cap check): no third sheet, content grafted, title swapped, back control shown — all green. **Repaired at landing**: `createSurfaceShell.apply()` was still calling `placeSheet`/`keepSheetPlaced` on an element the cap had absorbed, so the grafted body kept `placeSheet`'s inline `position: fixed; left: 0; right: 0` and painted as a full-bleed layer over the parent it had just been grafted into — the parent frame collapsed to 95px and its freshly retitled header left the screen, while all four structural assertions above stayed green. `apply()` now returns early when the element does not carry `SHEET_SURFACE_CLASS` after the chrome pass, and the lane row gained two geometry assertions (computed position, containment in the parent's rect) that go red with that guard removed. **Not wired into the two named lane pairs' own registry entries** (`properties property type picker` / `add view property picker` still assert the pre-existing stack shape in `REGISTERED_STACKED_PAIRS`); the mechanism is proven generically rather than through those two specific rows, given the harness's own two hops there are synthetic stand-ins, not the real production call graph.
+      **Closed**: `attemptReplace` (`surface-shell.ts`) grafts the child's own element into the parent's content root, hides the parent's prior body and the child's own host container, swaps the header title via the existing sub-page stack, and shows the back control. Verified live (`sheet-grammar.mjs` depth-cap check): no third sheet, content grafted, title swapped, back control shown — all green. **Repaired at landing**: `createSurfaceShell.apply()` was still calling `placeSheet`/`keepSheetPlaced` on an element the cap had absorbed, so the grafted body kept `placeSheet`'s inline `position: fixed; left: 0; right: 0` and painted as a full-bleed layer over the parent it had just been grafted into — the parent frame collapsed to 95px and its freshly retitled header left the screen, while all four structural assertions above stayed green. `apply()` now returns early when the element does not carry `SHEET_SURFACE_CLASS` after the chrome pass, and the lane row gained two geometry assertions (computed position, containment in the parent's rect) that go red with that guard removed. **The two named lane pairs' own real call graph is now asserted, on a second follow-up leg** — see T004's own closed note and `acceptance-criteria.md` AC-001 for the detail: `properties property type picker` gained a dedicated, additive check that mounts the real column-manager parent, a real panel-role `createSurfaceShell` consumer, and a real dropdown; its own `REGISTERED_STACKED_PAIRS` entry is left unchanged (still the synthetic stand-in, still green) since retargeting the shared 18-assertion battery every pair runs through was judged out of scope for one pair whose absorbed outcome that battery does not fit. `add view property picker` was traced and confirmed already real at its own native two-level depth.
 - [x] **T006 Make the declared role load-bearing and ship the `menu` card** (`src/views/surface-shell.ts`,
       `src/views/popover-host.ts`, `styles.css`). **Threshold**: a `menu`-role phone surface carries
       **no grab handle**, keeps the **44px close** (ADR-007 **E1**), the presentation resolves
@@ -220,11 +220,20 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       `buildShellHeaderChip` (`surface-shell.ts`) exist with the measured CSS classes
       (`.db-shell-primary-pill`, `.db-shell-header-chip`), but carry **no lane row yet** and no
       current production call site — they are producers a future consumer can call, not a wired
-      surface. **The header-block clause is untouched**: its 20px top margin is the SAME rule the
-      row-59 era tuned specifically to keep the close button clear of the grab band's own hit-test
-      (`styles.css`'s own comment on `.db-mobile-bottom-sheet > .db-panel-header:has(.db-sheet-close)`),
-      and reducing it toward 70pt without a real hit-test re-verification risks reintroducing that
-      exact regression. Left red rather than forced. Named here rather than silently dropped.
+      surface. **The header-block clause is narrowed but still red, on a second follow-up leg.**
+      Its 20px top margin was swept live from 0 to 20px against `tools/storybook/
+      verify-placement.mjs`'s own real hit-test ("add view: the sheet's grab band is a thumb-sized
+      target"): below 6px the close button is swallowed by the grab band, reproducing the exact
+      row-59-era regression this rule was tuned to prevent, confirming it is load-bearing rather
+      than decorative. 6px is the safe floor — `margin-top: 6px` now ships, measured at **77px** on
+      the `sort-panel` surface (was 91px), still past the 66-74px band. The residual 3-7px is
+      bounded by the shared grab-band geometry (`.db-mobile-bottom-sheet-handle::before`'s own
+      `-40px`/`-28px`, tuned separately against the owned-menu surface's own tighter 45px
+      clearance) or by the handle's own already-closed 6pt drop (T014) — closing it further needs
+      either a per-family band retune (every close-button sheet) or reopening that already-verified
+      geometry, neither of which this leg's file group covers. Verified safe: `node tools/
+      storybook/verify-placement.mjs` (413/415, matching the recorded baseline exactly) and
+      `node tools/live/touch-targets.mjs` (PASS, nothing newly under 28px).
       **`buildPrimaryActionPill`/`buildShellHeaderChip` disposition, reviewed on the follow-up
       leg**: kept as documented producers, not removed and not force-wired. Wiring either to a
       real consumer is a product decision — which form sheet trades its cancel/confirm button row
@@ -291,6 +300,18 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       this packet has for T005: **the first-level child is fully buried** in all three chains, its
       rect contained entirely inside the top child's, so nothing of the middle level survives in any
       of the six images. Depends on T005.
+      **Closed for one of the two named pairs, on a second follow-up leg.**
+      `constructed-depth3-property-type-picker-replaced` (both themes) is the AFTER picture of
+      `properties property type picker`'s own before scenario beside it: the same "Create
+      property" chain, but its first level is a real `createSurfaceShell({ role: "panel" })`
+      consumer instead of a bare host-modal stand-in, so the real dropdown opened over it is
+      absorbed rather than stacking a third sheet. Opened and read: the panel's own body is
+      swapped for the dropdown's option list, the header title unchanged (the real dropdown
+      carries no title element for `readReplacementTitle` to scrape a swap from, which is the true
+      production outcome for this specific kind of replace, not a capture defect). `add view
+      property picker` gets no replace-pair capture — traced this leg and confirmed its own real
+      chain is two levels with no third to replace (see `decision-record.md`), so there is nothing
+      for a before/after pair to show.
 - [ ] **T021 [P] Divider-inset audit** (`styles.css`). **Threshold**: C8's three contexts each
       verified — plain rows symmetric **20pt ± 1**, rows with a leading icon aligned to the text
       column, between-section dividers full-bleed. **Red-first anchor**: the research **explicitly

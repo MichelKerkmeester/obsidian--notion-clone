@@ -120,6 +120,7 @@ describe("constructed scenario registry", () => {
       "constructed-depth3-column-submenu",
       "constructed-depth3-import-confirm-dropdown",
       "constructed-depth3-property-type-picker",
+      "constructed-depth3-property-type-picker-replaced",
       "constructed-dropdown",
       "constructed-dropdown-desktop-sheet",
       "constructed-dropdown-search",

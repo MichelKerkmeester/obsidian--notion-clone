@@ -180,6 +180,7 @@ import { attachSheetChromeToModal } from "${fileURLToPath(new URL("../../src/vie
 import { keepSheetPlaced, placeSheet } from "${fileURLToPath(new URL("../../src/views/popover-position.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { openDropdownMenu } from "${fileURLToPath(new URL("../../src/views/dropdown-field.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { createOwnedMenu } from "${fileURLToPath(new URL("../../src/views/owned-menu.ts", import.meta.url)).replace(/\\/g, "/")}";
+import { createSurfaceShell } from "${fileURLToPath(new URL("../../src/views/surface-shell.ts", import.meta.url)).replace(/\\/g, "/")}";
 
 const stackedLaneNewestSheet = () => Array.from(document.body.querySelectorAll(".db-mobile-bottom-sheet")).at(-1) || null;
 
@@ -265,6 +266,51 @@ window.__mountConstructedDepth3Stack = (spec) => {
 
   const secondPanel = openStackedLaneDropdown(firstPanel, spec.title);
   return Boolean(secondPanel);
+};
+
+// The AFTER picture of the same chain: the first level's own "modal" shape built as a real
+// createSurfaceShell({ role: "panel" }) consumer, the same call the production CreatePropertyModal
+// makes, rather than the bare attachSheetChromeToModal openStackedLaneModal above uses for the
+// unconverted menu-stack pairs. That is the one difference the depth cap can see -- a panel-role
+// shell offers a replace, so the second level's own real dropdown gets absorbed into the first
+// panel's body (a back control, the swapped title) instead of stacking as its own third sheet. The
+// picture this produces is the replaced state, not a photograph the cap has been told to fake.
+const openStackedLaneReplaceableModal = (title) => {
+  const { contentEl: content, modalEl } = createHostModalStandIn();
+  const heading = document.createElement("h3");
+  heading.textContent = title;
+  content.appendChild(heading);
+  const body = document.createElement("div");
+  body.className = "db-modal-help";
+  body.textContent = "Confirm this change";
+  content.appendChild(body);
+  let shellRef;
+  shellRef = createSurfaceShell({
+    presentation: "sheet",
+    element: modalEl,
+    close: () => shellRef.destroy(),
+    title,
+    role: "panel",
+  });
+  shellRef.apply();
+  return modalEl;
+};
+
+window.__mountConstructedDepth3Replace = (spec) => {
+  let parentSheet = null;
+  runRenderAssertions(document.body, spec.parent, "", () => {
+    parentSheet = document.body.querySelector(".db-mobile-bottom-sheet");
+  });
+  if (!parentSheet) return false;
+
+  const firstPanel = openStackedLaneReplaceableModal(spec.title);
+  if (!firstPanel) return false;
+
+  openStackedLaneDropdown(firstPanel, spec.title);
+  // Unlike the stacking mount above, success here is never a THIRD sheet -- it is the absence of
+  // one, with the first panel still the newest and still the one thing on screen to photograph.
+  return document.body.querySelectorAll(".db-mobile-bottom-sheet").length === 2
+    && stackedLaneNewestSheet() === firstPanel;
 };
 `;
 
@@ -478,6 +524,21 @@ export async function mountConstructedDepth3Stack(page, device, theme, spec) {
   return ready ? page.$("#shot") : null;
 }
 
+// The AFTER half of the same chain: the first level built as a real panel-role shell instead of a
+// bare host-modal stand-in, so the second level's own real dropdown is offered a replace rather
+// than stacking as a third sheet. Same host, same portal-to-body reasoning as the stacking mount
+// above -- only which window function runs differs.
+export async function mountConstructedDepth3Replace(page, device, theme, spec) {
+  if (!constructedBundle) {
+    throw new Error("constructed capture: no bundle prepared — build it before mounting");
+  }
+  const host = join(constructedBundle.work, `host-depth3-replace-${spec.id}-${device.id}-${theme}.html`);
+  writeFileSync(host, constructedHostHtml(device, theme));
+  await page.goto(pathToFileURL(host).href, { waitUntil: "load" });
+  const ready = await page.evaluate((s) => window.__mountConstructedDepth3Replace(s), spec);
+  return ready ? page.$("#shot") : null;
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 4. THE CONSTRUCTED SCENARIO CONTRACT
 // ───────────────────────────────────────────────────────────────────
@@ -652,6 +713,29 @@ function constructedDepth3Scenario(name, opts) {
       id: name,
       parent: opts.parent,
       first: opts.first,
+      title: opts.chainTitle,
+    }),
+  };
+}
+
+// The replaced-in-place counterpart to a stacking depth-3 chain: same parent, same chain title,
+// but the first level is a real panel-role shell rather than a bare host-modal stand-in, so the
+// picture shows the depth cap's own outcome -- two sheets, not three -- for the one pair the cap
+// actually governs.
+function constructedDepth3ReplaceScenario(name, opts) {
+  return {
+    id: `constructed-depth3-${name}-replaced`,
+    title: opts.title,
+    group: "panels",
+    capture: "viewport",
+    devices: ["mobile"],
+    renderer: "depth3-stack",
+    bag: "file-view",
+    sources: opts.sources,
+    note: opts.note,
+    mount: async (page, device, theme) => mountConstructedDepth3Replace(page, device, theme, {
+      id: name,
+      parent: opts.parent,
       title: opts.chainTitle,
     }),
   };
@@ -1471,9 +1555,23 @@ export const CONSTRUCTED_SCENARIOS = [
     sources: DEPTH3_SHELL_SOURCES.concat(STACKED_PARENT_SOURCES),
     note: "sheet-grammar.mjs's own \"properties property type picker\" pair (depth: 3): the "
       + "Properties sheet, a \"Create property\" host-modal stand-in stacked over it, and a real "
-      + "dropdown opened over that in turn. The sheet family's own true-up converts this chain's "
-      + "real counterpart to an in-place sub-page on the strength of Anytype's own capture; the "
-      + "pair stays registered at depth 3 here because that conversion has not landed.",
+      + "dropdown opened over that in turn — the BEFORE picture of the pair the depth cap now "
+      + "governs for real. The first level here is a bare stand-in on purpose, the same shape the "
+      + "cap does not reach; the replaced-in-place AFTER picture is the "
+      + "\"property-type-picker-replaced\" scenario beside this one.",
+  }),
+  constructedDepth3ReplaceScenario("property-type-picker", {
+    title: "Create property → format picker, replaced in place over the Properties sheet (constructed)",
+    parent: { renderer: "column-manager", bag: "file-view", captureData: true },
+    chainTitle: "Create property",
+    sources: DEPTH3_SHELL_SOURCES.concat(STACKED_PARENT_SOURCES),
+    note: "The AFTER half of the pair beside this one: the same Properties sheet and the same "
+      + "\"Create property\" chain title, but the first level is a real createSurfaceShell({ role: "
+      + "\"panel\" }) consumer — the same call CreatePropertyModal itself makes — so the real "
+      + "dropdown opened over it is offered a replace instead of stacking as a third sheet. Two "
+      + "sheets on screen, not three; sheet-grammar.mjs's own "
+      + "\"properties property type picker — the real call graph under the depth cap\" check "
+      + "asserts the same outcome live, this scenario is the photograph of it.",
   }),
   constructedDepth3Scenario("column-submenu", {
     title: "Column menu → submenu, stacked three deep over the record sheet (constructed)",

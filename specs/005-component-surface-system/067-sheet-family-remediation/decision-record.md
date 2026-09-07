@@ -12,10 +12,10 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/067-sheet-family-remediation"
-    last_updated_at: "2026-09-07T00:05:00+02:00"
-    last_updated_by: "operator-ruling-session"
-    recent_action: "Flipped ADR-002, ADR-003, ADR-004 to Accepted per 2026-09-07 operator rulings"
-    next_safe_action: "Implement T004-T008 per the four ADRs; ADR-001 is the only one still Proposed"
+    last_updated_at: "2026-09-07T17:00:00Z"
+    last_updated_by: "second-follow-up-leg-session"
+    recent_action: "Verified ADR-001's real call graph for properties property type picker"
+    next_safe_action: "Await operator acceptance of ADR-001"
     blockers: []
     key_files:
       - "src/views/overlay-stack.ts"
@@ -172,13 +172,30 @@ that parent is already two deep, and only `panel`/`condition panel`-role `create
 consumers ever set one. Verified: `overlay-stack.test.ts` (three new unit cases) and a live
 `sheet-grammar.mjs` check driving real `createSurfaceShell` end to end, both the positive case (no
 third sheet, content grafted, title swapped, back control shown) and a `dialog`-role negative
-control (stacks to three, as a menu-stack must). **Not verified**: the two NAMED lane pairs this
-ADR cites (`properties property type picker`, `add view property picker`) still assert their
-pre-existing stack shape in `REGISTERED_STACKED_PAIRS` — both hops in that harness are synthetic
-stand-ins rather than the real production call graph, so the mechanism is proven generically rather
-than through those two specific rows. This status field stays `Proposed` because its own
-"Deciders" row names the operator and nothing here changes that; what is now settled is that the
-approach builds and measures as designed.
+control (stacks to three, as a menu-stack must). **Verified for one of the two NAMED lane pairs
+this ADR cites, on a second follow-up leg.** `properties property type picker`'s own
+`REGISTERED_STACKED_PAIRS` entry is unchanged — retargeting the SHARED 18-assertion battery every
+one of the 32 registered pairs runs through was judged too wide a blast radius for one pair whose
+absorbed outcome that battery does not measure — but a dedicated, additive check
+(`tools/live/sheet-grammar.mjs`, "properties property type picker — the real call graph under the
+depth cap") now proves the SAME mechanism through the pair's own real production shapes rather than
+a generic stand-in: a real column-manager parent (`runRenderAssertions`), a real
+`createSurfaceShell({ role: "panel" })` consumer for the "Create property" hop — the exact call the
+production `CreatePropertyModal` class makes for its own declared `panel` role, confirming ZERO
+production code changes were needed since the mechanism is role-driven rather than per-consumer —
+and the real `openDropdownMenu` for the type picker. Measured: 1 sheet before, 2 after the real
+panel opens, still 2 (not 3) after the real dropdown opens; a `dialog`-role negative control (the
+same real dropdown, over a hop that never offers a replace) confirms it then stacks to 3, proving
+the check can tell the two cases apart. `node tools/live/sheet-grammar.mjs` exits 0 with both
+green. **`add view property picker` needed no equivalent check.** Traced this leg
+(`toolbar-renderer.ts`'s `showAddViewMenu`/`createAddViewField`, the view's key-field
+`createDropdownField` call): its registered two-level test shape already matches its own real
+production chain exactly — a real toolbar/add-view sheet and a real `createDropdownField` picker
+choosing an EXISTING column, with no synthetic stand-in anywhere in it and no third level for the
+depth cap to reach. It was not force-extended to a fake third level just to have something to
+rewire. This status field stays `Proposed` because its own "Deciders" row names the operator and
+nothing here changes that; what is now settled is that the approach builds and measures as
+designed, against BOTH the generic proof and one pair's own real call graph.
 <!-- /ANCHOR:adr-001-impl -->
 <!-- /ANCHOR:adr-001 -->
 

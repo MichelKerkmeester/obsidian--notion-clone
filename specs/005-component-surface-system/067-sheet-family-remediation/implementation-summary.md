@@ -11,10 +11,10 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/067-sheet-family-remediation"
-    last_updated_at: "2026-09-07T12:00:00Z"
-    last_updated_by: "follow-up-leg-session"
-    recent_action: "T006 closed live; ADR-003 pull-back dropped on the operator ruling; landed on main"
-    next_safe_action: "Close T015 header block, T020, T021, and the lane-pair rewiring"
+    last_updated_at: "2026-09-07T17:00:00Z"
+    last_updated_by: "second-follow-up-leg-session"
+    recent_action: "Closed AC-003 light figure, verified real call graph, narrowed T015 header block"
+    next_safe_action: "Fix T015 header block margin and audit T021 dividers"
     blockers:
       - "T023 is the operator's device read"
     key_files:
@@ -24,9 +24,8 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-067-impl"
       parent_session_id: null
-    completion_pct: 62
-    open_questions:
-      - "Whether a theme-scoped darkening mechanism (e.g. filter: brightness()) should close the light stacked-parent figure, and at what value"
+    completion_pct: 70
+    open_questions: []
     answered_questions:
       - "The commit-id discrepancy the research flagged is not one: be578988, 772b24d2 and e632a1e1 are three commits with three roles"
       - "Dimmed parent under a stacked menu, per the operator's 2026-09-07 Notion ruling (ADR-002)"
@@ -47,7 +46,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 067-sheet-family-remediation |
-| **Completed** | Landed on `main` 2026-09-07, follow-up leg closed T006 and ADR-003's page pull-back the same day; not device-verified — T015's header-block clause, T020, T021 (partial), the two named lane pairs' rewiring and AC-011 remain open |
+| **Completed** | Landed on `main` 2026-09-07, first follow-up leg closed T006 and ADR-003's page pull-back the same day; second follow-up leg (same day) closed AC-003's remaining light-theme figure, verified `properties property type picker`'s real call graph, closed T020's replace-pair capture for that pair, and narrowed T015's header block; not device-verified — T015's header-block clause, T021 (partial) and AC-011 remain open |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -82,15 +81,23 @@ audit got a partial, styles.css-only reading (not a reference-capture comparison
 `buildPrimaryActionPill`/`buildShellHeaderChip` were reviewed and deliberately kept as documented
 producers rather than removed or force-wired.
 
-**Still not built**: the header-block margin re-tune (T015's third clause — left red to avoid
-reintroducing a documented close/grab-band touch-target regression), the replace-pair capture
-scenarios (T020), the two named lane pairs' (`properties property type picker`, `add view
-property picker`) rewiring to the real depth-cap call graph (proven generically instead — see
-Known Limitations #2, unchanged this session), the light-theme stacked-parent recalibration (a
-model was built showing `.is-stack-parent`'s bare `opacity` cannot reach the target for light
-theme alone; a theme-scoped darkening mechanism was identified but not implemented or verified),
-and the 17 stale sheet-family captures named on `tools/lane/css-lane.json`'s `outstanding` row
-(not reviewed this session). AC-011 is the operator's device read and is untouched.
+**Second follow-up leg (same day), on top of both legs above**: the light-theme stacked-parent
+figure closed (`filter: brightness(0.93)`, reset to `none` in dark, measured 0.707 against a
+0.758 red, dark unmoved at 0.717), `properties property type picker`'s own real call graph
+verified live (a real column-manager parent, a real panel-role `createSurfaceShell` consumer, a
+real dropdown — absorbed rather than stacking, with a dialog-role negative control), `add view
+property picker` traced and confirmed already real at its own native two-level depth (no rewiring
+needed), the replace-pair capture closed for `properties property type picker` (both themes,
+before and after, opened and read), and the header-block margin swept live from 0-20px against a
+real hit-test to find its safe floor (6px, measuring 77px against the 66-74px target — narrower,
+still red for a reason bounded outside this leg's file group).
+
+**Still not built**: the header-block margin's final close (needs either a per-family grab-band
+retune or reopening the already-`Met` handle-drop geometry, both outside this leg's file group —
+see Known Limitations #5), T021's divider-inset audit (still a styles.css reading, not a
+reference-capture comparison — see Known Limitations #6), and the 17 stale sheet-family captures
+named on `tools/lane/css-lane.json`'s `outstanding` row (not reviewed this session). AC-011 is the
+operator's device read and is untouched.
 
 ### Files Changed
 
@@ -115,6 +122,10 @@ and the 17 stale sheet-family captures named on `tools/lane/css-lane.json`'s `ou
 | `screenshots/**/*.png` (73 files at landing, 19 more on the follow-up leg), `screenshots/manifest.json` | Modified | Recaptured after the scrim/handle/motion/row-pitch changes, then again after the follow-up leg's menu-card and page-pull-back rules; byte-only re-encodes restored to their committed bytes both times |
 | `tools/lane/css-lane.json` | Modified | CSS lane handed over from `063-notion-dropdown-refinement` to this phase at landing (73 real changes named); acquired and released TWICE on the follow-up leg — once at 19 real changes for the menu-card fix plus the (then still present) page-pull-back, and again after the page-pull-back's revert moved the baseline hash a second time, correcting the set to the 12 changes the menu-card fix alone produces (2 excluded both times as already fixed on `main` by an unrelated packet) |
 | `tools/live/*.json` (evidence artefacts) | Modified | Regenerated against the moved `styles.css`/`mobile-bottom-sheet.ts` |
+| `styles.css` (second follow-up leg) | Modified | The stacked-parent `filter: brightness(0.93)` (reset to `none` in `.theme-dark`) closing AC-003's light figure; the header-block `margin-top` re-derived from 20px to the safety-verified 6px floor |
+| `tools/live/sheet-grammar.mjs` (second follow-up leg) | Modified | A permanent "stacked-parent filter" lane row plus its negative control; a new `openRealPanelShellChild` construction and a dedicated "properties property type picker — the real call graph under the depth cap" check plus its dialog-role negative control, additive beside the existing `REGISTERED_STACKED_PAIRS` entry |
+| `tools/screenshots/constructed-scenarios.mjs` (second follow-up leg) | Modified | A new `constructedDepth3ReplaceScenario` helper and the `constructed-depth3-property-type-picker-replaced` scenario (the AFTER picture of the existing BEFORE one), both themes |
+| `screenshots/notion-clone/panels/constructed-depth3-column-submenu-mobile-light.png`, `constructed-depth3-property-type-picker-replaced-mobile-{dark,light}.png` (second follow-up leg) | Modified/Added | Recaptured for the filter fix (light only — dark is unmoved by construction) and the new replace-pair AFTER scenario |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -181,11 +192,24 @@ re-encodes falls under `screenshots/project-manager/`).
 
 1. **Nothing here is device-confirmed.** AC-011 is the operator's and untouched by this session —
    the family is built and gate-verified against a repository read, not a device read.
-2. **T005's replace producer is proven generically, not through the two NAMED lane pairs.**
-   `properties property type picker` and `add view property picker` in `REGISTERED_STACKED_PAIRS`
-   still assert their pre-existing stack shape; both hops in that harness are synthetic stand-ins,
-   not the real production call graph, so retargeting them was judged higher-risk than adding a
-   dedicated, real-`createSurfaceShell` depth-cap check (which exists and passes).
+2. **T005's replace producer is now also verified through one of the two NAMED lane pairs' own
+   real call graph, on a second follow-up leg.** `properties property type picker`'s
+   `REGISTERED_STACKED_PAIRS` entry is unchanged (still the synthetic two-hop stand-in, still
+   green) — retargeting the SHARED 18-assertion battery every one of the 32 registered pairs
+   shares was still judged too wide a blast radius for one pair whose absorbed outcome that
+   battery does not fit. Instead, a dedicated, additive check
+   (`tools/live/sheet-grammar.mjs`, "properties property type picker — the real call graph under
+   the depth cap") drives the SAME real modules: a real column-manager parent, a real
+   `createSurfaceShell({ role: "panel" })` consumer for the "Create property" hop (the exact call
+   the production `CreatePropertyModal` class makes), and the real `openDropdownMenu`. Measured: 1
+   sheet before, 2 after the real panel opens, still 2 (not 3) after the real dropdown opens —
+   confirming zero production code changes were needed, since the mechanism is role-driven rather
+   than per-consumer. A `dialog`-role negative control confirms the same real dropdown DOES stack
+   to 3 over a hop that never offers a replace. `add view property picker` needed no equivalent
+   check — traced this leg and confirmed its own registered two-level shape already matches its
+   real production chain exactly (a real toolbar/add-view sheet, a real `createDropdownField`
+   picker for an existing column, no synthetic stand-in anywhere in it, no third level for the cap
+   to reach).
 3. **T006 is now closed on the follow-up leg — the class-stripping regression is fixed and
    measured on all four production surfaces.** `setSheetMount`'s toggle is add-only, so a
    placement pass with `menuCard` undefined no longer undoes a class `mountPickerSheetHeader`
@@ -218,25 +242,32 @@ re-encodes falls under `screenshots/project-manager/`).
    not as a plan. The `.db-page-pulled-back` exemption this attempt had added to
    `tools/live/touch-target-measure.mjs` is removed with it, so no reference to the dropped class
    survives anywhere in `src`, `styles.css` or `tools`. **The light-theme stacked-parent figure
-   (0.758, from AC-003) remains open and was investigated further, not fixed**: an alpha-composite
-   model built from the recorded luminance pairs shows light theme's own workspace background sits
-   ABOVE the sheet's opaque background, which bounds `.is-stack-parent`'s bare `opacity` constant
-   between composite ratios of roughly 0.75 and 0.80 for light theme regardless of value — it
-   cannot reach 0.710 through that one property alone. A theme-scoped darkening mechanism
-   independent of `opacity` (e.g. a `filter: brightness()` step, reset for dark) was identified as
-   the likely fix but not implemented or verified.
-5. **T015's header-block clause, T020, and the two named lane pairs' rewiring are still open.**
-   The header block's 20px top margin is the same rule a prior phase tuned specifically to keep
-   the close button clear of the grab band's own hit-test; reducing it toward the measured 70pt
-   without a real hit-test re-verification risked reintroducing that regression, so it was left
-   red. `properties property type picker` and `add view property picker` in
-   `REGISTERED_STACKED_PAIRS` still assert their pre-existing stack shape rather than the shell's
-   real replace mechanism, for the reason limitation 2 above already gives; retargeting them to
-   drive real `createSurfaceShell` composition (the way the depth-cap's own dedicated check does)
-   is a distinct, deeper harness change not attempted this session. The replace-pair capture
-   scenarios (T020) were not reached either. `buildPrimaryActionPill`/`buildShellHeaderChip` were
-   reviewed and deliberately kept as documented producers rather than removed or force-wired,
-   matching T018's `heightRole` precedent in this same packet.
+   (was 0.758, from AC-003) is now closed, on a second follow-up leg.** The theme-scoped
+   darkening mechanism this limitation identified but did not implement — `filter: brightness()`,
+   reset for dark — now ships: `filter: brightness(0.93)` on `.is-stack-parent`, `filter: none`
+   under `.theme-dark`. Measured off decoded PNGs against the same control pair: light **242 →
+   171, ratio 0.707** (was 183/0.758), dark **46 → 33, ratio 0.717** (unmoved). Both inside 0.710 ±
+   0.02. A permanent lane row (`tools/live/sheet-grammar.mjs`, "stacked-parent filter") asserts the
+   computed value directly with a negative control; `node tools/live/sheet-grammar.mjs` exits 0.
+5. **T015's header-block clause narrowed but is still open; T020 closed for one of the two named
+   pairs; the pairs' own rewiring closed for one of them — all on a second follow-up leg.** The
+   header block's 20px top margin was swept live from 0 to 20px against a real hit-test
+   (`tools/storybook/verify-placement.mjs`'s "add view: the sheet's grab band is a thumb-sized
+   target"): below 6px the close button is swallowed, confirming the margin's own reasoning; 6px
+   is the safe floor, measuring 77px (was 91px) against the 66-74px target — narrower, still red.
+   The residual gap is bounded by the shared grab-band geometry or by reopening the already-closed
+   handle-drop geometry, neither in this leg's file group. `properties property type picker` in
+   `REGISTERED_STACKED_PAIRS` still asserts its pre-existing stack shape (unchanged, still green),
+   but now has a DEDICATED, ADDITIVE check proving its own real production call graph — a real
+   column-manager parent, a real panel-role `createSurfaceShell` consumer, a real dropdown —
+   respects the depth cap, with a negative control proving the check can tell a capped case from
+   an uncapped one. `add view property picker` needed no equivalent: traced this leg and confirmed
+   real at its own native two-level depth, with no third level for the cap to reach. The
+   replace-pair capture scenarios (T020) are closed for `properties property type picker` (before
+   and after, both themes, opened and read) and not applicable to `add view property picker` (no
+   third level to replace). `buildPrimaryActionPill`/`buildShellHeaderChip` were reviewed on the
+   first follow-up leg and deliberately kept as documented producers rather than removed or
+   force-wired, matching T018's `heightRole` precedent in this same packet — unchanged this leg.
 6. **T021's divider audit is partial — a styles.css reading, not a reference-capture comparison.**
    The leading-icon row case has a real mechanism (`.db-menu-item`'s inset hairline) that matches
    the described shape. The plain-row symmetric-20pt case has no mechanism at all anywhere in the
