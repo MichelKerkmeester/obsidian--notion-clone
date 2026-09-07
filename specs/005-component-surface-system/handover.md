@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: 220-rename-leg, 2026-09-07 19:52. 0.0.30 still shipped at e016e75c; 068's rename LANDED on worktree 220, not yet merged -- a fresh Opus verifier reviews and lands it, then cuts 0.0.31. All eight Notion-refinement children (059-066) are open with a first implementation leg each. 220 touched every class name in styles.css/src/tools/.storybook via a committed sweep script, plus the compat shim, the migration, and a byte-identical recapture; gate 26/26 green twice."
+description: "Resume point: 223-goal-refresh-0031, 2026-09-07 22:05. 0.0.31 shipped at 5e7f1426 as the RENAME release (id obnotion, vault obnotion/, repo obsidian_notion-clone). Four legs in flight, each awaiting a GLM lander: live-host-model (009 T26 device defect), 067 follow-up 3, the new 069-board-cross-group-drag child, and the timeline-to-table view-switch teardown fix. NO Opus agents (operator 2026-09-07 18:40); GLM 5.3 flash max via cli-pi DevPass carries landings/docs/releases, monitored every 5 min with a 15-min stall relaunch."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,24 +10,24 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-07T21:05:00Z"
-    last_updated_by: "220-rename-to-obnotion-landing-verifier"
-    recent_action: "Verified and pushed the 068 rename leg to main at e80f0775; gate 26/26"
-    next_safe_action: "Cut release 0.0.31 with the id-change notes and its three assets"
+    last_updated_at: "2026-09-07T22:16:00Z"
+    last_updated_by: "223-goal-refresh-0031"
+    recent_action: "Refreshed 005 state after 0.0.31 shipped; queued 069, timeline fix, 009 T26 padding"
+    next_safe_action: "Land the four in-flight legs via GLM landers, one at a time, then cut 0.0.32"
     blockers:
-      - "AC-014 (release) and AC-015 (operator device confirmation) are the only 068 rows still open"
-      - "061's device row (AC-005) and 067's gate row stay open behind the operator's iOS pass"
-      - "The primary checkout carries live uncommitted edits to 067's docs; reconcile before editing them"
-      - "Both claude logins share one session-cap window; write a continuation prompt per leg"
+      - "009 T26: .obnotion-panel-button sort-panel overflow ~10px under real host cascade (expectFail)"
+      - "069-board-cross-group-drag touch drag-and-drop leg in progress (worktree 224)"
+      - "timeline-to-table view-switch teardown residue in progress (worktree 225)"
+      - "live-host-model (wt 221) and 067 follow-up 3 (wt 222) landers pending"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
       - "specs/005-component-surface-system/roadmap.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "220-rename-to-obnotion-lander"
+      session_id: "223-goal-refresh-0031"
       parent_session_id: null
-    completion_pct: 84
+    completion_pct: 85
     open_questions:
       - "Does a Notion finding that contradicts a landed Anytype ruling ever become more than Proposed"
     answered_questions:
@@ -35,6 +35,7 @@ _memory:
       - "068 renames to obnotion- with a data.json migration, author MichelKerkmeester, repo obsidian_notion-clone"
       - "GLM route: --provider llmgateway --model glm-5.3-flash --thinking max"
       - "All eight Notion-refinement children are open with a first implementation leg each"
+      - "0.0.31 shipped 5e7f1426 as the rename release; NO Opus agents, GLM 5.3 flash max landers only"
 ---
 # Session Handover: Component Surface System
 
@@ -43,6 +44,62 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-07 ~22:05, 0.0.31 SHIPPED as the RENAME release — four legs queued for GLM landers
+
+**0.0.31 shipped at `5e7f1426`, the rename release.** Plugin id `obnotion`, name Obnotion, prefix
+`obnotion-` everywhere, a copy-never-move `data.json` bridge on first load, vault folder
+`.obsidian/plugins/obnotion/`, GitHub repo `obsidian_notion-clone`. Release:
+https://github.com/MichelKerkmeester/obsidian_notion-clone/releases/tag/0.0.31, published
+2026-09-07T19:20:19Z. `<scratchpad>/release-31.handover.md` records all 13 release steps DONE:
+tsc/build/vitest green, both CI workflows SUCCESS, the sha256 triad matched across the release
+asset, the local build and the installed iCloud copy, and the vault's old `note-database/data.json`
+mtime unchanged before/after the swap.
+
+**Landed 2026-09-07 (SHAs from `git log --oneline origin/main`):** 064 child + rulings, its
+implementation `b46f4ef2` and follow-up `9d798c69`; ClickUp harvest `69c58159` + reclassification
+`21392233`; 063 `a88894e5` + evidence gaps `755f2eac`; 067 fold `44101b47` + impl `173f7d3a` +
+follow-ups `53cb5bb4` (menu-card) and `7ffeecc6` (AC-003 light scrim); 060 `5fec918d`; 065
+`a0d64df0` + touch fix `8fb3c87e`; 066 `cbb854c4` + lane row `af0e8796` + toast settle `38d5a986`;
+059 `f2a7ec34`; 062 `2c8974fb` + freeze defects `3a94e58b`; 061 `abb6827f` + tap/dock `6ca4a5c3`;
+the Settings-sheet phone fix `232f5c38`/`b8876332` + guard rows `258d52d7`/`440da14d`; 030/056/057
+doc fixes `31eafb60`/`6d222e6e`; 068 rename `14e073b4`/`24b3d683`, closed out at `6f4d026c`. Ticks
+recounted live against each child's own `goal.md` §3 Completion Criteria: 059 9/10, 060 5/5, 061
+6/7, 062 8/9, 063 6/8, 064 7/8, 065 9/10, 066 4/6, 067 3/7, 068 5/8 — none moved since the last
+refresh.
+
+**In flight, each awaiting a GLM lander:** `live-host-model` (`.worktrees/221-live-host-model`,
+HEAD `77397c4b`, owns `009-live-verification` — the host stylesheet model, `sheet-rebuild` 836/836,
+the check-lane's `maxBuffer`; it also found a **new device defect, `009` `T26`**: the sort panel's
+`.obnotion-panel-button` overflows ~10px under the real host button cascade, recorded with a
+declared gate `expectFail`). `067 follow-up 3` (`.worktrees/222-sheet-family-followup-3`, HEAD
+`6f4d026c` — replaced-body labels, registry depth, pill/chip lane rows, the header-block residual,
+a divider audit). `069-board-cross-group-drag` (`.worktrees/224-board-touch-drag-groups`, HEAD
+`5e7f1426`, a NEW child — operator 21:40 verbatim: *"board view needs to support dragging to other
+groups and thus updating that property to match grouped field. Like clickup for example. You have
+task on status 'open' and drag board card to 'in progress'"* — desktop drag already updates the
+grouped property; touch drag never existed because cards were never draggable on touch; a Sonnet
+leg is building long-press lift, ghost, edge auto-scroll, drop = `moveCardAndOrder`, and an Undo
+toast). The timeline→table view-switch residue (`.worktrees/225-timeline-view-teardown`, HEAD
+`5e7f1426` — operator 21:55 verbatim: *"if you open timeline view then go back to table view, the
+timeline sits on top above table view for some reason and it glitches"* — a Sonnet leg is
+reproducing and fixing the teardown).
+
+**Primary-checkout worktree list** (`git worktree list`, from `/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin`):
+`065-anytype-research` `83fc7121`; `221-live-host-model` `77397c4b`; `222-sheet-family-followup-3`
+`6f4d026c`; `223-goal-refresh-0031` `5e7f1426` (this leg); `224-board-touch-drag-groups`
+`5e7f1426`; `225-timeline-view-teardown` `5e7f1426`.
+
+**Scratchpad paths a successor needs:** `<scratchpad>/pause-state.md`,
+`<scratchpad>/needs-followups.md`, `<scratchpad>/continuations/`, `<scratchpad>/glm/queue/`,
+`<scratchpad>/glm/monitor.sh`, `<scratchpad>/glm/launch-glm.sh`, `<scratchpad>/glm/pixel-delta.mjs`.
+
+**Standing rules (operator 2026-09-07 18:40):** NO Opus agents — GLM 5.3 flash max via cli-pi
+DevPass (`--provider llmgateway --model glm-5.3-flash --thinking max`) carries landings, docs and
+releases on scripted numbered briefs, judged by decoded pixel-delta, monitored every 5 min with a
+15-min stall relaunch; an Opus may only orchestrate GLM workers, never carry a leg itself; cap of
+four agents at once; every leg keeps `<worktree>/.handover.md` and writes the packet's handover
+entry.
 
 ### 2026-09-07 ~21:05, `068-rename-to-obnotion` LANDING VERIFICATION PASSED — leg PUSHED to `origin/main` at `e80f0775`
 
