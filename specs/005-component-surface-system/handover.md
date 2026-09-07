@@ -45,6 +45,40 @@ _memory:
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
 
+### 2026-09-07, `064-notion-toolbar-refinement` T015/T016 follow-up landed, from `.worktrees/212-toolbar-followups`
+
+**Base `3a94e58b`.** The follow-up closes the three gaps `tasks.md` T016 recorded and the
+undo-selection gap T015 recorded, and it needed a **second** landing verification (`T018`) because
+`T017`'s push never reached `main`: the branch was found two commits ahead of `origin/main` with
+sixteen re-derived evidence files uncommitted. Nothing was accepted from `T017`; every claim was
+re-mutated on this base and every one read red for its own reason —
+`addFirstLeaf(columns[0].key)` at `filter-panel-renderer.ts:275` (`expected 'file.name' to be
+'colB'`), the harness bag without `addFilter`/`addSort` (`0 add control(s), want 1`, both chip-rail
+scenarios), `.is-phone .db-toast-action` reverted (`30x15, under its named 44px floor`) and with the
+`RAISED` entry reverted as well (fixture **186** against a baseline of 185), and `deleteView`'s
+`viewId` override reverted (`expected +0 to be 1`). One wording correction that changes no result:
+the three suites mount a hand-built `FakeElement` tree, not a jsdom or browser DOM.
+
+**Two things worth carrying forward.** First, **a rebase that resolves `screenshots/manifest.json` to
+main's side silently invalidates the whole corpus** — the manifest kept main's `styles.css` hash, so
+the first gate run read **882** captures stale and `check-lane` had signed off a recapture that was
+no longer in the tree. Regenerate the manifest after any rebase that touches it. Second, the
+recapture moved 26 files and **21 of them are other lanes' debt, not this packet's**: seventeen are
+the sheet-family captures `css-lane.json`'s `outstanding` entry already books against `067`, and
+four are an **icon-picker class nobody has booked** — `field-icon-picker-desktop-{dark,light}` (4,923
+pixels at max channel delta 208, `pixelHash` DIFFERENT) and
+`constructed-icon-picker-desktop-{dark,light}` (1,637 at 112/132, `pixelHash` identical). Ownership
+was proved rather than argued: recapturing with **`origin/main`'s own `styles.css`** checked into the
+tree reproduces the new bytes and still differs from the committed PNG by the identical 4,923 pixels,
+so they were stale against `origin/main` before this branch existed. All 21 were opened, read and
+committed rather than restored, and the css-lane release names them (`reviewed` **4 → 25**).
+
+`npx tsc --noEmit` 0 · `npx vitest run` 0 (**151 files / 1630 tests**) · `npm run build` 0 ·
+`npm run screenshots` 606 entries with `screenshots:verify` 0 · `check-lane` 0 ("release names all
+21 changed capture(s)") · `npm run gate` **26 green, exit 0** · packet validation `RESULT: PASSED`,
+Errors 0 Warnings 0. `goal.md` still derives **7/8 = 88%**; the eighth is AC-011, the operator's
+device row, and it was not touched.
+
 ### 2026-09-06 ~20:10, `orchestrate-handover-24`, read from `.worktrees/193-goal-refresh-0930`
 
 **Documentation only.** No `src/`, `styles.css`, `tools/` or `main.js` file was touched. Main moved

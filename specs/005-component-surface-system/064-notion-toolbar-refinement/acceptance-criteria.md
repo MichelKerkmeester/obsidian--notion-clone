@@ -118,14 +118,17 @@ its own is closed, **re-derived at the landing on the rebased tree** (twenty-sev
 from `059`, `060`, `061`, `062`, `065` and `066`), then further closed by this follow-up: the
 three T016(a) gaps (the surviving `addFirstLeaf` mutant, the chip-rail add control's missing
 photograph, and the sort/active-view-controls suites' own source-grep coverage) and T016(b)'s
-unphotographed add control are closed by mounting real DOM in
+unphotographed add control are closed by mounting the renderers on a hand-built element tree in
 `filter-panel-renderer.test.ts`/`sort-panel-renderer.test.ts`/`active-view-controls-renderer.test.ts`
+— the `FakeElement` idiom `view-config-panel-renderer.test.ts` already uses, not a jsdom or browser
+DOM, a wording corrected at the second landing without changing any result —
 and by supplying `addFilter`/`addSort` in `render-assertion-harness.ts`'s own actions bag; T016(c)'s
 29x14 `.db-toast-action` tap target is raised to a 44px phone floor (`styles.css`, `.is-phone
 .db-toast-action`) with a matching `RAISED` entry in `tools/live/touch-targets.mjs`; and AC-001's
 recorded gap — undo not restoring the selected tab — is fixed in `deleteView` (`database-view.ts`).
 `npx tsc --noEmit`, `npm run build` and `npx vitest run` (149 files / **1602** tests, **1609**
-on the follow-up landing's rebased tree — the four added are main's own) all exit
+on the follow-up landing's rebased tree, **151 files / 1630 tests** on the second landing's base
+`3a94e58b` — every added case is main's own) all exit
 **0**, and `npm run gate` exits **0** at **26 green, 0 red for a declared reason** — including
 `toolbar-collapse` (observed red in T001, green after T007) and `sheet-rebuild` (three scoped
 fixes recorded in `tasks.md` T011, the third one made at the landing after the leg's own

@@ -525,6 +525,55 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       changed capture(s)"; `npm run gate` exit **0**, **26 green, 0 red for a declared reason** on both
       passes, after the stale evidence artefacts each run named (eight, then twelve) were
       re-derived by their own tools. Packet validation `RESULT: PASSED`, 0 errors 0 warnings.
+- [x] T018 [P0] **Second landing verification of the same follow-up, on a new base (Opus).** The
+      branch was verified again from `worktrees/212-toolbar-followups` at base `origin/main`
+      **`3a94e58b`**, because T017's landing never reached `main`: `origin/main` had moved past both
+      bases T017 names, and the branch sat two commits ahead of `3a94e58b` with sixteen re-derived
+      evidence files uncommitted. Nothing was accepted from T017; every claim was re-mutated on
+      this base. **`addFirstLeaf(columns[0].key)`** for `col.key` at `filter-panel-renderer.ts:275`
+      fails `filter-panel-renderer.test.ts` with `expected 'file.name' to be 'colB'`. **Removing
+      `addFilter`/`addSort`** from `render-assertion-harness.ts`'s actions bag fails
+      `render-assertions.mjs` on both chip-rail scenarios — `0 add control(s), want 1`, exit **1**.
+      **Reverting `.is-phone .db-toast-action`** alone fails `touch-targets.mjs` with
+      `chrome-toast-success button.db-toast-action measured 30x15, under its named 44px floor`;
+      reverting the `RAISED` entry alone instead leaves the run at **185** and green, and reverting
+      **both** returns the fixture count to **186** against a baseline of 185 (`1 control(s) newly
+      under 28px`) — so the ceiling move is the CSS's and not an artifact of the `RAISED` list, the
+      exact claim `touch-targets-baseline.json`'s `toastActionRaise` makes. **Reverting
+      `deleteView`'s `viewId` override** fails `database-view.test.ts` with `expected +0 to be 1`.
+      A further probe raised the `db-toast-action` `RAISED` floor to a synthetic **200** and the run
+      still passed: `classifyBox` (`touch-target-measure.mjs:20`) returns `null` for any control
+      whose short side already clears `ENHANCED`, so the control's short side measures **≥ 44 CSS
+      px** at the corpus's own 402px phone fixture. One wording correction, which changes no
+      result: the three suites mount a hand-built `FakeElement` tree — the idiom
+      `view-config-panel-renderer.test.ts` uses — not a jsdom or browser DOM, and
+      `filter-panel-renderer.test.ts` sections 4-5 stay source pins by the design its own header
+      documents. All four changed captures were opened and read: the two chip-rail captures gain a
+      `+` control in each rule group, and the toast captures grow **804x354 → 804x416** (DPR 2, so
+      +31 CSS px, exactly 46 − 15) with Undo centred in the taller box. `npx tsc --noEmit` exit
+      **0**; `npx vitest run` exit **0**, **151 files / 1630 tests**; `npm run build` exit **0**
+      (`main.js` unchanged); `node tools/live/sheet-grammar.mjs` and
+      `node tools/live/render-assertions.mjs` exit **0**; `node tools/naming/scan-comments.mjs`
+      PASS, 502 files, 0 artifact-id violations. **The first gate run was RED**, on
+      `screenshots-fresh` alone and for a real reason T017 could not have seen: `screenshots/manifest.json`
+      had been resolved to main's side on T017's own rebase and never regenerated, so it still
+      carried main's `styles.css` hash and `verify.mjs` read **882** captures stale. `npm run
+      screenshots` (**606 entries**, `screenshots:verify` exit **0**) fixed it and moved 26 files.
+      Five are jitter, restored to their committed bytes with the manifest's `bytes` reconciled to
+      them (all 606 re-checked: 0 remaining mismatches, 0 `pixelHash` mismatches). The other
+      **21 are real and are not this packet's**: seventeen are the sheet-family debt
+      `css-lane.json`'s own `outstanding` entry records against `067`, matched to that entry's own
+      pixel numbers, and four are an icon-picker class it does not name. Ownership was proved, not
+      inferred — recapturing `field-icon-picker` with **`origin/main`'s own `styles.css`** in the
+      tree reproduces the new bytes and still differs from the committed PNG by the same 4,923
+      pixels at max channel delta 208, and `.is-phone .db-toast-action` cannot reach a desktop
+      capture in any case. All 21 were opened and read (each is a 1-2px sheet resting-position
+      shift with its scrim, or a ~2px shift of an icon row / "No results" label; no content,
+      colour or control differs) and committed rather than restored, with the css-lane release's
+      `reviewed` array extended **4 → 25** paths. `node tools/lane/check-lane.mjs` exit **0**,
+      "release names all 21 changed capture(s)". **`npm run gate` exit 0, 26 green, 0 red** on the
+      second run, after which seven evidence artefacts re-derived themselves and were committed.
+      Packet validation `RESULT: PASSED`, Errors 0 Warnings 0.
 - [ ] T013 [P0] **Operator row — never ticked by an agent.** The four device-only checks the loop
       named — icon-only rail discoverability on a phone, the entry tier inside the phone filter
       sheet, the delete confirm as a stacked sheet, and tabs against the view switcher both
@@ -660,7 +709,8 @@ counts. `T015` (landing verification) and `T016` (the three gaps that landing re
 at the landing and are closed; a follow-up has since closed all three gaps `T016` named and the
 undo-selection gap `T015` recorded — none of them ever blocked a criterion this packet could close,
 and none is open any longer. `T017` is that follow-up's own landing verification, added on the
-rebase onto `6ca4a5c3` and closed there; like `T015` and `T016` it is not a `CHK-*` row.
+rebase onto `6ca4a5c3` and closed there, and `T018` is a second one on a later base (`3a94e58b`)
+after `T017`'s push never reached `main`; like `T015` and `T016` neither is a `CHK-*` row.
 
 **Verification Date**: 2026-09-07
 <!-- /ANCHOR:summary -->

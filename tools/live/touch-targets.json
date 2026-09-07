@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-07T11:07:05.899Z",
+  "measuredAt": "2026-09-07T11:32:37.396Z",
   "inputs": {
-    "tools/live/touch-targets.mjs": "22968869bd42",
+    "tools/live/touch-targets.mjs": "d111529201c4",
     "tools/live/touch-target-measure.mjs": "cf15edfd5901",
     "tools/live/render-assertion-bundle.mjs": "adbe26aa26fb",
     "tools/live/render-assertion-harness.ts": "4af685daa59b",
