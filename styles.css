@@ -1409,10 +1409,6 @@
   margin-left: 4px;
 }
 
-.note-database-container tr.db-conditional-format > td:not(.db-conditional-format) {
-  background-color: var(--db-conditional-format-bg, transparent);
-}
-
 .note-database-container td.db-conditional-format,
 .note-database-container .db-board-card-field.db-conditional-format,
 .db-mobile-bottom-sheet .db-record-detail-field.db-conditional-format,
@@ -5622,28 +5618,58 @@ body.db-bottom-dock-taken .note-database-container .db-cell-selection-pill {
 }
 
 /* Per-column freeze (desktop only). The phone switches to content-driven auto layout with no
-   horizontal overflow to freeze against (see the .is-phone table rules further down), so the
-   sticky/left declarations below are scoped away from it explicitly rather than relying on the
-   phone's own width overrides to happen to cancel them out. `--db-frozen-left` is computed once
-   per render in table-renderer.ts (NFR-P01) and never in CSS. */
-.note-database-container:not(.is-phone) .db-table th.db-frozen-col,
-.note-database-container:not(.is-phone) .db-table td.db-frozen-col {
+   horizontal overflow to freeze against, so the sticky/left declarations below apply
+   unconditionally here and the .is-phone override further down turns them off explicitly — this
+   stylesheet puts `is-phone` on the body, an ancestor of `.note-database-container`, never on the
+   container itself, so a `:not(.is-phone)` scope on the container matches every render and was
+   inert. `--db-frozen-left` is computed once per render in table-renderer.ts (NFR-P01) and never
+   in CSS. */
+.note-database-container .db-table th.db-frozen-col,
+.note-database-container .db-table td.db-frozen-col {
   position: sticky;
   left: var(--db-frozen-left, 0px);
   z-index: 1;
 }
 
-.note-database-container:not(.is-phone) .db-table thead th.db-frozen-col {
+.note-database-container .db-table thead th.db-frozen-col {
   z-index: 2;
 }
 
 /* Nothing at rest. The last frozen column paints a soft right-edge shadow only once the table
-   has scrolled sideways, so a reader can see content passing under it rather than beside it —
-   a design that is ours, not copied from anything, since no reference capture shows a frozen
-   state. The colour is Obsidian's own component-shadow token rather than a sampled value, so it
-   already resolves per theme. */
-.note-database-container.is-scrolled-x:not(.is-phone) .db-table .db-frozen-col-last {
-  box-shadow: 4px 0 6px -4px var(--background-modifier-box-shadow, rgba(0, 0, 0, 0.25));
+   has scrolled sideways, so a reader can see content passing under it rather than beside it — a
+   design that is ours, not copied from anything, since no reference capture shows a frozen state.
+   Themed per surface rather than through Obsidian's own token: no shipped theme defines
+   `--background-modifier-box-shadow`, so the fallback literal painted identically in both themes,
+   and darkening an already near-black surface cannot read the way the same treatment reads
+   against a near-white one — measured 255 to luminance 225 over 13px in light (contrast ≈1.3:1)
+   against only 30 to 26 over 5px in dark (≈1.05:1, less visible than an ordinary border). Dark
+   theme lightens instead of darkening, which is the only direction with room to move against a
+   surface this dark. */
+.note-database-container {
+  --db-frozen-col-shadow: 4px 0 6px -4px rgba(0, 0, 0, 0.25);
+}
+
+.theme-dark .note-database-container {
+  --db-frozen-col-shadow: 4px 0 6px -4px rgba(255, 255, 255, 0.35);
+}
+
+.note-database-container.is-scrolled-x .db-table .db-frozen-col-last {
+  box-shadow: var(--db-frozen-col-shadow);
+}
+
+/* The phone has no horizontal overflow to freeze against. A stale db-frozen-col class from a real
+   render never reaches here (computeFrozenLayout returns empty on a touch render), but a
+   hand-authored capture fixture can still carry the class, so the sticky offset and the shadow
+   are collapsed back to nothing explicitly rather than left to rely on that. */
+.is-phone .note-database-container .db-table th.db-frozen-col,
+.is-phone .note-database-container .db-table td.db-frozen-col {
+  position: static;
+  left: auto;
+  z-index: auto;
+}
+
+.is-phone .note-database-container.is-scrolled-x .db-table .db-frozen-col-last {
+  box-shadow: none;
 }
 
 /* Sticky 表头（未分组时）：粘在工具栏下方

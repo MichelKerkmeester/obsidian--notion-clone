@@ -249,6 +249,15 @@ const FOOTER_PHONE_SCENARIO = {
 // touch-target minimum this repository holds every tappable control to elsewhere.
 const FOOTER_PHONE_FLOOR = 44;
 
+// The frozen-column right-edge shadow's own bar. WCAG 1.4.11 (non-text contrast) wants 3:1, and
+// the formal close against a real device stays a separate, manual pass — but a themed shadow that
+// regresses to the old ~1.05:1 (a darkening treatment against a surface already near-black has
+// almost no room to move: the physical ceiling for a pure-black shadow over a rgb(30,30,30) ground
+// is ≈1.26:1) has to fail here rather than wait for a device. The floor is set above the old defect
+// and below the impossible-for-a-subtle-treatment 3:1, so it catches a regression without asserting
+// a bar this repository cannot mechanically prove either theme meets.
+const FROZEN_SHADOW_CONTRAST_FLOOR = 1.15;
+
 // The five permanent guards on behaviours already at or ahead of Notion parity: the footer's
 // zero-row skip and phone floor, the header's icon/label/sort-ordinal composition, the inline
 // chip layout, per-option pill colour, and the conditional-format tint's td paint. Kept local
@@ -589,6 +598,48 @@ writeFileSync(join(work, "index.html"), `<!doctype html>
 <body class="theme-dark"><script src="render-bundle.js"></script></body></html>`);
 
 // ───────────────────────────────────────────────────────────────────
+// 3a. WCAG CONTRAST, FROM RESOLVED COMPUTED-STYLE COLOURS
+// ───────────────────────────────────────────────────────────────────
+//
+// getComputedStyle resolves every var() a shadow's colour reads through, including the theme
+// tokens the colour page above attaches — but box-shadow is a paint effect, not a queryable
+// pixel, so the browser hands back the shadow's own declared rgba(), not what it looks like once
+// alpha-composited over the surface underneath. The blend and the WCAG contrast ratio are done
+// here instead, in Node, on the exact resolved numbers the browser already committed to.
+
+function parseRgba(value) {
+  const match = /rgba?\(([^)]+)\)/.exec(value || "");
+  if (!match) return null;
+  const parts = match[1].split(",").map((part) => parseFloat(part.trim()));
+  return { r: parts[0], g: parts[1], b: parts[2], a: parts.length > 3 ? parts[3] : 1 };
+}
+
+/** The shadow's own colour, alpha-composited over the surface it paints on — i.e. what a reader's
+ *  eye actually receives at the shadow's least-attenuated point, not the raw declared colour. */
+function blendOverGround(shadowRgba, groundRgba) {
+  const a = shadowRgba.a;
+  return {
+    r: shadowRgba.r * a + groundRgba.r * (1 - a),
+    g: shadowRgba.g * a + groundRgba.g * (1 - a),
+    b: shadowRgba.b * a + groundRgba.b * (1 - a),
+  };
+}
+
+function relativeLuminance({ r, g, b }) {
+  const channel = (c) => {
+    const s = c / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  };
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+}
+
+/** WCAG contrast ratio, 1:1 (no difference) to 21:1 (black on white). */
+function contrastRatio(a, b) {
+  const [lighter, darker] = [relativeLuminance(a), relativeLuminance(b)].sort((x, y) => y - x);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+// ───────────────────────────────────────────────────────────────────
 // 4. RUN
 // ───────────────────────────────────────────────────────────────────
 
@@ -615,6 +666,7 @@ let wrapToggleOutcomes = null;
 let phoneOverlapInk = null;
 let footerFloorOutcome = null;
 let wrapDesktopOutcomes = null;
+let frozenColumnCssOutcome = null;
 try {
   browser = await chromium.launch({ executablePath: findChrome() });
   const page = await browser.newPage({ viewport: { width: 1100, height: 900 } });
@@ -741,6 +793,92 @@ try {
     await geometryPage.close();
     for (const error of geometryErrors) failures.push(`board geometry page error: ${error}`);
   }
+
+  // The frozen column's CSS-dependent claims: the right-edge shadow's contrast in each theme
+  // (styles.css's own `--db-frozen-col-shadow` tokens), that it paints nothing at scrollLeft === 0,
+  // and that the .is-phone override actually turns the sticky position off — none of that is a
+  // structural DOM fact runRenderAssertions' scenarios can read, so this page carries static
+  // fixture markup (the same shape table-frozen-column's capture scenario draws) against the real
+  // token sheets, the same way the rhythm and geometry passes above measure against them rather
+  // than against styles.css alone. The resize-handle's own hover-visibility read rides along on
+  // the same page since it needs the identical real-mouse `page.hover()`, which only a Playwright
+  // page (not window.__renderAssertions' in-page callback) can drive.
+  const colorPage = await browser.newPage({ viewport: { width: 500, height: 300 } });
+  const colorErrors = [];
+  colorPage.on("pageerror", (error) => colorErrors.push(error.message));
+  await colorPage.setContent(`<!doctype html><html><head><meta charset="utf-8"></head>
+<body><div class="note-database-container" style="width:400px;overflow:auto;">
+<table class="db-table"><thead><tr>
+<th class="db-frozen-col db-frozen-col-last" data-note-database-column-key="name" style="position:relative;--db-frozen-left:0px;">
+  <span class="db-resize-handle"></span>
+</th>
+<th data-note-database-column-key="cost"></th>
+</tr></thead><tbody><tr>
+<td class="db-cell db-frozen-col db-frozen-col-last" style="--db-frozen-left:0px;">Adobe Creative Cloud</td>
+<td class="db-cell">$54.99</td>
+</tr></tbody></table>
+<div id="ground-probe" style="background-color: var(--db-surface-canvas);"></div>
+</div>
+</body></html>`);
+  for (const sheet of ["styles.css", "tools/screenshots/theme.css", "tools/screenshots/runtime-vars.css"]) {
+    await colorPage.addStyleTag({ content: readFileSync(join(REPO, sheet), "utf8") });
+  }
+  // Both measurements below read getComputedStyle immediately after a class toggle or a
+  // synthetic hover, with no browser paint in between — a `transition` declared on the real
+  // property (box-shadow on the frozen cell, background on the resize handle) is then caught
+  // mid-interpolation rather than at its end state, which reads as a value far short of what the
+  // stylesheet actually declares. Nothing here is testing the transition itself, so it is turned
+  // off for this page rather than raced against.
+  await colorPage.addStyleTag({
+    content: "*, *::before, *::after { transition: none !important; animation: none !important; }",
+  });
+
+  async function measureFrozenColumnTheme(dark) {
+    await colorPage.evaluate((isDark) => {
+      document.body.classList.toggle("theme-dark", isDark);
+      document.querySelector(".note-database-container").classList.remove("is-scrolled-x");
+      document.body.classList.remove("is-phone");
+    }, dark);
+    const atRest = await colorPage.evaluate(() => {
+      const td = document.querySelector("td.db-frozen-col-last");
+      // The cell itself paints no background (`.db-cell` never sets one, so its own
+      // `backgroundColor` always resolves transparent) — the surface a reader actually sees
+      // behind it is `--db-surface-canvas`, read off a probe element whose only job is to
+      // normalize that custom property's value into an rgb()/rgba() string.
+      const groundColor = getComputedStyle(document.querySelector("#ground-probe")).backgroundColor;
+      return { boxShadow: getComputedStyle(td).boxShadow, groundColor };
+    });
+    await colorPage.evaluate(() => document.querySelector(".note-database-container").classList.add("is-scrolled-x"));
+    const scrolled = await colorPage.evaluate(() => ({
+      boxShadow: getComputedStyle(document.querySelector("td.db-frozen-col-last")).boxShadow,
+    }));
+    await colorPage.evaluate(() => {
+      document.body.classList.add("is-phone");
+    });
+    const phone = await colorPage.evaluate(() => {
+      const td = document.querySelector("td.db-frozen-col-last");
+      return { position: getComputedStyle(td).position, boxShadow: getComputedStyle(td).boxShadow };
+    });
+    await colorPage.evaluate(() => {
+      document.body.classList.remove("is-phone");
+      document.querySelector(".note-database-container").classList.remove("is-scrolled-x");
+    });
+    const handleRest = await colorPage.evaluate(() =>
+      getComputedStyle(document.querySelector(".db-resize-handle")).backgroundColor);
+    await colorPage.hover("th.db-frozen-col-last");
+    const handleHover = await colorPage.evaluate(() =>
+      getComputedStyle(document.querySelector(".db-resize-handle")).backgroundColor);
+    await colorPage.mouse.move(0, 0);
+    return { atRest, scrolled, phone, handleRest, handleHover };
+  }
+
+  frozenColumnCssOutcome = {
+    light: await measureFrozenColumnTheme(false),
+    dark: await measureFrozenColumnTheme(true),
+  };
+  await colorPage.close();
+  for (const error of colorErrors) failures.push(`frozen-column CSS page error: ${error}`);
+
   for (const error of pageErrors) {
     failures.push(`page error: ${error}`);
   }
@@ -1107,6 +1245,73 @@ console.log("\nrender-assertions: phone week overlap-column title ink");
           + `visible ink against a ${PHONE_OVERLAP_INK_FLOOR}px floor (block ${title.blockWidth}px, `
           + `text "${title.text}") — no ink, the defect this scenario exists to catch`);
       }
+    }
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 4d. FROZEN COLUMN: NOTHING AT REST, THE SHADOW'S CONTRAST, PHONE OFF, THE RESIZE-HANDLE HOVER
+// ───────────────────────────────────────────────────────────────────
+
+console.log("\nrender-assertions: frozen column CSS (both themes)");
+if (!frozenColumnCssOutcome) {
+  failures.push("frozen column CSS: no outcome measured");
+  console.log("  FAIL  frozen column CSS — no outcome measured");
+} else {
+  for (const themeName of ["light", "dark"]) {
+    const measured = frozenColumnCssOutcome[themeName];
+
+    // Nothing at rest: scrollLeft === 0 (is-scrolled-x absent) paints no shadow at all.
+    const atRestOk = measured.atRest.boxShadow === "none";
+    console.log(`  ${atRestOk ? "PASS" : "FAIL"}  ${themeName.padEnd(6)} nothing at rest`.padEnd(58)
+      + `boxShadow "${measured.atRest.boxShadow}"`);
+    if (!atRestOk) {
+      failures.push(`frozen column (${themeName}): a shadow painted at scrollLeft === 0 — `
+        + `boxShadow "${measured.atRest.boxShadow}", expected "none"`);
+    }
+
+    // The scrolled shadow's contrast against the cell's own ground.
+    const shadowRgba = parseRgba(measured.scrolled.boxShadow);
+    const groundRgba = parseRgba(measured.atRest.groundColor);
+    let contrast = 0;
+    if (!shadowRgba || !groundRgba) {
+      failures.push(`frozen column (${themeName}): could not parse the scrolled boxShadow `
+        + `("${measured.scrolled.boxShadow}") or ground colour ("${measured.atRest.groundColor}")`);
+    } else {
+      const blended = blendOverGround(shadowRgba, groundRgba);
+      contrast = Math.round(contrastRatio(blended, groundRgba) * 100) / 100;
+      const contrastOk = contrast >= FROZEN_SHADOW_CONTRAST_FLOOR;
+      console.log(`  ${contrastOk ? "PASS" : "FAIL"}  ${themeName.padEnd(6)} scrolled shadow contrast`.padEnd(58)
+        + `${contrast}:1 against ground rgb(${Math.round(groundRgba.r)}, ${Math.round(groundRgba.g)}, ${Math.round(groundRgba.b)}), `
+        + `floor ${FROZEN_SHADOW_CONTRAST_FLOOR}:1`);
+      if (!contrastOk) {
+        failures.push(`frozen column (${themeName}): scrolled shadow contrast ${contrast}:1 is under `
+          + `the ${FROZEN_SHADOW_CONTRAST_FLOOR}:1 floor against ground rgb(${Math.round(groundRgba.r)}, `
+          + `${Math.round(groundRgba.g)}, ${Math.round(groundRgba.b)})`);
+      }
+    }
+
+    // is-phone: the sticky offset and the shadow both collapse, even with is-scrolled-x present —
+    // this is the regression a `:not(.is-phone)` scope on `.note-database-container` cannot catch,
+    // since `is-phone` sits on the body, never on the container itself.
+    const phoneOk = measured.phone.position === "static" && measured.phone.boxShadow === "none";
+    console.log(`  ${phoneOk ? "PASS" : "FAIL"}  ${themeName.padEnd(6)} is-phone turns freeze off`.padEnd(58)
+      + `position "${measured.phone.position}", boxShadow "${measured.phone.boxShadow}"`);
+    if (!phoneOk) {
+      failures.push(`frozen column (${themeName}): is-phone did not turn freeze off — `
+        + `position "${measured.phone.position}" (expected "static"), `
+        + `boxShadow "${measured.phone.boxShadow}" (expected "none")`);
+    }
+
+    // The resize handle: transparent at rest, a token-derived colour once its header is hovered.
+    const handleRestOk = parseRgba(measured.handleRest)?.a === 0 || measured.handleRest === "transparent";
+    const handleHoverOk = measured.handleHover !== measured.handleRest
+      && (parseRgba(measured.handleHover)?.a ?? 0) > 0;
+    console.log(`  ${handleRestOk && handleHoverOk ? "PASS" : "FAIL"}  ${themeName.padEnd(6)} resize-handle hover`.padEnd(58)
+      + `rest "${measured.handleRest}", hover "${measured.handleHover}"`);
+    if (!handleRestOk || !handleHoverOk) {
+      failures.push(`frozen column (${themeName}): resize-handle hover did not change its computed `
+        + `background — rest "${measured.handleRest}", hover "${measured.handleHover}"`);
     }
   }
 }

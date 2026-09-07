@@ -226,20 +226,26 @@ export class TableRenderer {
   }
 
   /** The right-edge shadow paints only once the table has scrolled sideways, nothing at rest — a
-   *  plain `scroll` listener, not a ResizeObserver/MutationObserver/rAF loop (NFR-P02). */
-  private setupFrozenScrollTracking(container: HTMLElement): void {
+   *  plain `scroll` listener, not a ResizeObserver/MutationObserver/rAF loop (NFR-P02).
+   *
+   *  `scrollTarget` is the element that actually carries the horizontal overflow; `classTarget`
+   *  (defaulting to the same element) is the one the CSS keys `.is-scrolled-x` off. The two
+   *  diverge for a grouped table: `.db-grouped-table` owns `overflow-x`, not the outer
+   *  `.note-database-container`, and a `scroll` event does not bubble — a listener bound to the
+   *  container the way the ungrouped path binds it never fires. */
+  private setupFrozenScrollTracking(scrollTarget: HTMLElement, classTarget: HTMLElement = scrollTarget): void {
     this.frozenScrollCleanup?.();
     this.frozenScrollCleanup = undefined;
     if (this.activeFrozenLayout.size === 0) {
-      container.removeClass("is-scrolled-x");
+      classTarget.removeClass("is-scrolled-x");
       return;
     }
-    const onScroll = () => container.toggleClass("is-scrolled-x", container.scrollLeft > 0);
-    container.addEventListener("scroll", onScroll, { passive: true });
+    const onScroll = () => classTarget.toggleClass("is-scrolled-x", scrollTarget.scrollLeft > 0);
+    scrollTarget.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     this.frozenScrollCleanup = () => {
-      container.removeEventListener("scroll", onScroll);
-      container.removeClass("is-scrolled-x");
+      scrollTarget.removeEventListener("scroll", onScroll);
+      classTarget.removeClass("is-scrolled-x");
     };
   }
 
@@ -319,7 +325,10 @@ export class TableRenderer {
     const container = containerEl.createDiv({ cls: "db-grouped-table" });
     const visibleColumns = this.actions.getVisibleColumns(config, rows);
     this.activeFrozenLayout = this.computeFrozenLayout(config, visibleColumns);
-    this.setupFrozenScrollTracking(containerEl);
+    // `container` (.db-grouped-table) is what actually scrolls horizontally; `containerEl`
+    // (.note-database-container) is what the CSS keys `.is-scrolled-x` off, same as the ungrouped
+    // path — see setupFrozenScrollTracking's own comment for why the two must be named apart here.
+    this.setupFrozenScrollTracking(container, containerEl);
     const tableMinWidth = this.getTableMinWidth(config, visibleColumns);
     const tableWrap = container.createDiv({ cls: "db-table-wrap" });
     tableWrap.style.minWidth = `${tableMinWidth}px`;
