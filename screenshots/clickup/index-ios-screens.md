@@ -1,0 +1,86 @@
+# ClickUp — ios grouped-screen index
+
+79 files. Every row cites its Mobbin screen page; that URL is the provenance for the image.
+Grouping records the query intent that surfaced the screen, not a verified reading of its content — see README.md "What the grouping does and does not mean".
+
+| File | Group | Screen ID | Mobbin |
+|------|-------|-----------|--------|
+| `ios/ai/clickup-ios-ai-ai-assistant-5a6de336-b72c-4284-b6ab-cef8ae01fc30.webp` | ai | `5a6de336-b72c-4284-b6ab-cef8ae01fc30` | https://mobbin.com/screens/5a6de336-b72c-4284-b6ab-cef8ae01fc30 |
+| `ios/chat/clickup-ios-chat-chat-06904e8e-9a1b-4ee8-98dd-3756f6927b9a.webp` | chat | `06904e8e-9a1b-4ee8-98dd-3756f6927b9a` | https://mobbin.com/screens/06904e8e-9a1b-4ee8-98dd-3756f6927b9a |
+| `ios/editors/clickup-ios-editors-docs-b4bcc6fa-1d5a-4420-bc42-d889fe388f8c.webp` | editors | `b4bcc6fa-1d5a-4420-bc42-d889fe388f8c` | https://mobbin.com/screens/b4bcc6fa-1d5a-4420-bc42-d889fe388f8c |
+| `ios/editors/clickup-ios-editors-forms-19d00768-0372-4e61-b96e-01db5ad98611.webp` | editors | `19d00768-0372-4e61-b96e-01db5ad98611` | https://mobbin.com/screens/19d00768-0372-4e61-b96e-01db5ad98611 |
+| `ios/editors/clickup-ios-editors-forms-782436c8-4353-4dc0-aecc-75794a4d3b3c.webp` | editors | `782436c8-4353-4dc0-aecc-75794a4d3b3c` | https://mobbin.com/screens/782436c8-4353-4dc0-aecc-75794a4d3b3c |
+| `ios/editors/clickup-ios-editors-forms-7ed3ef89-da66-40f1-b052-a9ed9f01db49.webp` | editors | `7ed3ef89-da66-40f1-b052-a9ed9f01db49` | https://mobbin.com/screens/7ed3ef89-da66-40f1-b052-a9ed9f01db49 |
+| `ios/editors/clickup-ios-editors-forms-aee9b213-5812-4d23-9c2e-61762a6802a6.webp` | editors | `aee9b213-5812-4d23-9c2e-61762a6802a6` | https://mobbin.com/screens/aee9b213-5812-4d23-9c2e-61762a6802a6 |
+| `ios/editors/clickup-ios-editors-notepad-3434dd8c-3963-4906-8b93-1783e0f81764.webp` | editors | `3434dd8c-3963-4906-8b93-1783e0f81764` | https://mobbin.com/screens/3434dd8c-3963-4906-8b93-1783e0f81764 |
+| `ios/editors/clickup-ios-editors-notepad-50b69716-9bbb-4425-bf29-2a4bbff18f60.webp` | editors | `50b69716-9bbb-4425-bf29-2a4bbff18f60` | https://mobbin.com/screens/50b69716-9bbb-4425-bf29-2a4bbff18f60 |
+| `ios/editors/clickup-ios-editors-notepad-5b81a863-e563-4158-b14c-96b914d8970f.webp` | editors | `5b81a863-e563-4158-b14c-96b914d8970f` | https://mobbin.com/screens/5b81a863-e563-4158-b14c-96b914d8970f |
+| `ios/editors/clickup-ios-editors-notepad-6786f021-c5d5-4201-af7e-01a5de4da0e5.webp` | editors | `6786f021-c5d5-4201-af7e-01a5de4da0e5` | https://mobbin.com/screens/6786f021-c5d5-4201-af7e-01a5de4da0e5 |
+| `ios/editors/clickup-ios-editors-notepad-7002cde4-b5b0-4003-9f82-78f3df83dd57.webp` | editors | `7002cde4-b5b0-4003-9f82-78f3df83dd57` | https://mobbin.com/screens/7002cde4-b5b0-4003-9f82-78f3df83dd57 |
+| `ios/filters/clickup-ios-filters-filters-19b00eaa-f469-4634-a804-b1e33ac1fc70.webp` | filters | `19b00eaa-f469-4634-a804-b1e33ac1fc70` | https://mobbin.com/screens/19b00eaa-f469-4634-a804-b1e33ac1fc70 |
+| `ios/filters/clickup-ios-filters-sort-3fe0480a-8509-4e6a-82c8-b193dabfaef2.webp` | filters | `3fe0480a-8509-4e6a-82c8-b193dabfaef2` | https://mobbin.com/screens/3fe0480a-8509-4e6a-82c8-b193dabfaef2 |
+| `ios/navigation/clickup-ios-navigation-favorites-0de9a4f7-8854-4775-b34a-b7ae1a835fd8.webp` | navigation | `0de9a4f7-8854-4775-b34a-b7ae1a835fd8` | https://mobbin.com/screens/0de9a4f7-8854-4775-b34a-b7ae1a835fd8 |
+| `ios/navigation/clickup-ios-navigation-favorites-1ca1bab7-0440-428f-ac6e-a1bd4d824789.webp` | navigation | `1ca1bab7-0440-428f-ac6e-a1bd4d824789` | https://mobbin.com/screens/1ca1bab7-0440-428f-ac6e-a1bd4d824789 |
+| `ios/navigation/clickup-ios-navigation-favorites-370898c6-d7ef-4941-b1e6-28f202cec19b.webp` | navigation | `370898c6-d7ef-4941-b1e6-28f202cec19b` | https://mobbin.com/screens/370898c6-d7ef-4941-b1e6-28f202cec19b |
+| `ios/navigation/clickup-ios-navigation-favorites-54ec7183-f0e1-46e4-b0c2-6dcc6fe580fb.webp` | navigation | `54ec7183-f0e1-46e4-b0c2-6dcc6fe580fb` | https://mobbin.com/screens/54ec7183-f0e1-46e4-b0c2-6dcc6fe580fb |
+| `ios/navigation/clickup-ios-navigation-favorites-a47c10d9-9603-47bc-a5f7-67952eec3e10.webp` | navigation | `a47c10d9-9603-47bc-a5f7-67952eec3e10` | https://mobbin.com/screens/a47c10d9-9603-47bc-a5f7-67952eec3e10 |
+| `ios/navigation/clickup-ios-navigation-favorites-a8f682ae-9369-462b-9532-909e36c127e8.webp` | navigation | `a8f682ae-9369-462b-9532-909e36c127e8` | https://mobbin.com/screens/a8f682ae-9369-462b-9532-909e36c127e8 |
+| `ios/navigation/clickup-ios-navigation-favorites-ecf32465-764a-4a7e-bfc7-b0f63859a7e4.webp` | navigation | `ecf32465-764a-4a7e-bfc7-b0f63859a7e4` | https://mobbin.com/screens/ecf32465-764a-4a7e-bfc7-b0f63859a7e4 |
+| `ios/navigation/clickup-ios-navigation-home-00e1f356-5dbc-43c4-b21d-1668bd553833.webp` | navigation | `00e1f356-5dbc-43c4-b21d-1668bd553833` | https://mobbin.com/screens/00e1f356-5dbc-43c4-b21d-1668bd553833 |
+| `ios/navigation/clickup-ios-navigation-home-0494d348-c628-4602-93f9-d8dfa47221eb.webp` | navigation | `0494d348-c628-4602-93f9-d8dfa47221eb` | https://mobbin.com/screens/0494d348-c628-4602-93f9-d8dfa47221eb |
+| `ios/navigation/clickup-ios-navigation-home-26ba9e66-6335-4f8f-8e24-deb5f0d98082.webp` | navigation | `26ba9e66-6335-4f8f-8e24-deb5f0d98082` | https://mobbin.com/screens/26ba9e66-6335-4f8f-8e24-deb5f0d98082 |
+| `ios/navigation/clickup-ios-navigation-home-2e61217f-d253-4e9d-bdb7-42ef0acb6919.webp` | navigation | `2e61217f-d253-4e9d-bdb7-42ef0acb6919` | https://mobbin.com/screens/2e61217f-d253-4e9d-bdb7-42ef0acb6919 |
+| `ios/navigation/clickup-ios-navigation-home-544b27c3-6617-4a6e-95c7-ea9e06902ea2.webp` | navigation | `544b27c3-6617-4a6e-95c7-ea9e06902ea2` | https://mobbin.com/screens/544b27c3-6617-4a6e-95c7-ea9e06902ea2 |
+| `ios/navigation/clickup-ios-navigation-home-58a9a858-c486-44df-8ad8-3ba0a3ad26d8.webp` | navigation | `58a9a858-c486-44df-8ad8-3ba0a3ad26d8` | https://mobbin.com/screens/58a9a858-c486-44df-8ad8-3ba0a3ad26d8 |
+| `ios/navigation/clickup-ios-navigation-home-5ad6a44a-3e51-4056-9a30-f4eb3fac8af3.webp` | navigation | `5ad6a44a-3e51-4056-9a30-f4eb3fac8af3` | https://mobbin.com/screens/5ad6a44a-3e51-4056-9a30-f4eb3fac8af3 |
+| `ios/navigation/clickup-ios-navigation-home-99d9d5ab-d435-4fa1-aad0-1588f34fb2b8.webp` | navigation | `99d9d5ab-d435-4fa1-aad0-1588f34fb2b8` | https://mobbin.com/screens/99d9d5ab-d435-4fa1-aad0-1588f34fb2b8 |
+| `ios/navigation/clickup-ios-navigation-home-bbe281f0-eb97-4f38-9468-13764e719467.webp` | navigation | `bbe281f0-eb97-4f38-9468-13764e719467` | https://mobbin.com/screens/bbe281f0-eb97-4f38-9468-13764e719467 |
+| `ios/navigation/clickup-ios-navigation-home-c3f7f860-8aec-40f8-92b4-6242c14a5c5e.webp` | navigation | `c3f7f860-8aec-40f8-92b4-6242c14a5c5e` | https://mobbin.com/screens/c3f7f860-8aec-40f8-92b4-6242c14a5c5e |
+| `ios/navigation/clickup-ios-navigation-home-d9ff90b4-29aa-4618-841d-b4416c721316.webp` | navigation | `d9ff90b4-29aa-4618-841d-b4416c721316` | https://mobbin.com/screens/d9ff90b4-29aa-4618-841d-b4416c721316 |
+| `ios/navigation/clickup-ios-navigation-home-ddf8cb1b-0a68-4d0e-8cb4-eccab5f3969c.webp` | navigation | `ddf8cb1b-0a68-4d0e-8cb4-eccab5f3969c` | https://mobbin.com/screens/ddf8cb1b-0a68-4d0e-8cb4-eccab5f3969c |
+| `ios/navigation/clickup-ios-navigation-home-de2aac7a-0fa2-43e2-a66c-ea4db9f0fdca.webp` | navigation | `de2aac7a-0fa2-43e2-a66c-ea4db9f0fdca` | https://mobbin.com/screens/de2aac7a-0fa2-43e2-a66c-ea4db9f0fdca |
+| `ios/navigation/clickup-ios-navigation-home-ecb1790e-e9b8-494c-8022-224b41476d34.webp` | navigation | `ecb1790e-e9b8-494c-8022-224b41476d34` | https://mobbin.com/screens/ecb1790e-e9b8-494c-8022-224b41476d34 |
+| `ios/navigation/clickup-ios-navigation-home-ee269477-ea5a-4cca-a83b-0d7a14eff623.webp` | navigation | `ee269477-ea5a-4cca-a83b-0d7a14eff623` | https://mobbin.com/screens/ee269477-ea5a-4cca-a83b-0d7a14eff623 |
+| `ios/navigation/clickup-ios-navigation-search-0c80bb80-980b-48c0-a24d-8b821a7a1abc.webp` | navigation | `0c80bb80-980b-48c0-a24d-8b821a7a1abc` | https://mobbin.com/screens/0c80bb80-980b-48c0-a24d-8b821a7a1abc |
+| `ios/navigation/clickup-ios-navigation-search-3cae3bac-3163-4a7e-9e9e-9ddfe03829f2.webp` | navigation | `3cae3bac-3163-4a7e-9e9e-9ddfe03829f2` | https://mobbin.com/screens/3cae3bac-3163-4a7e-9e9e-9ddfe03829f2 |
+| `ios/navigation/clickup-ios-navigation-search-3e935320-0c53-4425-a261-e124b1a7976a.webp` | navigation | `3e935320-0c53-4425-a261-e124b1a7976a` | https://mobbin.com/screens/3e935320-0c53-4425-a261-e124b1a7976a |
+| `ios/navigation/clickup-ios-navigation-search-71211a74-3a8d-42f2-a3a7-641c30817acd.webp` | navigation | `71211a74-3a8d-42f2-a3a7-641c30817acd` | https://mobbin.com/screens/71211a74-3a8d-42f2-a3a7-641c30817acd |
+| `ios/navigation/clickup-ios-navigation-sidebar-7e852f3b-b33a-4ec3-ad7e-0b9af94513d2.webp` | navigation | `7e852f3b-b33a-4ec3-ad7e-0b9af94513d2` | https://mobbin.com/screens/7e852f3b-b33a-4ec3-ad7e-0b9af94513d2 |
+| `ios/navigation/clickup-ios-navigation-tab-bar-6fdef296-ab35-459c-81aa-9b79ff4b3f3c.webp` | navigation | `6fdef296-ab35-459c-81aa-9b79ff4b3f3c` | https://mobbin.com/screens/6fdef296-ab35-459c-81aa-9b79ff4b3f3c |
+| `ios/navigation/clickup-ios-navigation-tab-bar-84795435-a488-43d6-94da-f8cc732ca48f.webp` | navigation | `84795435-a488-43d6-94da-f8cc732ca48f` | https://mobbin.com/screens/84795435-a488-43d6-94da-f8cc732ca48f |
+| `ios/notifications/clickup-ios-notifications-reminders-2ad13613-e5b6-4451-a0c0-0f451cb831cb.webp` | notifications | `2ad13613-e5b6-4451-a0c0-0f451cb831cb` | https://mobbin.com/screens/2ad13613-e5b6-4451-a0c0-0f451cb831cb |
+| `ios/onboarding/clickup-ios-onboarding-login-c30adf90-d648-4864-99e9-44f2464d7633.webp` | onboarding | `c30adf90-d648-4864-99e9-44f2464d7633` | https://mobbin.com/screens/c30adf90-d648-4864-99e9-44f2464d7633 |
+| `ios/settings/clickup-ios-settings-settings-3257908d-b0f3-460a-8976-b311ff9cd738.webp` | settings | `3257908d-b0f3-460a-8976-b311ff9cd738` | https://mobbin.com/screens/3257908d-b0f3-460a-8976-b311ff9cd738 |
+| `ios/settings/clickup-ios-settings-settings-782436c8-4353-4dc0-aecc-75794a4d5b3c.webp` | settings | `782436c8-4353-4dc0-aecc-75794a4d5b3c` | https://mobbin.com/screens/782436c8-4353-4dc0-aecc-75794a4d5b3c |
+| `ios/settings/clickup-ios-settings-settings-7f248abd-f90a-4477-a2a7-8b9aa0cbcc10.webp` | settings | `7f248abd-f90a-4477-a2a7-8b9aa0cbcc10` | https://mobbin.com/screens/7f248abd-f90a-4477-a2a7-8b9aa0cbcc10 |
+| `ios/settings/clickup-ios-settings-settings-d63328e2-5596-43a0-b54b-819bb261a4a5.webp` | settings | `d63328e2-5596-43a0-b54b-819bb261a4a5` | https://mobbin.com/screens/d63328e2-5596-43a0-b54b-819bb261a4a5 |
+| `ios/tasks/clickup-ios-tasks-activity-348306ab-dd87-4526-a724-56361a873e93.webp` | tasks | `348306ab-dd87-4526-a724-56361a873e93` | https://mobbin.com/screens/348306ab-dd87-4526-a724-56361a873e93 |
+| `ios/tasks/clickup-ios-tasks-activity-c02787ae-2a69-4325-840e-e2fac38022e1.webp` | tasks | `c02787ae-2a69-4325-840e-e2fac38022e1` | https://mobbin.com/screens/c02787ae-2a69-4325-840e-e2fac38022e1 |
+| `ios/tasks/clickup-ios-tasks-assignee-picker-b8505d68-ff6a-41dc-9afe-25872e6fba3a.webp` | tasks | `b8505d68-ff6a-41dc-9afe-25872e6fba3a` | https://mobbin.com/screens/b8505d68-ff6a-41dc-9afe-25872e6fba3a |
+| `ios/tasks/clickup-ios-tasks-assignee-picker-bff91def-d964-4e4e-9d3e-483b2506a91e.webp` | tasks | `bff91def-d964-4e4e-9d3e-483b2506a91e` | https://mobbin.com/screens/bff91def-d964-4e4e-9d3e-483b2506a91e |
+| `ios/tasks/clickup-ios-tasks-assignee-picker-c56fc912-5c96-44a8-ab2f-57a8c8147425.webp` | tasks | `c56fc912-5c96-44a8-ab2f-57a8c8147425` | https://mobbin.com/screens/c56fc912-5c96-44a8-ab2f-57a8c8147425 |
+| `ios/tasks/clickup-ios-tasks-assignee-picker-e73c5d81-3580-48c0-b710-e3909fb2cd60.webp` | tasks | `e73c5d81-3580-48c0-b710-e3909fb2cd60` | https://mobbin.com/screens/e73c5d81-3580-48c0-b710-e3909fb2cd60 |
+| `ios/tasks/clickup-ios-tasks-assignee-picker-f576d175-79ca-479f-9070-316957e5f35b.webp` | tasks | `f576d175-79ca-479f-9070-316957e5f35b` | https://mobbin.com/screens/f576d175-79ca-479f-9070-316957e5f35b |
+| `ios/tasks/clickup-ios-tasks-attachments-5ff80253-48a3-4c00-bbcf-8673b6010408.webp` | tasks | `5ff80253-48a3-4c00-bbcf-8673b6010408` | https://mobbin.com/screens/5ff80253-48a3-4c00-bbcf-8673b6010408 |
+| `ios/tasks/clickup-ios-tasks-attachments-fbb8cf1f-aee6-4f00-8b0a-57a6ba949560.webp` | tasks | `fbb8cf1f-aee6-4f00-8b0a-57a6ba949560` | https://mobbin.com/screens/fbb8cf1f-aee6-4f00-8b0a-57a6ba949560 |
+| `ios/tasks/clickup-ios-tasks-date-picker-84a1b9a6-c55e-49cc-8dbb-be2087ed6125.webp` | tasks | `84a1b9a6-c55e-49cc-8dbb-be2087ed6125` | https://mobbin.com/screens/84a1b9a6-c55e-49cc-8dbb-be2087ed6125 |
+| `ios/tasks/clickup-ios-tasks-date-picker-b4c5abb0-6b6f-44a1-b2f2-71a785dc52e5.webp` | tasks | `b4c5abb0-6b6f-44a1-b2f2-71a785dc52e5` | https://mobbin.com/screens/b4c5abb0-6b6f-44a1-b2f2-71a785dc52e5 |
+| `ios/tasks/clickup-ios-tasks-priority-picker-0d46a8c9-293e-437f-901a-c30b13df02a2.webp` | tasks | `0d46a8c9-293e-437f-901a-c30b13df02a2` | https://mobbin.com/screens/0d46a8c9-293e-437f-901a-c30b13df02a2 |
+| `ios/tasks/clickup-ios-tasks-priority-picker-36748667-0ad8-4f15-aaf2-1ed38c7356d1.webp` | tasks | `36748667-0ad8-4f15-aaf2-1ed38c7356d1` | https://mobbin.com/screens/36748667-0ad8-4f15-aaf2-1ed38c7356d1 |
+| `ios/tasks/clickup-ios-tasks-subtasks-checklists-6e37ed64-1aca-400f-818c-87885b599253.webp` | tasks | `6e37ed64-1aca-400f-818c-87885b599253` | https://mobbin.com/screens/6e37ed64-1aca-400f-818c-87885b599253 |
+| `ios/tasks/clickup-ios-tasks-subtasks-checklists-b8ab1378-412d-473d-9f34-c1a324629ef8.webp` | tasks | `b8ab1378-412d-473d-9f34-c1a324629ef8` | https://mobbin.com/screens/b8ab1378-412d-473d-9f34-c1a324629ef8 |
+| `ios/views/clickup-ios-views-calendar-086b5e97-4a63-4c8d-80fa-f092b52cce94.webp` | views | `086b5e97-4a63-4c8d-80fa-f092b52cce94` | https://mobbin.com/screens/086b5e97-4a63-4c8d-80fa-f092b52cce94 |
+| `ios/views/clickup-ios-views-calendar-54502010-9677-42f0-b47b-50c1660557c8.webp` | views | `54502010-9677-42f0-b47b-50c1660557c8` | https://mobbin.com/screens/54502010-9677-42f0-b47b-50c1660557c8 |
+| `ios/views/clickup-ios-views-list-view-479b3a03-5bac-4be3-98b7-b9fc2d8139c9.webp` | views | `479b3a03-5bac-4be3-98b7-b9fc2d8139c9` | https://mobbin.com/screens/479b3a03-5bac-4be3-98b7-b9fc2d8139c9 |
+| `ios/views/clickup-ios-views-my-tasks-04c4689b-de8b-4e72-b525-7b0a3c89201f.webp` | views | `04c4689b-de8b-4e72-b525-7b0a3c89201f` | https://mobbin.com/screens/04c4689b-de8b-4e72-b525-7b0a3c89201f |
+| `ios/views/clickup-ios-views-my-tasks-3a3b2c04-ff74-446b-8e26-c2b587e41979.webp` | views | `3a3b2c04-ff74-446b-8e26-c2b587e41979` | https://mobbin.com/screens/3a3b2c04-ff74-446b-8e26-c2b587e41979 |
+| `ios/views/clickup-ios-views-my-tasks-aaa1d09a-954d-479b-a590-aa2012ce885e.webp` | views | `aaa1d09a-954d-479b-a590-aa2012ce885e` | https://mobbin.com/screens/aaa1d09a-954d-479b-a590-aa2012ce885e |
+| `ios/views/clickup-ios-views-my-tasks-bfc39794-f97a-4237-8940-970a6720e4b2.webp` | views | `bfc39794-f97a-4237-8940-970a6720e4b2` | https://mobbin.com/screens/bfc39794-f97a-4237-8940-970a6720e4b2 |
+| `ios/views/clickup-ios-views-my-tasks-c8debe9b-02ac-431b-b703-3c55adabae66.webp` | views | `c8debe9b-02ac-431b-b703-3c55adabae66` | https://mobbin.com/screens/c8debe9b-02ac-431b-b703-3c55adabae66 |
+| `ios/views/clickup-ios-views-my-tasks-f70f4ee9-1c26-4e8d-a8e6-2152260fac3d.webp` | views | `f70f4ee9-1c26-4e8d-a8e6-2152260fac3d` | https://mobbin.com/screens/f70f4ee9-1c26-4e8d-a8e6-2152260fac3d |
+| `ios/views/clickup-ios-views-my-tasks-fdf99039-e57d-452b-9b4e-c79e162cd8cc.webp` | views | `fdf99039-e57d-452b-9b4e-c79e162cd8cc` | https://mobbin.com/screens/fdf99039-e57d-452b-9b4e-c79e162cd8cc |
+| `ios/views/clickup-ios-views-view-switcher-7fe3bd0a-372b-4eac-9b50-1c06943a4211.webp` | views | `7fe3bd0a-372b-4eac-9b50-1c06943a4211` | https://mobbin.com/screens/7fe3bd0a-372b-4eac-9b50-1c06943a4211 |
+| `ios/views/clickup-ios-views-view-switcher-a27bca20-10f0-4fd3-b9b1-b742ce0ff1bb.webp` | views | `a27bca20-10f0-4fd3-b9b1-b742ce0ff1bb` | https://mobbin.com/screens/a27bca20-10f0-4fd3-b9b1-b742ce0ff1bb |
+| `ios/views/clickup-ios-views-view-switcher-c9ded613-5ac2-4a10-845f-9270716fa62d.webp` | views | `c9ded613-5ac2-4a10-845f-9270716fa62d` | https://mobbin.com/screens/c9ded613-5ac2-4a10-845f-9270716fa62d |
+| `ios/views/clickup-ios-views-view-switcher-d0507715-f3c4-45cc-aa77-37c1f421bc6e.webp` | views | `d0507715-f3c4-45cc-aa77-37c1f421bc6e` | https://mobbin.com/screens/d0507715-f3c4-45cc-aa77-37c1f421bc6e |
+| `ios/views/clickup-ios-views-view-switcher-f149357b-0e23-4520-abf1-5037462b994b.webp` | views | `f149357b-0e23-4520-abf1-5037462b994b` | https://mobbin.com/screens/f149357b-0e23-4520-abf1-5037462b994b |
