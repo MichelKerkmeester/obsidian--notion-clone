@@ -94,3 +94,6 @@ repo-rules/uncertainty-and-honesty.md
 # The gate writes a failing lane's full output here so a red verdict keeps its own evidence.
 # It is a diagnostic of one run on one machine, not a fact about the tree.
 /tools/lane/gate-logs/
+
+# worktree-local lander notes, never part of the tree
+.handover.md
