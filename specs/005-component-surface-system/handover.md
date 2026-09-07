@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-07T19:52:00Z"
-    last_updated_by: "220-rename-to-obnotion-lander"
-    recent_action: "Landed the 068 rename leg on worktree 220; gate 26/26 twice, not yet merged"
-    next_safe_action: "A fresh Opus verifier reviews and lands worktree 220, then cuts 0.0.31"
+    last_updated_at: "2026-09-07T21:05:00Z"
+    last_updated_by: "220-rename-to-obnotion-landing-verifier"
+    recent_action: "Verified and pushed the 068 rename leg to main at e80f0775; gate 26/26"
+    next_safe_action: "Cut release 0.0.31 with the id-change notes and its three assets"
     blockers:
       - "AC-014 (release) and AC-015 (operator device confirmation) are the only 068 rows still open"
       - "061's device row (AC-005) and 067's gate row stay open behind the operator's iOS pass"
@@ -43,6 +43,48 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-07 ~21:05, `068-rename-to-obnotion` LANDING VERIFICATION PASSED — leg PUSHED to `origin/main` at `e80f0775`
+
+**The rename is landed on `origin/main`; the worktree's job is done.** A fresh Opus verifier (this
+entry's author) re-derived every claim in the leg's handover from the final committed tree in
+`.worktrees/220-rename-to-obnotion`, then pushed `65a76ee9..e80f0775` (6 commits: the rewrite
+leg's 4 + 2 verifier commits) to `origin/main` in one accepted push — no rejection, no retry.
+
+**What was verified, and the number that decided it:** identity (id `obnotion`, name `Obnotion`,
+author `MichelKerkmeester`, no `fundingUrl`); `db-` in styles.css **0**, `obnotion-` **5500**,
+`obnotion-container` **2260**; the 5 aliases present with 11 dedicated tests; migration is
+copy-never-move with a single log line; README/update-fork.sh point at
+`MichelKerkmeester/obsidian_notion-clone`. Mutation tests went red on demand (migration guard
+removed → 2 red / 5; alias branch removed → 2 red / 6) and green after restore. `npx tsc --noEmit`
+0, `npx vitest run` **153 files / 1641 tests**, `npm run build` 0.
+
+**The recapture claim survived independent re-derivation.** Two fresh `npm run screenshots` runs
+(608 entries, exit 0 each) plus a decoded pixel-delta pass across both runs: **3 byte-only jitter
+moves** (board-view-desktop-dark, reference-gantt-subtask-mobile-light,
+reference-kanban-subtask-mobile-dark — max channel delta **1** on each, every pixelHash
+identical to the committed blob, all 3 moved in both runs) and **0 real changes**. The three
+manifest `bytes` fields were reconciled to the files on disk (layoutHashes kept fresh — do not
+restore those), and the css-lane release entry now **names the 3 jitter captures** in `reviewed`,
+which the lane demands before any release sits on the current stylesheet.
+
+**The ratchet did its job.** `scan-failing-values` read **152 bare against baseline 147** from the
+doc-closing commit — five 068 goal.md criteria had been ticked without the number each moved from.
+Fixed by recording the watched-red figures into those 5 rows (the 3,485 name references and 1,247
+`.db-*` selectors the sweep removed; the mutation tests; the 152-bare breach itself), NOT by
+touching the baseline. Now **147/147**, exit 0. A first gate run from the final tree failed exactly
+these two ways (`operator-list` stale, `css-lane` unnamed captures); both were re-derived per the
+gate's own messages, and the second run read **26 green, 0 red, exit 0**.
+
+**Caveats for successors:** (1) `tools/naming/rename-prefixes.mjs` in WRITE mode is destructive by
+design on this tree — a verifier's first-instruction re-run rewrote 7 files and destroyed the
+hand-written aliases before being caught and restored; `--check` is safe, write mode must never
+run again. (2) The sweep renamed one historical baseline title inside
+`failing-values-baseline.json` (`.db-header` → `.obnotion-header`) that no longer matches 005's
+goal.md prose — cosmetic, the title set still matches its goals by count. (3) The 068 release
+row and the operator-device row are still open — 0.0.31 is **not cut**; that is the next leg's
+job. (4) The parent roadmap 068 row reads **5/8**, re-derived from goal.md §3 after the ratchet
+fix re-worded rows.
 
 ### 2026-09-07 ~19:52, `068-rename-to-obnotion` REWRITE LEG LANDED on its own worktree, not yet merged
 
