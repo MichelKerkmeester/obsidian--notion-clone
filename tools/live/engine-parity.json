@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-07T08:32:04.634Z",
+  "measuredAt": "2026-09-07T13:28:37.368Z",
   "inputs": {
-    "styles.css": "acd49f23b031",
+    "styles.css": "a401f36b34f4",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
     "fixtures": 82,
-    "differences": 44
+    "differences": 50
   },
   "differences": [
     {
@@ -175,7 +175,55 @@
       "selector": "input[type=\"text\"]",
       "index": 0,
       "notes": [
-        "width 193 vs 215.31"
+        "width 1167 vs 1159"
+      ]
+    },
+    {
+      "scenarioId": "panel-view-config-sheet",
+      "selector": "input[type=\"text\"]",
+      "index": 1,
+      "notes": [
+        "width 1167 vs 1159"
+      ]
+    },
+    {
+      "scenarioId": "panel-view-config-sheet",
+      "selector": "button",
+      "index": 1,
+      "notes": [
+        "width 1167 vs 1159"
+      ]
+    },
+    {
+      "scenarioId": "panel-view-config-sheet",
+      "selector": "button",
+      "index": 2,
+      "notes": [
+        "width 1167 vs 1159"
+      ]
+    },
+    {
+      "scenarioId": "panel-view-config-sheet",
+      "selector": "button",
+      "index": 3,
+      "notes": [
+        "width 1167 vs 1159"
+      ]
+    },
+    {
+      "scenarioId": "panel-view-config-sheet",
+      "selector": "button",
+      "index": 4,
+      "notes": [
+        "width 1167 vs 1159"
+      ]
+    },
+    {
+      "scenarioId": "panel-view-config-sheet",
+      "selector": "button",
+      "index": 5,
+      "notes": [
+        "width 1167 vs 1159"
       ]
     },
     {

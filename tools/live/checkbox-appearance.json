@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-07T08:31:02.103Z",
+  "measuredAt": "2026-09-07T13:26:57.567Z",
   "inputs": {
-    "styles.css": "acd49f23b031",
+    "styles.css": "a401f36b34f4",
     "tools/live/checkbox-appearance.mjs": "8e751058f620",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -1693,7 +1693,7 @@
         "height": 18
       },
       "appearanceOwnedBy": null,
-      "tokensFrom": "db-panel-row"
+      "tokensFrom": "note-database-container db-width-default"
     },
     {
       "scenario": "panel-view-config-sheet",
@@ -1716,7 +1716,7 @@
         "height": 18
       },
       "appearanceOwnedBy": null,
-      "tokensFrom": "db-panel-row"
+      "tokensFrom": "note-database-container db-width-default"
     },
     {
       "scenario": "panel-board-card-properties",

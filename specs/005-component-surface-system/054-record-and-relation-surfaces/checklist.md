@@ -171,8 +171,12 @@ cannot be opened is recorded as a gap in `migration-table.md`, never silently co
       all render correctly with no regression. Both themes are covered by the manifest's own
       dark/light pairing, not re-opened individually per theme this pass
 - [x] CHK-026 [P0] T072 (database Settings sheet row grammar, operator report 2026-09-07): AC-013
-      Met, `npm run gate` 26 green, and the eight content-changed captures it names all opened and
-      read.
+      Met, `npm run gate` 26 green, and the content-changed captures it names all opened and read.
+- [x] CHK-027 [P0] T073 (the horizontal-overflow half of the same report): AC-014 Met — no native
+      `<select>` and no inline option list on this surface, every enabled dropdown opens the phone
+      picker at 44px rows, and the segmented group's ink past its own box is 0px at every text size
+      the host offers, against 78px on the 0.0.30 geometry. The mutation test is recorded honestly
+      in AC-014: no gate lane pins either fix, and T074 is the guard.
 <!-- /ANCHOR:verification -->
 
 ---
@@ -190,7 +194,8 @@ Nothing in this repository closes these. An agent never ticks one.
       as before
 - [ ] OPS-004 [P0] **iOS.** The operator reopens the database Settings sheet on the device that
       produced the 2026-09-07 ~10:20 report and confirms the row grammar reads as one column with
-      no clipping, on the build carrying T072
+      no clipping, on the build carrying T072 **and T073** — T073 is the half that answers the
+      clipping, and it only shows on a device at the operator's own text size
 <!-- /ANCHOR:operator -->
 
 ---
@@ -200,7 +205,7 @@ Nothing in this repository closes these. An agent never ticks one.
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 19 | 15/19 (CHK-001 through CHK-005 are the authoring checks, verified at authoring time; CHK-007 closed with T002's re-measurement; CHK-008/CHK-010/CHK-014/CHK-015 closed with the primitives family; CHK-011/CHK-012/CHK-023/CHK-024 close with T061-T063's editor extraction; CHK-026 closed with T072. CHK-006 stays open on the one unreadable capture; CHK-020/CHK-021/CHK-022 stay open — the packet is not closing this pass) |
+| P0 Items | 20 | 16/20 (CHK-001 through CHK-005 are the authoring checks, verified at authoring time; CHK-007 closed with T002's re-measurement; CHK-008/CHK-010/CHK-014/CHK-015 closed with the primitives family; CHK-011/CHK-012/CHK-023/CHK-024 close with T061-T063's editor extraction; CHK-026 closed with T072 and CHK-027 with T073. CHK-006 stays open on the one unreadable capture; CHK-020/CHK-021/CHK-022 stay open — the packet is not closing this pass) |
 | P1 Items | 2 | 2/2 (CHK-013 closed with `migration-table.md`'s open-questions section; CHK-025 closed with this pass's three opened captures) |
 | Operator rows | 4 | 0/4 (never agent-ticked) |
 

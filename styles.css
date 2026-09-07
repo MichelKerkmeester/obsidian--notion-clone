@@ -23273,9 +23273,9 @@ body.is-tablet .note-database-container .db-record-open-btn {
    "Automatically" and "(recommended)" mid-word rather than at a word boundary, and the group still
    ran 2px past the settings sheet's own right edge at 390/402px regardless — the mid-word break
    bought illegibility without buying safety. `min-width: 0` still lets an option shrink below its
-   own longest word rather than forcing the group wider than its row; the phone/sheet rule below is
-   what actually keeps the group inside its surface, by giving a full sentence the sheet's own full
-   width instead of a third of it. */
+   own longest word rather than forcing the group wider than its row; the phone/sheet rules below
+   are what actually keep the group inside its surface — the sheet's own full width for a full
+   sentence, and the wrapping that width is useless without. */
 .note-database-container .db-new-placement-option {
   flex: 1 1 0;
   min-width: 0;
@@ -23284,16 +23284,42 @@ body.is-tablet .note-database-container .db-record-open-btn {
 
 /* Phone/sheet only: a segmented control sized for one or two words has no such row to spare for a
    full sentence, so the group stacks vertically instead of forcing three sentence-length options
-   across one row. Each option keeps its own left-aligned text and wraps at word boundaries only —
-   the geometry lane's "no descendant past the surface's right edge" check is what proves this,
-   not a visual read alone. */
+   across one row. */
 .db-mobile-bottom-sheet .db-new-placement {
   flex-direction: column;
 }
 
-.db-mobile-bottom-sheet .db-new-placement-option {
+/* An option is a `<button>`, and the host's own `button` rule is what decides how its text lays
+   out unless this file says otherwise. Obsidian sets `white-space: nowrap`, `display: inline-flex`
+   with `justify-content: center`, and `height: var(--input-height)` (44px on a phone) on every
+   button in the app. Under those three a sentence-length option CANNOT wrap: it lays out as one
+   centred line and paints outside its own box on both sides, which is the horizontal overflow an
+   operator photographed on 0.0.30. `text-align: left` alone never touched it — text-align aligns
+   lines inside a block, and a nowrap flex line has no block to align.
+   Measured on the geometry the report shipped with (option box 217.7px, the label still beside
+   the field): the longest option laid out at 296px, 78px of ink outside its own button, ~39px past
+   each edge. The stacked row this packet landed widens the option to 369px, which hides it at the
+   16px default text size and brings it straight back at the size the operator actually runs.
+   So the three host declarations are answered here rather than worked around: the option wraps at
+   word boundaries, starts at the row's left edge, and grows to the height its wrapped text needs.
+   `min-height` restates the family's phone floor (`.db-dropdown-option`'s 44px at :3187) that the
+   host's fixed `height` was supplying by accident.
+   Scoped to the settings sheet rather than every sheet that draws this group. The column-width
+   adjuster's presets are one word each and never overflow, and trading the host's fixed height for
+   `auto` + a floor changes the sheet's own rendered height, which `classifySheetFrameShape`
+   (`mobile-bottom-sheet.ts`) reads: at 390x844 the taller adjuster lands inside the floating/flush
+   hysteresis band, so once a keyboard has forced it flush it no longer returns to its 8px floating
+   inset — measured, and the reason `verify-placement.mjs`'s two adjuster keyboard rows go red on
+   the unscoped form. That surface's real height in the app is already the taller one, since the
+   host gives every button `height: var(--input-height)`; whether its frame shape should follow is
+   a question for the adjuster's own owner, not a side effect of this row's fix. */
+.db-view-config-panel.db-mobile-bottom-sheet .db-new-placement-option {
   width: 100%;
   text-align: left;
+  white-space: normal;
+  justify-content: flex-start;
+  height: auto;
+  min-height: 44px;
 }
 
 .note-database-container .db-new-placement-option.is-active {

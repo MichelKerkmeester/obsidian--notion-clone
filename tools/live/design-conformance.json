@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-07T08:31:58.034Z",
+  "measuredAt": "2026-09-07T13:27:52.739Z",
   "inputs": {
-    "styles.css": "acd49f23b031",
+    "styles.css": "a401f36b34f4",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "eea3b7cb22b9"
   },

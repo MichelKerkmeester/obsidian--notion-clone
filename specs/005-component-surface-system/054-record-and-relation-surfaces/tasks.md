@@ -753,10 +753,10 @@ Nothing in this repository closes these. An agent never ticks one.
       floating mid-height of the control (label top 731.75 against field top 654, a **6px**
       horizontal gap — the two-column shape) to sitting fully above it (label bottom 674.3, field
       top 678.3); sheet `scrollWidth`/`clientWidth` held **402/402** in both states at this
-      viewport (this harness never reproduced literal px overflow, even before the fix — recorded
-      rather than asserted, since the operator's own device capture shows text clipped at the
-      sheet's right edge and this fix removes the row squeeze regardless of the exact device font
-      metrics that produced it). A second, real regression was caught by the same measurement: once
+      viewport. **The horizontal overflow half of the report is NOT closed by this task** — this
+      task's harness could not reproduce it and said so; **T073 reproduced it and fixed it**, and
+      the reason both readings were true at once is recorded there. A second, real regression was
+      caught by the same measurement: once
       the field stopped being squeezed, `.db-checkbox`'s own fixed `18px` flex-basis lost to the
       field's `:first-child { flex: 1 1 auto }` rule on specificity, stretching every checkbox
       switch across the full row — fixed by excluding `.db-checkbox` from that rule.
@@ -771,3 +771,82 @@ Nothing in this repository closes these. An agent never ticks one.
       {dark,light}`, opened and confirmed as an unrelated few-pixel icon-glyph rerun drift outside
       this edit's selector scope, kept rather than restored since its pixelHash genuinely differs.
       `npm run gate` — 26 green, 0 red. Files: `styles.css` only; no renderer or i18n change.
+
+- [x] T073 [P0] Settle and fix the horizontal overflow half of the same report. T072 measured the
+      row squeeze and recorded the overflow as inferred; this task reproduced it. **What the sheet's
+      choice controls actually do on a phone, measured on the real `ViewConfigPanelRenderer` mounted
+      through `render-assertion-bundle.mjs` at 402x874 with `body.is-phone` and a coarse pointer
+      forced at Blink:** `document.querySelectorAll("select").length` is **0** before and after every
+      click; every enabled dropdown — Record icon field, View type, Row density, Date year display —
+      opens the family's own picker as `db-dropdown-popover … db-mobile-bottom-sheet` with a shell
+      header and **44px** option rows, right edge 394 inside a 402 viewport; Template engine is
+      correctly `disabled` (no template path set) and opens nothing. **The landed phone-picker rule
+      is honoured, and no native `<select>` or inline option list exists on this surface.**
+      **The overflow is something else.** On a phone sheet "Formula result storage" is not a dropdown
+      at all: `view-config-panel-renderer.ts`'s `asSheet` branch draws `.db-new-placement`, an
+      always-visible segmented group of three sentence-length `<button>`s. Obsidian's own `button`
+      rule (`app.css`, extracted from the installed application: `display: inline-flex;
+      justify-content: center; height: var(--input-height)` — 44px on mobile — `white-space: nowrap`)
+      decides how that text lays out, and this stylesheet overrode none of it. Under nowrap a
+      sentence-length option **cannot wrap**: it lays out as one centred line and paints outside its
+      own box on both sides. The `text-align: left` that was there never touched it — text-align
+      aligns lines inside a block, and a nowrap flex line has no block to align. **Reproduced on the
+      geometry 0.0.30 shipped** (pre-T072 stylesheet + the host button rule + `--font-ui-small` 19px,
+      derived from the operator's own capture): option box **217.7px**, text **scrollWidth 296px** —
+      **78px of ink outside the button, ~39px past each edge**, matching the operator's screenshot
+      row for row. **Fix** (`styles.css`, one rule): `.db-mobile-bottom-sheet .db-new-placement-option`
+      answers the three host declarations — `white-space: normal`, `justify-content: flex-start`,
+      `height: auto` with `min-height: 44px` restating the family's phone floor the host's fixed
+      `height` had been supplying by accident. **Scoped to `.db-view-config-panel`, not to every
+      sheet that draws the group** — the unscoped form also grew the column-width adjuster, whose
+      taller height lands inside `classifySheetFrameShape`'s floating/flush hysteresis band; see
+      T075. **Red/green**, ink past the option's own box by text
+      size: BEFORE 0px @15px, **3px @19px, 45px @24px, 102px @30px**; AFTER **0px at every size**.
+      T072's stacked row widens the option to 369px, which hides the defect at the 16px default and
+      brings it straight back at the size the operator actually runs — which is why T072 alone was
+      not enough. Stacked layout re-verified live on all 23 rows: label above control, control at the
+      full 369px inset-to-inset span, explainer under the control, every row >= 48px.
+      `npx tsc --noEmit`, `npx vitest run` (1628/1628), `npm run build`,
+      `node tools/live/sheet-grammar.mjs`, `node tools/live/render-assertions.mjs`,
+      `node tools/naming/scan-comments.mjs` all exit 0. Files: `styles.css` only.
+
+- [ ] T074 [P1] Give the geometry lane a predicate that can see this. `sheet-grammar.mjs`'s own
+      §2 comment already admits "no structural predicate can see a `.db-new-placement` group's long
+      option text overflowing the surface" — T073 is the proof of that admission, and **no existing
+      gate lane pins T072 or T073**: with BOTH fixes reverted, `sheet-grammar.mjs`,
+      `render-assertions.mjs` and `touch-targets.mjs` all still exit 0. Three gaps, all measured:
+      (1) `tools/screenshots/theme.css`'s transcription of the host `button` rule omits
+      `display`/`align-items`/`justify-content`/`height`/`white-space`/`font-weight`/`user-select`,
+      so a captured button wraps where the shipped one cannot; (2) `sheet-grammar.mjs` links
+      `styles.css` alone and carries no host button baseline at all; (3) both pin `--font-ui-small`
+      at a flat 13px where the host's mobile block resolves it from `--font-text-size` (15px at the
+      16px default, more when the operator raises text size), at which even the real defect stays
+      sub-threshold. The predicate itself is one line —
+      `getComputedStyle(el).overflowX === "visible" && el.scrollWidth - el.clientWidth > tolerance`
+      — and was **tried in this landing and reverted**: it reports **356 failures**, almost all
+      pre-existing false positives (`div.db-mobile-bottom-sheet-handle +170px` x158 on a 4px
+      decorative bar, `input.db-checkbox +6px`, `span.db-dropdown-field-chevron +1px`,
+      `button.stacked-lane-anchor`, the harness's own test anchor). Landing it needs its own
+      exemption list beside the sweep's existing ones, and the two fidelity fixes above, each of
+      which re-derives a large slice of the capture corpus. That is a packet, not a rider on a fix.
+
+- [ ] T075 [P1] Decide the column-width adjuster's frame shape at its real height. T073's fix was
+      first written unscoped, for every `.db-mobile-bottom-sheet .db-new-placement-option`, and
+      `verify-placement.mjs` went red on two rows: "the adjuster clears a keyboard no host reported"
+      (panel bottom 513 against a 505 floor) and "the adjuster returns to the floor once the keyboard
+      closes" (bottom 844 against a viewport of 844 with an 8px resting inset). **Mechanism,
+      measured:** trading the host's fixed `height: var(--input-height)` for `height: auto` +
+      `min-height: 44px` grows the adjuster's four preset options from 32px to 44px, and at 390x844
+      the resulting sheet height lands between `FLOATING_HEIGHT_RATIO_MAX` and
+      `FLUSH_HEIGHT_RATIO_MIN` (`mobile-bottom-sheet.ts` §2d) — inside the hysteresis gap, where the
+      classifier deliberately leaves the sheet's CURRENT shape alone. A keyboard shrinks the visual
+      viewport, the ratio crosses the flush cutoff, the sheet goes flush, and on close the ratio
+      falls back only into the gap, so it never returns to its 8px floating inset. Reverting the rule
+      restores both rows to green; scoping it to `.db-view-config-panel` does the same, and that is
+      what landed. **The open question is not the rule, it is the surface.** The shipped app already
+      gives every button `height: var(--input-height)` (44px on mobile), so the adjuster's real height
+      on a device is already the taller one and this hysteresis behaviour is presumably already
+      happening there — the harness simply models a shorter button than the host supplies (T074's
+      first gap). Whoever owns that sheet should decide whether its frame shape should follow its real
+      height, or whether it should declare `heightRole` rather than be classified. Not decided here:
+      a fix for one row's overflow is not the place to change another surface's frame.

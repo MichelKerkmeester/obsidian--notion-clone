@@ -185,7 +185,7 @@ claim — a lander re-runs every check itself and judges a moved capture by deco
 orchestrator is rebuilt only from a clean Public-repo tree, never from inside a worktree with local
 drift.
 
-### 2026-09-07 ~11:42, `worktrees/216-settings-sheet-phone`, T072 landed against `054`
+### 2026-09-07 ~15:20, `worktrees/216-settings-sheet-phone`, T072 + T073 landed against `054`
 
 Operator report (iOS, 0.0.30, ~10:20): *"View sheet still had bad ui ux and horizontal overflow on
 0.30 btw"*, capture `operator-settings-sheet-ios-0030.png` (the operator's own, not committed
@@ -197,10 +197,41 @@ Fixed in `styles.css` only: the row stacks to a column inside this sheet, and `.
 excluded from the field's `:first-child` flex-grow rule (a second, real defect the wider field
 exposed — checkbox switches were stretching to the row's full width). Recorded as roadmap row 66,
 `054/tasks.md` T072, `054/acceptance-criteria.md` AC-013 (Met), `054/checklist.md` CHK-026 and
-OPS-004 (operator device confirmation, not agent-ticked). `npm run gate` 26 green, committed on
-`worktrees/216-settings-sheet-phone` (local, not pushed — a fresh verifier lands it; see that
-branch's own HEAD for the exact commit). Full detail: this session's own `.handover.md` in that
-worktree (untracked) and `054`'s own docs above.
+OPS-004 (operator device confirmation, not agent-ticked).
+
+**The report's second half — the horizontal overflow — was recorded as inferred by that leg and
+settled at landing as T073.** It is a different mechanism, and the landing verifier reproduced it
+rather than reasoning about it. On a phone sheet "Formula result storage" is not a dropdown: the
+renderer draws `.db-new-placement`, three sentence-length `<button>`s. Obsidian's own `button` rule
+sets `white-space: nowrap` with `justify-content: center` and a fixed `height`, and this stylesheet
+overrode none of it, so the option cannot wrap — it lays out as one centred line and paints outside
+its own box on both sides. Reproduced on the geometry 0.0.30 shipped, at the text size the
+operator's own capture implies: option box 217.7px, text 296px, **78px of ink outside the button**.
+Fixed by answering those three declarations on that one rule, scoped to `.db-view-config-panel`;
+ink past the box is now 0px at every text size the host offers, against 3/45/102px before at
+19/24/30px. Scoped rather than family-wide for a measured reason: unscoped, the same rule grows the
+column-width adjuster's presets from 32px to 44px, which lands that sheet's height inside
+`classifySheetFrameShape`'s floating/flush hysteresis band, so once a keyboard forces it flush it
+never returns to its 8px floating inset — two `verify-placement.mjs` rows red, green again once
+scoped. That surface already has the taller height in the shipped app for the same host reason, so
+the question belongs to its owner and is recorded as `054` T075. **T072's stacked row hides this
+at the 16px default and it returns at the operator's own size**, which is why the row needed both
+halves. Everything else on the surface was cleared by live measurement: **zero native `<select>`s**,
+and every enabled dropdown opens the family's phone picker sheet with 44px rows — the landed
+052/063 rule is honoured. Recorded as `054` T073/AC-014/CHK-027.
+
+**Two things a successor should not have to rediscover.** First, **no gate lane pins either fix**:
+with both reverted, `sheet-grammar.mjs`, `render-assertions.mjs` and `touch-targets.mjs` all still
+exit 0, and `sheet-grammar.mjs`'s own §2 comment already admits it cannot see this shape. The guard
+is `054` T074, which carries the one-line predicate, the 356 pre-existing false positives it
+surfaces today, and the two harness-fidelity fixes it depends on. Second, **the capture corpus was
+stale at that leg's HEAD**: it classified 23 moved captures as byte-only by `pixelHash`, which is
+quantised and blind to small real changes, and restored them. Re-capturing at that leg's own
+stylesheet reproduces real deltas for several of them (`panel-record-detail-sheet-*`,
+`constructed-chart-toolbar-options-mobile-dark`, `constructed-column-manager-mobile-dark` among
+them). This landing re-derived them and judged the whole set by decoded pixel delta over three
+capture runs instead. `npm run gate` 26 green. Full detail: that worktree's own `.handover.md`
+(untracked) and `054`'s docs above.
 
 ### 2026-09-06 ~20:10, `orchestrate-handover-24`, read from `.worktrees/193-goal-refresh-0930`
 
