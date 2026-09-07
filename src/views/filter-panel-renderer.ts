@@ -30,6 +30,7 @@ import { getViewRuleColumns, removeFilterRuleAt } from "./view-rule-operations";
 import { closeActiveDateValuePicker, renderDateValuePicker } from "./date-value-picker";
 import { createConditionRow } from "./toolbar-primitives";
 import { trapFocus } from "./interaction-scope";
+import { filterPickerRows } from "./popover-host";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CONSTANTS
@@ -195,10 +196,7 @@ export class FilterPanelRenderer {
     const tree = this.ensureFilterTree(state);
     this.renderHeader(panel, containerEl, state, config, actions, tree);
     if (!tree || flattenLeaves(tree).length === 0) {
-      panel.createDiv({
-        cls: "db-panel-empty",
-        text: t("panel.emptyFilters"),
-      });
+      this.renderEntryTier(panel, containerEl, state, config, actions);
     } else {
       const leafCursor = { value: 0 };
       const rootDepth = isFilterLeaf(tree) ? 0 : 1;
@@ -213,21 +211,82 @@ export class FilterPanelRenderer {
         actions,
         (next) => this.replaceFilterTree(containerEl, state, config, actions, next)
       );
+      const addBtn = panel.createEl("button", {
+        cls: "db-panel-button",
+        text: `+ ${t("panel.addCondition")}`,
+      });
+      addBtn.onclick = () => {
+        const next = appendLeaf(state.filterTree, createDefaultFilterRule(config), state.filterLogic);
+        this.commitFilterTree(state, next);
+        actions.saveState();
+        this.render(containerEl, true, state, config, actions, this.anchorEl || undefined);
+        actions.refresh();
+      };
     }
+    positionToolbarPopover(panel, this.anchorEl || undefined, PANEL_POPOVER);
+    if (savedScroll) panel.scrollTop = savedScroll;
+  }
 
-    const addBtn = panel.createEl("button", {
-      cls: "db-panel-button",
-      text: `+ ${t("panel.addCondition")}`,
+  /**
+   * The zero-rule state's own entry tier: a searchable flat property list, one click from
+   * picking the first filter rather than the nested tree's open-dropdown-then-pick path. A
+   * database with no rule-eligible properties has nothing to list and falls back to the plain
+   * hint instead, unchanged from before this tier existed.
+   */
+  private renderEntryTier(
+    panel: HTMLElement,
+    containerEl: HTMLElement,
+    state: DatabaseViewState,
+    config: ViewConfig,
+    actions: FilterPanelActions
+  ): void {
+    const columns = getViewRuleColumns(config);
+    if (columns.length === 0) {
+      panel.createDiv({ cls: "db-panel-empty", text: t("panel.emptyFilters") });
+      return;
+    }
+    // Reuses the dropdown primitive's own search-row and option-row classes rather than
+    // inventing a second set of geometry for what is, visually, the same list — a
+    // db-dropdown-search input above a db-dropdown-options list, exactly like every other
+    // searchable picker in this family, so this tier mints no new CSS value (D7).
+    const searchWrap = panel.createDiv({ cls: "db-dropdown-search" });
+    const search = searchWrap.createEl("input", {
+      attr: { type: "text", placeholder: t("common.search"), "aria-label": t("common.search") },
     });
-    addBtn.onclick = () => {
+    const list = panel.createDiv({ cls: "db-dropdown-options", attr: { role: "listbox" } });
+    const addFirstLeaf = (field: string) => {
+      const rule = createDefaultFilterRule(config);
+      rule.field = field;
+      const next = appendLeaf(state.filterTree, rule, state.filterLogic);
+      this.commitFilterTree(state, next);
+      actions.saveState();
+      this.render(containerEl, true, state, config, actions, this.anchorEl || undefined);
+      actions.refresh();
+    };
+    const rows = columns.map((col) => {
+      const option = toPropertyDropdownOption(col);
+      const row = list.createEl("button", {
+        cls: `db-dropdown-option db-menu-item${option.icon ? " has-icon" : ""}`,
+        attr: { type: "button", role: "option", "data-search-text": option.text.toLocaleLowerCase() },
+      });
+      if (option.icon) renderDropdownPropertyTypeIcon(row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon" }), option.icon);
+      const text = row.createSpan({ cls: "db-dropdown-option-text db-menu-item-label" });
+      text.createSpan({ cls: "db-dropdown-option-label", text: option.text });
+      row.onclick = () => addFirstLeaf(col.key);
+      return { row };
+    });
+    search.oninput = () => filterPickerRows(rows, search.value);
+    const footer = panel.createEl("button", {
+      cls: "db-panel-button",
+      text: `+ ${t("panel.addAdvancedFilter")}`,
+    });
+    footer.onclick = () => {
       const next = appendLeaf(state.filterTree, createDefaultFilterRule(config), state.filterLogic);
       this.commitFilterTree(state, next);
       actions.saveState();
       this.render(containerEl, true, state, config, actions, this.anchorEl || undefined);
       actions.refresh();
     };
-    positionToolbarPopover(panel, this.anchorEl || undefined, PANEL_POPOVER);
-    if (savedScroll) panel.scrollTop = savedScroll;
   }
 
   renderSingleRuleEditor(
@@ -498,6 +557,7 @@ export class FilterPanelRenderer {
           value: currentField,
           className: "db-panel-dropdown db-filter-field-dropdown",
           hideLabel: true,
+          searchable: true,
           renderIcon: renderDropdownPropertyTypeIcon,
           onChange: (value) => {
             rule.field = value;
@@ -584,6 +644,7 @@ export class FilterPanelRenderer {
         value: rule.value || "",
         className: "db-panel-dropdown db-filter-value-dropdown",
         hideLabel: true,
+        searchable: true,
         onChange: (value) => {
           rule.value = value;
           actions.saveState();

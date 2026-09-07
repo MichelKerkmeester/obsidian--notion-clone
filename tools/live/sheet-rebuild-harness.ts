@@ -442,7 +442,7 @@ function runOverlayRegistrationAfterRebuild(doc: Document): RebuildResult[] {
     });
 
     const addBtn = Array.from(openPanel?.querySelectorAll<HTMLButtonElement>(".db-panel-button") || [])
-      .find((btn) => /condition/i.test(btn.textContent || "")) || openPanel?.querySelector<HTMLButtonElement>(".db-panel-button");
+      .find((btn) => /condition|advanced filter/i.test(btn.textContent || "")) || openPanel?.querySelector<HTMLButtonElement>(".db-panel-button");
     const rowsBefore = openPanel?.querySelectorAll(".db-panel-row").length ?? 0;
     addBtn?.click();
     const rebuiltPanel = renderer.getPanel();
@@ -501,7 +501,7 @@ function runOverlayRegistrationAfterRebuild(doc: Document): RebuildResult[] {
     }
 
     const addBtn = Array.from(openPanel?.querySelectorAll<HTMLButtonElement>(".db-panel-button") || [])
-      .find((btn) => /condition/i.test(btn.textContent || "")) || openPanel?.querySelector<HTMLButtonElement>(".db-panel-button");
+      .find((btn) => /condition|advanced filter/i.test(btn.textContent || "")) || openPanel?.querySelector<HTMLButtonElement>(".db-panel-button");
     const rowsBefore = openPanel?.querySelectorAll(".db-panel-row").length ?? 0;
     addBtn?.click();
     const rebuiltPanel = renderer.getPanel();

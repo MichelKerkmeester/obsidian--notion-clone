@@ -203,6 +203,7 @@ export class SortPanelRenderer {
           value: rule.field,
           className: "db-panel-dropdown db-sort-field-dropdown",
           hideLabel: true,
+          searchable: true,
           renderIcon: renderDropdownPropertyTypeIcon,
           onChange: (value) => {
             state.sortColumn = undefined;
