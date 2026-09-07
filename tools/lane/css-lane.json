@@ -1,7 +1,7 @@
 {
-  "holder": "062-notion-table-refinement",
-  "acquiredAt": "2026-09-07T10:20:00Z",
-  "baselineHash": "775de2bcac81",
+  "holder": "064-notion-toolbar-refinement",
+  "acquiredAt": "2026-09-07T11:35:00.000Z",
+  "baselineHash": "acd49f23b031",
   "baselineCommit": null,
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -4956,6 +4956,33 @@
         "screenshots/notion-clone/views/table-frozen-column-mobile-light.png"
       ],
       "note": "Closes the dark-theme contrast debt the prior release on this lane recorded rather than fixed: the shadow is now themed per surface (light keeps its original rgba(0,0,0,0.25), dark switches to rgba(255,255,255,0.35), since darkening an already near-black surface has almost no room to move), measured via render-assertions.mjs's own WCAG-contrast pass at 1.83:1 light and 3.21:1 dark against --db-surface-canvas, both above the regression floor and the dark leg now above the 3:1 non-text bar the prior note could only wish for. Also fixed on this pass: the `:not(.is-phone)` scope on the frozen-column rules never matched (is-phone sits on the body, an ancestor of .note-database-container, never the container itself), so the freeze and its shadow are now turned off explicitly under .is-phone instead; and the grouped table's is-scrolled-x listener was bound to the outer container instead of .db-grouped-table, the element that actually carries the horizontal overflow, so it never toggled. Full recapture: 604 entries, verify.mjs exit 0. Three of this scenario's four captures moved real pixels and all three are committed: mobile-light 11,751 pixels of 1,405,392 and mobile-dark 4,418, both the .is-phone override removing a shadow the phone should never have painted; desktop-dark 22,510, the dark shadow itself flipping from darkening to lightening (luminance 30 to 67 at the frozen edge against 30 to 26 before). Only desktop-light is a true no-op, pixel-identical to its committed bytes, because the light token is the same rgba(0, 0, 0, 0.25) literal the old shared fallback resolved to. pixelHash does NOT separate these: it averages a 16x16 grid into 32 buckets, and a 6px blurred shadow band moves a cell's average by less than one bucket, so desktop-dark and mobile-dark both hash unchanged while their pixels plainly moved. Restoring a capture on an unchanged pixelHash is therefore wrong for this scenario specifically, and the earlier note on this entry — that desktop-dark's 'static at-rest markup never exercises the scrolled shadow' — was wrong on its own terms: the fixture carries is-scrolled-x in its markup. All three moved captures were opened and read at the frozen edge. table-renderer.ts's own scroll-listener rewiring changed no capture, structural fixture markup, and had no pixel to move."
+    },
+    {
+      "event": "acquire",
+      "phase": "064-notion-toolbar-refinement",
+      "at": "2026-09-07T11:35:00.000Z",
+      "hash": "775de2bcac81",
+      "note": "Taken over from 062-notion-table-refinement at its own released hash (775de2bcac81), with nothing outstanding against it beyond the pre-existing ledger. Re-derived on each pass of this landing's rebase: concurrent landings took and released the lane between every gate and push, so the handover this entry names is the one true of the tree that actually landed. Nothing about 064's own edit changed on any pass; only the hashes it is recorded against."
+    },
+    {
+      "event": "edit",
+      "phase": "064-notion-toolbar-refinement",
+      "at": "2026-09-07T11:40:00.000Z",
+      "hash": "acd49f23b031",
+      "note": "One rule for the toast's action link. `.db-toast-action` (Undo/Retry) measured 29x14 on a phone with no floor raising it and no touch-targets.json entry naming it. `.is-phone .db-toast-action` gains `min-width: 46px; min-height: 46px; justify-content: center;` \u2014 the icon and label keep their existing size and stay centred, only the invisible hit area grows, unchanged on desktop. `tools/live/touch-targets.mjs`'s RAISED list gained a matching db-toast-action entry at the 44px floor (46px chosen over a bare 44px after a bare 44px measured 43x43 in Chrome, evidently rounded); `tools/live/touch-targets-baseline.json`'s fixture ceiling drops 186 -> 185 since the control now clears its own named floor instead of sitting in the generic under-28px count. SURFACE_PHASE=064-notion-toolbar-refinement, check-lane.mjs exit 0 (\"edit allowed\"). Re-derived on the landing rebase: the hash names the merged stylesheet (acd49f23b031), which carries 065's and 063's landings alongside this rule; the rule itself is byte-identical to the one measured on the branch."
+    },
+    {
+      "event": "release",
+      "phase": "064-notion-toolbar-refinement",
+      "at": "2026-09-07T11:45:00.000Z",
+      "hash": "acd49f23b031",
+      "reviewed": [
+        "screenshots/notion-clone/components/chrome-toast-success-mobile-dark.png",
+        "screenshots/notion-clone/components/chrome-toast-success-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-active-view-controls-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-active-view-controls-desktop-light.png"
+      ],
+      "note": "Full recapture (npm run screenshots, 604 entries) after the .db-toast-action edit above; screenshots:verify exit 0. Four captures carry real content. chrome-toast-success-mobile-{dark,light} \u2014 both opened and read \u2014 draw the Undo action at its unchanged position and size (\"Undo\", left-aligned under the message), with more empty space around it: the invisible hit box grew, the glyph did not. constructed-active-view-controls-desktop-{dark,light} carry forward the prior release's own reviewed content unchanged (this recapture reran on top of it; same pixelHash as the release two entries back). Six further captures moved bytes at identical pixelHash under the rerun nondeterminism check-lane.mjs already documents (panel-base-import-modal-desktop-light, constructed-cell-editor-select-desktop-dark, board-mobile-desktop-dark, board-view-desktop-dark, reference-gantt-subtask-mobile-light, reference-kanban-subtask-mobile-dark) and were restored to their committed bytes, with the manifest's own bytes fields reconciled back to the restored files. node tools/lane/check-lane.mjs exit 0. Re-derived on the landing rebase onto origin/main (173f7d3a, after a first pass onto 6ca4a5c3): the four captures above are the ones this packet's own recapture moved, carried forward unchanged through the rebase since none of the concurrent landings touches the toast card or the chip rail; every generated evidence artefact was resolved to main's side and re-derived by its owning tool on the rebased tree, and the hash names the merged stylesheet. The harness-only release this packet recorded at 09:10 (constructed-active-view-controls-desktop-{dark,light} only) is folded into this entry rather than replayed: its two captures are a subset of these four and its stylesheet hash no longer exists in the tree."
     }
   ],
   "outstanding": [

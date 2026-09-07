@@ -405,7 +405,16 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       views, so it is not a fixture artefact: `recordConfigHistory` is handed the mutation's
       `viewId`, which is resolved **after** the splice, so the entry names the surviving view. No
       criterion here claims otherwise — `AC-001` asks only that the views come back — and the
-      state is coherent rather than broken, so this is recorded, not fixed.
+      state is coherent rather than broken, so this was recorded, not fixed, at this landing.
+      **Since fixed, in the same follow-up that closed T016.** `deleteView` now captures the
+      deleted view's own id (`removed.id`, already held by the splice's own destructure) before
+      calling `saveCurrentViewConfigInBackground`, and passes it through an explicit mutation
+      override rather than letting `recordConfigHistory` fall back to `this.getConfig()?.id` —
+      the *current* view's id, read after `currentViewIndex` has already moved onto the neighbour.
+      `src/views/database-view.test.ts`'s new case: deletes the active, last view (index 1 of 2),
+      asserts `currentViewIndex` moves to 0 on delete, then back to 1 — the restored view's
+      original index — on undo; red-proved by reverting the capture (stayed on 0 after undo too).
+      `npx vitest run` exit **0**.
       **The toast's presentation, measured live in Chrome** at 390x844 and 1200x800, both themes.
       Phone: the card sits at x=16 w=358 in a 390px viewport — 16px insets on both sides, so
       `066`'s centred band applies to this toast as it does to every other. Desktop: the landed
@@ -420,29 +429,68 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       reason**, read twice — the first run was RED on `evidence` alone (8 of 15 artefacts
       describing the pre-rebase tree), which was cleared by re-running each artefact's own tool
       rather than editing a number.
-- [x] T016 [P1] **Open gaps this landing recorded, neither blocking nor closed.** The row is
-      closed because naming them is its deliverable; each gap itself stays open, with an owner. Three, each with
-      an owner that is not this packet's remaining work.
-      **(a) Three of the five suites this packet adds are source greps, not behaviour.**
+- [x] T016 [P1] **Open gaps this landing recorded, since closed by a follow-up.** Three, each
+      with an owner that was not this packet's remaining work at the landing — all three are now
+      closed, in the same follow-up that also fixed the undo-selection gap T015 recorded (below).
+      **(a) CLOSED. Three of the five suites this packet adds were source greps, not behaviour.**
       `filter-panel-renderer.test.ts`, `sort-panel-renderer.test.ts` and
-      `active-view-controls-renderer.test.ts` read the shipped source and assert on strings. Their
-      stated reason — that the `node` environment cannot mount Obsidian's DOM helpers — is
+      `active-view-controls-renderer.test.ts` read the shipped source and asserted on strings.
+      Their stated reason — that the `node` environment cannot mount Obsidian's DOM helpers — was
       contradicted inside this same packet by `view-config-panel-renderer.test.ts`, which mounts
-      the real renderer on a hand-built tree and asks it real questions. The cost is measurable:
+      the real renderer on a hand-built tree and asks it real questions. The cost was measurable:
       rewriting the entry tier so **every** property row creates its rule on the first property
-      (`addFirstLeaf(columns[0].key)` for `addFirstLeaf(col.key)`) leaves all seven
-      `filter-panel-renderer.test.ts` assertions green. That is a real defect no test here sees.
-      **(b) The chip rail's add control ships unphotographed and behaviourally untested.** No
-      registered capture draws it, because the one capture that mounts the real renderer supplies
-      no `addFilter`/`addSort`. Giving `render-assertion-harness.ts` those two actions would give
-      `REQ-005` real coverage and a picture — and would move four captures, so it needs a lane
-      acquire, a recapture and an operator read, which is why it is filed rather than done here.
-      **(c) `.db-toast-action` is a 29x14 px tap target on a phone.** `styles.css`'s
-      `.db-toast-action` sets `padding: 0` with no min-height, and `tools/live/touch-targets.json`
-      carries no `db-toast` entry, so nothing measures it. This packet's Undo rides that control,
-      which is what makes it worth naming here, but the control belongs to the toast's owner
-      (`051`/`066`) and `D5` says a shared primitive has one owner. Ctrl+Z and the toolbar's own
-      Undo action reach the same history entry, so the recovery path does not depend on it.
+      (`addFirstLeaf(columns[0].key)` for `addFirstLeaf(col.key)`) left all seven
+      `filter-panel-renderer.test.ts` assertions green — a real defect no test there saw. All
+      three suites now mount real DOM on a hand-built tree, matching `view-config-panel-renderer.test.ts`'s
+      own idiom. `filter-panel-renderer.test.ts` mounts the zero-rule entry tier and drives a
+      click on a non-first row, asserting the resulting rule's field matches that row's own
+      property — red-proved against the named mutant (`state.filters[0].field` read `"file.name"`
+      instead of the clicked `"colB"`), green on the real source. The ≥1-rule tree branch and the
+      searchable-dropdown occurrence counts stay a documented source pin: `toolbar-primitives.ts`'s
+      `appendConditionPart` gates its min-width floor on `child instanceof HTMLElement`, and this
+      suite's `node` environment has no global `HTMLElement` — mounting that branch needs that
+      fixed first, filed separately rather than smuggled into this follow-up.
+      `sort-panel-renderer.test.ts` mounts a real sort rule row (with `./dropdown-field`'s
+      `createDropdownField` mocked — it carries its own suite — and a scoped `HTMLElement` global
+      stub for `appendConditionPart`'s same guard) and reads which call received `searchable:
+      true`, red-proved by swapping the flag onto the direction dropdown.
+      `active-view-controls-renderer.test.ts` mounts the real chip rail and drives the add
+      control's click through to `actions.addFilter`/`actions.addSort`, red-proved by wiring the
+      sort group's control to `addFilter` instead. `npx vitest run` exit **0**, 1602/1602.
+      **(b) CLOSED. The chip rail's add control shipped unphotographed and behaviourally
+      untested.** No registered capture drew it, because the one capture that mounts the real
+      renderer supplied no `addFilter`/`addSort`. `render-assertion-harness.ts`'s
+      `active-view-controls` scenario (its own actions bag, `:3207`) now supplies both as no-ops,
+      matching every other action in that bag; `chipRailAssertions` gained a check that each
+      present rule group carries its own `.db-active-control-add`, red-proved by reverting the two
+      actions (0 add controls, want 1, on both scenarios). `node tools/live/render-assertions.mjs`
+      exit **0**. This moved four registered captures; two are byte-identical
+      (`constructed-active-view-controls-mobile-{dark,light}` — the mobile rail's own horizontal
+      scroll clips the add control out of the captured viewport, a `layoutHash`-only move) and two
+      carry real content (`constructed-active-view-controls-desktop-{dark,light}`), both opened
+      and read: the `+` control now sits at the end of each chip group, legible in both themes.
+      `tools/lane/css-lane.json` released, naming both real-content captures; `node
+      tools/lane/check-lane.mjs` exit **0**, "release names all 2 changed capture(s)".
+      **(c) CLOSED. `.db-toast-action` was a 29x14 px tap target on a phone.** `styles.css`'s
+      `.db-toast-action` set `padding: 0` with no min-height, and `tools/live/touch-targets.json`
+      carried no entry naming it, so nothing measured it. `.is-phone .db-toast-action` now carries
+      `min-width: 46px; min-height: 46px; justify-content: center;` — the icon and label keep
+      their existing size and stay centred, only the invisible hit area grows, unchanged on
+      desktop (46px rather than a bare 44px: a bare 44px measured 43x43 in Chrome, evidently
+      rounded). `tools/live/touch-targets.mjs`'s `RAISED` list gained a matching `db-toast-action`
+      entry at the 44px floor, the same shape `db-table-footer-trigger` already used; red-proved
+      by reverting the CSS alone (`30x15, under its named 44px floor (RAISED, not the 28px
+      default)`), green with it restored. `tools/live/touch-targets-baseline.json`'s fixture
+      ceiling dropped 186 → 185, since the control now clears its own named floor instead of
+      sitting in the generic under-28px count. This edited `styles.css`, so it went through the
+      css-lane properly: `SURFACE_PHASE=064-notion-toolbar-refinement`, an `edit` entry recorded
+      at the new hash, a full recapture (`chrome-toast-success-mobile-{dark,light}` moved real
+      content — both opened and read, "Undo" unchanged in position and size with more invisible
+      space around it — plus `constructed-active-view-controls-desktop-{dark,light}` carrying
+      forward (b)'s own content), and a `release` entry naming all four. `node
+      tools/lane/check-lane.mjs` exit **0**, "release names all 4 changed capture(s)". `node
+      tools/live/touch-targets.mjs` exit **0**. Ctrl+Z and the toolbar's own Undo action still
+      reach the same history entry regardless, so the recovery path never depended on this fix.
 - [ ] T013 [P0] **Operator row — never ticked by an agent.** The four device-only checks the loop
       named — icon-only rail discoverability on a phone, the entry tier inside the phone filter
       sheet, the delete confirm as a stacked sheet, and tabs against the view switcher both
@@ -575,8 +623,9 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
 Every `CHK-*` row above is closed. `T013` in the tasks list above is the one row still open —
 the operator's device sitting — and it is not one of the `CHK-*` verification items this table
 counts. `T015` (landing verification) and `T016` (the three gaps that landing recorded) were added
-at the landing and are closed; the three gaps `T016` names are open with owners, and none of them
-blocks a criterion this packet can close.
+at the landing and are closed; a follow-up has since closed all three gaps `T016` named and the
+undo-selection gap `T015` recorded — none of them ever blocked a criterion this packet could close,
+and none is open any longer.
 
 **Verification Date**: 2026-09-07
 <!-- /ANCHOR:summary -->

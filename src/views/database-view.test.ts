@@ -122,6 +122,7 @@ interface DatabaseViewHarness {
   rows: RowData[];
   instanceId: string;
   historyStack: TestHistoryEntry[];
+  currentViewIndex: number;
   refresh(options?: { viewport?: unknown }): void;
   deleteView(viewIndex: number): void;
   undoLastEdit(): Promise<void>;
@@ -478,6 +479,36 @@ describe("DatabaseView deleteView (no confirm — an existing undo path already 
     await harness.undoLastEdit();
     expect(dbConfig.views).toHaveLength(2);
     expect(dbConfig.views.map((view) => view.name)).toEqual(["Board", "Table"]);
+  });
+
+  it("restores the selected tab, not just the view list, when undo brings a deleted view back", async () => {
+    // Red before this fix: recordConfigHistory fell back to the CURRENT view's id
+    // (this.getConfig()?.id) when no viewId was given, and deleteView already moved
+    // currentViewIndex onto the neighbour by the time that fallback ran — so the history entry
+    // named the surviving view, and undo restored the deleted view into the strip without ever
+    // moving the selection back onto it.
+    const secondView: ViewConfig = {
+      id: "view-2", name: "Table", sourceFolder: "Tasks", schema: { columns: [], computedFields: [] }, viewType: "table",
+    };
+    const { harness, dbConfig } = createView([secondView]);
+    expect(dbConfig.views).toHaveLength(2);
+
+    // Select the view being deleted — it is also the last one, so the delete forces
+    // currentViewIndex back onto its neighbour (Board, index 0) the same way the toolbar's own
+    // tab-close does. Deleting an inactive, non-last view never moves currentViewIndex at all,
+    // so the bug only shows on this exact shape.
+    harness.currentViewIndex = 1;
+    harness.deleteView(1);
+    await flushConfigWrite();
+
+    expect(dbConfig.views.map((view) => view.name)).toEqual(["Board"]);
+    expect(harness.currentViewIndex).toBe(0);
+
+    await harness.undoLastEdit();
+    expect(dbConfig.views.map((view) => view.name)).toEqual(["Board", "Table"]);
+    // The restored "Table" view is back at its original index (1) — the selection must follow
+    // it there, not stay on "Board", the neighbour the delete moved it to.
+    expect(harness.currentViewIndex).toBe(1);
   });
 
   it("raises no confirm and pushes no history entry for the one-view guard — a delete that cannot happen asks nothing", async () => {

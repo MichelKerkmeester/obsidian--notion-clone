@@ -3474,7 +3474,12 @@ export class DatabaseView extends FileView {
     }
     this.clearViewStateCache();
     this.pendingUndoLabel = t("undo.deleteViewConfig");
-    this.saveCurrentViewConfigInBackground();
+    // recordConfigHistory falls back to the CURRENT view's id when no viewId is given, and by
+    // this point currentViewIndex has already moved off the deleted view — that fallback would
+    // name the neighbour undo left selected, not the view undo is about to bring back. The
+    // deleted view's own id, still held by `removed`, is what undo needs to restore the tab.
+    const mutation = this.getCurrentMutationTarget();
+    this.saveCurrentViewConfigInBackground(mutation && removed ? { ...mutation, viewId: removed.id } : mutation);
     this.rerenderToolbar();
     this.refresh({ viewport: "reset-top" });
     if (this.containerEl_) {

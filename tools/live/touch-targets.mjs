@@ -144,6 +144,14 @@ const RAISED = [
       + " phone body); the footer itself is now absent at zero rows, so every trigger this measures"
       + " belongs to a table that actually has rows to summarize",
   },
+  {
+    match: "db-toast-action",
+    floor: ENHANCED,
+    reason: "the toast's action link (Undo/Retry) measured 29x14 with no floor at all before this"
+      + " entry; raised to 44px on phone (unchanged on desktop, out of this floor's reach since the"
+      + " fixture only renders on a phone body), the icon and label kept at their existing size and"
+      + " centred in the wider box",
+  },
 ];
 
 // ───────────────────────────────────────────────────────────────────

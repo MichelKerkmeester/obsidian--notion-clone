@@ -3050,6 +3050,17 @@ body.db-bottom-dock-taken .note-database-container .db-cell-selection-pill {
   height: 14px;
 }
 
+/* Was a 29x14 CSS px tap target on a phone — no rule raised it and `touch-targets.json` carried
+   no entry to measure it. Raised to the same 44px phone floor `.db-table-load-more-button` and
+   `.db-table-footer-trigger` already carry; the icon and label stay their existing size and
+   position (`justify-content: center` keeps them centred in the wider box), only the invisible
+   hit area grows. Unchanged on desktop. */
+.is-phone .db-toast-action {
+  min-width: 46px;
+  min-height: 46px;
+  justify-content: center;
+}
+
 .note-database-container .db-skeleton-loader {
   position: absolute;
   inset: 112px 16px 16px;

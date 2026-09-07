@@ -105,25 +105,28 @@ REQ-006 (per-group visibility) was **not built** — ADR-007 declined it, 2026-0
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `src/views/database-view.ts` | Modify | `deleteView` labels its history entry and raises the Undo toast (REQ-001); wires `addFilter`/`addSort` to `toggleHeaderPopover` (REQ-005) |
+| `src/views/database-view.ts` | Modify | `deleteView` labels its history entry and raises the Undo toast (REQ-001); wires `addFilter`/`addSort` to `toggleHeaderPopover` (REQ-005). Follow-up: `deleteView` now passes the deleted view's own id through an explicit mutation override, so undo restores the selected tab along with the view (AC-001, was T015's recorded gap) |
 | `src/views/toolbar-renderer.ts` | Modify | Collapse rung ahead of the cluster ladder (REQ-004); the New label span gained a class for the sweep to read; the two `deleteView` call sites are unchanged |
 | `src/views/filter-panel-renderer.ts` | Modify | Zero-rule entry tier (REQ-002); `searchable: true` on two dropdowns (REQ-003) |
 | `src/views/sort-panel-renderer.ts` | Modify | `searchable: true` on the field dropdown (REQ-003) |
 | `src/views/active-view-controls-renderer.ts` | Modify | Optional `addFilter`/`addSort` actions and the per-group `db-active-control-add` control (REQ-005) |
 | `src/views/view-config-panel-renderer.ts` | Modify | Fourth conditional-colour summary row, opening the existing section (REQ-009) |
 | `src/i18n.ts` | Modify | Six new English keys: `undo.deleteViewConfig`, `notice.deletedView`, `panel.addAdvancedFilter`, `toolbar.noConditionalColors`, `viewConfig.conditionalColor`, `viewConfig.conditionalColorHint` |
-| `styles.css` | Modify | One class, `.db-active-control-add` (REQ-005), at the landed chip pitch and tints. No other new selector — the entry tier and the conditional-colour row both reuse shipped classes |
+| `styles.css` | Modify | One class, `.db-active-control-add` (REQ-005), at the landed chip pitch and tints. No other new selector — the entry tier and the conditional-colour row both reuse shipped classes. Follow-up: `.is-phone .db-toast-action` gains a 46px min-width/min-height, closing T016(c) |
 | `tools/live/toolbar-collapse-sweep.ts` | Modify | `newLabelVisible`/`newButtonAriaLabel` readings (REQ-004) |
 | `tools/live/run-toolbar-collapse-sweep.mjs` | Modify | Direct assertions for the label-ahead-of-ladder, non-vacuous and aria-stable checks |
 | `tools/live/sheet-rebuild-harness.ts` | Modify | Widened a stale `/condition/i` button-finder to also match the entry tier's "advanced filter" wording (two call sites) |
 | `tools/live/sheet-rebuild.mjs` | Modify | The "holds still while it rebuilds" check now detects a replayed entrance (top reaches the viewport floor) rather than any downward movement, so a legitimate content-driven resize is no longer mistaken for the historical re-entrance bug |
-| `tools/lane/css-lane.json` | Modify | Acquired, edited, released — zero captures carry this packet's content |
-| `src/views/database-view.test.ts` | Modify | New "DatabaseView deleteView" suite (2 cases); harness gained a second-view fixture and an `activeDocument.querySelectorAll` stub |
+| `tools/live/render-assertion-harness.ts` | Modify | Follow-up: the `active-view-controls` scenario's actions bag now supplies `addFilter`/`addSort`, and `chipRailAssertions` checks each present rule group carries its own add control — closes T016(b) |
+| `tools/live/touch-targets.mjs` | Modify | Follow-up: `RAISED` list gains a `db-toast-action` entry at the 44px floor — closes T016(c) |
+| `tools/live/touch-targets-baseline.json` | Modify | Follow-up: fixture ceiling 186 → 185, since `db-toast-action` now clears its own named floor instead of sitting in the generic under-28px count |
+| `tools/lane/css-lane.json` | Modify | Acquired, edited, released — zero captures carried this packet's content at the landing. Follow-up: two further release cycles, one for T016(b)'s add control (2 captures named) and one for T016(c)'s toast fix (an `edit` entry plus a `release` naming 4 captures) |
+| `src/views/database-view.test.ts` | Modify | New "DatabaseView deleteView" suite (2 cases); harness gained a second-view fixture and an `activeDocument.querySelectorAll` stub. Follow-up: a third case proving undo restores the selected tab, and the harness exposes `currentViewIndex` |
 | `src/views/toolbar-renderer.test.ts` | Modify | Pins that neither delete-view call site gained a confirm primitive |
 | `src/views/view-config-panel-renderer.test.ts` | Modify | New conditional-colour summary-row suite (3 cases) |
-| `src/views/filter-panel-renderer.test.ts` | New | Entry-tier and searchable-dropdown assertions (7 cases) |
-| `src/views/sort-panel-renderer.test.ts` | New | Searchable-dropdown assertions (2 cases) |
-| `src/views/active-view-controls-renderer.test.ts` | New | Chip-rail add-control assertions (3 cases) |
+| `src/views/filter-panel-renderer.test.ts` | New | Entry-tier and searchable-dropdown assertions (7 cases at the landing). Follow-up: the entry-tier assertions now mount the real renderer and drive a click, closing T016(a)'s named `addFirstLeaf` gap; still 7 cases |
+| `src/views/sort-panel-renderer.test.ts` | New | Searchable-dropdown assertions (2 cases at the landing). Follow-up: mounts the real renderer with `createDropdownField` mocked, reading which call received `searchable: true`; still 2 cases |
+| `src/views/active-view-controls-renderer.test.ts` | New | Chip-rail add-control assertions (3 cases at the landing). Follow-up: mounts the real renderer and drives the add control's click through to `actions.addFilter`/`actions.addSort` (4 cases) |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -168,15 +171,17 @@ its plan without a branch decision.
 |-------|--------|
 | `npx tsc --noEmit` | Exit **0** |
 | `npm run build` | Exit **0** (`main.js` regenerated) |
-| `npx vitest run` | Exit **0** — **149 files, 1600 tests** on the rebased tree (146 / 1557 before it; the difference is main's own landings) |
+| `npx vitest run` | Exit **0** — **149 files, 1600 tests** on the rebased tree (146 / 1557 before it; the difference is main's own landings). Follow-up: **1602 tests** (2 new cases: the `addFirstLeaf`-mutant click test, the undo-selection test) |
 | `node tools/live/sheet-grammar.mjs` | Exit **0** |
-| `node tools/live/render-assertions.mjs` | Exit **0** |
+| `node tools/live/render-assertions.mjs` | Exit **0**. Follow-up: still exit **0** with `chipRailAssertions`'s new add-control check |
+| `node tools/live/touch-targets.mjs` | Follow-up: Exit **0** — fixture baseline 185 (was 186), constructed baseline 810 (unchanged); red-proved by reverting the `.db-toast-action` CSS alone (`30x15, under its named 44px floor`) |
 | `node tools/naming/scan-comments.mjs` | Exit **0** — no artifact ids, comment grammar intact |
 | `node tools/naming/scan-failing-values.mjs` | Exit **0** |
-| `npm run gate` | Exit **0** — **26 green, 0 red for a declared reason**, read twice on the rebased tree; the first run was RED on `evidence` alone (8 of 15 artefacts still describing the pre-rebase tree) and was cleared by re-running each artefact's own tool. Includes `toolbar-collapse` (red in T001, green after T007) and `sheet-rebuild` (three scoped fixes, `tasks.md` T011) |
-| `npm run screenshots` + `npm run screenshots:verify` | Full recapture (**604 entries**) on the rebased tree; exit **0**. Zero captures carry this packet's content — **4** moved bytes at identical pixelHash/layoutHash (rerun jitter) and were restored to committed bytes, with the manifest's `bytes` fields reconciled to them |
-| Mutation testing, one per new surface | Every mutation red except one: the entry tier's per-row property binding survives its suite. `tasks.md` T015, gap in T016(a) |
-| Captures opened and read | `constructed-toolbar-{desktop,mobile}-{dark,light}` and `chrome-toast-success-{desktop,mobile}-{dark,light}` |
+| `npm run gate` | Exit **0** — **26 green, 0 red for a declared reason**, read twice on the rebased tree; the first run was RED on `evidence` alone (8 of 15 artefacts still describing the pre-rebase tree) and was cleared by re-running each artefact's own tool. Includes `toolbar-collapse` (red in T001, green after T007) and `sheet-rebuild` (three scoped fixes, `tasks.md` T011). Follow-up: read again after the `.db-toast-action` `styles.css` edit moved its hash — RED on `evidence` alone again (8 of 15 artefacts, the same 8 that read `styles.css` as an input), cleared the same way; **26 green** on the re-run |
+| `npm run screenshots` + `npm run screenshots:verify` | Full recapture (**604 entries**) on the rebased tree; exit **0**. Zero captures carry this packet's content — **4** moved bytes at identical pixelHash/layoutHash (rerun jitter) and were restored to committed bytes, with the manifest's `bytes` fields reconciled to them. Follow-up: two further full recaptures. T016(b)'s: 2 captures carry real content (`constructed-active-view-controls-desktop-{dark,light}`), 2 are byte-identical mobile pixelHash matches with a `layoutHash`-only move, 5 further captures are rerun jitter, restored. T016(c)'s: 2 further captures carry real content (`chrome-toast-success-mobile-{dark,light}`), 6 are rerun jitter, restored |
+| `node tools/lane/check-lane.mjs` | Follow-up: exit **0** after each of the two release cycles above — `"release names all 2 changed capture(s)"`, then `"release names all 4 changed capture(s)"` |
+| Mutation testing, one per new surface | Every mutation red except one: the entry tier's per-row property binding survives its suite. `tasks.md` T015, gap in T016(a). Follow-up: closed — the mutant (`addFirstLeaf(columns[0].key)` for `addFirstLeaf(col.key)`) now fails `filter-panel-renderer.test.ts` |
+| Captures opened and read | `constructed-toolbar-{desktop,mobile}-{dark,light}` and `chrome-toast-success-{desktop,mobile}-{dark,light}`. Follow-up: `constructed-active-view-controls-desktop-{dark,light}` (twice, across both release cycles) and `chrome-toast-success-mobile-{dark,light}` |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -210,16 +215,24 @@ its plan without a branch decision.
    import modal). Recorded rather than silently absorbed; not investigated further as out of scope.
    `engine-parity` is not a `gate.mjs` row — only its artefact's freshness is gated — so its
    non-zero exit does not enter the 26.
-5. **The Undo does not restore the selected tab.** Measured at the landing: deleting the selected
-   view and pressing the toast's Undo brings the view and its whole config back, and leaves the
-   selection on the neighbour the delete had moved it to. `recordConfigHistory` is handed a
-   `viewId` resolved after the splice, so the history entry names the surviving view. No criterion
-   claims otherwise and the resulting state is coherent, so this is recorded rather than fixed.
-6. **Three of this packet's five suites are source greps.** `filter-panel-renderer.test.ts`,
-   `sort-panel-renderer.test.ts` and `active-view-controls-renderer.test.ts` assert on the shipped
-   source rather than on rendered DOM, and one real defect passes them (see `tasks.md` T016(a)).
-   The chip-rail add control additionally has no capture, and `.db-toast-action` is a 29x14 px tap
-   target that nothing measures — T016(b) and T016(c).
+5. ~~**The Undo does not restore the selected tab.**~~ **RESOLVED by a follow-up.** Measured at
+   the landing: deleting the selected view and pressing the toast's Undo brought the view and its
+   whole config back, and left the selection on the neighbour the delete had moved it to. Fixed by
+   passing the deleted view's own id through an explicit mutation override to
+   `saveCurrentViewConfigInBackground`, rather than letting `recordConfigHistory` fall back to
+   `this.getConfig()?.id` — the *current* view's id, read after `currentViewIndex` had already
+   moved. Proven with a new case in `src/views/database-view.test.ts`, red-proved against the
+   reverted capture.
+6. ~~**Three of this packet's five suites are source greps.**~~ **RESOLVED by a follow-up.**
+   `filter-panel-renderer.test.ts`, `sort-panel-renderer.test.ts` and
+   `active-view-controls-renderer.test.ts` now mount real DOM on a hand-built tree, matching
+   `view-config-panel-renderer.test.ts`'s own idiom; the named mutant
+   (`addFirstLeaf(columns[0].key)` for `addFirstLeaf(col.key)`) now fails the first suite. The
+   chip-rail add control's missing capture and `.db-toast-action`'s 29x14 px tap target are also
+   resolved — `render-assertion-harness.ts` now supplies `addFilter`/`addSort` to the one capture
+   that mounts the real rail, and `.is-phone .db-toast-action` carries a 46px min-width/min-height
+   with a matching `RAISED` entry in `tools/live/touch-targets.mjs`. Full evidence: `tasks.md`
+   T016.
 <!-- /ANCHOR:limitations -->
 
 ---

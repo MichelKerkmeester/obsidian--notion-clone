@@ -2206,6 +2206,13 @@ function chipRailAssertions(container: HTMLElement, scenario: ScenarioSpec): Ass
         : "no direction word — the rail used to show an ordinal only",
     });
   }
+  const expectedAddControls = (scenario.rules !== "sort" ? 1 : 0) + (scenario.rules !== "filter" ? 1 : 0);
+  const addControls = container.querySelectorAll(".db-active-control-add").length;
+  results.push({
+    name: "each active rule group carries its own add control, wired to the actions bag's addFilter/addSort",
+    pass: addControls === expectedAddControls,
+    detail: `${addControls} add control(s), want ${expectedAddControls}`,
+  });
   return results;
 }
 
@@ -3218,6 +3225,8 @@ export function runRenderAssertions(
       removeSort: () => undefined,
       toggleFilterLogic: () => undefined,
       clearAll: () => undefined,
+      addFilter: () => undefined,
+      addSort: () => undefined,
     };
     bagKeys = Object.keys(actions).sort();
     container.createDiv({ cls: "db-header" });
