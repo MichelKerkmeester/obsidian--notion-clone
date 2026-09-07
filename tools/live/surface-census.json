@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-07T04:51:52.310Z",
+  "measuredAt": "2026-09-07T05:04:09.127Z",
   "inputs": {
-    "styles.css": "3f695d84f132",
+    "styles.css": "fc00d8134c97",
     "tools/live/surface-census.mjs": "ea52a1e1e8f5",
     "src/views/surface-contract.ts": "ca203fa23a84",
     "src/views/record-detail-panel.ts": "b1bf1a174b87",
@@ -9,13 +9,13 @@
     "src/views/board-card-properties-panel.ts": "20052347713c"
   },
   "totals": {
-    "rendered": 85,
-    "buildable": 229,
+    "rendered": 86,
+    "buildable": 230,
     "declared": 6,
     "renderedOnly": 0,
     "buildableNotRendered": 144,
     "untokened": 0,
-    "unroled": 85,
+    "unroled": 86,
     "recordSurfaceHandBuilt": 0
   },
   "rendered": {
@@ -112,6 +112,7 @@
         "panel-view-config-sheet",
         "panel-settings-side-sheet",
         "panel-board-card-properties",
+        "panel-board-groups",
         "panel-column-manager",
         "panel-column-width-sheet",
         "chrome-utilities-popover",
@@ -136,6 +137,7 @@
         "panel-view-config-sheet",
         "panel-settings-side-sheet",
         "panel-board-card-properties",
+        "panel-board-groups",
         "panel-column-manager",
         "panel-column-width-sheet",
         "chrome-utilities-popover",
@@ -960,6 +962,8 @@
         "panel-sort-rules",
         "panel-sort-rules",
         "panel-sort-calendar-empty",
+        "panel-board-groups",
+        "panel-board-groups",
         "panel-column-manager",
         "panel-column-manager",
         "field-cell-edit-select"
@@ -1058,6 +1062,16 @@
         "panel-view-config-sheet",
         "panel-column-manager",
         "field-cell-edit-select"
+      ]
+    },
+    "db-board-groups-panel": {
+      "cls": "db-board-groups-panel",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "360x235",
+      "scenarios": [
+        "panel-board-groups"
       ]
     },
     "db-panel-button-label": {

@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Notion Board Refinement"
-description: "The Groups panel landed: per-group visibility, drag reorder and hide-empty-groups on one surface, with the four errata and four device checks still owed to a broader-authority pass."
+description: "The Groups panel landed: per-group visibility, drag reorder and hide-empty-groups on one surface, with the four errata and four device checks filed into 056 by the landing pass."
 trigger_phrases:
   - "059 implementation summary"
   - "board groups panel summary"
@@ -10,12 +10,11 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/059-notion-board-refinement"
-    last_updated_at: "2026-09-07T01:30:00Z"
-    last_updated_by: "code-leg-session"
-    recent_action: "Landed the Groups panel, the hideGroup/showGroup wiring, boardHideEmptyGroups, and the panel's captures and assertion rows; gate green at 26/26"
-    next_safe_action: "A broader-authority pass files E-1/E-2/E-4/E-5 into ../056-board-anytype-parity/notion-screens-digest.md and the four device items onto its acceptance-criteria.md AC-010, then the operator reads T015"
+    last_updated_at: "2026-09-07T05:55:00Z"
+    last_updated_by: "landing-verification-session"
+    recent_action: "Rebased onto origin/main; filed T003/T004/T014 into 056; gate 26 green"
+    next_safe_action: "Cut a release so the operator can read T015 on device"
     blockers:
-      - "AC-007 and half of AC-009 need write authority into ../056-board-anytype-parity/** that this leg did not carry"
       - "T015 (the operator's own device read) closes nothing an agent can close"
     key_files:
       - "src/views/board-groups-panel.ts"
@@ -30,11 +29,12 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-059-impl-summary"
       parent_session_id: null
-    completion_pct: 80
+    completion_pct: 90
     open_questions: []
     answered_questions:
       - "ADR-004/ADR-010/ADR-011 answered 2026-09-06 18:36; this leg is the code half they unblocked"
       - "T008's own row-count arithmetic needed a correction: ADR-004's 'one Groups panel, not scattered across the column menu' means the standalone Hide column row is removed once hideGroup is wired, not kept alongside Manage groups"
+      - "T003/T004/T014's cross-packet half was filed by the landing pass, which carried the 056 write authority the code leg did not"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
 # Implementation Summary

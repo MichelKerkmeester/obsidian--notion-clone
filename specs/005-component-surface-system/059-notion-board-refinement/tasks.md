@@ -251,11 +251,24 @@ the file half: every task below waits only on `058` releasing `src/views/board-r
       panel's reuse of the shared reorder-button control added 6 already-recorded-shortfall
       instances to each pass; `tools/live/touch-targets-baseline.json` and
       `-constructed-baseline.json` re-pinned with a dated justification entry, the same convention
-      every prior ratchet change in that file already follows), and `evidence` (nine `tools/live/
+      every prior ratchet change in that file already follows). **Re-derived on the rebase onto
+      `origin/main`, and the fixture ratchet moved DOWN rather than up:** the tree measures **186**
+      fixture / **807** constructed over three consecutive runs, so the fixture pin is **186**, not
+      the 202 this leg's own arithmetic produced — `origin/main`'s 196 was already stale by 16 from
+      its own landings in between, found stale rather than lowered here, the same way `lastTriage`
+      and `listRetirementLowering` in that file were. The +6 is confirmed by machine, not by
+      argument: `touch-targets.mjs --json` filtered to unclassed 24x24 buttons reports
+      `panel-column-manager` **12**, `panel-board-card-properties` **8**, `panel-sort-rules` **4**
+      and `panel-board-groups` **6** — one shared control, in a fourth fixture. The constructed pin
+      lands at **810**, and only **6** of that raise is this packet's: a before/after diff of
+      `--json`, keyed on (scenario, tag, classes, width, height), attributes the other **3** to
+      `db-record-detail-hidden-toggle` at 120x20, which arrived with `065-notion-record-refinement`'s
+      own landing on `main` without a re-pin. Recorded under its own key in the constructed baseline
+      rather than folded into this packet's raise, and `evidence` (nine `tools/live/
       *.json` census/audit stamps recorded against the pre-edit `styles.css` hash; each re-run by
       its own tool per the file's own instruction — "do not edit the numbers" — with `engine-parity`
       confirmed to report its pre-existing 44 differences unchanged, only its freshness hash
-      moving). `npx tsc --noEmit` and `npx vitest run` (143 files, 1534 tests) both exit 0. The
+      moving). `npx tsc --noEmit` and `npx vitest run` both exit 0 — **144 files, 1553 tests** re-run from the rebased final state (143/1534 on this leg's own tree, before `origin/main`'s landings and one assertion the landing pass added). The
       gantt guard `056` D7 carries is unaffected — `git diff` names no `pm-gantt-*` file.
 - [x] T014 **Reconcile the record.** `spec.md`, `plan.md`, this file and `acceptance-criteria.md`
       reconciled against the landed tree; `decision-record.md` needed no change — its eleven ADRs

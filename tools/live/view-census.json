@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-07T04:52:05.756Z",
+  "measuredAt": "2026-09-07T05:04:21.224Z",
   "inputs": {
-    "styles.css": "3f695d84f132",
+    "styles.css": "fc00d8134c97",
     "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -360,11 +360,11 @@
     }
   ],
   "totals": {
-    "fixtures": 79,
+    "fixtures": 80,
     "escaping": 663,
     "growing": 309,
     "scrolling": 354,
-    "rhythmGroups": 8,
+    "rhythmGroups": 12,
     "ragged": 0,
     "probeBlind": 24
   },
@@ -2028,6 +2028,16 @@
       "by": 4,
       "scrolls": false,
       "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "panel-board-groups",
+      "kind": "rhythm",
+      "cls": "db-column-manager-row",
+      "count": 3,
+      "mean": 34,
+      "sd": 0,
+      "distinct": 1
     },
     {
       "width": 320,
@@ -4823,6 +4833,16 @@
     },
     {
       "width": 402,
+      "fixture": "panel-board-groups",
+      "kind": "rhythm",
+      "cls": "db-column-manager-row",
+      "count": 3,
+      "mean": 34,
+      "sd": 0,
+      "distinct": 1
+    },
+    {
+      "width": 402,
       "fixture": "panel-record-detail-sheet",
       "kind": "escaping",
       "tag": "div",
@@ -6636,6 +6656,16 @@
     },
     {
       "width": 768,
+      "fixture": "panel-board-groups",
+      "kind": "rhythm",
+      "cls": "db-column-manager-row",
+      "count": 3,
+      "mean": 34,
+      "sd": 0,
+      "distinct": 1
+    },
+    {
+      "width": 768,
       "fixture": "panel-record-detail-sheet",
       "kind": "escaping",
       "tag": "div",
@@ -7503,6 +7533,16 @@
     },
     {
       "width": 1440,
+      "fixture": "panel-board-groups",
+      "kind": "rhythm",
+      "cls": "db-column-manager-row",
+      "count": 3,
+      "mean": 34,
+      "sd": 0,
+      "distinct": 1
+    },
+    {
+      "width": 1440,
       "fixture": "panel-record-detail-sheet",
       "kind": "escaping",
       "tag": "div",
@@ -7926,6 +7966,11 @@
     },
     {
       "width": 320,
+      "fixture": "panel-board-groups",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "panel-column-manager",
       "probe": "4px"
     },
@@ -8321,6 +8366,11 @@
     },
     {
       "width": 402,
+      "fixture": "panel-board-groups",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "panel-column-manager",
       "probe": "4px"
     },
@@ -8716,6 +8766,11 @@
     },
     {
       "width": 768,
+      "fixture": "panel-board-groups",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "panel-column-manager",
       "probe": "4px"
     },
@@ -9107,6 +9162,11 @@
     {
       "width": 1440,
       "fixture": "panel-board-card-properties",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "panel-board-groups",
       "probe": "4px"
     },
     {

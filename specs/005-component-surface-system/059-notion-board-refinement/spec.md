@@ -22,7 +22,7 @@ contextType: "planning"
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Draft |
+| **Status** | Implemented — AC-001 through AC-009 Met (AC-005 against ADR-010's reversed bar, recorded as a supersession); AC-010 Unmet, operator-owned (`acceptance-criteria.md`) |
 | **Created** | 2026-09-06 |
 | **Branch** | `worktrees/174-notion-board` |
 | **Parent Spec** | ../spec.md |

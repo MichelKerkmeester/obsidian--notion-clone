@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-07: **69 phases**, **7 with nothing left**, **217 rows** waiting on a device.
+Derived 2026-09-07: **69 phases**, **7 with nothing left**, **208 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -342,17 +342,8 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] The operator sets a currency column as a board's card title on a phone, reads it formatted the same way that column formats elsewhere (for example `€ 3.537,32`), and reports being able to change which property becomes the card's main name. Only the operator closes this row.
 
-## 059-notion-board-refinement — 0/10
+## 059-notion-board-refinement — 9/10
 
-- [ ] A group's visibility is reachable, and reversible, from a board-mounted surface.
-- [ ] The Groups surface is a `panel`, and its width and dismissal come from the role rather than from Notion. Today, observed red: no such surface exists — `grep -rn "manageGroups\|db-board-groups" src/` returns 0. Notion's is a full screen on phone and a right-hand side panel on web (`30ba5533`, `2ef31bd5`), which is Notion's grammar, not ours. Done is `role: "panel"` declared at the call site, width inside the 292-360px band `../design-system.md:77` assigns the role, local anchoring per `../design-system.md:126`, trapped focus, and dismissal on outside click or Escape — with the phone presentation going through `044`'s sheet grammar rather than a second vocabulary.
-- [ ] Group order is reorderable from the same surface that carries visibility, and it round-trips. Today, observed red: order and visibility live apart. Reorder is reachable only by dragging a column on the board or through the toolbar's group-order popover (`src/views/database-view.ts:3119-3287`), which carries 0 visibility controls; visibility has no surface at all. Notion puts a `⁚⁚` handle on every row of the screen that carries the eye (`e9698e1b`; digest `:92`, `:124-125`). Done is a drag handle per row committing through `updateGroupOrder` (`src/views/board-renderer.ts:83`), the order surviving a re-render, and the drag and move-up/move-down grammar reused from the shared row builder `buildCheckboxPropertyRow` (`src/views/record-surface/property-row.ts:353`) as `src/views/board-card-properties-panel.ts:48-125` already uses it — 0 new drag vocabulary.
-- [ ] "Hide empty groups" ships default OFF and the empty-column state survives.
-- [ ] The eight declined Notion patterns land zero code change, each with an ADR — seven naming the landed ruling that decides it, and ADR-009 recording a decline no ruling has made.
-- [ ] Every record claim contradicted by the current tree carries an errata note.
-- [ ] The page-scroll landing and the erratum it closed are re-read from the final state rather than trusted. Today, observed red in the research and green in the tree: the loop's §11 N1 ranks "land T014-T016" as its P0 and its §10 E-3 records `056` `acceptance-criteria.md`'s AC-012 citing three drifted stylesheet anchors. Both statements were true when the loop read them and are false now: `056` `tasks.md` T014, T015 and T016 are all `[x]`, AC-012 and AC-013 both read Met, `grep -n "9569\|9447\|9472"` on that file returns 0 rows, and the landed rules are `.db-kanban-cards` with no `overflow-y` at all, `.note-database-container.db-kanban-view` carrying the scroll (`styles.css:9348-9356`) and its `::-webkit-scrollbar` at `height: 0` at rest rising to `10px` on hover or `.is-scrolling` (`:9386-9392`). Done is that re-read recorded here with its command output, and 0 rows in this packet that would redo work `dc1d54a9` already landed (D7).
-- [ ] The four device-only checks are named on `056` AC-010's operator pass rather than left in a research document. Today, observed red: AC-010's verification cell reads "the operator's own words" and enumerates 0 checks (`../056-board-anytype-parity/acceptance-criteria.md`, AC-010 row). Done is 4 enumerated: page scroll with hidden desktop chrome, the board in dark theme (no dark Notion board exists in the harvest on either platform — digest `:262-266`), desktop hover-reveal of `···`/`+` (uncaptured even on Notion's own web — digest `:269-272`), and the phone board on a real handset (`056` R5's phone capture is harness-synthetic, forced `matchMedia("(pointer: coarse)")`).
-- [ ] The new surface is captured and locked by lanes that already exist.
 - [ ] OPERATOR: the operator answers the adoption question at `../056-board-anytype-parity/notion-screens-digest.md:277-281` — ADR-004, ADR-010 and ADR-011, all three Accepted on the operator's 2026-09-06 18:36 rulings — before any code leg starts, and afterwards reads the Groups panel on iOS and on desktop and reports it as an improvement rather than a fourth place to hunt for a setting. Nothing in this repository can close this row, and an agent never ticks it.
 
 ## 061-notion-sheet-refinement — 0/7

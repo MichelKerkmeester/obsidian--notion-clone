@@ -262,7 +262,10 @@ never resolve them silently.
       menu's own `.db-menu-item` count of **4** — each observed red first. **0** new gate lanes.
       `sheet-grammar.mjs` exits 0 at 12 surfaces and **34** stacked pairs — the figure this row
       cites as 31 was already stale before this packet, and is recorded as observed rather than
-      corrected silently, since nothing in this diff touches that registry.
+      corrected silently, since nothing in this diff touches that registry. Re-verified from the rebased final
+      state: `npm run gate` **26 green, exit 0** read from `$?`; `npx vitest run` **1553 tests over
+      144 files**, exit 0; `render-assertions.mjs` reports all three `board-groups-panel/file-view`
+      rows PASS; `screenshots/verify.mjs` reports all **596** entries current.
 - [ ] **OPERATOR:** the operator answers the adoption question at
       `../056-board-anytype-parity/notion-screens-digest.md:277-281` — ADR-004, ADR-010 and
       ADR-011, **all three Accepted on the operator's 2026-09-06 18:36 rulings** — before any code
