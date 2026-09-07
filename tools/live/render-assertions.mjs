@@ -687,11 +687,16 @@ try {
   // the same reason a third time: its own row/swatch-count assertion lives in
   // render-assertion-harness.ts's "color-picker" branch, but `field-option-color-picker/file-view`
   // was never a member of `outcomes` or of this filter, so that assertion never ran in this gate
-  // — a regression to the old sixteen-swatch grid would have exited 0 here regardless.
+  // — a regression to the old sixteen-swatch grid would have exited 0 here regardless. The
+  // dropdown desktop-sheet escalation joins for the same reason a fourth time:
+  // `core-dropdown-desktop-sheet/file-view` carried the flag its own branch reads, but named no
+  // scenario in this filter or in `outcomes`, so the titled-sheet assertion never ran here either
+  // — and the query bug that assertion shipped with (matching against `container` for a surface
+  // portalled to `document.body`) went unnoticed because nothing ever evaluated it.
   const rulesScenarios = STATE_SCENARIOS.filter((scenario) =>
     scenario.rules != null || scenario.toolbarPopover === "tab-menu" || scenario.chartVariant === "empty"
     || scenario.emptyReason != null || scenario.boardGroupsPanel === true
-    || scenario.renderer === "color-picker");
+    || scenario.renderer === "color-picker" || scenario.dropdownDesktopSheet === true);
   const rulesOutcomes = await page.evaluate(
     (scenarios) => scenarios.map((scenario) => window.__renderAssertions(scenario)),
     rulesScenarios,

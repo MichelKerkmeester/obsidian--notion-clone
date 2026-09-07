@@ -3888,13 +3888,18 @@ export function runRenderAssertions(
 
     results.push(provenanceResult(container, "dropdown-field"));
     if (results[0].pass) {
+      // The escalated sheet is portalled to document.body, the same as the icon and colour
+      // pickers above — it is never a descendant of `container`, so querying `container` can
+      // only ever find nothing and this assertion would fail regardless of what actually
+      // rendered. `container.ownerDocument` reaches the whole document the way those pickers do.
+      const sheet = container.ownerDocument.querySelector(".db-dropdown-popover.db-dropdown-popover-desktop-sheet");
       results.push({
         name: "a cramped anchored placement escalated to a titled sheet with its own search row",
-        pass: Boolean(container.querySelector(".db-dropdown-popover.db-dropdown-popover-desktop-sheet"))
-          && Boolean(container.querySelector(".db-dropdown-popover-desktop-sheet .db-panel-title"))
-          && Boolean(container.querySelector(".db-dropdown-popover-desktop-sheet .db-dropdown-search input"))
+        pass: Boolean(sheet)
+          && Boolean(sheet?.querySelector(".db-panel-title"))
+          && Boolean(sheet?.querySelector(".db-dropdown-search input"))
           && row.querySelector(".db-dropdown-field-input") == null,
-        detail: container.querySelector(".db-dropdown-popover-desktop-sheet")
+        detail: sheet
           ? "desktop-sheet class, titled header and search row all present, trigger never converted"
           : "no .db-dropdown-popover-desktop-sheet — the anchored branch fired instead",
       });

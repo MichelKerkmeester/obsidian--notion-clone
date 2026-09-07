@@ -131,6 +131,7 @@ export const STATE_SCENARIOS = [
   { name: "field-status-colors/file-view", renderer: "table", bag: "file-view", captureData: true, fullStatusPalette: true },
   // The core components.
   { name: "core-dropdown-field/file-view", renderer: "dropdown", bag: "file-view" },
+  { name: "core-dropdown-desktop-sheet/file-view", renderer: "dropdown", bag: "file-view", dropdownDesktopSheet: true },
   { name: "core-empty-state/file-view", renderer: "empty-state", bag: "file-view" },
   // The two reasons getEmptyStateReason's own predicate distinguishes at sourceCount === 0 versus
   // a positive sourceCount with nothing active — mounted on the catalogue's real columns, zero

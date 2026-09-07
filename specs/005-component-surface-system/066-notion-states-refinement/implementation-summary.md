@@ -48,7 +48,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 066-notion-states-refinement |
-| **Completed** | Partial — six code legs and the reconciliation landed 2026-09-07; two device/lane items open |
+| **Completed** | Partial — six code legs, the reconciliation and a landing-verification capture-pipeline fix (T018) landed 2026-09-07; two device/lane items open |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -94,6 +94,26 @@ amendment and `T020` ticked in its `tasks.md`. `T003` was deliberately left `[ ]
 documented gap (a `nothingToUndo` branch needing a live `App`/vault/metadata cache) is untouched by
 anything in this packet's scope.
 
+**Two capture-pipeline defects closed at the root, landing-verification (T018).** The
+`chrome-toast-*` captures' `layoutHash` flipped between two values across repeated capture runs at
+a stable `pixelHash` — two prior landers (065, 063) had each observed and restored the flip rather
+than fixed it. Root cause: `.db-toast`'s entrance keyframe races `capture.mjs`'s layout-hash read,
+which happens before the screenshot call's own animation fast-forward. Fixed by disabling the
+animation outright in both toast scenarios' `captureCss`, proven red on `chrome-toast-success`
+(four backed-out runs, flipping, one of them disagreeing between its own dark and light pass of a
+single layout) then green (three runs of each scenario, stable). `chrome-toast-error` did not
+reproduce a live flip in ten backed-out runs; its race is evidenced by the committed manifest
+carrying two different hashes for one device's dark and light captures, so its share of the fix is
+prophylactic against the same latent keyframe and is recorded as such. Separately,
+`render-assertion-harness.ts`'s `dropdownDesktopSheet` assertion (added by
+`063-notion-dropdown-refinement`) queried `container` for a sheet portalled to `document.body`, and
+had never been wired into any gate lane's scenario selection — so it had never once run. Fixed to
+query `container.ownerDocument`, matching the icon- and colour-picker branches beside it, and wired
+into `render-assertions.mjs`'s `rulesScenarios` selection; proven red (false-negative with the old
+selector, then a genuine anchored-branch negative control at the fixed selector) then green. Both
+edits sit in `CAPTURE_INPUTS`/`SHARED_CONSTRUCTED_SOURCES`, forcing the full 606-entry recapture
+this leg's evidence is measured against; zero of the 606 moved a pixel.
+
 ### Files Changed
 
 | File | Action | Purpose |
@@ -111,6 +131,13 @@ anything in this packet's scope.
 | `specs/.../055-states-feedback-and-motion/goal.md` | Modify | Five stale rows restated against the tree |
 | `specs/.../055-states-feedback-and-motion/tasks.md` | Modify | T019 amendment and T020 ticked; T003 annotated, left open |
 | `specs/.../066-notion-states-refinement/decision-record.md` | Modify | ADR-004 decided (option 1, Accepted) |
+| `tools/screenshots/scenarios/chrome.mjs` | Modify | **T018.** `animation: none !important` on `.db-toast` in both toast scenarios' `captureCss` |
+| `tools/live/render-assertion-harness.ts` | Modify | **T018.** `dropdownDesktopSheet` sheet query scoped to `container.ownerDocument` |
+| `tools/live/render-assertion-bundle.mjs` | Modify | **T018.** `core-dropdown-desktop-sheet/file-view` added to `STATE_SCENARIOS` |
+| `tools/live/render-assertions.mjs` | Modify | **T018.** `scenario.dropdownDesktopSheet === true` added to the `rulesScenarios` filter |
+| `screenshots/manifest.json` | Modify | **T018.** Full recapture (three runs); three `chrome-toast-*` `layoutHash` corrected, and the jittered captures' `bytes`/`pixelHash` reconciled after a byte-only restore |
+| `tools/lane/css-lane.json` | Modify | **T018.** Acquired from 064 at its released hash (`acd49f23b031`); released naming all eight `chrome-toast-*` captures |
+| `specs/.../063-notion-dropdown-refinement/tasks.md` | Modify | **T018.** Addendum on T018 recording the assertion-query follow-up fix |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -160,6 +187,10 @@ the lineage trail on disk and git-ignored.
 | Red-first proofs | Eight of nine acceptance criteria `Met`, each with an observed red value before its fix; every new test re-checked at landing by mutating the production file it guards and watching it go red. See `acceptance-criteria.md` |
 | Phone-band placement, measured | Chrome against the shipped `styles.css`, mounting the DOM `showToast` builds, at 390px / 402px / 430px: stack and rail cards both left 16px / right 16px. Desktop 1280px unchanged. The measurement found a 32px overflow the arithmetic had missed |
 | `npm run gate` (26 lanes) | Exit 0 — 26 green, 0 red, from the final rebased tree |
+| T018 `chrome-toast-*` `layoutHash` flip, red then green | `capture.mjs --only chrome-toast-success`, four backed-out runs: flipping (`ec7335c12b6a`/`7425a6d0cd70` desktop, `ffd9d0f9aefb`/`5ac877430f1c` mobile). Three runs of each scenario with the fix: stable, `pixelHash` unchanged throughout. `--only chrome-toast-error` stayed stable across ten backed-out runs — its flip is evidenced by the committed manifest, not reproduced live |
+| T018 recapture, judged by decoded pixel delta | Three full `npm run screenshots` runs, 606 entries, exit 0 each. Three `layoutHash` moves, identical on all three runs; zero reproducing `pixelHash` moves; every byte-moved PNG measured at max channel delta ≤ 12 (mean ≈1) against its committed copy and restored |
+| T018 `dropdownDesktopSheet` assertion, red/negative-control/green | `render-assertions.mjs`: false-negative with the original `container`-scoped query; correctly fails at three options (anchored branch) with the fix applied; passes at thirty options (escalated) with the fix applied |
+| `node tools/screenshots/verify.mjs` | Exit 0, 606 entries current |
 <!-- /ANCHOR:verification -->
 
 ---

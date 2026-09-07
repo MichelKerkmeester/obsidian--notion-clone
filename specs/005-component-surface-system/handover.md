@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: orchestrate-handover-25, 2026-09-07 13:15. 0.0.30 still shipped at e016e75c; all eight Notion-refinement children (059-066) are open and each has a first implementation leg landed, 068's rename plan is ruled, and the GitHub repo itself was renamed to obsidian_notion-clone. In flight: worktrees 212, 214 (paused), 215 and 216, landed one Opus lander at a time, then the 068 rename as one leg, then the operator device rows. Documentation only: no src/, styles.css, tools/ or main.js file was touched."
+description: "Resume point: orchestrate-handover-25, 2026-09-07 13:15. 0.0.30 still shipped at e016e75c; all eight Notion-refinement children (059-066) are open and each has a first implementation leg landed, 068's rename plan is ruled, and the GitHub repo itself was renamed to obsidian_notion-clone. In flight: worktrees 215 and 216, landed one Opus lander at a time (212 and 214 have landed), then the 068 rename as one leg, then the operator device rows. Documentation only: no src/, styles.css, tools/ or main.js file was touched."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -12,10 +12,10 @@ _memory:
     packet_pointer: "005-component-surface-system"
     last_updated_at: "2026-09-07T13:15:00Z"
     last_updated_by: "orchestrate-handover-25"
-    recent_action: "Refreshed goal-prompt.md, goal.md's 059-068 states, and this handover"
-    next_safe_action: "Land 212, then 214, then 215 and 216, one Opus lander at a time"
+    recent_action: "Landed 066 T018 and 063's T018 addendum from .worktrees/214-toast-capture-settle"
+    next_safe_action: "Land 215, then 216, one Opus lander at a time"
     blockers:
-      - "068 runs as one leg with nothing else in flight; do not start it while 212/214/215/216 land"
+      - "068 runs as one leg with nothing else in flight; do not start it while 215/216 land"
       - "061's device row (AC-005) and 067's gate row stay open behind the operator's iOS pass"
       - "The primary checkout carries live uncommitted edits to 067's docs (likely 215 landing)"
       - "Both claude logins share one session-cap window; write a continuation prompt per leg"
@@ -43,6 +43,54 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-07, `066` T018 + `063` T018 addendum landed, from `.worktrees/214-toast-capture-settle`
+
+**Base `18b6d866`.** Two capture-pipeline defects closed at the root, and both of the leg's own
+claims were re-proven on the merged tree rather than accepted from the report.
+
+**The `chrome-toast-*` `layoutHash` race — confirmed, and narrowed in scope.** `.db-toast`'s
+entrance keyframe survives `reducedMotion` at 0.01ms, and `capture.mjs` reads the layout hash
+through `getBoundingClientRect()` before the screenshot call's own animation fast-forward, so the
+read raced the keyframe. Backing the fix out and running `capture.mjs --only chrome-toast-success`
+four times reproduced the flip live — desktop `ec7335c12b6a` on runs 1/2 against `7425a6d0cd70` on
+runs 3/4, mobile `ffd9d0f9aefb` against `5ac877430f1c` — and run 1 disagreed with **itself**: its
+dark and light passes photograph one layout and recorded two hashes. `--only chrome-toast-error`
+did **not** flip in ten backed-out runs; its race is evidenced only by the committed manifest
+having carried `5d4e87a8263a` for `error-desktop-dark` and `02d0836ee6f6` for its light pair. The
+leg's claim of eight live reproductions was **corrected in `tasks.md`, `implementation-summary.md`
+and the lane note** to one reproduced scenario and one prophylactic. `animation: none !important`
+in both scenarios' `captureCss`; three runs of each scenario after the fix, all eight stable.
+
+**The `dropdownDesktopSheet` assertion — confirmed exactly as reported.** It queried `container`
+for a sheet `openDropdownPopover` portals to `document.body`, and no scenario set the flag in
+`STATE_SCENARIOS` or the `rulesScenarios` filter, so it had never run. Both negative controls
+reproduced: with the old selector restored it fails **even with the sheet present** (which is what
+proves it can never have run in a green gate), and with the fix in but the option count cut from
+thirty to three it fails for the genuine anchored reason. Green at thirty, `render-assertions.mjs`
+exit 0.
+
+**`chrome-toast-*` `layoutHash`: three moved, not eight or five.** `064` had already recaptured
+`chrome-toast-success-mobile-*` when it landed its `.is-phone .db-toast-action` 46px floor, so by
+the time this leg rebased onto `9d798c69` only `error-desktop-light`,
+`success-desktop-light` and `success-mobile-dark` still carried a racy value. The leg's own
+pre-rebase draft claimed five, and an earlier draft eight; both were re-derived rather than carried.
+
+**The `067` debt this leg had drafted was already paid.** Its working tree carried a new
+`outstanding` entry naming seventeen sheet captures as stale against `e8c484d5`. `064`'s landing
+(`9d798c69`) recaptured and **reviewed** every one of them in its own release. The entry was
+dropped; the pre-existing `067` outstanding row from `062`'s verifier is untouched.
+
+**Jitter, judged by decoded pixels.** The full 606-entry recapture was run three times. Eleven to
+sixteen captures moved PNG bytes per run in largely disjoint sets; every one measured at max
+channel delta ≤ 12 and mean ≈ 1 against its committed copy. One `pixelHash` moved per run
+(`timeline-view-desktop-light` on run 1, `timeline-subtask-tree-desktop-light` on run 3) and each
+returned to its committed value on the next run — which is what settles them as jitter rather than
+content. All restored, `bytes` and `pixelHash` patched back.
+
+`npm run gate` 26 green. `tsc` 0, `vitest` 0 (151 files, 1630 tests), `screenshots:verify` 0 on 606,
+`sheet-grammar` 0, `render-assertions` 0, `scan-comments` PASS. `css-lane` acquired from `064` at
+`acd49f23b031` (no `styles.css` edit) and released naming all eight `chrome-toast-*` captures.
 
 ### 2026-09-07, `064-notion-toolbar-refinement` T015/T016 follow-up landed, from `.worktrees/212-toolbar-followups`
 

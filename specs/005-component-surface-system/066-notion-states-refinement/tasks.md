@@ -1,6 +1,6 @@
 ---
 title: "Tasks: Notion States Refinement"
-description: "Seventeen legs: two decisions, six builds, one reconciliation, the lane rows and the device read. Task Format: T### [P?] Description (file path)"
+description: "Eighteen legs: two decisions, six builds, one reconciliation, the lane rows, the device read, and a landing-verification capture-pipeline fix. Task Format: T### [P?] Description (file path)"
 trigger_phrases:
   - "066 tasks"
   - "notion states refinement tasks"
@@ -251,6 +251,97 @@ creates no new lane file and never ticks an operator device row.
       `decision-record.md`. This row records the operator's own completed act; the packet's device
       rows are the ones still waiting on them.
 <!-- /ANCHOR:phase-3 -->
+
+---
+
+<!-- ANCHOR:phase-4 -->
+## Phase 4: Landing-Verification Evidence Closure
+
+Two capture-pipeline defects surfaced while re-reading the corpus this packet's own toast work
+sits beside, neither a new criterion against `goal.md` §3 and both closed at their root rather than
+worked around.
+
+- [x] T018 [P0] **The eight `chrome-toast-*` captures' nondeterministic `layoutHash` at a stable
+      `pixelHash`, and the `dropdownDesktopSheet` render-assertion's unreachable query bug.**
+      Since the toast landing `af0e8796`, `chrome-toast-success` and `chrome-toast-error`
+      (`tools/screenshots/scenarios/chrome.mjs`) each carry `layoutHash` that flips between two
+      values across repeated capture runs at an unchanged `pixelHash` — two prior landers observed
+      it and each restored the flip to whatever value happened to be committed rather than fixing
+      it (`065-notion-record-refinement`'s and `063-notion-dropdown-refinement`'s own
+      `tools/lane/css-lane.json` release notes both name it). Root cause: `.db-toast` carries an
+      entrance keyframe (`animation: db-toast-in`, `styles.css:2902`) scaling from
+      `--db-motion-scale-from` to 1; `reducedMotion: "reduce"` shortens its duration to 0.01ms
+      rather than removing it, and `capture.mjs` reads the layout hash via
+      `getBoundingClientRect()` — which reflects the live transform — before the screenshot call's
+      own `animations: "disabled"` fast-forwards anything. Whether the read landed before or after
+      that sub-millisecond keyframe finished was a scheduling race.
+      **Red observed, re-run on the merged tree at landing:** with the fix backed out,
+      `node tools/screenshots/capture.mjs --only chrome-toast-success` four times —
+      `chrome-toast-success-desktop-*` read `ec7335c12b6a` on runs 1 and 2 and `7425a6d0cd70` on
+      runs 3 and 4, and the mobile pair flipped between `ffd9d0f9aefb` and `5ac877430f1c`. Run 1
+      disagreed with itself: its dark and light passes photograph one layout and must share one
+      hash, and they did not. `pixelHash` identical on every run. `--only chrome-toast-error` did
+      **not** reproduce a live flip in ten backed-out runs on this machine; its race is evidenced
+      instead by the committed manifest, where `chrome-toast-error-desktop-dark` carried
+      `5d4e87a8263a` and its light pair `02d0836ee6f6` — one device, one layout, two hashes, which
+      only a past flip explains. The error scenario's share of the fix is therefore prophylactic
+      against the identical latent keyframe rather than a live-reproduced red, and this row says so
+      rather than claiming eight reproductions.
+      **Fix:** `animation: none !important;` added to `.db-toast` in both scenarios' `captureCss`
+      (`tools/screenshots/scenarios/chrome.mjs`) — removes the race instead of narrowing it.
+      **Green:** three repeated runs of each scenario with the fix in — all eight captures stable,
+      `pixelHash` unchanged, and the settled value is the post-animation rect rather than whichever
+      member of the racy pair a run happened to catch. Three opened and read
+      (`chrome-toast-success-desktop-dark`, `chrome-toast-success-mobile-dark`,
+      `chrome-toast-error-mobile-light`) — full opacity, no clipped or mid-transform artifact, and
+      the phone capture shows the taller `Undo` box `064-notion-toolbar-refinement`'s own 46px
+      floor gives it.
+      A second, unrelated defect shares this leg because fixing either forces the same full
+      recapture: `render-assertion-harness.ts`'s `dropdownDesktopSheet` branch (added by
+      `063-notion-dropdown-refinement`, see that packet's `tasks.md` T018 addendum) queried
+      `container.querySelector(".db-dropdown-popover.db-dropdown-popover-desktop-sheet")` against
+      a sheet `openDropdownPopover` portals to `document.body`, and no scenario ever set
+      `dropdownDesktopSheet: true` in `render-assertion-bundle.mjs`'s `STATE_SCENARIOS` or in
+      `render-assertions.mjs`'s `rulesScenarios` filter — the assertion could not have passed and
+      had never run in any gate lane. Fixed to `container.ownerDocument.querySelector(...)`
+      (matching the icon- and colour-picker branches beside it), wired `core-dropdown-desktop-
+      sheet/file-view` into `STATE_SCENARIOS` and `scenario.dropdownDesktopSheet === true` into the
+      `rulesScenarios` filter. **Red, wired, before the query fix:** `node
+      tools/live/render-assertions.mjs` → `core-dropdown-desktop-sheet/file-view: a cramped
+      anchored placement escalated to a titled sheet with its own search row — no
+      .db-dropdown-popover-desktop-sheet — the anchored branch fired instead` (false negative — the
+      sheet was present). **Negative control (with the query fix applied):** the scenario's option
+      count dropped from thirty to three so the anchored branch genuinely fires — the same
+      assertion correctly fails with the same detail line, proving it is not vacuously true.
+      **Green:** option count restored to thirty — `PASS core-dropdown-desktop-sheet/file-view  a
+      cramped anchored placement escalated to a titled sheet with its own search row`; full
+      `render-assertions.mjs` run, 0 failures.
+      Both edits (`render-assertion-harness.ts`, a `tools/screenshots/scenarios/` module) sit in
+      `CAPTURE_INPUTS`/`SHARED_CONSTRUCTED_SOURCES`, so every one of the 606 manifest entries'
+      `sourceHashes` moves regardless of which scenario it belongs to — this leg's own full
+      recapture (`npm run screenshots`, 606 entries, `screenshots:verify` exit 0) is that forced
+      run, not a separate one, and it was run three times over this landing. Zero of the 606 moved
+      a pixel that reproduced. Exactly three `layoutHash` values moved against the merged base, the
+      same three on all three runs — `chrome-toast-error-desktop-light` `02d0836ee6f6` →
+      `5d4e87a8263a`, `chrome-toast-success-desktop-light` `ec7335c12b6a` → `7425a6d0cd70`,
+      `chrome-toast-success-mobile-dark` `ffd9d0f9aefb` → `5ac877430f1c`. Not eight: the other five
+      already carried the settled value on the merged base, two of them because
+      `064-notion-toolbar-refinement` recaptured `chrome-toast-success-mobile-*` when it landed its
+      `.is-phone .db-toast-action` 46px floor. Between eleven and sixteen captures moved PNG bytes
+      on each run, but each run's set was largely disjoint from the others', and every one measured
+      against its committed PNG came back sub-visual (max channel delta 12, mean ≈1) — capture
+      jitter, judged by decoded pixel delta rather than by `pixelHash`, which is blind to a small
+      real change. One capture per run also moved `pixelHash` — `timeline-view-desktop-light` on
+      run 1, `timeline-subtask-tree-desktop-light` on run 3 — and each came back to its committed
+      value on the next run. All were restored to their committed bytes with `manifest.json`'s
+      `bytes` and `pixelHash` fields patched back to match. `tools/lane/css-lane.json` acquired from
+      `064-notion-toolbar-refinement` at its own released hash (`acd49f23b031`, unmoved — no
+      `styles.css` edit here) and released naming all eight `chrome-toast-*` captures.
+      (`tools/screenshots/scenarios/chrome.mjs`, `tools/live/render-assertion-harness.ts`,
+      `tools/live/render-assertion-bundle.mjs`, `tools/live/render-assertions.mjs`,
+      `screenshots/manifest.json`, `tools/lane/css-lane.json`,
+      `../063-notion-dropdown-refinement/tasks.md`)
+<!-- /ANCHOR:phase-4 -->
 
 ---
 

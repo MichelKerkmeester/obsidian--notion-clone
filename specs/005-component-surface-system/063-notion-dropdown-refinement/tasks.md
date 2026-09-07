@@ -354,6 +354,37 @@ already-landed row, not a new criterion.
       with a focused, unconditional search input and the row list scrolled to the current
       selection, in both light and dark. (`tools/live/render-assertion-harness.ts`,
       `tools/screenshots/constructed-scenarios.mjs`, `tools/screenshots/constructed-capture.test.mjs`)
+
+**Addendum, 2026-09-07 (066) — the T018 assertion fix.** T018's own screenshot capture (the
+`constructed-dropdown-desktop-sheet` PNGs, opened and read above) was never the whole of
+goal.md §3's fourth criterion: `render-assertion-harness.ts` already carried a structural
+assertion for the escalation ("a cramped anchored placement escalated to a titled sheet with its
+own search row"), but it queried `container.querySelector(".db-dropdown-popover.db-dropdown-
+popover-desktop-sheet")` against a sheet that `openDropdownPopover` portals to `document.body` —
+the same body-portal shape the icon- and colour-picker branches beside it already handle through
+`container.ownerDocument`. The query could only ever find nothing, and — the deeper gap — no
+scenario ever set `dropdownDesktopSheet: true` in `render-assertion-bundle.mjs`'s `STATE_SCENARIOS`
+or in `render-assertions.mjs`'s `rulesScenarios` filter, so the broken assertion never ran in any
+gate lane either, the same class of gap T019 closed for the colour picker. **Red observed twice.**
+First, wired with the original selector: `node tools/live/render-assertions.mjs` →
+`core-dropdown-desktop-sheet/file-view: a cramped anchored placement escalated to a titled sheet
+with its own search row — no .db-dropdown-popover-desktop-sheet — the anchored branch fired
+instead` (a false negative — the sheet was present, `container.ownerDocument.querySelector` finds
+it). Second, a negative control proving the fixed assertion is not vacuously true: with the fix
+applied but the scenario's option count temporarily dropped from thirty to three, the anchored
+branch genuinely fires instead of escalating, and the same assertion correctly fails with the same
+detail line. **Fix:** `container.ownerDocument.querySelector(...)` for the sheet and its two
+header/search-row checks (`tools/live/render-assertion-harness.ts`); added
+`core-dropdown-desktop-sheet/file-view` to `STATE_SCENARIOS` and `scenario.dropdownDesktopSheet ===
+true` to the `rulesScenarios` filter (`tools/live/render-assertion-bundle.mjs`,
+`tools/live/render-assertions.mjs`). **Green:** option count restored to thirty, `node
+tools/live/render-assertions.mjs` → `PASS core-dropdown-desktop-sheet/file-view  a cramped anchored
+placement escalated to a titled sheet with its own search row`; full run, 0 failures. Landed as
+part of `066-notion-states-refinement`'s own leg alongside the unrelated `chrome-toast-*`
+`layoutHash` fix, sharing the full recapture the harness edit forces; see `066`'s own `tasks.md`
+and `implementation-summary.md` for that leg's complete evidence. (`tools/live/render-assertion-
+harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/live/render-assertions.mjs`)
+
 - [x] T019 [P0] The colour picker's 16-row/0-swatch assertion (`render-assertion-harness.ts`'s
       `color-picker` branch) was unreachable by any gate lane: `render-assertions.mjs` runs
       `SCENARIOS` in full but selects only a narrow, explicitly-named subset of `STATE_SCENARIOS`

@@ -878,10 +878,19 @@ export const CHROME_SCENARIOS = [
     // with position: absolute — the same collapsed-stack idiom the selection bar's own fixed dock
     // hits above. Neither contributes height to the element being captured undone, so both are put
     // back in flow; nothing about the card's own furniture is touched.
+    //
+    // `.db-toast` also carries its own entrance keyframe (`animation: db-toast-in`), scaling from
+    // `--db-motion-scale-from` to 1. `reducedMotion: "reduce"` shortens that to 0.01ms rather than
+    // removing it, and capture.mjs reads the layout hash through `getBoundingClientRect()` — which
+    // includes the live transform — before the screenshot call's own `animations: "disabled"` fast-
+    // forwards anything. Whether the read landed before or after that sub-millisecond keyframe
+    // finished was a scheduling race, and it decided which of two scaled rects the hash described:
+    // the same PNG (pixelHash stable) with two different layoutHashes across runs. Disabling the
+    // animation outright removes the race instead of narrowing it.
     captureCss: `.db-toast-stack {
       position: static !important; right: auto !important; bottom: auto !important;
     }
-    .db-toast { position: static !important; inset: auto !important; }`,
+    .db-toast { position: static !important; inset: auto !important; animation: none !important; }`,
     note: "The shared feedback surface `showToast` builds, raised here exactly as the gallery-migration notice raises it: success severity, paired with the check glyph rather than colour alone, and an Undo action. Not wrapped in `note-database-container`: this stack mounts on `doc.body`, so a fixture that wrapped it would photograph a surface the plugin never ships.",
     html: () => `
       <div class="db-surface db-toast-stack">
@@ -902,10 +911,12 @@ export const CHROME_SCENARIOS = [
     title: "Toast — error, sticky until dismissed",
     group: "components",
     sources: ["src/views/toast.ts"],
+    // `animation: none` on `.db-toast`: see `chrome-toast-success`'s captureCss comment above — the
+    // entrance keyframe's live transform otherwise races the layout-hash read, not the pixels.
     captureCss: `.db-toast-stack {
       position: static !important; right: auto !important; bottom: auto !important;
     }
-    .db-toast { position: static !important; inset: auto !important; }`,
+    .db-toast { position: static !important; inset: auto !important; animation: none !important; }`,
     note: "An error toast carries no auto-dismiss timer and no action row — `showToast` builds the row unconditionally and `:empty` hides it, so a plain error photographs with no stray gap under its message.",
     html: () => `
       <div class="db-surface db-toast-stack">

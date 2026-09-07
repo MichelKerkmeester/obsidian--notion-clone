@@ -57,8 +57,10 @@
       "src/views/board-renderer-hierarchy.test.ts",
       "src/views/empty-state-renderer.test.ts",
       "src/views/motion-tokens.test.ts",
-      "tools/storybook/verify-placement.mjs",
-      "src/views/modals/confirm-modal.ts"
+      "tools/screenshots/scenarios/chrome.mjs",
+      "tools/live/render-assertion-harness.ts",
+      "tools/live/render-assertion-bundle.mjs",
+      "tools/live/render-assertions.mjs"
     ],
     "entities": [
       {
@@ -158,15 +160,27 @@
         "source": "derived"
       },
       {
-        "name": "verify-placement.mjs",
+        "name": "chrome.mjs",
         "kind": "file",
-        "path": "tools/storybook/verify-placement.mjs",
+        "path": "tools/screenshots/scenarios/chrome.mjs",
         "source": "derived"
       },
       {
-        "name": "confirm-modal.ts",
+        "name": "render-assertion-harness.ts",
         "kind": "code",
-        "path": "src/views/modals/confirm-modal.ts",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-bundle.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertion-bundle.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertions.mjs",
         "source": "derived"
       },
       {
@@ -192,23 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Critical Dependencies",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Parent Spec",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "An Undo the reader cannot reach is not an Undo",
     "created_at": "2026-09-06T16:04:47Z",
-    "last_save_at": "2026-09-07T05:41:37.669Z",
+    "last_save_at": "2026-09-07T12:09:59.721Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:598fd317eb5ad49d8b5d5f91db2c5126a6c83ef4fa029d12707624ecbc434f0e",
+    "source_fingerprint": "sha256:4df4cdb59e9308b34b8ca8321e5067d49ef612caa6753ee2911591d1a5a94bc2",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "ccbda4d44abcf9f0a76cf3c09484757fac86e0be9f86f30567ecf3562fa084e3",
       "plan.md": "a77962864b2871a7ef29a4410576af4e82f4c0b06380b32eee754fa88e849544",
-      "tasks.md": "00aa12f3dc44c760eb0e848d039fddd5274207ff5c9009d81a22cd86e3af434e",
+      "tasks.md": "e6bf22626635eab217566311f89dd42ffe401412d5196030ee86f647c66fdb5d",
       "decision-record.md": "e6f90220cbba18015e27a942eab09c56c00fbf89bfca9be15e878f0eae872431",
-      "implementation-summary.md": "4f5cfa658220b6652bd262530adf66a594d2176f7c3cae070b40b4fedc3feb49"
+      "implementation-summary.md": "4d0f1f6521345d2c14c607a1072d0c2e1732b651b0f0be5157b593668d31a770"
     },
     "last_active_at": null
   }
