@@ -442,7 +442,9 @@ function classifySheetFrameShape(panel: HTMLElement): void {
   // The card is declared, never inferred: a surface that asked for it keeps it
   // regardless of its own rendered height, the same way the hysteresis gap below leaves a
   // sheet's CURRENT shape alone rather than answering from a height that shape itself produced.
-  if (panel.hasClass("db-sheet-card")) return;
+  // A `menu`-role card is the same kind of declared shape (`design-trueup.md` row 26) and must not
+  // have the floating/flush split toggled underneath it either.
+  if (panel.hasClass("db-sheet-card") || panel.hasClass("db-mobile-menu-card")) return;
   const view = panel.ownerDocument.defaultView;
   const viewportHeight = view?.visualViewport?.height ?? view?.innerHeight;
   const height = panel.getBoundingClientRect().height;
@@ -642,7 +644,15 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     // unknown to the watcher — so the backdrop could be taken down while one was still open.
     sheetsFor(doc).add(panel);
     sheetPointerCapture.set(panel, options.scrimCapturesPointer);
-    panel.toggleClass("db-mobile-menu-card", Boolean(options.menuCard));
+    // Add-only, never toggle off: this runs on every placement pass, including the ones a
+    // picker's own `mountPickerSheetHeader` call already ran ahead of (`popover-host.ts`), which
+    // sets the class directly rather than through this option. A caller that never declares
+    // `menuCard` on THIS pass must not undo a class a different pass already earned — that
+    // "later pass wins" toggle was exactly what stripped the class from every production
+    // `menu`-role picker: `mountPickerSheetHeader` added it, then this line ran again with
+    // `menuCard` undefined and took it back off. Removal on the way OUT of sheet-hood is still
+    // handled below, in the `!isSheet` branch.
+    if (options.menuCard) panel.addClass("db-mobile-menu-card");
     if (options.heightRole) {
       // A declared shape wins outright: it is the documented fallback the classifier itself now
       // defers to, so an undeclared surface's behaviour is unchanged and a declared one stops
@@ -1057,6 +1067,14 @@ export function shouldFlickDismiss(
 
 export function attachSheetDragToDismiss(panel: HTMLElement, close: () => void): () => void {
   activeSheetDrag.get(panel)?.();
+  // A `menu`-role card dismisses on a tap, not a drag (`design-trueup.md` row 26: "no handle at
+  // all"). Drawing the bar and wiring the gesture are one call for every other sheet — see the
+  // comment below — so a card that must never grow a handle back is refused here, at the one
+  // place that draws it, rather than trusted to every caller to skip.
+  if (panel.hasClass("db-mobile-menu-card")) {
+    activeSheetDrag.delete(panel);
+    return () => {};
+  }
   // Drawn here, because this is the only place that can promise it does something.
   const handle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle") ?? createSheetHandle(panel);
 

@@ -82,7 +82,14 @@ function hasSheetHandle(panel: HTMLElement): boolean {
   // bar without a gesture cannot exist and a gesture without a bar is a sheet
   // that cannot be pulled down. Both halves are required because a rebuild
   // can restore the bar while the drag was never re-wired.
-  return Boolean(panel.querySelector(".db-mobile-bottom-sheet-handle")) && hasSheetDrag(panel);
+  const hasBar = Boolean(panel.querySelector(".db-mobile-bottom-sheet-handle"));
+  const hasDrag = hasSheetDrag(panel);
+  // A `menu`-role card (`design-trueup.md` row 26) is satisfied by the OPPOSITE of a handle: it
+  // dismisses on a tap, not a drag, and advertising one it does not have is the defect this
+  // column exists to catch for every other sheet. Read backwards for this one declared role
+  // rather than silently passing it on a coincidental "neither exists" for the wrong reason.
+  if (panel.hasClass("db-mobile-menu-card")) return !hasBar && !hasDrag;
+  return hasBar && hasDrag;
 }
 
 function hasSheetHeader(panel: HTMLElement): boolean {

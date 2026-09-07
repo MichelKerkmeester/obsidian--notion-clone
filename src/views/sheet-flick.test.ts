@@ -73,6 +73,9 @@ describe("pointer cancellation", () => {
     const listeners = new Map<string, (event: PointerEvent) => void>();
     const handle = {} as HTMLElement;
     const panel = {
+      // An ordinary sheet, not a `menu`-role card — `attachSheetDragToDismiss` reads this before
+      // deciding whether to draw a handle at all.
+      hasClass: () => false,
       querySelector: () => handle,
       addEventListener: (type: string, listener: EventListener) => {
         listeners.set(type, listener as unknown as (event: PointerEvent) => void);

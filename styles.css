@@ -319,6 +319,19 @@
   border-radius: var(--db-radius-xl) !important;
 }
 
+/* A `menu`-role card never draws a grab handle: it dismisses on a tap, not a drag, and
+   `attachSheetDragToDismiss` already refuses to create one for this class, so this is a second,
+   defensive line rather than the only one. Anchoring this card to its own trigger instead of
+   docking it to the screen edge was attempted and reverted: anchoring at the desktop popover's own
+   narrow width measured 24 overflowing calendar-grid cells plus a broken keyboard-avoidance
+   handoff (`placeSheet`'s own `--db-keyboard-inset` write, which the anchored path never ran) — the
+   picker BODIES were built for the full-width sheet this class still docks as, not for a card that
+   width. Reworking each picker's own body for a narrower footprint is a separate, larger change,
+   not this class's; the docked-only geometry stays until that lands. */
+.db-mobile-bottom-sheet.db-mobile-menu-card .db-mobile-bottom-sheet-handle {
+  display: none;
+}
+
 /* A child sheet sits above the surface that opened it. The root panel keeps its own box so the
    parent does not jump when the child arrives; only its content is visually pulled back, which is
    the compact depth cue used by iOS and Notion. The scrim remains the single boundary between the

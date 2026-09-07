@@ -273,6 +273,14 @@ export function positionToolbarPopover(
     // an open sheet, then any viewport event at all, which on a phone means a scroll, a rotation, or
     // the keyboard appearing. Nothing about the sheet had changed and nothing about it was
     // unmeasurable; it was answering a question asked on another surface's behalf.
+    // A `menu`-role card still docks here, full width, exactly like every other phone sheet —
+    // it does not anchor to the trigger this function was given. Anchoring it at the desktop
+    // popover's own narrow width was tried and reverted: the picker bodies this call places are
+    // built for the full-width sheet, not for a card at that width, and anchoring surfaced both
+    // overflowing grid content and a broken keyboard-avoidance handoff (the inset this function
+    // writes below never ran on the anchored path). Narrowing each picker body for that width is
+    // a separate, larger change; the card keeps the handle-less presentation and drops only the
+    // grab bar and drag gesture, not the docked geometry.
     if (mobileSheet) {
       const sheetScroll = panel.scrollTop;
       placeSheet(panel, { margin });

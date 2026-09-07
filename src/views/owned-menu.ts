@@ -317,6 +317,11 @@ export function createOwnedMenu(
         applySheetChrome(el, true, {
           scrimCapturesPointer: true,
           close: () => close(),
+          // Every owned menu is `design-trueup.md` row 26's `menu` role: a handle-less card over
+          // a dimmed parent, not a grab-handle bottom sheet. `role="menu"` above already earns it
+          // the scrim's own Notion-measured band (`setScrim`, mobile-bottom-sheet.ts); this earns
+          // the handle-less card and the classifier bail-out that go with the same class.
+          menuCard: true,
         });
         placeSheet(el);
         // And keep it placed. A single call fixes the sheet at whatever the keyboard inset was when
