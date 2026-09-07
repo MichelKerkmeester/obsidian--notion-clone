@@ -111,17 +111,24 @@ fixing what the independent landing verification recorded rather than absorbed:
    `rgba(255,255,255,0.35)` — lightening instead of darkening, the only direction with room to move
    against a surface this dark. Measured by a new WCAG-contrast pass in `render-assertions.mjs`
    (alpha-composited over `--db-surface-canvas`, computed in Node since `box-shadow` is a paint
-   effect `getComputedStyle` cannot hand back as a resolved pixel): **red** 1:1 both themes before
-   the ground-truth fix, **green** 1.83:1 light / 3.21:1 dark after, plus a "nothing at rest"
-   assertion (`scrollLeft === 0` paints no shadow) in both themes.
+   effect `getComputedStyle` cannot hand back as a resolved pixel): **green** 1.83:1 light /
+   3.21:1 dark, plus a "nothing at rest" assertion (`scrollLeft === 0` paints no shadow) in both
+   themes. Its own negative control is the shipped defect, not a removed shadow: reverting the dark
+   token to the light literal takes the dark leg to **1.08:1**, under the 1.15:1 floor, and the pass
+   goes red naming it — the light leg was never the defect and reads 1.83:1 on either token, which
+   is why the floor has to catch the dark leg alone.
 2. **`.note-database-container:not(.is-phone)` was inert.** `is-phone` sits on the `body`, an
    ancestor of the container, never on the container itself, so the negation always matched and the
    freeze rules were never actually scoped away from phone. Rewritten to apply unconditionally and
    turn off explicitly under `.is-phone` (`position: static`, `left: auto`, `box-shadow: none`).
-   `table-frozen-column-mobile-light.png` moved a real pixel (11,751 of 1,405,392, bounded to the
-   frozen column's own region) confirming the freeze no longer applies on phone; the dark and
-   desktop mobile/light captures were byte-only re-encodes (`pixelHash` unchanged) and were
-   restored to their committed bytes.
+   Three of the scenario's four captures moved real pixels and all three are committed:
+   `mobile-light` 11,751 of 1,405,392 and `mobile-dark` 4,418 (the `.is-phone` override removing a
+   shadow the phone should never have painted), and `desktop-dark` 22,510 (the dark shadow flipping
+   from darkening to lightening — luminance 30 → 67 at the frozen edge, against 30 → 26 before).
+   Only `desktop-light` is pixel-identical, because the light token is the same
+   `rgba(0, 0, 0, 0.25)` literal the old shared fallback resolved to. `pixelHash` cannot separate
+   these — it averages a 16×16 grid into 32 buckets, and a 6px blurred band moves a cell's average
+   by less than one bucket — so `pixelHash`-identical is NOT a restore signal for this scenario.
 3. **Grouped tables never toggled `is-scrolled-x`.** `.db-grouped-table` owns the horizontal
    overflow, not the outer `.note-database-container`, and `scroll` does not bubble — the listener
    bound to the container the way the ungrouped path binds it never fired.
