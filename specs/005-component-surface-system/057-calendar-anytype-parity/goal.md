@@ -216,6 +216,7 @@ never resolve them silently.
 
 ---
 
+<!-- ANCHOR:log -->
 ## 4. LOG
 
 ### Opened 2026-09-05 ~22:45, on the operator's calendar ruling
@@ -292,3 +293,4 @@ The operator, ~16:10, verbatim: *"Based on notion screenshots add phases to all 
 to further refine based on notion ui screenshots. But do 5 iters of deep research with glm 5.3 flash
 max on those screens per relevant phase."* This packet's surface is **the calendar**, and its reserved
 child is **`060-notion-calendar-refinement`** — reserved, not created. **Wave 1: the research has been running since 16:14 in `worktrees/175`.** The packet is REOPENED on the gestalt reading and its rebuild leg is landing with 12 of 15 G-rows green, so the child reads a surface that is mid-rebuild. That is a known cost of running now rather than after: the synthesis re-reads HEAD before it writes anything, and G1-G15 stay the rebuild's threshold, not the child's. The pipeline is three stages and the first exists for one reason: a **Sonnet digest** of the relevant Notion captures is written to ``057-calendar-anytype-parity/notion-screens-digest.md``, because **GLM 5.3 flash cannot read images** and a capture reaches the loop as measured prose or not at all. Then `/deep:research:auto`, **5 iterations**, `--stop-policy=max-iterations`, on **GLM 5.3 flash max** — `openrouter/z-ai/glm-5.3-flash` first and `llmgateway` (DevPass) as the fallback, on the operator's ~16:25 ruling *"use openrouter untill usage is 0 then devpass"*. Then an **Opus synthesis** opens the child; a fresh Opus verifier lands it (D4). **Do not create the child by hand** — a folder without the loop behind it claims evidence it does not have. **The refinement is additive.** The child may add a criterion, a task, an ADR or a measurement. It may not un-tick a measured row here, rewrite a landed ruling, or change this packet's parity target. Where a Notion finding contradicts a landed Anytype ruling, the child writes a **Proposed** ADR carrying both readings and stops; only the operator moves it to Accepted. Parent `goal.md` **D15** and `../roadmap.md` **§7.15** carry the rule, §5.A the reservation, §6A the instruction verbatim.
+<!-- /ANCHOR:log -->
