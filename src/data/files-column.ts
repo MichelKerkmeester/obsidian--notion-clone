@@ -162,12 +162,12 @@ export function renderChips(
     .filter((value): value is ParsedFileValue => value !== null);
   if (links.length === 0) return;
 
-  const wrap = parent.createDiv({ cls: "db-file-link-list" });
+  const wrap = parent.createDiv({ cls: "obnotion-file-link-list" });
   setTooltip(wrap, links.map((link) => link.label));
 
   for (const link of links.slice(0, FILE_CHIP_CAP)) {
     const type = link.target ? classifyFileType(link.target) : "file";
-    const itemClass = `db-file-link-list-item db-file-link-type-${type}`;
+    const itemClass = `obnotion-file-link-list-item obnotion-file-link-type-${type}`;
 
     if (link.malformed || !link.target) {
       const item = wrap.createSpan({ cls: itemClass, text: link.label });
@@ -193,7 +193,7 @@ export function renderChips(
   const overflow = links.length - FILE_CHIP_CAP;
   if (overflow > 0) {
     const overflowChip = wrap.createSpan({
-      cls: "db-file-link-list-item db-file-link-list-overflow",
+      cls: "obnotion-file-link-list-item obnotion-file-link-list-overflow",
       text: `+${overflow}`,
     });
     overflowChip.title = links.slice(FILE_CHIP_CAP).map((link) => link.label).join(", ");
@@ -341,7 +341,7 @@ function appendChipContent(
       const resourcePath = app.vault.getResourcePath(destination);
       if (resourcePath) {
         const thumbnail = anchor.createEl("img", {
-          cls: "db-file-link-list-item-thumbnail",
+          cls: "obnotion-file-link-list-item-thumbnail",
           attr: { src: resourcePath, alt: link.label, draggable: "false" },
         });
         thumbnail.setCssProps({
@@ -357,7 +357,7 @@ function appendChipContent(
     }
   }
 
-  anchor.createSpan({ cls: "db-file-link-list-item-label", text: link.label });
+  anchor.createSpan({ cls: "obnotion-file-link-list-item-label", text: link.label });
 }
 
 // ───────────────────────────────────────────────────────────────────

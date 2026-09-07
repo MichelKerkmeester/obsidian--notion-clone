@@ -267,7 +267,7 @@ export class ColumnMenu {
   // ───────────────────────────────────────────────────────────────────
 
   private showColumnTypePopover(evt: MouseEvent | KeyboardEvent, col: ColumnDef, menu: OwnedMenuHandle, anchorEl?: HTMLElement): void {
-    const { panel, cleanup } = this.createColumnMenuSubpopover(evt, "db-column-type-popover", anchorEl);
+    const { panel, cleanup } = this.createColumnMenuSubpopover(evt, "obnotion-column-type-popover", anchorEl);
     panel.setAttr("role", "listbox");
     const labels = COLUMN_TYPE_LABELS();
     // Sliced from the shared property-format list rather than a second literal — the grouping is
@@ -278,19 +278,19 @@ export class ColumnMenu {
       { title: t("columnType.group.advanced"), types: PROPERTY_TYPES.slice(13) },
     ];
     groups.forEach((group) => {
-      panel.createDiv({ cls: "db-dropdown-section-title", text: group.title });
+      panel.createDiv({ cls: "obnotion-dropdown-section-title", text: group.title });
       for (const type of group.types) {
         const row = panel.createEl("button", {
-          cls: `db-dropdown-option db-menu-item has-icon${type === col.type ? " is-selected" : ""}`,
+          cls: `obnotion-dropdown-option obnotion-menu-item has-icon${type === col.type ? " is-selected" : ""}`,
           attr: { type: "button", role: "option", "aria-selected": type === col.type ? "true" : "false" },
         });
-        renderPropertyTypeIcon(row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon db-column-type-option-icon" }), {
+        renderPropertyTypeIcon(row.createSpan({ cls: "obnotion-dropdown-option-icon obnotion-menu-item-icon obnotion-column-type-option-icon" }), {
           key: type,
           label: labels[type],
           type,
         });
-        row.createSpan({ cls: "db-dropdown-option-label db-menu-item-label", text: labels[type] });
-        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
+        row.createSpan({ cls: "obnotion-dropdown-option-label obnotion-menu-item-label", text: labels[type] });
+        const check = row.createSpan({ cls: "obnotion-dropdown-option-check obnotion-menu-item-check" });
         if (type === col.type) setIcon(check, "check");
         row.onclick = () => {
           cleanup();
@@ -302,7 +302,7 @@ export class ColumnMenu {
   }
 
   private showNumberDisplayStylePopover(evt: MouseEvent | KeyboardEvent, col: ColumnDef, _menu: OwnedMenuHandle, anchorEl?: HTMLElement): void {
-    const { panel, cleanup } = this.createColumnMenuSubpopover(evt, "db-column-display-style-popover db-column-number-style-popover", anchorEl);
+    const { panel, cleanup } = this.createColumnMenuSubpopover(evt, "obnotion-column-display-style-popover obnotion-column-number-style-popover", anchorEl);
     const RATING_ICONS = ["star", "flame", "heart", "thumbs-up", "gem"];
     const DIVISOR_PRESETS = ["100", "10"];
     const DEFAULT_CUSTOM_COLOR: StatusColor = "green";
@@ -329,12 +329,12 @@ export class ColumnMenu {
       ];
       for (const { value, key } of styles) {
         const row = styleSection.createEl("button", {
-          cls: `db-dropdown-option db-menu-item has-icon${value === currentStyle ? " is-selected" : ""}`,
+          cls: `obnotion-dropdown-option obnotion-menu-item has-icon${value === currentStyle ? " is-selected" : ""}`,
           attr: { type: "button", role: "option", "aria-selected": value === currentStyle ? "true" : "false" },
         });
-        this.renderNumberStyleMenuIcon(row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon db-number-style-menu-icon" }), value);
-        row.createSpan({ cls: "db-dropdown-option-label db-menu-item-label", text: t(key) });
-        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
+        this.renderNumberStyleMenuIcon(row.createSpan({ cls: "obnotion-dropdown-option-icon obnotion-menu-item-icon obnotion-number-style-menu-icon" }), value);
+        row.createSpan({ cls: "obnotion-dropdown-option-label obnotion-menu-item-label", text: t(key) });
+        const check = row.createSpan({ cls: "obnotion-dropdown-option-check obnotion-menu-item-check" });
         if (value === currentStyle) setIcon(check, "check");
         row.onclick = () => { this.actions.setNumberDisplayStyle(col, value); render(); };
       }
@@ -409,15 +409,15 @@ export class ColumnMenu {
 
   private appendItemHint(dom: HTMLElement | undefined, text: string): void {
     if (!dom) return;
-    dom.createSpan({ cls: "db-menu-item-current", text });
+    dom.createSpan({ cls: "obnotion-menu-item-current", text });
   }
 
   private addSubmenuBackButton(panel: HTMLElement, cleanup: () => void, anchorEl?: HTMLElement): void {
     const back = panel.createEl("button", {
-      cls: "db-column-menu-back db-menu-item",
+      cls: "obnotion-column-menu-back obnotion-menu-item",
       attr: { type: "button", "aria-label": t("menu.back") },
     });
-    back.createSpan({ cls: "db-menu-item-label", text: t("menu.back") });
+    back.createSpan({ cls: "obnotion-menu-item-label", text: t("menu.back") });
     back.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -431,7 +431,7 @@ export class ColumnMenu {
   // ───────────────────────────────────────────────────────────────────
 
   private showTextRenderModePopover(evt: MouseEvent | KeyboardEvent, col: ColumnDef, _menu: OwnedMenuHandle, anchorEl?: HTMLElement): void {
-    const { panel, cleanup } = this.createColumnMenuSubpopover(evt, "db-column-display-style-popover db-column-text-style-popover", anchorEl);
+    const { panel, cleanup } = this.createColumnMenuSubpopover(evt, "obnotion-column-display-style-popover obnotion-column-text-style-popover", anchorEl);
     const render = (): void => {
       panel.empty();
       this.addSubmenuBackButton(panel, cleanup, anchorEl);
@@ -445,12 +445,12 @@ export class ColumnMenu {
       const current: "plain" | "link" | "markdown" = col.textRenderMode ?? "plain";
       for (const { value, key, icon } of options) {
         const row = section.createEl("button", {
-          cls: `db-dropdown-option db-menu-item has-icon${value === current ? " is-selected" : ""}`,
+          cls: `obnotion-dropdown-option obnotion-menu-item has-icon${value === current ? " is-selected" : ""}`,
           attr: { type: "button", role: "option", "aria-selected": value === current ? "true" : "false" },
         });
-        setIcon(row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon" }), icon);
-        row.createSpan({ cls: "db-dropdown-option-label db-menu-item-label" , text: t(key) });
-        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
+        setIcon(row.createSpan({ cls: "obnotion-dropdown-option-icon obnotion-menu-item-icon" }), icon);
+        row.createSpan({ cls: "obnotion-dropdown-option-label obnotion-menu-item-label" , text: t(key) });
+        const check = row.createSpan({ cls: "obnotion-dropdown-option-check obnotion-menu-item-check" });
         if (value === current) setIcon(check, "check");
         row.onclick = () => { this.actions.setTextRenderMode(col, value); render(); };
       }
@@ -460,12 +460,12 @@ export class ColumnMenu {
       for (const option of TEXT_LINK_SCHEME_MENU_OPTIONS) {
         const selected = option.value === currentScheme;
         const row = schemeSection.createEl("button", {
-          cls: `db-dropdown-option db-menu-item has-icon${selected ? " is-selected" : ""}`,
+          cls: `obnotion-dropdown-option obnotion-menu-item has-icon${selected ? " is-selected" : ""}`,
           attr: { type: "button", role: "option", "aria-selected": selected ? "true" : "false" },
         });
-        setIcon(row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon" }), option.icon);
-        row.createSpan({ cls: "db-dropdown-option-label db-menu-item-label" , text: t(option.labelKey) });
-        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
+        setIcon(row.createSpan({ cls: "obnotion-dropdown-option-icon obnotion-menu-item-icon" }), option.icon);
+        row.createSpan({ cls: "obnotion-dropdown-option-label obnotion-menu-item-label" , text: t(option.labelKey) });
+        const check = row.createSpan({ cls: "obnotion-dropdown-option-check obnotion-menu-item-check" });
         if (selected) setIcon(check, "check");
         row.onclick = () => { this.actions.setTextLinkScheme(col, option.value); render(); };
       }
@@ -481,8 +481,8 @@ export class ColumnMenu {
   // ───────────────────────────────────────────────────────────────────
 
   private createDisplayOptionSection(parent: HTMLElement, title: string): HTMLElement {
-    const section = parent.createDiv({ cls: "db-displayopt-section" });
-    section.createDiv({ cls: "db-displayopt-section-title", text: title });
+    const section = parent.createDiv({ cls: "obnotion-displayopt-section" });
+    section.createDiv({ cls: "obnotion-displayopt-section-title", text: title });
     return section;
   }
 
@@ -494,29 +494,29 @@ export class ColumnMenu {
       value,
       onChange,
       icon,
-      className: "db-displayopt-row db-displayopt-select",
-      popoverClassName: "db-displayopt-dropdown-popover",
+      className: "obnotion-displayopt-row obnotion-displayopt-select",
+      popoverClassName: "obnotion-displayopt-dropdown-popover",
       closeOnSelect: true,
       renderIcon: (target, iconName) => setIcon(target, iconName),
     });
   }
 
   private renderSwitch(parent: HTMLElement, label: string, checked: boolean, onChange: (checked: boolean) => void): void {
-    const row = parent.createDiv({ cls: "db-displayopt-row db-displayopt-switch" });
-    setIcon(row.createSpan({ cls: "db-displayopt-row-icon" }), "eye");
-    const text = row.createDiv({ cls: "db-displayopt-row-text" });
-    text.createSpan({ cls: "db-displayopt-label", text: label });
-    const checkbox = row.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch", "aria-label": label } });
+    const row = parent.createDiv({ cls: "obnotion-displayopt-row obnotion-displayopt-switch" });
+    setIcon(row.createSpan({ cls: "obnotion-displayopt-row-icon" }), "eye");
+    const text = row.createDiv({ cls: "obnotion-displayopt-row-text" });
+    text.createSpan({ cls: "obnotion-displayopt-label", text: label });
+    const checkbox = row.createEl("input", { cls: "obnotion-toggle-switch", attr: { type: "checkbox", role: "switch", "aria-label": label } });
     checkbox.checked = checked;
     checkbox.onchange = () => onChange(checkbox.checked);
   }
 
   private renderNumberInput(parent: HTMLElement, value: number, onChange: (value: number) => void): void {
-    const row = parent.createDiv({ cls: "db-displayopt-row db-displayopt-input-row" });
-    setIcon(row.createSpan({ cls: "db-displayopt-row-icon" }), "hash");
-    const text = row.createDiv({ cls: "db-displayopt-row-text" });
-    text.createSpan({ cls: "db-displayopt-label", text: t("menu.numberStyleCustom") });
-    const input = row.createEl("input", { cls: "db-displayopt-input", attr: { type: "number", "aria-label": t("menu.numberDisplayDivisor") } });
+    const row = parent.createDiv({ cls: "obnotion-displayopt-row obnotion-displayopt-input-row" });
+    setIcon(row.createSpan({ cls: "obnotion-displayopt-row-icon" }), "hash");
+    const text = row.createDiv({ cls: "obnotion-displayopt-row-text" });
+    text.createSpan({ cls: "obnotion-displayopt-label", text: t("menu.numberStyleCustom") });
+    const input = row.createEl("input", { cls: "obnotion-displayopt-input", attr: { type: "number", "aria-label": t("menu.numberDisplayDivisor") } });
     input.value = String(value);
     input.onchange = () => {
       const n = parseFloat(input.value);
@@ -525,12 +525,12 @@ export class ColumnMenu {
   }
 
   private renderEmojiInput(parent: HTMLElement, value: string, onChange: (value: string | undefined) => void): void {
-    const row = parent.createDiv({ cls: "db-displayopt-row db-displayopt-input-row" });
-    setIcon(row.createSpan({ cls: "db-displayopt-row-icon" }), "smile");
-    const text = row.createDiv({ cls: "db-displayopt-row-text" });
-    text.createSpan({ cls: "db-displayopt-label", text: t("menu.numberDisplayEmoji") });
+    const row = parent.createDiv({ cls: "obnotion-displayopt-row obnotion-displayopt-input-row" });
+    setIcon(row.createSpan({ cls: "obnotion-displayopt-row-icon" }), "smile");
+    const text = row.createDiv({ cls: "obnotion-displayopt-row-text" });
+    text.createSpan({ cls: "obnotion-displayopt-label", text: t("menu.numberDisplayEmoji") });
     const input = row.createEl("input", {
-      cls: "db-displayopt-input db-displayopt-emoji-input",
+      cls: "obnotion-displayopt-input obnotion-displayopt-emoji-input",
       attr: { type: "text", "aria-label": t("menu.numberDisplayEmoji"), maxlength: "8" },
     });
     input.value = value;
@@ -558,14 +558,14 @@ export class ColumnMenu {
   }
 
   private renderColorSwatches(parent: HTMLElement, current: StatusColor, onChange: (color: StatusColor | undefined) => void): void {
-    const row = parent.createDiv({ cls: "db-displayopt-row db-displayopt-colors" });
-    setIcon(row.createSpan({ cls: "db-displayopt-row-icon" }), "palette");
-    const text = row.createDiv({ cls: "db-displayopt-row-text" });
-    text.createSpan({ cls: "db-displayopt-label", text: t("menu.numberDisplayColorCustom") });
-    const grid = row.createDiv({ cls: "db-displayopt-swatches" });
+    const row = parent.createDiv({ cls: "obnotion-displayopt-row obnotion-displayopt-colors" });
+    setIcon(row.createSpan({ cls: "obnotion-displayopt-row-icon" }), "palette");
+    const text = row.createDiv({ cls: "obnotion-displayopt-row-text" });
+    text.createSpan({ cls: "obnotion-displayopt-label", text: t("menu.numberDisplayColorCustom") });
+    const grid = row.createDiv({ cls: "obnotion-displayopt-swatches" });
     for (const color of OPTION_COLORS) {
       const sw = grid.createEl("button", {
-        cls: `db-displayopt-swatch db-option-color-${color}${current === color ? " is-selected" : ""}`,
+        cls: `obnotion-displayopt-swatch obnotion-option-color-${color}${current === color ? " is-selected" : ""}`,
         attr: { type: "button", title: color, "aria-label": color, "aria-pressed": current === color ? "true" : "false" },
       });
       sw.onclick = () => onChange(color);
@@ -582,8 +582,8 @@ export class ColumnMenu {
       return;
     }
     if (style === "progress") {
-      const track = parent.createSpan({ cls: "db-number-style-menu-progress" });
-      track.createSpan({ cls: "db-number-style-menu-progress-fill" });
+      const track = parent.createSpan({ cls: "obnotion-number-style-menu-progress" });
+      track.createSpan({ cls: "obnotion-number-style-menu-progress-fill" });
       return;
     }
 
@@ -592,7 +592,7 @@ export class ColumnMenu {
     });
     svg.createSvg("circle", {
       attr: { cx: 8, cy: 8, r: 5.5, fill: "none", "stroke-width": 3 },
-    }).addClass("db-number-style-menu-ring-track");
+    }).addClass("obnotion-number-style-menu-ring-track");
     svg.createSvg("circle", {
       attr: {
         cx: 8,
@@ -605,7 +605,7 @@ export class ColumnMenu {
         "stroke-dashoffset": "21",
         transform: "rotate(-90 8 8)",
       },
-    }).addClass("db-number-style-menu-ring-arc");
+    }).addClass("obnotion-number-style-menu-ring-arc");
   }
 
   // ───────────────────────────────────────────────────────────────────
@@ -619,10 +619,10 @@ export class ColumnMenu {
   ): { panel: HTMLElement; cleanup: () => void } {
     this.closeActiveColumnSubmenu();
     const doc = window.activeDocument;
-    doc.querySelectorAll(".db-column-menu-subpopover, .db-column-type-popover, .db-number-style-popover, .db-column-display-style-popover, .db-column-number-style-popover, .db-column-text-style-popover")
+    doc.querySelectorAll(".obnotion-column-menu-subpopover, .obnotion-column-type-popover, .obnotion-number-style-popover, .obnotion-column-display-style-popover, .obnotion-column-number-style-popover, .obnotion-column-text-style-popover")
       .forEach((existing) => existing.remove());
-    const panel = doc.body.createDiv({ cls: `db-dropdown-popover db-column-menu-subpopover ${className}` });
-    const estimatedWidth = className.includes("db-column-display-style-popover") ? 292 : 220;
+    const panel = doc.body.createDiv({ cls: `obnotion-dropdown-popover obnotion-column-menu-subpopover ${className}` });
+    const estimatedWidth = className.includes("obnotion-column-display-style-popover") ? 292 : 220;
     let closed = false;
     let removeAutoClose: (() => void) | undefined;
     let cleanup: () => void = () => undefined;

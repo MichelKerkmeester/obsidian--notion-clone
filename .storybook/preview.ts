@@ -52,7 +52,7 @@ const preview: Preview = {
     // render unstyled and the catalogue would quietly lie about what ships.
     (story) => {
       const host = document.createElement("div");
-      host.className = "note-database-container";
+      host.className = "obnotion-container";
       const rendered = story();
       if (typeof rendered === "string") host.innerHTML = rendered;
       else host.appendChild(rendered as Node);

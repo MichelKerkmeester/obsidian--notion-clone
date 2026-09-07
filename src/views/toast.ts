@@ -81,7 +81,7 @@ const stacks = new WeakMap<Document, HTMLElement>();
 function getStack(doc: Document): HTMLElement {
   const existing = stacks.get(doc);
   if (existing?.isConnected) return existing;
-  const stack = doc.body.createDiv({ cls: "db-surface db-toast-stack" });
+  const stack = doc.body.createDiv({ cls: "obnotion-surface obnotion-toast-stack" });
   stacks.set(doc, stack);
   return stack;
 }
@@ -97,7 +97,7 @@ export function showToast(doc: Document, options: ToastOptions): ToastHandle {
   // before, rather than layer a second card the collapsed-stack trick below was never meant for.
   if (options.container) stack.empty();
   const card = stack.createDiv({
-    cls: `db-toast is-${options.severity}${options.container ? " is-inline" : ""}`,
+    cls: `obnotion-toast is-${options.severity}${options.container ? " is-inline" : ""}`,
     attr: { role: "status", "aria-live": "polite", "aria-atomic": "true" },
   });
   // Prepended, not appended: the stack renders only its first child, so the newest toast has to
@@ -105,16 +105,16 @@ export function showToast(doc: Document, options: ToastOptions): ToastHandle {
   // single-slot container, which was just emptied above and so has only this one child anyway.
   stack.prepend(card);
 
-  const header = card.createDiv({ cls: "db-toast-header" });
-  setIcon(header.createDiv({ cls: "db-toast-icon" }), options.severity === "success" ? "check" : "alert-triangle");
-  header.createDiv({ cls: "db-toast-message", text: options.message });
+  const header = card.createDiv({ cls: "obnotion-toast-header" });
+  setIcon(header.createDiv({ cls: "obnotion-toast-icon" }), options.severity === "success" ? "check" : "alert-triangle");
+  header.createDiv({ cls: "obnotion-toast-message", text: options.message });
   const closeBtn = header.createEl("button", {
-    cls: "db-toast-close",
+    cls: "obnotion-toast-close",
     attr: { type: "button", "aria-label": t("common.close") },
   });
   setIcon(closeBtn, "x");
 
-  const actions = card.createDiv({ cls: "db-toast-actions" });
+  const actions = card.createDiv({ cls: "obnotion-toast-actions" });
 
   let timer: number | null = null;
   const clearAutoDismiss = () => {
@@ -130,7 +130,7 @@ export function showToast(doc: Document, options: ToastOptions): ToastHandle {
 
   if (options.action) {
     const actionBtn = actions.createEl("button", {
-      cls: "db-toast-action",
+      cls: "obnotion-toast-action",
       attr: { type: "button" },
     });
     if (options.action.icon) setIcon(actionBtn.createSpan(), options.action.icon);

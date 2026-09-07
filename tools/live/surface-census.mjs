@@ -89,7 +89,7 @@ for (const scenario of SCENARIOS.filter((s) => typeof s.html === "function")) {
     const re = new RegExp(pattern);
     const out = [];
     document.querySelectorAll("#shot *").forEach((el) => {
-      const classes = (el.className || "").toString().split(/\s+/).filter((c) => c.startsWith("db-"));
+      const classes = (el.className || "").toString().split(/\s+/).filter((c) => c.startsWith("obnotion-"));
       const surface = classes.find((c) => re.test(c));
       if (!surface) return;
       const s = getComputedStyle(el);
@@ -97,8 +97,8 @@ for (const scenario of SCENARIOS.filter((s) => typeof s.html === "function")) {
       out.push({
         cls: surface,
         mountParent: (el.parentElement?.className || "").toString().split(/\s+/)[0] || "(body)",
-        tokens: s.getPropertyValue("--db-radius-sm").trim() !== "",
-        role: el.getAttribute("data-db-surface"),
+        tokens: s.getPropertyValue("--obnotion-radius-sm").trim() !== "",
+        role: el.getAttribute("data-obnotion-surface"),
         rect: `${Math.round(r.width)}x${Math.round(r.height)}`,
       });
     });
@@ -128,35 +128,35 @@ function walk(dir, out = []) {
 const buildable = new Map();
 for (const file of walk(join(REPO, "src"))) {
   const text = readFileSync(file, "utf8");
-  if (!text.includes("db-")) continue;
+  if (!text.includes("obnotion-")) continue;
   const rel = relative(REPO, file);
   const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true);
   // TEMPLATE CHUNKS COUNT, AND LEAVING THEM OUT ACCUSED THE FIXTURES.
   //
   // This read plain strings and no-substitution templates only, so every class written as
-  // `cls: `db-dropdown-popover ${context}`` was invisible to it. The reconciliation below then
+  // `cls: `obnotion-dropdown-popover ${context}`` was invisible to it. The reconciliation below then
   // reported those classes as "rendered but not buildable — fixture-only markup", which is a
   // picture of something the plugin does not make. All seven it named were built by the plugin,
   // every one of them from a template literal.
   //
-  // A chunk that runs into a substitution ends mid-token — `db-option-color-` before `${color}` —
+  // A chunk that runs into a substitution ends mid-token — `obnotion-option-color-` before `${color}` —
   // so the token touching the boundary is dropped rather than recorded. Recording it would trade
   // one wrong inventory for another, and a prefix is exactly the shape that looks like a real
-  // class to a `db-` test.
+  // class to a `obnotion-` test.
   const collect = (text, dropFirst, dropLast) => {
     const parts = text.split(/\s+/);
     if (dropFirst && parts.length) parts.shift();
     if (dropLast && parts.length) parts.pop();
     for (const cls of parts) {
-      if (!cls.startsWith("db-") || !SURFACE_WORDS.test(cls)) continue;
+      if (!cls.startsWith("obnotion-") || !SURFACE_WORDS.test(cls)) continue;
       if (!buildable.has(cls)) buildable.set(cls, rel);
     }
   };
   // Whether a substitution can extend the token that runs into it.
   //
   // `${disabled ? " is-disabled" : ""}` cannot: every value it produces is empty or starts with a
-  // space, so `db-chart-options-popover-entry` before it is a whole class. `${color}` can, so
-  // `db-option-color-` before it is a prefix and is dropped. Only literals are read — an identifier
+  // space, so `obnotion-chart-options-popover-entry` before it is a whole class. `${color}` can, so
+  // `obnotion-option-color-` before it is a prefix and is dropped. Only literals are read — an identifier
   // or a call is unknown, and unknown drops, because a prefix recorded as a class is a wrong
   // inventory in the direction that is hardest to notice.
   const cannotExtend = (expr) => {
@@ -274,8 +274,8 @@ const BUILDER_NAMES = new Set([...HEADER_BUILDER_NAMES, ...ROW_BUILDER_NAMES]);
 // The class name a primitive assigns its own header or row root when a caller does not override it.
 // That string belongs in the primitive's own file or in a builder call's own class option; anywhere
 // else in a consumer it names an element the consumer put that class on itself.
-const HAND_BUILT_HEADER_CLASSES = new Set(["db-record-detail-header", "db-record-peek-header", "db-panel-header"]);
-const HAND_BUILT_ROW_CLASSES = new Set(["db-record-detail-field", "db-record-peek-field", "db-column-manager-row"]);
+const HAND_BUILT_HEADER_CLASSES = new Set(["obnotion-record-detail-header", "obnotion-record-peek-header", "obnotion-panel-header"]);
+const HAND_BUILT_ROW_CLASSES = new Set(["obnotion-record-detail-field", "obnotion-record-peek-field", "obnotion-column-manager-row"]);
 // Reading only `createDiv({ cls })` was the earlier shape of this check and it could not see the
 // bypasses these files have actually carried: the peek built its header and every field through a
 // local `createChild(parent, tag, className)` helper that assigns `element.className`, and the board
@@ -292,7 +292,7 @@ const SELECTOR_METHODS = new Set(["querySelector", "querySelectorAll", "closest"
 // for its styling and carries the empty marker beside it. It is a message, not a property row, so it
 // is reported on its own line rather than counted against the zero threshold — and any OTHER literal
 // carrying a row class still goes red, including a second notice that dropped the marker.
-const NON_ROW_REUSE_MARKERS = new Set(["db-record-peek-empty"]);
+const NON_ROW_REUSE_MARKERS = new Set(["obnotion-record-peek-empty"]);
 
 /** True when this literal is a CSS selector rather than a class being assigned. */
 function isSelectorLiteral(node, text) {

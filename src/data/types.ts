@@ -149,7 +149,7 @@ export interface ComputedFieldDef {
   expression: string;
   type: "number" | "text" | "date" | "datetime" | "checkbox";
   /** Expression language. Bases imports keep their native formula syntax. */
-  expressionSyntax?: "note-database" | "base";
+  expressionSyntax?: "obnotion" | "base";
 }
 
 export type ComputedSyncMode = "automatic" | "display-only" | "manual";
@@ -473,7 +473,7 @@ export interface ViewConfig {
   sourceRuleTree?: SourceRuleNode;
   /** Enables/disables per-view source rules at runtime. When false, view-level source
    *  rules (sourceRuleTree, sourceRules, sourceLogic) are NOT applied by getEffectiveConfig
-   *  and the editor is hidden. When true, they are combined with db-level rules and the
+   *  and the editor is hidden. When true, they are combined with obnotion-level rules and the
    *  editor is shown. */
   viewSourceRulesEnabled?: boolean;
   /** Whether record title surfaces render an icon slot. */

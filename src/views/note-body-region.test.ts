@@ -125,7 +125,7 @@ function makePanel(): FakeElement {
   const doc = new FakeDocument();
   const panel = new FakeElement("div", doc);
   // Stand in for the properties the region has to sit under.
-  panel.appendChild(doc.createElement("div")).className = "db-record-detail-fields";
+  panel.appendChild(doc.createElement("div")).className = "obnotion-record-detail-fields";
   return panel;
 }
 
@@ -164,8 +164,8 @@ beforeEach(() => {
 describe("the body region in read mode", () => {
   it("mounts as the last child, under the properties", () => {
     const { panel } = mount("# Notes\n");
-    expect(panel.children.at(-1)?.className).toBe("db-record-detail-body");
-    expect(panel.children.at(0)?.className).toBe("db-record-detail-fields");
+    expect(panel.children.at(-1)?.className).toBe("obnotion-record-detail-body");
+    expect(panel.children.at(0)?.className).toBe("obnotion-record-detail-fields");
   });
 
   it("hands the body to the renderer rather than printing it", () => {
@@ -175,7 +175,7 @@ describe("the body region in read mode", () => {
 
   it("shows a placeholder, and asks the renderer for nothing, when there is no body", () => {
     const { panel, rendered } = mount("");
-    const content = panel.find("db-record-detail-body-rendered");
+    const content = panel.find("obnotion-record-detail-body-rendered");
     expect(rendered).toEqual([]);
     expect(content?.classList.contains("is-empty")).toBe(true);
     expect(content?.textContent).toBe("Write a note…");
@@ -183,12 +183,12 @@ describe("the body region in read mode", () => {
 
   it("is reachable by keyboard as well as by tap", () => {
     const { panel } = mount("Body");
-    expect(panel.find("db-record-detail-body-rendered")?.tabIndex).toBe(0);
+    expect(panel.find("obnotion-record-detail-body-rendered")?.tabIndex).toBe(0);
   });
 
   it("offers no way in when the surface is read-only", () => {
     const { panel, region } = mount("Body", { readOnly: true });
-    const content = panel.find("db-record-detail-body-rendered");
+    const content = panel.find("obnotion-record-detail-body-rendered");
     expect(content?.tabIndex).toBe(-1);
     content?.dispatch("click");
     region.beginEdit();
@@ -203,40 +203,40 @@ describe("the body region in read mode", () => {
 describe("swapping into the editor", () => {
   it("replaces the rendered body with a focused textarea on tap", () => {
     const { panel, region } = mount("Body text");
-    panel.find("db-record-detail-body-rendered")?.dispatch("click");
+    panel.find("obnotion-record-detail-body-rendered")?.dispatch("click");
 
-    const editor = panel.find("db-record-detail-body-editor");
+    const editor = panel.find("obnotion-record-detail-body-editor");
     expect(region.isEditing()).toBe(true);
     expect(editor?.tagName).toBe("textarea");
     expect(editor?.value).toBe("Body text");
     expect(editor?.focused).toBe(true);
-    expect(panel.find("db-record-detail-body-rendered")).toBeNull();
+    expect(panel.find("obnotion-record-detail-body-rendered")).toBeNull();
   });
 
   it("opens on Enter from the keyboard", () => {
     const { panel, region } = mount("Body text");
-    panel.find("db-record-detail-body-rendered")?.dispatch("keydown", { key: "Enter" });
+    panel.find("obnotion-record-detail-body-rendered")?.dispatch("keydown", { key: "Enter" });
     expect(region.isEditing()).toBe(true);
   });
 
   it("puts the caret where it was asked to", () => {
     const { panel, region } = mount("Body text");
     region.beginEdit(4);
-    expect(panel.find("db-record-detail-body-editor")?.selectionStart).toBe(4);
+    expect(panel.find("obnotion-record-detail-body-editor")?.selectionStart).toBe(4);
   });
 
   it("grows to its content instead of scrolling inside itself", () => {
     const { panel, region } = mount("Body text");
     region.beginEdit();
-    expect(panel.find("db-record-detail-body-editor")?.style.height).toBe("120px");
+    expect(panel.find("obnotion-record-detail-body-editor")?.style.height).toBe("120px");
   });
 
   it("returns to the rendered body on blur", () => {
     const { panel, region } = mount("Body text");
     region.beginEdit();
-    panel.find("db-record-detail-body-editor")?.dispatch("blur");
+    panel.find("obnotion-record-detail-body-editor")?.dispatch("blur");
     expect(region.isEditing()).toBe(false);
-    expect(panel.find("db-record-detail-body-rendered")).not.toBeNull();
+    expect(panel.find("obnotion-record-detail-body-rendered")).not.toBeNull();
   });
 });
 
@@ -246,7 +246,7 @@ describe("swapping into the editor", () => {
 
 describe("committing the draft", () => {
   const type = (panel: FakeElement, text: string): void => {
-    const editor = panel.find("db-record-detail-body-editor");
+    const editor = panel.find("obnotion-record-detail-body-editor");
     if (!editor) throw new Error("no editor mounted");
     editor.value = text;
     editor.dispatch("input");
@@ -269,7 +269,7 @@ describe("committing the draft", () => {
     const { panel, region, commits } = mount("");
     region.beginEdit();
     type(panel, "Typed");
-    panel.find("db-record-detail-body-editor")?.dispatch("blur");
+    panel.find("obnotion-record-detail-body-editor")?.dispatch("blur");
     expect(commits).toEqual(["Typed"]);
   });
 
@@ -277,10 +277,10 @@ describe("committing the draft", () => {
     const { panel, region, commits } = mount("");
     region.beginEdit();
     type(panel, "Typed");
-    panel.find("db-record-detail-body-editor")?.dispatch("keydown", { key: "Escape" });
+    panel.find("obnotion-record-detail-body-editor")?.dispatch("keydown", { key: "Escape" });
     expect(commits).toEqual(["Typed"]);
     expect(region.isEditing()).toBe(false);
-    expect(panel.find("db-record-detail-body-rendered")).not.toBeNull();
+    expect(panel.find("obnotion-record-detail-body-rendered")).not.toBeNull();
   });
 
   it("flushes on destroy, so a panel rebuild cannot drop the draft", () => {
@@ -295,7 +295,7 @@ describe("committing the draft", () => {
     const { panel, region } = mount("");
     region.beginEdit();
     type(panel, "Half a sen");
-    const editor = panel.find("db-record-detail-body-editor");
+    const editor = panel.find("obnotion-record-detail-body-editor");
     if (editor) editor.selectionStart = 6;
 
     expect(region.isEditing()).toBe(true);
@@ -315,6 +315,6 @@ describe("committing the draft", () => {
   it("takes the region out of the panel on destroy", () => {
     const { panel, region } = mount("Body");
     region.destroy();
-    expect(panel.find("db-record-detail-body")).toBeNull();
+    expect(panel.find("obnotion-record-detail-body")).toBeNull();
   });
 });

@@ -25,7 +25,7 @@ type Story = StoryObj;
 
 function pick(caption: string, options: Record<string, unknown>): HTMLElement {
   const cell = document.createElement("div");
-  cell.className = "db-story-cell";
+  cell.className = "obnotion-story-cell";
   const host = document.createElement("div");
   renderDateValuePicker({
     parent: host,
@@ -34,7 +34,7 @@ function pick(caption: string, options: Record<string, unknown>): HTMLElement {
     ...options,
   } as Parameters<typeof renderDateValuePicker>[0]);
   const note = document.createElement("span");
-  note.className = "db-story-note";
+  note.className = "obnotion-story-note";
   note.textContent = caption;
   cell.append(host, note);
   return cell;
@@ -48,7 +48,7 @@ function pick(caption: string, options: Record<string, unknown>): HTMLElement {
 export const States: Story = {
   render: () => {
     const col = document.createElement("div");
-    col.className = "db-story-column";
+    col.className = "obnotion-story-column";
     col.append(
       pick("empty", { placeholder: "Pick a date" }),
       pick("date", { value: "2026-03-14" }),

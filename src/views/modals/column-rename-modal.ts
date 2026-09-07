@@ -15,7 +15,7 @@ import { App, Notice } from "obsidian";
 import { isFileFieldKey } from "../../data/file-fields";
 import { ColumnDef } from "../../data/types";
 import { t } from "../../i18n";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import { createCheckbox } from "../checkbox";
 import type { SurfaceShellRole } from "../surface-shell";
 
@@ -105,7 +105,7 @@ export class ColumnRenameModal extends DbModal {
       migrateLabel.createSpan({ text: t("modal.migrateValues") });
       const migrateHelpText = t("modal.migrateValuesDesc");
       const helpIcon = migrateRow.createEl("button", {
-        cls: "db-migrate-help-icon",
+        cls: "obnotion-migrate-help-icon",
         text: "?",
         attr: { type: "button", title: migrateHelpText, "aria-label": migrateHelpText },
       });

@@ -61,8 +61,8 @@ describe("sheet trace", () => {
   it("records nothing and subscribes to nothing while it is off", () => {
     const doc = createDocument();
     expect(isSheetTraceEnabled()).toBe(false);
-    traceSheet("sheet-open", "db-filter-panel");
-    beginSheetGeneration("db-filter-panel");
+    traceSheet("sheet-open", "obnotion-filter-panel");
+    beginSheetGeneration("obnotion-filter-panel");
     expect(doc.listeners.size).toBe(0);
     expect(readSheetTrace()).toContain("not recording");
   });
@@ -80,9 +80,9 @@ describe("sheet trace", () => {
 
   it("groups events under the generation of the sheet that was open", () => {
     setSheetTraceEnabled(true, createDocument());
-    beginSheetGeneration("db-filter-panel");
+    beginSheetGeneration("obnotion-filter-panel");
     traceSheet("panel-refill", "filter");
-    beginSheetGeneration("db-sort-panel");
+    beginSheetGeneration("obnotion-sort-panel");
     traceSheet("dismiss", "outside-pointerdown");
     const lines = readSheetTrace().split("\n");
     // A generation begins at a mount, so the refill belongs to the sheet that was open when it

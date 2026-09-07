@@ -104,8 +104,8 @@ interface DropdownPopoverOptions extends DropdownFieldOptions {
 // ───────────────────────────────────────────────────────────────────
 
 // The family's own tokens for a natural-height estimate, not a rounder guess: the option row's
-// 30px floor (`styles.css` `.db-dropdown-option`), the search row's ~44px (its 28px input plus
-// wrap padding), and a section title's ~28px (`.db-dropdown-section-title`). Estimated rather than
+// 30px floor (`styles.css` `.obnotion-dropdown-option`), the search row's ~44px (its 28px input plus
+// wrap padding), and a section title's ~28px (`.obnotion-dropdown-section-title`). Estimated rather than
 // measured because the answer is needed before `createDropdownField`'s own click handler decides
 // whether to turn the trigger into the query field — measuring the built panel would mean building
 // the anchored shape first and unwinding that conversion after the fact, for a caller that runs
@@ -143,7 +143,7 @@ function isDesktopDropdownCramped(anchor: HTMLElement, options: DropdownOption[]
 export function createDropdownField(options: DropdownFieldOptions): DropdownFieldHandle {
   let currentValue = options.value;
   const button = options.parent.createEl("button", {
-    cls: `db-dropdown-field${options.className ? ` ${options.className}` : ""}`,
+    cls: `obnotion-dropdown-field${options.className ? ` ${options.className}` : ""}`,
     attr: { type: "button", "aria-haspopup": "listbox", "aria-expanded": "false" },
   });
   if (options.disabled) button.disabled = true;
@@ -151,7 +151,7 @@ export function createDropdownField(options: DropdownFieldOptions): DropdownFiel
     button.setAttr("title", options.disabledReason);
     button.setAttr("aria-label", `${options.label}: ${options.disabledReason}`);
   }
-  const iconWrap = button.createSpan({ cls: "db-dropdown-field-icon" });
+  const iconWrap = button.createSpan({ cls: "obnotion-dropdown-field-icon" });
   const renderButtonIcon = (value: string) => {
     iconWrap.empty();
     const icon = options.icon || getOptionIcon(options.options, value);
@@ -161,13 +161,13 @@ export function createDropdownField(options: DropdownFieldOptions): DropdownFiel
     else setIcon(iconWrap, icon);
   };
   renderButtonIcon(currentValue);
-  const text = button.createDiv({ cls: "db-dropdown-field-text" });
-  if (!options.hideLabel) text.createSpan({ cls: "db-dropdown-field-label", text: options.label });
-  const valueEl = text.createSpan({ cls: "db-dropdown-field-value", text: getOptionText(options.options, currentValue) || options.placeholder || "" });
+  const text = button.createDiv({ cls: "obnotion-dropdown-field-text" });
+  if (!options.hideLabel) text.createSpan({ cls: "obnotion-dropdown-field-label", text: options.label });
+  const valueEl = text.createSpan({ cls: "obnotion-dropdown-field-value", text: getOptionText(options.options, currentValue) || options.placeholder || "" });
   if (options.disabled && options.disabledReason) {
-    text.createSpan({ cls: "db-dropdown-field-disabled-reason", text: options.disabledReason });
+    text.createSpan({ cls: "obnotion-dropdown-field-disabled-reason", text: options.disabledReason });
   }
-  setIcon(button.createSpan({ cls: "db-dropdown-field-chevron" }), "chevron-down");
+  setIcon(button.createSpan({ cls: "obnotion-dropdown-field-chevron" }), "chevron-down");
 
   let cleanup: (() => void) | undefined;
   let combobox: HTMLInputElement | undefined;
@@ -279,8 +279,8 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownPopoverOption
   // escalated sheet is never comboboxInput-backed (see `desktopSheet` above), so it always lands
   // in this branch and gets the same in-panel search row the phone sheet gets.
   const panelSearch = searchable && !options.comboboxInput;
-  const panel = host.createDiv({ cls: `db-dropdown-popover ${contextClass}${panelSearch ? " is-searchable" : ""}${desktopSheet ? " db-dropdown-popover-desktop-sheet" : ""}${options.popoverClassName ? ` ${options.popoverClassName}` : ""}` });
-  const popupId = `db-dropdown-${++nextDropdownId}`;
+  const panel = host.createDiv({ cls: `obnotion-dropdown-popover ${contextClass}${panelSearch ? " is-searchable" : ""}${desktopSheet ? " obnotion-dropdown-popover-desktop-sheet" : ""}${options.popoverClassName ? ` ${options.popoverClassName}` : ""}` });
+  const popupId = `obnotion-dropdown-${++nextDropdownId}`;
   panel.setAttr("id", popupId);
   panel.setAttr("role", "listbox");
   panel.setAttr("aria-label", options.label);
@@ -288,7 +288,7 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownPopoverOption
   if (phoneSheet || desktopSheet) buildShellHeader(panel, { title: options.label, onClose: close });
   let searchInput = options.comboboxInput;
   if (panelSearch) {
-    const searchWrap = panel.createDiv({ cls: "db-dropdown-search" });
+    const searchWrap = panel.createDiv({ cls: "obnotion-dropdown-search" });
     searchInput = searchWrap.createEl("input", {
       attr: {
         type: "search",
@@ -303,11 +303,11 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownPopoverOption
   }
   // When the panel carries the search box, options live in their own scroll container so the box
   // stays fixed at the top (no sticky drift). Otherwise the panel itself scrolls.
-  const optionsHost = panelSearch || phoneSheet ? panel.createDiv({ cls: "db-dropdown-options" }) : panel;
+  const optionsHost = panelSearch || phoneSheet ? panel.createDiv({ cls: "obnotion-dropdown-options" }) : panel;
   let currentSection = "";
   let currentSectionEl: HTMLElement | undefined;
   const sectionRows: DropdownRow[] = [];
-  const emptyRow = optionsHost.createDiv({ cls: "db-dropdown-empty", text: t("dropdown.noResults"), attr: { role: "status", hidden: "true" } });
+  const emptyRow = optionsHost.createDiv({ cls: "obnotion-dropdown-empty", text: t("dropdown.noResults"), attr: { role: "status", hidden: "true" } });
   // Every create-affordance row (`preserveValueOnSelect`) moves ahead of the ordinary results,
   // directly under the search field, so it stays reachable while a query is still narrowing toward
   // nothing rather than scrolling past once the list is short. The two groups keep their own
@@ -375,10 +375,10 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownPopoverOption
   for (const option of orderedOptions) {
     if (option.section && option.section !== currentSection) {
       currentSection = option.section;
-      currentSectionEl = optionsHost.createDiv({ cls: "db-dropdown-section-title", text: option.section });
+      currentSectionEl = optionsHost.createDiv({ cls: "obnotion-dropdown-section-title", text: option.section });
     }
     const row = optionsHost.createEl("button", {
-      cls: `db-dropdown-option db-menu-item${option.icon ? " has-icon" : ""}${option.swatches?.length ? " has-swatches" : ""}${option.value === options.value ? " is-selected" : ""}${option.disabled ? " is-disabled" : ""}`,
+      cls: `obnotion-dropdown-option obnotion-menu-item${option.icon ? " has-icon" : ""}${option.swatches?.length ? " has-swatches" : ""}${option.value === options.value ? " is-selected" : ""}${option.disabled ? " is-disabled" : ""}`,
       attr: { type: "button", role: "option", "aria-selected": option.value === options.value ? "true" : "false", tabindex: "-1" },
     });
     row.setAttr("data-value", option.value);
@@ -397,21 +397,21 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownPopoverOption
       row.setAttr("aria-label", `${option.text}: ${option.disabledReason}`);
     }
     if (option.icon) {
-      const iconEl = row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon" });
+      const iconEl = row.createSpan({ cls: "obnotion-dropdown-option-icon obnotion-menu-item-icon" });
       if (options.renderIcon) options.renderIcon(iconEl, option.icon);
       else setIcon(iconEl, option.icon);
     }
-    const text = row.createSpan({ cls: "db-dropdown-option-text db-menu-item-label" });
-    text.createSpan({ cls: "db-dropdown-option-label", text: option.text });
+    const text = row.createSpan({ cls: "obnotion-dropdown-option-text obnotion-menu-item-label" });
+    text.createSpan({ cls: "obnotion-dropdown-option-label", text: option.text });
     if (option.swatches?.length) {
-      const swatches = row.createSpan({ cls: "db-dropdown-option-swatches", attr: { "aria-hidden": "true" } });
+      const swatches = row.createSpan({ cls: "obnotion-dropdown-option-swatches", attr: { "aria-hidden": "true" } });
       for (const color of option.swatches.slice(0, 5)) {
-        swatches.createSpan({ cls: "db-dropdown-option-swatch", attr: { style: `background-color: ${color}` } });
+        swatches.createSpan({ cls: "obnotion-dropdown-option-swatch", attr: { style: `background-color: ${color}` } });
       }
     }
     // Trailing, as the last element child: the selection state reads as the row's own outcome
     // rather than a leading marker competing with the icon for the same slot.
-    const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
+    const check = row.createSpan({ cls: "obnotion-dropdown-option-check obnotion-menu-item-check" });
     if (option.value === options.value) setIcon(check, "check");
     const rowData = { section: currentSectionEl, row, value: option.value, option };
     row.onclick = () => selectRow(rowData);
@@ -553,7 +553,7 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownPopoverOption
 function openTriggerInput(options: DropdownFieldOptions, button: HTMLButtonElement, value: string): HTMLInputElement {
   const input = button.ownerDocument.createElement("input");
   input.type = "text";
-  input.addClass("db-dropdown-field-input");
+  input.addClass("obnotion-dropdown-field-input");
   // The trigger's own layout classes come along: whatever sizes the button in its row has to size
   // the input that replaces it, or the row reflows the moment the field is opened.
   for (const cls of (options.className || "").split(/\s+/).filter(Boolean)) input.addClass(cls);
@@ -569,16 +569,16 @@ function openTriggerInput(options: DropdownFieldOptions, button: HTMLButtonEleme
 }
 
 function getDropdownPopoverHost(anchor: HTMLElement): HTMLElement {
-  if (anchor.closest(".db-mobile-bottom-sheet, .note-database-settings, .note-database-modal")) return anchor.ownerDocument.body;
-  const container = anchor.closest(".note-database-container");
+  if (anchor.closest(".obnotion-mobile-bottom-sheet, .obnotion-settings, .obnotion-modal")) return anchor.ownerDocument.body;
+  const container = anchor.closest(".obnotion-container");
   if (container instanceof HTMLElement) return container;
   return anchor.parentElement || anchor;
 }
 
 function getDropdownPopoverContextClass(anchor: HTMLElement): string {
-  if (anchor.closest(".note-database-settings")) return "db-dropdown-popover-context-settings";
-  if (anchor.closest(".note-database-modal")) return "db-dropdown-popover-context-modal";
-  return "db-dropdown-popover-context-container";
+  if (anchor.closest(".obnotion-settings")) return "obnotion-dropdown-popover-context-settings";
+  if (anchor.closest(".obnotion-modal")) return "obnotion-dropdown-popover-context-modal";
+  return "obnotion-dropdown-popover-context-container";
 }
 
 function getOptionText(options: DropdownOption[], value: string): string | undefined {
@@ -594,7 +594,7 @@ function syncDropdownSelection(rows: Array<{ row: HTMLButtonElement; value: stri
     const selected = item.value === value;
     item.row.toggleClass("is-selected", selected);
     item.row.setAttr("aria-selected", selected ? "true" : "false");
-    const check = item.row.querySelector<HTMLElement>(".db-dropdown-option-check");
+    const check = item.row.querySelector<HTMLElement>(".obnotion-dropdown-option-check");
     check?.replaceChildren();
     if (selected && check) setIcon(check, "check");
   }

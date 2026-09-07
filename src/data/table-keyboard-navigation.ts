@@ -7,7 +7,7 @@
 // and edge movement clamp instead — this asymmetry matches spreadsheet
 // convention and is easy to "fix" incorrectly if resolveTableCellNavigation is
 // read in isolation. handleKeydown bails out early when focus is inside an
-// editable target (input/textarea/select/contenteditable/.db-cell-editing/
+// editable target (input/textarea/select/contenteditable/.obnotion-cell-editing/
 // .modal) so arrow keys still behave normally while a cell is being edited.
 
 // ───────────────────────────────────────────────────────────────────
@@ -75,7 +75,7 @@ export class TableKeyboardNavigationController {
   handleKeydown(event: KeyboardEvent): boolean {
     if (!this.callbacks.hasSelection()) return false;
     const target = event.target as HTMLElement | null;
-    if (target?.closest?.("input, textarea, select, [contenteditable='true'], .db-cell-editing, .modal")) return false;
+    if (target?.closest?.("input, textarea, select, [contenteditable='true'], .obnotion-cell-editing, .modal")) return false;
     const intent = getTableKeyboardNavigationIntent(event);
     if (!intent) return false;
     event.preventDefault();

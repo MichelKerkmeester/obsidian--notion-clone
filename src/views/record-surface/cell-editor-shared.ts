@@ -110,10 +110,10 @@ export function bulkAnchorRect(session: CellEditSession | undefined): DOMRect | 
 export function showValidationError(element: HTMLElement, message: string): void {
   element.setAttribute("aria-invalid", "true");
   element.title = message;
-  element.removeClass("db-validation-error");
+  element.removeClass("obnotion-validation-error");
   void element.offsetWidth;
-  element.addClass("db-validation-error");
-  element.addEventListener("animationend", () => element.removeClass("db-validation-error"), { once: true });
+  element.addClass("obnotion-validation-error");
+  element.addEventListener("animationend", () => element.removeClass("obnotion-validation-error"), { once: true });
 }
 
 /** Renders the retry/discard row a failed save shows beside the still-open editor. */
@@ -123,15 +123,15 @@ export function renderDraftFailure(
   retry: () => void,
   discard: () => void,
 ): void {
-  host.querySelector<HTMLElement>(".db-draft-failure")?.remove();
-  const failure = host.createDiv({ cls: "db-draft-failure", attr: { role: "alert" } });
-  failure.createSpan({ cls: "db-draft-failure-text", text: t("editor.saveFailed") });
-  const retryButton = failure.createEl("button", { cls: "db-draft-action", text: t("editor.retry"), attr: { type: "button" } });
+  host.querySelector<HTMLElement>(".obnotion-draft-failure")?.remove();
+  const failure = host.createDiv({ cls: "obnotion-draft-failure", attr: { role: "alert" } });
+  failure.createSpan({ cls: "obnotion-draft-failure-text", text: t("editor.saveFailed") });
+  const retryButton = failure.createEl("button", { cls: "obnotion-draft-action", text: t("editor.retry"), attr: { type: "button" } });
   retryButton.onclick = (event) => {
     event.preventDefault();
     retry();
   };
-  const discardButton = failure.createEl("button", { cls: "db-draft-action", text: t("editor.discard"), attr: { type: "button" } });
+  const discardButton = failure.createEl("button", { cls: "obnotion-draft-action", text: t("editor.discard"), attr: { type: "button" } });
   discardButton.onclick = (event) => {
     event.preventDefault();
     discard();

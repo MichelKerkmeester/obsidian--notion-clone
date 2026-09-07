@@ -83,7 +83,7 @@ export class CalendarToolbarRenderer {
 	private openPopover(containerEl: HTMLElement, anchor: HTMLElement, config: ViewConfig, actions: CalendarToolbarActions): void {
 		this.closePopover();
 
-		const panel = containerEl.createDiv({ cls: "db-calendar-options-popover db-chart-options-popover" });
+		const panel = containerEl.createDiv({ cls: "obnotion-calendar-options-popover obnotion-chart-options-popover" });
 		this.popover = panel;
 
 		// Grab handle, centred title, 44x44 trailing close — the same shell every
@@ -95,7 +95,7 @@ export class CalendarToolbarRenderer {
 
 		// Sections render into a content wrapper so a scale change can rebuild them
 		// in place (week/day expose different settings than month) without reopening.
-		const content = panel.createDiv({ cls: "db-calendar-options-content" });
+		const content = panel.createDiv({ cls: "obnotion-calendar-options-content" });
 		this.popoverContent = content;
 		this.renderSections(content, config, actions);
 
@@ -160,13 +160,13 @@ export class CalendarToolbarRenderer {
 			config.calendarStartDateField = value || undefined;
 			actions.onChange(t("undo.calendarStartFieldConfig"));
 			if (this.popoverContent) this.renderSections(this.popoverContent, config, actions);
-		}, "calendar-days", dateFieldOptions.length > 8, false, "db-calendar-date-field-dropdown");
+		}, "calendar-days", dateFieldOptions.length > 8, false, "obnotion-calendar-date-field-dropdown");
 
 		this.renderSelect(data, t("viewConfig.eventEndDateField"), dateFieldOptions, config.calendarEndDateField || "", (value) => {
 			config.calendarEndDateField = value || undefined;
 			actions.onChange(t("undo.calendarEndFieldConfig"));
 			if (this.popoverContent) this.renderSections(this.popoverContent, config, actions);
-		}, "calendar-range", dateFieldOptions.length > 8, false, "db-calendar-date-field-dropdown");
+		}, "calendar-range", dateFieldOptions.length > 8, false, "obnotion-calendar-date-field-dropdown");
 
 		this.renderSameDateFieldWarning(data, config.calendarStartDateField, config.calendarEndDateField);
 		this.renderInvalidEventsNotice(data, actions);
@@ -205,36 +205,36 @@ export class CalendarToolbarRenderer {
 	}
 
 	private renderSetupPreview(parent: HTMLElement, config: ViewConfig): void {
-		const preview = parent.createDiv({ cls: "db-calendar-setup-preview" });
-		preview.createDiv({ cls: "db-calendar-setup-preview-label", text: t("calendar.setupPreview") });
-		const card = preview.createDiv({ cls: "db-calendar-preview-card" });
+		const preview = parent.createDiv({ cls: "obnotion-calendar-setup-preview" });
+		preview.createDiv({ cls: "obnotion-calendar-setup-preview-label", text: t("calendar.setupPreview") });
+		const card = preview.createDiv({ cls: "obnotion-calendar-preview-card" });
 		const titleField = config.calendarTitleField ? config.schema.columns.find((column) => column.key === config.calendarTitleField) : undefined;
 		const startField = config.calendarStartDateField ? config.schema.columns.find((column) => column.key === config.calendarStartDateField) : undefined;
 		const endField = config.calendarEndDateField ? config.schema.columns.find((column) => column.key === config.calendarEndDateField) : undefined;
 		const colorField = config.calendarColorField ? config.schema.columns.find((column) => column.key === config.calendarColorField) : undefined;
-		card.createDiv({ cls: "db-calendar-preview-title", text: titleField?.label || t("calendar.previewEvent") });
-		card.createDiv({ cls: "db-calendar-preview-date", text: `${startField?.label || t("viewConfig.eventStartDateField")} → ${endField?.label || t("viewConfig.eventEndDateField")}` });
-		const color = card.createDiv({ cls: "db-calendar-preview-color" });
+		card.createDiv({ cls: "obnotion-calendar-preview-title", text: titleField?.label || t("calendar.previewEvent") });
+		card.createDiv({ cls: "obnotion-calendar-preview-date", text: `${startField?.label || t("viewConfig.eventStartDateField")} → ${endField?.label || t("viewConfig.eventEndDateField")}` });
+		const color = card.createDiv({ cls: "obnotion-calendar-preview-color" });
 		color.setAttribute("aria-label", colorField?.label || t("viewConfig.eventColorField"));
 		color.setAttribute("title", colorField?.label || t("viewConfig.eventColorField"));
 	}
 
 	private renderSameDateFieldWarning(parent: HTMLElement, startField: string | undefined, endField: string | undefined): void {
 		if (!startField || !endField || startField !== endField) return;
-		parent.createDiv({ cls: "db-calendar-same-date-warning", text: t("calendar.sameDateFieldWarning") });
+		parent.createDiv({ cls: "obnotion-calendar-same-date-warning", text: t("calendar.sameDateFieldWarning") });
 	}
 
 	/** 无效时间事件提示 + 修复入口（A2：popover 内完整 warning，对齐时间线）：⚠️ + 冲突数 + [修复]。 */
 	private renderInvalidEventsNotice(parent: HTMLElement, actions: CalendarToolbarActions): void {
 		if (!actions.getInvalidEventCount || !actions.openInvalidEvents) return;
-		const row = parent.createDiv({ cls: "db-calendar-same-date-warning db-calendar-invalid-events-row" });
+		const row = parent.createDiv({ cls: "obnotion-calendar-same-date-warning obnotion-calendar-invalid-events-row" });
 		const renderCount = (count: number) => {
 			if (!row.isConnected) return;
 			if (count <= 0) { row.remove(); return; }
 			row.empty();
-			setIcon(row.createSpan({ cls: "db-calendar-invalid-events-icon" }), "alert-triangle");
-			row.createSpan({ cls: "db-calendar-invalid-events-text", text: t("timeline.invalidEventsConflictNotice", { count }) });
-			const btn = row.createEl("button", { cls: "db-calendar-invalid-events-btn", text: t("timeline.fixInvalidEvents") });
+			setIcon(row.createSpan({ cls: "obnotion-calendar-invalid-events-icon" }), "alert-triangle");
+			row.createSpan({ cls: "obnotion-calendar-invalid-events-text", text: t("timeline.invalidEventsConflictNotice", { count }) });
+			const btn = row.createEl("button", { cls: "obnotion-calendar-invalid-events-btn", text: t("timeline.fixInvalidEvents") });
 			btn.onclick = () => actions.openInvalidEvents?.();
 		};
 		const result = actions.getInvalidEventCount();
@@ -316,7 +316,7 @@ export class CalendarToolbarRenderer {
 			if (value && !resolveRecordIconField(database, config) && !database.recordIconField) config.recordIconFieldOverrideEnabled = true;
 			actions.onChange(t("recordIcon.show"));
 			if (this.popoverContent) this.renderSections(this.popoverContent, config, actions);
-		}, "smile-plus", "db-calendar-show-icon-toggle");
+		}, "smile-plus", "obnotion-calendar-show-icon-toggle");
 		if (config.showRecordIcon === false) return;
 		this.renderSwitch(parent, t("recordIcon.override"), config.recordIconFieldOverrideEnabled === true, (value) => {
 			config.recordIconFieldOverrideEnabled = value || undefined;
@@ -454,15 +454,15 @@ export class CalendarToolbarRenderer {
 	 */
 	private refreshSizingRows(sizingEl: HTMLElement, config: ViewConfig, actions: CalendarToolbarActions): void {
 		sizingEl.empty();
-		sizingEl.createDiv({ cls: "db-chart-options-section-title", text: t("calendar.layout") });
+		sizingEl.createDiv({ cls: "obnotion-chart-options-section-title", text: t("calendar.layout") });
 		this.renderSizingRows(sizingEl, config, actions);
 	}
 
 	// ── Shared UI helpers (same pattern as CalendarTimelineToolbarRenderer) ──
 
 	private createSection(panel: HTMLElement, title: string): HTMLElement {
-		const section = panel.createDiv({ cls: "db-chart-options-section" });
-		section.createDiv({ cls: "db-chart-options-section-title", text: title });
+		const section = panel.createDiv({ cls: "obnotion-chart-options-section" });
+		section.createDiv({ cls: "obnotion-chart-options-section-title", text: title });
 		return section;
 	}
 
@@ -484,8 +484,8 @@ export class CalendarToolbarRenderer {
 			value,
 			onChange,
 			icon,
-			className: "db-chart-options-dropdown",
-			popoverClassName: extraPopoverClass ? `db-calendar-options-dropdown ${extraPopoverClass}` : "db-calendar-options-dropdown",
+			className: "obnotion-chart-options-dropdown",
+			popoverClassName: extraPopoverClass ? `obnotion-calendar-options-dropdown ${extraPopoverClass}` : "obnotion-calendar-options-dropdown",
 			searchable,
 			disabled,
 			renderIcon: (iconEl, iconName) => {
@@ -495,10 +495,10 @@ export class CalendarToolbarRenderer {
 	}
 
 	private renderSwitch(parent: HTMLElement, label: string, value: boolean, onChange: (value: boolean) => void, icon: string, extraClass?: string): void {
-		const row = parent.createEl("label", { cls: "db-chart-options-row db-chart-options-switch-row" });
-		setIcon(row.createSpan({ cls: "db-chart-options-row-icon" }), icon);
-		row.createDiv({ cls: "db-chart-options-row-text" }).createSpan({ cls: "db-chart-options-label", text: label });
-		const input = row.createEl("input", { cls: `db-toggle-switch${extraClass ? ` ${extraClass}` : ""}`, attr: { type: "checkbox", role: "switch" } });
+		const row = parent.createEl("label", { cls: "obnotion-chart-options-row obnotion-chart-options-switch-row" });
+		setIcon(row.createSpan({ cls: "obnotion-chart-options-row-icon" }), icon);
+		row.createDiv({ cls: "obnotion-chart-options-row-text" }).createSpan({ cls: "obnotion-chart-options-label", text: label });
+		const input = row.createEl("input", { cls: `obnotion-toggle-switch${extraClass ? ` ${extraClass}` : ""}`, attr: { type: "checkbox", role: "switch" } });
 		input.checked = value;
 		input.onchange = () => onChange(input.checked);
 	}
@@ -513,16 +513,16 @@ export class CalendarToolbarRenderer {
 		onChange: (value: number) => void,
 		onInput?: (value: number) => void,
 	): void {
-		const row = parent.createDiv({ cls: "db-chart-options-row db-calendar-range-row" });
-		setIcon(row.createSpan({ cls: "db-chart-options-row-icon" }), "ruler");
-		const text = row.createDiv({ cls: "db-chart-options-row-text" });
-		text.createSpan({ cls: "db-chart-options-label", text: label });
-		const controls = row.createDiv({ cls: "db-view-config-range" });
+		const row = parent.createDiv({ cls: "obnotion-chart-options-row obnotion-calendar-range-row" });
+		setIcon(row.createSpan({ cls: "obnotion-chart-options-row-icon" }), "ruler");
+		const text = row.createDiv({ cls: "obnotion-chart-options-row-text" });
+		text.createSpan({ cls: "obnotion-chart-options-label", text: label });
+		const controls = row.createDiv({ cls: "obnotion-view-config-range" });
 		const range = controls.createEl("input", {
 			attr: { type: "range", min: String(min), max: String(max), step: String(step) },
 		});
 		const number = controls.createEl("input", {
-			cls: "db-view-config-number",
+			cls: "obnotion-view-config-number",
 			attr: { type: "number", min: String(min), max: String(max), step: String(step) },
 		});
 		const clamp = (next: number): number => Math.max(min, Math.min(max, Math.round(next)));
@@ -590,6 +590,6 @@ export class CalendarToolbarRenderer {
 	}
 
 	private isInsideDropdown(target: Node): boolean {
-		return target.instanceOf(HTMLElement) && Boolean(target.closest(".db-dropdown-popover"));
+		return target.instanceOf(HTMLElement) && Boolean(target.closest(".obnotion-dropdown-popover"));
 	}
 }

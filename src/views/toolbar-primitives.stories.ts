@@ -42,12 +42,12 @@ type Story = StoryObj;
 export const ControlStates: Story = {
   render: () => {
     const root = document.createElement("div");
-    root.className = "note-database-container";
-    const row = root.createDiv({ cls: "db-toolbar" });
-    const cluster = row.createDiv({ cls: "db-toolbar-cluster" });
+    root.className = "obnotion-container";
+    const row = root.createDiv({ cls: "obnotion-toolbar" });
+    const cluster = row.createDiv({ cls: "obnotion-toolbar-cluster" });
     createControlClusterButton(cluster, { icon: "list-filter", label: "Filter", state: "add" });
     createControlClusterButton(cluster, { icon: "arrow-up-down", label: "Sort", state: "add" });
-    const active = row.createDiv({ cls: "db-toolbar-cluster" });
+    const active = row.createDiv({ cls: "obnotion-toolbar-cluster" });
     createControlClusterButton(active, { icon: "list-filter", label: "Filter", state: "active", count: 2 });
     createControlClusterButton(active, { icon: "arrow-up-down", label: "Sort", state: "active", count: 1 });
     return root;
@@ -58,7 +58,7 @@ export const ControlStates: Story = {
 export const TabStrip: Story = {
   render: () => {
     const root = document.createElement("div");
-    root.className = "note-database-container";
+    root.className = "obnotion-container";
     createTabStrip(root, {
       activeId: "table",
       ariaLabel: "Views",

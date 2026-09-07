@@ -134,27 +134,27 @@ describe("the column-width adjuster presents as a shared bottom sheet on a phone
   it("routes its header through the shell's three-slot builder rather than drawing its own", () => {
     expect(columnWidthSource).toContain("buildShellHeader(panel");
     expect(columnWidthSource).toContain('t("columnWidth.adjustTitle"');
-    expect(columnWidthSource).not.toContain('cls: "db-panel-header"');
-    expect(columnWidthSource).not.toContain('cls: "db-cell-edit-close"');
+    expect(columnWidthSource).not.toContain('cls: "obnotion-panel-header"');
+    expect(columnWidthSource).not.toContain('cls: "obnotion-cell-edit-close"');
   });
 
   it("puts the slider and the typed value in one shared range row, not a floating pill", () => {
-    expect(columnWidthSource).toContain('cls: "db-panel-row"');
-    expect(columnWidthSource).toContain('cls: "db-view-config-range"');
-    expect(columnWidthSource).toContain('cls: "db-view-config-number"');
+    expect(columnWidthSource).toContain('cls: "obnotion-panel-row"');
+    expect(columnWidthSource).toContain('cls: "obnotion-view-config-range"');
+    expect(columnWidthSource).toContain('cls: "obnotion-view-config-number"');
     // The bare strip's own vocabulary is gone from both files; the shared range control replaced
     // the custom slider, value pill and title.
-    expect(columnWidthSource).not.toContain("db-mobile-column-width-title");
-    expect(columnWidthSource).not.toContain("db-mobile-column-width-slider");
-    expect(columnWidthSource).not.toContain("db-mobile-column-width-value-row");
-    expect(databaseViewSource).not.toContain("db-mobile-column-width-title");
-    expect(databaseViewSource).not.toContain("db-mobile-column-width-value-row");
+    expect(columnWidthSource).not.toContain("obnotion-mobile-column-width-title");
+    expect(columnWidthSource).not.toContain("obnotion-mobile-column-width-slider");
+    expect(columnWidthSource).not.toContain("obnotion-mobile-column-width-value-row");
+    expect(databaseViewSource).not.toContain("obnotion-mobile-column-width-title");
+    expect(databaseViewSource).not.toContain("obnotion-mobile-column-width-value-row");
   });
 
   it("renders the four presets as the shared exclusive-choice group with a selected state", () => {
     // The same radio group the new-record placement uses: equal options, one selected.
-    expect(columnWidthSource).toContain('cls: "db-new-placement"');
-    expect(columnWidthSource).toContain('"db-new-placement-option"');
+    expect(columnWidthSource).toContain('cls: "obnotion-new-placement"');
+    expect(columnWidthSource).toContain('"obnotion-new-placement-option"');
     expect(columnWidthSource).toContain('role: "radio"');
     expect(columnWidthSource).toContain('"aria-checked"');
     expect(columnWidthSource).toContain('"is-active"');
@@ -170,15 +170,15 @@ describe("the column-width adjuster presents as a shared bottom sheet on a phone
   });
 
   it("keeps the desktop presentation on the same body markup", () => {
-    expect(columnWidthSource).toContain('cls: "db-mobile-column-width-backdrop"');
-    expect(columnWidthSource).toContain('cls: "db-mobile-column-width-panel"');
+    expect(columnWidthSource).toContain('cls: "obnotion-mobile-column-width-backdrop"');
+    expect(columnWidthSource).toContain('cls: "obnotion-mobile-column-width-panel"');
   });
 
   it("gives the panel the container class its shared classes need to match", () => {
     // The panel is created on doc.body directly and never takes setSheetMount's move branch on
-    // either presentation, so without this the db-panel-header/db-panel-row/db-view-config-*/
-    // db-new-placement rules above match nothing — every one of them is written
-    // ".note-database-container .db-thing" — and the shared body would render unstyled.
-    expect(columnWidthSource).toContain('panel.addClass("note-database-container")');
+    // either presentation, so without this the obnotion-panel-header/obnotion-panel-row/obnotion-view-config-*/
+    // obnotion-new-placement rules above match nothing — every one of them is written
+    // ".obnotion-container .obnotion-thing" — and the shared body would render unstyled.
+    expect(columnWidthSource).toContain('panel.addClass("obnotion-container")');
   });
 });

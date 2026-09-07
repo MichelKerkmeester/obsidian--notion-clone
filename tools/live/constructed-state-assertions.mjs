@@ -50,8 +50,8 @@ window.__stateMarkers = (scenario) => {
       .map((el) => [...el.classList].find((cls) => cls.startsWith("status-color-")) || ""));
     result = {
     mounted: true,
-    subtaskToggle: !!container.querySelector(".db-subtask-toggle, .db-subtask-event-toggle, .pm-collapse-toggle"),
-    subtaskProgress: !!container.querySelector(".db-subtask-progress, .db-timeline-subtask-progress")
+    subtaskToggle: !!container.querySelector(".obnotion-subtask-toggle, .obnotion-subtask-event-toggle, .pm-collapse-toggle"),
+    subtaskProgress: !!container.querySelector(".obnotion-subtask-progress, .obnotion-timeline-subtask-progress")
       // The timeline bench's own per-row fixture gives every fourth row a genuine progress
       // value (60%) independent of subtaskTree, so ".pm-gantt-label-progress" alone is not
       // specific to a subtask; applyCaptureSubtaskTree overwrites that same row to 62%, a
@@ -64,82 +64,82 @@ window.__stateMarkers = (scenario) => {
         return indents.length > 1 && Math.max(...indents) > Math.min(...indents);
       })(),
     emptyDateReason: !!container.querySelector('[data-empty-reason="no-date-field"]'),
-    calendarGrid: !!container.querySelector(".db-calendar"),
-    chartNumber: !!container.querySelector(".db-chart-number"),
-    chartEmpty: !!container.querySelector(".db-chart-empty"),
-    chartCanvas: !!container.querySelector(".db-chart-canvas"),
-    calendarOptionsPopover: !!container.querySelector(".db-calendar-options-popover"),
-    timelineOptionsPopover: !!container.querySelector(".db-calendar-timeline-options-popover"),
-    chartOptionsPopover: !!container.querySelector(".db-chart-options-popover"),
-    toolbar: !!container.querySelector(".db-toolbar .db-view-tab"),
-    toolbarSearchActive: !!container.querySelector(".db-search-control.is-active"),
-    toolbarUtilitiesPopover: !!container.querySelector(".db-toolbar-utilities-popover"),
-    toolbarAddViewPopover: !!container.querySelector(".db-add-view-popover"),
-    activeViewControls: !!container.querySelector(".db-active-view-controls .db-active-control-chip"),
-    activeRulePopover: !!container.querySelector(".db-active-rule-popover"),
-    filterPanel: !!container.querySelector(".db-filter-panel .db-source-rule-node"),
-    filterPanelNested: !!container.querySelector(".db-filter-panel .db-source-rule-not"),
-    sortPanel: !!container.querySelector(".db-sort-panel .db-sort-rule-row"),
-    sortPanelCalendarHint: !!container.querySelector(".db-sort-panel .db-panel-hint"),
-    viewConfigPanel: !!container.querySelector(".db-view-config-panel"),
-    boardCardPropertiesPanel: !!container.querySelector(".db-view-config-panel .db-column-manager-row"),
-    boardCardPropertiesListsEveryField: container.querySelectorAll(".db-view-config-panel .db-column-manager-row").length === 4,
+    calendarGrid: !!container.querySelector(".obnotion-calendar"),
+    chartNumber: !!container.querySelector(".obnotion-chart-number"),
+    chartEmpty: !!container.querySelector(".obnotion-chart-empty"),
+    chartCanvas: !!container.querySelector(".obnotion-chart-canvas"),
+    calendarOptionsPopover: !!container.querySelector(".obnotion-calendar-options-popover"),
+    timelineOptionsPopover: !!container.querySelector(".obnotion-calendar-timeline-options-popover"),
+    chartOptionsPopover: !!container.querySelector(".obnotion-chart-options-popover"),
+    toolbar: !!container.querySelector(".obnotion-toolbar .obnotion-view-tab"),
+    toolbarSearchActive: !!container.querySelector(".obnotion-search-control.is-active"),
+    toolbarUtilitiesPopover: !!container.querySelector(".obnotion-toolbar-utilities-popover"),
+    toolbarAddViewPopover: !!container.querySelector(".obnotion-add-view-popover"),
+    activeViewControls: !!container.querySelector(".obnotion-active-view-controls .obnotion-active-control-chip"),
+    activeRulePopover: !!container.querySelector(".obnotion-active-rule-popover"),
+    filterPanel: !!container.querySelector(".obnotion-filter-panel .obnotion-source-rule-node"),
+    filterPanelNested: !!container.querySelector(".obnotion-filter-panel .obnotion-source-rule-not"),
+    sortPanel: !!container.querySelector(".obnotion-sort-panel .obnotion-sort-rule-row"),
+    sortPanelCalendarHint: !!container.querySelector(".obnotion-sort-panel .obnotion-panel-hint"),
+    viewConfigPanel: !!container.querySelector(".obnotion-view-config-panel"),
+    boardCardPropertiesPanel: !!container.querySelector(".obnotion-view-config-panel .obnotion-column-manager-row"),
+    boardCardPropertiesListsEveryField: container.querySelectorAll(".obnotion-view-config-panel .obnotion-column-manager-row").length === 4,
     boardCardPropertiesTagsUnchecked: (() => {
-      const cb = container.querySelector('.db-view-config-panel [data-note-database-column-key="tags"] input[type="checkbox"]');
+      const cb = container.querySelector('.obnotion-view-config-panel [data-obnotion-column-key="tags"] input[type="checkbox"]');
       return cb !== null && cb.checked === false;
     })(),
     boardCardPropertiesVisibleFieldsChecked: (() => {
-      const hours = container.querySelector('.db-view-config-panel [data-note-database-column-key="hours"] input[type="checkbox"]');
-      const due = container.querySelector('.db-view-config-panel [data-note-database-column-key="due"] input[type="checkbox"]');
+      const hours = container.querySelector('.obnotion-view-config-panel [data-obnotion-column-key="hours"] input[type="checkbox"]');
+      const due = container.querySelector('.obnotion-view-config-panel [data-obnotion-column-key="due"] input[type="checkbox"]');
       return !!hours && hours.checked === true && !!due && due.checked === true;
     })(),
-    columnManager: !!container.querySelector(".db-column-manager .db-column-manager-row"),
-    recordDetailPanel: !!container.querySelector(".db-record-detail-panel"),
-    recordDetailHeader: !!container.querySelector(".db-record-detail-panel .db-record-detail-header"),
-    recordDetailBodyEditing: !!container.querySelector(".db-record-detail-body.is-editing .db-record-detail-body-editor"),
-    recordDetailBodyEmpty: !!container.querySelector(".db-record-detail-body .db-record-detail-body-rendered.is-empty"),
-    recordPeekPanel: !!container.querySelector(".db-record-peek-panel"),
-    tableFooterCalculations: !!container.querySelector("tfoot.db-table-footer .db-table-footer-trigger.has-calculation"),
-    tableGrouped: !!container.querySelector(".db-grouped-table tr.db-group-divider-row"),
-    summaryRow: !!container.querySelector(".db-summary .db-summary-item"),
-    ownedMenu: !!doc.querySelector(".db-owned-menu .db-menu-item"),
-    cardCovers: !!container.querySelector(".db-board-card-cover.is-empty .db-board-card-cover-placeholder"),
-    cellEditorText: !!container.querySelector('.db-cell-edit-popover[data-note-database-editor-kind="text"] .db-md-toolbar'),
-    cellEditorSelect: !!container.querySelector(".db-cell-option-popover .db-cell-option-item"),
-    datePicker: !!container.querySelector(".db-date-value-popover .db-calendar-mini-grid"),
-    datePickerDatetime: !!container.querySelector(".db-date-value-popover.is-datetime .db-hour-seg"),
-    iconPicker: !!doc.querySelector(".db-icon-picker-popover .db-icon-picker-colors"),
+    columnManager: !!container.querySelector(".obnotion-column-manager .obnotion-column-manager-row"),
+    recordDetailPanel: !!container.querySelector(".obnotion-record-detail-panel"),
+    recordDetailHeader: !!container.querySelector(".obnotion-record-detail-panel .obnotion-record-detail-header"),
+    recordDetailBodyEditing: !!container.querySelector(".obnotion-record-detail-body.is-editing .obnotion-record-detail-body-editor"),
+    recordDetailBodyEmpty: !!container.querySelector(".obnotion-record-detail-body .obnotion-record-detail-body-rendered.is-empty"),
+    recordPeekPanel: !!container.querySelector(".obnotion-record-peek-panel"),
+    tableFooterCalculations: !!container.querySelector("tfoot.obnotion-table-footer .obnotion-table-footer-trigger.has-calculation"),
+    tableGrouped: !!container.querySelector(".obnotion-grouped-table tr.obnotion-group-divider-row"),
+    summaryRow: !!container.querySelector(".obnotion-summary .obnotion-summary-item"),
+    ownedMenu: !!doc.querySelector(".obnotion-owned-menu .obnotion-menu-item"),
+    cardCovers: !!container.querySelector(".obnotion-board-card-cover.is-empty .obnotion-board-card-cover-placeholder"),
+    cellEditorText: !!container.querySelector('.obnotion-cell-edit-popover[data-obnotion-editor-kind="text"] .obnotion-md-toolbar'),
+    cellEditorSelect: !!container.querySelector(".obnotion-cell-option-popover .obnotion-cell-option-item"),
+    datePicker: !!container.querySelector(".obnotion-date-value-popover .obnotion-calendar-mini-grid"),
+    datePickerDatetime: !!container.querySelector(".obnotion-date-value-popover.is-datetime .obnotion-hour-seg"),
+    iconPicker: !!doc.querySelector(".obnotion-icon-picker-popover .obnotion-icon-picker-colors"),
     // A labelled list, not a swatch grid — the current row carries the trailing check.
-    colorPicker: !!doc.querySelector(".db-color-picker-popup .db-dropdown-option.is-selected .db-dropdown-option-check"),
+    colorPicker: !!doc.querySelector(".obnotion-color-picker-popup .obnotion-dropdown-option.is-selected .obnotion-dropdown-option-check"),
     relationValues: !container.querySelector("table")
-      && container.querySelectorAll(".db-relation-values .db-relation-link").length >= 2,
-    fileFields: !!container.querySelector(".db-file-tags .db-file-tag-badge")
-      && !!container.querySelector(".db-file-link-list .internal-link"),
-    numberDisplays: !!container.querySelector(".db-cell-rating")
-      && !!container.querySelector(".db-cell-progress")
-      && !!container.querySelector(".db-cell-progress-ring"),
-    recordIconColumn: !!container.querySelector(".db-record-icon-emoji")
-      && !!container.querySelector(".db-record-icon.is-default"),
+      && container.querySelectorAll(".obnotion-relation-values .obnotion-relation-link").length >= 2,
+    fileFields: !!container.querySelector(".obnotion-file-tags .obnotion-file-tag-badge")
+      && !!container.querySelector(".obnotion-file-link-list .internal-link"),
+    numberDisplays: !!container.querySelector(".obnotion-cell-rating")
+      && !!container.querySelector(".obnotion-cell-progress")
+      && !!container.querySelector(".obnotion-cell-progress-ring"),
+    recordIconColumn: !!container.querySelector(".obnotion-record-icon-emoji")
+      && !!container.querySelector(".obnotion-record-icon.is-default"),
     statusColors: statusColors.size >= 16,
-    dropdownPopover: !!container.querySelector(".db-dropdown-popover .db-dropdown-option.is-disabled")
+    dropdownPopover: !!container.querySelector(".obnotion-dropdown-popover .obnotion-dropdown-option.is-disabled")
       // The selected row's own check must be present AND trailing — lastElementChild === check
       // fails both for a row with no check at all (negative control: a checkless row cannot pass by
       // matching nothing) and for a row whose check still renders first.
       && (() => {
-        const selectedRow = container.querySelector(".db-dropdown-popover .db-dropdown-option.is-selected");
-        const check = selectedRow?.querySelector(".db-dropdown-option-check") ?? null;
+        const selectedRow = container.querySelector(".obnotion-dropdown-popover .obnotion-dropdown-option.is-selected");
+        const check = selectedRow?.querySelector(".obnotion-dropdown-option-check") ?? null;
         return !!check && selectedRow?.lastElementChild === check;
       })(),
-    emptyStateCard: !!container.querySelector(".db-empty-card .db-empty-card-title"),
-    columnHeaderTriggers: !!container.querySelector(".db-column-menu-trigger")
-      && !!container.querySelector(".db-resize-handle"),
-    boardEmptyColumn: Array.from(container.querySelectorAll(".db-kanban-col"))
-      .some((col) => col.querySelectorAll(".db-kanban-card").length === 0),
+    emptyStateCard: !!container.querySelector(".obnotion-empty-card .obnotion-empty-card-title"),
+    columnHeaderTriggers: !!container.querySelector(".obnotion-column-menu-trigger")
+      && !!container.querySelector(".obnotion-resize-handle"),
+    boardEmptyColumn: Array.from(container.querySelectorAll(".obnotion-kanban-col"))
+      .some((col) => col.querySelectorAll(".obnotion-kanban-card").length === 0),
     // The kanban card names its parent instead of drawing a tree: a child card carries the
     // parent's title in its own type line, and a card with no parent has no such line at all.
-    boardSubtaskParentTitle: !!container.querySelector(".db-kanban-card-type"),
-    migratedListAsTable: !!container.querySelector("table.db-table")
-      && !container.querySelector(".db-list-row"),
+    boardSubtaskParentTitle: !!container.querySelector(".obnotion-kanban-card-type"),
+    migratedListAsTable: !!container.querySelector("table.obnotion-table")
+      && !container.querySelector(".obnotion-list-row"),
     };
   });
   return result;
@@ -214,7 +214,7 @@ const PAIRED_CASES = [
   },
   {
     // The "off" side is the harness's existing view-config scenario — a table view, which never
-    // reaches renderBoardSettings and therefore never mounts a single .db-column-manager-row. The
+    // reaches renderBoardSettings and therefore never mounts a single .obnotion-column-manager-row. The
     // "on" side is the same panel host for a board view instead, so the only variable this pair
     // isolates is which view type the panel is configuring — not a hand-toggled boolean.
     id: "constructed-board-card-properties",
@@ -445,8 +445,8 @@ const SINGLE_CASES = [
   {
     // A config built as `viewType: "list"`, run through the real `planListMigration`/
     // `applyListMigration` before the harness ever hands it to `TableRenderer` — not a config
-    // authored as a table from the start. The marker requires both a real `table.db-table` and
-    // the absence of any `.db-list-row`, so a regression that left the config half-migrated
+    // authored as a table from the start. The marker requires both a real `table.obnotion-table` and
+    // the absence of any `.obnotion-list-row`, so a regression that left the config half-migrated
     // fails here instead of only showing up as a visual diff nobody was looking for.
     id: "constructed-list-migrated",
     spec: { renderer: "table", bag: "file-view", captureData: true, migratedFromList: true },

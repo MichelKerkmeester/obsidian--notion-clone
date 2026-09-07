@@ -86,8 +86,8 @@ class FakeElement {
   }
 
   querySelector<T extends FakeElement>(selector: string): T | null {
-    if (selector !== "td:not(.db-select-col)") return null;
-    return (this.children.find((child) => child.tagName === "TD" && !child.classes.has("db-select-col")) as T | undefined) ?? null;
+    if (selector !== "td:not(.obnotion-select-col)") return null;
+    return (this.children.find((child) => child.tagName === "TD" && !child.classes.has("obnotion-select-col")) as T | undefined) ?? null;
   }
 
   remove(): void {
@@ -256,7 +256,7 @@ describe("conditional formatting display", () => {
 
     applyConditionalFormat(element as unknown as HTMLElement, row({ status: "ready" }), config([rule]), undefined);
 
-    expect(element.getAttribute("data-note-database-conditional-icon")).toBe("lucide:not-a-real-icon@red");
+    expect(element.getAttribute("data-obnotion-conditional-icon")).toBe("lucide:not-a-real-icon@red");
     expect(element.children).toHaveLength(0);
   });
 
@@ -269,10 +269,10 @@ describe("conditional formatting display", () => {
 
     applyConditionalFormat(element as unknown as HTMLElement, row({ status: "ready" }), config([rule]), undefined);
 
-    expect(element.classes).toContain("db-conditional-format");
-    expect(element.classes).toContain("db-conditional-format-bold");
-    expect(element.style.values.has("--db-conditional-format-bg")).toBe(false);
-    expect(element.getAttribute("data-note-database-conditional-icon")).toBe("lucide:star@blue");
+    expect(element.classes).toContain("obnotion-conditional-format");
+    expect(element.classes).toContain("obnotion-conditional-format-bold");
+    expect(element.style.values.has("--obnotion-conditional-format-bg")).toBe(false);
+    expect(element.getAttribute("data-obnotion-conditional-icon")).toBe("lucide:star@blue");
     expect(element.children).toHaveLength(1);
   });
 
@@ -282,17 +282,17 @@ describe("conditional formatting display", () => {
 
     applyConditionalFormat(element as unknown as HTMLElement, row({ status: "ready" }), config([rule]), undefined);
 
-    expect(element.style.values.get("--db-conditional-format-bg")).toBe(
+    expect(element.style.values.get("--obnotion-conditional-format-bg")).toBe(
       "color-mix(in srgb, var(--status-color-bg-green) 60%, transparent)",
     );
-    expect(element.style.values.get("--db-conditional-format-fg")).toBe("var(--status-color-fg-green)");
-    expect(element.style.values.get("--db-conditional-format-accent")).toBe("var(--status-color-fg-green)");
+    expect(element.style.values.get("--obnotion-conditional-format-fg")).toBe("var(--status-color-fg-green)");
+    expect(element.style.values.get("--obnotion-conditional-format-accent")).toBe("var(--status-color-fg-green)");
   });
 
   it("places a record icon in the first non-select table cell", () => {
     const tr = new FakeElement("tr");
     const selectCell = new FakeElement("td");
-    selectCell.addClass("db-select-col");
+    selectCell.addClass("obnotion-select-col");
     const valueCell = new FakeElement("td");
     tr.append(selectCell);
     tr.append(valueCell);

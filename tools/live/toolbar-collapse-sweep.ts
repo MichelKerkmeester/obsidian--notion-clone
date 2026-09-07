@@ -102,11 +102,11 @@ export async function runToolbarCollapseSweep(host: HTMLElement, widths: number[
   };
   const viewEntries: ToolbarViewEntry[] = [{ config: db, sourcePath: "notes" }];
 
-  const outer = host.createDiv({ cls: "note-database-container" });
+  const outer = host.createDiv({ cls: "obnotion-container" });
   const renderer = new ToolbarRenderer();
   renderer.render(outer, viewEntries, 0, 0, state, actions);
-  const toolbar = outer.querySelector<HTMLElement>(".db-toolbar");
-  if (!toolbar) throw new Error("toolbar-collapse-sweep: .db-toolbar never rendered");
+  const toolbar = outer.querySelector<HTMLElement>(".obnotion-toolbar");
+  if (!toolbar) throw new Error("toolbar-collapse-sweep: .obnotion-toolbar never rendered");
 
   const view = host.ownerDocument.defaultView;
   if (!view) throw new Error("toolbar-collapse-sweep: no window on the host document");
@@ -120,14 +120,14 @@ export async function runToolbarCollapseSweep(host: HTMLElement, widths: number[
       overflow: toolbar.scrollWidth > toolbar.clientWidth + 1,
       scrollWidth: toolbar.scrollWidth,
       clientWidth: toolbar.clientWidth,
-      newClusterVisible: isVisible(toolbar.querySelector(".db-toolbar-creation-cluster")),
-      queryClusterVisible: isVisible(toolbar.querySelector(".db-toolbar-query-cluster")),
-      propertiesClusterVisible: isVisible(toolbar.querySelector(".db-toolbar-properties-cluster")),
-      addTabVisible: isVisible(toolbar.querySelector(".db-view-tab-add")),
-      tabRowIsDropdown: Boolean(toolbar.querySelector(".db-view-tab-collapsed-trigger")),
-      settingsButtonVisible: isVisible(toolbar.querySelector(".db-toolbar-settings-btn")),
-      newLabelVisible: isVisible(toolbar.querySelector(".db-new-button-label")),
-      newButtonAriaLabel: toolbar.querySelector(".db-new-button-primary")?.getAttribute("aria-label") ?? null,
+      newClusterVisible: isVisible(toolbar.querySelector(".obnotion-toolbar-creation-cluster")),
+      queryClusterVisible: isVisible(toolbar.querySelector(".obnotion-toolbar-query-cluster")),
+      propertiesClusterVisible: isVisible(toolbar.querySelector(".obnotion-toolbar-properties-cluster")),
+      addTabVisible: isVisible(toolbar.querySelector(".obnotion-view-tab-add")),
+      tabRowIsDropdown: Boolean(toolbar.querySelector(".obnotion-view-tab-collapsed-trigger")),
+      settingsButtonVisible: isVisible(toolbar.querySelector(".obnotion-toolbar-settings-btn")),
+      newLabelVisible: isVisible(toolbar.querySelector(".obnotion-new-button-label")),
+      newButtonAriaLabel: toolbar.querySelector(".obnotion-new-button-primary")?.getAttribute("aria-label") ?? null,
     });
   }
   return readings;

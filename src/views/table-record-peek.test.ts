@@ -322,17 +322,17 @@ describe("TableRecordPeek visible/hidden column split", () => {
       container: container as unknown as HTMLElement,
     });
 
-    const panel = container.children.find((child) => child.className.includes("db-record-peek-panel"))!;
+    const panel = container.children.find((child) => child.className.includes("obnotion-record-peek-panel"))!;
     expect(panel.getAttribute("role")).toBe("dialog");
     expect(panel.getAttribute("aria-modal")).toBe("true");
 
-    const properties = findByClass(container, "db-record-peek-properties")[0];
-    const visibleLabels = findByClass(properties, "db-record-peek-field-label").map((el) => el.textContent);
+    const properties = findByClass(container, "obnotion-record-peek-properties")[0];
+    const visibleLabels = findByClass(properties, "obnotion-record-peek-field-label").map((el) => el.textContent);
     // file.name is excluded from the visible section even though it was in visibleColumns.
     expect(visibleLabels).toEqual(["Status"]);
 
-    const hiddenFields = findByClass(container, "db-record-peek-hidden-fields")[0];
-    const hiddenLabels = findByClass(hiddenFields, "db-record-peek-field-label").map((el) => el.textContent);
+    const hiddenFields = findByClass(container, "obnotion-record-peek-hidden-fields")[0];
+    const hiddenLabels = findByClass(hiddenFields, "obnotion-record-peek-field-label").map((el) => el.textContent);
     expect(hiddenLabels).toEqual(["Regular Empty", "Size", "Calc Filled"]);
     expect(hiddenLabels).not.toContain("Created");
     expect(hiddenLabels).not.toContain("Calc Empty");
@@ -356,8 +356,8 @@ describe("TableRecordPeek visible/hidden column split", () => {
       container: container as unknown as HTMLElement,
     });
 
-    expect(findByClass(container, "db-record-peek-empty")).toHaveLength(1);
-    expect(findByClass(container, "db-record-peek-hidden-group")).toHaveLength(0);
+    expect(findByClass(container, "obnotion-record-peek-empty")).toHaveLength(1);
+    expect(findByClass(container, "obnotion-record-peek-hidden-group")).toHaveLength(0);
 
     closeTableRecordPeek();
   });
@@ -422,14 +422,14 @@ describe("TableRecordPeek option values", () => {
     expect(badges.map((b) => b.textContent)).toEqual(["Design", "Business"]);
     expect(badges[0].className).toContain("status-color-pink");
     expect(badges[1].className).toContain("status-color-blue");
-    expect(findByClass(container, "db-multi-select-values")).toHaveLength(1);
+    expect(findByClass(container, "obnotion-multi-select-values")).toHaveLength(1);
     closeTableRecordPeek();
   });
 
   it("leaves a non-option column as text, so only option types gain a chip", () => {
     const container = openWith(col({ key: "cost", label: "Cost" }), { cost: "€ 18,75" });
     expect(findByClass(container, "status-badge")).toHaveLength(0);
-    expect(findByClass(container, "db-record-peek-field-value")[0].textContent).toBe("€ 18,75");
+    expect(findByClass(container, "obnotion-record-peek-field-value")[0].textContent).toBe("€ 18,75");
     closeTableRecordPeek();
   });
 });
@@ -437,7 +437,7 @@ describe("TableRecordPeek option values", () => {
 describe("TableRecordPeek empty property value", () => {
   // The peek is a page-view surface — Notion writes the word here and leaves its own table cells
   // blank, and ours already matches that blank convention (cell-renderer.ts's own
-  // `.db-empty-value`, asserted separately in cell-renderer-wrap.test.ts, which this class name
+  // `.obnotion-empty-value`, asserted separately in cell-renderer-wrap.test.ts, which this class name
   // must stay distinct from). A label beside nothing used to read as a rendering gap rather than
   // "this property has no value"; the muted placeholder says so directly.
   function openWith(column: ColumnDef, frontmatter: Record<string, unknown>) {
@@ -456,17 +456,17 @@ describe("TableRecordPeek empty property value", () => {
 
   it("renders a muted placeholder rather than a label beside nothing", () => {
     const container = openWith(col({ key: "cost", label: "Cost" }), { cost: "" });
-    const values = findByClass(container, "db-record-peek-field-value");
+    const values = findByClass(container, "obnotion-record-peek-field-value");
     expect(values).toHaveLength(1);
-    expect(values[0].className).toContain("db-record-peek-field-value-empty");
+    expect(values[0].className).toContain("obnotion-record-peek-field-value-empty");
     expect(values[0].textContent.length).toBeGreaterThan(0);
     closeTableRecordPeek();
   });
 
   it("leaves a populated value without the empty placeholder class", () => {
     const container = openWith(col({ key: "cost", label: "Cost" }), { cost: "€ 18,75" });
-    const values = findByClass(container, "db-record-peek-field-value");
-    expect(values[0].className).not.toContain("db-record-peek-field-value-empty");
+    const values = findByClass(container, "obnotion-record-peek-field-value");
+    expect(values[0].className).not.toContain("obnotion-record-peek-field-value-empty");
     closeTableRecordPeek();
   });
 });
@@ -491,15 +491,15 @@ describe("TableRecordPeek open/close and hidden-toggle state", () => {
       returnFocus: overrides.returnFocus,
     });
 
-    const panel = container.children.find((child) => child.className.includes("db-record-peek-panel"))!;
+    const panel = container.children.find((child) => child.className.includes("obnotion-record-peek-panel"))!;
     return { container, document, win, anchor, panel };
   }
 
   it("toggles the hidden-fields group open and closed on click", () => {
     const { panel } = open();
-    const toggle = findByClass(panel, "db-record-peek-hidden-toggle")[0];
-    const hiddenFields = findByClass(panel, "db-record-peek-hidden-fields")[0];
-    const hiddenGroup = findByClass(panel, "db-record-peek-hidden-group")[0];
+    const toggle = findByClass(panel, "obnotion-record-peek-hidden-toggle")[0];
+    const hiddenFields = findByClass(panel, "obnotion-record-peek-hidden-fields")[0];
+    const hiddenGroup = findByClass(panel, "obnotion-record-peek-hidden-group")[0];
 
     expect(toggle.getAttribute("aria-expanded")).toBe("false");
     expect(hiddenFields.classList.contains("is-hidden")).toBe(true);
@@ -572,13 +572,13 @@ describe("TableRecordPeek row sync", () => {
       container: container as unknown as HTMLElement,
     });
 
-    const panel = container.children.find((child) => child.className.includes("db-record-peek-panel"))!;
+    const panel = container.children.find((child) => child.className.includes("obnotion-record-peek-panel"))!;
     const renamedRow = row({ path: "Notes/Tracked.md", basename: "Renamed" });
 
     syncTableRecordPeek([renamedRow]);
-    const title = findByClass(panel, "db-record-peek-title")[0];
+    const title = findByClass(panel, "obnotion-record-peek-title")[0];
     expect(title.textContent).toBe("Renamed");
-    expect(panel.getAttribute("data-note-database-row-path")).toBe("Notes/Tracked.md");
+    expect(panel.getAttribute("data-obnotion-row-path")).toBe("Notes/Tracked.md");
 
     syncTableRecordPeek([]);
     expect(panel.isConnected).toBe(false);
@@ -595,9 +595,9 @@ describe("attachTitleOpenAffordance", () => {
     attachTitleOpenAffordance(td as unknown as HTMLElement, testRow, { open });
     attachTitleOpenAffordance(td as unknown as HTMLElement, testRow, { open });
 
-    const buttons = findByClass(td, "db-record-open-btn");
+    const buttons = findByClass(td, "obnotion-record-open-btn");
     expect(buttons).toHaveLength(1);
-    expect(td.classList.contains("db-record-open-host")).toBe(true);
+    expect(td.classList.contains("obnotion-record-open-host")).toBe(true);
     expect(buttons[0].getAttribute("tabindex")).toBeNull();
     expect(buttons[0].getAttribute("aria-label")).toBe("panel.open");
 
@@ -615,8 +615,8 @@ describe("attachTitleOpenAffordance", () => {
       platform.isMobile = false;
     }
 
-    const button = findByClass(td, "db-record-open-btn")[0];
-    expect(button.classList.contains("db-record-open-btn-icon")).toBe(true);
+    const button = findByClass(td, "obnotion-record-open-btn")[0];
+    expect(button.classList.contains("obnotion-record-open-btn-icon")).toBe(true);
     expect(button.getAttribute("data-icon")).toBe("maximize-2");
     expect(button.getAttribute("aria-label")).toBe("panel.open");
     // The text label is what stole the column width on the phone; the icon must not carry it.

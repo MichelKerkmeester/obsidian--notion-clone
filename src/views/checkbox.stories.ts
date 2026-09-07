@@ -26,10 +26,10 @@ type Story = StoryObj;
 export const Roles: Story = {
   render: () => {
     const column = document.createElement("div");
-    column.className = "db-story-column";
+    column.className = "obnotion-story-column";
     for (const role of ["row", "field"] as const) {
       const label = document.createElement("label");
-      label.className = "db-story-row";
+      label.className = "obnotion-story-row";
       label.append(` ${role} checkbox`);
       const checkbox = createCheckbox(label, {
         role,

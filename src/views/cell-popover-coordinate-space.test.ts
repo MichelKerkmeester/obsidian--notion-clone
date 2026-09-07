@@ -8,7 +8,7 @@
 //            space shared by the stylesheet and the positioners.
 // ───────────────────────────────────────────────────────────────────
 //
-// Three popovers mount into `.note-database-container` and are positioned
+// Three popovers mount into `.obnotion-container` and are positioned
 // `absolute` by the stylesheet. Coordinates written by JS must therefore be
 // measured from that container, which is what passing its rect and scroll
 // offsets to `setPosition` does.
@@ -69,9 +69,9 @@ const POSITIONERS = [
 describe("cell popover coordinate space", () => {
   it("styles the option popover as absolute inside a positioned container", () => {
     expect(stylesContent).toMatch(
-      /\.note-database-container \.db-cell-option-popover \{[^}]*position: absolute/
+      /\.obnotion-container \.obnotion-cell-option-popover \{[^}]*position: absolute/
     );
-    expect(stylesContent).toMatch(/\.note-database-container \{[^}]*position: relative/);
+    expect(stylesContent).toMatch(/\.obnotion-container \{[^}]*position: relative/);
   });
 
   for (const name of POSITIONERS) {

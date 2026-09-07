@@ -99,8 +99,8 @@ for (const width of WIDTHS) {
 
       // The probe. A plugin token resolving to a real value is only possible with the stylesheet
       // present, so this separates "measured and clean" from "measured nothing".
-      const probeEl = shot.querySelector("[class*='db-']") || shot;
-      const probe = getComputedStyle(probeEl).getPropertyValue("--db-radius-sm").trim();
+      const probeEl = shot.querySelector("[class*='obnotion-']") || shot;
+      const probe = getComputedStyle(probeEl).getPropertyValue("--obnotion-radius-sm").trim();
 
       const escaping = [];
       shot.querySelectorAll("*").forEach((el) => {
@@ -118,7 +118,7 @@ for (const width of WIDTHS) {
         //
         // The scroller need not be the immediate parent — a wide axis inside a wrapper inside a
         // scroller is contained. Walk up until one is found. Note that a class named "-scroll" is
-        // not evidence of one: this codebase has a `.db-timeline-scroll` declaring
+        // not evidence of one: this codebase has a `.obnotion-timeline-scroll` declaring
         // `overflow-x: visible`, which is exactly why this asks the computed style instead.
         let scrolls = false;
         for (let a = el.parentElement; a && a !== shot; a = a.parentElement) {
@@ -132,7 +132,7 @@ for (const width of WIDTHS) {
         // control can sit neatly inside its own wrapper while the wrapper itself hangs off the
         // header's edge, so measuring parent-by-parent reports the chain as clean and the header as
         // ragged. The header is the box a reader sees.
-        const header = el.closest(".db-header");
+        const header = el.closest(".obnotion-header");
         let pastHeader = 0;
         if (header && header !== el) {
           const hs = getComputedStyle(header);
@@ -200,7 +200,7 @@ for (const width of WIDTHS) {
 // if it disagrees with the running app, the app wins.
 //
 // It did disagree, silently, for as long as this matrix has existed. It emitted
-// `db-list-row-field`, `db-list-row-field-label` and `db-list-row-field-value`, and each of those
+// `obnotion-list-row-field`, `obnotion-list-row-field-label` and `obnotion-list-row-field-value`, and each of those
 // three has zero rules in the stylesheet and zero creation sites in the source. Every row it
 // measured was a stack of unstyled divs: no track width, no grid column, no padding. The heights,
 // the standard deviations and the spill counts were all real measurements of markup the plugin does
@@ -236,29 +236,29 @@ for (const width of WIDTHS) {
         // they do, which is a claim about the product rather than about the input.
         const filler = "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod ";
         const cells = Array.from({ length: fields }, (_, f) =>
-          `<div class="db-list-field" style="grid-column: ${f + 1}"><span class="db-list-field-label">Field ${f}</span>` +
-          `<div class="db-list-field-value">${"x".repeat(r % 3) || ""}Value ${r}-${f} ` +
+          `<div class="obnotion-list-field" style="grid-column: ${f + 1}"><span class="obnotion-list-field-label">Field ${f}</span>` +
+          `<div class="obnotion-list-field-value">${"x".repeat(r % 3) || ""}Value ${r}-${f} ` +
           `${filler.repeat(r % 5)}</div></div>`
         ).join("");
-        return `<div class="db-list-row" role="row"><div class="db-list-row-controls">` +
-          `<input type="checkbox" class="db-checkbox db-checkbox-row db-list-row-checkbox"></div>` +
-          `<div class="db-list-row-main"><div class="db-record-title-line">` +
-          `<span class="db-list-row-title">Row ${r}</span></div>` +
-          `<div class="db-list-row-meta" style="grid-template-columns: ${template}">${cells}</div></div></div>`;
+        return `<div class="obnotion-list-row" role="row"><div class="obnotion-list-row-controls">` +
+          `<input type="checkbox" class="obnotion-checkbox obnotion-checkbox-row obnotion-list-row-checkbox"></div>` +
+          `<div class="obnotion-list-row-main"><div class="obnotion-record-title-line">` +
+          `<span class="obnotion-list-row-title">Row ${r}</span></div>` +
+          `<div class="obnotion-list-row-meta" style="grid-template-columns: ${template}">${cells}</div></div></div>`;
       }).join("");
       // --capture-max-width bounds the container the way the capture harness does. Without it the
       // container sized itself to content and measured 948px inside a 402px viewport, so every
       // phone number taken from this page described a width no phone has.
       await rowMatrixPage.setContent(
         `<html style="--capture-max-width: ${width}px"><body class="${phone ? "is-mobile is-phone" : ""}">`
-        + `<div id="shot"><div class="note-database-container"><div class="db-list">${html}</div></div></div></body></html>`
+        + `<div id="shot"><div class="obnotion-container"><div class="obnotion-list">${html}</div></div></div></body></html>`
       );
       await rowMatrixPage.addStyleTag({ content: css });
       await rowMatrixPage.addStyleTag({ content: theme });
       await rowMatrixPage.addStyleTag({ content: runtime });
       await rowMatrixPage.evaluate(() => document.fonts.ready);
       const r = await rowMatrixPage.evaluate(() => {
-        const rowsEl = [...document.querySelectorAll(".db-list-row")];
+        const rowsEl = [...document.querySelectorAll(".obnotion-list-row")];
         const heights = rowsEl.map((e) => Math.round(e.getBoundingClientRect().height * 10) / 10);
         const mean = heights.reduce((a, b) => a + b, 0) / heights.length;
         const sd = Math.sqrt(heights.reduce((a, h) => a + (h - mean) ** 2, 0) / heights.length);
@@ -320,7 +320,7 @@ for (const width of WIDTHS) {
   for (const fixture of fixtures) {
     let html;
     try { html = fixture.html(); } catch { continue; }
-    if (!html.includes("db-active-view-controls-scroll")) continue;
+    if (!html.includes("obnotion-active-view-controls-scroll")) continue;
     await railPage.setContent(`<body><div id="shot">${html}</div></body>`);
     await railPage.addStyleTag({ content: css });
     await railPage.addStyleTag({ content: theme });
@@ -330,8 +330,8 @@ for (const width of WIDTHS) {
       width,
       fixture: fixture.id,
       ...(await railPage.evaluate(() => {
-        const el = document.querySelector(".db-active-view-controls-scroll");
-        const container = document.querySelector(".note-database-container");
+        const el = document.querySelector(".obnotion-active-view-controls-scroll");
+        const container = document.querySelector(".obnotion-container");
         const mask = (n) => {
           const s = getComputedStyle(n);
           return (s.maskImage && s.maskImage !== "none" ? s.maskImage : s.webkitMaskImage) || "none";
@@ -380,7 +380,7 @@ const ragged = rhythms.filter((r) => r.sd > 0);
 console.log(`  elements past their container      ${escaping.length}`);
 console.log(`    scrolling (a decision)           ${scrolls.length}`);
 console.log(`    growing the parent (the defect)  ${grows.length}`);
-// `005`: no descendant of `.db-header` has a right edge beyond the header's content box. A
+// `005`: no descendant of `.obnotion-header` has a right edge beyond the header's content box. A
 // descendant that scrolls is still inside a scroller, and a scroller inside the header is the
 // header's own decision — so the count that matters is the one that neither scrolls nor fits.
 const headerSpill = escaping.filter((r) => r.pastHeader > 0 && !r.scrolls);

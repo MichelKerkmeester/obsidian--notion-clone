@@ -20,7 +20,10 @@ import { t } from "../../i18n";
 // 2. TYPES
 // ───────────────────────────────────────────────────────────────────
 
-export type LinkedViewLanguage = "note-database" | "database-view";
+// "note-database" is a permanent alias, never removed: a fence written
+// before the rename carries it, and round-tripping that fence through parse/serialise must
+// keep saying so rather than silently upgrading someone else's file.
+export type LinkedViewLanguage = "obnotion" | "database-view" | "note-database";
 
 export interface LinkedViewBlockRef {
   language: LinkedViewLanguage;
@@ -32,8 +35,8 @@ export interface LinkedViewBlockRef {
   hideHeader?: boolean;
 }
 
-export const EMBED_LINKED_CLASS = "note-database-embed-linked";
-export const LINKED_VIEW_DRAG_TYPE = "application/x-note-database-linked-view";
+export const EMBED_LINKED_CLASS = "obnotion-embed-linked";
+export const LINKED_VIEW_DRAG_TYPE = "application/x-obnotion-linked-view";
 
 const OPTION_LINE = /^([A-Za-z][\w-]*)\s*:\s*(.*)$/;
 
@@ -79,7 +82,11 @@ export function formatLinkedViewFence(ref: LinkedViewBlockRef): string {
 export function parseLinkedViewFence(fence: string): LinkedViewBlockRef {
   const trimmed = fence.replace(/^\s+/, "").replace(/\s+$/, "");
   const match = trimmed.match(/^```(\S+)\n([\s\S]*?)\n```$/);
-  const language = (match?.[1] === "database-view" ? "database-view" : "note-database") as LinkedViewLanguage;
+  const language = (
+    match?.[1] === "database-view" ? "database-view"
+      : match?.[1] === "note-database" ? "note-database"
+        : "obnotion"
+  ) as LinkedViewLanguage;
   const body = match ? match[2] : trimmed;
   return { language, ...parseLinkedViewSource(body) };
 }
@@ -118,7 +125,7 @@ function spliceLines(content: string, start: number, end: number, replacement?: 
 }
 
 function countFences(content: string): number {
-  return (content.match(/```(?:note-database|database-view)\b/g) || []).length;
+  return (content.match(/```(?:obnotion|database-view|note-database)\b/g) || []).length;
 }
 
 /**
@@ -198,7 +205,7 @@ export function appendLinkedViewToDatabase(
 
 export function buildLinkedViewFence(db: DatabaseConfig, view: ViewConfig, sourcePath: string): string {
   return formatLinkedViewFence({
-    language: "note-database",
+    language: "obnotion",
     dbId: db.id || undefined,
     dbPath: db.id ? undefined : sourcePath,
     viewId: view.id || "",

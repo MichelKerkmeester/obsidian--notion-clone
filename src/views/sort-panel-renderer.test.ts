@@ -203,8 +203,8 @@ function makeContainer(): FakeElement {
   const body = new FakeElement("body");
   const doc = { body, querySelector: (selector: string) => body.querySelector(selector) };
   body.ownerDocument = doc;
-  const container = body.createDiv({ cls: "note-database-container" });
-  container.createDiv({ cls: "db-header" });
+  const container = body.createDiv({ cls: "obnotion-container" });
+  container.createDiv({ cls: "obnotion-header" });
   return container;
 }
 
@@ -261,8 +261,8 @@ describe("SortPanelRenderer searchable field dropdown (mounted)", () => {
     const renderer = new SortPanelRenderer();
     renderer.render(container as unknown as HTMLElement, true, makeConfig(), makeState(), makeActions());
 
-    const field = dropdownCalls.find((call) => call.className?.includes("db-sort-field-dropdown"));
-    const direction = dropdownCalls.find((call) => call.className?.includes("db-sort-direction-dropdown"));
+    const field = dropdownCalls.find((call) => call.className?.includes("obnotion-sort-field-dropdown"));
+    const direction = dropdownCalls.find((call) => call.className?.includes("obnotion-sort-direction-dropdown"));
     expect(field).toBeDefined();
     expect(direction).toBeDefined();
     expect(field?.searchable).toBe(true);
@@ -276,8 +276,8 @@ describe("SortPanelRenderer searchable field dropdown (mounted)", () => {
     state.sortRules = [{ field: "colA", direction: "asc" }, { field: "file.name", direction: "desc" }];
     renderer.render(container as unknown as HTMLElement, true, makeConfig(), state, makeActions());
 
-    const fieldCalls = dropdownCalls.filter((call) => call.className?.includes("db-sort-field-dropdown"));
-    const directionCalls = dropdownCalls.filter((call) => call.className?.includes("db-sort-direction-dropdown"));
+    const fieldCalls = dropdownCalls.filter((call) => call.className?.includes("obnotion-sort-field-dropdown"));
+    const directionCalls = dropdownCalls.filter((call) => call.className?.includes("obnotion-sort-direction-dropdown"));
     expect(fieldCalls).toHaveLength(2);
     expect(directionCalls).toHaveLength(2);
     expect(fieldCalls.every((call) => call.searchable === true)).toBe(true);

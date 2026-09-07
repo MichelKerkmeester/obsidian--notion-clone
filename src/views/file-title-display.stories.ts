@@ -44,18 +44,18 @@ const duplicate: FileTitleDisplay = {
 
 function variants(render: (p: HTMLElement, i: FileTitleDisplay, always?: boolean) => void): HTMLElement {
   const col = document.createElement("div");
-  col.className = "db-story-column";
+  col.className = "obnotion-story-column";
   for (const [caption, info, always] of [
     ["unique name", unique, false],
     ["duplicate name — prefix disambiguates", duplicate, false],
     ["path always shown", unique, true],
   ] as Array<[string, FileTitleDisplay, boolean]>) {
     const cell = document.createElement("div");
-    cell.className = "db-story-cell";
+    cell.className = "obnotion-story-cell";
     const host = document.createElement("div");
     render(host, info, always);
     const note = document.createElement("span");
-    note.className = "db-story-note";
+    note.className = "obnotion-story-note";
     note.textContent = caption;
     cell.append(host, note);
     col.appendChild(cell);

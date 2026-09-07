@@ -86,7 +86,7 @@ describe("surface contract", () => {
   it("defines a versioned plugin token key list", () => {
     expect(SURFACE_TOKEN_SNAPSHOT_VERSION).toBe(1);
     expect(SURFACE_TOKEN_KEYS.length).toBeGreaterThan(0);
-    expect(SURFACE_TOKEN_KEYS).toContain("--db-radius-lg");
-    expect(SURFACE_TOKEN_KEYS.every((key) => key.startsWith("--db-"))).toBe(true);
+    expect(SURFACE_TOKEN_KEYS).toContain("--obnotion-radius-lg");
+    expect(SURFACE_TOKEN_KEYS.every((key) => key.startsWith("--obnotion-"))).toBe(true);
   });
 });

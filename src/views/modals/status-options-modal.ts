@@ -18,7 +18,7 @@ import { ColumnDef, StatusColor, StatusOptionDef, StatusPresetDef } from "../../
 import { t } from "../../i18n";
 import { confirmWithModal } from "./confirm-modal";
 import { isHTMLElement } from "../dom-guards";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
@@ -141,10 +141,10 @@ export class StatusOptionsModal extends DbModal {
   onOpen(): void {
     super.onOpen();
     this.contentEl.empty();
-    this.contentEl.addClass("note-database-modal");
+    this.contentEl.addClass("obnotion-modal");
     this.contentEl.createEl("h3", { text: t("modal.statusOptions", { type: COLUMN_TYPE_LABELS()[this.col.type], label: this.col.label }) });
     if (this.col.type === "status" && this.showPresets) this.renderPresets();
-    this.listEl = this.contentEl.createDiv({ cls: "db-status-option-list" });
+    this.listEl = this.contentEl.createDiv({ cls: "obnotion-status-option-list" });
     this.renderList();
 
     const addBtn = this.contentEl.createEl("button", { text: t("modal.addOption") });
@@ -155,7 +155,7 @@ export class StatusOptionsModal extends DbModal {
       this.renderList();
     };
 
-    const buttonRow = this.contentEl.createDiv({ cls: "db-modal-button-row" });
+    const buttonRow = this.contentEl.createDiv({ cls: "obnotion-modal-button-row" });
     buttonRow.createEl("button", { text: t("common.cancel") }).onclick = () => this.close();
     const saveBtn = buttonRow.createEl("button", { text: t("common.save"), cls: "mod-cta" });
     saveBtn.onclick = async () => {
@@ -197,15 +197,15 @@ export class StatusOptionsModal extends DbModal {
 
   private renderPresets(): void {
     if (!this.presetButtonsEl) {
-      const wrap = this.contentEl.createDiv({ cls: "db-status-preset-list" });
-      wrap.createDiv({ cls: "db-status-preset-title", text: t("modal.preset") });
-      this.presetButtonsEl = wrap.createDiv({ cls: "db-status-preset-buttons" });
+      const wrap = this.contentEl.createDiv({ cls: "obnotion-status-preset-list" });
+      wrap.createDiv({ cls: "obnotion-status-preset-title", text: t("modal.preset") });
+      this.presetButtonsEl = wrap.createDiv({ cls: "obnotion-status-preset-buttons" });
     } else {
       this.presetButtonsEl.empty();
     }
 
     const noneBtn = this.presetButtonsEl.createEl("button", {
-      cls: "db-status-preset-button",
+      cls: "obnotion-status-preset-button",
       text: t("statusPresets.none"),
       attr: { type: "button" },
     });
@@ -216,7 +216,7 @@ export class StatusOptionsModal extends DbModal {
 
     for (const preset of this.presets) {
       const btn = this.presetButtonsEl.createEl("button", {
-        cls: "db-status-preset-button",
+        cls: "obnotion-status-preset-button",
         text: preset.name,
         attr: { type: "button" },
       });
@@ -231,7 +231,7 @@ export class StatusOptionsModal extends DbModal {
     if (!this.listEl) return;
     this.listEl.empty();
     this.options.forEach((option, index) => {
-      const row = this.listEl!.createDiv({ cls: "db-status-option-row" });
+      const row = this.listEl!.createDiv({ cls: "obnotion-status-option-row" });
       row.ondragover = (event) => {
         event.preventDefault();
         row.addClass("is-drop-target");
@@ -239,7 +239,7 @@ export class StatusOptionsModal extends DbModal {
       row.ondragleave = () => row.removeClass("is-drop-target");
       row.ondrop = (event) => this.dropOn(event, index, row);
 
-      const drag = row.createSpan({ cls: "db-status-option-drag", text: "⋮⋮" });
+      const drag = row.createSpan({ cls: "obnotion-status-option-drag", text: "⋮⋮" });
       drag.draggable = true;
       drag.ondragstart = (event) => {
         if (this.shouldIgnoreOptionDrag(event)) {
@@ -250,7 +250,7 @@ export class StatusOptionsModal extends DbModal {
       };
       drag.ondragend = () => this.finishDrag();
       drag.title = t("panel.dragToSort");
-      const moveControls = row.createSpan({ cls: "db-mobile-reorder-controls db-status-option-mobile-controls" });
+      const moveControls = row.createSpan({ cls: "obnotion-mobile-reorder-controls obnotion-status-option-mobile-controls" });
       const upBtn = moveControls.createEl("button", {
         attr: { type: "button", title: t("menu.moveUp"), "aria-label": t("menu.moveUp") },
       });
@@ -264,12 +264,12 @@ export class StatusOptionsModal extends DbModal {
       downBtn.disabled = index >= this.options.length - 1;
       downBtn.onclick = () => this.moveOption(index, index + 1);
       row.createSpan({
-        cls: `db-status-option-preview status-badge status-color-${option.color}`,
+        cls: `obnotion-status-option-preview status-badge status-color-${option.color}`,
         text: option.value || t("modal.untitled"),
         attr: { title: option.value || t("modal.untitled") },
       });
       const input = row.createEl("input", {
-        cls: "db-status-option-input",
+        cls: "obnotion-status-option-input",
         attr: { type: "text" },
       });
       input.value = option.value;
@@ -285,14 +285,14 @@ export class StatusOptionsModal extends DbModal {
         }
       };
 
-      const palette = row.createDiv({ cls: "db-status-color-palette" });
+      const palette = row.createDiv({ cls: "obnotion-status-color-palette" });
       for (const color of COLORS) {
         const colorLabel = t(COLOR_KEYS[color]);
         const colorButton = palette.createEl("button", {
-          cls: `db-status-color-button status-color-${color}${option.color === color ? " is-selected" : ""}`,
+          cls: `obnotion-status-color-button status-color-${color}${option.color === color ? " is-selected" : ""}`,
           attr: { "aria-label": colorLabel, title: colorLabel },
         });
-        colorButton.createSpan({ cls: "db-status-color-dot" });
+        colorButton.createSpan({ cls: "obnotion-status-color-dot" });
         colorButton.onclick = () => {
           this.markCustomOptions();
           option.color = color;
@@ -301,9 +301,9 @@ export class StatusOptionsModal extends DbModal {
         };
       }
 
-      const controls = row.createDiv({ cls: "db-status-option-controls" });
+      const controls = row.createDiv({ cls: "obnotion-status-option-controls" });
       const deleteBtn = controls.createEl("button", {
-        cls: "db-status-delete-btn",
+        cls: "obnotion-status-delete-btn",
         attr: { title: t("common.delete"), "aria-label": t("common.delete") },
       });
       setIcon(deleteBtn, "trash");
@@ -362,14 +362,14 @@ export class StatusOptionsModal extends DbModal {
 
   private finishDrag(): void {
     this.draggedIndex = null;
-    this.contentEl.querySelectorAll(".db-status-option-row").forEach((row) => {
+    this.contentEl.querySelectorAll(".obnotion-status-option-row").forEach((row) => {
       row.removeClass("is-dragging", "is-drop-target");
     });
   }
 
   private shouldIgnoreOptionDrag(event: DragEvent): boolean {
     return isHTMLElement(event.target)
-      && event.target.closest("input, select, textarea, button, .db-mobile-reorder-controls") != null;
+      && event.target.closest("input, select, textarea, button, .obnotion-mobile-reorder-controls") != null;
   }
 
   onClose(): void {

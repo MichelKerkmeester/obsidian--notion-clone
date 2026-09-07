@@ -6,7 +6,7 @@
 // Portalling a surface to the body is the only way to escape the leaf's paint
 // containment — no coordinate does it. It has been attempted twice here and
 // both times it shipped a surface rendering as unstyled text, because most of
-// this stylesheet is written `.note-database-container .db-thing` and a node
+// this stylesheet is written `.obnotion-container .obnotion-thing` and a node
 // that leaves the container stops matching those rules.
 //
 // Both attempts were reasoned about rather than measured. This measures. For a
@@ -19,8 +19,8 @@
 // says is the right long-term answer.
 //
 // The imposed half is NOT fixed by guarding the container's own box with
-// `:not(.db-surface)`. That was tried and reverted: the guard raises specificity
-// from (0,1,0) to (0,2,0), which wins fights `.is-phone .note-database-container`
+// `:not(.obnotion-surface)`. That was tried and reverted: the guard raises specificity
+// from (0,1,0) to (0,2,0), which wins fights `.is-phone .obnotion-container`
 // used to win on order alone, and it moved 34 captures. Neutralise per surface,
 // the way the sheet does with its own height override, or match the original
 // specificity exactly.
@@ -31,7 +31,7 @@
 //
 // Usage:
 //   node tools/live/portal-safety.mjs               all surface scenarios
-//   node tools/live/portal-safety.mjs db-filter-panel   one class
+//   node tools/live/portal-safety.mjs obnotion-filter-panel   one class
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -52,13 +52,13 @@ const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 
 /** The surfaces that would have to move for Live Preview to stop clipping them. */
 const SURFACE_CLASSES = [
-  "db-filter-panel",
-  "db-sort-panel",
-  "db-column-manager",
-  "db-view-config-panel",
-  "db-record-detail-panel",
-  "db-cell-edit-popover",
-  "db-dropdown-popover",
+  "obnotion-filter-panel",
+  "obnotion-sort-panel",
+  "obnotion-column-manager",
+  "obnotion-view-config-panel",
+  "obnotion-record-detail-panel",
+  "obnotion-cell-edit-popover",
+  "obnotion-dropdown-popover",
 ];
 
 /**
@@ -123,9 +123,9 @@ for (const scenario of SCENARIOS.filter((s) => typeof s.html === "function")) {
         // have to be re-keyed before this surface can move.
         document.body.appendChild(surface);
         const bare = snapshot(surface);
-        surface.classList.add("db-surface", "note-database-container");
+        surface.classList.add("obnotion-surface", "obnotion-container");
         const marked = snapshot(surface);
-        surface.classList.remove("db-surface", "note-database-container");
+        surface.classList.remove("obnotion-surface", "obnotion-container");
         home.parent.insertBefore(surface, home.next);
 
         const diffs = [];

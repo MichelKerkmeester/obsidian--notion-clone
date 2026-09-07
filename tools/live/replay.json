@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-09-07T16:26:16.473Z",
+  "measuredAt": "2026-09-07T17:30:32.048Z",
   "inputs": {
-    "styles.css": "42e4510561f9",
-    "tools/screenshots/theme.css": "6139ea960d6a",
-    "tools/screenshots/runtime-vars.css": "f50464eb6411",
+    "styles.css": "65c9009170d1",
+    "tools/screenshots/theme.css": "43554e1fbe3e",
+    "tools/screenshots/runtime-vars.css": "65a22a21cf1f",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a",
-    "tools/live/replay.mjs": "12aab7a66fc2"
+    "tools/live/replay.mjs": "04a70009088f"
   },
   "claims": [
     {
@@ -68,7 +68,7 @@
     },
     {
       "phase": "000-surface-contract-and-truthful-harness",
-      "claim": "a body-mounted surface marked db-surface resolves the plugin tokens",
+      "claim": "a body-mounted surface marked obnotion-surface resolves the plugin tokens",
       "was": 0,
       "recorded": 1,
       "actual": 1,
@@ -196,7 +196,7 @@
     },
     {
       "phase": "041-shared-ui-ux-port",
-      "claim": "the .db-surface selector leads the reduced-motion reset's selector list",
+      "claim": "the .obnotion-surface selector leads the reduced-motion reset's selector list",
       "was": 0,
       "recorded": 1,
       "actual": 1,
@@ -204,7 +204,7 @@
     },
     {
       "phase": "041-shared-ui-ux-port",
-      "claim": "the .db-surface subtree owns a reduced-motion rule separate from the container's",
+      "claim": "the .obnotion-surface subtree owns a reduced-motion rule separate from the container's",
       "was": 0,
       "recorded": 1,
       "actual": 1,

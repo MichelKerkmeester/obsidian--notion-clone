@@ -76,7 +76,7 @@ class FakeElement {
 
   closest(selector: string): FakeElement | null {
     if (selector.includes("input") && (this.className === "input" || this.tagName === "input")) return this;
-    if (selector.includes(".db-cell-editing") && this.className.includes("db-cell-editing")) return this;
+    if (selector.includes(".obnotion-cell-editing") && this.className.includes("obnotion-cell-editing")) return this;
     return this.parent ? this.parent.closest(selector) : null;
   }
 
@@ -224,14 +224,14 @@ describe("CardRovingTabindex pure helpers", () => {
 
 describe("CardRovingController", () => {
   function createCardElement(index: number): FakeElement {
-    const card = new FakeElement("db-card-mock");
+    const card = new FakeElement("obnotion-card-mock");
     card.setAttribute("data-index", String(index));
     return card;
   }
 
   function createFieldElement(key: string): FakeElement {
-    const field = new FakeElement("db-card-field");
-    field.setAttribute("data-note-database-column-key", key);
+    const field = new FakeElement("obnotion-card-field");
+    field.setAttribute("data-obnotion-column-key", key);
     field.setAttribute("tabindex", "-1");
     field.setAttribute("role", "gridcell");
     return field;
@@ -450,7 +450,7 @@ describe("CardRovingController", () => {
 
   it("wires card keydown and roving via shared helpers", () => {
     const controller = new CardRovingController();
-    const container = new FakeElement("db-board");
+    const container = new FakeElement("obnotion-board");
     const card = createCardElement(0);
     container.appendChild(card);
 
@@ -461,7 +461,7 @@ describe("CardRovingController", () => {
       onActivate,
     });
 
-    const syncedCards = syncCardRoving(container as unknown as HTMLElement, controller, ".db-card-mock");
+    const syncedCards = syncCardRoving(container as unknown as HTMLElement, controller, ".obnotion-card-mock");
     expect(syncedCards).toHaveLength(1);
 
     // Space on card triggers onActivate

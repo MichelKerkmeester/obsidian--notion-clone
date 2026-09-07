@@ -72,8 +72,8 @@ class RealElement {
   }
 }
 
-const ROW_ATTR = "data-note-database-row-path";
-const COL_ATTR = "data-note-database-column-key";
+const ROW_ATTR = "data-obnotion-row-path";
+const COL_ATTR = "data-obnotion-column-key";
 
 // ───────────────────────────────────────────────────────────────────
 // 3. TESTS

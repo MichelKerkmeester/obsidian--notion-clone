@@ -54,7 +54,7 @@ const css = readFileSync(join(REPO, "styles.css"), "utf8");
 
 /** Every overlay-shaped class the stylesheet mentions — the population, not a sample. */
 const classes = [...new Set(
-  (css.match(/\.db-[a-z0-9-]*(?:popover|dropdown|panel|menu|picker|sheet)\b/g) || [])
+  (css.match(/\.obnotion-[a-z0-9-]*(?:popover|dropdown|panel|menu|picker|sheet)\b/g) || [])
     .map((c) => c.slice(1)),
 )].sort();
 
@@ -66,7 +66,7 @@ const classes = [...new Set(
  * census exists to catch, so the rule is anchored on the declaration it actually contains.
  */
 const tokenRoots = (() => {
-  const match = css.match(/((?:^\s*\.[a-z0-9-]+,\s*\n)+\s*\.[a-z0-9-]+\s*\{[^}]*--db-space-1)/m);
+  const match = css.match(/((?:^\s*\.[a-z0-9-]+,\s*\n)+\s*\.[a-z0-9-]+\s*\{[^}]*--obnotion-space-1)/m);
   if (!match) return [];
   return match[1]
     .slice(0, match[1].indexOf("{"))
@@ -83,7 +83,7 @@ const browser = await chromium.launch({ executablePath: CHROME });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 await page.setContent(
   '<!doctype html><html><head><meta name="viewport" content="width=device-width">'
-  + '</head><body><div class="note-database-container" id="host"></div></body></html>',
+  + '</head><body><div class="obnotion-container" id="host"></div></body></html>',
 );
 await page.addStyleTag({ content: css });
 
@@ -96,8 +96,8 @@ const rows = await page.evaluate(({ classes, props }) => {
     const cs = getComputedStyle(el);
     const out = {};
     for (const p of props) out[p] = cs[p];
-    out.__radiusToken = cs.getPropertyValue("--db-radius-lg").trim();
-    out.__spaceToken = cs.getPropertyValue("--db-space-4").trim();
+    out.__radiusToken = cs.getPropertyValue("--obnotion-radius-lg").trim();
+    out.__spaceToken = cs.getPropertyValue("--obnotion-space-4").trim();
     el.remove();
     return out;
   };
@@ -107,7 +107,7 @@ const rows = await page.evaluate(({ classes, props }) => {
     const onBody = read(document.body, cls);
     // What the class computes once it also carries the surface marker — the state a migrated
     // call site reaches. Recording it beside the other two is what makes the delta legible.
-    const marked = read(document.body, `db-surface ${cls}`);
+    const marked = read(document.body, `obnotion-surface ${cls}`);
     const differing = props.filter((p) => inside[p] !== onBody[p]);
     return {
       cls,

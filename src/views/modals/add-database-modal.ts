@@ -20,7 +20,7 @@ import { normalizeStatusPresets } from "../../data/column-types";
 import { AddDatabaseModalResult } from "../../data/add-database-result";
 import { ViewConfigPanelActions, ViewConfigPanelRenderer } from "../view-config-panel-renderer";
 import { StatusPresetManagerModal } from "./status-preset-manager-modal";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
@@ -88,14 +88,14 @@ export class AddDatabaseModal extends DbModal {
     contentEl.empty();
     contentEl.createEl("h3", { text: t("addDatabase.title") });
 
-    // Wrap the globals in `.note-database-container` so the scoped `db-view-config-*`
+    // Wrap the globals in `.obnotion-container` so the scoped `obnotion-view-config-*`
     // styles (which key off that ancestor) apply unchanged — the base selector only sets
     // CSS variables, so this is safe inside a modal. The same renderer powers the settings
     // popover, so the creation form is visually identical to editing an existing database.
-    this.globalsHost = contentEl.createDiv({ cls: "note-database-container" });
+    this.globalsHost = contentEl.createDiv({ cls: "obnotion-container" });
     this.renderGlobals();
 
-    const btnRow = contentEl.createDiv({ cls: "db-delete-modal-buttons" });
+    const btnRow = contentEl.createDiv({ cls: "obnotion-delete-modal-buttons" });
     btnRow.createEl("button", { text: t("common.cancel") }).onclick = () => {
       this.resolve?.(null);
       this.close();

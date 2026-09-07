@@ -38,9 +38,9 @@ export interface NumberDisplayInteraction {
 // 4. HELPERS
 // ───────────────────────────────────────────────────────────────────
 
-/** Apply the tint color as a `db-num-color-<name>` class (CSS sets --db-number-color). */
+/** Apply the tint color as a `obnotion-num-color-<name>` class (CSS sets --obnotion-number-color). */
 function applyColorClass(el: HTMLElement, color: string | undefined): void {
-  if (color) el.addClass(`db-num-color-${color}`);
+  if (color) el.addClass(`obnotion-num-color-${color}`);
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -56,14 +56,14 @@ export function renderRating(parent: HTMLElement, value: number, config?: Number
   const isEmoji = symbol === "emoji";
   const emoji = config?.ratingEmoji?.trim() || DEFAULT_RATING_EMOJI;
   const container = parent.createSpan({
-    cls: `db-cell-rating${config?.ratingVariant === "outline" && !isEmoji ? " is-outline" : ""}${isEmoji ? " is-emoji" : ""}`,
+    cls: `obnotion-cell-rating${config?.ratingVariant === "outline" && !isEmoji ? " is-outline" : ""}${isEmoji ? " is-emoji" : ""}`,
   });
-  container.addClass("db-numeric-value");
+  container.addClass("obnotion-numeric-value");
   if (!isEmoji) applyColorClass(container, config?.color);
   const foregrounds: HTMLElement[] = [];
   const initialWidths: string[] = [];
   for (const [index, slot] of buildRatingSlots(value, max).entries()) {
-    const star = container.createSpan({ cls: "db-rating-star" });
+    const star = container.createSpan({ cls: "obnotion-rating-star" });
     if (interaction?.onChange) {
       star.setAttribute("role", "button");
       star.tabIndex = 0;
@@ -82,14 +82,14 @@ export function renderRating(parent: HTMLElement, value: number, config?: Number
         });
       });
     }
-    const bg = star.createSpan({ cls: "db-rating-star-bg" });
-    if (isEmoji) bg.createSpan({ cls: "db-rating-emoji", text: emoji });
+    const bg = star.createSpan({ cls: "obnotion-rating-star-bg" });
+    if (isEmoji) bg.createSpan({ cls: "obnotion-rating-emoji", text: emoji });
     else setIcon(bg, symbol);
-    const fg = star.createSpan({ cls: "db-rating-star-fg" });
+    const fg = star.createSpan({ cls: "obnotion-rating-star-fg" });
     fg.style.width = `${RATING_SLOT_FILL[slot]}%`;
     foregrounds.push(fg);
     initialWidths.push(fg.style.width);
-    if (isEmoji) fg.createSpan({ cls: "db-rating-emoji", text: emoji });
+    if (isEmoji) fg.createSpan({ cls: "obnotion-rating-emoji", text: emoji });
     else setIcon(fg, symbol);
   }
   if (interaction?.onChange) {
@@ -106,10 +106,10 @@ export function renderProgress(parent: HTMLElement, value: number, config?: Numb
   const percent = progressFillPercent(value, divisor);
   if (percent == null) return;
   const showValue = config?.progressShowValue !== false;
-  const container = parent.createDiv({ cls: "db-cell-progress" });
-  container.addClass("db-numeric-value");
+  const container = parent.createDiv({ cls: "obnotion-cell-progress" });
+  container.addClass("obnotion-numeric-value");
   applyColorClass(container, config?.color);
-  const track = container.createDiv({ cls: "db-cell-progress-track" });
+  const track = container.createDiv({ cls: "obnotion-cell-progress-track" });
   if (interaction?.onChange) {
     track.setAttribute("role", "slider");
     track.tabIndex = 0;
@@ -148,9 +148,9 @@ export function renderProgress(parent: HTMLElement, value: number, config?: Numb
       void interaction.onChange?.(Math.max(0, Math.min(divisor, value + (event.key === "ArrowRight" ? delta : -delta))));
     };
   }
-  const fill = track.createDiv({ cls: "db-cell-progress-fill" });
+  const fill = track.createDiv({ cls: "obnotion-cell-progress-fill" });
   fill.style.width = `${percent}%`;
-  if (showValue) container.createSpan({ cls: "db-cell-progress-text", text: formatProgressValue(value) });
+  if (showValue) container.createSpan({ cls: "obnotion-cell-progress-text", text: formatProgressValue(value) });
 }
 
 /** Render a circular ring progress into `parent`. fill = value/divisor; the raw value is shown
@@ -162,8 +162,8 @@ export function renderProgressRing(parent: HTMLElement, value: number, config?: 
   const showValue = config?.progressShowValue !== false;
   const RADIUS = 9;
   const { circumference, dashOffset } = ringGeometry(percent, RADIUS);
-  const container = parent.createSpan({ cls: "db-cell-progress-ring" });
-  container.addClass("db-numeric-value");
+  const container = parent.createSpan({ cls: "obnotion-cell-progress-ring" });
+  container.addClass("obnotion-numeric-value");
   if (interaction?.onChange) {
     container.setAttribute("role", "slider");
     container.tabIndex = 0;
@@ -181,13 +181,13 @@ export function renderProgressRing(parent: HTMLElement, value: number, config?: 
   applyColorClass(container, config?.color);
   const svg = container.createSvg("svg", { attr: { viewBox: "0 0 24 24", width: 20, height: 20 } });
   svg.createSvg("circle", { attr: { cx: 12, cy: 12, r: RADIUS, fill: "none", "stroke-width": 4 } })
-    .addClass("db-progress-ring-track");
+    .addClass("obnotion-progress-ring-track");
   svg.createSvg("circle", {
     attr: {
       cx: 12, cy: 12, r: RADIUS, fill: "none", "stroke-width": 4, "stroke-linecap": "round",
       "stroke-dasharray": String(circumference), "stroke-dashoffset": String(dashOffset),
       transform: "rotate(-90 12 12)",
     },
-  }).addClass("db-progress-ring-arc");
-  if (showValue) container.createSpan({ cls: "db-progress-ring-text", text: formatProgressValue(value) });
+  }).addClass("obnotion-progress-ring-arc");
+  if (showValue) container.createSpan({ cls: "obnotion-progress-ring-text", text: formatProgressValue(value) });
 }

@@ -1,8 +1,8 @@
 {
-  "measuredAt": "2026-09-07T15:33:58.935Z",
+  "measuredAt": "2026-09-07T17:23:10.851Z",
   "inputs": {
-    "styles.css": "42e4510561f9",
-    "tools/live/engine-parity.mjs": "0264fc2e3d90",
+    "styles.css": "65c9009170d1",
+    "tools/live/engine-parity.mjs": "de4db2b1d210",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {

@@ -56,10 +56,10 @@ export interface DesktopRecordHeaderHandle {
 }
 
 export function buildDesktopRecordHeader(options: DesktopRecordHeaderOptions): DesktopRecordHeaderHandle {
-  const header = options.parent.createDiv({ cls: options.headerClass || "db-record-detail-header" });
+  const header = options.parent.createDiv({ cls: options.headerClass || "obnotion-record-detail-header" });
   options.renderIcon?.(header);
 
-  const titleEl = header.createDiv({ cls: options.titleClass || "db-record-detail-title", text: options.title });
+  const titleEl = header.createDiv({ cls: options.titleClass || "obnotion-record-detail-title", text: options.title });
   options.decorateTitle?.(titleEl);
   if (options.titleIsEmpty) titleEl.addClass("is-empty-title");
 
@@ -80,7 +80,7 @@ export function buildDesktopRecordHeader(options: DesktopRecordHeaderOptions): D
   if (options.onOpen) {
     const onOpen = options.onOpen;
     openButton = header.createEl("button", {
-      cls: "db-board-card-open",
+      cls: "obnotion-board-card-open",
       attr: { type: "button", "aria-label": t("menu.openNote") },
     });
     setIcon(openButton, "maximize-2");
@@ -95,7 +95,7 @@ export function buildDesktopRecordHeader(options: DesktopRecordHeaderOptions): D
   if (options.onClose) {
     const onClose = options.onClose;
     closeButton = header.createEl("button", {
-      cls: "db-cell-edit-close",
+      cls: "obnotion-cell-edit-close",
       attr: { type: "button", "aria-label": t("common.close") },
     });
     setIcon(closeButton, "x");

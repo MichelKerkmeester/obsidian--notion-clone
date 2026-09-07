@@ -22,7 +22,11 @@ import { DatabaseView } from "./database-view";
 // 2. VIEW TYPE
 // ───────────────────────────────────────────────────────────────────
 
-export const DATABASE_FILE_VIEW_TYPE = "note-database-file-view";
+export const DATABASE_FILE_VIEW_TYPE = "obnotion-file-view";
+// Permanent alias, never removed: a `workspace.json` written before the rename stores this exact
+// string for an open database-file tab, and it is never removed. `main.ts` registers both
+// types against the same view factory so either one resolves.
+export const LEGACY_DATABASE_FILE_VIEW_TYPE = "note-database-file-view";
 
 // ───────────────────────────────────────────────────────────────────
 // 3. DASHBOARD VIEW
@@ -94,7 +98,7 @@ export class DatabaseFileDashboardView extends DatabaseView {
 
   async onOpen(): Promise<void> {
     await super.onOpen();
-    this.contentEl.addClass("note-database-file-view");
+    this.contentEl.addClass("obnotion-file-view");
     // Navigate to the database matching this file
     if (this.filePath) {
       this.openViewReference(this.filePath);

@@ -185,7 +185,7 @@ export const SHELL_EXIT_MS = 150;
 // that decides when their panel is visible at all.
 
 /** Stamped on a consumer's own panel element to opt into the side-sheet CSS shape. */
-export const SHELL_SIDE_SHEET_CLASS = "db-shell-side-sheet";
+export const SHELL_SIDE_SHEET_CLASS = "obnotion-shell-side-sheet";
 
 /**
  * Measured off Anytype's own right-hand object panel — `anytype-menu-object-properties-panel-
@@ -243,10 +243,10 @@ export function shellHasBack(state: SurfaceShellSubPageState): boolean {
 // This wraps the engine call rather than changing it, so every other caller of that builder
 // is unaffected until it opts into this shape for itself.
 
-const SHELL_HEADER_CLASS = "db-shell-header";
-const SHELL_HEADER_LEADING_CLASS = "db-shell-header-leading";
-const SHELL_HEADER_TRAILING_CLASS = "db-shell-header-trailing";
-const SHELL_HEADER_BACK_CLASS = "db-shell-back";
+const SHELL_HEADER_CLASS = "obnotion-shell-header";
+const SHELL_HEADER_LEADING_CLASS = "obnotion-shell-header-leading";
+const SHELL_HEADER_TRAILING_CLASS = "obnotion-shell-header-trailing";
+const SHELL_HEADER_BACK_CLASS = "obnotion-shell-back";
 
 export interface SurfaceShellHeaderHandle extends SheetHeaderHandle {
   leadingEl: HTMLElement;
@@ -293,7 +293,7 @@ export function buildShellHeader(
 }
 
 /** Class for the measured 44 x 44pt trailing header control (a `+`, a toggle, an overflow). */
-export const SHELL_HEADER_CHIP_CLASS = "db-shell-header-chip";
+export const SHELL_HEADER_CHIP_CLASS = "obnotion-shell-header-chip";
 
 /** Build a trailing header chip at the shell's own measured size, into the trailing slot. */
 export function buildShellHeaderChip(
@@ -354,14 +354,14 @@ const REPLACEABLE_ROLES: ReadonlySet<SurfaceShellRole> = new Set(["panel", "cond
 
 /** A would-be third sheet's own title, read from what it already declared rather than guessed. */
 function readReplacementTitle(panel: HTMLElement): string {
-  const declared = panel.getAttribute("data-db-sheet-title")?.trim();
+  const declared = panel.getAttribute("data-obnotion-sheet-title")?.trim();
   if (declared) return declared;
   // Every Modal carries a `.modal-title` whether or not a subclass ever fills it in (the same
   // fact `attachSheetChromeToModal`'s own native-title guard reads elsewhere), so the first MATCH
   // is not necessarily the first one that says anything — the candidate list is walked in order
   // and the first with real text wins, rather than `querySelector`'s own document-order pick
   // stopping at an empty native title ahead of the real heading.
-  for (const candidate of Array.from(panel.querySelectorAll<HTMLElement>(".db-panel-title, .modal-title, h1, h2, h3"))) {
+  for (const candidate of Array.from(panel.querySelectorAll<HTMLElement>(".obnotion-panel-title, .modal-title, h1, h2, h3"))) {
     const text = candidate.textContent?.trim();
     if (text) return text;
   }
@@ -373,7 +373,7 @@ function readReplacementTitle(panel: HTMLElement): string {
  *
  * The child keeps its own element — reparented, not rebuilt — so whatever it already rendered and
  * whatever handlers it already wired (its own close included) keep working; it never becomes an
- * independent `.db-mobile-bottom-sheet` at all (`mobile-bottom-sheet.ts`'s `applySheetChrome`
+ * independent `.obnotion-mobile-bottom-sheet` at all (`mobile-bottom-sheet.ts`'s `applySheetChrome`
  * short-circuits before the sheet class, the handle or a scrim ever reach it). Its own host
  * container — a real `Modal`'s `.modal-container`, when it has one — is hidden rather than
  * removed: the child's own teardown still owns detaching it eventually, and hiding is what a
@@ -385,7 +385,7 @@ function attemptReplace(
   onAccepted: (title: string, restore: () => void) => void,
 ): boolean {
   if (childPanel === parentElement || parentElement.contains(childPanel)) return false;
-  const contentRoot = parentElement.querySelector<HTMLElement>(".note-database-modal") ?? parentElement;
+  const contentRoot = parentElement.querySelector<HTMLElement>(".obnotion-modal") ?? parentElement;
   const bodyChildren = Array.from(contentRoot.children).filter((node) =>
     !node.classList.contains(SHELL_HEADER_CLASS) && node !== childPanel) as HTMLElement[];
   for (const node of bodyChildren) node.style.setProperty("display", "none");
@@ -396,7 +396,7 @@ function attemptReplace(
   hostContainer?.style.setProperty("display", "none");
 
   const title = readReplacementTitle(childPanel);
-  childPanel.addClass("db-shell-replaced-body");
+  childPanel.addClass("obnotion-shell-replaced-body");
   contentRoot.appendChild(childPanel);
 
   onAccepted(title, () => {

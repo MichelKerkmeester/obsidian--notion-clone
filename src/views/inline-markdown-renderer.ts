@@ -40,7 +40,7 @@ export interface RenderInlineMarkdownOptions {
   /** Resolve an internal image target to a displayable src (e.g. vault resource path).
    *  External targets are used as-is; if omitted, the raw target is used as src. */
   onResolveImage?: (target: string, external: boolean) => string | null;
-  /** CSS class prefix for markup elements. Default "db-text". */
+  /** CSS class prefix for markup elements. Default "obnotion-text". */
   baseClass?: string;
   /** How anchor clicks coexist with the host interaction. Default "card". */
   linkClickStrategy?: LinkClickStrategy;
@@ -78,9 +78,9 @@ export function createRenderedTextWidthMeasurer(): RenderedTextWidthMeasurer | n
   const td = doc.createElement("td");
   if (typeof td.createEl !== "function" || typeof td.empty !== "function") return null;
 
-  host.className = "note-database-container db-column-width-measure";
-  table.className = "db-table db-column-width-measure-table";
-  td.className = "db-column-width-measure-cell";
+  host.className = "obnotion-container obnotion-column-width-measure";
+  table.className = "obnotion-table obnotion-column-width-measure-table";
+  td.className = "obnotion-column-width-measure-cell";
 
   tr.appendChild(td);
   tbody.appendChild(tr);
@@ -115,7 +115,7 @@ export function createRenderedTextWidthMeasurer(): RenderedTextWidthMeasurer | n
         // renderMath falls back to raw `$...$` while MathJax is unavailable.
         // Never treat that TeX source as the rendered formula width.
         if (containsNodeType(nodes, "math")) {
-          const mathElements = Array.from(td.querySelectorAll<HTMLElement>(".db-text-md-math"));
+          const mathElements = Array.from(td.querySelectorAll<HTMLElement>(".obnotion-text-md-math"));
           if (mathElements.some((element) => !element.querySelector("mjx-container"))) {
             cache.set(cacheKey, null);
             return null;
@@ -129,7 +129,7 @@ export function createRenderedTextWidthMeasurer(): RenderedTextWidthMeasurer | n
         }
         td.empty();
         td.createEl("a", {
-          cls: `db-text-link ${link.external ? "external-link" : "internal-link"}`,
+          cls: `obnotion-text-link ${link.external ? "external-link" : "internal-link"}`,
           text: link.label,
           attr: { href: link.external ? link.target : "#" },
         });
@@ -165,7 +165,7 @@ export function renderInlineMarkdown(
   options: RenderInlineMarkdownOptions,
 ): void {
   parent.empty();
-  const baseClass = options.baseClass ?? "db-text";
+  const baseClass = options.baseClass ?? "obnotion-text";
   const strategy = options.linkClickStrategy ?? "card";
   for (const node of nodes) appendNode(parent, node, options, baseClass, strategy);
   // MathJax requires a single flush after all renderMath() calls in a batch.
@@ -231,7 +231,7 @@ function appendNode(
       break;
     }
     case "highlight": {
-      // Distinct class — must NOT reuse .db-search-highlight (SearchHighlight walker).
+      // Distinct class — must NOT reuse .obnotion-search-highlight (SearchHighlight walker).
       const el = parent.createEl("mark", { cls: `${baseClass}-md-highlight` });
       for (const child of node.children) appendNode(el, child, options, baseClass, strategy);
       break;

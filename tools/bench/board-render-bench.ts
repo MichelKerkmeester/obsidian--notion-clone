@@ -253,7 +253,7 @@ export function runBoardBench(host: HTMLElement, options: BoardBenchOptions = {}
 
         // One discarded warm-up: the first run pays for lazily-compiled paths.
         for (let run = 0; run <= REPEATS; run += 1) {
-          const container = host.createDiv({ cls: "note-database-container" });
+          const container = host.createDiv({ cls: "obnotion-container" });
           const renderer = new BoardRenderer(app, actions);
 
           const start = performance.now();
@@ -270,8 +270,8 @@ export function runBoardBench(host: HTMLElement, options: BoardBenchOptions = {}
             renderTimes.push(rendered - start);
             layoutTimes.push(layoutEnd - layoutStart);
             domNodes = container.querySelectorAll("*").length;
-            cardNodes = container.querySelectorAll(".db-board-card").length;
-            fieldNodes = container.querySelectorAll(".db-board-card-meta > *").length;
+            cardNodes = container.querySelectorAll(".obnotion-board-card").length;
+            fieldNodes = container.querySelectorAll(".obnotion-board-card-meta > *").length;
           }
           container.remove();
         }

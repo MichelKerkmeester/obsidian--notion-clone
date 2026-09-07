@@ -15,7 +15,7 @@
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { SettingsTab, createDefaultSettings, DEFAULT_VIEW_TYPES, normalizeDefaultViewType } from "./settings";
-import type NoteDatabasePlugin from "./main";
+import type ObnotionPlugin from "./main";
 import type { App } from "obsidian";
 import type { PluginSettings } from "./data/types";
 import type { DatabaseFileEntry } from "./data/database-file-order";
@@ -299,7 +299,7 @@ function createStubPlugin(): SettingsTabStub {
 }
 
 function openTab(): void {
-  const tab = new SettingsTab({} as App, createStubPlugin() as unknown as NoteDatabasePlugin);
+  const tab = new SettingsTab({} as App, createStubPlugin() as unknown as ObnotionPlugin);
   tab.display();
 }
 
@@ -332,7 +332,7 @@ describe("SettingsTab reconciled view vocabulary", () => {
 
   it("persists the chosen default view through the plugin settings field", () => {
     const plugin = createStubPlugin();
-    new SettingsTab({} as App, plugin as unknown as NoteDatabasePlugin).display();
+    new SettingsTab({} as App, plugin as unknown as ObnotionPlugin).display();
 
     const row = dom.instances.find((setting) => setting.name === t("settings.defaultView.name"));
     expect(row).toBeDefined();

@@ -42,9 +42,9 @@ describe("multi-group display", () => {
   });
 
   it("preserves the depth-zero header shape and scopes depth styling to nested headers", () => {
-    expect(getGroupHeaderClassName(0)).toBe("db-group-header");
+    expect(getGroupHeaderClassName(0)).toBe("obnotion-group-header");
     expect(getGroupHeaderDepthValue(0)).toBeUndefined();
-    expect(getGroupHeaderClassName(1)).toBe("db-group-header db-group-header--depth-1");
+    expect(getGroupHeaderClassName(1)).toBe("obnotion-group-header obnotion-group-header--depth-1");
     expect(getGroupHeaderDepthValue(1)).toBe("1");
   });
 });

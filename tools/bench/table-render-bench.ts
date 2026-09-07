@@ -161,8 +161,8 @@ export function runBench(host: HTMLElement, detached = false, options: TableBenc
         // is not, the cost is live-DOM insertion rather than anything in the render loop.
         const container = detached
           ? host.ownerDocument.createElement("div")
-          : host.createDiv({ cls: "note-database-container" });
-        if (detached) container.className = "note-database-container";
+          : host.createDiv({ cls: "obnotion-container" });
+        if (detached) container.className = "obnotion-container";
         const renderer = new TableRenderer(actions);
 
         const start = performance.now();

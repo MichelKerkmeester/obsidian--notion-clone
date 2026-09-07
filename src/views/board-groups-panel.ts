@@ -107,12 +107,12 @@ export function renderBoardGroupsRows(
     // that layout to keep in step.
     buildCheckboxPropertyRow({
       parent: body,
-      rowClass: "db-column-manager-row",
+      rowClass: "obnotion-column-manager-row",
       dataColumnKey: key,
       draggable: true,
-      dragHandleClass: "db-column-drag",
+      dragHandleClass: "obnotion-column-drag",
       dragHandleTitle: t("panel.dragToSort"),
-      moveControlsClass: "db-mobile-reorder-controls",
+      moveControlsClass: "obnotion-mobile-reorder-controls",
       drag: {
         onDragStart: (event) => {
           if (shouldIgnorePropertyRowDrag(event)) {
@@ -151,15 +151,15 @@ export function renderBoardGroupsRows(
         if (checked) actions.showGroup(groupField, key);
         else actions.hideGroup(groupField, key);
       },
-      typeClass: "db-column-type",
+      typeClass: "obnotion-column-type",
       renderTypeIcon: (iconParent) => {
-        const dot = iconParent.createSpan({ cls: "db-board-groups-dot" });
+        const dot = iconParent.createSpan({ cls: "obnotion-board-groups-dot" });
         if (!optionColor) return;
         if (STATUS_COLORS.includes(optionColor as StatusColor)) dot.addClass(`status-color-${optionColor}`);
         else dot.style.backgroundColor = optionColor;
       },
-      nameWrapClass: "db-column-name-wrap",
-      nameClass: "db-column-name",
+      nameWrapClass: "obnotion-column-name-wrap",
+      nameClass: "obnotion-column-name",
       nameText: formatGroupKeyDisplay(config, groupField, key, { uncategorizedLabel: t("board.noValue") }),
     });
   });
@@ -193,7 +193,7 @@ export function openBoardGroupsPanel(options: BoardGroupsPanelOptions): void {
   let keys = resolveBoardGroupsPanelKeys(config, groupField, options.groupKeys);
 
   const panel = containerEl.createDiv({
-    cls: "db-board-groups-panel",
+    cls: "obnotion-board-groups-panel",
     attr: { role: "dialog", "aria-label": t("board.manageGroups") },
   });
   panel.tabIndex = -1;
@@ -213,8 +213,8 @@ export function openBoardGroupsPanel(options: BoardGroupsPanelOptions): void {
     onClose: close,
   });
 
-  const bulkActions = panel.createDiv({ cls: "db-board-groups-actions" });
-  const hideAllBtn = bulkActions.createEl("button", { cls: "db-panel-button", text: t("board.hideAllGroups"), attr: { type: "button" } });
+  const bulkActions = panel.createDiv({ cls: "obnotion-board-groups-actions" });
+  const hideAllBtn = bulkActions.createEl("button", { cls: "obnotion-panel-button", text: t("board.hideAllGroups"), attr: { type: "button" } });
   hideAllBtn.onclick = () => {
     for (const key of keys) {
       if (!hiddenKeys.has(key)) {
@@ -224,7 +224,7 @@ export function openBoardGroupsPanel(options: BoardGroupsPanelOptions): void {
     }
     renderRows();
   };
-  const showAllBtn = bulkActions.createEl("button", { cls: "db-panel-button", text: t("board.showAllGroups"), attr: { type: "button" } });
+  const showAllBtn = bulkActions.createEl("button", { cls: "obnotion-panel-button", text: t("board.showAllGroups"), attr: { type: "button" } });
   showAllBtn.onclick = () => {
     for (const key of keys) {
       if (hiddenKeys.has(key)) {
@@ -235,7 +235,7 @@ export function openBoardGroupsPanel(options: BoardGroupsPanelOptions): void {
     renderRows();
   };
 
-  const body = panel.createDiv({ cls: "db-board-groups-body" });
+  const body = panel.createDiv({ cls: "obnotion-board-groups-body" });
 
   const reorder = (fromIndex: number, toIndex: number): void => {
     if (fromIndex < 0 || fromIndex === toIndex) return;
@@ -264,12 +264,12 @@ export function openBoardGroupsPanel(options: BoardGroupsPanelOptions): void {
 
   renderRows();
 
-  const footer = panel.createDiv({ cls: "db-board-groups-footer" });
-  const emptyRow = footer.createDiv({ cls: "db-board-groups-empty-row" });
+  const footer = panel.createDiv({ cls: "obnotion-board-groups-footer" });
+  const emptyRow = footer.createDiv({ cls: "obnotion-board-groups-empty-row" });
   const emptyCheckbox = createCheckbox(emptyRow, { role: "field" });
   emptyCheckbox.checked = config.boardHideEmptyGroups !== false;
   emptyCheckbox.onchange = () => actions.setBoardHideEmptyGroups(emptyCheckbox.checked);
-  emptyRow.createSpan({ cls: "db-board-groups-empty-label", text: t("board.hideEmptyGroups") });
+  emptyRow.createSpan({ cls: "obnotion-board-groups-empty-label", text: t("board.hideEmptyGroups") });
 
   const removeFocusTrap = trapFocus(panel, { onEscape: close });
   const removeAutoClose = installPopoverAutoClose({

@@ -80,7 +80,7 @@ export function closeActiveDateValuePicker(doc: Document = window.activeDocument
 
 export function renderDateValuePicker(options: DateValuePickerOptions): HTMLButtonElement {
   const trigger = options.parent.createEl("button", {
-    cls: ["db-date-value-field", options.className || ""].filter(Boolean).join(" "),
+    cls: ["obnotion-date-value-field", options.className || ""].filter(Boolean).join(" "),
     attr: {
       type: "button",
       "aria-label": options.placeholder || t("filter.value"),
@@ -89,9 +89,9 @@ export function renderDateValuePicker(options: DateValuePickerOptions): HTMLButt
     },
   });
   trigger.disabled = Boolean(options.disabled);
-  const icon = trigger.createSpan({ cls: "db-date-value-field-icon" });
+  const icon = trigger.createSpan({ cls: "obnotion-date-value-field-icon" });
   setIcon(icon, options.includeTime ? "calendar-clock" : "calendar-days");
-  const label = trigger.createSpan({ cls: "db-date-value-field-text" });
+  const label = trigger.createSpan({ cls: "obnotion-date-value-field-text" });
   const syncLabel = () => {
     const current = normalizeDatePickerValue(options.value, Boolean(options.includeTime));
     label.setText(options.displayText || current.replace("T", " ") || options.placeholder || t("filter.value"));
@@ -126,7 +126,7 @@ function openDateValuePicker(
   }
   active?.close(true);
 
-  const rawContainer = trigger.closest(".note-database-container");
+  const rawContainer = trigger.closest(".obnotion-container");
   const host = isHTMLElement(rawContainer) ? rawContainer : doc.body;
   const includeTime = Boolean(options.includeTime);
   const originalValue = normalizeDatePickerValue(options.value, includeTime);
@@ -143,10 +143,10 @@ function openDateValuePicker(
   let cleanupAutoClose: (() => void) | undefined;
 
   const popover = host.createDiv({
-    cls: "db-cell-edit-popover db-date-edit-popover db-date-value-popover",
+    cls: "obnotion-cell-edit-popover obnotion-date-edit-popover obnotion-date-value-popover",
     attr: { role: "dialog", "aria-label": options.placeholder || t("filter.value") },
   });
-  const popoverId = `db-date-picker-${++nextDatePickerId}`;
+  const popoverId = `obnotion-date-picker-${++nextDatePickerId}`;
   popover.setAttr("id", popoverId);
   trigger.setAttr("aria-controls", popoverId);
   if (includeTime) popover.addClass("is-datetime");
@@ -158,18 +158,18 @@ function openDateValuePicker(
   const content = mountPickerSheetHeader(popover, doc, {
     title: options.fieldLabel || t("filter.value"),
     onClose: () => close(true),
-    bodyCls: "db-date-picker-body db-panel-row",
+    bodyCls: "obnotion-date-picker-body obnotion-panel-row",
   });
-  const presets = content.createDiv({ cls: "db-date-presets", attr: { role: "group", "aria-label": t("datePicker.presets") } });
+  const presets = content.createDiv({ cls: "obnotion-date-presets", attr: { role: "group", "aria-label": t("datePicker.presets") } });
   // A relative label ("Tomorrow") reads as a choice with no literal to check it against until the
   // resolved date sits beside it — Notion pairs every relative preset with the date it resolves to
   // (`cfca14fb`). The resolved dateKey is optional so "Clear" — which resolves to nothing — keeps
   // a bare label rather than growing an empty subline.
   const createPreset = (label: string, onSelect: () => void, resolvedDateKey?: string) => {
-    const button = presets.createEl("button", { cls: "db-date-preset", attr: { type: "button" } });
-    button.createSpan({ cls: "db-date-preset-label", text: label });
+    const button = presets.createEl("button", { cls: "obnotion-date-preset", attr: { type: "button" } });
+    button.createSpan({ cls: "obnotion-date-preset-label", text: label });
     if (resolvedDateKey) {
-      button.createSpan({ cls: "db-date-preset-subline", text: formatDateValueDisplay(resolvedDateKey) });
+      button.createSpan({ cls: "obnotion-date-preset-subline", text: formatDateValueDisplay(resolvedDateKey) });
     }
     button.onclick = (event) => {
       event.preventDefault();
@@ -186,32 +186,32 @@ function openDateValuePicker(
     setInputs("");
     close(true);
   });
-  const segments = content.createDiv({ cls: "db-date-segments" });
+  const segments = content.createDiv({ cls: "obnotion-date-segments" });
   const yearInput = segments.createEl("input", {
-    cls: "db-date-seg",
+    cls: "obnotion-date-seg",
     attr: { maxlength: "4", inputmode: "numeric", placeholder: "YYYY", "aria-label": "YYYY" },
   });
-  segments.createSpan({ cls: "db-date-sep", text: "-" });
+  segments.createSpan({ cls: "obnotion-date-sep", text: "-" });
   const monthInput = segments.createEl("input", {
-    cls: "db-date-seg",
+    cls: "obnotion-date-seg",
     attr: { maxlength: "2", inputmode: "numeric", placeholder: "MM", "aria-label": "MM" },
   });
-  segments.createSpan({ cls: "db-date-sep", text: "-" });
+  segments.createSpan({ cls: "obnotion-date-sep", text: "-" });
   const dayInput = segments.createEl("input", {
-    cls: "db-date-seg",
+    cls: "obnotion-date-seg",
     attr: { maxlength: "2", inputmode: "numeric", placeholder: "DD", "aria-label": "DD" },
   });
   let hourInput: HTMLInputElement | undefined;
   let minuteInput: HTMLInputElement | undefined;
   if (includeTime) {
-    segments.createSpan({ cls: "db-date-sep db-time-sep", text: " " });
+    segments.createSpan({ cls: "obnotion-date-sep obnotion-time-sep", text: " " });
     hourInput = segments.createEl("input", {
-      cls: "db-date-seg db-time-seg db-hour-seg",
+      cls: "obnotion-date-seg obnotion-time-seg obnotion-hour-seg",
       attr: { maxlength: "2", inputmode: "numeric", placeholder: "HH", "aria-label": "HH" },
     });
-    segments.createSpan({ cls: "db-date-sep db-time-colon", text: ":" });
+    segments.createSpan({ cls: "obnotion-date-sep obnotion-time-colon", text: ":" });
     minuteInput = segments.createEl("input", {
-      cls: "db-date-seg db-time-seg db-minute-seg",
+      cls: "obnotion-date-seg obnotion-time-seg obnotion-minute-seg",
       attr: {
         maxlength: "2",
         inputmode: "numeric",
@@ -229,7 +229,7 @@ function openDateValuePicker(
     monthKeys: new Set(),
     yearKeys: new Set(),
   };
-  const calendar = content.createDiv({ cls: "db-calendar-mini-popover db-cell-date-picker" });
+  const calendar = content.createDiv({ cls: "obnotion-calendar-mini-popover obnotion-cell-date-picker" });
   calendar.addEventListener("mousedown", (event) => event.preventDefault());
 
   const readDraftDateKey = (): string | null => {
@@ -325,10 +325,10 @@ function openDateValuePicker(
     renderPicker();
     ownerWindow.requestAnimationFrame(() => {
       if (target === "title") {
-        calendar.querySelector<HTMLButtonElement>(".db-calendar-mini-title-button")?.focus();
+        calendar.querySelector<HTMLButtonElement>(".obnotion-calendar-mini-title-button")?.focus();
         return;
       }
-      const navButtons = calendar.querySelectorAll<HTMLButtonElement>(".db-calendar-mini-nav");
+      const navButtons = calendar.querySelectorAll<HTMLButtonElement>(".obnotion-calendar-mini-nav");
       navButtons[target === "previous" ? 0 : navButtons.length - 1]?.focus();
     });
   };

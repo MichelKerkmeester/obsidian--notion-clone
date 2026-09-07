@@ -15,7 +15,7 @@ import { App } from "obsidian";
 import { ComputedFrontmatterCleanupOption } from "../../data/computed-cleanup";
 import { applyRangeSelection } from "../../data/range-selection";
 import { t } from "../../i18n";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import { createCheckbox } from "../checkbox";
 import type { SurfaceShellRole } from "../surface-shell";
 
@@ -48,20 +48,20 @@ export class ComputedFrontmatterCleanupModal extends DbModal {
     super.onOpen();
     const { contentEl } = this;
     contentEl.empty();
-    contentEl.addClass("note-database-modal");
+    contentEl.addClass("obnotion-modal");
     contentEl.createEl("h3", { text: t("viewConfig.computedCleanup.title") });
-    contentEl.createDiv({ cls: "db-modal-help", text: t("viewConfig.computedCleanup.desc") });
+    contentEl.createDiv({ cls: "obnotion-modal-help", text: t("viewConfig.computedCleanup.desc") });
 
-    const list = contentEl.createDiv({ cls: "db-computed-cleanup-list" });
+    const list = contentEl.createDiv({ cls: "obnotion-computed-cleanup-list" });
     let confirm: HTMLButtonElement;
     const updateConfirmState = () => {
       if (confirm) confirm.disabled = this.selectedKeys.size === 0;
     };
     for (const option of this.options) {
-      const row = list.createEl("label", { cls: "db-computed-cleanup-option" });
+      const row = list.createEl("label", { cls: "obnotion-computed-cleanup-option" });
       const checkbox = createCheckbox(row, {
         role: "field",
-        cls: "db-modal-checkbox",
+        cls: "obnotion-modal-checkbox",
         attr: { value: option.key },
       });
       checkbox.checked = this.selectedKeys.has(option.key);
@@ -77,18 +77,18 @@ export class ComputedFrontmatterCleanupModal extends DbModal {
         this.syncCheckboxes(list);
         updateConfirmState();
       };
-      const text = row.createDiv({ cls: "db-computed-cleanup-option-text" });
+      const text = row.createDiv({ cls: "obnotion-computed-cleanup-option-text" });
       text.createDiv({
-        cls: "db-computed-cleanup-option-label",
+        cls: "obnotion-computed-cleanup-option-label",
         text: t("viewConfig.computedCleanup.optionField", { label: option.label }),
       });
       text.createDiv({
-        cls: "db-computed-cleanup-option-key",
+        cls: "obnotion-computed-cleanup-option-key",
         text: t("viewConfig.computedCleanup.optionKey", { key: option.key, count: option.recordCount }),
       });
     }
 
-    const actions = contentEl.createDiv({ cls: "db-modal-actions" });
+    const actions = contentEl.createDiv({ cls: "obnotion-modal-actions" });
     actions.createEl("button", {
       text: t("common.cancel"),
       attr: { type: "button" },

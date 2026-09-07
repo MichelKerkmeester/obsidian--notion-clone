@@ -69,7 +69,7 @@ interface ChildPopoverSizeOptions {
 // ───────────────────────────────────────────────────────────────────
 
 const REFERENCE_LINE_COLORS = [
-  { value: "", color: "var(--db-border-emphasis)", labelKey: "chart.referenceLineColorDefault" },
+  { value: "", color: "var(--obnotion-border-emphasis)", labelKey: "chart.referenceLineColorDefault" },
   { value: "#64748b", color: "var(--status-color-fg-slate)", labelKey: "chart.referenceLineColorGray" },
   { value: "#3b82f6", color: "var(--status-color-fg-blue)", labelKey: "chart.referenceLineColorBlue" },
   { value: "#22c55e", color: "var(--status-color-fg-green)", labelKey: "chart.referenceLineColorGreen" },
@@ -339,11 +339,11 @@ export class ChartToolbarRenderer {
 
   private openPopover(containerEl: HTMLElement, anchor: HTMLElement, config: ViewConfig, actions: ChartToolbarActions): void {
     this.closePopover();
-    const panel = containerEl.createDiv({ cls: "db-chart-options-popover" });
+    const panel = containerEl.createDiv({ cls: "obnotion-chart-options-popover" });
     this.popover = panel;
     buildShellHeader(panel, { title: t("chart.options"), onClose: () => this.closePopover() });
     this.renderPopoverContent(panel, containerEl, config, actions);
-    panel.addClass("db-anchored-popover");
+    panel.addClass("obnotion-anchored-popover");
     positionToolbarPopover(panel, anchor, { preferredWidth: 520, maxWidth: 560 });
     const onOutside = (event: MouseEvent) => {
       const target = event.target as Node | null;
@@ -405,7 +405,7 @@ export class ChartToolbarRenderer {
     if (!panel?.isConnected || !host) return;
     this.closeChildPopover();
     Array.from(panel.children).forEach((child) => {
-      if (!isHTMLElement(child) || !child.hasClass("db-panel-header")) child.remove();
+      if (!isHTMLElement(child) || !child.hasClass("obnotion-panel-header")) child.remove();
     });
     this.renderPopoverContent(panel, host, config, actions);
   }
@@ -530,7 +530,7 @@ export class ChartToolbarRenderer {
     actions: ChartToolbarActions,
     slot: ChartValueSlot,
   ): void {
-    this.openChildPopover(containerEl, anchor, "db-chart-value-aggregation-popover", (panel) => {
+    this.openChildPopover(containerEl, anchor, "obnotion-chart-value-aggregation-popover", (panel) => {
       buildShellHeader(panel, {
         title: slot === "primary" ? t("chart.toolbarValue") : t("chart.toolbarLineValue"),
         onClose: () => this.closeChildPopover(),
@@ -545,7 +545,7 @@ export class ChartToolbarRenderer {
     actions: ChartToolbarActions,
     slot: ChartValueSlot,
   ): void {
-    const section = panel.createDiv({ cls: "db-chart-options-section db-chart-options-section-plain" });
+    const section = panel.createDiv({ cls: "obnotion-chart-options-section obnotion-chart-options-section-plain" });
     this.renderValueAggregationControls(section, config, actions, slot);
   }
 
@@ -567,7 +567,7 @@ export class ChartToolbarRenderer {
 
   private renderChartAggregationOptions(section: HTMLElement, config: ViewConfig, actions: ChartToolbarActions, slot: ChartValueSlot): void {
     const aggregation = (slot === "primary" ? config.chartAggregation : config.chartSecondaryAggregation) || "count";
-    const aggregationTitle = section.createDiv({ cls: "db-chart-aggregation-title", text: t("chart.toolbarAggregation") });
+    const aggregationTitle = section.createDiv({ cls: "obnotion-chart-aggregation-title", text: t("chart.toolbarAggregation") });
     aggregationTitle.setAttr("role", "presentation");
     for (const option of getOrderedChartAggregationOptions(config, slot === "primary" ? config.chartValueField : config.chartSecondaryValueField)) {
       this.renderAggregationOption(section, option, aggregation, () => {
@@ -586,14 +586,14 @@ export class ChartToolbarRenderer {
   }
 
   private refreshChartAggregationOptions(section: HTMLElement, config: ViewConfig, actions: ChartToolbarActions, slot: ChartValueSlot): void {
-    section.querySelectorAll<HTMLElement>(".db-chart-aggregation-title, .db-chart-aggregation-option").forEach((el) => el.remove());
+    section.querySelectorAll<HTMLElement>(".obnotion-chart-aggregation-title, .obnotion-chart-aggregation-option").forEach((el) => el.remove());
     this.renderChartAggregationOptions(section, config, actions, slot);
   }
 
   private renderAggregationOption(parent: HTMLElement, option: SelectOption, currentValue: string, onClick: () => void): void {
     const selected = option.value === currentValue;
     const row = parent.createEl("button", {
-      cls: `db-chart-options-row db-chart-aggregation-option${selected ? " is-selected" : ""}${option.disabled ? " is-disabled" : ""}`,
+      cls: `obnotion-chart-options-row obnotion-chart-aggregation-option${selected ? " is-selected" : ""}${option.disabled ? " is-disabled" : ""}`,
       attr: { type: "button", role: "option", "aria-selected": selected ? "true" : "false" },
     });
     row.setAttr("data-value", option.value);
@@ -602,11 +602,11 @@ export class ChartToolbarRenderer {
       row.setAttr("title", option.disabledReason);
       row.setAttr("aria-label", `${option.text}: ${option.disabledReason}`);
     }
-    const icon = row.createSpan({ cls: "db-chart-options-row-icon" });
+    const icon = row.createSpan({ cls: "obnotion-chart-options-row-icon" });
     if (selected) setIcon(icon, "check");
-    const text = row.createDiv({ cls: "db-chart-options-row-text" });
-    text.createSpan({ cls: "db-chart-options-label", text: option.text });
-    if (option.disabledReason) text.createSpan({ cls: "db-chart-options-value", text: option.disabledReason });
+    const text = row.createDiv({ cls: "obnotion-chart-options-row-text" });
+    text.createSpan({ cls: "obnotion-chart-options-label", text: option.text });
+    if (option.disabledReason) text.createSpan({ cls: "obnotion-chart-options-value", text: option.disabledReason });
     row.createSpan();
     row.onclick = () => {
       if (row.disabled) return;
@@ -615,11 +615,11 @@ export class ChartToolbarRenderer {
   }
 
   private syncChartAggregationSelection(parent: HTMLElement, value: string): void {
-    for (const row of parent.querySelectorAll<HTMLButtonElement>(".db-chart-aggregation-option")) {
+    for (const row of parent.querySelectorAll<HTMLButtonElement>(".obnotion-chart-aggregation-option")) {
       const selected = row.getAttribute("data-value") === value;
       row.toggleClass("is-selected", selected);
       row.setAttr("aria-selected", selected ? "true" : "false");
-      const icon = row.querySelector<HTMLElement>(".db-chart-options-row-icon");
+      const icon = row.querySelector<HTMLElement>(".obnotion-chart-options-row-icon");
       icon?.replaceChildren();
       if (selected && icon) setIcon(icon, "check");
     }
@@ -697,14 +697,14 @@ export class ChartToolbarRenderer {
   }
 
   private openStylePopover(containerEl: HTMLElement, anchor: HTMLElement, config: ViewConfig, actions: ChartToolbarActions): void {
-    this.openChildPopover(containerEl, anchor, "db-chart-style-popover", (panel) => {
+    this.openChildPopover(containerEl, anchor, "obnotion-chart-style-popover", (panel) => {
       buildShellHeader(panel, { title: t("chart.optionsStyle"), onClose: () => this.closeChildPopover() });
       this.renderStyleSection(panel, config, actions);
     });
   }
 
   private renderStyleSection(panel: HTMLElement, config: ViewConfig, actions: ChartToolbarActions): void {
-    const section = panel.createDiv({ cls: "db-chart-options-section db-chart-options-section-plain" });
+    const section = panel.createDiv({ cls: "obnotion-chart-options-section obnotion-chart-options-section-plain" });
     this.renderSelect(section, t("chart.height"), [
       { value: "small", text: t("chart.heightSmall") },
       { value: "medium", text: t("chart.heightMedium") },
@@ -799,20 +799,20 @@ export class ChartToolbarRenderer {
   }
 
   private renderReferenceLinesSection(parent: HTMLElement, config: ViewConfig, actions: ChartToolbarActions): void {
-    const wrap = parent.createDiv({ cls: "db-chart-reference-lines-inline" });
+    const wrap = parent.createDiv({ cls: "obnotion-chart-reference-lines-inline" });
     const render = () => {
       wrap.empty();
-      const header = wrap.createDiv({ cls: "db-chart-reference-lines-header" });
+      const header = wrap.createDiv({ cls: "obnotion-chart-reference-lines-header" });
       this.renderOptionIcon(header, "list-plus");
-      header.createSpan({ cls: "db-chart-options-label", text: t("chart.referenceLines") });
+      header.createSpan({ cls: "obnotion-chart-options-label", text: t("chart.referenceLines") });
       const count = config.chartReferenceLines?.length || 0;
-      header.createSpan({ cls: "db-chart-options-value", text: String(count) });
+      header.createSpan({ cls: "obnotion-chart-options-value", text: String(count) });
       const lines = config.chartReferenceLines || [];
       for (const line of lines) {
         this.renderReferenceLineRow(wrap, line, config, actions, render);
       }
       const addLine = wrap.createEl("button", {
-        cls: "db-chart-reference-line-add",
+        cls: "obnotion-chart-reference-line-add",
         text: t("chart.addReferenceLine"),
         attr: { type: "button" },
       });
@@ -826,7 +826,7 @@ export class ChartToolbarRenderer {
   }
 
   private renderReferenceLineRow(parent: HTMLElement, line: ChartReferenceLine, config: ViewConfig, actions: ChartToolbarActions, rerender: () => void): void {
-    const wrap = parent.createDiv({ cls: "db-chart-reference-line-row" });
+    const wrap = parent.createDiv({ cls: "obnotion-chart-reference-line-row" });
     this.renderSelect(wrap, t("chart.referenceLines"), getReferenceLineTypeOptions(), line.type, (value) => {
       line.type = value as ChartReferenceLine["type"];
       if (line.type !== "constant") line.value = undefined;
@@ -849,7 +849,7 @@ export class ChartToolbarRenderer {
       actions.onChange(t("undo.chartReferenceLineStyleConfig"));
     }, "minus");
     this.renderReferenceLineColorPicker(wrap, line, actions);
-    const remove = wrap.createEl("button", { cls: "db-chart-reference-line-remove", attr: { type: "button" } });
+    const remove = wrap.createEl("button", { cls: "obnotion-chart-reference-line-remove", attr: { type: "button" } });
     this.renderOptionIcon(remove, "trash-2");
     setTooltip(remove, t("common.delete"), { delay: 100 });
     remove.onclick = () => {
@@ -861,15 +861,15 @@ export class ChartToolbarRenderer {
   }
 
   private renderReferenceLineColorPicker(parent: HTMLElement, line: ChartReferenceLine, actions: ChartToolbarActions): void {
-    const row = parent.createDiv({ cls: "db-chart-options-row db-chart-reference-line-color-row" });
+    const row = parent.createDiv({ cls: "obnotion-chart-options-row obnotion-chart-reference-line-color-row" });
     this.renderOptionIcon(row, "palette");
-    const text = row.createDiv({ cls: "db-chart-options-row-text" });
-    text.createSpan({ cls: "db-chart-options-label", text: t("chart.referenceLineColor") });
-    const swatches = row.createDiv({ cls: "db-chart-reference-line-swatches" });
+    const text = row.createDiv({ cls: "obnotion-chart-options-row-text" });
+    text.createSpan({ cls: "obnotion-chart-options-label", text: t("chart.referenceLineColor") });
+    const swatches = row.createDiv({ cls: "obnotion-chart-reference-line-swatches" });
     const current = line.color || "";
     for (const option of REFERENCE_LINE_COLORS) {
       const button = swatches.createEl("button", {
-        cls: `db-chart-reference-line-swatch${current === option.value ? " is-selected" : ""}`,
+        cls: `obnotion-chart-reference-line-swatch${current === option.value ? " is-selected" : ""}`,
         attr: {
           type: "button",
           "aria-label": t(option.labelKey),
@@ -880,7 +880,7 @@ export class ChartToolbarRenderer {
       button.onclick = () => {
         line.color = option.value || undefined;
         actions.onChange(t("undo.chartReferenceLineColorConfig"));
-        swatches.querySelectorAll(".db-chart-reference-line-swatch").forEach((el) => el.removeClass("is-selected"));
+        swatches.querySelectorAll(".obnotion-chart-reference-line-swatch").forEach((el) => el.removeClass("is-selected"));
         button.addClass("is-selected");
       };
     }
@@ -893,10 +893,10 @@ export class ChartToolbarRenderer {
   }
 
   private renderExportButton(section: HTMLElement, icon: ChartOptionIcon, label: string, onClick: () => void): void {
-    const button = section.createEl("button", { cls: "db-chart-options-row db-chart-options-export", attr: { type: "button" } });
+    const button = section.createEl("button", { cls: "obnotion-chart-options-row obnotion-chart-options-export", attr: { type: "button" } });
     this.renderOptionIcon(button, icon);
-    const text = button.createDiv({ cls: "db-chart-options-row-text" });
-    text.createSpan({ cls: "db-chart-options-label", text: label });
+    const text = button.createDiv({ cls: "obnotion-chart-options-row-text" });
+    text.createSpan({ cls: "obnotion-chart-options-label", text: label });
     button.createSpan();
     button.onclick = onClick;
   }
@@ -908,11 +908,11 @@ export class ChartToolbarRenderer {
     actions: ChartToolbarActions,
     groups: string[]
   ): void {
-    this.openChildPopover(containerEl, anchor, "db-chart-visible-groups-popover", (panel) => {
+    this.openChildPopover(containerEl, anchor, "obnotion-chart-visible-groups-popover", (panel) => {
       buildShellHeader(panel, { title: t("chart.visibleGroups"), onClose: () => this.closeChildPopover() });
-      const wrap = panel.createDiv({ cls: "db-chart-visible-groups-list" });
+      const wrap = panel.createDiv({ cls: "obnotion-chart-visible-groups-list" });
       if (groups.length === 0) {
-        wrap.createDiv({ cls: "db-panel-empty", text: t("chart.noFieldSelected") });
+        wrap.createDiv({ cls: "obnotion-panel-empty", text: t("chart.noFieldSelected") });
         return;
       }
       for (const group of groups) {
@@ -928,8 +928,8 @@ export class ChartToolbarRenderer {
   }
 
   private createSection(panel: HTMLElement, title: string): HTMLElement {
-    const section = panel.createDiv({ cls: "db-chart-options-section" });
-    const titleEl = section.createDiv({ cls: "db-chart-options-section-title" });
+    const section = panel.createDiv({ cls: "obnotion-chart-options-section" });
+    const titleEl = section.createDiv({ cls: "obnotion-chart-options-section-title" });
     titleEl.createSpan({ text: title });
     return section;
   }
@@ -942,8 +942,8 @@ export class ChartToolbarRenderer {
       value,
       onChange,
       icon,
-      className: "db-chart-options-row db-chart-options-select-row",
-      popoverClassName: "db-chart-dropdown-popover",
+      className: "obnotion-chart-options-row obnotion-chart-options-select-row",
+      popoverClassName: "obnotion-chart-dropdown-popover",
       placeholder: t("common.notSet"),
       disabled,
       disabledReason: disabled ? disabledReason : undefined,
@@ -954,12 +954,12 @@ export class ChartToolbarRenderer {
   }
 
   private renderTextInput(parent: HTMLElement, label: string, value: string, placeholder: string, onChange: (value: string) => void, icon: ChartOptionIcon = "text"): void {
-    const row = parent.createDiv({ cls: "db-chart-options-row db-chart-options-title-row" });
+    const row = parent.createDiv({ cls: "obnotion-chart-options-row obnotion-chart-options-title-row" });
     this.renderOptionIcon(row, icon);
-    const text = row.createDiv({ cls: "db-chart-options-row-text" });
-    text.createSpan({ cls: "db-chart-options-label", text: label });
+    const text = row.createDiv({ cls: "obnotion-chart-options-row-text" });
+    text.createSpan({ cls: "obnotion-chart-options-label", text: label });
     const input = text.createEl("input", {
-      cls: "db-chart-options-text-input",
+      cls: "obnotion-chart-options-text-input",
       attr: { type: "text", placeholder, "aria-label": label },
     });
     input.value = value;
@@ -968,16 +968,16 @@ export class ChartToolbarRenderer {
   }
 
   private renderSwitch(parent: HTMLElement, label: string, checked: boolean, onChange: (checked: boolean) => void, icon: ChartOptionIcon, disabled = false, switchKey?: string, disabledReason?: string): void {
-    const row = parent.createDiv({ cls: `db-chart-options-row db-chart-options-switch${disabled ? " is-disabled" : ""}` });
+    const row = parent.createDiv({ cls: `obnotion-chart-options-row obnotion-chart-options-switch${disabled ? " is-disabled" : ""}` });
     if (switchKey) row.dataset.chartSwitch = switchKey;
     applyDisabledReason(row, label, disabled, disabledReason);
     this.renderOptionIcon(row, icon);
-    const text = row.createDiv({ cls: "db-chart-options-row-text" });
-    text.createSpan({ cls: "db-chart-options-label", text: label });
+    const text = row.createDiv({ cls: "obnotion-chart-options-row-text" });
+    text.createSpan({ cls: "obnotion-chart-options-label", text: label });
     this.renderDisabledReason(text, disabledReason, !disabled);
     // Named from the same string the visible span shows; that span is not a label element, so
     // without this the switch reaches assistive technology with no name at all.
-    const input = row.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch", "aria-label": label } });
+    const input = row.createEl("input", { cls: "obnotion-toggle-switch", attr: { type: "checkbox", role: "switch", "aria-label": label } });
     input.checked = checked;
     input.disabled = disabled;
     applyDisabledReason(input, label, disabled, disabledReason);
@@ -985,33 +985,33 @@ export class ChartToolbarRenderer {
   }
 
   private renderCheckbox(parent: HTMLElement, label: string, checked: boolean, onChange: (checked: boolean) => void): void {
-    const row = parent.createEl("label", { cls: "db-chart-visible-group-row" });
+    const row = parent.createEl("label", { cls: "obnotion-chart-visible-group-row" });
     const input = createCheckbox(row, { role: "field" });
     input.checked = checked;
     input.onchange = () => onChange(input.checked);
-    row.createSpan({ cls: "db-chart-visible-group-label", text: label });
+    row.createSpan({ cls: "obnotion-chart-visible-group-label", text: label });
   }
 
   private renderPopoverEntry(parent: HTMLElement, label: string, value: string, icon: ChartOptionIcon, onClick: (anchor: HTMLElement) => void, disabled = false, disabledReason?: string): void {
     const row = parent.createEl("button", {
-      cls: `db-chart-options-row db-chart-options-popover-entry${disabled ? " is-disabled" : ""}`,
+      cls: `obnotion-chart-options-row obnotion-chart-options-popover-entry${disabled ? " is-disabled" : ""}`,
       attr: { type: "button" },
     });
     applyDisabledReason(row, label, disabled, disabledReason);
     this.renderOptionIcon(row, icon);
-    const text = row.createDiv({ cls: "db-chart-options-row-text" });
-    text.createSpan({ cls: "db-chart-options-label", text: label });
-    if (value) text.createSpan({ cls: "db-chart-options-value", text: value });
+    const text = row.createDiv({ cls: "obnotion-chart-options-row-text" });
+    text.createSpan({ cls: "obnotion-chart-options-label", text: label });
+    if (value) text.createSpan({ cls: "obnotion-chart-options-value", text: value });
     if (disabled) this.renderDisabledReason(text, disabledReason);
-    setIcon(row.createSpan({ cls: "db-chart-options-chevron" }), "chevron-right");
+    setIcon(row.createSpan({ cls: "obnotion-chart-options-chevron" }), "chevron-right");
     row.disabled = disabled;
     row.onclick = () => onClick(row);
   }
 
   private renderOptionIcon(parent: HTMLElement, icon: ChartOptionIcon): HTMLElement {
-    const wrap = parent.hasClass("db-dropdown-field-icon") ? parent : parent.createSpan({ cls: "db-chart-options-row-icon" });
+    const wrap = parent.hasClass("obnotion-dropdown-field-icon") ? parent : parent.createSpan({ cls: "obnotion-chart-options-row-icon" });
     if (icon.startsWith("chart:")) {
-      wrap.createSpan({ cls: `db-chart-custom-icon db-chart-icon-${icon.slice("chart:".length)}` });
+      wrap.createSpan({ cls: `obnotion-chart-custom-icon obnotion-chart-icon-${icon.slice("chart:".length)}` });
     } else if (icon.startsWith("property:")) {
       renderDropdownPropertyTypeIcon(wrap, icon);
     } else {
@@ -1022,7 +1022,7 @@ export class ChartToolbarRenderer {
 
   private renderDisabledReason(parent: HTMLElement, disabledReason?: string, hidden = false): void {
     if (!disabledReason) return;
-    parent.createSpan({ cls: `db-chart-options-disabled-reason${hidden ? " is-hidden" : ""}`, text: disabledReason });
+    parent.createSpan({ cls: `obnotion-chart-options-disabled-reason${hidden ? " is-hidden" : ""}`, text: disabledReason });
   }
 
   private openChildPopover(
@@ -1033,7 +1033,7 @@ export class ChartToolbarRenderer {
     size: ChildPopoverSizeOptions = {},
   ): void {
     this.closeChildPopover();
-    const panel = containerEl.createDiv({ cls: `db-chart-options-popover db-chart-subpopover ${cls}` });
+    const panel = containerEl.createDiv({ cls: `obnotion-chart-options-popover obnotion-chart-subpopover ${cls}` });
     this.childPopover = panel;
     render(panel);
     this.positionChildPopover(panel, anchor, containerEl, size);
@@ -1110,12 +1110,12 @@ export class ChartToolbarRenderer {
   }
 
   private isInsideChartDropdownPopover(target: Node | null): boolean {
-    return isHTMLElement(target) && target.closest(".db-chart-dropdown-popover") != null;
+    return isHTMLElement(target) && target.closest(".obnotion-chart-dropdown-popover") != null;
   }
 
   private isInsideChartPopoverSurface(target: EventTarget | null): boolean {
     if (!isHTMLElement(target)) return false;
-    return target.closest(".db-chart-options-popover, .db-chart-dropdown-popover") != null;
+    return target.closest(".obnotion-chart-options-popover, .obnotion-chart-dropdown-popover") != null;
   }
 
   private closeChildPopover(): void {
@@ -1131,14 +1131,14 @@ export class ChartToolbarRenderer {
 
   private syncCumulativeSwitch(section: HTMLElement, config: ViewConfig): void {
     const row = section.querySelector<HTMLElement>("[data-chart-switch='cumulative']");
-    const input = row?.querySelector<HTMLInputElement>("input.db-toggle-switch");
+    const input = row?.querySelector<HTMLInputElement>("input.obnotion-toggle-switch");
     if (!row || !input) return;
     const supported = isChartCumulativeSupported(config);
     if (!supported) config.chartCumulative = false;
     input.checked = config.chartCumulative === true && supported;
     input.disabled = !supported;
     row.toggleClass("is-disabled", !supported);
-    const reason = row.querySelector<HTMLElement>(".db-chart-options-disabled-reason");
+    const reason = row.querySelector<HTMLElement>(".obnotion-chart-options-disabled-reason");
     if (reason) reason.toggleClass("is-hidden", supported);
   }
 }

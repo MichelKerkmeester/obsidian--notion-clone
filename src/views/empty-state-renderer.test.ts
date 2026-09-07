@@ -154,13 +154,13 @@ describe("EmptyStateRenderer", () => {
       actions: [{ label: "Clear search", primary: true, onClick: () => {} }],
     }) as unknown as FakeElement;
 
-    const icon = elementWithClass(card, "db-empty-card-icon");
+    const icon = elementWithClass(card, "obnotion-empty-card-icon");
     expect(icon?.getAttribute("aria-hidden")).toBe("true");
-    const title = elementWithClass(card, "db-empty-card-title");
+    const title = elementWithClass(card, "obnotion-empty-card-title");
     expect(title?.tagName).toBe("h3");
-    const body = elementWithClass(card, "db-empty-card-message");
+    const body = elementWithClass(card, "obnotion-empty-card-message");
     expect(body?.tagName).toBe("p");
-    const action = elementWithClass(card, "db-empty-action");
+    const action = elementWithClass(card, "obnotion-empty-action");
     expect(action?.classes.has("mod-cta")).toBe(true);
     expect(action?.getAttribute("aria-label")).toBe("Clear search");
   });
@@ -172,7 +172,7 @@ describe("EmptyStateRenderer", () => {
       reason: "search-empty",
       actions: [{ label: "Clear search", primary: true, onClick: () => { calls += 1; } }],
     }) as unknown as FakeElement;
-    const button = elementWithClass(card, "db-empty-action");
+    const button = elementWithClass(card, "obnotion-empty-action");
     expect(button?.getAttribute("type")).toBe("button");
     button?.onclick?.();
     expect(calls).toBe(1);
@@ -187,7 +187,7 @@ describe("EmptyStateRenderer", () => {
       onCreateDb: () => {},
       onSelectPreset: (preset) => { selected.push(preset.id); },
     });
-    const presetGrid = elementWithClass(root, "db-empty-preset-grid");
+    const presetGrid = elementWithClass(root, "obnotion-empty-preset-grid");
     expect(presetGrid?.children).toHaveLength(4);
     expect(presetGrid?.children[0]?.getAttribute("aria-label")).toBeNull();
     expect(STARTER_PRESETS[0].name).toBe("Tasks");
@@ -207,7 +207,7 @@ describe("EmptyStateRenderer", () => {
     });
     expect(row.tagName).toBe("tr");
     expect(row.children[0]?.getAttribute("colspan")).toBe("5");
-    expect(elementWithClass(row as unknown as FakeElement, "db-empty-card")?.classes.has("is-compact")).toBe(true);
+    expect(elementWithClass(row as unknown as FakeElement, "obnotion-empty-card")?.classes.has("is-compact")).toBe(true);
   });
 
   it("renders compact card without action button when actions are undefined or stripped for deduplication", () => {
@@ -216,7 +216,7 @@ describe("EmptyStateRenderer", () => {
       reason: "filter-empty",
       actions: undefined,
     });
-    const actionButton = elementWithClass(row as unknown as FakeElement, "db-empty-action");
+    const actionButton = elementWithClass(row as unknown as FakeElement, "obnotion-empty-action");
     expect(actionButton).toBeUndefined();
   });
 
@@ -229,7 +229,7 @@ describe("EmptyStateRenderer", () => {
       reason,
       actions: [{ label: "Open view settings", icon: "settings", onClick: () => {} }],
     }) as unknown as FakeElement;
-    expect(chip.classes.has("db-inline-chip")).toBe(true);
+    expect(chip.classes.has("obnotion-inline-chip")).toBe(true);
     expect(chip.getAttribute("data-empty-reason")).toBe(reason);
     expect(chip.getAttribute("aria-live")).toBe("polite");
     expect((chip.children[0] as FakeElement | undefined)?.icon).toBe("alert-triangle");

@@ -275,11 +275,11 @@ describe("owned menu — submenu handle", () => {
     }) as unknown as MockElement;
     parent.showAt({ x: 0, y: 0 });
 
-    expect(body.children.filter((el) => el.hasClass("db-owned-menu")).length).toBe(1);
+    expect(body.children.filter((el) => el.hasClass("obnotion-owned-menu")).length).toBe(1);
 
     row.dispatch("click");
 
-    const menus = body.children.filter((el) => el.hasClass("db-owned-menu"));
+    const menus = body.children.filter((el) => el.hasClass("obnotion-owned-menu"));
     expect(menus.length).toBe(2);
     expect(row.hasClass("is-submenu-open")).toBe(true);
     expect(row.getAttribute("aria-expanded")).toBe("true");
@@ -299,7 +299,7 @@ describe("owned menu — submenu handle", () => {
 
       row.dispatch("keydown", { key });
 
-      const menus = mock.body.children.filter((el) => el.hasClass("db-owned-menu"));
+      const menus = mock.body.children.filter((el) => el.hasClass("obnotion-owned-menu"));
       expect(menus.length, `key=${key}`).toBe(2);
     }
   });
@@ -315,7 +315,7 @@ describe("owned menu — submenu handle", () => {
     }) as unknown as MockElement;
     hoverMenu.showAt({ x: 0, y: 0 });
     hoverRow.dispatch("pointerenter", { pointerType: "mouse" });
-    expect(hoverCapable.body.children.filter((el) => el.hasClass("db-owned-menu")).length).toBe(2);
+    expect(hoverCapable.body.children.filter((el) => el.hasClass("obnotion-owned-menu")).length).toBe(2);
 
     const coarse = createMockDoc({ hoverCapable: false });
     const coarseMenu = createOwnedMenu(coarse.doc);
@@ -326,7 +326,7 @@ describe("owned menu — submenu handle", () => {
     }) as unknown as MockElement;
     coarseMenu.showAt({ x: 0, y: 0 });
     coarseRow.dispatch("pointerenter", { pointerType: "touch" });
-    expect(coarse.body.children.filter((el) => el.hasClass("db-owned-menu")).length).toBe(1);
+    expect(coarse.body.children.filter((el) => el.hasClass("obnotion-owned-menu")).length).toBe(1);
   });
 
   it("closes only the innermost menu on Escape, leaving the parent open", async () => {
@@ -339,15 +339,15 @@ describe("owned menu — submenu handle", () => {
     }) as unknown as MockElement;
     parent.showAt({ x: 0, y: 0 });
     row.dispatch("click");
-    expect(body.children.filter((el) => el.hasClass("db-owned-menu")).length).toBe(2);
+    expect(body.children.filter((el) => el.hasClass("obnotion-owned-menu")).length).toBe(2);
 
     dispatchDocument("keydown", { key: "Escape" });
-    expect(body.children.filter((el) => el.hasClass("db-owned-menu")).length).toBe(1);
+    expect(body.children.filter((el) => el.hasClass("obnotion-owned-menu")).length).toBe(1);
     expect(row.hasClass("is-submenu-open")).toBe(false);
-    expect(body.children.some((el) => el.hasClass("db-owned-menu"))).toBe(true);
+    expect(body.children.some((el) => el.hasClass("obnotion-owned-menu"))).toBe(true);
 
     dispatchDocument("keydown", { key: "Escape" });
-    expect(body.children.filter((el) => el.hasClass("db-owned-menu")).length).toBe(0);
+    expect(body.children.filter((el) => el.hasClass("obnotion-owned-menu")).length).toBe(0);
   });
 
   it("dismisses only the child on an outside pointerdown, leaving the parent for a second press", async () => {
@@ -360,14 +360,14 @@ describe("owned menu — submenu handle", () => {
     }) as unknown as MockElement;
     parent.showAt({ x: 0, y: 0 });
     row.dispatch("click");
-    expect(body.children.filter((el) => el.hasClass("db-owned-menu")).length).toBe(2);
+    expect(body.children.filter((el) => el.hasClass("obnotion-owned-menu")).length).toBe(2);
 
     const outside = new MockElement("div");
     dispatchDocument("pointerdown", { target: outside });
-    expect(body.children.filter((el) => el.hasClass("db-owned-menu")).length).toBe(1);
+    expect(body.children.filter((el) => el.hasClass("obnotion-owned-menu")).length).toBe(1);
 
     dispatchDocument("pointerdown", { target: outside });
-    expect(body.children.filter((el) => el.hasClass("db-owned-menu")).length).toBe(0);
+    expect(body.children.filter((el) => el.hasClass("obnotion-owned-menu")).length).toBe(0);
   });
 });
 
@@ -379,7 +379,7 @@ describe("owned menu — never-empty fallback", () => {
     const menu = createOwnedMenu(doc);
     menu.showAt({ x: 0, y: 0 });
 
-    const rows = body.querySelectorAll<MockElement>(".db-menu-item");
+    const rows = body.querySelectorAll<MockElement>(".obnotion-menu-item");
     expect(rows.length).toBe(1);
     expect(rows[0].hasAttribute("disabled")).toBe(true);
   });
@@ -392,7 +392,7 @@ describe("owned menu — never-empty fallback", () => {
     menu.addRow({ label: "Only action" });
     menu.showAt({ x: 0, y: 0 });
 
-    const rows = body.querySelectorAll<MockElement>(".db-menu-item");
+    const rows = body.querySelectorAll<MockElement>(".obnotion-menu-item");
     expect(rows.length).toBe(1);
     expect(rows[0].hasAttribute("disabled")).toBe(false);
   });
@@ -421,7 +421,7 @@ describe("owned menu — a row's own handler runs before the menu closes", () =>
     row.dispatch("click");
 
     expect(order).toEqual(["onClick", "close"]);
-    expect(body.children.filter((el) => el.hasClass("db-owned-menu")).length).toBe(0);
+    expect(body.children.filter((el) => el.hasClass("obnotion-owned-menu")).length).toBe(0);
     // Focus lands on the trigger only after the handler has run, which is what a caller opening its
     // own surface has to close ahead of.
     expect(activeElementRef.value).toBe(trigger);

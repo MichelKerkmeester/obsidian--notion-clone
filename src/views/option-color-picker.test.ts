@@ -7,8 +7,8 @@
 // test.ts` uses to drive `openDropdownPopover` — `MockElement` reimplements just enough of the
 // Obsidian DOM helper surface to open the picker and read its rows back, without a mounted view.
 //
-// The row-count case is the load-bearing one: sixteen `.db-dropdown-option` rows, zero
-// `.db-color-picker-swatch` elements — the negative half is asserted explicitly rather than
+// The row-count case is the load-bearing one: sixteen `.obnotion-dropdown-option` rows, zero
+// `.obnotion-color-picker-swatch` elements — the negative half is asserted explicitly rather than
 // merely absent from the count, so a regression that renamed the class instead of removing it
 // still fails.
 
@@ -313,11 +313,11 @@ describe("option colour picker — labelled list", () => {
 
     openOptionColorPicker(anchor, "blue", () => {});
 
-    const popup = body.querySelector<MockElement>(".db-color-picker-popup")!;
+    const popup = body.querySelector<MockElement>(".obnotion-color-picker-popup")!;
     expect(popup).not.toBeNull();
     // The negative half: a class rename rather than a removal would still leave this at 0.
-    expect(popup.querySelectorAll(".db-color-picker-swatch").length).toBe(0);
-    const rows = popup.querySelectorAll<MockElement>(".db-dropdown-option");
+    expect(popup.querySelectorAll(".obnotion-color-picker-swatch").length).toBe(0);
+    const rows = popup.querySelectorAll<MockElement>(".obnotion-dropdown-option");
     expect(rows.length).toBe(OPTION_COLORS.length);
     expect(rows.length).toBe(16);
   });
@@ -330,13 +330,13 @@ describe("option colour picker — labelled list", () => {
 
     openOptionColorPicker(anchor, "green", () => {});
 
-    const popup = body.querySelector<MockElement>(".db-color-picker-popup")!;
-    const rows = popup.querySelectorAll<MockElement>(".db-dropdown-option");
+    const popup = body.querySelector<MockElement>(".obnotion-color-picker-popup")!;
+    const rows = popup.querySelectorAll<MockElement>(".obnotion-dropdown-option");
     for (const [index, row] of rows.entries()) {
       const color = OPTION_COLORS[index];
-      const dot = row.querySelector<MockElement>(".db-color-picker-row-dot")!;
-      expect(dot.hasClass(`db-option-color-${color}`)).toBe(true);
-      const label = row.querySelector<MockElement>(".db-dropdown-option-label")!;
+      const dot = row.querySelector<MockElement>(".obnotion-color-picker-row-dot")!;
+      expect(dot.hasClass(`obnotion-option-color-${color}`)).toBe(true);
+      const label = row.querySelector<MockElement>(".obnotion-dropdown-option-label")!;
       // The visible name, not the raw enum value, reaches the row.
       expect(label.getAttribute("data-text")).not.toBe(color);
       const isSelected = color === "green";
@@ -344,7 +344,7 @@ describe("option colour picker — labelled list", () => {
       expect(row.getAttribute("aria-selected")).toBe(isSelected ? "true" : "false");
       // The check is the row's own last child — the same trailing position the check flip
       // gives the dropdown's own rows.
-      expect(row.children[row.children.length - 1].hasClass("db-dropdown-option-check")).toBe(true);
+      expect(row.children[row.children.length - 1].hasClass("obnotion-dropdown-option-check")).toBe(true);
     }
   });
 
@@ -356,8 +356,8 @@ describe("option colour picker — labelled list", () => {
 
     openOptionColorPicker(anchor, "gray", () => {});
 
-    const popup = body.querySelector<MockElement>(".db-color-picker-popup")!;
-    const labels = popup.querySelectorAll<MockElement>(".db-dropdown-option-label")
+    const popup = body.querySelector<MockElement>(".obnotion-color-picker-popup")!;
+    const labels = popup.querySelectorAll<MockElement>(".obnotion-dropdown-option-label")
       .map((el) => el.getAttribute("data-text"));
     expect(labels.length).toBe(16);
     for (const [index, text] of labels.entries()) {
@@ -374,8 +374,8 @@ describe("option colour picker — labelled list", () => {
 
     openOptionColorPicker(anchor, "blue", () => {});
 
-    const popup = body.querySelector<MockElement>(".db-color-picker-popup")!;
-    for (const row of popup.querySelectorAll<MockElement>(".db-dropdown-option")) {
+    const popup = body.querySelector<MockElement>(".obnotion-color-picker-popup")!;
+    for (const row of popup.querySelectorAll<MockElement>(".obnotion-dropdown-option")) {
       expect(row.getAttribute("title")).toBeNull();
     }
   });
@@ -388,12 +388,12 @@ describe("option colour picker — labelled list", () => {
     const picked: string[] = [];
 
     openOptionColorPicker(anchor, "blue", (color) => { picked.push(color); });
-    const popup = body.querySelector<MockElement>(".db-color-picker-popup")!;
-    const rows = popup.querySelectorAll<MockElement>(".db-dropdown-option");
+    const popup = body.querySelector<MockElement>(".obnotion-color-picker-popup")!;
+    const rows = popup.querySelectorAll<MockElement>(".obnotion-dropdown-option");
     rows[3].dispatch("click");
 
     expect(picked).toEqual([OPTION_COLORS[3]]);
-    expect(body.querySelector(".db-color-picker-popup")).toBeNull();
+    expect(body.querySelector(".obnotion-color-picker-popup")).toBeNull();
   });
 
   it("moves the highlight by index with ArrowDown/ArrowUp/Home/End — the family's list model, not a grid", async () => {
@@ -403,8 +403,8 @@ describe("option colour picker — labelled list", () => {
     (anchor as unknown as MockElement).ownerDocument = doc;
 
     openOptionColorPicker(anchor, "gray", () => {});
-    const popup = body.querySelector<MockElement>(".db-color-picker-popup")!;
-    const rows = popup.querySelectorAll<MockElement>(".db-dropdown-option");
+    const popup = body.querySelector<MockElement>(".obnotion-color-picker-popup")!;
+    const rows = popup.querySelectorAll<MockElement>(".obnotion-dropdown-option");
 
     popup.dispatch("keydown", { key: "ArrowDown", target: rows[0] });
     expect(activeElementRef.value).toBe(rows[1] as unknown as MockElement);
@@ -434,10 +434,10 @@ describe("option colour picker — phone sheet", () => {
 
     openOptionColorPicker(anchor, "rose", () => {}, "Color");
 
-    const popup = body.querySelector<MockElement>(".db-color-picker-popup")!;
-    expect(popup.querySelector(".db-panel-title")).not.toBeNull();
-    expect(popup.querySelector(".db-sheet-close")).not.toBeNull();
-    const rows = popup.querySelectorAll<MockElement>(".db-dropdown-option");
+    const popup = body.querySelector<MockElement>(".obnotion-color-picker-popup")!;
+    expect(popup.querySelector(".obnotion-panel-title")).not.toBeNull();
+    expect(popup.querySelector(".obnotion-sheet-close")).not.toBeNull();
+    const rows = popup.querySelectorAll<MockElement>(".obnotion-dropdown-option");
     expect(rows.length).toBe(16);
     const currentRow = rows[OPTION_COLORS.indexOf("rose")];
     // The `requestAnimationFrame` mock above runs its callback synchronously, so the initial

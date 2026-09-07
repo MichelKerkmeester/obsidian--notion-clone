@@ -20,7 +20,7 @@ import { t } from "../../i18n";
 import { createDropdownField } from "../dropdown-field";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "../property-type-icon";
 import { createCheckbox } from "../checkbox";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
@@ -91,11 +91,11 @@ export class BaseImportConfirmModal extends DbModal {
     super.onOpen();
     const { contentEl } = this;
     contentEl.empty();
-    contentEl.addClass("note-database-modal");
+    contentEl.addClass("obnotion-modal");
     contentEl.createEl("h3", { text: this.titleText });
     contentEl.createEl("p", {
       text: this.descText,
-      cls: "db-modal-help",
+      cls: "obnotion-modal-help",
     });
 
     this.initializeColumnSelection();
@@ -132,7 +132,7 @@ export class BaseImportConfirmModal extends DbModal {
         label: t("baseImport.inferredType"),
         options: BaseImportConfirmModal.TYPES.map((type) => ({ value: type, text: typeLabels[type], icon: getPropertyDropdownIcon(type) })),
         value: col.type,
-        className: "db-modal-dropdown db-base-import-type-dropdown",
+        className: "obnotion-modal-dropdown obnotion-base-import-type-dropdown",
         hideLabel: true,
         renderIcon: renderDropdownPropertyTypeIcon,
         onChange: (value) => {
@@ -144,7 +144,7 @@ export class BaseImportConfirmModal extends DbModal {
       checkTd.addClass("base-import-check-cell");
       const checkbox = createCheckbox(checkTd, {
         role: "field",
-        cls: "db-modal-checkbox base-import-include-checkbox",
+        cls: "obnotion-modal-checkbox base-import-include-checkbox",
         attr: { "aria-label": t("baseImport.include") },
       });
       checkbox.checked = this.selectedColumnKeys.has(col.key);
@@ -190,7 +190,7 @@ export class BaseImportConfirmModal extends DbModal {
   private renderHeaderSelectionCheckbox(parent: HTMLElement): void {
     const checkbox = createCheckbox(parent, {
       role: "field",
-      cls: "db-modal-checkbox base-import-include-checkbox",
+      cls: "obnotion-modal-checkbox base-import-include-checkbox",
       attr: { "aria-label": t("baseImport.include") },
     });
     this.headerSelectionCheckbox = checkbox;

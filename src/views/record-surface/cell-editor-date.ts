@@ -80,13 +80,13 @@ export function openDateEditor(
   session?: CellEditSession,
   initialDraft?: string,
 ): void {
-  const rawContainer = td.closest(".note-database-container");
+  const rawContainer = td.closest(".obnotion-container");
   const container = isHTMLElement(rawContainer) ? rawContainer : null;
   const isMobile = isTouchDevice(container || td);
   const host = isMobile ? null : (container || window.activeDocument.body);
 
   ctx.getActiveTextEditClose()?.();
-  td.addClass("db-cell-editing");
+  td.addClass("obnotion-cell-editing");
   // Claimed for the editor's whole life, matching `openSingleLineEditor`'s identical pair: without
   // it a phone's selection pill stays docked in the band this popover's mobile Save/Cancel row
   // occupies, and the two are drawn on top of each other.
@@ -112,46 +112,46 @@ export function openDateEditor(
   let removeMobileViewportListeners = () => undefined;
 
   if (isMobile) {
-    editScrollContainer = td.closest(".note-database-container")
+    editScrollContainer = td.closest(".obnotion-container")
       || td.closest(".markdown-preview-view")
       || window.activeDocument.body;
 
-    popover = editScrollContainer.createDiv({ cls: "db-cell-edit-popover is-mobile is-inline-overlay db-date-edit-popover" });
+    popover = editScrollContainer.createDiv({ cls: "obnotion-cell-edit-popover is-mobile is-inline-overlay obnotion-date-edit-popover" });
 
     const containerRect = editScrollContainer.getBoundingClientRect();
     const tdRect = bulkAnchorRect(session) ?? td.getBoundingClientRect();
     const scrollTop = editScrollContainer.scrollTop || 0;
     const relativeTop = tdRect.top - containerRect.top + scrollTop;
 
-    popover.setCssProps({ position: "absolute", left: "0", right: "0", top: `${relativeTop + tdRect.height + 2}px`, "z-index": "var(--db-layer-popover, 100)" });
+    popover.setCssProps({ position: "absolute", left: "0", right: "0", top: `${relativeTop + tdRect.height + 2}px`, "z-index": "var(--obnotion-layer-popover, 100)" });
 
     closeBtn = popover.createEl("button", {
-      cls: "db-cell-edit-close",
+      cls: "obnotion-cell-edit-close",
       attr: { type: "button", title: t("common.cancel"), "aria-label": t("common.cancel") },
     });
     setIcon(closeBtn, "x");
   } else {
-    popover = (host as HTMLElement).createDiv({ cls: "db-cell-edit-popover db-date-edit-popover" });
+    popover = (host as HTMLElement).createDiv({ cls: "obnotion-cell-edit-popover obnotion-date-edit-popover" });
   }
   if (includeTime) popover.addClass("is-datetime");
-  popover.dataset.noteDatabaseRowPath = row.file.path;
-  popover.dataset.noteDatabaseColumnKey = col.key;
-  popover.dataset.noteDatabaseEditorKind = "date";
+  popover.dataset.obnotionRowPath = row.file.path;
+  popover.dataset.obnotionColumnKey = col.key;
+  popover.dataset.obnotionEditorKind = "date";
 
-  const segments = popover.createDiv({ cls: "db-date-segments" });
-  const yearInp = segments.createEl("input", { cls: "db-date-seg", attr: { maxlength: "4", placeholder: "YYYY" } });
-  segments.createSpan({ cls: "db-date-sep", text: "-" });
-  const monthInp = segments.createEl("input", { cls: "db-date-seg", attr: { maxlength: "2", placeholder: "MM" } });
-  segments.createSpan({ cls: "db-date-sep", text: "-" });
-  const dayInp = segments.createEl("input", { cls: "db-date-seg", attr: { maxlength: "2", placeholder: "DD" } });
+  const segments = popover.createDiv({ cls: "obnotion-date-segments" });
+  const yearInp = segments.createEl("input", { cls: "obnotion-date-seg", attr: { maxlength: "4", placeholder: "YYYY" } });
+  segments.createSpan({ cls: "obnotion-date-sep", text: "-" });
+  const monthInp = segments.createEl("input", { cls: "obnotion-date-seg", attr: { maxlength: "2", placeholder: "MM" } });
+  segments.createSpan({ cls: "obnotion-date-sep", text: "-" });
+  const dayInp = segments.createEl("input", { cls: "obnotion-date-seg", attr: { maxlength: "2", placeholder: "DD" } });
   let hourInp: HTMLInputElement | undefined;
   let minuteInp: HTMLInputElement | undefined;
   if (includeTime) {
-    segments.createSpan({ cls: "db-date-sep db-time-sep", text: " " });
-    hourInp = segments.createEl("input", { cls: "db-date-seg db-time-seg db-hour-seg", attr: { maxlength: "2", placeholder: "HH" } });
-    segments.createSpan({ cls: "db-date-sep db-time-colon", text: ":" });
+    segments.createSpan({ cls: "obnotion-date-sep obnotion-time-sep", text: " " });
+    hourInp = segments.createEl("input", { cls: "obnotion-date-seg obnotion-time-seg obnotion-hour-seg", attr: { maxlength: "2", placeholder: "HH" } });
+    segments.createSpan({ cls: "obnotion-date-sep obnotion-time-colon", text: ":" });
     const minutePlaceholder = "m" + "m";
-    minuteInp = segments.createEl("input", { cls: "db-date-seg db-time-seg db-minute-seg", attr: { maxlength: "2", placeholder: minutePlaceholder } });
+    minuteInp = segments.createEl("input", { cls: "obnotion-date-seg obnotion-time-seg obnotion-minute-seg", attr: { maxlength: "2", placeholder: minutePlaceholder } });
   }
 
   // The End date row. Bulk (session) edits keep the single-date form only — a range across a
@@ -167,18 +167,18 @@ export function openDateEditor(
     const rawEndValue = row.frontmatter[endKey];
     const endParts = parseDateTimeParts(rawEndValue);
     const endFallbackParts = safeString(rawEndValue).substring(0, 10).split("-");
-    const endRow = popover.createDiv({ cls: "db-date-end-row" });
-    endRow.createSpan({ cls: "db-date-end-label", text: t("date.endDate") });
-    const endSegments = endRow.createDiv({ cls: "db-date-segments" });
-    endYearInp = endSegments.createEl("input", { cls: "db-date-seg", attr: { maxlength: "4", placeholder: "YYYY" } });
-    endSegments.createSpan({ cls: "db-date-sep", text: "-" });
-    endMonthInp = endSegments.createEl("input", { cls: "db-date-seg", attr: { maxlength: "2", placeholder: "MM" } });
-    endSegments.createSpan({ cls: "db-date-sep", text: "-" });
-    endDayInp = endSegments.createEl("input", { cls: "db-date-seg", attr: { maxlength: "2", placeholder: "DD" } });
+    const endRow = popover.createDiv({ cls: "obnotion-date-end-row" });
+    endRow.createSpan({ cls: "obnotion-date-end-label", text: t("date.endDate") });
+    const endSegments = endRow.createDiv({ cls: "obnotion-date-segments" });
+    endYearInp = endSegments.createEl("input", { cls: "obnotion-date-seg", attr: { maxlength: "4", placeholder: "YYYY" } });
+    endSegments.createSpan({ cls: "obnotion-date-sep", text: "-" });
+    endMonthInp = endSegments.createEl("input", { cls: "obnotion-date-seg", attr: { maxlength: "2", placeholder: "MM" } });
+    endSegments.createSpan({ cls: "obnotion-date-sep", text: "-" });
+    endDayInp = endSegments.createEl("input", { cls: "obnotion-date-seg", attr: { maxlength: "2", placeholder: "DD" } });
     endYearInp.value = endParts ? String(endParts.year) : (endFallbackParts[0] || "");
     endMonthInp.value = endParts?.month || endFallbackParts[1] || "";
     endDayInp.value = endParts?.day || endFallbackParts[2] || "";
-    endRow.createDiv({ cls: "db-date-end-hint", text: t("date.endBeforeStartHint") });
+    endRow.createDiv({ cls: "obnotion-date-end-hint", text: t("date.endBeforeStartHint") });
   }
 
   const inputs = [yearInp, monthInp, dayInp, hourInp, minuteInp].filter((input): input is HTMLInputElement => Boolean(input));
@@ -198,7 +198,7 @@ export function openDateEditor(
     closed = true;
     removeMobileViewportListeners();
     popover.remove();
-    td.removeClass("db-cell-editing");
+    td.removeClass("obnotion-cell-editing");
     claimBottomDock(td.ownerDocument, "cell-editor", false);
     window.activeDocument.removeEventListener("mousedown", onOutside, true);
     window.activeDocument.removeEventListener("keydown", onDocumentKeydown, true);
@@ -294,9 +294,9 @@ export function openDateEditor(
       ? (includeTime ? `${dateParts.dateKey}T${dateParts.time || "00:00"}` : dateParts.dateKey)
       : safeString(currentValue).substring(0, includeTime ? 16 : 10).replace(" ", "T");
     if (newVal !== currentNormalized) {
-      popover.addClass("db-editor-saving");
+      popover.addClass("obnotion-editor-saving");
       const success = await ctx.commitEditedValue(row, col, newVal, session, "replace");
-      popover.removeClass("db-editor-saving");
+      popover.removeClass("obnotion-editor-saving");
       if (!success) {
         committed = false;
         renderDraftFailure(popover, yearInp, () => { void commit(intent); }, () => cancel(intent));
@@ -317,9 +317,9 @@ export function openDateEditor(
   ctx.setActiveInlineEditorCancel(cancel);
 
   if (isMobile) {
-    const actions = popover.createDiv({ cls: "db-cell-edit-mobile-actions" });
-    const done = actions.createEl("button", { cls: "db-cell-edit-mobile-done", text: t("common.save"), attr: { type: "button" } });
-    const cancelButton = actions.createEl("button", { cls: "db-cell-edit-mobile-cancel", text: t("common.cancel"), attr: { type: "button" } });
+    const actions = popover.createDiv({ cls: "obnotion-cell-edit-mobile-actions" });
+    const done = actions.createEl("button", { cls: "obnotion-cell-edit-mobile-done", text: t("common.save"), attr: { type: "button" } });
+    const cancelButton = actions.createEl("button", { cls: "obnotion-cell-edit-mobile-cancel", text: t("common.cancel"), attr: { type: "button" } });
     done.onmousedown = (event) => event.preventDefault();
     cancelButton.onmousedown = (event) => event.preventDefault();
     done.onclick = () => { void commit(); };
@@ -448,7 +448,7 @@ export function openDateEditor(
     yearKeys: new Set(),
   };
 
-  const datePicker = popover.createDiv({ cls: "db-calendar-mini-popover db-cell-date-picker" });
+  const datePicker = popover.createDiv({ cls: "obnotion-calendar-mini-popover obnotion-cell-date-picker" });
   datePicker.addEventListener("mousedown", (event) => {
     event.preventDefault();
   });

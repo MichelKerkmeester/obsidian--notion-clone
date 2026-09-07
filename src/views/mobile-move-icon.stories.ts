@@ -31,7 +31,7 @@ type Story = StoryObj;
 export const Default: Story = {
   render: () => {
     const host = document.createElement("div");
-    host.className = "db-story-row";
+    host.className = "obnotion-story-row";
     const icon = document.createElement("div");
     renderMobileMoveIcon(icon);
     host.appendChild(icon);

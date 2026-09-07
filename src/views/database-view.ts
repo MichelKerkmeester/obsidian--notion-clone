@@ -243,23 +243,27 @@ function propertyTypeChangeTargetsEntry(entry: { sourcePath: string; config: Dat
   return (entry.config.id || entry.sourcePath) === change.databaseId;
 }
 
-export const DATABASE_VIEW_TYPE = "note-database-view";
+export const DATABASE_VIEW_TYPE = "obnotion-view";
+// Permanent alias, never removed: a `workspace.json` written before the rename stores this exact
+// string for an open database tab, and it is never removed. `main.ts` registers both types
+// against the same view factory so either one resolves.
+export const LEGACY_DATABASE_VIEW_TYPE = "note-database-view";
 
 /**
- * Safely retrieve the NoteDatabasePlugin instance from the Obsidian app registry.
+ * Safely retrieve the ObnotionPlugin instance from the Obsidian app registry.
  * Returns null if the plugin is not loaded (e.g. during hot-reload or tests).
  */
-interface NoteDatabasePluginLike {
+interface ObnotionPluginLike {
   settings: import("../data/types").PluginSettings;
   saveSettings(): Promise<void>;
   openDatabaseFileView?(file: TFile): Promise<void>;
 }
 
-export function getNoteDatabasePlugin(app: App): NoteDatabasePluginLike | null {
+export function getObnotionPlugin(app: App): ObnotionPluginLike | null {
   const plugins = (app as unknown as { plugins?: { plugins?: Record<string, unknown> } }).plugins;
-  const instance = plugins?.plugins?.["note-database"];
-  if (instance && typeof (instance as NoteDatabasePluginLike).saveSettings === "function") {
-    return instance as NoteDatabasePluginLike;
+  const instance = plugins?.plugins?.["obnotion"];
+  if (instance && typeof (instance as ObnotionPluginLike).saveSettings === "function") {
+    return instance as ObnotionPluginLike;
   }
   return null;
 }
@@ -888,7 +892,7 @@ export class DatabaseView extends FileView {
       },
       onStateChange: (state) => this.updateRefreshIndicator(state),
       onError: (error) => {
-        console.error("Note Database: refresh failed", error);
+        console.error("Obnotion: refresh failed", error);
         new Notice(t("errors.refreshFailed"));
       },
       // active-leaf-change and window focus poke immediately. A hidden tab only
@@ -995,19 +999,19 @@ export class DatabaseView extends FileView {
     if (this.cellRenderer?.hasActiveEditor(this.containerEl_)) return true;
     return Boolean(this.containerEl_?.ownerDocument.querySelector(
       ".modal:not(.is-hidden), .menu, .suggestion-container, " +
-      ".db-cell-edit-popover:not(.is-hidden), .db-cell-option-popover:not(.is-hidden), " +
-      ".db-dropdown-popover:not(.is-hidden), .db-view-config-panel:not(.is-hidden), " +
-      ".db-group-popover:not(.is-hidden), .db-export-popover:not(.is-hidden), " +
-      ".db-title-actions-popover:not(.is-hidden), .db-color-picker-popup:not(.is-hidden), " +
-      ".db-record-detail-panel:not(.is-hidden), .db-record-peek-panel:not(.is-hidden), " +
-      ".db-filter-panel:not(.is-hidden), " +
-      ".db-sort-panel:not(.is-hidden), .db-column-manager:not(.is-hidden), " +
-      ".db-group-order-popover:not(.is-hidden), .db-chart-options-popover:not(.is-hidden), " +
-      ".db-calendar-options-popover:not(.is-hidden), .db-calendar-timeline-options-popover:not(.is-hidden), " +
-      ".db-database-popover:not(.is-hidden), .db-view-tab-popover:not(.is-hidden), " +
-      ".db-add-view-popover:not(.is-hidden), .db-board-drag-group-preview, " +
-      ".db-icon-picker-popover:not(.is-hidden), .db-calendar-day-popover:not(.is-hidden), " +
-      ".db-calendar-week-allday-popover:not(.is-hidden), .db-calendar-mini-popover:not(.is-hidden)"
+      ".obnotion-cell-edit-popover:not(.is-hidden), .obnotion-cell-option-popover:not(.is-hidden), " +
+      ".obnotion-dropdown-popover:not(.is-hidden), .obnotion-view-config-panel:not(.is-hidden), " +
+      ".obnotion-group-popover:not(.is-hidden), .obnotion-export-popover:not(.is-hidden), " +
+      ".obnotion-title-actions-popover:not(.is-hidden), .obnotion-color-picker-popup:not(.is-hidden), " +
+      ".obnotion-record-detail-panel:not(.is-hidden), .obnotion-record-peek-panel:not(.is-hidden), " +
+      ".obnotion-filter-panel:not(.is-hidden), " +
+      ".obnotion-sort-panel:not(.is-hidden), .obnotion-column-manager:not(.is-hidden), " +
+      ".obnotion-group-order-popover:not(.is-hidden), .obnotion-chart-options-popover:not(.is-hidden), " +
+      ".obnotion-calendar-options-popover:not(.is-hidden), .obnotion-calendar-timeline-options-popover:not(.is-hidden), " +
+      ".obnotion-database-popover:not(.is-hidden), .obnotion-view-tab-popover:not(.is-hidden), " +
+      ".obnotion-add-view-popover:not(.is-hidden), .obnotion-board-drag-group-preview, " +
+      ".obnotion-icon-picker-popover:not(.is-hidden), .obnotion-calendar-day-popover:not(.is-hidden), " +
+      ".obnotion-calendar-week-allday-popover:not(.is-hidden), .obnotion-calendar-mini-popover:not(.is-hidden)"
     ));
   }
 
@@ -1041,9 +1045,9 @@ export class DatabaseView extends FileView {
     closeTableRecordPeek();
     const doc = this.containerEl_?.ownerDocument || window.activeDocument;
     doc.querySelectorAll(
-      ".db-color-picker-popup:not(.is-hidden), .db-icon-picker-popover:not(.is-hidden), " +
-      ".db-dropdown-popover:not(.is-hidden), .db-calendar-day-popover:not(.is-hidden), " +
-      ".db-calendar-week-allday-popover:not(.is-hidden), .db-calendar-mini-popover:not(.is-hidden), " +
+      ".obnotion-color-picker-popup:not(.is-hidden), .obnotion-icon-picker-popover:not(.is-hidden), " +
+      ".obnotion-dropdown-popover:not(.is-hidden), .obnotion-calendar-day-popover:not(.is-hidden), " +
+      ".obnotion-calendar-week-allday-popover:not(.is-hidden), .obnotion-calendar-mini-popover:not(.is-hidden), " +
       ".menu"
     ).forEach((element) => element.remove());
   }
@@ -1156,9 +1160,9 @@ export class DatabaseView extends FileView {
 
     // Metadata JSON
     zipEntries.push({
-      path: `${baseName}/note-database.json`,
+      path: `${baseName}/obnotion.json`,
       content: JSON.stringify({
-        format: "note-database-csv-markdown",
+        format: "obnotion-csv-markdown",
         version: 3,
         exportedAt: new Date().toISOString(),
         includeFrontmatter: options.includeFrontmatter,
@@ -1354,18 +1358,18 @@ export class DatabaseView extends FileView {
 
   async onOpen(): Promise<void> {
     this.containerEl_ = this.contentEl;
-    this.containerEl_.addClass("note-database-container");
+    this.containerEl_.addClass("obnotion-container");
     this.interactionScopes.register(this.interactionScopeId, this.containerEl_, {
       portalSelectors: [
-        ".db-column-menu-subpopover",
-        ".db-icon-picker-popover",
-        ".db-color-picker-popup",
-        ".db-calendar-search-results-popover",
-        ".db-cell-edit-popover",
-        ".db-cell-option-popover",
-        ".db-cell-date-popover",
-        ".db-mobile-bottom-sheet",
-        ".db-mobile-column-width-panel",
+        ".obnotion-column-menu-subpopover",
+        ".obnotion-icon-picker-popover",
+        ".obnotion-color-picker-popup",
+        ".obnotion-calendar-search-results-popover",
+        ".obnotion-cell-edit-popover",
+        ".obnotion-cell-option-popover",
+        ".obnotion-cell-date-popover",
+        ".obnotion-mobile-bottom-sheet",
+        ".obnotion-mobile-column-width-panel",
       ],
     });
     this.touchLayoutState = undefined;
@@ -1384,7 +1388,7 @@ export class DatabaseView extends FileView {
     });
     installNoteHoverPreview(this, this.containerEl_, this.app, this.leaf);
     this.undoActionEl = this.addAction("undo-2", t("toolbar.undo"), () => { void this.undoLastEdit(); });
-    this.undoActionEl.addClass("db-view-undo-action");
+    this.undoActionEl.addClass("obnotion-view-undo-action");
     window.requestAnimationFrame(() => this.positionUndoActionNearNavigation());
     this.updateUndoAction();
     this.registerDomEvent(this.containerEl_, "scroll", () => this.markContainerScrolling());
@@ -1427,7 +1431,7 @@ export class DatabaseView extends FileView {
       this.renderToolbar();
       this.render();
     } catch (e) {
-      console.error("Note Database: render error", e);
+      console.error("Obnotion: render error", e);
       const errMsg = e instanceof Error ? e.message : String(e);
       const stack = e instanceof Error ? e.stack : "";
       const configInfo = this.viewEntries.length > 0
@@ -1444,7 +1448,7 @@ export class DatabaseView extends FileView {
           onClick: () => this.refresh(),
         }],
       });
-      const details = card.createEl("details", { cls: "db-error-display" });
+      const details = card.createEl("details", { cls: "obnotion-error-display" });
       details.createEl("summary", { text: t("emptyState.technicalDetails") });
       details.createEl("pre", { text: stack ? stack.substring(0, 500) : t("errors.noStack") });
     }
@@ -1505,8 +1509,8 @@ export class DatabaseView extends FileView {
   }
 
   private attachDescriptionScrollState(descEl: HTMLElement): void {
-    if (descEl.dataset.noteDatabaseDescriptionScroll === "true") return;
-    descEl.dataset.noteDatabaseDescriptionScroll = "true";
+    if (descEl.dataset.obnotionDescriptionScroll === "true") return;
+    descEl.dataset.obnotionDescriptionScroll = "true";
     this.registerDomEvent(descEl, "scroll", () => {
       descEl.addClass("is-scrolling");
       const existing = this.descriptionScrollTimers.get(descEl);
@@ -1522,7 +1526,7 @@ export class DatabaseView extends FileView {
   /** In default width, blank side gutters are outside the scroll container; forward wheel input there. */
   private forwardOuterWheelScroll(event: WheelEvent): void {
     if (!this.containerEl_?.isConnected) return;
-    if (!this.containerEl_.hasClass("db-width-default")) return;
+    if (!this.containerEl_.hasClass("obnotion-width-default")) return;
     const target = event.target as Node | null;
     if (target && this.containerEl_.contains(target)) return;
     if (!event.deltaY && !event.deltaX) return;
@@ -1553,8 +1557,8 @@ export class DatabaseView extends FileView {
   }
 
   private focusSearch(): boolean {
-    const control = this.containerEl_?.querySelector<HTMLElement>(".db-search-control");
-    const searchInput = control?.querySelector<HTMLInputElement>(".db-search-input");
+    const control = this.containerEl_?.querySelector<HTMLElement>(".obnotion-search-control");
+    const searchInput = control?.querySelector<HTMLInputElement>(".obnotion-search-input");
     if (!control || !searchInput) return false;
     control.addClass("is-active");
     window.requestAnimationFrame(() => {
@@ -1598,7 +1602,7 @@ export class DatabaseView extends FileView {
   private handleTableFillShortcut(event: KeyboardEvent, direction: "down" | "right"): boolean {
     const active = window.activeDocument.activeElement;
     const isEditing = isHTMLElement(active)
-      && active.closest("input, textarea, select, .db-cell-editing, .modal") != null;
+      && active.closest("input, textarea, select, .obnotion-cell-editing, .modal") != null;
     if (!this.isInteractionScopeActive(event) || isEditing || !this.cellSelection || this.getConfig()?.viewType !== "table") {
       return true;
     }
@@ -1611,7 +1615,7 @@ export class DatabaseView extends FileView {
   private handleHistoryShortcut(event: KeyboardEvent, direction: "undo" | "redo"): boolean {
     const active = window.activeDocument.activeElement;
     const isEditing = isHTMLElement(active)
-      && active.closest("input, textarea, select, .db-cell-editing, .db-cell-popover-editing, .modal") != null;
+      && active.closest("input, textarea, select, .obnotion-cell-editing, .obnotion-cell-popover-editing, .modal") != null;
     if (!this.isInteractionScopeActive(event) || isEditing) return true;
     event.preventDefault();
     event.stopPropagation();
@@ -1625,9 +1629,9 @@ export class DatabaseView extends FileView {
   ): boolean {
     const active = window.activeDocument.activeElement;
     const isEditing = isHTMLElement(active)
-      && active.closest("input, textarea, select, .db-cell-editing, .db-cell-popover-editing, .modal") != null;
+      && active.closest("input, textarea, select, .obnotion-cell-editing, .obnotion-cell-popover-editing, .modal") != null;
     const hasCellPopover = this.containerEl_?.querySelector(
-      ".db-cell-option-popover, .db-cell-date-popover, .db-color-picker-popup"
+      ".obnotion-cell-option-popover, .obnotion-cell-date-popover, .obnotion-color-picker-popup"
     ) != null;
     if (!this.isInteractionScopeActive(event) || isEditing || hasCellPopover || !this.cellSelection || this.getConfig()?.viewType !== "table") {
       return true;
@@ -1646,11 +1650,11 @@ export class DatabaseView extends FileView {
     if (!this.containerEl_?.isConnected) return;
     const target = event.target;
     const eventTarget = isHTMLElement(target) ? target : null;
-    const isEditing = eventTarget?.closest("input, textarea, select, .db-cell-editing, .modal") != null;
+    const isEditing = eventTarget?.closest("input, textarea, select, .obnotion-cell-editing, .modal") != null;
     if (!this.isInteractionScopeActive(event)) return;
     if (isEditing) return;
     // 字段编辑弹出层（选项/日期/颜色选择器）打开时，方向键/Enter 由弹出层自己的 keydown 处理，不导航单元格
-    if (this.containerEl_?.querySelector(".db-cell-option-popover, .db-cell-date-popover, .db-color-picker-popup")) return;
+    if (this.containerEl_?.querySelector(".obnotion-cell-option-popover, .obnotion-cell-date-popover, .obnotion-color-picker-popup")) return;
     if (event.key === "Escape" && this.cellSelection) {
       event.preventDefault();
       if (this.pendingCellCut) {
@@ -1860,10 +1864,10 @@ export class DatabaseView extends FileView {
     const context = this.getCellSelectionFocusContext();
     if (!context || !this.containerEl_) return false;
     const header = this.containerEl_.querySelector<HTMLElement>(
-      `th[data-note-database-column-key="${CSS.escape(context.col.key)}"]`
+      `th[data-obnotion-column-key="${CSS.escape(context.col.key)}"]`
     );
     if (!header) return false;
-    const anchor = header.querySelector<HTMLElement>(".db-column-menu-trigger") || header;
+    const anchor = header.querySelector<HTMLElement>(".obnotion-column-menu-trigger") || header;
     const event = new MouseEvent("contextmenu", { bubbles: true, cancelable: true });
     this.showContextMenu(event, context.col, anchor, {
       onClose: () => this.restoreCellFocusAfterKeyboardMenu(),
@@ -1899,7 +1903,7 @@ export class DatabaseView extends FileView {
     if (!this.cellSelection || !this.containerEl_) return;
     const active = this.getCellSelectionActiveAddress();
     const td = this.containerEl_.querySelector<HTMLElement>(
-      `td[data-note-database-row-path="${CSS.escape(active.rowPath)}"][data-note-database-column-key="${CSS.escape(active.colKey)}"]`
+      `td[data-obnotion-row-path="${CSS.escape(active.rowPath)}"][data-obnotion-column-key="${CSS.escape(active.colKey)}"]`
     );
     const rowHeight = td?.closest("tr")?.getBoundingClientRect().height || 32;
     const pageRows = Math.max(1, Math.floor(this.containerEl_.clientHeight / rowHeight) - 2);
@@ -1923,13 +1927,13 @@ export class DatabaseView extends FileView {
     const context = this.getCellSelectionFocusContext();
     if (!context) return;
     const { td, row, col } = context;
-    if (td.classList.contains("db-cell-editing")) return;
+    if (td.classList.contains("obnotion-cell-editing")) return;
     this.cellRenderer.startEdit(td, row, col, undefined, undefined, undefined, checkboxFinishIntent);
   }
 
   private startReplaceEditAtCellSelectionFocus(initialText: string): boolean {
     const context = this.getCellSelectionFocusContext();
-    if (!context || context.td.classList.contains("db-cell-editing")) return false;
+    if (!context || context.td.classList.contains("obnotion-cell-editing")) return false;
     return this.cellRenderer.startReplaceEdit(context.td, context.row, context.col, initialText);
   }
 
@@ -1950,13 +1954,13 @@ export class DatabaseView extends FileView {
     const { rowPath, colKey } = this.getCellSelectionActiveAddress();
     const active = window.activeDocument.activeElement;
     const focusedCell = isHTMLElement(active)
-      ? active.closest<HTMLElement>("td[data-note-database-row-path][data-note-database-column-key]")
+      ? active.closest<HTMLElement>("td[data-obnotion-row-path][data-obnotion-column-key]")
       : null;
-    const td = focusedCell?.dataset.noteDatabaseRowPath === rowPath
-      && focusedCell.dataset.noteDatabaseColumnKey === colKey
+    const td = focusedCell?.dataset.obnotionRowPath === rowPath
+      && focusedCell.dataset.obnotionColumnKey === colKey
       ? focusedCell
       : this.containerEl_.querySelector<HTMLElement>(
-          `td[data-note-database-row-path="${CSS.escape(rowPath)}"][data-note-database-column-key="${CSS.escape(colKey)}"]`
+          `td[data-obnotion-row-path="${CSS.escape(rowPath)}"][data-obnotion-column-key="${CSS.escape(colKey)}"]`
         );
     if (!td) return null;
     const row = this.rows.find((r) => r.file.path === rowPath);
@@ -1981,7 +1985,7 @@ export class DatabaseView extends FileView {
   private scrollCellIntoView(addr: CellAddress): void {
     if (!this.containerEl_) return;
     const td = this.containerEl_.querySelector<HTMLElement>(
-      `td[data-note-database-row-path="${CSS.escape(addr.rowPath)}"][data-note-database-column-key="${CSS.escape(addr.colKey)}"]`
+      `td[data-obnotion-row-path="${CSS.escape(addr.rowPath)}"][data-obnotion-column-key="${CSS.escape(addr.colKey)}"]`
     );
     if (!td) return;
     td.tabIndex = 0;
@@ -2056,13 +2060,13 @@ export class DatabaseView extends FileView {
   protected get hideDatabaseActions(): boolean { return false; }
 
   private saveDescriptionScrollPosition(): number {
-    return this.containerEl_?.querySelector<HTMLElement>(":scope > .db-header .db-description")?.scrollTop || 0;
+    return this.containerEl_?.querySelector<HTMLElement>(":scope > .obnotion-header .obnotion-description")?.scrollTop || 0;
   }
 
   private restoreDescriptionScrollPosition(scrollTop: number): void {
     if (scrollTop <= 0) return;
     const restore = () => {
-      const desc = this.containerEl_?.querySelector<HTMLElement>(":scope > .db-header .db-description");
+      const desc = this.containerEl_?.querySelector<HTMLElement>(":scope > .obnotion-header .obnotion-description");
       if (desc) desc.scrollTop = scrollTop;
     };
     restore();
@@ -2100,7 +2104,7 @@ export class DatabaseView extends FileView {
       renameDatabase: (name) => this.renameDatabase(name),
       updateDatabaseDescription: (description) => this.updateDatabaseDescription(description),
       editDatabaseIcon: (anchor) => this.openDatabaseIconPicker(anchor),
-      showDatabaseIcon: getNoteDatabasePlugin(this.app)?.settings.showDatabaseIcon !== false,
+      showDatabaseIcon: getObnotionPlugin(this.app)?.settings.showDatabaseIcon !== false,
       toggleDatabaseIcon: () => { void this.toggleDatabaseIcon(); },
       setViewType: (value, viewIndex) => this.setViewType(value, viewIndex),
       setDisplayWidth: (value) => this.setDisplayWidth(value),
@@ -2313,15 +2317,15 @@ export class DatabaseView extends FileView {
 
   private renderDatabaseCover(): void {
     if (!this.containerEl_) return;
-    this.containerEl_.querySelector(":scope > .db-database-cover")?.remove();
+    this.containerEl_.querySelector(":scope > .obnotion-database-cover")?.remove();
     const database = this.getActiveDb();
     const path = database?.coverImage?.trim();
     if (!path) return;
     const file = this.app.vault.getAbstractFileByPath(normalizePath(path));
     if (!(file instanceof TFile)) return;
-    const header = this.containerEl_.querySelector(":scope > .db-header");
+    const header = this.containerEl_.querySelector(":scope > .obnotion-header");
     const cover = this.containerEl_.createDiv({
-      cls: "db-database-cover",
+      cls: "obnotion-database-cover",
       attr: { title: file.path },
     });
     const image = cover.createEl("img", {
@@ -2370,7 +2374,7 @@ export class DatabaseView extends FileView {
     cover.onpointerup = finishReposition;
     cover.onpointercancel = finishReposition;
     const change = cover.createEl("button", {
-      cls: "db-database-cover-change db-icon-only-button",
+      cls: "obnotion-database-cover-change obnotion-icon-only-button",
       attr: { type: "button", "aria-label": t("databaseCover.choose") },
     });
     setIcon(change, "image-up");
@@ -2396,9 +2400,9 @@ export class DatabaseView extends FileView {
     if (!this.containerEl_) return;
     const update = () => {
       if (!this.containerEl_) return;
-      const header = this.containerEl_.querySelector(":scope > .db-header");
+      const header = this.containerEl_.querySelector(":scope > .obnotion-header");
       const height = header ? Math.ceil(header.getBoundingClientRect().height) : 96;
-      this.containerEl_.style.setProperty("--db-table-header-top", `${height}px`);
+      this.containerEl_.style.setProperty("--obnotion-table-header-top", `${height}px`);
     };
     update();
     window.requestAnimationFrame(update);
@@ -2535,12 +2539,12 @@ export class DatabaseView extends FileView {
     const interaction = this.captureInteractionSnapshot();
     const activeElement = this.containerEl_.ownerDocument.activeElement as HTMLElement | null;
     const focusedCell = activeElement?.closest<HTMLElement>(
-      "td[data-note-database-row-path][data-note-database-column-key]"
+      "td[data-obnotion-row-path][data-obnotion-column-key]"
     );
     const focusedAddress = focusedCell
       ? {
-          rowPath: focusedCell.getAttribute("data-note-database-row-path") || "",
-          colKey: focusedCell.getAttribute("data-note-database-column-key") || "",
+          rowPath: focusedCell.getAttribute("data-obnotion-row-path") || "",
+          colKey: focusedCell.getAttribute("data-obnotion-column-key") || "",
         }
       : null;
 
@@ -2589,9 +2593,9 @@ export class DatabaseView extends FileView {
       computedSync.scope
     );
     this.renderSummary(config);
-    const summary = this.containerEl_.querySelector<HTMLElement>(":scope > .db-summary");
+    const summary = this.containerEl_.querySelector<HTMLElement>(":scope > .obnotion-summary");
     const tableRoot = this.containerEl_.querySelector<HTMLElement>(
-      ":scope > .db-table-wrap, :scope > .db-grouped-table"
+      ":scope > .obnotion-table-wrap, :scope > .obnotion-grouped-table"
     );
     if (summary && tableRoot) this.containerEl_.insertBefore(summary, tableRoot);
     this.renderSelectionStatusBar();
@@ -2613,10 +2617,10 @@ export class DatabaseView extends FileView {
     if (this.containerEl_) {
       this.containerEl_.setAttr("aria-busy", state.staleWhileRefreshing ? "true" : "false");
       this.containerEl_.querySelectorAll<HTMLElement>(
-        ".db-table-wrap, .db-grouped-table, .db-board, .db-gallery, .db-gallery-grouped, .db-list, .db-list-grouped, .db-chart, .db-calendar, .db-timeline"
+        ".obnotion-table-wrap, .obnotion-grouped-table, .obnotion-board, .obnotion-gallery, .obnotion-gallery-grouped, .obnotion-list, .obnotion-list-grouped, .obnotion-chart, .obnotion-calendar, .obnotion-timeline"
       ).forEach((root) => root.setAttr("aria-busy", state.staleWhileRefreshing ? "true" : "false"));
     }
-    const button = this.containerEl_?.querySelector<HTMLElement>(".db-database-refresh-button");
+    const button = this.containerEl_?.querySelector<HTMLElement>(".obnotion-database-refresh-button");
     if (!button) return;
     this.toolbarRenderer.updateDatabaseRefreshButton(button, {
       pendingRefreshCount: state.pendingCount,
@@ -2714,7 +2718,7 @@ export class DatabaseView extends FileView {
     if (!view?.id || !db?.id) return;
     const plan = planGalleryMigration(view);
     if (!plan) return;
-    const plugin = getNoteDatabasePlugin(this.app);
+    const plugin = getObnotionPlugin(this.app);
     const alreadyNotified = plugin?.settings.galleryMigrationNotices?.includes(db.id) ?? false;
     if (!alreadyNotified) {
       if (this.migratedGalleryViews.has(db.id)) return;
@@ -2737,7 +2741,7 @@ export class DatabaseView extends FileView {
       }
     } catch (err) {
       if (view.viewType === "board") view.viewType = "gallery";
-      console.error("Note Database: failed to migrate a gallery view to a board", err);
+      console.error("Obnotion: failed to migrate a gallery view to a board", err);
     }
   }
 
@@ -2764,7 +2768,7 @@ export class DatabaseView extends FileView {
     if (!view?.id || !db?.id) return;
     const plan = planListMigration(view);
     if (!plan) return;
-    const plugin = getNoteDatabasePlugin(this.app);
+    const plugin = getObnotionPlugin(this.app);
     const alreadyNotified = plugin?.settings.listMigrationNotices?.includes(db.id) ?? false;
     if (!alreadyNotified) {
       if (this.migratedListViews.has(db.id)) return;
@@ -2782,7 +2786,7 @@ export class DatabaseView extends FileView {
       }
     } catch (err) {
       if (view.viewType === "table") view.viewType = "list";
-      console.error("Note Database: failed to migrate a list view to a table", err);
+      console.error("Obnotion: failed to migrate a list view to a table", err);
     }
   }
 
@@ -2795,21 +2799,21 @@ export class DatabaseView extends FileView {
   private applyDisplayWidth(): void {
     if (!this.containerEl_) return;
     if (!this.hasActiveDatabase()) {
-      this.containerEl_.toggleClass("db-width-wide", false);
-      this.containerEl_.toggleClass("db-width-default", true);
+      this.containerEl_.toggleClass("obnotion-width-wide", false);
+      this.containerEl_.toggleClass("obnotion-width-default", true);
       return;
     }
     const config = this.getConfig();
     const width = config?.displayWidth;
     const wide = width === "wide";
-    this.containerEl_.toggleClass("db-width-wide", wide);
-    this.containerEl_.toggleClass("db-width-default", !wide);
+    this.containerEl_.toggleClass("obnotion-width-wide", wide);
+    this.containerEl_.toggleClass("obnotion-width-default", !wide);
   }
 
   private applyViewTypeClass(viewType: DatabaseViewType): void {
     if (!this.containerEl_) return;
     for (const type of ["table", "board", "gallery", "list", "chart", "calendar", "timeline"] as const) {
-      this.containerEl_.toggleClass(`db-view-${type}`, viewType === type);
+      this.containerEl_.toggleClass(`obnotion-view-${type}`, viewType === type);
     }
   }
 
@@ -2831,7 +2835,7 @@ export class DatabaseView extends FileView {
       }
     }
     // Update group button active state without full toolbar re-render
-    const groupBtn = this.containerEl_?.querySelector(".db-group-btn");
+    const groupBtn = this.containerEl_?.querySelector(".obnotion-group-btn");
     if (groupBtn) groupBtn.toggleClass("is-active", !!value);
     this.pendingUndoLabel = t("undo.groupConfig");
     this.viewStateStore.persist(config, this.vs());
@@ -2957,7 +2961,7 @@ export class DatabaseView extends FileView {
       return;
     }
     this.closeHeaderPopovers();
-    const activeAnchor = this.containerEl_.querySelector<HTMLElement>(".db-chart-options-toolbar-btn") || anchorEl;
+    const activeAnchor = this.containerEl_.querySelector<HTMLElement>(".obnotion-chart-options-toolbar-btn") || anchorEl;
     this.chartToolbarRenderer.togglePopover(this.containerEl_, activeAnchor, config, {
       onChange: (label) => {
         this.pendingUndoLabel = label || t("undo.chartConfig");
@@ -3017,14 +3021,14 @@ export class DatabaseView extends FileView {
       anchorEl: this.headerPopoverAnchorEl,
       close: () => this.closeHeaderPopovers(),
       isActiveTarget: (target) => target instanceof HTMLElement &&
-        Boolean(target.closest(".db-color-picker-popup, .db-dropdown-popover, .db-date-value-popover")),
+        Boolean(target.closest(".obnotion-color-picker-popup, .obnotion-dropdown-popover, .obnotion-date-value-popover")),
     });
   }
 
   private handleOutsideClick(event: MouseEvent): void {
     const target = event.target as HTMLElement | null;
     if (!target) return;
-    if (target.closest(".db-color-picker-popup")) return;
+    if (target.closest(".obnotion-color-picker-popup")) return;
     if (this.cellSelection && this.shouldClearCellSelectionFromPointer(target)) {
       this.clearCellSelection();
     }
@@ -3034,7 +3038,7 @@ export class DatabaseView extends FileView {
     // thumb on the sheet's own control as a press somewhere else and takes the surface down on the
     // `mousedown` a tap produces — before its `click` can reach the control.
     if (this.containerEl_?.contains(target) || isInsideOpenSheet(target)) {
-      if (target.closest(".db-filter-panel, .db-sort-panel, .db-column-manager, .db-view-config-panel, .db-dropdown-popover, .db-date-value-popover, .db-toolbar, .db-header")) {
+      if (target.closest(".obnotion-filter-panel, .obnotion-sort-panel, .obnotion-column-manager, .obnotion-view-config-panel, .obnotion-dropdown-popover, .obnotion-date-value-popover, .obnotion-toolbar, .obnotion-header")) {
         return;
       }
     }
@@ -3052,9 +3056,9 @@ export class DatabaseView extends FileView {
     // moves, keeps it. The branch below already names every control that must not clear it.
     if (!this.containerEl_?.contains(target) && !isInsideOpenSheet(target)) return !target.closest(".modal, .menu");
     return !target.closest(
-      "td[data-note-database-row-path][data-note-database-column-key], " +
-      ".db-selection-status-bar, .db-cell-editing, input, textarea, select, button, a, " +
-      ".db-filter-panel, .db-sort-panel, .db-column-manager, .db-view-config-panel, .db-dropdown-popover, .db-date-value-popover, .db-group-order-popover, .menu"
+      "td[data-obnotion-row-path][data-obnotion-column-key], " +
+      ".obnotion-selection-status-bar, .obnotion-cell-editing, input, textarea, select, button, a, " +
+      ".obnotion-filter-panel, .obnotion-sort-panel, .obnotion-column-manager, .obnotion-view-config-panel, .obnotion-dropdown-popover, .obnotion-date-value-popover, .obnotion-group-order-popover, .menu"
     );
   }
 
@@ -3114,12 +3118,12 @@ export class DatabaseView extends FileView {
     if (this.activeHeaderPopover !== kind) return undefined;
     if (this.headerPopoverAnchorEl?.isConnected) return this.headerPopoverAnchorEl;
     const selector = kind === "filter"
-      ? ".db-filter-btn"
+      ? ".obnotion-filter-btn"
       : kind === "sort"
-        ? ".db-sort-btn"
+        ? ".obnotion-sort-btn"
         : kind === "view"
-          ? ".db-view-config-btn"
-          : ".db-col-manager-btn";
+          ? ".obnotion-view-config-btn"
+          : ".obnotion-col-manager-btn";
     return this.containerEl_?.querySelector(selector) as HTMLElement | undefined;
   }
 
@@ -3154,15 +3158,15 @@ export class DatabaseView extends FileView {
 
     this.closeGroupOrderPopover();
 
-    const triggerBtn = this.headerPopoverAnchorEl || this.containerEl_?.querySelector(".db-group-btn");
+    const triggerBtn = this.headerPopoverAnchorEl || this.containerEl_?.querySelector(".obnotion-group-btn");
     const host = this.containerEl_ || window.activeDocument.body;
     const anchorEl = isHTMLElement(triggerBtn) ? triggerBtn : undefined;
 
-    const popover = host.createDiv({ cls: "db-group-order-popover" });
+    const popover = host.createDiv({ cls: "obnotion-group-order-popover" });
     this.groupOrderPopover = popover;
     popover.createEl("h3", { text: t("modal.groupOrderTitle", { field: col?.label || field }) });
 
-    const list = popover.createDiv({ cls: "db-group-order-list" });
+    const list = popover.createDiv({ cls: "obnotion-group-order-list" });
     let draggedIndex: number | null = null;
     let dropLine: HTMLElement | null = null;
     let outsideTimer: number | undefined;
@@ -3190,8 +3194,8 @@ export class DatabaseView extends FileView {
     };
     const showDropLine = (event: DragEvent, targetIndex: number, row: HTMLElement) => {
       const insertIndex = getInsertIndex(event, targetIndex, row);
-      const rows = Array.from(list.querySelectorAll<HTMLElement>(".db-group-order-row"));
-      if (!dropLine) dropLine = createDiv({ cls: "db-group-order-drop-line" });
+      const rows = Array.from(list.querySelectorAll<HTMLElement>(".obnotion-group-order-row"));
+      if (!dropLine) dropLine = createDiv({ cls: "obnotion-group-order-drop-line" });
       const ref = rows[insertIndex] || null;
       if (ref) list.insertBefore(dropLine, ref);
       else list.appendChild(dropLine);
@@ -3201,7 +3205,7 @@ export class DatabaseView extends FileView {
       list.empty();
       dropLine = null;
       order.forEach((key, index) => {
-        const row = list.createDiv({ cls: "db-group-order-row" });
+        const row = list.createDiv({ cls: "obnotion-group-order-row" });
         row.draggable = true;
         row.ondragstart = (event) => {
           draggedIndex = index;
@@ -3237,12 +3241,12 @@ export class DatabaseView extends FileView {
           draggedIndex = null;
           clearDropLine();
           popover.classList.remove("is-dragging-order");
-          list.querySelectorAll(".db-group-order-row").forEach((r) => r.classList.remove("is-dragging"));
+          list.querySelectorAll(".obnotion-group-order-row").forEach((r) => r.classList.remove("is-dragging"));
         };
 
-        row.createSpan({ cls: "db-group-order-drag", text: "⋮⋮" });
-        row.createSpan({ cls: "db-group-order-name", text: formatGroupKeyDisplay(config, field, key) });
-        const moveControls = row.createSpan({ cls: "db-mobile-reorder-controls" });
+        row.createSpan({ cls: "obnotion-group-order-drag", text: "⋮⋮" });
+        row.createSpan({ cls: "obnotion-group-order-name", text: formatGroupKeyDisplay(config, field, key) });
+        const moveControls = row.createSpan({ cls: "obnotion-mobile-reorder-controls" });
         const upBtn = moveControls.createEl("button", {
           attr: { type: "button", title: t("menu.moveUp"), "aria-label": t("menu.moveUp") },
         });
@@ -3273,7 +3277,7 @@ export class DatabaseView extends FileView {
 
     if (defaultOrder.length > 0) {
       const resetBtn = popover.createEl("button", {
-        cls: "db-panel-button db-group-order-reset",
+        cls: "obnotion-panel-button obnotion-group-order-reset",
         text: t("modal.resetToOptionOrder"),
         attr: { type: "button" },
       });
@@ -3727,7 +3731,7 @@ export class DatabaseView extends FileView {
     // Move to plugin trash or system trash
     if (result.action === "plugin-trash") {
       // Store in plugin settings trashedDatabases
-      const plugin = getNoteDatabasePlugin(this.app);
+      const plugin = getObnotionPlugin(this.app);
       if (plugin) {
         if (!plugin.settings.trashedDatabases) plugin.settings.trashedDatabases = [];
         plugin.settings.trashedDatabases.push({
@@ -3737,7 +3741,7 @@ export class DatabaseView extends FileView {
         try {
           await plugin.saveSettings();
         } catch (e) {
-          console.error("Note Database: failed to save database trash settings", e);
+          console.error("Obnotion: failed to save database trash settings", e);
           new Notice(t("errors.updateFailed", { error: String(e) }));
         }
       }
@@ -3756,7 +3760,7 @@ export class DatabaseView extends FileView {
     if (!entry) return;
     const file = this.app.vault.getAbstractFileByPath(entry.sourcePath);
     if (file instanceof TFile) {
-      const plugin = getNoteDatabasePlugin(this.app);
+      const plugin = getObnotionPlugin(this.app);
       if (plugin?.openDatabaseFileView) {
         await plugin.openDatabaseFileView(file);
       } else {
@@ -3968,7 +3972,7 @@ export class DatabaseView extends FileView {
   }
 
   private openViewSettingsAfterMutation(): void {
-    const anchor = this.containerEl_?.querySelector<HTMLElement>(".db-view-config-btn");
+    const anchor = this.containerEl_?.querySelector<HTMLElement>(".obnotion-view-config-btn");
     if (anchor) this.toggleHeaderPopover("view", anchor);
   }
 
@@ -4010,7 +4014,7 @@ export class DatabaseView extends FileView {
     // Prefer the stable database id so the copied embed survives file moves/renames.
     const locator = entry.config.id ? `dbId: ${entry.config.id}` : `dbPath: ${entry.sourcePath}`;
     const lines = [
-      "```note-database",
+      "```obnotion",
       locator,
       `viewId: ${view.id || ""}`,
       "```",
@@ -4020,7 +4024,7 @@ export class DatabaseView extends FileView {
       await navigator.clipboard.writeText(code);
       new Notice(t("notice.copiedEmbedCode"));
     } catch (err) {
-      console.error("Note Database: failed to copy embed code", err);
+      console.error("Obnotion: failed to copy embed code", err);
       new Notice(t("errors.copyFailed", { error: String(err) }));
     }
   }
@@ -4046,7 +4050,7 @@ export class DatabaseView extends FileView {
   private rerenderToolbar(): void {
     if (!this.containerEl_) return;
     this.closeCalendarTimelineSearchResultsPanel();
-    const existing = this.containerEl_.querySelector(".db-header");
+    const existing = this.containerEl_.querySelector(".obnotion-header");
     if (existing) existing.remove();
     this.renderToolbar();
   }
@@ -4210,7 +4214,7 @@ export class DatabaseView extends FileView {
           try {
             await this.dataSource.trashNote(file, { sourceInstanceId: this.instanceId });
           } catch (rollbackErr) {
-            console.error("Note Database: failed to roll back created note after config save failure", rollbackErr);
+            console.error("Obnotion: failed to roll back created note after config save failure", rollbackErr);
           }
           throw err;
         }
@@ -4706,14 +4710,14 @@ export class DatabaseView extends FileView {
     const rowByPath = new Map(this.rows.map((row) => [row.file.path, row]));
     const seen = new Set<string>();
     const selectors = [
-      "tr[data-note-database-row-path]",
-      ".db-board-card[data-note-database-row-path]",
-      ".db-gallery-card[data-note-database-row-path]",
-      ".db-list-row[data-note-database-row-path]",
+      "tr[data-obnotion-row-path]",
+      ".obnotion-board-card[data-obnotion-row-path]",
+      ".obnotion-gallery-card[data-obnotion-row-path]",
+      ".obnotion-list-row[data-obnotion-row-path]",
     ];
     const rows: RowData[] = [];
     for (const element of Array.from(this.containerEl_.querySelectorAll<HTMLElement>(selectors.join(",")))) {
-      const path = element.dataset.noteDatabaseRowPath;
+      const path = element.dataset.obnotionRowPath;
       if (!path || seen.has(path)) continue;
       const row = rowByPath.get(path);
       if (!row) continue;
@@ -4795,12 +4799,12 @@ export class DatabaseView extends FileView {
     const activeAddress = this.cellSelection ? this.getCellSelectionActiveAddress() : null;
     const isFocusCell = activeAddress?.rowPath === address.rowPath
       && activeAddress.colKey === address.colKey;
-    td.toggleClass("db-cell-range-selected", this.isCellSelected(address.rowPath, address.colKey));
-    td.toggleClass("db-cell-focus", isFocusCell);
-    td.toggleClass("db-cell-cut-source", Boolean(this.pendingCellCut?.addressKeys.has(`${address.rowPath}\u0000${address.colKey}`)));
+    td.toggleClass("obnotion-cell-range-selected", this.isCellSelected(address.rowPath, address.colKey));
+    td.toggleClass("obnotion-cell-focus", isFocusCell);
+    td.toggleClass("obnotion-cell-cut-source", Boolean(this.pendingCellCut?.addressKeys.has(`${address.rowPath}\u0000${address.colKey}`)));
     td.tabIndex = -1;
     const hasGridTabStop = this.containerEl_?.querySelector(
-      'td[data-note-database-row-path][data-note-database-column-key][tabindex="0"]'
+      'td[data-obnotion-row-path][data-obnotion-column-key][tabindex="0"]'
     );
     td.tabIndex = isFocusCell || (!this.cellSelection && !hasGridTabStop) ? 0 : -1;
     const cellGesture = trackCellGesture(td);
@@ -4890,7 +4894,7 @@ export class DatabaseView extends FileView {
 
   private isInteractiveCellTarget(target: EventTarget | null): boolean {
     return isHTMLElement(target) &&
-      Boolean(target.closest("input, textarea, select, button, a, .db-cell-fill-handle, .db-cell-editing"));
+      Boolean(target.closest("input, textarea, select, button, a, .obnotion-cell-fill-handle, .obnotion-cell-editing"));
   }
 
   private isCellSelected(rowPath: string, colKey: string): boolean {
@@ -4931,8 +4935,8 @@ export class DatabaseView extends FileView {
     if (!this.containerEl_) return [];
     const paths: string[] = [];
     const seen = new Set<string>();
-    this.containerEl_.querySelectorAll<HTMLElement>(".db-table tbody tr[data-note-database-row-path]").forEach((rowEl) => {
-      const path = rowEl.dataset.noteDatabaseRowPath;
+    this.containerEl_.querySelectorAll<HTMLElement>(".obnotion-table tbody tr[data-obnotion-row-path]").forEach((rowEl) => {
+      const path = rowEl.dataset.obnotionRowPath;
       if (!path || seen.has(path)) return;
       seen.add(path);
       paths.push(path);
@@ -4942,25 +4946,25 @@ export class DatabaseView extends FileView {
 
   private getRenderedTableRowCreateContext(rowPath: string, anchor?: HTMLElement): RowCreateContext | undefined {
     if (!this.containerEl_) return undefined;
-    const anchoredRow = anchor?.closest<HTMLElement>("tr[data-note-database-row-path]");
+    const anchoredRow = anchor?.closest<HTMLElement>("tr[data-obnotion-row-path]");
     const active = window.activeDocument.activeElement;
     const focusedRow = isHTMLElement(active)
-      ? active.closest<HTMLElement>("tr[data-note-database-row-path]")
+      ? active.closest<HTMLElement>("tr[data-obnotion-row-path]")
       : null;
-    let rowEl = anchoredRow?.dataset.noteDatabaseRowPath === rowPath ? anchoredRow : null;
-    if (!rowEl && focusedRow?.dataset.noteDatabaseRowPath === rowPath) rowEl = focusedRow;
+    let rowEl = anchoredRow?.dataset.obnotionRowPath === rowPath ? anchoredRow : null;
+    if (!rowEl && focusedRow?.dataset.obnotionRowPath === rowPath) rowEl = focusedRow;
     rowEl ||= this.containerEl_.querySelector<HTMLElement>(
-      `.db-table tbody tr[data-note-database-row-path="${CSS.escape(rowPath)}"]`
+      `.obnotion-table tbody tr[data-obnotion-row-path="${CSS.escape(rowPath)}"]`
     );
     if (!rowEl) return undefined;
     const tbody = rowEl.closest("tbody");
     const visibleRows = tbody
-      ? Array.from(tbody.querySelectorAll<HTMLElement>("tr[data-note-database-row-path]"))
-          .map((element) => this.rows.find((row) => row.file.path === element.dataset.noteDatabaseRowPath))
+      ? Array.from(tbody.querySelectorAll<HTMLElement>("tr[data-obnotion-row-path]"))
+          .map((element) => this.rows.find((row) => row.file.path === element.dataset.obnotionRowPath))
           .filter((row): row is RowData => Boolean(row))
       : this.rows;
-    const groupField = rowEl.getAttribute("data-note-database-group-field");
-    const groupKey = rowEl.getAttribute("data-note-database-group-key");
+    const groupField = rowEl.getAttribute("data-obnotion-group-field");
+    const groupKey = rowEl.getAttribute("data-obnotion-group-key");
     return {
       visibleRows,
       groups: groupField != null && groupKey != null ? [{ field: groupField, key: groupKey }] : undefined,
@@ -4969,10 +4973,10 @@ export class DatabaseView extends FileView {
 
   private getRenderedTableColumnKeys(): string[] {
     if (!this.containerEl_) return [];
-    const firstRow = this.containerEl_.querySelector<HTMLElement>(".db-table tbody tr[data-note-database-row-path]");
+    const firstRow = this.containerEl_.querySelector<HTMLElement>(".obnotion-table tbody tr[data-obnotion-row-path]");
     if (!firstRow) return [];
-    return Array.from(firstRow.querySelectorAll<HTMLElement>("td[data-note-database-column-key]"))
-      .map((cell) => cell.dataset.noteDatabaseColumnKey)
+    return Array.from(firstRow.querySelectorAll<HTMLElement>("td[data-obnotion-column-key]"))
+      .map((cell) => cell.dataset.obnotionColumnKey)
       .filter((key): key is string => Boolean(key));
   }
 
@@ -4995,24 +4999,24 @@ export class DatabaseView extends FileView {
       ? activeAddress.rowPath + "\u0000" + activeAddress.colKey
       : null;
     const cells = Array.from(this.containerEl_.querySelectorAll<HTMLElement>(
-      "td[data-note-database-row-path][data-note-database-column-key]"
+      "td[data-obnotion-row-path][data-obnotion-column-key]"
     ));
     let foundFocus = false;
     cells.forEach((cell) => {
-      const rowPath = cell.dataset.noteDatabaseRowPath;
-      const colKey = cell.dataset.noteDatabaseColumnKey;
+      const rowPath = cell.dataset.obnotionRowPath;
+      const colKey = cell.dataset.obnotionColumnKey;
       const key = rowPath && colKey ? rowPath + "\u0000" + colKey : null;
       const isFocus = Boolean(key && key === focusKey);
       const rowIndex = rowPath ? rowPaths.indexOf(rowPath) : -1;
       const colIndex = colKey ? colKeys.indexOf(colKey) : -1;
       const isSelected = Boolean(key && selected.has(key));
-      cell.toggleClass("db-cell-range-selected", Boolean(key && selected.has(key)));
+      cell.toggleClass("obnotion-cell-range-selected", Boolean(key && selected.has(key)));
       cell.toggleClass("is-top-edge", isSelected && rowIndex === rowStart);
       cell.toggleClass("is-bottom-edge", isSelected && rowIndex === rowEnd);
       cell.toggleClass("is-left-edge", isSelected && colIndex === colStart);
       cell.toggleClass("is-right-edge", isSelected && colIndex === colEnd);
-      cell.toggleClass("db-cell-cut-source", Boolean(key && cutSources.has(key)));
-      cell.toggleClass("db-cell-focus", isFocus);
+      cell.toggleClass("obnotion-cell-cut-source", Boolean(key && cutSources.has(key)));
+      cell.toggleClass("obnotion-cell-focus", isFocus);
       cell.tabIndex = isFocus ? 0 : -1;
       if (isFocus) foundFocus = true;
     });
@@ -5101,29 +5105,29 @@ export class DatabaseView extends FileView {
   private updateToolbarIndicators(): void {
     if (!this.containerEl_) return;
     const state = this.vs();
-    const filterBtn = this.containerEl_.querySelector(".db-filter-btn");
+    const filterBtn = this.containerEl_.querySelector(".obnotion-filter-btn");
     if (isHTMLElement(filterBtn)) this.updateToolbarBadge(filterBtn, getEffectiveFilterRules(state.filters).length);
-    const sortBtn = this.containerEl_.querySelector(".db-sort-btn");
+    const sortBtn = this.containerEl_.querySelector(".obnotion-sort-btn");
     if (isHTMLElement(sortBtn)) {
       const count = state.sortRules.filter((rule) => rule.field && rule.direction).length ||
         (state.sortColumn ? 1 : 0);
       this.updateToolbarBadge(sortBtn, count);
     }
-    const colBtn = this.containerEl_.querySelector(".db-col-manager-btn");
+    const colBtn = this.containerEl_.querySelector(".obnotion-col-manager-btn");
     if (isHTMLElement(colBtn)) this.updateHiddenToolbarBadge(colBtn, state.hiddenColumns.size);
     this.renderActiveViewControls();
   }
 
   private updateToolbarBadge(button: HTMLElement, count: number): void {
-    button.querySelector(".db-toolbar-badge")?.remove();
+    button.querySelector(".obnotion-toolbar-badge")?.remove();
     if (count <= 0) return;
-    button.createSpan({ cls: "db-toolbar-badge", text: String(count) });
+    button.createSpan({ cls: "obnotion-toolbar-badge", text: String(count) });
   }
 
   private updateHiddenToolbarBadge(button: HTMLElement, count: number): void {
-    button.querySelector(".db-toolbar-badge")?.remove();
+    button.querySelector(".obnotion-toolbar-badge")?.remove();
     button.setAttribute("aria-label", count > 0 ? t("toolbar.propertiesHidden", { count }) : t("toolbar.properties"));
-    if (count > 0) button.createSpan({ cls: "db-toolbar-badge db-toolbar-badge-neutral", text: t("toolbar.hiddenCount", { count }) });
+    if (count > 0) button.createSpan({ cls: "obnotion-toolbar-badge obnotion-toolbar-badge-neutral", text: t("toolbar.hiddenCount", { count }) });
   }
 
   /** Render column management panel below the toolbar */
@@ -5239,11 +5243,11 @@ export class DatabaseView extends FileView {
   }
 
   private getRecentRecordIcons(): string[] {
-    return getNoteDatabasePlugin(this.app)?.settings.recentRecordIcons || [];
+    return getObnotionPlugin(this.app)?.settings.recentRecordIcons || [];
   }
 
   private async setRecentRecordIcons(recent: string[]): Promise<void> {
-    const plugin = getNoteDatabasePlugin(this.app);
+    const plugin = getObnotionPlugin(this.app);
     if (!plugin) return;
     plugin.settings.recentRecordIcons = recent;
     await plugin.saveSettings();
@@ -5290,7 +5294,7 @@ export class DatabaseView extends FileView {
   }
 
   private async toggleDatabaseIcon(): Promise<void> {
-    const plugin = getNoteDatabasePlugin(this.app);
+    const plugin = getObnotionPlugin(this.app);
     if (!plugin) return;
     plugin.settings.showDatabaseIcon = plugin.settings.showDatabaseIcon === false;
     await plugin.saveSettings();
@@ -5507,13 +5511,13 @@ export class DatabaseView extends FileView {
 
   private findRecordIconAnchor(row: RowData): HTMLElement | null {
     return this.containerEl_?.querySelector<HTMLElement>(
-      `[data-note-database-row-path="${CSS.escape(row.file.path)}"] .db-record-icon`
+      `[data-obnotion-row-path="${CSS.escape(row.file.path)}"] .obnotion-record-icon`
     ) || null;
   }
 
   private updateRecordIconDOM(row: RowData, config: ViewConfig): boolean {
     if (!this.containerEl_ || config.showRecordIcon !== true) return false;
-    const selector = `[data-note-database-row-path="${CSS.escape(row.file.path)}"] .db-record-icon`;
+    const selector = `[data-obnotion-row-path="${CSS.escape(row.file.path)}"] .obnotion-record-icon`;
     const currentIcons = Array.from(this.containerEl_.querySelectorAll<HTMLElement>(selector));
     if (currentIcons.length === 0) return false;
     for (const current of currentIcons) {
@@ -5530,8 +5534,8 @@ export class DatabaseView extends FileView {
 
   private isRowFieldRendered(row: RowData, col: ColumnDef): boolean {
     if (!this.containerEl_) return false;
-    const rowSelector = `[data-note-database-row-path="${CSS.escape(row.file.path)}"]`;
-    const fieldSelector = `[data-note-database-column-key="${CSS.escape(col.key)}"]`;
+    const rowSelector = `[data-obnotion-row-path="${CSS.escape(row.file.path)}"]`;
+    const fieldSelector = `[data-obnotion-column-key="${CSS.escape(col.key)}"]`;
     return Boolean(this.containerEl_.querySelector(
       `${rowSelector}${fieldSelector}, ${rowSelector} ${fieldSelector}`
     ));
@@ -5559,18 +5563,18 @@ export class DatabaseView extends FileView {
   private updateDatabaseChrome(): void {
     if (!this.containerEl_) return;
     const db = this.getActiveDb();
-    const heading = this.containerEl_.querySelector(":scope > .db-header .db-heading");
+    const heading = this.containerEl_.querySelector(":scope > .obnotion-header .obnotion-heading");
     if (heading) {
       const name = db?.name || t("common.untitledDatabase");
-      const headingText = heading.querySelector(".db-heading-text");
+      const headingText = heading.querySelector(".obnotion-heading-text");
       if (headingText) headingText.textContent = name;
       else heading.textContent = name;
       heading.setAttribute("title", name);
     }
-    const header = this.containerEl_.querySelector(":scope > .db-header");
+    const header = this.containerEl_.querySelector(":scope > .obnotion-header");
     if (!header) return;
-    const existing = header.querySelector<HTMLElement>(".db-description");
-    const desc = existing || header.createDiv({ cls: "db-description" });
+    const existing = header.querySelector<HTMLElement>(".obnotion-description");
+    const desc = existing || header.createDiv({ cls: "obnotion-description" });
     const description = db?.description || "";
     const placeholder = t("viewConfig.descriptionPlaceholder");
     if (!existing && heading?.parentElement?.nextSibling) header.insertBefore(desc, heading.parentElement.nextSibling);
@@ -5657,7 +5661,7 @@ export class DatabaseView extends FileView {
       database,
       databases,
       async (result) => this.applyRelationRollupConfigResult(col, database, databases, result),
-      getNoteDatabasePlugin(this.app)?.settings.showDatabaseIcon !== false,
+      getObnotionPlugin(this.app)?.settings.showDatabaseIcon !== false,
       (targetDatabaseId) => this.getRelationTargetChangeImpact(col, database, databases, targetDatabaseId),
       () => {
         if (!restoreFocusRow) return;
@@ -5897,7 +5901,7 @@ export class DatabaseView extends FileView {
     this.optionTransactionQueue = this.optionTransactionQueue
       .then(() => this.runCellOptionTransaction(row, col, transaction))
       .catch((err) => {
-        console.error("Note Database: failed to commit option transaction", err);
+        console.error("Obnotion: failed to commit option transaction", err);
         new Notice(t("errors.updateFailed", { error: String(err) }));
       });
     return this.optionTransactionQueue;
@@ -6373,7 +6377,7 @@ export class DatabaseView extends FileView {
       new Notice(t("notice.clearedComputedFrontmatter", { key: uniqueKeys.join(", "), count: changed }));
       await this.refreshAfterSave();
     } catch (err) {
-      console.error("Note Database: failed to clear computed frontmatter", err);
+      console.error("Obnotion: failed to clear computed frontmatter", err);
       new Notice(t("errors.updateFailed", { error: String(err) }));
     }
   }
@@ -6845,7 +6849,7 @@ export class DatabaseView extends FileView {
   }
 
   private reportConfigSaveFailure(err: unknown): void {
-    console.error("Note Database: failed to save view config", err);
+    console.error("Obnotion: failed to save view config", err);
     new Notice(t("errors.saveViewConfigFailed", { error: String(err) }));
   }
 
@@ -6974,7 +6978,7 @@ export class DatabaseView extends FileView {
     if (this.pendingConfigSave && this.pendingConfigSave.entry !== entry) {
       const pending = this.pendingConfigSave;
       void this.saveViewEntryConfig(pending.entry, pending.mutation, pending).catch((err) => {
-        console.error("Note Database: failed to save view config", err);
+        console.error("Obnotion: failed to save view config", err);
         new Notice(t("errors.saveViewConfigFailed", { error: String(err) }));
       });
       this.pendingConfigSave = null;
@@ -6995,7 +6999,7 @@ export class DatabaseView extends FileView {
       this.pendingConfigSave = null;
       if (!pending) return;
       this.saveViewEntryConfig(pending.entry, pending.mutation, pending).catch((err) => {
-        console.error("Note Database: failed to save view config", err);
+        console.error("Obnotion: failed to save view config", err);
         new Notice(t("errors.saveViewConfigFailed", { error: String(err) }));
       });
     }, 300);
@@ -7063,7 +7067,7 @@ export class DatabaseView extends FileView {
         const file = this.app.vault.getAbstractFileByPath(entry.sourcePath);
         if (file instanceof TFile) {
           void this.dataSource.updateViewDefFile(file, entry.config).catch((err) => {
-            console.error("Note Database: failed to persist auto-init manual ranks", err);
+            console.error("Obnotion: failed to persist auto-init manual ranks", err);
           });
         }
         this.configSnapshots.set(
@@ -7128,15 +7132,15 @@ export class DatabaseView extends FileView {
     if (!this.containerEl_ || (config.viewType !== "calendar" && config.viewType !== "timeline")) return;
     const query = this.vs().searchText.trim();
     if (!query) return;
-    const searchControl = this.containerEl_.querySelector<HTMLElement>(".db-search-control");
-    const searchInput = searchControl?.querySelector<HTMLInputElement>(".db-search-input");
+    const searchControl = this.containerEl_.querySelector<HTMLElement>(".obnotion-search-control");
+    const searchInput = searchControl?.querySelector<HTMLInputElement>(".obnotion-search-input");
     if (!searchControl || !searchInput) return;
     if (window.activeDocument.activeElement !== searchInput) return;
     const visibleRange = config.viewType === "timeline"
       ? this.calendarTimelineRenderer.getCurrentVisibleRange()
       : this.calendarRenderer.getCurrentVisibleRange();
     const results = buildCalendarTimelineSearchResults(this.rows, config, visibleRange);
-    const panel = window.activeDocument.body.createDiv({ cls: "db-calendar-search-results-popover" });
+    const panel = window.activeDocument.body.createDiv({ cls: "obnotion-calendar-search-results-popover" });
     this.calendarTimelineSearchResultsEl = panel;
     this.positionCalendarTimelineSearchResultsPanel(panel, searchControl);
     this.renderCalendarTimelineSearchResultsContent(panel, results, query);
@@ -7159,14 +7163,14 @@ export class DatabaseView extends FileView {
 
   private renderCalendarTimelineSearchResultsContent(panel: HTMLElement, results: CalendarTimelineSearchResults, query: string): void {
     panel.createDiv({
-      cls: "db-calendar-search-results-summary",
+      cls: "obnotion-calendar-search-results-summary",
       text: t("search.calendarTimelineSummary", { total: results.totalCount, visible: results.visibleCount }),
     });
     if (results.totalCount === 0) {
-      panel.createDiv({ cls: "db-calendar-search-results-empty", text: t("search.noMatches") });
+      panel.createDiv({ cls: "obnotion-calendar-search-results-empty", text: t("search.noMatches") });
       return;
     }
-    const list = panel.createDiv({ cls: "db-calendar-search-results-list" });
+    const list = panel.createDiv({ cls: "obnotion-calendar-search-results-list" });
     const currentRangeItems = results.items.filter((item) => item.inCurrentRange);
     const outsideRangeItems = results.items.filter((item) => !item.inCurrentRange);
     const visibleItems = [...currentRangeItems, ...outsideRangeItems].slice(0, 50);
@@ -7174,15 +7178,15 @@ export class DatabaseView extends FileView {
     const outsideVisibleItems = visibleItems.filter((item) => !item.inCurrentRange);
     const renderSection = (label: string, items: CalendarTimelineSearchResultItem[]) => {
       if (items.length === 0) return;
-      const section = list.createDiv({ cls: "db-calendar-search-results-section" });
-      section.createDiv({ cls: "db-calendar-search-results-section-title", text: label });
+      const section = list.createDiv({ cls: "obnotion-calendar-search-results-section" });
+      section.createDiv({ cls: "obnotion-calendar-search-results-section-title", text: label });
       for (const item of items) this.renderCalendarTimelineSearchResultButton(section, item, query);
     };
     renderSection(t("search.inCurrentRange"), currentVisibleItems);
     renderSection(t("search.outsideCurrentRange"), outsideVisibleItems);
     if (results.totalCount > visibleItems.length) {
       panel.createDiv({
-        cls: "db-calendar-search-results-more",
+        cls: "obnotion-calendar-search-results-more",
         text: t("search.moreResults", { count: results.totalCount - visibleItems.length }),
       });
     }
@@ -7190,11 +7194,11 @@ export class DatabaseView extends FileView {
 
   private renderCalendarTimelineSearchResultButton(list: HTMLElement, item: CalendarTimelineSearchResultItem, query: string): void {
     const button = list.createEl("button", {
-      cls: `db-calendar-search-result${item.inCurrentRange ? " is-current-range" : ""}`,
+      cls: `obnotion-calendar-search-result${item.inCurrentRange ? " is-current-range" : ""}`,
       attr: { type: "button" },
     });
-    renderSearchHighlightedText(button.createSpan({ cls: "db-calendar-search-result-title" }), item.title || t("common.untitled"), query);
-    renderSearchHighlightedText(button.createSpan({ cls: "db-calendar-search-result-date" }), formatCalendarTimelineSearchResultDate(item), query);
+    renderSearchHighlightedText(button.createSpan({ cls: "obnotion-calendar-search-result-title" }), item.title || t("common.untitled"), query);
+    renderSearchHighlightedText(button.createSpan({ cls: "obnotion-calendar-search-result-date" }), formatCalendarTimelineSearchResultDate(item), query);
     button.onclick = (event) => {
       event.preventDefault();
       this.closeCalendarTimelineSearchResultsPanel();
@@ -7297,7 +7301,7 @@ export class DatabaseView extends FileView {
   private renderEmptyDashboard(): void {
     const container = this.containerEl_;
     if (!container) return;
-    const empty = container.createDiv({ cls: "db-empty db-empty-dashboard" });
+    const empty = container.createDiv({ cls: "obnotion-empty obnotion-empty-dashboard" });
     this.emptyStateRenderer.renderHero(empty, {
       title: t("emptyState.noDatabaseTitle"),
       desc: t("emptyState.noDatabaseMessage"),
@@ -7307,7 +7311,7 @@ export class DatabaseView extends FileView {
   }
 
   private openDateConfiguration(): void {
-    const button = this.containerEl_?.querySelector<HTMLElement>(".db-calendar-timeline-options-toolbar-btn");
+    const button = this.containerEl_?.querySelector<HTMLElement>(".obnotion-calendar-timeline-options-toolbar-btn");
     button?.click();
   }
 
@@ -7315,7 +7319,7 @@ export class DatabaseView extends FileView {
     if (!this.containerEl_) return;
     const viewConfig = config || this.getConfig();
     if (viewConfig.viewType === "table") {
-      this.containerEl_.querySelector(".db-summary")?.remove();
+      this.containerEl_.querySelector(".obnotion-summary")?.remove();
       return;
     }
     const isChart = viewConfig.viewType === "chart";
@@ -7342,7 +7346,7 @@ export class DatabaseView extends FileView {
   // Status-bar element that anchors the native bulk editor popover. Re-queried on demand because
   // renderSelectionStatusBar rebuilds the bar on every selection change.
   private getStatusBarAnchor(): HTMLElement | null {
-    return this.containerEl_?.querySelector<HTMLElement>(":scope > .db-selection-status-bar") ?? null;
+    return this.containerEl_?.querySelector<HTMLElement>(":scope > .obnotion-selection-status-bar") ?? null;
   }
 
   /** Selection changes invalidate the path snapshot captured by a native bulk editor session. */
@@ -7354,15 +7358,15 @@ export class DatabaseView extends FileView {
   // The editor popover horizontally aligns with the field chip's left edge (not the status bar's
   // left edge). Falls back to the status bar when no chip is rendered yet.
   private getBulkEditChipAnchor(): HTMLElement | null {
-    return this.containerEl_?.querySelector<HTMLElement>(":scope > .db-selection-status-bar .db-selection-chip") ?? null;
+    return this.containerEl_?.querySelector<HTMLElement>(":scope > .obnotion-selection-status-bar .obnotion-selection-chip") ?? null;
   }
 
   // Render the single "editing field" chip shown in the status bar while a native bulk editor is
   // open. Re-resolves the column from the live config so a config swap mid-edit still matches.
   private renderBulkEditingChip(bar: HTMLElement, col: ColumnDef, onClick?: () => void): void {
-    const chip = bar.createDiv({ cls: "db-selection-chip" + (onClick ? " is-clickable" : "") });
-    renderPropertyTypeIcon(chip, col, "db-property-icon");
-    chip.createSpan({ cls: "db-selection-chip-label", text: col.label || col.key });
+    const chip = bar.createDiv({ cls: "obnotion-selection-chip" + (onClick ? " is-clickable" : "") });
+    renderPropertyTypeIcon(chip, col, "obnotion-property-icon");
+    chip.createSpan({ cls: "obnotion-selection-chip-label", text: col.label || col.key });
     if (onClick) {
       chip.setAttr("role", "button");
       chip.setAttr("tabindex", "0");
@@ -7402,7 +7406,7 @@ export class DatabaseView extends FileView {
     ].filter((field): field is string => Boolean(field)));
   }
 
-  // Fields referenced by any source rule (db-side always, view-side only when enabled). Editing a
+  // Fields referenced by any source rule (obnotion-side always, view-side only when enabled). Editing a
   // field used in a source filter can drop records out of the database/view, so it is gated like a
   // grouping field.
   private collectSourceRuleFields(): Set<string> {
@@ -7693,7 +7697,7 @@ export class DatabaseView extends FileView {
     if (!this.containerEl_) return;
     this.closeBulkEditPopover?.();
     if (!this.selectionStatusBar?.isConnected) {
-      this.selectionStatusBar = this.containerEl_.querySelector<HTMLElement>(":scope > .db-selection-status-bar") || undefined;
+      this.selectionStatusBar = this.containerEl_.querySelector<HTMLElement>(":scope > .obnotion-selection-status-bar") || undefined;
     }
     const rowCount = this.selectedRows.size;
     const addresses = this.getSelectedCellAddresses();
@@ -7723,7 +7727,7 @@ export class DatabaseView extends FileView {
       return;
     }
     this.teardownCellSelectionPill();
-    const bar = this.selectionStatusBar || this.containerEl_.createDiv({ cls: "db-selection-status-bar" });
+    const bar = this.selectionStatusBar || this.containerEl_.createDiv({ cls: "obnotion-selection-status-bar" });
     this.selectionStatusBar = bar;
     // The bar docks above the software keyboard, and only this container can tell it how far. The
     // measurement is published for exactly as long as a bar exists to read it: attached here, torn
@@ -7733,7 +7737,7 @@ export class DatabaseView extends FileView {
     this.releaseKeyboardInset ??= publishKeyboardInset(this.containerEl_);
     if (!this.selectionLiveRegion?.isConnected) {
       this.selectionLiveRegion = this.containerEl_.createDiv({
-        cls: "db-selection-live-region",
+        cls: "obnotion-selection-live-region",
         attr: { role: "status", "aria-live": "polite", "aria-atomic": "true" },
       });
     }
@@ -7744,39 +7748,39 @@ export class DatabaseView extends FileView {
       // the phone pill opens as a sheet, so the two platforms read one shape at two sizes rather
       // than as two hand-maintained lists.
       bar.createSpan({
-        cls: "db-selection-count-badge",
+        cls: "obnotion-selection-count-badge",
         text: tSelectedCells(cellCount),
       });
       if (this.selectionLiveRegion) {
         this.selectionLiveRegion.setText(tSelectedCells(cellCount));
       }
       const copyBtn = bar.createEl("button", {
-        cls: "db-selection-action",
+        cls: "obnotion-selection-action",
         text: t("selection.copyCells"),
         attr: { type: "button" },
       });
       copyBtn.onclick = () => { void this.copySelectedCells("tsv"); };
       const pasteBtn = bar.createEl("button", {
-        cls: "db-selection-action",
+        cls: "obnotion-selection-action",
         text: t("selection.pasteCells"),
         attr: { type: "button" },
       });
       pasteBtn.onclick = () => { void this.pasteCellsFromClipboard(); };
       const clearBtn = bar.createEl("button", {
-        cls: "db-selection-delete",
+        cls: "obnotion-selection-delete",
         text: t("selection.clearCells"),
         attr: { type: "button" },
       });
       clearBtn.onclick = () => { void this.clearSelectedCells(); };
       const moreBtn = bar.createEl("button", {
-        cls: "db-selection-action db-selection-more",
+        cls: "obnotion-selection-action obnotion-selection-more",
         attr: { type: "button", "aria-label": t("selection.moreActions") },
       });
       setIcon(moreBtn, "more-horizontal");
       moreBtn.onclick = () => this.openCellSelectionActionsMenu(moreBtn);
     } else {
       const clearSelectionButton = bar.createEl("button", {
-        cls: "db-selection-clear-pill",
+        cls: "obnotion-selection-clear-pill",
         text: t("selection.clearEsc"),
         attr: {
           type: "button",
@@ -7789,7 +7793,7 @@ export class DatabaseView extends FileView {
         this.clearCellSelection();
       };
       bar.createSpan({
-        cls: "db-selection-count-badge",
+        cls: "obnotion-selection-count-badge",
         text: t("toolbar.selectedCount", { count: rowCount }),
       });
       if (this.selectionLiveRegion) {
@@ -7798,10 +7802,10 @@ export class DatabaseView extends FileView {
       // Icon-led actions, matching the reference: an icon carries the action faster than a word,
       // and it lets the bar stay compact as more bulk actions arrive.
       const editBtn = bar.createEl("button", {
-        cls: "db-selection-action",
+        cls: "obnotion-selection-action",
         attr: { type: "button" },
       });
-      setIcon(editBtn.createSpan({ cls: "db-selection-action-icon" }), "sliders-horizontal");
+      setIcon(editBtn.createSpan({ cls: "obnotion-selection-action-icon" }), "sliders-horizontal");
       editBtn.createSpan({ text: t("bulkEdit.editField") });
       editBtn.onclick = () => this.openBulkEditForRows(editBtn);
       const editingCol = this.bulkEditingColumnKey ? config?.schema.columns.find((candidate) => candidate.key === this.bulkEditingColumnKey) : undefined;
@@ -7809,18 +7813,18 @@ export class DatabaseView extends FileView {
         this.renderBulkEditingChip(bar, editingCol, () => this.openBulkEditNativeEditorForRows());
       }
       const deleteBtn = bar.createEl("button", {
-        cls: "db-selection-delete",
+        cls: "obnotion-selection-delete",
         attr: { type: "button" },
       });
-      setIcon(deleteBtn.createSpan({ cls: "db-selection-action-icon" }), "trash-2");
+      setIcon(deleteBtn.createSpan({ cls: "obnotion-selection-action-icon" }), "trash-2");
       deleteBtn.createSpan({ text: t("common.delete") });
       deleteBtn.onclick = () => { void this.deleteSelectedRows(); };
       if (this.historyStack.length > 0) {
         const undoBtn = bar.createEl("button", {
-          cls: "db-selection-action db-selection-undo",
+          cls: "obnotion-selection-action obnotion-selection-undo",
           attr: { type: "button" },
         });
-        setIcon(undoBtn.createSpan({ cls: "db-selection-action-icon" }), "undo-2");
+        setIcon(undoBtn.createSpan({ cls: "obnotion-selection-action-icon" }), "undo-2");
         undoBtn.createSpan({ text: t("toolbar.undo") });
         undoBtn.onclick = () => { void this.undoLastEdit(); };
       }
@@ -7838,28 +7842,28 @@ export class DatabaseView extends FileView {
   private renderCellSelectionPill(addresses: CellAddress[]): void {
     if (!this.containerEl_) return;
     if (!this.cellSelectionPill?.isConnected) {
-      this.cellSelectionPill = this.containerEl_.querySelector<HTMLElement>(":scope > .db-cell-selection-pill") || undefined;
+      this.cellSelectionPill = this.containerEl_.querySelector<HTMLElement>(":scope > .obnotion-cell-selection-pill") || undefined;
     }
-    const pill = this.cellSelectionPill || this.containerEl_.createDiv({ cls: "db-cell-selection-pill" });
+    const pill = this.cellSelectionPill || this.containerEl_.createDiv({ cls: "obnotion-cell-selection-pill" });
     this.cellSelectionPill = pill;
     if (!this.selectionLiveRegion?.isConnected) {
       this.selectionLiveRegion = this.containerEl_.createDiv({
-        cls: "db-selection-live-region",
+        cls: "obnotion-selection-live-region",
         attr: { role: "status", "aria-live": "polite", "aria-atomic": "true" },
       });
     }
     pill.empty();
     const cellCount = addresses.length;
-    pill.createSpan({ cls: "db-selection-count-badge", text: tSelectedCells(cellCount) });
+    pill.createSpan({ cls: "obnotion-selection-count-badge", text: tSelectedCells(cellCount) });
     this.selectionLiveRegion.setText(tSelectedCells(cellCount));
     const copyBtn = pill.createEl("button", {
-      cls: "db-selection-action",
+      cls: "obnotion-selection-action",
       text: t("selection.copyCells"),
       attr: { type: "button" },
     });
     copyBtn.onclick = () => { void this.copySelectedCells("tsv"); };
     const moreBtn = pill.createEl("button", {
-      cls: "db-selection-action db-selection-more",
+      cls: "obnotion-selection-action obnotion-selection-more",
       attr: { type: "button", "aria-label": t("selection.moreActions") },
     });
     setIcon(moreBtn, "more-horizontal");
@@ -7868,7 +7872,7 @@ export class DatabaseView extends FileView {
     this.positionCellSelectionPill();
     if (!this.releaseCellSelectionPillWatch) {
       const reposition = () => this.positionCellSelectionPill();
-      const viewport = this.containerEl_.querySelector<HTMLElement>(".db-table-wrap");
+      const viewport = this.containerEl_.querySelector<HTMLElement>(".obnotion-table-wrap");
       const win = this.containerEl_.ownerDocument.defaultView;
       viewport?.addEventListener("scroll", reposition, { passive: true });
       win?.addEventListener("resize", reposition);
@@ -7895,7 +7899,7 @@ export class DatabaseView extends FileView {
   private positionCellSelectionPill(): void {
     const pill = this.cellSelectionPill;
     if (!pill?.isConnected || !this.containerEl_) return;
-    const viewport = this.containerEl_.querySelector<HTMLElement>(".db-table-wrap") || this.containerEl_;
+    const viewport = this.containerEl_.querySelector<HTMLElement>(".obnotion-table-wrap") || this.containerEl_;
     const rangeRect = this.getCellSelectionRangeRect();
     if (!rangeRect) return;
     const margin = 8;
@@ -7923,7 +7927,7 @@ export class DatabaseView extends FileView {
   /** The union rect of every `td` the live cell selection covers, in viewport coordinates. */
   private getCellSelectionRangeRect(): DOMRect | null {
     if (!this.containerEl_ || !this.cellSelection) return null;
-    const cells = this.containerEl_.querySelectorAll<HTMLElement>(".db-cell-range-selected");
+    const cells = this.containerEl_.querySelectorAll<HTMLElement>(".obnotion-cell-range-selected");
     if (cells.length === 0) return null;
     let top = Infinity;
     let left = Infinity;
@@ -7940,7 +7944,7 @@ export class DatabaseView extends FileView {
   }
 
   /**
-   * `max(env(safe-area-inset-bottom), var(--db-mobile-navbar-height, 0px)) + 8px`, read in
+   * `max(env(safe-area-inset-bottom), var(--obnotion-mobile-navbar-height, 0px)) + 8px`, read in
    * viewport pixels rather than left as a CSS formula, because the pill's own top offset is
    * computed in script and a fixed element positioned from script cannot also lean on a CSS
    * `bottom` clamp the way the mobile FAB does.
@@ -7948,7 +7952,7 @@ export class DatabaseView extends FileView {
   private getMobileNavClearancePx(): number {
     if (!this.containerEl_) return 0;
     const win = this.containerEl_.ownerDocument.defaultView;
-    const navbarHeight = Number.parseFloat(win?.getComputedStyle(this.containerEl_).getPropertyValue("--db-mobile-navbar-height") || "0") || 0;
+    const navbarHeight = Number.parseFloat(win?.getComputedStyle(this.containerEl_).getPropertyValue("--obnotion-mobile-navbar-height") || "0") || 0;
     const safeAreaProbe = this.containerEl_.ownerDocument.createElement("div");
     safeAreaProbe.style.cssText = "position:fixed;bottom:0;height:0;padding-bottom:env(safe-area-inset-bottom);visibility:hidden;";
     this.containerEl_.ownerDocument.body.appendChild(safeAreaProbe);
@@ -8005,9 +8009,9 @@ export class DatabaseView extends FileView {
 
   /** The plain-text fill form for a mixed-column selection, opened as the actions menu's child. */
   private buildCellSelectionFillSubmenu(child: OwnedMenuHandle): void {
-    const form = child.el.createEl("form", { cls: "db-selection-fill-form" });
+    const form = child.el.createEl("form", { cls: "obnotion-selection-fill-form" });
     const input = form.createEl("input", {
-      cls: "db-selection-fill-input",
+      cls: "obnotion-selection-fill-input",
       attr: {
         type: "text",
         placeholder: t("selection.fillPlaceholder"),
@@ -8016,7 +8020,7 @@ export class DatabaseView extends FileView {
     });
     input.value = this.pendingCellFillDraft ?? "";
     form.createEl("button", {
-      cls: "db-selection-action",
+      cls: "obnotion-selection-action",
       text: t("common.save"),
       attr: { type: "submit" },
     });
@@ -8030,9 +8034,9 @@ export class DatabaseView extends FileView {
   }
 
   private renderCellFillInput(bar: HTMLElement): void {
-    const form = bar.createEl("form", { cls: "db-selection-fill-form" });
+    const form = bar.createEl("form", { cls: "obnotion-selection-fill-form" });
     const input = form.createEl("input", {
-      cls: "db-selection-fill-input",
+      cls: "obnotion-selection-fill-input",
       attr: {
         type: "text",
         placeholder: t("selection.fillPlaceholder"),
@@ -8041,7 +8045,7 @@ export class DatabaseView extends FileView {
     });
     input.value = this.pendingCellFillDraft ?? "";
     const apply = form.createEl("button", {
-      cls: "db-selection-action",
+      cls: "obnotion-selection-action",
       text: t("common.save"),
       attr: { type: "submit" },
     });
@@ -8081,13 +8085,13 @@ export class DatabaseView extends FileView {
   private syncRowSelectionInputs(): void {
     if (!this.containerEl_) return;
     const rowSelectors = [
-      [".db-table tbody tr[data-note-database-row-path]", ".db-select-col input[type='checkbox']"],
-      [".db-gallery-card[data-note-database-row-path]", ".db-gallery-card-checkbox"],
-      [".db-list-row[data-note-database-row-path]", ".db-list-row-checkbox"],
+      [".obnotion-table tbody tr[data-obnotion-row-path]", ".obnotion-select-col input[type='checkbox']"],
+      [".obnotion-gallery-card[data-obnotion-row-path]", ".obnotion-gallery-card-checkbox"],
+      [".obnotion-list-row[data-obnotion-row-path]", ".obnotion-list-row-checkbox"],
     ] as const;
     for (const [rowSelector, inputSelector] of rowSelectors) {
       this.containerEl_.querySelectorAll<HTMLElement>(rowSelector).forEach((rowEl) => {
-        const path = rowEl.getAttribute("data-note-database-row-path");
+        const path = rowEl.getAttribute("data-obnotion-row-path");
         const input = rowEl.querySelector<HTMLInputElement>(inputSelector);
         if (!path || !input) return;
         input.checked = this.selectedRows.has(path);
@@ -8098,56 +8102,56 @@ export class DatabaseView extends FileView {
 
   private syncGroupedSelectionInputs(): void {
     if (!this.containerEl_) return;
-    this.containerEl_.querySelectorAll<HTMLElement>(".db-table").forEach((table) => {
+    this.containerEl_.querySelectorAll<HTMLElement>(".obnotion-table").forEach((table) => {
       this.syncScopeSelectionInput(
-        table.querySelector<HTMLInputElement>("thead .db-select-col input[type='checkbox']"),
-        this.getSelectionPaths(table, "tbody tr[data-note-database-row-path]")
+        table.querySelector<HTMLInputElement>("thead .obnotion-select-col input[type='checkbox']"),
+        this.getSelectionPaths(table, "tbody tr[data-obnotion-row-path]")
       );
     });
-    this.containerEl_.querySelectorAll<HTMLElement>(".db-group-divider-row").forEach((divider) => {
+    this.containerEl_.querySelectorAll<HTMLElement>(".obnotion-group-divider-row").forEach((divider) => {
       this.syncScopeSelectionInput(
-        divider.querySelector<HTMLInputElement>(".db-group-divider-checkbox"),
+        divider.querySelector<HTMLInputElement>(".obnotion-group-divider-checkbox"),
         this.getGroupDividerSelectionPaths(divider),
       );
     });
-    this.containerEl_.querySelectorAll<HTMLElement>(".db-gallery-group").forEach((group) => {
+    this.containerEl_.querySelectorAll<HTMLElement>(".obnotion-gallery-group").forEach((group) => {
       this.syncScopeSelectionInput(
-        group.querySelector<HTMLInputElement>(".db-gallery-group-checkbox"),
-        this.getSelectionPaths(group, ".db-gallery-card[data-note-database-row-path]")
+        group.querySelector<HTMLInputElement>(".obnotion-gallery-group-checkbox"),
+        this.getSelectionPaths(group, ".obnotion-gallery-card[data-obnotion-row-path]")
       );
     });
-    const totalHeader = this.containerEl_.querySelector<HTMLElement>(":scope > .db-gallery-total-header");
-    const gallery = this.containerEl_.querySelector<HTMLElement>(":scope > .db-gallery");
+    const totalHeader = this.containerEl_.querySelector<HTMLElement>(":scope > .obnotion-gallery-total-header");
+    const gallery = this.containerEl_.querySelector<HTMLElement>(":scope > .obnotion-gallery");
     if (totalHeader && gallery) {
       this.syncScopeSelectionInput(
-        totalHeader.querySelector<HTMLInputElement>(".db-gallery-group-checkbox"),
-        this.getSelectionPaths(gallery, ".db-gallery-card[data-note-database-row-path]")
+        totalHeader.querySelector<HTMLInputElement>(".obnotion-gallery-group-checkbox"),
+        this.getSelectionPaths(gallery, ".obnotion-gallery-card[data-obnotion-row-path]")
       );
     }
-    this.containerEl_.querySelectorAll<HTMLElement>(".db-list-group").forEach((group) => {
+    this.containerEl_.querySelectorAll<HTMLElement>(".obnotion-list-group").forEach((group) => {
       this.syncScopeSelectionInput(
-        group.querySelector<HTMLInputElement>(".db-list-group-checkbox"),
-        this.getSelectionPaths(group, ".db-list-row[data-note-database-row-path]")
+        group.querySelector<HTMLInputElement>(".obnotion-list-group-checkbox"),
+        this.getSelectionPaths(group, ".obnotion-list-row[data-obnotion-row-path]")
       );
     });
-    const listTotalHeader = this.containerEl_.querySelector<HTMLElement>(":scope > .db-list-total-header");
-    const list = this.containerEl_.querySelector<HTMLElement>(":scope > .db-list");
+    const listTotalHeader = this.containerEl_.querySelector<HTMLElement>(":scope > .obnotion-list-total-header");
+    const list = this.containerEl_.querySelector<HTMLElement>(":scope > .obnotion-list");
     if (listTotalHeader && list) {
       this.syncScopeSelectionInput(
-        listTotalHeader.querySelector<HTMLInputElement>(".db-list-group-checkbox"),
-        this.getSelectionPaths(list, ".db-list-row[data-note-database-row-path]")
+        listTotalHeader.querySelector<HTMLInputElement>(".obnotion-list-group-checkbox"),
+        this.getSelectionPaths(list, ".obnotion-list-row[data-obnotion-row-path]")
       );
     }
   }
 
   private getSelectionPaths(parent: HTMLElement, selector: string): string[] {
     return Array.from(parent.querySelectorAll<HTMLElement>(selector))
-      .map((el) => el.getAttribute("data-note-database-row-path") || "")
+      .map((el) => el.getAttribute("data-obnotion-row-path") || "")
       .filter((path) => path.length > 0);
   }
 
   private getGroupDividerSelectionPaths(divider: HTMLElement): string[] {
-    const raw = divider.getAttribute("data-note-database-group-paths");
+    const raw = divider.getAttribute("data-obnotion-group-paths");
     if (!raw) return [];
     try {
       const paths: unknown = JSON.parse(raw);
@@ -8367,7 +8371,7 @@ export class DatabaseView extends FileView {
         : undefined;
       const focusCell = focusRequest
         ? target.querySelector<HTMLElement>(
-            `td[data-note-database-column-key="${CSS.escape(focusRequest.colKey)}"]`
+            `td[data-obnotion-column-key="${CSS.escape(focusRequest.colKey)}"]`
           )
         : null;
       const scrollTarget = focusCell || (target.matches("tr")
@@ -8413,9 +8417,9 @@ export class DatabaseView extends FileView {
   private findRenderedRowElement(path: string): HTMLElement | null {
     if (!this.containerEl_) return null;
     const candidates = Array.from(
-      this.containerEl_.querySelectorAll<HTMLElement>("[data-note-database-row-path]")
+      this.containerEl_.querySelectorAll<HTMLElement>("[data-obnotion-row-path]")
     );
-    return candidates.find((candidate) => candidate.dataset.noteDatabaseRowPath === path) || null;
+    return candidates.find((candidate) => candidate.dataset.obnotionRowPath === path) || null;
   }
 
   private revealPendingColumn(): void {
@@ -8471,7 +8475,7 @@ export class DatabaseView extends FileView {
 
   private findRenderedColumnElements(key: string): HTMLElement[] {
     if (!this.containerEl_) return [];
-    const selector = `[data-note-database-column-key="${CSS.escape(key)}"]`;
+    const selector = `[data-obnotion-column-key="${CSS.escape(key)}"]`;
     return Array.from(this.containerEl_.querySelectorAll<HTMLElement>(selector))
       .filter((element) => !element.matches("col"));
   }
@@ -8653,7 +8657,7 @@ export class DatabaseView extends FileView {
       }
       await this.refreshAfterSave();
     } catch (err) {
-      console.error("Note Database: failed to delete row", err);
+      console.error("Obnotion: failed to delete row", err);
       if (this.containerEl_) {
         showToast(this.containerEl_.ownerDocument, {
           severity: "error",
@@ -8689,7 +8693,7 @@ export class DatabaseView extends FileView {
    */
   private resolveOpenTarget(anchorEl?: HTMLElement): ResolvedOpenTarget {
     return resolveRecordOpenTarget({
-      setting: getNoteDatabasePlugin(this.app)?.settings.recordOpenTarget,
+      setting: getObnotionPlugin(this.app)?.settings.recordOpenTarget,
       // `Platform.isPhone` alone, deliberately. `isTouchDevice` answers "coarse pointer or narrow
       // pane", which is true of a 700px split on a 1440px desktop — the harness reports exactly that
       // — and folding on it would take the split, the popout and the preview layer away from a
@@ -8748,7 +8752,7 @@ export class DatabaseView extends FileView {
       this.pendingNewRecords.set(file.path, { file, frontmatter: { ...row.frontmatter }, expiresAt: Date.now() + 8000 });
       await this.refreshAfterSave();
     } catch (err) {
-      console.error("Note Database: failed to duplicate row", err);
+      console.error("Obnotion: failed to duplicate row", err);
       if (this.containerEl_) {
         showToast(this.containerEl_.ownerDocument, {
           severity: "error",
@@ -8810,14 +8814,14 @@ export class DatabaseView extends FileView {
         try {
           await this.dataSource.updateViewDefFile(dbFile, entry.config, this.getCurrentMutationTarget());
         } catch (rollbackErr) {
-          console.error("Note Database: failed to roll back file rename config", rollbackErr);
+          console.error("Obnotion: failed to roll back file rename config", rollbackErr);
         }
       }
       if (renamed) {
         try {
           await this.executeFileRenamesAtomically(plan.changes, "old");
         } catch (rollbackErr) {
-          console.error("Note Database: failed to roll back file rename", rollbackErr);
+          console.error("Obnotion: failed to roll back file rename", rollbackErr);
         }
       }
       new Notice(t("errors.renameFailed", { error: String(err) }));
@@ -8887,7 +8891,7 @@ export class DatabaseView extends FileView {
     let attempt = 0;
     while (true) {
       const candidate = normalizePath(
-        `${parent}note-database-rename-${this.instanceId}-${Date.now()}-${index}-${attempt}.md`,
+        `${parent}obnotion-rename-${this.instanceId}-${Date.now()}-${index}-${attempt}.md`,
       );
       if (!this.app.vault.getAbstractFileByPath(candidate)) return candidate;
       attempt += 1;
@@ -8911,7 +8915,7 @@ export class DatabaseView extends FileView {
         );
         restaged.push({ stage, tempPath });
       } catch (rollbackErr) {
-        console.error("Note Database: failed to stage file rename rollback", rollbackErr);
+        console.error("Obnotion: failed to stage file rename rollback", rollbackErr);
       }
     }
     for (const { stage } of restaged) {
@@ -8923,7 +8927,7 @@ export class DatabaseView extends FileView {
           { sourceInstanceId: this.instanceId }
         );
       } catch (rollbackErr) {
-        console.error("Note Database: failed to restore file rename source", rollbackErr);
+        console.error("Obnotion: failed to restore file rename source", rollbackErr);
       }
     }
   }
@@ -9083,7 +9087,7 @@ export class DatabaseView extends FileView {
   private renameRowFromMenu(row: RowData, anchorEl?: HTMLElement): void {
     const container = this.containerEl_;
     const cell = container?.querySelector<HTMLElement>(
-      `td.db-title-cell[data-note-database-row-path="${CSS.escape(row.file.path)}"]`
+      `td.obnotion-title-cell[data-obnotion-row-path="${CSS.escape(row.file.path)}"]`
     );
     const target = cell ?? anchorEl ?? container;
     if (!target) return;
@@ -9107,28 +9111,28 @@ export class DatabaseView extends FileView {
   private setupTableFillHandle(td: HTMLElement, row: RowData, col: ColumnDef): void {
     if (isTouchDevice(this.containerEl_)) return;
     if (!this.canFillColumn(col)) return;
-    td.addClass("db-fillable-cell");
+    td.addClass("obnotion-fillable-cell");
   }
 
   private syncTableFillHandle(): void {
     if (!this.containerEl_) return;
-    this.containerEl_.querySelectorAll<HTMLElement>(".db-cell-fill-handle").forEach((handle) => handle.remove());
+    this.containerEl_.querySelectorAll<HTMLElement>(".obnotion-cell-fill-handle").forEach((handle) => handle.remove());
     if (isTouchDevice(this.containerEl_) || !this.cellSelection) return;
     const addresses = this.getSelectedCellAddresses();
     const active = addresses[addresses.length - 1];
     if (!active) return;
     const cell = Array.from(this.containerEl_.querySelectorAll<HTMLElement>(
-      "td[data-note-database-row-path][data-note-database-column-key]"
+      "td[data-obnotion-row-path][data-obnotion-column-key]"
     )).find((candidate) =>
-      candidate.dataset.noteDatabaseRowPath === active.rowPath && candidate.dataset.noteDatabaseColumnKey === active.colKey
+      candidate.dataset.obnotionRowPath === active.rowPath && candidate.dataset.obnotionColumnKey === active.colKey
     );
     if (!cell) return;
     const col = this.getConfig()?.schema.columns.find((candidate) => candidate.key === active.colKey);
     const row = this.rows.find((candidate) => candidate.file.path === active.rowPath);
     if (!col || !row || !this.canFillColumn(col)) return;
-    cell.addClass("db-fillable-cell");
+    cell.addClass("obnotion-fillable-cell");
     const handle = cell.createSpan({
-      cls: "db-cell-fill-handle",
+      cls: "obnotion-cell-fill-handle",
       attr: { title: t("cell.dragFill"), "aria-label": t("cell.dragFill") },
     });
     handle.addEventListener("mousedown", (event) => {
@@ -9279,18 +9283,18 @@ export class DatabaseView extends FileView {
 
   private updateConditionalFormatDOM(row: RowData, config: ViewConfig): void {
     if (!this.containerEl_) return;
-    const selector = `[data-note-database-row-path="${CSS.escape(row.file.path)}"]`;
+    const selector = `[data-obnotion-row-path="${CSS.escape(row.file.path)}"]`;
     for (const element of Array.from(this.containerEl_.querySelectorAll<HTMLElement>(selector))) {
-      if (element.matches("td[data-note-database-column-key]")) continue;
-      const field = element.getAttribute("data-note-database-column-key") || undefined;
+      if (element.matches("td[data-obnotion-column-key]")) continue;
+      const field = element.getAttribute("data-obnotion-column-key") || undefined;
       applyConditionalFormat(element, row, config, this.getActiveDb(), field);
     }
   }
 
   private updateCardFieldDOM(row: RowData, col: ColumnDef, config: ViewConfig, newField: HTMLElement): void {
     if (!this.containerEl_) return;
-    const cardSelector = `[data-note-database-row-path="${CSS.escape(row.file.path)}"]`;
-    const fieldSelector = `[data-note-database-column-key="${CSS.escape(col.key)}"]`;
+    const cardSelector = `[data-obnotion-row-path="${CSS.escape(row.file.path)}"]`;
+    const fieldSelector = `[data-obnotion-column-key="${CSS.escape(col.key)}"]`;
     const card = this.containerEl_.querySelector<HTMLElement>(cardSelector);
     if (!card) { this.refresh(); return; }
     const oldField = card.querySelector<HTMLElement>(fieldSelector);
@@ -9300,7 +9304,7 @@ export class DatabaseView extends FileView {
 
   private updateTableCellDOM(row: RowData, col: ColumnDef): void {
     if (!this.containerEl_) return;
-    const selector = `td[data-note-database-row-path="${CSS.escape(row.file.path)}"][data-note-database-column-key="${CSS.escape(col.key)}"]`;
+    const selector = `td[data-obnotion-row-path="${CSS.escape(row.file.path)}"][data-obnotion-column-key="${CSS.escape(col.key)}"]`;
     const oldTd = this.containerEl_.querySelector<HTMLElement>(selector);
     if (!oldTd) {
       this.refresh();
@@ -9308,10 +9312,10 @@ export class DatabaseView extends FileView {
     }
 
     const newTd = window.activeDocument.createElement("td");
-    newTd.setAttribute("data-note-database-row-path", row.file.path);
-    newTd.setAttribute("data-note-database-column-key", col.key);
-    if (oldTd.hasClass("db-cell-range-selected")) {
-      newTd.addClass("db-cell-range-selected");
+    newTd.setAttribute("data-obnotion-row-path", row.file.path);
+    newTd.setAttribute("data-obnotion-column-key", col.key);
+    if (oldTd.hasClass("obnotion-cell-range-selected")) {
+      newTd.addClass("obnotion-cell-range-selected");
     }
 
     oldTd.replaceWith(newTd);
@@ -9346,7 +9350,7 @@ export class DatabaseView extends FileView {
     };
     const updateTargets = (clientX: number, clientY: number) => {
       const element = window.activeDocument.elementFromPoint(clientX, clientY) as HTMLElement | null;
-      const targetCell = element?.closest<HTMLElement>("td[data-note-database-row-path][data-note-database-column-key]");
+      const targetCell = element?.closest<HTMLElement>("td[data-obnotion-row-path][data-obnotion-column-key]");
       if (!targetCell || targetCell.closest("tbody") !== tbody) {
         clearTargets();
         return;
@@ -9372,7 +9376,7 @@ export class DatabaseView extends FileView {
       if (plan.targets.length > 0) void this.applyTableFill(plan, sourceValue);
       else if (plan.skipped > 0) new Notice(t("notice.noEditableCellsSkipped", { skipped: plan.skipped }));
     };
-    this.fillAutoScroller = new EdgeAutoScroller(tbody.closest<HTMLElement>(".db-table-wrap") || tbody);
+    this.fillAutoScroller = new EdgeAutoScroller(tbody.closest<HTMLElement>(".obnotion-table-wrap") || tbody);
     window.activeDocument.addEventListener("mousemove", onMove, true);
     window.activeDocument.addEventListener("mouseup", onUp, true);
     updateTargets(event.clientX, event.clientY);
@@ -9380,7 +9384,7 @@ export class DatabaseView extends FileView {
 
   private getTableFillRange(sourceCell: HTMLElement, targetCell: HTMLElement, tbody: Element): HTMLElement[] {
     if (sourceCell === targetCell) return [];
-    const rows = Array.from(tbody.querySelectorAll<HTMLElement>("tr[data-note-database-row-path]"));
+    const rows = Array.from(tbody.querySelectorAll<HTMLElement>("tr[data-obnotion-row-path]"));
     const sourceRow = sourceCell.closest("tr");
     const targetRow = targetCell.closest("tr");
     const sourceIndex = sourceRow ? rows.indexOf(sourceRow) : -1;
@@ -9389,12 +9393,12 @@ export class DatabaseView extends FileView {
 
     const firstRow = rows[0];
     const visibleColKeys = firstRow
-      ? Array.from(firstRow.querySelectorAll<HTMLElement>("td[data-note-database-column-key]"))
-        .map((cell) => cell.dataset.noteDatabaseColumnKey)
+      ? Array.from(firstRow.querySelectorAll<HTMLElement>("td[data-obnotion-column-key]"))
+        .map((cell) => cell.dataset.obnotionColumnKey)
         .filter((key): key is string => Boolean(key))
       : [];
-    const sourceColKey = sourceCell.dataset.noteDatabaseColumnKey;
-    const targetColKey = targetCell.dataset.noteDatabaseColumnKey;
+    const sourceColKey = sourceCell.dataset.obnotionColumnKey;
+    const targetColKey = targetCell.dataset.obnotionColumnKey;
     const sourceColIndex = sourceColKey ? visibleColKeys.indexOf(sourceColKey) : -1;
     const targetColIndex = targetColKey ? visibleColKeys.indexOf(targetColKey) : -1;
     if (sourceColIndex < 0 || targetColIndex < 0) return [];
@@ -9408,7 +9412,7 @@ export class DatabaseView extends FileView {
       for (let colIndex = colStart; colIndex <= colEnd; colIndex++) {
         if (rowIndex === sourceIndex && colIndex === sourceColIndex) continue;
         const key = visibleColKeys[colIndex];
-        const cell = rows[rowIndex]?.querySelector<HTMLElement>(`td[data-note-database-column-key="${CSS.escape(key)}"]`);
+        const cell = rows[rowIndex]?.querySelector<HTMLElement>(`td[data-obnotion-column-key="${CSS.escape(key)}"]`);
         if (!cell) continue;
         cells.push(cell);
       }
@@ -9422,8 +9426,8 @@ export class DatabaseView extends FileView {
     const targets: FillTarget[] = [];
     let skipped = 0;
     for (const cell of cells) {
-      const path = cell.dataset.noteDatabaseRowPath;
-      const colKey = cell.dataset.noteDatabaseColumnKey;
+      const path = cell.dataset.obnotionRowPath;
+      const colKey = cell.dataset.obnotionColumnKey;
       if (!path || !colKey) continue;
       const key = `${path}\u0000${colKey}`;
       if (seen.has(key)) continue;
@@ -9886,7 +9890,7 @@ export class DatabaseView extends FileView {
         try {
           await this.applyFrontmatterChanges(applied, "old");
         } catch (rollbackErr) {
-          console.error("Note Database: failed to roll back renamed paste values", rollbackErr);
+          console.error("Obnotion: failed to roll back renamed paste values", rollbackErr);
         }
       }
       this.replaceDatabaseConfig(entry.config, before);
@@ -9895,14 +9899,14 @@ export class DatabaseView extends FileView {
           this.suppressDataReload(2500);
           await this.dataSource.updateViewDefFile(dbFile, entry.config, this.getCurrentMutationTarget());
         } catch (rollbackErr) {
-          console.error("Note Database: failed to roll back renamed paste config", rollbackErr);
+          console.error("Obnotion: failed to roll back renamed paste config", rollbackErr);
         }
       }
       if (renamed) {
         try {
           await this.executeFileRenamesAtomically(fileRenames, "old");
         } catch (rollbackErr) {
-          console.error("Note Database: failed to roll back pasted file names", rollbackErr);
+          console.error("Obnotion: failed to roll back pasted file names", rollbackErr);
         }
       }
       this.configSnapshots.set(this.getConfigHistoryKey(entry), this.cloneDatabaseConfig(entry.config));
@@ -10172,14 +10176,14 @@ export class DatabaseView extends FileView {
         try {
           await this.applyFrontmatterChanges(applied, "old");
         } catch (rollbackErr) {
-          console.error("Note Database: failed to roll back pasted cell changes", rollbackErr);
+          console.error("Obnotion: failed to roll back pasted cell changes", rollbackErr);
         }
       }
       for (const item of [...created].reverse()) {
         try {
           await this.dataSource.trashNote(item.file, { sourceInstanceId: this.instanceId });
         } catch (rollbackErr) {
-          console.error("Note Database: failed to roll back pasted record creation", rollbackErr);
+          console.error("Obnotion: failed to roll back pasted record creation", rollbackErr);
         }
       }
       this.replaceDatabaseConfig(entry.config, before);
@@ -10189,7 +10193,7 @@ export class DatabaseView extends FileView {
           try {
             await this.dataSource.updateViewDefFile(dbFile, entry.config, this.getCurrentMutationTarget());
           } catch (rollbackErr) {
-            console.error("Note Database: failed to roll back paste config", rollbackErr);
+            console.error("Obnotion: failed to roll back paste config", rollbackErr);
           }
         }
       }
@@ -10197,7 +10201,7 @@ export class DatabaseView extends FileView {
         try {
           await this.executeFileRenamesAtomically(fileRenames, "old");
         } catch (rollbackErr) {
-          console.error("Note Database: failed to roll back pasted file names", rollbackErr);
+          console.error("Obnotion: failed to roll back pasted file names", rollbackErr);
         }
       }
       this.configSnapshots.set(this.getConfigHistoryKey(entry), this.cloneDatabaseConfig(entry.config));
@@ -10466,7 +10470,7 @@ export class DatabaseView extends FileView {
         try {
           await this.applyFrontmatterChanges(applied, "old");
         } catch (rollbackErr) {
-          console.error("Note Database: failed to roll back config transaction cell values", rollbackErr);
+          console.error("Obnotion: failed to roll back config transaction cell values", rollbackErr);
         }
       }
       this.replaceDatabaseConfig(entry.config, before);
@@ -10475,7 +10479,7 @@ export class DatabaseView extends FileView {
           this.suppressDataReload(2500);
           await this.dataSource.updateViewDefFile(file, entry.config, this.getCurrentMutationTarget());
         } catch (rollbackErr) {
-          console.error("Note Database: failed to roll back config transaction database config", rollbackErr);
+          console.error("Obnotion: failed to roll back config transaction database config", rollbackErr);
         }
       }
       this.configSnapshots.set(this.getConfigHistoryKey(entry), this.cloneDatabaseConfig(entry.config));
@@ -10617,7 +10621,7 @@ export class DatabaseView extends FileView {
       if (this.file?.path === file.path) this.refresh();
       new Notice(t("notice.reportsComputedFieldsApplied"));
     } catch (err) {
-      console.error("Note Database: failed to configure Reports computed fields", err);
+      console.error("Obnotion: failed to configure Reports computed fields", err);
       new Notice(t("errors.updateFailed", { error: String(err) }));
     }
   }
@@ -10639,7 +10643,7 @@ export class DatabaseView extends FileView {
       if (destination.length > 15) destination.length = 15;
       new Notice(t(direction === "undo" ? "notice.undone" : "notice.redone", { action: entry.label }));
     } catch (err) {
-      console.error(`Note Database: failed to ${direction} edit`, err);
+      console.error(`Obnotion: failed to ${direction} edit`, err);
       new Notice(t("errors.updateFailed", { error: String(err) }));
     } finally {
       this.applyingHistory = false;
@@ -10651,7 +10655,7 @@ export class DatabaseView extends FileView {
     if (entry.type === "config") {
       await this.applyConfigHistoryEntry(entry, direction);
       // Config replay replaces view objects; close popovers holding detached references.
-      this.containerEl_?.querySelectorAll(".db-cell-option-popover").forEach((el) => el.remove());
+      this.containerEl_?.querySelectorAll(".obnotion-cell-option-popover").forEach((el) => el.remove());
       return;
     }
     if (entry.type === "created") {
@@ -10821,7 +10825,7 @@ export class DatabaseView extends FileView {
           try {
             await this.removeCreatedFile(created);
           } catch (rollbackErr) {
-            console.error("Note Database: failed to remove restored file after history replay failure", rollbackErr);
+            console.error("Obnotion: failed to remove restored file after history replay failure", rollbackErr);
           }
         }
       }
@@ -10829,7 +10833,7 @@ export class DatabaseView extends FileView {
         try {
           await this.applyFrontmatterChangesAtomically(historyChanges, valueDirection === "new" ? "old" : "new");
         } catch (rollbackErr) {
-          console.error("Note Database: failed to restore cell values after history replay failure", rollbackErr);
+          console.error("Obnotion: failed to restore cell values after history replay failure", rollbackErr);
         }
       }
       this.replaceDatabaseConfig(target.config, previous);
@@ -10840,7 +10844,7 @@ export class DatabaseView extends FileView {
           this.suppressDataReload(2500);
           await this.dataSource.updateViewDefFile(file, target.config, this.getCurrentDatabaseMutationTarget());
         } catch (rollbackErr) {
-          console.error("Note Database: failed to restore config after history replay failure", rollbackErr);
+          console.error("Obnotion: failed to restore config after history replay failure", rollbackErr);
         }
       }
       if (renamed && entry.fileRenames?.length) {
@@ -10849,7 +10853,7 @@ export class DatabaseView extends FileView {
           await this.executeFileRenamesAtomically(entry.fileRenames, rollbackDirection);
           this.remapTransientRecordPaths(entry.fileRenames, rollbackDirection);
         } catch (rollbackErr) {
-          console.error("Note Database: failed to roll back history file rename", rollbackErr);
+          console.error("Obnotion: failed to roll back history file rename", rollbackErr);
         }
       }
       if (direction === "undo") {
@@ -10857,7 +10861,7 @@ export class DatabaseView extends FileView {
           try {
             await this.restoreCreatedFile(created);
           } catch (rollbackErr) {
-            console.error("Note Database: failed to restore removed file after history replay failure", rollbackErr);
+            console.error("Obnotion: failed to restore removed file after history replay failure", rollbackErr);
           }
         }
       }
@@ -10887,7 +10891,7 @@ export class DatabaseView extends FileView {
     const header = leafContent?.querySelector<HTMLElement>(".view-header");
     const nav = header?.querySelector<HTMLElement>(".view-header-nav-buttons");
     if (!header || !nav) return;
-    action.addClass("db-view-undo-action-near-nav");
+    action.addClass("obnotion-view-undo-action-near-nav");
     nav.insertAdjacentElement("afterend", action);
   }
 
@@ -11364,7 +11368,7 @@ export class DatabaseView extends FileView {
       try {
         await this.dataSource.trashNote(file, { sourceInstanceId: this.instanceId });
       } catch (rollbackErr) {
-        console.error("Note Database: failed to roll back created subtask after the parent link write failed", rollbackErr);
+        console.error("Obnotion: failed to roll back created subtask after the parent link write failed", rollbackErr);
       }
       new Notice(t("errors.createFailed", { error: String(err) }));
       return;
@@ -11614,7 +11618,7 @@ export class DatabaseView extends FileView {
 
   // Renders through the shared toast component, at the rail's own fixed placement — one
   // component, one timer contract, one reduced-motion story, in place of the rail's former
-  // bespoke pill and the separate CSS it carried (styles.css's retired db-operation-result-*
+  // bespoke pill and the separate CSS it carried (styles.css's retired obnotion-operation-result-*
   // rules). A prior call's toast is closed before the next one opens, matching the rail's own
   // former "replace what's showing" behaviour; unlike that former behaviour, an error no longer
   // times out on its own — the toast component's own contract, not a per-caller exception.
@@ -11625,9 +11629,9 @@ export class DatabaseView extends FileView {
   ): void {
     if (!this.containerEl_) return;
     this.operationResultToast?.close();
-    // db-surface: the rail is not the shared body-portalled stack, so it needs its own marker
+    // obnotion-surface: the rail is not the shared body-portalled stack, so it needs its own marker
     // for the reduced-motion reset to reach the toast card mounted inside it.
-    const rail = this.operationResultRail || this.containerEl_.createDiv({ cls: "db-operation-result-rail db-surface" });
+    const rail = this.operationResultRail || this.containerEl_.createDiv({ cls: "obnotion-operation-result-rail obnotion-surface" });
     this.operationResultRail = rail;
     this.operationResultToast = showToast(rail.ownerDocument, {
       severity: kind,
@@ -11954,7 +11958,7 @@ export class DatabaseView extends FileView {
         return;
       }
       void this.syncComputedFieldsNow(false, syncConfig, recordConfig, pending.rows, false, pending.scope).catch((err) => {
-        console.error("Note Database: failed to sync computed fields", err);
+        console.error("Obnotion: failed to sync computed fields", err);
         new Notice(t("errors.updateFailed", { error: String(err) }));
       });
     }, 5000);
@@ -12046,7 +12050,7 @@ export class DatabaseView extends FileView {
 
   private syncComputedFieldsManually(): void {
     void this.syncComputedFieldsNow(true, this.getConfig(), undefined, this.rows, true).catch((err) => {
-      console.error("Note Database: failed to sync computed fields", err);
+      console.error("Obnotion: failed to sync computed fields", err);
       new Notice(t("errors.updateFailed", { error: String(err) }));
     });
   }
@@ -12099,20 +12103,20 @@ export class DatabaseView extends FileView {
    */
   private openRecordAddPropertyPicker(anchorEl: HTMLElement): void {
     const host = anchorEl.ownerDocument.body;
-    const popover = host.createDiv({ cls: "db-dropdown-popover db-add-property-picker" });
+    const popover = host.createDiv({ cls: "obnotion-dropdown-popover obnotion-add-property-picker" });
     let close: () => void = () => undefined;
     let picker: ReturnType<typeof buildAddPropertyRow<ColumnDef["type"]>>;
     picker = buildAddPropertyRow({
       parent: popover,
-      rootClass: "db-add-property-row",
-      searchClass: "db-add-property-search",
-      optionListClass: "db-add-property-options",
-      optionClass: "db-add-property-option",
-      createRowClass: "db-add-property-create",
+      rootClass: "obnotion-add-property-row",
+      searchClass: "obnotion-add-property-search",
+      optionListClass: "obnotion-add-property-options",
+      optionClass: "obnotion-add-property-option",
+      createRowClass: "obnotion-add-property-create",
       options: buildTypePickerOptions().map((option) => ({ value: option.value as ColumnDef["type"], label: option.text })),
       searchPlaceholder: t("panel.addPropertySearchPlaceholder"),
       createLabel: (query) => t("panel.createPropertyNamed", { name: query }),
-      renderIcon: (iconParent, value) => renderPropertyTypeIcon(iconParent, { key: "", label: "", type: value } as ColumnDef, "db-column-type-option-icon"),
+      renderIcon: (iconParent, value) => renderPropertyTypeIcon(iconParent, { key: "", label: "", type: value } as ColumnDef, "obnotion-column-type-option-icon"),
       onSelect: (type) => {
         const query = picker.searchInput.value;
         close();
@@ -12199,20 +12203,20 @@ export class DatabaseView extends FileView {
   private captureInteractionSnapshot(): InteractionSnapshot {
     const activeElement = this.containerEl_?.ownerDocument.activeElement as HTMLElement | null;
     const focusedCell = activeElement?.closest<HTMLElement>(
-      "td[data-note-database-row-path][data-note-database-column-key]"
+      "td[data-obnotion-row-path][data-obnotion-column-key]"
     );
     const editor = activeElement?.closest<HTMLElement>(
-      ".db-cell-edit-popover[data-note-database-row-path], .db-cell-line-edit-popover[data-note-database-row-path]"
+      ".obnotion-cell-edit-popover[data-obnotion-row-path], .obnotion-cell-line-edit-popover[data-obnotion-row-path]"
     );
-    const editorRowPath = editor?.dataset.noteDatabaseRowPath;
-    const editorColumnKey = editor?.dataset.noteDatabaseColumnKey;
+    const editorRowPath = editor?.dataset.obnotionRowPath;
+    const editorColumnKey = editor?.dataset.obnotionColumnKey;
     const editorCell = editorRowPath && editorColumnKey
       ? { rowPath: editorRowPath, colKey: editorColumnKey }
       : undefined;
     const snapshotCell = focusedCell
       ? {
-          rowPath: focusedCell.dataset.noteDatabaseRowPath || "",
-          colKey: focusedCell.dataset.noteDatabaseColumnKey || "",
+          rowPath: focusedCell.dataset.obnotionRowPath || "",
+          colKey: focusedCell.dataset.obnotionColumnKey || "",
         }
       : editorCell;
     const snapshot: InteractionSnapshot = {
@@ -12231,9 +12235,9 @@ export class DatabaseView extends FileView {
         value: activeElement.value,
         inputType: activeElement.type,
         cell: editorCell || (focusedCell
-          ? { rowPath: focusedCell.dataset.noteDatabaseRowPath || "", colKey: focusedCell.dataset.noteDatabaseColumnKey || "" }
+          ? { rowPath: focusedCell.dataset.obnotionRowPath || "", colKey: focusedCell.dataset.obnotionColumnKey || "" }
           : undefined),
-        editorKind: editor?.dataset.noteDatabaseEditorKind as "text" | "number" | "date" | undefined,
+        editorKind: editor?.dataset.obnotionEditorKind as "text" | "number" | "date" | undefined,
       };
     }
     return cloneInteractionSnapshot(snapshot);
@@ -12257,10 +12261,10 @@ export class DatabaseView extends FileView {
     let restoredDraft = false;
     if (snapshot.activeDraft?.cell && !this.cellRenderer.isEditorCommitInProgress()) {
       const draftCell = Array.from(this.containerEl_.querySelectorAll<HTMLElement>(
-        "td[data-note-database-row-path][data-note-database-column-key]"
+        "td[data-obnotion-row-path][data-obnotion-column-key]"
       )).find((candidate) =>
-        candidate.dataset.noteDatabaseRowPath === snapshot.activeDraft?.cell?.rowPath &&
-        candidate.dataset.noteDatabaseColumnKey === snapshot.activeDraft?.cell?.colKey
+        candidate.dataset.obnotionRowPath === snapshot.activeDraft?.cell?.rowPath &&
+        candidate.dataset.obnotionColumnKey === snapshot.activeDraft?.cell?.colKey
       );
       const draftRow = this.rows.find((row) => row.file.path === snapshot.activeDraft?.cell?.rowPath);
       const draftCol = this.getConfig()?.schema.columns.find((col) => col.key === snapshot.activeDraft?.cell?.colKey);
@@ -12270,10 +12274,10 @@ export class DatabaseView extends FileView {
     }
     if (snapshot.focusedCell && !restoredDraft) {
       const cell = Array.from(this.containerEl_.querySelectorAll<HTMLElement>(
-        "td[data-note-database-row-path][data-note-database-column-key]"
+        "td[data-obnotion-row-path][data-obnotion-column-key]"
       )).find((candidate) =>
-        candidate.dataset.noteDatabaseRowPath === snapshot.focusedCell?.rowPath &&
-        candidate.dataset.noteDatabaseColumnKey === snapshot.focusedCell?.colKey
+        candidate.dataset.obnotionRowPath === snapshot.focusedCell?.rowPath &&
+        candidate.dataset.obnotionColumnKey === snapshot.focusedCell?.colKey
       );
       cell?.focus({ preventScroll: true });
     }
@@ -12281,12 +12285,12 @@ export class DatabaseView extends FileView {
 
   private showSkeletonLoader(): void {
     if (!this.containerEl_ || this.skeletonLoader?.isConnected) return;
-    const loader = this.containerEl_.createDiv({ cls: "db-skeleton-loader", attr: { role: "status", "aria-label": t("refresh.loading") } });
+    const loader = this.containerEl_.createDiv({ cls: "obnotion-skeleton-loader", attr: { role: "status", "aria-label": t("refresh.loading") } });
     for (let index = 0; index < 4; index++) {
-      const row = loader.createDiv({ cls: "db-skeleton-row", attr: { "aria-hidden": "true" } });
-      row.createSpan({ cls: "db-skeleton-cell is-wide" });
-      row.createSpan({ cls: "db-skeleton-cell" });
-      row.createSpan({ cls: "db-skeleton-cell is-short" });
+      const row = loader.createDiv({ cls: "obnotion-skeleton-row", attr: { "aria-hidden": "true" } });
+      row.createSpan({ cls: "obnotion-skeleton-cell is-wide" });
+      row.createSpan({ cls: "obnotion-skeleton-cell" });
+      row.createSpan({ cls: "obnotion-skeleton-cell is-short" });
     }
     this.skeletonLoader = loader;
     this.skeletonTimer = this.getRefreshWindow().setTimeout(() => {

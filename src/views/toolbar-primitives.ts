@@ -16,9 +16,9 @@ import {
 import { overlayStack } from "./overlay-stack";
 
 export const SETTINGS_FALLBACK_CLASSES = [
-  "db-view-config-btn",
-  "db-chart-options-toolbar-btn",
-  "db-calendar-timeline-options-toolbar-btn",
+  "obnotion-view-config-btn",
+  "obnotion-chart-options-toolbar-btn",
+  "obnotion-calendar-timeline-options-toolbar-btn",
 ] as const;
 
 const CONDITION_FIELD_FLOOR_PX = 140;
@@ -51,7 +51,7 @@ export interface PopoverShellHandle {
 }
 
 function getToolbarRoot(anchor: HTMLElement): HTMLElement {
-  return anchor.closest<HTMLElement>(".note-database-container")
+  return anchor.closest<HTMLElement>(".obnotion-container")
     || anchor.parentElement
     || anchor.ownerDocument.body;
 }
@@ -63,15 +63,15 @@ function getPopoverPosition(role: ToolbarSurfaceRole, width?: number | ToolbarPo
 }
 
 function closeToolbarSibling(anchor: HTMLElement): void {
-  const toolbar = anchor.closest<HTMLElement>(".db-toolbar")
-    || anchor.closest<HTMLElement>(".note-database-container");
+  const toolbar = anchor.closest<HTMLElement>(".obnotion-toolbar")
+    || anchor.closest<HTMLElement>(".obnotion-container");
   if (!toolbar) return;
   let guard = 0;
   while (guard++ < 8) {
     const top = overlayStack.getTopSurfaceForDocument(anchor.ownerDocument);
     if (!top || top.anchor === anchor) return;
-    const topToolbar = top.anchor?.closest<HTMLElement>(".db-toolbar")
-      || top.anchor?.closest<HTMLElement>(".note-database-container");
+    const topToolbar = top.anchor?.closest<HTMLElement>(".obnotion-toolbar")
+      || top.anchor?.closest<HTMLElement>(".obnotion-container");
     if (topToolbar !== toolbar) return;
     overlayStack.dismissTop("programmatic");
   }
@@ -86,7 +86,7 @@ export function dismissToolbarSurfaces(anchor: HTMLElement): void {
 export function createPopoverShell(anchor: HTMLElement, options: PopoverShellOptions): PopoverShellHandle {
   closeToolbarSibling(anchor);
   const panel = getToolbarRoot(anchor).createDiv({
-    cls: ["db-toolbar-popover", options.className].filter(Boolean).join(" "),
+    cls: ["obnotion-toolbar-popover", options.className].filter(Boolean).join(" "),
     attr: {
       ...(options.id ? { id: options.id } : {}),
       role: options.role === "menu" ? "menu" : "dialog",
@@ -149,7 +149,7 @@ function appendConditionPart(row: HTMLElement, part: ConditionPart | undefined, 
 /** Build the shared property/operator/value row while leaving each control's behaviour to its owner. */
 export function createConditionRow(parent: HTMLElement, options: ConditionRowOptions): HTMLElement {
   const row = parent.createDiv({
-    cls: ["db-panel-row", options.className, options.compact ? "db-active-rule-editor-row" : ""].filter(Boolean).join(" "),
+    cls: ["obnotion-panel-row", options.className, options.compact ? "obnotion-active-rule-editor-row" : ""].filter(Boolean).join(" "),
   });
   appendConditionPart(row, options.leading);
   appendConditionPart(row, options.field, options.compact ? undefined : CONDITION_FIELD_FLOOR_PX);
@@ -184,7 +184,7 @@ export interface ControlClusterButtonOptions {
 /** Build a toolbar trigger whose visible and announced state cannot drift from its count. */
 export function createControlClusterButton(parent: HTMLElement, options: ControlClusterButtonOptions): HTMLButtonElement {
   const button = parent.createEl("button", {
-    cls: ["db-toolbar-icon-button", options.className].filter(Boolean).join(" "),
+    cls: ["obnotion-toolbar-icon-button", options.className].filter(Boolean).join(" "),
     attr: {
       type: "button",
       "aria-label": options.label,
@@ -199,7 +199,7 @@ export function createControlClusterButton(parent: HTMLElement, options: Control
   button.toggleClass("is-add", options.state === "add");
   if (options.count && options.count > 0) {
     button.createSpan({
-      cls: `db-toolbar-badge${options.neutralCount ? " db-toolbar-badge-neutral" : ""}`,
+      cls: `obnotion-toolbar-badge${options.neutralCount ? " obnotion-toolbar-badge-neutral" : ""}`,
       text: String(options.count),
     });
   }
@@ -325,7 +325,7 @@ function installTabDrag(tab: HTMLElement, id: string, tabs: Map<string, HTMLElem
 /** Build the accessible tablist; overflow and drag policy remain measurable host concerns. */
 export function createTabStrip(parent: HTMLElement, options: TabStripOptions): TabStripHandle {
   const root = parent.createDiv({
-    cls: "db-view-tabs",
+    cls: "obnotion-view-tabs",
     attr: { role: "tablist", "aria-label": options.ariaLabel || "Views" },
   });
   const tabs = new Map<string, HTMLElement>();
@@ -339,7 +339,7 @@ export function createTabStrip(parent: HTMLElement, options: TabStripOptions): T
   };
   for (const definition of options.tabs) {
     const tab = root.createEl("button", {
-      cls: `db-view-tab${definition.active || definition.id === options.activeId ? " is-active" : ""}`,
+      cls: `obnotion-view-tab${definition.active || definition.id === options.activeId ? " is-active" : ""}`,
       attr: {
         type: "button",
         role: "tab",
@@ -350,9 +350,9 @@ export function createTabStrip(parent: HTMLElement, options: TabStripOptions): T
       },
     });
     if (definition.disabled) tab.disabled = true;
-    if (options.renderIcon) options.renderIcon(tab.createSpan({ cls: "db-view-tab-icon" }), definition);
-    else if (definition.icon) setIcon(tab.createSpan({ cls: "db-view-tab-icon" }), definition.icon);
-    tab.createSpan({ cls: "db-view-tab-name", text: definition.label });
+    if (options.renderIcon) options.renderIcon(tab.createSpan({ cls: "obnotion-view-tab-icon" }), definition);
+    else if (definition.icon) setIcon(tab.createSpan({ cls: "obnotion-view-tab-icon" }), definition.icon);
+    tab.createSpan({ cls: "obnotion-view-tab-name", text: definition.label });
     tab.onclick = () => options.onActivate(definition.id, tab);
     if (options.onContext) tab.oncontextmenu = (event) => options.onContext?.(event, definition.id, tab);
     if (options.onDoubleActivate) tab.ondblclick = () => options.onDoubleActivate?.(definition.id, tab);
@@ -362,7 +362,7 @@ export function createTabStrip(parent: HTMLElement, options: TabStripOptions): T
   let addButton: HTMLButtonElement | undefined;
   if (options.addButton) {
     const add = root.createEl("button", {
-      cls: "db-view-tab db-view-tab-add",
+      cls: "obnotion-view-tab obnotion-view-tab-add",
       attr: {
         type: "button",
         "aria-label": options.addButton.label,

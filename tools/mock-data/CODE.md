@@ -84,8 +84,8 @@ renderer would photograph something else and look identical.
 ## 5. TWO THINGS THAT LOOK LIKE BUGS AND ARE NOT
 
 **Record rows are counted by attribute, not by `tr`.** `TableRenderer` emits a
-`db-row-insert-line` between every pair of records, so `tbody tr` reads exactly double the record
-count. `capture.mjs` counts `tbody tr[data-note-database-row-path]`, which is the attribute
+`obnotion-row-insert-line` between every pair of records, so `tbody tr` reads exactly double the record
+count. `capture.mjs` counts `tbody tr[data-obnotion-row-path]`, which is the attribute
 `renderRow` sets.
 
 **Computed and rollup cells are empty in a capture.** Both are evaluated by the data pipeline against

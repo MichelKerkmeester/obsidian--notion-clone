@@ -172,7 +172,7 @@ describe("renderBoardGroupsRows", () => {
       showGroup: vi.fn(),
     }, vi.fn());
 
-    const rows = body.querySelectorAll(".db-column-manager-row");
+    const rows = body.querySelectorAll(".obnotion-column-manager-row");
     expect(rows).toHaveLength(3);
     const checkboxes = body.querySelectorAll("input");
     expect(checkboxes.map((box) => box.checked)).toEqual([true, true, false]);
@@ -209,7 +209,7 @@ describe("renderBoardGroupsRows", () => {
       showGroup: vi.fn(),
     }, onReorder);
 
-    const rows = body.querySelectorAll(".db-column-manager-row");
+    const rows = body.querySelectorAll(".obnotion-column-manager-row");
     rows[0].ondragstart?.({ dataTransfer: { setData: vi.fn() }, target: {} });
     rows[2].ondrop?.({ preventDefault() {}, target: {} });
     expect(onReorder).toHaveBeenCalledWith(0, 2);
@@ -225,7 +225,7 @@ describe("renderBoardGroupsRows", () => {
       showGroup: vi.fn(),
     }, onReorder);
 
-    const firstRow = body.querySelectorAll(".db-column-manager-row")[0];
+    const firstRow = body.querySelectorAll(".obnotion-column-manager-row")[0];
     const moveDown = firstRow.querySelectorAll("button")[1];
     moveDown.onclick?.({ preventDefault() {}, stopPropagation() {} });
     expect(onReorder).toHaveBeenCalledWith(0, 1);

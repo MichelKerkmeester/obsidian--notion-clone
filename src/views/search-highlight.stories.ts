@@ -25,11 +25,11 @@ type Story = StoryObj;
 
 function line(text: string, query: string, caption: string): HTMLElement {
   const wrap = document.createElement("div");
-  wrap.className = "db-story-cell";
+  wrap.className = "obnotion-story-cell";
   const host = document.createElement("div");
   renderSearchHighlightedText(host, text, query);
   const note = document.createElement("span");
-  note.className = "db-story-note";
+  note.className = "obnotion-story-note";
   note.textContent = caption;
   wrap.append(host, note);
   return wrap;
@@ -43,7 +43,7 @@ function line(text: string, query: string, caption: string): HTMLElement {
 export const Matches: Story = {
   render: () => {
     const col = document.createElement("div");
-    col.className = "db-story-column";
+    col.className = "obnotion-story-column";
     col.append(
       line("Quarterly revenue forecast", "revenue", "single term"),
       line("Quarterly revenue forecast", "quarterly forecast", "two terms"),

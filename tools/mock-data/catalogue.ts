@@ -187,7 +187,7 @@ export interface Catalogue {
 }
 
 export const SCHEMA_VERSION = 1;
-export const DEFAULT_SEED = "note-database-testbed";
+export const DEFAULT_SEED = "obnotion-testbed";
 
 // The two attachments that exist in the vault today. Pointing at a file that is
 // not there would exercise the unresolved-link path, which is a real state worth

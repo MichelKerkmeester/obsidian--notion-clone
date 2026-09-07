@@ -95,7 +95,7 @@ import { ActiveViewControlsRenderer } from "./active-view-controls-renderer";
 import { ActiveRulePopoverRenderer } from "./active-rule-popover-renderer";
 import { removeFilterRuleAt, removeSortRuleAt } from "./view-rule-operations";
 import { ViewConfigPanelRenderer } from "./view-config-panel-renderer";
-import { DATABASE_VIEW_TYPE, DatabaseView, getNoteDatabasePlugin } from "./database-view";
+import { DATABASE_VIEW_TYPE, DatabaseView, getObnotionPlugin } from "./database-view";
 import { applyListMigration, planListMigration } from "../data/list-migration";
 import { applyGalleryMigration, planGalleryMigration } from "../data/gallery-migration";
 import { resolveViewIndex } from "../data/view-selection";
@@ -508,7 +508,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       renderCell: (td, row, col) => {
         if (this.isViewReadOnly()) this.renderReadOnlyCell(td, row, col);
         else this.cellRenderer.renderCell(td, row, col, this.config?.wrapText);
-        td.toggleClass("db-cell-range-selected", this.isEmbedCellSelected(row.file.path, col.key));
+        td.toggleClass("obnotion-cell-range-selected", this.isEmbedCellSelected(row.file.path, col.key));
         // The same tap the full table view gives its main-item cell. Without it an embedded table
         // looked identical and answered differently: a thumb on the note name followed the link
         // and navigated away from the page the table is embedded in. Bound in both persistence
@@ -588,7 +588,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       },
       onStateChange: (state) => this.updateRefreshIndicator(state),
       onError: (error) => {
-        console.error("Note Database: embedded refresh failed", error);
+        console.error("Obnotion: embedded refresh failed", error);
         new Notice(t("errors.refreshFailed"));
       },
       // IntersectionObserver pokes immediately when the embed becomes visible.
@@ -609,11 +609,11 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   onload(): void {
-    this.containerEl.addClass("note-database-container");
-    this.containerEl.addClass("note-database-embed");
+    this.containerEl.addClass("obnotion-container");
+    this.containerEl.addClass("obnotion-embed");
     if (this.persistMode === "codeblock") this.containerEl.addClass(EMBED_LINKED_CLASS);
     this.interactionScopes.register(this.interactionScopeId, this.containerEl, {
-      portalSelectors: [".db-column-menu-subpopover", ".db-icon-picker-popover", ".db-color-picker-popup", ".db-calendar-search-results-popover", ".db-cell-edit-popover", ".db-cell-option-popover", ".db-cell-date-popover"],
+      portalSelectors: [".obnotion-column-menu-subpopover", ".obnotion-icon-picker-popover", ".obnotion-color-picker-popup", ".obnotion-calendar-search-results-popover", ".obnotion-cell-edit-popover", ".obnotion-cell-option-popover", ".obnotion-cell-date-popover"],
     });
     this.touchLayoutState = undefined;
     this.removeTouchEnvironmentObserver = observeTouchEnvironment(this.containerEl, (touch) => {
@@ -722,7 +722,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     const pos = scroll ?? this.saveScroll();
     const descriptionScroll = this.saveDescriptionScroll();
     this.containerEl.empty();
-    this.containerEl.toggleClass("note-database-embed-headerless", this.shouldHideHeaderChrome());
+    this.containerEl.toggleClass("obnotion-embed-headerless", this.shouldHideHeaderChrome());
     const config = this.getEmbeddedConfig();
     if (!config) {
       this.emptyStateRenderer.renderCard(this.containerEl, {
@@ -782,7 +782,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     if (!config?.id || !db?.id) return;
     const plan = planGalleryMigration(config);
     if (!plan) return;
-    const plugin = getNoteDatabasePlugin(this.app);
+    const plugin = getObnotionPlugin(this.app);
     const alreadyNotified = plugin?.settings.galleryMigrationNotices?.includes(db.id) ?? false;
     if (!alreadyNotified) {
       if (this.migratedGalleryViews.has(db.id)) return;
@@ -804,7 +804,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       }
     } catch (err) {
       if (config.viewType === "board") config.viewType = "gallery";
-      console.error("Note Database: failed to migrate an embedded gallery view to a board", err);
+      console.error("Obnotion: failed to migrate an embedded gallery view to a board", err);
     }
   }
 
@@ -825,7 +825,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     if (!config?.id || !db?.id) return;
     const plan = planListMigration(config);
     if (!plan) return;
-    const plugin = getNoteDatabasePlugin(this.app);
+    const plugin = getObnotionPlugin(this.app);
     const alreadyNotified = plugin?.settings.listMigrationNotices?.includes(db.id) ?? false;
     if (!alreadyNotified) {
       if (this.migratedListViews.has(db.id)) return;
@@ -843,7 +843,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       }
     } catch (err) {
       if (config.viewType === "table") config.viewType = "list";
-      console.error("Note Database: failed to migrate an embedded list view to a table", err);
+      console.error("Obnotion: failed to migrate an embedded list view to a table", err);
     }
   }
 
@@ -857,13 +857,13 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private saveDescriptionScroll(): number {
-    return this.containerEl.querySelector<HTMLElement>(":scope > .db-header .db-description")?.scrollTop || 0;
+    return this.containerEl.querySelector<HTMLElement>(":scope > .obnotion-header .obnotion-description")?.scrollTop || 0;
   }
 
   private restoreDescriptionScroll(scrollTop: number): void {
     if (scrollTop <= 0) return;
     const restore = () => {
-      const desc = this.containerEl.querySelector<HTMLElement>(":scope > .db-header .db-description");
+      const desc = this.containerEl.querySelector<HTMLElement>(":scope > .obnotion-header .obnotion-description");
       if (desc) desc.scrollTop = scrollTop;
     };
     restore();
@@ -1064,7 +1064,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.getIncrementalComputedSyncRows(config, this.rows, changedPaths)
     );
     if (config.viewType === "table") {
-      this.containerEl.querySelector(".db-summary")?.remove();
+      this.containerEl.querySelector(".obnotion-summary")?.remove();
     } else {
       this.summaryRenderer.render(this.containerEl, this.rows, config, this.currentDbConfig, {
         onChange: () => {
@@ -1074,9 +1074,9 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         },
       });
     }
-    const summary = this.containerEl.querySelector<HTMLElement>(":scope > .db-summary");
+    const summary = this.containerEl.querySelector<HTMLElement>(":scope > .obnotion-summary");
     const tableRoot = this.containerEl.querySelector<HTMLElement>(
-      ":scope > .db-table-wrap, :scope > .db-grouped-table"
+      ":scope > .obnotion-table-wrap, :scope > .obnotion-grouped-table"
     );
     if (summary && tableRoot) this.containerEl.insertBefore(summary, tableRoot);
     this.renderEmbedCellSelectionClasses();
@@ -1113,8 +1113,8 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       return;
     }
     if (target.closest(
-      ".db-filter-panel, .db-sort-panel, .db-column-manager, .db-view-config-panel, " +
-      ".db-dropdown-popover, .db-date-value-popover, .db-toolbar, .db-header"
+      ".obnotion-filter-panel, .obnotion-sort-panel, .obnotion-column-manager, .obnotion-view-config-panel, " +
+      ".obnotion-dropdown-popover, .obnotion-date-value-popover, .obnotion-toolbar, .obnotion-header"
     )) return;
     this.closePopovers();
   }
@@ -1126,10 +1126,10 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     // moves, keeps it. The branch below already names every control that must not clear it.
     if (!this.containerEl.contains(target) && !isInsideOpenSheet(target)) return !target.closest(".modal");
     return !target.closest(
-      "td[data-note-database-row-path][data-note-database-column-key], " +
-      ".db-selection-status-bar, .db-cell-editing, input, textarea, select, button, a, " +
-      ".db-filter-panel, .db-sort-panel, .db-column-manager, .db-view-config-panel, " +
-      ".db-dropdown-popover, .db-date-value-popover, .db-group-order-popover, .menu"
+      "td[data-obnotion-row-path][data-obnotion-column-key], " +
+      ".obnotion-selection-status-bar, .obnotion-cell-editing, input, textarea, select, button, a, " +
+      ".obnotion-filter-panel, .obnotion-sort-panel, .obnotion-column-manager, .obnotion-view-config-panel, " +
+      ".obnotion-dropdown-popover, .obnotion-date-value-popover, .obnotion-group-order-popover, .menu"
     );
   }
 
@@ -1231,13 +1231,13 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     const viewType = config.viewType || "table";
     const viewTypeChanged = this.lastRenderedViewType !== viewType;
     this.lastRenderedViewType = viewType;
-    this.containerEl.toggleClass("db-width-wide", config.displayWidth === "wide");
+    this.containerEl.toggleClass("obnotion-width-wide", config.displayWidth === "wide");
     this.updateFileViewWidthClass(config);
     this.applyViewTypeClass(config.viewType || "table");
     const target = this.containerEl;
     const staleViewSelector = config.viewType === "chart"
-      ? ".db-summary, .db-table-wrap, .db-grouped-table, .db-board, .db-gallery, .db-gallery-grouped, .db-gallery-total-header, .db-list, .db-list-grouped, .db-list-total-header, .db-calendar, .db-timeline, .db-empty"
-      : ".db-summary, .db-table-wrap, .db-grouped-table, .db-board, .db-gallery, .db-gallery-grouped, .db-gallery-total-header, .db-list, .db-list-grouped, .db-list-total-header, .db-chart, .db-chart-empty, .db-chart-number, .db-calendar, .db-timeline, .db-empty";
+      ? ".obnotion-summary, .obnotion-table-wrap, .obnotion-grouped-table, .obnotion-board, .obnotion-gallery, .obnotion-gallery-grouped, .obnotion-gallery-total-header, .obnotion-list, .obnotion-list-grouped, .obnotion-list-total-header, .obnotion-calendar, .obnotion-timeline, .obnotion-empty"
+      : ".obnotion-summary, .obnotion-table-wrap, .obnotion-grouped-table, .obnotion-board, .obnotion-gallery, .obnotion-gallery-grouped, .obnotion-gallery-total-header, .obnotion-list, .obnotion-list-grouped, .obnotion-list-total-header, .obnotion-chart, .obnotion-chart-empty, .obnotion-chart-number, .obnotion-calendar, .obnotion-timeline, .obnotion-empty";
     target.querySelectorAll(staleViewSelector).forEach((el) => el.remove());
     if (!config.schema.columns || config.schema.columns.length === 0) {
       this.emptyStateRenderer.renderCard(target, {
@@ -1384,15 +1384,15 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     if (config.viewType !== "calendar" && config.viewType !== "timeline") return;
     const query = this.vs(config).searchText.trim();
     if (!query) return;
-    const searchControl = this.containerEl.querySelector<HTMLElement>(".db-search-control");
-    const searchInput = searchControl?.querySelector<HTMLInputElement>(".db-search-input");
+    const searchControl = this.containerEl.querySelector<HTMLElement>(".obnotion-search-control");
+    const searchInput = searchControl?.querySelector<HTMLInputElement>(".obnotion-search-input");
     if (!searchControl || !searchInput) return;
     if (window.activeDocument.activeElement !== searchInput) return;
     const visibleRange = config.viewType === "timeline"
       ? this.calendarTimelineRenderer.getCurrentVisibleRange()
       : this.calendarRenderer.getCurrentVisibleRange();
     const results = buildCalendarTimelineSearchResults(this.rows, config, visibleRange);
-    const panel = window.activeDocument.body.createDiv({ cls: "db-calendar-search-results-popover" });
+    const panel = window.activeDocument.body.createDiv({ cls: "obnotion-calendar-search-results-popover" });
     this.calendarTimelineSearchResultsEl = panel;
     this.positionCalendarTimelineSearchResultsPanel(panel, searchControl);
     this.renderCalendarTimelineSearchResultsContent(panel, results, config, query);
@@ -1415,14 +1415,14 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private renderCalendarTimelineSearchResultsContent(panel: HTMLElement, results: CalendarTimelineSearchResults, config: ViewConfig, query: string): void {
     panel.createDiv({
-      cls: "db-calendar-search-results-summary",
+      cls: "obnotion-calendar-search-results-summary",
       text: t("search.calendarTimelineSummary", { total: results.totalCount, visible: results.visibleCount }),
     });
     if (results.totalCount === 0) {
-      panel.createDiv({ cls: "db-calendar-search-results-empty", text: t("search.noMatches") });
+      panel.createDiv({ cls: "obnotion-calendar-search-results-empty", text: t("search.noMatches") });
       return;
     }
-    const list = panel.createDiv({ cls: "db-calendar-search-results-list" });
+    const list = panel.createDiv({ cls: "obnotion-calendar-search-results-list" });
     const currentRangeItems = results.items.filter((item) => item.inCurrentRange);
     const outsideRangeItems = results.items.filter((item) => !item.inCurrentRange);
     const visibleItems = [...currentRangeItems, ...outsideRangeItems].slice(0, 50);
@@ -1430,15 +1430,15 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     const outsideVisibleItems = visibleItems.filter((item) => !item.inCurrentRange);
     const renderSection = (label: string, items: CalendarTimelineSearchResultItem[]) => {
       if (items.length === 0) return;
-      const section = list.createDiv({ cls: "db-calendar-search-results-section" });
-      section.createDiv({ cls: "db-calendar-search-results-section-title", text: label });
+      const section = list.createDiv({ cls: "obnotion-calendar-search-results-section" });
+      section.createDiv({ cls: "obnotion-calendar-search-results-section-title", text: label });
       for (const item of items) this.renderCalendarTimelineSearchResultButton(section, config, item, query);
     };
     renderSection(t("search.inCurrentRange"), currentVisibleItems);
     renderSection(t("search.outsideCurrentRange"), outsideVisibleItems);
     if (results.totalCount > visibleItems.length) {
       panel.createDiv({
-        cls: "db-calendar-search-results-more",
+        cls: "obnotion-calendar-search-results-more",
         text: t("search.moreResults", { count: results.totalCount - visibleItems.length }),
       });
     }
@@ -1446,11 +1446,11 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private renderCalendarTimelineSearchResultButton(list: HTMLElement, config: ViewConfig, item: CalendarTimelineSearchResultItem, query: string): void {
     const button = list.createEl("button", {
-      cls: `db-calendar-search-result${item.inCurrentRange ? " is-current-range" : ""}`,
+      cls: `obnotion-calendar-search-result${item.inCurrentRange ? " is-current-range" : ""}`,
       attr: { type: "button" },
     });
-    renderSearchHighlightedText(button.createSpan({ cls: "db-calendar-search-result-title" }), item.title || t("common.untitled"), query);
-    renderSearchHighlightedText(button.createSpan({ cls: "db-calendar-search-result-date" }), formatCalendarTimelineSearchResultDate(item), query);
+    renderSearchHighlightedText(button.createSpan({ cls: "obnotion-calendar-search-result-title" }), item.title || t("common.untitled"), query);
+    renderSearchHighlightedText(button.createSpan({ cls: "obnotion-calendar-search-result-date" }), formatCalendarTimelineSearchResultDate(item), query);
     button.onclick = (event) => {
       event.preventDefault();
       this.closeCalendarTimelineSearchResultsPanel();
@@ -1516,14 +1516,14 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private findRenderedRowElement(path: string): HTMLElement | null {
     const candidates = Array.from(
-      this.containerEl.querySelectorAll<HTMLElement>("[data-note-database-row-path]")
+      this.containerEl.querySelectorAll<HTMLElement>("[data-obnotion-row-path]")
     );
-    return candidates.find((candidate) => candidate.dataset.noteDatabaseRowPath === path) || null;
+    return candidates.find((candidate) => candidate.dataset.obnotionRowPath === path) || null;
   }
 
   private applyViewTypeClass(viewType: NonNullable<ViewConfig["viewType"]>): void {
     for (const type of ["table", "board", "gallery", "list", "chart", "calendar", "timeline"] as const) {
-      this.containerEl.toggleClass(`db-view-${type}`, viewType === type);
+      this.containerEl.toggleClass(`obnotion-view-${type}`, viewType === type);
     }
   }
 
@@ -1604,7 +1604,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       setDisplayWidth: (value) => {
         config.displayWidth = value;
         this.persistEmbeddedConfigLocally(config);
-        this.containerEl.toggleClass("db-width-wide", value === "wide");
+        this.containerEl.toggleClass("obnotion-width-wide", value === "wide");
         this.updateFileViewWidthClass(config);
         this.saveEmbeddedConfigInBackground();
       },
@@ -1847,12 +1847,12 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private rerenderToolbar(config: ViewConfig): void {
     this.closeCalendarTimelineSearchResultsPanel();
-    this.containerEl.querySelector(":scope > .db-header")?.remove();
+    this.containerEl.querySelector(":scope > .obnotion-header")?.remove();
     this.renderToolbar(config);
   }
 
   private updateRefreshIndicator(state = this.refreshCoordinator.getState()): void {
-    const button = this.containerEl.querySelector<HTMLElement>(".db-database-refresh-button");
+    const button = this.containerEl.querySelector<HTMLElement>(".obnotion-database-refresh-button");
     if (!button) return;
     this.toolbarRenderer.updateDatabaseRefreshButton(button, {
       pendingRefreshCount: state.pendingCount,
@@ -1864,9 +1864,9 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private updateStickyOffsets(): void {
     const update = () => {
       const hideHeader = this.shouldHideHeaderChrome();
-      const header = hideHeader ? null : this.containerEl.querySelector(":scope > .db-header");
+      const header = hideHeader ? null : this.containerEl.querySelector(":scope > .obnotion-header");
       const height = header ? Math.ceil(header.getBoundingClientRect().height) : 88;
-      this.containerEl.style.setProperty("--db-table-header-top", `${hideHeader ? 0 : height}px`);
+      this.containerEl.style.setProperty("--obnotion-table-header-top", `${hideHeader ? 0 : height}px`);
     };
     update();
     window.requestAnimationFrame(update);
@@ -1919,7 +1919,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     //
     // A phone sheet is portalled onto the body (see mobile-bottom-sheet.ts), so a selector scoped
     // to this embed's own container stops matching the instant the panel becomes a sheet, and the
-    // fixed ids these panels share ("db-sort-panel" etc.) make an unscoped document-wide selector
+    // fixed ids these panels share ("obnotion-sort-panel" etc.) make an unscoped document-wide selector
     // unsafe with more than one embed open. The renderer's own reference has neither problem, and
     // it is re-asked on every dismissal check, so a rebuild that replaces the node (sort/filter
     // rebuild on every add/toggle/remove) is followed rather than left pointing at a detached one.
@@ -1938,7 +1938,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       anchorEl: this.headerPopoverAnchorEl,
       close: () => this.closePopovers(),
       isActiveTarget: (target) => target instanceof HTMLElement &&
-        Boolean(target.closest(".db-color-picker-popup, .db-dropdown-popover, .db-date-value-popover")),
+        Boolean(target.closest(".obnotion-color-picker-popup, .obnotion-dropdown-popover, .obnotion-date-value-popover")),
     });
   }
 
@@ -1946,12 +1946,12 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     if (this.activeHeaderPopover !== kind) return undefined;
     if (this.headerPopoverAnchorEl?.isConnected) return this.headerPopoverAnchorEl;
     const selector = kind === "filter"
-      ? ".db-filter-btn"
+      ? ".obnotion-filter-btn"
       : kind === "sort"
-        ? ".db-sort-btn"
+        ? ".obnotion-sort-btn"
         : kind === "view"
-          ? ".db-view-config-btn"
-          : ".db-col-manager-btn";
+          ? ".obnotion-view-config-btn"
+          : ".obnotion-col-manager-btn";
     return this.containerEl.querySelector(selector) as HTMLElement | undefined;
   }
 
@@ -2029,13 +2029,13 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
    *  also uses and which knows nothing about a page it did not render past. Reads the header row
    *  TableRenderer just built for its own column count rather than re-deriving one. */
   private renderTableLoadMoreRow(target: HTMLElement, config: ViewConfig, remaining: number): void {
-    const tbody = target.querySelector<HTMLElement>(".db-table-wrap table.db-table tbody");
-    const headerRow = target.querySelector<HTMLElement>(".db-table-wrap table.db-table thead tr");
+    const tbody = target.querySelector<HTMLElement>(".obnotion-table-wrap table.obnotion-table tbody");
+    const headerRow = target.querySelector<HTMLElement>(".obnotion-table-wrap table.obnotion-table thead tr");
     if (!tbody || !headerRow) return;
-    const row = tbody.createEl("tr", { cls: "db-table-load-more-row" });
+    const row = tbody.createEl("tr", { cls: "obnotion-table-load-more-row" });
     const cell = row.createEl("td", { attr: { colspan: String(headerRow.children.length) } });
     const button = cell.createEl("button", {
-      cls: "db-table-load-more-button",
+      cls: "obnotion-table-load-more-button",
       text: t("embeddedTable.loadMore", { count: remaining }),
       attr: { type: "button" },
     });
@@ -2050,7 +2050,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         icon: "settings",
         primary: true,
         onClick: () => {
-          const anchor = this.containerEl.querySelector<HTMLElement>(".db-view-config-btn");
+          const anchor = this.containerEl.querySelector<HTMLElement>(".obnotion-view-config-btn");
           if (anchor) this.toggleHeaderPopover(config, "view", anchor);
         },
       }],
@@ -2134,7 +2134,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         icon: "database",
         primary: true,
         onClick: () => {
-          const anchor = this.containerEl.querySelector<HTMLElement>(".db-view-config-btn");
+          const anchor = this.containerEl.querySelector<HTMLElement>(".obnotion-view-config-btn");
           if (anchor) this.toggleHeaderPopover(config, "view", anchor);
         },
       });
@@ -2151,7 +2151,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private openDateConfiguration(config: ViewConfig): void {
-    const button = this.containerEl.querySelector<HTMLElement>(".db-toolbar-more-btn");
+    const button = this.containerEl.querySelector<HTMLElement>(".obnotion-toolbar-more-btn");
     if (button) {
       this.toggleHeaderPopover(config, "view", button);
       return;
@@ -2336,7 +2336,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       return;
     }
     this.closePopovers();
-    const activeAnchor = this.containerEl.querySelector<HTMLElement>(".db-chart-options-toolbar-btn") || anchorEl;
+    const activeAnchor = this.containerEl.querySelector<HTMLElement>(".obnotion-chart-options-toolbar-btn") || anchorEl;
     this.chartToolbarRenderer.togglePopover(this.containerEl, activeAnchor, config, {
       onChange: () => {
         this.persistEmbeddedConfigLocally(config);
@@ -2477,13 +2477,13 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private updateFileViewWidthClass(config: ViewConfig): void {
     if (this.persistMode !== "frontmatter") return;
     this.containerEl.closest(".markdown-preview-view")
-      ?.toggleClass("note-database-file-view-wide", config.displayWidth === "wide");
+      ?.toggleClass("obnotion-file-view-wide", config.displayWidth === "wide");
   }
 
   private clearFileViewWidthClass(): void {
     if (this.persistMode !== "frontmatter") return;
     this.containerEl.closest(".markdown-preview-view")
-      ?.removeClass("note-database-file-view-wide");
+      ?.removeClass("obnotion-file-view-wide");
   }
 
   private parseEmbeddedReference(): EmbeddedReference {
@@ -2576,7 +2576,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private renderReadOnlyCell(td: HTMLElement, row: RowData, col: ColumnDef): void {
     this.cellRenderer.renderCell(td, row, col, this.config?.wrapText);
-    td.removeClass("db-editable-cell", "db-cell-selected", "db-cell-editing");
+    td.removeClass("obnotion-editable-cell", "obnotion-cell-selected", "obnotion-cell-editing");
     td.removeAttribute("tabindex");
     const checkbox = td.querySelector<HTMLInputElement>('input[type="checkbox"]');
     if (checkbox) checkbox.disabled = true;
@@ -3089,15 +3089,15 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
     this.closeGroupOrderPopover();
 
-    const triggerBtn = this.containerEl.querySelector(".db-group-btn");
+    const triggerBtn = this.containerEl.querySelector(".obnotion-group-btn");
     const host = this.containerEl;
     const anchorEl = isHTMLElement(triggerBtn) ? triggerBtn : undefined;
 
-    const popover = host.createDiv({ cls: "db-group-order-popover" });
+    const popover = host.createDiv({ cls: "obnotion-group-order-popover" });
     this.groupOrderPopover = popover;
     popover.createEl("h3", { text: t("modal.groupOrderTitle", { field: col?.label || field }) });
 
-    const list = popover.createDiv({ cls: "db-group-order-list" });
+    const list = popover.createDiv({ cls: "obnotion-group-order-list" });
     let draggedIndex: number | null = null;
     let dropLine: HTMLElement | null = null;
     let outsideTimer: number | undefined;
@@ -3125,8 +3125,8 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     };
     const showDropLine = (event: DragEvent, targetIndex: number, row: HTMLElement) => {
       const insertIndex = getInsertIndex(event, targetIndex, row);
-      const rows = Array.from(list.querySelectorAll<HTMLElement>(".db-group-order-row"));
-      if (!dropLine) dropLine = createDiv({ cls: "db-group-order-drop-line" });
+      const rows = Array.from(list.querySelectorAll<HTMLElement>(".obnotion-group-order-row"));
+      if (!dropLine) dropLine = createDiv({ cls: "obnotion-group-order-drop-line" });
       const ref = rows[insertIndex] || null;
       if (ref) list.insertBefore(dropLine, ref);
       else list.appendChild(dropLine);
@@ -3136,7 +3136,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       list.empty();
       dropLine = null;
       order.forEach((key, index) => {
-        const row = list.createDiv({ cls: "db-group-order-row" });
+        const row = list.createDiv({ cls: "obnotion-group-order-row" });
         row.draggable = true;
         row.ondragstart = (event) => {
           draggedIndex = index;
@@ -3172,12 +3172,12 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
           draggedIndex = null;
           clearDropLine();
           popover.classList.remove("is-dragging-order");
-          list.querySelectorAll(".db-group-order-row").forEach((r) => r.classList.remove("is-dragging"));
+          list.querySelectorAll(".obnotion-group-order-row").forEach((r) => r.classList.remove("is-dragging"));
         };
 
-        row.createSpan({ cls: "db-group-order-drag", text: "⋮⋮" });
-        row.createSpan({ cls: "db-group-order-name", text: formatGroupKeyDisplay(config, field, key) });
-        const moveControls = row.createSpan({ cls: "db-mobile-reorder-controls" });
+        row.createSpan({ cls: "obnotion-group-order-drag", text: "⋮⋮" });
+        row.createSpan({ cls: "obnotion-group-order-name", text: formatGroupKeyDisplay(config, field, key) });
+        const moveControls = row.createSpan({ cls: "obnotion-mobile-reorder-controls" });
         const upBtn = moveControls.createEl("button", {
           attr: { type: "button" },
         });
@@ -3210,7 +3210,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
     if (defaultOrder.length > 0) {
       const resetBtn = popover.createEl("button", {
-        cls: "db-panel-button db-group-order-reset",
+        cls: "obnotion-panel-button obnotion-group-order-reset",
         text: t("modal.resetToOptionOrder"),
         attr: { type: "button" },
       });
@@ -3591,14 +3591,14 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     const rowByPath = new Map(this.rows.map((row) => [row.file.path, row]));
     const seen = new Set<string>();
     const selectors = [
-      "tr[data-note-database-row-path]",
-      ".db-board-card[data-note-database-row-path]",
-      ".db-gallery-card[data-note-database-row-path]",
-      ".db-list-row[data-note-database-row-path]",
+      "tr[data-obnotion-row-path]",
+      ".obnotion-board-card[data-obnotion-row-path]",
+      ".obnotion-gallery-card[data-obnotion-row-path]",
+      ".obnotion-list-row[data-obnotion-row-path]",
     ];
     const rows: RowData[] = [];
     for (const element of Array.from(this.containerEl.querySelectorAll<HTMLElement>(selectors.join(",")))) {
-      const path = element.dataset.noteDatabaseRowPath;
+      const path = element.dataset.obnotionRowPath;
       if (!path || seen.has(path)) continue;
       const renderedRow = rowByPath.get(path);
       if (!renderedRow) continue;
@@ -3709,7 +3709,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private syncComputedFieldsInBackground(config: ViewConfig, rows: RowData[], notify = false, force = false): void {
     void this.syncComputedFields(config, rows, notify, force).catch((err) => {
-      console.error("Note Database: failed to sync embedded computed fields", err);
+      console.error("Obnotion: failed to sync embedded computed fields", err);
       new Notice(t("errors.updateFailed", { error: String(err) }));
     });
   }
@@ -3750,17 +3750,17 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private updateToolbarIndicators(config = this.config): void {
     if (!config) return;
     const state = this.vs(config);
-    const filterBtn = this.containerEl.querySelector(".db-filter-btn");
+    const filterBtn = this.containerEl.querySelector(".obnotion-filter-btn");
     if (isHTMLElement(filterBtn)) this.updateToolbarBadge(filterBtn, getEffectiveFilterRules(state.filters).length);
-    const sortBtn = this.containerEl.querySelector(".db-sort-btn");
+    const sortBtn = this.containerEl.querySelector(".obnotion-sort-btn");
     if (isHTMLElement(sortBtn)) {
       const count = state.sortRules.filter((rule) => rule.field && rule.direction).length ||
         (state.sortColumn ? 1 : 0);
       this.updateToolbarBadge(sortBtn, count);
     }
-    const colBtn = this.containerEl.querySelector(".db-col-manager-btn");
+    const colBtn = this.containerEl.querySelector(".obnotion-col-manager-btn");
     if (isHTMLElement(colBtn)) this.updateHiddenToolbarBadge(colBtn, state.hiddenColumns.size);
-    const groupBtn = this.containerEl.querySelector(".db-group-btn");
+    const groupBtn = this.containerEl.querySelector(".obnotion-group-btn");
     if (isHTMLElement(groupBtn)) {
       const groupValue = config.viewType === "board"
         ? config.boardGroupField || state.groupByField
@@ -3775,15 +3775,15 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private updateToolbarBadge(button: HTMLElement, count: number): void {
-    button.querySelector(".db-toolbar-badge")?.remove();
+    button.querySelector(".obnotion-toolbar-badge")?.remove();
     if (count <= 0) return;
-    button.createSpan({ cls: "db-toolbar-badge", text: String(count) });
+    button.createSpan({ cls: "obnotion-toolbar-badge", text: String(count) });
   }
 
   private updateHiddenToolbarBadge(button: HTMLElement, count: number): void {
-    button.querySelector(".db-toolbar-badge")?.remove();
+    button.querySelector(".obnotion-toolbar-badge")?.remove();
     button.setAttribute("aria-label", count > 0 ? t("toolbar.propertiesHidden", { count }) : t("toolbar.properties"));
-    if (count > 0) button.createSpan({ cls: "db-toolbar-badge db-toolbar-badge-neutral", text: t("toolbar.hiddenCount", { count }) });
+    if (count > 0) button.createSpan({ cls: "obnotion-toolbar-badge obnotion-toolbar-badge-neutral", text: t("toolbar.hiddenCount", { count }) });
   }
 
   private persistEmbeddedConfigToSource(): void {
@@ -3795,7 +3795,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private saveEmbeddedConfigInBackground(mutationOverride?: ViewConfigMutation): void {
     void this.saveEmbeddedConfigToSource(mutationOverride).catch((err) => {
-      console.error("Note Database: failed to save embedded view config", err);
+      console.error("Obnotion: failed to save embedded view config", err);
       new Notice(t("errors.saveViewConfigFailed", { error: String(err) }));
     });
   }
@@ -3842,10 +3842,10 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.configHistoryStack.shift();
       const nextConfig = this.getEmbeddedConfig();
       if (nextConfig) this.render(undefined);
-      this.containerEl.querySelectorAll(".db-cell-option-popover").forEach((el) => el.remove());
+      this.containerEl.querySelectorAll(".obnotion-cell-option-popover").forEach((el) => el.remove());
       new Notice(t("notice.undone", { action: t("undo.viewConfig") }));
     } catch (err) {
-      console.error("Note Database: failed to undo embedded config", err);
+      console.error("Obnotion: failed to undo embedded config", err);
       if (current) {
         this.pendingDatabaseOverride = { config: current, sourcePath: this.currentSourcePath };
         this.currentDbConfig = current;
@@ -3865,7 +3865,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     if (!(file instanceof TFile)) return;
     const section = this.getSectionInfo();
     if (!section) return;
-    const language = section.text.match(/^```(\S+)/)?.[1] || "note-database";
+    const language = section.text.match(/^```(\S+)/)?.[1] || "obnotion";
     const replacement = `\`\`\`${language}\n${this.serializeCodeBlockReference(config)}\n\`\`\``;
     const content = await this.app.vault.read(file);
     const lines = content.split("\n");
@@ -3877,7 +3877,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private saveCodeBlockReferenceInBackground(config: ViewConfig): void {
     void this.saveCodeBlockReference(config).catch((err) => {
-      console.error("Note Database: failed to save embedded code block reference", err);
+      console.error("Obnotion: failed to save embedded code block reference", err);
       new Notice(t("errors.updateFailed", { error: String(err) }));
     });
   }
@@ -3894,7 +3894,12 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private getLinkedViewLanguage(): LinkedViewLanguage {
     const language = this.getSectionInfo()?.text.match(/^```(\S+)/)?.[1];
-    return language === "database-view" ? "database-view" : "note-database";
+    // Round-trips a pre-rename fence unchanged (aliases are permanent, never
+    // force-upgraded), and defaults anything else — including a fresh block — to the new
+    // canonical language.
+    if (language === "database-view") return "database-view";
+    if (language === "note-database") return "note-database";
+    return "obnotion";
   }
 
   private currentLinkedViewFence(config = this.config): string | null {
@@ -3911,7 +3916,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private bindLinkedViewMoveAffordance(): void {
     if (this.persistMode !== "codeblock") return;
-    const handle = this.containerEl.querySelector(":scope > .db-header .db-linked-view-drag-handle");
+    const handle = this.containerEl.querySelector(":scope > .obnotion-header .obnotion-linked-view-drag-handle");
     if (!isHTMLElement(handle)) return;
     handle.draggable = true;
     handle.addEventListener("dragstart", (event) => this.onLinkedViewDragStart(event));
@@ -3999,7 +4004,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       });
       new Notice(t("notice.linkedViewMoved"));
     } catch (err) {
-      console.error("Note Database: failed to move linked view", err);
+      console.error("Obnotion: failed to move linked view", err);
       new Notice(t("notice.linkedViewMoveFailed"));
     }
   }
@@ -4010,12 +4015,12 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       new Notice(t("notice.noDbCopyInfo"));
       return;
     }
-    const code = ["```note-database", reference, "```"].join("\n");
+    const code = ["```obnotion", reference, "```"].join("\n");
     try {
       await navigator.clipboard.writeText(code);
       new Notice(t("notice.copiedEmbedCode"));
     } catch (err) {
-      console.error("Note Database: failed to copy embedded view code", err);
+      console.error("Obnotion: failed to copy embedded view code", err);
       new Notice(t("errors.copyFailed", { error: String(err) }));
     }
   }
@@ -4067,7 +4072,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     navigator.clipboard.writeText(content).then(() => {
       new Notice(t("notice.copiedExport", { format: format === "csv" ? "CSV" : "Markdown", count: this.rows.length }));
     }).catch((err) => {
-      console.error("Note Database: failed to export embedded data", err);
+      console.error("Obnotion: failed to export embedded data", err);
       new Notice(t("errors.clipboardFailed"));
     });
   }
@@ -4316,7 +4321,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     if (!this.interactionScopes.isActive(this.interactionScopeId, event)) return;
     const target = event.target;
     const eventTarget = isHTMLElement(target) ? target : null;
-    const isEditing = eventTarget?.closest("input, textarea, select, .db-cell-editing, .modal") != null;
+    const isEditing = eventTarget?.closest("input, textarea, select, .obnotion-cell-editing, .modal") != null;
     if (isEditing) return;
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "c" && this.cellSelection) {
       event.preventDefault();
@@ -4344,8 +4349,8 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private getEmbedTableRowPaths(): string[] {
     const paths: string[] = [];
     const seen = new Set<string>();
-    this.containerEl.querySelectorAll<HTMLElement>("tr[data-note-database-row-path]").forEach((tr) => {
-      const path = tr.dataset.noteDatabaseRowPath;
+    this.containerEl.querySelectorAll<HTMLElement>("tr[data-obnotion-row-path]").forEach((tr) => {
+      const path = tr.dataset.obnotionRowPath;
       if (!path || seen.has(path)) return;
       seen.add(path);
       paths.push(path);
@@ -4355,12 +4360,12 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   /** Get column keys in the order they appear in the rendered table thead */
   private getEmbedTableColKeys(): string[] {
-    const firstRow = this.containerEl.querySelector<HTMLElement>(".db-table tbody tr[data-note-database-row-path]");
+    const firstRow = this.containerEl.querySelector<HTMLElement>(".obnotion-table tbody tr[data-obnotion-row-path]");
     if (firstRow) {
       const seen = new Set<string>();
       return Array.from(firstRow.children)
-        .filter((cell): cell is HTMLElement => cell.instanceOf(HTMLElement) && cell.matches("td[data-note-database-column-key]"))
-        .map((cell) => cell.dataset.noteDatabaseColumnKey)
+        .filter((cell): cell is HTMLElement => cell.instanceOf(HTMLElement) && cell.matches("td[data-obnotion-column-key]"))
+        .map((cell) => cell.dataset.obnotionColumnKey)
         .filter((key): key is string => {
           if (!key || seen.has(key)) return false;
           seen.add(key);
@@ -4449,7 +4454,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     // back apart the way the tap grammar above already did once.
     attachLongPress(td, {
       ignoreTarget: (event) => isHTMLElement(event.target)
-        && Boolean(event.target.closest("input, textarea, select, button, a, .db-cell-fill-handle, .db-cell-editing")),
+        && Boolean(event.target.closest("input, textarea, select, button, a, .obnotion-cell-fill-handle, .obnotion-cell-editing")),
       onLongPress: () => {
         const addr: CellAddress = { rowPath: row.file.path, colKey: col.key };
         const current = this.cellSelection;
@@ -4529,15 +4534,15 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private findEmbedCell(address: CellAddress): HTMLElement | null {
-    return Array.from(this.containerEl.querySelectorAll<HTMLElement>("td[data-note-database-row-path][data-note-database-column-key]")).find((cell) =>
-      cell.dataset.noteDatabaseRowPath === address.rowPath && cell.dataset.noteDatabaseColumnKey === address.colKey
+    return Array.from(this.containerEl.querySelectorAll<HTMLElement>("td[data-obnotion-row-path][data-obnotion-column-key]")).find((cell) =>
+      cell.dataset.obnotionRowPath === address.rowPath && cell.dataset.obnotionColumnKey === address.colKey
     ) || null;
   }
 
   private focusEmbedCell(address: CellAddress): void {
     const cell = this.findEmbedCell(address);
     if (!cell) return;
-    this.containerEl.querySelectorAll<HTMLElement>("td[data-note-database-row-path][data-note-database-column-key]").forEach((candidate) => {
+    this.containerEl.querySelectorAll<HTMLElement>("td[data-obnotion-row-path][data-obnotion-column-key]").forEach((candidate) => {
       candidate.tabIndex = candidate === cell ? 0 : -1;
     });
     cell.focus({ preventScroll: true });
@@ -4583,63 +4588,63 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private renderEmbedCellSelectionClasses(): void {
     const selected = new Set(this.getSelectedEmbedCellAddresses().map((addr) => `${addr.rowPath}\u0000${addr.colKey}`));
-    this.containerEl.querySelectorAll<HTMLElement>("td[data-note-database-row-path][data-note-database-column-key]").forEach((cell) => {
-      const rowPath = cell.dataset.noteDatabaseRowPath;
-      const colKey = cell.dataset.noteDatabaseColumnKey;
+    this.containerEl.querySelectorAll<HTMLElement>("td[data-obnotion-row-path][data-obnotion-column-key]").forEach((cell) => {
+      const rowPath = cell.dataset.obnotionRowPath;
+      const colKey = cell.dataset.obnotionColumnKey;
       const selectedCell = Boolean(rowPath && colKey && selected.has(`${rowPath}\u0000${colKey}`));
-      cell.toggleClass("db-cell-range-selected", selectedCell);
-      cell.toggleClass("db-cell-focus", Boolean(this.cellSelection?.focus && rowPath === this.cellSelection.focus.rowPath && colKey === this.cellSelection.focus.colKey));
+      cell.toggleClass("obnotion-cell-range-selected", selectedCell);
+      cell.toggleClass("obnotion-cell-focus", Boolean(this.cellSelection?.focus && rowPath === this.cellSelection.focus.rowPath && colKey === this.cellSelection.focus.colKey));
       cell.tabIndex = this.cellSelection?.focus && rowPath === this.cellSelection.focus.rowPath && colKey === this.cellSelection.focus.colKey ? 0 : -1;
     });
     if (!this.cellSelection) {
-      this.containerEl.querySelector<HTMLElement>("td[data-note-database-row-path][data-note-database-column-key]")?.setAttr("tabindex", "0");
+      this.containerEl.querySelector<HTMLElement>("td[data-obnotion-row-path][data-obnotion-column-key]")?.setAttr("tabindex", "0");
     }
   }
 
   /** Render a full Dashboard-style selection status bar.
-   *  Paste/fill/clear/undo buttons are rendered but hidden via CSS (.note-database-embed .db-embed-hide).
+   *  Paste/fill/clear/undo buttons are rendered but hidden via CSS (.obnotion-embed .obnotion-embed-hide).
    *  Only copy actions are wired up. */
   private renderEmbedSelectionStatusBar(): void {
-    this.containerEl.querySelectorAll(".db-selection-status-bar").forEach((el) => el.remove());
+    this.containerEl.querySelectorAll(".obnotion-selection-status-bar").forEach((el) => el.remove());
     this.containerEl.toggleClass("has-selection-status", !!this.cellSelection);
     if (!this.cellSelection) return;
     const config = this.config || this.getEmbeddedConfig();
     if (!config || config.viewType !== "table") return;
     const cellCount = this.getSelectedEmbedCellAddresses().length;
     if (cellCount === 0) return;
-    const bar = this.containerEl.createDiv({ cls: "db-selection-status-bar" });
+    const bar = this.containerEl.createDiv({ cls: "obnotion-selection-status-bar" });
 
     // Clear selection checkbox (matches Dashboard)
     const checkbox = createCheckbox(bar, {
       role: "row",
-      cls: "db-selection-clear-checkbox",
+      cls: "obnotion-selection-clear-checkbox",
       attr: { title: tSelectedCells(cellCount) },
     });
     checkbox.checked = true;
     checkbox.onchange = () => { if (!checkbox.checked) this.clearEmbedCellSelection(); };
 
     // Count text
-    bar.createSpan({ cls: "db-selection-count", text: tSelectedCells(cellCount) });
+    bar.createSpan({ cls: "obnotion-selection-count", text: tSelectedCells(cellCount) });
 
     // Copy buttons (same structure as Dashboard)
-    const copyTsvBtn = bar.createEl("button", { cls: "db-selection-action", text: t("selection.copyTsv"), attr: { type: "button" } });
+    const copyTsvBtn = bar.createEl("button", { cls: "obnotion-selection-action", text: t("selection.copyTsv"), attr: { type: "button" } });
     copyTsvBtn.onclick = () => { void this.copySelectedEmbedCells("tsv"); };
-    const copyMdBtn = bar.createEl("button", { cls: "db-selection-action", text: t("selection.copyMarkdown"), attr: { type: "button" } });
+    const copyMdBtn = bar.createEl("button", { cls: "obnotion-selection-action", text: t("selection.copyMarkdown"), attr: { type: "button" } });
     copyMdBtn.onclick = () => { void this.copySelectedEmbedCells("markdown"); };
-    const copyCsvBtn = bar.createEl("button", { cls: "db-selection-action", text: t("selection.copyCsv"), attr: { type: "button" } });
+    const copyCsvBtn = bar.createEl("button", { cls: "obnotion-selection-action", text: t("selection.copyCsv"), attr: { type: "button" } });
     copyCsvBtn.onclick = () => { void this.copySelectedEmbedCells("csv"); };
 
     // Edit-only buttons — rendered but hidden in embedded view via CSS
-    bar.createEl("button", { cls: "db-selection-action db-embed-hide", text: t("selection.pasteCells"), attr: { type: "button" } });
-    bar.createEl("button", { cls: "db-selection-action db-embed-hide", text: t("selection.fillValue"), attr: { type: "button" } });
-    bar.createEl("button", { cls: "db-selection-delete db-embed-hide", text: t("selection.clearCells"), attr: { type: "button" } });
+    bar.createEl("button", { cls: "obnotion-selection-action obnotion-embed-hide", text: t("selection.pasteCells"), attr: { type: "button" } });
+    bar.createEl("button", { cls: "obnotion-selection-action obnotion-embed-hide", text: t("selection.fillValue"), attr: { type: "button" } });
+    bar.createEl("button", { cls: "obnotion-selection-delete obnotion-embed-hide", text: t("selection.clearCells"), attr: { type: "button" } });
 
-    const summary = this.containerEl.querySelector(".db-summary");
+    const summary = this.containerEl.querySelector(".obnotion-summary");
     if (summary) {
       bar.addClass("is-summary-overlay");
       summary.before(bar);
     } else {
-      const tableWrap = this.containerEl.querySelector(".db-table-wrap");
+      const tableWrap = this.containerEl.querySelector(".obnotion-table-wrap");
       if (tableWrap) tableWrap.before(bar);
     }
   }

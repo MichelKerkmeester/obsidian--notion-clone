@@ -586,12 +586,12 @@ describe("linked embed chrome", () => {
     const { harness } = createRenderer();
     const container = (harness as unknown as { containerEl: FakeElement }).containerEl;
     const header = new FakeElement();
-    header.addClass("db-header");
+    header.addClass("obnotion-header");
     const handle = new FakeElement();
-    handle.addClass("db-linked-view-drag-handle");
+    handle.addClass("obnotion-linked-view-drag-handle");
     handle.parentElement = header;
     const button = new FakeElement();
-    button.addClass("db-toolbar-icon-button");
+    button.addClass("obnotion-toolbar-icon-button");
     button.parentElement = header;
     header.children.push(handle, button);
     header.parentElement = container;
@@ -668,7 +668,7 @@ describe("linked embed writes", () => {
 
 describe("moving a linked view", () => {
   const movedFiles = () => new Map<string, string>([
-    ["from.md", "intro\n```note-database\ndbId: db1\n```\nend\n"],
+    ["from.md", "intro\n```obnotion\ndbId: db1\n```\nend\n"],
     ["to.md", "other\n"],
   ]);
   const moveRequest = {
@@ -676,7 +676,7 @@ describe("moving a linked view", () => {
     destPath: "to.md",
     sourceLineStart: 1,
     sourceLineEnd: 3,
-    block: "```note-database\ndbId: db1\n```",
+    block: "```obnotion\ndbId: db1\n```",
   };
 
   it("writes the destination first and leaves exactly one block", async () => {
@@ -694,7 +694,7 @@ describe("moving a linked view", () => {
     expect(order[1]).toBe("from.md");
     expect(linkedViewBlockCount(result.sourceAfter, result.destAfter)).toBe(1);
     expect(result.destAfter).toContain("dbId: db1");
-    expect(result.sourceAfter).not.toContain("```note-database");
+    expect(result.sourceAfter).not.toContain("```obnotion");
     await undoLinkedViewMove(adapter, { ...result, sourcePath: "from.md", destPath: "to.md" });
     expect(files.get("from.md")).toBe(result.sourceBefore);
     expect(files.get("to.md")).toBe(result.destBefore);
@@ -743,7 +743,7 @@ describe("moving a linked view", () => {
 
     const sourceAfter = await adapter.read("pages/overview.md");
     const destAfter = await adapter.read("pages/archive.md");
-    const movedFence = destAfter.match(/```(?:note-database|database-view)\n[\s\S]*?\n```/);
+    const movedFence = destAfter.match(/```(?:obnotion|database-view)\n[\s\S]*?\n```/);
     expect(movedFence).not.toBeNull();
     if (!movedFence) return;
     const parsed = parseLinkedViewFence(movedFence[0]);
@@ -776,7 +776,7 @@ describe("moving a linked view", () => {
 });
 
 describe("creating a linked view", () => {
-  it("builds a note-database fence for a newly appended view without List", () => {
+  it("builds a obnotion fence for a newly appended view without List", () => {
     const types = getViewTypeOptions().map((option) => option.value);
     expect(types).not.toContain("list");
     expect(types).toContain("table");
@@ -790,7 +790,7 @@ describe("creating a linked view", () => {
     const view = appendLinkedViewToDatabase(db, "board", "By status");
     expect(db.views).toHaveLength(1);
     const fence = buildLinkedViewFence(db, view, "db.md");
-    expect(fence).toContain("```note-database");
+    expect(fence).toContain("```obnotion");
     expect(fence).toContain("dbId: db1");
     expect(fence).toContain(`viewId: ${view.id}`);
     expect(fence).not.toContain("dbPath:");
@@ -832,7 +832,7 @@ describe("linked-view fence round trip", () => {
     { hideHeader: true as const },
     {},
   ] as const;
-  const languages = ["note-database", "database-view"] as const;
+  const languages = ["obnotion", "database-view"] as const;
 
   it("round-trips the 16 canonical rows byte-identically", () => {
     let count = 0;
@@ -851,17 +851,17 @@ describe("linked-view fence round trip", () => {
   });
 
   it("parses a dbPath that contains a colon and keeps the locator kind", () => {
-    const parsed = parseLinkedViewFence("```note-database\ndbPath: folder/db:name.md\n```");
+    const parsed = parseLinkedViewFence("```obnotion\ndbPath: folder/db:name.md\n```");
     expect(parsed.dbPath).toBe("folder/db:name.md");
     expect(serializeLinkedViewSource(parsed)).toBe("dbPath: folder/db:name.md");
   });
 
   it("keeps an empty viewId key that copyCurrentViewCode writes", () => {
-    const parsed = parseLinkedViewFence("```note-database\ndbId: db1\nviewId: \n```");
+    const parsed = parseLinkedViewFence("```obnotion\ndbId: db1\nviewId: \n```");
     expect(parsed.viewIdPresent).toBe(true);
     expect(parsed.viewId).toBe("");
-    expect(roundTripLinkedViewFence("```note-database\ndbId: db1\nviewId: \n```")).toBe(
-      "```note-database\ndbId: db1\nviewId: \n```",
+    expect(roundTripLinkedViewFence("```obnotion\ndbId: db1\nviewId: \n```")).toBe(
+      "```obnotion\ndbId: db1\nviewId: \n```",
     );
   });
 

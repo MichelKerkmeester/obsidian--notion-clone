@@ -68,16 +68,16 @@ export class ActiveViewControlsRenderer {
     state: DatabaseViewState,
     actions: ActiveViewControlsActions
   ): void {
-    const existing = containerEl.querySelector<HTMLElement>(":scope > .db-header > .db-active-view-controls");
-    const previousScrollLeft = existing?.querySelector<HTMLElement>(".db-active-view-controls-scroll")?.scrollLeft || 0;
+    const existing = containerEl.querySelector<HTMLElement>(":scope > .obnotion-header > .obnotion-active-view-controls");
+    const previousScrollLeft = existing?.querySelector<HTMLElement>(".obnotion-active-view-controls-scroll")?.scrollLeft || 0;
     existing?.remove();
-    const header = containerEl.querySelector<HTMLElement>(":scope > .db-header");
+    const header = containerEl.querySelector<HTMLElement>(":scope > .obnotion-header");
     if (!header) return;
-    header.querySelector<HTMLElement>(":scope > .db-sr-status")?.remove();
+    header.querySelector<HTMLElement>(":scope > .obnotion-sr-status")?.remove();
     if (this.statusUpdateTimer !== null) window.clearTimeout(this.statusUpdateTimer);
     this.statusUpdateTimer = null;
     const status = header.createDiv({
-      cls: "db-sr-status",
+      cls: "obnotion-sr-status",
       attr: { role: "status", "aria-live": "polite", "aria-atomic": "true" },
     });
     const statusMessage = actions.getStatusMessage?.();
@@ -102,14 +102,14 @@ export class ActiveViewControlsRenderer {
     if (filters.length === 0 && sorts.length === 0) return;
 
     const rail = header.createDiv({
-      cls: "db-active-view-controls",
+      cls: "obnotion-active-view-controls",
       attr: { "aria-label": `${t("toolbar.filter")} / ${t("toolbar.sort")}` },
     });
-    const scroller = rail.createDiv({ cls: "db-active-view-controls-scroll" });
+    const scroller = rail.createDiv({ cls: "obnotion-active-view-controls-scroll" });
 
     if (sorts.length > 0) {
       const sortGroup = scroller.createDiv({
-        cls: "db-active-control-group is-sort",
+        cls: "obnotion-active-control-group is-sort",
         attr: { "aria-label": t("toolbar.sort") },
       });
       for (const [visibleIndex, { rule, index }] of sorts.entries()) {
@@ -117,15 +117,15 @@ export class ActiveViewControlsRenderer {
         const chip = this.createChip(sortGroup, "sort");
         chip.dataset.activeRuleKey = `sort:${index}`;
         this.setEditHandler(chip, () => actions.editSort(index, chip));
-        const icon = chip.querySelector<HTMLElement>(".db-active-control-icon");
+        const icon = chip.querySelector<HTMLElement>(".obnotion-active-control-icon");
         if (icon) {
           setIcon(icon, rule.direction === "desc" ? "arrow-down" : "arrow-up");
-          icon.createSpan({ cls: "db-active-control-order", text: String(visibleIndex + 1) });
+          icon.createSpan({ cls: "obnotion-active-control-order", text: String(visibleIndex + 1) });
         }
-        chip.querySelector<HTMLElement>(".db-active-control-field")?.setText(column?.label || rule.field);
+        chip.querySelector<HTMLElement>(".obnotion-active-control-field")?.setText(column?.label || rule.field);
         const detail = createDirectionWord(rule.direction);
-        const detailEl = chip.querySelector<HTMLElement>(".db-active-control-detail");
-        detailEl?.addClass("db-active-control-direction");
+        const detailEl = chip.querySelector<HTMLElement>(".obnotion-active-control-detail");
+        detailEl?.addClass("obnotion-active-control-direction");
         detailEl?.setText(detail);
         this.setEditLabel(chip, `${column?.label || rule.field} · ${detail}`);
         this.appendRemoveButton(chip, t("toolbar.sort"), () => actions.removeSort(index));
@@ -135,13 +135,13 @@ export class ActiveViewControlsRenderer {
 
     if (filters.length > 0) {
       const filterGroup = scroller.createDiv({
-        cls: "db-active-control-group is-filter",
+        cls: "obnotion-active-control-group is-filter",
         attr: { "aria-label": t("toolbar.filter") },
       });
       if (filters.length > 1 && !isNestedFilterTree(state.filterTree)) {
         const logicLabel = state.filterLogic === "and" ? t("panel.and") : t("panel.or");
         const logic = filterGroup.createEl("button", {
-          cls: "db-active-control-logic",
+          cls: "obnotion-active-control-logic",
           text: state.filterLogic.toUpperCase(),
           attr: { type: "button", title: logicLabel, "aria-label": logicLabel },
         });
@@ -154,7 +154,7 @@ export class ActiveViewControlsRenderer {
     }
     scroller.scrollLeft = previousScrollLeft;
     const clear = rail.createEl("button", {
-      cls: "db-active-view-controls-clear",
+      cls: "obnotion-active-view-controls-clear",
       text: t("toolbar.clearAll"),
       attr: { type: "button", "aria-label": t("toolbar.clearAll") },
     });
@@ -182,35 +182,35 @@ export class ActiveViewControlsRenderer {
     const chip = this.createChip(parent, "filter");
     chip.dataset.activeRuleKey = `filter:${index}`;
     this.setEditHandler(chip, () => actions.editFilter(index, chip));
-    const icon = chip.querySelector<HTMLElement>(".db-active-control-icon");
+    const icon = chip.querySelector<HTMLElement>(".obnotion-active-control-icon");
     if (icon) setIcon(icon, "list-filter");
     const operator = getFilterOperatorsForColumn(column).find(([value]) => value === rule.op)?.[1] || rule.op;
     const phrase = formatFilterPhrase(column?.label || rule.field, operator, rule);
-    chip.querySelector<HTMLElement>(".db-active-control-field")?.setText(phrase);
-    chip.querySelector<HTMLElement>(".db-active-control-detail")?.setText("");
+    chip.querySelector<HTMLElement>(".obnotion-active-control-field")?.setText(phrase);
+    chip.querySelector<HTMLElement>(".obnotion-active-control-detail")?.setText("");
     this.setEditLabel(chip, phrase);
     this.appendRemoveButton(chip, t("toolbar.filter"), () => actions.removeFilter(index));
   }
 
   private createChip(parent: HTMLElement, kind: "filter" | "sort"): HTMLElement {
-    const chip = parent.createDiv({ cls: `db-active-control-chip is-${kind}` });
+    const chip = parent.createDiv({ cls: `obnotion-active-control-chip is-${kind}` });
     const edit = chip.createEl("button", {
-      cls: "db-active-control-edit",
+      cls: "obnotion-active-control-edit",
       attr: { type: "button" },
     });
-    edit.createSpan({ cls: "db-active-control-icon" });
-    edit.createSpan({ cls: "db-active-control-field" });
-    edit.createSpan({ cls: "db-active-control-detail" });
+    edit.createSpan({ cls: "obnotion-active-control-icon" });
+    edit.createSpan({ cls: "obnotion-active-control-field" });
+    edit.createSpan({ cls: "obnotion-active-control-detail" });
     return chip;
   }
 
   private setEditHandler(chip: HTMLElement, onEdit: () => void): void {
-    const edit = chip.querySelector<HTMLElement>(".db-active-control-edit");
+    const edit = chip.querySelector<HTMLElement>(".obnotion-active-control-edit");
     if (edit) edit.onclick = onEdit;
   }
 
   private setEditLabel(chip: HTMLElement, label: string): void {
-    const edit = chip.querySelector<HTMLElement>(".db-active-control-edit");
+    const edit = chip.querySelector<HTMLElement>(".obnotion-active-control-edit");
     if (!edit) return;
     edit.setAttribute("title", label);
     edit.setAttribute("aria-label", label);
@@ -218,7 +218,7 @@ export class ActiveViewControlsRenderer {
 
   private appendRemoveButton(chip: HTMLElement, label: string, onRemove: () => void): void {
     const remove = chip.createEl("button", {
-      cls: "db-active-control-remove",
+      cls: "obnotion-active-control-remove",
       text: "×",
       attr: {
         type: "button",
@@ -237,7 +237,7 @@ export class ActiveViewControlsRenderer {
    *  itself is present, so the zero-chip case (the group never renders) is the control. */
   private appendAddButton(group: HTMLElement, label: string, onAdd: (anchorEl: HTMLElement) => void): void {
     const add = group.createEl("button", {
-      cls: "db-active-control-add",
+      cls: "obnotion-active-control-add",
       attr: { type: "button", title: label, "aria-label": label },
     });
     setIcon(add, "plus");

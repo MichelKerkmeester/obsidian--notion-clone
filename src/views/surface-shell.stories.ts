@@ -26,7 +26,7 @@ type Story = StoryObj;
 export const RootTitle: Story = {
   render: () => {
     const panel = document.createElement("section");
-    panel.className = "db-menu";
+    panel.className = "obnotion-menu";
     buildShellHeader(panel, { title: "Edit view", onClose: () => undefined });
     return panel;
   },
@@ -35,7 +35,7 @@ export const RootTitle: Story = {
 export const SubPageWithBack: Story = {
   render: () => {
     const panel = document.createElement("section");
-    panel.className = "db-menu";
+    panel.className = "obnotion-menu";
     buildShellHeader(panel, { title: "Layout", onClose: () => undefined, onBack: () => undefined });
     return panel;
   },

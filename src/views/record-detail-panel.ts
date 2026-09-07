@@ -55,9 +55,9 @@ import { renderPropertyTypeIcon } from "./property-type-icon";
  *   Esc + 容器滚动/视口 resize 即关。pointerdown 同时覆盖鼠标与触摸，手机端点击外部才能关闭
  *   （mousedown 在触摸屏不触发）。不用 installPopoverAutoClose（其为「空闲超时关」语义）。
  * - 移动端（is-phone）由 positionToolbarPopover 转为底部抽屉：抓手可向下拖拽关闭，标题栏常驻
- *   关闭按钮（复用 db-cell-edit-close）。桌面端保持锚定面板不变。
- * - 面板挂在 .note-database-container 内且不加 transform/filter，确保字段编辑时子气泡
- *   （db-cell-option-popover 等）相对同一容器 absolute 定位正确。
+ *   关闭按钮（复用 obnotion-cell-edit-close）。桌面端保持锚定面板不变。
+ * - 面板挂在 .obnotion-container 内且不加 transform/filter，确保字段编辑时子气泡
+ *   （obnotion-cell-option-popover 等）相对同一容器 absolute 定位正确。
  * - z-index 999：低于子编辑气泡（1000–1002），子气泡浮在面板之上。
  */
 
@@ -91,7 +91,7 @@ export interface RecordDetailActions {
 export interface OpenRecordDetailOptions {
   /** 被点击的事件卡片，作为定位锚点。 */
   anchorEl: HTMLElement;
-  /** 面板挂载宿主（传容器的 note-database-container 元素）。 */
+  /** 面板挂载宿主（传容器的 obnotion-container 元素）。 */
   host: HTMLElement;
   /**
    * How the panel takes its position. Defaults to `anchored`, which is what every affordance with
@@ -130,12 +130,12 @@ interface ActivePanel {
 let currentPanel: ActivePanel | null = null;
 
 const RECORD_DETAIL_CHILD_POPOVER_SELECTOR = [
-  ".db-cell-edit-popover",
-  ".db-cell-option-popover",
-  ".db-cell-date-popover",
-  ".db-color-picker-popup",
-  ".db-dropdown-popover",
-  ".db-icon-picker-popover",
+  ".obnotion-cell-edit-popover",
+  ".obnotion-cell-option-popover",
+  ".obnotion-cell-date-popover",
+  ".obnotion-color-picker-popup",
+  ".obnotion-dropdown-popover",
+  ".obnotion-icon-picker-popover",
 ].join(", ");
 
 function isRecordDetailChildPopoverTarget(target: EventTarget | null): boolean {
@@ -143,7 +143,7 @@ function isRecordDetailChildPopoverTarget(target: EventTarget | null): boolean {
 }
 
 function isBodyEditorTarget(target: EventTarget | null): boolean {
-  return isElement(target) && Boolean(target.closest(".db-record-detail-body-editor"));
+  return isElement(target) && Boolean(target.closest(".obnotion-record-detail-body-editor"));
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -179,10 +179,10 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
   // 定位完成后只隐藏 overflow，不能 remove：CalendarRenderer 会保留节点引用供
   // “还有 N 条”再次打开；remove 会留下 detached 引用，使后续 hover/click 无响应。
   const calendarPopovers = Array.from(
-    host.querySelectorAll<HTMLElement>(".db-calendar-day-popover, .db-calendar-week-allday-popover")
+    host.querySelectorAll<HTMLElement>(".obnotion-calendar-day-popover, .obnotion-calendar-week-allday-popover")
   );
 
-  const panel = host.createDiv({ cls: "db-record-detail-panel" });
+  const panel = host.createDiv({ cls: "obnotion-record-detail-panel" });
   panel.tabIndex = -1;
   panel.setAttribute("role", "dialog");
   panel.setAttribute("aria-modal", "true");
@@ -203,22 +203,22 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
   // Outlives renderContent the same way bodyText does: a field-commit refresh rebuilds every
   // field, and a toggle held only in the DOM would collapse itself back on the very next one.
   const hiddenPropertiesGroup: HiddenPropertiesGroupHandle = createHiddenPropertiesGroup({
-    groupClass: "db-record-detail-hidden-group",
-    toggleClass: "db-record-detail-hidden-toggle",
-    fieldsClass: "db-record-detail-hidden-fields",
+    groupClass: "obnotion-record-detail-hidden-group",
+    toggleClass: "obnotion-record-detail-hidden-toggle",
+    fieldsClass: "obnotion-record-detail-hidden-fields",
     expandedClass: "is-expanded",
-    sectionClass: "db-record-detail-hidden-section",
-    sectionHeaderClass: "db-record-detail-hidden-section-header",
-    sectionTitleClass: "db-record-detail-hidden-section-title",
-    bulkLinkClass: "db-record-detail-hidden-bulk-link",
-    rowClass: "db-record-detail-hidden-row",
-    dragHandleClass: "db-record-detail-hidden-drag",
+    sectionClass: "obnotion-record-detail-hidden-section",
+    sectionHeaderClass: "obnotion-record-detail-hidden-section-header",
+    sectionTitleClass: "obnotion-record-detail-hidden-section-title",
+    bulkLinkClass: "obnotion-record-detail-hidden-bulk-link",
+    rowClass: "obnotion-record-detail-hidden-row",
+    dragHandleClass: "obnotion-record-detail-hidden-drag",
     dragHandleTitle: t("panel.dragToSort"),
-    typeClass: "db-record-detail-hidden-type",
-    nameWrapClass: "db-record-detail-hidden-name-wrap",
-    nameClass: "db-record-detail-hidden-name",
-    eyeClass: "db-record-detail-hidden-eye",
-    chevronClass: "db-record-detail-hidden-chevron",
+    typeClass: "obnotion-record-detail-hidden-type",
+    nameWrapClass: "obnotion-record-detail-hidden-name-wrap",
+    nameClass: "obnotion-record-detail-hidden-name",
+    eyeClass: "obnotion-record-detail-hidden-eye",
+    chevronClass: "obnotion-record-detail-hidden-chevron",
     shownSectionTitle: t("panel.shownSection"),
     hiddenSectionTitle: t("panel.hiddenSection"),
     hideAllLabel: t("panel.hideAllProperties"),
@@ -276,7 +276,7 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
       if (isBodyEditorTarget(event.target)) return;
       // 焦点留在触发按钮时（如记录图标按钮打开 IconPickerPopover），event.target 不在白名单内。
       // 收窄到图标/颜色选择器（会留焦点的嵌套浮层），避免其他位置同类浮窗误命中。
-      if (window.activeDocument.querySelector(".db-icon-picker-popover, .db-color-picker-popup")) return;
+      if (window.activeDocument.querySelector(".obnotion-icon-picker-popover, .obnotion-color-picker-popup")) return;
       event.preventDefault();
       close();
     }
@@ -334,7 +334,7 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
    * captured, since a view re-render rebuilds this node while the closures around it survive.
    */
   const contentHost = (): HTMLElement =>
-    panel.querySelector<HTMLElement>(".db-record-detail-scroll") ?? panel;
+    panel.querySelector<HTMLElement>(".obnotion-record-detail-scroll") ?? panel;
 
   /** Mount the body under the properties, resuming an interrupted edit where it left off. */
   const mountBody = (r: RowData): void => {
@@ -371,7 +371,7 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
       bodyText = text;
       mountBody(r);
     }).catch((err) => {
-      console.error("Note Database: failed to read the record's note body", err);
+      console.error("Obnotion: failed to read the record's note body", err);
     });
   };
 
@@ -387,12 +387,12 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     // enough to leave the sheet with no bar to grab and no visible affordance to aim at.
     // Re-applying is idempotent and only fires once the surface is already a sheet, so the first
     // render and every desktop render are untouched.
-    if (panel.hasClass("db-mobile-bottom-sheet")) applySheetChrome(panel, true);
+    if (panel.hasClass("obnotion-mobile-bottom-sheet")) applySheetChrome(panel, true);
     const explicitTitleField = getRecordEventTitleField(config);
     const title = resolveTitleFieldDisplay(r, config, explicitTitleField);
     panel.setAttribute("aria-label", title.text || r.file.basename);
     const titleField = title.field || "file.name";
-    // 标题区（对齐事件卡片标题）+ 右上角「打开笔记」按钮（复用看板卡片 db-board-card-open 样式）
+    // 标题区（对齐事件卡片标题）+ 右上角「打开笔记」按钮（复用看板卡片 obnotion-board-card-open 样式）
     const editFileName = titleField === "file.name" ? actions.editFileName : undefined;
     buildDesktopRecordHeader({
       parent: panel,
@@ -415,8 +415,8 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     // 字段列表（跳过 titleField；空的可见字段按 showEmptyFields 决定是否渲染，不再归入隐藏分组——
     // 该分组现在持有的是视图中被隐藏的列，与看板卡片、peek 一致）
     // The scroll region, holding everything below the header. See `contentHost`.
-    const scrollEl = panel.createDiv({ cls: "db-record-detail-scroll" });
-    const fieldsEl = scrollEl.createDiv({ cls: "db-record-detail-fields" });
+    const scrollEl = panel.createDiv({ cls: "obnotion-record-detail-scroll" });
+    const fieldsEl = scrollEl.createDiv({ cls: "obnotion-record-detail-fields" });
     // `allColumns` filtered through the live, locally-owned membership rather than through
     // `columns` itself — the eye toggle below mutates this set directly, so a field it just
     // moved shows up here on the very next `renderContent` call rather than waiting on whatever
@@ -442,8 +442,8 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     }
     if (actions.addProperty) {
       const addProperty = actions.addProperty;
-      const addRow = scrollEl.createDiv({ cls: "db-record-detail-add-row" });
-      const addButton = addRow.createEl("button", { cls: "db-record-detail-add-button", attr: { type: "button" } });
+      const addRow = scrollEl.createDiv({ cls: "obnotion-record-detail-add-row" });
+      const addButton = addRow.createEl("button", { cls: "obnotion-record-detail-add-button", attr: { type: "button" } });
       addButton.createSpan({ text: `+ ${t("panel.addColumn")}` });
       addButton.addEventListener("click", (event) => {
         event.preventDefault();
@@ -469,15 +469,15 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     // matching column entry falls back to its key, the same way every other unlabelled row would.
     const titleColumn: ColumnDef = allColumns.find((col) => col.key === titleField) ?? { key: titleField, label: titleField, type: "text" };
     const shownRows: HiddenGroupRow<ColumnDef>[] = [
-      { item: titleColumn, key: titleColumn.key, label: titleColumn.label || titleColumn.key, visible: true, eyeDisabled: true, renderTypeIcon: (parent) => renderPropertyTypeIcon(parent, titleColumn, "db-record-detail-hidden-type-icon") },
+      { item: titleColumn, key: titleColumn.key, label: titleColumn.label || titleColumn.key, visible: true, eyeDisabled: true, renderTypeIcon: (parent) => renderPropertyTypeIcon(parent, titleColumn, "obnotion-record-detail-hidden-type-icon") },
       ...shownColumns.map((col): HiddenGroupRow<ColumnDef> => ({
         item: col, key: col.key, label: col.label || col.key, visible: true,
-        renderTypeIcon: (parent) => renderPropertyTypeIcon(parent, col, "db-record-detail-hidden-type-icon"),
+        renderTypeIcon: (parent) => renderPropertyTypeIcon(parent, col, "obnotion-record-detail-hidden-type-icon"),
       })),
     ];
     const hiddenRows: HiddenGroupRow<ColumnDef>[] = hiddenFieldColumns.map((col) => ({
       item: col, key: col.key, label: col.label || col.key, visible: false,
-      renderTypeIcon: (parent) => renderPropertyTypeIcon(parent, col, "db-record-detail-hidden-type-icon"),
+      renderTypeIcon: (parent) => renderPropertyTypeIcon(parent, col, "obnotion-record-detail-hidden-type-icon"),
     }));
     hiddenPropertiesGroup.render(scrollEl, shownRows, hiddenRows, toggleColumnVisible, bulkToggle);
     // Last, so the body reads as the note under its properties rather than as another property.
@@ -497,8 +497,8 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     // The host, not the anchor: a dock is measured from the pane the panel belongs to.
     dockTo: placement === "docked" ? host : undefined,
   });
-  // 移动端底部抽屉：positionToolbarPopover 已加 .db-mobile-bottom-sheet 与抓手；接上向下拖拽关闭手势。
-  if (panel.hasClass("db-mobile-bottom-sheet")) removeSheetDrag = attachSheetDragToDismiss(panel, close);
+  // 移动端底部抽屉：positionToolbarPopover 已加 .obnotion-mobile-bottom-sheet 与抓手；接上向下拖拽关闭手势。
+  if (panel.hasClass("obnotion-mobile-bottom-sheet")) removeSheetDrag = attachSheetDragToDismiss(panel, close);
   // positionToolbarPopover 会在下一帧复测一次；按注册顺序在其复测之后隐藏来源
   // overflow，既保留正确锚点位置，也避免详情面板与事件列表继续层叠显示。
   window.requestAnimationFrame(() => {
@@ -545,8 +545,8 @@ function renderRecordField(
 
   const field = renderCardField({
     app, row, col, config, value: displayValue, displayType, empty,
-    fieldClass: "db-record-detail-field", valueClass: "db-board-card-value", labelClass: "db-record-detail-field-label",
-    badgesClass: "db-board-card-badges", linkClass: "db-board-card-link", fieldWidth: getFieldWidth(config, col),
+    fieldClass: "obnotion-record-detail-field", valueClass: "obnotion-board-card-value", labelClass: "obnotion-record-detail-field-label",
+    badgesClass: "obnotion-board-card-badges", linkClass: "obnotion-board-card-link", fieldWidth: getFieldWidth(config, col),
     wrap: col.wrap, readOnly: actions.isReadOnly || isReadonlyFileField(col.key), splitOptionValue: true,
     applyConditionalFormat: actions.applyConditionalFormat,
     onEdit: (target, editRow, editCol, event) => actions.editCell(target, editRow, editCol, event),

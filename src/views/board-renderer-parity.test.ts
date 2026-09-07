@@ -8,7 +8,7 @@
 // KanbanCard, plus the primitives those cards compose (Chip, AvatarStack,
 // Avatar, ProgressBar, timeChip, tagChip, dueChip) — and asserts our
 // renderer produces the same structure for an equivalent RowData set.
-// Card identity stays path-keyed here (data-note-database-row-path), the
+// Card identity stays path-keyed here (data-obnotion-row-path), the
 // one deliberate addition to the reference vocabulary; the reference's
 // data-task-id slot carries the same path.
 //
@@ -453,7 +453,7 @@ function renderBoard(actions: BoardRendererActions = createActions()): {
   const renderer = new BoardRenderer({} as unknown as App, actions);
   const container = new MockElement("div");
   renderer.render(container as unknown as HTMLElement, CONFIG, GROUPS, "status");
-  const board = container.querySelector<MockElement>(".db-kanban-board")!;
+  const board = container.querySelector<MockElement>(".obnotion-kanban-board")!;
   return { container, board, renderer, actions };
 }
 
@@ -465,10 +465,10 @@ function dropEvent(path: string, fromGroup: string | undefined): Record<string, 
     preventDefault: vi.fn(),
     stopPropagation: vi.fn(),
     dataTransfer: {
-      types: ["application/x-note-database-card"],
+      types: ["application/x-obnotion-card"],
       getData: (mime: string) =>
-        mime === "application/x-note-database-card" ? path
-          : mime === "application/x-note-database-card-from-group" && fromGroup !== undefined ? fromGroup
+        mime === "application/x-obnotion-card" ? path
+          : mime === "application/x-obnotion-card-from-group" && fromGroup !== undefined ? fromGroup
           : "",
     },
   };
@@ -495,23 +495,23 @@ const fixtureBoardCard = screenshotBoardCard as (
 describe("kanban view and column shell parity", () => {
   it("keeps the screenshot fixture helpers on the Anytype-shaped class contract", () => {
     const column = fixtureBoardColumn("To Do", [fixtureRows[0]], "blue");
-    expect(column).toContain('class="db-kanban-col"');
-    expect(column).toContain('class="db-kanban-col-header"');
-    expect(column).toContain('class="db-kanban-cards"');
+    expect(column).toContain('class="obnotion-kanban-col"');
+    expect(column).toContain('class="obnotion-kanban-col-header"');
+    expect(column).toContain('class="obnotion-kanban-cards"');
     // The option colour lands on the chip's own status-color class, the same vocabulary every
     // select/status value renders with elsewhere — not an inline style.
-    expect(column).toContain('class="db-kanban-col-chip status-color-blue"');
+    expect(column).toContain('class="obnotion-kanban-col-chip status-color-blue"');
 
     const card = fixtureBoardCard(fixtureRows[0], "");
-    expect(card).toContain('class="db-kanban-card"');
-    expect(card).toContain('class="db-kanban-card-body"');
-    expect(card).not.toMatch(/class="db-board-card"/);
+    expect(card).toContain('class="obnotion-kanban-card"');
+    expect(card).toContain('class="obnotion-kanban-card-body"');
+    expect(card).not.toMatch(/class="obnotion-board-card"/);
   });
 
   it("renders the kanban view and board wrappers", () => {
     const { container, board } = renderBoard();
     // The renderer adds the view class to the container itself.
-    expect(container.className).toContain("db-kanban-view");
+    expect(container.className).toContain("obnotion-kanban-view");
     expect(board).not.toBeNull();
     expect(board.parentElement).toBe(container);
   });
@@ -519,7 +519,7 @@ describe("kanban view and column shell parity", () => {
   it("gives every card row its grid ancestor in the built DOM, not just a matching literal", () => {
     const { board } = renderBoard();
     expect(board.getAttribute("role")).toBe("grid");
-    const card = board.querySelectorAll<MockElement>(".db-kanban-card")[0];
+    const card = board.querySelectorAll<MockElement>(".obnotion-kanban-card")[0];
     expect(card.getAttribute("role")).toBe("row");
     // Walk up from the card rather than re-reading the source: this fails if the grid role
     // ever moves off the card's actual ancestor chain, independent of where each role is set.
@@ -534,14 +534,14 @@ describe("kanban view and column shell parity", () => {
 
   it("renders one column per group with the option chip header", () => {
     const { board } = renderBoard();
-    const columns = board.querySelectorAll<MockElement>(":scope > .db-kanban-col");
+    const columns = board.querySelectorAll<MockElement>(":scope > .obnotion-kanban-col");
     expect(columns).toHaveLength(2);
     expect(columns[0].getAttribute("data-status")).toBe("To Do");
     expect(columns[1].getAttribute("data-status")).toBe("Done");
 
-    const header = columns[0].querySelector<MockElement>(":scope > .db-kanban-col-header");
+    const header = columns[0].querySelector<MockElement>(":scope > .obnotion-kanban-col-header");
     expect(header).not.toBeNull();
-    const chip = header?.querySelector<MockElement>(":scope > .db-kanban-col-chip");
+    const chip = header?.querySelector<MockElement>(":scope > .obnotion-kanban-col-chip");
     expect(chip).not.toBeNull();
     expect(chip?.textContent).toBe("To Do");
     expect(chip?.className).toContain("status-color-blue");
@@ -549,10 +549,10 @@ describe("kanban view and column shell parity", () => {
 
   it("renders the cards container with the reference status data", () => {
     const { board } = renderBoard();
-    const cards = board.querySelectorAll<MockElement>(".db-kanban-cards");
+    const cards = board.querySelectorAll<MockElement>(".obnotion-kanban-cards");
     expect(cards).toHaveLength(2);
     expect(cards[0].getAttribute("data-status")).toBe("To Do");
-    expect(cards[0].parentElement?.className).toBe("db-kanban-col");
+    expect(cards[0].parentElement?.className).toBe("obnotion-kanban-col");
   });
 
   it("renders an empty column with the shared empty-group card when hideEmptyGroups is off, no crash", () => {
@@ -565,11 +565,11 @@ describe("kanban view and column shell parity", () => {
     // pins the setting off explicitly rather than relying on an unstated default.
     renderer.render(container as unknown as HTMLElement, { ...CONFIG, boardHideEmptyGroups: false }, emptyGroups, "status");
 
-    const column = container.querySelector<MockElement>(".db-kanban-col")!;
-    expect(column.querySelectorAll(".db-kanban-card")).toHaveLength(0);
+    const column = container.querySelector<MockElement>(".obnotion-kanban-col")!;
+    expect(column.querySelectorAll(".obnotion-kanban-card")).toHaveLength(0);
     // A11: not seen in any of the 62 captures. Design inferred: the same empty-group card every
     // other grouped renderer already shows.
-    expect(column.querySelector(".db-kanban-empty-slot")).not.toBeNull();
+    expect(column.querySelector(".obnotion-kanban-empty-slot")).not.toBeNull();
   });
 
   it("renders no column at all for an empty group under the default config", () => {
@@ -581,7 +581,7 @@ describe("kanban view and column shell parity", () => {
     const container = new MockElement("div");
     renderer.render(container as unknown as HTMLElement, CONFIG, emptyGroups, "status");
 
-    const columns = container.querySelectorAll<MockElement>(".db-kanban-col");
+    const columns = container.querySelectorAll<MockElement>(".obnotion-kanban-col");
     expect(columns).toHaveLength(1);
     expect(columns[0].getAttribute("data-status")).toBe("To Do");
   });
@@ -594,48 +594,48 @@ describe("kanban view and column shell parity", () => {
 describe("kanban card tree parity", () => {
   function todoCard(): MockElement {
     const { board } = renderBoard();
-    const cards = board.querySelectorAll<MockElement>(":scope > .db-kanban-col")[0]
-      .querySelectorAll<MockElement>(":scope > .db-kanban-cards > .db-kanban-card");
+    const cards = board.querySelectorAll<MockElement>(":scope > .obnotion-kanban-col")[0]
+      .querySelectorAll<MockElement>(":scope > .obnotion-kanban-cards > .obnotion-kanban-card");
     return cards[1]; // the child row carries a subtask parent, exercising the type-name slot
   }
 
   it("keeps card identity path-keyed in both attribute slots", () => {
     const card = todoCard();
     expect(card.getAttribute("data-task-id")).toBe(CHILD_PATH);
-    expect(card.getAttribute("data-note-database-row-path")).toBe(CHILD_PATH);
+    expect(card.getAttribute("data-obnotion-row-path")).toBe(CHILD_PATH);
     expect(card.draggable).toBe(true);
   });
 
   it("nests the title row and property meta directly under the card body, no per-type furniture", () => {
     const card = todoCard();
-    const body = card.querySelector<MockElement>(":scope > .db-kanban-card-body")!;
+    const body = card.querySelector<MockElement>(":scope > .obnotion-kanban-card-body")!;
     expect(card.children[0]).toBe(body);
 
-    const titleRow = body.querySelector<MockElement>(":scope > .db-kanban-card-title-row");
-    expect(titleRow?.querySelector<MockElement>(":scope > .db-kanban-card-title")?.textContent).toBe("Child");
+    const titleRow = body.querySelector<MockElement>(":scope > .obnotion-kanban-card-title-row");
+    expect(titleRow?.querySelector<MockElement>(":scope > .obnotion-kanban-card-title")?.textContent).toBe("Child");
 
     // No Objects/Types data model exists; the type-name slot keeps the schema's nearest content
     // — a subtask's parent title — rather than a smaller breadcrumb.
-    const type = body.querySelector<MockElement>(":scope > .db-kanban-card-type");
+    const type = body.querySelector<MockElement>(":scope > .obnotion-kanban-card-type");
     expect(type?.textContent).toBe("Parent");
 
-    expect(card.querySelector(".db-kanban-card-priority-bar")).toBeNull();
+    expect(card.querySelector(".obnotion-kanban-card-priority-bar")).toBeNull();
     expect(card.querySelector(".pm-avatar-stack")).toBeNull();
     expect(card.querySelector(".pm-progress")).toBeNull();
   });
 
   it("renders every configured property as a values-only row on one fixed rhythm", () => {
     const card = todoCard();
-    const meta = card.querySelector<MockElement>(".db-kanban-card-meta")!;
-    const rows = meta.querySelectorAll<MockElement>(":scope > .db-board-card-field");
+    const meta = card.querySelector<MockElement>(".obnotion-kanban-card-meta")!;
+    const rows = meta.querySelectorAll<MockElement>(":scope > .obnotion-board-card-field");
     // "status" is the group field and the title field is excluded by the card-field resolver's
     // own reserved-key rule, leaving progress, hours, due, tags and people from COLUMNS, in that
     // order, unchanged by this leg.
-    expect(rows.map((row) => row.getAttribute("data-note-database-column-key"))).toEqual([
+    expect(rows.map((row) => row.getAttribute("data-obnotion-column-key"))).toEqual([
       "progress", "hours", "due", "tags", "people",
     ]);
-    expect(rows[1].querySelector<MockElement>(".db-board-card-value")?.textContent).toBe("2");
-    expect(rows[2].querySelector<MockElement>(".db-board-card-value")?.textContent).toBeTruthy();
+    expect(rows[1].querySelector<MockElement>(".obnotion-board-card-value")?.textContent).toBe("2");
+    expect(rows[2].querySelector<MockElement>(".obnotion-board-card-value")?.textContent).toBeTruthy();
   });
 
   // A card shows the properties the view is configured for, so a stored list empties the slot
@@ -649,11 +649,11 @@ describe("kanban card tree parity", () => {
     const renderer = new BoardRenderer({} as unknown as App, createActions());
     const container = new MockElement("div");
     renderer.render(container as unknown as HTMLElement, listed, GROUPS, "status");
-    const card = container.querySelectorAll<MockElement>(".db-kanban-card")
-      .find((el) => el.getAttribute("data-note-database-row-path") === CHILD_PATH)!;
-    const meta = card.querySelector<MockElement>(".db-kanban-card-meta")!;
-    const keys = meta.querySelectorAll<MockElement>(":scope > .db-board-card-field")
-      .map((row) => row.getAttribute("data-note-database-column-key"));
+    const card = container.querySelectorAll<MockElement>(".obnotion-kanban-card")
+      .find((el) => el.getAttribute("data-obnotion-row-path") === CHILD_PATH)!;
+    const meta = card.querySelector<MockElement>(".obnotion-kanban-card-meta")!;
+    const keys = meta.querySelectorAll<MockElement>(":scope > .obnotion-board-card-field")
+      .map((row) => row.getAttribute("data-obnotion-column-key"));
     expect(keys).not.toContain("hours");
     expect(keys).not.toContain("tags");
     expect(keys).toContain("due");
@@ -661,12 +661,12 @@ describe("kanban card tree parity", () => {
 
   it("gates the type-name slot on an actual parent relation, not row presence", () => {
     const { board } = renderBoard();
-    const cards = board.querySelectorAll<MockElement>(".db-kanban-card");
-    const rootCard = cards.find((card) => card.getAttribute("data-note-database-row-path") === PARENT_PATH)!;
-    const childCard = cards.find((card) => card.getAttribute("data-note-database-row-path") === CHILD_PATH)!;
+    const cards = board.querySelectorAll<MockElement>(".obnotion-kanban-card");
+    const rootCard = cards.find((card) => card.getAttribute("data-obnotion-row-path") === PARENT_PATH)!;
+    const childCard = cards.find((card) => card.getAttribute("data-obnotion-row-path") === CHILD_PATH)!;
 
-    expect(rootCard.querySelector(".db-kanban-card-type")).toBeNull();
-    expect(childCard.querySelector<MockElement>(".db-kanban-card-type")?.textContent).toBe("Parent");
+    expect(rootCard.querySelector(".obnotion-kanban-card-type")).toBeNull();
+    expect(childCard.querySelector<MockElement>(".obnotion-kanban-card-type")?.textContent).toBe("Parent");
   });
 
   it("passes a real hex option color through the header chip via a class, not an inline style", () => {
@@ -681,7 +681,7 @@ describe("kanban card tree parity", () => {
 
     // A hex value carries no status-color-* class to retint; it paints through an inline style
     // instead, the same fallback the header always had for a custom author-chosen colour.
-    const chip = container.querySelector<MockElement>(".db-kanban-col-chip")!;
+    const chip = container.querySelector<MockElement>(".obnotion-kanban-col-chip")!;
     expect(chip.className).not.toMatch(/status-color-#/);
     expect(chip.style.color).toBe("#ff6600");
   });
@@ -695,7 +695,7 @@ describe("kanban interaction parity", () => {
   it("opens the note when a card is clicked", () => {
     const actions = createActions();
     const { board } = renderBoard(actions);
-    const card = board.querySelectorAll<MockElement>(".db-kanban-card")[0];
+    const card = board.querySelectorAll<MockElement>(".obnotion-kanban-card")[0];
     card.dispatchEvent({ type: "click", target: card });
     expect(actions.openRow).toHaveBeenCalledTimes(1);
     expect(vi.mocked(actions.openRow).mock.calls[0][0].file.path).toBe(PARENT_PATH);
@@ -705,7 +705,7 @@ describe("kanban interaction parity", () => {
     const openRecordDetail = vi.fn<(anchorEl: HTMLElement, row: RowData) => void>();
     const actions = createActions({ openRecordDetail });
     const { board } = renderBoard(actions);
-    const card = board.querySelectorAll<MockElement>(".db-kanban-card")[0];
+    const card = board.querySelectorAll<MockElement>(".obnotion-kanban-card")[0];
     card.dispatchEvent({ type: "click", target: card });
 
     // Without an element to point at, the record surface anchors to the whole scrolling
@@ -721,7 +721,7 @@ describe("kanban interaction parity", () => {
     const showRowMenu = vi.fn();
     const actions = createActions({ showRowMenu });
     const { board } = renderBoard(actions);
-    const card = board.querySelectorAll<MockElement>(".db-kanban-card")[0];
+    const card = board.querySelectorAll<MockElement>(".obnotion-kanban-card")[0];
     const preventDefault = vi.fn();
     card.dispatchEvent({ type: "contextmenu", preventDefault });
     expect(preventDefault).toHaveBeenCalled();
@@ -730,36 +730,36 @@ describe("kanban interaction parity", () => {
 
   it("writes the path-keyed payload and dragging classes on dragstart", () => {
     const { board } = renderBoard();
-    const card = board.querySelectorAll<MockElement>(".db-kanban-card")[0];
+    const card = board.querySelectorAll<MockElement>(".obnotion-kanban-card")[0];
     const setData = vi.fn();
     card.dispatchEvent({ type: "dragstart", dataTransfer: { setData } });
     expect(setData).toHaveBeenCalledWith("text/plain", PARENT_PATH);
-    expect(setData).toHaveBeenCalledWith("application/x-note-database-card", PARENT_PATH);
-    expect(card.className).toContain("db-kanban-card--dragging");
+    expect(setData).toHaveBeenCalledWith("application/x-obnotion-card", PARENT_PATH);
+    expect(card.className).toContain("obnotion-kanban-card--dragging");
   });
 
   it("adds and removes the reference drop-target class on the cards container", () => {
     const { board } = renderBoard();
-    const cards = board.querySelectorAll<MockElement>(".db-kanban-cards")[0];
+    const cards = board.querySelectorAll<MockElement>(".obnotion-kanban-cards")[0];
     cards.dispatchEvent({
       type: "dragover",
       preventDefault: vi.fn(),
-      dataTransfer: { types: ["application/x-note-database-card"], getData: () => "" },
+      dataTransfer: { types: ["application/x-obnotion-card"], getData: () => "" },
     });
-    expect(cards.className).toContain("db-kanban-drop-target");
+    expect(cards.className).toContain("obnotion-kanban-drop-target");
 
     cards.dispatchEvent({
       type: "dragleave",
       preventDefault: vi.fn(),
-      dataTransfer: { types: ["application/x-note-database-card"], getData: () => "" },
+      dataTransfer: { types: ["application/x-obnotion-card"], getData: () => "" },
     });
-    expect(cards.className).not.toContain("db-kanban-drop-target");
+    expect(cards.className).not.toContain("obnotion-kanban-drop-target");
   });
 
   it("updates status once for a cross-column drop and refreshes via the transaction", async () => {
     const actions = createActions();
     const { board } = renderBoard(actions);
-    const doneCards = board.querySelectorAll<MockElement>(".db-kanban-cards")[1];
+    const doneCards = board.querySelectorAll<MockElement>(".obnotion-kanban-cards")[1];
     doneCards.dispatchEvent(dropEvent(CHILD_PATH, "To Do"));
     await flush();
 
@@ -770,13 +770,13 @@ describe("kanban interaction parity", () => {
     expect(beforePath).toBe(OTHER_PATH);
     expect(afterPath).toBeUndefined();
     expect(movedPaths).toEqual([CHILD_PATH]);
-    expect(doneCards.className).not.toContain("db-kanban-drop-target");
+    expect(doneCards.className).not.toContain("obnotion-kanban-drop-target");
   });
 
   it("keeps a same-status drop in place without touching the transaction", async () => {
     const actions = createActions();
     const { board } = renderBoard(actions);
-    const todoCards = board.querySelectorAll<MockElement>(".db-kanban-cards")[0];
+    const todoCards = board.querySelectorAll<MockElement>(".obnotion-kanban-cards")[0];
     todoCards.dispatchEvent(dropEvent(CHILD_PATH, "To Do"));
     await flush();
 
@@ -804,9 +804,9 @@ describe("kanban interaction parity", () => {
   it("moves the card across columns through a real dragstart-to-drop cycle", async () => {
     const actions = createActions();
     const { board } = renderBoard(actions);
-    const todoCards = board.querySelectorAll<MockElement>(".db-kanban-cards")[0];
-    const doneCards = board.querySelectorAll<MockElement>(".db-kanban-cards")[1];
-    const card = todoCards.querySelectorAll<MockElement>(":scope > .db-kanban-card")[1]; // child row
+    const todoCards = board.querySelectorAll<MockElement>(".obnotion-kanban-cards")[0];
+    const doneCards = board.querySelectorAll<MockElement>(".obnotion-kanban-cards")[1];
+    const card = todoCards.querySelectorAll<MockElement>(":scope > .obnotion-kanban-card")[1]; // child row
     const dataTransfer = realDrag();
 
     card.dispatchEvent({ type: "dragstart", dataTransfer });
@@ -822,8 +822,8 @@ describe("kanban interaction parity", () => {
   it("keeps a real same-column drag in place without a spurious reorder", async () => {
     const actions = createActions();
     const { board } = renderBoard(actions);
-    const todoCards = board.querySelectorAll<MockElement>(".db-kanban-cards")[0];
-    const card = todoCards.querySelectorAll<MockElement>(":scope > .db-kanban-card")[1]; // child row
+    const todoCards = board.querySelectorAll<MockElement>(".obnotion-kanban-cards")[0];
+    const card = todoCards.querySelectorAll<MockElement>(":scope > .obnotion-kanban-card")[1]; // child row
     const dataTransfer = realDrag();
 
     card.dispatchEvent({ type: "dragstart", dataTransfer });
@@ -848,13 +848,13 @@ describe("kanban lazy description hydration", () => {
     const actions = createActions({ loadRowDescription });
     const { container, renderer } = renderBoard(actions);
 
-    expect(container.querySelector(".db-kanban-card-description")).toBeNull();
+    expect(container.querySelector(".obnotion-kanban-card-description")).toBeNull();
 
     await flush();
     await flush();
 
     expect(loadRowDescription).toHaveBeenCalled();
-    const description = container.querySelector<MockElement>(".db-kanban-card-description");
+    const description = container.querySelector<MockElement>(".obnotion-kanban-card-description");
     expect(description).not.toBeNull();
     expect(description?.textContent).toBe("Body text from the note");
     expect(renderer).toBeTruthy();
@@ -868,15 +868,15 @@ describe("kanban lazy description hydration", () => {
 describe("switching away from the default board", () => {
   it("leaves no board root or board container class behind", () => {
     const { container } = renderBoard();
-    expect(container.querySelector(".db-kanban-board")).not.toBeNull();
-    expect(container.hasClass("db-kanban-view")).toBe(true);
+    expect(container.querySelector(".obnotion-kanban-board")).not.toBeNull();
+    expect(container.hasClass("obnotion-kanban-view")).toBe(true);
 
     clearRenderedViewRoots(container as unknown as HTMLElement);
 
     // Whatever renders next mounts into this container. A surviving root stacks above it,
     // and a surviving container class keeps the board's flex/overflow layout on it.
-    expect(container.querySelector(".db-kanban-board")).toBeNull();
-    expect(container.hasClass("db-kanban-view")).toBe(false);
+    expect(container.querySelector(".obnotion-kanban-board")).toBeNull();
+    expect(container.hasClass("obnotion-kanban-view")).toBe(false);
   });
 });
 

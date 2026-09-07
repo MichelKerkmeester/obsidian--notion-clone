@@ -20,7 +20,7 @@ import { createUniqueColumnKey } from "../../data/column-config";
 import { createDropdownField } from "../dropdown-field";
 import { renderDropdownPropertyTypeIcon } from "../property-type-icon";
 import { buildTypePickerOptions, rollupNeedsRelationGate } from "../record-surface/type-picker";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
@@ -50,7 +50,7 @@ export interface CreatePropertyModalOptions {
 /**
  * Unified "create property" dialog. Collects a display label, a frontmatter key,
  * and a property type, then resolves the result (or null on cancel). Uses the
- * compact `.note-database-modal` / `db-modal-*` styles like other editor modals,
+ * compact `.obnotion-modal` / `obnotion-modal-*` styles like other editor modals,
  * NOT the wide settings-popover layout. Escape cancels (Modal default → onClose).
  */
 export class CreatePropertyModal extends DbModal {
@@ -93,12 +93,12 @@ export class CreatePropertyModal extends DbModal {
     super.onOpen();
     const { contentEl } = this;
     contentEl.empty();
-    contentEl.addClass("note-database-modal");
+    contentEl.addClass("obnotion-modal");
     contentEl.createEl("h3", { text: this.options.title ?? t("modal.createProperty") });
 
     this.renderForm();
 
-    const btnRow = contentEl.createDiv({ cls: "db-modal-button-row" });
+    const btnRow = contentEl.createDiv({ cls: "obnotion-modal-button-row" });
     btnRow.createEl("button", { text: t("common.cancel") }).onclick = () => {
       this.resolve?.(null);
       this.close();
@@ -113,8 +113,8 @@ export class CreatePropertyModal extends DbModal {
     const { contentEl } = this;
     const hasRelation = this.config.schema.columns.some((col) => col.type === "relation");
 
-    const labelRow = contentEl.createDiv({ cls: "db-modal-row" });
-    labelRow.createEl("label", { cls: "db-modal-label", text: t("modal.displayName") });
+    const labelRow = contentEl.createDiv({ cls: "obnotion-modal-row" });
+    labelRow.createEl("label", { cls: "obnotion-modal-label", text: t("modal.displayName") });
     this.labelInput = this.appendInput(labelRow, t("modal.displayName"), this.labelValue, (value) => {
       this.labelValue = value;
       // Mirror label → key until the user manually edits the key.
@@ -124,17 +124,17 @@ export class CreatePropertyModal extends DbModal {
       }
     });
 
-    const keyRow = contentEl.createDiv({ cls: "db-modal-row db-modal-row-with-help" });
-    keyRow.createEl("label", { cls: "db-modal-label", text: t("modal.frontmatterKey") });
-    const keyControl = keyRow.createDiv({ cls: "db-modal-control-stack" });
+    const keyRow = contentEl.createDiv({ cls: "obnotion-modal-row obnotion-modal-row-with-help" });
+    keyRow.createEl("label", { cls: "obnotion-modal-label", text: t("modal.frontmatterKey") });
+    const keyControl = keyRow.createDiv({ cls: "obnotion-modal-control-stack" });
     this.keyInput = this.appendInput(keyControl, t("modal.frontmatterKey"), this.keyValue, (value) => {
       this.keyValue = value;
       this.keyTouched = true;
     });
-    keyControl.createDiv({ cls: "db-modal-help", text: t("modal.propertyKeyHint") });
+    keyControl.createDiv({ cls: "obnotion-modal-help", text: t("modal.propertyKeyHint") });
 
-    const typeRow = contentEl.createDiv({ cls: "db-modal-row" });
-    typeRow.createEl("label", { cls: "db-modal-label", text: t("modal.propertyType") });
+    const typeRow = contentEl.createDiv({ cls: "obnotion-modal-row" });
+    typeRow.createEl("label", { cls: "obnotion-modal-label", text: t("modal.propertyType") });
     createDropdownField({
       parent: typeRow,
       label: t("modal.propertyType"),
@@ -143,7 +143,7 @@ export class CreatePropertyModal extends DbModal {
       // its reason rather than removing it from the list.
       options: buildTypePickerOptions(rollupNeedsRelationGate(hasRelation, t("modal.rollupNeedsRelation"))),
       value: this.typeValue,
-      className: "db-modal-dropdown",
+      className: "obnotion-modal-dropdown",
       hideLabel: true,
       searchable: true,
       renderIcon: renderDropdownPropertyTypeIcon,
@@ -156,7 +156,7 @@ export class CreatePropertyModal extends DbModal {
 
   private appendInput(parent: HTMLElement, placeholder: string, value: string, onInput: (value: string) => void): HTMLInputElement {
     const input = parent.createEl("input", {
-      cls: "db-modal-input",
+      cls: "obnotion-modal-input",
       attr: { type: "text", value, placeholder },
     });
     input.oninput = () => onInput(input.value);

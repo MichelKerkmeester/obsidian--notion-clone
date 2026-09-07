@@ -64,7 +64,7 @@ export class DragDropFeedbackState {
     this.removePlacementClasses();
     this.target = target;
     this.placement = placement;
-    this.destinationId = destinationId ?? target.dataset.noteDatabaseDestinationId ?? null;
+    this.destinationId = destinationId ?? target.dataset.obnotionDestinationId ?? null;
     this.phase = "over";
     this.error = null;
     target.classList.add(getPlacementClass(placement));
@@ -139,12 +139,12 @@ export class DragDropFeedbackState {
     if (!message) return;
     const doc = this.target?.ownerDocument ?? (typeof document !== "undefined" ? document : null);
     if (!doc) return;
-    const container = (this.target && typeof this.target.closest === "function" ? this.target.closest(".note-database-container") : null) ?? doc.body;
+    const container = (this.target && typeof this.target.closest === "function" ? this.target.closest(".obnotion-container") : null) ?? doc.body;
     if (!container) return;
-    let liveRegion = typeof container.querySelector === "function" ? container.querySelector<HTMLElement>(":scope > .db-sr-status, .db-sr-status") : null;
+    let liveRegion = typeof container.querySelector === "function" ? container.querySelector<HTMLElement>(":scope > .obnotion-sr-status, .obnotion-sr-status") : null;
     if (!liveRegion && typeof doc.createElement === "function" && typeof container.appendChild === "function") {
       liveRegion = doc.createElement("div");
-      liveRegion.className = "db-sr-status";
+      liveRegion.className = "obnotion-sr-status";
       liveRegion.setAttribute("role", "status");
       liveRegion.setAttribute("aria-live", "polite");
       liveRegion.setAttribute("aria-atomic", "true");

@@ -38,14 +38,14 @@ const TYPES: ColumnDef["type"][] = [
 export const AllTypes: Story = {
   render: () => {
     const grid = document.createElement("div");
-    grid.className = "db-story-row";
+    grid.className = "obnotion-story-row";
     for (const type of TYPES) {
       const cell = document.createElement("div");
-      cell.className = "db-story-cell";
+      cell.className = "obnotion-story-cell";
       const icon = document.createElement("div");
       renderPropertyTypeIcon(icon, { key: type, label: type, type });
       const label = document.createElement("span");
-      label.className = "db-story-note";
+      label.className = "obnotion-story-note";
       label.textContent = type;
       cell.append(icon, label);
       grid.appendChild(cell);

@@ -3,7 +3,7 @@
 // COMPONENT: Gantt-style timeline view — lanes, viewport scroll, drag reorder/resize
 // ───────────────────────────────────────────────────────────────────
 //
-// Event pixel geometry is expressed as CSS custom properties (--db-timeline-
+// Event pixel geometry is expressed as CSS custom properties (--obnotion-timeline-
 // exact-offset/-width) computed from unit counts rather than raw pixels, so
 // the same layout math works whether the viewport shows days, weeks, months,
 // quarters or years without a separate positioning path per scale. The
@@ -182,10 +182,10 @@ export function getTimelineTimedPositionStyle(
     offsetUnits,
     durationUnits,
     cssProps: {
-      "--db-timeline-offset": "1",
-      "--db-timeline-span": String(Math.max(1, totalUnits)),
-      "--db-timeline-exact-offset": `calc(var(--db-timeline-unit-width) * ${formatTimelineUnitCssValue(offsetUnits)})`,
-      "--db-timeline-exact-width": `calc(var(--db-timeline-unit-width) * ${formatTimelineUnitCssValue(durationUnits)})`,
+      "--obnotion-timeline-offset": "1",
+      "--obnotion-timeline-span": String(Math.max(1, totalUnits)),
+      "--obnotion-timeline-exact-offset": `calc(var(--obnotion-timeline-unit-width) * ${formatTimelineUnitCssValue(offsetUnits)})`,
+      "--obnotion-timeline-exact-width": `calc(var(--obnotion-timeline-unit-width) * ${formatTimelineUnitCssValue(durationUnits)})`,
     },
   };
 }
@@ -227,8 +227,8 @@ export function getTimelineTodayPositionStyle(
   return {
     offsetUnits,
     cssProps: {
-      "--db-timeline-today-offset-units": formatTimelineUnitCssValue(offsetUnits),
-      "--db-timeline-today-offset-px": `${formatTimelineUnitCssValue(offsetPx)}px`,
+      "--obnotion-timeline-today-offset-units": formatTimelineUnitCssValue(offsetUnits),
+      "--obnotion-timeline-today-offset-px": `${formatTimelineUnitCssValue(offsetPx)}px`,
     },
   };
 }
@@ -390,7 +390,7 @@ export class CalendarTimelineRenderer {
    * layout inside a loop appending to the same container, so the browser reflowed the tree
    * built so far once per event and the total became superlinear in event count.
    *
-   * It is measured on the container rather than on `.db-timeline` for consistency with the list,
+   * It is measured on the container rather than on `.obnotion-timeline` for consistency with the list,
    * board and gallery, which all ask the same question of the same element. The container is the
    * pane, which is the width the touch threshold was written about; the timeline root merely
    * fills it, so the two agree today and the container is the one that stays meaningful if the
@@ -490,7 +490,7 @@ export class CalendarTimelineRenderer {
       return;
     }
 
-    const wrap = container.createDiv({ cls: `db-timeline is-scale-${model.scale} is-slot-${this.getTimelineSlotDuration(config)}` });
+    const wrap = container.createDiv({ cls: `obnotion-timeline is-scale-${model.scale} is-slot-${this.getTimelineSlotDuration(config)}` });
     this.timelineRoot = wrap;
     // The full task-driven range (padded, min-spanned) is grid metadata for the
     // styles lane; the rendered window stays viewport-sized.
@@ -509,10 +509,10 @@ export class CalendarTimelineRenderer {
     this.timelineObservedUnitCount = visibleUnitCount;
     this.timelineObservedUnitSpan = visibleUnitSpan;
     this.observeTimelineViewport(container, config, rows);
-    wrap.style.setProperty("--db-timeline-units", String(Math.max(1, model.totalUnits)));
-    wrap.style.setProperty("--db-timeline-unit-width", `${unitWidth}px`);
+    wrap.style.setProperty("--obnotion-timeline-units", String(Math.max(1, model.totalUnits)));
+    wrap.style.setProperty("--obnotion-timeline-unit-width", `${unitWidth}px`);
     wrap.style.setProperty(
-      "--db-timeline-group-width",
+      "--obnotion-timeline-group-width",
       config.summaryRules && config.summaryRules.length > 0
         ? "min(240px, 42vw)"
         : "min(160px, 32vw)"
@@ -524,7 +524,7 @@ export class CalendarTimelineRenderer {
       startMinutes: model.startMinutes,
     };
     wrap.createDiv({
-      cls: "db-sr-status",
+      cls: "obnotion-sr-status",
       text: t("timeline.accessibilityLabel", {
         start: model.startDateKey || "",
         end: model.endDateKey || model.startDateKey || "",
@@ -543,9 +543,9 @@ export class CalendarTimelineRenderer {
       return;
     }
 
-    const scroll = wrap.createDiv({ cls: "db-timeline-scroll" });
+    const scroll = wrap.createDiv({ cls: "obnotion-timeline-scroll" });
     this.setupTimelineZoomGesture(scroll, config);
-    const axis = scroll.createDiv({ cls: "db-timeline-axis" });
+    const axis = scroll.createDiv({ cls: "obnotion-timeline-axis" });
     const allTicks = buildTimelineTicks(
       { startDateKey: model.startDateKey, endDateKey: model.endDateKey, totalUnits: model.totalUnits, unit: model.unit, startMinutes: model.startMinutes },
       model.scale,
@@ -560,18 +560,18 @@ export class CalendarTimelineRenderer {
       totalUnits: model.totalUnits,
       locale: getEffectiveLocale(),
     });
-    const band = axis.createDiv({ cls: "db-timeline-ticks-band" });
+    const band = axis.createDiv({ cls: "obnotion-timeline-ticks-band" });
     if (axisBands.length === 0) band.setAttribute("aria-hidden", "true");
     for (const group of axisBands) {
-      const bandItem = band.createDiv({ cls: "db-timeline-band-item", text: group.label });
-      bandItem.style.setProperty("--db-timeline-band-start", String(group.offset + 1));
-      bandItem.style.setProperty("--db-timeline-band-span", String(group.span));
+      const bandItem = band.createDiv({ cls: "obnotion-timeline-band-item", text: group.label });
+      bandItem.style.setProperty("--obnotion-timeline-band-start", String(group.offset + 1));
+      bandItem.style.setProperty("--obnotion-timeline-band-span", String(group.span));
     }
     const now = new Date();
-    const ticksEl = axis.createDiv({ cls: "db-timeline-ticks" });
+    const ticksEl = axis.createDiv({ cls: "obnotion-timeline-ticks" });
     for (const tick of allTicks) {
       const tickClasses = [
-        "db-timeline-tick",
+        "obnotion-timeline-tick",
         tick.isScaleBoundary ? "is-scale-boundary" : "",
         this.isTimelineWeekendDate(tick.dateKey) ? "is-weekend" : "",
         this.isCurrentTimelineTick(tick, model, now) ? "is-current-time-tick" : "",
@@ -585,26 +585,26 @@ export class CalendarTimelineRenderer {
           ...(tick.isScaleBoundary ? { "data-timeline-boundary": "true" } : {}),
         },
       });
-      tickEl.style.setProperty("--db-timeline-tick-offset", String(tick.offsetUnits + 1));
+      tickEl.style.setProperty("--obnotion-timeline-tick-offset", String(tick.offsetUnits + 1));
       this.renderTimelineTickLabel(tickEl, tick.label, model.scale, tick.offsetUnits === 0);
     }
 
-    const body = scroll.createDiv({ cls: "db-timeline-body" });
+    const body = scroll.createDiv({ cls: "obnotion-timeline-body" });
     this.renderTimelineGridColumns(body, model);
     const todayPosition = getTimelineTodayPositionStyle(now, model, unitWidth);
     // 无分组时不渲染 group header（与表格等视图一致），events 直接占满宽度；
     // collapsed 强制 false（无折叠按钮，也不应折叠唯一泳道）。
     const hasGroupField = Boolean(config.timelineGroupField);
     for (const lane of model.lanes) {
-      const groupEl = body.createDiv({ cls: "db-timeline-group" });
-      // group 自身也带 lane key，使拖拽能解析折叠分组（折叠时无 .db-timeline-events 子元素）。
+      const groupEl = body.createDiv({ cls: "obnotion-timeline-group" });
+      // group 自身也带 lane key，使拖拽能解析折叠分组（折叠时无 .obnotion-timeline-events 子元素）。
       groupEl.setAttribute("data-timeline-lane-key", lane.key);
       const collapsed = hasGroupField ? this.renderTimelineGroupHeader(groupEl, config, lane) : false;
       if (collapsed) {
         groupEl.addClass("is-collapsed");
         continue;
       }
-      const events = groupEl.createDiv({ cls: "db-timeline-events" });
+      const events = groupEl.createDiv({ cls: "obnotion-timeline-events" });
       events.setAttribute("data-timeline-lane-key", lane.key);
       this.setupTimelineBacklogDropTarget(events, config, model.startDateKey);
       // day scale：可见小时范围（绝对分钟，可跨午夜）；week/month/quarter：整个多天窗口（0 → totalUnits 天）。
@@ -619,7 +619,7 @@ export class CalendarTimelineRenderer {
       const laneRowCount = limitCount < lane.events.length
         ? renderedEvents.reduce((max, e) => Math.max(max, e.timelineRow || 1), 1)
         : lane.rowCount;
-      events.style.setProperty("--db-timeline-event-rows", String(laneRowCount));
+      events.style.setProperty("--obnotion-timeline-event-rows", String(laneRowCount));
       for (const event of renderedEvents) {
         // 统一按绝对刻度（相对 windowStartKey 的分钟）定位事件两端，再用可见窗口夹取。
         // scale.start < visibleStart → 左侧 jump-to-start；scale.end > visibleEnd → 右侧 jump-to-end。
@@ -658,7 +658,7 @@ export class CalendarTimelineRenderer {
       for (const [property, value] of Object.entries(todayPosition.cssProps)) {
         body.style.setProperty(property, value);
       }
-      body.createDiv({ cls: "db-timeline-today-line", attr: { title: this.getTodayDateKey() } });
+      body.createDiv({ cls: "obnotion-timeline-today-line", attr: { title: this.getTodayDateKey() } });
     }
     if (this.pendingFlashDateKey) {
       const key = this.pendingFlashDateKey;
@@ -817,7 +817,7 @@ export class CalendarTimelineRenderer {
       const active = window.activeDocument?.activeElement;
       const editing = active != null
         && typeof (active as HTMLElement).closest === "function"
-        && (active as HTMLElement).closest("input, textarea, select, .db-cell-editing, .db-cell-popover-editing, .modal") != null;
+        && (active as HTMLElement).closest("input, textarea, select, .obnotion-cell-editing, .obnotion-cell-popover-editing, .modal") != null;
       if (editing) return;
       const key = event.key.toLowerCase();
       if (key === "z" && !event.shiftKey) {
@@ -1987,7 +1987,7 @@ export class CalendarTimelineRenderer {
     model: { startDateKey?: string; startMinutes?: number; totalUnits: number; unit: TimelineUnit },
   ): void {
     if (!model.startDateKey) return;
-    const columns = body.createDiv({ cls: "db-timeline-grid-columns", attr: { "aria-hidden": "true" } });
+    const columns = body.createDiv({ cls: "obnotion-timeline-grid-columns", attr: { "aria-hidden": "true" } });
     const startMinutes = model.startMinutes ?? 0;
     const now = new Date();
     const todayKey = this.getTodayDateKey(now);
@@ -2004,14 +2004,14 @@ export class CalendarTimelineRenderer {
         ? dateKey === todayKey && Math.floor((startMinutes + index * MINUTES_PER_HOUR) / MINUTES_PER_HOUR) % 24 === now.getHours()
         : dateKey === todayKey;
       const classes = [
-        "db-timeline-grid-column",
+        "obnotion-timeline-grid-column",
         this.isTimelineWeekendDate(dateKey) ? "is-weekend" : "",
         isToday ? "is-today" : "",
       ].filter(Boolean).join(" ");
       const column = columns.createSpan({ cls: classes, attr: { "data-date-key": dateKey } });
       column.setCssProps({
-        "--db-timeline-grid-column-offset": String(index),
-        "--db-timeline-grid-column-span": "1",
+        "--obnotion-timeline-grid-column-offset": String(index),
+        "--obnotion-timeline-grid-column-span": "1",
       });
     }
   }
@@ -2026,18 +2026,18 @@ export class CalendarTimelineRenderer {
   private renderTimelineDependencyLinks(body: HTMLElement): void {
     const graph = this.getTimelineDependencyGraph();
     const bars = new Map<string, HTMLElement>();
-    for (const bar of Array.from(body.querySelectorAll<HTMLElement>(".db-timeline-event[data-timeline-event-id]"))) {
+    for (const bar of Array.from(body.querySelectorAll<HTMLElement>(".obnotion-timeline-event[data-timeline-event-id]"))) {
       const id = bar.dataset.timelineEventId;
       if (id) bars.set(id, bar);
     }
     const bodyRect = body.getBoundingClientRect();
     for (const [successorId, predecessorIds] of Object.entries(graph.dependencies)) {
       const successor = bars.get(successorId);
-      const successorDot = successor?.querySelector<HTMLElement>(".db-timeline-link-dot.is-left");
+      const successorDot = successor?.querySelector<HTMLElement>(".obnotion-timeline-link-dot.is-left");
       if (!successorDot) continue;
       for (const predecessorId of predecessorIds) {
         const predecessor = bars.get(predecessorId);
-        const predecessorDot = predecessor?.querySelector<HTMLElement>(".db-timeline-link-dot.is-right");
+        const predecessorDot = predecessor?.querySelector<HTMLElement>(".obnotion-timeline-link-dot.is-right");
         if (!predecessorDot) continue;
         const from = predecessorDot.getBoundingClientRect();
         const to = successorDot.getBoundingClientRect();
@@ -2048,7 +2048,7 @@ export class CalendarTimelineRenderer {
         const length = Math.hypot(endX - startX, endY - startY);
         if (![startX, startY, endX, endY, length].every(Number.isFinite)) continue;
         const line = body.createDiv({
-          cls: "db-timeline-link-line",
+          cls: "obnotion-timeline-link-line",
           attr: {
             "aria-hidden": "true",
             "data-timeline-link-predecessor": predecessorId,
@@ -2105,7 +2105,7 @@ export class CalendarTimelineRenderer {
       const labelKey = side === "left" ? "timeline.linkInput" : "timeline.linkOutput";
       const label = `${t(labelKey)}: ${event.title}`;
       const dot = parent.createEl("button", {
-        cls: `db-timeline-link-dot is-${side}`,
+        cls: `obnotion-timeline-link-dot is-${side}`,
         attr: {
           type: "button",
           "aria-label": label,
@@ -2187,12 +2187,12 @@ export class CalendarTimelineRenderer {
   private findTimelineLinkTarget(document: Document, clientX: number, clientY: number): { click: TimelineLinkClick; dot: HTMLElement | null } | null {
     if (typeof document.elementFromPoint !== "function") return null;
     const target = document.elementFromPoint(clientX, clientY) as HTMLElement | null;
-    const dot = target?.closest<HTMLElement>(".db-timeline-link-dot") || null;
-    const bar = dot?.closest<HTMLElement>(".db-timeline-event") || target?.closest<HTMLElement>(".db-timeline-event") || null;
+    const dot = target?.closest<HTMLElement>(".obnotion-timeline-link-dot") || null;
+    const bar = dot?.closest<HTMLElement>(".obnotion-timeline-event") || target?.closest<HTMLElement>(".obnotion-timeline-event") || null;
     const taskId = bar?.dataset.timelineEventId;
     if (!taskId) return null;
     const side = dot?.dataset.timelineLinkSide === "right" ? "right" : "left";
-    const resolvedDot = dot || bar.querySelector<HTMLElement>(`.db-timeline-link-dot.is-${side}`);
+    const resolvedDot = dot || bar.querySelector<HTMLElement>(`.obnotion-timeline-link-dot.is-${side}`);
     return { click: { taskId, side }, dot: resolvedDot };
   }
 
@@ -2203,11 +2203,11 @@ export class CalendarTimelineRenderer {
       this.timelineLinkSelectionEl?.removeClass("is-active");
       this.timelineLinkSelectionEl = dot;
       // is-active/is-linking are local-extension CSS (styles.css scopes both to
-      // .db-timeline); the reference pm-gantt tree has its own dot highlight
+      // .obnotion-timeline); the reference pm-gantt tree has its own dot highlight
       // (pm-gantt-link-dot--active, applied by the caller) and no root-level
       // "linking" class at all (GanttLinkHandler.ts), so writing these two here
       // would be dead weight on that tree.
-      if (this.timelineRoot?.hasClass("db-timeline")) {
+      if (this.timelineRoot?.hasClass("obnotion-timeline")) {
         dot?.addClass("is-active");
         this.timelineRoot.addClass("is-linking");
       }
@@ -2272,28 +2272,28 @@ export class CalendarTimelineRenderer {
   }
 
   private startTimelineLinkFromMenu(rowPath: string): void {
-    const dot = Array.from(this.timelineRoot?.querySelectorAll<HTMLElement>(".db-timeline-link-dot.is-right") || [])
-      .find((candidate) => candidate.closest<HTMLElement>(".db-timeline-event")?.dataset.timelineEventId === rowPath) || null;
+    const dot = Array.from(this.timelineRoot?.querySelectorAll<HTMLElement>(".obnotion-timeline-link-dot.is-right") || [])
+      .find((candidate) => candidate.closest<HTMLElement>(".obnotion-timeline-event")?.dataset.timelineEventId === rowPath) || null;
     this.handleTimelineLinkClick({ taskId: rowPath, side: "right" }, dot);
   }
 
   private renderUnscheduledBacklog(parent: HTMLElement, config: ViewConfig, rows: RowData[], startField: string): void {
     const unscheduled = collectUnscheduledTimelineRows(rows, config, startField);
     if (unscheduled.length === 0) return;
-    const drawer = parent.createDiv({ cls: `db-timeline-backlog${this.backlogCollapsed ? " is-collapsed" : ""}` });
+    const drawer = parent.createDiv({ cls: `obnotion-timeline-backlog${this.backlogCollapsed ? " is-collapsed" : ""}` });
     const toggle = drawer.createEl("button", {
-      cls: "db-timeline-backlog-toggle",
+      cls: "obnotion-timeline-backlog-toggle",
       text: `${t("calendar.unscheduled")} (${unscheduled.length})`,
       attr: { type: "button", "aria-expanded": this.backlogCollapsed ? "false" : "true" },
     });
-    const list = drawer.createDiv({ cls: "db-timeline-backlog-list" });
+    const list = drawer.createDiv({ cls: "obnotion-timeline-backlog-list" });
     toggle.onclick = () => {
       this.backlogCollapsed = !this.backlogCollapsed;
       drawer.toggleClass("is-collapsed", this.backlogCollapsed);
       toggle.setAttribute("aria-expanded", this.backlogCollapsed ? "false" : "true");
     };
     for (const row of unscheduled) {
-      const item = list.createEl("button", { cls: "db-timeline-backlog-item", text: row.file.basename || row.file.name, attr: { type: "button", title: row.file.path } });
+      const item = list.createEl("button", { cls: "obnotion-timeline-backlog-item", text: row.file.basename || row.file.name, attr: { type: "button", title: row.file.path } });
       item.onclick = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -2303,7 +2303,7 @@ export class CalendarTimelineRenderer {
       if (!this.actions.isReadOnly && this.actions.updateEventDates) {
         item.draggable = true;
         item.addEventListener("dragstart", (event) => {
-          event.dataTransfer?.setData("application/x-note-database-unscheduled", row.file.path);
+          event.dataTransfer?.setData("application/x-obnotion-unscheduled", row.file.path);
           event.dataTransfer?.setData("text/plain", row.file.path);
         });
       }
@@ -2313,13 +2313,13 @@ export class CalendarTimelineRenderer {
   private setupTimelineBacklogDropTarget(target: HTMLElement, config: ViewConfig, fallbackDateKey?: string): void {
     if (this.actions.isReadOnly || !this.actions.updateEventDates) return;
     target.addEventListener("dragover", (event) => {
-      if (!Array.from(event.dataTransfer?.types || []).includes("application/x-note-database-unscheduled")) return;
+      if (!Array.from(event.dataTransfer?.types || []).includes("application/x-obnotion-unscheduled")) return;
       event.preventDefault();
       target.addClass("is-backlog-drop-target");
     });
     target.addEventListener("dragleave", () => target.removeClass("is-backlog-drop-target"));
     target.addEventListener("drop", (event) => {
-      const path = event.dataTransfer?.getData("application/x-note-database-unscheduled");
+      const path = event.dataTransfer?.getData("application/x-obnotion-unscheduled");
       const row = path ? this.rowByPath.get(path) : undefined;
       if (!row || !fallbackDateKey) return;
       event.preventDefault();
@@ -2365,12 +2365,12 @@ export class CalendarTimelineRenderer {
   private fitTimelineGroupHeaderWidth(wrap: HTMLElement, container: HTMLElement): void {
     const apply = () => {
       if (!wrap.isConnected) return;
-      const labels = Array.from(wrap.querySelectorAll<HTMLElement>(".db-timeline-group-header-label"));
+      const labels = Array.from(wrap.querySelectorAll<HTMLElement>(".obnotion-timeline-group-header-label"));
       if (labels.length === 0) return;
       const contentWidth = labels.reduce((max, label) => {
-        const toggle = label.querySelector<HTMLElement>(".db-timeline-group-toggle");
-        const tag = label.querySelector<HTMLElement>(".db-timeline-group-tag");
-        const summaries = Array.from(label.querySelectorAll<HTMLElement>(".db-group-summary-item"));
+        const toggle = label.querySelector<HTMLElement>(".obnotion-timeline-group-toggle");
+        const tag = label.querySelector<HTMLElement>(".obnotion-timeline-group-tag");
+        const summaries = Array.from(label.querySelectorAll<HTMLElement>(".obnotion-group-summary-item"));
         const itemCount = [toggle, tag, ...summaries].filter(Boolean).length;
         const naturalWidth = (toggle?.offsetWidth || 0) +
           (tag?.scrollWidth || 0) +
@@ -2381,26 +2381,26 @@ export class CalendarTimelineRenderer {
       }, 0);
       const viewportWidth = Math.max(320, container.clientWidth || container.getBoundingClientRect().width || 0);
       const width = Math.max(160, Math.min(Math.ceil(contentWidth), Math.max(160, viewportWidth - 96)));
-      wrap.style.setProperty("--db-timeline-group-width", `${width}px`);
+      wrap.style.setProperty("--obnotion-timeline-group-width", `${width}px`);
     };
     apply();
     (container.ownerDocument.defaultView || window).requestAnimationFrame(apply);
   }
 
   private renderTimelineTickLabel(tickEl: HTMLElement, label: string, scale: TimelineScale, isFirstTick = false): void {
-    const labelEl = tickEl.createSpan({ cls: "db-timeline-tick-label" });
+    const labelEl = tickEl.createSpan({ cls: "obnotion-timeline-tick-label" });
     // Every label is centred on its tick's left boundary; the first tick's boundary is the
     // viewport's left edge, so that label anchors at the edge instead of clipping past it.
     if (isFirstTick) labelEl.setCssProps({ transform: "none" });
     if (scale === "week") {
       const separator = label.lastIndexOf(" ");
       if (separator > 0 && separator < label.length - 1) {
-        labelEl.createSpan({ cls: "db-timeline-tick-weekday", text: label.slice(0, separator) });
-        labelEl.createSpan({ cls: "db-timeline-tick-date", text: label.slice(separator + 1) });
+        labelEl.createSpan({ cls: "obnotion-timeline-tick-weekday", text: label.slice(0, separator) });
+        labelEl.createSpan({ cls: "obnotion-timeline-tick-date", text: label.slice(separator + 1) });
         return;
       }
     }
-    labelEl.createSpan({ cls: "db-timeline-tick-date", text: label });
+    labelEl.createSpan({ cls: "obnotion-timeline-tick-date", text: label });
   }
 
   /** Render a single timeline event bar with unified absolute-scale positioning. */
@@ -2436,12 +2436,12 @@ export class CalendarTimelineRenderer {
     const subtaskProgress = subtaskNode?.progress;
     const progress = subtaskProgress?.value ?? event.progress ?? 0;
     const eventEl = eventsEl.createDiv({
-      cls: `db-timeline-event${hasSubtaskRelation ? " db-subtask-event" : ""}${hasSubtaskChildren ? " has-subtask-children" : ""}${isDateColumn ? " is-all-day" : ""}${isMilestone ? " is-milestone" : ""}${milestoneLabelPlacement === "above" ? " is-label-above" : ""}${progress > 0 ? " is-progressing" : ""}${range.isClippedStart ? " is-clipped-start" : ""}${range.isClippedEnd ? " is-clipped-end" : ""}`,
+      cls: `obnotion-timeline-event${hasSubtaskRelation ? " obnotion-subtask-event" : ""}${hasSubtaskChildren ? " has-subtask-children" : ""}${isDateColumn ? " is-all-day" : ""}${isMilestone ? " is-milestone" : ""}${milestoneLabelPlacement === "above" ? " is-label-above" : ""}${progress > 0 ? " is-progressing" : ""}${range.isClippedStart ? " is-clipped-start" : ""}${range.isClippedEnd ? " is-clipped-end" : ""}`,
       attr: {
         role: "group",
         "aria-label": eventDetails,
         title: `${event.title} · ${dateText} · ${event.filePath}`,
-        "data-note-database-row-path": event.row.file.path,
+        "data-obnotion-row-path": event.row.file.path,
         "data-timeline-event-id": event.id,
         ...(hasSubtaskRelation ? {
           "data-subtask-depth": String(subtaskNode!.depth),
@@ -2452,18 +2452,18 @@ export class CalendarTimelineRenderer {
         ...(progress > 0 ? { "data-timeline-progress": String(progress) } : {}),
       },
     });
-    eventEl.style.setProperty("--db-timeline-row", String(rowIndex));
-    if (hasSubtaskRelation) eventEl.style.setProperty("--db-subtask-depth", String(subtaskNode!.depth));
+    eventEl.style.setProperty("--obnotion-timeline-row", String(rowIndex));
+    if (hasSubtaskRelation) eventEl.style.setProperty("--obnotion-subtask-depth", String(subtaskNode!.depth));
     // 统一绝对刻度定位（可见窗口夹取后的 [renderStart, renderEnd]）；所有事件同一路径，不再 is-timed 双轨。
     this.applyTimelineAbsolutePosition(eventEl, range.renderStart, range.renderEnd, range.visible.startMinutes, model.unit);
     this.applyCalendarEventColor(eventEl, event.color);
     this.actions.applyConditionalFormat?.(eventEl, event.row, config);
-    if (isMilestone) eventEl.createSpan({ cls: "db-timeline-milestone-diamond", attr: { "aria-hidden": "true" } });
+    if (isMilestone) eventEl.createSpan({ cls: "obnotion-timeline-milestone-diamond", attr: { "aria-hidden": "true" } });
     if (progress > 0) {
       const progressDuration = Math.max(model.unit === "hour" ? 0.25 : 1, event.durationUnits || 1);
       const progressUnits = resolveTimelineProgressFillUnits(progress, progressDuration);
-      const progressEl = eventEl.createSpan({ cls: "db-timeline-event-progress", attr: { "aria-hidden": "true" } });
-      progressEl.style.setProperty("--db-timeline-progress-width", `calc(var(--db-timeline-unit-width) * ${this.formatTimelineUnitValue(progressUnits)})`);
+      const progressEl = eventEl.createSpan({ cls: "obnotion-timeline-event-progress", attr: { "aria-hidden": "true" } });
+      progressEl.style.setProperty("--obnotion-timeline-progress-width", `calc(var(--obnotion-timeline-unit-width) * ${this.formatTimelineUnitValue(progressUnits)})`);
     }
     if (hasSubtaskChildren) {
       // Sibling of the trigger, not a child of it: a control nested inside the trigger button is
@@ -2471,14 +2471,14 @@ export class CalendarTimelineRenderer {
       // reads left to right in both the DOM and the tab order.
       const collapsed = subtaskNode!.collapsed;
       const toggle = eventEl.createEl("button", {
-        cls: `db-subtask-toggle db-subtask-event-toggle${collapsed ? " is-collapsed" : ""}`,
+        cls: `obnotion-subtask-toggle obnotion-subtask-event-toggle${collapsed ? " is-collapsed" : ""}`,
         attr: {
           type: "button",
           "aria-label": collapsed ? t("subtask.expand") : t("subtask.collapse"),
           "aria-expanded": String(!collapsed),
         },
       });
-      toggle.createSpan({ cls: "db-collapse-triangle", attr: { "aria-hidden": "true" } });
+      toggle.createSpan({ cls: "obnotion-collapse-triangle", attr: { "aria-hidden": "true" } });
       toggle.onclick = (mouseEvent) => {
         mouseEvent.preventDefault();
         mouseEvent.stopPropagation();
@@ -2487,14 +2487,14 @@ export class CalendarTimelineRenderer {
       };
     }
     const trigger = eventEl.createEl("button", {
-      cls: "db-timeline-event-trigger",
+      cls: "obnotion-timeline-event-trigger",
       attr: { type: "button", "aria-label": eventLabel },
     });
-    const content = trigger.createSpan({ cls: "db-timeline-event-content" });
+    const content = trigger.createSpan({ cls: "obnotion-timeline-event-content" });
     this.actions.renderRecordIcon?.(content, event.row, config, true);
-    const titleEl = content.createSpan({ cls: `db-timeline-event-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
+    const titleEl = content.createSpan({ cls: `obnotion-timeline-event-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
     markNoteHoverLink(titleEl, event.row.file.path, event.row.file.path);
-    content.createSpan({ cls: "db-timeline-event-meta", text: dateText });
+    content.createSpan({ cls: "obnotion-timeline-event-meta", text: dateText });
     if (subtaskProgress && (subtaskProgress.explicit != null || subtaskProgress.derived != null)) {
       const summary = subtaskProgress.derived == null
         ? ""
@@ -2503,10 +2503,10 @@ export class CalendarTimelineRenderer {
         ? ""
         : t("subtask.explicitProgress", { value: Math.round(subtaskProgress.explicit) });
       const labels = [summary, explicit].filter(Boolean);
-      const progressLabel = content.createSpan({ cls: "db-timeline-subtask-progress", attr: { "aria-label": labels.join(" · ") } });
-      if (summary) progressLabel.createSpan({ cls: "db-subtask-progress-derived", text: summary });
+      const progressLabel = content.createSpan({ cls: "obnotion-timeline-subtask-progress", attr: { "aria-label": labels.join(" · ") } });
+      if (summary) progressLabel.createSpan({ cls: "obnotion-subtask-progress-derived", text: summary });
       if (summary && explicit) progressLabel.createSpan({ text: " · ", attr: { "aria-hidden": "true" } });
-      if (explicit) progressLabel.createSpan({ cls: "db-subtask-progress-explicit", text: explicit });
+      if (explicit) progressLabel.createSpan({ cls: "obnotion-subtask-progress-explicit", text: explicit });
     }
     this.renderTimelineLinkDots(eventEl, event);
     // The resize handles, the link dots, the subtask toggle and the phone menu button are siblings
@@ -2540,7 +2540,7 @@ export class CalendarTimelineRenderer {
   /**
    * 统一绝对刻度定位：按事件在可见窗口夹取后的 [renderStart, renderEnd] 区间设置 exact-offset/width。
    * day scale 单位=小时（/MINUTES_PER_HOUR）；week/month/quarter 单位=天（/MINUTES_PER_DAY）。
-   * 刻度统一是绝对分钟，按 unit 换算成与 CSS --db-timeline-unit-width 对应的列单位。
+   * 刻度统一是绝对分钟，按 unit 换算成与 CSS --obnotion-timeline-unit-width 对应的列单位。
    */
   private applyTimelineAbsolutePosition(button: HTMLElement, renderStart: number, renderEnd: number, visibleStart: number, unit: TimelineUnit): void {
     const minutesPerUnit = unit === "hour" ? MINUTES_PER_HOUR : MINUTES_PER_DAY;
@@ -2548,8 +2548,8 @@ export class CalendarTimelineRenderer {
     const offsetUnits = Math.max(0, (renderStart - visibleStart) / minutesPerUnit);
     const widthUnits = Math.max(minUnits, (renderEnd - renderStart) / minutesPerUnit);
     button.setCssProps({
-      "--db-timeline-exact-offset": `calc(var(--db-timeline-unit-width) * ${offsetUnits})`,
-      "--db-timeline-exact-width": `calc(var(--db-timeline-unit-width) * ${widthUnits})`,
+      "--obnotion-timeline-exact-offset": `calc(var(--obnotion-timeline-unit-width) * ${offsetUnits})`,
+      "--obnotion-timeline-exact-width": `calc(var(--obnotion-timeline-unit-width) * ${widthUnits})`,
     });
   }
 
@@ -2565,14 +2565,14 @@ export class CalendarTimelineRenderer {
   ): void {
     const dateKey = target === "end" ? event.endDateKey : event.startDateKey;
     const button = eventsEl.createEl("button", {
-      cls: `db-timeline-window-jump is-${direction}${isOverEvent ? " is-over-event" : ""}`,
+      cls: `obnotion-timeline-window-jump is-${direction}${isOverEvent ? " is-over-event" : ""}`,
       attr: {
         type: "button",
         "aria-label": t("timeline.jumpToEvent", { title: event.title, date: dateKey }),
-        "data-note-database-row-path": event.row.file.path,
+        "data-obnotion-row-path": event.row.file.path,
       },
     });
-    button.style.setProperty("--db-timeline-row", String(rowIndex));
+    button.style.setProperty("--obnotion-timeline-row", String(rowIndex));
     setIcon(button, direction === "before" ? "arrow-left" : "arrow-right");
     setTooltip(button, t("timeline.jumpToEvent", { title: event.title, date: dateKey }), { delay: 100 });
     button.onclick = (mouseEvent) => {
@@ -2602,13 +2602,13 @@ export class CalendarTimelineRenderer {
     const collapsed = this.isTimelineGroupCollapsed(config, collapseField, lane.key);
     const sectionId = `group-section-${encodeURIComponent(`${collapseField}:${lane.key}`)}`;
     parent.setAttr("id", sectionId);
-    const header = parent.createDiv({ cls: "db-timeline-group-header" });
-    const headerLabel = header.createDiv({ cls: "db-timeline-group-header-label" });
+    const header = parent.createDiv({ cls: "obnotion-timeline-group-header" });
+    const headerLabel = header.createDiv({ cls: "obnotion-timeline-group-header-label" });
     const toggle = headerLabel.createEl("button", {
-      cls: `db-timeline-group-toggle${collapsed ? " is-collapsed" : ""}`,
+      cls: `obnotion-timeline-group-toggle${collapsed ? " is-collapsed" : ""}`,
       attr: { type: "button", "aria-label": collapsed ? t("group.expand") : t("group.collapse"), "aria-expanded": String(!collapsed), "aria-controls": sectionId },
     });
-    toggle.createSpan({ cls: "db-collapse-triangle" });
+    toggle.createSpan({ cls: "obnotion-collapse-triangle" });
     toggle.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -2616,7 +2616,7 @@ export class CalendarTimelineRenderer {
     };
     this.renderTimelineGroupTag(headerLabel, lane);
     this.actions.renderGroupSummaries?.(headerLabel, lane.events.map((event) => event.row), config);
-    header.createDiv({ cls: "db-timeline-group-header-grid" });
+    header.createDiv({ cls: "obnotion-timeline-group-header-grid" });
     return collapsed;
   }
 
@@ -2637,14 +2637,14 @@ export class CalendarTimelineRenderer {
   }
 
   private renderTimelineGroupTag(parent: HTMLElement, lane: { label: string; color?: string; events: CalendarTimelineEvent[] }): void {
-    const tag = parent.createSpan({ cls: "db-timeline-group-tag" });
+    const tag = parent.createSpan({ cls: "obnotion-timeline-group-tag" });
     if (lane.color) {
       tag.addClass(`status-color-${lane.color}`);
-      tag.style.setProperty("--db-timeline-group-tag-bg", `var(--status-color-bg-${lane.color})`);
-      tag.style.setProperty("--db-timeline-group-tag-fg", `var(--status-color-fg-${lane.color})`);
+      tag.style.setProperty("--obnotion-timeline-group-tag-bg", `var(--status-color-bg-${lane.color})`);
+      tag.style.setProperty("--obnotion-timeline-group-tag-fg", `var(--status-color-fg-${lane.color})`);
     }
-    tag.createSpan({ cls: "db-timeline-group-title", text: lane.label });
-    tag.createSpan({ cls: "db-timeline-group-count", text: String(lane.events.length) });
+    tag.createSpan({ cls: "obnotion-timeline-group-title", text: lane.label });
+    tag.createSpan({ cls: "obnotion-timeline-group-count", text: String(lane.events.length) });
   }
 
   private renderTimelineCreateRow(
@@ -2654,20 +2654,20 @@ export class CalendarTimelineRenderer {
     groupKey: string,
   ): void {
     if (this.actions.isReadOnly || !this.actions.createEntryForDate || !model.startDateKey) return;
-    const row = parent.createDiv({ cls: "db-timeline-create-row" });
+    const row = parent.createDiv({ cls: "obnotion-timeline-create-row" });
     const button = row.createEl("button", {
-      cls: "db-timeline-create-button",
+      cls: "obnotion-timeline-create-button",
       attr: { type: "button" },
     });
     button.setCssProps({
-      "--db-timeline-create-offset": "1",
-      "--db-timeline-create-span": String(this.getTimelineCreateSpanUnits(model)),
-      "--db-timeline-create-left": "0px",
-      "--db-timeline-create-width": `calc(var(--db-timeline-unit-width) * ${this.formatTimelineUnitValue(this.getTimelineCreateSpanUnits(model))})`,
+      "--obnotion-timeline-create-offset": "1",
+      "--obnotion-timeline-create-span": String(this.getTimelineCreateSpanUnits(model)),
+      "--obnotion-timeline-create-left": "0px",
+      "--obnotion-timeline-create-width": `calc(var(--obnotion-timeline-unit-width) * ${this.formatTimelineUnitValue(this.getTimelineCreateSpanUnits(model))})`,
     });
-    const content = button.createSpan({ cls: "db-timeline-create-content" });
-    setIcon(content.createSpan({ cls: "db-timeline-create-icon" }), "plus");
-    content.createSpan({ cls: "db-timeline-create-label", text: t("toolbar.new") });
+    const content = button.createSpan({ cls: "obnotion-timeline-create-content" });
+    setIcon(content.createSpan({ cls: "obnotion-timeline-create-icon" }), "plus");
+    content.createSpan({ cls: "obnotion-timeline-create-label", text: t("toolbar.new") });
     this.setupTimelineCreateRow(button, config, model, groupKey);
   }
 
@@ -2682,10 +2682,10 @@ export class CalendarTimelineRenderer {
     button.onmouseleave = () => this.clearTimelineCreatePreview(button);
     button.onfocus = () => {
       button.setCssProps({
-        "--db-timeline-create-offset": "1",
-        "--db-timeline-create-span": String(this.getTimelineCreateSpanUnits(model)),
-        "--db-timeline-create-left": "0px",
-        "--db-timeline-create-width": `calc(var(--db-timeline-unit-width) * ${this.formatTimelineUnitValue(this.getTimelineCreateSpanUnits(model))})`,
+        "--obnotion-timeline-create-offset": "1",
+        "--obnotion-timeline-create-span": String(this.getTimelineCreateSpanUnits(model)),
+        "--obnotion-timeline-create-left": "0px",
+        "--obnotion-timeline-create-width": `calc(var(--obnotion-timeline-unit-width) * ${this.formatTimelineUnitValue(this.getTimelineCreateSpanUnits(model))})`,
       });
     };
     button.onblur = () => this.clearTimelineCreatePreview(button);
@@ -2715,10 +2715,10 @@ export class CalendarTimelineRenderer {
 
   private applyTimelineCreatePreview(button: HTMLElement, target: TimelineCreateTarget): void {
     button.setCssProps({
-      "--db-timeline-create-offset": this.formatTimelineUnitValue(target.offsetUnits + 1),
-      "--db-timeline-create-span": this.formatTimelineUnitValue(target.spanUnits),
-      "--db-timeline-create-left": `calc(var(--db-timeline-unit-width) * ${this.formatTimelineUnitValue(target.offsetUnits)})`,
-      "--db-timeline-create-width": `calc(var(--db-timeline-unit-width) * ${this.formatTimelineUnitValue(target.spanUnits)})`,
+      "--obnotion-timeline-create-offset": this.formatTimelineUnitValue(target.offsetUnits + 1),
+      "--obnotion-timeline-create-span": this.formatTimelineUnitValue(target.spanUnits),
+      "--obnotion-timeline-create-left": `calc(var(--obnotion-timeline-unit-width) * ${this.formatTimelineUnitValue(target.offsetUnits)})`,
+      "--obnotion-timeline-create-width": `calc(var(--obnotion-timeline-unit-width) * ${this.formatTimelineUnitValue(target.spanUnits)})`,
     });
     button.addClass("is-previewing");
   }
@@ -2729,7 +2729,7 @@ export class CalendarTimelineRenderer {
 
   /** Navigation header: window title + prev/today/next buttons. Mirrors the calendar header. */
   private renderTimelineHeader(wrap: HTMLElement, config: ViewConfig, model: { startDateKey?: string; endDateKey?: string; totalUnits: number; scale: TimelineScale }): void {
-    const header = wrap.createDiv({ cls: "db-timeline-header" });
+    const header = wrap.createDiv({ cls: "obnotion-timeline-header" });
     const fallbackTitleWindow = getTimelineTitleWindow(config, getTimelineAnchor(config), this.timelineObservedUnitCount);
     const titleWindow = model.startDateKey && model.endDateKey
       ? { startDateKey: model.startDateKey, endDateKey: model.endDateKey }
@@ -2740,7 +2740,7 @@ export class CalendarTimelineRenderer {
       endDateKey: titleWindow.endDateKey,
       locale: getEffectiveLocale(),
     }));
-    const controls = header.createDiv({ cls: "db-timeline-controls" });
+    const controls = header.createDiv({ cls: "obnotion-timeline-controls" });
     const scale = model.scale;
     this.renderTimelineScaleControl(controls, config, scale);
     this.renderTimelineNavButton(controls, "timeline.prevLong", () => this.shiftTimeline(config, scale, -1, model, "long"), "chevrons-left");
@@ -2770,14 +2770,14 @@ export class CalendarTimelineRenderer {
     ];
     const activeScale = config.timelineScale || currentScale;
     const control = parent.createDiv({
-      cls: "db-timeline-scale-control",
+      cls: "obnotion-timeline-scale-control",
       attr: { role: "group", "aria-label": t("viewConfig.timelineScale") },
     });
-    const segment = control.createDiv({ cls: "db-timeline-scale-segment" });
+    const segment = control.createDiv({ cls: "obnotion-timeline-scale-segment" });
     for (const option of options) {
       const active = option.value === activeScale;
       const button = segment.createEl("button", {
-        cls: `db-timeline-scale-button${active ? " is-active" : ""}`,
+        cls: `obnotion-timeline-scale-button${active ? " is-active" : ""}`,
         text: option.text,
         attr: { type: "button", "aria-pressed": active ? "true" : "false", "data-timeline-scale": option.value, "aria-label": option.text },
       });
@@ -2789,14 +2789,14 @@ export class CalendarTimelineRenderer {
     }
     const activeText = options.find((option) => option.value === activeScale)?.text || t("timeline.scaleWeek");
     const menuButton = control.createEl("button", {
-      cls: "db-timeline-scale-menu db-timeline-nav-button is-text",
+      cls: "obnotion-timeline-scale-menu obnotion-timeline-nav-button is-text",
       attr: {
         type: "button",
         "aria-haspopup": "listbox",
       },
     });
-    menuButton.createSpan({ cls: "db-timeline-scale-menu-label", text: activeText });
-    setIcon(menuButton.createSpan({ cls: "db-timeline-nav-icon db-timeline-scale-menu-chevron" }), "chevron-down");
+    menuButton.createSpan({ cls: "obnotion-timeline-scale-menu-label", text: activeText });
+    setIcon(menuButton.createSpan({ cls: "obnotion-timeline-nav-icon obnotion-timeline-scale-menu-chevron" }), "chevron-down");
     menuButton.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -2806,7 +2806,7 @@ export class CalendarTimelineRenderer {
         label: t("viewConfig.timelineScale"),
         options,
         value: activeScale,
-        popoverClassName: "db-timeline-scale-popover",
+        popoverClassName: "obnotion-timeline-scale-popover",
         onChange: (value) => {
           void this.setTimelineScale(config, this.normalizeTimelineScale(value));
           this.closeTimelineScaleMenu();
@@ -2837,11 +2837,11 @@ export class CalendarTimelineRenderer {
 
   private renderTimelineNavButton(parent: HTMLElement, labelKey: string, onClick: () => void, icon?: string): void {
     const button = parent.createEl("button", {
-      cls: `db-timeline-nav-button${icon ? " is-icon" : " is-text"}`,
+      cls: `obnotion-timeline-nav-button${icon ? " is-icon" : " is-text"}`,
       attr: { type: "button" },
     });
     if (icon) {
-      setIcon(button.createSpan({ cls: "db-timeline-nav-icon" }), icon);
+      setIcon(button.createSpan({ cls: "obnotion-timeline-nav-icon" }), icon);
     } else {
       button.setText(t(labelKey));
     }
@@ -2855,10 +2855,10 @@ export class CalendarTimelineRenderer {
 
   private renderTimelineMiniCalendarButton(controls: HTMLElement, header: HTMLElement, config: ViewConfig): void {
     const button = controls.createEl("button", {
-      cls: "db-timeline-nav-button is-icon",
+      cls: "obnotion-timeline-nav-button is-icon",
       attr: { type: "button" },
     });
-    setIcon(button.createSpan({ cls: "db-timeline-nav-icon" }), "calendar-days");
+    setIcon(button.createSpan({ cls: "obnotion-timeline-nav-icon" }), "calendar-days");
     setTooltip(button, t("calendar.datePicker"), { delay: 100 });
     button.onclick = (event) => {
       event.preventDefault();
@@ -2877,10 +2877,10 @@ export class CalendarTimelineRenderer {
     if (typeof result === "number") this.timelineInvalidWarningCount = result;
     if (typeof result === "number" && result <= 0) return;
     const button = parent.createEl("button", {
-      cls: `db-timeline-nav-button is-icon db-timeline-invalid-toggle${initialCount && initialCount > 0 ? "" : " is-hidden"}`,
+      cls: `obnotion-timeline-nav-button is-icon obnotion-timeline-invalid-toggle${initialCount && initialCount > 0 ? "" : " is-hidden"}`,
       attr: { type: "button" },
     });
-    setIcon(button.createSpan({ cls: "db-timeline-nav-icon" }), "alert-triangle");
+    setIcon(button.createSpan({ cls: "obnotion-timeline-nav-icon" }), "alert-triangle");
     button.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -2913,7 +2913,7 @@ export class CalendarTimelineRenderer {
       return;
     }
     this.closeTimelineMiniCalendar();
-    const popover = header.createDiv({ cls: "db-calendar-mini-popover db-timeline-mini-popover" });
+    const popover = header.createDiv({ cls: "obnotion-calendar-mini-popover obnotion-timeline-mini-popover" });
     this.miniCalendarEl = popover;
     this.miniCalendarMonth = this.resolveTimelineMiniMonthKey(config);
     this.miniCalendarMode = "day";
@@ -3048,14 +3048,14 @@ export class CalendarTimelineRenderer {
     const range = this.getTimelineFlashRange(dateKey);
     const overlays: HTMLElement[] = [];
     if (range) {
-      const body = root.querySelector<HTMLElement>(".db-timeline-body");
+      const body = root.querySelector<HTMLElement>(".obnotion-timeline-body");
       if (body) {
         const overlay = body.createDiv({
-          cls: "db-timeline-body-flash-column is-flash",
+          cls: "obnotion-timeline-body-flash-column is-flash",
           attr: { "data-date-key": dateKey },
         });
-        overlay.style.setProperty("--db-timeline-flash-offset", String(range.offsetUnits));
-        overlay.style.setProperty("--db-timeline-flash-span", String(range.spanUnits));
+        overlay.style.setProperty("--obnotion-timeline-flash-offset", String(range.offsetUnits));
+        overlay.style.setProperty("--obnotion-timeline-flash-span", String(range.spanUnits));
         overlays.push(overlay);
       }
     }
@@ -3147,11 +3147,11 @@ export class CalendarTimelineRenderer {
 
   private renderTimelineTitle(parent: HTMLElement, parts: CalendarTitleParts): void {
     const title = parent.createDiv({
-      cls: "db-timeline-title",
+      cls: "obnotion-timeline-title",
     });
     setTooltip(title, parts.ariaLabel, { delay: 100 });
-    title.createSpan({ cls: "db-timeline-title-main", text: parts.main });
-    if (parts.year) title.createSpan({ cls: "db-timeline-title-year", text: parts.year });
+    title.createSpan({ cls: "obnotion-timeline-title-main", text: parts.main });
+    if (parts.year) title.createSpan({ cls: "obnotion-timeline-title-year", text: parts.year });
   }
 
   private getDayStartHour(config: ViewConfig): number {
@@ -3167,8 +3167,8 @@ export class CalendarTimelineRenderer {
 
   private applyCalendarEventColor(button: HTMLElement, color: string | undefined): void {
     if (!color) return;
-    button.style.setProperty("--db-calendar-event-accent", `var(--status-color-fg-${color})`);
-    button.style.setProperty("--db-calendar-event-bg", `var(--status-color-bg-${color})`);
+    button.style.setProperty("--obnotion-calendar-event-accent", `var(--status-color-fg-${color})`);
+    button.style.setProperty("--obnotion-calendar-event-bg", `var(--status-color-bg-${color})`);
   }
 
   /**
@@ -3182,8 +3182,8 @@ export class CalendarTimelineRenderer {
     draggedPath: string,
     laneEvents: readonly CalendarTimelineEvent[]
   ): { targetPath: string; placeBefore: boolean; beforePath?: string; afterPath?: string } | null {
-    const buttons = Array.from(eventsEl.querySelectorAll<HTMLElement>(".db-timeline-event, .db-timeline-window-jump"))
-      .filter((btn) => btn.getAttribute("data-note-database-row-path") !== draggedPath);
+    const buttons = Array.from(eventsEl.querySelectorAll<HTMLElement>(".obnotion-timeline-event, .obnotion-timeline-window-jump"))
+      .filter((btn) => btn.getAttribute("data-obnotion-row-path") !== draggedPath);
     if (buttons.length === 0) return null;
     let closest = buttons[0];
     let closestDist = Infinity;
@@ -3194,7 +3194,7 @@ export class CalendarTimelineRenderer {
     }
     const rect = closest.getBoundingClientRect();
     const placeBefore = clientY < rect.top + rect.height / 2;
-    const targetPath = closest.getAttribute("data-note-database-row-path") || "";
+    const targetPath = closest.getAttribute("data-obnotion-row-path") || "";
     // 用完整 lane 顺序（含 jump 事件）算 before/after——jump 事件不在 visible DOM，
     // 否则 A 会跨越 jump、不紧贴目标。
     const fullPath = laneEvents.map((event) => event.row.file.path).filter((path) => path !== draggedPath);
@@ -3210,22 +3210,22 @@ export class CalendarTimelineRenderer {
     const target = this.findTimelineReorderTarget(eventsEl, clientY, draggedPath, laneEvents);
     if (!target) return null;
     const btn = eventsEl.querySelector<HTMLElement>(
-      `[data-note-database-row-path="${CSS.escape(target.targetPath)}"]`
+      `[data-obnotion-row-path="${CSS.escape(target.targetPath)}"]`
     );
     if (btn) {
       // 横跨整行的水平插入线，紧贴目标事件的上边缘（插入其前）或下边缘（插入其后）——
       // 延续旧「卡片边缘 box-shadow」的贴边质感，但跨整行更显眼；无圆点，用细线 + 柔和
       // 发光定位，不阻断。
       const top = target.placeBefore ? btn.offsetTop : btn.offsetTop + btn.offsetHeight;
-      const line = eventsEl.createDiv({ cls: "db-timeline-reorder-line" });
-      line.style.setProperty("--db-timeline-reorder-line-top", `${top}px`);
+      const line = eventsEl.createDiv({ cls: "obnotion-timeline-reorder-line" });
+      line.style.setProperty("--obnotion-timeline-reorder-line-top", `${top}px`);
     }
     return target;
   }
 
   /** 清除所有 lane 的 reorder 插入线（pointer 模式同一时刻只有一条）。 */
   private clearAllTimelineReorderLines(): void {
-    window.activeDocument.querySelectorAll(".db-timeline-reorder-line").forEach((el) => el.remove());
+    window.activeDocument.querySelectorAll(".obnotion-timeline-reorder-line").forEach((el) => el.remove());
   }
 
   /**
@@ -3270,7 +3270,7 @@ export class CalendarTimelineRenderer {
       if (mouseEvent.button !== 0) return;
       // resize 进行中或点中 resize 手柄时不触发 move。
       if (this.timelineResizeInProgress) return;
-      if ((mouseEvent.target as HTMLElement | null)?.closest(".db-timeline-resize-handle")) return;
+      if ((mouseEvent.target as HTMLElement | null)?.closest(".obnotion-timeline-resize-handle")) return;
       mouseEvent.preventDefault();
       mouseEvent.stopPropagation();
       this.beginTimelineDateDrag(button, eventsEl, config, event, groupKey, model, mouseEvent.clientX, mouseEvent.clientY, laneEvents, lanes);
@@ -3291,7 +3291,7 @@ export class CalendarTimelineRenderer {
     button.addClass("is-draggable");
     button.addEventListener("mousedown", (mouseEvent) => {
       if (mouseEvent.button !== 0) return;
-      const mode = ((mouseEvent.target as HTMLElement | null)?.closest(".db-timeline-resize-handle") as HTMLElement | null)
+      const mode = ((mouseEvent.target as HTMLElement | null)?.closest(".obnotion-timeline-resize-handle") as HTMLElement | null)
         ?.dataset.timelineResizeMode as "resize-start" | "resize-end" | undefined || "move";
       if (mode !== "move" && !(config.timelineEndDateField || config.calendarEndDateField)) return;
       mouseEvent.preventDefault();
@@ -3310,7 +3310,7 @@ export class CalendarTimelineRenderer {
     groupKey: string,
   ): void {
     const handle = button.createSpan({
-      cls: `db-timeline-resize-handle is-${edge}`,
+      cls: `obnotion-timeline-resize-handle is-${edge}`,
       attr: {
         title: edge === "start" ? t("calendar.resizeStart") : t("calendar.resizeEnd"),
         "aria-hidden": "true",
@@ -3378,18 +3378,18 @@ export class CalendarTimelineRenderer {
     let targetEventsEl = eventsEl;
 
     const unitWidth = this.getTimelineUnitPixelWidth(eventsEl, model.totalUnits);
-    const originalExactOffset = button.style.getPropertyValue("--db-timeline-exact-offset");
-    const originalExactWidth = button.style.getPropertyValue("--db-timeline-exact-width");
+    const originalExactOffset = button.style.getPropertyValue("--obnotion-timeline-exact-offset");
+    const originalExactWidth = button.style.getPropertyValue("--obnotion-timeline-exact-width");
     const wasTimed = button.hasClass("is-timed");
-    const metaEl = button.querySelector<HTMLElement>(".db-timeline-event-meta");
+    const metaEl = button.querySelector<HTMLElement>(".obnotion-timeline-event-meta");
     const originalMeta = metaEl?.textContent || "";
 
     button.addClass("is-timed");
     const restore = (): void => {
-      if (originalExactOffset) button.style.setProperty("--db-timeline-exact-offset", originalExactOffset);
-      else button.style.removeProperty("--db-timeline-exact-offset");
-      if (originalExactWidth) button.style.setProperty("--db-timeline-exact-width", originalExactWidth);
-      else button.style.removeProperty("--db-timeline-exact-width");
+      if (originalExactOffset) button.style.setProperty("--obnotion-timeline-exact-offset", originalExactOffset);
+      else button.style.removeProperty("--obnotion-timeline-exact-offset");
+      if (originalExactWidth) button.style.setProperty("--obnotion-timeline-exact-width", originalExactWidth);
+      else button.style.removeProperty("--obnotion-timeline-exact-width");
       if (!wasTimed) button.removeClass("is-timed");
       if (metaEl) metaEl.setText(originalMeta);
     };
@@ -3476,8 +3476,8 @@ export class CalendarTimelineRenderer {
       button.removeClass("is-dragging", "is-resizing", "is-moving");
       if (mode === "move") this.clearAllTimelineDropTargets();
       else eventsEl.removeClass("is-resize-target");
-      button.querySelector(":scope > .db-timeline-snap-marker")?.remove();
-      eventsEl.querySelector(":scope > .db-timeline-snap-marker")?.remove();
+      button.querySelector(":scope > .obnotion-timeline-snap-marker")?.remove();
+      eventsEl.querySelector(":scope > .obnotion-timeline-snap-marker")?.remove();
       this.timelineResizeInProgress = false;
       const targetGroupKey = targetEventsEl.dataset.timelineLaneKey || groupKey;
       const didChangeLane = mode === "move"
@@ -3554,18 +3554,18 @@ export class CalendarTimelineRenderer {
       ? this.getTimelineVisibleMinutes(config, model)
       : { startMinutes: 0, endMinutes: Math.max(1, model.totalUnits) * MINUTES_PER_DAY };
     // 捕获渲染时的 exact 定位，restore 原样恢复。
-    const originalExactOffset = button.style.getPropertyValue("--db-timeline-exact-offset");
-    const originalExactWidth = button.style.getPropertyValue("--db-timeline-exact-width");
+    const originalExactOffset = button.style.getPropertyValue("--obnotion-timeline-exact-offset");
+    const originalExactWidth = button.style.getPropertyValue("--obnotion-timeline-exact-width");
     const unitWidth = this.getTimelineUnitPixelWidth(eventsEl, model.totalUnits);
     let didMove = false;
     let nextStartKey = originalStartKey;
     let nextEndKey = originalEndKey;
 
     const restore = (): void => {
-      if (originalExactOffset) button.style.setProperty("--db-timeline-exact-offset", originalExactOffset);
-      else button.style.removeProperty("--db-timeline-exact-offset");
-      if (originalExactWidth) button.style.setProperty("--db-timeline-exact-width", originalExactWidth);
-      else button.style.removeProperty("--db-timeline-exact-width");
+      if (originalExactOffset) button.style.setProperty("--obnotion-timeline-exact-offset", originalExactOffset);
+      else button.style.removeProperty("--obnotion-timeline-exact-offset");
+      if (originalExactWidth) button.style.setProperty("--obnotion-timeline-exact-width", originalExactWidth);
+      else button.style.removeProperty("--obnotion-timeline-exact-width");
     };
     const swallowClick = (clickEvent: MouseEvent): void => {
       clickEvent.stopPropagation();
@@ -3607,8 +3607,8 @@ export class CalendarTimelineRenderer {
       previewRange(targetFromX(upEvent.clientX));
       button.removeClass("is-resizing", "is-dragging");
       eventsEl.removeClass("is-resize-target");
-      button.querySelector(":scope > .db-timeline-snap-marker")?.remove();
-      eventsEl.querySelector(":scope > .db-timeline-snap-marker")?.remove();
+      button.querySelector(":scope > .obnotion-timeline-snap-marker")?.remove();
+      eventsEl.querySelector(":scope > .obnotion-timeline-snap-marker")?.remove();
       this.timelineResizeInProgress = false;
       if (nextStartKey === originalStartKey && nextEndKey === originalEndKey) {
         restore();
@@ -3674,11 +3674,11 @@ export class CalendarTimelineRenderer {
     const unitWidth = this.getTimelineUnitPixelWidth(eventsEl, model.totalUnits);
     // 一天的像素宽：day scale = unitWidth×24（unit=小时），其余 = unitWidth（unit=天）。
     const pixelsPerDay = unitWidth > 0 ? (unitWidth * MINUTES_PER_DAY) / minutesPerUnit : 0;
-    const metaEl = button.querySelector<HTMLElement>(".db-timeline-event-meta");
+    const metaEl = button.querySelector<HTMLElement>(".obnotion-timeline-event-meta");
     const originalMeta = metaEl?.textContent || "";
     // 捕获渲染时的 exact 定位（已夹到可见窗口），restore 原样恢复，避免重算夹取。
-    const originalExactOffset = button.style.getPropertyValue("--db-timeline-exact-offset");
-    const originalExactWidth = button.style.getPropertyValue("--db-timeline-exact-width");
+    const originalExactOffset = button.style.getPropertyValue("--obnotion-timeline-exact-offset");
+    const originalExactWidth = button.style.getPropertyValue("--obnotion-timeline-exact-width");
 
     let didDrag = false;
     let nextStartDay = originalStartDay;
@@ -3690,10 +3690,10 @@ export class CalendarTimelineRenderer {
     eventsEl.addClass("is-drop-target");
 
     const restore = (): void => {
-      if (originalExactOffset) button.style.setProperty("--db-timeline-exact-offset", originalExactOffset);
-      else button.style.removeProperty("--db-timeline-exact-offset");
-      if (originalExactWidth) button.style.setProperty("--db-timeline-exact-width", originalExactWidth);
-      else button.style.removeProperty("--db-timeline-exact-width");
+      if (originalExactOffset) button.style.setProperty("--obnotion-timeline-exact-offset", originalExactOffset);
+      else button.style.removeProperty("--obnotion-timeline-exact-offset");
+      if (originalExactWidth) button.style.setProperty("--obnotion-timeline-exact-width", originalExactWidth);
+      else button.style.removeProperty("--obnotion-timeline-exact-width");
       if (metaEl) metaEl.setText(originalMeta);
     };
     const swallowClick = (clickEvent: MouseEvent): void => {
@@ -3752,8 +3752,8 @@ export class CalendarTimelineRenderer {
       }
       button.removeClass("is-dragging", "is-moving");
       this.clearAllTimelineDropTargets();
-      button.querySelector(":scope > .db-timeline-snap-marker")?.remove();
-      eventsEl.querySelector(":scope > .db-timeline-snap-marker")?.remove();
+      button.querySelector(":scope > .obnotion-timeline-snap-marker")?.remove();
+      eventsEl.querySelector(":scope > .obnotion-timeline-snap-marker")?.remove();
 
       if (!didDrag) {
         restore();
@@ -3819,7 +3819,7 @@ export class CalendarTimelineRenderer {
     lanes: Array<{ key: string; label: string; events: CalendarTimelineEvent[] }>
   ): void {
     const menuButton = button.createEl("button", {
-      cls: "db-timeline-mobile-menu-button",
+      cls: "obnotion-timeline-mobile-menu-button",
       text: "...",
       attr: { type: "button" },
     });
@@ -4036,7 +4036,7 @@ export class CalendarTimelineRenderer {
   }
 
   private getTimelineUnitPixelWidth(eventsEl: HTMLElement, totalUnits: number): number {
-    const raw = window.getComputedStyle(eventsEl).getPropertyValue("--db-timeline-unit-width").trim();
+    const raw = window.getComputedStyle(eventsEl).getPropertyValue("--obnotion-timeline-unit-width").trim();
     const parsed = Number.parseFloat(raw);
     if (Number.isFinite(parsed) && parsed > 0) return parsed;
     const rect = eventsEl.getBoundingClientRect();
@@ -4117,52 +4117,52 @@ export class CalendarTimelineRenderer {
     dateKey: string,
     options?: { variant?: "timed-range"; leftPx?: number; topPx?: number; widthPx?: number },
   ): void {
-    let snap = eventsEl.querySelector<HTMLElement>(":scope > .db-timeline-snap-marker");
-    if (!snap) snap = eventsEl.createDiv({ cls: "db-timeline-snap-marker" });
+    let snap = eventsEl.querySelector<HTMLElement>(":scope > .obnotion-timeline-snap-marker");
+    if (!snap) snap = eventsEl.createDiv({ cls: "obnotion-timeline-snap-marker" });
     snap.toggleClass("is-timed-range", options?.variant === "timed-range");
     const snapWidth = Number.isFinite(options?.widthPx) ? Math.max(96, options!.widthPx!) : 0;
     if (Number.isFinite(options?.leftPx)) {
       const laneWidth = eventsEl.clientWidth || eventsEl.getBoundingClientRect().width || 0;
       const maxLeft = Math.max(8, laneWidth - snapWidth - 8);
       const left = laneWidth > 0 ? Math.min(maxLeft, Math.max(8, options!.leftPx!)) : Math.max(8, options!.leftPx!);
-      snap.style.setProperty("--db-timeline-snap-left", `${left}px`);
+      snap.style.setProperty("--obnotion-timeline-snap-left", `${left}px`);
     } else {
-      snap.style.removeProperty("--db-timeline-snap-left");
+      snap.style.removeProperty("--obnotion-timeline-snap-left");
     }
-    if (snapWidth > 0) snap.style.setProperty("--db-timeline-snap-width", `${snapWidth}px`);
-    else snap.style.removeProperty("--db-timeline-snap-width");
-    if (Number.isFinite(options?.topPx)) snap.style.setProperty("--db-timeline-snap-top", `${Math.max(0, options!.topPx!)}px`);
-    else snap.style.removeProperty("--db-timeline-snap-top");
+    if (snapWidth > 0) snap.style.setProperty("--obnotion-timeline-snap-width", `${snapWidth}px`);
+    else snap.style.removeProperty("--obnotion-timeline-snap-width");
+    if (Number.isFinite(options?.topPx)) snap.style.setProperty("--obnotion-timeline-snap-top", `${Math.max(0, options!.topPx!)}px`);
+    else snap.style.removeProperty("--obnotion-timeline-snap-top");
     snap.setText(dateKey);
   }
 
   private getTimelineTimedDropTarget(clientX: number, clientY: number, fallbackEventsEl: HTMLElement): HTMLElement {
     const hit = window.activeDocument.elementFromPoint(clientX, clientY) as HTMLElement | null;
-    const directLane = hit?.closest<HTMLElement>(".db-timeline-events");
+    const directLane = hit?.closest<HTMLElement>(".obnotion-timeline-events");
     if (directLane?.dataset.timelineLaneKey) return directLane;
-    const group = hit?.closest<HTMLElement>(".db-timeline-group");
-    const groupLane = group?.querySelector<HTMLElement>(":scope > .db-timeline-events");
+    const group = hit?.closest<HTMLElement>(".obnotion-timeline-group");
+    const groupLane = group?.querySelector<HTMLElement>(":scope > .obnotion-timeline-events");
     if (groupLane?.dataset.timelineLaneKey) return groupLane;
-    // 折叠分组无 .db-timeline-events 子元素，但 group 自身带 data-timeline-lane-key：
+    // 折叠分组无 .obnotion-timeline-events 子元素，但 group 自身带 data-timeline-lane-key：
     // 返回 group 让跨组移动命中折叠分组（精确插入由 resolveTimelineReorderTarget 对折叠态返回 null → 追加）。
     if (group?.dataset.timelineLaneKey) return group;
     return fallbackEventsEl;
   }
 
   private syncTimelineTimedDropTarget(sourceEventsEl: HTMLElement, targetEventsEl: HTMLElement): void {
-    const timeline = sourceEventsEl.closest<HTMLElement>(".db-timeline") || window.activeDocument;
-    // 同时清理 events 和折叠分组上的高亮（折叠分组无 .db-timeline-events，高亮挂在 group 上）。
-    timeline.querySelectorAll<HTMLElement>(".db-timeline-events.is-drop-target, .db-timeline-group.is-drop-target").forEach((el) => {
+    const timeline = sourceEventsEl.closest<HTMLElement>(".obnotion-timeline") || window.activeDocument;
+    // 同时清理 events 和折叠分组上的高亮（折叠分组无 .obnotion-timeline-events，高亮挂在 group 上）。
+    timeline.querySelectorAll<HTMLElement>(".obnotion-timeline-events.is-drop-target, .obnotion-timeline-group.is-drop-target").forEach((el) => {
       el.removeClass("is-drop-target");
     });
     targetEventsEl.addClass("is-drop-target");
   }
 
   private clearAllTimelineDropTargets(): void {
-    window.activeDocument.querySelectorAll(".db-timeline-events.is-drop-target, .db-timeline-group.is-drop-target").forEach((el) => {
+    window.activeDocument.querySelectorAll(".obnotion-timeline-events.is-drop-target, .obnotion-timeline-group.is-drop-target").forEach((el) => {
       el.removeClass("is-drop-target");
-      el.querySelector(":scope > .db-timeline-snap-marker")?.remove();
-      el.querySelector(":scope > .db-timeline-reorder-line")?.remove();
+      el.querySelector(":scope > .obnotion-timeline-snap-marker")?.remove();
+      el.querySelector(":scope > .obnotion-timeline-reorder-line")?.remove();
     });
   }
 
@@ -4219,7 +4219,7 @@ export class CalendarTimelineRenderer {
     input.type = "date";
     input.value = defaultDateKey;
     input.setAttribute("aria-label", t("calendar.moveToDate"));
-    input.addClass("db-hidden-date-input");
+    input.addClass("obnotion-hidden-date-input");
     const remove = () => window.setTimeout(() => input.remove(), 0);
     input.onchange = () => {
       const value = input.value.trim();
@@ -4248,7 +4248,7 @@ export class CalendarTimelineRenderer {
   private renderTimelineEmptyRange(container: HTMLElement): void {
     this.emptyStateRenderer.renderCard(container, {
       reason: "no-events-in-range",
-      className: "db-timeline-empty-range",
+      className: "obnotion-timeline-empty-range",
       actions: this.actions.openDateConfig ? [{
         label: t("emptyState.selectDateProperty"),
         icon: "settings-2",

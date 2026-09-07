@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "seed": "note-database-testbed",
+  "seed": "obnotion-testbed",
   "anchor": "2026-03-25T13:45",
   "note": "Deterministic mock data. Regenerating with the same seed produces the same bytes. Created and modified columns carry no value: the host product supplies them.",
   "useCases": [

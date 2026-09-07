@@ -175,11 +175,11 @@ export class FilterPanelRenderer {
       panel.empty();
     } else {
       panel = containerEl.createDiv({
-        cls: "db-filter-panel",
-        attr: { id: "db-filter-panel", role: "dialog", "aria-label": t("toolbar.filter") },
+        cls: "obnotion-filter-panel",
+        attr: { id: "obnotion-filter-panel", role: "dialog", "aria-label": t("toolbar.filter") },
       });
       panel.tabIndex = -1;
-      const header = containerEl.querySelector(".db-header") || containerEl.querySelector(".db-toolbar");
+      const header = containerEl.querySelector(".obnotion-header") || containerEl.querySelector(".obnotion-toolbar");
       if (header?.parentElement) {
         header.parentElement.insertBefore(panel, header.nextSibling);
       }
@@ -212,7 +212,7 @@ export class FilterPanelRenderer {
         (next) => this.replaceFilterTree(containerEl, state, config, actions, next)
       );
       const addBtn = panel.createEl("button", {
-        cls: "db-panel-button",
+        cls: "obnotion-panel-button",
         text: `+ ${t("panel.addCondition")}`,
       });
       addBtn.onclick = () => {
@@ -242,18 +242,18 @@ export class FilterPanelRenderer {
   ): void {
     const columns = getViewRuleColumns(config);
     if (columns.length === 0) {
-      panel.createDiv({ cls: "db-panel-empty", text: t("panel.emptyFilters") });
+      panel.createDiv({ cls: "obnotion-panel-empty", text: t("panel.emptyFilters") });
       return;
     }
     // Reuses the dropdown primitive's own search-row and option-row classes rather than
     // inventing a second set of geometry for what is, visually, the same list — a
-    // db-dropdown-search input above a db-dropdown-options list, exactly like every other
+    // obnotion-dropdown-search input above a obnotion-dropdown-options list, exactly like every other
     // searchable picker in this family, so this tier mints no new CSS value (D7).
-    const searchWrap = panel.createDiv({ cls: "db-dropdown-search" });
+    const searchWrap = panel.createDiv({ cls: "obnotion-dropdown-search" });
     const search = searchWrap.createEl("input", {
       attr: { type: "text", placeholder: t("common.search"), "aria-label": t("common.search") },
     });
-    const list = panel.createDiv({ cls: "db-dropdown-options", attr: { role: "listbox" } });
+    const list = panel.createDiv({ cls: "obnotion-dropdown-options", attr: { role: "listbox" } });
     const addFirstLeaf = (field: string) => {
       const rule = createDefaultFilterRule(config);
       rule.field = field;
@@ -266,18 +266,18 @@ export class FilterPanelRenderer {
     const rows = columns.map((col) => {
       const option = toPropertyDropdownOption(col);
       const row = list.createEl("button", {
-        cls: `db-dropdown-option db-menu-item${option.icon ? " has-icon" : ""}`,
+        cls: `obnotion-dropdown-option obnotion-menu-item${option.icon ? " has-icon" : ""}`,
         attr: { type: "button", role: "option", "data-search-text": option.text.toLocaleLowerCase() },
       });
-      if (option.icon) renderDropdownPropertyTypeIcon(row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon" }), option.icon);
-      const text = row.createSpan({ cls: "db-dropdown-option-text db-menu-item-label" });
-      text.createSpan({ cls: "db-dropdown-option-label", text: option.text });
+      if (option.icon) renderDropdownPropertyTypeIcon(row.createSpan({ cls: "obnotion-dropdown-option-icon obnotion-menu-item-icon" }), option.icon);
+      const text = row.createSpan({ cls: "obnotion-dropdown-option-text obnotion-menu-item-label" });
+      text.createSpan({ cls: "obnotion-dropdown-option-label", text: option.text });
       row.onclick = () => addFirstLeaf(col.key);
       return { row };
     });
     search.oninput = () => filterPickerRows(rows, search.value);
     const footer = panel.createEl("button", {
-      cls: "db-panel-button",
+      cls: "obnotion-panel-button",
       text: `+ ${t("panel.addAdvancedFilter")}`,
     });
     footer.onclick = () => {
@@ -324,9 +324,9 @@ export class FilterPanelRenderer {
       },
       beforeClose: (header) => {
         if (tree && !isFilterLeaf(tree)) return;
-        const right = header.createDiv({ cls: "db-panel-header-actions" });
+        const right = header.createDiv({ cls: "obnotion-panel-header-actions" });
         const logicBtn = header.createEl("button", {
-          cls: "db-panel-button",
+          cls: "obnotion-panel-button",
           text: state.filterLogic === "and" ? t("panel.and") : t("panel.or"),
         });
         right.appendChild(logicBtn);
@@ -412,8 +412,8 @@ export class FilterPanelRenderer {
     actions: FilterPanelActions,
     onReplace: (node: SourceRuleNode | undefined) => void
   ): void {
-    const wrap = parent.createDiv({ cls: "db-source-rule-node db-source-rule-group" });
-    const header = wrap.createDiv({ cls: "db-source-rule-header" });
+    const wrap = parent.createDiv({ cls: "obnotion-source-rule-node obnotion-source-rule-group" });
+    const header = wrap.createDiv({ cls: "obnotion-source-rule-header" });
     createDropdownField({
       parent: header,
       label: t("viewConfig.sourceRules.logic"),
@@ -422,11 +422,11 @@ export class FilterPanelRenderer {
         { value: "or", text: t("panel.or") },
       ],
       value: group.logic,
-      className: "db-source-rule-dropdown db-source-rule-logic",
+      className: "obnotion-source-rule-dropdown obnotion-source-rule-logic",
       hideLabel: true,
       onChange: (value) => onReplace({ ...group, logic: value === "or" ? "or" : "and" }),
     });
-    const groupActions = header.createDiv({ cls: "db-source-rule-actions" });
+    const groupActions = header.createDiv({ cls: "obnotion-source-rule-actions" });
     this.createFilterTreeIconButton(groupActions, "plus", t("viewConfig.sourceRules.addRule"), () => {
       onReplace(appendLeaf(group, createDefaultFilterRule(config), group.logic));
     });
@@ -440,9 +440,9 @@ export class FilterPanelRenderer {
     });
     this.createFilterTreeIconButton(groupActions, "trash-2", t("viewConfig.sourceRules.remove"), () => onReplace(undefined));
 
-    const children = wrap.createDiv({ cls: "db-source-rule-children" });
+    const children = wrap.createDiv({ cls: "obnotion-source-rule-children" });
     if (group.rules.length === 0) {
-      children.createDiv({ cls: "db-source-rules-empty", text: t("viewConfig.sourceRules.emptyGroup") });
+      children.createDiv({ cls: "obnotion-source-rules-empty", text: t("viewConfig.sourceRules.emptyGroup") });
     }
     for (let index = 0; index < group.rules.length; index += 1) {
       this.renderFilterTreeNode(
@@ -475,13 +475,13 @@ export class FilterPanelRenderer {
     actions: FilterPanelActions,
     onReplace: (node: SourceRuleNode | undefined) => void
   ): void {
-    const wrap = parent.createDiv({ cls: "db-source-rule-node db-source-rule-not" });
-    const header = wrap.createDiv({ cls: "db-source-rule-header" });
-    header.createSpan({ cls: "db-source-rule-not-label", text: t("viewConfig.sourceRules.not") });
-    const nodeActions = header.createDiv({ cls: "db-source-rule-actions" });
+    const wrap = parent.createDiv({ cls: "obnotion-source-rule-node obnotion-source-rule-not" });
+    const header = wrap.createDiv({ cls: "obnotion-source-rule-header" });
+    header.createSpan({ cls: "obnotion-source-rule-not-label", text: t("viewConfig.sourceRules.not") });
+    const nodeActions = header.createDiv({ cls: "obnotion-source-rule-actions" });
     this.createFilterTreeIconButton(nodeActions, "undo-2", t("viewConfig.sourceRules.removeNot"), () => onReplace(node.rule));
     this.createFilterTreeIconButton(nodeActions, "trash-2", t("viewConfig.sourceRules.remove"), () => onReplace(undefined));
-    const content = wrap.createDiv({ cls: "db-source-rule-children" });
+    const content = wrap.createDiv({ cls: "obnotion-source-rule-children" });
     this.renderFilterTreeNode(
       content,
       node.rule,
@@ -497,7 +497,7 @@ export class FilterPanelRenderer {
 
   private createFilterTreeIconButton(parent: HTMLElement, icon: string, title: string, onClick: () => void): void {
     const button = parent.createEl("button", {
-      cls: "db-source-rule-icon-button",
+      cls: "obnotion-source-rule-icon-button",
       attr: { type: "button", "aria-label": title },
     });
     setIcon(button, icon);
@@ -555,7 +555,7 @@ export class FilterPanelRenderer {
           label: t("panel.field"),
           options: allCols.map((col) => toPropertyDropdownOption(col)),
           value: currentField,
-          className: "db-panel-dropdown db-filter-field-dropdown",
+          className: "obnotion-panel-dropdown obnotion-filter-field-dropdown",
           hideLabel: true,
           searchable: true,
           renderIcon: renderDropdownPropertyTypeIcon,
@@ -577,7 +577,7 @@ export class FilterPanelRenderer {
           label: t("panel.operator"),
           options: ops.map(([value, label]) => ({ value, text: label })),
           value: rule.op,
-          className: "db-panel-dropdown db-filter-operator-dropdown",
+          className: "obnotion-panel-dropdown obnotion-filter-operator-dropdown",
           hideLabel: true,
           onChange: (value) => {
             rule.op = value as FilterRule["op"];
@@ -592,7 +592,7 @@ export class FilterPanelRenderer {
           this.renderValueInput(parent, rule, currentCol, actions);
           return;
         }
-        parent.createSpan({ text: "—", cls: "db-panel-empty-value" });
+        parent.createSpan({ text: "—", cls: "obnotion-panel-empty-value" });
       },
       trailing: options?.showRemove === false ? undefined : (parent) => {
         if (options?.onWrap) {
@@ -601,7 +601,7 @@ export class FilterPanelRenderer {
         if (options?.onNot) {
           this.createFilterTreeIconButton(parent, "circle-slash-2", t("viewConfig.sourceRules.addNot"), options.onNot);
         }
-        const rmBtn = parent.createEl("button", { cls: "db-panel-button", text: "×" });
+        const rmBtn = parent.createEl("button", { cls: "obnotion-panel-button", text: "×" });
         rmBtn.onclick = () => {
           if (options?.onRemove) {
             options.onRemove();
@@ -624,7 +624,7 @@ export class FilterPanelRenderer {
         placeholder: t("panel.value"),
         includeTime: col?.type === "datetime",
         fieldLabel: col?.label,
-        className: "db-panel-date-value db-filter-value-control",
+        className: "obnotion-panel-date-value obnotion-filter-value-control",
         onChange: (value) => {
           rule.value = value;
           actions.saveState();
@@ -642,7 +642,7 @@ export class FilterPanelRenderer {
           ...getColumnOptions(col).map((option) => ({ value: option.value, text: option.value })),
         ],
         value: rule.value || "",
-        className: "db-panel-dropdown db-filter-value-dropdown",
+        className: "obnotion-panel-dropdown obnotion-filter-value-dropdown",
         hideLabel: true,
         searchable: true,
         onChange: (value) => {
@@ -664,7 +664,7 @@ export class FilterPanelRenderer {
           { value: "false", text: t("common.false") },
         ],
         value,
-        className: "db-panel-dropdown db-filter-value-dropdown",
+        className: "obnotion-panel-dropdown obnotion-filter-value-dropdown",
         hideLabel: true,
         onChange: (nextValue) => {
           rule.value = nextValue;

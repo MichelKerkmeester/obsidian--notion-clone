@@ -117,11 +117,11 @@ describe("buildDesktopRecordHeader", () => {
       onClose,
     });
 
-    expect(handle.header.hasClass("db-record-detail-header")).toBe(true);
-    expect(handle.titleEl.hasClass("db-record-detail-title")).toBe(true);
+    expect(handle.header.hasClass("obnotion-record-detail-header")).toBe(true);
+    expect(handle.titleEl.hasClass("obnotion-record-detail-title")).toBe(true);
     expect(handle.titleEl.textContent).toBe("My Record");
-    expect(handle.openButton?.hasClass("db-board-card-open")).toBe(true);
-    expect(handle.closeButton?.hasClass("db-cell-edit-close")).toBe(true);
+    expect(handle.openButton?.hasClass("obnotion-board-card-open")).toBe(true);
+    expect(handle.closeButton?.hasClass("obnotion-cell-edit-close")).toBe(true);
   });
 
   it("marks an empty title and never wires a rename unless one is supplied", () => {
@@ -170,12 +170,12 @@ describe("buildDesktopRecordHeader", () => {
       parent: parent as unknown as HTMLElement,
       title: "Rail Title",
       titleIsEmpty: false,
-      headerClass: "db-record-peek-header",
-      titleClass: "db-record-peek-title",
+      headerClass: "obnotion-record-peek-header",
+      titleClass: "obnotion-record-peek-title",
     });
 
-    expect(handle.header.hasClass("db-record-peek-header")).toBe(true);
-    expect(handle.titleEl.hasClass("db-record-peek-title")).toBe(true);
+    expect(handle.header.hasClass("obnotion-record-peek-header")).toBe(true);
+    expect(handle.titleEl.hasClass("obnotion-record-peek-title")).toBe(true);
     expect(handle.openButton).toBeNull();
     expect(handle.closeButton).toBeNull();
   });
@@ -191,9 +191,9 @@ describe("buildPhoneRecordHeader", () => {
       onClose,
     });
 
-    expect(handle.header.hasClass("db-panel-header")).toBe(true);
-    expect(handle.titleEl.hasClass("db-panel-title")).toBe(true);
+    expect(handle.header.hasClass("obnotion-panel-header")).toBe(true);
+    expect(handle.titleEl.hasClass("obnotion-panel-title")).toBe(true);
     expect(handle.titleEl.textContent).toBe("Sheet Title");
-    expect(handle.closeButton.hasClass("db-sheet-close")).toBe(true);
+    expect(handle.closeButton.hasClass("obnotion-sheet-close")).toBe(true);
   });
 });

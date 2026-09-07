@@ -118,7 +118,7 @@ function callSites(): CallSite[] {
 }
 
 /** The classes the factory puts on every box itself, which no call site declares. */
-const FACTORY_OWNED = /^db-checkbox(-row|-field)?$/;
+const FACTORY_OWNED = /^obnotion-checkbox(-row|-field)?$/;
 
 /** A class list reduced to what the call site asked for, in a form two of them can be compared by. */
 function declaredKey(classes: string[]): string {
@@ -188,11 +188,11 @@ async function fixtureBoxes(): Promise<FixtureBox[]> {
 /**
  * The one checkbox in the shipped DOM that the factory does not build.
  *
- * Eight call sites create the switch with a raw `createEl`, so it carries neither `db-checkbox`
+ * Eight call sites create the switch with a raw `createEl`, so it carries neither `obnotion-checkbox`
  * nor a role class. Naming it here is what keeps the agreement assertion exact: any other
  * unrecognised checkbox in a fixture is markup the plugin does not produce, and fails.
  */
-const NOT_FROM_THE_FACTORY = ["db-toggle-switch"];
+const NOT_FROM_THE_FACTORY = ["obnotion-toggle-switch"];
 
 // ───────────────────────────────────────────────────────────────────
 // 5. TESTS
@@ -203,7 +203,7 @@ describe("every checkbox family the plugin builds is also rendered by a fixture"
     const wanted = new Set(
       callSites()
         .flatMap((site) => site.families)
-        .filter((family) => family !== "db-checkbox" && !family.startsWith("db-checkbox-"))
+        .filter((family) => family !== "obnotion-checkbox" && !family.startsWith("obnotion-checkbox-"))
     );
     const rendered = new Set((await fixtureBoxes()).flatMap((box) => box.classes));
     const uncovered = [...wanted].filter((family) => !rendered.has(family)).sort();

@@ -129,7 +129,7 @@ async function main() {
           const root = document.querySelector("#storybook-root");
           if (!root) return { classed: 0, text: 0 };
           const classed = Array.from(root.querySelectorAll("*"))
-            .filter((el) => el.getAttribute("class") && el.className !== "note-database-container")
+            .filter((el) => el.getAttribute("class") && el.className !== "obnotion-container")
             .length;
           return { classed, text: root.textContent?.trim().length || 0 };
         });

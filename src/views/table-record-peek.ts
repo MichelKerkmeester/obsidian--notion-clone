@@ -88,19 +88,19 @@ export function attachTitleOpenAffordance(
   row: RowData,
   deps: TitleOpenAffordanceDeps,
 ): void {
-  td.classList.add("db-record-open-host");
-  if (td.querySelector(".db-record-open-btn")) return;
+  td.classList.add("obnotion-record-open-host");
+  if (td.querySelector(".obnotion-record-open-btn")) return;
 
   const button = td.ownerDocument.createElement("button");
   button.type = "button";
-  button.className = "db-record-open-btn";
+  button.className = "obnotion-record-open-btn";
   button.setAttribute("aria-label", t("panel.open"));
   // On touch the affordance is always visible and shares the title cell, where a text
   // label steals width the note name needs; a compact icon carries the same meaning and
   // stays announced through the aria-label. On desktop it only appears on hover, so the
   // clearer text label is kept.
   if (isTouchDevice(td)) {
-    button.classList.add("db-record-open-btn-icon");
+    button.classList.add("obnotion-record-open-btn-icon");
     setIcon(button, "maximize-2");
   } else {
     button.textContent = t("panel.open");
@@ -132,15 +132,15 @@ export function attachTitleOpenAffordance(
 export function setupTitleCellTap(td: HTMLElement, row: RowData, deps: TitleCellTapDeps): void {
   // Bind once per cell, the way the affordance beside it does. A re-render that reuses the node
   // would otherwise stack a second reader and a second handler on it.
-  if (td.dataset.noteDatabaseTitleTap === "1") return;
-  td.dataset.noteDatabaseTitleTap = "1";
+  if (td.dataset.obnotionTitleTap === "1") return;
+  td.dataset.obnotionTitleTap = "1";
   const cellGesture = trackCellGesture(td);
   td.addEventListener("click", (event) => {
     const action = resolveCellTapAction({ gesture: cellGesture(), isTitleCell: true, isEditable: true });
     if (action !== "open-record") return;
     // The affordance button opens the record already. Letting it through keeps one path to the
     // sheet instead of two that can drift apart.
-    if (isHTMLElement(event.target) && event.target.closest(".db-record-open-btn")) return;
+    if (isHTMLElement(event.target) && event.target.closest(".obnotion-record-open-btn")) return;
     event.preventDefault();
     event.stopPropagation();
     deps.openRecord(td, row);
@@ -183,11 +183,11 @@ export function openTableRecordPeek(options: OpenTableRecordPeekOptions): void {
   const ownerDocument = container.ownerDocument;
   const ownerWindow = ownerDocument.defaultView || window;
   const panel = ownerDocument.createElement("div");
-  panel.className = "db-record-peek-panel";
+  panel.className = "obnotion-record-peek-panel";
   panel.tabIndex = -1;
   panel.setAttribute("role", "dialog");
   panel.setAttribute("aria-modal", "true");
-  panel.setAttribute("data-note-database-row-path", row.file.path);
+  panel.setAttribute("data-obnotion-row-path", row.file.path);
   container.appendChild(panel);
 
   let closed = false;
@@ -238,8 +238,8 @@ export function openTableRecordPeek(options: OpenTableRecordPeekOptions): void {
       titleIsEmpty: false,
       renderIcon: (headerEl) => renderRecordIcon?.(headerEl, currentRow, config),
       // A display-only rail: no open/close button of its own, so onOpen/onClose stay unset.
-      headerClass: "db-record-peek-header",
-      titleClass: "db-record-peek-title",
+      headerClass: "obnotion-record-peek-header",
+      titleClass: "obnotion-record-peek-title",
     });
 
     const visibleProperties = visibleColumns.filter((column) => column.key !== "file.name");
@@ -250,9 +250,9 @@ export function openTableRecordPeek(options: OpenTableRecordPeekOptions): void {
       return !(isEmptyValue(value) && (isReadonlyFileField(column.key) || isDerivedColumn(column)));
     });
 
-    const properties = createChild(panel, "div", "db-record-peek-properties");
+    const properties = createChild(panel, "div", "obnotion-record-peek-properties");
     if (visibleProperties.length === 0 && hiddenProperties.length === 0) {
-      const empty = createChild(properties, "div", "db-record-peek-field db-record-peek-empty is-muted");
+      const empty = createChild(properties, "div", "obnotion-record-peek-field obnotion-record-peek-empty is-muted");
       empty.textContent = t("panel.noProperties");
       return;
     }
@@ -263,13 +263,13 @@ export function openTableRecordPeek(options: OpenTableRecordPeekOptions): void {
 
     if (hiddenProperties.length === 0) return;
 
-    const hiddenGroup = createChild(panel, "div", "db-record-peek-hidden-group");
-    const hiddenToggle = createChild(hiddenGroup, "button", "db-record-peek-hidden-toggle");
+    const hiddenGroup = createChild(panel, "div", "obnotion-record-peek-hidden-group");
+    const hiddenToggle = createChild(hiddenGroup, "button", "obnotion-record-peek-hidden-toggle");
     hiddenToggle.type = "button";
     hiddenToggle.setAttribute("aria-expanded", "false");
     hiddenToggle.textContent = t("panel.hiddenProperties");
 
-    const hiddenFields = createChild(hiddenGroup, "div", "db-record-peek-hidden-fields is-hidden");
+    const hiddenFields = createChild(hiddenGroup, "div", "obnotion-record-peek-hidden-fields is-hidden");
     hiddenFields.setAttribute("aria-hidden", "true");
     hiddenToggle.addEventListener("click", (event) => {
       event.preventDefault();
@@ -318,7 +318,7 @@ export function syncTableRecordPeek(rows: readonly RowData[]): void {
     return;
   }
   current.refresh(row);
-  current.element.setAttribute("data-note-database-row-path", row.file.path);
+  current.element.setAttribute("data-obnotion-row-path", row.file.path);
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -350,9 +350,9 @@ function renderProperty(
 
   const handle = buildPropertyRow({
     parent,
-    rowClass: "db-record-peek-field",
-    labelClass: "db-record-peek-field-label",
-    valueClass: "db-record-peek-field-value",
+    rowClass: "obnotion-record-peek-field",
+    labelClass: "obnotion-record-peek-field-label",
+    valueClass: "obnotion-record-peek-field-value",
     label: column.label || column.key,
     renderValue: (valueEl) => {
       if (!isOption || !text) {
@@ -361,7 +361,7 @@ function renderProperty(
         // convention (cell-renderer.ts). A label beside nothing read as a rendering gap rather
         // than "this property has no value", which the muted placeholder now says directly.
         if (!text) {
-          valueEl.addClass("db-record-peek-field-value-empty");
+          valueEl.addClass("obnotion-record-peek-field-value-empty");
           valueEl.textContent = t("common.empty");
         } else {
           valueEl.textContent = text;
@@ -375,7 +375,7 @@ function renderProperty(
         ? text.split(",").map((item) => item.trim()).filter(Boolean)
         : [text];
       const host = displayType === "multi-select"
-        ? valueEl.createDiv({ cls: "db-multi-select-values" })
+        ? valueEl.createDiv({ cls: "obnotion-multi-select-values" })
         : valueEl;
       for (const item of values) {
         const { option } = resolveOptionDisplay(column, item);
@@ -385,7 +385,7 @@ function renderProperty(
       }
     },
   });
-  handle.row.setAttribute("data-note-database-column-key", column.key);
+  handle.row.setAttribute("data-obnotion-column-key", column.key);
 }
 
 function isEmptyValue(value: unknown): boolean {

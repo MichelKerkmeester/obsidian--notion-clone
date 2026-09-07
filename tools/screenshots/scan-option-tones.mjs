@@ -110,7 +110,7 @@ const bareTitles = [];
 // branch that built them — the reference (default) board's `pm-kanban-col-badge` colours by
 // inline style, not a `status-color-*` class, a different contract this check does not model.
 const HEADERS = [
-  ["tableGroupTitle", (title) => tableGroupTitle(title), ROWS[18].category, "db-group-title-text"],
+  ["tableGroupTitle", (title) => tableGroupTitle(title), ROWS[18].category, "obnotion-group-title-text"],
 ];
 for (const [name, helper, title, cls] of HEADERS) {
   if (!OPTION_TONES[title]) {

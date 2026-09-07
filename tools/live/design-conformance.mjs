@@ -59,7 +59,7 @@ let rawSurfaceMounts = 0;
 const rawSites = [];
 for (const file of walk(join(REPO, "src"))) {
   const text = readFileSync(file, "utf8");
-  if (!text.includes("db-")) continue;
+  if (!text.includes("obnotion-")) continue;
   const rel = relative(REPO, file);
   const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true);
   const visit = (node) => {
@@ -134,12 +134,12 @@ record("width policy — the widthless default is a role width, not a literal", 
 const css = readFileSync(join(REPO, "styles.css"), "utf8");
 // A marker is dead only when NOTHING consumes it — no rule styles it and no code queries it.
 //
-// A first version checked the stylesheet alone and reported `db-list-row-checkbox` as dead. It is
+// A first version checked the stylesheet alone and reported `obnotion-list-row-checkbox` as dead. It is
 // not: it appears in a selector list that drives keyboard navigation, so removing it would have
 // broken roving tabindex to satisfy a checker. A class with a consumer is not dead just because the
 // consumer is not CSS.
 const deadMarkers = [];
-for (const marker of ["db-anchored-popover", "db-list-row-checkbox"]) {
+for (const marker of ["obnotion-anchored-popover", "obnotion-list-row-checkbox"]) {
   const files = walk(join(REPO, "src"));
   const setBy = files.filter((f) => {
     const t = readFileSync(f, "utf8");

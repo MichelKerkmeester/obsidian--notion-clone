@@ -177,8 +177,8 @@ export function mountPickerSheetHeader(
   // wired (this header is built after placement, which is what wires it) never advertises a drag
   // this surface does not want; `applySheetChrome`'s own rebuild-restore path checks the same class
   // so a rebuilt panel does not grow it back.
-  panel.addClass("db-mobile-menu-card");
-  panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle")?.remove();
+  panel.addClass("obnotion-mobile-menu-card");
+  panel.querySelector<HTMLElement>(".obnotion-mobile-bottom-sheet-handle")?.remove();
   return panel.createDiv({ cls: options.bodyCls });
 }
 

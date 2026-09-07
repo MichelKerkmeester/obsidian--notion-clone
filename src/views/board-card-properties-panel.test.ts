@@ -36,7 +36,7 @@ vi.mock("obsidian", () => ({
 
 vi.mock("./property-type-icon", () => ({
   renderPropertyTypeIcon: (parent: { createSpan: (options: { cls?: string }) => unknown }) =>
-    parent.createSpan({ cls: "db-property-icon" }),
+    parent.createSpan({ cls: "obnotion-property-icon" }),
 }));
 
 class MockElement {
@@ -162,7 +162,7 @@ function baseConfig(overrides: Partial<ViewConfig> = {}): ViewConfig {
 
 describe("renderBoardCardProperties", () => {
   it("renders fixed Cover and Title rows above one reorderable row per field", () => {
-    const panel = new MockElement("div", "db-view-config-panel");
+    const panel = new MockElement("div", "obnotion-view-config-panel");
     const onChange = vi.fn();
     renderBoardCardProperties(panel as unknown as HTMLElement, baseConfig(), {
       onChange,
@@ -173,20 +173,20 @@ describe("renderBoardCardProperties", () => {
     expect(text).toContain(t("viewConfig.cardProperties"));
     expect(text).toContain(t("viewConfig.cover"));
     expect(text).toContain(t("viewConfig.titleField"));
-    expect(panel.querySelectorAll(".db-column-manager-row")).toHaveLength(3);
-    expect(panel.querySelectorAll(".db-column-drag")).toHaveLength(3);
-    expect(panel.querySelectorAll(".db-mobile-reorder-controls")).toHaveLength(3);
-    expect(panel.querySelector("[data-note-database-column-key='file.name']")).toBeNull();
-    expect(panel.querySelector("[data-note-database-column-key='hours']")).not.toBeNull();
+    expect(panel.querySelectorAll(".obnotion-column-manager-row")).toHaveLength(3);
+    expect(panel.querySelectorAll(".obnotion-column-drag")).toHaveLength(3);
+    expect(panel.querySelectorAll(".obnotion-mobile-reorder-controls")).toHaveLength(3);
+    expect(panel.querySelector("[data-obnotion-column-key='file.name']")).toBeNull();
+    expect(panel.querySelector("[data-obnotion-column-key='hours']")).not.toBeNull();
   });
 
   it("persists a reorder through the view config callback", () => {
-    const panel = new MockElement("div", "db-view-config-panel");
+    const panel = new MockElement("div", "obnotion-view-config-panel");
     const view = baseConfig();
     const onChange = vi.fn();
     renderBoardCardProperties(panel as unknown as HTMLElement, view, { onChange, readOnly: false });
 
-    const hours = panel.querySelector("[data-note-database-column-key='hours']")!;
+    const hours = panel.querySelector("[data-obnotion-column-key='hours']")!;
     const down = hours.querySelectorAll("button")[1];
     down.onclick?.({ preventDefault() {}, stopPropagation() {} });
 
@@ -195,63 +195,63 @@ describe("renderBoardCardProperties", () => {
   });
 
   it("shows the list and blocks edits when read-only", () => {
-    const panel = new MockElement("div", "db-view-config-panel");
+    const panel = new MockElement("div", "obnotion-view-config-panel");
     const view = baseConfig();
     const onChange = vi.fn();
     renderBoardCardProperties(panel as unknown as HTMLElement, view, { onChange, readOnly: true });
 
-    expect(panel.querySelectorAll(".db-column-manager-row")).toHaveLength(3);
-    expect(panel.querySelectorAll(".db-column-drag")).toHaveLength(0);
-    expect(panel.querySelectorAll(".db-mobile-reorder-controls")).toHaveLength(0);
-    const checkbox = panel.querySelector("[data-note-database-column-key='hours']")?.querySelector("input");
+    expect(panel.querySelectorAll(".obnotion-column-manager-row")).toHaveLength(3);
+    expect(panel.querySelectorAll(".obnotion-column-drag")).toHaveLength(0);
+    expect(panel.querySelectorAll(".obnotion-mobile-reorder-controls")).toHaveLength(0);
+    const checkbox = panel.querySelector("[data-obnotion-column-key='hours']")?.querySelector("input");
     expect(checkbox?.disabled).toBe(true);
     checkbox?.onchange?.();
     expect(onChange).not.toHaveBeenCalled();
   });
 
   it("keeps the Cover and Title rows on the desktop grid by default", () => {
-    const panel = new MockElement("div", "db-view-config-panel");
+    const panel = new MockElement("div", "obnotion-view-config-panel");
     renderBoardCardProperties(panel as unknown as HTMLElement, baseConfig(), {
       onChange: vi.fn(),
       readOnly: false,
     });
 
-    expect(panel.querySelectorAll(".db-view-config-row")).toHaveLength(2);
-    expect(panel.querySelectorAll(".db-panel-row").length).toBe(0);
+    expect(panel.querySelectorAll(".obnotion-view-config-row")).toHaveLength(2);
+    expect(panel.querySelectorAll(".obnotion-panel-row").length).toBe(0);
   });
 
   it("moves the Cover and Title rows onto the shared sheet grammar when asSheet is set", () => {
-    const panel = new MockElement("div", "db-view-config-panel");
+    const panel = new MockElement("div", "obnotion-view-config-panel");
     renderBoardCardProperties(panel as unknown as HTMLElement, baseConfig(), {
       onChange: vi.fn(),
       readOnly: false,
       asSheet: true,
     });
 
-    expect(panel.querySelectorAll(".db-panel-row")).toHaveLength(2);
-    expect(panel.querySelectorAll(".db-view-config-row").length).toBe(0);
+    expect(panel.querySelectorAll(".obnotion-panel-row")).toHaveLength(2);
+    expect(panel.querySelectorAll(".obnotion-view-config-row").length).toBe(0);
     const text = panel.allText();
     expect(text).toContain(t("viewConfig.cover"));
     expect(text).toContain(t("viewConfig.titleField"));
   });
 
   it("opens the titleField picker from the Title fixed slot, with no handler on the Cover row", () => {
-    const panel = new MockElement("div", "db-view-config-panel");
+    const panel = new MockElement("div", "obnotion-view-config-panel");
     // Stands in for the general section's own titleField row, rendered earlier into this same
     // scrolling panel in the real sheet — the Title fixed slot finds it by this same marker.
-    const titleFieldRow = panel.createDiv({ cls: "db-view-config-row", attr: { "data-config-row": "title-field" } });
+    const titleFieldRow = panel.createDiv({ cls: "obnotion-view-config-row", attr: { "data-config-row": "title-field" } });
     const openPicker = vi.fn();
-    titleFieldRow.createDiv({ cls: "db-dropdown-field" }).onclick = openPicker;
+    titleFieldRow.createDiv({ cls: "obnotion-dropdown-field" }).onclick = openPicker;
 
     renderBoardCardProperties(panel as unknown as HTMLElement, baseConfig(), {
       onChange: vi.fn(),
       readOnly: false,
     });
 
-    const clickableRows = panel.querySelectorAll(".db-view-config-row-clickable");
+    const clickableRows = panel.querySelectorAll(".obnotion-view-config-row-clickable");
     expect(clickableRows).toHaveLength(1);
     const [titleRow] = clickableRows;
-    const coverRow = panel.querySelectorAll(".db-view-config-row").find((row) => row !== titleFieldRow && row !== titleRow);
+    const coverRow = panel.querySelectorAll(".obnotion-view-config-row").find((row) => row !== titleFieldRow && row !== titleRow);
 
     // Negative control: the Cover row directly above Title gains no click handler.
     expect(coverRow?.onclick).toBeNull();

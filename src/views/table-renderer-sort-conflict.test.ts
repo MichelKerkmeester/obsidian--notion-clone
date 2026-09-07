@@ -417,8 +417,8 @@ function renderTable(actions: TableRendererActions): { container: MockElement; r
  *  quoted attribute value (as in "First.md") as a class marker, so an
  *  inline `[attr='...md']` selector cannot be used for a file path. */
 function findRow(container: MockElement, path: string): MockElement {
-  const rows = container.querySelectorAll<MockElement>("tr[data-note-database-row-path]");
-  const row = rows.find((candidate) => candidate.getAttribute("data-note-database-row-path") === path);
+  const rows = container.querySelectorAll<MockElement>("tr[data-obnotion-row-path]");
+  const row = rows.find((candidate) => candidate.getAttribute("data-obnotion-row-path") === path);
   if (!row) throw new Error(`no row rendered for ${path}`);
   return row;
 }
@@ -427,7 +427,7 @@ function findRow(container: MockElement, path: string): MockElement {
  *  internal dragging path is set the same way a real pointer drag sets it. */
 function dragStart(container: MockElement, sourcePath: string): void {
   const sourceRow = findRow(container, sourcePath);
-  const handle = sourceRow.querySelector<MockElement>(".db-table-row-drag-handle")!;
+  const handle = sourceRow.querySelector<MockElement>(".obnotion-table-row-drag-handle")!;
   handle.dispatchEvent({
     type: "dragstart",
     clientX: 0,

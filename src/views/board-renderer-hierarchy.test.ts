@@ -407,7 +407,7 @@ const CONFIG: ViewConfig = {
   sourceFolder: "Tasks",
   viewType: "board",
   boardGroupField: "status",
-  // The db-board-* vocabulary these assertions pin is the local-extension
+  // The obnotion-board-* vocabulary these assertions pin is the local-extension
   // layout; the default board renders the reference kanban structure
   // (covered by board-renderer-parity.test.ts).
   boardExtensionsEnabled: true,
@@ -503,13 +503,13 @@ describe("default board card properties", () => {
   }
 
   function todoCard(container: MockElement): MockElement {
-    return container.querySelectorAll<MockElement>(".db-kanban-card")
-      .find((card) => card.getAttribute("data-note-database-row-path") === TODO_PATH)!;
+    return container.querySelectorAll<MockElement>(".obnotion-kanban-card")
+      .find((card) => card.getAttribute("data-obnotion-row-path") === TODO_PATH)!;
   }
 
   function fieldKeys(card: MockElement): Array<string | null> {
-    return card.querySelectorAll<MockElement>(".db-kanban-card-meta .db-board-card-field")
-      .map((field) => field.getAttribute("data-note-database-column-key"));
+    return card.querySelectorAll<MockElement>(".obnotion-kanban-card-meta .obnotion-board-card-field")
+      .map((field) => field.getAttribute("data-obnotion-column-key"));
   }
 
   it("renders a configured property that fills no reference slot", () => {
@@ -529,7 +529,7 @@ describe("default board card properties", () => {
   });
 
   // No dedicated slots survive the Anytype retarget: every configured property, "hours"
-  // included, is an ordinary row in `db-kanban-card-meta` now, so hiding one is the same
+  // included, is an ordinary row in `obnotion-kanban-card-meta` now, so hiding one is the same
   // stored-list mechanism every other property already goes through.
   it("drops a configured property from the row list when the stored list hides its column", () => {
     expect(fieldKeys(todoCard(renderReference()))).toContain("hours");
@@ -552,8 +552,8 @@ describe("default board card properties", () => {
       ...REFERENCE_CONFIG,
       boardCardFields: COLUMNS.map((column) => ({ key: column.key, visible: false })),
     } as ViewConfig));
-    expect(card.querySelector<MockElement>(".db-kanban-card-title")?.textContent).toBe("To Do Note");
-    expect(card.querySelectorAll(".db-kanban-card-meta .db-board-card-field")).toHaveLength(0);
+    expect(card.querySelector<MockElement>(".obnotion-kanban-card-title")?.textContent).toBe("To Do Note");
+    expect(card.querySelectorAll(".obnotion-kanban-card-meta .obnotion-board-card-field")).toHaveLength(0);
   });
 
   // The reference reserves the title icon slot on every card, not only when a record-icon field
@@ -565,7 +565,7 @@ describe("default board card properties", () => {
     new BoardRenderer({} as unknown as App, createActions({ renderRecordIcon }))
       .render(container as unknown as HTMLElement, REFERENCE_CONFIG, GROUPS, "status");
     const card = todoCard(container);
-    const titleRow = card.querySelector<MockElement>(".db-kanban-card-title-row");
+    const titleRow = card.querySelector<MockElement>(".obnotion-kanban-card-title-row");
     expect(renderRecordIcon).toHaveBeenCalledWith(titleRow, expect.anything(), REFERENCE_CONFIG, true, true);
   });
 });
@@ -595,7 +595,7 @@ describe("board renderer stale-relation empty state", () => {
   });
 
   it("renders the inline chip when the group field's relation is gone", () => {
-    const chip = renderWith([], staleRelation()).querySelector<MockElement>(".db-inline-chip");
+    const chip = renderWith([], staleRelation()).querySelector<MockElement>(".obnotion-inline-chip");
     expect(chip).not.toBeNull();
     expect(chip?.getAttribute("data-empty-reason")).toBe("group-relation-deleted");
     expect(chip?.getAttribute("aria-live")).toBe("polite");
@@ -604,7 +604,7 @@ describe("board renderer stale-relation empty state", () => {
   it("wires the chip's chevron to the reason's own action", () => {
     let opened = 0;
     const container = renderWith([], staleRelation(() => { opened += 1; }));
-    const action = container.querySelector<MockElement>(".db-inline-chip-action");
+    const action = container.querySelector<MockElement>(".obnotion-inline-chip-action");
     expect(action).not.toBeNull();
     action?.onclick?.({});
     expect(opened).toBe(1);
@@ -612,11 +612,11 @@ describe("board renderer stale-relation empty state", () => {
 
   it("leaves an ordinary empty result to the card, never the chip", () => {
     const container = renderWith([], { reason: "search-empty" });
-    expect(container.querySelector(".db-inline-chip")).toBeNull();
+    expect(container.querySelector(".obnotion-inline-chip")).toBeNull();
   });
 
   it("renders no chip while the board still has a column to draw", () => {
     const container = renderWith(GROUPS, staleRelation());
-    expect(container.querySelector(".db-inline-chip")).toBeNull();
+    expect(container.querySelector(".obnotion-inline-chip")).toBeNull();
   });
 });

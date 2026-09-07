@@ -14,7 +14,7 @@ trigger_phrases:
 ## 1. OVERVIEW
 
 `src/views/` is a flat folder (plus `modals/`) of DOM-building modules. Each owns one surface or one
-piece of a surface. Renderers read computed rows from `src/data/` and emit `db-*` class structures
+piece of a surface. Renderers read computed rows from `src/data/` and emit `obnotion-*` class structures
 that `styles.css` styles and the screenshot harness photographs.
 
 Current state:
@@ -45,7 +45,7 @@ Current state:
 │ Table, Board…  │    │ renderers      │
 └────────────────┘    └────────────────┘
 
-Reads rows from src/data. Emits db-* DOM styled by styles.css.
+Reads rows from src/data. Emits obnotion-* DOM styled by styles.css.
 ```
 
 ---
@@ -74,7 +74,7 @@ Reads rows from src/data. Emits db-* DOM styled by styles.css.
 |---|---|
 | Imports | `src/data/` and Obsidian are allowed. A renderer does not reach back into `main.ts` |
 | Exports | `DatabaseView` and `DatabaseFileView` are the view types `main.ts` registers |
-| Ownership | DOM construction and interaction. The `db-*` class names emitted here are the contract with `styles.css` and the screenshot harness |
+| Ownership | DOM construction and interaction. The `obnotion-*` class names emitted here are the contract with `styles.css` and the screenshot harness |
 
 Main flow:
 
@@ -100,7 +100,7 @@ Main flow:
                   │
                   ▼
 ╭──────────────────────────────────────────╮
-│ db-* DOM styled by styles.css             │
+│ obnotion-* DOM styled by styles.css             │
 ╰──────────────────────────────────────────╯
 ```
 

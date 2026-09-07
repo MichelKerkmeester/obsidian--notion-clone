@@ -44,7 +44,7 @@ Current state:
 Each entry carries an `id`, a `title`, a `group`, the `sources` it depicts and an `html` builder:
 
 ```text
-{ id, title, group, width?, sources: ["src/views/…"], html: () => `<div class="note-database-container">…` }
+{ id, title, group, width?, sources: ["src/views/…"], html: () => `<div class="obnotion-container">…` }
 ```
 
 `verify.mjs` hashes every path in `sources` plus `styles.css`, so a shot goes stale when any of them

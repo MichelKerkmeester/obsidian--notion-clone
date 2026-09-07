@@ -66,10 +66,10 @@ import { createOwnedMenuForEvent } from "./owned-menu";
 
 const TIME_SNAP_MINUTES = CALENDAR_TIME_SNAP_MINUTES;
 const TIMED_EVENT_TIME_VISIBILITY_HEIGHT = 42;
-const UNSCHEDULED_MIME = "application/x-note-database-unscheduled";
+const UNSCHEDULED_MIME = "application/x-obnotion-unscheduled";
 // Fixed per-lane cascade inset for overlapping week/day timed blocks (renderWeekTimedEvent),
 // chosen to match this file's other 10px chip insets. At a desktop column both blocks keep a
-// readable title. At the 45px phone minimum column (--db-calendar-phone-week-col-min) the
+// readable title. At the 45px phone minimum column (--obnotion-calendar-phone-week-col-min) the
 // staggered block keeps ~27px of BOX, not of title: its own padding and 12px leading glyph
 // take the rest, and the second title measures ~2 CSS px of ink on the phone corpus — the
 // icon identifies it and the tooltip carries the name. That is still strictly more than the
@@ -175,7 +175,7 @@ export class CalendarRenderer {
 		if (unscheduled.length === 0) return;
 		const label = t("calendar.unscheduled");
 		const chip = title.createEl("button", {
-			cls: "db-calendar-nav-button is-text db-calendar-unscheduled-chip",
+			cls: "obnotion-calendar-nav-button is-text obnotion-calendar-unscheduled-chip",
 			text: `${label} · ${unscheduled.length}`,
 			attr: { type: "button", "aria-haspopup": "true", "aria-label": label },
 		});
@@ -223,12 +223,12 @@ export class CalendarRenderer {
 			if (result && typeof (result as Promise<void>).catch === "function") {
 				(result as Promise<void>).catch((err) => {
 					onRevert?.();
-					console.error("Note Database: failed to update event dates", err);
+					console.error("Obnotion: failed to update event dates", err);
 				});
 			}
 		} catch (err) {
 			onRevert?.();
-			console.error("Note Database: failed to update event dates", err);
+			console.error("Obnotion: failed to update event dates", err);
 		}
 	}
 
@@ -279,7 +279,7 @@ export class CalendarRenderer {
 			return;
 		}
 
-		const wrap = container.createDiv({ cls: "db-calendar db-calendar-month" });
+		const wrap = container.createDiv({ cls: "obnotion-calendar obnotion-calendar-month" });
 		this.calendarRoot = wrap;
 		this.applyMonthSizingVars(wrap, config);
 		const monthTitleEl = this.renderMonthHeader(wrap, config, model);
@@ -292,7 +292,7 @@ export class CalendarRenderer {
 			locale: getEffectiveLocale(),
 		}).ariaLabel;
 		const grid = wrap.createDiv({
-			cls: "db-calendar-grid db-calendar-month-grid",
+			cls: "obnotion-calendar-grid obnotion-calendar-month-grid",
 			attr: { role: "grid", "aria-label": monthTitle },
 		});
 		const layouts = buildCalendarMonthWeekLayouts(model.weeks, config);
@@ -308,7 +308,7 @@ export class CalendarRenderer {
 
 		attachCalendarGridKeyboard({
 			grid,
-			cellSelector: ".db-calendar-day[role=gridcell]",
+			cellSelector: ".obnotion-calendar-day[role=gridcell]",
 			columns: 7,
 			onSelectDate: (dateKey) => {
 				this.actions.createEntryForDate?.(config, dateKey);
@@ -330,7 +330,7 @@ export class CalendarRenderer {
 		focusDateKey?: string,
 	): void {
 		const weekEl = parent.createDiv({
-			cls: "db-calendar-month-week",
+			cls: "obnotion-calendar-month-week",
 			attr: { "data-week-index": String(layout.weekIndex), role: "row" },
 		});
 		const rowHeight = this.getRowHeight(config, layout.weekIndex);
@@ -351,14 +351,14 @@ export class CalendarRenderer {
 		weekEl.style.gridTemplateRows = `32px repeat(${totalLaneRows}, ${chipPitch}px) minmax(0, 1fr)`;
 
 		const neededHeight = 32 + totalLaneRows * chipPitch + 10;
-		weekEl.style.setProperty("--db-calendar-month-week-min-height", `${Math.max(rowHeight || 0, neededHeight, this.getCellMinHeight(config))}px`);
+		weekEl.style.setProperty("--obnotion-calendar-month-week-min-height", `${Math.max(rowHeight || 0, neededHeight, this.getCellMinHeight(config))}px`);
 
 		const dayCells: HTMLElement[] = [];
 		for (let dayIndex = 0; dayIndex < layout.days.length; dayIndex++) {
 			const day = layout.days[dayIndex];
 			const cell = weekEl.createDiv({
 				cls: [
-					"db-calendar-day",
+					"obnotion-calendar-day",
 					day.inCurrentMonth ? "" : "is-outside-month",
 					day.dateKey === todayKey ? "is-today" : "",
 					this.isWeekendDateKey(day.dateKey) ? "is-weekend" : "",
@@ -429,28 +429,28 @@ export class CalendarRenderer {
 				const isChipEnd = dayIndex === segment.endDayIndex;
 				const eventEl = weekEl.createEl("button", {
 					cls: [
-						"db-calendar-month-segment",
+						"obnotion-calendar-month-segment",
 						segment.isTimed ? "is-timed" : "is-all-day",
 						this.isRowCompleted(segment.event.row, config) ? "is-completed" : "",
 					].join(" "),
 					attr: {
 						type: "button",
 						title: this.getSegmentTitle(segment),
-						"data-note-database-row-path": segment.event.row.file.path,
+						"data-obnotion-row-path": segment.event.row.file.path,
 					},
 				});
-				eventEl.style.setProperty("--db-calendar-segment-start", String(dayIndex + 1));
+				eventEl.style.setProperty("--obnotion-calendar-segment-start", String(dayIndex + 1));
 				// +2 offset: +1 for heading row, +1 for 1-based grid index
-				eventEl.style.setProperty("--db-calendar-segment-lane", String(localLane + 2));
+				eventEl.style.setProperty("--obnotion-calendar-segment-lane", String(localLane + 2));
 				this.applyEventColor(eventEl, segment.event.color);
 				this.actions.applyConditionalFormat?.(eventEl, segment.event.row, config);
 				this.actions.renderRecordIcon?.(eventEl, segment.event.row, iconConfig, true);
-				const titleEl = eventEl.createSpan({ cls: `db-calendar-month-title${segment.event.titleIsEmpty ? " is-empty-title" : ""}`, text: segment.event.title });
+				const titleEl = eventEl.createSpan({ cls: `obnotion-calendar-month-title${segment.event.titleIsEmpty ? " is-empty-title" : ""}`, text: segment.event.title });
 				markNoteHoverLink(titleEl, segment.event.row.file.path, segment.event.row.file.path);
 				// Time renders after the title as a muted suffix, never a
 				// coloured prefix — timed events can appear in the month grid too.
 				if (segment.isTimed && segment.startMinutes != null) {
-					eventEl.createSpan({ cls: "db-calendar-month-time", text: formatCalendarTime(segment.startMinutes) });
+					eventEl.createSpan({ cls: "obnotion-calendar-month-time", text: formatCalendarTime(segment.startMinutes) });
 				}
 				this.attachEventOpenHandlers(eventEl, segment.event);
 				eventEl.oncontextmenu = (event) => {
@@ -461,13 +461,13 @@ export class CalendarRenderer {
 				// Any day's chip grabs the whole event (all of its per-day chips share
 				// the same row-path attribute, so setCalendarEventPreviewHidden already
 				// hides them together during a drag).
-				this.attachMonthMoveHandler(eventEl, weekEl, layout.days, segment, config, ".db-calendar-month-week", ".db-calendar-day", 7);
+				this.attachMonthMoveHandler(eventEl, weekEl, layout.days, segment, config, ".obnotion-calendar-month-week", ".obnotion-calendar-day", 7);
 				// Resize handles attach only to the chip at the segment's real edge: a
 				// segment carried over from the previous week has no leading edge in
 				// this row, and one continuing past this week has no trailing edge.
 				if (!this.actions.isReadOnly && this.actions.updateEventDates && config.calendarEndDateField) {
-					if (isChipStart && segment.isStart) this.attachMonthResizeHandle(eventEl, weekEl, layout.days, segment, config, "resize-start", ".db-calendar-month-week", ".db-calendar-day", 7);
-					if (isChipEnd && segment.isEnd) this.attachMonthResizeHandle(eventEl, weekEl, layout.days, segment, config, "resize-end", ".db-calendar-month-week", ".db-calendar-day", 7);
+					if (isChipStart && segment.isStart) this.attachMonthResizeHandle(eventEl, weekEl, layout.days, segment, config, "resize-start", ".obnotion-calendar-month-week", ".obnotion-calendar-day", 7);
+					if (isChipEnd && segment.isEnd) this.attachMonthResizeHandle(eventEl, weekEl, layout.days, segment, config, "resize-end", ".obnotion-calendar-month-week", ".obnotion-calendar-day", 7);
 				}
 			}
 		}
@@ -476,7 +476,7 @@ export class CalendarRenderer {
 	private setupMonthCreateDrag(cell: HTMLElement, config: ViewConfig, dateKey: string, weekEl: HTMLElement): void {
 		if (this.actions.isReadOnly || !this.actions.createEntryForDate) return;
 		cell.addEventListener("pointerdown", (event) => {
-			if (event.button !== 0 || (event.target as HTMLElement | null)?.closest("button, a, input, .db-calendar-month-segment")) return;
+			if (event.button !== 0 || (event.target as HTMLElement | null)?.closest("button, a, input, .obnotion-calendar-month-segment")) return;
 			let currentDateKey = dateKey;
 			let moved = false;
 			const setPreview = (nextDateKey: string): void => {
@@ -484,14 +484,14 @@ export class CalendarRenderer {
 				moved = moved || nextDateKey !== dateKey;
 				const min = nextDateKey < dateKey ? nextDateKey : dateKey;
 				const max = nextDateKey < dateKey ? dateKey : nextDateKey;
-				weekEl.querySelectorAll<HTMLElement>(".db-calendar-day").forEach((candidate) => {
+				weekEl.querySelectorAll<HTMLElement>(".obnotion-calendar-day").forEach((candidate) => {
 					const candidateKey = candidate.dataset.dateKey || "";
 					candidate.toggleClass("is-create-range", candidateKey >= min && candidateKey <= max);
 				});
 			};
 			const onMove = (moveEvent: PointerEvent): void => {
-				const target = window.activeDocument.elementFromPoint(moveEvent.clientX, moveEvent.clientY)?.closest<HTMLElement>(".db-calendar-day");
-				if (target && target.closest(".db-calendar-month-week") === weekEl && target.dataset.dateKey) setPreview(target.dataset.dateKey);
+				const target = window.activeDocument.elementFromPoint(moveEvent.clientX, moveEvent.clientY)?.closest<HTMLElement>(".obnotion-calendar-day");
+				if (target && target.closest(".obnotion-calendar-month-week") === weekEl && target.dataset.dateKey) setPreview(target.dataset.dateKey);
 			};
 			const cleanup = (): void => {
 				window.activeDocument.removeEventListener("pointermove", onMove);
@@ -523,7 +523,7 @@ export class CalendarRenderer {
 			if (hiddenEvents.length === 0) continue;
 			const dayCell = dayCells[dayIndex];
 			const button = weekEl.createEl("button", {
-				cls: "db-calendar-more-events",
+				cls: "obnotion-calendar-more-events",
 				text: t("calendar.moreEvents", { count: hiddenEvents.length }),
 				attr: { type: "button", title: t("calendar.moreEventsTitle", { count: hiddenEvents.length, date: day.dateKey }), "aria-haspopup": "dialog", "aria-expanded": "false", "aria-label": t("calendar.moreEventsTitle", { count: hiddenEvents.length, date: day.dateKey }) },
 			});
@@ -589,21 +589,21 @@ export class CalendarRenderer {
 
 		// The popover floats over the day cell as an enlarged copy of it
 		const popover = dayCell.createDiv({
-			cls: "db-calendar-day-popover",
+			cls: "obnotion-calendar-day-popover",
 			attr: { "data-date-key": day.dateKey, role: "dialog", "aria-label": day.dateKey },
 		});
 
 		// Day number heading — identical to the real day cell heading
-		const heading = popover.createDiv({ cls: "db-calendar-day-heading" });
-		heading.createSpan({ cls: "db-calendar-day-number", text: String(Number(day.dateKey.slice(8, 10))) });
+		const heading = popover.createDiv({ cls: "obnotion-calendar-day-heading" });
+		heading.createSpan({ cls: "obnotion-calendar-day-number", text: String(Number(day.dateKey.slice(8, 10))) });
 
 		// Events: same visual style as the in-grid month segments, but stacked and full-width
-		const list = popover.createDiv({ cls: "db-calendar-day-popover-events" });
+		const list = popover.createDiv({ cls: "obnotion-calendar-day-popover-events" });
 		for (const event of allEvents) {
 			const timing = getCalendarEventTiming(event, config);
 			const eventEl = list.createEl("button", {
 				cls: [
-					"db-calendar-month-segment",
+					"obnotion-calendar-month-segment",
 					timing.isTimed ? "is-timed" : "is-all-day",
 					"is-start",
 					"is-end",
@@ -612,20 +612,20 @@ export class CalendarRenderer {
 				attr: {
 					type: "button",
 					title: event.title,
-					"data-note-database-row-path": event.row.file.path,
+					"data-obnotion-row-path": event.row.file.path,
 				},
 			});
 			this.applyEventColor(eventEl, event.color);
 			this.actions.applyConditionalFormat?.(eventEl, event.row, config);
 			this.actions.renderRecordIcon?.(eventEl, event.row, this.withRecordIconDefault(config), true);
-			const titleEl = eventEl.createSpan({ cls: `db-calendar-month-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
+			const titleEl = eventEl.createSpan({ cls: `obnotion-calendar-month-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
 			markNoteHoverLink(titleEl, event.row.file.path, event.row.file.path);
 			// Time renders after the title as a muted suffix, never a coloured
 			// dot-prefixed pair.
 			if (timing.isTimed && timing.startMinutes != null) {
-				eventEl.createSpan({ cls: "db-calendar-month-time", text: formatCalendarTime(timing.startMinutes) });
+				eventEl.createSpan({ cls: "obnotion-calendar-month-time", text: formatCalendarTime(timing.startMinutes) });
 			}
-			eventEl.createSpan({ cls: "db-calendar-month-dates", text: this.formatMonthDateRange(event.startDateKey, event.endDateKey, event.startMinutes, event.endMinutes) });
+			eventEl.createSpan({ cls: "obnotion-calendar-month-dates", text: this.formatMonthDateRange(event.startDateKey, event.endDateKey, event.startMinutes, event.endMinutes) });
 			this.attachEventOpenHandlers(eventEl, event);
 		}
 
@@ -657,7 +657,7 @@ export class CalendarRenderer {
 		// Defer to next frame so layout is measurable.
 		window.requestAnimationFrame(() => {
 			if (!popover.isConnected) return;
-			const scroller = dayCell.closest<HTMLElement>(".note-database-container") || window.activeDocument.body;
+			const scroller = dayCell.closest<HTMLElement>(".obnotion-container") || window.activeDocument.body;
 			const bounds = scroller.getBoundingClientRect();
 			const rect = popover.getBoundingClientRect();
 
@@ -700,14 +700,14 @@ export class CalendarRenderer {
 			return;
 		}
 
-		const wrap = container.createDiv({ cls: "db-calendar db-calendar-week" });
+		const wrap = container.createDiv({ cls: "obnotion-calendar obnotion-calendar-week" });
 		this.calendarRoot = wrap;
 		this.applyTimeGridSizingVars(wrap, config, weekDays.length);
 		const weekTitle = this.renderWeekHeader(wrap, config, weekDays);
 		this.renderUnscheduledChip(weekTitle, config, rows, startField);
 		// Sticky wrapper keeps the day-name row + all-day strip pinned while the
 		// time grid scrolls beneath it.
-		const sticky = wrap.createDiv({ cls: "db-calendar-week-sticky" });
+		const sticky = wrap.createDiv({ cls: "obnotion-calendar-week-sticky" });
 		this.renderTimeHeaderRow(sticky, wrap, config, weekDays);
 		this.renderAllDaySection(sticky, config, weekDays);
 		this.renderTimeGrid(wrap, config, weekDays);
@@ -731,12 +731,12 @@ export class CalendarRenderer {
 		);
 		const day = model.days.find((item) => item.dateKey === dayKey) || { dateKey: dayKey, inCurrentMonth: true, events: [] };
 		this.currentVisibleRange = { startDateKey: day.dateKey, endDateKey: day.dateKey };
-		const wrap = container.createDiv({ cls: "db-calendar db-calendar-week db-calendar-day-view" });
+		const wrap = container.createDiv({ cls: "obnotion-calendar obnotion-calendar-week obnotion-calendar-day-view" });
 		this.calendarRoot = wrap;
 		this.applyTimeGridSizingVars(wrap, config, 1);
 		const dayTitle = this.renderDayHeader(wrap, config, day.dateKey);
 		this.renderUnscheduledChip(dayTitle, config, rows, startField);
-		const sticky = wrap.createDiv({ cls: "db-calendar-week-sticky" });
+		const sticky = wrap.createDiv({ cls: "obnotion-calendar-week-sticky" });
 		this.renderTimeHeaderRow(sticky, wrap, config, [day]);
 		this.renderAllDaySection(sticky, config, [day]);
 		this.renderTimeGrid(wrap, config, [day]);
@@ -745,22 +745,22 @@ export class CalendarRenderer {
 	}
 
 	private renderTimeHeaderRow(parent: HTMLElement, sizingWrap: HTMLElement, config: ViewConfig, days: CalendarDayModel[]): void {
-		const row = parent.createDiv({ cls: "db-calendar-time-header-row", attr: { role: "row" } });
-		row.createDiv({ cls: "db-calendar-time-header-gutter" });
-		const daysEl = row.createDiv({ cls: "db-calendar-time-header-days" });
-		daysEl.style.setProperty("--db-calendar-time-day-count", String(days.length));
+		const row = parent.createDiv({ cls: "obnotion-calendar-time-header-row", attr: { role: "row" } });
+		row.createDiv({ cls: "obnotion-calendar-time-header-gutter" });
+		const daysEl = row.createDiv({ cls: "obnotion-calendar-time-header-days" });
+		daysEl.style.setProperty("--obnotion-calendar-time-day-count", String(days.length));
 		const todayKey = this.getTodayDateKey();
 		for (const day of days) {
 			const button = daysEl.createEl("button", {
-				cls: `db-calendar-time-header-day${day.dateKey === todayKey ? " is-today" : ""}${this.isWeekendDateKey(day.dateKey) ? " is-weekend" : ""}`,
+				cls: `obnotion-calendar-time-header-day${day.dateKey === todayKey ? " is-today" : ""}${this.isWeekendDateKey(day.dateKey) ? " is-weekend" : ""}`,
 				attr: { type: "button", title: day.dateKey, "data-date-key": day.dateKey, role: "columnheader" },
 			});
-			button.createSpan({ cls: "db-calendar-week-day-name", text: this.formatWeekDayName(day.dateKey) });
+			button.createSpan({ cls: "obnotion-calendar-week-day-name", text: this.formatWeekDayName(day.dateKey) });
 			this.attachDayViewNavigation(button, config, day.dateKey);
 				// Column-width drag handle mirrors the month view. Only for multi-column
 				// (week) views — a single day column uses the toolbar slider instead.
 			if (!this.actions.isReadOnly && this.actions.onConfigChange && days.length > 1) {
-				const resizeHandle = button.createDiv({ cls: "db-calendar-col-resize-handle" });
+				const resizeHandle = button.createDiv({ cls: "obnotion-calendar-col-resize-handle" });
 				this.setupColumnResize(resizeHandle, config, sizingWrap);
 			}
 		}
@@ -774,18 +774,18 @@ export class CalendarRenderer {
 		const maxLanes = Math.max(1, Math.min(6, config.calendarAllDayMaxLanes ?? 2));
 		const hasOverflow = totalLanes > maxLanes;
 		const visibleLanes = hasOverflow ? maxLanes : totalLanes;
-		const section = wrap.createDiv({ cls: "db-calendar-week-allday" });
-		section.style.setProperty("--db-calendar-allday-rows", String(visibleLanes));
+		const section = wrap.createDiv({ cls: "obnotion-calendar-week-allday" });
+		section.style.setProperty("--obnotion-calendar-allday-rows", String(visibleLanes));
 		// 空 gutter 占据 grid 第一列（52px），与下方时间网格的小时列对齐；
 		// 不再放标签文字（标签会换行不好看）。
-		section.createDiv({ cls: "db-calendar-week-allday-gutter" });
+		section.createDiv({ cls: "obnotion-calendar-week-allday-gutter" });
 
 		// Single CSS grid: day columns and event segments share one grid (no overlay layer).
 		// Mirrors the month view: day cells span all rows as background, segments are
 		// direct children placed by explicit grid-column / grid-row.
-		const stage = section.createDiv({ cls: "db-calendar-week-allday-cols" });
+		const stage = section.createDiv({ cls: "obnotion-calendar-week-allday-cols" });
 		stage.dataset.calendarVisibleLanes = String(visibleLanes);
-		stage.style.setProperty("--db-calendar-time-day-count", String(days.length));
+		stage.style.setProperty("--obnotion-calendar-time-day-count", String(days.length));
 		// Lane pitch matches the month grid's flat chip, phone floor included; the
 		// detached day-number row above it keeps its own 28px.
 		stage.style.gridTemplateRows = `28px repeat(${visibleLanes + (hasOverflow ? 1 : 0)}, ${this.getMonthChipPitch()}px)`;
@@ -795,7 +795,7 @@ export class CalendarRenderer {
 		for (let dayIndex = 0; dayIndex < days.length; dayIndex++) {
 			const day = days[dayIndex];
 			const col = stage.createDiv({
-				cls: `db-calendar-week-allday-col${day.dateKey === todayKey ? " is-today" : ""}${this.isWeekendDateKey(day.dateKey) ? " is-weekend" : ""}${dayIndex === days.length - 1 ? " is-last-col" : ""}`,
+				cls: `obnotion-calendar-week-allday-col${day.dateKey === todayKey ? " is-today" : ""}${this.isWeekendDateKey(day.dateKey) ? " is-weekend" : ""}${dayIndex === days.length - 1 ? " is-last-col" : ""}`,
 				attr: { "data-date-key": day.dateKey },
 			});
 			if (dayIndex === 0) firstAllDayCol = col;
@@ -803,13 +803,13 @@ export class CalendarRenderer {
 			this.setupBacklogDropTarget(col, config, day.dateKey);
 			if (!this.actions.isReadOnly && this.actions.createEntryForDate) {
 				col.ondblclick = (event) => {
-					if ((event.target as HTMLElement | null)?.closest(".db-calendar-month-segment")) return;
+					if ((event.target as HTMLElement | null)?.closest(".obnotion-calendar-month-segment")) return;
 					this.actions.createEntryForDate?.(config, day.dateKey);
 				};
 			}
 
 			const dateButton = stage.createEl("button", {
-				cls: `db-calendar-week-allday-date${day.dateKey === todayKey ? " is-today" : ""}${this.isWeekendDateKey(day.dateKey) ? " is-weekend" : ""}`,
+				cls: `obnotion-calendar-week-allday-date${day.dateKey === todayKey ? " is-today" : ""}${this.isWeekendDateKey(day.dateKey) ? " is-weekend" : ""}`,
 				text: String(Number(day.dateKey.slice(8, 10))),
 				attr: { type: "button", title: day.dateKey, "aria-label": day.dateKey },
 			});
@@ -831,7 +831,7 @@ export class CalendarRenderer {
 		}
 
 		if (layout.segments.length === 0) {
-			firstAllDayCol?.createDiv({ cls: "db-calendar-week-allday-empty", text: t("calendar.noAllDayEvents") });
+			firstAllDayCol?.createDiv({ cls: "obnotion-calendar-week-allday-empty", text: t("calendar.noAllDayEvents") });
 		}
 
 		// Segments are direct children of the grid (no absolute overlay layer).
@@ -840,33 +840,33 @@ export class CalendarRenderer {
 			if (segment.lane >= visibleLanes) continue;
 			const eventEl = stage.createEl("button", {
 				cls: [
-					"db-calendar-month-segment",
-					"db-calendar-week-allday-segment",
+					"obnotion-calendar-month-segment",
+					"obnotion-calendar-week-allday-segment",
 					"is-all-day",
 					segment.isStart ? "is-start" : "is-continuation",
 					segment.isEnd ? "is-end" : "continues-after",
 					this.isRowCompleted(segment.event.row, config) ? "is-completed" : "",
 				].join(" "),
-				attr: { type: "button", title: this.getSegmentTitle(segment), "data-note-database-row-path": segment.event.row.file.path },
+				attr: { type: "button", title: this.getSegmentTitle(segment), "data-obnotion-row-path": segment.event.row.file.path },
 			});
-			eventEl.style.setProperty("--db-calendar-segment-start", String(segment.startDayIndex + 1));
-			eventEl.style.setProperty("--db-calendar-segment-span", String(segment.spanDays));
+			eventEl.style.setProperty("--obnotion-calendar-segment-start", String(segment.startDayIndex + 1));
+			eventEl.style.setProperty("--obnotion-calendar-segment-span", String(segment.spanDays));
 			// Row 1 is reserved for the detached day number, so event lanes start at row 2.
-			eventEl.style.setProperty("--db-calendar-segment-lane", String(segment.lane + 2));
+			eventEl.style.setProperty("--obnotion-calendar-segment-lane", String(segment.lane + 2));
 			this.applyEventColor(eventEl, segment.event.color);
 			this.actions.applyConditionalFormat?.(eventEl, segment.event.row, config);
-			const content = eventEl.createSpan({ cls: "db-calendar-week-allday-content" });
+			const content = eventEl.createSpan({ cls: "obnotion-calendar-week-allday-content" });
 			this.actions.renderRecordIcon?.(content, segment.event.row, this.withRecordIconDefault(config), true);
-			const titleEl = content.createSpan({ cls: `db-calendar-month-title${segment.event.titleIsEmpty ? " is-empty-title" : ""}`, text: segment.event.title });
+			const titleEl = content.createSpan({ cls: `obnotion-calendar-month-title${segment.event.titleIsEmpty ? " is-empty-title" : ""}`, text: segment.event.title });
 			markNoteHoverLink(titleEl, segment.event.row.file.path, segment.event.row.file.path);
 			// The range stays reachable through the chip's own title tooltip
 			// (getSegmentTitle) and the day and overflow popovers, matching where
 			// the reference keeps it off the resting grid.
 			this.attachEventOpenHandlers(eventEl, segment.event);
-			this.attachMonthMoveHandler(eventEl, stage, days, segment, config, ".db-calendar-week-allday-cols", ".db-calendar-week-allday-col", days.length);
+			this.attachMonthMoveHandler(eventEl, stage, days, segment, config, ".obnotion-calendar-week-allday-cols", ".obnotion-calendar-week-allday-col", days.length);
 			if (!this.actions.isReadOnly && this.actions.updateEventDates && config.calendarEndDateField) {
-				if (segment.isStart) this.attachMonthResizeHandle(eventEl, stage, days, segment, config, "resize-start", ".db-calendar-week-allday-cols", ".db-calendar-week-allday-col", days.length);
-				if (segment.isEnd) this.attachMonthResizeHandle(eventEl, stage, days, segment, config, "resize-end", ".db-calendar-week-allday-cols", ".db-calendar-week-allday-col", days.length);
+				if (segment.isStart) this.attachMonthResizeHandle(eventEl, stage, days, segment, config, "resize-start", ".obnotion-calendar-week-allday-cols", ".obnotion-calendar-week-allday-col", days.length);
+				if (segment.isEnd) this.attachMonthResizeHandle(eventEl, stage, days, segment, config, "resize-end", ".obnotion-calendar-week-allday-cols", ".obnotion-calendar-week-allday-col", days.length);
 			}
 		}
 
@@ -880,7 +880,7 @@ export class CalendarRenderer {
 					.slice().sort((a, b) => a.order - b.order);
 				const day = days[dayIndex];
 				const button = stage.createEl("button", {
-					cls: "db-calendar-week-allday-more",
+					cls: "obnotion-calendar-week-allday-more",
 					text: t("calendar.moreEvents", { count: hiddenEvents.length }),
 					attr: { type: "button", title: t("calendar.moreEventsTitle", { count: hiddenEvents.length, date: day.dateKey }), "aria-haspopup": "dialog", "aria-expanded": "false", "aria-label": t("calendar.moreEventsTitle", { count: hiddenEvents.length, date: day.dateKey }) },
 				});
@@ -915,19 +915,19 @@ export class CalendarRenderer {
 		scheduleHide: () => void,
 	): HTMLElement {
 		// The popover floats above the "+N" link as a stacked list of all-day events.
-		const popover = anchor.createDiv({ cls: "db-calendar-week-allday-popover", attr: { role: "dialog", "aria-label": t("calendar.moreEvents") } });
-		const list = popover.createDiv({ cls: "db-calendar-day-popover-events" });
+		const popover = anchor.createDiv({ cls: "obnotion-calendar-week-allday-popover", attr: { role: "dialog", "aria-label": t("calendar.moreEvents") } });
+		const list = popover.createDiv({ cls: "obnotion-calendar-day-popover-events" });
 		for (const event of events) {
 			const eventEl = list.createEl("button", {
-				cls: `db-calendar-month-segment is-all-day is-start is-end${this.isRowCompleted(event.row, config) ? " is-completed" : ""}`,
-				attr: { type: "button", title: event.title, "data-note-database-row-path": event.row.file.path },
+				cls: `obnotion-calendar-month-segment is-all-day is-start is-end${this.isRowCompleted(event.row, config) ? " is-completed" : ""}`,
+				attr: { type: "button", title: event.title, "data-obnotion-row-path": event.row.file.path },
 			});
 			this.applyEventColor(eventEl, event.color);
 			this.actions.applyConditionalFormat?.(eventEl, event.row, config);
 			this.actions.renderRecordIcon?.(eventEl, event.row, this.withRecordIconDefault(config), true);
-			const titleEl = eventEl.createSpan({ cls: `db-calendar-month-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
+			const titleEl = eventEl.createSpan({ cls: `obnotion-calendar-month-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
 			markNoteHoverLink(titleEl, event.row.file.path, event.row.file.path);
-			eventEl.createSpan({ cls: "db-calendar-month-dates", text: this.formatMonthDateRange(event.startDateKey, event.endDateKey, event.startMinutes, event.endMinutes) });
+			eventEl.createSpan({ cls: "obnotion-calendar-month-dates", text: this.formatMonthDateRange(event.startDateKey, event.endDateKey, event.startMinutes, event.endMinutes) });
 			this.attachEventOpenHandlers(eventEl, event);
 		}
 		// Hovering the popover cancels the link's pending hide; leaving schedules it.
@@ -958,33 +958,33 @@ export class CalendarRenderer {
 		const timedLayouts = buildCalendarTimedEventLayouts(dateKeys, days.flatMap((day) => day.events), config);
 		const slotDuration = getCalendarSlotDuration(config);
 		// No inner scroll area: the time grid grows to full height and the outer
-		// .note-database-container (overflow: auto) scrolls it, so the all-day
+		// .obnotion-container (overflow: auto) scrolls it, so the all-day
 		// section and the time columns share identical column widths.
-		const timeGrid = wrap.createDiv({ cls: "db-calendar-week-scroll" });
-		const gutter = timeGrid.createDiv({ cls: "db-calendar-week-time-gutter" });
+		const timeGrid = wrap.createDiv({ cls: "obnotion-calendar-week-scroll" });
+		const gutter = timeGrid.createDiv({ cls: "obnotion-calendar-week-time-gutter" });
 		gutter.style.height = `${metrics.gridHeight}px`;
 		const now = new Date();
 		for (let hour = visible.startHour; hour <= visible.endHour; hour++) {
 			const offset = (hour * 60 - visible.startMinutes) / 60 * hourHeight;
 			gutter.createDiv({
-				cls: `db-calendar-week-hour-label${this.isCurrentCalendarHourTick(hour, days, now) ? " is-current-time-tick" : ""}`,
+				cls: `obnotion-calendar-week-hour-label${this.isCurrentCalendarHourTick(hour, days, now) ? " is-current-time-tick" : ""}`,
 				text: this.formatHourLabel(hour % 24),
 				attr: { style: `top: ${offset}px` },
 			});
 		}
 
-		const body = timeGrid.createDiv({ cls: "db-calendar-week-body", attr: { role: "grid", "aria-label": t("calendar.week") } });
+		const body = timeGrid.createDiv({ cls: "obnotion-calendar-week-body", attr: { role: "grid", "aria-label": t("calendar.week") } });
 		body.style.height = `${metrics.gridHeight}px`;
-		body.style.setProperty("--db-calendar-time-day-count", String(days.length));
+		body.style.setProperty("--obnotion-calendar-time-day-count", String(days.length));
 		this.renderTimeGridLines(body, visible.startMinutes, visible.endMinutes, slotDuration, hourHeight);
-		const columns = body.createDiv({ cls: "db-calendar-time-columns", attr: { role: "row" } });
-		columns.style.setProperty("--db-calendar-time-day-count", String(days.length));
+		const columns = body.createDiv({ cls: "obnotion-calendar-time-columns", attr: { role: "row" } });
+		columns.style.setProperty("--obnotion-calendar-time-day-count", String(days.length));
 		const todayKey = this.getTodayDateKey();
 		const focusIndex = Math.max(0, days.findIndex((day) => day.dateKey === todayKey));
 		for (let dayIndex = 0; dayIndex < days.length; dayIndex++) {
 			const day = days[dayIndex];
 			const col = columns.createDiv({
-				cls: `db-calendar-week-day-col${day.dateKey === todayKey ? " is-today" : ""}${this.isWeekendDateKey(day.dateKey) ? " is-weekend" : ""}`,
+				cls: `obnotion-calendar-week-day-col${day.dateKey === todayKey ? " is-today" : ""}${this.isWeekendDateKey(day.dateKey) ? " is-weekend" : ""}`,
 				attr: {
 					"data-date-key": day.dateKey,
 					role: "gridcell",
@@ -1002,7 +1002,7 @@ export class CalendarRenderer {
 
 		attachCalendarGridKeyboard({
 			grid: columns,
-			cellSelector: ".db-calendar-week-day-col[role=gridcell]",
+			cellSelector: ".obnotion-calendar-week-day-col[role=gridcell]",
 			columns: days.length,
 			onSelectDate: (dateKey) => {
 				this.actions.createEntryForDate?.(config, dateKey);
@@ -1029,7 +1029,7 @@ export class CalendarRenderer {
 		for (let minute = startMinutes; minute < endMinutes; minute += slotDuration) {
 			const offset = ((minute - startMinutes) / 60) * hourHeight;
 			const line = body.createDiv({
-				cls: `db-calendar-week-slot-line${minute % 60 === 0 ? " is-hour" : ""}`,
+				cls: `obnotion-calendar-week-slot-line${minute % 60 === 0 ? " is-hour" : ""}`,
 				attr: { style: `top: ${offset}px` },
 			});
 			line.setAttribute("aria-hidden", "true");
@@ -1053,13 +1053,13 @@ export class CalendarRenderer {
 		const left = 4 + layout.columnIndex * CALENDAR_TIMED_STAGGER_STEP;
 		const eventTitle = `${formatCalendarTime(layout.startMinutes)} - ${formatCalendarTime(layout.endMinutes)} ${layout.event.title}`;
 		const eventEl = dayCol.createEl("button", {
-			cls: `db-calendar-week-timed-event${isCompact ? " is-compact" : ""}${this.isRowCompleted(layout.event.row, config) ? " is-completed" : ""}`,
+			cls: `obnotion-calendar-week-timed-event${isCompact ? " is-compact" : ""}${this.isRowCompleted(layout.event.row, config) ? " is-completed" : ""}`,
 			attr: {
 				type: "button",
 				style: `top: ${top}px; height: ${height}px; left: ${left}px; width: calc(100% - ${left + 4}px); z-index: ${3 + layout.columnIndex};`,
 				title: eventTitle,
 				"aria-label": eventTitle,
-				"data-note-database-row-path": layout.event.row.file.path,
+				"data-obnotion-row-path": layout.event.row.file.path,
 			},
 		});
 		this.applyEventColor(eventEl, layout.event.color);
@@ -1067,15 +1067,15 @@ export class CalendarRenderer {
 		if (!this.actions.isReadOnly && this.actions.updateEventDates && config.calendarEndDateField) {
 			this.renderTimeResizeHandle(eventEl, layout, "resize-start");
 		}
-		const content = eventEl.createDiv({ cls: "db-calendar-week-event-content" });
+		const content = eventEl.createDiv({ cls: "obnotion-calendar-week-event-content" });
 		// Title first (top) so a short card still shows what the event is; the
 		// time range renders below only when there's room.
 		this.actions.renderRecordIcon?.(content, layout.event.row, this.withRecordIconDefault(config), true);
-		const titleEl = content.createDiv({ cls: `db-calendar-week-event-title${layout.event.titleIsEmpty ? " is-empty-title" : ""}`, text: layout.event.title });
+		const titleEl = content.createDiv({ cls: `obnotion-calendar-week-event-title${layout.event.titleIsEmpty ? " is-empty-title" : ""}`, text: layout.event.title });
 		markNoteHoverLink(titleEl, layout.event.row.file.path, layout.event.row.file.path);
 		if (!isCompact) {
 			content.createDiv({
-				cls: "db-calendar-week-event-time",
+				cls: "obnotion-calendar-week-event-time",
 				text: `${formatCalendarTime(layout.startMinutes)} - ${formatCalendarTime(layout.endMinutes)}`,
 			});
 		}
@@ -1088,11 +1088,11 @@ export class CalendarRenderer {
 
 	private renderTimeResizeHandle(eventEl: HTMLElement, layout: CalendarTimedEventLayout, mode: "resize-start" | "resize-end"): void {
 		const handle = eventEl.createSpan({
-			cls: `db-calendar-time-resize-handle is-${mode === "resize-start" ? "start" : "end"}`,
+			cls: `obnotion-calendar-time-resize-handle is-${mode === "resize-start" ? "start" : "end"}`,
 			attr: {
 				title: mode === "resize-start" ? t("calendar.resizeStart") : t("calendar.resizeEnd"),
 				"data-calendar-drag-mode": mode,
-				"data-note-database-row-path": layout.event.row.file.path,
+				"data-obnotion-row-path": layout.event.row.file.path,
 			},
 		});
 		handle.addEventListener("click", (event) => event.stopPropagation());
@@ -1114,7 +1114,7 @@ export class CalendarRenderer {
 		// segment's native HTML5 drag, which could not reliably distinguish resize
 		// from move and left resize effectively impossible to trigger.
 		const handle = eventEl.createSpan({
-			cls: `db-calendar-month-resize-handle is-${mode === "resize-start" ? "start" : "end"}`,
+			cls: `obnotion-calendar-month-resize-handle is-${mode === "resize-start" ? "start" : "end"}`,
 			attr: { "data-calendar-resize-mode": mode, "aria-hidden": "true" },
 		});
 		// A click on the grab zone must not open the underlying event.
@@ -1143,7 +1143,7 @@ export class CalendarRenderer {
 		segmentEl.addEventListener("mousedown", (downEvent) => {
 			if (downEvent.button !== 0) return;
 			// 避开 resize 把手（把手 mousedown 自己 stopPropagation，这里兜底，与 timed pointer drag 一致）。
-			if ((downEvent.target as HTMLElement | null)?.closest(".db-calendar-month-resize-handle")) return;
+			if ((downEvent.target as HTMLElement | null)?.closest(".obnotion-calendar-month-resize-handle")) return;
 			downEvent.preventDefault();
 			this.beginMonthMove(segmentEl, originGrid, days, segment, config, downEvent, gridSelector, cellSelector, colCount);
 		});
@@ -1170,12 +1170,12 @@ export class CalendarRenderer {
 		// Restore the segment's original grid placement when a resize is cancelled
 		// (no commit, so no refresh) so it doesn't keep the previewed start/span.
 		const resetSegmentGrid = (): void => {
-			segmentEl.style.setProperty("--db-calendar-segment-start", String(fixedStartDay + 1));
-			segmentEl.style.setProperty("--db-calendar-segment-span", String(fixedEndDay - fixedStartDay + 1));
+			segmentEl.style.setProperty("--obnotion-calendar-segment-start", String(fixedStartDay + 1));
+			segmentEl.style.setProperty("--obnotion-calendar-segment-span", String(fixedEndDay - fixedStartDay + 1));
 		};
 		// Scope target-cell highlighting to this calendar (several may coexist via
 		// embeds on the same page).
-		const container = originGrid.closest<HTMLElement>(".db-calendar-month, .db-calendar-week-allday") || originGrid.parentElement || originGrid;
+		const container = originGrid.closest<HTMLElement>(".obnotion-calendar-month, .obnotion-calendar-week-allday") || originGrid.parentElement || originGrid;
 		let didMove = false;
 		// Swallow the synthetic click that follows a drag so releasing a resize
 		// never opens the underlying note.
@@ -1223,10 +1223,10 @@ export class CalendarRenderer {
 			container.querySelectorAll(".is-resize-target").forEach((node) => node.classList.remove("is-resize-target"));
 			if (targetKey) {
 				container
-					.querySelectorAll(`.db-calendar-day[data-date-key="${targetKey}"]`)
+					.querySelectorAll(`.obnotion-calendar-day[data-date-key="${targetKey}"]`)
 					.forEach((cell) => cell.classList.add("is-resize-target"));
 				container
-					.querySelectorAll(`.db-calendar-week-allday-col[data-date-key="${targetKey}"]`)
+					.querySelectorAll(`.obnotion-calendar-week-allday-col[data-date-key="${targetKey}"]`)
 					.forEach((cell) => cell.classList.add("is-resize-target"));
 			}
 		};
@@ -1279,7 +1279,7 @@ export class CalendarRenderer {
 	}
 
 	/** move（整体平移）：pointer 驱动，本体沿格子实时滑动 + 按列吸附（对齐时间线手感）。
-	 *  与 resize 的区别：span 守恒，只动 `--db-calendar-segment-start`；提交数学是 move（换日期保时长）。
+	 *  与 resize 的区别：span 守恒，只动 `--obnotion-calendar-segment-start`；提交数学是 move（换日期保时长）。
 	 *  参数化 gridSelector/cellSelector/colCount 支持月视图（week 行）和周视图 all-day（stage）。 */
 	private beginMonthMove(
 		segmentEl: HTMLElement,
@@ -1304,21 +1304,21 @@ export class CalendarRenderer {
 		const durationDays = Math.max(1, (dateKeyDaysBetween(segment.event.startDateKey, segment.event.endDateKey) ?? 0) + 1);
 		const startClientX = downEvent.clientX;
 		const startClientY = downEvent.clientY;
-		// 卡片日期范围文本：跨天 segment 才有 .db-calendar-month-dates；拖拽时实时改为目标范围，
+		// 卡片日期范围文本：跨天 segment 才有 .obnotion-calendar-month-dates；拖拽时实时改为目标范围，
 		// 取消时还原原始文本（提交则由 re-render 重建）。
 		const originalDatesText = this.formatMonthDateRange(originalStartKey, segment.event.endDateKey, segment.event.startMinutes, segment.event.endMinutes);
-		const segmentDatesEl = segmentEl.querySelector<HTMLElement>(":scope > .db-calendar-month-dates");
+		const segmentDatesEl = segmentEl.querySelector<HTMLElement>(":scope > .obnotion-calendar-month-dates");
 		const formatTargetRange = (targetKey: string): string => {
 			const endKey = endField ? addDateKeyDays(targetKey, durationDays - 1) : targetKey;
 			return this.formatMonthDateRange(targetKey, endKey, segment.event.startMinutes, segment.event.endMinutes);
 		};
 		const resetSegmentGrid = (): void => {
-			segmentEl.style.setProperty("--db-calendar-segment-start", String(fixedStartDay + 1));
-			segmentEl.style.setProperty("--db-calendar-segment-span", String(spanDays));
+			segmentEl.style.setProperty("--obnotion-calendar-segment-start", String(fixedStartDay + 1));
+			segmentEl.style.setProperty("--obnotion-calendar-segment-span", String(spanDays));
 			if (segmentDatesEl) segmentDatesEl.setText(originalDatesText);
 		};
 		// 容器用于限定 highlight/ghost 范围（多个日历共存于 embeds）。
-		const container = originGrid.closest<HTMLElement>(".db-calendar-month, .db-calendar-week-allday") || originGrid.parentElement || originGrid;
+		const container = originGrid.closest<HTMLElement>(".obnotion-calendar-month, .obnotion-calendar-week-allday") || originGrid.parentElement || originGrid;
 		let didMove = false;
 		const swallowClick = (clickEvent: MouseEvent): void => {
 			clickEvent.stopPropagation();
@@ -1362,7 +1362,7 @@ export class CalendarRenderer {
 			container.querySelectorAll(".is-resize-target").forEach((node) => node.classList.remove("is-resize-target"));
 			if (targetKey) {
 				container
-					.querySelectorAll(`.db-calendar-day[data-date-key="${targetKey}"], .db-calendar-week-allday-col[data-date-key="${targetKey}"]`)
+					.querySelectorAll(`.obnotion-calendar-day[data-date-key="${targetKey}"], .obnotion-calendar-week-allday-col[data-date-key="${targetKey}"]`)
 					.forEach((cell) => cell.classList.add("is-resize-target"));
 			}
 		};
@@ -1414,8 +1414,8 @@ export class CalendarRenderer {
 	}
 
 	private setCalendarEventPreviewHidden(container: HTMLElement, rowPath: string, hidden: boolean): void {
-		for (const candidate of container.querySelectorAll<HTMLElement>(".db-calendar-month-segment[data-note-database-row-path]")) {
-			if (candidate.getAttribute("data-note-database-row-path") !== rowPath) continue;
+		for (const candidate of container.querySelectorAll<HTMLElement>(".obnotion-calendar-month-segment[data-obnotion-row-path]")) {
+			if (candidate.getAttribute("data-obnotion-row-path") !== rowPath) continue;
 			candidate.toggleClass("is-preview-hidden", hidden);
 		}
 	}
@@ -1448,9 +1448,9 @@ export class CalendarRenderer {
 			if (startDay < 0 || endDay < startDay) continue;
 			neededGrids.add(grid);
 			const ghost = this.ensureMonthRangePreviewGhost(grid, options.ghostByGrid, options.segment, options.label);
-			ghost.style.setProperty("--db-calendar-segment-start", String(startDay + 1));
-			ghost.style.setProperty("--db-calendar-segment-span", String(endDay - startDay + 1));
-			ghost.style.setProperty("--db-calendar-segment-lane", String(this.getPreviewLaneForGrid(grid, options.segment.lane) + 2));
+			ghost.style.setProperty("--obnotion-calendar-segment-start", String(startDay + 1));
+			ghost.style.setProperty("--obnotion-calendar-segment-span", String(endDay - startDay + 1));
+			ghost.style.setProperty("--obnotion-calendar-segment-lane", String(this.getPreviewLaneForGrid(grid, options.segment.lane) + 2));
 			ghost.toggleClass("is-start", options.startDateKey >= firstKey);
 			ghost.toggleClass("is-continuation", options.startDateKey < firstKey);
 			ghost.toggleClass("is-end", options.endDateKey <= lastKey);
@@ -1480,22 +1480,22 @@ export class CalendarRenderer {
 	): HTMLElement {
 		const existing = ghostByGrid.get(grid);
 		if (existing) {
-			existing.querySelector<HTMLElement>(":scope > .db-calendar-month-dates")?.setText(label);
+			existing.querySelector<HTMLElement>(":scope > .obnotion-calendar-month-dates")?.setText(label);
 			return existing;
 		}
 		const ghost = grid.createDiv({
 			cls: [
-				"db-calendar-month-segment",
-				"db-calendar-month-ghost",
+				"obnotion-calendar-month-segment",
+				"obnotion-calendar-month-ghost",
 				segment.isTimed ? "is-timed" : "is-all-day",
 			].join(" "),
 		});
 		this.applyEventColor(ghost, segment.event.color);
 		if (segment.isTimed && segment.startMinutes != null) {
-			ghost.createSpan({ cls: "db-calendar-month-time", text: formatCalendarTime(segment.startMinutes) });
+			ghost.createSpan({ cls: "obnotion-calendar-month-time", text: formatCalendarTime(segment.startMinutes) });
 		}
-		ghost.createSpan({ cls: `db-calendar-month-title${segment.event.titleIsEmpty ? " is-empty-title" : ""}`, text: segment.event.title });
-		ghost.createSpan({ cls: "db-calendar-month-dates", text: label });
+		ghost.createSpan({ cls: `obnotion-calendar-month-title${segment.event.titleIsEmpty ? " is-empty-title" : ""}`, text: segment.event.title });
+		ghost.createSpan({ cls: "obnotion-calendar-month-dates", text: label });
 		ghostByGrid.set(grid, ghost);
 		return ghost;
 	}
@@ -1525,7 +1525,7 @@ export class CalendarRenderer {
 	private renderCurrentTimeLine(dayCol: HTMLElement, dateKey: string, metrics: TimeGridMetrics): void {
 		const todayKey = this.getTodayDateKey();
 		if (dateKey !== todayKey) return;
-		const line = dayCol.createDiv({ cls: "db-calendar-timed-current-line", attr: { "aria-hidden": "true" } });
+		const line = dayCol.createDiv({ cls: "obnotion-calendar-timed-current-line", attr: { "aria-hidden": "true" } });
 		const update = () => {
 			const now = new Date();
 			const minutes = now.getHours() * 60 + now.getMinutes();
@@ -1544,7 +1544,7 @@ export class CalendarRenderer {
 
 	private scrollTimeGridToWorkday(wrap: HTMLElement, config: ViewConfig, dateKeys: string[]): void {
 		window.requestAnimationFrame(() => {
-			const scroller = wrap.closest<HTMLElement>(".note-database-container") || wrap.parentElement;
+			const scroller = wrap.closest<HTMLElement>(".obnotion-container") || wrap.parentElement;
 			if (!scroller) return;
 			const today = this.getTodayDateKey();
 			const now = new Date();
@@ -1567,9 +1567,9 @@ export class CalendarRenderer {
 	private syncPhoneWeekHorizontalScroll(wrap: HTMLElement): void {
 		if (!this.isPhoneLayout()) return;
 		const panels = [
-			wrap.querySelector<HTMLElement>(".db-calendar-time-header-days"),
-			wrap.querySelector<HTMLElement>(".db-calendar-week-allday-cols"),
-			wrap.querySelector<HTMLElement>(".db-calendar-week-body"),
+			wrap.querySelector<HTMLElement>(".obnotion-calendar-time-header-days"),
+			wrap.querySelector<HTMLElement>(".obnotion-calendar-week-allday-cols"),
+			wrap.querySelector<HTMLElement>(".obnotion-calendar-week-body"),
 		].filter((el): el is HTMLElement => el != null);
 		if (panels.length < 2) return;
 		let syncing = false;
@@ -1584,7 +1584,7 @@ export class CalendarRenderer {
 		// Deferred a frame so the columns have their laid-out widths (and scrollWidth) before
 		// scrollIntoView measures them — the same reason scrollTimeGridToWorkday above defers.
 		window.requestAnimationFrame(() => {
-			const todayCol = panels[panels.length - 1]?.querySelector<HTMLElement>(".db-calendar-week-day-col.is-today");
+			const todayCol = panels[panels.length - 1]?.querySelector<HTMLElement>(".obnotion-calendar-week-day-col.is-today");
 			todayCol?.scrollIntoView({ inline: "center", block: "nearest" });
 		});
 	}
@@ -1593,14 +1593,14 @@ export class CalendarRenderer {
 		if (this.actions.isReadOnly || !this.actions.createEntryForDate) return;
 		dayCol.addEventListener("mousedown", (event) => {
 			if (event.button !== 0) return;
-			if ((event.target as HTMLElement | null)?.closest(".db-calendar-week-timed-event, .db-calendar-time-resize-handle")) return;
+			if ((event.target as HTMLElement | null)?.closest(".obnotion-calendar-week-timed-event, .obnotion-calendar-time-resize-handle")) return;
 			event.preventDefault();
 			const startY = event.clientY;
 			// endMinutes 是时间范围边界，不让事件从边界开始
 			const rawStart = this.snapTime(this.minuteFromPointer(dayCol, event.clientY, metrics));
 			const start = rawStart >= metrics.endMinutes ? metrics.endMinutes - TIME_SNAP_MINUTES : rawStart;
 			let end = Math.min(metrics.endMinutes, start + TIME_SNAP_MINUTES);
-			const preview = dayCol.createDiv({ cls: "db-calendar-selection-preview" });
+			const preview = dayCol.createDiv({ cls: "obnotion-calendar-selection-preview" });
 			// Suppress the click after a drag so releasing over an event doesn't open it.
 			let didDrag = false;
 			const swallowClick = (clickEvent: MouseEvent) => {
@@ -1647,7 +1647,7 @@ export class CalendarRenderer {
 		if (this.actions.isReadOnly || !this.actions.updateEventDates) return;
 		eventEl.addEventListener("mousedown", (event) => {
 			if (event.button !== 0) return;
-			const mode = ((event.target as HTMLElement | null)?.closest(".db-calendar-time-resize-handle") as HTMLElement | null)
+			const mode = ((event.target as HTMLElement | null)?.closest(".obnotion-calendar-time-resize-handle") as HTMLElement | null)
 				?.dataset.calendarDragMode as TimedDragMode | undefined || "move";
 			if (mode !== "move" && !config.calendarEndDateField) return;
 			event.preventDefault();
@@ -1718,7 +1718,7 @@ export class CalendarRenderer {
 				window.activeDocument.removeEventListener("mousemove", onMove, true);
 				window.activeDocument.removeEventListener("mouseup", onUp, true);
 				eventEl.removeClass("is-dragging", "is-moving");
-				eventEl.querySelector(".db-calendar-timed-drag-preview")?.remove();
+				eventEl.querySelector(".obnotion-calendar-timed-drag-preview")?.remove();
 				if (mode === "move") this.clearAllDropTargets();
 				if (!didDrag) return; // 纯点击（无拖动）：仅清理拖拽视觉态，不写日期，避免误弹「日期未变更」
 				// Remove after the current task so the mouseup->click is swallowed.
@@ -1743,15 +1743,15 @@ export class CalendarRenderer {
 	}
 
 	private renderTimedDragPreview(eventEl: HTMLElement, dateKey: string, startMinutes: number, endMinutes: number): void {
-		let preview = eventEl.querySelector<HTMLElement>(":scope > .db-calendar-timed-drag-preview");
-		if (!preview) preview = eventEl.createDiv({ cls: "db-calendar-timed-drag-preview" });
+		let preview = eventEl.querySelector<HTMLElement>(":scope > .obnotion-calendar-timed-drag-preview");
+		if (!preview) preview = eventEl.createDiv({ cls: "obnotion-calendar-timed-drag-preview" });
 		preview.setText(`${formatCalendarTime(startMinutes)} - ${formatCalendarTime(endMinutes)}`);
 	}
 
 	private syncTimedDragDropTarget(eventEl: HTMLElement, dateKey: string): void {
-		const calendar = eventEl.closest<HTMLElement>(".db-calendar") || window.activeDocument;
+		const calendar = eventEl.closest<HTMLElement>(".obnotion-calendar") || window.activeDocument;
 		this.clearDropTargets(calendar);
-		const target = Array.from(calendar.querySelectorAll<HTMLElement>(".db-calendar-week-day-col"))
+		const target = Array.from(calendar.querySelectorAll<HTMLElement>(".obnotion-calendar-week-day-col"))
 			.find((col) => col.dataset.dateKey === dateKey);
 		if (!target) return;
 		target.addClass("is-drop-target");
@@ -1760,7 +1760,7 @@ export class CalendarRenderer {
 
 	private attachEventOpenHandlers(eventEl: HTMLElement, event: CalendarTimelineEvent): void {
 		eventEl.addEventListener("click", (mouseEvent) => {
-			if ((mouseEvent.target as HTMLElement | null)?.closest(".db-calendar-time-resize-handle")) return;
+			if ((mouseEvent.target as HTMLElement | null)?.closest(".obnotion-calendar-time-resize-handle")) return;
 			mouseEvent.stopPropagation();
 			if (this.actions.openRecordDetail) {
 				this.actions.openRecordDetail(eventEl, event.row);
@@ -1804,7 +1804,7 @@ export class CalendarRenderer {
 	}
 
 	private renderWeekHeader(wrap: HTMLElement, config: ViewConfig, weekDays: CalendarDayModel[]): HTMLElement {
-		const header = wrap.createDiv({ cls: "db-calendar-header" });
+		const header = wrap.createDiv({ cls: "obnotion-calendar-header" });
 		const anchorKey = weekDays[0]?.dateKey || this.getTodayDateKey();
 		const title = this.renderScaleTitleSelects(header, anchorKey, formatCalendarTitleParts({
 			scale: "week",
@@ -1812,7 +1812,7 @@ export class CalendarRenderer {
 			endDateKey: weekDays[weekDays.length - 1]?.dateKey,
 			locale: getEffectiveLocale(),
 		}), (year, monthIndex) => this.navigateCalendarTitleTo(config, anchorKey, year, monthIndex));
-		const controls = header.createDiv({ cls: "db-calendar-controls" });
+		const controls = header.createDiv({ cls: "obnotion-calendar-controls" });
 		this.renderCalendarScaleControl(controls, config, "week", weekDays[0]?.dateKey || this.getTodayDateKey());
 		this.renderNavButton(controls, "calendar.prevWeek", () => this.shiftWeek(config, weekDays, -1), "chevron-left");
 		this.renderNavButton(controls, "calendar.today", () => this.goToTodayWeek(config));
@@ -1822,13 +1822,13 @@ export class CalendarRenderer {
 	}
 
 	private renderDayHeader(wrap: HTMLElement, config: ViewConfig, dateKey: string): HTMLElement {
-		const header = wrap.createDiv({ cls: "db-calendar-header" });
+		const header = wrap.createDiv({ cls: "obnotion-calendar-header" });
 		const title = this.renderScaleTitleSelects(header, dateKey, formatCalendarTitleParts({
 			scale: "day",
 			startDateKey: dateKey,
 			locale: getEffectiveLocale(),
 		}), (year, monthIndex) => this.navigateCalendarTitleTo(config, dateKey, year, monthIndex));
-		const controls = header.createDiv({ cls: "db-calendar-controls" });
+		const controls = header.createDiv({ cls: "obnotion-calendar-controls" });
 		this.renderCalendarScaleControl(controls, config, "day", dateKey);
 		this.renderNavButton(controls, "calendar.prevDay", () => this.shiftDay(config, dateKey, -1), "chevron-left");
 		this.renderNavButton(controls, "calendar.today", () => this.goToTodayDay(config));
@@ -1849,14 +1849,14 @@ export class CalendarRenderer {
 			? t("timeline.invalidEventsConflictNotice", { count: initialCount })
 			: t("timeline.invalidEventsTitle");
 		const button = controls.createEl("button", {
-			cls: `db-calendar-nav-button is-icon db-calendar-invalid-toggle${initialCount && initialCount > 0 ? "" : " is-hidden"}`,
+			cls: `obnotion-calendar-nav-button is-icon obnotion-calendar-invalid-toggle${initialCount && initialCount > 0 ? "" : " is-hidden"}`,
 			attr: {
 				type: "button",
 				title: defaultLabel,
 				"aria-label": defaultLabel,
 			},
 		});
-		setIcon(button.createSpan({ cls: "db-calendar-nav-icon" }), "alert-triangle");
+		setIcon(button.createSpan({ cls: "obnotion-calendar-nav-icon" }), "alert-triangle");
 		button.onclick = (event) => {
 			event.preventDefault();
 			event.stopPropagation();
@@ -1879,7 +1879,7 @@ export class CalendarRenderer {
 		void result
 			.then((count) => applyCount(count))
 			.catch((err) => {
-				console.error("Note Database: failed to get calendar invalid event count", err);
+				console.error("Obnotion: failed to get calendar invalid event count", err);
 				if (button.isConnected) button.remove();
 			});
 	}
@@ -1897,8 +1897,8 @@ export class CalendarRenderer {
 	 *  whatever it scrolled to before the jump. */
 	private scrollWeekToBottom(dateKey: string): void {
 		const root = this.calendarRoot ?? window.activeDocument;
-		const cell = root.querySelector<HTMLElement>(`.db-calendar-day[data-date-key="${dateKey}"]`);
-		const week = cell?.closest<HTMLElement>(".db-calendar-month-week");
+		const cell = root.querySelector<HTMLElement>(`.obnotion-calendar-day[data-date-key="${dateKey}"]`);
+		const week = cell?.closest<HTMLElement>(".obnotion-calendar-month-week");
 		week?.scrollIntoView({ block: "end" });
 	}
 
@@ -1907,20 +1907,20 @@ export class CalendarRenderer {
 		// grid lane — so the highlight reads as one continuous column instead of a
 		// truncated swimlane.
 		const root = this.calendarRoot ?? window.activeDocument;
-		const monthCells = Array.from(root.querySelectorAll<HTMLElement>(`.db-calendar-day[data-date-key="${dateKey}"]`));
+		const monthCells = Array.from(root.querySelectorAll<HTMLElement>(`.obnotion-calendar-day[data-date-key="${dateKey}"]`));
 		const overlays: HTMLElement[] = [];
 		for (const cell of monthCells) {
-			const week = cell.closest<HTMLElement>(".db-calendar-month-week");
+			const week = cell.closest<HTMLElement>(".obnotion-calendar-month-week");
 			if (!week) continue;
 			const overlay = week.createDiv({
-				cls: "db-calendar-month-flash-column is-flash",
+				cls: "obnotion-calendar-month-flash-column is-flash",
 				attr: { "data-date-key": dateKey },
 			});
-			overlay.style.setProperty("--db-calendar-month-flash-column", cell.style.gridColumn || "1");
+			overlay.style.setProperty("--obnotion-calendar-month-flash-column", cell.style.gridColumn || "1");
 			overlays.push(overlay);
 		}
 
-		const selector = `.db-calendar-week-day-col[data-date-key="${dateKey}"], .db-calendar-week-allday-col[data-date-key="${dateKey}"], .db-calendar-time-header-day[data-date-key="${dateKey}"]`;
+		const selector = `.obnotion-calendar-week-day-col[data-date-key="${dateKey}"], .obnotion-calendar-week-allday-col[data-date-key="${dateKey}"], .obnotion-calendar-time-header-day[data-date-key="${dateKey}"]`;
 		const cols = Array.from(root.querySelectorAll<HTMLElement>(selector));
 		if (cols.length === 0 && overlays.length === 0) return;
 		cols.forEach((col) => col.addClass("is-flash"));
@@ -1988,11 +1988,11 @@ export class CalendarRenderer {
 	}
 
 	private renderMonthHeader(wrap: HTMLElement, config: ViewConfig, model: { year: number; monthIndex: number }): HTMLElement {
-		const header = wrap.createDiv({ cls: "db-calendar-header" });
+		const header = wrap.createDiv({ cls: "obnotion-calendar-header" });
 		// The month title is two selects, not one static string — month opens a
 		// 12-row list, year a scrollable one, each checkmarking the current value.
 		const title = this.renderMonthTitleSelects(header, config, model);
-		const controls = header.createDiv({ cls: "db-calendar-controls" });
+		const controls = header.createDiv({ cls: "obnotion-calendar-controls" });
 		this.renderCalendarScaleControl(controls, config, "month", `${String(model.year).padStart(4, "0")}-${String(model.monthIndex + 1).padStart(2, "0")}-01`);
 		this.renderNavButton(controls, "calendar.prevMonth", () => this.shiftMonth(config, model, -1), "chevron-left");
 		this.renderNavButton(controls, "calendar.today", () => this.goToTodayMonth(config));
@@ -2006,12 +2006,12 @@ export class CalendarRenderer {
 	 *  title element so the unscheduled chip can sit beside it. */
 	private renderMonthTitleSelects(header: HTMLElement, config: ViewConfig, model: { year: number; monthIndex: number }): HTMLElement {
 		const title = header.createDiv({
-			cls: "db-calendar-title",
+			cls: "obnotion-calendar-title",
 			attr: { title: this.formatMonthTitle(model.year, model.monthIndex), "aria-label": this.formatMonthTitle(model.year, model.monthIndex) },
 		});
 		const monthNames = this.getMonthNames();
 		const monthButton = title.createEl("button", {
-			cls: "db-calendar-title-main db-calendar-title-select",
+			cls: "obnotion-calendar-title-main obnotion-calendar-title-select",
 			text: monthNames[model.monthIndex],
 			attr: { type: "button", "aria-haspopup": "listbox" },
 		});
@@ -2027,7 +2027,7 @@ export class CalendarRenderer {
 			});
 		};
 		const yearButton = title.createEl("button", {
-			cls: "db-calendar-title-year db-calendar-title-select",
+			cls: "obnotion-calendar-title-year obnotion-calendar-title-select",
 			text: String(model.year),
 			attr: { type: "button", "aria-haspopup": "listbox" },
 		});
@@ -2075,26 +2075,26 @@ export class CalendarRenderer {
 	}
 
 	private renderWeekdayLabels(wrap: HTMLElement, config: ViewConfig, weekStartsOn: number): void {
-		const weekdaysRow = wrap.createDiv({ cls: "db-calendar-weekdays", attr: { role: "row" } });
+		const weekdaysRow = wrap.createDiv({ cls: "obnotion-calendar-weekdays", attr: { role: "row" } });
 		const labels = this.getWeekdayLabels(weekStartsOn);
 		for (let index = 0; index < labels.length; index++) {
-			const wdDiv = weekdaysRow.createDiv({ cls: `db-calendar-weekday${this.isWeekendWeekday(weekStartsOn, index) ? " is-weekend" : ""}`, attr: { role: "columnheader" } });
+			const wdDiv = weekdaysRow.createDiv({ cls: `obnotion-calendar-weekday${this.isWeekendWeekday(weekStartsOn, index) ? " is-weekend" : ""}`, attr: { role: "columnheader" } });
 			wdDiv.createSpan({ text: labels[index] });
 			// No column-resize handle here. The month scale ignores a custom column
 			// width outright (applyMonthSizingVars), so a drag would write a setting
 			// month can never honour — and while the drag ran it set
-			// --db-calendar-col-width on the month wrap, which the fixed-width
+			// --obnotion-calendar-col-width on the month wrap, which the fixed-width
 			// grid-template rules pick up and widen the grid past its pane with,
 			// clipping the seventh column. Week and day keep their own handle.
 		}
 	}
 
 	private renderDayHeading(cell: HTMLElement, config: ViewConfig, dateKey: string): void {
-		const heading = cell.createDiv({ cls: "db-calendar-day-heading" });
-		heading.createSpan({ cls: "db-calendar-day-number", text: String(Number(dateKey.slice(8, 10))) });
+		const heading = cell.createDiv({ cls: "obnotion-calendar-day-heading" });
+		heading.createSpan({ cls: "obnotion-calendar-day-number", text: String(Number(dateKey.slice(8, 10))) });
 		if (!this.actions.isReadOnly && this.actions.createEntryForDate) {
 			const addButton = heading.createEl("button", {
-				cls: "db-calendar-add-button",
+				cls: "obnotion-calendar-add-button",
 				text: "+",
 				attr: { type: "button", title: t("toolbar.new"), "aria-label": t("toolbar.new") },
 			});
@@ -2104,7 +2104,7 @@ export class CalendarRenderer {
 				this.actions.createEntryForDate?.(config, dateKey);
 			};
 			cell.ondblclick = (event) => {
-				if ((event.target as HTMLElement | null)?.closest(".db-calendar-month-segment, .db-calendar-add-button, .db-calendar-more-events")) return;
+				if ((event.target as HTMLElement | null)?.closest(".obnotion-calendar-month-segment, .obnotion-calendar-add-button, .obnotion-calendar-more-events")) return;
 				this.actions.createEntryForDate?.(config, dateKey);
 			};
 		}
@@ -2117,7 +2117,7 @@ export class CalendarRenderer {
 	 *  fast path. */
 	private setupDayEntryMenu(cell: HTMLElement, config: ViewConfig, dateKey: string): void {
 		cell.oncontextmenu = (event) => {
-			if ((event.target as HTMLElement | null)?.closest(".db-calendar-month-segment, .db-calendar-more-events")) return;
+			if ((event.target as HTMLElement | null)?.closest(".obnotion-calendar-month-segment, .obnotion-calendar-more-events")) return;
 			event.preventDefault();
 			event.stopPropagation();
 			this.showDayEntryMenu(event, config, dateKey);
@@ -2145,15 +2145,15 @@ export class CalendarRenderer {
 	}
 
 	private renderDropSnap(cell: HTMLElement, dateKey: string): void {
-		let snap = cell.querySelector<HTMLElement>(":scope > .db-calendar-drop-snap");
-		if (!snap) snap = cell.createDiv({ cls: "db-calendar-drop-snap" });
+		let snap = cell.querySelector<HTMLElement>(":scope > .obnotion-calendar-drop-snap");
+		if (!snap) snap = cell.createDiv({ cls: "obnotion-calendar-drop-snap" });
 		snap.setText(dateKey);
 	}
 
 	private clearDropTargets(scope: ParentNode): void {
-		scope.querySelectorAll<HTMLElement>(".db-calendar-day.is-drop-target, .db-calendar-week-day-col.is-drop-target, .db-calendar-week-allday-col.is-drop-target").forEach((el) => {
+		scope.querySelectorAll<HTMLElement>(".obnotion-calendar-day.is-drop-target, .obnotion-calendar-week-day-col.is-drop-target, .obnotion-calendar-week-allday-col.is-drop-target").forEach((el) => {
 			el.removeClass("is-drop-target");
-			el.querySelector(":scope > .db-calendar-drop-snap")?.remove();
+			el.querySelector(":scope > .obnotion-calendar-drop-snap")?.remove();
 		});
 	}
 
@@ -2181,7 +2181,7 @@ export class CalendarRenderer {
 				const next = Math.max(colMin, Math.min(colMax, startWidth + moveEvent.clientX - startX));
 				config.calendarColumnSizeMode = "custom";
 				config.calendarCustomColumnWidth = next;
-				wrap.style.setProperty("--db-calendar-col-width", `${next}px`);
+				wrap.style.setProperty("--obnotion-calendar-col-width", `${next}px`);
 			};
 			// Week/day day headers are <button>s that open the day view; swallow the
 			// synthetic click following a real drag so resizing never navigates.
@@ -2216,7 +2216,7 @@ export class CalendarRenderer {
 	}
 
 	/** The flat chip's own row pitch: the measured 20px desktop value, or the 44px
-	 *  touch floor on phone (styles.css's `.is-phone .db-calendar-month-segment`). */
+	 *  touch floor on phone (styles.css's `.is-phone .obnotion-calendar-month-segment`). */
 	private getMonthChipPitch(): number {
 		return this.isPhoneLayout() ? 44 : 20;
 	}
@@ -2226,21 +2226,21 @@ export class CalendarRenderer {
 		// columns always, regardless of calendarColumnSizeMode — so a config carried
 		// over from week/day (or set before this ruling) never clips the seventh
 		// column against the pane. Week/day keep the setting via applyTimeGridSizingVars.
-		wrap.style.setProperty("--db-calendar-day-min-height", `${this.getCellMinHeight(config)}px`);
+		wrap.style.setProperty("--obnotion-calendar-day-min-height", `${this.getCellMinHeight(config)}px`);
 	}
 
 	private applyTimeGridSizingVars(wrap: HTMLElement, config: ViewConfig, dayCount: number): void {
 		const visible = getCalendarVisibleHourRange(config);
 		const hourHeight = getCalendarHourHeight(config);
-		wrap.style.setProperty("--db-calendar-time-day-count", String(dayCount));
+		wrap.style.setProperty("--obnotion-calendar-time-day-count", String(dayCount));
 		if (config.calendarColumnSizeMode === "custom") {
 			// Mirror month view: a fixed column width lets users widen day columns.
 			// All three time grids (header / all-day / time columns) consume this var,
 			// and because they share one scroll container they stay aligned on overflow.
-			wrap.style.setProperty("--db-calendar-col-width", `${this.getColumnWidth(config)}px`);
+			wrap.style.setProperty("--obnotion-calendar-col-width", `${this.getColumnWidth(config)}px`);
 		}
-		wrap.style.setProperty("--db-calendar-hour-height", `${hourHeight}px`);
-		wrap.style.setProperty("--db-calendar-visible-hours", String(visible.endHour - visible.startHour));
+		wrap.style.setProperty("--obnotion-calendar-hour-height", `${hourHeight}px`);
+		wrap.style.setProperty("--obnotion-calendar-visible-hours", String(visible.endHour - visible.startHour));
 	}
 
 	private getColumnWidth(config: ViewConfig): number {
@@ -2301,14 +2301,14 @@ export class CalendarRenderer {
 		];
 		const activeScale = config.calendarScale || currentScale;
 		const control = parent.createDiv({
-			cls: "db-calendar-scale-control",
+			cls: "obnotion-calendar-scale-control",
 			attr: { role: "group" },
 		});
-		const segment = control.createDiv({ cls: "db-calendar-scale-segment" });
+		const segment = control.createDiv({ cls: "obnotion-calendar-scale-segment" });
 		for (const option of options) {
 			const active = option.value === activeScale;
 			const button = segment.createEl("button", {
-				cls: `db-calendar-scale-button${active ? " is-active" : ""}`,
+				cls: `obnotion-calendar-scale-button${active ? " is-active" : ""}`,
 				text: option.text,
 				attr: { type: "button", "aria-pressed": active ? "true" : "false" },
 			});
@@ -2320,14 +2320,14 @@ export class CalendarRenderer {
 		}
 		const activeText = options.find((option) => option.value === activeScale)?.text || t("calendar.scaleMonth");
 		const menuButton = control.createEl("button", {
-			cls: "db-calendar-scale-menu db-calendar-nav-button is-text",
+			cls: "obnotion-calendar-scale-menu obnotion-calendar-nav-button is-text",
 			attr: {
 				type: "button",
 				"aria-haspopup": "listbox",
 			},
 		});
-		menuButton.createSpan({ cls: "db-calendar-scale-menu-label", text: activeText });
-		setIcon(menuButton.createSpan({ cls: "db-calendar-nav-icon db-calendar-scale-menu-chevron" }), "chevron-down");
+		menuButton.createSpan({ cls: "obnotion-calendar-scale-menu-label", text: activeText });
+		setIcon(menuButton.createSpan({ cls: "obnotion-calendar-nav-icon obnotion-calendar-scale-menu-chevron" }), "chevron-down");
 		menuButton.onclick = (event) => {
 			event.preventDefault();
 			event.stopPropagation();
@@ -2337,7 +2337,7 @@ export class CalendarRenderer {
 				label: t("viewConfig.calendarScale"),
 				options,
 				value: activeScale,
-				popoverClassName: "db-calendar-scale-popover",
+				popoverClassName: "obnotion-calendar-scale-popover",
 				onChange: (value) => {
 					this.setCalendarScale(config, value === "day" || value === "week" ? value : "month", anchorDateKey);
 					this.closeCalendarScaleMenu();
@@ -2381,11 +2381,11 @@ export class CalendarRenderer {
 		// class scopes their contrast fix to those two buttons, not the
 		// invalid-warning icon built separately below.
 		const button = parent.createEl("button", {
-			cls: `db-calendar-nav-button${icon ? " is-icon db-calendar-nav-chevron" : " is-text"}`,
+			cls: `obnotion-calendar-nav-button${icon ? " is-icon obnotion-calendar-nav-chevron" : " is-text"}`,
 			attr: { type: "button", title: t(labelKey), "aria-label": t(labelKey) },
 		});
 		if (icon) {
-			setIcon(button.createSpan({ cls: "db-calendar-nav-icon" }), icon);
+			setIcon(button.createSpan({ cls: "obnotion-calendar-nav-icon" }), icon);
 		} else {
 			button.setText(t(labelKey));
 		}
@@ -2416,7 +2416,7 @@ export class CalendarRenderer {
 	}
 
 	private isColumnResizeHandleEvent(event: MouseEvent): boolean {
-		return !!(event.target as HTMLElement | null)?.closest(".db-calendar-col-resize-handle");
+		return !!(event.target as HTMLElement | null)?.closest(".obnotion-calendar-col-resize-handle");
 	}
 
 	private showDayViewNavigationMenu(event: MouseEvent, config: ViewConfig, dateKey: string): void {
@@ -2456,7 +2456,7 @@ export class CalendarRenderer {
 		onNavigate: (year: number, monthIndex: number) => void,
 	): HTMLElement {
 		const title = header.createDiv({
-			cls: "db-calendar-title",
+			cls: "obnotion-calendar-title",
 			attr: { title: parts.ariaLabel, "aria-label": parts.ariaLabel },
 		});
 		const anchor = parseDateTimeParts(anchorDateKey);
@@ -2464,7 +2464,7 @@ export class CalendarRenderer {
 		const monthIndex = anchor ? Number(anchor.month) - 1 : new Date().getMonth();
 		const monthNames = this.getMonthNames();
 		const monthButton = title.createEl("button", {
-			cls: "db-calendar-title-main db-calendar-title-select",
+			cls: "obnotion-calendar-title-main obnotion-calendar-title-select",
 			text: parts.main,
 			attr: { type: "button", "aria-haspopup": "listbox" },
 		});
@@ -2481,7 +2481,7 @@ export class CalendarRenderer {
 		};
 		if (!parts.year) return title;
 		const yearButton = title.createEl("button", {
-			cls: "db-calendar-title-year db-calendar-title-select",
+			cls: "obnotion-calendar-title-year obnotion-calendar-title-select",
 			text: parts.year,
 			attr: { type: "button", "aria-haspopup": "listbox" },
 		});
@@ -2597,8 +2597,8 @@ export class CalendarRenderer {
 		if (!color) return;
 		element.style.setProperty("--card-accent", `var(--status-color-fg-${color})`);
 		element.style.setProperty("--card-bg", `var(--status-color-bg-${color})`);
-		element.style.setProperty("--db-calendar-event-accent", `var(--status-color-fg-${color})`);
-		element.style.setProperty("--db-calendar-event-bg", `var(--status-color-bg-${color})`);
+		element.style.setProperty("--obnotion-calendar-event-accent", `var(--status-color-fg-${color})`);
+		element.style.setProperty("--obnotion-calendar-event-bg", `var(--status-color-bg-${color})`);
 	}
 
 	private uniqueEventsForDay(events: CalendarTimelineEvent[]): CalendarTimelineEvent[] {
@@ -2625,15 +2625,15 @@ export class CalendarRenderer {
 	}
 
 	private getRenderedTimeGridDateKeys(eventEl: HTMLElement): string[] {
-		const columns = eventEl.closest<HTMLElement>(".db-calendar-time-columns");
-		return Array.from(columns?.querySelectorAll<HTMLElement>(".db-calendar-week-day-col") || [])
+		const columns = eventEl.closest<HTMLElement>(".obnotion-calendar-time-columns");
+		return Array.from(columns?.querySelectorAll<HTMLElement>(".obnotion-calendar-week-day-col") || [])
 			.map((col) => col.dataset.dateKey || "")
 			.filter(Boolean);
 	}
 
 	private getDateKeyFromPointer(eventEl: HTMLElement, clientX: number, dateKeys: string[]): string | null {
-		const columns = eventEl.closest<HTMLElement>(".db-calendar-time-columns");
-		const dayCols = Array.from(columns?.querySelectorAll<HTMLElement>(".db-calendar-week-day-col") || []);
+		const columns = eventEl.closest<HTMLElement>(".obnotion-calendar-time-columns");
+		const dayCols = Array.from(columns?.querySelectorAll<HTMLElement>(".obnotion-calendar-week-day-col") || []);
 		for (let index = 0; index < dayCols.length; index++) {
 			const rect = dayCols[index].getBoundingClientRect();
 			if (clientX >= rect.left && clientX <= rect.right) return dateKeys[index] || null;

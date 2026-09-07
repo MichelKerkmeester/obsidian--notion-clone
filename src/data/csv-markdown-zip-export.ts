@@ -65,9 +65,9 @@ export async function createCsvMarkdownZip(
 
   // Metadata JSON
   entries.push({
-    path: `${baseName}/note-database.json`,
+    path: `${baseName}/obnotion.json`,
     content: JSON.stringify({
-      format: "note-database-csv-markdown",
+      format: "obnotion-csv-markdown",
       version: 3,
       exportedAt: new Date().toISOString(),
       includeFrontmatter: options.includeFrontmatter,

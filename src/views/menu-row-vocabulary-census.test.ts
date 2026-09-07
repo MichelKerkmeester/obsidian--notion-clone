@@ -5,7 +5,7 @@
 // ───────────────────────────────────────────────────────────────────
 //
 // Every caller that needs a menu row has one shared builder to reach for, and
-// yet four files still construct a `db-menu-item` row by hand rather than
+// yet four files still construct a `obnotion-menu-item` row by hand rather than
 // through it — one row vocabulary per file drifts from the next in ways a
 // reviewer only notices when two menus open side by side. Migrating those
 // sites away is ongoing work; this test's job is narrower and permanent: the
@@ -33,13 +33,13 @@ import { describe, expect, it } from "vitest";
 const SRC_VIEWS = resolve(__dirname, ".");
 
 /**
- * A hand-built row: a line naming the `db-menu-item` class outside the row builder's own
+ * A hand-built row: a line naming the `obnotion-menu-item` class outside the row builder's own
  * definition of it. Mirrors the two-stage grep a maintainer runs by hand — find every line naming
  * the class, then keep the ones that are actually building a class list — as one regular
  * expression rather than a shelled-out pipeline, since a shelled `grep | grep` is not something a
  * unit suite can run portably across every environment this project's checks run in.
  */
-const HAND_BUILT_ROW_LINE = /db-menu-item/;
+const HAND_BUILT_ROW_LINE = /obnotion-menu-item/;
 const CLASS_LIST_LINE = /\bcls\b/;
 
 function countHandBuiltRows(fileName: string): number {

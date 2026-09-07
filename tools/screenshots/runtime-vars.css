@@ -5,7 +5,7 @@
    default offsets it by a toolbar height that does not exist here, and it lands on top of
    the first data row.
 
-   Targets .note-database-container as well as :root because the plugin declares several of
+   Targets .obnotion-container as well as :root because the plugin declares several of
    these on that container; a custom property inherits from the nearest ancestor that sets
    it, so a :root-only override never reaches the element. */
 
@@ -15,16 +15,16 @@
    there is no runtime value for this file to stand in for. Supplying a different one
    did not approximate the product, it contradicted it:
 
-     --db-layer-sticky         production 40,          pinned 25
-     --db-status-bg            production transparent, pinned a hover background
-     --db-number-color         production text-accent, pinned text-normal
-     --db-calendar-row-height  production auto,        pinned 44px
-     --db-week-grid-height     production 1152px,      pinned calc(100vh - 150px)
+     --obnotion-layer-sticky         production 40,          pinned 25
+     --obnotion-status-bg            production transparent, pinned a hover background
+     --obnotion-number-color         production text-accent, pinned text-normal
+     --obnotion-calendar-row-height  production auto,        pinned 44px
+     --obnotion-week-grid-height     production 1152px,      pinned calc(100vh - 150px)
 
    Status chips and numbers were therefore the wrong colour in every screenshot ever
    taken, and the calendar showed a row height no user gets. Found by
    scan-pinned-values.mjs, which is the general form of the rule that caught
-   --db-header-height by hand. Removing them lets the fallback apply, which is what
+   --obnotion-header-height by hand. Removing them lets the fallback apply, which is what
    ships. */
 
 /* ── Values the plugin sets from JavaScript at runtime ───────────────────────────────
@@ -35,68 +35,68 @@
    The capture supplies the value a screenshot implies — no toolbar above the table, one
    column of default width, a timeline scrolled to its origin. */
 :root,
-.note-database-container {
-  --db-table-header-top: 22px;      /* sticky offset resolves to 0 with no toolbar above */
-  --db-selection-status-offset: 0px;
-  --db-group-table-head-top: 0px;
+.obnotion-container {
+  --obnotion-table-header-top: 22px;      /* sticky offset resolves to 0 with no toolbar above */
+  --obnotion-selection-status-offset: 0px;
+  --obnotion-group-table-head-top: 0px;
 
-  --db-board-image-fit: cover;
-  --db-group-depth: 0;
+  --obnotion-board-image-fit: cover;
+  --obnotion-group-depth: 0;
 
-  --db-status-fg: var(--text-normal);
-  --db-conditional-format-accent: var(--interactive-accent);
-  --db-conditional-format-bg: transparent;
-  --db-conditional-format-fg: var(--text-normal);
+  --obnotion-status-fg: var(--text-normal);
+  --obnotion-conditional-format-accent: var(--interactive-accent);
+  --obnotion-conditional-format-bg: transparent;
+  --obnotion-conditional-format-fg: var(--text-normal);
 
-  --db-mobile-bar-height: 48px;
+  --obnotion-mobile-bar-height: 48px;
 
-  --db-calendar-col-width: 140px;
+  --obnotion-calendar-col-width: 140px;
   /* The renderer writes both of these inline from config.calendarCellMinHeight ?? 112, clamped
      to 72-400 — it never measures the pane, so the viewport formula this file used to pin made
      every capture denser than the product draws. The 112px default is the value the runtime
      writes when nothing is configured, which is the state a screenshot implies. */
-  --db-calendar-day-min-height: 112px;
-  --db-calendar-month-week-min-height: 112px;
-  --db-calendar-allday-rows: 1;
-  --db-calendar-time-day-count: 7;
-  --db-calendar-event-bg: var(--interactive-accent);
-  --db-calendar-segment-lane: 0;
-  --db-calendar-segment-span: 1;
-  --db-calendar-segment-start: 0;
-  --db-calendar-month-flash-column: 0;
+  --obnotion-calendar-day-min-height: 112px;
+  --obnotion-calendar-month-week-min-height: 112px;
+  --obnotion-calendar-allday-rows: 1;
+  --obnotion-calendar-time-day-count: 7;
+  --obnotion-calendar-event-bg: var(--interactive-accent);
+  --obnotion-calendar-segment-lane: 0;
+  --obnotion-calendar-segment-span: 1;
+  --obnotion-calendar-segment-start: 0;
+  --obnotion-calendar-month-flash-column: 0;
 
-  --db-timeline-units: 30;
-  --db-timeline-unit-width: 48px;
-  --db-timeline-group-width: 180px;
-  --db-timeline-event-rows: 1;
-  --db-timeline-band-start: 0;
-  --db-timeline-band-span: 1;
-  --db-timeline-tick-offset: 0;
-  --db-timeline-today-offset-px: 0px;
-  --db-timeline-today-offset-units: 0;
-  --db-timeline-exact-offset: 0px;
-  --db-timeline-exact-width: 0px;
-  --db-timeline-flash-offset: 0px;
-  --db-timeline-flash-span: 0;
-  --db-timeline-snap-left: 0px;
-  --db-timeline-snap-top: 0px;
-  --db-timeline-snap-width: 0px;
-  --db-timeline-create-left: 0px;
-  --db-timeline-create-width: 0px;
-  --db-timeline-reorder-line-top: 0px;
-  --db-timeline-group-tag-bg: var(--background-secondary);
-  --db-timeline-group-tag-fg: var(--text-muted);
-  --db-timeline-event-shadow: 0 2px 7px rgba(0, 0, 0, 0.09);
+  --obnotion-timeline-units: 30;
+  --obnotion-timeline-unit-width: 48px;
+  --obnotion-timeline-group-width: 180px;
+  --obnotion-timeline-event-rows: 1;
+  --obnotion-timeline-band-start: 0;
+  --obnotion-timeline-band-span: 1;
+  --obnotion-timeline-tick-offset: 0;
+  --obnotion-timeline-today-offset-px: 0px;
+  --obnotion-timeline-today-offset-units: 0;
+  --obnotion-timeline-exact-offset: 0px;
+  --obnotion-timeline-exact-width: 0px;
+  --obnotion-timeline-flash-offset: 0px;
+  --obnotion-timeline-flash-span: 0;
+  --obnotion-timeline-snap-left: 0px;
+  --obnotion-timeline-snap-top: 0px;
+  --obnotion-timeline-snap-width: 0px;
+  --obnotion-timeline-create-left: 0px;
+  --obnotion-timeline-create-width: 0px;
+  --obnotion-timeline-reorder-line-top: 0px;
+  --obnotion-timeline-group-tag-bg: var(--background-secondary);
+  --obnotion-timeline-group-tag-fg: var(--text-muted);
+  --obnotion-timeline-event-shadow: 0 2px 7px rgba(0, 0, 0, 0.09);
 }
 
 /* Four variables were removed from this file rather than corrected.
    Each pinned a value the runtime computes or falls back to differently, which meant the captures
    showed the harness's answer instead of the product's -- and a defect living in that exact value
    could never appear in a screenshot:
-     --db-header-height      never assigned in src/; production resolves 34px, this pinned 40px
-     --db-card-field-width   production falls back to 150px, this pinned 120px
-     --db-mobile-sheet-bottom computed from the visible bounds; pinning 0px forced the right answer
-     --db-timeline-row       a grid line INDEX, not a length; 34px made grid-row invalid, so every
+     --obnotion-header-height      never assigned in src/; production resolves 34px, this pinned 40px
+     --obnotion-card-field-width   production falls back to 150px, this pinned 120px
+     --obnotion-mobile-sheet-bottom computed from the visible bounds; pinning 0px forced the right answer
+     --obnotion-timeline-row       a grid line INDEX, not a length; 34px made grid-row invalid, so every
                              timeline band in every capture collapsed to auto
    The rule this file now follows: never assign a property the runtime also assigns. A harness that
    supplies the answer cannot detect a wrong one. */

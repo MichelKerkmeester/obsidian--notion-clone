@@ -189,8 +189,8 @@ async function checkTransport() {
   const result = await evaluate(
     "JSON.stringify({"
     + " vault: app.vault.getName(),"
-    + " plugin: !!app.plugins.plugins['note-database'],"
-    + " version: app.plugins.plugins['note-database']?.manifest?.version ?? null,"
+    + " plugin: !!app.plugins.plugins['obnotion'],"
+    + " version: app.plugins.plugins['obnotion']?.manifest?.version ?? null,"
     + " theme: document.body.classList.contains('theme-dark') ? 'dark' : 'light',"
     + " navbar: !!document.querySelector('.mobile-navbar')"
     + " })",

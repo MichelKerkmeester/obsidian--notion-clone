@@ -63,7 +63,7 @@ function config(): ViewConfig {
 export const Editable: Story = {
   render: () => {
     const panel = document.createElement("div");
-    panel.className = "db-view-config-panel";
+    panel.className = "obnotion-view-config-panel";
     const view = config();
     renderBoardCardProperties(panel, view, { onChange: () => undefined }, boardCardPropertiesContext(view));
     return panel;
@@ -73,7 +73,7 @@ export const Editable: Story = {
 export const ReadOnly: Story = {
   render: () => {
     const panel = document.createElement("div");
-    panel.className = "db-view-config-panel";
+    panel.className = "obnotion-view-config-panel";
     const view = config();
     renderBoardCardProperties(
       panel,

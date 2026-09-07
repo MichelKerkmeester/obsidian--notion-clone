@@ -220,7 +220,7 @@ export class CardRovingController {
     if (!target || typeof target !== "object") return false;
 
     // Do not intercept if focus is inside an active text/cell editor or form control
-    if (target.closest?.("input, textarea, select, [contenteditable='true'], .db-cell-editing")) {
+    if (target.closest?.("input, textarea, select, [contenteditable='true'], .obnotion-cell-editing")) {
       return false;
     }
 
@@ -310,12 +310,12 @@ export class CardRovingController {
     if (!card.querySelectorAll) return [];
     const elements = Array.from(
       card.querySelectorAll<HTMLElement>(
-        "[data-note-database-column-key][tabindex], .db-card-field[tabindex], .db-gallery-card-field[tabindex], .db-list-row-field[tabindex], [role='gridcell'][tabindex]"
+        "[data-obnotion-column-key][tabindex], .obnotion-card-field[tabindex], .obnotion-gallery-card-field[tabindex], .obnotion-list-row-field[tabindex], [role='gridcell'][tabindex]"
       )
     );
     return elements.filter((el) => {
       const tabAttr = el.getAttribute("tabindex");
-      return tabAttr !== null && tabAttr !== "" && !el.closest?.(".db-cell-editing");
+      return tabAttr !== null && tabAttr !== "" && !el.closest?.(".obnotion-cell-editing");
     });
   }
 
@@ -343,7 +343,7 @@ export function wireCardKeyboard(options: CardKeydownWiringOptions): void {
     card,
     rovingController,
     onActivate,
-    ignoreSelector = "a, button, input, select, textarea, .db-cell-editing",
+    ignoreSelector = "a, button, input, select, textarea, .obnotion-cell-editing",
   } = options;
 
   rovingController.attachCard(card);

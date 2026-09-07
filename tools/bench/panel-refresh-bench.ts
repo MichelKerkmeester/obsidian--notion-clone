@@ -140,10 +140,10 @@ function snapshotState(state: DatabaseViewState): string {
  * call through; none of it decides how many times render is asked for.
  */
 function makeHarness(host: HTMLElement): Harness {
-  const container = host.createDiv({ cls: "note-database-container" });
-  const toolbar = container.createDiv({ cls: "db-toolbar" });
-  const anchor = toolbar.createEl("button", { cls: "db-sort-btn" });
-  toolbar.createEl("button", { cls: "db-filter-btn" });
+  const container = host.createDiv({ cls: "obnotion-container" });
+  const toolbar = container.createDiv({ cls: "obnotion-toolbar" });
+  const anchor = toolbar.createEl("button", { cls: "obnotion-sort-btn" });
+  toolbar.createEl("button", { cls: "obnotion-filter-btn" });
 
   const config = makeConfig();
   const state = makeState();
@@ -264,14 +264,14 @@ function describeDoc(harness: Harness): string {
  * Click the panel's add-a-rule button.
  *
  * Matched as a direct child of the panel rather than by ordinal, because both
- * panels put other `.db-panel-button` controls inside nested rows — the filter
+ * panels put other `.obnotion-panel-button` controls inside nested rows — the filter
  * panel's AND/OR toggle is the first one in document order, and clicking it
  * changes the rule tree instead of adding a rule.
  */
 function clickAddRule(harness: Harness, panel: "sort" | "filter"): boolean {
-  const root = harness.doc.querySelector<HTMLElement>(panel === "sort" ? ".db-sort-panel" : ".db-filter-panel");
+  const root = harness.doc.querySelector<HTMLElement>(panel === "sort" ? ".obnotion-sort-panel" : ".obnotion-filter-panel");
   if (!root) return false;
-  const button = root.querySelector<HTMLElement>(":scope > .db-panel-button");
+  const button = root.querySelector<HTMLElement>(":scope > .obnotion-panel-button");
   if (!button) return false;
   button.click();
   return true;
@@ -297,7 +297,7 @@ function settle(view: Window): Promise<void> {
 /** Drop everything this harness put in the document, portalled sheets included. */
 function teardown(harness: Harness): void {
   harness.container.remove();
-  harness.doc.querySelectorAll(".db-sort-panel, .db-filter-panel, .db-overlay-backdrop")
+  harness.doc.querySelectorAll(".obnotion-sort-panel, .obnotion-filter-panel, .obnotion-overlay-backdrop")
     .forEach((el) => el.remove());
 }
 
@@ -315,9 +315,9 @@ function dismiss(harness: Harness, panel: "sort" | "filter", how: string): void 
   }
   if (how === "panel-close") {
     // The panel's own close affordance, which on a phone is the sheet's dismiss.
-    clickIn(harness, panel === "sort" ? ".db-panel-close" : ".db-filter-panel-close");
+    clickIn(harness, panel === "sort" ? ".obnotion-panel-close" : ".obnotion-filter-panel-close");
     // Not every panel exposes one; fall back to the same action the close wires.
-    if (harness.doc.querySelector(panel === "sort" ? ".db-sort-panel" : ".db-filter-panel")) {
+    if (harness.doc.querySelector(panel === "sort" ? ".obnotion-sort-panel" : ".obnotion-filter-panel")) {
       routing(view).closeHeaderPopovers();
     }
     return;
@@ -465,9 +465,9 @@ async function typedValueRoundTrip(host: HTMLElement, how: string): Promise<Scen
   }
   // First keystroke, then let its debounce land, so a later change cannot ride
   // on a paint that never happened.
-  const input = harness.doc.querySelector<HTMLInputElement>(".db-filter-panel input[type='text']");
+  const input = harness.doc.querySelector<HTMLInputElement>(".obnotion-filter-panel input[type='text']");
   if (!input) {
-    const panel = harness.doc.querySelector(".db-filter-panel");
+    const panel = harness.doc.querySelector(".obnotion-filter-panel");
     throw new Error(`filter panel value input never rendered; panel: ${panel ? panel.innerHTML.slice(0, 1200) : "absent"}`);
   }
   input.value = "a";

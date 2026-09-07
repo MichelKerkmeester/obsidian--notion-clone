@@ -36,7 +36,7 @@ describe("toast", () => {
 
   it("pairs each severity with its own icon rather than colour alone", () => {
     expect(toastSource).toContain('options.severity === "success" ? "check" : "alert-triangle"');
-    expect(toastSource).toContain("cls: `db-toast is-${options.severity}${options.container ? \" is-inline\" : \"\"}`");
+    expect(toastSource).toContain("cls: `obnotion-toast is-${options.severity}${options.container ? \" is-inline\" : \"\"}`");
   });
 
   it("gives a plain success its existing 2200ms budget and a longer one when an action is attached", () => {
@@ -65,8 +65,8 @@ describe("toast", () => {
     expect(toastSource).toContain("void options.action?.onClick();\n      close();");
   });
 
-  it("mounts on a db-surface stack so the token scale and reduced-motion reset both reach it", () => {
-    expect(toastSource).toContain('cls: "db-surface db-toast-stack"');
+  it("mounts on a obnotion-surface stack so the token scale and reduced-motion reset both reach it", () => {
+    expect(toastSource).toContain('cls: "obnotion-surface obnotion-toast-stack"');
   });
 
   it("mounts into a caller-supplied container as a single-slot placement instead of the shared stack", () => {
@@ -173,7 +173,7 @@ describe("toast dwell matrix", () => {
   function mount(options: ToastOptions): FakeElement {
     const { doc, body } = createFakeDoc();
     showToast(doc, options);
-    return body.children[0]; // the db-toast-stack
+    return body.children[0]; // the obnotion-toast-stack
   }
 
   it("keeps a success toast carrying an action connected at 3000ms", () => {

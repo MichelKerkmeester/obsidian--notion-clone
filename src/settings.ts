@@ -13,7 +13,7 @@
 
 import { setSheetTraceEnabled } from "./views/sheet-trace";
 import { App, Notice, PluginSettingTab, Setting, setIcon, setTooltip } from "obsidian";
-import NoteDatabasePlugin from "./main";
+import ObnotionPlugin from "./main";
 import { DatabaseConfig, DatabaseViewType, PluginSettings, TrashedDatabase } from "./data/types";
 import { DEFAULT_RECORD_OPEN_TARGET, RECORD_OPEN_TARGETS, normalizeRecordOpenTarget } from "./views/record-open-target";
 import { LocaleCode, setLocale, t } from "./i18n";
@@ -26,7 +26,7 @@ import { DatabaseFileEntry, moveDatabaseFilePath, sortDatabaseFileEntries } from
 import { confirmWithModal } from "./views/modals/confirm-modal";
 import { createDropdownField, DropdownOption } from "./views/dropdown-field";
 import { isHTMLElement } from "./views/dom-guards";
-import { DbModal } from "./views/modals/db-modal";
+import { DbModal } from "./views/modals/obnotion-modal";
 import type { SurfaceShellRole } from "./views/surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
@@ -91,11 +91,11 @@ export function normalizeDefaultViewType(value: unknown): DatabaseViewType {
 // ───────────────────────────────────────────────────────────────────
 
 export class SettingsTab extends PluginSettingTab {
-  private plugin: NoteDatabasePlugin;
+  private plugin: ObnotionPlugin;
   /** 文件型数据库拖拽排序状态 */
   private draggedFileEntry: DatabaseFileEntry | null = null;
 
-  constructor(app: App, plugin: NoteDatabasePlugin) {
+  constructor(app: App, plugin: ObnotionPlugin) {
     super(app, plugin);
     this.plugin = plugin;
   }
@@ -104,7 +104,7 @@ export class SettingsTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.addClass("note-database-settings");
+    containerEl.addClass("obnotion-settings");
     new Setting(containerEl).setName(t("settings.title")).setHeading();
 
     // 分组 1：通用设置
@@ -256,16 +256,16 @@ export class SettingsTab extends PluginSettingTab {
     this.renderGlobalStatusPresetSetting(presets);
 
     // 分组 4：数据库
-    const dbFilesGroup = containerEl.createDiv({ cls: "setting-group", attr: { id: "db-settings-database-group" } });
+    const dbFilesGroup = containerEl.createDiv({ cls: "setting-group", attr: { id: "obnotion-settings-database-group" } });
     dbFilesGroup.createDiv({ cls: "setting-group-title", text: t("settings.groups.databaseFiles") });
     dbFilesGroup.createDiv({ cls: "setting-group-desc", text: t("settings.groups.databaseFiles.desc") });
     const dbFiles = dbFilesGroup.createDiv({ cls: "setting-group-body" });
     this.renderAddDatabaseButton(dbFiles);
     const files = sortDatabaseFileEntries(this.plugin.dataSource.getViewDefFiles(), this.plugin.settings.databaseFileOrder || []);
     if (files.length === 0) {
-      dbFiles.createDiv({ cls: "db-panel-empty", text: t("settings.databaseFiles.emptyHint") });
+      dbFiles.createDiv({ cls: "obnotion-panel-empty", text: t("settings.databaseFiles.emptyHint") });
     } else {
-      const list = dbFiles.createDiv({ cls: "db-settings-database-list" });
+      const list = dbFiles.createDiv({ cls: "obnotion-settings-database-list" });
       for (let i = 0; i < files.length; i++) {
         this.renderFileDatabaseCard(list, files, i);
       }
@@ -298,8 +298,8 @@ export class SettingsTab extends PluginSettingTab {
 
   /** 渲染新建数据库按钮 */
   private renderAddDatabaseButton(parent: HTMLElement): void {
-    const btn = parent.createEl("button", { cls: "db-settings-add-database" });
-    setIcon(btn.createSpan({ cls: "db-settings-add-icon" }), "plus");
+    const btn = parent.createEl("button", { cls: "obnotion-settings-add-database" });
+    setIcon(btn.createSpan({ cls: "obnotion-settings-add-icon" }), "plus");
     btn.createSpan({ text: t("settings.addDatabaseFile") });
     btn.onclick = async () => {
       const result = await new AddDatabaseModal(
@@ -330,7 +330,7 @@ export class SettingsTab extends PluginSettingTab {
     const setting = new Setting(containerEl)
       .setName(t("settings.statusPresets.name"))
       .setDesc(t("settings.statusPresets.desc"));
-    setting.settingEl.addClass("db-status-preset-setting-item");
+    setting.settingEl.addClass("obnotion-status-preset-setting-item");
     this.renderSettingsDropdown(setting.controlEl, {
       label: t("settings.statusPresets.name"),
       options: presets.map((preset) => ({ value: preset.id, text: preset.name })),
@@ -374,7 +374,7 @@ export class SettingsTab extends PluginSettingTab {
       label: options.label,
       options: options.options,
       value: options.value,
-      className: "db-settings-dropdown",
+      className: "obnotion-settings-dropdown",
       hideLabel: true,
       onChange: (value) => {
         void options.onChange(value);
@@ -400,34 +400,34 @@ export class SettingsTab extends PluginSettingTab {
     const config = entry.config;
 
     const section = parent.createDiv({
-      cls: "settings-section db-settings-database-card",
+      cls: "settings-section obnotion-settings-database-card",
       attr: { title: entry.file.path },
     });
     this.attachFileDragEvents(section, parent, files, index);
 
-    const heading = section.createDiv({ cls: "db-settings-database-heading" });
+    const heading = section.createDiv({ cls: "obnotion-settings-database-heading" });
     this.renderFileDragHandle(heading);
     this.renderMobileReorder(heading, index, files.length, (from, to) => this.moveFileDatabase(files, from, to));
 
-    const title = heading.createDiv({ cls: "db-settings-database-title" });
-    title.createDiv({ cls: "db-settings-database-name", text: config.name || entry.file.basename });
+    const title = heading.createDiv({ cls: "obnotion-settings-database-title" });
+    title.createDiv({ cls: "obnotion-settings-database-name", text: config.name || entry.file.basename });
 
     // 文件路径
     heading.createSpan({
-      cls: "db-settings-database-path",
+      cls: "obnotion-settings-database-path",
       text: entry.file.path,
       attr: { title: entry.file.path },
     });
 
     // 元信息：列数、视图数
     heading.createSpan({
-      cls: "db-settings-database-meta",
+      cls: "obnotion-settings-database-meta",
       text: `${config.schema?.columns?.length ?? 0} ${t("settings.databaseList.columns")}, ${config.views?.length ?? 0} ${t("settings.databaseList.views")}`,
     });
 
     // 打开按钮（hover 时显示）
     const openBtn = heading.createEl("button", {
-      cls: "db-settings-open-button",
+      cls: "obnotion-settings-open-button",
       attr: { type: "button" },
     });
     setIcon(openBtn, "arrow-up-right");
@@ -439,7 +439,7 @@ export class SettingsTab extends PluginSettingTab {
 
     // 删除按钮（hover 时显示）— 逻辑与配置型数据库一致
     const deleteButton = heading.createEl("button", {
-      cls: "db-settings-delete-button",
+      cls: "obnotion-settings-delete-button",
       attr: { type: "button" },
     });
     setIcon(deleteButton, "trash");
@@ -484,7 +484,7 @@ export class SettingsTab extends PluginSettingTab {
       try {
         await this.plugin.saveSettings();
       } catch (e) {
-        console.error("Note Database: failed to save database trash settings", e);
+        console.error("Obnotion: failed to save database trash settings", e);
         new Notice(t("errors.updateFailed", { error: String(e) }));
       }
       this.display();
@@ -519,14 +519,14 @@ export class SettingsTab extends PluginSettingTab {
     section.ondragend = () => {
       this.draggedFileEntry = null;
       section.removeClass("is-dragging");
-      parent.querySelectorAll(".db-settings-database-card.is-drop-target").forEach((el) => el.removeClass("is-drop-target"));
+      parent.querySelectorAll(".obnotion-settings-database-card.is-drop-target").forEach((el) => el.removeClass("is-drop-target"));
     };
   }
 
   /** 渲染文件型数据库拖拽手柄 */
   private renderFileDragHandle(heading: HTMLElement): void {
     heading.createSpan({
-      cls: "db-settings-database-drag",
+      cls: "obnotion-settings-database-drag",
       text: "⋮⋮",
       attr: { title: t("panel.dragToSort") },
     });
@@ -534,12 +534,12 @@ export class SettingsTab extends PluginSettingTab {
 
   private shouldIgnoreFileDatabaseDrag(event: DragEvent): boolean {
     return isHTMLElement(event.target)
-      && event.target.closest("input, select, textarea, button, .db-mobile-reorder-controls") != null;
+      && event.target.closest("input, select, textarea, button, .obnotion-mobile-reorder-controls") != null;
   }
 
   /** 渲染移动端上/下移按钮 */
   private renderMobileReorder(heading: HTMLElement, index: number, total: number, onMove: (from: number, to: number) => Promise<void>): void {
-    const controls = heading.createSpan({ cls: "db-mobile-reorder-controls" });
+    const controls = heading.createSpan({ cls: "obnotion-mobile-reorder-controls" });
     const upBtn = controls.createEl("button", {
       attr: { type: "button" },
     });
@@ -582,7 +582,7 @@ export class SettingsTab extends PluginSettingTab {
 class TrashManagerModal extends DbModal {
   constructor(
     app: App,
-    private plugin: NoteDatabasePlugin,
+    private plugin: ObnotionPlugin,
     private onRefresh: () => void,
   ) {
     super(app, "sheet");
@@ -600,44 +600,44 @@ class TrashManagerModal extends DbModal {
     super.onOpen();
     const { contentEl } = this;
     contentEl.empty();
-    contentEl.addClass("note-database-modal");
+    contentEl.addClass("obnotion-modal");
     contentEl.createEl("h3", { text: t("settings.trash.manageTitle") });
-    contentEl.createDiv({ cls: "db-delete-modal-info", text: t("settings.trash.manageDesc") });
+    contentEl.createDiv({ cls: "obnotion-delete-modal-info", text: t("settings.trash.manageDesc") });
 
     const trash = this.plugin.settings.trashedDatabases;
     if (!trash || trash.length === 0) {
-      contentEl.createDiv({ cls: "db-panel-empty", text: t("settings.trash.empty") });
+      contentEl.createDiv({ cls: "obnotion-panel-empty", text: t("settings.trash.empty") });
       return;
     }
 
-    const list = contentEl.createDiv({ cls: "db-trash-manager-list" });
+    const list = contentEl.createDiv({ cls: "obnotion-trash-manager-list" });
     for (let i = 0; i < trash.length; i++) {
       const item = trash[i];
-      const row = list.createDiv({ cls: "db-trash-manager-row" });
+      const row = list.createDiv({ cls: "obnotion-trash-manager-row" });
 
       // 左侧信息区
-      const info = row.createDiv({ cls: "db-trash-manager-info" });
-      info.createDiv({ cls: "db-trash-manager-name", text: item.database.name || t("common.untitled") });
+      const info = row.createDiv({ cls: "obnotion-trash-manager-info" });
+      info.createDiv({ cls: "obnotion-trash-manager-name", text: item.database.name || t("common.untitled") });
 
       // 描述（最多 100 字）
       if (item.database.description) {
         const desc = item.database.description.length > 100
           ? item.database.description.slice(0, 100) + "..."
           : item.database.description;
-        info.createDiv({ cls: "db-trash-manager-desc", text: desc });
+        info.createDiv({ cls: "obnotion-trash-manager-desc", text: desc });
       }
 
       // 元信息行：列数、视图数、删除日期
-      const meta = info.createDiv({ cls: "db-trash-manager-meta" });
+      const meta = info.createDiv({ cls: "obnotion-trash-manager-meta" });
       meta.createSpan({ text: `${item.database.schema?.columns?.length ?? 0} ${t("settings.databaseList.columns")}, ${item.database.views?.length ?? 0} ${t("settings.databaseList.views")}` });
-      meta.createSpan({ cls: "db-trash-manager-date", text: new Date(item.deletedAt).toLocaleDateString() });
+      meta.createSpan({ cls: "obnotion-trash-manager-date", text: new Date(item.deletedAt).toLocaleDateString() });
 
       // 右侧操作按钮
-      const actions = row.createDiv({ cls: "db-trash-manager-actions" });
+      const actions = row.createDiv({ cls: "obnotion-trash-manager-actions" });
 
       // 恢复按钮
       const restoreBtn = actions.createEl("button", {
-        cls: "db-settings-trash-icon-btn",
+        cls: "obnotion-settings-trash-icon-btn",
         attr: { type: "button" },
       });
       setIcon(restoreBtn, "rotate-ccw");
@@ -648,7 +648,7 @@ class TrashManagerModal extends DbModal {
 
       // 永久删除按钮
       const permDeleteBtn = actions.createEl("button", {
-        cls: "db-settings-trash-icon-btn db-settings-trash-danger",
+        cls: "obnotion-settings-trash-icon-btn obnotion-settings-trash-danger",
         attr: { type: "button" },
       });
       setIcon(permDeleteBtn, "trash-2");
@@ -688,11 +688,11 @@ class TrashManagerModal extends DbModal {
       onOpen(): void {
         super.onOpen();
         this.contentEl.empty();
-        this.contentEl.addClass("note-database-modal");
+        this.contentEl.addClass("obnotion-modal");
         this.contentEl.createEl("h3", { text: t("settings.trash.restoreTitle", { name: item.database.name || t("common.untitled") }) });
-        this.contentEl.createDiv({ cls: "db-delete-modal-info", text: t("settings.trash.restoreDesc") });
+        this.contentEl.createDiv({ cls: "obnotion-delete-modal-info", text: t("settings.trash.restoreDesc") });
 
-        const btnRow = this.contentEl.createDiv({ cls: "db-delete-modal-buttons" });
+        const btnRow = this.contentEl.createDiv({ cls: "obnotion-delete-modal-buttons" });
         btnRow.createEl("button", { text: t("common.cancel") }).onclick = () => this.close();
 
         const fileBtn = btnRow.createEl("button", {

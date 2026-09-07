@@ -207,7 +207,7 @@ console.log(`    lose it if an ancestor class goes    ${ancestorOwned.length}`);
 console.log(`    keep it wherever they are mounted    ${selfOwned.length}`);
 console.log(`  fall back to the platform box          ${platform.length}/${boxes.length}`);
 console.log(`  take geometry from a token root        ${tokenDependent.length}  (by design — a`);
-console.log(`                                          portalled surface marked .db-surface keeps it)\n`);
+console.log(`                                          portalled surface marked .obnotion-surface keeps it)\n`);
 console.log("  shapes among the owned:");
 for (const [shape, count] of [...shapes].sort((a, b) => b[1] - a[1])) {
   console.log(`    ${shape.padEnd(28)} ${count}`);
@@ -313,7 +313,7 @@ const stateResults = await statePage.evaluate((families) => {
 }, [...stateFamilies].map(([shape, r]) => ({
   shape,
   classes: r.classes,
-  chainClass: r.chain[r.chain.length - 1] || "note-database-container",
+  chainClass: r.chain[r.chain.length - 1] || "obnotion-container",
 })));
 await statePage.close();
 
@@ -370,7 +370,7 @@ for (const scenario of scenarios) {
   //
   // The first version appended the host sheet LAST and reported all 250 checkboxes moving under
   // every profile. That was the harness, not the plugin: the component rule is
-  // `input[type="checkbox"].db-checkbox` and the profile selector is
+  // `input[type="checkbox"].obnotion-checkbox` and the profile selector is
   // `.stress-x input[type="checkbox"]` — both 0-2-1, so the tie goes to whichever came later, and
   // appending the host afterwards handed it every tie it should have lost. Obsidian loads its own
   // stylesheet and then injects plugin styles, so the plugin wins ties on device and the harness
@@ -473,7 +473,7 @@ for (const scenario of scenarios) {
         // the thing it sits on measures the control's internal decoration rather than whether the
         // control can be seen. Both readings were tried and both were wrong for the switch — 2.66:1
         // for border-on-track, 1.22:1 for track-on-page — and neither is the boundary.
-        isSwitch: box.classList.contains("db-toggle-switch"),
+        isSwitch: box.classList.contains("obnotion-toggle-switch"),
         contrast: box.checked || box.indeterminate
           ? null
           : Math.round(contrast(cs.borderTopColor, surface) * 100) / 100,
@@ -508,7 +508,7 @@ await themePage.close();
 // Every board/gallery/list card field routes its value through card-field-renderer.ts's shared
 // renderCardFieldValue, and every one of those fields is read-only in place — the card's own
 // click opens the record, never the control inside it. That readOnly flag reached
-// `checkbox.disabled`, and `input[type="checkbox"].db-checkbox:disabled` in styles.css halves
+// `checkbox.disabled`, and `input[type="checkbox"].obnotion-checkbox:disabled` in styles.css halves
 // opacity and drops the border to `--background-modifier-border`: a treatment written for a
 // control nobody can use, painted here over informational content the reader still needs to
 // read. Nothing above measures this — the checked glyph is a `background-image`, not a colour
@@ -521,7 +521,7 @@ await themePage.close();
 // default light theme, not a value read off a device — the same caveat every other reading in
 // this file carries, restated here because this check's own pass/fail line quotes them directly.
 const boardCardMarkup = (checked) =>
-  `<input type="checkbox" class="db-checkbox db-checkbox-field" tabindex="-1" aria-disabled="true"${checked ? " checked" : ""}>`;
+  `<input type="checkbox" class="obnotion-checkbox obnotion-checkbox-field" tabindex="-1" aria-disabled="true"${checked ? " checked" : ""}>`;
 
 function averageRegion(image, x0, y0, x1, y1) {
   let r = 0, g = 0, b = 0, n = 0;
@@ -556,7 +556,7 @@ for (const themeClass of ["theme-light", "theme-dark"]) {
   for (const checked of [false, true]) {
     await boardCardPage.setContent(
       `<html class="${themeClass}"><body class="${themeClass}" style="margin:0;">`
-      + `<div class="note-database-container"><div class="db-kanban-card" style="display:inline-block;padding:16px;">`
+      + `<div class="obnotion-container"><div class="obnotion-kanban-card" style="display:inline-block;padding:16px;">`
       + boardCardMarkup(checked)
       + `</div></div></body></html>`,
     );
@@ -613,7 +613,7 @@ for (const r of themeMovedBoxes) {
  * a checkbox's third value; a toggle is binary by construction and drawing a third state on it would
  * be inventing an affordance nothing sets.
  */
-const NO_INDETERMINATE = ["db-toggle-switch"];
+const NO_INDETERMINATE = ["obnotion-toggle-switch"];
 const exemptFromIndeterminate = (r) => r.classes.some((c) => NO_INDETERMINATE.includes(c));
 
 const stateFailures = stateResults.filter((r) =>
@@ -629,12 +629,12 @@ const stateFailures = stateResults.filter((r) =>
 // the shape census above answers neither: it reports four shapes across everything, which is the
 // right answer to a different question.
 //
-// THE POINTER MODE IS AN AXIS, NOT A VIOLATION. Grouped by role alone, `db-checkbox-row` reports two
+// THE POINTER MODE IS AN AXIS, NOT A VIOLATION. Grouped by role alone, `obnotion-checkbox-row` reports two
 // shapes — 16x16 and 28x28 — and that reads as a role disagreeing with itself. It is the coarse
 // pointer: the stylesheet raises the box under `@media (pointer: coarse)`, and the phone fixtures
 // render on the touch page. A check without this axis fails a correct stylesheet, which is the shape
 // this program keeps finding in criteria phrased as universals.
-const roleOf = (row) => ([...row.classes].find((c) => c.startsWith("db-checkbox-")) || "(switch)");
+const roleOf = (row) => ([...row.classes].find((c) => c.startsWith("obnotion-checkbox-")) || "(switch)");
 const deviceOf = (row) => (/mobile|phone/i.test(row.scenario) ? "touch" : "fine");
 const mountOf = (row) => (row.chain[0] || "(body)");
 

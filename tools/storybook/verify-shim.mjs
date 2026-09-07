@@ -114,9 +114,9 @@ const checks = () => {
   check("setAttr(null) removes", attrs.hasAttribute("data-x"), false);
 
   const styled = host.createDiv();
-  styled.setCssProps({ width: "10px", "--db-token": "7px" });
+  styled.setCssProps({ width: "10px", "--obnotion-token": "7px" });
   check("setCssProps sets a property", styled.style.width, "10px");
-  check("setCssProps sets a custom property", styled.style.getPropertyValue("--db-token"), "7px");
+  check("setCssProps sets a custom property", styled.style.getPropertyValue("--obnotion-token"), "7px");
 
   const texted = host.createDiv();
   texted.setText("first");

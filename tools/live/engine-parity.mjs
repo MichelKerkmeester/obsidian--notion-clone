@@ -53,7 +53,7 @@ const SUBJECTS = [
   'input[type="text"]',
   "select",
   "button",
-  ".db-checkbox",
+  ".obnotion-checkbox",
 ];
 
 /** Sub-pixel disagreement is normal between engines; a whole pixel is a layout difference. */

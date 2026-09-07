@@ -259,11 +259,11 @@ describe("CardFieldRenderer keyboard accessibility", () => {
         config,
         value: "Active",
         displayType: "text",
-        fieldClass: "db-card-field",
-        valueClass: "db-card-value",
-        labelClass: "db-card-label",
-        badgesClass: "db-card-badges",
-        linkClass: "db-card-link",
+        fieldClass: "obnotion-card-field",
+        valueClass: "obnotion-card-value",
+        labelClass: "obnotion-card-label",
+        badgesClass: "obnotion-card-badges",
+        linkClass: "obnotion-card-link",
         onEdit,
       }) as unknown as MockElement;
 
@@ -332,11 +332,11 @@ describe("CardFieldRenderer keyboard accessibility", () => {
         config,
         value: true,
         displayType: "checkbox",
-        fieldClass: "db-card-field",
-        valueClass: "db-card-value",
-        labelClass: "db-card-label",
-        badgesClass: "db-card-badges",
-        linkClass: "db-card-link",
+        fieldClass: "obnotion-card-field",
+        valueClass: "obnotion-card-value",
+        labelClass: "obnotion-card-label",
+        badgesClass: "obnotion-card-badges",
+        linkClass: "obnotion-card-link",
         onEdit,
       }) as unknown as MockElement;
 
@@ -364,7 +364,7 @@ describe("CardFieldRenderer keyboard accessibility", () => {
     // #EEEEEE border on a #EEEEEE glyph in the default light theme — checked and unchecked read
     // as the same picture — because every board/gallery/list card field is read-only in place
     // (the card's own click opens the record), and that reached `checkbox.disabled`, which
-    // `input[type="checkbox"].db-checkbox:disabled` in styles.css halves opacity and desaturates.
+    // `input[type="checkbox"].obnotion-checkbox:disabled` in styles.css halves opacity and desaturates.
     // The fix keeps the checkbox out of the tab order and announced as non-interactive without
     // the native `disabled` state, so the accent-filled base appearance stays legible.
     const origWindow = globalThis.window;
@@ -384,11 +384,11 @@ describe("CardFieldRenderer keyboard accessibility", () => {
         config,
         value: true,
         displayType: "checkbox",
-        fieldClass: "db-card-field",
-        valueClass: "db-card-value",
-        labelClass: "db-card-label",
-        badgesClass: "db-card-badges",
-        linkClass: "db-card-link",
+        fieldClass: "obnotion-card-field",
+        valueClass: "obnotion-card-value",
+        labelClass: "obnotion-card-label",
+        badgesClass: "obnotion-card-badges",
+        linkClass: "obnotion-card-link",
         readOnly: true,
       }) as unknown as MockElement;
 
@@ -429,11 +429,11 @@ describe("CardFieldRenderer keyboard accessibility", () => {
         config,
         value: "Active",
         displayType: "text",
-        fieldClass: "db-card-field",
-        valueClass: "db-card-value",
-        labelClass: "db-card-label",
-        badgesClass: "db-card-badges",
-        linkClass: "db-card-link",
+        fieldClass: "obnotion-card-field",
+        valueClass: "obnotion-card-value",
+        labelClass: "obnotion-card-label",
+        badgesClass: "obnotion-card-badges",
+        linkClass: "obnotion-card-link",
         readOnly: true,
         onEdit,
       }) as unknown as MockElement;
@@ -478,15 +478,15 @@ describe("CardFieldRenderer keyboard accessibility", () => {
         config,
         value: "Active",
         displayType: "text",
-        fieldClass: "db-card-field",
-        valueClass: "db-card-value",
-        labelClass: "db-card-label",
-        badgesClass: "db-card-badges",
-        linkClass: "db-card-link",
+        fieldClass: "obnotion-card-field",
+        valueClass: "obnotion-card-value",
+        labelClass: "obnotion-card-label",
+        badgesClass: "obnotion-card-badges",
+        linkClass: "obnotion-card-link",
         onShowColumnMenu,
       }) as unknown as MockElement;
 
-      const labelEl = fieldEl.children.find((c) => c.className === "db-card-label");
+      const labelEl = fieldEl.children.find((c) => c.className === "obnotion-card-label");
       expect(labelEl).toBeDefined();
       expect(labelEl?.tabIndex).toBe(-1);
       expect(labelEl?.getAttribute("role")).toBeNull();
@@ -557,20 +557,20 @@ describe("CardFieldRenderer option split", () => {
       config,
       value: "Review",
       displayType: "select" as const,
-      fieldClass: "db-card-field",
-      valueClass: "db-card-value",
-      labelClass: "db-card-label",
-      badgesClass: "db-card-badges",
-      linkClass: "db-card-link",
+      fieldClass: "obnotion-card-field",
+      valueClass: "obnotion-card-value",
+      labelClass: "obnotion-card-label",
+      badgesClass: "obnotion-card-badges",
+      linkClass: "obnotion-card-link",
     };
 
     const split = withStubbedDocument(() => renderCardField({ ...renderArgs, splitOptionValue: true }) as unknown as MockElement);
-    const valueEl = split.children.find((child) => child.hasClass("db-card-value"));
+    const valueEl = split.children.find((child) => child.hasClass("obnotion-card-value"));
     expect(valueEl?.querySelectorAll(".status-badge")).toHaveLength(0);
     expect(valueEl?.querySelector(".status-color-text-purple")).not.toBeNull();
 
     const unsplit = withStubbedDocument(() => renderCardField(renderArgs) as unknown as MockElement);
-    const unsplitValueEl = unsplit.children.find((child) => child.hasClass("db-card-value"));
+    const unsplitValueEl = unsplit.children.find((child) => child.hasClass("obnotion-card-value"));
     expect(unsplitValueEl?.querySelector(".status-badge")).not.toBeNull();
   });
 
@@ -589,15 +589,15 @@ describe("CardFieldRenderer option split", () => {
       config,
       value: ["Backlog", "Review"],
       displayType: "multi-select",
-      fieldClass: "db-card-field",
-      valueClass: "db-card-value",
-      labelClass: "db-card-label",
-      badgesClass: "db-card-badges",
-      linkClass: "db-card-link",
+      fieldClass: "obnotion-card-field",
+      valueClass: "obnotion-card-value",
+      labelClass: "obnotion-card-label",
+      badgesClass: "obnotion-card-badges",
+      linkClass: "obnotion-card-link",
       splitOptionValue: true,
     }) as unknown as MockElement);
 
-    const valueEl = fieldEl.children.find((child) => child.hasClass("db-card-value"));
+    const valueEl = fieldEl.children.find((child) => child.hasClass("obnotion-card-value"));
     expect(valueEl?.querySelectorAll(".status-badge")).toHaveLength(2);
   });
 });

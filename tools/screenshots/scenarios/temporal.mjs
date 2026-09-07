@@ -89,12 +89,12 @@ const ICON = {
 
 /* renderRecordIcon's own default-glyph shape, at the compact size every calendar chip
    passes (renderRecordIcon(el, row, config, true)). */
-const recordIcon = () => `<span class="db-record-icon is-compact is-default">${glyph(ICON.fileText)}</span>`;
+const recordIcon = () => `<span class="obnotion-record-icon is-compact is-default">${glyph(ICON.fileText)}</span>`;
 
 /* Mirrors applyEventColor()/applyCalendarEventColor(): both write the accent and the tint
    as the two status-colour variables onto the event element itself. */
 const eventColor = (tone) =>
-  `--db-calendar-event-accent: var(--status-color-fg-${tone}); --db-calendar-event-bg: var(--status-color-bg-${tone});`;
+  `--obnotion-calendar-event-accent: var(--status-color-fg-${tone}); --obnotion-calendar-event-bg: var(--status-color-bg-${tone});`;
 
 // ───────────────────────────────────────────────────────────────────
 // 3. SHARED TOOLBAR-POPOVER ROWS
@@ -104,36 +104,36 @@ const eventColor = (tone) =>
 // renderers (createDropdownField, renderSwitch, renderRange), so the fixtures share them too.
 
 const dropdownRow = (icon, label, value) => `
-  <button type="button" class="db-dropdown-field db-chart-options-dropdown has-current-icon"
+  <button type="button" class="obnotion-dropdown-field obnotion-chart-options-dropdown has-current-icon"
     aria-haspopup="listbox" aria-expanded="false">
-    <span class="db-dropdown-field-icon">${glyph(icon)}</span>
-    <div class="db-dropdown-field-text">
-      <span class="db-dropdown-field-label">${label}</span>
-      <span class="db-dropdown-field-value">${value}</span>
+    <span class="obnotion-dropdown-field-icon">${glyph(icon)}</span>
+    <div class="obnotion-dropdown-field-text">
+      <span class="obnotion-dropdown-field-label">${label}</span>
+      <span class="obnotion-dropdown-field-value">${value}</span>
     </div>
-    <span class="db-dropdown-field-chevron">${glyph(ICON.chevronDown)}</span>
+    <span class="obnotion-dropdown-field-chevron">${glyph(ICON.chevronDown)}</span>
   </button>`;
 
 const switchRow = (icon, label, on, extraClass) => `
-  <label class="db-chart-options-row db-chart-options-switch-row">
-    <span class="db-chart-options-row-icon">${glyph(icon)}</span>
-    <div class="db-chart-options-row-text"><span class="db-chart-options-label">${label}</span></div>
-    <input type="checkbox" role="switch" class="db-toggle-switch${extraClass ? ` ${extraClass}` : ""}"${on ? " checked" : ""}>
+  <label class="obnotion-chart-options-row obnotion-chart-options-switch-row">
+    <span class="obnotion-chart-options-row-icon">${glyph(icon)}</span>
+    <div class="obnotion-chart-options-row-text"><span class="obnotion-chart-options-label">${label}</span></div>
+    <input type="checkbox" role="switch" class="obnotion-toggle-switch${extraClass ? ` ${extraClass}` : ""}"${on ? " checked" : ""}>
   </label>`;
 
 const rangeRow = (label, value, min, max, step, extraClass) => `
-  <div class="db-chart-options-row db-calendar-range-row ${extraClass || ""}">
-    <span class="db-chart-options-row-icon">${glyph(ICON.ruler)}</span>
-    <div class="db-chart-options-row-text"><span class="db-chart-options-label">${label}</span></div>
-    <div class="db-view-config-range">
+  <div class="obnotion-chart-options-row obnotion-calendar-range-row ${extraClass || ""}">
+    <span class="obnotion-chart-options-row-icon">${glyph(ICON.ruler)}</span>
+    <div class="obnotion-chart-options-row-text"><span class="obnotion-chart-options-label">${label}</span></div>
+    <div class="obnotion-view-config-range">
       <input type="range" min="${min}" max="${max}" step="${step}" value="${value}">
-      <input type="number" class="db-view-config-number" min="${min}" max="${max}" step="${step}" value="${value}">
+      <input type="number" class="obnotion-view-config-number" min="${min}" max="${max}" step="${step}" value="${value}">
     </div>
   </div>`;
 
 const section = (title, body) => `
-  <div class="db-chart-options-section">
-    <div class="db-chart-options-section-title">${title}</div>
+  <div class="obnotion-chart-options-section">
+    <div class="obnotion-chart-options-section-title">${title}</div>
     ${body}
   </div>`;
 
@@ -152,20 +152,20 @@ const STATIC_POPOVER = `position: static !important; top: auto !important; right
 
 const navButton = (icon, label) =>
   icon
-    ? `<button type="button" class="db-calendar-nav-button is-icon db-calendar-nav-chevron" title="${label}" aria-label="${label}">
-        <span class="db-calendar-nav-icon">${glyph(icon)}</span></button>`
-    : `<button type="button" class="db-calendar-nav-button is-text" title="${label}" aria-label="${label}">${label}</button>`;
+    ? `<button type="button" class="obnotion-calendar-nav-button is-icon obnotion-calendar-nav-chevron" title="${label}" aria-label="${label}">
+        <span class="obnotion-calendar-nav-icon">${glyph(icon)}</span></button>`
+    : `<button type="button" class="obnotion-calendar-nav-button is-text" title="${label}" aria-label="${label}">${label}</button>`;
 
 const scaleControl = (active) => `
-  <div class="db-calendar-scale-control" role="group">
-    <div class="db-calendar-scale-segment">
+  <div class="obnotion-calendar-scale-control" role="group">
+    <div class="obnotion-calendar-scale-segment">
       ${["Day", "Week", "Month"].map((s) => `
-        <button type="button" class="db-calendar-scale-button ${s === active ? "is-active" : ""}"
+        <button type="button" class="obnotion-calendar-scale-button ${s === active ? "is-active" : ""}"
           aria-pressed="${s === active ? "true" : "false"}">${s}</button>`).join("")}
     </div>
-    <button type="button" class="db-calendar-scale-menu db-calendar-nav-button is-text" aria-haspopup="listbox">
-      <span class="db-calendar-scale-menu-label">${active}</span>
-      <span class="db-calendar-nav-icon db-calendar-scale-menu-chevron">${glyph(ICON.chevronDown)}</span>
+    <button type="button" class="obnotion-calendar-scale-menu obnotion-calendar-nav-button is-text" aria-haspopup="listbox">
+      <span class="obnotion-calendar-scale-menu-label">${active}</span>
+      <span class="obnotion-calendar-nav-icon obnotion-calendar-scale-menu-chevron">${glyph(ICON.chevronDown)}</span>
     </button>
   </div>`;
 
@@ -173,19 +173,19 @@ const scaleControl = (active) => `
 // dropdown-menu listbox; week and day keep the plain static title.
 const calendarTitle = (main, year, activeScale) =>
   activeScale === "Month"
-    ? `<div class="db-calendar-title" title="${main} ${year}" aria-label="${main} ${year}">
-        <button type="button" class="db-calendar-title-main db-calendar-title-select" aria-haspopup="listbox">${main}</button>
-        <button type="button" class="db-calendar-title-year db-calendar-title-select" aria-haspopup="listbox">${year}</button>
+    ? `<div class="obnotion-calendar-title" title="${main} ${year}" aria-label="${main} ${year}">
+        <button type="button" class="obnotion-calendar-title-main obnotion-calendar-title-select" aria-haspopup="listbox">${main}</button>
+        <button type="button" class="obnotion-calendar-title-year obnotion-calendar-title-select" aria-haspopup="listbox">${year}</button>
       </div>`
-    : `<div class="db-calendar-title" title="${main} ${year}" aria-label="${main} ${year}">
-        <span class="db-calendar-title-main">${main}</span>
-        <span class="db-calendar-title-year">${year}</span>
+    : `<div class="obnotion-calendar-title" title="${main} ${year}" aria-label="${main} ${year}">
+        <span class="obnotion-calendar-title-main">${main}</span>
+        <span class="obnotion-calendar-title-year">${year}</span>
       </div>`;
 
 const calendarHeader = (main, year, activeScale, prev, next) => `
-  <div class="db-calendar-header">
+  <div class="obnotion-calendar-header">
     ${calendarTitle(main, year, activeScale)}
-    <div class="db-calendar-controls">
+    <div class="obnotion-calendar-controls">
       ${scaleControl(activeScale)}
       ${navButton(ICON.chevronLeft, prev)}
       ${navButton(null, "Today")}
@@ -208,15 +208,15 @@ export const calendarIsWeekendDateKey = (dateKey) => {
 };
 
 export const calendarWeekdayMarkup = (name, index) => `
-  <div class="db-calendar-weekday ${index === 5 || index === 6 ? "is-weekend" : ""}" role="columnheader"><span>${name}</span>
-    <div class="db-calendar-col-resize-handle"></div></div>`;
+  <div class="obnotion-calendar-weekday ${index === 5 || index === 6 ? "is-weekend" : ""}" role="columnheader"><span>${name}</span>
+    <div class="obnotion-calendar-col-resize-handle"></div></div>`;
 
 /* Mirrors EmptyStateRenderer.renderCard() (empty-state-renderer.ts:262-295) class-for-class, for
    the two reasons calendar-renderer.ts's renderEmpty() ever passes it (:248-268, :631-667):
    "no-date-field" (no calendarStartDateField resolved) and "no-events" (a date field exists but
    nothing in it falls in view). renderEmpty() calls renderCard(container, ...) directly — no
-   .db-calendar wrapper is ever created on this path — so the card lands as a direct child of
-   .note-database-container, which is what styles.css:16849-16864's density rule keys off. Only
+   .obnotion-calendar wrapper is ever created on this path — so the card lands as a direct child of
+   .obnotion-container, which is what styles.css:16849-16864's density rule keys off. Only
    "no-date-field" carries an action (this.actions.openDateConfig is always present in the real
    app); copy is EMPTY_STATE_COPY's real English strings (empty-state-renderer.ts:179-188), not
    placeholder text, so the capture reads as the real card, not a stand-in for it. */
@@ -228,29 +228,29 @@ const CALENDAR_EMPTY_STATE_COPY = {
 export const calendarEmptyStateMarkup = (reason) => {
   const copy = CALENDAR_EMPTY_STATE_COPY[reason];
   const actions = reason === "no-date-field" ? `
-      <div class="db-empty-action-group">
-        <button type="button" class="db-empty-action mod-cta" aria-label="Select date property">
-          <span class="db-empty-action-icon" aria-hidden="true">${glyph(ICON.settings2)}</span>
+      <div class="obnotion-empty-action-group">
+        <button type="button" class="obnotion-empty-action mod-cta" aria-label="Select date property">
+          <span class="obnotion-empty-action-icon" aria-hidden="true">${glyph(ICON.settings2)}</span>
           <span>Select date property</span>
         </button>
       </div>` : "";
   return `
-  <div class="db-empty db-empty-card" data-empty-reason="${reason}">
-    <div class="db-empty-card-icon" aria-hidden="true">${glyph(copy.icon)}</div>
-    <div class="db-empty-card-content">
-      <h3 class="db-empty-card-title">${copy.title}</h3>
-      <div class="db-empty-card-message">${copy.message}</div>${actions}
+  <div class="obnotion-empty obnotion-empty-card" data-empty-reason="${reason}">
+    <div class="obnotion-empty-card-icon" aria-hidden="true">${glyph(copy.icon)}</div>
+    <div class="obnotion-empty-card-content">
+      <h3 class="obnotion-empty-card-title">${copy.title}</h3>
+      <div class="obnotion-empty-card-message">${copy.message}</div>${actions}
     </div>
   </div>`;
 };
 
 export const monthDayCell = (day, column) => `
-  <div class="db-calendar-day ${day.outside ? "is-outside-month" : ""} ${day.today ? "is-today" : ""} ${calendarIsWeekendDateKey(day.key) ? "is-weekend" : ""}"
+  <div class="obnotion-calendar-day ${day.outside ? "is-outside-month" : ""} ${day.today ? "is-today" : ""} ${calendarIsWeekendDateKey(day.key) ? "is-weekend" : ""}"
     data-date-key="${day.key}" role="gridcell" tabindex="${day.today ? "0" : "-1"}" aria-label="${day.key}"
     style="grid-column: ${column}">
-    <div class="db-calendar-day-heading">
-      <span class="db-calendar-day-number">${day.n}</span>
-      <button type="button" class="db-calendar-add-button" title="New" aria-label="New">+</button>
+    <div class="obnotion-calendar-day-heading">
+      <span class="obnotion-calendar-day-number">${day.n}</span>
+      <button type="button" class="obnotion-calendar-add-button" title="New" aria-label="New">+</button>
     </div>
   </div>`;
 
@@ -259,21 +259,21 @@ export const monthDayCell = (day, column) => `
  * day it covers rather than one element spanning grid columns, so `seg` never carries a
  * `span` or a date-range string — a multi-day event repeats the same title across the
  * `seg` entries for each day it touches, exactly as `renderMonthSegments` emits one
- * `db-calendar-month-segment` per (segment, day) pair. `lane` is the zero-based *local*
+ * `obnotion-calendar-month-segment` per (segment, day) pair. `lane` is the zero-based *local*
  * rank among the segments that actually touch this one day (`computeMonthDayLocalLanes`);
  * the renderer offsets it by two — one for the heading row, one because grid lines are
  * 1-based — before writing the variable.
  */
 export const monthSegment = (seg) => {
-  const geometry = `--db-calendar-segment-start: ${seg.column}; --db-calendar-segment-lane: ${seg.lane + 2}; ${eventColor(seg.tone)}`;
+  const geometry = `--obnotion-calendar-segment-start: ${seg.column}; --obnotion-calendar-segment-lane: ${seg.lane + 2}; ${eventColor(seg.tone)}`;
   // No coloured dot — every chip is icon + title, with a timed event's
   // time as a muted suffix after the title rather than a coloured prefix.
   return `
-    <button type="button" class="db-calendar-month-segment ${seg.timed ? "is-timed" : "is-all-day"}${seg.completed ? " is-completed" : ""}"
-      title="${seg.title}" data-note-database-row-path="Subscriptions/${seg.title}.md" style="${geometry}">
+    <button type="button" class="obnotion-calendar-month-segment ${seg.timed ? "is-timed" : "is-all-day"}${seg.completed ? " is-completed" : ""}"
+      title="${seg.title}" data-obnotion-row-path="Subscriptions/${seg.title}.md" style="${geometry}">
       ${recordIcon()}
-      <span class="db-calendar-month-title">${seg.title}</span>
-      ${seg.timed ? `<span class="db-calendar-month-time">${seg.time}</span>` : ""}
+      <span class="obnotion-calendar-month-title">${seg.title}</span>
+      ${seg.timed ? `<span class="obnotion-calendar-month-time">${seg.time}</span>` : ""}
     </button>`;
 };
 
@@ -287,12 +287,12 @@ const monthWeek = (week) => {
   const laneRows = week.lanes + (week.overflow ? 1 : 0);
   const rows = `grid-template-rows: 32px repeat(${laneRows}, 20px) minmax(0, 1fr);`;
   return `
-    <div class="db-calendar-month-week" role="row" data-week-index="${week.index}"
+    <div class="obnotion-calendar-month-week" role="row" data-week-index="${week.index}"
       data-calendar-visible-lanes="${week.lanes}"
-      style="${rows} --db-calendar-month-week-min-height: 136px">
+      style="${rows} --obnotion-calendar-month-week-min-height: 136px">
       ${week.days.map((day, i) => monthDayCell(day, i + 1)).join("")}
       ${week.segments.map(monthSegment).join("")}
-      ${week.overflow ? `<button type="button" class="db-calendar-more-events" aria-haspopup="dialog"
+      ${week.overflow ? `<button type="button" class="obnotion-calendar-more-events" aria-haspopup="dialog"
         aria-expanded="false" aria-label="${week.overflow.label}"
         style="grid-column: ${week.overflow.column}; grid-row: ${laneRows + 1}">${week.overflow.label}</button>` : ""}
     </div>`;
@@ -418,15 +418,15 @@ export const timedEvent = (event) => {
   const range = `${String(Math.floor(event.from / 60)).padStart(2, "0")}:${String(event.from % 60).padStart(2, "0")}`
     + ` - ${String(Math.floor(event.to / 60)).padStart(2, "0")}:${String(event.to % 60).padStart(2, "0")}`;
   return `
-    <button type="button" class="db-calendar-week-timed-event ${compact ? "is-compact" : ""}${event.completed ? " is-completed" : ""}"
+    <button type="button" class="obnotion-calendar-week-timed-event ${compact ? "is-compact" : ""}${event.completed ? " is-completed" : ""}"
       title="${range} ${event.title}" aria-label="${range} ${event.title}"
-      data-note-database-row-path="Subscriptions/${event.title}.md"
+      data-obnotion-row-path="Subscriptions/${event.title}.md"
       style="top: ${top}px; height: ${height}px; left: ${left}px; width: calc(100% - ${left + 4}px);
         z-index: ${3 + (event.columnIndex || 0)}; ${eventColor(event.tone)}">
-      <div class="db-calendar-week-event-content">
+      <div class="obnotion-calendar-week-event-content">
         ${recordIcon()}
-        <div class="db-calendar-week-event-title">${event.title}</div>
-        ${compact ? "" : `<div class="db-calendar-week-event-time">${range}</div>`}
+        <div class="obnotion-calendar-week-event-title">${event.title}</div>
+        ${compact ? "" : `<div class="obnotion-calendar-week-event-time">${range}</div>`}
       </div>
     </button>`;
 };
@@ -449,7 +449,7 @@ const hourLabels = () => {
   const out = [];
   for (let hour = WEEK_START_HOUR; hour <= WEEK_END_HOUR; hour++) {
     const current = hour === 13; // 13:45 on the pinned "now"
-    out.push(`<div class="db-calendar-week-hour-label ${current ? "is-current-time-tick" : ""}"
+    out.push(`<div class="obnotion-calendar-week-hour-label ${current ? "is-current-time-tick" : ""}"
       style="top: ${offsetOf(hour * 60)}px">${String(hour).padStart(2, "0")}</div>`);
   }
   return out.join("");
@@ -458,7 +458,7 @@ const hourLabels = () => {
 const slotLines = () => {
   const out = [];
   for (let minute = WEEK_START_HOUR * 60; minute < WEEK_END_HOUR * 60; minute += 30) {
-    out.push(`<div class="db-calendar-week-slot-line ${minute % 60 === 0 ? "is-hour" : ""}"
+    out.push(`<div class="obnotion-calendar-week-slot-line ${minute % 60 === 0 ? "is-hour" : ""}"
       aria-hidden="true" style="top: ${offsetOf(minute)}px"></div>`);
   }
   return out.join("");
@@ -501,10 +501,10 @@ const miniDay = (day) => {
     hasEvents ? "has-events" : "",
   ].filter(Boolean).join(" ");
   return `
-    <button type="button" class="db-calendar-mini-day ${mods}" role="gridcell" data-date-key="${day.key}"
+    <button type="button" class="obnotion-calendar-mini-day ${mods}" role="gridcell" data-date-key="${day.key}"
       title="${day.key}" aria-selected="${selected ? "true" : "false"}" tabindex="-1">
-      <span class="db-calendar-mini-day-num">${day.n}</span>
-      <span class="db-calendar-mini-day-dot"></span>
+      <span class="obnotion-calendar-mini-day-num">${day.n}</span>
+      <span class="obnotion-calendar-mini-day-dot"></span>
     </button>`;
 };
 
@@ -1364,7 +1364,7 @@ const timelineScaleScenario = (scale, overrides = {}) => {
       : "";
 
     return [
-      '<div class="note-database-container">',
+      '<div class="obnotion-container">',
       '<div class="pm-gantt-view">',
       controls,
       '<div class="pm-gantt-wrapper">',
@@ -1449,7 +1449,7 @@ export const TEMPORAL_SCENARIOS = [
     width: 1100,
     sources: ["src/views/calendar-renderer.ts"],
     fixtureOf: "constructed-calendar-month",
-    /* The wrapper carries --db-calendar-day-min-height because applyMonthSizingVars() writes it
+    /* The wrapper carries --obnotion-calendar-day-min-height because applyMonthSizingVars() writes it
        there on every month render, from config.calendarCellMinHeight ?? 136 clamped to 72-400
        (calendar-renderer.ts). 136px is the reference row height; runtime-vars.css derives this
        one variable from viewport height instead, and without the
@@ -1457,13 +1457,13 @@ export const TEMPORAL_SCENARIOS = [
        the product draws. */
     note: "Multi-day all-day bars, timed events, weekend headers, a completed milestone treatment and an overflow week; the unscheduled backlog is omitted because nothing here is unscheduled.",
     html: () => `
-      <div class="note-database-container">
-        <div class="db-calendar db-calendar-month" style="--db-calendar-day-min-height: 136px">
+      <div class="obnotion-container">
+        <div class="obnotion-calendar obnotion-calendar-month" style="--obnotion-calendar-day-min-height: 136px">
           ${calendarHeader("March", "2026", "Month", "Previous month", "Next month")}
-          <div class="db-calendar-weekdays" role="row">
+          <div class="obnotion-calendar-weekdays" role="row">
             ${WEEKDAYS.map(calendarWeekdayMarkup).join("")}
           </div>
-          <div class="db-calendar-grid db-calendar-month-grid" role="grid" aria-label="March 2026">
+          <div class="obnotion-calendar-grid obnotion-calendar-month-grid" role="grid" aria-label="March 2026">
             ${MARCH_WEEKS.map(monthWeek).join("")}
           </div>
         </div>
@@ -1478,53 +1478,53 @@ export const TEMPORAL_SCENARIOS = [
     fixtureOf: "constructed-calendar-week",
     note: "Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment and the current-time ruler sit in frame; the unscheduled backlog is omitted because nothing here is unscheduled.",
     html: () => `
-      <div class="note-database-container">
-        <div class="db-calendar db-calendar-week">
+      <div class="obnotion-container">
+        <div class="obnotion-calendar obnotion-calendar-week">
           ${calendarHeader("Mar 23 – 29", "2026", "Week", "Previous week", "Next week")}
-          <div class="db-calendar-week-sticky">
-            <div class="db-calendar-time-header-row" role="row">
-              <div class="db-calendar-time-header-gutter"></div>
-              <div class="db-calendar-time-header-days" style="--db-calendar-time-day-count: 7">
+          <div class="obnotion-calendar-week-sticky">
+            <div class="obnotion-calendar-time-header-row" role="row">
+              <div class="obnotion-calendar-time-header-gutter"></div>
+              <div class="obnotion-calendar-time-header-days" style="--obnotion-calendar-time-day-count: 7">
                 ${WEEK_DAYS.map((day) => `
-                  <button type="button" class="db-calendar-time-header-day ${day.today ? "is-today" : ""} ${day.weekend ? "is-weekend" : ""}"
+                  <button type="button" class="obnotion-calendar-time-header-day ${day.today ? "is-today" : ""} ${day.weekend ? "is-weekend" : ""}"
                     title="${day.key}" data-date-key="${day.key}" role="columnheader">
-                    <span class="db-calendar-week-day-name">${day.name}</span>
-                    <div class="db-calendar-col-resize-handle"></div>
+                    <span class="obnotion-calendar-week-day-name">${day.name}</span>
+                    <div class="obnotion-calendar-col-resize-handle"></div>
                   </button>`).join("")}
               </div>
             </div>
-            <div class="db-calendar-week-allday" style="--db-calendar-allday-rows: 1">
-              <div class="db-calendar-week-allday-gutter"></div>
-              <div class="db-calendar-week-allday-cols" data-calendar-visible-lanes="1"
-                style="--db-calendar-time-day-count: 7; grid-template-rows: 28px repeat(1, 20px)">
+            <div class="obnotion-calendar-week-allday" style="--obnotion-calendar-allday-rows: 1">
+              <div class="obnotion-calendar-week-allday-gutter"></div>
+              <div class="obnotion-calendar-week-allday-cols" data-calendar-visible-lanes="1"
+                style="--obnotion-calendar-time-day-count: 7; grid-template-rows: 28px repeat(1, 20px)">
                 ${WEEK_DAYS.map((day, i) => `
-                  <div class="db-calendar-week-allday-col ${day.today ? "is-today" : ""} ${day.weekend ? "is-weekend" : ""} ${i === 6 ? "is-last-col" : ""}"
+                  <div class="obnotion-calendar-week-allday-col ${day.today ? "is-today" : ""} ${day.weekend ? "is-weekend" : ""} ${i === 6 ? "is-last-col" : ""}"
                     data-date-key="${day.key}" style="grid-column: ${i + 1}"></div>`).join("")}
                 ${WEEK_DAYS.map((day, i) => `
-                  <button type="button" class="db-calendar-week-allday-date ${day.today ? "is-today" : ""} ${day.weekend ? "is-weekend" : ""}"
+                  <button type="button" class="obnotion-calendar-week-allday-date ${day.today ? "is-today" : ""} ${day.weekend ? "is-weekend" : ""}"
                     title="${day.key}" aria-label="${day.key}" style="grid-column: ${i + 1}">${day.n}</button>`).join("")}
-                <button type="button" class="db-calendar-month-segment db-calendar-week-allday-segment is-all-day is-start is-end is-completed"
-                  title="Q1 renewals sweep" data-note-database-row-path="Subscriptions/Q1.md"
-                  style="--db-calendar-segment-start: 2; --db-calendar-segment-span: 3; --db-calendar-segment-lane: 2; ${eventColor("orange")}">
-                  <span class="db-calendar-week-allday-content">
-                    <span class="db-calendar-month-title">Q1 renewals sweep</span>
-                    <span class="db-calendar-month-dates">Mar 24 – 26</span>
+                <button type="button" class="obnotion-calendar-month-segment obnotion-calendar-week-allday-segment is-all-day is-start is-end is-completed"
+                  title="Q1 renewals sweep" data-obnotion-row-path="Subscriptions/Q1.md"
+                  style="--obnotion-calendar-segment-start: 2; --obnotion-calendar-segment-span: 3; --obnotion-calendar-segment-lane: 2; ${eventColor("orange")}">
+                  <span class="obnotion-calendar-week-allday-content">
+                    <span class="obnotion-calendar-month-title">Q1 renewals sweep</span>
+                    <span class="obnotion-calendar-month-dates">Mar 24 – 26</span>
                   </span>
                 </button>
               </div>
             </div>
           </div>
-          <div class="db-calendar-week-scroll">
-            <div class="db-calendar-week-time-gutter" style="height: ${GRID_HEIGHT}px">${hourLabels()}</div>
-            <div class="db-calendar-week-body" role="grid" aria-label="Week"
-              style="height: ${GRID_HEIGHT}px; --db-calendar-time-day-count: 7">
+          <div class="obnotion-calendar-week-scroll">
+            <div class="obnotion-calendar-week-time-gutter" style="height: ${GRID_HEIGHT}px">${hourLabels()}</div>
+            <div class="obnotion-calendar-week-body" role="grid" aria-label="Week"
+              style="height: ${GRID_HEIGHT}px; --obnotion-calendar-time-day-count: 7">
               ${slotLines()}
-              <div class="db-calendar-time-columns" role="row" style="--db-calendar-time-day-count: 7">
+              <div class="obnotion-calendar-time-columns" role="row" style="--obnotion-calendar-time-day-count: 7">
                 ${WEEK_DAYS.map((day) => `
-                  <div class="db-calendar-week-day-col ${day.today ? "is-today" : ""} ${day.weekend ? "is-weekend" : ""}" data-date-key="${day.key}"
+                  <div class="obnotion-calendar-week-day-col ${day.today ? "is-today" : ""} ${day.weekend ? "is-weekend" : ""}" data-date-key="${day.key}"
                     role="gridcell" tabindex="${day.today ? "0" : "-1"}" aria-label="${day.key}">
                     ${(WEEK_EVENTS[day.key] || []).map(timedEvent).join("")}
-                    ${day.today ? `<div class="db-calendar-timed-current-line" aria-hidden="true"
+                    ${day.today ? `<div class="obnotion-calendar-timed-current-line" aria-hidden="true"
                       style="top: ${offsetOf(13 * 60 + 45)}px"></div>` : ""}
                   </div>`).join("")}
               </div>
@@ -1545,29 +1545,29 @@ export const TEMPORAL_SCENARIOS = [
       + "own markup rather than a constructed capture of a button that no longer exists.",
     // Anchored absolutely under the calendar header, so with no header to hang from it leaves
     // the flow and the capture box collapses. Put back in flow to photograph it.
-    captureCss: `.note-database-container .db-calendar-mini-popover {
+    captureCss: `.obnotion-container .obnotion-calendar-mini-popover {
       position: static !important; top: auto !important; right: auto !important; margin-top: 0 !important;
     }`,
     html: () => `
-      <div class="note-database-container">
-        <div class="db-calendar-mini-popover">
-          <div class="db-calendar-mini-head">
-            <button type="button" class="db-calendar-mini-nav" aria-label="Previous month">${glyph(ICON.chevronLeft)}</button>
-            <button type="button" class="db-calendar-mini-title db-calendar-mini-title-button">March 2026</button>
-            <button type="button" class="db-calendar-mini-nav" aria-label="Next month">${glyph(ICON.chevronRight)}</button>
+      <div class="obnotion-container">
+        <div class="obnotion-calendar-mini-popover">
+          <div class="obnotion-calendar-mini-head">
+            <button type="button" class="obnotion-calendar-mini-nav" aria-label="Previous month">${glyph(ICON.chevronLeft)}</button>
+            <button type="button" class="obnotion-calendar-mini-title obnotion-calendar-mini-title-button">March 2026</button>
+            <button type="button" class="obnotion-calendar-mini-nav" aria-label="Next month">${glyph(ICON.chevronRight)}</button>
           </div>
-          <div class="db-calendar-mini-weekdays" role="row">
-            ${WEEKDAYS.map((d) => `<div class="db-calendar-mini-weekday" role="columnheader">${d}</div>`).join("")}
+          <div class="obnotion-calendar-mini-weekdays" role="row">
+            ${WEEKDAYS.map((d) => `<div class="obnotion-calendar-mini-weekday" role="columnheader">${d}</div>`).join("")}
           </div>
-          <div class="db-calendar-mini-grid" role="grid" aria-label="March 2026">
+          <div class="obnotion-calendar-mini-grid" role="grid" aria-label="March 2026">
             ${MINI_WEEKS.map((week) => `
-              <div class="db-calendar-mini-week" role="row">
+              <div class="obnotion-calendar-mini-week" role="row">
                 ${week.map((day) => miniDay(day)).join("")}
               </div>`).join("")}
           </div>
-          <div class="db-calendar-mini-footer">
-            <button type="button" class="db-calendar-mini-footer-action">This week</button>
-            <button type="button" class="db-calendar-mini-today">Today</button>
+          <div class="obnotion-calendar-mini-footer">
+            <button type="button" class="obnotion-calendar-mini-footer-action">This week</button>
+            <button type="button" class="obnotion-calendar-mini-today">Today</button>
           </div>
         </div>
       </div>`,
@@ -1579,11 +1579,11 @@ export const TEMPORAL_SCENARIOS = [
     width: 1100,
     sources: ["src/views/calendar-renderer.ts", "src/views/empty-state-renderer.ts"],
     fixtureOf: "constructed-calendar-empty",
-    note: "renderEmpty() returns before .db-calendar is ever created, so the card lands as a "
-      + "direct child of .note-database-container — the density rule (styles.css:16849-16864) has "
-      + "to key off that same container, not a .db-calendar descendant, or it never applies.",
+    note: "renderEmpty() returns before .obnotion-calendar is ever created, so the card lands as a "
+      + "direct child of .obnotion-container — the density rule (styles.css:16849-16864) has "
+      + "to key off that same container, not a .obnotion-calendar descendant, or it never applies.",
     html: () => `
-      <div class="note-database-container">
+      <div class="obnotion-container">
         ${calendarEmptyStateMarkup("no-date-field")}
       </div>`,
   },
@@ -1595,24 +1595,24 @@ export const TEMPORAL_SCENARIOS = [
     sources: ["src/views/calendar-toolbar-renderer.ts", "src/views/dropdown-field.ts"],
     fixtureOf: "constructed-calendar-toolbar-options",
     note: "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
-    captureCss: `.note-database-container .db-calendar-options-popover { ${STATIC_POPOVER} }`,
+    captureCss: `.obnotion-container .obnotion-calendar-options-popover { ${STATIC_POPOVER} }`,
     html: () => `
-      <div class="note-database-container">
-        <div class="db-calendar-options-popover db-chart-options-popover">
-          <div class="db-panel-header"><div class="db-panel-title">Calendar options</div></div>
-          <div class="db-calendar-options-content">
+      <div class="obnotion-container">
+        <div class="obnotion-calendar-options-popover obnotion-chart-options-popover">
+          <div class="obnotion-panel-header"><div class="obnotion-panel-title">Calendar options</div></div>
+          <div class="obnotion-calendar-options-content">
             ${section("Data", `
               ${dropdownRow(ICON.calendarDays, "Event start date", "Next Renewal")}
               ${dropdownRow(ICON.calendarRange, "Event end date", "Not set")}
               ${dropdownRow(ICON.textCursor, "Event title", "Name")}
               ${dropdownRow(ICON.layoutGrid, "Calendar scale", "Week")}
               ${switchRow(ICON.rows, "Show empty fields", false)}
-              <div class="db-calendar-setup-preview">
-                <div class="db-calendar-setup-preview-label">Preview</div>
-                <div class="db-calendar-preview-card">
-                  <div class="db-calendar-preview-title">Name</div>
-                  <div class="db-calendar-preview-date">Next Renewal → End date</div>
-                  <div class="db-calendar-preview-color" aria-label="Category" title="Category"></div>
+              <div class="obnotion-calendar-setup-preview">
+                <div class="obnotion-calendar-setup-preview-label">Preview</div>
+                <div class="obnotion-calendar-preview-card">
+                  <div class="obnotion-calendar-preview-title">Name</div>
+                  <div class="obnotion-calendar-preview-date">Next Renewal → End date</div>
+                  <div class="obnotion-calendar-preview-color" aria-label="Category" title="Category"></div>
                 </div>
               </div>`)}
             ${section("Layout", `
@@ -1625,7 +1625,7 @@ export const TEMPORAL_SCENARIOS = [
               ${dropdownRow(ICON.clock, "Slot duration", "30 minutes")}`)}
             ${section("Appearance", `
               ${dropdownRow(ICON.palette, "Event colour", "Category")}
-              ${switchRow(ICON.smilePlus, "Show record icon", true, "db-calendar-show-icon-toggle")}`)}
+              ${switchRow(ICON.smilePlus, "Show record icon", true, "obnotion-calendar-show-icon-toggle")}`)}
           </div>
         </div>
       </div>`,
@@ -1640,12 +1640,12 @@ export const TEMPORAL_SCENARIOS = [
     sources: ["src/views/calendar-timeline-toolbar-renderer.ts", "src/views/dropdown-field.ts"],
     fixtureOf: "constructed-timeline-toolbar-options",
     note: "The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them). The week-label select stays visible regardless of scale, matching the reference's always-visible plugin setting. The day-scale slot-duration select is gated behind local extensions AND day scale together, so this fixture — depicted at Week scale — omits it even with extensions on.",
-    captureCss: `.note-database-container .db-calendar-timeline-options-popover { ${STATIC_POPOVER} }`,
+    captureCss: `.obnotion-container .obnotion-calendar-timeline-options-popover { ${STATIC_POPOVER} }`,
     html: () => `
-      <div class="note-database-container">
-        <div class="db-calendar-timeline-options-popover db-chart-options-popover">
-          <div class="db-panel-header"><div class="db-panel-title">Timeline options</div></div>
-          <div class="db-calendar-timeline-options-content">
+      <div class="obnotion-container">
+        <div class="obnotion-calendar-timeline-options-popover obnotion-chart-options-popover">
+          <div class="obnotion-panel-header"><div class="obnotion-panel-title">Timeline options</div></div>
+          <div class="obnotion-calendar-timeline-options-content">
             ${section("Data", `
               ${dropdownRow(ICON.calendarDays, "Event start date", "Next Renewal")}
               ${dropdownRow(ICON.calendarRange, "Event end date", "Ends")}
@@ -1656,7 +1656,7 @@ export const TEMPORAL_SCENARIOS = [
             ${section("Layout", `
               ${switchRow(ICON.code, "Local extensions", true)}
               ${switchRow(ICON.columns, "Custom column width", true)}
-              ${rangeRow("Column width", 72, 24, 240, 1, "db-calendar-timeline-range-row")}
+              ${rangeRow("Column width", 72, 24, 240, 1, "obnotion-calendar-timeline-range-row")}
               ${dropdownRow(ICON.hash, "Week label", "Week number")}`)}
             ${section("Style", `
               ${dropdownRow(ICON.palette, "Event colour", "Category")}

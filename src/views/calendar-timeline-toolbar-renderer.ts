@@ -65,7 +65,7 @@ export class CalendarTimelineToolbarRenderer {
 
   private openPopover(containerEl: HTMLElement, anchor: HTMLElement, config: ViewConfig, actions: CalendarTimelineToolbarActions): void {
     this.closePopover();
-    const panel = containerEl.createDiv({ cls: "db-calendar-timeline-options-popover db-chart-options-popover" });
+    const panel = containerEl.createDiv({ cls: "obnotion-calendar-timeline-options-popover obnotion-chart-options-popover" });
     this.popover = panel;
     // Grab handle, centred title, 44x44 trailing close — the same shell every
     // migrated sheet/popover header uses (surface-shell.ts).
@@ -73,7 +73,7 @@ export class CalendarTimelineToolbarRenderer {
       title: t("timeline.options"),
       onClose: () => this.closePopover(),
     });
-    const content = panel.createDiv({ cls: "db-calendar-timeline-options-content" });
+    const content = panel.createDiv({ cls: "obnotion-calendar-timeline-options-content" });
     this.popoverContent = content;
     this.renderTimelineOptions(content, config, actions);
     positionToolbarPopover(panel, anchor, { preferredWidth: 420, maxWidth: 480 });
@@ -166,7 +166,7 @@ export class CalendarTimelineToolbarRenderer {
     // renderLayoutContent rebuilds its own subtree on every gate/scale toggle (see its own
     // comment); a nested content div keeps that empty()/rebuild scoped below the heading
     // createSection just added, instead of wiping the heading along with the fields.
-    const layoutContent = layout.createDiv({ cls: "db-chart-options-section-content" });
+    const layoutContent = layout.createDiv({ cls: "obnotion-chart-options-section-content" });
     this.renderLayoutContent(layoutContent, config, actions);
 
     const style = this.createSection(panel, t("chart.optionsStyle"));
@@ -268,20 +268,20 @@ export class CalendarTimelineToolbarRenderer {
 
   private renderSameDateFieldWarning(parent: HTMLElement, startField: string | undefined, endField: string | undefined): void {
     if (!startField || !endField || startField !== endField) return;
-    parent.createDiv({ cls: "db-calendar-same-date-warning", text: t("calendar.sameDateFieldWarning") });
+    parent.createDiv({ cls: "obnotion-calendar-same-date-warning", text: t("calendar.sameDateFieldWarning") });
   }
 
   /** 无效时间事件提示 + 修复入口（popover 内完整 warning）：⚠️ + 冲突数 + [修复]。 */
   private renderInvalidEventsNotice(parent: HTMLElement, actions: CalendarTimelineToolbarActions): void {
     if (!actions.getInvalidEventCount || !actions.openInvalidEvents) return;
-    const row = parent.createDiv({ cls: "db-calendar-same-date-warning db-calendar-invalid-events-row" });
+    const row = parent.createDiv({ cls: "obnotion-calendar-same-date-warning obnotion-calendar-invalid-events-row" });
     const renderCount = (count: number) => {
       if (!row.isConnected) return;
       if (count <= 0) { row.remove(); return; }
       row.empty();
-      setIcon(row.createSpan({ cls: "db-calendar-invalid-events-icon" }), "alert-triangle");
-      row.createSpan({ cls: "db-calendar-invalid-events-text", text: t("timeline.invalidEventsConflictNotice", { count }) });
-      const btn = row.createEl("button", { cls: "db-calendar-invalid-events-btn", text: t("timeline.fixInvalidEvents") });
+      setIcon(row.createSpan({ cls: "obnotion-calendar-invalid-events-icon" }), "alert-triangle");
+      row.createSpan({ cls: "obnotion-calendar-invalid-events-text", text: t("timeline.invalidEventsConflictNotice", { count }) });
+      const btn = row.createEl("button", { cls: "obnotion-calendar-invalid-events-btn", text: t("timeline.fixInvalidEvents") });
       btn.onclick = () => actions.openInvalidEvents?.();
     };
     const result = actions.getInvalidEventCount();
@@ -299,8 +299,8 @@ export class CalendarTimelineToolbarRenderer {
   }
 
   private createSection(panel: HTMLElement, title: string): HTMLElement {
-    const section = panel.createDiv({ cls: "db-chart-options-section" });
-    section.createDiv({ cls: "db-chart-options-section-title", text: title });
+    const section = panel.createDiv({ cls: "obnotion-chart-options-section" });
+    section.createDiv({ cls: "obnotion-chart-options-section-title", text: title });
     return section;
   }
 
@@ -321,8 +321,8 @@ export class CalendarTimelineToolbarRenderer {
       value,
       onChange,
       icon,
-      className: "db-chart-options-dropdown",
-      popoverClassName: "db-calendar-timeline-options-dropdown",
+      className: "obnotion-chart-options-dropdown",
+      popoverClassName: "obnotion-calendar-timeline-options-dropdown",
       searchable,
       disabled,
       renderIcon: (iconEl, iconName) => {
@@ -332,25 +332,25 @@ export class CalendarTimelineToolbarRenderer {
   }
 
 	private renderSwitch(parent: HTMLElement, label: string, value: boolean, onChange: (value: boolean) => void, icon: string): void {
-		const row = parent.createEl("label", { cls: "db-chart-options-row db-chart-options-switch-row" });
-		setIcon(row.createSpan({ cls: "db-chart-options-row-icon" }), icon);
-		row.createDiv({ cls: "db-chart-options-row-text" }).createSpan({ cls: "db-chart-options-label", text: label });
-		const input = row.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch" } });
+		const row = parent.createEl("label", { cls: "obnotion-chart-options-row obnotion-chart-options-switch-row" });
+		setIcon(row.createSpan({ cls: "obnotion-chart-options-row-icon" }), icon);
+		row.createDiv({ cls: "obnotion-chart-options-row-text" }).createSpan({ cls: "obnotion-chart-options-label", text: label });
+		const input = row.createEl("input", { cls: "obnotion-toggle-switch", attr: { type: "checkbox", role: "switch" } });
 		input.checked = value;
 		input.onchange = () => onChange(input.checked);
 	}
 
   private renderRange(parent: HTMLElement, label: string, value: number, min: number, max: number, step: number, onChange: (value: number) => void): void {
-    const row = parent.createDiv({ cls: "db-chart-options-row db-calendar-range-row db-calendar-timeline-range-row" });
-    setIcon(row.createSpan({ cls: "db-chart-options-row-icon" }), "ruler");
-    const text = row.createDiv({ cls: "db-chart-options-row-text" });
-    text.createSpan({ cls: "db-chart-options-label", text: label });
-    const control = row.createDiv({ cls: "db-view-config-range" });
+    const row = parent.createDiv({ cls: "obnotion-chart-options-row obnotion-calendar-range-row obnotion-calendar-timeline-range-row" });
+    setIcon(row.createSpan({ cls: "obnotion-chart-options-row-icon" }), "ruler");
+    const text = row.createDiv({ cls: "obnotion-chart-options-row-text" });
+    text.createSpan({ cls: "obnotion-chart-options-label", text: label });
+    const control = row.createDiv({ cls: "obnotion-view-config-range" });
     const slider = control.createEl("input", {
       attr: { type: "range", min: String(min), max: String(max), step: String(step) },
     });
     const number = control.createEl("input", {
-      cls: "db-view-config-number",
+      cls: "obnotion-view-config-number",
       attr: { type: "number", min: String(min), max: String(max), step: String(step) },
     });
     const clamp = (next: number): number => Math.max(min, Math.min(max, Math.round(next)));
@@ -427,6 +427,6 @@ export class CalendarTimelineToolbarRenderer {
   }
 
   private isInsideDropdown(target: Node): boolean {
-    return target.instanceOf(HTMLElement) && Boolean(target.closest(".db-dropdown-popover"));
+    return target.instanceOf(HTMLElement) && Boolean(target.closest(".obnotion-dropdown-popover"));
   }
 }

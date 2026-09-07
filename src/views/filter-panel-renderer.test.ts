@@ -60,7 +60,7 @@ vi.mock("./property-type-icon", async (importOriginal) => {
 //
 // The same hand-built element `view-config-panel-renderer.test.ts` mounts on, trimmed to what the
 // entry tier and its shell header touch: creation, class membership, attributes, sibling-aware
-// insertion (the panel repositions itself after `.db-header` via `insertBefore`/`nextSibling`).
+// insertion (the panel repositions itself after `.obnotion-header` via `insertBefore`/`nextSibling`).
 
 class FakeElement {
   tagName: string;
@@ -220,8 +220,8 @@ function makeContainer(): FakeElement {
   const body = new FakeElement("body");
   const doc = { body, querySelector: (selector: string) => body.querySelector(selector) };
   body.ownerDocument = doc;
-  const container = body.createDiv({ cls: "note-database-container" });
-  container.createDiv({ cls: "db-header" });
+  const container = body.createDiv({ cls: "obnotion-container" });
+  container.createDiv({ cls: "obnotion-header" });
   return container;
 }
 
@@ -270,13 +270,13 @@ describe("FilterPanelRenderer zero-rule entry tier (mounted)", () => {
     const renderer = new FilterPanelRenderer();
     renderer.render(container as unknown as HTMLElement, true, makeState(), makeConfig(), makeActions());
 
-    const panel = container.querySelector(".db-filter-panel");
+    const panel = container.querySelector(".obnotion-filter-panel");
     expect(panel).not.toBeNull();
-    expect(panel?.querySelector(".db-dropdown-search")).not.toBeNull();
-    const rows = panel?.querySelectorAll(".db-dropdown-option") ?? [];
+    expect(panel?.querySelector(".obnotion-dropdown-search")).not.toBeNull();
+    const rows = panel?.querySelectorAll(".obnotion-dropdown-option") ?? [];
     // file.name, colA, colB — the entry tier's own vocabulary is getViewRuleColumns(config).
     expect(rows).toHaveLength(3);
-    const labels = rows.map((row) => row.querySelector(".db-dropdown-option-label")?.textContent);
+    const labels = rows.map((row) => row.querySelector(".obnotion-dropdown-option-label")?.textContent);
     expect(labels).toEqual(["Name", "Alpha", "Beta"]);
   });
 
@@ -285,9 +285,9 @@ describe("FilterPanelRenderer zero-rule entry tier (mounted)", () => {
     const renderer = new FilterPanelRenderer();
     renderer.render(container as unknown as HTMLElement, true, makeState(), makeConfig(), makeActions());
 
-    const panel = container.querySelector(".db-filter-panel");
+    const panel = container.querySelector(".obnotion-filter-panel");
     const buttons = panel?.querySelectorAll("button") ?? [];
-    const footer = buttons.find((button) => button.hasClass("db-panel-button") && button.textContent.includes("Add"));
+    const footer = buttons.find((button) => button.hasClass("obnotion-panel-button") && button.textContent.includes("Add"));
     expect(footer?.textContent).toBe("+ Add advanced filter");
   });
 
@@ -304,8 +304,8 @@ describe("FilterPanelRenderer zero-rule entry tier (mounted)", () => {
     const actions = makeActions();
     renderer.render(container as unknown as HTMLElement, true, state, config, actions);
 
-    const panel = container.querySelector(".db-filter-panel");
-    const rows = panel?.querySelectorAll(".db-dropdown-option") ?? [];
+    const panel = container.querySelector(".obnotion-filter-panel");
+    const rows = panel?.querySelectorAll(".obnotion-dropdown-option") ?? [];
     expect(rows).toHaveLength(3);
 
     // Swallow the re-render `addFirstLeaf` triggers on commit: it re-enters the public `render()`
@@ -346,7 +346,7 @@ describe("FilterPanelRenderer searchable condition dropdowns", () => {
 
 describe("FilterPanelRenderer ≥1-rule tree branch", () => {
   it("falls back to the plain hint when there is nothing to list, rather than an empty search box", () => {
-    expect(source).toMatch(/if \(columns\.length === 0\) \{\s*\n\s*panel\.createDiv\(\{ cls: "db-panel-empty", text: t\("panel\.emptyFilters"\) \}\);/);
+    expect(source).toMatch(/if \(columns\.length === 0\) \{\s*\n\s*panel\.createDiv\(\{ cls: "obnotion-panel-empty", text: t\("panel\.emptyFilters"\) \}\);/);
   });
 
   it("keeps the ≥1-rule branch's + Add condition button inside the tree branch, unmoved — the negative control", () => {

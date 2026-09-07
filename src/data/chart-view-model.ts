@@ -242,7 +242,7 @@ export function normalizeChartConfigForType(config: ViewConfig): void {
 
 export function getChartHeightClass(config: ViewConfig): string {
   const height = config.chartHeight || "medium";
-  return `db-chart-height-${height}`;
+  return `obnotion-chart-height-${height}`;
 }
 
 function requiresChartSeriesField(chartType: ViewConfig["chartType"]): boolean {

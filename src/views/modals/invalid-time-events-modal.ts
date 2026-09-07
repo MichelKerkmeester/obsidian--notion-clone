@@ -22,7 +22,7 @@ import {
 import { applyRangeSelection, clearSelection, selectAll } from "../../data/range-selection";
 import { RowData } from "../../data/types";
 import { t } from "../../i18n";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 import { createCheckbox } from "../checkbox";
 
@@ -94,15 +94,15 @@ export class InvalidTimeEventsModal extends DbModal {
     const { contentEl } = this;
     contentEl.empty();
     this.modalEl.addClass("invalid-events-modal-host");
-    contentEl.addClass("note-database-modal", "db-invalid-events-modal");
+    contentEl.addClass("obnotion-modal", "obnotion-invalid-events-modal");
     contentEl.createEl("h3", { text: t("timeline.invalidEventsTitleWithCount", { count: this.options.length }) });
-    contentEl.createDiv({ cls: "db-modal-help", text: t("timeline.invalidEventsDesc") });
+    contentEl.createDiv({ cls: "obnotion-modal-help", text: t("timeline.invalidEventsDesc") });
 
-    const grid = contentEl.createDiv({ cls: "db-invalid-event-grid" });
-    const header = grid.createDiv({ cls: "db-invalid-event-grid-header" });
+    const grid = contentEl.createDiv({ cls: "obnotion-invalid-event-grid" });
+    const header = grid.createDiv({ cls: "obnotion-invalid-event-grid-header" });
     const selectAll = createCheckbox(header, {
       role: "field",
-      cls: "db-modal-checkbox db-invalid-event-select",
+      cls: "obnotion-modal-checkbox obnotion-invalid-event-select",
       attr: { "aria-label": t("timeline.invalidEventsSelectAll") },
     });
     this.selectAllInput = selectAll;
@@ -111,14 +111,14 @@ export class InvalidTimeEventsModal extends DbModal {
       this.setAllSelected(selectAll.checked);
       this.lastSelectedEventKey = selectAll.checked ? this.getEventKeys()[this.options.length - 1] || null : null;
     };
-    header.createDiv({ cls: "db-invalid-event-col-note", text: t("timeline.invalidEventsNote") });
-    header.createDiv({ cls: "db-invalid-event-col-time", text: t("timeline.invalidEventsStart") });
-    header.createDiv({ cls: "db-invalid-event-col-time", text: t("timeline.invalidEventsEnd") });
-    header.createDiv({ cls: "db-invalid-event-col-span", text: t("timeline.invalidEventsSpan") });
+    header.createDiv({ cls: "obnotion-invalid-event-col-note", text: t("timeline.invalidEventsNote") });
+    header.createDiv({ cls: "obnotion-invalid-event-col-time", text: t("timeline.invalidEventsStart") });
+    header.createDiv({ cls: "obnotion-invalid-event-col-time", text: t("timeline.invalidEventsEnd") });
+    header.createDiv({ cls: "obnotion-invalid-event-col-span", text: t("timeline.invalidEventsSpan") });
 
     for (const option of this.options) {
       const key = option.row.file.path;
-      const row = grid.createDiv({ cls: "db-invalid-event-row" });
+      const row = grid.createDiv({ cls: "obnotion-invalid-event-row" });
       const draft: InvalidTimeEventDraft = {
         selected: true,
         start: InvalidTimeEventsModal.clipForDateInput(toTimelineDateTimeInputValue(option.startValue), option.startIsDateOnly),
@@ -132,7 +132,7 @@ export class InvalidTimeEventsModal extends DbModal {
       };
       const checkbox = createCheckbox(row, {
         role: "field",
-        cls: "db-modal-checkbox db-invalid-event-select",
+        cls: "obnotion-modal-checkbox obnotion-invalid-event-select",
         attr: { "aria-label": t("timeline.invalidEventsSelectRow", { name: option.fileName }) },
       });
       checkbox.checked = true;
@@ -149,13 +149,13 @@ export class InvalidTimeEventsModal extends DbModal {
         this.syncEventSelection(selectedKeys);
       };
       draft.checkbox = checkbox;
-      row.createDiv({ cls: "db-invalid-event-name", text: option.fileName, attr: { title: option.row.file.path } });
+      row.createDiv({ cls: "obnotion-invalid-event-name", text: option.fileName, attr: { title: option.row.file.path } });
       draft.startInput = this.createDateTimeInput(row, t("timeline.invalidEventsStart"), draft.start, "start", draft.startIsDateOnly);
       draft.endInput = this.createDateTimeInput(row, t("timeline.invalidEventsEnd"), draft.end, "end", draft.endIsDateOnly);
-      const spanCell = row.createDiv({ cls: "db-invalid-event-span-cell" });
-      draft.spanEl = spanCell.createSpan({ cls: "db-invalid-event-span" });
+      const spanCell = row.createDiv({ cls: "obnotion-invalid-event-span-cell" });
+      draft.spanEl = spanCell.createSpan({ cls: "obnotion-invalid-event-span" });
       const quickFix = spanCell.createEl("button", {
-        cls: "db-invalid-event-row-fix",
+        cls: "obnotion-invalid-event-row-fix",
         text: t("timeline.invalidEventsQuickFixShort"),
         attr: { type: "button", title: t("timeline.invalidEventsQuickFix") },
       });
@@ -174,14 +174,14 @@ export class InvalidTimeEventsModal extends DbModal {
       this.renderSpan(draft);
     }
 
-    const actions = contentEl.createDiv({ cls: "db-invalid-event-actions" });
-    const bulk = actions.createDiv({ cls: "db-invalid-event-bulk-actions" });
+    const actions = contentEl.createDiv({ cls: "obnotion-invalid-event-actions" });
+    const bulk = actions.createDiv({ cls: "obnotion-invalid-event-bulk-actions" });
     bulk.createEl("button", {
       text: t("timeline.invalidEventsQuickFix"),
       attr: { type: "button" },
     }).onclick = () => this.applyQuickFixToSelected();
-    this.selectedCountEl = bulk.createSpan({ cls: "db-invalid-event-selected-count" });
-    const buttons = actions.createDiv({ cls: "db-modal-actions" });
+    this.selectedCountEl = bulk.createSpan({ cls: "obnotion-invalid-event-selected-count" });
+    const buttons = actions.createDiv({ cls: "obnotion-modal-actions" });
     buttons.createEl("button", {
       text: t("common.cancel"),
       attr: { type: "button" },
@@ -217,11 +217,11 @@ export class InvalidTimeEventsModal extends DbModal {
   }
 
   private createDateTimeInput(parent: HTMLElement, label: string, initialValue: string, placement: "start" | "end", isDateOnly: boolean): HTMLInputElement {
-    const field = parent.createDiv({ cls: `db-invalid-event-time-field is-${placement}` });
-    field.createSpan({ cls: "db-invalid-event-time-label", text: label });
+    const field = parent.createDiv({ cls: `obnotion-invalid-event-time-field is-${placement}` });
+    field.createSpan({ cls: "obnotion-invalid-event-time-label", text: label });
     const input = field.createEl("input", {
       // 纯 date 列用 date 输入：用户无法给 date 列填无意义的时间，避免「填了时间→写回被截→刷新后又 invalid」的假修复。
-      cls: `db-invalid-event-datetime${isDateOnly ? " is-date-only" : ""}`,
+      cls: `obnotion-invalid-event-datetime${isDateOnly ? " is-date-only" : ""}`,
       attr: { type: isDateOnly ? "date" : "datetime-local", "aria-label": label },
     });
     input.value = initialValue;

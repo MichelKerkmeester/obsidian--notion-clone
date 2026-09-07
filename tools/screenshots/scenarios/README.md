@@ -4,13 +4,13 @@ description: "One scenario module per surface family: shared fixtures, applicati
 trigger_phrases:
   - "screenshot scenario modules"
   - "chrome core fields panels temporal scenarios"
-  - "mock db- fixtures for capture"
+  - "mock obnotion- fixtures for capture"
 ---
 
 # tools/screenshots/scenarios: per-surface scenarios
 
 `tools/screenshots/scenarios/` holds one scenario module per surface family, so several can be
-authored at once without contending for a single file. Each module defines the mock `db-*` DOM for
+authored at once without contending for a single file. Each module defines the mock `obnotion-*` DOM for
 its surfaces and names the source files behind each shot. `scenarios.mjs` in the parent folder
 aggregates them into the `SCENARIOS` registry.
 

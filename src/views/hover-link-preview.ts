@@ -18,9 +18,9 @@ import { isElement, isHTMLElement } from "./dom-guards";
 // 2. CONSTANTS
 // ───────────────────────────────────────────────────────────────────
 
-export const NOTE_DATABASE_HOVER_LINK_SOURCE = "note-database";
+export const OBNOTION_HOVER_LINK_SOURCE = "obnotion";
 
-const HOVER_LINK_SELECTOR = "[data-note-database-hover-link]";
+const HOVER_LINK_SELECTOR = "[data-obnotion-hover-link]";
 
 // ───────────────────────────────────────────────────────────────────
 // 3. HOVER LINK DELEGATION
@@ -32,9 +32,9 @@ export function markNoteHoverLink(
   linktext: string,
   sourcePath: string,
 ): void {
-  element.setAttribute("data-note-database-hover-link", "true");
-  element.setAttribute("data-note-database-linktext", linktext);
-  element.setAttribute("data-note-database-source-path", sourcePath);
+  element.setAttribute("data-obnotion-hover-link", "true");
+  element.setAttribute("data-obnotion-linktext", linktext);
+  element.setAttribute("data-obnotion-source-path", sourcePath);
 }
 
 /**
@@ -54,15 +54,15 @@ export function installNoteHoverPreview(
 
     if (isElement(event.relatedTarget) && targetEl.contains(event.relatedTarget)) return;
 
-    const linktext = targetEl.getAttribute("data-note-database-linktext");
+    const linktext = targetEl.getAttribute("data-obnotion-linktext");
     if (!linktext) return;
     app.workspace.trigger("hover-link", {
       event,
-      source: NOTE_DATABASE_HOVER_LINK_SOURCE,
+      source: OBNOTION_HOVER_LINK_SOURCE,
       hoverParent,
       targetEl,
       linktext,
-      sourcePath: targetEl.getAttribute("data-note-database-source-path") || "",
+      sourcePath: targetEl.getAttribute("data-obnotion-source-path") || "",
     });
   });
 }

@@ -44,14 +44,14 @@
 
 import { hasSheetDrag } from "./mobile-bottom-sheet";
 
-// The floor `.db-panel-row` itself declares (styles.css §21 PANEL ROWS) — the value sort and
-// filter rows have always used. `.db-record-detail-field` (4px/6px) and the phone-scoped
-// `.db-menu-item` (8px/16px, `.is-phone .db-menu-item.db-menu-item`) both clear it comfortably;
-// there is no `--db-panel-row-padding` custom property to read instead, so the literal is named
+// The floor `.obnotion-panel-row` itself declares (styles.css §21 PANEL ROWS) — the value sort and
+// filter rows have always used. `.obnotion-record-detail-field` (4px/6px) and the phone-scoped
+// `.obnotion-menu-item` (8px/16px, `.is-phone .obnotion-menu-item.obnotion-menu-item`) both clear it comfortably;
+// there is no `--obnotion-panel-row-padding` custom property to read instead, so the literal is named
 // here rather than duplicated at every call site.
 const ROW_PADDING_FLOOR_PX = 2;
 
-// `.db-mobile-bottom-sheet`'s own rule sets `padding-bottom: calc(16px + env(safe-area-inset-
+// `.obnotion-mobile-bottom-sheet`'s own rule sets `padding-bottom: calc(16px + env(safe-area-inset-
 // bottom))`. A headless browser with no device notch resolves `env()` to 0, so the number this
 // lane can observe is the literal term, not the environment term — checking for it is checking
 // that the rule which *would* add the inset on a real device is the one actually applied, rather
@@ -72,9 +72,9 @@ export interface SheetGrammarElement {
 
 function hasSheetSurface(panel: HTMLElement): boolean {
   const doc = panel.ownerDocument;
-  return panel.hasClass("db-mobile-bottom-sheet")
+  return panel.hasClass("obnotion-mobile-bottom-sheet")
     && panel.parentElement === doc.body
-    && Boolean(doc.body.querySelector(".db-mobile-sheet-scrim"));
+    && Boolean(doc.body.querySelector(".obnotion-mobile-sheet-scrim"));
 }
 
 function hasSheetHandle(panel: HTMLElement): boolean {
@@ -82,22 +82,22 @@ function hasSheetHandle(panel: HTMLElement): boolean {
   // bar without a gesture cannot exist and a gesture without a bar is a sheet
   // that cannot be pulled down. Both halves are required because a rebuild
   // can restore the bar while the drag was never re-wired.
-  const hasBar = Boolean(panel.querySelector(".db-mobile-bottom-sheet-handle"));
+  const hasBar = Boolean(panel.querySelector(".obnotion-mobile-bottom-sheet-handle"));
   const hasDrag = hasSheetDrag(panel);
   // A `menu`-role card (`design-trueup.md` row 26) is satisfied by the OPPOSITE of a handle: it
   // dismisses on a tap, not a drag, and advertising one it does not have is the defect this
   // column exists to catch for every other sheet. Read backwards for this one declared role
   // rather than silently passing it on a coincidental "neither exists" for the wrong reason.
-  if (panel.hasClass("db-mobile-menu-card")) return !hasBar && !hasDrag;
+  if (panel.hasClass("obnotion-mobile-menu-card")) return !hasBar && !hasDrag;
   return hasBar && hasDrag;
 }
 
 function hasSheetHeader(panel: HTMLElement): boolean {
-  const header = panel.querySelector<HTMLElement>(".db-panel-header, .db-record-detail-header");
+  const header = panel.querySelector<HTMLElement>(".obnotion-panel-header, .obnotion-record-detail-header");
   if (!header) return false;
-  const title = header.querySelector<HTMLElement>(".db-panel-title, .db-record-detail-title");
+  const title = header.querySelector<HTMLElement>(".obnotion-panel-title, .obnotion-record-detail-title");
   const titleText = title?.textContent?.trim() ?? "";
-  const close = header.querySelector<HTMLElement>(".db-sheet-close, .db-cell-edit-close");
+  const close = header.querySelector<HTMLElement>(".obnotion-sheet-close, .obnotion-cell-edit-close");
   return titleText.length > 0 && close !== null;
 }
 
@@ -110,7 +110,7 @@ function hasPaddedRows(panel: HTMLElement): boolean {
   // The properties panel's row predates this contract too: it already clears the padding floor
   // (a rule of its own, not a borrowed one), so it joins the accepted-synonyms list rather than
   // being asked to rename onto one of the other three for a predicate that already passes it.
-  const rows = Array.from(panel.querySelectorAll<HTMLElement>(".db-panel-row, .db-record-detail-field, .db-menu-item, .db-column-manager-row"));
+  const rows = Array.from(panel.querySelectorAll<HTMLElement>(".obnotion-panel-row, .obnotion-record-detail-field, .obnotion-menu-item, .obnotion-column-manager-row"));
   if (rows.length === 0) return false;
   const view = panel.ownerDocument.defaultView;
   if (!view) return false;
@@ -119,7 +119,7 @@ function hasPaddedRows(panel: HTMLElement): boolean {
     // lane's own group-gap ratio check): spacing comes from the form's own `gap`, and re-adding
     // padding here would be the exact double-count that design removed. Presence still counts
     // toward the column; the per-row floor does not apply to this one documented exception.
-    if (row.closest(".db-add-view-form")) return true;
+    if (row.closest(".obnotion-add-view-form")) return true;
     const style = view.getComputedStyle(row);
     return [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft].every((value) => {
       const px = Number.parseFloat(value);
@@ -132,12 +132,12 @@ function hasSharedDropdownRows(panel: HTMLElement): boolean {
   // A native select renders the OS picker, which is a second dropdown grammar — the one that
   // shipped on the Add view's key-field row. Absence of a `<select>` alone never proved a surface
   // WITH a dropdown built the shared one, so every element naming itself a dropdown is now checked
-  // against the shared component's own prefix (`db-dropdown-field`/`db-dropdown-popover`/
-  // `db-dropdown-option`) — a surface with no dropdown at all still passes, which is correct: there
+  // against the shared component's own prefix (`obnotion-dropdown-field`/`obnotion-dropdown-popover`/
+  // `obnotion-dropdown-option`) — a surface with no dropdown at all still passes, which is correct: there
   // is nothing on it to be a second grammar.
   //
   // The check is per element, not per class token: `createDropdownField` callers pass extra scoping
-  // classes onto the same node (`db-dropdown-field db-panel-dropdown db-filter-field-dropdown`), and
+  // classes onto the same node (`obnotion-dropdown-field obnotion-panel-dropdown obnotion-filter-field-dropdown`), and
   // every one of those also spells "dropdown" without being a competing component. What matters is
   // whether the ELEMENT that calls itself a dropdown also carries the shared family's own class.
   if (panel.querySelector("select")) return false;
@@ -145,24 +145,24 @@ function hasSharedDropdownRows(panel: HTMLElement): boolean {
     const classes = Array.from(el.classList);
     const namesItselfDropdown = classes.some((cls) => cls.toLowerCase().includes("dropdown"));
     if (!namesItselfDropdown) continue;
-    if (!classes.some((cls) => cls.startsWith("db-dropdown"))) return false;
+    if (!classes.some((cls) => cls.startsWith("obnotion-dropdown"))) return false;
   }
   return true;
 }
 
 function hasSegmentedToggleRows(panel: HTMLElement): boolean {
-  // Choice groups are a segmented control, the shared checkbox, or the `.db-new-placement` radio
+  // Choice groups are a segmented control, the shared checkbox, or the `.obnotion-new-placement` radio
   // substitute the settings/toolbar placement rows actually ship — the primitive every surface on
-  // this program uses. `.db-segmented` alone was checked before, and no surface has ever used it,
+  // this program uses. `.obnotion-segmented` alone was checked before, and no surface has ever used it,
   // which is exactly what made this column pass vacuously: there was nothing on any registered
-  // surface that could ever turn it red. Checking `.db-new-placement` too gives it a real surface
+  // surface that could ever turn it red. Checking `.obnotion-new-placement` too gives it a real surface
   // to fail on if a group's children ever stop carrying the option class.
   const checkboxes = Array.from(panel.querySelectorAll<HTMLInputElement>("input[type='checkbox']"));
-  if (checkboxes.some((input) => !input.classList.contains("db-checkbox"))) return false;
+  if (checkboxes.some((input) => !input.classList.contains("obnotion-checkbox"))) return false;
   if (panel.querySelector("input[type='radio']")) return false;
-  const groups = Array.from(panel.querySelectorAll<HTMLElement>(".db-segmented, .db-new-placement"));
+  const groups = Array.from(panel.querySelectorAll<HTMLElement>(".obnotion-segmented, .obnotion-new-placement"));
   return groups.every((group) => {
-    const optionClass = group.classList.contains("db-segmented") ? "db-segmented-option" : "db-new-placement-option";
+    const optionClass = group.classList.contains("obnotion-segmented") ? "obnotion-segmented-option" : "obnotion-new-placement-option";
     return Array.from(group.children).every((child) => child.classList.contains(optionClass));
   });
 }
@@ -171,12 +171,12 @@ function hasKeyboardAvoidance(panel: HTMLElement): boolean {
   // The placement loop publishes the keyboard figure to this variable on
   // every viewport event while the sheet is open; a sheet that never went
   // through placement carries no inset and stays docked behind the keyboard.
-  const declared = panel.style.getPropertyValue("--db-keyboard-inset");
+  const declared = panel.style.getPropertyValue("--obnotion-keyboard-inset");
   return declared.length > 0 && Number.isFinite(Number.parseFloat(declared));
 }
 
 function hasSafeAreaInset(panel: HTMLElement): boolean {
-  // `.db-mobile-bottom-sheet`'s own rule adds `env(safe-area-inset-bottom)` to a fixed 16px floor;
+  // `.obnotion-mobile-bottom-sheet`'s own rule adds `env(safe-area-inset-bottom)` to a fixed 16px floor;
   // see the module-level comment on why the floor, not the environment term, is what a headless
   // run can observe.
   const view = panel.ownerDocument.defaultView;

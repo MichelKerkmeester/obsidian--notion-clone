@@ -311,17 +311,17 @@ export class ViewConfigPanelRenderer {
   private getScrollHost(): HTMLElement | null {
     const panel = this.panelEl;
     if (!panel) return null;
-    const body = panel.querySelector<HTMLElement>(".db-view-config-body");
+    const body = panel.querySelector<HTMLElement>(".obnotion-view-config-body");
     return body && body.scrollHeight > body.clientHeight ? body : panel;
   }
 
   private rowClass(extra?: string): string {
-    const base = this.asSheet ? "db-panel-row" : "db-view-config-row";
+    const base = this.asSheet ? "obnotion-panel-row" : "obnotion-view-config-row";
     return extra ? `${base} ${extra}` : base;
   }
 
   private hintClass(extra?: string): string {
-    const base = this.asSheet ? "db-panel-hint" : "db-view-config-help";
+    const base = this.asSheet ? "obnotion-panel-hint" : "obnotion-view-config-help";
     return extra ? `${base} ${extra}` : base;
   }
 
@@ -352,7 +352,7 @@ export class ViewConfigPanelRenderer {
     this.panelEl = null;
     if (!visible || !config) return;
 
-    const panel = containerEl.createDiv({ cls: "db-view-config-panel", attr: { id: "db-view-config-panel" } });
+    const panel = containerEl.createDiv({ cls: "obnotion-view-config-panel", attr: { id: "obnotion-view-config-panel" } });
     this.panelEl = panel;
     // A replacement node for a surface that is already open is a rebuild, not an opening. Saying so
     // is what keeps the sheet from replaying its rise and moving out from under the thumb.
@@ -374,12 +374,12 @@ export class ViewConfigPanelRenderer {
     //
     // The region exists on desktop too, with no overflow of its own, so the anchored panel keeps
     // scrolling exactly as it did and only the sheet's rules move the scroller into here.
-    const body = panel.createDiv({ cls: "db-view-config-body" });
+    const body = panel.createDiv({ cls: "obnotion-view-config-body" });
 
     if (actions.database) {
       this.renderSectionTitle(body, t("viewConfig.databaseSection"), "database");
       if (actions.isDatabaseReadOnly) {
-        body.createDiv({ cls: "db-view-config-readonly-note", text: t("viewConfig.databaseReadonly") });
+        body.createDiv({ cls: "obnotion-view-config-readonly-note", text: t("viewConfig.databaseReadonly") });
       }
       this.renderDatabaseSettings(body, actions.database, actions);
     }
@@ -390,11 +390,11 @@ export class ViewConfigPanelRenderer {
     if (actions.onOpenLayoutOptions && ["chart", "calendar", "timeline"].includes(config.viewType || "")) {
       const label = config.viewType === "chart" ? t("chart.options") : config.viewType === "timeline" ? t("timeline.options") : t("calendar.options");
       const layoutOptions = body.createEl("button", {
-        cls: "db-view-config-layout-options db-panel-button",
+        cls: "obnotion-view-config-layout-options obnotion-panel-button",
         attr: { type: "button", "aria-label": label },
       });
-      setIcon(layoutOptions.createSpan({ cls: "db-panel-button-icon" }), config.viewType === "chart" ? "bar-chart-3" : config.viewType === "timeline" ? "chart-gantt" : "calendar-days");
-      layoutOptions.createSpan({ cls: "db-panel-button-label", text: label });
+      setIcon(layoutOptions.createSpan({ cls: "obnotion-panel-button-icon" }), config.viewType === "chart" ? "bar-chart-3" : config.viewType === "timeline" ? "chart-gantt" : "calendar-days");
+      layoutOptions.createSpan({ cls: "obnotion-panel-button-label", text: label });
       layoutOptions.onclick = () => actions.onOpenLayoutOptions?.(layoutOptions);
     }
     this.renderViewSourceRulesSection(body, config, actions);
@@ -484,7 +484,7 @@ export class ViewConfigPanelRenderer {
    * The desktop branch never calls `positionToolbarPopover`. That function's anchored math needs
    * a live anchor and writes its own inline `top`/`left`, which a fixed-edge dock has no use for
    * and would otherwise have to fight with `!important`; the side sheet is pane-relative and
-   * viewport-resize-safe by construction (`position: absolute` against `.note-database-container`,
+   * viewport-resize-safe by construction (`position: absolute` against `.obnotion-container`,
    * `top`/`right`/`bottom: 0`), so it needs none of that placement loop or its resize listener.
    */
   private presentPanel(panel: HTMLElement, anchorEl?: HTMLElement): void {
@@ -495,7 +495,7 @@ export class ViewConfigPanelRenderer {
     panel.addClass(SHELL_SIDE_SHEET_CLASS);
     const view = panel.ownerDocument.defaultView;
     if (!panel.hasClass("is-visible")) {
-      panel.addClass("db-shell-side-sheet-enter");
+      panel.addClass("obnotion-shell-side-sheet-enter");
       view?.requestAnimationFrame(() => {
         if (panel.isConnected) panel.addClass("is-visible");
       });
@@ -510,7 +510,7 @@ export class ViewConfigPanelRenderer {
   }
 
   private renderSectionTitle(panel: HTMLElement, text: string, scope: "database" | "view"): void {
-    panel.createDiv({ cls: `db-view-config-section-title db-view-config-section-${scope}`, text, attr: { "data-scope": scope } });
+    panel.createDiv({ cls: `obnotion-view-config-section-title obnotion-view-config-section-${scope}`, text, attr: { "data-scope": scope } });
   }
 
   private renderAppliedSummaries(panel: HTMLElement, config: ViewConfig, actions: ViewConfigPanelActions): void {
@@ -535,11 +535,11 @@ export class ViewConfigPanelRenderer {
     const row = this.renderAppliedSummary(panel, t("viewConfig.conditionalColor"), count, t("toolbar.noConditionalColors"));
     row.createDiv({ cls: this.hintClass(), text: t("viewConfig.conditionalColorHint") });
     const open = () => {
-      panel.querySelector<HTMLElement>(".db-conditional-format-settings")?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+      panel.querySelector<HTMLElement>(".obnotion-conditional-format-settings")?.scrollIntoView?.({ behavior: "smooth", block: "start" });
     };
     row.setAttr("role", "button");
     row.setAttr("tabindex", "0");
-    row.addClass("db-view-config-row-clickable");
+    row.addClass("obnotion-view-config-row-clickable");
     row.onclick = open;
     row.onkeydown = (event) => {
       if (event.key !== "Enter" && event.key !== " ") return;
@@ -549,10 +549,10 @@ export class ViewConfigPanelRenderer {
   }
 
   private renderAppliedSummary(panel: HTMLElement, label: string, count: number, emptyWord: string): HTMLElement {
-    const row = panel.createDiv({ cls: this.rowClass("db-view-config-summary-row") });
-    row.createDiv({ cls: "db-view-config-label", text: label });
+    const row = panel.createDiv({ cls: this.rowClass("obnotion-view-config-summary-row") });
+    row.createDiv({ cls: "obnotion-view-config-label", text: label });
     row.createDiv({
-      cls: "db-view-config-field db-view-config-summary",
+      cls: "obnotion-view-config-field obnotion-view-config-summary",
       text: count > 0 ? t("toolbar.appliedCount", { count }) : emptyWord,
     });
     return row;
@@ -620,7 +620,7 @@ export class ViewConfigPanelRenderer {
       actions.onDatabaseChange?.(t("undo.databaseNameConfig"));
     }, readOnly, undefined, (value) => {
       database.name = value || t("common.untitledDatabase");
-    }, "db-view-config-name-field");
+    }, "obnotion-view-config-name-field");
     this.renderTextarea(panel, t("viewConfig.databaseDescription"), database.description || "", t("viewConfig.descriptionPlaceholder"), (value) => {
       database.description = value || undefined;
       actions.onDatabaseChange?.(t("undo.databaseDescriptionConfig"));
@@ -646,19 +646,19 @@ export class ViewConfigPanelRenderer {
     readOnly?: boolean,
   ): void {
     const row = panel.createDiv({ cls: this.rowClass() });
-    row.createDiv({ cls: "db-view-config-label", text: t("template.label") });
-    const field = row.createDiv({ cls: "db-view-config-field db-view-config-field-stack" });
-    const controls = field.createDiv({ cls: "db-template-setting-controls" });
-    const pathRow = controls.createDiv({ cls: "db-template-path-row" });
+    row.createDiv({ cls: "obnotion-view-config-label", text: t("template.label") });
+    const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-view-config-field-stack" });
+    const controls = field.createDiv({ cls: "obnotion-template-setting-controls" });
+    const pathRow = controls.createDiv({ cls: "obnotion-template-path-row" });
     pathRow.createDiv({
-      cls: `db-view-config-readonly-value${database.newRecordTemplate?.path ? "" : " is-empty"}`,
+      cls: `obnotion-view-config-readonly-value${database.newRecordTemplate?.path ? "" : " is-empty"}`,
       text: database.newRecordTemplate?.path || t("common.notSet"),
       attr: { title: database.newRecordTemplate?.path || t("common.notSet") },
     });
     if (readOnly) return;
 
-    const engineRow = controls.createDiv({ cls: "db-template-engine-row" });
-    engineRow.createDiv({ cls: "db-template-engine-label", text: t("template.engine.label") });
+    const engineRow = controls.createDiv({ cls: "obnotion-template-engine-row" });
+    engineRow.createDiv({ cls: "obnotion-template-engine-label", text: t("template.engine.label") });
     createDropdownField({
       parent: engineRow,
       label: t("template.engine.label"),
@@ -681,7 +681,7 @@ export class ViewConfigPanelRenderer {
       },
     });
 
-    const choose = pathRow.createEl("button", { cls: "db-icon-only-button", attr: { type: "button", "aria-label": t("template.choose") } });
+    const choose = pathRow.createEl("button", { cls: "obnotion-icon-only-button", attr: { type: "button", "aria-label": t("template.choose") } });
     setIcon(choose, "file-plus-2");
     choose.onclick = () => {
       new MarkdownFileSuggestModal(actions.app, (file) => {
@@ -693,7 +693,7 @@ export class ViewConfigPanelRenderer {
       }, t("template.choose")).open();
     };
     if (database.newRecordTemplate?.path) {
-      const remove = pathRow.createEl("button", { cls: "db-icon-only-button", attr: { type: "button", "aria-label": t("template.remove") } });
+      const remove = pathRow.createEl("button", { cls: "obnotion-icon-only-button", attr: { type: "button", "aria-label": t("template.remove") } });
       setIcon(remove, "x");
       remove.onclick = () => {
         database.newRecordTemplate = undefined;
@@ -710,17 +710,17 @@ export class ViewConfigPanelRenderer {
     readOnly?: boolean,
   ): void {
     const row = panel.createDiv({ cls: this.rowClass() });
-    row.createDiv({ cls: "db-view-config-label", text: t("databaseCover.label") });
-    const field = row.createDiv({ cls: "db-view-config-field db-database-cover-setting" });
+    row.createDiv({ cls: "obnotion-view-config-label", text: t("databaseCover.label") });
+    const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-database-cover-setting" });
     field.createDiv({
-      cls: `db-view-config-readonly-value${database.coverImage ? "" : " is-empty"}`,
+      cls: `obnotion-view-config-readonly-value${database.coverImage ? "" : " is-empty"}`,
       text: database.coverImage || t("common.notSet"),
       attr: { title: database.coverImage || t("common.notSet") },
     });
     if (readOnly) return;
 
     const choose = field.createEl("button", {
-      cls: "db-icon-only-button",
+      cls: "obnotion-icon-only-button",
       attr: { type: "button", "aria-label": t("databaseCover.choose") },
     });
     setIcon(choose, database.coverImage ? "image-up" : "image-plus");
@@ -735,7 +735,7 @@ export class ViewConfigPanelRenderer {
 
     if (database.coverImage) {
       const remove = field.createEl("button", {
-        cls: "db-icon-only-button",
+        cls: "obnotion-icon-only-button",
         attr: { type: "button", "aria-label": t("databaseCover.remove") },
       });
       setIcon(remove, "x");
@@ -783,15 +783,15 @@ export class ViewConfigPanelRenderer {
     actions: ViewConfigPanelActions,
     readOnly?: boolean,
   ): void {
-    const section = panel.createDiv({ cls: "db-conditional-format-settings" });
+    const section = panel.createDiv({ cls: "obnotion-conditional-format-settings" });
     const renderRules = () => {
       closeActiveDateValuePicker(section.ownerDocument);
       section.empty();
-      const heading = section.createDiv({ cls: "db-conditional-format-heading" });
+      const heading = section.createDiv({ cls: "obnotion-conditional-format-heading" });
       heading.createSpan({ text: t("conditionalFormat.title") });
       if (!readOnly) {
         const add = heading.createEl("button", {
-          cls: "db-conditional-format-add db-icon-only-button",
+          cls: "obnotion-conditional-format-add obnotion-icon-only-button",
           attr: { type: "button", "aria-label": t("conditionalFormat.add") },
         });
         setIcon(add, "plus");
@@ -847,7 +847,7 @@ export class ViewConfigPanelRenderer {
         onClick: () => void,
       ): HTMLButtonElement => {
         const button = parent.createEl("button", {
-          cls: "db-source-rule-icon-button",
+          cls: "obnotion-source-rule-icon-button",
           attr: { type: "button", "aria-label": label },
         });
         setIcon(button, icon);
@@ -902,7 +902,7 @@ export class ViewConfigPanelRenderer {
           })),
           hideLabel: true,
           disabled: Boolean(readOnly),
-          className: "db-conditional-format-dropdown db-conditional-format-field",
+          className: "obnotion-conditional-format-dropdown obnotion-conditional-format-field",
           renderIcon: renderDropdownPropertyTypeIcon,
           onChange: (next) => {
             leaf.field = next;
@@ -920,7 +920,7 @@ export class ViewConfigPanelRenderer {
           options: operators.map(([value, text]) => ({ value, text })),
           hideLabel: true,
           disabled: Boolean(readOnly),
-          className: "db-conditional-format-dropdown",
+          className: "obnotion-conditional-format-dropdown",
           onChange: (next) => {
             leaf.op = next as FilterOperator;
             if (next === "empty" || next === "notempty") leaf.value = "";
@@ -929,7 +929,7 @@ export class ViewConfigPanelRenderer {
         });
         const valueDisabled = Boolean(readOnly) || leaf.op === "empty" || leaf.op === "notempty";
         if (valueDisabled) {
-          parent.createSpan({ cls: "db-conditional-format-empty-value", text: "—" });
+          parent.createSpan({ cls: "obnotion-conditional-format-empty-value", text: "—" });
         } else if (currentColumn && ["select", "status", "multi-select"].includes(currentColumn.type)) {
           createDropdownField({
             parent,
@@ -941,7 +941,7 @@ export class ViewConfigPanelRenderer {
             ],
             hideLabel: true,
             disabled: Boolean(readOnly),
-            className: "db-conditional-format-dropdown db-conditional-format-value",
+            className: "obnotion-conditional-format-dropdown obnotion-conditional-format-value",
             onChange: (next) => {
               leaf.value = next;
               commitLeaf();
@@ -956,7 +956,7 @@ export class ViewConfigPanelRenderer {
             includeTime: currentColumn?.type === "datetime",
             fieldLabel: currentColumn?.label,
             displayText: rule.valueSource === "today" ? t("conditionalFormat.dynamicToday") : undefined,
-            className: "db-conditional-format-value db-conditional-format-date-field",
+            className: "obnotion-conditional-format-value obnotion-conditional-format-date-field",
             onChange: (next) => {
               rule.valueSource = "literal";
               leaf.value = next;
@@ -973,7 +973,7 @@ export class ViewConfigPanelRenderer {
           });
         } else {
           const value = parent.createEl("input", {
-            cls: "db-view-config-text db-conditional-format-value",
+            cls: "obnotion-view-config-text obnotion-conditional-format-value",
             attr: {
               type: currentColumn?.type === "number" || currentColumn?.type === "currency" ? "number" : "text",
               placeholder: t("filter.value"),
@@ -988,7 +988,7 @@ export class ViewConfigPanelRenderer {
           };
         }
         if (showTreeActions && !readOnly) {
-          const leafActions = parent.createDiv({ cls: "db-source-rule-actions" });
+          const leafActions = parent.createDiv({ cls: "obnotion-source-rule-actions" });
           createTreeButton(leafActions, "folder-plus", t("conditionalFormat.group"), () => {
             onReplace({ type: "group", logic: "and", rules: [leaf] });
           });
@@ -1003,8 +1003,8 @@ export class ViewConfigPanelRenderer {
         onReplace: (next: SourceRuleNode | undefined) => void,
       ): void => {
         if (isSourceRuleGroup(node)) {
-          const wrap = parent.createDiv({ cls: "db-source-rule-node db-source-rule-group" });
-          const header = wrap.createDiv({ cls: "db-source-rule-header" });
+          const wrap = parent.createDiv({ cls: "obnotion-source-rule-node obnotion-source-rule-group" });
+          const header = wrap.createDiv({ cls: "obnotion-source-rule-header" });
           createDropdownField({
             parent: header,
             label: t("conditionalFormat.group"),
@@ -1013,13 +1013,13 @@ export class ViewConfigPanelRenderer {
               { value: "or", text: t("panel.or") },
             ],
             value: node.logic,
-            className: "db-source-rule-dropdown db-source-rule-logic",
+            className: "obnotion-source-rule-dropdown obnotion-source-rule-logic",
             hideLabel: true,
             disabled: Boolean(readOnly),
             onChange: (value) => onReplace({ ...node, logic: value === "or" ? "or" : "and" }),
           });
           if (!readOnly) {
-            const groupActions = header.createDiv({ cls: "db-source-rule-actions" });
+            const groupActions = header.createDiv({ cls: "obnotion-source-rule-actions" });
             createTreeButton(groupActions, "plus", t("panel.addCondition"), () => {
               onReplace({ ...node, rules: [...node.rules, createConditionalFormatLeaf(defaultCondition())] });
             });
@@ -1031,9 +1031,9 @@ export class ViewConfigPanelRenderer {
             });
             createTreeButton(groupActions, "trash-2", t("common.delete"), () => onReplace(undefined));
           }
-          const children = wrap.createDiv({ cls: "db-source-rule-children" });
+          const children = wrap.createDiv({ cls: "obnotion-source-rule-children" });
           if (node.rules.length === 0) {
-            children.createDiv({ cls: "db-source-rules-empty", text: t("conditionalFormat.group") });
+            children.createDiv({ cls: "obnotion-source-rules-empty", text: t("conditionalFormat.group") });
           }
           for (let index = 0; index < node.rules.length; index += 1) {
             renderConditionNode(children, node.rules[index], rule, (next) => {
@@ -1046,16 +1046,16 @@ export class ViewConfigPanelRenderer {
           return;
         }
         if (!isSourceRuleLeaf(node)) return;
-        const wrap = parent.createDiv({ cls: "db-source-rule-node db-source-rule-leaf" });
-        const controls = wrap.createDiv({ cls: "db-source-rule-leaf-controls" });
+        const wrap = parent.createDiv({ cls: "obnotion-source-rule-node obnotion-source-rule-leaf" });
+        const controls = wrap.createDiv({ cls: "obnotion-source-rule-leaf-controls" });
         renderLeaf(controls, node, rule, onReplace, true);
       };
 
       rules.forEach((rule, index) => {
-        const row = section.createDiv({ cls: "db-conditional-format-rule" });
+        const row = section.createDiv({ cls: "obnotion-conditional-format-rule" });
         const conditionTree = rule.conditionTree;
         if (conditionTree && isSourceRuleGroup(conditionTree)) {
-          const group = row.createDiv({ cls: "db-conditional-format-condition-group" });
+          const group = row.createDiv({ cls: "obnotion-conditional-format-condition-group" });
           group.style.gridColumn = "1 / -1";
           renderConditionNode(group, conditionTree, rule, (next) => replaceTree(rule, next));
         } else {
@@ -1072,7 +1072,7 @@ export class ViewConfigPanelRenderer {
           ],
           hideLabel: true,
           disabled: Boolean(readOnly),
-          className: "db-conditional-format-dropdown",
+          className: "obnotion-conditional-format-dropdown",
           onChange: (next) => {
             rule.target = next === "field" ? "field" : "record";
             persist(true);
@@ -1080,11 +1080,11 @@ export class ViewConfigPanelRenderer {
         });
 
         const color = row.createEl("button", {
-          cls: "db-conditional-format-color",
+          cls: "obnotion-conditional-format-color",
           attr: { type: "button", "aria-label": t("conditionalFormat.color") },
         });
         color.createSpan({
-          cls: `db-conditional-format-color-swatch db-option-color-${rule.color || "gray"}`,
+          cls: `obnotion-conditional-format-color-swatch obnotion-option-color-${rule.color || "gray"}`,
         });
         color.disabled = Boolean(readOnly);
         color.onclick = () => {
@@ -1096,7 +1096,7 @@ export class ViewConfigPanelRenderer {
 
         const validIconIds = new Set(getValidRecordIconIds());
         const icon = row.createEl("button", {
-          cls: "db-icon-only-button db-conditional-format-icon-button",
+          cls: "obnotion-icon-only-button obnotion-conditional-format-icon-button",
           attr: { type: "button", "aria-label": t("conditionalFormat.icon") },
         });
         const currentIcon = rule.icon && parseRecordIconToken(rule.icon, validIconIds) ? rule.icon : undefined;
@@ -1117,7 +1117,7 @@ export class ViewConfigPanelRenderer {
         };
 
         const bold = row.createEl("button", {
-          cls: `db-icon-only-button db-conditional-format-bold-toggle${rule.bold ? " is-active" : ""}`,
+          cls: `obnotion-icon-only-button obnotion-conditional-format-bold-toggle${rule.bold ? " is-active" : ""}`,
           attr: {
             type: "button",
             "aria-label": t("conditionalFormat.bold"),
@@ -1133,10 +1133,10 @@ export class ViewConfigPanelRenderer {
         };
 
         if (!readOnly) {
-          const controls = row.createDiv({ cls: "db-conditional-format-controls" });
+          const controls = row.createDiv({ cls: "obnotion-conditional-format-controls" });
           if (!conditionTree || !isSourceRuleGroup(conditionTree)) {
             const group = controls.createEl("button", {
-              cls: "db-icon-only-button",
+              cls: "obnotion-icon-only-button",
               attr: { type: "button", "aria-label": t("conditionalFormat.group") },
             });
             setIcon(group, "folder-plus");
@@ -1152,7 +1152,7 @@ export class ViewConfigPanelRenderer {
               persist(true);
             };
           }
-          const up = controls.createEl("button", { cls: "db-icon-only-button", attr: { type: "button", "aria-label": t("common.moveUp") } });
+          const up = controls.createEl("button", { cls: "obnotion-icon-only-button", attr: { type: "button", "aria-label": t("common.moveUp") } });
           setIcon(up, "chevron-up");
           up.disabled = index === 0;
           up.onclick = () => {
@@ -1160,7 +1160,7 @@ export class ViewConfigPanelRenderer {
             [rules[index - 1], rules[index]] = [rules[index], rules[index - 1]];
             persist(true);
           };
-          const down = controls.createEl("button", { cls: "db-icon-only-button", attr: { type: "button", "aria-label": t("common.moveDown") } });
+          const down = controls.createEl("button", { cls: "obnotion-icon-only-button", attr: { type: "button", "aria-label": t("common.moveDown") } });
           setIcon(down, "chevron-down");
           down.disabled = index === rules.length - 1;
           down.onclick = () => {
@@ -1168,7 +1168,7 @@ export class ViewConfigPanelRenderer {
             [rules[index], rules[index + 1]] = [rules[index + 1], rules[index]];
             persist(true);
           };
-          const remove = controls.createEl("button", { cls: "db-icon-only-button", attr: { type: "button", "aria-label": t("common.delete") } });
+          const remove = controls.createEl("button", { cls: "obnotion-icon-only-button", attr: { type: "button", "aria-label": t("common.delete") } });
           setIcon(remove, "trash-2");
           remove.onclick = () => removeRule(rule);
         }
@@ -1219,11 +1219,11 @@ export class ViewConfigPanelRenderer {
     actions: ViewConfigPanelActions,
     readOnly?: boolean
   ): void {
-    const row = panel.createDiv({ cls: this.rowClass("db-source-rules-setting") });
-    row.createDiv({ cls: "db-view-config-label", text: t("viewConfig.sourceRules") });
-    const field = row.createDiv({ cls: "db-view-config-field db-view-config-field-stack" });
-    field.createDiv({ cls: this.hintClass("db-source-rules-help"), text: t("viewConfig.sourceRules.help") });
-    const editor = field.createDiv({ cls: "db-source-rules-editor" });
+    const row = panel.createDiv({ cls: this.rowClass("obnotion-source-rules-setting") });
+    row.createDiv({ cls: "obnotion-view-config-label", text: t("viewConfig.sourceRules") });
+    const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-view-config-field-stack" });
+    field.createDiv({ cls: this.hintClass("obnotion-source-rules-help"), text: t("viewConfig.sourceRules.help") });
+    const editor = field.createDiv({ cls: "obnotion-source-rules-editor" });
     const tree = createEditableSourceRuleRoot(getSourceRuleTree(database.sourceRuleTree, database.sourceRules, database.sourceLogic));
     if (tree && (!database.sourceRuleTree || database.sourceRuleTree !== tree) && !readOnly) {
       database.sourceRuleTree = tree;
@@ -1239,10 +1239,10 @@ export class ViewConfigPanelRenderer {
     if (tree) {
       this.renderSourceRuleNode(editor, tree, commit, !!readOnly, database, getVaultProperties(actions.app));
     } else {
-      editor.createDiv({ cls: "db-source-rules-empty", text: t("viewConfig.sourceRules.empty") });
+      editor.createDiv({ cls: "obnotion-source-rules-empty", text: t("viewConfig.sourceRules.empty") });
     }
     if (!readOnly && !tree) {
-      const buttons = editor.createDiv({ cls: "db-source-rule-actions" });
+      const buttons = editor.createDiv({ cls: "obnotion-source-rule-actions" });
       this.createSourceRuleIconButton(buttons, "plus", t("viewConfig.sourceRules.addRule"), () => {
         commit({ field: "file.name", op: "eq", value: "" });
       });
@@ -1268,15 +1268,15 @@ export class ViewConfigPanelRenderer {
       return;
     }
     if (isSourceRuleNot(node)) {
-      const wrap = parent.createDiv({ cls: "db-source-rule-node db-source-rule-not" });
-      const header = wrap.createDiv({ cls: "db-source-rule-header" });
-      header.createSpan({ cls: "db-source-rule-not-label", text: t("viewConfig.sourceRules.not") });
+      const wrap = parent.createDiv({ cls: "obnotion-source-rule-node obnotion-source-rule-not" });
+      const header = wrap.createDiv({ cls: "obnotion-source-rule-header" });
+      header.createSpan({ cls: "obnotion-source-rule-not-label", text: t("viewConfig.sourceRules.not") });
       if (!readOnly) {
-        const actions = header.createDiv({ cls: "db-source-rule-actions" });
+        const actions = header.createDiv({ cls: "obnotion-source-rule-actions" });
         this.createSourceRuleIconButton(actions, "undo-2", t("viewConfig.sourceRules.removeNot"), () => onReplace(node.rule));
         this.createSourceRuleIconButton(actions, "trash-2", t("viewConfig.sourceRules.remove"), () => onReplace(undefined));
       }
-      const content = wrap.createDiv({ cls: "db-source-rule-children" });
+      const content = wrap.createDiv({ cls: "obnotion-source-rule-children" });
       this.renderSourceRuleNode(content, node.rule, (next) => next ? onReplace({ ...node, rule: next }) : onReplace(undefined), readOnly, database, vaultProperties);
       return;
     }
@@ -1295,8 +1295,8 @@ export class ViewConfigPanelRenderer {
     database: DatabaseConfig,
     vaultProperties: VaultProperty[]
   ): void {
-    const wrap = parent.createDiv({ cls: "db-source-rule-node db-source-rule-group" });
-    const header = wrap.createDiv({ cls: "db-source-rule-header" });
+    const wrap = parent.createDiv({ cls: "obnotion-source-rule-node obnotion-source-rule-group" });
+    const header = wrap.createDiv({ cls: "obnotion-source-rule-header" });
     createDropdownField({
       parent: header,
       label: t("viewConfig.sourceRules.logic"),
@@ -1305,13 +1305,13 @@ export class ViewConfigPanelRenderer {
         { value: "or", text: t("viewConfig.sourceRules.or") },
       ],
       value: group.logic,
-      className: "db-source-rule-dropdown db-source-rule-logic",
+      className: "obnotion-source-rule-dropdown obnotion-source-rule-logic",
       hideLabel: true,
       disabled: readOnly,
       onChange: (value) => onReplace({ ...group, logic: value === "or" ? "or" : "and" }),
     });
     if (!readOnly) {
-      const actions = header.createDiv({ cls: "db-source-rule-actions" });
+      const actions = header.createDiv({ cls: "obnotion-source-rule-actions" });
       this.createSourceRuleIconButton(actions, "plus", t("viewConfig.sourceRules.addRule"), () => {
         onReplace({ ...group, rules: [...group.rules, { field: "file.name", op: "eq", value: "" }] });
       });
@@ -1326,9 +1326,9 @@ export class ViewConfigPanelRenderer {
       });
       this.createSourceRuleIconButton(actions, "trash-2", t("viewConfig.sourceRules.remove"), () => onReplace(undefined));
     }
-    const children = wrap.createDiv({ cls: "db-source-rule-children" });
+    const children = wrap.createDiv({ cls: "obnotion-source-rule-children" });
     if (group.rules.length === 0) {
-      children.createDiv({ cls: "db-source-rules-empty", text: t("viewConfig.sourceRules.emptyGroup") });
+      children.createDiv({ cls: "obnotion-source-rules-empty", text: t("viewConfig.sourceRules.emptyGroup") });
     }
     for (let index = 0; index < group.rules.length; index += 1) {
       this.renderSourceRuleNode(children, group.rules[index], (next) => {
@@ -1348,8 +1348,8 @@ export class ViewConfigPanelRenderer {
     database: DatabaseConfig,
     vaultProperties: VaultProperty[]
   ): void {
-    const wrap = parent.createDiv({ cls: "db-source-rule-node db-source-rule-leaf" });
-    const controls = wrap.createDiv({ cls: "db-source-rule-leaf-controls" });
+    const wrap = parent.createDiv({ cls: "obnotion-source-rule-node obnotion-source-rule-leaf" });
+    const controls = wrap.createDiv({ cls: "obnotion-source-rule-leaf-controls" });
     const fieldGroups = this.getSourceRuleFieldGroups(database);
     const knownFields = new Set(fieldGroups.flatMap((group) => group.options.map((option) => option.value)));
     const isKnownField = knownFields.has(rule.field);
@@ -1366,7 +1366,7 @@ export class ViewConfigPanelRenderer {
         { value: CUSTOM_SOURCE_RULE_FIELD, text: t("viewConfig.sourceRules.customField"), section: t("viewConfig.sourceRules.fieldGroup.custom") },
       ],
       value: selectedFieldValue,
-      className: "db-source-rule-dropdown db-source-rule-field",
+      className: "obnotion-source-rule-dropdown obnotion-source-rule-field",
       hideLabel: true,
       disabled: readOnly,
       renderIcon: renderDropdownPropertyTypeIcon,
@@ -1394,7 +1394,7 @@ export class ViewConfigPanelRenderer {
           commit();
         })
       : controls.createEl("input", {
-          cls: "db-view-config-text db-source-rule-custom-field",
+          cls: "obnotion-view-config-text obnotion-source-rule-custom-field",
           attr: { type: "text", placeholder: t("viewConfig.sourceRules.fieldPlaceholder"), "aria-label": t("viewConfig.sourceRules.fieldPlaceholder") },
         });
     if (!usePicker) {
@@ -1404,7 +1404,7 @@ export class ViewConfigPanelRenderer {
     }
     customField.style.display = isKnownField ? "none" : "";
     const value = controls.createEl("input", {
-      cls: "db-view-config-text db-source-rule-value",
+      cls: "obnotion-view-config-text obnotion-source-rule-value",
       attr: { type: "text", placeholder: t("viewConfig.sourceRules.valuePlaceholder"), "aria-label": t("viewConfig.sourceRules.valuePlaceholder") },
     });
     value.value = rule.value || "";
@@ -1443,7 +1443,7 @@ export class ViewConfigPanelRenderer {
       label: t("panel.operator"),
       options: getOperatorOptions(rule.op),
       value: getRecommendedOperator(rule.op),
-      className: "db-source-rule-dropdown db-source-rule-operator",
+      className: "obnotion-source-rule-dropdown obnotion-source-rule-operator",
       hideLabel: true,
       disabled: readOnly,
       onChange: (nextValue) => {
@@ -1463,7 +1463,7 @@ export class ViewConfigPanelRenderer {
         label: t("panel.operator"),
         options: getOperatorOptions(selectedOperator, preserveUnsupported),
         value: selectedOperator,
-        className: "db-source-rule-dropdown db-source-rule-operator",
+        className: "obnotion-source-rule-dropdown obnotion-source-rule-operator",
         hideLabel: true,
         disabled: readOnly,
         onChange: (nextValue) => {
@@ -1484,7 +1484,7 @@ export class ViewConfigPanelRenderer {
         label: t("panel.value"),
         options: getSourceRuleIsTypeValueOptions(selectedTypeValue).map((option) => ({ value: option, text: option })),
         value: selectedTypeValue,
-        className: "db-source-rule-dropdown db-source-rule-value db-source-rule-type-value",
+        className: "obnotion-source-rule-dropdown obnotion-source-rule-value obnotion-source-rule-type-value",
         hideLabel: true,
         disabled: readOnly,
         onChange: (nextValue) => {
@@ -1539,7 +1539,7 @@ export class ViewConfigPanelRenderer {
     value.oninput = () => { rule.value = value.value; };
     value.onchange = commit;
     if (!readOnly) {
-      const actions = controls.createDiv({ cls: "db-source-rule-actions" });
+      const actions = controls.createDiv({ cls: "obnotion-source-rule-actions" });
       this.createSourceRuleIconButton(actions, "circle-slash-2", t("viewConfig.sourceRules.addNot"), () => {
         onReplace({ type: "not", rule });
       });
@@ -1560,7 +1560,7 @@ export class ViewConfigPanelRenderer {
     onPick: () => void
   ): HTMLButtonElement {
     const button = parent.createEl("button", {
-      cls: "db-dropdown-field db-source-rule-dropdown db-source-rule-custom-field db-source-rule-property-picker",
+      cls: "obnotion-dropdown-field obnotion-source-rule-dropdown obnotion-source-rule-custom-field obnotion-source-rule-property-picker",
       attr: { type: "button", "aria-haspopup": "listbox" },
     });
     const renderContent = () => {
@@ -1569,11 +1569,11 @@ export class ViewConfigPanelRenderer {
       const propType = selectedKey ? vaultProperties.find((p) => p.key === selectedKey)?.type : undefined;
       button.toggleClass("has-current-icon", Boolean(propType));
       if (propType) {
-        renderPropertyTypeIcon(button, { key: selectedKey, type: propType, label: selectedKey }, "db-dropdown-field-icon");
+        renderPropertyTypeIcon(button, { key: selectedKey, type: propType, label: selectedKey }, "obnotion-dropdown-field-icon");
       }
-      const text = button.createSpan({ cls: "db-dropdown-field-text" });
-      text.createSpan({ cls: "db-dropdown-field-value", text: selectedKey || t("viewConfig.sourceRules.pickProperty") });
-      setIcon(button.createSpan({ cls: "db-dropdown-field-chevron" }), "chevron-down");
+      const text = button.createSpan({ cls: "obnotion-dropdown-field-text" });
+      text.createSpan({ cls: "obnotion-dropdown-field-value", text: selectedKey || t("viewConfig.sourceRules.pickProperty") });
+      setIcon(button.createSpan({ cls: "obnotion-dropdown-field-chevron" }), "chevron-down");
     };
     renderContent();
     button.onclick = () => {
@@ -1659,10 +1659,10 @@ export class ViewConfigPanelRenderer {
     onReplace: (node: SourceRuleNode | undefined) => void,
     readOnly: boolean
   ): void {
-    const wrap = parent.createDiv({ cls: "db-source-rule-node db-source-rule-expression" });
-    const controls = wrap.createDiv({ cls: "db-source-rule-leaf-controls" });
+    const wrap = parent.createDiv({ cls: "obnotion-source-rule-node obnotion-source-rule-expression" });
+    const controls = wrap.createDiv({ cls: "obnotion-source-rule-leaf-controls" });
     const expression = controls.createEl("textarea", {
-      cls: "db-view-config-text db-source-rule-expression-input",
+      cls: "obnotion-view-config-text obnotion-source-rule-expression-input",
       attr: { rows: "2", placeholder: t("viewConfig.sourceRules.expressionPlaceholder") },
     });
     expression.value = rule.expression;
@@ -1670,7 +1670,7 @@ export class ViewConfigPanelRenderer {
     expression.oninput = () => { rule.expression = expression.value.trim(); };
     expression.onchange = () => onReplace({ type: "expression", expression: expression.value.trim() });
     if (!readOnly) {
-      const actions = controls.createDiv({ cls: "db-source-rule-actions" });
+      const actions = controls.createDiv({ cls: "obnotion-source-rule-actions" });
       this.createSourceRuleIconButton(actions, "circle-slash-2", t("viewConfig.sourceRules.addNot"), () => {
         onReplace({ type: "not", rule });
       });
@@ -1679,7 +1679,7 @@ export class ViewConfigPanelRenderer {
   }
 
   private createSourceRuleIconButton(parent: HTMLElement, icon: string, title: string, onClick: () => void): void {
-    const button = parent.createEl("button", { cls: "db-source-rule-icon-button", attr: { type: "button" } });
+    const button = parent.createEl("button", { cls: "obnotion-source-rule-icon-button", attr: { type: "button" } });
     setIcon(button, icon);
     setTooltip(button, title, { delay: 100 });
     button.onclick = onClick;
@@ -1710,11 +1710,11 @@ export class ViewConfigPanelRenderer {
       },
     ];
     const row = panel.createDiv({ cls: this.rowClass() });
-    row.createDiv({ cls: "db-view-config-label", text: t("viewConfig.computedSyncMode") });
-    const field = row.createDiv({ cls: "db-view-config-field db-view-config-field-stack" });
+    row.createDiv({ cls: "obnotion-view-config-label", text: t("viewConfig.computedSyncMode") });
+    const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-view-config-field-stack" });
     if (readOnly) {
       field.createDiv({
-        cls: "db-view-config-readonly-value",
+        cls: "obnotion-view-config-readonly-value",
         text: options.find((option) => option.value === mode)?.title || t("viewConfig.computedSync.displayOnly"),
       });
       field.createDiv({ cls: this.hintClass(), text: t("viewConfig.computedSync.help") });
@@ -1753,7 +1753,7 @@ export class ViewConfigPanelRenderer {
       // set: the OS radio is a second choice grammar on a sheet that already
       // uses one segmented control everywhere else.
       const group = field.createDiv({
-        cls: "db-new-placement",
+        cls: "obnotion-new-placement",
         attr: { role: "group", "aria-label": t("viewConfig.computedSyncMode") },
       });
       const buttons: Array<{ button: HTMLButtonElement; value: ComputedSyncMode }> = [];
@@ -1767,7 +1767,7 @@ export class ViewConfigPanelRenderer {
       });
       for (const option of options) {
         const button = group.createEl("button", {
-          cls: `db-new-placement-option${option.value === mode ? " is-active" : ""}`,
+          cls: `obnotion-new-placement-option${option.value === mode ? " is-active" : ""}`,
           text: option.title,
           attr: {
             type: "button",
@@ -1781,10 +1781,10 @@ export class ViewConfigPanelRenderer {
         };
       }
     } else {
-      const cards = field.createDiv({ cls: "db-computed-sync-cards" });
+      const cards = field.createDiv({ cls: "obnotion-computed-sync-cards" });
       reflectors.push(() => {
         const activeMode = normalizeComputedSyncMode(database.computedSyncMode);
-        for (const card of cards.querySelectorAll<HTMLElement>(".db-computed-sync-card")) {
+        for (const card of cards.querySelectorAll<HTMLElement>(".obnotion-computed-sync-card")) {
           const input = card.querySelector<HTMLInputElement>("input");
           const active = input?.value === activeMode;
           if (input) input.checked = active;
@@ -1793,7 +1793,7 @@ export class ViewConfigPanelRenderer {
       });
       for (const option of options) {
         const card = cards.createEl("label", {
-          cls: `db-computed-sync-card${option.value === mode ? " is-active" : ""}`,
+          cls: `obnotion-computed-sync-card${option.value === mode ? " is-active" : ""}`,
         });
         const radio = card.createEl("input", {
           attr: { type: "radio", name: "computed-sync-mode", value: option.value },
@@ -1803,15 +1803,15 @@ export class ViewConfigPanelRenderer {
           if (!radio.checked) return;
           if (!await changeMode(option.value)) reflect();
         };
-        const body = card.createDiv({ cls: "db-computed-sync-card-body" });
-        body.createDiv({ cls: "db-computed-sync-card-title", text: option.title });
-        body.createDiv({ cls: "db-computed-sync-card-desc", text: option.desc });
+        const body = card.createDiv({ cls: "obnotion-computed-sync-card-body" });
+        body.createDiv({ cls: "obnotion-computed-sync-card-title", text: option.title });
+        body.createDiv({ cls: "obnotion-computed-sync-card-desc", text: option.desc });
       }
     }
     field.createDiv({ cls: this.hintClass(), text: t("viewConfig.computedSync.help") });
     if ((database.schema?.columns || []).some((col) => col.type === "computed")) {
       const cleanup = field.createEl("button", {
-        cls: "db-computed-cleanup-button",
+        cls: "obnotion-computed-cleanup-button",
         text: t("viewConfig.computedCleanup.button"),
         attr: { type: "button" },
       });
@@ -1835,11 +1835,11 @@ export class ViewConfigPanelRenderer {
     const presets = options.presets || [];
     if (presets.length === 0 && !options.onManagePresets) return;
     const row = panel.createDiv({ cls: this.rowClass() });
-    row.createDiv({ cls: "db-view-config-label", text: t("viewConfig.statusPreset") });
-    const field = row.createDiv({ cls: "db-view-config-field db-view-config-inline-controls" });
+    row.createDiv({ cls: "obnotion-view-config-label", text: t("viewConfig.statusPreset") });
+    const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-view-config-inline-controls" });
     if (readOnly) {
       const current = presets.find((preset) => preset.id === options.defaultPresetId) || presets[0];
-      field.createDiv({ cls: "db-view-config-readonly-value", text: current?.name || t("common.notSet") });
+      field.createDiv({ cls: "obnotion-view-config-readonly-value", text: current?.name || t("common.notSet") });
       if (options.helpText) field.createDiv({ cls: this.hintClass(), text: options.helpText });
       return;
     }
@@ -1849,12 +1849,12 @@ export class ViewConfigPanelRenderer {
         label: t("viewConfig.statusPreset"),
         options: presets.map((preset) => ({ value: preset.id, text: preset.name })),
         value: options.defaultPresetId || presets[0]?.id || "",
-        className: "db-view-config-dropdown db-status-preset-setting-dropdown",
+        className: "obnotion-view-config-dropdown obnotion-status-preset-setting-dropdown",
         hideLabel: true,
         onChange: (value) => options.onDefaultPresetChange?.(value),
       });
     } else {
-      field.createDiv({ cls: "db-view-config-readonly-value", text: t("statusPresets.none") });
+      field.createDiv({ cls: "obnotion-view-config-readonly-value", text: t("statusPresets.none") });
     }
     const button = field.createEl("button", {
       text: t("statusPresets.manage"),
@@ -1874,18 +1874,18 @@ export class ViewConfigPanelRenderer {
     readOnly?: boolean
   ): void {
     const row = panel.createDiv({ cls: this.rowClass() });
-    row.createDiv({ cls: "db-view-config-label", text: t("viewConfig.newRecordFolder") });
-    const field = row.createDiv({ cls: "db-view-config-field db-view-config-field-stack" });
+    row.createDiv({ cls: "obnotion-view-config-label", text: t("viewConfig.newRecordFolder") });
+    const field = row.createDiv({ cls: "obnotion-view-config-field obnotion-view-config-field-stack" });
 
     if (readOnly) {
       field.createDiv({
-        cls: "db-view-config-readonly-value",
+        cls: "obnotion-view-config-readonly-value",
         text: database.newRecordFolder || t("common.untitled"),
       });
       return;
     }
     const input = field.createEl("input", {
-      cls: "db-view-config-text",
+      cls: "obnotion-view-config-text",
       attr: { type: "text", placeholder: t("settings.sourceFolder.placeholder"), "aria-label": t("settings.sourceFolder.placeholder") },
     });
     input.value = database.newRecordFolder || "";
@@ -2046,9 +2046,9 @@ export class ViewConfigPanelRenderer {
 
   private renderReadonlyField(panel: HTMLElement, label: string, value: string): void {
     const row = panel.createDiv({ cls: this.rowClass() });
-    row.createDiv({ cls: "db-view-config-label", text: label });
-    row.createDiv({ cls: "db-view-config-field" }).createDiv({
-      cls: "db-view-config-readonly-value",
+    row.createDiv({ cls: "obnotion-view-config-label", text: label });
+    row.createDiv({ cls: "obnotion-view-config-field" }).createDiv({
+      cls: "obnotion-view-config-readonly-value",
       text: value,
     });
   }
@@ -2098,8 +2098,8 @@ export class ViewConfigPanelRenderer {
     rowAttr?: Record<string, string>
   ): void {
     const row = panel.createDiv({ cls: this.rowClass(), attr: rowAttr });
-    row.createDiv({ cls: "db-view-config-label", text: label });
-    const field = row.createDiv({ cls: "db-view-config-field" });
+    row.createDiv({ cls: "obnotion-view-config-label", text: label });
+    const field = row.createDiv({ cls: "obnotion-view-config-field" });
     const hasPropertyIcons = options.some((option) => isPropertyDropdownIcon(option.icon));
     createDropdownField({
       parent: field,
@@ -2107,8 +2107,8 @@ export class ViewConfigPanelRenderer {
       options,
       value,
       onChange,
-      className: `db-view-config-dropdown${hasPropertyIcons ? " db-view-config-field-dropdown" : ""}`,
-      popoverClassName: "db-view-config-dropdown-popover",
+      className: `obnotion-view-config-dropdown${hasPropertyIcons ? " obnotion-view-config-field-dropdown" : ""}`,
+      popoverClassName: "obnotion-view-config-dropdown-popover",
       placeholder: t("common.notSet"),
       hideLabel: true,
       searchable,
@@ -2139,15 +2139,15 @@ export class ViewConfigPanelRenderer {
     fieldClass?: string,
   ): void {
     const row = panel.createDiv({ cls: this.rowClass() });
-    row.createDiv({ cls: "db-view-config-label", text: label });
-    const field = row.createDiv({ cls: ["db-view-config-field", "db-view-config-field-stack", fieldClass].filter(Boolean).join(" ") });
+    row.createDiv({ cls: "obnotion-view-config-label", text: label });
+    const field = row.createDiv({ cls: ["obnotion-view-config-field", "obnotion-view-config-field-stack", fieldClass].filter(Boolean).join(" ") });
     if (disabled) {
-      field.createDiv({ cls: "db-view-config-readonly-value", text: value || t("common.notSet") });
+      field.createDiv({ cls: "obnotion-view-config-readonly-value", text: value || t("common.notSet") });
       if (helpText) field.createDiv({ cls: this.hintClass(), text: helpText });
       return;
     }
     const input = field.createEl("input", {
-      cls: "db-view-config-text",
+      cls: "obnotion-view-config-text",
       // The row's own label, which is a div beside the field and names nothing on its own.
       attr: { type: "text", placeholder, "aria-label": label },
     });
@@ -2167,13 +2167,13 @@ export class ViewConfigPanelRenderer {
     onInput?: (value: string) => void
   ): void {
     const row = panel.createDiv({ cls: this.rowClass() });
-    row.createDiv({ cls: "db-view-config-label", text: label });
+    row.createDiv({ cls: "obnotion-view-config-label", text: label });
     if (disabled) {
-      row.createDiv({ cls: "db-view-config-readonly-value db-view-config-readonly-multiline", text: value || t("common.notSet") });
+      row.createDiv({ cls: "obnotion-view-config-readonly-value obnotion-view-config-readonly-multiline", text: value || t("common.notSet") });
       return;
     }
     const textarea = row.createEl("textarea", {
-      cls: "db-view-config-textarea",
+      cls: "obnotion-view-config-textarea",
       attr: { placeholder, rows: "3" },
     });
     textarea.value = value;
@@ -2190,10 +2190,10 @@ export class ViewConfigPanelRenderer {
     helpText?: string
   ): void {
     const row = panel.createDiv({ cls: this.rowClass() });
-    row.createDiv({ cls: "db-view-config-label", text: label });
-    const field = row.createDiv({ cls: "db-view-config-field" });
+    row.createDiv({ cls: "obnotion-view-config-label", text: label });
+    const field = row.createDiv({ cls: "obnotion-view-config-field" });
     if (disabled) {
-      field.createDiv({ cls: "db-view-config-readonly-value", text: value ? t("common.true") : t("common.false") });
+      field.createDiv({ cls: "obnotion-view-config-readonly-value", text: value ? t("common.true") : t("common.false") });
       if (helpText) field.createDiv({ cls: this.hintClass(), text: helpText });
       return;
     }
@@ -2212,10 +2212,10 @@ export class ViewConfigPanelRenderer {
     helpText?: string
   ): void {
     const row = panel.createDiv({ cls: this.rowClass() });
-    row.createDiv({ cls: "db-view-config-label", text: label });
-    const field = row.createDiv({ cls: "db-view-config-field" });
+    row.createDiv({ cls: "obnotion-view-config-label", text: label });
+    const field = row.createDiv({ cls: "obnotion-view-config-field" });
     if (disabled) {
-      field.createDiv({ cls: "db-view-config-readonly-value", text: value ? t("common.true") : t("common.false") });
+      field.createDiv({ cls: "obnotion-view-config-readonly-value", text: value ? t("common.true") : t("common.false") });
       if (helpText) field.createDiv({ cls: this.hintClass(), text: helpText });
       return;
     }
@@ -2226,7 +2226,7 @@ export class ViewConfigPanelRenderer {
     // turning that div into a label would flip it from block to inline and move the row.
     const input = this.asSheet
       ? createCheckbox(field, { role: "field", attr: { role: "switch", "aria-label": label } })
-      : field.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch", "aria-label": label } });
+      : field.createEl("input", { cls: "obnotion-toggle-switch", attr: { type: "checkbox", role: "switch", "aria-label": label } });
     input.checked = value;
     input.onchange = () => onChange(input.checked);
     if (helpText) field.createDiv({ cls: this.hintClass(), text: helpText });
@@ -2243,8 +2243,8 @@ export class ViewConfigPanelRenderer {
     onInput?: (value: number) => void
   ): void {
     const row = panel.createDiv({ cls: this.rowClass() });
-    row.createDiv({ cls: "db-view-config-label", text: label });
-    const controls = row.createDiv({ cls: "db-view-config-range" });
+    row.createDiv({ cls: "obnotion-view-config-label", text: label });
+    const controls = row.createDiv({ cls: "obnotion-view-config-range" });
     // Named from the row's own label. The visible text is a div beside them, so without this a
     // screen reader announces "slider" and "spin button" with nothing to say which setting they are
     // — and this row emits two controls, so it announces it twice.
@@ -2252,7 +2252,7 @@ export class ViewConfigPanelRenderer {
       attr: { type: "range", min: String(min), max: String(max), step: String(step), "aria-label": label },
     });
     const number = controls.createEl("input", {
-      cls: "db-view-config-number",
+      cls: "obnotion-view-config-number",
       attr: { type: "number", min: String(min), max: String(max), step: String(step), "aria-label": label },
     });
     const clamped = Math.max(min, Math.min(max, Math.round(value)));

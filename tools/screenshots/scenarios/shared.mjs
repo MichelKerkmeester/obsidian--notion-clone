@@ -83,7 +83,7 @@ export const ICONS = {
   // Without it a fixture can carry `is-selected` and still photograph an unmarked row.
   check: glyph('<path d="M20 6 9 17l-5-5"/>'),
   // Lucide's `image`, which is what `setIcon(placeholder, "image")` injects into an empty cover.
-  // The 14px attributes are defaults; `.db-*-cover-placeholder svg` sizes it to 28px.
+  // The 14px attributes are defaults; `.obnotion-*-cover-placeholder svg` sizes it to 28px.
   image: glyph('<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/>'
     + '<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>'),
   // Lucide's `folder-open`, what `setIcon(icon, "folder-open")` injects into the "empty-group"
@@ -105,7 +105,7 @@ export const ICONS = {
  * still be a picture of the surface.
  *
  * A fixture once carried the wrong view's placeholder class here, with no wrapper and no glyph, so
- * `.db-board-card-cover` and `.db-board-card-cover-placeholder` went the whole corpus unphotographed
+ * `.obnotion-board-card-cover` and `.obnotion-board-card-cover-placeholder` went the whole corpus unphotographed
  * and the class it did name matched no rule.
  */
 export const emptyCover = (base) => `
@@ -113,7 +113,7 @@ export const emptyCover = (base) => `
     <span class="${base}-placeholder">${ICONS.image}</span>
   </div>`;
 
-export const COVER_BASES = { board: "db-board-card-cover" };
+export const COVER_BASES = { board: "obnotion-board-card-cover" };
 
 // ───────────────────────────────────────────────────────────────────
 // 3. RENDER HELPERS
@@ -173,7 +173,7 @@ export const groupTitle = (cls, title, tone) =>
  * An explicit empty tone renders bare text — the non-option branch — and overrides the default.
  */
 export const tableGroupTitle = (title, tone = OPTION_TONES[title]) =>
-  groupTitle("db-group-title-text", title, tone);
+  groupTitle("obnotion-group-title-text", title, tone);
 
 
 /**
@@ -187,26 +187,26 @@ export const tableGroupTitle = (title, tone = OPTION_TONES[title]) =>
  * call site passes. Kept in one place so a change to the factory has one fixture to update.
  */
 export const rowCheckbox = (family) =>
-  `<input type="checkbox" class="db-checkbox db-checkbox-row${family ? ` ${family}` : ""}" aria-label="Select">`;
+  `<input type="checkbox" class="obnotion-checkbox obnotion-checkbox-row${family ? ` ${family}` : ""}" aria-label="Select">`;
 
 /** The field role, for a boolean value rather than a row selection. */
 export const fieldCheckbox = (family) =>
-  `<input type="checkbox" class="db-checkbox db-checkbox-field${family ? ` ${family}` : ""}" aria-label="Toggle">`;
+  `<input type="checkbox" class="obnotion-checkbox obnotion-checkbox-field${family ? ` ${family}` : ""}" aria-label="Toggle">`;
 
 /**
  * The switch is a checkbox too, and it does not come from the factory.
  *
- * Eight call sites build it with a raw `createEl`, so it carries `db-toggle-switch` alone and
+ * Eight call sites build it with a raw `createEl`, so it carries `obnotion-toggle-switch` alone and
  * shares none of the checkbox component's contract. It is included here because it is an
  * `input[type="checkbox"]` in the shipped DOM: any census that walks checkboxes finds it, and a
  * fixture that leaves it out makes that census silently partial.
  */
 export const toggleSwitch = ({ checked = false, disabled = false } = {}) =>
-  `<input type="checkbox" role="switch" class="db-toggle-switch"${checked ? " checked" : ""}${disabled ? " disabled" : ""} aria-label="Toggle">`;
+  `<input type="checkbox" role="switch" class="obnotion-toggle-switch"${checked ? " checked" : ""}${disabled ? " disabled" : ""} aria-label="Toggle">`;
 
 /** The collapse chevron every group header opens with. */
 export const collapseToggle = (cls) =>
-  `<button type="button" class="${cls}"><span class="db-collapse-triangle"></span></button>`;
+  `<button type="button" class="${cls}"><span class="obnotion-collapse-triangle"></span></button>`;
 
 /**
  * The header cells for the standard column set.
@@ -219,14 +219,14 @@ export const collapseToggle = (cls) =>
  */
 export function tableHeader({ selectColumn = true } = {}) {
   return (selectColumn
-    ? `<th class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></th>`
+    ? `<th class="obnotion-select-col"><div class="obnotion-select-inner">${rowCheckbox()}</div></th>`
     : "") +
     COLUMNS.map((c) => `
-    <th data-note-database-column-key="${c.label.toLowerCase()}">
-      <div class="db-th-content">
-        <span class="db-property-icon">${ICONS[c.icon] || ""}</span>
-        <span class="db-th-label">${c.label}</span>
-        <button type="button" class="db-column-menu-trigger" aria-label="Open ${c.label} menu">${dots}</button>
+    <th data-obnotion-column-key="${c.label.toLowerCase()}">
+      <div class="obnotion-th-content">
+        <span class="obnotion-property-icon">${ICONS[c.icon] || ""}</span>
+        <span class="obnotion-th-label">${c.label}</span>
+        <button type="button" class="obnotion-column-menu-trigger" aria-label="Open ${c.label} menu">${dots}</button>
       </div>
     </th>`).join("");
 }
@@ -234,7 +234,7 @@ export function tableHeader({ selectColumn = true } = {}) {
 export function tableRows() {
   return ROWS.map((r) => `
     <tr>
-      <td class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></td>
+      <td class="obnotion-select-col"><div class="obnotion-select-inner">${rowCheckbox()}</div></td>
       <td>${r.name}</td>
       <td>${r.cost}</td>
       <td>${optionPill(r.cycle)}</td>
@@ -251,13 +251,13 @@ export function tableRows() {
  *  a date, number or text column — Anytype's card shows every property this way, values only,
  *  one per line. */
 const kanbanCardField = (label, value, tone) => `
-      <div class="db-board-card-field" data-note-database-column-key="${label.toLowerCase()}" role="gridcell">
-        <span class="db-board-card-field-label">${label}</span>
-        <div class="db-board-card-value">${tone ? pill(value, tone) : value}</div>
+      <div class="obnotion-board-card-field" data-obnotion-column-key="${label.toLowerCase()}" role="gridcell">
+        <span class="obnotion-board-card-field-label">${label}</span>
+        <div class="obnotion-board-card-value">${tone ? pill(value, tone) : value}</div>
       </div>`;
 
 const kanbanCardFields = (row) => `
-      <div class="db-kanban-card-meta">
+      <div class="obnotion-kanban-card-meta">
         ${kanbanCardField("Cost", row.cost)}
         ${kanbanCardField("Billing", row.cycle, optionTone(row.cycle))}
         ${kanbanCardField("Payment", row.payment, optionTone(row.payment))}
@@ -268,13 +268,13 @@ const kanbanCardPath = (row, parent = "") => row.path || `${parent ? `${parent}/
 
 export const boardCard = (r, parent = "", { dragState } = {}) => {
   const path = kanbanCardPath(r, parent);
-  const cardClasses = ["db-kanban-card", dragState === "dragging" ? "db-kanban-card--dragging" : ""]
+  const cardClasses = ["obnotion-kanban-card", dragState === "dragging" ? "obnotion-kanban-card--dragging" : ""]
     .filter(Boolean).join(" ");
   return `
-  <div class="${cardClasses}" data-task-id="${path}" data-note-database-row-path="${path}">
-    <div class="db-kanban-card-body">
-      <div class="db-kanban-card-title-row">
-        <span class="db-kanban-card-title">${r.name}</span>
+  <div class="${cardClasses}" data-task-id="${path}" data-obnotion-row-path="${path}">
+    <div class="obnotion-kanban-card-body">
+      <div class="obnotion-kanban-card-title-row">
+        <span class="obnotion-kanban-card-title">${r.name}</span>
       </div>
       ${kanbanCardFields(r)}
     </div>
@@ -297,12 +297,12 @@ export const SUBTASK_FIXTURE_ROWS = {
 export const subtaskBoardCard = (r, { depth = 0, parent = "" } = {}) => {
   const cardPath = kanbanCardPath(r, parent);
   return `
-  <div class="db-kanban-card" data-task-id="${cardPath}" data-note-database-row-path="${cardPath}">
-    <div class="db-kanban-card-body">
-      <div class="db-kanban-card-title-row">
-        <span class="db-kanban-card-title">${r.name}</span>
+  <div class="obnotion-kanban-card" data-task-id="${cardPath}" data-obnotion-row-path="${cardPath}">
+    <div class="obnotion-kanban-card-body">
+      <div class="obnotion-kanban-card-title-row">
+        <span class="obnotion-kanban-card-title">${r.name}</span>
       </div>
-      ${depth > 0 && parent ? `<div class="db-kanban-card-type">${parent}</div>` : ""}
+      ${depth > 0 && parent ? `<div class="obnotion-kanban-card-type">${parent}</div>` : ""}
       ${kanbanCardFields(r)}
     </div>
   </div>`;
@@ -320,12 +320,12 @@ export const boardEmptySlot = () => "";
  *  (`board-renderer-parity.test.ts`) exercises them against the live TypeScript. */
 export function boardColumn(title, rows, tone = OPTION_TONES[title], { columnClass = "", cardRenderer } = {}) {
   const renderRow = cardRenderer || ((row) => boardCard(row));
-  const cardsClass = columnClass === "is-drop-target" ? "db-kanban-cards db-kanban-drop-target" : "db-kanban-cards";
+  const cardsClass = columnClass === "is-drop-target" ? "obnotion-kanban-cards obnotion-kanban-drop-target" : "obnotion-kanban-cards";
   const toneClass = tone ? ` status-color-${tone}` : "";
   return `
-  <div class="db-kanban-col" data-status="${title}">
-    <div class="db-kanban-col-header">
-      <span class="db-kanban-col-chip${toneClass}">${title}</span>
+  <div class="obnotion-kanban-col" data-status="${title}">
+    <div class="obnotion-kanban-col-header">
+      <span class="obnotion-kanban-col-chip${toneClass}">${title}</span>
     </div>
     <div class="${cardsClass}" data-status="${title}">${rows.map(renderRow).join("")}</div>
   </div>`;

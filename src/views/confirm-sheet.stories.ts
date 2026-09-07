@@ -26,7 +26,7 @@ type Story = StoryObj;
 export const Destructive: Story = {
   render: () => {
     const host = document.createElement("div");
-    host.className = "note-database-modal";
+    host.className = "obnotion-modal";
     buildConfirmSheetBody(host, {
       title: "Delete this row?",
       message: "This action cannot be undone.",
@@ -43,7 +43,7 @@ export const Destructive: Story = {
 export const NonDestructiveWithSecondaryAction: Story = {
   render: () => {
     const host = document.createElement("div");
-    host.className = "note-database-modal";
+    host.className = "obnotion-modal";
     buildConfirmSheetBody(host, {
       title: "Clear sort to reorder?",
       message: "This view is sorted. Reordering will clear the sort and keep the new order.",

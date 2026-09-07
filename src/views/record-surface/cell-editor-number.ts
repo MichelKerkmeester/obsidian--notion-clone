@@ -48,9 +48,9 @@ export function openNumberEditor(
     } else {
       ctx.renderNumberValue(td, undefined, col, currentValue);
     }
-    clearTransientClass(td, "db-cell-editing");
+    clearTransientClass(td, "obnotion-cell-editing");
   }, () => {
     ctx.renderNumberValue(td, undefined, col, currentValue);
-    clearTransientClass(td, "db-cell-editing");
+    clearTransientClass(td, "obnotion-cell-editing");
   }, session, placeholder, initialDraft === undefined);
 }

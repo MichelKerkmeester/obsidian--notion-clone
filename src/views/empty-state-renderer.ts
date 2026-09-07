@@ -306,35 +306,35 @@ export function createStarterViewConfig(preset: StarterPreset): ViewConfig {
 export class EmptyStateRenderer {
   renderCard(container: HTMLElement, options: EmptyStateOptions): HTMLElement {
     const copy = EMPTY_STATE_COPY[options.reason];
-    const classes = ["db-empty", "db-empty-card", options.compact ? "is-compact" : "", options.className || ""]
+    const classes = ["obnotion-empty", "obnotion-empty-card", options.compact ? "is-compact" : "", options.className || ""]
       .filter(Boolean)
       .join(" ");
     const card = container.createDiv({ cls: classes, attr: { "data-empty-reason": options.reason } });
-    const icon = card.createDiv({ cls: "db-empty-card-icon", attr: { "aria-hidden": "true" } });
+    const icon = card.createDiv({ cls: "obnotion-empty-card-icon", attr: { "aria-hidden": "true" } });
     setIcon(icon, options.icon || copy.icon);
-    const content = card.createDiv({ cls: "db-empty-card-content" });
+    const content = card.createDiv({ cls: "obnotion-empty-card-content" });
     content.createEl("h3", {
-      cls: "db-empty-card-title",
+      cls: "obnotion-empty-card-title",
       text: options.title || t(copy.title),
     });
     // The body is a paragraph (the reference shape's body element); the
     // caller-facing option keeps the historical `message` name, and the i18n
     // keys keep theirs because other surfaces read them directly.
     content.createEl("p", {
-      cls: "db-empty-card-message",
+      cls: "obnotion-empty-card-message",
       text: options.message || t(copy.body),
     });
     if (options.diagnostics) {
-      content.createSpan({ cls: "db-empty-card-diagnostics", text: options.diagnostics });
+      content.createSpan({ cls: "obnotion-empty-card-diagnostics", text: options.diagnostics });
     }
     if (options.actions && options.actions.length > 0) {
-      const actionGroup = content.createDiv({ cls: "db-empty-action-group" });
+      const actionGroup = content.createDiv({ cls: "obnotion-empty-action-group" });
       for (const action of options.actions) {
         const button = actionGroup.createEl("button", {
-          cls: ["db-empty-action", action.primary ? "mod-cta" : "", action.cls || ""].filter(Boolean).join(" "),
+          cls: ["obnotion-empty-action", action.primary ? "mod-cta" : "", action.cls || ""].filter(Boolean).join(" "),
           attr: { type: "button", "aria-label": action.label },
         });
-        if (action.icon) setIcon(button.createSpan({ cls: "db-empty-action-icon", attr: { "aria-hidden": "true" } }), action.icon);
+        if (action.icon) setIcon(button.createSpan({ cls: "obnotion-empty-action-icon", attr: { "aria-hidden": "true" } }), action.icon);
         button.createSpan({ text: action.label });
         button.onclick = () => { void action.onClick(); };
       }
@@ -351,20 +351,20 @@ export class EmptyStateRenderer {
   renderInlineChip(container: HTMLElement, options: EmptyStateOptions): HTMLElement {
     const copy = EMPTY_STATE_COPY[options.reason];
     const chip = container.createDiv({
-      cls: ["db-inline-chip", options.className || ""].filter(Boolean).join(" "),
+      cls: ["obnotion-inline-chip", options.className || ""].filter(Boolean).join(" "),
       attr: {
         "data-empty-reason": options.reason,
         role: "status",
         "aria-live": "polite",
       },
     });
-    const icon = chip.createDiv({ cls: "db-inline-chip-icon", attr: { "aria-hidden": "true" } });
+    const icon = chip.createDiv({ cls: "obnotion-inline-chip-icon", attr: { "aria-hidden": "true" } });
     setIcon(icon, "alert-triangle");
-    chip.createSpan({ cls: "db-inline-chip-label", text: options.title || t(copy.title) });
+    chip.createSpan({ cls: "obnotion-inline-chip-label", text: options.title || t(copy.title) });
     const action = options.actions?.[0];
     if (action) {
       const button = chip.createEl("button", {
-        cls: "db-inline-chip-action",
+        cls: "obnotion-inline-chip-action",
         attr: { type: "button", "aria-label": action.label },
       });
       setIcon(button, "chevron-right");
@@ -374,40 +374,40 @@ export class EmptyStateRenderer {
   }
 
   renderHero(container: HTMLElement, options: EmptyStateHeroOptions): HTMLElement {
-    const hero = container.createDiv({ cls: "db-empty-hero", attr: { "data-empty-reason": "no-database" } });
-    const icon = hero.createDiv({ cls: "db-empty-hero-icon", attr: { "aria-hidden": "true" } });
+    const hero = container.createDiv({ cls: "obnotion-empty-hero", attr: { "data-empty-reason": "no-database" } });
+    const icon = hero.createDiv({ cls: "obnotion-empty-hero-icon", attr: { "aria-hidden": "true" } });
     setIcon(icon, "database");
-    const content = hero.createDiv({ cls: "db-empty-hero-content" });
-    content.createEl("h2", { cls: "db-empty-hero-title", text: options.title });
-    content.createDiv({ cls: "db-empty-hero-description", text: options.desc });
-    const actions = content.createDiv({ cls: "db-empty-action-group" });
+    const content = hero.createDiv({ cls: "obnotion-empty-hero-content" });
+    content.createEl("h2", { cls: "obnotion-empty-hero-title", text: options.title });
+    content.createDiv({ cls: "obnotion-empty-hero-description", text: options.desc });
+    const actions = content.createDiv({ cls: "obnotion-empty-action-group" });
     const create = actions.createEl("button", {
-      cls: "db-empty-action mod-cta",
+      cls: "obnotion-empty-action mod-cta",
       attr: { type: "button", "aria-label": t("emptyState.createDatabase") },
     });
-    setIcon(create.createSpan({ cls: "db-empty-action-icon", attr: { "aria-hidden": "true" } }), "plus");
+    setIcon(create.createSpan({ cls: "obnotion-empty-action-icon", attr: { "aria-hidden": "true" } }), "plus");
     create.createSpan({ text: t("emptyState.createDatabase") });
     create.onclick = () => { void options.onCreateDb(); };
 
-    const presets = hero.createDiv({ cls: "db-empty-presets", attr: { "aria-label": t("emptyState.starterPresets") } });
-    presets.createDiv({ cls: "db-empty-presets-title", text: t("emptyState.starterPresets") });
-    const presetGrid = presets.createDiv({ cls: "db-empty-preset-grid" });
+    const presets = hero.createDiv({ cls: "obnotion-empty-presets", attr: { "aria-label": t("emptyState.starterPresets") } });
+    presets.createDiv({ cls: "obnotion-empty-presets-title", text: t("emptyState.starterPresets") });
+    const presetGrid = presets.createDiv({ cls: "obnotion-empty-preset-grid" });
     for (const preset of STARTER_PRESETS) {
       const card = presetGrid.createEl("button", {
-        cls: "db-empty-preset-card",
+        cls: "obnotion-empty-preset-card",
         attr: { type: "button" },
       });
-      const presetIcon = card.createDiv({ cls: "db-empty-preset-icon", attr: { "aria-hidden": "true" } });
+      const presetIcon = card.createDiv({ cls: "obnotion-empty-preset-icon", attr: { "aria-hidden": "true" } });
       setIcon(presetIcon, preset.icon);
-      card.createEl("strong", { cls: "db-empty-preset-title", text: preset.name });
-      card.createSpan({ cls: "db-empty-preset-description", text: preset.description });
+      card.createEl("strong", { cls: "obnotion-empty-preset-title", text: preset.name });
+      card.createSpan({ cls: "obnotion-empty-preset-description", text: preset.description });
       card.onclick = () => { void options.onSelectPreset(preset); };
     }
     return hero;
   }
 
   renderTableRow(tbody: HTMLElement, colSpan: number, options: EmptyStateOptions): HTMLElement {
-    const row = tbody.createEl("tr", { cls: "db-empty-table-row" });
+    const row = tbody.createEl("tr", { cls: "obnotion-empty-table-row" });
     const cell = row.createEl("td", { attr: { colspan: String(Math.max(1, colSpan)) } });
     this.renderCard(cell, { ...options, compact: true });
     return row;

@@ -181,7 +181,7 @@ export function positionToolbarPopover(
   const mobileSheet = options.forceSheet === true || isMobileBottomSheet(ownerDocument);
   positionCleanups.get(panel)?.();
 
-  panel.addClass("db-anchored-popover");
+  panel.addClass("obnotion-anchored-popover");
 
   // Presentation now lives in the sheet module so surfaces without an anchor — modals — can reach
   // it too. This function keeps placement, which is the part that genuinely needs an anchor.
@@ -193,7 +193,7 @@ export function positionToolbarPopover(
     // surface nobody reported, and this phase is not the place to make it.
     playSheetEntrance(panel);
   } else if (!panel.hasClass("is-visible")) {
-    panel.addClass("db-overlay-enter");
+    panel.addClass("obnotion-overlay-enter");
     view.requestAnimationFrame(() => {
       if (panel.isConnected) panel.addClass("is-visible");
     });
@@ -458,7 +458,7 @@ export function placeSheet(
   // `!important`, so the lever was already wired — it was simply always written zero, and the
   // re-placement that a visual-viewport event triggers recomputed the same zero every time.
   const keyboard = overlayStack.isTopSheet(panel) ? keyboardInset(view, panel.ownerDocument) : 0;
-  panel.style.setProperty("--db-mobile-sheet-bottom", `${keyboard}px`);
+  panel.style.setProperty("--obnotion-mobile-sheet-bottom", `${keyboard}px`);
   // The same figure, published once per placement on the sheet's own node. The placement loop
   // above is the sheet's one viewport subscription, so this is where the published value is
   // written — a second subscription per sheet would answer the same keyboard event twice, and
@@ -982,7 +982,7 @@ export function resolveKeyboardInset(
 }
 
 /**
- * Publish a container's keyboard inset as `--db-keyboard-inset`, and keep it current.
+ * Publish a container's keyboard inset as `--obnotion-keyboard-inset`, and keep it current.
  *
  * A phone surface that docks to the bottom of the screen has to know how much of that screen the
  * software keyboard is covering, and `--keyboard-height` cannot be asked on its own. That variable
@@ -1018,7 +1018,7 @@ export function publishKeyboardInset(container: HTMLElement): () => void {
   let frame: number | undefined;
   const publish = () => {
     frame = undefined;
-    container.style.setProperty("--db-keyboard-inset", `${keyboardInset(view, doc)}px`);
+    container.style.setProperty("--obnotion-keyboard-inset", `${keyboardInset(view, doc)}px`);
   };
   const schedule = () => {
     if (frame !== undefined) return;
@@ -1033,7 +1033,7 @@ export function publishKeyboardInset(container: HTMLElement): () => void {
     view.removeEventListener("resize", schedule);
     visual?.removeEventListener("resize", schedule);
     visual?.removeEventListener("scroll", schedule);
-    container.style.removeProperty("--db-keyboard-inset");
+    container.style.removeProperty("--obnotion-keyboard-inset");
   };
 }
 

@@ -98,9 +98,9 @@ export function renderMiniCalendar(options: MiniCalendarOptions): void {
   const { popover } = options;
   popover.empty();
 
-  const head = popover.createDiv({ cls: "db-calendar-mini-head" });
+  const head = popover.createDiv({ cls: "obnotion-calendar-mini-head" });
   const prevBtn = head.createEl("button", {
-    cls: "db-calendar-mini-nav",
+    cls: "obnotion-calendar-mini-nav",
     attr: { type: "button", "aria-label": getPreviousLabel(options.mode) },
   });
   setIcon(prevBtn, "chevron-left");
@@ -110,7 +110,7 @@ export function renderMiniCalendar(options: MiniCalendarOptions): void {
   };
 
   const title = head.createEl("button", {
-    cls: "db-calendar-mini-title db-calendar-mini-title-button",
+    cls: "obnotion-calendar-mini-title obnotion-calendar-mini-title-button",
     text: getMiniCalendarTitle(options),
     attr: { type: "button" },
   });
@@ -120,7 +120,7 @@ export function renderMiniCalendar(options: MiniCalendarOptions): void {
   };
 
   const nextBtn = head.createEl("button", {
-    cls: "db-calendar-mini-nav",
+    cls: "obnotion-calendar-mini-nav",
     attr: { type: "button", "aria-label": getNextLabel(options.mode) },
   });
   setIcon(nextBtn, "chevron-right");
@@ -137,10 +137,10 @@ export function renderMiniCalendar(options: MiniCalendarOptions): void {
     renderMiniCalendarYearGrid(options);
   }
 
-  const footer = popover.createDiv({ cls: "db-calendar-mini-footer" });
+  const footer = popover.createDiv({ cls: "obnotion-calendar-mini-footer" });
   if (options.footerAction) {
     const action = footer.createEl("button", {
-      cls: "db-calendar-mini-footer-action",
+      cls: "obnotion-calendar-mini-footer-action",
       text: options.footerAction.label,
       attr: { type: "button" },
     });
@@ -151,7 +151,7 @@ export function renderMiniCalendar(options: MiniCalendarOptions): void {
   }
   const todayKey = options.todayKey;
   const today = footer.createEl("button", {
-    cls: "db-calendar-mini-today",
+    cls: "obnotion-calendar-mini-today",
     text: t("calendar.today"),
     attr: { type: "button" },
   });
@@ -166,26 +166,26 @@ export function renderMiniCalendar(options: MiniCalendarOptions): void {
 // ───────────────────────────────────────────────────────────────────
 
 function renderMiniCalendarDayGrid(options: MiniCalendarOptions): void {
-  const weekdayRow = options.popover.createDiv({ cls: "db-calendar-mini-weekdays" });
+  const weekdayRow = options.popover.createDiv({ cls: "obnotion-calendar-mini-weekdays" });
   weekdayRow.setAttr("role", "row");
   for (const label of options.weekdays) {
-    weekdayRow.createDiv({ cls: "db-calendar-mini-weekday", text: label, attr: { role: "columnheader" } });
+    weekdayRow.createDiv({ cls: "obnotion-calendar-mini-weekday", text: label, attr: { role: "columnheader" } });
   }
 
-  const grid = options.popover.createDiv({ cls: "db-calendar-mini-grid" });
+  const grid = options.popover.createDiv({ cls: "obnotion-calendar-mini-grid" });
   grid.setAttr("role", "grid");
   grid.setAttr("aria-label", options.monthTitle);
   const selectedDate = getFirstSelectedDate(options);
   const focusIndex = Math.max(0, options.weeks.flat().findIndex((day) => day.dateKey === selectedDate || day.dateKey === options.todayKey));
   const rows = options.weeks.flat();
   for (const week of options.weeks) {
-    const row = grid.createDiv({ cls: "db-calendar-mini-week", attr: { role: "row" } });
+    const row = grid.createDiv({ cls: "obnotion-calendar-mini-week", attr: { role: "row" } });
     for (const day of week) {
       const dayIndex = rows.findIndex((candidate) => candidate.dateKey === day.dateKey);
       const hasEvents = options.eventIndex.dateKeys.has(day.dateKey) || day.events.length > 0;
       const cell = row.createEl("button", {
         cls: [
-          "db-calendar-mini-day",
+          "obnotion-calendar-mini-day",
           day.inCurrentMonth ? "" : "is-outside",
           day.dateKey === options.todayKey ? "is-today" : "",
           options.selectedKeys.has(day.dateKey) ? "is-selected" : "",
@@ -201,8 +201,8 @@ function renderMiniCalendarDayGrid(options: MiniCalendarOptions): void {
           tabindex: dayIndex === focusIndex ? "0" : "-1",
         },
       });
-      cell.createSpan({ cls: "db-calendar-mini-day-num", text: String(Number(day.dateKey.slice(8, 10))) });
-      cell.createSpan({ cls: "db-calendar-mini-day-dot" });
+      cell.createSpan({ cls: "obnotion-calendar-mini-day-num", text: String(Number(day.dateKey.slice(8, 10))) });
+      cell.createSpan({ cls: "obnotion-calendar-mini-day-dot" });
       cell.onclick = (event) => {
         event.stopPropagation();
         options.onSelectDate(day.dateKey);
@@ -250,7 +250,7 @@ function renderMiniCalendarDayGrid(options: MiniCalendarOptions): void {
 }
 
 function renderMiniCalendarMonthGrid(options: MiniCalendarOptions): void {
-  const grid = options.popover.createDiv({ cls: "db-calendar-mini-view-grid is-month-grid" });
+  const grid = options.popover.createDiv({ cls: "obnotion-calendar-mini-view-grid is-month-grid" });
   grid.setAttr("role", "grid");
   grid.setAttr("aria-label", getMiniCalendarTitle(options));
   const eventIndex = options.eventIndex;
@@ -260,7 +260,7 @@ function renderMiniCalendarMonthGrid(options: MiniCalendarOptions): void {
     const hasEvents = eventIndex.monthKeys.has(monthKey);
     const cell = grid.createEl("button", {
       cls: [
-        "db-calendar-mini-view-cell",
+        "obnotion-calendar-mini-view-cell",
         selectedMonth === monthKey ? "is-selected" : "",
         options.todayKey.startsWith(monthKey) ? "is-today" : "",
         hasEvents ? "has-events" : "",
@@ -275,8 +275,8 @@ function renderMiniCalendarMonthGrid(options: MiniCalendarOptions): void {
         tabindex: selectedMonth === monthKey ? "0" : "-1",
       },
     });
-    cell.createSpan({ cls: "db-calendar-mini-view-label", text: getMonthLabel(options.visibleYear, month) });
-    cell.createSpan({ cls: "db-calendar-mini-view-dot" });
+    cell.createSpan({ cls: "obnotion-calendar-mini-view-label", text: getMonthLabel(options.visibleYear, month) });
+    cell.createSpan({ cls: "obnotion-calendar-mini-view-dot" });
     cell.onclick = (event) => {
       event.stopPropagation();
       options.onSelectMonth(monthKey);
@@ -286,7 +286,7 @@ function renderMiniCalendarMonthGrid(options: MiniCalendarOptions): void {
 }
 
 function renderMiniCalendarYearGrid(options: MiniCalendarOptions): void {
-  const grid = options.popover.createDiv({ cls: "db-calendar-mini-view-grid is-year-grid" });
+  const grid = options.popover.createDiv({ cls: "obnotion-calendar-mini-view-grid is-year-grid" });
   grid.setAttr("role", "grid");
   grid.setAttr("aria-label", getMiniCalendarTitle(options));
   const eventIndex = options.eventIndex;
@@ -297,7 +297,7 @@ function renderMiniCalendarYearGrid(options: MiniCalendarOptions): void {
     const hasEvents = eventIndex.yearKeys.has(String(year));
     const cell = grid.createEl("button", {
       cls: [
-        "db-calendar-mini-view-cell",
+        "obnotion-calendar-mini-view-cell",
         selectedYear === year ? "is-selected" : "",
         options.todayKey.startsWith(yearKey) ? "is-today" : "",
         hasEvents ? "has-events" : "",
@@ -312,8 +312,8 @@ function renderMiniCalendarYearGrid(options: MiniCalendarOptions): void {
         tabindex: selectedYear === year ? "0" : "-1",
       },
     });
-    cell.createSpan({ cls: "db-calendar-mini-view-label", text: yearKey });
-    cell.createSpan({ cls: "db-calendar-mini-view-dot" });
+    cell.createSpan({ cls: "obnotion-calendar-mini-view-label", text: yearKey });
+    cell.createSpan({ cls: "obnotion-calendar-mini-view-dot" });
     cell.onclick = (event) => {
       event.stopPropagation();
       options.onSelectYear(year);

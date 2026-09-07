@@ -125,7 +125,7 @@ function optionColumn(statusOptions: Array<{ value: string; color: string }>): C
   return { key: "stage", label: "Stage", type: "select", statusOptions } as unknown as ColumnDef;
 }
 
-const OPTION_CLASSES = { chipClass: "db-option-chip", textClass: "db-option-text" };
+const OPTION_CLASSES = { chipClass: "obnotion-option-chip", textClass: "obnotion-option-text" };
 
 // ───────────────────────────────────────────────────────────────────
 // 3. CASES — THE ROW SHELL
@@ -136,24 +136,24 @@ describe("buildPropertyRow", () => {
     const parent = new MockElement();
     const handle = buildPropertyRow({
       parent: asHTMLElement(parent),
-      rowClass: "db-property-row",
-      labelClass: "db-property-label",
-      valueClass: "db-property-value",
+      rowClass: "obnotion-property-row",
+      labelClass: "obnotion-property-label",
+      valueClass: "obnotion-property-value",
       label: "Stage",
       renderValue: (valueEl) => { (valueEl as unknown as MockElement).text = "Backlog"; },
     });
 
     const row = handle.row as unknown as MockElement;
     expect(parent.children).toHaveLength(1);
-    expect(row.className).toBe("db-property-row");
+    expect(row.className).toBe("obnotion-property-row");
 
     // Two children and no third: a value row draws no format icon on either platform, so an icon
     // element appearing here is the regression this assertion exists to catch.
     expect(row.children).toHaveLength(2);
     expect(row.children[0].tagName).toBe("SPAN");
-    expect(row.children[0].className).toBe("db-property-label");
+    expect(row.children[0].className).toBe("obnotion-property-label");
     expect(row.children[0].text).toBe("Stage");
-    expect(row.children[1].className).toBe("db-property-value");
+    expect(row.children[1].className).toBe("obnotion-property-value");
   });
 
   it("hands the value element to the caller exactly once, even when it renders nothing", () => {
@@ -192,10 +192,10 @@ describe("renderOptionValue", () => {
     expect(valueEl.children).toHaveLength(1);
     const [text] = valueEl.children;
     expect(text.text).toBe("Review");
-    expect(text.hasClass("db-option-text")).toBe(true);
+    expect(text.hasClass("obnotion-option-text")).toBe(true);
     expect(text.hasClass("status-color-text-purple")).toBe(true);
     // The whole point of the split: no chip class reaches a single-select value.
-    expect(text.hasClass("db-option-chip")).toBe(false);
+    expect(text.hasClass("obnotion-option-chip")).toBe(false);
   });
 
   it("draws a multi-select as one filled chip per value", () => {
@@ -204,8 +204,8 @@ describe("renderOptionValue", () => {
 
     expect(valueEl.children.map((child) => child.text)).toEqual(["Backlog", "Review"]);
     for (const chip of valueEl.children) {
-      expect(chip.hasClass("db-option-chip")).toBe(true);
-      expect(chip.hasClass("db-option-text")).toBe(false);
+      expect(chip.hasClass("obnotion-option-chip")).toBe(true);
+      expect(chip.hasClass("obnotion-option-text")).toBe(false);
     }
     expect(valueEl.children[0].hasClass("status-color-gray")).toBe(true);
     expect(valueEl.children[1].hasClass("status-color-purple")).toBe(true);
@@ -261,16 +261,16 @@ describe("getPropertyEmptyPrompt", () => {
 
 describe("buildCheckboxPropertyRow", () => {
   const baseOptions = {
-    rowClass: "db-column-manager-row",
+    rowClass: "obnotion-column-manager-row",
     dataColumnKey: "status",
-    dragHandleClass: "db-column-drag",
+    dragHandleClass: "obnotion-column-drag",
     dragHandleTitle: "Drag to sort",
-    moveControlsClass: "db-mobile-reorder-controls",
+    moveControlsClass: "obnotion-mobile-reorder-controls",
     checked: true,
-    typeClass: "db-column-type",
+    typeClass: "obnotion-column-type",
     renderTypeIcon: vi.fn(),
-    nameWrapClass: "db-column-name-wrap",
-    nameClass: "db-column-name",
+    nameWrapClass: "obnotion-column-name-wrap",
+    nameClass: "obnotion-column-name",
     nameText: "Status [status]",
   };
 
@@ -289,10 +289,10 @@ describe("buildCheckboxPropertyRow", () => {
 
     const row = handle.row as unknown as MockElement;
     expect(row.draggable).toBe(true);
-    expect(row.attributes.get("data-note-database-column-key")).toBe("status");
+    expect(row.attributes.get("data-obnotion-column-key")).toBe("status");
     expect(row.children.map((child) => child.className)).toEqual([
-      "db-column-drag", "db-mobile-reorder-controls", "db-checkbox db-checkbox-field",
-      "db-column-type", "db-column-name-wrap",
+      "obnotion-column-drag", "obnotion-mobile-reorder-controls", "obnotion-checkbox obnotion-checkbox-field",
+      "obnotion-column-type", "obnotion-column-name-wrap",
     ]);
     expect(handle.checkbox.checked).toBe(true);
     expect((handle.nameEl as unknown as MockElement).text).toBe("Status [status]");
@@ -309,8 +309,8 @@ describe("buildCheckboxPropertyRow", () => {
 
     const row = handle.row as unknown as MockElement;
     expect(row.draggable).toBe(false);
-    expect(row.children.some((child) => child.hasClass("db-column-drag"))).toBe(false);
-    expect(row.children.some((child) => child.hasClass("db-mobile-reorder-controls"))).toBe(false);
+    expect(row.children.some((child) => child.hasClass("obnotion-column-drag"))).toBe(false);
+    expect(row.children.some((child) => child.hasClass("obnotion-mobile-reorder-controls"))).toBe(false);
     expect(handle.checkbox.disabled).toBe(true);
   });
 
@@ -342,7 +342,7 @@ describe("shouldIgnorePropertyRowDrag", () => {
   });
 
   it("allows a drag starting on the row itself", () => {
-    const row = new MockElement("div", "db-column-manager-row");
+    const row = new MockElement("div", "obnotion-column-manager-row");
     expect(shouldIgnorePropertyRowDrag({ target: row } as unknown as DragEvent)).toBe(false);
   });
 });

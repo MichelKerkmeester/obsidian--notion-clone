@@ -72,7 +72,7 @@ export function mountNoteBodyRegion(options: NoteBodyRegionOptions): NoteBodyReg
   const delay = options.commitDelayMs ?? COMMIT_DELAY_MS;
 
   const el = doc.createElement("div");
-  el.className = "db-record-detail-body";
+  el.className = "obnotion-record-detail-body";
   parent.appendChild(el);
 
   let draft = options.body;
@@ -107,7 +107,7 @@ export function mountNoteBodyRegion(options: NoteBodyRegionOptions): NoteBodyReg
     el.replaceChildren();
     el.classList.remove("is-editing");
     const content = doc.createElement("div");
-    content.className = "db-record-detail-body-rendered";
+    content.className = "obnotion-record-detail-body-rendered";
     el.appendChild(content);
     if (draft.trim() === "") {
       content.classList.add("is-empty");
@@ -150,7 +150,7 @@ export function mountNoteBodyRegion(options: NoteBodyRegionOptions): NoteBodyReg
     el.replaceChildren();
     el.classList.add("is-editing");
     const area = doc.createElement("textarea");
-    area.className = "db-record-detail-body-editor";
+    area.className = "obnotion-record-detail-body-editor";
     area.value = draft;
     area.placeholder = placeholder;
     area.rows = 1;

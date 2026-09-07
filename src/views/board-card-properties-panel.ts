@@ -35,7 +35,7 @@ export function renderBoardCardProperties(
   context?: BoardCardFieldContext,
 ): void {
   panel.createDiv({
-    cls: "db-view-config-section-title db-view-config-section-view",
+    cls: "obnotion-view-config-section-title obnotion-view-config-section-view",
     text: t("viewConfig.cardProperties"),
     attr: { "data-scope": "view" },
   });
@@ -48,12 +48,12 @@ export function renderBoardCardProperties(
   entries.forEach((entry, index) => {
     const handle = buildCheckboxPropertyRow({
       parent: panel,
-      rowClass: "db-column-manager-row",
+      rowClass: "obnotion-column-manager-row",
       dataColumnKey: entry.column.key,
       draggable: !actions.readOnly,
-      dragHandleClass: "db-column-drag",
+      dragHandleClass: "obnotion-column-drag",
       dragHandleTitle: t("panel.dragToSort"),
-      moveControlsClass: "db-mobile-reorder-controls",
+      moveControlsClass: "obnotion-mobile-reorder-controls",
       drag: {
         onDragStart: (event) => {
           if (shouldIgnorePropertyRowDrag(event)) {
@@ -89,7 +89,7 @@ export function renderBoardCardProperties(
         onDragEnd: () => {
           draggedKey = null;
           handle.row.removeClass("is-dragging");
-          panel.querySelectorAll(".db-column-manager-row").forEach((el) => el.removeClass("is-drop-target"));
+          panel.querySelectorAll(".obnotion-column-manager-row").forEach((el) => el.removeClass("is-drop-target"));
         },
       },
       move: {
@@ -116,11 +116,11 @@ export function renderBoardCardProperties(
         entry.visible = checked;
         persist(config, entries, actions);
       },
-      typeClass: "db-column-type",
+      typeClass: "obnotion-column-type",
       typeTitle: entry.column.type,
-      renderTypeIcon: (iconParent) => renderPropertyTypeIcon(iconParent, entry.column, "db-column-type-icon"),
-      nameWrapClass: "db-column-name-wrap",
-      nameClass: "db-column-name",
+      renderTypeIcon: (iconParent) => renderPropertyTypeIcon(iconParent, entry.column, "obnotion-column-type-icon"),
+      nameWrapClass: "obnotion-column-name-wrap",
+      nameClass: "obnotion-column-name",
       nameText: entry.column.label || entry.column.key,
     });
   });
@@ -136,14 +136,14 @@ function persist(
 }
 
 function renderFixedSlot(panel: HTMLElement, label: string, value: string, asSheet?: boolean, onOpen?: () => void): void {
-  const baseCls = asSheet ? "db-panel-row" : "db-view-config-row";
+  const baseCls = asSheet ? "obnotion-panel-row" : "obnotion-view-config-row";
   const row = panel.createDiv({
-    cls: onOpen ? `${baseCls} db-view-config-row-clickable` : baseCls,
+    cls: onOpen ? `${baseCls} obnotion-view-config-row-clickable` : baseCls,
     attr: onOpen ? { role: "button", tabindex: "0" } : undefined,
   });
-  row.createDiv({ cls: "db-view-config-label", text: label });
-  row.createDiv({ cls: "db-view-config-field" }).createDiv({
-    cls: "db-view-config-readonly-value",
+  row.createDiv({ cls: "obnotion-view-config-label", text: label });
+  row.createDiv({ cls: "obnotion-view-config-field" }).createDiv({
+    cls: "obnotion-view-config-readonly-value",
     text: value,
   });
   if (!onOpen) return;
@@ -166,7 +166,7 @@ function openTitleFieldPicker(panel: HTMLElement): void {
   // The dropdown field's own onclick (dropdown-field.ts) ignores its event argument, so this
   // reaches the same open-popover path a real click would without constructing a synthetic
   // pointer event the test environment has no DOM to build.
-  row.querySelector<HTMLButtonElement>(".db-dropdown-field")?.onclick?.(undefined as unknown as PointerEvent);
+  row.querySelector<HTMLButtonElement>(".obnotion-dropdown-field")?.onclick?.(undefined as unknown as PointerEvent);
 }
 
 function coverLabel(config: ViewConfig): string {

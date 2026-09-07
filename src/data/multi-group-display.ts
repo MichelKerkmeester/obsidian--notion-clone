@@ -32,8 +32,8 @@ export function getDisplayGroupFields(
 export function getGroupHeaderClassName(depth: number): string {
   const normalizedDepth = normalizeDepth(depth);
   return normalizedDepth === 0
-    ? "db-group-header"
-    : `db-group-header db-group-header--depth-${normalizedDepth}`;
+    ? "obnotion-group-header"
+    : `obnotion-group-header obnotion-group-header--depth-${normalizedDepth}`;
 }
 
 /** Return the nested depth token; depth zero keeps the legacy inline style absent. */

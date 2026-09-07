@@ -220,9 +220,9 @@ export function judgeChromeGeometry(reading) {
 // ───────────────────────────────────────────────────────────────────
 
 function readSplitButton(root) {
-  const primary = root.querySelector(".db-new-button-primary");
-  const dropdown = root.querySelector(".db-new-button-dropdown");
-  const icon = root.querySelector(".db-toolbar-icon-button");
+  const primary = root.querySelector(".obnotion-new-button-primary");
+  const dropdown = root.querySelector(".obnotion-new-button-dropdown");
+  const icon = root.querySelector(".obnotion-toolbar-icon-button");
   if (!primary || !dropdown || !icon) return null;
   // The phone's floating action button is a different control wearing the same class: round,
   // accent-filled and off the toolbar row entirely, so none of the comparisons below apply to it.
@@ -243,7 +243,7 @@ function readSplitButton(root) {
 
 /** The one control in a condition row that holds the value, whatever type the column is. */
 function valueControl(row) {
-  return row.querySelector(".db-filter-value-dropdown, .db-panel-date-value")
+  return row.querySelector(".obnotion-filter-value-dropdown, .obnotion-panel-date-value")
     || row.querySelector("input");
 }
 
@@ -259,16 +259,16 @@ function boxWidth(el) {
 function readRuleRows(root) {
   const rows = [];
   for (const [panel, selector, property, operator] of [
-    ["filter", ".db-filter-panel", ".db-filter-field-dropdown", ".db-filter-operator-dropdown"],
-    ["sort", ".db-sort-panel", ".db-sort-field-dropdown", null],
+    ["filter", ".obnotion-filter-panel", ".obnotion-filter-field-dropdown", ".obnotion-filter-operator-dropdown"],
+    ["sort", ".obnotion-sort-panel", ".obnotion-sort-field-dropdown", null],
   ]) {
     // Same two exclusions the floors themselves carry: a panel presenting as a phone sheet lays its
     // rows out as a two-line grid on purpose, and the compact single-rule editor the chip rail opens
     // borrows this panel's chrome class while being a wrapping column a third of the width.
-    const host = root.querySelector(`${selector}:not(.db-mobile-bottom-sheet):not(.db-active-rule-popover)`);
+    const host = root.querySelector(`${selector}:not(.obnotion-mobile-bottom-sheet):not(.obnotion-active-rule-popover)`);
     if (!host) continue;
     const panelWidth = host.getBoundingClientRect().width;
-    for (const row of host.querySelectorAll(".db-panel-row")) {
+    for (const row of host.querySelectorAll(".obnotion-panel-row")) {
       const propertyEl = row.querySelector(property);
       if (!propertyEl) continue;
       const operatorEl = operator ? row.querySelector(operator) : null;
@@ -298,10 +298,10 @@ function readRuleRows(root) {
  */
 function readRecordDock(root, scenario) {
   if (scenario?.recordPlacement !== "docked") return null;
-  const panel = root.querySelector(".db-record-detail-panel");
+  const panel = root.querySelector(".obnotion-record-detail-panel");
   if (!panel) return null;
   // A phone sheet is docked to the viewport floor by a different function and has its own lane.
-  if (panel.classList.contains("db-mobile-bottom-sheet")) return null;
+  if (panel.classList.contains("obnotion-mobile-bottom-sheet")) return null;
   const panelRect = panel.getBoundingClientRect();
   // The same fallback the placement itself makes: a pane holding nothing but this fixed panel has
   // no area, and the dock is measured against the viewport instead. Reading the empty rect here
@@ -321,8 +321,8 @@ function readRecordDock(root, scenario) {
 }
 
 function readToolbarBoxes(root) {
-  const chip = root.querySelector(".db-active-control-chip");
-  const icon = root.querySelector(".db-toolbar-icon-button");
+  const chip = root.querySelector(".obnotion-active-control-chip");
+  const icon = root.querySelector(".obnotion-toolbar-icon-button");
   const chipBox = chip?.getBoundingClientRect();
   const iconBox = icon?.getBoundingClientRect();
   return {
@@ -334,21 +334,21 @@ function readToolbarBoxes(root) {
 
 /**
  * The row-insertion seam's height inside a linked-view (codeblock) embed. `runRenderAssertions`
- * builds the table renderer's own bare `.note-database-container` host; production's embed adds
- * `.note-database-embed` on top of it (`EMBED_LINKED_CLASS`, `embedded-database-renderer.ts:584`),
+ * builds the table renderer's own bare `.obnotion-container` host; production's embed adds
+ * `.obnotion-embed` on top of it (`EMBED_LINKED_CLASS`, `embedded-database-renderer.ts:584`),
  * which is the class the embed-only CSS keys on and the harness never applies on its own. Added
  * here and removed again once read, so a later pass over this same container (the link-colour
  * scan runs right after) still sees the DOM `runRenderAssertions` actually built.
  */
 function readLinkedViewInsertLines(root, scenario) {
   if (scenario?.renderer !== "table" || scenario?.bag !== "embed") return null;
-  const alreadyEmbed = root.classList.contains("note-database-embed");
-  if (!alreadyEmbed) root.classList.add("note-database-embed", "note-database-embed-linked");
+  const alreadyEmbed = root.classList.contains("obnotion-embed");
+  if (!alreadyEmbed) root.classList.add("obnotion-embed", "obnotion-embed-linked");
   try {
-    return [...root.querySelectorAll("table.db-table > tbody > tr.db-row-insert-line")]
+    return [...root.querySelectorAll("table.obnotion-table > tbody > tr.obnotion-row-insert-line")]
       .map((tr) => ({ height: tr.getBoundingClientRect().height }));
   } finally {
-    if (!alreadyEmbed) root.classList.remove("note-database-embed", "note-database-embed-linked");
+    if (!alreadyEmbed) root.classList.remove("obnotion-embed", "obnotion-embed-linked");
   }
 }
 

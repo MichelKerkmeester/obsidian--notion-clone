@@ -1,8 +1,8 @@
 {
-  "measuredAt": "2026-09-07T15:32:54.005Z",
+  "measuredAt": "2026-09-07T17:22:12.248Z",
   "inputs": {
-    "styles.css": "42e4510561f9",
-    "tools/live/checkbox-inventory.mjs": "e869ed91680a"
+    "styles.css": "65c9009170d1",
+    "tools/live/checkbox-inventory.mjs": "905d8557d4b0"
   },
   "totals": {
     "sites": 10,
@@ -15,7 +15,7 @@
       "file": "src/views/calendar-toolbar-renderer.ts",
       "line": 501,
       "chain": [
-        "db-chart-options-row db-calendar-range-row"
+        "obnotion-chart-options-row obnotion-calendar-range-row"
       ],
       "classes": [],
       "computedClass": true,
@@ -45,10 +45,10 @@
       "file": "src/views/calendar-timeline-toolbar-renderer.ts",
       "line": 338,
       "chain": [
-        "db-chart-options-row db-calendar-range-row db-calendar-timeline-range-row"
+        "obnotion-chart-options-row obnotion-calendar-range-row obnotion-calendar-timeline-range-row"
       ],
       "classes": [
-        "db-toggle-switch"
+        "obnotion-toggle-switch"
       ],
       "computedClass": false,
       "borrowed": null
@@ -57,7 +57,7 @@
       "file": "src/views/calendar-toolbar-renderer.ts",
       "line": 501,
       "chain": [
-        "db-chart-options-row db-calendar-range-row"
+        "obnotion-chart-options-row obnotion-calendar-range-row"
       ],
       "classes": [],
       "computedClass": true,
@@ -76,7 +76,7 @@
       "line": 980,
       "chain": [],
       "classes": [
-        "db-toggle-switch"
+        "obnotion-toggle-switch"
       ],
       "computedClass": false,
       "borrowed": null
@@ -93,10 +93,10 @@
       "file": "src/views/column-menu.ts",
       "line": 509,
       "chain": [
-        "db-displayopt-row db-displayopt-colors"
+        "obnotion-displayopt-row obnotion-displayopt-colors"
       ],
       "classes": [
-        "db-toggle-switch"
+        "obnotion-toggle-switch"
       ],
       "computedClass": false,
       "borrowed": null
@@ -105,11 +105,11 @@
       "file": "src/views/toolbar-renderer.ts",
       "line": 1904,
       "chain": [
-        "db-database-popover",
-        "db-new-preset-row db-menu-item"
+        "obnotion-database-popover",
+        "obnotion-new-preset-row obnotion-menu-item"
       ],
       "classes": [
-        "db-toggle-switch"
+        "obnotion-toggle-switch"
       ],
       "computedClass": false,
       "borrowed": null
@@ -118,11 +118,11 @@
       "file": "src/views/toolbar-renderer.ts",
       "line": 1924,
       "chain": [
-        "db-database-popover",
-        "db-new-preset-row db-menu-item"
+        "obnotion-database-popover",
+        "obnotion-new-preset-row obnotion-menu-item"
       ],
       "classes": [
-        "db-toggle-switch"
+        "obnotion-toggle-switch"
       ],
       "computedClass": false,
       "borrowed": null
@@ -131,11 +131,11 @@
       "file": "src/views/toolbar-renderer.ts",
       "line": 1996,
       "chain": [
-        "db-database-popover",
-        "db-new-preset-row db-menu-item"
+        "obnotion-database-popover",
+        "obnotion-new-preset-row obnotion-menu-item"
       ],
       "classes": [
-        "db-toggle-switch"
+        "obnotion-toggle-switch"
       ],
       "computedClass": false,
       "borrowed": null
@@ -144,11 +144,11 @@
       "file": "src/views/view-config-panel-renderer.ts",
       "line": 2229,
       "chain": [
-        "db-view-config-panel",
-        "db-view-config-field"
+        "obnotion-view-config-panel",
+        "obnotion-view-config-field"
       ],
       "classes": [
-        "db-toggle-switch"
+        "obnotion-toggle-switch"
       ],
       "computedClass": false,
       "borrowed": null

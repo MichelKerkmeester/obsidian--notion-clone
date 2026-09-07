@@ -661,7 +661,7 @@ export class DataSource {
         });
       } catch (err) {
         // Non-critical migration; log and continue
-        console.warn("Note Database: failed to migrate top-level name in", file.path, err);
+        console.warn("Obnotion: failed to migrate top-level name in", file.path, err);
       }
     }
   }
@@ -683,7 +683,7 @@ export class DataSource {
         });
       } catch (err) {
         // Non-critical migration; log and continue
-        console.warn("Note Database: failed to backfill database id in", target.file.path, err);
+        console.warn("Obnotion: failed to backfill database id in", target.file.path, err);
       }
     }
   }
@@ -710,7 +710,7 @@ export class DataSource {
         });
       } catch (err) {
         this.viewDefOverrides.delete(target.file.path);
-        console.warn("Note Database: failed to deduplicate database id in", target.file.path, err);
+        console.warn("Obnotion: failed to deduplicate database id in", target.file.path, err);
       }
     }
   }
@@ -739,7 +739,7 @@ export class DataSource {
         });
       } catch (err) {
         // Non-critical migration; log and continue
-        console.warn("Note Database: failed to migrate typeFilter in", file.path, err);
+        console.warn("Obnotion: failed to migrate typeFilter in", file.path, err);
       }
     }
   }
@@ -1847,7 +1847,7 @@ export class DataSource {
         origin: "external",
       });
     } catch (error) {
-      console.warn("Note Database: failed to reconcile modified record", file.path, error);
+      console.warn("Obnotion: failed to reconcile modified record", file.path, error);
     }
   }
 
@@ -2061,7 +2061,7 @@ export class DataSource {
         columns: db.schema.columns,
       });
     } catch (error) {
-      console.warn("Note Database: failed to evaluate Bases source expression", expression, error);
+      console.warn("Obnotion: failed to evaluate Bases source expression", expression, error);
       return false;
     }
   }

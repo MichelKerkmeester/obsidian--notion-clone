@@ -256,13 +256,13 @@ function createCol(): ColumnDef {
   return { key: "myDate", label: "My Date", type: "date" };
 }
 
-/** Finds a `.db-menu-item` row anywhere under `root` whose label span carries this exact text. */
+/** Finds a `.obnotion-menu-item` row anywhere under `root` whose label span carries this exact text. */
 function findRowByLabel(root: MockElement, label: string): MockElement | undefined {
   const stack = [...root.children];
   while (stack.length) {
     const node = stack.shift()!;
-    if (node.classes.has("db-menu-item")) {
-      const labelEl = node.children.find((child) => child.classes.has("db-menu-item-label"));
+    if (node.classes.has("obnotion-menu-item")) {
+      const labelEl = node.children.find((child) => child.classes.has("obnotion-menu-item-label"));
       if (labelEl?.text === label) return node;
     }
     stack.push(...node.children);
@@ -271,7 +271,7 @@ function findRowByLabel(root: MockElement, label: string): MockElement | undefin
 }
 
 function hintTextOf(row: MockElement): string | undefined {
-  return row.children.find((child) => child.classes.has("db-menu-item-current"))?.text;
+  return row.children.find((child) => child.classes.has("obnotion-menu-item-current"))?.text;
 }
 
 // ───────────────────────────────────────────────────────────────────

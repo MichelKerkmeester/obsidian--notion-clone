@@ -3,7 +3,7 @@
 // COMPONENT: what a single click on the properties row's trash actually costs
 // ───────────────────────────────────────────────────────────────────
 //
-// The packet recorded this as failing — "`db-column-delete-btn` deletes on one click from the row
+// The packet recorded this as failing — "`obnotion-column-delete-btn` deletes on one click from the row
 // itself" — and that assessment came from reading the button, which is wired
 // `deleteBtn.onclick = () => actions.deleteColumn(col)`. One click, straight to a delete. Reading
 // stops there; the criterion is about what the click COSTS, and that is decided one call deeper.

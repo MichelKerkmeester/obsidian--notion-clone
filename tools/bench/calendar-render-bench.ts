@@ -223,7 +223,7 @@ export function runCalendarBench(host: HTMLElement, options: CalendarBenchOption
 
         // One discarded warm-up: the first run pays for lazily-compiled paths.
         for (let run = 0; run <= REPEATS; run += 1) {
-          const container = host.createDiv({ cls: "note-database-container" });
+          const container = host.createDiv({ cls: "obnotion-container" });
           const renderer = new CalendarRenderer(actions);
 
           const start = performance.now();
@@ -241,9 +241,9 @@ export function runCalendarBench(host: HTMLElement, options: CalendarBenchOption
             layoutTimes.push(layoutEnd - layoutStart);
             domNodes = container.querySelectorAll("*").length;
             cardNodes = container.querySelectorAll(
-              ".db-calendar-month-segment, .db-calendar-week-allday-segment, .db-calendar-timed-event",
+              ".obnotion-calendar-month-segment, .obnotion-calendar-week-allday-segment, .obnotion-calendar-timed-event",
             ).length;
-            fieldNodes = container.querySelectorAll(".db-calendar-day").length;
+            fieldNodes = container.querySelectorAll(".obnotion-calendar-day").length;
           }
           container.remove();
         }

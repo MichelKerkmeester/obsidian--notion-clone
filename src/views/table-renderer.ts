@@ -40,8 +40,8 @@ import { createOwnedMenuForEvent, OwnedMenuHandle } from "./owned-menu";
 // 2. CONSTANTS
 // ───────────────────────────────────────────────────────────────────
 
-const ROW_MIME = "application/x-note-database-row";
-const ROW_FROM_GROUP_MIME = "application/x-note-database-row-from-group";
+const ROW_MIME = "application/x-obnotion-row";
+const ROW_FROM_GROUP_MIME = "application/x-obnotion-row-from-group";
 
 // ───────────────────────────────────────────────────────────────────
 // 3. TYPES
@@ -218,11 +218,11 @@ export class TableRenderer {
   private applyFrozenCellStyle(cell: HTMLElement, colKey: string): void {
     const frozen = this.activeFrozenLayout.get(colKey);
     // Gated entirely by the class, which is what the CSS keys its `position: sticky` rule off —
-    // a stale `--db-frozen-left` left on an unfrozen cell is inert once the class is gone, so
+    // a stale `--obnotion-frozen-left` left on an unfrozen cell is inert once the class is gone, so
     // nothing needs to clear it back out.
-    cell.toggleClass("db-frozen-col", Boolean(frozen));
-    cell.toggleClass("db-frozen-col-last", Boolean(frozen?.isLast));
-    if (frozen) cell.style.setProperty("--db-frozen-left", `${frozen.left}px`);
+    cell.toggleClass("obnotion-frozen-col", Boolean(frozen));
+    cell.toggleClass("obnotion-frozen-col-last", Boolean(frozen?.isLast));
+    if (frozen) cell.style.setProperty("--obnotion-frozen-left", `${frozen.left}px`);
   }
 
   /** The right-edge shadow paints only once the table has scrolled sideways, nothing at rest — a
@@ -230,8 +230,8 @@ export class TableRenderer {
    *
    *  `scrollTarget` is the element that actually carries the horizontal overflow; `classTarget`
    *  (defaulting to the same element) is the one the CSS keys `.is-scrolled-x` off. The two
-   *  diverge for a grouped table: `.db-grouped-table` owns `overflow-x`, not the outer
-   *  `.note-database-container`, and a `scroll` event does not bubble — a listener bound to the
+   *  diverge for a grouped table: `.obnotion-grouped-table` owns `overflow-x`, not the outer
+   *  `.obnotion-container`, and a `scroll` event does not bubble — a listener bound to the
    *  container the way the ungrouped path binds it never fires. */
   private setupFrozenScrollTracking(scrollTarget: HTMLElement, classTarget: HTMLElement = scrollTarget): void {
     this.frozenScrollCleanup?.();
@@ -270,10 +270,10 @@ export class TableRenderer {
     const visibleColumns = this.actions.getVisibleColumns(config, rows);
     this.activeFrozenLayout = this.computeFrozenLayout(config, visibleColumns);
     this.setupFrozenScrollTracking(container);
-    const tableWrap = container.createDiv({ cls: "db-table-wrap" });
-    const table = tableWrap.createEl("table", { cls: "db-table" });
+    const tableWrap = container.createDiv({ cls: "obnotion-table-wrap" });
+    const table = tableWrap.createEl("table", { cls: "obnotion-table" });
     table.toggleClass("is-create-entry-hidden", Boolean(this.actions.hideCreateEntry));
-    table.toggleClass("db-no-vertical-lines", config.showVerticalLines === false);
+    table.toggleClass("obnotion-no-vertical-lines", config.showVerticalLines === false);
     const availableWidth = this.getAvailableTableWidth(tableWrap);
     this.applyTableWidth(table, config, visibleColumns, availableWidth);
     this.renderColgroup(table, config, visibleColumns, availableWidth);
@@ -322,19 +322,19 @@ export class TableRenderer {
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
     this.applyDensity(containerEl, config);
 
-    const container = containerEl.createDiv({ cls: "db-grouped-table" });
+    const container = containerEl.createDiv({ cls: "obnotion-grouped-table" });
     const visibleColumns = this.actions.getVisibleColumns(config, rows);
     this.activeFrozenLayout = this.computeFrozenLayout(config, visibleColumns);
-    // `container` (.db-grouped-table) is what actually scrolls horizontally; `containerEl`
-    // (.note-database-container) is what the CSS keys `.is-scrolled-x` off, same as the ungrouped
+    // `container` (.obnotion-grouped-table) is what actually scrolls horizontally; `containerEl`
+    // (.obnotion-container) is what the CSS keys `.is-scrolled-x` off, same as the ungrouped
     // path — see setupFrozenScrollTracking's own comment for why the two must be named apart here.
     this.setupFrozenScrollTracking(container, containerEl);
     const tableMinWidth = this.getTableMinWidth(config, visibleColumns);
-    const tableWrap = container.createDiv({ cls: "db-table-wrap" });
+    const tableWrap = container.createDiv({ cls: "obnotion-table-wrap" });
     tableWrap.style.minWidth = `${tableMinWidth}px`;
-    const table = tableWrap.createEl("table", { cls: "db-table" });
+    const table = tableWrap.createEl("table", { cls: "obnotion-table" });
     table.toggleClass("is-create-entry-hidden", Boolean(this.actions.hideCreateEntry));
-    table.toggleClass("db-no-vertical-lines", config.showVerticalLines === false);
+    table.toggleClass("obnotion-no-vertical-lines", config.showVerticalLines === false);
     const availableWidth = this.getAvailableTableWidth(tableWrap);
     this.applyTableWidth(table, config, visibleColumns, availableWidth);
     this.renderColgroup(table, config, visibleColumns, availableWidth);
@@ -421,14 +421,14 @@ export class TableRenderer {
     rows: RowData[],
     changedPaths: ReadonlySet<string>
   ): boolean {
-    const table = container.querySelector<HTMLElement>(":scope > .db-table-wrap > table.db-table");
+    const table = container.querySelector<HTMLElement>(":scope > .obnotion-table-wrap > table.obnotion-table");
     const tbody = table?.querySelector<HTMLElement>(":scope > tbody");
     if (!table || !tbody) return false;
 
     const renderedRows = Array.from(
-      tbody.querySelectorAll<HTMLElement>(":scope > tr[data-note-database-row-path]")
+      tbody.querySelectorAll<HTMLElement>(":scope > tr[data-obnotion-row-path]")
     );
-    const renderedPaths = renderedRows.map((row) => row.getAttribute("data-note-database-row-path") || "");
+    const renderedPaths = renderedRows.map((row) => row.getAttribute("data-obnotion-row-path") || "");
     const nextPaths = rows.map((row) => row.file.path);
     if (renderedPaths.length !== nextPaths.length ||
         renderedPaths.some((path, index) => path !== nextPaths[index])) {
@@ -437,8 +437,8 @@ export class TableRenderer {
 
     const visibleColumns = this.actions.getVisibleColumns(config, rows);
     const renderedColumnKeys = Array.from(
-      table.querySelectorAll<HTMLElement>(":scope > thead [data-note-database-column-key]")
-    ).map((header) => header.getAttribute("data-note-database-column-key") || "");
+      table.querySelectorAll<HTMLElement>(":scope > thead [data-obnotion-column-key]")
+    ).map((header) => header.getAttribute("data-obnotion-column-key") || "");
     if (renderedColumnKeys.length !== visibleColumns.length ||
         renderedColumnKeys.some((key, index) => key !== visibleColumns[index]?.key)) {
       return false;
@@ -448,7 +448,7 @@ export class TableRenderer {
     const interaction = this.actions.captureInteractionSnapshot?.();
     const rowByPath = this.rowByPath;
     for (const oldRow of renderedRows) {
-      const path = oldRow.getAttribute("data-note-database-row-path") || "";
+      const path = oldRow.getAttribute("data-obnotion-row-path") || "";
       if (!changedPaths.has(path)) continue;
       const row = rowByPath.get(path);
       if (!row) return false;
@@ -473,23 +473,23 @@ export class TableRenderer {
     groupField: string,
     changedPaths: ReadonlySet<string>
   ): boolean {
-    const grouped = container.querySelector<HTMLElement>(":scope > .db-grouped-table");
+    const grouped = container.querySelector<HTMLElement>(":scope > .obnotion-grouped-table");
     if (!grouped) return false;
     // Group summaries depend on every row in the group. Until their DOM has a
     // dedicated patch path, prefer the normal grouped render over stale totals.
     if (config.summaryRules && config.summaryRules.length > 0) return false;
 
     const visibleColumns = this.actions.getVisibleColumns(config, rows);
-    const table = grouped.querySelector<HTMLElement>(":scope > .db-table-wrap > table.db-table");
+    const table = grouped.querySelector<HTMLElement>(":scope > .obnotion-table-wrap > table.obnotion-table");
     const tbody = table?.querySelector<HTMLElement>(":scope > tbody");
     const renderedHeaders = tbody
-      ? Array.from(tbody.querySelectorAll<HTMLElement>(":scope > tr.db-group-divider-row"))
+      ? Array.from(tbody.querySelectorAll<HTMLElement>(":scope > tr.obnotion-group-divider-row"))
       : [];
     const renderableGroups = this.getRenderableGroups(config, groups, groupField);
     if (!table || !tbody || renderedHeaders.length !== renderableGroups.length) return false;
     const renderedColumnKeys = Array.from(
-      table.querySelectorAll<HTMLElement>(":scope > thead [data-note-database-column-key]")
-    ).map((header) => header.getAttribute("data-note-database-column-key") || "");
+      table.querySelectorAll<HTMLElement>(":scope > thead [data-obnotion-column-key]")
+    ).map((header) => header.getAttribute("data-obnotion-column-key") || "");
     if (renderedColumnKeys.length !== visibleColumns.length ||
         renderedColumnKeys.some((key, index) => key !== visibleColumns[index]?.key)) {
       return false;
@@ -506,18 +506,18 @@ export class TableRenderer {
       const renderable = renderableGroups[index];
       const group = renderable.group;
       const header = renderedHeaders[index];
-      if (header.getAttribute("data-note-database-group-key") !== group.key) return false;
-      if (header.querySelector<HTMLElement>(".db-group-count")?.textContent !== String(group.count)) return false;
+      if (header.getAttribute("data-obnotion-group-key") !== group.key) return false;
+      if (header.querySelector<HTMLElement>(".obnotion-group-count")?.textContent !== String(group.count)) return false;
 
       const collapsed = renderable.collapsed;
       if (header.classList.contains("is-collapsed") !== collapsed) return false;
       const visibleRows = collapsed || group.children?.length ? [] : renderable.visibleRows;
       const renderedRows = Array.from(
         this.rowsBetweenGroupDividers(header, renderedHeaders[index + 1])
-          .filter((rowEl) => rowEl.hasAttribute("data-note-database-row-path"))
+          .filter((rowEl) => rowEl.hasAttribute("data-obnotion-row-path"))
       );
       const renderedPaths = renderedRows.map((rowEl) =>
-        rowEl.getAttribute("data-note-database-row-path") || ""
+        rowEl.getAttribute("data-obnotion-row-path") || ""
       );
       const nextPaths = visibleRows.map((row) => row.file.path);
       if (renderedPaths.length !== nextPaths.length ||
@@ -532,7 +532,7 @@ export class TableRenderer {
     for (const { tbody, renderedRows, renderable, visibleRows } of renderedRowsByGroup) {
       const { group } = renderable;
       for (const oldRow of renderedRows) {
-        const path = oldRow.getAttribute("data-note-database-row-path") || "";
+        const path = oldRow.getAttribute("data-obnotion-row-path") || "";
         if (!changedPaths.has(path)) continue;
         const row = this.rowByPath.get(path);
         if (!row) return false;
@@ -574,7 +574,7 @@ export class TableRenderer {
     this.rowDropFeedback.clear();
     this.frozenScrollCleanup?.();
     this.frozenScrollCleanup = undefined;
-    container.querySelectorAll(".db-table-wrap, .db-grouped-table, .db-empty").forEach((el) => el.remove());
+    container.querySelectorAll(".obnotion-table-wrap, .obnotion-grouped-table, .obnotion-empty").forEach((el) => el.remove());
   }
 
   private renderColgroup(table: HTMLElement, config: ViewConfig, columns: ColumnDef[], availableWidth = 0): void {
@@ -583,25 +583,25 @@ export class TableRenderer {
     if (!this.actions.isReadOnly) {
       const selectionCol = colgroup.createEl("col");
       const selectionWidth = this.getSelectionColumnWidth();
-      selectionCol.addClass("db-select-colgroup");
+      selectionCol.addClass("obnotion-select-colgroup");
       selectionCol.setAttr("width", String(selectionWidth));
       selectionCol.style.width = `${selectionWidth}px`;
     }
     if (this.shouldRenderRecordIcon(config)) {
       const iconCol = colgroup.createEl("col");
       const iconWidth = this.getRecordIconColumnWidth();
-      iconCol.addClass("db-record-icon-colgroup");
+      iconCol.addClass("obnotion-record-icon-colgroup");
       iconCol.setAttr("width", String(iconWidth));
       iconCol.style.width = `${iconWidth}px`;
     }
     columns.forEach((col, index) => {
       const colEl = colgroup.createEl("col");
-      colEl.setAttr("data-note-database-column-key", col.key);
+      colEl.setAttr("data-obnotion-column-key", col.key);
       const style = getTableColumnStyle(renderedWidths[index], index, columns.length);
       if (style.width) colEl.style.width = style.width;
       if (style.minWidth) colEl.style.minWidth = style.minWidth;
     });
-    const addColumn = colgroup.createEl("col", { cls: "db-add-column-colgroup" });
+    const addColumn = colgroup.createEl("col", { cls: "obnotion-add-column-colgroup" });
     addColumn.setAttr("width", String(this.getAddColumnWidth()));
     addColumn.style.width = `${this.getAddColumnWidth()}px`;
     addColumn.style.minWidth = `${this.getAddColumnWidth()}px`;
@@ -684,8 +684,8 @@ export class TableRenderer {
     table.setAttr("role", "grid");
     table.setAttr("aria-label", t("table.ariaLabel"));
     if (!this.actions.isReadOnly) {
-      const selectTh = headerRow.createEl("th", { cls: "db-select-col", attr: { role: "columnheader" } });
-      const selectInner = selectTh.createDiv({ cls: "db-select-inner" });
+      const selectTh = headerRow.createEl("th", { cls: "obnotion-select-col", attr: { role: "columnheader" } });
+      const selectInner = selectTh.createDiv({ cls: "obnotion-select-inner" });
       const selectAll = createCheckbox(selectInner, { role: "row" });
       selectAll.checked = this.actions.areAllRowsSelected(rows);
       selectAll.onchange = () => {
@@ -694,7 +694,7 @@ export class TableRenderer {
     }
     if (this.shouldRenderRecordIcon(config)) {
       headerRow.createEl("th", {
-        cls: "db-record-icon-col",
+        cls: "obnotion-record-icon-col",
         attr: { role: "columnheader", "aria-label": t("recordIcon.icons"), title: t("recordIcon.icons") },
       });
     }
@@ -702,12 +702,12 @@ export class TableRenderer {
       const th = headerRow.createEl("th");
       th.setAttr("role", "columnheader");
       th.setAttr("aria-colindex", String(Array.from(headerRow.children).indexOf(th) + 1));
-      th.setAttr("data-note-database-column-key", col.key);
+      th.setAttr("data-obnotion-column-key", col.key);
       th.toggleClass("is-narrow", this.isHeaderNarrow(config, col));
       this.applyFrozenCellStyle(th, col.key);
-      const content = th.createDiv({ cls: "db-th-content" });
+      const content = th.createDiv({ cls: "obnotion-th-content" });
       renderPropertyTypeIcon(content, col);
-      content.createSpan({ cls: "db-th-label", text: col.label || col.key, attr: { title: col.label || col.key } });
+      content.createSpan({ cls: "obnotion-th-label", text: col.label || col.key, attr: { title: col.label || col.key } });
       const sort = this.getColumnSortState(config, col);
       if (sort) {
         th.setAttr("aria-sort", sort.direction === "asc" ? "ascending" : "descending");
@@ -722,9 +722,9 @@ export class TableRenderer {
       if (!sort) th.setAttr("aria-sort", "none");
       this.actions.setupColumnHeader(th, col);
     }
-    const addTh = headerRow.createEl("th", { cls: "db-add-column-th", attr: { role: "columnheader" } });
+    const addTh = headerRow.createEl("th", { cls: "obnotion-add-column-th", attr: { role: "columnheader" } });
     const addButton = addTh.createEl("button", {
-      cls: "db-add-column-button",
+      cls: "obnotion-add-column-button",
       attr: { type: "button", "aria-label": t("table.addColumn"), title: t("table.addColumn") },
     });
     setIcon(addButton, "plus");
@@ -784,25 +784,25 @@ export class TableRenderer {
     const { group, depth, displayField, collapseKey, collapsed } = renderable;
     const selectionRows = group.rows;
     const divider = tbody.createEl("tr", {
-      cls: `db-group-divider-row ${getGroupHeaderClassName(depth)}${collapsed ? " is-collapsed" : ""}`,
+      cls: `obnotion-group-divider-row ${getGroupHeaderClassName(depth)}${collapsed ? " is-collapsed" : ""}`,
       attr: {
-        "data-note-database-group-key": group.key,
-        "data-note-database-group-field": displayField || "",
-        "data-note-database-group-paths": JSON.stringify(selectionRows.map((row) => row.file.path)),
+        "data-obnotion-group-key": group.key,
+        "data-obnotion-group-field": displayField || "",
+        "data-obnotion-group-paths": JSON.stringify(selectionRows.map((row) => row.file.path)),
       },
     });
     const sectionId = this.getGroupSectionId(displayField || "group", collapseKey);
     divider.setAttr("id", sectionId);
     const depthValue = getGroupHeaderDepthValue(depth);
-    if (depthValue !== undefined) divider.style.setProperty("--db-group-depth", depthValue);
+    if (depthValue !== undefined) divider.style.setProperty("--obnotion-group-depth", depthValue);
     const cell = divider.createEl("td", { attr: { colspan: String(Math.max(1, colspan)) } });
-    const content = cell.createDiv({ cls: "db-group-divider-content" });
+    const content = cell.createDiv({ cls: "obnotion-group-divider-content" });
     if (!this.actions.isReadOnly) {
       const selectedIds = new Set(selectionRows.filter((row) => this.actions.isRowSelected(row)).map((row) => row.file.path));
       const selection = getSelectionState(selectionRows.map((row) => row.file.path), selectedIds);
       const checkbox = createCheckbox(content, {
         role: "row",
-        cls: "db-group-divider-checkbox",
+        cls: "obnotion-group-divider-checkbox",
         attr: { "aria-label": t("group.selectRows") },
       });
       checkbox.checked = selection.checked;
@@ -810,10 +810,10 @@ export class TableRenderer {
       checkbox.onclick = (event) => event.stopPropagation();
       checkbox.onchange = () => this.actions.toggleRowsSelected(selectionRows, checkbox.checked);
     }
-    const label = content.createSpan({ cls: "db-group-header-label" });
+    const label = content.createSpan({ cls: "obnotion-group-header-label" });
     if (displayField) {
       const toggle = label.createEl("button", {
-        cls: `db-group-collapse-toggle${collapsed ? " is-collapsed" : ""}`,
+        cls: `obnotion-group-collapse-toggle${collapsed ? " is-collapsed" : ""}`,
         attr: {
           type: "button",
           "aria-label": collapsed ? t("group.expand") : t("group.collapse"),
@@ -821,16 +821,16 @@ export class TableRenderer {
           "aria-controls": sectionId,
         },
       });
-      toggle.createSpan({ cls: "db-collapse-triangle" });
+      toggle.createSpan({ cls: "obnotion-collapse-triangle" });
       toggle.onclick = (event) => {
         event.preventDefault();
         event.stopPropagation();
         this.actions.toggleGroupCollapsed?.(displayField, collapseKey);
       };
     }
-    renderGroupLabel(label, config, displayField, group.key, "db-group-title-text");
-    label.createSpan({ cls: "db-group-count", text: String(group.count) });
-    const summaries = content.createDiv({ cls: "db-group-divider-summaries" });
+    renderGroupLabel(label, config, displayField, group.key, "obnotion-group-title-text");
+    label.createSpan({ cls: "obnotion-group-count", text: String(group.count) });
+    const summaries = content.createDiv({ cls: "obnotion-group-divider-summaries" });
     this.actions.renderGroupSummaries?.(summaries, group.rows, config);
     return divider;
   }
@@ -843,7 +843,7 @@ export class TableRenderer {
     totalCount: number,
     colspan: number,
   ): void {
-    const row = tbody.createEl("tr", { cls: "db-group-expand-row" });
+    const row = tbody.createEl("tr", { cls: "obnotion-group-expand-row" });
     const cell = row.createEl("td", { attr: { colspan: String(Math.max(1, colspan)) } });
     if (!renderGroupExpandControls(cell, config, field, key, totalCount, this.actions)) row.remove();
   }
@@ -858,12 +858,12 @@ export class TableRenderer {
   ): void {
     if (this.actions.isReadOnly || this.actions.hideCreateEntry || !this.actions.createEntry || isExplicitlySorted(config)) return;
     const line = tbody.createEl("tr", {
-      cls: "db-row-insert-line",
+      cls: "obnotion-row-insert-line",
       attr: { "data-before-path": beforePath, "data-after-path": afterPath },
     });
     const cell = line.createEl("td", { attr: { colspan: String(Math.max(1, colspan)) } });
     const button = cell.createEl("button", {
-      cls: "db-row-insert-button",
+      cls: "obnotion-row-insert-button",
       attr: { type: "button", "aria-label": t("table.insertRow") },
     });
     setIcon(button, "plus");
@@ -937,20 +937,20 @@ export class TableRenderer {
     allowGroupMove = true,
   ): HTMLElement {
     const tr = tbody.createEl("tr", {
-      attr: { "data-note-database-row-path": row.file.path, role: "row" },
+      attr: { "data-obnotion-row-path": row.file.path, role: "row" },
     });
     this.actions.applyConditionalFormat?.(tr, row, config);
     if (groupField && groupKey != null) {
-      tr.setAttr("data-note-database-group-field", groupField);
-      tr.setAttr("data-note-database-group-key", groupKey);
+      tr.setAttr("data-obnotion-group-field", groupField);
+      tr.setAttr("data-obnotion-group-key", groupKey);
     }
     this.actions.setupRow(tr, row, {
       visibleRows: rows,
       groups: groupPath ?? (groupField && groupKey != null ? [{ field: groupField, key: groupKey }] : undefined),
     });
     if (!this.actions.isReadOnly) {
-      const selectTd = tr.createEl("td", { cls: "db-select-col" });
-      const selectInner = selectTd.createDiv({ cls: "db-select-inner" });
+      const selectTd = tr.createEl("td", { cls: "obnotion-select-col" });
+      const selectInner = selectTd.createDiv({ cls: "obnotion-select-inner" });
       // 拖拽手柄（左）与 checkbox（右）放入同一 flex 容器：先建手柄、再建 checkbox，
       // checkbox 用 margin-left:auto 贴右，使各行 checkbox 与表头 checkbox 上下对齐。
       const rowMoveField = allowGroupMove ? groupField : undefined;
@@ -970,7 +970,7 @@ export class TableRenderer {
       };
     }
     if (this.shouldRenderRecordIcon(config)) {
-      const iconTd = tr.createEl("td", { cls: "db-record-icon-col" });
+      const iconTd = tr.createEl("td", { cls: "obnotion-record-icon-col" });
       const icon = this.actions.renderRecordIcon?.(iconTd, row, config, true);
       // Keep spreadsheet roving-tabindex authoritative: the gutter is clickable,
       // but must not become an extra Tab stop between real data cells.
@@ -979,8 +979,8 @@ export class TableRenderer {
     for (const col of columns) {
       const td = tr.createEl("td", {
         attr: {
-          "data-note-database-row-path": row.file.path,
-          "data-note-database-column-key": col.key,
+          "data-obnotion-row-path": row.file.path,
+          "data-obnotion-column-key": col.key,
         },
       });
       this.applyFrozenCellStyle(td, col.key);
@@ -988,7 +988,7 @@ export class TableRenderer {
       this.actions.applyConditionalFormat?.(td, row, config, col.key);
       if (!this.actions.isReadOnly) this.actions.setupFillHandle?.(td, row, col);
     }
-    tr.createEl("td", { cls: "db-add-column-cell", attr: { "aria-hidden": "true" } });
+    tr.createEl("td", { cls: "obnotion-add-column-cell", attr: { "aria-hidden": "true" } });
     return tr;
   }
 
@@ -1003,7 +1003,7 @@ export class TableRenderer {
     groups?: TableGroup[]
   ): void {
     const button = parent.createEl("button", {
-      cls: "db-table-mobile-move-btn",
+      cls: "obnotion-table-mobile-move-btn",
       attr: { type: "button", title: t("mobile.moveCard"), "aria-label": t("mobile.moveCard") },
     });
     renderMobileMoveIcon(button);
@@ -1050,13 +1050,13 @@ export class TableRenderer {
   }
 
   private renderNewRow(tbody: HTMLElement, colspan: number, defaults: Record<string, unknown> | undefined, rows: RowData[] = [], computedGroup = false, config?: ViewConfig): void {
-    const tr = tbody.createEl("tr", { cls: "db-new-row" });
+    const tr = tbody.createEl("tr", { cls: "obnotion-new-row" });
     const td = tr.createEl("td", { attr: { colspan: String(Math.max(colspan, 1)) } });
     if (computedGroup) {
-      td.createEl("button", { cls: "db-new-row-button is-disabled", text: t("group.computedCreateDisabled"), attr: { disabled: "true" } });
+      td.createEl("button", { cls: "obnotion-new-row-button is-disabled", text: t("group.computedCreateDisabled"), attr: { disabled: "true" } });
       return;
     }
-    const btn = td.createEl("button", { cls: "db-new-row-button", text: `+ ${this.getAddRowLabel(config)}` });
+    const btn = td.createEl("button", { cls: "obnotion-new-row-button", text: `+ ${this.getAddRowLabel(config)}` });
     btn.onclick = () => this.createEntryNearEnd(defaults, rows);
   }
 
@@ -1094,7 +1094,7 @@ export class TableRenderer {
     if (!handleParent) return;
 
     const handle = handleParent.createEl("button", {
-      cls: "db-table-row-drag-handle",
+      cls: "obnotion-table-row-drag-handle",
       attr: { type: "button", title: t("panel.dragToSort"), "aria-label": t("panel.dragToSort") },
     });
     setIcon(handle, "grip-vertical");
@@ -1123,7 +1123,7 @@ export class TableRenderer {
       }
       this.draggingPath = row.file.path;
       this.rowDropFeedback.begin(row.file.path, [row.file.path]);
-      this.rowAutoScroller = new EdgeAutoScroller(tr.closest<HTMLElement>(".db-table-wrap") || tr);
+      this.rowAutoScroller = new EdgeAutoScroller(tr.closest<HTMLElement>(".obnotion-table-wrap") || tr);
       this.setRowDraggingMode(tr, true);
       tr.addClass("is-dragging");
     });
@@ -1214,7 +1214,7 @@ export class TableRenderer {
 
   private setGroupDropTarget(target: HTMLElement, active: boolean): void {
     target.toggleClass("is-drop-target", active);
-    const tableWrap = target.closest<HTMLElement>(".db-table-wrap");
+    const tableWrap = target.closest<HTMLElement>(".obnotion-table-wrap");
     if (tableWrap && target !== tableWrap) tableWrap.toggleClass("is-drop-target", active);
   }
 
@@ -1278,11 +1278,11 @@ export class TableRenderer {
   }
 
   private setRowDraggingMode(rowEl: HTMLElement, active: boolean): void {
-    const container = rowEl.closest<HTMLElement>(".note-database-container");
+    const container = rowEl.closest<HTMLElement>(".obnotion-container");
     container?.toggleClass("is-row-dragging", active);
     if (!active) {
-      container?.querySelectorAll(".db-table th.db-drop-target, .db-table th.db-dragging").forEach((el) => {
-        el.classList.remove("db-drop-target", "db-dragging");
+      container?.querySelectorAll(".obnotion-table th.obnotion-drop-target, .obnotion-table th.obnotion-dragging").forEach((el) => {
+        el.classList.remove("obnotion-drop-target", "obnotion-dragging");
       });
     }
   }
@@ -1359,7 +1359,7 @@ export class TableRenderer {
     tbody.empty();
 
     const spacer = (height: number): void => {
-      const tr = tbody.createEl("tr", { cls: "db-table-window-spacer" });
+      const tr = tbody.createEl("tr", { cls: "obnotion-table-window-spacer" });
       tr.setAttr("aria-hidden", "true");
       const cell = tr.createEl("td");
       cell.setAttr("colspan", String(span));
@@ -1377,14 +1377,14 @@ export class TableRenderer {
 
   /** Three layout reads: where the block starts, where it ends, how many rows are in it. */
   private measureTableRowHeight(state: TableWindow): void {
-    const painted = state.tbody.querySelectorAll<HTMLElement>("tr[data-note-database-row-path]");
+    const painted = state.tbody.querySelectorAll<HTMLElement>("tr[data-obnotion-row-path]");
     const first = painted[0];
     const last = painted[painted.length - 1];
     if (!first || !last) return;
     const measured = (last.offsetTop + last.offsetHeight - first.offsetTop) / painted.length;
     if (measured <= 0 || Math.abs(measured - state.rowHeight) < 0.5) return;
     state.rowHeight = measured;
-    const spacers = state.tbody.querySelectorAll<HTMLElement>(".db-table-window-spacer td");
+    const spacers = state.tbody.querySelectorAll<HTMLElement>(".obnotion-table-window-spacer td");
     spacers[0]?.setCssProps({ height: `${Math.round(state.start * measured)}px` });
     spacers[1]?.setCssProps({ height: `${Math.round((state.rows.length - state.end) * measured)}px` });
   }
@@ -1417,10 +1417,10 @@ export class TableRenderer {
     // The lookup becomes a map built once from the same argument, and the column index is the
     // position the iteration already knows. Nothing about the emitted attributes changes.
     const rowByPath = new Map(rows.map((candidate) => [candidate.file.path, candidate]));
-    table.querySelectorAll<HTMLElement>("tbody > tr[data-note-database-row-path]").forEach((row, index) => {
+    table.querySelectorAll<HTMLElement>("tbody > tr[data-obnotion-row-path]").forEach((row, index) => {
       row.setAttr("role", "row");
       row.setAttr("aria-rowindex", String(startIndex + index + 2));
-      const path = row.dataset.noteDatabaseRowPath;
+      const path = row.dataset.obnotionRowPath;
       const dataRow = path === undefined ? undefined : rowByPath.get(path);
       const selected = dataRow ? this.actions.isRowSelected(dataRow) : false;
       row.setAttr("aria-selected", String(Boolean(selected)));
@@ -1428,7 +1428,7 @@ export class TableRenderer {
         const element = cell as HTMLElement;
         element.setAttr("role", "gridcell");
         element.setAttr("aria-colindex", String(cellIndex + 1));
-        element.setAttr("aria-selected", String(Boolean(selected) || element.hasClass("db-cell-range-selected")));
+        element.setAttr("aria-selected", String(Boolean(selected) || element.hasClass("obnotion-cell-range-selected")));
       });
     });
   }

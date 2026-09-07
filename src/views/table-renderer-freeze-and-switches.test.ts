@@ -299,31 +299,31 @@ describe("TableRenderer per-column freeze", () => {
     // since a lone middle column would never accumulate any preceding width to sum.
     renderer.renderTable(container as unknown as HTMLElement, config({ columnWidths: { name: 180 }, frozenColumnKeys: ["name", "cost"] }), ROWS);
 
-    const frozen = container.querySelectorAll(".db-frozen-col");
+    const frozen = container.querySelectorAll(".obnotion-frozen-col");
     // Two th plus two td per row (name, cost): the header cells and both body rows' two cells.
     expect(frozen.length).toBe(2 + 2 * ROWS.length);
-    const nameCells = frozen.filter((el) => el.getAttribute("data-note-database-column-key") === "name");
+    const nameCells = frozen.filter((el) => el.getAttribute("data-obnotion-column-key") === "name");
     expect(nameCells).toHaveLength(1 + ROWS.length);
     for (const cell of nameCells) {
-      expect(cell.style["--db-frozen-left"]).toBe("0px");
-      expect(cell.hasClass("db-frozen-col-last")).toBe(false);
+      expect(cell.style["--obnotion-frozen-left"]).toBe("0px");
+      expect(cell.hasClass("obnotion-frozen-col-last")).toBe(false);
     }
-    const costTh = container.querySelectorAll("th").find((el) => el.getAttribute("data-note-database-column-key") === "cost")!;
-    expect(costTh.hasClass("db-frozen-col")).toBe(true);
+    const costTh = container.querySelectorAll("th").find((el) => el.getAttribute("data-obnotion-column-key") === "cost")!;
+    expect(costTh.hasClass("obnotion-frozen-col")).toBe(true);
     // The last frozen column's own left is the sum of the preceding frozen columns — "name" alone
     // here — read off the real column width the config carries, not a hardcoded value.
-    expect(costTh.style["--db-frozen-left"]).toBe("180px");
-    expect(costTh.hasClass("db-frozen-col-last")).toBe(true);
+    expect(costTh.style["--obnotion-frozen-left"]).toBe("180px");
+    expect(costTh.hasClass("obnotion-frozen-col-last")).toBe(true);
   });
 
   it("collapses the offset to 0 once the column is unfrozen", () => {
     const container = new MockElement("div");
     const renderer = new TableRenderer(createActions());
     renderer.renderTable(container as unknown as HTMLElement, config({ columnWidths: { name: 180 }, frozenColumnKeys: ["name", "cost"] }), ROWS);
-    expect(container.querySelectorAll(".db-frozen-col").length).toBeGreaterThan(0);
+    expect(container.querySelectorAll(".obnotion-frozen-col").length).toBeGreaterThan(0);
 
     renderer.renderTable(container as unknown as HTMLElement, config({ columnWidths: { name: 180 }, frozenColumnKeys: [] }), ROWS);
-    expect(container.querySelectorAll(".db-frozen-col")).toHaveLength(0);
+    expect(container.querySelectorAll(".obnotion-frozen-col")).toHaveLength(0);
   });
 
   it("leaves a stale frozen key inert rather than fatal when the column no longer exists", () => {
@@ -334,7 +334,7 @@ describe("TableRenderer per-column freeze", () => {
       config({ frozenColumnKeys: ["retired-column"] }),
       ROWS,
     )).not.toThrow();
-    expect(container.querySelectorAll(".db-frozen-col")).toHaveLength(0);
+    expect(container.querySelectorAll(".obnotion-frozen-col")).toHaveLength(0);
   });
 });
 
@@ -357,16 +357,16 @@ describe("TableRenderer toggles is-scrolled-x on the element that actually scrol
     expect(container.hasClass("is-scrolled-x")).toBe(false);
   });
 
-  it("binds the scroll listener to .db-grouped-table, the element with the overflow, not the outer container", () => {
+  it("binds the scroll listener to .obnotion-grouped-table, the element with the overflow, not the outer container", () => {
     const outer = new MockElement("div");
     const renderer = new TableRenderer(createActions());
     const groups: TableGroup[] = [{ key: "all", rows: ROWS, count: ROWS.length, depth: 0, field: "billing" }];
     renderer.renderGroupedTable(outer as unknown as HTMLElement, config({ frozenColumnKeys: ["cost"] }), ROWS, groups, "billing");
 
-    const grouped = outer.querySelectorAll(".db-grouped-table")[0]!;
+    const grouped = outer.querySelectorAll(".obnotion-grouped-table")[0]!;
     // The regression this pins: scroll does not bubble, so a listener left on `outer` would never
     // see this and the class would never move — which is exactly the defect the grouped path
-    // shipped with (the listener bound to the outer container instead of .db-grouped-table).
+    // shipped with (the listener bound to the outer container instead of .obnotion-grouped-table).
     grouped.scrollLeft = 40;
     grouped.fireScroll();
     expect(outer.hasClass("is-scrolled-x")).toBe(true);
@@ -382,21 +382,21 @@ describe("TableRenderer toggles is-scrolled-x on the element that actually scrol
 // 6. SHOW VERTICAL LINES
 // ───────────────────────────────────────────────────────────────────
 
-describe("TableRenderer's db-no-vertical-lines gate", () => {
+describe("TableRenderer's obnotion-no-vertical-lines gate", () => {
   it("adds the class when the view switch is off", () => {
     const container = new MockElement("div");
     new TableRenderer(createActions()).renderTable(container as unknown as HTMLElement, config({ showVerticalLines: false }), ROWS);
-    expect(container.querySelectorAll("table")[0]!.hasClass("db-no-vertical-lines")).toBe(true);
+    expect(container.querySelectorAll("table")[0]!.hasClass("obnotion-no-vertical-lines")).toBe(true);
   });
 
   it("leaves the class off when the switch is on or unset", () => {
     const onContainer = new MockElement("div");
     new TableRenderer(createActions()).renderTable(onContainer as unknown as HTMLElement, config({ showVerticalLines: true }), ROWS);
-    expect(onContainer.querySelectorAll("table")[0]!.hasClass("db-no-vertical-lines")).toBe(false);
+    expect(onContainer.querySelectorAll("table")[0]!.hasClass("obnotion-no-vertical-lines")).toBe(false);
 
     const unsetContainer = new MockElement("div");
     new TableRenderer(createActions()).renderTable(unsetContainer as unknown as HTMLElement, config(), ROWS);
-    expect(unsetContainer.querySelectorAll("table")[0]!.hasClass("db-no-vertical-lines")).toBe(false);
+    expect(unsetContainer.querySelectorAll("table")[0]!.hasClass("obnotion-no-vertical-lines")).toBe(false);
   });
 });
 
@@ -408,7 +408,7 @@ describe("TableRenderer's add-row button text", () => {
   function buttonText(addRowNoun?: string): string {
     const container = new MockElement("div");
     new TableRenderer(createActions()).renderTable(container as unknown as HTMLElement, config({ addRowNoun }), ROWS);
-    return container.querySelectorAll(".db-new-row-button")[0]!.textContent;
+    return container.querySelectorAll(".obnotion-new-row-button")[0]!.textContent;
   }
 
   it("reads '+ New <noun>' when the view configures one", () => {

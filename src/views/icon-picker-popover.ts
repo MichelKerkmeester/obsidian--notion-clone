@@ -62,7 +62,7 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
   const doc = options.anchor.ownerDocument;
   const view = doc.defaultView || window;
   closeActivePicker(doc);
-  const panel = doc.body.createDiv({ cls: "db-icon-picker-popover" });
+  const panel = doc.body.createDiv({ cls: "obnotion-icon-picker-popover" });
   panel.setAttr("role", "dialog");
   panel.setAttr("aria-label", t("recordIcon.configureField"));
   panel.style.setProperty("color-scheme", "light dark");
@@ -107,20 +107,20 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
   const content = mountPickerSheetHeader(panel, doc, {
     title: options.label || t("recordIcon.icons"),
     onClose: close,
-    bodyCls: "db-icon-picker-body db-panel-row",
+    bodyCls: "obnotion-icon-picker-body obnotion-panel-row",
   });
 
   const render = (preserveScroll = false, restoreFocus = true) => {
     const previousScrollTop = preserveScroll
-      ? content.querySelector<HTMLElement>(".db-icon-picker-scroll")?.scrollTop || 0
+      ? content.querySelector<HTMLElement>(".obnotion-icon-picker-scroll")?.scrollTop || 0
       : 0;
     const previousIcon = restoreFocus && doc.activeElement instanceof HTMLElement
       ? doc.activeElement.getAttribute("data-icon-value")
       : null;
-    const searchWasFocused = restoreFocus && doc.activeElement?.classList.contains("db-icon-picker-search");
+    const searchWasFocused = restoreFocus && doc.activeElement?.classList.contains("obnotion-icon-picker-search");
     content.empty();
-    const header = content.createDiv({ cls: "db-icon-picker-header" });
-    const tabs = header.createDiv({ cls: "db-icon-picker-tabs" });
+    const header = content.createDiv({ cls: "obnotion-icon-picker-header" });
+    const tabs = header.createDiv({ cls: "obnotion-icon-picker-tabs" });
     tabs.setAttr("role", "tablist");
     tabs.setAttr("aria-label", t("recordIcon.configureField"));
     const createTab = (kind: "emoji" | "lucide", label: string) => {
@@ -130,21 +130,21 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
     createTab("emoji", t("recordIcon.emoji"));
     createTab("lucide", t("recordIcon.icons"));
     const search = header.createEl("input", {
-      cls: "db-icon-picker-search",
+      cls: "obnotion-icon-picker-search",
       attr: { type: "search", placeholder: t("iconPicker.search"), "aria-label": t("iconPicker.search"), value: searchQuery },
     });
     search.oninput = () => {
       searchQuery = search.value.trim().toLocaleLowerCase();
       render(true, false);
-      view.requestAnimationFrame(() => panel.querySelector<HTMLInputElement>(".db-icon-picker-search")?.focus());
+      view.requestAnimationFrame(() => panel.querySelector<HTMLInputElement>(".obnotion-icon-picker-search")?.focus());
     };
-    const remove = header.createEl("button", { text: t("recordIcon.remove"), cls: "db-icon-picker-remove", attr: { type: "button" } });
+    const remove = header.createEl("button", { text: t("recordIcon.remove"), cls: "obnotion-icon-picker-remove", attr: { type: "button" } });
     remove.onclick = () => { void commit(null); };
-    const random = header.createEl("button", { cls: "db-icon-picker-random", attr: { type: "button", title: t("recordIcon.random"), "aria-label": t("recordIcon.random") } });
+    const random = header.createEl("button", { cls: "obnotion-icon-picker-random", attr: { type: "button", title: t("recordIcon.random"), "aria-label": t("recordIcon.random") } });
     setIcon(random, "shuffle");
     if (options.onConfigureField) {
       const settings = header.createEl("button", {
-        cls: "db-icon-picker-settings",
+        cls: "obnotion-icon-picker-settings",
         attr: { type: "button", title: t("recordIcon.configureField"), "aria-label": t("recordIcon.configureField") },
       });
       setIcon(settings, "settings-2");
@@ -158,10 +158,10 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
     }
 
     if (tab === "lucide") {
-      const colors = panel.createDiv({ cls: "db-icon-picker-colors" });
+      const colors = panel.createDiv({ cls: "obnotion-icon-picker-colors" });
       for (const candidate of RECORD_ICON_COLORS) {
         const dot = colors.createEl("button", {
-          cls: `db-icon-color db-icon-color-${candidate}${candidate === color ? " is-active" : ""}`,
+          cls: `obnotion-icon-color obnotion-icon-color-${candidate}${candidate === color ? " is-active" : ""}`,
           attr: { type: "button", title: candidate, "aria-label": candidate },
         });
         dot.onclick = () => { color = candidate; render(true); };
@@ -200,36 +200,36 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
       const { recentValues, values, sectionLabel } = computeValues();
       const renderToken = (target: HTMLElement, value: string) => {
         const selected = value === current || (value.startsWith("lucide:") && value.replace(/@[^@]+$/, "") === current?.replace(/@[^@]+$/, ""));
-        const button = target.createEl("button", { cls: `db-icon-picker-item${selected ? " is-selected" : ""}`, attr: { type: "button", title: value, "data-icon-value": value, "aria-label": value, "aria-pressed": selected ? "true" : "false", tabindex: "-1" } });
+        const button = target.createEl("button", { cls: `obnotion-icon-picker-item${selected ? " is-selected" : ""}`, attr: { type: "button", title: value, "data-icon-value": value, "aria-label": value, "aria-pressed": selected ? "true" : "false", tabindex: "-1" } });
         if (value.startsWith("lucide:")) {
           const match = value.match(/^lucide:([^@]+)(?:@(.+))?$/);
-          if (match) { setIcon(button, match[1]); button.addClass(`db-record-icon-color-${match[2] || "gray"}`); }
+          if (match) { setIcon(button, match[1]); button.addClass(`obnotion-record-icon-color-${match[2] || "gray"}`); }
         } else button.createSpan({ text: value });
         button.onclick = () => { void commit(value); };
       };
       if (!searchQuery && category !== "recent" && recentValues.length) {
-        const recent = scroller.createDiv({ cls: "db-icon-picker-section" });
-        recent.createDiv({ cls: "db-icon-picker-label", text: t("recordIcon.recent") });
-        const grid = recent.createDiv({ cls: "db-icon-picker-grid" });
+        const recent = scroller.createDiv({ cls: "obnotion-icon-picker-section" });
+        recent.createDiv({ cls: "obnotion-icon-picker-label", text: t("recordIcon.recent") });
+        const grid = recent.createDiv({ cls: "obnotion-icon-picker-grid" });
         recentValues.forEach((value) => {
           const lucideId = value.startsWith("lucide:") ? value.match(/^lucide:([^@]+)/)?.[1] : null;
           renderToken(grid, tab === "lucide" && lucideId ? serializeLucideIconToken(lucideId, color) : value);
         });
       }
-      const section = scroller.createDiv({ cls: "db-icon-picker-section" });
-      section.createDiv({ cls: "db-icon-picker-label", text: sectionLabel });
-      const grid = section.createDiv({ cls: "db-icon-picker-grid" });
+      const section = scroller.createDiv({ cls: "obnotion-icon-picker-section" });
+      section.createDiv({ cls: "obnotion-icon-picker-label", text: sectionLabel });
+      const grid = section.createDiv({ cls: "obnotion-icon-picker-grid" });
       values.forEach((value) => {
         if (tab === "emoji") { renderToken(grid, value); return; }
         const lucideId = value.startsWith("lucide:") ? value.match(/^lucide:([^@]+)/)?.[1] : value;
         renderToken(grid, lucideId ? serializeLucideIconToken(lucideId, color) : value);
       });
-      if (!values.length) grid.createDiv({ cls: "db-icon-picker-empty", text: t("common.noResults") });
+      if (!values.length) grid.createDiv({ cls: "obnotion-icon-picker-empty", text: t("common.noResults") });
     };
-    const scroller = panel.createDiv({ cls: "db-icon-picker-scroll" });
+    const scroller = panel.createDiv({ cls: "obnotion-icon-picker-scroll" });
     renderGrid(scroller);
 
-    const nav = panel.createDiv({ cls: "db-icon-picker-nav" });
+    const nav = panel.createDiv({ cls: "obnotion-icon-picker-nav" });
     const navItems = tab === "emoji"
       ? [{ id: "recent", label: t("recordIcon.recent"), icon: "clock-3" }, ...EMOJI_CATEGORIES.map((item) => ({ id: item.id, label: t(item.labelKey), icon: EMOJI_CATEGORY_ICONS[item.id] || "circle" }))]
       : [{ id: "recent", label: t("recordIcon.recent"), icon: "clock-3" }, ...LUCIDE_CATEGORY_DEFINITIONS.map((item) => ({ id: item.id, label: t(item.labelKey), icon: item.icon })), { id: "other", label: t("recordIcon.category.other"), icon: "ellipsis" }];
@@ -239,7 +239,7 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
       const button = nav.createEl("button", { cls: category === item.id ? "is-active" : "", attr: { type: "button", role: "tab", title: item.label, "aria-label": item.label, "aria-selected": category === item.id ? "true" : "false" } });
       setIcon(button, item.icon);
       setTooltip(button, item.label, { delay: 150 });
-      button.onclick = () => { category = item.id; render(); panel.querySelector<HTMLElement>(".db-icon-picker-scroll")?.scrollTo(0, 0); };
+      button.onclick = () => { category = item.id; render(); panel.querySelector<HTMLElement>(".obnotion-icon-picker-scroll")?.scrollTo(0, 0); };
     }
 
     random.onclick = () => {
@@ -252,7 +252,7 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
     if (restoreFocus) {
       view.requestAnimationFrame(() => {
         if (searchWasFocused) {
-          panel.querySelector<HTMLInputElement>(".db-icon-picker-search")?.focus();
+          panel.querySelector<HTMLInputElement>(".obnotion-icon-picker-search")?.focus();
           return;
         }
         if (previousIcon) {
@@ -261,14 +261,14 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
             ?.focus();
           return;
         }
-        panel.querySelector<HTMLButtonElement>(".db-icon-picker-item.is-selected")?.focus({ preventScroll: true });
+        panel.querySelector<HTMLButtonElement>(".obnotion-icon-picker-item.is-selected")?.focus({ preventScroll: true });
       });
     }
   };
   const onKeydown = (event: KeyboardEvent) => {
     if (event.target instanceof HTMLInputElement || event.target instanceof HTMLButtonElement && event.target.closest("[role=tab]")) return;
     if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) return;
-    const items = Array.from(panel.querySelectorAll<HTMLButtonElement>(".db-icon-picker-item"));
+    const items = Array.from(panel.querySelectorAll<HTMLButtonElement>(".obnotion-icon-picker-item"));
     if (!items.length) return;
     const current = doc.activeElement instanceof HTMLButtonElement ? items.indexOf(doc.activeElement) : -1;
     const next = getGridNavigationTarget(items, current < 0 ? 0 : current, event.key);

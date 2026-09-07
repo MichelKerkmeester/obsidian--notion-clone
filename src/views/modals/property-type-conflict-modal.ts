@@ -29,7 +29,7 @@ import { t } from "../../i18n";
 import { createDropdownField } from "../dropdown-field";
 import { renderDropdownPropertyTypeIcon } from "../property-type-icon";
 import { buildTypePickerOptions, conflictWriterGate } from "../record-surface/type-picker";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
@@ -120,20 +120,20 @@ export class PropertyTypeConflictModal extends DbModal {
     const { contentEl } = this;
     contentEl.empty();
     this.modalEl.addClass("property-conflict-modal-host");
-    contentEl.addClass("note-database-modal", "db-property-conflict-modal");
+    contentEl.addClass("obnotion-modal", "obnotion-property-conflict-modal");
     contentEl.createEl("h3", { text: t("propertyConflict.title") });
     contentEl.createDiv({
-      cls: "db-modal-help",
+      cls: "obnotion-modal-help",
       text: t("propertyConflict.desc", { count: this.options.conflicts.length }),
     });
 
-    const list = contentEl.createDiv({ cls: "db-property-conflict-list" });
+    const list = contentEl.createDiv({ cls: "obnotion-property-conflict-list" });
     for (const conflict of this.options.conflicts) {
       this.renderConflictCard(list, conflict);
     }
-    this.validationEl = contentEl.createDiv({ cls: "db-property-conflict-validation" });
+    this.validationEl = contentEl.createDiv({ cls: "obnotion-property-conflict-validation" });
 
-    const actions = contentEl.createDiv({ cls: "db-modal-actions" });
+    const actions = contentEl.createDiv({ cls: "obnotion-modal-actions" });
     actions.createEl("button", {
       text: this.options.cancelText || t("common.cancel"),
       attr: { type: "button" },
@@ -172,27 +172,27 @@ export class PropertyTypeConflictModal extends DbModal {
   }
 
   private renderConflictCard(parent: HTMLElement, conflict: PropertyTypeConflict): void {
-    const item = parent.createDiv({ cls: "db-property-conflict-item" });
+    const item = parent.createDiv({ cls: "obnotion-property-conflict-item" });
     const header = item.createEl("button", {
-      cls: "db-property-conflict-header",
+      cls: "obnotion-property-conflict-header",
       attr: { type: "button", "aria-expanded": "false" },
     });
-    header.createSpan({ cls: "db-property-conflict-key", text: conflict.key });
-    const summary = header.createSpan({ cls: "db-property-conflict-header-summary" });
+    header.createSpan({ cls: "obnotion-property-conflict-key", text: conflict.key });
+    const summary = header.createSpan({ cls: "obnotion-property-conflict-header-summary" });
     this.renderObservableTypeCounts(summary, conflict.writers);
-    const status = header.createSpan({ cls: "db-property-conflict-status" });
-    const body = item.createDiv({ cls: "db-property-conflict-body" });
-    body.createDiv({ cls: "db-property-conflict-instruction", text: t("propertyConflict.resolveInstruction") });
+    const status = header.createSpan({ cls: "obnotion-property-conflict-status" });
+    const body = item.createDiv({ cls: "obnotion-property-conflict-body" });
+    body.createDiv({ cls: "obnotion-property-conflict-instruction", text: t("propertyConflict.resolveInstruction") });
     body.createDiv({
-      cls: "db-property-conflict-writers-title",
+      cls: "obnotion-property-conflict-writers-title",
       text: t("propertyConflict.affectedFiles", { count: conflict.writers.length }),
     });
     this.renderWriterTable(body, conflict.writers);
     if (conflict.kind === "date-precision") {
-      body.createDiv({ cls: "db-property-conflict-note", text: t("propertyConflict.datePrecisionHint") });
+      body.createDiv({ cls: "obnotion-property-conflict-note", text: t("propertyConflict.datePrecisionHint") });
     }
     if (conflict.involvesComputed) {
-      body.createDiv({ cls: "db-property-conflict-note", text: t("propertyConflict.computedHint") });
+      body.createDiv({ cls: "obnotion-property-conflict-note", text: t("propertyConflict.computedHint") });
     }
     const cardState: ConflictCardState = {
       conflict,
@@ -211,13 +211,13 @@ export class PropertyTypeConflictModal extends DbModal {
   private renderObservableTypeCounts(parent: HTMLElement, writers: PropertyWriter[]): void {
     parent.empty();
     parent.createSpan({
-      cls: "db-property-conflict-types-label",
+      cls: "obnotion-property-conflict-types-label",
       text: t("propertyConflict.detectedTypesSummary", { count: getObservableTypeCounts(writers).length }),
     });
     for (const countItem of getObservableTypeCounts(writers)) {
-      const wrap = parent.createSpan({ cls: "db-property-conflict-type-count" });
-      wrap.createSpan({ cls: "db-property-conflict-type", text: getObservableTypeLabel(countItem.type) });
-      wrap.createSpan({ cls: "db-property-conflict-type-count-text", text: t("propertyConflict.fileCount", { count: countItem.count }) });
+      const wrap = parent.createSpan({ cls: "obnotion-property-conflict-type-count" });
+      wrap.createSpan({ cls: "obnotion-property-conflict-type", text: getObservableTypeLabel(countItem.type) });
+      wrap.createSpan({ cls: "obnotion-property-conflict-type-count-text", text: t("propertyConflict.fileCount", { count: countItem.count }) });
     }
   }
 
@@ -228,35 +228,35 @@ export class PropertyTypeConflictModal extends DbModal {
   }
 
   private renderWriterTable(parent: HTMLElement, writers: PropertyWriter[]): void {
-    const table = parent.createDiv({ cls: "db-property-conflict-table" });
-    const header = table.createDiv({ cls: "db-property-conflict-table-row db-property-conflict-table-header" });
-    header.createDiv({ cls: "db-property-conflict-table-cell is-name", text: t("propertyConflict.columnDatabaseName") });
-    header.createDiv({ cls: "db-property-conflict-table-cell is-path", text: t("propertyConflict.columnDatabasePath") });
-    header.createDiv({ cls: "db-property-conflict-table-cell is-obsidian-type", text: t("propertyConflict.columnObsidianType") });
-    header.createDiv({ cls: "db-property-conflict-table-cell is-plugin-type", text: t("propertyConflict.columnPluginType") });
-    header.createDiv({ cls: "db-property-conflict-table-cell is-target-type", text: t("propertyConflict.columnTargetStorageType") });
+    const table = parent.createDiv({ cls: "obnotion-property-conflict-table" });
+    const header = table.createDiv({ cls: "obnotion-property-conflict-table-row obnotion-property-conflict-table-header" });
+    header.createDiv({ cls: "obnotion-property-conflict-table-cell is-name", text: t("propertyConflict.columnDatabaseName") });
+    header.createDiv({ cls: "obnotion-property-conflict-table-cell is-path", text: t("propertyConflict.columnDatabasePath") });
+    header.createDiv({ cls: "obnotion-property-conflict-table-cell is-obsidian-type", text: t("propertyConflict.columnObsidianType") });
+    header.createDiv({ cls: "obnotion-property-conflict-table-cell is-plugin-type", text: t("propertyConflict.columnPluginType") });
+    header.createDiv({ cls: "obnotion-property-conflict-table-cell is-target-type", text: t("propertyConflict.columnTargetStorageType") });
     for (const writer of writers) {
       this.renderWriterRow(table, writer);
     }
   }
 
   private renderWriterRow(parent: HTMLElement, writer: PropertyWriter): void {
-    const row = parent.createDiv({ cls: "db-property-conflict-table-row" });
+    const row = parent.createDiv({ cls: "obnotion-property-conflict-table-row" });
     const state = this.writerStates.find((candidate) => sameWriter(candidate.writer, writer));
-    const nameCell = row.createDiv({ cls: "db-property-conflict-table-cell is-name" });
-    nameCell.createSpan({ cls: "db-property-conflict-mobile-label", text: t("propertyConflict.columnDatabaseName") });
-    nameCell.createSpan({ cls: "db-property-conflict-db", text: writer.databaseName });
-    const pathCell = row.createDiv({ cls: "db-property-conflict-table-cell is-path" });
-    pathCell.createSpan({ cls: "db-property-conflict-mobile-label", text: t("propertyConflict.columnDatabasePath") });
-    pathCell.createSpan({ cls: "db-property-conflict-path", text: writer.databasePath || "" });
-    const obsidianTypeCell = row.createDiv({ cls: "db-property-conflict-table-cell is-obsidian-type" });
-    obsidianTypeCell.createSpan({ cls: "db-property-conflict-mobile-label", text: t("propertyConflict.columnObsidianType") });
+    const nameCell = row.createDiv({ cls: "obnotion-property-conflict-table-cell is-name" });
+    nameCell.createSpan({ cls: "obnotion-property-conflict-mobile-label", text: t("propertyConflict.columnDatabaseName") });
+    nameCell.createSpan({ cls: "obnotion-property-conflict-db", text: writer.databaseName });
+    const pathCell = row.createDiv({ cls: "obnotion-property-conflict-table-cell is-path" });
+    pathCell.createSpan({ cls: "obnotion-property-conflict-mobile-label", text: t("propertyConflict.columnDatabasePath") });
+    pathCell.createSpan({ cls: "obnotion-property-conflict-path", text: writer.databasePath || "" });
+    const obsidianTypeCell = row.createDiv({ cls: "obnotion-property-conflict-table-cell is-obsidian-type" });
+    obsidianTypeCell.createSpan({ cls: "obnotion-property-conflict-mobile-label", text: t("propertyConflict.columnObsidianType") });
     obsidianTypeCell.createSpan({
-      cls: "db-property-conflict-observable-type",
+      cls: "obnotion-property-conflict-observable-type",
       text: getObservableTypeLabel(writer.observableType),
     });
-    const pluginTypeCell = row.createDiv({ cls: "db-property-conflict-table-cell is-plugin-type" });
-    pluginTypeCell.createSpan({ cls: "db-property-conflict-mobile-label", text: t("propertyConflict.columnPluginType") });
+    const pluginTypeCell = row.createDiv({ cls: "obnotion-property-conflict-table-cell is-plugin-type" });
+    pluginTypeCell.createSpan({ cls: "obnotion-property-conflict-mobile-label", text: t("propertyConflict.columnPluginType") });
     createDropdownField({
       parent: pluginTypeCell,
       label: t("propertyConflict.changeTypeFor", { key: writer.key, database: writer.databaseName }),
@@ -268,7 +268,7 @@ export class PropertyTypeConflictModal extends DbModal {
         computedOnlyPlainTypes: t("propertyConflict.computedOnlyPlainTypes"),
       })),
       value: writer.pluginType,
-      className: "db-property-conflict-type-dropdown",
+      className: "obnotion-property-conflict-type-dropdown",
       hideLabel: true,
       searchable: true,
       renderIcon: (parentEl, icon) => {
@@ -287,10 +287,10 @@ export class PropertyTypeConflictModal extends DbModal {
         this.updateValidation();
       },
     });
-    const targetTypeCell = row.createDiv({ cls: "db-property-conflict-table-cell is-target-type" });
-    targetTypeCell.createSpan({ cls: "db-property-conflict-mobile-label", text: t("propertyConflict.columnTargetStorageType") });
+    const targetTypeCell = row.createDiv({ cls: "obnotion-property-conflict-table-cell is-target-type" });
+    targetTypeCell.createSpan({ cls: "obnotion-property-conflict-mobile-label", text: t("propertyConflict.columnTargetStorageType") });
     const targetTypeEl = targetTypeCell.createSpan({
-      cls: "db-property-conflict-target-type",
+      cls: "obnotion-property-conflict-target-type",
       text: getTargetObservableTypeLabel(state?.type || writer.pluginType, writer.observableType),
     });
     if (state) {

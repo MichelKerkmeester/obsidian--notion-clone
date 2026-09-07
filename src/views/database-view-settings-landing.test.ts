@@ -402,7 +402,7 @@ function makeDb(): DatabaseConfig {
     schema: { columns: COLUMNS, computedFields: [] },
   };
   return {
-    id: "db-1",
+    id: "obnotion-1",
     name: "Tasks",
     sourceFolder: "Tasks",
     schema: { columns: COLUMNS, computedFields: [] },
@@ -422,9 +422,9 @@ interface Harness {
  *  and whose toolbar rebuild and post-landing refresh are stubbed — the two
  *  collaborators that are not what this file measures. */
 function makeHarness(): Harness {
-  const container = new MockElement("div", "note-database-container");
-  const toolbar = container.createDiv({ cls: "db-toolbar" });
-  toolbar.createEl("button", { cls: "db-view-config-btn", attr: { type: "button" } });
+  const container = new MockElement("div", "obnotion-container");
+  const toolbar = container.createDiv({ cls: "obnotion-toolbar" });
+  toolbar.createEl("button", { cls: "obnotion-view-config-btn", attr: { type: "button" } });
 
   const db = makeDb();
   const view = Object.create(DatabaseView.prototype) as DatabaseView;

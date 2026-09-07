@@ -14,7 +14,7 @@
 import { App, Notice } from "obsidian";
 import { ColumnDef } from "../../data/types";
 import { t } from "../../i18n";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────

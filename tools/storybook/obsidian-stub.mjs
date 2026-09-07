@@ -139,7 +139,7 @@ const REAL_ICONS = {
 
 export function setIcon(parent, iconId) {
   const el = parent.ownerDocument.createElement("span");
-  el.className = "db-story-icon";
+  el.className = "obnotion-story-icon";
   el.setAttribute("data-icon", iconId);
   el.setAttribute("aria-hidden", "true");
   const paths = REAL_ICONS[iconId];

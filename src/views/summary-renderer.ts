@@ -163,7 +163,7 @@ export class SummaryRenderer {
     config: ViewConfig,
     database?: DatabaseConfig,
   ): void {
-    parent.querySelectorAll(":scope > .db-group-summary-item").forEach((element) => element.remove());
+    parent.querySelectorAll(":scope > .obnotion-group-summary-item").forEach((element) => element.remove());
     if (!config.summaryRules) return;
     for (const { field, summary: summaryName } of config.summaryRules) {
       const col = config.schema.columns.find((candidate) => candidate.key === field);
@@ -173,15 +173,15 @@ export class SummaryRenderer {
       const kind = normalizeSummaryKind(summaryName);
       const label = col?.label || field;
       const item = parent.createSpan({
-        cls: "db-group-summary-item",
+        cls: "obnotion-group-summary-item",
         attr: { title: `${label} ${kind ? getSummaryKindLabel(kind) : summaryName}: ${this.formatSummaryValue(result)}` },
       });
       item.createSpan({
-        cls: "db-group-summary-label",
+        cls: "obnotion-group-summary-label",
         text: `${label} ${kind ? getSummaryKindLabel(kind) : summaryName}`,
       });
       item.createSpan({
-        cls: "db-group-summary-value",
+        cls: "obnotion-group-summary-value",
         text: this.formatSummaryValue(result),
       });
     }
@@ -194,13 +194,13 @@ export class SummaryRenderer {
     database?: DatabaseConfig,
     options?: SummaryRenderOptions
   ): void {
-    const existing = containerEl.querySelector(".db-summary");
+    const existing = containerEl.querySelector(".obnotion-summary");
     if (existing) existing.remove();
     if (config?.viewType === "calendar") return;
-    const summary = containerEl.createDiv({ cls: "db-summary" });
+    const summary = containerEl.createDiv({ cls: "obnotion-summary" });
     if (options?.placement === "after-chart") this.placeAfterChart(containerEl, summary);
     const addItem = (label: string, value: string, style?: string): HTMLElement => {
-      const div = summary.createDiv({ cls: "db-summary-item" });
+      const div = summary.createDiv({ cls: "obnotion-summary-item" });
       div.createDiv({ cls: "label", text: label });
       div.createSpan({ text: value, cls: "value", attr: style ? { style } : {} });
       return div;
@@ -245,7 +245,7 @@ export class SummaryRenderer {
     config: ViewConfig,
     onChange: () => void
   ): HTMLElement {
-    const div = summary.createDiv({ cls: "db-summary-item db-summary-sum-item" });
+    const div = summary.createDiv({ cls: "obnotion-summary-item obnotion-summary-sum-item" });
     div.createDiv({ cls: "label", text: `${fieldLabel} ${getSummaryKindLabel(kind)}` });
     div.createSpan({ text: value, cls: "value" });
     div.onclick = (e: MouseEvent) => {
@@ -259,7 +259,7 @@ export class SummaryRenderer {
     item: HTMLElement,
     ruleIndex: number,
   ): void {
-    item.addClass("db-summary-draggable");
+    item.addClass("obnotion-summary-draggable");
     item.draggable = true;
     item.setAttribute("data-summary-rule-index", String(ruleIndex));
     item.addEventListener("dragstart", (event) => {
@@ -270,7 +270,7 @@ export class SummaryRenderer {
     });
     item.addEventListener("dragend", () => {
       const summary = item.parentElement;
-      summary?.querySelectorAll(".db-summary-draggable").forEach((candidate) => {
+      summary?.querySelectorAll(".obnotion-summary-draggable").forEach((candidate) => {
         candidate.removeClass("is-dragging");
         candidate.removeClass("is-drop-before");
         candidate.removeClass("is-drop-after");
@@ -292,7 +292,7 @@ export class SummaryRenderer {
     onChange: () => void,
   ): void {
     const clearTarget = () => {
-      summary.querySelectorAll(".db-summary-draggable").forEach((candidate) => {
+      summary.querySelectorAll(".obnotion-summary-draggable").forEach((candidate) => {
         candidate.removeClass("is-drop-before");
         candidate.removeClass("is-drop-after");
       });
@@ -301,7 +301,7 @@ export class SummaryRenderer {
     };
     summary.addEventListener("dragstart", (event) => {
       const item = event.target instanceof HTMLElement
-        ? event.target.closest<HTMLElement>(".db-summary-draggable")
+        ? event.target.closest<HTMLElement>(".obnotion-summary-draggable")
         : null;
       if (item?.dataset.summaryRuleIndex) {
         summary.dataset.summaryDragSource = item.dataset.summaryRuleIndex;
@@ -310,7 +310,7 @@ export class SummaryRenderer {
     summary.addEventListener("dragover", (event) => {
       const sourceIndex = Number(summary.dataset.summaryDragSource);
       if (!Number.isInteger(sourceIndex)) return;
-      const items = Array.from(summary.querySelectorAll<HTMLElement>(".db-summary-draggable:not(.is-dragging)"));
+      const items = Array.from(summary.querySelectorAll<HTMLElement>(".obnotion-summary-draggable:not(.is-dragging)"));
       if (items.length === 0) return;
       event.preventDefault();
       clearTarget();
@@ -366,7 +366,7 @@ export class SummaryRenderer {
 
   /** 渲染淡色汇总新增入口。 */
   private addSummaryEntryHint(summary: HTMLElement, config: ViewConfig, onChange: () => void): void {
-    const hint = summary.createDiv({ cls: "db-summary-item db-summary-sum-hint" });
+    const hint = summary.createDiv({ cls: "obnotion-summary-item obnotion-summary-sum-hint" });
     hint.createSpan({ text: t("viewConfig.summaryAdd"), cls: "value" });
     hint.onclick = (e: MouseEvent) => this.openSummaryFieldMenu(e, config, onChange);
   }
@@ -386,7 +386,7 @@ export class SummaryRenderer {
       anchor,
       label: t("viewConfig.summaryField"),
       value: currentField || "",
-      popoverClassName: "db-summary-dropdown-popover",
+      popoverClassName: "obnotion-summary-dropdown-popover",
       searchable: true,
       options: getSummaryFieldOptions(config, Boolean(currentField)),
       renderIcon: renderDropdownPropertyTypeIcon,
@@ -426,7 +426,7 @@ export class SummaryRenderer {
       anchor,
       label: t("viewConfig.summaryField"),
       value: currentKind || "",
-      popoverClassName: "db-summary-dropdown-popover",
+      popoverClassName: "obnotion-summary-dropdown-popover",
       options,
       onChange: (value) => {
         const kind = normalizeSummaryKind(value);
@@ -440,7 +440,7 @@ export class SummaryRenderer {
   }
 
   private placeAfterChart(containerEl: HTMLElement, summary: HTMLElement): void {
-    const anchor = containerEl.querySelector(".db-chart, .db-chart-empty");
+    const anchor = containerEl.querySelector(".obnotion-chart, .obnotion-chart-empty");
     if (anchor?.parentElement) anchor.parentElement.insertBefore(summary, anchor.nextSibling);
   }
 

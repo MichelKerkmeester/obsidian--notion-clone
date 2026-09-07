@@ -108,7 +108,7 @@ export class OverlayStack {
       surface.panel.ownerDocument === doc
       && (surface.panel === options.panel || (options.id !== undefined && surface.id === options.id)));
     const existing = existingIndex >= 0 ? this.surfaces[existingIndex] : undefined;
-    const id = options.id || existing?.id || `db-overlay-${++nextOverlayId}`;
+    const id = options.id || existing?.id || `obnotion-overlay-${++nextOverlayId}`;
 
     const parentId = existing
       ? options.parentId ?? existing.parentId

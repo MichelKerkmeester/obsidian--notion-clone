@@ -15,7 +15,7 @@
  * captured over gives it exactly that.
  *
  * Markup mirrors the renderers named in each `sources` list, including the parts that look
- * redundant: the dropdowns are the `db-dropdown-field` button the plugin builds rather than
+ * redundant: the dropdowns are the `obnotion-dropdown-field` button the plugin builds rather than
  * a `<select>`, and the reorder buttons are present because the renderers emit them
  * unconditionally.
  */
@@ -82,8 +82,8 @@ const COLUMN_DEFS = [
  * evidence that a link, an embed or a task checkbox renders. That is device-verified only.
  */
 const BODY_RENDERED = `
-          <div class="db-record-detail-body">
-            <div class="db-record-detail-body-rendered" tabindex="0">
+          <div class="obnotion-record-detail-body">
+            <div class="obnotion-record-detail-body-rendered" tabindex="0">
               <h3>Cancellation</h3>
               <p>Cancel before the renewal date or it bills for another year.</p>
               <ul><li>Support answer on weekdays only</li><li>Keep the receipt</li></ul>
@@ -95,9 +95,9 @@ function sheetWithBody(bodyHtml) {
   const row = ROWS[1];
   const closeGlyph = glyph('<path d="M18 6 6 18M6 6l12 12"/>');
   const field = (col, value, valueClass = "") => `
-        <div class="db-record-detail-field" data-note-database-column-key="${col.key}" role="gridcell">
-          <span class="db-record-detail-field-label">${col.label}</span>
-          <div class="db-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
+        <div class="obnotion-record-detail-field" data-obnotion-column-key="${col.key}" role="gridcell">
+          <span class="obnotion-record-detail-field-label">${col.label}</span>
+          <div class="obnotion-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
         </div>`;
   /* The panel's badge carries a `title` the table's does not, so it cannot just be `optionPill` —
      but the tone is the option's, not the panel's. A value that is purple in a table and orange in
@@ -105,18 +105,18 @@ function sheetWithBody(bodyHtml) {
      from the schema and is the same everywhere the value appears. */
   const badge = (text) => `<span class="status-badge status-color-${optionTone(text)}" title="${text}">${text}</span>`;
   return `
-      <div class="note-database-container db-width-default">
-        <div class="db-record-detail-panel db-anchored-popover db-mobile-bottom-sheet is-visible" role="dialog" aria-modal="true" aria-label="${row.name}">
-          <div class="db-mobile-bottom-sheet-handle" aria-hidden="true"></div>
-          <div class="db-record-detail-header">
-            <div class="db-record-detail-title">${row.name}</div>
-            <button type="button" class="db-board-card-open" aria-label="Open note">${I.maximize2}</button>
-            <button type="button" class="db-cell-edit-close" aria-label="Close">${closeGlyph}</button>
+      <div class="obnotion-container obnotion-width-default">
+        <div class="obnotion-record-detail-panel obnotion-anchored-popover obnotion-mobile-bottom-sheet is-visible" role="dialog" aria-modal="true" aria-label="${row.name}">
+          <div class="obnotion-mobile-bottom-sheet-handle" aria-hidden="true"></div>
+          <div class="obnotion-record-detail-header">
+            <div class="obnotion-record-detail-title">${row.name}</div>
+            <button type="button" class="obnotion-board-card-open" aria-label="Open note">${I.maximize2}</button>
+            <button type="button" class="obnotion-cell-edit-close" aria-label="Close">${closeGlyph}</button>
           </div>
-          <div class="db-record-detail-fields">
-            ${field(COLUMN_DEFS[1], row.cost, "db-card-field-number")}
+          <div class="obnotion-record-detail-fields">
+            ${field(COLUMN_DEFS[1], row.cost, "obnotion-card-field-number")}
             ${field(COLUMN_DEFS[2], badge(row.cycle))}
-            ${field(COLUMN_DEFS[4], row.renew, "db-date-value")}
+            ${field(COLUMN_DEFS[4], row.renew, "obnotion-date-value")}
           </div>
 ${bodyHtml}
         </div>
@@ -132,16 +132,16 @@ ${bodyHtml}
 function dropdownField(className, value, icon) {
   const withIcon = Boolean(icon);
   return `
-    <button type="button" class="db-dropdown-field ${className}${withIcon ? " has-current-icon" : ""}"
+    <button type="button" class="obnotion-dropdown-field ${className}${withIcon ? " has-current-icon" : ""}"
       aria-haspopup="listbox" aria-expanded="false">
-      <span class="db-dropdown-field-icon">${withIcon ? `<span class="db-dropdown-option-type-icon">${icon}</span>` : ""}</span>
-      <div class="db-dropdown-field-text"><span class="db-dropdown-field-value">${value}</span></div>
-      <span class="db-dropdown-field-chevron">${I.chevronDown}</span>
+      <span class="obnotion-dropdown-field-icon">${withIcon ? `<span class="obnotion-dropdown-option-type-icon">${icon}</span>` : ""}</span>
+      <div class="obnotion-dropdown-field-text"><span class="obnotion-dropdown-field-value">${value}</span></div>
+      <span class="obnotion-dropdown-field-chevron">${I.chevronDown}</span>
     </button>`;
 }
 
 const ruleIcon = (label, icon) =>
-  `<button type="button" class="db-source-rule-icon-button" aria-label="${label}">${icon}</button>`;
+  `<button type="button" class="obnotion-source-rule-icon-button" aria-label="${label}">${icon}</button>`;
 
 /**
  * One condition row. `value` is the already-rendered value control: an `<input>` for text
@@ -150,28 +150,28 @@ const ruleIcon = (label, icon) =>
  */
 function filterRow(field, fieldType, operator, value, { canWrap = true } = {}) {
   return `
-    <div class="db-panel-row">
-      ${dropdownField("db-panel-dropdown db-filter-field-dropdown", field, TYPE_ICON[fieldType])}
-      ${dropdownField("db-panel-dropdown db-filter-operator-dropdown", operator)}
+    <div class="obnotion-panel-row">
+      ${dropdownField("obnotion-panel-dropdown obnotion-filter-field-dropdown", field, TYPE_ICON[fieldType])}
+      ${dropdownField("obnotion-panel-dropdown obnotion-filter-operator-dropdown", operator)}
       ${value}
       ${canWrap ? ruleIcon("Add rule group", I.folderPlus) : ""}
       ${ruleIcon("Negate rule", I.circleSlash)}
-      <button type="button" class="db-panel-button">×</button>
+      <button type="button" class="obnotion-panel-button">×</button>
     </div>`;
 }
 
 /* Number and currency columns get a native number input; select and status columns get a
    dropdown of the column's options instead. */
 const numberValue = (v) => `<input type="number" placeholder="Value" value="${v}">`;
-const selectValue = (v) => dropdownField("db-panel-dropdown db-filter-value-dropdown", v);
-const noValue = `<span class="db-panel-empty-value">—</span>`;
+const selectValue = (v) => dropdownField("obnotion-panel-dropdown obnotion-filter-value-dropdown", v);
+const noValue = `<span class="obnotion-panel-empty-value">—</span>`;
 
 /** The header of a group node: its AND/OR dropdown plus the node-level actions. */
 function groupHeader({ logic = "AND (all)", canWrap = true } = {}) {
   return `
-    <div class="db-source-rule-header">
-      ${dropdownField("db-source-rule-dropdown db-source-rule-logic", logic)}
-      <div class="db-source-rule-actions">
+    <div class="obnotion-source-rule-header">
+      ${dropdownField("obnotion-source-rule-dropdown obnotion-source-rule-logic", logic)}
+      <div class="obnotion-source-rule-actions">
         ${ruleIcon("Add source rule", I.plus)}
         ${canWrap ? ruleIcon("Add rule group", I.folderPlus) : ""}
         ${ruleIcon("Negate rule", I.circleSlash)}
@@ -182,10 +182,10 @@ function groupHeader({ logic = "AND (all)", canWrap = true } = {}) {
 
 /* Both reorder buttons are emitted by every sort rule and every column-manager row. They
    are kept here because the renderers emit them unconditionally — see the report note about
-   `.db-mobile-reorder-controls` being shown on desktop by a late rule in styles.css. */
+   `.obnotion-mobile-reorder-controls` being shown on desktop by a late rule in styles.css. */
 function reorderControls(isFirst, isLast) {
   return `
-    <span class="db-mobile-reorder-controls">
+    <span class="obnotion-mobile-reorder-controls">
       <button type="button" title="Move up" aria-label="Move up"${isFirst ? " disabled" : ""}>${I.arrowUp}</button>
       <button type="button" title="Move down" aria-label="Move down"${isLast ? " disabled" : ""}>${I.arrowDown}</button>
     </span>`;
@@ -195,7 +195,7 @@ function reorderControls(isFirst, isLast) {
    rule keyed to a toolbar height the capture has no toolbar to supply. Restoring flow is
    the whole job; the height cap is lifted so a panel taller than the viewport is
    photographed whole instead of scrolled. */
-const ANCHORED_PANEL_CSS = `.note-database-container :is(.db-filter-panel, .db-sort-panel, .db-view-config-panel, .db-column-manager, .db-board-groups-panel) {
+const ANCHORED_PANEL_CSS = `.obnotion-container :is(.obnotion-filter-panel, .obnotion-sort-panel, .obnotion-view-config-panel, .obnotion-column-manager, .obnotion-board-groups-panel) {
   position: static !important; top: auto !important; right: auto !important;
   max-height: none !important;
 }`;
@@ -215,18 +215,18 @@ export const PANEL_SCENARIOS = [
     note: "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
     captureCss: ANCHORED_PANEL_CSS,
     html: () => `
-      <div class="note-database-container">
-        <div class="db-filter-panel" id="db-filter-panel" role="dialog" aria-label="Filter">
-          <div class="db-panel-header"><span class="db-panel-title">Filter</span></div>
-          <div class="db-source-rule-node db-source-rule-group">
+      <div class="obnotion-container">
+        <div class="obnotion-filter-panel" id="obnotion-filter-panel" role="dialog" aria-label="Filter">
+          <div class="obnotion-panel-header"><span class="obnotion-panel-title">Filter</span></div>
+          <div class="obnotion-source-rule-node obnotion-source-rule-group">
             ${groupHeader()}
-            <div class="db-source-rule-children">
+            <div class="obnotion-source-rule-children">
               ${filterRow("Category", "select", "equals", selectValue("Business"))}
               ${filterRow("Cost", "currency", "greater than", numberValue("20"))}
               ${filterRow("Next Renewal", "date", "is not empty", noValue)}
             </div>
           </div>
-          <button class="db-panel-button">+ Add condition</button>
+          <button class="obnotion-panel-button">+ Add condition</button>
         </div>
       </div>`,
   },
@@ -240,35 +240,35 @@ export const PANEL_SCENARIOS = [
     note: "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
     captureCss: ANCHORED_PANEL_CSS,
     html: () => `
-      <div class="note-database-container">
-        <div class="db-filter-panel" id="db-filter-panel" role="dialog" aria-label="Filter">
-          <div class="db-panel-header"><span class="db-panel-title">Filter</span></div>
-          <div class="db-source-rule-node db-source-rule-group">
+      <div class="obnotion-container">
+        <div class="obnotion-filter-panel" id="obnotion-filter-panel" role="dialog" aria-label="Filter">
+          <div class="obnotion-panel-header"><span class="obnotion-panel-title">Filter</span></div>
+          <div class="obnotion-source-rule-node obnotion-source-rule-group">
             ${groupHeader()}
-            <div class="db-source-rule-children">
+            <div class="obnotion-source-rule-children">
               ${filterRow("Category", "select", "equals", selectValue("Business"))}
-              <div class="db-source-rule-node db-source-rule-not">
-                <div class="db-source-rule-header">
-                  <span class="db-source-rule-not-label">NOT</span>
-                  <div class="db-source-rule-actions">
+              <div class="obnotion-source-rule-node obnotion-source-rule-not">
+                <div class="obnotion-source-rule-header">
+                  <span class="obnotion-source-rule-not-label">NOT</span>
+                  <div class="obnotion-source-rule-actions">
                     ${ruleIcon("Remove NOT", I.undo2)}
                     ${ruleIcon("Remove rule", I.trash2)}
                   </div>
                 </div>
-                <div class="db-source-rule-children">
+                <div class="obnotion-source-rule-children">
                   ${filterRow("Payment", "select", "equals", selectValue("Apple"))}
                 </div>
               </div>
-              <div class="db-source-rule-node db-source-rule-group">
+              <div class="obnotion-source-rule-node obnotion-source-rule-group">
                 ${groupHeader({ logic: "OR (any)" })}
-                <div class="db-source-rule-children">
+                <div class="obnotion-source-rule-children">
                   ${filterRow("Cost", "currency", "greater than", numberValue("50"), { canWrap: false })}
                   ${filterRow("Billing", "select", "equals", selectValue("Yearly"), { canWrap: false })}
                 </div>
               </div>
             </div>
           </div>
-          <button class="db-panel-button">+ Add condition</button>
+          <button class="obnotion-panel-button">+ Add condition</button>
         </div>
       </div>`,
   },
@@ -283,20 +283,20 @@ export const PANEL_SCENARIOS = [
     captureCss: ANCHORED_PANEL_CSS,
     html: () => {
       const rule = (field, type, direction, isFirst, isLast) => `
-        <div class="db-panel-row db-sort-rule-row" draggable="true">
-          <span class="db-panel-drag" title="Drag to reorder">⋮⋮</span>
+        <div class="obnotion-panel-row obnotion-sort-rule-row" draggable="true">
+          <span class="obnotion-panel-drag" title="Drag to reorder">⋮⋮</span>
           ${reorderControls(isFirst, isLast)}
-          ${dropdownField("db-panel-dropdown db-sort-field-dropdown", field, TYPE_ICON[type])}
-          ${dropdownField("db-panel-dropdown db-sort-direction-dropdown", direction)}
-          <button class="db-panel-button">×</button>
+          ${dropdownField("obnotion-panel-dropdown obnotion-sort-field-dropdown", field, TYPE_ICON[type])}
+          ${dropdownField("obnotion-panel-dropdown obnotion-sort-direction-dropdown", direction)}
+          <button class="obnotion-panel-button">×</button>
         </div>`;
       return `
-      <div class="note-database-container">
-        <div class="db-sort-panel db-filter-panel" id="db-sort-panel">
-          <div class="db-panel-header"><span class="db-panel-title">Sort</span></div>
+      <div class="obnotion-container">
+        <div class="obnotion-sort-panel obnotion-filter-panel" id="obnotion-sort-panel">
+          <div class="obnotion-panel-header"><span class="obnotion-panel-title">Sort</span></div>
           ${rule("Next Renewal", "date", "Ascending", true, false)}
           ${rule("Cost", "currency", "Descending", false, true)}
-          <button class="db-panel-button">+ Add sort</button>
+          <button class="obnotion-panel-button">+ Add sort</button>
         </div>
       </div>`;
     },
@@ -311,12 +311,12 @@ export const PANEL_SCENARIOS = [
     note: "Calendar views add a hint above the empty state because layout order wins over user sort.",
     captureCss: ANCHORED_PANEL_CSS,
     html: () => `
-      <div class="note-database-container">
-        <div class="db-sort-panel db-filter-panel" id="db-sort-panel">
-          <div class="db-panel-header"><span class="db-panel-title">Sort</span></div>
-          <div class="db-panel-hint">Calendar views place spanning, all-day, and overlapping timed events first; sort rules apply within the available event order.</div>
-          <div class="db-panel-empty">Click "Add sort" below to add multi-sort rules.</div>
-          <button class="db-panel-button">+ Add sort</button>
+      <div class="obnotion-container">
+        <div class="obnotion-sort-panel obnotion-filter-panel" id="obnotion-sort-panel">
+          <div class="obnotion-panel-header"><span class="obnotion-panel-title">Sort</span></div>
+          <div class="obnotion-panel-hint">Calendar views place spanning, all-day, and overlapping timed events first; sort rules apply within the available event order.</div>
+          <div class="obnotion-panel-empty">Click "Add sort" below to add multi-sort rules.</div>
+          <button class="obnotion-panel-button">+ Add sort</button>
         </div>
       </div>`,
   },
@@ -330,62 +330,62 @@ export const PANEL_SCENARIOS = [
     note: "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
     captureCss: ANCHORED_PANEL_CSS,
     html: () => `
-      <div class="note-database-container">
-        <div class="db-view-config-panel" id="db-view-config-panel">
-          <div class="db-panel-header"><div class="db-panel-title">Settings</div></div>
+      <div class="obnotion-container">
+        <div class="obnotion-view-config-panel" id="obnotion-view-config-panel">
+          <div class="obnotion-panel-header"><div class="obnotion-panel-title">Settings</div></div>
 
           <!-- The renderer puts everything below the header in this region so a sheet can scroll it
                while the header and the grab bar above it stay put. It is inert here: the anchored
                panel is still its own scroller and this region has no overflow of its own. -->
-          <div class="db-view-config-body">
-          <div class="db-view-config-section-title" data-scope="database">Current database</div>
-          <div class="db-view-config-row">
-            <div class="db-view-config-label">Name</div>
-            <div class="db-view-config-field db-view-config-field-stack">
-              <input class="db-view-config-text" type="text" placeholder="Database name" value="Subscriptions">
+          <div class="obnotion-view-config-body">
+          <div class="obnotion-view-config-section-title" data-scope="database">Current database</div>
+          <div class="obnotion-view-config-row">
+            <div class="obnotion-view-config-label">Name</div>
+            <div class="obnotion-view-config-field obnotion-view-config-field-stack">
+              <input class="obnotion-view-config-text" type="text" placeholder="Database name" value="Subscriptions">
             </div>
           </div>
-          <div class="db-view-config-row">
-            <div class="db-view-config-label">Description</div>
-            <textarea class="db-view-config-textarea" rows="3" placeholder="Add a short description...">Recurring charges, grouped by who pays for them.</textarea>
+          <div class="obnotion-view-config-row">
+            <div class="obnotion-view-config-label">Description</div>
+            <textarea class="obnotion-view-config-textarea" rows="3" placeholder="Add a short description...">Recurring charges, grouped by who pays for them.</textarea>
           </div>
-          <div class="db-view-config-row">
-            <div class="db-view-config-label">Source folder</div>
-            <div class="db-view-config-field db-view-config-field-stack">
-              <input class="db-view-config-text" type="text" placeholder="Example: Projects" value="Finance/Subscriptions">
-              <div class="db-view-config-help">Vault path to scan for notes. Leave empty to scan the vault root.</div>
+          <div class="obnotion-view-config-row">
+            <div class="obnotion-view-config-label">Source folder</div>
+            <div class="obnotion-view-config-field obnotion-view-config-field-stack">
+              <input class="obnotion-view-config-text" type="text" placeholder="Example: Projects" value="Finance/Subscriptions">
+              <div class="obnotion-view-config-help">Vault path to scan for notes. Leave empty to scan the vault root.</div>
             </div>
           </div>
 
-          <div class="db-view-config-section-title" data-scope="view">Current view</div>
-          <div class="db-view-config-row">
-            <div class="db-view-config-label">View type</div>
-            <div class="db-view-config-field">
-              ${dropdownField("db-view-config-dropdown", "Table", I.table)}
+          <div class="obnotion-view-config-section-title" data-scope="view">Current view</div>
+          <div class="obnotion-view-config-row">
+            <div class="obnotion-view-config-label">View type</div>
+            <div class="obnotion-view-config-field">
+              ${dropdownField("obnotion-view-config-dropdown", "Table", I.table)}
             </div>
           </div>
-          <div class="db-view-config-row">
-            <div class="db-view-config-label">Enable this view's source rules</div>
-            <div class="db-view-config-field">
-              <input class="db-toggle-switch" type="checkbox" role="switch" aria-label="Enable this view's source rules">
+          <div class="obnotion-view-config-row">
+            <div class="obnotion-view-config-label">Enable this view's source rules</div>
+            <div class="obnotion-view-config-field">
+              <input class="obnotion-toggle-switch" type="checkbox" role="switch" aria-label="Enable this view's source rules">
             </div>
           </div>
-          <div class="db-view-config-row">
-            <div class="db-view-config-label">Show icon</div>
-            <div class="db-view-config-field">
-              <input class="db-toggle-switch" type="checkbox" role="switch" aria-label="Show icon" checked>
+          <div class="obnotion-view-config-row">
+            <div class="obnotion-view-config-label">Show icon</div>
+            <div class="obnotion-view-config-field">
+              <input class="obnotion-toggle-switch" type="checkbox" role="switch" aria-label="Show icon" checked>
             </div>
           </div>
-          <div class="db-view-config-row">
-            <div class="db-view-config-label">Row density</div>
-            <div class="db-view-config-field">
-              ${dropdownField("db-view-config-dropdown", "Default")}
+          <div class="obnotion-view-config-row">
+            <div class="obnotion-view-config-label">Row density</div>
+            <div class="obnotion-view-config-field">
+              ${dropdownField("obnotion-view-config-dropdown", "Default")}
             </div>
           </div>
-          <div class="db-view-config-row">
-            <div class="db-view-config-label">Date year display</div>
-            <div class="db-view-config-field">
-              ${dropdownField("db-view-config-dropdown", "Always")}
+          <div class="obnotion-view-config-row">
+            <div class="obnotion-view-config-label">Date year display</div>
+            <div class="obnotion-view-config-field">
+              ${dropdownField("obnotion-view-config-dropdown", "Always")}
             </div>
           </div>
           </div>
@@ -400,8 +400,8 @@ export const PANEL_SCENARIOS = [
     capture: "viewport",
     // Photographed on the phone only, for the reason every other bottom-sheet fixture in this file
     // carries the same restriction: the desktop pass would stretch a phone sheet across a window
-    // the plugin never presents it in. Rows here are the shared `.db-panel-row`/`.db-panel-hint`
-    // grammar and the `.db-new-placement` segmented group; label/field/text/dropdown markup is
+    // the plugin never presents it in. Rows here are the shared `.obnotion-panel-row`/`.obnotion-panel-hint`
+    // grammar and the `.obnotion-new-placement` segmented group; label/field/text/dropdown markup is
     // unchanged from the anchored panel above, since only the row wrapper, the hint wrapper, the
     // exclusive-choice control and the switch differ between the two presentations.
     devices: ["mobile"],
@@ -413,69 +413,69 @@ export const PANEL_SCENARIOS = [
       "src/views/checkbox.ts",
       "src/views/dropdown-field.ts",
     ],
-    note: "The phone form of the settings panel: a grab handle, a header with a permanent db-sheet-close button (the drag band alone was reported as an unusable sole dismissal on a form this long), and a body that scrolls under the fixed header. Every row is `.db-panel-row` and every hint `.db-panel-hint` — the same wrapper classes the sort, filter and column-width sheets already draw — and the computed-sync choice is the shared `.db-new-placement` segmented group rather than the desktop's card-radio pair. The two switches are the shared checkbox, not the desktop's `.db-toggle-switch`. Conditional formatting and status presets sit further down and are not in frame.",
+    note: "The phone form of the settings panel: a grab handle, a header with a permanent obnotion-sheet-close button (the drag band alone was reported as an unusable sole dismissal on a form this long), and a body that scrolls under the fixed header. Every row is `.obnotion-panel-row` and every hint `.obnotion-panel-hint` — the same wrapper classes the sort, filter and column-width sheets already draw — and the computed-sync choice is the shared `.obnotion-new-placement` segmented group rather than the desktop's card-radio pair. The two switches are the shared checkbox, not the desktop's `.obnotion-toggle-switch`. Conditional formatting and status presets sit further down and are not in frame.",
     html: () => {
       const closeGlyph = glyph('<path d="M18 6 6 18M6 6l12 12"/>');
       return `
-      <div class="note-database-container db-width-default">
-        <div class="db-view-config-panel db-mobile-bottom-sheet is-visible" id="db-view-config-panel">
-          <div class="db-mobile-bottom-sheet-handle" aria-hidden="true"></div>
-          <div class="db-panel-header">
-            <div class="db-panel-title">Settings</div>
-            <div class="db-panel-header-actions">
-              <button type="button" class="db-icon-only-button db-view-config-close db-sheet-close" aria-label="Close">${closeGlyph}</button>
+      <div class="obnotion-container obnotion-width-default">
+        <div class="obnotion-view-config-panel obnotion-mobile-bottom-sheet is-visible" id="obnotion-view-config-panel">
+          <div class="obnotion-mobile-bottom-sheet-handle" aria-hidden="true"></div>
+          <div class="obnotion-panel-header">
+            <div class="obnotion-panel-title">Settings</div>
+            <div class="obnotion-panel-header-actions">
+              <button type="button" class="obnotion-icon-only-button obnotion-view-config-close obnotion-sheet-close" aria-label="Close">${closeGlyph}</button>
             </div>
           </div>
-          <div class="db-view-config-body">
-          <div class="db-view-config-section-title" data-scope="database">Current database</div>
-          <div class="db-panel-row">
-            <div class="db-view-config-label">Name</div>
-            <div class="db-view-config-field db-view-config-field-stack">
-              <input class="db-view-config-text" type="text" placeholder="Database name" value="Subscriptions">
+          <div class="obnotion-view-config-body">
+          <div class="obnotion-view-config-section-title" data-scope="database">Current database</div>
+          <div class="obnotion-panel-row">
+            <div class="obnotion-view-config-label">Name</div>
+            <div class="obnotion-view-config-field obnotion-view-config-field-stack">
+              <input class="obnotion-view-config-text" type="text" placeholder="Database name" value="Subscriptions">
             </div>
           </div>
-          <div class="db-panel-row">
-            <div class="db-view-config-label">Source folder</div>
-            <div class="db-view-config-field db-view-config-field-stack">
-              <input class="db-view-config-text" type="text" placeholder="Example: Projects" value="Finance/Subscriptions">
-              <div class="db-panel-hint">Vault path to scan for notes. Leave empty to scan the vault root.</div>
+          <div class="obnotion-panel-row">
+            <div class="obnotion-view-config-label">Source folder</div>
+            <div class="obnotion-view-config-field obnotion-view-config-field-stack">
+              <input class="obnotion-view-config-text" type="text" placeholder="Example: Projects" value="Finance/Subscriptions">
+              <div class="obnotion-panel-hint">Vault path to scan for notes. Leave empty to scan the vault root.</div>
             </div>
           </div>
-          <div class="db-panel-row">
-            <div class="db-view-config-label">Formula result storage</div>
-            <div class="db-view-config-field db-view-config-field-stack">
-              <div class="db-new-placement" role="group" aria-label="Formula result storage">
-                <button type="button" class="db-new-placement-option is-active" role="radio" aria-checked="true">Show only in this database (recommended)</button>
-                <button type="button" class="db-new-placement-option" role="radio" aria-checked="false">Automatically save to note properties</button>
-                <button type="button" class="db-new-placement-option" role="radio" aria-checked="false">Save to note properties manually</button>
+          <div class="obnotion-panel-row">
+            <div class="obnotion-view-config-label">Formula result storage</div>
+            <div class="obnotion-view-config-field obnotion-view-config-field-stack">
+              <div class="obnotion-new-placement" role="group" aria-label="Formula result storage">
+                <button type="button" class="obnotion-new-placement-option is-active" role="radio" aria-checked="true">Show only in this database (recommended)</button>
+                <button type="button" class="obnotion-new-placement-option" role="radio" aria-checked="false">Automatically save to note properties</button>
+                <button type="button" class="obnotion-new-placement-option" role="radio" aria-checked="false">Save to note properties manually</button>
               </div>
-              <div class="db-panel-hint">Formula values are always calculated for display. This setting only controls whether results are also saved into note properties.</div>
+              <div class="obnotion-panel-hint">Formula values are always calculated for display. This setting only controls whether results are also saved into note properties.</div>
             </div>
           </div>
 
-          <div class="db-view-config-section-title" data-scope="view">Current view</div>
-          <div class="db-panel-row">
-            <div class="db-view-config-label">View type</div>
-            <div class="db-view-config-field">
-              ${dropdownField("db-view-config-dropdown", "Table", I.table)}
+          <div class="obnotion-view-config-section-title" data-scope="view">Current view</div>
+          <div class="obnotion-panel-row">
+            <div class="obnotion-view-config-label">View type</div>
+            <div class="obnotion-view-config-field">
+              ${dropdownField("obnotion-view-config-dropdown", "Table", I.table)}
             </div>
           </div>
-          <div class="db-panel-row">
-            <div class="db-view-config-label">Enable this view's source rules</div>
-            <div class="db-view-config-field">
-              <input class="db-checkbox db-checkbox-field" type="checkbox" role="switch" aria-label="Enable this view's source rules">
+          <div class="obnotion-panel-row">
+            <div class="obnotion-view-config-label">Enable this view's source rules</div>
+            <div class="obnotion-view-config-field">
+              <input class="obnotion-checkbox obnotion-checkbox-field" type="checkbox" role="switch" aria-label="Enable this view's source rules">
             </div>
           </div>
-          <div class="db-panel-row">
-            <div class="db-view-config-label">Show icon</div>
-            <div class="db-view-config-field">
-              <input class="db-checkbox db-checkbox-field" type="checkbox" role="switch" aria-label="Show icon" checked>
+          <div class="obnotion-panel-row">
+            <div class="obnotion-view-config-label">Show icon</div>
+            <div class="obnotion-view-config-field">
+              <input class="obnotion-checkbox obnotion-checkbox-field" type="checkbox" role="switch" aria-label="Show icon" checked>
             </div>
           </div>
-          <div class="db-panel-row">
-            <div class="db-view-config-label">Row density</div>
-            <div class="db-view-config-field">
-              ${dropdownField("db-view-config-dropdown", "Default")}
+          <div class="obnotion-panel-row">
+            <div class="obnotion-view-config-label">Row density</div>
+            <div class="obnotion-view-config-field">
+              ${dropdownField("obnotion-view-config-dropdown", "Default")}
             </div>
           </div>
           </div>
@@ -515,40 +515,40 @@ export const PANEL_SCENARIOS = [
       + "list does not. The header stays fixed; the body below it is the only region that scrolls, "
       + "independently of the database visible at the left edge of the pane.",
     html: () => `
-      <div class="note-database-container" style="position: relative; height: 820px; width: 100%;">
-        <div class="db-view-config-panel db-shell-side-sheet is-visible" id="db-view-config-panel">
-          <div class="db-panel-header"><div class="db-panel-title">Settings</div></div>
-          <div class="db-view-config-body">
-          <div class="db-view-config-section-title" data-scope="database">Current database</div>
-          <div class="db-view-config-row">
-            <div class="db-view-config-label">Name</div>
-            <div class="db-view-config-field db-view-config-field-stack">
-              <input class="db-view-config-text" type="text" placeholder="Database name" value="Subscriptions">
+      <div class="obnotion-container" style="position: relative; height: 820px; width: 100%;">
+        <div class="obnotion-view-config-panel obnotion-shell-side-sheet is-visible" id="obnotion-view-config-panel">
+          <div class="obnotion-panel-header"><div class="obnotion-panel-title">Settings</div></div>
+          <div class="obnotion-view-config-body">
+          <div class="obnotion-view-config-section-title" data-scope="database">Current database</div>
+          <div class="obnotion-view-config-row">
+            <div class="obnotion-view-config-label">Name</div>
+            <div class="obnotion-view-config-field obnotion-view-config-field-stack">
+              <input class="obnotion-view-config-text" type="text" placeholder="Database name" value="Subscriptions">
             </div>
           </div>
-          <div class="db-view-config-row">
-            <div class="db-view-config-label">Description</div>
-            <textarea class="db-view-config-textarea" rows="3" placeholder="Add a short description...">Recurring charges, grouped by who pays for them, with renewal cadence and cancellation notes.</textarea>
+          <div class="obnotion-view-config-row">
+            <div class="obnotion-view-config-label">Description</div>
+            <textarea class="obnotion-view-config-textarea" rows="3" placeholder="Add a short description...">Recurring charges, grouped by who pays for them, with renewal cadence and cancellation notes.</textarea>
           </div>
-          <div class="db-view-config-row">
-            <div class="db-view-config-label">Source folder</div>
-            <div class="db-view-config-field db-view-config-field-stack">
-              <input class="db-view-config-text" type="text" placeholder="Example: Projects" value="Finance/Subscriptions">
-              <div class="db-view-config-help">Vault path to scan for notes. Leave empty to scan the vault root.</div>
+          <div class="obnotion-view-config-row">
+            <div class="obnotion-view-config-label">Source folder</div>
+            <div class="obnotion-view-config-field obnotion-view-config-field-stack">
+              <input class="obnotion-view-config-text" type="text" placeholder="Example: Projects" value="Finance/Subscriptions">
+              <div class="obnotion-view-config-help">Vault path to scan for notes. Leave empty to scan the vault root.</div>
             </div>
           </div>
 
-          <div class="db-view-config-section-title" data-scope="view">Current view</div>
-          <div class="db-view-config-row">
-            <div class="db-view-config-label">View type</div>
-            <div class="db-view-config-field">
-              ${dropdownField("db-view-config-dropdown", "Table", I.table)}
+          <div class="obnotion-view-config-section-title" data-scope="view">Current view</div>
+          <div class="obnotion-view-config-row">
+            <div class="obnotion-view-config-label">View type</div>
+            <div class="obnotion-view-config-field">
+              ${dropdownField("obnotion-view-config-dropdown", "Table", I.table)}
             </div>
           </div>
-          <div class="db-view-config-row">
-            <div class="db-view-config-label">Row density</div>
-            <div class="db-view-config-field">
-              ${dropdownField("db-view-config-dropdown", "Default")}
+          <div class="obnotion-view-config-row">
+            <div class="obnotion-view-config-label">Row density</div>
+            <div class="obnotion-view-config-field">
+              ${dropdownField("obnotion-view-config-dropdown", "Default")}
             </div>
           </div>
           </div>
@@ -582,30 +582,30 @@ export const PANEL_SCENARIOS = [
         { key: "cycle", label: "Billing", type: "select", visible: false },
       ];
       const row = (field, i) => `
-        <div class="db-column-manager-row" draggable="true" data-note-database-column-key="${field.key}">
-          <span class="db-column-drag" title="Drag to reorder">⋮⋮</span>
+        <div class="obnotion-column-manager-row" draggable="true" data-obnotion-column-key="${field.key}">
+          <span class="obnotion-column-drag" title="Drag to reorder">⋮⋮</span>
           ${reorderControls(i === 0, i === fields.length - 1)}
-          <input type="checkbox" class="db-checkbox db-checkbox-field"${field.visible ? " checked" : ""}>
-          <span class="db-column-type" title="${field.type}">
-            <span class="db-column-type-icon">${TYPE_ICON[field.type]}</span>
+          <input type="checkbox" class="obnotion-checkbox obnotion-checkbox-field"${field.visible ? " checked" : ""}>
+          <span class="obnotion-column-type" title="${field.type}">
+            <span class="obnotion-column-type-icon">${TYPE_ICON[field.type]}</span>
           </span>
-          <div class="db-column-name-wrap">
-            <span class="db-column-name">${field.label}</span>
+          <div class="obnotion-column-name-wrap">
+            <span class="obnotion-column-name">${field.label}</span>
           </div>
         </div>`;
       return `
-      <div class="note-database-container">
-        <div class="db-view-config-panel" id="db-view-config-panel">
-          <div class="db-panel-header"><div class="db-panel-title">Settings</div></div>
-          <div class="db-view-config-body">
-          <div class="db-view-config-section-title db-view-config-section-view" data-scope="view">Properties</div>
-          <div class="db-view-config-row">
-            <div class="db-view-config-label">Cover</div>
-            <div class="db-view-config-field"><div class="db-view-config-readonly-value">No cover</div></div>
+      <div class="obnotion-container">
+        <div class="obnotion-view-config-panel" id="obnotion-view-config-panel">
+          <div class="obnotion-panel-header"><div class="obnotion-panel-title">Settings</div></div>
+          <div class="obnotion-view-config-body">
+          <div class="obnotion-view-config-section-title obnotion-view-config-section-view" data-scope="view">Properties</div>
+          <div class="obnotion-view-config-row">
+            <div class="obnotion-view-config-label">Cover</div>
+            <div class="obnotion-view-config-field"><div class="obnotion-view-config-readonly-value">No cover</div></div>
           </div>
-          <div class="db-view-config-row">
-            <div class="db-view-config-label">Title field</div>
-            <div class="db-view-config-field"><div class="db-view-config-readonly-value">Use file name</div></div>
+          <div class="obnotion-view-config-row">
+            <div class="obnotion-view-config-label">Title field</div>
+            <div class="obnotion-view-config-field"><div class="obnotion-view-config-readonly-value">Use file name</div></div>
           </div>
           ${fields.map(row).join("")}
           </div>
@@ -641,32 +641,32 @@ export const PANEL_SCENARIOS = [
         { key: "Done", color: "green", visible: false },
       ];
       const row = (group, i) => `
-        <div class="db-column-manager-row" draggable="true" data-note-database-column-key="${group.key}">
-          <span class="db-column-drag" title="Drag to reorder">⋮⋮</span>
+        <div class="obnotion-column-manager-row" draggable="true" data-obnotion-column-key="${group.key}">
+          <span class="obnotion-column-drag" title="Drag to reorder">⋮⋮</span>
           ${reorderControls(i === 0, i === groups.length - 1)}
-          <input type="checkbox" class="db-checkbox db-checkbox-field"${group.visible ? " checked" : ""}>
-          <span class="db-column-type">
-            <span class="db-board-groups-dot status-color-${group.color}"></span>
+          <input type="checkbox" class="obnotion-checkbox obnotion-checkbox-field"${group.visible ? " checked" : ""}>
+          <span class="obnotion-column-type">
+            <span class="obnotion-board-groups-dot status-color-${group.color}"></span>
           </span>
-          <div class="db-column-name-wrap">
-            <span class="db-column-name">${group.key}</span>
+          <div class="obnotion-column-name-wrap">
+            <span class="obnotion-column-name">${group.key}</span>
           </div>
         </div>`;
       return `
-      <div class="note-database-container">
-        <div class="db-board-groups-panel" role="dialog" aria-label="Manage groups">
-          <div class="db-panel-header"><span class="db-panel-title">Manage groups</span></div>
-          <div class="db-board-groups-actions">
-            <button type="button" class="db-panel-button">Hide all</button>
-            <button type="button" class="db-panel-button">Show all</button>
+      <div class="obnotion-container">
+        <div class="obnotion-board-groups-panel" role="dialog" aria-label="Manage groups">
+          <div class="obnotion-panel-header"><span class="obnotion-panel-title">Manage groups</span></div>
+          <div class="obnotion-board-groups-actions">
+            <button type="button" class="obnotion-panel-button">Hide all</button>
+            <button type="button" class="obnotion-panel-button">Show all</button>
           </div>
-          <div class="db-board-groups-body">
+          <div class="obnotion-board-groups-body">
             ${groups.map(row).join("")}
           </div>
-          <div class="db-board-groups-footer">
-            <div class="db-board-groups-empty-row">
-              <input type="checkbox" class="db-checkbox db-checkbox-field" checked>
-              <span class="db-board-groups-empty-label">Hide empty groups</span>
+          <div class="obnotion-board-groups-footer">
+            <div class="obnotion-board-groups-empty-row">
+              <input type="checkbox" class="obnotion-checkbox obnotion-checkbox-field" checked>
+              <span class="obnotion-board-groups-empty-label">Hide empty groups</span>
             </div>
           </div>
         </div>
@@ -684,27 +684,27 @@ export const PANEL_SCENARIOS = [
     captureCss: ANCHORED_PANEL_CSS,
     html: () => {
       const row = (col, { visible = true, wrap = false, isFirst = false, isLast = false } = {}) => `
-        <div class="db-column-manager-row" draggable="true">
-          <span class="db-column-drag" title="Drag to reorder">⋮⋮</span>
+        <div class="obnotion-column-manager-row" draggable="true">
+          <span class="obnotion-column-drag" title="Drag to reorder">⋮⋮</span>
           ${reorderControls(isFirst, isLast)}
-          <input type="checkbox" class="db-checkbox db-checkbox-field"${visible ? " checked" : ""}>
-          <span class="db-column-type" title="${col.type}">
-            <span class="db-column-type-icon">${TYPE_ICON[col.type]}</span>
+          <input type="checkbox" class="obnotion-checkbox obnotion-checkbox-field"${visible ? " checked" : ""}>
+          <span class="obnotion-column-type" title="${col.type}">
+            <span class="obnotion-column-type-icon">${TYPE_ICON[col.type]}</span>
           </span>
-          <div class="db-column-name-wrap">
-            <span class="db-column-name" title="Double-click to edit">${col.label} [${col.key}]</span>
+          <div class="obnotion-column-name-wrap">
+            <span class="obnotion-column-name" title="Double-click to edit">${col.label} [${col.key}]</span>
           </div>
-          <button class="clickable-icon db-column-wrap-toggle${wrap ? " is-active" : ""}">${I.wrapText}</button>
+          <button class="clickable-icon obnotion-column-wrap-toggle${wrap ? " is-active" : ""}">${I.wrapText}</button>
           <button class="clickable-icon">${I.edit}</button>
-          <button class="clickable-icon db-column-delete-btn">${I.trash}</button>
+          <button class="clickable-icon obnotion-column-delete-btn">${I.trash}</button>
         </div>`;
       return `
-      <div class="note-database-container">
-        <div class="db-column-manager" id="db-column-manager">
-          <div class="db-panel-header">
-            <span class="db-panel-title">Properties</span>
-            <div class="db-panel-header-actions">
-              <label class="db-column-manager-toggle-all"><input type="checkbox" class="db-checkbox db-checkbox-field"><span>All</span></label>
+      <div class="obnotion-container">
+        <div class="obnotion-column-manager" id="obnotion-column-manager">
+          <div class="obnotion-panel-header">
+            <span class="obnotion-panel-title">Properties</span>
+            <div class="obnotion-panel-header-actions">
+              <label class="obnotion-column-manager-toggle-all"><input type="checkbox" class="obnotion-checkbox obnotion-checkbox-field"><span>All</span></label>
             </div>
           </div>
           ${COLUMN_DEFS.map((col, i) => row(col, {
@@ -713,12 +713,12 @@ export const PANEL_SCENARIOS = [
             isFirst: i === 0,
             isLast: i === COLUMN_DEFS.length - 1,
           })).join("")}
-          <div class="db-column-manager-add-row">
-            <button type="button" class="db-panel-button db-column-manager-add-button">
-              <span class="db-panel-button-label">+ Add property</span>
+          <div class="obnotion-column-manager-add-row">
+            <button type="button" class="obnotion-panel-button obnotion-column-manager-add-button">
+              <span class="obnotion-panel-button-label">+ Add property</span>
             </button>
-            <button type="button" class="db-panel-button db-column-manager-add-button">
-              <span class="db-panel-button-label">+ File property</span>
+            <button type="button" class="obnotion-panel-button obnotion-column-manager-add-button">
+              <span class="obnotion-panel-button-label">+ File property</span>
             </button>
           </div>
         </div>
@@ -739,15 +739,15 @@ export const PANEL_SCENARIOS = [
     note: "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
     // This panel is the exception in this family: nothing in the stylesheet positions it, so
     // it is already in flow here — `positionToolbarPopover` is what makes it fixed at
-    // runtime. Only the 60vh cap is lifted, and the panel keeps its --db-layer-panel z-index,
+    // runtime. Only the 60vh cap is lifted, and the panel keeps its --obnotion-layer-panel z-index,
     // which is what keeps it under the field editors it opens.
-    captureCss: `.note-database-container .db-record-detail-panel { max-height: none !important; }`,
+    captureCss: `.obnotion-container .obnotion-record-detail-panel { max-height: none !important; }`,
     html: () => {
       const row = ROWS[0];
       const field = (col, value, valueClass = "") => `
-        <div class="db-record-detail-field" data-note-database-column-key="${col.key}" role="gridcell">
-          <span class="db-record-detail-field-label">${col.label}</span>
-          <div class="db-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
+        <div class="obnotion-record-detail-field" data-obnotion-column-key="${col.key}" role="gridcell">
+          <span class="obnotion-record-detail-field-label">${col.label}</span>
+          <div class="obnotion-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
         </div>`;
       /* The panel's badge carries a `title` the table's does not, so it cannot just be `optionPill` —
      but the tone is the option's, not the panel's. A value that is purple in a table and orange in
@@ -755,21 +755,21 @@ export const PANEL_SCENARIOS = [
      from the schema and is the same everywhere the value appears. */
   const badge = (text) => `<span class="status-badge status-color-${optionTone(text)}" title="${text}">${text}</span>`;
       return `
-      <div class="note-database-container">
-        <div class="db-record-detail-panel" role="dialog" aria-modal="true" aria-label="${row.name}">
-          <div class="db-record-detail-header">
-            <div class="db-record-detail-title">${row.name}</div>
-            <button type="button" class="db-board-card-open" aria-label="Open note">${I.maximize2}</button>
+      <div class="obnotion-container">
+        <div class="obnotion-record-detail-panel" role="dialog" aria-modal="true" aria-label="${row.name}">
+          <div class="obnotion-record-detail-header">
+            <div class="obnotion-record-detail-title">${row.name}</div>
+            <button type="button" class="obnotion-board-card-open" aria-label="Open note">${I.maximize2}</button>
           </div>
-          <div class="db-record-detail-fields">
-            ${field(COLUMN_DEFS[1], row.cost, "db-card-field-number")}
+          <div class="obnotion-record-detail-fields">
+            ${field(COLUMN_DEFS[1], row.cost, "obnotion-card-field-number")}
             ${field(COLUMN_DEFS[2], badge(row.cycle))}
             ${field(COLUMN_DEFS[3], badge(row.payment))}
-            ${field(COLUMN_DEFS[4], row.renew, "db-date-value")}
+            ${field(COLUMN_DEFS[4], row.renew, "obnotion-date-value")}
             ${field(COLUMN_DEFS[5], badge(row.category))}
-            <div class="db-record-detail-field is-empty-field" data-note-database-column-key="notes" role="gridcell">
-              <span class="db-record-detail-field-label">Notes</span>
-              <div class="db-board-card-value db-card-empty-placeholder">Empty</div>
+            <div class="obnotion-record-detail-field is-empty-field" data-obnotion-column-key="notes" role="gridcell">
+              <span class="obnotion-record-detail-field-label">Notes</span>
+              <div class="obnotion-board-card-value obnotion-card-empty-placeholder">Empty</div>
             </div>
           </div>
           ${BODY_RENDERED}
@@ -793,14 +793,14 @@ export const PANEL_SCENARIOS = [
       "src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts",
       "src/views/note-body-region.ts",
     ],
-    note: "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
+    note: "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing obnotion-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
     html: () => {
       const row = ROWS[1];
       const closeGlyph = glyph('<path d="M18 6 6 18M6 6l12 12"/>');
       const field = (col, value, valueClass = "") => `
-        <div class="db-record-detail-field" data-note-database-column-key="${col.key}" role="gridcell">
-          <span class="db-record-detail-field-label">${col.label}</span>
-          <div class="db-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
+        <div class="obnotion-record-detail-field" data-obnotion-column-key="${col.key}" role="gridcell">
+          <span class="obnotion-record-detail-field-label">${col.label}</span>
+          <div class="obnotion-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
         </div>`;
       /* The panel's badge carries a `title` the table's does not, so it cannot just be `optionPill` —
      but the tone is the option's, not the panel's. A value that is purple in a table and orange in
@@ -808,19 +808,19 @@ export const PANEL_SCENARIOS = [
      from the schema and is the same everywhere the value appears. */
   const badge = (text) => `<span class="status-badge status-color-${optionTone(text)}" title="${text}">${text}</span>`;
       return `
-      <div class="note-database-container db-width-default">
-        <div class="db-record-detail-panel db-anchored-popover db-mobile-bottom-sheet is-visible" role="dialog" aria-modal="true" aria-label="${row.name}">
-          <div class="db-mobile-bottom-sheet-handle" aria-hidden="true"></div>
-          <div class="db-record-detail-header">
-            <div class="db-record-detail-title">${row.name}</div>
-            <button type="button" class="db-board-card-open" aria-label="Open note">${I.maximize2}</button>
-            <button type="button" class="db-cell-edit-close" aria-label="Close">${closeGlyph}</button>
+      <div class="obnotion-container obnotion-width-default">
+        <div class="obnotion-record-detail-panel obnotion-anchored-popover obnotion-mobile-bottom-sheet is-visible" role="dialog" aria-modal="true" aria-label="${row.name}">
+          <div class="obnotion-mobile-bottom-sheet-handle" aria-hidden="true"></div>
+          <div class="obnotion-record-detail-header">
+            <div class="obnotion-record-detail-title">${row.name}</div>
+            <button type="button" class="obnotion-board-card-open" aria-label="Open note">${I.maximize2}</button>
+            <button type="button" class="obnotion-cell-edit-close" aria-label="Close">${closeGlyph}</button>
           </div>
-          <div class="db-record-detail-fields">
-            ${field(COLUMN_DEFS[1], row.cost, "db-card-field-number")}
+          <div class="obnotion-record-detail-fields">
+            ${field(COLUMN_DEFS[1], row.cost, "obnotion-card-field-number")}
             ${field(COLUMN_DEFS[2], badge(row.cycle))}
             ${field(COLUMN_DEFS[3], badge(row.payment))}
-            ${field(COLUMN_DEFS[4], row.renew, "db-date-value")}
+            ${field(COLUMN_DEFS[4], row.renew, "obnotion-date-value")}
             ${field(COLUMN_DEFS[5], badge(row.category))}
           </div>
           ${BODY_RENDERED}
@@ -842,26 +842,26 @@ export const PANEL_SCENARIOS = [
       + "same row — resolveTitleFieldDisplay is the one place both surfaces read it from. Cost "
       + "is left out of the fields grid below, matching the title-field exclusion every "
       + "property list already applies.",
-    captureCss: `.note-database-container .db-record-detail-panel { max-height: none !important; }`,
+    captureCss: `.obnotion-container .obnotion-record-detail-panel { max-height: none !important; }`,
     html: () => {
       const row = ROWS[2];
       const field = (col, value, valueClass = "") => `
-        <div class="db-record-detail-field" data-note-database-column-key="${col.key}" role="gridcell">
-          <span class="db-record-detail-field-label">${col.label}</span>
-          <div class="db-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
+        <div class="obnotion-record-detail-field" data-obnotion-column-key="${col.key}" role="gridcell">
+          <span class="obnotion-record-detail-field-label">${col.label}</span>
+          <div class="obnotion-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
         </div>`;
       const badge = (text) => `<span class="status-badge status-color-${optionTone(text)}" title="${text}">${text}</span>`;
       return `
-      <div class="note-database-container">
-        <div class="db-record-detail-panel" role="dialog" aria-modal="true" aria-label="${row.cost}">
-          <div class="db-record-detail-header">
-            <div class="db-record-detail-title">${row.cost}</div>
-            <button type="button" class="db-board-card-open" aria-label="Open note">${I.maximize2}</button>
+      <div class="obnotion-container">
+        <div class="obnotion-record-detail-panel" role="dialog" aria-modal="true" aria-label="${row.cost}">
+          <div class="obnotion-record-detail-header">
+            <div class="obnotion-record-detail-title">${row.cost}</div>
+            <button type="button" class="obnotion-board-card-open" aria-label="Open note">${I.maximize2}</button>
           </div>
-          <div class="db-record-detail-fields">
+          <div class="obnotion-record-detail-fields">
             ${field(COLUMN_DEFS[2], badge(row.cycle))}
             ${field(COLUMN_DEFS[3], badge(row.payment))}
-            ${field(COLUMN_DEFS[4], row.renew, "db-date-value")}
+            ${field(COLUMN_DEFS[4], row.renew, "obnotion-date-value")}
             ${field(COLUMN_DEFS[5], badge(row.category))}
           </div>
           ${BODY_RENDERED}
@@ -889,24 +889,24 @@ export const PANEL_SCENARIOS = [
       const row = ROWS[3];
       const closeGlyph = glyph('<path d="M18 6 6 18M6 6l12 12"/>');
       const field = (col, value, valueClass = "") => `
-        <div class="db-record-detail-field" data-note-database-column-key="${col.key}" role="gridcell">
-          <span class="db-record-detail-field-label">${col.label}</span>
-          <div class="db-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
+        <div class="obnotion-record-detail-field" data-obnotion-column-key="${col.key}" role="gridcell">
+          <span class="obnotion-record-detail-field-label">${col.label}</span>
+          <div class="obnotion-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
         </div>`;
       const badge = (text) => `<span class="status-badge status-color-${optionTone(text)}" title="${text}">${text}</span>`;
       return `
-      <div class="note-database-container db-width-default">
-        <div class="db-record-detail-panel db-anchored-popover db-mobile-bottom-sheet is-visible" role="dialog" aria-modal="true" aria-label="${row.cost}">
-          <div class="db-mobile-bottom-sheet-handle" aria-hidden="true"></div>
-          <div class="db-record-detail-header">
-            <div class="db-record-detail-title">${row.cost}</div>
-            <button type="button" class="db-board-card-open" aria-label="Open note">${I.maximize2}</button>
-            <button type="button" class="db-cell-edit-close" aria-label="Close">${closeGlyph}</button>
+      <div class="obnotion-container obnotion-width-default">
+        <div class="obnotion-record-detail-panel obnotion-anchored-popover obnotion-mobile-bottom-sheet is-visible" role="dialog" aria-modal="true" aria-label="${row.cost}">
+          <div class="obnotion-mobile-bottom-sheet-handle" aria-hidden="true"></div>
+          <div class="obnotion-record-detail-header">
+            <div class="obnotion-record-detail-title">${row.cost}</div>
+            <button type="button" class="obnotion-board-card-open" aria-label="Open note">${I.maximize2}</button>
+            <button type="button" class="obnotion-cell-edit-close" aria-label="Close">${closeGlyph}</button>
           </div>
-          <div class="db-record-detail-fields">
+          <div class="obnotion-record-detail-fields">
             ${field(COLUMN_DEFS[2], badge(row.cycle))}
             ${field(COLUMN_DEFS[3], badge(row.payment))}
-            ${field(COLUMN_DEFS[4], row.renew, "db-date-value")}
+            ${field(COLUMN_DEFS[4], row.renew, "obnotion-date-value")}
             ${field(COLUMN_DEFS[5], badge(row.category))}
           </div>
           ${BODY_RENDERED}
@@ -922,14 +922,14 @@ export const PANEL_SCENARIOS = [
     capture: "viewport",
     fixtureOf: "constructed-record-detail-body-editing",
     sources: ["src/views/record-detail-panel.ts", "src/views/note-body-region.ts"],
-    note: "Tapping the rendered body swaps it for a textarea. The box grows to its content rather than scrolling inside itself, because the sheet is already a scroll container. What a capture cannot show is the software keyboard: the sheet lifts and shortens against --db-keyboard-inset only when one is open, and no capture has one, so this is the editor at an inset of zero. Focus and the keyboard-avoided sheet are device-verified.",
+    note: "Tapping the rendered body swaps it for a textarea. The box grows to its content rather than scrolling inside itself, because the sheet is already a scroll container. What a capture cannot show is the software keyboard: the sheet lifts and shortens against --obnotion-keyboard-inset only when one is open, and no capture has one, so this is the editor at an inset of zero. Focus and the keyboard-avoided sheet are device-verified.",
     // The height is pinned to the content because nothing runs the auto-fit here. It is the height
     // `fit()` would set at this width, so the capture shows a box that ends where its text does —
     // which is the shipped behaviour. A box that clipped its own last line would photograph a
     // defect this editor does not have.
     html: () => sheetWithBody(`
-          <div class="db-record-detail-body is-editing">
-            <textarea class="db-record-detail-body-editor" rows="1" style="height: 138px;">## Cancellation
+          <div class="obnotion-record-detail-body is-editing">
+            <textarea class="obnotion-record-detail-body-editor" rows="1" style="height: 138px;">## Cancellation
 
 Cancel before the renewal date or it bills for another year. Support answer on weekdays.</textarea>
           </div>`),
@@ -944,8 +944,8 @@ Cancel before the renewal date or it bills for another year. Support answer on w
     sources: ["src/views/record-detail-panel.ts", "src/views/note-body-region.ts"],
     note: "A record whose note has frontmatter and nothing else. One faint line rather than an empty box: without an affordance the records most in need of a body would be exactly the ones that could not be given one.",
     html: () => sheetWithBody(`
-          <div class="db-record-detail-body">
-            <div class="db-record-detail-body-rendered is-empty" tabindex="0">Write a note…</div>
+          <div class="obnotion-record-detail-body">
+            <div class="obnotion-record-detail-body-rendered is-empty" tabindex="0">Write a note…</div>
           </div>`),
   },
   {
@@ -959,36 +959,36 @@ Cancel before the renewal date or it bills for another year. Support answer on w
     // Photographed on the phone only, for the same reason the record-detail sheet is: this
     // markup is the shared bottom-sheet presentation, and the desktop pass would stretch it
     // across a window the plugin never presents it in — the desktop form is the same body inside
-    // the fixed panel shape .db-mobile-column-width-panel already carries without a sheet.
+    // the fixed panel shape .obnotion-mobile-column-width-panel already carries without a sheet.
     sources: ["src/views/column-width.ts", "src/views/mobile-bottom-sheet.ts", "src/views/popover-position.ts"],
     note: "The adjuster mounts through the shared sheet host (applySheetChrome, placeSheet, "
       + "attachSheetDragToDismiss) with the same panel-family body every other sheet in this file "
-      + "uses: db-panel-header with a db-cell-edit-close close button, a db-panel-row holding the "
-      + "shared db-view-config-range/db-view-config-number slider-and-value, and a second "
-      + "db-panel-row holding the db-new-placement preset group. No explicit width is set, so Auto "
+      + "uses: obnotion-panel-header with a obnotion-cell-edit-close close button, a obnotion-panel-row holding the "
+      + "shared obnotion-view-config-range/obnotion-view-config-number slider-and-value, and a second "
+      + "obnotion-panel-row holding the obnotion-new-placement preset group. No explicit width is set, so Auto "
       + "is the selected preset and the field shows the column's fallback width.",
     html: () => {
       const closeGlyph = glyph('<path d="M18 6 6 18M6 6l12 12"/>');
       return `
-      <div class="note-database-container db-width-default">
-        <div class="db-mobile-column-width-panel db-mobile-bottom-sheet is-visible">
-          <div class="db-mobile-bottom-sheet-handle" aria-hidden="true"></div>
-          <div class="db-panel-header">
-            <div class="db-panel-title">Adjust "Cost"</div>
-            <button type="button" class="db-cell-edit-close" aria-label="Close">${closeGlyph}</button>
+      <div class="obnotion-container obnotion-width-default">
+        <div class="obnotion-mobile-column-width-panel obnotion-mobile-bottom-sheet is-visible">
+          <div class="obnotion-mobile-bottom-sheet-handle" aria-hidden="true"></div>
+          <div class="obnotion-panel-header">
+            <div class="obnotion-panel-title">Adjust "Cost"</div>
+            <button type="button" class="obnotion-cell-edit-close" aria-label="Close">${closeGlyph}</button>
           </div>
-          <div class="db-panel-row">
-            <div class="db-view-config-range">
+          <div class="obnotion-panel-row">
+            <div class="obnotion-view-config-range">
               <input type="range" min="60" max="360" step="1" value="150" aria-label="Adjust column width">
-              <input type="number" class="db-view-config-number" inputmode="numeric" min="60" step="1" value="150" aria-label="Adjust column width">
+              <input type="number" class="obnotion-view-config-number" inputmode="numeric" min="60" step="1" value="150" aria-label="Adjust column width">
             </div>
           </div>
-          <div class="db-panel-row">
-            <div class="db-new-placement" role="group" aria-label="Adjust column width">
-              <button type="button" class="db-new-placement-option is-active" role="radio" aria-checked="true">Auto</button>
-              <button type="button" class="db-new-placement-option" role="radio" aria-checked="false">Narrow</button>
-              <button type="button" class="db-new-placement-option" role="radio" aria-checked="false">Medium</button>
-              <button type="button" class="db-new-placement-option" role="radio" aria-checked="false">Wide</button>
+          <div class="obnotion-panel-row">
+            <div class="obnotion-new-placement" role="group" aria-label="Adjust column width">
+              <button type="button" class="obnotion-new-placement-option is-active" role="radio" aria-checked="true">Auto</button>
+              <button type="button" class="obnotion-new-placement-option" role="radio" aria-checked="false">Narrow</button>
+              <button type="button" class="obnotion-new-placement-option" role="radio" aria-checked="false">Medium</button>
+              <button type="button" class="obnotion-new-placement-option" role="radio" aria-checked="false">Wide</button>
             </div>
           </div>
         </div>
@@ -1008,7 +1008,7 @@ Cancel before the renewal date or it bills for another year. Support answer on w
     devices: ["desktop"],
     sources: ["src/views/table-record-peek.ts", "src/views/table-renderer.ts"],
     note: "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
-    // No captureCss: the peek is absolute against .note-database-container, which is
+    // No captureCss: the peek is absolute against .obnotion-container, which is
     // position: relative, so the table below gives it something real to dock against — the
     // same relationship it has in the plugin. The row count is what keeps the panel's
     // top/bottom docking taller than its own content.
@@ -1027,13 +1027,13 @@ Cancel before the renewal date or it bills for another year. Support answer on w
          inches to its right. */
       const OPTION_KEYS = new Set(["cycle", "payment", "category"]);
       const peekField = (key, label, value) => `
-        <div class="db-record-peek-field" data-note-database-column-key="${key}">
-          <span class="db-record-peek-field-label">${label}</span>
-          <span class="db-record-peek-field-value">${OPTION_KEYS.has(key) ? optionPill(value) : value}</span>
+        <div class="obnotion-record-peek-field" data-obnotion-column-key="${key}">
+          <span class="obnotion-record-peek-field-label">${label}</span>
+          <span class="obnotion-record-peek-field-value">${OPTION_KEYS.has(key) ? optionPill(value) : value}</span>
         </div>`;
       return `
-      <div class="note-database-container">
-        <table class="db-table">
+      <div class="obnotion-container">
+        <table class="obnotion-table">
           <thead><tr>${tableHeader()}</tr></thead>
           <tbody>${rows.map((r) => `
             <tr>
@@ -1042,7 +1042,7 @@ Cancel before the renewal date or it bills for another year. Support answer on w
                    truncated to two characters, the cost sat under Name, and the category under
                    Next Renewal. The header comes from tableHeader(), which emits the th; these
                    rows are hand-rolled rather than built by tableRows(), and the cell was missing. -->
-              <td class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></td>
+              <td class="obnotion-select-col"><div class="obnotion-select-inner">${rowCheckbox()}</div></td>
               <td>${r.name}</td>
               <td>${r.cost}</td>
               <td>${optionPill(r.cycle)}</td>
@@ -1051,19 +1051,19 @@ Cancel before the renewal date or it bills for another year. Support answer on w
               <td>${optionPill(r.category)}</td>
             </tr>`).join("")}</tbody>
         </table>
-        <div class="db-record-peek-panel" role="dialog" aria-modal="true"
-          aria-label="${ROWS[0].name}" data-note-database-row-path="Finance/Subscriptions/Figma.md">
-          <div class="db-record-peek-header"><span class="db-record-peek-title">${ROWS[0].name}</span></div>
-          <div class="db-record-peek-properties">
+        <div class="obnotion-record-peek-panel" role="dialog" aria-modal="true"
+          aria-label="${ROWS[0].name}" data-obnotion-row-path="Finance/Subscriptions/Figma.md">
+          <div class="obnotion-record-peek-header"><span class="obnotion-record-peek-title">${ROWS[0].name}</span></div>
+          <div class="obnotion-record-peek-properties">
             ${peekField("cost", "Cost", ROWS[0].cost)}
             ${peekField("cycle", "Billing", ROWS[0].cycle)}
             ${peekField("payment", "Payment", ROWS[0].payment)}
             ${peekField("renew", "Next Renewal", ROWS[0].renew)}
             ${peekField("category", "Category", ROWS[0].category)}
           </div>
-          <div class="db-record-peek-hidden-group">
-            <button type="button" class="db-record-peek-hidden-toggle" aria-expanded="false">Hidden properties</button>
-            <div class="db-record-peek-hidden-fields is-hidden" aria-hidden="true">
+          <div class="obnotion-record-peek-hidden-group">
+            <button type="button" class="obnotion-record-peek-hidden-toggle" aria-expanded="false">Hidden properties</button>
+            <div class="obnotion-record-peek-hidden-fields is-hidden" aria-hidden="true">
               ${peekField("seats", "Seats", "3")}
               ${peekField("owner", "Owner", "Michel")}
             </div>
@@ -1078,30 +1078,30 @@ Cancel before the renewal date or it bills for another year. Support answer on w
     group: "components",
     width: 520,
     sources: ["src/views/modals/computed-frontmatter-cleanup-modal.ts"],
-    // db-modal-checkbox is a factory family with a call site and a stylesheet rule and no fixture,
+    // obnotion-modal-checkbox is a factory family with a call site and a stylesheet rule and no fixture,
     // so its box was the one field-role box nothing measured. It is also the only family mounted
-    // under .note-database-modal rather than .note-database-container, which is the mount point a
+    // under .obnotion-modal rather than .obnotion-container, which is the mount point a
     // container-scoped rule cannot reach — the exact shape of the original defect.
     note: "The one checkbox family that mounts under the modal root instead of the view container. Its box must match every other field-role box.",
     html: () => {
       const option = (label, key, count, checked) => `
-        <label class="db-computed-cleanup-option">
-          ${checked ? fieldCheckbox("db-modal-checkbox").replace(" aria-label=", " checked aria-label=") : fieldCheckbox("db-modal-checkbox")}
-          <div class="db-computed-cleanup-option-text">
-            <div class="db-computed-cleanup-option-label">Field: ${label}</div>
-            <div class="db-computed-cleanup-option-key">${key} — ${count} records</div>
+        <label class="obnotion-computed-cleanup-option">
+          ${checked ? fieldCheckbox("obnotion-modal-checkbox").replace(" aria-label=", " checked aria-label=") : fieldCheckbox("obnotion-modal-checkbox")}
+          <div class="obnotion-computed-cleanup-option-text">
+            <div class="obnotion-computed-cleanup-option-label">Field: ${label}</div>
+            <div class="obnotion-computed-cleanup-option-key">${key} — ${count} records</div>
           </div>
         </label>`;
       return `
-      <div class="note-database-modal">
+      <div class="obnotion-modal">
         <h3>Remove computed values from frontmatter</h3>
-        <div class="db-modal-help">These properties are computed at render time. Their stored values can be removed.</div>
-        <div class="db-computed-cleanup-list">
+        <div class="obnotion-modal-help">These properties are computed at render time. Their stored values can be removed.</div>
+        <div class="obnotion-computed-cleanup-list">
           ${option("Total cost", "total_cost", 24, true)}
           ${option("Days until renewal", "days_until_renewal", 24, false)}
           ${option("Monthly equivalent", "monthly_equivalent", 18, false)}
         </div>
-        <div class="db-modal-actions">
+        <div class="obnotion-modal-actions">
           <button type="button">Cancel</button>
           <button type="button" class="mod-warning">Remove</button>
         </div>
@@ -1142,44 +1142,44 @@ Cancel before the renewal date or it bills for another year. Support answer on w
     html: (device) => {
       const narrow = device?.id === "mobile";
       const row = (name, start, end) => `
-        <div class="db-invalid-event-row is-invalid">
-          ${fieldCheckbox("db-modal-checkbox db-invalid-event-select").replace(" aria-label=", " checked aria-label=")}
-          <div class="db-invalid-event-name" title="Timeline/${name}.md">${name}</div>
-          <div class="db-invalid-event-time-field is-start">
-            <span class="db-invalid-event-time-label">Start</span>
-            <input type="datetime-local" class="db-invalid-event-datetime" value="${start}">
+        <div class="obnotion-invalid-event-row is-invalid">
+          ${fieldCheckbox("obnotion-modal-checkbox obnotion-invalid-event-select").replace(" aria-label=", " checked aria-label=")}
+          <div class="obnotion-invalid-event-name" title="Timeline/${name}.md">${name}</div>
+          <div class="obnotion-invalid-event-time-field is-start">
+            <span class="obnotion-invalid-event-time-label">Start</span>
+            <input type="datetime-local" class="obnotion-invalid-event-datetime" value="${start}">
           </div>
-          <div class="db-invalid-event-time-field is-end">
-            <span class="db-invalid-event-time-label">End</span>
-            <input type="datetime-local" class="db-invalid-event-datetime is-invalid" value="${end}">
+          <div class="obnotion-invalid-event-time-field is-end">
+            <span class="obnotion-invalid-event-time-label">End</span>
+            <input type="datetime-local" class="obnotion-invalid-event-datetime is-invalid" value="${end}">
           </div>
-          <div class="db-invalid-event-span-cell">
-            <span class="db-invalid-event-span is-invalid">Still invalid</span>
-            <button type="button" class="db-invalid-event-row-fix" title="Quick fix selected">Fix</button>
+          <div class="obnotion-invalid-event-span-cell">
+            <span class="obnotion-invalid-event-span is-invalid">Still invalid</span>
+            <button type="button" class="obnotion-invalid-event-row-fix" title="Quick fix selected">Fix</button>
           </div>
         </div>`;
       return `
-      <div class="note-database-modal db-invalid-events-modal${narrow ? " is-invalid-events-compact is-invalid-events-narrow" : ""}">
+      <div class="obnotion-modal obnotion-invalid-events-modal${narrow ? " is-invalid-events-compact is-invalid-events-narrow" : ""}">
         <h3>Invalid time events (3)</h3>
-        <div class="db-modal-help">These events end at or before they start and are hidden from the timeline. Adjust start/end so end is after start.</div>
-        <div class="db-invalid-event-grid">
-          <div class="db-invalid-event-grid-header">
-            ${fieldCheckbox("db-modal-checkbox db-invalid-event-select").replace(" aria-label=", " checked aria-label=")}
-            <div class="db-invalid-event-col-note">Note</div>
-            <div class="db-invalid-event-col-time">Start</div>
-            <div class="db-invalid-event-col-time">End</div>
-            <div class="db-invalid-event-col-span">Span</div>
+        <div class="obnotion-modal-help">These events end at or before they start and are hidden from the timeline. Adjust start/end so end is after start.</div>
+        <div class="obnotion-invalid-event-grid">
+          <div class="obnotion-invalid-event-grid-header">
+            ${fieldCheckbox("obnotion-modal-checkbox obnotion-invalid-event-select").replace(" aria-label=", " checked aria-label=")}
+            <div class="obnotion-invalid-event-col-note">Note</div>
+            <div class="obnotion-invalid-event-col-time">Start</div>
+            <div class="obnotion-invalid-event-col-time">End</div>
+            <div class="obnotion-invalid-event-col-span">Span</div>
           </div>
           ${row("Design review", "2026-03-04T14:00", "2026-03-04T13:00")}
           ${row("Quarterly planning", "2026-03-11T09:30", "2026-03-11T09:00")}
           ${row("Retrospective", "2026-03-18T16:00", "2026-03-18T15:15")}
         </div>
-        <div class="db-invalid-event-actions">
-          <div class="db-invalid-event-bulk-actions">
+        <div class="obnotion-invalid-event-actions">
+          <div class="obnotion-invalid-event-bulk-actions">
             <button type="button">Quick fix selected</button>
-            <span class="db-invalid-event-selected-count">3 selected</span>
+            <span class="obnotion-invalid-event-selected-count">3 selected</span>
           </div>
-          <div class="db-modal-actions">
+          <div class="obnotion-modal-actions">
             <button type="button">Cancel</button>
             <button type="button" class="mod-warning">Save changes</button>
           </div>
@@ -1199,8 +1199,8 @@ Cancel before the renewal date or it bills for another year. Support answer on w
     note: "The include box in the base-import column table. Same field role as every other modal box, mounted in a centred table cell.",
     html: () => {
       const box = (checked) => (checked
-        ? fieldCheckbox("db-modal-checkbox base-import-include-checkbox").replace(" aria-label=", " checked aria-label=")
-        : fieldCheckbox("db-modal-checkbox base-import-include-checkbox"));
+        ? fieldCheckbox("obnotion-modal-checkbox base-import-include-checkbox").replace(" aria-label=", " checked aria-label=")
+        : fieldCheckbox("obnotion-modal-checkbox base-import-include-checkbox"));
       const row = (key, label, type, count, checked, excluded) => `
         <tr${excluded ? ' class="base-import-excluded"' : ""}>
           <td>${key}</td>
@@ -1210,9 +1210,9 @@ Cancel before the renewal date or it bills for another year. Support answer on w
           <td class="base-import-check-cell">${box(checked)}</td>
         </tr>`;
       return `
-      <div class="note-database-modal">
+      <div class="obnotion-modal">
         <h3>Import 4 columns from base</h3>
-        <div class="db-modal-help">Choose which columns to bring in and confirm the type inferred for each.</div>
+        <div class="obnotion-modal-help">Choose which columns to bring in and confirm the type inferred for each.</div>
         <table class="base-import-table">
           <thead>
             <tr>

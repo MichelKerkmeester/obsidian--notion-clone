@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-09-07T15:32:44.769Z",
+  "measuredAt": "2026-09-07T17:22:05.326Z",
   "inputs": {
-    "styles.css": "42e4510561f9",
+    "styles.css": "65c9009170d1",
     "tools/live/cascade-audit.mjs": "59b8f50917f8"
   },
-  "sheetLines": 23763,
+  "sheetLines": 23772,
   "totals": {
     "rules": 3074,
     "duplicatedSelectors": 260,
@@ -12,7 +12,7 @@
   },
   "duplicated": [
     {
-      "selector": ".note-database-container",
+      "selector": ".obnotion-container",
       "context": "",
       "count": 4,
       "lines": [
@@ -23,7 +23,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal",
+      "selector": ".obnotion-modal",
       "context": "",
       "count": 3,
       "lines": [
@@ -33,7 +33,7 @@
       ]
     },
     {
-      "selector": ".db-color-picker-popup",
+      "selector": ".obnotion-color-picker-popup",
       "context": "",
       "count": 5,
       "lines": [
@@ -45,7 +45,7 @@
       ]
     },
     {
-      "selector": ".db-icon-picker-popover",
+      "selector": ".obnotion-icon-picker-popover",
       "context": "",
       "count": 5,
       "lines": [
@@ -57,7 +57,7 @@
       ]
     },
     {
-      "selector": ".db-dropdown-popover",
+      "selector": ".obnotion-dropdown-popover",
       "context": "",
       "count": 4,
       "lines": [
@@ -68,7 +68,7 @@
       ]
     },
     {
-      "selector": ".db-cell-option-popover",
+      "selector": ".obnotion-cell-option-popover",
       "context": "",
       "count": 2,
       "lines": [
@@ -88,7 +88,7 @@
       ]
     },
     {
-      "selector": ".db-chart-drilldown-modal",
+      "selector": ".obnotion-chart-drilldown-modal",
       "context": "",
       "count": 3,
       "lines": [
@@ -98,7 +98,7 @@
       ]
     },
     {
-      "selector": ".db-mobile-sheet-scrim",
+      "selector": ".obnotion-mobile-sheet-scrim",
       "context": "",
       "count": 2,
       "lines": [
@@ -107,7 +107,7 @@
       ]
     },
     {
-      "selector": ".db-mobile-bottom-sheet",
+      "selector": ".obnotion-mobile-bottom-sheet",
       "context": "",
       "count": 2,
       "lines": [
@@ -116,7 +116,7 @@
       ]
     },
     {
-      "selector": ".db-menu-item:focus-visible",
+      "selector": ".obnotion-menu-item:focus-visible",
       "context": "",
       "count": 2,
       "lines": [
@@ -125,7 +125,7 @@
       ]
     },
     {
-      "selector": ".db-column-menu-subpopover",
+      "selector": ".obnotion-column-menu-subpopover",
       "context": "",
       "count": 4,
       "lines": [
@@ -136,7 +136,7 @@
       ]
     },
     {
-      "selector": ".db-relation-popover",
+      "selector": ".obnotion-relation-popover",
       "context": "",
       "count": 3,
       "lines": [
@@ -146,7 +146,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-toolbar",
+      "selector": ".obnotion-container .obnotion-toolbar",
       "context": "",
       "count": 3,
       "lines": [
@@ -156,7 +156,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-filter-panel",
+      "selector": ".obnotion-container .obnotion-filter-panel",
       "context": "",
       "count": 3,
       "lines": [
@@ -166,7 +166,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-sort-panel",
+      "selector": ".obnotion-container .obnotion-sort-panel",
       "context": "",
       "count": 3,
       "lines": [
@@ -176,7 +176,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-view-config-panel",
+      "selector": ".obnotion-container .obnotion-view-config-panel",
       "context": "",
       "count": 4,
       "lines": [
@@ -187,7 +187,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-column-manager",
+      "selector": ".obnotion-container .obnotion-column-manager",
       "context": "",
       "count": 3,
       "lines": [
@@ -197,7 +197,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-board-groups-panel",
+      "selector": ".obnotion-container .obnotion-board-groups-panel",
       "context": "",
       "count": 5,
       "lines": [
@@ -209,7 +209,7 @@
       ]
     },
     {
-      "selector": ".theme-dark .note-database-container",
+      "selector": ".theme-dark .obnotion-container",
       "context": "",
       "count": 2,
       "lines": [
@@ -218,55 +218,55 @@
       ]
     },
     {
-      "selector": ".note-database-container",
+      "selector": ".obnotion-container",
       "context": "@media (prefers-reduced-motion: reduce)",
       "count": 5,
       "lines": [
         1163,
         22098,
         22112,
-        23534,
-        23620
+        23543,
+        23629
       ]
     },
     {
-      "selector": ".note-database-container *",
+      "selector": ".obnotion-container *",
       "context": "@media (prefers-reduced-motion: reduce)",
       "count": 5,
       "lines": [
         1163,
         22098,
         22112,
-        23534,
-        23620
+        23543,
+        23629
       ]
     },
     {
-      "selector": ".note-database-container *::before",
+      "selector": ".obnotion-container *::before",
       "context": "@media (prefers-reduced-motion: reduce)",
       "count": 5,
       "lines": [
         1163,
         22098,
         22112,
-        23534,
-        23620
+        23543,
+        23629
       ]
     },
     {
-      "selector": ".note-database-container *::after",
+      "selector": ".obnotion-container *::after",
       "context": "@media (prefers-reduced-motion: reduce)",
       "count": 5,
       "lines": [
         1163,
         22098,
         22112,
-        23534,
-        23620
+        23543,
+        23629
       ]
     },
     {
-      "selector": ".note-database-container .db-conditional-format",
+      "selector": ".obnotion-container .obnotion-conditional-format",
       "context": "",
       "count": 2,
       "lines": [
@@ -275,7 +275,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-conditional-format-dropdown",
+      "selector": ".obnotion-container .obnotion-conditional-format-dropdown",
       "context": "",
       "count": 2,
       "lines": [
@@ -284,7 +284,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-heading-button",
+      "selector": ".obnotion-container .obnotion-heading-button",
       "context": "",
       "count": 3,
       "lines": [
@@ -294,7 +294,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-toolbar-left",
+      "selector": ".obnotion-container .obnotion-toolbar-left",
       "context": "",
       "count": 2,
       "lines": [
@@ -303,7 +303,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-toolbar-right",
+      "selector": ".obnotion-container .obnotion-toolbar-right",
       "context": "",
       "count": 3,
       "lines": [
@@ -313,26 +313,26 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-active-view-controls",
+      "selector": ".obnotion-container .obnotion-active-view-controls",
       "context": "",
       "count": 2,
       "lines": [
         1897,
-        23392
+        23401
       ]
     },
     {
-      "selector": ".note-database-container .db-active-view-controls-scroll",
+      "selector": ".obnotion-container .obnotion-active-view-controls-scroll",
       "context": "",
       "count": 3,
       "lines": [
         1903,
         22778,
-        23409
+        23418
       ]
     },
     {
-      "selector": ".note-database-container .db-active-control-edit",
+      "selector": ".obnotion-container .obnotion-active-control-edit",
       "context": "",
       "count": 3,
       "lines": [
@@ -342,7 +342,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-active-control-remove",
+      "selector": ".obnotion-container .obnotion-active-control-remove",
       "context": "",
       "count": 3,
       "lines": [
@@ -352,7 +352,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-active-control-edit:hover",
+      "selector": ".obnotion-container .obnotion-active-control-edit:hover",
       "context": "",
       "count": 2,
       "lines": [
@@ -361,7 +361,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-active-control-remove:hover",
+      "selector": ".obnotion-container .obnotion-active-control-remove:hover",
       "context": "",
       "count": 2,
       "lines": [
@@ -370,7 +370,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-view-tabs",
+      "selector": ".obnotion-container .obnotion-view-tabs",
       "context": "",
       "count": 2,
       "lines": [
@@ -379,7 +379,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-view-tab",
+      "selector": ".obnotion-container .obnotion-view-tab",
       "context": "",
       "count": 2,
       "lines": [
@@ -388,7 +388,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-view-tab.is-drop-target",
+      "selector": ".obnotion-container .obnotion-view-tab.is-drop-target",
       "context": "",
       "count": 2,
       "lines": [
@@ -397,7 +397,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-view-tab-rename",
+      "selector": ".obnotion-container .obnotion-view-tab-rename",
       "context": "",
       "count": 2,
       "lines": [
@@ -406,7 +406,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-view-switcher select",
+      "selector": ".obnotion-container .obnotion-view-switcher select",
       "context": "",
       "count": 2,
       "lines": [
@@ -415,7 +415,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-toolbar-button",
+      "selector": ".obnotion-container .obnotion-toolbar-button",
       "context": "",
       "count": 2,
       "lines": [
@@ -424,7 +424,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-toolbar-icon-button",
+      "selector": ".obnotion-container .obnotion-toolbar-icon-button",
       "context": "",
       "count": 4,
       "lines": [
@@ -435,7 +435,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-new-button",
+      "selector": ".obnotion-container .obnotion-new-button",
       "context": "",
       "count": 2,
       "lines": [
@@ -444,7 +444,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-selection-count-badge",
+      "selector": ".obnotion-container .obnotion-selection-count-badge",
       "context": "",
       "count": 3,
       "lines": [
@@ -454,7 +454,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-mobile-reorder-controls",
+      "selector": ".obnotion-container .obnotion-mobile-reorder-controls",
       "context": "",
       "count": 2,
       "lines": [
@@ -463,7 +463,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-mobile-reorder-controls button",
+      "selector": ".obnotion-container .obnotion-mobile-reorder-controls button",
       "context": "",
       "count": 2,
       "lines": [
@@ -472,7 +472,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-selection-clear-pill",
+      "selector": ".obnotion-container .obnotion-selection-clear-pill",
       "context": "",
       "count": 2,
       "lines": [
@@ -481,7 +481,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-search-control",
+      "selector": ".obnotion-container .obnotion-search-control",
       "context": "",
       "count": 3,
       "lines": [
@@ -491,7 +491,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-search-control:hover",
+      "selector": ".obnotion-container .obnotion-search-control:hover",
       "context": "",
       "count": 2,
       "lines": [
@@ -500,7 +500,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-search-control:focus-within",
+      "selector": ".obnotion-container .obnotion-search-control:focus-within",
       "context": "",
       "count": 2,
       "lines": [
@@ -509,7 +509,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-search-button",
+      "selector": ".obnotion-container .obnotion-search-button",
       "context": "",
       "count": 2,
       "lines": [
@@ -518,7 +518,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-dropdown-popover",
+      "selector": ".obnotion-container .obnotion-dropdown-popover",
       "context": "",
       "count": 2,
       "lines": [
@@ -527,7 +527,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-dropdown-option-check",
+      "selector": ".obnotion-container .obnotion-dropdown-option-check",
       "context": "",
       "count": 2,
       "lines": [
@@ -536,7 +536,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-dropdown-option-icon",
+      "selector": ".obnotion-container .obnotion-dropdown-option-icon",
       "context": "",
       "count": 2,
       "lines": [
@@ -545,7 +545,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-dropdown-option-swatches",
+      "selector": ".obnotion-container .obnotion-dropdown-option-swatches",
       "context": "",
       "count": 2,
       "lines": [
@@ -554,7 +554,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-dropdown-option-label",
+      "selector": ".obnotion-container .obnotion-dropdown-option-label",
       "context": "",
       "count": 2,
       "lines": [
@@ -563,7 +563,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-dropdown-option-reason",
+      "selector": ".obnotion-container .obnotion-dropdown-option-reason",
       "context": "",
       "count": 2,
       "lines": [
@@ -572,7 +572,7 @@
       ]
     },
     {
-      "selector": ".db-column-menu-subpopover .db-dropdown-option-check",
+      "selector": ".obnotion-column-menu-subpopover .obnotion-dropdown-option-check",
       "context": "",
       "count": 2,
       "lines": [
@@ -581,7 +581,7 @@
       ]
     },
     {
-      "selector": ".db-column-menu-subpopover .db-dropdown-option-icon",
+      "selector": ".obnotion-column-menu-subpopover .obnotion-dropdown-option-icon",
       "context": "",
       "count": 2,
       "lines": [
@@ -590,7 +590,7 @@
       ]
     },
     {
-      "selector": ".db-calendar-search-result-title",
+      "selector": ".obnotion-calendar-search-result-title",
       "context": "",
       "count": 2,
       "lines": [
@@ -599,7 +599,7 @@
       ]
     },
     {
-      "selector": ".db-calendar-search-result-date",
+      "selector": ".obnotion-calendar-search-result-date",
       "context": "",
       "count": 2,
       "lines": [
@@ -608,7 +608,7 @@
       ]
     },
     {
-      "selector": ".note-database-settings .db-settings-database-meta",
+      "selector": ".obnotion-settings .obnotion-settings-database-meta",
       "context": "",
       "count": 2,
       "lines": [
@@ -617,7 +617,7 @@
       ]
     },
     {
-      "selector": ".note-database-settings .db-settings-database-path",
+      "selector": ".obnotion-settings .obnotion-settings-database-path",
       "context": "",
       "count": 2,
       "lines": [
@@ -626,7 +626,7 @@
       ]
     },
     {
-      "selector": ".note-database-settings .db-settings-open-button",
+      "selector": ".obnotion-settings .obnotion-settings-open-button",
       "context": "",
       "count": 2,
       "lines": [
@@ -635,7 +635,7 @@
       ]
     },
     {
-      "selector": ".note-database-settings .db-settings-delete-button",
+      "selector": ".obnotion-settings .obnotion-settings-delete-button",
       "context": "",
       "count": 2,
       "lines": [
@@ -644,7 +644,7 @@
       ]
     },
     {
-      "selector": ".note-database-settings .db-settings-file-database-name",
+      "selector": ".obnotion-settings .obnotion-settings-file-database-name",
       "context": "",
       "count": 2,
       "lines": [
@@ -653,7 +653,7 @@
       ]
     },
     {
-      "selector": ".note-database-settings .db-settings-file-database-path",
+      "selector": ".obnotion-settings .obnotion-settings-file-database-path",
       "context": "",
       "count": 2,
       "lines": [
@@ -662,7 +662,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-summary-draggable.is-dragging",
+      "selector": ".obnotion-container .obnotion-summary-draggable.is-dragging",
       "context": "",
       "count": 2,
       "lines": [
@@ -671,7 +671,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-summary-draggable.is-drop-before::before",
+      "selector": ".obnotion-container .obnotion-summary-draggable.is-drop-before::before",
       "context": "",
       "count": 2,
       "lines": [
@@ -680,7 +680,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-summary-draggable.is-drop-after::after",
+      "selector": ".obnotion-container .obnotion-summary-draggable.is-drop-after::after",
       "context": "",
       "count": 2,
       "lines": [
@@ -689,7 +689,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-chart-options-export",
+      "selector": ".obnotion-container .obnotion-chart-options-export",
       "context": "",
       "count": 2,
       "lines": [
@@ -698,7 +698,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-chart-options-popover",
+      "selector": ".obnotion-container .obnotion-chart-options-popover",
       "context": "",
       "count": 3,
       "lines": [
@@ -708,7 +708,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-chart-dropdown-popover",
+      "selector": ".obnotion-container .obnotion-chart-dropdown-popover",
       "context": "",
       "count": 2,
       "lines": [
@@ -717,7 +717,7 @@
       ]
     },
     {
-      "selector": ".db-chart-drilldown-modal .db-chart-drilldown-table th",
+      "selector": ".obnotion-chart-drilldown-modal .obnotion-chart-drilldown-table th",
       "context": "",
       "count": 2,
       "lines": [
@@ -726,7 +726,7 @@
       ]
     },
     {
-      "selector": ".db-chart-drilldown-modal .db-chart-drilldown-more",
+      "selector": ".obnotion-chart-drilldown-modal .obnotion-chart-drilldown-more",
       "context": "",
       "count": 2,
       "lines": [
@@ -735,7 +735,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table-wrap",
+      "selector": ".obnotion-container .obnotion-table-wrap",
       "context": "",
       "count": 2,
       "lines": [
@@ -744,7 +744,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table",
+      "selector": ".obnotion-container .obnotion-table",
       "context": "",
       "count": 2,
       "lines": [
@@ -753,7 +753,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table th",
+      "selector": ".obnotion-container .obnotion-table th",
       "context": "",
       "count": 2,
       "lines": [
@@ -762,7 +762,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table td",
+      "selector": ".obnotion-container .obnotion-table td",
       "context": "",
       "count": 2,
       "lines": [
@@ -771,7 +771,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table th .db-property-icon",
+      "selector": ".obnotion-container .obnotion-table th .obnotion-property-icon",
       "context": "",
       "count": 2,
       "lines": [
@@ -780,7 +780,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table th .sort-indicator",
+      "selector": ".obnotion-container .obnotion-table th .sort-indicator",
       "context": "",
       "count": 2,
       "lines": [
@@ -789,7 +789,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-column-menu-trigger::before",
+      "selector": ".obnotion-container .obnotion-column-menu-trigger::before",
       "context": "",
       "count": 2,
       "lines": [
@@ -798,7 +798,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table .db-table-row-drag-handle::before",
+      "selector": ".obnotion-container .obnotion-table .obnotion-table-row-drag-handle::before",
       "context": "",
       "count": 2,
       "lines": [
@@ -807,7 +807,7 @@
       ]
     },
     {
-      "selector": ".db-displayopt-dropdown-popover .db-dropdown-option-check",
+      "selector": ".obnotion-displayopt-dropdown-popover .obnotion-dropdown-option-check",
       "context": "",
       "count": 2,
       "lines": [
@@ -816,7 +816,7 @@
       ]
     },
     {
-      "selector": ".db-displayopt-dropdown-popover .db-dropdown-option-icon",
+      "selector": ".obnotion-displayopt-dropdown-popover .obnotion-dropdown-option-icon",
       "context": "",
       "count": 2,
       "lines": [
@@ -825,7 +825,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table th.db-record-icon-col",
+      "selector": ".obnotion-container .obnotion-table th.obnotion-record-icon-col",
       "context": "",
       "count": 2,
       "lines": [
@@ -834,7 +834,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table .db-select-col .db-select-inner input[type=\"checkbox\"]:not(.db-checkbox):checked",
+      "selector": ".obnotion-container .obnotion-table .obnotion-select-col .obnotion-select-inner input[type=\"checkbox\"]:not(.obnotion-checkbox):checked",
       "context": "",
       "count": 2,
       "lines": [
@@ -843,7 +843,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table .db-select-col .db-select-inner input[type=\"checkbox\"]:not(.db-checkbox):indeterminate",
+      "selector": ".obnotion-container .obnotion-table .obnotion-select-col .obnotion-select-inner input[type=\"checkbox\"]:not(.obnotion-checkbox):indeterminate",
       "context": "",
       "count": 2,
       "lines": [
@@ -852,7 +852,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table td.is-top-edge",
+      "selector": ".obnotion-container .obnotion-table td.is-top-edge",
       "context": "",
       "count": 2,
       "lines": [
@@ -861,7 +861,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table td.is-bottom-edge",
+      "selector": ".obnotion-container .obnotion-table td.is-bottom-edge",
       "context": "",
       "count": 2,
       "lines": [
@@ -870,7 +870,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table td.is-left-edge",
+      "selector": ".obnotion-container .obnotion-table td.is-left-edge",
       "context": "",
       "count": 2,
       "lines": [
@@ -879,7 +879,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table td.is-right-edge",
+      "selector": ".obnotion-container .obnotion-table td.is-right-edge",
       "context": "",
       "count": 2,
       "lines": [
@@ -888,7 +888,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-file-tag-remove",
+      "selector": ".obnotion-container .obnotion-file-tag-remove",
       "context": "",
       "count": 2,
       "lines": [
@@ -897,7 +897,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-file-tag-remove:focus-visible",
+      "selector": ".obnotion-container .obnotion-file-tag-remove:focus-visible",
       "context": "",
       "count": 2,
       "lines": [
@@ -906,7 +906,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table tr.is-drop-before td",
+      "selector": ".obnotion-container .obnotion-table tr.is-drop-before td",
       "context": "",
       "count": 2,
       "lines": [
@@ -915,7 +915,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table tr.is-drop-after td",
+      "selector": ".obnotion-container .obnotion-table tr.is-drop-after td",
       "context": "",
       "count": 2,
       "lines": [
@@ -924,7 +924,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-cell-option-popover",
+      "selector": ".obnotion-container .obnotion-cell-option-popover",
       "context": "",
       "count": 2,
       "lines": [
@@ -933,7 +933,7 @@
       ]
     },
     {
-      "selector": ".db-cell-option-drag-preview.db-cell-option-item",
+      "selector": ".obnotion-cell-option-drag-preview.obnotion-cell-option-item",
       "context": "",
       "count": 2,
       "lines": [
@@ -942,7 +942,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-cell-option-item:hover",
+      "selector": ".obnotion-container .obnotion-cell-option-item:hover",
       "context": "",
       "count": 2,
       "lines": [
@@ -951,7 +951,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-cell-edit-popover",
+      "selector": ".obnotion-container .obnotion-cell-edit-popover",
       "context": "",
       "count": 2,
       "lines": [
@@ -960,7 +960,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-cell-line-edit-popover",
+      "selector": ".obnotion-container .obnotion-cell-line-edit-popover",
       "context": "",
       "count": 2,
       "lines": [
@@ -969,7 +969,7 @@
       ]
     },
     {
-      "selector": ".db-cell-edit-popover.is-mobile",
+      "selector": ".obnotion-cell-edit-popover.is-mobile",
       "context": "",
       "count": 2,
       "lines": [
@@ -978,7 +978,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .status-badge",
+      "selector": ".obnotion-container .status-badge",
       "context": "",
       "count": 2,
       "lines": [
@@ -987,7 +987,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .status-badge",
+      "selector": ".obnotion-modal .status-badge",
       "context": "",
       "count": 2,
       "lines": [
@@ -996,7 +996,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-empty-action",
+      "selector": ".obnotion-container .obnotion-empty-action",
       "context": "",
       "count": 2,
       "lines": [
@@ -1005,7 +1005,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-empty-preset-card:focus-visible",
+      "selector": ".obnotion-container .obnotion-empty-preset-card:focus-visible",
       "context": "",
       "count": 2,
       "lines": [
@@ -1014,7 +1014,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-empty-preset-icon",
+      "selector": ".obnotion-container .obnotion-empty-preset-icon",
       "context": "",
       "count": 2,
       "lines": [
@@ -1023,7 +1023,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-grouped-table",
+      "selector": ".obnotion-container .obnotion-grouped-table",
       "context": "",
       "count": 2,
       "lines": [
@@ -1032,7 +1032,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-group-collapse-toggle",
+      "selector": ".obnotion-container .obnotion-group-collapse-toggle",
       "context": "",
       "count": 2,
       "lines": [
@@ -1041,7 +1041,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-modal-help",
+      "selector": ".obnotion-modal .obnotion-modal-help",
       "context": "",
       "count": 2,
       "lines": [
@@ -1050,7 +1050,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-property-conflict-writers-title",
+      "selector": ".obnotion-modal .obnotion-property-conflict-writers-title",
       "context": "",
       "count": 2,
       "lines": [
@@ -1059,7 +1059,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-property-conflict-path",
+      "selector": ".obnotion-modal .obnotion-property-conflict-path",
       "context": "",
       "count": 2,
       "lines": [
@@ -1068,7 +1068,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-property-conflict-note",
+      "selector": ".obnotion-modal .obnotion-property-conflict-note",
       "context": "",
       "count": 2,
       "lines": [
@@ -1077,7 +1077,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-group-order-popover",
+      "selector": ".obnotion-container .obnotion-group-order-popover",
       "context": "",
       "count": 2,
       "lines": [
@@ -1086,7 +1086,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-modal-checkbox:not(.db-checkbox):checked",
+      "selector": ".obnotion-modal .obnotion-modal-checkbox:not(.obnotion-checkbox):checked",
       "context": "",
       "count": 2,
       "lines": [
@@ -1095,7 +1095,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-modal-checkbox:not(.db-checkbox):indeterminate",
+      "selector": ".obnotion-modal .obnotion-modal-checkbox:not(.obnotion-checkbox):indeterminate",
       "context": "",
       "count": 2,
       "lines": [
@@ -1104,7 +1104,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .pm-chip",
+      "selector": ".obnotion-container .pm-chip",
       "context": "",
       "count": 2,
       "lines": [
@@ -1113,7 +1113,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-subtask-progress-explicit",
+      "selector": ".obnotion-container .obnotion-subtask-progress-explicit",
       "context": "",
       "count": 2,
       "lines": [
@@ -1122,7 +1122,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-board-card-field-wrap .db-board-card-link",
+      "selector": ".obnotion-container .obnotion-board-card-field-wrap .obnotion-board-card-link",
       "context": "",
       "count": 2,
       "lines": [
@@ -1131,7 +1131,7 @@
       ]
     },
     {
-      "selector": ".db-record-detail-panel.db-mobile-bottom-sheet",
+      "selector": ".obnotion-record-detail-panel.obnotion-mobile-bottom-sheet",
       "context": "",
       "count": 3,
       "lines": [
@@ -1141,7 +1141,7 @@
       ]
     },
     {
-      "selector": ".db-mobile-bottom-sheet .db-record-detail-title",
+      "selector": ".obnotion-mobile-bottom-sheet .obnotion-record-detail-title",
       "context": "",
       "count": 2,
       "lines": [
@@ -1150,7 +1150,7 @@
       ]
     },
     {
-      "selector": ".db-mobile-bottom-sheet .db-record-detail-hidden-toggle",
+      "selector": ".obnotion-mobile-bottom-sheet .obnotion-record-detail-hidden-toggle",
       "context": "",
       "count": 2,
       "lines": [
@@ -1159,7 +1159,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-record-detail-hidden-eye",
+      "selector": ".obnotion-container .obnotion-record-detail-hidden-eye",
       "context": "",
       "count": 2,
       "lines": [
@@ -1168,7 +1168,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-record-detail-hidden-chevron",
+      "selector": ".obnotion-container .obnotion-record-detail-hidden-chevron",
       "context": "",
       "count": 2,
       "lines": [
@@ -1177,7 +1177,7 @@
       ]
     },
     {
-      "selector": ".db-mobile-bottom-sheet .db-record-detail-hidden-eye",
+      "selector": ".obnotion-mobile-bottom-sheet .obnotion-record-detail-hidden-eye",
       "context": "",
       "count": 3,
       "lines": [
@@ -1187,7 +1187,7 @@
       ]
     },
     {
-      "selector": ".db-mobile-bottom-sheet .db-record-detail-hidden-chevron",
+      "selector": ".obnotion-mobile-bottom-sheet .obnotion-record-detail-hidden-chevron",
       "context": "",
       "count": 2,
       "lines": [
@@ -1196,7 +1196,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-list",
+      "selector": ".obnotion-container .obnotion-list",
       "context": "",
       "count": 2,
       "lines": [
@@ -1205,7 +1205,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-list-row",
+      "selector": ".obnotion-container .obnotion-list-row",
       "context": "",
       "count": 2,
       "lines": [
@@ -1214,7 +1214,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-database-popover",
+      "selector": ".obnotion-container .obnotion-database-popover",
       "context": "",
       "count": 3,
       "lines": [
@@ -1224,7 +1224,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-group-popover",
+      "selector": ".obnotion-container .obnotion-group-popover",
       "context": "",
       "count": 3,
       "lines": [
@@ -1234,7 +1234,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-export-popover",
+      "selector": ".obnotion-container .obnotion-export-popover",
       "context": "",
       "count": 2,
       "lines": [
@@ -1243,7 +1243,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-view-tab-popover",
+      "selector": ".obnotion-container .obnotion-view-tab-popover",
       "context": "",
       "count": 3,
       "lines": [
@@ -1253,7 +1253,7 @@
       ]
     },
     {
-      "selector": ".db-view-config-panel.db-surface",
+      "selector": ".obnotion-view-config-panel.obnotion-surface",
       "context": "",
       "count": 2,
       "lines": [
@@ -1262,7 +1262,7 @@
       ]
     },
     {
-      "selector": ".db-column-manager.db-surface",
+      "selector": ".obnotion-column-manager.obnotion-surface",
       "context": "",
       "count": 2,
       "lines": [
@@ -1271,7 +1271,7 @@
       ]
     },
     {
-      "selector": ".db-database-popover.db-surface",
+      "selector": ".obnotion-database-popover.obnotion-surface",
       "context": "",
       "count": 2,
       "lines": [
@@ -1280,7 +1280,7 @@
       ]
     },
     {
-      "selector": ".db-group-popover.db-surface",
+      "selector": ".obnotion-group-popover.obnotion-surface",
       "context": "",
       "count": 2,
       "lines": [
@@ -1289,7 +1289,7 @@
       ]
     },
     {
-      "selector": ".db-chart-options-popover.db-surface",
+      "selector": ".obnotion-chart-options-popover.obnotion-surface",
       "context": "",
       "count": 2,
       "lines": [
@@ -1298,7 +1298,7 @@
       ]
     },
     {
-      "selector": ".db-view-tab-popover.db-surface",
+      "selector": ".obnotion-view-tab-popover.obnotion-surface",
       "context": "",
       "count": 2,
       "lines": [
@@ -1307,7 +1307,7 @@
       ]
     },
     {
-      "selector": ".db-board-groups-panel.db-surface",
+      "selector": ".obnotion-board-groups-panel.obnotion-surface",
       "context": "",
       "count": 2,
       "lines": [
@@ -1316,7 +1316,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-database-popover-row",
+      "selector": ".obnotion-container .obnotion-database-popover-row",
       "context": "",
       "count": 2,
       "lines": [
@@ -1325,7 +1325,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-export-popover-row",
+      "selector": ".obnotion-container .obnotion-export-popover-row",
       "context": "",
       "count": 2,
       "lines": [
@@ -1334,7 +1334,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-view-tab-popover-row",
+      "selector": ".obnotion-container .obnotion-view-tab-popover-row",
       "context": "",
       "count": 2,
       "lines": [
@@ -1343,16 +1343,16 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-view-config-section-title",
+      "selector": ".obnotion-container .obnotion-view-config-section-title",
       "context": "",
       "count": 2,
       "lines": [
         11881,
-        23445
+        23454
       ]
     },
     {
-      "selector": ".note-database-container .db-view-config-textarea",
+      "selector": ".obnotion-container .obnotion-view-config-textarea",
       "context": "",
       "count": 2,
       "lines": [
@@ -1361,7 +1361,7 @@
       ]
     },
     {
-      "selector": ".db-view-config-panel.db-mobile-bottom-sheet",
+      "selector": ".obnotion-view-config-panel.obnotion-mobile-bottom-sheet",
       "context": "",
       "count": 2,
       "lines": [
@@ -1370,7 +1370,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-invalid-event-grid-header",
+      "selector": ".obnotion-modal .obnotion-invalid-event-grid-header",
       "context": "",
       "count": 2,
       "lines": [
@@ -1379,7 +1379,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-invalid-event-row",
+      "selector": ".obnotion-modal .obnotion-invalid-event-row",
       "context": "",
       "count": 2,
       "lines": [
@@ -1388,7 +1388,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-view-config-range input[type=\"range\"]",
+      "selector": ".obnotion-container .obnotion-view-config-range input[type=\"range\"]",
       "context": "",
       "count": 2,
       "lines": [
@@ -1397,7 +1397,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar-range-row input[type=\"range\"]",
+      "selector": ".obnotion-container .obnotion-calendar-range-row input[type=\"range\"]",
       "context": "",
       "count": 2,
       "lines": [
@@ -1406,7 +1406,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-source-rule-children",
+      "selector": ".obnotion-container .obnotion-source-rule-children",
       "context": "",
       "count": 2,
       "lines": [
@@ -1415,7 +1415,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-source-rule-header",
+      "selector": ".obnotion-container .obnotion-source-rule-header",
       "context": "",
       "count": 2,
       "lines": [
@@ -1424,7 +1424,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-source-rule-leaf-controls",
+      "selector": ".obnotion-container .obnotion-source-rule-leaf-controls",
       "context": "",
       "count": 2,
       "lines": [
@@ -1433,7 +1433,7 @@
       ]
     },
     {
-      "selector": ".db-mobile-bottom-sheet > .note-database-modal",
+      "selector": ".obnotion-mobile-bottom-sheet > .obnotion-modal",
       "context": "",
       "count": 2,
       "lines": [
@@ -1442,7 +1442,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-panel-row input",
+      "selector": ".obnotion-container .obnotion-panel-row input",
       "context": "",
       "count": 2,
       "lines": [
@@ -1451,7 +1451,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-add-property-create",
+      "selector": ".obnotion-container .obnotion-add-property-create",
       "context": "",
       "count": 2,
       "lines": [
@@ -1460,7 +1460,7 @@
       ]
     },
     {
-      "selector": ".db-mobile-bottom-sheet .db-panel-title",
+      "selector": ".obnotion-mobile-bottom-sheet .obnotion-panel-title",
       "context": "",
       "count": 2,
       "lines": [
@@ -1469,7 +1469,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal textarea",
+      "selector": ".obnotion-modal textarea",
       "context": "",
       "count": 2,
       "lines": [
@@ -1478,7 +1478,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-editor-pane",
+      "selector": ".obnotion-modal .obnotion-formula-editor-pane",
       "context": "",
       "count": 2,
       "lines": [
@@ -1487,7 +1487,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-help-pane",
+      "selector": ".obnotion-modal .obnotion-formula-help-pane",
       "context": "",
       "count": 2,
       "lines": [
@@ -1496,7 +1496,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-highlight",
+      "selector": ".obnotion-modal .obnotion-formula-highlight",
       "context": "",
       "count": 2,
       "lines": [
@@ -1505,7 +1505,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-textarea",
+      "selector": ".obnotion-modal .obnotion-formula-textarea",
       "context": "",
       "count": 2,
       "lines": [
@@ -1514,7 +1514,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-preview-status.is-error",
+      "selector": ".obnotion-modal .obnotion-formula-preview-status.is-error",
       "context": "",
       "count": 2,
       "lines": [
@@ -1523,7 +1523,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-preview-status.is-warning",
+      "selector": ".obnotion-modal .obnotion-formula-preview-status.is-warning",
       "context": "",
       "count": 2,
       "lines": [
@@ -1550,7 +1550,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-header",
+      "selector": ".obnotion-modal .obnotion-formula-header",
       "context": "@media (max-width: 1100px)",
       "count": 3,
       "lines": [
@@ -1560,7 +1560,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-result-type",
+      "selector": ".obnotion-modal .obnotion-formula-result-type",
       "context": "@media (max-width: 1100px)",
       "count": 2,
       "lines": [
@@ -1569,7 +1569,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-workbench",
+      "selector": ".obnotion-modal .obnotion-formula-workbench",
       "context": "@media (max-width: 1100px)",
       "count": 2,
       "lines": [
@@ -1578,7 +1578,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-editor-pane",
+      "selector": ".obnotion-modal .obnotion-formula-editor-pane",
       "context": "@media (max-width: 1100px)",
       "count": 2,
       "lines": [
@@ -1587,7 +1587,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-help-pane",
+      "selector": ".obnotion-modal .obnotion-formula-help-pane",
       "context": "@media (max-width: 1100px)",
       "count": 2,
       "lines": [
@@ -1596,7 +1596,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-editor-shell",
+      "selector": ".obnotion-modal .obnotion-formula-editor-shell",
       "context": "@media (max-width: 1100px)",
       "count": 2,
       "lines": [
@@ -1605,7 +1605,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-preview",
+      "selector": ".obnotion-modal .obnotion-formula-preview",
       "context": "@media (max-width: 1100px)",
       "count": 2,
       "lines": [
@@ -1614,7 +1614,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-preview-details",
+      "selector": ".obnotion-modal .obnotion-formula-preview-details",
       "context": "@media (max-width: 1100px)",
       "count": 2,
       "lines": [
@@ -1623,7 +1623,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-browser",
+      "selector": ".obnotion-modal .obnotion-formula-browser",
       "context": "@media (max-width: 1100px)",
       "count": 2,
       "lines": [
@@ -1632,7 +1632,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-browser-three-col",
+      "selector": ".obnotion-modal .obnotion-formula-browser-three-col",
       "context": "@media (max-width: 1100px)",
       "count": 2,
       "lines": [
@@ -1641,7 +1641,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-browser-three-col .db-formula-category-list",
+      "selector": ".obnotion-modal .obnotion-formula-browser-three-col .obnotion-formula-category-list",
       "context": "@media (max-width: 1100px)",
       "count": 2,
       "lines": [
@@ -1650,7 +1650,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-browser-three-col .db-formula-category",
+      "selector": ".obnotion-modal .obnotion-formula-browser-three-col .obnotion-formula-category",
       "context": "@media (max-width: 1100px)",
       "count": 2,
       "lines": [
@@ -1659,7 +1659,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-browser-three-col .db-formula-function-list-compact",
+      "selector": ".obnotion-modal .obnotion-formula-browser-three-col .obnotion-formula-function-list-compact",
       "context": "@media (max-width: 1100px)",
       "count": 2,
       "lines": [
@@ -1668,7 +1668,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-browser-three-col .db-formula-function-detail",
+      "selector": ".obnotion-modal .obnotion-formula-browser-three-col .obnotion-formula-function-detail",
       "context": "@media (max-width: 1100px)",
       "count": 2,
       "lines": [
@@ -1677,7 +1677,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-category-list",
+      "selector": ".obnotion-modal .obnotion-formula-category-list",
       "context": "",
       "count": 2,
       "lines": [
@@ -1686,7 +1686,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-function-list-compact",
+      "selector": ".obnotion-modal .obnotion-formula-function-list-compact",
       "context": "",
       "count": 2,
       "lines": [
@@ -1695,7 +1695,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-function-detail",
+      "selector": ".obnotion-modal .obnotion-formula-function-detail",
       "context": "",
       "count": 2,
       "lines": [
@@ -1704,7 +1704,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-category",
+      "selector": ".obnotion-modal .obnotion-formula-category",
       "context": "",
       "count": 2,
       "lines": [
@@ -1713,7 +1713,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-function-row",
+      "selector": ".obnotion-modal .obnotion-formula-function-row",
       "context": "",
       "count": 2,
       "lines": [
@@ -1722,7 +1722,7 @@
       ]
     },
     {
-      "selector": ".note-database-modal .db-formula-function-desc",
+      "selector": ".obnotion-modal .obnotion-formula-function-desc",
       "context": "",
       "count": 2,
       "lines": [
@@ -1731,7 +1731,7 @@
       ]
     },
     {
-      "selector": ".formula-workbench-modal.is-formula-compact .db-formula-preview-row",
+      "selector": ".formula-workbench-modal.is-formula-compact .obnotion-formula-preview-row",
       "context": "",
       "count": 2,
       "lines": [
@@ -1740,7 +1740,7 @@
       ]
     },
     {
-      "selector": ".note-database-embed.note-database-container table.db-table th",
+      "selector": ".obnotion-embed.obnotion-container table.obnotion-table th",
       "context": "",
       "count": 2,
       "lines": [
@@ -1749,7 +1749,7 @@
       ]
     },
     {
-      "selector": ".note-database-embed.note-database-container table.db-table td",
+      "selector": ".obnotion-embed.obnotion-container table.obnotion-table td",
       "context": "",
       "count": 2,
       "lines": [
@@ -1758,7 +1758,7 @@
       ]
     },
     {
-      "selector": ".note-database-embed.note-database-container .db-group-header",
+      "selector": ".obnotion-embed.obnotion-container .obnotion-group-header",
       "context": "",
       "count": 2,
       "lines": [
@@ -1767,7 +1767,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar",
+      "selector": ".obnotion-container .obnotion-calendar",
       "context": "",
       "count": 2,
       "lines": [
@@ -1776,7 +1776,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar-mini-today:hover",
+      "selector": ".obnotion-container .obnotion-calendar-mini-today:hover",
       "context": "",
       "count": 2,
       "lines": [
@@ -1785,7 +1785,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar-mini-footer-action:hover",
+      "selector": ".obnotion-container .obnotion-calendar-mini-footer-action:hover",
       "context": "",
       "count": 2,
       "lines": [
@@ -1794,7 +1794,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar-title",
+      "selector": ".obnotion-container .obnotion-calendar-title",
       "context": "",
       "count": 2,
       "lines": [
@@ -1803,7 +1803,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar-title-main",
+      "selector": ".obnotion-container .obnotion-calendar-title-main",
       "context": "",
       "count": 2,
       "lines": [
@@ -1812,7 +1812,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar-title-year",
+      "selector": ".obnotion-container .obnotion-calendar-title-year",
       "context": "",
       "count": 2,
       "lines": [
@@ -1821,7 +1821,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar-nav-button",
+      "selector": ".obnotion-container .obnotion-calendar-nav-button",
       "context": "",
       "count": 2,
       "lines": [
@@ -1830,7 +1830,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar[style*=\"--db-calendar-col-width\"] .db-calendar-weekdays",
+      "selector": ".obnotion-container .obnotion-calendar[style*=\"--obnotion-calendar-col-width\"] .obnotion-calendar-weekdays",
       "context": "",
       "count": 2,
       "lines": [
@@ -1839,7 +1839,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar[style*=\"--db-calendar-col-width\"] .db-calendar-month-week",
+      "selector": ".obnotion-container .obnotion-calendar[style*=\"--obnotion-calendar-col-width\"] .obnotion-calendar-month-week",
       "context": "",
       "count": 2,
       "lines": [
@@ -1848,7 +1848,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar[style*=\"--db-calendar-col-width\"] .db-calendar-time-header-days",
+      "selector": ".obnotion-container .obnotion-calendar[style*=\"--obnotion-calendar-col-width\"] .obnotion-calendar-time-header-days",
       "context": "",
       "count": 2,
       "lines": [
@@ -1857,7 +1857,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar[style*=\"--db-calendar-col-width\"] .db-calendar-week-allday-cols",
+      "selector": ".obnotion-container .obnotion-calendar[style*=\"--obnotion-calendar-col-width\"] .obnotion-calendar-week-allday-cols",
       "context": "",
       "count": 2,
       "lines": [
@@ -1866,7 +1866,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar[style*=\"--db-calendar-col-width\"] .db-calendar-week-body",
+      "selector": ".obnotion-container .obnotion-calendar[style*=\"--obnotion-calendar-col-width\"] .obnotion-calendar-week-body",
       "context": "",
       "count": 2,
       "lines": [
@@ -1875,7 +1875,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar[style*=\"--db-calendar-col-width\"] .db-calendar-week-sticky",
+      "selector": ".obnotion-container .obnotion-calendar[style*=\"--obnotion-calendar-col-width\"] .obnotion-calendar-week-sticky",
       "context": "",
       "count": 2,
       "lines": [
@@ -1884,7 +1884,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar-add-button",
+      "selector": ".obnotion-container .obnotion-calendar-add-button",
       "context": "",
       "count": 2,
       "lines": [
@@ -1893,7 +1893,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar-week-allday",
+      "selector": ".obnotion-container .obnotion-calendar-week-allday",
       "context": "",
       "count": 2,
       "lines": [
@@ -1902,7 +1902,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar-week-allday-gutter",
+      "selector": ".obnotion-container .obnotion-calendar-week-allday-gutter",
       "context": "",
       "count": 2,
       "lines": [
@@ -1911,7 +1911,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar-week-body",
+      "selector": ".obnotion-container .obnotion-calendar-week-body",
       "context": "",
       "count": 2,
       "lines": [
@@ -1920,7 +1920,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar-week-day-num.is-today",
+      "selector": ".obnotion-container .obnotion-calendar-week-day-num.is-today",
       "context": "",
       "count": 2,
       "lines": [
@@ -1929,7 +1929,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar-week-allday-date.is-today",
+      "selector": ".obnotion-container .obnotion-calendar-week-allday-date.is-today",
       "context": "",
       "count": 2,
       "lines": [
@@ -1938,7 +1938,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-calendar-timed-drag-preview",
+      "selector": ".obnotion-container .obnotion-calendar-timed-drag-preview",
       "context": "",
       "count": 2,
       "lines": [
@@ -1947,7 +1947,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-timeline-mobile-menu-button",
+      "selector": ".obnotion-container .obnotion-timeline-mobile-menu-button",
       "context": "",
       "count": 2,
       "lines": [
@@ -1956,7 +1956,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-timeline-event.is-all-day",
+      "selector": ".obnotion-container .obnotion-timeline-event.is-all-day",
       "context": "",
       "count": 2,
       "lines": [
@@ -1965,7 +1965,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-timeline-snap-marker.is-timed-range",
+      "selector": ".obnotion-container .obnotion-timeline-snap-marker.is-timed-range",
       "context": "",
       "count": 2,
       "lines": [
@@ -1974,7 +1974,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-timeline-event > .db-timeline-snap-marker",
+      "selector": ".obnotion-container .obnotion-timeline-event > .obnotion-timeline-snap-marker",
       "context": "",
       "count": 2,
       "lines": [
@@ -1983,7 +1983,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-timeline-window-jump",
+      "selector": ".obnotion-container .obnotion-timeline-window-jump",
       "context": "",
       "count": 2,
       "lines": [
@@ -1992,7 +1992,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-chart-number",
+      "selector": ".obnotion-container .obnotion-chart-number",
       "context": "",
       "count": 2,
       "lines": [
@@ -2001,7 +2001,7 @@
       ]
     },
     {
-      "selector": ".is-phone .note-database-container .db-toolbar-left",
+      "selector": ".is-phone .obnotion-container .obnotion-toolbar-left",
       "context": "",
       "count": 2,
       "lines": [
@@ -2010,26 +2010,26 @@
       ]
     },
     {
-      "selector": ".is-phone .note-database-container .db-toolbar-right",
+      "selector": ".is-phone .obnotion-container .obnotion-toolbar-right",
       "context": "",
       "count": 3,
       "lines": [
         20849,
         20877,
-        23594
+        23603
       ]
     },
     {
-      "selector": ".is-phone .note-database-container .db-view-tabs",
+      "selector": ".is-phone .obnotion-container .obnotion-view-tabs",
       "context": "",
       "count": 2,
       "lines": [
         20858,
-        23589
+        23598
       ]
     },
     {
-      "selector": ".is-phone .note-database-container .db-column-manager-row",
+      "selector": ".is-phone .obnotion-container .obnotion-column-manager-row",
       "context": "",
       "count": 2,
       "lines": [
@@ -2038,7 +2038,7 @@
       ]
     },
     {
-      "selector": ".is-phone .note-database-settings .setting-group-body .setting-item .setting-item-control",
+      "selector": ".is-phone .obnotion-settings .setting-group-body .setting-item .setting-item-control",
       "context": "",
       "count": 2,
       "lines": [
@@ -2047,7 +2047,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-card-mobile-move-btn",
+      "selector": ".obnotion-container .obnotion-card-mobile-move-btn",
       "context": "",
       "count": 3,
       "lines": [
@@ -2057,7 +2057,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table-mobile-move-btn",
+      "selector": ".obnotion-container .obnotion-table-mobile-move-btn",
       "context": "",
       "count": 3,
       "lines": [
@@ -2067,7 +2067,7 @@
       ]
     },
     {
-      "selector": ".is-phone .note-database-container .db-table th.db-select-col",
+      "selector": ".is-phone .obnotion-container .obnotion-table th.obnotion-select-col",
       "context": "",
       "count": 2,
       "lines": [
@@ -2076,7 +2076,7 @@
       ]
     },
     {
-      "selector": ".is-phone .note-database-container .db-table td.db-select-col",
+      "selector": ".is-phone .obnotion-container .obnotion-table td.obnotion-select-col",
       "context": "",
       "count": 2,
       "lines": [
@@ -2085,7 +2085,7 @@
       ]
     },
     {
-      "selector": ".is-phone .note-database-container .db-list-row",
+      "selector": ".is-phone .obnotion-container .obnotion-list-row",
       "context": "",
       "count": 3,
       "lines": [
@@ -2095,7 +2095,7 @@
       ]
     },
     {
-      "selector": ".db-icon-picker-header",
+      "selector": ".obnotion-icon-picker-header",
       "context": "",
       "count": 2,
       "lines": [
@@ -2104,7 +2104,7 @@
       ]
     },
     {
-      "selector": ".db-icon-picker-colors",
+      "selector": ".obnotion-icon-picker-colors",
       "context": "",
       "count": 2,
       "lines": [
@@ -2113,7 +2113,7 @@
       ]
     },
     {
-      "selector": ".db-icon-picker-nav",
+      "selector": ".obnotion-icon-picker-nav",
       "context": "",
       "count": 2,
       "lines": [
@@ -2122,7 +2122,7 @@
       ]
     },
     {
-      "selector": ".db-icon-picker-popover .db-icon-picker-tabs button",
+      "selector": ".obnotion-icon-picker-popover .obnotion-icon-picker-tabs button",
       "context": "",
       "count": 4,
       "lines": [
@@ -2133,7 +2133,7 @@
       ]
     },
     {
-      "selector": ".db-icon-picker-popover button.db-icon-picker-remove",
+      "selector": ".obnotion-icon-picker-popover button.obnotion-icon-picker-remove",
       "context": "",
       "count": 4,
       "lines": [
@@ -2144,7 +2144,7 @@
       ]
     },
     {
-      "selector": ".db-icon-picker-popover button.db-icon-picker-random",
+      "selector": ".obnotion-icon-picker-popover button.obnotion-icon-picker-random",
       "context": "",
       "count": 3,
       "lines": [
@@ -2154,7 +2154,7 @@
       ]
     },
     {
-      "selector": ".db-icon-picker-popover button.db-icon-picker-settings",
+      "selector": ".obnotion-icon-picker-popover button.obnotion-icon-picker-settings",
       "context": "",
       "count": 3,
       "lines": [
@@ -2164,7 +2164,7 @@
       ]
     },
     {
-      "selector": ".db-icon-picker-popover button.db-icon-picker-item",
+      "selector": ".obnotion-icon-picker-popover button.obnotion-icon-picker-item",
       "context": "",
       "count": 3,
       "lines": [
@@ -2174,7 +2174,7 @@
       ]
     },
     {
-      "selector": ".db-icon-picker-popover .db-icon-picker-nav button",
+      "selector": ".obnotion-icon-picker-popover .obnotion-icon-picker-nav button",
       "context": "",
       "count": 2,
       "lines": [
@@ -2183,7 +2183,7 @@
       ]
     },
     {
-      "selector": ".db-icon-picker-popover button.db-icon-color",
+      "selector": ".obnotion-icon-picker-popover button.obnotion-icon-color",
       "context": "",
       "count": 3,
       "lines": [
@@ -2193,61 +2193,61 @@
       ]
     },
     {
-      "selector": ".note-database-container :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
+      "selector": ".obnotion-container :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
       "context": "",
       "count": 2,
       "lines": [
         21797,
-        23564
+        23573
       ]
     },
     {
-      "selector": ".db-column-menu-subpopover :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
+      "selector": ".obnotion-column-menu-subpopover :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
       "context": "",
       "count": 2,
       "lines": [
         21797,
-        23564
+        23573
       ]
     },
     {
-      "selector": ".db-icon-picker-popover :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
+      "selector": ".obnotion-icon-picker-popover :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
       "context": "",
       "count": 2,
       "lines": [
         21797,
-        23564
+        23573
       ]
     },
     {
-      "selector": ".db-color-picker-popup :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
+      "selector": ".obnotion-color-picker-popup :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
       "context": "",
       "count": 2,
       "lines": [
         21797,
-        23564
+        23573
       ]
     },
     {
-      "selector": ".db-mobile-column-width-panel :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
+      "selector": ".obnotion-mobile-column-width-panel :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
       "context": "",
       "count": 2,
       "lines": [
         21797,
-        23564
+        23573
       ]
     },
     {
-      "selector": ".db-cell-edit-popover :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
+      "selector": ".obnotion-cell-edit-popover :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
       "context": "",
       "count": 2,
       "lines": [
         21797,
-        23564
+        23573
       ]
     },
     {
-      "selector": ".is-phone .note-database-container .db-list-row-main",
+      "selector": ".is-phone .obnotion-container .obnotion-list-row-main",
       "context": "",
       "count": 2,
       "lines": [
@@ -2256,7 +2256,7 @@
       ]
     },
     {
-      "selector": ".is-phone .note-database-container .db-list-row-meta",
+      "selector": ".is-phone .obnotion-container .obnotion-list-row-meta",
       "context": "",
       "count": 2,
       "lines": [
@@ -2265,76 +2265,76 @@
       ]
     },
     {
-      "selector": ".db-column-menu-subpopover *",
+      "selector": ".obnotion-column-menu-subpopover *",
       "context": "@media (prefers-reduced-motion: reduce)",
       "count": 4,
       "lines": [
         22098,
         22112,
-        23534,
-        23620
+        23543,
+        23629
       ]
     },
     {
-      "selector": ".db-icon-picker-popover *",
+      "selector": ".obnotion-icon-picker-popover *",
       "context": "@media (prefers-reduced-motion: reduce)",
       "count": 4,
       "lines": [
         22098,
         22112,
-        23534,
-        23620
+        23543,
+        23629
       ]
     },
     {
-      "selector": ".db-color-picker-popup *",
+      "selector": ".obnotion-color-picker-popup *",
       "context": "@media (prefers-reduced-motion: reduce)",
       "count": 2,
       "lines": [
         22098,
-        23545
+        23554
       ]
     },
     {
-      "selector": ".db-mobile-column-width-panel *",
+      "selector": ".obnotion-mobile-column-width-panel *",
       "context": "@media (prefers-reduced-motion: reduce)",
       "count": 2,
       "lines": [
         22098,
-        23545
+        23554
       ]
     },
     {
-      "selector": ".db-dropdown-popover *",
+      "selector": ".obnotion-dropdown-popover *",
       "context": "@media (prefers-reduced-motion: reduce)",
       "count": 2,
       "lines": [
         22098,
-        23545
+        23554
       ]
     },
     {
-      "selector": ".db-calendar-search-results-popover *",
+      "selector": ".obnotion-calendar-search-results-popover *",
       "context": "@media (prefers-reduced-motion: reduce)",
       "count": 2,
       "lines": [
         22098,
-        23545
+        23554
       ]
     },
     {
-      "selector": ".db-cell-edit-popover *",
+      "selector": ".obnotion-cell-edit-popover *",
       "context": "@media (prefers-reduced-motion: reduce)",
       "count": 4,
       "lines": [
         22098,
         22112,
-        23534,
-        23620
+        23543,
+        23629
       ]
     },
     {
-      "selector": ".db-relation-clear",
+      "selector": ".obnotion-relation-clear",
       "context": "",
       "count": 2,
       "lines": [
@@ -2343,25 +2343,25 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-table td[tabindex]:focus-visible",
+      "selector": ".obnotion-container .obnotion-table td[tabindex]:focus-visible",
       "context": "",
       "count": 2,
       "lines": [
         22732,
-        23569
+        23578
       ]
     },
     {
-      "selector": ".db-mobile-bottom-sheet.db-mobile-bottom-sheet",
+      "selector": ".obnotion-mobile-bottom-sheet.obnotion-mobile-bottom-sheet",
       "context": "",
       "count": 2,
       "lines": [
         22822,
-        23760
+        23769
       ]
     },
     {
-      "selector": ".note-database-container .db-heading-chevron-button",
+      "selector": ".obnotion-container .obnotion-heading-chevron-button",
       "context": "",
       "count": 3,
       "lines": [
@@ -2371,7 +2371,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-heading-rename-button",
+      "selector": ".obnotion-container .obnotion-heading-rename-button",
       "context": "",
       "count": 4,
       "lines": [
@@ -2382,7 +2382,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-add-view-popover",
+      "selector": ".obnotion-container .obnotion-add-view-popover",
       "context": "",
       "count": 2,
       "lines": [
@@ -2391,7 +2391,7 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-add-view-key-field",
+      "selector": ".obnotion-container .obnotion-add-view-key-field",
       "context": "",
       "count": 2,
       "lines": [
@@ -2400,96 +2400,96 @@
       ]
     },
     {
-      "selector": ".note-database-container .db-toolbar-right",
+      "selector": ".obnotion-container .obnotion-toolbar-right",
       "context": "@media (max-width: 700px)",
       "count": 2,
       "lines": [
-        23459,
-        23469
+        23468,
+        23478
       ]
     },
     {
-      "selector": "input[type=\"checkbox\"].db-checkbox:checked",
+      "selector": "input[type=\"checkbox\"].obnotion-checkbox:checked",
       "context": "",
       "count": 2,
       "lines": [
-        23719,
-        23726
+        23728,
+        23735
       ]
     },
     {
-      "selector": "input[type=\"checkbox\"].db-checkbox:indeterminate",
+      "selector": "input[type=\"checkbox\"].obnotion-checkbox:indeterminate",
       "context": "",
       "count": 2,
       "lines": [
-        23719,
-        23731
+        23728,
+        23740
       ]
     }
   ],
   "conflicts": [
     {
-      "selector": ".db-color-picker-popup",
+      "selector": ".obnotion-color-picker-popup",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 7595,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22675,
       "classification": "unknown"
     },
     {
-      "selector": ".db-icon-picker-popover",
+      "selector": ".obnotion-icon-picker-popover",
       "context": "",
       "prop": "box-shadow",
-      "from": "var(--db-elevation-2)",
+      "from": "var(--obnotion-elevation-2)",
       "fromLine": 928,
-      "to": "var(--db-elevation-3)",
+      "to": "var(--obnotion-elevation-3)",
       "toLine": 21457,
       "classification": "unknown"
     },
     {
-      "selector": ".db-icon-picker-popover",
+      "selector": ".obnotion-icon-picker-popover",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 21457,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".db-icon-picker-popover",
+      "selector": ".obnotion-icon-picker-popover",
       "context": "",
       "prop": "box-shadow",
-      "from": "var(--db-elevation-3)",
+      "from": "var(--obnotion-elevation-3)",
       "fromLine": 21457,
-      "to": "var(--db-elevation-2)",
+      "to": "var(--obnotion-elevation-2)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".db-column-menu-subpopover",
+      "selector": ".obnotion-column-menu-subpopover",
       "context": "",
       "prop": "z-index",
-      "from": "var(--db-layer-popover, 100)",
+      "from": "var(--obnotion-layer-popover, 100)",
       "fromLine": 928,
-      "to": "var(--db-layer-submenu, 110)",
+      "to": "var(--obnotion-layer-submenu, 110)",
       "toLine": 934,
       "classification": "unknown"
     },
     {
-      "selector": ".db-column-menu-subpopover",
+      "selector": ".obnotion-column-menu-subpopover",
       "context": "",
       "prop": "z-index",
-      "from": "var(--db-layer-submenu, 110)",
+      "from": "var(--obnotion-layer-submenu, 110)",
       "fromLine": 4087,
-      "to": "var(--db-layer-submenu, 110) !important",
+      "to": "var(--obnotion-layer-submenu, 110) !important",
       "toLine": 22807,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-toolbar",
+      "selector": ".obnotion-container .obnotion-toolbar",
       "context": "",
       "prop": "flex-wrap",
       "from": "nowrap",
@@ -2499,27 +2499,27 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-filter-panel",
+      "selector": ".obnotion-container .obnotion-filter-panel",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-sort-panel",
+      "selector": ".obnotion-container .obnotion-sort-panel",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-view-config-panel",
+      "selector": ".obnotion-container .obnotion-view-config-panel",
       "context": "",
       "prop": "width",
       "from": "min(520px, calc(100vw - 72px))",
@@ -2529,27 +2529,27 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-view-config-panel",
+      "selector": ".obnotion-container .obnotion-view-config-panel",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-column-manager",
+      "selector": ".obnotion-container .obnotion-column-manager",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-board-groups-panel",
+      "selector": ".obnotion-container .obnotion-board-groups-panel",
       "context": "",
       "prop": "width",
       "from": "min(520px, calc(100vw - 72px))",
@@ -2559,17 +2559,17 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-board-groups-panel",
+      "selector": ".obnotion-container .obnotion-board-groups-panel",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container",
+      "selector": ".obnotion-container",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "scroll-behavior",
       "from": "auto",
@@ -2579,7 +2579,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container",
+      "selector": ".obnotion-container",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "animation-duration",
       "from": "0.01ms",
@@ -2589,7 +2589,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container",
+      "selector": ".obnotion-container",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "animation-iteration-count",
       "from": "1",
@@ -2599,7 +2599,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container",
+      "selector": ".obnotion-container",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "transition-duration",
       "from": "0.01ms",
@@ -2609,7 +2609,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container *",
+      "selector": ".obnotion-container *",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "scroll-behavior",
       "from": "auto",
@@ -2619,7 +2619,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container *",
+      "selector": ".obnotion-container *",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "animation-duration",
       "from": "0.01ms",
@@ -2629,7 +2629,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container *",
+      "selector": ".obnotion-container *",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "animation-iteration-count",
       "from": "1",
@@ -2639,7 +2639,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container *",
+      "selector": ".obnotion-container *",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "transition-duration",
       "from": "0.01ms",
@@ -2649,7 +2649,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container *::before",
+      "selector": ".obnotion-container *::before",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "scroll-behavior",
       "from": "auto",
@@ -2659,7 +2659,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container *::before",
+      "selector": ".obnotion-container *::before",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "animation-duration",
       "from": "0.01ms",
@@ -2669,7 +2669,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container *::before",
+      "selector": ".obnotion-container *::before",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "animation-iteration-count",
       "from": "1",
@@ -2679,7 +2679,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container *::before",
+      "selector": ".obnotion-container *::before",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "transition-duration",
       "from": "0.01ms",
@@ -2689,7 +2689,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container *::after",
+      "selector": ".obnotion-container *::after",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "scroll-behavior",
       "from": "auto",
@@ -2699,7 +2699,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container *::after",
+      "selector": ".obnotion-container *::after",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "animation-duration",
       "from": "0.01ms",
@@ -2709,7 +2709,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container *::after",
+      "selector": ".obnotion-container *::after",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "animation-iteration-count",
       "from": "1",
@@ -2719,7 +2719,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container *::after",
+      "selector": ".obnotion-container *::after",
       "context": "@media (prefers-reduced-motion: reduce)",
       "prop": "transition-duration",
       "from": "0.01ms",
@@ -2729,17 +2729,17 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-conditional-format-dropdown",
+      "selector": ".obnotion-container .obnotion-conditional-format-dropdown",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 1483,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-heading-button",
+      "selector": ".obnotion-container .obnotion-heading-button",
       "context": "",
       "prop": "min-height",
       "from": "0",
@@ -2749,7 +2749,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-heading-button",
+      "selector": ".obnotion-container .obnotion-heading-button",
       "context": "",
       "prop": "justify-content",
       "from": "center",
@@ -2759,37 +2759,37 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-toolbar-right",
+      "selector": ".obnotion-container .obnotion-toolbar-right",
       "context": "",
       "prop": "gap",
-      "from": "var(--db-space-3)",
+      "from": "var(--obnotion-space-3)",
       "fromLine": 1876,
-      "to": "var(--db-space-2)",
+      "to": "var(--obnotion-space-2)",
       "toLine": 22830,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-active-view-controls-scroll",
+      "selector": ".obnotion-container .obnotion-active-view-controls-scroll",
       "context": "",
       "prop": "-webkit-mask-image",
-      "from": "linear-gradient(to right, transparent, black var(--db-space-4), black calc(100% - var(--db-space-4)), transparent)",
+      "from": "linear-gradient(to right, transparent, black var(--obnotion-space-4), black calc(100% - var(--obnotion-space-4)), transparent)",
       "fromLine": 22778,
       "to": "none",
-      "toLine": 23409,
+      "toLine": 23418,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-active-view-controls-scroll",
+      "selector": ".obnotion-container .obnotion-active-view-controls-scroll",
       "context": "",
       "prop": "mask-image",
-      "from": "linear-gradient(to right, transparent, black var(--db-space-4), black calc(100% - var(--db-space-4)), transparent)",
+      "from": "linear-gradient(to right, transparent, black var(--obnotion-space-4), black calc(100% - var(--obnotion-space-4)), transparent)",
       "fromLine": 22778,
       "to": "none",
-      "toLine": 23409,
+      "toLine": 23418,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-active-control-remove",
+      "selector": ".obnotion-container .obnotion-active-control-remove",
       "context": "",
       "prop": "color",
       "from": "inherit",
@@ -2799,7 +2799,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-view-tab.is-drop-target",
+      "selector": ".obnotion-container .obnotion-view-tab.is-drop-target",
       "context": "",
       "prop": "background",
       "from": "var(--background-modifier-hover)",
@@ -2809,7 +2809,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-view-tab.is-drop-target",
+      "selector": ".obnotion-container .obnotion-view-tab.is-drop-target",
       "context": "",
       "prop": "box-shadow",
       "from": "inset 0 0 0 1px color-mix(in srgb, var(--interactive-accent) 65%, transparent)",
@@ -2819,7 +2819,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-view-switcher select",
+      "selector": ".obnotion-container .obnotion-view-switcher select",
       "context": "",
       "prop": "max-width",
       "from": "none",
@@ -2829,7 +2829,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-view-switcher select",
+      "selector": ".obnotion-container .obnotion-view-switcher select",
       "context": "",
       "prop": "color",
       "from": "var(--text-muted)",
@@ -2839,7 +2839,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-selection-count-badge",
+      "selector": ".obnotion-container .obnotion-selection-count-badge",
       "context": "",
       "prop": "color",
       "from": "var(--interactive-accent)",
@@ -2849,7 +2849,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-mobile-reorder-controls button",
+      "selector": ".obnotion-container .obnotion-mobile-reorder-controls button",
       "context": "",
       "prop": "width",
       "from": "20px",
@@ -2859,7 +2859,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-mobile-reorder-controls button",
+      "selector": ".obnotion-container .obnotion-mobile-reorder-controls button",
       "context": "",
       "prop": "height",
       "from": "20px",
@@ -2869,7 +2869,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-search-control",
+      "selector": ".obnotion-container .obnotion-search-control",
       "context": "",
       "prop": "padding",
       "from": "0 6px",
@@ -2879,7 +2879,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-search-control",
+      "selector": ".obnotion-container .obnotion-search-control",
       "context": "",
       "prop": "width",
       "from": "28px",
@@ -2889,7 +2889,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-search-control",
+      "selector": ".obnotion-container .obnotion-search-control",
       "context": "",
       "prop": "overflow",
       "from": "hidden",
@@ -2899,7 +2899,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-search-button",
+      "selector": ".obnotion-container .obnotion-search-button",
       "context": "",
       "prop": "color",
       "from": "inherit",
@@ -2909,17 +2909,17 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-dropdown-popover",
+      "selector": ".obnotion-container .obnotion-dropdown-popover",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 3334,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-dropdown-option-swatches",
+      "selector": ".obnotion-container .obnotion-dropdown-option-swatches",
       "context": "",
       "prop": "min-width",
       "from": "0",
@@ -2929,7 +2929,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-chart-options-popover",
+      "selector": ".obnotion-container .obnotion-chart-options-popover",
       "context": "",
       "prop": "width",
       "from": "min(560px, calc(100vw - 72px))",
@@ -2939,7 +2939,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-chart-options-popover",
+      "selector": ".obnotion-container .obnotion-chart-options-popover",
       "context": "",
       "prop": "max-height",
       "from": "min(620px, calc(100vh - 140px))",
@@ -2949,27 +2949,27 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-chart-options-popover",
+      "selector": ".obnotion-container .obnotion-chart-options-popover",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-table th",
+      "selector": ".obnotion-container .obnotion-table th",
       "context": "",
       "prop": "background",
-      "from": "var(--db-surface-canvas)",
+      "from": "var(--obnotion-surface-canvas)",
       "fromLine": 5642,
-      "to": "var(--db-table-header-background)",
+      "to": "var(--obnotion-table-header-background)",
       "toLine": 5740,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-file-tag-remove",
+      "selector": ".obnotion-container .obnotion-file-tag-remove",
       "context": "",
       "prop": "color",
       "from": "var(--text-muted)",
@@ -2979,17 +2979,17 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-cell-option-popover",
+      "selector": ".obnotion-container .obnotion-cell-option-popover",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 7284,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".db-cell-option-drag-preview.db-cell-option-item",
+      "selector": ".obnotion-cell-option-drag-preview.obnotion-cell-option-item",
       "context": "",
       "prop": "border",
       "from": "0",
@@ -2999,17 +2999,17 @@
       "classification": "unknown"
     },
     {
-      "selector": ".db-cell-option-drag-preview.db-cell-option-item",
+      "selector": ".obnotion-cell-option-drag-preview.obnotion-cell-option-item",
       "context": "",
       "prop": "border-radius",
       "from": "0",
       "fromLine": 7302,
-      "to": "var(--db-radius-md)",
+      "to": "var(--obnotion-radius-md)",
       "toLine": 7324,
       "classification": "unknown"
     },
     {
-      "selector": ".db-cell-option-drag-preview.db-cell-option-item",
+      "selector": ".obnotion-cell-option-drag-preview.obnotion-cell-option-item",
       "context": "",
       "prop": "background",
       "from": "transparent",
@@ -3019,27 +3019,27 @@
       "classification": "unknown"
     },
     {
-      "selector": ".db-cell-option-drag-preview.db-cell-option-item",
+      "selector": ".obnotion-cell-option-drag-preview.obnotion-cell-option-item",
       "context": "",
       "prop": "box-shadow",
       "from": "none",
       "fromLine": 7302,
-      "to": "var(--db-elevation-2)",
+      "to": "var(--obnotion-elevation-2)",
       "toLine": 7324,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-cell-edit-popover",
+      "selector": ".obnotion-container .obnotion-cell-edit-popover",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 7841,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-grouped-table",
+      "selector": ".obnotion-container .obnotion-grouped-table",
       "context": "",
       "prop": "display",
       "from": "flex",
@@ -3049,7 +3049,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-modal .db-modal-help",
+      "selector": ".obnotion-modal .obnotion-modal-help",
       "context": "",
       "prop": "font-size",
       "from": "13px",
@@ -3059,7 +3059,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-modal .db-property-conflict-writers-title",
+      "selector": ".obnotion-modal .obnotion-property-conflict-writers-title",
       "context": "",
       "prop": "color",
       "from": "var(--text-muted)",
@@ -3069,17 +3069,17 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-group-order-popover",
+      "selector": ".obnotion-container .obnotion-group-order-popover",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 9334,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".db-record-detail-panel.db-mobile-bottom-sheet",
+      "selector": ".obnotion-record-detail-panel.obnotion-mobile-bottom-sheet",
       "context": "",
       "prop": "overflow-y",
       "from": "auto",
@@ -3089,27 +3089,27 @@
       "classification": "unknown"
     },
     {
-      "selector": ".db-mobile-bottom-sheet .db-record-detail-title",
+      "selector": ".obnotion-mobile-bottom-sheet .obnotion-record-detail-title",
       "context": "",
       "prop": "font-size",
       "from": "var(--font-ui-medium)",
       "fromLine": 10758,
-      "to": "var(--db-font-lg)",
+      "to": "var(--obnotion-font-lg)",
       "toLine": 13662,
       "classification": "unknown"
     },
     {
-      "selector": ".db-mobile-bottom-sheet .db-record-detail-title",
+      "selector": ".obnotion-mobile-bottom-sheet .obnotion-record-detail-title",
       "context": "",
       "prop": "font-weight",
       "from": "600",
       "fromLine": 10758,
-      "to": "var(--db-font-lg-weight)",
+      "to": "var(--obnotion-font-lg-weight)",
       "toLine": 13662,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-record-detail-hidden-chevron",
+      "selector": ".obnotion-container .obnotion-record-detail-hidden-chevron",
       "context": "",
       "prop": "color",
       "from": "var(--text-muted)",
@@ -3119,7 +3119,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".db-mobile-bottom-sheet .db-record-detail-hidden-chevron",
+      "selector": ".obnotion-mobile-bottom-sheet .obnotion-record-detail-hidden-chevron",
       "context": "",
       "prop": "color",
       "from": "var(--text-muted)",
@@ -3129,7 +3129,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-database-popover",
+      "selector": ".obnotion-container .obnotion-database-popover",
       "context": "",
       "prop": "width",
       "from": "min(520px, calc(100vw - 72px))",
@@ -3139,7 +3139,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-database-popover",
+      "selector": ".obnotion-container .obnotion-database-popover",
       "context": "",
       "prop": "max-height",
       "from": "min(560px, calc(100vh - 140px))",
@@ -3149,17 +3149,17 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-database-popover",
+      "selector": ".obnotion-container .obnotion-database-popover",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-group-popover",
+      "selector": ".obnotion-container .obnotion-group-popover",
       "context": "",
       "prop": "width",
       "from": "min(520px, calc(100vw - 72px))",
@@ -3169,7 +3169,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-group-popover",
+      "selector": ".obnotion-container .obnotion-group-popover",
       "context": "",
       "prop": "max-height",
       "from": "min(560px, calc(100vh - 140px))",
@@ -3179,17 +3179,17 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-group-popover",
+      "selector": ".obnotion-container .obnotion-group-popover",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-export-popover",
+      "selector": ".obnotion-container .obnotion-export-popover",
       "context": "",
       "prop": "width",
       "from": "min(520px, calc(100vw - 72px))",
@@ -3199,7 +3199,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-export-popover",
+      "selector": ".obnotion-container .obnotion-export-popover",
       "context": "",
       "prop": "max-height",
       "from": "min(560px, calc(100vh - 140px))",
@@ -3209,7 +3209,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-view-tab-popover",
+      "selector": ".obnotion-container .obnotion-view-tab-popover",
       "context": "",
       "prop": "width",
       "from": "min(520px, calc(100vw - 72px))",
@@ -3219,7 +3219,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-view-tab-popover",
+      "selector": ".obnotion-container .obnotion-view-tab-popover",
       "context": "",
       "prop": "max-height",
       "from": "min(560px, calc(100vh - 140px))",
@@ -3229,87 +3229,87 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-view-tab-popover",
+      "selector": ".obnotion-container .obnotion-view-tab-popover",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".db-view-config-panel.db-surface",
+      "selector": ".obnotion-view-config-panel.obnotion-surface",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".db-column-manager.db-surface",
+      "selector": ".obnotion-column-manager.obnotion-surface",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".db-database-popover.db-surface",
+      "selector": ".obnotion-database-popover.obnotion-surface",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".db-group-popover.db-surface",
+      "selector": ".obnotion-group-popover.obnotion-surface",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".db-chart-options-popover.db-surface",
+      "selector": ".obnotion-chart-options-popover.obnotion-surface",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".db-view-tab-popover.db-surface",
+      "selector": ".obnotion-view-tab-popover.obnotion-surface",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".db-board-groups-panel.db-surface",
+      "selector": ".obnotion-board-groups-panel.obnotion-surface",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 11524,
-      "to": "var(--db-surface-overlay)",
+      "to": "var(--obnotion-surface-overlay)",
       "toLine": 22643,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-database-popover-row",
+      "selector": ".obnotion-container .obnotion-database-popover-row",
       "context": "",
       "prop": "grid-template-columns",
       "from": "18px 18px minmax(0, 1fr) 16px",
@@ -3319,27 +3319,27 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-database-popover-row",
+      "selector": ".obnotion-container .obnotion-database-popover-row",
       "context": "",
       "prop": "gap",
-      "from": "var(--db-space-3)",
+      "from": "var(--obnotion-space-3)",
       "fromLine": 11651,
-      "to": "var(--db-space-2)",
+      "to": "var(--obnotion-space-2)",
       "toLine": 22971,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-database-popover-row",
+      "selector": ".obnotion-container .obnotion-database-popover-row",
       "context": "",
       "prop": "padding",
       "from": "4px 6px",
       "fromLine": 11651,
-      "to": "2px var(--db-space-2)",
+      "to": "2px var(--obnotion-space-2)",
       "toLine": 22971,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-export-popover-row",
+      "selector": ".obnotion-container .obnotion-export-popover-row",
       "context": "",
       "prop": "grid-template-columns",
       "from": "22px minmax(0, 1fr) 16px",
@@ -3349,27 +3349,27 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-view-config-section-title",
+      "selector": ".obnotion-container .obnotion-view-config-section-title",
       "context": "",
       "prop": "color",
       "from": "var(--text-normal)",
       "fromLine": 11881,
       "to": "var(--text-muted)",
-      "toLine": 23445,
+      "toLine": 23454,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-view-config-section-title",
+      "selector": ".obnotion-container .obnotion-view-config-section-title",
       "context": "",
       "prop": "font-size",
       "from": "12px",
       "fromLine": 11881,
-      "to": "var(--db-font-xs)",
-      "toLine": 23445,
+      "to": "var(--obnotion-font-xs)",
+      "toLine": 23454,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-source-rule-leaf-controls",
+      "selector": ".obnotion-container .obnotion-source-rule-leaf-controls",
       "context": "",
       "prop": "align-items",
       "from": "center",
@@ -3379,7 +3379,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-add-property-create",
+      "selector": ".obnotion-container .obnotion-add-property-create",
       "context": "",
       "prop": "color",
       "from": "var(--text-normal)",
@@ -3399,7 +3399,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-modal .db-formula-header",
+      "selector": ".obnotion-modal .obnotion-formula-header",
       "context": "@media (max-width: 1100px)",
       "prop": "align-items",
       "from": "stretch",
@@ -3409,7 +3409,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-modal .db-formula-result-type",
+      "selector": ".obnotion-modal .obnotion-formula-result-type",
       "context": "@media (max-width: 1100px)",
       "prop": "align-items",
       "from": "stretch",
@@ -3419,7 +3419,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-modal .db-formula-preview",
+      "selector": ".obnotion-modal .obnotion-formula-preview",
       "context": "@media (max-width: 1100px)",
       "prop": "max-height",
       "from": "360px",
@@ -3429,7 +3429,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-modal .db-formula-preview-details",
+      "selector": ".obnotion-modal .obnotion-formula-preview-details",
       "context": "@media (max-width: 1100px)",
       "prop": "max-height",
       "from": "190px",
@@ -3439,7 +3439,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-modal .db-formula-browser",
+      "selector": ".obnotion-modal .obnotion-formula-browser",
       "context": "@media (max-width: 1100px)",
       "prop": "max-height",
       "from": "420px",
@@ -3449,7 +3449,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-modal .db-formula-browser-three-col",
+      "selector": ".obnotion-modal .obnotion-formula-browser-three-col",
       "context": "@media (max-width: 1100px)",
       "prop": "grid-template-columns",
       "from": "minmax(0, 1fr)",
@@ -3459,7 +3459,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-modal .db-formula-browser-three-col",
+      "selector": ".obnotion-modal .obnotion-formula-browser-three-col",
       "context": "@media (max-width: 1100px)",
       "prop": "grid-template-rows",
       "from": "auto minmax(120px, 1fr) minmax(120px, auto)",
@@ -3469,7 +3469,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-modal .db-formula-browser-three-col",
+      "selector": ".obnotion-modal .obnotion-formula-browser-three-col",
       "context": "@media (max-width: 1100px)",
       "prop": "min-height",
       "from": "320px",
@@ -3479,7 +3479,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-modal .db-formula-browser-three-col",
+      "selector": ".obnotion-modal .obnotion-formula-browser-three-col",
       "context": "@media (max-width: 1100px)",
       "prop": "max-height",
       "from": "420px",
@@ -3489,17 +3489,17 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-modal .db-formula-browser-three-col .db-formula-category",
+      "selector": ".obnotion-modal .obnotion-formula-browser-three-col .obnotion-formula-category",
       "context": "@media (max-width: 1100px)",
       "prop": "padding",
-      "from": "var(--db-space-3) var(--db-space-4)",
+      "from": "var(--obnotion-space-3) var(--obnotion-space-4)",
       "fromLine": 14765,
-      "to": "var(--db-space-3) var(--db-space-5)",
+      "to": "var(--obnotion-space-3) var(--obnotion-space-5)",
       "toLine": 15795,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-modal .db-formula-function-desc",
+      "selector": ".obnotion-modal .obnotion-formula-function-desc",
       "context": "",
       "prop": "font-size",
       "from": "12px",
@@ -3509,17 +3509,17 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-embed.note-database-container table.db-table th",
+      "selector": ".obnotion-embed.obnotion-container table.obnotion-table th",
       "context": "",
       "prop": "background",
       "from": "var(--background-primary)",
       "fromLine": 16468,
-      "to": "var(--db-table-header-background)",
+      "to": "var(--obnotion-table-header-background)",
       "toLine": 16494,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-embed.note-database-container table.db-table th",
+      "selector": ".obnotion-embed.obnotion-container table.obnotion-table th",
       "context": "",
       "prop": "color",
       "from": "inherit",
@@ -3529,7 +3529,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-embed.note-database-container table.db-table td",
+      "selector": ".obnotion-embed.obnotion-container table.obnotion-table td",
       "context": "",
       "prop": "color",
       "from": "inherit",
@@ -3539,7 +3539,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-calendar-title",
+      "selector": ".obnotion-container .obnotion-calendar-title",
       "context": "",
       "prop": "gap",
       "from": "8px",
@@ -3549,7 +3549,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-calendar-title-main",
+      "selector": ".obnotion-container .obnotion-calendar-title-main",
       "context": "",
       "prop": "font-size",
       "from": "22px",
@@ -3559,7 +3559,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-calendar-title-main",
+      "selector": ".obnotion-container .obnotion-calendar-title-main",
       "context": "",
       "prop": "font-weight",
       "from": "700",
@@ -3569,7 +3569,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-calendar-title-main",
+      "selector": ".obnotion-container .obnotion-calendar-title-main",
       "context": "",
       "prop": "letter-spacing",
       "from": "0.01em",
@@ -3579,7 +3579,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-calendar-title-year",
+      "selector": ".obnotion-container .obnotion-calendar-title-year",
       "context": "",
       "prop": "color",
       "from": "var(--text-muted)",
@@ -3589,17 +3589,17 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-calendar-title-year",
+      "selector": ".obnotion-container .obnotion-calendar-title-year",
       "context": "",
       "prop": "font-size",
-      "from": "var(--db-font-md)",
+      "from": "var(--obnotion-font-md)",
       "fromLine": 16986,
       "to": "16px",
       "toLine": 17007,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-calendar-title-year",
+      "selector": ".obnotion-container .obnotion-calendar-title-year",
       "context": "",
       "prop": "letter-spacing",
       "from": "0.04em",
@@ -3609,7 +3609,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-calendar-week-allday-gutter",
+      "selector": ".obnotion-container .obnotion-calendar-week-allday-gutter",
       "context": "",
       "prop": "padding",
       "from": "4px",
@@ -3619,17 +3619,17 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-calendar-week-body",
+      "selector": ".obnotion-container .obnotion-calendar-week-body",
       "context": "",
       "prop": "height",
-      "from": "var(--db-week-grid-height, 1152px)",
+      "from": "var(--obnotion-week-grid-height, 1152px)",
       "fromLine": 17718,
       "to": "auto",
       "toLine": 18436,
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-calendar-week-day-num.is-today",
+      "selector": ".obnotion-container .obnotion-calendar-week-day-num.is-today",
       "context": "",
       "prop": "color",
       "from": "var(--text-on-accent)",
@@ -3639,7 +3639,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-calendar-week-allday-date.is-today",
+      "selector": ".obnotion-container .obnotion-calendar-week-allday-date.is-today",
       "context": "",
       "prop": "color",
       "from": "var(--text-on-accent)",
@@ -3649,7 +3649,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-timeline-window-jump",
+      "selector": ".obnotion-container .obnotion-timeline-window-jump",
       "context": "",
       "prop": "position",
       "from": "sticky",
@@ -3659,17 +3659,17 @@
       "classification": "unknown"
     },
     {
-      "selector": ".is-phone .note-database-container .db-toolbar-right",
+      "selector": ".is-phone .obnotion-container .obnotion-toolbar-right",
       "context": "",
       "prop": "overflow-y",
       "from": "hidden",
       "fromLine": 20877,
       "to": "visible",
-      "toLine": 23594,
+      "toLine": 23603,
       "classification": "unknown"
     },
     {
-      "selector": ".is-phone .note-database-container .db-column-manager-row",
+      "selector": ".is-phone .obnotion-container .obnotion-column-manager-row",
       "context": "",
       "prop": "grid-template-columns",
       "from": "0 auto 20px 18px minmax(120px, 1fr) auto auto auto",
@@ -3679,7 +3679,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".is-phone .note-database-container .db-list-row",
+      "selector": ".is-phone .obnotion-container .obnotion-list-row",
       "context": "",
       "prop": "grid-template-columns",
       "from": "minmax(0, 1fr) minmax(0, 1fr) auto auto auto",
@@ -3689,7 +3689,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".db-icon-picker-popover .db-icon-picker-tabs button",
+      "selector": ".obnotion-icon-picker-popover .obnotion-icon-picker-tabs button",
       "context": "",
       "prop": "min-width",
       "from": "0",
@@ -3699,7 +3699,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".db-icon-picker-popover button.db-icon-picker-remove",
+      "selector": ".obnotion-icon-picker-popover button.obnotion-icon-picker-remove",
       "context": "",
       "prop": "min-width",
       "from": "0",
@@ -3709,7 +3709,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".db-icon-picker-popover button.db-icon-picker-random",
+      "selector": ".obnotion-icon-picker-popover button.obnotion-icon-picker-random",
       "context": "",
       "prop": "min-width",
       "from": "0",
@@ -3719,7 +3719,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".db-icon-picker-popover button.db-icon-picker-settings",
+      "selector": ".obnotion-icon-picker-popover button.obnotion-icon-picker-settings",
       "context": "",
       "prop": "min-width",
       "from": "0",
@@ -3729,7 +3729,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".db-icon-picker-popover button.db-icon-picker-item",
+      "selector": ".obnotion-icon-picker-popover button.obnotion-icon-picker-item",
       "context": "",
       "prop": "min-width",
       "from": "0",
@@ -3739,7 +3739,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".db-icon-picker-popover button.db-icon-color",
+      "selector": ".obnotion-icon-picker-popover button.obnotion-icon-color",
       "context": "",
       "prop": "border",
       "from": "0",
@@ -3749,7 +3749,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".db-icon-picker-popover button.db-icon-color",
+      "selector": ".obnotion-icon-picker-popover button.obnotion-icon-color",
       "context": "",
       "prop": "box-shadow",
       "from": "none",
@@ -3759,7 +3759,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".db-icon-picker-popover button.db-icon-color",
+      "selector": ".obnotion-icon-picker-popover button.obnotion-icon-color",
       "context": "",
       "prop": "min-width",
       "from": "0",
@@ -3769,7 +3769,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-heading-chevron-button",
+      "selector": ".obnotion-container .obnotion-heading-chevron-button",
       "context": "",
       "prop": "color",
       "from": "inherit",
@@ -3779,7 +3779,7 @@
       "classification": "unknown"
     },
     {
-      "selector": ".note-database-container .db-heading-rename-button",
+      "selector": ".obnotion-container .obnotion-heading-rename-button",
       "context": "",
       "prop": "color",
       "from": "inherit",

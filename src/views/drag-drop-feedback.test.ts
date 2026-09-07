@@ -73,7 +73,7 @@ describe("DragDropFeedbackState", () => {
     const state = new DragDropFeedbackState();
     let statusContent = "";
     const mockLiveRegion = {
-      className: "db-sr-status",
+      className: "obnotion-sr-status",
       getAttribute: (name: string) => (name === "aria-live" ? "polite" : null),
       setAttribute: () => undefined,
       set textContent(value: string) {

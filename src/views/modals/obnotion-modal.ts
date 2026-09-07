@@ -1,5 +1,5 @@
 // ───────────────────────────────────────────────────────────────────
-// MODULE:    db-modal
+// MODULE:    obnotion-modal
 // COMPONENT: shared modal base — host class and phone presentation
 // ───────────────────────────────────────────────────────────────────
 //
@@ -53,8 +53,8 @@ import {
  */
 export type DbModalPresentation = SurfaceShellPresentation;
 
-export const DB_MODAL_HOST_CLASS = "note-database-modal";
-export const DB_MODAL_FULLSCREEN_CLASS = "db-modal-fullscreen";
+export const DB_MODAL_HOST_CLASS = "obnotion-modal";
+export const DB_MODAL_FULLSCREEN_CLASS = "obnotion-modal-fullscreen";
 
 // ───────────────────────────────────────────────────────────────────
 // 3. BASE MODAL
@@ -90,7 +90,7 @@ export class DbModal extends Modal {
    */
   protected getSheetTitle(): string {
     const heading = Array.from(this.contentEl.querySelectorAll<HTMLElement>("h1, h2, h3"))
-      .find((candidate) => !candidate.closest(".db-sheet-modal-header"))
+      .find((candidate) => !candidate.closest(".obnotion-sheet-modal-header"))
       ?.textContent?.trim();
     return heading || t("menu.title");
   }

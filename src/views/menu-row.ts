@@ -22,7 +22,7 @@
 //
 // One dependency worth knowing before calling this with an arbitrary parent:
 // a row does NOT lay itself out. `display: flex` is declared on
-// `.db-owned-menu .db-menu-item`, and the trailing value is pushed right by a
+// `.obnotion-owned-menu .obnotion-menu-item`, and the trailing value is pushed right by a
 // `margin-left: auto` that only does anything inside a flex container. Build
 // rows inside the container `owned-menu` creates, or they render inline with
 // the value jammed against the label. Every caller today goes through
@@ -42,7 +42,7 @@ import { setIcon } from "obsidian";
 
 export interface MenuRowOptions {
   /**
-   * Extra classes for the row, on top of `db-menu-item`.
+   * Extra classes for the row, on top of `obnotion-menu-item`.
    *
    * For a caller whose container styles its rows through a class of its own. Without this the only
    * way to keep such a class was to hand-build the row, which is how a second row implementation
@@ -92,28 +92,28 @@ export interface MenuRowHandle {
  */
 export function createMenuRow(parent: HTMLElement, options: MenuRowOptions): MenuRowHandle {
   const row = parent.createEl("button", {
-    cls: options.cls ? `db-menu-item ${options.cls}` : "db-menu-item",
+    cls: options.cls ? `obnotion-menu-item ${options.cls}` : "obnotion-menu-item",
     attr: { type: "button", role: "menuitem" },
   });
 
   let iconEl: HTMLElement | null = null;
   if (options.icon) {
-    iconEl = row.createSpan({ cls: "db-menu-item-icon" });
+    iconEl = row.createSpan({ cls: "obnotion-menu-item-icon" });
     setIcon(iconEl, options.icon);
   }
 
-  const labelEl = row.createSpan({ cls: "db-menu-item-label", text: options.label });
+  const labelEl = row.createSpan({ cls: "obnotion-menu-item-label", text: options.label });
 
   let valueEl: HTMLElement | null = null;
   if (options.value !== undefined) {
-    valueEl = row.createSpan({ cls: "db-menu-item-current", text: options.value });
+    valueEl = row.createSpan({ cls: "obnotion-menu-item-current", text: options.value });
   }
 
   if (options.submenu || options.chevron) {
     // `margin-left: auto` on the value pushes it right; without a value the chevron needs to do
     // that itself, which is why it carries the trailing class too.
     const chevron = row.createSpan({
-      cls: `db-menu-item-chevron${valueEl ? "" : " db-menu-item-current"}`,
+      cls: `obnotion-menu-item-chevron${valueEl ? "" : " obnotion-menu-item-current"}`,
     });
     setIcon(chevron, "chevron-right");
     // The submenu claims announce a nested menu; a plain chevron row is a leaf action that
@@ -154,7 +154,7 @@ export function createMenuRow(parent: HTMLElement, options: MenuRowOptions): Men
     labelEl,
     valueEl,
     setValue(text) {
-      const target = valueEl ?? row.createSpan({ cls: "db-menu-item-current" });
+      const target = valueEl ?? row.createSpan({ cls: "obnotion-menu-item-current" });
       target.setText(text);
       valueEl = target;
     },
@@ -178,12 +178,12 @@ export function createMenuRow(parent: HTMLElement, options: MenuRowOptions): Men
  * affordance so the two families read alike.
  */
 export function createMenuSection(parent: HTMLElement, label: string): HTMLElement {
-  return parent.createDiv({ cls: "db-menu-section", text: label });
+  return parent.createDiv({ cls: "obnotion-menu-section", text: label });
 }
 
 /** A hairline between groups, for surfaces that separate without labelling. */
 export function createMenuSeparator(parent: HTMLElement): HTMLElement {
-  const separator = parent.createDiv({ cls: "db-menu-separator" });
+  const separator = parent.createDiv({ cls: "obnotion-menu-separator" });
   separator.setAttr("role", "separator");
   return separator;
 }

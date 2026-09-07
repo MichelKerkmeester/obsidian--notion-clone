@@ -33,7 +33,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { applySheetChrome, attachSheetChromeToModal } from "../../src/views/mobile-bottom-sheet";
-import { DbModal } from "../../src/views/modals/db-modal";
+import { DbModal } from "../../src/views/modals/obnotion-modal";
 import { ViewConfigPanelRenderer } from "../../src/views/view-config-panel-renderer";
 import { ColumnManagerRenderer } from "../../src/views/column-manager-renderer";
 import { installPopoverAutoClose } from "../../src/views/popover-auto-close";
@@ -43,8 +43,8 @@ import { overlayStack } from "../../src/views/overlay-stack";
 // 2. SHAPES
 // ───────────────────────────────────────────────────────────────────
 
-const SCRIM = ".db-mobile-sheet-scrim";
-const SHEET = ".db-mobile-bottom-sheet";
+const SCRIM = ".obnotion-mobile-sheet-scrim";
+const SHEET = ".obnotion-mobile-bottom-sheet";
 
 export interface TeardownResult {
   producer: string;
@@ -72,7 +72,7 @@ export type CloseShape = "chrome-then-remove" | "remove-only";
 
 function mountSheet(doc: Document, label: string): HTMLElement {
   const panel = doc.createElement("div");
-  panel.className = "db-panel";
+  panel.className = "obnotion-panel";
   panel.setAttribute("data-producer", label);
   doc.body.appendChild(panel);
   applySheetChrome(panel, true);
@@ -287,7 +287,7 @@ async function runHeaderPanel(
 ): Promise<TeardownResult> {
   clearBody(doc);
   const container = doc.createElement("div");
-  container.className = "note-database-container";
+  container.className = "obnotion-container";
   doc.body.appendChild(container);
   // A connected anchor, because the positioner returns without doing anything when it has none —
   // and a panel that never became a sheet would measure nothing about sheet teardown.
@@ -346,10 +346,10 @@ function headerPanelCases(doc: Document): (() => Promise<TeardownResult>)[] {
   const noop = (): void => undefined;
 
   return [
-    () => runHeaderPanel(doc, "view config panel (real renderer)", ".db-view-config-panel", (container, visible, anchor) => {
+    () => runHeaderPanel(doc, "view config panel (real renderer)", ".obnotion-view-config-panel", (container, visible, anchor) => {
       viewConfig.render(container, visible, config, { app: {} as never, onChange: noop } as never, anchor);
     }),
-    () => runHeaderPanel(doc, "column manager (real renderer)", ".db-column-manager", (container, visible, anchor) => {
+    () => runHeaderPanel(doc, "column manager (real renderer)", ".obnotion-column-manager", (container, visible, anchor) => {
       // `hiddenColumns` is a real Set here, not a stub: the header reads it to count visible
       // columns, so an empty object would throw rather than render.
       columnManager.render(container, visible, config, { groupByField: "", hiddenColumns: new Set<string>() } as never, columns, {
@@ -382,7 +382,7 @@ function headerPanelCases(doc: Document): (() => Promise<TeardownResult>)[] {
 async function runRegistrationCase(doc: Document): Promise<TeardownResult> {
   clearBody(doc);
   const container = doc.createElement("div");
-  container.className = "note-database-container";
+  container.className = "obnotion-container";
   doc.body.appendChild(container);
   const anchor = doc.createElement("button");
   container.appendChild(anchor);
@@ -394,7 +394,7 @@ async function runRegistrationCase(doc: Document): Promise<TeardownResult> {
   } as never;
   renderer.render(container, true, config, { app: {} as never, onChange: () => undefined } as never, anchor);
 
-  const foundBySelector = container.querySelector<HTMLElement>(".db-view-config-panel");
+  const foundBySelector = container.querySelector<HTMLElement>(".obnotion-view-config-panel");
   const foundByReference = renderer.getPanel();
 
   let dismissed = false;
@@ -440,7 +440,7 @@ async function runRegistrationCase(doc: Document): Promise<TeardownResult> {
 async function runScrimPointerContract(doc: Document): Promise<TeardownResult> {
   clearBody(doc);
   const modal = doc.createElement("div");
-  modal.className = "db-panel";
+  modal.className = "obnotion-panel";
   modal.setAttribute("data-producer", "scrim-default");
   doc.body.appendChild(modal);
   applySheetChrome(modal, true);
@@ -450,7 +450,7 @@ async function runScrimPointerContract(doc: Document): Promise<TeardownResult> {
   await settle(doc);
 
   const permeable = doc.createElement("div");
-  permeable.className = "db-panel";
+  permeable.className = "obnotion-panel";
   permeable.setAttribute("data-producer", "scrim-optout");
   doc.body.appendChild(permeable);
   applySheetChrome(permeable, true, { scrimCapturesPointer: false });

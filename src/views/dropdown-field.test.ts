@@ -44,7 +44,7 @@ vi.mock("./popover-auto-close", () => ({
 // The escalated desktop sheet reuses the phone sheet's own chrome, z-index
 // stacking and overlay-stack registration, none of which this lightweight mock document
 // implements (`getComputedStyle`, node siblings, a ResizeObserver-shaped frame watcher) — the
-// same reason a plain desktop dropdown test here never needed a `.db-mobile-bottom-sheet` class
+// same reason a plain desktop dropdown test here never needed a `.obnotion-mobile-bottom-sheet` class
 // to exist for real. `044`'s live sheet-grammar lane and the `constructed-dropdown` gate row are
 // what prove the chrome itself; this suite proves the escalation DECISION — the marker class
 // `openDropdownPopover` sets directly, the header, and the search row — so only the chrome/
@@ -339,7 +339,7 @@ function createMockDoc(): { doc: Document; body: MockElement; container: MockEle
   } as unknown as Document;
 
   body.ownerDocument = doc;
-  const container = body.createDiv({ cls: "note-database-container" });
+  const container = body.createDiv({ cls: "obnotion-container" });
   (globalThis as unknown as { window: { activeDocument: unknown } }).window.activeDocument = doc;
   return { doc, body, container: container as unknown as MockElement };
 }
@@ -376,7 +376,7 @@ describe("dropdown popover — anchoring", () => {
   it("left-aligns the popover under a trigger narrower than the panel, not right-aligned", async () => {
     const { doc, container } = createMockDoc();
     const { openDropdownMenu } = await import("./dropdown-field");
-    const anchor = container.createEl("button", { cls: "db-filter-operator-dropdown" }) as unknown as HTMLElement;
+    const anchor = container.createEl("button", { cls: "obnotion-filter-operator-dropdown" }) as unknown as HTMLElement;
     (anchor as unknown as MockElement).ownerDocument = doc;
     // The operator's screenshot: a ~190px-wide trigger, a popover measuring wider than it once
     // its rows are laid out. Anchor left 290, right 480 — matching `.operator-dropdown-report.png`.
@@ -396,7 +396,7 @@ describe("dropdown popover — anchoring", () => {
       onChange: () => {},
     });
 
-    const panel = container.querySelector<MockElement>(".db-dropdown-popover");
+    const panel = container.querySelector<MockElement>(".obnotion-dropdown-popover");
     expect(panel).not.toBeNull();
     // Left-aligned: the panel's left edge sits at the trigger's left edge (290), not at
     // `anchor.right - width` (480 - 280 = 200), which is the pre-fix, right-aligned defect.
@@ -420,7 +420,7 @@ describe("dropdown popover — anchoring", () => {
       onChange: () => {},
     });
 
-    const panel = container.querySelector<MockElement>(".db-dropdown-popover");
+    const panel = container.querySelector<MockElement>(".obnotion-dropdown-popover");
     const left = Number.parseFloat(String(panel!.style.left));
     // `margin: 12` in `positionToolbarPopover`'s default; the panel's right edge must not pass
     // the 1200px bound, and its left edge must not pass 0 either.
@@ -456,13 +456,13 @@ describe("dropdown popover — search availability", () => {
       onChange: () => {},
     });
 
-    const panel = container.querySelector<MockElement>(".db-dropdown-popover");
+    const panel = container.querySelector<MockElement>(".obnotion-dropdown-popover");
     expect(panel!.hasClass("is-searchable")).toBe(true);
-    const input = panel!.querySelector<MockElement>(".db-dropdown-search")!.children[0];
+    const input = panel!.querySelector<MockElement>(".obnotion-dropdown-search")!.children[0];
     input.value = "Option 3";
     input.dispatch("input");
     const visible = panel!
-      .querySelectorAll<MockElement>(".db-dropdown-option")
+      .querySelectorAll<MockElement>(".obnotion-dropdown-option")
       .filter((row) => !row.hasClass("is-hidden"));
     expect(visible.map((row) => row.getAttribute("data-value"))).toEqual(["v3"]);
   });
@@ -494,9 +494,9 @@ describe("dropdown popover — search availability", () => {
 
       // Five items, `searchable: true`: the count gate the desktop no longer applies still decides
       // the phone sheet's search row, so this list keeps rendering without one.
-      const panel = container.querySelector<MockElement>(".db-dropdown-popover");
+      const panel = container.querySelector<MockElement>(".obnotion-dropdown-popover");
       expect(panel).not.toBeNull();
-      expect(panel!.querySelector(".db-dropdown-search")).toBeNull();
+      expect(panel!.querySelector(".obnotion-dropdown-search")).toBeNull();
     } finally {
       vi.doUnmock("./surface-shell");
       vi.doUnmock("./popover-position");
@@ -519,9 +519,9 @@ describe("dropdown popover — search availability", () => {
       onChange: () => {},
     });
 
-    const panel = container.querySelector<MockElement>(".db-dropdown-popover");
+    const panel = container.querySelector<MockElement>(".obnotion-dropdown-popover");
     expect(panel!.hasClass("is-searchable")).toBe(true);
-    const input = panel!.querySelector<MockElement>(".db-dropdown-search")?.children[0];
+    const input = panel!.querySelector<MockElement>(".obnotion-dropdown-search")?.children[0];
     expect(input).toBeTruthy();
     expect(input!.getAttribute("role")).toBe("combobox");
     expect(input!.getAttribute("aria-expanded")).toBe("true");
@@ -530,7 +530,7 @@ describe("dropdown popover — search availability", () => {
     input!.value = "OPTION 3";
     input!.dispatch("input");
     const visible = panel!
-      .querySelectorAll<MockElement>(".db-dropdown-option")
+      .querySelectorAll<MockElement>(".obnotion-dropdown-option")
       .filter((row) => !row.hasClass("is-hidden"));
     expect(visible.map((row) => row.getAttribute("data-value"))).toEqual(["v3"]);
     expect(input!.getAttribute("aria-activedescendant")).toBe(visible[0].getAttribute("id"));
@@ -563,9 +563,9 @@ describe("dropdown popover — search-field keyboard contract", () => {
       onChange: (value) => { picked = value; },
     });
 
-    const panel = container.querySelector<MockElement>(".db-dropdown-popover");
-    const input = panel!.querySelector<MockElement>(".db-dropdown-search")!.children[0];
-    const rows = panel!.querySelectorAll<MockElement>(".db-dropdown-option");
+    const panel = container.querySelector<MockElement>(".obnotion-dropdown-popover");
+    const input = panel!.querySelector<MockElement>(".obnotion-dropdown-search")!.children[0];
+    const rows = panel!.querySelectorAll<MockElement>(".obnotion-dropdown-option");
     // The first ArrowDown hands focus from the search input to the currently active row (`v0`,
     // matching `value`) rather than advancing it — a real browser then routes every further
     // keydown through whichever row now has focus, which is the panel's own listener, not the
@@ -596,8 +596,8 @@ describe("dropdown popover — search-field keyboard contract", () => {
       onChange,
     });
 
-    const panel = container.querySelector<MockElement>(".db-dropdown-popover");
-    const input = panel!.querySelector<MockElement>(".db-dropdown-search")!.children[0];
+    const panel = container.querySelector<MockElement>(".obnotion-dropdown-popover");
+    const input = panel!.querySelector<MockElement>(".obnotion-dropdown-search")!.children[0];
     input.dispatch("keydown", { key: "ArrowDown" });
     input.dispatch("keydown", { key: "ArrowDown" });
     // Typing and arrowing never call `onChange` on their own — only a row's own selection does, so
@@ -614,11 +614,11 @@ describe("dropdown popover — search-field keyboard contract", () => {
 async function openField(optionCount: number, onChange: (value: string) => void = () => {}) {
   const { doc, container } = createMockDoc();
   const { createDropdownField } = await import("./dropdown-field");
-  const row = container.createDiv({ cls: "db-panel-row" });
+  const row = container.createDiv({ cls: "obnotion-panel-row" });
   const handle = createDropdownField({
     parent: row as unknown as HTMLElement,
     label: "Operator",
-    className: "db-panel-dropdown db-filter-operator-dropdown",
+    className: "obnotion-panel-dropdown obnotion-filter-operator-dropdown",
     options: makeOptions(optionCount),
     value: "v0",
     onChange,
@@ -626,8 +626,8 @@ async function openField(optionCount: number, onChange: (value: string) => void 
   const button = handle.button as unknown as MockElement;
   button.setRect({ left: 290, top: 100, right: 480, bottom: 130, width: 190, height: 30 });
   button.dispatch("click");
-  const input = row.querySelector<MockElement>(".db-dropdown-field-input")!;
-  const panel = container.querySelector<MockElement>(".db-dropdown-popover")!;
+  const input = row.querySelector<MockElement>(".obnotion-dropdown-field-input")!;
+  const panel = container.querySelector<MockElement>(".obnotion-dropdown-popover")!;
   return { doc, container, row, handle, button, input, panel };
 }
 
@@ -650,9 +650,9 @@ describe("dropdown field — the trigger becomes the query field", () => {
     expect(input.getAttribute("placeholder")).toBe("Option 0");
     expect(input.value).toBe("");
     // The trigger's layout classes come with it, or the row reflows the moment the field opens.
-    expect(input.hasClass("db-filter-operator-dropdown")).toBe(true);
+    expect(input.hasClass("obnotion-filter-operator-dropdown")).toBe(true);
     // One caret, not two: the panel renders no search row of its own behind the trigger's.
-    expect(panel.querySelector(".db-dropdown-search")).toBeNull();
+    expect(panel.querySelector(".obnotion-dropdown-search")).toBeNull();
     expect(panel.hasClass("is-searchable")).toBe(false);
   });
 
@@ -663,7 +663,7 @@ describe("dropdown field — the trigger becomes the query field", () => {
     input.dispatch("input");
 
     const visible = panel
-      .querySelectorAll<MockElement>(".db-dropdown-option")
+      .querySelectorAll<MockElement>(".obnotion-dropdown-option")
       .filter((option) => !option.hasClass("is-hidden"));
     expect(visible.map((option) => option.getAttribute("data-value"))).toEqual(["v3"]);
     expect(input.getAttribute("aria-activedescendant")).toBe(visible[0].getAttribute("id"));
@@ -672,7 +672,7 @@ describe("dropdown field — the trigger becomes the query field", () => {
   it("moves the highlight on ArrowDown without taking the caret out of the field, and Enter picks it", async () => {
     const picked: string[] = [];
     const { doc, input, panel } = await openField(5, (value) => { picked.push(value); });
-    const rows = panel.querySelectorAll<MockElement>(".db-dropdown-option");
+    const rows = panel.querySelectorAll<MockElement>(".obnotion-dropdown-option");
 
     input.dispatch("keydown", { key: "ArrowDown" });
     expect(doc.activeElement).toBe(input as unknown as Element);
@@ -692,8 +692,8 @@ describe("dropdown field — the trigger becomes the query field", () => {
     const event = input.dispatch("keydown", { key: "Escape" });
 
     expect(event.defaultPrevented).toBe(true);
-    expect(container.querySelector(".db-dropdown-popover")).toBeNull();
-    expect(row.querySelector(".db-dropdown-field-input")).toBeNull();
+    expect(container.querySelector(".obnotion-dropdown-popover")).toBeNull();
+    expect(row.querySelector(".obnotion-dropdown-field-input")).toBeNull();
     expect(button.hasClass("is-editing")).toBe(false);
     expect(doc.activeElement).toBe(button as unknown as Element);
     // `setText` is the only thing that rewrites the displayed value, and only a selected row calls
@@ -706,9 +706,9 @@ describe("dropdown field — the trigger becomes the query field", () => {
   it("puts the trigger back when a row is picked", async () => {
     const { row, button, panel } = await openField(5);
 
-    panel.querySelectorAll<MockElement>(".db-dropdown-option")[2].dispatch("click");
+    panel.querySelectorAll<MockElement>(".obnotion-dropdown-option")[2].dispatch("click");
 
-    expect(row.querySelector(".db-dropdown-field-input")).toBeNull();
+    expect(row.querySelector(".obnotion-dropdown-field-input")).toBeNull();
     expect(button.hasClass("is-editing")).toBe(false);
   });
 });
@@ -724,7 +724,7 @@ async function openFieldAt(
 ) {
   const { doc, container } = createMockDoc();
   const { createDropdownField } = await import("./dropdown-field");
-  const row = container.createDiv({ cls: "db-panel-row" });
+  const row = container.createDiv({ cls: "obnotion-panel-row" });
   const handle = createDropdownField({
     parent: row as unknown as HTMLElement,
     label: "Operator",
@@ -735,7 +735,7 @@ async function openFieldAt(
   const button = handle.button as unknown as MockElement;
   button.setRect(rect);
   button.dispatch("click");
-  const panel = container.querySelector<MockElement>(".db-dropdown-popover")!;
+  const panel = container.querySelector<MockElement>(".obnotion-dropdown-popover")!;
   return { doc, container, row, handle, button, panel };
 }
 
@@ -751,22 +751,22 @@ describe("dropdown field — desktop sheet escalation", () => {
   it("stays an anchored popover with the trigger as the query field when there is room", async () => {
     const { row, button, panel } = await openFieldAt(CRAMPING_RECT, 3);
 
-    expect(panel.hasClass("db-dropdown-popover-desktop-sheet")).toBe(false);
+    expect(panel.hasClass("obnotion-dropdown-popover-desktop-sheet")).toBe(false);
     // The negative control for the case below: the same anchor, a short enough list, and the
     // ordinary combobox conversion still happens — escalation is not simply "always on".
-    expect(row.querySelector(".db-dropdown-field-input")).not.toBeNull();
+    expect(row.querySelector(".obnotion-dropdown-field-input")).not.toBeNull();
     expect(button.hasClass("is-editing")).toBe(true);
   });
 
   it("escalates to a sheet, leaving the trigger a button, when the list cannot fit beside it", async () => {
     const { row, button, panel } = await openFieldAt(CRAMPING_RECT, 30);
 
-    // `applySheetChrome` itself — the `.db-mobile-bottom-sheet` class, drag-to-dismiss, z-index
+    // `applySheetChrome` itself — the `.obnotion-mobile-bottom-sheet` class, drag-to-dismiss, z-index
     // stacking — is stubbed above; its correctness is `044`'s live sheet-grammar lane's job. This
     // marker is `openDropdownPopover`'s own, set unconditionally on the escalation decision.
-    expect(panel.hasClass("db-dropdown-popover-desktop-sheet")).toBe(true);
+    expect(panel.hasClass("obnotion-dropdown-popover-desktop-sheet")).toBe(true);
     // The trigger never became the query field — the escalated sheet carries its own search row.
-    expect(row.querySelector(".db-dropdown-field-input")).toBeNull();
+    expect(row.querySelector(".obnotion-dropdown-field-input")).toBeNull();
     expect(button.hasClass("is-editing")).toBe(false);
     expect(button.getAttribute("aria-expanded")).toBe("true");
   });
@@ -774,14 +774,14 @@ describe("dropdown field — desktop sheet escalation", () => {
   it("carries the family's own sheet header — a title slot and the shared close affordance", async () => {
     const { panel } = await openFieldAt(CRAMPING_RECT, 30);
 
-    expect(panel.querySelector(".db-panel-title")).not.toBeNull();
-    expect(panel.querySelector(".db-sheet-close")).not.toBeNull();
+    expect(panel.querySelector(".obnotion-panel-title")).not.toBeNull();
+    expect(panel.querySelector(".obnotion-sheet-close")).not.toBeNull();
   });
 
   it("still opens with a focused, unconditional search input that survives the escalation", async () => {
     const { doc, panel } = await openFieldAt(CRAMPING_RECT, 30);
 
-    const searchWrap = panel.querySelector<MockElement>(".db-dropdown-search");
+    const searchWrap = panel.querySelector<MockElement>(".obnotion-dropdown-search");
     expect(searchWrap).not.toBeNull();
     const search = searchWrap!.children.find((child) => child.tagName === "INPUT");
     expect(search).toBeDefined();

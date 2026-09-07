@@ -1,13 +1,13 @@
 ---
-title: "src: Note Database plugin source"
-description: "The TypeScript source root for the Note Database Obsidian plugin: the plugin entrypoint, its settings and locale files, and the data and view layers underneath."
+title: "src: Obnotion plugin source"
+description: "The TypeScript source root for the Obnotion Obsidian plugin: the plugin entrypoint, its settings and locale files, and the data and view layers underneath."
 trigger_phrases:
   - "note database plugin src"
   - "obsidian plugin source root"
   - "where does the plugin start"
 ---
 
-# src: Note Database plugin source
+# src: Obnotion plugin source
 
 `src/` holds every TypeScript source file the plugin bundles. `main.ts` is the Obsidian
 entrypoint. Everything a database view computes lives under `data/`, everything it draws lives
@@ -46,7 +46,7 @@ src/
 
 | Path | Role |
 |---|---|
-| `main.ts` | The `NoteDatabasePlugin` class, view and command registration, file lifecycle |
+| `main.ts` | The `ObnotionPlugin` class, view and command registration, file lifecycle |
 | `settings.ts` | Plugin settings tab and the settings modal |
 | `i18n.ts` | `LocaleCode` union and the string dictionaries the UI reads |
 | `data/` | Database model, formulas, filters, grouping, relations, charts, export |

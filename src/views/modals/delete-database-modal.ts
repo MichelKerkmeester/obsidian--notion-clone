@@ -14,7 +14,7 @@
 
 import { App, Setting } from "obsidian";
 import { t } from "../../i18n";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
@@ -62,12 +62,12 @@ export class DeleteDatabaseModal extends DbModal {
     super.onOpen();
     const { contentEl } = this;
     contentEl.empty();
-    contentEl.addClass("note-database-modal");
-    contentEl.addClass("db-delete-database-modal");
+    contentEl.addClass("obnotion-modal");
+    contentEl.addClass("obnotion-delete-database-modal");
     contentEl.createEl("h3", { text: t("deleteDatabase.title", { name: this.dbName }) });
 
     contentEl.createDiv({
-      cls: "db-delete-modal-info",
+      cls: "obnotion-delete-modal-info",
       text: t("deleteDatabase.info", { count: this.fileCount }),
     });
 
@@ -81,8 +81,8 @@ export class DeleteDatabaseModal extends DbModal {
         });
     }
 
-    const btnRow = contentEl.createDiv({ cls: "db-delete-modal-buttons db-delete-modal-danger-row" });
-    const primaryActions = btnRow.createDiv({ cls: "db-delete-modal-primary-actions" });
+    const btnRow = contentEl.createDiv({ cls: "obnotion-delete-modal-buttons obnotion-delete-modal-danger-row" });
+    const primaryActions = btnRow.createDiv({ cls: "obnotion-delete-modal-primary-actions" });
 
     primaryActions.createEl("button", { text: t("common.cancel") }).onclick = () => {
       this.resolve?.(null);

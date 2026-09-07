@@ -29,18 +29,18 @@ type Story = StoryObj;
 
 /** Four swatches, standing in for the date, colour or icon picker's own content. */
 function buildBody(parent: HTMLElement): void {
-  for (let i = 0; i < 4; i += 1) parent.createDiv({ cls: "db-story-swatch" });
+  for (let i = 0; i < 4; i += 1) parent.createDiv({ cls: "obnotion-story-swatch" });
 }
 
 export const Desktop: Story = {
   render: () => {
     document.body.removeClass("is-phone");
     const panel = document.createElement("div");
-    panel.className = "db-color-picker-popup";
+    panel.className = "obnotion-color-picker-popup";
     const content = mountPickerSheetHeader(panel, document, {
       title: "Colour",
       onClose: () => {},
-      bodyCls: "db-color-picker-body",
+      bodyCls: "obnotion-color-picker-body",
     });
     buildBody(content);
     return panel;
@@ -51,11 +51,11 @@ export const Phone: Story = {
   render: () => {
     document.body.addClass("is-phone");
     const panel = document.createElement("div");
-    panel.className = "db-color-picker-popup db-mobile-bottom-sheet";
+    panel.className = "obnotion-color-picker-popup obnotion-mobile-bottom-sheet";
     const content = mountPickerSheetHeader(panel, document, {
       title: "Colour",
       onClose: () => {},
-      bodyCls: "db-color-picker-body",
+      bodyCls: "obnotion-color-picker-body",
     });
     buildBody(content);
     return panel;

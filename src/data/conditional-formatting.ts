@@ -120,11 +120,11 @@ function paintConditionalIcon(element: HTMLElement, token: string): void {
   const parsed = parseRecordIconToken(token, new Set(getValidRecordIconIds()));
   if (!parsed) return;
   const host: HTMLElement | null = element.tagName.toUpperCase() === "TR"
-    ? element.querySelector<HTMLElement>("td:not(.db-select-col)")
+    ? element.querySelector<HTMLElement>("td:not(.obnotion-select-col)")
     : element;
   if (!host) return;
   const icon = renderRecordIcon(host, token);
-  icon.addClass("db-conditional-format-icon");
+  icon.addClass("obnotion-conditional-format-icon");
   conditionalIcons.set(element, icon);
 }
 
@@ -172,36 +172,36 @@ export function applyConditionalFormat(
   database: DatabaseConfig | undefined,
   targetField?: string,
 ): void {
-  element.removeClass("db-conditional-format");
-  element.removeClass("db-conditional-format-bold");
-  element.style.removeProperty("--db-conditional-format-bg");
-  element.style.removeProperty("--db-conditional-format-fg");
-  element.style.removeProperty("--db-conditional-format-accent");
+  element.removeClass("obnotion-conditional-format");
+  element.removeClass("obnotion-conditional-format-bold");
+  element.style.removeProperty("--obnotion-conditional-format-bg");
+  element.style.removeProperty("--obnotion-conditional-format-fg");
+  element.style.removeProperty("--obnotion-conditional-format-accent");
   element.style.removeProperty("--card-bg");
   element.style.removeProperty("--card-accent");
-  element.style.removeProperty("--db-calendar-event-bg");
-  element.style.removeProperty("--db-calendar-event-accent");
-  element.removeAttribute("data-note-database-conditional-rule");
-  element.removeAttribute("data-note-database-conditional-icon");
+  element.style.removeProperty("--obnotion-calendar-event-bg");
+  element.style.removeProperty("--obnotion-calendar-event-accent");
+  element.removeAttribute("data-obnotion-conditional-rule");
+  element.removeAttribute("data-obnotion-conditional-icon");
   clearConditionalIcon(element);
   const match = getConditionalFormatMatch(row, config, database, targetField);
   if (!match) return;
-  element.addClass("db-conditional-format");
+  element.addClass("obnotion-conditional-format");
   if (match.color) {
     const statusBackground = `var(--status-color-bg-${match.color})`;
     const statusForeground = `var(--status-color-fg-${match.color})`;
-    element.style.setProperty("--db-conditional-format-bg", `color-mix(in srgb, ${statusBackground} 60%, transparent)`);
-    element.style.setProperty("--db-conditional-format-fg", statusForeground);
-    element.style.setProperty("--db-conditional-format-accent", statusForeground);
+    element.style.setProperty("--obnotion-conditional-format-bg", `color-mix(in srgb, ${statusBackground} 60%, transparent)`);
+    element.style.setProperty("--obnotion-conditional-format-fg", statusForeground);
+    element.style.setProperty("--obnotion-conditional-format-accent", statusForeground);
     element.style.setProperty("--card-bg", `color-mix(in srgb, ${statusBackground} 60%, transparent)`);
     element.style.setProperty("--card-accent", statusForeground);
-    element.style.setProperty("--db-calendar-event-bg", `color-mix(in srgb, ${statusBackground} 60%, transparent)`);
-    element.style.setProperty("--db-calendar-event-accent", statusForeground);
+    element.style.setProperty("--obnotion-calendar-event-bg", `color-mix(in srgb, ${statusBackground} 60%, transparent)`);
+    element.style.setProperty("--obnotion-calendar-event-accent", statusForeground);
   }
-  element.setAttribute("data-note-database-conditional-rule", match.ruleId);
-  if (match.bold) element.addClass("db-conditional-format-bold");
+  element.setAttribute("data-obnotion-conditional-rule", match.ruleId);
+  if (match.bold) element.addClass("obnotion-conditional-format-bold");
   if (match.icon) {
-    element.setAttribute("data-note-database-conditional-icon", match.icon);
+    element.setAttribute("data-obnotion-conditional-icon", match.icon);
     paintConditionalIcon(element, match.icon);
   }
 }

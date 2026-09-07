@@ -128,14 +128,14 @@ export class TableFooterRenderer {
     options: TableFooterOptions,
   ): HTMLElement {
     table.querySelector(":scope > tfoot")?.remove();
-    const footer = table.createEl("tfoot", { cls: "db-table-footer" });
-    const footerRow = footer.createEl("tr", { cls: "db-table-footer-row" });
-    if (!options.isReadOnly) footerRow.createEl("td", { cls: "db-table-footer-utility" });
-    if (options.hasRecordIcon) footerRow.createEl("td", { cls: "db-table-footer-utility" });
+    const footer = table.createEl("tfoot", { cls: "obnotion-table-footer" });
+    const footerRow = footer.createEl("tr", { cls: "obnotion-table-footer-row" });
+    if (!options.isReadOnly) footerRow.createEl("td", { cls: "obnotion-table-footer-utility" });
+    if (options.hasRecordIcon) footerRow.createEl("td", { cls: "obnotion-table-footer-utility" });
     for (const column of columns) {
       const cell = footerRow.createEl("td", {
-        cls: "db-table-footer-cell",
-        attr: { "data-note-database-column-key": column.key },
+        cls: "obnotion-table-footer-cell",
+        attr: { "data-obnotion-column-key": column.key },
       });
       const rules = (config.summaryRules || []).filter((rule) => rule.field === column.key);
       const values = rules
@@ -143,17 +143,17 @@ export class TableFooterRenderer {
         .map(({ kind, rawKind }) => ({ kind, rawKind, value: calculateTableAggregate(rows.map((row) => getRowValue(row, column)), rawKind) }))
         .filter(({ value }) => value != null && value !== "");
       const trigger = cell.createEl("button", {
-        cls: `db-table-footer-trigger${values.length ? " has-calculation" : ""}`,
+        cls: `obnotion-table-footer-trigger${values.length ? " has-calculation" : ""}`,
         attr: { type: "button", "aria-label": t("table.calculateFor", { name: column.label || column.key }) },
       });
       if (values.length > 0) {
         for (const { kind, rawKind, value } of values) {
-          const item = trigger.createSpan({ cls: "db-table-footer-value" });
-          item.createSpan({ cls: "db-table-footer-kind", text: kind ? getCalculationLabel(kind) : rawKind });
-          item.createSpan({ cls: "db-table-footer-result", text: formatCalculationValue(value, getColumnDisplayType(column, config.schema.computedFields)) });
+          const item = trigger.createSpan({ cls: "obnotion-table-footer-value" });
+          item.createSpan({ cls: "obnotion-table-footer-kind", text: kind ? getCalculationLabel(kind) : rawKind });
+          item.createSpan({ cls: "obnotion-table-footer-result", text: formatCalculationValue(value, getColumnDisplayType(column, config.schema.computedFields)) });
         }
       } else {
-        trigger.createSpan({ cls: "db-table-footer-calculate-hint", text: t("table.calculate") });
+        trigger.createSpan({ cls: "obnotion-table-footer-calculate-hint", text: t("table.calculate") });
       }
       if (options.isReadOnly) {
         trigger.disabled = true;
@@ -165,7 +165,7 @@ export class TableFooterRenderer {
         };
       }
     }
-    footerRow.createEl("td", { cls: "db-table-footer-add-column" });
+    footerRow.createEl("td", { cls: "obnotion-table-footer-add-column" });
     return footer;
   }
 
@@ -185,7 +185,7 @@ export class TableFooterRenderer {
       label: t("table.calculation.label", { name: column.label || column.key }),
       value: current || "",
       options: choices,
-      popoverClassName: "db-table-calculation-popover",
+      popoverClassName: "obnotion-table-calculation-popover",
       onChange: (value) => {
         const kind = normalizeCalculationKind(value);
         if (!kind && value !== "") return;

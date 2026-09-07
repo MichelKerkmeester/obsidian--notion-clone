@@ -206,7 +206,7 @@ export function applyRowSelectionPress(press: RowSelectionPress): string | null 
 
 /** True when a press landed on a row's own selection checkbox, not on a boolean field's checkbox. */
 export function isRowSelectionCheckbox(target: EventTarget | null): boolean {
-  return isHTMLElement(target) && target.matches("input.db-checkbox-row[type='checkbox']");
+  return isHTMLElement(target) && target.matches("input.obnotion-checkbox-row[type='checkbox']");
 }
 
 /**
@@ -219,7 +219,7 @@ export function isRowSelectionCheckbox(target: EventTarget | null): boolean {
  * is: two copies of the same target test is how this file's own history of drift started.
  */
 export function isTableCellTarget(target: EventTarget | null): boolean {
-  return isHTMLElement(target) && Boolean(target.closest("td[data-note-database-row-path][data-note-database-column-key]"));
+  return isHTMLElement(target) && Boolean(target.closest("td[data-obnotion-row-path][data-obnotion-column-key]"));
 }
 
 /**

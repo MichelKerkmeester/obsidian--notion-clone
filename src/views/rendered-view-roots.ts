@@ -15,30 +15,30 @@
 // ───────────────────────────────────────────────────────────────────
 
 const VIEW_ROOT_CLASSES = [
-  "db-table",
-  "db-table-wrap",
-  "db-grouped-table",
-  "db-board",
-  "db-kanban-board",
-  "db-gallery",
-  "db-gallery-grouped",
-  "db-gallery-total-header",
-  "db-list",
-  "db-list-grouped",
-  "db-list-total-header",
-  "db-chart",
-  "db-chart-empty",
-  "db-chart-number",
-  "db-calendar",
-  "db-timeline",
-  "db-summary",
-  "db-selection-status-bar",
-  "db-empty",
+  "obnotion-table",
+  "obnotion-table-wrap",
+  "obnotion-grouped-table",
+  "obnotion-board",
+  "obnotion-kanban-board",
+  "obnotion-gallery",
+  "obnotion-gallery-grouped",
+  "obnotion-gallery-total-header",
+  "obnotion-list",
+  "obnotion-list-grouped",
+  "obnotion-list-total-header",
+  "obnotion-chart",
+  "obnotion-chart-empty",
+  "obnotion-chart-number",
+  "obnotion-calendar",
+  "obnotion-timeline",
+  "obnotion-summary",
+  "obnotion-selection-status-bar",
+  "obnotion-empty",
 ];
 
 /** Classes a view puts on the container itself rather than on its root, and
  *  which therefore outlive the root unless they come off with it. */
-const VIEW_CONTAINER_CLASSES = ["db-kanban-view"];
+const VIEW_CONTAINER_CLASSES = ["obnotion-kanban-view"];
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TEARDOWN

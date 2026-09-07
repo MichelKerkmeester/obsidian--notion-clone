@@ -190,15 +190,15 @@ window.__mountUseCase = (useCaseId, rowLimit) => {
   const shot = document.getElementById("shot");
   shot.replaceChildren();
   const container = document.createElement("div");
-  container.className = "note-database-container";
+  container.className = "obnotion-container";
   shot.appendChild(container);
   new TableRenderer(bag).renderTable(container, config, rows);
 
   // Record rows are the ones carrying the path attribute renderRow sets. The
-  // renderer also emits a db-row-insert-line between every pair, so a bare
+  // renderer also emits a obnotion-row-insert-line between every pair, so a bare
   // "tbody tr" count reads exactly double and would have been accepted as the
   // row count by anyone who did not look.
-  const body = container.querySelectorAll("tbody tr[data-note-database-row-path]");
+  const body = container.querySelectorAll("tbody tr[data-obnotion-row-path]");
   return {
     useCase: useCase.name,
     rows: body.length,

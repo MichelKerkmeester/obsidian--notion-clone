@@ -4,7 +4,7 @@
 // ───────────────────────────────────────────────────────────────────
 //
 // The measured 224px/28px date-property submenu geometry (styles.css's
-// .db-calendar-date-field-dropdown) is scoped to the start/end date-field rows
+// .obnotion-calendar-date-field-dropdown) is scoped to the start/end date-field rows
 // only, not every dropdown this popover renders — a title-field or scale
 // change that widened the shared className to the wrong rows would silently
 // stretch or shrink a dropdown never captured. createDropdownField's actual
@@ -114,10 +114,10 @@ describe("CalendarToolbarRenderer data section — date-field submenu scoping", 
 
     const byLabel = new Map(createDropdownFieldSpy.mock.calls.map(([call]) => [call.label, call.popoverClassName]));
 
-    expect(byLabel.get(t("viewConfig.eventStartDateField"))).toBe("db-calendar-options-dropdown db-calendar-date-field-dropdown");
-    expect(byLabel.get(t("viewConfig.eventEndDateField"))).toBe("db-calendar-options-dropdown db-calendar-date-field-dropdown");
+    expect(byLabel.get(t("viewConfig.eventStartDateField"))).toBe("obnotion-calendar-options-dropdown obnotion-calendar-date-field-dropdown");
+    expect(byLabel.get(t("viewConfig.eventEndDateField"))).toBe("obnotion-calendar-options-dropdown obnotion-calendar-date-field-dropdown");
     // The title field reuses the same generic dropdown but must not inherit the
     // date-field-only geometry class — it was never part of the measured row.
-    expect(byLabel.get(t("viewConfig.eventTitleField"))).toBe("db-calendar-options-dropdown");
+    expect(byLabel.get(t("viewConfig.eventTitleField"))).toBe("obnotion-calendar-options-dropdown");
   });
 });

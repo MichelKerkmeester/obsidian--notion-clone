@@ -115,12 +115,12 @@ export function createOwnedMenu(
   doc: Document,
   options: { returnFocus?: HTMLElement | null; onClose?: () => void; title?: string } = {},
 ): OwnedMenuHandle {
-  // `db-surface` is what carries the design tokens to a surface mounted outside the plugin's
+  // `obnotion-surface` is what carries the design tokens to a surface mounted outside the plugin's
   // container. Without it a menu on the body inherits none of the scale and silently falls back to
   // whatever the browser and the host theme supply — measured across every overlay class, seventy
   // of seventy-three lose their tokens at the place they actually mount, and a menu ships
   // square-cornered a size too large.
-  const el = doc.body.createDiv({ cls: "db-surface db-menu db-owned-menu" });
+  const el = doc.body.createDiv({ cls: "obnotion-surface obnotion-menu obnotion-owned-menu" });
   el.setAttr("role", "menu");
   el.setAttr("tabindex", "-1");
 
@@ -139,7 +139,7 @@ export function createOwnedMenu(
   let childRow: HTMLElement | null = null;
 
   const rows = (): HTMLElement[] =>
-    Array.from(el.querySelectorAll<HTMLElement>(".db-menu-item:not([disabled])"));
+    Array.from(el.querySelectorAll<HTMLElement>(".obnotion-menu-item:not([disabled])"));
 
   /** Closes the open child submenu, if any. A no-op when none is open. */
   const closeChildMenu = () => {
@@ -162,7 +162,7 @@ export function createOwnedMenu(
     // Take the sheet chrome down before the node goes, not after: the backdrop is a sibling on the
     // body rather than a child, so removing the menu alone would leave the whole app dimmed behind
     // a surface that is no longer there.
-    if (el.hasClass("db-mobile-bottom-sheet")) applySheetChrome(el, false);
+    if (el.hasClass("obnotion-mobile-bottom-sheet")) applySheetChrome(el, false);
     el.remove();
     options.onClose?.();
     options.returnFocus?.focus({ preventScroll: true });
@@ -337,11 +337,11 @@ export function createOwnedMenu(
         // put it after every row instead of before all of them.
         const resolvedTitle = options.title
           || ("anchor" in target ? target.anchor.getAttribute("aria-label")?.trim() || undefined : undefined)
-          || ("submenuAnchor" in target ? target.submenuAnchor.querySelector(".db-menu-item-label")?.textContent?.trim() || undefined : undefined)
+          || ("submenuAnchor" in target ? target.submenuAnchor.querySelector(".obnotion-menu-item-label")?.textContent?.trim() || undefined : undefined)
           || resolveActiveViewName(doc)
           || t("menu.title");
         const header = buildShellHeader(el, { title: resolvedTitle, onClose: close });
-        const handleEl = el.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
+        const handleEl = el.querySelector<HTMLElement>(".obnotion-mobile-bottom-sheet-handle");
         el.insertBefore(header.header, handleEl ? handleEl.nextSibling : el.firstChild);
       } else {
         const bounds = getVisiblePopoverBounds(null);

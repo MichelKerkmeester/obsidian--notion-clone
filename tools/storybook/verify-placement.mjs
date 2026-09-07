@@ -233,7 +233,7 @@ const page_html = `<!doctype html><html><head>
   .workspace-split.mod-left-split { width: ${SIDEBAR}px; flex: 0 0 ${SIDEBAR}px; background: #eee; }
   .is-phone .workspace-split.mod-left-split,
   .is-phone .workspace-split.mod-right-split { display: none; }
-  .note-database-container { position: relative; height: 100%; padding: 40px; }
+  .obnotion-container { position: relative; height: 100%; padding: 40px; }
   /* Reproduced from the shipped Obsidian stylesheet, because it changes what is even possible.
      contain:strict includes paint containment, which makes the leaf the containing block for
      fixed-position descendants AND clips them; isolation:isolate traps every descendant z-index
@@ -256,7 +256,7 @@ const page_html = `<!doctype html><html><head>
     <div class="workspace-split mod-left-split"></div>
     <div class="workspace-split mod-root">
       <div class="workspace-leaf"><div class="workspace-leaf-content"><div class="view-content">
-      <div class="note-database-container"><div class="anchor" id="anchor"></div></div>
+      <div class="obnotion-container"><div class="anchor" id="anchor"></div></div>
       </div></div></div>
     </div>
     <div class="workspace-split mod-right-split"></div>
@@ -330,7 +330,7 @@ await page.addScriptTag({ content: positionerJs });
 const results = await section("desktop workspace geometry", () => page.evaluate(() => {
   const out = [];
   const { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER } = globalThis.__place;
-  const container = document.querySelector(".note-database-container");
+  const container = document.querySelector(".obnotion-container");
   const rootSplit = document.querySelector(".workspace-split.mod-root");
 
   const build = (rows) => {
@@ -355,7 +355,7 @@ const results = await section("desktop workspace geometry", () => page.evaluate(
   // Both arguments are measured in one case. `null` alone cannot fail this way, so on its own it
   // would be evidence about the wrong call.
   {
-    const fresh = document.body.createDiv({ cls: "db-anchored-popover" });
+    const fresh = document.body.createDiv({ cls: "obnotion-anchored-popover" });
     fresh.setCssProps({ position: "fixed", width: "292px" });
     const withNull = getVisiblePopoverBounds(null);
     const withPanel = getVisiblePopoverBounds(fresh);
@@ -465,7 +465,7 @@ const results = await section("desktop workspace geometry", () => page.evaluate(
   // widget `contain: paint !important`. Placement can be exactly right and the surface still be cut
   // off at the widget's own edge, because no coordinate lets a box escape a paint-contained
   // ancestor. That is why the sheet is portalled, and this is the same problem one layer in.
-  const widget = document.querySelector(".note-database-container").createDiv({ cls: "cm-widget-probe" });
+  const widget = document.querySelector(".obnotion-container").createDiv({ cls: "cm-widget-probe" });
   widget.setCssProps({ position: "relative", height: "180px", contain: "paint", overflow: "visible" });
   const wAnchor = widget.createDiv({ cls: "anchor" });
   wAnchor.setCssProps({ position: "absolute", left: "40px", top: "120px", width: "120px", height: "28px" });
@@ -561,7 +561,7 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   // handle. The offset arithmetic that reads the navbar lives in the positioner, so it was never
   // executed here — which is why adding a navbar to the page changed no asserted number and the
   // harness agreed with the device for the wrong reason.
-  const anchoredHost = document.body.createDiv({ cls: "note-database-container" });
+  const anchoredHost = document.body.createDiv({ cls: "obnotion-container" });
   const anchor = anchoredHost.createDiv({ cls: "anchor" });
   const anchored = anchoredHost.createDiv({ cls: "panel" });
   for (let i = 0; i < 6; i += 1) anchored.createDiv({ cls: "row", text: `Row ${i}` });
@@ -596,7 +596,7 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
       : "no .mobile-navbar in the page — the harness cannot observe this at all",
   });
   anchoredHost.remove();
-  const panel = document.body.createDiv({ cls: "note-database-container" });
+  const panel = document.body.createDiv({ cls: "obnotion-container" });
   for (let i = 0; i < 40; i += 1) panel.createDiv({ text: `Row ${i}` });
 
   applySheetChrome(panel, true);
@@ -644,9 +644,9 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   //
   // What is asserted now is the outcome. `position: fixed` resolves against the viewport, so a
   // sheet whose bottom is 0 reaches the floor from inside the container.
-  const sheetHost = document.querySelector(".note-database-container");
+  const sheetHost = document.querySelector(".obnotion-container");
   const sheetAnchor = sheetHost.createDiv({ cls: "anchor" });
-  const sheetPanel = sheetHost.createDiv({ cls: "db-record-detail-panel" });
+  const sheetPanel = sheetHost.createDiv({ cls: "obnotion-record-detail-panel" });
   // Real content, not a fixed height. The sheet sizes to what it holds, so an empty panel measures
   // 48px and passes the floor checks while covering almost none of the navigation band — a check
   // that would report success on a sheet no user could see.
@@ -656,9 +656,9 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   // means what it says on content tall enough to classify flush, which is what an ordinary record
   // (rarely under a dozen properties) actually renders as.
   for (let i = 0; i < 20; i += 1) {
-    const field = sheetPanel.createDiv({ cls: "db-record-detail-field" });
-    field.createDiv({ cls: "db-record-detail-label", text: `Field ${i}` });
-    field.createDiv({ cls: "db-record-detail-value", text: `Value ${i}` });
+    const field = sheetPanel.createDiv({ cls: "obnotion-record-detail-field" });
+    field.createDiv({ cls: "obnotion-record-detail-label", text: `Field ${i}` });
+    field.createDiv({ cls: "obnotion-record-detail-value", text: `Value ${i}` });
   }
   positionToolbarPopover(sheetPanel, sheetAnchor, {});
 
@@ -707,15 +707,15 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   // fixture renders static markup and imports nothing from src/.
   //
   // The rows are built with the shipped `renderCardField`, not with hand-written markup. An earlier
-  // sheet check in this file builds its rows with the class names `db-record-detail-label` and
-  // `db-record-detail-value`, and production emits neither — it emits `db-record-detail-field-label`
-  // on a span and `db-board-card-value` on a div. Those checks are measuring a stylesheet path no
+  // sheet check in this file builds its rows with the class names `obnotion-record-detail-label` and
+  // `obnotion-record-detail-value`, and production emits neither — it emits `obnotion-record-detail-field-label`
+  // on a span and `obnotion-board-card-value` on a div. Those checks are measuring a stylesheet path no
   // user reaches. Bundling the renderer means the harness cannot drift from production that way,
   // because there is only one of them.
-  const rhythmHost = document.body.createDiv({ cls: "note-database-container" });
+  const rhythmHost = document.body.createDiv({ cls: "obnotion-container" });
   const rhythmAnchor = rhythmHost.createDiv({ cls: "anchor" });
-  const rhythmPanel = rhythmHost.createDiv({ cls: "db-record-detail-panel" });
-  const rhythmFields = rhythmPanel.createDiv({ cls: "db-record-detail-fields" });
+  const rhythmPanel = rhythmHost.createDiv({ cls: "obnotion-record-detail-panel" });
+  const rhythmFields = rhythmPanel.createDiv({ cls: "obnotion-record-detail-fields" });
   // The operator's own record, and enough repeats to drive the sheet into its height cap — a short
   // sheet passes the "fits above the keyboard" check without the cap ever being consulted.
   const RECORD = [
@@ -729,9 +729,9 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
     rhythmFields.appendChild(globalThis.__place.renderCardField({
       app: {}, row: fieldRow, col: { key: label, label, type: "text" }, config: {},
       value, displayType: "text", empty: false,
-      fieldClass: "db-record-detail-field", valueClass: "db-board-card-value",
-      labelClass: "db-record-detail-field-label", badgesClass: "db-board-card-badges",
-      linkClass: "db-board-card-link", wrap: false, readOnly: false,
+      fieldClass: "obnotion-record-detail-field", valueClass: "obnotion-board-card-value",
+      labelClass: "obnotion-record-detail-field-label", badgesClass: "obnotion-board-card-badges",
+      linkClass: "obnotion-board-card-link", wrap: false, readOnly: false,
     }));
   }
   positionToolbarPopover(rhythmPanel, rhythmAnchor, { minWidth: 240, preferredWidth: 360, maxWidth: 420 });
@@ -744,9 +744,9 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
     const rect = range.getBoundingClientRect();
     return rect.width ? rect : el.getBoundingClientRect();
   };
-  const fieldRows = [...rhythmFields.querySelectorAll(".db-record-detail-field")];
-  const labelText = fieldRows.map((r) => textRect(r.querySelector(".db-record-detail-field-label")));
-  const valueText = fieldRows.map((r) => textRect(r.querySelector(".db-board-card-value")));
+  const fieldRows = [...rhythmFields.querySelectorAll(".obnotion-record-detail-field")];
+  const labelText = fieldRows.map((r) => textRect(r.querySelector(".obnotion-record-detail-field-label")));
+  const valueText = fieldRows.map((r) => textRect(r.querySelector(".obnotion-board-card-value")));
   const rowBoxes = fieldRows.map((r) => r.getBoundingClientRect());
   const sheetBox = rhythmPanel.getBoundingClientRect();
 
@@ -816,38 +816,38 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   // Read the sizes off the project's own tokens rather than off numbers typed into this file, so
   // retuning the scale moves the check with it instead of leaving it asserting a stale literal.
   //
-  // Off the sheet, not off the document element: these tokens are declared on `.db-surface` and the
+  // Off the sheet, not off the document element: these tokens are declared on `.obnotion-surface` and the
   // plugin's other surface roots, never on `:root`. Reading them from `documentElement` returns the
   // empty string, which `parseFloat` turns into NaN and a careless check turns into 0 === 0.
   const tokenPx = (name) => parseFloat(
     getComputedStyle(rhythmPanel).getPropertyValue(name) || "",
   );
-  const labelPx = parseFloat(getComputedStyle(fieldRows[0].querySelector(".db-record-detail-field-label")).fontSize);
-  const valuePx = parseFloat(getComputedStyle(fieldRows[0].querySelector(".db-board-card-value")).fontSize);
+  const labelPx = parseFloat(getComputedStyle(fieldRows[0].querySelector(".obnotion-record-detail-field-label")).fontSize);
+  const valuePx = parseFloat(getComputedStyle(fieldRows[0].querySelector(".obnotion-board-card-value")).fontSize);
   out.push({
     name: "value text clears the size at which iOS zooms an input on focus",
     pass: valuePx >= 16,
-    detail: `value font-size=${valuePx}px, --db-font-lg=${tokenPx("--db-font-lg")}px`,
+    detail: `value font-size=${valuePx}px, --obnotion-font-lg=${tokenPx("--obnotion-font-lg")}px`,
   });
   out.push({
     name: "label and value are both on the project's type scale, label no larger",
-    // Bound to --db-font-base rather than --db-font-md since the label moved onto the base step.
+    // Bound to --obnotion-font-base rather than --obnotion-font-md since the label moved onto the base step.
     // The property asserted is unchanged and just as able to fail: the label must equal a token
     // rather than a literal, the value must equal its own token, and the label must not outgrow
     // the value. Only which token the label is expected to read has moved with the label.
-    pass: labelPx === tokenPx("--db-font-base") && valuePx === tokenPx("--db-font-lg") && labelPx <= valuePx,
-    detail: `label=${labelPx}px (--db-font-base=${tokenPx("--db-font-base")}) `
-      + `value=${valuePx}px (--db-font-lg=${tokenPx("--db-font-lg")})`,
+    pass: labelPx === tokenPx("--obnotion-font-base") && valuePx === tokenPx("--obnotion-font-lg") && labelPx <= valuePx,
+    detail: `label=${labelPx}px (--obnotion-font-base=${tokenPx("--obnotion-font-base")}) `
+      + `value=${valuePx}px (--obnotion-font-lg=${tokenPx("--obnotion-font-lg")})`,
   });
 
   // A label wider than its column must truncate, not shove the column sideways. Measured on the
   // value's BOX: its text rect cannot move while the value is right-aligned, so a check written
   // against the text rect passes against the defect and can never fail.
   const longRow = fieldRows[2];
-  const longLabel = longRow.querySelector(".db-record-detail-field-label");
-  const columnBefore = longRow.querySelector(".db-board-card-value").getBoundingClientRect().left;
+  const longLabel = longRow.querySelector(".obnotion-record-detail-field-label");
+  const columnBefore = longRow.querySelector(".obnotion-board-card-value").getBoundingClientRect().left;
   longLabel.textContent = "A supercalifragilistic property name";
-  const columnAfter = longRow.querySelector(".db-board-card-value").getBoundingClientRect().left;
+  const columnAfter = longRow.querySelector(".obnotion-board-card-value").getBoundingClientRect().left;
   longLabel.textContent = "Subscriptions";
   out.push({
     name: "a long label truncates instead of moving the value column",
@@ -862,7 +862,7 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   // The standalone fixture below drives a ROW selection rather than a cell one: a phone no longer
   // builds a bottom-docked bar for a cell selection at all (its own pill-shape section runs
   // further down), and the bar mechanism this whole span measures — the keyboard dock, the
-  // `--db-keyboard-inset` fallback trap, the safe-area floor — is the row bar's own, unchanged by
+  // `--obnotion-keyboard-inset` fallback trap, the safe-area floor — is the row bar's own, unchanged by
   // that leg. Keeping this fixture on the surface that still produces the bar is what lets every
   // check below keep asserting the same mechanism rather than a fixture built to please it.
   const selectedAddresses = [
@@ -876,7 +876,7 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   // those. It decides whether the bar carries an undo action, and a fresh view starts it empty, so
   // that is what a view drawn at rest holds and what is supplied here.
   const renderStandaloneSelection = () => {
-    const host = document.body.createDiv({ cls: "note-database-container" });
+    const host = document.body.createDiv({ cls: "obnotion-container" });
     const view = Object.create(DatabaseView.prototype);
     view.containerEl_ = host;
     view.selectedRows = new Set(["record.md"]);
@@ -888,17 +888,17 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
     view.getSelectedCellAddresses = () => [];
     view.getConfig = () => ({ schema: { columns: [] } });
     DatabaseView.prototype.renderSelectionStatusBar.call(view);
-    return { host, view, bar: host.querySelector(".db-selection-status-bar") };
+    return { host, view, bar: host.querySelector(".obnotion-selection-status-bar") };
   };
   const renderEmbeddedSelection = () => {
-    const host = document.body.createDiv({ cls: "note-database-embed note-database-container" });
+    const host = document.body.createDiv({ cls: "obnotion-embed obnotion-container" });
     const renderer = Object.create(EmbeddedDatabaseRenderer.prototype);
     renderer.containerEl = host;
     renderer.config = { viewType: "table" };
     renderer.cellSelection = { anchor: selectedAddresses[0], focus: selectedAddresses[1] };
     renderer.getSelectedEmbedCellAddresses = () => selectedAddresses;
     EmbeddedDatabaseRenderer.prototype.renderEmbedSelectionStatusBar.call(renderer);
-    return { host, bar: host.querySelector(".db-selection-status-bar") };
+    return { host, bar: host.querySelector(".obnotion-selection-status-bar") };
   };
   // The bar's own checks need a page with nothing else docked at the bottom.
   //
@@ -907,7 +907,7 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   // "one thing owns the phone's bottom edge". Here it would mean the checks below measured a 0x0
   // rectangle and reported the bar as failing the thumb floor and the keyboard clearance, which is a
   // fixture artefact wearing the costume of a product defect.
-  const releaseDock = () => document.body.removeClass("db-bottom-dock-taken");
+  const releaseDock = () => document.body.removeClass("obnotion-bottom-dock-taken");
   releaseDock();
   const standaloneSelection = renderStandaloneSelection();
   const embeddedSelection = renderEmbeddedSelection();
@@ -920,7 +920,7 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   const selectionBarRect = selectionBar.getBoundingClientRect();
   const selectionBarClientRight = selectionBarRect.left + selectionBar.clientLeft + selectionBar.clientWidth;
   const selectionActions = [...selectionBar.querySelectorAll(
-    ".db-selection-action, .db-selection-clear-pill, .db-selection-delete",
+    ".obnotion-selection-action, .obnotion-selection-clear-pill, .obnotion-selection-delete",
   )];
   const selectionActionRights = selectionActions.map((el) => el.getBoundingClientRect().right);
   const maxSelectionActionRight = Math.max(...selectionActionRights);
@@ -958,9 +958,9 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   // point, driven with a cell range instead of a row set, plus two real marker elements carrying
   // the class the positioner reads, so the anchor and clamp math below run against actual rects
   // rather than a stand-in the check would have to trust.
-  const pillHost = document.body.createDiv({ cls: "note-database-container" });
+  const pillHost = document.body.createDiv({ cls: "obnotion-container" });
   pillHost.setCssProps({ position: "fixed", top: "0", left: "0", width: "390px", height: "844px" });
-  pillHost.style.setProperty("--db-mobile-navbar-height", "80px");
+  pillHost.style.setProperty("--obnotion-mobile-navbar-height", "80px");
   const pillView = Object.create(DatabaseView.prototype);
   pillView.containerEl_ = pillHost;
   pillView.selectedRows = new Set();
@@ -977,25 +977,25 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
       { key: "name", label: "Name", type: "text" },
     ] },
   });
-  const rangeMarkerA = pillHost.createDiv({ cls: "db-cell-range-selected" });
+  const rangeMarkerA = pillHost.createDiv({ cls: "obnotion-cell-range-selected" });
   rangeMarkerA.setCssProps({ position: "fixed", top: "300px", left: "40px", width: "100px", height: "36px" });
-  const rangeMarkerB = pillHost.createDiv({ cls: "db-cell-range-selected" });
+  const rangeMarkerB = pillHost.createDiv({ cls: "obnotion-cell-range-selected" });
   rangeMarkerB.setCssProps({ position: "fixed", top: "300px", left: "140px", width: "100px", height: "36px" });
 
   DatabaseView.prototype.renderSelectionStatusBar.call(pillView);
-  const pillBarCount = pillHost.querySelectorAll(":scope > .db-selection-status-bar").length;
-  let pill = pillHost.querySelector(":scope > .db-cell-selection-pill");
-  const pillCount = pillHost.querySelectorAll(":scope > .db-cell-selection-pill").length;
+  const pillBarCount = pillHost.querySelectorAll(":scope > .obnotion-selection-status-bar").length;
+  let pill = pillHost.querySelector(":scope > .obnotion-cell-selection-pill");
+  const pillCount = pillHost.querySelectorAll(":scope > .obnotion-cell-selection-pill").length;
 
   out.push({
     name: "a phone cell selection builds no bottom-docked bar",
     pass: pillBarCount === 0,
-    detail: `.db-selection-status-bar count=${pillBarCount} (want 0)`,
+    detail: `.obnotion-selection-status-bar count=${pillBarCount} (want 0)`,
   });
   out.push({
     name: "a phone cell selection builds exactly one anchored pill",
     pass: pillCount === 1,
-    detail: `.db-cell-selection-pill count=${pillCount} (want 1)`,
+    detail: `.obnotion-cell-selection-pill count=${pillCount} (want 1)`,
   });
 
   if (pill) {
@@ -1057,15 +1057,15 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
     rangeMarkerA.setCssProps({ top: "810px", left: "40px", width: "100px", height: "20px" });
     rangeMarkerB.setCssProps({ top: "810px", left: "140px", width: "100px", height: "20px" });
     DatabaseView.prototype.renderSelectionStatusBar.call(pillView);
-    pill = pillHost.querySelector(":scope > .db-cell-selection-pill");
+    pill = pillHost.querySelector(":scope > .obnotion-cell-selection-pill");
     const beforeGap = window.innerHeight - pill.getBoundingClientRect().bottom;
-    pillHost.style.setProperty("--db-mobile-navbar-height", "0px");
+    pillHost.style.setProperty("--obnotion-mobile-navbar-height", "0px");
     DatabaseView.prototype.renderSelectionStatusBar.call(pillView);
-    pill = pillHost.querySelector(":scope > .db-cell-selection-pill");
+    pill = pillHost.querySelector(":scope > .obnotion-cell-selection-pill");
     const droppedGap = window.innerHeight - pill.getBoundingClientRect().bottom;
-    pillHost.style.setProperty("--db-mobile-navbar-height", "80px");
+    pillHost.style.setProperty("--obnotion-mobile-navbar-height", "80px");
     DatabaseView.prototype.renderSelectionStatusBar.call(pillView);
-    pill = pillHost.querySelector(":scope > .db-cell-selection-pill");
+    pill = pillHost.querySelector(":scope > .obnotion-cell-selection-pill");
     const restoredGap = window.innerHeight - pill.getBoundingClientRect().bottom;
     out.push({
       name: "navbar clearance negative control — dropping the published height closes the gap",
@@ -1075,11 +1075,11 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
 
     // The overflow: every reachable action within one tap of `···`, for a mixed-column range —
     // the single-editable-column "Bulk edit <Column>" branch is not exercised by this fixture.
-    const moreBtn = pill.querySelector(".db-selection-more");
+    const moreBtn = pill.querySelector(".obnotion-selection-more");
     DatabaseView.prototype.openCellSelectionActionsMenu.call(pillView, moreBtn);
     await new Promise((resolve) => requestAnimationFrame(resolve));
-    const overflowRows = Array.from(document.querySelectorAll(".db-menu-item")).filter((el) => el.textContent?.trim().length);
-    const overflowLabels = overflowRows.map((el) => el.querySelector(".db-menu-item-label")?.textContent?.trim() || el.textContent.trim());
+    const overflowRows = Array.from(document.querySelectorAll(".obnotion-menu-item")).filter((el) => el.textContent?.trim().length);
+    const overflowLabels = overflowRows.map((el) => el.querySelector(".obnotion-menu-item-label")?.textContent?.trim() || el.textContent.trim());
     out.push({
       name: "the overflow reaches Copy TSV, Copy Markdown, Copy CSV, Paste, Fill and Clear",
       pass: ["Copy TSV", "Copy Markdown", "Copy CSV", "Paste", "Fill", "Clear"].every(
@@ -1089,7 +1089,7 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
     });
     const overflowRowCountBefore = overflowRows.length;
     overflowRows[0]?.remove();
-    const overflowRowCountAfter = document.querySelectorAll(".db-menu-item").length;
+    const overflowRowCountAfter = document.querySelectorAll(".obnotion-menu-item").length;
     out.push({
       name: "overflow reachability negative control — dropping a row lowers the count",
       pass: overflowRowCountAfter === overflowRowCountBefore - 1,
@@ -1104,14 +1104,14 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   }
 
   // The dock claim: any open cell editor hides the pill, the same rule that already hides the bar.
-  document.body.addClass("db-bottom-dock-taken");
-  const dockedPill = pillHost.querySelector(":scope > .db-cell-selection-pill");
+  document.body.addClass("obnotion-bottom-dock-taken");
+  const dockedPill = pillHost.querySelector(":scope > .obnotion-cell-selection-pill");
   out.push({
     name: "an open cell editor hides the pill the way it already hides the bar",
     pass: dockedPill !== null && getComputedStyle(dockedPill).display === "none",
     detail: `pill display=${dockedPill ? getComputedStyle(dockedPill).display : "(no pill)"}`,
   });
-  document.body.removeClass("db-bottom-dock-taken");
+  document.body.removeClass("obnotion-bottom-dock-taken");
   pillHost.remove();
 
   // ── the keyboard ──
@@ -1278,7 +1278,7 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
     pass: Math.abs(fallbackSheetBox.bottom - fallbackFloor) <= 2,
     detail: `sheet bottom=${fallbackSheetBox.bottom.toFixed(0)} want=${fallbackFloor} `
       + `(window ${window.innerHeight}, visual viewport shrunk to ${window.visualViewport.height}); `
-      + `lever var=${rhythmPanel.style.getPropertyValue("--db-mobile-sheet-bottom") || "(unset)"}`,
+      + `lever var=${rhythmPanel.style.getPropertyValue("--obnotion-mobile-sheet-bottom") || "(unset)"}`,
   });
   out.push({
     name: "the selection bar clears a keyboard no host reported",
@@ -1317,8 +1317,8 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   // control breaks the property on purpose and confirms the assertion notices; a control that stops
   // reporting YES means its check has quietly become decorative.
   const controlRow = fieldRows[0];
-  const controlValue = controlRow.querySelector(".db-board-card-value");
-  const controlLabel = controlRow.querySelector(".db-record-detail-field-label");
+  const controlValue = controlRow.querySelector(".obnotion-board-card-value");
+  const controlLabel = controlRow.querySelector(".obnotion-record-detail-field-label");
 
   const beforeShove = controlValue.getBoundingClientRect().left;
   controlLabel.style.flex = "0 0 220px";
@@ -1400,28 +1400,28 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   // removes the bar and drops the subscription with it. After that the variable is gone, and a
   // shrink that would have republished it a moment earlier leaves it gone. A publisher still
   // holding its subscription would rewrite the variable on that very event and fail here.
-  const publishedWhileOpen = standaloneSelection.host.style.getPropertyValue("--db-keyboard-inset");
+  const publishedWhileOpen = standaloneSelection.host.style.getPropertyValue("--obnotion-keyboard-inset");
   standaloneSelection.view.selectedRows = new Set();
   standaloneSelection.view.cellSelection = undefined;
   standaloneSelection.view.getSelectedCellAddresses = () => [];
   DatabaseView.prototype.renderSelectionStatusBar.call(standaloneSelection.view);
-  const afterClear = standaloneSelection.host.style.getPropertyValue("--db-keyboard-inset");
+  const afterClear = standaloneSelection.host.style.getPropertyValue("--obnotion-keyboard-inset");
   shrinkVisualViewport(KEYBOARD);
   window.visualViewport.dispatchEvent(new window.Event("resize"));
   await settle();
-  const afterClearedShrink = standaloneSelection.host.style.getPropertyValue("--db-keyboard-inset");
+  const afterClearedShrink = standaloneSelection.host.style.getPropertyValue("--obnotion-keyboard-inset");
   restoreVisualViewport();
   out.push({
     name: "clearing the selection takes the keyboard publisher's viewport listener with it",
     pass: publishedWhileOpen !== "" && afterClear === "" && afterClearedShrink === "",
-    detail: `--db-keyboard-inset held "${publishedWhileOpen || "(unset)"}" while a bar was up, `
+    detail: `--obnotion-keyboard-inset held "${publishedWhileOpen || "(unset)"}" while a bar was up, `
       + `"${afterClear || "(unset)"}" once the selection cleared, and "${afterClearedShrink || "(unset)"}" `
       + `after a viewport shrink that would have republished it`,
   });
   out.push({
     name: "clearing the selection removes the bar it published for",
-    pass: !standaloneSelection.host.querySelector(".db-selection-status-bar"),
-    detail: `bars left in the container: ${standaloneSelection.host.querySelectorAll(".db-selection-status-bar").length} `
+    pass: !standaloneSelection.host.querySelector(".obnotion-selection-status-bar"),
+    detail: `bars left in the container: ${standaloneSelection.host.querySelectorAll(".obnotion-selection-status-bar").length} `
       + `(a surviving bar would keep the publisher legitimately alive and make the check above vacuous)`,
   });
 
@@ -1435,7 +1435,7 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   // this pair is written to catch, and it is invisible to any check that only looks for the
   // attribute. Both checks below drive two real renders at different counts through the shipped
   // method and compare the announcing NODE across them.
-  const liveHost = document.body.createDiv({ cls: "note-database-container" });
+  const liveHost = document.body.createDiv({ cls: "obnotion-container" });
   const liveView = Object.create(DatabaseView.prototype);
   liveView.containerEl_ = liveHost;
   liveView.selectedRows = new Set(["one.md", "two.md"]);
@@ -1465,7 +1465,7 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   // One region, and outside the bar. Two announcing nodes would make the pair above pick whichever
   // came first in the tree and could hide a stale one, and a region the rebuild can reach is the
   // original defect wearing a new class name.
-  const liveBar = liveHost.querySelector(".db-selection-status-bar");
+  const liveBar = liveHost.querySelector(".obnotion-selection-status-bar");
   out.push({
     name: "exactly one announcer exists and the bar rebuild cannot reach it",
     pass: announcerCount === 1 && !!liveBar && !!announcerAfter && !liveBar.contains(announcerAfter),
@@ -1539,7 +1539,7 @@ const menuResults = await section("the phone menu presentation", () => menuPhone
 
   const el = menu.el;
   const r = el.getBoundingClientRect();
-  const rowCount = el.querySelectorAll(".db-menu-item").length;
+  const rowCount = el.querySelectorAll(".obnotion-menu-item").length;
 
   out.push({
     name: "a phone menu docks to the bottom of the screen instead of opening at the point",
@@ -1563,15 +1563,15 @@ const menuResults = await section("the phone menu presentation", () => menuPhone
   // carried a bottom-sheet handle it had no gesture wired to.
   out.push({
     name: "a phone menu carries no grab handle",
-    pass: !el.querySelector(".db-mobile-bottom-sheet-handle"),
-    detail: `handle=${el.querySelector(".db-mobile-bottom-sheet-handle") ? "present" : "absent"} `
+    pass: !el.querySelector(".obnotion-mobile-bottom-sheet-handle"),
+    detail: `handle=${el.querySelector(".obnotion-mobile-bottom-sheet-handle") ? "present" : "absent"} `
       + `classes=${el.className}`,
   });
   // With no handle there is no band to test for stealing a row — the question becomes its
   // opposite: does the tap that lands on the first row's own painted rect actually reach that
   // row, with nothing invisible layered over it stealing the hit the way a handle's band used to.
   {
-    const rows = [...el.querySelectorAll(".db-menu-item")];
+    const rows = [...el.querySelectorAll(".obnotion-menu-item")];
     const firstRow = rows[0];
     const rr = firstRow ? firstRow.getBoundingClientRect() : null;
     const hitsFirstRow = rr
@@ -1593,7 +1593,7 @@ const menuResults = await section("the phone menu presentation", () => menuPhone
   // The backdrop has to take the tap, or the press that dismisses the menu also lands on the table
   // underneath. Read from the document rather than from the element: an inert backdrop is present
   // in the tree and absent from the hit test, and only the hit test is the behaviour.
-  const scrim = document.querySelector(".db-mobile-sheet-scrim");
+  const scrim = document.querySelector(".obnotion-mobile-sheet-scrim");
   const above = document.elementFromPoint(Math.round(vw / 2), Math.max(2, Math.round(r.top / 2)));
   out.push({
     name: "the backdrop over a menu sheet takes the tap rather than passing it to the table",
@@ -1603,9 +1603,9 @@ const menuResults = await section("the phone menu presentation", () => menuPhone
       + `the document paints ${above ? above.className || above.tagName : "nothing"} above the sheet`,
   });
 
-  const scrimWhileOpen = Boolean(document.querySelector(".db-mobile-sheet-scrim"));
+  const scrimWhileOpen = Boolean(document.querySelector(".obnotion-mobile-sheet-scrim"));
   menu.close();
-  const scrimAfterClose = Boolean(document.querySelector(".db-mobile-sheet-scrim"));
+  const scrimAfterClose = Boolean(document.querySelector(".obnotion-mobile-sheet-scrim"));
   out.push({
     name: "the backdrop arrives with the menu and leaves with it",
     pass: scrimWhileOpen && !scrimAfterClose && !el.isConnected,
@@ -1620,7 +1620,7 @@ const menuResults = await section("the phone menu presentation", () => menuPhone
   aligned.addRow({ label: "Without an icon" });
   aligned.addRow({ icon: "trash-2", label: "With another icon" });
   aligned.showAt({ x: 0, y: 0 });
-  const labelLefts = [...aligned.el.querySelectorAll(".db-menu-item-label")]
+  const labelLefts = [...aligned.el.querySelectorAll(".obnotion-menu-item-label")]
     .map((n) => Math.round(n.getBoundingClientRect().left));
   out.push({
     name: "rows in a sheet menu share one left edge, icon or no icon",
@@ -1633,20 +1633,20 @@ const menuResults = await section("the phone menu presentation", () => menuPhone
   // plus the class its container styles. Before the row component could carry that class the only
   // way to keep it was to hand-build the row, which is how a second implementation of this row came
   // to exist and to drift.
-  const container = document.querySelector(".note-database-container");
+  const container = document.querySelector(".obnotion-container");
   const anchor = container.createDiv({ cls: "anchor" });
-  const utilities = container.createDiv({ cls: "db-view-tab-popover db-toolbar-utilities-popover" });
+  const utilities = container.createDiv({ cls: "obnotion-view-tab-popover obnotion-toolbar-utilities-popover" });
   for (const [icon, label] of [
     ["arrow-left-right", "Display width"],
     ["refresh-cw", "Refresh database"],
     ["clipboard-copy", "Export to clipboard"],
     ["settings-2", "View settings"],
-  ]) createMenuRow(utilities, { cls: "db-toolbar-menu-row", icon, label });
+  ]) createMenuRow(utilities, { cls: "obnotion-toolbar-menu-row", icon, label });
   positionToolbarPopover(utilities, anchor, COMPACT_MENU_POPOVER);
-  const utilityRows = [...utilities.querySelectorAll(".db-menu-item")];
+  const utilityRows = [...utilities.querySelectorAll(".obnotion-menu-item")];
   const utilityStyle = getComputedStyle(utilityRows[0]);
   const utilityLefts = utilityRows.map((n) =>
-    Math.round(n.querySelector(".db-menu-item-label").getBoundingClientRect().left));
+    Math.round(n.querySelector(".obnotion-menu-item-label").getBoundingClientRect().left));
   out.push({
     name: "utilities rows keep their container's row layout after moving to the shared component",
     pass: utilityStyle.display === "flex"
@@ -1666,19 +1666,19 @@ const menuResults = await section("the phone menu presentation", () => menuPhone
   // The same shared row, in a sheet that is not the owned menu's own shell.
   //
   // This is the family case, and it is the one that was reported: the row's layout used to be
-  // written `.db-owned-menu .db-menu-item`, so a row built anywhere else rendered as an unstyled
+  // written `.obnotion-owned-menu .obnotion-menu-item`, so a row built anywhere else rendered as an unstyled
   // button — inline, centred, each one a different width, which is the ragged sheet in the device
   // screenshot. Re-keying the grammar to the row itself fixed it, and this is what holds it fixed.
   // A row is a row wherever it is mounted, or the shared component is shared in name only.
-  const bare = document.body.createDiv({ cls: "db-view-tab-popover" });
+  const bare = document.body.createDiv({ cls: "obnotion-view-tab-popover" });
   createMenuRow(bare, { icon: "pencil", label: "With an icon" });
   createMenuRow(bare, { label: "Without an icon" });
   createMenuRow(bare, { icon: "trash-2", label: "A much longer label than its siblings" });
   applySheetChrome(bare, true);
-  const bareRows = [...bare.querySelectorAll(".db-menu-item")];
+  const bareRows = [...bare.querySelectorAll(".obnotion-menu-item")];
   const bareStyle = getComputedStyle(bareRows[0]);
   const bareLefts = bareRows.map((n) =>
-    Math.round(n.querySelector(".db-menu-item-label").getBoundingClientRect().left));
+    Math.round(n.querySelector(".obnotion-menu-item-label").getBoundingClientRect().left));
   out.push({
     name: "a shared menu row lays itself out in any sheet, not only inside the owned menu",
     pass: bareStyle.display === "flex"
@@ -1716,7 +1716,7 @@ const dragCase = async (distance, { pauseMs = 0, steps = 2 } = {}) => {
     const menu = globalThis.__dragMenu = createOwnedMenu(document);
     for (let i = 0; i < 8; i += 1) menu.addRow({ icon: "pencil", label: `Row ${i}` });
     menu.showAt({ x: 10, y: 10 });
-    const handle = menu.el.querySelector(".db-mobile-bottom-sheet-handle");
+    const handle = menu.el.querySelector(".obnotion-mobile-bottom-sheet-handle");
     // A missing handle is a result, not a crash. Reading a rectangle off null aborts the whole run,
     // and a harness that dies on the defect it exists to find reports nothing at all.
     if (!handle) return null;
@@ -1737,7 +1737,7 @@ const dragCase = async (distance, { pauseMs = 0, steps = 2 } = {}) => {
   const after = await menuPhone.evaluate(() => {
     const state = {
       mounted: globalThis.__dragMenu.el.isConnected,
-      scrim: Boolean(document.querySelector(".db-mobile-sheet-scrim")),
+      scrim: Boolean(document.querySelector(".obnotion-mobile-sheet-scrim")),
     };
     globalThis.__dragMenu.close();
     return state;
@@ -1822,7 +1822,7 @@ await menuPhone.close();
 const addViewProbe = (isPhone) => {
   const out = [];
   const { ToolbarRenderer, createMenuRow } = globalThis.__place;
-  const host = document.querySelector(".note-database-container");
+  const host = document.querySelector(".obnotion-container");
   const anchor = host.createDiv({ cls: "anchor" });
   const renderer = new ToolbarRenderer();
   const db = {
@@ -1834,7 +1834,7 @@ const addViewProbe = (isPhone) => {
     views: [{ viewType: "table", name: "All" }],
   };
   renderer.showAddViewMenu(new MouseEvent("click"), { addView() {}, closeToolbarPopovers() {} }, anchor, db, 0);
-  const panel = document.querySelector(".db-add-view-popover");
+  const panel = document.querySelector(".obnotion-add-view-popover");
   const where = isPhone ? "phone" : "desktop";
   if (!panel) {
     out.push({ name: `add view: the surface renders (${where})`, pass: false, detail: "showAddViewMenu produced no panel" });
@@ -1860,7 +1860,7 @@ const addViewProbe = (isPhone) => {
     // the harness stub puts a "\u25c6" glyph. Reading the whole button therefore compared
     // "\u25c6Duplicate current view" against "Duplicate current view" and found no collision — a
     // harness artifact deciding the result of a product check. Read the label slot when there is one.
-    const labelSlot = el.querySelector(".db-menu-item-label");
+    const labelSlot = el.querySelector(".obnotion-menu-item-label");
     return (labelSlot ?? el).textContent.trim();
   };
   const controls = [...panel.querySelectorAll("input, select, textarea, button")];
@@ -1896,7 +1896,7 @@ const addViewProbe = (isPhone) => {
   // One row grammar. The comparison row is built by the shipped builder inside an owned
   // menu, so the two sides cannot drift apart in the harness; and the absolute value is pinned as
   // well as the difference, or a regression that moved BOTH would pass on equality alone.
-  const control = host.createDiv({ cls: "db-owned-menu" });
+  const control = host.createDiv({ cls: "obnotion-owned-menu" });
   const reference = createMenuRow(control, { icon: "copy", label: "Reference row" }).row;
   const refCs = getComputedStyle(reference);
   const box = (el) => {
@@ -1904,7 +1904,7 @@ const addViewProbe = (isPhone) => {
     return `${s.minHeight}|${s.paddingTop}/${s.paddingRight}/${s.paddingBottom}/${s.paddingLeft}|${s.fontSize}`;
   };
   const refBox = box(reference);
-  const rows = [...panel.querySelectorAll(".db-menu-item")];
+  const rows = [...panel.querySelectorAll(".obnotion-menu-item")];
   const offGrammar = rows.filter((r) => box(r) !== refBox);
   const expectedMinHeight = isPhone ? "44px" : "30px";
   out.push({
@@ -1946,8 +1946,8 @@ const addViewProbe = (isPhone) => {
   // distance, and it stayed green when the padding was reverted, because the separator and the
   // heading sit in between and are tall enough to carry the gap on their own. A check whose subject
   // is furniture cannot see the property it claims to measure.
-  const form = panel.querySelector(".db-add-view-form");
-  const choices = panel.querySelector(".db-add-view-choices");
+  const form = panel.querySelector(".obnotion-add-view-form");
+  const choices = panel.querySelector(".obnotion-add-view-choices");
   const formFields = [...form.children];
   const withinGaps = formFields.slice(1).map((el, i) =>
     Math.round(el.getBoundingClientRect().top - formFields[i].getBoundingClientRect().bottom));
@@ -1978,13 +1978,13 @@ const addViewProbe = (isPhone) => {
 
   // The groups are named, in the vocabulary the owned menu already uses.
   //
-  // The TEXT is load-bearing, not just the element. Counting `.db-menu-section` nodes is a
+  // The TEXT is load-bearing, not just the element. Counting `.obnotion-menu-section` nodes is a
   // class-name criterion: two empty divs satisfy it, draw nothing a reader can use, and still hold
   // the gap the check below measures — so the two clauses pass together while the surface says
   // nothing. Asserting the text is what separates "the group is named" from "the group has a box
   // where a name would go".
-  const sections = [...panel.querySelectorAll(".db-menu-section")];
-  const separators = panel.querySelectorAll(".db-menu-separator");
+  const sections = [...panel.querySelectorAll(".obnotion-menu-section")];
+  const separators = panel.querySelectorAll(".obnotion-menu-separator");
   const namedSections = sections.filter((el) => (el.textContent || "").trim().length > 0);
   out.push({
     name: `add view: the groups carry headings (${where})`,
@@ -2006,10 +2006,10 @@ const addViewProbe = (isPhone) => {
     return Math.round(box + parseFloat(getComputedStyle(el).paddingLeft || "0"));
   };
   const edges = {
-    heading: contentLeft(panel.querySelector(".db-menu-section")),
-    fieldLabel: contentLeft(panel.querySelector(".db-add-view-field-label")),
-    checkbox: contentLeft(panel.querySelector(".db-add-view-duplicate")),
-    rowIcon: contentLeft(panel.querySelector(".db-menu-item .db-menu-item-icon")),
+    heading: contentLeft(panel.querySelector(".obnotion-menu-section")),
+    fieldLabel: contentLeft(panel.querySelector(".obnotion-add-view-field-label")),
+    checkbox: contentLeft(panel.querySelector(".obnotion-add-view-duplicate")),
+    rowIcon: contentLeft(panel.querySelector(".obnotion-menu-item .obnotion-menu-item-icon")),
   };
   const distinctEdges = new Set(Object.values(edges));
   out.push({
@@ -2022,7 +2022,7 @@ const addViewProbe = (isPhone) => {
   // A row is a <button>, and a host stylesheet fills every bare button. Nothing may paint behind a
   // resting row: the reset used to be scoped to the owned menu, so the first surface to build rows
   // outside one got that fill as a visible band.
-  const restingRow = panel.querySelector(".db-menu-item");
+  const restingRow = panel.querySelector(".obnotion-menu-item");
   const rowBg = getComputedStyle(restingRow).backgroundColor;
   const transparent = rowBg === "rgba(0, 0, 0, 0)" || rowBg === "transparent";
   out.push({
@@ -2035,15 +2035,15 @@ const addViewProbe = (isPhone) => {
   // everything a sheet fails on the desktop side rather than passing quietly.
   const cs = getComputedStyle(panel);
   const rect = panel.getBoundingClientRect();
-  const isSheet = panel.classList.contains("db-mobile-bottom-sheet");
-  const scrim = Boolean(document.querySelector(".db-mobile-sheet-scrim"));
-  const handle = panel.querySelector(".db-mobile-bottom-sheet-handle");
+  const isSheet = panel.classList.contains("obnotion-mobile-bottom-sheet");
+  const scrim = Boolean(document.querySelector(".obnotion-mobile-sheet-scrim"));
+  const handle = panel.querySelector(".obnotion-mobile-bottom-sheet-handle");
   const handleBox = handle ? handle.getBoundingClientRect() : null;
   if (isPhone) {
     // Flush or floating — the add-view menu is short enough to
     // float, so "on the floor" is read against whichever inset the sheet actually classified as
     // rather than the flush shape's fixed 0.
-    const floating = panel.classList.contains("db-sheet-floating");
+    const floating = panel.classList.contains("obnotion-sheet-floating");
     const inset = floating ? Number.parseFloat(cs.left) || 0 : 0;
     out.push({
       name: "add view: on a phone the surface is a sheet on the viewport floor",
@@ -2092,7 +2092,7 @@ const addViewProbe = (isPhone) => {
     // The band is only allowed to be this big because everything it covers is inert. Asserted, not
     // assumed: the surface's own controls are hit-tested, and if one of them ever moves up under the
     // band this fails instead of the band quietly swallowing it the way the record sheet's did.
-    const controls = [...panel.querySelectorAll("button, input, select, textarea, .db-menu-item, [role=button]")];
+    const controls = [...panel.querySelectorAll("button, input, select, textarea, .obnotion-menu-item, [role=button]")];
     const swallowed = controls.filter((el) => {
       const r = el.getBoundingClientRect();
       const mid = document.elementFromPoint(Math.round(r.left + r.width / 2), Math.round(r.top + r.height / 2));
@@ -2128,7 +2128,7 @@ const addViewProbe = (isPhone) => {
   }
 
   panel.remove();
-  document.querySelector(".db-mobile-sheet-scrim")?.remove();
+  document.querySelector(".obnotion-mobile-sheet-scrim")?.remove();
   anchor.remove();
   return out;
 };
@@ -2188,18 +2188,18 @@ const grammarResults = await section("the shared row grammar on a phone", () => 
   const out = [];
   const { ColumnMenu } = globalThis.__place;
 
-  const labelXs = (root) => [...root.querySelectorAll(".db-menu-item")]
-    .map((row) => row.querySelector(".db-menu-item-label"))
+  const labelXs = (root) => [...root.querySelectorAll(".obnotion-menu-item")]
+    .map((row) => row.querySelector(".obnotion-menu-item-label"))
     .filter(Boolean)
     .map((label) => Math.round(label.getBoundingClientRect().x));
 
   // ── the column menu, through the class that ships it ────────────────
-  const anchor = document.querySelector(".note-database-container").createDiv({ cls: "anchor" });
+  const anchor = document.querySelector(".obnotion-container").createDiv({ cls: "anchor" });
   const columnMenu = new ColumnMenu(new Proxy({}, { get: () => () => {} }));
   const openEvent = new MouseEvent("click", { clientX: 120, clientY: 120, bubbles: true });
   Object.defineProperty(openEvent, "view", { value: window });
   columnMenu.show(openEvent, { key: "stocks", label: "Stocks", type: "text" }, anchor, {});
-  const sheet = document.querySelector(".db-owned-menu");
+  const sheet = document.querySelector(".obnotion-owned-menu");
 
   const xs = labelXs(sheet);
   const distinct = [...new Set(xs)];
@@ -2211,7 +2211,7 @@ const grammarResults = await section("the shared row grammar on a phone", () => 
       + "stated its own justify-content, with only the two chevron rows holding their edge)",
   });
 
-  const firstRow = sheet.querySelector(".db-menu-item");
+  const firstRow = sheet.querySelector(".obnotion-menu-item");
   const rowStyle = getComputedStyle(firstRow);
   out.push({
     name: "column menu: the row states its own main-axis alignment",
@@ -2222,7 +2222,7 @@ const grammarResults = await section("the shared row grammar on a phone", () => 
 
   // A thumb target, and a hairline between neighbours. The last row of the sheet draws none: a rule
   // under nothing is a border, not a separator.
-  const rows = [...sheet.querySelectorAll(".db-menu-item")];
+  const rows = [...sheet.querySelectorAll(".obnotion-menu-item")];
   const shortest = Math.min(...rows.map((row) => Math.round(row.getBoundingClientRect().height)));
   out.push({
     name: "column menu: every row clears the 44px thumb floor",
@@ -2234,8 +2234,8 @@ const grammarResults = await section("the shared row grammar on a phone", () => 
     const after = getComputedStyle(row, "::after");
     return after.content !== "none" && Math.round(parseFloat(after.height || "0")) === 1;
   };
-  const middle = rows.filter((row) => row.nextElementSibling?.classList.contains("db-menu-item"));
-  const trailing = rows.filter((row) => !row.nextElementSibling?.classList.contains("db-menu-item"));
+  const middle = rows.filter((row) => row.nextElementSibling?.classList.contains("obnotion-menu-item"));
+  const trailing = rows.filter((row) => !row.nextElementSibling?.classList.contains("obnotion-menu-item"));
   out.push({
     name: "column menu: adjacent rows are divided by a hairline, and a group's last row is not",
     pass: middle.length > 0 && middle.every(hairline) && trailing.every((row) => !hairline(row)),
@@ -2248,7 +2248,7 @@ const grammarResults = await section("the shared row grammar on a phone", () => 
   const divided = middle[0];
   const dividerLeft = Math.round(divided.getBoundingClientRect().x
     + parseFloat(getComputedStyle(divided, "::after").left || "0"));
-  const labelLeft = Math.round(divided.querySelector(".db-menu-item-label").getBoundingClientRect().x);
+  const labelLeft = Math.round(divided.querySelector(".obnotion-menu-item-label").getBoundingClientRect().x);
   out.push({
     name: "column menu: the hairline begins at the label, not at the sheet edge",
     pass: Math.abs(dividerLeft - labelLeft) <= 1,
@@ -2262,19 +2262,19 @@ const grammarResults = await section("the shared row grammar on a phone", () => 
   const actor = rows.find((row) => /Duplicate property/.test(row.textContent));
   out.push({
     name: "a row that opens a submenu carries a chevron and says so; a row that acts carries neither",
-    pass: Boolean(opener?.querySelector(".db-menu-item-chevron"))
+    pass: Boolean(opener?.querySelector(".obnotion-menu-item-chevron"))
       && opener?.getAttribute("aria-haspopup") !== null
-      && !actor?.querySelector(".db-menu-item-chevron")
+      && !actor?.querySelector(".obnotion-menu-item-chevron")
       && actor?.getAttribute("aria-haspopup") === null,
-    detail: `"Change type" chevron=${Boolean(opener?.querySelector(".db-menu-item-chevron"))} `
+    detail: `"Change type" chevron=${Boolean(opener?.querySelector(".obnotion-menu-item-chevron"))} `
       + `aria-haspopup=${opener?.getAttribute("aria-haspopup")}; `
-      + `"Duplicate property" chevron=${Boolean(actor?.querySelector(".db-menu-item-chevron"))} `
+      + `"Duplicate property" chevron=${Boolean(actor?.querySelector(".obnotion-menu-item-chevron"))} `
       + `aria-haspopup=${actor?.getAttribute("aria-haspopup")}`,
   });
 
   // One axis, not two. Declaring only `overflow-y` makes the other axis `auto` by the overflow
   // spec's own coupling rule, so a full-width sheet gains a sideways drag nobody asked for.
-  const longRow = sheet.querySelector(".db-menu-item .db-menu-item-label");
+  const longRow = sheet.querySelector(".obnotion-menu-item .obnotion-menu-item-label");
   longRow.setText("A property name long enough that it cannot possibly fit across a phone sheet in one line");
   sheet.getBoundingClientRect();
   const sheetStyle = getComputedStyle(sheet);
@@ -2306,8 +2306,8 @@ const grammarResults = await section("the shared row grammar on a phone", () => 
   chevronRow.dispatchEvent(new MouseEvent("click", press));
   await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
-  const submenu = document.querySelector(".db-column-type-popover");
-  const scrim = document.querySelector(".db-mobile-sheet-scrim");
+  const submenu = document.querySelector(".obnotion-column-type-popover");
+  const scrim = document.querySelector(".obnotion-mobile-sheet-scrim");
   const submenuZ = submenu ? Number(getComputedStyle(submenu).zIndex) : null;
   const scrimZ = scrim ? Number(getComputedStyle(scrim).zIndex) : null;
   const submenuBox = submenu?.getBoundingClientRect();
@@ -2336,10 +2336,10 @@ const grammarResults = await section("the shared row grammar on a phone", () => 
 const addViewGrammar = await section("the add-view menu's row grammar", () => grammarPhone.evaluate(async () => {
   const out = [];
   const { ToolbarRenderer } = globalThis.__place;
-  document.querySelectorAll(".db-owned-menu, .db-column-menu-subpopover, .db-mobile-sheet-scrim")
+  document.querySelectorAll(".obnotion-owned-menu, .obnotion-column-menu-subpopover, .obnotion-mobile-sheet-scrim")
     .forEach((node) => node.remove());
 
-  const host = document.querySelector(".note-database-container");
+  const host = document.querySelector(".obnotion-container");
   const anchor = host.createDiv({ cls: "anchor" });
   new ToolbarRenderer().showAddViewMenu(
     new MouseEvent("click"),
@@ -2349,9 +2349,9 @@ const addViewGrammar = await section("the add-view menu's row grammar", () => gr
       views: [{ viewType: "table", name: "All" }] },
     0,
   );
-  const panel = document.querySelector(".db-add-view-popover");
-  const xs = [...panel.querySelectorAll(".db-add-view-choices .db-menu-item")]
-    .map((row) => Math.round(row.querySelector(".db-menu-item-label").getBoundingClientRect().x));
+  const panel = document.querySelector(".obnotion-add-view-popover");
+  const xs = [...panel.querySelectorAll(".obnotion-add-view-choices .obnotion-menu-item")]
+    .map((row) => Math.round(row.querySelector(".obnotion-menu-item-label").getBoundingClientRect().x));
   const distinct = [...new Set(xs)];
   out.push({
     name: "add view: every create row starts at the same x",
@@ -2363,7 +2363,7 @@ const addViewGrammar = await section("the add-view menu's row grammar", () => gr
   // The grab bar was chrome with nothing behind it on every surface the positioner presents. A
   // gesture, not a source grep: press the handle, drag past the threshold, and see whether the
   // sheet answers.
-  const handle = panel.querySelector(".db-mobile-bottom-sheet-handle");
+  const handle = panel.querySelector(".obnotion-mobile-bottom-sheet-handle");
   const hb = handle.getBoundingClientRect();
   const start = hb.y + hb.height / 2;
   const x = hb.x + hb.width / 2;
@@ -2377,7 +2377,7 @@ const addViewGrammar = await section("the add-view menu's row grammar", () => gr
     onStep: (i) => { if (i === 2) followed = getComputedStyle(panel).transform; },
   });
   await new Promise((resolve) => requestAnimationFrame(resolve));
-  const stillOpen = Boolean(document.querySelector(".db-add-view-popover"));
+  const stillOpen = Boolean(document.querySelector(".obnotion-add-view-popover"));
   out.push({
     name: "add view: the sheet follows a drag on its grab bar and dismisses past the threshold",
     pass: /matrix/.test(followed) && !/matrix\(1, 0, 0, 1, 0, 0\)/.test(followed) && !stillOpen,
@@ -2477,11 +2477,11 @@ const motionResults = await section("the sheet entrance with motion allowed", ()
   // and the handle only exists once the gesture itself draws it, so that call is made explicitly
   // rather than assumed to follow from chrome alone.
   const { attachSheetDragToDismiss } = globalThis.__a;
-  const rising = document.body.createDiv({ cls: "note-database-container" });
+  const rising = document.body.createDiv({ cls: "obnotion-container" });
   for (let i = 0; i < 10; i += 1) rising.createDiv({ text: `Row ${i}` });
   applySheetChrome(rising, true);
   attachSheetDragToDismiss(rising, () => undefined);
-  const bar = rising.querySelector(".db-mobile-bottom-sheet-handle");
+  const bar = rising.querySelector(".obnotion-mobile-bottom-sheet-handle");
   const bb = bar.getBoundingClientRect();
   const grabX = bb.x + bb.width / 2;
   const grab = (y) => ({
@@ -2532,7 +2532,7 @@ const reducedResults = await section("the sheet entrance under reduced motion", 
   menu.showAt({ x: 200, y: 200 });
   const sheet = menu.el;
   const transform = getComputedStyle(sheet).transform;
-  const scrim = document.querySelector(".db-mobile-sheet-scrim");
+  const scrim = document.querySelector(".obnotion-mobile-sheet-scrim");
   out.push({
     name: "reduced motion lands the sheet at rest with nothing running, backdrop included",
     pass: (transform === "none" || transform === "matrix(1, 0, 0, 1, 0, 0)")
@@ -2587,17 +2587,17 @@ const columnWidthKeyboardResults = await section(
     const { openColumnWidthAdjuster } = globalThis.__columnWidth;
     const settle = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
-    const host = document.body.createDiv({ cls: "note-database-container" });
+    const host = document.body.createDiv({ cls: "obnotion-container" });
     const col = { key: "amount", label: "Amount", width: 150 };
     const config = { schema: { columns: [col] }, columnWidths: {}, defaultColumnWidth: 150 };
     let persistCount = 0;
     const close = openColumnWidthAdjuster({ root: host, col, config, persist: () => { persistCount += 1; } });
 
-    const panel = document.querySelector(".db-mobile-column-width-panel");
+    const panel = document.querySelector(".obnotion-mobile-column-width-panel");
     const numberField = panel ? panel.querySelector('input[type="number"]') : null;
     out.push({
       name: "the adjuster mounts as the shared sheet, with the field the keyboard checks focus",
-      pass: Boolean(panel) && panel.classList.contains("db-mobile-bottom-sheet") && Boolean(numberField),
+      pass: Boolean(panel) && panel.classList.contains("obnotion-mobile-bottom-sheet") && Boolean(numberField),
       detail: `panel=${panel ? panel.className : "(none)"} numberField=${Boolean(numberField)}`,
     });
 
@@ -2641,7 +2641,7 @@ const columnWidthKeyboardResults = await section(
     // still active. A bare fixed-and-docked surface reading as clearing the keyboard here would
     // mean the two "clears the keyboard" checks above are not testing anything and this section
     // could not be trusted.
-    const staleHost = document.body.createDiv({ cls: "note-database-container" });
+    const staleHost = document.body.createDiv({ cls: "obnotion-container" });
     const stalePanel = staleHost.createDiv({});
     stalePanel.setCssProps({ position: "fixed", left: "0px", right: "0px", bottom: "0px" });
     const staleField = stalePanel.createEl("input", { attr: { type: "number" } });
@@ -2700,10 +2700,10 @@ const columnWidthKeyboardResults = await section(
     close();
     out.push({
       name: "closing the adjuster leaves no sheet chrome behind",
-      pass: !document.querySelector(".db-mobile-column-width-panel")
-        && !document.querySelector(".db-mobile-sheet-scrim"),
-      detail: `panel=${Boolean(document.querySelector(".db-mobile-column-width-panel"))} `
-        + `scrim=${Boolean(document.querySelector(".db-mobile-sheet-scrim"))} persisted=${persistCount}x`,
+      pass: !document.querySelector(".obnotion-mobile-column-width-panel")
+        && !document.querySelector(".obnotion-mobile-sheet-scrim"),
+      detail: `panel=${Boolean(document.querySelector(".obnotion-mobile-column-width-panel"))} `
+        + `scrim=${Boolean(document.querySelector(".obnotion-mobile-sheet-scrim"))} persisted=${persistCount}x`,
     });
     host.remove();
     return out;
@@ -2740,12 +2740,12 @@ const desktopMenuResults = await section("the desktop menu presentation", () => 
     pass: Math.abs(r.left - 400) <= 1
       && Math.abs(r.top - 200) <= 1
       && r.width <= 320
-      && !menu.el.hasClass("db-mobile-bottom-sheet")
-      && !menu.el.querySelector(".db-mobile-bottom-sheet-handle")
-      && !document.querySelector(".db-mobile-sheet-scrim"),
+      && !menu.el.hasClass("obnotion-mobile-bottom-sheet")
+      && !menu.el.querySelector(".obnotion-mobile-bottom-sheet-handle")
+      && !document.querySelector(".obnotion-mobile-sheet-scrim"),
     detail: `menu=[${Math.round(r.left)},${Math.round(r.top)}] asked for [400,200] width=${Math.round(r.width)} `
-      + `bottom=${Math.round(r.bottom)} viewport=${window.innerHeight}; sheet class=${menu.el.hasClass("db-mobile-bottom-sheet")} `
-      + `backdrop=${document.querySelector(".db-mobile-sheet-scrim") ? "present" : "absent"} position=${style.position}`,
+      + `bottom=${Math.round(r.bottom)} viewport=${window.innerHeight}; sheet class=${menu.el.hasClass("obnotion-mobile-bottom-sheet")} `
+      + `backdrop=${document.querySelector(".obnotion-mobile-sheet-scrim") ? "present" : "absent"} position=${style.position}`,
   });
   menu.close();
   return out;
@@ -2807,18 +2807,18 @@ const cellResults = await section("what a press on a table cell means", () => ce
   // y 1116-1121 and y 1824-1829, and the 708 device pixels between them are 236 CSS px. Over a 34px
   // row that is 6.94 rows, and exactly seven labels are enclosed — so the block is 7 rows by 2
   // columns, 14 cells. Counting it as 8 rows was an eye estimate that never survived measurement.
-  const host = document.querySelector(".note-database-container");
+  const host = document.querySelector(".obnotion-container");
   const table = document.createElement("table");
-  table.className = "db-table";
+  table.className = "obnotion-table";
   const tbody = document.createElement("tbody");
   for (const path of rowPaths) {
     const tr = document.createElement("tr");
     for (const key of colKeys) {
       const td = document.createElement("td");
-      td.setAttribute("data-note-database-row-path", path);
-      td.setAttribute("data-note-database-column-key", key);
+      td.setAttribute("data-obnotion-row-path", path);
+      td.setAttribute("data-obnotion-column-key", key);
       if (key === "file.name") {
-        td.className = "db-title-cell";
+        td.className = "obnotion-title-cell";
         const a = document.createElement("a");
         a.textContent = "33 • Sep '27";
         td.appendChild(a);
@@ -2957,7 +2957,7 @@ const cellResults = await section("what a press on a table cell means", () => ce
   // has no bare-area behaviour to assert.
   const titleTd = cellAt(4, 0);
   attachTitleOpenAffordance(titleTd, { file: { path: rowPaths[4], name: "33.md" } }, { open: () => undefined });
-  const button = titleTd.querySelector(".db-record-open-btn");
+  const button = titleTd.querySelector(".obnotion-record-open-btn");
   const btnRect = button.getBoundingClientRect();
   const cellRect = titleTd.getBoundingClientRect();
   const probeY = Math.round(cellRect.top + cellRect.height / 2);
@@ -3021,7 +3021,7 @@ const cellResults = await section("what a press on a table cell means", () => ce
   let navigated = 0;
   openLink.addEventListener("click", () => { navigated += 1; });
   attachTitleOpenAffordance(openTd, openRow, { open: () => undefined });
-  const openBtn = openTd.querySelector(".db-record-open-btn");
+  const openBtn = openTd.querySelector(".obnotion-record-open-btn");
   const openedPaths = [];
   const openedSheets = [];
   const driveRealOpener = (anchorEl, r) => {
@@ -3046,15 +3046,15 @@ const cellResults = await section("what a press on a table cell means", () => ce
         editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false,
       },
     });
-    const sheet = document.querySelector(".db-record-detail-panel");
+    const sheet = document.querySelector(".obnotion-record-detail-panel");
     const rect = sheet ? sheet.getBoundingClientRect() : null;
     openedSheets.push({
       row: r.file.path,
       held: getOpenRecordDetailPath(),
       mounted: Boolean(sheet && sheet.isConnected),
-      isSheet: Boolean(sheet && sheet.classList.contains("db-mobile-bottom-sheet")),
-      title: sheet ? (sheet.querySelector(".db-record-detail-title")?.textContent ?? "") : "",
-      fields: sheet ? sheet.querySelectorAll(".db-record-detail-field").length : 0,
+      isSheet: Boolean(sheet && sheet.classList.contains("obnotion-mobile-bottom-sheet")),
+      title: sheet ? (sheet.querySelector(".obnotion-record-detail-title")?.textContent ?? "") : "",
+      fields: sheet ? sheet.querySelectorAll(".obnotion-record-detail-field").length : 0,
       width: rect ? Math.round(rect.width) : 0,
       height: rect ? Math.round(rect.height) : 0,
       onScreen: Boolean(rect && rect.width > 0 && rect.height > 0
@@ -3116,8 +3116,8 @@ const cellResults = await section("what a press on a table cell means", () => ce
 
   // Nothing may be left standing: the probes below hit-test the table, and a sheet or a scrim
   // still on the body would answer for it — which is the failure 031 root-caused on other surfaces.
-  const sheetsLeft = document.querySelectorAll(".db-record-detail-panel").length;
-  const scrimsLeft = document.querySelectorAll(".db-mobile-sheet-scrim").length;
+  const sheetsLeft = document.querySelectorAll(".obnotion-record-detail-panel").length;
+  const scrimsLeft = document.querySelectorAll(".obnotion-mobile-sheet-scrim").length;
 
   const everySheetReal = openedSheets.length === 3 && openedSheets.every((sheet) => sheet.mounted
     && sheet.isSheet && sheet.held === sheet.row && sheet.title.length > 0 && sheet.fields >= 2
@@ -3230,7 +3230,7 @@ const cellResults = await section("what a press on a table cell means", () => ce
   // named there. Driven through the shipped RowMenu rather than asserted against the source: the
   // entry has to be built, carry a label, and reach the host's rename when pressed.
   const { RowMenu } = globalThis.__place;
-  const menuHost = document.querySelector(".note-database-container");
+  const menuHost = document.querySelector(".obnotion-container");
   const renamed = [];
   const rowMenu = new RowMenu({
     app: { workspace: { containerEl: menuHost } },
@@ -3242,9 +3242,9 @@ const cellResults = await section("what a press on a table cell means", () => ce
   });
   const menuRowData = { file: { path: rowPaths[3], name: "36.md", basename: "36" } };
   rowMenu.show(new MouseEvent("contextmenu", { bubbles: true, cancelable: true }), menuRowData, undefined, tbody.rows[3]);
-  const builtMenu = document.querySelector(".db-owned-menu");
-  const entries = builtMenu ? [...builtMenu.querySelectorAll(".db-menu-item")] : [];
-  const labelOf = (el) => (el.querySelector(".db-menu-item-label") ?? el).textContent.trim();
+  const builtMenu = document.querySelector(".obnotion-owned-menu");
+  const entries = builtMenu ? [...builtMenu.querySelectorAll(".obnotion-menu-item")] : [];
+  const labelOf = (el) => (el.querySelector(".obnotion-menu-item-label") ?? el).textContent.trim();
   const renameEntry = entries.find((el) => /renam/i.test(labelOf(el)));
   renameEntry?.click();
   out.push({
@@ -3257,7 +3257,7 @@ const cellResults = await section("what a press on a table cell means", () => ce
       + " which a phone shows to nobody",
   });
   builtMenu?.remove();
-  document.querySelector(".db-mobile-sheet-scrim")?.remove();
+  document.querySelector(".obnotion-mobile-sheet-scrim")?.remove();
 
   // ── an open sheet takes the tap instead of the table ──
   //
@@ -3266,10 +3266,10 @@ const cellResults = await section("what a press on a table cell means", () => ce
   // settles it: while one is up, the coordinates of a cell resolve to the backdrop, so the press
   // that dismisses cannot also land on a cell and open an editor on the way out.
   const sheetPanel = document.createElement("div");
-  sheetPanel.className = "note-database-container db-record-detail-panel";
+  sheetPanel.className = "obnotion-container obnotion-record-detail-panel";
   document.body.appendChild(sheetPanel);
   globalThis.__place.applySheetChrome(sheetPanel, true);
-  const scrim = document.body.querySelector(".db-mobile-sheet-scrim");
+  const scrim = document.body.querySelector(".obnotion-mobile-sheet-scrim");
   const probeCell = cellAt(1, 1);
   const cellBox = probeCell.getBoundingClientRect();
   const overCell = document.elementFromPoint(
@@ -3297,9 +3297,9 @@ const cellResults = await section("what a press on a table cell means", () => ce
   // option, and the result has to change with it. Registered on its own line so the run reports it
   // by name beside the case it defends, the way `010` registers its two.
   globalThis.__place.applySheetChrome(sheetPanel, false);
-  document.querySelector(".db-mobile-sheet-scrim")?.remove();
+  document.querySelector(".obnotion-mobile-sheet-scrim")?.remove();
   globalThis.__place.applySheetChrome(sheetPanel, true, { scrimCapturesPointer: false });
-  const openScrim = document.body.querySelector(".db-mobile-sheet-scrim");
+  const openScrim = document.body.querySelector(".obnotion-mobile-sheet-scrim");
   const openStyle = openScrim ? getComputedStyle(openScrim) : null;
   const overCellOpen = document.elementFromPoint(
     Math.round(cellBox.left + cellBox.width / 2),
@@ -3420,7 +3420,7 @@ await sheetPhone.addScriptTag({ content: positionerJs });
 const sheetResults = await section("the record sheet's own header", async () => {
   const sheetSetup = await sheetPhone.evaluate(() => {
     const { openRecordDetailPanel } = globalThis.__place;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
     const row = { file: { path: "33.md", basename: "33", name: "33.md" }, frontmatter: { income: 1 }, computed: {} };
     globalThis.__renames = 0;
     openRecordDetailPanel({
@@ -3438,18 +3438,18 @@ const sheetResults = await section("the record sheet's own header", async () => 
         isReadOnly: false,
       },
     });
-    const panel = document.querySelector(".db-record-detail-panel");
-    const title = panel.querySelector(".db-record-detail-title");
+    const panel = document.querySelector(".obnotion-record-detail-panel");
+    const title = panel.querySelector(".obnotion-record-detail-title");
     const box = (el) => { const r = el.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) }; };
     return { titleCentre: box(title) };
   });
 
   const measured = await sheetPhone.evaluate((titleCentre) => {
     const out = [];
-    const panel = document.querySelector(".db-record-detail-panel");
-    const handle = panel.querySelector(".db-mobile-bottom-sheet-handle");
-    const title = panel.querySelector(".db-record-detail-title");
-    const actions = [...panel.querySelectorAll(".db-record-detail-header button")];
+    const panel = document.querySelector(".obnotion-record-detail-panel");
+    const handle = panel.querySelector(".obnotion-mobile-bottom-sheet-handle");
+    const title = panel.querySelector(".obnotion-record-detail-title");
+    const actions = [...panel.querySelectorAll(".obnotion-record-detail-header button")];
     const panelTop = panel.getBoundingClientRect().top;
 
     const reaches = (el) => {
@@ -3569,7 +3569,7 @@ await sheetPhone.close();
 // numbers attached: row 26.84px, value right-aligned, 2px between rows, and no divider. Three of the
 // four were measured nowhere in the run and the fourth appeared only inside another phase's detail
 // line. The stylesheet does corroborate the SCOPING — every phone rule for this surface is written
-// under `.db-record-detail-panel.db-mobile-bottom-sheet` — but scoping proves the phone rules cannot
+// under `.obnotion-record-detail-panel.obnotion-mobile-bottom-sheet` — but scoping proves the phone rules cannot
 // match a desktop panel. It does not prove the four values, because row height and the gap between
 // rows are computed rather than declared.
 //
@@ -3591,7 +3591,7 @@ await desktopPanel.addScriptTag({ content: positionerJs });
 const desktopPanelResults = await section("the desktop record panel's frozen values", () => desktopPanel.evaluate(() => {
   const out = [];
   const { openRecordDetailPanel } = globalThis.__place;
-  const host = document.querySelector(".note-database-container");
+  const host = document.querySelector(".obnotion-container");
   const anchor = host.createDiv({ cls: "anchor" });
   anchor.setCssProps({ position: "absolute", left: "80px", top: "80px" });
   openRecordDetailPanel({
@@ -3621,9 +3621,9 @@ const desktopPanelResults = await section("the desktop record panel's frozen val
     actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
   });
 
-  const panel = document.querySelector(".db-record-detail-panel");
-  const isSheet = panel ? panel.classList.contains("db-mobile-bottom-sheet") : true;
-  const rows = panel ? [...panel.querySelectorAll(".db-record-detail-field")] : [];
+  const panel = document.querySelector(".obnotion-record-detail-panel");
+  const isSheet = panel ? panel.classList.contains("obnotion-mobile-bottom-sheet") : true;
+  const rows = panel ? [...panel.querySelectorAll(".obnotion-record-detail-field")] : [];
   const boxes = rows.map((row) => row.getBoundingClientRect());
   const heights = boxes.map((b) => +b.height.toFixed(2));
   // The gap between rows, measured as the space between one row's bottom and the next row's top
@@ -3638,7 +3638,7 @@ const desktopPanelResults = await section("the desktop record panel's frozen val
   // Right-aligned: the value box ends where the row's content box ends. Read against the row's own
   // padding rather than its border box, because the padding is not the alignment.
   const alignment = rows.map((row) => {
-    const value = row.querySelector(".db-board-card-value");
+    const value = row.querySelector(".obnotion-board-card-value");
     if (!value) return null;
     const rowRect = row.getBoundingClientRect();
     const valueRect = value.getBoundingClientRect();
@@ -3663,7 +3663,7 @@ const desktopPanelResults = await section("the desktop record panel's frozen val
       + ` answer rather than an absent host variable;`
       + ` the value box ends within ${worstAlignment}px of the row's content right edge`,
   });
-  document.querySelectorAll(".db-record-detail-panel").forEach((el) => el.remove());
+  document.querySelectorAll(".obnotion-record-detail-panel").forEach((el) => el.remove());
   anchor.remove();
   return out;
 }));
@@ -3702,7 +3702,7 @@ const stateResults = await section("the record sheet's identity and its subscrip
   const {
     openRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath, refreshRecordDetailPanel,
   } = globalThis.__place;
-  const host = document.querySelector(".note-database-container");
+  const host = document.querySelector(".obnotion-container");
   const anchor = host.createDiv({ cls: "anchor" });
   anchor.setCssProps({ position: "absolute", left: "40px", top: "40px" });
 
@@ -3746,7 +3746,7 @@ const stateResults = await section("the record sheet's identity and its subscrip
   openRecordDetailPanel({ anchorEl: anchor, host, row: recordA(100), columns, allColumns: columns, config, app: {}, actions });
   const openedPath = getOpenRecordDetailPath();
   const fieldFor = (key) => document.querySelector(
-    `.db-record-detail-panel .db-record-detail-field[data-note-database-column-key="${key}"]`);
+    `.obnotion-record-detail-panel .obnotion-record-detail-field[data-obnotion-column-key="${key}"]`);
   const incomeBefore = fieldFor("income");
   const textBefore = incomeBefore ? incomeBefore.textContent : "";
 
@@ -3774,7 +3774,7 @@ const stateResults = await section("the record sheet's identity and its subscrip
   // last handed.
   refreshRecordDetailPanel(recordB);
   const afterForeign = getOpenRecordDetailPath();
-  const panelAfterForeign = document.querySelectorAll(".db-record-detail-panel").length;
+  const panelAfterForeign = document.querySelectorAll(".obnotion-record-detail-panel").length;
   out.push({
     name: "CONTROL a refresh naming another record closes the sheet rather than re-pointing it",
     pass: afterForeign === null && panelAfterForeign === 0,
@@ -3792,22 +3792,22 @@ const stateResults = await section("the record sheet's identity and its subscrip
   document.documentElement.style.setProperty("--keyboard-height", "336px");
   window.visualViewport.dispatchEvent(new Event("resize"));
   await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-  const liftedBottom = document.querySelector(".db-record-detail-panel")?.style
-    .getPropertyValue("--db-mobile-sheet-bottom") || "(unset)";
+  const liftedBottom = document.querySelector(".obnotion-record-detail-panel")?.style
+    .getPropertyValue("--obnotion-mobile-sheet-bottom") || "(unset)";
   document.documentElement.style.removeProperty("--keyboard-height");
   window.visualViewport.dispatchEvent(new Event("resize"));
   await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
   closeRecordDetailPanel();
   await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
   const after = outstanding();
-  const leftBehind = document.querySelectorAll(".db-record-detail-panel, .db-mobile-sheet-scrim").length;
+  const leftBehind = document.querySelectorAll(".obnotion-record-detail-panel, .obnotion-mobile-sheet-scrim").length;
 
   out.push({
     name: "a closed sheet leaves no viewport subscription and no node behind",
     pass: after === before && whileOpen > before && leftBehind === 0,
     detail: `visualViewport listeners: ${before} before, ${whileOpen} while the sheet was open,`
       + ` ${after} after one keyboard cycle and a close. The sheet lifted to`
-      + ` --db-mobile-sheet-bottom=${liftedBottom} while the keyboard was declared (harness-supplied `
+      + ` --obnotion-mobile-sheet-bottom=${liftedBottom} while the keyboard was declared (harness-supplied `
       + `--keyboard-height=336px; a device where the host publishes nothing is covered by `
       + `"the sheet clears a keyboard no host reported").`
       + ` ${leftBehind} panel or scrim node(s) remain. The inset is written by a subscription, so a`
@@ -3850,7 +3850,7 @@ const keyboardParityResults = await section("both sheet families under one keybo
   const out = [];
   const P = globalThis.__p;
   const { openRecordDetailPanel, closeRecordDetailPanel } = globalThis.__place;
-  const host = document.querySelector(".note-database-container");
+  const host = document.querySelector(".obnotion-container");
   const KEYBOARD = 336;
   const tick = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
 
@@ -3868,7 +3868,7 @@ const keyboardParityResults = await section("both sheet families under one keybo
     await tick();
   };
   const readSheet = (el) => ({
-    lever: el.style.getPropertyValue("--db-mobile-sheet-bottom") || "(unset)",
+    lever: el.style.getPropertyValue("--obnotion-mobile-sheet-bottom") || "(unset)",
     bottom: Math.round(el.getBoundingClientRect().bottom),
   });
 
@@ -3898,7 +3898,7 @@ const keyboardParityResults = await section("both sheet families under one keybo
     app: {},
     actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
   });
-  const panelEl = document.querySelector(".db-record-detail-panel");
+  const panelEl = document.querySelector(".obnotion-record-detail-panel");
   const panelAtRest = readSheet(panelEl);
   await openKeyboard();
   const panelLifted = readSheet(panelEl);
@@ -3910,7 +3910,7 @@ const keyboardParityResults = await section("both sheet families under one keybo
   const lifted = (before, after) => after.bottom < before.bottom - 1;
   // A menu-role card bails out of the floating/flush classifier outright (`design-trueup.md` row
   // 26 docks it, never floats it), so its resting bottom sits flush with the viewport while a
-  // panel's own 8px float inset (`--db-sheet-float-inset`) sits 8px short of it — the two were
+  // panel's own 8px float inset (`--obnotion-sheet-float-inset`) sits 8px short of it — the two were
   // never going to share one absolute resting position once the menu stopped participating in
   // that split. What both must still share is the LIFT itself: the same keyboard signal moving
   // each sheet up by the same amount, whatever edge each one started from.
@@ -3964,14 +3964,14 @@ const keyboardParityResults = await section("both sheet families under one keybo
     const m = P.createOwnedMenu(document);
     for (let r = 0; r < 4; r += 1) m.addRow({ title: `Row ${r}`, onClick: () => undefined });
     m.showAt({ x: 40, y: 200 });
-    scrimsWhileOpen.add(document.querySelectorAll(".db-mobile-sheet-scrim").length);
+    scrimsWhileOpen.add(document.querySelectorAll(".obnotion-mobile-sheet-scrim").length);
     m.close();
     await tick();
   }
   const capturesLeft = [...docLive.values()].filter((k) => k.endsWith("capture")).length;
   const viewportLeft = vvLive.size;
-  const scrimsLeft = document.querySelectorAll(".db-mobile-sheet-scrim").length;
-  const sheetsLeft = document.querySelectorAll(".db-mobile-bottom-sheet").length;
+  const scrimsLeft = document.querySelectorAll(".obnotion-mobile-sheet-scrim").length;
+  const sheetsLeft = document.querySelectorAll(".obnotion-mobile-bottom-sheet").length;
   document.addEventListener = realDocAdd;
   document.removeEventListener = realDocRemove;
   window.visualViewport.addEventListener = realVvAdd;
@@ -3992,14 +3992,14 @@ const keyboardParityResults = await section("both sheet families under one keybo
   // panel has ever had — and passed comfortably under a cap it was never near. That is the "the
   // harness made the content small" failure these packets' own audits keep naming, reproduced while
   // writing a check to answer one of them.
-  const propsPanel = host.createDiv({ cls: "db-column-manager db-surface" });
+  const propsPanel = host.createDiv({ cls: "obnotion-column-manager obnotion-surface" });
   for (let i = 0; i < 40; i += 1) {
-    const row = propsPanel.createDiv({ cls: "db-column-manager-row" });
-    row.createSpan({ cls: "db-column-drag", text: "⋮⋮" });
-    const box = row.createEl("input", { cls: "db-checkbox db-checkbox-field" });
+    const row = propsPanel.createDiv({ cls: "obnotion-column-manager-row" });
+    row.createSpan({ cls: "obnotion-column-drag", text: "⋮⋮" });
+    const box = row.createEl("input", { cls: "obnotion-checkbox obnotion-checkbox-field" });
     box.type = "checkbox";
-    row.createSpan({ cls: "db-column-type", text: "T" });
-    row.createSpan({ cls: "db-column-name", text: `Property ${i}` });
+    row.createSpan({ cls: "obnotion-column-type", text: "T" });
+    row.createSpan({ cls: "obnotion-column-name", text: `Property ${i}` });
     for (const icon of ["wrap", "edit", "delete"]) {
       row.createEl("button", { cls: "clickable-icon", text: icon[0] });
     }
@@ -4049,9 +4049,9 @@ const keyboardParityResults = await section("both sheet families under one keybo
     app: {},
     actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
   });
-  const thin = document.querySelector(".db-record-detail-panel");
+  const thin = document.querySelector(".obnotion-record-detail-panel");
   const thinRect = thin.getBoundingClientRect();
-  const thinFields = thin.querySelectorAll(".db-record-detail-field").length;
+  const thinFields = thin.querySelectorAll(".obnotion-record-detail-field").length;
   const cap = window.innerHeight * 0.9;
   closeRecordDetailPanel();
   floorAnchor.remove();
@@ -4090,14 +4090,14 @@ const keyboardParityResults = await section("both sheet families under one keybo
     return [cs.padding, cs.borderRadius, cs.boxShadow, cs.fontSize, cs.borderWidth].join(" | ");
   };
   const roleFamilies = {
-    panel: ["db-filter-panel", "db-view-config-panel", "db-column-manager", "db-group-popover",
-      "db-export-popover", "db-chart-options-popover"],
+    panel: ["obnotion-filter-panel", "obnotion-view-config-panel", "obnotion-column-manager", "obnotion-group-popover",
+      "obnotion-export-popover", "obnotion-chart-options-popover"],
     "menu-row": [],
   };
   const panelValues = new Map();
   for (const cls of roleFamilies.panel) {
-    const el = host.createDiv({ cls: `${cls} db-surface` });
-    el.createDiv({ cls: "db-panel-header" }).createDiv({ cls: "db-panel-title", text: "T" });
+    const el = host.createDiv({ cls: `${cls} obnotion-surface` });
+    el.createDiv({ cls: "obnotion-panel-header" }).createDiv({ cls: "obnotion-panel-title", text: "T" });
     panelValues.set(cls, surfaceSignature(el));
     el.remove();
   }
@@ -4109,13 +4109,13 @@ const keyboardParityResults = await section("both sheet families under one keybo
       return { el: menu.el || menu.dom || menu.containerEl, done: () => menu.close() };
     }],
     ["panel-sheet", () => {
-      const el = document.body.createDiv({ cls: "db-record-detail-panel" });
+      const el = document.body.createDiv({ cls: "obnotion-record-detail-panel" });
       P.applySheetChrome ? undefined : undefined;
       globalThis.__a.applySheetChrome(el, true);
       return { el, done: () => { globalThis.__a.applySheetChrome(el, false); el.remove(); } };
     }],
     ["filter-panel", () => {
-      const el = host.createDiv({ cls: "db-filter-panel db-surface" });
+      const el = host.createDiv({ cls: "obnotion-filter-panel obnotion-surface" });
       return { el, done: () => el.remove() };
     }],
   ];
@@ -4167,7 +4167,7 @@ const keyboardParityResults = await section("both sheet families under one keybo
   // touch-target census declares its exempt controls — a predicate wide enough to hide these would
   // hide the next dead class with them.
   const HOST_OWNED_CLASSES = {
-    "db-menu": "Obsidian's own menu class, carried so the host's app.css reaches the surface;"
+    "obnotion-menu": "Obsidian's own menu class, carried so the host's app.css reaches the surface;"
       + " the harness does not load app.css, so nothing it declares can move here",
     // These two are the entrance, and an entrance has no resting value to move. The page runs with
     // `reducedMotion: reduce`, so the surface is already at rest when this measures it — which is
@@ -4176,7 +4176,7 @@ const keyboardParityResults = await section("both sheet families under one keybo
     // travels and settles, and its reduced-motion counterpart asserts it lands at rest with nothing
     // running. Declaring them here rather than widening this check to run animations keeps one
     // question per check.
-    "db-overlay-enter": "the entrance class; its work is the transition, and this measures a surface"
+    "obnotion-overlay-enter": "the entrance class; its work is the transition, and this measures a surface"
       + " already at rest under reducedMotion. Covered by the two sheet-entrance sections",
     "is-visible": "the entrance's end state; same reason — at rest it is the state, not a change to"
       + " it, and the transition it completes is asserted by the entrance sections",
@@ -4211,15 +4211,15 @@ const keyboardParityResults = await section("both sheet families under one keybo
   ablationMenu.close();
   await tick();
 
-  // TWO MOUNT POINTS, and a class earns its place by moving something at EITHER. `db-surface` is the
+  // TWO MOUNT POINTS, and a class earns its place by moving something at EITHER. `obnotion-surface` is the
   // token-root marker: inside the container the tokens already resolve, so removing it changes
   // nothing and it reads dead. On the body — where the panels that need it actually go — it is the
   // only thing making them resolve at all, which `replay` has recorded since `000`. A one-position
   // ablation would have called the marker dead and invited its deletion.
   const buildPanel = (parent) => {
-    const el = parent.createDiv({ cls: "db-filter-panel db-surface" });
-    el.createDiv({ cls: "db-panel-header" }).createDiv({ cls: "db-panel-title", text: "Filter" });
-    for (let i = 0; i < 3; i += 1) el.createDiv({ cls: "db-panel-row", text: `Rule ${i}` });
+    const el = parent.createDiv({ cls: "obnotion-filter-panel obnotion-surface" });
+    el.createDiv({ cls: "obnotion-panel-header" }).createDiv({ cls: "obnotion-panel-title", text: "Filter" });
+    for (let i = 0; i < 3; i += 1) el.createDiv({ cls: "obnotion-panel-row", text: `Rule ${i}` });
     return el;
   };
   const inContainer = buildPanel(host);
@@ -4327,7 +4327,7 @@ const keyboardParityResults = await section("both sheet families under one keybo
   // 44px this way, because the two surfaces put their handle at different offsets. Two methods is
   // how the numbers stopped being comparable in the first place.
   const walkBand = (sheet) => {
-    const handle = sheet.querySelector(".db-mobile-bottom-sheet-handle");
+    const handle = sheet.querySelector(".obnotion-mobile-bottom-sheet-handle");
     if (!handle) return 0;
     const box = handle.getBoundingClientRect();
     const answers = (y) => {
@@ -4370,7 +4370,7 @@ const keyboardParityResults = await section("both sheet families under one keybo
     app: {},
     actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
   });
-  const recordBand = walkBand(document.querySelector(".db-record-detail-panel"));
+  const recordBand = walkBand(document.querySelector(".obnotion-record-detail-panel"));
   closeRecordDetailPanel();
   bandAnchor.remove();
   await tick();
@@ -4394,9 +4394,9 @@ const keyboardParityResults = await section("both sheet families under one keybo
   // rules out is specific and cheap to write by mistake — a menu that resolves its target from the
   // header cell under its anchor, rather than from the column it captured, acts on whichever column
   // now occupies that coordinate after a re-render.
-  const header = host.createDiv({ cls: "db-header-row" });
+  const header = host.createDiv({ cls: "obnotion-header-row" });
   const cellFor = (label, left) => {
-    const cell = header.createDiv({ cls: "db-header-cell", text: label });
+    const cell = header.createDiv({ cls: "obnotion-header-cell", text: label });
     cell.setCssProps({ position: "absolute", top: "0px", left: `${left}px`, width: "100px", height: "28px" });
     return cell;
   };
@@ -4432,21 +4432,21 @@ const keyboardParityResults = await section("both sheet families under one keybo
     colA,
     cellA,
   );
-  const menuEl2 = document.querySelector(".db-owned-menu");
-  const openedRows = menuEl2 ? menuEl2.querySelectorAll(".db-menu-item").length : 0;
+  const menuEl2 = document.querySelector(".obnotion-owned-menu");
+  const openedRows = menuEl2 ? menuEl2.querySelectorAll(".obnotion-menu-item").length : 0;
 
   // The header is rebuilt and the columns swap places, so the coordinate the menu opened at now
   // belongs to the OTHER column and the node the menu captured is gone from the document.
   header.empty();
   cellFor("Expenses", 0);
   cellA = cellFor("Income", 100);
-  const labelOf2 = (el) => (el.querySelector(".db-menu-item-label") ?? el).textContent.trim();
-  const rowsNow = menuEl2 ? [...menuEl2.querySelectorAll(".db-menu-item")] : [];
+  const labelOf2 = (el) => (el.querySelector(".obnotion-menu-item-label") ?? el).textContent.trim();
+  const rowsNow = menuEl2 ? [...menuEl2.querySelectorAll(".obnotion-menu-item")] : [];
   const hideRow = rowsNow.find((el) => /hide/i.test(labelOf2(el)));
   hideRow?.click();
-  const stillOpenAfterAction = document.querySelectorAll(".db-owned-menu").length;
-  document.querySelectorAll(".db-owned-menu").forEach((el) => el.remove());
-  document.querySelectorAll(".db-mobile-sheet-scrim").forEach((el) => el.remove());
+  const stillOpenAfterAction = document.querySelectorAll(".obnotion-owned-menu").length;
+  document.querySelectorAll(".obnotion-owned-menu").forEach((el) => el.remove());
+  document.querySelectorAll(".obnotion-mobile-sheet-scrim").forEach((el) => el.remove());
   header.remove();
 
   out.push({
@@ -4526,13 +4526,13 @@ const SELECT_CONTROL = process.env.PLACEMENT_SELECT_CONTROL || "";
 // left standing. That is the half of the phone criterion that tells "the phone was already right"
 // apart from "the desktop edit reached the phone".
 const SELECT_CONTROL_CSS = {
-  "reguard-desktop": 'body:not(.is-phone) .note-database-container .db-table .db-select-col'
-    + ' .db-select-inner input[type="checkbox"].db-checkbox { position: static; right: auto; }',
-  "reguard-phone": 'body.is-phone .note-database-container .db-table .db-select-col'
-    + ' .db-select-inner input[type="checkbox"].db-checkbox { position: static; right: auto; }',
+  "reguard-desktop": 'body:not(.is-phone) .obnotion-container .obnotion-table .obnotion-select-col'
+    + ' .obnotion-select-inner input[type="checkbox"].obnotion-checkbox { position: static; right: auto; }',
+  "reguard-phone": 'body.is-phone .obnotion-container .obnotion-table .obnotion-select-col'
+    + ' .obnotion-select-inner input[type="checkbox"].obnotion-checkbox { position: static; right: auto; }',
 }[SELECT_CONTROL] || "";
 
-// The role-mate needs to be unchecked, row-role and outside any `.db-select-col` — a
+// The role-mate needs to be unchecked, row-role and outside any `.obnotion-select-col` — a
 // checked box (the selection-status-bar's clear control) compares its filled accent
 // background against the select column's own unchecked white, which fails on state alone
 // rather than on appearance ownership. A bare instance of the shared factory's own markup
@@ -4540,7 +4540,7 @@ const SELECT_CONTROL_CSS = {
 // directly here rather than borrowed from a registered scenario.
 const SELECT_FIXTURE = [
   SCENARIOS.find((s) => s.id === "table-view").html(),
-  `<div class="note-database-container">${rowCheckbox("db-placement-role-mate")}</div>`,
+  `<div class="obnotion-container">${rowCheckbox("obnotion-placement-role-mate")}</div>`,
 ].join("");
 
 const selectStyles = (extra) => readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS + extra;
@@ -4555,12 +4555,12 @@ const selectStyles = (extra) => readFileSync(join(REPO, "styles.css"), "utf8") +
 const armSelectControl = async (page) => {
   if (SELECT_CONTROL !== "strip-select" && SELECT_CONTROL !== "strip-mate") return;
   const stripped = await page.evaluate((which) => {
-    const boxes = [...document.querySelectorAll('input[type="checkbox"].db-checkbox')];
+    const boxes = [...document.querySelectorAll('input[type="checkbox"].obnotion-checkbox')];
     const target = which === "strip-select"
-      ? boxes.find((el) => el.closest(".db-select-col"))
-      : boxes.find((el) => !el.closest(".db-select-col") && el.classList.contains("db-checkbox-row"));
+      ? boxes.find((el) => el.closest(".obnotion-select-col"))
+      : boxes.find((el) => !el.closest(".obnotion-select-col") && el.classList.contains("obnotion-checkbox-row"));
     if (!target) return 0;
-    target.classList.remove("db-checkbox");
+    target.classList.remove("obnotion-checkbox");
     return 1;
   }, SELECT_CONTROL);
   if (!stripped) throw new Error(`PLACEMENT_SELECT_CONTROL=${SELECT_CONTROL} matched no element to strip`);
@@ -4574,15 +4574,15 @@ const armSelectControl = async (page) => {
  */
 const selectCellProbe = ({ phone }) => {
   const out = [];
-  const cells = [...document.querySelectorAll(".db-select-col")].filter((c) => c.querySelector('input[type="checkbox"]'));
+  const cells = [...document.querySelectorAll(".obnotion-select-col")].filter((c) => c.querySelector('input[type="checkbox"]'));
   const measured = cells.map((cell) => {
     const box = cell.querySelector('input[type="checkbox"]');
-    const inner = cell.querySelector(".db-select-inner");
+    const inner = cell.querySelector(".obnotion-select-inner");
     const c = cell.getBoundingClientRect();
     const b = box.getBoundingClientRect();
     return {
       tag: cell.tagName,
-      owned: box.classList.contains("db-checkbox"),
+      owned: box.classList.contains("obnotion-checkbox"),
       left: +(b.left - c.left).toFixed(2),
       right: +(c.right - b.right).toFixed(2),
       innerH: inner ? +inner.getBoundingClientRect().height.toFixed(2) : null,
@@ -4672,10 +4672,10 @@ const selectCellProbe = ({ phone }) => {
     };
   };
   const selectBox = cells.length ? cells[0].querySelector('input[type="checkbox"]') : null;
-  const mate = [...document.querySelectorAll('input[type="checkbox"].db-checkbox-row')]
-    .find((el) => !el.closest(".db-select-col"));
+  const mate = [...document.querySelectorAll('input[type="checkbox"].obnotion-checkbox-row')]
+    .find((el) => !el.closest(".obnotion-select-col"));
   const mateFamily = mate
-    ? ([...mate.classList].find((c) => c !== "db-checkbox" && !c.startsWith("db-checkbox-")) || "(role only)")
+    ? ([...mate.classList].find((c) => c !== "obnotion-checkbox" && !c.startsWith("obnotion-checkbox-")) || "(role only)")
     : "(no role-mate in this document)";
   const selectStyle = selectBox ? readAppearance(selectBox) : null;
   const mateStyle = mate ? readAppearance(mate) : null;
@@ -4778,7 +4778,7 @@ const rowRangeProbe = async ({ pointerType }) => {
     for (let i = 0; i < boxes.length; i += 1) boxes[i].checked = selected.has(rowPaths[i]);
   };
 
-  const host = document.querySelector(".note-database-container");
+  const host = document.querySelector(".obnotion-container");
 
   // A real menu, not a counter.
   //
@@ -4813,16 +4813,16 @@ const rowRangeProbe = async ({ pointerType }) => {
   const menuAnchoredTo = (menu, tr) => {
     const m = menu.getBoundingClientRect();
     const r = tr.getBoundingClientRect();
-    const asSheet = menu.classList.contains("db-mobile-bottom-sheet");
+    const asSheet = menu.classList.contains("obnotion-mobile-bottom-sheet");
     const onScreen = m.top >= 0 && m.left >= -1
       && m.bottom <= window.innerHeight + 1 && m.right <= window.innerWidth + 1;
     // A sheet sits flush against every free edge, or floats a fixed 8pt off all three of them
     // a four-entry menu is short enough to float, and a
     // check that only accepted the flush shape read that as unplaced rather than as the OTHER
     // shape this same class name can now carry. Read off the class the classifier toggles
-    // (`mobile-bottom-sheet.ts`'s `db-sheet-floating`) rather than re-deriving the inset, so this
+    // (`mobile-bottom-sheet.ts`'s `obnotion-sheet-floating`) rather than re-deriving the inset, so this
     // stays in step with whichever value that module owns.
-    const floating = menu.classList.contains("db-sheet-floating");
+    const floating = menu.classList.contains("obnotion-sheet-floating");
     const inset = floating ? Number.parseFloat(getComputedStyle(menu).left) || 0 : 0;
     const placed = asSheet
       ? Math.abs(m.width - (window.innerWidth - inset * 2)) <= 1
@@ -4835,22 +4835,22 @@ const rowRangeProbe = async ({ pointerType }) => {
   const dismissAnyMenu = () => {
     // The shipped dismissal first, so the teardown a user gets is the one exercised here.
     document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
-    for (const stale of document.querySelectorAll(".db-owned-menu")) stale.remove();
+    for (const stale of document.querySelectorAll(".obnotion-owned-menu")) stale.remove();
   };
 
   const table = document.createElement("table");
-  table.className = "db-table";
+  table.className = "obnotion-table";
   const tbody = document.createElement("tbody");
   for (const path of rowPaths) {
     const tr = document.createElement("tr");
-    tr.setAttribute("data-note-database-row-path", path);
+    tr.setAttribute("data-obnotion-row-path", path);
     const selectTd = document.createElement("td");
-    selectTd.className = "db-select-col";
+    selectTd.className = "obnotion-select-col";
     const inner = document.createElement("div");
-    inner.className = "db-select-inner";
+    inner.className = "obnotion-select-inner";
     const cb = document.createElement("input");
     cb.type = "checkbox";
-    cb.className = "db-checkbox db-checkbox-row";
+    cb.className = "obnotion-checkbox obnotion-checkbox-row";
     inner.appendChild(cb);
     selectTd.appendChild(inner);
     tr.appendChild(selectTd);
@@ -4890,8 +4890,8 @@ const rowRangeProbe = async ({ pointerType }) => {
           undefined,
           tr,
         );
-        const built = document.querySelector(".db-owned-menu");
-        const entries = built ? built.querySelectorAll(".db-menu-item").length : 0;
+        const built = document.querySelector(".obnotion-owned-menu");
+        const entries = built ? built.querySelectorAll(".obnotion-menu-item").length : 0;
         const placement = built ? menuAnchoredTo(built, tr) : null;
         if (built && entries > 0 && placement.ok) menuCount += 1;
         menuReport = built
@@ -5153,10 +5153,10 @@ await section("every checkbox family, at the size its role declares", async () =
         const classes = [...el.classList];
         return {
           scenario: id,
-          family: classes.find((c) => c !== "db-checkbox" && !c.startsWith("db-checkbox-")) || "(role only)",
-          role: classes.includes("db-checkbox-row") ? "row"
-            : classes.includes("db-checkbox-field") ? "field"
-              : classes.includes("db-toggle-switch") ? "switch" : "(none)",
+          family: classes.find((c) => c !== "obnotion-checkbox" && !c.startsWith("obnotion-checkbox-")) || "(role only)",
+          role: classes.includes("obnotion-checkbox-row") ? "row"
+            : classes.includes("obnotion-checkbox-field") ? "field"
+              : classes.includes("obnotion-toggle-switch") ? "switch" : "(none)",
           appearance: style.appearance || style.webkitAppearance || "",
           shape: `${Math.round(box.width)}x${Math.round(box.height)} r=${style.borderRadius}`,
         };
@@ -5210,11 +5210,11 @@ const touchContext = await browser.newContext({
   viewport: { width: 480, height: 900 }, reducedMotion: "reduce", hasTouch: true, isMobile: true,
 });
 const touchPage = await touchContext.newPage();
-await touchPage.setContent(`<body class="is-mobile is-phone"><div class="note-database-container" id="shot"
+await touchPage.setContent(`<body class="is-mobile is-phone"><div class="obnotion-container" id="shot"
   style="display:flex;flex-direction:column;gap:40px;padding:40px">
-  <div><input type="checkbox" class="db-checkbox db-checkbox-row" aria-label="row"></div>
-  <div><input type="checkbox" class="db-checkbox db-checkbox-field" aria-label="field"></div>
-  <div><input type="checkbox" role="switch" class="db-toggle-switch" aria-label="switch"></div>
+  <div><input type="checkbox" class="obnotion-checkbox obnotion-checkbox-row" aria-label="row"></div>
+  <div><input type="checkbox" class="obnotion-checkbox obnotion-checkbox-field" aria-label="field"></div>
+  <div><input type="checkbox" role="switch" class="obnotion-toggle-switch" aria-label="switch"></div>
 </div></body>`);
 for (const file of ["styles.css", "tools/screenshots/theme.css", "tools/screenshots/runtime-vars.css"]) {
   await touchPage.addStyleTag({ content: readFileSync(join(REPO, file), "utf8") });
@@ -5270,14 +5270,14 @@ await section("the reorder button and the row checkbox share one cell", async ()
     }
     await page.waitForTimeout(250);
     overlapResults.push(...await page.evaluate((id) => {
-      const cells = [...document.querySelectorAll("td.db-select-col")]
+      const cells = [...document.querySelectorAll("td.obnotion-select-col")]
         .filter((cell) => cell.querySelector('input[type="checkbox"]'));
       const shown = cells.filter((cell) => {
-        const button = cell.querySelector(".db-table-mobile-move-btn");
+        const button = cell.querySelector(".obnotion-table-mobile-move-btn");
         return button && getComputedStyle(button).display !== "none";
       });
       const gaps = shown.map((cell) => {
-        const button = cell.querySelector(".db-table-mobile-move-btn").getBoundingClientRect();
+        const button = cell.querySelector(".obnotion-table-mobile-move-btn").getBoundingClientRect();
         const checkbox = cell.querySelector('input[type="checkbox"]').getBoundingClientRect();
         return Math.round(checkbox.left - button.right);
       });
@@ -5305,7 +5305,7 @@ await section("the reorder button and the row checkbox share one cell", async ()
         const cell = shown[0];
         const style = getComputedStyle(cell);
         const padding = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
-        const button = cell.querySelector(".db-table-mobile-move-btn").getBoundingClientRect().width;
+        const button = cell.querySelector(".obnotion-table-mobile-move-btn").getBoundingClientRect().width;
         const checkbox = cell.querySelector('input[type="checkbox"]').getBoundingClientRect().width;
         const needed = Math.round(padding + button + Math.max(0, worst) + checkbox);
         results.push({
@@ -5366,7 +5366,7 @@ await section("lifted probes: desktop placement", async () => {
     .workspace-split.mod-left-split { width: ${SIDEBAR}px; flex: 0 0 ${SIDEBAR}px; background: #eee; display: ${leftSidebar}; }
     .workspace-leaf { position: relative; contain: strict !important; overflow: hidden; isolation: isolate; }
     .workspace-leaf, .workspace-leaf-content, .view-content { height: 100%; }
-    .note-database-container { position: relative; height: 100%; padding: 40px; overflow: auto; }
+    .obnotion-container { position: relative; height: 100%; padding: 40px; overflow: auto; }
     .anchor { width: 120px; height: 28px; background: #ccd; }
     .probe-panel { background: #fff; border: 1px solid #999; }
     .probe-panel .row { height: 30px; }
@@ -5376,7 +5376,7 @@ await section("lifted probes: desktop placement", async () => {
       <div class="workspace-split mod-left-split"></div>
       <div class="workspace-split mod-root">
         <div class="workspace-leaf"><div class="workspace-leaf-content"><div class="view-content">
-        <div class="note-database-container"><div class="anchor" id="anchor"></div></div>
+        <div class="obnotion-container"><div class="anchor" id="anchor"></div></div>
         </div></div></div>
       </div>
       <div class="workspace-split mod-right-split"></div>
@@ -5406,7 +5406,7 @@ await section("lifted probes: desktop placement", async () => {
   all.push(...await page.evaluate(async () => {
     const out = [];
     const P = globalThis.__p;
-    const container = document.querySelector(".note-database-container");
+    const container = document.querySelector(".obnotion-container");
     const leaf = document.querySelector(".workspace-leaf");
     const split = document.querySelector(".workspace-split.mod-root").getBoundingClientRect();
     const leafRect = leaf.getBoundingClientRect();
@@ -5515,7 +5515,7 @@ await section("lifted probes: desktop placement", async () => {
 
     // ── DEFECT PROBE: a tall owned menu has no height cap and no scroll.
     // positionToolbarPopover writes maxHeight and overflowY on every placement.
-    // showAt writes neither, and .db-owned-menu declares neither.
+    // showAt writes neither, and .obnotion-owned-menu declares neither.
     const tallMenu = buildMenu(60);
     tallMenu.showAt({ x: Math.round(bounds.left + 100), y: Math.round(bounds.top + 40) });
     const tm = tallMenu.el.getBoundingClientRect();
@@ -5534,7 +5534,7 @@ await section("lifted probes: desktop placement", async () => {
     // scrollHeight equals its clientHeight by definition. A check that is green
     // precisely because the defect is present is worse than no check.
     // So ask the document instead: is the last row somewhere a pointer can land?
-    const lastRow = tallMenu.el.querySelector(".db-menu-item:last-of-type");
+    const lastRow = tallMenu.el.querySelector(".obnotion-menu-item:last-of-type");
     // Scroll the menu to its end, then ask where the last row actually is. Reachable means
     // "a user can bring it under the pointer", not "it is visible right now" — a capped,
     // scrolling menu correctly leaves its last row off screen until scrolled.
@@ -5744,7 +5744,7 @@ await section("lifted probes: desktop placement", async () => {
   all.push(...await narrow.evaluate(() => {
     const out = [];
     const P = globalThis.__p;
-    const container = document.querySelector(".note-database-container");
+    const container = document.querySelector(".obnotion-container");
     const split = document.querySelector(".workspace-split.mod-root").getBoundingClientRect();
     const anchor = document.getElementById("anchor");
 
@@ -5781,7 +5781,7 @@ await section("lifted probes: desktop placement", async () => {
   all.push(...await noSidebar.evaluate(() => {
     const out = [];
     const P = globalThis.__p;
-    const container = document.querySelector(".note-database-container");
+    const container = document.querySelector(".obnotion-container");
     const leafRect = document.querySelector(".workspace-leaf").getBoundingClientRect();
     const split = document.querySelector(".workspace-split.mod-root").getBoundingClientRect();
     const anchor = document.getElementById("anchor");
@@ -5832,9 +5832,9 @@ await section("lifted probes: desktop placement", async () => {
     // both renderers call, and this calls the same one.
     //
     // The anchor is a toolbar search control near the right of the editing area.
-    const searchControl = document.querySelector(".note-database-container").createDiv({ cls: "anchor" });
+    const searchControl = document.querySelector(".obnotion-container").createDiv({ cls: "anchor" });
     searchControl.setCssProps({ position: "absolute", top: "20px", width: "200px" });
-    const panel = document.body.createDiv({ cls: "db-calendar-search-results-popover" });
+    const panel = document.body.createDiv({ cls: "obnotion-calendar-search-results-popover" });
     const placeSearchPanel = (anchorX) => {
       searchControl.setCssProps({ left: `${anchorX}px` });
       const placement = P.calendarSearchResultsPlacement(
@@ -5898,7 +5898,7 @@ await section("lifted probes: desktop placement", async () => {
     // window-relative clamp turns this red.
     const estimatedWidth = 292;
     const point = { x: Math.round(split.right - 60), y: 200 };
-    const sub = document.body.createDiv({ cls: "db-dropdown-popover db-column-menu-subpopover" });
+    const sub = document.body.createDiv({ cls: "obnotion-dropdown-popover obnotion-column-menu-subpopover" });
     for (let i = 0; i < 5; i += 1) sub.createDiv({ cls: "row", text: `Item ${i}` });
     sub.setCssProps({ position: "fixed", width: `${estimatedWidth}px` });
     const subHeight = sub.getBoundingClientRect().height || 320;
@@ -5917,11 +5917,11 @@ await section("lifted probes: desktop placement", async () => {
     // formula-modal.ts:1343, verbatim — the property/function autocomplete inside
     // the formula workbench. Placed at an estimated caret position with no clamp of
     // any kind, so its right edge is wherever the caret plus its own width land.
-    const modal = document.body.createDiv({ cls: "note-database-modal" });
+    const modal = document.body.createDiv({ cls: "obnotion-modal" });
     modal.setCssProps({ position: "fixed", left: "300px", top: "100px", width: "800px", height: "400px" });
-    const suggest = modal.createDiv({ cls: "db-formula-property-suggestions is-visible" });
+    const suggest = modal.createDiv({ cls: "obnotion-formula-property-suggestions is-visible" });
     for (let i = 0; i < 6; i += 1) {
-      const b = suggest.createEl("button", { cls: "db-formula-property-suggestion" });
+      const b = suggest.createEl("button", { cls: "obnotion-formula-property-suggestion" });
       b.createSpan({ text: `functionName${i}` });
       b.createSpan({ text: "(value, unit, locale, fallback)" });
     }
@@ -5956,15 +5956,15 @@ await section("lifted probes: desktop placement", async () => {
     modal.remove();
 
     // calendar-renderer.ts:600-616 — the "more events" day popover. Unlike the three
-    // above it clamps to `.note-database-container`, which lives inside the leaf, so it
+    // above it clamps to `.obnotion-container`, which lives inside the leaf, so it
     // cannot reach the sidebar however wrong its arithmetic is. That is a different
     // risk class and the number that establishes it is the container's own right edge.
-    const cont = document.querySelector(".note-database-container").getBoundingClientRect();
+    const cont = document.querySelector(".obnotion-container").getBoundingClientRect();
     out.push({
       name: "HAND the calendar day popover clamps to a container that is inside the editing area",
       pass: Math.round(cont.right) <= Math.round(split.right) + 1,
       detail: `container.right=${Math.round(cont.right)} editing area right=${Math.round(split.right)}. `
-        + `positionDayPopover clamps to .note-database-container rather than to the window, so its `
+        + `positionDayPopover clamps to .obnotion-container rather than to the window, so its `
         + `worst case is a misplacement inside the editing area, never travel under a sidebar.`,
     });
 
@@ -6005,7 +6005,7 @@ await section("lifted probes: desktop placement", async () => {
     // Flush or floating — an 8-row owned menu is short enough
     // to float, so "still a bottom sheet" is read against whichever inset it actually classified
     // as rather than the flush shape's fixed 0/full-width.
-    const floating = menu.el.classList.contains("db-sheet-floating");
+    const floating = menu.el.classList.contains("obnotion-sheet-floating");
     const inset = floating ? Number.parseFloat(style.left) || 0 : 0;
     out.push({
       name: "PHONE an owned menu still presents as a full-width bottom sheet",
@@ -6022,7 +6022,7 @@ await section("lifted probes: desktop placement", async () => {
     // which ceiling is in force.
     const cap = parseFloat(style.maxHeight);
     // A floating sheet's cap is the same 90svh minus the inset it also keeps clear at the bottom
-    // (`.db-sheet-floating`'s own `max-height` rule) — the flush
+    // (`.obnotion-sheet-floating`'s own `max-height` rule) — the flush
     // 90svh figure alone is only the OTHER shape's ceiling.
     const sheetCap = window.innerHeight * 0.9 - inset;
     out.push({
@@ -6065,14 +6065,14 @@ await section("lifted probes: desktop placement", async () => {
       for (let i = 0; i < rows; i += 1) el.createDiv({ cls: "row", text: `Item ${i}` });
       return el;
     };
-    const scrims = () => document.querySelectorAll(".db-mobile-sheet-scrim").length;
+    const scrims = () => document.querySelectorAll(".obnotion-mobile-sheet-scrim").length;
     const tick = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
     const doomed = document.body.createDiv({ cls: "anchor" });
     doomed.setCssProps({ position: "absolute", left: "40px", top: "100px", width: "40px", height: "20px" });
     const orphan = buildSheet(6);
     P.positionToolbarPopover(orphan, doomed, P.COMPACT_MENU_POPOVER);
-    const openedAsSheet = orphan.classList.contains("db-mobile-bottom-sheet");
+    const openedAsSheet = orphan.classList.contains("obnotion-mobile-bottom-sheet");
     const scrimWhileOpen = scrims();
     // The real sequence: a commit rebuilds the toolbar that owned the trigger while the surface
     // stays open, and the reposition loop is what notices. Re-calling the positioner would measure
@@ -6082,7 +6082,7 @@ await section("lifted probes: desktop placement", async () => {
     await tick();
     const orphanVisibility = getComputedStyle(orphan).visibility;
     const scrimAfter = scrims();
-    const orphanIsSheet = orphan.classList.contains("db-mobile-bottom-sheet");
+    const orphanIsSheet = orphan.classList.contains("obnotion-mobile-bottom-sheet");
     out.push({
       name: "PHONE a sheet outlives the toolbar rebuild that destroyed its anchor",
       pass: openedAsSheet && scrimWhileOpen === 1
@@ -6120,7 +6120,7 @@ await section("lifted probes: desktop placement", async () => {
     const keptRect = kept.getBoundingClientRect();
     const keptVisibility = getComputedStyle(kept).visibility;
     const keptScrims = scrims();
-    const keptFloating = kept.classList.contains("db-sheet-floating");
+    const keptFloating = kept.classList.contains("obnotion-sheet-floating");
     const keptInset = keptFloating ? Number.parseFloat(getComputedStyle(kept).left) || 0 : 0;
     out.push({
       name: "PHONE CONTROL a sheet with a live anchor keeps its backdrop and stays on the floor",
@@ -6149,7 +6149,7 @@ await section("lifted probes: the sheet drag", async () => {
     .app-container { display: flex; width: 100vw; height: 100vh; }
     .workspace { display: flex; width: 100%; }
     .workspace-split.mod-root { flex: 1 1 auto; position: relative; overflow: hidden; }
-    .note-database-container { position: relative; height: 100%; padding: 40px; }
+    .obnotion-container { position: relative; height: 100%; padding: 40px; }
     .workspace-leaf { position: relative; contain: strict !important; overflow: hidden; isolation: isolate; }
     .workspace-leaf, .workspace-leaf-content, .view-content { height: 100%; }
     .app-container.mod-static-nav .workspace { height: calc(100% - 80px); }
@@ -6161,7 +6161,7 @@ await section("lifted probes: the sheet drag", async () => {
     <div class="app-container mod-static-nav"><div class="workspace">
       <div class="workspace-split mod-root">
         <div class="workspace-leaf"><div class="workspace-leaf-content"><div class="view-content">
-        <div class="note-database-container"><div class="anchor" id="anchor"></div></div>
+        <div class="obnotion-container"><div class="anchor" id="anchor"></div></div>
         </div></div></div>
       </div>
     </div></div>
@@ -6213,7 +6213,7 @@ await section("lifted probes: the sheet drag", async () => {
     }
     openRecordDetailPanel({
       anchorEl: document.getElementById("anchor"),
-      host: document.querySelector(".note-database-container"),
+      host: document.querySelector(".obnotion-container"),
       row: { file: { path: "33.md", basename: "33", name: "33.md" }, frontmatter: { income: 1 }, computed: {} },
       columns: [
         { key: "file.name", label: "Name", type: "text" },
@@ -6235,8 +6235,8 @@ await section("lifted probes: the sheet drag", async () => {
 
   // ── 1. GEOMETRY: where the grab band actually answers ────────────────
   const geometry = await page.evaluate(() => {
-    const panel = document.querySelector(".db-record-detail-panel");
-    const handle = panel?.querySelector(".db-mobile-bottom-sheet-handle");
+    const panel = document.querySelector(".obnotion-record-detail-panel");
+    const handle = panel?.querySelector(".obnotion-mobile-bottom-sheet-handle");
     if (!panel || !handle) return { error: "no panel or no handle", hasPanel: !!panel, hasHandle: !!handle };
     const pr = panel.getBoundingClientRect();
     const hr = handle.getBoundingClientRect();
@@ -6274,7 +6274,7 @@ await section("lifted probes: the sheet drag", async () => {
       panelInlineOverflowY: panel.style.overflowY || "(unset)",
       panelInlineBoxSizing: panel.style.boxSizing || "(unset)",
       panelTransformAtRest: getComputedStyle(panel).transform,
-      scrimPointerEvents: getComputedStyle(document.querySelector(".db-mobile-sheet-scrim")).pointerEvents,
+      scrimPointerEvents: getComputedStyle(document.querySelector(".obnotion-mobile-sheet-scrim")).pointerEvents,
     };
   });
   record(
@@ -6307,7 +6307,7 @@ await section("lifted probes: the sheet drag", async () => {
     // one rAF and the style is only observable after that frame has been committed.
     const t = await page.evaluate(() => new Promise((resolve) => {
       requestAnimationFrame(() => requestAnimationFrame(() => {
-        const p = document.querySelector(".db-record-detail-panel");
+        const p = document.querySelector(".obnotion-record-detail-panel");
         resolve(p ? { computed: getComputedStyle(p).transform, inline: p.style.transform || "(none)" } : null);
       }));
     }));
@@ -6361,10 +6361,10 @@ await section("lifted probes: the sheet drag", async () => {
   const afterRefresh = await page.evaluate(() => {
     const { refreshRecordDetailPanel } = globalThis.__drag;
     refreshRecordDetailPanel({ file: { path: "33.md", basename: "33", name: "33.md" }, frontmatter: { income: 2 }, computed: {} });
-    const panel = document.querySelector(".db-record-detail-panel");
+    const panel = document.querySelector(".obnotion-record-detail-panel");
     return {
       hasPanel: !!panel,
-      hasHandle: !!panel?.querySelector(".db-mobile-bottom-sheet-handle"),
+      hasHandle: !!panel?.querySelector(".obnotion-mobile-bottom-sheet-handle"),
       firstChild: panel?.firstElementChild?.className || "(none)",
     };
   });
@@ -6377,13 +6377,13 @@ await section("lifted probes: the sheet drag", async () => {
   // A second real drag, after the refresh, is the operator's "barely works" case.
   if (afterRefresh.hasPanel) {
     const g2 = await page.evaluate(() => {
-      const p = document.querySelector(".db-record-detail-panel");
+      const p = document.querySelector(".obnotion-record-detail-panel");
       const r = p.getBoundingClientRect();
       return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top) + 8 };
     });
     await touch("touchStart", g2.x, g2.y);
     await touch("touchMove", g2.x, g2.y + 40);
-    const t2 = await page.evaluate(() => getComputedStyle(document.querySelector(".db-record-detail-panel")).transform);
+    const t2 = await page.evaluate(() => getComputedStyle(document.querySelector(".obnotion-record-detail-panel")).transform);
     await touch("touchEnd", g2.x, g2.y + 40);
     record(
       "a drag still works after the sheet has refreshed its fields",
@@ -6412,15 +6412,15 @@ await section("lifted probes: the sheet audit", async () => {
   // audit asks whether each one gets the sheet treatment and a discovery pass would only ever find
   // the ones that already do.
   const SHEET_SURFACES = [
-    "db-record-detail-panel",
-    "db-owned-menu",
-    "db-dropdown-popover",
-    "db-cell-option-popover",
-    "db-cell-edit-popover",
-    "db-date-value-popover",
-    "db-icon-picker-popover",
-    "db-color-picker-popup",
-    "db-relation-popover",
+    "obnotion-record-detail-panel",
+    "obnotion-owned-menu",
+    "obnotion-dropdown-popover",
+    "obnotion-cell-option-popover",
+    "obnotion-cell-edit-popover",
+    "obnotion-date-value-popover",
+    "obnotion-icon-picker-popover",
+    "obnotion-color-picker-popup",
+    "obnotion-relation-popover",
   ];
 
   const pageHtml = `<!doctype html><html><head>
@@ -6430,7 +6430,7 @@ await section("lifted probes: the sheet audit", async () => {
     .app-container { display: flex; width: 100vw; height: 100vh; }
     .workspace { display: flex; width: 100%; }
     .workspace-split.mod-root { flex: 1 1 auto; position: relative; overflow: hidden; }
-    .note-database-container { position: relative; height: 100%; padding: 40px; }
+    .obnotion-container { position: relative; height: 100%; padding: 40px; }
     .workspace-leaf { position: relative; contain: strict !important; overflow: hidden; isolation: isolate; }
     .workspace-leaf, .workspace-leaf-content, .view-content { height: 100%; }
     .app-container.mod-static-nav .workspace { height: calc(100% - 80px); }
@@ -6441,7 +6441,7 @@ await section("lifted probes: the sheet audit", async () => {
     <div class="mobile-navbar"></div>
     <div class="app-container mod-static-nav"><div class="workspace"><div class="workspace-split mod-root">
       <div class="workspace-leaf"><div class="workspace-leaf-content"><div class="view-content">
-      <div class="note-database-container"><div class="anchor" id="anchor"></div></div>
+      <div class="obnotion-container"><div class="anchor" id="anchor"></div></div>
       </div></div></div>
     </div></div></div>
   </body></html>`;
@@ -6482,7 +6482,7 @@ await section("lifted probes: the sheet audit", async () => {
     globalThis.__a.closeRecordDetailPanel();
     globalThis.__a.openRecordDetailPanel({
       anchorEl: document.getElementById("anchor"),
-      host: document.querySelector(".note-database-container"),
+      host: document.querySelector(".obnotion-container"),
       row: { file: { path: "33.md", basename: "Quarterly review", name: "33.md" }, frontmatter: { income: 1200, status: "Active", owner: "Michel" }, computed: {} },
       columns: [
         { key: "file.name", label: "Name", type: "text" },
@@ -6507,8 +6507,8 @@ await section("lifted probes: the sheet audit", async () => {
 
   // ── ASK 1 — the drag ──────────────────────────────────────────────────
   const geom = await page.evaluate(() => {
-    const panel = document.querySelector(".db-record-detail-panel");
-    const handle = panel.querySelector(".db-mobile-bottom-sheet-handle");
+    const panel = document.querySelector(".obnotion-record-detail-panel");
+    const handle = panel.querySelector(".obnotion-mobile-bottom-sheet-handle");
     const pr = panel.getBoundingClientRect();
     const cx = Math.round(pr.left + pr.width / 2);
     const rows = [];
@@ -6531,7 +6531,7 @@ await section("lifted probes: the sheet audit", async () => {
     await touch("touchMove", x, y + dy);
     await page.waitForTimeout(160); // outlive the 120ms overlay transition before reading
     const t = await page.evaluate(() => {
-      const p = document.querySelector(".db-record-detail-panel");
+      const p = document.querySelector(".obnotion-record-detail-panel");
       return p ? getComputedStyle(p).transform : "gone";
     });
     await touch("touchEnd", x, y + dy);
@@ -6554,8 +6554,8 @@ await section("lifted probes: the sheet audit", async () => {
   // edit, metadata resolve and computed sync does.
   const afterRefresh = await page.evaluate(() => {
     globalThis.__a.refreshRecordDetailPanel({ file: { path: "33.md", basename: "Quarterly review", name: "33.md" }, frontmatter: { income: 1300, status: "Active", owner: "Michel" }, computed: {} });
-    const panel = document.querySelector(".db-record-detail-panel");
-    return { hasHandle: !!panel.querySelector(".db-mobile-bottom-sheet-handle"), firstChild: panel.firstElementChild?.className || "(none)" };
+    const panel = document.querySelector(".obnotion-record-detail-panel");
+    return { hasHandle: !!panel.querySelector(".obnotion-mobile-bottom-sheet-handle"), firstChild: panel.firstElementChild?.className || "(none)" };
   });
   record(1, "the grab bar survives a view re-render", afterRefresh.hasHandle,
     `after one refresh the sheet's first child is "${afterRefresh.firstChild}"; grab bar present=${afterRefresh.hasHandle}`);
@@ -6568,9 +6568,9 @@ await section("lifted probes: the sheet audit", async () => {
   await openSheet();
   await page.waitForTimeout(200);
   const header = await page.evaluate(() => {
-    const panel = document.querySelector(".db-record-detail-panel");
-    const open = panel.querySelector(".db-board-card-open");
-    const close = panel.querySelector(".db-cell-edit-close");
+    const panel = document.querySelector(".obnotion-record-detail-panel");
+    const open = panel.querySelector(".obnotion-board-card-open");
+    const close = panel.querySelector(".obnotion-cell-edit-close");
     const box = (el) => { const r = el.getBoundingClientRect(); return { w: +r.width.toFixed(1), h: +r.height.toFixed(1), cy: +(r.top + r.height / 2).toFixed(1), top: +r.top.toFixed(1), right: +r.right.toFixed(1) }; };
     return { open: box(open), close: box(close) };
   });
@@ -6583,13 +6583,13 @@ await section("lifted probes: the sheet audit", async () => {
 
   // ── ASK 3 — Notion-like rows: no gap, bigger text, a divider ──────────
   const rows = await page.evaluate(() => {
-    const panel = document.querySelector(".db-record-detail-panel");
-    const fields = panel.querySelectorAll(".db-record-detail-field");
-    const list = panel.querySelector(".db-record-detail-fields");
+    const panel = document.querySelector(".obnotion-record-detail-panel");
+    const fields = panel.querySelectorAll(".obnotion-record-detail-field");
+    const list = panel.querySelector(".obnotion-record-detail-fields");
     const a = fields[0].getBoundingClientRect();
     const b = fields[1].getBoundingClientRect();
-    const label = fields[0].querySelector(".db-record-detail-field-label");
-    const value = fields[0].querySelector(".db-board-card-value");
+    const label = fields[0].querySelector(".obnotion-record-detail-field-label");
+    const value = fields[0].querySelector(".obnotion-board-card-value");
     const cs = (el) => getComputedStyle(el);
     return {
       count: fields.length,
@@ -6617,7 +6617,7 @@ await section("lifted probes: the sheet audit", async () => {
 
   // ── ASK 5 — the grab band, as accepted: 35px, full width ──────────────
   // The 48px ask was closed: the band gets the chrome above the header and no more, which is
-  // --db-space-6 (16) + the handle's 6pt top margin + its 5pt bar + its 4px bottom reach = 31px —
+  // --obnotion-space-6 (16) + the handle's 6pt top margin + its 5pt bar + its 4px bottom reach = 31px —
   // the measured 34x5pt handle at a 6pt drop, one pixel under the previous 36x4px/8px shape's own
   // 32px sum. That clears WCAG 2.5.8's 24px AA target and falls short of 2.5.5's 44px AAA one,
   // knowingly. The prose record says 35px; the stylesheet's own arithmetic says 31px, and this is
@@ -6641,15 +6641,15 @@ await section("lifted probes: the sheet audit", async () => {
   // asserted "no unwired bar" would pass a build where the bar had stopped appearing at all.
   const handles = await page.evaluate((classes) => {
     const { applySheetChrome, attachSheetDragToDismiss, hasSheetDrag } = globalThis.__a;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
     const out = [];
     for (const cls of classes) {
       const el = host.createDiv({ cls });
       applySheetChrome(el, true);
-      const chromeAlone = el.querySelectorAll(".db-mobile-bottom-sheet-handle").length;
+      const chromeAlone = el.querySelectorAll(".obnotion-mobile-bottom-sheet-handle").length;
       const wiredBefore = hasSheetDrag(el);
       const release = attachSheetDragToDismiss(el, () => undefined);
-      const afterGesture = el.querySelectorAll(".db-mobile-bottom-sheet-handle").length;
+      const afterGesture = el.querySelectorAll(".obnotion-mobile-bottom-sheet-handle").length;
       const wiredAfter = hasSheetDrag(el);
       if (typeof release === "function") release();
       applySheetChrome(el, false);
@@ -6678,7 +6678,7 @@ await section("lifted probes: the sheet audit", async () => {
 
   // ── ASK 6 — one fill for every sheet surface ──────────────────────────
   // Each surface is built where its owner builds it. A panel is created inside the plugin's
-  // container and portalled out by applySheetChrome, which is what hands it `db-surface` and the
+  // container and portalled out by applySheetChrome, which is what hands it `obnotion-surface` and the
   // token scope; a bare div parked on the body instead takes applySheetChrome's already-on-the-body
   // early return, never receives that class, and measures transparent for a reason that has nothing
   // to do with the fill under test. The owned menu is measured through its own constructor, since it
@@ -6698,7 +6698,7 @@ await section("lifted probes: the sheet audit", async () => {
   // claim than "one rule declares the fill", and it is the one that answers the ask.
   const fills = await page.evaluate((classes) => {
     const { applySheetChrome, createOwnedMenu } = globalThis.__a;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
     const out = {};
     const parents = {};
     const wrappers = [];
@@ -6707,8 +6707,8 @@ await section("lifted probes: the sheet audit", async () => {
       const wrapper = host.createDiv({ cls: "sheet-fill-ancestor" });
       wrapper.style.setProperty("--background-primary", `rgb(${20 + index * 25}, ${index * 20}, ${200 - index * 20})`);
       wrappers.push(wrapper);
-      const el = cls === "db-owned-menu" ? createOwnedMenu(document).el : wrapper.createDiv({ cls });
-      if (cls === "db-owned-menu") wrapper.appendChild(el);
+      const el = cls === "obnotion-owned-menu" ? createOwnedMenu(document).el : wrapper.createDiv({ cls });
+      if (cls === "obnotion-owned-menu") wrapper.appendChild(el);
       applySheetChrome(el, true);
       out[cls] = getComputedStyle(el).backgroundColor;
       parents[cls] = el.parentElement === document.body ? "body" : (el.parentElement?.className || "detached");
@@ -6760,8 +6760,8 @@ await section("lifted probes: the sheet audit", async () => {
   await page.waitForTimeout(200);
   const navbarCover = await page.evaluate(() => {
     const nav = document.querySelector(".mobile-navbar");
-    const panel = document.querySelector(".db-record-detail-panel");
-    const scrim = document.querySelector(".db-mobile-sheet-scrim");
+    const panel = document.querySelector(".obnotion-record-detail-panel");
+    const scrim = document.querySelector(".obnotion-mobile-sheet-scrim");
     if (!nav || !panel) return null;
     const navBox = nav.getBoundingClientRect();
     const x = Math.round(navBox.left + navBox.width / 2);
@@ -6806,9 +6806,9 @@ await section("lifted probes: the sheet audit", async () => {
   await openSheet();
   await page.waitForTimeout(200);
   const scrim = await page.evaluate(() => {
-    const s = document.querySelector(".db-mobile-sheet-scrim");
-    const panel = document.querySelector(".db-record-detail-panel");
-    const handle = panel.querySelector(".db-mobile-bottom-sheet-handle");
+    const s = document.querySelector(".obnotion-mobile-sheet-scrim");
+    const panel = document.querySelector(".obnotion-record-detail-panel");
+    const handle = panel.querySelector(".obnotion-mobile-bottom-sheet-handle");
     const cs = getComputedStyle(s);
     const pr = panel.getBoundingClientRect();
     // Behind the sheet: does the scrim take the press instead of the table?
@@ -6841,7 +6841,7 @@ await section("lifted probes: the sheet audit", async () => {
   await openSheet();
   await page.waitForTimeout(200);
   const kbVisual = await page.evaluate(async () => {
-    const panel = document.querySelector(".db-record-detail-panel");
+    const panel = document.querySelector(".obnotion-record-detail-panel");
     const before = Math.round(panel.getBoundingClientRect().bottom);
     // This record carries four fields, short enough to float —
     // read the resting inset off the panel itself rather than assuming the flush shape's fixed 0.
@@ -6850,14 +6850,14 @@ await section("lifted probes: the sheet audit", async () => {
     // The iOS-shaped signal: visualViewport changes, window does not.
     window.visualViewport?.dispatchEvent(new Event("resize"));
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-    const live = document.querySelector(".db-record-detail-panel");
+    const live = document.querySelector(".obnotion-record-detail-panel");
     const out = live
-      ? { survived: true, before, bottom: Math.round(live.getBoundingClientRect().bottom), top: Math.round(live.getBoundingClientRect().top), varValue: live.style.getPropertyValue("--db-mobile-sheet-bottom"), maxH: getComputedStyle(live).maxHeight }
+      ? { survived: true, before, bottom: Math.round(live.getBoundingClientRect().bottom), top: Math.round(live.getBoundingClientRect().top), varValue: live.style.getPropertyValue("--obnotion-mobile-sheet-bottom"), maxH: getComputedStyle(live).maxHeight }
       : { survived: false, before };
     document.documentElement.style.removeProperty("--keyboard-height");
     window.visualViewport?.dispatchEvent(new Event("resize"));
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-    const back = document.querySelector(".db-record-detail-panel");
+    const back = document.querySelector(".obnotion-record-detail-panel");
     return { ...out, restingInset, restored: back ? Math.round(back.getBoundingClientRect().bottom) : null, viewport: window.innerHeight };
   });
   record(4, "a declared keyboard height lifts the sheet clear of it",
@@ -6887,7 +6887,7 @@ await section("lifted probes: the sheet audit", async () => {
   // half a host cannot supply.
   const kbFallback = await page.evaluate(async () => {
     const { publishKeyboardInset } = globalThis.__p;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
     if (!host) return { ran: false };
     // Host variable absent, which is the whole premise.
     document.documentElement.style.removeProperty("--keyboard-height");
@@ -6905,7 +6905,7 @@ await section("lifted probes: the sheet audit", async () => {
     });
     const stop = publishKeyboardInset(host);
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-    const observed = host.style.getPropertyValue("--db-keyboard-inset");
+    const observed = host.style.getPropertyValue("--obnotion-keyboard-inset");
     stop();
     Object.defineProperty(window, "visualViewport", { configurable: true, value: real });
     return { ran: true, observed, want: `${shrunk}px`, declared: document.documentElement.style.getPropertyValue("--keyboard-height") || "(absent)" };
@@ -6913,7 +6913,7 @@ await section("lifted probes: the sheet audit", async () => {
   record(4, "the keyboard inset falls back to the visual viewport when the host declares nothing",
     kbFallback.ran && kbFallback.observed === kbFallback.want,
     kbFallback.ran
-      ? `--keyboard-height ${kbFallback.declared}, visual viewport shrunk by 336px, published --db-keyboard-inset=${kbFallback.observed} (want ${kbFallback.want})`
+      ? `--keyboard-height ${kbFallback.declared}, visual viewport shrunk by 336px, published --obnotion-keyboard-inset=${kbFallback.observed} (want ${kbFallback.want})`
       : "no container to publish onto");
 
   // The Android-shaped signal: the window itself resizes. Driven by resizing the page rather than
@@ -6929,7 +6929,7 @@ await section("lifted probes: the sheet audit", async () => {
   await page.setViewportSize({ width: 390, height: 508 });
   await page.waitForTimeout(120);
   const kbWindow = await page.evaluate(() => {
-    const live = document.querySelector(".db-record-detail-panel");
+    const live = document.querySelector(".obnotion-record-detail-panel");
     return {
       survived: Boolean(live),
       bottom: live ? Math.round(live.getBoundingClientRect().bottom) : null,
@@ -6941,7 +6941,7 @@ await section("lifted probes: the sheet audit", async () => {
   await page.setViewportSize({ width: 844, height: 390 });
   await page.waitForTimeout(120);
   const rotated = await page.evaluate(() => ({
-    survived: Boolean(document.querySelector(".db-record-detail-panel")),
+    survived: Boolean(document.querySelector(".obnotion-record-detail-panel")),
     width: window.innerWidth,
   }));
   await page.setViewportSize({ width: 390, height: 844 });
@@ -6972,7 +6972,7 @@ await section("lifted probes: the sheet audit", async () => {
     document.body.appendChild(menuEl);
     applySheetChrome(menuEl, true);
     const inMenuSheet = measure(menuEl);
-    const bare = document.body.createDiv({ cls: "db-record-detail-panel" });
+    const bare = document.body.createDiv({ cls: "obnotion-record-detail-panel" });
     applySheetChrome(bare, true);
     const inPanelSheet = measure(bare);
     applySheetChrome(menuEl, false); applySheetChrome(bare, false);
@@ -6992,7 +6992,7 @@ await section("lifted probes: the sheet audit", async () => {
   await openSheet();
   await page.waitForTimeout(200);
   const dropped = await page.evaluate(() => {
-    const panel = document.querySelector(".db-record-detail-panel");
+    const panel = document.querySelector(".obnotion-record-detail-panel");
     return {
       overflowY: panel.style.getPropertyValue("overflow-y") || "(unset)",
       overscroll: panel.style.getPropertyValue("overscroll-behavior") || "(unset)",
@@ -7020,7 +7020,7 @@ await section("lifted probes: the sheet audit", async () => {
 // fixture.
 //
 // What comes back is not one editor but four, and only one of them is inline.
-// A number or currency cell gets `.db-cell-line-edit-popover`, sized and placed
+// A number or currency cell gets `.obnotion-cell-line-edit-popover`, sized and placed
 // against the value it replaces, which is the one a reader expects to sit on the
 // label's line. Text and date get a full-width overlay docked below the row, and
 // a select gets a list popover; those are deliberately different affordances and
@@ -7056,7 +7056,7 @@ await section("the sheet's inline editor", async () => {
     .workspace-split.mod-root { flex: 1 1 auto; position: relative; overflow: hidden; }
     .workspace-split.mod-right-split { width: ${SIDEBAR}px; flex: 0 0 ${SIDEBAR}px; background: #eee; }
     .is-phone .workspace-split.mod-right-split { display: none; }
-    .note-database-container { position: relative; height: 100%; padding: 40px; }
+    .obnotion-container { position: relative; height: 100%; padding: 40px; }
     .workspace-leaf { position: relative; contain: strict !important; overflow: hidden; isolation: isolate; }
     .workspace-leaf, .workspace-leaf-content, .view-content { height: 100%; }
     .app-container.mod-static-nav .workspace { height: calc(100% - 80px); }
@@ -7067,7 +7067,7 @@ await section("the sheet's inline editor", async () => {
     ${phone ? '<div class="mobile-navbar"></div>' : ""}
     <div class="app-container${phone ? " mod-static-nav" : ""}"><div class="workspace"><div class="workspace-split mod-root">
       <div class="workspace-leaf"><div class="workspace-leaf-content"><div class="view-content">
-      <div class="note-database-container"><div class="anchor" id="anchor"></div></div>
+      <div class="obnotion-container"><div class="anchor" id="anchor"></div></div>
       </div></div></div>
     </div><div class="workspace-split mod-right-split"></div></div></div>
   </body></html>`;
@@ -7105,7 +7105,7 @@ await section("the sheet's inline editor", async () => {
     closeRecordDetailPanel();
     openRecordDetailPanel({
       anchorEl: document.getElementById("anchor"),
-      host: document.querySelector(".note-database-container"),
+      host: document.querySelector(".obnotion-container"),
       row,
       columns,
       allColumns: columns,
@@ -7122,7 +7122,7 @@ await section("the sheet's inline editor", async () => {
       },
     });
 
-    const panel = document.querySelector(".db-record-detail-panel");
+    const panel = document.querySelector(".obnotion-record-detail-panel");
     const raf = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     // The sheet slides in. Measuring before it lands reads a moving rectangle.
     await new Promise((r) => setTimeout(r, 450));
@@ -7136,10 +7136,10 @@ await section("the sheet's inline editor", async () => {
       };
     };
 
-    const out = { isSheet: panel.classList.contains("db-mobile-bottom-sheet"), fields: [] };
-    for (const fieldRow of [...panel.querySelectorAll(".db-record-detail-field")]) {
-      const label = fieldRow.querySelector(".db-record-detail-field-label");
-      const value = fieldRow.querySelector(".db-board-card-value");
+    const out = { isSheet: panel.classList.contains("obnotion-mobile-bottom-sheet"), fields: [] };
+    for (const fieldRow of [...panel.querySelectorAll(".obnotion-record-detail-field")]) {
+      const label = fieldRow.querySelector(".obnotion-record-detail-field-label");
+      const value = fieldRow.querySelector(".obnotion-board-card-value");
       if (!label || !value) continue;
       const valueAtRest = rect(value);
 
@@ -7151,8 +7151,8 @@ await section("the sheet's inline editor", async () => {
       // Document-wide: the desktop panel hosts its editor on the container, the
       // sheet hosts it on itself, and a check that looked in only one would find
       // nothing on the other and read that as "no defect".
-      const editor = document.querySelector(".db-cell-edit-popover, .db-cell-option-popover")
-        || document.querySelector("input.db-cell-input, textarea.db-cell-input");
+      const editor = document.querySelector(".obnotion-cell-edit-popover, .obnotion-cell-option-popover")
+        || document.querySelector("input.obnotion-cell-input, textarea.obnotion-cell-input");
       const input = editor ? (editor.matches("input, textarea") ? editor : editor.querySelector("input, textarea")) : null;
       const rowRect = rect(fieldRow);
       const labelRect = rect(label);
@@ -7161,7 +7161,7 @@ await section("the sheet's inline editor", async () => {
       out.fields.push({
         label: label.textContent,
         cls: editor ? editor.className : "(no editor opened)",
-        inline: Boolean(editor && editor.classList.contains("db-cell-line-edit-popover")),
+        inline: Boolean(editor && editor.classList.contains("obnotion-cell-line-edit-popover")),
         position: editor ? getComputedStyle(editor).position : null,
         inFlowChildOfRow: Boolean(editor && fieldRow.contains(editor) && getComputedStyle(editor).position === "static"),
         marginTop: editor ? getComputedStyle(editor).marginTop : null,
@@ -7188,22 +7188,22 @@ await section("the sheet's inline editor", async () => {
     // therefore inherits the same height and the same centring correction, while anchoring on a
     // line box of its own. Whether one correction can serve both anchors is only answerable by
     // measuring the second one.
-    const titleEl = panel.querySelector(".db-record-detail-title");
+    const titleEl = panel.querySelector(".obnotion-record-detail-title");
     const titleAtRest = rect(titleEl);
     const titleCs = getComputedStyle(titleEl);
     titleEl.dispatchEvent(new window.MouseEvent("dblclick", { bubbles: true, cancelable: true, view: window }));
     await raf();
     await new Promise((r) => setTimeout(r, 40));
     await raf();
-    const titleEditor = document.querySelector(".db-cell-edit-popover, .db-cell-option-popover");
+    const titleEditor = document.querySelector(".obnotion-cell-edit-popover, .obnotion-cell-option-popover");
     const titleEditorRect = titleEditor ? rect(titleEditor) : null;
     out.title = {
       cls: titleEditor ? titleEditor.className : "(no editor opened)",
       // The rename reaches the shared single-line popover through the renderer, so it is subject to
       // the sheet's popover rules. If it ever stops doing so the geometry below measures a
       // different box and would read as "no defect" rather than as a changed mechanism.
-      inline: Boolean(titleEditor && titleEditor.classList.contains("db-cell-line-edit-popover")),
-      columnKey: titleEditor ? titleEditor.dataset.noteDatabaseColumnKey || "(none)" : null,
+      inline: Boolean(titleEditor && titleEditor.classList.contains("obnotion-cell-line-edit-popover")),
+      columnKey: titleEditor ? titleEditor.dataset.obnotionColumnKey || "(none)" : null,
       marginTop: titleEditor ? getComputedStyle(titleEditor).marginTop : null,
       // The anchor's own metrics, read rather than derived. The title takes its size from a HOST
       // token and declares no line-height of its own, so both numbers depend on what the host
@@ -7263,8 +7263,8 @@ await section("the sheet's inline editor", async () => {
 
   record("the sheet opens an inline editor on a number row",
     phone.isSheet && sheetInline.length === 2,
-    `${sheetInline.length} of ${phone.fields.length} sheet rows opened .db-cell-line-edit-popover`
-      + ` (${phone.fields.map((f) => `${f.label}=${f.cls.replace("db-cell-edit-popover ", "")}`).join(", ")})`);
+    `${sheetInline.length} of ${phone.fields.length} sheet rows opened .obnotion-cell-line-edit-popover`
+      + ` (${phone.fields.map((f) => `${f.label}=${f.cls.replace("obnotion-cell-edit-popover ", "")}`).join(", ")})`);
 
   // Pinning the shape, because the fix depends on it. An out-of-flow editor is
   // sized to its row; an in-flow one would let the row size itself, and the
@@ -7336,7 +7336,7 @@ await section("the sheet's inline editor", async () => {
   // The cheaper guard — assert the desktop editor's margin-top is still 0px — was
   // written first and does not work. Unscoping both selectors, which is the mistake
   // this exists to catch, still left margin-top reading 0px, because
-  // `--db-sheet-row-min-height` is declared only on the sheet and off it the whole
+  // `--obnotion-sheet-row-min-height` is declared only on the sheet and off it the whole
   // declaration is invalid at computed-value time and falls back to the initial
   // value. The input rule leaked anyway and shrank the desktop editor to 31px.
   // Only measuring the rectangle sees that.
@@ -7383,7 +7383,7 @@ await section("a number reads the same on a card and in the row behind it", asyn
 
   const measured = await page.evaluate(() => {
     const { renderCardField, CellRenderer, getColumnDisplayType, isEmptyValue, formatEuroNumber } = globalThis.__number;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
 
     // One record and one column, rendered both ways. The card is given the frontmatter value the
     // way the board and list renderers give it, and the cell reads the same record itself — so the
@@ -7399,15 +7399,15 @@ await section("a number reads the same on a card and in the row behind it", asyn
       const field = renderCardField({
         app: {}, row, col, config: { schema: { computedFields: [] } },
         value: row.frontmatter[col.key], displayType, empty: isEmptyValue(row.frontmatter[col.key]),
-        fieldClass: "db-board-card-field", valueClass: "db-board-card-value",
-        labelClass: "db-board-card-field-label", badgesClass: "db-board-card-badges",
-        linkClass: "db-board-card-link",
+        fieldClass: "obnotion-board-card-field", valueClass: "obnotion-board-card-value",
+        labelClass: "obnotion-board-card-field-label", badgesClass: "obnotion-board-card-badges",
+        linkClass: "obnotion-board-card-link",
       });
       host.appendChild(field);
-      const td = host.createDiv({ cls: "db-cell" });
+      const td = host.createDiv({ cls: "obnotion-cell" });
       // The renderer only needs a data source to save through, and nothing here saves.
       new CellRenderer({ openNote() {}, getRows: () => [row] }, async () => {}).renderCell(td, row, col);
-      return { field, card: field.querySelector(".db-board-card-value").textContent, cell: td.textContent };
+      return { field, card: field.querySelector(".obnotion-board-card-value").textContent, cell: td.textContent };
     };
 
     const pairs = (values) => {
@@ -7450,7 +7450,7 @@ await section("a number reads the same on a card and in the row behind it", asyn
       return {
         style,
         needle,
-        elements: field.querySelectorAll(style === "ring" ? ".db-cell-progress-ring" : ".db-cell-progress").length,
+        elements: field.querySelectorAll(style === "ring" ? ".obnotion-cell-progress-ring" : ".obnotion-cell-progress").length,
         formatted: texts.filter((text) => text.includes(needle)).length,
         texts,
       };
@@ -7531,7 +7531,7 @@ await section("a number reads the same on a card and in the row behind it", asyn
 // The peek was docked with a hand-written `z-index: 998`. That number is not in the layer scale —
 // the scale is panel 50, popover 100, submenu 110, modal 1000 — so it beat two declared tiers
 // without anyone choosing that, and a dropdown opened inside the peek painted underneath the panel
-// containing it. The literal has since been replaced with `var(--db-layer-panel, 50)`, and nothing
+// containing it. The literal has since been replaced with `var(--obnotion-layer-panel, 50)`, and nothing
 // in this repository could tell the difference: no check reads a stacking order anywhere.
 //
 // A check that reads the stylesheet for the string "998" would pass on the fixed tree and prove
@@ -7541,7 +7541,7 @@ await section("a number reads the same on a card and in the row behind it", asyn
 //
 // BOTH SURFACES ARE THE SHIPPED ONES. `openTableRecordPeek` mounts the panel and `openDropdownMenu`
 // mounts the dropdown, which matters more than usual here: the dropdown resolves its own host, and
-// it resolves to `.note-database-container` — the peek's parent. That shared parent is the whole
+// it resolves to `.obnotion-container` — the peek's parent. That shared parent is the whole
 // mechanism. A hand-built dropdown appended somewhere else would be in a different stacking context
 // and would paint above a peek at any z-index, which is a check that cannot fail.
 //
@@ -7559,7 +7559,7 @@ await section("the peek's layer sits inside the token scale", async () => {
 
   const measured = await page.evaluate(() => {
     const { openTableRecordPeek, closeTableRecordPeek, openDropdownMenu } = globalThis.__layer;
-    const container = document.querySelector(".note-database-container");
+    const container = document.querySelector(".obnotion-container");
     const anchor = document.getElementById("anchor");
 
     const row = {
@@ -7580,11 +7580,11 @@ await section("the peek's layer sits inside the token scale", async () => {
     openTableRecordPeek({
       anchor, row, config: peekConfig, visibleColumns: columns, allColumns: columns, container,
     });
-    const peek = container.querySelector(".db-record-peek-panel");
+    const peek = container.querySelector(".obnotion-record-peek-panel");
 
     // The dropdown is anchored inside the peek, which is what the criterion says: opened *inside*
     // it. The anchor's own host resolution then puts the popover in the container beside the peek.
-    const trigger = peek.querySelector(".db-record-peek-title");
+    const trigger = peek.querySelector(".obnotion-record-peek-title");
     const close = openDropdownMenu({
       anchor: trigger,
       label: "Status",
@@ -7592,18 +7592,18 @@ await section("the peek's layer sits inside the token scale", async () => {
       value: "open",
       onChange: () => undefined,
     });
-    const dropdown = container.querySelector(".db-dropdown-popover");
+    const dropdown = container.querySelector(".obnotion-dropdown-popover");
 
-    // The scale is declared on the surface list, not on `:root` — `.note-database-container` is in
+    // The scale is declared on the surface list, not on `:root` — `.obnotion-container` is in
     // that list and is what both surfaces inherit through, so this is the scale they actually
     // resolve against. Read off the document element it comes back empty and every tier reads 0,
     // which compares the peek against a scale that does not exist.
     const rootStyle = getComputedStyle(container);
     const tier = (name) => Number(rootStyle.getPropertyValue(name).trim());
     const layers = {
-      panel: tier("--db-layer-panel"),
-      popover: tier("--db-layer-popover"),
-      submenu: tier("--db-layer-submenu"),
+      panel: tier("--obnotion-layer-panel"),
+      popover: tier("--obnotion-layer-popover"),
+      submenu: tier("--obnotion-layer-submenu"),
     };
 
     // Painting at 50 and declaring the tier are different claims: a hand-written 50 paints
@@ -7615,7 +7615,7 @@ await section("the peek's layer sits inside the token scale", async () => {
       try { rules = sheet.cssRules; } catch { continue; }
       for (const rule of rules) {
         if (!rule.selectorText || !rule.style) continue;
-        if (!rule.selectorText.includes(".db-record-peek-panel")) continue;
+        if (!rule.selectorText.includes(".obnotion-record-peek-panel")) continue;
         const z = rule.style.getPropertyValue("z-index");
         if (z) declaredZ = z.trim();
       }
@@ -7671,7 +7671,7 @@ await section("the peek's layer sits inside the token scale", async () => {
 
   record("the peek's layer is a declared tier, not a literal outside the scale",
     Number(shipped.peekZ) === layers.panel
-      && shipped.declaredZ.includes("--db-layer-panel")
+      && shipped.declaredZ.includes("--obnotion-layer-panel")
       && layers.panel < layers.popover && layers.popover < layers.submenu,
     `peek paints at z-index ${shipped.peekZ} from the declaration \`${shipped.declaredZ}\`, against `
       + `the scale panel=${layers.panel} popover=${layers.popover} submenu=${layers.submenu}. The `
@@ -7767,7 +7767,7 @@ await section("the setting decides where a record opens", async () => {
 
   const measured = await page.evaluate(async () => {
     const { DatabaseView, closeTableRecordPeek, closeRecordDetailPanel } = globalThis.__opentarget;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
     const columns = [
       { key: "file.name", label: "Name", type: "text" },
       { key: "amount", label: "Amount", type: "text" },
@@ -7775,7 +7775,7 @@ await section("the setting decides where a record opens", async () => {
     const config = { schema: { columns, computedFields: [] }, viewType: "table" };
     const row = { file: { path: "record.md", name: "record.md", basename: "record" }, frontmatter: { amount: "1" }, computed: {} };
 
-    const anchor = host.createDiv({ cls: "db-cell" });
+    const anchor = host.createDiv({ cls: "obnotion-cell" });
     anchor.tabIndex = 0;
 
     const run = async (setting, hasAnchor) => {
@@ -7784,7 +7784,7 @@ await section("the setting decides where a record opens", async () => {
       // A panel whose construction was refused mid-way leaves its node behind, and the next run
       // would then read a surface the run before it opened. Clearing by selector rather than by the
       // close helper is what makes each reading independent.
-      for (const stale of document.querySelectorAll(".db-record-detail-panel, .db-record-peek-panel")) stale.remove();
+      for (const stale of document.querySelectorAll(".obnotion-record-detail-panel, .obnotion-record-peek-panel")) stale.remove();
       const opened = [];
       // `Object.create` gives a real view without the constructor, which wants a leaf this page
       // cannot supply. Every field the driven method reads is written here; a field it only reads
@@ -7803,7 +7803,7 @@ await section("the setting decides where a record opens", async () => {
       view.dataSource = { openNote: (file, target) => opened.push(`leaf:${target}`) };
       // The settings lookup the view really performs, answered by a stub registry shaped like the
       // one Obsidian keeps. Supplying the value any other way would test a different code path.
-      view.app = { plugins: { plugins: { "note-database": { saveSettings: async () => undefined, settings: { recordOpenTarget: setting } } } } };
+      view.app = { plugins: { plugins: { "obnotion": { saveSettings: async () => undefined, settings: { recordOpenTarget: setting } } } } };
 
       // The panel is identified by reaching the shim's boundary, and that is a proxy.
       //
@@ -7820,8 +7820,8 @@ await section("the setting decides where a record opens", async () => {
         else throw err;
       }
 
-      const peek = document.querySelector(".db-record-peek-panel");
-      const panel = document.querySelector(".db-record-detail-panel");
+      const peek = document.querySelector(".obnotion-record-peek-panel");
+      const panel = document.querySelector(".obnotion-record-detail-panel");
       if (peek) opened.push("peek");
       if (panel && !opened.includes("panel")) opened.push("panel");
       closeTableRecordPeek();
@@ -7878,7 +7878,7 @@ for (const surface of [
 
     const geo = await page.evaluate(() => {
       const { ColumnManagerRenderer } = globalThis.__columns;
-      const container = document.querySelector(".note-database-container");
+      const container = document.querySelector(".obnotion-container");
       const columns = [
         { key: "file.name", label: "Name", type: "text" },
         { key: "status", label: "Status", type: "text" },
@@ -7894,7 +7894,7 @@ for (const surface of [
       const renderer = new ColumnManagerRenderer();
       renderer.render(container, true, config, state, columns, actions, document.getElementById("anchor"));
       const panel = renderer.getPanel();
-      const rows = [...panel.querySelectorAll(".db-column-manager-row")];
+      const rows = [...panel.querySelectorAll(".obnotion-column-manager-row")];
 
       // Two controls, one per clause, because the clauses fail in different ways and a single
       // mutation would leave one of them untested.
@@ -8000,7 +8000,7 @@ await section("what a single click on a property row reaches", async () => {
 
   const measured = await page.evaluate(() => {
     const { ColumnManagerRenderer } = globalThis.__columns;
-    const container = document.querySelector(".note-database-container");
+    const container = document.querySelector(".obnotion-container");
 
     const columns = [
       { key: "file.name", label: "Name", type: "text" },
@@ -8025,9 +8025,9 @@ await section("what a single click on a property row reaches", async () => {
 
     // The middle row, so a mis-resolution has somewhere to land in both directions. A first or last
     // row hides an off-by-one against the array's own edge.
-    const rows = [...panel.querySelectorAll(".db-column-manager-row")];
+    const rows = [...panel.querySelectorAll(".obnotion-column-manager-row")];
     const row = rows[1];
-    const named = row.querySelector(".db-column-name").textContent;
+    const named = row.querySelector(".obnotion-column-name").textContent;
 
     // Every element inside the row, clicked once. `elementFromPoint` at each one's centre would
     // measure the same thing for overlapping children; dispatching on the element itself asks what
@@ -8044,7 +8044,7 @@ await section("what a single click on a property row reaches", async () => {
           // A click on the trash's own glyph bubbles to the trash, which is one path reported
           // twice, not two paths. What separates a real second route from that is whether the
           // element sits inside the delete control at all.
-          insideDelete: Boolean(el.closest(".db-column-delete-btn")),
+          insideDelete: Boolean(el.closest(".obnotion-column-delete-btn")),
           isRow: el === row,
           action: call.action,
           key: call.arg && call.arg.key ? call.arg.key : String(call.arg),
@@ -8112,7 +8112,7 @@ await section("what a single click on a property row reaches", async () => {
 // This measures it. Both presentations of the same grammar, one page each, reading the left edge
 // the eye actually tracks: the heading's text box, the row's icon box, and the row's label box.
 //
-// The rule the lead names is `.is-phone .db-menu-section { padding-inline: 16px }`. If it is the
+// The rule the lead names is `.is-phone .obnotion-menu-section { padding-inline: 16px }`. If it is the
 // mechanism, removing it moves the phone heading and leaves the desktop one where it is — which is
 // the ablation below, and it is what makes this a measurement rather than a second argument.
 
@@ -8132,7 +8132,7 @@ const menuEdgeProbe = async (isPhone) => {
 
   const measured = await page.evaluate(() => {
     const { createOwnedMenu, createMenuRow } = globalThis.__place;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
 
     // Surface A: the owned menu, which is what a column menu is on a phone. Heading through its own
     // `addSection`, rows through `addRow` — both the shipped entry points.
@@ -8144,14 +8144,14 @@ const menuEdgeProbe = async (isPhone) => {
     menu.showAt({ x: 200, y: 200 });
 
     // Surface B: the More-tools dropdown, built the way `renderUtilitiesOverflowButton` builds it —
-    // `.db-panel-header` holding a `.db-panel-title`, then `createMenuRow` rows carrying
-    // `db-toolbar-menu-row`. Those three classes ARE the subject of report 28, so they are named
+    // `.obnotion-panel-header` holding a `.obnotion-panel-title`, then `createMenuRow` rows carrying
+    // `obnotion-toolbar-menu-row`. Those three classes ARE the subject of report 28, so they are named
     // from the shipped source rather than guessed, and the rows come from the shared factory.
-    const utilities = host.createDiv({ cls: "db-view-tab-popover db-toolbar-utilities-popover" });
-    const header = utilities.createDiv({ cls: "db-panel-header" });
-    header.createDiv({ cls: "db-panel-title", text: "Utilities" });
+    const utilities = host.createDiv({ cls: "obnotion-view-tab-popover obnotion-toolbar-utilities-popover" });
+    const header = utilities.createDiv({ cls: "obnotion-panel-header" });
+    header.createDiv({ cls: "obnotion-panel-title", text: "Utilities" });
     for (const label of ["Display width", "Refresh database", "View settings"]) {
-      createMenuRow(utilities, { cls: "db-toolbar-menu-row", icon: "pencil", label });
+      createMenuRow(utilities, { cls: "obnotion-toolbar-menu-row", icon: "pencil", label });
     }
 
     // The INK's left edge, not the box's. A heading is a padded div whose border box starts at the
@@ -8168,8 +8168,8 @@ const menuEdgeProbe = async (isPhone) => {
       const heading = root.querySelector(headingSel);
       const row = root.querySelector(rowSel);
       if (!heading || !row) return null;
-      const icon = row.querySelector(".db-menu-item-icon");
-      const label = row.querySelector(".db-menu-item-label");
+      const icon = row.querySelector(".obnotion-menu-item-icon");
+      const label = row.querySelector(".obnotion-menu-item-label");
       return {
         heading: inkLeft(heading),
         rowBox: inkLeft(row),
@@ -8188,20 +8188,20 @@ const menuEdgeProbe = async (isPhone) => {
     };
 
     // Surface C: the same dropdown mounted on the BODY, which is where a phone puts it. These
-    // surfaces present as sheets and are portalled out of `.note-database-container`, so a rule
+    // surfaces present as sheets and are portalled out of `.obnotion-container`, so a rule
     // scoped to the container is correct on the desktop half and simply absent on the presentation
     // whose rows are largest. Same builder, different parent, and that is the whole test.
-    const portalled = document.body.createDiv({ cls: "db-view-tab-popover db-toolbar-utilities-popover db-surface" });
-    const portalledHeader = portalled.createDiv({ cls: "db-panel-header" });
-    portalledHeader.createDiv({ cls: "db-panel-title", text: "Utilities" });
+    const portalled = document.body.createDiv({ cls: "obnotion-view-tab-popover obnotion-toolbar-utilities-popover obnotion-surface" });
+    const portalledHeader = portalled.createDiv({ cls: "obnotion-panel-header" });
+    portalledHeader.createDiv({ cls: "obnotion-panel-title", text: "Utilities" });
     for (const label of ["Display width", "Refresh database"]) {
-      createMenuRow(portalled, { cls: "db-toolbar-menu-row", icon: "pencil", label });
+      createMenuRow(portalled, { cls: "obnotion-toolbar-menu-row", icon: "pencil", label });
     }
 
     const read = () => ({
-      owned: edgesOf(menu.el, ".db-menu-section", ".db-menu-item"),
-      utilities: edgesOf(utilities, ".db-panel-title", ".db-toolbar-menu-row"),
-      portalled: edgesOf(portalled, ".db-panel-title", ".db-toolbar-menu-row"),
+      owned: edgesOf(menu.el, ".obnotion-menu-section", ".obnotion-menu-item"),
+      utilities: edgesOf(utilities, ".obnotion-panel-title", ".obnotion-toolbar-menu-row"),
+      portalled: edgesOf(portalled, ".obnotion-panel-title", ".obnotion-toolbar-menu-row"),
     });
 
     const shipped = read();
@@ -8214,7 +8214,7 @@ const menuEdgeProbe = async (isPhone) => {
       let rules;
       try { rules = sheet.cssRules; } catch { continue; }
       for (const rule of rules) {
-        if (rule.selectorText && rule.selectorText.includes(".is-phone .db-menu-section")) {
+        if (rule.selectorText && rule.selectorText.includes(".is-phone .obnotion-menu-section")) {
           rule.style.removeProperty("padding-inline");
         }
       }
@@ -8258,7 +8258,7 @@ await section("a menu's heading and its rows share one left edge", async () => {
         + `${m.shipped.utilities?.icon} (its glyph at ${m.shipped.utilities?.glyph}), row label left `
         + `${m.shipped.utilities?.label}. `
         + `This is operator report 28, measured rather than argued: the rows take a per-surface `
-        + `\`db-toolbar-menu-row\` inset and the heading takes whatever \`.db-panel-header\` gives it`);
+        + `\`obnotion-toolbar-menu-row\` inset and the heading takes whatever \`.obnotion-panel-header\` gives it`);
   }
 
   // The same surface, portalled — on the PHONE, which is the only presentation that portals it.
@@ -8266,7 +8266,7 @@ await section("a menu's heading and its rows share one left edge", async () => {
   // difference between a rule that reaches a phone sheet and one that does not.
   //
   // The desktop half of this pairing is deliberately not asserted. Measured, it reads heading 916
-  // against icon 912: on the body the ROW loses `.note-database-container .db-toolbar-menu-row` and
+  // against icon 912: on the body the ROW loses `.obnotion-container .obnotion-toolbar-menu-row` and
   // falls back to the shared row's own inset, so the heading is four pixels in rather than out. But
   // a desktop popover is never portalled — only the sheet presentation moves — so that shape is one
   // no surface renders, and a check that failed on it would be asking the stylesheet to be correct
@@ -8278,7 +8278,7 @@ await section("a menu's heading and its rows share one left edge", async () => {
       && Math.abs(phone.shipped.portalled.heading - phone.shipped.portalled.icon) <= 1,
     `mounted on the body at phone width: heading left ${phone.shipped.portalled?.heading}, row icon `
       + `left ${phone.shipped.portalled?.icon}. On a phone these surfaces leave `
-      + `\`.note-database-container\` to become sheets, so a rule that names that container is `
+      + `\`.obnotion-container\` to become sheets, so a rule that names that container is `
       + `absent exactly where the rows are largest`);
 
   // The lead, answered. Two claims in one row, because either alone is satisfiable by a coincidence.
@@ -8286,7 +8286,7 @@ await section("a menu's heading and its rows share one left edge", async () => {
   const desktopMoved = desktop.shipped.owned.heading !== desktop.ablated.owned.heading;
   record("the .is-phone heading rule moves the phone menu and cannot move the desktop one",
     phoneMoved && !desktopMoved,
-    `with \`.is-phone .db-menu-section\`'s padding-inline removed, the phone heading goes `
+    `with \`.is-phone .obnotion-menu-section\`'s padding-inline removed, the phone heading goes `
       + `${phone.shipped.owned.heading} → ${phone.ablated.owned.heading} and the desktop heading `
       + `goes ${desktop.shipped.owned.heading} → ${desktop.ablated.owned.heading}. `
       + `\`027\` left this as a lead: a rule scoped to the phone cannot be the mechanism behind a `
@@ -8308,7 +8308,7 @@ await section("a menu's heading and its rows share one left edge", async () => {
 //
 // The bound is stated as a TOKEN STEP rather than as a pixel count, because that is what the
 // criterion says and because a pixel bound would have to be re-tuned every time the scale moves.
-// `--db-space-2` is read off the surface rather than assumed.
+// `--obnotion-space-2` is read off the surface rather than assumed.
 
 const headerRhythmResults = [];
 
@@ -8321,7 +8321,7 @@ await section("the header keeps its height when the view type changes", async ()
 
   const measured = await page.evaluate(() => {
     const { ToolbarRenderer } = globalThis.__place;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
 
     const columns = [
       { key: "file.name", label: "Name", type: "text" },
@@ -8362,13 +8362,13 @@ await section("the header keeps its height when the view type changes", async ()
       sortColumn: undefined, sortDirection: "asc", searchText: "", groupByField: "",
     };
 
-    const step = Number.parseFloat(getComputedStyle(host).getPropertyValue("--db-space-2")) || 0;
+    const step = Number.parseFloat(getComputedStyle(host).getPropertyValue("--obnotion-space-2")) || 0;
 
     const VIEW_TYPES = ["table", "board", "gallery", "list", "calendar", "timeline"];
     const heights = [];
     const renderer = new ToolbarRenderer();
     for (const viewType of VIEW_TYPES) {
-      const container = host.createDiv({ cls: "db-view-host" });
+      const container = host.createDiv({ cls: "obnotion-view-host" });
       const view = { viewType, name: viewType, schema: { columns }, columnOrder: columns.map((c) => c.key) };
       const db = { id: "db", name: "Subs", schema: { columns }, views: [view], sourceRules: [] };
       let error = null;
@@ -8377,7 +8377,7 @@ await section("the header keeps its height when the view type changes", async ()
       } catch (e) {
         error = String(e && e.message ? e.message : e);
       }
-      const header = container.querySelector(".db-header") ?? container.querySelector(".db-toolbar");
+      const header = container.querySelector(".obnotion-header") ?? container.querySelector(".obnotion-toolbar");
       heights.push({
         viewType,
         error,
@@ -8407,7 +8407,7 @@ await section("the header keeps its height when the view type changes", async ()
 
   record("switching view type changes header height by at most one token step",
     spread !== null && step > 0 && spread <= step,
-    `header heights ${listing}; spread ${spread}px against one --db-space-2 step of ${step}px. `
+    `header heights ${listing}; spread ${spread}px against one --obnotion-space-2 step of ${step}px. `
       + `Stated in token steps because that is what the criterion says and because a pixel bound `
       + `would need re-tuning every time the scale moves`);
 });
@@ -8438,7 +8438,7 @@ await section("filter and sort answer a keyboard the same way", async () => {
 
   const measured = await page.evaluate(() => {
     const { FilterPanelRenderer, SortPanelRenderer } = globalThis.__panels;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
 
     const columns = [
       { key: "file.name", label: "Name", type: "text" },
@@ -8447,8 +8447,8 @@ await section("filter and sort answer a keyboard the same way", async () => {
     const config = { schema: { columns }, viewType: "table", columnOrder: columns.map((c) => c.key) };
 
     const probe = (which) => {
-      const container = host.createDiv({ cls: "db-panel-host" });
-      container.createDiv({ cls: "db-toolbar" });
+      const container = host.createDiv({ cls: "obnotion-panel-host" });
+      container.createDiv({ cls: "obnotion-toolbar" });
       const anchor = container.createEl("button", { cls: "anchor", text: which });
       let closed = 0;
       const actions = {
@@ -8571,7 +8571,7 @@ await section("the registry describes where these surfaces actually mount", asyn
     const { SURFACE_REGISTRY, renderDateValuePicker, closeActiveDateValuePicker } = globalThis.__registry;
     const { createOwnedMenu, ColumnMenu, openRecordDetailPanel, closeRecordDetailPanel } = globalThis.__place;
     const { FilterPanelRenderer } = globalThis.__panels;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
 
     const columns = [
       { key: "file.name", label: "Name", type: "text" },
@@ -8600,7 +8600,7 @@ await section("the registry describes where these surfaces actually mount", asyn
           new MouseEvent("click", { clientX: 300, clientY: 200 }),
           columns[1], anchor, {},
         );
-        const el = document.querySelector(".db-menu:not(.db-column-menu-subpopover)")
+        const el = document.querySelector(".obnotion-menu:not(.obnotion-column-menu-subpopover)")
           ?? document.querySelector(".menu");
         return { el, close: () => { el?.remove(); anchor.remove(); } };
       },
@@ -8610,13 +8610,13 @@ await section("the registry describes where these surfaces actually mount", asyn
           anchorEl: anchor, host, row, columns, allColumns: columns, config, app: {}, actions: {},
         });
         return {
-          el: document.querySelector(".db-record-detail-panel"),
+          el: document.querySelector(".obnotion-record-detail-panel"),
           close: () => { closeRecordDetailPanel(); anchor.remove(); },
         };
       },
       "filter-panel": () => {
-        const container = host.createDiv({ cls: "db-panel-host" });
-        container.createDiv({ cls: "db-toolbar" });
+        const container = host.createDiv({ cls: "obnotion-panel-host" });
+        container.createDiv({ cls: "obnotion-toolbar" });
         const anchor = container.createEl("button", { cls: "anchor", text: "Filter" });
         const renderer = new FilterPanelRenderer();
         const state = {
@@ -8629,19 +8629,19 @@ await section("the registry describes where these surfaces actually mount", asyn
         return { el: renderer.getPanel(), close: () => container.remove() };
       },
       "date-value-picker": () => {
-        const parent = host.createDiv({ cls: "db-panel-host" });
+        const parent = host.createDiv({ cls: "obnotion-panel-host" });
         const trigger = renderDateValuePicker({
           parent, value: "2026-03-25", onChange: () => undefined,
         });
         trigger.click();
         return {
-          el: document.querySelector(".db-date-value-popover, .db-date-edit-popover"),
+          el: document.querySelector(".obnotion-date-value-popover, .obnotion-date-edit-popover"),
           close: () => { closeActiveDateValuePicker(document); parent.remove(); },
         };
       },
       "toast": () => {
         const handle = globalThis.__toast.showToast(document, { severity: "success", message: "Registry check" });
-        const el = document.querySelector(".db-toast-stack");
+        const el = document.querySelector(".obnotion-toast-stack");
         return { el, close: () => { handle.close(); el?.remove(); } };
       },
     };
@@ -8697,7 +8697,7 @@ await section("the registry describes where these surfaces actually mount", asyn
     record(`${m.id} mounts where its registry entry says (${m.entry.host}/${m.entry.mount})`,
       wantsBody ? m.parentIsBody : m.insideContainer,
       `declared host=${m.entry.host} mount=${m.entry.mount} role=${m.entry.role}; the node's parent `
-        + `is .${m.parentClass}, body=${m.parentIsBody}, inside .note-database-container=${m.insideContainer}`);
+        + `is .${m.parentClass}, body=${m.parentIsBody}, inside .obnotion-container=${m.insideContainer}`);
   }
 });
 
@@ -8726,7 +8726,7 @@ const toastResults = [];
 await section("the toast pairs severity with a glyph and its action reaches its callback", async () => {
   // Width is read off `offsetWidth` rather than a bounding rect, and the difference is not
   // pedantry: read as a rect during the entrance keyframe the card measures 376px, which is 384
-  // times the `--db-motion-scale-from` it enters at. A rect carries the transform, so that number
+  // times the `--obnotion-motion-scale-from` it enters at. A rect carries the transform, so that number
   // is an animation frame and not a layout, and waiting the animation out instead would make the
   // check a race.
   const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
@@ -8739,17 +8739,17 @@ await section("the toast pairs severity with a glyph and its action reaches its 
     const { showToast } = globalThis.__toast;
     const read = (card) => ({
       severityClass: card.className,
-      glyph: card.querySelector(".db-toast-icon [data-icon]")?.getAttribute("data-icon") ?? null,
+      glyph: card.querySelector(".obnotion-toast-icon [data-icon]")?.getAttribute("data-icon") ?? null,
       role: card.getAttribute("role"),
       live: card.getAttribute("aria-live"),
       stackClass: card.parentElement ? String(card.parentElement.className) : null,
       stackOnBody: card.parentElement?.parentElement === document.body,
-      actionsDisplay: getComputedStyle(card.querySelector(".db-toast-actions")).display,
-      actionLabel: card.querySelector(".db-toast-action")?.textContent ?? null,
+      actionsDisplay: getComputedStyle(card.querySelector(".obnotion-toast-actions")).display,
+      actionLabel: card.querySelector(".obnotion-toast-action")?.textContent ?? null,
       box: (() => {
         const stack = card.parentElement;
         const cardStyle = getComputedStyle(card);
-        const actionStyle = getComputedStyle(card.querySelector(".db-toast-actions"));
+        const actionStyle = getComputedStyle(card.querySelector(".obnotion-toast-actions"));
         return {
           width: card.offsetWidth,
           right: Math.round(window.innerWidth - stack.getBoundingClientRect().right),
@@ -8764,11 +8764,11 @@ await section("the toast pairs severity with a glyph and its action reaches its 
     });
 
     const plain = showToast(document, { severity: "success", message: "Migrated" });
-    const plainRead = read(document.querySelector(".db-toast"));
+    const plainRead = read(document.querySelector(".obnotion-toast"));
     plain.close();
 
     const failed = showToast(document, { severity: "error", message: "Could not read the source" });
-    const errorRead = read(document.querySelector(".db-toast"));
+    const errorRead = read(document.querySelector(".obnotion-toast"));
     failed.close();
 
     let clicks = 0;
@@ -8777,9 +8777,9 @@ await section("the toast pairs severity with a glyph and its action reaches its 
       message: "Migrated",
       action: { label: "Undo", onClick: () => { clicks += 1; } },
     });
-    const actionRead = read(document.querySelector(".db-toast"));
-    document.querySelector(".db-toast-action").click();
-    const cardsAfterAction = document.querySelectorAll(".db-toast").length;
+    const actionRead = read(document.querySelector(".obnotion-toast"));
+    document.querySelector(".obnotion-toast-action").click();
+    const cardsAfterAction = document.querySelectorAll(".obnotion-toast").length;
 
     // The close button is a second, independent dismissal path from the action button above, and
     // nothing had driven it: a toast that empties its stack when pressed one way but leaves a
@@ -8787,9 +8787,9 @@ await section("the toast pairs severity with a glyph and its action reaches its 
     // action-only check alone. Measured into its own variable, before this toast exists, so a
     // close button that fails here cannot also read back as a failure of the action check above.
     showToast(document, { severity: "success", message: "Last one" });
-    document.querySelector(".db-toast-close").click();
+    document.querySelector(".obnotion-toast-close").click();
     const stackAfterClose = {
-      toastCount: document.querySelectorAll(".db-toast").length,
+      toastCount: document.querySelectorAll(".obnotion-toast").length,
       liveRegionCount: document.querySelectorAll("[aria-live]").length,
     };
 
@@ -8807,8 +8807,8 @@ await section("the toast pairs severity with a glyph and its action reaches its 
 
   // The one claim in this component that a stylesheet grep gets WRONG, so it is asked of the
   // browser. The reset is written near the top of a twenty-thousand-line file and its selector is
-  // one class plus a universal, which ties with `.db-toast` and loses the tie on order. Read as
-  // source, `.db-surface` is in the reset's selector list and the toast carries `.db-surface`, so
+  // one class plus a universal, which ties with `.obnotion-toast` and loses the tie on order. Read as
+  // source, `.obnotion-surface` is in the reset's selector list and the toast carries `.obnotion-surface`, so
   // it looks covered; read as a computed style it kept its full entrance. Both preferences are
   // measured, because a duration that is short under BOTH proves the reset reached nothing.
   const motion = {};
@@ -8820,7 +8820,7 @@ await section("the toast pairs severity with a glyph and its action reaches its 
     await motionPage.addScriptTag({ content: positionerJs });
     motion[preference] = await motionPage.evaluate(() => {
       globalThis.__toast.showToast(document, { severity: "success", message: "Migrated" });
-      const style = getComputedStyle(document.querySelector(".db-toast"));
+      const style = getComputedStyle(document.querySelector(".obnotion-toast"));
       return { duration: style.animationDuration, iterations: style.animationIterationCount };
     });
     await motionPage.close();
@@ -8842,14 +8842,14 @@ await section("the toast pairs severity with a glyph and its action reaches its 
       + `"${measured.error.glyph}" on ${measured.error.severityClass}. A reader who cannot separate `
       + `the two colours has only the glyph left, so a shared glyph is severity by colour alone`);
 
-  record("the toast announces itself as a polite live region on a body-mounted db-surface stack",
+  record("the toast announces itself as a polite live region on a body-mounted obnotion-surface stack",
     measured.plain.role === "status" && measured.plain.live === "polite"
-      && String(measured.plain.stackClass).split(" ").includes("db-surface")
-      && String(measured.plain.stackClass).includes("db-toast-stack")
+      && String(measured.plain.stackClass).split(" ").includes("obnotion-surface")
+      && String(measured.plain.stackClass).includes("obnotion-toast-stack")
       && measured.plain.stackOnBody,
     `role=${measured.plain.role} aria-live=${measured.plain.live}, stack classes `
       + `"${measured.plain.stackClass}", stack's parent is the body=${measured.plain.stackOnBody}. `
-      + `\`db-surface\` is what carries the token scale and the reduced-motion reset to a surface `
+      + `\`obnotion-surface\` is what carries the token scale and the reduced-motion reset to a surface `
       + `that has left the container, so its absence is silent everywhere but on screen`);
 
   record("a notice with no action renders no action row",
@@ -8896,11 +8896,11 @@ await section("the toast pairs severity with a glyph and its action reaches its 
 // ───────────────────────────────────────────────────────────────────
 //
 // A prior pass proved this with arithmetic against the declared CSS values and was wrong about the
-// rail: `.db-toast` is `content-box`, so the band's `width: 100%` added the card's own padding to
+// rail: `.obnotion-toast` is `content-box`, so the band's `width: 100%` added the card's own padding to
 // its host's width instead of counting it inside, and the card measured 32px past the edge the
 // centring exists to square up. Arithmetic reasons about declared values; the defect was in how the
 // box model resolves them, which only a rendered measurement can see. This mounts the production
-// `showToast` — on its own body-anchored stack, and again inside a `db-operation-result-rail`
+// `showToast` — on its own body-anchored stack, and again inside a `obnotion-operation-result-rail`
 // div built exactly as the call site builds it — and reads `getBoundingClientRect` at three phone
 // widths and once on desktop, rather than trusting the declared rule.
 
@@ -8919,12 +8919,12 @@ const measureBand = async (viewport, phone) => {
 
   const measured = await bandPage.evaluate(async () => {
     const { showToast } = globalThis.__toast;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
     // The card itself is measured, not its host: the box-model defect this guards against (a
     // `content-box` card rendering 32px wider than its `width: 100%` host) shows up on the CARD's
     // own edges, not on the fixed-position container around it, which keeps its declared inset
     // regardless of what its child does. Read after a settle rather than immediately: the card
-    // carries `animation: db-toast-in`, a transform-scale entrance that moves `getBoundingClientRect`
+    // carries `animation: obnotion-toast-in`, a transform-scale entrance that moves `getBoundingClientRect`
     // for as long as it runs — even under `reducedMotion: "reduce"`, which shortens the duration to
     // near-zero but does not skip the keyframes — so a rect read on the same tick is an animation
     // frame, not a layout.
@@ -8933,7 +8933,7 @@ const measureBand = async (viewport, phone) => {
     // `right`/`left` are read against EACH card's own containing block, not uniformly against
     // `window.innerWidth`: the stack mounts on `doc.body`, outside the `contain: strict` leaf, so its
     // card's `position: absolute` resolves against the true viewport — but the rail mounts inside
-    // `.note-database-container`, and `contain: strict` on `.workspace-leaf` (reproduced from the
+    // `.obnotion-container`, and `contain: strict` on `.workspace-leaf` (reproduced from the
     // shipped host stylesheet above) makes the LEAF the containing block for everything positioned
     // inside it. A desktop reading taken against the window would report the leaf's sidebar-narrowed
     // width as a broken inset the rail's own CSS never declared.
@@ -8947,17 +8947,17 @@ const measureBand = async (viewport, phone) => {
 
     const stackHandle = showToast(document, { severity: "success", message: "Migrated" });
     await settle();
-    const stackCard = document.querySelector(".db-toast-stack .db-toast");
+    const stackCard = document.querySelector(".obnotion-toast-stack .obnotion-toast");
     const stack = rectAgainst(stackCard.getBoundingClientRect(), viewportEdge);
     stackHandle.close();
 
     // Built exactly as `showOperationResult` builds it — the rail's own host `div`, carrying the
     // two classes that call site stamps, holding a single-slot `container` toast rather than a
     // fixture copy of the CSS.
-    const rail = host.createDiv({ cls: "db-operation-result-rail db-surface" });
+    const rail = host.createDiv({ cls: "obnotion-operation-result-rail obnotion-surface" });
     const railHandle = showToast(document, { severity: "success", message: "Moved", container: rail });
     await settle();
-    const railCard = rail.querySelector(".db-toast");
+    const railCard = rail.querySelector(".obnotion-toast");
     const railGeometry = rectAgainst(railCard.getBoundingClientRect(), leafEdge);
     railHandle.close();
     rail.remove();
@@ -9077,12 +9077,12 @@ await section("the flick decision reaches the sheet", async () => {
     // actually about (the flick WIRING, not anything menu-specific), built directly rather than
     // borrowed from the menu builder these cases used before that fix shipped.
     const attempt = ({ travel, msPerStep, restMs }) => {
-      const host = document.querySelector(".note-database-container");
-      const panel = host.createDiv({ cls: "db-record-detail-panel" });
+      const host = document.querySelector(".obnotion-container");
+      const panel = host.createDiv({ cls: "obnotion-record-detail-panel" });
       applySheetChrome(panel, true);
       let dismissedByGesture = false;
       const release = attachSheetDragToDismiss(panel, () => { dismissedByGesture = true; panel.remove(); });
-      const bar = panel.querySelector(".db-mobile-bottom-sheet-handle");
+      const bar = panel.querySelector(".obnotion-mobile-bottom-sheet-handle");
       if (!bar) { release(); panel.remove(); return { built: false }; }
       const bb = bar.getBoundingClientRect();
       const from = bb.y + bb.height / 2;
@@ -9188,7 +9188,7 @@ await section("the select column is as wide as what it draws", async () => {
 
   const measured = await page.evaluate(() => {
     const { TableRenderer } = globalThis.__table;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
 
     const columns = [
       { key: "file.name", label: "Name", type: "text" },
@@ -9220,10 +9220,10 @@ await section("the select column is as wide as what it draws", async () => {
     };
 
     const render = (config) => {
-      const container = host.createDiv({ cls: "db-table-host" });
+      const container = host.createDiv({ cls: "obnotion-table-host" });
       new TableRenderer(bag).renderTable(container, config, rows);
-      const cell = container.querySelector("td.db-select-col");
-      const headerCell = container.querySelector("th.db-select-col");
+      const cell = container.querySelector("td.obnotion-select-col");
+      const headerCell = container.querySelector("th.obnotion-select-col");
       const box = cell?.getBoundingClientRect();
       const controls = cell ? cell.querySelectorAll("button, input").length : 0;
       const widest = cell
@@ -9363,13 +9363,13 @@ await section("every fixture table has as many cells as it has headers", async (
       // A title link the renderer never builds.
       //
       // `cell-renderer` puts the note title through `renderInlineFileTitle`, which wraps it in
-      // `.db-file-title-inline > .db-file-title-name` — and the ellipsis lives on that inner span.
+      // `.obnotion-file-title-inline > .obnotion-file-title-name` — and the ellipsis lives on that inner span.
       // A fixture that drops bare text into the anchor instead gets no ellipsis owner, so a long
       // name hard-clips at the cell wall. That is a fact about the fixture, and it was photographed
       // as though it were a fact about the plugin.
       const bareTitles = [];
-      for (const link of document.querySelectorAll(".db-title-cell a.internal-link")) {
-        if (link.querySelector(".db-file-title-name")) continue;
+      for (const link of document.querySelectorAll(".obnotion-title-cell a.internal-link")) {
+        if (link.querySelector(".obnotion-file-title-name")) continue;
         bareTitles.push({
           scenario: id,
           text: (link.textContent || "").trim().replace(/\s+/g, " ").slice(0, 40),
@@ -9378,13 +9378,13 @@ await section("every fixture table has as many cells as it has headers", async (
       // An icon supplied without the class that reveals it.
       //
       // The renderer sets `has-current-icon` whenever an icon exists. Without it the stylesheet
-      // hides `.db-dropdown-field-icon`, and a hidden element is not a grid item — so on a
+      // hides `.obnotion-dropdown-field-icon`, and a hidden element is not a grid item — so on a
       // three-column row every remaining child shifts one track left, the label lands in the icon's
       // 18px column and the chevron takes the label's. Five rows of one popover rendered as single
       // clipped glyphs that way, and four captures of it were kept as though that were the surface.
       const iconlessRows = [];
-      for (const field of document.querySelectorAll(".db-dropdown-field")) {
-        const icon = field.querySelector(".db-dropdown-field-icon");
+      for (const field of document.querySelectorAll(".obnotion-dropdown-field")) {
+        const icon = field.querySelector(".obnotion-dropdown-field-icon");
         if (!icon || !icon.children.length) continue;
         if (field.classList.contains("has-current-icon")) continue;
         iconlessRows.push({ scenario: id, text: (field.textContent || "").trim().replace(/\s+/g, " ").slice(0, 34) });
@@ -9404,10 +9404,10 @@ await section("every fixture table has as many cells as it has headers", async (
       const SHARED_GLYPH_EXEMPT = ["First day of the week"];
       const sharedGlyphs = [];
       for (const group of document.querySelectorAll(
-        ".db-toolbar-utilities-popover, .db-view-tab-popover, .db-owned-menu, .db-chart-options-popover, .db-calendar-options-content, .db-calendar-timeline-options-content",
+        ".obnotion-toolbar-utilities-popover, .obnotion-view-tab-popover, .obnotion-owned-menu, .obnotion-chart-options-popover, .obnotion-calendar-options-content, .obnotion-calendar-timeline-options-content",
       )) {
         const byIcon = new Map();
-        for (const row of group.querySelectorAll("button, .db-menu-item, .db-utilities-row")) {
+        for (const row of group.querySelectorAll("button, .obnotion-menu-item, .obnotion-utilities-row")) {
           const svg = row.querySelector("svg");
           const label = (row.textContent || "").trim().split("\n")[0].trim();
           if (!svg || !label) continue;
@@ -9426,10 +9426,10 @@ await section("every fixture table has as many cells as it has headers", async (
       return {
         rows, tables, bareTitles, iconlessRows, sharedGlyphs,
         menuRows: document.querySelectorAll(
-          ".db-toolbar-utilities-popover .db-menu-item, .db-view-tab-popover .db-menu-item, .db-owned-menu .db-menu-item, .db-chart-options-popover button",
+          ".obnotion-toolbar-utilities-popover .obnotion-menu-item, .obnotion-view-tab-popover .obnotion-menu-item, .obnotion-owned-menu .obnotion-menu-item, .obnotion-chart-options-popover button",
         ).length,
-        titleLinks: document.querySelectorAll(".db-title-cell a.internal-link").length,
-        dropdownFields: document.querySelectorAll(".db-dropdown-field").length,
+        titleLinks: document.querySelectorAll(".obnotion-title-cell a.internal-link").length,
+        dropdownFields: document.querySelectorAll(".obnotion-dropdown-field").length,
       };
     }, scenario.id);
 
@@ -9456,7 +9456,7 @@ await section("every fixture table has as many cells as it has headers", async (
   record("every fixture title link is built the way the renderer builds one",
     titleLinksChecked > 0 && bareTitleOffenders.length === 0,
     `${titleLinksChecked} title link(s) across the fixture set; ${bareTitleOffenders.length} carry bare `
-      + `text instead of the renderer's .db-file-title-name`
+      + `text instead of the renderer's .obnotion-file-title-name`
       + (bareTitleOffenders.length
         ? `: ${[...new Set(bareTitleOffenders.map((b) => b.scenario))].join(", ")}`
         : "")
@@ -9520,7 +9520,7 @@ await section("the properties panel owns what it subscribes", async () => {
 
   const measured = await page.evaluate(async () => {
     const { ColumnManagerRenderer } = globalThis.__columns;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
 
     // Count every window-level subscription the panel path can take, not only the viewport ones.
     // `positionToolbarPopover` takes four across three targets, and counting one target would
@@ -9564,8 +9564,8 @@ await section("the properties panel owns what it subscribes", async () => {
       has: () => true,
     });
 
-    const container = host.createDiv({ cls: "db-cm-host" });
-    container.createDiv({ cls: "db-toolbar" });
+    const container = host.createDiv({ cls: "obnotion-cm-host" });
+    container.createDiv({ cls: "obnotion-toolbar" });
     const anchor = container.createEl("button", { cls: "anchor", text: "Properties" });
     const renderer = new ColumnManagerRenderer();
 
@@ -9583,7 +9583,7 @@ await section("the properties panel owns what it subscribes", async () => {
     renderer.render(container, false, config, state, columns, actions, anchor);
     await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
     const afterClose = outstanding();
-    const nodesLeft = document.querySelectorAll(".db-column-manager").length;
+    const nodesLeft = document.querySelectorAll(".obnotion-column-manager").length;
 
     // The positioner's `schedule` releases itself when it finds its panel disconnected — but only
     // when an event arrives to run it. So the question is not whether the subscriptions exist after
@@ -9660,7 +9660,7 @@ await section("the record peek owns what it subscribes", async () => {
 
   const measured = await page.evaluate(async () => {
     const { openTableRecordPeek, closeTableRecordPeek } = globalThis.__layer;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
 
     const live = new Map();
     const watch = (name, target) => {
@@ -9732,7 +9732,7 @@ await section("the record peek owns what it subscribes", async () => {
     const closedInsideTick = outstanding();
 
     for (const anchor of [a, b, c, d]) anchor.remove();
-    const nodesLeft = document.querySelectorAll(".db-record-peek-panel").length;
+    const nodesLeft = document.querySelectorAll(".obnotion-record-peek-panel").length;
     return {
       before, afterOpen, afterTimer, afterClose,
       twoDeep, afterReplace, afterReplaceClose, closedInsideTick, nodesLeft, keys: keys(),
@@ -9795,7 +9795,7 @@ await section("every row checkbox toggles its own row", async () => {
 
   const measured = await page.evaluate(() => {
     const { TableRenderer } = globalThis.__table;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
 
     const columns = [
       { key: "file.name", label: "Name", type: "text" },
@@ -9837,15 +9837,15 @@ await section("every row checkbox toggles its own row", async () => {
       };
     }
 
-    const container = host.createDiv({ cls: "db-cb-host" });
+    const container = host.createDiv({ cls: "obnotion-cb-host" });
     const config = { schema: { columns }, viewType: "table", columnOrder: columns.map((c) => c.key) };
     new TableRenderer(bag).renderTable(container, config, rows);
 
-    const rowEls = [...container.querySelectorAll("tr[data-note-database-row-path]")];
+    const rowEls = [...container.querySelectorAll("tr[data-obnotion-row-path]")];
     const pairs = [];
     for (const tr of rowEls) {
-      const drawnIn = tr.getAttribute("data-note-database-row-path");
-      const box = tr.querySelector("td.db-select-col input.db-checkbox");
+      const drawnIn = tr.getAttribute("data-obnotion-row-path");
+      const box = tr.querySelector("td.obnotion-select-col input.obnotion-checkbox");
       if (!box) { pairs.push({ drawnIn, received: "(no checkbox)" }); continue; }
       const before = toggled.length;
       box.click();
@@ -9915,7 +9915,7 @@ await section("choosing a view type asks for that view type", async () => {
 
   const measured = await page.evaluate(() => {
     const { ToolbarRenderer } = globalThis.__place;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
 
     const db = {
       schema: { columns: [
@@ -9942,10 +9942,10 @@ await section("choosing a view type asks for that view type", async () => {
     // One press per row, each on a freshly opened menu — pressing a row closes the popover, so a
     // single open cannot exercise the second row at all.
     const anchor0 = open();
-    const panel = document.querySelector(".db-add-view-popover");
+    const panel = document.querySelector(".obnotion-add-view-popover");
     const labels = panel
-      ? [...panel.querySelectorAll(".db-add-view-choices .db-menu-item")]
-        .map((row) => (row.querySelector(".db-menu-item-label")?.textContent || "").trim())
+      ? [...panel.querySelectorAll(".obnotion-add-view-choices .obnotion-menu-item")]
+        .map((row) => (row.querySelector(".obnotion-menu-item-label")?.textContent || "").trim())
       : [];
     anchor0.remove();
     panel?.remove();
@@ -9953,12 +9953,12 @@ await section("choosing a view type asks for that view type", async () => {
     const pressed = [];
     for (let i = 0; i < labels.length; i += 1) {
       const anchor = open();
-      const menu = document.querySelector(".db-add-view-popover");
-      const rows = [...menu.querySelectorAll(".db-add-view-choices .db-menu-item")];
+      const menu = document.querySelector(".obnotion-add-view-popover");
+      const rows = [...menu.querySelectorAll(".obnotion-add-view-choices .obnotion-menu-item")];
       const before = asked.length;
       // Name the view before pressing, so the options the row carries can be read too — a row that
       // asks for the right TYPE and drops the form is still the wrong outcome.
-      const nameInput = menu.querySelector("input[type=text], .db-add-view-name input, input");
+      const nameInput = menu.querySelector("input[type=text], .obnotion-add-view-name input, input");
       if (nameInput) nameInput.value = `View ${i}`;
       rows[i].click();
       const got = asked.slice(before)[0] ?? null;
@@ -9967,10 +9967,10 @@ await section("choosing a view type asks for that view type", async () => {
         type: got?.type ?? "(nothing)",
         name: got?.options?.name ?? "(none)",
         duplicate: got?.options?.duplicateCurrent === true,
-        isDuplicateRow: rows[i].classList.contains("db-add-view-duplicate-action"),
+        isDuplicateRow: rows[i].classList.contains("obnotion-add-view-duplicate-action"),
       });
       anchor.remove();
-      document.querySelector(".db-add-view-popover")?.remove();
+      document.querySelector(".obnotion-add-view-popover")?.remove();
     }
 
     const typeRows = pressed.filter((p) => !p.isDuplicateRow);
@@ -10054,7 +10054,7 @@ await section("a tap on a field edits that field", async () => {
 
   const measured = await page.evaluate(() => {
     const { openRecordDetailPanel, closeRecordDetailPanel } = globalThis.__edit;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
 
     const columns = [
       { key: "file.name", label: "Name", type: "text" },
@@ -10082,15 +10082,15 @@ await section("a tap on a field edits that field", async () => {
       },
     });
 
-    const panel = document.querySelector(".db-record-detail-panel");
+    const panel = document.querySelector(".obnotion-record-detail-panel");
     if (!panel) return { built: false, pairs: [] };
 
     // Rows carry their own column key, so the pairing is by declaration and never by position.
-    const fieldRows = [...panel.querySelectorAll("[data-note-database-column-key]")];
+    const fieldRows = [...panel.querySelectorAll("[data-obnotion-column-key]")];
     const pairs = [];
     for (const el of fieldRows) {
-      const declared = el.getAttribute("data-note-database-column-key");
-      const value = el.querySelector(".db-record-detail-value, .db-record-detail-field-value") ?? el;
+      const declared = el.getAttribute("data-obnotion-column-key");
+      const value = el.querySelector(".obnotion-record-detail-value, .obnotion-record-detail-field-value") ?? el;
       const before = edits.length;
       value.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
       pairs.push({ declared, received: edits.slice(before)[0] ?? "(nothing)" });
@@ -10154,7 +10154,7 @@ await section("every menu row reaches its own action", async () => {
 
   const measured = await page.evaluate(() => {
     const { ColumnMenu } = globalThis.__place;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
     const col = { key: "cost", label: "Cost", type: "number" };
 
     const calls = [];
@@ -10186,17 +10186,17 @@ await section("every menu row reaches its own action", async () => {
       new ColumnMenu(actions).show(
         new MouseEvent("click", { clientX: 300, clientY: 200 }), col, anchor, {},
       );
-      const menu = document.querySelector(".db-menu") ?? document.querySelector(".menu");
-      const rows = menu ? [...menu.querySelectorAll(".db-menu-item")] : [];
+      const menu = document.querySelector(".obnotion-menu") ?? document.querySelector(".menu");
+      const rows = menu ? [...menu.querySelectorAll(".obnotion-menu-item")] : [];
       const target = rows.find(
-        (r) => (r.querySelector(".db-menu-item-label")?.textContent || "").trim() === label,
+        (r) => (r.querySelector(".obnotion-menu-item-label")?.textContent || "").trim() === label,
       );
       const before = calls.length;
       target?.click();
       const got = calls.slice(before)[0] ?? null;
       menu?.remove();
       anchor.remove();
-      document.querySelectorAll(".db-mobile-sheet-scrim").forEach((el) => el.remove());
+      document.querySelectorAll(".obnotion-mobile-sheet-scrim").forEach((el) => el.remove());
       return { label, action: got?.action ?? "(nothing)", key: got?.key ?? "(none)", found: Boolean(target) };
     };
 
@@ -10204,16 +10204,16 @@ await section("every menu row reaches its own action", async () => {
     // pressing a row closes the menu, so one open cannot reach the second row.
     const anchor = host.createDiv({ cls: "anchor" });
     new ColumnMenu(actions).show(new MouseEvent("click", { clientX: 300, clientY: 200 }), col, anchor, {});
-    const first = document.querySelector(".db-menu") ?? document.querySelector(".menu");
+    const first = document.querySelector(".obnotion-menu") ?? document.querySelector(".menu");
     const labels = first
-      ? [...first.querySelectorAll(".db-menu-item")]
-        .filter((r) => !r.querySelector(".db-menu-item-chevron"))
-        .map((r) => (r.querySelector(".db-menu-item-label")?.textContent || "").trim())
+      ? [...first.querySelectorAll(".obnotion-menu-item")]
+        .filter((r) => !r.querySelector(".obnotion-menu-item-chevron"))
+        .map((r) => (r.querySelector(".obnotion-menu-item-label")?.textContent || "").trim())
         .filter(Boolean)
       : [];
     first?.remove();
     anchor.remove();
-    document.querySelectorAll(".db-mobile-sheet-scrim").forEach((el) => el.remove());
+    document.querySelectorAll(".obnotion-mobile-sheet-scrim").forEach((el) => el.remove());
 
     const pressed = labels.map(pressRow);
     return {
@@ -10339,13 +10339,13 @@ await section("a press on the backdrop dismisses the sheet under it", async () =
     // 1. One sheet: the press must dismiss it and take the backdrop with it.
     const only = openSheet("Row");
     await settle();
-    const scrimBefore = Boolean(document.querySelector(".db-mobile-sheet-scrim"));
+    const scrimBefore = Boolean(document.querySelector(".obnotion-mobile-sheet-scrim"));
     const where = pressBackdrop(only.el);
     await settle();
     const singleClosed = !only.el.isConnected;
-    const scrimAfter = Boolean(document.querySelector(".db-mobile-sheet-scrim"));
+    const scrimAfter = Boolean(document.querySelector(".obnotion-mobile-sheet-scrim"));
     if (!singleClosed) only.close();
-    document.querySelectorAll(".db-mobile-sheet-scrim").forEach((el) => el.remove());
+    document.querySelectorAll(".obnotion-mobile-sheet-scrim").forEach((el) => el.remove());
 
     // 2. Two sheets, counting the document handlers each one registers.
     let handlers = 0;
@@ -10372,7 +10372,7 @@ await section("a press on the backdrop dismisses the sheet under it", async () =
     const bottomSurvived = under.el.isConnected;
     under.close();
     over.close();
-    document.querySelectorAll(".db-mobile-sheet-scrim").forEach((el) => el.remove());
+    document.querySelectorAll(".obnotion-mobile-sheet-scrim").forEach((el) => el.remove());
 
     document.addEventListener = realAdd;
     document.removeEventListener = realRemove;
@@ -10409,7 +10409,7 @@ await section("a press on the backdrop dismisses the sheet under it", async () =
   // press, both dismissed.
   //
   // Whether that is wrong depends on whether the plugin ever stacks two independent owned menus,
-  // which is NOT established here — a submenu portals a `db-column-menu-subpopover` rather than
+  // which is NOT established here — a submenu portals a `obnotion-column-menu-subpopover` rather than
   // opening a second owned menu. So what is asserted is the mechanism, which is decidable: one
   // document handler per open menu. The consequence is recorded in `003`'s packet as a question
   // with its number, rather than as a defect nobody has shown a user can reach.
@@ -10448,11 +10448,11 @@ await section("a press on the backdrop dismisses the sheet under it", async () =
 // theme because a collision can exist in one and not the other.
 //
 // THE SWATCH-GRID MEASUREMENT RETIRED WITH THE GRID IT MEASURED. The colour picker now uses a
-// one-column labelled list (`.db-dropdown-option`) instead of the sixteen-swatch grid, precisely
+// one-column labelled list (`.obnotion-dropdown-option`) instead of the sixteen-swatch grid, precisely
 // because two near-identical hues are not reliably told apart by colour alone — the row's leading
 // dot is decorative once the visible name sits beside it, so a swatch's own distinctness is no
-// longer a correctness question this file needs to answer, and `.db-color-picker-swatch` carries
-// no styling for this probe to read any more. The chip check below (`.db-status-chip`, painted on
+// longer a correctness question this file needs to answer, and `.obnotion-color-picker-swatch` carries
+// no styling for this probe to read any more. The chip check below (`.obnotion-status-chip`, painted on
 // every view's own badges, not the picker) is unrelated to the picker's row shape and stays.
 
 const paletteResults = [];
@@ -10469,13 +10469,13 @@ await section("sixteen named colours are sixteen different colours", async () =>
       "blue", "brown", "cyan", "gray", "green", "indigo", "lime", "orange",
       "pink", "purple", "red", "rose", "slate", "teal", "violet", "yellow",
     ];
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
 
     const readTheme = (themeClass) => {
       document.body.className = themeClass;
-      const probe = host.createDiv({ cls: "db-palette-probe" });
+      const probe = host.createDiv({ cls: "obnotion-palette-probe" });
       const entries = NAMES.map((name) => {
-        const chip = probe.createSpan({ cls: `db-status-chip db-option-color-${name}` });
+        const chip = probe.createSpan({ cls: `obnotion-status-chip obnotion-option-color-${name}` });
         const style = getComputedStyle(chip);
         return { name, bg: style.backgroundColor, fg: style.color };
       });
@@ -10560,7 +10560,7 @@ await section("the selected day is the one thing the picker exists to show", asy
   await page.addScriptTag({ content: positionerJs });
 
   const measured = await page.evaluate(() => {
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
 
     const parse = (value) => {
       const m = String(value).match(/rgba?\(([^)]+)\)/);
@@ -10588,11 +10588,11 @@ await section("the selected day is the one thing the picker exists to show", asy
 
     const read = (themeClass) => {
       document.body.className = themeClass;
-      const popover = host.createDiv({ cls: "db-calendar-mini-popover db-surface" });
-      const grid = popover.createDiv({ cls: "db-calendar-mini-grid" });
+      const popover = host.createDiv({ cls: "obnotion-calendar-mini-popover obnotion-surface" });
+      const grid = popover.createDiv({ cls: "obnotion-calendar-mini-grid" });
       const make = (cls) => {
-        const day = grid.createEl("button", { cls: `db-calendar-mini-day ${cls}`.trim() });
-        const num = day.createSpan({ cls: "db-calendar-mini-day-num", text: "9" });
+        const day = grid.createEl("button", { cls: `obnotion-calendar-mini-day ${cls}`.trim() });
+        const num = day.createSpan({ cls: "obnotion-calendar-mini-day-num", text: "9" });
         const style = getComputedStyle(num);
         return {
           bg: style.backgroundColor, color: style.color,
@@ -10713,25 +10713,25 @@ await section("nothing truncates while its neighbour has room to spare", async (
   await page.addScriptTag({ content: positionerJs });
 
   const measured = await page.evaluate(() => {
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
     const chip = (cls, value) => `
-      <button type="button" class="db-dropdown-field db-panel-dropdown ${cls}">
-        <span class="db-dropdown-field-icon"></span>
-        <div class="db-dropdown-field-text"><span class="db-dropdown-field-value">${value}</span></div>
-        <span class="db-dropdown-field-chevron"></span>
+      <button type="button" class="obnotion-dropdown-field obnotion-panel-dropdown ${cls}">
+        <span class="obnotion-dropdown-field-icon"></span>
+        <div class="obnotion-dropdown-field-text"><span class="obnotion-dropdown-field-value">${value}</span></div>
+        <span class="obnotion-dropdown-field-chevron"></span>
       </button>`;
 
     // The longest value each chip can hold, which is what a fixed basis has to be sized against.
     const read = (direction) => {
-      const wrap = host.createDiv({ cls: "db-active-rule-popover db-filter-panel db-sort-panel is-sort" });
-      wrap.innerHTML = `<div class="db-panel-row db-sort-rule-row db-active-rule-editor-row">`
-        + chip("db-sort-field-dropdown", "Cost")
-        + chip("db-sort-direction-dropdown", direction)
+      const wrap = host.createDiv({ cls: "obnotion-active-rule-popover obnotion-filter-panel obnotion-sort-panel is-sort" });
+      wrap.innerHTML = `<div class="obnotion-panel-row obnotion-sort-rule-row obnotion-active-rule-editor-row">`
+        + chip("obnotion-sort-field-dropdown", "Cost")
+        + chip("obnotion-sort-direction-dropdown", direction)
         + `</div>`;
-      const row = wrap.querySelector(".db-panel-row");
+      const row = wrap.querySelector(".obnotion-panel-row");
       const kids = [...row.children];
       const tops = new Set(kids.map((el) => Math.round(el.getBoundingClientRect().top)));
-      const value = kids[1].querySelector(".db-dropdown-field-value");
+      const value = kids[1].querySelector(".obnotion-dropdown-field-value");
       const result = {
         direction,
         lines: tops.size,
@@ -10808,7 +10808,7 @@ await section("a record sheet taller than its cap keeps its handle", async () =>
 
   const measured = await page.evaluate(async () => {
     const { openRecordDetailPanel, mountNoteBodyRegion } = globalThis.__tall;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
     // The operator's own record, extended past the point where a sheet at its cap can hold it.
     const PROPS = ["Income", "Expenses", "Subscriptions", "Remaining", "Sales", "Saved",
       "Invested", "Withdrawn", "Added to", "Balance", "Stocks", "Year", "Quarter", "Owner",
@@ -10831,9 +10831,9 @@ await section("a record sheet taller than its cap keeps its handle", async () =>
       app: {},
       actions: { editCell: () => {}, openRow: () => {}, isReadOnly: false },
     });
-    const panel = document.querySelector(".db-record-detail-panel");
+    const panel = document.querySelector(".obnotion-record-detail-panel");
     mountNoteBodyRegion({
-      parent: panel.querySelector(".db-record-detail-scroll") ?? panel,
+      parent: panel.querySelector(".obnotion-record-detail-scroll") ?? panel,
       body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ".repeat(40),
       placeholder: "Empty",
       renderMarkdown: (target, markdown) => { target.textContent = markdown; },
@@ -10843,8 +10843,8 @@ await section("a record sheet taller than its cap keeps its handle", async () =>
 
     const sheetRect = panel.getBoundingClientRect();
     const cap = window.innerHeight * 0.9;
-    const handle = panel.querySelector(".db-mobile-bottom-sheet-handle");
-    const body = panel.querySelector(".db-record-detail-body");
+    const handle = panel.querySelector(".obnotion-mobile-bottom-sheet-handle");
+    const body = panel.querySelector(".obnotion-record-detail-body");
 
     // Whatever inside the sheet actually owns the scroll — the panel itself before the fix, an
     // inner region after it. Naming the element would be asserting the mechanism rather than the
@@ -10865,7 +10865,7 @@ await section("a record sheet taller than its cap keeps its handle", async () =>
     return {
       sheetHeight: Math.round(sheetRect.height),
       cap: Math.round(cap),
-      fields: panel.querySelectorAll(".db-record-detail-field").length,
+      fields: panel.querySelectorAll(".obnotion-record-detail-field").length,
       scrollerClass: scroller ? (scroller.className.split(" ")[0] || scroller.tagName) : "none",
       overflow: Math.round(overflow),
       scrolledTo: scroller ? Math.round(scroller.scrollTop) : 0,
@@ -10933,7 +10933,7 @@ await section("one thing owns the phone's bottom edge", async () => {
     const { DatabaseView, closeRecordDetailPanel, CellRenderer } = globalThis.__dock;
     const { openRecordDetailPanel } = globalThis.__tall;
     const settle = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
 
     // The bar through the shipped view method. `Object.create` gives a real view without the
     // constructor's Obsidian leaf, so every field the method reads is written here.
@@ -10956,7 +10956,7 @@ await section("one thing owns the phone's bottom edge", async () => {
     DatabaseView.prototype.renderSelectionStatusBar.call(view);
     await settle();
 
-    const bar = () => host.querySelector(".db-selection-status-bar");
+    const bar = () => host.querySelector(".obnotion-selection-status-bar");
     const box = (el) => {
       if (!el) return { top: 0, left: 0, right: 0, bottom: 0, width: 0, height: 0 };
       const r = el.getBoundingClientRect();
@@ -10988,7 +10988,7 @@ await section("one thing owns the phone's bottom edge", async () => {
     const sheetOpen = {
       barOnScreen: onScreen(bar()),
       barBox: box(bar()),
-      sheetBox: box(document.querySelector(".db-record-detail-panel")),
+      sheetBox: box(document.querySelector(".obnotion-record-detail-panel")),
     };
     sheetOpen.overlapWithSheet = Math.round(overlap(sheetOpen.barBox, sheetOpen.sheetBox));
     closeRecordDetailPanel();
@@ -10999,8 +10999,8 @@ await section("one thing owns the phone's bottom edge", async () => {
     document.documentElement.style.setProperty("--keyboard-height", "331px");
     window.dispatchEvent(new window.Event("resize"));
     await settle();
-    const table = host.createDiv({ cls: "db-table-wrap" });
-    const td = table.createDiv({ cls: "db-cell db-editable-cell db-numeric-value", text: "4975.32" });
+    const table = host.createDiv({ cls: "obnotion-table-wrap" });
+    const td = table.createDiv({ cls: "obnotion-cell obnotion-editable-cell obnotion-numeric-value", text: "4975.32" });
     // Placed in the band the bar has just docked into, read off the bar rather than guessed.
     //
     // The editor is not lifted by the keyboard — it is clamped to bounds the navbar derives and
@@ -11017,7 +11017,7 @@ await section("one thing owns the phone's bottom edge", async () => {
     cellRenderer.startEdit(td, { file: { path: "record.md", basename: "record" }, frontmatter: { amount: 4975.32 }, computed: {} },
       { key: "amount", label: "Amount", type: "number" });
     await settle();
-    const editorEl = document.querySelector(".db-cell-line-edit-popover");
+    const editorEl = document.querySelector(".obnotion-cell-line-edit-popover");
     const editing = {
       hasEditor: Boolean(editorEl),
       editorBox: box(editorEl),
@@ -11040,8 +11040,8 @@ await section("one thing owns the phone's bottom edge", async () => {
     // contributes to this geometry is exactly the class string below — `toolbar-renderer.ts` adds
     // `is-mobile-fab` on a touch device — and everything that decides where the control lands is in
     // the stylesheet, which is loaded here as it ships.
-    const fab = host.createEl("button", { cls: "db-new-button db-new-button-primary is-mobile-fab" });
-    fab.createSpan({ cls: "db-new-button-icon", text: "+" });
+    const fab = host.createEl("button", { cls: "obnotion-new-button obnotion-new-button-primary is-mobile-fab" });
+    fab.createSpan({ cls: "obnotion-new-button-icon", text: "+" });
     await settle();
     const withBar = {
       barOnScreen: onScreen(bar()),
@@ -11125,8 +11125,8 @@ await section("a plain tap edits and never paints a selection through the focus 
     const { DatabaseView, CellRenderer } = globalThis.__dock;
     const settle = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     const macrotask = () => new Promise((resolve) => setTimeout(resolve, 30));
-    const host = document.querySelector(".note-database-container");
-    const container = host.createDiv({ cls: "note-database-container" });
+    const host = document.querySelector(".obnotion-container");
+    const container = host.createDiv({ cls: "obnotion-container" });
 
     const col = { key: "notes", label: "Notes", type: "text" };
     const row = {
@@ -11164,8 +11164,8 @@ await section("a plain tap edits and never paints a selection through the focus 
     const tr = tbody.createEl("tr");
     const td = tr.createEl("td", {
       attr: {
-        "data-note-database-row-path": row.file.path,
-        "data-note-database-column-key": col.key,
+        "data-obnotion-row-path": row.file.path,
+        "data-obnotion-column-key": col.key,
       },
     });
     cellRenderer.renderCell(td, row, col);
@@ -11183,8 +11183,8 @@ await section("a plain tap edits and never paints a selection through the focus 
     await macrotask();
 
     const afterTap = {
-      hasEditor: Boolean(container.querySelector(".db-cell-edit-popover")),
-      pillCountAfterTap: container.querySelectorAll(":scope > .db-cell-selection-pill").length,
+      hasEditor: Boolean(container.querySelector(".obnotion-cell-edit-popover")),
+      pillCountAfterTap: container.querySelectorAll(":scope > .obnotion-cell-selection-pill").length,
       cellSelectionAfterTap: view.cellSelection ? { ...view.cellSelection } : null,
     };
 
@@ -11196,17 +11196,17 @@ await section("a plain tap edits and never paints a selection through the focus 
 
     return {
       ...afterTap,
-      hasEditorAfterEscape: Boolean(container.querySelector(".db-cell-edit-popover")),
-      pillCountAfterEscape: container.querySelectorAll(":scope > .db-cell-selection-pill").length,
+      hasEditorAfterEscape: Boolean(container.querySelector(".obnotion-cell-edit-popover")),
+      pillCountAfterEscape: container.querySelectorAll(":scope > .obnotion-cell-selection-pill").length,
       cellSelectionAfterEscape: view.cellSelection ? { ...view.cellSelection } : null,
-      pillText: container.querySelector(":scope > .db-cell-selection-pill .db-selection-count-badge")?.textContent || null,
+      pillText: container.querySelector(":scope > .obnotion-cell-selection-pill .obnotion-selection-count-badge")?.textContent || null,
     };
   });
   await page.close();
 
   record("a touch tap opens the column's editor",
     measured.hasEditor,
-    `.db-cell-edit-popover present after tap=${measured.hasEditor}`);
+    `.obnotion-cell-edit-popover present after tap=${measured.hasEditor}`);
 
   record("a touch tap never paints a selection through the focus path",
     measured.cellSelectionAfterTap === null,
@@ -11251,13 +11251,13 @@ await section("every cell editor claims the bottom dock while it is open", async
 
   const measured = await page.evaluate(async () => {
     const { DatabaseView, CellRenderer } = globalThis.__dock;
-    const host = document.querySelector(".note-database-container");
+    const host = document.querySelector(".obnotion-container");
 
     // A live selection pill to fold under the dock claim, built the same way the pill-shape
     // section above builds one: the shipped `renderSelectionStatusBar`, driven with a touch cell
     // selection, rather than a stand-in div carrying the class by hand.
     const makeFixture = () => {
-      const container = host.createDiv({ cls: "note-database-container" });
+      const container = host.createDiv({ cls: "obnotion-container" });
       const addr = { rowPath: "pill-note.md", colKey: "amount" };
       const view = Object.create(DatabaseView.prototype);
       view.containerEl_ = container;
@@ -11270,19 +11270,19 @@ await section("every cell editor claims the bottom dock while it is open", async
       view.historyStack = [];
       view.getSelectedCellAddresses = () => [addr];
       view.getConfig = () => ({ schema: { columns: [] } });
-      const marker = container.createDiv({ cls: "db-cell-range-selected" });
+      const marker = container.createDiv({ cls: "obnotion-cell-range-selected" });
       marker.setCssProps({ position: "fixed", top: "300px", left: "40px", width: "100px", height: "36px" });
       DatabaseView.prototype.renderSelectionStatusBar.call(view);
-      return { container, pill: container.querySelector(":scope > .db-cell-selection-pill") };
+      return { container, pill: container.querySelector(":scope > .obnotion-cell-selection-pill") };
     };
 
     // The relation editor always portals to `document.body` regardless of the cell's own
     // container (unlike the date/option editors, which mount inside it when one is found), so the
     // editor-presence read is global rather than scoped to the fixture's own container.
     const readState = (pill) => ({
-      dockTaken: document.body.classList.contains("db-bottom-dock-taken"),
+      dockTaken: document.body.classList.contains("obnotion-bottom-dock-taken"),
       pillDisplay: pill ? getComputedStyle(pill).display : null,
-      hasEditor: Boolean(document.querySelector(".db-cell-edit-popover, .db-cell-option-popover")),
+      hasEditor: Boolean(document.querySelector(".obnotion-cell-edit-popover, .obnotion-cell-option-popover")),
     });
     const settle = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     // Both the date and text editors attach their outside-press/Escape listeners on a macrotask
@@ -11295,7 +11295,7 @@ await section("every cell editor claims the bottom dock while it is open", async
       const before = readState(pill);
       const cellRenderer = new CellRenderer(dataSource || { openNote() {}, getRows: () => [row] }, async () => {});
       const td = container.createEl("td", {
-        attr: { "data-note-database-row-path": row.file.path, "data-note-database-column-key": col.key },
+        attr: { "data-obnotion-row-path": row.file.path, "data-obnotion-column-key": col.key },
       });
       cellRenderer.startEdit(td, row, col, undefined, currentValue);
       await settle();
@@ -11376,8 +11376,8 @@ await section("the relation editor claims the bottom dock in a narrow split pane
     const { CellRenderer } = globalThis.__dock;
     const settle = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     const macrotask = () => new Promise((resolve) => setTimeout(resolve, 30));
-    const host = document.querySelector(".note-database-container");
-    const container = host.createDiv({ cls: "note-database-container" });
+    const host = document.querySelector(".obnotion-container");
+    const container = host.createDiv({ cls: "obnotion-container" });
     container.setCssProps({ width: "380px" });
 
     const row = {
@@ -11393,11 +11393,11 @@ await section("the relation editor claims the bottom dock in a narrow split pane
       getRecordsForDatabase: () => [],
     };
     const td = container.createEl("td", {
-      attr: { "data-note-database-row-path": row.file.path, "data-note-database-column-key": col.key },
+      attr: { "data-obnotion-row-path": row.file.path, "data-obnotion-column-key": col.key },
     });
 
     const before = {
-      dockTaken: document.body.classList.contains("db-bottom-dock-taken"),
+      dockTaken: document.body.classList.contains("obnotion-bottom-dock-taken"),
       isTouch: /* mirrors production's own predicate */ container.getBoundingClientRect().width <= 760,
       isPhoneSheet: document.body.classList.contains("is-phone"),
     };
@@ -11405,13 +11405,13 @@ await section("the relation editor claims the bottom dock in a narrow split pane
     await settle();
     await macrotask();
     const whileOpen = {
-      dockTaken: document.body.classList.contains("db-bottom-dock-taken"),
-      hasEditor: Boolean(document.querySelector(".db-cell-option-popover")),
+      dockTaken: document.body.classList.contains("obnotion-bottom-dock-taken"),
+      hasEditor: Boolean(document.querySelector(".obnotion-cell-option-popover")),
     };
     document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
     await settle();
     await macrotask();
-    const after = { dockTaken: document.body.classList.contains("db-bottom-dock-taken") };
+    const after = { dockTaken: document.body.classList.contains("obnotion-bottom-dock-taken") };
     return { before, whileOpen, after };
   });
   await page.close();
@@ -11460,7 +11460,7 @@ await section("a view-switcher row on a phone carries one trailing control", asy
     await page.addScriptTag({ content: positionerJs });
     const out = await page.evaluate(async () => {
       const { ToolbarRenderer } = globalThis.__viewrow;
-      const host = document.querySelector(".note-database-container");
+      const host = document.querySelector(".obnotion-container");
       const anchor = host.createDiv({ cls: "anchor" });
       const renderer = new ToolbarRenderer();
       // The operator's own view list, including the name that truncated on the device.
@@ -11480,16 +11480,16 @@ await section("a view-switcher row on a phone carries one trailing control", asy
       });
       await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 
-      const panel = document.querySelector(".db-all-views-popover");
-      const rows = [...panel.querySelectorAll(".db-all-view-row")];
-      const perRow = rows.map((row) => row.querySelectorAll(".db-all-view-action").length);
+      const panel = document.querySelector(".obnotion-all-views-popover");
+      const rows = [...panel.querySelectorAll(".obnotion-all-view-row")];
+      const perRow = rows.map((row) => row.querySelectorAll(".obnotion-all-view-action").length);
       const heights = rows.map((row) => Math.round(row.getBoundingClientRect().height));
       // Truncation as the element reports it, not as a width comparison guesses it.
-      const labels = rows.map((row) => row.querySelector(".db-all-view-label"));
+      const labels = rows.map((row) => row.querySelector(".obnotion-all-view-label"));
       const clipped = labels.filter((el) => el.scrollWidth > el.clientWidth + 1);
 
       // The actions behind the control, reached the way a thumb reaches them.
-      const more = rows[7].querySelector(".db-all-view-more");
+      const more = rows[7].querySelector(".obnotion-all-view-more");
       let menuLabels = [];
       if (more) {
         more.click();
@@ -11497,8 +11497,8 @@ await section("a view-switcher row on a phone carries one trailing control", asy
         // The row's own label element, not its whole text: the harness stands in for Obsidian's
         // icons with a placeholder glyph that production does not emit, and reading `textContent`
         // would compare against the stand-in rather than against the label the row carries.
-        menuLabels = [...document.querySelectorAll(".db-owned-menu .db-menu-item")]
-          .map((el) => (el.querySelector(".db-menu-item-label") ?? el).textContent.trim())
+        menuLabels = [...document.querySelectorAll(".obnotion-owned-menu .obnotion-menu-item")]
+          .map((el) => (el.querySelector(".obnotion-menu-item-label") ?? el).textContent.trim())
           .filter(Boolean);
       }
       return {
@@ -11594,22 +11594,22 @@ const KNOWN = new Map([
   ],
   [
     "removing any one class from a panel changes a measured value",
-    "A closing pass on the phone sheet grammar added `note-database-container` to the owned menu's "
-      + "body-mounted branch of `setSheetMount`, the only way to reach `.note-database-container "
-      + ".db-sheet-close`'s 44px sizing rule once the menu carries a header — without it the close "
-      + "target measured 30x23. `db-surface` (present on the owned menu from its own creation call, "
-      + "needed for the small anchored desktop menu `note-database-container` is never added to) and "
-      + "`note-database-container` sit in the same shared token-root selector list, so once BOTH are "
-      + "on the body-mounted sheet, either alone covers what that list provides and removing `db-"
+    "A closing pass on the phone sheet grammar added `obnotion-container` to the owned menu's "
+      + "body-mounted branch of `setSheetMount`, the only way to reach `.obnotion-container "
+      + ".obnotion-sheet-close`'s 44px sizing rule once the menu carries a header — without it the close "
+      + "target measured 30x23. `obnotion-surface` (present on the owned menu from its own creation call, "
+      + "needed for the small anchored desktop menu `obnotion-container` is never added to) and "
+      + "`obnotion-container` sit in the same shared token-root selector list, so once BOTH are "
+      + "on the body-mounted sheet, either alone covers what that list provides and removing `obnotion-"
       + "surface` there measures no change. The close-target floor is a required touch-target size, "
       + "and the two classes overlapping on this one presentation is the accepted cost of meeting it, "
-      + "not a silent duplication — `db-surface` still does real work on the untouched desktop "
+      + "not a silent duplication — `obnotion-surface` still does real work on the untouched desktop "
       + "presentation this ablation does not mount.",
   ],
   // Four entries have left this map by being repaired rather than by being weakened, which is the
   // outcome it exists to produce. The calendar/timeline search-results clamp was fixed in both of
   // its duplicated copies. The row label's off-scale size was unsatisfiable as declared — one check
-  // bound the label to `--db-font-md` and another required it on the audited scale, and no value
+  // bound the label to `--obnotion-font-md` and another required it on the audited scale, and no value
   // satisfied both while that token read 13px — and moving the step to 14px satisfies both at once.
   // And the record sheet's window-resize dismissal is fixed at the handler: it now tells a keyboard
   // from a rotation by whether the width moved, so the sheet survives the first and not the second.

@@ -104,11 +104,11 @@ function persistFileTagColorOptions(options: StatusOptionDef[]): StatusOptionDef
 function createOptionDragPreview(item: HTMLElement, event: MouseEvent): OptionDragPreview {
   const rect = item.getBoundingClientRect();
   const preview = item.cloneNode(true) as HTMLElement;
-  preview.addClass("db-cell-option-drag-preview");
-  preview.addClass("db-cell-option-item");
+  preview.addClass("obnotion-cell-option-drag-preview");
+  preview.addClass("obnotion-cell-option-item");
   preview.removeClass("is-dragging");
   preview.setAttribute("aria-hidden", "true");
-  preview.querySelectorAll(".db-mobile-reorder-controls").forEach((el) => el.remove());
+  preview.querySelectorAll(".obnotion-mobile-reorder-controls").forEach((el) => el.remove());
   preview.setCssProps({
     width: `${rect.width}px`,
     height: `${rect.height}px`,
@@ -134,7 +134,7 @@ function removeOptionDragPreview(state: OptionDragPreview): void {
 }
 
 // Coordinates are container-relative, matching the CSS. The popover mounts inside
-// `.note-database-container` (`position: relative`), and the stylesheet positions it `absolute`
+// `.obnotion-container` (`position: relative`), and the stylesheet positions it `absolute`
 // there, so the numbers written here must be measured from that container — which is what
 // passing its rect and scroll offsets to `setPosition` does. This is the same convention the
 // date and text edit popovers use for the same host.
@@ -152,7 +152,7 @@ function positionOptionPopover(
   const popoverRect = popover.getBoundingClientRect();
   const bounds = getVisiblePopoverBounds(container);
 
-  const relationPopover = popover.hasClass("db-relation-popover");
+  const relationPopover = popover.hasClass("obnotion-relation-popover");
   const minWidth = relationPopover ? 360 : 160;
   const maxWidth = relationPopover ? 520 : 260;
   const width = Math.min(
@@ -214,17 +214,17 @@ export function openOptionEditor(
   initialSearch?: string,
 ): void {
   ctx.closeActiveOptionPopover();
-  const rawContainer = td.closest(".note-database-container");
+  const rawContainer = td.closest(".obnotion-container");
   const container = isHTMLElement(rawContainer) ? rawContainer : null;
   const host = container || window.activeDocument.body;
-  host.querySelectorAll(".db-cell-option-popover").forEach((el) => el.remove());
+  host.querySelectorAll(".obnotion-cell-option-popover").forEach((el) => el.remove());
   const isFileTags = col.key === "file.tags";
   const optionKey = isFileTags ? "tags" : col.key;
   const originalValues = multiple
     ? (isFileTags ? toValidObsidianTagValues(currentValue) : toMultiSelectValuesForKey(optionKey, currentValue))
     : [normalizeOptionValueForKey(optionKey, currentValue)].filter(Boolean);
   const selected = new Set(originalValues);
-  const popover = host.createDiv({ cls: "db-cell-option-popover" });
+  const popover = host.createDiv({ cls: "obnotion-cell-option-popover" });
   // Claimed for the editor's whole life, matching `openSingleLineEditor`'s identical pair: without
   // it a phone's selection pill stays docked in the band this popover can occupy near the grid's
   // bottom edge, and the two are drawn on top of each other.
@@ -252,7 +252,7 @@ export function openOptionEditor(
     popover.remove();
     claimBottomDock(td.ownerDocument, "cell-editor", false);
     // Clean up any leaked color picker popups on window.activeDocument.body
-    window.activeDocument.body.querySelectorAll(".db-color-picker-popup").forEach(el => el.remove());
+    window.activeDocument.body.querySelectorAll(".obnotion-color-picker-popup").forEach(el => el.remove());
     window.activeDocument.removeEventListener("keydown", onKeydown, true);
     session?.onClose?.();
     if (intent) ctx.finishInlineEdit(row, col, session, intent);
@@ -282,7 +282,7 @@ export function openOptionEditor(
     }
     if (isHTMLElement(event.target) && event.target.closest("input, textarea, select")) return;
     if (event.key !== "ArrowDown" && event.key !== "ArrowUp" && event.key !== "Enter") return;
-    const items = Array.from(popover.querySelectorAll<HTMLButtonElement>(".db-cell-option-item"));
+    const items = Array.from(popover.querySelectorAll<HTMLButtonElement>(".obnotion-cell-option-item"));
     if (!items.length) return;
     event.preventDefault();
     event.stopPropagation();
@@ -342,7 +342,7 @@ export function openOptionEditor(
       if (transaction.setValue) await ctx.commitEditedValue(row, col, transaction.value, session);
       else await ctx.refreshAfterSave();
     } catch (err) {
-      console.error("Note Database: failed to commit option edit", err);
+      console.error("Obnotion: failed to commit option edit", err);
       new Notice(t("errors.updateFailed", { error: String(err) }));
     }
   };
@@ -363,11 +363,11 @@ export function openOptionEditor(
 
   const renderOptionList = () => {
     // Rebuild transient option rows and empty state from the current local selection set.
-    popover.querySelectorAll(".db-cell-option-item, .db-panel-empty, .db-option-drop-line").forEach(el => el.remove());
+    popover.querySelectorAll(".obnotion-cell-option-item, .obnotion-panel-empty, .obnotion-option-drop-line").forEach(el => el.remove());
     activeOptionIndex = 0;
     if (optionDefs.length === 0) {
-      const empty = popover.createDiv({ cls: "db-panel-empty", text: t("cell.noOptions") });
-      popover.insertBefore(empty, popover.querySelector(".db-cell-option-add"));
+      const empty = popover.createDiv({ cls: "obnotion-panel-empty", text: t("cell.noOptions") });
+      popover.insertBefore(empty, popover.querySelector(".obnotion-cell-option-add"));
     }
     optionDefs.forEach((opt, idx) => {
       const isTransient = !isFileTags && !registeredOptionValues.has(opt.value);
@@ -378,17 +378,17 @@ export function openOptionEditor(
       // The drag handle, reorder controls, colour dot and delete button have no home in that
       // builder's fixed slots and are spliced in around the label exactly where they sat before.
       const rowHandle = createMenuRow(popover, {
-        cls: "db-cell-option-item",
+        cls: "obnotion-cell-option-item",
         label: opt.value,
         selected: selected.has(opt.value),
       });
       const item = rowHandle.row;
       const label = rowHandle.labelEl;
-      label.addClass("db-option-label");
-      popover.insertBefore(item, popover.querySelector(".db-cell-option-add"));
+      label.addClass("obnotion-option-label");
+      popover.insertBefore(item, popover.querySelector(".obnotion-cell-option-add"));
 
       // Drag handle for reorder
-      const handle = item.createSpan({ cls: "db-option-drag-handle", text: "⠿" });
+      const handle = item.createSpan({ cls: "obnotion-option-drag-handle", text: "⠿" });
       if (isFileTags || isTransient) handle.addClass("is-hidden");
       handle.onmousedown = (e) => {
         if (isFileTags || isTransient) return;
@@ -405,7 +405,7 @@ export function openOptionEditor(
         const onMove = (ev: MouseEvent) => {
           updateOptionDragPreview(dragPreview, ev);
           // Find insert-before position in DOM
-          const items = Array.from(popover.querySelectorAll<HTMLButtonElement>(".db-cell-option-item"));
+          const items = Array.from(popover.querySelectorAll<HTMLButtonElement>(".obnotion-cell-option-item"));
           let insertBefore = items.length;
           for (let i = 0; i < items.length; i++) {
             const ir = items[i].getBoundingClientRect();
@@ -420,10 +420,10 @@ export function openOptionEditor(
 
           if (target !== idx) {
             removeDropLine();
-            dropLine = popover.createDiv({ cls: "db-option-drop-line" });
+            dropLine = popover.createDiv({ cls: "obnotion-option-drop-line" });
             const ref = items[insertBefore];
             if (ref) popover.insertBefore(dropLine, ref);
-            else popover.insertBefore(dropLine, popover.querySelector(".db-cell-option-add"));
+            else popover.insertBefore(dropLine, popover.querySelector(".obnotion-cell-option-add"));
             lastTarget = target;
           } else {
             removeDropLine();
@@ -449,7 +449,7 @@ export function openOptionEditor(
         window.activeDocument.addEventListener("mouseup", onUp);
       };
 
-      const moveControls = item.createSpan({ cls: "db-mobile-reorder-controls" });
+      const moveControls = item.createSpan({ cls: "obnotion-mobile-reorder-controls" });
       if (isFileTags || isTransient) moveControls.addClass("is-hidden");
       const upBtn = moveControls.createEl("button", {
         attr: { type: "button", title: t("menu.moveUp"), "aria-label": t("menu.moveUp") },
@@ -481,9 +481,9 @@ export function openOptionEditor(
       };
 
       // Color dot — opens color picker
-      const dot = item.createSpan({ cls: "db-option-color-dot" });
+      const dot = item.createSpan({ cls: "obnotion-option-color-dot" });
       const updateDot = () => {
-        dot.className = `db-option-color-dot db-option-color-${opt.color}`;
+        dot.className = `obnotion-option-color-dot obnotion-option-color-${opt.color}`;
       };
       updateDot();
       dot.onclick = (e) => {
@@ -504,7 +504,7 @@ export function openOptionEditor(
         const input = window.activeDocument.createElement("input");
         input.type = "text";
         input.value = opt.value;
-        input.className = "db-option-rename-input";
+        input.className = "obnotion-option-rename-input";
         label.replaceWith(input);
         input.focus();
         input.select();
@@ -537,14 +537,14 @@ export function openOptionEditor(
 
       // Check mark — an icon carrying the row's own `menuitemcheckbox` semantics rather than a
       // bare "✓" glyph, which a screen reader reads as a character, not a state.
-      const mark = item.createSpan({ cls: "db-option-check" });
+      const mark = item.createSpan({ cls: "obnotion-option-check" });
       const updateMark = () => {
         mark.empty();
         if (selected.has(opt.value)) setIcon(mark, "check");
       };
       updateMark();
       const deleteButton = item.createEl("button", {
-        cls: "db-option-delete",
+        cls: "obnotion-option-delete",
         attr: {
           title: isTransient ? t("cell.addOption") : t("common.delete"),
           "aria-label": isTransient ? t("cell.addOption") : t("common.delete"),
@@ -632,7 +632,7 @@ export function openOptionEditor(
   };
 
   // New option input
-  const addRow = popover.createDiv({ cls: "db-cell-option-add" });
+  const addRow = popover.createDiv({ cls: "obnotion-cell-option-add" });
   const addInput = addRow.createEl("input", {
     attr: { placeholder: t("cell.addOption"), type: "text" },
   });
@@ -679,7 +679,7 @@ export function openOptionEditor(
     if (!multiple) {
       selected.clear();
       selected.add(name);
-      popover.querySelectorAll<HTMLElement>(".db-option-check").forEach((el) => el.empty());
+      popover.querySelectorAll<HTMLElement>(".obnotion-option-check").forEach((el) => el.empty());
       if (isFileTags) commitValue(name);
       else commitOptions({ setValue: true, value: name });
     } else {
@@ -691,12 +691,12 @@ export function openOptionEditor(
   };
 
   // Clear button (at bottom)
-  const actions = popover.createDiv({ cls: "db-panel-header-actions" });
-  const clearBtn = actions.createEl("button", { cls: "db-panel-button", text: t("cell.clear") });
+  const actions = popover.createDiv({ cls: "obnotion-panel-header-actions" });
+  const clearBtn = actions.createEl("button", { cls: "obnotion-panel-button", text: t("cell.clear") });
   clearBtn.onmousedown = (event) => event.preventDefault();
   const clearAllChecks = () => {
-    popover.querySelectorAll<HTMLElement>(".db-option-check").forEach((el) => el.empty());
-    popover.querySelectorAll<HTMLElement>(".db-cell-option-item").forEach((el) => {
+    popover.querySelectorAll<HTMLElement>(".obnotion-option-check").forEach((el) => el.empty());
+    popover.querySelectorAll<HTMLElement>(".obnotion-cell-option-item").forEach((el) => {
       el.toggleClass("is-selected", false);
       el.setAttr("aria-checked", "false");
     });

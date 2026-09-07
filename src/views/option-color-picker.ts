@@ -4,7 +4,7 @@
 // ───────────────────────────────────────────────────────────────────
 //
 // Registry and the phone header are the picker host's — the row catalogue and its trailing tick
-// are this file's own. A one-column labelled list, built from the family's own `.db-dropdown-
+// are this file's own. A one-column labelled list, built from the family's own `.obnotion-dropdown-
 // option` row, replaces the unlabelled swatch grid this file used to build: the palette is
 // sixteen colours, several pairs of which sit under a CIE76 ΔE of 10 in at least one theme, so a
 // grid asked the user to tell two near-identical hues apart with no other signal. The
@@ -45,7 +45,7 @@ export function openOptionColorPicker(
   const view = doc.defaultView || window;
   closeActivePicker(doc);
 
-  const picker = doc.body.createDiv({ cls: "db-color-picker-popup" });
+  const picker = doc.body.createDiv({ cls: "obnotion-color-picker-popup" });
   picker.setAttr("role", "listbox");
   picker.setAttr("aria-label", t("menu.numberDisplayColorCustom"));
   picker.style.setProperty("color-scheme", "light dark");
@@ -66,7 +66,7 @@ export function openOptionColorPicker(
   const content = mountPickerSheetHeader(picker, doc, {
     title: title || t("conditionalFormat.color"),
     onClose: close,
-    bodyCls: "db-color-picker-body db-panel-row",
+    bodyCls: "obnotion-color-picker-body obnotion-panel-row",
   });
 
   const rows: HTMLButtonElement[] = [];
@@ -74,7 +74,7 @@ export function openOptionColorPicker(
 
   OPTION_COLORS.forEach((color, index) => {
     const row = content.createEl("button", {
-      cls: `db-dropdown-option db-menu-item${color === current ? " is-selected" : ""}`,
+      cls: `obnotion-dropdown-option obnotion-menu-item${color === current ? " is-selected" : ""}`,
       attr: {
         type: "button",
         role: "option",
@@ -82,11 +82,11 @@ export function openOptionColorPicker(
         tabindex: index === activeIndex ? "0" : "-1",
       },
     });
-    row.createSpan({ cls: `db-color-picker-row-dot db-option-color-${color}`, attr: { "aria-hidden": "true" } });
+    row.createSpan({ cls: `obnotion-color-picker-row-dot obnotion-option-color-${color}`, attr: { "aria-hidden": "true" } });
     // The visible name IS the accessible name here — nothing duplicates it into a `title` or a
     // raw `aria-label`, which is what let the old grid ship the enum value itself as text.
-    row.createSpan({ cls: "db-dropdown-option-label db-menu-item-label", text: t(`optionColor.${color}`) });
-    const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
+    row.createSpan({ cls: "obnotion-dropdown-option-label obnotion-menu-item-label", text: t(`optionColor.${color}`) });
+    const check = row.createSpan({ cls: "obnotion-dropdown-option-check obnotion-menu-item-check" });
     if (color === current) setIcon(check, "check");
     row.onclick = (event) => {
       event.stopPropagation();
@@ -109,7 +109,7 @@ export function openOptionColorPicker(
   picker.onkeydown = (event) => {
     if (isImeComposing(event)) return;
     const target = event.target as HTMLElement | null;
-    const currentRow = target?.closest<HTMLButtonElement>(".db-dropdown-option");
+    const currentRow = target?.closest<HTMLButtonElement>(".obnotion-dropdown-option");
     if (!currentRow) return;
     const index = rows.indexOf(currentRow);
     if (index < 0) return;

@@ -11,7 +11,7 @@
 import { getSearchHighlightTerms } from "../data/search";
 
 /** Walk text nodes in `root`, wrapping case-insensitive matches of `query` in
- *  <mark class="db-search-highlight">.
+ *  <mark class="obnotion-search-highlight">.
  *
  *  **Allowlist approach**: only highlight text inside result-area containers
  *  (table, board, gallery, list, calendar, timeline). Everything outside —
@@ -27,29 +27,29 @@ import { getSearchHighlightTerms } from "../data/search";
 
 /** Result containers that hold record data across all view types. */
 const SEARCHABLE_CONTAINERS =
-  ".db-table, .db-grouped-table, .db-board, .db-gallery, .db-gallery-grouped, " +
-  ".db-list, .db-list-grouped, .db-calendar, .db-timeline";
+  ".obnotion-table, .obnotion-grouped-table, .obnotion-board, .obnotion-gallery, .obnotion-gallery-grouped, " +
+  ".obnotion-list, .obnotion-list-grouped, .obnotion-calendar, .obnotion-timeline";
 
 /** Structural (non-data) text-bearing elements that live INSIDE result containers.
- *  Using broad container selectors (e.g. `.db-calendar-header`, `.db-timeline-axis`)
+ *  Using broad container selectors (e.g. `.obnotion-calendar-header`, `.obnotion-timeline-axis`)
  *  to cover all descendants — `closest()` matches for nested children too. */
 const NON_DATA_WITHIN_RESULTS = [
   // Cross-view: table/board headers, group titles, board subgroup headers, empty states
-  "th", ".db-group-header", ".db-board-column-header",
-  ".db-board-subgroup-header", ".db-empty",
+  "th", ".obnotion-group-header", ".obnotion-board-column-header",
+  ".obnotion-board-subgroup-header", ".obnotion-empty",
   // Calendar: toolbar (title/scale/nav/add), sticky header row, weekday headers,
   // day numbers, hour labels, overflow counts, mini-calendar popover
-  ".db-calendar-header", ".db-calendar-week-sticky", ".db-calendar-time-header-row",
-  ".db-calendar-weekdays", ".db-calendar-day-heading", ".db-calendar-day-number",
-  ".db-calendar-week-hour-label", ".db-calendar-week-allday-empty",
-  ".db-calendar-week-allday-more", ".db-calendar-more-events",
-  ".db-calendar-mini-popover",
+  ".obnotion-calendar-header", ".obnotion-calendar-week-sticky", ".obnotion-calendar-time-header-row",
+  ".obnotion-calendar-weekdays", ".obnotion-calendar-day-heading", ".obnotion-calendar-day-number",
+  ".obnotion-calendar-week-hour-label", ".obnotion-calendar-week-allday-empty",
+  ".obnotion-calendar-week-allday-more", ".obnotion-calendar-more-events",
+  ".obnotion-calendar-mini-popover",
   // Timeline: axis (ticks/bands/labels), group headers+tags, create row,
   // toolbar (title/scale/nav), mini-calendar popover, empty state, mobile menu
-  ".db-timeline-axis", ".db-timeline-group-header", ".db-timeline-group-tag",
-  ".db-timeline-create-row", ".db-timeline-header",
-  ".db-timeline-mini-popover", ".db-timeline-empty-range",
-  ".db-timeline-mobile-menu-button",
+  ".obnotion-timeline-axis", ".obnotion-timeline-group-header", ".obnotion-timeline-group-tag",
+  ".obnotion-timeline-create-row", ".obnotion-timeline-header",
+  ".obnotion-timeline-mini-popover", ".obnotion-timeline-empty-range",
+  ".obnotion-timeline-mobile-menu-button",
 ].join(", ");
 
 // ───────────────────────────────────────────────────────────────────
@@ -72,7 +72,7 @@ export function highlightSearchMatches(root: HTMLElement, query: string): void {
       acceptNode(node: Text) {
         const parent = node.parentElement;
         if (!parent) return NodeFilter.FILTER_REJECT;
-        if (parent.closest(".db-search-highlight")) return NodeFilter.FILTER_REJECT;
+        if (parent.closest(".obnotion-search-highlight")) return NodeFilter.FILTER_REJECT;
         if (parent.closest(NON_DATA_WITHIN_RESULTS)) return NodeFilter.FILTER_REJECT;
         const lowerText = node.textContent?.toLowerCase() || "";
         return lowerTerms.some((term) => lowerText.includes(term))
@@ -97,7 +97,7 @@ export function highlightSearchMatches(root: HTMLElement, query: string): void {
     while (match) {
       if (match.index > lastEnd) frag.appendChild(doc.createTextNode(text.slice(lastEnd, match.index)));
       const mark = doc.createElement("mark");
-      mark.className = "db-search-highlight";
+      mark.className = "obnotion-search-highlight";
       mark.textContent = text.slice(match.index, match.index + match.length);
       frag.appendChild(mark);
       lastEnd = match.index + match.length;
@@ -124,7 +124,7 @@ export function renderSearchHighlightedText(parent: HTMLElement, text: string, q
   const doc = parent.ownerDocument || window.activeDocument;
   while (match) {
     if (match.index > lastEnd) parent.appendChild(doc.createTextNode(text.slice(lastEnd, match.index)));
-    const mark = parent.createEl("mark", { cls: "db-search-highlight", text: text.slice(match.index, match.index + match.length) });
+    const mark = parent.createEl("mark", { cls: "obnotion-search-highlight", text: text.slice(match.index, match.index + match.length) });
     parent.appendChild(mark);
     lastEnd = match.index + match.length;
     match = findNextSearchHighlightMatch(lower, terms, lastEnd);

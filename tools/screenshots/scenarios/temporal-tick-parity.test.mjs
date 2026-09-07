@@ -82,7 +82,7 @@ describe("timeline screenshot event markup mirrors the renderer", () => {
     expect(fixtureMarkup).toContain('class="pm-gantt-bar-progress"');
     expect(fixtureMarkup).toContain('class="pm-gantt-drag-handle"');
     expect(fixtureMarkup).toContain('class="pm-gantt-link-dot"');
-    expect(fixtureMarkup).not.toContain("db-timeline");
+    expect(fixtureMarkup).not.toContain("obnotion-timeline");
     expect(source).toContain('class: "pm-gantt-bar-group"');
     expect(source).toContain('class: "pm-gantt-drag-handle"');
     expect(source).toContain('class: "pm-gantt-link-dot"');
@@ -118,9 +118,9 @@ describe("timeline toolbar options fixture mirrors the week-label select", () =>
 
   it("shows the reference week-label select, defaulting to week number, using the shared dropdown-row markup", () => {
     const markup = scenario.html();
-    expect(markup).toContain('class="db-dropdown-field db-chart-options-dropdown has-current-icon"');
-    expect(markup).toContain('<span class="db-dropdown-field-label">Week label</span>');
-    expect(markup).toContain('<span class="db-dropdown-field-value">Week number</span>');
+    expect(markup).toContain('class="obnotion-dropdown-field obnotion-chart-options-dropdown has-current-icon"');
+    expect(markup).toContain('<span class="obnotion-dropdown-field-label">Week label</span>');
+    expect(markup).toContain('<span class="obnotion-dropdown-field-value">Week number</span>');
     // Placed after the local-extensions column-width controls, the same order
     // renderLayoutContent() emits them in.
     const localExtensionsAt = markup.indexOf("Local extensions");
@@ -137,7 +137,7 @@ describe("timeline toolbar options fixture mirrors the week-label select", () =>
     // Data section depicts "Timeline scale: Week", so the row must not appear here even
     // though local extensions are on.
     const markup = scenario.html();
-    expect(markup).toContain('<span class="db-dropdown-field-value">Week</span>');
+    expect(markup).toContain('<span class="obnotion-dropdown-field-value">Week</span>');
     expect(markup).not.toContain("Slot duration");
   });
 
@@ -382,10 +382,10 @@ describe("timeline fixture unit widths match the reference gantt's fixed day wid
    (the local viewport-centred window is a gated extension). This section proves the unit-count
    and content-width mirrors against the real model exports, for every scale, at the two device
    widths the capture harness actually opens the page at. getTimelineViewportUnitCount()
-   (calendar-timeline-renderer.ts:2419-2426) measures the outer .note-database-container's rect
+   (calendar-timeline-renderer.ts:2419-2426) measures the outer .obnotion-container's rect
    width, then getTimelineViewportContentWidth() (calendar-timeline-model.ts:245-250) subtracts
-   that container's own CSS padding (`padding: 0 var(--db-space-8) var(--db-space-8)`,
-   styles.css:809; --db-space-8 is 24px, styles.css:52) — never the sticky group-label column,
+   that container's own CSS padding (`padding: 0 var(--obnotion-space-8) var(--obnotion-space-8)`,
+   styles.css:809; --obnotion-space-8 is 24px, styles.css:52) — never the sticky group-label column,
    which overlays rather than shrinks the measured container. */
 const DEVICE_WIDTHS = [1440, 402];
 const CONTAINER_PADDING_PX = 24;
@@ -614,9 +614,9 @@ describe("calendar fixture markup mirrors the renderer states", () => {
     expect(calendarIsWeekendDateKey("2026-03-23")).toBe(false);
     // The week defaults to Monday regardless of locale, so the weekend pair is columns 6/7 (Sat, Sun), the two
     // rightmost, not the two outer edges a Sunday-first week used to split it to.
-    expect(calendarWeekdayMarkup("Sun", 6)).toContain("db-calendar-weekday is-weekend");
-    expect(calendarWeekdayMarkup("Sat", 5)).toContain("db-calendar-weekday is-weekend");
-    expect(calendarWeekdayMarkup("Mon", 0)).toContain("class=\"db-calendar-weekday \"");
+    expect(calendarWeekdayMarkup("Sun", 6)).toContain("obnotion-calendar-weekday is-weekend");
+    expect(calendarWeekdayMarkup("Sat", 5)).toContain("obnotion-calendar-weekday is-weekend");
+    expect(calendarWeekdayMarkup("Mon", 0)).toContain("class=\"obnotion-calendar-weekday \"");
     expect(monthDayCell({ n: 22, key: "2026-03-22" }, 1)).toContain("is-weekend");
     expect(monthDayCell({ n: 23, key: "2026-03-23" }, 2)).not.toContain("is-weekend");
   });
@@ -644,19 +644,19 @@ describe("calendar fixture markup mirrors the renderer states", () => {
   it("mirrors renderEmpty()'s empty-card markup class-for-class for both calendar reasons", () => {
     // "no-date-field" carries the one action calendar-renderer.ts's renderEmpty() ever attaches
     // (openDateConfig is always present in the real app), and lands as a direct child of
-    // .note-database-container — never a .db-calendar descendant — matching the actual DOM
+    // .obnotion-container — never a .obnotion-calendar descendant — matching the actual DOM
     // renderCard() builds before any calendar wrapper exists.
     const noDateField = calendarEmptyStateMarkup("no-date-field");
-    expect(noDateField).toContain('class="db-empty db-empty-card"');
+    expect(noDateField).toContain('class="obnotion-empty obnotion-empty-card"');
     expect(noDateField).toContain('data-empty-reason="no-date-field"');
-    expect(noDateField).toContain("db-empty-card-icon");
-    expect(noDateField).toContain("db-empty-card-content");
-    expect(noDateField).toContain("db-empty-card-title");
+    expect(noDateField).toContain("obnotion-empty-card-icon");
+    expect(noDateField).toContain("obnotion-empty-card-content");
+    expect(noDateField).toContain("obnotion-empty-card-title");
     expect(noDateField).toContain("No date property");
-    expect(noDateField).toContain("db-empty-card-message");
+    expect(noDateField).toContain("obnotion-empty-card-message");
     expect(noDateField).toContain("Select the property that supplies dates for this view.");
-    expect(noDateField).toContain("db-empty-action-group");
-    expect(noDateField).toContain('db-empty-action mod-cta');
+    expect(noDateField).toContain("obnotion-empty-action-group");
+    expect(noDateField).toContain('obnotion-empty-action mod-cta');
     expect(noDateField).toContain("Select date property");
 
     // "no-events" never carries an action (renderEmpty() only attaches one for "no-date-field").
@@ -664,6 +664,6 @@ describe("calendar fixture markup mirrors the renderer states", () => {
     expect(noEvents).toContain('data-empty-reason="no-events"');
     expect(noEvents).toContain("No events");
     expect(noEvents).toContain("Records with a value in the selected date property will appear here.");
-    expect(noEvents).not.toContain("db-empty-action-group");
+    expect(noEvents).not.toContain("obnotion-empty-action-group");
   });
 });

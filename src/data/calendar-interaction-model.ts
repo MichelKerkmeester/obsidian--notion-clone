@@ -224,7 +224,7 @@ export interface UnitDragOffsetResult {
  * 周/月/季 move 拖拽：把水平位移换算成夹取后的 unit 偏移（unit = 天，0 基）。
  * 本体沿轨道滑动时用：offset = originalOffset + deltaUnits，夹取到可见窗口
  * [0, totalUnits - span] 内，防止事件拖出窗口。返回值用于设置
- * `--db-timeline-offset`（CSS 用 offsetUnits + 1）。
+ * `--obnotion-timeline-offset`（CSS 用 offsetUnits + 1）。
  */
 export function resolveUnitDragOffset(input: UnitDragOffsetInput): UnitDragOffsetResult {
   // span 至少为 1 天；maxOffset 为事件能在窗口内平移的最大起始偏移。

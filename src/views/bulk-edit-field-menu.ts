@@ -44,7 +44,7 @@ export function openBulkEditFieldMenu(options: {
     value: "",
     searchable: editable.length > 0,
     searchPlaceholder: t("bulkEdit.searchField"),
-    popoverClassName: "db-bulk-edit-field-menu",
+    popoverClassName: "obnotion-bulk-edit-field-menu",
     options: rows,
     renderIcon: renderDropdownPropertyTypeIcon,
     onChange: (key) => {

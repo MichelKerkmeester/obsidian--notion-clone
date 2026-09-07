@@ -1331,7 +1331,7 @@ function compareManualRank(a: string | undefined, b: string | undefined): number
 
 /**
  * jump 修复：基于完整 lane 顺序（含 jump 事件）计算重排的 before/after 邻居。
- * jump 事件不在 visible DOM（它是 .db-timeline-window-jump 而非 .db-timeline-event），
+ * jump 事件不在 visible DOM（它是 .obnotion-timeline-window-jump 而非 .obnotion-timeline-event），
  * 若用 visible DOM 算邻居会跨越 jump，导致拖入事件不紧贴目标。
  */
 export function resolveTimelineReorderNeighbors(

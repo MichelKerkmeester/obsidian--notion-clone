@@ -25,9 +25,9 @@ type Story = StoryObj;
 
 function strip(label: string, build: (host: HTMLElement) => void): HTMLElement {
   const wrap = document.createElement("div");
-  wrap.className = "db-story-cell";
+  wrap.className = "obnotion-story-cell";
   const caption = document.createElement("span");
-  caption.className = "db-story-note";
+  caption.className = "obnotion-story-note";
   caption.textContent = label;
   const host = document.createElement("div");
   build(host);
@@ -43,7 +43,7 @@ function strip(label: string, build: (host: HTMLElement) => void): HTMLElement {
 export const Rating: Story = {
   render: () => {
     const row = document.createElement("div");
-    row.className = "db-story-row";
+    row.className = "obnotion-story-row";
     row.append(
       strip("Default, 3/5", (h) => renderRating(h, 3)),
       strip("Outline", (h) => renderRating(h, 3, { ratingVariant: "outline" })),
@@ -58,7 +58,7 @@ export const Rating: Story = {
 export const Progress: Story = {
   render: () => {
     const row = document.createElement("div");
-    row.className = "db-story-row";
+    row.className = "obnotion-story-row";
     row.append(
       strip("0%", (h) => renderProgress(h, 0)),
       strip("35%", (h) => renderProgress(h, 35)),
@@ -74,7 +74,7 @@ export const Progress: Story = {
 export const Ring: Story = {
   render: () => {
     const row = document.createElement("div");
-    row.className = "db-story-row";
+    row.className = "obnotion-story-row";
     row.append(
       strip("0%", (h) => renderProgressRing(h, 0)),
       strip("35%", (h) => renderProgressRing(h, 35)),

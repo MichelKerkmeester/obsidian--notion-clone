@@ -298,7 +298,7 @@ describe("CalendarRenderer Unit Tests", () => {
 
     renderer.render(container, baseConfig, []);
 
-    const warningBtn = (container as unknown as MockElement).querySelector(".db-calendar-invalid-toggle");
+    const warningBtn = (container as unknown as MockElement).querySelector(".obnotion-calendar-invalid-toggle");
     expect(warningBtn).not.toBeNull();
     // Default label is set immediately at creation time
     expect(warningBtn?.getAttribute("aria-label")).toBe("Invalid time events");
@@ -324,7 +324,7 @@ describe("CalendarRenderer Unit Tests", () => {
     };
 
     renderer.render(container, configNoDateField, []);
-    const actionBtn = (container as unknown as MockElement).querySelector(".db-empty-action");
+    const actionBtn = (container as unknown as MockElement).querySelector(".obnotion-empty-action");
     expect(actionBtn).not.toBeNull();
 
     // Now render with date field but no events (and no calendarMonth set)
@@ -334,7 +334,7 @@ describe("CalendarRenderer Unit Tests", () => {
       calendarMonth: undefined,
     };
     renderer.render(container2, configNoEvents, []);
-    const actionBtn2 = (container2 as unknown as MockElement).querySelector(".db-empty-action");
+    const actionBtn2 = (container2 as unknown as MockElement).querySelector(".obnotion-empty-action");
     // For no-events, the date property is already configured, so no action button is offered
     expect(actionBtn2).toBeNull();
   });
@@ -353,15 +353,15 @@ describe("CalendarRenderer Unit Tests", () => {
     renderer.render(container, baseConfig, [sampleRow]);
 
     const mockRoot = container as unknown as MockElement;
-    const grid = mockRoot.querySelector(".db-calendar-month-grid");
+    const grid = mockRoot.querySelector(".obnotion-calendar-month-grid");
     expect(grid).not.toBeNull();
     expect(grid?.getAttribute("role")).toBe("grid");
 
-    const weekdayHeaders = mockRoot.querySelectorAll(".db-calendar-weekday");
+    const weekdayHeaders = mockRoot.querySelectorAll(".obnotion-calendar-weekday");
     expect(weekdayHeaders.length).toBeGreaterThan(0);
     expect(weekdayHeaders[0].getAttribute("role")).toBe("columnheader");
 
-    const cells = mockRoot.querySelectorAll(".db-calendar-day");
+    const cells = mockRoot.querySelectorAll(".obnotion-calendar-day");
     expect(cells.length).toBeGreaterThan(0);
     expect(cells[0].getAttribute("role")).toBe("gridcell");
     // At least one cell should have tabindex="0" for roving focus
@@ -398,7 +398,7 @@ describe("CalendarRenderer Unit Tests", () => {
     renderer.render(container, timedConfig, [timedRow]);
 
     const mockRoot = container as unknown as MockElement;
-    const timedEvent = mockRoot.querySelector(".db-calendar-week-timed-event");
+    const timedEvent = mockRoot.querySelector(".obnotion-calendar-week-timed-event");
     expect(timedEvent).not.toBeNull();
     expect(timedEvent?.tagName).toBe("BUTTON");
     expect(timedEvent?.getAttribute("type")).toBe("button");
@@ -440,7 +440,7 @@ describe("CalendarRenderer Unit Tests", () => {
       .renderEmpty(container, "read-failed");
 
     const mockRoot = container as unknown as MockElement;
-    const emptyCard = mockRoot.querySelector(".db-empty-card");
+    const emptyCard = mockRoot.querySelector(".obnotion-empty-card");
     expect(emptyCard).not.toBeNull();
     expect(emptyCard?.getAttribute("data-empty-reason")).toBe("read-failed");
   });
@@ -474,7 +474,7 @@ describe("Calendar parity behaviours", () => {
   });
 
   const eventForPath = (root: MockElement, selector: string, path: string): MockElement | undefined =>
-    root.querySelectorAll(selector).find((el) => el.getAttribute("data-note-database-row-path") === path);
+    root.querySelectorAll(selector).find((el) => el.getAttribute("data-obnotion-row-path") === path);
 
   const isWeekendKey = (dateKey: string): boolean => {
     const dow = new Date(Date.UTC(Number(dateKey.slice(0, 4)), Number(dateKey.slice(5, 7)) - 1, Number(dateKey.slice(8, 10)))).getUTCDay();
@@ -491,8 +491,8 @@ describe("Calendar parity behaviours", () => {
     ]);
 
     const root = container as unknown as MockElement;
-    const doneSegment = eventForPath(root, ".db-calendar-month-segment", "done-note.md");
-    const openSegment = eventForPath(root, ".db-calendar-month-segment", "open-note.md");
+    const doneSegment = eventForPath(root, ".obnotion-calendar-month-segment", "done-note.md");
+    const openSegment = eventForPath(root, ".obnotion-calendar-month-segment", "open-note.md");
     expect(doneSegment).toBeDefined();
     expect(openSegment).toBeDefined();
     expect(doneSegment?.className.split(/\s+/)).toContain("is-completed");
@@ -514,8 +514,8 @@ describe("Calendar parity behaviours", () => {
     ]);
 
     const root = container as unknown as MockElement;
-    const doneSegment = eventForPath(root, ".db-calendar-week-allday-segment", "done-week.md");
-    const openSegment = eventForPath(root, ".db-calendar-week-allday-segment", "open-week.md");
+    const doneSegment = eventForPath(root, ".obnotion-calendar-week-allday-segment", "done-week.md");
+    const openSegment = eventForPath(root, ".obnotion-calendar-week-allday-segment", "open-week.md");
     expect(doneSegment).toBeDefined();
     expect(openSegment).toBeDefined();
     expect(doneSegment?.className.split(/\s+/)).toContain("is-completed");
@@ -545,12 +545,12 @@ describe("Calendar parity behaviours", () => {
     ]);
 
     const root = container as unknown as MockElement;
-    const strip = root.querySelector(".db-calendar-week-allday-cols");
+    const strip = root.querySelector(".obnotion-calendar-week-allday-cols");
     expect(strip).toBeDefined();
-    expect(strip!.querySelectorAll(".db-calendar-month-dates").length).toBe(0);
+    expect(strip!.querySelectorAll(".obnotion-calendar-month-dates").length).toBe(0);
 
     // The range survives where Notion also keeps it: the chip's own tooltip.
-    const segment = eventForPath(root, ".db-calendar-week-allday-segment", "multi-day.md");
+    const segment = eventForPath(root, ".obnotion-calendar-week-allday-segment", "multi-day.md");
     const expectedRange = formatDateTimeRangeDisplay("2026-08-11", "2026-08-13", undefined, undefined, { contextYear: 2026 });
     expect(segment?.getAttribute("title")).toContain(expectedRange);
   });
@@ -579,8 +579,8 @@ describe("Calendar parity behaviours", () => {
     ]);
 
     const root = container as unknown as MockElement;
-    const doneEvent = eventForPath(root, ".db-calendar-week-timed-event", "meeting-done.md");
-    const openEvent = eventForPath(root, ".db-calendar-week-timed-event", "meeting-open.md");
+    const doneEvent = eventForPath(root, ".obnotion-calendar-week-timed-event", "meeting-done.md");
+    const openEvent = eventForPath(root, ".obnotion-calendar-week-timed-event", "meeting-open.md");
     expect(doneEvent).toBeDefined();
     expect(openEvent).toBeDefined();
     expect(doneEvent?.className.split(/\s+/)).toContain("is-completed");
@@ -608,7 +608,7 @@ describe("Calendar parity behaviours", () => {
     renderer.render(container, parityConfig, []);
 
     const root = container as unknown as MockElement;
-    const cells = root.querySelectorAll(".db-calendar-day");
+    const cells = root.querySelectorAll(".obnotion-calendar-day");
     expect(cells.length).toBeGreaterThan(0);
     for (const cell of cells) {
       const dateKey = cell.getAttribute("data-date-key") || "";
@@ -617,7 +617,7 @@ describe("Calendar parity behaviours", () => {
     }
 
     // The weekday label row marks the same columns as the first grid week.
-    const weekdays = root.querySelectorAll(".db-calendar-weekday");
+    const weekdays = root.querySelectorAll(".obnotion-calendar-weekday");
     const firstWeekCells = cells.slice(0, 7);
     expect(weekdays.length).toBe(7);
     firstWeekCells.forEach((cell, index) => {
@@ -638,7 +638,7 @@ describe("Calendar parity behaviours", () => {
     renderer.render(container, weekConfig, []);
 
     const root = container as unknown as MockElement;
-    const headers = root.querySelectorAll(".db-calendar-time-header-day");
+    const headers = root.querySelectorAll(".obnotion-calendar-time-header-day");
     expect(headers.length).toBe(7);
     for (const header of headers) {
       const dateKey = header.getAttribute("data-date-key") || "";
@@ -653,8 +653,8 @@ describe("Calendar parity behaviours", () => {
     renderer.render(container, parityConfig, [makeRow("scheduled.md", { due: "2026-08-15", done: false })]);
 
     const root = container as unknown as MockElement;
-    expect(root.querySelector(".db-calendar-unscheduled-chip")).toBeNull();
-    expect(root.querySelector(".db-calendar-backlog")).toBeNull();
+    expect(root.querySelector(".obnotion-calendar-unscheduled-chip")).toBeNull();
+    expect(root.querySelector(".obnotion-calendar-backlog")).toBeNull();
   });
 
   it("renders the unscheduled chip beside the title, and no band, once an unscheduled row exists", () => {
@@ -664,12 +664,12 @@ describe("Calendar parity behaviours", () => {
     renderer.render(container, parityConfig, [makeRow("unscheduled.md", { done: false })]);
 
     const root = container as unknown as MockElement;
-    const chip = root.querySelector(".db-calendar-unscheduled-chip");
+    const chip = root.querySelector(".obnotion-calendar-unscheduled-chip");
     expect(chip).not.toBeNull();
     expect(chip?.textContent).toContain("1");
-    // Beside the title, not a sibling band: the chip is a child of .db-calendar-title.
-    expect(chip?.parentElement?.className.split(/\s+/)).toContain("db-calendar-title");
-    expect(root.querySelector(".db-calendar-backlog")).toBeNull();
+    // Beside the title, not a sibling band: the chip is a child of .obnotion-calendar-title.
+    expect(chip?.parentElement?.className.split(/\s+/)).toContain("obnotion-calendar-title");
+    expect(root.querySelector(".obnotion-calendar-backlog")).toBeNull();
   });
 
   it("keeps a create path on every day cell for pointers that have no + glyph", () => {
@@ -685,7 +685,7 @@ describe("Calendar parity behaviours", () => {
     renderer.render(container, parityConfig, [makeRow("scheduled.md", { due: "2026-08-15", done: false })]);
 
     const root = container as unknown as MockElement;
-    const cells = root.querySelectorAll(".db-calendar-day");
+    const cells = root.querySelectorAll(".obnotion-calendar-day");
     expect(cells.length).toBeGreaterThan(0);
     const cell = cells.find((el) => typeof el.oncontextmenu === "function");
     expect(cell).toBeDefined();
@@ -705,7 +705,7 @@ describe("Calendar parity behaviours", () => {
     const roContainer = new MockElement("div") as unknown as HTMLElement;
     readOnly.render(roContainer, parityConfig, [makeRow("scheduled.md", { due: "2026-08-15", done: false })]);
     ownedMenuRows.length = 0;
-    const roCell = (roContainer as unknown as MockElement).querySelectorAll(".db-calendar-day").find((el) => typeof el.oncontextmenu === "function");
+    const roCell = (roContainer as unknown as MockElement).querySelectorAll(".obnotion-calendar-day").find((el) => typeof el.oncontextmenu === "function");
     roCell?.oncontextmenu?.({ preventDefault: () => undefined, stopPropagation: () => undefined, clientX: 1, clientY: 1 });
     expect(ownedMenuRows.find((row) => row.icon === "plus")).toBeUndefined();
   });
@@ -717,7 +717,7 @@ describe("Calendar parity behaviours", () => {
     renderer.render(container, { ...parityConfig, calendarMonth: undefined }, []);
 
     const root = container as unknown as MockElement;
-    const title = root.querySelector(".db-empty-card-title");
+    const title = root.querySelector(".obnotion-empty-card-title");
     expect(title?.textContent).toBe("No events");
   });
 
@@ -764,7 +764,7 @@ describe("phone month-chip title ellipsis", () => {
     // week-all-day strip and the day-popover copy have their own title rules and are
     // not what this selector matches.
     const body = ruleBody(
-      /\.is-phone \.note-database-container \.db-calendar-month-week > \.db-calendar-month-segment > \.db-calendar-month-title \{/
+      /\.is-phone \.obnotion-container \.obnotion-calendar-month-week > \.obnotion-calendar-month-segment > \.obnotion-calendar-month-title \{/
     );
     // flex-shrink 1 (not 0) with a 0 basis: the title's box is bounded by whatever
     // space the segment actually has, so its right edge can never sit past the
@@ -783,7 +783,7 @@ describe("phone month-chip title ellipsis", () => {
     // 8-character basis with shrink disabled — reverting the phone rule (deleting
     // it, or widening its selector off `.is-phone`) leaves exactly this shape in
     // effect, which is the state that produced the overflow this suite guards.
-    const body = ruleBody(/\.note-database-container \.db-calendar-month-title \{/);
+    const body = ruleBody(/\.obnotion-container \.obnotion-calendar-month-title \{/);
     expect(body).toMatch(/flex:\s*1 0 min\(8ch, 100%\);/);
   });
 
@@ -792,7 +792,7 @@ describe("phone month-chip title ellipsis", () => {
     // once in the whole stylesheet, and only prefixed with `.is-phone` — never as a
     // plain `@media` width query, which would also catch a narrow desktop window
     // that was never flagged as a phone.
-    const selector = ".db-calendar-month-week > .db-calendar-month-segment > .db-calendar-month-title {";
+    const selector = ".obnotion-calendar-month-week > .obnotion-calendar-month-segment > .obnotion-calendar-month-title {";
     const occurrences = stylesContent.split(selector).length - 1;
     expect(occurrences).toBe(1);
     const selectorIndex = stylesContent.indexOf(selector);

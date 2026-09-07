@@ -106,16 +106,16 @@ const DECLARED = [
       + " padding one out would break the line box it sits in",
   },
   {
-    match: "db-checkbox",
+    match: "obnotion-checkbox",
     reason: "the checkbox paints at 28px and takes its touch area from a ::before inset, which a"
       + " bounding box does not include; the checkbox tool measures that surface directly",
   },
   {
-    match: "db-mobile-bottom-sheet-handle",
+    match: "obnotion-mobile-bottom-sheet-handle",
     reason: "the grab bar is 4px tall by design and hit-tests as a full-width band above it",
   },
   {
-    match: "db-board-pagination-dot",
+    match: "obnotion-board-pagination-dot",
     reason: "the dot paints at 12px and takes its touch area from a ::before inset of -16px on"
       + " every side (styles.css's coarse-pointer board-pagination block), a 44px effective hit"
       + " area a bounding box does not include — the same shape as the checkbox exemption above."
@@ -131,13 +131,13 @@ const DECLARED = [
  */
 const RAISED = [
   {
-    match: "db-table-load-more-button",
+    match: "obnotion-table-load-more-button",
     floor: ENHANCED,
     reason: "the embedded table's Load more row, operator-ruled 2026-09-06 at 44px on phone"
       + " (30px desktop, out of this floor's reach since the fixture only renders on a phone body)",
   },
   {
-    match: "db-table-footer-trigger",
+    match: "obnotion-table-footer-trigger",
     floor: ENHANCED,
     reason: "the table's summary-footer \"+ Calculate\" trigger, operator-ruled 2026-09-06 at 44px"
       + " on phone (26px desktop, out of this floor's reach since the fixture only renders on a"
@@ -145,7 +145,7 @@ const RAISED = [
       + " belongs to a table that actually has rows to summarize",
   },
   {
-    match: "db-toast-action",
+    match: "obnotion-toast-action",
     floor: ENHANCED,
     reason: "the toast's action link (Undo/Retry) measured 29x14 with no floor at all before this"
       + " entry; raised to 44px on phone (unchanged on desktop, out of this floor's reach since the"
@@ -211,7 +211,7 @@ async function assertPremise(page, scenarioId) {
     canary: (() => {
       const probe = document.createElement("input");
       probe.type = "checkbox";
-      probe.className = "db-checkbox db-checkbox-row";
+      probe.className = "obnotion-checkbox obnotion-checkbox-row";
       document.body.appendChild(probe);
       const box = probe.getBoundingClientRect();
       probe.remove();

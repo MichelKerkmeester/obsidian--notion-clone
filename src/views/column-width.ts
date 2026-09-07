@@ -349,18 +349,18 @@ export function openColumnWidthAdjuster(options: ColumnWidthAdjusterOptions): ()
   const doc = root.ownerDocument;
   const sheet = isMobileBottomSheet(doc);
 
-  const backdrop = sheet ? null : doc.body.createDiv({ cls: "db-mobile-column-width-backdrop" });
-  const panel = doc.body.createDiv({ cls: "db-mobile-column-width-panel" });
-  // The body below is built from the shared panel-family classes (`db-panel-header`,
-  // `db-panel-row`, `db-view-config-range`, `db-new-placement`...), and every one of those rules
-  // is written `.note-database-container .db-thing`. Filter, Sort and the view-config panel keep
+  const backdrop = sheet ? null : doc.body.createDiv({ cls: "obnotion-mobile-column-width-backdrop" });
+  const panel = doc.body.createDiv({ cls: "obnotion-mobile-column-width-panel" });
+  // The body below is built from the shared panel-family classes (`obnotion-panel-header`,
+  // `obnotion-panel-row`, `obnotion-view-config-range`, `obnotion-new-placement`...), and every one of those rules
+  // is written `.obnotion-container .obnotion-thing`. Filter, Sort and the view-config panel keep
   // matching after their own portal because they are BUILT inside the container and
   // `setSheetMount`'s move branch re-adds the class on the way to the body; this panel is created
   // on `doc.body` directly and never takes that branch, on either presentation, so without this
   // the shared classes above render as unstyled blocks and buttons — the operator's "bare strip"
   // report, reproduced by a different cause. The container's own `height: 100%` is corrected in
   // the stylesheet, right beside the rule it corrects.
-  panel.addClass("note-database-container");
+  panel.addClass("obnotion-container");
 
   // The same three-slot header grammar every other shell surface carries: a centred title (on the
   // phone sheet) with the close control on the trailing edge, so the adjuster reads as part of the
@@ -376,8 +376,8 @@ export function openColumnWidthAdjuster(options: ColumnWidthAdjusterOptions): ()
   // The shared range control: slider and typed value side by side in one row. Dragging cannot
   // hit an exact number, and matching a column to a known width is the whole reason someone
   // opens this panel.
-  const widthRow = panel.createDiv({ cls: "db-panel-row" });
-  const control = widthRow.createDiv({ cls: "db-view-config-range" });
+  const widthRow = panel.createDiv({ cls: "obnotion-panel-row" });
+  const control = widthRow.createDiv({ cls: "obnotion-view-config-range" });
   const slider = control.createEl("input", {
     attr: {
       type: "range",
@@ -388,7 +388,7 @@ export function openColumnWidthAdjuster(options: ColumnWidthAdjusterOptions): ()
     },
   });
   const valueEl = control.createEl("input", {
-    cls: "db-view-config-number",
+    cls: "obnotion-view-config-number",
     attr: {
       type: "number",
       inputmode: "numeric",
@@ -400,15 +400,15 @@ export function openColumnWidthAdjuster(options: ColumnWidthAdjusterOptions): ()
 
   // The presets are the same exclusive-choice group the new-record placement uses: equal options
   // with one selected, so the current mode is visible instead of four flat tiles.
-  const presetsRow = panel.createDiv({ cls: "db-panel-row" });
+  const presetsRow = panel.createDiv({ cls: "obnotion-panel-row" });
   const group = presetsRow.createDiv({
-    cls: "db-new-placement",
+    cls: "obnotion-new-placement",
     attr: { role: "group", "aria-label": t("menu.adjustColumnWidth") },
   });
   const presetButtons: Array<{ button: HTMLButtonElement; mode: "auto" | "width"; width: number }> = [];
   const addPresetButton = (mode: "auto" | "width", width: number, label: string): void => {
     const button = group.createEl("button", {
-      cls: "db-new-placement-option",
+      cls: "obnotion-new-placement-option",
       text: label,
       attr: { type: "button", role: "radio", "aria-checked": "false" },
     });
@@ -503,7 +503,7 @@ export function openColumnWidthAdjuster(options: ColumnWidthAdjusterOptions): ()
     removeAutoClose?.();
     // Take the sheet chrome down before the node goes: the backdrop is a body sibling, so
     // removing the panel alone would leave the app dimmed behind a surface that is no longer there.
-    if (panel.hasClass("db-mobile-bottom-sheet")) applySheetChrome(panel, false);
+    if (panel.hasClass("obnotion-mobile-bottom-sheet")) applySheetChrome(panel, false);
     panel.remove();
     backdrop?.remove();
   };

@@ -144,7 +144,7 @@ const LEGITIMATE_LINES = [
   "text ships as UTF-16 across the render boundary",
   "see specs/context/obsidian-pm-main/src/views/KanbanView.ts for the reference behaviour",
   "errors.ac_001_required is the i18n key shown under the field",
-  "--db-motion-fast is the custom property this transition reads",
+  "--obnotion-motion-fast is the custom property this transition reads",
 ];
 
 describe("scanText lets every legitimate shape through", () => {

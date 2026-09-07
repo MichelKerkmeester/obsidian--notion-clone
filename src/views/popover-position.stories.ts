@@ -26,12 +26,12 @@ type Story = StoryObj;
 export const Anchored: Story = {
   render: () => {
     const host = document.createElement("div");
-    host.className = "db-story-column";
+    host.className = "obnotion-story-column";
     const anchor = document.createElement("button");
     anchor.type = "button";
     anchor.textContent = "Open menu";
     const panel = document.createElement("div");
-    panel.className = "db-menu";
+    panel.className = "obnotion-menu";
     panel.textContent = "Positioned menu";
     host.append(anchor, panel);
     document.body.appendChild(host);

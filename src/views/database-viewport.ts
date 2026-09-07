@@ -61,8 +61,8 @@ interface AnchorCandidate {
 /** Capture scroll offsets and the first visible row/column so a full rerender can keep the user's place. */
 export function captureDatabaseViewport(container: HTMLElement): DatabaseViewportSnapshot {
   const bounds = container.getBoundingClientRect();
-  const rowAnchor = findVisibleAnchor(container, "[data-note-database-row-path]", "noteDatabaseRowPath", bounds, "top");
-  const columnAnchor = findVisibleAnchor(container, "th[data-note-database-column-key]", "noteDatabaseColumnKey", bounds, "left");
+  const rowAnchor = findVisibleAnchor(container, "[data-obnotion-row-path]", "obnotionRowPath", bounds, "top");
+  const columnAnchor = findVisibleAnchor(container, "th[data-obnotion-column-key]", "obnotionColumnKey", bounds, "left");
   return {
     top: container.scrollTop,
     left: container.scrollLeft,
@@ -78,14 +78,14 @@ export function restoreDatabaseViewport(container: HTMLElement, snapshot: Databa
 
   const bounds = container.getBoundingClientRect();
   const row = snapshot.rowAnchor
-    ? findAnchorById(container, "[data-note-database-row-path]", "noteDatabaseRowPath", snapshot.rowAnchor.path)
+    ? findAnchorById(container, "[data-obnotion-row-path]", "obnotionRowPath", snapshot.rowAnchor.path)
     : null;
   if (row) {
     container.scrollTop += row.getBoundingClientRect().top - bounds.top - snapshot.rowAnchor!.offset;
   }
 
   const column = snapshot.columnAnchor
-    ? findAnchorById(container, "th[data-note-database-column-key]", "noteDatabaseColumnKey", snapshot.columnAnchor.key)
+    ? findAnchorById(container, "th[data-obnotion-column-key]", "obnotionColumnKey", snapshot.columnAnchor.key)
     : null;
   if (column) {
     container.scrollLeft += column.getBoundingClientRect().left - bounds.left - snapshot.columnAnchor!.offset;
@@ -154,7 +154,7 @@ export function resolveDatabaseViewportMode(
 function findVisibleAnchor(
   container: HTMLElement,
   selector: string,
-  datasetKey: "noteDatabaseRowPath" | "noteDatabaseColumnKey",
+  datasetKey: "obnotionRowPath" | "obnotionColumnKey",
   bounds: DOMRect,
   axis: "top" | "left"
 ): AnchorCandidate | undefined {
@@ -178,7 +178,7 @@ function findVisibleAnchor(
 function findAnchorById(
   container: HTMLElement,
   selector: string,
-  datasetKey: "noteDatabaseRowPath" | "noteDatabaseColumnKey",
+  datasetKey: "obnotionRowPath" | "obnotionColumnKey",
   id: string
 ): HTMLElement | null {
   const candidates = Array.from(container.querySelectorAll<HTMLElement>(selector));

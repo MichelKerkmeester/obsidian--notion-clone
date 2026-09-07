@@ -104,7 +104,7 @@ async function chooseExternalSavePath(app: App, defaultFilename: string): Promis
     if (result?.canceled || !result?.filePath) return null;
     return result.filePath;
   } catch (err) {
-    console.warn("Note Database: save dialog unavailable, falling back to vault export", err);
+    console.warn("Obnotion: save dialog unavailable, falling back to vault export", err);
     return undefined;
   }
 }

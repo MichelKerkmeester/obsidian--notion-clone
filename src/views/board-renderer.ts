@@ -51,8 +51,8 @@ import { openBoardGroupsPanel } from "./board-groups-panel";
 // 2. CONSTANTS
 // ───────────────────────────────────────────────────────────────────
 
-const CARD_MIME = "application/x-note-database-card";
-const CARD_FROM_GROUP_MIME = "application/x-note-database-card-from-group";
+const CARD_MIME = "application/x-obnotion-card";
+const CARD_FROM_GROUP_MIME = "application/x-obnotion-card-from-group";
 /** How close the pointer must sit to the container's scrollbar edge, in pixels, before the
  *  desktop scrollbar reveals from a hover. Anywhere else in the pane leaves it hidden — a reader
  *  scanning cards should not have a bar paint under their pointer just for being on the page. */
@@ -163,7 +163,7 @@ export class BoardRenderer {
    * inside a loop appending to the same container, so the browser reflowed the tree built so far
    * once per card and the total became superlinear in card count.
    *
-   * It is measured on the container, not on `.db-kanban-board`. That element is `width:
+   * It is measured on the container, not on `.obnotion-kanban-board`. That element is `width:
    * max-content`, so it grows as each column is appended and a width read from it is a different
    * number on the first card than on the last — there is no single value to hoist. The container
    * is the pane, which is the width the touch threshold was written about.
@@ -248,10 +248,10 @@ export class BoardRenderer {
         : undefined,
       visibleKeys: this.legacyVisibleColumnKeys,
     });
-    container.addClass("db-kanban-view");
+    container.addClass("obnotion-kanban-view");
     // The card carries role="row" below; without a role="grid" ancestor that role has no grid to
     // pair with, which is an ARIA relationship the browser and assistive tech both expect intact.
-    const board = container.createDiv({ cls: "db-kanban-board", attr: { role: "grid" } });
+    const board = container.createDiv({ cls: "obnotion-kanban-board", attr: { role: "grid" } });
     // The column header shows its "..." and "+" only on hover on desktop and permanently on
     // touch, where there is no hover to reveal them from.
     board.toggleClass("is-touch", this.touchMode);
@@ -312,13 +312,13 @@ export class BoardRenderer {
     const visibleRows = this.getVisibleSubtaskRows(group.rows);
     allRows.push(...visibleRows);
 
-    const col = board.createDiv({ cls: "db-kanban-col", attr: { "data-status": group.key } });
-    const header = col.createDiv({ cls: "db-kanban-col-header" });
+    const col = board.createDiv({ cls: "obnotion-kanban-col", attr: { "data-status": group.key } });
+    const header = col.createDiv({ cls: "obnotion-kanban-col-header" });
     // At rest the header carries the option chip alone — a 1px border, the option's own tint
     // fill and darkened text. The chip reuses the same status-color vocabulary every option value
     // renders with elsewhere; only its hex pair is retinted, scoped to this view, because the
     // raw hue fails WCAG 1.4.3 as bare text in light theme.
-    const chip = header.createSpan({ cls: "db-kanban-col-chip" });
+    const chip = header.createSpan({ cls: "obnotion-kanban-col-chip" });
     // A palette name paints through the retinted status-color class below; any other authored
     // color string (a custom hex/rgb value) has no bucket to retint, so it paints as an inline
     // style instead of a malformed class name.
@@ -328,11 +328,11 @@ export class BoardRenderer {
     }
     chip.appendText(formatGroupKeyDisplay(config, groupField, group.key, { uncategorizedLabel: t("board.noValue") }));
 
-    const controls = header.createDiv({ cls: "db-kanban-col-controls" });
+    const controls = header.createDiv({ cls: "obnotion-kanban-col-controls" });
     // Folds the "WIP counts" extension: the desktop header carries no record count, but the
     // phone board always shows one as plain text beside the label.
     if (this.touchMode) {
-      controls.createSpan({ cls: "db-kanban-col-count", text: String(visibleRows.length) });
+      controls.createSpan({ cls: "obnotion-kanban-col-count", text: String(visibleRows.length) });
     }
     // Folds "group controls" and "touch menus": the same sort/hide/delete menu the extensions
     // layout already ships opens from this affordance, hover-revealed on desktop and permanent
@@ -342,7 +342,7 @@ export class BoardRenderer {
     }
     if (!this.actions.isReadOnly && !this.actions.hideCreateEntry && !isComputedGroupField(config, groupField)) {
       const addCard = controls.createEl("button", {
-        cls: "db-kanban-col-add",
+        cls: "obnotion-kanban-col-add",
         attr: { type: "button", "aria-label": t("board.addCard"), title: t("board.addCard") },
       });
       setIcon(addCard, "plus");
@@ -353,7 +353,7 @@ export class BoardRenderer {
       };
     }
 
-    const cardsEl = col.createDiv({ cls: "db-kanban-cards", attr: { "data-status": group.key } });
+    const cardsEl = col.createDiv({ cls: "obnotion-kanban-cards", attr: { "data-status": group.key } });
     this.attachReferenceDropHandlers(cardsEl, group, groupField);
     // The kanban page limit is 10, distinct from every other layout's own default; applied
     // locally rather than through the shared unlimited-by-default config field so no other
@@ -364,7 +364,7 @@ export class BoardRenderer {
       // No reference capture holds an empty column. Design inferred: the shared empty-group
       // card the rest of the app already uses.
       const empty = this.emptyStateRenderer.renderCard(cardsEl, { reason: "empty-group" });
-      empty.addClass("db-kanban-empty-slot");
+      empty.addClass("obnotion-kanban-empty-slot");
     }
     for (const row of visibleRows.slice(0, visibleCount)) {
       this.renderReferenceCard(cardsEl, config, group, row, groupField);
@@ -374,11 +374,11 @@ export class BoardRenderer {
       // The "+ New" control sits 8px below the last card, in the same flex rhythm as the
       // inter-card gap — a bare "+" on desktop, a labelled row on touch.
       const newRecord = cardsEl.createEl("button", {
-        cls: "db-kanban-new",
+        cls: "obnotion-kanban-new",
         attr: { type: "button", "aria-label": t("toolbar.new") },
       });
-      setIcon(newRecord.createSpan({ cls: "db-kanban-new-icon" }), "plus");
-      newRecord.createSpan({ cls: "db-kanban-new-label", text: t("toolbar.new") });
+      setIcon(newRecord.createSpan({ cls: "obnotion-kanban-new-icon" }), "plus");
+      newRecord.createSpan({ cls: "obnotion-kanban-new-label", text: t("toolbar.new") });
       newRecord.onclick = () => this.createEntryNearEnd({ [groupField]: group.key || "" }, visibleRows);
     }
   }
@@ -392,21 +392,21 @@ export class BoardRenderer {
       if (this.actions.isReadOnly) return;
       if (!this.isCardDrag(event)) return;
       event.preventDefault();
-      cardsEl.addClass("db-kanban-drop-target");
+      cardsEl.addClass("obnotion-kanban-drop-target");
       const afterEl = getReferenceDragAfterElement(cardsEl, event.clientY);
-      const dragging = cardsEl.querySelector(".db-kanban-card--dragging");
+      const dragging = cardsEl.querySelector(".obnotion-kanban-card--dragging");
       if (dragging) {
         if (afterEl) cardsEl.insertBefore(dragging, afterEl);
         else cardsEl.appendChild(dragging);
       }
     });
     cardsEl.addEventListener("dragleave", () => {
-      cardsEl.removeClass("db-kanban-drop-target");
+      cardsEl.removeClass("obnotion-kanban-drop-target");
     });
     cardsEl.addEventListener("drop", (event) => {
       if (this.actions.isReadOnly) return;
       event.preventDefault();
-      cardsEl.removeClass("db-kanban-drop-target");
+      cardsEl.removeClass("obnotion-kanban-drop-target");
       const path = event.dataTransfer?.getData(CARD_MIME) || event.dataTransfer?.getData("text/plain") || "";
       if (!path) return;
       const row = this.rowByPath.get(path);
@@ -435,10 +435,10 @@ export class BoardRenderer {
     const subtaskNode = this.subtaskRelation?.nodes.get(row.file.path);
 
     const card = cards.createDiv({
-      cls: "db-kanban-card",
+      cls: "obnotion-kanban-card",
       attr: {
         "data-task-id": row.file.path,
-        "data-note-database-row-path": row.file.path,
+        "data-obnotion-row-path": row.file.path,
         role: "row",
       },
     });
@@ -463,14 +463,14 @@ export class BoardRenderer {
         event.dataTransfer?.setData(CARD_MIME, row.file.path);
         event.dataTransfer?.setData(CARD_FROM_GROUP_MIME, group.key);
         event.dataTransfer?.setData("text/plain", row.file.path);
-        card.addClass("db-kanban-card--dragging");
+        card.addClass("obnotion-kanban-card--dragging");
         // Not seen in any capture — no card mid-drag exists in the sweep. Design inferred: the
         // raised state paints first, then the card itself fades a tick later.
-        window.setTimeout(() => card.addClass("db-kanban-card--drag-fade"), 0);
+        window.setTimeout(() => card.addClass("obnotion-kanban-card--drag-fade"), 0);
       });
       card.addEventListener("dragend", () => {
-        card.removeClass("db-kanban-card--dragging");
-        card.removeClass("db-kanban-card--drag-fade");
+        card.removeClass("obnotion-kanban-card--dragging");
+        card.removeClass("obnotion-kanban-card--drag-fade");
       });
     }
 
@@ -478,7 +478,7 @@ export class BoardRenderer {
     // default, same as this — a mapped image field is the only way a cover renders.
     if (config.boardImageField) this.renderCover(card, config, row);
 
-    const body = card.createDiv({ cls: "db-kanban-card-body" });
+    const body = card.createDiv({ cls: "obnotion-kanban-card-body" });
 
     // No Objects/Types data model exists here, so there is no literal "type name" to show in the
     // slot Anytype uses for one. The nearest thing this schema already tracks in that position —
@@ -488,19 +488,19 @@ export class BoardRenderer {
       ? this.getReferenceRowTitle(config, this.rowByPath.get(subtaskNode.parentId))
       : undefined;
 
-    const titleRow = body.createDiv({ cls: "db-kanban-card-title-row" });
+    const titleRow = body.createDiv({ cls: "obnotion-kanban-card-title-row" });
     // The reference reserves the icon slot on every card, not only when a record-icon field is
     // mapped — `force` skips that gate here, so an unmapped card still gets the default glyph
     // renderRecordIcon already falls back to, rather than starting the title flush left.
     this.actions.renderRecordIcon?.(titleRow, row, config, true, true);
-    titleRow.createSpan({ cls: "db-kanban-card-title", text: this.getReferenceRowTitle(config, row) });
+    titleRow.createSpan({ cls: "obnotion-kanban-card-title", text: this.getReferenceRowTitle(config, row) });
 
-    if (parentTitle) body.createDiv({ cls: "db-kanban-card-type", text: parentTitle });
+    if (parentTitle) body.createDiv({ cls: "obnotion-kanban-card-type", text: parentTitle });
 
     // Folded into the property rhythm rather than a dedicated clamped block: one line among the
     // rest, same pitch, same secondary grey, truncated to one line by CSS.
     const description = this.hydratedDescriptions.get(row.file.path);
-    if (description) body.createDiv({ cls: "db-kanban-card-description", text: description });
+    if (description) body.createDiv({ cls: "obnotion-kanban-card-description", text: description });
 
     this.renderReferenceCardMeta(body, config, row, this.referenceCardFields);
   }
@@ -523,7 +523,7 @@ export class BoardRenderer {
       entries.push(this.renderCardFieldContent(row, col, config, displayValue, displayType, empty, true));
     }
     if (entries.length === 0) return;
-    const meta = body.createDiv({ cls: "db-kanban-card-meta" });
+    const meta = body.createDiv({ cls: "obnotion-kanban-card-meta" });
     for (const entry of entries) meta.appendChild(entry);
   }
 
@@ -580,7 +580,7 @@ export class BoardRenderer {
   // group name keeps it inline with the text instead of parked at the far header edge.
   private renderBoardGroupOptions(parent: HTMLElement, config: ViewConfig, field: string, group: BoardGroup, icon = "more-vertical"): void {
     const button = parent.createEl("button", {
-      cls: "db-board-column-options",
+      cls: "obnotion-board-column-options",
       attr: { type: "button", "aria-label": t("board.columnOptions"), title: t("board.columnOptions") },
     });
     setIcon(button, icon);
@@ -597,7 +597,7 @@ export class BoardRenderer {
       menu.addSeparator();
       menu.addRow({ icon: "fold-vertical", label: t("board.collapseGroup"), onClick: () => this.actions.toggleGroupCollapsed?.(field, group.key) });
       menu.addRow({
-        cls: "db-board-groups-entry",
+        cls: "obnotion-board-groups-entry",
         icon: "settings-2",
         label: t("board.manageGroups"),
         onClick: () => this.openGroupsPanel(button, config, field),
@@ -639,19 +639,19 @@ export class BoardRenderer {
   }
 
   private renderCover(card: HTMLElement, config: ViewConfig, row: RowData): void {
-    const cover = card.createDiv({ cls: "db-board-card-cover" });
+    const cover = card.createDiv({ cls: "obnotion-board-card-cover" });
     const ratio = Math.max(0.35, Math.min(2.5, config.boardImageAspectRatio ?? 0.75));
     cover.style.aspectRatio = String(ratio);
-    cover.style.setProperty("--db-board-image-fit", config.boardImageFit || "cover");
+    cover.style.setProperty("--obnotion-board-image-fit", config.boardImageFit || "cover");
     const image = resolveCoverImage(config.boardImageField, row, this.app);
     const coverColumn = config.schema.columns.find((col) => col.key === config.boardImageField);
     if (!image || isCoverImageBlocked(image, coverColumn?.type)) {
       cover.addClass("is-empty");
-      setIcon(cover.createSpan({ cls: "db-board-card-cover-placeholder" }), "image");
+      setIcon(cover.createSpan({ cls: "obnotion-board-card-cover-placeholder" }), "image");
       return;
     }
     const coverLink = cover.createEl("div", {
-      cls: "db-board-card-cover-button",
+      cls: "obnotion-board-card-cover-button",
       attr: { role: "button", tabindex: "0", "aria-label": image.label },
     });
     setTooltip(coverLink, image.label, { delay: 100 });
@@ -675,7 +675,7 @@ export class BoardRenderer {
       }
     };
     const imageEl = coverLink.createEl("img", { attr: { src: image.src, alt: image.alt, draggable: "false" } });
-    imageEl.onerror = () => markCoverImageLoadError(cover, coverLink, "db-board-card-cover-placeholder");
+    imageEl.onerror = () => markCoverImageLoadError(cover, coverLink, "obnotion-board-card-cover-placeholder");
   }
 
   private async moveCardAndOrder(
@@ -795,8 +795,8 @@ export class BoardRenderer {
     const displayValue = resolvedValue ?? (empty ? this.getEmptyDisplayValue(col, displayType) : value);
     return renderCardField({
       app: this.app, row, col, config, value: displayValue, displayType, empty,
-      fieldClass: "db-board-card-field", valueClass: "db-board-card-value", labelClass: "db-board-card-field-label",
-      badgesClass: "db-board-card-badges", linkClass: "db-board-card-link", fieldWidth: this.getCardFieldWidth(config, col),
+      fieldClass: "obnotion-board-card-field", valueClass: "obnotion-board-card-value", labelClass: "obnotion-board-card-field-label",
+      badgesClass: "obnotion-board-card-badges", linkClass: "obnotion-board-card-link", fieldWidth: this.getCardFieldWidth(config, col),
       wrap: col.wrap, readOnly: displayOnly || this.actions.isReadOnly, splitOptionValue: true,
       applyConditionalFormat: this.actions.applyConditionalFormat,
       onEdit: (target, editRow, editCol, event) => this.actions.editCell(target, editRow, editCol, event),
@@ -848,8 +848,8 @@ export class BoardRenderer {
   }
 
   private clear(container: HTMLElement): void {
-    container.querySelectorAll(".db-kanban-board").forEach((el) => el.remove());
-    container.removeClass("db-kanban-view");
+    container.querySelectorAll(".obnotion-kanban-board").forEach((el) => el.remove());
+    container.removeClass("obnotion-kanban-view");
     // The container is the host's, not the board's — a listener left on it would keep firing for
     // whichever view takes the pane next.
     this.scrollbarRevealTeardown?.();
@@ -885,7 +885,7 @@ export class BoardRenderer {
 /** Adapted from obsidian-pm KanbanColumn.ts:118-131 (MIT, notice above) for the Anytype card
  *  class names this board now constructs. */
 function getReferenceDragAfterElement(container: HTMLElement, y: number): Element | null {
-  const cards = Array.from(container.querySelectorAll(".db-kanban-card:not(.db-kanban-card--dragging)"));
+  const cards = Array.from(container.querySelectorAll(".obnotion-kanban-card:not(.obnotion-kanban-card--dragging)"));
   let closest: Element | null = null;
   let closestOffset = Number.NEGATIVE_INFINITY;
   for (const card of cards) {

@@ -51,37 +51,37 @@ function ruleBody(selector: string): string {
 
 describe("calendar pinned values — measured against the Anytype month grid capture", () => {
   it("pins the month row's default height at 136px", () => {
-    const body = ruleBody(".note-database-container .db-calendar-month-week");
-    expect(body).toContain("var(--db-calendar-day-min-height, 136px)");
+    const body = ruleBody(".obnotion-container .obnotion-calendar-month-week");
+    expect(body).toContain("var(--obnotion-calendar-day-min-height, 136px)");
   });
 
-  it("pins the day-cell rule to the shared --db-calendar-rule token, not a literal per theme", () => {
-    const body = ruleBody(".note-database-container .db-calendar-month-week > .db-calendar-day");
-    expect(body).toContain("border-right: 1px solid var(--db-calendar-rule)");
-    expect(body).toContain("border-bottom: 1px solid var(--db-calendar-rule)");
+  it("pins the day-cell rule to the shared --obnotion-calendar-rule token, not a literal per theme", () => {
+    const body = ruleBody(".obnotion-container .obnotion-calendar-month-week > .obnotion-calendar-day");
+    expect(body).toContain("border-right: 1px solid var(--obnotion-calendar-rule)");
+    expect(body).toContain("border-bottom: 1px solid var(--obnotion-calendar-rule)");
     // The token itself reproduces the measured #292929-on-#171717 / #EBEBEB-on-#FFFFFF pair
     // via color-mix toward --text-normal, which is theme-adaptive by construction — no
-    // per-theme override survives on this selector. `.note-database-container .db-calendar {`
+    // per-theme override survives on this selector. `.obnotion-container .obnotion-calendar {`
     // is declared more than once (the main container block, then this state-token block), so
     // this greps the raw text for the declaration rather than using ruleBody, whose first
     // match would be the unrelated shared block.
-    expect(STYLES).toContain("--db-calendar-rule: color-mix(in srgb, var(--background-primary) 92%, var(--text-normal))");
+    expect(STYLES).toContain("--obnotion-calendar-rule: color-mix(in srgb, var(--background-primary) 92%, var(--text-normal))");
   });
 
   it("pins the flat chip's 20px desktop pitch and square corners", () => {
-    const body = ruleBody(".note-database-container .db-calendar-month-segment");
+    const body = ruleBody(".obnotion-container .obnotion-calendar-month-segment");
     expect(body).toContain("height: 20px");
     expect(body).toContain("border-radius: 0");
     expect(body).toContain("background: none");
   });
 
   it("pins the phone chip's 44px touch-floor override, plus overflow: hidden so an oversized title clips at the column rather than crossing it", () => {
-    const body = ruleBody(".is-phone .note-database-container .db-calendar-month-segment");
+    const body = ruleBody(".is-phone .obnotion-container .obnotion-calendar-month-segment");
     expect(body.replace(/\s+/g, " ").trim()).toBe("height: 44px; overflow: hidden;");
   });
 
   it("pins the today marker's 26x24px size and #216DFA fill", () => {
-    const body = ruleBody(".note-database-container .db-calendar-day.is-today .db-calendar-day-number");
+    const body = ruleBody(".obnotion-container .obnotion-calendar-day.is-today .obnotion-calendar-day-number");
     expect(body).toContain("width: 26px");
     expect(body).toContain("height: 24px");
     expect(body).toContain("background: #216DFA");
@@ -91,12 +91,12 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     // The band's own rule (a bordered, always-laid-out drawer above the grid) is gone, not just
     // unreferenced — this greps the raw stylesheet text rather than one selector's block, so a
     // rule reintroduced under a new selector name would still be caught by its class name.
-    expect(STYLES).not.toContain(".db-calendar-backlog");
+    expect(STYLES).not.toContain(".obnotion-calendar-backlog");
     // The selector carries the shared control classes deliberately: the Today-label rule matches
     // `.is-text` at the same weight, so the chip class alone would lose the cascade and paint the
     // normal ink while this pin still read green. The rendered pair is compared in the browser
     // harness's own calendar assertions; this pin holds the declaration it depends on.
-    const body = ruleBody(".note-database-container .db-calendar-nav-button.is-text.db-calendar-unscheduled-chip");
+    const body = ruleBody(".obnotion-container .obnotion-calendar-nav-button.is-text.obnotion-calendar-unscheduled-chip");
     expect(body).toContain("color: var(--text-muted)");
   });
 
@@ -104,20 +104,20 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     // The title's own flex-grow (below) fills a multi-day segment's whole grid-column span when
     // nothing bounds it, so a segment carrying a date range zeroes its title's grow — the fix for
     // an operator report of a multi-day chip's range reading as centred, detached text.
-    const title = ruleBody(".note-database-container .db-calendar-month-title");
+    const title = ruleBody(".obnotion-container .obnotion-calendar-month-title");
     expect(title).toContain("flex: 1 0 min(8ch, 100%)");
-    const bounded = ruleBody(".note-database-container .db-calendar-month-segment:has(> .db-calendar-month-dates) > .db-calendar-month-title");
+    const bounded = ruleBody(".obnotion-container .obnotion-calendar-month-segment:has(> .obnotion-calendar-month-dates) > .obnotion-calendar-month-title");
     expect(bounded.replace(/\s+/g, " ").trim()).toBe("flex-grow: 0;");
   });
 
   it("pins the week/day timed block to the month chip's flat ink: no fill, no accent bar, no radius", () => {
-    const body = ruleBody(".note-database-container .db-calendar-week-timed-event");
+    const body = ruleBody(".obnotion-container .obnotion-calendar-week-timed-event");
     expect(body).toContain("background: none");
     expect(body).not.toContain("border-left");
     expect(body).toContain("border-radius: 0");
     expect(body).toContain("color: #292929");
 
-    const dark = ruleBody(".theme-dark .note-database-container .db-calendar-week-timed-event");
+    const dark = ruleBody(".theme-dark .obnotion-container .obnotion-calendar-week-timed-event");
     expect(dark.replace(/\s+/g, " ").trim()).toBe("color: #DDDDDD;");
   });
 
@@ -134,39 +134,39 @@ describe("calendar pinned values — measured against the Anytype month grid cap
   });
 
   it("pins the weekend tint: one step off the page, in a flat form for the month cell and a wash for the time grid", () => {
-    expect(STYLES).toContain("--db-calendar-weekend-bg: color-mix(in srgb, var(--background-primary) 97%, var(--text-normal))");
-    expect(STYLES).toContain("--db-calendar-weekend-wash: color-mix(in srgb, var(--text-normal) 3%, transparent)");
+    expect(STYLES).toContain("--obnotion-calendar-weekend-bg: color-mix(in srgb, var(--background-primary) 97%, var(--text-normal))");
+    expect(STYLES).toContain("--obnotion-calendar-weekend-wash: color-mix(in srgb, var(--text-normal) 3%, transparent)");
     // Negative control: the tree used to carry a literal light value and a
     // `.theme-dark` override with a DIFFERENT literal — neither survives.
-    expect(STYLES).not.toContain("--db-calendar-weekend-bg: #F7F7F7");
-    expect(STYLES).not.toContain("--db-calendar-weekend-bg: #1E1E1E");
+    expect(STYLES).not.toContain("--obnotion-calendar-weekend-bg: #F7F7F7");
+    expect(STYLES).not.toContain("--obnotion-calendar-weekend-bg: #1E1E1E");
     // The two forms are not interchangeable and the split is the point. The time
     // grid paints its day columns above its slot lines, so the flat form erased
     // every hour line under the weekend pair; the month day heading is sticky and
     // takes `background: inherit`, so the wash repaints there a second time.
-    const monthCell = ruleBody(".note-database-container .db-calendar-month-week > .db-calendar-day.is-weekend:not(.is-today)");
-    expect(monthCell).toContain("background: var(--db-calendar-weekend-bg)");
-    const timeGrid = ruleBody(".note-database-container .db-calendar-time-columns .db-calendar-week-day-col.is-weekend:not(.is-today)");
-    expect(timeGrid).toContain("background: var(--db-calendar-weekend-wash)");
+    const monthCell = ruleBody(".obnotion-container .obnotion-calendar-month-week > .obnotion-calendar-day.is-weekend:not(.is-today)");
+    expect(monthCell).toContain("background: var(--obnotion-calendar-weekend-bg)");
+    const timeGrid = ruleBody(".obnotion-container .obnotion-calendar-time-columns .obnotion-calendar-week-day-col.is-weekend:not(.is-today)");
+    expect(timeGrid).toContain("background: var(--obnotion-calendar-weekend-wash)");
   });
 
   it("pins the month grid to seven fluid columns regardless of a custom column width", () => {
     // The month week row and the weekday label row never read that custom-width
     // value; only week/day's own time-grid tracks read it, via applyTimeGridSizingVars.
-    const monthWeek = ruleBody(".note-database-container .db-calendar[style*=\"--db-calendar-col-width\"] .db-calendar-month-week");
-    expect(monthWeek).toContain("repeat(7, var(--db-calendar-col-width))");
-    const weekdays = ruleBody(".note-database-container .db-calendar-weekdays");
+    const monthWeek = ruleBody(".obnotion-container .obnotion-calendar[style*=\"--obnotion-calendar-col-width\"] .obnotion-calendar-month-week");
+    expect(monthWeek).toContain("repeat(7, var(--obnotion-calendar-col-width))");
+    const weekdays = ruleBody(".obnotion-container .obnotion-calendar-weekdays");
     expect(weekdays).toContain("repeat(7, minmax(0, 1fr))");
   });
 
   it("pins the \"+N more\" affordance to a reset button — no fill, no border, no centred text", () => {
-    const body = ruleBody(".note-database-container .db-calendar-more-events");
+    const body = ruleBody(".obnotion-container .obnotion-calendar-more-events");
     expect(body).toContain("background: none");
     expect(body).toContain("border: 0");
     expect(body).toContain("box-shadow: none");
     expect(body).toContain("text-align: left");
     expect(body).toContain("padding: 0 0 0 10px");
-    expect(body).toContain("color: var(--db-calendar-muted-ink)");
+    expect(body).toContain("color: var(--obnotion-calendar-muted-ink)");
     // A grid item's min-width is auto, so without these the line kept its whole
     // intrinsic width and ran past its own column's rule into the next one at
     // phone widths — measured 13 CSS px of overrun before this landed.
@@ -179,33 +179,33 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     const source = readFileSync(resolve(__dirname, "calendar-renderer.ts"), "utf-8");
     const labels = source.slice(source.indexOf("private renderWeekdayLabels("));
     const body = labels.slice(0, labels.indexOf("\n\tprivate "));
-    expect(body).not.toContain("db-calendar-col-resize-handle");
+    expect(body).not.toContain("obnotion-calendar-col-resize-handle");
     expect(body).not.toContain("setupColumnResize");
     // Negative control on the mechanism, not on the absence: the handle's drag
     // is what sets the var, and the week/day header still carries one.
-    expect(source).toContain("wrap.style.setProperty(\"--db-calendar-col-width\"");
-    expect(source).toContain("db-calendar-col-resize-handle");
+    expect(source).toContain("wrap.style.setProperty(\"--obnotion-calendar-col-width\"");
+    expect(source).toContain("obnotion-calendar-col-resize-handle");
   });
 
   it("pins the timed dot's removal: no chip carries a coloured dot", () => {
-    expect(STYLES).not.toContain(".db-calendar-month-timed-dot");
+    expect(STYLES).not.toContain(".obnotion-calendar-month-timed-dot");
   });
 
   it("pins the phone week/day time grid's minimum column width at 45px, the phone month grid's own cell", () => {
-    const body = ruleBody(".is-phone .note-database-container .db-calendar.db-calendar-week");
-    expect(body.replace(/\s+/g, " ").trim()).toBe("--db-calendar-phone-week-col-min: 45px;");
+    const body = ruleBody(".is-phone .obnotion-container .obnotion-calendar.obnotion-calendar-week");
+    expect(body.replace(/\s+/g, " ").trim()).toBe("--obnotion-calendar-phone-week-col-min: 45px;");
 
     // Both synchronised in-flow tracks read the same token, so a future edit that widens one
     // without the other silently un-syncs the header from the columns beneath it.
-    const headerDays = ruleBody(".is-phone .note-database-container .db-calendar-time-header-days");
-    const alldayCols = ruleBody(".is-phone .note-database-container .db-calendar-week-allday-cols");
+    const headerDays = ruleBody(".is-phone .obnotion-container .obnotion-calendar-time-header-days");
+    const alldayCols = ruleBody(".is-phone .obnotion-container .obnotion-calendar-week-allday-cols");
     for (const track of [headerDays, alldayCols]) {
-      expect(track).toContain("minmax(var(--db-calendar-phone-week-col-min, 45px), 1fr)");
+      expect(track).toContain("minmax(var(--obnotion-calendar-phone-week-col-min, 45px), 1fr)");
       expect(track).toContain("overflow-x: auto");
     }
 
-    const timeColumns = ruleBody(".is-phone .note-database-container .db-calendar-time-columns");
-    expect(timeColumns).toContain("minmax(var(--db-calendar-phone-week-col-min, 45px), 1fr)");
+    const timeColumns = ruleBody(".is-phone .obnotion-container .obnotion-calendar-time-columns");
+    expect(timeColumns).toContain("minmax(var(--obnotion-calendar-phone-week-col-min, 45px), 1fr)");
   });
 
   it("pins the overlap stagger: an overlapping timed block insets by a fixed step and keeps the column's remaining width, not an equal N-way split", () => {
@@ -217,17 +217,17 @@ describe("calendar pinned values — measured against the Anytype month grid cap
   });
 
   it("pins the calendar's own scale switcher as plain tabs, not the timeline's bordered segmented pill", () => {
-    const button = ruleBody(".note-database-container .db-calendar-scale-button");
+    const button = ruleBody(".obnotion-container .obnotion-calendar-scale-button");
     expect(button).toContain("border: 0");
     expect(button).toContain("background: none");
     expect(button).toContain("font-size: 14px");
-    const active = ruleBody(".note-database-container .db-calendar-scale-button.is-active");
+    const active = ruleBody(".obnotion-container .obnotion-calendar-scale-button.is-active");
     expect(active.replace(/\s+/g, " ").trim()).toBe("background: none; color: var(--text-normal); box-shadow: none;");
     // The timeline/gantt keeps its own bordered pill — a separate class family,
     // untouched by the calendar's restyle (the gantt is Project Manager 1:1).
-    const timelineButton = ruleBody(".note-database-container .db-timeline-scale-button");
+    const timelineButton = ruleBody(".obnotion-container .obnotion-timeline-scale-button");
     expect(timelineButton).toContain("border: 0");
-    const timelineActive = ruleBody(".note-database-container .db-timeline-scale-button.is-active");
+    const timelineActive = ruleBody(".obnotion-container .obnotion-timeline-scale-button.is-active");
     expect(timelineActive).toContain("box-shadow: 0 0 0 1px");
   });
 
@@ -238,70 +238,70 @@ describe("calendar pinned values — measured against the Anytype month grid cap
   });
 
   it("pins the title's 12px gap and 500 weight, not the shared base's 8px gap and 700 weight", () => {
-    // `.db-calendar-title` (and `-main`) is declared twice — the shared base the
+    // `.obnotion-calendar-title` (and `-main`) is declared twice — the shared base the
     // gantt's own title also reads, then the calendar-only override below it — so
     // this greps the raw text for the override's own declaration rather than
     // `ruleBody`, which would return the first (shared) block.
-    expect(STYLES).toContain(".note-database-container .db-calendar-title {\n  gap: 12px;\n}");
+    expect(STYLES).toContain(".obnotion-container .obnotion-calendar-title {\n  gap: 12px;\n}");
     // `-title-main` and `-title-year` are each declared twice too (shared base, then this
     // override), so these read the raw override text rather than `ruleBody`'s first match.
-    expect(STYLES).toContain(".note-database-container .db-calendar-title-main {\n  font-size: 16px;\n  font-weight: 500;\n  letter-spacing: normal;\n}");
-    expect(STYLES).toContain("font-weight: 500;\n  letter-spacing: normal;\n}\n\n.note-database-container .db-calendar-title-select");
+    expect(STYLES).toContain(".obnotion-container .obnotion-calendar-title-main {\n  font-size: 16px;\n  font-weight: 500;\n  letter-spacing: normal;\n}");
+    expect(STYLES).toContain("font-weight: 500;\n  letter-spacing: normal;\n}\n\n.obnotion-container .obnotion-calendar-title-select");
     // The shared base (also read by the gantt's own title) still carries the
     // heavier weight this override replaces, unmoved.
-    const sharedMain = ruleBody(".note-database-container .db-timeline-title-main,\n.note-database-container .db-calendar-title-main");
+    const sharedMain = ruleBody(".obnotion-container .obnotion-timeline-title-main,\n.obnotion-container .obnotion-calendar-title-main");
     expect(sharedMain).toContain("font-weight: 700");
   });
 
-  it("pins one rule colour across the week grid: the day-column divider and the grid's own bottom edge both read --db-calendar-rule, not --background-modifier-border", () => {
-    const col = ruleBody(".note-database-container .db-calendar-time-columns .db-calendar-week-day-col");
-    expect(col).toContain("border-right: 1px solid var(--db-calendar-rule)");
-    // `.db-calendar-week-body` is declared twice (sizing, then this border); the
+  it("pins one rule colour across the week grid: the day-column divider and the grid's own bottom edge both read --obnotion-calendar-rule, not --background-modifier-border", () => {
+    const col = ruleBody(".obnotion-container .obnotion-calendar-time-columns .obnotion-calendar-week-day-col");
+    expect(col).toContain("border-right: 1px solid var(--obnotion-calendar-rule)");
+    // `.obnotion-calendar-week-body` is declared twice (sizing, then this border); the
     // border declaration is the second block, so this reads the raw text rather
     // than `ruleBody`, which would return the first (sizing-only) block.
-    expect(STYLES).toContain(".note-database-container .db-calendar-week-body {\n  position: relative;\n  height: auto;\n  overflow: hidden;\n  border-bottom: 1px solid var(--db-calendar-rule);\n}");
+    expect(STYLES).toContain(".obnotion-container .obnotion-calendar-week-body {\n  position: relative;\n  height: auto;\n  overflow: hidden;\n  border-bottom: 1px solid var(--obnotion-calendar-rule);\n}");
     // Negative control: the removed rule read the theme's own border token at 90%, a different
     // rule colour from the month grid and slot lines above it.
     expect(STYLES).not.toContain("border-bottom: 1px solid color-mix(in srgb, var(--background-modifier-border) 90%, transparent);");
   });
 
   it("pins the week/day today marker to the disc alone: no accent underline, no recoloured hour label", () => {
-    expect(STYLES).not.toContain(".db-calendar-week-allday-col.is-today::before");
-    expect(STYLES).not.toContain(".db-calendar-time-header-day.is-today");
-    expect(STYLES).not.toContain(".db-calendar-week-hour-label.is-current-time-tick");
+    expect(STYLES).not.toContain(".obnotion-calendar-week-allday-col.is-today::before");
+    expect(STYLES).not.toContain(".obnotion-calendar-time-header-day.is-today");
+    expect(STYLES).not.toContain(".obnotion-calendar-week-hour-label.is-current-time-tick");
   });
 
   it("pins the phone add button hidden: the day sheet/long-press is the add path, not a per-day glyph", () => {
     const source = readFileSync(resolve(__dirname, "calendar-renderer.ts"), "utf-8");
-    const marker = "  .note-database-container .db-calendar-add-button {\n    display: none;\n  }";
+    const marker = "  .obnotion-container .obnotion-calendar-add-button {\n    display: none;\n  }";
     expect(STYLES).toContain(marker);
     // Negative control: the old rule forced it visible on every coarse-pointer/narrow view.
-    expect(STYLES).not.toContain(".db-calendar-add-button {\n    opacity: 1;\n  }");
-    expect(source).toContain("db-calendar-add-button");
+    expect(STYLES).not.toContain(".obnotion-calendar-add-button {\n    opacity: 1;\n  }");
+    expect(source).toContain("obnotion-calendar-add-button");
   });
 
   it("pins the all-day strip's range-string removal: the in-grid emitter is gone, the three off-grid producers survive", () => {
-    // Observed red before this fix: `content.createSpan({ cls: "db-calendar-month-dates", ... })`
+    // Observed red before this fix: `content.createSpan({ cls: "obnotion-calendar-month-dates", ... })`
     // rendered inside the week/day all-day strip's segment loop — one count inside
-    // `.db-calendar-week-allday-cols` per multi-day event, proven by a constructed render in
+    // `.obnotion-calendar-week-allday-cols` per multi-day event, proven by a constructed render in
     // `calendar-renderer.test.ts`.
     const source = readFileSync(resolve(__dirname, "calendar-renderer.ts"), "utf-8");
-    expect(source).not.toContain('content.createSpan({ cls: "db-calendar-month-dates"');
+    expect(source).not.toContain('content.createSpan({ cls: "obnotion-calendar-month-dates"');
     // The day popover, the overflow popover and the drag ghost are not in-grid resting chips and
-    // keep emitting the range — this is what the shared `.db-calendar-month-dates` rule and its
+    // keep emitting the range — this is what the shared `.obnotion-calendar-month-dates` rule and its
     // `:has()` flex bound still have to reach, and why neither is retired below.
-    expect(source).toContain('eventEl.createSpan({ cls: "db-calendar-month-dates"');
-    expect(source).toContain('ghost.createSpan({ cls: "db-calendar-month-dates"');
+    expect(source).toContain('eventEl.createSpan({ cls: "obnotion-calendar-month-dates"');
+    expect(source).toContain('ghost.createSpan({ cls: "obnotion-calendar-month-dates"');
   });
 
-  it("pins the shared .db-calendar-month-dates rule and its :has() flex bound as still-reachable, not orphaned", () => {
+  it("pins the shared .obnotion-calendar-month-dates rule and its :has() flex bound as still-reachable, not orphaned", () => {
     // Both survive the all-day strip's removal above: the day popover and the overflow popover
-    // share `.db-calendar-day-popover-events`, and both they and the drag ghost carry
-    // `.db-calendar-month-dates` as a direct child of `.db-calendar-month-segment`, which is what
+    // share `.obnotion-calendar-day-popover-events`, and both they and the drag ghost carry
+    // `.obnotion-calendar-month-dates` as a direct child of `.obnotion-calendar-month-segment`, which is what
     // the `:has()` bound and the base rule's colour/size still reach.
-    const base = ruleBody(".note-database-container .db-calendar-month-dates");
+    const base = ruleBody(".obnotion-container .obnotion-calendar-month-dates");
     expect(base).toContain("color: var(--text-muted)");
-    const bounded = ruleBody(".note-database-container .db-calendar-month-segment:has(> .db-calendar-month-dates) > .db-calendar-month-title");
+    const bounded = ruleBody(".obnotion-container .obnotion-calendar-month-segment:has(> .obnotion-calendar-month-dates) > .obnotion-calendar-month-title");
     expect(bounded.replace(/\s+/g, " ").trim()).toBe("flex-grow: 0;");
   });
 
@@ -309,12 +309,12 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     // Observed red before this fix: 34px in the toolbar mini calendar, 28px in the date-edit
     // popover variant, and no `.is-phone` rule reaching either — swept across every `.is-phone`
     // calendar rule and every `(pointer: coarse)` / `(hover: none)` block in the stylesheet.
-    const base = ruleBody(".note-database-container .db-calendar-mini-day");
+    const base = ruleBody(".obnotion-container .obnotion-calendar-mini-day");
     expect(base).toContain("min-height: 34px");
-    const popoverBase = ruleBody(".db-cell-edit-popover.db-date-edit-popover .db-calendar-mini-day");
+    const popoverBase = ruleBody(".obnotion-cell-edit-popover.obnotion-date-edit-popover .obnotion-calendar-mini-day");
     expect(popoverBase).toContain("min-height: 28px");
 
-    const phone = ruleBody(".is-phone .note-database-container .db-calendar-mini-day,\n.is-phone .db-cell-edit-popover.db-date-edit-popover .db-calendar-mini-day");
+    const phone = ruleBody(".is-phone .obnotion-container .obnotion-calendar-mini-day,\n.is-phone .obnotion-cell-edit-popover.obnotion-date-edit-popover .obnotion-calendar-mini-day");
     expect(phone.replace(/\s+/g, " ").trim()).toBe("min-width: 44px; min-height: 44px;");
   });
 
@@ -325,13 +325,13 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     // clipped Sunday in half against `overflow: hidden`, both read off the phone captures.
     const cellFloor = 44;
     const padding = 12;
-    const hosts = ruleBody(".is-phone .note-database-container .db-calendar-mini-popover,\n.is-phone .db-cell-edit-popover.db-date-edit-popover");
+    const hosts = ruleBody(".is-phone .obnotion-container .obnotion-calendar-mini-popover,\n.is-phone .obnotion-cell-edit-popover.obnotion-date-edit-popover");
     const width = Number(/width:\s*(\d+)px/.exec(hosts)?.[1]);
     expect(width).toBe(cellFloor * 7 + padding * 2);
     // The 402px phone frame the capture harness renders has to hold it.
     expect(width).toBeLessThanOrEqual(402);
     // Both unconditional widths this overrides are the ones the arithmetic above assumes.
-    expect(ruleBody(".note-database-container .db-calendar-mini-popover")).toContain("width: 252px");
-    expect(ruleBody(".db-cell-edit-popover.db-date-edit-popover")).toContain("width: 252px");
+    expect(ruleBody(".obnotion-container .obnotion-calendar-mini-popover")).toContain("width: 252px");
+    expect(ruleBody(".obnotion-cell-edit-popover.obnotion-date-edit-popover")).toContain("width: 252px");
   });
 });

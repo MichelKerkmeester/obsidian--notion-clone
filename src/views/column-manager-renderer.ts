@@ -93,14 +93,14 @@ export class ColumnManagerRenderer {
     if (!visible) return;
 
     const panel = containerEl.createDiv({
-      cls: "db-column-manager",
-      attr: { id: "db-column-manager" },
+      cls: "obnotion-column-manager",
+      attr: { id: "obnotion-column-manager" },
     });
     this.panelEl = panel;
     // A replacement node for a surface that is already open is a rebuild, not an opening. Saying so
     // is what keeps the sheet from replaying its rise and moving out from under the thumb.
     if (wasOpen) carrySheetEntrance(panel);
-    const header = containerEl.querySelector(".db-header") || containerEl.querySelector(".db-toolbar");
+    const header = containerEl.querySelector(".obnotion-header") || containerEl.querySelector(".obnotion-toolbar");
     if (header?.parentElement) {
       header.parentElement.insertBefore(panel, header.nextSibling);
     }
@@ -114,12 +114,12 @@ export class ColumnManagerRenderer {
     this.wireVisibilitySearch(searchInput, columns, rowsByKey);
 
     if (!actions.isReadOnly) {
-      const addRow = panel.createDiv({ cls: "db-column-manager-add-row" });
+      const addRow = panel.createDiv({ cls: "obnotion-column-manager-add-row" });
       const addColumnBtn = addRow.createEl("button", {
-        cls: "db-panel-button db-column-manager-add-button",
+        cls: "obnotion-panel-button obnotion-column-manager-add-button",
         attr: { type: "button" },
       });
-      addColumnBtn.createSpan({ cls: "db-panel-button-label", text: `+ ${t("panel.addColumn")}` });
+      addColumnBtn.createSpan({ cls: "obnotion-panel-button-label", text: `+ ${t("panel.addColumn")}` });
       addColumnBtn.onclick = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -131,10 +131,10 @@ export class ColumnManagerRenderer {
         const available = QUICK_ADD_FILE_FIELDS.filter((f) => !existingKeys.has(f.key));
         if (available.length > 0) {
           const addFileBtn = addRow.createEl("button", {
-            cls: "db-panel-button db-column-manager-add-button",
+            cls: "obnotion-panel-button obnotion-column-manager-add-button",
             attr: { type: "button" },
           });
-          addFileBtn.createSpan({ cls: "db-panel-button-label", text: `+ ${t("fileField.addFileProperty")}` });
+          addFileBtn.createSpan({ cls: "obnotion-panel-button-label", text: `+ ${t("fileField.addFileProperty")}` });
           addFileBtn.onclick = (event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -154,10 +154,10 @@ export class ColumnManagerRenderer {
                 actions.addFileFieldColumn?.(value);
               },
               closeOnSelect: true,
-              popoverClassName: "db-column-manager-file-property-dropdown",
+              popoverClassName: "obnotion-column-manager-file-property-dropdown",
               renderIcon: (parent, icon) => {
                 const type = icon.startsWith("property:") ? icon.slice("property:".length) : icon;
-                parent.addClass("db-column-type-option-icon");
+                parent.addClass("obnotion-column-type-option-icon");
                 renderPropertyTypeIcon(parent, { type } as ColumnDef);
               },
             });
@@ -185,7 +185,7 @@ export class ColumnManagerRenderer {
       else actions.addColumn();
     };
     const host = anchorEl.ownerDocument.body;
-    const popover = host.createDiv({ cls: "db-dropdown-popover db-add-property-picker" });
+    const popover = host.createDiv({ cls: "obnotion-dropdown-popover obnotion-add-property-picker" });
     let close: () => void = () => undefined;
     // Typing a name that matches no format is the create path — seeded as a text property, the
     // way `create-property-modal.ts`'s own default does. Picking a format is the other one: the
@@ -194,15 +194,15 @@ export class ColumnManagerRenderer {
     let picker: ReturnType<typeof buildAddPropertyRow<ColumnDef["type"]>>;
     picker = buildAddPropertyRow({
       parent: popover,
-      rootClass: "db-add-property-row",
-      searchClass: "db-add-property-search",
-      optionListClass: "db-add-property-options",
-      optionClass: "db-add-property-option",
-      createRowClass: "db-add-property-create",
+      rootClass: "obnotion-add-property-row",
+      searchClass: "obnotion-add-property-search",
+      optionListClass: "obnotion-add-property-options",
+      optionClass: "obnotion-add-property-option",
+      createRowClass: "obnotion-add-property-create",
       options: buildTypePickerOptions().map((option) => ({ value: option.value as ColumnDef["type"], label: option.text })),
       searchPlaceholder: t("panel.addPropertySearchPlaceholder"),
       createLabel: (query) => t("panel.createPropertyNamed", { name: query }),
-      renderIcon: (iconParent, value) => renderPropertyTypeIcon(iconParent, { key: "", label: "", type: value } as ColumnDef, "db-column-type-option-icon"),
+      renderIcon: (iconParent, value) => renderPropertyTypeIcon(iconParent, { key: "", label: "", type: value } as ColumnDef, "obnotion-column-type-option-icon"),
       onSelect: (type) => {
         const query = picker.searchInput.value;
         close();
@@ -232,8 +232,8 @@ export class ColumnManagerRenderer {
     actions: ColumnManagerActions
   ): void {
     const addToggle = (header: HTMLElement): void => {
-      const right = header.createDiv({ cls: "db-panel-header-actions" });
-      const toggleLabel = right.createEl("label", { cls: "db-column-manager-toggle-all" });
+      const right = header.createDiv({ cls: "obnotion-panel-header-actions" });
+      const toggleLabel = right.createEl("label", { cls: "obnotion-column-manager-toggle-all" });
       const toggleAll = createCheckbox(toggleLabel, { role: "field" });
       const visibleCount = columns.filter((col) => !state.hiddenColumns.has(col.key)).length;
       toggleAll.checked = visibleCount === columns.length;
@@ -258,8 +258,8 @@ export class ColumnManagerRenderer {
         parent: panel,
         title: t("toolbar.properties"),
         titleIsEmpty: false,
-        headerClass: "db-panel-header",
-        titleClass: "db-panel-title",
+        headerClass: "obnotion-panel-header",
+        titleClass: "obnotion-panel-title",
         renderTrailing: addToggle,
       });
     }
@@ -270,9 +270,9 @@ export class ColumnManagerRenderer {
    *  (see `render()`'s own comment), so a query typed before one commit does not survive the next
    *  redraw, the same way the drag and range-selection state here never has either. */
   private renderSearchRow(panel: HTMLElement): HTMLInputElement {
-    const row = panel.createDiv({ cls: "db-column-manager-search-row" });
+    const row = panel.createDiv({ cls: "obnotion-column-manager-search-row" });
     return row.createEl("input", {
-      cls: "db-column-manager-search",
+      cls: "obnotion-column-manager-search",
       attr: { type: "text", placeholder: t("panel.searchProperties") },
     }) as unknown as HTMLInputElement;
   }
@@ -287,7 +287,7 @@ export class ColumnManagerRenderer {
         const rowEl = rowsByKey.get(col.key);
         if (!rowEl) continue;
         const matches = !query || col.label.toLowerCase().includes(query) || col.key.toLowerCase().includes(query);
-        rowEl.classList.toggle("db-column-manager-row-search-hidden", !matches);
+        rowEl.classList.toggle("obnotion-column-manager-row-search-hidden", !matches);
       }
     });
   }
@@ -311,12 +311,12 @@ export class ColumnManagerRenderer {
 
     const handle = buildCheckboxPropertyRow({
       parent: panel,
-      rowClass: "db-column-manager-row",
+      rowClass: "obnotion-column-manager-row",
       dataColumnKey: col.key,
       draggable: true,
-      dragHandleClass: "db-column-drag",
+      dragHandleClass: "obnotion-column-drag",
       dragHandleTitle: t("panel.dragToSort"),
-      moveControlsClass: "db-mobile-reorder-controls",
+      moveControlsClass: "obnotion-mobile-reorder-controls",
       drag: {
         onDragStart: (event) => {
           if (shouldIgnorePropertyRowDrag(event)) {
@@ -346,7 +346,7 @@ export class ColumnManagerRenderer {
         onDragEnd: () => {
           this.draggedKey = null;
           handle.row.removeClass("is-dragging");
-          panel.querySelectorAll(".db-column-manager-row").forEach((el) => el.removeClass("is-drop-target"));
+          panel.querySelectorAll(".obnotion-column-manager-row").forEach((el) => el.removeClass("is-drop-target"));
         },
       },
       move: {
@@ -372,11 +372,11 @@ export class ColumnManagerRenderer {
         });
         this.syncColumnVisibility(columns, config, state, actions, selectedKeys);
       },
-      typeClass: "db-column-type",
+      typeClass: "obnotion-column-type",
       typeTitle: col.type,
-      renderTypeIcon: (iconParent) => renderPropertyTypeIcon(iconParent, col, "db-column-type-icon"),
-      nameWrapClass: "db-column-name-wrap",
-      nameClass: "db-column-name",
+      renderTypeIcon: (iconParent) => renderPropertyTypeIcon(iconParent, col, "obnotion-column-type-icon"),
+      nameWrapClass: "obnotion-column-name-wrap",
+      nameClass: "obnotion-column-name",
       nameText: `${col.label} [${col.key}]`,
     });
 
@@ -384,13 +384,13 @@ export class ColumnManagerRenderer {
     handle.nameEl.addEventListener("dblclick", () => actions.editColumn(col));
     if (requiredReason) {
       handle.nameWrap.createDiv({
-        cls: "db-column-group-hint",
+        cls: "obnotion-column-group-hint",
         text: requiredReason,
         attr: { title: requiredReason },
       });
     }
     const wrapBtn = handle.row.createEl("button", {
-      cls: `clickable-icon db-column-wrap-toggle${col.wrap ? " is-active" : ""}`,
+      cls: `clickable-icon obnotion-column-wrap-toggle${col.wrap ? " is-active" : ""}`,
       attr: {},
     });
     setIcon(wrapBtn, "wrap-text");
@@ -403,7 +403,7 @@ export class ColumnManagerRenderer {
       editBtn.onclick = () => actions.editColumn(col);
 
       const deleteBtn = handle.row.createEl("button", {
-        cls: "clickable-icon db-column-delete-btn",
+        cls: "clickable-icon obnotion-column-delete-btn",
         attr: {},
       });
       setIcon(deleteBtn, "trash");
@@ -428,12 +428,12 @@ export class ColumnManagerRenderer {
   }
 
   private updateToolbarButton(containerEl: HTMLElement, state: DatabaseViewState, columns: ColumnDef[]): void {
-    const colBtn = containerEl.querySelector(".db-col-manager-btn");
+    const colBtn = containerEl.querySelector(".obnotion-col-manager-btn");
     if (colBtn) {
-      colBtn.querySelector(".db-toolbar-badge")?.remove();
+      colBtn.querySelector(".obnotion-toolbar-badge")?.remove();
       if (colBtn.instanceOf(HTMLElement)) {
         const visibleCount = Math.max(0, columns.length - state.hiddenColumns.size);
-        if (visibleCount > 0) colBtn.createSpan({ cls: "db-toolbar-badge", text: String(visibleCount) });
+        if (visibleCount > 0) colBtn.createSpan({ cls: "obnotion-toolbar-badge", text: String(visibleCount) });
       }
     }
   }

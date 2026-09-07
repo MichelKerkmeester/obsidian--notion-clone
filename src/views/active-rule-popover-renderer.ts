@@ -119,7 +119,7 @@ export class ActiveRulePopoverRenderer {
       ? anchorEl
       : containerEl.querySelector<HTMLElement>(`[data-active-rule-key="${key}"]`) || anchorEl;
     const panel = containerEl.createDiv({
-      cls: `db-active-rule-popover db-filter-panel${kind === "sort" ? " db-sort-panel" : ""} is-${kind}`,
+      cls: `obnotion-active-rule-popover obnotion-filter-panel${kind === "sort" ? " obnotion-sort-panel" : ""} is-${kind}`,
       attr: {
         role: "dialog",
         "aria-label": kind === "filter" ? t("toolbar.filter") : t("toolbar.sort"),
@@ -143,7 +143,7 @@ export class ActiveRulePopoverRenderer {
       closeOnEscape: true,
       isActiveTarget: (target) => target instanceof HTMLElement &&
         Boolean(target.closest(
-          ".db-active-control-chip, .db-dropdown-popover, .db-color-picker-popup, .db-date-value-popover"
+          ".obnotion-active-control-chip, .obnotion-dropdown-popover, .obnotion-color-picker-popup, .obnotion-date-value-popover"
         )),
     });
   }

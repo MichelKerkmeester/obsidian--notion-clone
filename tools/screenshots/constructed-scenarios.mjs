@@ -81,7 +81,7 @@ window.__mountConstructed = (spec) => {
         provenance = results.length > 0 && results[0].pass;
       });
       if (!container || !provenance) return null;
-      if (linked) container.classList.add("note-database-embed", "note-database-embed-linked");
+      if (linked) container.classList.add("obnotion-embed", "obnotion-embed-linked");
       const section = document.createElement("section");
       section.className = \`constructed-view-comparison \${className}\`;
       const label = document.createElement("div");
@@ -144,7 +144,7 @@ window.__mountConstructedModalSheet = (spec) => {
   if (spec.stacked) {
     let parentSheet = null;
     runRenderAssertions(document.body, { renderer: "column-manager", bag: "file-view", captureData: true }, "", () => {
-      parentSheet = document.body.querySelector(".db-mobile-bottom-sheet");
+      parentSheet = document.body.querySelector(".obnotion-mobile-bottom-sheet");
     });
     if (!parentSheet) return false;
   }
@@ -164,7 +164,7 @@ window.__mountConstructedModalSheet = (spec) => {
         allColumns: [FAKE_MONTH_COLUMN],
         onSave: async () => {},
       });
-  return standIn.modalEl.classList.contains("db-mobile-bottom-sheet");
+  return standIn.modalEl.classList.contains("obnotion-mobile-bottom-sheet");
 };
 `;
 
@@ -182,7 +182,7 @@ import { openDropdownMenu } from "${fileURLToPath(new URL("../../src/views/dropd
 import { createOwnedMenu } from "${fileURLToPath(new URL("../../src/views/owned-menu.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { createSurfaceShell } from "${fileURLToPath(new URL("../../src/views/surface-shell.ts", import.meta.url)).replace(/\\/g, "/")}";
 
-const stackedLaneNewestSheet = () => Array.from(document.body.querySelectorAll(".db-mobile-bottom-sheet")).at(-1) || null;
+const stackedLaneNewestSheet = () => Array.from(document.body.querySelectorAll(".obnotion-mobile-bottom-sheet")).at(-1) || null;
 
 // Out of flow so the anchor cannot change the parent's own height, and inside the parent because
 // that is what the production opener resolves the anchored surface against.
@@ -217,7 +217,7 @@ const openStackedLaneModal = (title) => {
   heading.textContent = title;
   content.appendChild(heading);
   const body = document.createElement("div");
-  body.className = "db-modal-help";
+  body.className = "obnotion-modal-help";
   body.textContent = "Confirm this change";
   content.appendChild(body);
   attachSheetChromeToModal(modalEl, true, () => {}, { title, getTitle: () => title });
@@ -255,7 +255,7 @@ const openStackedLaneDropdown = (parent, title) => {
 window.__mountConstructedDepth3Stack = (spec) => {
   let parentSheet = null;
   runRenderAssertions(document.body, spec.parent, "", () => {
-    parentSheet = document.body.querySelector(".db-mobile-bottom-sheet");
+    parentSheet = document.body.querySelector(".obnotion-mobile-bottom-sheet");
   });
   if (!parentSheet) return false;
 
@@ -281,7 +281,7 @@ const openStackedLaneReplaceableModal = (title) => {
   heading.textContent = title;
   content.appendChild(heading);
   const body = document.createElement("div");
-  body.className = "db-modal-help";
+  body.className = "obnotion-modal-help";
   body.textContent = "Confirm this change";
   content.appendChild(body);
   let shellRef;
@@ -299,7 +299,7 @@ const openStackedLaneReplaceableModal = (title) => {
 window.__mountConstructedDepth3Replace = (spec) => {
   let parentSheet = null;
   runRenderAssertions(document.body, spec.parent, "", () => {
-    parentSheet = document.body.querySelector(".db-mobile-bottom-sheet");
+    parentSheet = document.body.querySelector(".obnotion-mobile-bottom-sheet");
   });
   if (!parentSheet) return false;
 
@@ -309,7 +309,7 @@ window.__mountConstructedDepth3Replace = (spec) => {
   openStackedLaneDropdown(firstPanel, spec.title);
   // Unlike the stacking mount above, success here is never a THIRD sheet -- it is the absence of
   // one, with the first panel still the newest and still the one thing on screen to photograph.
-  return document.body.querySelectorAll(".db-mobile-bottom-sheet").length === 2
+  return document.body.querySelectorAll(".obnotion-mobile-bottom-sheet").length === 2
     && stackedLaneNewestSheet() === firstPanel;
 };
 `;
@@ -378,7 +378,7 @@ function constructedHostHtml(device, theme, comparisonHost = false) {
   font-size: 12px;
   font-weight: 600;
 }
-.constructed-view-comparison > .note-database-container {
+.constructed-view-comparison > .obnotion-container {
   height: auto;
   min-height: 0;
 }
@@ -415,8 +415,8 @@ export async function mountConstructed(page, device, theme, spec) {
   if (spec.comparisonHost) {
     const measurement = await page.evaluate(() => {
       const prose = document.querySelector(".constructed-host-prose");
-      const embed = document.querySelector("#shot .note-database-embed-linked");
-      const table = embed?.querySelector("table.db-table");
+      const embed = document.querySelector("#shot .obnotion-embed-linked");
+      const table = embed?.querySelector("table.obnotion-table");
       if (!prose || !embed || !table) return null;
       const contentBoxWidth = (element) => {
         const rect = element.getBoundingClientRect();
@@ -428,7 +428,7 @@ export async function mountConstructed(page, device, theme, spec) {
           - parseFloat(style.borderRightWidth);
       };
       // The element that actually scrolls is found by computed overflow, never by class name.
-      // `.db-table-wrap` is `width: fit-content`, so it always reports clientWidth === scrollWidth
+      // `.obnotion-table-wrap` is `width: fit-content`, so it always reports clientWidth === scrollWidth
       // and comparing the table against it measures the table against itself.
       let scrollHost = null;
       for (let el = table.parentElement; el; el = el.parentElement) {
@@ -489,8 +489,8 @@ export async function mountConstructed(page, device, theme, spec) {
     if (!measurement.ok && process.env.ALLOW_CONSTRUCTED_MEASURE_FAILURE !== "1") return null;
   }
   return spec.comparisonHost
-    ? page.$("#shot .note-database-embed-linked")
-    : page.$("#shot > .note-database-container");
+    ? page.$("#shot .obnotion-embed-linked")
+    : page.$("#shot > .obnotion-container");
 }
 
 // A stacked DbModal sheet (and its parent, when one is asked for) portals straight onto
@@ -645,7 +645,7 @@ function constructedScenario(view, opts) {
 // (`mountConstructedModalSheet`). `renderer: "modal-sheet"` and `bag: "file-view"` are set
 // directly so the manifest schema's constructed-entry check still has a view name to record.
 const MODAL_SHEET_BASE_SOURCES = [
-  "src/views/modals/db-modal.ts",
+  "src/views/modals/obnotion-modal.ts",
   "src/views/surface-shell.ts",
   "src/views/mobile-bottom-sheet.ts",
   "src/views/popover-position.ts",
@@ -1329,7 +1329,7 @@ export const CONSTRUCTED_SCENARIOS = [
     sources: constructedSources("src/views/number-display-renderer.ts", "tools/bench/table-render-bench.ts")
       .concat(["src/data/number-display.ts"]),
     note: "renderRating, renderProgress and renderProgressRing's own entries, one style per row "
-      + "including the tinted variants that paint through the db-num-color-* classes.",
+      + "including the tinted variants that paint through the obnotion-num-color-* classes.",
   }),
   constructedScenario("record-icon", {
     renderer: "record-icon",

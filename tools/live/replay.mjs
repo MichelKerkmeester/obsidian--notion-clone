@@ -108,16 +108,16 @@ const CLAIMS = [
     was: 1,
     recorded: 0,
     async measure(page) {
-      // `.db-surface` is the marker the surface contract puts on anything mounted on the body, and
+      // `.obnotion-surface` is the marker the surface contract puts on anything mounted on the body, and
       // it was the one marker the focus-indicator list did not name — so the architecture's own
       // escape hatch handed over tokens and radius and dropped the one thing a keyboard user needs.
       const MARKERS = [
-        "db-surface",
-        "db-column-menu-subpopover",
-        "db-icon-picker-popover",
-        "db-color-picker-popup",
-        "db-mobile-column-width-panel",
-        "db-cell-edit-popover",
+        "obnotion-surface",
+        "obnotion-column-menu-subpopover",
+        "obnotion-icon-picker-popover",
+        "obnotion-color-picker-popup",
+        "obnotion-mobile-column-width-panel",
+        "obnotion-cell-edit-popover",
       ];
       await load(page, "");
       return page.evaluate((markers) => {
@@ -173,7 +173,7 @@ const CLAIMS = [
       if (!s) return 1;
       await load(page, s.html());
       return page.evaluate(() => {
-        const row = document.querySelector(".db-column-manager-row");
+        const row = document.querySelector(".obnotion-column-manager-row");
         return getComputedStyle(row).gridTemplateRows.split(/\s+/).filter(Boolean).length;
       });
     },
@@ -188,23 +188,23 @@ const CLAIMS = [
       if (!s) return 0;
       await load(page, s.html());
       return page.evaluate(() => {
-        const row = document.querySelector(".db-column-manager-row");
-        const name = row.querySelector(".db-column-name-wrap").getBoundingClientRect().width;
-        const type = row.querySelector(".db-column-type").getBoundingClientRect().width;
+        const row = document.querySelector(".obnotion-column-manager-row");
+        const name = row.querySelector(".obnotion-column-name-wrap").getBoundingClientRect().width;
+        const type = row.querySelector(".obnotion-column-type").getBoundingClientRect().width;
         return name > type * 3 ? 1 : 0;
       });
     },
   },
   {
     phase: "000-surface-contract-and-truthful-harness",
-    claim: "a body-mounted surface marked db-surface resolves the plugin tokens",
+    claim: "a body-mounted surface marked obnotion-surface resolves the plugin tokens",
     was: 0,
     recorded: 1,
     async measure(page) {
-      await load(page, '<div class="db-surface" id="probe"></div>');
+      await load(page, '<div class="obnotion-surface" id="probe"></div>');
       return page.evaluate(() => {
         const el = document.getElementById("probe");
-        return getComputedStyle(el).getPropertyValue("--db-radius-sm").trim() ? 1 : 0;
+        return getComputedStyle(el).getPropertyValue("--obnotion-radius-sm").trim() ? 1 : 0;
       });
     },
   },
@@ -273,7 +273,7 @@ const CLAIMS = [
     // and all five of its bars were dotless; the four extra scale fixtures arrived with the fix.
     // Selectors follow the default render's actual DOM: its bar group is `.pm-gantt-bar-group`
     // (holding `.pm-gantt-bar` plus its two `.pm-gantt-link-dot` endpoints), not the gated
-    // `renderTimelineLocal` extensions path's `.db-timeline-event`/`.db-timeline-link-dot`.
+    // `renderTimelineLocal` extensions path's `.obnotion-timeline-event`/`.obnotion-timeline-link-dot`.
     async measure(page) {
       let missing = 0;
       for (const id of ["timeline-view", "timeline-view-day", "timeline-view-month", "timeline-view-quarter", "timeline-view-year"]) {
@@ -294,7 +294,7 @@ const CLAIMS = [
     recorded: 5,
     // The port's red was 0 of 17 module-map rows rewritten; its green recorded the captures read
     // at five scales. Reselectored for the fixture rewrite (temporal.mjs moved every
-    // timeline-view* scenario from `.db-timeline-*` to `.pm-gantt-*`): bars are `.pm-gantt-bar`,
+    // timeline-view* scenario from `.obnotion-timeline-*` to `.pm-gantt-*`): bars are `.pm-gantt-bar`,
     // the header carries a scale-specific label class (day/week/month/quarter/year), the row grid
     // is `.pm-gantt-gridline-h`, today is `.pm-gantt-today-line`. Weekend stayed a claim, not a
     // vacuous pass: the reference's own GanttRenderer.ts and GanttHeaderRenderer.ts gate
@@ -332,7 +332,7 @@ const CLAIMS = [
     recorded: 10,
     // Rewritten: a later operator ruling replaced the board's Project Manager 1:1 copy with an
     // Anytype-shaped rebuild, so the ten-point hierarchy this claim protects moves from the
-    // pm-kanban-* tree to the db-kanban-* one that replaced it. The claim itself — a card cannot
+    // pm-kanban-* tree to the obnotion-kanban-* one that replaced it. The claim itself — a card cannot
     // look present while omitting its content region or the affordance that opens it — is
     // unchanged; only the ten points that prove it are re-picked for the anatomy that replaced
     // it: no topbar, no count pill, no priority bar, no tag block, no chip footer, in place of a
@@ -342,23 +342,23 @@ const CLAIMS = [
       if (!s) return -1;
       await load(page, s.html());
       return page.evaluate(() => {
-        const column = document.querySelector(".db-kanban-col");
-        const card = document.querySelector(".db-kanban-card");
+        const column = document.querySelector(".obnotion-kanban-col");
+        const card = document.querySelector(".obnotion-kanban-card");
         if (!column || !card) return 0;
-        const header = column.querySelector(".db-kanban-col-header");
-        const body = card.querySelector(".db-kanban-card-body");
-        const titleRow = body?.querySelector(".db-kanban-card-title-row");
+        const header = column.querySelector(".obnotion-kanban-col-header");
+        const body = card.querySelector(".obnotion-kanban-card-body");
+        const titleRow = body?.querySelector(".obnotion-kanban-card-title-row");
         const checks = [
-          column.querySelector(".db-kanban-cards") !== null,
+          column.querySelector(".obnotion-kanban-cards") !== null,
           header !== null,
-          header?.querySelector(".db-kanban-col-chip") !== null,
+          header?.querySelector(".obnotion-kanban-col-chip") !== null,
           body !== null,
           card.getElementsByTagName("*").length > 0 && card.firstElementChild === body,
           titleRow !== null,
-          titleRow?.querySelector(".db-kanban-card-title") !== null,
-          body?.querySelector(".db-kanban-card-meta") !== null,
-          body?.querySelector(".db-kanban-card-meta .db-board-card-field") !== null,
-          card.hasAttribute("data-note-database-row-path"),
+          titleRow?.querySelector(".obnotion-kanban-card-title") !== null,
+          body?.querySelector(".obnotion-kanban-card-meta") !== null,
+          body?.querySelector(".obnotion-kanban-card-meta .obnotion-board-card-field") !== null,
+          card.hasAttribute("data-obnotion-row-path"),
         ];
         return checks.filter(Boolean).length;
       });
@@ -380,13 +380,13 @@ const CLAIMS = [
       await load(page, s.html());
       return page.evaluate(() => {
         let bad = 0;
-        const chips = [...document.querySelectorAll(".db-kanban-col-chip")];
+        const chips = [...document.querySelectorAll(".obnotion-kanban-col-chip")];
         if (chips.length === 0) bad += 1;
         for (const chip of chips) {
           const fg = getComputedStyle(chip).color;
           if (!fg || fg === "rgba(0, 0, 0, 0)" || fg === "transparent") bad += 1;
         }
-        const tagChips = [...document.querySelectorAll(".db-kanban-card-meta .status-badge")];
+        const tagChips = [...document.querySelectorAll(".obnotion-kanban-card-meta .status-badge")];
         if (tagChips.length === 0) bad += 1;
         for (const tag of tagChips) {
           const bg = getComputedStyle(tag).backgroundColor;
@@ -406,13 +406,13 @@ const CLAIMS = [
     async measure(page) {
       const probes = [
         { id: "calendar-month-view", check: () =>
-          [...document.querySelectorAll(".db-calendar-month-segment")].some((el) => el.classList.contains("is-completed")) ? 0 : 1 },
+          [...document.querySelectorAll(".obnotion-calendar-month-segment")].some((el) => el.classList.contains("is-completed")) ? 0 : 1 },
         { id: "calendar-week-time-grid", check: () =>
-          document.querySelectorAll(".db-calendar-time-header-day.is-weekend").length > 0 ? 0 : 1 },
+          document.querySelectorAll(".obnotion-calendar-time-header-day.is-weekend").length > 0 ? 0 : 1 },
         { id: "calendar-month-view", check: () =>
-          document.querySelectorAll(".db-calendar-backlog").length === 0 ? 0 : 1 },
+          document.querySelectorAll(".obnotion-calendar-backlog").length === 0 ? 0 : 1 },
         { id: "calendar-empty-state", check: () => {
-          const title = document.querySelector(".db-empty-card-title");
+          const title = document.querySelector(".obnotion-empty-card-title");
           return title && title.textContent.trim() === "No date property" ? 0 : 1;
         } },
       ];
@@ -438,11 +438,11 @@ const CLAIMS = [
       await load(page, s.html());
       return page.evaluate(() => {
         let bad = 0;
-        const segments = [...document.querySelectorAll(".db-calendar-month-segment.is-completed")];
+        const segments = [...document.querySelectorAll(".obnotion-calendar-month-segment.is-completed")];
         if (segments.length === 0) return 1;
         for (const seg of segments) {
           if (getComputedStyle(seg).opacity !== "0.82") bad += 1;
-          const title = seg.querySelector(".db-calendar-month-title");
+          const title = seg.querySelector(".obnotion-calendar-month-title");
           if (!title || !getComputedStyle(title).textDecorationLine.includes("line-through")) bad += 1;
         }
         return bad;
@@ -457,14 +457,14 @@ const CLAIMS = [
     // Rewritten: the board's progress bar (`.pm-progress`) is retired with no Anytype
     // counterpart, so this claim narrows to the depth marker alone — the half both surfaces
     // still carry. The board's depth marker moved from `.pm-kanban-card-parent`
-    // to `.db-kanban-card-type` (same content, the subtask's parent title; restyled to the
+    // to `.obnotion-kanban-card-type` (same content, the subtask's parent title; restyled to the
     // ordinary secondary rhythm rather than a smaller breadcrumb). The timeline is unchanged: it
     // indents a child row via an inline `padding-left` computed from the relation's depth, matching
     // the reference's own GanttView label row (`.pm-gantt-label-row`), so a child row's box is
     // >8px (the base, non-subtask padding) rather than data-attribute-tagged.
     async measure(page) {
       const checks = {
-        "board-subtask-tree": () => document.querySelector(".db-kanban-card-type") !== null,
+        "board-subtask-tree": () => document.querySelector(".obnotion-kanban-card-type") !== null,
         "timeline-subtask-tree": () =>
           [...document.querySelectorAll(".pm-gantt-label-row")]
             .some((el) => parseInt(el.style.paddingLeft || "0", 10) > 8),
@@ -489,7 +489,7 @@ const CLAIMS = [
     // tree markup. See the sibling claim above for why the board's own probe changed.
     async measure(page) {
       const checks = {
-        "board-subtask-tree": () => document.querySelector(".db-kanban-card-type") !== null,
+        "board-subtask-tree": () => document.querySelector(".obnotion-kanban-card-type") !== null,
         "timeline-subtask-tree": () =>
           [...document.querySelectorAll(".pm-gantt-label-row")]
             .some((el) => parseInt(el.style.paddingLeft || "0", 10) > 8),
@@ -512,7 +512,7 @@ const CLAIMS = [
     // The element type is the product change; a stylesheet rule can exist while the renderer still emits a div.
     measure() {
       const source = readFileSync(join(REPO, "src/views/empty-state-renderer.ts"), "utf8");
-      return /content\.createEl\("p",\s*\{[\s\S]*?cls: "db-empty-card-message"/.test(source) ? 0 : 1;
+      return /content\.createEl\("p",\s*\{[\s\S]*?cls: "obnotion-empty-card-message"/.test(source) ? 0 : 1;
     },
   },
   {
@@ -529,9 +529,9 @@ const CLAIMS = [
       await load(page, s.html());
       return page.evaluate(() => {
         let bad = 0;
-        for (const bar of document.querySelectorAll(".db-timeline-event")) {
+        for (const bar of document.querySelectorAll(".obnotion-timeline-event")) {
           if (bar.tagName === "BUTTON") bad += 1;
-          const trigger = bar.querySelector(".db-timeline-event-trigger");
+          const trigger = bar.querySelector(".obnotion-timeline-event-trigger");
           if (!trigger) bad += 1;
           else if (trigger.getBoundingClientRect().height < 28) bad += 1;
         }
@@ -547,7 +547,7 @@ const CLAIMS = [
     // Neither scenario id existed on the landing commit's parent tree, so SCENARIOS.find returned
     // undefined for both and this measure could not even load a fixture to check. Rewritten: the
     // class names moved from the Project Manager pm-kanban-* copy to the Anytype-shaped
-    // db-kanban-* one that replaced it; the states themselves are unchanged — an empty column is
+    // obnotion-kanban-* one that replaced it; the states themselves are unchanged — an empty column is
     // still a hollow cards container (now with the same shared empty-group card every other
     // grouped renderer shows, since no reference capture shows this state) and the drop language
     // still tints the drop target's cards container and raises the dragged card.
@@ -558,10 +558,10 @@ const CLAIMS = [
         await load(page, empty.html());
         const good = await page.evaluate(() => {
           // The scenario mounts a populated column beside the empty one, so the first
-          // .db-kanban-cards in document order is not reliably the one under test.
-          const containers = [...document.querySelectorAll(".db-kanban-cards")];
+          // .obnotion-kanban-cards in document order is not reliably the one under test.
+          const containers = [...document.querySelectorAll(".obnotion-kanban-cards")];
           return containers.length > 0
-            && containers.some((el) => el.querySelector(".db-kanban-card") === null);
+            && containers.some((el) => el.querySelector(".obnotion-kanban-card") === null);
         });
         if (good) ok += 1;
       }
@@ -569,8 +569,8 @@ const CLAIMS = [
       if (drop) {
         await load(page, drop.html());
         const good = await page.evaluate(() => {
-          const dropTarget = document.querySelector(".db-kanban-drop-target");
-          const dragging = document.querySelector(".db-kanban-card--dragging");
+          const dropTarget = document.querySelector(".obnotion-kanban-drop-target");
+          const dragging = document.querySelector(".obnotion-kanban-card--dragging");
           return !!(dropTarget && dragging);
         });
         if (good) ok += 1;
@@ -601,13 +601,13 @@ const CLAIMS = [
   },
   {
     phase: "041-shared-ui-ux-port",
-    claim: "the .db-surface selector leads the reduced-motion reset's selector list",
+    claim: "the .obnotion-surface selector leads the reduced-motion reset's selector list",
     was: 0,
     recorded: 1,
-    // owned-menu.ts mounts its surface on doc.body carrying .db-surface but never
-    // .note-database-container, so the container-wide reset never matched a menu descendant until
-    // .db-surface joined the reset's own selector list. `was` is this measure on the landing
-    // commit's parent tree: .db-surface appeared in no reduced-motion rule at all.
+    // owned-menu.ts mounts its surface on doc.body carrying .obnotion-surface but never
+    // .obnotion-container, so the container-wide reset never matched a menu descendant until
+    // .obnotion-surface joined the reset's own selector list. `was` is this measure on the landing
+    // commit's parent tree: .obnotion-surface appeared in no reduced-motion rule at all.
     async measure(page) {
       await load(page, "");
       return page.evaluate(() => {
@@ -617,21 +617,21 @@ const CLAIMS = [
         const reduced = rules.filter((r) => r.media?.mediaText?.includes("prefers-reduced-motion"))
           .flatMap((r) => [...r.cssRules]);
         return reduced.some((inner) =>
-          inner.selectorText?.split(",").map((s) => s.trim()).includes(".db-surface")) ? 1 : 0;
+          inner.selectorText?.split(",").map((s) => s.trim()).includes(".obnotion-surface")) ? 1 : 0;
       });
     },
   },
   {
     phase: "041-shared-ui-ux-port",
-    claim: "the .db-surface subtree owns a reduced-motion rule separate from the container's",
+    claim: "the .obnotion-surface subtree owns a reduced-motion rule separate from the container's",
     was: 0,
     recorded: 1,
-    // The reset first joined .db-surface into the same rule as .note-database-container, which
+    // The reset first joined .obnotion-surface into the same rule as .obnotion-container, which
     // gave the surface the container's near-zero 0.01ms transition-duration and let a synchronous
     // getComputedStyle read land mid-transition -- the fault verify-placement.mjs's ".is-phone
-    // heading rule" ablation caught. This fix splits .db-surface into its own rule so it can carry
+    // heading rule" ablation caught. This fix splits .obnotion-surface into its own rule so it can carry
     // a real zero. `was` is this measure on the landing commit's parent tree, where the prior fix
-    // had already joined .db-surface into the container's rule: still one shared rule, not two.
+    // had already joined .obnotion-surface into the container's rule: still one shared rule, not two.
     async measure(page) {
       await load(page, "");
       return page.evaluate(() => {
@@ -642,9 +642,9 @@ const CLAIMS = [
         const mediaBlocks = rules.filter((r) => r.media?.mediaText?.includes("prefers-reduced-motion"));
         for (const mq of mediaBlocks) {
           const inner = [...mq.cssRules];
-          const surfaceRule = inner.find((r) => lead(r) === ".db-surface");
+          const surfaceRule = inner.find((r) => lead(r) === ".obnotion-surface");
           if (!surfaceRule) continue;
-          const containerRule = inner.find((r) => lead(r) === ".note-database-container");
+          const containerRule = inner.find((r) => lead(r) === ".obnotion-container");
           return containerRule && containerRule !== surfaceRule ? 1 : 0;
         }
         return -1;
@@ -685,17 +685,17 @@ const CLAIMS = [
     // needs as clearance.
     async measure(page) {
       await load(page, `
-        <div class="note-database-container">
-          <div class="db-timeline-events"></div>
-          <div class="db-timeline-event is-milestone is-label-above">
-            <div class="db-timeline-event-trigger">
-              <div class="db-timeline-event-content">label</div>
+        <div class="obnotion-container">
+          <div class="obnotion-timeline-events"></div>
+          <div class="obnotion-timeline-event is-milestone is-label-above">
+            <div class="obnotion-timeline-event-trigger">
+              <div class="obnotion-timeline-event-content">label</div>
             </div>
           </div>
         </div>`);
       return page.evaluate(() => {
-        const events = document.querySelector(".db-timeline-events");
-        const content = document.querySelector(".db-timeline-event-content");
+        const events = document.querySelector(".obnotion-timeline-events");
+        const content = document.querySelector(".obnotion-timeline-event-content");
         const rowGapOk = getComputedStyle(events).rowGap === "24px";
         const positionOk = getComputedStyle(content).position === "absolute";
         return (rowGapOk ? 1 : 0) + (positionOk ? 1 : 0);

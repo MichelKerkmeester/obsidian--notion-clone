@@ -46,7 +46,7 @@ function collectSources(dir: string, acc: string[] = []): string[] {
 /**
  * A class is real when something builds it or styles it, matched whole.
  *
- * Substring matching alone says `db-list-row-field` exists because `db-list-row-field-label` does,
+ * Substring matching alone says `obnotion-list-row-field` exists because `obnotion-list-row-field-label` does,
  * and both of those were invented — so a family of invented names vouched for itself.
  */
 const isRealClass = (cls: string, stylesheetText: string, source: string): boolean => {
@@ -67,8 +67,8 @@ const sourceText = collectSources(join(REPO, "src")).join("\n");
 /**
  * The measuring tools build their own markup too, and it rots the same way.
  *
- * The row-rhythm matrix in view-census.mjs synthesised rows from `db-list-row-field`,
- * `db-list-row-field-label` and `db-list-row-field-value`. Each has zero rules in the stylesheet
+ * The row-rhythm matrix in view-census.mjs synthesised rows from `obnotion-list-row-field`,
+ * `obnotion-list-row-field-label` and `obnotion-list-row-field-value`. Each has zero rules in the stylesheet
  * and zero creation sites in the source, so every height, deviation and spill count it reported was
  * a measurement of unstyled divs — a check that could not fail whatever the product did. The
  * fixtures had a guard for exactly this and the tools did not, which is the only reason it survived.
@@ -86,7 +86,7 @@ function markupClasses(text: string): string[] {
   for (const match of text.matchAll(/class="([^"]+)"/g)) {
     for (const cls of match[1].split(/\s+/)) {
       if (!cls || cls.includes("${")) continue;
-      if (cls.startsWith("db-") || cls.startsWith("note-database") || cls.startsWith("status-")) {
+      if (cls.startsWith("obnotion-") || cls.startsWith("obnotion") || cls.startsWith("status-")) {
         found.add(cls);
       }
     }

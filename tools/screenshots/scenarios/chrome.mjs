@@ -9,8 +9,8 @@
  * Every class here was read out of the renderer that emits it — ToolbarRenderer,
  * ActiveViewControlsRenderer, ActiveRulePopoverRenderer, TableFooterRenderer,
  * GroupLabelRenderer, SummaryRenderer and the two chart renderers — and the nesting mirrors
- * the real tree, because several rules are descendant- or child-scoped (`.db-panel-row
- * .db-panel-dropdown`, `.db-grouped-table tr.db-group-divider-row`) and match nothing when
+ * the real tree, because several rules are descendant- or child-scoped (`.obnotion-panel-row
+ * .obnotion-panel-dropdown`, `.obnotion-grouped-table tr.obnotion-group-divider-row`) and match nothing when
  * the structure is flattened.
  *
  * Two surfaces here are drawn by JavaScript at runtime rather than by the stylesheet: the
@@ -91,68 +91,68 @@ const I = {
   x: glyph('<path d="M18 6 6 18"/><path d="m6 6 12 12"/>'),
 };
 
-/* One More-tools row, built the way `renderToolbarMenuRow` builds it: the shared `db-menu-item`
-   from `createMenuRow`, plus the per-surface `db-toolbar-menu-row` whose own inline padding is the
+/* One More-tools row, built the way `renderToolbarMenuRow` builds it: the shared `obnotion-menu-item`
+   from `createMenuRow`, plus the per-surface `obnotion-toolbar-menu-row` whose own inline padding is the
    inset the heading above it is aligned to. */
 const utilitiesRow = (label, icon) => `
-  <button type="button" class="db-menu-item db-toolbar-menu-row" role="menuitem">
-    <span class="db-menu-item-icon">${icon}</span>
-    <span class="db-menu-item-label">${label}</span>
+  <button type="button" class="obnotion-menu-item obnotion-toolbar-menu-row" role="menuitem">
+    <span class="obnotion-menu-item-icon">${icon}</span>
+    <span class="obnotion-menu-item-label">${label}</span>
   </button>`;
 
-/* `createIconButton` builds `button.db-toolbar-icon-button` with the extra classes the call
+/* `createIconButton` builds `button.obnotion-toolbar-icon-button` with the extra classes the call
    site passes; `setBadge`/`setHiddenBadge` append the count span inside the same button. */
 const iconButton = (icon, label, extra = "", badgeHtml = "") => `
-  <button type="button" class="db-toolbar-icon-button${extra ? ` ${extra}` : ""}" aria-label="${label}">${icon}${badgeHtml}</button>`;
+  <button type="button" class="obnotion-toolbar-icon-button${extra ? ` ${extra}` : ""}" aria-label="${label}">${icon}${badgeHtml}</button>`;
 
-const badge = (text) => `<span class="db-toolbar-badge">${text}</span>`;
-const neutralBadge = (text) => `<span class="db-toolbar-badge db-toolbar-badge-neutral">${text}</span>`;
+const badge = (text) => `<span class="obnotion-toolbar-badge">${text}</span>`;
+const neutralBadge = (text) => `<span class="obnotion-toolbar-badge obnotion-toolbar-badge-neutral">${text}</span>`;
 
 const viewTab = (name, icon, active) => `
-  <button type="button" class="db-view-tab${active ? " is-active" : ""}" role="tab"
+  <button type="button" class="obnotion-view-tab${active ? " is-active" : ""}" role="tab"
     aria-selected="${active ? "true" : "false"}" tabindex="${active ? "0" : "-1"}">
-    <span class="db-view-tab-icon">${icon}</span>
-    <span class="db-view-tab-name">${name}</span>
+    <span class="obnotion-view-tab-icon">${icon}</span>
+    <span class="obnotion-view-tab-name">${name}</span>
   </button>`;
 
 /* `renderSearch` leaves the wrap collapsed to 28px until it has text or focus; `is-active`
    is the widened state, so both are shown where the point is the control itself. */
 const searchControl = (active) => `
-  <div class="db-search-control${active ? " is-active" : ""}">
-    <button type="button" class="db-search-button" aria-label="Search">${I.search}</button>
-    <div class="db-search-input-wrap">
-      <input type="text" class="db-search-input" placeholder="Search" aria-label="Search"${active ? ' value="notion"' : ""}>
-      <span class="db-search-activity-pulse" aria-hidden="true"></span>
+  <div class="obnotion-search-control${active ? " is-active" : ""}">
+    <button type="button" class="obnotion-search-button" aria-label="Search">${I.search}</button>
+    <div class="obnotion-search-input-wrap">
+      <input type="text" class="obnotion-search-input" placeholder="Search" aria-label="Search"${active ? ' value="notion"' : ""}>
+      <span class="obnotion-search-activity-pulse" aria-hidden="true"></span>
     </div>
-    <button type="button" class="db-search-clear" aria-label="Clear search"${active ? "" : " hidden"}>×</button>
+    <button type="button" class="obnotion-search-clear" aria-label="Clear search"${active ? "" : " hidden"}>×</button>
   </div>`;
 
 const newButtonGroup = () => `
-  <div class="db-new-button-group">
-    <button type="button" class="db-new-button db-new-button-primary" aria-label="New">
-      <span class="db-new-button-icon">${I.plus}</span><span>New</span>
+  <div class="obnotion-new-button-group">
+    <button type="button" class="obnotion-new-button obnotion-new-button-primary" aria-label="New">
+      <span class="obnotion-new-button-icon">${I.plus}</span><span>New</span>
     </button>
-    <button type="button" class="db-new-button-dropdown" aria-label="Choose a template">${I.chevronDown}</button>
+    <button type="button" class="obnotion-new-button-dropdown" aria-label="Choose a template">${I.chevronDown}</button>
   </div>`;
 
 /* The right half of the toolbar: four clusters in the order ToolbarRenderer creates them,
    with the search control inside the utilities cluster where it lands on desktop. */
 const toolbarRight = () => `
-  <div class="db-toolbar-right">
-    <div class="db-toolbar-cluster db-toolbar-query-cluster" aria-label="Query controls">
-      ${iconButton(I.listFilter, "Filter", "db-filter-btn db-toolbar-badge-button", badge("2"))}
-      ${iconButton(I.arrowUpDown, "Sort", "db-sort-btn db-toolbar-badge-button", badge("1"))}
-      ${iconButton(I.group, "Group", "db-group-btn is-active")}
+  <div class="obnotion-toolbar-right">
+    <div class="obnotion-toolbar-cluster obnotion-toolbar-query-cluster" aria-label="Query controls">
+      ${iconButton(I.listFilter, "Filter", "obnotion-filter-btn obnotion-toolbar-badge-button", badge("2"))}
+      ${iconButton(I.arrowUpDown, "Sort", "obnotion-sort-btn obnotion-toolbar-badge-button", badge("1"))}
+      ${iconButton(I.group, "Group", "obnotion-group-btn is-active")}
     </div>
-    <div class="db-toolbar-cluster db-toolbar-properties-cluster" aria-label="Properties">
-      ${iconButton(I.columns3, "Properties", "db-col-manager-btn db-toolbar-badge-button", neutralBadge("2 hidden"))}
+    <div class="obnotion-toolbar-cluster obnotion-toolbar-properties-cluster" aria-label="Properties">
+      ${iconButton(I.columns3, "Properties", "obnotion-col-manager-btn obnotion-toolbar-badge-button", neutralBadge("2 hidden"))}
     </div>
-    <div class="db-toolbar-cluster db-toolbar-utilities-cluster" aria-label="More tools">
-      ${iconButton(I.settings, "Settings", "db-toolbar-settings-btn")}
-      ${iconButton(I.moreHorizontal, "More tools", "db-toolbar-more-btn")}
+    <div class="obnotion-toolbar-cluster obnotion-toolbar-utilities-cluster" aria-label="More tools">
+      ${iconButton(I.settings, "Settings", "obnotion-toolbar-settings-btn")}
+      ${iconButton(I.moreHorizontal, "More tools", "obnotion-toolbar-more-btn")}
       ${searchControl(false)}
     </div>
-    <div class="db-toolbar-cluster db-toolbar-creation-cluster">
+    <div class="obnotion-toolbar-cluster obnotion-toolbar-creation-cluster">
       ${newButtonGroup()}
     </div>
   </div>`;
@@ -169,12 +169,12 @@ const FOOTER_COLUMNS = [
 ];
 
 const utilityHeader = () => `
-  <th class="db-select-col" role="columnheader"><div class="db-select-inner"><input type="checkbox" class="db-checkbox db-checkbox-row"></div></th>`;
+  <th class="obnotion-select-col" role="columnheader"><div class="obnotion-select-inner"><input type="checkbox" class="obnotion-checkbox obnotion-checkbox-row"></div></th>`;
 
 const utilityCell = () => `
-  <td class="db-select-col"><div class="db-select-inner">
-    <button type="button" class="db-table-row-drag-handle" aria-label="Drag to sort">${I.grip}</button>
-    <input type="checkbox" class="db-checkbox db-checkbox-row">
+  <td class="obnotion-select-col"><div class="obnotion-select-inner">
+    <button type="button" class="obnotion-table-row-drag-handle" aria-label="Drag to sort">${I.grip}</button>
+    <input type="checkbox" class="obnotion-checkbox obnotion-checkbox-row">
   </div></td>`;
 
 /* The table is `table-layout: fixed`, and the plugin sizes its columns through a colgroup
@@ -183,7 +183,7 @@ const utilityCell = () => `
    so the fixture supplies one the same way the renderer does. */
 const fullColgroup = () => `
   <colgroup>
-    <col class="db-select-colgroup">
+    <col class="obnotion-select-colgroup">
     ${FOOTER_COLUMNS.map(() => `<col style="width:150px">`).join("")}
     <col style="width:44px">
   </colgroup>`;
@@ -193,25 +193,25 @@ const fullHeader = () => `
   <thead><tr role="row">
     ${utilityHeader()}
     ${FOOTER_COLUMNS.map((c) => `
-      <th role="columnheader" data-note-database-column-key="${c.key}"><div class="db-th-content">
-        <span class="db-property-icon">${ICONS[c.icon]}</span>
-        <span class="db-th-label">${c.label}</span>
-        <button type="button" class="db-column-menu-trigger" aria-label="Open ${c.label} menu">${dots}</button>
+      <th role="columnheader" data-obnotion-column-key="${c.key}"><div class="obnotion-th-content">
+        <span class="obnotion-property-icon">${ICONS[c.icon]}</span>
+        <span class="obnotion-th-label">${c.label}</span>
+        <button type="button" class="obnotion-column-menu-trigger" aria-label="Open ${c.label} menu">${dots}</button>
       </div></th>`).join("")}
-    <th class="db-add-column-th" role="columnheader">
-      <button type="button" class="db-add-column-button" aria-label="Add property">${I.plus}</button>
+    <th class="obnotion-add-column-th" role="columnheader">
+      <button type="button" class="obnotion-add-column-button" aria-label="Add property">${I.plus}</button>
     </th>
   </tr></thead>`;
 
 const fullRow = (r) => `
-  <tr role="row" data-note-database-row-path="Subscriptions/${r.name}.md">
+  <tr role="row" data-obnotion-row-path="Subscriptions/${r.name}.md">
     ${utilityCell()}
-    <td data-note-database-column-key="name">${r.name}</td>
-    <td data-note-database-column-key="cost">${r.cost}</td>
-    <td data-note-database-column-key="billing">${optionPill(r.cycle)}</td>
-    <td data-note-database-column-key="payment">${optionPill(r.payment)}</td>
-    <td data-note-database-column-key="renew">${r.renew}</td>
-    <td class="db-add-column-cell" aria-hidden="true"></td>
+    <td data-obnotion-column-key="name">${r.name}</td>
+    <td data-obnotion-column-key="cost">${r.cost}</td>
+    <td data-obnotion-column-key="billing">${optionPill(r.cycle)}</td>
+    <td data-obnotion-column-key="payment">${optionPill(r.payment)}</td>
+    <td data-obnotion-column-key="renew">${r.renew}</td>
+    <td class="obnotion-add-column-cell" aria-hidden="true"></td>
   </tr>`;
 
 /* `TableFooterRenderer` stacks a kind label over its result inside one trigger, and repeats
@@ -245,15 +245,15 @@ const footerEarliest = `${footerEarliestDate.getFullYear()}-`
   + `${String(footerEarliestDate.getDate()).padStart(2, "0")}`;
 
 const footerCell = (key, values) => `
-  <td class="db-table-footer-cell" data-note-database-column-key="${key}">
-    <button type="button" class="db-table-footer-trigger${values.length ? " has-calculation" : ""}"
+  <td class="obnotion-table-footer-cell" data-obnotion-column-key="${key}">
+    <button type="button" class="obnotion-table-footer-trigger${values.length ? " has-calculation" : ""}"
       aria-label="Calculate for ${key}">
       ${values.length
-        ? values.map(([kind, result]) => `<span class="db-table-footer-value">
-            <span class="db-table-footer-kind">${kind}</span>
-            <span class="db-table-footer-result">${result}</span>
+        ? values.map(([kind, result]) => `<span class="obnotion-table-footer-value">
+            <span class="obnotion-table-footer-kind">${kind}</span>
+            <span class="obnotion-table-footer-result">${result}</span>
           </span>`).join("")
-        : `<span class="db-table-footer-calculate-hint">+ Calculate</span>`}
+        : `<span class="obnotion-table-footer-calculate-hint">+ Calculate</span>`}
     </button>
   </td>`;
 
@@ -263,38 +263,38 @@ const footerCell = (key, values) => `
    payment, which is option-typed — the renderer badges it. Passing "" still renders text, for
    whenever a non-option group field is photographed; nothing does yet. */
 const groupDividerRow = (title, field, count, badgeTone, summaries, depth = 0) => `
-  <tr class="db-group-divider-row db-group-header${depth ? ` db-group-header--depth-${depth}` : ""}"
-    data-note-database-group-key="${title}" data-note-database-group-field="${field}"
-    ${depth ? `style="--db-group-depth:${depth}"` : ""}>
+  <tr class="obnotion-group-divider-row obnotion-group-header${depth ? ` obnotion-group-header--depth-${depth}` : ""}"
+    data-obnotion-group-key="${title}" data-obnotion-group-field="${field}"
+    ${depth ? `style="--obnotion-group-depth:${depth}"` : ""}>
     <td colspan="7">
-      <div class="db-group-divider-content">
-        <input type="checkbox" class="db-checkbox db-checkbox-row db-group-divider-checkbox" aria-label="Select rows">
-        <span class="db-group-header-label">
-          <button type="button" class="db-group-collapse-toggle" aria-label="Collapse" aria-expanded="true">
-            <span class="db-collapse-triangle"></span>
+      <div class="obnotion-group-divider-content">
+        <input type="checkbox" class="obnotion-checkbox obnotion-checkbox-row obnotion-group-divider-checkbox" aria-label="Select rows">
+        <span class="obnotion-group-header-label">
+          <button type="button" class="obnotion-group-collapse-toggle" aria-label="Collapse" aria-expanded="true">
+            <span class="obnotion-collapse-triangle"></span>
           </button>
           ${tableGroupTitle(title, badgeTone)}
-          <span class="db-group-count">${count}</span>
+          <span class="obnotion-group-count">${count}</span>
         </span>
-        <div class="db-group-divider-summaries">
+        <div class="obnotion-group-divider-summaries">
           ${summaries.map(([label, value]) => `
-            <span class="db-group-summary-item">
-              <span class="db-group-summary-label">${label}</span>
-              <span class="db-group-summary-value">${value}</span>
+            <span class="obnotion-group-summary-item">
+              <span class="obnotion-group-summary-label">${label}</span>
+              <span class="obnotion-group-summary-value">${value}</span>
             </span>`).join("")}
         </div>
       </div>
     </td>
   </tr>`;
 
-/* A `db-panel-row` inside the active-rule popover: two or three dropdown fields, no remove
+/* A `obnotion-panel-row` inside the active-rule popover: two or three dropdown fields, no remove
    button (`renderSingleRuleEditor` passes `showRemove: false`). */
 const panelDropdown = (extraClass, value, icon) => `
-  <button type="button" class="db-dropdown-field db-panel-dropdown ${extraClass}${icon ? " has-current-icon" : ""}"
+  <button type="button" class="obnotion-dropdown-field obnotion-panel-dropdown ${extraClass}${icon ? " has-current-icon" : ""}"
     aria-haspopup="listbox" aria-expanded="false">
-    <span class="db-dropdown-field-icon">${icon ? `<span class="db-dropdown-option-type-icon">${icon}</span>` : ""}</span>
-    <div class="db-dropdown-field-text"><span class="db-dropdown-field-value">${value}</span></div>
-    <span class="db-dropdown-field-chevron">${I.chevronDown}</span>
+    <span class="obnotion-dropdown-field-icon">${icon ? `<span class="obnotion-dropdown-option-type-icon">${icon}</span>` : ""}</span>
+    <div class="obnotion-dropdown-field-text"><span class="obnotion-dropdown-field-value">${value}</span></div>
+    <span class="obnotion-dropdown-field-chevron">${I.chevronDown}</span>
   </button>`;
 
 /* Every panel in the plugin is `position: absolute` against a toolbar anchor that a
@@ -307,48 +307,48 @@ const IN_FLOW_PANEL = `position: static !important; top: auto !important; right:
 
 const chartOptionsRow = {
   // `has-current-icon` is not decoration: the row is a three-column grid and the stylesheet hides
-  // `.db-dropdown-field-icon` without it. A hidden element is not a grid item, so every remaining
+  // `.obnotion-dropdown-field-icon` without it. A hidden element is not a grid item, so every remaining
   // child shifts one column left — the label lands in the 18px icon track and the chevron takes the
   // 458px text track. The renderer sets this class whenever an icon exists, and a fixture that
   // supplies the icon without the class photographs a row the plugin never draws.
   select: (label, value, icon) => `
-    <button type="button" class="db-dropdown-field db-chart-options-row db-chart-options-select-row${icon ? " has-current-icon" : ""}"
+    <button type="button" class="obnotion-dropdown-field obnotion-chart-options-row obnotion-chart-options-select-row${icon ? " has-current-icon" : ""}"
       aria-haspopup="listbox" aria-expanded="false">
-      <span class="db-dropdown-field-icon">${icon}</span>
-      <div class="db-dropdown-field-text">
-        <span class="db-dropdown-field-label">${label}</span>
-        <span class="db-dropdown-field-value">${value}</span>
+      <span class="obnotion-dropdown-field-icon">${icon}</span>
+      <div class="obnotion-dropdown-field-text">
+        <span class="obnotion-dropdown-field-label">${label}</span>
+        <span class="obnotion-dropdown-field-value">${value}</span>
       </div>
-      <span class="db-dropdown-field-chevron">${I.chevronDown}</span>
+      <span class="obnotion-dropdown-field-chevron">${I.chevronDown}</span>
     </button>`,
   entry: (label, value, icon) => `
-    <button type="button" class="db-chart-options-row db-chart-options-popover-entry">
-      <span class="db-chart-options-row-icon">${icon}</span>
-      <div class="db-chart-options-row-text">
-        <span class="db-chart-options-label">${label}</span>
-        <span class="db-chart-options-value">${value}</span>
+    <button type="button" class="obnotion-chart-options-row obnotion-chart-options-popover-entry">
+      <span class="obnotion-chart-options-row-icon">${icon}</span>
+      <div class="obnotion-chart-options-row-text">
+        <span class="obnotion-chart-options-label">${label}</span>
+        <span class="obnotion-chart-options-value">${value}</span>
       </div>
-      <span class="db-chart-options-chevron">${I.chevronRight}</span>
+      <span class="obnotion-chart-options-chevron">${I.chevronRight}</span>
     </button>`,
   toggle: (label, icon, checked) => `
-    <div class="db-chart-options-row db-chart-options-switch">
-      <span class="db-chart-options-row-icon">${icon}</span>
-      <div class="db-chart-options-row-text"><span class="db-chart-options-label">${label}</span></div>
-      <input type="checkbox" class="db-toggle-switch" role="switch" aria-label="${label}"${checked ? " checked" : ""}>
+    <div class="obnotion-chart-options-row obnotion-chart-options-switch">
+      <span class="obnotion-chart-options-row-icon">${icon}</span>
+      <div class="obnotion-chart-options-row-text"><span class="obnotion-chart-options-label">${label}</span></div>
+      <input type="checkbox" class="obnotion-toggle-switch" role="switch" aria-label="${label}"${checked ? " checked" : ""}>
     </div>`,
   text: (label, placeholder, icon) => `
-    <div class="db-chart-options-row db-chart-options-title-row">
-      <span class="db-chart-options-row-icon">${icon}</span>
-      <div class="db-chart-options-row-text">
-        <span class="db-chart-options-label">${label}</span>
-        <input type="text" class="db-chart-options-text-input" placeholder="${placeholder}" aria-label="${label}">
+    <div class="obnotion-chart-options-row obnotion-chart-options-title-row">
+      <span class="obnotion-chart-options-row-icon">${icon}</span>
+      <div class="obnotion-chart-options-row-text">
+        <span class="obnotion-chart-options-label">${label}</span>
+        <input type="text" class="obnotion-chart-options-text-input" placeholder="${placeholder}" aria-label="${label}">
       </div>
       <span></span>
     </div>`,
   exportAction: (label, icon) => `
-    <button type="button" class="db-chart-options-row db-chart-options-export">
-      <span class="db-chart-options-row-icon">${icon}</span>
-      <div class="db-chart-options-row-text"><span class="db-chart-options-label">${label}</span></div>
+    <button type="button" class="obnotion-chart-options-row obnotion-chart-options-export">
+      <span class="obnotion-chart-options-row-icon">${icon}</span>
+      <div class="obnotion-chart-options-row-text"><span class="obnotion-chart-options-label">${label}</span></div>
       <span></span>
     </button>`,
 };
@@ -367,15 +367,15 @@ export const CHROME_SCENARIOS = [
     sources: ["src/views/toolbar-renderer.ts"],
     note: "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
     html: () => `
-      <div class="note-database-container">
-        <div class="db-header">
-          <div class="db-toolbar">
-            <div class="db-toolbar-left">
-              <div class="db-view-tabs" role="tablist" aria-label="View switcher">
+      <div class="obnotion-container">
+        <div class="obnotion-header">
+          <div class="obnotion-toolbar">
+            <div class="obnotion-toolbar-left">
+              <div class="obnotion-view-tabs" role="tablist" aria-label="View switcher">
                 ${viewTab("All subscriptions", I.table, true)}
                 ${viewTab("By category", I.layoutGrid, false)}
                 ${viewTab("Covers", I.image, false)}
-                <button type="button" class="db-view-tab db-view-tab-add" aria-label="Add view"
+                <button type="button" class="obnotion-view-tab obnotion-view-tab-add" aria-label="Add view"
                   aria-haspopup="dialog" aria-expanded="false">${I.plus}</button>
               </div>
             </div>
@@ -393,18 +393,18 @@ export const CHROME_SCENARIOS = [
     sources: ["src/views/toolbar-renderer.ts"],
     note: "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
     html: () => `
-      <div class="note-database-container">
-        <div class="db-header">
-          <div class="db-toolbar">
-            <div class="db-toolbar-left">
-              <div class="db-view-tabs" role="tablist" aria-label="View switcher">
+      <div class="obnotion-container">
+        <div class="obnotion-header">
+          <div class="obnotion-toolbar">
+            <div class="obnotion-toolbar-left">
+              <div class="obnotion-view-tabs" role="tablist" aria-label="View switcher">
                 ${viewTab("All subscriptions", I.table, true)}
                 ${viewTab("By category", I.layoutGrid, false)}
                 ${viewTab("Covers", I.image, false)}
                 ${viewTab("Spend", I.barChart, false)}
-                <button type="button" class="db-view-tab db-view-tab-more" aria-label="2 more views"
+                <button type="button" class="obnotion-view-tab obnotion-view-tab-more" aria-label="2 more views"
                   aria-haspopup="dialog" aria-expanded="false"><span>⋯</span></button>
-                <button type="button" class="db-view-tab db-view-tab-add" aria-label="Add view"
+                <button type="button" class="obnotion-view-tab obnotion-view-tab-add" aria-label="Add view"
                   aria-haspopup="dialog" aria-expanded="false">${I.plus}</button>
               </div>
             </div>
@@ -421,10 +421,10 @@ export const CHROME_SCENARIOS = [
     sources: ["src/views/toolbar-renderer.ts"],
     note: "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
     html: () => `
-      <div class="note-database-container">
-        <div class="db-header"><div class="db-toolbar">
-          <div class="db-toolbar-right">
-            <div class="db-toolbar-cluster db-toolbar-utilities-cluster" aria-label="More tools">
+      <div class="obnotion-container">
+        <div class="obnotion-header"><div class="obnotion-toolbar">
+          <div class="obnotion-toolbar-right">
+            <div class="obnotion-toolbar-cluster obnotion-toolbar-utilities-cluster" aria-label="More tools">
               ${searchControl(false)}
               ${searchControl(true)}
             </div>
@@ -442,30 +442,30 @@ export const CHROME_SCENARIOS = [
     note: "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
     html: () => {
       const chip = (kind, icon, field, detail, order) => `
-        <div class="db-active-control-chip is-${kind}" data-active-rule-key="${kind}:0">
-          <button type="button" class="db-active-control-edit" title="${field} · ${detail}" aria-label="${field} · ${detail}">
-            <span class="db-active-control-icon">${icon}${order ? `<span class="db-active-control-order">${order}</span>` : ""}</span>
-            <span class="db-active-control-field">${field}</span>
-            <span class="db-active-control-detail">${detail}</span>
+        <div class="obnotion-active-control-chip is-${kind}" data-active-rule-key="${kind}:0">
+          <button type="button" class="obnotion-active-control-edit" title="${field} · ${detail}" aria-label="${field} · ${detail}">
+            <span class="obnotion-active-control-icon">${icon}${order ? `<span class="obnotion-active-control-order">${order}</span>` : ""}</span>
+            <span class="obnotion-active-control-field">${field}</span>
+            <span class="obnotion-active-control-detail">${detail}</span>
           </button>
-          <button type="button" class="db-active-control-remove" aria-label="Delete ${kind}">×</button>
+          <button type="button" class="obnotion-active-control-remove" aria-label="Delete ${kind}">×</button>
         </div>`;
       return `
-      <div class="note-database-container">
-        <div class="db-header">
-          <div class="db-active-view-controls" aria-label="Filter / Sort">
-            <div class="db-active-view-controls-scroll">
-              <div class="db-active-control-group is-sort" aria-label="Sort">
+      <div class="obnotion-container">
+        <div class="obnotion-header">
+          <div class="obnotion-active-view-controls" aria-label="Filter / Sort">
+            <div class="obnotion-active-view-controls-scroll">
+              <div class="obnotion-active-control-group is-sort" aria-label="Sort">
                 ${chip("sort", I.arrowDown, "Cost", "Descending", "1")}
                 ${chip("sort", I.arrowUp, "Next Renewal", "Ascending", "2")}
               </div>
-              <div class="db-active-control-group is-filter" aria-label="Filter">
-                <button type="button" class="db-active-control-logic" title="AND (all)" aria-label="AND (all)">AND</button>
+              <div class="obnotion-active-control-group is-filter" aria-label="Filter">
+                <button type="button" class="obnotion-active-control-logic" title="AND (all)" aria-label="AND (all)">AND</button>
                 ${chip("filter", I.listFilter, "Category", "equals · Business", "")}
                 ${chip("filter", I.listFilter, "Payment", "equals · Revolut", "")}
               </div>
             </div>
-            <button type="button" class="db-active-view-controls-clear" aria-label="Clear all">Clear all</button>
+            <button type="button" class="obnotion-active-view-controls-clear" aria-label="Clear all">Clear all</button>
           </div>
         </div>
       </div>`;
@@ -482,12 +482,12 @@ export const CHROME_SCENARIOS = [
     width: 420,
     fixtureOf: "constructed-toolbar-utilities",
     sources: ["src/views/toolbar-renderer.ts", "src/views/menu-row.ts"],
-    note: "The toolbar's overflow menu. Rows come from the shared createMenuRow but carry db-toolbar-menu-row, whose own inline padding is what the heading is aligned to.",
-    captureCss: `.note-database-container .db-toolbar-utilities-popover { ${IN_FLOW_PANEL} }`,
+    note: "The toolbar's overflow menu. Rows come from the shared createMenuRow but carry obnotion-toolbar-menu-row, whose own inline padding is what the heading is aligned to.",
+    captureCss: `.obnotion-container .obnotion-toolbar-utilities-popover { ${IN_FLOW_PANEL} }`,
     html: () => `
-      <div class="note-database-container">
-        <div class="db-view-tab-popover db-toolbar-utilities-popover" role="menu" aria-label="Utilities">
-          <div class="db-panel-header"><div class="db-panel-title">Utilities</div></div>
+      <div class="obnotion-container">
+        <div class="obnotion-view-tab-popover obnotion-toolbar-utilities-popover" role="menu" aria-label="Utilities">
+          <div class="obnotion-panel-header"><div class="obnotion-panel-title">Utilities</div></div>
           ${utilitiesRow("Wide display", I.arrowLeftRight)}
           ${utilitiesRow("Save computed results", I.refreshFx)}
           ${utilitiesRow("Refresh database", I.refresh)}
@@ -505,14 +505,14 @@ export const CHROME_SCENARIOS = [
     sources: ["src/views/active-rule-popover-renderer.ts", "src/views/filter-panel-renderer.ts"],
     note: "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
     // Anchored to the chip that opened it, so it leaves the flow and the capture box collapses.
-    captureCss: `.note-database-container .db-active-rule-popover { ${IN_FLOW_PANEL} }`,
+    captureCss: `.obnotion-container .obnotion-active-rule-popover { ${IN_FLOW_PANEL} }`,
     html: () => `
-      <div class="note-database-container">
-        <div class="db-active-rule-popover db-filter-panel is-filter" role="dialog" aria-label="Filter">
-          <div class="db-panel-row db-active-rule-editor-row">
-            ${panelDropdown("db-filter-field-dropdown", "Category", ICONS["circle-dot"])}
-            ${panelDropdown("db-filter-operator-dropdown", "equals", "")}
-            ${panelDropdown("db-filter-value-dropdown", "Business", "")}
+      <div class="obnotion-container">
+        <div class="obnotion-active-rule-popover obnotion-filter-panel is-filter" role="dialog" aria-label="Filter">
+          <div class="obnotion-panel-row obnotion-active-rule-editor-row">
+            ${panelDropdown("obnotion-filter-field-dropdown", "Category", ICONS["circle-dot"])}
+            ${panelDropdown("obnotion-filter-operator-dropdown", "equals", "")}
+            ${panelDropdown("obnotion-filter-value-dropdown", "Business", "")}
           </div>
         </div>
       </div>`,
@@ -528,14 +528,14 @@ export const CHROME_SCENARIOS = [
     // `width: min(520px, calc(100vw - 72px))` and adds its own 8px padding and 1px border.
     width: 570,
     sources: ["src/views/active-rule-popover-renderer.ts", "src/views/sort-panel-renderer.ts"],
-    note: "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
-    captureCss: `.note-database-container .db-active-rule-popover { ${IN_FLOW_PANEL} }`,
+    note: "The sort variant adds obnotion-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
+    captureCss: `.obnotion-container .obnotion-active-rule-popover { ${IN_FLOW_PANEL} }`,
     html: () => `
-      <div class="note-database-container">
-        <div class="db-active-rule-popover db-filter-panel db-sort-panel is-sort" role="dialog" aria-label="Sort">
-          <div class="db-panel-row db-sort-rule-row db-active-rule-editor-row">
-            ${panelDropdown("db-sort-field-dropdown", "Cost", ICONS.hash)}
-            ${panelDropdown("db-sort-direction-dropdown", "Descending", "")}
+      <div class="obnotion-container">
+        <div class="obnotion-active-rule-popover obnotion-filter-panel obnotion-sort-panel is-sort" role="dialog" aria-label="Sort">
+          <div class="obnotion-panel-row obnotion-sort-rule-row obnotion-active-rule-editor-row">
+            ${panelDropdown("obnotion-sort-field-dropdown", "Cost", ICONS.hash)}
+            ${panelDropdown("obnotion-sort-direction-dropdown", "Descending", "")}
           </div>
         </div>
       </div>`,
@@ -549,20 +549,20 @@ export const CHROME_SCENARIOS = [
     sources: ["src/views/table-footer-renderer.ts", "src/views/table-renderer.ts"],
     note: "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
     html: () => `
-      <div class="note-database-container">
-        <div class="db-table-wrap">
-          <table class="db-table" role="grid">
+      <div class="obnotion-container">
+        <div class="obnotion-table-wrap">
+          <table class="obnotion-table" role="grid">
             ${fullHeader()}
             <tbody>${ROWS.map(fullRow).join("")}</tbody>
-            <tfoot class="db-table-footer">
-              <tr class="db-table-footer-row">
-                <td class="db-table-footer-utility"></td>
+            <tfoot class="obnotion-table-footer">
+              <tr class="obnotion-table-footer-row">
+                <td class="obnotion-table-footer-utility"></td>
                 ${footerCell("name", [["Count", nl2.format(ROWS.length)]])}
                 ${footerCell("cost", [["Sum", nl2.format(footerSum)], ["Average", nl2.format(footerSum / ROWS.length)]])}
                 ${footerCell("billing", [])}
                 ${footerCell("payment", [["Unique", nl2.format(new Set(ROWS.map((r) => r.payment)).size)]])}
                 ${footerCell("renew", [["Earliest", footerEarliest]])}
-                <td class="db-table-footer-add-column"></td>
+                <td class="obnotion-table-footer-add-column"></td>
               </tr>
             </tfoot>
           </table>
@@ -581,10 +581,10 @@ export const CHROME_SCENARIOS = [
       const business = ROWS.filter((r) => r.category === "Business");
       const personal = ROWS.filter((r) => r.category === "Personal");
       return `
-      <div class="note-database-container">
-        <div class="db-grouped-table">
-          <div class="db-table-wrap">
-            <table class="db-table" role="grid">
+      <div class="obnotion-container">
+        <div class="obnotion-grouped-table">
+          <div class="obnotion-table-wrap">
+            <table class="obnotion-table" role="grid">
               ${fullHeader()}
               <tbody>
                 ${groupDividerRow("Business", "category", business.length, OPTION_TONES.Business, [["Cost Sum", "177,50"], ["Cost Average", "59,17"]])}
@@ -608,19 +608,19 @@ export const CHROME_SCENARIOS = [
     sources: ["src/views/summary-renderer.ts"],
     note: "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
     html: () => `
-      <div class="note-database-container">
-        <div class="db-summary">
-          <div class="db-summary-item"><div class="label">Total</div><span class="value">5</span></div>
-          <div class="db-summary-item db-summary-sum-item db-summary-draggable" data-summary-rule-index="0">
+      <div class="obnotion-container">
+        <div class="obnotion-summary">
+          <div class="obnotion-summary-item"><div class="label">Total</div><span class="value">5</span></div>
+          <div class="obnotion-summary-item obnotion-summary-sum-item obnotion-summary-draggable" data-summary-rule-index="0">
             <div class="label">Cost Sum</div><span class="value">191,75</span>
           </div>
-          <div class="db-summary-item db-summary-sum-item db-summary-draggable" data-summary-rule-index="1">
+          <div class="obnotion-summary-item obnotion-summary-sum-item obnotion-summary-draggable" data-summary-rule-index="1">
             <div class="label">Cost Average</div><span class="value">38,35</span>
           </div>
-          <div class="db-summary-item db-summary-sum-item db-summary-draggable" data-summary-rule-index="2">
+          <div class="obnotion-summary-item obnotion-summary-sum-item obnotion-summary-draggable" data-summary-rule-index="2">
             <div class="label">Payment Count</div><span class="value">5</span>
           </div>
-          <div class="db-summary-item db-summary-sum-hint"><span class="value">+ Summary</span></div>
+          <div class="obnotion-summary-item obnotion-summary-sum-hint"><span class="value">+ Summary</span></div>
         </div>
       </div>`,
   },
@@ -632,13 +632,13 @@ export const CHROME_SCENARIOS = [
     sources: ["src/views/chart-toolbar-renderer.ts"],
     fixtureOf: "constructed-chart-toolbar-options",
     note: "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
-    captureCss: `.note-database-container .db-chart-options-popover { ${IN_FLOW_PANEL} }`,
+    captureCss: `.obnotion-container .obnotion-chart-options-popover { ${IN_FLOW_PANEL} }`,
     html: () => `
-      <div class="note-database-container">
-        <div class="db-chart-options-popover">
-          <div class="db-panel-header"><div class="db-panel-title">Chart options</div></div>
-          <div class="db-chart-options-section">
-            <div class="db-chart-options-section-title"><span>Data</span></div>
+      <div class="obnotion-container">
+        <div class="obnotion-chart-options-popover">
+          <div class="obnotion-panel-header"><div class="obnotion-panel-title">Chart options</div></div>
+          <div class="obnotion-chart-options-section">
+            <div class="obnotion-chart-options-section-title"><span>Data</span></div>
             ${chartOptionsRow.select("Type", "Bar", I.barChart)}
             ${chartOptionsRow.select("Group", "Category", I.group)}
             ${chartOptionsRow.select("Subgroup", "Billing", I.layers)}
@@ -647,19 +647,19 @@ export const CHROME_SCENARIOS = [
             ${chartOptionsRow.toggle("Omit zero values", I.eyeOff, false)}
             ${chartOptionsRow.toggle("Cumulative", I.trendingUp, true)}
           </div>
-          <div class="db-chart-options-section">
-            <div class="db-chart-options-section-title"><span>Visible groups</span></div>
+          <div class="obnotion-chart-options-section">
+            <div class="obnotion-chart-options-section-title"><span>Visible groups</span></div>
             ${chartOptionsRow.entry("Groups", "2/3", I.listChecks)}
           </div>
-          <div class="db-chart-options-section">
-            <div class="db-chart-options-section-title"><span>Style</span></div>
+          <div class="obnotion-chart-options-section">
+            <div class="obnotion-chart-options-section-title"><span>Style</span></div>
             ${chartOptionsRow.select("Colors", "Auto", I.palette)}
             ${chartOptionsRow.toggle("Color by value", I.paintBucket, false)}
             ${chartOptionsRow.entry("Customize", "", I.paintbrush)}
             ${chartOptionsRow.text("Title", "Sum of Cost by Category", I.textCursor)}
           </div>
-          <div class="db-chart-options-section">
-            <div class="db-chart-options-section-title"><span>Export</span></div>
+          <div class="obnotion-chart-options-section">
+            <div class="obnotion-chart-options-section-title"><span>Export</span></div>
             ${chartOptionsRow.exportAction("Export PNG", I.download)}
             ${chartOptionsRow.exportAction("Copy PNG", I.copy)}
           </div>
@@ -675,11 +675,11 @@ export const CHROME_SCENARIOS = [
     fixtureOf: "constructed-chart-number",
     note: "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
     html: () => `
-      <div class="note-database-container">
-        <div class="db-chart-number db-chart-height-medium">
-          <div class="db-chart-number-label">Sum of Cost</div>
-          <div class="db-chart-number-value">191,75</div>
-          <div class="db-chart-number-caption">Single number</div>
+      <div class="obnotion-container">
+        <div class="obnotion-chart-number obnotion-chart-height-medium">
+          <div class="obnotion-chart-number-label">Sum of Cost</div>
+          <div class="obnotion-chart-number-value">191,75</div>
+          <div class="obnotion-chart-number-caption">Single number</div>
         </div>
       </div>`,
   },
@@ -690,17 +690,17 @@ export const CHROME_SCENARIOS = [
     width: 900,
     sources: ["src/views/chart-renderer.ts"],
     fixtureOf: "constructed-chart-empty",
-    note: "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body. The card inside .db-chart-empty is the shared EmptyStateRenderer markup, not chart's own retired db-chart-empty-* vocabulary; chart-renderer.ts maps its six reasons onto the nearest shared reason for the title only, and always supplies its own message.",
+    note: "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body. The card inside .obnotion-chart-empty is the shared EmptyStateRenderer markup, not chart's own retired obnotion-chart-empty-* vocabulary; chart-renderer.ts maps its six reasons onto the nearest shared reason for the title only, and always supplies its own message.",
     html: () => `
-      <div class="note-database-container">
-        <div class="db-chart-empty db-chart-height-medium">
-          <div class="db-empty db-empty-card" data-empty-reason="limit-empty">
-            <div class="db-empty-card-icon" aria-hidden="true">${I.barChart}</div>
-            <div class="db-empty-card-content">
-              <h3 class="db-empty-card-title">No records are visible</h3>
-              <p class="db-empty-card-message">All chart groups are hidden. Show at least one group in Chart options.</p>
-              <div class="db-empty-action-group">
-                <button type="button" class="db-empty-action" aria-label="Show all groups"><span>Show all groups</span></button>
+      <div class="obnotion-container">
+        <div class="obnotion-chart-empty obnotion-chart-height-medium">
+          <div class="obnotion-empty obnotion-empty-card" data-empty-reason="limit-empty">
+            <div class="obnotion-empty-card-icon" aria-hidden="true">${I.barChart}</div>
+            <div class="obnotion-empty-card-content">
+              <h3 class="obnotion-empty-card-title">No records are visible</h3>
+              <p class="obnotion-empty-card-message">All chart groups are hidden. Show at least one group in Chart options.</p>
+              <div class="obnotion-empty-action-group">
+                <button type="button" class="obnotion-empty-action" aria-label="Show all groups"><span>Show all groups</span></button>
               </div>
             </div>
           </div>
@@ -714,37 +714,37 @@ export const CHROME_SCENARIOS = [
     width: 420,
     fixtureOf: "constructed-owned-menu",
     sources: ["src/views/owned-menu.ts", "src/views/menu-row.ts"],
-    note: "Deliberately not wrapped in note-database-container: this menu mounts on document.body, so a fixture that wrapped it would photograph a surface the plugin never ships. Chromed from Obsidian's own menu variables so it matches the app's real menus and follows a theme that restyles them.",
+    note: "Deliberately not wrapped in obnotion-container: this menu mounts on document.body, so a fixture that wrapped it would photograph a surface the plugin never ships. Chromed from Obsidian's own menu variables so it matches the app's real menus and follows a theme that restyles them.",
     // The destructive row carries its icon here as it does in the sheet below. `ColumnMenu` builds
     // it with `icon: "trash"`, so drawn bare it was a picture of a row the renderer does not make,
     // and it quietly exercised the icon-less alignment path on a menu that always has one. The
     // sheet fixture was corrected and this one was not, so the two presentations of the same menu
     // disagreed about the same row while sitting side by side in the index.
     html: () => `
-      <div class="db-surface db-menu db-owned-menu" role="menu" tabindex="-1">
-        <div class="db-menu-section">Column</div>
-        <button type="button" class="db-menu-item" aria-checked="false">
-          <span class="db-menu-item-icon">${I.arrowUpDown}</span>
-          <span class="db-menu-item-label">Sort ascending</span>
+      <div class="obnotion-surface obnotion-menu obnotion-owned-menu" role="menu" tabindex="-1">
+        <div class="obnotion-menu-section">Column</div>
+        <button type="button" class="obnotion-menu-item" aria-checked="false">
+          <span class="obnotion-menu-item-icon">${I.arrowUpDown}</span>
+          <span class="obnotion-menu-item-label">Sort ascending</span>
         </button>
-        <button type="button" class="db-menu-item" aria-checked="true">
-          <span class="db-menu-item-icon">${I.listFilter}</span>
-          <span class="db-menu-item-label">Filter on this column</span>
+        <button type="button" class="obnotion-menu-item" aria-checked="true">
+          <span class="obnotion-menu-item-icon">${I.listFilter}</span>
+          <span class="obnotion-menu-item-label">Filter on this column</span>
         </button>
-        <button type="button" class="db-menu-item" aria-checked="false" aria-haspopup="true" aria-expanded="false">
-          <span class="db-menu-item-icon">${I.columns3}</span>
-          <span class="db-menu-item-label">Property type</span>
-          <span class="db-menu-item-current">Select</span>
-          <span class="db-menu-item-chevron">${I.chevronRight}</span>
+        <button type="button" class="obnotion-menu-item" aria-checked="false" aria-haspopup="true" aria-expanded="false">
+          <span class="obnotion-menu-item-icon">${I.columns3}</span>
+          <span class="obnotion-menu-item-label">Property type</span>
+          <span class="obnotion-menu-item-current">Select</span>
+          <span class="obnotion-menu-item-chevron">${I.chevronRight}</span>
         </button>
-        <div class="db-menu-separator" role="separator"></div>
-        <button type="button" class="db-menu-item" aria-checked="false" disabled aria-disabled="true">
-          <span class="db-menu-item-icon">${I.group}</span>
-          <span class="db-menu-item-label">Group by this column</span>
+        <div class="obnotion-menu-separator" role="separator"></div>
+        <button type="button" class="obnotion-menu-item" aria-checked="false" disabled aria-disabled="true">
+          <span class="obnotion-menu-item-icon">${I.group}</span>
+          <span class="obnotion-menu-item-label">Group by this column</span>
         </button>
-        <button type="button" class="db-menu-item is-warning" aria-checked="false">
-          <span class="db-menu-item-icon">${I.trash}</span>
-          <span class="db-menu-item-label">Delete property</span>
+        <button type="button" class="obnotion-menu-item is-warning" aria-checked="false">
+          <span class="obnotion-menu-item-icon">${I.trash}</span>
+          <span class="obnotion-menu-item-label">Delete property</span>
         </button>
       </div>`,
   },
@@ -761,22 +761,22 @@ export const CHROME_SCENARIOS = [
     // pointer has moved onto the child, and its chevron rotates from pointing right to pointing
     // down. Drawn without `:hover`, exactly as the real row sits once the pointer has left it.
     html: () => `
-      <div class="db-surface db-menu db-owned-menu" role="menu" tabindex="-1">
-        <div class="db-menu-section">Column</div>
-        <button type="button" class="db-menu-item" aria-checked="false">
-          <span class="db-menu-item-icon">${I.arrowUpDown}</span>
-          <span class="db-menu-item-label">Sort ascending</span>
+      <div class="obnotion-surface obnotion-menu obnotion-owned-menu" role="menu" tabindex="-1">
+        <div class="obnotion-menu-section">Column</div>
+        <button type="button" class="obnotion-menu-item" aria-checked="false">
+          <span class="obnotion-menu-item-icon">${I.arrowUpDown}</span>
+          <span class="obnotion-menu-item-label">Sort ascending</span>
         </button>
-        <button type="button" class="db-menu-item is-submenu-open" aria-checked="false" aria-haspopup="true" aria-expanded="true">
-          <span class="db-menu-item-icon">${I.columns3}</span>
-          <span class="db-menu-item-label">Property type</span>
-          <span class="db-menu-item-current">Select</span>
-          <span class="db-menu-item-chevron">${I.chevronRight}</span>
+        <button type="button" class="obnotion-menu-item is-submenu-open" aria-checked="false" aria-haspopup="true" aria-expanded="true">
+          <span class="obnotion-menu-item-icon">${I.columns3}</span>
+          <span class="obnotion-menu-item-label">Property type</span>
+          <span class="obnotion-menu-item-current">Select</span>
+          <span class="obnotion-menu-item-chevron">${I.chevronRight}</span>
         </button>
-        <div class="db-menu-separator" role="separator"></div>
-        <button type="button" class="db-menu-item is-warning" aria-checked="false">
-          <span class="db-menu-item-icon">${I.trash}</span>
-          <span class="db-menu-item-label">Delete property</span>
+        <div class="obnotion-menu-separator" role="separator"></div>
+        <button type="button" class="obnotion-menu-item is-warning" aria-checked="false">
+          <span class="obnotion-menu-item-icon">${I.trash}</span>
+          <span class="obnotion-menu-item-label">Delete property</span>
         </button>
       </div>`,
   },
@@ -797,7 +797,7 @@ export const CHROME_SCENARIOS = [
     sources: ["src/views/owned-menu.ts", "src/views/menu-row.ts", "src/views/mobile-bottom-sheet.ts"],
     // The same rows as the popover above, in the presentation a phone actually gets. It exists
     // because the row grammar the sheet applies — a fixed leading column, one left edge, a hairline
-    // between neighbours, a 44px target — is stated only under `.db-mobile-bottom-sheet`, so the
+    // between neighbours, a 44px target — is stated only under `.obnotion-mobile-bottom-sheet`, so the
     // desktop fixture photographs none of it.
     //
     // What this proves is bounded, and worth stating plainly: it is hand-written markup against the
@@ -806,35 +806,35 @@ export const CHROME_SCENARIOS = [
     // menu, with the host's own button rule loaded.
     note: "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom. Every row carries its icon, including the destructive one: `ColumnMenu` builds that row with `icon: \"trash\"`, and the fixture drew it bare — a picture of a row the renderer does not make. The icon-less shape is real elsewhere and is exercised where it belongs, by the placement lane's own three-row menu.",
     html: () => `
-      <div class="db-surface db-menu db-owned-menu db-mobile-bottom-sheet db-overlay-enter is-visible" role="menu" tabindex="-1">
-        <div class="db-mobile-bottom-sheet-handle" aria-hidden="true"></div>
-        <div class="db-menu-section">Column</div>
-        <button type="button" class="db-menu-item">
-          <span class="db-menu-item-icon">${I.arrowUpDown}</span>
-          <span class="db-menu-item-label">Sort ascending</span>
+      <div class="obnotion-surface obnotion-menu obnotion-owned-menu obnotion-mobile-bottom-sheet obnotion-overlay-enter is-visible" role="menu" tabindex="-1">
+        <div class="obnotion-mobile-bottom-sheet-handle" aria-hidden="true"></div>
+        <div class="obnotion-menu-section">Column</div>
+        <button type="button" class="obnotion-menu-item">
+          <span class="obnotion-menu-item-icon">${I.arrowUpDown}</span>
+          <span class="obnotion-menu-item-label">Sort ascending</span>
         </button>
-        <button type="button" class="db-menu-item">
-          <span class="db-menu-item-icon">${I.listFilter}</span>
-          <span class="db-menu-item-label">Filter on this column</span>
+        <button type="button" class="obnotion-menu-item">
+          <span class="obnotion-menu-item-icon">${I.listFilter}</span>
+          <span class="obnotion-menu-item-label">Filter on this column</span>
         </button>
-        <button type="button" class="db-menu-item" aria-haspopup="true" aria-expanded="false">
-          <span class="db-menu-item-icon">${I.columns3}</span>
-          <span class="db-menu-item-label">Property type</span>
-          <span class="db-menu-item-current">Select</span>
-          <span class="db-menu-item-chevron">${I.chevronRight}</span>
+        <button type="button" class="obnotion-menu-item" aria-haspopup="true" aria-expanded="false">
+          <span class="obnotion-menu-item-icon">${I.columns3}</span>
+          <span class="obnotion-menu-item-label">Property type</span>
+          <span class="obnotion-menu-item-current">Select</span>
+          <span class="obnotion-menu-item-chevron">${I.chevronRight}</span>
         </button>
-        <div class="db-menu-separator" role="separator"></div>
-        <button type="button" class="db-menu-item">
-          <span class="db-menu-item-icon">${I.copy}</span>
-          <span class="db-menu-item-label">Duplicate property</span>
+        <div class="obnotion-menu-separator" role="separator"></div>
+        <button type="button" class="obnotion-menu-item">
+          <span class="obnotion-menu-item-icon">${I.copy}</span>
+          <span class="obnotion-menu-item-label">Duplicate property</span>
         </button>
-        <button type="button" class="db-menu-item" disabled aria-disabled="true">
-          <span class="db-menu-item-icon">${I.group}</span>
-          <span class="db-menu-item-label">Group by this column</span>
+        <button type="button" class="obnotion-menu-item" disabled aria-disabled="true">
+          <span class="obnotion-menu-item-icon">${I.group}</span>
+          <span class="obnotion-menu-item-label">Group by this column</span>
         </button>
-        <button type="button" class="db-menu-item is-warning">
-          <span class="db-menu-item-icon">${I.trash}</span>
-          <span class="db-menu-item-label">Delete property</span>
+        <button type="button" class="obnotion-menu-item is-warning">
+          <span class="obnotion-menu-item-icon">${I.trash}</span>
+          <span class="obnotion-menu-item-label">Delete property</span>
         </button>
       </div>`,
   },
@@ -853,19 +853,19 @@ export const CHROME_SCENARIOS = [
     // stayed green, because freshness and existence were the only things anyone asked about.
     // Positioning is all that is undone; the height, border, radius, background and padding that
     // make up the thing being photographed are left exactly as the stylesheet sets them.
-    captureCss: `.note-database-container .db-selection-status-bar {
+    captureCss: `.obnotion-container .obnotion-selection-status-bar {
       position: static !important; left: auto !important; bottom: auto !important;
       transform: none !important;
     }`,
     note: "The bar that appears while table cells are selected. Its checkbox clears the selection, so it is always rendered checked.",
     html: () => `
-      <div class="note-database-container">
-        <div class="db-selection-status-bar">
-          ${rowCheckbox("db-selection-clear-checkbox").replace(" aria-label=", " checked aria-label=")}
-          <span class="db-selection-count">6 cells selected</span>
-          <button type="button" class="db-selection-action">Copy TSV</button>
-          <button type="button" class="db-selection-action">Copy Markdown</button>
-          <button type="button" class="db-selection-action">Copy CSV</button>
+      <div class="obnotion-container">
+        <div class="obnotion-selection-status-bar">
+          ${rowCheckbox("obnotion-selection-clear-checkbox").replace(" aria-label=", " checked aria-label=")}
+          <span class="obnotion-selection-count">6 cells selected</span>
+          <button type="button" class="obnotion-selection-action">Copy TSV</button>
+          <button type="button" class="obnotion-selection-action">Copy Markdown</button>
+          <button type="button" class="obnotion-selection-action">Copy CSV</button>
         </div>
       </div>`,
   },
@@ -874,34 +874,34 @@ export const CHROME_SCENARIOS = [
     title: "Toast — success, with an Undo action",
     group: "components",
     sources: ["src/views/toast.ts"],
-    // `.db-toast-stack` docks to the viewport with position: fixed, and `.db-toast` sits inside it
+    // `.obnotion-toast-stack` docks to the viewport with position: fixed, and `.obnotion-toast` sits inside it
     // with position: absolute — the same collapsed-stack idiom the selection bar's own fixed dock
     // hits above. Neither contributes height to the element being captured undone, so both are put
     // back in flow; nothing about the card's own furniture is touched.
     //
-    // `.db-toast` also carries its own entrance keyframe (`animation: db-toast-in`), scaling from
-    // `--db-motion-scale-from` to 1. `reducedMotion: "reduce"` shortens that to 0.01ms rather than
+    // `.obnotion-toast` also carries its own entrance keyframe (`animation: obnotion-toast-in`), scaling from
+    // `--obnotion-motion-scale-from` to 1. `reducedMotion: "reduce"` shortens that to 0.01ms rather than
     // removing it, and capture.mjs reads the layout hash through `getBoundingClientRect()` — which
     // includes the live transform — before the screenshot call's own `animations: "disabled"` fast-
     // forwards anything. Whether the read landed before or after that sub-millisecond keyframe
     // finished was a scheduling race, and it decided which of two scaled rects the hash described:
     // the same PNG (pixelHash stable) with two different layoutHashes across runs. Disabling the
     // animation outright removes the race instead of narrowing it.
-    captureCss: `.db-toast-stack {
+    captureCss: `.obnotion-toast-stack {
       position: static !important; right: auto !important; bottom: auto !important;
     }
-    .db-toast { position: static !important; inset: auto !important; animation: none !important; }`,
-    note: "The shared feedback surface `showToast` builds, raised here exactly as the gallery-migration notice raises it: success severity, paired with the check glyph rather than colour alone, and an Undo action. Not wrapped in `note-database-container`: this stack mounts on `doc.body`, so a fixture that wrapped it would photograph a surface the plugin never ships.",
+    .obnotion-toast { position: static !important; inset: auto !important; animation: none !important; }`,
+    note: "The shared feedback surface `showToast` builds, raised here exactly as the gallery-migration notice raises it: success severity, paired with the check glyph rather than colour alone, and an Undo action. Not wrapped in `obnotion-container`: this stack mounts on `doc.body`, so a fixture that wrapped it would photograph a surface the plugin never ships.",
     html: () => `
-      <div class="db-surface db-toast-stack">
-        <div class="db-toast is-success" role="status" aria-live="polite" aria-atomic="true">
-          <div class="db-toast-header">
-            <div class="db-toast-icon">${ICONS.check}</div>
-            <div class="db-toast-message">"Subscriptions" was a gallery. Gallery views are being retired, so it now shows as a board with the same cover image, fit and aspect ratio. Its card-size settings do not carry over. Undo to keep it a gallery.</div>
-            <button type="button" class="db-toast-close" aria-label="Close">${I.x}</button>
+      <div class="obnotion-surface obnotion-toast-stack">
+        <div class="obnotion-toast is-success" role="status" aria-live="polite" aria-atomic="true">
+          <div class="obnotion-toast-header">
+            <div class="obnotion-toast-icon">${ICONS.check}</div>
+            <div class="obnotion-toast-message">"Subscriptions" was a gallery. Gallery views are being retired, so it now shows as a board with the same cover image, fit and aspect ratio. Its card-size settings do not carry over. Undo to keep it a gallery.</div>
+            <button type="button" class="obnotion-toast-close" aria-label="Close">${I.x}</button>
           </div>
-          <div class="db-toast-actions">
-            <button type="button" class="db-toast-action">Undo</button>
+          <div class="obnotion-toast-actions">
+            <button type="button" class="obnotion-toast-action">Undo</button>
           </div>
         </div>
       </div>`,
@@ -911,22 +911,22 @@ export const CHROME_SCENARIOS = [
     title: "Toast — error, sticky until dismissed",
     group: "components",
     sources: ["src/views/toast.ts"],
-    // `animation: none` on `.db-toast`: see `chrome-toast-success`'s captureCss comment above — the
+    // `animation: none` on `.obnotion-toast`: see `chrome-toast-success`'s captureCss comment above — the
     // entrance keyframe's live transform otherwise races the layout-hash read, not the pixels.
-    captureCss: `.db-toast-stack {
+    captureCss: `.obnotion-toast-stack {
       position: static !important; right: auto !important; bottom: auto !important;
     }
-    .db-toast { position: static !important; inset: auto !important; animation: none !important; }`,
+    .obnotion-toast { position: static !important; inset: auto !important; animation: none !important; }`,
     note: "An error toast carries no auto-dismiss timer and no action row — `showToast` builds the row unconditionally and `:empty` hides it, so a plain error photographs with no stray gap under its message.",
     html: () => `
-      <div class="db-surface db-toast-stack">
-        <div class="db-toast is-error" role="status" aria-live="polite" aria-atomic="true">
-          <div class="db-toast-header">
-            <div class="db-toast-icon">${I.alertTriangle}</div>
-            <div class="db-toast-message">Could not read the source. Check the database source and try again.</div>
-            <button type="button" class="db-toast-close" aria-label="Close">${I.x}</button>
+      <div class="obnotion-surface obnotion-toast-stack">
+        <div class="obnotion-toast is-error" role="status" aria-live="polite" aria-atomic="true">
+          <div class="obnotion-toast-header">
+            <div class="obnotion-toast-icon">${I.alertTriangle}</div>
+            <div class="obnotion-toast-message">Could not read the source. Check the database source and try again.</div>
+            <button type="button" class="obnotion-toast-close" aria-label="Close">${I.x}</button>
           </div>
-          <div class="db-toast-actions"></div>
+          <div class="obnotion-toast-actions"></div>
         </div>
       </div>`,
   },
@@ -940,7 +940,7 @@ export const CHROME_SCENARIOS = [
     html: () => {
       const rows = ROWS.slice(0, 4).map((r) => `
         <tr>
-          <td class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></td>
+          <td class="obnotion-select-col"><div class="obnotion-select-inner">${rowCheckbox()}</div></td>
           <td>${r.name}</td>
           <td>${r.cost}</td>
           <td>${optionPill(r.cycle)}</td>
@@ -949,12 +949,12 @@ export const CHROME_SCENARIOS = [
           <td>${optionPill(r.category)}</td>
         </tr>`).join("");
       return `
-      <div class="note-database-container">
-        <div class="db-table-wrap">
-          <table class="db-table"><thead><tr>${tableHeader()}</tr></thead><tbody>
+      <div class="obnotion-container">
+        <div class="obnotion-table-wrap">
+          <table class="obnotion-table"><thead><tr>${tableHeader()}</tr></thead><tbody>
             ${rows}
-            <tr class="db-table-load-more-row"><td colspan="7">
-              <button type="button" class="db-table-load-more-button">Load 20 more</button>
+            <tr class="obnotion-table-load-more-row"><td colspan="7">
+              <button type="button" class="obnotion-table-load-more-button">Load 20 more</button>
             </td></tr>
           </tbody></table>
         </div>

@@ -37,15 +37,15 @@ const app = null as unknown as App;
 
 function cell(value: boolean, readOnly: boolean, caption: string): HTMLElement {
   const wrap = document.createElement("div");
-  wrap.className = "db-story-cell";
+  wrap.className = "obnotion-story-cell";
   const valueEl = document.createElement("div");
   renderCardFieldValue(valueEl, app, row, column, value, "checkbox", {
-    badgesClass: "db-card-badges",
-    linkClass: "db-card-link",
+    badgesClass: "obnotion-card-badges",
+    linkClass: "obnotion-card-link",
     readOnly,
   });
   const label = document.createElement("span");
-  label.className = "db-story-note";
+  label.className = "obnotion-story-note";
   label.textContent = caption;
   wrap.append(valueEl, label);
   return wrap;
@@ -65,7 +65,7 @@ function cell(value: boolean, readOnly: boolean, caption: string): HTMLElement {
 export const States: Story = {
   render: () => {
     const rowEl = document.createElement("div");
-    rowEl.className = "db-story-row";
+    rowEl.className = "obnotion-story-row";
     rowEl.append(
       cell(false, false, "Unchecked"),
       cell(true, false, "Checked"),

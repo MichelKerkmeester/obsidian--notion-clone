@@ -888,7 +888,7 @@ describe("timeline gantt DOM-structure parity", () => {
 
     // GanttLinkHandler.ts toggles only pm-gantt-link-dot--active on the dot itself; it
     // never touches a root-level "linking" class. Both is-active (styles.css scopes it
-    // to .db-timeline-link-dot) and is-linking (scoped to .db-timeline) are local-
+    // to .obnotion-timeline-link-dot) and is-linking (scoped to .obnotion-timeline) are local-
     // extension classes with no matching rule on the pm-gantt-view tree.
     expect(alphaRight.className).toContain("pm-gantt-link-dot--active");
     expect(alphaRight.className).not.toContain("is-active");

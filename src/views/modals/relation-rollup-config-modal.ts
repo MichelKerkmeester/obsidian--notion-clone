@@ -23,7 +23,7 @@ import { t } from "../../i18n";
 import { createDropdownField, DropdownOption } from "../dropdown-field";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "../property-type-icon";
 import { getDatabaseDropdownIcon, renderDatabaseDropdownIcon } from "../record-icon-renderer";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
@@ -54,7 +54,7 @@ export class RelationRollupConfigModal extends DbModal {
 
   onOpen(): void {
     super.onOpen();
-    this.contentEl.addClass("note-database-modal", "db-relation-rollup-config-modal");
+    this.contentEl.addClass("obnotion-modal", "obnotion-relation-rollup-config-modal");
     this.render();
   }
 
@@ -79,9 +79,9 @@ export class RelationRollupConfigModal extends DbModal {
       const changed = Boolean(initialTargetDatabaseId && targetDatabaseId !== initialTargetDatabaseId);
       const impact = changed ? this.getRelationImpact?.(targetDatabaseId) : undefined;
       if (impact) {
-        const notice = impactHost.createDiv({ cls: "db-relation-target-impact" });
+        const notice = impactHost.createDiv({ cls: "obnotion-relation-target-impact" });
         notice.createDiv({
-          cls: "db-relation-target-impact-main",
+          cls: "obnotion-relation-target-impact-main",
           text: t("relation.targetChangeImpact", {
             records: impact.clearRecordCount,
             rollups: impact.dependentRollupCount,
@@ -89,7 +89,7 @@ export class RelationRollupConfigModal extends DbModal {
         });
         if (impact.invalidatedRollupLabels.length > 0) {
           notice.createDiv({
-            cls: "db-relation-target-impact-detail",
+            cls: "obnotion-relation-target-impact-detail",
             text: t("relation.targetChangeInvalidRollups", {
               names: impact.invalidatedRollupLabels.join(", "),
             }),
@@ -114,7 +114,7 @@ export class RelationRollupConfigModal extends DbModal {
       (value) => { targetDatabaseId = value; renderImpact(); },
       renderDatabaseDropdownIcon,
     );
-    impactHost = this.contentEl.createDiv({ cls: "db-relation-target-impact-host" });
+    impactHost = this.contentEl.createDiv({ cls: "obnotion-relation-target-impact-host" });
     saveButton = this.renderActions(async () => {
       if (!targetDatabaseId) {
         new Notice(t("relation.targetDatabaseRequired"));
@@ -131,7 +131,7 @@ export class RelationRollupConfigModal extends DbModal {
       (column) => column.type === "relation" && column.relationConfig?.targetDatabaseId
     );
     if (relationColumns.length === 0) {
-      this.contentEl.createDiv({ cls: "db-empty", text: t("rollup.relationRequired") });
+      this.contentEl.createDiv({ cls: "obnotion-empty", text: t("rollup.relationRequired") });
       this.renderCancelOnly();
       return;
     }
@@ -140,7 +140,7 @@ export class RelationRollupConfigModal extends DbModal {
       : relationColumns[0].key;
     let targetField = this.column.rollupConfig?.targetField || "";
     let aggregation = this.column.rollupConfig?.aggregation || "count";
-    const configHost = this.contentEl.createDiv({ cls: "db-rollup-config-fields" });
+    const configHost = this.contentEl.createDiv({ cls: "obnotion-rollup-config-fields" });
 
     const renderFields = () => {
       configHost.empty();
@@ -241,15 +241,15 @@ export class RelationRollupConfigModal extends DbModal {
     onChange: (value: string) => void,
     renderIcon?: (parent: HTMLElement, icon: string) => boolean,
   ): void {
-    const field = parent.createDiv({ cls: "db-relation-rollup-config-field" });
-    field.createDiv({ cls: "db-relation-rollup-config-label", text: label });
+    const field = parent.createDiv({ cls: "obnotion-relation-rollup-config-field" });
+    field.createDiv({ cls: "obnotion-relation-rollup-config-label", text: label });
     createDropdownField({
       parent: field,
       label,
       value,
       options,
       hideLabel: true,
-      className: "db-relation-rollup-config-dropdown",
+      className: "obnotion-relation-rollup-config-dropdown",
       renderIcon: renderIcon ? (iconParent, icon) => { renderIcon(iconParent, icon); } : undefined,
       onChange,
     });

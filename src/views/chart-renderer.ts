@@ -39,7 +39,7 @@ import { ChartColorPalette, ChartReferenceLine, ChartType, ColumnDef, FilterRule
 import { STATUS_COLORS } from "../data/status-colors";
 import { t } from "../i18n";
 import { isHTMLElement } from "./dom-guards";
-import { DbModal } from "./modals/db-modal";
+import { DbModal } from "./modals/obnotion-modal";
 import { EmptyStateAction, EmptyStateReason, EmptyStateRenderer } from "./empty-state-renderer";
 import type { SurfaceShellRole } from "./surface-shell";
 
@@ -327,7 +327,7 @@ export class ChartRenderer {
 
   clear(container?: HTMLElement): void {
     this.destroyChart();
-    container?.querySelectorAll(".db-chart, .db-chart-empty, .db-chart-number").forEach((el) => el.remove());
+    container?.querySelectorAll(".obnotion-chart, .obnotion-chart-empty, .obnotion-chart-number").forEach((el) => el.remove());
   }
 
   destroy(): void {
@@ -402,8 +402,8 @@ export class ChartRenderer {
 
   private renderChart(container: HTMLElement, result: ChartRenderResult): void {
     const colors = getThemeColors(container);
-    const wrap = this.createChartRoot(container, "db-chart");
-    const canvas = wrap.createEl("canvas", { cls: "db-chart-canvas" });
+    const wrap = this.createChartRoot(container, "obnotion-chart");
+    const canvas = wrap.createEl("canvas", { cls: "obnotion-chart-canvas" });
     const config = this.lastRender?.config;
     const columns = this.lastRender?.columns || [];
     const datasetLabel = getAggregationLabel(config);
@@ -435,7 +435,7 @@ export class ChartRenderer {
     const showTitle = config?.chartShowTitle !== false;
     if (showTitle) {
       wrap.addClass("has-chart-title");
-      wrap.createDiv({ cls: "db-chart-title", text: chartTitle });
+      wrap.createDiv({ cls: "obnotion-chart-title", text: chartTitle });
     }
     this.chartContainer = wrap;
     this.observeContainer(wrap);
@@ -621,14 +621,14 @@ export class ChartRenderer {
     });
   }
 
-  // The outer .db-chart-empty root is kept as the chart view's structural
+  // The outer .obnotion-chart-empty root is kept as the chart view's structural
   // marker — rendered-view-roots.ts's teardown, summary-renderer.ts's
   // after-chart anchor and embedded-database-renderer.ts's stale-view
   // selector all key off it, and none of those files is this leg's to
-  // change. Only the inner card retires the private db-chart-empty-*
+  // change. Only the inner card retires the private obnotion-chart-empty-*
   // vocabulary in favour of the shared EmptyStateRenderer markup.
   private renderEmptyState(container: HTMLElement, reason: ChartEmptyReason): void {
-    const empty = this.createChartRoot(container, "db-chart-empty");
+    const empty = this.createChartRoot(container, "obnotion-chart-empty");
     const actions = this.buildEmptyActions(reason);
     this.emptyStateRenderer.renderCard(empty, {
       reason: mapChartEmptyReason(reason),
@@ -750,21 +750,21 @@ export class ChartRenderer {
     const config = this.lastRender?.config;
     const columns = this.lastRender?.columns || [];
     const point = result.points[0];
-    const wrap = this.createChartRoot(container, "db-chart-number");
+    const wrap = this.createChartRoot(container, "obnotion-chart-number");
     const effectiveConfig = config || createFallbackChartConfig(columns);
     wrap.addClass(getChartHeightClass(effectiveConfig));
     if (config?.chartShowTitle !== false) {
-      wrap.createDiv({ cls: "db-chart-number-label", text: getChartTitle(effectiveConfig, columns) });
+      wrap.createDiv({ cls: "obnotion-chart-number-label", text: getChartTitle(effectiveConfig, columns) });
     } else {
-      wrap.createDiv({ cls: "db-chart-number-label", text: getAggregationLabel(config) });
+      wrap.createDiv({ cls: "obnotion-chart-number-label", text: getAggregationLabel(config) });
     }
-    wrap.createDiv({ cls: "db-chart-number-value", text: formatChartNumber(point?.value ?? 0, config, columns) });
-    wrap.createDiv({ cls: "db-chart-number-caption", text: getChartTypeLabel(config?.chartType) });
+    wrap.createDiv({ cls: "obnotion-chart-number-value", text: formatChartNumber(point?.value ?? 0, config, columns) });
+    wrap.createDiv({ cls: "obnotion-chart-number-caption", text: getChartTypeLabel(config?.chartType) });
   }
 
   private createChartRoot(container: HTMLElement, cls: string): HTMLElement {
     const root = container.createDiv({ cls });
-    const summary = container.querySelector(":scope > .db-summary");
+    const summary = container.querySelector(":scope > .obnotion-summary");
     if (summary?.parentElement) summary.parentElement.insertBefore(root, summary);
     return root;
   }
@@ -933,7 +933,7 @@ export class ChartRenderer {
     const container = snapshot?.container;
     if (!snapshot || !container?.isConnected) return null;
     const title = getChartTitle(snapshot.config, snapshot.config.schema.columns);
-    const canvas = container.querySelector(".db-chart-canvas");
+    const canvas = container.querySelector(".obnotion-chart-canvas");
     if (isCanvasElement(canvas)) {
       return {
         dataUrl: canvas.toDataURL("image/png"),
@@ -942,7 +942,7 @@ export class ChartRenderer {
         title,
       };
     }
-    const numberCard = container.querySelector(".db-chart-number");
+    const numberCard = container.querySelector(".obnotion-chart-number");
     if (isHTMLElement(numberCard)) {
       const dataUrl = this.renderNumberCardToPng(numberCard);
       if (!dataUrl) return null;
@@ -972,9 +972,9 @@ export class ChartRenderer {
     const ctx = canvas.getContext("2d");
     if (!ctx) return null;
     const colors = getThemeColors(card);
-    const label = card.querySelector(".db-chart-number-label")?.textContent || "";
-    const value = card.querySelector(".db-chart-number-value")?.textContent || "";
-    const caption = card.querySelector(".db-chart-number-caption")?.textContent || "";
+    const label = card.querySelector(".obnotion-chart-number-label")?.textContent || "";
+    const value = card.querySelector(".obnotion-chart-number-value")?.textContent || "";
+    const caption = card.querySelector(".obnotion-chart-number-caption")?.textContent || "";
     ctx.fillStyle = colors.background;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.textAlign = "center";
@@ -1025,13 +1025,13 @@ class ChartDrilldownModal extends DbModal {
     super.onOpen();
     const { contentEl } = this;
     contentEl.empty();
-    contentEl.addClass("db-chart-drilldown-modal");
-    const header = contentEl.createDiv({ cls: "db-chart-drilldown-header" });
+    contentEl.addClass("obnotion-chart-drilldown-modal");
+    const header = contentEl.createDiv({ cls: "obnotion-chart-drilldown-header" });
     header.createEl("h2", { text: this.options.title });
-    header.createDiv({ cls: "db-chart-drilldown-group", text: this.options.groupLabel });
-    contentEl.createDiv({ cls: "db-chart-drilldown-summary", text: t("chart.drilldownSummary", { count: String(this.options.rows.length) }) });
-    const tableWrap = contentEl.createDiv({ cls: "db-chart-drilldown-table-wrap" });
-    const table = tableWrap.createEl("table", { cls: "db-chart-drilldown-table" });
+    header.createDiv({ cls: "obnotion-chart-drilldown-group", text: this.options.groupLabel });
+    contentEl.createDiv({ cls: "obnotion-chart-drilldown-summary", text: t("chart.drilldownSummary", { count: String(this.options.rows.length) }) });
+    const tableWrap = contentEl.createDiv({ cls: "obnotion-chart-drilldown-table-wrap" });
+    const table = tableWrap.createEl("table", { cls: "obnotion-chart-drilldown-table" });
     const thead = table.createEl("thead");
     const headerRow = thead.createEl("tr");
     headerRow.createEl("th", { text: t("chart.drilldownFile") });
@@ -1042,12 +1042,12 @@ class ChartDrilldownModal extends DbModal {
     }
     const tbody = table.createEl("tbody");
     for (const row of this.options.rows.slice(0, 100)) {
-      const item = tbody.createEl("tr", { cls: "db-chart-drilldown-row" });
-      const name = item.createEl("td", { cls: "db-chart-drilldown-name", text: row.file.basename || row.file.name.replace(/\.md$/i, "") });
-      item.createEl("td", { cls: "db-chart-drilldown-path", text: row.file.path });
-      item.createEl("td", { cls: "db-chart-drilldown-cell-value", text: formatChartDrilldownCellValue(row, this.options.primaryField, this.options.primaryColumn) });
+      const item = tbody.createEl("tr", { cls: "obnotion-chart-drilldown-row" });
+      const name = item.createEl("td", { cls: "obnotion-chart-drilldown-name", text: row.file.basename || row.file.name.replace(/\.md$/i, "") });
+      item.createEl("td", { cls: "obnotion-chart-drilldown-path", text: row.file.path });
+      item.createEl("td", { cls: "obnotion-chart-drilldown-cell-value", text: formatChartDrilldownCellValue(row, this.options.primaryField, this.options.primaryColumn) });
       if (this.options.seriesField) {
-        item.createEl("td", { cls: "db-chart-drilldown-cell-value", text: formatChartDrilldownCellValue(row, this.options.seriesField, this.options.seriesColumn) });
+        item.createEl("td", { cls: "obnotion-chart-drilldown-cell-value", text: formatChartDrilldownCellValue(row, this.options.seriesField, this.options.seriesColumn) });
       }
       name.onclick = () => {
         void this.app.workspace.openLinkText(row.file.path, "", false);
@@ -1055,9 +1055,9 @@ class ChartDrilldownModal extends DbModal {
       };
     }
     if (this.options.rows.length > 100) {
-      contentEl.createDiv({ cls: "db-chart-drilldown-more", text: t("chart.drilldownMore", { count: String(this.options.rows.length - 100) }) });
+      contentEl.createDiv({ cls: "obnotion-chart-drilldown-more", text: t("chart.drilldownMore", { count: String(this.options.rows.length - 100) }) });
     }
-    const actions = contentEl.createDiv({ cls: "db-chart-drilldown-actions" });
+    const actions = contentEl.createDiv({ cls: "obnotion-chart-drilldown-actions" });
     const filterButton = actions.createEl("button", { cls: "mod-cta", text: t("chart.applyFilter") });
     filterButton.onclick = () => {
       this.options.applyFilter();
@@ -1153,7 +1153,7 @@ function createDataLabelsPlugin(
   options: { placeInsideBars?: boolean; isHorizontal?: boolean; percentByCategory?: boolean } = {},
 ): Plugin {
   return {
-    id: "noteDatabaseDataLabels",
+    id: "obnotionDataLabels",
     afterDatasetsDraw(chart) {
       if (!enabled) return;
       const ctx = chart.ctx;
@@ -1331,7 +1331,7 @@ function createDonutCenterPlugin(
   colors: ThemeColors,
 ): DonutCenterPlugin {
   return {
-    id: "noteDatabaseDonutCenter",
+    id: "obnotionDonutCenter",
     mode,
     afterDraw(chart) {
       if (mode === "hidden" || value == null) return;
@@ -1480,7 +1480,7 @@ function getReferenceLineDefaultLabel(
 
 function createReferenceLinesPlugin(lines: ResolvedReferenceLine[], isHorizontal: boolean, colors: ThemeColors): Plugin {
   return {
-    id: "noteDatabaseReferenceLines",
+    id: "obnotionReferenceLines",
     afterDatasetsDraw(chart) {
       const scale = isHorizontal ? chart.scales.x : chart.scales.y;
       const categoryScale = isHorizontal ? chart.scales.y : chart.scales.x;

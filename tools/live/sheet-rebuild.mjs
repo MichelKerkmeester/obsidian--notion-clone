@@ -548,7 +548,7 @@ try {
     // taken. Same gate, one more condition, and the condition is the one the race lives in.
     const hit = await page
       .waitForFunction(() => {
-        const handle = document.querySelector(".db-mobile-bottom-sheet-handle");
+        const handle = document.querySelector(".obnotion-mobile-bottom-sheet-handle");
         if (!handle) return null;
         const box = handle.getBoundingClientRect();
         if (box.width === 0 || box.height === 0) return null;
@@ -576,7 +576,7 @@ try {
     // is about a moment that has already passed by the time the cursor is actually here.
     const onBar = await page.evaluate(([x, y]) => {
       const el = document.elementFromPoint(x, y);
-      return Boolean(el && el.classList.contains("db-mobile-bottom-sheet-handle"));
+      return Boolean(el && el.classList.contains("obnotion-mobile-bottom-sheet-handle"));
     }, [centreX, centreY]);
     if (!onBar) {
       return { staged: false, closed: false, detail: "the bar moved out from under the cursor between the hit test and the press" };
@@ -641,7 +641,7 @@ try {
     // missing grab band on a sheet whose bar was merely off-screen.
     const settled = await page
       .waitForFunction(() => {
-        const handle = document.querySelector(".db-view-config-panel .db-mobile-bottom-sheet-handle");
+        const handle = document.querySelector(".obnotion-view-config-panel .obnotion-mobile-bottom-sheet-handle");
         if (!handle) return false;
         const y = handle.getBoundingClientRect().y;
         const still = window.__lastReachY !== undefined && Math.abs(window.__lastReachY - y) < 0.5;
@@ -836,7 +836,7 @@ try {
   // 0px inset reports a fully-run entrance as "instant" for measuring the wrong start line, not for
   // any regression in the entrance itself.
   const restingBottom = await page.evaluate(() => {
-    const panel = window.__addRowProbe().open ? document.querySelector(".db-mobile-bottom-sheet") : null;
+    const panel = window.__addRowProbe().open ? document.querySelector(".obnotion-mobile-bottom-sheet") : null;
     return panel ? Number.parseFloat(getComputedStyle(panel).bottom) || 0 : 0;
   });
   const startedBelow = openTrack.length > 0 && Math.max(...openTrack) >= floor - restingBottom - 1;

@@ -8,11 +8,11 @@
  * single cell rather than around the grid.
  *
  * Every class here was read off the renderer that emits it. Where a renderer writes into a
- * `<td>` the fixture puts it in a real `db-table` row, because the shipped rules for those
- * values are scoped through `.note-database-container` and, for numbers and badges, read
+ * `<td>` the fixture puts it in a real `obnotion-table` row, because the shipped rules for those
+ * values are scoped through `.obnotion-container` and, for numbers and badges, read
  * custom properties that only the container (or a picker root listed alongside it) declares.
  *
- * Two roots are deliberately NOT wrapped in `.note-database-container`: the icon picker and
+ * Two roots are deliberately NOT wrapped in `.obnotion-container`: the icon picker and
  * the option colour picker. Both are created on `document.body` at runtime, and the
  * stylesheet names them alongside the container when it declares the design tokens, so the
  * faithful fixture is a top-level element rather than a nested one.
@@ -85,17 +85,17 @@ const COLORS = [
   "red", "slate", "cyan", "teal", "lime", "indigo", "violet", "rose",
 ];
 
-/* `.db-cell-edit-popover`, `.db-cell-option-popover` and the date popover are all placed
+/* `.obnotion-cell-edit-popover`, `.obnotion-cell-option-popover` and the date popover are all placed
    absolutely against the cell they belong to. Nothing anchors them in a capture, so they
    leave the flow and the shot collapses to the table alone. The margin only separates two
    distinct surfaces sharing one frame; nothing inside either popover is restyled. */
-const STATIC_POPOVERS = `.note-database-container .db-cell-edit-popover,
-.note-database-container .db-cell-option-popover {
+const STATIC_POPOVERS = `.obnotion-container .obnotion-cell-edit-popover,
+.obnotion-container .obnotion-cell-option-popover {
   position: static !important; top: auto !important; left: auto !important;
   margin-top: 12px !important;
 }`;
 
-const STATIC_DATE_POPOVER = `.note-database-container .db-cell-edit-popover {
+const STATIC_DATE_POPOVER = `.obnotion-container .obnotion-cell-edit-popover {
   position: static !important; top: auto !important; left: auto !important;
   margin-top: 12px !important;
 }`;
@@ -106,53 +106,53 @@ const STATIC_DATE_POPOVER = `.note-database-container .db-cell-edit-popover {
 
 /** A `<th>` built the way ColumnHeaderController builds one. */
 const th = (label, icon) => `
-  <th data-note-database-column-key="${label.toLowerCase()}"><div class="db-th-content">
-    <span class="db-property-icon">${ICONS[icon] || ""}</span>
-    <span class="db-th-label">${label}</span>
-    <button type="button" class="db-column-menu-trigger" aria-label="Open ${label} menu">${dots}</button>
+  <th data-obnotion-column-key="${label.toLowerCase()}"><div class="obnotion-th-content">
+    <span class="obnotion-property-icon">${ICONS[icon] || ""}</span>
+    <span class="obnotion-th-label">${label}</span>
+    <button type="button" class="obnotion-column-menu-trigger" aria-label="Open ${label} menu">${dots}</button>
   </div></th>`;
 
 /** One rating slot: a faint base glyph with an accent overlay clipped to `fill`. */
 const ratingStar = (fill, symbol = I.star) => `
-  <span class="db-rating-star">
-    <span class="db-rating-star-bg">${glyph(symbol)}</span>
-    <span class="db-rating-star-fg" style="width:${fill}%">${glyph(symbol)}</span>
+  <span class="obnotion-rating-star">
+    <span class="obnotion-rating-star-bg">${glyph(symbol)}</span>
+    <span class="obnotion-rating-star-fg" style="width:${fill}%">${glyph(symbol)}</span>
   </span>`;
 
 const ratingEmojiStar = (fill, emoji) => `
-  <span class="db-rating-star">
-    <span class="db-rating-star-bg"><span class="db-rating-emoji">${emoji}</span></span>
-    <span class="db-rating-star-fg" style="width:${fill}%"><span class="db-rating-emoji">${emoji}</span></span>
+  <span class="obnotion-rating-star">
+    <span class="obnotion-rating-star-bg"><span class="obnotion-rating-emoji">${emoji}</span></span>
+    <span class="obnotion-rating-star-fg" style="width:${fill}%"><span class="obnotion-rating-emoji">${emoji}</span></span>
   </span>`;
 
 const rating = (slots, extra = "", symbol) => `
-  <span class="db-cell-rating db-numeric-value${extra}">${slots.map((s) => ratingStar(s, symbol)).join("")}</span>`;
+  <span class="obnotion-cell-rating obnotion-numeric-value${extra}">${slots.map((s) => ratingStar(s, symbol)).join("")}</span>`;
 
 const progress = (percent, text, color) => `
-  <div class="db-cell-progress db-numeric-value${color ? ` db-num-color-${color}` : ""}">
-    <div class="db-cell-progress-track"><div class="db-cell-progress-fill" style="width:${percent}%"></div></div>
-    <span class="db-cell-progress-text">${text}</span>
+  <div class="obnotion-cell-progress obnotion-numeric-value${color ? ` obnotion-num-color-${color}` : ""}">
+    <div class="obnotion-cell-progress-track"><div class="obnotion-cell-progress-fill" style="width:${percent}%"></div></div>
+    <span class="obnotion-cell-progress-text">${text}</span>
   </div>`;
 
 /* r=9 → circumference 2πr = 56.549; the dash offset hides the unfilled remainder. */
 const RING_CIRCUMFERENCE = 56.549;
 const ring = (percent, text, color) => `
-  <span class="db-cell-progress-ring db-numeric-value${color ? ` db-num-color-${color}` : ""}">
+  <span class="obnotion-cell-progress-ring obnotion-numeric-value${color ? ` obnotion-num-color-${color}` : ""}">
     <svg viewBox="0 0 24 24" width="20" height="20">
-      <circle class="db-progress-ring-track" cx="12" cy="12" r="9" fill="none" stroke-width="4"></circle>
-      <circle class="db-progress-ring-arc" cx="12" cy="12" r="9" fill="none" stroke-width="4" stroke-linecap="round"
+      <circle class="obnotion-progress-ring-track" cx="12" cy="12" r="9" fill="none" stroke-width="4"></circle>
+      <circle class="obnotion-progress-ring-arc" cx="12" cy="12" r="9" fill="none" stroke-width="4" stroke-linecap="round"
         stroke-dasharray="${RING_CIRCUMFERENCE}" stroke-dashoffset="${(RING_CIRCUMFERENCE * (1 - percent / 100)).toFixed(3)}"
         transform="rotate(-90 12 12)"></circle>
     </svg>
-    <span class="db-progress-ring-text">${text}</span>
+    <span class="obnotion-progress-ring-text">${text}</span>
   </span>`;
 
 /** A relation chip. Resolved targets get `file-text`; unresolved ones get `alert-triangle`. */
 const relationLink = (label, resolved) => `
-  <a href="#" class="db-relation-link internal-link${resolved ? "" : " is-unresolved"}"
+  <a href="#" class="obnotion-relation-link internal-link${resolved ? "" : " is-unresolved"}"
      title="${resolved ? label : "Note not found in vault"}">
-    <span class="db-relation-link-icon">${glyph(resolved ? '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>' : I.alertTriangle)}</span>
-    <span class="db-relation-link-label">${label}</span>
+    <span class="obnotion-relation-link-icon">${glyph(resolved ? '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>' : I.alertTriangle)}</span>
+    <span class="obnotion-relation-link-label">${label}</span>
   </a>`;
 
 /* One option row in the select editor, in the order CellRenderer builds it.
@@ -160,26 +160,26 @@ const relationLink = (label, resolved) => `
    inside it as <button>s too. The DOM API allows that nesting; the HTML parser does not —
    a nested <button> start tag closes the outer one, which would split the row into two
    siblings. The inner controls are therefore spans here. Every rule that paints them
-   (`.db-option-delete`, `.db-mobile-reorder-controls`) selects on class alone, so the
+   (`.obnotion-option-delete`, `.obnotion-mobile-reorder-controls`) selects on class alone, so the
    capture is unchanged; only the tag names differ from the live DOM.
 
-   The row shell is `menu-row.ts`'s: `db-menu-item` alongside the editor's own class, the
+   The row shell is `menu-row.ts`'s: `obnotion-menu-item` alongside the editor's own class, the
    checkable role and state on the row rather than on the check glyph, and the label carrying
    the builder's class as well as the editor's. That class list is not cosmetic here — the
-   icon-slot spacer keyed to `.db-menu-item` with no icon child paints in this row, so a
+   icon-slot spacer keyed to `.obnotion-menu-item` with no icon child paints in this row, so a
    fixture that omits the class photographs a row the plugin no longer builds. */
 const optionRow = (value, color, checked, transient) => `
-  <button type="button" class="db-menu-item db-cell-option-item${checked ? " is-selected" : ""}"
+  <button type="button" class="obnotion-menu-item obnotion-cell-option-item${checked ? " is-selected" : ""}"
     role="menuitemcheckbox" aria-checked="${checked ? "true" : "false"}">
-    <span class="db-option-drag-handle${transient ? " is-hidden" : ""}">⠿</span>
-    <span class="db-mobile-reorder-controls${transient ? " is-hidden" : ""}">
+    <span class="obnotion-option-drag-handle${transient ? " is-hidden" : ""}">⠿</span>
+    <span class="obnotion-mobile-reorder-controls${transient ? " is-hidden" : ""}">
       <span aria-label="Move up">${glyph(I.arrowUp)}</span>
       <span aria-label="Move down">${glyph(I.arrowDown)}</span>
     </span>
-    <span class="db-option-color-dot db-option-color-${color}"></span>
-    <span class="db-menu-item-label db-option-label">${value}</span>
-    <span class="db-option-check">${checked ? glyph(I.check) : ""}</span>
-    <span class="db-option-delete" role="button" aria-label="${transient ? "Add option" : "Delete"}"
+    <span class="obnotion-option-color-dot obnotion-option-color-${color}"></span>
+    <span class="obnotion-menu-item-label obnotion-option-label">${value}</span>
+    <span class="obnotion-option-check">${checked ? glyph(I.check) : ""}</span>
+    <span class="obnotion-option-delete" role="button" aria-label="${transient ? "Add option" : "Delete"}"
       >${glyph(transient ? I.plus : I.trash)}</span>
   </button>`;
 
@@ -196,15 +196,15 @@ const AUGUST_2026 = [
 
 function miniCalendarDays() {
   return AUGUST_2026.map((week) => `
-    <div class="db-calendar-mini-week" role="row">${week.map(([day, outside]) => {
+    <div class="obnotion-calendar-mini-week" role="row">${week.map(([day, outside]) => {
       const selected = !outside && day === 21;
       const today = !outside && day === 28;
-      const cls = ["db-calendar-mini-day", outside ? "is-outside" : "", today ? "is-today" : "", selected ? "is-selected" : ""]
+      const cls = ["obnotion-calendar-mini-day", outside ? "is-outside" : "", today ? "is-today" : "", selected ? "is-selected" : ""]
         .filter(Boolean).join(" ");
       return `
       <button type="button" role="gridcell" class="${cls}" aria-selected="${selected}"${today ? ' aria-current="date"' : ""}>
-        <span class="db-calendar-mini-day-num">${day}</span>
-        <span class="db-calendar-mini-day-dot"></span>
+        <span class="obnotion-calendar-mini-day-num">${day}</span>
+        <span class="obnotion-calendar-mini-day-dot"></span>
       </button>`;
     }).join("")}</div>`).join("");
 }
@@ -223,30 +223,30 @@ export const FIELDS_SCENARIOS = [
     width: 560,
     fixtureOf: "constructed-cell-editor-text",
     sources: ["src/views/cell-renderer.ts", "src/views/record-surface/cell-editor-text.ts", "src/views/record-surface/cell-editor-number.ts"],
-    note: "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
+    note: "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with obnotion-cell-editing (the accent inset); the single-line one marks its cell with obnotion-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
     captureCss: STATIC_POPOVERS,
     html: () => `
-      <div class="note-database-container">
-        <table class="db-table">
+      <div class="obnotion-container">
+        <table class="obnotion-table">
           <thead><tr>${th("Name", "file-text")}${th("Notes", "file-text")}${th("Cost", "hash")}</tr></thead>
           <tbody><tr>
-            <td class="db-cell db-title-cell db-editable-cell"><a class="internal-link" href="#"><span class="db-file-title-inline"><span class="db-file-title-name">Figma</span></span></a></td>
-            <td class="db-cell db-editable-cell db-cell-editing">Team seat, annual plan.</td>
-            <td class="db-cell db-editable-cell db-numeric-value db-cell-popover-editing">18.75</td>
+            <td class="obnotion-cell obnotion-title-cell obnotion-editable-cell"><a class="internal-link" href="#"><span class="obnotion-file-title-inline"><span class="obnotion-file-title-name">Figma</span></span></a></td>
+            <td class="obnotion-cell obnotion-editable-cell obnotion-cell-editing">Team seat, annual plan.</td>
+            <td class="obnotion-cell obnotion-editable-cell obnotion-numeric-value obnotion-cell-popover-editing">18.75</td>
           </tr></tbody>
         </table>
 
-        <div class="db-cell-edit-popover" data-note-database-editor-kind="text">
-          <div class="db-md-toolbar">
+        <div class="obnotion-cell-edit-popover" data-obnotion-editor-kind="text">
+          <div class="obnotion-md-toolbar">
             ${[I.bold, I.italic, I.strike, I.highlighter, I.code, I.sigma, I.link, I.fileSymlink]
-              .map((d) => `<button type="button" class="db-md-toolbar-btn"><svg class="svg-icon" viewBox="0 0 24 24" width="16" height="16"
+              .map((d) => `<button type="button" class="obnotion-md-toolbar-btn"><svg class="svg-icon" viewBox="0 0 24 24" width="16" height="16"
                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg></button>`).join("")}
           </div>
-          <textarea class="db-cell-textarea" rows="2">Team seat, **annual** plan. Renews with the [[Design tooling]] budget.</textarea>
+          <textarea class="obnotion-cell-textarea" rows="2">Team seat, **annual** plan. Renews with the [[Design tooling]] budget.</textarea>
         </div>
 
-        <div class="db-cell-edit-popover db-cell-line-edit-popover" data-note-database-editor-kind="number">
-          <input type="number" step="any" class="db-cell-line-input" value="18.75">
+        <div class="obnotion-cell-edit-popover obnotion-cell-line-edit-popover" data-obnotion-editor-kind="number">
+          <input type="number" step="any" class="obnotion-cell-line-input" value="18.75">
         </div>
       </div>`,
   },
@@ -260,22 +260,22 @@ export const FIELDS_SCENARIOS = [
     note: "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
     captureCss: STATIC_POPOVERS,
     html: () => `
-      <div class="note-database-container">
-        <table class="db-table">
+      <div class="obnotion-container">
+        <table class="obnotion-table">
           <thead><tr>${th("Name", "file-text")}${th("Category", "circle-dot")}</tr></thead>
           <tbody><tr>
-            <td class="db-cell db-title-cell db-editable-cell"><a class="internal-link" href="#"><span class="db-file-title-inline"><span class="db-file-title-name">Adobe CC</span></span></a></td>
-            <td class="db-cell db-editable-cell db-cell-editing">${optionPill("Business")}</td>
+            <td class="obnotion-cell obnotion-title-cell obnotion-editable-cell"><a class="internal-link" href="#"><span class="obnotion-file-title-inline"><span class="obnotion-file-title-name">Adobe CC</span></span></a></td>
+            <td class="obnotion-cell obnotion-editable-cell obnotion-cell-editing">${optionPill("Business")}</td>
           </tr></tbody>
         </table>
 
-        <div class="db-cell-option-popover">
+        <div class="obnotion-cell-option-popover">
           ${optionRow("Business", "blue", true, false)}
           ${optionRow("Personal", "green", false, false)}
           ${optionRow("Shared", "orange", false, false)}
           ${optionRow("Archive", "gray", false, true)}
-          <div class="db-cell-option-add"><input type="text" placeholder="Add option"></div>
-          <div class="db-panel-header-actions"><button type="button" class="db-panel-button">Clear</button></div>
+          <div class="obnotion-cell-option-add"><input type="text" placeholder="Add option"></div>
+          <div class="obnotion-panel-header-actions"><button type="button" class="obnotion-panel-button">Clear</button></div>
         </div>
       </div>`,
   },
@@ -289,38 +289,38 @@ export const FIELDS_SCENARIOS = [
     note: "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
     captureCss: STATIC_DATE_POPOVER,
     html: () => `
-      <div class="note-database-container">
-        <button type="button" class="db-date-value-field" aria-haspopup="dialog" aria-expanded="true" aria-label="Value">
-          <span class="db-date-value-field-icon">${glyph(I.calendarDays)}</span>
-          <span class="db-date-value-field-text">2026-08-21</span>
+      <div class="obnotion-container">
+        <button type="button" class="obnotion-date-value-field" aria-haspopup="dialog" aria-expanded="true" aria-label="Value">
+          <span class="obnotion-date-value-field-icon">${glyph(I.calendarDays)}</span>
+          <span class="obnotion-date-value-field-text">2026-08-21</span>
         </button>
 
-        <div class="db-cell-edit-popover db-date-edit-popover db-date-value-popover" role="dialog" aria-label="Value">
-          <div class="db-date-presets" role="group" aria-label="Quick dates">
-            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Today</span><span class="db-date-preset-subline">August 21</span></button>
-            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Tomorrow</span><span class="db-date-preset-subline">August 22</span></button>
-            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Next week</span><span class="db-date-preset-subline">August 28</span></button>
-            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Clear</span></button>
+        <div class="obnotion-cell-edit-popover obnotion-date-edit-popover obnotion-date-value-popover" role="dialog" aria-label="Value">
+          <div class="obnotion-date-presets" role="group" aria-label="Quick dates">
+            <button type="button" class="obnotion-date-preset"><span class="obnotion-date-preset-label">Today</span><span class="obnotion-date-preset-subline">August 21</span></button>
+            <button type="button" class="obnotion-date-preset"><span class="obnotion-date-preset-label">Tomorrow</span><span class="obnotion-date-preset-subline">August 22</span></button>
+            <button type="button" class="obnotion-date-preset"><span class="obnotion-date-preset-label">Next week</span><span class="obnotion-date-preset-subline">August 28</span></button>
+            <button type="button" class="obnotion-date-preset"><span class="obnotion-date-preset-label">Clear</span></button>
           </div>
-          <div class="db-date-segments">
-            <input class="db-date-seg" maxlength="4" inputmode="numeric" placeholder="YYYY" aria-label="YYYY" value="2026">
-            <span class="db-date-sep">-</span>
-            <input class="db-date-seg" maxlength="2" inputmode="numeric" placeholder="MM" aria-label="MM" value="08">
-            <span class="db-date-sep">-</span>
-            <input class="db-date-seg" maxlength="2" inputmode="numeric" placeholder="DD" aria-label="DD" value="21">
+          <div class="obnotion-date-segments">
+            <input class="obnotion-date-seg" maxlength="4" inputmode="numeric" placeholder="YYYY" aria-label="YYYY" value="2026">
+            <span class="obnotion-date-sep">-</span>
+            <input class="obnotion-date-seg" maxlength="2" inputmode="numeric" placeholder="MM" aria-label="MM" value="08">
+            <span class="obnotion-date-sep">-</span>
+            <input class="obnotion-date-seg" maxlength="2" inputmode="numeric" placeholder="DD" aria-label="DD" value="21">
           </div>
-          <div class="db-calendar-mini-popover db-cell-date-picker">
-            <div class="db-calendar-mini-head">
-              <button type="button" class="db-calendar-mini-nav" aria-label="Previous month">${glyph(I.chevronLeft)}</button>
-              <button type="button" class="db-calendar-mini-title db-calendar-mini-title-button">August 2026</button>
-              <button type="button" class="db-calendar-mini-nav" aria-label="Next month">${glyph(I.chevronRight)}</button>
+          <div class="obnotion-calendar-mini-popover obnotion-cell-date-picker">
+            <div class="obnotion-calendar-mini-head">
+              <button type="button" class="obnotion-calendar-mini-nav" aria-label="Previous month">${glyph(I.chevronLeft)}</button>
+              <button type="button" class="obnotion-calendar-mini-title obnotion-calendar-mini-title-button">August 2026</button>
+              <button type="button" class="obnotion-calendar-mini-nav" aria-label="Next month">${glyph(I.chevronRight)}</button>
             </div>
-            <div class="db-calendar-mini-weekdays" role="row">
-              ${WEEKDAYS.map((d) => `<div class="db-calendar-mini-weekday" role="columnheader">${d}</div>`).join("")}
+            <div class="obnotion-calendar-mini-weekdays" role="row">
+              ${WEEKDAYS.map((d) => `<div class="obnotion-calendar-mini-weekday" role="columnheader">${d}</div>`).join("")}
             </div>
-            <div class="db-calendar-mini-grid" role="grid" aria-label="August 2026">${miniCalendarDays()}</div>
-            <div class="db-calendar-mini-footer">
-              <button type="button" class="db-calendar-mini-today">Today</button>
+            <div class="obnotion-calendar-mini-grid" role="grid" aria-label="August 2026">${miniCalendarDays()}</div>
+            <div class="obnotion-calendar-mini-footer">
+              <button type="button" class="obnotion-calendar-mini-today">Today</button>
             </div>
           </div>
         </div>
@@ -336,42 +336,42 @@ export const FIELDS_SCENARIOS = [
     note: "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
     captureCss: STATIC_DATE_POPOVER,
     html: () => `
-      <div class="note-database-container">
-        <button type="button" class="db-date-value-field" aria-haspopup="dialog" aria-expanded="true" aria-label="Value">
-          <span class="db-date-value-field-icon">${glyph(I.calendarClock)}</span>
-          <span class="db-date-value-field-text">2026-08-21 09:30</span>
+      <div class="obnotion-container">
+        <button type="button" class="obnotion-date-value-field" aria-haspopup="dialog" aria-expanded="true" aria-label="Value">
+          <span class="obnotion-date-value-field-icon">${glyph(I.calendarClock)}</span>
+          <span class="obnotion-date-value-field-text">2026-08-21 09:30</span>
         </button>
 
-        <div class="db-cell-edit-popover db-date-edit-popover db-date-value-popover is-datetime" role="dialog" aria-label="Value">
-          <div class="db-date-presets" role="group" aria-label="Quick dates">
-            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Today</span><span class="db-date-preset-subline">August 21</span></button>
-            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Tomorrow</span><span class="db-date-preset-subline">August 22</span></button>
-            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Next week</span><span class="db-date-preset-subline">August 28</span></button>
-            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Clear</span></button>
+        <div class="obnotion-cell-edit-popover obnotion-date-edit-popover obnotion-date-value-popover is-datetime" role="dialog" aria-label="Value">
+          <div class="obnotion-date-presets" role="group" aria-label="Quick dates">
+            <button type="button" class="obnotion-date-preset"><span class="obnotion-date-preset-label">Today</span><span class="obnotion-date-preset-subline">August 21</span></button>
+            <button type="button" class="obnotion-date-preset"><span class="obnotion-date-preset-label">Tomorrow</span><span class="obnotion-date-preset-subline">August 22</span></button>
+            <button type="button" class="obnotion-date-preset"><span class="obnotion-date-preset-label">Next week</span><span class="obnotion-date-preset-subline">August 28</span></button>
+            <button type="button" class="obnotion-date-preset"><span class="obnotion-date-preset-label">Clear</span></button>
           </div>
-          <div class="db-date-segments">
-            <input class="db-date-seg" maxlength="4" inputmode="numeric" placeholder="YYYY" aria-label="YYYY" value="2026">
-            <span class="db-date-sep">-</span>
-            <input class="db-date-seg" maxlength="2" inputmode="numeric" placeholder="MM" aria-label="MM" value="08">
-            <span class="db-date-sep">-</span>
-            <input class="db-date-seg" maxlength="2" inputmode="numeric" placeholder="DD" aria-label="DD" value="21">
-            <span class="db-date-sep db-time-sep"> </span>
-            <input class="db-date-seg db-time-seg db-hour-seg" maxlength="2" inputmode="numeric" placeholder="HH" aria-label="HH" value="09">
-            <span class="db-date-sep db-time-colon">:</span>
-            <input class="db-date-seg db-time-seg db-minute-seg" maxlength="2" inputmode="numeric" placeholder="mm" aria-label="Minute" value="30">
+          <div class="obnotion-date-segments">
+            <input class="obnotion-date-seg" maxlength="4" inputmode="numeric" placeholder="YYYY" aria-label="YYYY" value="2026">
+            <span class="obnotion-date-sep">-</span>
+            <input class="obnotion-date-seg" maxlength="2" inputmode="numeric" placeholder="MM" aria-label="MM" value="08">
+            <span class="obnotion-date-sep">-</span>
+            <input class="obnotion-date-seg" maxlength="2" inputmode="numeric" placeholder="DD" aria-label="DD" value="21">
+            <span class="obnotion-date-sep obnotion-time-sep"> </span>
+            <input class="obnotion-date-seg obnotion-time-seg obnotion-hour-seg" maxlength="2" inputmode="numeric" placeholder="HH" aria-label="HH" value="09">
+            <span class="obnotion-date-sep obnotion-time-colon">:</span>
+            <input class="obnotion-date-seg obnotion-time-seg obnotion-minute-seg" maxlength="2" inputmode="numeric" placeholder="mm" aria-label="Minute" value="30">
           </div>
-          <div class="db-calendar-mini-popover db-cell-date-picker">
-            <div class="db-calendar-mini-head">
-              <button type="button" class="db-calendar-mini-nav" aria-label="Previous month">${glyph(I.chevronLeft)}</button>
-              <button type="button" class="db-calendar-mini-title db-calendar-mini-title-button">August 2026</button>
-              <button type="button" class="db-calendar-mini-nav" aria-label="Next month">${glyph(I.chevronRight)}</button>
+          <div class="obnotion-calendar-mini-popover obnotion-cell-date-picker">
+            <div class="obnotion-calendar-mini-head">
+              <button type="button" class="obnotion-calendar-mini-nav" aria-label="Previous month">${glyph(I.chevronLeft)}</button>
+              <button type="button" class="obnotion-calendar-mini-title obnotion-calendar-mini-title-button">August 2026</button>
+              <button type="button" class="obnotion-calendar-mini-nav" aria-label="Next month">${glyph(I.chevronRight)}</button>
             </div>
-            <div class="db-calendar-mini-weekdays" role="row">
-              ${WEEKDAYS.map((d) => `<div class="db-calendar-mini-weekday" role="columnheader">${d}</div>`).join("")}
+            <div class="obnotion-calendar-mini-weekdays" role="row">
+              ${WEEKDAYS.map((d) => `<div class="obnotion-calendar-mini-weekday" role="columnheader">${d}</div>`).join("")}
             </div>
-            <div class="db-calendar-mini-grid" role="grid" aria-label="August 2026">${miniCalendarDays()}</div>
-            <div class="db-calendar-mini-footer">
-              <button type="button" class="db-calendar-mini-today">Today</button>
+            <div class="obnotion-calendar-mini-grid" role="grid" aria-label="August 2026">${miniCalendarDays()}</div>
+            <div class="obnotion-calendar-mini-footer">
+              <button type="button" class="obnotion-calendar-mini-today">Today</button>
             </div>
           </div>
         </div>
@@ -387,10 +387,10 @@ export const FIELDS_SCENARIOS = [
     note: "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
     // Fixed to the viewport and anchored to the icon it was opened from. Nothing anchors
     // it here, so it leaves the flow and the capture box collapses.
-    captureCss: `.db-icon-picker-popover { position: static !important; top: auto !important; left: auto !important; }`,
+    captureCss: `.obnotion-icon-picker-popover { position: static !important; top: auto !important; left: auto !important; }`,
     html: () => {
       const item = (d, color, selected) => `
-        <button type="button" class="db-icon-picker-item${selected ? " is-selected" : ""} db-record-icon-color-${color}"
+        <button type="button" class="obnotion-icon-picker-item${selected ? " is-selected" : ""} obnotion-record-icon-color-${color}"
           data-icon-value="lucide:x@${color}" aria-pressed="${Boolean(selected)}" tabindex="-1">${glyph(d)}</button>`;
       const grid = (icons, color, selectedIndex) =>
         icons.map((d, i) => item(d, color, i === selectedIndex)).join("");
@@ -400,31 +400,31 @@ export const FIELDS_SCENARIOS = [
         I.tag, I.flag, I.check, I.trophy, I.plane, I.lightbulb, I.badge, I.clock, I.search,
         I.leaf, I.layers, I.smile, I.star, I.plus, I.code, I.link, I.calendarDays, I.settings];
       return `
-      <div class="db-icon-picker-popover" role="dialog" aria-label="Configure record icon property…">
-        <div class="db-icon-picker-header">
-          <div class="db-icon-picker-tabs" role="tablist">
+      <div class="obnotion-icon-picker-popover" role="dialog" aria-label="Configure record icon property…">
+        <div class="obnotion-icon-picker-header">
+          <div class="obnotion-icon-picker-tabs" role="tablist">
             <button type="button" role="tab" aria-selected="false">Emoji</button>
             <button type="button" role="tab" class="is-active" aria-selected="true">Icons</button>
           </div>
-          <input type="search" class="db-icon-picker-search" placeholder="Search icons and emoji" aria-label="Search icons and emoji">
-          <button type="button" class="db-icon-picker-remove">Remove</button>
-          <button type="button" class="db-icon-picker-random" aria-label="Random">${glyph(I.shuffle)}</button>
-          <button type="button" class="db-icon-picker-settings" aria-label="Configure record icon property…">${glyph(I.settings)}</button>
+          <input type="search" class="obnotion-icon-picker-search" placeholder="Search icons and emoji" aria-label="Search icons and emoji">
+          <button type="button" class="obnotion-icon-picker-remove">Remove</button>
+          <button type="button" class="obnotion-icon-picker-random" aria-label="Random">${glyph(I.shuffle)}</button>
+          <button type="button" class="obnotion-icon-picker-settings" aria-label="Configure record icon property…">${glyph(I.settings)}</button>
         </div>
-        <div class="db-icon-picker-colors">
-          ${COLORS.map((c) => `<button type="button" class="db-icon-color db-icon-color-${c}${c === "blue" ? " is-active" : ""}" aria-label="${c}"></button>`).join("")}
+        <div class="obnotion-icon-picker-colors">
+          ${COLORS.map((c) => `<button type="button" class="obnotion-icon-color obnotion-icon-color-${c}${c === "blue" ? " is-active" : ""}" aria-label="${c}"></button>`).join("")}
         </div>
-        <div class="db-icon-picker-scroll">
-          <div class="db-icon-picker-section">
-            <div class="db-icon-picker-label">Recent</div>
-            <div class="db-icon-picker-grid">${grid([I.star, I.heart, I.zap, I.tag, I.bell, I.folder], "blue", -1)}</div>
+        <div class="obnotion-icon-picker-scroll">
+          <div class="obnotion-icon-picker-section">
+            <div class="obnotion-icon-picker-label">Recent</div>
+            <div class="obnotion-icon-picker-grid">${grid([I.star, I.heart, I.zap, I.tag, I.bell, I.folder], "blue", -1)}</div>
           </div>
-          <div class="db-icon-picker-section">
-            <div class="db-icon-picker-label">Common</div>
-            <div class="db-icon-picker-grid">${grid(common, "blue", 4)}</div>
+          <div class="obnotion-icon-picker-section">
+            <div class="obnotion-icon-picker-label">Common</div>
+            <div class="obnotion-icon-picker-grid">${grid(common, "blue", 4)}</div>
           </div>
         </div>
-        <div class="db-icon-picker-nav" role="tablist" aria-label="Configure record icon property…">
+        <div class="obnotion-icon-picker-nav" role="tablist" aria-label="Configure record icon property…">
           ${navButton(I.clock, false)}
           ${navButton(I.star, true)}
           ${navButton(I.layers, false)}
@@ -445,33 +445,33 @@ export const FIELDS_SCENARIOS = [
     fixtureOf: "constructed-option-color-picker",
     sources: ["src/views/option-color-picker.ts", "src/views/popover-host.ts", "styles.css"],
     note: "A one-column labelled list (ADR-004) — sixteen rows in the persisted order, each a leading dot and its visible name, the current colour carrying the trailing tick every row in the family uses. Opened from the colour dot in the select editor and created on document.body. On a phone this is the family's own sheet, not the anchored popover: a header names the picker, and the same sixteen rows grow to the 44px floor.",
-    captureCss: `.db-color-picker-popup { position: static !important; top: auto !important; left: auto !important; }`,
+    captureCss: `.obnotion-color-picker-popup { position: static !important; top: auto !important; left: auto !important; }`,
     html: (device) => {
       const isPhoneSheet = device?.id === "mobile";
       const row = (c) => `
-        <button type="button" role="option" class="db-dropdown-option db-menu-item${c === "blue" ? " is-selected" : ""}" aria-selected="${c === "blue"}">
-          <span class="db-color-picker-row-dot db-option-color-${c}" aria-hidden="true"></span>
-          <span class="db-dropdown-option-label db-menu-item-label">${c.charAt(0).toUpperCase()}${c.slice(1)}</span>
-          <span class="db-dropdown-option-check db-menu-item-check">${c === "blue" ? glyph(I.check) : ""}</span>
+        <button type="button" role="option" class="obnotion-dropdown-option obnotion-menu-item${c === "blue" ? " is-selected" : ""}" aria-selected="${c === "blue"}">
+          <span class="obnotion-color-picker-row-dot obnotion-option-color-${c}" aria-hidden="true"></span>
+          <span class="obnotion-dropdown-option-label obnotion-menu-item-label">${c.charAt(0).toUpperCase()}${c.slice(1)}</span>
+          <span class="obnotion-dropdown-option-check obnotion-menu-item-check">${c === "blue" ? glyph(I.check) : ""}</span>
         </button>`;
       const rows = COLORS.map(row).join("");
       if (!isPhoneSheet) {
         return `
-      <div class="db-color-picker-popup" role="listbox" aria-label="Custom">
+      <div class="obnotion-color-picker-popup" role="listbox" aria-label="Custom">
         ${rows}
       </div>`;
       }
       // The phone sheet `mountPickerSheetHeader` builds: a title-and-close header ahead of the
-      // rows, inside the family's own `.db-mobile-bottom-sheet` chrome — the shape the previously
+      // rows, inside the family's own `.obnotion-mobile-bottom-sheet` chrome — the shape the previously
       // registered pair never photographed (`field-option-color-picker-mobile-light.png` was
       // shape-identical to its desktop twin before this fixture branched on device).
       return `
-      <div class="db-color-picker-popup db-mobile-bottom-sheet" role="listbox" aria-label="Custom">
-        <div class="db-panel-header">
-          <span class="db-panel-title">Color</span>
-          <button type="button" class="db-sheet-close" aria-label="Close">${glyph('<path d="M18 6 6 18"/><path d="m6 6 12 12"/>')}</button>
+      <div class="obnotion-color-picker-popup obnotion-mobile-bottom-sheet" role="listbox" aria-label="Custom">
+        <div class="obnotion-panel-header">
+          <span class="obnotion-panel-title">Color</span>
+          <button type="button" class="obnotion-sheet-close" aria-label="Close">${glyph('<path d="M18 6 6 18"/><path d="m6 6 12 12"/>')}</button>
         </div>
-        <div class="db-color-picker-body db-panel-row">
+        <div class="obnotion-color-picker-body obnotion-panel-row">
           ${rows}
         </div>
       </div>`;
@@ -486,25 +486,25 @@ export const FIELDS_SCENARIOS = [
     sources: ["src/views/relation-value-renderer.ts"],
     note: "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
     html: () => `
-      <div class="note-database-container">
-        <table class="db-table">
+      <div class="obnotion-container">
+        <table class="obnotion-table">
           <thead><tr>${th("Name", "file-text")}${th("Related", "file-text")}</tr></thead>
           <tbody>
             <tr>
-              <td class="db-cell db-title-cell"><a class="internal-link" href="#"><span class="db-file-title-inline"><span class="db-file-title-name">Figma</span></span></a></td>
-              <td class="db-cell"><div class="db-relation-values">
+              <td class="obnotion-cell obnotion-title-cell"><a class="internal-link" href="#"><span class="obnotion-file-title-inline"><span class="obnotion-file-title-name">Figma</span></span></a></td>
+              <td class="obnotion-cell"><div class="obnotion-relation-values">
                 ${relationLink("Design tooling", true)}${relationLink("Q3 budget", true)}
               </div></td>
             </tr>
             <tr>
-              <td class="db-cell db-title-cell"><a class="internal-link" href="#"><span class="db-file-title-inline"><span class="db-file-title-name">Notion</span></span></a></td>
-              <td class="db-cell"><div class="db-relation-values">
+              <td class="obnotion-cell obnotion-title-cell"><a class="internal-link" href="#"><span class="obnotion-file-title-inline"><span class="obnotion-file-title-name">Notion</span></span></a></td>
+              <td class="obnotion-cell"><div class="obnotion-relation-values">
                 ${relationLink("Knowledge base", true)}${relationLink("Archived vendors", false)}
               </div></td>
             </tr>
             <tr>
-              <td class="db-cell db-title-cell"><a class="internal-link" href="#"><span class="db-file-title-inline"><span class="db-file-title-name">Adobe CC</span></span></a></td>
-              <td class="db-cell"><div class="db-relation-values is-compact">
+              <td class="obnotion-cell obnotion-title-cell"><a class="internal-link" href="#"><span class="obnotion-file-title-inline"><span class="obnotion-file-title-name">Adobe CC</span></span></a></td>
+              <td class="obnotion-cell"><div class="obnotion-relation-values is-compact">
                 ${relationLink("Brand assets", true)}${relationLink("Legacy licence", false)}
               </div></td>
             </tr>
@@ -521,28 +521,28 @@ export const FIELDS_SCENARIOS = [
     sources: ["src/views/file-field-renderer.ts"],
     note: "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
     html: () => `
-      <div class="note-database-container">
-        <table class="db-table">
+      <div class="obnotion-container">
+        <table class="obnotion-table">
           <thead><tr>${th("File", "file-text")}${th("Tags", "circle-dot")}${th("Outlinks", "file-text")}</tr></thead>
           <tbody>
             <tr>
-              <td class="db-cell"><a class="internal-link db-file-self-link" href="#" title="Subscriptions/Figma.md">Figma</a></td>
-              <td class="db-cell db-editable-cell"><div class="db-file-tags db-multi-select-values">
-                <span class="status-badge db-file-tag-badge status-color-blue">design<button type="button" class="db-file-tag-remove" aria-label="Remove design">×</button></span>
-                <span class="status-badge db-file-tag-badge">saas<button type="button" class="db-file-tag-remove" aria-label="Remove saas">×</button></span>
+              <td class="obnotion-cell"><a class="internal-link obnotion-file-self-link" href="#" title="Subscriptions/Figma.md">Figma</a></td>
+              <td class="obnotion-cell obnotion-editable-cell"><div class="obnotion-file-tags obnotion-multi-select-values">
+                <span class="status-badge obnotion-file-tag-badge status-color-blue">design<button type="button" class="obnotion-file-tag-remove" aria-label="Remove design">×</button></span>
+                <span class="status-badge obnotion-file-tag-badge">saas<button type="button" class="obnotion-file-tag-remove" aria-label="Remove saas">×</button></span>
               </div></td>
-              <td class="db-cell"><div class="db-file-link-list">
-                <a class="internal-link db-file-link-list-item" href="#" title="Design tooling">Design tooling</a>
-                <a class="internal-link db-file-link-list-item" href="#" title="Q3 budget">Q3 budget</a>
+              <td class="obnotion-cell"><div class="obnotion-file-link-list">
+                <a class="internal-link obnotion-file-link-list-item" href="#" title="Design tooling">Design tooling</a>
+                <a class="internal-link obnotion-file-link-list-item" href="#" title="Q3 budget">Q3 budget</a>
               </div></td>
             </tr>
             <tr>
-              <td class="db-cell"><a class="internal-link db-file-self-link" href="#" title="Subscriptions/Spotify.md">Spotify</a></td>
-              <td class="db-cell db-editable-cell"><div class="db-file-tags db-multi-select-values">
-                <span class="status-badge db-file-tag-badge status-color-green">personal<button type="button" class="db-file-tag-remove" aria-label="Remove personal">×</button></span>
+              <td class="obnotion-cell"><a class="internal-link obnotion-file-self-link" href="#" title="Subscriptions/Spotify.md">Spotify</a></td>
+              <td class="obnotion-cell obnotion-editable-cell"><div class="obnotion-file-tags obnotion-multi-select-values">
+                <span class="status-badge obnotion-file-tag-badge status-color-green">personal<button type="button" class="obnotion-file-tag-remove" aria-label="Remove personal">×</button></span>
               </div></td>
-              <td class="db-cell"><div class="db-file-link-list">
-                <a class="internal-link db-file-link-list-item" href="#" title="Household costs">Household costs</a>
+              <td class="obnotion-cell"><div class="obnotion-file-link-list">
+                <a class="internal-link obnotion-file-link-list-item" href="#" title="Household costs">Household costs</a>
               </div></td>
             </tr>
           </tbody>
@@ -556,22 +556,22 @@ export const FIELDS_SCENARIOS = [
     width: 560,
     fixtureOf: "constructed-number-displays",
     sources: ["src/views/number-display-renderer.ts", "src/data/number-display.ts"],
-    note: "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
+    note: "Rating, progress bar and progress ring all tint through obnotion-num-color-*, which sets --obnotion-number-color. Half slots are the accent overlay clipped to 50%.",
     html: () => `
-      <div class="note-database-container">
-        <table class="db-table">
+      <div class="obnotion-container">
+        <table class="obnotion-table">
           <thead><tr>${th("Style", "circle-dot")}${th("Value", "hash")}</tr></thead>
           <tbody>
-            <tr><td class="db-cell">Plain</td><td class="db-cell db-numeric-value">62.5</td></tr>
-            <tr><td class="db-cell">Rating, solid</td><td class="db-cell db-numeric-value">${rating([100, 100, 100, 50, 0])}</td></tr>
-            <tr><td class="db-cell">Rating, outline</td><td class="db-cell db-numeric-value">${rating([100, 100, 0, 0, 0], " is-outline")}</td></tr>
-            <tr><td class="db-cell">Rating, emoji</td><td class="db-cell db-numeric-value">
-              <span class="db-cell-rating db-numeric-value is-emoji">${[100, 100, 100, 100, 0].map((f) => ratingEmojiStar(f, "⭐")).join("")}</span>
+            <tr><td class="obnotion-cell">Plain</td><td class="obnotion-cell obnotion-numeric-value">62.5</td></tr>
+            <tr><td class="obnotion-cell">Rating, solid</td><td class="obnotion-cell obnotion-numeric-value">${rating([100, 100, 100, 50, 0])}</td></tr>
+            <tr><td class="obnotion-cell">Rating, outline</td><td class="obnotion-cell obnotion-numeric-value">${rating([100, 100, 0, 0, 0], " is-outline")}</td></tr>
+            <tr><td class="obnotion-cell">Rating, emoji</td><td class="obnotion-cell obnotion-numeric-value">
+              <span class="obnotion-cell-rating obnotion-numeric-value is-emoji">${[100, 100, 100, 100, 0].map((f) => ratingEmojiStar(f, "⭐")).join("")}</span>
             </td></tr>
-            <tr><td class="db-cell">Progress</td><td class="db-cell db-numeric-value">${progress(72, "72")}</td></tr>
-            <tr><td class="db-cell">Progress, tinted</td><td class="db-cell db-numeric-value">${progress(34, "34", "orange")}</td></tr>
-            <tr><td class="db-cell">Ring</td><td class="db-cell db-numeric-value">${ring(72, "72")}</td></tr>
-            <tr><td class="db-cell">Ring, tinted</td><td class="db-cell db-numeric-value">${ring(96, "96", "green")}</td></tr>
+            <tr><td class="obnotion-cell">Progress</td><td class="obnotion-cell obnotion-numeric-value">${progress(72, "72")}</td></tr>
+            <tr><td class="obnotion-cell">Progress, tinted</td><td class="obnotion-cell obnotion-numeric-value">${progress(34, "34", "orange")}</td></tr>
+            <tr><td class="obnotion-cell">Ring</td><td class="obnotion-cell obnotion-numeric-value">${ring(72, "72")}</td></tr>
+            <tr><td class="obnotion-cell">Ring, tinted</td><td class="obnotion-cell obnotion-numeric-value">${ring(96, "96", "green")}</td></tr>
           </tbody>
         </table>
       </div>`,
@@ -583,37 +583,37 @@ export const FIELDS_SCENARIOS = [
     width: 560,
     fixtureOf: "constructed-record-icon",
     sources: ["src/views/record-icon-renderer.ts", "src/views/table-renderer.ts", "src/data/record-icon.ts"],
-    note: "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
+    note: "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries obnotion-record-icon-color-*; an emoji token renders through obnotion-record-icon-emoji.",
     html: () => {
       const icon = (body, extra = "") => `
-        <td class="db-record-icon-col">
-          <span class="db-record-icon is-compact is-editable${extra}" role="button" tabindex="-1">${body}</span>
+        <td class="obnotion-record-icon-col">
+          <span class="obnotion-record-icon is-compact is-editable${extra}" role="button" tabindex="-1">${body}</span>
         </td>`;
       const row = (r, cell) => `
         <tr>
           ${cell}
-          <td class="db-cell db-title-cell db-editable-cell"><a class="internal-link" href="#"><span class="db-file-title-inline"><span class="db-file-title-name">${r.name}</span></span></a></td>
-          <td class="db-cell db-editable-cell db-numeric-value">${r.cost}</td>
-          <td class="db-cell db-editable-cell">${optionPill(r.category)}</td>
+          <td class="obnotion-cell obnotion-title-cell obnotion-editable-cell"><a class="internal-link" href="#"><span class="obnotion-file-title-inline"><span class="obnotion-file-title-name">${r.name}</span></span></a></td>
+          <td class="obnotion-cell obnotion-editable-cell obnotion-numeric-value">${r.cost}</td>
+          <td class="obnotion-cell obnotion-editable-cell">${optionPill(r.category)}</td>
         </tr>`;
       const fileText = glyph('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>');
       return `
-      <div class="note-database-container">
-        <table class="db-table">
+      <div class="obnotion-container">
+        <table class="obnotion-table">
           <colgroup>
-            <col class="db-record-icon-colgroup" width="28" style="width:28px">
+            <col class="obnotion-record-icon-colgroup" width="28" style="width:28px">
             <col><col><col>
           </colgroup>
           <thead><tr>
-            <th class="db-record-icon-col" role="columnheader" aria-label="Icons" title="Icons"></th>
+            <th class="obnotion-record-icon-col" role="columnheader" aria-label="Icons" title="Icons"></th>
             ${th("Name", "file-text")}${th("Cost", "hash")}${th("Category", "circle-dot")}
           </tr></thead>
           <tbody>
             ${row(ROWS[0], icon(fileText, " is-default"))}
-            ${row(ROWS[1], icon(glyph(I.layers), " db-record-icon-color-blue"))}
-            ${row(ROWS[2], icon(glyph(I.zap), " db-record-icon-color-green"))}
-            ${row(ROWS[3], icon('<span class="db-record-icon-emoji">☁️</span>'))}
-            ${row(ROWS[4], icon(glyph(I.camera), " db-record-icon-color-rose"))}
+            ${row(ROWS[1], icon(glyph(I.layers), " obnotion-record-icon-color-blue"))}
+            ${row(ROWS[2], icon(glyph(I.zap), " obnotion-record-icon-color-green"))}
+            ${row(ROWS[3], icon('<span class="obnotion-record-icon-emoji">☁️</span>'))}
+            ${row(ROWS[4], icon(glyph(I.camera), " obnotion-record-icon-color-rose"))}
           </tbody>
         </table>
       </div>`;
@@ -634,25 +634,25 @@ export const FIELDS_SCENARIOS = [
     // whole strip reads as illegible when in the product it is not. The surface the product always
     // has behind these chips is `--background-primary`; supplying it here is what makes the
     // capture answerable rather than a picture of the viewer.
-    captureCss: `.note-database-container { background: var(--background-primary); padding: 8px; }`,
+    captureCss: `.obnotion-container { background: var(--background-primary); padding: 8px; }`,
     note: "The strip is the whole colour vocabulary — every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
     html: () => `
-      <div class="note-database-container">
-        <div class="db-multi-select-values">
+      <div class="obnotion-container">
+        <div class="obnotion-multi-select-values">
           ${COLORS.map((c) => pill(c, c)).join("")}
         </div>
-        <table class="db-table">
+        <table class="obnotion-table">
           <thead><tr>${th("Name", "file-text")}${th("Billing", "circle-dot")}${th("Payment", "circle-dot")}${th("Category", "circle-dot")}</tr></thead>
           <tbody>
             ${ROWS.map((r) => `
             <tr>
-              <td class="db-cell db-title-cell"><a class="internal-link" href="#"><span class="db-file-title-inline"><span class="db-file-title-name">${r.name}</span></span></a></td>
-              <td class="db-cell">${optionPill(r.cycle)}</td>
-              <td class="db-cell">${optionPill(r.payment)}</td>
-              <td class="db-cell"><div class="db-multi-select-values">
-                <span class="status-badge db-multi-select-badge status-color-${optionTone(r.category)}">
-                  <span class="db-multi-select-label">${r.category}</span>
-                  <button type="button" class="db-multi-select-remove" aria-label="Remove ${r.category}">×</button>
+              <td class="obnotion-cell obnotion-title-cell"><a class="internal-link" href="#"><span class="obnotion-file-title-inline"><span class="obnotion-file-title-name">${r.name}</span></span></a></td>
+              <td class="obnotion-cell">${optionPill(r.cycle)}</td>
+              <td class="obnotion-cell">${optionPill(r.payment)}</td>
+              <td class="obnotion-cell"><div class="obnotion-multi-select-values">
+                <span class="status-badge obnotion-multi-select-badge status-color-${optionTone(r.category)}">
+                  <span class="obnotion-multi-select-label">${r.category}</span>
+                  <button type="button" class="obnotion-multi-select-remove" aria-label="Remove ${r.category}">×</button>
                 </span>
               </div></td>
             </tr>`).join("")}

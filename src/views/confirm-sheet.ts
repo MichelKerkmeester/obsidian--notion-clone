@@ -49,7 +49,7 @@ export interface ConfirmSheetBodyOptions {
 // class and the disabled styling live in one place a lane row can import and assert against,
 // rather than each form re-declaring its own button and drifting from the measured shape.
 
-export const SHELL_PRIMARY_PILL_CLASS = "db-shell-primary-pill";
+export const SHELL_PRIMARY_PILL_CLASS = "obnotion-shell-primary-pill";
 
 export interface PrimaryActionPillOptions {
   text: string;
@@ -80,14 +80,14 @@ export function buildPrimaryActionPill(container: HTMLElement, options: PrimaryA
  */
 export function buildConfirmSheetBody(host: HTMLElement, options: ConfirmSheetBodyOptions): void {
   host.createEl("h3", { text: options.title });
-  // db-panel-row is the sheet grammar's shared row shape: on a phone, the shell marks
-  // this modal's own root as the .note-database-container the row's padding rule is scoped
+  // obnotion-panel-row is the sheet grammar's shared row shape: on a phone, the shell marks
+  // this modal's own root as the .obnotion-container the row's padding rule is scoped
   // under, so the confirm's body reads as a padded row like every other phone sheet's content
   // rather than as bare, unpadded text.
-  host.createDiv({ cls: "db-modal-help db-panel-row", text: options.message });
+  host.createDiv({ cls: "obnotion-modal-help obnotion-panel-row", text: options.message });
 
   const actions = host.createDiv({
-    cls: options.stackedActions ? "db-modal-actions db-confirm-stacked" : "db-modal-actions",
+    cls: options.stackedActions ? "obnotion-modal-actions obnotion-confirm-stacked" : "obnotion-modal-actions",
   });
   actions.createEl("button", {
     text: options.cancelText,

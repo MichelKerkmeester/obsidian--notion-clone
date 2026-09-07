@@ -55,12 +55,12 @@ export class ColumnHeaderController {
     th.addEventListener("click", (event) => {
       if (Date.now() < this.suppressSortUntil) return;
       const target = event.target;
-      if (isHTMLElement(target) && target.closest("button, .db-resize-handle")) return;
+      if (isHTMLElement(target) && target.closest("button, .obnotion-resize-handle")) return;
       this.actions.sortByColumn(col, event.shiftKey);
     });
     th.addEventListener("contextmenu", (e) => this.actions.showContextMenu(e, col, th));
     this.setupMenuTrigger(th, col);
-    if (!isTouchDevice(th.closest<HTMLElement>(".note-database-container") || th)) {
+    if (!isTouchDevice(th.closest<HTMLElement>(".obnotion-container") || th)) {
       this.setupResizeHandle(th, col);
       this.setupDragToReorder(th, col);
     }
@@ -69,9 +69,9 @@ export class ColumnHeaderController {
   private setupMenuTrigger(th: HTMLElement, col: ColumnDef): void {
     // Mounted inside the header's flex row rather than on the cell, so the button is a
     // sibling of the label instead of a block that wraps onto its own line beneath it.
-    const row = th.querySelector<HTMLElement>(".db-th-content") || th;
+    const row = th.querySelector<HTMLElement>(".obnotion-th-content") || th;
     const button = row.createEl("button", {
-      cls: "db-column-menu-trigger",
+      cls: "obnotion-column-menu-trigger",
       attr: { type: "button", "aria-label": t("column.openMenu", { label: col.label }) },
     });
     setIcon(button, "more-vertical");
@@ -87,7 +87,7 @@ export class ColumnHeaderController {
   // ───────────────────────────────────────────────────────────────────
 
   private setupResizeHandle(th: HTMLElement, col: ColumnDef): void {
-    const handle = th.createEl("div", { cls: "db-resize-handle" });
+    const handle = th.createEl("div", { cls: "obnotion-resize-handle" });
     let startX = 0;
     let startWidth = 0;
 
@@ -133,7 +133,7 @@ export class ColumnHeaderController {
   }
 
   private syncTableColumnLayouts(th: HTMLElement): void {
-    const root = th.closest(".note-database-container");
+    const root = th.closest(".obnotion-container");
     const config = this.actions.getConfig();
     if (!root || !config) return;
     syncTableColumnLayouts(root, config);
@@ -146,25 +146,25 @@ export class ColumnHeaderController {
   private setupDragToReorder(th: HTMLElement, col: ColumnDef): void {
     th.draggable = true;
     th.addEventListener("dragstart", (e) => {
-      if (th.closest(".note-database-container.is-row-dragging")) {
+      if (th.closest(".obnotion-container.is-row-dragging")) {
         e.preventDefault();
         return;
       }
       e.dataTransfer?.setData("text/plain", col.key);
-      th.addClass("db-dragging");
+      th.addClass("obnotion-dragging");
     });
     th.addEventListener("dragover", (e) => {
-      if (th.closest(".note-database-container.is-row-dragging")) return;
+      if (th.closest(".obnotion-container.is-row-dragging")) return;
       e.preventDefault();
-      th.addClass("db-drop-target");
+      th.addClass("obnotion-drop-target");
     });
     th.addEventListener("dragleave", () => {
-      th.removeClass("db-drop-target");
+      th.removeClass("obnotion-drop-target");
     });
     th.addEventListener("drop", (e) => {
-      if (th.closest(".note-database-container.is-row-dragging")) return;
+      if (th.closest(".obnotion-container.is-row-dragging")) return;
       e.preventDefault();
-      th.removeClass("db-drop-target");
+      th.removeClass("obnotion-drop-target");
       const draggedKey = e.dataTransfer?.getData("text/plain");
       if (!draggedKey || draggedKey === col.key) return;
       const config = this.actions.getConfig();
@@ -181,8 +181,8 @@ export class ColumnHeaderController {
       this.actions.refresh();
     });
     th.addEventListener("dragend", () => {
-      th.removeClass("db-dragging");
-      window.activeDocument.querySelectorAll(".db-drop-target").forEach((el) => el.classList.remove("db-drop-target"));
+      th.removeClass("obnotion-dragging");
+      window.activeDocument.querySelectorAll(".obnotion-drop-target").forEach((el) => el.classList.remove("obnotion-drop-target"));
     });
   }
 

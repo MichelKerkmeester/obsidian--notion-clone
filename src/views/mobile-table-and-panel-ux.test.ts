@@ -63,23 +63,23 @@ const hoverHoverBlocks = (): string => {
 
 describe("mobile table and panel UX", () => {
   it("resets the desktop centring container so overflow is not thrown off-screen on a phone", () => {
-    // db-width-default centres the view in a ~760px column via auto side margins; on a phone
+    // obnotion-width-default centres the view in a ~760px column via auto side margins; on a phone
     // that pushes any wider child's left edge past the viewport.
-    const container = declarationsFor(".is-phone .note-database-container.db-width-default");
+    const container = declarationsFor(".is-phone .obnotion-container.obnotion-width-default");
     expect(container).toMatch(/max-width:\s*none/);
     expect(container).toMatch(/margin-left:\s*0/);
     expect(container).toMatch(/margin-right:\s*0/);
   });
 
   it("drops the scroll-area fade mask on the phone table so the select column is not clipped", () => {
-    const wrap = declarationsFor(".is-phone .note-database-container .db-table-wrap");
+    const wrap = declarationsFor(".is-phone .obnotion-container .obnotion-table-wrap");
     expect(wrap).toMatch(/mask-image:\s*none/);
     expect(wrap).toMatch(/-webkit-mask-image:\s*none/);
   });
 
   it("pins the select checkbox to the right on the phone so header and rows line up", () => {
     const checkbox = declarationsFor(
-      '.is-phone .note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]'
+      '.is-phone .obnotion-container .obnotion-table .obnotion-select-col .obnotion-select-inner input[type="checkbox"]'
     );
     expect(checkbox).toMatch(/position:\s*absolute/);
     // 4px, not the 6px this pinned when the cell held one control. The cell also holds a 28px
@@ -90,51 +90,51 @@ describe("mobile table and panel UX", () => {
   });
 
   it("auto-fits phone table columns to content and bounds them so they cannot run away", () => {
-    const table = declarationsFor(".is-phone .note-database-container .db-table");
+    const table = declarationsFor(".is-phone .obnotion-container .obnotion-table");
     expect(table).toMatch(/table-layout:\s*auto/);
     // The table/col widths are inline (JS-set); releasing them needs !important.
     expect(table).toMatch(/width:\s*auto\s*!important/);
     expect(table).toMatch(/min-width:\s*0\s*!important/);
-    expect(declarationsFor(".is-phone .note-database-container .db-table col[data-note-database-column-key]")).toMatch(
+    expect(declarationsFor(".is-phone .obnotion-container .obnotion-table col[data-obnotion-column-key]")).toMatch(
       /width:\s*auto\s*!important/
     );
     // Data cells hug content on one line but are capped so a pathological value cannot
     // stretch a column without bound.
-    const cell = declarationsFor(".is-phone .note-database-container .db-table th[data-note-database-column-key]");
+    const cell = declarationsFor(".is-phone .obnotion-container .obnotion-table th[data-obnotion-column-key]");
     expect(cell).toMatch(/max-width:\s*60vw/);
     expect(cell).toMatch(/white-space:\s*nowrap/);
   });
 
   it("makes phone list cards fill the viewport and wrap their fields inside the border", () => {
-    const row = declarationsFor(".is-phone .note-database-container .db-list-row");
+    const row = declarationsFor(".is-phone .obnotion-container .obnotion-list-row");
     expect(row).toMatch(/width:\s*100%/);
     expect(row).toMatch(/grid-template-columns:\s*auto minmax\(0, 1fr\)/);
-    expect(declarationsFor(".is-phone .note-database-container .db-list-row-meta")).toMatch(/flex-wrap:\s*wrap/);
-    const field = declarationsFor(".is-phone .note-database-container .db-list-field");
+    expect(declarationsFor(".is-phone .obnotion-container .obnotion-list-row-meta")).toMatch(/flex-wrap:\s*wrap/);
+    const field = declarationsFor(".is-phone .obnotion-container .obnotion-list-field");
     expect(field).toMatch(/flex:\s*1 1/);
     expect(field).toMatch(/min-width:\s*0/);
   });
 
   it("guards the load-bearing hover states behind @media (hover: hover) so a tap leaves nothing stuck", () => {
     const hover = hoverHoverBlocks();
-    expect(hover).toContain(".note-database-container .db-table tr:hover td");
-    expect(hover).toContain(".note-database-container .db-table td:hover");
-    expect(hover).toContain(".note-database-container .db-list-row:hover");
-    expect(hover).toContain(".note-database-container .db-board-card-field:hover");
-    expect(hover).toContain(".note-database-container .db-record-detail-field:hover");
+    expect(hover).toContain(".obnotion-container .obnotion-table tr:hover td");
+    expect(hover).toContain(".obnotion-container .obnotion-table td:hover");
+    expect(hover).toContain(".obnotion-container .obnotion-list-row:hover");
+    expect(hover).toContain(".obnotion-container .obnotion-board-card-field:hover");
+    expect(hover).toContain(".obnotion-container .obnotion-record-detail-field:hover");
   });
 
   it("shows a close button only in the record-detail bottom sheet, keeping the desktop panel unchanged", () => {
-    expect(declarationsFor(".note-database-container .db-record-detail-panel .db-cell-edit-close")).toMatch(
+    expect(declarationsFor(".obnotion-container .obnotion-record-detail-panel .obnotion-cell-edit-close")).toMatch(
       /display:\s*none/
     );
     expect(
-      declarationsFor(".note-database-container .db-record-detail-panel.db-mobile-bottom-sheet .db-cell-edit-close")
+      declarationsFor(".obnotion-container .obnotion-record-detail-panel.obnotion-mobile-bottom-sheet .obnotion-cell-edit-close")
     ).toMatch(/display:\s*inline-flex/);
   });
 
   it("makes the mobile bottom sheet border-box so its own padding does not overflow the viewport", () => {
-    expect(declarationsFor(".db-mobile-bottom-sheet")).toMatch(/box-sizing:\s*border-box/);
+    expect(declarationsFor(".obnotion-mobile-bottom-sheet")).toMatch(/box-sizing:\s*border-box/);
   });
 
   it("dismisses the record panel via pointer events and the sheet affordances, not a mouse-only handler", () => {
@@ -142,29 +142,29 @@ describe("mobile table and panel UX", () => {
     expect(recordPanelSource).toContain('addEventListener("pointerdown", onOutside, true)');
     expect(recordPanelSource).not.toContain('addEventListener("mousedown", onOutside');
     // A permanent close control (reusing the existing close class) and a drag-to-dismiss gesture.
-    expect(recordHeaderSource).toContain('cls: "db-cell-edit-close"');
-    expect(recordPanelSource).toContain('hasClass("db-mobile-bottom-sheet")');
+    expect(recordHeaderSource).toContain('cls: "obnotion-cell-edit-close"');
+    expect(recordPanelSource).toContain('hasClass("obnotion-mobile-bottom-sheet")');
     expect(recordPanelSource).toContain("attachSheetDragToDismiss");
   });
 
   it("raises the hidden-properties disclosure and its eye button to a 44px hit box on the sheet, leaving the anchored desktop popover and the row pitch alone", () => {
     // The disclosure toggle: a standalone tappable control, the same reasoning the table's
     // load-more button and footer trigger already raise on. Sheet-only, so the anchored desktop
-    // popover (no `.db-mobile-bottom-sheet` ancestor) keeps its compact height.
-    expect(declarationsFor(".db-mobile-bottom-sheet .db-record-detail-hidden-toggle")).toMatch(/min-height:\s*44px/);
-    expect(declarationsFor(".note-database-container .db-record-detail-hidden-toggle")).not.toMatch(/min-height/);
+    // popover (no `.obnotion-mobile-bottom-sheet` ancestor) keeps its compact height.
+    expect(declarationsFor(".obnotion-mobile-bottom-sheet .obnotion-record-detail-hidden-toggle")).toMatch(/min-height:\s*44px/);
+    expect(declarationsFor(".obnotion-container .obnotion-record-detail-hidden-toggle")).not.toMatch(/min-height/);
 
-    // The per-row eye button: fills the 44px the row's own `--db-sheet-row-min-height` already
+    // The per-row eye button: fills the 44px the row's own `--obnotion-sheet-row-min-height` already
     // reserves per row on the sheet, rather than growing the row.
-    expect(declarationsFor(".db-mobile-bottom-sheet .db-record-detail-hidden-eye")).toMatch(/min-width:\s*44px/);
-    expect(declarationsFor(".db-mobile-bottom-sheet .db-record-detail-hidden-eye")).toMatch(/min-height:\s*44px/);
+    expect(declarationsFor(".obnotion-mobile-bottom-sheet .obnotion-record-detail-hidden-eye")).toMatch(/min-width:\s*44px/);
+    expect(declarationsFor(".obnotion-mobile-bottom-sheet .obnotion-record-detail-hidden-eye")).toMatch(/min-height:\s*44px/);
 
     // Negative control: the row pitch itself is untouched by this fix, and neither the chevron nor
     // the drag handle — decorative spans with no click handler — gained a hit box they cannot use.
-    expect(declarationsFor(".db-mobile-bottom-sheet .db-record-detail-hidden-row")).toMatch(
-      /min-height:\s*var\(--db-sheet-row-min-height,\s*30px\)/
+    expect(declarationsFor(".obnotion-mobile-bottom-sheet .obnotion-record-detail-hidden-row")).toMatch(
+      /min-height:\s*var\(--obnotion-sheet-row-min-height,\s*30px\)/
     );
-    expect(declarationsFor(".db-mobile-bottom-sheet .db-record-detail-hidden-chevron")).not.toMatch(/min-width|min-height/);
-    expect(declarationsFor(".db-mobile-bottom-sheet .db-record-detail-hidden-drag")).not.toMatch(/min-width|min-height/);
+    expect(declarationsFor(".obnotion-mobile-bottom-sheet .obnotion-record-detail-hidden-chevron")).not.toMatch(/min-width|min-height/);
+    expect(declarationsFor(".obnotion-mobile-bottom-sheet .obnotion-record-detail-hidden-drag")).not.toMatch(/min-width|min-height/);
   });
 });

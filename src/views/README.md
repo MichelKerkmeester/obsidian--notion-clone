@@ -12,7 +12,7 @@ trigger_phrases:
 `src/views/` builds every pixel the plugin shows. It holds the seven view renderers (Table, Board,
 Gallery, List, Chart, Calendar, Timeline), the table internals, the cell editors and value
 renderers, the toolbar and the panels and popovers it opens, and the `modals/` dialogs. Renderers
-read from `src/data/` and emit the `db-*` DOM that `styles.css` styles.
+read from `src/data/` and emit the `obnotion-*` DOM that `styles.css` styles.
 
 ---
 

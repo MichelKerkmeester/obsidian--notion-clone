@@ -120,7 +120,7 @@ function creationSites() {
      * from, so an input's full ancestor chain can be rebuilt.
      *
      * The immediate parent is not enough. The table's select-all checkbox is reached by
-     * `.db-table .db-select-col .db-select-inner input`, four levels deep, and a harness that
+     * `.obnotion-table .obnotion-select-col .obnotion-select-inner input`, four levels deep, and a harness that
      * renders only the nearest parent never matches the rule — the input shows the platform box,
      * stripping the parent changes nothing, and the site reads as safe when it was measured wrong.
      */
@@ -244,7 +244,7 @@ function creationSites() {
  * appearance, and whether that rule reaches the input only through an ancestor.
  *
  * An earlier version collected only selectors containing `input[type=checkbox]`, so a rule written
- * as `.db-board-column-checkbox { … }` was invisible and its site was reported as styled by
+ * as `.obnotion-board-column-checkbox { … }` was invisible and its site was reported as styled by
  * nothing. Index by class and the question becomes answerable.
  */
 function stylesheetIndex() {

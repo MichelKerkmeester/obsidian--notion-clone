@@ -4,57 +4,57 @@
   "recorded": "2026-09-07",
   "footerTriggerRaisedFloorLowering": {
     "recorded": "2026-09-06",
-    "what": "974 -> 801, the footer trigger's own shortfall closed rather than deferred. Operator ruling, 2026-09-06 (verbatim): \"Hide the footer at zero rows, 44px otherwise\" -- table-renderer.ts's private renderFooter now returns before drawing anything when rows.length === 0 (the summary config is untouched, so the footer reappears the moment a row exists), and `.is-phone .note-database-container .db-table-footer-trigger` gains `min-height: 44px` in styles.css, the same floor `.is-phone .db-menu-item` and the load-more row's own `.is-phone` rule (raiseHistory/RAISED entry `db-table-load-more-button`, 2026-09-06) already raise their own phone rows to. touch-targets.mjs's RAISED list gained a matching `db-table-footer-trigger` entry at the 44px (ENHANCED) floor, so a regression back under 44px on phone fails this lane outright rather than only showing up as a bigger informational 28-44px count. All 173 of the class's constructed-pass instances (raiseHistory's own 32 -> 173 entry, still true of the pre-fix tree) now measure above their named 44px floor and drop out of the general 28px ratchet entirely -- not exempted, cleared.",
+    "what": "974 -> 801, the footer trigger's own shortfall closed rather than deferred. Operator ruling, 2026-09-06 (verbatim): \"Hide the footer at zero rows, 44px otherwise\" -- table-renderer.ts's private renderFooter now returns before drawing anything when rows.length === 0 (the summary config is untouched, so the footer reappears the moment a row exists), and `.is-phone .obnotion-container .obnotion-table-footer-trigger` gains `min-height: 44px` in styles.css, the same floor `.is-phone .obnotion-menu-item` and the load-more row's own `.is-phone` rule (raiseHistory/RAISED entry `obnotion-table-load-more-button`, 2026-09-06) already raise their own phone rows to. touch-targets.mjs's RAISED list gained a matching `obnotion-table-footer-trigger` entry at the 44px (ENHANCED) floor, so a regression back under 44px on phone fails this lane outright rather than only showing up as a bigger informational 28-44px count. All 173 of the class's constructed-pass instances (raiseHistory's own 32 -> 173 entry, still true of the pre-fix tree) now measure above their named 44px floor and drop out of the general 28px ratchet entirely -- not exempted, cleared.",
     "perClass": [
       {
-        "class": "db-table-footer-trigger",
+        "class": "obnotion-table-footer-trigger",
         "before": 173,
         "after": 0
       }
     ],
     "totalBefore": 974,
     "totalAfter": 801,
-    "verification": "Measured on the pristine pre-fix tree (table-renderer.ts, styles.css and touch-targets.mjs checked out at HEAD via `git diff`/`git checkout --`/`git apply`, so nothing else in the repository could move between the two reads): `node tools/live/touch-targets.mjs --json` reports 974 under the 28px floor, 173 of them `db-table-footer-trigger`, matching this file's own `raiseHistory`/`emptyReasonScenariosNotRaised` records exactly. The same command against the fixed tree reports 801, `db-table-footer-trigger` absent from the undeclared list entirely (grepped the fresh dump for the class name -- zero hits) and 0 raisedMisses for it, reproduced on three consecutive runs (801, 801, 801). No other class's count moved between the two reads. A negative control -- forcing `.is-phone .db-table-footer-trigger`'s `min-height` back to 26px with the RAISED entry left in place -- reports 176 raisedMisses for the class (a different, stricter count than the general ratchet, since a RAISED miss fails unconditionally rather than accumulating into `under`), confirmed and then reverted.",
+    "verification": "Measured on the pristine pre-fix tree (table-renderer.ts, styles.css and touch-targets.mjs checked out at HEAD via `git diff`/`git checkout --`/`git apply`, so nothing else in the repository could move between the two reads): `node tools/live/touch-targets.mjs --json` reports 974 under the 28px floor, 173 of them `obnotion-table-footer-trigger`, matching this file's own `raiseHistory`/`emptyReasonScenariosNotRaised` records exactly. The same command against the fixed tree reports 801, `obnotion-table-footer-trigger` absent from the undeclared list entirely (grepped the fresh dump for the class name -- zero hits) and 0 raisedMisses for it, reproduced on three consecutive runs (801, 801, 801). No other class's count moved between the two reads. A negative control -- forcing `.is-phone .obnotion-table-footer-trigger`'s `min-height` back to 26px with the RAISED entry left in place -- reports 176 raisedMisses for the class (a different, stricter count than the general ratchet, since a RAISED miss fails unconditionally rather than accumulating into `under`), confirmed and then reverted.",
     "productFindings": "Closes the finding `raiseHistory` opened on 2026-09-04 (32 -> 173) and `emptyReasonScenariosNotRaised` carried forward on 2026-09-06 rather than deferring it again: the operator ruling above is the resizing decision this file's own `why` field says is an operator-scale call, not a repair a pass should make silently -- it has now been made."
   },
   "emptyReasonScenariosNotRaised": {
     "recorded": "2026-09-06",
-    "what": "The two new STATE_SCENARIOS entries that would have raised this ratchet are read past instead, and the number itself is re-pinned DOWN to what the rebased tree measures. `table-empty-source-missing/file-view` and `table-empty-no-matching-data/file-view` (render-assertion-bundle.mjs) mount a table over the home-inventory catalogue's columns with its rows dropped, purely to read one attribute off the empty-state card. `TableRenderer.renderTable` draws the summary footer row whether or not there are rows, so each mount adds 28 more `db-table-footer-trigger` buttons (the per-column \"+ Calculate\" control, 26px tall) -- 56 in total, every one a second copy of a control this corpus already counts at that same table's own scenarios. That is the corpus growing, not the tree getting worse, and a ratchet that rises whenever a scenario is added stops meaning what it says. touch-targets.mjs now filters scenarios carrying `emptyReason` out of the constructed sweep (MEASURED_SCENARIOS) and measures 75 scenarios as before. The control is not exempted anywhere: its 173 instances stay counted against the scenarios that own it, and resizing it remains the operator-scale decision this file's own `why` describes. SUPERSEDED IN PART the same day by `footerTriggerRaisedFloorLowering` above: a table at zero rows now draws no footer at all, so these two probes contribute no `db-table-footer-trigger` at all and the 56 counted here is history. The filter stays, because the rest of an empty table's chrome is still a second copy of controls this corpus already measures.",
+    "what": "The two new STATE_SCENARIOS entries that would have raised this ratchet are read past instead, and the number itself is re-pinned DOWN to what the rebased tree measures. `table-empty-source-missing/file-view` and `table-empty-no-matching-data/file-view` (render-assertion-bundle.mjs) mount a table over the home-inventory catalogue's columns with its rows dropped, purely to read one attribute off the empty-state card. `TableRenderer.renderTable` draws the summary footer row whether or not there are rows, so each mount adds 28 more `obnotion-table-footer-trigger` buttons (the per-column \"+ Calculate\" control, 26px tall) -- 56 in total, every one a second copy of a control this corpus already counts at that same table's own scenarios. That is the corpus growing, not the tree getting worse, and a ratchet that rises whenever a scenario is added stops meaning what it says. touch-targets.mjs now filters scenarios carrying `emptyReason` out of the constructed sweep (MEASURED_SCENARIOS) and measures 75 scenarios as before. The control is not exempted anywhere: its 173 instances stay counted against the scenarios that own it, and resizing it remains the operator-scale decision this file's own `why` describes. SUPERSEDED IN PART the same day by `footerTriggerRaisedFloorLowering` above: a table at zero rows now draws no footer at all, so these two probes contribute no `obnotion-table-footer-trigger` at all and the 56 counted here is history. The filter stays, because the rest of an empty table's chrome is still a second copy of controls this corpus already measures.",
     "perClass": [
       {
-        "class": "db-table-footer-trigger",
+        "class": "obnotion-table-footer-trigger",
         "measuredWithProbes": 229,
         "measuredWithoutProbes": 173
       }
     ],
     "totalWithProbes": 1030,
     "under": 974,
-    "verification": "`node tools/live/touch-targets.mjs --json` on the landed tree with the probes measured: 17689 elements across 77 constructed scenarios, 1030 under the floor, `db-table-footer-trigger` at 229. The same command with the filter in place: 17626 elements across 75 scenarios, 974 under the floor, `db-table-footer-trigger` back to 173. The per-class diff between the two runs names `db-table-footer-trigger` and nothing else -- no other class moves by one instance -- so the 56 are entirely the probes' own footer row. The same pair measured 1360 and 1304 before this leg rebased, the 1304 matching main's own recorded baseline exactly.",
-    "productFindings": "Not a new finding, and none is hidden. `db-table-footer-trigger` at 26px is the same shortfall this file's raiseHistory already records (32 -> 173 on 2026-09-04) and it stays recorded at 173. An empty table does still draw a footer of undersized \"+ Calculate\" buttons on a phone -- worth an operator decision, unchanged by this leg either way.",
-    "loweringNotOwnedHere": "1304 -> 974, and none of the 330 is this leg's. Rebasing onto the calendar and sheet landings retired `db-calendar-month-segment` from the constructed corpus entirely (330 -> 0 in the per-class dump; it was 330 before the rebase and is absent after, and no other class moves). The prior baseline of 1304 would have left 330 controls' worth of headroom that no longer exists, so the number is re-pinned down to what the tree measures rather than left stale -- the same correction `pickerHostLowering` and `settingsBodyGrammarLowering` record, and this leg claims no credit for the change that caused it. The fixture pass measures 197 against its own pinned 209, stale on main rather than moved here, and is left for the phase that owns it."
+    "verification": "`node tools/live/touch-targets.mjs --json` on the landed tree with the probes measured: 17689 elements across 77 constructed scenarios, 1030 under the floor, `obnotion-table-footer-trigger` at 229. The same command with the filter in place: 17626 elements across 75 scenarios, 974 under the floor, `obnotion-table-footer-trigger` back to 173. The per-class diff between the two runs names `obnotion-table-footer-trigger` and nothing else -- no other class moves by one instance -- so the 56 are entirely the probes' own footer row. The same pair measured 1360 and 1304 before this leg rebased, the 1304 matching main's own recorded baseline exactly.",
+    "productFindings": "Not a new finding, and none is hidden. `obnotion-table-footer-trigger` at 26px is the same shortfall this file's raiseHistory already records (32 -> 173 on 2026-09-04) and it stays recorded at 173. An empty table does still draw a footer of undersized \"+ Calculate\" buttons on a phone -- worth an operator decision, unchanged by this leg either way.",
+    "loweringNotOwnedHere": "1304 -> 974, and none of the 330 is this leg's. Rebasing onto the calendar and sheet landings retired `obnotion-calendar-month-segment` from the constructed corpus entirely (330 -> 0 in the per-class dump; it was 330 before the rebase and is absent after, and no other class moves). The prior baseline of 1304 would have left 330 controls' worth of headroom that no longer exists, so the number is re-pinned down to what the tree measures rather than left stale -- the same correction `pickerHostLowering` and `settingsBodyGrammarLowering` record, and this leg claims no credit for the change that caused it. The fixture pass measures 197 against its own pinned 209, stale on main rather than moved here, and is left for the phase that owns it."
   },
   "why": "Controls the constructed-renderer pass finds under this project's own 28px coarse-pointer floor, on real production renderer output no fixture in scenarios.mjs ever mounted. Not an allowance: every one of these is a real shortfall, exactly like the fixture baseline it sits beside. The remaining classes here are recurrences the fixture baseline already tracks, now also visible on the real renderer at production row counts (a control the fixture pass measured once shows up here dozens or hundreds of times because a 1600-2000 row bench table/gallery/calendar/timeline actually repeats it). Resizing them is the same operator-scale decision the fixture baseline's own `why` describes, not a repair this pass makes silently.",
-  "smallest": "db-file-tag-remove at 10x14",
-  "settingsBodyGrammarLowering": "1215 -> 1209 on 2026-09-05, found stale rather than lowered by 052-card-properties-capture: worktrees/050-settings-body-grammar's own landing (`4f090d2e`, `9ab96581`, `07be64fe`) converted the settings sheet's native `input[type=\"radio\"]` group and `.db-toggle-switch` checkboxes onto the shared row/segmented grammar so `sheet-grammar.mjs` could register `settings` as a seventh conforming surface, and that same conversion narrowed this ratchet without anyone re-measuring the constructed pass or writing the new number back here. `node tools/live/touch-targets.mjs` on the landed tree measures 1209 under the floor against this file's own prior baseline of 1215, three consecutive runs, still comfortably PASSing at the stale 1215 (1209 < 1215) — which is exactly why it went unnoticed rather than failing loudly. This entry only corrects the stale number to what every measurement agrees on; 052 raises nothing in the constructed pass and claims no credit for a conversion `050` made.",
+  "smallest": "obnotion-file-tag-remove at 10x14",
+  "settingsBodyGrammarLowering": "1215 -> 1209 on 2026-09-05, found stale rather than lowered by 052-card-properties-capture: worktrees/050-settings-body-grammar's own landing (`4f090d2e`, `9ab96581`, `07be64fe`) converted the settings sheet's native `input[type=\"radio\"]` group and `.obnotion-toggle-switch` checkboxes onto the shared row/segmented grammar so `sheet-grammar.mjs` could register `settings` as a seventh conforming surface, and that same conversion narrowed this ratchet without anyone re-measuring the constructed pass or writing the new number back here. `node tools/live/touch-targets.mjs` on the landed tree measures 1209 under the floor against this file's own prior baseline of 1215, three consecutive runs, still comfortably PASSing at the stale 1215 (1209 < 1215) — which is exactly why it went unnoticed rather than failing loudly. This entry only corrects the stale number to what every measurement agrees on; 052 raises nothing in the constructed pass and claims no credit for a conversion `050` made.",
   "monthGridRetargetRaise": {
     "recorded": "2026-09-06",
-    "what": "1213 -> 1320, a calendar month-grid retarget that removed the week grid's 2px row-gap so the event lanes carry their own 20px pitch instead of a 22px one (row-gap plus the segment's own height). The tighter pitch lets more lanes fit inside the same cell height before the \"+N\" overflow collapse takes over, so more `db-calendar-month-segment` buttons render instead of being hidden — the button's own height (20px, under the 28px floor) was already a shortfall before this change; this raise is more of the same shortfall becoming visible, not a new one. No other class moved.",
+    "what": "1213 -> 1320, a calendar month-grid retarget that removed the week grid's 2px row-gap so the event lanes carry their own 20px pitch instead of a 22px one (row-gap plus the segment's own height). The tighter pitch lets more lanes fit inside the same cell height before the \"+N\" overflow collapse takes over, so more `obnotion-calendar-month-segment` buttons render instead of being hidden — the button's own height (20px, under the 28px floor) was already a shortfall before this change; this raise is more of the same shortfall becoming visible, not a new one. No other class moved.",
     "perClass": [
       {
-        "class": "db-calendar-month-segment is-all-day is-start is-end is-draggable",
+        "class": "obnotion-calendar-month-segment is-all-day is-start is-end is-draggable",
         "before": 93,
         "after": 149
       },
       {
-        "class": "db-calendar-month-segment is-all-day is-start is-end",
+        "class": "obnotion-calendar-month-segment is-all-day is-start is-end",
         "before": 84,
         "after": 140
       }
     ],
     "totalBefore": 1208,
     "totalAfter": 1320,
-    "verification": "Isolated by measuring `node tools/live/touch-targets.mjs --json` against `styles.css`/`calendar-renderer.ts`/`calendar-toolbar-renderer.ts` checked out at the commit before this phase's edits (932fa3a9) and again against the landed tree, both from the same working copy so nothing else in the repository could move between the two reads: 1208 before, 1320 after, reproduced twice more on the landed tree (1320, 1320). The per-class diff names exactly the two `db-calendar-month-segment` class combinations above (+56 each, +112 total) and no other class in either dump changed by so much as one instance. `db-calendar-week-allday-segment`'s three variants (the week/day all-day strip, a different lane pitch this phase did not touch) hold their exact prior counts.",
-    "productFindings": "Not a new control type: `db-calendar-month-segment` was already 218 of the pre-existing 1213 (raiseHistory's own perClass table), already under the floor at its shipped 20px height. Anytype's own chip is measured at this same 20px pitch (design-trueup's own reference), so raising the button's height to clear 28px on desktop would be declining the one value this phase was asked to match rather than an accessibility ground ADR-004 recognises — the phone-specific enlargement this same design source calls for is a later leg's (not this file's) to land, and will lower this count again when it does."
+    "verification": "Isolated by measuring `node tools/live/touch-targets.mjs --json` against `styles.css`/`calendar-renderer.ts`/`calendar-toolbar-renderer.ts` checked out at the commit before this phase's edits (932fa3a9) and again against the landed tree, both from the same working copy so nothing else in the repository could move between the two reads: 1208 before, 1320 after, reproduced twice more on the landed tree (1320, 1320). The per-class diff names exactly the two `obnotion-calendar-month-segment` class combinations above (+56 each, +112 total) and no other class in either dump changed by so much as one instance. `obnotion-calendar-week-allday-segment`'s three variants (the week/day all-day strip, a different lane pitch this phase did not touch) hold their exact prior counts.",
+    "productFindings": "Not a new control type: `obnotion-calendar-month-segment` was already 218 of the pre-existing 1213 (raiseHistory's own perClass table), already under the floor at its shipped 20px height. Anytype's own chip is measured at this same 20px pitch (design-trueup's own reference), so raising the button's height to clear 28px on desktop would be declining the one value this phase was asked to match rather than an accessibility ground ADR-004 recognises — the phone-specific enlargement this same design source calls for is a later leg's (not this file's) to land, and will lower this count again when it does."
   },
   "pickerHostLowering": "1320 -> 1304 on 2026-09-06, and the ratchet is lowered rather than raised. The month-grid retarget's own raise to 1320 stands as measured and is unchanged in kind: the pre-leg sources measure 1208 under the floor and the retargeted ones 1320, read from the same working copy minutes apart, which reproduces monthGridRetargetRaise's own figures. What moved after that is not this phase's: rebasing onto e76fcfd4 picked up 052-dropdown-menu-and-picker-componentization's move of the cell editors and the date, colour and icon pickers onto the shared host, and the landed tree now measures 1304 in two consecutive runs. A ratchet left at 1320 would silently allow sixteen controls' worth of headroom that no longer exists, so it is re-pinned down to what the tree actually measures. No count is raised here. The fixture pass measures 208 against its own pinned 209 both before and after this phase's edits, so that number is stale on main rather than moved here, and it is left for the phase that owns it rather than re-pinned from inside an unrelated scope.",
   "raiseHistory": {
@@ -62,22 +62,22 @@
     "what": "422 -> 1278, the third raise recorded here (the first two, 335 -> 367 and 367 -> 422 on the same date, are preserved in this file's git history rather than restated). SCENARIOS_WITH_STATES grew from 31 to 73 constructed scenarios: the toolbar and its four popovers, the six anchored panels, the record detail panel and its note-body region, the table's record peek, the in-cell editors, the date/icon/colour pickers, the dropdown and owned-menu shells, the table chrome variants (footer, grouped, record-icon gutter, full status palette, column headers), the board and gallery cover states, the group-selection controls and the four remaining timeline scales. Two corrections ride the same measurement and are described under `measurementCorrections`: the pre-existing 31 scenarios now measure 407 rather than a flaky 419-429, so the raise is 407 + 871 rather than 422 + 904.",
     "perClass": [
       {
-        "class": "db-multi-select-remove",
+        "class": "obnotion-multi-select-remove",
         "before": 0,
         "after": 558
       },
       {
-        "class": "db-calendar-month-segment",
+        "class": "obnotion-calendar-month-segment",
         "before": 218,
         "after": 218
       },
       {
-        "class": "db-table-footer-trigger",
+        "class": "obnotion-table-footer-trigger",
         "before": 32,
         "after": 173
       },
       {
-        "class": "db-calendar-more-events",
+        "class": "obnotion-calendar-more-events",
         "before": 56,
         "after": 56
       },
@@ -92,141 +92,141 @@
         "after": 48
       },
       {
-        "class": "db-timeline-nav-button",
+        "class": "obnotion-timeline-nav-button",
         "before": 42,
         "after": 42
       },
       {
-        "class": "db-record-icon",
+        "class": "obnotion-record-icon",
         "before": 0,
         "after": 18
       },
       {
-        "class": "db-calendar-week-allday-date",
+        "class": "obnotion-calendar-week-allday-date",
         "before": 16,
         "after": 16
       },
       {
-        "class": "db-calendar-week-allday-more",
+        "class": "obnotion-calendar-week-allday-more",
         "before": 16,
         "after": 16
       },
       {
-        "class": "db-color-picker-swatch",
+        "class": "obnotion-color-picker-swatch",
         "before": 0,
         "after": 16
       },
       {
-        "class": "db-toggle-switch",
+        "class": "obnotion-toggle-switch",
         "before": 10,
         "after": 8
       },
       {
-        "class": "db-timeline-scale-menu",
+        "class": "obnotion-timeline-scale-menu",
         "before": 7,
         "after": 7
       },
       {
-        "class": "db-timeline-create-button",
+        "class": "obnotion-timeline-create-button",
         "before": 6,
         "after": 6
       },
       {
-        "class": "db-calendar-mini-nav",
+        "class": "obnotion-calendar-mini-nav",
         "before": 2,
         "after": 6
       },
       {
-        "class": "db-view-config-number",
+        "class": "obnotion-view-config-number",
         "before": 12,
         "after": 5
       },
       {
-        "class": "db-list-group-new",
+        "class": "obnotion-list-group-new",
         "before": 0,
         "after": 5
       },
       {
-        "class": "db-gallery-group-new",
+        "class": "obnotion-gallery-group-new",
         "before": 0,
         "after": 5
       },
       {
-        "class": "db-option-delete",
+        "class": "obnotion-option-delete",
         "before": 0,
         "after": 5
       },
       {
-        "class": "db-view-tab",
+        "class": "obnotion-view-tab",
         "before": 0,
         "after": 4
       },
       {
-        "class": "db-calendar-mini-title",
+        "class": "obnotion-calendar-mini-title",
         "before": 1,
         "after": 3
       },
       {
-        "class": "db-calendar-mini-today",
+        "class": "obnotion-calendar-mini-today",
         "before": 1,
         "after": 3
       },
       {
-        "class": "db-icon-only-button",
+        "class": "obnotion-icon-only-button",
         "before": 0,
         "after": 2
       },
       {
-        "class": "db-file-tag-remove",
+        "class": "obnotion-file-tag-remove",
         "before": 0,
         "after": 2
       },
       {
-        "class": "db-search-clear",
+        "class": "obnotion-search-clear",
         "before": 0,
         "after": 1
       },
       {
-        "class": "db-active-control-logic",
+        "class": "obnotion-active-control-logic",
         "before": 0,
         "after": 1
       },
       {
-        "class": "db-conditional-format-add",
+        "class": "obnotion-conditional-format-add",
         "before": 0,
         "after": 1
       },
       {
-        "class": "db-record-detail-body-rendered",
+        "class": "obnotion-record-detail-body-rendered",
         "before": 0,
         "after": 1
       },
       {
-        "class": "db-icon-picker-search",
+        "class": "obnotion-icon-picker-search",
         "before": 0,
         "after": 1
       },
       {
-        "class": "db-calendar-options-trigger",
+        "class": "obnotion-calendar-options-trigger",
         "before": 1,
         "after": 0
       },
       {
-        "class": "db-calendar-timeline-options-trigger",
+        "class": "obnotion-calendar-timeline-options-trigger",
         "before": 1,
         "after": 0
       },
       {
-        "class": "db-chart-options-trigger",
+        "class": "obnotion-chart-options-trigger",
         "before": 1,
         "after": 0
       }
     ],
     "totalBefore": 422,
     "totalAfter": 1278,
-    "measurementCorrections": "Two harness defects were counted into the 422 and are gone from the 1326. (1) Body-portal leakage: a surface that portals to document.body (an anchored panel, a phone sheet, a menu, a picker) was left attached when the next scenario mounted, so every scenario after it measured its controls too. The lanes mount all scenarios into one page, so leftovers accumulated: by the tenth panel scenario the body carried ten stacked panels, and which of them survived depended on production's own mutual exclusion, which made the total non-deterministic (1457, 1471, 1558, 1584, 1601, 1623 across six runs of the same tree, and 419/429/429 across three runs of the pre-existing 31 alone — the recorded 422 sat inside that band, so the gate it guarded was already decided by timing). render-assertion-harness.ts now sweeps every body child a mount added, after the named closes it already ran, at the start of the next mount — late enough that a capture still photographs the surface its own scenario opened. Three passes over the same page now return 1326, 1326, 1326, and two independent runs of touch-targets.mjs return 1326 and 1326. It removed the double-counted db-toggle-switch (10 -> 6 on the pre-existing set) and db-view-config-number (12 -> 4). (2) Harness-only anchors: the hidden button this harness creates for a popover to position against is not a product control, and eleven more of them arrived with the new surfaces. They are now spans, which the lane's interactive selector does not match, and the three T028 wrote inline (db-calendar-options-trigger, db-calendar-timeline-options-trigger, db-chart-options-trigger, 1 each) fold into the same helper and drop to 0.",
-    "verification": "Attributed per scenario by tagging each ScenarioSpec with its own unique name rather than scenarioLabel() (which collides for scenarios sharing a renderer/bag pair) and summing that run's under-floor rows per class, the same method T029's entry describes. The 871 the new scenarios add: 558 db-multi-select-remove (72 per table-rendering capture scenario, 86 in the full-palette one, 24 in the footer variant's shorter row set, 16 in the grouped table), 141 more db-table-footer-trigger (16 per new table scenario, 13 in the footer variant), 51 unclassed buttons and inputs (32 in the column manager at 24x24, 10 in the select-cell editor, 4 in the sort panel, 3 view-config checkboxes at 13x13, 2 view-config buttons at 121x24), 48 clickable-icon in the column manager, 18 db-record-icon, 16 db-color-picker-swatch at 18x18, 5 each of db-list-group-new, db-gallery-group-new and db-option-delete, 4 db-view-tab, 4 more mini-calendar buttons from the two date-picker scenarios, and single findings in the search, filter, record-body and icon-picker surfaces. Every pre-existing class holds its exact prior count except the six the measurement corrections above explain. unstyled-links.mjs over the same 73 scenarios: 1548 links, 0 resolving to a user-agent colour, PASS, identical across two runs. No styles.css or src/views change accompanies this raise.",
-    "productFindings": "Every count here is a real shortfall, not an allowance. Three are newly visible because no fixture and no pre-043 constructed scenario ever mounted the surface: db-multi-select-remove (the per-tag remove button inside a multi-select cell, the largest single population here — it repeats once per tag per row, so a capture-sized 18-row table already shows 72 of them), db-file-tag-remove (10x14, the smallest control this pass has ever measured, the per-tag remove button on the file.tags pseudo-column), and the column manager's 48 clickable-icon plus 32 unclassed 24x24 buttons, which are that panel's per-row controls. db-color-picker-swatch at 18x18 and the view-config panel's 13x13 checkbox inputs are the two other honest misses. None is fixed here: resizing a product control is the same operator-scale decision this file's own `why` and `lastTriage` describe, and it would move captures this packet is not scoped to move."
+    "measurementCorrections": "Two harness defects were counted into the 422 and are gone from the 1326. (1) Body-portal leakage: a surface that portals to document.body (an anchored panel, a phone sheet, a menu, a picker) was left attached when the next scenario mounted, so every scenario after it measured its controls too. The lanes mount all scenarios into one page, so leftovers accumulated: by the tenth panel scenario the body carried ten stacked panels, and which of them survived depended on production's own mutual exclusion, which made the total non-deterministic (1457, 1471, 1558, 1584, 1601, 1623 across six runs of the same tree, and 419/429/429 across three runs of the pre-existing 31 alone — the recorded 422 sat inside that band, so the gate it guarded was already decided by timing). render-assertion-harness.ts now sweeps every body child a mount added, after the named closes it already ran, at the start of the next mount — late enough that a capture still photographs the surface its own scenario opened. Three passes over the same page now return 1326, 1326, 1326, and two independent runs of touch-targets.mjs return 1326 and 1326. It removed the double-counted obnotion-toggle-switch (10 -> 6 on the pre-existing set) and obnotion-view-config-number (12 -> 4). (2) Harness-only anchors: the hidden button this harness creates for a popover to position against is not a product control, and eleven more of them arrived with the new surfaces. They are now spans, which the lane's interactive selector does not match, and the three T028 wrote inline (obnotion-calendar-options-trigger, obnotion-calendar-timeline-options-trigger, obnotion-chart-options-trigger, 1 each) fold into the same helper and drop to 0.",
+    "verification": "Attributed per scenario by tagging each ScenarioSpec with its own unique name rather than scenarioLabel() (which collides for scenarios sharing a renderer/bag pair) and summing that run's under-floor rows per class, the same method T029's entry describes. The 871 the new scenarios add: 558 obnotion-multi-select-remove (72 per table-rendering capture scenario, 86 in the full-palette one, 24 in the footer variant's shorter row set, 16 in the grouped table), 141 more obnotion-table-footer-trigger (16 per new table scenario, 13 in the footer variant), 51 unclassed buttons and inputs (32 in the column manager at 24x24, 10 in the select-cell editor, 4 in the sort panel, 3 view-config checkboxes at 13x13, 2 view-config buttons at 121x24), 48 clickable-icon in the column manager, 18 obnotion-record-icon, 16 obnotion-color-picker-swatch at 18x18, 5 each of obnotion-list-group-new, obnotion-gallery-group-new and obnotion-option-delete, 4 obnotion-view-tab, 4 more mini-calendar buttons from the two date-picker scenarios, and single findings in the search, filter, record-body and icon-picker surfaces. Every pre-existing class holds its exact prior count except the six the measurement corrections above explain. unstyled-links.mjs over the same 73 scenarios: 1548 links, 0 resolving to a user-agent colour, PASS, identical across two runs. No styles.css or src/views change accompanies this raise.",
+    "productFindings": "Every count here is a real shortfall, not an allowance. Three are newly visible because no fixture and no pre-043 constructed scenario ever mounted the surface: obnotion-multi-select-remove (the per-tag remove button inside a multi-select cell, the largest single population here — it repeats once per tag per row, so a capture-sized 18-row table already shows 72 of them), obnotion-file-tag-remove (10x14, the smallest control this pass has ever measured, the per-tag remove button on the file.tags pseudo-column), and the column manager's 48 clickable-icon plus 32 unclassed 24x24 buttons, which are that panel's per-row controls. obnotion-color-picker-swatch at 18x18 and the view-config panel's 13x13 checkbox inputs are the two other honest misses. None is fixed here: resizing a product control is the same operator-scale decision this file's own `why` and `lastTriage` describe, and it would move captures this packet is not scoped to move."
   },
   "rebaseReconciliation": {
     "recorded": "2026-09-04",
@@ -241,33 +241,33 @@
   },
   "ganttPortMergeReconciliation": {
     "recorded": "2026-09-04",
-    "what": "worktrees/028-constructed-chrome (this file's own raiseHistory above, 422 -> 1278, dated against a pre-rebase tree where the timeline's default render was still the local db-timeline-* markup) was rebased onto main after main separately landed the 037-timeline-gantt-port one-to-one fidelity work — a different lineage of this same file that moved the shared 422 base through its own chain (stateVariantRaiseHistory 367->422, ganttPortRaiseHistory 367->9974, ganttPortLowerHistory 9974->320, mergeReconciliation 320->367 — see main's history for this file, git-preserved rather than restated here since this branch's own raiseHistory took the other fork of the same 422 base). The two derivations are compatible, not contradictory: main's chain ends at 367 because it excludes this branch's 43 new constructed families (STATE_SCENARIOS 31, not 73) entirely; this branch's chain reaches 1278 by adding those families on top of the pre-gantt-port timeline. Rebasing onto main's already-ported gantt tree removes exactly the three local timeline-nav classes this branch's own raiseHistory perClass table still carried (db-timeline-create-button 6, db-timeline-nav-button 42, db-timeline-scale-menu 7 — 55 total): the default timeline render no longer mounts that chrome at all (replaced by the reference gantt's own controls-bar/add-subtask buttons, already covered by main's coarse-pointer hit-area rule and additionally excluded from this pass's own INTERACTIVE selector because they render as bare SVG `<rect>`/`<circle>` shapes with no `role`/`tabindex`, not semantic buttons).",
+    "what": "worktrees/028-constructed-chrome (this file's own raiseHistory above, 422 -> 1278, dated against a pre-rebase tree where the timeline's default render was still the local obnotion-timeline-* markup) was rebased onto main after main separately landed the 037-timeline-gantt-port one-to-one fidelity work — a different lineage of this same file that moved the shared 422 base through its own chain (stateVariantRaiseHistory 367->422, ganttPortRaiseHistory 367->9974, ganttPortLowerHistory 9974->320, mergeReconciliation 320->367 — see main's history for this file, git-preserved rather than restated here since this branch's own raiseHistory took the other fork of the same 422 base). The two derivations are compatible, not contradictory: main's chain ends at 367 because it excludes this branch's 43 new constructed families (STATE_SCENARIOS 31, not 73) entirely; this branch's chain reaches 1278 by adding those families on top of the pre-gantt-port timeline. Rebasing onto main's already-ported gantt tree removes exactly the three local timeline-nav classes this branch's own raiseHistory perClass table still carried (obnotion-timeline-create-button 6, obnotion-timeline-nav-button 42, obnotion-timeline-scale-menu 7 — 55 total): the default timeline render no longer mounts that chrome at all (replaced by the reference gantt's own controls-bar/add-subtask buttons, already covered by main's coarse-pointer hit-area rule and additionally excluded from this pass's own INTERACTIVE selector because they render as bare SVG `<rect>`/`<circle>` shapes with no `role`/`tabindex`, not semantic buttons).",
     "reMeasured": 1223,
     "reMeasuredRuns": [
       1223,
       1223,
       1223
     ],
-    "derivation": "1278 (this branch's own pre-rebase baseline) - 55 (db-timeline-create-button 6 + db-timeline-nav-button 42 + db-timeline-scale-menu 7, all three retired from the default render by main's already-landed gantt port) = 1223, matching the merged tree's measured total exactly across three independent runs.",
+    "derivation": "1278 (this branch's own pre-rebase baseline) - 55 (obnotion-timeline-create-button 6 + obnotion-timeline-nav-button 42 + obnotion-timeline-scale-menu 7, all three retired from the default render by main's already-landed gantt port) = 1223, matching the merged tree's measured total exactly across three independent runs.",
     "intermediateValuesNoted": "main's own parallel chain for this file passed through 367 and 422 on its way to reconciling the state-variant raise against the gantt port (see main's git history for tools/live/touch-targets-constructed-baseline.json, stateVariantRebaseReconciliation/ganttPortRaiseHistory/ganttPortLowerHistory/mergeReconciliation) — a different fork of the same shared 422 base this branch's own raiseHistory extended, not a value this merge needed to pass through itself.",
-    "verification": "`node tools/live/touch-targets.mjs` run three times against the fully merged tree (rebase complete, harness fix for the gantt-vocabulary subtask markers applied, full verify suite green): constructed pass reports 1223 under the 28px floor on every run, against this file's own pre-rebase baseline of 1278 (fixture pass 198 against 279, unaffected and stable across the same three runs). The three retired classes are absent from the merged tree's undeclared list entirely (not merely reduced to 0 — grepped for db-timeline-create-button/db-timeline-nav-button/db-timeline-scale-menu in the fresh --json dump, zero hits), and every other class holds its exact prior count from this file's own raiseHistory perClass table (db-multi-select-remove 558, db-table-footer-trigger 173, clickable-icon 48 split across the column manager's own three class combinations, db-calendar-month-segment variants, etc.) — confirmed by diffing the fresh per-class breakdown against raiseHistory's own table, class by class. `node tools/live/unstyled-links.mjs`: constructed link total unchanged at 1476 (fixture 112), since link colour is unaffected by which markup renders the timeline's controls. `npm run gate`: 25 green, 0 red on the merged tree with this baseline applied."
+    "verification": "`node tools/live/touch-targets.mjs` run three times against the fully merged tree (rebase complete, harness fix for the gantt-vocabulary subtask markers applied, full verify suite green): constructed pass reports 1223 under the 28px floor on every run, against this file's own pre-rebase baseline of 1278 (fixture pass 198 against 279, unaffected and stable across the same three runs). The three retired classes are absent from the merged tree's undeclared list entirely (not merely reduced to 0 — grepped for obnotion-timeline-create-button/obnotion-timeline-nav-button/obnotion-timeline-scale-menu in the fresh --json dump, zero hits), and every other class holds its exact prior count from this file's own raiseHistory perClass table (obnotion-multi-select-remove 558, obnotion-table-footer-trigger 173, clickable-icon 48 split across the column manager's own three class combinations, obnotion-calendar-month-segment variants, etc.) — confirmed by diffing the fresh per-class breakdown against raiseHistory's own table, class by class. `node tools/live/unstyled-links.mjs`: constructed link total unchanged at 1476 (fixture 112), since link colour is unaffected by which markup renders the timeline's controls. `npm run gate`: 25 green, 0 red on the merged tree with this baseline applied."
   },
   "lastTriage": {
     "recorded": "2026-09-04",
-    "what": "db-row-insert-button, db-gallery-card-open and db-timeline-mobile-menu-button raised to the 28px floor by adding them to styles.css's existing `@media (pointer: coarse) { min-width: 28px; min-height: 28px; }` block (styles.css:21456-21469), the same idiom already used for db-list-row-open/db-source-rule-icon-button. No width, height, or position property changed on any of the three; the coarse-pointer minimum floats above the visual size only where a coarse pointer is present.",
+    "what": "obnotion-row-insert-button, obnotion-gallery-card-open and obnotion-timeline-mobile-menu-button raised to the 28px floor by adding them to styles.css's existing `@media (pointer: coarse) { min-width: 28px; min-height: 28px; }` block (styles.css:21456-21469), the same idiom already used for obnotion-list-row-open/obnotion-source-rule-icon-button. No width, height, or position property changed on any of the three; the coarse-pointer minimum floats above the visual size only where a coarse pointer is present.",
     "perClass": [
       {
-        "class": "db-row-insert-button",
+        "class": "obnotion-row-insert-button",
         "before": 3998,
         "after": 0
       },
       {
-        "class": "db-gallery-card-open",
+        "class": "obnotion-gallery-card-open",
         "before": 3200,
         "after": 0
       },
       {
-        "class": "db-timeline-mobile-menu-button",
+        "class": "obnotion-timeline-mobile-menu-button",
         "before": 960,
         "after": 0
       }
@@ -278,7 +278,7 @@
   },
   "listRetirementLowering": {
     "recorded": "2026-09-05",
-    "what": "1220 -> 1215 on 2026-09-05 (corrected basis: 1223 was already known stale before this phase touched the file -- see phase044RebaseReconciliation below, which establishes 1220 as true of the tree this phase started from), lowered because `006/007` retired `src/views/list-renderer.ts` and every constructed scenario that mounted it (`constructed-list`, `constructed-list-sparse`) and the list host inside `group-selection-controls`, so `db-list-row-open`, `db-list-row-checkbox`, `db-list-mobile-move-btn`, `db-list-group-toggle`, `db-list-group-checkbox` and `db-list-group-new` no longer appear anywhere in the constructed corpus. `render-assertion-harness.ts`'s own list-only helpers (`fileViewListBag`, `embedListBag`, `listAssertions`, `tagListRenders`, `tagListGroupedRenders`) were removed in the same change; nothing else in `SCENARIOS_WITH_STATES` changed.",
+    "what": "1220 -> 1215 on 2026-09-05 (corrected basis: 1223 was already known stale before this phase touched the file -- see phase044RebaseReconciliation below, which establishes 1220 as true of the tree this phase started from), lowered because `006/007` retired `src/views/list-renderer.ts` and every constructed scenario that mounted it (`constructed-list`, `constructed-list-sparse`) and the list host inside `group-selection-controls`, so `obnotion-list-row-open`, `obnotion-list-row-checkbox`, `obnotion-list-mobile-move-btn`, `obnotion-list-group-toggle`, `obnotion-list-group-checkbox` and `obnotion-list-group-new` no longer appear anywhere in the constructed corpus. `render-assertion-harness.ts`'s own list-only helpers (`fileViewListBag`, `embedListBag`, `listAssertions`, `tagListRenders`, `tagListGroupedRenders`) were removed in the same change; nothing else in `SCENARIOS_WITH_STATES` changed.",
     "reMeasured": 1215,
     "reMeasuredRuns": [
       1215,
@@ -287,39 +287,39 @@
     ],
     "verification": "`node tools/live/touch-targets.mjs` on the landed tree measures 1215 under the 28px floor against this file's own prior recorded value of 1223 -- corrected to 1220 by phase044RebaseReconciliation below -- three consecutive runs, exit 0 in both passes. `npm run screenshots:verify` reports 534 entries fresh with 0 stale, and `tools/lane/check-lane.mjs` finds no content change this lowering did not already account for (the removed list scenarios drop 20 captures; the remaining content moves are the bench-consolidation field renaming recorded separately, not a touch-target surface)."
   },
-  "note": "The constructed pass first ran against no baseline at all (2026-09-03) and measured 8503 under-floor controls across 12 classes, red before any fix or declaration existed. Five of the twelve were newly discovered here — invisible to the fixture pass because no scenarios.mjs fixture mounts them: db-row-insert-button (22x22, 3998 instances — the table's hover-to-insert-row button, repeated at every row gap in the 2000-row bench table), db-gallery-card-open (24x24, 3200 instances — the gallery card's open button), db-timeline-mobile-menu-button (22x22, 960 instances — the timeline's phone-only overflow menu button, ironically missing the floor its own name promises), db-board-pagination-dot (12x12, 10 instances) and db-calendar-week-allday-more (67x13, 16 instances). db-board-pagination-dot is declared, not counted here: its `::before` inset is -16px on every side of a 12px dot, a 44px effective hit area a bounding box does not see (styles.css:19696-19699), the same shape as the checkbox exemption in touch-targets.mjs's DECLARED list, which now names it. The remaining four (8493 = 8503 - 10) were real, recorded here rather than fixed. A fix was drafted and verified for three of them the first time this pass ran, then reverted rather than landed because landing it would have invalidated the sourceHashes on eight unrelated census/audit artefacts (cascade-audit, checkbox-appearance, checkbox-inventory, design-conformance, engine-parity, surface-census, token-census, view-census); re-stamping surfaced that two of the eight — checkbox-appearance (a pre-existing 2.99:1 border-contrast shortfall on a board-drop-language fixture) and engine-parity (pre-existing Chrome/WebKit width differences, 520 vs 512, on unrelated fixtures) — fail for reasons that predate any touch-target work, confirmed by running both against the untouched tree: identical failing output. Those two remain a different scope's problem (WCAG contrast and cross-engine tolerance, not touch targets) and are recorded unchanged rather than fixed incidentally. This time the fix was landed: see `lastTriage` above for the applied change, the per-class before/after count, and the verification that produced them. db-calendar-week-allday-more (67x13, a real `<button>` inside the week/day all-day overflow row) was never a fix candidate for this pass regardless: raising its height sits inside the calendar's CSS-grid all-day row track (`grid-row` positioning shared with event-segment bars), an area this program's own history already flags as fragile (the runtime-vars.css calendar-formula finding), so it stays deferred pending a dedicated pass with its own capture verification. The other 7 recurring classes (db-calendar-month-segment 200, db-calendar-more-events 56, db-calendar-week-allday-date 16, db-table-footer-trigger 32, db-timeline-create-button 1, db-timeline-nav-button 12, db-timeline-scale-menu 2 — 319 total) are the same shortfalls the fixture baseline already tracks, now also counted at the scale a real renderer repeats them; 319 + db-calendar-week-allday-more's 16 = 335, the new baseline.",
+  "note": "The constructed pass first ran against no baseline at all (2026-09-03) and measured 8503 under-floor controls across 12 classes, red before any fix or declaration existed. Five of the twelve were newly discovered here — invisible to the fixture pass because no scenarios.mjs fixture mounts them: obnotion-row-insert-button (22x22, 3998 instances — the table's hover-to-insert-row button, repeated at every row gap in the 2000-row bench table), obnotion-gallery-card-open (24x24, 3200 instances — the gallery card's open button), obnotion-timeline-mobile-menu-button (22x22, 960 instances — the timeline's phone-only overflow menu button, ironically missing the floor its own name promises), obnotion-board-pagination-dot (12x12, 10 instances) and obnotion-calendar-week-allday-more (67x13, 16 instances). obnotion-board-pagination-dot is declared, not counted here: its `::before` inset is -16px on every side of a 12px dot, a 44px effective hit area a bounding box does not see (styles.css:19696-19699), the same shape as the checkbox exemption in touch-targets.mjs's DECLARED list, which now names it. The remaining four (8493 = 8503 - 10) were real, recorded here rather than fixed. A fix was drafted and verified for three of them the first time this pass ran, then reverted rather than landed because landing it would have invalidated the sourceHashes on eight unrelated census/audit artefacts (cascade-audit, checkbox-appearance, checkbox-inventory, design-conformance, engine-parity, surface-census, token-census, view-census); re-stamping surfaced that two of the eight — checkbox-appearance (a pre-existing 2.99:1 border-contrast shortfall on a board-drop-language fixture) and engine-parity (pre-existing Chrome/WebKit width differences, 520 vs 512, on unrelated fixtures) — fail for reasons that predate any touch-target work, confirmed by running both against the untouched tree: identical failing output. Those two remain a different scope's problem (WCAG contrast and cross-engine tolerance, not touch targets) and are recorded unchanged rather than fixed incidentally. This time the fix was landed: see `lastTriage` above for the applied change, the per-class before/after count, and the verification that produced them. obnotion-calendar-week-allday-more (67x13, a real `<button>` inside the week/day all-day overflow row) was never a fix candidate for this pass regardless: raising its height sits inside the calendar's CSS-grid all-day row track (`grid-row` positioning shared with event-segment bars), an area this program's own history already flags as fragile (the runtime-vars.css calendar-formula finding), so it stays deferred pending a dedicated pass with its own capture verification. The other 7 recurring classes (obnotion-calendar-month-segment 200, obnotion-calendar-more-events 56, obnotion-calendar-week-allday-date 16, obnotion-table-footer-trigger 32, obnotion-timeline-create-button 1, obnotion-timeline-nav-button 12, obnotion-timeline-scale-menu 2 — 319 total) are the same shortfalls the fixture baseline already tracks, now also counted at the scale a real renderer repeats them; 319 + obnotion-calendar-week-allday-more's 16 = 335, the new baseline.",
   "phase044RebaseReconciliation": {
     "recorded": "2026-09-05",
-    "what": "044-phone-sheet-alignment measured this pass at three points to separate what its own work changed from what the rebase carried in: 199 fixture / 1223 constructed on the untouched branch base (62e7e5c1, matching this file's own recorded 1223 exactly); 199 fixture / 1220 constructed at the rebased tip (5af7eef7, after picking up 037-reference-captures, 038-milestone-labels, 039-column-width-sheet and 040-settings-sheet); 199 fixture / 1220 constructed on 044's own final tree, after every CSS and fixture edit this phase made (.db-sheet-close, .db-add-view-key-field, the add-view/record-peek fixture updates). The constructed count moved once, during the rebase, and did not move again across 044's own edits — every new element this phase added (the 44px close button, the dropdown button) already clears the floor, so it can only ever leave this count unchanged, never lower it. Per-class diff between the base and rebase-tip measurements: db-icon-only-button 2->0, db-conditional-format-add db-icon-only-button 1->0 (view-config-panel-renderer.ts controls the settings-sheet leg (040) resized), no other class moved. 044 raises nothing in the constructed pass and this entry corrects the recorded number to what its own measurements agree on rather than claiming credit for a change it did not make.",
+    "what": "044-phone-sheet-alignment measured this pass at three points to separate what its own work changed from what the rebase carried in: 199 fixture / 1223 constructed on the untouched branch base (62e7e5c1, matching this file's own recorded 1223 exactly); 199 fixture / 1220 constructed at the rebased tip (5af7eef7, after picking up 037-reference-captures, 038-milestone-labels, 039-column-width-sheet and 040-settings-sheet); 199 fixture / 1220 constructed on 044's own final tree, after every CSS and fixture edit this phase made (.obnotion-sheet-close, .obnotion-add-view-key-field, the add-view/record-peek fixture updates). The constructed count moved once, during the rebase, and did not move again across 044's own edits — every new element this phase added (the 44px close button, the dropdown button) already clears the floor, so it can only ever leave this count unchanged, never lower it. Per-class diff between the base and rebase-tip measurements: obnotion-icon-only-button 2->0, obnotion-conditional-format-add obnotion-icon-only-button 1->0 (view-config-panel-renderer.ts controls the settings-sheet leg (040) resized), no other class moved. 044 raises nothing in the constructed pass and this entry corrects the recorded number to what its own measurements agree on rather than claiming credit for a change it did not make.",
     "reMeasured": 1220,
     "reMeasuredRuns": [
       1220,
       1220,
       1220
     ],
-    "derivation": "1223 (this file's own recorded baseline, confirmed still true at 044's branch base) - 2 (db-icon-only-button) - 1 (db-conditional-format-add db-icon-only-button) = 1220, matching every measurement on the rebased and final trees exactly."
+    "derivation": "1223 (this file's own recorded baseline, confirmed still true at 044's branch base) - 2 (obnotion-icon-only-button) - 1 (obnotion-conditional-format-add obnotion-icon-only-button) = 1220, matching every measurement on the rebased and final trees exactly."
   },
   "toolbarRulesCoverageRaise": {
     "recorded": "2026-09-05",
     "what": "1209 -> 1213, four more instances of two already-known undersized classes, from seven new STATE_SCENARIOS entries added to prove the toolbar's declared trigger state and the tab context menu against real mounts (render-assertion-bundle.mjs: chrome-toolbar-rules-{filter,sort,both}, chrome-toolbar-tab-menu, chrome-active-view-controls-{none,filter,sort}). No styles.css or src/views change accompanies this raise.",
     "perClass": [
       {
-        "class": "db-view-tab",
+        "class": "obnotion-view-tab",
         "before": 4,
         "after": 8
       },
       {
-        "class": "db-active-control-logic",
+        "class": "obnotion-active-control-logic",
         "before": 1,
         "after": 2
       }
     ],
     "totalBefore": 1209,
     "totalAfter": 1213,
-    "verification": "Isolated by stashing the three render-assertion-* files that carry the new scenarios and running node tools/live/touch-targets.mjs --json before and after: 1208 without the new scenarios (a 1-off from this file's own recorded 1209, consistent with the run-to-run variance other entries in this file already note) and 1213 with them, both reproduced on a second run. The per-class diff names exactly db-view-tab (the view-tab-add \"+\" button, 25x24, already tracked since this file's original raiseHistory) and db-active-control-logic (the chip rail's AND/OR toggle, 43x26, already tracked the same way) -- both pre-existing shortfalls this file already carries, now mounted a few more times because the new scenarios render more toolbar and chip-rail instances, not a new control type. No new class name appears in either diff.",
-    "productFindings": "Not a new finding. Both classes are the same shortfalls this file's own history already records (db-view-tab and db-active-control-logic both appear in the original 2026-09-04 raiseHistory perClass table); this entry only accounts for more instances of them."
+    "verification": "Isolated by stashing the three render-assertion-* files that carry the new scenarios and running node tools/live/touch-targets.mjs --json before and after: 1208 without the new scenarios (a 1-off from this file's own recorded 1209, consistent with the run-to-run variance other entries in this file already note) and 1213 with them, both reproduced on a second run. The per-class diff names exactly obnotion-view-tab (the view-tab-add \"+\" button, 25x24, already tracked since this file's original raiseHistory) and obnotion-active-control-logic (the chip rail's AND/OR toggle, 43x26, already tracked the same way) -- both pre-existing shortfalls this file already carries, now mounted a few more times because the new scenarios render more toolbar and chip-rail instances, not a new control type. No new class name appears in either diff.",
+    "productFindings": "Not a new finding. Both classes are the same shortfalls this file's own history already records (obnotion-view-tab and obnotion-active-control-logic both appear in the original 2026-09-04 raiseHistory perClass table); this entry only accounts for more instances of them."
   },
   "boardGroupsPanelRaise": "196 -> 202 -> 186 on 2026-09-07 (fixture); 801 -> 807 on 2026-09-07 (constructed). TWO movements, in opposite directions, recorded separately because they have different causes. (1) THE RAISE, +6, and it is this packet's. The board's new Groups panel (059-notion-board-refinement) reuses buildCheckboxPropertyRow's own unclassed move-up/move-down buttons (record-surface/property-row.ts) verbatim, so the hand-written panel-board-groups fixture carries 3 rows x 2 buttons = 6 new 24x24 instances. Not a new component and not a new defect class: `node tools/live/touch-targets.mjs --json`, filtered to unclassed 24x24 buttons, reports panel-column-manager 12, panel-board-card-properties 8, panel-sort-rules 4 and panel-board-groups 6 -- the same shared control, in a fourth fixture. The constructed pass's board-groups-panel/file-view scenario shares board/file-view's own label (scenarioLabel keys on renderer/bag, not on the state-scenario's unique name) and opens the real panel over the board bench's 5 groups, contributing the +6 measured there. (2) THE LOWERING, -16, and it is NOT this packet's -- found stale on the rebase onto origin/main, the same way lastTriage and listRetirementLowering below were found stale rather than lowered. The 196 this packet raised from was measured on branch base f29c8344; origin/main at 44101b47 still pins 196, but the rebased tree measures 180 without this packet's fixture and 186 with it, over three consecutive runs, so main's own landings in between lowered the corpus by 16 without re-pinning. The pin follows the measurement rather than the arithmetic: 186, not 202. Re-pinning to 202 would have left a 16-slot allowance nothing in the tree earns. No control shrinks below what the shared row builder already ships elsewhere in the corpus; resizing that control remains the operator-scale decision this file declines to make silently.",
-  "rebaseReconciliation2026_09_07": "801 -> 810 on the rebase onto origin/main a0d64df0, and only 6 of the 9 are this packet's. Measured with `node tools/live/touch-targets.mjs --json` before and after the rebase, differenced by (scenario, tag, classes, width, height): (a) +6, THIS PACKET -- the Groups panel's reuse of buildCheckboxPropertyRow's unclassed 24x24 move-up/move-down buttons; see boardGroupsPanelRaise. (b) +3, NOT THIS PACKET -- `db-record-detail-hidden-toggle` at 120x20, two instances in record-detail/file-view and one in record-peek/file-view. That control arrived with 065-notion-record-refinement's landing on main, which did not re-pin this file for it. Recorded here rather than absorbed silently into (a): the raise is pinned because the alternative is landing red on a shortfall this packet did not create, and naming it keeps it findable when 065's own triage reaches it. The fixture pass is unaffected by (b) -- no scenarios.mjs fixture mounts that control -- and moved the other way, 196 -> 186, for reasons its own file records. (b) is now closed -- see hiddenDetailToggleTouchFix below.",
-  "hiddenDetailToggleTouchFix": "810 -> 807 on 2026-09-07, closing the (b) portion `rebaseReconciliation2026_09_07` pinned rather than absorbed. `db-record-detail-hidden-toggle` (record-detail-panel.ts's disclosure button, shared by the record-detail and record-peek surfaces) measured 120x20 in all three constructed-pass instances -- a standalone tappable control, not a value living inside an already-sized cell, so it needed the same floor the table's load-more button and footer trigger already raise on. Fixed at the source: `.db-mobile-bottom-sheet .db-record-detail-hidden-toggle` gains `min-height: 44px` in styles.css. The per-row `.db-record-detail-hidden-eye` button (collapsed by default -- invisible to this pass and never counted in `under`) also gains `min-width`/`min-height: 44px` under `.db-mobile-bottom-sheet`, filling the 44px `.db-record-detail-hidden-row` already reserves per row via `--db-sheet-row-min-height` rather than growing the row: measured 48px before and after the change, on both the record-detail and record-peek scenarios, with the toggle at 120x44 and the eye at 44x44 once the group is expanded. `.db-record-detail-hidden-chevron` and `.db-record-detail-hidden-drag` are unchanged -- neither carries a click handler, so neither is a control the touch floor applies to; only the eye button and the disclosure toggle are real interactive elements in this group today. Re-measured three consecutive runs at 807, `db-record-detail-hidden-toggle` absent from the undeclared list (grepped the fresh `--json` dump for the class -- zero hits), 0 raisedMisses, no other class's count moved between the two reads."
+  "rebaseReconciliation2026_09_07": "801 -> 810 on the rebase onto origin/main a0d64df0, and only 6 of the 9 are this packet's. Measured with `node tools/live/touch-targets.mjs --json` before and after the rebase, differenced by (scenario, tag, classes, width, height): (a) +6, THIS PACKET -- the Groups panel's reuse of buildCheckboxPropertyRow's unclassed 24x24 move-up/move-down buttons; see boardGroupsPanelRaise. (b) +3, NOT THIS PACKET -- `obnotion-record-detail-hidden-toggle` at 120x20, two instances in record-detail/file-view and one in record-peek/file-view. That control arrived with 065-notion-record-refinement's landing on main, which did not re-pin this file for it. Recorded here rather than absorbed silently into (a): the raise is pinned because the alternative is landing red on a shortfall this packet did not create, and naming it keeps it findable when 065's own triage reaches it. The fixture pass is unaffected by (b) -- no scenarios.mjs fixture mounts that control -- and moved the other way, 196 -> 186, for reasons its own file records. (b) is now closed -- see hiddenDetailToggleTouchFix below.",
+  "hiddenDetailToggleTouchFix": "810 -> 807 on 2026-09-07, closing the (b) portion `rebaseReconciliation2026_09_07` pinned rather than absorbed. `obnotion-record-detail-hidden-toggle` (record-detail-panel.ts's disclosure button, shared by the record-detail and record-peek surfaces) measured 120x20 in all three constructed-pass instances -- a standalone tappable control, not a value living inside an already-sized cell, so it needed the same floor the table's load-more button and footer trigger already raise on. Fixed at the source: `.obnotion-mobile-bottom-sheet .obnotion-record-detail-hidden-toggle` gains `min-height: 44px` in styles.css. The per-row `.obnotion-record-detail-hidden-eye` button (collapsed by default -- invisible to this pass and never counted in `under`) also gains `min-width`/`min-height: 44px` under `.obnotion-mobile-bottom-sheet`, filling the 44px `.obnotion-record-detail-hidden-row` already reserves per row via `--obnotion-sheet-row-min-height` rather than growing the row: measured 48px before and after the change, on both the record-detail and record-peek scenarios, with the toggle at 120x44 and the eye at 44x44 once the group is expanded. `.obnotion-record-detail-hidden-chevron` and `.obnotion-record-detail-hidden-drag` are unchanged -- neither carries a click handler, so neither is a control the touch floor applies to; only the eye button and the disclosure toggle are real interactive elements in this group today. Re-measured three consecutive runs at 807, `obnotion-record-detail-hidden-toggle` absent from the undeclared list (grepped the fresh `--json` dump for the class -- zero hits), 0 raisedMisses, no other class's count moved between the two reads."
 }

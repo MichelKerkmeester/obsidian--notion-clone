@@ -37,7 +37,7 @@ describe("ToolbarRenderer toggle state language", () => {
   it("offers display width from the utilities menu after the dedicated toggle was removed", () => {
     expect(toolbarContent).toContain('t("toolbar.displayWidth")');
     expect(toolbarContent).toContain("setDisplayWidth");
-    expect(toolbarContent).not.toContain("db-width-toggle-btn");
+    expect(toolbarContent).not.toContain("obnotion-width-toggle-btn");
   });
 
   it("keeps disclosure triggers on the expanded-state language only", () => {
@@ -49,11 +49,11 @@ describe("ToolbarRenderer toggle state language", () => {
     expect(toolbarContent).toContain("active: i === currentViewIndex");
     const primitives = readFileSync(resolve(__dirname, "toolbar-primitives.ts"), "utf-8");
     expect(primitives).toContain('"aria-selected": String(definition.active || definition.id === options.activeId)');
-    expect(primitives).toContain('cls: `db-view-tab${definition.active || definition.id === options.activeId ? " is-active" : ""}`');
+    expect(primitives).toContain('cls: `obnotion-view-tab${definition.active || definition.id === options.activeId ? " is-active" : ""}`');
   });
 
   it("renders six dots in the linked-view grab handle", () => {
-    expect(toolbarContent).toContain("db-linked-view-drag-handle");
+    expect(toolbarContent).toContain("obnotion-linked-view-drag-handle");
     expect(toolbarContent).toContain("index < 6");
     expect(toolbarContent).toContain("actions.moveLinkedView");
   });

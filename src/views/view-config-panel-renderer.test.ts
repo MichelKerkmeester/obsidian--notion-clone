@@ -246,7 +246,7 @@ function makeDoc(phone: boolean): { body: FakeElement; container: FakeElement } 
     querySelector: (selector: string) => body.querySelector(selector),
   };
   body.ownerDocument = doc;
-  const container = body.createDiv({ cls: "note-database-container" });
+  const container = body.createDiv({ cls: "obnotion-container" });
   return { body, container };
 }
 
@@ -265,7 +265,7 @@ function makeConfig(): ViewConfig {
 
 function makeDatabase(config: ViewConfig): DatabaseConfig {
   return {
-    id: "db-1",
+    id: "obnotion-1",
     name: "Notes",
     sourceFolder: "notes",
     schema: config.schema,
@@ -296,7 +296,7 @@ function mount(phone: boolean): { panel: FakeElement; database: DatabaseConfig }
     config,
     makeActions(database),
   );
-  const panel = container.querySelector(".db-view-config-panel");
+  const panel = container.querySelector(".obnotion-view-config-panel");
   if (!panel) throw new Error("settings panel did not mount");
   return { panel, database };
 }
@@ -318,49 +318,49 @@ describe("settings sheet body grammar", () => {
     // no CSS engine to answer — the real browser lane (tools/live/sheet-grammar.mjs, "settings" row)
     // is what proves the measurement; this suite keeps the structural half that this tree can still
     // answer honestly.
-    expect(panel.querySelector(".db-panel-row")).not.toBeNull();
+    expect(panel.querySelector(".obnotion-panel-row")).not.toBeNull();
     expect(report.dropdown).toBe(true);
     expect(report.segmented).toBe(true);
-    expect(panel.querySelector(".db-view-config-row")).toBeNull();
+    expect(panel.querySelector(".obnotion-view-config-row")).toBeNull();
     expect(panel.querySelector("select")).toBeNull();
     expect(panel.querySelector("input[type='radio']")).toBeNull();
-    expect(panel.querySelector(".db-new-placement")).not.toBeNull();
-    expect(panel.querySelector(".db-panel-hint")).not.toBeNull();
+    expect(panel.querySelector(".obnotion-new-placement")).not.toBeNull();
+    expect(panel.querySelector(".obnotion-panel-hint")).not.toBeNull();
     const checkboxes = panel.querySelectorAll("input[type='checkbox']");
     expect(checkboxes.length).toBeGreaterThan(0);
-    for (const input of checkboxes) expect(input.classList.contains("db-checkbox")).toBe(true);
+    for (const input of checkboxes) expect(input.classList.contains("obnotion-checkbox")).toBe(true);
   });
 
   it("on desktop, keeps the two-column grid, radios and switch", () => {
     const { panel } = mount(false);
-    expect(panel.querySelector(".db-view-config-row")).not.toBeNull();
-    expect(panel.querySelector(".db-panel-row")).toBeNull();
+    expect(panel.querySelector(".obnotion-view-config-row")).not.toBeNull();
+    expect(panel.querySelector(".obnotion-panel-row")).toBeNull();
     expect(panel.querySelector("input[type='radio']")).not.toBeNull();
-    expect(panel.querySelector(".db-toggle-switch")).not.toBeNull();
-    expect(panel.querySelector(".db-new-placement")).toBeNull();
-    // `rows` is not asked here for the same reason noted above; `.db-panel-row`'s absence is
+    expect(panel.querySelector(".obnotion-toggle-switch")).not.toBeNull();
+    expect(panel.querySelector(".obnotion-new-placement")).toBeNull();
+    // `rows` is not asked here for the same reason noted above; `.obnotion-panel-row`'s absence is
     // already asserted two lines up, which is the structural half this tree can answer.
     const report = describeSheetGrammar(panel as unknown as HTMLElement);
     expect(report.segmented).toBe(false);
   });
 
   it("on desktop, presents as the side sheet rather than the anchored dropdown", () => {
-    // Red before this leg: `db-shell-side-sheet` did not exist anywhere in this file, so the
+    // Red before this leg: `obnotion-shell-side-sheet` did not exist anywhere in this file, so the
     // desktop panel had no marker distinguishing it from every other anchored popover — it read
-    // identically to `.db-view-config-panel` alone. The operator's report, 2026-09-06: "this
+    // identically to `.obnotion-view-config-panel` alone. The operator's report, 2026-09-06: "this
     // dropdown on desktop is horrible".
     const { panel } = mount(false);
-    expect(panel.hasClass("db-shell-side-sheet")).toBe(true);
+    expect(panel.hasClass("obnotion-shell-side-sheet")).toBe(true);
   });
 
   it("on phone, keeps the existing bottom sheet — no side-sheet marker", () => {
     const { panel } = mount(true);
-    expect(panel.hasClass("db-shell-side-sheet")).toBe(false);
+    expect(panel.hasClass("obnotion-shell-side-sheet")).toBe(false);
   });
 
   it("keeps computed-sync persistence when the phone segmented control is used", () => {
     const { panel, database } = mount(true);
-    const buttons = panel.querySelectorAll(".db-new-placement-option");
+    const buttons = panel.querySelectorAll(".obnotion-new-placement-option");
     expect(buttons).toHaveLength(3);
     expect(database.computedSyncMode).toBe("display-only");
     buttons[1].onclick?.();
@@ -377,29 +377,29 @@ describe("conditional-colour summary row", () => {
     // Red before this leg: renderAppliedSummaries made exactly 3 calls to renderAppliedSummary —
     // Properties, Filters, Sorts — and none named conditional colour.
     const { panel } = mount(false);
-    const rows = panel.querySelectorAll(".db-view-config-summary-row");
+    const rows = panel.querySelectorAll(".obnotion-view-config-summary-row");
     expect(rows).toHaveLength(4);
-    const labels = rows.map((row) => row.querySelector(".db-view-config-label")?.textContent);
+    const labels = rows.map((row) => row.querySelector(".obnotion-view-config-label")?.textContent);
     expect(labels).toEqual(["Properties", "Filters", "Sorts", "Conditional color"]);
     const colorRow = rows[3];
-    expect(colorRow.querySelector(".db-view-config-summary")?.textContent).toBe("No color rules");
-    // hintClass() resolves to db-view-config-help on desktop, db-panel-hint on a phone sheet —
+    expect(colorRow.querySelector(".obnotion-view-config-summary")?.textContent).toBe("No color rules");
+    // hintClass() resolves to obnotion-view-config-help on desktop, obnotion-panel-hint on a phone sheet —
     // this mount is desktop, so the explainer carries the desktop class.
-    expect(colorRow.querySelector(".db-view-config-help")).not.toBeNull();
+    expect(colorRow.querySelector(".obnotion-view-config-help")).not.toBeNull();
   });
 
   it("opens the existing conditional-formatting section rather than a second editor", () => {
     const { panel } = mount(false);
-    const rows = panel.querySelectorAll(".db-view-config-summary-row");
+    const rows = panel.querySelectorAll(".obnotion-view-config-summary-row");
     const colorRow = rows[3];
-    expect(colorRow.hasClass("db-view-config-row-clickable")).toBe(true);
-    const section = panel.querySelector(".db-conditional-format-settings");
+    expect(colorRow.hasClass("obnotion-view-config-row-clickable")).toBe(true);
+    const section = panel.querySelector(".obnotion-conditional-format-settings");
     expect(section).not.toBeNull();
     // No throw: scrollIntoView is guarded for the fake DOM this suite mounts on, and the real
     // click handler resolves the same section the row promises rather than building another.
     expect(() => colorRow.onclick?.()).not.toThrow();
     // Exactly one conditional-formatting section exists — the row opens it, it does not clone it.
-    expect(panel.querySelectorAll(".db-conditional-format-settings")).toHaveLength(1);
+    expect(panel.querySelectorAll(".obnotion-conditional-format-settings")).toHaveLength(1);
   });
 
   it("renders no row for a chart view, whose own guard mounts no conditional-formatting section — the negative control", () => {
@@ -407,10 +407,10 @@ describe("conditional-colour summary row", () => {
     const config: ViewConfig = { ...makeConfig(), viewType: "chart" };
     const database = makeDatabase(config);
     new ViewConfigPanelRenderer().render(container as unknown as HTMLElement, true, config, makeActions(database));
-    const panel = container.querySelector(".db-view-config-panel");
+    const panel = container.querySelector(".obnotion-view-config-panel");
     if (!panel) throw new Error("settings panel did not mount");
-    const rows = panel.querySelectorAll(".db-view-config-summary-row");
+    const rows = panel.querySelectorAll(".obnotion-view-config-summary-row");
     expect(rows).toHaveLength(3);
-    expect(panel.querySelector(".db-conditional-format-settings")).toBeNull();
+    expect(panel.querySelector(".obnotion-conditional-format-settings")).toBeNull();
   });
 });

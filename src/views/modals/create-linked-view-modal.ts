@@ -25,7 +25,7 @@ import {
   insertTextAtCursor,
   vaultFilesAdapter,
 } from "./linked-view-block";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
@@ -65,7 +65,7 @@ export class CreateLinkedViewModal extends DbModal {
     const { contentEl } = this;
     contentEl.empty();
 
-    const dbRow = contentEl.createDiv({ cls: "db-panel-row" });
+    const dbRow = contentEl.createDiv({ cls: "obnotion-panel-row" });
     createDropdownField({
       parent: dbRow,
       label: t("linkedView.sourceDatabase"),
@@ -77,7 +77,7 @@ export class CreateLinkedViewModal extends DbModal {
       onChange: (value) => { this.selectedPath = value; },
     });
 
-    const typeRow = contentEl.createDiv({ cls: "db-panel-row" });
+    const typeRow = contentEl.createDiv({ cls: "obnotion-panel-row" });
     createDropdownField({
       parent: typeRow,
       label: t("linkedView.viewType"),
@@ -90,14 +90,14 @@ export class CreateLinkedViewModal extends DbModal {
       onChange: (value) => { this.selectedType = value as DatabaseViewType; },
     });
 
-    const nameRow = contentEl.createDiv({ cls: "db-panel-row" });
+    const nameRow = contentEl.createDiv({ cls: "obnotion-panel-row" });
     nameRow.createEl("label", { text: t("linkedView.name") });
     const input = nameRow.createEl("input", {
       attr: { type: "text", placeholder: t("linkedView.namePlaceholder") },
     });
     input.oninput = () => { this.name = input.value; };
 
-    const actions = contentEl.createDiv({ cls: "db-modal-actions" });
+    const actions = contentEl.createDiv({ cls: "obnotion-modal-actions" });
     actions.createEl("button", { text: t("common.cancel") }).onclick = () => this.close();
     actions.createEl("button", {
       cls: "mod-cta",

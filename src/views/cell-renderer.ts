@@ -85,16 +85,16 @@ export function renderDelayedExternalLink(
 ): void {
   const external = link.external ?? true;
   const anchor = td.createEl("a", {
-    cls: `db-text-link ${external ? "external-link" : "internal-link"}`,
+    cls: `obnotion-text-link ${external ? "external-link" : "internal-link"}`,
     text: link.label,
     attr: { title: link.target, href: external ? link.target : "#" },
   });
   if (!external) markNoteHoverLink(anchor, link.target, row.file.path);
 
   if (external) {
-    const actions = td.createSpan({ cls: "db-inline-link-actions" });
+    const actions = td.createSpan({ cls: "obnotion-inline-link-actions" });
     const open = actions.createEl("button", {
-      cls: "db-inline-link-action",
+      cls: "obnotion-inline-link-action",
       attr: { type: "button", "aria-label": t("link.open"), title: t("link.open") },
     });
     setIcon(open, "external-link");
@@ -104,7 +104,7 @@ export function renderDelayedExternalLink(
       openExternalUrl(link.target);
     };
     const copy = actions.createEl("button", {
-      cls: "db-inline-link-action",
+      cls: "obnotion-inline-link-action",
       attr: { type: "button", "aria-label": t("link.copy"), title: t("link.copy") },
     });
     setIcon(copy, "copy");
@@ -208,9 +208,9 @@ export class CellRenderer {
    *  than losing to it: off clips every column, on lets a column's Clip mode opt back out.
    *  `resolvesToWrappedCell` is the one place that rule lives. */
   renderCell(td: HTMLElement, row: RowData, col: ColumnDef, viewWrapDefault?: boolean): void {
-    td.addClass("db-cell");
+    td.addClass("obnotion-cell");
     const isWrapping = resolvesToWrappedCell(col.wrap, viewWrapDefault);
-    if (isWrapping) td.addClass("db-cell-wrap");
+    if (isWrapping) td.addClass("obnotion-cell-wrap");
     let value: unknown;
 
     if (col.type === "computed" || col.type === "rollup") {
@@ -220,7 +220,7 @@ export class CellRenderer {
       // this, so nothing is written back and there is no value to go stale.
       value = col.type === "created-time" ? row.file.stat.ctime : row.file.stat.mtime;
     } else if (col.key === "file.name") {
-      td.addClass("db-title-cell");
+      td.addClass("obnotion-title-cell");
       const displayInfo = this.getFileTitleInfo(row);
       const link = td.createEl("a", {
         cls: "internal-link",
@@ -234,7 +234,7 @@ export class CellRenderer {
       });
       setFieldTooltip(td, displayInfo.fullPath);
       if (!this.isReadOnly) {
-        td.addClass("db-editable-cell");
+        td.addClass("obnotion-editable-cell");
         setFieldTooltip(td, displayInfo.fullPath, t("cell.doubleClickRename"));
         td.tabIndex = 0;
         td.addEventListener("dblclick", (event) => {
@@ -252,7 +252,7 @@ export class CellRenderer {
     const computedError = computedKey ? row.computedErrors?.[computedKey] : undefined;
     if (computedError) {
       const badge = td.createSpan({
-        cls: "db-formula-error-badge",
+        cls: "obnotion-formula-error-badge",
         text: "#ERROR!",
         attr: { role: "img", "aria-label": t("formula.errorBadge") },
       });
@@ -267,7 +267,7 @@ export class CellRenderer {
     }
 
     if (isEmptyValue(value) && !isReportsComputedColumn(col)) {
-      td.createSpan({ cls: "db-empty-value" });
+      td.createSpan({ cls: "obnotion-empty-value" });
       if (!this.isReadOnly && col.type === "computed") {
         this.makeComputedEditable(td, row, col);
         setFieldTooltip(td, t("common.empty"), t("cell.doubleClickEditFormula"));
@@ -277,7 +277,7 @@ export class CellRenderer {
         setFieldTooltip(td, t("common.empty"), t("cell.doubleClickConfigureRollup"));
       }
       if (!this.isReadOnly && this.isEditableCellColumn(col)) {
-        td.addClass("db-editable-cell");
+        td.addClass("obnotion-editable-cell");
         this.makeEditable(td, row, col, "");
         setFieldTooltip(td, t("common.empty"), this.getEditHint(col));
       } else if (!this.isReadOnly && (isReadonlyFileField(col.key) || isAuditColumnType(col.type))) {
@@ -298,7 +298,7 @@ export class CellRenderer {
         : undefined,
     })) {
       if (!this.isReadOnly && this.isEditableCellColumn(col)) {
-        td.addClass("db-editable-cell");
+        td.addClass("obnotion-editable-cell");
         this.makeEditable(td, row, col, value);
         setFieldTooltip(td, this.getTooltipValue(col, value), this.getEditHint(col));
       } else {
@@ -323,7 +323,7 @@ export class CellRenderer {
         break;
       case "currency": {
         const num = this.toDisplayNumber(value);
-        td.addClass("db-numeric-value");
+        td.addClass("obnotion-numeric-value");
         td.textContent = isNaN(num) ? this.nonNumericText(value) : formatEuroCurrency(num);
         break;
       }
@@ -411,7 +411,7 @@ export class CellRenderer {
       this.makeRollupConfigurable(td, row, col);
       setFieldTooltip(td, this.getTooltipValue(col, value), t("cell.doubleClickConfigureRollup"));
     } else if (!this.isReadOnly && this.isEditableCellColumn(col)) {
-      td.addClass("db-editable-cell");
+      td.addClass("obnotion-editable-cell");
       this.makeEditable(td, row, col, value);
       setFieldTooltip(td, this.getTooltipValue(col, value), this.getEditHint(col));
     } else if (!this.isReadOnly && (isReadonlyFileField(col.key) || isAuditColumnType(col.type))) {
@@ -447,7 +447,7 @@ export class CellRenderer {
 
   /** Render a number cell value, honoring the column's numberDisplayStyle (plain/rating/progress). */
   private renderNumberValue(td: HTMLElement, row: RowData | undefined, col: ColumnDef, value: unknown): void {
-    td.addClass("db-numeric-value");
+    td.addClass("obnotion-numeric-value");
     const num = this.toDisplayNumber(value);
     if (isNaN(num)) { td.textContent = this.nonNumericText(value); return; }
     const style = getNumberDisplayStyle(col);
@@ -484,7 +484,7 @@ export class CellRenderer {
   private renderStatus(td: HTMLElement, col: ColumnDef, status: string): void {
     const resolved = resolveOptionDisplay(col, status);
     if (!resolved.value) {
-      td.createSpan({ cls: "db-empty-value" });
+      td.createSpan({ cls: "obnotion-empty-value" });
       return;
     }
     const badge = td.createSpan({ cls: "status-badge" });
@@ -500,16 +500,16 @@ export class CellRenderer {
 
   private renderMultiSelect(td: HTMLElement, row: RowData, col: ColumnDef, value: unknown): void {
     const values = toMultiSelectValuesForKey(col.key, value);
-    const wrap = td.createDiv({ cls: "db-multi-select-values" });
+    const wrap = td.createDiv({ cls: "obnotion-multi-select-values" });
     setFieldTooltip(wrap, values);
     for (const item of values) {
       const resolved = resolveOptionDisplay(col, item);
-      const badge = wrap.createSpan({ cls: "status-badge db-multi-select-badge" });
-      badge.createSpan({ cls: "db-multi-select-label", text: resolved.value || item });
+      const badge = wrap.createSpan({ cls: "status-badge obnotion-multi-select-badge" });
+      badge.createSpan({ cls: "obnotion-multi-select-label", text: resolved.value || item });
       badge.title = resolved.value || item;
       badge.addClass(`status-color-${resolved.option?.color || "gray"}`);
       const remove = badge.createEl("button", {
-        cls: "db-multi-select-remove",
+        cls: "obnotion-multi-select-remove",
         text: "×",
         attr: { type: "button", "aria-label": t("tag.remove", { tag: item }), title: t("tag.remove", { tag: item }) },
       });
@@ -543,7 +543,7 @@ export class CellRenderer {
   }
 
   private renderCheckbox(td: HTMLElement, row: RowData, col: ColumnDef, value: unknown): void {
-    td.addClass("db-checkbox-cell");
+    td.addClass("obnotion-checkbox-cell");
     setFieldTooltip(td, toBooleanValue(value) ? t("common.true") : t("common.false"));
     const checkbox = createCheckbox(td, { role: "field" });
     checkbox.checked = toBooleanValue(value);
@@ -551,7 +551,7 @@ export class CellRenderer {
       checkbox.disabled = true;
     } else if (col.type === "computed") {
       // Keep events bubbling to the cell so computed checkbox formulas are editable.
-      checkbox.addClass("db-computed-checkbox-preview");
+      checkbox.addClass("obnotion-computed-checkbox-preview");
       this.makeComputedEditable(td, row, col);
       return;
     }
@@ -566,7 +566,7 @@ export class CellRenderer {
   }
 
   private renderDate(td: HTMLElement, row: RowData, col: ColumnDef, value: unknown, includeTime: boolean): void {
-    td.addClass("db-date-value");
+    td.addClass("obnotion-date-value");
     // Only a plain date/datetime column can carry an end value — the two audit time types have no
     // range concept, and reading row.frontmatter for them would be reading a key nothing writes.
     const endValue = (col.type === "date" || col.type === "datetime")
@@ -599,7 +599,7 @@ export class CellRenderer {
     td.tabIndex = 0;
 
     const startEdit = (event?: MouseEvent) => {
-      td.removeClass("db-cell-selected");
+      td.removeClass("obnotion-cell-selected");
       this.startEdit(td, row, col, event, currentValue);
     };
 
@@ -661,7 +661,7 @@ export class CellRenderer {
   }
 
   private makeComputedEditable(td: HTMLElement, row: RowData, col: ColumnDef): void {
-    td.addClass("db-formula-cell");
+    td.addClass("obnotion-formula-cell");
     td.addEventListener("dblclick", (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -670,7 +670,7 @@ export class CellRenderer {
   }
 
   private makeRollupConfigurable(td: HTMLElement, row: RowData, col: ColumnDef): void {
-    td.addClass("db-rollup-cell");
+    td.addClass("obnotion-rollup-cell");
     td.addEventListener("dblclick", (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -883,8 +883,8 @@ export class CellRenderer {
     if (!this.activeInlineEditorCancel && !this.activeOptionPopoverClose && !this.activeTextEditClose) return false;
     const root = container || window.activeDocument;
     return Boolean(root.querySelector(
-      ".db-cell-edit-popover, .db-cell-option-popover, .db-dropdown-popover, " +
-      ".db-cell-editing input, .db-cell-editing textarea, input.db-cell-input"
+      ".obnotion-cell-edit-popover, .obnotion-cell-option-popover, .obnotion-dropdown-popover, " +
+      ".obnotion-cell-editing input, .obnotion-cell-editing textarea, input.obnotion-cell-input"
     ));
   }
 
@@ -987,7 +987,7 @@ export class CellRenderer {
     currentValue: unknown,
     origText: string
   ): void {
-    td.addClass("db-cell-editing");
+    td.addClass("obnotion-cell-editing");
     td.textContent = "";
 
     const parts = safeString(currentValue).substring(0, 10).split("-");
@@ -995,12 +995,12 @@ export class CellRenderer {
     const initMonth = parts[1] || "";
     const initDay = parts[2] || "";
 
-    const container = td.createDiv({ cls: "db-date-segments" });
-    const yearInp = container.createEl("input", { cls: "db-date-seg", attr: { maxlength: "4", placeholder: "YYYY" } });
-    container.createSpan({ cls: "db-date-sep", text: "-" });
-    const monthInp = container.createEl("input", { cls: "db-date-seg", attr: { maxlength: "2", placeholder: "MM" } });
-    container.createSpan({ cls: "db-date-sep", text: "-" });
-    const dayInp = container.createEl("input", { cls: "db-date-seg", attr: { maxlength: "2", placeholder: "DD" } });
+    const container = td.createDiv({ cls: "obnotion-date-segments" });
+    const yearInp = container.createEl("input", { cls: "obnotion-date-seg", attr: { maxlength: "4", placeholder: "YYYY" } });
+    container.createSpan({ cls: "obnotion-date-sep", text: "-" });
+    const monthInp = container.createEl("input", { cls: "obnotion-date-seg", attr: { maxlength: "2", placeholder: "MM" } });
+    container.createSpan({ cls: "obnotion-date-sep", text: "-" });
+    const dayInp = container.createEl("input", { cls: "obnotion-date-seg", attr: { maxlength: "2", placeholder: "DD" } });
 
     const inputs = [yearInp, monthInp, dayInp];
     let committed = false;
@@ -1036,7 +1036,7 @@ export class CellRenderer {
         } else {
           restore();
         }
-        clearTransientClass(td, "db-cell-editing");
+        clearTransientClass(td, "obnotion-cell-editing");
         return;
       }
       if (!y || !rawM || !rawD) {
@@ -1061,11 +1061,11 @@ export class CellRenderer {
       } else {
         restore();
       }
-      clearTransientClass(td, "db-cell-editing");
+      clearTransientClass(td, "obnotion-cell-editing");
     };
 
     const restore = () => {
-      clearTransientClass(td, "db-cell-editing");
+      clearTransientClass(td, "obnotion-cell-editing");
       td.textContent = origText;
     };
 
@@ -1184,7 +1184,7 @@ export class CellRenderer {
           return true;
         } catch (error) {
           new Notice(t("editor.saveFailed"));
-          console.error("Note Database: inline editor commit failed", error);
+          console.error("Obnotion: inline editor commit failed", error);
           return false;
         }
       }

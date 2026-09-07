@@ -91,31 +91,31 @@ export function getFileTitleDisplay(
 /** Render table-style one-line titles with an optional low-emphasis folder prefix. */
 export function renderInlineFileTitle(parent: HTMLElement, info: FileTitleDisplay, alwaysShowPath = false): void {
   parent.empty();
-  parent.addClass("db-file-title-inline");
+  parent.addClass("obnotion-file-title-inline");
   const folderPath = alwaysShowPath ? info.folderPath : info.folderPrefix;
   parent.toggleClass("has-folder-prefix", Boolean(folderPath));
   if (folderPath) {
     if (folderPath === "/") {
-      parent.createSpan({ cls: "db-file-title-prefix", text: "" });
+      parent.createSpan({ cls: "obnotion-file-title-prefix", text: "" });
     } else {
-      parent.createSpan({ cls: "db-file-title-prefix", text: folderPath });
+      parent.createSpan({ cls: "obnotion-file-title-prefix", text: folderPath });
     }
   }
-  parent.createSpan({ cls: "db-file-title-name", text: info.name });
+  parent.createSpan({ cls: "obnotion-file-title-name", text: info.name });
 }
 
 /** Render card/list titles with the filename as primary text and the path as a footnote. */
 export function renderStackedFileTitle(parent: HTMLElement, info: FileTitleDisplay, alwaysShowPath = false): void {
   parent.empty();
-  parent.addClass("db-file-title-stacked");
+  parent.addClass("obnotion-file-title-stacked");
   parent.toggleClass("has-folder-prefix", alwaysShowPath || Boolean(info.folderPrefix));
-  parent.createDiv({ cls: "db-file-title-name", text: info.name });
+  parent.createDiv({ cls: "obnotion-file-title-name", text: info.name });
   const folderPath = alwaysShowPath ? info.folderPath : info.folderPrefix;
   if (folderPath) {
     if (folderPath === "/") {
-      parent.createDiv({ cls: "db-file-title-prefix", text: "" });
+      parent.createDiv({ cls: "obnotion-file-title-prefix", text: "" });
     } else {
-      parent.createDiv({ cls: "db-file-title-prefix", text: folderPath });
+      parent.createDiv({ cls: "obnotion-file-title-prefix", text: folderPath });
     }
   }
 }

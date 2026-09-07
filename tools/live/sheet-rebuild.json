@@ -1,15 +1,15 @@
 {
-  "measuredAt": "2026-09-07T16:27:46.549Z",
+  "measuredAt": "2026-09-07T17:32:01.536Z",
   "inputs": {
-    "tools/live/sheet-rebuild.mjs": "ff3f4850b7f4",
-    "tools/live/sheet-rebuild-harness.ts": "896933a3454c",
-    "src/views/toolbar-renderer.ts": "feca46093dfd",
-    "src/views/popover-position.ts": "a10fd5ca2091",
-    "src/views/mobile-bottom-sheet.ts": "8ac56dda1369",
-    "src/views/sort-panel-renderer.ts": "d4e4a38bdd82",
-    "src/views/filter-panel-renderer.ts": "6f265d0dd002",
-    "src/views/view-config-panel-renderer.ts": "98ca8ca10597",
-    "src/views/overlay-stack.ts": "a071087814ea",
+    "tools/live/sheet-rebuild.mjs": "2b399c74a90d",
+    "tools/live/sheet-rebuild-harness.ts": "8b56d2b01f48",
+    "src/views/toolbar-renderer.ts": "8aef36ac094a",
+    "src/views/popover-position.ts": "2bab65e868fe",
+    "src/views/mobile-bottom-sheet.ts": "a2360ab4d988",
+    "src/views/sort-panel-renderer.ts": "8e715d344de9",
+    "src/views/filter-panel-renderer.ts": "dc0b2f9f2ac8",
+    "src/views/view-config-panel-renderer.ts": "17c30a24443f",
+    "src/views/overlay-stack.ts": "cca7015c7a07",
     "src/views/popover-auto-close.ts": "b81714513ff4"
   },
   "cases": 53,
@@ -131,7 +131,7 @@
     {
       "name": "the filter sheet holds still while it rebuilds",
       "pass": true,
-      "detail": "settled at top 541, rebuilt to 641; the deepest point during the rebuild was 641",
+      "detail": "settled at top 836, rebuilt to 836; the deepest point during the rebuild was 836",
       "preFixFailure": "settled at top 701 and the rebuild dropped it to 844 on an 844px screen"
     },
     {
@@ -221,13 +221,13 @@
     {
       "name": "Chrome: a press inside the sort sheet keeps the cell selection",
       "pass": true,
-      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.db-panel-button)",
+      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.obnotion-panel-button)",
       "preFixFailure": "the shipped shape still drops it — a phone user loses a selection desktop keeps"
     },
     {
       "name": "Chrome: a press inside the filter sheet keeps the cell selection",
       "pass": true,
-      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.db-panel-button)",
+      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.obnotion-panel-button)",
       "preFixFailure": "the shipped shape still drops it — a phone user loses a selection desktop keeps"
     },
     {
@@ -317,13 +317,13 @@
     {
       "name": "WebKit: a press inside the sort sheet keeps the cell selection",
       "pass": true,
-      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.db-panel-button)",
+      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.obnotion-panel-button)",
       "preFixFailure": "the shipped shape still drops it — a phone user loses a selection desktop keeps"
     },
     {
       "name": "WebKit: a press inside the filter sheet keeps the cell selection",
       "pass": true,
-      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.db-panel-button)",
+      "detail": "containment alone drops it and the shipped shape keeps it, on the same press (button.obnotion-panel-button)",
       "preFixFailure": "the shipped shape still drops it — a phone user loses a selection desktop keeps"
     },
     {

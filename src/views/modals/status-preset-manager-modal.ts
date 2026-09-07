@@ -23,7 +23,7 @@ import { ColumnDef, StatusPresetDef, generateId } from "../../data/types";
 import { t } from "../../i18n";
 import { createDropdownField } from "../dropdown-field";
 import { StatusOptionsModal } from "./status-options-modal";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
@@ -58,11 +58,11 @@ export class StatusPresetManagerModal extends DbModal {
   onOpen(): void {
     super.onOpen();
     this.contentEl.empty();
-    this.contentEl.addClass("note-database-modal");
+    this.contentEl.addClass("obnotion-modal");
     this.contentEl.createEl("h3", { text: this.title });
-    this.contentEl.createDiv({ cls: "db-modal-help", text: t("statusPresets.desc") });
+    this.contentEl.createDiv({ cls: "obnotion-modal-help", text: t("statusPresets.desc") });
     this.renderDefaultSelector();
-    this.listEl = this.contentEl.createDiv({ cls: "db-status-preset-manager-list" });
+    this.listEl = this.contentEl.createDiv({ cls: "obnotion-status-preset-manager-list" });
     this.renderList();
 
     const addBtn = this.contentEl.createEl("button", { text: `+ ${t("statusPresets.add")}` });
@@ -76,7 +76,7 @@ export class StatusPresetManagerModal extends DbModal {
       this.onOpen();
     };
 
-    const buttons = this.contentEl.createDiv({ cls: "db-modal-button-row" });
+    const buttons = this.contentEl.createDiv({ cls: "obnotion-modal-button-row" });
     buttons.createEl("button", { text: t("common.cancel") }).onclick = () => this.close();
     const save = buttons.createEl("button", { text: t("common.save"), cls: "mod-cta" });
     save.onclick = async () => {
@@ -88,14 +88,14 @@ export class StatusPresetManagerModal extends DbModal {
   }
 
   private renderDefaultSelector(): void {
-    const row = this.contentEl.createDiv({ cls: "db-status-preset-default-row" });
+    const row = this.contentEl.createDiv({ cls: "obnotion-status-preset-default-row" });
     row.createSpan({ text: t("statusPresets.default") });
     createDropdownField({
       parent: row,
       label: t("statusPresets.default"),
       options: this.presets.map((preset) => ({ value: preset.id, text: preset.name })),
       value: this.defaultPresetId,
-      className: "db-modal-dropdown db-status-preset-default-dropdown",
+      className: "obnotion-modal-dropdown obnotion-status-preset-default-dropdown",
       hideLabel: true,
       onChange: (value) => {
         this.defaultPresetId = value;
@@ -108,27 +108,27 @@ export class StatusPresetManagerModal extends DbModal {
     if (!this.listEl) return;
     this.listEl.empty();
     for (const preset of this.presets) {
-      const row = this.listEl.createDiv({ cls: "db-status-preset-manager-row" });
+      const row = this.listEl.createDiv({ cls: "obnotion-status-preset-manager-row" });
       const name = row.createEl("input", {
-        cls: "db-status-preset-name-input",
+        cls: "obnotion-status-preset-name-input",
         attr: { type: "text", placeholder: t("statusPresets.namePlaceholder") },
       });
       name.value = preset.name;
       name.oninput = () => {
         preset.name = name.value.trim();
       };
-      const preview = row.createDiv({ cls: "db-status-preset-preview" });
+      const preview = row.createDiv({ cls: "obnotion-status-preset-preview" });
       for (const option of preset.options.slice(0, 5)) {
         preview.createSpan({ cls: `status-badge status-color-${option.color}`, text: option.value });
       }
-      if (preset.options.length > 5) preview.createSpan({ cls: "db-status-preset-more", text: `+${preset.options.length - 5}` });
+      if (preset.options.length > 5) preview.createSpan({ cls: "obnotion-status-preset-more", text: `+${preset.options.length - 5}` });
       if (preset.id === this.defaultPresetId) {
-        preview.createSpan({ cls: "db-status-preset-default-badge", text: t("statusPresets.defaultShort") });
+        preview.createSpan({ cls: "obnotion-status-preset-default-badge", text: t("statusPresets.defaultShort") });
         row.addClass("is-default");
       }
-      const controls = row.createDiv({ cls: "db-status-preset-manager-controls" });
+      const controls = row.createDiv({ cls: "obnotion-status-preset-manager-controls" });
       const star = row.createSpan({
-        cls: `db-status-preset-default-indicator${preset.id === this.defaultPresetId ? " is-active" : ""}`,
+        cls: `obnotion-status-preset-default-indicator${preset.id === this.defaultPresetId ? " is-active" : ""}`,
         attr: { title: t("statusPresets.useAsDefault") }
       });
       setIcon(star, "star");
@@ -141,7 +141,7 @@ export class StatusPresetManagerModal extends DbModal {
       setIcon(editButton, "edit");
       setTooltip(editButton, t("common.edit"), { delay: 100 });
       editButton.onclick = () => this.openOptionEditor(preset);
-      this.contentEl.addClass("note-database-modal");
+      this.contentEl.addClass("obnotion-modal");
       const deleteBtn = controls.createEl("button", {
         cls: "delete-btn",
       });

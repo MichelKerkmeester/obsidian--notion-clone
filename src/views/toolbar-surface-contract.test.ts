@@ -41,9 +41,9 @@ describe("toolbar surface constructors", () => {
 
   it("stamps the settings fallback classes on the live trigger constructor", () => {
     const source = read("toolbar-primitives.ts");
-    expect(source).toContain("db-view-config-btn");
-    expect(source).toContain("db-chart-options-toolbar-btn");
-    expect(source).toContain("db-calendar-timeline-options-toolbar-btn");
+    expect(source).toContain("obnotion-view-config-btn");
+    expect(source).toContain("obnotion-chart-options-toolbar-btn");
+    expect(source).toContain("obnotion-calendar-timeline-options-toolbar-btn");
   });
 });
 
@@ -52,7 +52,7 @@ describe("toolbar surface migrations", () => {
     const toolbar = read("toolbar-renderer.ts");
     const sort = read("sort-panel-renderer.ts");
     expect(toolbar).not.toMatch(/private render(?:ComputedSyncButton|DatabaseRefreshButton|CalendarTimelineOptionsButton|WidthSelect|ViewConfigButton|ChartOptionsButton|ExportButton)\(/);
-    expect(sort).not.toContain('cls: "db-sort-panel db-filter-panel"');
+    expect(sort).not.toContain('cls: "obnotion-sort-panel obnotion-filter-panel"');
   });
 
   it("collapses repeated sibling-close runs into one dismissal helper", () => {
@@ -62,7 +62,7 @@ describe("toolbar surface migrations", () => {
     expect(toolbar).toContain("createPopoverShell");
     expect(toolbar).toContain("createTabStrip");
     expect(toolbar).toContain("createSettingsEntry");
-    expect(toolbar).not.toContain("db-view-tab-popover-row db-menu-item");
+    expect(toolbar).not.toContain("obnotion-view-tab-popover-row obnotion-menu-item");
     const teardownRuns = toolbar.match(/this\.closeDatabasePopover\(\);\s*this\.closeGroupPopover\(\);\s*this\.closeViewTabPopover\(\);/g) || [];
     expect(teardownRuns.length).toBeLessThanOrEqual(2);
   });
@@ -74,7 +74,7 @@ describe("toolbar surface migrations", () => {
     expect(toolbar).toContain("createControlClusterButton");
     expect(read("toolbar-primitives.ts")).toContain("data-control-state");
     expect(active).toContain("createDirectionWord");
-    expect(styles).toMatch(/\.db-active-control-chip[\s\S]{0,500}height:\s*28px/);
+    expect(styles).toMatch(/\.obnotion-active-control-chip[\s\S]{0,500}height:\s*28px/);
     expect(styles).toContain("margin: 0 12px 0 8px");
   });
 

@@ -47,15 +47,15 @@ describe("stacking order between the record detail panel and its editors", () =>
     // The selector may be a list — the sheet presentation adds a second, surface-rooted alternative
     // so the panel keeps its rules when it is not inside the plugin container. What must not change
     // is which tier it lands on.
-    const panelRule = /\.db-record-detail-panel[^{]*\{[^}]*z-index:\s*var\(--db-layer-panel[^)]*\)/;
+    const panelRule = /\.obnotion-record-detail-panel[^{]*\{[^}]*z-index:\s*var\(--obnotion-layer-panel[^)]*\)/;
     expect(stylesContent).toMatch(panelRule);
-    expect(stylesContent).not.toMatch(/\.db-record-detail-panel[^{]*\{[^}]*z-index:\s*99\d/);
+    expect(stylesContent).not.toMatch(/\.obnotion-record-detail-panel[^{]*\{[^}]*z-index:\s*99\d/);
   });
 
   it("orders the layer tokens so panels sit below popovers and popovers below modals", () => {
     const read = (name: string): number => {
-      const found = new RegExp(`--db-layer-${name}:\\s*(\\d+)`).exec(stylesContent);
-      if (!found) throw new Error(`--db-layer-${name} is not defined`);
+      const found = new RegExp(`--obnotion-layer-${name}:\\s*(\\d+)`).exec(stylesContent);
+      if (!found) throw new Error(`--obnotion-layer-${name} is not defined`);
       return Number(found[1]);
     };
     expect(read("panel")).toBeLessThan(read("popover"));
@@ -66,7 +66,7 @@ describe("stacking order between the record detail panel and its editors", () =>
   it("routes the inline mobile editors through the shared token instead of a raw number", () => {
     expect(cellRendererSource).not.toContain('zIndex: "1000"');
     expect(extractedEditorSource).not.toContain('zIndex: "1000"');
-    expect(extractedEditorSource).toContain('"z-index": "var(--db-layer-popover, 100)"');
+    expect(extractedEditorSource).toContain('"z-index": "var(--obnotion-layer-popover, 100)"');
   });
 });
 

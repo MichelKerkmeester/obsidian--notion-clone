@@ -23,8 +23,8 @@ export const CORE_SCENARIOS = [
     sources: ["src/views/table-renderer.ts", "src/views/column-header-controller.ts", "src/views/cell-renderer.ts"],
     fixtureOf: "constructed-table",
     html: () => `
-      <div class="note-database-container">
-        <table class="db-table"><thead><tr>${tableHeader()}</tr></thead><tbody>${tableRows()}</tbody></table>
+      <div class="obnotion-container">
+        <table class="obnotion-table"><thead><tr>${tableHeader()}</tr></thead><tbody>${tableRows()}</tbody></table>
       </div>`,
   },
   {
@@ -38,14 +38,14 @@ export const CORE_SCENARIOS = [
       + "at one line, and a value carrying its own line breaks collapsed to spaces instead of "
       + "forcing a <br> through white-space: nowrap.",
     html: () => `
-      <div class="note-database-container">
-        <table class="db-table"><thead><tr>
-          <th><div class="db-th-content"><span class="db-th-label">Title</span></div></th>
-          <th><div class="db-th-content"><span class="db-th-label">Journal</span></div></th>
+      <div class="obnotion-container">
+        <table class="obnotion-table"><thead><tr>
+          <th><div class="obnotion-th-content"><span class="obnotion-th-label">Title</span></div></th>
+          <th><div class="obnotion-th-content"><span class="obnotion-th-label">Journal</span></div></th>
         </tr></thead><tbody>
-          <tr><td class="db-cell">Log 2026-02-01</td><td class="db-cell">Nothing measurable changed, but the day felt heavier than the numbers suggest. Worth noting rather than explaining away.</td></tr>
-          <tr><td class="db-cell">Log 2026-02-02</td><td class="db-cell">Streak intact Watch tomorrow morning Third week running</td></tr>
-          <tr><td class="db-cell">Log 2026-02-03</td><td class="db-cell">Best sleep of the month by a wide margin</td></tr>
+          <tr><td class="obnotion-cell">Log 2026-02-01</td><td class="obnotion-cell">Nothing measurable changed, but the day felt heavier than the numbers suggest. Worth noting rather than explaining away.</td></tr>
+          <tr><td class="obnotion-cell">Log 2026-02-02</td><td class="obnotion-cell">Streak intact Watch tomorrow morning Third week running</td></tr>
+          <tr><td class="obnotion-cell">Log 2026-02-03</td><td class="obnotion-cell">Best sleep of the month by a wide margin</td></tr>
         </tbody></table>
       </div>`,
   },
@@ -55,18 +55,18 @@ export const CORE_SCENARIOS = [
     group: "views",
     width: 640,
     sources: ["src/data/column-types.ts", "src/views/cell-renderer.ts", "src/views/inline-markdown-renderer.ts"],
-    note: "The same column and the same source values with the switch on: db-cell-wrap sets "
+    note: "The same column and the same source values with the switch on: obnotion-cell-wrap sets "
       + "white-space: normal, so the long sentence takes a second line and the value's own line "
       + "breaks render as real line breaks again. The phone renders this identically now.",
     html: () => `
-      <div class="note-database-container">
-        <table class="db-table"><thead><tr>
-          <th><div class="db-th-content"><span class="db-th-label">Title</span></div></th>
-          <th><div class="db-th-content"><span class="db-th-label">Journal</span></div></th>
+      <div class="obnotion-container">
+        <table class="obnotion-table"><thead><tr>
+          <th><div class="obnotion-th-content"><span class="obnotion-th-label">Title</span></div></th>
+          <th><div class="obnotion-th-content"><span class="obnotion-th-label">Journal</span></div></th>
         </tr></thead><tbody>
-          <tr><td class="db-cell">Log 2026-02-01</td><td class="db-cell db-cell-wrap">Nothing measurable changed, but the day felt heavier than the numbers suggest.<br>Worth noting rather than explaining away.</td></tr>
-          <tr><td class="db-cell">Log 2026-02-02</td><td class="db-cell db-cell-wrap">Streak intact<br>Watch tomorrow morning<br>Third week running</td></tr>
-          <tr><td class="db-cell">Log 2026-02-03</td><td class="db-cell db-cell-wrap">Best sleep of the month by a wide margin</td></tr>
+          <tr><td class="obnotion-cell">Log 2026-02-01</td><td class="obnotion-cell obnotion-cell-wrap">Nothing measurable changed, but the day felt heavier than the numbers suggest.<br>Worth noting rather than explaining away.</td></tr>
+          <tr><td class="obnotion-cell">Log 2026-02-02</td><td class="obnotion-cell obnotion-cell-wrap">Streak intact<br>Watch tomorrow morning<br>Third week running</td></tr>
+          <tr><td class="obnotion-cell">Log 2026-02-03</td><td class="obnotion-cell obnotion-cell-wrap">Best sleep of the month by a wide margin</td></tr>
         </tbody></table>
       </div>`,
   },
@@ -80,32 +80,32 @@ export const CORE_SCENARIOS = [
       + "content passes under it. Nothing at rest — the right-edge shadow paints only once "
       + "is-scrolled-x is present, which is table-renderer.ts's own scroll listener toggling it.",
     html: () => `
-      <div class="note-database-container is-scrolled-x">
-        <table class="db-table"><thead><tr>
-          <th class="db-frozen-col db-frozen-col-last" style="--db-frozen-left:0px" data-note-database-column-key="name">
-            <div class="db-th-content"><span class="db-property-icon">${ICONS["file-text"]}</span><span class="db-th-label">Name</span></div>
+      <div class="obnotion-container is-scrolled-x">
+        <table class="obnotion-table"><thead><tr>
+          <th class="obnotion-frozen-col obnotion-frozen-col-last" style="--obnotion-frozen-left:0px" data-obnotion-column-key="name">
+            <div class="obnotion-th-content"><span class="obnotion-property-icon">${ICONS["file-text"]}</span><span class="obnotion-th-label">Name</span></div>
           </th>
-          <th data-note-database-column-key="cost"><div class="db-th-content"><span class="db-property-icon">${ICONS.hash}</span><span class="db-th-label">Cost</span></div></th>
-          <th data-note-database-column-key="billing"><div class="db-th-content"><span class="db-property-icon">${ICONS["circle-dot"]}</span><span class="db-th-label">Billing</span></div></th>
-          <th data-note-database-column-key="renewal"><div class="db-th-content"><span class="db-property-icon">${ICONS.calendar}</span><span class="db-th-label">Next Renewal</span></div></th>
+          <th data-obnotion-column-key="cost"><div class="obnotion-th-content"><span class="obnotion-property-icon">${ICONS.hash}</span><span class="obnotion-th-label">Cost</span></div></th>
+          <th data-obnotion-column-key="billing"><div class="obnotion-th-content"><span class="obnotion-property-icon">${ICONS["circle-dot"]}</span><span class="obnotion-th-label">Billing</span></div></th>
+          <th data-obnotion-column-key="renewal"><div class="obnotion-th-content"><span class="obnotion-property-icon">${ICONS.calendar}</span><span class="obnotion-th-label">Next Renewal</span></div></th>
         </tr></thead><tbody>
           <tr>
-            <td class="db-cell db-frozen-col db-frozen-col-last" style="--db-frozen-left:0px">Adobe Creative Cloud</td>
-            <td class="db-cell">$54.99</td>
-            <td class="db-cell">${optionPill("Monthly")}</td>
-            <td class="db-cell">2026-03-14</td>
+            <td class="obnotion-cell obnotion-frozen-col obnotion-frozen-col-last" style="--obnotion-frozen-left:0px">Adobe Creative Cloud</td>
+            <td class="obnotion-cell">$54.99</td>
+            <td class="obnotion-cell">${optionPill("Monthly")}</td>
+            <td class="obnotion-cell">2026-03-14</td>
           </tr>
           <tr>
-            <td class="db-cell db-frozen-col db-frozen-col-last" style="--db-frozen-left:0px">Figma</td>
-            <td class="db-cell">$15.00</td>
-            <td class="db-cell">${optionPill("Monthly")}</td>
-            <td class="db-cell">2026-02-28</td>
+            <td class="obnotion-cell obnotion-frozen-col obnotion-frozen-col-last" style="--obnotion-frozen-left:0px">Figma</td>
+            <td class="obnotion-cell">$15.00</td>
+            <td class="obnotion-cell">${optionPill("Monthly")}</td>
+            <td class="obnotion-cell">2026-02-28</td>
           </tr>
           <tr>
-            <td class="db-cell db-frozen-col db-frozen-col-last" style="--db-frozen-left:0px">Sketch</td>
-            <td class="db-cell">$120.00</td>
-            <td class="db-cell">${optionPill("Yearly")}</td>
-            <td class="db-cell">2026-08-02</td>
+            <td class="obnotion-cell obnotion-frozen-col obnotion-frozen-col-last" style="--obnotion-frozen-left:0px">Sketch</td>
+            <td class="obnotion-cell">$120.00</td>
+            <td class="obnotion-cell">${optionPill("Yearly")}</td>
+            <td class="obnotion-cell">2026-08-02</td>
           </tr>
         </tbody></table>
       </div>`,
@@ -116,12 +116,12 @@ export const CORE_SCENARIOS = [
     group: "views",
     width: 620,
     sources: ["src/views/table-renderer.ts", "styles.css"],
-    note: "The Show vertical lines view switch off: db-no-vertical-lines on the table removes "
+    note: "The Show vertical lines view switch off: obnotion-no-vertical-lines on the table removes "
       + "every td/th right border, and nothing else — row backgrounds, the bottom border and "
       + "conditional-format tints are unaffected.",
     html: () => `
-      <div class="note-database-container">
-        <table class="db-table db-no-vertical-lines"><thead><tr>${tableHeader()}</tr></thead><tbody>${tableRows()}</tbody></table>
+      <div class="obnotion-container">
+        <table class="obnotion-table obnotion-no-vertical-lines"><thead><tr>${tableHeader()}</tr></thead><tbody>${tableRows()}</tbody></table>
       </div>`,
   },
   {
@@ -133,17 +133,17 @@ export const CORE_SCENARIOS = [
     sources: ["src/views/column-header-controller.ts"],
     note: "The menu trigger sits inline after the label and the label truncates before it moves.",
     html: () => `
-      <div class="note-database-container">
-        <table class="db-table"><thead><tr>
-          <th data-note-database-column-key="short"><div class="db-th-content">
-            <span class="db-property-icon">${ICONS["circle-dot"]}</span>
-            <span class="db-th-label">Payment</span>
-            <button type="button" class="db-column-menu-trigger" aria-label="Open menu">${dots}</button>
+      <div class="obnotion-container">
+        <table class="obnotion-table"><thead><tr>
+          <th data-obnotion-column-key="short"><div class="obnotion-th-content">
+            <span class="obnotion-property-icon">${ICONS["circle-dot"]}</span>
+            <span class="obnotion-th-label">Payment</span>
+            <button type="button" class="obnotion-column-menu-trigger" aria-label="Open menu">${dots}</button>
           </div></th>
-          <th data-note-database-column-key="long" style="max-width:220px"><div class="db-th-content">
-            <span class="db-property-icon">${ICONS.calendar}</span>
-            <span class="db-th-label">A deliberately long column name that must truncate</span>
-            <button type="button" class="db-column-menu-trigger" aria-label="Open menu">${dots}</button>
+          <th data-obnotion-column-key="long" style="max-width:220px"><div class="obnotion-th-content">
+            <span class="obnotion-property-icon">${ICONS.calendar}</span>
+            <span class="obnotion-th-label">A deliberately long column name that must truncate</span>
+            <button type="button" class="obnotion-column-menu-trigger" aria-label="Open menu">${dots}</button>
           </div></th>
         </tr></thead><tbody><tr><td>Revolut</td><td>January 4, 2027</td></tr></tbody></table>
       </div>`,
@@ -156,8 +156,8 @@ export const CORE_SCENARIOS = [
     sources: ["src/views/board-renderer.ts", "src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts"],
     fixtureOf: "constructed-board",
     html: () => `
-      <div class="note-database-container db-kanban-view">
-        <div class="db-kanban-board">
+      <div class="obnotion-container obnotion-kanban-view">
+        <div class="obnotion-kanban-board">
           ${[...new Set(ROWS.map((r) => r.category))]
             .map((cat) => boardColumn(cat, ROWS.filter((r) => r.category === cat), OPTION_TONES[cat]))
             .join("")}
@@ -173,8 +173,8 @@ export const CORE_SCENARIOS = [
     fixtureOf: "constructed-board-subtask",
     note: "A parent and two child cards beside an ordinary lane, using the same card, title, chip, progress, and footer tree as the rendered board.",
     html: () => `
-      <div class="note-database-container db-kanban-view">
-        <div class="db-kanban-board">
+      <div class="obnotion-container obnotion-kanban-view">
+        <div class="obnotion-kanban-board">
           ${subtaskBoardColumn("Projects", [
             subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { depth: 0 }),
             subtaskBoardCard(SUBTASK_FIXTURE_ROWS.copy, { depth: 1, parent: SUBTASK_FIXTURE_ROWS.parent.name }),
@@ -193,8 +193,8 @@ export const CORE_SCENARIOS = [
     sources: ["src/views/board-renderer.ts"],
     note: "A populated lane beside an empty lane, preserving the rendered column header and empty cards container.",
     html: () => `
-      <div class="note-database-container db-kanban-view">
-        <div class="db-kanban-board">
+      <div class="obnotion-container obnotion-kanban-view">
+        <div class="obnotion-kanban-board">
           ${boardColumn("Design", ROWS.filter((r) => r.category === "Design").slice(0, 2))}
           ${boardColumn("Personal", [])}
         </div>
@@ -206,14 +206,14 @@ export const CORE_SCENARIOS = [
     group: "components",
     width: 620,
     sources: ["src/views/board-renderer.ts"],
-    note: "A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (db-kanban-drop-target), and the dragged card keeps the dragstart lift (db-kanban-card--dragging) — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.",
+    note: "A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (obnotion-kanban-drop-target), and the dragged card keeps the dragstart lift (obnotion-kanban-card--dragging) — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.",
     html: () => {
       const rows = ROWS.filter((r) => r.category === "Business").slice(0, 3);
       const tone = OPTION_TONES.Business;
       const cardRenderer = (row, index) => (index === 1 ? boardCard(row, "", { dragState: "dragging" }) : boardCard(row));
       return `
-      <div class="note-database-container db-kanban-view">
-        <div class="db-kanban-board">
+      <div class="obnotion-container obnotion-kanban-view">
+        <div class="obnotion-kanban-board">
           ${boardColumn("Business", rows, tone, { columnClass: "is-drop-target", cardRenderer })}
         </div>
       </div>`;
@@ -240,7 +240,7 @@ export const CORE_SCENARIOS = [
     // phone the shipped positioner makes this surface a bottom sheet; pinned static, it photographs
     // as a popover in both devices. A defect was once read off this image that the image was
     // structurally incapable of showing. Placement is measured in verify-placement, never here.
-    captureCss: `.note-database-container .db-view-tab-popover {
+    captureCss: `.obnotion-container .obnotion-view-tab-popover {
       position: static !important; top: auto !important; left: auto !important;
       max-height: none !important;
     }`,
@@ -251,51 +251,51 @@ export const CORE_SCENARIOS = [
     html: () => {
       const chevron = glyph('<path d="m9 18 6-6-6-6"/>');
       const row = (label, d) => `
-        <button type="button" class="db-menu-item" role="menuitem" aria-checked="false">
-          <span class="db-menu-item-icon">${glyph(d)}</span>
-          <span class="db-menu-item-label">${label}</span>
-          <span class="db-menu-item-chevron db-menu-item-current">${chevron}</span>
+        <button type="button" class="obnotion-menu-item" role="menuitem" aria-checked="false">
+          <span class="obnotion-menu-item-icon">${glyph(d)}</span>
+          <span class="obnotion-menu-item-label">${label}</span>
+          <span class="obnotion-menu-item-chevron obnotion-menu-item-current">${chevron}</span>
         </button>`;
       const field = (id, label, control) => `
-        <div class="db-panel-row">
-          <div class="db-add-view-field">
-            <label class="db-add-view-field-label" for="${id}">${label}</label>
+        <div class="obnotion-panel-row">
+          <div class="obnotion-add-view-field">
+            <label class="obnotion-add-view-field-label" for="${id}">${label}</label>
             ${control}
           </div>
         </div>`;
       return `
-      <div class="note-database-container">
-        <div class="db-view-tab-popover db-add-view-popover" role="dialog" aria-label="Add view">
-          <div class="db-panel-header">
-            <span class="db-panel-title">Add view</span>
-            <button type="button" class="db-sheet-close" aria-label="Close">${glyph('<path d="M18 6 6 18"/><path d="m6 6 12 12"/>')}</button>
+      <div class="obnotion-container">
+        <div class="obnotion-view-tab-popover obnotion-add-view-popover" role="dialog" aria-label="Add view">
+          <div class="obnotion-panel-header">
+            <span class="obnotion-panel-title">Add view</span>
+            <button type="button" class="obnotion-sheet-close" aria-label="Close">${glyph('<path d="M18 6 6 18"/><path d="m6 6 12 12"/>')}</button>
           </div>
-          <div class="db-menu-section">Options</div>
-          <div class="db-add-view-form">
-            ${field("db-add-view-field-1", "View name (optional)",
-              '<input type="text" class="db-add-view-name" id="db-add-view-field-1">')}
-            ${field("db-add-view-field-2", "Title property",
-              `<button type="button" class="db-dropdown-field db-add-view-key-field" id="db-add-view-field-2" aria-haspopup="listbox" aria-expanded="false">
-                 <span class="db-dropdown-field-icon"></span>
-                 <div class="db-dropdown-field-text"><span class="db-dropdown-field-value">Cost</span></div>
-                 <span class="db-dropdown-field-chevron">${glyph('<path d="m6 9 6 6 6-6"/>')}</span>
+          <div class="obnotion-menu-section">Options</div>
+          <div class="obnotion-add-view-form">
+            ${field("obnotion-add-view-field-1", "View name (optional)",
+              '<input type="text" class="obnotion-add-view-name" id="obnotion-add-view-field-1">')}
+            ${field("obnotion-add-view-field-2", "Title property",
+              `<button type="button" class="obnotion-dropdown-field obnotion-add-view-key-field" id="obnotion-add-view-field-2" aria-haspopup="listbox" aria-expanded="false">
+                 <span class="obnotion-dropdown-field-icon"></span>
+                 <div class="obnotion-dropdown-field-text"><span class="obnotion-dropdown-field-value">Cost</span></div>
+                 <span class="obnotion-dropdown-field-chevron">${glyph('<path d="m6 9 6 6 6-6"/>')}</span>
                </button>`)}
-            ${field("db-add-view-field-3", "Icon (optional)",
-              '<input type="text" class="db-add-view-icon" maxlength="8" id="db-add-view-field-3">')}
-            <label class="db-add-view-duplicate db-panel-row"><input type="checkbox" class="db-checkbox db-checkbox-field"><span>Copy settings from current view</span></label>
+            ${field("obnotion-add-view-field-3", "Icon (optional)",
+              '<input type="text" class="obnotion-add-view-icon" maxlength="8" id="obnotion-add-view-field-3">')}
+            <label class="obnotion-add-view-duplicate obnotion-panel-row"><input type="checkbox" class="obnotion-checkbox obnotion-checkbox-field"><span>Copy settings from current view</span></label>
           </div>
-          <div class="db-menu-separator" role="separator"></div>
-          <div class="db-menu-section">Create</div>
-          <div class="db-add-view-choices">
+          <div class="obnotion-menu-separator" role="separator"></div>
+          <div class="obnotion-menu-section">Create</div>
+          <div class="obnotion-add-view-choices">
             ${row("Table view", '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/>')}
             ${row("Board view", '<rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="11" rx="1"/>')}
             ${row("Chart view", '<path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7"/><rect x="13" y="6" width="3" height="11"/>')}
             ${row("Calendar view", '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>')}
             ${row("Timeline view", '<path d="M3 6h11M3 12h7M3 18h14"/>')}
-            <button type="button" class="db-menu-item db-add-view-duplicate-action" role="menuitem" aria-checked="false">
-              <span class="db-menu-item-icon">${glyph('<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>')}</span>
-              <span class="db-menu-item-label">Duplicate current view</span>
-              <span class="db-menu-item-chevron db-menu-item-current">${chevron}</span>
+            <button type="button" class="obnotion-menu-item obnotion-add-view-duplicate-action" role="menuitem" aria-checked="false">
+              <span class="obnotion-menu-item-icon">${glyph('<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>')}</span>
+              <span class="obnotion-menu-item-label">Duplicate current view</span>
+              <span class="obnotion-menu-item-chevron obnotion-menu-item-current">${chevron}</span>
             </button>
           </div>
         </div>
@@ -320,31 +320,31 @@ export const CORE_SCENARIOS = [
       // character and an ellipsis — "S…", "A…", "R…" — in a popover over a thousand pixels wide,
       // which is a picture of a dropdown the plugin does not build.
       //
-      // The row carries `db-menu-item` too, and that is not decoration: the disabled appearance
-      // both menus share is declared on `.db-menu-item[aria-disabled="true"]`, so a row with the
+      // The row carries `obnotion-menu-item` too, and that is not decoration: the disabled appearance
+      // both menus share is declared on `.obnotion-menu-item[aria-disabled="true"]`, so a row with the
       // attribute and not the class matched nothing. `is-disabled` was missing beside it, which is
-      // the other half — `.db-dropdown-option.is-disabled` is where the 0.45 opacity lives. The
+      // the other half — `.obnotion-dropdown-option.is-disabled` is where the 0.45 opacity lives. The
       // disabled option was therefore drawn exactly like the two available ones, in the one
       // scenario whose whole title is "Dropdown with disabled option".
       //
       // The selected row's check span was empty. `openDropdownPopover` puts Lucide's `check` in it
       // for the matching value, so the fixture claimed a selected state with nothing marking it.
       const option = (label, extra = "", attrs = "", checked = false) => `
-          <button type="button" class="${`db-dropdown-option db-menu-item ${extra}`.trim()}" ${attrs}>
-            <span class="db-dropdown-option-text db-menu-item-label"><span class="db-dropdown-option-label">${label}</span></span>
-            <span class="db-dropdown-option-check db-menu-item-check">${checked ? ICONS.check : ""}</span>
+          <button type="button" class="${`obnotion-dropdown-option obnotion-menu-item ${extra}`.trim()}" ${attrs}>
+            <span class="obnotion-dropdown-option-text obnotion-menu-item-label"><span class="obnotion-dropdown-option-label">${label}</span></span>
+            <span class="obnotion-dropdown-option-check obnotion-menu-item-check">${checked ? ICONS.check : ""}</span>
           </button>`;
       // The desktop panel opens with its query field first and the options in their own scroll
       // container beneath it — every desktop menu is searchable, so a three-option list carries
       // the same row a thirty-option one does.
       return `
-      <div class="note-database-container">
-        <div class="db-dropdown-popover db-dropdown-popover-context-container is-searchable">
-          <div class="db-dropdown-search">
+      <div class="obnotion-container">
+        <div class="obnotion-dropdown-popover obnotion-dropdown-popover-context-container is-searchable">
+          <div class="obnotion-dropdown-search">
             <input type="search" placeholder="Aggregate" role="combobox" aria-expanded="true" aria-autocomplete="list">
           </div>
-          <div class="db-dropdown-options">
-            <div class="db-dropdown-section-title">Aggregate</div>
+          <div class="obnotion-dropdown-options">
+            <div class="obnotion-dropdown-section-title">Aggregate</div>
             ${option("Sum", "is-selected", "", true)}
             ${option("Average")}
             ${option("Rollup", "is-disabled", 'aria-disabled="true" title="Rollup needs a numeric target field"')}
@@ -361,15 +361,15 @@ export const CORE_SCENARIOS = [
     fixtureOf: "constructed-empty-state",
     sources: ["src/views/empty-state-renderer.ts"],
     html: () => `
-      <div class="note-database-container">
-        <div class="db-empty-hero">
-          <div class="db-empty-hero-content">
-            <div class="db-empty-hero-icon">${glyph('<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/>')}</div>
-            <div class="db-empty-card-title">No properties yet</div>
-            <div class="db-empty-hero-description">Add a property to start describing these notes.</div>
-            <div class="db-empty-action-group">
-              <button type="button" class="db-empty-action mod-cta">Add property</button>
-              <button type="button" class="db-empty-action">Learn more</button>
+      <div class="obnotion-container">
+        <div class="obnotion-empty-hero">
+          <div class="obnotion-empty-hero-content">
+            <div class="obnotion-empty-hero-icon">${glyph('<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/>')}</div>
+            <div class="obnotion-empty-card-title">No properties yet</div>
+            <div class="obnotion-empty-hero-description">Add a property to start describing these notes.</div>
+            <div class="obnotion-empty-action-group">
+              <button type="button" class="obnotion-empty-action mod-cta">Add property</button>
+              <button type="button" class="obnotion-empty-action">Learn more</button>
             </div>
           </div>
         </div>
@@ -387,15 +387,15 @@ export const CORE_SCENARIOS = [
     // action is the state's own primary "Choose database" affordance, not a stand-in.
     sources: ["src/views/empty-state-renderer.ts", "styles.css"],
     html: () => `
-      <div class="note-database-container">
-        <div class="db-empty db-empty-card" data-empty-reason="source-missing">
-          <div class="db-empty-card-icon" aria-hidden="true">${ICONS.database}</div>
-          <div class="db-empty-card-content">
-            <h3 class="db-empty-card-title">This view's source is missing</h3>
-            <p class="db-empty-card-message">The folder or database this view pointed to was moved or deleted. Choose a database to continue.</p>
-            <div class="db-empty-action-group">
-              <button type="button" class="db-empty-action mod-cta" aria-label="Choose database">
-                <span class="db-empty-action-icon" aria-hidden="true">${ICONS.database}</span>
+      <div class="obnotion-container">
+        <div class="obnotion-empty obnotion-empty-card" data-empty-reason="source-missing">
+          <div class="obnotion-empty-card-icon" aria-hidden="true">${ICONS.database}</div>
+          <div class="obnotion-empty-card-content">
+            <h3 class="obnotion-empty-card-title">This view's source is missing</h3>
+            <p class="obnotion-empty-card-message">The folder or database this view pointed to was moved or deleted. Choose a database to continue.</p>
+            <div class="obnotion-empty-action-group">
+              <button type="button" class="obnotion-empty-action mod-cta" aria-label="Choose database">
+                <span class="obnotion-empty-action-icon" aria-hidden="true">${ICONS.database}</span>
                 <span>Choose database</span>
               </button>
             </div>
@@ -423,12 +423,12 @@ export const CORE_SCENARIOS = [
       const openIcon = glyph('<path d="M15 3h6v6"/><path d="m21 3-7 7"/><path d="M9 21H3v-6"/><path d="m3 21 7-7"/>');
       const colWidths = [200, 120, 130, 140, 170, 140];
       const cols = COLUMNS
-        .map((c, i) => `<col data-note-database-column-key="${c.label.toLowerCase()}" style="width:${colWidths[i]}px">`)
+        .map((c, i) => `<col data-obnotion-column-key="${c.label.toLowerCase()}" style="width:${colWidths[i]}px">`)
         .join("");
       const titleCell = (r) => `
-        <td class="db-cell db-title-cell db-editable-cell db-record-open-host">
-          <a class="internal-link"><span class="db-file-title-inline has-folder-prefix"><span class="db-file-title-name">${r.name}</span></span></a>
-          <button type="button" class="db-record-open-btn db-record-open-btn-icon" aria-label="Open">${openIcon}</button>
+        <td class="obnotion-cell obnotion-title-cell obnotion-editable-cell obnotion-record-open-host">
+          <a class="internal-link"><span class="obnotion-file-title-inline has-folder-prefix"><span class="obnotion-file-title-name">${r.name}</span></span></a>
+          <button type="button" class="obnotion-record-open-btn obnotion-record-open-btn-icon" aria-label="Open">${openIcon}</button>
         </td>`;
       const dataCells = (r) => `
         ${titleCell(r)}<td>${r.cost}</td><td>${optionPill(r.cycle)}</td>
@@ -436,23 +436,23 @@ export const CORE_SCENARIOS = [
         <td>${optionPill(r.category)}</td>`;
       const bodyRows = rows.map((r) => `
         <tr>
-          <td class="db-select-col"><div class="db-select-inner">
-            <button type="button" class="db-table-mobile-move-btn" aria-label="Move row">${move}</button>
+          <td class="obnotion-select-col"><div class="obnotion-select-inner">
+            <button type="button" class="obnotion-table-mobile-move-btn" aria-label="Move row">${move}</button>
             ${rowCheckbox()}</div></td>
-          <td class="db-record-icon-col"><span class="db-record-icon">${icon}</span></td>
+          <td class="obnotion-record-icon-col"><span class="obnotion-record-icon">${icon}</span></td>
           ${dataCells(r)}
         </tr>`).join("");
       const total = 40 + 28 + colWidths.reduce((a, b) => a + b, 0);
       return `
-      <div class="note-database-container db-width-default">
-        <div class="db-table-wrap">
-          <table class="db-table" style="width:${total}px;min-width:${total}px">
+      <div class="obnotion-container obnotion-width-default">
+        <div class="obnotion-table-wrap">
+          <table class="obnotion-table" style="width:${total}px;min-width:${total}px">
             <colgroup>
-              <col class="db-select-colgroup"><col class="db-record-icon-colgroup">${cols}
+              <col class="obnotion-select-colgroup"><col class="obnotion-record-icon-colgroup">${cols}
             </colgroup>
             <thead><tr>
-              <th class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></th>
-              <th class="db-record-icon-col"></th>
+              <th class="obnotion-select-col"><div class="obnotion-select-inner">${rowCheckbox()}</div></th>
+              <th class="obnotion-record-icon-col"></th>
               ${tableHeader({ selectColumn: false })}
             </tr></thead>
             <tbody>${bodyRows}</tbody>
@@ -472,8 +472,8 @@ export const CORE_SCENARIOS = [
     fixtureOf: "constructed-board",
     note: "The reference board inside the default-width container: its fixed-width columns page horizontally on a phone while the card tree remains unchanged.",
     html: () => `
-      <div class="note-database-container db-kanban-view db-width-default">
-        <div class="db-kanban-board">
+      <div class="obnotion-container obnotion-kanban-view obnotion-width-default">
+        <div class="obnotion-kanban-board">
           ${[...new Set(ROWS.map((r) => r.category))]
             .map((cat) => boardColumn(cat, ROWS.filter((r) => r.category === cat)))
             .join("")}
@@ -488,8 +488,8 @@ export const CORE_SCENARIOS = [
     fixtureOf: "constructed-card-covers",
     sources: ["src/views/board-renderer.ts"],
     // `renderCover` runs in the board card whenever an image field is configured, and every
-    // capture in this corpus was of a view with none — so `.db-board-card-cover` and
-    // `.db-board-card-cover-placeholder` were unreachable by any check. This fixture is what makes
+    // capture in this corpus was of a view with none — so `.obnotion-board-card-cover` and
+    // `.obnotion-board-card-cover-placeholder` were unreachable by any check. This fixture is what makes
     // them reachable: the empty state is the one a fixture can produce honestly, since resolving a
     // real image needs a vault.
     //
@@ -500,18 +500,18 @@ export const CORE_SCENARIOS = [
     note: "The empty cover in the board's card: the same Lucide image glyph on --background-secondary at a 0.75 aspect ratio the board has always drawn.",
     // The card sits in its real parent rather than on the container. The cover's height is its
     // width over a 0.75 ratio, so a card photographed at the scenario's own width is a cover eight
-    // hundred pixels tall — a shape no lane or grid column ever gives it. `.db-kanban-col`
+    // hundred pixels tall — a shape no lane or grid column ever gives it. `.obnotion-kanban-col`
     // carries the shipped width (246px).
     html: () => `
-      <div class="note-database-container" style="display: flex; gap: 16px; align-items: flex-start">
-        <div class="db-kanban-col">
-          <div class="db-kanban-cards" role="rowgroup">
-            <div class="db-kanban-card" role="row" tabindex="-1">
+      <div class="obnotion-container" style="display: flex; gap: 16px; align-items: flex-start">
+        <div class="obnotion-kanban-col">
+          <div class="obnotion-kanban-cards" role="rowgroup">
+            <div class="obnotion-kanban-card" role="row" tabindex="-1">
               ${emptyCover(COVER_BASES.board)}
-              <div class="db-kanban-card-body">
-                <div class="db-kanban-card-title-row"><div class="db-kanban-card-title">Figma</div></div>
-                <div class="db-kanban-card-meta">
-                  <div class="db-board-card-field"><span class="db-board-card-field-label">Cost</span><span class="db-board-card-value">€ 18,75</span></div>
+              <div class="obnotion-kanban-card-body">
+                <div class="obnotion-kanban-card-title-row"><div class="obnotion-kanban-card-title">Figma</div></div>
+                <div class="obnotion-kanban-card-meta">
+                  <div class="obnotion-board-card-field"><span class="obnotion-board-card-field-label">Cost</span><span class="obnotion-board-card-value">€ 18,75</span></div>
                 </div>
               </div>
             </div>
@@ -535,17 +535,17 @@ export const CORE_SCENARIOS = [
       + "excludes whichever column is chosen as its title.",
     html: () => {
       const currencyTitleField = (label, value, tone) => `
-        <div class="db-board-card-field" data-note-database-column-key="${label.toLowerCase()}" role="gridcell">
-          <span class="db-board-card-field-label">${label}</span>
-          <div class="db-board-card-value">${tone ? optionPill(value) : value}</div>
+        <div class="obnotion-board-card-field" data-obnotion-column-key="${label.toLowerCase()}" role="gridcell">
+          <span class="obnotion-board-card-field-label">${label}</span>
+          <div class="obnotion-board-card-value">${tone ? optionPill(value) : value}</div>
         </div>`;
       const currencyTitleCard = (row) => `
-      <div class="db-kanban-card" role="row" tabindex="-1">
-        <div class="db-kanban-card-body">
-          <div class="db-kanban-card-title-row">
-            <span class="db-kanban-card-title">${row.cost}</span>
+      <div class="obnotion-kanban-card" role="row" tabindex="-1">
+        <div class="obnotion-kanban-card-body">
+          <div class="obnotion-kanban-card-title-row">
+            <span class="obnotion-kanban-card-title">${row.cost}</span>
           </div>
-          <div class="db-kanban-card-meta">
+          <div class="obnotion-kanban-card-meta">
             ${currencyTitleField("Billing", row.cycle, true)}
             ${currencyTitleField("Payment", row.payment, true)}
             ${currencyTitleField("Next Renewal", row.renew)}
@@ -554,7 +554,7 @@ export const CORE_SCENARIOS = [
       </div>`;
       const [first, second] = ROWS;
       return `
-      <div class="note-database-container db-kanban-view">
+      <div class="obnotion-container obnotion-kanban-view">
         ${boardColumn(first.category, [first, second], optionTone(first.category), { cardRenderer: currencyTitleCard })}
       </div>`;
     },

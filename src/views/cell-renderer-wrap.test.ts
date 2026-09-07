@@ -4,9 +4,9 @@
 // ───────────────────────────────────────────────────────────────────
 //
 // `renderCell` resolves the view's wrap switch against the column's own mode:
-// the switch gates, the mode refines. `.db-cell-wrap` is the single class that
+// the switch gates, the mode refines. `.obnotion-cell-wrap` is the single class that
 // decision produces, and everything downstream hangs off it — the stylesheet's
-// `white-space`, the `td:not(.db-cell-wrap)` rule that keeps the four value
+// `white-space`, the `td:not(.obnotion-cell-wrap)` rule that keeps the four value
 // containers on one line, and the phone rule that no longer outranks it. A
 // wiring mistake at any of the four call sites reads as a table that quietly
 // ignores the setting, which no type check catches because the parameter is
@@ -118,7 +118,7 @@ function wrapsWith(colWrap: boolean | undefined, viewDefault: boolean | undefine
   const td = new MockElement();
   const col = { key: "Notes", label: "Notes", type: "text", wrap: colWrap } as ColumnDef;
   renderer().renderCell(td as unknown as HTMLElement, row, col, viewDefault);
-  return td.classes.has("db-cell-wrap");
+  return td.classes.has("obnotion-cell-wrap");
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -193,7 +193,7 @@ describe("CellRenderer markdown wrap: line-break collapse", () => {
 
 // The table cell's own blank convention, pinned unchanged alongside the docked peek's muted
 // placeholder for the same empty property. Ours already matches Notion's blank table cell;
-// `.db-empty-value` is distinct from the peek's own `.db-record-peek-field-value-empty`
+// `.obnotion-empty-value` is distinct from the peek's own `.obnotion-record-peek-field-value-empty`
 // (table-record-peek.test.ts), and this pins the cell side of that pair so a later change to the
 // peek cannot leak text into this one too.
 describe("CellRenderer leaves an empty value blank in the table cell", () => {
@@ -202,7 +202,7 @@ describe("CellRenderer leaves an empty value blank in the table cell", () => {
     const col = { key: "notes", label: "Notes", type: "text" } as ColumnDef;
     const emptyRow = { file: { path: "Notes/One.md" }, frontmatter: { notes: "" }, computed: {} } as unknown as RowData;
     renderer().renderCell(td as unknown as HTMLElement, emptyRow, col, false);
-    expect(td.hasChildClass("db-empty-value")).toBe(true);
+    expect(td.hasChildClass("obnotion-empty-value")).toBe(true);
     expect(td.textContent).toBe("");
   });
 });

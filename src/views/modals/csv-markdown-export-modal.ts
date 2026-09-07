@@ -12,7 +12,7 @@
 
 import { t } from "../../i18n";
 import { CsvMarkdownExportOptions } from "../../data/csv-markdown-zip-export";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 import { createCheckbox } from "../checkbox";
 
@@ -42,15 +42,15 @@ export class CsvMarkdownExportModal extends DbModal {
   onOpen(): void {
     super.onOpen();
     this.contentEl.empty();
-    this.contentEl.addClass("note-database-modal");
+    this.contentEl.addClass("obnotion-modal");
     this.contentEl.createEl("h3", { text: t("csvMarkdownExport.title") });
-    this.contentEl.createDiv({ cls: "db-panel-empty", text: t("csvMarkdownExport.desc") });
+    this.contentEl.createDiv({ cls: "obnotion-panel-empty", text: t("csvMarkdownExport.desc") });
 
     this.renderCheckboxOption(t("csvMarkdownExport.includeFrontmatter"), this.includeFrontmatter, (value) => {
       this.includeFrontmatter = value;
     });
 
-    const actions = this.contentEl.createDiv({ cls: "db-modal-actions" });
+    const actions = this.contentEl.createDiv({ cls: "obnotion-modal-actions" });
     actions.createEl("button", { text: t("common.cancel") }).onclick = () => this.close();
     actions.createEl("button", {
       cls: "mod-cta",
@@ -67,8 +67,8 @@ export class CsvMarkdownExportModal extends DbModal {
   }
 
   private renderCheckboxOption(text: string, checked: boolean, onChange: (value: boolean) => void): void {
-    const row = this.contentEl.createDiv({ cls: "db-csv-markdown-option-row" });
-    const label = row.createEl("label", { cls: "db-csv-markdown-option-label" });
+    const row = this.contentEl.createDiv({ cls: "obnotion-csv-markdown-option-row" });
+    const label = row.createEl("label", { cls: "obnotion-csv-markdown-option-label" });
     const checkbox = createCheckbox(label, { role: "field" });
     checkbox.checked = checked;
     checkbox.onchange = () => onChange(checkbox.checked);

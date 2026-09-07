@@ -181,7 +181,7 @@ describe("the shell's own geometry constants", () => {
   });
 
   it("carries the desktop side-sheet's marker class and measured width", () => {
-    expect(SHELL_SIDE_SHEET_CLASS).toBe("db-shell-side-sheet");
+    expect(SHELL_SIDE_SHEET_CLASS).toBe("obnotion-shell-side-sheet");
     expect(SHELL_SIDE_SHEET_WIDTH_PX).toBe(420);
   });
 });
@@ -191,7 +191,7 @@ describe("the shell's own geometry constants", () => {
 // ───────────────────────────────────────────────────────────────────
 
 const shellSource = readFileSync(resolve(__dirname, "./surface-shell.ts"), "utf8");
-const dbModalSource = readFileSync(resolve(__dirname, "./modals/db-modal.ts"), "utf8");
+const dbModalSource = readFileSync(resolve(__dirname, "./modals/obnotion-modal.ts"), "utf8");
 
 describe("the shell composes the existing sheet engine rather than reimplementing it", () => {
   it("imports the chrome, header and placement primitives from the engine modules", () => {
@@ -206,7 +206,7 @@ describe("the shell composes the existing sheet engine rather than reimplementin
     // from it would be a cycle, and this module reaching into one would be the shell
     // depending on the very thing it is meant to unify.
     expect(shellSource).not.toMatch(/from ["']\.\/modals\//);
-    expect(shellSource).not.toMatch(/from ["']\.\/db-modal["']/);
+    expect(shellSource).not.toMatch(/from ["']\.\/obnotion-modal["']/);
     expect(shellSource).not.toMatch(/-renderer["']/);
   });
 
@@ -311,7 +311,7 @@ describe("the thirteen sheet subclasses and the four fullscreen ones declare a t
 // it is what `buildShellHeader` itself calls, so it must keep calling `createSheetHeader`
 // directly). A later census found that list short: `column-width.ts`, `chart-toolbar-renderer.ts`
 // (four sites), `toolbar-renderer.ts` (two), and `record-surface/record-header.ts`'s unconsumed
-// phone builder were all still hand-built from raw `db-panel-header`/`db-panel-title` markup.
+// phone builder were all still hand-built from raw `obnotion-panel-header`/`obnotion-panel-title` markup.
 // The list below is the true population, re-pinned rather than left at twelve.
 //
 // Three of the original eleven — the date, colour and icon pickers — since reached the same
@@ -322,7 +322,7 @@ describe("the thirteen sheet subclasses and the four fullscreen ones declare a t
 //
 // The two calendar toolbars were the last raw sites; the calendar leg that owned those files
 // migrated them itself, so they are pinned here with the rest. Nothing outside
-// `mobile-bottom-sheet.ts` builds a `db-panel-header`/`db-panel-title` pair by hand any more.
+// `mobile-bottom-sheet.ts` builds a `obnotion-panel-header`/`obnotion-panel-title` pair by hand any more.
 
 const SHELL_HEADER_CONSUMER_FILES = [
   // The relation editor's phone header — editRelationPopover's body moved here from CellRenderer.

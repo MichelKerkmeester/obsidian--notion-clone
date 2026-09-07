@@ -31,27 +31,27 @@ describe("Accessibility Defect Fixes", () => {
 
   it("Item 1 & 3: baseline focus ring extends across all 9 surface roots and standardises on box-shadow", () => {
     const requiredRoots = [
-      ".note-database-container",
-      ".note-database-modal",
-      ".note-database-settings",
-      ".db-color-picker-popup",
-      ".db-icon-picker-popover",
-      ".db-dropdown-popover",
-      ".db-cell-option-popover",
+      ".obnotion-container",
+      ".obnotion-modal",
+      ".obnotion-settings",
+      ".obnotion-color-picker-popup",
+      ".obnotion-icon-picker-popover",
+      ".obnotion-dropdown-popover",
+      ".obnotion-cell-option-popover",
       ".formula-workbench-modal",
-      ".db-chart-drilldown-modal",
+      ".obnotion-chart-drilldown-modal",
     ];
 
     for (const root of requiredRoots) {
       expect(stylesContent).toContain(root);
     }
 
-    expect(stylesContent).toContain("box-shadow: var(--db-accent-focus-ring);");
+    expect(stylesContent).toContain("box-shadow: var(--obnotion-accent-focus-ring);");
   });
 
-  it("Item 2: db-icon-picker-search focus has accent focus ring box-shadow", () => {
+  it("Item 2: obnotion-icon-picker-search focus has accent focus ring box-shadow", () => {
     expect(stylesContent).toMatch(
-      /\.db-icon-picker-search:focus-visible\s*\{[^}]*box-shadow:\s*var\(--db-accent-focus-ring\)/
+      /\.obnotion-icon-picker-search:focus-visible\s*\{[^}]*box-shadow:\s*var\(--obnotion-accent-focus-ring\)/
     );
   });
 
@@ -82,21 +82,21 @@ describe("Accessibility Defect Fixes", () => {
     const boardPath = resolve(__dirname, "board-renderer.ts");
     const boardContent = readFileSync(boardPath, "utf-8");
 
-    expect(boardContent).not.toContain("db-board-column-checkbox");
-    expect(boardContent).not.toContain("db-board-card-checkbox");
+    expect(boardContent).not.toContain("obnotion-board-column-checkbox");
+    expect(boardContent).not.toContain("obnotion-board-card-checkbox");
   });
 
   it("Item 7: urgency classes supply non-colour visual glyphs for deuteranope clarity", () => {
-    expect(stylesContent).toContain(".note-database-container .urgency-red::before");
-    expect(stylesContent).toContain(".note-database-container .urgency-orange::before");
-    expect(stylesContent).toContain(".note-database-container .urgency-green::before");
+    expect(stylesContent).toContain(".obnotion-container .urgency-red::before");
+    expect(stylesContent).toContain(".obnotion-container .urgency-orange::before");
+    expect(stylesContent).toContain(".obnotion-container .urgency-green::before");
   });
 
   it("Item 8: drag-drop feedback announces transactional outcomes via aria-live polite region", () => {
     const state = new DragDropFeedbackState();
     let statusText = "";
     const mockLiveRegion = {
-      className: "db-sr-status",
+      className: "obnotion-sr-status",
       getAttribute: (attr: string) => (attr === "aria-live" ? "polite" : null),
       setAttribute: vi.fn(),
       set textContent(val: string) {

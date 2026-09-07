@@ -121,7 +121,7 @@ export interface BoardDropCandidate {
 }
 
 /**
- * 把鼠标坐标解析到目标列 / 子分组，供 .db-board 容器空白区的兜底 drop handler 使用。
+ * 把鼠标坐标解析到目标列 / 子分组，供 .obnotion-board 容器空白区的兜底 drop handler 使用。
  *
  * 算法（**两列间水平 gap 不处理**）：
  * - 候选为空 → null。

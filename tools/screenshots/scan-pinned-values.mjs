@@ -14,11 +14,11 @@
 // approximating the product, it is contradicting it, and every screenshot shows
 // a layout the user cannot get.
 //
-// `--db-header-height` was this: read with a 34px fallback, assigned by nothing,
+// `--obnotion-header-height` was this: read with a 34px fallback, assigned by nothing,
 // and pinned here to 40px. Every capture depicted a header six pixels taller
 // than the one that ships. It was found by reading. This finds the rest.
 //
-// Not covered: a value of the wrong *type*. `--db-timeline-row` took a length
+// Not covered: a value of the wrong *type*. `--obnotion-timeline-row` took a length
 // where the runtime assigns a grid line index, which made `grid-row` invalid and
 // silently dropped it. Deciding that from source means knowing the type of a
 // TypeScript expression — `String(units)`, a nested template literal — and a
@@ -73,8 +73,8 @@ function runtimeAssigned() {
   for (const file of walk(dir)) {
     const text = readFileSync(file, "utf8");
     const rel = relative(REPO, file);
-    for (const m of text.matchAll(/"(--db-[a-z0-9-]+)"\s*:/g)) if (!found.has(m[1])) found.set(m[1], rel);
-    for (const m of text.matchAll(/setProperty\(\s*"(--db-[a-z0-9-]+)"/g)) if (!found.has(m[1])) found.set(m[1], rel);
+    for (const m of text.matchAll(/"(--obnotion-[a-z0-9-]+)"\s*:/g)) if (!found.has(m[1])) found.set(m[1], rel);
+    for (const m of text.matchAll(/setProperty\(\s*"(--obnotion-[a-z0-9-]+)"/g)) if (!found.has(m[1])) found.set(m[1], rel);
   }
   return found;
 }
@@ -83,12 +83,12 @@ function runtimeAssigned() {
 function stylesheet() {
   const abs = join(REPO, "styles.css");
   const text = existsSync(abs) ? readFileSync(abs, "utf8") : "";
-  const declared = new Set([...text.matchAll(/^\s*(--db-[a-z0-9-]+)\s*:/gm)].map((m) => m[1]));
+  const declared = new Set([...text.matchAll(/^\s*(--obnotion-[a-z0-9-]+)\s*:/gm)].map((m) => m[1]));
   // Balanced scan, not a regex. A fallback is routinely another var() — stopping at the first
   // closing paren truncates `var(--text-normal)` to `var(--text-normal`, which then differs from
   // itself and reports two identical values as a contradiction.
   const fallbacks = new Map();
-  for (const m of text.matchAll(/var\(\s*(--db-[a-z0-9-]+)\s*,/g)) {
+  for (const m of text.matchAll(/var\(\s*(--obnotion-[a-z0-9-]+)\s*,/g)) {
     let depth = 1;
     let index = m.index + m[0].length;
     while (index < text.length && depth > 0) {
@@ -108,7 +108,7 @@ function harnessDeclared(relPath) {
   if (!existsSync(abs)) return new Map();
   const text = readFileSync(abs, "utf8").replace(/\/\*[\s\S]*?\*\//g, " ");
   const found = new Map();
-  for (const m of text.matchAll(/(--db-[a-z0-9-]+)\s*:\s*([^;]+);/g)) {
+  for (const m of text.matchAll(/(--obnotion-[a-z0-9-]+)\s*:\s*([^;]+);/g)) {
     if (!found.has(m[1])) found.set(m[1], m[2].trim());
   }
   return found;

@@ -95,11 +95,11 @@ export class SortPanelRenderer {
       panel.empty();
     } else {
       panel = containerEl.createDiv({
-        cls: "db-sort-panel",
-        attr: { id: "db-sort-panel", role: "dialog", "aria-label": t("toolbar.sort") },
+        cls: "obnotion-sort-panel",
+        attr: { id: "obnotion-sort-panel", role: "dialog", "aria-label": t("toolbar.sort") },
       });
       panel.tabIndex = -1;
-      const header = containerEl.querySelector(".db-header") || containerEl.querySelector(".db-toolbar");
+      const header = containerEl.querySelector(".obnotion-header") || containerEl.querySelector(".obnotion-toolbar");
       if (header?.parentElement) header.parentElement.insertBefore(panel, header.nextSibling);
     }
     this.panelEl = panel;
@@ -121,17 +121,17 @@ export class SortPanelRenderer {
     // Calendar layouts reserve lanes/columns for spanning, all-day, and
     // overlapping timed events before applying user sort as a layout tiebreak.
     if (config.viewType === "calendar") {
-      panel.createDiv({ cls: "db-panel-hint", text: t("sortPanel.calendarHint") });
+      panel.createDiv({ cls: "obnotion-panel-hint", text: t("sortPanel.calendarHint") });
     }
 
     const rules = state.sortRules || [];
     if (rules.length === 0) {
-      panel.createDiv({ cls: "db-panel-empty", text: t("panel.emptySorts") });
+      panel.createDiv({ cls: "obnotion-panel-empty", text: t("panel.emptySorts") });
     } else {
       rules.forEach((rule, index) => this.renderRule(panel, config, state, rule, index, actions));
     }
 
-    panel.createEl("button", { cls: "db-panel-button", text: `+ ${t("panel.addSort")}` }).onclick = () => {
+    panel.createEl("button", { cls: "obnotion-panel-button", text: `+ ${t("panel.addSort")}` }).onclick = () => {
       const first = getViewRuleColumns(config)[0]?.key || "file.name";
       state.sortColumn = undefined;
       state.sortDirection = "asc";
@@ -168,12 +168,12 @@ export class SortPanelRenderer {
   ): void {
     const columns = getViewRuleColumns(config);
     const row = createConditionRow(panel, {
-      className: "db-sort-rule-row",
+      className: "obnotion-sort-rule-row",
       compact,
       leading: compact ? undefined : (parent) => {
-        const drag = parent.createSpan({ cls: "db-panel-drag", text: "⋮⋮" });
+        const drag = parent.createSpan({ cls: "obnotion-panel-drag", text: "⋮⋮" });
         drag.title = t("panel.dragToSort");
-        const moveControls = parent.createSpan({ cls: "db-mobile-reorder-controls" });
+        const moveControls = parent.createSpan({ cls: "obnotion-mobile-reorder-controls" });
         const upBtn = moveControls.createEl("button", {
           attr: { type: "button", title: t("menu.moveUp"), "aria-label": t("menu.moveUp") },
         });
@@ -201,7 +201,7 @@ export class SortPanelRenderer {
           label: t("panel.field"),
           options: columns.map((col) => toPropertyDropdownOption(col)),
           value: rule.field,
-          className: "db-panel-dropdown db-sort-field-dropdown",
+          className: "obnotion-panel-dropdown obnotion-sort-field-dropdown",
           hideLabel: true,
           searchable: true,
           renderIcon: renderDropdownPropertyTypeIcon,
@@ -223,7 +223,7 @@ export class SortPanelRenderer {
             { value: "desc", text: t("common.desc") },
           ],
           value: rule.direction,
-          className: "db-panel-dropdown db-sort-direction-dropdown",
+          className: "obnotion-panel-dropdown obnotion-sort-direction-dropdown",
           hideLabel: true,
           onChange: (value) => {
             state.sortColumn = undefined;
@@ -235,7 +235,7 @@ export class SortPanelRenderer {
         });
       },
       trailing: compact ? undefined : (parent) => {
-        parent.createEl("button", { cls: "db-panel-button", text: "×" }).onclick = () => {
+        parent.createEl("button", { cls: "obnotion-panel-button", text: "×" }).onclick = () => {
           removeSortRuleAt(state, index);
           actions.save();
           this.render(panel.parentElement as HTMLElement, true, config, state, actions, this.anchorEl || undefined);
@@ -316,28 +316,28 @@ export class SortPanelRenderer {
 
   private finishDrag(): void {
     this.draggedRuleIndex = null;
-    this.panelEl?.querySelectorAll(".db-sort-rule-row").forEach((row) => {
+    this.panelEl?.querySelectorAll(".obnotion-sort-rule-row").forEach((row) => {
       row.removeClass("is-dragging", "is-drop-target", "is-drop-before", "is-drop-after");
-      row.querySelector<HTMLElement>(".db-sort-drop-indicator")?.remove();
+      row.querySelector<HTMLElement>(".obnotion-sort-drop-indicator")?.remove();
     });
   }
 
   private updateDropIndicator(row: HTMLElement, placement: "before" | "after"): void {
     row.addClass(placement === "before" ? "is-drop-before" : "is-drop-after");
     row.removeClass(placement === "before" ? "is-drop-after" : "is-drop-before");
-    const indicator = row.querySelector<HTMLElement>(".db-sort-drop-indicator")
-      || row.createSpan({ cls: "db-sort-drop-indicator" });
+    const indicator = row.querySelector<HTMLElement>(".obnotion-sort-drop-indicator")
+      || row.createSpan({ cls: "obnotion-sort-drop-indicator" });
     indicator.toggleClass("is-before", placement === "before");
     indicator.toggleClass("is-after", placement === "after");
   }
 
   private clearDropIndicator(row: HTMLElement): void {
     row.removeClass("is-drop-target", "is-drop-before", "is-drop-after");
-    row.querySelector<HTMLElement>(".db-sort-drop-indicator")?.remove();
+    row.querySelector<HTMLElement>(".obnotion-sort-drop-indicator")?.remove();
   }
 
   private shouldIgnoreRuleDrag(event: DragEvent): boolean {
     return isHTMLElement(event.target)
-      && event.target.closest("input, select, textarea, button, .db-dropdown-field, .db-mobile-reorder-controls") != null;
+      && event.target.closest("input, select, textarea, button, .obnotion-dropdown-field, .obnotion-mobile-reorder-controls") != null;
   }
 }

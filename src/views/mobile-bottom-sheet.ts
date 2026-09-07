@@ -92,7 +92,7 @@ export interface SheetChromeOptions {
  * element actually become a sheet?", which a caller downstream of `applySheetChrome` needs when the
  * depth cap may have absorbed the element into another surface instead.
  */
-export const SHEET_SURFACE_CLASS = "db-mobile-bottom-sheet";
+export const SHEET_SURFACE_CLASS = "obnotion-mobile-bottom-sheet";
 
 export function applySheetChrome(
   panel: HTMLElement,
@@ -122,7 +122,7 @@ export function applySheetChrome(
     panel.removeClass(SHEET_SURFACE_CLASS);
     return false;
   }
-  const existingHandle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
+  const existingHandle = panel.querySelector<HTMLElement>(".obnotion-mobile-bottom-sheet-handle");
   // A grab bar is drawn by the GESTURE, never by the chrome — so one cannot exist unwired.
   //
   // This used to draw the bar here, which meant a producer got the affordance for free and had to
@@ -137,7 +137,7 @@ export function applySheetChrome(
   // producer that never wired anything.
   // A `menu`-role card never grows a handle back, rebuild or not (`design-trueup.md` row 26):
   // it advertises a tap, not a drag, and re-asserting chrome on it must not undo that.
-  if (isSheet && !existingHandle && activeSheetDrag.has(panel) && !panel.hasClass("db-mobile-menu-card")) {
+  if (isSheet && !existingHandle && activeSheetDrag.has(panel) && !panel.hasClass("obnotion-mobile-menu-card")) {
     createSheetHandle(panel);
     return true;
   }
@@ -145,26 +145,26 @@ export function applySheetChrome(
   return true;
 }
 
-const SHEET_SURFACE_ID_ATTR = "data-db-sheet-surface-id";
+const SHEET_SURFACE_ID_ATTR = "data-obnotion-sheet-surface-id";
 let nextSheetSurfaceId = 0;
 
 function getSheetSurfaceId(panel: HTMLElement): string {
   const existing = panel.getAttribute(SHEET_SURFACE_ID_ATTR);
   if (existing) return existing;
-  const id = panel.id ? `db-sheet-${panel.id}` : `db-sheet-surface-${++nextSheetSurfaceId}`;
+  const id = panel.id ? `obnotion-sheet-${panel.id}` : `obnotion-sheet-surface-${++nextSheetSurfaceId}`;
   panel.setAttribute(SHEET_SURFACE_ID_ATTR, id);
   return id;
 }
 
 function invokeSheetClose(panel: HTMLElement): void {
-  const closeButton = panel.querySelector<HTMLElement>(".db-sheet-close, .db-cell-edit-close");
+  const closeButton = panel.querySelector<HTMLElement>(".obnotion-sheet-close, .obnotion-cell-edit-close");
   closeButton?.click();
 }
 
 /** The bar itself. One place, so its shape and its aria treatment cannot drift between callers. */
 function createSheetHandle(panel: HTMLElement): HTMLElement {
   const handle = panel.ownerDocument.createElement("div");
-  handle.className = "db-mobile-bottom-sheet-handle";
+  handle.className = "obnotion-mobile-bottom-sheet-handle";
   handle.setAttribute("aria-hidden", "true");
   panel.prepend(handle);
   return handle;
@@ -210,11 +210,11 @@ export interface SheetHeaderHandle {
  * builder only guarantees the control exists and dismisses through the shared path.
  */
 export function createSheetHeader(panel: HTMLElement, options: SheetHeaderOptions): SheetHeaderHandle {
-  const header = panel.createDiv({ cls: "db-panel-header" });
-  const titleEl = header.createSpan({ cls: "db-panel-title", text: options.title });
+  const header = panel.createDiv({ cls: "obnotion-panel-header" });
+  const titleEl = header.createSpan({ cls: "obnotion-panel-title", text: options.title });
   options.beforeClose?.(header);
   const closeButton = header.createEl("button", {
-    cls: "db-sheet-close",
+    cls: "obnotion-sheet-close",
     attr: { type: "button", "aria-label": t("common.close") },
   });
   setIcon(closeButton, "x");
@@ -239,7 +239,7 @@ export function createSheetHeader(panel: HTMLElement, options: SheetHeaderOption
  * value is the same figure the host and the visual viewport drive; publishing it on the sheet
  * does not add a second source of truth, only a second reader.
  */
-export const SHEET_KEYBOARD_INSET_VAR = "--db-keyboard-inset";
+export const SHEET_KEYBOARD_INSET_VAR = "--obnotion-keyboard-inset";
 
 // ───────────────────────────────────────────────────────────────────
 // 2c. HOST MODALS
@@ -341,8 +341,8 @@ export function attachSheetChromeToModal(
     const buildHeader = options.buildHeader
       ?? ((panel: HTMLElement, title: string, onClose: () => void) => createSheetHeader(panel, { title, onClose }));
     header = buildHeader(modalEl, resolveTitle(), close);
-    header.header.addClass("db-sheet-modal-header");
-    let contentRoot = modalEl.querySelector<HTMLElement>(".note-database-modal");
+    header.header.addClass("obnotion-sheet-modal-header");
+    let contentRoot = modalEl.querySelector<HTMLElement>(".obnotion-modal");
     while (contentRoot?.parentElement && contentRoot.parentElement !== modalEl) {
       contentRoot = contentRoot.parentElement;
     }
@@ -354,8 +354,8 @@ export function attachSheetChromeToModal(
     void Promise.resolve().then(() => {
       if (!modalEl.isConnected || !header) return;
       header.titleEl.setText(resolveTitle());
-      for (const heading of Array.from(modalEl.querySelectorAll<HTMLElement>(".note-database-modal h1, .note-database-modal h2, .note-database-modal h3"))) {
-        if (!heading.closest(".db-sheet-modal-header")) heading.addClass("db-sheet-original-title");
+      for (const heading of Array.from(modalEl.querySelectorAll<HTMLElement>(".obnotion-modal h1, .obnotion-modal h2, .obnotion-modal h3"))) {
+        if (!heading.closest(".obnotion-sheet-modal-header")) heading.addClass("obnotion-sheet-original-title");
       }
     });
   }
@@ -364,7 +364,7 @@ export function attachSheetChromeToModal(
     const releasedHeader = header;
     header = undefined;
     releasedHeader?.header.remove();
-    modalEl.querySelectorAll<HTMLElement>(".db-sheet-original-title").forEach((heading) => heading.removeClass("db-sheet-original-title"));
+    modalEl.querySelectorAll<HTMLElement>(".obnotion-sheet-original-title").forEach((heading) => heading.removeClass("obnotion-sheet-original-title"));
     nativeClose?.style.removeProperty("display");
     nativeTitle?.style.removeProperty("display");
     nativeContainer?.style.removeProperty("display");
@@ -444,14 +444,14 @@ function classifySheetFrameShape(panel: HTMLElement): void {
   // sheet's CURRENT shape alone rather than answering from a height that shape itself produced.
   // A `menu`-role card is the same kind of declared shape (`design-trueup.md` row 26) and must not
   // have the floating/flush split toggled underneath it either.
-  if (panel.hasClass("db-sheet-card") || panel.hasClass("db-mobile-menu-card")) return;
+  if (panel.hasClass("obnotion-sheet-card") || panel.hasClass("obnotion-mobile-menu-card")) return;
   const view = panel.ownerDocument.defaultView;
   const viewportHeight = view?.visualViewport?.height ?? view?.innerHeight;
   const height = panel.getBoundingClientRect().height;
   if (!viewportHeight || !height) return;
   const ratio = height / viewportHeight;
-  if (ratio <= FLOATING_HEIGHT_RATIO_MAX) panel.addClass("db-sheet-floating");
-  else if (ratio >= FLUSH_HEIGHT_RATIO_MIN) panel.removeClass("db-sheet-floating");
+  if (ratio <= FLOATING_HEIGHT_RATIO_MAX) panel.addClass("obnotion-sheet-floating");
+  else if (ratio >= FLUSH_HEIGHT_RATIO_MIN) panel.removeClass("obnotion-sheet-floating");
   // Between the two: neither cutoff is crossed, so the sheet keeps whatever shape it already had
   // rather than a `<=` deciding on a height this same class may have produced.
 }
@@ -516,7 +516,7 @@ function watchSheetFrameShape(panel: HTMLElement): void {
 function unwatchSheetFrameShape(panel: HTMLElement): void {
   frameShapeObservers.get(panel)?.disconnect();
   frameShapeObservers.delete(panel);
-  panel.removeClass("db-sheet-floating");
+  panel.removeClass("obnotion-sheet-floating");
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -542,7 +542,7 @@ function unwatchSheetFrameShape(panel: HTMLElement): void {
  */
 export function playSheetEntrance(panel: HTMLElement): void {
   if (panel.hasClass("is-visible")) return;
-  panel.addClass("db-overlay-enter");
+  panel.addClass("obnotion-overlay-enter");
   panel.getBoundingClientRect();
   panel.addClass("is-visible");
 }
@@ -566,7 +566,7 @@ export function playSheetEntrance(panel: HTMLElement): void {
  * entrance on the same node is a no-op for the same reason it already was.
  */
 export function carrySheetEntrance(panel: HTMLElement): void {
-  panel.addClass("db-overlay-enter");
+  panel.addClass("obnotion-overlay-enter");
   panel.addClass("is-visible");
 }
 
@@ -576,12 +576,12 @@ export function carrySheetEntrance(panel: HTMLElement): void {
  * A caller that keeps the node mounted across the resulting delay sees the surface actually leave
  * rather than vanish; a caller whose host (Obsidian's own `Modal.close()`, for one) detaches the
  * node synchronously right after gets the same instant removal it always had; this toggle costs it
- * nothing either way. `db-overlay-exit` is a distinct class from the entrance's own start state so
+ * nothing either way. `obnotion-overlay-exit` is a distinct class from the entrance's own start state so
  * the two transitions — sliding in, sliding out — never collide on the same selector.
  */
 export function playSheetExit(panel: HTMLElement): void {
   panel.removeClass("is-visible");
-  panel.addClass("db-overlay-exit");
+  panel.addClass("obnotion-overlay-exit");
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -652,12 +652,12 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     // `menu`-role picker: `mountPickerSheetHeader` added it, then this line ran again with
     // `menuCard` undefined and took it back off. Removal on the way OUT of sheet-hood is still
     // handled below, in the `!isSheet` branch.
-    if (options.menuCard) panel.addClass("db-mobile-menu-card");
+    if (options.menuCard) panel.addClass("obnotion-mobile-menu-card");
     if (options.heightRole) {
       // A declared shape wins outright: it is the documented fallback the classifier itself now
       // defers to, so an undeclared surface's behaviour is unchanged and a declared one stops
       // waiting on a `ResizeObserver` guess of its own height.
-      panel.toggleClass("db-sheet-floating", options.heightRole === "floating");
+      panel.toggleClass("obnotion-sheet-floating", options.heightRole === "floating");
       declaredFrameShapes.add(panel);
     } else {
       declaredFrameShapes.delete(panel);
@@ -665,7 +665,7 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     // A generation begins when a surface mounts, so a device trace reads as one sheet's whole life
     // rather than as a stream to be correlated by timestamp afterwards.
     if (isSheetTraceEnabled()) beginSheetGeneration(panel.className);
-    panel.toggleClass("db-sheet-card", options.frameRole === "card");
+    panel.toggleClass("obnotion-sheet-card", options.frameRole === "card");
     claimBottomDock(doc, "sheet", true);
     watchForSheetRemoval(doc);
     watchSheetFrameShape(panel);
@@ -675,21 +675,21 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     // before the backdrop existed left it dimming nothing and leaked the node on the next open.
     //
     // It still needs the container-scoped rules the move branch below carries for exactly the
-    // reason documented there — most of this plugin's rules read `.note-database-container .db-
+    // reason documented there — most of this plugin's rules read `.obnotion-container .obnotion-
     // thing`, and a self-mounted surface that skips this class never matches them. The owned menu
-    // measured its own close button at 30x23 instead of the 44px `.note-database-container .db-
+    // measured its own close button at 30x23 instead of the 44px `.obnotion-container .obnotion-
     // sheet-close` declares until this was added: the early return meant the header this phase
     // gave it never had the container ancestor that rule needs.
     //
-    // `db-surface` is not added here: the owned menu already carries it from its own creation
+    // `obnotion-surface` is not added here: the owned menu already carries it from its own creation
     // call, and a placement check caught the duplicate the moment this class started adding
-    // `note-database-container` beside it — both names sit in the same shared selector list, so
+    // `obnotion-container` beside it — both names sit in the same shared selector list, so
     // adding a class the surface already has changes nothing but reads, to that check, as a class
-    // whose own removal changes nothing either. A future self-mounted consumer with no `db-surface`
+    // whose own removal changes nothing either. A future self-mounted consumer with no `obnotion-surface`
     // of its own would need it re-added here; none exists today.
     if (panel.parentElement === doc.body) {
-      panel.addClass("note-database-container");
-      panel.setCssProps({ "--db-mobile-sheet-bottom": "0px" });
+      panel.addClass("obnotion-container");
+      panel.setCssProps({ "--obnotion-mobile-sheet-bottom": "0px" });
       syncSheetStack(doc);
       return true;
     }
@@ -698,7 +698,7 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     }
     // Carry the plugin's own scope with it, not just the tokens.
     //
-    // Most of this plugin's rules are written `.note-database-container .db-thing`, so a surface
+    // Most of this plugin's rules are written `.obnotion-container .obnotion-thing`, so a surface
     // that leaves the container stops matching them and renders as unstyled text on top of the
     // view — which is exactly what shipped when this portal was added with only the token class.
     // Marking the portalled root as a container root as well means every ancestor-scoped rule
@@ -706,12 +706,12 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     //
     // The right long-term answer is to re-key those rules to the surface itself so no stand-in is
     // needed. Until that lands, this keeps the portal from costing the sheet its appearance.
-    panel.addClass("db-surface");
-    panel.addClass("note-database-container");
+    panel.addClass("obnotion-surface");
+    panel.addClass("obnotion-container");
     // The sheet covers the navbar rather than sitting above it. The positioner writes this variable
     // in its anchored branch to hold a popover clear of the navbar, which is right for a popover
     // and wrong for a sheet, so the sheet states its own value rather than inheriting that one.
-    panel.setCssProps({ "--db-mobile-sheet-bottom": "0px" });
+    panel.setCssProps({ "--obnotion-mobile-sheet-bottom": "0px" });
     doc.body.appendChild(panel);
     syncSheetStack(doc);
     return true;
@@ -723,23 +723,23 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
   declaredFrameShapes.delete(panel);
   unwatchSheetFrameShape(panel);
   if (wasSheet) overlayStack.unregisterPanel(panel, false);
-  panel.style.removeProperty("--db-sheet-depth");
-  panel.style.removeProperty("--db-sheet-z-index");
+  panel.style.removeProperty("--obnotion-sheet-depth");
+  panel.style.removeProperty("--obnotion-sheet-z-index");
   panel.removeClass("is-stack-parent");
-  panel.removeClass("db-sheet-card");
-  panel.removeClass("db-mobile-menu-card");
+  panel.removeClass("obnotion-sheet-card");
+  panel.removeClass("obnotion-mobile-menu-card");
   syncSheetStack(doc);
   // After the stack has been resynchronized, a document that still holds another sheet keeps the claim.
   claimBottomDock(doc, "sheet", sheetsFor(doc).size > 0);
   if (!remembered) {
     if (isSheetTraceEnabled()) traceSheet("sheet-unmount", panel.className);
-    panel.style.removeProperty("--db-mobile-sheet-bottom");
+    panel.style.removeProperty("--obnotion-mobile-sheet-bottom");
     return true;
   }
   originalMount.delete(panel);
-  panel.removeClass("db-surface");
-  panel.removeClass("note-database-container");
-  panel.style.removeProperty("--db-mobile-sheet-bottom");
+  panel.removeClass("obnotion-surface");
+  panel.removeClass("obnotion-container");
+  panel.style.removeProperty("--obnotion-mobile-sheet-bottom");
   // A view rebuild can destroy the parent while the sheet is open. Putting the node back into a
   // detached tree would hide it with no way to reach it, so it is removed instead — a closed
   // surface is recoverable, an invisible one is not.
@@ -773,7 +773,7 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
 export function isInsideOpenSheet(target: Node | null | undefined): boolean {
   if (!target) return false;
   const element = isElement(target) ? target : target.parentElement;
-  const sheet = element?.closest<HTMLElement>(".db-mobile-bottom-sheet");
+  const sheet = element?.closest<HTMLElement>(".obnotion-mobile-bottom-sheet");
   if (!sheet) return false;
   return sheetsFor(sheet.ownerDocument).has(sheet);
 }
@@ -816,7 +816,7 @@ export function isInsideOpenSheet(target: Node | null | undefined): boolean {
 const liveSheets = new WeakMap<Document, Set<HTMLElement>>();
 const sheetWatchers = new WeakMap<Document, MutationObserver>();
 const sheetPointerCapture = new WeakMap<HTMLElement, boolean | undefined>();
-export const SHEET_STACK_CHANGE_EVENT = "db-sheet-stack-change";
+export const SHEET_STACK_CHANGE_EVENT = "obnotion-sheet-stack-change";
 
 // ───────────────────────────────────────────────────────────────────
 // 1c. WHO OWNS THE BOTTOM EDGE
@@ -847,7 +847,7 @@ export function claimBottomDock(doc: Document, owner: string, claimed: boolean):
   if (!existing) dockClaims.set(doc, claims);
   if (claimed) claims.add(owner);
   else claims.delete(owner);
-  doc.body?.toggleClass("db-bottom-dock-taken", claims.size > 0);
+  doc.body?.toggleClass("obnotion-bottom-dock-taken", claims.size > 0);
 }
 
 function sheetsFor(doc: Document): Set<HTMLElement> {
@@ -892,14 +892,14 @@ function watchForSheetRemoval(doc: Document): void {
 
 function baseSheetZIndex(doc: Document, reference?: HTMLElement): number {
   const declared = reference
-    ? doc.defaultView?.getComputedStyle(reference).getPropertyValue("--db-layer-modal")
-    : doc.defaultView?.getComputedStyle(doc.documentElement).getPropertyValue("--db-layer-modal");
+    ? doc.defaultView?.getComputedStyle(reference).getPropertyValue("--obnotion-layer-modal")
+    : doc.defaultView?.getComputedStyle(doc.documentElement).getPropertyValue("--obnotion-layer-modal");
   const parsed = Number.parseFloat(declared || "");
   return Number.isFinite(parsed) ? parsed : 1000;
 }
 
 function setScrim(doc: Document, wanted: boolean, capturesPointer: boolean | undefined): void {
-  const scrims = Array.from(doc.body.querySelectorAll<HTMLElement>(".db-mobile-sheet-scrim"));
+  const scrims = Array.from(doc.body.querySelectorAll<HTMLElement>(".obnotion-mobile-sheet-scrim"));
   const existing = scrims.shift();
   for (const duplicate of scrims) duplicate.remove();
   if (!wanted) {
@@ -907,7 +907,7 @@ function setScrim(doc: Document, wanted: boolean, capturesPointer: boolean | und
     // this plugin — the caller's own close(), a host that detaches its container the instant it
     // takes a surface down — already assumes the backdrop is gone the moment a dismissal returns,
     // and a scrim left behind for a fade is exactly the frozen-app shape this module exists to
-    // prevent. `--db-sheet-exit` stays a real, asserted token for whatever CAN afford to wait on
+    // prevent. `--obnotion-sheet-exit` stays a real, asserted token for whatever CAN afford to wait on
     // it (the sheet's own transform, which a caller that keeps the node mounted still sees).
     existing?.remove();
     stopWatching(doc);
@@ -915,7 +915,7 @@ function setScrim(doc: Document, wanted: boolean, capturesPointer: boolean | und
   }
   const scrim = existing ?? doc.createElement("div");
   if (!existing) {
-    scrim.className = "db-mobile-sheet-scrim";
+    scrim.className = "obnotion-mobile-sheet-scrim";
     scrim.setAttribute("aria-hidden", "true");
   }
   // Opt out, not opt in: the stylesheet makes the backdrop modal and a producer that needs a
@@ -925,23 +925,23 @@ function setScrim(doc: Document, wanted: boolean, capturesPointer: boolean | und
   const topPanel = top ? surfacePanel(top) : undefined;
   const depth = topPanel ? overlayStack.getDepth(topPanel) : 1;
   const topZ = baseSheetZIndex(doc, topPanel) + Math.max(0, depth - 1) * 2;
-  scrim.style.setProperty("--db-sheet-scrim-z-index", String(topZ - 1));
+  scrim.style.setProperty("--obnotion-sheet-scrim-z-index", String(topZ - 1));
   // A `menu`-role top dims its parent to the Notion-measured band (≈0.39), distinct from an
   // ordinary sheet's own band — the same shared backdrop, a different strength, rather than a
   // second element. `role="menu"` is `owned-menu.ts`'s own pre-existing ARIA attribute, read here
   // rather than duplicated as a second marker.
-  const menuTop = Boolean(topPanel && (topPanel.hasClass("db-mobile-menu-card") || topPanel.getAttribute("role") === "menu"));
+  const menuTop = Boolean(topPanel && (topPanel.hasClass("obnotion-mobile-menu-card") || topPanel.getAttribute("role") === "menu"));
   // Three bands, one element: the page under a first sheet is dimmed hardest, a sheet that is
   // itself the parent of a stacked child holds the weaker, already-measured band (unchanged, so
   // the stacked composite is not regressed by the page band's own increase), and a `menu`-role
   // top uses its own Notion-measured band. `depth` here is the TOP surface's own depth — 1 means
   // the scrim sits directly on the page, 2+ means it sits on a sheet that is itself a parent.
   const scrimAlphaToken = menuTop
-    ? "var(--db-sheet-scrim-alpha-menu)"
+    ? "var(--obnotion-sheet-scrim-alpha-menu)"
     : depth > 1
-      ? "var(--db-sheet-scrim-alpha-stack)"
-      : "var(--db-sheet-scrim-alpha-page)";
-  scrim.style.setProperty("--db-sheet-scrim-alpha", scrimAlphaToken);
+      ? "var(--obnotion-sheet-scrim-alpha-stack)"
+      : "var(--obnotion-sheet-scrim-alpha-page)";
+  scrim.style.setProperty("--obnotion-sheet-scrim-alpha", scrimAlphaToken);
   // Move it only when it is not already there. The watcher below reacts to childList changes on the
   // body, and re-inserting a node at the position it already occupies still emits a mutation record,
   // so an unconditional move would wake the watcher, which would call back here, forever.
@@ -963,15 +963,15 @@ function syncSheetStack(doc: Document): void {
   const baseZ = baseSheetZIndex(doc);
   for (const sheet of sheets) {
     const depth = overlayStack.getDepth(sheet);
-    sheet.style.setProperty("--db-sheet-depth", String(depth));
-    sheet.style.setProperty("--db-sheet-z-index", String(baseZ + Math.max(0, depth - 1) * 2));
+    sheet.style.setProperty("--obnotion-sheet-depth", String(depth));
+    sheet.style.setProperty("--obnotion-sheet-z-index", String(baseZ + Math.max(0, depth - 1) * 2));
     // Every surface under the top is pushed back, not only the one directly beneath it. A three-deep
     // chain leaves the outermost sheet visible past the edges of the two above it, so marking only
     // the middle one would leave a sheet on screen at full strength while the person is two levels
     // away from it.
     sheet.classList.toggle("is-stack-parent", sheet !== top);
     if (sheet !== top) {
-      sheet.style.setProperty("--db-mobile-sheet-bottom", "0px");
+      sheet.style.setProperty("--obnotion-mobile-sheet-bottom", "0px");
       sheet.style.setProperty(SHEET_KEYBOARD_INSET_VAR, "0px");
     }
   }
@@ -987,7 +987,7 @@ function syncSheetStack(doc: Document): void {
  * Wire "drag the grab handle down to dismiss" onto a phone bottom sheet.
  *
  * Only attach this once the panel has actually been rendered as a sheet (it
- * carries `db-mobile-bottom-sheet` and a `db-mobile-bottom-sheet-handle`);
+ * carries `obnotion-mobile-bottom-sheet` and a `obnotion-mobile-bottom-sheet-handle`);
  * the desktop anchored panel has no handle and must never reach here.
  * Returns a disposer that removes the listeners and clears any drag offset.
  *
@@ -1071,12 +1071,12 @@ export function attachSheetDragToDismiss(panel: HTMLElement, close: () => void):
   // all"). Drawing the bar and wiring the gesture are one call for every other sheet — see the
   // comment below — so a card that must never grow a handle back is refused here, at the one
   // place that draws it, rather than trusted to every caller to skip.
-  if (panel.hasClass("db-mobile-menu-card")) {
+  if (panel.hasClass("obnotion-mobile-menu-card")) {
     activeSheetDrag.delete(panel);
     return () => {};
   }
   // Drawn here, because this is the only place that can promise it does something.
-  const handle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle") ?? createSheetHandle(panel);
+  const handle = panel.querySelector<HTMLElement>(".obnotion-mobile-bottom-sheet-handle") ?? createSheetHandle(panel);
 
   const DISMISS_PX = 96;
   // A flick dismisses too, and these numbers are measured rather than chosen.
@@ -1108,7 +1108,7 @@ export function attachSheetDragToDismiss(panel: HTMLElement, close: () => void):
     panel.setCssProps({ transition: "", transform: "" });
   };
   const grabTarget = (): HTMLElement =>
-    panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle") ?? handle;
+    panel.querySelector<HTMLElement>(".obnotion-mobile-bottom-sheet-handle") ?? handle;
 
   const distance = (event: PointerEvent): number => Math.max(0, event.clientY - startY);
   const onDown = (event: PointerEvent): void => {

@@ -173,7 +173,7 @@ describe("ColumnManagerRenderer add-property picker", () => {
 
     searchInput.value = "Not A Real Format";
     searchInput.fire("input"); // buildAddPropertyRow re-renders its list on the search input's own event
-    const createRow = list.children.find((row) => row.className.includes("db-add-property-create"));
+    const createRow = list.children.find((row) => row.className.includes("obnotion-add-property-create"));
     expect(createRow).toBeDefined();
     createRow!.fire("click");
 
@@ -200,7 +200,7 @@ describe("ColumnManagerRenderer visibility search", () => {
     searchInput.value = "due";
     searchInput.fire("input");
 
-    const hidden = (key: string) => (rowsByKey.get(key) as unknown as MockElement).className.includes("db-column-manager-row-search-hidden");
+    const hidden = (key: string) => (rowsByKey.get(key) as unknown as MockElement).className.includes("obnotion-column-manager-row-search-hidden");
     expect(hidden("due")).toBe(false);
     expect(hidden("status")).toBe(true);
     expect(hidden("priority")).toBe(true);
@@ -222,7 +222,7 @@ describe("ColumnManagerRenderer visibility search", () => {
     searchInput.value = "";
     searchInput.fire("input");
 
-    const hidden = (key: string) => (rowsByKey.get(key) as unknown as MockElement).className.includes("db-column-manager-row-search-hidden");
+    const hidden = (key: string) => (rowsByKey.get(key) as unknown as MockElement).className.includes("obnotion-column-manager-row-search-hidden");
     expect(hidden("status")).toBe(false);
     expect(hidden("due")).toBe(false);
   });

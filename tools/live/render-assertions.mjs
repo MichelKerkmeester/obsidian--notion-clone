@@ -69,7 +69,7 @@ const REPO = fileURLToPath(new URL("../..", import.meta.url));
 // every row the same field count and the same value lengths — so this measures
 // the mock-data catalogue instead, whose records vary the way real ones do.
 //
-// WHAT WENT WRONG WHEN NOTHING MEASURED THIS. `.db-multi-select-values` is a
+// WHAT WENT WRONG WHEN NOTHING MEASURED THIS. `.obnotion-multi-select-values` is a
 // wrapping flex container, and a table cell's `height` is a minimum, so six
 // option chips in a narrow column stacked six deep and took the row with them:
 // one Home Inventory row measured 141px beside neighbours at 45px, and the
@@ -108,7 +108,7 @@ const ROW_HEIGHT_CEILING = 49;
 // means nothing. This proves the toggle side of that on the same catalogue mount RHYTHM_SCENARIOS
 // measures — clipped stays at the floor, and forcing the view's own wrap default on re-opens the
 // exact row-height defect that fix closed, because every column without its own wrap override now
-// carries `.db-cell-wrap` and the four value containers wrap again. That second scenario is the
+// carries `.obnotion-cell-wrap` and the four value containers wrap again. That second scenario is the
 // negative control: a check that cannot go red when wrap is actually on proves nothing about the
 // toggle actually reaching the renderer.
 const WRAP_TOGGLE_SCENARIOS = [
@@ -166,25 +166,25 @@ const ROW_FLOOR = 36;
 // use, with the token sheets attached the way the row-rhythm pass attaches them.
 //
 // Each row reads the property a device-pixel diff actually found wrong, not a proxy for it —
-// `.db-kanban-col-chip`'s painted height rather than its declared one, since `height: 24px`
+// `.obnotion-kanban-col-chip`'s painted height rather than its declared one, since `height: 24px`
 // alone does not tell you whether the border sits inside it.
 const GEOMETRY_PINS = [
-  { label: "card radius", selector: ".db-kanban-card", prop: "borderRadius", expected: "8px" },
-  { label: "column width", selector: ".db-kanban-col", prop: "width", expected: "246px" },
-  { label: "column gap", selector: ".db-kanban-board", prop: "gap", expected: "24px" },
-  { label: "checkbox size", selector: ".db-kanban-card-meta .db-checkbox-field", prop: "boxWidth", expected: 14 },
+  { label: "card radius", selector: ".obnotion-kanban-card", prop: "borderRadius", expected: "8px" },
+  { label: "column width", selector: ".obnotion-kanban-col", prop: "width", expected: "246px" },
+  { label: "column gap", selector: ".obnotion-kanban-board", prop: "gap", expected: "24px" },
+  { label: "checkbox size", selector: ".obnotion-kanban-card-meta .obnotion-checkbox-field", prop: "boxWidth", expected: 14 },
   // A card text value read right-aligned and a single-token value broke mid-word. The first
   // non-checkbox property value on the mounted card proves both: it reads from the left, and has
   // nowhere to force a break a single unbreakable token would take.
   {
     label: "value align",
-    selector: ".db-kanban-card-meta .db-board-card-field:not(.is-checkbox-field) .db-board-card-value",
+    selector: ".obnotion-kanban-card-meta .obnotion-board-card-field:not(.is-checkbox-field) .obnotion-board-card-value",
     prop: "textAlign",
     expected: "left",
   },
   {
     label: "value wrap",
-    selector: ".db-kanban-card-meta .db-board-card-field:not(.is-checkbox-field) .db-board-card-value",
+    selector: ".obnotion-kanban-card-meta .obnotion-board-card-field:not(.is-checkbox-field) .obnotion-board-card-value",
     prop: "wordBreak",
     expected: "normal",
   },
@@ -193,7 +193,7 @@ const GEOMETRY_PINS = [
   // scroll — so a pin here is the check that a sticky header does not get reintroduced as an
   // inference. It is inert as well as unwanted: the header's nearest scrollport would be the
   // board, which scrolls in neither axis.
-  { label: "header position", selector: ".db-kanban-col-header", prop: "position", expected: "static" },
+  { label: "header position", selector: ".obnotion-kanban-col-header", prop: "position", expected: "static" },
 ];
 
 /** The board scenario this pass mounts: the shipped renderer at its production entry. */
@@ -208,7 +208,7 @@ const GEOMETRY_SCENARIO = SCENARIOS.find((scenario) => scenario.renderer === "bo
 // room left for a title after its own inset and padding — "one clipped glyph and zero ink" where
 // the two blocks used to read as coloured bars. This measures the DOM proxy for that: both
 // overlap-pair titles must carry a visible ink width past PHONE_OVERLAP_INK_FLOOR once the phone
-// minimum column width (styles.css, `--db-calendar-phone-week-col-min`) is in effect. The split
+// minimum column width (styles.css, `--obnotion-calendar-phone-week-col-min`) is in effect. The split
 // block, not the whole column, is what sets that minimum: a floor sized for an unsplit block
 // leaves the halved one a sliver, which is the reading a capture of this surface showed. It shares
 // the phone-profile rhythm page below (`is-phone` class, theme/runtime tokens attached) rather
@@ -224,7 +224,7 @@ const PHONE_OVERLAP_SCENARIO = {
 // A read-it floor, not a bare non-zero one, because non-zero is what the defect already measured.
 // Both states measured on this fixture, at the 286px container below:
 //
-//   no minimum column width (`--db-calendar-phone-week-col-min: 0px`, the pre-fix grid)
+//   no minimum column width (`--obnotion-calendar-phone-week-col-min: 0px`, the pre-fix grid)
 //     block 8px, title ink 3px and 1px — a sub-pixel sliver of one letter, not a glyph
 //   the shipped minimum (styles.css)
 //     block 32px, title ink 27px and 25px — three glyphs and the ellipsis
@@ -375,13 +375,13 @@ window.__boardGeometry = (scenario) => {
 
     // The chip's painted height, not its declared one: box-sizing decides whether the border
     // sits inside or outside it, which "height: 24px" alone cannot tell you.
-    const chip = container.querySelector(".db-kanban-col-chip");
+    const chip = container.querySelector(".obnotion-kanban-col-chip");
 
     // Row pitch, read on every property row of the first card rather than one of them, since a
     // shared rule regressing on a single row type — a checkbox row beside a text row, say — is
     // exactly what "uniform" is there to catch.
-    const firstCard = container.querySelector(".db-kanban-card");
-    const checkbox = container.querySelector(".db-kanban-card-meta .db-checkbox-field");
+    const firstCard = container.querySelector(".obnotion-kanban-card");
+    const checkbox = container.querySelector(".obnotion-kanban-card-meta .obnotion-checkbox-field");
 
     // The scrollbar box is read off the ::-webkit-scrollbar pseudo-element of the container,
     // which is the element that scrolls — at rest, again with "is-scrolling" applied the way the
@@ -394,7 +394,7 @@ window.__boardGeometry = (scenario) => {
     // VERTICAL bar stayed painted at rest, because the app-wide 8px width was never overridden
     // here and the board's own thumb rule outranks the app-wide transparency by source order.
     // One number per axis per state is what tells the two bars apart.
-    const board = container.querySelector(".db-kanban-board");
+    const board = container.querySelector(".obnotion-kanban-board");
     const restBar = getComputedStyle(container, "::-webkit-scrollbar");
     const scrollbarRestHeight = restBar.height;
     const scrollbarRestWidth = restBar.width;
@@ -414,12 +414,12 @@ window.__boardGeometry = (scenario) => {
       pins: ${JSON.stringify(GEOMETRY_PINS)}.map((pin) => ({ ...pin, ...read(pin.selector, pin.prop) })),
       chipHeight: chip ? Math.round(chip.getBoundingClientRect().height) : null,
       rowHeights: firstCard
-        ? Array.from(firstCard.querySelectorAll(".db-kanban-card-meta .db-board-card-field"))
+        ? Array.from(firstCard.querySelectorAll(".obnotion-kanban-card-meta .obnotion-board-card-field"))
           .map((row) => Math.round(row.getBoundingClientRect().height))
         : [],
       checkboxRadius: checkbox ? getComputedStyle(checkbox).borderRadius : null,
       pageOverflowY: getComputedStyle(container).overflowY,
-      columnOverflowY: read(".db-kanban-cards", "overflowY").value ?? null,
+      columnOverflowY: read(".obnotion-kanban-cards", "overflowY").value ?? null,
       boardOverflowY,
       scrollbarRestHeight,
       scrollbarActiveHeight,
@@ -436,12 +436,12 @@ window.__boardGeometry = (scenario) => {
     // check gives the container a pane's definite height (the shape a real host gives it; this
     // page's body has none), overfills one column, and asks whether the scroll actually moved and
     // the last card came with it. Destructive to the DOM, so it runs after every read above.
-    const cardsEl = container.querySelector(".db-kanban-cards");
-    const template = cardsEl && cardsEl.querySelector(".db-kanban-card");
+    const cardsEl = container.querySelector(".obnotion-kanban-cards");
+    const template = cardsEl && cardsEl.querySelector(".obnotion-kanban-card");
     if (cardsEl && template) {
       container.style.height = "600px";
       for (let i = 0; i < 30; i += 1) cardsEl.appendChild(template.cloneNode(true));
-      const cards = cardsEl.querySelectorAll(".db-kanban-card");
+      const cards = cardsEl.querySelectorAll(".obnotion-kanban-card");
       const last = cards[cards.length - 1];
       container.scrollTop = 1e6;
       const reached = container.scrollTop;
@@ -461,10 +461,10 @@ window.__rowRhythm = (scenario) => {
     // Data rows only. The insert line between rows and the create-entry row at the bottom are
     // chrome, sized by their own affordance rather than by a record, and holding them to the
     // record rhythm would fail a table that is correct.
-    const rows = [...container.querySelectorAll("table.db-table tbody tr")].filter((tr) =>
-      !tr.classList.contains("db-row-insert-line")
-      && !tr.classList.contains("db-new-row")
-      && !tr.classList.contains("db-group-expand-row"));
+    const rows = [...container.querySelectorAll("table.obnotion-table tbody tr")].filter((tr) =>
+      !tr.classList.contains("obnotion-row-insert-line")
+      && !tr.classList.contains("obnotion-new-row")
+      && !tr.classList.contains("obnotion-group-expand-row"));
     // The tallest child of the tallest row, named. A bare number says a row is wrong; the class
     // says which cell made it wrong, which is the difference between a failure and a diagnosis.
     //
@@ -473,7 +473,7 @@ window.__rowRhythm = (scenario) => {
     // every tall row and win the comparison by document order — the first version of this named
     // the select column's inner box on both catalogues, which is the checkbox reporting a symptom
     // it was handed. The cause is always a cell that grew on its own.
-    const UTILITY = ["db-select-col", "db-record-icon-col", "db-add-column-cell"];
+    const UTILITY = ["obnotion-select-col", "obnotion-record-icon-col", "obnotion-add-column-cell"];
     // A cell's own content height, measured by a range over its contents rather than by its box.
     // The box is the row's height once the row has grown, so every cell reports the symptom; the
     // range reports what that cell alone asked for. It also reaches a cell holding nothing but
@@ -523,8 +523,8 @@ window.__rowRhythm = (scenario) => {
       heights: rows.map((tr) => Math.round(tr.getBoundingClientRect().height)),
       tallestTextCell: Math.round(tallestTextCell),
       worst,
-      provenance: !!container.querySelector("table.db-table[data-render-assertion-source]")
-        || !!container.querySelector("table.db-table"),
+      provenance: !!container.querySelector("table.obnotion-table[data-render-assertion-source]")
+        || !!container.querySelector("table.obnotion-table"),
     };
   });
   return out;
@@ -538,7 +538,7 @@ window.__phoneOverlapInk = (scenario) => {
   // 41px"). Narrowing the whole container (gutter included) to that same 286px reproduces the
   // chrome's constraint, so the fit-to-width column this measurement's negative control depends
   // on is the one a phone actually produces rather than a roomier one: with
-  // --db-calendar-phone-week-col-min set to 0px (this fixture's own pre-fix baseline) the
+  // --obnotion-calendar-phone-week-col-min set to 0px (this fixture's own pre-fix baseline) the
   // overlap pair reads 1-3px of visible ink at 286px, and PHONE_OVERLAP_INK_FLOOR names why that
   // counts as none.
   runRenderAssertions(document.body, scenario, "", (container) => {
@@ -548,7 +548,7 @@ window.__phoneOverlapInk = (scenario) => {
     // would delete a wrapper created ahead of the render call. Setting the width here, before
     // the geometry reads below force a layout, narrows the same live box just as effectively.
     container.style.width = "286px";
-    const blocks = [...container.querySelectorAll(".db-calendar-week-timed-event")];
+    const blocks = [...container.querySelectorAll(".obnotion-calendar-week-timed-event")];
     // The title's visible ink, not its laid-out text box: the title is white-space: nowrap, so a
     // Range over its contents measures the glyph run at its full natural width regardless of how
     // narrow the block is — the block clips overflow (styles.css), so text wider than the block
@@ -557,7 +557,7 @@ window.__phoneOverlapInk = (scenario) => {
     // red capture above turned on ("one clipped glyph and zero ink").
     const titleBox = (block) => {
       const blockRect = block.getBoundingClientRect();
-      const title = block.querySelector(".db-calendar-week-event-title");
+      const title = block.querySelector(".obnotion-calendar-week-event-title");
       if (!title) return { blockWidth: Math.round(blockRect.width), visibleWidth: 0, text: "" };
       const range = title.ownerDocument.createRange();
       range.selectNodeContents(title);
@@ -577,7 +577,7 @@ window.__phoneOverlapInk = (scenario) => {
 window.__footerFloor = (scenario) => {
   let out = null;
   runRenderAssertions(document.body, scenario, "", (container) => {
-    const triggers = [...container.querySelectorAll(".db-table-footer-trigger")];
+    const triggers = [...container.querySelectorAll(".obnotion-table-footer-trigger")];
     out = {
       count: triggers.length,
       minHeights: triggers.map((trigger) => parseFloat(getComputedStyle(trigger).minHeight) || 0),
@@ -731,14 +731,14 @@ try {
   // fallback document and must say so instead of publishing its heights.
   const tokensResolved = await rhythmPage.evaluate(() => {
     const probe = document.createElement("div");
-    probe.className = "note-database-container";
+    probe.className = "obnotion-container";
     document.body.appendChild(probe);
-    const value = getComputedStyle(probe).getPropertyValue("--db-row-height-default").trim();
+    const value = getComputedStyle(probe).getPropertyValue("--obnotion-row-height-default").trim();
     probe.remove();
     return value;
   });
   if (tokensResolved !== "34px") {
-    failures.push(`row rhythm: the token sheets did not attach (--db-row-height-default is `
+    failures.push(`row rhythm: the token sheets did not attach (--obnotion-row-height-default is `
       + `"${tokensResolved}", expected "34px"); heights measured here would describe a fallback document`);
   } else {
     rhythmOutcomes = await rhythmPage.evaluate(
@@ -800,7 +800,7 @@ try {
   }
 
   // The frozen column's CSS-dependent claims: the right-edge shadow's contrast in each theme
-  // (styles.css's own `--db-frozen-col-shadow` tokens), that it paints nothing at scrollLeft === 0,
+  // (styles.css's own `--obnotion-frozen-col-shadow` tokens), that it paints nothing at scrollLeft === 0,
   // and that the .is-phone override actually turns the sticky position off — none of that is a
   // structural DOM fact runRenderAssertions' scenarios can read, so this page carries static
   // fixture markup (the same shape table-frozen-column's capture scenario draws) against the real
@@ -812,17 +812,17 @@ try {
   const colorErrors = [];
   colorPage.on("pageerror", (error) => colorErrors.push(error.message));
   await colorPage.setContent(`<!doctype html><html><head><meta charset="utf-8"></head>
-<body><div class="note-database-container" style="width:400px;overflow:auto;">
-<table class="db-table"><thead><tr>
-<th class="db-frozen-col db-frozen-col-last" data-note-database-column-key="name" style="position:relative;--db-frozen-left:0px;">
-  <span class="db-resize-handle"></span>
+<body><div class="obnotion-container" style="width:400px;overflow:auto;">
+<table class="obnotion-table"><thead><tr>
+<th class="obnotion-frozen-col obnotion-frozen-col-last" data-obnotion-column-key="name" style="position:relative;--obnotion-frozen-left:0px;">
+  <span class="obnotion-resize-handle"></span>
 </th>
-<th data-note-database-column-key="cost"></th>
+<th data-obnotion-column-key="cost"></th>
 </tr></thead><tbody><tr>
-<td class="db-cell db-frozen-col db-frozen-col-last" style="--db-frozen-left:0px;">Adobe Creative Cloud</td>
-<td class="db-cell">$54.99</td>
+<td class="obnotion-cell obnotion-frozen-col obnotion-frozen-col-last" style="--obnotion-frozen-left:0px;">Adobe Creative Cloud</td>
+<td class="obnotion-cell">$54.99</td>
 </tr></tbody></table>
-<div id="ground-probe" style="background-color: var(--db-surface-canvas);"></div>
+<div id="ground-probe" style="background-color: var(--obnotion-surface-canvas);"></div>
 </div>
 </body></html>`);
   for (const sheet of ["styles.css", "tools/screenshots/theme.css", "tools/screenshots/runtime-vars.css"]) {
@@ -841,38 +841,38 @@ try {
   async function measureFrozenColumnTheme(dark) {
     await colorPage.evaluate((isDark) => {
       document.body.classList.toggle("theme-dark", isDark);
-      document.querySelector(".note-database-container").classList.remove("is-scrolled-x");
+      document.querySelector(".obnotion-container").classList.remove("is-scrolled-x");
       document.body.classList.remove("is-phone");
     }, dark);
     const atRest = await colorPage.evaluate(() => {
-      const td = document.querySelector("td.db-frozen-col-last");
-      // The cell itself paints no background (`.db-cell` never sets one, so its own
+      const td = document.querySelector("td.obnotion-frozen-col-last");
+      // The cell itself paints no background (`.obnotion-cell` never sets one, so its own
       // `backgroundColor` always resolves transparent) — the surface a reader actually sees
-      // behind it is `--db-surface-canvas`, read off a probe element whose only job is to
+      // behind it is `--obnotion-surface-canvas`, read off a probe element whose only job is to
       // normalize that custom property's value into an rgb()/rgba() string.
       const groundColor = getComputedStyle(document.querySelector("#ground-probe")).backgroundColor;
       return { boxShadow: getComputedStyle(td).boxShadow, groundColor };
     });
-    await colorPage.evaluate(() => document.querySelector(".note-database-container").classList.add("is-scrolled-x"));
+    await colorPage.evaluate(() => document.querySelector(".obnotion-container").classList.add("is-scrolled-x"));
     const scrolled = await colorPage.evaluate(() => ({
-      boxShadow: getComputedStyle(document.querySelector("td.db-frozen-col-last")).boxShadow,
+      boxShadow: getComputedStyle(document.querySelector("td.obnotion-frozen-col-last")).boxShadow,
     }));
     await colorPage.evaluate(() => {
       document.body.classList.add("is-phone");
     });
     const phone = await colorPage.evaluate(() => {
-      const td = document.querySelector("td.db-frozen-col-last");
+      const td = document.querySelector("td.obnotion-frozen-col-last");
       return { position: getComputedStyle(td).position, boxShadow: getComputedStyle(td).boxShadow };
     });
     await colorPage.evaluate(() => {
       document.body.classList.remove("is-phone");
-      document.querySelector(".note-database-container").classList.remove("is-scrolled-x");
+      document.querySelector(".obnotion-container").classList.remove("is-scrolled-x");
     });
     const handleRest = await colorPage.evaluate(() =>
-      getComputedStyle(document.querySelector(".db-resize-handle")).backgroundColor);
-    await colorPage.hover("th.db-frozen-col-last");
+      getComputedStyle(document.querySelector(".obnotion-resize-handle")).backgroundColor);
+    await colorPage.hover("th.obnotion-frozen-col-last");
     const handleHover = await colorPage.evaluate(() =>
-      getComputedStyle(document.querySelector(".db-resize-handle")).backgroundColor);
+      getComputedStyle(document.querySelector(".obnotion-resize-handle")).backgroundColor);
     await colorPage.mouse.move(0, 0);
     return { atRest, scrolled, phone, handleRest, handleHover };
   }
@@ -994,7 +994,7 @@ console.log("\nrender-assertions: table footer trigger phone floor");
 {
   const measured = footerFloorOutcome;
   if (!measured || measured.count === 0) {
-    failures.push(`${FOOTER_PHONE_SCENARIO.name}: no .db-table-footer-trigger measured`);
+    failures.push(`${FOOTER_PHONE_SCENARIO.name}: no .obnotion-table-footer-trigger measured`);
     console.log(`  FAIL  ${FOOTER_PHONE_SCENARIO.name} — no footer trigger measured`);
   } else {
     const shortfall = measured.minHeights.filter((h) => h < FOOTER_PHONE_FLOOR);
@@ -1134,20 +1134,20 @@ if (!geometryOutcome || !geometryOutcome.provenance) {
 
   const chipOk = geometryOutcome.chipHeight === 24;
   console.log(`  ${chipOk ? "PASS" : "FAIL"}  ${"chip height".padEnd(16)} `
-    + `${".db-kanban-col-chip painted".padEnd(42)} ${geometryOutcome.chipHeight}px`);
+    + `${".obnotion-kanban-col-chip painted".padEnd(42)} ${geometryOutcome.chipHeight}px`);
   if (!chipOk) failures.push(`board geometry header chip: painted height ${geometryOutcome.chipHeight}px, `
     + "expected 24px (a capture reads it at 48 device pixels; divide by the DPR before comparing)");
 
   const heights = geometryOutcome.rowHeights;
   const pitchOk = heights.length > 0 && heights.every((height) => height === 25);
   console.log(`  ${pitchOk ? "PASS" : "FAIL"}  ${"row pitch".padEnd(16)} `
-    + `${".db-board-card-field on card one".padEnd(42)} [${heights.join(", ")}]`);
-  if (heights.length === 0) failures.push("board geometry row pitch: no .db-board-card-field row on the first card");
+    + `${".obnotion-board-card-field on card one".padEnd(42)} [${heights.join(", ")}]`);
+  if (heights.length === 0) failures.push("board geometry row pitch: no .obnotion-board-card-field row on the first card");
   else if (!pitchOk) failures.push(`board geometry row pitch: ${[...new Set(heights)].join(", ")}px, expected a uniform 25px`);
 
   const radiusOk = geometryOutcome.checkboxRadius === "50%";
   console.log(`  ${radiusOk ? "PASS" : "FAIL"}  ${"checkbox shape".padEnd(16)} `
-    + `${".db-checkbox-field border-radius".padEnd(42)} ${JSON.stringify(geometryOutcome.checkboxRadius)}`);
+    + `${".obnotion-checkbox-field border-radius".padEnd(42)} ${JSON.stringify(geometryOutcome.checkboxRadius)}`);
   if (!radiusOk) failures.push(`board geometry checkbox shape: border-radius ${JSON.stringify(geometryOutcome.checkboxRadius)}, `
     + 'expected "50%" — a circle, not the app-wide rounded square');
 
@@ -1161,7 +1161,7 @@ if (!geometryOutcome || !geometryOutcome.provenance) {
   console.log(`  ${pageScrollOk ? "PASS" : "FAIL"}  ${"page scroll".padEnd(16)} `
     + `${"overflow-y / scrollTop / last card".padEnd(42)} `
     + `${JSON.stringify(geometryOutcome.pageOverflowY)} / ${geometryOutcome.pageScrollReached} / ${geometryOutcome.lastCardReachable}`);
-  if (!pageScrollOk) failures.push(`board geometry page scroll: .db-kanban-view overflow-y read `
+  if (!pageScrollOk) failures.push(`board geometry page scroll: .obnotion-kanban-view overflow-y read `
     + `${JSON.stringify(geometryOutcome.pageOverflowY)}, scrolled to ${geometryOutcome.pageScrollReached} of `
     + `${geometryOutcome.pageScrollHeight}/${geometryOutcome.pageClientHeight}, last card reachable `
     + `${geometryOutcome.lastCardReachable} — the container must scroll far enough to reach the last card of an `
@@ -1170,23 +1170,23 @@ if (!geometryOutcome || !geometryOutcome.provenance) {
 
   const columnScrollOk = geometryOutcome.columnOverflowY === "visible" && geometryOutcome.boardOverflowY === "visible";
   console.log(`  ${columnScrollOk ? "PASS" : "FAIL"}  ${"column scroll".padEnd(16)} `
-    + `${".db-kanban-cards / .db-kanban-board overflow-y".padEnd(42)} `
+    + `${".obnotion-kanban-cards / .obnotion-kanban-board overflow-y".padEnd(42)} `
     + `${JSON.stringify(geometryOutcome.columnOverflowY)} / ${JSON.stringify(geometryOutcome.boardOverflowY)}`);
-  if (!columnScrollOk) failures.push(`board geometry column scroll: .db-kanban-cards overflow-y read `
-    + `${JSON.stringify(geometryOutcome.columnOverflowY)} and .db-kanban-board read ${JSON.stringify(geometryOutcome.boardOverflowY)}, `
+  if (!columnScrollOk) failures.push(`board geometry column scroll: .obnotion-kanban-cards overflow-y read `
+    + `${JSON.stringify(geometryOutcome.columnOverflowY)} and .obnotion-kanban-board read ${JSON.stringify(geometryOutcome.boardOverflowY)}, `
     + `expected "visible" for both — neither a column nor the board may be its own scroll container `
-    + `(the negative control: putting "overflow-y: auto" back on .db-kanban-cards turns this red)`);
+    + `(the negative control: putting "overflow-y: auto" back on .obnotion-kanban-cards turns this red)`);
 
   const scrollbarRestOk = geometryOutcome.scrollbarRestHeight === "0px";
   console.log(`  ${scrollbarRestOk ? "PASS" : "FAIL"}  ${"scrollbar (rest)".padEnd(16)} `
-    + `${".db-kanban-view ::-webkit-scrollbar".padEnd(42)} ${JSON.stringify(geometryOutcome.scrollbarRestHeight)}`);
+    + `${".obnotion-kanban-view ::-webkit-scrollbar".padEnd(42)} ${JSON.stringify(geometryOutcome.scrollbarRestHeight)}`);
   if (!scrollbarRestOk) failures.push(`board geometry scrollbar (rest): height read `
     + `${JSON.stringify(geometryOutcome.scrollbarRestHeight)}, expected "0px" — the operator's ruling declines the `
     + `measured 10px lane at rest`);
 
   const scrollbarActiveOk = geometryOutcome.scrollbarActiveHeight === "10px";
   console.log(`  ${scrollbarActiveOk ? "PASS" : "FAIL"}  ${"scrollbar (active)".padEnd(16)} `
-    + `${".db-kanban-view.is-scrolling ::-webkit-scrollbar".padEnd(42)} ${JSON.stringify(geometryOutcome.scrollbarActiveHeight)}`);
+    + `${".obnotion-kanban-view.is-scrolling ::-webkit-scrollbar".padEnd(42)} ${JSON.stringify(geometryOutcome.scrollbarActiveHeight)}`);
   if (!scrollbarActiveOk) failures.push(`board geometry scrollbar (active): height read `
     + `${JSON.stringify(geometryOutcome.scrollbarActiveHeight)}, expected "10px" — the measured reference geometry still applies `
     + `once the bar is shown, only "at rest" is declined`);
@@ -1200,7 +1200,7 @@ if (!geometryOutcome || !geometryOutcome.provenance) {
   // scrollbar (active) does for "is-scrolling".
   const scrollbarEdgeHoverOk = geometryOutcome.scrollbarEdgeHoverHeight === "10px";
   console.log(`  ${scrollbarEdgeHoverOk ? "PASS" : "FAIL"}  ${"scrollbar (edge-hover)".padEnd(16)} `
-    + `${".db-kanban-view.is-edge-hover ::-webkit-scrollbar".padEnd(42)} ${JSON.stringify(geometryOutcome.scrollbarEdgeHoverHeight)}`);
+    + `${".obnotion-kanban-view.is-edge-hover ::-webkit-scrollbar".padEnd(42)} ${JSON.stringify(geometryOutcome.scrollbarEdgeHoverHeight)}`);
   if (!scrollbarEdgeHoverOk) failures.push(`board geometry scrollbar (edge-hover): height read `
     + `${JSON.stringify(geometryOutcome.scrollbarEdgeHoverHeight)}, expected "10px" — the "Edge only" ruling still reveals `
     + `the bar once the pointer is within its edge band, only a pane-wide hover is declined`);
@@ -1216,7 +1216,7 @@ if (!geometryOutcome || !geometryOutcome.provenance) {
   const edgeWidth = geometryOutcome.scrollbarEdgeHoverWidth;
   const scrollbarWidthOk = restWidth === "0px" && activeWidth === "10px" && edgeWidth === "10px";
   console.log(`  ${scrollbarWidthOk ? "PASS" : "FAIL"}  ${"scrollbar (vertical)".padEnd(16)} `
-    + `${".db-kanban-view ::-webkit-scrollbar width".padEnd(42)} `
+    + `${".obnotion-kanban-view ::-webkit-scrollbar width".padEnd(42)} `
     + `${JSON.stringify(restWidth)} / ${JSON.stringify(activeWidth)} / ${JSON.stringify(edgeWidth)}`);
   if (!scrollbarWidthOk) failures.push(`board geometry scrollbar (vertical): ::-webkit-scrollbar width read `
     + `${JSON.stringify(restWidth)} at rest, ${JSON.stringify(activeWidth)} scrolling, ${JSON.stringify(edgeWidth)} `
@@ -1297,7 +1297,7 @@ if (!frozenColumnCssOutcome) {
     }
 
     // is-phone: the sticky offset and the shadow both collapse, even with is-scrolled-x present —
-    // this is the regression a `:not(.is-phone)` scope on `.note-database-container` cannot catch,
+    // this is the regression a `:not(.is-phone)` scope on `.obnotion-container` cannot catch,
     // since `is-phone` sits on the body, never on the container itself.
     const phoneOk = measured.phone.position === "static" && measured.phone.boxShadow === "none";
     console.log(`  ${phoneOk ? "PASS" : "FAIL"}  ${themeName.padEnd(6)} is-phone turns freeze off`.padEnd(58)

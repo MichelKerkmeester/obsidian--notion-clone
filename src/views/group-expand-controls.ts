@@ -44,22 +44,22 @@ export function renderGroupExpandControls(
   const expandedBeyondLimit = visible > limit;
   if (hidden <= 0 && !expandedBeyondLimit) return false;
 
-  const row = parent.createDiv({ cls: "db-group-expand-controls" });
+  const row = parent.createDiv({ cls: "obnotion-group-expand-controls" });
   if (hidden > 0) {
     const more = row.createEl("button", {
-      cls: "db-group-expand-btn db-group-expand-more",
+      cls: "obnotion-group-expand-btn obnotion-group-expand-more",
       text: t("group.expandMore", { count: Math.min(limit, hidden) }),
     });
     more.onclick = () => actions.expandGroup?.(field, key, visible + limit);
     const all = row.createEl("button", {
-      cls: "db-group-expand-btn db-group-expand-all",
+      cls: "obnotion-group-expand-btn obnotion-group-expand-all",
       text: t("group.expandAll"),
     });
     all.onclick = () => actions.expandGroup?.(field, key, -1);
   }
   if (expandedBeyondLimit) {
     const collapse = row.createEl("button", {
-      cls: "db-group-expand-btn db-group-collapse",
+      cls: "obnotion-group-expand-btn obnotion-group-collapse",
       text: t("group.collapseToLimit"),
     });
     collapse.onclick = () => actions.expandGroup?.(field, key, 0);

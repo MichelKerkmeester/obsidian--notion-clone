@@ -33,7 +33,7 @@ import { confirmWithModal } from "./confirm-modal";
 import { safeString } from "../../data/safe-string";
 import { isDateLikeColumnType } from "../../data/date-time-format";
 import { scanFormulaSegments, type FormulaSegment } from "../../data/formula-tokenizer";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
@@ -200,7 +200,7 @@ export class FormulaModal extends DbModal {
   private originalResultType: ComputedFieldDef["type"] = "text";
   private selectedResultType: ComputedFieldDef["type"] = "text";
   private selectedPreviewIndex = 0;
-  private expressionSyntax: ComputedFieldDef["expressionSyntax"] = "note-database";
+  private expressionSyntax: ComputedFieldDef["expressionSyntax"] = "obnotion";
   private saved = false;
   private resizeObserver?: ResizeObserver;
   private closeConfirmed = false;
@@ -237,7 +237,7 @@ export class FormulaModal extends DbModal {
     super.onOpen();
     this.contentEl.empty();
     this.modalEl.addClass("formula-workbench-modal-host");
-    this.contentEl.addClass("note-database-modal");
+    this.contentEl.addClass("obnotion-modal");
     this.contentEl.addClass("formula-workbench-modal");
     this.originalExpression = this.computedField?.expression || "";
     this.originalResultType = this.computedField?.type || "text";
@@ -246,13 +246,13 @@ export class FormulaModal extends DbModal {
       ? this.rows.findIndex((row) => row.file.path === this.initialPreviewRowPath)
       : -1;
     this.selectedPreviewIndex = initialPreviewIndex >= 0 ? initialPreviewIndex : 0;
-    this.expressionSyntax = this.computedField?.expressionSyntax || "note-database";
+    this.expressionSyntax = this.computedField?.expressionSyntax || "obnotion";
 
     this.renderHeader();
 
-    const workbench = this.contentEl.createDiv({ cls: "db-formula-workbench" });
-    const editorPane = workbench.createDiv({ cls: "db-formula-editor-pane" });
-    const helpPane = workbench.createDiv({ cls: "db-formula-help-pane" });
+    const workbench = this.contentEl.createDiv({ cls: "obnotion-formula-workbench" });
+    const editorPane = workbench.createDiv({ cls: "obnotion-formula-editor-pane" });
+    const helpPane = workbench.createDiv({ cls: "obnotion-formula-help-pane" });
 
     this.renderEditor(editorPane);
     this.renderPreview(editorPane);
@@ -278,21 +278,21 @@ export class FormulaModal extends DbModal {
   }
 
   private renderHeader(): void {
-    const header = this.contentEl.createDiv({ cls: "db-formula-header" });
-    const titleWrap = header.createDiv({ cls: "db-formula-title-wrap" });
+    const header = this.contentEl.createDiv({ cls: "obnotion-formula-header" });
+    const titleWrap = header.createDiv({ cls: "obnotion-formula-title-wrap" });
     titleWrap.createEl("h3", { text: t("formula.title", { name: this.col.label }) });
-    titleWrap.createDiv({ cls: "db-formula-subtitle", text: this.getStorageSubtitle() });
-    titleWrap.createDiv({ cls: "db-formula-storage-note", text: this.getStorageNote() });
+    titleWrap.createDiv({ cls: "obnotion-formula-subtitle", text: this.getStorageSubtitle() });
+    titleWrap.createDiv({ cls: "obnotion-formula-storage-note", text: this.getStorageNote() });
 
-    const typeWrap = header.createDiv({ cls: "db-formula-result-type-wrap" });
-    const typeLabel = typeWrap.createEl("label", { cls: "db-formula-result-type" });
+    const typeWrap = header.createDiv({ cls: "obnotion-formula-result-type-wrap" });
+    const typeLabel = typeWrap.createEl("label", { cls: "obnotion-formula-result-type" });
     typeLabel.createSpan({ text: t("formula.resultType") });
     createDropdownField({
       parent: typeLabel,
       label: t("formula.resultType"),
       options: buildTypePickerOptions(resultTypeGate),
       value: this.selectedResultType,
-      className: "db-modal-dropdown db-formula-result-type-dropdown",
+      className: "obnotion-modal-dropdown obnotion-formula-result-type-dropdown",
       hideLabel: true,
       searchable: true,
       renderIcon: renderDropdownPropertyTypeIcon,
@@ -302,7 +302,7 @@ export class FormulaModal extends DbModal {
         this.renderHelpBrowserContent();
       },
     });
-    typeWrap.createDiv({ cls: "db-formula-result-type-note", text: t("formula.typeCoercionHint") });
+    typeWrap.createDiv({ cls: "obnotion-formula-result-type-note", text: t("formula.typeCoercionHint") });
   }
 
   private getStorageSubtitle(): string {
@@ -323,15 +323,15 @@ export class FormulaModal extends DbModal {
   }
 
   private renderEditor(parent: HTMLElement): void {
-    parent.createDiv({ cls: "db-formula-section-title", text: t("formula.sectionTitle") });
-    const shell = parent.createDiv({ cls: "db-formula-editor-shell" });
-    this.lineNumberEl = shell.createDiv({ cls: "db-formula-line-numbers", attr: { "aria-hidden": "true" } });
+    parent.createDiv({ cls: "obnotion-formula-section-title", text: t("formula.sectionTitle") });
+    const shell = parent.createDiv({ cls: "obnotion-formula-editor-shell" });
+    this.lineNumberEl = shell.createDiv({ cls: "obnotion-formula-line-numbers", attr: { "aria-hidden": "true" } });
 
-    const codeWrap = shell.createDiv({ cls: "db-formula-code-wrap" });
-    const pre = codeWrap.createEl("pre", { cls: "db-formula-highlight", attr: { "aria-hidden": "true" } });
+    const codeWrap = shell.createDiv({ cls: "obnotion-formula-code-wrap" });
+    const pre = codeWrap.createEl("pre", { cls: "obnotion-formula-highlight", attr: { "aria-hidden": "true" } });
     this.highlightEl = pre.createEl("code");
     this.textarea = codeWrap.createEl("textarea", {
-      cls: "db-formula-textarea",
+      cls: "obnotion-formula-textarea",
       attr: {
         placeholder: '=if([status] === "done", 1, 0)',
         rows: "9",
@@ -344,7 +344,7 @@ export class FormulaModal extends DbModal {
     });
     this.textarea.spellcheck = false;
     this.textarea.value = this.originalExpression;
-    this.propertySuggestEl = codeWrap.createDiv({ cls: "db-formula-property-suggestions" });
+    this.propertySuggestEl = codeWrap.createDiv({ cls: "obnotion-formula-property-suggestions" });
     this.propertySuggestEl.onmousedown = (event) => event.preventDefault();
 
     this.textarea.addEventListener("input", () => {
@@ -369,7 +369,7 @@ export class FormulaModal extends DbModal {
       // Autocomplete keyboard navigation
       if (this.propertySuggestEl?.hasClass("is-visible")) {
         const items = Array.from(
-          this.propertySuggestEl.querySelectorAll<HTMLButtonElement>("button.db-formula-property-suggestion")
+          this.propertySuggestEl.querySelectorAll<HTMLButtonElement>("button.obnotion-formula-property-suggestion")
         );
         if (items.length === 0) {
           this.hideSuggestions();
@@ -431,26 +431,26 @@ export class FormulaModal extends DbModal {
       }
     });
 
-    const referenceNote = parent.createDiv({ cls: "db-formula-reference-note" });
-    setIcon(referenceNote.createSpan({ cls: "db-formula-reference-note-icon" }), "brackets");
-    const referenceText = referenceNote.createDiv({ cls: "db-formula-reference-note-text" });
+    const referenceNote = parent.createDiv({ cls: "obnotion-formula-reference-note" });
+    setIcon(referenceNote.createSpan({ cls: "obnotion-formula-reference-note-icon" }), "brackets");
+    const referenceText = referenceNote.createDiv({ cls: "obnotion-formula-reference-note-text" });
     referenceText.createDiv({
-      cls: "db-formula-reference-note-main",
+      cls: "obnotion-formula-reference-note-main",
       text: t(this.expressionSyntax === "base" ? "formula.referenceNoteBase" : "formula.referenceNote"),
     });
     referenceText.createDiv({
-      cls: "db-formula-reference-note-secondary",
+      cls: "obnotion-formula-reference-note-secondary",
       text: t(this.expressionSyntax === "base" ? "formula.referenceNoteBaseAdvanced" : "formula.referenceNoteAdvanced"),
     });
-    const fallbackHint = parent.createDiv({ cls: "db-formula-iferror-hint" });
-    setIcon(fallbackHint.createSpan({ cls: "db-formula-iferror-hint-icon" }), "circle-alert");
+    const fallbackHint = parent.createDiv({ cls: "obnotion-formula-iferror-hint" });
+    setIcon(fallbackHint.createSpan({ cls: "obnotion-formula-iferror-hint-icon" }), "circle-alert");
     fallbackHint.createSpan({ text: t("formula.ifErrorFallbackHint") });
   }
 
   private renderPreview(parent: HTMLElement): void {
-    const preview = parent.createDiv({ cls: "db-formula-preview" });
-    const row = preview.createDiv({ cls: "db-formula-preview-row" });
-    row.createSpan({ cls: "db-formula-preview-label", text: t("formula.previewItem") });
+    const preview = parent.createDiv({ cls: "obnotion-formula-preview" });
+    const row = preview.createDiv({ cls: "obnotion-formula-preview-row" });
+    row.createSpan({ cls: "obnotion-formula-preview-label", text: t("formula.previewItem") });
     if (!this.rows[this.selectedPreviewIndex]) this.selectedPreviewIndex = 0;
     const previewRowIndexes = this.rows.slice(0, 80).map((_, index) => index);
     if (this.rows[this.selectedPreviewIndex] && !previewRowIndexes.includes(this.selectedPreviewIndex)) {
@@ -462,7 +462,7 @@ export class FormulaModal extends DbModal {
         label: t("formula.previewItem"),
         options: [{ value: "0", text: t("formula.noPreviewItems") }],
         value: "0",
-        className: "db-modal-dropdown db-formula-preview-dropdown",
+        className: "obnotion-modal-dropdown obnotion-formula-preview-dropdown",
         hideLabel: true,
         disabled: true,
         onChange: () => undefined,
@@ -476,7 +476,7 @@ export class FormulaModal extends DbModal {
           text: this.rows[index].file.name.replace(/\.md$/, ""),
         })),
         value: String(this.selectedPreviewIndex),
-        className: "db-modal-dropdown db-formula-preview-dropdown",
+        className: "obnotion-modal-dropdown obnotion-formula-preview-dropdown",
         hideLabel: true,
         onChange: (value) => {
           this.selectedPreviewIndex = Number(value) || 0;
@@ -485,25 +485,25 @@ export class FormulaModal extends DbModal {
       });
     }
 
-    const result = preview.createDiv({ cls: "db-formula-result-card" });
-    result.createSpan({ cls: "db-formula-preview-label", text: t("formula.calcResult") });
-    this.previewOutput = result.createDiv({ cls: "db-formula-preview-output", text: t("formula.notCalculated") });
-    this.previewStatus = result.createDiv({ cls: "db-formula-preview-status", text: t("formula.waitingForFormula") });
-    this.previewDetails = preview.createDiv({ cls: "db-formula-preview-details" });
+    const result = preview.createDiv({ cls: "obnotion-formula-result-card" });
+    result.createSpan({ cls: "obnotion-formula-preview-label", text: t("formula.calcResult") });
+    this.previewOutput = result.createDiv({ cls: "obnotion-formula-preview-output", text: t("formula.notCalculated") });
+    this.previewStatus = result.createDiv({ cls: "obnotion-formula-preview-status", text: t("formula.waitingForFormula") });
+    this.previewDetails = preview.createDiv({ cls: "obnotion-formula-preview-details" });
   }
 
   private renderHelpBrowser(parent: HTMLElement): void {
     parent.empty();
-    const header = parent.createDiv({ cls: "db-formula-help-header" });
-    const titleRow = header.createDiv({ cls: "db-formula-help-title-row" });
-    titleRow.createDiv({ cls: "db-formula-section-title", text: t("formula.fieldsAndFunctions") });
+    const header = parent.createDiv({ cls: "obnotion-formula-help-header" });
+    const titleRow = header.createDiv({ cls: "obnotion-formula-help-title-row" });
+    titleRow.createDiv({ cls: "obnotion-formula-section-title", text: t("formula.fieldsAndFunctions") });
     const copyBtn = titleRow.createEl("button", {
-      cls: "db-formula-copy-ai-prompt",
+      cls: "obnotion-formula-copy-ai-prompt",
       text: t("formula.copyAiPrompt"),
     });
     copyBtn.onclick = () => this.copyAiPrompt();
     const search = header.createEl("input", {
-      cls: "db-formula-help-search",
+      cls: "obnotion-formula-help-search",
       attr: { type: "search", placeholder: t("formula.searchPlaceholder") },
     });
     search.value = this.searchQuery;
@@ -512,8 +512,8 @@ export class FormulaModal extends DbModal {
       this.renderHelpBrowserContent();
     };
 
-    const browser = parent.createDiv({ cls: "db-formula-browser db-formula-browser-three-col" });
-    this.categoryListEl = browser.createDiv({ cls: "db-formula-category-list" });
+    const browser = parent.createDiv({ cls: "obnotion-formula-browser obnotion-formula-browser-three-col" });
+    this.categoryListEl = browser.createDiv({ cls: "obnotion-formula-category-list" });
     this.categoryListEl.addEventListener("wheel", (event) => {
       if (!this.categoryListEl) return;
       if (this.categoryListEl.scrollWidth <= this.categoryListEl.clientWidth) return;
@@ -522,8 +522,8 @@ export class FormulaModal extends DbModal {
       event.preventDefault();
       this.categoryListEl.scrollLeft += delta;
     }, { passive: false });
-    this.helpListEl = browser.createDiv({ cls: "db-formula-function-list-compact" });
-    this.helpDetailEl = browser.createDiv({ cls: "db-formula-function-detail" });
+    this.helpListEl = browser.createDiv({ cls: "obnotion-formula-function-list-compact" });
+    this.helpDetailEl = browser.createDiv({ cls: "obnotion-formula-function-detail" });
     this.renderHelpBrowserContent();
   }
 
@@ -535,7 +535,7 @@ export class FormulaModal extends DbModal {
 
     for (const categoryKey of HELP_CATEGORY_KEYS) {
       const button = this.categoryListEl.createEl("button", {
-        cls: `db-formula-category${categoryKey === this.selectedCategoryKey && !this.searchQuery ? " is-active" : ""}`,
+        cls: `obnotion-formula-category${categoryKey === this.selectedCategoryKey && !this.searchQuery ? " is-active" : ""}`,
         text: t(categoryKey),
       });
       button.onclick = () => {
@@ -552,14 +552,14 @@ export class FormulaModal extends DbModal {
     }
 
     if (items.length === 0) {
-      this.helpListEl.createDiv({ cls: "db-formula-empty-help", text: t("formula.noMatch") });
-      this.helpDetailEl.createDiv({ cls: "db-formula-hint", text: t("formula.noMatchHint") });
+      this.helpListEl.createDiv({ cls: "obnotion-formula-empty-help", text: t("formula.noMatch") });
+      this.helpDetailEl.createDiv({ cls: "obnotion-formula-hint", text: t("formula.noMatchHint") });
       return;
     }
 
     for (const item of items) {
       const button = this.helpListEl.createEl("button", {
-        cls: `db-formula-function-row${this.isSameHelpItem(item, this.selectedHelpItem) ? " is-active" : ""}`,
+        cls: `obnotion-formula-function-row${this.isSameHelpItem(item, this.selectedHelpItem) ? " is-active" : ""}`,
       });
       this.renderHelpListItem(button, item);
       button.onclick = () => {
@@ -574,9 +574,9 @@ export class FormulaModal extends DbModal {
 
   private renderHelpListItem(button: HTMLElement, item: FormulaHelpItem): void {
     if (item.kind === "field") {
-      button.addClass("db-formula-field-row");
-      renderPropertyTypeIcon(button, item.col, "db-formula-field-icon");
-      const text = button.createDiv({ cls: "db-formula-help-row-text" });
+      button.addClass("obnotion-formula-field-row");
+      renderPropertyTypeIcon(button, item.col, "obnotion-formula-field-icon");
+      const text = button.createDiv({ cls: "obnotion-formula-help-row-text" });
       text.createSpan({ text: item.col.label || item.col.key });
       text.createSpan({ text: `${t("formula.referenceShort")}: ${this.getFormulaFieldReference(item.col)} · ${COLUMN_TYPE_LABELS()[item.col.type]}` });
       return;
@@ -594,58 +594,58 @@ export class FormulaModal extends DbModal {
     if (!this.helpDetailEl || !item) return;
     this.helpDetailEl.empty();
     if (item.kind === "field") {
-      const heading = this.helpDetailEl.createDiv({ cls: "db-formula-field-detail-heading" });
-      const title = heading.createDiv({ cls: "db-formula-field-detail-title" });
+      const heading = this.helpDetailEl.createDiv({ cls: "obnotion-formula-field-detail-heading" });
+      const title = heading.createDiv({ cls: "obnotion-formula-field-detail-title" });
       title.createEl("h4", { text: item.col.label || item.col.key, attr: { title: item.col.label || item.col.key } });
-      title.createDiv({ cls: "db-formula-field-title-kind", text: t("formula.columnTitle") });
-      const type = heading.createDiv({ cls: "db-formula-field-detail-type" });
-      renderPropertyTypeIcon(type, item.col, "db-formula-field-detail-type-icon");
+      title.createDiv({ cls: "obnotion-formula-field-title-kind", text: t("formula.columnTitle") });
+      const type = heading.createDiv({ cls: "obnotion-formula-field-detail-type" });
+      renderPropertyTypeIcon(type, item.col, "obnotion-formula-field-detail-type-icon");
       type.createSpan({ text: COLUMN_TYPE_LABELS()[item.col.type] });
-      const referenceMap = this.helpDetailEl.createDiv({ cls: "db-formula-field-reference-map" });
+      const referenceMap = this.helpDetailEl.createDiv({ cls: "obnotion-formula-field-reference-map" });
       const formulaReference = this.getFormulaFieldReference(item.col);
       this.renderFieldReferenceRow(referenceMap, t("formula.formulaReference"), formulaReference, true);
       this.renderFieldReferenceRow(referenceMap, t("modal.propertyKey"), item.col.key, true);
       this.renderFieldOptions(this.helpDetailEl, item.col);
       const insert = this.helpDetailEl.createEl("button", {
-        cls: "db-formula-insert-example",
+        cls: "obnotion-formula-insert-example",
         text: t("formula.insertField", { reference: formulaReference }),
       });
       insert.onclick = () => this.insertHelpItem(item);
       this.helpDetailEl.createDiv({
-        cls: "db-formula-hint",
+        cls: "obnotion-formula-hint",
         text: t("formula.fieldHint"),
       });
       return;
     }
     if (item.kind === "example") {
       this.helpDetailEl.createEl("h4", { text: item.example.name });
-      this.helpDetailEl.createDiv({ cls: "db-formula-function-desc", text: item.example.description });
+      this.helpDetailEl.createDiv({ cls: "obnotion-formula-function-desc", text: item.example.description });
       const insert = this.helpDetailEl.createEl("button", {
-        cls: "db-formula-insert-example",
+        cls: "obnotion-formula-insert-example",
         text: item.example.expression,
       });
       insert.onclick = () => this.insertHelpItem(item);
       return;
     }
     this.helpDetailEl.createEl("h4", { text: item.fn.name });
-    this.helpDetailEl.createDiv({ cls: "db-formula-signature", text: item.fn.signature });
-    this.helpDetailEl.createDiv({ cls: "db-formula-function-desc", text: t(item.fn.descriptionKey) });
+    this.helpDetailEl.createDiv({ cls: "obnotion-formula-signature", text: item.fn.signature });
+    this.helpDetailEl.createDiv({ cls: "obnotion-formula-function-desc", text: t(item.fn.descriptionKey) });
     const example = this.helpDetailEl.createEl("button", {
-      cls: "db-formula-insert-example",
+      cls: "obnotion-formula-insert-example",
       text: item.fn.example,
     });
     example.onclick = () => this.insertExample(item.fn.example);
     this.helpDetailEl.createDiv({
-      cls: "db-formula-hint",
+      cls: "obnotion-formula-hint",
       text: t("formula.syntaxHint"),
     });
   }
 
   private renderFieldReferenceRow(parent: HTMLElement, label: string, value: string, monospace = false): void {
-    const row = parent.createDiv({ cls: "db-formula-field-reference-row" });
-    row.createSpan({ cls: "db-formula-field-reference-label", text: label });
+    const row = parent.createDiv({ cls: "obnotion-formula-field-reference-row" });
+    row.createSpan({ cls: "obnotion-formula-field-reference-label", text: label });
     row.createSpan({
-      cls: `db-formula-field-reference-value${monospace ? " is-monospace" : ""}`,
+      cls: `obnotion-formula-field-reference-value${monospace ? " is-monospace" : ""}`,
       text: value,
       attr: { title: value },
     });
@@ -664,21 +664,21 @@ export class FormulaModal extends DbModal {
 
   private renderFieldOptions(parent: HTMLElement, col: ColumnDef): void {
     if (!["select", "multi-select", "status"].includes(col.type)) return;
-    const section = parent.createDiv({ cls: "db-formula-field-options" });
-    section.createDiv({ cls: "db-formula-field-options-title", text: t("formula.availableOptions") });
+    const section = parent.createDiv({ cls: "obnotion-formula-field-options" });
+    section.createDiv({ cls: "obnotion-formula-field-options-title", text: t("formula.availableOptions") });
     if (col.key === "file.tags") {
-      section.createDiv({ cls: "db-formula-hint", text: t("formula.fileTagsHint") });
+      section.createDiv({ cls: "obnotion-formula-hint", text: t("formula.fileTagsHint") });
       return;
     }
     const options = this.getFieldOptionEntries(col);
     if (options.length === 0) {
-      section.createDiv({ cls: "db-formula-hint", text: t("formula.noOptions") });
+      section.createDiv({ cls: "obnotion-formula-hint", text: t("formula.noOptions") });
       return;
     }
-    const list = section.createDiv({ cls: "db-formula-field-option-list" });
+    const list = section.createDiv({ cls: "obnotion-formula-field-option-list" });
     for (const option of options) {
       const button = list.createEl("button", {
-        cls: `db-formula-field-option status-badge status-color-${option.color || "gray"}`,
+        cls: `obnotion-formula-field-option status-badge status-color-${option.color || "gray"}`,
         text: option.value,
         attr: { type: "button", title: option.value },
       });
@@ -717,7 +717,7 @@ export class FormulaModal extends DbModal {
   }
 
   private renderButtons(): void {
-    const buttonRow = this.contentEl.createDiv({ cls: "db-modal-button-row" });
+    const buttonRow = this.contentEl.createDiv({ cls: "obnotion-modal-button-row" });
     buttonRow.createEl("button", { text: t("common.cancel") }).onclick = () => this.close();
     this.saveBtn = buttonRow.createEl("button", { text: t("formula.save"), cls: "mod-cta" });
     this.saveBtn.onclick = async () => {
@@ -1014,7 +1014,7 @@ export class FormulaModal extends DbModal {
     const row = this.getPreviewRow();
     if (!expression || !row) {
       this.previewDetails.createDiv({
-        cls: "db-formula-preview-empty",
+        cls: "obnotion-formula-preview-empty",
         text: expression ? t("formula.noPreviewForSteps") : t("formula.enterToSeeSteps"),
       });
       return;
@@ -1022,37 +1022,37 @@ export class FormulaModal extends DbModal {
 
     const refs = this.getReferencedFields(expression, row);
     const expressionSection = this.previewDetails.createDiv({
-      cls: "db-formula-preview-section db-formula-preview-expression-section",
+      cls: "obnotion-formula-preview-section obnotion-formula-preview-expression-section",
     });
     expressionSection.createDiv({
-      cls: "db-formula-preview-section-title",
+      cls: "obnotion-formula-preview-section-title",
       text: t("formula.substitutedFormula"),
     });
     const substituted = this.buildSubstitutedExpression(expression, refs);
     expressionSection.createEl("code", {
-      cls: "db-formula-preview-expression-code",
+      cls: "obnotion-formula-preview-expression-code",
       text: substituted || t("formula.emptyValue"),
       attr: { title: substituted || t("formula.emptyValue") },
     });
 
     const fieldsSection = this.previewDetails.createDiv({
-      cls: "db-formula-preview-section db-formula-preview-fields-section",
+      cls: "obnotion-formula-preview-section obnotion-formula-preview-fields-section",
     });
-    fieldsSection.createDiv({ cls: "db-formula-preview-section-title", text: t("formula.fieldValues") });
+    fieldsSection.createDiv({ cls: "obnotion-formula-preview-section-title", text: t("formula.fieldValues") });
     if (refs.length === 0) {
-      fieldsSection.createDiv({ cls: "db-formula-preview-empty", text: t("formula.noReferencedFields") });
+      fieldsSection.createDiv({ cls: "obnotion-formula-preview-empty", text: t("formula.noReferencedFields") });
     } else {
-      const fieldList = fieldsSection.createDiv({ cls: "db-formula-preview-field-list" });
+      const fieldList = fieldsSection.createDiv({ cls: "obnotion-formula-preview-field-list" });
       for (const ref of refs) {
-        const item = fieldList.createDiv({ cls: "db-formula-preview-field-item" });
-        const main = item.createDiv({ cls: "db-formula-preview-field-main" });
-        main.createSpan({ cls: "db-formula-preview-field-name", text: ref.col.label || ref.col.key });
+        const item = fieldList.createDiv({ cls: "obnotion-formula-preview-field-item" });
+        const main = item.createDiv({ cls: "obnotion-formula-preview-field-main" });
+        main.createSpan({ cls: "obnotion-formula-preview-field-name", text: ref.col.label || ref.col.key });
         main.createSpan({
-          cls: "db-formula-preview-field-ref",
+          cls: "obnotion-formula-preview-field-ref",
           text: ref.syntax,
         });
         item.createDiv({
-          cls: "db-formula-preview-field-value",
+          cls: "obnotion-formula-preview-field-value",
           text: this.formatPreviewValue(ref.value),
           attr: { title: this.formatPreviewValue(ref.value) },
         });
@@ -1307,10 +1307,10 @@ export class FormulaModal extends DbModal {
       const bracket = /[()[\]{}]/.test(char);
       const tokenClasses = cls === "plain"
         ? []
-        : cls.split(/\s+/).filter(Boolean).map((part) => `db-formula-token-${part}`);
+        : cls.split(/\s+/).filter(Boolean).map((part) => `obnotion-formula-token-${part}`);
       const classes = [
         ...tokenClasses,
-        matched && bracket ? "db-formula-token-bracket-match" : "",
+        matched && bracket ? "obnotion-formula-token-bracket-match" : "",
       ].filter(Boolean).join(" ");
       html += classes ? `<span class="${classes}">${this.escapeHtml(char)}</span>` : this.escapeHtml(char);
     }
@@ -1350,9 +1350,9 @@ export class FormulaModal extends DbModal {
       // rows give it, so the clamp that keeps its right edge inside the field is computed from a
       // number that is about to change.
       for (const col of matches) {
-        const item = this.propertySuggestEl.createEl("button", { cls: "db-formula-property-suggestion" });
-        renderPropertyTypeIcon(item, col, "db-formula-property-suggestion-icon");
-        item.createSpan({ cls: "db-formula-property-suggestion-label", text: col.label || col.key });
+        const item = this.propertySuggestEl.createEl("button", { cls: "obnotion-formula-property-suggestion" });
+        renderPropertyTypeIcon(item, col, "obnotion-formula-property-suggestion-icon");
+        item.createSpan({ cls: "obnotion-formula-property-suggestion-label", text: col.label || col.key });
         item.createSpan({ text: this.getFormulaFieldReference(col) });
         item.onclick = () => this.insertProperty(openIndex, cursor, col);
       }
@@ -1375,7 +1375,7 @@ export class FormulaModal extends DbModal {
       return;
     }
     for (const fn of matches) {
-      const item = this.propertySuggestEl.createEl("button", { cls: "db-formula-property-suggestion" });
+      const item = this.propertySuggestEl.createEl("button", { cls: "obnotion-formula-property-suggestion" });
       item.createSpan({ text: fn.name });
       item.createSpan({ text: fn.signature });
       item.onclick = () => this.replaceRange(cursor - functionMatch[1].length, cursor, fn.signature);
@@ -1429,7 +1429,7 @@ export class FormulaModal extends DbModal {
   private activateFirstSuggestion(): void {
     if (!this.propertySuggestEl) return;
     const items = Array.from(
-      this.propertySuggestEl.querySelectorAll<HTMLButtonElement>("button.db-formula-property-suggestion")
+      this.propertySuggestEl.querySelectorAll<HTMLButtonElement>("button.obnotion-formula-property-suggestion")
     );
     this.suggestionIndex = items.length > 0 ? 0 : -1;
     this.highlightSuggestion(items);
@@ -1521,7 +1521,7 @@ export class FormulaModal extends DbModal {
     const prompt = locale === "en"
       ? {
         intro: [
-          "You are helping me write formulas for an Obsidian plugin called Note Database.",
+          "You are helping me write formulas for an Obsidian plugin called Obnotion.",
           "The formula syntax is based on JavaScript expressions.",
         ],
         syntaxTitle: "## Syntax Rules",
@@ -1549,7 +1549,7 @@ export class FormulaModal extends DbModal {
       : locale === "zh-TW"
         ? {
           intro: [
-            "請幫我為 Obsidian 外掛 Note Database 編寫公式。",
+            "請幫我為 Obsidian 外掛 Obnotion 編寫公式。",
             "公式語法基於 JavaScript 運算式。",
           ],
           syntaxTitle: "## 語法規則",
@@ -1576,7 +1576,7 @@ export class FormulaModal extends DbModal {
         }
         : {
           intro: [
-            "请帮我为 Obsidian 插件 Note Database 编写公式。",
+            "请帮我为 Obsidian 插件 Obnotion 编写公式。",
             "公式语法基于 JavaScript 表达式。",
           ],
           syntaxTitle: "## 语法规则",

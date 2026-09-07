@@ -70,7 +70,7 @@ describe("table column header menu trigger sits inline after the name", () => {
   it("keeps the trigger in flow instead of positioning it out of the header row", () => {
     // Absolute positioning is what let a later blanket `position: relative` touch-target
     // rule win on specificity and drop the button onto a line of its own.
-    const trigger = rulesFor(".note-database-container .db-column-menu-trigger");
+    const trigger = rulesFor(".obnotion-container .obnotion-column-menu-trigger");
     expect(trigger).toHaveLength(1);
     expect(declaration(trigger[0], "position")).not.toBe("absolute");
     expect(declaration(trigger[0], "display")).toBe("inline-flex");
@@ -79,7 +79,7 @@ describe("table column header menu trigger sits inline after the name", () => {
   it("declares the trigger's position exactly once so no later rule can silently override it", () => {
     const positioning = cssRules.filter(
       (rule) =>
-        rule.selectors.some((selector) => selector.endsWith(".db-column-menu-trigger"))
+        rule.selectors.some((selector) => selector.endsWith(".obnotion-column-menu-trigger"))
         && declaration(rule, "position") !== undefined,
     );
     expect(positioning).toHaveLength(1);
@@ -87,7 +87,7 @@ describe("table column header menu trigger sits inline after the name", () => {
   });
 
   it("makes the trigger a fixed, non-shrinking sibling 2px after the name", () => {
-    const trigger = rulesFor(".note-database-container .db-column-menu-trigger")[0];
+    const trigger = rulesFor(".obnotion-container .obnotion-column-menu-trigger")[0];
     expect(declaration(trigger, "flex")).toBe("0 0 auto");
     expect(declaration(trigger, "margin-left")).toBe("2px");
   });
@@ -95,7 +95,7 @@ describe("table column header menu trigger sits inline after the name", () => {
   it("keeps the trigger's hit halo off the name it now sits beside", () => {
     const halo = cssRules.filter(
       (rule) =>
-        rule.selectors.includes(".note-database-container .db-column-menu-trigger::before")
+        rule.selectors.includes(".obnotion-container .obnotion-column-menu-trigger::before")
         && declaration(rule, "inset") !== undefined,
     );
     expect(halo).toHaveLength(1);
@@ -104,7 +104,7 @@ describe("table column header menu trigger sits inline after the name", () => {
   });
 
   it("lets only the column name shrink, so a narrow column ellipsises the name", () => {
-    const label = rulesFor(".note-database-container .db-th-label")[0];
+    const label = rulesFor(".obnotion-container .obnotion-th-label")[0];
     expect(declaration(label, "flex")).toBe("0 1 auto");
     expect(declaration(label, "min-width")).toBe("0");
     expect(declaration(label, "overflow")).toBe("hidden");
@@ -113,7 +113,7 @@ describe("table column header menu trigger sits inline after the name", () => {
   });
 
   it("mounts the trigger inside the header's flex row rather than on the cell", () => {
-    expect(columnHeaderSource).toContain('th.querySelector<HTMLElement>(".db-th-content")');
+    expect(columnHeaderSource).toContain('th.querySelector<HTMLElement>(".obnotion-th-content")');
     expect(columnHeaderSource).toContain('row.createEl("button"');
   });
 
@@ -129,7 +129,7 @@ describe("table column header menu trigger sits inline after the name", () => {
 
 describe("board column header options button mirrors the table trigger", () => {
   it("gives the options button an inline, non-shrinking box", () => {
-    const options = rulesFor(".note-database-container .db-board-column-options")[0];
+    const options = rulesFor(".obnotion-container .obnotion-board-column-options")[0];
     expect(declaration(options, "display")).toBe("inline-flex");
     expect(declaration(options, "flex")).toBe("0 0 auto");
     expect(declaration(options, "margin-left")).toBe("2px");
@@ -155,14 +155,14 @@ describe("board column header options button mirrors the table trigger", () => {
 
 describe("drag cursor is scoped to the column header background", () => {
   it("shows grab only on draggable property cells, never on the fixed table columns", () => {
-    expect(declaredIn(".note-database-container .db-table th[data-note-database-column-key]", "cursor")).toBe("grab");
+    expect(declaredIn(".obnotion-container .obnotion-table th[data-obnotion-column-key]", "cursor")).toBe("grab");
     // The select / record-icon / add-column cells are not draggable, so the base cell rule
     // must stay on the pointer rather than promising a drag that never starts.
-    expect(declaredIn(".note-database-container .db-table th", "cursor")).toBe("pointer");
+    expect(declaredIn(".obnotion-container .obnotion-table th", "cursor")).toBe("pointer");
   });
 
   it("returns the pointer over the name and the menu button", () => {
-    expect(declaredIn(".note-database-container .db-table th .db-th-label", "cursor")).toBe("pointer");
-    expect(declaredIn(".note-database-container .db-column-menu-trigger", "cursor")).toBe("pointer");
+    expect(declaredIn(".obnotion-container .obnotion-table th .obnotion-th-label", "cursor")).toBe("pointer");
+    expect(declaredIn(".obnotion-container .obnotion-column-menu-trigger", "cursor")).toBe("pointer");
   });
 });

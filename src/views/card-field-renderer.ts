@@ -93,10 +93,10 @@ export function renderCardField(options: CardFieldRendererOptions): HTMLElement 
   } = options;
   const field = window.activeDocument.createElement("div");
   field.className = fieldClass;
-  field.setAttribute("data-note-database-column-key", col.key);
+  field.setAttribute("data-obnotion-column-key", col.key);
   field.setAttribute("role", "gridcell");
   options.applyConditionalFormat?.(field, row, config, col.key);
-  if (options.fieldWidth != null) field.style.setProperty("--db-card-field-width", `${options.fieldWidth}px`);
+  if (options.fieldWidth != null) field.style.setProperty("--obnotion-card-field-width", `${options.fieldWidth}px`);
   if (options.wrap || col.wrap) field.addClass(`${fieldClass}-wrap`);
   if (options.empty) field.addClass("is-empty-field");
   if (displayType === "checkbox") field.addClass("is-checkbox-field");
@@ -105,7 +105,7 @@ export function renderCardField(options: CardFieldRendererOptions): HTMLElement 
   const label = field.createSpan({ cls: labelClass, text: col.label });
   options.onShowColumnMenu && attachColumnMenu(field, label, col, options.onShowColumnMenu);
   const valueEl = field.createDiv({ cls: valueClass });
-  if (options.empty) valueEl.addClass("db-card-empty-placeholder");
+  if (options.empty) valueEl.addClass("obnotion-card-empty-placeholder");
   renderCardFieldValue(valueEl, app, row, col, value, displayType, {
     badgesClass,
     linkClass,
@@ -122,7 +122,7 @@ export function renderCardField(options: CardFieldRendererOptions): HTMLElement 
     field.tabIndex = -1;
     field.addEventListener("click", (event) => {
       const target = event.target as HTMLElement | null;
-      if (target && typeof target === "object" && typeof target.closest === "function" && target.closest("a, button, input, textarea, .db-cell-editing")) return;
+      if (target && typeof target === "object" && typeof target.closest === "function" && target.closest("a, button, input, textarea, .obnotion-cell-editing")) return;
       event.stopPropagation();
       options.onEdit?.(valueEl, row, col, event);
     });
@@ -130,7 +130,7 @@ export function renderCardField(options: CardFieldRendererOptions): HTMLElement 
       if (isImeComposing(event)) return;
       if (event.key === "Enter" || event.key === " ") {
         const target = event.target as HTMLElement | null;
-        if (target && typeof target === "object" && typeof target.closest === "function" && target.closest("a, button, input, textarea, .db-cell-editing")) return;
+        if (target && typeof target === "object" && typeof target.closest === "function" && target.closest("a, button, input, textarea, .obnotion-cell-editing")) return;
         event.preventDefault();
         event.stopPropagation();
         options.onEdit?.(valueEl, row, col);
@@ -138,7 +138,7 @@ export function renderCardField(options: CardFieldRendererOptions): HTMLElement 
       }
       if ((event.shiftKey && event.key === "F10") || event.key === "ContextMenu") {
         const target = event.target as HTMLElement | null;
-        if (target && typeof target === "object" && typeof target.closest === "function" && target.closest("a, button, input, textarea, .db-cell-editing")) return;
+        if (target && typeof target === "object" && typeof target.closest === "function" && target.closest("a, button, input, textarea, .obnotion-cell-editing")) return;
         event.preventDefault();
         event.stopPropagation();
         options.onShowColumnMenu?.(createContextMenuEvent(), col, field);

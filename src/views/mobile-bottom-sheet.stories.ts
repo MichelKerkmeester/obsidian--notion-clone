@@ -26,13 +26,13 @@ type Story = StoryObj;
 export const Chrome: Story = {
   render: () => {
     const panel = document.createElement("section");
-    panel.className = "db-menu";
+    panel.className = "obnotion-menu";
     const heading = document.createElement("h2");
     heading.textContent = "Record actions";
     panel.appendChild(heading);
     for (const label of ["Edit record", "Duplicate record", "Delete record"]) {
       const action = document.createElement("button");
-      action.className = "db-menu-item";
+      action.className = "obnotion-menu-item";
       action.type = "button";
       action.textContent = label;
       panel.appendChild(action);

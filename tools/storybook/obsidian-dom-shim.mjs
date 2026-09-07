@@ -235,7 +235,7 @@ export function installObsidianDomShim(target = globalThis) {
 /** A labelled placeholder reads more clearly in a catalogue than a real glyph would. */
 export function setIcon(parent, iconId) {
   const el = parent.ownerDocument.createElement("span");
-  el.className = "db-story-icon-stub";
+  el.className = "obnotion-story-icon-stub";
   el.setAttribute("data-icon", iconId);
   el.setAttribute("aria-hidden", "true");
   parent.appendChild(el);

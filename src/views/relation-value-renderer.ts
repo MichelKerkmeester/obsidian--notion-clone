@@ -33,12 +33,12 @@ export function renderRelationValue(
 ): boolean {
   const links = parseRelationValues(value);
   if (links.length === 0) return false;
-  const wrap = parent.createDiv({ cls: `db-relation-values${compact ? " is-compact" : ""}` });
+  const wrap = parent.createDiv({ cls: `obnotion-relation-values${compact ? " is-compact" : ""}` });
   setFieldTooltip(wrap, links.map((link) => link.alias || link.target));
   for (const link of links) {
     const resolved = app?.metadataCache.getFirstLinkpathDest(link.target, row.file.path);
     const anchor = wrap.createEl("a", {
-      cls: "db-relation-link internal-link",
+      cls: "obnotion-relation-link internal-link",
       attr: { href: "#", title: link.target },
     });
     if (app && !resolved) {
@@ -47,10 +47,10 @@ export function renderRelationValue(
       setFieldTooltip(anchor, t("relation.notFoundInVault"));
     }
     markNoteHoverLink(anchor, link.target, row.file.path);
-    const icon = anchor.createSpan({ cls: "db-relation-link-icon" });
+    const icon = anchor.createSpan({ cls: "obnotion-relation-link-icon" });
     setIcon(icon, resolved || !app ? "file-text" : "alert-triangle");
     anchor.createSpan({
-      cls: "db-relation-link-label",
+      cls: "obnotion-relation-link-label",
       text: getRelationDisplayLabel(link),
     });
     anchor.onclick = (event) => {

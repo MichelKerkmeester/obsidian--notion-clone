@@ -14,7 +14,7 @@
 import { App, TFile } from "obsidian";
 import { t } from "../../i18n";
 import { buildConfirmSheetBody } from "../confirm-sheet";
-import { DbModal } from "./db-modal";
+import { DbModal } from "./obnotion-modal";
 import type { SurfaceShellRole } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
@@ -69,7 +69,7 @@ export class ConfirmModal extends DbModal {
     // shell's phone header never has to wait on this body existing — the order is simply the
     // simpler one to read, not load-bearing the way it was before the title was declared.
     this.contentEl.empty();
-    this.contentEl.addClass("note-database-modal");
+    this.contentEl.addClass("obnotion-modal");
     buildConfirmSheetBody(this.contentEl, {
       title: this.options.title,
       message: this.options.message,

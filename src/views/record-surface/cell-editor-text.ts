@@ -46,7 +46,7 @@ function shouldUsePopoverEditor(_target: HTMLElement, col: ColumnDef, _value: st
 }
 
 function mountInput(td: HTMLElement, input: HTMLInputElement): void {
-  td.addClass("db-cell-editing");
+  td.addClass("obnotion-cell-editing");
   input.setCssProps({ width: "100%" });
   td.textContent = "";
   td.appendChild(input);
@@ -132,7 +132,7 @@ function wrapSelection(textarea: HTMLTextAreaElement, prefix: string, suffix: st
  *  Each button wraps/inserts the matching marker around the current selection,
  *  then keeps focus in the textarea. */
 function buildMarkdownToolbar(popover: HTMLElement, textarea: HTMLTextAreaElement): void {
-  const bar = createDiv({ cls: "db-md-toolbar" });
+  const bar = createDiv({ cls: "obnotion-md-toolbar" });
   // Insert before the textarea so the toolbar sits on top.
   textarea.parentElement?.insertBefore(bar, textarea);
 
@@ -148,7 +148,7 @@ function buildMarkdownToolbar(popover: HTMLElement, textarea: HTMLTextAreaElemen
   ];
 
   for (const def of buttons) {
-    const btn = bar.createEl("button", { cls: "db-md-toolbar-btn", attr: { type: "button" } });
+    const btn = bar.createEl("button", { cls: "obnotion-md-toolbar-btn", attr: { type: "button" } });
     setIcon(btn, def.icon);
     setTooltip(btn, def.title, { delay: 100 });
     // mousedown would blur the textarea and lose the selection; prevent it.
@@ -200,23 +200,23 @@ export function openSingleLineEditor(
   placeholder?: string,
   selectInitial = true,
 ): void {
-  const rawContainer = td.closest(".note-database-container");
+  const rawContainer = td.closest(".obnotion-container");
   const container = isHTMLElement(rawContainer) ? rawContainer : null;
   const host = container || window.activeDocument.body;
   ctx.getActiveTextEditClose()?.();
-  td.addClass("db-cell-popover-editing");
+  td.addClass("obnotion-cell-popover-editing");
   // The editor is the active task, so it takes the bottom edge from the selection status bar for
   // as long as it is open. Without this the bar stays docked in the band the editor is placed in
   // and the two land on each other — the editor on top, with the bar's count chip clipped behind
   // it and two rows of actions stacked over the keyboard.
   claimBottomDock(td.ownerDocument, "cell-editor", true);
 
-  const popover = host.createDiv({ cls: "db-cell-edit-popover db-cell-line-edit-popover" });
-  popover.dataset.noteDatabaseRowPath = row.file.path;
-  popover.dataset.noteDatabaseColumnKey = col.key;
-  popover.dataset.noteDatabaseEditorKind = inputType === "number" ? "number" : "text";
+  const popover = host.createDiv({ cls: "obnotion-cell-edit-popover obnotion-cell-line-edit-popover" });
+  popover.dataset.obnotionRowPath = row.file.path;
+  popover.dataset.obnotionColumnKey = col.key;
+  popover.dataset.obnotionEditorKind = inputType === "number" ? "number" : "text";
   const input = popover.createEl("input", {
-    cls: "db-cell-line-input",
+    cls: "obnotion-cell-line-input",
     attr: { type: inputType },
   });
   if (inputType === "number") input.setAttr("step", "any");
@@ -229,7 +229,7 @@ export function openSingleLineEditor(
     if (closed) return;
     closed = true;
     popover.remove();
-    td.removeClass("db-cell-popover-editing");
+    td.removeClass("obnotion-cell-popover-editing");
     claimBottomDock(td.ownerDocument, "cell-editor", false);
     window.activeDocument.removeEventListener("mousedown", onOutside, true);
     window.activeDocument.removeEventListener("keydown", onDocumentKeydown, true);
@@ -242,9 +242,9 @@ export function openSingleLineEditor(
   const save = async (intent?: TableCellNavigationIntent) => {
     if (committed) return;
     committed = true;
-    popover.addClass("db-editor-saving");
+    popover.addClass("obnotion-editor-saving");
     const result = await saveValue(input.value);
-    popover.removeClass("db-editor-saving");
+    popover.removeClass("obnotion-editor-saving");
     if (result === "validation") {
       committed = false;
       showValidationError(input, inputType === "number" ? t("validation.invalidNumber") : t("editor.saveFailed"));
@@ -338,13 +338,13 @@ export function openTextPopoverEditor(
   placeholder?: string,
   initialDraft?: string,
 ): void {
-  const rawContainer = td.closest(".note-database-container");
+  const rawContainer = td.closest(".obnotion-container");
   const container = isHTMLElement(rawContainer) ? rawContainer : null;
   const isMobile = isTouchDevice(container || td);
   const host = isMobile ? null : (container || window.activeDocument.body);
 
   ctx.getActiveTextEditClose()?.();
-  td.addClass("db-cell-editing");
+  td.addClass("obnotion-cell-editing");
   // Claimed for the editor's whole life, matching `openSingleLineEditor`'s identical pair below:
   // without it a phone's selection chrome stays docked in the band this popover occupies, and the
   // two are drawn on top of each other.
@@ -359,11 +359,11 @@ export function openTextPopoverEditor(
   if (isMobile) {
     // Mobile: an inline overlay inserted into the cell's own scroll container rather than
     // detached from the document flow.
-    editScrollContainer = td.closest(".note-database-container")
+    editScrollContainer = td.closest(".obnotion-container")
       || td.closest(".markdown-preview-view")
       || window.activeDocument.body;
 
-    popover = editScrollContainer.createDiv({ cls: "db-cell-edit-popover is-mobile is-inline-overlay" });
+    popover = editScrollContainer.createDiv({ cls: "obnotion-cell-edit-popover is-mobile is-inline-overlay" });
 
     const containerRect = editScrollContainer.getBoundingClientRect();
     const tdRect = bulkAnchorRect(session) ?? td.getBoundingClientRect();
@@ -371,34 +371,34 @@ export function openTextPopoverEditor(
 
     const relativeTop = tdRect.top - containerRect.top + scrollTop;
 
-    popover.setCssProps({ position: "absolute", left: "0", right: "0", top: `${relativeTop + tdRect.height + 2}px`, "z-index": "var(--db-layer-popover, 100)" });
+    popover.setCssProps({ position: "absolute", left: "0", right: "0", top: `${relativeTop + tdRect.height + 2}px`, "z-index": "var(--obnotion-layer-popover, 100)" });
 
     closeBtn = popover.createEl("button", {
-      cls: "db-cell-edit-close",
+      cls: "obnotion-cell-edit-close",
       attr: { type: "button", title: t("common.cancel"), "aria-label": t("common.cancel") },
     });
     setIcon(closeBtn, "x");
 
     textarea = window.activeDocument.createElement("textarea");
-    textarea.className = "db-cell-textarea db-mobile-textarea";
+    textarea.className = "obnotion-cell-textarea obnotion-mobile-textarea";
     textarea.value = initialDraft ?? currentValue;
     if (placeholder) textarea.setAttr("placeholder", placeholder);
     popover.appendChild(textarea);
 
   } else {
     // Desktop: the original fixed-popover approach.
-    popover = (host as HTMLElement).createDiv({ cls: "db-cell-edit-popover" });
+    popover = (host as HTMLElement).createDiv({ cls: "obnotion-cell-edit-popover" });
 
     textarea = window.activeDocument.createElement("textarea");
-    textarea.className = "db-cell-textarea";
+    textarea.className = "obnotion-cell-textarea";
     textarea.value = initialDraft ?? currentValue;
     if (placeholder) textarea.setAttr("placeholder", placeholder);
     textarea.rows = 1;
     popover.appendChild(textarea);
   }
-  popover.dataset.noteDatabaseRowPath = row.file.path;
-  popover.dataset.noteDatabaseColumnKey = col.key;
-  popover.dataset.noteDatabaseEditorKind = "text";
+  popover.dataset.obnotionRowPath = row.file.path;
+  popover.dataset.obnotionColumnKey = col.key;
+  popover.dataset.obnotionEditorKind = "text";
 
   let committed = false;
   // Markdown-mode columns get a format toolbar above the textarea, plus
@@ -414,7 +414,7 @@ export function openTextPopoverEditor(
     closed = true;
     removeMobileViewportListeners();
     popover.remove();
-    td.removeClass("db-cell-editing");
+    td.removeClass("obnotion-cell-editing");
     claimBottomDock(td.ownerDocument, "cell-editor", false);
     window.activeDocument.removeEventListener("mousedown", onOutside, true);
     window.activeDocument.removeEventListener("keydown", onDocumentKeydown, true);
@@ -429,9 +429,9 @@ export function openTextPopoverEditor(
     committed = true;
     const newVal = textarea.value;
     if (newVal !== currentValue || session?.mixed) {
-      popover.addClass("db-editor-saving");
+      popover.addClass("obnotion-editor-saving");
       const success = await ctx.commitEditedValue(row, col, newVal, session, newVal ? "replace" : "clear");
-      popover.removeClass("db-editor-saving");
+      popover.removeClass("obnotion-editor-saving");
       if (!success) {
         committed = false;
         renderDraftFailure(popover, textarea, () => { void save(intent); }, () => cancel(intent));
@@ -452,9 +452,9 @@ export function openTextPopoverEditor(
   ctx.setActiveInlineEditorCancel(cancel);
 
   if (isMobile) {
-    const actions = popover.createDiv({ cls: "db-cell-edit-mobile-actions" });
-    const done = actions.createEl("button", { cls: "db-cell-edit-mobile-done", text: t("common.save"), attr: { type: "button" } });
-    const cancelButton = actions.createEl("button", { cls: "db-cell-edit-mobile-cancel", text: t("common.cancel"), attr: { type: "button" } });
+    const actions = popover.createDiv({ cls: "obnotion-cell-edit-mobile-actions" });
+    const done = actions.createEl("button", { cls: "obnotion-cell-edit-mobile-done", text: t("common.save"), attr: { type: "button" } });
+    const cancelButton = actions.createEl("button", { cls: "obnotion-cell-edit-mobile-cancel", text: t("common.cancel"), attr: { type: "button" } });
     done.onmousedown = (event) => event.preventDefault();
     cancelButton.onmousedown = (event) => event.preventDefault();
     done.onclick = () => { void save(); };
@@ -571,7 +571,7 @@ export function openTextEditor(
     return;
   }
   const inp = window.activeDocument.createElement("input");
-  inp.className = "db-cell-input";
+  inp.className = "obnotion-cell-input";
   inp.type = "text";
   inp.value = initialDraft ?? valueText;
   mountInput(td, inp);
@@ -579,7 +579,7 @@ export function openTextEditor(
   let committed = false;
 
   const finish = (intent?: TableCellNavigationIntent) => {
-    td.removeClass("db-cell-editing");
+    td.removeClass("obnotion-cell-editing");
     if (ctx.getActiveInlineEditorCancel() === cancel) ctx.setActiveInlineEditorCancel(undefined);
     if (intent) ctx.finishInlineEdit(row, col, session, intent);
   };
@@ -589,9 +589,9 @@ export function openTextEditor(
     committed = true;
     const newVal = inp.value;
     if (newVal !== safeString(currentValue)) {
-      td.addClass("db-editor-saving");
+      td.addClass("obnotion-editor-saving");
       const success = await ctx.commitEditedValue(row, col, newVal, session, newVal ? "replace" : "clear");
-      td.removeClass("db-editor-saving");
+      td.removeClass("obnotion-editor-saving");
       if (!success) {
         committed = false;
         renderDraftFailure(td, inp, () => { void save(intent); }, () => cancel(intent));

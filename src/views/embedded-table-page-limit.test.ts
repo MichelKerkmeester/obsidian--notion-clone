@@ -81,7 +81,7 @@ describe("the embedded table's page limit is 60, our own number", () => {
     expect(end).toBeGreaterThan(start);
     const body = source.slice(start, end);
 
-    expect(body).toContain('".db-table-wrap table.db-table thead tr"');
+    expect(body).toContain('".obnotion-table-wrap table.obnotion-table thead tr"');
     expect(body).toContain("headerRow.children.length");
     // No virtualization mount is introduced by this row — the regression guard the packet's own
     // premise (a virtualization path being entered) already asked for stays satisfied.

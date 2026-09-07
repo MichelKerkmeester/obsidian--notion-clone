@@ -403,28 +403,28 @@ function renderTable(rows: RowData[], renderer = new TableRenderer(createActions
 describe("table footer presence, gated on row count", () => {
   it("renders no footer over an empty table", () => {
     const container = renderTable([]);
-    expect(container.querySelectorAll(".db-table-footer")).toHaveLength(0);
-    expect(container.querySelectorAll(".db-table-footer-trigger")).toHaveLength(0);
+    expect(container.querySelectorAll(".obnotion-table-footer")).toHaveLength(0);
+    expect(container.querySelectorAll(".obnotion-table-footer-trigger")).toHaveLength(0);
     // The empty-state card takes the space the footer used to occupy, so the table is not left
     // with a band of controls over nothing.
-    expect(container.querySelectorAll(".db-empty").length).toBeGreaterThan(0);
+    expect(container.querySelectorAll(".obnotion-empty").length).toBeGreaterThan(0);
   });
 
   it("renders the footer once a row exists", () => {
     const container = renderTable(ONE_ROW);
-    expect(container.querySelectorAll(".db-table-footer")).toHaveLength(1);
-    expect(container.querySelectorAll(".db-table-footer-trigger").length).toBe(COLUMNS.length);
+    expect(container.querySelectorAll(".obnotion-table-footer")).toHaveLength(1);
+    expect(container.querySelectorAll(".obnotion-table-footer-trigger").length).toBe(COLUMNS.length);
   });
 
   it("brings the footer back with its calculation intact after an empty render", () => {
     const renderer = new TableRenderer(createActions());
-    expect(renderTable([], renderer).querySelectorAll(".db-table-footer")).toHaveLength(0);
+    expect(renderTable([], renderer).querySelectorAll(".obnotion-table-footer")).toHaveLength(0);
 
     const container = renderTable(ONE_ROW, renderer);
-    expect(container.querySelectorAll(".db-table-footer")).toHaveLength(1);
-    const calculated = container.querySelectorAll(".db-table-footer-trigger.has-calculation");
+    expect(container.querySelectorAll(".obnotion-table-footer")).toHaveLength(1);
+    const calculated = container.querySelectorAll(".obnotion-table-footer-trigger.has-calculation");
     expect(calculated).toHaveLength(1);
-    expect(container.querySelectorAll(".db-table-footer-result")[0].textContent).toBe("1");
+    expect(container.querySelectorAll(".obnotion-table-footer-result")[0].textContent).toBe("1");
     expect(CONFIG.summaryRules).toEqual([{ field: "priority", summary: "COUNT" }]);
   });
 });

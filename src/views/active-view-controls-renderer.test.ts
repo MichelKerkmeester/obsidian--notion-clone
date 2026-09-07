@@ -3,7 +3,7 @@
 // COMPONENT: the chip rail's per-group add control
 // ───────────────────────────────────────────────────────────────────
 //
-// Was a source grep asserting the strings `db-active-control-add`, `actions.addFilter` and
+// Was a source grep asserting the strings `obnotion-active-control-add`, `actions.addFilter` and
 // `actions.addSort` appeared somewhere in the file — true regardless of whether the control is
 // ever actually wired to those actions or reachable from a click. This suite mounts the real
 // renderer on a hand-built tree instead (the renderer's own dependencies are plain data helpers
@@ -31,7 +31,7 @@ vi.mock("obsidian", async (importOriginal) => {
 //
 // Extends the hand-built element `view-config-panel-renderer.test.ts` mounts on with what this
 // renderer additionally reads: `:scope > X` child-combinator lookups (`containerEl.querySelector(
-// ":scope > .db-header > .db-active-view-controls")`), `dataset`, and `setText`. `window` is
+// ":scope > .obnotion-header > .obnotion-active-view-controls")`), `dataset`, and `setText`. `window` is
 // stubbed with the timer/rAF surface `render()` calls unconditionally once a rail draws.
 
 class FakeElement {
@@ -174,8 +174,8 @@ function makeContainer(): FakeElement {
   const body = new FakeElement("body");
   const doc = { body, querySelector: (selector: string) => body.querySelector(selector) };
   body.ownerDocument = doc;
-  const container = body.createDiv({ cls: "note-database-container" });
-  container.createDiv({ cls: "db-header" });
+  const container = body.createDiv({ cls: "obnotion-container" });
+  container.createDiv({ cls: "obnotion-header" });
   return container;
 }
 
@@ -243,9 +243,9 @@ describe("ActiveViewControlsRenderer chip rail add control (mounted)", () => {
     const actions = makeActions({ addFilter: vi.fn(), addSort: vi.fn() });
     new ActiveViewControlsRenderer().render(container as unknown as HTMLElement, makeConfig(), makeState(), actions);
 
-    const rail = container.querySelector(".db-active-view-controls");
+    const rail = container.querySelector(".obnotion-active-view-controls");
     expect(rail).not.toBeNull();
-    const addButtons = rail?.querySelectorAll(".db-active-control-add") ?? [];
+    const addButtons = rail?.querySelectorAll(".obnotion-active-control-add") ?? [];
     expect(addButtons).toHaveLength(2);
   });
 
@@ -255,8 +255,8 @@ describe("ActiveViewControlsRenderer chip rail add control (mounted)", () => {
     const actions = makeActions({ addFilter, addSort: vi.fn() });
     new ActiveViewControlsRenderer().render(container as unknown as HTMLElement, makeConfig(), makeState(), actions);
 
-    const filterGroup = container.querySelector(".db-active-control-group.is-filter");
-    const addButton = filterGroup?.querySelector(".db-active-control-add");
+    const filterGroup = container.querySelector(".obnotion-active-control-group.is-filter");
+    const addButton = filterGroup?.querySelector(".obnotion-active-control-add");
     expect(addButton).not.toBeNull();
     addButton?.onclick?.({ preventDefault: () => {}, stopPropagation: () => {} });
     expect(addFilter).toHaveBeenCalledTimes(1);
@@ -269,8 +269,8 @@ describe("ActiveViewControlsRenderer chip rail add control (mounted)", () => {
     const actions = makeActions({ addFilter: vi.fn(), addSort });
     new ActiveViewControlsRenderer().render(container as unknown as HTMLElement, makeConfig(), makeState(), actions);
 
-    const sortGroup = container.querySelector(".db-active-control-group.is-sort");
-    const addButton = sortGroup?.querySelector(".db-active-control-add");
+    const sortGroup = container.querySelector(".obnotion-active-control-group.is-sort");
+    const addButton = sortGroup?.querySelector(".obnotion-active-control-add");
     addButton?.onclick?.({ preventDefault: () => {}, stopPropagation: () => {} });
     expect(addSort).toHaveBeenCalledTimes(1);
     expect(addSort).toHaveBeenCalledWith(addButton);
@@ -281,8 +281,8 @@ describe("ActiveViewControlsRenderer chip rail add control (mounted)", () => {
     const actions = makeActions();
     new ActiveViewControlsRenderer().render(container as unknown as HTMLElement, makeConfig(), makeState(), actions);
 
-    const rail = container.querySelector(".db-active-view-controls");
+    const rail = container.querySelector(".obnotion-active-view-controls");
     expect(rail).not.toBeNull();
-    expect(rail?.querySelectorAll(".db-active-control-add")).toHaveLength(0);
+    expect(rail?.querySelectorAll(".obnotion-active-control-add")).toHaveLength(0);
   });
 });

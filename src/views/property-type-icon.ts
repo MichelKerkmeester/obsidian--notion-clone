@@ -233,11 +233,11 @@ export function toPropertyDropdownOption(col: ColumnDef, text = col.label || col
 export function renderDropdownPropertyTypeIcon(parent: HTMLElement, icon: string): boolean {
   if (!icon.startsWith(PROPERTY_DROPDOWN_ICON_PREFIX)) return false;
   const type = icon.slice(PROPERTY_DROPDOWN_ICON_PREFIX.length) as ColumnDef["type"];
-  renderPropertyTypeIcon(parent, { key: "", label: "", type }, "db-dropdown-option-type-icon");
+  renderPropertyTypeIcon(parent, { key: "", label: "", type }, "obnotion-dropdown-option-type-icon");
   return true;
 }
 
-export function renderPropertyTypeIcon(parent: HTMLElement, col: ColumnDef, cls = "db-property-icon"): HTMLElement {
+export function renderPropertyTypeIcon(parent: HTMLElement, col: ColumnDef, cls = "obnotion-property-icon"): HTMLElement {
   const icon = parent.createSpan({ cls });
   const iconName = getPropertyTypeIconName(col);
   const doc = parent.ownerDocument || window.activeDocument;

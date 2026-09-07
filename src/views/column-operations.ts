@@ -272,7 +272,7 @@ export class ColumnOperations {
       this.deps.refreshColumnManager();
       new Notice(t("column.updatedProperty", { label: newLabel, key: newKey, migration: migrationNotice }));
     } catch (err) {
-      console.error("Note Database: failed to rename column", err);
+      console.error("Obnotion: failed to rename column", err);
       new Notice(t("column.renameFailed", { error: String(err) }));
     }
   }
@@ -438,7 +438,7 @@ export class ColumnOperations {
       this.deps.refreshColumnManager();
       new Notice(targetCol.type === "computed" ? t("column.deletedComputed") : t("column.deletedColumn", { key: targetCol.key, count: result.changed }));
     } catch (err) {
-      console.error("Note Database: failed to delete column", err);
+      console.error("Obnotion: failed to delete column", err);
       new Notice(t("column.deleteFailed", { error: String(err) }));
     }
   }
@@ -646,7 +646,7 @@ export class ColumnOperations {
       config.columnOrder = (config.columnOrder || []).filter((candidate) => candidate !== key);
       rollbackReference();
       try { await this.deps.saveConfigImmediately(); } catch { /* original failure is reported below */ }
-      console.error("Note Database: failed to create record icon property", err);
+      console.error("Obnotion: failed to create record icon property", err);
       new Notice(t("column.actionFailed", { action: t("recordIcon.createField"), error: String(err) }));
       return null;
     }
@@ -722,7 +722,7 @@ export class ColumnOperations {
       }
       options.rollbackReference?.();
       try { await this.deps.saveConfigImmediately(); } catch { /* original failure is reported below */ }
-      console.error("Note Database: failed to create property", err);
+      console.error("Obnotion: failed to create property", err);
       new Notice(t("column.actionFailed", { action: t("modal.createProperty"), error: String(err) }));
       return null;
     }
@@ -796,7 +796,7 @@ export class ColumnOperations {
       this.deps.refreshColumnManager();
       new Notice(col.type === "computed" ? t("column.copiedComputed") : t("column.copiedColumn", { source: col.key, target: copyKey, count: changed }));
     } catch (err) {
-      console.error("Note Database: failed to duplicate column", err);
+      console.error("Obnotion: failed to duplicate column", err);
       new Notice(t("column.copyColumnFailed", { error: String(err) }));
     }
   }
@@ -974,7 +974,7 @@ export class ColumnOperations {
       this.deps.refreshColumnManager();
       new Notice(type === "computed" ? t("column.changedToComputed") : t("column.changedType", { key: target.key, count: changed }));
     } catch (err) {
-      console.error("Note Database: failed to change column type", err);
+      console.error("Obnotion: failed to change column type", err);
       new Notice(t("column.changeTypeFailed", { error: String(err) }));
     }
   }
@@ -1050,7 +1050,7 @@ export class ColumnOperations {
       this.deps.refreshColumnManager();
       new Notice(t("column.addedProperty", { prefix: successPrefix, key: col.key, count: result.changed }));
     } catch (err) {
-      console.error(`Note Database: failed to ${actionName}`, err);
+      console.error(`Obnotion: failed to ${actionName}`, err);
       new Notice(t("column.actionFailed", { action: actionName, error: String(err) }));
     }
   }

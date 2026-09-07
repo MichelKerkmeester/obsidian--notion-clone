@@ -65,7 +65,7 @@ export function createHostModalStandIn(): HostModalStandIn {
   modalEl.appendChild(titleEl);
 
   const contentEl = document.createElement("div");
-  contentEl.className = "modal-content note-database-modal";
+  contentEl.className = "modal-content obnotion-modal";
   modalEl.appendChild(contentEl);
 
   const closeButton = document.createElement("div");

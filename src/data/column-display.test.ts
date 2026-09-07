@@ -37,7 +37,7 @@ describe("isEmptyValue", () => {
 
 /**
  * Locks CellRenderer.renderCell's empty-value guard: `isEmptyValue(value) && !isReportsComputedColumn(col)`.
- * A plain empty numeric column must still take the placeholder branch (db-empty-value + editable),
+ * A plain empty numeric column must still take the placeholder branch (obnotion-empty-value + editable),
  * exactly as it did before the Reports feature shipped. Only the two Reports computed columns
  * (Remaining/Saved) are allowed to skip the placeholder and fall through to the numeric "-" glyph.
  */
@@ -51,7 +51,7 @@ describe("CellRenderer empty-value placeholder guard", () => {
     expect(getColumnDisplayType(col)).toBe("number");
     // Negative control: the defect this locks was `isEmptyValue(value) && displayType !== "number"`.
     // For this column displayType IS "number", so the old guard evaluated to `true && false` = false —
-    // the placeholder was skipped and the cell rendered a bare "-" with no db-empty-value class/tooltip/
+    // the placeholder was skipped and the cell rendered a bare "-" with no obnotion-empty-value class/tooltip/
     // edit affordance. The fixed guard must evaluate to true here.
     expect(shouldShowEmptyPlaceholder(col, null)).toBe(true);
     expect(shouldShowEmptyPlaceholder(col, undefined)).toBe(true);

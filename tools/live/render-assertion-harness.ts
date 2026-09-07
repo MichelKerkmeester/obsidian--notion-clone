@@ -512,8 +512,8 @@ export interface ScenarioSpec {
   /**
    * Opt-in, renderer "table" only: builds the config as `viewType: "list"`, runs it through the
    * production `planListMigration`/`applyListMigration`, then always mounts `TableRenderer`.
-   * A migration that failed to flip the type fails the marker (`table.db-table` present,
-   * `.db-list-row` absent) rather than constructing a retired renderer.
+   * A migration that failed to flip the type fails the marker (`table.obnotion-table` present,
+   * `.obnotion-list-row` absent) rather than constructing a retired renderer.
    */
   migratedFromList?: boolean;
   /**
@@ -1265,7 +1265,7 @@ function tagColumnHeaderSetups(): void {
   const original = ColumnHeaderController.prototype.setup;
   ColumnHeaderController.prototype.setup = function taggedSetup(th: HTMLElement, col: ColumnDef): void {
     original.call(this, th, col);
-    th.closest(".note-database-container")?.setAttribute(PROVENANCE_ATTR, "column-header-controller");
+    th.closest(".obnotion-container")?.setAttribute(PROVENANCE_ATTR, "column-header-controller");
   };
 }
 
@@ -1278,7 +1278,7 @@ function tagCellStartEdits(): void {
     ...rest: unknown[]
   ): void {
     original.call(this, target, row, col, ...rest);
-    target.closest(".note-database-container")?.setAttribute(PROVENANCE_ATTR, "cell-renderer");
+    target.closest(".obnotion-container")?.setAttribute(PROVENANCE_ATTR, "cell-renderer");
   };
 }
 
@@ -1433,25 +1433,25 @@ function countRowAppendsToConnectedNodes(): () => number {
 function headerCompositionAssertions(container: HTMLElement): AssertionResult[] {
   const results: AssertionResult[] = [];
   const headerCells = Array.from(container.querySelectorAll<HTMLElement>(
-    "thead th[data-note-database-column-key]",
+    "thead th[data-obnotion-column-key]",
   ));
   if (headerCells.length === 0) return results;
-  const missingIcon = headerCells.filter((th) => !th.querySelector(".db-property-icon"));
+  const missingIcon = headerCells.filter((th) => !th.querySelector(".obnotion-property-icon"));
   results.push({
     name: "every column header carries a type icon",
     pass: missingIcon.length === 0,
     detail: missingIcon.length === 0
-      ? `${headerCells.length} header(s), each with a .db-property-icon`
-      : `${missingIcon.length} of ${headerCells.length} header(s) missing .db-property-icon: `
-        + missingIcon.map((th) => th.getAttribute("data-note-database-column-key")).join(", "),
+      ? `${headerCells.length} header(s), each with a .obnotion-property-icon`
+      : `${missingIcon.length} of ${headerCells.length} header(s) missing .obnotion-property-icon: `
+        + missingIcon.map((th) => th.getAttribute("data-obnotion-column-key")).join(", "),
   });
-  const missingLabel = headerCells.filter((th) => !(th.querySelector(".db-th-label")?.textContent || "").trim());
+  const missingLabel = headerCells.filter((th) => !(th.querySelector(".obnotion-th-label")?.textContent || "").trim());
   results.push({
     name: "every column header carries a non-empty label",
     pass: missingLabel.length === 0,
     detail: missingLabel.length === 0
-      ? `${headerCells.length} header(s), each with a non-empty .db-th-label`
-      : `${missingLabel.length} of ${headerCells.length} header(s) with an empty or missing .db-th-label`,
+      ? `${headerCells.length} header(s), each with a non-empty .obnotion-th-label`
+      : `${missingLabel.length} of ${headerCells.length} header(s) with an empty or missing .obnotion-th-label`,
   });
   const missingAriaSort = headerCells.filter((th) => !th.hasAttribute("aria-sort"));
   results.push({
@@ -1485,8 +1485,8 @@ function headerCompositionAssertions(container: HTMLElement): AssertionResult[] 
 // checks `display`/`gap` only — the wrap value itself is the view's wrap switch's own question,
 // not this guard's. Vacuously true on a scenario with no multi-select values on the page at all.
 function chipLayoutAssertions(container: HTMLElement): AssertionResult[] {
-  const wrap = Array.from(container.querySelectorAll<HTMLElement>(".db-multi-select-values"))
-    .find((el) => el.querySelectorAll(".db-multi-select-badge").length >= 2);
+  const wrap = Array.from(container.querySelectorAll<HTMLElement>(".obnotion-multi-select-values"))
+    .find((el) => el.querySelectorAll(".obnotion-multi-select-badge").length >= 2);
   if (!wrap) {
     return [{
       name: "inline chips stack in a flex row with a 4px gap",
@@ -1511,7 +1511,7 @@ function chipLayoutAssertions(container: HTMLElement): AssertionResult[] {
 // when the scenario has fewer than two distinct option values on the page at all.
 function pillColorAssertions(container: HTMLElement): AssertionResult[] {
   const badges = Array.from(container.querySelectorAll<HTMLElement>(
-    "td[data-note-database-column-key] .status-badge[data-status-color]",
+    "td[data-obnotion-column-key] .status-badge[data-status-color]",
   ));
   const byValue = new Map<string, HTMLElement>();
   for (const badge of badges) {
@@ -1542,7 +1542,7 @@ function pillColorAssertions(container: HTMLElement): AssertionResult[] {
 // no-op applyConditionalFormat bag member, which only proves the renderer calls the action at the
 // right time) so this reads the shipped stylesheet's own paint rule rather than the call site.
 function conditionalTintAssertions(container: HTMLElement, rows: RowData[]): AssertionResult[] {
-  const dataRows = Array.from(container.querySelectorAll<HTMLElement>("tr[data-note-database-row-path]"));
+  const dataRows = Array.from(container.querySelectorAll<HTMLElement>("tr[data-obnotion-row-path]"));
   if (dataRows.length < 2) {
     return [{
       name: "a row's conditional-format tint paints on its td backgrounds, not only the tr",
@@ -1552,19 +1552,19 @@ function conditionalTintAssertions(container: HTMLElement, rows: RowData[]): Ass
   }
   const [tinted, plain] = dataRows;
   const probeColor = "rgb(1, 2, 3)";
-  const tintedTd = tinted.querySelector<HTMLElement>("td[data-note-database-column-key]");
-  const plainTd = plain.querySelector<HTMLElement>("td[data-note-database-column-key]");
-  // `.db-table td` transitions its own background-color, so a read taken in the same tick as the
+  const tintedTd = tinted.querySelector<HTMLElement>("td[data-obnotion-column-key]");
+  const plainTd = plain.querySelector<HTMLElement>("td[data-obnotion-column-key]");
+  // `.obnotion-table td` transitions its own background-color, so a read taken in the same tick as the
   // class/variable change would report the pre-change value — the transition has not advanced a
   // single frame yet. Suspending the transition on the one cell being probed makes the change
   // land synchronously, which is what this assertion actually needs to measure.
   tintedTd?.style.setProperty("transition", "none");
-  tinted.addClass("db-conditional-format");
-  tinted.style.setProperty("--db-conditional-format-bg", probeColor);
+  tinted.addClass("obnotion-conditional-format");
+  tinted.style.setProperty("--obnotion-conditional-format-bg", probeColor);
   const tintedBg = tintedTd ? win.getComputedStyle(tintedTd).backgroundColor : "";
   const plainBg = plainTd ? win.getComputedStyle(plainTd).backgroundColor : "";
-  tinted.removeClass("db-conditional-format");
-  tinted.style.removeProperty("--db-conditional-format-bg");
+  tinted.removeClass("obnotion-conditional-format");
+  tinted.style.removeProperty("--obnotion-conditional-format-bg");
   tintedTd?.style.removeProperty("transition");
   return [{
     name: "a row's conditional-format tint paints on its td backgrounds, not only the tr",
@@ -1581,10 +1581,10 @@ function tableAssertions(
   columns: ColumnDef[],
 ): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const rowEls = Array.from(container.querySelectorAll<HTMLElement>("tr[data-note-database-row-path]"));
-  const cellsPerRow = rowEls.map((row) => row.querySelectorAll<HTMLElement>("td[data-note-database-column-key]").length);
+  const rowEls = Array.from(container.querySelectorAll<HTMLElement>("tr[data-obnotion-row-path]"));
+  const cellsPerRow = rowEls.map((row) => row.querySelectorAll<HTMLElement>("td[data-obnotion-column-key]").length);
   const cellIndexes = rowEls.map((row) => {
-    const cell = row.querySelector<HTMLTableCellElement>('[data-note-database-column-key="field1"]');
+    const cell = row.querySelector<HTMLTableCellElement>('[data-obnotion-column-key="field1"]');
     return cell ? cell.cellIndex : -1;
   });
 
@@ -1610,8 +1610,8 @@ function tableAssertions(
   results.push(...conditionalTintAssertions(container, rows));
   results.push({
     name: "selection checkbox affordance is one per row",
-    pass: container.querySelectorAll("td.db-select-col").length === rows.length,
-    detail: `${container.querySelectorAll("td.db-select-col").length} selection cells for ${rows.length} rows`,
+    pass: container.querySelectorAll("td.obnotion-select-col").length === rows.length,
+    detail: `${container.querySelectorAll("td.obnotion-select-col").length} selection cells for ${rows.length} rows`,
   });
   return results;
 }
@@ -1663,10 +1663,10 @@ function emptyReasonAssertion(container: HTMLElement, expected: "source-missing"
 function boardAssertions(container: HTMLElement, rows: RowData[], groups: BoardGroup[]): AssertionResult[] {
   const results: AssertionResult[] = [];
   // The default board (boardExtensionsEnabled unset) renders the Anytype-shaped
-  // db-kanban-* vocabulary, not the local extension classes; probe that
+  // obnotion-kanban-* vocabulary, not the local extension classes; probe that
   // vocabulary rather than opting the scenario into the extensions.
-  const cards = container.querySelectorAll<HTMLElement>(".db-kanban-card").length;
-  const columns = container.querySelectorAll<HTMLElement>(".db-kanban-col").length;
+  const cards = container.querySelectorAll<HTMLElement>(".obnotion-kanban-card").length;
+  const columns = container.querySelectorAll<HTMLElement>(".obnotion-kanban-col").length;
 
   // The kanban page limit is 10 per column, applied at board-renderer.ts's own render call
   // rather than through the shared config field every other view's own default still reads
@@ -1688,21 +1688,21 @@ function boardAssertions(container: HTMLElement, rows: RowData[], groups: BoardG
 
 function calendarAssertions(container: HTMLElement, scenario: ScenarioSpec): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const dayCells = container.querySelectorAll<HTMLElement>(".db-calendar-day").length;
+  const dayCells = container.querySelectorAll<HTMLElement>(".obnotion-calendar-day").length;
 
   // The unscheduled surface is a header chip, never a band above the grid: this class named a
   // full-width drawer element that no longer exists anywhere in the renderer's output, on any
   // scenario — a regression that reintroduced it would still pass every check above.
-  const drawerBands = container.querySelectorAll<HTMLElement>(".db-calendar-backlog").length;
+  const drawerBands = container.querySelectorAll<HTMLElement>(".obnotion-calendar-backlog").length;
   results.push({
     name: "no unscheduled band renders above the grid",
     pass: drawerBands === 0,
-    detail: `${drawerBands} .db-calendar-backlog element(s), want 0`,
+    detail: `${drawerBands} .obnotion-calendar-backlog element(s), want 0`,
   });
 
   // The chip is present exactly when the scenario put an unscheduled row in the data, and absent
   // otherwise — never a band with nothing to hold, never a hidden-but-present control either.
-  const chip = container.querySelector<HTMLElement>(".db-calendar-unscheduled-chip");
+  const chip = container.querySelector<HTMLElement>(".obnotion-calendar-unscheduled-chip");
   const wantsChip = Boolean(scenario.calendarUnscheduled);
   results.push({
     name: "the unscheduled chip's presence matches whether any row is undated",
@@ -1716,12 +1716,12 @@ function calendarAssertions(container: HTMLElement, scenario: ScenarioSpec): Ass
   // it, stranding the date range at the segment's far edge instead of right after the title — the
   // defect an operator screenshot showed as a centred/detached range. Bound the gap between them
   // rather than an exact pixel, since the title's own width varies with its text.
-  const spanning = Array.from(container.querySelectorAll<HTMLElement>(".db-calendar-month-segment"))
-    .filter((segment) => segment.querySelector(":scope > .db-calendar-month-dates"));
+  const spanning = Array.from(container.querySelectorAll<HTMLElement>(".obnotion-calendar-month-segment"))
+    .filter((segment) => segment.querySelector(":scope > .obnotion-calendar-month-dates"));
   const detached: string[] = [];
   for (const segment of spanning) {
-    const title = segment.querySelector<HTMLElement>(":scope > .db-calendar-month-title");
-    const dates = segment.querySelector<HTMLElement>(":scope > .db-calendar-month-dates");
+    const title = segment.querySelector<HTMLElement>(":scope > .obnotion-calendar-month-title");
+    const dates = segment.querySelector<HTMLElement>(":scope > .obnotion-calendar-month-dates");
     if (!title || !dates) continue;
     const titleBox = title.getBoundingClientRect();
     const datesBox = dates.getBoundingClientRect();
@@ -1738,7 +1738,7 @@ function calendarAssertions(container: HTMLElement, scenario: ScenarioSpec): Ass
         + (detached.length ? `: ${detached.join("; ")}` : ""),
   });
   const segments = container.querySelectorAll<HTMLElement>(
-    ".db-calendar-month-segment, .db-calendar-week-allday-segment, .db-calendar-timed-event",
+    ".obnotion-calendar-month-segment, .obnotion-calendar-week-allday-segment, .obnotion-calendar-timed-event",
   ).length;
 
   results.push({
@@ -1763,13 +1763,13 @@ function calendarAssertions(container: HTMLElement, scenario: ScenarioSpec): Ass
   // Stated as containment rather than as an offset, because the offset is allowed to differ between
   // a bar that starts mid-week and one that starts on Sunday; what is never allowed is ink outside
   // the row that owns it.
-  const rows = Array.from(container.querySelectorAll<HTMLElement>(".db-calendar-month-week"));
+  const rows = Array.from(container.querySelectorAll<HTMLElement>(".obnotion-calendar-month-week"));
   const escaped: string[] = [];
   let bars = 0;
   for (const row of rows) {
     const rowBox = row.getBoundingClientRect();
     if (rowBox.width === 0) continue;
-    for (const bar of Array.from(row.querySelectorAll<HTMLElement>(".db-calendar-month-segment"))) {
+    for (const bar of Array.from(row.querySelectorAll<HTMLElement>(".obnotion-calendar-month-segment"))) {
       const box = bar.getBoundingClientRect();
       if (box.width === 0) continue;
       bars += 1;
@@ -1798,9 +1798,9 @@ function calendarAssertions(container: HTMLElement, scenario: ScenarioSpec): Ass
 // trivially, so each suite establishes a non-zero drawn count before the layout bound is read.
 function weekAssertions(container: HTMLElement, scale: "week" | "day"): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const dayCols = container.querySelectorAll<HTMLElement>(".db-calendar-week-day-col").length;
+  const dayCols = container.querySelectorAll<HTMLElement>(".obnotion-calendar-week-day-col").length;
   const segments = container.querySelectorAll<HTMLElement>(
-    ".db-calendar-week-allday-segment, .db-calendar-week-timed-event",
+    ".obnotion-calendar-week-allday-segment, .obnotion-calendar-week-timed-event",
   ).length;
 
   results.push({
@@ -1821,26 +1821,26 @@ function weekAssertions(container: HTMLElement, scale: "week" | "day"): Assertio
 
 function chartAssertions(container: HTMLElement, config: ViewConfig): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const roots = container.querySelectorAll<HTMLElement>(".db-chart").length;
-  const empties = container.querySelectorAll<HTMLElement>(".db-chart-empty, .db-chart-number").length;
-  const canvases = container.querySelectorAll<HTMLElement>(".db-chart-canvas").length;
-  const titles = Array.from(container.querySelectorAll<HTMLElement>(".db-chart-title"))
+  const roots = container.querySelectorAll<HTMLElement>(".obnotion-chart").length;
+  const empties = container.querySelectorAll<HTMLElement>(".obnotion-chart-empty, .obnotion-chart-number").length;
+  const canvases = container.querySelectorAll<HTMLElement>(".obnotion-chart-canvas").length;
+  const titles = Array.from(container.querySelectorAll<HTMLElement>(".obnotion-chart-title"))
     .filter((el) => (el.textContent || "").trim().length > 0).length;
 
   results.push({
     name: "the chart drew its root exactly once",
     pass: roots === 1 && empties === 0,
-    detail: `${roots} .db-chart root(s) and ${empties} empty/number state(s), want 1 and 0`,
+    detail: `${roots} .obnotion-chart root(s) and ${empties} empty/number state(s), want 1 and 0`,
   });
   results.push({
     name: "the chart drew its canvas",
     pass: canvases === 1,
-    detail: `${canvases} .db-chart-canvas element(s), want 1`,
+    detail: `${canvases} .obnotion-chart-canvas element(s), want 1`,
   });
   results.push({
     name: "the chart drew a non-empty title",
     pass: titles === 1,
-    detail: `${titles} non-empty .db-chart-title element(s), want 1`,
+    detail: `${titles} non-empty .obnotion-chart-title element(s), want 1`,
   });
   // Vacuously true when no value field is configured (a plain "count" chart needs none) — the
   // point is to catch a value field that names a column that does not exist or is not numeric,
@@ -1861,7 +1861,7 @@ function chartAssertions(container: HTMLElement, config: ViewConfig): AssertionR
 
 // The timeline's default render is the one-to-one reference gantt tree (config.timelineLocalExtensions
 // unset), which carries subtask affordances under its own vocabulary rather than the local
-// db-subtask-* markup: `.pm-collapse-toggle` for the expand/collapse control, `.pm-gantt-label-progress`
+// obnotion-subtask-* markup: `.pm-collapse-toggle` for the expand/collapse control, `.pm-gantt-label-progress`
 // for the percentage chip, and no depth attribute at all — depth is an inline `padding-left` on
 // `.pm-gantt-label-row`, matched here as the tallest indent exceeding the shallowest row's own.
 // `.pm-gantt-label-progress` alone is not specific to a subtask: the timeline bench's own
@@ -1871,9 +1871,9 @@ function chartAssertions(container: HTMLElement, config: ViewConfig): AssertionR
 // own), so matching that exact text distinguishes the synthetic subtask aggregation from the
 // bench's own unrelated progress fixture.
 function subtaskTreeAssertion(container: HTMLElement, kind: "board" | "timeline"): AssertionResult {
-  const toggle = container.querySelector(kind === "board" ? ".db-subtask-toggle" : ".pm-collapse-toggle");
+  const toggle = container.querySelector(kind === "board" ? ".obnotion-subtask-toggle" : ".pm-collapse-toggle");
   const progress = kind === "board"
-    ? container.querySelector(".db-subtask-progress")
+    ? container.querySelector(".obnotion-subtask-progress")
     : Array.from(container.querySelectorAll(".pm-gantt-label-progress")).find((el) => el.textContent === "62%");
   const depthChild = kind === "board"
     ? container.querySelector('[data-subtask-depth="1"]')
@@ -1898,19 +1898,19 @@ function subtaskTreeAssertion(container: HTMLElement, kind: "board" | "timeline"
 
 function calendarEmptyStateAssertion(container: HTMLElement): AssertionResult {
   const card = container.querySelector('[data-empty-reason="no-date-field"]');
-  const grid = container.querySelectorAll(".db-calendar").length;
+  const grid = container.querySelectorAll(".obnotion-calendar").length;
   const pass = Boolean(card) && grid === 0;
   return {
     name: "the calendar drew its no-date-field empty state",
     pass,
     detail: card
-      ? `data-empty-reason="no-date-field" present, ${grid} .db-calendar grid(s) (want 0)`
+      ? `data-empty-reason="no-date-field" present, ${grid} .obnotion-calendar grid(s) (want 0)`
       : "no [data-empty-reason=\"no-date-field\"] element — the empty state never rendered",
   };
 }
 
 function chartVariantAssertion(container: HTMLElement, variant: "number" | "empty"): AssertionResult {
-  const selector = variant === "number" ? ".db-chart-number" : ".db-chart-empty";
+  const selector = variant === "number" ? ".obnotion-chart-number" : ".obnotion-chart-empty";
   const present = container.querySelectorAll(selector).length;
   return {
     name: `the chart drew its ${variant} state`,
@@ -1920,21 +1920,21 @@ function chartVariantAssertion(container: HTMLElement, variant: "number" | "empt
 }
 
 /** The chart's empty state renders through the shared EmptyStateRenderer card with its action
- *  preserved, and none of the retired private db-chart-empty-icon/-text/-action vocabulary
- *  remains — the outer .db-chart-empty structural wrapper is unaffected and asserted separately
+ *  preserved, and none of the retired private obnotion-chart-empty-icon/-text/-action vocabulary
+ *  remains — the outer .obnotion-chart-empty structural wrapper is unaffected and asserted separately
  *  by chartVariantAssertion. */
 function chartEmptyAbsorptionAssertion(container: HTMLElement): AssertionResult {
-  const card = container.querySelector(".db-chart-empty .db-empty-card");
-  const action = container.querySelector(".db-chart-empty .db-empty-action");
+  const card = container.querySelector(".obnotion-chart-empty .obnotion-empty-card");
+  const action = container.querySelector(".obnotion-chart-empty .obnotion-empty-action");
   const retired = container.querySelectorAll(
-    ".db-chart-empty-icon, .db-chart-empty-text, .db-chart-empty-action"
+    ".obnotion-chart-empty-icon, .obnotion-chart-empty-text, .obnotion-chart-empty-action"
   ).length;
   const pass = Boolean(card) && Boolean(action) && retired === 0;
   return {
     name: "the chart's empty state renders the shared card with its action, and no retired chart-empty markup",
     pass,
-    detail: `.db-empty-card present: ${Boolean(card)}, .db-empty-action present: ${Boolean(action)}, `
-      + `retired db-chart-empty-icon/-text/-action element(s): ${retired} (want 0)`,
+    detail: `.obnotion-empty-card present: ${Boolean(card)}, .obnotion-empty-action present: ${Boolean(action)}, `
+      + `retired obnotion-chart-empty-icon/-text/-action element(s): ${retired} (want 0)`,
   };
 }
 
@@ -2083,33 +2083,33 @@ function makeSurfaceListData(): { columns: ColumnDef[]; rows: RowData[] } {
 
 function toolbarAssertions(container: HTMLElement, scenario: ScenarioSpec): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const tabs = container.querySelectorAll(".db-view-tab").length;
+  const tabs = container.querySelectorAll(".obnotion-view-tab").length;
   results.push({
     name: "the toolbar drew its view tabs and clusters",
-    pass: Boolean(container.querySelector(".db-toolbar")) && tabs > 0
-      && Boolean(container.querySelector(".db-toolbar-right")),
+    pass: Boolean(container.querySelector(".obnotion-toolbar")) && tabs > 0
+      && Boolean(container.querySelector(".obnotion-toolbar-right")),
     detail: `${tabs} view tab(s), query/properties/utilities/creation clusters `
-      + `${container.querySelectorAll(".db-toolbar-cluster").length} present`,
+      + `${container.querySelectorAll(".obnotion-toolbar-cluster").length} present`,
   });
   if (scenario.toolbarPopover === "utilities") {
-    results.push(toolbarPopoverAssertion(container, ".db-toolbar-utilities-popover"));
+    results.push(toolbarPopoverAssertion(container, ".obnotion-toolbar-utilities-popover"));
   }
   if (scenario.toolbarPopover === "add-view") {
-    results.push(toolbarPopoverAssertion(container, ".db-add-view-popover"));
+    results.push(toolbarPopoverAssertion(container, ".obnotion-add-view-popover"));
   }
   if (scenario.toolbarPopover === "tab-menu") {
     // The view tab's context menu is `showViewTabMenu`'s own owned menu, not the hand-built
-    // "db-view-tab-popover" shell every other toolbar surface still opens — the componentization
+    // "obnotion-view-tab-popover" shell every other toolbar surface still opens — the componentization
     // leg that moved this one surface onto the shared primitive. Every `createOwnedMenu` mounts on
     // `doc.body`, a sibling of `container` rather than a descendant of it, so this reads the
     // document the same way every other owned-menu assertion here does.
-    const panel = container.ownerDocument.querySelector(".db-owned-menu");
+    const panel = container.ownerDocument.querySelector(".obnotion-owned-menu");
     results.push({
       name: "right-clicking a view tab opens its context menu through the owned-menu primitive",
       pass: Boolean(panel),
       detail: panel ? `classes=${panel.className}` : "no owned menu mounted on contextmenu",
     });
-    const rowLabels = Array.from(panel?.querySelectorAll(".db-menu-item-label") ?? [])
+    const rowLabels = Array.from(panel?.querySelectorAll(".obnotion-menu-item-label") ?? [])
       .map((row) => row.textContent?.trim() ?? "");
     const hasRename = rowLabels.some((label) => label.includes("Rename"));
     const hasDuplicate = rowLabels.some((label) => /duplicate|copy/i.test(label));
@@ -2119,8 +2119,8 @@ function toolbarAssertions(container: HTMLElement, scenario: ScenarioSpec): Asse
       pass: hasRename && hasDuplicate && hasRemove,
       detail: `rows: ${rowLabels.join(" | ") || "none"}`,
     });
-    const deleteRow = Array.from(panel?.querySelectorAll<HTMLElement>(".db-menu-item") ?? [])
-      .find((row) => /delete|remove/i.test(row.querySelector(".db-menu-item-label")?.textContent ?? ""));
+    const deleteRow = Array.from(panel?.querySelectorAll<HTMLElement>(".obnotion-menu-item") ?? [])
+      .find((row) => /delete|remove/i.test(row.querySelector(".obnotion-menu-item-label")?.textContent ?? ""));
     results.push({
       name: "the destructive row carries the primitive's warning tone, not a bespoke danger class",
       pass: Boolean(deleteRow?.classList.contains("is-warning")),
@@ -2128,8 +2128,8 @@ function toolbarAssertions(container: HTMLElement, scenario: ScenarioSpec): Asse
     });
   }
   if (scenario.searchText) {
-    const active = container.querySelector(".db-search-control.is-active");
-    const hasText = container.querySelector<HTMLInputElement>(".db-search-input")?.value === scenario.searchText;
+    const active = container.querySelector(".obnotion-search-control.is-active");
+    const hasText = container.querySelector<HTMLInputElement>(".obnotion-search-input")?.value === scenario.searchText;
     results.push({
       name: "the search control widened for its text",
       pass: Boolean(active) && hasText,
@@ -2140,8 +2140,8 @@ function toolbarAssertions(container: HTMLElement, scenario: ScenarioSpec): Asse
   const rules = scenario.rules ?? "none";
   const wantFilterActive = rules === "filter" || rules === "both";
   const wantSortActive = rules === "sort" || rules === "both";
-  const filterState = container.querySelector<HTMLElement>(".db-filter-btn")?.getAttribute("data-control-state");
-  const sortState = container.querySelector<HTMLElement>(".db-sort-btn")?.getAttribute("data-control-state");
+  const filterState = container.querySelector<HTMLElement>(".obnotion-filter-btn")?.getAttribute("data-control-state");
+  const sortState = container.querySelector<HTMLElement>(".obnotion-sort-btn")?.getAttribute("data-control-state");
   results.push({
     name: `filter and sort triggers declare add versus active from their counts (rules=${rules})`,
     pass: filterState === (wantFilterActive ? "active" : "add") && sortState === (wantSortActive ? "active" : "add"),
@@ -2149,10 +2149,10 @@ function toolbarAssertions(container: HTMLElement, scenario: ScenarioSpec): Asse
       + `${wantFilterActive ? "active" : "add"}/${wantSortActive ? "active" : "add"} on rules=${rules}`,
   });
   // The stamp moved with the live trigger: the settings entry is the permanent gear button now,
-  // not "···". `openViewSettingsAfterMutation`'s two `.db-view-config-btn` anchor-fallback
+  // not "···". `openViewSettingsAfterMutation`'s two `.obnotion-view-config-btn` anchor-fallback
   // queries still need to resolve to something live, which is what this asserts.
-  const settingsBtn = container.querySelector(".db-toolbar-settings-btn");
-  const fallbacks = ["db-view-config-btn", "db-chart-options-toolbar-btn", "db-calendar-timeline-options-toolbar-btn"]
+  const settingsBtn = container.querySelector(".obnotion-toolbar-settings-btn");
+  const fallbacks = ["obnotion-view-config-btn", "obnotion-chart-options-toolbar-btn", "obnotion-calendar-timeline-options-toolbar-btn"]
     .filter((cls) => settingsBtn?.classList.contains(cls));
   results.push({
     name: "the live settings trigger still resolves the older settings-anchor queries",
@@ -2160,10 +2160,10 @@ function toolbarAssertions(container: HTMLElement, scenario: ScenarioSpec): Asse
     detail: settingsBtn ? `fallback classes present: ${fallbacks.join(", ") || "none"}` : "no settings trigger",
   });
   if (scenario.toolbarPopover === "utilities" || scenario.toolbarPopover === "add-view") {
-    const panel = container.querySelector(".db-toolbar-utilities-popover, .db-add-view-popover");
+    const panel = container.querySelector(".obnotion-toolbar-utilities-popover, .obnotion-add-view-popover");
     results.push({
       name: "an opened toolbar menu is built through the shared popover shell",
-      pass: Boolean(panel?.classList.contains("db-toolbar-popover")),
+      pass: Boolean(panel?.classList.contains("obnotion-toolbar-popover")),
       detail: panel ? `classes=${panel.className}` : "no opened toolbar menu",
     });
   }
@@ -2172,8 +2172,8 @@ function toolbarAssertions(container: HTMLElement, scenario: ScenarioSpec): Asse
 
 function chipRailAssertions(container: HTMLElement, scenario: ScenarioSpec): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const rail = container.querySelector(".db-active-view-controls");
-  const chips = container.querySelectorAll(".db-active-control-chip").length;
+  const rail = container.querySelector(".obnotion-active-view-controls");
+  const chips = container.querySelectorAll(".obnotion-active-control-chip").length;
   if (scenario.rules === "none") {
     results.push({
       name: "the rail is absent entirely when neither a filter nor a sort is active",
@@ -2187,27 +2187,27 @@ function chipRailAssertions(container: HTMLElement, scenario: ScenarioSpec): Ass
   results.push({
     name: "the active-view-controls rail drew its chips",
     pass: Boolean(rail) && chips > 0,
-    detail: `${chips} chip(s) in ${container.querySelectorAll(".db-active-control-group").length} group(s)`,
+    detail: `${chips} chip(s) in ${container.querySelectorAll(".obnotion-active-control-group").length} group(s)`,
   });
   if (scenario.rules !== "sort") {
     results.push({
       name: "two filters show the AND/OR logic button",
-      pass: Boolean(container.querySelector(".db-active-control-logic")),
-      detail: container.querySelector(".db-active-control-logic") ? "logic button present"
+      pass: Boolean(container.querySelector(".obnotion-active-control-logic")),
+      detail: container.querySelector(".obnotion-active-control-logic") ? "logic button present"
         : "logic button missing — the filter group renders it only when more than one rule is effective",
     });
   }
   if (scenario.rules !== "filter") {
     results.push({
       name: "a sort chip carries the direction as a word, not only an arrow",
-      pass: Boolean(container.querySelector(".db-active-control-direction")),
-      detail: container.querySelector(".db-active-control-direction")
+      pass: Boolean(container.querySelector(".obnotion-active-control-direction")),
+      detail: container.querySelector(".obnotion-active-control-direction")
         ? "direction word present"
         : "no direction word — the rail used to show an ordinal only",
     });
   }
   const expectedAddControls = (scenario.rules !== "sort" ? 1 : 0) + (scenario.rules !== "filter" ? 1 : 0);
-  const addControls = container.querySelectorAll(".db-active-control-add").length;
+  const addControls = container.querySelectorAll(".obnotion-active-control-add").length;
   results.push({
     name: "each active rule group carries its own add control, wired to the actions bag's addFilter/addSort",
     pass: addControls === expectedAddControls,
@@ -2218,11 +2218,11 @@ function chipRailAssertions(container: HTMLElement, scenario: ScenarioSpec): Ass
 
 function activeRulePopoverAssertions(container: HTMLElement, kind: "filter" | "sort"): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const panel = container.querySelector(".db-active-rule-popover");
+  const panel = container.querySelector(".obnotion-active-rule-popover");
   const fieldDropdown = container.querySelector(kind === "filter"
-    ? ".db-filter-field-dropdown" : ".db-sort-field-dropdown");
+    ? ".obnotion-filter-field-dropdown" : ".obnotion-sort-field-dropdown");
   const valueDropdown = container.querySelector(kind === "filter"
-    ? ".db-filter-value-dropdown" : ".db-sort-direction-dropdown");
+    ? ".obnotion-filter-value-dropdown" : ".obnotion-sort-direction-dropdown");
   results.push({
     name: `the active-rule popover opened its ${kind} single-rule editor`,
     pass: Boolean(panel) && Boolean(fieldDropdown) && Boolean(valueDropdown),
@@ -2231,45 +2231,45 @@ function activeRulePopoverAssertions(container: HTMLElement, kind: "filter" | "s
   });
   results.push({
     name: "the single-rule editor carries no remove button",
-    pass: panel !== null && panel.querySelectorAll("button.db-panel-button").length === 0,
-    detail: panel ? `${panel.querySelectorAll("button.db-panel-button").length} remove button(s), want 0` : "no panel",
+    pass: panel !== null && panel.querySelectorAll("button.obnotion-panel-button").length === 0,
+    detail: panel ? `${panel.querySelectorAll("button.obnotion-panel-button").length} remove button(s), want 0` : "no panel",
   });
   return results;
 }
 
 function filterPanelAssertions(container: HTMLElement, nested: boolean): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const panel = container.querySelector(".db-filter-panel");
+  const panel = container.querySelector(".obnotion-filter-panel");
   results.push({
     name: "the filter panel drew its tree",
-    pass: panel !== null && Boolean(panel.querySelector(".db-source-rule-node")),
-    detail: panel ? "panel and at least one rule node present" : "no .db-filter-panel",
+    pass: panel !== null && Boolean(panel.querySelector(".obnotion-source-rule-node")),
+    detail: panel ? "panel and at least one rule node present" : "no .obnotion-filter-panel",
   });
   results.push({
     name: nested ? "the nested tree drew its NOT node and inner OR group"
       : "the flat tree draws its leaves without a NOT node",
     pass: nested
-      ? Boolean(panel?.querySelector(".db-source-rule-not"))
-        && Boolean(panel?.querySelector('.db-source-rule-logic[title*="OR"], .db-source-rule-logic'))
-      : !panel?.querySelector(".db-source-rule-not") && panel?.querySelectorAll(".db-panel-row").length === 3,
+      ? Boolean(panel?.querySelector(".obnotion-source-rule-not"))
+        && Boolean(panel?.querySelector('.obnotion-source-rule-logic[title*="OR"], .obnotion-source-rule-logic'))
+      : !panel?.querySelector(".obnotion-source-rule-not") && panel?.querySelectorAll(".obnotion-panel-row").length === 3,
     detail: nested
-      ? `${panel?.querySelectorAll(".db-source-rule-not").length} NOT node(s), `
-        + `${panel?.querySelectorAll(".db-source-rule-group").length} group(s)`
-      : `${panel?.querySelectorAll(".db-panel-row").length} leaf row(s), `
-        + `${panel?.querySelectorAll(".db-source-rule-not").length} NOT node(s)`,
+      ? `${panel?.querySelectorAll(".obnotion-source-rule-not").length} NOT node(s), `
+        + `${panel?.querySelectorAll(".obnotion-source-rule-group").length} group(s)`
+      : `${panel?.querySelectorAll(".obnotion-panel-row").length} leaf row(s), `
+        + `${panel?.querySelectorAll(".obnotion-source-rule-not").length} NOT node(s)`,
   });
   return results;
 }
 
 function sortPanelAssertions(container: HTMLElement, calendarHint: boolean): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const panel = container.querySelector(".db-sort-panel");
+  const panel = container.querySelector(".obnotion-sort-panel");
   results.push({
     name: "the sort panel drew its rules",
-    pass: panel !== null && Boolean(panel.querySelector(".db-sort-rule-row")),
-    detail: `${panel?.querySelectorAll(".db-sort-rule-row").length ?? 0} rule row(s)`,
+    pass: panel !== null && Boolean(panel.querySelector(".obnotion-sort-rule-row")),
+    detail: `${panel?.querySelectorAll(".obnotion-sort-rule-row").length ?? 0} rule row(s)`,
   });
-  const firstUp = panel?.querySelector<HTMLButtonElement>(".db-sort-rule-row button[title='Move up']");
+  const firstUp = panel?.querySelector<HTMLButtonElement>(".obnotion-sort-rule-row button[title='Move up']");
   results.push({
     name: "the first rule's move-up control is disabled",
     pass: firstUp ? firstUp.disabled : false,
@@ -2278,9 +2278,9 @@ function sortPanelAssertions(container: HTMLElement, calendarHint: boolean): Ass
   if (calendarHint) {
     results.push({
       name: "the calendar view drew its layout hint above the empty state",
-      pass: Boolean(panel?.querySelector(".db-panel-hint")) && Boolean(panel?.querySelector(".db-panel-empty")),
-      detail: panel ? `${panel.querySelectorAll(".db-panel-hint").length} hint(s), `
-        + `${panel.querySelectorAll(".db-panel-empty").length} empty state(s)` : "no panel",
+      pass: Boolean(panel?.querySelector(".obnotion-panel-hint")) && Boolean(panel?.querySelector(".obnotion-panel-empty")),
+      detail: panel ? `${panel.querySelectorAll(".obnotion-panel-hint").length} hint(s), `
+        + `${panel.querySelectorAll(".obnotion-panel-empty").length} empty state(s)` : "no panel",
     });
   }
   return results;
@@ -2288,16 +2288,16 @@ function sortPanelAssertions(container: HTMLElement, calendarHint: boolean): Ass
 
 function viewConfigAssertions(container: HTMLElement): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const panel = container.querySelector(".db-view-config-panel");
+  const panel = container.querySelector(".obnotion-view-config-panel");
   results.push({
     name: "the view-config panel drew its database and view sections",
     pass: panel !== null
-      && Boolean(panel.querySelector('.db-view-config-section-title[data-scope="database"]'))
-      && Boolean(panel.querySelector('.db-view-config-section-title[data-scope="view"]')),
-    detail: panel ? `${panel.querySelectorAll(".db-view-config-row").length} config row(s)`
-      : "no .db-view-config-panel",
+      && Boolean(panel.querySelector('.obnotion-view-config-section-title[data-scope="database"]'))
+      && Boolean(panel.querySelector('.obnotion-view-config-section-title[data-scope="view"]')),
+    detail: panel ? `${panel.querySelectorAll(".obnotion-view-config-row").length} config row(s)`
+      : "no .obnotion-view-config-panel",
   });
-  const summaries = Array.from(panel?.querySelectorAll(".db-view-config-summary") ?? []).map((el) => el.textContent || "");
+  const summaries = Array.from(panel?.querySelectorAll(".obnotion-view-config-summary") ?? []).map((el) => el.textContent || "");
   results.push({
     name: "every settings summary row states a count or the empty word",
     pass: summaries.length >= 3 && summaries.every((text) => text.length > 0),
@@ -2308,8 +2308,8 @@ function viewConfigAssertions(container: HTMLElement): AssertionResult[] {
 
 function boardCardPropertiesPanelAssertions(container: HTMLElement): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const panel = container.querySelector(".db-view-config-panel");
-  const rows = Array.from(panel?.querySelectorAll<HTMLElement>(".db-column-manager-row") ?? []);
+  const panel = container.querySelector(".obnotion-view-config-panel");
+  const rows = Array.from(panel?.querySelectorAll<HTMLElement>(".obnotion-column-manager-row") ?? []);
   // hours, tags, due (the stored list) plus status (the board's own group field, appended
   // because the stored list never names it) — the same four `listBoardCardFields` produces for
   // any config carrying this exact schema and stored list, board-card-fields.test.ts included.
@@ -2319,7 +2319,7 @@ function boardCardPropertiesPanelAssertions(container: HTMLElement): AssertionRe
     detail: `${rows.length} row(s), want 4 (hours, tags, due, status)`,
   });
   const checkedFor = (key: string) =>
-    panel?.querySelector<HTMLInputElement>(`[data-note-database-column-key="${key}"] input[type='checkbox']`)?.checked;
+    panel?.querySelector<HTMLInputElement>(`[data-obnotion-column-key="${key}"] input[type='checkbox']`)?.checked;
   results.push({
     name: "the stored list's hidden field renders its checkbox unchecked",
     pass: checkedFor("tags") === false,
@@ -2335,8 +2335,8 @@ function boardCardPropertiesPanelAssertions(container: HTMLElement): AssertionRe
 
 function columnManagerAssertions(container: HTMLElement, columns: ColumnDef[]): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const panel = container.querySelector(".db-column-manager");
-  const rows = panel?.querySelectorAll(".db-column-manager-row").length ?? 0;
+  const panel = container.querySelector(".obnotion-column-manager");
+  const rows = panel?.querySelectorAll(".obnotion-column-manager-row").length ?? 0;
   results.push({
     name: "the column manager drew one row per property",
     pass: Boolean(panel) && rows === columns.length,
@@ -2344,71 +2344,71 @@ function columnManagerAssertions(container: HTMLElement, columns: ColumnDef[]): 
   });
   results.push({
     name: "the column manager drew its add-property row",
-    pass: Boolean(panel?.querySelector(".db-column-manager-add-row")),
-    detail: panel?.querySelector(".db-column-manager-add-row") ? "add row present" : "add row missing",
+    pass: Boolean(panel?.querySelector(".obnotion-column-manager-add-row")),
+    detail: panel?.querySelector(".obnotion-column-manager-add-row") ? "add row present" : "add row missing",
   });
   return results;
 }
 
 function recordDetailAssertions(container: HTMLElement): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const panel = container.querySelector(".db-record-detail-panel");
+  const panel = container.querySelector(".obnotion-record-detail-panel");
   results.push({
     name: "the record detail panel drew its header and fields",
-    pass: Boolean(panel?.querySelector(".db-record-detail-header"))
-      && Boolean(panel?.querySelector(".db-record-detail-fields")),
-    detail: panel ? `${panel.querySelectorAll(".db-record-detail-field").length} field(s)`
-      : "no .db-record-detail-panel",
+    pass: Boolean(panel?.querySelector(".obnotion-record-detail-header"))
+      && Boolean(panel?.querySelector(".obnotion-record-detail-fields")),
+    detail: panel ? `${panel.querySelectorAll(".obnotion-record-detail-field").length} field(s)`
+      : "no .obnotion-record-detail-panel",
   });
   results.push({
     name: "the panel carries the sheet chrome on a phone and the close button",
-    pass: Boolean(panel?.querySelector(".db-cell-edit-close")),
-    detail: panel?.querySelector(".db-cell-edit-close") ? "close button present" : "close button missing",
+    pass: Boolean(panel?.querySelector(".obnotion-cell-edit-close")),
+    detail: panel?.querySelector(".obnotion-cell-edit-close") ? "close button present" : "close button missing",
   });
   results.push({
     name: "an empty field with an editor names the action, never the word Empty",
-    pass: Boolean(panel?.querySelector(".db-record-detail-field.is-empty-field .db-card-empty-placeholder"))
-      && !Array.from(panel?.querySelectorAll(".db-record-detail-field.is-empty-field .db-card-empty-placeholder") ?? [])
+    pass: Boolean(panel?.querySelector(".obnotion-record-detail-field.is-empty-field .obnotion-card-empty-placeholder"))
+      && !Array.from(panel?.querySelectorAll(".obnotion-record-detail-field.is-empty-field .obnotion-card-empty-placeholder") ?? [])
         .some((el) => (el.textContent || "").trim() === "Empty"),
-    detail: `${panel?.querySelectorAll(".db-record-detail-field.is-empty-field").length ?? 0} empty field(s), none reading "Empty"`,
+    detail: `${panel?.querySelectorAll(".obnotion-record-detail-field.is-empty-field").length ?? 0} empty field(s), none reading "Empty"`,
   });
-  const hiddenGroup = panel?.querySelector(".db-record-detail-hidden-group");
+  const hiddenGroup = panel?.querySelector(".obnotion-record-detail-hidden-group");
   results.push({
     name: "the hidden-properties group always renders, even with nothing hidden",
     pass: Boolean(hiddenGroup),
-    detail: hiddenGroup ? "group present" : "no .db-record-detail-hidden-group",
+    detail: hiddenGroup ? "group present" : "no .obnotion-record-detail-hidden-group",
   });
   results.push({
     name: "the group's Shown section carries the full row anatomy: drag handle, type icon, name, eye, chevron",
     pass: (() => {
-      const row = hiddenGroup?.querySelector(".db-record-detail-hidden-row");
+      const row = hiddenGroup?.querySelector(".obnotion-record-detail-hidden-row");
       return Boolean(row)
-        && Boolean(row?.querySelector(".db-record-detail-hidden-drag"))
-        && Boolean(row?.querySelector(".db-record-detail-hidden-type"))
-        && Boolean(row?.querySelector(".db-record-detail-hidden-name"))
-        && Boolean(row?.querySelector(".db-record-detail-hidden-eye"))
-        && Boolean(row?.querySelector(".db-record-detail-hidden-chevron"));
+        && Boolean(row?.querySelector(".obnotion-record-detail-hidden-drag"))
+        && Boolean(row?.querySelector(".obnotion-record-detail-hidden-type"))
+        && Boolean(row?.querySelector(".obnotion-record-detail-hidden-name"))
+        && Boolean(row?.querySelector(".obnotion-record-detail-hidden-eye"))
+        && Boolean(row?.querySelector(".obnotion-record-detail-hidden-chevron"));
     })(),
-    detail: `${hiddenGroup?.querySelectorAll(".db-record-detail-hidden-row").length ?? 0} row(s) in the group`,
+    detail: `${hiddenGroup?.querySelectorAll(".obnotion-record-detail-hidden-row").length ?? 0} row(s) in the group`,
   });
   results.push({
     name: "the title row's eye is disabled and every other row's is not",
     pass: (() => {
-      const eyes = Array.from(hiddenGroup?.querySelectorAll<HTMLButtonElement>(".db-record-detail-hidden-eye") ?? []);
+      const eyes = Array.from(hiddenGroup?.querySelectorAll<HTMLButtonElement>(".obnotion-record-detail-hidden-eye") ?? []);
       if (eyes.length === 0) return false;
       const disabledCount = eyes.filter((eye) => eye.disabled).length;
       return disabledCount === 1 && eyes[0]?.disabled === true;
     })(),
-    detail: `${hiddenGroup?.querySelectorAll(".db-record-detail-hidden-eye").length ?? 0} eye control(s), one disabled`,
+    detail: `${hiddenGroup?.querySelectorAll(".obnotion-record-detail-hidden-eye").length ?? 0} eye control(s), one disabled`,
   });
   return results;
 }
 
 function recordDetailBodyAssertions(container: HTMLElement, variant: "empty" | "editing" | "read"): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const body = container.querySelector(".db-record-detail-body");
-  const rendered = body?.querySelector(".db-record-detail-body-rendered");
-  const editor = body?.querySelector(".db-record-detail-body-editor");
+  const body = container.querySelector(".obnotion-record-detail-body");
+  const rendered = body?.querySelector(".obnotion-record-detail-body-rendered");
+  const editor = body?.querySelector(".obnotion-record-detail-body-editor");
   const pass = variant === "editing"
     ? Boolean(body?.classList.contains("is-editing")) && Boolean(editor)
     : variant === "empty"
@@ -2426,46 +2426,46 @@ function recordDetailBodyAssertions(container: HTMLElement, variant: "empty" | "
 
 function recordPeekAssertions(container: HTMLElement): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const panel = container.querySelector(".db-record-peek-panel");
+  const panel = container.querySelector(".obnotion-record-peek-panel");
   results.push({
     name: "the record peek docked its panel beside the table",
-    pass: Boolean(panel?.querySelector(".db-record-peek-header"))
-      && Boolean(panel?.querySelector(".db-record-peek-properties")),
-    detail: panel ? `${panel.querySelectorAll(".db-record-peek-field").length} peek field(s)`
-      : "no .db-record-peek-panel",
+    pass: Boolean(panel?.querySelector(".obnotion-record-peek-header"))
+      && Boolean(panel?.querySelector(".obnotion-record-peek-properties")),
+    detail: panel ? `${panel.querySelectorAll(".obnotion-record-peek-field").length} peek field(s)`
+      : "no .obnotion-record-peek-panel",
   });
   results.push({
     name: "the peek carries its hidden-properties disclosure",
-    pass: Boolean(panel?.querySelector(".db-record-peek-hidden-toggle")),
-    detail: panel?.querySelector(".db-record-peek-hidden-toggle") ? "disclosure present" : "disclosure missing",
+    pass: Boolean(panel?.querySelector(".obnotion-record-peek-hidden-toggle")),
+    detail: panel?.querySelector(".obnotion-record-peek-hidden-toggle") ? "disclosure present" : "disclosure missing",
   });
   return results;
 }
 
 function columnWidthAdjusterAssertions(doc: Document): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const panel = doc.querySelector(".db-mobile-column-width-panel");
+  const panel = doc.querySelector(".obnotion-mobile-column-width-panel");
   results.push({
     name: "the adjuster drew the shared header and the shared range row",
-    pass: Boolean(panel?.querySelector(".db-panel-header .db-panel-title"))
-      && Boolean(panel?.querySelector(".db-cell-edit-close"))
-      && Boolean(panel?.querySelector(".db-view-config-range input[type=\"range\"]"))
-      && Boolean(panel?.querySelector(".db-view-config-number")),
-    detail: panel ? "header, close button and range row present" : "no .db-mobile-column-width-panel",
+    pass: Boolean(panel?.querySelector(".obnotion-panel-header .obnotion-panel-title"))
+      && Boolean(panel?.querySelector(".obnotion-cell-edit-close"))
+      && Boolean(panel?.querySelector(".obnotion-view-config-range input[type=\"range\"]"))
+      && Boolean(panel?.querySelector(".obnotion-view-config-number")),
+    detail: panel ? "header, close button and range row present" : "no .obnotion-mobile-column-width-panel",
   });
-  const presets = panel?.querySelectorAll(".db-new-placement-option").length ?? 0;
+  const presets = panel?.querySelectorAll(".obnotion-new-placement-option").length ?? 0;
   results.push({
     name: "the adjuster drew all four presets, one of them selected",
-    pass: presets === 4 && Boolean(panel?.querySelector('.db-new-placement-option[aria-checked="true"]')),
-    detail: `${presets} preset(s), a checked one ${panel?.querySelector('.db-new-placement-option[aria-checked="true"]') ? "present" : "missing"}`,
+    pass: presets === 4 && Boolean(panel?.querySelector('.obnotion-new-placement-option[aria-checked="true"]')),
+    detail: `${presets} preset(s), a checked one ${panel?.querySelector('.obnotion-new-placement-option[aria-checked="true"]') ? "present" : "missing"}`,
   });
   return results;
 }
 
 function summaryAssertions(container: HTMLElement, ruleCount: number): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const summary = container.querySelector(".db-summary");
-  const items = summary?.querySelectorAll(".db-summary-item").length ?? 0;
+  const summary = container.querySelector(".obnotion-summary");
+  const items = summary?.querySelectorAll(".obnotion-summary-item").length ?? 0;
   results.push({
     name: "the summary row drew its total and its rules",
     pass: Boolean(summary) && items >= 1 + ruleCount,
@@ -2476,17 +2476,17 @@ function summaryAssertions(container: HTMLElement, ruleCount: number): Assertion
 
 function ownedMenuAssertions(doc: Document, wantSheet: boolean): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const menu = doc.querySelector(".db-owned-menu");
+  const menu = doc.querySelector(".obnotion-owned-menu");
   results.push({
     name: "the owned menu mounted on the document body",
-    pass: Boolean(menu) && menu.querySelectorAll(".db-menu-item").length > 0,
-    detail: menu ? `${menu.querySelectorAll(".db-menu-item").length} menu row(s)` : "no .db-owned-menu",
+    pass: Boolean(menu) && menu.querySelectorAll(".obnotion-menu-item").length > 0,
+    detail: menu ? `${menu.querySelectorAll(".obnotion-menu-item").length} menu row(s)` : "no .obnotion-owned-menu",
   });
   if (wantSheet) {
     results.push({
       name: "the phone menu carries the bottom-sheet chrome",
-      pass: Boolean(menu?.classList.contains("db-mobile-bottom-sheet")),
-      detail: menu?.classList.contains("db-mobile-bottom-sheet") ? "sheet classes present"
+      pass: Boolean(menu?.classList.contains("obnotion-mobile-bottom-sheet")),
+      detail: menu?.classList.contains("obnotion-mobile-bottom-sheet") ? "sheet classes present"
         : "menu mounted as a popover, not a sheet",
     });
   }
@@ -2496,25 +2496,25 @@ function ownedMenuAssertions(doc: Document, wantSheet: boolean): AssertionResult
 function cellEditorAssertions(container: HTMLElement, kind: "text" | "select"): AssertionResult[] {
   const results: AssertionResult[] = [];
   if (kind === "text") {
-    const textPopover = container.querySelector('.db-cell-edit-popover[data-note-database-editor-kind="text"]');
-    const linePopover = container.querySelector(".db-cell-line-edit-popover");
+    const textPopover = container.querySelector('.obnotion-cell-edit-popover[data-obnotion-editor-kind="text"]');
+    const linePopover = container.querySelector(".obnotion-cell-line-edit-popover");
     results.push({
       name: "the text editor opened its markdown toolbar and textarea",
-      pass: Boolean(textPopover?.querySelector(".db-md-toolbar")) && Boolean(textPopover?.querySelector("textarea.db-cell-textarea")),
+      pass: Boolean(textPopover?.querySelector(".obnotion-md-toolbar")) && Boolean(textPopover?.querySelector("textarea.obnotion-cell-textarea")),
       detail: textPopover ? "popover with toolbar and textarea present" : "no text-edit popover",
     });
     results.push({
       name: "the number cell opened its single-line editor",
-      pass: Boolean(linePopover?.querySelector("input.db-cell-line-input")),
+      pass: Boolean(linePopover?.querySelector("input.obnotion-cell-line-input")),
       detail: linePopover ? "line editor present" : "no line-edit popover",
     });
   } else {
-    const optionPopover = container.querySelector(".db-cell-option-popover");
+    const optionPopover = container.querySelector(".obnotion-cell-option-popover");
     results.push({
       name: "the select cell opened its option list",
-      pass: Boolean(optionPopover?.querySelector(".db-cell-option-item")),
-      detail: optionPopover ? `${optionPopover.querySelectorAll(".db-cell-option-item").length} option row(s)`
-        : "no .db-cell-option-popover",
+      pass: Boolean(optionPopover?.querySelector(".obnotion-cell-option-item")),
+      detail: optionPopover ? `${optionPopover.querySelectorAll(".obnotion-cell-option-item").length} option row(s)`
+        : "no .obnotion-cell-option-popover",
     });
   }
   return results;
@@ -2522,17 +2522,17 @@ function cellEditorAssertions(container: HTMLElement, kind: "text" | "select"): 
 
 function datePickerAssertions(container: HTMLElement, includeTime: boolean): AssertionResult[] {
   const results: AssertionResult[] = [];
-  const popover = container.querySelector(".db-date-value-popover");
-  const trigger = container.querySelector(".db-date-value-field");
+  const popover = container.querySelector(".obnotion-date-value-popover");
+  const trigger = container.querySelector(".obnotion-date-value-field");
   results.push({
     name: "the date trigger click opened its value popover",
-    pass: Boolean(trigger) && Boolean(popover?.querySelector(".db-calendar-mini-grid")),
-    detail: popover ? "popover with mini calendar present" : "no .db-date-value-popover",
+    pass: Boolean(trigger) && Boolean(popover?.querySelector(".obnotion-calendar-mini-grid")),
+    detail: popover ? "popover with mini calendar present" : "no .obnotion-date-value-popover",
   });
   if (includeTime) {
     results.push({
       name: "the datetime picker drew its time segments",
-      pass: Boolean(popover?.classList.contains("is-datetime")) && Boolean(popover?.querySelector(".db-hour-seg")),
+      pass: Boolean(popover?.classList.contains("is-datetime")) && Boolean(popover?.querySelector(".obnotion-hour-seg")),
       detail: popover?.classList.contains("is-datetime") ? "is-datetime and hour segment present"
         : "datetime flag missing from the popover",
     });
@@ -2561,7 +2561,7 @@ function multiMarkerAssertion(container: HTMLElement, markers: string[], name: s
 function timelineAssertions(container: HTMLElement): AssertionResult[] {
   const results: AssertionResult[] = [];
   // The bench leaves timelineLocalExtensions unset, so the renderer's default path is the
-  // reference-copy gantt tree (pm-gantt-*), not the local db-timeline-* markup.
+  // reference-copy gantt tree (pm-gantt-*), not the local obnotion-timeline-* markup.
   const bars = container.querySelectorAll<HTMLElement>(".pm-gantt-bar-group, .pm-gantt-milestone").length;
   const labelRows = container.querySelectorAll<HTMLElement>(".pm-gantt-label-row:not(.pm-gantt-add-row)").length;
 
@@ -2720,7 +2720,7 @@ export function runRenderAssertions(
   if (leftoverDeferred !== null) window.clearTimeout(leftoverDeferred);
   leftoverDeferred = null;
   sweepPortaledSurfaces(host.ownerDocument);
-  const container = host.createDiv({ cls: "note-database-container" });
+  const container = host.createDiv({ cls: "obnotion-container" });
   const app = undefined as unknown as App;
   let bagKeys: string[] = [];
   let chartValueField: string | undefined;
@@ -2794,8 +2794,8 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "board-renderer"));
     if (results[0].pass) {
       if (scenario.boardEmptyColumn) {
-        const columnsEls = Array.from(container.querySelectorAll<HTMLElement>(".db-kanban-col"));
-        const empties = columnsEls.filter((col) => col.querySelectorAll(".db-kanban-card").length === 0);
+        const columnsEls = Array.from(container.querySelectorAll<HTMLElement>(".obnotion-kanban-col"));
+        const empties = columnsEls.filter((col) => col.querySelectorAll(".obnotion-kanban-card").length === 0);
         results.push({
           name: "the board drew an empty column beside its populated lanes",
           pass: columnsEls.length === BOARD_GROUPS + 1 && empties.length === 1,
@@ -2806,7 +2806,7 @@ export function runRenderAssertions(
       }
       if (scenario.boardImageField) {
         results.push(multiMarkerAssertion(container,
-          [".db-board-card-cover.is-empty", ".db-board-card-cover-placeholder"],
+          [".obnotion-board-card-cover.is-empty", ".obnotion-board-card-cover-placeholder"],
           "the board cards drew their empty covers"));
       }
       if (scenario.subtaskTree) results.push(subtaskTreeAssertion(container, "board"));
@@ -2814,19 +2814,19 @@ export function runRenderAssertions(
         // The same two clicks a reader makes: the first column's own column-options button, then
         // the "Manage groups" row it opens. The row's own click handler opens the panel before the
         // menu that carried it closes, so the panel is already in the DOM by the time this reads it.
-        const optionsButton = container.querySelector<HTMLButtonElement>(".db-board-column-options");
+        const optionsButton = container.querySelector<HTMLButtonElement>(".obnotion-board-column-options");
         optionsButton?.click();
-        const menuRows = document.querySelectorAll(".db-menu-item").length;
+        const menuRows = document.querySelectorAll(".obnotion-menu-item").length;
         results.push({
           name: "the column menu carries sort ascending, sort descending, collapse and Manage groups — no standalone hide row",
           pass: menuRows === 4,
           detail: `${menuRows} row(s)`,
         });
-        const entryRow = document.querySelector<HTMLButtonElement>(".db-board-groups-entry");
+        const entryRow = document.querySelector<HTMLButtonElement>(".obnotion-board-groups-entry");
         entryRow?.click();
-        const panel = container.querySelector<HTMLElement>(".db-board-groups-panel");
+        const panel = container.querySelector<HTMLElement>(".obnotion-board-groups-panel");
         const width = panel ? panel.getBoundingClientRect().width : null;
-        const rowEls = panel ? Array.from(panel.querySelectorAll(".db-column-manager-row")) : [];
+        const rowEls = panel ? Array.from(panel.querySelectorAll(".obnotion-column-manager-row")) : [];
         const toggleCount = rowEls.filter((row) => row.querySelector('input[type="checkbox"]')).length;
         results.push({
           name: "the Groups panel opens from the column menu at a width inside the panel role's 292-360px band",
@@ -2843,7 +2843,7 @@ export function runRenderAssertions(
       }
       if (scenario.boardCardFieldsHidden) {
         const stillPresent = hiddenCardColumn
-          ? container.querySelector(`.db-board-card-field[data-note-database-column-key="${hiddenCardColumn.key}"]`)
+          ? container.querySelector(`.obnotion-board-card-field[data-obnotion-column-key="${hiddenCardColumn.key}"]`)
           : null;
         results.push({
           name: "a stored card field list removes the hidden field from every card",
@@ -2851,7 +2851,7 @@ export function runRenderAssertions(
           detail: !hiddenCardColumn
             ? "no currency column in this schema to hide — captureData must be on"
             : stillPresent
-              ? `found data-note-database-column-key="${hiddenCardColumn.key}" on a card`
+              ? `found data-obnotion-column-key="${hiddenCardColumn.key}" on a card`
               : `"${hiddenCardColumn.key}" absent from every card`,
         });
       }
@@ -3110,14 +3110,14 @@ export function runRenderAssertions(
       chartGroupField: BOARD_GROUP_FIELD,
       schema: { columns, computedFields: [] },
     } as ViewConfig;
-    const anchor = makeHiddenAnchor(container, "db-chart-options-trigger");
+    const anchor = makeHiddenAnchor(container, "obnotion-chart-options-trigger");
     const toolbar = new ChartToolbarRenderer();
     const actions: ChartToolbarActions = { onChange: () => undefined };
     bagKeys = Object.keys(actions).sort();
     toolbar.togglePopover(container, anchor, config, actions);
 
     results.push(provenanceResult(container, "chart-toolbar-renderer"));
-    if (results[0].pass) results.push(toolbarPopoverAssertion(container, ".db-chart-options-popover"));
+    if (results[0].pass) results.push(toolbarPopoverAssertion(container, ".obnotion-chart-options-popover"));
   } else if (scenario.renderer === "calendar-toolbar") {
     // The calendar settings popover, week scale so the Time section (only shown at week/day
     // scale, per the fixture this supersedes) is in frame.
@@ -3125,14 +3125,14 @@ export function runRenderAssertions(
     const rows = makeCalendarRows(CAPTURE_ROWS, columns, CAPTURE_FILL);
     applyCaptureOptions(columns, rows);
     const config = makeCalendarConfig(columns, "week");
-    const anchor = makeHiddenAnchor(container, "db-calendar-options-trigger");
+    const anchor = makeHiddenAnchor(container, "obnotion-calendar-options-trigger");
     const toolbar = new CalendarToolbarRenderer();
     const actions: CalendarToolbarActions = { onChange: () => undefined };
     bagKeys = Object.keys(actions).sort();
     toolbar.togglePopover(container, anchor, config, actions);
 
     results.push(provenanceResult(container, "calendar-toolbar-renderer"));
-    if (results[0].pass) results.push(toolbarPopoverAssertion(container, ".db-calendar-options-popover"));
+    if (results[0].pass) results.push(toolbarPopoverAssertion(container, ".obnotion-calendar-options-popover"));
   } else if (scenario.renderer === "timeline-toolbar") {
     // The timeline settings popover. The bench's own makeConfig sets viewType: "calendar" (it
     // never reaches a viewType-gated caller today), but CalendarTimelineToolbarRenderer.
@@ -3142,14 +3142,14 @@ export function runRenderAssertions(
     const rows = makeTimelineRows(CAPTURE_ROWS, columns, CAPTURE_FILL);
     applyCaptureOptions(columns, rows);
     const config: ViewConfig = { ...makeTimelineConfig(columns, "week"), viewType: "timeline" };
-    const anchor = makeHiddenAnchor(container, "db-calendar-timeline-options-trigger");
+    const anchor = makeHiddenAnchor(container, "obnotion-calendar-timeline-options-trigger");
     const toolbar = new CalendarTimelineToolbarRenderer();
     const actions: CalendarTimelineToolbarActions = { onChange: () => undefined };
     bagKeys = Object.keys(actions).sort();
     toolbar.togglePopover(container, anchor, config, actions);
 
     results.push(provenanceResult(container, "timeline-toolbar-renderer"));
-    if (results[0].pass) results.push(toolbarPopoverAssertion(container, ".db-calendar-timeline-options-popover"));
+    if (results[0].pass) results.push(toolbarPopoverAssertion(container, ".obnotion-calendar-timeline-options-popover"));
   } else if (scenario.renderer === "toolbar") {
     // The full toolbar: ToolbarRenderer.render with a one-view database over the table bench's
     // typed columns. The popover states ride the toolbar's own trigger buttons — the same
@@ -3188,13 +3188,13 @@ export function runRenderAssertions(
     const renderer = new ToolbarRenderer();
     renderer.render(container, [{ config: db, sourcePath: "notes" }], 0, 0, state, actions);
     if (scenario.toolbarPopover === "utilities") {
-      (container.querySelector<HTMLButtonElement>(".db-toolbar-more-btn"))?.click();
+      (container.querySelector<HTMLButtonElement>(".obnotion-toolbar-more-btn"))?.click();
     } else if (scenario.toolbarPopover === "add-view") {
-      (container.querySelector<HTMLButtonElement>(".db-view-tab-add"))?.click();
+      (container.querySelector<HTMLButtonElement>(".obnotion-view-tab-add"))?.click();
     } else if (scenario.toolbarPopover === "tab-menu") {
       // showViewTabMenu binds oncontextmenu, not onclick — a synthetic click proves nothing
       // about the real trigger a right-click reaches, so this dispatches the same event type.
-      const tab = container.querySelector<HTMLElement>(".db-view-tab:not(.db-view-tab-add)");
+      const tab = container.querySelector<HTMLElement>(".obnotion-view-tab:not(.obnotion-view-tab-add)");
       tab?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true }));
     }
 
@@ -3229,7 +3229,7 @@ export function runRenderAssertions(
       addSort: () => undefined,
     };
     bagKeys = Object.keys(actions).sort();
-    container.createDiv({ cls: "db-header" });
+    container.createDiv({ cls: "obnotion-header" });
     const renderer = new ActiveViewControlsRenderer();
     renderer.render(container, config, state, actions);
 
@@ -3241,7 +3241,7 @@ export function runRenderAssertions(
     // filter or sort renderer's renderSingleRuleEditor.
     const { columns } = makeSurfaceListData();
     const config = makeTableConfig(columns);
-    const anchor = makeHiddenAnchor(container, "db-active-rule-anchor");
+    const anchor = makeHiddenAnchor(container, "obnotion-active-rule-anchor");
     const close = (): void => undefined;
     if (scenario.ruleKind === "sort") {
       const currencyCol = columnOfType(columns, "currency");
@@ -3272,7 +3272,7 @@ export function runRenderAssertions(
     // OR group at the depth the panel's own wrap rules allow.
     const { columns } = makeSurfaceListData();
     const config = makeTableConfig(columns);
-    const anchor = makeHiddenAnchor(container, "db-filter-anchor");
+    const anchor = makeHiddenAnchor(container, "obnotion-filter-anchor");
     const actions: FilterPanelActions = { saveState: () => undefined, refresh: () => undefined, close: () => undefined };
     bagKeys = Object.keys(actions).sort();
     const selectCols = columns.filter((col) => col.type === "select" || col.type === "status");
@@ -3329,7 +3329,7 @@ export function runRenderAssertions(
     const actions: SortPanelActions = { save: () => undefined, refresh: () => undefined, close: () => undefined };
     bagKeys = Object.keys(actions).sort();
     const renderer = new SortPanelRenderer();
-    renderer.render(container, true, config, state, actions, makeHiddenAnchor(container, "db-sort-anchor"));
+    renderer.render(container, true, config, state, actions, makeHiddenAnchor(container, "obnotion-sort-anchor"));
 
     results.push(provenanceResult(container, "sort-panel-renderer"));
     if (results[0].pass) results.push(...sortPanelAssertions(container, Boolean(scenario.calendarHint)));
@@ -3371,7 +3371,7 @@ export function runRenderAssertions(
       };
       bagKeys = Object.keys(actions).sort();
       const renderer = new ViewConfigPanelRenderer();
-      renderer.render(container, true, config, actions, makeHiddenAnchor(container, "db-view-config-anchor"));
+      renderer.render(container, true, config, actions, makeHiddenAnchor(container, "obnotion-view-config-anchor"));
 
       results.push(provenanceResult(container, "view-config-panel-renderer"));
       if (results[0].pass) results.push(...boardCardPropertiesPanelAssertions(container));
@@ -3396,7 +3396,7 @@ export function runRenderAssertions(
       };
       bagKeys = Object.keys(actions).sort();
       const renderer = new ViewConfigPanelRenderer();
-      renderer.render(container, true, config, actions, makeHiddenAnchor(container, "db-view-config-anchor"));
+      renderer.render(container, true, config, actions, makeHiddenAnchor(container, "obnotion-view-config-anchor"));
 
       results.push(provenanceResult(container, "view-config-panel-renderer"));
       if (results[0].pass) results.push(...viewConfigAssertions(container));
@@ -3424,7 +3424,7 @@ export function runRenderAssertions(
     };
     bagKeys = Object.keys(actions).sort();
     const renderer = new ColumnManagerRenderer();
-    renderer.render(container, true, config, state, columns, actions, makeHiddenAnchor(container, "db-column-manager-anchor"));
+    renderer.render(container, true, config, state, columns, actions, makeHiddenAnchor(container, "obnotion-column-manager-anchor"));
 
     results.push(provenanceResult(container, "column-manager-renderer"));
     if (results[0].pass) results.push(...columnManagerAssertions(container, columns));
@@ -3448,7 +3448,7 @@ export function runRenderAssertions(
     // The docked case passes the container, which is exactly what an affordance with no element of
     // its own passes in the view. Using a hidden anchor here instead would photograph a case that
     // does not occur.
-    const anchor = docked ? container : makeHiddenAnchor(container, "db-record-detail-anchor");
+    const anchor = docked ? container : makeHiddenAnchor(container, "obnotion-record-detail-anchor");
     const actions: RecordDetailActions = {
       editCell: () => undefined,
       openRow: () => undefined,
@@ -3511,7 +3511,7 @@ export function runRenderAssertions(
     bagKeys = Object.keys(bag).sort();
     const renderer = new TableRenderer(bag);
     renderer.renderTable(container, config, rows);
-    const anchor = makeHiddenAnchor(container, "db-record-peek-anchor");
+    const anchor = makeHiddenAnchor(container, "obnotion-record-peek-anchor");
     openTableRecordPeek({
       anchor,
       row: rows[0],
@@ -3559,7 +3559,7 @@ export function runRenderAssertions(
       config,
       persist: () => undefined,
     });
-    const adjusterPanel = container.ownerDocument.querySelector(".db-mobile-column-width-panel");
+    const adjusterPanel = container.ownerDocument.querySelector(".obnotion-mobile-column-width-panel");
     adjusterPanel?.setAttribute(PROVENANCE_ATTR, "column-width-adjuster");
     bagKeys = [];
 
@@ -3598,7 +3598,7 @@ export function runRenderAssertions(
     menu.addRow({ icon: "copy", label: "Duplicate property" });
     menu.addRow({ icon: "group", label: "Group by this column", disabled: true });
     menu.addRow({ icon: "trash", label: "Delete property", warning: true });
-    menu.showAt({ anchor: makeHiddenAnchor(container, "db-owned-menu-anchor") });
+    menu.showAt({ anchor: makeHiddenAnchor(container, "obnotion-owned-menu-anchor") });
     menu.el.setAttribute(PROVENANCE_ATTR, "owned-menu");
     leftoverOwnedMenu = menu;
     bagKeys = [];
@@ -3627,7 +3627,7 @@ export function runRenderAssertions(
     new TableRenderer(bag).renderTable(container, config, rows);
     const row = rows[0];
     const cellFor = (col?: ColumnDef): HTMLElement | null => (col
-      ? container.querySelector<HTMLElement>(`td[data-note-database-column-key="${col.key}"]`)
+      ? container.querySelector<HTMLElement>(`td[data-obnotion-column-key="${col.key}"]`)
       : null);
     if (scenario.editorKind === "select") {
       const selectTd = cellFor(selectCol);
@@ -3663,7 +3663,7 @@ export function runRenderAssertions(
     // "lucide:", which is what the module reads to open its Icons tab (with the colour strip)
     // instead of Emoji. The panel mounts on document.body, so the marker rides the container the
     // anchor lives in and the assertions query the body.
-    const anchor = makeHiddenAnchor(container, "db-icon-picker-anchor");
+    const anchor = makeHiddenAnchor(container, "obnotion-icon-picker-anchor");
     leftoverIconPickerClose = openIconPickerPopover({
       anchor,
       current: "lucide:x@blue",
@@ -3676,34 +3676,34 @@ export function runRenderAssertions(
 
     results.push(provenanceResult(container, "icon-picker"));
     if (results[0].pass) {
-      const popover = container.ownerDocument.querySelector(".db-icon-picker-popover");
+      const popover = container.ownerDocument.querySelector(".obnotion-icon-picker-popover");
       results.push({
         name: "the picker opened on its Icons tab with the colour strip",
-        pass: Boolean(popover?.querySelector(".db-icon-picker-colors"))
-          && Boolean(popover?.querySelector(".db-icon-picker-grid")),
-        detail: popover ? "Icons tab, colour strip and icon grid present" : "no .db-icon-picker-popover on the body",
+        pass: Boolean(popover?.querySelector(".obnotion-icon-picker-colors"))
+          && Boolean(popover?.querySelector(".obnotion-icon-picker-grid")),
+        detail: popover ? "Icons tab, colour strip and icon grid present" : "no .obnotion-icon-picker-popover on the body",
       });
     }
   } else if (scenario.renderer === "color-picker") {
     // The option colour picker: openOptionColorPicker's own entry, opened with the current
     // colour that rings the matching swatch. Mounts on document.body like the icon picker.
-    const anchor = makeHiddenAnchor(container, "db-color-picker-anchor");
+    const anchor = makeHiddenAnchor(container, "obnotion-color-picker-anchor");
     openOptionColorPicker(anchor, "blue", () => undefined);
     container.setAttribute(PROVENANCE_ATTR, "color-picker");
     bagKeys = [];
 
     results.push(provenanceResult(container, "color-picker"));
     if (results[0].pass) {
-      const popup = container.ownerDocument.querySelector(".db-color-picker-popup");
-      // A one-column labelled list built from the family's own `.db-dropdown-option`
+      const popup = container.ownerDocument.querySelector(".obnotion-color-picker-popup");
+      // A one-column labelled list built from the family's own `.obnotion-dropdown-option`
       // row, not a swatch grid — sixteen rows, zero swatches, the current colour's row selected
       // with its trailing check.
       results.push({
         name: "the colour picker drew its sixteen labelled rows with the current one selected",
-        pass: Boolean(popup) && popup.querySelectorAll(".db-dropdown-option").length === 16
-          && popup!.querySelectorAll(".db-color-picker-swatch").length === 0
-          && Boolean(popup?.querySelector(".db-dropdown-option.is-selected .db-dropdown-option-check")),
-        detail: popup ? `${popup.querySelectorAll(".db-dropdown-option").length} row(s)` : "no .db-color-picker-popup",
+        pass: Boolean(popup) && popup.querySelectorAll(".obnotion-dropdown-option").length === 16
+          && popup!.querySelectorAll(".obnotion-color-picker-swatch").length === 0
+          && Boolean(popup?.querySelector(".obnotion-dropdown-option.is-selected .obnotion-dropdown-option-check")),
+        detail: popup ? `${popup.querySelectorAll(".obnotion-dropdown-option").length} row(s)` : "no .obnotion-color-picker-popup",
       });
     }
   } else if (scenario.renderer === "relation-values") {
@@ -3719,7 +3719,7 @@ export function runRenderAssertions(
 
     results.push(provenanceResult(container, "relation-value-renderer"));
     if (results[0].pass) results.push(multiMarkerAssertion(container,
-      [".db-relation-values", ".db-relation-link", ".db-relation-link-label"], "the relation chips rendered"));
+      [".obnotion-relation-values", ".obnotion-relation-link", ".obnotion-relation-link-label"], "the relation chips rendered"));
   } else if (scenario.renderer === "file-fields") {
     // The file pseudo-columns: renderSpecialFileFieldValue's own dispatch for file.tags and the
     // link-list key, over a real table row. The per-tag remove buttons render only when the
@@ -3727,7 +3727,7 @@ export function runRenderAssertions(
     const columns = makeTableColumns(TABLE_COLUMNS, "mixed");
     const rows = makeTableRows(TABLE_ROWS, columns);
     applyCaptureOptions(columns, rows);
-    const table = container.createEl("table", { cls: "db-table" });
+    const table = container.createEl("table", { cls: "obnotion-table" });
     const rowEl = table.createEl("tbody").createEl("tr");
     const fileCol: ColumnDef = { key: "file.tags", label: "Tags", type: "text" } as ColumnDef;
     const linkCol: ColumnDef = { key: "file.links", label: "Outlinks", type: "text" } as ColumnDef;
@@ -3741,18 +3741,18 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "file-field-renderer"));
     if (results[0].pass) {
       results.push(multiMarkerAssertion(container,
-        [".db-file-tags .status-badge.db-file-tag-badge", ".db-file-link-list .internal-link"],
+        [".obnotion-file-tags .status-badge.obnotion-file-tag-badge", ".obnotion-file-link-list .internal-link"],
         "the file tags and link list rendered"));
     }
   } else if (scenario.renderer === "number-display") {
     // The three number display styles: renderRating/renderProgress/renderProgressRing's own
     // entries into a table of rows, one style per row the way the cell renderer calls them.
-    const table = container.createEl("table", { cls: "db-table" });
+    const table = container.createEl("table", { cls: "obnotion-table" });
     const tbody = table.createEl("tbody");
     const styleRow = (label: string, build: (td: HTMLElement) => void): void => {
       const tr = tbody.createEl("tr");
       tr.createEl("td", { text: label });
-      const valueTd = tr.createEl("td", { cls: "db-numeric-value" });
+      const valueTd = tr.createEl("td", { cls: "obnotion-numeric-value" });
       build(valueTd);
     };
     styleRow("Rating", (td) => renderRating(td, 62.5));
@@ -3768,7 +3768,7 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "number-display-renderer"));
     if (results[0].pass) {
       results.push(multiMarkerAssertion(container,
-        [".db-cell-rating", ".db-cell-progress", ".db-cell-progress-ring", ".db-num-color-orange", ".db-num-color-green"],
+        [".obnotion-cell-rating", ".obnotion-cell-progress", ".obnotion-cell-progress-ring", ".obnotion-num-color-orange", ".obnotion-num-color-green"],
         "the rating, progress and ring styles rendered"));
     }
   } else if (scenario.renderer === "record-icon") {
@@ -3804,7 +3804,7 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "table-renderer"));
     if (results[0].pass) {
       results.push(multiMarkerAssertion(container,
-        [".db-record-icon-colgroup", ".db-record-icon.is-compact", ".db-record-icon.is-default", ".db-record-icon-emoji"],
+        [".obnotion-record-icon-colgroup", ".obnotion-record-icon.is-compact", ".obnotion-record-icon.is-default", ".obnotion-record-icon-emoji"],
         "the record-icon gutter rendered with its default and emoji variants"));
     }
   } else if (scenario.renderer === "dropdown" && scenario.dropdownSearch) {
@@ -3816,13 +3816,13 @@ export function runRenderAssertions(
     // listens for, so the capture shows the list narrowed to the query rather than an empty box
     // over a full list.
     const row = container.createDiv({
-      cls: "db-panel-row",
+      cls: "obnotion-panel-row",
       attr: { style: "width:320px;margin:16px" },
     });
     createDropdownField({
       parent: row,
       label: "Property",
-      className: "db-panel-dropdown db-filter-field-dropdown",
+      className: "obnotion-panel-dropdown obnotion-filter-field-dropdown",
       hideLabel: true,
       // Declared, so the phone profile of this scenario renders the sheet's own search row: the
       // desktop no longer reads this flag (every desktop list filters), and the phone still does.
@@ -3841,9 +3841,9 @@ export function runRenderAssertions(
       value: "title",
       onChange: () => undefined,
     });
-    row.querySelector<HTMLButtonElement>(".db-dropdown-field")?.click();
-    const searchInput = container.querySelector<HTMLInputElement>(".db-dropdown-field-input")
-      || container.querySelector<HTMLInputElement>(".db-dropdown-search input");
+    row.querySelector<HTMLButtonElement>(".obnotion-dropdown-field")?.click();
+    const searchInput = container.querySelector<HTMLInputElement>(".obnotion-dropdown-field-input")
+      || container.querySelector<HTMLInputElement>(".obnotion-dropdown-search input");
     if (searchInput) {
       searchInput.value = "ri";
       searchInput.dispatchEvent(new Event("input", { bubbles: true }));
@@ -3854,7 +3854,7 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "dropdown-field"));
     if (results[0].pass) {
       results.push(multiMarkerAssertion(container,
-        [".db-dropdown-popover", ".db-dropdown-option:not(.is-hidden)"],
+        [".obnotion-dropdown-popover", ".obnotion-dropdown-option:not(.is-hidden)"],
         "the combobox opened its list and filtered it to the typed query"));
     }
   } else if (scenario.renderer === "dropdown" && scenario.dropdownDesktopSheet) {
@@ -3866,13 +3866,13 @@ export function runRenderAssertions(
     // never becomes the query field on this path; the escalated sheet carries its own titled
     // header and search row instead.
     const row = container.createDiv({
-      cls: "db-panel-row",
+      cls: "obnotion-panel-row",
       attr: { style: "width:320px;margin:16px" },
     });
     createDropdownField({
       parent: row,
       label: "Property",
-      className: "db-panel-dropdown db-filter-field-dropdown",
+      className: "obnotion-panel-dropdown obnotion-filter-field-dropdown",
       hideLabel: true,
       searchable: true,
       options: Array.from({ length: 30 }, (_, index) => ({
@@ -3882,7 +3882,7 @@ export function runRenderAssertions(
       value: "property-0",
       onChange: () => undefined,
     });
-    row.querySelector<HTMLButtonElement>(".db-dropdown-field")?.click();
+    row.querySelector<HTMLButtonElement>(".obnotion-dropdown-field")?.click();
     container.setAttribute(PROVENANCE_ATTR, "dropdown-field");
     bagKeys = [];
 
@@ -3892,23 +3892,23 @@ export function runRenderAssertions(
       // pickers above — it is never a descendant of `container`, so querying `container` can
       // only ever find nothing and this assertion would fail regardless of what actually
       // rendered. `container.ownerDocument` reaches the whole document the way those pickers do.
-      const sheet = container.ownerDocument.querySelector(".db-dropdown-popover.db-dropdown-popover-desktop-sheet");
+      const sheet = container.ownerDocument.querySelector(".obnotion-dropdown-popover.obnotion-dropdown-popover-desktop-sheet");
       results.push({
         name: "a cramped anchored placement escalated to a titled sheet with its own search row",
         pass: Boolean(sheet)
-          && Boolean(sheet?.querySelector(".db-panel-title"))
-          && Boolean(sheet?.querySelector(".db-dropdown-search input"))
-          && row.querySelector(".db-dropdown-field-input") == null,
+          && Boolean(sheet?.querySelector(".obnotion-panel-title"))
+          && Boolean(sheet?.querySelector(".obnotion-dropdown-search input"))
+          && row.querySelector(".obnotion-dropdown-field-input") == null,
         detail: sheet
           ? "desktop-sheet class, titled header and search row all present, trigger never converted"
-          : "no .db-dropdown-popover-desktop-sheet — the anchored branch fired instead",
+          : "no .obnotion-dropdown-popover-desktop-sheet — the anchored branch fired instead",
       });
     }
   } else if (scenario.renderer === "dropdown") {
     // The dropdown popover: openDropdownMenu's own entry, the same call the column manager's
     // add-file-property button makes. The disabled option carries the reason the fixture's
     // tooltip exists to surface.
-    const anchor = makeHiddenAnchor(container, "db-dropdown-anchor");
+    const anchor = makeHiddenAnchor(container, "obnotion-dropdown-anchor");
     openDropdownMenu({
       anchor,
       label: "Aggregate",
@@ -3926,7 +3926,7 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "dropdown-field"));
     if (results[0].pass) {
       results.push(multiMarkerAssertion(container,
-        [".db-dropdown-popover", ".db-dropdown-option.is-selected", ".db-dropdown-option.is-disabled"],
+        [".obnotion-dropdown-popover", ".obnotion-dropdown-option.is-selected", ".obnotion-dropdown-option.is-disabled"],
         "the dropdown popover rendered its options with the selected and disabled states"));
     }
   } else if (scenario.renderer === "empty-state") {
@@ -3948,7 +3948,7 @@ export function runRenderAssertions(
     results.push(provenanceResult(container, "empty-state-renderer"));
     if (results[0].pass) {
       results.push(multiMarkerAssertion(container,
-        [".db-empty-card", ".db-empty-card-title", ".db-empty-action.mod-cta"],
+        [".obnotion-empty-card", ".obnotion-empty-card-title", ".obnotion-empty-action.mod-cta"],
         "the empty card rendered with its actions"));
     }
   } else if (scenario.renderer === "column-header") {
@@ -3979,7 +3979,7 @@ export function runRenderAssertions(
       ...fileViewTableBag(columns, true),
       setupColumnHeader: (th, col) => {
         controller.setup(th, col);
-        const marker = th.closest(".note-database-container")?.getAttribute(PROVENANCE_ATTR);
+        const marker = th.closest(".obnotion-container")?.getAttribute(PROVENANCE_ATTR);
         if (marker) controllerMarks.push(marker);
       },
     };
@@ -3996,7 +3996,7 @@ export function runRenderAssertions(
           : "no header carried the column-header-controller marker",
       });
       results.push(multiMarkerAssertion(container,
-        [".db-column-menu-trigger", ".db-resize-handle", ".db-th-content .db-th-label", ".db-th-content .db-property-icon"],
+        [".obnotion-column-menu-trigger", ".obnotion-resize-handle", ".obnotion-th-content .obnotion-th-label", ".obnotion-th-content .obnotion-property-icon"],
         "the column headers carry their menu triggers, resize handles and property-type icons"));
     }
   } else if (scenario.renderer === "card-covers") {
@@ -4012,7 +4012,7 @@ export function runRenderAssertions(
     const groups = makeBoardGroups(rows, BOARD_GROUPS);
     applyEmptyMetadataCache(rows);
     const imageKey = columnOfType(columns, "text")?.key;
-    const boardHost = container.createDiv({ cls: "db-cover-host" });
+    const boardHost = container.createDiv({ cls: "obnotion-cover-host" });
     const boardRenderer = new BoardRenderer(undefined as unknown as App, fileViewBoardBag(columns));
     boardRenderer.render(boardHost, {
       ...makeBoardConfig(columns),
@@ -4031,7 +4031,7 @@ export function runRenderAssertions(
     });
     if (results[0].pass) {
       results.push(multiMarkerAssertion(container,
-        [".db-board-card-cover.is-empty .db-board-card-cover-placeholder"],
+        [".obnotion-board-card-cover.is-empty .obnotion-board-card-cover-placeholder"],
         "the empty cover rendered in the board card"));
     }
   } else if (scenario.renderer === "table" && scenario.migratedFromList) {
@@ -4056,9 +4056,9 @@ export function runRenderAssertions(
 
     results.push({
       name: "the migrated list view rendered through the table renderer, not the list renderer",
-      pass: !!container.querySelector("table.db-table") && !container.querySelector(".db-list-row"),
-      detail: `table.db-table present: ${!!container.querySelector("table.db-table")}, `
-        + `.db-list-row present: ${!!container.querySelector(".db-list-row")}, `
+      pass: !!container.querySelector("table.obnotion-table") && !container.querySelector(".obnotion-list-row"),
+      detail: `table.obnotion-table present: ${!!container.querySelector("table.obnotion-table")}, `
+        + `.obnotion-list-row present: ${!!container.querySelector(".obnotion-list-row")}, `
         + `plan: ${plan ? `${plan.from}->${plan.to}` : "null"}, `
         + `final viewType: ${migratedConfig.viewType}`,
     });
@@ -4240,7 +4240,7 @@ export function runRenderAssertions(
       results.push(provenanceResult(container, "table-renderer"));
       if (results[0].pass) {
         results.push(multiMarkerAssertion(container,
-          [".db-grouped-table", "tr.db-group-divider-row", ".db-group-divider-row .status-badge", ".db-group-summary-item"],
+          [".obnotion-grouped-table", "tr.obnotion-group-divider-row", ".obnotion-group-divider-row .status-badge", ".obnotion-group-summary-item"],
           "the grouped table drew its divider rows with badges and summaries"));
       }
       // The grouped table owns no layout-bound assertion: the per-row guards above are
@@ -4270,21 +4270,21 @@ export function runRenderAssertions(
         }
         if (scenario.tableFooter) {
           if (rows.length === 0) {
-            const tfoot = container.querySelector("tfoot.db-table-footer");
+            const tfoot = container.querySelector("tfoot.obnotion-table-footer");
             results.push({
               name: "a zero-row table renders no footer",
               pass: !tfoot,
-              detail: tfoot ? "tfoot.db-table-footer is present over zero rows" : "no tfoot.db-table-footer, as expected",
+              detail: tfoot ? "tfoot.obnotion-table-footer is present over zero rows" : "no tfoot.obnotion-table-footer, as expected",
             });
           } else {
             results.push(multiMarkerAssertion(container,
-              ["tfoot.db-table-footer", ".db-table-footer-trigger.has-calculation", ".db-table-footer-kind"],
+              ["tfoot.obnotion-table-footer", ".obnotion-table-footer-trigger.has-calculation", ".obnotion-table-footer-kind"],
               "the footer rendered its calculated aggregates"));
-            const triggers = container.querySelectorAll(".db-table-footer-trigger").length;
+            const triggers = container.querySelectorAll(".obnotion-table-footer-trigger").length;
             results.push({
               name: "one footer trigger per column",
               pass: triggers === columns.length,
-              detail: `${triggers} .db-table-footer-trigger element(s) for ${columns.length} column(s)`,
+              detail: `${triggers} .obnotion-table-footer-trigger element(s) for ${columns.length} column(s)`,
             });
           }
         }
@@ -4307,7 +4307,7 @@ export function runRenderAssertions(
         }
         if (scenario.recordIconColumn) {
           results.push(multiMarkerAssertion(container,
-            [".db-record-icon-colgroup", ".db-record-icon.is-compact", ".db-record-icon.is-default", ".db-record-icon-emoji"],
+            [".obnotion-record-icon-colgroup", ".obnotion-record-icon.is-compact", ".obnotion-record-icon.is-default", ".obnotion-record-icon-emoji"],
             "the record-icon gutter rendered with its default and emoji variants"));
         }
         results.push({

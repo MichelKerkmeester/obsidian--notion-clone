@@ -266,7 +266,7 @@ export class ToolbarRenderer {
 
     if (actions.hideHeaderChrome) return;
 
-    const header = containerEl.createDiv({ cls: "db-header" });
+    const header = containerEl.createDiv({ cls: "obnotion-header" });
     containerEl.insertBefore(header, containerEl.firstChild);
     if (actions.moveLinkedView) this.renderLinkedViewDragHandle(header);
 
@@ -274,39 +274,39 @@ export class ToolbarRenderer {
     if (actions.showDatabaseChrome) {
       const description = currentDb?.description || "";
       header.toggleClass("has-empty-description", !description);
-      const headingRow = header.createDiv({ cls: "db-heading-row" });
+      const headingRow = header.createDiv({ cls: "obnotion-heading-row" });
       if (currentDb && actions.showDatabaseIcon !== false) {
         renderRecordIcon(headingRow, currentDb.icon, {
           editable: actions.editDatabaseIcon != null,
           defaultIcon: "database",
           tooltip: currentDb.name,
           onClick: (anchor) => actions.editDatabaseIcon?.(anchor),
-        }).addClass("db-database-icon");
+        }).addClass("obnotion-database-icon");
       }
       const heading = headingRow.createDiv({
-        cls: `db-heading${actions.hideDatabaseActions ? " is-static" : ""}`,
+        cls: `obnotion-heading${actions.hideDatabaseActions ? " is-static" : ""}`,
         attr: { title: currentDb?.name || t("common.untitledDatabase") },
       });
       const headingTitle = actions.hideDatabaseActions
-        ? heading.createSpan({ cls: "db-heading-text", text: currentDb?.name || t("common.untitledDatabase") })
+        ? heading.createSpan({ cls: "obnotion-heading-text", text: currentDb?.name || t("common.untitledDatabase") })
         : heading.createEl("button", {
-          cls: "db-heading-button",
+          cls: "obnotion-heading-button",
           attr: {
             type: "button",
             title: currentDb?.name || t("common.untitledDatabase"),
             "aria-label": currentDb?.name || t("common.untitledDatabase"),
           },
         });
-      if (!actions.hideDatabaseActions) headingTitle.createSpan({ cls: "db-heading-text", text: currentDb?.name || t("common.untitledDatabase") });
+      if (!actions.hideDatabaseActions) headingTitle.createSpan({ cls: "obnotion-heading-text", text: currentDb?.name || t("common.untitledDatabase") });
       if (!actions.hideDatabaseActions) {
         const chevron = heading.createEl("button", {
-          cls: "db-heading-chevron-button",
+          cls: "obnotion-heading-chevron-button",
           attr: {
             type: "button",
             "aria-label": t("toolbar.openDatabaseSwitcher"),
             "aria-haspopup": "menu",
             "aria-expanded": "false",
-            "aria-controls": "db-database-selector",
+            "aria-controls": "obnotion-database-selector",
           },
         });
         setIcon(chevron, "chevron-down");
@@ -333,7 +333,7 @@ export class ToolbarRenderer {
       if (!actions.hideDatabaseActions) {
         if (actions.renameDatabase) {
           const renameBtn = headingRow.createEl("button", {
-            cls: "db-heading-rename-button",
+            cls: "obnotion-heading-rename-button",
             attr: { type: "button", "aria-label": t("toolbar.renameDatabase") },
           });
           setIcon(renameBtn, "pencil");
@@ -344,8 +344,8 @@ export class ToolbarRenderer {
           };
         }
         const moreBtn = headingRow.createEl("button", {
-          cls: "db-heading-more-button",
-          attr: { type: "button", "aria-label": t("common.more"), "aria-haspopup": "menu", "aria-expanded": "false", "aria-controls": "db-title-actions" },
+          cls: "obnotion-heading-more-button",
+          attr: { type: "button", "aria-label": t("common.more"), "aria-haspopup": "menu", "aria-expanded": "false", "aria-controls": "obnotion-title-actions" },
         });
         setIcon(moreBtn, "more-horizontal");
         setTooltip(moreBtn, t("common.more"), { delay: 100 });
@@ -355,7 +355,7 @@ export class ToolbarRenderer {
       if (currentDb?.description || actions.updateDatabaseDescription) {
         const placeholder = t("viewConfig.descriptionPlaceholder");
         const descEl = header.createDiv({
-          cls: `db-description${description ? "" : " is-empty"}`,
+          cls: `obnotion-description${description ? "" : " is-empty"}`,
           text: description,
           attr: {
             title: description || placeholder,
@@ -371,31 +371,31 @@ export class ToolbarRenderer {
 
     // Embedded views keep a compact title row unless the embed already sits under the page heading.
     if (!actions.showDatabaseChrome && !actions.hideDatabaseTitle) {
-      const titleRow = header.createDiv({ cls: "db-title-row" });
+      const titleRow = header.createDiv({ cls: "obnotion-title-row" });
       titleRow.createDiv({
-        cls: "db-title",
+        cls: "obnotion-title",
         text: currentDb?.name || t("common.untitledDatabase"),
         attr: { title: currentDb?.name || t("common.untitledDatabase") },
       });
 
-      const titleActions = titleRow.createDiv({ cls: "db-title-actions" });
+      const titleActions = titleRow.createDiv({ cls: "obnotion-title-actions" });
       this.renderFullViewButton(titleActions, actions);
       if (!actions.isReadOnly && !isChartView) this.renderNewButton(titleActions, actions, currentDb, currentView);
       if (currentDb?.description) {
         header.createDiv({
-          cls: "db-description db-description-embed",
+          cls: "obnotion-description obnotion-description-embed",
           text: currentDb.description,
           attr: { title: currentDb.description },
         });
-        const descEl = header.querySelector<HTMLElement>(".db-description-embed");
+        const descEl = header.querySelector<HTMLElement>(".obnotion-description-embed");
         if (descEl) this.attachDescriptionScrollState(descEl);
       }
     }
 
     // Row 2: View tabs + toolbar
-    const toolbar = header.createDiv({ cls: "db-toolbar" });
-    const left = toolbar.createDiv({ cls: "db-toolbar-left" });
-    const right = toolbar.createDiv({ cls: "db-toolbar-right" });
+    const toolbar = header.createDiv({ cls: "obnotion-toolbar" });
+    const left = toolbar.createDiv({ cls: "obnotion-toolbar-left" });
+    const right = toolbar.createDiv({ cls: "obnotion-toolbar-right" });
 
     if (actions.showDatabaseChrome && currentDb) {
       this.renderViewTabs(left, currentDb, currentViewIndex, actions);
@@ -405,21 +405,21 @@ export class ToolbarRenderer {
     }
     if (phoneLayout && !isChartView) this.renderSearch(left, state, actions);
 
-    const queryCluster = right.createDiv({ cls: "db-toolbar-cluster db-toolbar-query-cluster", attr: { "aria-label": t("toolbar.queryCluster") } });
+    const queryCluster = right.createDiv({ cls: "obnotion-toolbar-cluster obnotion-toolbar-query-cluster", attr: { "aria-label": t("toolbar.queryCluster") } });
     this.renderFilterButton(queryCluster, state, actions);
     if (showSortButton) this.renderSortButton(queryCluster, state, actions);
     if (showGroupButton) this.renderGroupSelect(queryCluster, currentView, state, actions);
 
-    const propertiesCluster = right.createDiv({ cls: "db-toolbar-cluster db-toolbar-properties-cluster", attr: { "aria-label": t("toolbar.properties") } });
+    const propertiesCluster = right.createDiv({ cls: "obnotion-toolbar-cluster obnotion-toolbar-properties-cluster", attr: { "aria-label": t("toolbar.properties") } });
     if (showColumnButton) this.renderColumnButton(propertiesCluster, currentView, state, actions);
 
-    const utilitiesCluster = right.createDiv({ cls: "db-toolbar-cluster db-toolbar-utilities-cluster", attr: { "aria-label": t("toolbar.utilities") } });
+    const utilitiesCluster = right.createDiv({ cls: "obnotion-toolbar-cluster obnotion-toolbar-utilities-cluster", attr: { "aria-label": t("toolbar.utilities") } });
     // `toggleViewConfig` is not optional on `ToolbarActions` — every caller wires it — so the
     // gear is unconditional, the same way the "···" button beside it is.
     this.renderSettingsButton(utilitiesCluster, actions);
     this.renderUtilitiesOverflowButton(utilitiesCluster, currentEntry, currentView, actions);
 
-    const creationCluster = right.createDiv({ cls: "db-toolbar-cluster db-toolbar-creation-cluster" });
+    const creationCluster = right.createDiv({ cls: "obnotion-toolbar-cluster obnotion-toolbar-creation-cluster" });
     if (!phoneLayout && !isChartView) this.renderSearch(utilitiesCluster, state, actions);
     if (!actions.isReadOnly && !isChartView) this.renderNewButton(creationCluster, actions, currentDb, currentView);
     if (actions.hideDatabaseTitle && !actions.hideHeaderChrome) this.installMeasuredToolbarCollapse(header, currentDb, currentViewIndex, actions);
@@ -430,15 +430,15 @@ export class ToolbarRenderer {
    * behind "···" — the operator's ruling, 2026-09-06: *"Gear icon in the toolbar rail, before
    * ···"*. It carries the settings-trigger fallback classes `createSettingsEntry` stamps, which
    * used to sit on the utilities button while this control's job lived inside that menu; moving
-   * the row here moves the stamp with it; `openViewSettingsAfterMutation`'s `.db-view-config-btn`
+   * the row here moves the stamp with it; `openViewSettingsAfterMutation`'s `.obnotion-view-config-btn`
    * lookup (`database-view.ts`, `embedded-database-renderer.ts`) still resolves to a live button.
    */
   private renderSettingsButton(toolbar: HTMLElement, actions: ToolbarActions): void {
     // `createIconButton` already drew the icon and the tooltip; `createSettingsEntry` is asked
     // for neither, the same division the utilities button next to it already keeps — asking
     // both would draw the icon twice.
-    const button = this.createIconButton(toolbar, "settings", t("toolbar.settings"), "db-toolbar-settings-btn");
-    button.setAttribute("aria-controls", "db-view-config-panel");
+    const button = this.createIconButton(toolbar, "settings", t("toolbar.settings"), "obnotion-toolbar-settings-btn");
+    button.setAttribute("aria-controls", "obnotion-view-config-panel");
     createSettingsEntry(button, {
       label: t("toolbar.settings"),
       ariaHaspopup: "dialog",
@@ -456,14 +456,14 @@ export class ToolbarRenderer {
     config: ViewConfig | undefined,
     actions: ToolbarActions,
   ): void {
-    const button = this.createIconButton(toolbar, "more-horizontal", t("toolbar.utilities"), "db-toolbar-more-btn");
+    const button = this.createIconButton(toolbar, "more-horizontal", t("toolbar.utilities"), "obnotion-toolbar-more-btn");
     button.setAttribute("aria-haspopup", "menu");
     button.setAttribute("aria-expanded", "false");
-    button.setAttribute("aria-controls", "db-toolbar-utilities");
+    button.setAttribute("aria-controls", "obnotion-toolbar-utilities");
     button.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      if (this.utilitiesPopover?.isConnected && this.utilitiesPopover.hasClass("db-toolbar-utilities-popover")) {
+      if (this.utilitiesPopover?.isConnected && this.utilitiesPopover.hasClass("obnotion-toolbar-utilities-popover")) {
         this.closeUtilitiesPopover();
         return;
       }
@@ -474,18 +474,18 @@ export class ToolbarRenderer {
         return;
       }
 
-      const root = button.closest(".note-database-container");
+      const root = button.closest(".obnotion-container");
       if (!root) return;
       const shell = createPopoverShell(button, {
         title: t("toolbar.utilities"),
         role: "menu",
-        className: "db-view-tab-popover db-toolbar-utilities-popover",
-        id: "db-toolbar-utilities",
+        className: "obnotion-view-tab-popover obnotion-toolbar-utilities-popover",
+        id: "obnotion-toolbar-utilities",
         onClose: () => {
           this.utilitiesShell = undefined;
           this.utilitiesPopover = undefined;
           this.removeUtilitiesPopoverListener = undefined;
-          (this.toolbarRoot || window.activeDocument).querySelectorAll<HTMLElement>(".db-toolbar-more-btn, .db-new-button-dropdown").forEach((trigger) => {
+          (this.toolbarRoot || window.activeDocument).querySelectorAll<HTMLElement>(".obnotion-toolbar-more-btn, .obnotion-new-button-dropdown").forEach((trigger) => {
             this.setPopoverTriggerState(trigger, false);
           });
         },
@@ -543,11 +543,11 @@ export class ToolbarRenderer {
    * one row drift apart. Presented as a phone sheet next to the column menu, the difference was
    * visible: this menu's rows did not line up with that one's.
    *
-   * `db-toolbar-menu-row` stays on the row because the stylesheet hangs the row's layout on it.
+   * `obnotion-toolbar-menu-row` stays on the row because the stylesheet hangs the row's layout on it.
    */
   private renderToolbarMenuRow(panel: HTMLElement, label: string, icon: string, onClick: () => void, extraClass = ""): HTMLButtonElement {
     const handle = createMenuRow(panel, {
-      cls: `db-toolbar-menu-row ${extraClass}`.trim(),
+      cls: `obnotion-toolbar-menu-row ${extraClass}`.trim(),
       icon,
       label,
       onClick: () => {
@@ -564,10 +564,10 @@ export class ToolbarRenderer {
     const unknown = state.pendingRefreshUnknown === true;
     const refreshing = state.isRefreshingDatabase === true;
     button.toggleClass("is-refreshing", refreshing);
-    button.querySelector(".db-database-refresh-badge")?.remove();
+    button.querySelector(".obnotion-database-refresh-badge")?.remove();
     if (pending > 0 || unknown) {
       button.createSpan({
-        cls: "db-database-refresh-badge",
+        cls: "obnotion-database-refresh-badge",
         text: pending > 99 ? "99+" : pending > 0 ? String(pending) : "!",
       });
     }
@@ -583,7 +583,7 @@ export class ToolbarRenderer {
   }
 
   private toggleCalendarTimelineOptions(toolbar: HTMLElement, anchor: HTMLElement, config: ViewConfig, database: DatabaseConfig, actions: ToolbarActions): void {
-    this.calendarTimelineToolbarRenderer.togglePopover(toolbar.closest(".note-database-container") as HTMLElement || toolbar, anchor, config, {
+    this.calendarTimelineToolbarRenderer.togglePopover(toolbar.closest(".obnotion-container") as HTMLElement || toolbar, anchor, config, {
       onChange: (label) => actions.updateViewConfig?.(label),
       database,
       createRecordIconField: actions.createRecordIconField ? () => actions.createRecordIconField?.() : undefined,
@@ -603,7 +603,7 @@ export class ToolbarRenderer {
     currentDbIndex: number,
     actions: ToolbarActions
   ): void {
-    const root = anchorEl.closest(".note-database-container");
+    const root = anchorEl.closest(".obnotion-container");
     if (!root) return;
     if (this.databasePopover?.isConnected) {
       this.closeDatabasePopover();
@@ -612,7 +612,7 @@ export class ToolbarRenderer {
 
     const entries = [...viewEntries];
     let activeIndex = currentDbIndex;
-    const panel = root.createDiv({ cls: "db-database-popover", attr: { id: "db-database-selector", role: "menu", "aria-label": t("settings.databaseList.title") } });
+    const panel = root.createDiv({ cls: "obnotion-database-popover", attr: { id: "obnotion-database-selector", role: "menu", "aria-label": t("settings.databaseList.title") } });
     this.databasePopover = panel;
     this.populateDatabasePopover(panel, anchorEl, entries, activeIndex, actions, (nextEntries, nextActiveIndex) => {
       entries.splice(0, entries.length, ...nextEntries);
@@ -643,8 +643,8 @@ export class ToolbarRenderer {
     const firstItem = panel.querySelector<HTMLElement>("button[role=menuitem]:not(:disabled)");
     panel.querySelectorAll<HTMLElement>("button[role=menuitem]").forEach((item) => item.setAttribute("tabindex", item === firstItem ? "0" : "-1"));
     if (focusIndex != null) {
-      panel.querySelectorAll<HTMLElement>(".db-database-popover-row")[focusIndex]
-        ?.querySelector<HTMLElement>(".db-database-popover-select")
+      panel.querySelectorAll<HTMLElement>(".obnotion-database-popover-row")[focusIndex]
+        ?.querySelector<HTMLElement>(".obnotion-database-popover-select")
         ?.focus();
     }
 
@@ -663,11 +663,11 @@ export class ToolbarRenderer {
     updateState: (entries: ToolbarViewEntry[], currentIndex: number) => void
   ): void {
     const row = panel.createDiv({
-      cls: `db-database-popover-row db-menu-item${index === currentDbIndex ? " is-active" : ""}${canMove && actions.moveDatabase ? " is-draggable" : ""}`,
+      cls: `obnotion-database-popover-row obnotion-menu-item${index === currentDbIndex ? " is-active" : ""}${canMove && actions.moveDatabase ? " is-draggable" : ""}`,
       attr: { role: "presentation" },
     });
-    row.createSpan({ cls: "db-database-popover-drag db-menu-item-icon", text: canMove && actions.moveDatabase ? "⋮⋮" : "" });
-    const moveControls = row.createSpan({ cls: "db-mobile-reorder-controls" });
+    row.createSpan({ cls: "obnotion-database-popover-drag obnotion-menu-item-icon", text: canMove && actions.moveDatabase ? "⋮⋮" : "" });
+    const moveControls = row.createSpan({ cls: "obnotion-mobile-reorder-controls" });
     if (canMove && actions.moveDatabase) {
       const sameSourceIndexes = viewEntries
         .map((candidate, candidateIndex) => ({ candidate, candidateIndex }))
@@ -698,15 +698,15 @@ export class ToolbarRenderer {
     }
     const label = entry.config.name || t("common.untitled");
     const selectBtn = row.createEl("button", {
-      cls: "db-database-popover-select",
+      cls: "obnotion-database-popover-select",
       attr: { type: "button", role: "menuitem", "aria-label": label, "aria-current": index === currentDbIndex ? "true" : "false" },
     });
     if (actions.showDatabaseIcon !== false) {
       renderRecordIcon(selectBtn, entry.config.icon, { compact: true, defaultIcon: "database" })
-        .addClass("db-database-popover-icon");
+        .addClass("obnotion-database-popover-icon");
     }
-    selectBtn.createSpan({ cls: "db-database-popover-label db-menu-item-label", text: label });
-    if (index === currentDbIndex) setIcon(selectBtn.createSpan({ cls: "db-database-popover-check" }), "check");
+    selectBtn.createSpan({ cls: "obnotion-database-popover-label obnotion-menu-item-label", text: label });
+    if (index === currentDbIndex) setIcon(selectBtn.createSpan({ cls: "obnotion-database-popover-check" }), "check");
     selectBtn.onclick = () => {
       actions.selectDatabase(index);
       this.closeDatabasePopover();
@@ -773,7 +773,7 @@ export class ToolbarRenderer {
 
   private clearDatabaseDragState(panel: HTMLElement): void {
     this.draggedDatabaseIndex = null;
-    panel.querySelectorAll(".db-database-popover-row.is-drop-target, .db-database-popover-row.is-dragging")
+    panel.querySelectorAll(".obnotion-database-popover-row.is-drop-target, .obnotion-database-popover-row.is-dragging")
       .forEach((el) => el.removeClass("is-drop-target", "is-dragging"));
   }
 
@@ -786,7 +786,7 @@ export class ToolbarRenderer {
   ): void {
     event.preventDefault();
     event.stopPropagation();
-    const root = anchorEl.closest(".note-database-container");
+    const root = anchorEl.closest(".obnotion-container");
     if (!root) return;
     if (this.titleActionsPopover?.isConnected) {
       this.closeTitleActionsPopover();
@@ -799,13 +799,13 @@ export class ToolbarRenderer {
     const shell = createPopoverShell(anchorEl, {
       title: t("common.database"),
       role: "menu",
-      className: "db-view-tab-popover db-title-actions-popover",
-      id: "db-title-actions",
+      className: "obnotion-view-tab-popover obnotion-title-actions-popover",
+      id: "obnotion-title-actions",
       onClose: () => {
         this.titleActionsShell = undefined;
         this.titleActionsPopover = undefined;
         this.removeTitleActionsPopoverListener = undefined;
-        root.querySelectorAll<HTMLElement>(".db-heading-more-button").forEach((button) => this.setPopoverTriggerState(button, false));
+        root.querySelectorAll<HTMLElement>(".obnotion-heading-more-button").forEach((button) => this.setPopoverTriggerState(button, false));
       },
     });
     this.titleActionsShell = shell;
@@ -838,11 +838,11 @@ export class ToolbarRenderer {
     extraClass = ""
   ): void {
     const row = panel.createEl("button", {
-      cls: `db-view-tab-popover-row ${extraClass}`.trim(),
+      cls: `obnotion-view-tab-popover-row ${extraClass}`.trim(),
       attr: { type: "button", role: "menuitem", "aria-label": label },
     });
-    setIcon(row.createSpan({ cls: "db-view-tab-popover-marker" }), icon);
-    row.createSpan({ cls: "db-view-tab-popover-label", text: label });
+    setIcon(row.createSpan({ cls: "obnotion-view-tab-popover-marker" }), icon);
+    row.createSpan({ cls: "obnotion-view-tab-popover-label", text: label });
     row.onclick = (event) => {
       this.closeTitleActionsPopover();
       onClick(event);
@@ -905,7 +905,7 @@ export class ToolbarRenderer {
         attributes: {
           "aria-haspopup": "dialog",
           "aria-expanded": "false",
-          "aria-controls": "db-add-view-popover",
+          "aria-controls": "obnotion-add-view-popover",
         },
         onClick: (event) => {
           const addBtn = event?.currentTarget;
@@ -923,7 +923,7 @@ export class ToolbarRenderer {
     }
 
     // Set up resize observer on the toolbar for dynamic overflow detection
-    const toolbar = tabs.closest(".db-toolbar");
+    const toolbar = tabs.closest(".obnotion-toolbar");
     this.resizeObserver?.disconnect();
     if (toolbar) {
       let collapsing = false;
@@ -931,7 +931,7 @@ export class ToolbarRenderer {
         if (collapsing) return;
         collapsing = true;
         for (const t of tabEls) t.el.setCssProps({ display: "" });
-        const oldBtn = tabs.querySelector(".db-view-tab-more");
+        const oldBtn = tabs.querySelector(".obnotion-view-tab-more");
         if (oldBtn) oldBtn.remove();
         this.collapseOverflowTabs(tabs, tabEls, db, currentViewIndex, actions);
         collapsing = false;
@@ -954,12 +954,12 @@ export class ToolbarRenderer {
 
   private getViewTabId(db: DatabaseConfig, view: ViewConfig, index: number): string {
     const raw = `${db.id}-${this.getViewIdentity(view, index)}`;
-    return `db-view-tab-${raw.replace(/[^a-zA-Z0-9_-]/g, "-")}`;
+    return `obnotion-view-tab-${raw.replace(/[^a-zA-Z0-9_-]/g, "-")}`;
   }
 
   private renderViewIcon(parent: HTMLElement, token: string | undefined, fallback: string): void {
     if (token && !token.startsWith("lucide:") && token.length <= 8) {
-      parent.createSpan({ cls: "db-view-tab-custom-icon", text: token });
+      parent.createSpan({ cls: "obnotion-view-tab-custom-icon", text: token });
       return;
     }
     const lucideMatch = token?.match(/^lucide:([^@]+)(?:@(.+))?$/);
@@ -1030,7 +1030,7 @@ export class ToolbarRenderer {
   private clearViewTabDragState(tab: HTMLElement): void {
     this.draggedViewIndex = null;
     tab.removeClass("is-dragging", "is-drop-target");
-    tab.parentElement?.querySelectorAll(".db-view-tab.is-drop-target, .db-view-tab.is-dragging")
+    tab.parentElement?.querySelectorAll(".obnotion-view-tab.is-drop-target, .obnotion-view-tab.is-dragging")
       .forEach((el) => el.removeClass("is-drop-target", "is-dragging"));
   }
 
@@ -1049,16 +1049,16 @@ export class ToolbarRenderer {
     currentViewIndex: number,
     actions: ToolbarActions
   ): void {
-    const toolbar = tabs.closest(".db-toolbar");
-    const right = toolbar?.querySelector(".db-toolbar-right") as HTMLElement | null;
-    const phoneSearch = toolbar?.querySelector(".db-toolbar-left .db-search-control") as HTMLElement | null;
+    const toolbar = tabs.closest(".obnotion-toolbar");
+    const right = toolbar?.querySelector(".obnotion-toolbar-right") as HTMLElement | null;
+    const phoneSearch = toolbar?.querySelector(".obnotion-toolbar-left .obnotion-search-control") as HTMLElement | null;
     const boundary = isTouchDevice(this.toolbarRoot)
       ? (phoneSearch ? phoneSearch.getBoundingClientRect().left - 4 : toolbar?.getBoundingClientRect().right || tabs.getBoundingClientRect().right)
       : right ? right.getBoundingClientRect().left - 6 : tabs.getBoundingClientRect().right;
     const containerWidth = boundary - tabs.getBoundingClientRect().left;
     const gap = parseFloat(getComputedStyle(tabs).columnGap || getComputedStyle(tabs).gap || "3") || 3;
 
-    const addBtn: HTMLElement | null = tabs.querySelector(".db-view-tab-add");
+    const addBtn: HTMLElement | null = tabs.querySelector(".obnotion-view-tab-add");
     const addBtnWidth = addBtn ? addBtn.offsetWidth + gap : 0;
     const moreBtnWidth = 24 + gap;
 
@@ -1093,13 +1093,13 @@ export class ToolbarRenderer {
 
     // Create "⋯" overflow dropdown
     const moreBtn = tabs.createEl("button", {
-      cls: "db-view-tab db-view-tab-more",
+      cls: "obnotion-view-tab obnotion-view-tab-more",
       attr: {
         type: "button",
         "aria-label": t("toolbar.moreViewsCount", { count: hiddenTabs.length }),
         "aria-haspopup": "dialog",
         "aria-expanded": "false",
-        "aria-controls": "db-all-views-popover",
+        "aria-controls": "obnotion-all-views-popover",
       },
     });
     moreBtn.createSpan({ text: "⋯" });
@@ -1108,9 +1108,9 @@ export class ToolbarRenderer {
   }
 
   private showAllViewsHub(anchor: HTMLElement, db: DatabaseConfig, currentViewIndex: number, actions: ToolbarActions): void {
-    const root = anchor.closest(".note-database-container");
+    const root = anchor.closest(".obnotion-container");
     if (!root) return;
-    if (this.viewTabPopover?.isConnected && this.viewTabPopover.hasClass("db-all-views-popover")) {
+    if (this.viewTabPopover?.isConnected && this.viewTabPopover.hasClass("obnotion-all-views-popover")) {
       this.closeViewTabPopover();
       return;
     }
@@ -1119,12 +1119,12 @@ export class ToolbarRenderer {
     const shell = createPopoverShell(anchor, {
       title: t("toolbar.allViews"),
       role: "panel",
-      className: "db-view-tab-popover db-all-views-popover",
-      id: "db-all-views-popover",
+      className: "obnotion-view-tab-popover obnotion-all-views-popover",
+      id: "obnotion-all-views-popover",
       beforeClose: (header) => {
-        header.addClass("db-all-views-header");
+        header.addClass("obnotion-all-views-header");
         search = header.createEl("input", {
-          cls: "db-all-views-search",
+          cls: "obnotion-all-views-search",
           attr: { type: "search", placeholder: t("toolbar.searchViews"), "aria-label": t("toolbar.searchViews") },
         });
       },
@@ -1132,13 +1132,13 @@ export class ToolbarRenderer {
         this.viewTabShell = undefined;
         this.viewTabPopover = undefined;
         this.removeViewTabPopoverListener = undefined;
-        root.querySelectorAll<HTMLElement>(".db-view-tab-add, .db-view-tab-more").forEach((button) => this.setPopoverTriggerState(button, false));
+        root.querySelectorAll<HTMLElement>(".obnotion-view-tab-add, .obnotion-view-tab-more").forEach((button) => this.setPopoverTriggerState(button, false));
       },
     });
     this.viewTabShell = shell;
     this.viewTabPopover = shell.panel;
     const panel = shell.panel;
-    const list = panel.createDiv({ cls: "db-all-views-list", attr: { role: "listbox", "aria-label": t("toolbar.allViews") } });
+    const list = panel.createDiv({ cls: "obnotion-all-views-list", attr: { role: "listbox", "aria-label": t("toolbar.allViews") } });
     const renderList = () => {
       list.empty();
       const query = search.value.trim().toLocaleLowerCase();
@@ -1146,24 +1146,24 @@ export class ToolbarRenderer {
         .map((view, index) => ({ view, index }))
         .filter(({ view }) => `${view.name || t("common.untitled")} ${view.viewType || "table"}`.toLocaleLowerCase().includes(query));
       if (!visible.length) {
-        list.createDiv({ cls: "db-all-views-empty", text: t("common.noResults") });
+        list.createDiv({ cls: "obnotion-all-views-empty", text: t("common.noResults") });
         return;
       }
       for (const { view, index } of visible) {
         const viewId = this.getViewIdentity(view, index);
-        const row = list.createDiv({ cls: `db-all-view-row${index === currentViewIndex ? " is-active" : ""}` });
+        const row = list.createDiv({ cls: `obnotion-all-view-row${index === currentViewIndex ? " is-active" : ""}` });
         const select = row.createEl("button", {
-          cls: "db-all-view-select",
+          cls: "obnotion-all-view-select",
           attr: { type: "button", role: "option", "aria-selected": index === currentViewIndex ? "true" : "false", "aria-label": view.name || t("common.untitled") },
         });
-        this.renderViewIcon(select.createSpan({ cls: "db-all-view-icon" }), view.icon, this.getViewTypeIcon(view.viewType || "table"));
-        const label = select.createSpan({ cls: "db-all-view-label", text: view.name || t("common.untitled") });
-        select.createSpan({ cls: "db-all-view-layout", text: view.viewType || "table" });
-        if (index === currentViewIndex) setIcon(select.createSpan({ cls: "db-all-view-active" }), "check");
+        this.renderViewIcon(select.createSpan({ cls: "obnotion-all-view-icon" }), view.icon, this.getViewTypeIcon(view.viewType || "table"));
+        const label = select.createSpan({ cls: "obnotion-all-view-label", text: view.name || t("common.untitled") });
+        select.createSpan({ cls: "obnotion-all-view-layout", text: view.viewType || "table" });
+        if (index === currentViewIndex) setIcon(select.createSpan({ cls: "obnotion-all-view-active" }), "check");
         select.onclick = () => actions.selectViewInView(0, index, viewId);
 
         if (!actions.isReadOnlyViews) {
-          const controls = row.createDiv({ cls: "db-all-view-actions" });
+          const controls = row.createDiv({ cls: "obnotion-all-view-actions" });
           // One action per entry, built once and spent either as five inline icons or as five rows
           // behind one control. Two lists would be two places to add the next action to, and the
           // phone would be the one that quietly missed it.
@@ -1197,7 +1197,7 @@ export class ToolbarRenderer {
             // a sheet on a phone, so the actions arrive in the presentation every other menu here
             // uses, with its backdrop, its drag-to-dismiss and its keyboard handling already wired.
             const more = controls.createEl("button", {
-              cls: "db-all-view-action db-all-view-more",
+              cls: "obnotion-all-view-action obnotion-all-view-more",
               attr: { type: "button", "aria-label": t("common.more"), title: t("common.more"), "aria-haspopup": "menu" },
             });
             setIcon(more, "more-horizontal");
@@ -1228,7 +1228,7 @@ export class ToolbarRenderer {
 
   private renderInlineViewAction(parent: HTMLElement, label: string, icon: string, onClick: () => void, extraClass = ""): void {
     const button = parent.createEl("button", {
-      cls: `db-all-view-action ${extraClass}`.trim(),
+      cls: `obnotion-all-view-action ${extraClass}`.trim(),
       attr: { type: "button", "aria-label": label, title: label },
     });
     setIcon(button, icon);
@@ -1242,7 +1242,7 @@ export class ToolbarRenderer {
   private renameAllView(row: HTMLElement, label: HTMLElement, viewIndex: number, actions: ToolbarActions): void {
     const input = row.ownerDocument.createElement("input");
     input.type = "text";
-    input.className = "db-all-view-rename";
+    input.className = "obnotion-all-view-rename";
     input.value = label.textContent || "";
     label.replaceWith(input);
     input.focus();
@@ -1266,7 +1266,7 @@ export class ToolbarRenderer {
    * A view tab's own right-click menu: rename, duplicate, change type, the touch-only reorder
    * rows, delete.
    *
-   * The type-change row is the one row here that does not lead to a `db-menu-item` result — it
+   * The type-change row is the one row here that does not lead to a `obnotion-menu-item` result — it
    * opens the shared select picker instead, the way `showAllViewsHub`'s own "change layout" action
    * already does: close this menu first, then anchor the picker on the tab, which survives the
    * close unlike a row inside the menu that is about to be removed.
@@ -1287,7 +1287,7 @@ export class ToolbarRenderer {
   ): void {
     event.preventDefault();
     event.stopPropagation();
-    const root = tab.closest(".note-database-container");
+    const root = tab.closest(".obnotion-container");
     if (!root) return;
     actions.closeToolbarPopovers?.();
     this.dismissSiblingToolbarSurfaces(tab);
@@ -1344,7 +1344,7 @@ export class ToolbarRenderer {
       anchor,
       label: t("toolbar.changeViewType"),
       value: viewType,
-      popoverClassName: "db-view-tabs-dropdown-popover",
+      popoverClassName: "obnotion-view-tabs-dropdown-popover",
       options: this.getViewTypeOptions(viewType),
       onChange: (value) => {
         this.closeViewTabPopover();
@@ -1363,12 +1363,12 @@ export class ToolbarRenderer {
    */
   private createAddViewField(parent: HTMLElement, label: string): { row: HTMLElement; field: HTMLElement; controlId: string } {
     this.addViewFieldSeq += 1;
-    const controlId = `db-add-view-field-${this.addViewFieldSeq}`;
+    const controlId = `obnotion-add-view-field-${this.addViewFieldSeq}`;
     // The row is the shared one; the field inside keeps its own caption-above-control layout.
-    const row = parent.createDiv({ cls: "db-panel-row" });
-    const field = row.createDiv({ cls: "db-add-view-field" });
+    const row = parent.createDiv({ cls: "obnotion-panel-row" });
+    const field = row.createDiv({ cls: "obnotion-add-view-field" });
     field.createEl("label", {
-      cls: "db-add-view-field-label",
+      cls: "obnotion-add-view-field-label",
       text: label,
       attr: { for: controlId },
     });
@@ -1388,9 +1388,9 @@ export class ToolbarRenderer {
   ): void {
     event.preventDefault();
     event.stopPropagation();
-    const root = anchorEl.closest(".note-database-container");
+    const root = anchorEl.closest(".obnotion-container");
     if (!root) return;
-    if (this.viewTabPopover?.isConnected && this.viewTabPopover.hasClass("db-add-view-popover")) {
+    if (this.viewTabPopover?.isConnected && this.viewTabPopover.hasClass("obnotion-add-view-popover")) {
       this.closeViewTabPopover();
       return;
     }
@@ -1400,8 +1400,8 @@ export class ToolbarRenderer {
     const shell = createPopoverShell(anchorEl, {
       title: t("toolbar.addView"),
       role: "panel",
-      className: "db-view-tab-popover db-add-view-popover",
-      id: "db-add-view-popover",
+      className: "obnotion-view-tab-popover obnotion-add-view-popover",
+      id: "obnotion-add-view-popover",
       onClose: () => {
         this.viewTabShell = undefined;
         this.viewTabPopover = undefined;
@@ -1418,12 +1418,12 @@ export class ToolbarRenderer {
     // them and the weight below them: captions are muted and small, the action rows carry the
     // normal text colour and an icon, so the eye lands on the actions even though they come after.
     createMenuSection(panel, t("toolbar.addViewOptions"));
-    const form = panel.createDiv({ cls: "db-add-view-form" });
+    const form = panel.createDiv({ cls: "obnotion-add-view-form" });
     const nameField = this.createAddViewField(form, t("toolbar.newViewName"));
     // No placeholder: it repeated the caption, and a placeholder is not a label — it vanishes at
     // the first keystroke, which is when a person most needs to be told what the field is.
     const nameInput = nameField.field.createEl("input", {
-      cls: "db-add-view-name",
+      cls: "obnotion-add-view-name",
       attr: { type: "text", id: nameField.controlId },
     });
     // The key field is a dropdown row, not a native select: a select renders the OS picker on a
@@ -1438,7 +1438,7 @@ export class ToolbarRenderer {
       label: t("toolbar.viewKeyField"),
       options: keyFieldOptions,
       value: keyFieldValue,
-      className: "db-add-view-key-field",
+      className: "obnotion-add-view-key-field",
       hideLabel: true,
       onChange: (value) => {
         keyFieldValue = value;
@@ -1446,24 +1446,24 @@ export class ToolbarRenderer {
     });
     const iconFieldWrap = this.createAddViewField(form, t("toolbar.viewIcon"));
     const iconInput = iconFieldWrap.field.createEl("input", {
-      cls: "db-add-view-icon",
+      cls: "obnotion-add-view-icon",
       attr: { type: "text", maxlength: "8", id: iconFieldWrap.controlId },
     });
     // Named for what it does rather than for the action it resembles. It seeds the new view from
     // the current one's filters, sorts and column order; the row below makes a same-type copy. Two
     // behaviours that shared one name read as the same control offered twice.
-    // Label first, control last — the settings sheet's own toggle order (`.db-view-config-label`
-    // then `.db-view-config-field`). A fresh review found the two mirrored: this row read the
+    // Label first, control last — the settings sheet's own toggle order (`.obnotion-view-config-label`
+    // then `.obnotion-view-config-field`). A fresh review found the two mirrored: this row read the
     // checkbox before its own caption while every other toggle on the phone reads caption then
     // control, which is exactly the kind of per-surface drift the shared sheet grammar exists to
     // catch.
-    const duplicate = form.createEl("label", { cls: "db-add-view-duplicate db-panel-row" });
+    const duplicate = form.createEl("label", { cls: "obnotion-add-view-duplicate obnotion-panel-row" });
     duplicate.createSpan({ text: t("toolbar.copyCurrentViewSettings") });
     const duplicateInput = createCheckbox(duplicate, { role: "field" });
 
     createMenuSeparator(panel);
     createMenuSection(panel, t("toolbar.addViewCreate"));
-    const choices = panel.createDiv({ cls: "db-add-view-choices" });
+    const choices = panel.createDiv({ cls: "obnotion-add-view-choices" });
     // Rows, not tiles. The tiles carried a preview that was identical for all seven types, so the
     // grid's one advantage over a list — showing what each layout looks like — was never delivered,
     // while it cost a second row vocabulary, an 11px caption and a boundary no theme token can draw
@@ -1494,7 +1494,7 @@ export class ToolbarRenderer {
       // Same group as the type rows: duplicating is another way to end up with a new view, so it
       // belongs with them rather than stranded under a rule of its own.
       createMenuRow(choices, {
-        cls: "db-add-view-duplicate-action",
+        cls: "obnotion-add-view-duplicate-action",
         icon: "copy",
         label: t("toolbar.duplicateCurrentView"),
         chevron: true,
@@ -1513,12 +1513,12 @@ export class ToolbarRenderer {
   }
 
   private startRenameView(tab: HTMLElement, viewIndex: number, actions: ToolbarActions): void {
-    const nameEl = tab.querySelector(".db-view-tab-name") as HTMLElement;
+    const nameEl = tab.querySelector(".obnotion-view-tab-name") as HTMLElement;
     if (!nameEl) return;
     const input = tab.ownerDocument.createElement("input");
     input.type = "text";
     input.value = nameEl.textContent || "";
-    input.className = "db-view-tab-rename";
+    input.className = "obnotion-view-tab-rename";
     const resize = () => {
       input.style.width = `${Math.max(56, (input.value.length + 2) * 8)}px`;
     };
@@ -1561,7 +1561,7 @@ export class ToolbarRenderer {
     event.stopPropagation();
     const initialHeight = Math.ceil(el.getBoundingClientRect().height);
     const input = multiline ? window.activeDocument.createElement("textarea") : window.activeDocument.createElement("input");
-    input.className = multiline ? "db-heading-edit db-heading-edit-description" : "db-heading-edit";
+    input.className = multiline ? "obnotion-heading-edit obnotion-heading-edit-description" : "obnotion-heading-edit";
     if (!multiline) (input as HTMLInputElement).type = "text";
     if (multiline && input instanceof HTMLTextAreaElement) input.rows = 1;
     input.value = value;
@@ -1616,22 +1616,22 @@ export class ToolbarRenderer {
   // ── Row 2: Toolbar buttons ──
 
   private renderSearch(toolbar: HTMLElement, state: DatabaseViewState, actions: ToolbarActions): void {
-    const wrap = toolbar.createDiv({ cls: `db-search-control${state.searchText ? " is-active" : ""}` });
+    const wrap = toolbar.createDiv({ cls: `obnotion-search-control${state.searchText ? " is-active" : ""}` });
     const button = wrap.createEl("button", {
-      cls: "db-search-button",
+      cls: "obnotion-search-button",
       attr: { type: "button", "aria-label": t("common.search") },
     });
     setIcon(button, "search");
     setTooltip(button, t("toolbar.searchShortcut"), { delay: 100 });
-    const inputWrap = wrap.createDiv({ cls: "db-search-input-wrap" });
+    const inputWrap = wrap.createDiv({ cls: "obnotion-search-input-wrap" });
     const searchInput = inputWrap.createEl("input", {
-      cls: "db-search-input",
+      cls: "obnotion-search-input",
       attr: { type: "text", placeholder: t("common.search"), "aria-label": t("common.search") },
     });
-    const searchPulse = inputWrap.createSpan({ cls: "db-search-activity-pulse", attr: { "aria-hidden": "true" } });
+    const searchPulse = inputWrap.createSpan({ cls: "obnotion-search-activity-pulse", attr: { "aria-hidden": "true" } });
     searchInput.value = state.searchText;
     const clear = wrap.createEl("button", {
-      cls: "db-search-clear",
+      cls: "obnotion-search-clear",
       text: "×",
       attr: { type: "button", "aria-label": t("toolbar.clearSearch") },
     });
@@ -1711,10 +1711,10 @@ export class ToolbarRenderer {
   ): string {
     const currentViewType = config?.viewType || "table";
     const groupValue = config ? this.resolveGroupValue(config, currentViewType, state) : state.groupByField;
-    const btn = this.createIconButton(toolbar, "", t("toolbar.group"), "db-group-btn");
+    const btn = this.createIconButton(toolbar, "", t("toolbar.group"), "obnotion-group-btn");
     btn.setAttribute("aria-haspopup", "dialog");
     btn.setAttribute("aria-expanded", "false");
-    btn.setAttribute("aria-controls", "db-group-popover");
+    btn.setAttribute("aria-controls", "obnotion-group-popover");
     appendSvg(btn, ToolbarRenderer.ICONS.group);
     if (groupValue) btn.addClass("is-active");
     btn.onclick = (event) => {
@@ -1750,7 +1750,7 @@ export class ToolbarRenderer {
     actions: ToolbarActions,
     state: DatabaseViewState
   ): void {
-    const root = anchorEl.closest(".note-database-container");
+    const root = anchorEl.closest(".obnotion-container");
     if (!root) return;
     if (this.groupPopover?.isConnected) {
       this.closeGroupPopover();
@@ -1760,14 +1760,14 @@ export class ToolbarRenderer {
     const shell = createPopoverShell(anchorEl, {
       title: t("toolbar.group"),
       role: "menu",
-      className: "db-group-popover",
-      id: "db-group-popover",
+      className: "obnotion-group-popover",
+      id: "obnotion-group-popover",
       omitHeader: true,
       onClose: () => {
         this.groupShell = undefined;
         this.groupPopover = undefined;
         this.removeGroupPopoverListener = undefined;
-        root.querySelectorAll<HTMLElement>(".db-group-btn").forEach((button) => this.setPopoverTriggerState(button, false));
+        root.querySelectorAll<HTMLElement>(".obnotion-group-btn").forEach((button) => this.setPopoverTriggerState(button, false));
       },
     });
     this.groupShell = shell;
@@ -1786,7 +1786,7 @@ export class ToolbarRenderer {
     if (!(target instanceof Node)) return false;
     if (panel.contains(target) || anchorEl.contains(target)) return true;
     const element = isHTMLElement(target) ? target : target.parentElement;
-    return element?.closest(".db-group-row-limit-dropdown-popover") != null;
+    return element?.closest(".obnotion-group-row-limit-dropdown-popover") != null;
   }
 
   private populateGroupPopover(
@@ -1859,7 +1859,7 @@ export class ToolbarRenderer {
     // panel and it re-resolves the current bar when a press lands, so restoring the node is enough
     // to make the drag reachable again. Re-applying is idempotent and only does anything once the
     // surface is already a sheet, so desktop rebuilds are untouched.
-    if (panel.hasClass("db-mobile-bottom-sheet")) applySheetChrome(panel, true);
+    if (panel.hasClass("obnotion-mobile-bottom-sheet")) applySheetChrome(panel, true);
 
     const groupValue = this.resolveGroupValue(config, viewType, state);
 
@@ -1868,7 +1868,7 @@ export class ToolbarRenderer {
   }
 
   private renderGroupPopoverSection(panel: HTMLElement, title: string): void {
-    panel.createDiv({ cls: "db-group-popover-section-title", text: title });
+    panel.createDiv({ cls: "obnotion-group-popover-section-title", text: title });
   }
 
   private renderGroupPopoverRow(
@@ -1876,15 +1876,15 @@ export class ToolbarRenderer {
     options: { label: string; token?: string; icon?: string; column?: ColumnDef; active?: boolean; onClick(): void }
   ): void {
     const row = panel.createEl("button", {
-      cls: `db-group-popover-row db-menu-item${options.active ? " is-active" : ""}`,
+      cls: `obnotion-group-popover-row obnotion-menu-item${options.active ? " is-active" : ""}`,
       attr: { type: "button" },
     });
-    const marker = row.createSpan({ cls: "db-group-popover-marker db-menu-item-icon" });
+    const marker = row.createSpan({ cls: "obnotion-group-popover-marker obnotion-menu-item-icon" });
     if (options.icon) setIcon(marker, options.icon);
     else if (options.column) renderPropertyTypeIcon(marker, options.column);
-    else marker.createSpan({ cls: "db-property-icon db-property-icon-text", text: options.token || "" });
-    row.createSpan({ cls: "db-group-popover-label db-menu-item-label", text: options.label });
-    if (options.active) setIcon(row.createSpan({ cls: "db-group-popover-check db-menu-item-check" }), "check");
+    else marker.createSpan({ cls: "obnotion-property-icon obnotion-property-icon-text", text: options.token || "" });
+    row.createSpan({ cls: "obnotion-group-popover-label obnotion-menu-item-label", text: options.label });
+    if (options.active) setIcon(row.createSpan({ cls: "obnotion-group-popover-check obnotion-menu-item-check" }), "check");
     row.onclick = () => {
       options.onClick();
       this.rebuildGroupPopover();
@@ -1897,11 +1897,11 @@ export class ToolbarRenderer {
     field: string,
     actions: ToolbarActions
   ): void {
-    const row = panel.createEl("label", { cls: "db-group-popover-row db-menu-item db-group-popover-switch-row" });
-    const marker = row.createSpan({ cls: "db-group-popover-marker db-menu-item-icon" });
+    const row = panel.createEl("label", { cls: "obnotion-group-popover-row obnotion-menu-item obnotion-group-popover-switch-row" });
+    const marker = row.createSpan({ cls: "obnotion-group-popover-marker obnotion-menu-item-icon" });
     setIcon(marker, "eye");
-    row.createSpan({ cls: "db-group-popover-label db-menu-item-label", text: t("toolbar.showEmptyGroup") });
-    const input = row.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch" } });
+    row.createSpan({ cls: "obnotion-group-popover-label obnotion-menu-item-label", text: t("toolbar.showEmptyGroup") });
+    const input = row.createEl("input", { cls: "obnotion-toggle-switch", attr: { type: "checkbox", role: "switch" } });
     input.checked = shouldShowEmptyGroups(config, field);
     input.onchange = (event) => {
       event.stopPropagation();
@@ -1917,11 +1917,11 @@ export class ToolbarRenderer {
     field: string,
     actions: ToolbarActions
   ): void {
-    const row = panel.createEl("label", { cls: "db-group-popover-row db-menu-item db-group-popover-switch-row" });
-    const marker = row.createSpan({ cls: "db-group-popover-marker db-menu-item-icon" });
+    const row = panel.createEl("label", { cls: "obnotion-group-popover-row obnotion-menu-item obnotion-group-popover-switch-row" });
+    const marker = row.createSpan({ cls: "obnotion-group-popover-marker obnotion-menu-item-icon" });
     setIcon(marker, "clock");
-    row.createSpan({ cls: "db-group-popover-label db-menu-item-label", text: t("viewConfig.dateGroupIgnoreTime") });
-    const input = row.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch" } });
+    row.createSpan({ cls: "obnotion-group-popover-label obnotion-menu-item-label", text: t("viewConfig.dateGroupIgnoreTime") });
+    const input = row.createEl("input", { cls: "obnotion-toggle-switch", attr: { type: "checkbox", role: "switch" } });
     input.checked = getDateGroupMode(config, field) === "date";
     input.onchange = (event) => {
       event.stopPropagation();
@@ -1955,15 +1955,15 @@ export class ToolbarRenderer {
         this.rebuildGroupPopover();
       },
       icon: "list-filter",
-      className: "db-group-popover-row db-menu-item db-group-row-limit-select-row",
-      popoverClassName: "db-group-row-limit-dropdown-popover",
+      className: "obnotion-group-popover-row obnotion-menu-item obnotion-group-row-limit-select-row",
+      popoverClassName: "obnotion-group-row-limit-dropdown-popover",
     });
     if (customActive) {
-      const row = panel.createDiv({ cls: "db-group-popover-row db-menu-item db-group-row-limit-custom-row" });
-      row.createSpan({ cls: "db-group-popover-marker db-menu-item-icon" });
-      row.createSpan({ cls: "db-group-popover-label db-menu-item-label", text: t("viewConfig.groupRowLimitCustom") });
+      const row = panel.createDiv({ cls: "obnotion-group-popover-row obnotion-menu-item obnotion-group-row-limit-custom-row" });
+      row.createSpan({ cls: "obnotion-group-popover-marker obnotion-menu-item-icon" });
+      row.createSpan({ cls: "obnotion-group-popover-label obnotion-menu-item-label", text: t("viewConfig.groupRowLimitCustom") });
       const input = row.createEl("input", {
-        cls: "db-view-config-number db-group-row-limit-input",
+        cls: "obnotion-view-config-number obnotion-group-row-limit-input",
         attr: { type: "number", min: "1", max: "500" },
       });
       input.value = String(current);
@@ -1989,11 +1989,11 @@ export class ToolbarRenderer {
     config: ViewConfig,
     actions: ToolbarActions
   ): void {
-    const row = panel.createEl("label", { cls: "db-group-popover-row db-menu-item db-group-popover-switch-row" });
-    const marker = row.createSpan({ cls: "db-group-popover-marker db-menu-item-icon" });
+    const row = panel.createEl("label", { cls: "obnotion-group-popover-row obnotion-menu-item obnotion-group-popover-switch-row" });
+    const marker = row.createSpan({ cls: "obnotion-group-popover-marker obnotion-menu-item-icon" });
     setIcon(marker, "layout-list");
-    row.createSpan({ cls: "db-group-popover-label db-menu-item-label", text: t("toolbar.enableBoardSubgroups") });
-    const input = row.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch" } });
+    row.createSpan({ cls: "obnotion-group-popover-label obnotion-menu-item-label", text: t("toolbar.enableBoardSubgroups") });
+    const input = row.createEl("input", { cls: "obnotion-toggle-switch", attr: { type: "checkbox", role: "switch" } });
     input.checked = this.isBoardSubgroupEnabled(config);
     input.onchange = (event) => {
       event.stopPropagation();
@@ -2058,10 +2058,10 @@ export class ToolbarRenderer {
   }
 
   private renderGroupPopoverNotice(panel: HTMLElement, label: string, icon: string): void {
-    const row = panel.createDiv({ cls: "db-group-popover-row db-menu-item is-disabled" });
-    const marker = row.createSpan({ cls: "db-group-popover-marker db-menu-item-icon" });
+    const row = panel.createDiv({ cls: "obnotion-group-popover-row obnotion-menu-item is-disabled" });
+    const marker = row.createSpan({ cls: "obnotion-group-popover-marker obnotion-menu-item-icon" });
     setIcon(marker, icon);
-    row.createSpan({ cls: "db-group-popover-label db-menu-item-label", text: label });
+    row.createSpan({ cls: "obnotion-group-popover-label obnotion-menu-item-label", text: label });
   }
 
   private isBoardSubgroupEnabled(config: ViewConfig): boolean {
@@ -2126,7 +2126,7 @@ export class ToolbarRenderer {
   }
 
   private closeGroupPopover(): void {
-    const root = this.groupPopover?.closest(".note-database-container");
+    const root = this.groupPopover?.closest(".obnotion-container");
     this.groupRowLimitEditingCustom = false;
     this.groupRowLimitFocusCustomInput = false;
     if (this.groupShell) {
@@ -2137,11 +2137,11 @@ export class ToolbarRenderer {
     this.removeGroupPopoverListener = undefined;
     this.groupPopover?.remove();
     this.groupPopover = undefined;
-    root?.querySelectorAll<HTMLElement>(".db-group-btn").forEach((button) => this.setPopoverTriggerState(button, false));
+    root?.querySelectorAll<HTMLElement>(".obnotion-group-btn").forEach((button) => this.setPopoverTriggerState(button, false));
   }
 
   private closeViewTabPopover(): void {
-    const root = this.viewTabPopover?.closest(".note-database-container");
+    const root = this.viewTabPopover?.closest(".obnotion-container");
     if (this.viewTabShell) {
       this.viewTabShell.close();
       return;
@@ -2150,7 +2150,7 @@ export class ToolbarRenderer {
     this.removeViewTabPopoverListener = undefined;
     this.viewTabPopover?.remove();
     this.viewTabPopover = undefined;
-    root?.querySelectorAll<HTMLElement>(".db-view-tab-add, .db-view-tab-more").forEach((button) => this.setPopoverTriggerState(button, false));
+    root?.querySelectorAll<HTMLElement>(".obnotion-view-tab-add, .obnotion-view-tab-more").forEach((button) => this.setPopoverTriggerState(button, false));
   }
 
   private closeExportPopover(): void {
@@ -2165,7 +2165,7 @@ export class ToolbarRenderer {
   }
 
   private closeTitleActionsPopover(): void {
-    const root = this.titleActionsPopover?.closest(".note-database-container");
+    const root = this.titleActionsPopover?.closest(".obnotion-container");
     if (this.titleActionsShell) {
       this.titleActionsShell.close();
       return;
@@ -2174,7 +2174,7 @@ export class ToolbarRenderer {
     this.removeTitleActionsPopoverListener = undefined;
     this.titleActionsPopover?.remove();
     this.titleActionsPopover = undefined;
-    root?.querySelectorAll<HTMLElement>(".db-heading-more-button").forEach((button) => this.setPopoverTriggerState(button, false));
+    root?.querySelectorAll<HTMLElement>(".obnotion-heading-more-button").forEach((button) => this.setPopoverTriggerState(button, false));
   }
 
   private closeUtilitiesPopover(): void {
@@ -2186,19 +2186,19 @@ export class ToolbarRenderer {
     this.removeUtilitiesPopoverListener = undefined;
     this.utilitiesPopover?.remove();
     this.utilitiesPopover = undefined;
-    (this.toolbarRoot || window.activeDocument).querySelectorAll<HTMLElement>(".db-toolbar-more-btn, .db-new-button-dropdown").forEach((button) => {
+    (this.toolbarRoot || window.activeDocument).querySelectorAll<HTMLElement>(".obnotion-toolbar-more-btn, .obnotion-new-button-dropdown").forEach((button) => {
       this.setPopoverTriggerState(button, false);
     });
   }
 
   private closeDatabasePopover(): void {
-    const root = this.databasePopover?.closest(".note-database-container");
+    const root = this.databasePopover?.closest(".obnotion-container");
     this.removeDatabasePopoverListener?.();
     this.removeDatabasePopoverListener = undefined;
     this.databasePopover?.remove();
     this.databasePopover = undefined;
     this.draggedDatabaseIndex = null;
-    root?.querySelectorAll<HTMLElement>(".db-heading-chevron-button").forEach((button) => this.setPopoverTriggerState(button, false));
+    root?.querySelectorAll<HTMLElement>(".obnotion-heading-chevron-button").forEach((button) => this.setPopoverTriggerState(button, false));
   }
 
   private setPopoverTriggerState(button: HTMLElement, expanded: boolean): void {
@@ -2250,9 +2250,9 @@ export class ToolbarRenderer {
       label: t("toolbar.filter"),
       state: count > 0 ? "active" : "add",
       count,
-      className: "db-filter-btn db-toolbar-badge-button",
+      className: "obnotion-filter-btn obnotion-toolbar-badge-button",
       ariaHaspopup: "dialog",
-      ariaControls: "db-filter-panel",
+      ariaControls: "obnotion-filter-panel",
     });
     filterBtn.setAttribute("aria-expanded", "false");
     filterBtn.onclick = () => {
@@ -2269,9 +2269,9 @@ export class ToolbarRenderer {
       label: t("toolbar.sort"),
       state: count > 0 ? "active" : "add",
       count,
-      className: "db-sort-btn db-toolbar-badge-button",
+      className: "obnotion-sort-btn obnotion-toolbar-badge-button",
       ariaHaspopup: "dialog",
-      ariaControls: "db-sort-panel",
+      ariaControls: "obnotion-sort-panel",
     });
     sortBtn.setAttribute("aria-expanded", "false");
     sortBtn.onclick = () => {
@@ -2294,9 +2294,9 @@ export class ToolbarRenderer {
       state: hiddenCount > 0 ? "active" : "add",
       count: hiddenCount,
       neutralCount: true,
-      className: "db-col-manager-btn db-toolbar-badge-button",
+      className: "obnotion-col-manager-btn obnotion-toolbar-badge-button",
       ariaHaspopup: "dialog",
-      ariaControls: "db-column-manager",
+      ariaControls: "obnotion-column-manager",
     });
     colBtn.setAttribute("aria-label", hiddenCount > 0 ? t("toolbar.propertiesHidden", { count: hiddenCount }) : t("toolbar.properties"));
     colBtn.setAttribute("aria-expanded", "false");
@@ -2308,7 +2308,7 @@ export class ToolbarRenderer {
   }
 
   private renderExportPopover(anchorEl: HTMLElement, actions: ToolbarActions): void {
-    const root = anchorEl.closest(".note-database-container");
+    const root = anchorEl.closest(".obnotion-container");
     if (!root) return;
     if (this.exportPopover?.isConnected) {
       this.closeExportPopover();
@@ -2317,7 +2317,7 @@ export class ToolbarRenderer {
     const shell = createPopoverShell(anchorEl, {
       title: t("toolbar.copyFormats"),
       role: "menu",
-      className: "db-export-popover",
+      className: "obnotion-export-popover",
       onClose: () => {
         this.exportShell = undefined;
         this.exportPopover = undefined;
@@ -2342,11 +2342,11 @@ export class ToolbarRenderer {
 
   private renderExportPopoverRow(panel: HTMLElement, label: string, icon: string, onClick: () => void): void {
     const row = panel.createEl("button", {
-      cls: "db-export-popover-row db-menu-item",
+      cls: "obnotion-export-popover-row obnotion-menu-item",
       attr: { type: "button", role: "menuitem", "aria-label": label },
     });
-    setIcon(row.createSpan({ cls: "db-export-popover-marker db-menu-item-icon" }), icon);
-    row.createSpan({ cls: "db-export-popover-label db-menu-item-label", text: label });
+    setIcon(row.createSpan({ cls: "obnotion-export-popover-marker obnotion-menu-item-icon" }), icon);
+    row.createSpan({ cls: "obnotion-export-popover-label obnotion-menu-item-label", text: label });
     row.onclick = () => {
       this.closeExportPopover();
       onClick();
@@ -2357,16 +2357,16 @@ export class ToolbarRenderer {
     const hasTemplate = hasRecordTemplate(currentDb);
     const label = hasTemplate ? getNewFromTemplateLabel() : t("toolbar.new");
     const tooltip = hasTemplate ? getNewFromTemplateTooltip(currentDb) : label;
-    const group = toolbar.createDiv({ cls: "db-new-button-group" });
+    const group = toolbar.createDiv({ cls: "obnotion-new-button-group" });
     const newBtn = group.createEl("button", {
-      cls: `db-new-button db-new-button-primary${isTouchDevice(this.toolbarRoot) ? " is-mobile-fab" : ""}`,
+      cls: `obnotion-new-button obnotion-new-button-primary${isTouchDevice(this.toolbarRoot) ? " is-mobile-fab" : ""}`,
       attr: { type: "button", "aria-label": hasTemplate ? tooltip : label },
     });
-    setIcon(newBtn.createSpan({ cls: "db-new-button-icon" }), hasTemplate ? "file-plus-2" : "plus");
+    setIcon(newBtn.createSpan({ cls: "obnotion-new-button-icon" }), hasTemplate ? "file-plus-2" : "plus");
     // Touch surfaces get the icon alone: the button is a floating action button there, and a
     // text label makes it wide enough to cover the rows it floats over. The accessible name
     // is already on the button itself, so dropping the visible span costs nothing to a reader.
-    if (!isTouchDevice(this.toolbarRoot)) newBtn.createSpan({ cls: "db-new-button-label", text: label });
+    if (!isTouchDevice(this.toolbarRoot)) newBtn.createSpan({ cls: "obnotion-new-button-label", text: label });
     setTooltip(newBtn, tooltip, { delay: 100 });
     const create = (template: NewRecordTemplateConfig | null | undefined) => {
       const position = actions.getCreateEntryPosition?.(this.newRecordPlacement);
@@ -2388,13 +2388,13 @@ export class ToolbarRenderer {
       });
     };
     const dropdown = group.createEl("button", {
-      cls: "db-new-button-dropdown",
+      cls: "obnotion-new-button-dropdown",
       attr: {
         type: "button",
         "aria-label": t("toolbar.chooseTemplate"),
         "aria-haspopup": "menu",
         "aria-expanded": "false",
-        "aria-controls": "db-new-template-menu",
+        "aria-controls": "obnotion-new-template-menu",
       },
     });
     setIcon(dropdown, "chevron-down");
@@ -2424,7 +2424,7 @@ export class ToolbarRenderer {
     const navbarHeight = navbar instanceof HTMLElement
       ? navbar.getBoundingClientRect().height
       : isPhone ? 50 : 0;
-    container.setCssProps({ "--db-mobile-navbar-height": `${navbarHeight}px` });
+    container.setCssProps({ "--obnotion-mobile-navbar-height": `${navbarHeight}px` });
   }
 
   private showNewTemplateMenu(
@@ -2436,9 +2436,9 @@ export class ToolbarRenderer {
   ): void {
     event.preventDefault();
     event.stopPropagation();
-    const root = anchor.closest(".note-database-container");
+    const root = anchor.closest(".obnotion-container");
     if (!root) return;
-    if (this.utilitiesPopover?.isConnected && this.utilitiesPopover.hasClass("db-new-template-popover")) {
+    if (this.utilitiesPopover?.isConnected && this.utilitiesPopover.hasClass("obnotion-new-template-popover")) {
       this.closeUtilitiesPopover();
       return;
     }
@@ -2447,13 +2447,13 @@ export class ToolbarRenderer {
     const shell = createPopoverShell(anchor, {
       title: t("toolbar.chooseTemplate"),
       role: "menu",
-      className: "db-view-tab-popover db-new-template-popover",
-      id: "db-new-template-menu",
+      className: "obnotion-view-tab-popover obnotion-new-template-popover",
+      id: "obnotion-new-template-menu",
       onClose: () => {
         this.utilitiesShell = undefined;
         this.utilitiesPopover = undefined;
         this.removeUtilitiesPopoverListener = undefined;
-        (this.toolbarRoot || window.activeDocument).querySelectorAll<HTMLElement>(".db-toolbar-more-btn, .db-new-button-dropdown").forEach((trigger) => {
+        (this.toolbarRoot || window.activeDocument).querySelectorAll<HTMLElement>(".obnotion-toolbar-more-btn, .obnotion-new-button-dropdown").forEach((trigger) => {
           this.setPopoverTriggerState(trigger, false);
         });
       },
@@ -2461,10 +2461,10 @@ export class ToolbarRenderer {
     this.utilitiesShell = shell;
     this.utilitiesPopover = shell.panel;
     const panel = shell.panel;
-    const placement = panel.createDiv({ cls: "db-new-placement", attr: { role: "group", "aria-label": t("toolbar.insertPlacement") } });
+    const placement = panel.createDiv({ cls: "obnotion-new-placement", attr: { role: "group", "aria-label": t("toolbar.insertPlacement") } });
     for (const option of [{ value: "top" as const, label: t("toolbar.insertAtTop") }, { value: "bottom" as const, label: t("toolbar.insertAtBottom") }]) {
       const button = placement.createEl("button", {
-        cls: `db-new-placement-option${this.newRecordPlacement === option.value ? " is-active" : ""}`,
+        cls: `obnotion-new-placement-option${this.newRecordPlacement === option.value ? " is-active" : ""}`,
         text: option.label,
         attr: { type: "button", role: "radio", "aria-checked": this.newRecordPlacement === option.value ? "true" : "false" },
       });
@@ -2487,36 +2487,36 @@ export class ToolbarRenderer {
     const templates = actions.recordTemplates || [];
     for (const template of templates) {
       const row = panel.createEl("button", {
-        cls: "db-new-template-row db-menu-item",
+        cls: "obnotion-new-template-row obnotion-menu-item",
         attr: { type: "button", role: "menuitem", "aria-label": template.label },
       });
-      setIcon(row.createSpan({ cls: "db-menu-item-icon" }), "file-text");
-      row.createSpan({ cls: "db-menu-item-label", text: template.label });
-      if (template.path === actions.defaultTemplatePath) setIcon(row.createSpan({ cls: "db-new-template-default" }), "star");
+      setIcon(row.createSpan({ cls: "obnotion-menu-item-icon" }), "file-text");
+      row.createSpan({ cls: "obnotion-menu-item-label", text: template.label });
+      if (template.path === actions.defaultTemplatePath) setIcon(row.createSpan({ cls: "obnotion-new-template-default" }), "star");
       row.onclick = () => choose(template);
     }
     const blank = panel.createEl("button", {
-      cls: "db-new-template-row db-menu-item",
+      cls: "obnotion-new-template-row obnotion-menu-item",
       attr: { type: "button", role: "menuitem", "aria-label": t("toolbar.createBlankNote") },
     });
-    setIcon(blank.createSpan({ cls: "db-menu-item-icon" }), "file-plus-2");
-    blank.createSpan({ cls: "db-menu-item-label", text: t("toolbar.createBlankNote") });
+    setIcon(blank.createSpan({ cls: "obnotion-menu-item-icon" }), "file-plus-2");
+    blank.createSpan({ cls: "obnotion-menu-item-label", text: t("toolbar.createBlankNote") });
     blank.onclick = () => choose(null);
     if (templates.length > 0 && actions.setDefaultTemplate) {
       const defaultTemplate = templates.find((template) => template.path === actions.defaultTemplatePath) || templates[0];
       const setDefault = panel.createEl("button", {
-        cls: "db-new-template-default-action db-menu-item",
+        cls: "obnotion-new-template-default-action obnotion-menu-item",
         attr: { type: "button", role: "menuitem", "aria-label": t("toolbar.setDefaultTemplate") },
       });
-      setIcon(setDefault.createSpan({ cls: "db-menu-item-icon" }), "star");
-      setDefault.createSpan({ cls: "db-menu-item-label", text: t("toolbar.setDefaultTemplate") });
+      setIcon(setDefault.createSpan({ cls: "obnotion-menu-item-icon" }), "star");
+      setDefault.createSpan({ cls: "obnotion-menu-item-label", text: t("toolbar.setDefaultTemplate") });
       setDefault.onclick = () => {
         actions.setDefaultTemplate?.(defaultTemplate);
         this.closeUtilitiesPopover();
       };
     } else {
       const configure = panel.createEl("div", {
-        cls: "db-new-template-configure db-menu-item is-disabled",
+        cls: "obnotion-new-template-configure obnotion-menu-item is-disabled",
         text: t("toolbar.configureTemplates"),
         attr: { role: "note" },
       });
@@ -2527,10 +2527,10 @@ export class ToolbarRenderer {
       createMenuSeparator(panel);
       createMenuSection(panel, t("toolbar.settings"));
       for (const column of presetColumns) {
-        const row = panel.createDiv({ cls: "db-new-preset-row db-menu-item" });
-        row.createSpan({ cls: "db-menu-item-label", text: column.label || column.key });
+        const row = panel.createDiv({ cls: "obnotion-new-preset-row obnotion-menu-item" });
+        row.createSpan({ cls: "obnotion-menu-item-label", text: column.label || column.key });
         const input = row.createEl("input", {
-          cls: "db-new-preset-input",
+          cls: "obnotion-new-preset-input",
           attr: { type: "text", "aria-label": column.label || column.key, placeholder: t("toolbar.presetNone") },
         });
         input.value = currentView.newRowPresets?.[column.key] || "";
@@ -2555,7 +2555,7 @@ export class ToolbarRenderer {
     actions: ToolbarActions,
   ): void {
     this.chromeCollapseObserver?.disconnect();
-    const toolbar = header.querySelector<HTMLElement>(".db-toolbar");
+    const toolbar = header.querySelector<HTMLElement>(".obnotion-toolbar");
     if (!toolbar) return;
     const apply = () => this.applyToolbarChromeCollapse(toolbar, db, currentViewIndex, actions);
     const view = toolbar.ownerDocument.defaultView;
@@ -2572,11 +2572,11 @@ export class ToolbarRenderer {
     currentViewIndex: number,
     actions: ToolbarActions,
   ): void {
-    const newCluster = toolbar.querySelector<HTMLElement>(".db-toolbar-creation-cluster");
-    const query = toolbar.querySelector<HTMLElement>(".db-toolbar-query-cluster");
-    const props = toolbar.querySelector<HTMLElement>(".db-toolbar-properties-cluster");
-    const add = toolbar.querySelector<HTMLElement>(".db-view-tab-add");
-    const newLabel = toolbar.querySelector<HTMLElement>(".db-new-button-label");
+    const newCluster = toolbar.querySelector<HTMLElement>(".obnotion-toolbar-creation-cluster");
+    const query = toolbar.querySelector<HTMLElement>(".obnotion-toolbar-query-cluster");
+    const props = toolbar.querySelector<HTMLElement>(".obnotion-toolbar-properties-cluster");
+    const add = toolbar.querySelector<HTMLElement>(".obnotion-view-tab-add");
+    const newLabel = toolbar.querySelector<HTMLElement>(".obnotion-new-button-label");
     const targets = [newCluster, query, props, add].filter((el): el is HTMLElement => Boolean(el));
     for (const el of targets) el.style.display = "";
     if (newLabel) newLabel.style.display = "";
@@ -2603,7 +2603,7 @@ export class ToolbarRenderer {
   /** Undo a prior tab-row collapse before remeasuring, so every resize starts from the tab
    *  row's natural shape rather than compounding the last one. */
   private restoreCollapsedTabStrip(toolbar: HTMLElement): void {
-    toolbar.querySelector<HTMLElement>(".db-view-tab-collapsed-trigger")?.remove();
+    toolbar.querySelector<HTMLElement>(".obnotion-view-tab-collapsed-trigger")?.remove();
     toolbar.querySelectorAll<HTMLElement>("[data-chrome-collapsed-tab]").forEach((el) => {
       el.style.display = "";
       el.removeAttribute("data-chrome-collapsed-tab");
@@ -2616,28 +2616,28 @@ export class ToolbarRenderer {
     currentViewIndex: number,
     actions: ToolbarActions,
   ): void {
-    const strip = toolbar.querySelector<HTMLElement>(".db-view-tabs");
+    const strip = toolbar.querySelector<HTMLElement>(".obnotion-view-tabs");
     const currentView = db?.views[currentViewIndex];
     if (!strip || !db || !currentView) return;
-    const tabs = Array.from(strip.querySelectorAll<HTMLElement>(".db-view-tab"));
+    const tabs = Array.from(strip.querySelectorAll<HTMLElement>(".obnotion-view-tab"));
     if (!tabs.length) return;
     for (const tab of tabs) {
       tab.style.display = "none";
       tab.setAttribute("data-chrome-collapsed-tab", "true");
     }
     const trigger = strip.createEl("button", {
-      cls: "db-view-tab db-view-tab-collapsed-trigger",
+      cls: "obnotion-view-tab obnotion-view-tab-collapsed-trigger",
       attr: {
         type: "button",
         "aria-haspopup": "dialog",
         "aria-expanded": "false",
-        "aria-controls": "db-all-views-popover",
+        "aria-controls": "obnotion-all-views-popover",
         "aria-label": currentView.name || t("common.untitled"),
       },
     });
-    this.renderViewIcon(trigger.createSpan({ cls: "db-view-tab-icon" }), currentView.icon, this.getViewTypeIcon(currentView.viewType || "table"));
-    trigger.createSpan({ cls: "db-view-tab-name", text: currentView.name || t("common.untitled") });
-    setIcon(trigger.createSpan({ cls: "db-view-tab-collapsed-chevron" }), "chevron-down");
+    this.renderViewIcon(trigger.createSpan({ cls: "obnotion-view-tab-icon" }), currentView.icon, this.getViewTypeIcon(currentView.viewType || "table"));
+    trigger.createSpan({ cls: "obnotion-view-tab-name", text: currentView.name || t("common.untitled") });
+    setIcon(trigger.createSpan({ cls: "obnotion-view-tab-collapsed-chevron" }), "chevron-down");
     setTooltip(trigger, currentView.name || t("common.untitled"), { delay: 100 });
     trigger.onclick = () => this.showAllViewsHub(trigger, db, currentViewIndex, actions);
   }
@@ -2645,7 +2645,7 @@ export class ToolbarRenderer {
   private renderFullViewButton(toolbar: HTMLElement, actions: ToolbarActions): void {
     if (!actions.openFullView) return;
     const fullBtn = toolbar.createEl("button", {
-      cls: "db-toolbar-icon-button db-full-view-btn",
+      cls: "obnotion-toolbar-icon-button obnotion-full-view-btn",
       attr: { type: "button", "aria-label": t("toolbar.openFullView") },
     });
     setIcon(fullBtn, "maximize-2");
@@ -2655,7 +2655,7 @@ export class ToolbarRenderer {
 
   private renderLinkedViewDragHandle(header: HTMLElement): void {
     const handle = header.createEl("button", {
-      cls: "db-linked-view-drag-handle",
+      cls: "obnotion-linked-view-drag-handle",
       attr: {
         type: "button",
         draggable: "true",
@@ -2663,13 +2663,13 @@ export class ToolbarRenderer {
       },
     });
     for (let index = 0; index < 6; index += 1) {
-      handle.createSpan({ cls: "db-linked-view-drag-dot", attr: { "aria-hidden": "true" } });
+      handle.createSpan({ cls: "obnotion-linked-view-drag-dot", attr: { "aria-hidden": "true" } });
     }
   }
 
   private renderDatabaseFileButton(toolbar: HTMLElement, actions: ToolbarActions): void {
     const btn = toolbar.createEl("button", {
-      cls: "db-toolbar-icon-button",
+      cls: "obnotion-toolbar-icon-button",
       attr: { type: "button", "aria-label": t("toolbar.openDatabaseFile") },
     });
     setIcon(btn, "file-output");
@@ -2679,7 +2679,7 @@ export class ToolbarRenderer {
 
   private createIconButton(toolbar: HTMLElement, icon: string, label: string, extraClass = ""): HTMLButtonElement {
     const btn = toolbar.createEl("button", {
-      cls: `db-toolbar-icon-button ${extraClass}`.trim(),
+      cls: `obnotion-toolbar-icon-button ${extraClass}`.trim(),
       attr: { type: "button", "aria-label": label },
     });
     if (icon) setIcon(btn, icon);
@@ -2694,11 +2694,11 @@ export class ToolbarRenderer {
     extraClass = ""
   ): void {
     const wrap = button.createSpan({
-      cls: `db-composite-icon ${extraClass}`.trim(),
+      cls: `obnotion-composite-icon ${extraClass}`.trim(),
     });
 
-    setIcon(wrap.createSpan({ cls: "db-composite-icon-main" }), mainIcon);
-    appendSvg(wrap.createSpan({ cls: "db-composite-icon-badge" }), badgeSvg);
+    setIcon(wrap.createSpan({ cls: "obnotion-composite-icon-main" }), mainIcon);
+    appendSvg(wrap.createSpan({ cls: "obnotion-composite-icon-badge" }), badgeSvg);
   }
 
   private appendViewSettingsIcon(button: HTMLElement, viewIcon: string): void {
@@ -2706,20 +2706,20 @@ export class ToolbarRenderer {
       button,
       viewIcon,
       ToolbarRenderer.ICONS.settingsBadge,
-      "db-view-settings-icon"
+      "obnotion-view-settings-icon"
     );
   }
 
   private setBadge(button: HTMLElement, count: number): void {
-    button.querySelector(".db-toolbar-badge")?.remove();
+    button.querySelector(".obnotion-toolbar-badge")?.remove();
     if (count <= 0) return;
-    button.createSpan({ cls: "db-toolbar-badge", text: String(count) });
+    button.createSpan({ cls: "obnotion-toolbar-badge", text: String(count) });
   }
 
   private setHiddenBadge(button: HTMLElement, count: number): void {
-    button.querySelector(".db-toolbar-badge")?.remove();
+    button.querySelector(".obnotion-toolbar-badge")?.remove();
     button.setAttribute("aria-label", count > 0 ? t("toolbar.propertiesHidden", { count }) : t("toolbar.properties"));
-    if (count > 0) button.createSpan({ cls: "db-toolbar-badge db-toolbar-badge-neutral", text: t("toolbar.hiddenCount", { count }) });
+    if (count > 0) button.createSpan({ cls: "obnotion-toolbar-badge obnotion-toolbar-badge-neutral", text: t("toolbar.hiddenCount", { count }) });
   }
 
   private markLatestMenu(className: string, icons?: string[]): void {
@@ -2744,7 +2744,7 @@ export class ToolbarRenderer {
     this.closeTitleActionsPopover();
     this.closeUtilitiesPopover();
     this.calendarTimelineToolbarRenderer.closePopover();
-    (this.toolbarRoot || window.activeDocument).querySelectorAll<HTMLElement>(".db-filter-btn, .db-sort-btn, .db-col-manager-btn, .db-group-btn").forEach((button) => {
+    (this.toolbarRoot || window.activeDocument).querySelectorAll<HTMLElement>(".obnotion-filter-btn, .obnotion-sort-btn, .obnotion-col-manager-btn, .obnotion-group-btn").forEach((button) => {
       this.setPopoverTriggerState(button, false);
     });
   }

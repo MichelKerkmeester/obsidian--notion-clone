@@ -254,7 +254,7 @@ export function runTimelineBench(host: HTMLElement, options: TimelineBenchOption
 
         // One discarded warm-up: the first run pays for lazily-compiled paths.
         for (let run = 0; run <= REPEATS; run += 1) {
-          const container = host.createDiv({ cls: "note-database-container" });
+          const container = host.createDiv({ cls: "obnotion-container" });
           const renderer = new CalendarTimelineRenderer(actions);
 
           const start = performance.now();
@@ -271,8 +271,8 @@ export function runTimelineBench(host: HTMLElement, options: TimelineBenchOption
             renderTimes.push(rendered - start);
             layoutTimes.push(layoutEnd - layoutStart);
             domNodes = container.querySelectorAll("*").length;
-            cardNodes = container.querySelectorAll(".db-timeline-event").length;
-            fieldNodes = container.querySelectorAll(".db-timeline-events").length;
+            cardNodes = container.querySelectorAll(".obnotion-timeline-event").length;
+            fieldNodes = container.querySelectorAll(".obnotion-timeline-events").length;
           }
           // The renderer holds a ResizeObserver and timers across renders; dropping the
           // container without this leaks one of each per sample and the later samples

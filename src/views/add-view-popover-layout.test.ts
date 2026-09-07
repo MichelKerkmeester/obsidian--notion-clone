@@ -92,13 +92,13 @@ describe("add-view surface", () => {
   it("keeps the duplicate checkbox at its native size instead of stretching it to the form width", () => {
     // The form's full-bleed sizing exists for the text fields; a bare `input` selector also
     // catches the checkbox and flattens it into a form-wide pill with no visible caption.
-    const stretchedSelectors = stylesContent.match(/\.db-add-view-form input[^,{\n]*/g) ?? [];
+    const stretchedSelectors = stylesContent.match(/\.obnotion-add-view-form input[^,{\n]*/g) ?? [];
     expect(stretchedSelectors.length).toBeGreaterThan(0);
     for (const selector of stretchedSelectors) {
       expect(selector).toContain(':not([type="checkbox"])');
     }
 
-    const checkbox = declarationsFor(".note-database-container .db-add-view-duplicate input");
+    const checkbox = declarationsFor(".obnotion-container .obnotion-add-view-duplicate input");
     expect(checkbox).toMatch(/flex:\s*0 0 auto/);
     expect(checkbox).not.toMatch(/width:\s*100%/);
   });
@@ -107,19 +107,19 @@ describe("add-view surface", () => {
     expect(toolbarSource).toContain("createMenuRow(choices, {");
     // The tile grid is gone with its three classes; a stray reference would mean a class in
     // source that nothing styles, which is how the dead `is-<type>` preview modifier survived.
-    expect(toolbarSource).not.toContain("db-add-view-card");
-    expect(toolbarSource).not.toContain("db-add-view-preview");
-    expect(stylesContent).not.toContain("db-add-view-card");
-    expect(stylesContent).not.toContain("db-add-view-preview");
+    expect(toolbarSource).not.toContain("obnotion-add-view-card");
+    expect(toolbarSource).not.toContain("obnotion-add-view-preview");
+    expect(stylesContent).not.toContain("obnotion-add-view-card");
+    expect(stylesContent).not.toContain("obnotion-add-view-preview");
   });
 
   it("lets the shared row rule decide the duplicate action's box", () => {
-    // The row carried `db-menu-item` and was still 36px tall on a 30px grammar, because a legacy
+    // The row carried `obnotion-menu-item` and was still 36px tall on a 30px grammar, because a legacy
     // toolbar-row selector of equal specificity sat nineteen thousand lines later and won on order.
     // Nothing may re-declare that box: the row's geometry belongs to the row.
-    expect(declarationsFor(".db-menu-item.db-menu-item")).toMatch(/padding:\s*0 8px/);
-    expect(stylesContent).not.toMatch(/\.db-add-view-duplicate-action\s*[,{]/);
-    expect(toolbarSource).toContain('cls: "db-add-view-duplicate-action"');
+    expect(declarationsFor(".obnotion-menu-item.obnotion-menu-item")).toMatch(/padding:\s*0 8px/);
+    expect(stylesContent).not.toMatch(/\.obnotion-add-view-duplicate-action\s*[,{]/);
+    expect(toolbarSource).toContain('cls: "obnotion-add-view-duplicate-action"');
   });
 
   it("groups the surface with the same section and separator vocabulary the menus use", () => {
@@ -156,7 +156,7 @@ describe("add-view surface", () => {
       const types = offeredViewTypes();
       expect(types).toHaveLength(5);
       const fixture = addViewFixture();
-      const drawn = [...fixture.matchAll(/class="db-menu-item-label">([^<]+)</g)].map((m) => m[1]);
+      const drawn = [...fixture.matchAll(/class="obnotion-menu-item-label">([^<]+)</g)].map((m) => m[1]);
       // The duplicate action is a row too, so the fixture draws one more than there are types.
       expect(drawn).toHaveLength(types.length + 1);
       expect(drawn).toContain("Duplicate current view");
@@ -172,37 +172,37 @@ describe("add-view surface", () => {
     });
 
     it("gives the key field the shared dropdown, not a native select", () => {
-      // The real surface replaced `<select class="db-add-view-key-field">` with
+      // The real surface replaced `<select class="obnotion-add-view-key-field">` with
       // `createDropdownField` (`toolbar-renderer.ts`) so the field opens the same listbox every
       // other dropdown in the plugin does instead of the OS picker — the second grammar the sheet
       // contract exists to catch (`sheet-grammar.ts`'s `hasSharedDropdownRows`). A fixture still
       // drawing the native element is a picture of a surface nobody ships.
       const fixture = addViewFixture();
       expect(fixture).not.toContain("<select");
-      expect(fixture).toContain("db-add-view-key-field");
-      expect(fixture).toContain("db-dropdown-field");
+      expect(fixture).toContain("obnotion-add-view-key-field");
+      expect(fixture).toContain("obnotion-dropdown-field");
     });
 
     it("gives the header the close affordance every sheet grammar carries", () => {
-      // `createSheetHeader` always appends a `db-sheet-close` button; a fixture with a bare
+      // `createSheetHeader` always appends a `obnotion-sheet-close` button; a fixture with a bare
       // title-only header depicts the surface report 43 complained about, not the one that shipped.
       const fixture = addViewFixture();
-      expect(fixture).toContain("db-sheet-close");
+      expect(fixture).toContain("obnotion-sheet-close");
     });
 
     it("uses the row grammar, not a private tile", () => {
       const fixture = addViewFixture();
-      expect(fixture).toContain('class="db-menu-item"');
-      expect(fixture).toContain("db-add-view-choices");
-      expect(fixture).not.toContain("db-add-view-card");
-      expect(fixture).not.toContain("db-add-view-preview");
+      expect(fixture).toContain('class="obnotion-menu-item"');
+      expect(fixture).toContain("obnotion-add-view-choices");
+      expect(fixture).not.toContain("obnotion-add-view-card");
+      expect(fixture).not.toContain("obnotion-add-view-preview");
     });
 
     it("carries the visible labels and the grouping the renderer builds", () => {
       const fixture = addViewFixture();
-      expect(fixture).toContain("db-add-view-field-label");
-      expect(fixture).toContain('class="db-menu-section"');
-      expect(fixture).toContain('class="db-menu-separator"');
+      expect(fixture).toContain("obnotion-add-view-field-label");
+      expect(fixture).toContain('class="obnotion-menu-section"');
+      expect(fixture).toContain('class="obnotion-menu-separator"');
       expect(fixture).toContain("Copy settings from current view");
       // Every control the fixture draws is tied to its caption, as the renderer ties them.
       const fors = [...fixture.matchAll(/for="([^"]+)"/g)].map((m) => m[1]);
@@ -218,7 +218,7 @@ describe("add-view surface", () => {
       // that was missing, and it is taken from the renderer's own translation table rather than
       // from a literal, so a wording change moves both sides or fails here.
       const fixture = addViewFixture();
-      const drawnLabels = [...fixture.matchAll(/class="db-add-view-field-label"[^>]*>([^<]+)</g)]
+      const drawnLabels = [...fixture.matchAll(/class="obnotion-add-view-field-label"[^>]*>([^<]+)</g)]
         .map((m) => m[1].trim());
       // Pinned to English, because the capture is taken in English and a locale-dependent
       // comparison would pass or fail on whichever locale the runner happened to hold.

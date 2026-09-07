@@ -21,7 +21,7 @@ Current state:
 
 - `capture.mjs` drives system Chrome through `playwright-core`, so the repository carries no bundled
   browser download.
-- Each scenario renders the `db-*` class structure the renderers emit, against mock rows, so a shot
+- Each scenario renders the `obnotion-*` class structure the renderers emit, against mock rows, so a shot
   shows what the stylesheet produces rather than a live vault.
 - `verify.mjs` compares recorded source fingerprints, not image bytes.
 

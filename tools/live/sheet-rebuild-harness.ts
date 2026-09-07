@@ -48,8 +48,8 @@ import { isHTMLElement } from "../../src/views/dom-guards";
 // 2. SHAPES
 // ───────────────────────────────────────────────────────────────────
 
-const HANDLE = ".db-mobile-bottom-sheet-handle";
-const SHEET = "db-mobile-bottom-sheet";
+const HANDLE = ".obnotion-mobile-bottom-sheet-handle";
+const SHEET = "obnotion-mobile-bottom-sheet";
 
 export interface RebuildResult {
   surface: string;
@@ -72,10 +72,10 @@ interface Harness {
 
 function makeHarness(doc: Document): Harness {
   const root = doc.createElement("div");
-  root.className = "note-database-container";
+  root.className = "obnotion-container";
   doc.body.appendChild(root);
   const anchor = doc.createElement("button");
-  anchor.className = "db-group-btn";
+  anchor.className = "obnotion-group-btn";
   root.appendChild(anchor);
   return { root, anchor };
 }
@@ -105,7 +105,7 @@ function runGroupSheet(doc: Document): RebuildResult {
   const internals = renderer as unknown as Record<string, unknown>;
 
   const panel = doc.createElement("div");
-  panel.className = "db-group-popover";
+  panel.className = "obnotion-group-popover";
   root.appendChild(panel);
 
   const config = makeConfig();
@@ -248,12 +248,12 @@ function runHandleWiring(doc: Document): RebuildResult[] {
 
   // The positioner path, which every toolbar sheet reaches.
   const root = doc.createElement("div");
-  root.className = "note-database-container";
+  root.className = "obnotion-container";
   doc.body.appendChild(root);
   const anchor = doc.createElement("button");
   root.appendChild(anchor);
   const panel = doc.createElement("div");
-  panel.className = "db-group-popover";
+  panel.className = "obnotion-group-popover";
   root.appendChild(panel);
   positionToolbarPopover(panel, anchor, COMPACT_MENU_POPOVER);
 
@@ -392,18 +392,18 @@ function runOverlayRegistrationAfterRebuild(doc: Document): RebuildResult[] {
 
     // The tap the operator reports first: it lands inside the panel the stack actually registered,
     // so it works and rebuilds the panel underneath the still-open sheet.
-    const addBtn = openPanel?.querySelector<HTMLButtonElement>(".db-panel-button");
-    const rowsBefore = openPanel?.querySelectorAll(".db-panel-row").length ?? 0;
+    const addBtn = openPanel?.querySelector<HTMLButtonElement>(".obnotion-panel-button");
+    const rowsBefore = openPanel?.querySelectorAll(".obnotion-panel-row").length ?? 0;
     addBtn?.click();
     const rebuiltPanel = renderer.getPanel();
     const rebuilt = Boolean(rebuiltPanel)
-      && (rebuiltPanel?.querySelectorAll(".db-panel-row").length ?? 0) > rowsBefore;
+      && (rebuiltPanel?.querySelectorAll(".obnotion-panel-row").length ?? 0) > rowsBefore;
 
     // The tap that follows: anywhere inside the panel the rebuild just created. A real device
     // delivers this as pointerdown before click, and the stack's outside-pointerdown listener runs
     // on that capture-phase pointerdown — so this is the event that decides whether the tap ever
     // reaches the button underneath it.
-    const secondTarget = rebuiltPanel?.querySelector<HTMLButtonElement>(".db-panel-button") || rebuiltPanel;
+    const secondTarget = rebuiltPanel?.querySelector<HTMLButtonElement>(".obnotion-panel-button") || rebuiltPanel;
     secondTarget?.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, cancelable: true }));
 
     const stillOpen = !closed && Boolean(renderer.getPanel()?.isConnected);
@@ -441,15 +441,15 @@ function runOverlayRegistrationAfterRebuild(doc: Document): RebuildResult[] {
       close: () => { actions.close(); renderer.render(root, false, state, config, actions, anchor); },
     });
 
-    const addBtn = Array.from(openPanel?.querySelectorAll<HTMLButtonElement>(".db-panel-button") || [])
-      .find((btn) => /condition|advanced filter/i.test(btn.textContent || "")) || openPanel?.querySelector<HTMLButtonElement>(".db-panel-button");
-    const rowsBefore = openPanel?.querySelectorAll(".db-panel-row").length ?? 0;
+    const addBtn = Array.from(openPanel?.querySelectorAll<HTMLButtonElement>(".obnotion-panel-button") || [])
+      .find((btn) => /condition|advanced filter/i.test(btn.textContent || "")) || openPanel?.querySelector<HTMLButtonElement>(".obnotion-panel-button");
+    const rowsBefore = openPanel?.querySelectorAll(".obnotion-panel-row").length ?? 0;
     addBtn?.click();
     const rebuiltPanel = renderer.getPanel();
     const rebuilt = Boolean(rebuiltPanel)
-      && (rebuiltPanel?.querySelectorAll(".db-panel-row").length ?? 0) > rowsBefore;
+      && (rebuiltPanel?.querySelectorAll(".obnotion-panel-row").length ?? 0) > rowsBefore;
 
-    const secondTarget = rebuiltPanel?.querySelector<HTMLButtonElement>(".db-panel-button") || rebuiltPanel;
+    const secondTarget = rebuiltPanel?.querySelector<HTMLButtonElement>(".obnotion-panel-button") || rebuiltPanel;
     secondTarget?.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, cancelable: true }));
 
     const stillOpen = !closed && Boolean(renderer.getPanel()?.isConnected);
@@ -500,15 +500,15 @@ function runOverlayRegistrationAfterRebuild(doc: Document): RebuildResult[] {
       });
     }
 
-    const addBtn = Array.from(openPanel?.querySelectorAll<HTMLButtonElement>(".db-panel-button") || [])
-      .find((btn) => /condition|advanced filter/i.test(btn.textContent || "")) || openPanel?.querySelector<HTMLButtonElement>(".db-panel-button");
-    const rowsBefore = openPanel?.querySelectorAll(".db-panel-row").length ?? 0;
+    const addBtn = Array.from(openPanel?.querySelectorAll<HTMLButtonElement>(".obnotion-panel-button") || [])
+      .find((btn) => /condition|advanced filter/i.test(btn.textContent || "")) || openPanel?.querySelector<HTMLButtonElement>(".obnotion-panel-button");
+    const rowsBefore = openPanel?.querySelectorAll(".obnotion-panel-row").length ?? 0;
     addBtn?.click();
     const rebuiltPanel = renderer.getPanel();
     const rebuilt = Boolean(rebuiltPanel)
-      && (rebuiltPanel?.querySelectorAll(".db-panel-row").length ?? 0) > rowsBefore;
+      && (rebuiltPanel?.querySelectorAll(".obnotion-panel-row").length ?? 0) > rowsBefore;
 
-    const secondTarget = rebuiltPanel?.querySelector<HTMLButtonElement>(".db-panel-button") || rebuiltPanel;
+    const secondTarget = rebuiltPanel?.querySelector<HTMLButtonElement>(".obnotion-panel-button") || rebuiltPanel;
     secondTarget?.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, cancelable: true }));
 
     const stillOpen = !closed && Boolean(renderer.getPanel()?.isConnected);
@@ -562,7 +562,7 @@ let settingsReach: {
 
 /** Build the real settings sheet and leave it on screen for the measurement that follows. */
 export function openSettingsSheetForReach(doc: Document): DragSetup {
-  for (const stale of Array.from(doc.body.querySelectorAll(".note-database-container, .db-view-config-panel"))) {
+  for (const stale of Array.from(doc.body.querySelectorAll(".obnotion-container, .obnotion-view-config-panel"))) {
     stale.remove();
   }
   const { root, anchor } = makeHarness(doc);
@@ -622,7 +622,7 @@ export function measureSettingsSheetReach(doc: Document): RebuildResult[] {
     let depth = 0;
     for (let dy = 0; dy <= 96; dy += 1) {
       const hit = doc.elementFromPoint(x, box.y + dy);
-      const isBar = hit instanceof view.HTMLElement && hit.classList.contains("db-mobile-bottom-sheet-handle");
+      const isBar = hit instanceof view.HTMLElement && hit.classList.contains("obnotion-mobile-bottom-sheet-handle");
       if (isBar) depth = dy + 1;
       else if (depth > 0) break;
     }
@@ -632,7 +632,7 @@ export function measureSettingsSheetReach(doc: Document): RebuildResult[] {
   // The region the sheet actually scrolls. The panel is the scroller until the chrome is lifted out
   // of it and a body region takes over, so this is asked rather than assumed — the case then
   // measures the same surface before and after the fix instead of two different ones.
-  const body = panel.querySelector<HTMLElement>(".db-view-config-body");
+  const body = panel.querySelector<HTMLElement>(".obnotion-view-config-body");
   const scroller = body && body.scrollHeight > body.clientHeight ? body : panel;
   const contentPx = scroller.scrollHeight;
   const sheetPx = scroller.clientHeight;
@@ -640,12 +640,12 @@ export function measureSettingsSheetReach(doc: Document): RebuildResult[] {
 
   const panelTop = panel.getBoundingClientRect().top;
   const bandAtTop = bandDepth();
-  const headerAtTop = (panel.querySelector<HTMLElement>(".db-panel-header")?.getBoundingClientRect().top ?? panelTop) - panelTop;
+  const headerAtTop = (panel.querySelector<HTMLElement>(".obnotion-panel-header")?.getBoundingClientRect().top ?? panelTop) - panelTop;
 
   // Far enough that the bar cannot merely be clipped: the whole chrome is above the fold by here.
   scroller.scrollTop = 200;
   const bandAfterScroll = bandDepth();
-  const headerAfterScroll = (panel.querySelector<HTMLElement>(".db-panel-header")?.getBoundingClientRect().top ?? panelTop) - panelTop;
+  const headerAfterScroll = (panel.querySelector<HTMLElement>(".obnotion-panel-header")?.getBoundingClientRect().top ?? panelTop) - panelTop;
 
   settingsReach.renderer.render(settingsReach.root, false, settingsReach.config, settingsReach.actions, settingsReach.anchor);
   settingsReach.root.remove();
@@ -716,7 +716,7 @@ export function openGroupSheetForDrag(doc: Document): DragSetup {
   }
   // Sheets are fixed-position and stack, so a leftover panel would also take the press meant for
   // this one and the run would measure the wrong surface.
-  for (const stale of Array.from(doc.body.querySelectorAll(".note-database-container, .db-group-popover"))) {
+  for (const stale of Array.from(doc.body.querySelectorAll(".obnotion-container, .obnotion-group-popover"))) {
     stale.remove();
   }
 
@@ -725,7 +725,7 @@ export function openGroupSheetForDrag(doc: Document): DragSetup {
   const internals = renderer as unknown as Record<string, unknown>;
 
   const panel = doc.createElement("div");
-  panel.className = "db-group-popover";
+  panel.className = "obnotion-group-popover";
   root.appendChild(panel);
 
   const config = makeConfig();
@@ -816,7 +816,7 @@ export function openHeaderSheetForAddRow(doc: Document, kind: "sort" | "filter")
     const top = overlayStack.getTopSurface()?.panel;
     if (!top || !overlayStack.dismissPanel(top, "programmatic")) break;
   }
-  for (const stale of Array.from(doc.body.querySelectorAll(".note-database-container, .db-sort-panel, .db-filter-panel"))) {
+  for (const stale of Array.from(doc.body.querySelectorAll(".obnotion-container, .obnotion-sort-panel, .obnotion-filter-panel"))) {
     stale.remove();
   }
   activeAddRow?.root.remove();
@@ -824,17 +824,17 @@ export function openHeaderSheetForAddRow(doc: Document, kind: "sort" | "filter")
   topTrack = [];
 
   const root = doc.createElement("div");
-  root.className = "note-database-container";
+  root.className = "obnotion-container";
   doc.body.appendChild(root);
-  const header = root.createDiv({ cls: "db-header" });
-  const toolbar = header.createDiv({ cls: "db-toolbar" });
+  const header = root.createDiv({ cls: "obnotion-header" });
+  const toolbar = header.createDiv({ cls: "obnotion-toolbar" });
   const buildToolbar = (): void => {
     toolbar.empty();
-    toolbar.createEl("button", { cls: "db-sort-btn", text: "sort" });
-    toolbar.createEl("button", { cls: "db-filter-btn", text: "filter" });
+    toolbar.createEl("button", { cls: "obnotion-sort-btn", text: "sort" });
+    toolbar.createEl("button", { cls: "obnotion-filter-btn", text: "filter" });
   };
   buildToolbar();
-  root.createDiv({ cls: "db-table-wrapper", text: "rows" });
+  root.createDiv({ cls: "obnotion-table-wrapper", text: "rows" });
 
   const sortRenderer = new SortPanelRenderer();
   const filterRenderer = new FilterPanelRenderer();
@@ -861,7 +861,7 @@ export function openHeaderSheetForAddRow(doc: Document, kind: "sort" | "filter")
   };
 
   const anchor = (): HTMLElement | undefined =>
-    (root.querySelector(kind === "sort" ? ".db-sort-btn" : ".db-filter-btn") as HTMLElement) || undefined;
+    (root.querySelector(kind === "sort" ? ".obnotion-sort-btn" : ".obnotion-filter-btn") as HTMLElement) || undefined;
 
   const renderPanel = (): void => {
     if (kind === "sort") {
@@ -917,8 +917,8 @@ export function openHeaderSheetForAddRow(doc: Document, kind: "sort" | "filter")
  * is the whole point: the list is not what was wrong, so copying it keeps this focused on the part
  * that was.
  */
-const HEADER_SURFACE_SELECTOR = ".db-filter-panel, .db-sort-panel, .db-column-manager,"
-  + " .db-view-config-panel, .db-dropdown-popover, .db-date-value-popover, .db-toolbar, .db-header";
+const HEADER_SURFACE_SELECTOR = ".obnotion-filter-panel, .obnotion-sort-panel, .obnotion-column-manager,"
+  + " .obnotion-view-config-panel, .obnotion-dropdown-popover, .obnotion-date-value-popover, .obnotion-toolbar, .obnotion-header";
 
 let removeViewDismissal: (() => void) | null = null;
 
@@ -977,9 +977,9 @@ export function removeViewOutsideDismissal(): void {
 export function hitTestAt(doc: Document, x: number, y: number): string {
   const el = doc.elementFromPoint(x, y);
   if (!el) return "nothing";
-  if (el.classList.contains("db-mobile-sheet-scrim")) return "backdrop";
-  if (!el.closest(".db-mobile-bottom-sheet")) return `outside-sheet:${el.tagName.toLowerCase()}`;
-  return el.classList.contains("db-panel-button") ? "add-control" : `in-sheet:${el.tagName.toLowerCase()}`;
+  if (el.classList.contains("obnotion-mobile-sheet-scrim")) return "backdrop";
+  if (!el.closest(".obnotion-mobile-bottom-sheet")) return `outside-sheet:${el.tagName.toLowerCase()}`;
+  return el.classList.contains("obnotion-panel-button") ? "add-control" : `in-sheet:${el.tagName.toLowerCase()}`;
 }
 
 /**
@@ -1003,10 +1003,10 @@ export interface SelectionPressResult {
   sheetAware: boolean | null;
 }
 
-const INSIDE_CONTAINER_KEEPS = "td[data-note-database-row-path][data-note-database-column-key],"
-  + " .db-selection-status-bar, .db-cell-editing, input, textarea, select, button, a,"
-  + " .db-filter-panel, .db-sort-panel, .db-column-manager, .db-view-config-panel,"
-  + " .db-dropdown-popover, .db-date-value-popover, .db-group-order-popover, .menu";
+const INSIDE_CONTAINER_KEEPS = "td[data-obnotion-row-path][data-obnotion-column-key],"
+  + " .obnotion-selection-status-bar, .obnotion-cell-editing, input, textarea, select, button, a,"
+  + " .obnotion-filter-panel, .obnotion-sort-panel, .obnotion-column-manager, .obnotion-view-config-panel,"
+  + " .obnotion-dropdown-popover, .obnotion-date-value-popover, .obnotion-group-order-popover, .menu";
 
 let selectionPress: SelectionPressResult = { pressed: null, containerOnly: null, sheetAware: null };
 let removeSelectionProbe: (() => void) | null = null;
@@ -1064,8 +1064,8 @@ export function readSelectionPressProbe(): SelectionPressResult {
  */
 export function measureWheelReachFromSheet(doc: Document): { nested: boolean; reached: boolean } {
   const scenario = activeAddRow;
-  const sheet = doc.body.querySelector<HTMLElement>(".db-mobile-bottom-sheet");
-  const button = sheet?.querySelector<HTMLElement>(".db-panel-button");
+  const sheet = doc.body.querySelector<HTMLElement>(".obnotion-mobile-bottom-sheet");
+  const button = sheet?.querySelector<HTMLElement>(".obnotion-panel-button");
   if (!scenario || !sheet || !button) return { nested: false, reached: false };
 
   const leaf = doc.createElement("div");
@@ -1147,19 +1147,19 @@ export function rebuildToolbarBehindSheet(doc: Document): boolean {
 export function readAddRowProbe(doc: Document): AddRowProbe {
   const panel = activeAddRow?.panel() ?? null;
   const add = panel
-    ? Array.from(panel.querySelectorAll<HTMLButtonElement>(".db-panel-button")).find((btn) => (btn.textContent || "").startsWith("+"))
+    ? Array.from(panel.querySelectorAll<HTMLButtonElement>(".obnotion-panel-button")).find((btn) => (btn.textContent || "").startsWith("+"))
     : undefined;
   const box = add?.getBoundingClientRect();
   return {
     addButton: box && box.width > 0 ? { x: box.x + box.width / 2, y: box.y + box.height / 2 } : null,
     rules: activeAddRow?.rules() ?? -1,
     open: Boolean(activeAddRow?.open && panel?.isConnected),
-    sheets: doc.body.querySelectorAll(".db-mobile-bottom-sheet").length,
-    scrims: doc.body.querySelectorAll(".db-mobile-sheet-scrim").length,
+    sheets: doc.body.querySelectorAll(".obnotion-mobile-bottom-sheet").length,
+    scrims: doc.body.querySelectorAll(".obnotion-mobile-sheet-scrim").length,
     panelTop: panel ? panel.getBoundingClientRect().top : null,
     panelBottom: panel ? panel.getBoundingClientRect().bottom : null,
     panelIdentity: panel?.getAttribute("data-probe-panel") ?? null,
-    isSheet: Boolean(panel?.classList.contains("db-mobile-bottom-sheet")),
+    isSheet: Boolean(panel?.classList.contains("obnotion-mobile-bottom-sheet")),
     visibility: panel && doc.defaultView
       ? doc.defaultView.getComputedStyle(panel).visibility
       : null,

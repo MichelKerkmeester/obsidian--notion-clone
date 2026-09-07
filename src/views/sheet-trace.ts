@@ -66,7 +66,7 @@ function describe(target: EventTarget | null): string {
   const cls = target.className && typeof target.className === "string"
     ? `.${target.className.trim().split(/\s+/).slice(0, 4).join(".")}`
     : "";
-  const sheet = target.closest?.(".db-mobile-bottom-sheet") ? " in-sheet" : " outside-sheet";
+  const sheet = target.closest?.(".obnotion-mobile-bottom-sheet") ? " in-sheet" : " outside-sheet";
   return `${target.tagName.toLowerCase()}${id}${cls}${target.isConnected ? "" : " DETACHED"}${sheet}`;
 }
 

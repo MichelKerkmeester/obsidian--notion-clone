@@ -46,8 +46,8 @@ const REPO = fileURLToPath(new URL("../..", import.meta.url));
 // counted, because the assertion is "at least one renders checked", not "every checkbox is".
 //
 // List and table share the select/checkbox/currency shape but not the class names: the card-based
-// list renders through card-field-renderer.ts (".db-card-field-number"), the table through
-// cell-renderer.ts's own numeric-cell class (".db-numeric-value"). The table adds a date marker
+// list renders through card-field-renderer.ts (".obnotion-card-field-number"), the table through
+// cell-renderer.ts's own numeric-cell class (".obnotion-numeric-value"). The table adds a date marker
 // (no date column exists at the "text" shape, so its class only appears here) and a relation-icon
 // marker — the SVG the stub's real-icon table draws inside a relation chip, not the placeholder
 // "◆" text an untraced icon name would leave, which is what proves the chip's icon is real rather
@@ -68,18 +68,18 @@ window.__typedMarkers = (scenario) => {
     return {
       mounted: true,
       namedSelectPill: !!container.querySelector(".status-badge:not(.status-color-gray)"),
-      checkedCheckbox: !!container.querySelector(".db-checkbox-field:checked"),
-      currency: Array.from(container.querySelectorAll(".db-numeric-value"))
+      checkedCheckbox: !!container.querySelector(".obnotion-checkbox-field:checked"),
+      currency: Array.from(container.querySelectorAll(".obnotion-numeric-value"))
         .some((el) => el.textContent.includes("\\u20ac")),
-      dateValue: !!container.querySelector(".db-date-value"),
-      relationIcon: !!container.querySelector(".db-relation-link-icon svg"),
+      dateValue: !!container.querySelector(".obnotion-date-value"),
+      relationIcon: !!container.querySelector(".obnotion-relation-link-icon svg"),
     };
   }
   return {
     mounted: true,
     namedSelectPill: !!container.querySelector(".status-badge:not(.status-color-gray)"),
-    checkedCheckbox: !!container.querySelector(".db-checkbox-field:checked"),
-    currency: Array.from(container.querySelectorAll(".db-card-field-number"))
+    checkedCheckbox: !!container.querySelector(".obnotion-checkbox-field:checked"),
+    currency: Array.from(container.querySelectorAll(".obnotion-card-field-number"))
       .some((el) => el.textContent.includes("\\u20ac")),
   };
 };

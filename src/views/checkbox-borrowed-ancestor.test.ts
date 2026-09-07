@@ -11,8 +11,8 @@
 // to carry a class that supplied their appearance.
 //
 // The call-site half of this guard, below, watches how a checkbox is created. That is not the
-// property the defect was about. Re-keying the whole base rule from `input[type="checkbox"].db-checkbox`
-// back to `.note-database-container .db-checkbox-cell input[type="checkbox"]` — the exact pre-fix
+// property the defect was about. Re-keying the whole base rule from `input[type="checkbox"].obnotion-checkbox`
+// back to `.obnotion-container .obnotion-checkbox-cell input[type="checkbox"]` — the exact pre-fix
 // stylesheet, every checkbox outside a boolean cell falling back to the platform box — left this
 // suite reporting six passes. It passed on the broken tree and the fixed tree alike, because the
 // property it claimed to protect lives in CSS and nothing here read any CSS.
@@ -103,8 +103,8 @@ describe("checkboxes migrated off borrowed ancestor appearance", () => {
 
 /** The two controls the plugin renders as an `input[type="checkbox"]`, and the class each owns. */
 const OWNED_CONTROLS = [
-  { control: "db-checkbox", note: "every selection and boolean box" },
-  { control: "db-toggle-switch", note: "the switch" },
+  { control: "obnotion-checkbox", note: "every selection and boolean box" },
+  { control: "obnotion-toggle-switch", note: "the switch" },
 ] as const;
 
 interface AppearanceRule {
@@ -135,7 +135,7 @@ function appearanceRules(control: string): AppearanceRule[] {
       rules.push({
         selector,
         ancestorScoped: /[ >+~]/.test(skeleton),
-        guardedAgainstOwned: /:not\(\.db-checkbox\)/.test(selector),
+        guardedAgainstOwned: /:not\(\.obnotion-checkbox\)/.test(selector),
       });
     }
   }
@@ -155,7 +155,7 @@ describe("a checkbox's appearance is anchored on the control, not on where it is
 
     it(`${control} takes appearance from no ancestor`, () => {
       // A guarded fallback is exempt and only because the guard is what makes it unreachable:
-      // `:not(.db-checkbox)` cannot match a control the factory built. Delete the guard and this
+      // `:not(.obnotion-checkbox)` cannot match a control the factory built. Delete the guard and this
       // fails, which is the intent — an unguarded ancestor rule is the defect coming back.
       const borrowed = appearanceRules(control)
         .filter((rule) => rule.ancestorScoped && !rule.guardedAgainstOwned)

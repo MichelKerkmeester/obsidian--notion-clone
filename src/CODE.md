@@ -18,7 +18,7 @@ plugin into a DOM-free data layer and a rendering layer.
 
 Current state:
 
-- `main.ts` exports `NoteDatabasePlugin` (extends Obsidian's `Plugin`) and is the only entrypoint.
+- `main.ts` exports `ObnotionPlugin` (extends Obsidian's `Plugin`) and is the only entrypoint.
 - `data/` holds pure model and logic. `views/` holds everything that touches the DOM.
 - `settings.ts` and `i18n.ts` are leaf modules the entrypoint and views read from.
 
@@ -33,7 +33,7 @@ Current state:
 
 ┌─────────────┐      ┌────────────────┐      ┌────────────────┐
 │ Obsidian    │ ───▶ │ main.ts        │ ───▶ │ views/         │
-│ workspace   │      │ NoteDatabase-  │      │ renderers,     │
+│ workspace   │      │ Obnotion-  │      │ renderers,     │
 │ + commands  │      │ Plugin         │      │ panels, modals │
 └─────────────┘      └───────┬────────┘      └────────┬───────┘
                              │                        │
@@ -53,7 +53,7 @@ data/ never imports views/
 
 ```text
 src/
-+-- main.ts        # NoteDatabasePlugin, view registration, commands, vault IO
++-- main.ts        # ObnotionPlugin, view registration, commands, vault IO
 +-- settings.ts    # Settings tab and modal
 +-- i18n.ts        # Locale dictionaries and translate helper
 +-- data/          # Model and pure logic (no DOM)
@@ -117,7 +117,7 @@ Main flow:
 
 | Entrypoint | Type | Purpose |
 |---|---|---|
-| `NoteDatabasePlugin` | Class (`main.ts`) | The plugin Obsidian instantiates on load |
+| `ObnotionPlugin` | Class (`main.ts`) | The plugin Obsidian instantiates on load |
 | `DatabaseView` | Class (`views/DatabaseView.ts`) | The main database view type |
 | `DatabaseFileView` | Class (`views/DatabaseFileView.ts`) | The database-file dashboard view |
 

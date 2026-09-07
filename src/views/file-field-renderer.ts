@@ -75,17 +75,17 @@ export function renderSpecialFileFieldValue(
 
 export function renderFileTags(parent: HTMLElement, value: unknown, col: ColumnDef, context: FileFieldRenderContext = {}): void {
   const values = toValidObsidianTagValues(value);
-  const wrap = parent.createDiv({ cls: context.tagsContainerClass || "db-file-tags db-multi-select-values" });
+  const wrap = parent.createDiv({ cls: context.tagsContainerClass || "obnotion-file-tags obnotion-multi-select-values" });
   setFieldTooltip(wrap, values);
   for (const item of values) {
     const badge = wrap.createSpan({ cls: "status-badge", text: item });
     const option = col.statusOptions?.find((candidate) => normalizeOptionValueForKey("file.tags", candidate.value) === item);
     if (option?.color && option.color !== "gray") badge.addClass(`status-color-${option.color}`);
-    badge.addClass("db-file-tag-badge");
+    badge.addClass("obnotion-file-tag-badge");
     badge.title = item;
     if (context.onRemoveTag) {
       const remove = badge.createEl("button", {
-        cls: "db-file-tag-remove",
+        cls: "obnotion-file-tag-remove",
         text: "×",
         attr: { type: "button", "aria-label": `Remove ${item}` },
       });
@@ -110,10 +110,10 @@ export function renderFileLinkList(
     ? parent.createDiv({ cls: context.linkContainerClass })
     : context.linkItemClass
       ? parent
-      : parent.createDiv({ cls: "db-file-link-list" });
+      : parent.createDiv({ cls: "obnotion-file-link-list" });
   setFieldTooltip(wrap, links.map((link) => link.label));
   for (const link of links) {
-    const itemClass = context.linkItemClass || "db-file-link-list-item";
+    const itemClass = context.linkItemClass || "obnotion-file-link-list-item";
     const anchor = wrap.createEl("a", { cls: `internal-link ${itemClass}`, text: link.label, attr: { title: link.target } });
     markNoteHoverLink(anchor, link.target, row.file.path);
     anchor.href = "#";
@@ -135,7 +135,7 @@ export function renderFileSelfLink(
 ): void {
   const text = stringifyValue(value).trim();
   if (!text) return;
-  const itemClass = context.linkItemClass || "db-file-self-link";
+  const itemClass = context.linkItemClass || "obnotion-file-self-link";
   const anchor = parent.createEl("a", {
     cls: `internal-link ${itemClass}`,
     text,

@@ -3,7 +3,7 @@
 // COMPONENT: plugin entrypoint — lifecycle, view/command registration, and .base/CSV import-export
 // ───────────────────────────────────────────────────────────────────
 //
-// `NoteDatabasePlugin` is the single class Obsidian instantiates, so
+// `ObnotionPlugin` is the single class Obsidian instantiates, so
 // every cross-cutting concern that needs `this.app`/`this.registerEvent`
 // (vault-property cache scheduling, .base-file conversion, CSV/Markdown
 // zip import) lives here rather than in `data/` — those modules aren't
@@ -17,9 +17,10 @@ import { readSheetTrace, setSheetTraceEnabled } from "./views/sheet-trace";
 import { App, Component, FuzzySuggestModal, loadMathJax, MarkdownRenderer, MarkdownView, Modal, Plugin, WorkspaceLeaf, Notice, TFile, normalizePath, parseYaml, stringifyYaml } from "obsidian";
 import { DataSource } from "./data/data-source";
 import { applyGalleryMigration, planGalleryMigration } from "./data/gallery-migration";
+import { migrateLegacyPluginData } from "./data/legacy-plugin-data-migration";
 import { sortDatabaseFileEntries } from "./data/database-file-order";
-import { DatabaseView, DATABASE_VIEW_TYPE } from "./views/database-view";
-import { DatabaseFileDashboardView, DATABASE_FILE_VIEW_TYPE } from "./views/database-file-view";
+import { DatabaseView, DATABASE_VIEW_TYPE, LEGACY_DATABASE_VIEW_TYPE } from "./views/database-view";
+import { DatabaseFileDashboardView, DATABASE_FILE_VIEW_TYPE, LEGACY_DATABASE_FILE_VIEW_TYPE } from "./views/database-file-view";
 import { SettingsTab, DEFAULT_SETTINGS, createDefaultSettings } from "./settings";
 import { ColumnDef, ComputedFieldDef, DatabaseConfig, PluginSettings, SortRule, SourceRuleNode, StatusOptionDef, ViewConfig, generateId } from "./data/types";
 import {
@@ -47,8 +48,8 @@ import { hasDateTimeValue, parseDateTimeParts } from "./data/date-time-format";
 import { linkDatabaseSchemas } from "./data/column-config";
 import { safeString, isRecord } from "./data/safe-string";
 import { isElement } from "./views/dom-guards";
-import { NOTE_DATABASE_HOVER_LINK_SOURCE } from "./views/hover-link-preview";
-import { DbModal } from "./views/modals/db-modal";
+import { OBNOTION_HOVER_LINK_SOURCE } from "./views/hover-link-preview";
+import { DbModal } from "./views/modals/obnotion-modal";
 import { createSurfaceShell, type SurfaceShellHandle, type SurfaceShellRole } from "./views/surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
@@ -83,7 +84,7 @@ interface BaseFileViewData {
 // 3. PLUGIN
 // ───────────────────────────────────────────────────────────────────
 
-export default class NoteDatabasePlugin extends Plugin {
+export default class ObnotionPlugin extends Plugin {
   settings!: PluginSettings;
   dataSource!: DataSource;
   private readonly instanceId = generateId();
@@ -110,14 +111,37 @@ export default class NoteDatabasePlugin extends Plugin {
     "create-linked-view": "command.createLinkedView",
   };
 
+  /**
+   * Copies `data.json` from the pre-rename plugin folder into this one, once, on first load
+   * under the new id. Never moves, renames or deletes the source — a user running the old
+   * and new ids side by side must not lose either one's data — see
+   * `legacy-plugin-data-migration.ts` for the copy-vs-no-op decision itself. A throw here is
+   * caught and logged once rather than blocking `onload` (NFR-R01).
+   */
+  private async migrateLegacyPluginDataOnce(): Promise<void> {
+    try {
+      const adapter = this.app.vault.adapter;
+      const configDir = this.app.vault.configDir;
+      const newDataPath = `${this.manifest.dir ?? `${configDir}/plugins/${this.manifest.id}`}/data.json`;
+      const oldDataPath = `${configDir}/plugins/note-database/data.json`;
+      const result = await migrateLegacyPluginData(adapter, oldDataPath, newDataPath);
+      if (result.copied) {
+        console.log("Obnotion: migrated settings from the note-database plugin folder (source left untouched)");
+      }
+    } catch (error) {
+      console.error("Obnotion: failed to migrate settings from the note-database plugin folder", error);
+    }
+  }
+
   async onload(): Promise<void> {
-    this.registerHoverLinkSource(NOTE_DATABASE_HOVER_LINK_SOURCE, {
-      display: "Note Database",
+    this.registerHoverLinkSource(OBNOTION_HOVER_LINK_SOURCE, {
+      display: "Obnotion",
       defaultMod: true,
     });
     // Preload MathJax at startup so inline-markdown `$...$` rendering (renderMath)
     // works on first paint; without this Obsidian throws "MathJax is not defined".
     void loadMathJax();
+    await this.migrateLegacyPluginDataOnce();
     // Load and migrate settings with defensive fallback
     try {
       const loaded: unknown = await this.loadData();
@@ -316,44 +340,46 @@ export default class NoteDatabasePlugin extends Plugin {
       }
     });
 
-    // Register database view
-    this.registerView(
-      DATABASE_VIEW_TYPE,
-      (leaf: WorkspaceLeaf) => {
-        return new DatabaseView(
-          leaf,
-          this.dataSource,
-          this.settings.databaseFileOrder || [],
-          this.settings.databaseFolder || DEFAULT_SETTINGS.databaseFolder,
-          this.settings.statusPresets || DEFAULT_SETTINGS.statusPresets,
-          this.settings.defaultStatusPresetId,
-          () => this.saveSettings()
-        );
+    // Register database view. Also registered under the pre-rename view-type strings
+    // (never removed, no deprecation window): a `workspace.json` written before
+    // this rename still stores "note-database-view" / "note-database-file-view", and Obsidian
+    // resolves a stored leaf by looking up its exact type string against what was registered.
+    const createDatabaseView = (leaf: WorkspaceLeaf) => {
+      return new DatabaseView(
+        leaf,
+        this.dataSource,
+        this.settings.databaseFileOrder || [],
+        this.settings.databaseFolder || DEFAULT_SETTINGS.databaseFolder,
+        this.settings.statusPresets || DEFAULT_SETTINGS.statusPresets,
+        this.settings.defaultStatusPresetId,
+        () => this.saveSettings()
+      );
+    };
+    this.registerView(DATABASE_VIEW_TYPE, createDatabaseView);
+    this.registerView(LEGACY_DATABASE_VIEW_TYPE, createDatabaseView);
+
+    const createDatabaseFileView = (leaf: WorkspaceLeaf) => {
+      const state = leaf.getViewState();
+      const filePath = (state.state as Record<string, unknown>)?.file as string || "";
+      const file = filePath ? this.app.vault.getAbstractFileByPath(filePath) : null;
+      let configs: DatabaseConfig[] = [];
+      if (file instanceof TFile) {
+        const config = this.getDatabaseFileConfig(file);
+        if (config) configs = [config];
       }
-    );
-    this.registerView(
-      DATABASE_FILE_VIEW_TYPE,
-      (leaf: WorkspaceLeaf) => {
-        const state = leaf.getViewState();
-        const filePath = (state.state as Record<string, unknown>)?.file as string || "";
-        const file = filePath ? this.app.vault.getAbstractFileByPath(filePath) : null;
-        let configs: DatabaseConfig[] = [];
-        if (file instanceof TFile) {
-          const config = this.getDatabaseFileConfig(file);
-          if (config) configs = [config];
-        }
-        return new DatabaseFileDashboardView(
-          leaf,
-          this.dataSource,
-          configs,
-          filePath,
-          this.settings.databaseFolder || DEFAULT_SETTINGS.databaseFolder,
-          this.settings.statusPresets || DEFAULT_SETTINGS.statusPresets,
-          this.settings.defaultStatusPresetId,
-          () => this.saveSettings(),
-        );
-      }
-    );
+      return new DatabaseFileDashboardView(
+        leaf,
+        this.dataSource,
+        configs,
+        filePath,
+        this.settings.databaseFolder || DEFAULT_SETTINGS.databaseFolder,
+        this.settings.statusPresets || DEFAULT_SETTINGS.statusPresets,
+        this.settings.defaultStatusPresetId,
+        () => this.saveSettings(),
+      );
+    };
+    this.registerView(DATABASE_FILE_VIEW_TYPE, createDatabaseFileView);
+    this.registerView(LEGACY_DATABASE_FILE_VIEW_TYPE, createDatabaseFileView);
 
     // Add ribbon icon to open the view as a tab (like Kanban plugin)
     this.addRibbonIcon("database", t("app.name"), async () => {
@@ -448,34 +474,29 @@ export default class NoteDatabasePlugin extends Plugin {
       },
     });
 
-    this.registerMarkdownCodeBlockProcessor("note-database", (source, el, ctx) => {
-      ctx.addChild(new EmbeddedDatabaseRenderer(
-        this.app,
-        el,
-        this.dataSource,
-        () => this.getEmbeddedDatabaseEntries(),
-        source,
-        ctx.sourcePath,
-        () => ctx.getSectionInfo(el),
-        () => this.saveSettings(),
-        "codeblock",
-        this.settings.databaseFolder || DEFAULT_SETTINGS.databaseFolder
-      ));
-    });
-    this.registerMarkdownCodeBlockProcessor("database-view", (source, el, ctx) => {
-      ctx.addChild(new EmbeddedDatabaseRenderer(
-        this.app,
-        el,
-        this.dataSource,
-        () => this.getEmbeddedDatabaseEntries(),
-        source,
-        ctx.sourcePath,
-        () => ctx.getSectionInfo(el),
-        () => this.saveSettings(),
-        "codeblock",
-        this.settings.databaseFolder || DEFAULT_SETTINGS.databaseFolder
-      ));
-    });
+    // "obnotion" is the canonical code-block language. "database-view" and "note-database" are
+    // permanent aliases, never removed: a note written before this rename
+    // fences its embed with one of the other two, and both keep resolving to the same renderer
+    // forever.
+    const registerEmbedLanguage = (language: string) => {
+      this.registerMarkdownCodeBlockProcessor(language, (source, el, ctx) => {
+        ctx.addChild(new EmbeddedDatabaseRenderer(
+          this.app,
+          el,
+          this.dataSource,
+          () => this.getEmbeddedDatabaseEntries(),
+          source,
+          ctx.sourcePath,
+          () => ctx.getSectionInfo(el),
+          () => this.saveSettings(),
+          "codeblock",
+          this.settings.databaseFolder || DEFAULT_SETTINGS.databaseFolder
+        ));
+      });
+    };
+    registerEmbedLanguage("obnotion");
+    registerEmbedLanguage("database-view");
+    registerEmbedLanguage("note-database");
     window.setTimeout(() => this.markDatabaseFileTabs(), 1000);
   }
 
@@ -484,15 +505,15 @@ export default class NoteDatabasePlugin extends Plugin {
     this.settings.lastChangelogVersion = this.manifest.version;
     await this.saveSettings();
     const modal = new Modal(this.app);
-    modal.titleEl.setText(`Note Database ${this.manifest.version}`);
-    modal.contentEl.addClass("note-database-changelog");
+    modal.titleEl.setText(`Obnotion ${this.manifest.version}`);
+    modal.contentEl.addClass("obnotion-changelog");
     const component = new Component();
     modal.onClose = () => component.unload();
-    const notesEl = modal.contentEl.createDiv("note-database-changelog-notes");
+    const notesEl = modal.contentEl.createDiv("obnotion-changelog-notes");
     modal.contentEl.createEl("a", {
-      cls: "note-database-changelog-link",
+      cls: "obnotion-changelog-link",
       text: t("changelog.viewPluginPage"),
-      attr: { href: "obsidian://show-plugin?id=note-database" },
+      attr: { href: "obsidian://show-plugin?id=obnotion" },
     });
     modal.open();
     // The heading takes the version rather than carrying it in the string. It used to be baked
@@ -642,7 +663,7 @@ export default class NoteDatabasePlugin extends Plugin {
       await this.app.workspace.revealLeaf(leaf);
       this.markDatabaseFileTabs();
     } catch (error) {
-      console.error("Note Database: failed to reuse database file tab", error);
+      console.error("Obnotion: failed to reuse database file tab", error);
       new Notice(t("errors.updateFailed", { error: String(error) }));
     }
   }
@@ -700,7 +721,7 @@ export default class NoteDatabasePlugin extends Plugin {
         ? parsed as Record<string, unknown>
         : null;
     } catch (error) {
-      console.error("Note Database: failed to read database file frontmatter", error);
+      console.error("Obnotion: failed to read database file frontmatter", error);
       return null;
     }
   }
@@ -833,7 +854,7 @@ export default class NoteDatabasePlugin extends Plugin {
       setting.openTabById?.(this.manifest.id);
       // 等待 DOM 渲染后滚动到数据库列表分组
       window.requestAnimationFrame(() => {
-        const el = window.activeDocument.getElementById("db-settings-database-group");
+        const el = window.activeDocument.getElementById("obnotion-settings-database-group");
         if (el) {
           el.scrollIntoView({ behavior: "smooth", block: "start" });
         }
@@ -889,7 +910,7 @@ export default class NoteDatabasePlugin extends Plugin {
     try {
       ({ config, inferredColumns, mapViewDowngraded } = this.createConfigFromBase(file, source));
     } catch (error) {
-      console.warn("Note Database: failed to convert .base filters", error);
+      console.warn("Obnotion: failed to convert .base filters", error);
       new Notice(error instanceof Error ? error.message : String(error));
       return;
     }
@@ -1291,7 +1312,10 @@ export default class NoteDatabasePlugin extends Plugin {
   private async readCsvMarkdownMetadata(file: File): Promise<CsvMarkdownMetadata | null> {
     try {
       const parsed = JSON.parse(await file.text()) as CsvMarkdownMetadata;
-      if (parsed?.format !== "note-database-csv-markdown" || !parsed.database) return null;
+      // Write new, read either, forever: an archive exported before the rename
+      // still carries the old marker, and it must keep importing with no deprecation window.
+      const isKnownFormat = parsed?.format === "obnotion-csv-markdown" || parsed?.format === "note-database-csv-markdown";
+      if (!isKnownFormat || !parsed.database) return null;
       return parsed;
     } catch {
       new Notice(t("notice.csvMarkdownImportInvalidMetadata"));
@@ -2729,8 +2753,8 @@ export default class NoteDatabasePlugin extends Plugin {
   private markDatabaseFileTabs(): void {
     const applyTabState = (leaf: WorkspaceLeaf, isDatabaseFile: boolean, containerEl?: HTMLElement): void => {
       const tabHeaderEl = (leaf as unknown as { tabHeaderEl?: HTMLElement }).tabHeaderEl;
-      tabHeaderEl?.toggleClass("note-database-file-tab", isDatabaseFile);
-      containerEl?.toggleClass("note-database-file-leaf", isDatabaseFile);
+      tabHeaderEl?.toggleClass("obnotion-file-tab", isDatabaseFile);
+      containerEl?.toggleClass("obnotion-file-leaf", isDatabaseFile);
     };
 
     for (const leaf of this.app.workspace.getLeavesOfType("markdown")) {
@@ -2766,10 +2790,10 @@ export default class NoteDatabasePlugin extends Plugin {
           : undefined;
         const isDb = file instanceof TFile && fm?.["db_view"] === true;
 
-        const existingBadge = item.querySelector(".nav-file-tag.note-database-tag");
+        const existingBadge = item.querySelector(".nav-file-tag.obnotion-tag");
         if (isDb && !existingBadge) {
           if (self) {
-            self.createDiv({ cls: "nav-file-tag note-database-tag", text: "DB" });
+            self.createDiv({ cls: "nav-file-tag obnotion-tag", text: "DB" });
           }
         } else if (!isDb && existingBadge) {
           existingBadge.remove();
@@ -2803,7 +2827,7 @@ export default class NoteDatabasePlugin extends Plugin {
         );
         migrated++;
       } catch (err) {
-        console.error(`Note Database: failed to migrate database "${db.name}":`, err);
+        console.error(`Obnotion: failed to migrate database "${db.name}":`, err);
       }
     }
 
@@ -2919,17 +2943,17 @@ class CsvMarkdownImportModal extends DbModal {
 
   private render(): void {
     this.contentEl.empty();
-    this.contentEl.addClass("note-database-modal");
+    this.contentEl.addClass("obnotion-modal");
     this.contentEl.createEl("h3", { text: t("csvMarkdownImport.title") });
-    this.contentEl.createDiv({ cls: "db-panel-empty", text: t("csvMarkdownImport.desc") });
+    this.contentEl.createDiv({ cls: "obnotion-panel-empty", text: t("csvMarkdownImport.desc") });
 
-    const csvRow = this.contentEl.createDiv({ cls: "db-panel-row db-csv-markdown-import-row" });
+    const csvRow = this.contentEl.createDiv({ cls: "obnotion-panel-row obnotion-csv-markdown-import-row" });
     csvRow.createSpan({ text: t("csvMarkdownImport.csv") });
     const csvInput = csvRow.createEl("input", { attr: { type: "file", accept: ".csv,text/csv", multiple: "true" } });
-    csvInput.addClass("db-hidden-file-input");
-    const csvPicker = csvRow.createDiv({ cls: "db-file-picker" });
+    csvInput.addClass("obnotion-hidden-file-input");
+    const csvPicker = csvRow.createDiv({ cls: "obnotion-file-picker" });
     const csvButton = csvPicker.createEl("button", { text: t("csvMarkdownImport.chooseCsv"), attr: { type: "button" } });
-    const csvLabel = csvPicker.createSpan({ cls: "db-file-picker-label", text: t("csvMarkdownImport.noFile") });
+    const csvLabel = csvPicker.createSpan({ cls: "obnotion-file-picker-label", text: t("csvMarkdownImport.noFile") });
     csvButton.onclick = () => csvInput.click();
     csvInput.onchange = () => {
       this.csvFiles = Array.from(csvInput.files || []);
@@ -2944,13 +2968,13 @@ class CsvMarkdownImportModal extends DbModal {
       importBtn.disabled = this.csvFiles.length === 0;
     };
 
-    const mdRow = this.contentEl.createDiv({ cls: "db-panel-row db-csv-markdown-import-row" });
+    const mdRow = this.contentEl.createDiv({ cls: "obnotion-panel-row obnotion-csv-markdown-import-row" });
     mdRow.createSpan({ text: t("csvMarkdownImport.markdown") });
     const mdInput = mdRow.createEl("input", { attr: { type: "file", accept: ".md,.markdown,text/markdown", multiple: "true" } });
-    mdInput.addClass("db-hidden-file-input");
-    const mdPicker = mdRow.createDiv({ cls: "db-file-picker" });
+    mdInput.addClass("obnotion-hidden-file-input");
+    const mdPicker = mdRow.createDiv({ cls: "obnotion-file-picker" });
     const mdButton = mdPicker.createEl("button", { text: t("csvMarkdownImport.chooseMarkdown"), attr: { type: "button" } });
-    const mdLabel = mdPicker.createSpan({ cls: "db-file-picker-label", text: t("csvMarkdownImport.noFile") });
+    const mdLabel = mdPicker.createSpan({ cls: "obnotion-file-picker-label", text: t("csvMarkdownImport.noFile") });
     mdButton.onclick = () => mdInput.click();
     mdInput.onchange = () => {
       this.markdownFiles = Array.from(mdInput.files || []);
@@ -2959,20 +2983,20 @@ class CsvMarkdownImportModal extends DbModal {
         : t("csvMarkdownImport.noFile");
     };
 
-    const metadataRow = this.contentEl.createDiv({ cls: "db-panel-row db-csv-markdown-import-row" });
+    const metadataRow = this.contentEl.createDiv({ cls: "obnotion-panel-row obnotion-csv-markdown-import-row" });
     metadataRow.createSpan({ text: t("csvMarkdownImport.metadata") });
     const metadataInput = metadataRow.createEl("input", { attr: { type: "file", accept: ".json,application/json" } });
-    metadataInput.addClass("db-hidden-file-input");
-    const metadataPicker = metadataRow.createDiv({ cls: "db-file-picker" });
+    metadataInput.addClass("obnotion-hidden-file-input");
+    const metadataPicker = metadataRow.createDiv({ cls: "obnotion-file-picker" });
     const metadataButton = metadataPicker.createEl("button", { text: t("csvMarkdownImport.chooseMetadata"), attr: { type: "button" } });
-    const metadataLabel = metadataPicker.createSpan({ cls: "db-file-picker-label", text: t("csvMarkdownImport.noFile") });
+    const metadataLabel = metadataPicker.createSpan({ cls: "obnotion-file-picker-label", text: t("csvMarkdownImport.noFile") });
     metadataButton.onclick = () => metadataInput.click();
     metadataInput.onchange = () => {
       this.metadataFile = metadataInput.files?.[0] || null;
       metadataLabel.textContent = this.metadataFile?.name || t("csvMarkdownImport.noFile");
     };
 
-    const nameRow = this.contentEl.createDiv({ cls: "db-panel-row db-csv-markdown-import-row" });
+    const nameRow = this.contentEl.createDiv({ cls: "obnotion-panel-row obnotion-csv-markdown-import-row" });
     nameRow.createSpan({ text: t("csvMarkdownImport.databaseName") });
     const nameInput = nameRow.createEl("input", { attr: { type: "text" } });
     nameInput.value = this.databaseName;
@@ -2981,7 +3005,7 @@ class CsvMarkdownImportModal extends DbModal {
       folderInput.value = this.getDefaultTargetFolder();
     };
 
-    const folderRow = this.contentEl.createDiv({ cls: "db-panel-row db-csv-markdown-import-row" });
+    const folderRow = this.contentEl.createDiv({ cls: "obnotion-panel-row obnotion-csv-markdown-import-row" });
     folderRow.createSpan({ text: t("csvMarkdownImport.targetFolder") });
     const folderInput = folderRow.createEl("input", { attr: { type: "text" } });
     folderInput.value = this.getDefaultTargetFolder();
@@ -2989,7 +3013,7 @@ class CsvMarkdownImportModal extends DbModal {
       this.targetFolder = folderInput.value.trim();
     };
 
-    const actions = this.contentEl.createDiv({ cls: "db-modal-actions" });
+    const actions = this.contentEl.createDiv({ cls: "obnotion-modal-actions" });
     actions.createEl("button", { text: t("common.cancel") }).onclick = () => this.close();
     const importBtn = actions.createEl("button", {
       cls: "mod-cta",

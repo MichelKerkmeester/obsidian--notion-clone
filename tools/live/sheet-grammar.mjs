@@ -127,7 +127,7 @@ const REGISTERED_SURFACES = [
   // every column measures the shared production mechanism, not a second, parallel one.
   { name: "confirm", spec: { renderer: "confirm" } },
   // The three FuzzySuggestModal surfaces: each now routes through
-  // createSurfaceShell exactly as db-modal.ts:122 demonstrates, so the "fuzzy-suggest" case in
+  // createSurfaceShell exactly as obnotion-modal.ts:122 demonstrates, so the "fuzzy-suggest" case in
   // __sheetGrammar below stands in for FuzzySuggestModal's own host shape (the bundle's obsidian
   // stub cannot mount the real class, the same reason "confirm" above is a stand-in) and drives
   // the real createSurfaceShell/attachSheetChromeToModal composition, not a second, parallel one.
@@ -141,7 +141,7 @@ const REGISTERED_SURFACES = [
 // ───────────────────────────────────────────────────────────────────
 
 // Every registered header-bearing surface, minus the two whose header is not `buildShellHeader`'s
-// at all — `record-detail` and `record-peek` draw `.db-record-detail-header` by hand in
+// at all — `record-detail` and `record-peek` draw `.obnotion-record-detail-header` by hand in
 // `record-detail-panel.ts`, a third header shape this leg does not touch (`record-header.ts`'s own
 // phone builder now calls `buildShellHeader` too, but no production caller has reached it yet) —
 // plus the one this defect was actually found on: `column-manager` pairs a fixed-width leading
@@ -185,7 +185,7 @@ const FRAME_GEOMETRY_TOLERANCE_PX = 0.5;
 
 // The confirm's declared card frame: a floor rather than a parity figure (Notion's own
 // thumbnails carry no sampled value), so the inset check is >= rather than ==. The radius reuses
-// the same --db-radius-xl the floating shape above already asserts at FRAME_RADIUS_FLOATING_PX.
+// the same --obnotion-radius-xl the floating shape above already asserts at FRAME_RADIUS_FLOATING_PX.
 const CARD_INSET_MIN_PX = 16;
 const CARD_RADIUS_PX = 16;
 const CARD_GEOMETRY_TOLERANCE_PX = 0.5;
@@ -195,7 +195,7 @@ const CARD_GEOMETRY_TOLERANCE_PX = 0.5;
 // ───────────────────────────────────────────────────────────────────
 
 // The close control and the sub-page back control read one shared custom property
-// (`--db-shell-edge-control-size`, styles.css) rather than each repeating 44px at its own
+// (`--obnotion-shell-edge-control-size`, styles.css) rather than each repeating 44px at its own
 // selector. Reusing `sort-panel` costs no new fixture — it is already registered above and
 // already the drag-handle negative control's own surface.
 const EDGE_CONTROL_TOKEN_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "sort-panel");
@@ -207,7 +207,7 @@ const EDGE_CONTROL_TOKEN_OVERRIDE_PX = 60;
 // ───────────────────────────────────────────────────────────────────
 
 // Every phone sheet the shell mounts arrives with a scrim (`applySheetChrome`, `mobile-bottom-
-// sheet.ts`), and its entrance plays `var(--db-sheet-enter)` — the same token `--db-motion-sheet`
+// sheet.ts`), and its entrance plays `var(--obnotion-sheet-enter)` — the same token `--obnotion-motion-sheet`
 // aliases (styles.css, § tokens). `styles.css`'s own comment for the token states the band this
 // checks: "260ms is the top of the state-change band". 180ms is the bottom of that band, below
 // which a state change reads as a cut rather than a transition. Reusing `sort-panel` costs no new
@@ -261,7 +261,7 @@ const STACK_PARENT_FILTER_TOLERANCE = 0.01;
 // 2h. THE ROW PITCH FLOOR
 // ───────────────────────────────────────────────────────────────────
 //
-// `.db-panel-row` and `.db-menu-item` on a phone, against the 44px accessibility floor
+// `.obnotion-panel-row` and `.obnotion-menu-item` on a phone, against the 44px accessibility floor
 // (`ROW_PADDING_FLOOR_PX` in `sheet-grammar.ts` asserts padding alone, never the resulting pitch).
 const ROW_PITCH_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "owned-menu");
 const ROW_PITCH_FLOOR_PX = 44;
@@ -322,14 +322,14 @@ const SETTINGS_PLACEMENT_FONT_SIZES = [
 // used by the child. The adapter below keeps the row contract identical for dropdowns, menus,
 // pickers and host-modal chrome, while the parent and child still go through shipped modules.
 const REGISTERED_STACKED_PAIRS = [
-  { name: "filter property picker", parent: { renderer: "filter-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".db-filter-field-dropdown", overflow: true } },
-  { name: "filter operator picker", parent: { renderer: "filter-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".db-filter-operator-dropdown" } },
-  { name: "filter select value picker", parent: { renderer: "filter-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".db-filter-value-dropdown" } },
-  { name: "filter checkbox value picker", parent: { renderer: "filter-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".db-filter-value-dropdown" } },
-  { name: "filter conjunction picker", parent: { renderer: "filter-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".db-source-rule-logic" } },
+  { name: "filter property picker", parent: { renderer: "filter-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".obnotion-filter-field-dropdown", overflow: true } },
+  { name: "filter operator picker", parent: { renderer: "filter-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".obnotion-filter-operator-dropdown" } },
+  { name: "filter select value picker", parent: { renderer: "filter-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".obnotion-filter-value-dropdown" } },
+  { name: "filter checkbox value picker", parent: { renderer: "filter-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".obnotion-filter-value-dropdown" } },
+  { name: "filter conjunction picker", parent: { renderer: "filter-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".obnotion-source-rule-logic" } },
   { name: "filter date value picker", parent: { renderer: "filter-panel", bag: "file-view", captureData: true }, child: { kind: "date" } },
-  { name: "sort field picker", parent: { renderer: "sort-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".db-sort-field-dropdown" } },
-  { name: "sort direction picker", parent: { renderer: "sort-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".db-sort-direction-dropdown" } },
+  { name: "sort field picker", parent: { renderer: "sort-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".obnotion-sort-field-dropdown" } },
+  { name: "sort direction picker", parent: { renderer: "sort-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".obnotion-sort-direction-dropdown" } },
   { name: "properties create property", parent: { renderer: "column-manager", bag: "file-view", captureData: true }, child: { kind: "modal", title: "Create property" } },
   // The operator's own report, 2026-09-06: "Edit property — Month" opened from the per-column
   // overflow row on a shipped column, not the "+ Add column" row above. Same K3 opener family as
@@ -338,9 +338,9 @@ const REGISTERED_STACKED_PAIRS = [
   // rather than through the toolbar's own add-column action.
   { name: "properties edit property", parent: { renderer: "column-manager", bag: "file-view", captureData: true }, child: { kind: "modal", title: "Edit property — Month" } },
   { name: "properties property type picker", parent: { renderer: "column-manager", bag: "file-view", captureData: true }, child: { kind: "dropdown", depth: 3, first: "modal", title: "Create property" } },
-  { name: "properties column overflow menu", parent: { renderer: "column-manager", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".db-column-manager-file-property-dropdown" } },
-  { name: "settings dropdown field", parent: { renderer: "view-config", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".db-dropdown-field" } },
-  { name: "settings ad hoc dropdown", parent: { renderer: "view-config", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".db-dropdown-field" } },
+  { name: "properties column overflow menu", parent: { renderer: "column-manager", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".obnotion-column-manager-file-property-dropdown" } },
+  { name: "settings dropdown field", parent: { renderer: "view-config", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".obnotion-dropdown-field" } },
+  { name: "settings ad hoc dropdown", parent: { renderer: "view-config", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".obnotion-dropdown-field" } },
   { name: "settings icon picker", parent: { renderer: "view-config", bag: "file-view", captureData: true }, child: { kind: "icon" } },
   { name: "settings template file picker", parent: { renderer: "view-config", bag: "file-view", captureData: true }, child: { kind: "fuzzy", title: "Choose template" } },
   { name: "settings cover image picker", parent: { renderer: "view-config", bag: "file-view", captureData: true }, child: { kind: "fuzzy", title: "Choose cover" } },
@@ -365,9 +365,9 @@ const REGISTERED_STACKED_PAIRS = [
 ];
 
 // Two geometry facts the DOM predicates cannot see: the close control's own hit box, and whether
-// anything the surface drew reaches past its own right edge. `hasSheetHeader` proves a `.db-sheet-
+// anything the surface drew reaches past its own right edge. `hasSheetHeader` proves a `.obnotion-sheet-
 // close` node exists; it says nothing about whether that node clears the 44px floor `touch-
-// targets.mjs` ratchets everywhere else, and no structural predicate can see a `.db-new-placement`
+// targets.mjs` ratchets everywhere else, and no structural predicate can see a `.obnotion-new-placement`
 // group's long option text overflowing the surface — a settings sheet an operator screenshot once
 // showed with the same option text mid-word-broken to stay inside its own button, still overflowing.
 const CLOSE_TARGET_FLOOR_PX = 44;
@@ -477,7 +477,7 @@ const isOpaqueColor = (value) => {
   return Number.parseFloat(alpha) === 1;
 };
 
-const mountedSheet = () => document.body.querySelector(".db-mobile-bottom-sheet");
+const mountedSheet = () => document.body.querySelector(".obnotion-mobile-bottom-sheet");
 const stackedPairRegistry = ${JSON.stringify(REGISTERED_STACKED_PAIRS)};
 
 // Shared by the runRenderAssertions path below and the confirm stand-in, so the two ways this
@@ -488,7 +488,7 @@ const measureMountedSheet = (sheet) => {
   if (sheet) {
     // The 44px floor: hasSheetHeader only proves a close node exists, never that it clears the
     // touch-target size every other close control on the phone is held to.
-    const close = sheet.querySelector(".db-sheet-close, .db-cell-edit-close");
+    const close = sheet.querySelector(".obnotion-sheet-close, .obnotion-cell-edit-close");
     if (close) {
       const rect = close.getBoundingClientRect();
       closeBox = { width: rect.width, height: rect.height };
@@ -519,7 +519,7 @@ const mountConfirmStandIn = () => {
   const panel = document.createElement("div");
   panel.className = "modal-container";
   const content = document.createElement("div");
-  content.className = "modal-content note-database-modal";
+  content.className = "modal-content obnotion-modal";
   buildConfirmSheetBody(content, {
     title: "Delete this row?",
     message: "This action cannot be undone.",
@@ -551,13 +551,13 @@ const mountConfirmStandIn = () => {
 };
 
 // The card frame's own three measured clauses: the inset on all four edges, the radius on all
-// four corners, and the action row's layout — read off the shipped \`db-sheet-card\`/
-// \`db-confirm-stacked\` classes rather than re-derived, so a regression in either class is what
+// four corners, and the action row's layout — read off the shipped \`obnotion-sheet-card\`/
+// \`obnotion-confirm-stacked\` classes rather than re-derived, so a regression in either class is what
 // this reads, not a second copy of the geometry.
 const measureConfirmCardShape = (panel) => {
   const rect = panel.getBoundingClientRect();
   const style = getComputedStyle(panel);
-  const actions = panel.querySelector(".db-modal-actions");
+  const actions = panel.querySelector(".obnotion-modal-actions");
   const actionStyle = actions ? getComputedStyle(actions) : null;
   const buttons = actions ? Array.from(actions.querySelectorAll("button")) : [];
   return {
@@ -589,9 +589,9 @@ window.__confirmCardShape = () => {
 // every other row in this lane uses — rather than mounting a second, hand-built confirm.
 window.__confirmCardShapeNegativeControl = () => {
   const { panel, close } = mountConfirmStandIn();
-  panel.classList.remove("db-sheet-card");
-  const actions = panel.querySelector(".db-modal-actions");
-  actions?.classList.remove("db-confirm-stacked");
+  panel.classList.remove("obnotion-sheet-card");
+  const actions = panel.querySelector(".obnotion-modal-actions");
+  actions?.classList.remove("obnotion-confirm-stacked");
   const broken = measureConfirmCardShape(panel);
   close();
   return broken;
@@ -599,7 +599,7 @@ window.__confirmCardShapeNegativeControl = () => {
 
 // The three FuzzySuggestModal surfaces: each now presents through the real
 // createSurfaceShell/attachSheetChromeToModal composition on a real host-modal shape, exactly as
-// db-modal.ts:122 does for every DbModal subclass -- the same reason "confirm" above stands in
+// obnotion-modal.ts:122 does for every DbModal subclass -- the same reason "confirm" above stands in
 // for the Modal host without hand-copying what happens inside it.
 const mountFuzzySuggestStandIn = (title) => {
   const { container, modalEl, contentEl } = createHostModalStandIn();
@@ -607,7 +607,7 @@ const mountFuzzySuggestStandIn = (title) => {
   // packet's scope to redress (row 21's own boundary: a chrome route here, a row-shape flip for
   // 053). Wrapped in the shared row class for this stand-in only, so the grammar check measures
   // the chrome this packet DOES own rather than reporting a defect in body markup nobody touched.
-  const inputRow = contentEl.createDiv({ cls: "db-panel-row" });
+  const inputRow = contentEl.createDiv({ cls: "obnotion-panel-row" });
   const input = document.createElement("input");
   input.className = "prompt-input";
   inputRow.appendChild(input);
@@ -639,7 +639,7 @@ window.__sheetGrammar = (scenario) => {
     const { closeBox, rightOverflow } = measureMountedSheet(panel);
     const report = {
       mounted: true,
-      sheetFound: panel.classList.contains("db-mobile-bottom-sheet"),
+      sheetFound: panel.classList.contains("obnotion-mobile-bottom-sheet"),
       grammar: describeSheetGrammar(panel),
       listViewRow: null,
       closeBox,
@@ -653,7 +653,7 @@ window.__sheetGrammar = (scenario) => {
     const { closeBox, rightOverflow } = measureMountedSheet(panel);
     const report = {
       mounted: true,
-      sheetFound: panel.classList.contains("db-mobile-bottom-sheet"),
+      sheetFound: panel.classList.contains("obnotion-mobile-bottom-sheet"),
       grammar: describeSheetGrammar(panel),
       listViewRow: null,
       closeBox,
@@ -675,7 +675,7 @@ window.__sheetGrammar = (scenario) => {
       mounted: true,
       sheetFound: Boolean(sheet),
       grammar: sheet ? describeSheetGrammar(sheet) : null,
-      listViewRow: sheet ? Array.from(sheet.querySelectorAll(".db-menu-item-label"))
+      listViewRow: sheet ? Array.from(sheet.querySelectorAll(".obnotion-menu-item-label"))
         .some((el) => el.textContent?.trim() === t("common.listView")) : null,
       closeBox,
       rightOverflow,
@@ -692,7 +692,7 @@ window.__sheetGrammarNegativeControl = () => {
     const sheet = mountedSheet();
     if (!sheet) { removed = { mounted: true, error: "no sheet mounted" }; return; }
     const before = describeSheetGrammar(sheet);
-    sheet.querySelector(".db-mobile-bottom-sheet-handle")?.remove();
+    sheet.querySelector(".obnotion-mobile-bottom-sheet-handle")?.remove();
     removed = { mounted: true, before, after: describeSheetGrammar(sheet) };
   });
   let restored = null;
@@ -704,7 +704,7 @@ window.__sheetGrammarNegativeControl = () => {
 };
 
 const measureTitleCenter = (sheet) => {
-  const title = sheet.querySelector(".db-shell-header .db-panel-title");
+  const title = sheet.querySelector(".obnotion-shell-header .obnotion-panel-title");
   if (!title) return { titleFound: false };
   const sheetRect = sheet.getBoundingClientRect();
   const titleRect = title.getBoundingClientRect();
@@ -717,7 +717,7 @@ const measureTitleCenter = (sheet) => {
 window.__shellHeaderCentering = (scenario) => {
   if (scenario.renderer === "confirm") {
     const { panel, close } = mountConfirmStandIn();
-    const result = { mounted: true, sheetFound: panel.classList.contains("db-mobile-bottom-sheet"), ...measureTitleCenter(panel) };
+    const result = { mounted: true, sheetFound: panel.classList.contains("obnotion-mobile-bottom-sheet"), ...measureTitleCenter(panel) };
     close();
     return result;
   }
@@ -739,10 +739,10 @@ window.__shellHeaderCentering = (scenario) => {
 window.__shellHeaderCenteringNegativeControl = (scenario) => {
   const style = document.createElement("style");
   style.textContent = [
-    ".db-shell-header { display: flex !important; justify-content: flex-start !important; }",
-    ".db-shell-header-leading { display: inline-flex !important; flex: 0 0 auto !important; min-width: 44px !important; }",
-    ".db-shell-header .db-panel-title { flex: 1 1 auto !important; }",
-    ".db-shell-header-trailing { flex: 0 0 auto !important; justify-self: auto !important; }",
+    ".obnotion-shell-header { display: flex !important; justify-content: flex-start !important; }",
+    ".obnotion-shell-header-leading { display: inline-flex !important; flex: 0 0 auto !important; min-width: 44px !important; }",
+    ".obnotion-shell-header .obnotion-panel-title { flex: 1 1 auto !important; }",
+    ".obnotion-shell-header-trailing { flex: 0 0 auto !important; justify-self: auto !important; }",
   ].join(" ");
   document.head.appendChild(style);
   let broken = null;
@@ -776,7 +776,7 @@ const pxToNumber = (value) => Number.parseFloat(value) || 0;
 const measureFrameShape = (sheet) => {
   const style = getComputedStyle(sheet);
   return {
-    floating: sheet.classList.contains("db-sheet-floating"),
+    floating: sheet.classList.contains("obnotion-sheet-floating"),
     // The CSS left/right/bottom properties on a position: fixed element ARE the inset
     // from that edge already — no viewport arithmetic needed to read them as insets.
     left: pxToNumber(style.left),
@@ -802,7 +802,7 @@ window.__sheetFrameShape = (scenario) => {
 // GEOMETRY is load-bearing even on a surface the classifier still (correctly) calls floating.
 window.__sheetFrameShapeNegativeControl = (scenario) => {
   const style = document.createElement("style");
-  style.textContent = ".db-mobile-bottom-sheet.db-sheet-floating { left: 0 !important; right: 0 !important; bottom: 0 !important; border-radius: 8px 8px 0 0 !important; }";
+  style.textContent = ".obnotion-mobile-bottom-sheet.obnotion-sheet-floating { left: 0 !important; right: 0 !important; bottom: 0 !important; border-radius: 8px 8px 0 0 !important; }";
   document.head.appendChild(style);
   let broken = null;
   runRenderAssertions(document.body, scenario, "", () => {
@@ -819,7 +819,7 @@ window.__sheetFrameShapeNegativeControl = (scenario) => {
 };
 
 const measureEdgeControl = (sheet) => {
-  const close = sheet?.querySelector(".db-sheet-close");
+  const close = sheet?.querySelector(".obnotion-sheet-close");
   if (!close) return null;
   const rect = close.getBoundingClientRect();
   return { width: rect.width, height: rect.height };
@@ -839,11 +839,11 @@ window.__shellEdgeControlToken = (scenario) => {
 // that happens to agree with it today.
 window.__shellEdgeControlTokenNegativeControl = (scenario, overridePx) => {
   const style = document.createElement("style");
-  // Overridden on .db-surface, not :root: the sheet panel carries that class itself
+  // Overridden on .obnotion-surface, not :root: the sheet panel carries that class itself
   // (mobile-bottom-sheet.ts), which is where the token is actually declared (styles.css), so an
   // ancestor-scoped override would only ever reach an element nothing inherits it FROM — a
   // custom property re-declared at the element itself always wins over one merely inherited.
-  style.textContent = ".db-surface { --db-shell-edge-control-size: " + overridePx + "px !important; }";
+  style.textContent = ".obnotion-surface { --obnotion-shell-edge-control-size: " + overridePx + "px !important; }";
   document.head.appendChild(style);
   let broken = null;
   runRenderAssertions(document.body, scenario, "", () => {
@@ -858,14 +858,14 @@ window.__shellEdgeControlTokenNegativeControl = (scenario, overridePx) => {
 };
 
 // Read off the scrim's own computed style, not the sheet's: the scrim is the element the
-// entrance duration is declared on (\`.db-mobile-sheet-scrim\`, styles.css), and it is built by
+// entrance duration is declared on (\`.obnotion-mobile-sheet-scrim\`, styles.css), and it is built by
 // \`applySheetChrome\` for every mounted phone sheet — the shell's own engine call, not a
 // per-surface choice. \`getComputedStyle().animationDuration\` always reports seconds
 // ("0.26s"), never the declared unit, so the caller converts. \`.at(-1)\`, not the first match:
 // earlier checks in this lane leave their own mounted sheets and scrims behind in the document,
 // exactly like \`newestSheet\` below has to account for.
 const measureMotionBand = () => {
-  const scrims = document.querySelectorAll(".db-mobile-sheet-scrim");
+  const scrims = document.querySelectorAll(".obnotion-mobile-sheet-scrim");
   const scrim = scrims[scrims.length - 1];
   if (!scrim) return null;
   const seconds = Number.parseFloat(getComputedStyle(scrim).animationDuration) || 0;
@@ -880,17 +880,17 @@ window.__shellMotionBand = (scenario) => {
   return measuredMs;
 };
 
-// The negative control overrides the token itself (\`--db-sheet-enter\`), not a hardcoded
+// The negative control overrides the token itself (\`--obnotion-sheet-enter\`), not a hardcoded
 // duration, so a scrim that hardcoded 260ms somewhere else would stay green here while failing
 // the plain measurement above — same pairing argument the edge-control-token control above
-// makes. Overridden on \`.db-mobile-sheet-scrim\`, not \`:root\`, for the identical reason the
-// edge-control-token control scopes to \`.db-surface\`: \`--db-sheet-enter\` is declared directly
-// on \`.db-mobile-sheet-scrim\` itself (styles.css's shared token block, one selector among
+// makes. Overridden on \`.obnotion-mobile-sheet-scrim\`, not \`:root\`, for the identical reason the
+// edge-control-token control scopes to \`.obnotion-surface\`: \`--obnotion-sheet-enter\` is declared directly
+// on \`.obnotion-mobile-sheet-scrim\` itself (styles.css's shared token block, one selector among
 // several), not merely inherited from \`:root\` — a \`:root\` override only ever reaches an
 // element nothing inherits it FROM, and this element declares its own copy.
 window.__shellMotionBandNegativeControl = (scenario, overrideMs) => {
   const style = document.createElement("style");
-  style.textContent = ".db-mobile-sheet-scrim { --db-sheet-enter: " + overrideMs + "ms !important; }";
+  style.textContent = ".obnotion-mobile-sheet-scrim { --obnotion-sheet-enter: " + overrideMs + "ms !important; }";
   document.head.appendChild(style);
   let broken = null;
   runRenderAssertions(document.body, scenario, "", () => {
@@ -904,16 +904,16 @@ window.__shellMotionBandNegativeControl = (scenario, overrideMs) => {
   return { broken, fixed };
 };
 
-// The exit half of the same token pair -- --db-sheet-exit, read the identical way but off the
+// The exit half of the same token pair -- --obnotion-sheet-exit, read the identical way but off the
 // scrim's own exit class (playSheetExit/setScrim, mobile-bottom-sheet.ts) rather than its
 // mount state, since the exit animation only declares itself once that class is present.
 const measureMotionExitBand = () => {
-  const scrims = document.querySelectorAll(".db-mobile-sheet-scrim");
+  const scrims = document.querySelectorAll(".obnotion-mobile-sheet-scrim");
   const scrim = scrims[scrims.length - 1];
   if (!scrim) return null;
-  scrim.classList.add("db-overlay-exit");
+  scrim.classList.add("obnotion-overlay-exit");
   const seconds = Number.parseFloat(getComputedStyle(scrim).animationDuration) || 0;
-  scrim.classList.remove("db-overlay-exit");
+  scrim.classList.remove("obnotion-overlay-exit");
   return Math.round(seconds * 1000);
 };
 
@@ -927,7 +927,7 @@ window.__shellMotionExitBand = (scenario) => {
 
 window.__shellMotionExitBandNegativeControl = (scenario, overrideMs) => {
   const style = document.createElement("style");
-  style.textContent = ".db-mobile-sheet-scrim { --db-sheet-exit: " + overrideMs + "ms !important; }";
+  style.textContent = ".obnotion-mobile-sheet-scrim { --obnotion-sheet-exit: " + overrideMs + "ms !important; }";
   document.head.appendChild(style);
   let broken = null;
   runRenderAssertions(document.body, scenario, "", () => {
@@ -945,7 +945,7 @@ window.__shellMotionExitBandNegativeControl = (scenario, overrideMs) => {
 // (the motion band above). getComputedStyle always resolves the custom property inside the
 // rgba() to a concrete number, so the alpha channel is read off the string it produces.
 const measureScrimAlpha = () => {
-  const scrims = document.querySelectorAll(".db-mobile-sheet-scrim");
+  const scrims = document.querySelectorAll(".obnotion-mobile-sheet-scrim");
   const scrim = scrims[scrims.length - 1];
   if (!scrim) return null;
   const match = getComputedStyle(scrim).backgroundColor.match(/rgba?\\(([^)]+)\\)/);
@@ -964,7 +964,7 @@ window.__shellScrimAlpha = (scenario) => {
 
 window.__shellScrimAlphaNegativeControl = (scenario, overrideAlpha) => {
   const style = document.createElement("style");
-  style.textContent = ".db-mobile-sheet-scrim { --db-sheet-scrim-alpha-page: " + overrideAlpha + " !important; }";
+  style.textContent = ".obnotion-mobile-sheet-scrim { --obnotion-sheet-scrim-alpha-page: " + overrideAlpha + " !important; }";
   document.head.appendChild(style);
   let broken = null;
   runRenderAssertions(document.body, scenario, "", () => {
@@ -1015,7 +1015,7 @@ const mountStackParentPair = () => {
 
 // The class toggle that marks a parent is-stack-parent runs on an already-painted element (the
 // parent was on screen alone before the child arrived), and both \`opacity\` and \`filter\` carry a
-// \`transition\` at \`--db-motion-surface\` (200ms). Reading computed style before that transition
+// \`transition\` at \`--obnotion-motion-surface\` (200ms). Reading computed style before that transition
 // has finished returns an interpolated mid-transition value, not the target — two frames
 // (\`waitForStackSettle\`) is long enough for the class toggle itself to commit but not for a
 // 200ms transition to finish, so this waits out the transition's own declared duration instead.
@@ -1035,7 +1035,7 @@ window.__shellStackParentFilter = async () => {
 
 window.__shellStackParentFilterNegativeControl = async () => {
   const style = document.createElement("style");
-  style.textContent = ".db-mobile-bottom-sheet.is-stack-parent.is-stack-parent { filter: none !important; }";
+  style.textContent = ".obnotion-mobile-bottom-sheet.is-stack-parent.is-stack-parent { filter: none !important; }";
   document.head.appendChild(style);
   const broken = mountStackParentPair();
   await waitStackParentTransition();
@@ -1060,7 +1060,7 @@ window.__shellStackParentFilterNegativeControl = async () => {
 // The newest match, not the first: earlier scenarios in this same lane can leave their own
 // mounted sheets behind in the document, exactly like measureMotionBand's own .at(-1) accounts for.
 const measureRowPitch = () => {
-  const rows = document.querySelectorAll(".db-mobile-bottom-sheet .db-menu-item");
+  const rows = document.querySelectorAll(".obnotion-mobile-bottom-sheet .obnotion-menu-item");
   const row = rows[rows.length - 1];
   return row ? row.getBoundingClientRect().height : null;
 };
@@ -1075,7 +1075,7 @@ window.__shellRowPitch = (scenario) => {
 
 window.__shellRowPitchNegativeControl = (scenario) => {
   const style = document.createElement("style");
-  style.textContent = "body.is-phone .note-database-container .db-menu-item { min-height: 30px !important; }";
+  style.textContent = "body.is-phone .obnotion-container .obnotion-menu-item { min-height: 30px !important; }";
   document.head.appendChild(style);
   let broken = null;
   runRenderAssertions(document.body, scenario, "", () => {
@@ -1092,10 +1092,10 @@ window.__shellRowPitchNegativeControl = (scenario) => {
 // The handle's own rect: 34 x 5pt at a 6pt drop below the sheet's own top edge. hasSheetHandle
 // (sheet-grammar.ts) checks existence and drag only and cannot see any of the three numbers.
 const measureHandleGeometry = () => {
-  const sheets = document.querySelectorAll(".db-mobile-bottom-sheet");
+  const sheets = document.querySelectorAll(".obnotion-mobile-bottom-sheet");
   const sheet = sheets[sheets.length - 1];
   if (!sheet) return null;
-  const handle = sheet.querySelector(".db-mobile-bottom-sheet-handle");
+  const handle = sheet.querySelector(".obnotion-mobile-bottom-sheet-handle");
   if (!handle) return null;
   const sheetRect = sheet.getBoundingClientRect();
   const handleRect = handle.getBoundingClientRect();
@@ -1126,12 +1126,12 @@ window.__shellHandleGeometry = (scenario) => new Promise((resolve) => {
 // ever had a horizontal shape to begin with. Thresholds are applied by the node-side caller, the
 // split every other row above already uses.
 const measureSettingsRowStacking = () => {
-  const sheet = document.querySelector(".db-view-config-panel.db-mobile-bottom-sheet");
+  const sheet = document.querySelector(".obnotion-view-config-panel.obnotion-mobile-bottom-sheet");
   if (!sheet) return null;
   const rows = [];
-  for (const row of sheet.querySelectorAll(".db-panel-row")) {
-    const label = row.querySelector(":scope > .db-view-config-label");
-    const field = row.querySelector(":scope > .db-view-config-field");
+  for (const row of sheet.querySelectorAll(".obnotion-panel-row")) {
+    const label = row.querySelector(":scope > .obnotion-view-config-label");
+    const field = row.querySelector(":scope > .obnotion-view-config-field");
     if (!label || !field) continue;
     const labelRect = label.getBoundingClientRect();
     const fieldRect = field.getBoundingClientRect();
@@ -1154,10 +1154,10 @@ window.__shellSettingsRowStacking = (scenario) => {
 
 window.__shellSettingsRowStackingNegativeControl = (scenario) => {
   const style = document.createElement("style");
-  // The row-stacking rule, reverted: .db-panel-row's shared base (the unscoped rule the filter and
+  // The row-stacking rule, reverted: .obnotion-panel-row's shared base (the unscoped rule the filter and
   // sort sheets keep) is a left-to-right row, and this declaration is what took the settings
   // sheet's rows back to it.
-  style.textContent = ".db-view-config-panel.db-mobile-bottom-sheet .db-panel-row { flex-direction: row !important; align-items: normal !important; }";
+  style.textContent = ".obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row { flex-direction: row !important; align-items: normal !important; }";
   document.head.appendChild(style);
   let broken = null;
   runRenderAssertions(document.body, scenario, "", () => {
@@ -1176,9 +1176,9 @@ window.__shellSettingsRowStackingNegativeControl = (scenario) => {
 // wider, document-wide sweep already tried and reverted, here with nothing else in scope to
 // misfire on.
 const measureSettingsPlacementInk = () => {
-  const sheet = document.querySelector(".db-view-config-panel.db-mobile-bottom-sheet");
+  const sheet = document.querySelector(".obnotion-view-config-panel.obnotion-mobile-bottom-sheet");
   if (!sheet) return null;
-  const buttons = Array.from(sheet.querySelectorAll(".db-new-placement-option"));
+  const buttons = Array.from(sheet.querySelectorAll(".obnotion-new-placement-option"));
   if (buttons.length === 0) return null;
   return buttons.map((button) => ({
     scrollWidth: button.scrollWidth,
@@ -1189,7 +1189,7 @@ const measureSettingsPlacementInk = () => {
 
 window.__shellSettingsPlacementInk = (scenario, fontSizePx) => {
   const style = document.createElement("style");
-  style.textContent = ".db-view-config-panel.db-mobile-bottom-sheet .db-new-placement-option { font-size: " + fontSizePx + "px !important; }";
+  style.textContent = ".obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-new-placement-option { font-size: " + fontSizePx + "px !important; }";
   document.head.appendChild(style);
   let measured = null;
   runRenderAssertions(document.body, scenario, "", () => {
@@ -1204,7 +1204,7 @@ window.__shellSettingsPlacementInkNegativeControl = (scenario, fontSizePx) => {
   // The placement-button wrap rule, reverted: the three host button declarations the shipped fix answered —
   // nowrap, centred, a fixed height — reinstated on exactly this selector so the sentence-length
   // option cannot wrap again.
-  brokenStyle.textContent = ".db-view-config-panel.db-mobile-bottom-sheet .db-new-placement-option { font-size: " + fontSizePx + "px !important; white-space: nowrap !important; justify-content: center !important; height: 44px !important; }";
+  brokenStyle.textContent = ".obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-new-placement-option { font-size: " + fontSizePx + "px !important; white-space: nowrap !important; justify-content: center !important; height: 44px !important; }";
   document.head.appendChild(brokenStyle);
   let broken = null;
   runRenderAssertions(document.body, scenario, "", () => {
@@ -1212,7 +1212,7 @@ window.__shellSettingsPlacementInkNegativeControl = (scenario, fontSizePx) => {
   });
   brokenStyle.remove();
   const fixedStyle = document.createElement("style");
-  fixedStyle.textContent = ".db-view-config-panel.db-mobile-bottom-sheet .db-new-placement-option { font-size: " + fontSizePx + "px !important; }";
+  fixedStyle.textContent = ".obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-new-placement-option { font-size: " + fontSizePx + "px !important; }";
   document.head.appendChild(fixedStyle);
   let fixed = null;
   runRenderAssertions(document.body, scenario, "", () => {
@@ -1230,7 +1230,7 @@ window.__shellSettingsPlacementInkNegativeControl = (scenario, fontSizePx) => {
 // DOM sweep removes the backdrop and any surface a dismiss callback did not tear down itself.
 const clearStrayOverlays = () => {
   overlayStack.clear();
-  document.querySelectorAll(".db-mobile-bottom-sheet, .db-mobile-sheet-scrim").forEach((el) => el.remove());
+  document.querySelectorAll(".obnotion-mobile-bottom-sheet, .obnotion-mobile-sheet-scrim").forEach((el) => el.remove());
 };
 
 window.__shellDepthCapReplace = () => {
@@ -1243,14 +1243,14 @@ window.__shellDepthCapReplace = () => {
   const parentShell = createSurfaceShell({ presentation: "sheet", element: parent.modalEl, close: () => parentShell.destroy(), title: "Parent", role: "panel" });
   parentShell.apply();
 
-  const beforeSheets = document.querySelectorAll(".db-mobile-bottom-sheet").length;
+  const beforeSheets = document.querySelectorAll(".obnotion-mobile-bottom-sheet").length;
 
   const child = createHostModalStandIn();
   child.contentEl.createEl("h2", { text: "Child Title" });
   const childShell = createSurfaceShell({ presentation: "sheet", element: child.modalEl, close: () => childShell.destroy(), title: "Child Title", role: "panel" });
   childShell.apply();
 
-  const afterSheets = document.querySelectorAll(".db-mobile-bottom-sheet").length;
+  const afterSheets = document.querySelectorAll(".obnotion-mobile-bottom-sheet").length;
   // Where the grafted body actually LANDS, not just where the DOM says it is. An absorbed panel
   // that the shell still placed keeps placeSheet's own inline position:fixed/left:0/right:0, so it
   // paints as a full-bleed layer over the parent it was grafted into while every structural fact
@@ -1263,9 +1263,9 @@ window.__shellDepthCapReplace = () => {
   const result = {
     beforeSheets,
     afterSheets,
-    parentHeaderTitle: parent.modalEl.querySelector(".db-shell-header .db-panel-title")?.textContent?.trim(),
-    parentHasBack: Boolean(parent.modalEl.querySelector(".db-shell-back")),
-    childBecameSheet: child.modalEl.classList.contains("db-mobile-bottom-sheet"),
+    parentHeaderTitle: parent.modalEl.querySelector(".obnotion-shell-header .obnotion-panel-title")?.textContent?.trim(),
+    parentHasBack: Boolean(parent.modalEl.querySelector(".obnotion-shell-back")),
+    childBecameSheet: child.modalEl.classList.contains("obnotion-mobile-bottom-sheet"),
     childGraftedIntoParent: parent.modalEl.contains(child.modalEl),
     childPosition: childStyle.position,
     childInsideParentRect: childRect.left >= parentRect.left - 0.5
@@ -1302,8 +1302,8 @@ window.__shellDepthCapReplaceNegativeControl = () => {
   childShell.apply();
 
   const result = {
-    sheetCount: document.querySelectorAll(".db-mobile-bottom-sheet").length,
-    childBecameSheet: child.modalEl.classList.contains("db-mobile-bottom-sheet"),
+    sheetCount: document.querySelectorAll(".obnotion-mobile-bottom-sheet").length,
+    childBecameSheet: child.modalEl.classList.contains("obnotion-mobile-bottom-sheet"),
   };
 
   childShell.destroy();
@@ -1355,7 +1355,7 @@ const maxRectDelta = (before, after) => Math.max(
   Math.abs(before.left - after.left),
 );
 
-const newestSheet = () => Array.from(document.body.querySelectorAll(".db-mobile-bottom-sheet")).at(-1) || null;
+const newestSheet = () => Array.from(document.body.querySelectorAll(".obnotion-mobile-bottom-sheet")).at(-1) || null;
 
 // The anchor lives inside the parent because that is what the production opener resolves against —
 // a dropdown asks its anchor which surface it belongs to. It is taken out of flow so that adding it
@@ -1385,7 +1385,7 @@ const makeDropdownOptions = (long) => Array.from({ length: long ? 26 : 7 }, (_, 
 
 const closeSheetNode = (panel) => {
   if (!panel) return;
-  panel.querySelector(".db-sheet-close, .db-cell-edit-close")?.click();
+  panel.querySelector(".obnotion-sheet-close, .obnotion-cell-edit-close")?.click();
   if (panel.isConnected) panel.remove();
 };
 
@@ -1483,7 +1483,7 @@ const openHostModalChild = (parent, child) => {
   heading.textContent = child.title || "Choose file";
   content.appendChild(heading);
   const body = document.createElement("div");
-  body.className = "db-modal-help";
+  body.className = "obnotion-modal-help";
   body.textContent = child.kind === "fuzzy" ? "Search files" : "Confirm this change";
   content.appendChild(body);
   let releaseChrome;
@@ -1563,7 +1563,7 @@ const openPairChild = (parent, child) => {
 // what the browser actually painted.
 const measureParentTreatment = (parent) => {
   if (!parent) return { dim: 1, transform: "none", treated: false };
-  const content = Array.from(parent.children).find((child) => !child.classList.contains("db-mobile-bottom-sheet-handle"));
+  const content = Array.from(parent.children).find((child) => !child.classList.contains("obnotion-mobile-bottom-sheet-handle"));
   const dim = Number.parseFloat(getComputedStyle(parent).opacity);
   const transform = content ? getComputedStyle(content).transform : "none";
   return { dim, transform, treated: dim < 0.99 && transform !== "none" };
@@ -1629,27 +1629,27 @@ const measureStackedPair = async (pair) => {
 
   const parentAfter = rectSnapshot(parent);
   const parentDelta = maxRectDelta(parentBefore, parentAfter);
-  const sheets = Array.from(document.body.querySelectorAll(".db-mobile-bottom-sheet"));
+  const sheets = Array.from(document.body.querySelectorAll(".obnotion-mobile-bottom-sheet"));
   const top = sheets.at(-1) || child;
   const beneath = sheets.at(-2) || parent;
-  const scrims = Array.from(document.body.querySelectorAll(".db-mobile-sheet-scrim"));
+  const scrims = Array.from(document.body.querySelectorAll(".obnotion-mobile-sheet-scrim"));
   const bodyChildren = Array.from(document.body.children);
   const topIndex = bodyChildren.indexOf(top);
   const beneathIndex = bodyChildren.indexOf(beneath);
   const scrimIndex = scrims.length === 1 ? bodyChildren.indexOf(scrims[0]) : -1;
-  const header = top.querySelector(".db-panel-header, .db-record-detail-header");
-  const title = header?.querySelector(".db-panel-title, .db-record-detail-title");
-  const close = header?.querySelector(".db-sheet-close, .db-cell-edit-close");
+  const header = top.querySelector(".obnotion-panel-header, .obnotion-record-detail-header");
+  const title = header?.querySelector(".obnotion-panel-title, .obnotion-record-detail-title");
+  const close = header?.querySelector(".obnotion-sheet-close, .obnotion-cell-edit-close");
   const closeRect = close ? rectSnapshot(close) : null;
   const headerStyle = header ? getComputedStyle(header) : null;
   const titleStyle = title ? getComputedStyle(title) : null;
-  const scrollHost = top.querySelector(".db-dropdown-options, .db-icon-picker-scroll, .db-date-picker-body") || top;
+  const scrollHost = top.querySelector(".obnotion-dropdown-options, .obnotion-icon-picker-scroll, .obnotion-date-picker-body") || top;
   const scrollStyle = getComputedStyle(scrollHost);
   const hasOverflow = scrollHost.scrollHeight > scrollHost.clientHeight + 1;
   const hasFade = top.classList.contains("has-scroll-overflow")
     || scrollStyle.maskImage !== "none"
     || scrollStyle.webkitMaskImage !== "none";
-  // Exactly one close affordance for the child: its own .db-sheet-close, scoped to the child so
+  // Exactly one close affordance for the child: its own .obnotion-sheet-close, scoped to the child so
   // the dimmed parent's own close button — still on screen, only dimmed, never hidden — is not
   // counted against it. .modal-close-button is read from the whole document instead of the
   // child alone, because a host modal's native close button that survives the portal can end up
@@ -1660,7 +1660,7 @@ const measureStackedPair = async (pair) => {
     const rect = el.getBoundingClientRect();
     return rect.width > 0 && rect.height > 0;
   };
-  const childCloseControls = Array.from(top.querySelectorAll(".db-sheet-close")).filter(isVisible);
+  const childCloseControls = Array.from(top.querySelectorAll(".obnotion-sheet-close")).filter(isVisible);
   const nativeCloseControls = Array.from(document.querySelectorAll(".modal-close-button")).filter(isVisible);
   const visibleCloseControls = [...childCloseControls, ...nativeCloseControls];
   const singleCloseControl = childCloseControls.length === 1 && nativeCloseControls.length === 0;
@@ -1680,16 +1680,16 @@ const measureStackedPair = async (pair) => {
   // Read every stack-derived fact before the gesture below. A drag past the flick threshold is
   // meant to dismiss the child, so a depth or inset sampled afterwards describes a stack that has
   // already come apart rather than the one under test.
-  const depthAtRest = Number.parseInt(child.style.getPropertyValue("--db-sheet-depth"), 10);
-  const childBottomAtRest = Number.parseFloat(child.style.getPropertyValue("--db-mobile-sheet-bottom"));
-  const parentBottomAtRest = Number.parseFloat(parent.style.getPropertyValue("--db-mobile-sheet-bottom"));
+  const depthAtRest = Number.parseInt(child.style.getPropertyValue("--obnotion-sheet-depth"), 10);
+  const childBottomAtRest = Number.parseFloat(child.style.getPropertyValue("--obnotion-mobile-sheet-bottom"));
+  const parentBottomAtRest = Number.parseFloat(parent.style.getPropertyValue("--obnotion-mobile-sheet-bottom"));
   const parentDragBefore = rectSnapshot(parent);
   let dragParentUnchanged = false;
-  const handle = top.querySelector(".db-mobile-bottom-sheet-handle");
+  const handle = top.querySelector(".obnotion-mobile-bottom-sheet-handle");
   // A menu-role child (design-trueup.md row 26) is satisfied by the ABSENCE of a handle, so
   // neither the gap this handle would leave above the title nor the drag it would offer applies --
   // both checks below are read as vacuously satisfied for this child rather than as "n/a" red.
-  const childIsMenuCard = top.classList.contains("db-mobile-menu-card");
+  const childIsMenuCard = top.classList.contains("obnotion-mobile-menu-card");
   // The band between the grab handle and the title: the handle's own margins plus the header's
   // own top margin and row height account for every pixel a conforming sheet spends here, so a
   // gap past that budget is unclaimed space rather than chrome.
@@ -1788,7 +1788,7 @@ const measureNamedPairPropertyTypeReplace = async (shellRole) => {
   }
   if (!parent || mountError) return { error: mountError || "the column-manager parent did not mount" };
   await settleSheetGeometry(parent);
-  const beforeSheets = document.querySelectorAll(".db-mobile-bottom-sheet").length;
+  const beforeSheets = document.querySelectorAll(".obnotion-mobile-bottom-sheet").length;
   let first = null;
   let second = null;
   let firstPanelMissing = false;
@@ -1803,7 +1803,7 @@ const measureNamedPairPropertyTypeReplace = async (shellRole) => {
   }
   await waitForStackSettle();
   const afterFirstHop = beforeSheets + 1;
-  const afterSecondHop = document.querySelectorAll(".db-mobile-bottom-sheet").length;
+  const afterSecondHop = document.querySelectorAll(".obnotion-mobile-bottom-sheet").length;
   const result = {
     // 1 before (the column-manager parent alone), 2 after the first hop (parent + the real
     // "Create property" panel), and — the fact this check exists to prove — still 2 after the
@@ -1816,7 +1816,7 @@ const measureNamedPairPropertyTypeReplace = async (shellRole) => {
     afterFirstHop,
     afterSecondHop,
     dropdownResolved: Boolean(second?.panel && second.panel.isConnected),
-    dropdownBecameOwnSheet: Boolean(second?.panel && second.panel !== first.panel && second.panel.classList.contains("db-mobile-bottom-sheet")),
+    dropdownBecameOwnSheet: Boolean(second?.panel && second.panel !== first.panel && second.panel.classList.contains("obnotion-mobile-bottom-sheet")),
     parentStillConnected: parent.isConnected,
   };
   second?.close?.();
@@ -1864,9 +1864,9 @@ window.__stackedSheetChromeNegativeControl = async () => {
   await waitForStackSettle();
   if (!parent || !opened?.panel) return { error: "parent or child did not mount" };
   const top = opened.panel;
-  const header = top.querySelector(".db-panel-header, .db-record-detail-header");
-  const title = header?.querySelector(".db-panel-title, .db-record-detail-title");
-  const handle = top.querySelector(".db-mobile-bottom-sheet-handle");
+  const header = top.querySelector(".obnotion-panel-header, .obnotion-record-detail-header");
+  const title = header?.querySelector(".obnotion-panel-title, .obnotion-record-detail-title");
+  const handle = top.querySelector(".obnotion-mobile-bottom-sheet-handle");
 
   const isVisible = (el) => {
     const style = getComputedStyle(el);
@@ -1874,11 +1874,11 @@ window.__stackedSheetChromeNegativeControl = async () => {
     const rect = el.getBoundingClientRect();
     return rect.width > 0 && rect.height > 0;
   };
-  // Scoped the same way the row's own predicate is: the child's own .db-sheet-close, so the
+  // Scoped the same way the row's own predicate is: the child's own .obnotion-sheet-close, so the
   // dimmed parent's close button underneath (still on screen, only dimmed) is not counted against
   // it, plus .modal-close-button read from the whole document since an orphaned native one can
   // land beside the child rather than inside it.
-  const countCloseControls = () => Array.from(top.querySelectorAll(".db-sheet-close")).filter(isVisible).length
+  const countCloseControls = () => Array.from(top.querySelectorAll(".obnotion-sheet-close")).filter(isVisible).length
     + Array.from(document.querySelectorAll(".modal-close-button")).filter(isVisible).length;
   const backgroundsMatch = () => {
     const bodyHost = header?.nextElementSibling ?? null;
@@ -1950,7 +1950,7 @@ window.__shellPanelParentUntouched = () => {
   const host = document.createElement("div");
   host.style.setProperty("display", "flex");
   const panel = document.createElement("div");
-  panel.className = "db-view-config-panel db-surface";
+  panel.className = "obnotion-view-config-panel obnotion-surface";
   host.appendChild(panel);
   document.body.appendChild(host);
   const release = attachSheetChromeToModal(panel, true, () => {}, { title: "Settings" });
@@ -1974,7 +1974,7 @@ const UNBREAKABLE = ${JSON.stringify(UNBREAKABLE_NAME)};
 // editors and the option list that are deliberately not sheets, and a host modal wearing sheet
 // chrome. The editors are portalled onto the body; the option list stays inside the cell it edits,
 // so both roots are searched rather than the body alone.
-const SWEEP_SELECTOR = ".db-mobile-bottom-sheet, .db-cell-edit-popover, .db-cell-option-popover, .modal-container";
+const SWEEP_SELECTOR = ".obnotion-mobile-bottom-sheet, .obnotion-cell-edit-popover, .obnotion-cell-option-popover, .modal-container";
 const sweptSurfaces = () => Array.from(document.querySelectorAll(SWEEP_SELECTOR));
 
 const describeNode = (el) => {
@@ -1993,9 +1993,9 @@ const describeNode = (el) => {
 // segmented placement group in particular already carries an operator decision to break at word
 // boundaries only, which such a word would report as a defect it is not.
 const VAULT_TEXT_SELECTORS = [
-  ".db-panel-title", ".db-record-detail-title", ".db-column-name-wrap", ".db-column-name-wrap *",
-  ".db-column-manager-name", ".db-view-config-readonly-value", ".db-dropdown-field-value",
-  ".db-dropdown-option", ".db-record-detail-field-label",
+  ".obnotion-panel-title", ".obnotion-record-detail-title", ".obnotion-column-name-wrap", ".obnotion-column-name-wrap *",
+  ".obnotion-column-manager-name", ".obnotion-view-config-readonly-value", ".obnotion-dropdown-field-value",
+  ".obnotion-dropdown-option", ".obnotion-record-detail-field-label",
 ];
 
 const lengthenVaultText = (surface) => {
@@ -2507,8 +2507,8 @@ try {
       continue;
     }
     if (!report.titleFound) {
-      failures.push(`title centring ${name}: no .db-shell-header title to measure`);
-      console.log(`  FAIL  ${name} — no .db-shell-header title to measure`);
+      failures.push(`title centring ${name}: no .obnotion-shell-header title to measure`);
+      console.log(`  FAIL  ${name} — no .obnotion-shell-header title to measure`);
       continue;
     }
     const ok = report.delta <= TITLE_CENTER_TOLERANCE_PX;
@@ -2596,12 +2596,12 @@ try {
   const cardShapeControl = await page.evaluate(() => window.__confirmCardShapeNegativeControl());
   {
     const wentRed = cardShapeControl.inset.left === 0 && cardShapeControl.actionFlexDirection !== "column";
-    if (!wentRed) failures.push("confirm card negative control: stripping db-sheet-card/db-confirm-stacked did not go red");
+    if (!wentRed) failures.push("confirm card negative control: stripping obnotion-sheet-card/obnotion-confirm-stacked did not go red");
     console.log(`  ${wentRed ? "PASS" : "FAIL"}  flush left and side-by-side actions once both classes are stripped (inset.left=${cardShapeControl.inset.left}px, flex-direction=${cardShapeControl.actionFlexDirection})`);
   }
   console.log("");
 
-  console.log("sheet-grammar: edge control token — the close control reads --db-shell-edge-control-size\n");
+  console.log("sheet-grammar: edge control token — the close control reads --obnotion-shell-edge-control-size\n");
   const edgeControlMeasured = await page.evaluate((scenario) => window.__shellEdgeControlToken(scenario), EDGE_CONTROL_TOKEN_SURFACE.spec);
   if (!edgeControlMeasured) {
     failures.push("edge control token: no close control to measure");
@@ -2633,7 +2633,7 @@ try {
   }
   console.log("");
 
-  console.log(`sheet-grammar: motion timing band — the scrim's entrance reads --db-sheet-enter within ${MOTION_BAND_MIN_MS}-${MOTION_BAND_MAX_MS}ms\n`);
+  console.log(`sheet-grammar: motion timing band — the scrim's entrance reads --obnotion-sheet-enter within ${MOTION_BAND_MIN_MS}-${MOTION_BAND_MAX_MS}ms\n`);
   const motionBandMeasured = await page.evaluate((scenario) => window.__shellMotionBand(scenario), MOTION_BAND_SURFACE.spec);
   if (motionBandMeasured == null) {
     failures.push("motion timing band: no scrim to measure");
@@ -2642,7 +2642,7 @@ try {
     const inBand = motionBandMeasured >= MOTION_BAND_MIN_MS && motionBandMeasured <= MOTION_BAND_MAX_MS;
     const atToken = motionBandMeasured === MOTION_BAND_TOKEN_DEFAULT_MS;
     if (!inBand) failures.push(`motion timing band: scrim entrance measured ${motionBandMeasured}ms, wanted ${MOTION_BAND_MIN_MS}-${MOTION_BAND_MAX_MS}ms`);
-    if (!atToken) failures.push(`motion timing band: scrim entrance measured ${motionBandMeasured}ms, wanted ${MOTION_BAND_TOKEN_DEFAULT_MS}ms (--db-sheet-enter)`);
+    if (!atToken) failures.push(`motion timing band: scrim entrance measured ${motionBandMeasured}ms, wanted ${MOTION_BAND_TOKEN_DEFAULT_MS}ms (--obnotion-sheet-enter)`);
     console.log(`  ${inBand && atToken ? "PASS" : "FAIL"}  scrim entrance measures ${motionBandMeasured}ms, wanted ${MOTION_BAND_TOKEN_DEFAULT_MS}ms inside ${MOTION_BAND_MIN_MS}-${MOTION_BAND_MAX_MS}ms`);
   }
 
@@ -2650,28 +2650,28 @@ try {
     ({ scenario, overrideMs }) => window.__shellMotionBandNegativeControl(scenario, overrideMs),
     { scenario: MOTION_BAND_SURFACE.spec, overrideMs: MOTION_BAND_TOKEN_OVERRIDE_MS },
   );
-  console.log(`sheet-grammar: motion timing band negative control — ${MOTION_BAND_SURFACE.name}'s --db-sheet-enter overridden\n`);
+  console.log(`sheet-grammar: motion timing band negative control — ${MOTION_BAND_SURFACE.name}'s --obnotion-sheet-enter overridden\n`);
   if (motionBandControl.broken == null || motionBandControl.fixed == null) {
     failures.push("motion timing band negative control: the surface did not mount a scrim to measure");
     console.log("  FAIL  motion timing band negative control — the surface did not mount a scrim to measure");
   } else {
     const wentRed = motionBandControl.broken === MOTION_BAND_TOKEN_OVERRIDE_MS && motionBandControl.broken > MOTION_BAND_MAX_MS;
     const cleanAfter = motionBandControl.fixed === MOTION_BAND_TOKEN_DEFAULT_MS;
-    if (!wentRed) failures.push(`motion timing band negative control: overriding --db-sheet-enter did not move the scrim's duration past the band (measured ${motionBandControl.broken}ms)`);
+    if (!wentRed) failures.push(`motion timing band negative control: overriding --obnotion-sheet-enter did not move the scrim's duration past the band (measured ${motionBandControl.broken}ms)`);
     if (!cleanAfter) failures.push(`motion timing band negative control: removing the override did not restore ${MOTION_BAND_TOKEN_DEFAULT_MS}ms (measured ${motionBandControl.fixed}ms)`);
-    console.log(`  ${wentRed ? "PASS" : "FAIL"}  overriding --db-sheet-enter moves the scrim past the band (${motionBandControl.broken}ms)`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  overriding --obnotion-sheet-enter moves the scrim past the band (${motionBandControl.broken}ms)`);
     console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores ${MOTION_BAND_TOKEN_DEFAULT_MS}ms (${motionBandControl.fixed}ms)`);
   }
   console.log("");
 
-  console.log(`sheet-grammar: motion exit band — the scrim's exit reads --db-sheet-exit at ${MOTION_EXIT_BAND_TOKEN_DEFAULT_MS}ms\n`);
+  console.log(`sheet-grammar: motion exit band — the scrim's exit reads --obnotion-sheet-exit at ${MOTION_EXIT_BAND_TOKEN_DEFAULT_MS}ms\n`);
   const motionExitMeasured = await page.evaluate((scenario) => window.__shellMotionExitBand(scenario), MOTION_BAND_SURFACE.spec);
   if (motionExitMeasured == null) {
     failures.push("motion exit band: no scrim to measure");
     console.log("  FAIL  motion exit band — no scrim to measure");
   } else {
     const atToken = motionExitMeasured === MOTION_EXIT_BAND_TOKEN_DEFAULT_MS;
-    if (!atToken) failures.push(`motion exit band: scrim exit measured ${motionExitMeasured}ms, wanted ${MOTION_EXIT_BAND_TOKEN_DEFAULT_MS}ms (--db-sheet-exit)`);
+    if (!atToken) failures.push(`motion exit band: scrim exit measured ${motionExitMeasured}ms, wanted ${MOTION_EXIT_BAND_TOKEN_DEFAULT_MS}ms (--obnotion-sheet-exit)`);
     console.log(`  ${atToken ? "PASS" : "FAIL"}  scrim exit measures ${motionExitMeasured}ms, wanted ${MOTION_EXIT_BAND_TOKEN_DEFAULT_MS}ms`);
   }
 
@@ -2679,16 +2679,16 @@ try {
     ({ scenario, overrideMs }) => window.__shellMotionExitBandNegativeControl(scenario, overrideMs),
     { scenario: MOTION_BAND_SURFACE.spec, overrideMs: MOTION_EXIT_BAND_OVERRIDE_MS },
   );
-  console.log(`sheet-grammar: motion exit band negative control — ${MOTION_BAND_SURFACE.name}'s --db-sheet-exit overridden\n`);
+  console.log(`sheet-grammar: motion exit band negative control — ${MOTION_BAND_SURFACE.name}'s --obnotion-sheet-exit overridden\n`);
   if (motionExitControl.broken == null || motionExitControl.fixed == null) {
     failures.push("motion exit band negative control: the surface did not mount a scrim to measure");
     console.log("  FAIL  motion exit band negative control — the surface did not mount a scrim to measure");
   } else {
     const wentRed = motionExitControl.broken === MOTION_EXIT_BAND_OVERRIDE_MS;
     const cleanAfter = motionExitControl.fixed === MOTION_EXIT_BAND_TOKEN_DEFAULT_MS;
-    if (!wentRed) failures.push(`motion exit band negative control: overriding --db-sheet-exit did not move the scrim's exit duration (measured ${motionExitControl.broken}ms)`);
+    if (!wentRed) failures.push(`motion exit band negative control: overriding --obnotion-sheet-exit did not move the scrim's exit duration (measured ${motionExitControl.broken}ms)`);
     if (!cleanAfter) failures.push(`motion exit band negative control: removing the override did not restore ${MOTION_EXIT_BAND_TOKEN_DEFAULT_MS}ms (measured ${motionExitControl.fixed}ms)`);
-    console.log(`  ${wentRed ? "PASS" : "FAIL"}  overriding --db-sheet-exit moves the scrim's exit duration (${motionExitControl.broken}ms)`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  overriding --obnotion-sheet-exit moves the scrim's exit duration (${motionExitControl.broken}ms)`);
     console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores ${MOTION_EXIT_BAND_TOKEN_DEFAULT_MS}ms (${motionExitControl.fixed}ms)`);
   }
   console.log("");
@@ -2708,7 +2708,7 @@ try {
     ({ scenario, overrideAlpha }) => window.__shellScrimAlphaNegativeControl(scenario, overrideAlpha),
     { scenario: SCRIM_ALPHA_SURFACE.spec, overrideAlpha: SCRIM_ALPHA_OVERRIDE },
   );
-  console.log(`sheet-grammar: scrim alpha negative control — ${SCRIM_ALPHA_SURFACE.name}'s --db-sheet-scrim-alpha-page overridden\n`);
+  console.log(`sheet-grammar: scrim alpha negative control — ${SCRIM_ALPHA_SURFACE.name}'s --obnotion-sheet-scrim-alpha-page overridden\n`);
   if (scrimAlphaControl.broken == null || scrimAlphaControl.fixed == null) {
     failures.push("scrim alpha negative control: the surface did not mount a scrim to measure");
     console.log("  FAIL  scrim alpha negative control — the surface did not mount a scrim to measure");
@@ -2844,14 +2844,14 @@ try {
   }
   console.log("");
 
-  console.log(`sheet-grammar: settings sheet placement-button ink — .db-new-placement-option text stays inside its own box at ${SETTINGS_PLACEMENT_FONT_SIZES.map((s) => s.px).join("px and ")}px\n`);
+  console.log(`sheet-grammar: settings sheet placement-button ink — .obnotion-new-placement-option text stays inside its own box at ${SETTINGS_PLACEMENT_FONT_SIZES.map((s) => s.px).join("px and ")}px\n`);
   for (const { px: fontSizePx } of SETTINGS_PLACEMENT_FONT_SIZES) {
     const measured = await page.evaluate(
       ({ scenario, fontSizePx }) => window.__shellSettingsPlacementInk(scenario, fontSizePx),
       { scenario: SETTINGS_SHEET_SURFACE.spec, fontSizePx },
     );
     if (!measured || measured.length === 0) {
-      failures.push(`settings sheet placement-button ink: no .db-new-placement-option buttons to measure at ${fontSizePx}px`);
+      failures.push(`settings sheet placement-button ink: no .obnotion-new-placement-option buttons to measure at ${fontSizePx}px`);
       console.log(`  FAIL  settings sheet placement-button ink — no buttons to measure at ${fontSizePx}px`);
       continue;
     }

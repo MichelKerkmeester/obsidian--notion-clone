@@ -26,8 +26,8 @@ export interface CheckboxOptions {
 export function createCheckbox(parent: HTMLElement, options: CheckboxOptions): HTMLInputElement {
   const { role, cls, attr } = options;
   const classes = [
-    "db-checkbox",
-    `db-checkbox-${role}`,
+    "obnotion-checkbox",
+    `obnotion-checkbox-${role}`,
     ...(Array.isArray(cls) ? cls : cls ? [cls] : []),
   ];
 

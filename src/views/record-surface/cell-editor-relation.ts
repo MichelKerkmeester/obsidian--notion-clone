@@ -77,7 +77,7 @@ export function openRelationEditor(
   }
 
   const host = window.activeDocument.body;
-  const popover = host.createDiv({ cls: "db-cell-option-popover db-relation-popover" });
+  const popover = host.createDiv({ cls: "obnotion-cell-option-popover obnotion-relation-popover" });
   popover.setAttr("role", "dialog");
   popover.setAttr("aria-label", col.label || col.key);
   // Claimed for the editor's whole life, matching `openSingleLineEditor`'s identical pair: without
@@ -97,22 +97,22 @@ export function openRelationEditor(
   };
   const phoneSheet = isMobileBottomSheet(host.ownerDocument);
   if (phoneSheet) buildShellHeader(popover, { title: col.label || col.key, onClose: close });
-  const header = popover.createDiv({ cls: "db-relation-popover-header" });
-  if (!phoneSheet) header.createDiv({ cls: "db-relation-popover-title", text: col.label || col.key });
+  const header = popover.createDiv({ cls: "obnotion-relation-popover-header" });
+  if (!phoneSheet) header.createDiv({ cls: "obnotion-relation-popover-title", text: col.label || col.key });
   const search = header.createEl("input", {
-    cls: "db-cell-option-search",
+    cls: "obnotion-cell-option-search",
     attr: { type: "search", placeholder: t("relation.search"), "aria-label": t("relation.search"), "aria-autocomplete": "list" },
   });
   search.value = initialSearch;
-  const list = popover.createDiv({ cls: "db-cell-option-list db-relation-option-list", attr: { role: "listbox", "aria-multiselectable": "true", "aria-label": col.label || col.key } });
-  const listId = `db-relation-list-${++nextRelationListId}`;
+  const list = popover.createDiv({ cls: "obnotion-cell-option-list obnotion-relation-option-list", attr: { role: "listbox", "aria-multiselectable": "true", "aria-label": col.label || col.key } });
+  const listId = `obnotion-relation-list-${++nextRelationListId}`;
   list.setAttr("id", listId);
   search.setAttr("aria-controls", listId);
-  const footer = popover.createDiv({ cls: "db-relation-popover-footer" });
-  const count = footer.createSpan({ cls: "db-relation-selected-count" });
-  const clear = footer.createEl("button", { text: t("common.clear"), cls: "db-relation-clear", attr: { type: "button" } });
-  const actions = footer.createDiv({ cls: "db-relation-footer-actions" });
-  const apply = actions.createEl("button", { text: t("common.save"), cls: "mod-cta db-relation-footer-button", attr: { type: "button" } });
+  const footer = popover.createDiv({ cls: "obnotion-relation-popover-footer" });
+  const count = footer.createSpan({ cls: "obnotion-relation-selected-count" });
+  const clear = footer.createEl("button", { text: t("common.clear"), cls: "obnotion-relation-clear", attr: { type: "button" } });
+  const actions = footer.createDiv({ cls: "obnotion-relation-footer-actions" });
+  const apply = actions.createEl("button", { text: t("common.save"), cls: "mod-cta obnotion-relation-footer-button", attr: { type: "button" } });
   let activeIndex = 0;
   const rowHeight = 34;
   const windowSize = 80;
@@ -130,7 +130,7 @@ export function openRelationEditor(
     const filtered = getFilteredRecords();
     if (activeIndex >= filtered.length) activeIndex = Math.max(0, filtered.length - 1);
     list.empty();
-    const empty = list.createDiv({ cls: "db-dropdown-empty db-relation-empty", text: t("relation.noResults"), attr: { role: "status", hidden: filtered.length > 0 ? "true" : "false" } });
+    const empty = list.createDiv({ cls: "obnotion-dropdown-empty obnotion-relation-empty", text: t("relation.noResults"), attr: { role: "status", hidden: filtered.length > 0 ? "true" : "false" } });
     if (!filtered.length) {
       empty.removeAttribute("hidden");
       count.textContent = t("relation.selectedCount", { count: selectedPaths.size });
@@ -138,7 +138,7 @@ export function openRelationEditor(
     }
     const start = Math.max(0, Math.min(Math.max(0, filtered.length - windowSize), Math.floor(scrollTop / rowHeight) - 8));
     const end = Math.min(filtered.length, start + windowSize);
-    if (start > 0) list.createDiv({ cls: "db-relation-list-spacer", attr: { "aria-hidden": "true", style: `height: ${start * rowHeight}px` } });
+    if (start > 0) list.createDiv({ cls: "obnotion-relation-list-spacer", attr: { "aria-hidden": "true", style: `height: ${start * rowHeight}px` } });
     // Built by hand rather than through the shared row builder: this list is a virtualised
     // `listbox`, and its rows carry `role="option"`/`aria-selected` — the semantics the keyboard
     // handler below selects on (`[role=option]`) — where the row builder's rows are
@@ -148,15 +148,15 @@ export function openRelationEditor(
       const record = filtered[filteredIndex];
       const title = record.file.basename || record.file.name.replace(/\.md$/i, "");
       const option = list.createEl("button", {
-        cls: `db-cell-option-item db-menu-item db-relation-option-item${selectedPaths.has(record.file.path) ? " is-selected" : ""}`,
+        cls: `obnotion-cell-option-item obnotion-menu-item obnotion-relation-option-item${selectedPaths.has(record.file.path) ? " is-selected" : ""}`,
         attr: { type: "button", role: "option", "aria-selected": selectedPaths.has(record.file.path) ? "true" : "false", tabindex: filteredIndex === activeIndex ? "0" : "-1", "data-index": String(filteredIndex) },
       });
       renderRecordIcon(option, recordIconField ? record.frontmatter[recordIconField] : undefined, {
         compact: true,
         defaultIcon: "file-text",
-      }).addClass("db-relation-option-icon");
-      option.createSpan({ cls: "db-dropdown-option-label db-menu-item-label", text: title });
-      const check = option.createSpan({ cls: "db-option-check db-menu-item-check db-relation-option-check" });
+      }).addClass("obnotion-relation-option-icon");
+      option.createSpan({ cls: "obnotion-dropdown-option-label obnotion-menu-item-label", text: title });
+      const check = option.createSpan({ cls: "obnotion-option-check obnotion-menu-item-check obnotion-relation-option-check" });
       if (selectedPaths.has(record.file.path)) setIcon(check, "check");
       option.onclick = () => {
         if (selectedPaths.has(record.file.path)) {
@@ -171,7 +171,7 @@ export function openRelationEditor(
         renderList();
       };
     }
-    if (end < filtered.length) list.createDiv({ cls: "db-relation-list-spacer", attr: { "aria-hidden": "true", style: `height: ${(filtered.length - end) * rowHeight}px` } });
+    if (end < filtered.length) list.createDiv({ cls: "obnotion-relation-list-spacer", attr: { "aria-hidden": "true", style: `height: ${(filtered.length - end) * rowHeight}px` } });
     if (preserveScroll) list.scrollTop = scrollTop;
     count.textContent = t("relation.selectedCount", { count: selectedPaths.size });
   };

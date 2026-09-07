@@ -77,12 +77,12 @@ export function renderPropertyValue(
   const { app, row, col } = options;
 
   if (displayType === "checkbox") {
-    valueEl.addClass("db-checkbox-cell");
+    valueEl.addClass("obnotion-checkbox-cell");
     const checkbox = createCheckbox(valueEl, { role: "field" });
     checkbox.checked = toBooleanValue(value);
     // `readOnly` here means "the card's click opens the record, not this control" — every
     // board/gallery/list card field is read-only in exactly that sense, not "unavailable to the
-    // user". Native `disabled` says the second thing: `input[type="checkbox"].db-checkbox:disabled`
+    // user". Native `disabled` says the second thing: `input[type="checkbox"].obnotion-checkbox:disabled`
     // halves opacity and drops the border to --background-modifier-border, which measured a
     // #EEEEEE border on a #EEEEEE checked glyph in the default light theme — checked and unchecked
     // read as the same picture. The value stays legible if the toggle is blocked at the click
@@ -147,7 +147,7 @@ export function renderPropertyValue(
     return;
   }
   if (displayType === "date" || displayType === "datetime") {
-    valueEl.addClass("db-date-value");
+    valueEl.addClass("obnotion-date-value");
     valueEl.textContent = displayType === "datetime"
       ? formatDateTimeValueDisplay(value, { mode: "full", showTimeWhenMissing: true })
       : formatDateValueDisplay(value);
@@ -164,7 +164,7 @@ export function renderPropertyValue(
       if (style === "progress") { renderProgress(valueEl, numeric, col.numberDisplayConfig, interaction); return; }
       if (style === "ring") { renderProgressRing(valueEl, numeric, col.numberDisplayConfig, interaction); return; }
     }
-    valueEl.addClass("db-card-field-number");
+    valueEl.addClass("obnotion-card-field-number");
     if (Number.isFinite(numeric)) {
       valueEl.textContent = displayType === "currency" ? formatEuroCurrency(numeric) : formatEuroNumber(numeric);
       return;
@@ -265,7 +265,7 @@ export interface OptionValueRenderOptions {
  *  text carries no rule of its own — the colour comes entirely from the `status-color-text-*`
  *  class `renderOptionValue` already adds beside it. */
 function splitOptionValueClasses(col: ColumnDef): OptionValueRenderOptions {
-  return { col, chipClass: "status-badge", textClass: "db-option-value-text" };
+  return { col, chipClass: "status-badge", textClass: "obnotion-option-value-text" };
 }
 
 /**
@@ -383,7 +383,7 @@ export interface CheckboxPropertyRowHandle {
 
 export function buildCheckboxPropertyRow(options: CheckboxPropertyRowOptions): CheckboxPropertyRowHandle {
   const row = options.parent.createDiv({ cls: options.rowClass });
-  row.setAttribute("data-note-database-column-key", options.dataColumnKey);
+  row.setAttribute("data-obnotion-column-key", options.dataColumnKey);
 
   if (options.draggable) {
     row.draggable = true;
@@ -443,5 +443,5 @@ export function buildCheckboxPropertyRow(options: CheckboxPropertyRowOptions): C
 export function shouldIgnorePropertyRowDrag(event: DragEvent): boolean {
   const target = event.target as { closest?: (selector: string) => unknown } | null;
   return Boolean(target && typeof target === "object" && typeof target.closest === "function"
-    && target.closest("input, select, textarea, button, .db-dropdown-field, .db-mobile-reorder-controls"));
+    && target.closest("input, select, textarea, button, .obnotion-dropdown-field, .obnotion-mobile-reorder-controls"));
 }
