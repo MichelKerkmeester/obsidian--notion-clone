@@ -82,6 +82,16 @@ already clear 28px, confirmed by a stylesheet-wide sweep that found no coarse-po
 block shrinking either. Device check D1 (which chrome a phone date-edit takes) stays open for the
 operator; the lift targets the popover's current known selector regardless of the answer.
 
+**The floor needed a second rule to be safe.** Lifting the cell to 44px alone broke the grid it sits
+in. Both hosts are 252px wide with 12px of horizontal padding, so a `repeat(7, 1fr)` day grid has
+228px; seven 44px cells want 308px. The toolbar popover spilled its seventh column 22px past its own
+border, the date-edit popover clipped Sunday in half against `overflow: hidden`, and the weekday
+header — a separate `repeat(7, 1fr)` grid with no cell floor — stayed at its old width and stopped
+lining up with the days beneath it. One further rule widens both hosts to 332px (`7 x 44 + 2 x 12`)
+under `.is-phone`; the 402px phone frame holds it with room over. The defect was read off the
+recaptured phone images during landing verification, after the first recapture pass reported the
+taller cells and not the overflow.
+
 **One correction to the packet's own record.** `acceptance-criteria.md`'s AC-003 describes the
 date-edit popover's 28px rule as sitting inside a `(hover: hover)` block. `git blame` on
 `styles.css:6941-6945` shows it unconditional since `33d526f08` (2026-07-04) — no such block has ever
@@ -93,9 +103,10 @@ framing detail was wrong, and this document records the correction rather than r
 | File | Action | Purpose |
 |------|--------|---------|
 | `src/views/calendar-renderer.ts` | Modify | Deleted the guarded `content.createSpan({ cls: "db-calendar-month-dates", ... })` call and its `endDateKey > startDateKey` guard from the all-day strip's segment loop (`:862-864` on `3e1c3c65`; same relative position on `e5830232`) |
+| `styles.css` | Modify | Added a second rule widening both hosts of the mini day grid to 332px under `.is-phone` (`.note-database-container .db-calendar-mini-popover` and `.db-cell-edit-popover.db-date-edit-popover`), so the seven 44px columns the rule below forces fit inside them instead of spilling past or being clipped |
 | `styles.css` | Modify | Added one rule lifting `.db-calendar-mini-day` to 44px under `.is-phone`, covering the toolbar variant (`.note-database-container .db-calendar-mini-day`) and the date-edit popover variant (`.db-cell-edit-popover.db-date-edit-popover .db-calendar-mini-day`) together (`:18667`). No rule deleted — T004 found the shared `.db-calendar-month-dates` rule and its `:has()` bound both still reachable |
 | `src/views/calendar-renderer.test.ts` | Modify | Added one constructed-render test proving 0 `.db-calendar-month-dates` inside `.db-calendar-week-allday-cols` for a multi-day event, with the tooltip's range preserved. Not in `spec.md`'s file list; added because the file already carries every mock and fixture this proof needs and duplicating that harness elsewhere would have been the larger change |
-| `src/views/calendar-pinned-values.test.ts` | Modify | Three new pins: the range-string removal (source-text, with the three surviving producers as a positive control), the still-reachable `.db-calendar-month-dates` / `:has()` rules, and the mini day-cell's phone floor (44px, both variants) alongside its unconditional 34px/28px bases |
+| `src/views/calendar-pinned-values.test.ts` | Modify | Four new pins: the range-string removal (source-text, with the three surviving producers as a positive control), the still-reachable `.db-calendar-month-dates` / `:has()` rules, and the mini day-cell's phone floor (44px, both variants) alongside its unconditional 34px/28px bases, and both hosts' phone width against the arithmetic the floor forces |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -134,8 +145,11 @@ below, alongside the two naming scans and the full `npm run gate`.
 |-------|--------|
 | Research loop completed | PASS - 5/5 iterations, `stopReason maxIterationsReached`, lineage `glm-devpass-calendar` |
 | Findings reconciled against `main` | PASS - of the loop's six ranked rows, four closed and two are still red at `3e1c3c65`; the rank-1 of those two moved scale rather than closing |
-| Code legs | Not started |
-| Three gates | Not run - no code changed |
+| Code legs | PASS - both landed; each proven red first and pinned with a negative control |
+| Three gates | PASS - `npx tsc --noEmit` exit 0, `npm run build` exit 0, `npx vitest run` exit 0 (1525/1525 across 142 files) |
+| Full gate | PASS - `npm run gate` 26/26 lanes green, run once in the foreground from the final tree |
+| Screenshot gate | PASS - `npm run screenshots:verify` exit 0 after a second full recapture (588 entries); six captures carry content and were reopened |
+| CSS lane | PASS - `npm run lane:check` exit 0, held by this packet, release names all six changed captures |
 <!-- /ANCHOR:verification -->
 
 ---

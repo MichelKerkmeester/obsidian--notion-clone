@@ -204,7 +204,7 @@
     ],
     "causal_summary": "Notion's 40-screen calendar harvest changes exactly one design decision on this surface, and the calendar rebuild landed most of its consequences before this packet opened",
     "created_at": "2026-09-06T16:38:53Z",
-    "last_save_at": "2026-09-06T22:54:50.351Z",
+    "last_save_at": "2026-09-07T04:07:41.309Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,14 +216,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:abeda36b0c258e3e9f7e3c5d15afbbff57b2947b29cd115c5def3cde9fef1c97",
+    "source_fingerprint": "sha256:282110b22963d205dea34aefdac48e2c39907f33a44d36297703fab9976b592e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "86aaeda3c1c26ad2728dab6b435e83985b5716aea3d19e6e72694a9e1590a842",
       "plan.md": "a8eda29118349ba05aa91f349912acd1015da39b72d98c28162e2b512ff3921a",
-      "tasks.md": "2a0b9da74ff9ed2c90b4a393c2d3becbdcd5e9d04da1753d14fef78d2741ed36",
+      "tasks.md": "7e1c49f11e8fcb3f498ad2e270ac4eb8221eec1520291a0546281240b1e67a19",
       "decision-record.md": "71bc88bcea41fc399f8034a5b8a9f8ec93f93f9545c1c242a4aa25b1d6ef94ec",
-      "implementation-summary.md": "de7216caea9f98a50385085e7090d3e667b90f171e92c9a495462f3463f37f58"
+      "implementation-summary.md": "b8d34c83e06560fa222ad3396e09838d857483474f96a84334ef5798541846dc"
     },
     "last_active_at": null
   }

@@ -119,6 +119,14 @@ contextType: "implementation"
       (`.db-cell-edit-popover.db-date-edit-popover .db-calendar-mini-day`); if the phone chrome turns
       out to be an `044` sheet with a different wrapper class, the selector may need extending, not the
       value.
+      **Landing correction.** The floor alone broke the layout it sits in. Both hosts of the day grid
+      are 252px wide with 12px of horizontal padding, leaving 228px for a `repeat(7, 1fr)` grid; seven
+      44px cells want 308px. On the phone captures the toolbar popover spilled its seventh column 22px
+      past its own border and the date-edit popover clipped Sunday in half against `overflow: hidden`,
+      while the weekday header — a separate `repeat(7, 1fr)` grid with no cell floor — stayed at its
+      old width and stopped lining up with the days. One further rule widens both hosts to 332px
+      (7 x 44 + 2 x 12) under `.is-phone`, which the 402px phone frame holds. Read off the recaptured
+      images, not inferred.
 - [x] T006 **Pin both values with negative controls** (`src/views/calendar-pinned-values.test.ts`).
       Promote T001's two assertions to permanent pins, each with the negative control that produced its
       red. A regression must fail a test, not a capture review.
@@ -127,7 +135,10 @@ contextType: "implementation"
       pinned in `calendar-pinned-values.test.ts` as three tests: the phone floor (negative control:
       stashing the CSS addition and re-running throws `selector not found verbatim`, confirmed), the
       unconditional bases (34px/28px), and the still-reachable `.db-calendar-month-dates` /
-      `:has()` rules from T004's finding.
+      `:has()` rules from T004's finding. A fourth pin, added with T005's landing correction, asserts
+      both hosts' phone width against the arithmetic the floor forces (`7 x 44 + 2 x 12`, and no wider
+      than the 402px frame). Negative controls: deleting the rule throws `selector not found verbatim`,
+      narrowing it to 300px reads `expected 300 to be 332`.
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -155,6 +166,16 @@ contextType: "implementation"
       pixels with no code-level connection to `.db-calendar-mini-day` (confirmed by grep against their
       scenario sources) and were restored to their committed bytes; `tools/lane/css-lane.json` records
       the handover with the ten reviewed paths named.
+      **Landing correction.** That reading was incomplete: the ten images do show taller cells, and
+      they also show the seventh column leaving its host, which this pass did not report. A second full
+      recapture after T005's width fix (588 entries, `screenshots:verify` exit 0) moved six captures by
+      content — the toolbar mini calendar and the date-edit popover variant (plain and datetime), phone
+      profile, both themes — each reopened: all seven columns now sit inside their host and align with
+      the weekday header. Twenty further captures moved bytes at identical `pixelHash` and `layoutHash`
+      and were restored to their committed bytes. The four `constructed-date-picker` mobile captures did
+      not move at all this time: that fixture draws the picker in a full-width bottom sheet, which never
+      lacked the room. `tools/lane/css-lane.json` records the second edit and release with the six
+      reviewed paths named.
 - [x] T009 **Record the four rows the rebuild closed** (`acceptance-criteria.md` section 3).
       `+N more` band (`057` G5/G8), the toolbar's segmented control (`057` G13), the unscheduled chip's
       44px floor, and the Monday week start (`057` G7) - each with the `main`-side evidence, as
