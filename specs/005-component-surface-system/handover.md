@@ -283,6 +283,65 @@ them). This landing re-derived them and judged the whole set by decoded pixel de
 capture runs instead. `npm run gate` 26 green. Full detail: that worktree's own `.handover.md`
 (untracked) and `054`'s docs above.
 
+### 2026-09-07 ~17:05, `218-settings-sheet-guard` VERIFIED AND LANDED by an Opus lander
+
+Every claim in the leg's report below was re-run rather than read. **Both T074 rows confirmed, one
+with a caveat now written into the tool; T075's refutation confirmed by independent measurement;
+the hand-patched manifest confirmed against two full recaptures.**
+
+**T074 row 1 (row stacking) is tree-sensitive.** Removing `flex-direction: column` from
+`.db-view-config-panel.db-mobile-bottom-sheet .db-panel-row` in `styles.css` itself — not through
+the tool's injected override — takes `sheet-grammar.mjs` to `FAIL 0/21 rows sit label-above-control`,
+`FAIL 0/21 rows have a control at >= 90%`, exit 1. Restored, exit 0.
+
+**T074 row 2 (placement-button ink) guards the defect but not the rule's presence.** Deleting the
+whole `.db-new-placement-option` fix rule from `styles.css` leaves the row GREEN and the tool at
+exit 0. The reason is a harness fact, not a mistake in the row: `tools/live/` models no host
+stylesheet — there is no `--input-height` and no host `button` rule anywhere under it, while
+`tools/storybook/verify-placement.mjs` carries both — and the overflow only exists under Obsidian's
+`white-space: nowrap`. Replacing the fix rule with those three host declarations (the pre-fix DEVICE
+state) does take it red: `FAIL 2/3 buttons stay inside their own box at 19px`, worst 17.0px of ink
+outside, exit 1. So the row is real for the defect it names; it is not a tripwire for someone
+deleting the rule. That limitation is now stated in the tool's own section comment
+(`440da14d`), along with two garbled comment fragments repaired in the same commit.
+
+**T075's premise refuted independently, and the declaration proved inert.** A probe mounting the
+real `openColumnWidthAdjuster` at 390x874 with the host button rule modelled measures the panel at
+364px against an 844px viewport — ratio **0.4313**, against a floating cutoff of
+`1 - 248.5/874 = 0.715675` and a flush floor of `0.745675`. Presets measure **32.00px** each at
+`flex-basis: 0px`. The decisive run: repeating it with `--input-height: 44px`, the real phone value,
+leaves presets at 32px, the panel at 364px and the ratio at 0.4313 — the host `height` rule is
+genuinely inert, exactly as T075 argued. Commenting out `heightRole: "floating"` and re-running
+returns a byte-identical class string
+(`db-mobile-column-width-panel note-database-container db-mobile-bottom-sheet db-sheet-floating
+db-overlay-enter is-visible`), the same ratio and the same 8px resting inset: **no shape changed.**
+
+**The hand-patched manifest was correct.** Two full `npm run screenshots` runs on the rebased tree
+(606 entries, exit 0 each) produce a manifest whose only structural difference from main is the six
+`src/views/column-width.ts` sourceHash rows the leg patched by hand, with all six pixelHashes and
+all six PNG bytes unchanged. Five other PNGs moved across the two runs — a different set each run,
+every pixelHash unchanged, four at a maximum channel delta of 1, and
+`chrome-table-load-more-desktop-light` at 804 channels/209 max in the second run only, a state that
+flips between runs of the identical tree. All five restored;
+`constructed-column-width-adjuster-mobile-light.png` opened and read.
+
+**One thing left open.** `styles.css`'s own comment above the wrap rule still asserts "That
+surface's real height in the app is already the taller one, since the host gives every button
+`height: var(--input-height)`" — the exact claim T075 refuted and the 44px probe refutes again. It
+was not corrected here: editing `styles.css` moves the stylesheet hash and drags in the css-lane
+release and another full recapture, which is a row of its own, not a rider on a verification pass.
+Whoever next opens that rule should fix the comment.
+
+Rebased onto `443061d4`; all ten conflicts were generated evidence, resolved to main's side and
+re-derived by their owning tools. `npx tsc --noEmit` (0), `npx vitest run` (1630/1630 in 151 files),
+`npm run build`, `node tools/live/sheet-grammar.mjs`, `node tools/live/render-assertions.mjs`,
+`node tools/naming/scan-comments.mjs` (502 files, 0 violations) and `npm run gate`
+(**26 green, 0 red**) all exit 0. `054` and this parent both `RESULT: PASSED` under the realpath'd
+orchestrator with `--strict`. `tools/live/sheet-rebuild.json`'s filter-sheet row re-measures
+527/627 where main records 836/836 — not this landing: every input `sheet-rebuild.mjs` declares is
+byte-identical to main, and the only two files this branch changes under `src`, `styles.css` and
+`tools` are `column-width.ts` and `sheet-grammar.mjs`, neither of which it reads.
+
 ### 2026-09-07, `worktrees/218-settings-sheet-guard`, `054` T074 + T075 landed
 
 The two rows the T072/T073 landing left open. **T074**: no gate lane pinned either fix — with both
