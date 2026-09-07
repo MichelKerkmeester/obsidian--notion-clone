@@ -281,10 +281,9 @@ One app landed and verified before the next opens. Never a parallel fan-out acro
       `node tools/screenshots/verify.mjs` exits 0, for the same schema reason as Anytype (T034).
       Grouping is query-derived, not content-verified: `web/screens/` is deliberately flat, so the
       T035 reclassification pass is owed here in full
-- [ ] T033 [B] Harvest ClickUp (iOS + web) via Mobbin, same orchestration, into
+- [x] T033 [B] Harvest ClickUp (iOS + web) via Mobbin, same orchestration, into
       `screenshots/clickup/{ios,web}/<group>/`; landed by a fresh verifier.
-      **Queued under Opus xhigh** in `worktrees/151-harvest-clickup`, opening when T032 lands —
-      one app at a time, unchanged
+      **Done, 2026-09-06 into 2026-09-07** — operator's words: *"let fresh fable (medium) orchestrator through claude2 use sonnet agents to same for clickup but ask a opus xhigh to orchestrate that"*. **6,478 files, 3,435 unique screens** in `screenshots/clickup/` — **iOS 543 files / 357 screens / 112 journeys**, **web 5,935 files / 3,078 screens / 609 journeys**, no screen shared across platforms. Retrieved through the Mobbin MCP's two read tools (`search_screens`, `search_flows`) via Code Mode only, in scripted per-execution loops capped at 38 calls with a 3.1 s interval and at most two concurrent Sonnet agents, holding well under the documented 60/min limit: **3,110 recorded calls across 96 saved payloads**, one transport error in the whole run (`MCP operation on 'mobbin:stdio' timed out after 30s.`), zero 401s, zero OAuth challenges, zero 429s. **The finding that made completeness measurable: `mode: "deep"` returns a bounded ~15 screens per query — excluding those 15 returns nothing at exclude sizes 300/600/1,200 — while `mode: "standard"` paginates to ~105, about 7×.** The whole query set (96 iOS, 150 web surface queries; 132 journey queries per platform, 52 of them mined from Mobbin's own 53-category ClickUp action taxonomy) was therefore re-swept in `standard` mode as the saturation test: iOS returned 6,378 rows over 534 calls for **0 new screens**, web 13,369 rows over 1,034 calls for **113**. Ten images were opened and read before commit; all ten are genuine ClickUp screens, and two whose content only partly matches their folder are named in the README — grouping records the query that surfaced a screen, not a verified reading of it. Index: `screenshots/clickup/README.md` plus four per-file tables citing all 6,478 images by `mobbin_url`. **Sourcing differs from this packet's earlier legs and is not covered by CHK-030:** Mobbin is a paid library and these came through the operator's authorized MCP session, not anonymous public fetches — the position, and the delete-images-keep-citations fallback, are written in the README's "Sourcing position". Like `screenshots/anytype/`, nothing here is in `tools/screenshots/manifest.json`; `screenshots/manifest.json` was not touched
 - [ ] T034 Confirm none of the four apps' captures entered `screenshots/manifest.json` — a Mobbin
       screenshot has no in-repo source to hash, matching D5's rule for an Anytype capture
 - [ ] T035 [B] Content-based reclassification of the Notion web and iOS captures: a Sonnet agent
@@ -308,7 +307,7 @@ One app landed and verified before the next opens. Never a parallel fan-out acro
       `screenshots/fibery/reclassification-2026-09-06.tsv` records every move (old path, new path,
       reason); ledger and README index agree 1:1 with disk, no duplicate path.
       `screenshots/manifest.json` untouched, `node tools/screenshots/verify.mjs` exits 0.
-      **ClickUp half stays open** — owed once T033 lands. The same pass is owed to Evernote only if
+      **ClickUp half stays open** — now owed, T033 landed 2026-09-07 with query-derived grouping (the landing verifier's 12-image spot check found 6 of 12 files in a folder whose slug their content does not match, so the pass is needed in full). The same pass is owed to Evernote only if
       a spot check finds it needed (its grouping was content-derived at harvest time)
 <!-- /ANCHOR:phase-mobbin -->
 

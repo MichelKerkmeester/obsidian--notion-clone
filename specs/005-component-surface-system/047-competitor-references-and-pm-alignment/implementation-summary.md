@@ -80,9 +80,14 @@ _memory:
 | `tools/screenshots/manifest-schema.test.mjs` | Added | The reference-entry negative control, written red-first against the un-widened contract |
 | `tools/screenshots/manifest-schema.mjs` | Edited | Rejects a `file` whose path climbs out of its capture root through a `..` segment |
 | `screenshots/fibery/` | Added | 1,800 Mobbin preview captures of Fibery web (860 distinct screen ids: 105 sidebar, 597 standalone, 1,098 across 233 flows) with a README index citing a `mobbin_url` for every capture; untracked by the manifest like Anytype — `tasks.md` T032 |
+| `screenshots/clickup/` | Added | T033's ClickUp reference harvest — 6,478 Mobbin captures (iOS 543 / 357 unique screens / 112 journeys; web 5,935 / 3,078 / 609), a README carrying provenance and the saturation evidence, and four per-file index tables citing every image by `mobbin_url` |
 
 No file under `src/` and no rule in `styles.css` was touched. The gantt comparison below is the
-reason: it found nothing in either file to change.
+reason: it found nothing in either file to change. The ClickUp harvest (T033) is reference material
+only: it adds one new top-level capture folder, stays outside `tools/screenshots/manifest.json`
+exactly as `screenshots/anytype/` does, and its completeness rests on a re-sweep in Mobbin's
+`standard` search mode — which paginates to ~105 screens per query against `deep` mode's bounded ~15
+— returning **0** new iOS screens over 534 calls and 113 new web screens over 1,034.
 
 ### Notion reference captures (2026-09-06)
 
@@ -171,7 +176,7 @@ too. The pinned constants agree with the pixels: `ROW_HEIGHT 44`, `HEADER_HEIGHT
 
 The 702 non-flow files (597 `web/screens/` + 105 `web/navigation/`) were each opened with the Read tool and refiled into the group its content actually shows, the same method as the Notion pass; `web/flows/` (1,098 files, 233 folders) was left alone because its folder name is already a content read (the Mobbin flow name). 694 files moved; 8 `web/navigation/` files were already correctly grouped and kept their path. `screenshots/fibery/reclassification-2026-09-06.tsv` records every move (old path, new path, reason) and agrees 1:1 with both the git renames and the corrected README index — no duplicate path either side.
 
-45 images were spot-checked with the Read tool across every group (more than double the required 20), and it surfaced two real defects rather than zero, both fixed before landing rather than reported and left: the harvest's `ai` group had conflated Fibery's **Insight** database name with "AI-generated insight" — 8 of its 11 files showed no AI feature at all (5 moved to `database` as view-configuration popovers, 2 to `views` as plain rendered list views, 1 to `reports` as a report wizard); a rendered, populated Feed view had been filed as an empty state (moved to `views`); and one Settings > General screen carried a reason string duplicated from a neighboring whiteboard capture and sat in `web/whiteboard/` (moved to `settings`). Final per-group counts (702 total, unchanged): `navigation` 35, `views` 115, `database` 136, `editors` 76, `reports` 87, `onboarding` 68, `settings` 54, `automations` 30, `whiteboard` 30, `collaboration` 31, `forms` 21, `marketing` 11, `ai` 3, `states` 2, `dialogs` 3. `screenshots/manifest.json` is untouched and `node tools/screenshots/verify.mjs` exits 0. The ClickUp half of T035 stays open, owed once T033 lands.
+45 images were spot-checked with the Read tool across every group (more than double the required 20), and it surfaced two real defects rather than zero, both fixed before landing rather than reported and left: the harvest's `ai` group had conflated Fibery's **Insight** database name with "AI-generated insight" — 8 of its 11 files showed no AI feature at all (5 moved to `database` as view-configuration popovers, 2 to `views` as plain rendered list views, 1 to `reports` as a report wizard); a rendered, populated Feed view had been filed as an empty state (moved to `views`); and one Settings > General screen carried a reason string duplicated from a neighboring whiteboard capture and sat in `web/whiteboard/` (moved to `settings`). Final per-group counts (702 total, unchanged): `navigation` 35, `views` 115, `database` 136, `editors` 76, `reports` 87, `onboarding` 68, `settings` 54, `automations` 30, `whiteboard` 30, `collaboration` 31, `forms` 21, `marketing` 11, `ai` 3, `states` 2, `dialogs` 3. `screenshots/manifest.json` is untouched and `node tools/screenshots/verify.mjs` exits 0. The ClickUp half of T035 stays open and is now owed: T033 landed 2026-09-07 with query-derived grouping, and the landing verifier's 12-image spot check found 6 of 12 files under a slug their content does not match.
 
 <!-- /ANCHOR:how-delivered -->
 
