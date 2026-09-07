@@ -16,7 +16,7 @@ import { getColumnDisplayType, isEmptyValue } from "./column-display";
 import { formatDateTimeValueDisplay, formatDateValueDisplay } from "./date-time-format";
 import { formatEuroCurrency, formatEuroNumber } from "./euro-format";
 import { stringifyValue } from "./stringify";
-import { ColumnDef, NO_TITLE_FIELD, RowData, ViewConfig } from "./types";
+import { ColumnDef, NO_TITLE_FIELD, RowData, TitleFileFormat, ViewConfig } from "./types";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -45,7 +45,7 @@ export function resolveTitleFieldDisplay(row: RowData, config: ViewConfig, title
   if (field === "file.name" || field === "file.basename") {
     return {
       field,
-      text: getFileTitleText(row),
+      text: formatFileTitleText(getFileTitleText(row), config.titleFormat),
       isEmpty: false,
       isFileTitle: true,
       isHidden: false,
@@ -79,6 +79,27 @@ function formatTitleFieldText(config: ViewConfig, field: string, value: unknown)
   if (displayType === "date") return formatDateValueDisplay(value).trim();
   if (displayType === "datetime") return formatDateTimeValueDisplay(value, { showTimeWhenMissing: true }).trim();
   return stringifyValue(value).trim();
+}
+
+// A file name carries no ColumnDef of its own to inherit a format from — this plugin otherwise
+// formats currency in euros only (`euro-format.ts`), so a file-name title asking for USD/GBP needs
+// its own locale-aware formatters, kept local to this one file-name-only surface rather than
+// widening `euro-format.ts`'s own euro-only scope.
+const usdCurrency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 2 });
+const gbpCurrency = new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", minimumFractionDigits: 0, maximumFractionDigits: 2 });
+
+/** Applies `titleFormat` to a file-name-drawn title only — never to a real column's own title
+ *  text, which keeps inheriting its column's format via `formatTitleFieldText` above.
+ *  Undefined/`"text"` is a no-op so today's plain file-name behavior is unchanged. */
+function formatFileTitleText(text: string, format: TitleFileFormat | undefined): string {
+  if (!format || format === "text") return text;
+  if (format === "date") return formatDateValueDisplay(text).trim();
+  const num = toTitleDisplayNumber(text);
+  if (Number.isNaN(num)) return text;
+  if (format === "number") return formatEuroNumber(num);
+  if (format === "currency-eur") return formatEuroCurrency(num);
+  if (format === "currency-usd") return usdCurrency.format(num);
+  return gbpCurrency.format(num);
 }
 
 /** Mirrors the cell renderer's own numeric-cell reading: a real number stays a number, and

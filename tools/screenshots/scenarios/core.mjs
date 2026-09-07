@@ -524,6 +524,7 @@ export const CORE_SCENARIOS = [
     title: "Board card titled by a currency column",
     group: "components",
     width: 300,
+    fixtureOf: "constructed-board-title-currency",
     sources: [
       "src/data/title-field-display.ts", "src/views/board-renderer.ts",
       "src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts",
@@ -532,7 +533,9 @@ export const CORE_SCENARIOS = [
       + "column's own euro-formatted text (resolveTitleFieldDisplay's typed-format routing) "
       + "instead of the raw stored number — the operator's phone report, closed. Cost is left "
       + "out of the meta list below the title, matching how a card's own property list already "
-      + "excludes whichever column is chosen as its title.",
+      + "excludes whichever column is chosen as its title. The constructed-board-title-currency "
+      + "capture is the authority for this state — it mounts the real BoardRenderer; this fixture "
+      + "stays registered for the class-structure coverage a hand-built markup fixture gives.",
     html: () => {
       const currencyTitleField = (label, value, tone) => `
         <div class="obnotion-board-card-field" data-obnotion-column-key="${label.toLowerCase()}" role="gridcell">

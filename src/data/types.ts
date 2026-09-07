@@ -353,6 +353,10 @@ export type TimelineScale = "day" | "week" | "month" | "quarter" | "year";
 export type GanttWeekLabel = "weekNumber" | "dateRange" | "both";
 export type GroupOrderMode = "text-asc" | "text-desc" | "number-asc" | "number-desc" | "date-asc" | "date-desc" | "checkbox-false-first" | "checkbox-true-first" | "option-asc" | "option-desc" | "multi-select-priority";
 export const NO_TITLE_FIELD = "__none";
+/** Applies only while `titleField` resolves to the file-name pseudo-field (unset, or explicitly
+ *  `file.name`/`file.basename`) — a real column keeps its own type's format instead, so this
+ *  never overrides a typed column's display. */
+export type TitleFileFormat = "text" | "number" | "currency-eur" | "currency-usd" | "currency-gbp" | "date";
 
 export type SourceRuleOperator =
   "inFolder" | "hasTag" | "hasProperty" | "hasLink" |
@@ -586,6 +590,9 @@ export interface ViewConfig {
   galleryImageField?: string;
   /** Optional card/list title property. When absent, renderers fall back to visible file.name. */
   titleField?: string;
+  /** Format applied when the title above is drawn from the file name rather than a real column
+   *  (see `TitleFileFormat`). Undefined/`"text"` keeps today's plain file-name text. */
+  titleFormat?: TitleFileFormat;
   /** Gallery cover aspect ratio as width / height. */
   galleryImageAspectRatio?: number;
   /** Gallery card width in pixels. */

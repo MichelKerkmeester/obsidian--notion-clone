@@ -586,9 +586,13 @@ export class BoardRenderer {
     if (!row) return "";
     const titleField = this.getTitleField(config);
     const title = titleField ? resolveTitleFieldDisplay(row, config, titleField) : undefined;
-    if (title && !title.isHidden) {
-      return title.isFileTitle ? row.file.basename : title.text;
-    }
+    // A file-name-drawn title used to bypass `title.text` for the raw `row.file.basename` here —
+    // harmless while the resolver's file-title branch always computed that same text verbatim,
+    // but it silently discarded a `titleFormat` choice once one existed: the card kept reading
+    // the raw file name while the record header (which already read `title.text` directly)
+    // showed the formatted version. The operator's own report — a numeric file name with no
+    // format — is exactly this gap.
+    if (title && !title.isHidden) return title.text;
     return row.file.basename;
   }
 

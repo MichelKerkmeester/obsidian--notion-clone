@@ -452,6 +452,7 @@ export class ViewConfigPanelRenderer {
     }
     if (config.viewType !== "table" && config.viewType !== "chart" && !isCalendarTimelineView) {
       this.renderTitleField(body, config, actions);
+      this.renderTitleFormat(body, config, actions);
       this.renderSwitch(body, t("viewConfig.showEmptyFields"), config.showEmptyFields === true, (value) => {
         config.showEmptyFields = value || undefined;
         actions.onChange(t("undo.showEmptyFieldsConfig"));
@@ -1997,6 +1998,30 @@ export class ViewConfigPanelRenderer {
       // Lets the board's Properties sheet find and open this same row from its own Title fixed
       // slot, instead of building a second titleField picker for that surface to own.
       { "data-config-row": "title-field" }
+    );
+  }
+
+  /** Only reachable while the title is drawn from the file name — a real column keeps
+   *  inheriting its own type's format instead, so this row would offer a choice that could
+   *  never take effect once a column is picked above. */
+  private renderTitleFormat(panel: HTMLElement, config: ViewConfig, actions: ViewConfigPanelActions): void {
+    if (config.titleField && config.titleField !== "file.name" && config.titleField !== "file.basename") return;
+    this.renderSelect(
+      panel,
+      t("viewConfig.titleFormat"),
+      [
+        { value: "text", text: t("viewConfig.titleFormat.text") },
+        { value: "number", text: t("viewConfig.titleFormat.number") },
+        { value: "currency-eur", text: t("viewConfig.titleFormat.currencyEur") },
+        { value: "currency-usd", text: t("viewConfig.titleFormat.currencyUsd") },
+        { value: "currency-gbp", text: t("viewConfig.titleFormat.currencyGbp") },
+        { value: "date", text: t("viewConfig.titleFormat.date") },
+      ],
+      config.titleFormat || "text",
+      (value) => {
+        config.titleFormat = value === "text" ? undefined : (value as ViewConfig["titleFormat"]);
+        actions.onChange(t("undo.titleFormatConfig"));
+      },
     );
   }
 

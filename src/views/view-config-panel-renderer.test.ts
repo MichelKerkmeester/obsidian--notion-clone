@@ -19,7 +19,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { App } from "obsidian";
 import type { DatabaseConfig, ViewConfig } from "../data/types";
 import { __resetVaultPropertiesCacheForTests } from "../data/vault-properties";
-import { setLocale } from "../i18n";
+import { setLocale, t } from "../i18n";
 import { describeSheetGrammar } from "./sheet-grammar";
 import { ViewConfigPanelRenderer, type ViewConfigPanelActions } from "./view-config-panel-renderer";
 
@@ -67,7 +67,11 @@ class FakeElement {
   parentElement: FakeElement | null = null;
   children: FakeElement[] = [];
   attributes = new Map<string, string>();
-  ownerDocument: { body: FakeElement; querySelector: (selector: string) => FakeElement | null };
+  ownerDocument: {
+    body: FakeElement;
+    querySelector: (selector: string) => FakeElement | null;
+    createElementNS: (namespace: string, tagName: string) => FakeElement;
+  };
   isConnected = true;
   disabled = false;
   checked = false;
@@ -94,6 +98,11 @@ class FakeElement {
     const doc: FakeElement["ownerDocument"] = {
       body: this,
       querySelector: (selector: string) => this.querySelector(selector),
+      // A schema column's dropdown option renders a property-type SVG glyph (property-type-icon.ts)
+      // regardless of the column's own type — this fake DOM has no SVG namespace of its own, so a
+      // detached FakeElement stands in: setAttribute/classList.add/appendChild all already exist on
+      // it, which is everything renderPropertyTypeIcon calls on the node it builds.
+      createElementNS: (_namespace: string, tagName: string) => new FakeElement(tagName, ""),
     };
     this.ownerDocument = ownerDocument ?? doc;
   }
@@ -241,9 +250,10 @@ function matches(el: FakeElement, selector: string): boolean {
 
 function makeDoc(phone: boolean): { body: FakeElement; container: FakeElement } {
   const body = new FakeElement("body", phone ? "is-phone" : "");
-  const doc = {
+  const doc: FakeElement["ownerDocument"] = {
     body,
     querySelector: (selector: string) => body.querySelector(selector),
+    createElementNS: (_namespace: string, tagName: string) => new FakeElement(tagName, ""),
   };
   body.ownerDocument = doc;
   const container = body.createDiv({ cls: "obnotion-container" });
@@ -369,8 +379,69 @@ describe("settings sheet body grammar", () => {
 });
 
 // ───────────────────────────────────────────────────────────────────
-// 5. CONDITIONAL-COLOUR SUMMARY ROW
+// 5. TITLE FORMAT ROW (file-name-only format choice, next to the existing titleField picker)
 // ───────────────────────────────────────────────────────────────────
+//
+// The operator's own board showed a raw stored number as the card title because the default
+// title source (file.name) has no ColumnDef to inherit a format from — a real column already
+// carries one. This row is the file-name-only escape hatch; it must appear only while the title
+// actually reads the file name, never once a real column is chosen, since a column's format
+// setting already lives on the column itself.
+
+function mountTitleFormatPanel(overrides: Partial<ViewConfig> = {}): { panel: FakeElement } {
+  const { container } = makeDoc(false);
+  const config: ViewConfig = {
+    ...makeConfig(),
+    viewType: "board",
+    schema: {
+      columns: [
+        { key: "file.name", label: "Name", type: "text" },
+        { key: "price", label: "Price", type: "currency" },
+      ],
+      computedFields: [],
+    },
+    ...overrides,
+  };
+  const database = makeDatabase(config);
+  new ViewConfigPanelRenderer().render(container as unknown as HTMLElement, true, config, makeActions(database));
+  const panel = container.querySelector(".obnotion-view-config-panel");
+  if (!panel) throw new Error("settings panel did not mount");
+  return { panel };
+}
+
+describe("title format row", () => {
+  it("shows the Title format row when the title reads the file name (the unset default)", () => {
+    const { panel } = mountTitleFormatPanel();
+    const labels = panel.querySelectorAll(".obnotion-view-config-label").map((row) => row.textContent);
+    expect(labels).toContain(t("viewConfig.titleFormat"));
+  });
+
+  it("defaults the shown value to Plain text when titleFormat is unset", () => {
+    const { panel } = mountTitleFormatPanel();
+    const values = panel.querySelectorAll(".obnotion-dropdown-field-value").map((row) => row.textContent);
+    expect(values).toContain(t("viewConfig.titleFormat.text"));
+  });
+
+  it("shows the persisted format's own label once one is set", () => {
+    const { panel } = mountTitleFormatPanel({ titleFormat: "currency-eur" });
+    const values = panel.querySelectorAll(".obnotion-dropdown-field-value").map((row) => row.textContent);
+    expect(values).toContain(t("viewConfig.titleFormat.currencyEur"));
+  });
+
+  it("hides the Title format row once titleField points at a real column — the column keeps its own format", () => {
+    // Negative control: with titleField pointed at a typed column, the file-name-only row has
+    // nothing to affect and must not render at all.
+    const { panel } = mountTitleFormatPanel({ titleField: "price" });
+    const labels = panel.querySelectorAll(".obnotion-view-config-label").map((row) => row.textContent);
+    expect(labels).not.toContain(t("viewConfig.titleFormat"));
+  });
+
+  it("keeps rendering the row when titleField is explicitly file.name", () => {
+    const { panel } = mountTitleFormatPanel({ titleField: "file.name" });
+    const labels = panel.querySelectorAll(".obnotion-view-config-label").map((row) => row.textContent);
+    expect(labels).toContain(t("viewConfig.titleFormat"));
+  });
+});
 
 describe("conditional-colour summary row", () => {
   it("adds a fourth named row beside Properties/Filters/Sorts, with an explainer and the rule count", () => {

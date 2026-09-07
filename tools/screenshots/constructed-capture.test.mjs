@@ -99,6 +99,8 @@ describe("constructed scenario registry", () => {
       "constructed-board-empty-column",
       "constructed-board-groups-panel",
       "constructed-board-subtask",
+      "constructed-board-title-currency",
+      "constructed-board-title-format-filename",
       "constructed-calendar-day",
       "constructed-calendar-empty",
       "constructed-calendar-month",
@@ -187,6 +189,7 @@ describe("fixture declarations", () => {
       .sort();
     expect(declared).toEqual([
       "add-view-popover -> constructed-toolbar-add-view",
+      "board-card-title-currency -> constructed-board-title-currency",
       "board-empty-column -> constructed-board-empty-column",
       "board-mobile -> constructed-board",
       "board-subtask-tree -> constructed-board-subtask",

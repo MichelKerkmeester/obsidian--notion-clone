@@ -84,9 +84,9 @@ raw value, now also its type/format) → `TitleFieldDisplay.text` → consumed u
 
 | Surface | Current Role | Action | Verification |
 |---------|--------------|--------|---------------|
-| `title-field-display.ts` (`resolveTitleFieldDisplay`) | Computes title text via `stringifyValue()` | Update — route number/currency/date through the column's own formatter | New unit test, red before green |
-| `board-renderer.ts` (title consumers) | Reads `TitleFieldDisplay.text` | Unchanged — not a consumer that needs editing, verified by `git diff --name-only` after the change | grep confirms no edit |
-| `record-detail-panel.ts` (title consumers) | Reads the same `TitleFieldDisplay.text` via `getRecordEventTitleField` | Unchanged | grep confirms no edit |
+| `title-field-display.ts` (`resolveTitleFieldDisplay`) | Computes title text via `stringifyValue()` | Update — route number/currency/date through the column's own formatter; 2026-09-07: also route the file-title branch through a new `titleFormat` | New unit test, red before green |
+| `board-renderer.ts` (title consumers) | Reads `TitleFieldDisplay.text` | **This premise was wrong, corrected 2026-09-07 rather than left standing.** `getReferenceRowTitle` special-cased `title.isFileTitle` to read `row.file.basename` directly instead of `title.text` — harmless while the two were always identical (the case this plan was written against), silently wrong the instant `titleFormat` made them diverge. Found only by driving the production renderer, not by `grep`/`git diff --name-only`, which is exactly what a consumer bug with no source-level signature looks like. Fixed: reads `title.text` unconditionally (ADR-006) | Live harness scenario mounting the real `BoardRenderer`, red against the reverted file, green restored |
+| `record-detail-panel.ts` (title consumers) | Reads the same `TitleFieldDisplay.text` via `getRecordEventTitleField` | Unchanged — confirmed still true 2026-09-07: it already read `title.text` unconditionally, so it never had `board-renderer.ts`'s defect | grep confirms no edit |
 | `board-card-properties-panel.ts` | Title row is a read-only fixed slot | Update — add a jump-to-picker click handler | New test asserting the handler exists and the Cover row's negative control still has none |
 
 Required inventories:

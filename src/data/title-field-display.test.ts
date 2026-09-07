@@ -14,9 +14,9 @@ import { NO_TITLE_FIELD, type ColumnDef, type RowData, type ViewConfig } from ".
 
 type TestFile = RowData["file"];
 
-function row(frontmatter: Record<string, unknown> = {}): RowData {
+function row(frontmatter: Record<string, unknown> = {}, fileOverrides: Partial<TestFile> = {}): RowData {
   return {
-    file: { path: "Notes/Row.md", name: "Row.md", basename: "Row" } as TestFile,
+    file: { path: "Notes/Row.md", name: "Row.md", basename: "Row", ...fileOverrides } as TestFile,
     frontmatter,
     computed: {},
   };
@@ -95,6 +95,77 @@ describe("resolveTitleFieldDisplay", () => {
     const view = config([col("price", "currency")], { titleField: NO_TITLE_FIELD });
     const display = resolveTitleFieldDisplay(row({ price: 10 }), view, NO_TITLE_FIELD);
     expect(display.isHidden).toBe(true);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 4. FILE-NAME TITLE FORMAT (the operator's own report: a numeric file name with no format)
+// ───────────────────────────────────────────────────────────────────
+//
+// The operator's board showed card titles reading a bare stored number ("3537.32") because the
+// title source was the unset default (file.name), which has no ColumnDef/type of its own to
+// inherit a format from — a real column's own type already routes through a formatter, but a
+// file name is not a column. `titleFormat` closes that specific gap: a per-view choice applied
+// only while the title is drawn from the file name, never overriding a real column's own format.
+
+describe("resolveTitleFieldDisplay — file-name titleFormat", () => {
+  it("leaves the file name untouched when titleFormat is unset (today's behavior)", () => {
+    const view = config([], {});
+    const display = resolveTitleFieldDisplay(row({}, { basename: "3537.32" }), view, "file.name");
+    expect(display.text).toBe("3537.32");
+  });
+
+  it("leaves the file name untouched when titleFormat is explicitly text", () => {
+    const view = config([], { titleFormat: "text" });
+    const display = resolveTitleFieldDisplay(row({}, { basename: "3537.32" }), view, "file.name");
+    expect(display.text).toBe("3537.32");
+  });
+
+  it("formats a numeric file name as a euro currency — the operator's own report", () => {
+    const view = config([], { titleFormat: "currency-eur" });
+    const display = resolveTitleFieldDisplay(row({}, { basename: "3537.32" }), view, "file.name");
+    expect(display.text).toBe(formatEuroCurrency(3537.32));
+    expect(display.text).not.toBe("3537.32");
+  });
+
+  it("formats a numeric file name as a US dollar currency", () => {
+    const view = config([], { titleFormat: "currency-usd" });
+    const display = resolveTitleFieldDisplay(row({}, { basename: "3537.32" }), view, "file.name");
+    expect(display.text).toContain("3,537.32");
+    expect(display.text).toMatch(/\$/);
+  });
+
+  it("formats a numeric file name as a British pound currency", () => {
+    const view = config([], { titleFormat: "currency-gbp" });
+    const display = resolveTitleFieldDisplay(row({}, { basename: "3537.32" }), view, "file.name");
+    expect(display.text).toContain("3,537.32");
+    expect(display.text).toMatch(/£/);
+  });
+
+  it("formats a numeric file name as a plain grouped number", () => {
+    const view = config([], { titleFormat: "number" });
+    const display = resolveTitleFieldDisplay(row({}, { basename: "3537.32" }), view, "file.name");
+    expect(display.text).toBe(formatEuroNumber(3537.32));
+  });
+
+  it("parses a date-shaped file name through the plugin's date formatter, not raw text", () => {
+    const view = config([], { titleFormat: "date" });
+    const display = resolveTitleFieldDisplay(row({}, { basename: "2026-03-14" }), view, "file.name");
+    expect(display.text).toMatch(/Mar/);
+  });
+
+  it("falls back to the raw file name for a non-numeric name under a numeric format, never throws", () => {
+    const view = config([], { titleFormat: "currency-eur" });
+    const display = resolveTitleFieldDisplay(row({}, { basename: "Quarterly Review" }), view, "file.name");
+    expect(display.text).toBe("Quarterly Review");
+  });
+
+  it("never applies a file-name titleFormat once titleField points at a real column", () => {
+    const view = config([col("price", "currency")], { titleField: "price", titleFormat: "currency-usd" });
+    const display = resolveTitleFieldDisplay(row({ price: 3537.32 }), view, "price");
+    // titleFormat is scoped to the file-name pseudo-field; a real column keeps inheriting its
+    // own type's formatter, never the file-name format setting.
+    expect(display.text).toBe(formatEuroCurrency(3537.32));
   });
 });
 

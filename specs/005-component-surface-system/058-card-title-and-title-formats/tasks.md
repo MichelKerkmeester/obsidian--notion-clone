@@ -118,6 +118,58 @@ contextType: "general"
 
 ---
 
+<!-- ANCHOR:phase-4 -->
+## Phase 4: Production verification and the file-name title format (2026-09-07)
+
+A fresh operator report on 0.0.31 iOS showed board cards titled by their raw file names
+(`3537.32`, `4736.32`), reopening the evidence question this phase's own log named as D1: the
+prior AC-001..AC-003 screenshot evidence was hand-written fixture HTML, never the shipped
+`BoardRenderer`.
+
+- [x] T012 Reproduce RED on the production `BoardRenderer` in headless Chrome at 402x874: with a
+      currency-typed `titleField`, does the real renderer format the title, and does a per-view
+      title-field picker actually reach the operator on phone? Confirmed by reading source
+      (`board-renderer.ts`'s `getReferenceRowTitle`, `getTitleField`) and by mounting the harness:
+      the currency-column claim held on the unmodified tree (D1 was an evidence gap, not a
+      behavior gap); the picker was already reachable via `board-card-properties-panel.ts`'s Title
+      row (D4, shipped). The real gap: `resolveTitleFieldDisplay`'s file-title branch has no format
+      option at all, and `board-renderer.ts` had a second, undiscovered bug (T014).
+- [x] T013 Add `TitleFileFormat` (`types.ts`), `ViewConfig.titleFormat`, and route
+      `resolveTitleFieldDisplay`'s file-title branch through it (`formatFileTitleText`,
+      `title-field-display.ts`) — plain text (default, unchanged) / number / currency (EUR, USD,
+      GBP) / date. Red first: 8 new `title-field-display.test.ts` cases failed against the
+      unmodified resolver (no `titleFormat` field existed); green once landed, 22/22.
+- [x] T014 Give the "Title format" row its own picker in `view-config-panel-renderer.ts`, beside
+      the existing Title field row, visible only while the title reads the file name. Red first: 5
+      new `view-config-panel-renderer.test.ts` cases (mounted on a board-viewType config) failed
+      against the unmodified tree; green once landed. **Driving the real `BoardRenderer` (not the
+      unit tests, which call the resolver directly) found a second, deeper red**:
+      `board-renderer.ts`'s `getReferenceRowTitle` special-cased `title.isFileTitle` to read
+      `row.file.basename` directly, discarding `titleFormat`'s output — harmless while the two
+      were always identical, silently wrong the moment they diverged. Fixed by reading `title.text`
+      unconditionally (ADR-006).
+- [x] T015 Add two `tools/live/render-assertion-harness.ts` scenarios mounting the production
+      `BoardRenderer`: `board-title-currency-column` (a currency-typed `titleField`) and
+      `board-title-format-numeric-filename` (a numeric file name plus a `titleFormat` choice), each
+      asserting every drawn `.obnotion-kanban-card-title` carries its format's own currency mark
+      and never equals the raw value. Both observed red against the unmodified `board-renderer.ts`
+      (`git stash` on that one file), green restored.
+- [x] T016 Add two constructed (real-renderer-driven) screenshot scenarios —
+      `constructed-board-title-currency` and `constructed-board-title-format-filename` — captured
+      in both themes, phone and desktop; cross-link the existing hand-written `board-card-title-currency`
+      fixture to the new constructed scenario via `fixtureOf` (D1's evidence upgrade). All eight new
+      PNGs plus the four `constructed-board-card-properties` captures the new picker row moved were
+      opened and read by a person.
+- [x] T017 `npx tsc --noEmit`, `npm run build`, `npx vitest run` (1655/1655), `node
+      tools/live/render-assertions.mjs`, `node tools/live/sheet-grammar.mjs`, `npm run gate`
+      (foreground, stdin `/dev/null`), `node tools/naming/scan-comments.mjs`, `node
+      tools/naming/scan-failing-values.mjs` (baseline raised by one justified row — the
+      currency-column claim was never broken, so it has no failing value to record; see
+      `failing-values-baseline.json`'s own note) — all exit 0.
+<!-- /ANCHOR:phase-4 -->
+
+---
+
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 

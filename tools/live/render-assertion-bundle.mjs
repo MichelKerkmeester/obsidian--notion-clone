@@ -40,6 +40,13 @@ export const SCENARIOS = [
   { name: "table/embed", renderer: "table", bag: "embed" },
   { name: "board/file-view", renderer: "board", bag: "file-view" },
   { name: "board/embed", renderer: "board", bag: "embed" },
+  // Earlier screenshot evidence for the title-format work was hand-written fixture HTML — the
+  // production BoardRenderer's own title-format routing was never actually proven against it.
+  // These two mount the real renderer: a typed currency column chosen as titleField, and the
+  // operator's own report — a numeric file name with no titleField set, formatted through the
+  // file-name titleFormat choice instead.
+  { name: "board-title-currency-column/file-view", renderer: "board", bag: "file-view", captureData: true, boardTitleFieldCurrency: true },
+  { name: "board-title-format-numeric-filename/file-view", renderer: "board", bag: "file-view", captureData: true, numericFileNames: true, titleFormat: "currency-eur" },
   { name: "calendar/file-view", renderer: "calendar", bag: "file-view" },
   { name: "calendar/embed", renderer: "calendar", bag: "embed" },
   { name: "calendar-week/file-view", renderer: "calendar", bag: "file-view", scale: "week" },

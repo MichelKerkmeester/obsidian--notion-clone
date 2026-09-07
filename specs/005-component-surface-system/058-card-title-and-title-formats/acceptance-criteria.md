@@ -10,23 +10,28 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/058-card-title-and-title-formats"
-    last_updated_at: "2026-09-06T17:55:00Z"
-    last_updated_by: "impl-058"
-    recent_action: "Marked AC-001 through AC-007 Met on the landed, verified tree; AC-008 stays the operator's"
+    last_updated_at: "2026-09-07T22:45:00Z"
+    last_updated_by: "impl-058-production-verification"
+    recent_action: "Added AC-009 and AC-010, both Met on the real BoardRenderer"
     next_safe_action: "AC-008's operator device read on a released build; then close"
     blockers:
       - "AC-008 is the operator's device read, unclosable here"
     key_files:
       - "src/data/title-field-display.ts"
       - "src/views/board-card-properties-panel.ts"
+      - "src/views/board-renderer.ts"
+      - "src/views/view-config-panel-renderer.ts"
+      - "tools/live/render-assertion-harness.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-058-ac"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 95
     open_questions: []
     answered_questions:
       - "AC-001..AC-007 Met: resolver format routing, Title-row picker affordance, cross-surface regression test, gate 26 green, replay 28 hold"
+      - "AC-009 Met: a currency-typed titleField's card title is now proven on the production BoardRenderer (tools/live/render-assertion-harness.ts), not only on hand-written fixture HTML — the claim itself was already correct"
+      - "AC-010 Met: the operator's own screenshot (raw numeric file names as card titles) named a real, second gap — a titleFormat field for the file-name pseudo-field, plus a board-renderer.ts consumer bug (getReferenceRowTitle) found only by driving production"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: acceptance-criteria | v2.2 -->
 # Acceptance Criteria: Card Title and Title Formats
@@ -42,8 +47,8 @@ _memory:
 
 **Packet:** 005-component-surface-system/058-card-title-and-title-formats
 **Level:** 2
-**Status:** Implemented — AC-001 through AC-007 Met; AC-008 Unmet, operator-owned
-**Date:** 2026-09-06
+**Status:** Implemented — AC-001 through AC-007, AC-009 and AC-010 Met; AC-008 Unmet, operator-owned
+**Date:** 2026-09-06, production verification and file-name titleFormat added 2026-09-07
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -63,6 +68,8 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 | AC-006 | REQ-004 | Given any view but calendar/timeline, When its `titleField` is set, Then the board card, the desktop record header and the phone record sheet all read the identical value | **Met 2026-09-06.** Locked by `title-field-display.test.ts`'s "cross-surface titleField agreement" suite (5/5): for every view type but calendar/timeline, the exact `titleField` value each surface's getter passes into the shared resolver yields identical, correctly-formatted text. Calendar/timeline stay on their own `calendarTitleField`/`timelineTitleField` (D5) | Met | - |
 | AC-007 | — | Given the packet is closed, When `npm run gate` runs, Then it exits 0 with the new lane row observed red before green, and `npm run replay` holds with reversed 0 | **Met 2026-09-06, with the premise corrected rather than the check waived.** The new coverage landed as unit and panel tests observed red before green (T003/T005's own evidence: a resolver revert and a panel revert, each re-run against the new tests) — the gate's lane count stayed at its existing-lanes-only 26, so there is no separate new lane row; the css-lane itself was taken over from `056-board-anytype-parity` after its release left nothing outstanding — the hold was re-based twice on the way in (056 on a parallel branch, then 057-calendar-anytype-parity, then 056 again), each time onto whatever the lane had last released. `npm run gate`: PASS, 26 green, 0 red, exit 0 read from `$?`; `npm run replay`: PASS, all 28 results hold, 0 reversed | Met | - |
 | AC-008 | — | Given a released build, When the operator sets a currency column as a board's card title on their phone, Then they report it formatted correctly and report being able to change which property is the card's name | Operator confirmation only | Unmet | - |
+| AC-009 | REQ-001 | Given the production `BoardRenderer` (not fixture HTML) with a currency column set as `titleField`, When mounted in headless Chrome and rendered, Then every drawn card title carries the euro mark and never equals the column's raw stored value | **Met 2026-09-07.** AC-001's own capture evidence was hand-written fixture markup (`tools/screenshots/scenarios/core.mjs`'s `board-card-title-currency`), which resembles the renderer's real output closely enough to pass a visual read without ever calling `resolveTitleFieldDisplay` through the shipped `BoardRenderer`. `tools/live/render-assertion-harness.ts` gained `board-title-currency-column`, a scenario that mounts the real renderer with `titleField` pointed at the schema's own currency column; green on the unmodified tree — this specific claim was already correct in production, D1 was an evidence gap rather than a behavior gap. A matching constructed screenshot (`constructed-board-title-currency`, both themes, phone and desktop, real-renderer-driven) opened and read, and cross-linked from the original fixture via `fixtureOf` | Met | - |
+| AC-010 | REQ-005 | Given a board view whose `titleField` is unset (the file-name default) and a `titleFormat` of `currency-eur` chosen, When the production `BoardRenderer` renders a row whose file name is a plain number (the operator's own report: `3537.32`), Then the card's main name reads the formatted value (`€ 3.537,32`), not the raw file name | **Met 2026-09-07. Two reds, not one.** Red 1 (the feature did not exist): `grep -rn "titleFormat" src` returned nothing; `title-field-display.test.ts`'s new file-name-titleFormat suite (8 cases) and `view-config-panel-renderer.test.ts`'s new "title format row" suite (5 cases) both failed against the unmodified tree, observed by reverting `src/data/types.ts`, `src/data/title-field-display.ts`, `src/i18n.ts` and `src/views/view-config-panel-renderer.ts` together (`git stash`) and re-running. Green once `TitleFileFormat`/`formatFileTitleText`/the "Title format" picker row landed. **Red 2 (a deeper one, found only by driving production):** with the unit-level fix alone in place, `board-renderer.ts`'s `getReferenceRowTitle` still discarded the formatted text for every file-name-drawn title — a `title.isFileTitle` shortcut that read `row.file.basename` directly instead of `title.text`, harmless while the two were always identical and silently wrong the instant `titleFormat` made them diverge. `board-title-format-numeric-filename` (the live harness, mounting the real `BoardRenderer`) failed against the reverted `board-renderer.ts` — "18 card title(s) drawn; 18 missing €, 18 still reading a raw unformatted value" — and passed once `getReferenceRowTitle` was fixed to read `title.text` unconditionally. Neither the unit tests above nor the prior fixture-based captures could have caught this: a unit test calls the resolver directly, and a hand-written fixture never calls `getReferenceRowTitle` at all. Constructed screenshot `constructed-board-title-format-filename` (both themes, phone and desktop, real-renderer-driven) opened and read | Met | - |
 
 ### Status values
 
@@ -103,4 +110,21 @@ instead — the gate's lane count is capped at its existing-lanes-only 26 — so
 carried by T003's resolver revert and T005's panel revert, and the gate itself stayed green
 throughout. The `css-lane` was taken over from `056-board-anytype-parity`, whose release left
 nothing outstanding.
+
+**2026-09-07 amendment — a fresh operator report on 0.0.31 iOS reopened the evidence question,
+and the AC-008 gap it named is now AC-009/AC-010, both Met.** The report's board screenshot
+showed cards titled by their raw file names ("3537.32", "4736.32") — the same defect class as the
+original report, on a different title source. Reading `058`'s own landing found the earlier
+capture evidence for the currency-column claim (AC-001) was hand-written fixture markup, never
+the shipped `BoardRenderer` itself (D1). **AC-009** closes that evidence gap: a
+`tools/live/render-assertion-harness.ts` scenario mounts the real renderer with a currency-typed
+`titleField` and passes on the unmodified tree — the original claim held, the evidence did not
+prove it. **AC-010** answers the operator's actual screenshot: the unset `titleField` default
+(the file name) has no `ColumnDef` to inherit a format from at all, so `resolveTitleFieldDisplay`'s
+prior fix (scoped to real columns) never reached it. A `titleFormat` field, its own picker row, and
+red-first unit/panel coverage landed first; driving the **production** `BoardRenderer` then found a
+second, deeper defect neither the unit tests nor any prior fixture could have seen —
+`board-renderer.ts`'s `getReferenceRowTitle` discarded a file-title's formatted text for a
+`title.isFileTitle`-shortcut that predates this packet. Both reds and both greens are on the real
+renderer. Nine of ten rows now stand at Met; AC-008 is unchanged — the operator's alone.
 <!-- /ANCHOR:closure -->

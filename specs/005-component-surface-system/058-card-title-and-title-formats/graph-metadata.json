@@ -56,8 +56,12 @@
       "src/views/board-card-properties-panel.ts",
       "src/views/board-card-properties-panel.test.ts",
       "src/views/view-config-panel-renderer.ts",
+      "tools/live/render-assertion-harness.ts",
       "src/views/board-card-fields.test.ts",
-      "src/data/euro-format.ts"
+      "src/data/types.ts",
+      "src/views/board-renderer.ts",
+      "src/i18n.ts",
+      "tools/live/render-assertion-bundle.mjs"
     ],
     "entities": [
       {
@@ -145,15 +149,39 @@
         "source": "derived"
       },
       {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
         "name": "board-card-fields.test.ts",
         "kind": "test",
         "path": "src/views/board-card-fields.test.ts",
         "source": "derived"
       },
       {
-        "name": "euro-format.ts",
+        "name": "types.ts",
         "kind": "code",
-        "path": "src/data/euro-format.ts",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-bundle.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertion-bundle.mjs",
         "source": "derived"
       },
       {
@@ -179,35 +207,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Handoff Criteria",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Phase Context This",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "A view's card and record title can already be set to any column (`ViewConfig.titleField`), but the",
     "created_at": "2026-09-06T06:27:07Z",
-    "last_save_at": "2026-09-06T18:46:28.698Z",
+    "last_save_at": "2026-09-07T20:57:13.959Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,13 +223,13 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:3dd011239076a6472740ba3846ddd98c0cd9ae8b4931d9458ed13878e3a5d168",
+    "source_fingerprint": "sha256:3a5bf543c58bcaac97bce85836286a7d8c90adb0cbd42c944c4a38498f0439f1",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "e5d5f1f87dbc3eb60f999f1fa7a81d1da0b7094423a43492428909f102fccc1f",
-      "plan.md": "2b114b644bc945f12ee7465c2af969119ddfe3690907644d0c0bb158b02b9063",
-      "tasks.md": "c4d494c0cd12921d07f0250ec72a6572bb80fbf47303b03458059d1682d7acda",
-      "decision-record.md": "11706a89e750bdfe7b1b1f7afb99cebd4d2df8e129dc800535e20980a8b0632e",
+      "spec.md": "e6410f9cc4cdbaf549cc4a34f2d279e66df6c79e80fb2343241371ee04fd452b",
+      "plan.md": "2e99df8b0df47ab845448524908775c765fd6186a09718589ab1be1ad8b890b8",
+      "tasks.md": "caaabe8be888dfc6577bf08d02949c9e17e8c0904d1d94b9443dc03d06289404",
+      "decision-record.md": "d93f5e1dc63280c09ba573e2707b08d86cf22792b8261edc5325ee6b58e46644",
       "implementation-summary.md": "5d80ca8b70564321f404c2dee3ec97c65888523bcd3e2c71f91e52606c11444d"
     },
     "last_active_at": null

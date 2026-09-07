@@ -89,21 +89,35 @@ shows it.
 - Give `board-card-properties-panel.ts`'s Title fixed slot a jump-to-picker affordance.
 - A regression test locking the existing board/record-header/phone-sheet titleField agreement.
 - A screenshot scenario per `screenshot-currency.md`: a currency-titled card, both themes.
+- **2026-09-07 amendment (a fresh operator report on 0.0.31 iOS, closing D1):** a `titleFormat`
+  field on `ViewConfig`, applied only while the title reads the file name (no column to inherit a
+  format from) — plain text / number / currency (EUR, USD, GBP) / date — with its own picker row
+  beside the existing Title field row, shown only in that state; and a live
+  `tools/live/render-assertion-harness.ts` proof that mounts the production `BoardRenderer`
+  directly, closing the earlier fixture-HTML-only evidence gap for REQ-001.
 
 ### Out of Scope
 - Building a second title-field picker — `view-config-panel-renderer.ts:1902-1920` already has one.
 - Calendar and timeline title fields (`calendarTitleField`/`timelineTitleField`) — `057`'s.
 - `045`'s card-property visibility/order list, `054`'s record-surface primitive extraction,
   `056`'s card anatomy migration — each stays that packet's own, unedited by this one.
+- A second, independent format setting for a title drawn from a real column — D3/ADR-003 stand;
+  `titleFormat` applies only to the file-name pseudo-field, which has no column to inherit from.
 
 ### Files to Change
 
 | File Path | Change Type | Description |
 |-----------|-------------|-------------|
-| `src/data/title-field-display.ts` | Modify | Route the non-file branch through the column's own typed formatter instead of `stringifyValue()` |
+| `src/data/title-field-display.ts` | Modify | Route the non-file branch through the column's own typed formatter instead of `stringifyValue()`; route the file-title branch through the new `titleFormat` |
 | `src/views/board-card-properties-panel.ts` | Modify | Title fixed slot (`:43`) gains a jump-to-picker affordance |
 | `src/views/board-card-fields.test.ts` / a new title-field-display test | Create/Modify | Red-first coverage for the formatted-title case and the cross-surface agreement |
 | `tools/screenshots/scenarios/*.mjs` | Modify | One new scenario: a currency-titled card, light and dark |
+| `src/data/types.ts` | Modify | `TitleFileFormat` type, `ViewConfig.titleFormat` |
+| `src/views/view-config-panel-renderer.ts` | Modify | "Title format" row, visible only while the title reads the file name |
+| `src/views/board-renderer.ts` | Modify | `getReferenceRowTitle` now reads `title.text` unconditionally (D8) — it silently discarded a file-title's format under the prior `title.isFileTitle` shortcut |
+| `src/i18n.ts` | Modify | New `viewConfig.titleFormat*`/`undo.titleFormatConfig` keys, all three locales |
+| `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs` | Modify | Two new board scenarios mounting the production `BoardRenderer`: a currency-typed `titleField`, and a numeric file name with a `titleFormat` choice |
+| `tools/screenshots/constructed-scenarios.mjs`, `tools/screenshots/scenarios/core.mjs` | Modify | Two new constructed captures (real-renderer-driven) plus a `fixtureOf` cross-link from the existing hand-written fixture |
 <!-- /ANCHOR:scope -->
 
 ---

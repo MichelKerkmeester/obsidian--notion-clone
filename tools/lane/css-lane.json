@@ -5367,6 +5367,27 @@
         "screenshots/notion-clone/panels/constructed-sort-panel-mobile-dark.png"
       ],
       "note": "Post-rebase re-derivation on the merged tree: npm run screenshots run twice (608 entries, exit 0 both). 17 captures moved in BOTH runs with BIT-IDENTICAL decoded deltas (changedPixels 9165-66629, max channel delta 36-180) - real, kept, named. They are the DARK mirrors of the moves this packet’s own release already reviewed (plus constructed-filter-panel-mobile-light), moved now because 069’s harness edit (tools/screenshots/host-bare-controls.css, +50) and the 221/225/069 renderer changes (rendered-view-roots, embedded-database-renderer, database-view, board/calendar renderers) reached these scenarios’ pixels underneath this packet’s three edits; upstream itself recaptured none of them (0 PNG churn 6f4d026c..87ec4c8f). 3 reference-gantt project-manager captures moved only in the FIRST run at max channel delta 1 (<=12, the lane’s established encoder jitter) and came back byte-identical in the second; restored to their committed bytes, their manifest bytes/pixelHash/layoutHash agreeing with HEAD already (0 manifest patches). Net 608: 17 changed, 591 byte-identical, 3 jittered-and-restored, 0 of the protected project-manager/ entries changed. (this pass: verification of the 82971d74 landing)"
+    },
+    {
+      "event": "release",
+      "phase": "058-card-title-and-title-formats",
+      "at": "2026-09-07T20:43:03.658Z",
+      "hash": "65c9009170d1",
+      "reviewed": [
+        "screenshots/notion-clone/components/constructed-board-title-currency-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-board-title-currency-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-board-title-currency-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-board-title-currency-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-board-title-format-filename-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-board-title-format-filename-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-board-title-format-filename-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-board-title-format-filename-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-light.png"
+      ],
+      "note": "styles.css itself was not edited by this leg (hash unchanged, no acquire needed) -- this entry accounts for the capture set two new constructed board scenarios moved, plus the settings-sheet capture that now shows the new Title format row. Two new scenarios (constructed-board-title-currency, constructed-board-title-format-filename) mount the real BoardRenderer with a currency-typed titleField and, separately, a numeric file name plus a euro titleFormat choice -- both opened and read in both themes, desktop and mobile: card titles read formatted euro currency, never the raw stored number or raw file name. constructed-board-card-properties moved because the settings sheet it captures now includes the new Title format row beneath Title field, opened and read on desktop and mobile, both themes. One additional byte-changed capture, screenshots/notion-clone/views/board-mobile-desktop-dark.png (a hand-written fixture, not driven by this leg's code change), was pixel-identical PNG-encoder jitter -- confirmed by comparing its manifest pixelHash before and after (unchanged) -- and was restored to its committed bytes rather than left drifting."
     }
   ],
   "outstanding": [

@@ -593,7 +593,7 @@ const SPEC_OPTIONS = [
   "boardEmptyColumn", "boardGroupsPanel", "tableGroups", "tableFooter", "fullStatusPalette",
   "recordIconColumn", "calendarRecordIcon", "calendarUnscheduled", "calendarMultiDay", "columnHeaderController", "longHeaderLabel", "migratedFromList",
   "viewConfigVariant", "boardCardFieldsHidden", "tableColumnCount", "recordPlacement", "dropdownSearch",
-  "dropdownDesktopSheet",
+  "dropdownDesktopSheet", "boardTitleFieldCurrency", "numericFileNames", "titleFormat",
 ];
 
 function constructedScenario(view, opts) {
@@ -1447,6 +1447,30 @@ export const CONSTRUCTED_SCENARIOS = [
       .concat(["src/views/board-groups-panel.ts", "src/views/record-surface/property-row.ts", "src/views/checkbox.ts"]),
     note: "The reference board's own column-options button, then the \"Manage groups\" row it "
       + "opens — the same two clicks a reader makes, not a hand-built panel.",
+  }),
+  constructedScenario("board-title-currency", {
+    renderer: "board",
+    boardTitleFieldCurrency: true,
+    group: "components",
+    title: "Board card titled by a currency column (constructed)",
+    fixtureOf: "board-card-title-currency",
+    sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts")
+      .concat(["src/data/title-field-display.ts", "src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts"]),
+    note: "The reference board, titleField pointed at the schema's own currency column: the "
+      + "card's main name reads that column's formatted euro text through the real BoardRenderer, "
+      + "not a hand-written stand-in for its markup.",
+  }),
+  constructedScenario("board-title-format-filename", {
+    renderer: "board",
+    numericFileNames: true,
+    titleFormat: "currency-eur",
+    group: "components",
+    title: "Board card title formatted from the file name (constructed)",
+    sources: constructedSources("src/views/board-renderer.ts", "tools/bench/board-render-bench.ts")
+      .concat(["src/data/title-field-display.ts"]),
+    note: "The operator's own report: a card whose title source is the (unset, default) file "
+      + "name, and the file names are plain numbers. With a euro titleFormat chosen, the card's "
+      + "main name reads the formatted value, not the raw numeric file name.",
   }),
   constructedScenario("board-card-properties-hidden", {
     renderer: "board",

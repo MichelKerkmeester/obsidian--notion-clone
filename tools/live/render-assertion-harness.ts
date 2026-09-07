@@ -69,7 +69,7 @@ import {
 } from "../../src/views/calendar-timeline-toolbar-renderer";
 import type { App } from "obsidian";
 import type { DataSource } from "../../src/data/data-source";
-import type { ColumnDef, RowData, StatusOptionDef, TimelineScale, ViewConfig } from "../../src/data/types";
+import type { ColumnDef, RowData, StatusOptionDef, TimelineScale, TitleFileFormat, ViewConfig } from "../../src/data/types";
 import { catalogueTableData } from "./catalogue-scenario";
 import {
   makeColumns as makeTableColumns,
@@ -413,6 +413,22 @@ export interface ScenarioSpec {
    * own menu rather than only constructible in isolation.
    */
   boardGroupsPanel?: boolean;
+  /**
+   * Opt-in, renderer "board" only: sets `titleField` to the schema's first currency column
+   * (`columnOfType(columns, "currency")`), proving the format routing on the REAL BoardRenderer
+   * rather than against hand-written fixture HTML. The card's main name must read that column's
+   * own formatted text (`formatEuroCurrency`), not the raw stored number.
+   */
+  boardTitleFieldCurrency?: boolean;
+  /**
+   * Opt-in, renderer "board" only, read together with `titleFormat`: overwrites every row's
+   * `file.basename`/`file.name` with a numeric string (mirroring the operator's own report — a
+   * board card titled "3537.32", the raw file name) so a `titleFormat` choice has a real numeric
+   * file name to format. `titleField` stays unset, matching the operator's actual view.
+   */
+  numericFileNames?: boolean;
+  /** Opt-in, renderer "board" only: sets `ViewConfig.titleFormat` — see `numericFileNames`. */
+  titleFormat?: TitleFileFormat;
   /**
    * Opt-in, renderer "table" only: renders the grouped table instead of the flat one — the
    * `renderGroupedTable` public entry the host calls when a group field is configured, with a
@@ -1661,6 +1677,32 @@ function emptyReasonAssertion(container: HTMLElement, expected: "source-missing"
 // The card views render one card per row with no window, so unlike the two date-driven views
 // their drawn count is the row count and a shortfall is a real failure rather than a fixture slip.
 
+/**
+ * Reads every drawn card's `.obnotion-kanban-card-title` text and checks it carries the
+ * format's own currency mark (a euro/dollar/pound formatter always includes one) and never
+ * equals the value's raw, unformatted stringification — the defect the operator's screenshot
+ * showed ("3537.32" as a card's main name).
+ */
+function boardCardTitleFormatAssertion(
+  container: HTMLElement,
+  rawValues: string[],
+  mark: string,
+  name: string,
+): AssertionResult {
+  const titles = Array.from(container.querySelectorAll<HTMLElement>(".obnotion-kanban-card-title"))
+    .map((el) => (el.textContent || "").trim());
+  const unmarked = titles.filter((text) => !text.includes(mark));
+  const stillRaw = titles.filter((text) => rawValues.includes(text));
+  return {
+    name,
+    pass: titles.length > 0 && unmarked.length === 0 && stillRaw.length === 0,
+    detail: `${titles.length} card title(s) drawn; ${unmarked.length} missing "${mark}", `
+      + `${stillRaw.length} still reading a raw unformatted value`
+      + (stillRaw.length ? `: ${JSON.stringify(stillRaw.slice(0, 3))}` : "")
+      + (titles.length ? ` (sample: ${JSON.stringify(titles.slice(0, 3))})` : ""),
+  };
+}
+
 function boardAssertions(container: HTMLElement, rows: RowData[], groups: BoardGroup[]): AssertionResult[] {
   const results: AssertionResult[] = [];
   // The default board (boardExtensionsEnabled unset) renders the Anytype-shaped
@@ -2744,7 +2786,21 @@ export function runRenderAssertions(
     const config = {
       ...makeBoardConfig(columns),
       ...(scenario.boardImageField ? { boardImageField: columnOfType(columns, "text")?.key } : {}),
+      ...(scenario.boardTitleFieldCurrency ? { titleField: columnOfType(columns, "currency")?.key } : {}),
+      ...(scenario.titleFormat ? { titleFormat: scenario.titleFormat } : {}),
     } as ViewConfig;
+    if (scenario.numericFileNames) {
+      // Mirrors the operator's own report: a board card titled "3537.32", the raw file name.
+      // titleField stays unset (this scenario's whole point is the file-name default path), so
+      // only the file identity moves — the row's actual data is untouched.
+      rows.forEach((row, index) => {
+        const basename = (3537.32 + index * 1199.1).toFixed(2);
+        const file = row.file as unknown as { name: string; basename: string; path: string };
+        file.basename = basename;
+        file.name = `${basename}.md`;
+        file.path = file.path.replace(/[^/]+$/, `${basename}.md`);
+      });
+    }
     const hiddenCardColumn = scenario.boardCardFieldsHidden ? columnOfType(columns, "currency") : undefined;
     if (hiddenCardColumn) {
       // Seed the stored list from the derived default itself, rather than hand-listing every
@@ -2809,6 +2865,23 @@ export function runRenderAssertions(
         results.push(multiMarkerAssertion(container,
           [".obnotion-board-card-cover.is-empty", ".obnotion-board-card-cover-placeholder"],
           "the board cards drew their empty covers"));
+      }
+      if (scenario.boardTitleFieldCurrency) {
+        const currencyCol = columnOfType(columns, "currency");
+        const rawValues = currencyCol
+          ? rows.map((row) => String((row as unknown as { frontmatter: Record<string, unknown> }).frontmatter[currencyCol.key]))
+          : [];
+        results.push(boardCardTitleFormatAssertion(container, rawValues, "€",
+          "a currency-typed titleField renders the card's main name through its own column format, not "
+          + "the raw stored number, proven here on the real BoardRenderer rather than hand-written "
+          + "fixture HTML"));
+      }
+      if (scenario.titleFormat) {
+        const rawValues = rows.map((row) => (row as unknown as { file: { basename: string } }).file.basename);
+        const mark = scenario.titleFormat === "currency-usd" ? "$" : scenario.titleFormat === "currency-gbp" ? "£" : "€";
+        results.push(boardCardTitleFormatAssertion(container, rawValues, mark,
+          "a file-name titleFormat choice formats the card's main name, not the raw file name — the "
+          + "operator's own report (a board card titled \"3537.32\"), proven on the real BoardRenderer"));
       }
       if (scenario.subtaskTree) results.push(subtaskTreeAssertion(container, "board"));
       if (scenario.boardGroupsPanel) {

@@ -406,3 +406,206 @@ a regression test addresses directly.
 **What changes**: A new test file/case; no production code.
 
 **How to roll back**: Delete the test.
+
+---
+
+## ADR-005: A `titleFormat` field scoped to the file-name pseudo-field
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-07 |
+| **Deciders** | Production-verification session, on a fresh operator report |
+
+---
+
+### Context
+
+A 2026-09-07 operator report on 0.0.31 iOS showed board cards titled by their raw file names —
+`3537.32`, `4736.32` — the same defect class ADR-003 already closed for a real column, but on the
+one title source ADR-003's own routing cannot reach: the unset `titleField` default (`file.name`)
+has no `ColumnDef`/`type` to look up a formatter from. ADR-003's decision — "a title has no
+independent format setting, it inherits the chosen column's own" — is unchanged and still correct
+for every titled column; it was never written to cover a title source that is not a column at all.
+
+### Constraints
+
+- ADR-003 must not be reopened or weakened for the column-based case — a title drawn from a real
+  column keeps inheriting that column's own format, no exceptions
+- The new setting must not appear when it cannot take effect (once a real column is `titleField`)
+
+---
+
+### Decision
+
+**We chose**: A `titleFormat` field on `ViewConfig` (`TitleFileFormat`: `text` / `number` /
+`currency-eur` / `currency-usd` / `currency-gbp` / `date`), read only while `resolveTitleFieldDisplay`
+is in its file-title branch (`titleField` unset, or explicitly `file.name`/`file.basename`).
+`text` (the default) is a no-op, so today's plain file-name behavior is unchanged for every
+existing view. Its picker row in `view-config-panel-renderer.ts` renders directly beneath the
+existing Title field row and only while that row's own value resolves to the file name.
+
+**How it works**: `formatFileTitleText` (`title-field-display.ts`) parses the file-name text as a
+number when the format calls for one, using the same fallback-to-raw-text posture the column-based
+branch already uses for a non-numeric value in a numeric column (never a thrown error). USD/GBP use
+local `Intl.NumberFormat` instances kept in this one module rather than widening `euro-format.ts`'s
+own euro-only scope.
+
+---
+
+### Alternatives Considered
+
+| Option | Pros | Cons | Score |
+|--------|------|------|-------|
+| **Chosen: a file-name-scoped format field** | Answers the operator's literal report; leaves ADR-003's column-based contract untouched | A second, small format vocabulary exists alongside the column-typed one | 8/10 |
+| Ask the operator to rename the note so the file name reads as a date/number naturally | Zero code | Not what was asked, and file names carrying vault-meaningful identifiers (dates, ids) are not always safe to rename | 2/10 |
+| Widen ADR-003 to let ANY title carry an independent format, column or not | One format concept instead of two | Directly reopens ADR-003, which a prior session weighed and rejected for a real column; the operator's report never asked for that case | 3/10 |
+
+**Why this one**: The operator's own words ("we would see the month for example") describe
+*picking a different column* (D1, already shipped) — the number-format half of the same report is
+about the file name specifically, since that is what their board's cards were titled by.
+
+---
+
+### Consequences
+
+**What improves**: The operator's literal defect (a numeric file name as a card's main name) has a
+direct fix that does not touch column-based titling at all.
+
+**What it costs**: A second format vocabulary (file-name-only) exists beside the column-typed one;
+mitigated by scoping it strictly to the one pseudo-field with no format of its own.
+
+**Risks**:
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| A future report asks for the same file-name format options on a *real* column title | Low | Named here as the boundary; would be a new ADR, not a silent widening of this one |
+
+---
+
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | Directly answers the operator's board screenshot: raw numeric file names as card titles |
+| 2 | **Beyond Local Maxima?** | PASS | Read `resolveTitleFieldDisplay`'s file-title branch and ADR-003 before deciding the gap was real, not a duplicate |
+| 3 | **Sufficient?** | PASS | One field, one picker row, scoped to the one pseudo-field that needed it |
+| 4 | **Fits Goal?** | PASS | Grounds D7/D8 in `goal.md` |
+| 5 | **Open Horizons?** | PASS | Explicitly declines to reopen ADR-003 |
+
+**Checks Summary**: 5/5 PASS
+
+---
+
+### Implementation
+
+**What changes**: `types.ts` (`TitleFileFormat`, `ViewConfig.titleFormat`), `title-field-display.ts`
+(`formatFileTitleText`), `view-config-panel-renderer.ts` (`renderTitleFormat`), `i18n.ts`.
+
+**How to roll back**: Remove the field, the formatter call and the picker row; `resolveTitleFieldDisplay`'s
+file-title branch returns to its unconditional `getFileTitleText(row)`.
+
+---
+
+## ADR-006: `board-renderer.ts`'s file-title consumer read the wrong value
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-07 |
+| **Deciders** | Production-verification session |
+
+---
+
+### Context
+
+ADR-005's `titleFormat` landed and passed every unit and panel test — all of which call
+`resolveTitleFieldDisplay` directly. Driving the actual `BoardRenderer` in headless Chrome (the one
+proof this packet's earlier evidence never did — D1) found the board card still showed the raw file
+name regardless of `titleFormat`. `board-renderer.ts`'s `getReferenceRowTitle` special-cased
+`title.isFileTitle`:
+
+```ts
+return title.isFileTitle ? row.file.basename : title.text;
+```
+
+This shortcut was harmless the day it was written — the resolver's file-title branch always
+computed `getFileTitleText(row)` verbatim, identical to `row.file.basename` in every real case — and
+became silently wrong the moment `titleFormat` made the two diverge, discarding the formatted text
+for the raw one on every file-name-drawn card.
+
+### Constraints
+
+- The record surface (`record-detail-panel.ts`) already reads `title.text` unconditionally and
+  needed no change — confirmed by reading it, not assumed
+- Fixing this must not touch `NO_TITLE_FIELD`'s hidden-title path or any column-based title path,
+  both already correct
+
+---
+
+### Decision
+
+**We chose**: `getReferenceRowTitle` reads `title.text` unconditionally once the title is not
+hidden, dropping the `title.isFileTitle` branch entirely. `resolveTitleFieldDisplay`'s file-title
+branch already produces the same output the old shortcut did for every existing view
+(`titleFormat` unset/`"text"`), so this is a behavior-preserving simplification for every caller
+except the one that now has a `titleFormat` to read.
+
+**How it works**: One conditional collapses to a single return path; no new state, no new branch.
+
+---
+
+### Alternatives Considered
+
+| Option | Pros | Cons | Score |
+|--------|------|------|-------|
+| **Chosen: read `title.text` unconditionally** | Matches what `record-detail-panel.ts` already does; removes a shortcut that has no reason to exist post-ADR-005 | None found | 9/10 |
+| Special-case `titleFormat` inside `getReferenceRowTitle` (keep the shortcut, add an override) | Smaller diff at this one call site | Reintroduces a second place the file-title text is computed, exactly the "one formatter" rule D2 exists to prevent | 3/10 |
+
+**Why this one**: The shortcut's entire justification (the two values were always identical) no
+longer holds; there is no remaining reason for `board-renderer.ts` to compute the file title any
+differently than `record-detail-panel.ts` already does.
+
+---
+
+### Consequences
+
+**What improves**: The board card and the record header now provably read the identical text for
+a file-name-drawn title, matching D5/AC-006's cross-surface contract — this was previously true by
+coincidence (`title.text` and `row.file.basename` happened to match) rather than by the code
+actually reading the same value.
+
+**What it costs**: Nothing — no behavior changes for any existing view.
+
+**Risks**:
+
+| Risk | Impact | Mitigation |
+|------|--------|------------|
+| A future edit reintroduces a shortcut like this for a different title branch | Low | `board-title-format-numeric-filename` (the live harness) now asserts the formatted text reaches the drawn card, not only the resolver's return value |
+
+---
+
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | Without this fix, `titleFormat` has no visible effect on the one surface the operator's report showed |
+| 2 | **Beyond Local Maxima?** | PASS | Found by driving the real renderer, not by re-reading the resolver alone |
+| 3 | **Sufficient?** | PASS | The unconditional return is the entire fix |
+| 4 | **Fits Goal?** | PASS | Grounds D8 in `goal.md` |
+| 5 | **Open Horizons?** | PASS | Does not touch the record surface's already-correct path |
+
+**Checks Summary**: 5/5 PASS
+
+---
+
+### Implementation
+
+**What changes**: `board-renderer.ts`'s `getReferenceRowTitle`, one conditional removed.
+
+**How to roll back**: Reintroduce the `title.isFileTitle ? row.file.basename : title.text` branch —
+not recommended; it silently drops any file-name titleFormat.

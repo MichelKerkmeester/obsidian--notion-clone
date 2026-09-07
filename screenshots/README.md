@@ -21,7 +21,7 @@ Sources: `src/views/toolbar-renderer.ts`
 
 ### Board card titled by a currency column
 
-The view's titleField points at the Cost column: the card's main name reads that column's own euro-formatted text (resolveTitleFieldDisplay's typed-format routing) instead of the raw stored number — the operator's phone report, closed. Cost is left out of the meta list below the title, matching how a card's own property list already excludes whichever column is chosen as its title.
+The view's titleField points at the Cost column: the card's main name reads that column's own euro-formatted text (resolveTitleFieldDisplay's typed-format routing) instead of the raw stored number — the operator's phone report, closed. Cost is left out of the meta list below the title, matching how a card's own property list already excludes whichever column is chosen as its title. The constructed-board-title-currency capture is the authority for this state — it mounts the real BoardRenderer; this fixture stays registered for the class-structure coverage a hand-built markup fixture gives.
 
 | dark | light |
 |---|---|
@@ -308,6 +308,26 @@ The reference board with one configured select option no row carries, backfilled
 | ![constructed-board-empty-column dark](notion-clone/components/constructed-board-empty-column-mobile-dark.png) | ![constructed-board-empty-column light](notion-clone/components/constructed-board-empty-column-mobile-light.png) |
 
 Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`, `src/data/group-visibility.ts`
+
+### Board card titled by a currency column (constructed)
+
+The reference board, titleField pointed at the schema's own currency column: the card's main name reads that column's formatted euro text through the real BoardRenderer, not a hand-written stand-in for its markup.
+
+| dark | light |
+|---|---|
+| ![constructed-board-title-currency dark](notion-clone/components/constructed-board-title-currency-mobile-dark.png) | ![constructed-board-title-currency light](notion-clone/components/constructed-board-title-currency-mobile-light.png) |
+
+Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/title-field-display.ts`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`
+
+### Board card title formatted from the file name (constructed)
+
+The operator's own report: a card whose title source is the (unset, default) file name, and the file names are plain numbers. With a euro titleFormat chosen, the card's main name reads the formatted value, not the raw numeric file name.
+
+| dark | light |
+|---|---|
+| ![constructed-board-title-format-filename dark](notion-clone/components/constructed-board-title-format-filename-mobile-dark.png) | ![constructed-board-title-format-filename light](notion-clone/components/constructed-board-title-format-filename-mobile-light.png) |
+
+Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/title-field-display.ts`
 
 ### Calendar settings popover (constructed)
 
