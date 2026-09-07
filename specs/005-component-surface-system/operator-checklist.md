@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-07: **69 phases**, **7 with nothing left**, **188 rows** waiting on a device.
+Derived 2026-09-07: **69 phases**, **7 with nothing left**, **187 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -346,9 +346,8 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] OPERATOR: the operator answers the adoption question at `../056-board-anytype-parity/notion-screens-digest.md:277-281` — ADR-004, ADR-010 and ADR-011, all three Accepted on the operator's 2026-09-06 18:36 rulings — before any code leg starts, and afterwards reads the Groups panel on iOS and on desktop and reports it as an improvement rather than a fourth place to hunt for a setting. Nothing in this repository can close this row, and an agent never ticks it.
 
-## 061-notion-sheet-refinement — 5/7
+## 061-notion-sheet-refinement — 6/7
 
-- [ ] A single tap on an editable, non-title cell on a phone opens that column's value editor and nothing else — the selection status bar is not built, and `renderSelectionStatusBar` is not reached on the `edit-cell` branch. Today the branch falls through and does both (`database-view.ts:4791-4803`), which is the second of the operator's two captures.
 - [ ] The operator reads the redesigned cell menu and the confirm card on iOS and says so. Only the operator closes this (parent D3); it is read in the same sitting as `067` AC-011.
 
 ## 062-notion-table-refinement — 8/9

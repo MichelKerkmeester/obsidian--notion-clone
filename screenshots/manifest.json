@@ -1886,7 +1886,7 @@
       "layoutHash": "9bcd1f820e51",
       "pixelHash": "c27637c76096",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2716e6ecaf05",
+        "src/views/embedded-database-renderer.ts": "8d8733e7c0ab",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
         "tools/screenshots/runtime-vars.css": "f50464eb6411",
@@ -1916,7 +1916,7 @@
       "layoutHash": "9bcd1f820e51",
       "pixelHash": "16c408942267",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2716e6ecaf05",
+        "src/views/embedded-database-renderer.ts": "8d8733e7c0ab",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
         "tools/screenshots/runtime-vars.css": "f50464eb6411",
@@ -1946,7 +1946,7 @@
       "layoutHash": "834c932f6aa8",
       "pixelHash": "f420ebc9f537",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2716e6ecaf05",
+        "src/views/embedded-database-renderer.ts": "8d8733e7c0ab",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
         "tools/screenshots/runtime-vars.css": "f50464eb6411",
@@ -1976,7 +1976,7 @@
       "layoutHash": "834c932f6aa8",
       "pixelHash": "e6c4b0e9ed6b",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2716e6ecaf05",
+        "src/views/embedded-database-renderer.ts": "8d8733e7c0ab",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
         "tools/screenshots/runtime-vars.css": "f50464eb6411",
@@ -2263,7 +2263,7 @@
       "layoutHash": "e776c311491e",
       "pixelHash": "84193c0c1375",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2716e6ecaf05",
+        "src/views/embedded-database-renderer.ts": "8d8733e7c0ab",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
         "tools/screenshots/runtime-vars.css": "f50464eb6411",
@@ -2294,7 +2294,7 @@
       "layoutHash": "e776c311491e",
       "pixelHash": "b76f408f6bd8",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2716e6ecaf05",
+        "src/views/embedded-database-renderer.ts": "8d8733e7c0ab",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
         "tools/screenshots/runtime-vars.css": "f50464eb6411",
@@ -2325,7 +2325,7 @@
       "layoutHash": "12cccabb2d4c",
       "pixelHash": "90087133812a",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2716e6ecaf05",
+        "src/views/embedded-database-renderer.ts": "8d8733e7c0ab",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
         "tools/screenshots/runtime-vars.css": "f50464eb6411",
@@ -2356,7 +2356,7 @@
       "layoutHash": "12cccabb2d4c",
       "pixelHash": "a5875e79f225",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "2716e6ecaf05",
+        "src/views/embedded-database-renderer.ts": "8d8733e7c0ab",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
         "tools/screenshots/runtime-vars.css": "f50464eb6411",
@@ -2563,7 +2563,7 @@
       "sources": [
         "src/views/toast.ts"
       ],
-      "layoutHash": "41be6981c5f7",
+      "layoutHash": "c8f19b0f1982",
       "pixelHash": "cb1c76b77f47",
       "sourceHashes": {
         "src/views/toast.ts": "f79e4937a440",
@@ -7911,7 +7911,7 @@
         "tools/screenshots/constructed-scenarios.mjs": "fe2ca62519c5",
         "tools/storybook/obsidian-stub.mjs": "78ce676d0650",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
+        "src/views/record-surface/cell-editor-option.ts": "38a345618cb2",
         "src/data/column-types.ts": "07260ccbf40d",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
@@ -7927,7 +7927,7 @@
       },
       "note": "The same startEdit entry on a select cell, opening the option-list editor over the column's own configured options. Captured full-page for the same positioning reason.",
       "capture": "viewport",
-      "bytes": 401740,
+      "bytes": 401111,
       "source": "constructed",
       "renderer": "cell-editors",
       "bag": "file-view",
@@ -7961,7 +7961,7 @@
         "tools/screenshots/constructed-scenarios.mjs": "fe2ca62519c5",
         "tools/storybook/obsidian-stub.mjs": "78ce676d0650",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
+        "src/views/record-surface/cell-editor-option.ts": "38a345618cb2",
         "src/data/column-types.ts": "07260ccbf40d",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
@@ -8011,7 +8011,7 @@
         "tools/screenshots/constructed-scenarios.mjs": "fe2ca62519c5",
         "tools/storybook/obsidian-stub.mjs": "78ce676d0650",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
+        "src/views/record-surface/cell-editor-option.ts": "38a345618cb2",
         "src/data/column-types.ts": "07260ccbf40d",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
@@ -8061,7 +8061,7 @@
         "tools/screenshots/constructed-scenarios.mjs": "fe2ca62519c5",
         "tools/storybook/obsidian-stub.mjs": "78ce676d0650",
         "tools/storybook/obsidian-dom-shim.mjs": "a1824cff41eb",
-        "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
+        "src/views/record-surface/cell-editor-option.ts": "38a345618cb2",
         "src/data/column-types.ts": "07260ccbf40d",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
@@ -10035,7 +10035,7 @@
       "pixelHash": "de7337f8d1fc",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "0b032e933f7e",
-        "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
+        "src/views/record-surface/cell-editor-option.ts": "38a345618cb2",
         "src/data/column-types.ts": "07260ccbf40d",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
@@ -10070,7 +10070,7 @@
       "pixelHash": "0b83e437687b",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "0b032e933f7e",
-        "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
+        "src/views/record-surface/cell-editor-option.ts": "38a345618cb2",
         "src/data/column-types.ts": "07260ccbf40d",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
@@ -10105,7 +10105,7 @@
       "pixelHash": "c4943329183b",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "0b032e933f7e",
-        "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
+        "src/views/record-surface/cell-editor-option.ts": "38a345618cb2",
         "src/data/column-types.ts": "07260ccbf40d",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
@@ -10140,7 +10140,7 @@
       "pixelHash": "88b913115b4e",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "0b032e933f7e",
-        "src/views/record-surface/cell-editor-option.ts": "d14ad368f04b",
+        "src/views/record-surface/cell-editor-option.ts": "38a345618cb2",
         "src/data/column-types.ts": "07260ccbf40d",
         "styles.css": "cd0beccfa123",
         "tools/screenshots/theme.css": "6139ea960d6a",
@@ -17953,7 +17953,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 216975,
+      "bytes": 216993,
       "fixtureOf": "constructed-board"
     },
     {
@@ -24432,7 +24432,7 @@
       },
       "note": "The same gantt over the tree-wired rows: the nested children render as indented label rows with collapse toggles, beside constructed-timeline-subtask.",
       "capture": "viewport",
-      "bytes": 71079,
+      "bytes": 71069,
       "source": "reference",
       "renderer": "pm-gantt",
       "referenceOf": "constructed-timeline-subtask"
@@ -24915,7 +24915,7 @@
       },
       "note": "The same kanban with the first three rows wired into a parent with two children and the config's kanbanShowSubtasks on, so the subtask cards carry the parent chip the way constructed-board-subtask draws its tree.",
       "capture": "viewport",
-      "bytes": 79794,
+      "bytes": 79773,
       "source": "reference",
       "renderer": "pm-kanban",
       "referenceOf": "constructed-board-subtask"
