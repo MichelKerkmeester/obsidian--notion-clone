@@ -284,8 +284,11 @@ One app landed and verified before the next opens. Never a parallel fan-out acro
 - [x] T033 [B] Harvest ClickUp (iOS + web) via Mobbin, same orchestration, into
       `screenshots/clickup/{ios,web}/<group>/`; landed by a fresh verifier.
       **Done, 2026-09-06 into 2026-09-07** — operator's words: *"let fresh fable (medium) orchestrator through claude2 use sonnet agents to same for clickup but ask a opus xhigh to orchestrate that"*. **6,478 files, 3,435 unique screens** in `screenshots/clickup/` — **iOS 543 files / 357 screens / 112 journeys**, **web 5,935 files / 3,078 screens / 609 journeys**, no screen shared across platforms. Retrieved through the Mobbin MCP's two read tools (`search_screens`, `search_flows`) via Code Mode only, in scripted per-execution loops capped at 38 calls with a 3.1 s interval and at most two concurrent Sonnet agents, holding well under the documented 60/min limit: **3,110 recorded calls across 96 saved payloads**, one transport error in the whole run (`MCP operation on 'mobbin:stdio' timed out after 30s.`), zero 401s, zero OAuth challenges, zero 429s. **The finding that made completeness measurable: `mode: "deep"` returns a bounded ~15 screens per query — excluding those 15 returns nothing at exclude sizes 300/600/1,200 — while `mode: "standard"` paginates to ~105, about 7×.** The whole query set (96 iOS, 150 web surface queries; 132 journey queries per platform, 52 of them mined from Mobbin's own 53-category ClickUp action taxonomy) was therefore re-swept in `standard` mode as the saturation test: iOS returned 6,378 rows over 534 calls for **0 new screens**, web 13,369 rows over 1,034 calls for **113**. Ten images were opened and read before commit; all ten are genuine ClickUp screens, and two whose content only partly matches their folder are named in the README — grouping records the query that surfaced a screen, not a verified reading of it. Index: `screenshots/clickup/README.md` plus four per-file tables citing all 6,478 images by `mobbin_url`. **Sourcing differs from this packet's earlier legs and is not covered by CHK-030:** Mobbin is a paid library and these came through the operator's authorized MCP session, not anonymous public fetches — the position, and the delete-images-keep-citations fallback, are written in the README's "Sourcing position". Like `screenshots/anytype/`, nothing here is in `tools/screenshots/manifest.json`; `screenshots/manifest.json` was not touched
-- [ ] T034 Confirm none of the four apps' captures entered `screenshots/manifest.json` — a Mobbin
-      screenshot has no in-repo source to hash, matching D5's rule for an Anytype capture
+- [x] T034 Confirm none of the four apps' captures entered `screenshots/manifest.json` — a Mobbin
+      screenshot has no in-repo source to hash, matching D5's rule for an Anytype capture.
+      **Verified 2026-09-07**: `grep -c '"screenshots/(notion|fibery|clickup|anytype|evernote)/'
+      screenshots/manifest.json` returns 0 — none of the five competitor-reference folders has an
+      entry, and `node tools/screenshots/verify.mjs` exits 0
 - [ ] T035 [B] Content-based reclassification of the Notion web and iOS captures: a Sonnet agent
       reads the images in batches of ~50, moves each file into the group its pixels depict and
       rewrites the README index. Opened 2026-09-06 because the harvest's grouping is
@@ -307,8 +310,29 @@ One app landed and verified before the next opens. Never a parallel fan-out acro
       `screenshots/fibery/reclassification-2026-09-06.tsv` records every move (old path, new path,
       reason); ledger and README index agree 1:1 with disk, no duplicate path.
       `screenshots/manifest.json` untouched, `node tools/screenshots/verify.mjs` exits 0.
-      **ClickUp half stays open** — now owed, T033 landed 2026-09-07 with query-derived grouping (the landing verifier's 12-image spot check found 6 of 12 files in a folder whose slug their content does not match, so the pass is needed in full). The same pass is owed to Evernote only if
-      a spot check finds it needed (its grouping was content-derived at harvest time)
+      **ClickUp half done, 2026-09-07**, in `worktrees/204-clickup-reclassify`: the same pass over
+      `screenshots/clickup/{ios,web}/` (`*/flows/**` untouched — 464 iOS + 3,571 web files across
+      721 journey folders, already a content read via the Mobbin flow name). All 2,443 non-flow
+      files opened individually with the Read tool (79 iOS + 2,364 web); 1,669 moved (51 iOS,
+      1,618 web) — `screenshots/clickup/reclassification-2026-09-07.tsv` records every move (old
+      path, new path, one-line reason). Five query-derived web groups emptied entirely once their
+      contents were re-homed by content (`misc`, `empty-states`, `filters`, `notifications`,
+      `upgrade`); six new content groups opened to hold what those queries had obscured
+      (`database`, `automations`, `forms`, `docs`, `whiteboard`, `time-tracking`, `reports`).
+      Final per-group counts — **iOS** (79 total): `tasks` 18, `views` 13, `collaboration` 13,
+      `navigation` 9, `menus` 9, `dialogs` 5, `settings` 3, `editors` 3, `ai` 3, `states` 1,
+      `onboarding` 1, `docs` 1. **web** (2,364 total): `tasks` 491, `settings` 355, `views` 186,
+      `ai` 173, `forms` 142, `chat` 126, `dashboards` 119, `whiteboard` 104, `time-tracking` 89,
+      `database` 88, `onboarding` 75, `docs` 74, `collaboration` 71, `reports` 63, `automations`
+      57, `menus` 56, `navigation` 40, `extra` 35, `marketing` 10, `dialogs` 9, `states` 1. The
+      recurring judgment call: a rich-text toolbar, custom-field editor or cover picker looks
+      identical whether opened from a Doc, a Task description, or a Dashboard widget — duplicate
+      screen ids recurring across the original query folders let each ambiguous case be
+      cross-checked against every other copy of the same screen before filing. README, both
+      `index-*-screens.md` files and disk agree 1:1 on all 2,443 non-flow paths, no duplicate path;
+      `screenshots/manifest.json` untouched, `node tools/screenshots/verify.mjs` exits 0. The same
+      pass is owed to Evernote only if a spot check finds it needed (its grouping was
+      content-derived at harvest time)
 <!-- /ANCHOR:phase-mobbin -->
 
 ---

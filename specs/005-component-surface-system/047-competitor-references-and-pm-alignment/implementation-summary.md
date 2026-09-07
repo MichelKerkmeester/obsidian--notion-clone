@@ -10,9 +10,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/047-competitor-references-and-pm-alignment"
-    last_updated_at: "2026-09-06T20:30:00Z"
-    last_updated_by: "fibery-reclassification"
-    recent_action: "Reclassified 702 non-flow Fibery captures by content (T035 Fibery half)"
+    last_updated_at: "2026-09-07T00:00:00Z"
+    last_updated_by: "clickup-reclassification"
+    recent_action: "Reclassified 2,443 non-flow ClickUp captures by content (T035 ClickUp half)"
     next_safe_action: "Write the negative control red-first against the current schema"
     blockers:
       - "manifest-schema.mjs rejects any reference group but project-manager"
@@ -80,7 +80,7 @@ _memory:
 | `tools/screenshots/manifest-schema.test.mjs` | Added | The reference-entry negative control, written red-first against the un-widened contract |
 | `tools/screenshots/manifest-schema.mjs` | Edited | Rejects a `file` whose path climbs out of its capture root through a `..` segment |
 | `screenshots/fibery/` | Added | 1,800 Mobbin preview captures of Fibery web (860 distinct screen ids: 105 sidebar, 597 standalone, 1,098 across 233 flows) with a README index citing a `mobbin_url` for every capture; untracked by the manifest like Anytype — `tasks.md` T032 |
-| `screenshots/clickup/` | Added | T033's ClickUp reference harvest — 6,478 Mobbin captures (iOS 543 / 357 unique screens / 112 journeys; web 5,935 / 3,078 / 609), a README carrying provenance and the saturation evidence, and four per-file index tables citing every image by `mobbin_url` |
+| `screenshots/clickup/` | Added | T033's ClickUp reference harvest — 6,478 Mobbin captures (iOS 543 / 357 unique screens / 112 journeys; web 5,935 / 3,078 / 609), a README carrying provenance and the saturation evidence, and four per-file index tables citing every image by `mobbin_url`. Non-flow groups (79 iOS, 2,364 web) were content-reclassified by T035 on 2026-09-07 — see that task and the ClickUp reclassification pass section below |
 
 No file under `src/` and no rule in `styles.css` was touched. The gantt comparison below is the
 reason: it found nothing in either file to change. The ClickUp harvest (T033) is reference material
@@ -176,7 +176,53 @@ too. The pinned constants agree with the pixels: `ROW_HEIGHT 44`, `HEADER_HEIGHT
 
 The 702 non-flow files (597 `web/screens/` + 105 `web/navigation/`) were each opened with the Read tool and refiled into the group its content actually shows, the same method as the Notion pass; `web/flows/` (1,098 files, 233 folders) was left alone because its folder name is already a content read (the Mobbin flow name). 694 files moved; 8 `web/navigation/` files were already correctly grouped and kept their path. `screenshots/fibery/reclassification-2026-09-06.tsv` records every move (old path, new path, reason) and agrees 1:1 with both the git renames and the corrected README index — no duplicate path either side.
 
-45 images were spot-checked with the Read tool across every group (more than double the required 20), and it surfaced two real defects rather than zero, both fixed before landing rather than reported and left: the harvest's `ai` group had conflated Fibery's **Insight** database name with "AI-generated insight" — 8 of its 11 files showed no AI feature at all (5 moved to `database` as view-configuration popovers, 2 to `views` as plain rendered list views, 1 to `reports` as a report wizard); a rendered, populated Feed view had been filed as an empty state (moved to `views`); and one Settings > General screen carried a reason string duplicated from a neighboring whiteboard capture and sat in `web/whiteboard/` (moved to `settings`). Final per-group counts (702 total, unchanged): `navigation` 35, `views` 115, `database` 136, `editors` 76, `reports` 87, `onboarding` 68, `settings` 54, `automations` 30, `whiteboard` 30, `collaboration` 31, `forms` 21, `marketing` 11, `ai` 3, `states` 2, `dialogs` 3. `screenshots/manifest.json` is untouched and `node tools/screenshots/verify.mjs` exits 0. The ClickUp half of T035 stays open and is now owed: T033 landed 2026-09-07 with query-derived grouping, and the landing verifier's 12-image spot check found 6 of 12 files under a slug their content does not match.
+45 images were spot-checked with the Read tool across every group (more than double the required 20), and it surfaced two real defects rather than zero, both fixed before landing rather than reported and left: the harvest's `ai` group had conflated Fibery's **Insight** database name with "AI-generated insight" — 8 of its 11 files showed no AI feature at all (5 moved to `database` as view-configuration popovers, 2 to `views` as plain rendered list views, 1 to `reports` as a report wizard); a rendered, populated Feed view had been filed as an empty state (moved to `views`); and one Settings > General screen carried a reason string duplicated from a neighboring whiteboard capture and sat in `web/whiteboard/` (moved to `settings`). Final per-group counts (702 total, unchanged): `navigation` 35, `views` 115, `database` 136, `editors` 76, `reports` 87, `onboarding` 68, `settings` 54, `automations` 30, `whiteboard` 30, `collaboration` 31, `forms` 21, `marketing` 11, `ai` 3, `states` 2, `dialogs` 3. `screenshots/manifest.json` is untouched and `node tools/screenshots/verify.mjs` exits 0.
+
+#### ClickUp reclassification pass, 2026-09-07 (T035)
+
+Done in `worktrees/204-clickup-reclassify`, on the same content-based methodology as the Notion and
+Fibery passes. All 2,443 non-flow ClickUp captures (79 iOS, 2,364 web) were opened individually with
+the Read tool, in batches, against a running ledger written to a scratchpad file so a crash would
+lose no classified work; `*/flows/**` (464 iOS + 3,571 web files across 721 journey folders) stayed
+untouched, since a flow's folder name is already a content read via the Mobbin flow name, not a
+search-query artifact.
+
+1,669 files moved (51 iOS, 1,618 web) — `screenshots/clickup/reclassification-2026-09-07.tsv`
+records every move (old path, new path, one-line reason). Five query-derived web groups emptied
+entirely once their contents were re-homed by content (`misc`, `empty-states`, `filters`,
+`notifications`, `upgrade`); six new content groups opened to hold what those queries had obscured
+(`database`, `automations`, `forms`, `docs`, `whiteboard`, `time-tracking`, `reports`).
+
+Final per-group counts — **iOS** (79 total): `tasks` 18, `views` 13, `collaboration` 13,
+`navigation` 9, `menus` 9, `dialogs` 5, `settings` 3, `editors` 3, `ai` 3, `states` 1, `onboarding`
+1, `docs` 1. **web** (2,364 total): `tasks` 491, `settings` 355, `views` 186, `ai` 173, `forms` 142,
+`chat` 126, `dashboards` 119, `whiteboard` 104, `time-tracking` 89, `database` 88, `onboarding` 75,
+`docs` 74, `collaboration` 71, `reports` 63, `automations` 57, `menus` 56, `navigation` 40, `extra`
+35, `marketing` 10, `dialogs` 9, `states` 1.
+
+The recurring judgment call across the pass: a rich-text toolbar, a custom-field editor or a cover
+picker looks pixel-identical whether it was opened from a Doc, a Task description, or a Dashboard
+widget — only the surrounding chrome (breadcrumb, sidebar, a "Milestone" type badge) says which.
+Duplicate screen ids recurring across the original query-derived folders (the same screen downloaded
+once per query context, per the harvest's own dedup rule) let every ambiguous case be cross-checked
+against every other copy of the same screen before it was filed; three cross-checks caught and
+corrected an earlier misclassification within this same pass (an AI StandUp screen initially filed
+as `collaboration`, a My Tasks aggregate view initially filed as `navigation`, and a Chat channel
+screen initially filed as `extra` from a batch-read transcription slip) before the ledger and disk
+were finalized.
+
+`screenshots/clickup/README.md` was regenerated with the new layout table, a before/after census,
+and a content-classification section explaining the method and its limits (mirroring the Notion and
+Fibery READMEs); `index-ios-screens.md` and `index-web-screens.md` were regenerated from disk so
+every row's `Group` column matches the file's final folder. Both `*-flows.md` indexes were left
+untouched — `*/flows/**` was never moved. README, both screen indexes and disk agree 1:1 on all
+2,443 non-flow paths, no duplicate path. `screenshots/manifest.json` is untouched and
+`node tools/screenshots/verify.mjs` exits 0.
+
+T034 was verified across all five competitor-reference folders in the same pass:
+`grep -c '"screenshots/(notion|fibery|clickup|anytype|evernote)/' screenshots/manifest.json` returns
+0. T035's ClickUp half is now closed; the same pass is owed to Evernote only if a spot check finds
+it needed, since its harvest grouping was content-derived at capture time.
 
 <!-- /ANCHOR:how-delivered -->
 
