@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Notion Toolbar Refinement"
-description: "Placeholder. The packet was opened by a research synthesis on 2026-09-06 and no code has changed yet; this document is filled in when the first leg lands."
+description: "What landed: a delete-view toast (no confirm — an existing undo path already covered it), a filter zero-rule entry tier, three searchable dropdowns, a collapse rung, a chip-rail add control, and a conditional-colour view-settings row. All 26 gate lanes green; the operator's device row is the one criterion left open."
 trigger_phrases:
   - "064 implementation summary"
   - "notion toolbar refinement summary"
@@ -11,24 +11,31 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/064-notion-toolbar-refinement"
-    last_updated_at: "2026-09-06T19:00:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Created the placeholder at packet open; no implementation yet"
-    next_safe_action: "Run T001 and record its red exit statuses here"
+    last_updated_at: "2026-09-07T00:00:00Z"
+    last_updated_by: "implementation-session"
+    recent_action: "Implemented all six code REQs; 26 gate lanes green"
+    next_safe_action: "AC-011 rides 053 AC-111 — only the operator's device sitting closes it"
     blockers:
-      - "Nothing has been implemented, so there is nothing to summarize"
+      - "AC-011 is the operator's and rides 053 AC-111; nothing here can close it"
     key_files:
+      - "src/views/database-view.ts"
       - "src/views/toolbar-renderer.ts"
       - "src/views/filter-panel-renderer.ts"
+      - "src/views/sort-panel-renderer.ts"
+      - "src/views/active-view-controls-renderer.ts"
+      - "src/views/view-config-panel-renderer.ts"
       - "tools/live/toolbar-collapse-sweep.ts"
+      - "tools/live/sheet-rebuild-harness.ts"
+      - "tools/live/sheet-rebuild.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-064-summary"
       parent_session_id: null
-    completion_pct: 0
-    open_questions:
-      - "None yet — the packet has not started implementing"
-    answered_questions: []
+    completion_pct: 92
+    open_questions: []
+    answered_questions:
+      - "ADR-005's persistence-layer read: a deleted view is already recoverable through the generic config-history undo path every other view mutation already takes — Branch B applies, no confirm was built"
+      - "The zero-rule entry tier's height genuinely exceeds the one-row tree it collapses into on the first pick, which the sheet-rebuild lane's stability check needed to learn to tell apart from the historical re-entrance-replay bug it exists to catch"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
 # Implementation Summary
@@ -44,7 +51,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 064-notion-toolbar-refinement |
-| **Completed** | Not completed — placeholder |
+| **Completed** | Implemented — the operator's device row (AC-011) is the one criterion left open |
 | **Level** | 2 |
 <!-- /ANCHOR:metadata -->
 
@@ -53,28 +60,70 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-**Nothing yet.** This packet was opened on 2026-09-06 by the Opus synthesis of the toolbar's
-five-iteration Notion research loop, and landed on 2026-09-07 after a verification pass. It carries
-a directive, eight completion criteria, twelve acceptance rows and ten decisions; it carries no
-code.
+Six changes, each closing a red measured on this tree first.
 
-This document is a placeholder so the packet's shape is complete. It is filled in when the first leg
-lands, and it records what was observed rather than what was expected — a red read before the fix and
-a green read after, each with the command that produced it.
+1. **A view can no longer be destroyed without the operator being told, and can be undone.**
+   `deleteView` (`database-view.ts:3445`) already saves through the same generic
+   `saveCurrentViewConfigInBackground` → `saveViewEntryConfig` → `recordConfigHistory` path every
+   other view mutation in this class takes, and that path already pushes an undoable `"config"`
+   history entry the toolbar's own persistent Undo action and Ctrl+Z already read. Reading the
+   persistence layer first, as ADR-005 required, found this: **a deleted view is already
+   recoverable by an existing undo path**, so Branch B applies and no confirm was built. `deleteView`
+   now labels the history entry (`undo.deleteViewConfig`) and raises a toast naming the deleted view
+   with an Undo action — the same config-history-plus-toast shape `migrateGalleryViewOnOpen`
+   already ships, adapted from an automatic migration to an operator-initiated delete. Both
+   toolbar call sites are unchanged; the toast lives once, in the shared implementation.
+2. **The first filter rule costs one click from an empty panel.** The zero-rule branch of
+   `filter-panel-renderer.ts` now renders a searchable flat property list (reusing the dropdown
+   primitive's own `db-dropdown-search`/`db-dropdown-options` classes and the shared
+   `filterPickerRows` search filter, so it mints no new CSS) with a distinct "+ Add advanced
+   filter" footer beneath it. Picking a property creates the first leaf through the existing
+   `createDefaultFilterRule`/`appendLeaf` path and lands on the untouched tree. A panel already
+   holding a rule renders through the identical, unmoved tree-branch code.
+3. **Three condition dropdowns search when the list is long.** `searchable: true` reaches the
+   filter field dropdown, the select/status value dropdown and the sort field dropdown — the gate
+   itself (phone: more than 8 options; desktop: always) already lived inside the primitive and was
+   untouched.
+4. **The New button's label collapses before any control is dropped.** One rung, added at the head
+   of `applyToolbarChromeCollapse`, hides the label span before the landed `[newCluster, query,
+   props, add]` order runs; the order itself is unmoved. The rung is visual only — the button's
+   `aria-label` is untouched at every width.
+5. **The chip rail can add the next rule from the rail.** One `db-active-control-add` control per
+   rule group (sort, filter), present exactly when that group has rendered at all — the zero-chip
+   case is the control — wired to the same panel-toggle actions the toolbar's own filter/sort
+   buttons use. Reuses the landed 28px chip pitch and 11%/17% tints.
+6. **Conditional row colour has its own named view-settings row.** A fourth summary row beside
+   Properties/Filters/Sorts, reading `config.conditionalFormats.length`, carrying an explainer, and
+   opening the existing conditional-formatting section on click rather than building a second one.
+   Reuses the already-shipped `db-view-config-row-clickable` class, so this leg needed no
+   `styles.css` edit despite the file being named in scope.
 
-The artifacts that exist today are documents and evidence, not code: `goal.md` (the directive and
-eight criteria), `spec.md` (REQ-001 through REQ-009), `plan.md`, `tasks.md` (T001-T014),
-`acceptance-criteria.md` (AC-001 through AC-012), `decision-record.md` (ADR-001 through ADR-010, plus
-the seven corrections), and the loop that produced them at
-`specs/005-component-surface-system/053-toolbar-and-view-controls/research/notion-toolbar/research.md`.
-The first code the packet will touch is `src/views/toolbar-renderer.ts:1180`/`:1330` — or nothing at
-all, if the operator routes REQ-006's writer to `059`.
+REQ-006 (per-group visibility) was **not built** — ADR-007 declined it, 2026-09-07, verbatim
+*"Groups panel only"*; the axis stays `059`'s to write.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| None | — | No source file has been touched by this packet |
+| `src/views/database-view.ts` | Modify | `deleteView` labels its history entry and raises the Undo toast (REQ-001); wires `addFilter`/`addSort` to `toggleHeaderPopover` (REQ-005) |
+| `src/views/toolbar-renderer.ts` | Modify | Collapse rung ahead of the cluster ladder (REQ-004); the New label span gained a class for the sweep to read; the two `deleteView` call sites are unchanged |
+| `src/views/filter-panel-renderer.ts` | Modify | Zero-rule entry tier (REQ-002); `searchable: true` on two dropdowns (REQ-003) |
+| `src/views/sort-panel-renderer.ts` | Modify | `searchable: true` on the field dropdown (REQ-003) |
+| `src/views/active-view-controls-renderer.ts` | Modify | Optional `addFilter`/`addSort` actions and the per-group `db-active-control-add` control (REQ-005) |
+| `src/views/view-config-panel-renderer.ts` | Modify | Fourth conditional-colour summary row, opening the existing section (REQ-009) |
+| `src/i18n.ts` | Modify | Six new English keys: `undo.deleteViewConfig`, `notice.deletedView`, `panel.addAdvancedFilter`, `toolbar.noConditionalColors`, `viewConfig.conditionalColor`, `viewConfig.conditionalColorHint` |
+| `styles.css` | Modify | One class, `.db-active-control-add` (REQ-005), at the landed chip pitch and tints. No other new selector — the entry tier and the conditional-colour row both reuse shipped classes |
+| `tools/live/toolbar-collapse-sweep.ts` | Modify | `newLabelVisible`/`newButtonAriaLabel` readings (REQ-004) |
+| `tools/live/run-toolbar-collapse-sweep.mjs` | Modify | Direct assertions for the label-ahead-of-ladder, non-vacuous and aria-stable checks |
+| `tools/live/sheet-rebuild-harness.ts` | Modify | Widened a stale `/condition/i` button-finder to also match the entry tier's "advanced filter" wording (two call sites) |
+| `tools/live/sheet-rebuild.mjs` | Modify | The "holds still while it rebuilds" check now detects a replayed entrance (top reaches the viewport floor) rather than any downward movement, so a legitimate content-driven resize is no longer mistaken for the historical re-entrance bug |
+| `tools/lane/css-lane.json` | Modify | Acquired, edited, released — zero captures carry this packet's content |
+| `src/views/database-view.test.ts` | Modify | New "DatabaseView deleteView" suite (2 cases); harness gained a second-view fixture and an `activeDocument.querySelectorAll` stub |
+| `src/views/toolbar-renderer.test.ts` | Modify | Pins that neither delete-view call site gained a confirm primitive |
+| `src/views/view-config-panel-renderer.test.ts` | Modify | New conditional-colour summary-row suite (3 cases) |
+| `src/views/filter-panel-renderer.test.ts` | New | Entry-tier and searchable-dropdown assertions (7 cases) |
+| `src/views/sort-panel-renderer.test.ts` | New | Searchable-dropdown assertions (2 cases) |
+| `src/views/active-view-controls-renderer.test.ts` | New | Chip-rail add-control assertions (3 cases) |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -82,10 +131,17 @@ all, if the operator routes REQ-006's writer to `059`.
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. The intended route is in `plan.md` §4 and `tasks.md`: two probes and an inventory that
-make the reds visible, seven code legs of which three wait on the operator's ADR answers, and three
-verification legs — the last of which is the operator's, riding `053` AC-111, and is never ticked by
-an agent.
+Each requirement landed as its own change against its own file group, in the order `tasks.md`
+lays out: the two red-first probes (T001) and the inventories (T002) before any fix, the CSS lane
+acquired (T003) before the one `styles.css` edit, then the six requirement legs (T004-T008, T014),
+REQ-006 settled Waived with no code (T009), the record re-verified (T010), and the three
+verification legs (T011-T013) — the last of which, the operator's device sitting, is not this
+agent's to close.
+
+ADR-005's read (T004) determined the confirm this packet opened with was never going to be built:
+the persistence layer already makes a deleted view recoverable, so the leg is an Undo toast
+consuming the existing config-history mechanism, not a new confirm surface. Every other leg matched
+its plan without a branch decision.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -95,13 +151,12 @@ an agent.
 
 | Decision | Why |
 |----------|-----|
-| Nine ADRs written at packet open rather than at landing | Six record dispositions the research named against landed rulings or the tree's own state; recording them late would mean the loop's negative knowledge lived only in a research folder |
-| ADR-010 inherited at landing rather than re-proposed | `062` ADR-003 carried a pointer to this packet because `064` did not exist on `main` when the operator ruled the conditional-colour row at 18:32. An agent may carry a ruling it may not make, so the row landed here as Accepted and not as a fourth gate |
-| The landing corrected three more citations rather than reporting them | Two had drifted under the twenty-seven commits this packet rebased onto, and one repeated a digest error `062` had already fixed. D1 puts the correction in the packet, dated, not in a hand-back note |
-| Three of them gate their legs, and the proofs still ran | `goal.md` D6 bars REQ-001, REQ-004 and REQ-006's code, not their red-first proofs — T001 observes the collapse and the unconfirmed-delete reds while the operator is asked |
-| The confirm is consumed, not built | `053` goal D8: the confirm primitive is `051`'s; a second confirm surface here is the failure the five family phases were split to avoid |
-| The hidden-group axis is settled, not duplicated | `boardHiddenGroups` exists, is persisted and is read (`types.ts:560`, `data-source.ts:1230`/`:1352`, `board-renderer.ts:192`); the loop's account that the set would be new was the packet's one substantive correction, routed in ADR-007 |
-| The only lane touched is one that already runs | The `toolbar-collapse` gate row (`tools/gate.mjs:80`) gains its readings; no new lane, no new capture scenario invented for markup the existing ones already photograph |
+| ADR-005's read found Branch B, not Branch A | `deleteView` already routes through the generic config-history save path every other mutation here uses, and that path already made the deletion undoable before this leg touched anything. Building a confirm anyway would have added friction a device already didn't need |
+| The toast lives in `deleteView`, not at the two toolbar call sites | One owner per shared primitive (`053` D8's rule, applied to this new case): both call sites still just call `actions.deleteView(index)` unchanged, and the toast is the shared implementation's job |
+| The entry tier and the conditional-colour row reuse existing classes rather than inventing new ones | D7: no new CSS value is minted. `db-dropdown-search`/`db-dropdown-options`/`db-menu-item` and `db-view-config-row-clickable` already carried the exact shapes needed |
+| The zero-rule branch's own "+ Add advanced filter" footer is a separate control from the tree's "+ Add condition" button, not a relabeling of it | The tree's button is the negative control (AC-005) — it had to stay byte-identical, so it moved into the `else` block unedited rather than being merged with the new footer |
+| `sheet-rebuild`'s stability check was corrected, not routed around | The check's own assumption — adding a rule only ever grows the sheet — predates a feature where the zero-rule state is genuinely taller than the first rule it collapses into. The fix teaches the check to detect the actual historical failure (a replayed entrance reaching the viewport floor) instead of widening a tolerance or skipping the case |
+| REQ-006 stays Waived | ADR-007, Declined 2026-09-07: per-group visibility is `059`'s Groups panel's to build; this packet's popover keeps its existing switch and gains no eye toggle |
 <!-- /ANCHOR:decisions -->
 
 ---
@@ -111,11 +166,15 @@ an agent.
 
 | Check | Result |
 |-------|--------|
-| `npx tsc --noEmit` | Not run — no code changed by this packet |
-| `npm run build` | Not run — no code changed by this packet |
-| `npx vitest run` | Not run — no code changed by this packet |
-| `npm run gate` | Not run — no code changed by this packet |
-| `validate.sh 064-notion-toolbar-refinement --strict` | Run at packet open; see the opening commit |
+| `npx tsc --noEmit` | Exit **0** |
+| `npm run build` | Exit **0** (`main.js` regenerated) |
+| `npx vitest run` | Exit **0** — 146 files, 1557 tests |
+| `node tools/live/sheet-grammar.mjs` | Exit **0** |
+| `node tools/live/render-assertions.mjs` | Exit **0** |
+| `node tools/naming/scan-comments.mjs` | Exit **0** — no artifact ids, comment grammar intact |
+| `node tools/naming/scan-failing-values.mjs` | Exit **0** |
+| `npm run gate` | Exit **0** — **26 green, 0 red for a declared reason**, including `toolbar-collapse` (red in T001, green after T007) and `sheet-rebuild` (two scoped fixes, recorded in `tasks.md` T011) |
+| `npm run screenshots` + `npm run screenshots:verify` | Full recapture (588 entries); exit **0**. Zero captures carry this packet's content — 17 moved bytes at identical pixelHash/layoutHash (rerun jitter) and were restored to committed bytes |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -123,19 +182,25 @@ an agent.
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Nothing is implemented.** Every criterion in `goal.md` §3 is red, and each carries a measured
-   value read at `80c2bb48` rather than an estimate.
-2. **Three decisions are the operator's and are open.** ADR-001 (the rung ahead of the landed
-   ladder), ADR-005 (whether the confirm exists) and ADR-007 (whose writer the hidden-group axis
-   gets) are Proposed, and `goal.md` D6 bars the gated code until they are answered.
-3. **One read is owed before any REQ-006 criterion goes green.** The board's consumption of the
-   hidden-group axis is verified; the table's is not — the loop deliberately did not read the table
-   renderer, and the read is REQ-006's first task, not a assumption.
-4. **The harness cannot answer four of the criteria.** The capture harness renders fixture markup, not
-   the real renderers, so the four device-only checks ride `053` AC-111 and are device reads, not
-   lane reads.
-5. **One digest row is known stale.** The `-toolbar` digest's §4 P3 row predates the desktop side
-   sheet's landing; ADR-008 records the correction rather than rewriting the digest.
+1. **The operator's device row (AC-011) is open.** Icon-only rail discoverability on a phone, the
+   entry tier inside the phone filter sheet, the delete confirm as a stacked sheet (moot now that
+   Branch B builds a toast instead — the phone-toast presentation is what actually wants a device
+   read), and tabs against the view switcher. These ride `053` AC-111 and nothing in this
+   repository can answer them.
+2. **AC-003 is Superseded, not Met.** It was written for Branch A's phone-confirm presentation;
+   Branch A never ships, so the criterion's own precondition is never reached. This is recorded as
+   a supersession citing ADR-005 rather than a pass, so a later reader does not mistake "never
+   applicable" for "verified."
+3. **The `sheet-rebuild` fix widens what counts as a legitimate resize.** The corrected check still
+   catches the documented failure mode (a replayed entrance reaching the viewport floor) but no
+   longer treats every downward movement as suspicious. This is a real loosening of a shared,
+   cross-packet regression lane, made because the old assumption was already false for a shipped
+   feature, not because the guard was in the way.
+4. **Engine-parity's Chrome/WebKit sub-pixel disagreements are pre-existing and unrelated.**
+   Re-running `tools/live/engine-parity.mjs` to refresh its staleness stamp (a step `evidence.mjs`
+   required once `styles.css` moved) surfaced 44 elements disagreeing across engines — none of them
+   in a surface this packet touched (add-view-popover, dropdown-field, calendar widgets, the base
+   import modal). Recorded rather than silently absorbed; not investigated further as out of scope.
 <!-- /ANCHOR:limitations -->
 
 ---

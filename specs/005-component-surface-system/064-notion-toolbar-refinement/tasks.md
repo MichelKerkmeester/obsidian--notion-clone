@@ -43,7 +43,7 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup
 
-- [ ] T001 [P0] Write the two red-first probes and observe each RED. First, the collapse reading:
+- [x] T001 [P0] Write the two red-first probes and observe each RED. First, the collapse reading:
       extend `tools/live/toolbar-collapse-sweep.ts`'s 250-900px, 10px-step sweep so it also reports
       (a) the width at which the New button's text label — the span `toolbar-renderer.ts:2365`
       draws off-touch — reads absent, and (b) the first width at which any cluster in the `:2571`
@@ -59,7 +59,20 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       where no cluster hides must leave the label reading present (so the reading is not vacuously
       green), and the confirm block's decline path must leave `actions.deleteView` uncalled.
       (`tools/live/toolbar-collapse-sweep.ts`, `src/views/toolbar-renderer.test.ts`)
-- [ ] T002 [P0] [P] Take the inventories this packet's legs will cite, and paste their output here:
+      **Evidence.** Collapse reading: before the rung, `newLabelVisible` read `true` at every swept
+      width including 250px, where `newClusterVisible` already read `false` — the label was never
+      collapsed by anything, so it stayed visible past the point a whole cluster was already gone
+      (observed via a direct run of `runToolbarCollapseSweep`, not by eye). After the rung: zero
+      widths where a cluster reads hidden while the label reads visible; `node
+      tools/live/run-toolbar-collapse-sweep.mjs` exit **0**. Confirm probe: ADR-005's read (T004)
+      found Branch B applies, so no confirm was ever built and the probe target changed — the red
+      this leg actually closes is `src/views/database-view.test.ts`'s new "DatabaseView deleteView"
+      block, red before T004 (no `undo.deleteViewConfig`-labeled history entry existed for a
+      deletion) and green after (9/9 assertions passing, `npx vitest run
+      src/views/database-view.test.ts` exit **0**). `grep -c "buildConfirmSheetBody"
+      src/views/toolbar-renderer.ts` is still **0** today — correctly, since Branch B builds no
+      confirm.
+- [x] T002 [P0] [P] Take the inventories this packet's legs will cite, and paste their output here:
       the confirm census (`grep -c "buildConfirmSheetBody" src/views/toolbar-renderer.ts` —
       **0**), the searchable census (`grep -c searchable src/views/filter-panel-renderer.ts
       src/views/sort-panel-renderer.ts` — **0** and **0**), the add-control census
@@ -69,10 +82,25 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       which registered scenarios photograph the toolbar, the panels or the rail, so any capture
       whose picture moves is named before the leg that moves it, not after. A leg that changes
       markup without this list is guessing at its blast radius. (`specs/005-component-surface-system/064-notion-toolbar-refinement/tasks.md`)
-- [ ] T003 [P0] Acquire the parent's serialized CSS lane hold before any `styles.css` edit, and
+      **Evidence.** Confirm census unchanged at **0** (Branch B builds none). Searchable census
+      **0**/**0** before T006, **2**/**1** after (`grep -c "searchable: true," src/views/filter-panel-renderer.ts src/views/sort-panel-renderer.ts`).
+      Add-control census **0** before T008, **1** definition site after
+      (`grep -rn "db-active-control-add" src/ styles.css`). Panel-toggle wiring confirmed at
+      `toolbar-renderer.ts:157`/`:167`, consumed at `:2256`/`:2275`; `database-view.ts`'s
+      `renderActiveViewControls()` now also wires `addFilter`/`addSort` to the same
+      `toggleHeaderPopover` the toolbar buttons use. Affected-capture census: zero registered
+      scenarios exercise any of the new markup (`chrome.mjs`/`panels.mjs` construct their own
+      static HTML, independent of the real renderers), so `npm run screenshots` followed by
+      `npm run screenshots:verify` moved 17 PNGs at identical pixelHash/layoutHash (rerun jitter,
+      restored to committed bytes) and zero at different content — recorded in `tools/lane/css-lane.json`'s release entry.
+- [x] T003 [P0] Acquire the parent's serialized CSS lane hold before any `styles.css` edit, and
       record the acquire entry. The hold permits editing the file; it grants no scope beyond the
       rules T005, T007 and T008 name (parent D7 — the lane is the parent's, per `053` goal D6).
       (`tools/lane/css-lane.json`)
+      **Evidence.** Acquired at `styles.css` hash `78a52c50b06b` (060's released baseline, nothing
+      outstanding); edited to `906faaa13a08`; released with zero captures reviewed as content
+      changes. `node tools/lane/check-lane.mjs` (with `SURFACE_PHASE=064-notion-toolbar-refinement`
+      during the edit) exit **0** throughout.
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -80,7 +108,7 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [ ] T004 [P0] **The two-branch read ADR-005 requires, first.** Read the persistence layer for
+- [x] T004 [P0] **The two-branch read ADR-005 requires, first.** Read the persistence layer for
       view deletion (`database-view.ts:3445-3456`) for whether a deleted view is recoverable by any
       existing undo path, and record the answer before either branch below is written.
       - **Branch A — unrecoverable.** Raise `051`'s confirm on both `deleteView` paths — the
@@ -103,7 +131,31 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       P9 (`55602f6a`, `348fd2b7`), the scope radio not adopted (F-304). Red closed by T001's confirm
       probe. (`src/views/toolbar-renderer.ts`, `src/views/toolbar-renderer.test.ts`,
       `src/views/database-view.ts`)
-- [ ] T005 [P0] Give the filter panel's zero-rule branch (`filter-panel-renderer.ts:197-202`) a
+      **The read, taken.** `database-view.ts:3445-3456`'s `deleteView` already calls
+      `saveCurrentViewConfigInBackground()` (`:3453`), the exact same call every other view
+      mutation in this class makes (`addView`, `renameView`, `moveView`). That call chains through
+      `saveCurrentViewConfig` → `saveViewEntryConfig` → `recordConfigHistory`
+      (`database-view.ts:6789-6811`), which snapshots the `DatabaseConfig` before and after the
+      save and — when they differ, which a splice always makes them — pushes a `ConfigHistoryEntry`
+      onto `historyStack`, the same stack the toolbar's own persistent Undo action
+      (`updateUndoAction`, `:10586`) and `Ctrl+Z` (`undoLastEdit`) already read. **A deleted view is
+      already recoverable by an existing undo path, today, before this leg's own code changed
+      anything.** ADR-005's Branch B applies.
+      **Built.** `deleteView` now sets `this.pendingUndoLabel = t("undo.deleteViewConfig")` before
+      saving (so the Undo action's label names the deletion rather than falling to the generic
+      "view configuration"), and raises a `showToast` naming the deleted view with an Undo action
+      that calls `this.undoLastEdit()` — the same config-history-plus-toast idiom
+      `migrateGalleryViewOnOpen` (`:2696-2724`) already ships, adapted from an automatic migration
+      to an operator-initiated delete. Both `toolbar-renderer.ts` call sites (`:1180`, `:1330`) are
+      **unchanged** — `actions.deleteView(index)` still runs directly, because the toast is the
+      shared implementation's job (one owner, D5), not each call site's. No confirm surface was
+      built anywhere. **Verified:** `src/views/database-view.test.ts`'s "DatabaseView deleteView"
+      block — deleting from a 2-view database removes exactly one view with no confirm, records a
+      `"config"`-typed history entry labeled `undo.deleteViewConfig`, and `undoLastEdit()` restores
+      both views in original order; the one-view guard raises no confirm and pushes no history
+      entry. `src/views/toolbar-renderer.test.ts` pins that neither call site gained
+      `buildConfirmSheetBody`/`confirmWithModal`. `npx vitest run` exit **0** (1557/1557).
+- [x] T005 [P0] Give the filter panel's zero-rule branch (`filter-panel-renderer.ts:197-202`) a
       searchable flat property list built from the `toPropertyDropdownOption` vocabulary the file
       already carries (`:497`); picking a property creates the first leaf through
       `createDefaultFilterRule` (`:90`) and `appendLeaf` (`:223`); a `+ Add advanced filter` footer
@@ -112,7 +164,18 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       byte-identical before and after, diffed and recorded. Red first: the branch renders only the
       `db-panel-empty` hint. **Notion:** P4, `86a8e66c` / `8ff7ae4b` / `1f10ae24` (F-202).
       (`src/views/filter-panel-renderer.ts`, `styles.css`)
-- [ ] T006 [P0] [P] Pass `searchable: true` at three sites — the filter field dropdown
+      **Evidence.** Reuses the dropdown primitive's own `db-dropdown-search`/`db-dropdown-options`
+      classes and `filterPickerRows` (from `popover-host.ts`) for the search filter, so the tier
+      mints no new CSS (D7). Property list built from `toPropertyDropdownOption`; the first leaf
+      goes through `createDefaultFilterRule(config)` with `rule.field` set to the clicked property,
+      then `appendLeaf`. The footer reads "+ Add advanced filter" (`panel.addAdvancedFilter`,
+      distinct from the tree's own "+ Add condition"); clicking it appends a default leaf exactly
+      as the old unconditional button did, landing on the tree. The ≥1-rule branch's own
+      "+ Add condition" button moved inside the `else` block, unchanged in markup or behavior — the
+      negative control this leg names. Zero columns falls back to the plain hint, no search box.
+      `src/views/filter-panel-renderer.test.ts` (7 assertions) and the live `sheet-rebuild` lane
+      (which mounts the real `FilterPanelRenderer` and exercises this exact branch) both pass.
+- [x] T006 [P0] [P] Pass `searchable: true` at three sites — the filter field dropdown
       (`filter-panel-renderer.ts:494-501`), the select/status value dropdown (`:576-590`) and the
       sort field dropdown (`sort-panel-renderer.ts:199-206`). The mechanism is the flag alone: the
       gate already lives inside the primitive (`dropdown-field.ts:228` — on a phone sheet,
@@ -122,7 +185,13 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       default and render no search row at any count — that is the red. **Notion:** P4/P5,
       `1067756c` / `82d66d47` / `86a8e66c`; the in-repo precedent: `view-config-panel-renderer.ts:1558` (the one real pass-`true` site;
       `:2064` and `:2082` are `renderSelect`'s parameter and its pass-through). (F-203.) (`src/views/filter-panel-renderer.ts`, `src/views/sort-panel-renderer.ts`)
-- [ ] T007 [P0] Add one rung at the head of `applyToolbarChromeCollapse` (`toolbar-renderer.ts:2561`)
+      **Evidence.** `searchable: true,` added at the three cited call sites and nowhere else
+      (`grep -c "searchable: true," src/views/filter-panel-renderer.ts` = **2**,
+      `src/views/sort-panel-renderer.ts` = **1**). The gate itself is untouched inside
+      `dropdown-field.ts:276`. `src/views/filter-panel-renderer.test.ts` and
+      `src/views/sort-panel-renderer.test.ts` pin the exact counts and that no second count check
+      was added alongside the flag.
+- [x] T007 [P0] Add one rung at the head of `applyToolbarChromeCollapse` (`toolbar-renderer.ts:2561`)
       that collapses the `:2365` label span before the `:2571` targets loop runs. The landed order
       — `[newCluster, query, props, add]` — is not reordered, and nothing behind the rung moves
       (ADR-001). In the sweep, the label reads absent before the first cluster-hidden width,
@@ -132,7 +201,17 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       ahead of the drop order and the drop order still applies, unmoved, after it. Red closed by
       T001's collapse reading.
       (`src/views/toolbar-renderer.ts`, `tools/live/toolbar-collapse-sweep.ts`)
-- [ ] T008 [P1] Add one `db-active-control-add` control per rule group in the chip rail's
+      **Evidence.** Red observed via a direct sweep run before the rung: `newLabelVisible` read
+      `true` at every width (250-900px), including widths where `newClusterVisible` already read
+      `false` (a cluster was already gone while the label still showed) — the label was never
+      collapsed. After the rung: `newLabelVisible` reads `false` at 250-450px and 460-480px (label
+      alone collapsed, cluster still present) and only both go `false` together below that — zero
+      widths where a cluster is hidden and the label still reads visible; the `newCluster` order is
+      unchanged (still `[newCluster, query, props, add]`); `newButtonAriaLabel` reads `"New"` at
+      every one of the 66 swept widths. `node tools/live/run-toolbar-collapse-sweep.mjs` exit **0**.
+      `run-toolbar-collapse-sweep.mjs` gained explicit assertions for all three (label-ahead,
+      non-vacuous, aria-stable) rather than leaving them as switch-point printouts.
+- [x] T008 [P1] Add one `db-active-control-add` control per rule group in the chip rail's
       `render()` (`active-view-controls-renderer.ts:60`), present exactly when at least one chip is
       visible — the zero-chip case is the control — wired to the existing
       `toggleFilterPanel` / `toggleSortPanel` (declared at `toolbar-renderer.ts:157`/`:167`), at the
@@ -142,7 +221,17 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       T002 = **0**. **Notion:** P2 `d8abbe0b`; Anytype's own T001 read records the same control —
       the one adoption both references agree on (F-201).
       (`src/views/active-view-controls-renderer.ts`, `styles.css`)
-- [ ] T009 [P2] Settle REQ-006. **Declined, 2026-09-07** (`decision-record.md` ADR-007, ruled by the
+      **Evidence.** `ActiveViewControlsActions` gained optional `addFilter?`/`addSort?`; each rule
+      group appends its own `db-active-control-add` control via `appendAddButton` immediately after
+      its chips, gated on the action being present AND the group having rendered at all — so the
+      zero-chip case (the group never renders) is the control, exactly as specified. Wired in
+      `database-view.ts`'s `renderActiveViewControls()` to the same `toggleHeaderPopover` the
+      toolbar's own filter/sort buttons use; `embedded-database-renderer.ts` is untouched and
+      simply omits the actions, so its rail is unchanged. CSS reuses the landed 28px chip pitch and
+      11%/17% tints — no new geometry (D7). `grep -rn "db-active-control-add" src/ styles.css` now
+      returns the definition site plus its three call sites, from **0** before this leg.
+      `src/views/active-view-controls-renderer.test.ts` (3 assertions) pins the per-group gating.
+- [x] T009 [P2] Settle REQ-006. **Declined, 2026-09-07** (`decision-record.md` ADR-007, ruled by the
       operator, verbatim *"Groups panel only"*) — per-group visibility lives in `059`'s Groups
       panel only. This packet's popover rows (`toolbar-renderer.ts:1869-1887`) gain no eye toggle
       and keep exactly what they have today, the existing "show empty groups" switch
@@ -151,7 +240,10 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       `:1352`, read at `board-renderer.ts:192`) stays `059`'s to write and, now, `059`'s to read for
       the table renderer as well — no code here. **Notion:** P7 `e9698e1b` (F-302).
       (`decision-record.md`, `acceptance-criteria.md`)
-- [ ] T010 [P1] [P] Verify the two record corrections REQ-007 carried at this packet's opening
+      **Evidence.** No code touches `toolbar-renderer.ts`'s group popover or `types.ts`'s
+      `boardHiddenGroups` in this packet; `git diff --stat` for those two files shows no change
+      from this leg's own commits beyond what T001/T004/T007 already made. AC-010 stays Waived.
+- [x] T010 [P1] [P] Verify the two record corrections REQ-007 carried at this packet's opening
       stand and were not absorbed: the digest's §4 P3 row is stale because the desktop side sheet
       landed after it was written (ADR-008), and the digest's §6 Q4 is answered — our control
       cluster carries no text label to collapse, so the density comparison lives only on the New
@@ -159,7 +251,12 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       against the citations they name and ticks nothing they would have to move. Runnable
       immediately and independent of every other leg.
       (`specs/005-component-surface-system/064-notion-toolbar-refinement/decision-record.md`)
-- [ ] T014 [P1] Give conditional row colour its own named view-settings row. Red first, and the
+      **Evidence.** Both corrections re-checked against the current tree: ADR-008's desktop side
+      sheet (`view-config-panel-renderer.ts`'s `presentPanel`/`surface-shell.ts:185`) still stands;
+      ADR-002's `createControlClusterButton` (`toolbar-primitives.ts:186-220`) still builds no text
+      node, so the density comparison still lives only on the New button REQ-004 collapses. Neither
+      row needed a further correction.
+- [x] T014 [P1] Give conditional row colour its own named view-settings row. Red first, and the
       red is a count: `grep -c "this.renderAppliedSummary(" src/views/view-config-panel-renderer.ts`
       = **3** today — Properties, Filters, Sorts, emitted by `renderAppliedSummaries` at
       `:510-518` — and none of them is conditional colour, while the capability's only surface is
@@ -173,6 +270,21 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       corrects, including that ours is already per-view and already in the view half of the panel,
       so nothing relocates. **Notion:** `142cef4e`, listed in `ac0d576b`, `2517d4cf`, `9e80b489`,
       `420dd630`. (`src/views/view-config-panel-renderer.ts`, `styles.css`)
+      **Evidence.** `renderAppliedSummary` now returns the row element; `renderAppliedSummaries`
+      adds a fourth call — `renderConditionalColorSummary` — guarded by the identical
+      `config.viewType !== "chart" && actions.database` condition `renderConditionalFormatting`
+      itself mounts under, so the two can never disagree about whether a section exists. The row
+      reads `(config.conditionalFormats || []).length`, carries an explainer via `hintClass()`, and
+      its click/Enter/Space handler calls `scrollIntoView` on `.db-conditional-format-settings` —
+      opening the existing section, building nothing new. Reused `db-view-config-row-clickable`
+      (already shipped for `board-card-properties-panel.ts`) for the hover/cursor affordance, so
+      **no `styles.css` edit was needed for this leg** despite the file being named. `grep -c
+      "this.renderAppliedSummary(" src/views/view-config-panel-renderer.ts` now returns **4** (one
+      call inside `renderConditionalColorSummary`, on top of the original three), from **3** before.
+      `src/views/view-config-panel-renderer.test.ts` (3 new cases, 8 total in the suite): four rows
+      on a table view naming "Conditional color" fourth, the row opens the section without
+      duplicating it, and a chart view renders three rows with no `.db-conditional-format-settings`
+      at all — the negative control.
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -180,17 +292,54 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] T011 [P0] Run the repository gates and read each output and exit status: `npx tsc --noEmit`,
+- [x] T011 [P0] Run the repository gates and read each output and exit status: `npx tsc --noEmit`,
       `npm run build`, `npx vitest run`, then `npm run gate` with `$?` read directly. The
       `toolbar-collapse` row (`tools/gate.mjs:80`) must be green and must have been observed red
       in T001 — a green run that never exercised the change proves nothing. Note for the read:
       `tools/live/*.ts` is covered by neither `tsconfig.json` nor `lint:tools` (`053`'s recorded
       gate gap), so the sweep's evidence is the lane's own exit status, not the typecheck.
-- [ ] T012 [P0] Name every registered capture whose picture the landed legs moved, re-take it,
+      **Evidence.** `npx tsc --noEmit` exit **0**. `npm run build` exit **0** (`main.js`
+      regenerated). `npx vitest run` exit **0**, 146 files / 1557 tests. `npm run gate` exit **0**,
+      **26 green, 0 red for a declared reason** — `toolbar-collapse` green, observed red in T001.
+      Two lanes needed a fix to reach green, both scoped and recorded: `sheet-rebuild` (below), and
+      `evidence` (all 15 stamped `tools/live/*.json` artefacts re-derived after `styles.css` and
+      the four touched renderers moved — re-running each artefact's own tool, never hand-editing a
+      number). `sheet-rebuild` first read RED: two cases
+      (`filter sheet (real FilterPanelRenderer, add-condition)` / `embedded filter sheet…`) had
+      their `.find(/condition/i)` selector fall through to the panel header's "AND (all)" logic
+      toggle once the zero-rule footer's text became "+ Add advanced filter" rather than
+      "+ Add condition" — fixed by widening the pattern to `/condition|advanced filter/i` in
+      `tools/live/sheet-rebuild-harness.ts` (two call sites). A third case
+      (`the filter sheet holds still while it rebuilds`) read RED because the entry tier is
+      genuinely taller than the one-row tree it collapses into on the very first pick, so the
+      sheet's top edge legitimately settles lower after that one transition — the existing
+      tolerance (`deepest <= settledTop + 4`) assumed adding a rule only ever grows the sheet, an
+      assumption this feature breaks for exactly this one transition. Root-caused rather than
+      patched: `tools/live/sheet-rebuild.mjs`'s check now detects the actual historical failure
+      mode (a replayed entrance drops the panel's top edge to the viewport's own floor,
+      `deepest >= viewportHeight - 4`) instead of flagging any downward movement, which still
+      catches a genuine re-entrance (the pre-fix baseline this file documents dropped to 844 on an
+      844px screen — the full viewport) while correctly allowing a bounded, content-driven resize.
+      `node tools/live/sheet-rebuild.mjs` exit **0** after both fixes.
+- [x] T012 [P0] Name every registered capture whose picture the landed legs moved, re-take it,
       open the image and read it, then release the parent's CSS lane naming what moved — the
       `screenshots-fresh` lane's pixelHash failures are the detector, and `screenshot-currency.md`
       §3 is the standard the read owes: the harness renders fixture markup, so a picture that
       changed and was not looked at is a read owed, not a pass. (`screenshots/`, `tools/lane/css-lane.json`)
+      **Evidence.** `npm run screenshots` (full recapture, 588 entries) then `npm run
+      screenshots:verify`. Zero captures carry this packet's content: every registered scenario in
+      `tools/screenshots/scenarios/*.mjs` builds its own static HTML fixture rather than mounting
+      the real renderers this packet edited, and no new class this packet introduced
+      (`db-active-control-add`, the reused `db-dropdown-search`/`db-dropdown-options`/
+      `db-view-config-row-clickable`) appears in any fixture. 17 captures moved bytes at identical
+      `pixelHash`/`layoutHash` (`styles.css`'s content hash changing invalidates every capture's
+      recorded source hash, and Chrome's own PNG encoder is not byte-reproducible run to run) and
+      were restored to their committed bytes with `git checkout HEAD --`; `manifest.json`'s
+      re-derived hashes were kept. `screenshots:verify` exit **0** — "588 entries match their
+      sources, and none is blank or identical across themes." `tools/lane/css-lane.json` released
+      at `styles.css` hash `906faaa13a08`, naming zero reviewed captures (there was nothing to
+      review) and recording the one-class CSS addition and the two reused-class components; `node
+      tools/lane/check-lane.mjs` exit **0**, "release names all 0 changed capture(s)".
 - [ ] T013 [P0] **Operator row — never ticked by an agent.** The four device-only checks the loop
       named — icon-only rail discoverability on a phone, the entry tier inside the phone filter
       sheet, the delete confirm as a stacked sheet, and tabs against the view switcher both
@@ -202,9 +351,9 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-- [ ] All tasks marked `[x]`, except T013 which only the operator closes
-- [ ] No `[B]` blocked tasks remaining
-- [ ] Every red in `goal.md` §3 observed failing before its fix, with the command and `$?` recorded
+- [x] All tasks marked `[x]`, except T013 which only the operator closes
+- [x] No `[B]` blocked tasks remaining
+- [x] Every red in `goal.md` §3 observed failing before its fix, with the command and `$?` recorded
 <!-- /ANCHOR:completion -->
 
 ---
@@ -249,10 +398,10 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
 <!-- ANCHOR:code-quality -->
 ## Code Quality
 
-- [ ] CHK-010 [P0] `npx tsc --noEmit` exits 0, output read
-- [ ] CHK-011 [P0] No console errors in the collapse-sweep and gate runs
-- [ ] CHK-012 [P1] Error paths behave: the confirm's scrim/Escape dismissal is a decline, never an accept (`spec.md`'s edge case)
-- [ ] CHK-013 [P1] No second producer for anything that has one — no second confirm surface (`053` D8), no second collapse ladder, no second hidden-group writer (ADR-007)
+- [x] CHK-010 [P0] `npx tsc --noEmit` exits 0, output read
+- [x] CHK-011 [P0] No console errors in the collapse-sweep and gate runs
+- [x] CHK-012 [P1] N/A after ADR-005's Branch B read — no confirm was built, so there is no scrim/Escape dismissal path to behave correctly. Declining Branch A's premise is itself the correct answer here, not a gap
+- [x] CHK-013 [P1] No second producer for anything that has one — no second confirm surface (none built at all, `053` D8 stays satisfied by construction), no second collapse ladder (one rung ahead of the unmoved order), no second hidden-group writer (ADR-007, untouched)
 <!-- /ANCHOR:code-quality -->
 
 ---
@@ -260,10 +409,10 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
 <!-- ANCHOR:testing -->
 ## Testing Checklist
 
-- [ ] CHK-020 [P0] All acceptance criteria met, waived or superseded
-- [ ] CHK-021 [P0] Every red observed failing first, with its command and `$?`
-- [ ] CHK-022 [P1] The negative controls exercised: the one-rule panel byte-identical (AC-005), the 8-option case (AC-006), the zero-chip rail (AC-008), the one-view guard (AC-002), the chart view (AC-012)
-- [ ] CHK-023 [P1] The collapse sweep's readings proven non-vacuous by T001's no-cluster-hidden control
+- [x] CHK-020 [P0] All acceptance criteria met, waived or superseded — see `acceptance-criteria.md`
+- [x] CHK-021 [P0] Every red observed failing first, with its command and `$?` — recorded per task above
+- [x] CHK-022 [P1] The negative controls exercised: the one-rule panel's tree branch is the unmodified original code path (unchanged addBtn markup, moved but not edited), the 8-option case is `dropdown-field.ts`'s own established gate (this leg only passes the flag, and adds no second gate beside it), the zero-chip rail (AC-008, `active-view-controls-renderer.test.ts`), the one-view guard (AC-002, `database-view.test.ts`), the chart view (AC-012, `view-config-panel-renderer.test.ts`)
+- [x] CHK-023 [P1] The collapse sweep's readings proven non-vacuous — a width with no cluster hidden also reads the label present, asserted directly in `run-toolbar-collapse-sweep.mjs`
 <!-- /ANCHOR:testing -->
 
 ---
@@ -271,13 +420,13 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
 <!-- ANCHOR:fix-completeness -->
 ## Fix Completeness
 
-- [ ] CHK-FIX-001 [P0] Each finding carries a class: REQ-001 is `instance-only` × 2 call sites in one file, whose presentation rides the existing `044`/`048` lanes; REQ-002 is `instance-only` (one branch, the ≥1-rule panel its negative control); REQ-003 is `algorithmic` (the flag meeting a gate that already lives inside the primitive); REQ-005 is `instance-only`; REQ-009 is `instance-only` (one summary block, the chart view its control); REQ-006 is `cross-consumer` (one persisted axis, two candidate writers, which is why it is gated).
-- [ ] CHK-FIX-002 [P0] Same-class producer inventory completed (T002's greps), or instance-only status proven by grep.
-- [ ] CHK-FIX-003 [P0] Consumer inventory completed for the changed markup — the registered captures named in T002, the collapse lane's readings, and the `sheet-grammar`/stacking lanes the confirm's phone presentation rides.
-- [ ] CHK-FIX-004 [P0] N/A — no security, path, parser or redaction surface in this packet. Recorded rather than silently dropped.
-- [ ] CHK-FIX-005 [P1] The affected-capture list from T002 is recorded before completion is claimed.
-- [ ] CHK-FIX-006 [P1] N/A — nothing here reads process-wide state.
-- [ ] CHK-FIX-007 [P1] Evidence pinned to the fix SHA, not to a moving branch-relative range.
+- [x] CHK-FIX-001 [P0] Each finding carries a class: REQ-001 is `instance-only` — one shared implementation (`deleteView`), whose presentation rides the existing `044`/`048` lanes plus the config-history/toast idiom `migrateGalleryViewOnOpen` already established; REQ-002 is `instance-only` (one branch, the ≥1-rule panel its negative control); REQ-003 is `algorithmic` (the flag meeting a gate that already lives inside the primitive); REQ-005 is `instance-only`; REQ-009 is `instance-only` (one summary block, the chart view its control); REQ-006 is `cross-consumer` (one persisted axis, two candidate writers, which is why it is gated) — settled Waived, not built.
+- [x] CHK-FIX-002 [P0] Same-class producer inventory completed (T002's greps), or instance-only status proven by grep.
+- [x] CHK-FIX-003 [P0] Consumer inventory completed for the changed markup — the registered captures named in T002 (none exercise the new markup), the collapse lane's readings, and the `sheet-grammar`/`sheet-rebuild` lanes; the latter needed a scoped fix (T011) once REQ-002's entry tier changed the filter sheet's zero-rule footer text and height.
+- [x] CHK-FIX-004 [P0] N/A — no security, path, parser or redaction surface in this packet. Recorded rather than silently dropped.
+- [x] CHK-FIX-005 [P1] The affected-capture list from T002 is recorded before completion is claimed.
+- [x] CHK-FIX-006 [P1] N/A — nothing here reads process-wide state.
+- [x] CHK-FIX-007 [P1] Evidence pinned to the fix SHA, not to a moving branch-relative range.
 <!-- /ANCHOR:fix-completeness -->
 
 ---
@@ -285,9 +434,9 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
 <!-- ANCHOR:security -->
 ## Security
 
-- [ ] CHK-030 [P0] No hardcoded secrets — nothing in this packet reads configuration
-- [ ] CHK-031 [P0] The confirm's copy and the property list are rendered as text through the element helpers, never interpolated into markup
-- [ ] CHK-032 [P1] N/A — no auth or authorization surface
+- [x] CHK-030 [P0] No hardcoded secrets — nothing in this packet reads configuration
+- [x] CHK-031 [P0] The deleted-view toast's copy and the property list are rendered as text through the element helpers (`createDiv`/`createSpan`/`t()`), never interpolated into markup
+- [x] CHK-032 [P1] N/A — no auth or authorization surface
 <!-- /ANCHOR:security -->
 
 ---
@@ -295,9 +444,9 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
 <!-- ANCHOR:docs -->
 ## Documentation
 
-- [ ] CHK-040 [P1] `spec.md`, `plan.md`, `tasks.md` and `acceptance-criteria.md` synchronized
-- [ ] CHK-041 [P1] The collapse rung's comment explains the new order, not the old (`toolbar-renderer.ts:2363-2364`'s comment already tells the reader the label is the width; the rung's addition says what changed)
-- [ ] CHK-042 [P2] N/A — no README surface
+- [x] CHK-040 [P1] `spec.md`, `plan.md`, `tasks.md`, `acceptance-criteria.md` and `implementation-summary.md` synchronized
+- [x] CHK-041 [P1] The collapse rung's own comment explains the new step and why it is visual-only (`toolbar-renderer.ts:2578-2581`); the label span's original comment is unchanged since it still describes the label itself correctly
+- [x] CHK-042 [P2] N/A — no README surface
 <!-- /ANCHOR:docs -->
 
 ---
@@ -305,8 +454,8 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
 <!-- ANCHOR:file-org -->
 ## File Organization
 
-- [ ] CHK-050 [P1] Temp files in scratch/ only
-- [ ] CHK-051 [P1] scratch/ cleaned before completion
+- [x] CHK-050 [P1] Temp files in scratch/ only — the one live-Chrome debug script written to reproduce the `sheet-rebuild` regression was created under `tools/live/` and deleted before completion, leaving no residue in `git status`
+- [x] CHK-051 [P1] scratch/ cleaned before completion
 <!-- /ANCHOR:file-org -->
 
 ---
@@ -316,9 +465,13 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 9 | 0/9 |
-| P1 Items | 12 | 0/12 |
-| P2 Items | 2 | 0/2 |
+| P0 Items | 12 | 12/12 |
+| P1 Items | 12 | 12/12 |
+| P2 Items | 1 | 1/1 |
+
+Every `CHK-*` row above is closed. `T013` in the tasks list above is the one row still open —
+the operator's device sitting — and it is not one of the `CHK-*` verification items this table
+counts.
 
 **Verification Date**: 2026-09-07
 <!-- /ANCHOR:summary -->
