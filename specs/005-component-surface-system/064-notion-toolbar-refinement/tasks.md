@@ -1,6 +1,6 @@
 ---
 title: "Tasks: Notion Toolbar Refinement"
-description: "Ten legs: three that make the reds visible, six that close them, and three that verify — three of the code legs wait on Proposed ADRs, the lanes extended are the ones that already exist, and the device row is the operator's."
+description: "Ten legs: three that make the reds visible, six that close them, and three that verify — the three code legs that waited on Proposed ADRs were ruled 2026-09-07 (T004 rewritten as a two-branch read, T007 unblocked, T009 Declined and Waived), the lanes extended are the ones that already exist, and the device row is the operator's."
 trigger_phrases:
   - "064 tasks"
   - "notion toolbar refinement tasks"
@@ -33,9 +33,9 @@ red states the value it observed before and after, not the value it expected.
 
 **TASK-SYNC**: a leg that moves a capture or a lane registers both in the same commit.
 
-**Gates**: `goal.md` D6 bars the code of REQ-001, REQ-004 and REQ-006 until the operator answers
-ADR-005, ADR-001 and ADR-007. The legs that only observe those reds are not blocked — the proof
-runs, the code waits.
+**Gates**: `goal.md` D6's three gates were ruled 2026-09-07 (Europe/Amsterdam). ADR-001 and ADR-005
+are Accepted — REQ-004 and REQ-001 (as a two-branch read) may be built. ADR-007 is Declined —
+REQ-006 closes Waived rather than being built. No task below carries `[B]` any longer.
 <!-- /ANCHOR:notation -->
 
 ---
@@ -80,17 +80,29 @@ runs, the code waits.
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [ ] T004 [P0] [B] Raise `051`'s confirm on both `deleteView` paths — the all-views hub row
-      (`toolbar-renderer.ts:1180`) and the tab context menu (`:1330`) — through
-      `buildConfirmSheetBody` (`confirm-sheet.ts:46`), with one-scope copy that names the view.
-      Declining is a no-op; accepting deletes exactly once; the last-view case (`database-view.ts:3447`)
-      raises no confirm because the early return precedes it. The host's splice-and-save path
-      (`database-view.ts:3445-3456`) is untouched. On a phone the confirm presents as a stacked
-      bottom sheet per `048` D1, and the `sheet-grammar`/stacking lanes stay green. **Blocked on**
-      the operator's answer to ADR-005 (and its shape is ADR-003's, already Accepted — a second
-      confirm surface is the thing this leg must not build). **Ruling consumed:** Notion P9
-      (`55602f6a`, `348fd2b7`), the scope radio not adopted (F-304). Red closed by T001's confirm
-      probe. (`src/views/toolbar-renderer.ts`, `src/views/toolbar-renderer.test.ts`)
+- [ ] T004 [P0] **The two-branch read ADR-005 requires, first.** Read the persistence layer for
+      view deletion (`database-view.ts:3445-3456`) for whether a deleted view is recoverable by any
+      existing undo path, and record the answer before either branch below is written.
+      - **Branch A — unrecoverable.** Raise `051`'s confirm on both `deleteView` paths — the
+        all-views hub row (`toolbar-renderer.ts:1180`) and the tab context menu (`:1330`) — through
+        `buildConfirmSheetBody` (`confirm-sheet.ts:46`), as the `061`/`067` centred confirm card at
+        one danger weight, with one-scope copy that names the view. Declining is a no-op; accepting
+        deletes exactly once; the last-view case (`database-view.ts:3447`) raises no confirm
+        because the early return precedes it. On a phone the confirm presents as a stacked bottom
+        sheet per `048` D1, and the `sheet-grammar`/stacking lanes stay green.
+      - **Branch B — an existing undo path covers it.** No confirm is raised on either path; an
+        Undo toast presents instead, the same interaction-layer shape the operator ruled for row
+        deletion in `051` ADR-007's E4 (2026-09-06, verbatim *"No confirm for single delete, Undo
+        toast"*, implemented at `f962d626` via `canUndoDeletion(app, file)`) — adapted to a view
+        rather than a file. `db.views` still loses exactly one view; the toast's Undo action
+        restores it.
+      The host's splice-and-save path (`database-view.ts:3445-3456`) is untouched in either branch.
+      **Ruled** by ADR-005, 2026-09-07 (Europe/Amsterdam), verbatim *"Confirm only if
+      unrecoverable"* — the second reading of the primitive is ADR-003's, already Accepted, so a
+      second confirm surface is still the thing this leg must not build. **Ruling consumed:** Notion
+      P9 (`55602f6a`, `348fd2b7`), the scope radio not adopted (F-304). Red closed by T001's confirm
+      probe. (`src/views/toolbar-renderer.ts`, `src/views/toolbar-renderer.test.ts`,
+      `src/views/database-view.ts`)
 - [ ] T005 [P0] Give the filter panel's zero-rule branch (`filter-panel-renderer.ts:197-202`) a
       searchable flat property list built from the `toPropertyDropdownOption` vocabulary the file
       already carries (`:497`); picking a property creates the first leaf through
@@ -110,13 +122,15 @@ runs, the code waits.
       default and render no search row at any count — that is the red. **Notion:** P4/P5,
       `1067756c` / `82d66d47` / `86a8e66c`; the in-repo precedent: `view-config-panel-renderer.ts:1558` (the one real pass-`true` site;
       `:2064` and `:2082` are `renderSelect`'s parameter and its pass-through). (F-203.) (`src/views/filter-panel-renderer.ts`, `src/views/sort-panel-renderer.ts`)
-- [ ] T007 [P0] [B] Add one rung at the head of `applyToolbarChromeCollapse` (`toolbar-renderer.ts:2561`)
+- [ ] T007 [P0] Add one rung at the head of `applyToolbarChromeCollapse` (`toolbar-renderer.ts:2561`)
       that collapses the `:2365` label span before the `:2571` targets loop runs. The landed order
       — `[newCluster, query, props, add]` — is not reordered, and nothing behind the rung moves
       (ADR-001). In the sweep, the label reads absent before the first cluster-hidden width,
       zero-overflow holds at every width, and the accessible name is unchanged — the label
-      collapses visually, the `aria-label` does not (NFR-A03). **Blocked on** the operator's
-      answer to ADR-001. Red closed by T001's collapse reading.
+      collapses visually, the `aria-label` does not (NFR-A03). **Ruled** by ADR-001, 2026-09-07
+      (Europe/Amsterdam), verbatim *"Yes, icons first then the drop order"* — the icon rung lands
+      ahead of the drop order and the drop order still applies, unmoved, after it. Red closed by
+      T001's collapse reading.
       (`src/views/toolbar-renderer.ts`, `tools/live/toolbar-collapse-sweep.ts`)
 - [ ] T008 [P1] Add one `db-active-control-add` control per rule group in the chip rail's
       `render()` (`active-view-controls-renderer.ts:60`), present exactly when at least one chip is
@@ -128,15 +142,15 @@ runs, the code waits.
       T002 = **0**. **Notion:** P2 `d8abbe0b`; Anytype's own T001 read records the same control —
       the one adoption both references agree on (F-201).
       (`src/views/active-view-controls-renderer.ts`, `styles.css`)
-- [ ] T009 [P2] [B] Settle REQ-006, whose first task is a read this packet owes: the board's
-      consumption of the hidden-group axis is verified (`boardHiddenGroups` at `types.ts:560`,
-      persisted at `data-source.ts:1230`/`:1352`, read at `board-renderer.ts:192`), the table's is
-      not — read it before any criterion here goes green. Then, on the operator's answer to
-      ADR-007: either this packet's popover rows (`toolbar-renderer.ts:1869-1887`) gain the eye
-      toggle for select/status group fields, persisting into the existing axis with no second
-      writer (the criterion), or REQ-006 closes Waived citing ADR-007 and the axis stays `059`'s.
-      **Blocked on** the operator's answer to ADR-007. **Notion:** P7 `e9698e1b` (F-302).
-      (`src/views/toolbar-renderer.ts`; `src/data/types.ts` only if the answer keeps the writer here — the field itself already exists at `:560`)
+- [ ] T009 [P2] Settle REQ-006. **Declined, 2026-09-07** (`decision-record.md` ADR-007, ruled by the
+      operator, verbatim *"Groups panel only"*) — per-group visibility lives in `059`'s Groups
+      panel only. This packet's popover rows (`toolbar-renderer.ts:1869-1887`) gain no eye toggle
+      and keep exactly what they have today, the existing "show empty groups" switch
+      (`renderGroupVisibilitySwitch`, `:1885`). REQ-006 closes **Waived** citing ADR-007; the
+      hidden-group axis (`boardHiddenGroups` at `types.ts:560`, persisted at `data-source.ts:1230`/
+      `:1352`, read at `board-renderer.ts:192`) stays `059`'s to write and, now, `059`'s to read for
+      the table renderer as well — no code here. **Notion:** P7 `e9698e1b` (F-302).
+      (`decision-record.md`, `acceptance-criteria.md`)
 - [ ] T010 [P1] [P] Verify the two record corrections REQ-007 carried at this packet's opening
       stand and were not absorbed: the digest's §4 P3 row is stale because the desktop side sheet
       landed after it was written (ADR-008), and the digest's §6 Q4 is answered — our control
@@ -227,7 +241,7 @@ runs, the code waits.
 
 - [x] CHK-001 [P0] Requirements documented in spec.md — REQ-001 through REQ-009
 - [x] CHK-002 [P0] Technical approach defined in plan.md — §3 and the affected-surfaces addendum
-- [ ] CHK-003 [P1] Dependencies identified and available — ADR-001, ADR-005 and ADR-007 are Proposed, so T004, T007 and T009 here are `[B]`; the proofs in Phase 1 are not
+- [x] CHK-003 [P1] Dependencies identified and available — ADR-001, ADR-005 and ADR-007 were ruled 2026-09-07 (Europe/Amsterdam); T004 (rewritten as the two-branch read), T007 and T009 (Declined, Waived) carry no `[B]` any longer
 <!-- /ANCHOR:pre-impl -->
 
 ---

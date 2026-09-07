@@ -11,12 +11,11 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/064-notion-toolbar-refinement"
-    last_updated_at: "2026-09-06T19:00:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Authored the acceptance criteria from the Notion research synthesis"
-    next_safe_action: "Put ADR-001, ADR-005 and ADR-007 to the operator, then observe the first red"
+    last_updated_at: "2026-09-07T00:00:00Z"
+    last_updated_by: "fold-064-rulings-session"
+    recent_action: "Folded the 2026-09-07 rulings on ADR-001, ADR-005 and ADR-007 into AC-001-003, AC-007 and AC-010"
+    next_safe_action: "Implement T004, T007 and AC-012; AC-010 closes Waived"
     blockers:
-      - "ADR-001, ADR-005 and ADR-007 are Proposed and gate REQ-004, REQ-001 and REQ-006"
       - "AC-011 is the operator's and rides 053 AC-111; nothing here can close it"
     key_files:
       - "src/views/toolbar-renderer.ts"
@@ -28,10 +27,11 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "Which of ADR-007's two readings the operator takes"
+      - "Which of ADR-005's two branches applies — the persistence-layer read is still owed by the implementation leg"
     answered_questions:
       - "The ten dispositions are recorded in decision-record.md and none is applied over a landed ruling"
       - "AC-012 is inherited from 062 ADR-003 and is not gated: the operator ruled it at 18:32"
+      - "ADR-001 and ADR-005 Accepted, ADR-007 Declined — ruled 2026-09-07 (Europe/Amsterdam)"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: acceptance-criteria | v2.2 -->
 # Acceptance Criteria: Notion Toolbar Refinement
@@ -70,16 +70,16 @@ not about drift; the two citations that did move with them are corrected in plac
 
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
-| AC-001 | REQ-001 | Given a database with more than one view, When the view is deleted from the all-views hub row (`toolbar-renderer.ts:1180`) or from the tab context menu (`:1330`), Then `051`'s confirm (`buildConfirmSheetBody`, `confirm-sheet.ts:46`) is raised, its copy names the view, declining is a no-op and accepting deletes exactly one view | A vitest block driving the real renderer's two paths with the confirm resolved via a real Promise, the decline/accept idiom `053`'s AC-105 blocks established. Red today: `grep -c "buildConfirmSheetBody" src/views/toolbar-renderer.ts` = **0** — neither path confirms | Unmet | - |
-| AC-002 | REQ-001 | Given a database with exactly one view, When the toolbar renders, Then no confirm is raised for the delete that cannot happen — the `database-view.ts:3447` early return precedes any confirm | The same block's one-view case; the criterion asserts the guard, not merely the absence of a dialog | Unmet | - |
-| AC-003 | REQ-001 | Given the confirm open on a phone, When it presents, Then it is a stacked bottom sheet per `048` D1, and `044`'s sheet grammar and `048`'s stacking stay green | `npm run gate`, `$?` read; the `sheet-grammar` and stacking lanes green | Unmet | - |
+| AC-001 | REQ-001 | Given a database with more than one view, and the persistence-layer read (`database-view.ts:3445-3456`) taken first for whether a deleted view is recoverable by any existing undo path, When the view is deleted from the all-views hub row (`toolbar-renderer.ts:1180`) or from the tab context menu (`:1330`), Then **Branch A (unrecoverable)**: `051`'s confirm (`buildConfirmSheetBody`, `confirm-sheet.ts:46`), presented as the `061`/`067` centred card at one danger weight, is raised, its copy names the view, declining is a no-op and accepting deletes exactly one view; **Branch B (an undo path covers it)**: no confirm is raised, the view is deleted, and an Undo toast presents whose Undo action restores it — the same shape `051` ADR-007's E4 ruled for row deletion | A vitest block driving the real renderer's two paths with the confirm resolved via a real Promise for Branch A, and the toast/undo assertion for Branch B, the decline/accept idiom `053`'s AC-105 blocks established. Red today: `grep -c "buildConfirmSheetBody" src/views/toolbar-renderer.ts` = **0** — neither path confirms or offers an undo toast | Unmet | - |
+| AC-002 | REQ-001 | Given a database with exactly one view, When the toolbar renders, Then no confirm is raised for the delete that cannot happen — the `database-view.ts:3447` early return precedes any confirm, in either of AC-001's branches | The same block's one-view case; the criterion asserts the guard, not merely the absence of a dialog | Unmet | - |
+| AC-003 | REQ-001 | Given the confirm open on a phone under AC-001's Branch A, When it presents, Then it is a stacked bottom sheet per `048` D1, and `044`'s sheet grammar and `048`'s stacking stay green. Branch B raises no confirm, so this row does not apply to it | `npm run gate`, `$?` read; the `sheet-grammar` and stacking lanes green | Unmet | - |
 | AC-004 | REQ-002 | Given the filter panel with zero rules, When it opens, Then a searchable flat property list renders, built from the `toPropertyDropdownOption` vocabulary (`filter-panel-renderer.ts:497`), picking a property creates the first leaf through `createDefaultFilterRule` (`:90`) and `appendLeaf` (`:223`), and a `+ Add advanced filter` footer switches to the tree | A test asserting the zero-rule branch renders the list. Red today: the branch renders only the `db-panel-empty` hint at `:197-202` | Unmet | - |
 | AC-005 | REQ-002 | Given the panel already holds exactly one rule, When it renders, Then it is byte-identical before and after REQ-002 — the negative control | A seeded one-rule panel rendered on both sides of the change and diffed; the result recorded in `tasks.md` | Unmet | - |
 | AC-006 | REQ-003 | Given the filter field (`:494-501`), the select/status value (`:576-590`) and the sort field (`sort-panel-renderer.ts:199-206`) dropdowns, When they present in a phone sheet — which is how the panels present on a phone, and where these dropdowns' search rows live — Then a search input shows above 8 options and not at 8, the 8-option case being the control; the gate is the primitive's own (`dropdown-field.ts:228`, the phone-branch rule `063`'s ADR-001 recorded), and the desktop combobox rule (`a952e5e7`) is untouched | Red today: `grep -c searchable` = **0** and **0** — the flag reaches neither panel, so the phone-sheet branch falls to its `searchable === true` default and renders no search row at any count. The flag's precedent: `view-config-panel-renderer.ts:1558` — the one real pass-`true` site; `:2064` and `:2082` are `renderSelect`'s parameter and its pass-through | Unmet | - |
 | AC-007 | REQ-004 | Given the toolbar swept 250→900px in 10px steps (`run-toolbar-collapse-sweep.mjs:39`), When the width narrows, Then the New label reads absent before the first width at which any cluster is hidden, zero-overflow holds at every width, the accessible name is unchanged, and the landed `:2571` drop order is not reordered | `tools/live/toolbar-collapse-sweep.ts`'s existing lane, extended with the label reading and the order assertion, run through the `toolbar-collapse` gate row. Red today: the cluster hides while the label is still drawn | Unmet | - |
 | AC-008 | REQ-005 | Given at least one chip in the rail, When the rail renders, Then exactly one `db-active-control-add` control per rule group is present, wired to the existing `toggleFilterPanel` / `toggleSortPanel`, at the landed 28px chip pitch (`styles.css:1821`) and carrying its own accessible name; with zero chips, none | Red today: `grep -rn "db-active-control-add" src/ styles.css` = **0**; a test asserting presence iff at least one chip — the zero-chip case is the control | Unmet | - |
-| AC-009 | REQ-007 | Given every Notion-versus-Anytype disposition the loop named, When this packet's record is read, Then it lives in `decision-record.md` — the ones a landed ruling or the tree decides marked `Accepted` and citing it, the ones it does not marked **Proposed** and the operator's — and none is applied over a landed ruling | `decision-record.md`: ten ADRs plus the corrections D1 requires, statuses read against `goal.md` D6's three gates | Unmet | - |
-| AC-010 | REQ-006 | Given the operator's answer on ADR-007, Then either the group popover's select/status rows (`toolbar-renderer.ts:1869-1887`) carry the eye toggle persisting into the existing `boardHiddenGroups` axis (`types.ts:560`, `data-source.ts:1230`, `:1352`; read at `board-renderer.ts:192`) with the table-renderer read recorded, or this row closes **Waived** citing ADR-007 | The operator's answer; the renderer read taken before any code — the board's read is verified, the table's is not, and `059` REQ-001's zero-writer census is the axis's own record | Unmet | - |
+| AC-009 | REQ-007 | Given every Notion-versus-Anytype disposition the loop named, When this packet's record is read, Then it lives in `decision-record.md` — the ones a landed ruling or the tree decides marked `Accepted` and citing it, the ones the operator ruled marked `Accepted` or `Declined` and citing the verbatim ruling — and none is applied over a landed ruling | `decision-record.md`: ten ADRs plus the corrections D1 requires, statuses read against `goal.md` D6's three gates, all three ruled 2026-09-07 | Unmet | - |
+| AC-010 | REQ-006 | ~~Given the operator's answer on ADR-007, Then either the group popover's select/status rows (`toolbar-renderer.ts:1869-1887`) carry the eye toggle persisting into the existing `boardHiddenGroups` axis (`types.ts:560`, `data-source.ts:1230`, `:1352`; read at `board-renderer.ts:192`) with the table-renderer read recorded, or this row closes **Waived** citing ADR-007~~ **Waived, 2026-09-07 by ADR-007** (Declined, operator verbatim *"Groups panel only"*). Per-group visibility lives in `059`'s Groups panel only; this packet's popover keeps exactly its existing "show empty groups" switch (`renderGroupVisibilitySwitch`, `toolbar-renderer.ts:1885`) and gains no eye-toggle row | No verification owed — REQ-006 is not built here. `059`'s own REQ-001/REQ-003 own the axis's writer and, now, the table-renderer read | Waived | ADR-007 |
 | AC-011 | REQ-008 | Given a released build, When the operator reads the refined toolbar on a device, Then the four device-only checks the loop named — icon-only rail discoverability on a phone, the entry tier inside the phone filter sheet, the delete confirm as a stacked sheet, and tabs against the view switcher both references use — are answered in `053` AC-111's sitting | `053`'s AC-111. Only the operator closes this row; nothing in this repository can | Unmet | - |
 | AC-012 | REQ-009 | Given the view-settings panel on a non-chart view, When it renders, Then a fourth named row sits in the summary block beside Properties, Filters and Sorts, reading the count of `config.conditionalFormats`, carrying an explainer line in the panel's `hintClass()` idiom, and opening the existing `renderConditionalFormatting` section (`:747`) — with no second rule editor created | A test asserting four `db-view-config-summary-row` rows and the named one's count and empty word. Red today: `renderAppliedSummaries` (`view-config-panel-renderer.ts:510-518`) makes exactly **three** calls to `renderAppliedSummary` — Properties, Filters, Sorts (`grep -c "this.renderAppliedSummary(" src/views/view-config-panel-renderer.ts` = **3**) — and none names conditional colour. **Negative control:** a chart view, where `:405`'s guard renders no conditional-formatting section, must render no row either | Unmet | - |
 
@@ -108,11 +108,13 @@ waiver is treated as an unmet criterion rather than as a pass.
 
 **Closeable:** No
 
-Twelve criteria, all `Unmet`, none waived. The packet was opened by a research synthesis and no
-code has changed yet. ADR-001, ADR-005 and ADR-007 gate REQ-004, REQ-001 and REQ-006, and
-`goal.md` D6 bars their code until the operator answers; AC-011 is the operator's and rides
-`053` AC-111. AC-012 is **not** gated: it inherits `062` ADR-003, which the operator ruled Accepted
-at 2026-09-06 18:32. The corrections this record's rows depend on — the group-popover anchor, the
-hidden-group axis's state, the chip tint's line and the `searchable` precedent's — were verified on
-this tree at the landed SHA, not carried from the loop.
+Twelve criteria: ten `Unmet`, one `Waived` (AC-010), one riding the operator (AC-011). The packet
+was opened by a research synthesis and no code has changed yet. ADR-001, ADR-005 and ADR-007 were
+ruled 2026-09-07 (Europe/Amsterdam) — ADR-001 and ADR-005 **Accepted**, ADR-007 **Declined** — so
+`goal.md` D6's gate is discharged: REQ-004 (AC-007) and REQ-001 (AC-001-003, now a two-branch read)
+may be built, and REQ-006 (AC-010) closes **Waived** citing ADR-007 rather than being built.
+AC-011 is the operator's and rides `053` AC-111. AC-012 is **not** gated: it inherits `062`
+ADR-003, which the operator ruled Accepted at 2026-09-06 18:32. The corrections this record's rows
+depend on — the group-popover anchor, the hidden-group axis's state, the chip tint's line and the
+`searchable` precedent's — were verified on this tree at the landed SHA, not carried from the loop.
 <!-- /ANCHOR:closure -->

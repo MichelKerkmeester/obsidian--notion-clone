@@ -53,14 +53,14 @@
       "src/views/filter-panel-renderer.ts",
       "src/views/sort-panel-renderer.ts",
       "src/views/active-view-controls-renderer.ts",
-      "src/data/types.ts",
+      "src/views/database-view.ts",
       "src/views/view-config-panel-renderer.ts",
-      "src/views/board-renderer.ts",
-      "src/views/table-renderer.ts",
       "tools/live/toolbar-collapse-sweep.ts",
       "src/views/toolbar-renderer.test.ts",
       "tools/live/run-toolbar-collapse-sweep.mjs",
-      "specs/005-component-surface-system/064-notion-toolbar-refinement/tasks.md"
+      "specs/005-component-surface-system/064-notion-toolbar-refinement/tasks.md",
+      "tools/lane/css-lane.json",
+      "specs/005-component-surface-system/064-notion-toolbar-refinement/decision-record.md"
     ],
     "entities": [
       {
@@ -96,7 +96,7 @@
       {
         "name": "decision-record.md",
         "kind": "doc",
-        "path": "decision-record.md",
+        "path": "specs/005-component-surface-system/064-notion-toolbar-refinement/decision-record.md",
         "source": "derived"
       },
       {
@@ -130,27 +130,15 @@
         "source": "derived"
       },
       {
-        "name": "types.ts",
+        "name": "database-view.ts",
         "kind": "code",
-        "path": "src/data/types.ts",
+        "path": "src/views/database-view.ts",
         "source": "derived"
       },
       {
         "name": "view-config-panel-renderer.ts",
         "kind": "code",
         "path": "src/views/view-config-panel-renderer.ts",
-        "source": "derived"
-      },
-      {
-        "name": "board-renderer.ts",
-        "kind": "code",
-        "path": "src/views/board-renderer.ts",
-        "source": "derived"
-      },
-      {
-        "name": "table-renderer.ts",
-        "kind": "code",
-        "path": "src/views/table-renderer.ts",
         "source": "derived"
       },
       {
@@ -169,6 +157,12 @@
         "name": "run-toolbar-collapse-sweep.mjs",
         "kind": "file",
         "path": "tools/live/run-toolbar-collapse-sweep.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
         "source": "derived"
       },
       {
@@ -206,11 +200,17 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
       }
     ],
     "causal_summary": "A five-iteration Notion research loop read 104 captures against this surface and found that twelve",
     "created_at": "2026-09-06T16:50:17Z",
-    "last_save_at": "2026-09-07T03:59:03.193Z",
+    "last_save_at": "2026-09-07T04:19:20.943Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,13 +222,13 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:13537cc46626c9df86d6dce84be3d0bfec437404e2d611e9ae583fa1845baf60",
+    "source_fingerprint": "sha256:12617cff4397e07bb9bbc06724aca0119657fef09a270e2bf0d8fafc9ad44a8c",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "6c5b06578b4b463683a3a0d83181fa499dcdb4a1c8610552d5e4e96466ccf742",
+      "spec.md": "38f5daee416ff4819faa1b6d71b3b99b90e33e4700ca3b7a0b1b5c8d56c3ba05",
       "plan.md": "f1a18ecbb545c6fefe11837c7675961a4a7893c62a2a767186518e5717e18f33",
-      "tasks.md": "4e757711a3f1963e3458c5df55a6371227d7cfcc9ca96158588a4eef8a5f4d1e",
-      "decision-record.md": "10bac5b01403442d0363b837ffc04be70b01ea04d7e83f1b2063354d3dd99674",
+      "tasks.md": "e81f5311d06057a20771b3cc9f4b48d12d59d00466be4786e0acb3c8b37066ed",
+      "decision-record.md": "63eee2521088a8dfee30ecc7f058cb28cf452a5690ea1bc4a4919729a0007e7f",
       "implementation-summary.md": "978f08dc065070efa6f3b4da59d19882e5f3c0def1dc8be5dc8ef52a069aeeb6"
     },
     "last_active_at": null

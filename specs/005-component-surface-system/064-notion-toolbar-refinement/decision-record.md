@@ -1,6 +1,6 @@
 ---
 title: "Decision Record: Notion Toolbar Refinement"
-description: "Ten decisions on the toolbar refinement: nine from the Notion research loop — six recorded because a landed ruling or the tree's own state already decides them, three Proposed that gate REQ-001, REQ-004 and REQ-006 — plus one inherited from 062 ADR-003 by the operator's 18:32 ruling, and the corrections D1 requires, recorded rather than absorbed."
+description: "Ten decisions on the toolbar refinement: nine from the Notion research loop — six recorded because a landed ruling or the tree's own state already decides them, three ruled 2026-09-07 (ADR-001 and ADR-005 Accepted, ADR-007 Declined), unblocking REQ-004 and REQ-001 and closing REQ-006 Waived — plus one inherited from 062 ADR-003 by the operator's 18:32 ruling, and the corrections D1 requires, recorded rather than absorbed."
 trigger_phrases:
   - "064 decision record"
   - "notion toolbar adr"
@@ -12,12 +12,11 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/064-notion-toolbar-refinement"
-    last_updated_at: "2026-09-06T19:00:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Recorded ten decisions and seven corrections"
-    next_safe_action: "Put ADR-001, ADR-005 and ADR-007 to the operator; they gate REQ-004, REQ-001 and REQ-006"
-    blockers:
-      - "ADR-001, ADR-005 and ADR-007 are Proposed and the operator's; each decides whether a gated leg exists at all"
+    last_updated_at: "2026-09-07T00:00:00Z"
+    last_updated_by: "fold-064-rulings-session"
+    recent_action: "Folded three operator rulings (2026-09-07, Europe/Amsterdam) into ADR-001, ADR-005 and ADR-007"
+    next_safe_action: "Implement T004, T007 and T014; T009 closes Waived"
+    blockers: []
     key_files:
       - "specs/005-component-surface-system/053-toolbar-and-view-controls/decision-record.md"
       - "specs/005-component-surface-system/053-toolbar-and-view-controls/goal.md"
@@ -28,12 +27,13 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "May a text-to-icon rung be added ahead of 053's AC-012 landed drop order"
-      - "Should a delete-view confirm exist at all, on Notion-only evidence"
-      - "Is per-group visibility this packet's popover row or 059's board panel"
+      - "Which of the two branches ADR-005 names applies — the persistence-layer read is still owed by the implementation leg"
     answered_questions:
       - "Six of the nine loop dispositions already have a landed ruling or the tree's own state, and it stands"
       - "The conditional-colour row is ADR-010: operator-ruled in 062 at 18:32, inherited here, not proposed"
+      - "ADR-001: Accepted 2026-09-07, verbatim \"Yes, icons first then the drop order\" — REQ-004 unblocked"
+      - "ADR-005: Accepted 2026-09-07, verbatim \"Confirm only if unrecoverable\" — REQ-001 unblocked as a two-branch read"
+      - "ADR-007: Declined 2026-09-07, verbatim \"Groups panel only\" — REQ-006 closes Waived"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: decision-record | v2.2 -->
 # Decision Record: Notion Toolbar Refinement
@@ -42,11 +42,12 @@ _memory:
 
 > Under the parent's **D15**, a Notion finding never silently overrides a landed Anytype ruling.
 > Where the two disagree, the record names both readings. Of the ten decisions below, five are
-> decided by a landed ruling or by the tree's own state and change nothing; three are the
-> operator's and gate REQ-001, REQ-004 and REQ-006 (`goal.md` D6); one records the arrangement the
-> packet's own research had to make; and one — ADR-010 — is inherited, a ruling the operator
-> already took in `062` and this packet carries rather than re-opens. ADR-001, ADR-005 and ADR-007
-> are the three gates: no code for their requirements is written before the operator answers.
+> decided by a landed ruling or by the tree's own state and change nothing; three were the
+> operator's — ADR-001, ADR-005 and ADR-007 (`goal.md` D6) — and were ruled 2026-09-07 (Europe/
+> Amsterdam): ADR-001 and ADR-005 **Accepted**, ADR-007 **Declined**; one records the arrangement
+> the packet's own research had to make; and one — ADR-010 — is inherited, a ruling the operator
+> already took in `062` and this packet carries rather than re-opens. **No ADR in this record still
+> gates a requirement.**
 
 ---
 
@@ -57,9 +58,9 @@ _memory:
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-06 |
-| **Deciders** | Operator — the decision gates REQ-004; recorded here by the Notion synthesis |
+| **Status** | Accepted |
+| **Date** | 2026-09-06 · Ruled 2026-09-07 |
+| **Deciders** | Operator, verbatim, 2026-09-07 (Europe/Amsterdam): *"Yes, icons first then the drop order"* |
 
 ---
 
@@ -94,9 +95,10 @@ Alternatives).
 <!-- ANCHOR:adr-001-decision -->
 ### Decision
 
-**We chose (pending the operator)**: one text→icon rung at the head of
-`applyToolbarChromeCollapse`, collapsing the `:2365` label before the `:2571` targets loop runs.
-The landed drop order is not reordered and nothing behind it moves.
+**Ruled.** The operator, verbatim, 2026-09-07 (Europe/Amsterdam): *"Yes, icons first then the drop
+order"* — one text→icon rung at the head of `applyToolbarChromeCollapse`, collapsing the `:2365`
+label before the `:2571` targets loop runs. The rung sits **ahead of** `053`'s approved AC-012 drop
+order; the drop order itself is unchanged and still applies, unmoved, after the icon step.
 
 **How it works**: REQ-004's criterion asserts, in the existing 250-900px sweep, that the label reads
 absent **before** the first width at which any cluster is hidden, and that zero-overflow holds at
@@ -104,8 +106,7 @@ every width. `053`'s AC-112 note already warns that `tools/live/*.ts` is covered
 `tsconfig.json` nor `lint:tools`, so the leg's evidence is the lane's own exit status, not the
 typecheck.
 
-**Why Proposed**: the operator approved `053`'s AC-012 order. Even an additive rung ahead of it is
-theirs to veto, so the ADR records both readings and neither is applied until they answer.
+**No longer gates REQ-004.** `tasks.md` T007's `[B]` is removed; the rung may be built.
 <!-- /ANCHOR:adr-001-decision -->
 
 ---
@@ -351,9 +352,9 @@ split carries no criterion, no task and no lane in this packet.
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-06 |
-| **Deciders** | Operator — the decision gates REQ-001; recorded here by the Notion synthesis |
+| **Status** | Accepted |
+| **Date** | 2026-09-06 · Ruled 2026-09-07 |
+| **Deciders** | Operator, verbatim, 2026-09-07 (Europe/Amsterdam): *"Confirm only if unrecoverable"* |
 
 ---
 
@@ -385,13 +386,30 @@ recorded verification gap.
 <!-- ANCHOR:adr-005-decision -->
 ### Decision
 
-**We chose (pending the operator)**: a confirmation stands in front of both paths, declining as a
-no-op and accepting exactly once, because a configured view is destroyed by one tap today and the
-captures show the reference product answering exactly that.
+**Ruled.** The operator, verbatim, 2026-09-07 (Europe/Amsterdam): *"Confirm only if unrecoverable"*
+— not the blanket "always confirm" this ADR originally proposed. The severity inference named above
+becomes the decision itself, rather than a risk beside it: whether the confirm exists turns on a
+fact the implementation leg has not yet read.
 
-**How it works**: until the operator answers, no code for REQ-001 is written (`goal.md` D6). The
-severity inference is named above; the read that closes it is REQ-001's first evidence, taken
-before the confirm is argued further.
+**How it works — the two-branch read.** Before either path ships, the implementation leg first
+**reads the persistence layer for view deletion** (`database-view.ts:3445-3456`): is a deleted view
+recoverable by any existing undo path?
+
+- **Branch A — unrecoverable.** No existing undo path covers a spliced-out view. The delete-view
+  confirm card ships on both call sites — the `061`/`067` centred confirm card, at one danger
+  weight — consuming `051`'s primitive per ADR-003 above. Declining is a no-op; accepting deletes
+  exactly once.
+- **Branch B — an undo path covers it.** No confirm is raised. An Undo toast presents instead, the
+  interaction-layer shape the operator already ruled for row deletion in `051` ADR-007's E4
+  (2026-09-06 ~07:50, verbatim *"No confirm for single delete, Undo toast"*, implemented at
+  `f962d626` via `canUndoDeletion(app, file)`) — the same no-confirm-single-delete rule, applied
+  here to a view rather than a file, so the precedent is the interaction shape, not the file-level
+  predicate.
+
+Each branch carries its own threshold: Branch A is REQ-001's original criterion (AC-001 through
+AC-003), unchanged; Branch B is that no confirm dialog is raised, `db.views` still loses exactly one
+view, and a toast carrying an Undo action restores it. **No longer gates REQ-001.** `tasks.md` T004
+is rewritten as this two-branch read; its `[B]` is removed.
 <!-- /ANCHOR:adr-005-decision -->
 
 ---
@@ -403,15 +421,16 @@ before the confirm is argued further.
 - A configured view — tabs, filters, sorts, groupings — stops being one tap from gone.
 
 **What it costs**:
-- One tap added to every certain delete, the common case. Mitigation: the decline path is a no-op
-  by criterion, so the cost is the tap, not a state.
+- In Branch A, one tap added to every certain delete, the common case. Mitigation: the decline path
+  is a no-op by criterion, so the cost is the tap, not a state. In Branch B, the cost moves from a
+  tap to a toast window, the same trade `051` ADR-007's E4 already made for row deletion.
 
 **Risks**:
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| The irrecoverability claim is wrong and an undo path exists | M | One read of the persistence layer closes it; the UNKNOWN row in `spec.md` §10 tracks it |
-| The confirm fires on the last view, where nothing can be deleted | L | The criterion asserts the `:3447` early return precedes any confirm |
+| The persistence-layer read is skipped and a branch is guessed rather than read | M | The ruling requires the read before either branch ships; T004 states it as the leg's first line, not a risk beside it |
+| The confirm fires on the last view, where nothing can be deleted | L | The criterion asserts the `:3447` early return precedes any confirm, in either branch |
 <!-- /ANCHOR:adr-005-consequences -->
 <!-- /ANCHOR:adr-005 -->
 
@@ -497,9 +516,9 @@ the evidence; the landed role widths and the shipped rail anatomy are the things
 
 | Field | Value |
 |-------|-------|
-| **Status** | Proposed |
-| **Date** | 2026-09-06 |
-| **Deciders** | Operator — the decision gates REQ-006; recorded here by the Notion synthesis |
+| **Status** | Declined |
+| **Date** | 2026-09-06 · Ruled 2026-09-07 |
+| **Deciders** | Operator, verbatim, 2026-09-07 (Europe/Amsterdam): *"Groups panel only"* |
 
 ---
 
@@ -534,14 +553,18 @@ renderer, so REQ-006's first task remains that read.
 <!-- ANCHOR:adr-007-decision -->
 ### Decision
 
-**We chose (pending the operator)**: this packet's REQ-006 shrinks to the popover row's eye toggle
-for select/status group fields, persisting into the existing `boardHiddenGroups` axis — **or**,
-if the operator answers that `059`'s panel is the single writer, REQ-006 is superseded here and
-`acceptance-criteria.md` waives it by this ADR. Both readings are recorded; neither is applied.
+**Ruled: Declined.** The operator, verbatim, 2026-09-07 (Europe/Amsterdam): *"Groups panel only"* —
+the second of the two readings this ADR recorded. Per-group visibility lives in `059`'s Groups
+panel only. This packet's group popover keeps exactly what it has today — the existing "show empty
+groups" switch (`renderGroupVisibilitySwitch`, `toolbar-renderer.ts:1885`, `i18n.ts:299`) — and
+gains no eye-toggle-per-group row.
 
-**How it works**: until the operator answers, no REQ-006 code is written (`goal.md` D6). Whichever
-way they answer, the first task is unchanged: read the renderers — the board's read is verified at
-`board-renderer.ts:192`, the table's is not — before any criterion here goes green.
+**How it works**: `spec.md`'s REQ-006 is Declined by this ADR and `acceptance-criteria.md`'s AC-010
+closes **Waived**, citing this ADR. `059-notion-board-refinement`'s REQ-001/REQ-003 stay the
+`boardHiddenGroups` axis's single writer, exactly as `053` D8's one-owner rule requires. **Recorded
+so nobody rebuilds it**: a per-group eye row in this packet's popover was proposed, read and
+declined — a later pass that finds the axis has one writer should read this ADR before adding a
+second.
 <!-- /ANCHOR:adr-007-decision -->
 
 ---
@@ -551,18 +574,19 @@ way they answer, the first task is unchanged: read the renderers — the board's
 
 **What improves**:
 - The correction the loop needed is on the record: the set exists, so nobody "adds" it a second
-  time; the question is only who writes it.
+  time, and the ruling closes who writes it — `059`, not this packet.
 
 **What it costs**:
-- If the operator routes to `059`, this packet's REQ-006 closes as a waiver rather than as a
-  feature. Mitigation: the waiver cites this ADR, which cites `059`'s own REQ-001.
+- REQ-006 closes as a waiver rather than as a feature. Mitigation: the waiver cites this ADR, which
+  cites `059`'s own REQ-001, and this packet's popover keeps its existing switch rather than losing
+  a capability — nothing here regresses.
 
 **Risks**:
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| Two writers for one persisted axis | M | `053` goal D8 is the ruling; this ADR applies it and names both candidate owners |
-| A criterion asserts table consumption nobody established | L | The first task is the read; the criterion waits for it |
+| A later pass reads `059`'s REQ-001/REQ-003 landing slowly and rebuilds a popover writer here in the meantime | M | This ADR is Declined and named, exactly for that reader |
+| The table renderer's consumption of the axis stays unestablished after this packet closes | L | `059`'s own packet owns the read now; it is no longer this packet's first task |
 <!-- /ANCHOR:adr-007-consequences -->
 <!-- /ANCHOR:adr-007 -->
 
@@ -835,16 +859,19 @@ it, in `062`, and an agent may carry a ruling it may not make.
 
 | ADR | Status | Gates |
 |-----|--------|-------|
-| ADR-001 | Proposed | REQ-004 |
+| ADR-001 | Accepted | REQ-004 — ruled 2026-09-07, not gated |
 | ADR-002 | Accepted | — |
 | ADR-003 | Accepted | — |
 | ADR-004 | Accepted | — |
-| ADR-005 | Proposed | REQ-001 |
+| ADR-005 | Accepted | REQ-001 — ruled 2026-09-07, two-branch read, not gated |
 | ADR-006 | Accepted | — |
-| ADR-007 | Proposed | REQ-006 |
+| ADR-007 | Declined | REQ-006 — ruled 2026-09-07, closes Waived |
 | ADR-008 | Accepted | — |
 | ADR-009 | Accepted | — |
 | ADR-010 | Accepted | REQ-009 — inherited, not gated |
 
-Three Proposed, and they are the three `goal.md` D6 names. No code for REQ-001, REQ-004 or REQ-006
-is written before the operator answers.
+Zero Proposed. The three `goal.md` D6 named — ADR-001, ADR-005 and ADR-007 — were ruled 2026-09-07
+(Europe/Amsterdam): ADR-001 *"Yes, icons first then the drop order"* and ADR-005 *"Confirm only if
+unrecoverable"* Accepted, ADR-007 *"Groups panel only"* Declined. REQ-004 is unblocked; REQ-001 is
+unblocked as a two-branch read; REQ-006 closes Waived, citing ADR-007. No ADR in this record still
+gates a requirement.

@@ -11,12 +11,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/064-notion-toolbar-refinement"
-    last_updated_at: "2026-09-06T19:00:00Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Opened the packet from the toolbar's five-iteration Notion research loop"
-    next_safe_action: "Put ADR-001, ADR-005 and ADR-007 to the operator; they gate three of the five legs"
+    last_updated_at: "2026-09-07T00:00:00Z"
+    last_updated_by: "fold-064-rulings-session"
+    recent_action: "Folded three operator rulings (2026-09-07, Europe/Amsterdam) into ADR-001, ADR-005 and ADR-007"
+    next_safe_action: "Implement T004's two-branch read and T007's rung"
     blockers:
-      - "ADR-001, ADR-005 and ADR-007 are Proposed and the operator's"
       - "styles.css edits are serialized by the parent's CSS lane"
       - "053 owns every file this packet edits and is sequenced ahead of it"
     key_files:
@@ -33,14 +32,13 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "May a text-to-icon rung be added ahead of 053's AC-012 landed drop order"
-      - "Should a delete-view confirm exist at all on Notion-only evidence"
-      - "Is a deleted view genuinely unrecoverable, or is the severity argument resting on an unverified inference"
+      - "Is a deleted view recoverable by any existing undo path — the read ADR-005 requires before either of its branches is written"
     answered_questions:
-      - "Per-group visibility is 059's, not this packet's: boardHiddenGroups already exists, is persisted and is read; the missing writer is 059 REQ-001/REQ-003's Groups panel"
-      - "Our control cluster carries no text label, so the digest's density comparison lives only on the New button"
-      - "The digest's own P3 divergence row is stale: the desktop side sheet landed after it was written"
-      - "Conditional row colour is ours already and its view-settings row is this packet's: 062 ADR-003, ruled by the operator at 18:32, routes it here"
+      - "Per-group visibility is 059's: boardHiddenGroups exists; the missing writer is 059's Groups panel"
+      - "Our control cluster carries no text label; the density comparison lives only on the New button"
+      - "The digest's P3 divergence row is stale: the desktop side sheet landed after it was written"
+      - "ADR-001 and ADR-005 Accepted, ADR-007 Declined — ruled 2026-09-07 (Europe/Amsterdam)"
+      - "Conditional row colour is ours already; its view-settings row routes here via 062 ADR-003"
 ---
 # Goal: Notion Toolbar Refinement
 
@@ -92,7 +90,7 @@ Frozen choices. Changing one is an amendment.
 | D3 | **Additive only, under parent D15.** This packet may add a criterion, a task or an ADR. It may not un-tick a measured row or overturn a landed Anytype ruling. Where a Notion finding contradicts one, the ADR names both readings and stays **Proposed**. |
 | D4 | **What `053` ruled stays ruled.** The nested filter builder stays (`053` D4). The single icon vocabulary stays (`ADR-001`). The landed collapse drop order stays (`053`'s `AC-012` / T008); ADR-001 here adds a rung ahead of it and reorders nothing. |
 | D5 | **One owner per shared primitive, carried from `053` D8.** The confirm primitive is `051`'s and REQ-001 consumes it; a second confirm surface on this path would be the exact failure the five family phases were split to avoid. Per-group visibility is **`059`'s**, not this packet's, and ADR-007 records why. |
-| D6 | **Three Proposed ADRs are a real gate, not a formality.** ADR-001, ADR-005 and ADR-007 each decide whether a leg exists at all. No code for REQ-001, REQ-004 or REQ-006 is written before the operator answers. |
+| D6 | **Three Proposed ADRs were a real gate, not a formality — ruled 2026-09-07 (Europe/Amsterdam).** ADR-001 (*"Yes, icons first then the drop order"*) and ADR-005 (*"Confirm only if unrecoverable"*) are Accepted; ADR-007 (*"Groups panel only"*) is Declined. REQ-004 and REQ-001 (as a two-branch read) may now be built; REQ-006 closes Waived. |
 | D7 | **No new value is minted.** Every geometry this packet writes already exists in the landed inventory the research recorded — the 28px chip pitch (`styles.css:1821`), the 11%/17% tints (`:1825`, `:1832`), the badge and tab metrics. A proposal that needs a number the tree does not already carry is a proposal that has not been measured. |
 | D8 | Shipped, verified and operator-confirmed are three states (parent D3). A green lane does not close this phase; `053` AC-111 is where the operator's read of this surface lands. |
 <!-- /ANCHOR:directive -->
@@ -135,10 +133,13 @@ never resolve them silently.
       (`toolbar-renderer.ts:1180`) and the tab context menu `onClick: () => actions.deleteView(viewIndex)`
       (`:1330`); the host splices and saves (`database-view.ts:3445-3456`) with the last-view early
       return at `:3447` as its only guard, and a grep for a confirm on either path returns nothing.
-      Done is: `051`'s confirm primitive (`confirm-sheet.ts:46`) raised on both paths, one-scope,
-      naming the view; decline byte-identical to no action; accept deleting exactly one view; the
-      phone presentation per `048` D1. Notion basis: P9, `55602f6a` / `348fd2b7` — the two-scope
-      radio half is **not** adopted, because our views own no data sources. **Gated by ADR-005.**
+      Done is, **in the branch ADR-005's persistence-layer read finds unrecoverable**: `051`'s
+      confirm primitive (`confirm-sheet.ts:46`) raised on both paths, one-scope, naming the view;
+      decline byte-identical to no action; accept deleting exactly one view; the phone presentation
+      per `048` D1. **In the branch an existing undo path covers**: no confirm, an Undo toast
+      instead. Notion basis: P9, `55602f6a` / `348fd2b7` — the two-scope radio half is **not**
+      adopted, because our views own no data sources. **Ruled by ADR-005**, 2026-09-07
+      (Europe/Amsterdam), verbatim *"Confirm only if unrecoverable"* — no longer gated.
 - [ ] **The first filter rule costs one click from an empty panel, and a panel that already holds a
       rule is unchanged.** **Today: three clicks, and the empty state is a sentence.** The zero-rule
       branch renders `db-panel-empty` and nothing else (`filter-panel-renderer.ts:197-202`); the
@@ -165,8 +166,9 @@ never resolve them silently.
       reads absent **before** the first width at which any cluster is hidden, zero-overflow holds at
       every width, and the accessible name is unchanged. The landed drop order is not reordered.
       Notion basis: P1 — the split New survives on every populated capture including the narrow
-      no-tab cases (`21d71e5f`, `795eb9b5`). **Gated by ADR-001**, which names the conflict with
-      `053`'s `AC-012` and leaves it standing.
+      no-tab cases (`21d71e5f`, `795eb9b5`). **Ruled by ADR-001**, 2026-09-07 (Europe/Amsterdam),
+      verbatim *"Yes, icons first then the drop order"* — the conflict with `053`'s `AC-012` is
+      named and the drop order stands, unmoved, after the icon step.
 - [ ] **The chip rail can add the next rule from the rail.** **Today: it cannot.** `render()`
       (`active-view-controls-renderer.ts:60`) draws chips, a logic toggle and one rail-level button,
       the clear-all at `:150`; `grep -rn "db-active-control-add" src/ styles.css` returns **0**.
@@ -175,10 +177,10 @@ never resolve them silently.
       pitch (`styles.css:1821`) and carrying its own accessible name. Notion basis: P2, `d8abbe0b`;
       Anytype's own T001 read records the same add control, so this is the one adoption both
       references agree on.
-- [ ] **Every Notion-versus-Anytype disposition the loop named is written down, and none is
-      applied over a landed ruling.** **Today: they live only in a research document.** Done is:
-      ten ADRs in `decision-record.md` — the ones a landed ruling already decides marked
-      `Accepted` and citing it, the ones it does not marked **Proposed** and the operator's, and
+- [x] **Every Notion-versus-Anytype disposition the loop named is written down, and none is
+      applied over a landed ruling.** Done: ten ADRs in `decision-record.md` — the ones a landed
+      ruling already decides marked `Accepted` and citing it, the three the operator's ruled
+      2026-09-07 (Europe/Amsterdam) — ADR-001 and ADR-005 `Accepted`, ADR-007 `Declined` — and
       ADR-010 inherited from `062` because the operator already ruled it — plus the seven
       corrections D1 requires: per-group visibility routed to `059` rather than built here, the
       conditional-colour reading `062` had already corrected, and five citation corrections.
@@ -221,6 +223,7 @@ Everything below is VOLATILE.
 | Level chosen | Done | `recommend-level.sh --loc 600 --files 10 --db` → Level 2, **48/100**, confidence **82%**, phase score **0/50** against the 25 bar. A standard child, never a phase parent. Without `--db`: the tool prints **41/100, Level 1 (Baseline)**, confidence 80% — recorded so the sensitivity is visible, and the packet stays Level 2 on the documented go-higher judgment, because the `ViewConfig` reach REQ-006 and REQ-009 have is real whether or not the flag is passed |
 | Red-first anchors | Done | Every criterion re-derived on the tree at `80c2bb48` during synthesis, then **re-read at the landing after the rebase onto `31eafb60`** — twenty-seven commits that did touch `styles.css` and `view-config-panel-renderer.ts` but left the six toolbar-family source files byte-identical (`git diff --stat 80c2bb48 HEAD -- src/views/toolbar-renderer.ts …` is empty). Every anchor above holds at the landed SHA; the two that had drifted are corrected below |
 | Landing verification | Done | Twenty-eight anchors re-read on the rebased tree; two citations corrected, one criterion added (the conditional-colour row), `recommend-level.sh --loc 600 --files 10 --db` reproduced at 48/100 / 82% / phase 0/50 |
+| Operator rulings on ADR-001, ADR-005, ADR-007 | Done | Ruled 2026-09-07 (Europe/Amsterdam); folded into `decision-record.md`, `spec.md`, `acceptance-criteria.md` and `tasks.md` the same day. ADR-001 and ADR-005 Accepted, ADR-007 Declined |
 | Implementation | Not started | No code touched by this packet |
 
 ### Deviations and findings
