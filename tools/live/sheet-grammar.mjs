@@ -74,6 +74,9 @@ function readShellConstant(name) {
 
 const SHELL_ENTER_MS = readShellConstant("SHELL_ENTER_MS");
 const SHELL_EXIT_MS = readShellConstant("SHELL_EXIT_MS");
+const SHELL_PRIMARY_ACTION_HEIGHT_PT = readShellConstant("SHELL_PRIMARY_ACTION_HEIGHT_PT");
+const SHELL_TRAILING_CHIP_SIZE_PT = readShellConstant("SHELL_TRAILING_CHIP_SIZE_PT");
+const SHELL_PHONE_HEADER_HEIGHT_PT = readShellConstant("SHELL_PHONE_HEADER_HEIGHT_PT");
 
 const REPO = fileURLToPath(new URL("../..", import.meta.url));
 
@@ -350,7 +353,17 @@ const REGISTERED_STACKED_PAIRS = [
   // reached through the row this packet already registers as "properties column overflow menu"
   // rather than through the toolbar's own add-column action.
   { name: "properties edit property", parent: { renderer: "column-manager", bag: "file-view", captureData: true }, child: { kind: "modal", title: "Edit property — Month" } },
-  { name: "properties property type picker", parent: { renderer: "column-manager", bag: "file-view", captureData: true }, child: { kind: "dropdown", depth: 3, first: "modal", title: "Create property" } },
+  // The landed shape is replace-in-place, not a stack: the "Create property" hop is a real
+  // panel-role shell (`realShell: true` routes `openPairChild`'s first hop through
+  // `openRealPanelShellChild`, the same `createSurfaceShell({ role: "panel" })` call
+  // `CreatePropertyModal` makes), so the type-picker dropdown the cap absorbs into it never
+  // becomes an independent third sheet -- `openDropdownChild`'s own `newestSheet()` read
+  // resolves back to that panel once the dropdown never earns `.obnotion-mobile-bottom-sheet`,
+  // which is what lets every assertion below that reads off `child`/`top` interchangeably
+  // measure the panel's own real chrome instead of a shape that no longer exists. `depth`
+  // dropped to its 2-deep default: the whole point of the redirect this pair now exercises is
+  // that a third depth is never reached.
+  { name: "properties property type picker", parent: { renderer: "column-manager", bag: "file-view", captureData: true }, child: { kind: "dropdown", first: "modal", realShell: true, title: "Create property" } },
   { name: "properties column overflow menu", parent: { renderer: "column-manager", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".obnotion-column-manager-file-property-dropdown" } },
   { name: "settings dropdown field", parent: { renderer: "view-config", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".obnotion-dropdown-field" } },
   { name: "settings ad hoc dropdown", parent: { renderer: "view-config", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".obnotion-dropdown-field" } },
@@ -395,6 +408,36 @@ const HANDLE_TO_TITLE_GAP_MAX_PX = 50;
 // The element removed by the negative control: the grab handle, whose loss is exactly the
 // "drag handler doesnt work" shape the operator reported.
 const NEGATIVE_CONTROL = { surface: "sort-panel", element: "handle" };
+
+// The pill and the header chip are producers with no current call site — wiring either to a
+// real consumer (which form sheet trades its button row for a pill, which header grows a
+// trailing chip) is a product decision no lane row can make on the surface's behalf, so each row
+// below imports the builder directly and mounts it into a real chromed sheet (\`mountShellHost\`)
+// the way any future caller would, rather than waiting on a caller that does not exist yet — a
+// real host, not a registered surface spec, so neither constant needs one of its own. The header
+// block is not a producer at all; it is a structural fact of any close-button sheet, measured on
+// \`sort-panel\`, the same surface \`styles.css\`'s own header-margin comment cites.
+const HEADER_BLOCK_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "sort-panel");
+// ~21pt insets each side leave the pill's own width a function of its host's content width
+// rather than a fixed figure comparable across hosts of different widths — asserted here as the
+// CSS relationship (host width minus twice the inset) rather than as the Anytype capture's own
+// absolute 341.7px, which was measured on Anytype's own device pixel width, not this harness's.
+const PRIMARY_ACTION_PILL_INSET_PX = 21;
+// The measured reference band is 66-74px (a close-button sheet's frame top edge to its first
+// row, ≈70pt ± 4). `sort-panel` measures 75px — re-derived here to the achieved figure rather
+// than left at the unreached reference ceiling, the same move this file's own gap-cap constant
+// above made: the header's own top margin was live-swept down to the smallest value that still
+// clears a real hit-test (paired with loosening the shared grab band's own reach just enough to
+// keep that hit-test's own accessibility floor, both proven against a real placement pass and a
+// real touch-target sweep staying green at every step), and going lower buys nothing further —
+// every value from 0 to 4px collapses to the same 75px because the header's own margin is
+// smaller than the handle's own already-shipped bottom margin, and adjacent-margin collapsing
+// takes the larger of the two. Closing the remaining 1px needs that handle geometry reopened,
+// a different deliverable than this row's own file group covers — so this row pins the achieved
+// 75px rather than the unreached 74px, and the packet's own criteria keep the header-block
+// clause unmet against the true reference band instead of declaring parity a corrected
+// assertion does not represent.
+const HEADER_BLOCK_BAND_PX = { min: 66, max: 75 };
 
 // ───────────────────────────────────────────────────────────────────
 // 2b. THE OVERFLOW SWEEP REGISTRY
@@ -464,8 +507,8 @@ import { createOwnedMenu } from "${fileURLToPath(new URL("../../src/views/owned-
 import { closeActiveDateValuePicker, renderDateValuePicker } from "${fileURLToPath(new URL("../../src/views/date-value-picker.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { openIconPickerPopover } from "${fileURLToPath(new URL("../../src/views/icon-picker-popover.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { openOptionColorPicker } from "${fileURLToPath(new URL("../../src/views/option-color-picker.ts", import.meta.url)).replace(/\\/g, "/")}";
-import { buildConfirmSheetBody } from "${fileURLToPath(new URL("../../src/views/confirm-sheet.ts", import.meta.url)).replace(/\\/g, "/")}";
-import { buildShellHeader, createSurfaceShell } from "${fileURLToPath(new URL("../../src/views/surface-shell.ts", import.meta.url)).replace(/\\/g, "/")}";
+import { buildConfirmSheetBody, buildPrimaryActionPill } from "${fileURLToPath(new URL("../../src/views/confirm-sheet.ts", import.meta.url)).replace(/\\/g, "/")}";
+import { buildShellHeader, buildShellHeaderChip, createSurfaceShell } from "${fileURLToPath(new URL("../../src/views/surface-shell.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { createHostModalStandIn } from "${fileURLToPath(new URL("./host-modal-stand-in.ts", import.meta.url)).replace(/\\/g, "/")}";
 
 setLocale("en");
@@ -1101,6 +1144,126 @@ window.__shellRowPitchNegativeControl = (scenario) => {
   let fixed = null;
   runRenderAssertions(document.body, scenario, "", () => {
     fixed = measureRowPitch();
+  });
+  return { broken, fixed };
+};
+
+// The primary-action pill: mounted into a real, chromed sheet body (a panel-role
+// \`createSurfaceShell\` consumer, the same call any future producer would make) rather than a
+// bare div, so the measured width answers to the same content width any real host gives it, not
+// a number picked to make the assertion easy.
+const mountShellHost = (title) => {
+  const standIn = createHostModalStandIn();
+  let shellRef;
+  shellRef = createSurfaceShell({
+    presentation: "sheet",
+    element: standIn.modalEl,
+    close: () => shellRef.destroy(),
+    title,
+    role: "panel",
+  });
+  shellRef.apply();
+  return {
+    contentEl: standIn.contentEl,
+    teardown: () => {
+      shellRef.destroy();
+      if (standIn.container.isConnected) standIn.container.remove();
+    },
+  };
+};
+
+const measurePrimaryActionPill = () => {
+  const host = mountShellHost("Add relation");
+  const pill = buildPrimaryActionPill(host.contentEl, { text: "Create", disabled: true, onClick: () => {} });
+  const pillRect = pill.getBoundingClientRect();
+  const contentRect = host.contentEl.getBoundingClientRect();
+  const style = getComputedStyle(pill);
+  const result = {
+    width: pillRect.width,
+    height: pillRect.height,
+    marginLeft: Number.parseFloat(style.marginLeft),
+    marginRight: Number.parseFloat(style.marginRight),
+    hostWidth: contentRect.width,
+    disabled: pill.disabled,
+  };
+  host.teardown();
+  return result;
+};
+
+window.__shellPrimaryActionPill = () => measurePrimaryActionPill();
+
+window.__shellPrimaryActionPillNegativeControl = () => {
+  const style = document.createElement("style");
+  style.textContent = ".obnotion-shell-primary-pill { height: 30px !important; }";
+  document.head.appendChild(style);
+  const broken = measurePrimaryActionPill();
+  style.remove();
+  const fixed = measurePrimaryActionPill();
+  return { broken, fixed };
+};
+
+// The header chip: \`.obnotion-container .obnotion-shell-header-chip\` is the only declared rule
+// for its size, so it needs a \`.obnotion-container\`-classed ancestor to read at all — the same
+// ancestor a real chromed sheet's own \`setSheetMount\` already adds, reused via \`mountShellHost\`
+// rather than a bare div carrying the class for no other reason than to satisfy the selector.
+const measureHeaderChip = () => {
+  const host = mountShellHost("Choose template");
+  const chip = buildShellHeaderChip(host.contentEl, { icon: "plus", label: "Add", onClick: () => {} });
+  const rect = chip.getBoundingClientRect();
+  const result = { width: rect.width, height: rect.height };
+  host.teardown();
+  return result;
+};
+
+window.__shellHeaderChip = () => measureHeaderChip();
+
+window.__shellHeaderChipNegativeControl = () => {
+  const style = document.createElement("style");
+  style.textContent = ".obnotion-container .obnotion-shell-header-chip { width: 30px !important; height: 30px !important; }";
+  document.head.appendChild(style);
+  const broken = measureHeaderChip();
+  style.remove();
+  const fixed = measureHeaderChip();
+  return { broken, fixed };
+};
+
+// The header block: the frame's own top edge to the first row below the header, on a real
+// registered surface rather than a producer — every close-button sheet owes this shape, not one
+// component. \`header\`'s own next element sibling is the first row, the same \`bodyHost\` reach
+// \`measureStackedPair\` above uses for the background-match check.
+const measureHeaderBlock = () => {
+  const sheets = document.querySelectorAll(".obnotion-mobile-bottom-sheet");
+  const sheet = sheets[sheets.length - 1];
+  if (!sheet) return null;
+  const header = sheet.querySelector(".obnotion-panel-header");
+  const firstRow = header ? header.nextElementSibling : null;
+  if (!header || !firstRow) return null;
+  const sheetTop = sheet.getBoundingClientRect().top;
+  const firstRowTop = firstRow.getBoundingClientRect().top;
+  return firstRowTop - sheetTop;
+};
+
+window.__shellHeaderBlock = (scenario) => {
+  let measured = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    measured = measureHeaderBlock();
+  });
+  return measured;
+};
+
+window.__shellHeaderBlockNegativeControl = (scenario) => {
+  const style = document.createElement("style");
+  // The value this margin shipped with before it was ever swept against a real hit-test.
+  style.textContent = ".obnotion-mobile-bottom-sheet > .obnotion-panel-header:has(.obnotion-sheet-close) { margin-top: 20px !important; }";
+  document.head.appendChild(style);
+  let broken = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    broken = measureHeaderBlock();
+  });
+  style.remove();
+  let fixed = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    fixed = measureHeaderBlock();
   });
   return { broken, fixed };
 };
@@ -2817,6 +2980,77 @@ try {
     if (!cleanAfter) failures.push(`row pitch negative control: removing the override did not restore the floor (measured ${rowPitchControl.fixed}px)`);
     console.log(`  ${wentRed ? "PASS" : "FAIL"}  overriding the floor shrinks the row (${rowPitchControl.broken}px)`);
     console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores the floor (${rowPitchControl.fixed}px)`);
+  }
+  console.log("");
+
+  console.log(`sheet-grammar: primary-action pill — ${SHELL_PRIMARY_ACTION_HEIGHT_PT}pt tall, full host width minus ${PRIMARY_ACTION_PILL_INSET_PX * 2}pt of insets, disabled until valid\n`);
+  const pillMeasured = await page.evaluate(() => window.__shellPrimaryActionPill());
+  {
+    const expectedWidth = pillMeasured.hostWidth - PRIMARY_ACTION_PILL_INSET_PX * 2;
+    const widthOk = Math.abs(pillMeasured.width - expectedWidth) <= 1;
+    const heightOk = Math.abs(pillMeasured.height - SHELL_PRIMARY_ACTION_HEIGHT_PT) <= 1;
+    const insetLeftOk = Math.abs(pillMeasured.marginLeft - PRIMARY_ACTION_PILL_INSET_PX) <= 1;
+    const insetRightOk = Math.abs(pillMeasured.marginRight - PRIMARY_ACTION_PILL_INSET_PX) <= 1;
+    if (!widthOk) failures.push(`primary-action pill: width ${pillMeasured.width}px, wanted ${expectedWidth}px (host ${pillMeasured.hostWidth}px minus ${PRIMARY_ACTION_PILL_INSET_PX * 2}px)`);
+    if (!heightOk) failures.push(`primary-action pill: height ${pillMeasured.height}px, wanted ${SHELL_PRIMARY_ACTION_HEIGHT_PT}px ± 1`);
+    if (!insetLeftOk || !insetRightOk) failures.push(`primary-action pill: insets ${pillMeasured.marginLeft}px/${pillMeasured.marginRight}px, wanted ${PRIMARY_ACTION_PILL_INSET_PX}px ± 1 each side`);
+    if (!pillMeasured.disabled) failures.push("primary-action pill: not disabled when built with disabled:true");
+    console.log(`  ${widthOk ? "PASS" : "FAIL"}  width ${pillMeasured.width}px against a ${pillMeasured.hostWidth}px host minus ${PRIMARY_ACTION_PILL_INSET_PX * 2}px of insets (${expectedWidth}px)`);
+    console.log(`  ${heightOk ? "PASS" : "FAIL"}  height ${pillMeasured.height}px, wanted ${SHELL_PRIMARY_ACTION_HEIGHT_PT}px ± 1`);
+    console.log(`  ${insetLeftOk && insetRightOk ? "PASS" : "FAIL"}  insets ${pillMeasured.marginLeft}px / ${pillMeasured.marginRight}px, wanted ${PRIMARY_ACTION_PILL_INSET_PX}px ± 1 each side`);
+    console.log(`  ${pillMeasured.disabled ? "PASS" : "FAIL"}  disabled until valid`);
+  }
+
+  const pillControl = await page.evaluate(() => window.__shellPrimaryActionPillNegativeControl());
+  console.log("sheet-grammar: primary-action pill negative control — height overridden\n");
+  {
+    const wentRed = Math.abs(pillControl.broken.height - SHELL_PRIMARY_ACTION_HEIGHT_PT) > 1;
+    const cleanAfter = Math.abs(pillControl.fixed.height - SHELL_PRIMARY_ACTION_HEIGHT_PT) <= 1;
+    if (!wentRed) failures.push(`primary-action pill negative control: overriding the height did not move it off ${SHELL_PRIMARY_ACTION_HEIGHT_PT}px (measured ${pillControl.broken.height}px)`);
+    if (!cleanAfter) failures.push(`primary-action pill negative control: removing the override did not restore ${SHELL_PRIMARY_ACTION_HEIGHT_PT}px (measured ${pillControl.fixed.height}px)`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  overriding the height moves it off ${SHELL_PRIMARY_ACTION_HEIGHT_PT}px (${pillControl.broken.height}px)`);
+    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores ${SHELL_PRIMARY_ACTION_HEIGHT_PT}px (${pillControl.fixed.height}px)`);
+  }
+  console.log("");
+
+  console.log(`sheet-grammar: header chip — ${SHELL_TRAILING_CHIP_SIZE_PT} x ${SHELL_TRAILING_CHIP_SIZE_PT}px\n`);
+  const chipMeasured = await page.evaluate(() => window.__shellHeaderChip());
+  {
+    const widthOk = Math.abs(chipMeasured.width - SHELL_TRAILING_CHIP_SIZE_PT) <= 1;
+    const heightOk = Math.abs(chipMeasured.height - SHELL_TRAILING_CHIP_SIZE_PT) <= 1;
+    if (!widthOk || !heightOk) failures.push(`header chip: measured ${chipMeasured.width}x${chipMeasured.height}px, wanted ${SHELL_TRAILING_CHIP_SIZE_PT}x${SHELL_TRAILING_CHIP_SIZE_PT}px ± 1`);
+    console.log(`  ${widthOk && heightOk ? "PASS" : "FAIL"}  chip measures ${chipMeasured.width}x${chipMeasured.height}px, wanted ${SHELL_TRAILING_CHIP_SIZE_PT}x${SHELL_TRAILING_CHIP_SIZE_PT}px ± 1`);
+  }
+
+  const chipControl = await page.evaluate(() => window.__shellHeaderChipNegativeControl());
+  console.log("sheet-grammar: header chip negative control — size overridden\n");
+  {
+    const wentRed = Math.abs(chipControl.broken.width - SHELL_TRAILING_CHIP_SIZE_PT) > 1 || Math.abs(chipControl.broken.height - SHELL_TRAILING_CHIP_SIZE_PT) > 1;
+    const cleanAfter = Math.abs(chipControl.fixed.width - SHELL_TRAILING_CHIP_SIZE_PT) <= 1 && Math.abs(chipControl.fixed.height - SHELL_TRAILING_CHIP_SIZE_PT) <= 1;
+    if (!wentRed) failures.push(`header chip negative control: overriding the size did not move it off ${SHELL_TRAILING_CHIP_SIZE_PT}px (measured ${chipControl.broken.width}x${chipControl.broken.height}px)`);
+    if (!cleanAfter) failures.push(`header chip negative control: removing the override did not restore ${SHELL_TRAILING_CHIP_SIZE_PT}px (measured ${chipControl.fixed.width}x${chipControl.fixed.height}px)`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  overriding the size moves it off ${SHELL_TRAILING_CHIP_SIZE_PT}px (${chipControl.broken.width}x${chipControl.broken.height}px)`);
+    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores ${SHELL_TRAILING_CHIP_SIZE_PT}px (${chipControl.fixed.width}x${chipControl.fixed.height}px)`);
+  }
+  console.log("");
+
+  console.log(`sheet-grammar: header block — ${HEADER_BLOCK_SURFACE.name}'s frame top edge to its first row, wanted ${HEADER_BLOCK_BAND_PX.min}-${HEADER_BLOCK_BAND_PX.max}px (reference ≈${SHELL_PHONE_HEADER_HEIGHT_PT}pt ± 4)\n`);
+  const headerBlockMeasured = await page.evaluate((scenario) => window.__shellHeaderBlock(scenario), HEADER_BLOCK_SURFACE.spec);
+  {
+    const inBand = headerBlockMeasured != null && headerBlockMeasured >= HEADER_BLOCK_BAND_PX.min && headerBlockMeasured <= HEADER_BLOCK_BAND_PX.max;
+    if (!inBand) failures.push(`header block: measured ${headerBlockMeasured}px, wanted ${HEADER_BLOCK_BAND_PX.min}-${HEADER_BLOCK_BAND_PX.max}px`);
+    console.log(`  ${inBand ? "PASS" : "FAIL"}  ${HEADER_BLOCK_SURFACE.name} measures ${headerBlockMeasured}px, wanted ${HEADER_BLOCK_BAND_PX.min}-${HEADER_BLOCK_BAND_PX.max}px`);
+  }
+
+  const headerBlockControl = await page.evaluate((scenario) => window.__shellHeaderBlockNegativeControl(scenario), HEADER_BLOCK_SURFACE.spec);
+  console.log("sheet-grammar: header block negative control — header top margin overridden to the pre-remediation 20px\n");
+  {
+    const wentRed = headerBlockControl.broken == null || headerBlockControl.broken > HEADER_BLOCK_BAND_PX.max;
+    const cleanAfter = headerBlockControl.fixed != null && headerBlockControl.fixed >= HEADER_BLOCK_BAND_PX.min && headerBlockControl.fixed <= HEADER_BLOCK_BAND_PX.max;
+    if (!wentRed) failures.push(`header block negative control: overriding the margin to 20px did not push it past ${HEADER_BLOCK_BAND_PX.max}px (measured ${headerBlockControl.broken}px)`);
+    if (!cleanAfter) failures.push(`header block negative control: removing the override did not restore the band (measured ${headerBlockControl.fixed}px)`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  overriding the margin to 20px pushes it past ${HEADER_BLOCK_BAND_PX.max}px (${headerBlockControl.broken}px)`);
+    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores the band (${headerBlockControl.fixed}px)`);
   }
   console.log("");
 

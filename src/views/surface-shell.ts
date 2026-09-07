@@ -396,11 +396,23 @@ function attemptReplace(
   hostContainer?.style.setProperty("display", "none");
 
   const title = readReplacementTitle(childPanel);
+  // The child arrives with its own header when whatever opened it built one before the depth cap
+  // ever offered it to this replace (a phone-sheet dropdown's own `buildShellHeader` call, for
+  // one) — reparented wholesale rather than rebuilt, so that header, and the close button on it,
+  // graft in right alongside the content. Left alone that is a second close control sitting
+  // directly under this shell's own header, which already carries the swapped title and the back
+  // control this replace exists to show. Hidden, not removed, matching every other node this
+  // function displaces: the child's own close handler stays wired for whatever still calls it,
+  // it simply never paints a second one.
+  const ownHeader = Array.from(childPanel.children).find((node) =>
+    node.classList.contains("obnotion-panel-header")) as HTMLElement | undefined;
+  ownHeader?.style.setProperty("display", "none");
   childPanel.addClass("obnotion-shell-replaced-body");
   contentRoot.appendChild(childPanel);
 
   onAccepted(title, () => {
     childPanel.remove();
+    ownHeader?.style.removeProperty("display");
     hostContainer?.style.removeProperty("display");
     for (const node of bodyChildren) node.style.removeProperty("display");
   });

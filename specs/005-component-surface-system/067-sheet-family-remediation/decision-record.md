@@ -196,6 +196,41 @@ depth cap to reach. It was not force-extended to a fake third level just to have
 rewire. This status field stays `Proposed` because its own "Deciders" row names the operator and
 nothing here changes that; what is now settled is that the approach builds and measures as
 designed, against BOTH the generic proof and one pair's own real call graph.
+
+**Retargeted on a third follow-up leg: the SHARED battery asserts the real call graph directly,
+not only beside it.** `properties property type picker`'s own `REGISTERED_STACKED_PAIRS` entry
+now drops `depth: 3` and adds `realShell: true`, routing its "Create property" hop through
+`openRealPanelShellChild` — the real `createSurfaceShell({ role: "panel" })` call — instead of
+the synthetic host-modal stand-in. This was judged too wide a blast radius on the prior leg
+because `measureStackedPair`'s own 18 assertions were assumed to depend on the child staying an
+independent, separately-measurable sheet. That assumption did not hold: `openDropdownChild`'s own
+`newestSheet()` lookup already resolves to the absorbing panel once the dropdown never earns
+`.obnotion-mobile-bottom-sheet`, so `child` and `top` were already the same element by
+construction — no change to the shared measurement function was needed at all. All 18 assertions
+pass against the real shape, including `child depth 2 (want 2)`.
+
+**The retargeting was not free of findings — it surfaced two real production bugs the additive
+check's narrower proof never exercised, both fixed in this leg:**
+1. **A second, orphaned close control.** The absorbed dropdown builds its own header
+   (`buildShellHeader`, via `dropdown-field.ts`'s `openDropdownPopover`) before the depth cap
+   ever intercepts its registration, so grafting the whole element wholesale (`attemptReplace`)
+   carried that header — and its own close button — in alongside the content. The replaced panel
+   briefly showed two visible `.obnotion-sheet-close` controls. Fixed by hiding the child's own
+   `.obnotion-panel-header` on graft (`attemptReplace`, `surface-shell.ts`), restored on the way
+   back out — the same hide-not-remove treatment the function already gives the displaced parent
+   body and host container.
+2. **A fixed-position leak outside `createSurfaceShell`'s own guarded path.** `positionToolbarPopover`
+   (`popover-position.ts`) is a second, independent caller of `applySheetChrome` that never
+   checked its return — or the sheet class — before calling `placeSheet` on the panel, so an
+   absorbed dropdown was pinned as a `position: fixed`, full-viewport-width layer regardless of
+   being reparented, measured as a 5px overflow past the absorbing (floating) panel's own right
+   edge. `createSurfaceShell.apply()`'s own equivalent case was already repaired at landing; this
+   was the same defect class in a caller that repair never reached. Fixed with the identical
+   `SHEET_SURFACE_CLASS` read-back guard.
+
+Neither bug is specific to the constructed test harness — both reproduce through the real
+production call graph this retargeting now exercises, which is the reason retargeting was worth
+doing beyond satisfying this ADR's own threshold literally.
 <!-- /ANCHOR:adr-001-impl -->
 <!-- /ANCHOR:adr-001 -->
 

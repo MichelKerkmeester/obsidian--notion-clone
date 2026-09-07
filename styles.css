@@ -454,12 +454,19 @@
      The top inset is deliberately larger than any sheet's own top padding so the band starts at the
      sheet's edge whatever that padding is, and the sheet clips the remainder; deriving it from a
      padding token instead would pin this rule to one surface's spacing. The bottom inset is what
-     sets the delivered size, and 28px is the value both surfaces can carry: the owned menu is the
-     tighter one, its bar bottom sitting 17px below the sheet edge, so the band measures 45px there
-     and still stops 2px above its first row. 24px would leave that surface at 41px, under the
-     floor; 32px would reach 49px and start taking the first row's presses. */
+     sets the delivered size. 28px was tuned against the owned menu as the tighter of two
+     handle-bearing surfaces; that comparison is retired -- every `menu`-role card, the owned
+     menu included, is handle-less now, so it carries no grab band of any kind to be tight about
+     any more (`tools/live/sheet-grammar.mjs`'s own menu-scrim-alpha row and `hasSheetHandle`'s
+     backwards read both assert the absence live). The live constraint now is
+     `verify-placement.mjs`'s own hit-test on the add-view sheet: 26px reads a 45px band there
+     (16px above + 28px below + the centre pixel), 1px of headroom over the 44px floor; 25px reads
+     exactly 44px, zero headroom; 24px reads 43px and fails live. 26px is the smallest reduction
+     from 28px that still clears the floor with a margin matching this rule's own original
+     1px-headroom convention, verified against `verify-placement.mjs` and `touch-targets.mjs`
+     staying green at every step down. */
   top: -40px;
-  bottom: -28px;
+  bottom: -26px;
   transform: translateX(-50%);
 }
 
@@ -3711,7 +3718,17 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
 .obnotion-modal .obnotion-dropdown-option {
   display: grid;
   flex: 0 0 auto;
-  grid-template-columns: 16px minmax(0, 1fr);
+  /* Text first, check last -- matching the DOM order dropdown-field.ts actually builds (an
+     icon-less row is [.obnotion-dropdown-option-text][.obnotion-dropdown-option-check]). The
+     reversed order this rule shipped with (16px minmax(0,1fr)) put the CHECK column where the
+     text lands, squeezing every label into 16px of width and its own overflow:hidden/ellipsis
+     rule to "O.." -- caught when the depth cap's own replace-in-place move grafts an
+     already-portalled dropdown back under a `.obnotion-modal` ancestor (`attemptReplace`,
+     surface-shell.ts), the one path
+     that puts `.obnotion-dropdown-option` under this selector instead of `.obnotion-container`'s
+     correctly-ordered one (`getDropdownPopoverHost` portals every other dropdown out of any
+     `.obnotion-modal` subtree before it ever mounts). */
+  grid-template-columns: minmax(0, 1fr) 16px;
   align-items: center;
   gap: var(--obnotion-space-3);
   width: 100%;
@@ -3730,7 +3747,7 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
 }
 
 .obnotion-modal .obnotion-dropdown-option.has-icon {
-  grid-template-columns: 16px 16px minmax(0, 1fr);
+  grid-template-columns: 16px minmax(0, 1fr) 16px;
 }
 
 .obnotion-modal .obnotion-dropdown-option:hover {
@@ -13038,17 +13055,28 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
    ~70pt on the reference this family is built against): 20px put the sort-panel's own block at
    91px. Swept live against the add-view sheet's own hit-test
    ("the sheet's grab band is a thumb-sized target", tools/storybook/verify-placement.mjs) at every
-   integer from 0 to 20 — 6px is the lowest value at which the close button still clears the band
-   (0 of 11 controls answered by it; 5px and below swallow obnotion-sheet-close, confirming this margin
-   is load-bearing rather than decorative). 6px measures 77px on the sort-panel, closer but still
-   past the target's own tolerance: the remaining gap is bounded by the shared grab-band geometry
-   (`.obnotion-mobile-bottom-sheet-handle::before`'s own -40px/-28px, tuned separately against the owned
-   menu's own tighter 45px clearance) rather than by this margin, and closing it further means
-   either retuning that shared band per-family — a wider blast radius, every close-button sheet
-   plus the handle-bearing menu surfaces it also governs — or shrinking the handle's own measured
-   drop below the top edge, which this family does not own. Left named rather than forced. */
+   integer from 0 to 20 — 6px was the lowest value that cleared the band AT THE BAND'S OWN PRIOR
+   -28px reach (0 of 11 controls answered by it; 5px and below swallowed obnotion-sheet-close).
+   6px measured 77px on the sort-panel, past the target's own tolerance.
+
+   Closed further on a later pass, against the shared grab-band constant this comment used to
+   name as the blocker: the band's own bottom inset moved from -28px to -26px (see
+   `.obnotion-mobile-bottom-sheet-handle::before`'s own comment — the owned menu's "tighter"
+   comparison this rule used to cite retired the moment every `menu`-role card went
+   handle-less), which reopened room here. Re-swept live at the loosened band: the close button
+   stays clear all the way down to 0px this time (0 of 11 controls answered, even at the value
+   that used to swallow it), so THIS margin is no longer what protects the close button --
+   verified by the sweep, not assumed from the prior one. The floor that remains is a DIFFERENT
+   one: 0px through 4px all measure the identical 75px on the sort-panel, because the header's own
+   margin collapses against the handle's own already-shipped `margin: 6px auto 4px` once the
+   header's margin is the smaller of the two -- 4px is the largest value that still gets the full
+   benefit of that collapse, so it is what ships, not a lower number chosen for its own sake. 75px
+   is 1px past 66-74pt's own ceiling; closing that last pixel needs the handle's own geometry
+   reopened, a different deliverable than this rule's own file group covers — `tools/live/
+   sheet-grammar.mjs`'s own header-block row pins the achieved 75px rather than the unreached 74,
+   and the packet's own criteria keep this clause unmet against the true reference band. */
 .obnotion-mobile-bottom-sheet > .obnotion-panel-header:has(.obnotion-sheet-close) {
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .obnotion-container .obnotion-panel-header-actions {

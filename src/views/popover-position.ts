@@ -30,6 +30,7 @@ import {
   playSheetEntrance,
   SHEET_KEYBOARD_INSET_VAR,
   SHEET_STACK_CHANGE_EVENT,
+  SHEET_SURFACE_CLASS,
 } from "./mobile-bottom-sheet";
 import { overlayStack } from "./overlay-stack";
 
@@ -186,6 +187,15 @@ export function positionToolbarPopover(
   // Presentation now lives in the sheet module so surfaces without an anchor — modals — can reach
   // it too. This function keeps placement, which is the part that genuinely needs an anchor.
   applySheetChrome(panel, mobileSheet);
+  // Absorbed rather than presented: the depth cap (`overlay-stack.ts`) can hand a would-be third
+  // sheet to a parent shell's own `replace` before this popover ever mounts as one, and
+  // `applySheetChrome` takes the sheet class back off to say so (`surface-shell.ts`'s own
+  // `apply()` reads the same class back for the identical reason). Placing it anyway pins the
+  // grafted body to the viewport as a fixed, full-bleed layer regardless of where it was just
+  // reparented to -- caught live once `properties property type picker` in
+  // `tools/live/sheet-grammar.mjs` started driving this exact call through the real depth cap
+  // rather than a synthetic stand-in that never offers a replace.
+  if (mobileSheet && !panel.hasClass(SHEET_SURFACE_CLASS)) return;
   if (mobileSheet) {
     // The sheet commits its start state before flipping, so the rise actually runs. The anchored
     // branch keeps the frame-scheduled flip it has always had: on that path the entrance has never

@@ -46,7 +46,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 067-sheet-family-remediation |
-| **Completed** | Landed on `main` 2026-09-07, first follow-up leg closed T006 and ADR-003's page pull-back the same day; second follow-up leg (same day) closed AC-003's remaining light-theme figure, verified `properties property type picker`'s real call graph, closed T020's replace-pair capture for that pair, and narrowed T015's header block; not device-verified — T015's header-block clause, T021 (partial) and AC-011 remain open |
+| **Completed** | Landed on `main` 2026-09-07, first follow-up leg closed T006 and ADR-003's page pull-back the same day; second follow-up leg (same day) closed AC-003's remaining light-theme figure, verified `properties property type picker`'s real call graph, closed T020's replace-pair capture for that pair, and narrowed T015's header block; third follow-up leg (same day) retargeted AC-001's own registry entry to the real replace-in-place shape (fixing two production bugs it surfaced plus a capture defect), added T015's pill/chip lane rows, narrowed the header-block figure further to 75px, and closed the T021 divider audit against real reference captures; not device-verified — T015's header-block clause, T021's own two confirmed-unmet contexts and AC-011 remain open |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -99,6 +99,34 @@ reference-capture comparison — see Known Limitations #6), and the 17 stale she
 named on `tools/lane/css-lane.json`'s `outstanding` row (not reviewed this session). AC-011 is the
 operator's device read and is untouched.
 
+**Third follow-up leg (same day), on top of all three legs above.** `properties property type
+picker`'s `REGISTERED_STACKED_PAIRS` entry retargeted from the synthetic two-hop stand-in to the
+real replace-in-place shape (`depth: 3` dropped, `realShell: true` added) — the SHARED
+18-assertion battery now asserts the real call graph directly, which the prior leg judged too
+wide a blast radius but turned out to need no change to `measureStackedPair` itself, since
+`openDropdownChild`'s own `newestSheet()` lookup already resolves the same element the battery's
+`child`/`top` read. Retargeting surfaced two real production bugs, both fixed: the absorbed
+dropdown's own header grafting in alongside its own close button (a second, orphaned close
+control), and `positionToolbarPopover` pinning an absorbed dropdown as a fixed, full-viewport
+layer because it never checked the depth cap's own outcome before placing it — the same defect
+class `createSurfaceShell.apply()`'s own landing repair already fixed, in a second caller that
+repair never reached. Retargeting also surfaced a capture defect: the replaced body's own option
+labels rendered truncated to `O..`, caused by a CSS grid-column-order collision unique to the
+depth-cap graft (`.obnotion-modal`'s reversed column order winning over `.obnotion-container`'s
+correct one once the grafted dropdown sits under both ancestors at once) — fixed in `styles.css`
+and recaptured in both themes. T015 gained pill and chip lane rows (each importing the real
+producer into a real chromed host, each with a negative control) and the header-block figure
+narrowed from 77px to 75px via a live-verified loosening of the shared grab-band constant paired
+with the header's own top margin — both proven against `verify-placement.mjs` and
+`touch-targets.mjs` staying green at every step, still 1px short of the 66-74px reference band,
+bounded to reopening the already-`Met` handle geometry. T021's divider audit closed against real
+reference captures (`anytype-mobile-sheet-view-edit-*`, `-view-sorts-*`,
+`-object-properties-settings-*`) rather than a styles.css reading alone: 1 of 3 contexts (leading-
+icon rows) `Met`; the other two confirmed `Unmet` with a specific, evidenced reason each
+(`.obnotion-panel-row`'s missing divider mechanism for plain rows; the Properties sheet's missing
+section-heading grouping for the between-section case), neither closed this leg because both need
+a wider blast radius than this leg's file group covers.
+
 ### Files Changed
 
 | File | Action | Purpose |
@@ -126,6 +154,12 @@ operator's device read and is untouched.
 | `tools/live/sheet-grammar.mjs` (second follow-up leg) | Modified | A permanent "stacked-parent filter" lane row plus its negative control; a new `openRealPanelShellChild` construction and a dedicated "properties property type picker — the real call graph under the depth cap" check plus its dialog-role negative control, additive beside the existing `REGISTERED_STACKED_PAIRS` entry |
 | `tools/screenshots/constructed-scenarios.mjs` (second follow-up leg) | Modified | A new `constructedDepth3ReplaceScenario` helper and the `constructed-depth3-property-type-picker-replaced` scenario (the AFTER picture of the existing BEFORE one), both themes |
 | `screenshots/notion-clone/panels/constructed-depth3-column-submenu-mobile-light.png`, `constructed-depth3-property-type-picker-replaced-mobile-{dark,light}.png` (second follow-up leg) | Modified/Added | Recaptured for the filter fix (light only — dark is unmoved by construction) and the new replace-pair AFTER scenario |
+| `src/views/surface-shell.ts` (third follow-up leg) | Modified | `attemptReplace` hides the absorbed child's own `.obnotion-panel-header` on graft (restored on the way out), fixing a second, orphaned close control |
+| `src/views/popover-position.ts` (third follow-up leg) | Modified | `positionToolbarPopover` reads `SHEET_SURFACE_CLASS` back after `applySheetChrome`, the same guard `createSurfaceShell.apply()` already uses, and returns early when the depth cap absorbed the panel instead of placing it anyway |
+| `styles.css` (third follow-up leg) | Modified | `.obnotion-modal .obnotion-dropdown-option`/`.has-icon`'s grid-column order corrected (fixes the replaced-body label truncation); the shared grab-band's bottom inset (`-28px` -> `-26px`) and the close-button header's top margin (`6px` -> `4px`), re-derived together against a live hit-test |
+| `tools/live/sheet-grammar.mjs` (third follow-up leg) | Modified | `properties property type picker`'s `REGISTERED_STACKED_PAIRS` entry retargeted (`depth: 3` dropped, `realShell: true` added); three new lane rows (primary-action pill, header chip, header block) each with a negative control; `HEADER_BLOCK_BAND_PX` re-derived to 66-75 |
+| `screenshots/notion-clone/panels/constructed-depth3-property-type-picker-replaced-mobile-{dark,light}.png` (third follow-up leg) | Modified | Recaptured for the grid-column-order fix — labels read in full instead of truncated to `O..` |
+| 45 further real-content recaptures (third follow-up leg, css-lane-reviewed) | Modified | Moved by the grab-band/header-margin re-derivation, which touches every close-button sheet; named in `tools/lane/css-lane.json`'s release entry, none under `screenshots/project-manager/` |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -183,6 +217,18 @@ re-encodes falls under `screenshots/project-manager/`).
 | **Follow-up leg** — `node tools/storybook/verify-placement.mjs` | PASS — exit 0, 413/415 (2 red for a declared reason, the pre-existing baseline). This is what caught the page-pull-back regression: two sections crashed outright (`TypeError: Cannot read properties of null`, reading the now-absent handle) and, once unblocked, eleven more genuinely failed — nine because a menu sheet no longer drags or carries a handle (rewritten to assert the new contract, using a plain draggable sheet fixture where the test's real subject was the drag/flick mechanism rather than anything menu-specific) and the keyboard-lift/selection-bar ones because of the page-pull-back containing-block bug (resolved by the revert, not by a test change) |
 | **Follow-up leg** — `node tools/naming/scan-comments.mjs`, `node tools/naming/scan-failing-values.mjs` | PASS — exit 0 both (one artifact-id violation and one commented-out-code false-positive introduced by this session's own comments, both fixed by rewording, not by loosening the scanner) |
 | **Follow-up leg** — `npm run screenshots` + css-lane acquire/review/release, run TWICE | First pass (with page-pull-back still present): 48 files moved on a 606-entry recapture (baseline `4edd4f3da2ef` -> `db7a393f8759`); 19 real by decoded pixel delta, named; 2 excluded (see below); 26 pixelHash-identical restored. Page-pull-back was then reverted (styles.css moved again, `db7a393f8759` -> `191652d50658`), so the lane was acquired and recaptured a SECOND time rather than hand-editing the first release's file list: 38 files moved, of which 12 are real (byte-for-byte the same decoded-pixel numbers as the first pass for the same files — the menu-card fix that produces them is unchanged by the revert) and 26 are pixelHash-identical, restored. The 7 files that moved ONLY because of the (now-reverted) page-pull-back — `constructed-toolbar-add-view-mobile-{dark,light}`, `constructed-toolbar-utilities-mobile-{dark,light}`, `constructed-board-groups-panel-mobile-{dark,light}`, `constructed-record-peek-mobile-light` — no longer move at all and are folded back into the restored set. Both passes exclude `field-icon-picker-desktop-{dark,light}`: origin/main's `9d798c69` already recaptured and reviewed these as part of a different, unrelated 4-file fix this worktree (8 commits behind) does not yet have; claiming them from a stale base would fight that commit's rebase rather than help it. The 32 protected Project Manager entries carry no content change in either pass. `SURFACE_PHASE=067-sheet-family-remediation node tools/lane/check-lane.mjs` exits 0 against the final (second) release |
+| **Third follow-up leg** — `npx tsc --noEmit` | PASS — exit 0 |
+| **Third follow-up leg** — `npx vitest run` | PASS — 1641/1641 tests, 153/153 files |
+| **Third follow-up leg** — `node tools/live/sheet-grammar.mjs` | PASS — exit 0, including the retargeted `properties property type picker` entry (all 18 assertions, `child depth 2 (want 2)`) and three new rows (primary-action pill, header chip, header block) with their negative controls |
+| **Third follow-up leg** — `node tools/live/render-assertions.mjs`, `node tools/live/sheet-teardown.mjs` | PASS — exit 0 both |
+| **Third follow-up leg** — `node tools/storybook/verify-placement.mjs` | PASS — exit 0, 413/415 (2 red for a declared reason, matching the recorded baseline exactly) at every step of the grab-band/header-margin sweep |
+| **Third follow-up leg** — `node tools/live/touch-targets.mjs` | PASS — nothing newly under 28px, at every step of the sweep |
+| **Third follow-up leg** — `node tools/naming/scan-comments.mjs`, `node tools/naming/scan-failing-values.mjs` | PASS — exit 0 both (artifact-id violations introduced by this leg's own new comments were fixed by rewording, not by loosening the scanner) |
+| **Third follow-up leg** — `npm run screenshots` + css-lane acquire/edit/release | 66 files moved on a 608-entry recapture; 47 real by decoded pixelHash/layoutHash delta, named in the lane's release entry; 19 byte-only re-encodes restored to their committed bytes (manifest `bytes` field reconciled for 16 of them whose size also drifted). `SURFACE_PHASE=067-sheet-family-remediation node tools/lane/check-lane.mjs` exits 0. The 32 protected Project Manager entries carry no change |
+| **Third follow-up leg** — `node tools/live/evidence.mjs --check-all` | 8 of 15 artefacts read STALE against the moved `styles.css`/`popover-position.ts` hashes; each regenerated by its own producing tool (`cascade-audit`, `checkbox-appearance`, `checkbox-inventory`, `design-conformance`, `engine-parity`, `surface-census`, `token-census`, `view-census`) — `engine-parity` itself still reports 50 Chrome/WebKit differences, unchanged from the pre-leg baseline (font/scrollbar rendering, not a regression), re-verified fresh. All 15 fresh on re-check |
+| **Third follow-up leg** — `npm run build` | PASS — exit 0 |
+| **Third follow-up leg** — `npm run replay` | PASS — all 28 results still hold |
+| **Third follow-up leg** — `npm run gate` (foreground, stdin from `/dev/null`, exit read from `$?`) | **PASS — 26/26 lanes green**, 0 red for a declared reason |
 <!-- /ANCHOR:verification -->
 
 ---

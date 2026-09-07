@@ -244,6 +244,40 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       are unreachable dead weight today (zero call sites, confirmed by `rg`), so leaving them costs
       nothing a lint or bundle-size check currently catches, and follows the same "producer, not
       yet a wired consumer" precedent T018's `heightRole` already sets in this same packet.
+      **Pill and chip gain lane rows, on a third follow-up leg; the header-block clause narrows
+      further and its blocker is now confirmed live rather than named from the prior sweep's own
+      arithmetic.** Both producers are mounted into a real, chromed `createSurfaceShell({role:
+      "panel"})` host (`tools/live/sheet-grammar.mjs`'s `mountShellHost`) rather than a bare div,
+      following the row-59 pattern: the pill asserts its measured 50pt height and its width as the
+      host's own content width minus 2×21pt of insets (the CSS relationship `calc(100% - 42px)`
+      declares, not Anytype's own absolute 341.7px — that figure was measured on Anytype's own
+      device pixel width, not this harness's, so pinning it here would assert a coincidence
+      instead of the shape); the chip asserts its measured 44.0×44.0px. Both carry a negative
+      control (overriding the pill's height / the chip's size, confirming red, then restoring).
+      `node tools/live/sheet-grammar.mjs` exits 0 with all three new rows and their controls
+      green. The header-block clause: the shared grab-band constant this leg's own prior note
+      pointed at as the blocker (`.obnotion-mobile-bottom-sheet-handle::before`'s `-40px`/`-28px`)
+      was live-swept downward against `verify-placement.mjs`'s own add-view hit-test — the owned
+      menu's "tighter" comparison that constant was tuned against no longer applies, since every
+      `menu`-role card (owned menu included) went handle-less on an earlier leg of this same
+      packet — and settled at `-26px`, the smallest reduction that still clears the hit-test's
+      44px floor with the rule's own original 1px of headroom (25px reads exactly 44, zero
+      headroom; 24px reads 43 and fails live). That reopened room to lower the header's own top
+      margin from 6px to 4px; re-swept live, the close button stays clear all the way down to 0px
+      this time, so the margin is no longer what protects it. The header-block figure narrows from
+      77px to **75px** on `sort-panel` — every value from 0 to 4px measures the identical 75px,
+      because the header's own margin collapses against the handle's own already-shipped `margin:
+      6px auto 4px` (T014) once the header's is the smaller of the two, so 4px is the largest
+      value that still gets the full benefit of that collapse rather than a lower number chosen
+      for its own sake. 75px is 1px past the 66-74px band; closing it needs T014's own geometry
+      reopened, a different deliverable than this leg's file group covers. `node tools/live/
+      sheet-grammar.mjs`'s new header-block row pins the achieved 75px (re-derived band 66-75,
+      the same move `HANDLE_TO_TITLE_GAP_MAX_PX` made) with its own negative control (forcing the
+      pre-sweep 20px margin, confirming it pushes past 75, then restoring); AC-007's own prose
+      still measures against the true 66-74px reference and stays `Unmet` by that 1px. Both
+      `node tools/storybook/verify-placement.mjs` (413/415, matching the recorded baseline) and
+      `node tools/live/touch-targets.mjs` (PASS) hold at every step of the sweep. `buildPrimaryActionPill`/`buildShellHeaderChip` stay undisposed — reviewed again this leg,
+      the same product-decision reasoning holds and neither is wired to a consumer nor removed.
 - [x] **T016 Declared titles to 20 of 20, and one scrape chain** (`src/views/modals/db-modal.ts`,
       `src/views/mobile-bottom-sheet.ts`, the three named modals). **Threshold**: the scrape-fallback
       counter reads **0** across the registered set, and exactly **one** scrape chain survives.
@@ -312,6 +346,45 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       property picker` gets no replace-pair capture — traced this leg and confirmed its own real
       chain is two levels with no third to replace (see `decision-record.md`), so there is nothing
       for a before/after pair to show.
+      **The AFTER picture itself carried a real defect this leg found and fixed, and one prior
+      claim in this row's own note is corrected against the tree.** The replaced-body's own option
+      labels rendered truncated to `O..` in both themes — the dropdown's `.obnotion-dropdown-
+      option-text` column collapsed to 16px instead of the flexible width every other host gives
+      it. Root cause: `attemptReplace` grafts the dropdown's own already-portalled element under
+      the absorbing panel's `.obnotion-modal` content root, so its `.obnotion-dropdown-option`
+      children now sit under BOTH `.obnotion-container` (the dropdown still carries its own, from
+      `setSheetMount`'s body-portal branch) and `.obnotion-modal` ancestors at once — a nesting no
+      other dropdown ever reaches, because `getDropdownPopoverHost` portals every other one out of
+      any `.obnotion-modal` subtree before it ever mounts. The two ancestor-scoped rules disagree
+      on column order (`.obnotion-container`'s is text-first; `.obnotion-modal`'s shipped
+      reversed, check-first), and equal specificity means source order decides — `.obnotion-modal`
+      is declared later, so its reversed order won and squeezed every label. Fixed in
+      `styles.css` by correcting `.obnotion-modal .obnotion-dropdown-option`'s column order to
+      match `.obnotion-container`'s (text first, check last), which is the DOM order
+      `dropdown-field.ts` actually builds in every context. Recaptured in both themes; both now
+      show `Option 1` through `Option 7` in full. **This also surfaced two production bugs, fixed
+      in the same pass, independent of the capture:** (1) the absorbed dropdown's own header
+      (built by `buildShellHeader` before the depth cap ever intercepts it) grafted in alongside
+      its own close button, so the replaced panel briefly carried two visible close controls —
+      `attemptReplace` now hides the child's own `.obnotion-panel-header` on graft (restored on
+      the way back out), matching the same hide-not-remove treatment the function already gives
+      the parent's displaced body and host container. (2) `positionToolbarPopover`
+      (`popover-position.ts`) never checked whether the depth cap had already absorbed its own
+      panel before calling `placeSheet` on it, so the grafted dropdown was pinned as a
+      `position: fixed`, full-viewport-width layer regardless of being reparented — measured live
+      as a 5px right-edge overflow past the (floating, inset) absorbing panel's own edge. Fixed
+      with the same `SHEET_SURFACE_CLASS` read-back guard `createSurfaceShell.apply()` already
+      uses for its own equivalent case. Both fixes verified via `node tools/live/
+      sheet-grammar.mjs`'s "properties property type picker" stacked-pair row (all 18 assertions
+      green, including "exactly one visible close control (found 1)" and the overflow sweep's
+      "nothing past ... right edge"). **The "no title element to scrape" claim is corrected in
+      place**: `dropdown-field.ts`'s own `openDropdownPopover` calls `buildShellHeader` — which
+      does build a real `.obnotion-panel-title` — ahead of the placement call that triggers the
+      depth-cap redirect, so `readReplacementTitle` in fact finds and scrapes that title rather
+      than falling through empty; the observed "unchanged" title is unchanged because the
+      dropdown's own label and the panel's own declared title are the same string
+      ("Create property"), not because nothing was found. The screenshot's own content is
+      unaffected either way; only the stated mechanism was wrong.
 - [ ] **T021 [P] Divider-inset audit** (`styles.css`). **Threshold**: C8's three contexts each
       verified — plain rows symmetric **20pt ± 1**, rows with a leading icon aligned to the text
       column, between-section dividers full-bleed. **Red-first anchor**: the research **explicitly
@@ -331,6 +404,39 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       whether that counts as "full-bleed" relative to the reference was not checked against an
       actual Anytype capture. Left `[ ]`: this needs a real comparison against the reference
       images, not a styles.css reading, before it can close.
+      **Audit closed against the real reference captures, on a third follow-up leg — two of the
+      three contexts stay unmet, now with evidence rather than a description.** Read directly
+      against `anytype-mobile-sheet-view-edit-dark.png`, `anytype-mobile-sheet-view-sorts-dark.png`
+      and `anytype-mobile-sheet-object-properties-settings-dark.png`, not styles.css alone.
+      **Leading-icon rows: Met.** `-view-sorts-`'s own "Name"/"Due" rows confirm the reference
+      divider starts at the label column past the leading icon square — exactly what
+      `.obnotion-mobile-bottom-sheet .obnotion-menu-item`'s `--obnotion-menu-divider-inset`
+      (derived from the row's own padding/icon/gap arithmetic) already produces. **Plain rows:
+      confirmed Unmet, not merely undescribed.** `-view-edit-`'s own "Layout"/"Properties"/
+      "Filters"/"Sorts" rows show a divider inset symmetrically from both edges, with no leading
+      icon to align to instead. `.obnotion-panel-row` (the filter/sort/settings-sheet family) has
+      no divider rule of any kind, confirmed unchanged by direct read of the current stylesheet —
+      the row previously described this without a reference to check it against; the reference
+      now confirms the gap is real. Not closed this leg: `.obnotion-panel-row` is a
+      high-blast-radius shared class reached by every filter, sort and settings-sheet surface in
+      the family, so adding a divider to it would move a wide, unbounded set of existing captures
+      this leg has not scoped or reviewed — a per-family retune this remediation's own file group
+      does not cover, the same class of deferral T015's shared grab-band constant and AC-007's
+      header-block clause already carry. **Between-section: confirmed Unmet, and narrower than
+      previously described.** `-object-properties-settings-`'s own capture shows a full-bleed
+      (edge-to-edge) hairline directly under a section heading ("Header", "Properties panel"),
+      distinct from the inset row-to-row dividers within a section. This repository's only
+      comparable primitive, `createMenuSeparator`/`.obnotion-menu-separator`
+      (`menu-row.ts`/`styles.css`, `margin: 4px 8px`), is wired to unlabelled group breaks in
+      owned-menus and is not literally edge-to-edge either way; the surface structurally closest
+      to the reference (`column-manager-renderer.ts`'s own "Properties" sheet, the same one this
+      packet's own depth-cap captures use) has no section-heading grouping at all to attach a
+      between-section divider to. The gap is not a wrong divider style, it is a missing
+      structural grouping the divider would need to attach to — a surface-restructuring question
+      wider than a stylesheet inset, outside this leg's file group. **1 of 3 contexts Met; the
+      audit itself — the threshold this row actually names — is closed: every context now has a
+      verified answer against a real capture, none left "not checked against an actual
+      capture."**
 - [ ] **T022 Gate from the final state.** **Threshold**: `npx tsc --noEmit` 0, `npm run build` 0,
       `npx vitest run` 0, `npm run gate` exit 0 read from `$?` without a pipe, `npm run replay`
       holding with reversed 0, and the registry at or above **14 surfaces / 32 pairs**. Read the
