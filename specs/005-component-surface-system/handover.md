@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: orchestrate-handover-24, 2026-09-06 ~20:10. 0.0.30 shipped at e016e75c; fourteen legs landed since 16:35, six of the eight Notion-refinement children are open (059, 061, 062, 063, 065, 066), 067 and the 068 rename plan landed, and the cell interaction model was decided from four reference products. Delegation is now native Sonnet-implements / Opus-verifies alongside GLM 5.3 flash max on DevPass, OpenRouter credit having reached 0 at 20:10. Documentation only: no src/, styles.css, tools/ or main.js file was touched."
+description: "Resume point: orchestrate-handover-25, 2026-09-07 13:15. 0.0.30 still shipped at e016e75c; all eight Notion-refinement children (059-066) are open and each has a first implementation leg landed, 068's rename plan is ruled, and the GitHub repo itself was renamed to obsidian_notion-clone. In flight: worktrees 212, 214 (paused), 215 and 216, landed one Opus lander at a time, then the 068 rename as one leg, then the operator device rows. Documentation only: no src/, styles.css, tools/ or main.js file was touched."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,32 +10,31 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-06T20:10:00Z"
-    last_updated_by: "orchestrate-handover-24"
-    recent_action: "Refreshed goal-prompt.md, goal.md's phase states and this handover after the 0.0.30 landings"
-    next_safe_action: "Land 058, 064 and the rulings fold leg"
+    last_updated_at: "2026-09-07T13:15:00Z"
+    last_updated_by: "orchestrate-handover-25"
+    recent_action: "Refreshed goal-prompt.md, goal.md's 059-068 states, and this handover"
+    next_safe_action: "Land 212, then 214, then 215 and 216, one Opus lander at a time"
     blockers:
-      - "064 is still research/synthesis; only an Opus synthesis opens a child, never a hand-made folder"
-      - "058 T003 onward pending: no title format-routing code has landed"
-      - "047 T035 content reclassification owed for the Fibery harvest, and for ClickUp when it lands"
-      - "OpenRouter credit is 0 as of 20:10; GLM runs through llmgateway (DevPass) only"
-      - "Both claude logins share one session-cap window (hit 17:05 and 18:57, reset 19:40)"
+      - "068 runs as one leg with nothing else in flight; do not start it while 212/214/215/216 land"
+      - "061's device row (AC-005) and 067's gate row stay open behind the operator's iOS pass"
+      - "The primary checkout carries live uncommitted edits to 067's docs (likely 215 landing)"
+      - "Both claude logins share one session-cap window; write a continuation prompt per leg"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
       - "specs/005-component-surface-system/roadmap.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "surface-system-handover-24"
+      session_id: "surface-system-handover-25"
       parent_session_id: null
-    completion_pct: 76
+    completion_pct: 82
     open_questions:
       - "Does a Notion finding that contradicts a landed Anytype ruling ever become more than Proposed"
     answered_questions:
       - "The cell model: tap edits, long-press selects, a 3-control anchored pill, an overflow sheet, the editor at the cell"
-      - "068 renames to obnotion- with a data.json migration and author MichelKerkmeester; 0.0.31 is the rename release"
-      - "GLM route once OpenRouter hits 0: --provider llmgateway --model glm-5.3-flash --thinking max"
-      - "The board scrollbar is edge-only; the calendar month chip's ellipsis sits inside the cell"
+      - "068 renames to obnotion- with a data.json migration, author MichelKerkmeester, repo obsidian_notion-clone"
+      - "GLM route: --provider llmgateway --model glm-5.3-flash --thinking max"
+      - "All eight Notion-refinement children are open with a first implementation leg each"
 ---
 # Session Handover: Component Surface System
 
@@ -78,6 +77,65 @@ committed rather than restored, and the css-lane release names them (`reviewed` 
 21 changed capture(s)") · `npm run gate` **26 green, exit 0** · packet validation `RESULT: PASSED`,
 Errors 0 Warnings 0. `goal.md` still derives **7/8 = 88%**; the eighth is AC-011, the operator's
 device row, and it was not touched.
+
+### 2026-09-07 13:15, `orchestrate-handover-25`, read from `.worktrees/217-goal-refresh-1315`
+
+**Documentation only.** No `src/`, `styles.css`, `tools/` or `main.js` file was touched in this
+leg. **`0.0.30` shipped at `e016e75c`, unchanged since handover-24.**
+
+**`212`'s T015/T016 follow-up landed while this leg rebased** — see the entry directly above,
+which supersedes this one's "in flight" line for `212` below; `064` now derives 7/8 with only
+AC-011, the operator's device row, untouched.
+
+**Landed 2026-09-07** (run `git log --since=2026-09-07 --oneline origin/main` for the full SHA
+list): `064` opened as a child plus its rulings · the ClickUp harvest `69c58159` and its content
+reclassification `21392233` (`047` T033-T035 all now done) · `063` implementation `a88894e5` plus
+the evidence-gaps follow-up `755f2eac` · `067` folded `44101b47` and implemented `173f7d3a` (3/7,
+a further follow-up in flight) · `060` `5fec918d` (5/5) · `065` `a0d64df0` plus the touch-target fix
+`8fb3c87e` (9/10) · `066` `cbb854c4` plus the lane-row fix `af0e8796` (4/6) · `059` `f2a7ec34` (9/10)
+· `062` `2c8974fb` plus the freeze-defects fix `3a94e58b` (8/9) · `061` `abb6827f` plus the tap/dock
+fix `6ca4a5c3` (6/7, closing the operator's cell-menu complaint in code) · `064` implementation
+`b46f4ef2` (delete-view routed through an undo branch) · `030`'s status update `31eafb60` · the
+`056`/`057` log-anchor fix `6d222e6e` · the GitHub repo itself renamed to `obsidian_notion-clone`
+(origin repointed; `068` folds this rename in rather than repeating it).
+
+**All eight reserved Notion-refinement children (`059`-`066`) are now open and each has shipped a
+first implementation leg.** `goal.md`'s tables carry the per-child fractions above; `061`'s and
+`067`'s device/gate rows and `064`'s and `067`'s follow-up legs stay open.
+
+**In flight at 13:15**, each its own worktree: `212-toolbar-followups` (`064` follow-ups, landing
+next) · `214-toast-capture-settle` (paused, a lander) · `215-sheet-family-followup` (`067`'s next
+builder: the menu card, scale 0.96, AC-003 under light theme, lane pairs, 17 stale captures) ·
+`216-settings-sheet-phone` (the operator's 10:20 report on `0.0.30` — a two-column grid and an
+overflowing select list on the phone Settings sheet). **The primary checkout itself carries live
+uncommitted edits to `067`'s docs right now** (`acceptance-criteria.md`, `decision-record.md`,
+`goal.md`, `implementation-summary.md`, `tasks.md`) — almost certainly `215` landing while this leg
+ran; confirm before assuming any `067` figure above still holds.
+
+**Order of work.** 1) Land `212`, then `214`, then `215` and `216` — one Opus lander at a time. 2)
+`068` runs as **one leg** with nothing else in flight: id `obnotion`, `obnotion-` prefix everywhere,
+the `data.json` migration, author **MichelKerkmeester**, repo `obsidian_notion-clone` — then release
+**`0.0.31`** as the rename release. 3) The device rows, operator-only, one per child: `059` AC-010,
+`060` D1-D4, `061` AC-005, `062` C9, `063` AC-011, `064` AC-011, `065` AC-012, `066` AC-008, `067`
+AC-011, `058` AC-008, `056` C10.1-4, `057` G12/G15 plus AC-010. No agent ticks an operator row.
+
+**`git worktree list`, read from the primary checkout at 13:15.** `main` `3a94e58b` (dirty, see
+above) · `065-anytype-research` `83fc7121` · `212-toolbar-followups` `9b280a32` ·
+`214-toast-capture-settle` `6ad30b55` · `215-sheet-family-followup` `173f7d3a` ·
+`216-settings-sheet-phone` `3a94e58b` · `217-goal-refresh-1315` `3a94e58b` (this leg).
+
+**Scratchpad paths, checked and not present in the tree at 13:15** — reserved conventions, not
+files on disk right now: `scratchpad/pause-state.md`, `scratchpad/needs-followups.md`,
+`scratchpad/continuations/` (one continuation prompt per delegated leg, per handover-24), and
+`scratchpad/glm/queue/`. A leg that creates one of these should say so here rather than assume the
+next reader already knows.
+
+**Three standing rules, restated because they outlive any one leg.** A delegate's report is a
+claim — a lander re-runs every check itself and judges a moved capture by decoded pixel delta, never
+`pixelHash`. GLM 5.3 flash via `cli-pi` DevPass (`--provider llmgateway --model glm-5.3-flash
+--thinking max`) carries text-only docs legs only — it cannot carry a code leg. The spec-kit
+orchestrator is rebuilt only from a clean Public-repo tree, never from inside a worktree with local
+drift.
 
 ### 2026-09-06 ~20:10, `orchestrate-handover-24`, read from `.worktrees/193-goal-refresh-0930`
 
