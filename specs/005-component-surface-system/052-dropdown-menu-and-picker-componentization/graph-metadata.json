@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The family works surface by surface and drifts as a family",
     "created_at": "2026-09-05T11:32:58.144Z",
-    "last_save_at": "2026-09-06T16:21:23.241Z",
+    "last_save_at": "2026-09-07T03:58:51.616Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -223,7 +223,7 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:7fd738e29a8dfa2100c77de9ddf57eb4ed67f5da4f53b6b7944b01973663f6dd",
+    "source_fingerprint": "sha256:e692660a55cb053b0f794f8adae01e8abfb1a8c83464880a1fbc77a80f94c260",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "3d677c7e022b37434cf8ab222f6c30af372c27cfdd19aa3ecdece0e3a59b9083",
