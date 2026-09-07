@@ -1,7 +1,7 @@
 {
-  "holder": "068-rename-to-obnotion",
-  "acquiredAt": "2026-09-07T18:35:00.000Z",
-  "baselineHash": "65c9009170d1",
+  "holder": "069-board-cross-group-drag",
+  "acquiredAt": "2026-09-07T20:50:00.000Z",
+  "baselineHash": "41ffc99c0cc3",
   "baselineCommit": null,
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -5243,6 +5243,21 @@
         "screenshots/project-manager/reference-kanban-subtask-mobile-dark.png"
       ],
       "note": "The whole-tree rename to Obnotion: every class, custom-property and id-derived selector in styles.css moved from its old vocabulary to the new one, byte-for-byte the same rules under new names. Recaptured from a clean index (npm run screenshots, 608 entries, screenshots:verify exit 0). Every one of the 608 captures came back BYTE-IDENTICAL to what was committed before this rename -- confirmed both by git status (0 files changed under screenshots/*.png before this release, after four known-jitter files were restored to committed bytes and their manifest bytes/pixelHash/layoutHash fields left describing the actual file on disk) and by content comparison (contentChangedCaptures against the previous manifest returns an empty set). That is the strongest form of proof this rename could offer: a class-name-only rewrite with matching renames on both sides of every selector renders pixel-for-pixel identical to what shipped before it, because nothing about what is drawn changed, only what it is called. The four files git initially reported as byte-changed (panel-record-detail-sheet-body-editing-desktop-light, board-view-desktop-dark, reference-gantt-subtask-mobile-light, reference-kanban-subtask-mobile-dark) are the same recurring rasteriser/encoder jitter this lane's history names on every prior recapture; pixelHash was identical on both sides for all four, confirmed before restoring their bytes. 12 captures spanning every major surface (table, board, gantt/timeline, a confirm sheet, a dropdown menu, a nested filter panel, the column manager, an owned-menu submenu, an empty record-detail body, the view-config settings panel, a chart, a project-manager reference capture, a sort panel and a toolbar utilities sheet) were opened and read directly and rendered exactly as expected with no visual defect. reviewed is empty because content-changed, in-scope is the empty set -- nothing here is a capture a human needed to judge, and the check above is what proves that rather than assumes it."
+    },
+    {
+      "event": "acquire",
+      "phase": "069-board-cross-group-drag",
+      "at": "2026-09-07T20:50:00.000Z",
+      "hash": "41ffc99c0cc3",
+      "note": "Acquiring the css lane to add two new classes for the board's phone cross-group drag: .obnotion-kanban-card--touch-lifted (opacity fade on the source card) and .obnotion-kanban-card--touch-ghost (the floating clone that tracks the finger). Both are new selectors on new classes no existing capture's markup carries, so no captured scenario should render differently."
+    },
+    {
+      "event": "release",
+      "phase": "069-board-cross-group-drag",
+      "at": "2026-09-07T21:05:00.000Z",
+      "hash": "41ffc99c0cc3",
+      "reviewed": [],
+      "note": "Recaptured from a clean index (npm run screenshots, 608 entries, screenshots:verify exit 0). git status reported 2 byte-changed PNGs after the first run (field-option-color-picker-desktop-light, board-view-desktop-dark); a second full recapture of the identical tree moved a DIFFERENT pair (panel-record-detail-title-currency-desktop-light, reference-kanban-subtask-mobile-light) and left the first pair byte-identical to HEAD again -- the same encoder/rasteriser nondeterminism this lane's history already documents on prior releases, confirmed rather than assumed by running twice. The one pair still byte-different after the second run was checked by decoded pixel delta (tools/screenshots/pixel-hash.mjs's decodePng, not pixelHash/layoutHash alone): field-option-color-picker-desktop-light moved 185/471296 pixels (0.039%) at a max channel delta of 196, board-view-desktop-dark moved 4/5184000 pixels (0.0001%) at a max channel delta of 1 -- both restored to committed bytes rather than committed as churn, since neither selector this leg touches (.obnotion-kanban-card--touch-lifted/--touch-ghost) is reachable by either scenario's markup. reviewed is empty because content-changed, in-scope is the empty set: 0 captures carry a real change from this leg's stylesheet edit."
     }
   ],
   "outstanding": [
