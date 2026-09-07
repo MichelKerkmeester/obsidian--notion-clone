@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The board renders Project Manager's kanban, not Anytype's: `src/views/board-renderer.ts` constructs",
     "created_at": "2026-09-05T20:25:00Z",
-    "last_save_at": "2026-09-07T06:57:30.060Z",
+    "last_save_at": "2026-09-07T21:25:59.040Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -223,7 +223,7 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:bae50d74fd999dda88d5544c549dc347b6c0b23c2361322e3247d7e67c2817f8",
+    "source_fingerprint": "sha256:ce16bd1d3e9901628c6567dbfd82e7108500969374b1b7983b9c38a82d9d7d2a",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "69a81acb0a3212ef5976de467fb7c8c1f5ca9956ec48b90a3aa30780f271865f",

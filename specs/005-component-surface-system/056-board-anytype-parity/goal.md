@@ -241,4 +241,15 @@ The operator, ~16:10, verbatim: *"Based on notion screenshots add phases to all 
 to further refine based on notion ui screenshots. But do 5 iters of deep research with glm 5.3 flash
 max on those screens per relevant phase."* This packet's surface is **the board**, and its reserved
 child is **`059-notion-board-refinement`** — reserved, not created. **Wave 1: the research has been running since 16:14 in `worktrees/174`.** This is the packet where the additive rule bites hardest: ADR-002 binds the board to adopt **every** captured Anytype value, and ADR-008 has already added an operator ruling as a third ground for declining one. A Notion finding is a fourth source and is **not** a fourth ground — it proposes, it does not decline. The pipeline is three stages and the first exists for one reason: a **Sonnet digest** of the relevant Notion captures is written to ``056-board-anytype-parity/notion-screens-digest.md``, because **GLM 5.3 flash cannot read images** and a capture reaches the loop as measured prose or not at all. Then `/deep:research:auto`, **5 iterations**, `--stop-policy=max-iterations`, on **GLM 5.3 flash max** — `openrouter/z-ai/glm-5.3-flash` first and `llmgateway` (DevPass) as the fallback, on the operator's ~16:25 ruling *"use openrouter untill usage is 0 then devpass"*. Then an **Opus synthesis** opens the child; a fresh Opus verifier lands it (D4). **Do not create the child by hand** — a folder without the loop behind it claims evidence it does not have. **The refinement is additive.** The child may add a criterion, a task, an ADR or a measurement. It may not un-tick a measured row here, rewrite a landed ruling, or change this packet's parity target. Where a Notion finding contradicts a landed Anytype ruling, the child writes a **Proposed** ADR carrying both readings and stops; only the operator moves it to Accepted. Parent `goal.md` **D15** and `../roadmap.md` **§7.15** carry the rule, §5.A the reservation, §6A the instruction verbatim.
+
+### 2026-09-07, cross-reference only: `069-board-cross-group-drag`
+
+Not a Notion-refinement child and not scope of this packet. The operator's report, ~21:40 —
+*"board view needs to support dragging to other groups and thus updating that property to match
+grouped field. Like clickup for example"* — is answered by a sibling phase, `069-board-cross-group-drag`,
+which owns the board's drag **input** layer: it wires a phone long-press touch drag onto the
+cross-group write path this packet's own desktop drag already used (`moveCardAndOrder`), and adds
+real headless-Chrome proof of both input devices. This packet's own board geometry, card anatomy
+and page-scroll rows are untouched. Named here only so a reader following this packet's drag code
+knows where the touch half landed.
 <!-- /ANCHOR:log -->

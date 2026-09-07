@@ -39,7 +39,7 @@
       "tasks"
     ],
     "importance_tier": "important",
-    "status": "draft",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -48,18 +48,19 @@
       "goal.md",
       "decision-record.md",
       "implementation-summary.md",
+      "src/views/board-groups-panel.ts",
+      "src/views/board-groups-panel.test.ts",
+      "src/views/board-groups-panel.stories.ts",
       "src/views/board-renderer.ts",
       "src/views/database-view.ts",
       "src/views/embedded-database-renderer.ts",
       "src/data/types.ts",
       "src/data/data-source.ts",
       "src/i18n.ts",
-      "tools/live/render-assertions.mjs",
-      "screenshots/manifest.json",
-      "tools/live/sheet-grammar.mjs",
-      "src/views/board-card-fields.ts",
-      "src/views/record-surface/property-row.ts",
-      "tools/gate.mjs"
+      "tools/live/render-assertion-harness.ts",
+      "tools/screenshots/scenarios/panels.mjs",
+      "src/data/data-source.test.ts",
+      "tools/lane/css-lane.json"
     ],
     "entities": [
       {
@@ -105,6 +106,24 @@
         "source": "derived"
       },
       {
+        "name": "board-groups-panel.ts",
+        "kind": "code",
+        "path": "src/views/board-groups-panel.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-groups-panel.test.ts",
+        "kind": "test",
+        "path": "src/views/board-groups-panel.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-groups-panel.stories.ts",
+        "kind": "code",
+        "path": "src/views/board-groups-panel.stories.ts",
+        "source": "derived"
+      },
+      {
         "name": "board-renderer.ts",
         "kind": "code",
         "path": "src/views/board-renderer.ts",
@@ -141,39 +160,27 @@
         "source": "derived"
       },
       {
-        "name": "render-assertions.mjs",
-        "kind": "file",
-        "path": "tools/live/render-assertions.mjs",
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
         "source": "derived"
       },
       {
-        "name": "manifest.json",
+        "name": "panels.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/panels.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "data-source.test.ts",
+        "kind": "test",
+        "path": "src/data/data-source.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
         "kind": "config",
-        "path": "screenshots/manifest.json",
-        "source": "derived"
-      },
-      {
-        "name": "sheet-grammar.mjs",
-        "kind": "file",
-        "path": "tools/live/sheet-grammar.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "board-card-fields.ts",
-        "kind": "code",
-        "path": "src/views/board-card-fields.ts",
-        "source": "derived"
-      },
-      {
-        "name": "property-row.ts",
-        "kind": "code",
-        "path": "src/views/record-surface/property-row.ts",
-        "source": "derived"
-      },
-      {
-        "name": "gate.mjs",
-        "kind": "file",
-        "path": "tools/gate.mjs",
+        "path": "tools/lane/css-lane.json",
         "source": "derived"
       },
       {
@@ -199,17 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Phase Context This",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The board can put a group out of sight and offers nothing that brings it back",
     "created_at": "2026-09-06T15:01:03Z",
-    "last_save_at": "2026-09-06T21:53:04.331Z",
+    "last_save_at": "2026-09-07T21:25:59.131Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:ea0eb29406cd48fb28b92e94937a77d6cd0d53a0785f34230fa59456d2a2c81a",
+    "source_fingerprint": "sha256:05a2e67a173e6b6e0f5c8617825e9931f19e9aa84a3eca80bd27a01882d9db9e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "e1ab708abf45c047945e8a8627b2e2d47c1e47f214f7467652b36795e108582e",
+      "spec.md": "0b8cc8dcc749e4ad17197a3c936af0c6ff9ed04bf1f409fbce088a65b9c1d492",
       "plan.md": "cd9d42fd48bd14a0ea6d317bed778ecc4a58182a133093419e19e2257b50cada",
-      "tasks.md": "dc8135c5236f8bc1ba8621a97b0fc02d518787a93a9ad2e01f855b126e4f6b59",
+      "tasks.md": "4c5c4624aecd89e8504bcfc5279cc2369d69142d5a73ecb9c2bf31bafa64bedc",
       "decision-record.md": "bae39fa0aea7da98f0211b40ca795f555edda2dbe551fc3dce588aa80b566cb9",
-      "implementation-summary.md": "50990e23f9214fc8c067c7f8ed9dfad3f48558e7e140588fd0326ccea12b8544"
+      "implementation-summary.md": "d7831cc92ed280af075632b79d0537f2e857ac110155c184bcfc86af8c112940"
     },
     "last_active_at": null
   }

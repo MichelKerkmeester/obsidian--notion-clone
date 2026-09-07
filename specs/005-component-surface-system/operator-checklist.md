@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-07: **69 phases**, **7 with nothing left**, **179 rows** waiting on a device.
+Derived 2026-09-07: **70 phases**, **7 with nothing left**, **180 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -384,6 +384,10 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] A note with a pre-rename `note-database` code fence renders, and a `workspace.json` holding the old view types reopens both tab kinds — the parsing/registration logic is unit-tested (`linked-view-block-aliases.test.ts`) and verified correct by code review; actual rendering in a live Obsidian window is not verifiable in this sandbox
 - [ ] Release 0.0.31 is cut with notes naming the id change and the migration, its three assets attached, and the build copied into the iCloud vault under `.obsidian/plugins/obnotion/` —
 - [ ] The operator confirms on their own device that the rename landed and nothing of theirs was lost (parent D3: only this closes the packet) — still open; only the operator can close this row
+
+## 069-board-cross-group-drag — 7/8
+
+- [ ] OPERATOR: the operator drags a card between two columns on their own phone and confirms the move landed in the note's frontmatter. Nothing in this repository can close this row, and an agent never ticks it.
 
 ## Nothing left to check
 

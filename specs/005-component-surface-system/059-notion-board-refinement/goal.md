@@ -338,4 +338,5 @@ commit deleted.
 | The research's P0 landed before the synthesis ran | `dc1d54a9`; carried as a verification row under D7, and E-3 closed with it |
 | Notion's group management is a *screen*; ours is proposed as a *panel* | `../design-system.md:77` already assigns the `panel` role to a working surface with several controls; adopting Notion's screen shape would import Notion's mobile grammar, which D2 forbids |
 | The board wrap switch is a conflict the digest never listed | The research added it as row 9 and recommends against it; ADR-009 carries it as `Proposed` so the operator sees a decline that no landed ruling made for them |
+| Cross-reference, not scope | `069-board-cross-group-drag` (opened 2026-09-07) is the operator's ClickUp-style cross-group drag report. It is a sibling child of the parent, not a row here: it owns the board's drag *input* layer (phone touch drag, plus the desktop mouse drag's existing proof), while this packet owns the Groups panel this document already closed. Named here only so a reader of this packet's drag-adjacent criteria knows where the touch-drag work landed |
 <!-- /ANCHOR:log -->

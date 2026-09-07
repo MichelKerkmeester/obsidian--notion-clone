@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/069-board-cross-group-drag",
+  "spec_folder": "005-component-surface-system/069-board-cross-group-drag",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "069 spec",
+      "board cross-group drag spec",
+      "board touch drag spec",
+      "kanban drag between columns spec",
+      "069 plan",
+      "board touch drag implementation plan",
+      "board cross-group drag technical approach",
+      "069 tasks",
+      "board touch drag task breakdown",
+      "board cross-group drag tasks",
+      "069 acceptance criteria",
+      "board cross-group drag closure gate"
+    ],
+    "key_topics": [
+      "spec",
+      "board",
+      "cross-group",
+      "drag",
+      "touch",
+      "kanban",
+      "between",
+      "columns",
+      "plan",
+      "implementation",
+      "technical",
+      "approach"
+    ],
+    "importance_tier": "normal",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md",
+      "src/views/board-renderer.ts",
+      "src/views/embedded-database-renderer.ts",
+      "src/views/board-renderer-parity.test.ts",
+      "src/views/embedded-database-renderer.test.ts",
+      "src/views/database-view.test.ts",
+      "tools/live/board-cross-group-drag.mjs",
+      "tools/lane/css-lane.json",
+      "screenshots/manifest.json",
+      "src/data/board-container-drop.ts",
+      "src/views/database-view.ts",
+      "tools/live/render-assertions.mjs",
+      "tools/screenshots/capture.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.ts",
+        "kind": "code",
+        "path": "src/views/embedded-database-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer-parity.test.ts",
+        "kind": "test",
+        "path": "src/views/board-renderer-parity.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/embedded-database-renderer.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.test.ts",
+        "kind": "test",
+        "path": "src/views/database-view.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-cross-group-drag.mjs",
+        "kind": "file",
+        "path": "tools/live/board-cross-group-drag.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "board-container-drop.ts",
+        "kind": "code",
+        "path": "src/data/board-container-drop.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertions.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Board Cross",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Group Drag",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "`board-renderer.ts:445` (pre-packet) set `card.draggable = !this.actions.isReadOnly && !this.touchMode` —",
+    "created_at": "2026-09-07T19:41:39Z",
+    "last_save_at": "2026-09-07T21:27:55.250Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:eda8ec27c66f7256f60c04fd074f1470db892c34ecd20e11ed7f4c95bbe7c416",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "0c6b7d49f8c3ddeeacf0d073d471d0b88c1308e027b58449bb7c0e509e884d5a",
+      "plan.md": "7088f500118c3fc0bd36fe849c2a79501385b723e02314cc27e51ec77d47400e",
+      "tasks.md": "4ebbc9ec18d664e842a61bc09dc7dc6f82aa37c0fa7e043e72b42c7c073d8fa8",
+      "decision-record.md": "9436a369f64b7924a5834e558f39ddd9f1c1b338c1b5db5a74f92f2fd4fe50af",
+      "implementation-summary.md": "8884c72038850e2426511beba7e21965e90828260202bfc355603ed52b90e268"
+    },
+    "last_active_at": null
+  }
+}

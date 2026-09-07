@@ -1,0 +1,17 @@
+{
+  "specFolder": "005-component-surface-system/069-board-cross-group-drag",
+  "description": "Phase 1: board-cross-group-drag",
+  "keywords": [
+    "phase",
+    "board-cross-group-drag"
+  ],
+  "lastUpdated": "2026-09-07T19:41:41.003Z",
+  "specId": "069",
+  "folderSlug": "board-cross-group-drag",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}
