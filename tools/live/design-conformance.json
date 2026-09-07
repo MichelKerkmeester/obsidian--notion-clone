@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-07T05:04:05.855Z",
+  "measuredAt": "2026-09-07T05:12:46.129Z",
   "inputs": {
-    "styles.css": "fc00d8134c97",
+    "styles.css": "9153adc77b41",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "eea3b7cb22b9"
   },
@@ -18,7 +18,7 @@
     {
       "name": "registry equality — rendered surfaces with no declared role",
       "enforced": false,
-      "value": 85,
+      "value": 86,
       "target": 0,
       "note": "the registry holds five producers; the rest are unmigrated",
       "gated": false,
@@ -133,17 +133,17 @@
     "src/views/column-manager-renderer.ts:133  .db-panel-button",
     "src/views/column-manager-renderer.ts:188  .db-dropdown-popover",
     "src/views/column-manager-renderer.ts:235  .db-panel-header-actions",
-    "src/views/column-menu.ts:267  .db-dropdown-section-title",
-    "src/views/column-menu.ts:402  .db-column-menu-back",
+    "src/views/column-menu.ts:281  .db-dropdown-section-title",
+    "src/views/column-menu.ts:416  .db-column-menu-back",
     "src/views/column-width.ts:353  .db-mobile-column-width-panel",
     "src/views/column-width.ts:379  .db-panel-row",
     "src/views/column-width.ts:403  .db-panel-row",
     "src/views/confirm-sheet.ts:52  .db-modal-help",
     "src/views/confirm-sheet.ts:54  .db-modal-actions",
-    "src/views/database-view.ts:3152  .db-group-order-popover",
-    "src/views/database-view.ts:3266  .db-panel-button",
-    "src/views/database-view.ts:7064  .db-calendar-search-results-popover",
-    "src/views/database-view.ts:11833  .db-dropdown-popover",
+    "src/views/database-view.ts:3154  .db-group-order-popover",
+    "src/views/database-view.ts:3268  .db-panel-button",
+    "src/views/database-view.ts:7084  .db-calendar-search-results-popover",
+    "src/views/database-view.ts:11853  .db-dropdown-popover",
     "src/views/date-value-picker.ts:140  .db-cell-edit-popover",
     "src/views/date-value-picker.ts:227  .db-calendar-mini-popover",
     "src/views/dropdown-field.ts:164  .db-dropdown-field-text",
@@ -218,9 +218,9 @@
     "src/views/option-color-picker.ts:48  .db-color-picker-popup",
     "src/views/owned-menu.ts:123  .db-menu",
     "src/views/record-detail-panel.ts:185  .db-record-detail-panel",
-    "src/views/record-surface/cell-editor-date.ts:113  .db-cell-edit-popover",
-    "src/views/record-surface/cell-editor-date.ts:128  .db-cell-edit-popover",
-    "src/views/record-surface/cell-editor-date.ts:376  .db-calendar-mini-popover",
+    "src/views/record-surface/cell-editor-date.ts:114  .db-cell-edit-popover",
+    "src/views/record-surface/cell-editor-date.ts:129  .db-cell-edit-popover",
+    "src/views/record-surface/cell-editor-date.ts:445  .db-calendar-mini-popover",
     "src/views/record-surface/cell-editor-option.ts:226  .db-cell-option-popover",
     "src/views/record-surface/cell-editor-option.ts:363  .db-panel-empty",
     "src/views/record-surface/cell-editor-option.ts:688  .db-panel-header-actions",
@@ -257,6 +257,6 @@
     "src/views/toolbar-renderer.ts:2522  .db-menu-item",
     "src/views/view-config-panel-renderer.ts:355  .db-view-config-panel",
     "src/views/view-config-panel-renderer.ts:392  .db-panel-button",
-    "src/views/view-config-panel-renderer.ts:1530  .db-dropdown-field"
+    "src/views/view-config-panel-renderer.ts:1536  .db-dropdown-field"
   ]
 }

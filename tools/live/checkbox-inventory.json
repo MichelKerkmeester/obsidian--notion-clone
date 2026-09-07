@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-07T05:03:16.866Z",
+  "measuredAt": "2026-09-07T05:11:55.891Z",
   "inputs": {
-    "styles.css": "fc00d8134c97",
+    "styles.css": "9153adc77b41",
     "tools/live/checkbox-inventory.mjs": "e869ed91680a"
   },
   "totals": {
@@ -91,7 +91,7 @@
     },
     {
       "file": "src/views/column-menu.ts",
-      "line": 495,
+      "line": 509,
       "chain": [
         "db-displayopt-row db-displayopt-colors"
       ],
@@ -142,7 +142,7 @@
     },
     {
       "file": "src/views/view-config-panel-renderer.ts",
-      "line": 2197,
+      "line": 2203,
       "chain": [
         "db-view-config-panel",
         "db-view-config-field"

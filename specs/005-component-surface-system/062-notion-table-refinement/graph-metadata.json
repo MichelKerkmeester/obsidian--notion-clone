@@ -39,7 +39,7 @@
       "end"
     ],
     "importance_tier": "important",
-    "status": "draft",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -48,17 +48,19 @@
       "goal.md",
       "decision-record.md",
       "implementation-summary.md",
+      "tools/live/render-assertion-harness.ts",
+      "tools/live/render-assertions.mjs",
       "src/data/types.ts",
       "src/data/column-types.ts",
-      "src/views/column-menu.ts",
+      "src/data/data-source.ts",
       "src/views/table-renderer.ts",
       "src/views/cell-renderer.ts",
-      "src/views/record-surface/cell-editor-date.ts",
-      "src/views/record-surface/type-picker.ts",
+      "src/views/column-menu.ts",
+      "src/views/database-view.ts",
       "src/views/property-type-icon.ts",
-      "src/views/table-record-peek.ts",
-      "tools/live/render-assertions.mjs",
-      "tools/screenshots/scenarios/core.mjs"
+      "src/views/record-surface/type-picker.ts",
+      "src/views/record-surface/cell-editor-date.ts",
+      "src/views/table-record-peek.ts"
     ],
     "entities": [
       {
@@ -104,6 +106,18 @@
         "source": "derived"
       },
       {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertions.mjs",
+        "source": "derived"
+      },
+      {
         "name": "types.ts",
         "kind": "code",
         "path": "src/data/types.ts",
@@ -116,9 +130,9 @@
         "source": "derived"
       },
       {
-        "name": "column-menu.ts",
+        "name": "data-source.ts",
         "kind": "code",
-        "path": "src/views/column-menu.ts",
+        "path": "src/data/data-source.ts",
         "source": "derived"
       },
       {
@@ -134,15 +148,15 @@
         "source": "derived"
       },
       {
-        "name": "cell-editor-date.ts",
+        "name": "column-menu.ts",
         "kind": "code",
-        "path": "src/views/record-surface/cell-editor-date.ts",
+        "path": "src/views/column-menu.ts",
         "source": "derived"
       },
       {
-        "name": "type-picker.ts",
+        "name": "database-view.ts",
         "kind": "code",
-        "path": "src/views/record-surface/type-picker.ts",
+        "path": "src/views/database-view.ts",
         "source": "derived"
       },
       {
@@ -152,21 +166,21 @@
         "source": "derived"
       },
       {
+        "name": "type-picker.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/type-picker.ts",
+        "source": "derived"
+      },
+      {
+        "name": "cell-editor-date.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/cell-editor-date.ts",
+        "source": "derived"
+      },
+      {
         "name": "table-record-peek.ts",
         "kind": "code",
         "path": "src/views/table-record-peek.ts",
-        "source": "derived"
-      },
-      {
-        "name": "render-assertions.mjs",
-        "kind": "file",
-        "path": "tools/live/render-assertions.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "core.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/scenarios/core.mjs",
         "source": "derived"
       },
       {
@@ -192,23 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Parent Spec",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Handoff Criteria",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Our table view has never been read side by side against the product it is most often compared to",
     "created_at": "2026-09-06T16:15:18.332Z",
-    "last_save_at": "2026-09-07T03:58:31.358Z",
+    "last_save_at": "2026-09-07T04:36:07.122Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:f26f7540a971adc560396673d0dc3cccb29df4246b40c475eae42c4e3c1c1434",
+    "source_fingerprint": "sha256:4f8b5beac8a02efd9d8f1575f2035e7f20e72a63bb3e3e17d90e32e3301c6d71",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "894c0ea0bc60510096919d4823c24a207696c877d8ae563f6a5237035808ede2",
+      "spec.md": "0b6f6c562c7e389490dcbed312f53b1df74f4800d8ed76af093570ed71a14f04",
       "plan.md": "4671b14c815b1d8e35224dbadbf368e97df6c44c4eb396001a09eb8b6bbdbafe",
-      "tasks.md": "b217fe02d8b9bee0684f2a620a16567fe09c0041df989cf0e3840eec0a1f76db",
-      "decision-record.md": "809ce28a4249cd66c1dc38353afae92a5405bd074ab0d278ea8bfb8be0239869",
-      "implementation-summary.md": "7ea304b5cdd09199e7ad24d946c1194a294065cc25d09d11863648eeccbbe621"
+      "tasks.md": "4d2564625ff70e137e479e324b16b016b74d84c656e7ded3a7e678cfd6f74313",
+      "decision-record.md": "5db714911366cad6a0cf71c63f09f180311ec68f909d55542196795fed6d85c5",
+      "implementation-summary.md": "73a40a4d8106fbc24ea1808462900dc2ae2e337f958f7220ad63fb075a98dd04"
     },
     "last_active_child_id": null,
     "last_active_at": null

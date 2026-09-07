@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-07T05:04:21.224Z",
+  "measuredAt": "2026-09-07T05:13:08.941Z",
   "inputs": {
-    "styles.css": "fc00d8134c97",
+    "styles.css": "9153adc77b41",
     "tools/live/view-census.mjs": "1fad37270f0b",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -360,10 +360,10 @@
     }
   ],
   "totals": {
-    "fixtures": 80,
-    "escaping": 663,
+    "fixtures": 82,
+    "escaping": 675,
     "growing": 309,
-    "scrolling": 354,
+    "scrolling": 366,
     "rhythmGroups": 12,
     "ragged": 0,
     "probeBlind": 24
@@ -432,6 +432,72 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 32.1,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "table-vertical-lines-off",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 32,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "table-vertical-lines-off",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 32,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "table-vertical-lines-off",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 32,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "table-vertical-lines-off",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 32,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "table-vertical-lines-off",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 32,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "table-vertical-lines-off",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 32,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -3465,6 +3531,72 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 18.5,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "table-vertical-lines-off",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 18.3,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "table-vertical-lines-off",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 18.3,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "table-vertical-lines-off",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 18.3,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "table-vertical-lines-off",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 18.3,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "table-vertical-lines-off",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 18.3,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "table-vertical-lines-off",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-column-menu-trigger",
+      "parentCls": "db-th-content",
+      "by": 18.3,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -7801,6 +7933,16 @@
     },
     {
       "width": 320,
+      "fixture": "table-frozen-column",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
+      "fixture": "table-vertical-lines-off",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "table-column-header",
       "probe": "4px"
     },
@@ -8201,6 +8343,16 @@
     },
     {
       "width": 402,
+      "fixture": "table-frozen-column",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
+      "fixture": "table-vertical-lines-off",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "table-column-header",
       "probe": "4px"
     },
@@ -8601,6 +8753,16 @@
     },
     {
       "width": 768,
+      "fixture": "table-frozen-column",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
+      "fixture": "table-vertical-lines-off",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "table-column-header",
       "probe": "4px"
     },
@@ -8997,6 +9159,16 @@
     {
       "width": 1440,
       "fixture": "table-wrap-on",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "table-frozen-column",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "table-vertical-lines-off",
       "probe": "4px"
     },
     {
