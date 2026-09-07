@@ -18,9 +18,9 @@ context, so a citation by name resolves without this table:
 | Folder | Holds | How to find it |
 |--------|-------|-----------------|
 | `ios/flows/<journey>/` | 464 files across **112 journeys**, one folder per Mobbin flow, files ordered by Mobbin's own `position` | Pick the journey folder by name (e.g. `creating-a-task-1ba7e785/`); the trailing 8 characters are the flow id |
-| `ios/<surface>/` | 79 files in `navigation` (29), `tasks` (15), `views` (15), `editors` (10), `settings` (4), `filters` (2), `ai`, `chat`, `notifications`, `onboarding` (1 each) | Anything that is not part of a journey |
+| `ios/<surface>/` | 79 files — `tasks` (18), `views` (13), `collaboration` (13), `navigation` (9), `menus` (9), `dialogs` (5), `settings` (3), `editors` (3), `ai` (3), `states` (1), `onboarding` (1), `docs` (1) | Anything that is not part of a journey |
 | `web/flows/<journey>/` | 3,571 files across **609 journeys**, same shape as iOS | Pick the journey folder by name; trailing 8 characters are the flow id |
-| `web/<surface>/` | 2,364 files — `settings` (416), `editors` (332), `tasks` (307), `misc` (197), `views` (164), `navigation` (162), `onboarding` (150), `chat` (134), `dashboards` (127), `menus` (124), `ai` (100), `empty-states` (69), `notifications` (42), `filters` (30), `upgrade` (10) | Grep the filename prefix for a surface, e.g. `clickup-web-menus-` for every menu capture |
+| `web/<surface>/` | 2,364 files — `tasks` (491), `settings` (355), `views` (186), `ai` (173), `forms` (142), `chat` (126), `dashboards` (119), `whiteboard` (104), `time-tracking` (89), `database` (88), `onboarding` (75), `docs` (74), `collaboration` (71), `reports` (63), `automations` (57), `menus` (56), `navigation` (40), `extra` (35), `marketing` (10), `dialogs` (9), `states` (1) | Grep the filename prefix for a surface, e.g. `clickup-web-menus-` for every menu capture |
 
 Filenames are `clickup-<platform>-<group>-<slug>-<screenid>.webp` for grouped screens and
 `clickup-<platform>-flow-<flow-slug>-<position>-<screenid>.webp` inside a journey. **The screen id is
@@ -125,17 +125,44 @@ that Mobbin's ClickUp library contains exactly 3,435 screens; a surface nobody t
 
 ## What the grouping does and does not mean
 
-**A group folder records the query that surfaced a screen, not a verified reading of its content.**
-Ten images were opened and inspected before this file was written; all ten are genuine ClickUp
-screens carrying Mobbin's footer, but two sat under a heading their content only partly matches:
+**Non-flow groups are classified by content; flows stay grouped by flow name.** The harvest
+originally filed every non-flow file under the Mobbin query that returned it, and Mobbin's relevance
+is loose — an early spot check of ten images found two sitting under a heading their content only
+partly matched (a Goals "Type of Target" modal filed under `views/add-view`; an Email Integration
+Signatures pane filed under `settings/api`). On 2026-09-07 every one of the 2,443 non-flow files on
+both platforms (79 iOS, 2,364 web) was opened individually and reassigned to the group its screen
+primarily shows — never the group its originating query implied. 1,669 files moved (51 iOS, 1,618
+web); [`reclassification-2026-09-07.tsv`](reclassification-2026-09-07.tsv) records every move with
+its old path, new path and a one-line reason. Six web groups from the original query set (`editors`,
+`misc`, `empty-states`, `filters`, `notifications`, `upgrade`) emptied out entirely once their
+contents were re-homed by content, and twelve new web groups (`forms`, `whiteboard`,
+`time-tracking`, `database`, `docs`, `collaboration`, `reports`, `automations`, `extra`,
+`marketing`, `dialogs`, `states`) absorbed screens that a query-derived heading had obscured. iOS
+moved less: three groups emptied (`chat`, `filters`, `notifications`) and five appeared
+(`collaboration`, `menus`, `dialogs`, `states`, `docs`). The `<slug>` inside a filename still names the query that found the screen, so it will
+often disagree with the folder — that is the record of where the file came from, not a claim about
+what it shows. Files under `flows/` were not reclassified: their folder is the Mobbin flow name,
+which is already a reading of the sequence rather than a search term, and `*/flows/**` was frozen
+for this pass.
 
-- `web/views/clickup-web-views-add-view-04a913c2-….webp` — filed under `views/add-view`, actually a
-  Goals "Type of Target" modal over a goal page.
-- `web/settings/clickup-web-settings-api-21b3aac6-….webp` — filed under `settings/api`, actually the
-  Email Integration → Signatures pane (the settings sidebar is visible, so the folder is defensible,
-  but the slug is not).
+The dominant judgment call across the pass: a screen's rich-text toolbar, custom-field editor or
+cover picker looks identical whether it is opened from a Doc, a Task description, or a Dashboard
+widget — only the surrounding chrome (breadcrumb, sidebar, "Milestone" badge) says which. Duplicate
+screen ids recurring across the original query-derived folders let each ambiguous case be
+cross-checked against every other copy of the same screen before it was filed.
 
-Treat the folder as a search hint. The screen id and its Mobbin page are the authoritative record.
+Treat the folder as a verified reading of the screen, not a guess. The screen id and its Mobbin page
+remain the authoritative record for what app version it shows.
+
+### Census before and after
+
+| Platform | Before (query-derived groups) | After (content-verified groups) | Files moved |
+|----------|-------------------------------|----------------------------------|------------:|
+| iOS | `navigation` (29), `tasks` (15), `views` (15), `editors` (10), `settings` (4), `filters` (2), `ai`/`chat`/`notifications`/`onboarding` (1 each) — 10 groups | `tasks` (18), `views` (13), `collaboration` (13), `navigation` (9), `menus` (9), `dialogs` (5), `settings` (3), `editors` (3), `ai` (3), `states`/`onboarding`/`docs` (1 each) — 12 groups | 51 |
+| web | `settings` (416), `editors` (332), `tasks` (307), `misc` (197), `views` (164), `navigation` (162), `onboarding` (150), `chat` (134), `dashboards` (127), `menus` (124), `ai` (100), `empty-states` (69), `notifications` (42), `filters` (30), `upgrade` (10) — 15 groups | `tasks` (491), `settings` (355), `views` (186), `ai` (173), `forms` (142), `chat` (126), `dashboards` (119), `whiteboard` (104), `time-tracking` (89), `database` (88), `onboarding` (75), `docs` (74), `collaboration` (71), `reports` (63), `automations` (57), `menus` (56), `navigation` (40), `extra` (35), `marketing` (10), `dialogs` (9), `states` (1) — 21 groups | 1,618 |
+
+Both platforms hold the same file count before and after (79 iOS, 2,364 web) — reclassification
+moves files between group folders, it never adds, deletes, or touches `*/flows/**`.
 
 ### Why the file count exceeds the screen count
 
@@ -163,7 +190,19 @@ old query list under a new group name cannot produce a second copy.
   "what does ClickUp's product UI look like", so it was out of scope for this harvest.
 - **`limit` above ~15 returns nothing.** Both `deep` and `standard` returned zero results at
   `limit: 50`, so 15 is the working ceiling and every call used it.
-- **Grouping is query-derived**, as described above.
+- **Non-flow grouping was content-verified on 2026-09-07**; flow grouping is still the Mobbin flow
+  name, as described above.
+- **The content pass is accurate but not perfect.** A landing audit opened 20 files stratified across
+  all 33 groups and found 18 filed correctly and 2 misfiled — both from the `views` sweep, both now
+  under `web/whiteboard/`: an image proofing/annotation viewer and a Board view showing a
+  "Protect view" modal. `web/whiteboard/` also holds a tail of `mentions`, `upload`, `tour-tooltip`
+  and `dark-mode` files that are the same image-proofing viewer rather than a whiteboard canvas, so
+  it is the least reliable group here; its core (the `whiteboard`, `whiteboard-objects`, `draw` and
+  `mind-map` slugs, 66 of 104 files) is sound.
+- **605 of the 1,669 ledger rows carry a templated reason.** The `web/editors`, `web/settings` and
+  `web/tasks` batches record `reclassified by content: <slug> screen -> <group>` instead of a
+  description of the image. The move itself is recorded exactly; the reason column just says less
+  for those rows than for the other 1,064.
 - **iOS is genuinely thinner than web** (357 vs 3,078 screens). That is Mobbin's library, not a gap
   in the sweep — the iOS query set is 96 queries deep and returned nothing new on its final pass.
 - **One transport error in the whole harvest**: `MCP operation on 'mobbin:stdio' timed out after
