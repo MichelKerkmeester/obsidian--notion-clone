@@ -1,7 +1,7 @@
 {
   "id": "obnotion",
   "name": "Obnotion",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "minAppVersion": "1.7.2",
   "description": "Database views for notes with table, board, chart, calendar, timeline, formulas, filters, and inline editing.",
   "author": "MichelKerkmeester",
