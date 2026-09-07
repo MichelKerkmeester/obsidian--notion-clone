@@ -177,6 +177,24 @@ cannot be opened is recorded as a gap in `migration-table.md`, never silently co
       picker at 44px rows, and the segmented group's ink past its own box is 0px at every text size
       the host offers, against 78px on the 0.0.30 geometry. The mutation test is recorded honestly
       in AC-014: no gate lane pins either fix, and T074 is the guard.
+- [x] CHK-028 [P1] T074 (the guard CHK-027 named): `sheet-grammar.mjs` gained two permanent rows,
+      scoped to the database Settings sheet, each with its own negative control observed red then
+      green — the row-stacking rule (21/21 rows, reverted to 0/21, restored to 21/21) and the
+      placement-button wrap rule (0/3 buttons overflowing at both measured text sizes, reverted to
+      1/3 overflowing at the larger size, restored to 0/3). `node tools/live/sheet-grammar.mjs`,
+      `npx tsc --noEmit`, `npx vitest run`, `npm run build` and `npm run gate` (26 green) all exit 0.
+- [x] CHK-029 [P1] T075 (the column-width adjuster's frame shape): decided and pinned. The open
+      question's own premise — that the host's button-height rule already gives these presets their
+      taller height in the shipped app — does not hold under measurement: a `flex-basis: 0` flex
+      item's rendered size comes from `min-height` alone, never from an explicit `height`, confirmed
+      both on a bare fixture and on `verify-placement.mjs`'s own adjuster keyboard section (all
+      three rows already pass on the shipped, unmodified CSS). `openColumnWidthAdjuster` now
+      declares `heightRole: "floating"`, matching what the classifier already computes for this
+      content — no shape changed, confirmed by `verify-placement.mjs`'s identical resting-inset
+      reading before and after. No ADR: recorded as a task note in `tasks.md` T075 rather than
+      `decision-record.md`, per its own branching. `npx tsc --noEmit`, `npx vitest run`,
+      `npm run build`, `node tools/storybook/verify-placement.mjs` (412/415, 3 red for a declared
+      reason, unchanged) and `npm run gate` (26 green) all exit 0.
 <!-- /ANCHOR:verification -->
 
 ---
@@ -206,7 +224,7 @@ Nothing in this repository closes these. An agent never ticks one.
 | Category | Total | Verified |
 |----------|-------|----------|
 | P0 Items | 20 | 16/20 (CHK-001 through CHK-005 are the authoring checks, verified at authoring time; CHK-007 closed with T002's re-measurement; CHK-008/CHK-010/CHK-014/CHK-015 closed with the primitives family; CHK-011/CHK-012/CHK-023/CHK-024 close with T061-T063's editor extraction; CHK-026 closed with T072 and CHK-027 with T073. CHK-006 stays open on the one unreadable capture; CHK-020/CHK-021/CHK-022 stay open — the packet is not closing this pass) |
-| P1 Items | 2 | 2/2 (CHK-013 closed with `migration-table.md`'s open-questions section; CHK-025 closed with this pass's three opened captures) |
+| P1 Items | 4 | 4/4 (CHK-013 closed with `migration-table.md`'s open-questions section; CHK-025 closed with this pass's three opened captures; CHK-028 closed with T074's two guard rows; CHK-029 closed with T075's `heightRole` decision) |
 | Operator rows | 4 | 0/4 (never agent-ticked) |
 
 **Verification Date**: 2026-09-07

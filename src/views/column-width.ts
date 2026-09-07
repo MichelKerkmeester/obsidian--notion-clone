@@ -511,9 +511,22 @@ export function openColumnWidthAdjuster(options: ColumnWidthAdjusterOptions): ()
   if (sheet) {
     // The shared scrim is the backdrop here, and it takes the tap: dismissing the adjuster must
     // not also edit a cell underneath on the way out.
+    //
+    // `heightRole: "floating"` is declared rather than left to the ResizeObserver classifier.
+    // This panel's content is fixed — a header, one range row, one row of four stacked presets —
+    // and never varies with vault data the way the settings sheet's body does, so there is
+    // nothing here a live classifier is buying over a fact stated once. Declaring it also
+    // forecloses a specific, measured failure mode: a keyboard shrinking the visual viewport can
+    // push the classifier's ratio past its flush cutoff and, because of the classifier's own
+    // hysteresis gap, leave the sheet flush after the keyboard closes instead of returning it to
+    // its resting floating inset — reproduced on this exact panel by widening its presets past
+    // 32px tall. "floating" is not a new answer: at its shipped height (four 32px presets) this
+    // panel already measures well inside the floating band with no keyboard open, so the
+    // declaration matches what the classifier already computes today.
     applySheetChrome(panel, true, {
       scrimCapturesPointer: true,
       close,
+      heightRole: "floating",
     });
     placeSheet(panel);
     releasePlacement = keepSheetPlaced(panel);

@@ -283,6 +283,58 @@ them). This landing re-derived them and judged the whole set by decoded pixel de
 capture runs instead. `npm run gate` 26 green. Full detail: that worktree's own `.handover.md`
 (untracked) and `054`'s docs above.
 
+### 2026-09-07, `worktrees/218-settings-sheet-guard`, `054` T074 + T075 landed
+
+The two rows the T072/T073 landing left open. **T074**: no gate lane pinned either fix — with both
+reverted, `sheet-grammar.mjs`, `render-assertions.mjs` and `touch-targets.mjs` all still exited 0.
+`sheet-grammar.mjs` gained two permanent rows against the real `ViewConfigPanelRenderer`, scoped to
+the database Settings sheet rather than attempting the general document-wide predicate (still not
+landed — the three fidelity gaps named at the prior leg are real and this did not touch them).
+Row stacking: every `.db-panel-row` owning both a label and a field (21 of the sheet's 23 rows)
+asserted label-above-control at >= 90% of the row's own inset-to-inset width, plus the sheet's own
+`scrollWidth === clientWidth`; reverting the row-stacking rule's `flex-direction` unstacks all
+21/21, restoring returns 21/21. Placement-button ink: the same
+`overflowX === "visible" && scrollWidth - clientWidth > tolerance` predicate the prior leg tried
+document-wide and reverted (356 pre-existing false positives), here scoped to exactly the three
+buttons this sheet draws — nothing else in scope to misfire on. Measured at the 16px default and at
+the text size the shipped defect was measured at (19px): clean at both; reverting the wrap rule
+overflows 1/3 buttons at 19px (0/3 at 15px — the string fits nowrap at that size regardless,
+matching the reading already on record), restoring returns 0/3 at both.
+
+**T075**: the open question was whether the column-width adjuster's frame shape should follow its
+real height or declare `heightRole`, on the premise that the host's button-height rule already
+makes its four presets the taller 44px in the shipped app. **That premise does not hold.**
+`.db-new-placement-option` carries an explicit `flex-basis: 0` (`flex: 1 1 0`), and a flex item's
+main-axis size under `flex-basis: 0` with no extra space to distribute comes from `min-height`
+alone — an explicit `height` is not consulted, confirmed on a bare two-button fixture in a real
+browser and, more directly, on `verify-placement.mjs`'s own adjuster keyboard section: on the
+shipped, unmodified CSS, all three rows already pass and the resting ratio (~0.435) sits nowhere
+near the classifier's hysteresis band (~0.716-0.746). The failure the open question described is
+real only if T073's wrap rule is hypothetically unscoped (`min-height` does raise the rendered
+height, unlike `height`) — reproduced again on demand, both keyboard rows red, and confirmed not a
+defect the shipped tree carries. Decided: `openColumnWidthAdjuster` now declares
+`heightRole: "floating"` — matching exactly what the classifier already computes for this content,
+confirmed by `verify-placement.mjs`'s identical resting-inset reading before and after (no shape
+changed, no ADR). The reason to declare it anyway rather than leave it classified: this panel's
+content is fixed (a header, one range row, one row of four stacked presets) and never varies with
+vault data, so a live classifier buys nothing a stated fact does not already cover, and declaring it
+forecloses this exact failure mode for good rather than leaving it to whichever future change next
+grows these buttons past the hysteresis gap.
+
+`npx tsc --noEmit`, `npx vitest run` (1630/1630), `npm run build`,
+`node tools/live/sheet-grammar.mjs`, `node tools/storybook/verify-placement.mjs` (412/415, 3 red
+for a declared reason, unchanged) and `npm run gate` (26 green, run twice in the foreground) all
+exit 0. `scan-comments.mjs` and `scan-failing-values.mjs` exit 0 standalone. `npm run screenshots`
+recaptured the whole corpus once to clear staleness on the 6 column-width-adjuster-attributed
+captures; all 6 came back `pixelHash`-identical (only `sourceHashes` for `column-width.ts` moved),
+so nothing was actually recaptured — the manifest was hand-patched to carry just that hash update
+rather than the two unrelated files the same broad run perturbed by re-encoding noise (both
+confirmed byte-noise-only by decoded `pixelHash`, and reverted rather than kept). Files:
+`tools/live/sheet-grammar.mjs`, `src/views/column-width.ts`, `main.js`, `screenshots/manifest.json`
+(one hash line, six entries), plus `054`'s `tasks.md`/`checklist.md`/`acceptance-criteria.md` and
+its regenerated `graph-metadata.json`. Full detail: that worktree's own `.handover.md` (untracked)
+and `054`'s docs above.
+
 ### 2026-09-06 ~20:10, `orchestrate-handover-24`, read from `.worktrees/193-goal-refresh-0930`
 
 **Documentation only.** No `src/`, `styles.css`, `tools/` or `main.js` file was touched. Main moved

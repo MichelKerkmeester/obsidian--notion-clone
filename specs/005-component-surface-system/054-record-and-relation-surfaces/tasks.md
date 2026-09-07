@@ -810,7 +810,7 @@ Nothing in this repository closes these. An agent never ticks one.
       `node tools/live/sheet-grammar.mjs`, `node tools/live/render-assertions.mjs`,
       `node tools/naming/scan-comments.mjs` all exit 0. Files: `styles.css` only.
 
-- [ ] T074 [P1] Give the geometry lane a predicate that can see this. `sheet-grammar.mjs`'s own
+- [x] T074 [P1] Give the geometry lane a predicate that can see this. `sheet-grammar.mjs`'s own
       §2 comment already admits "no structural predicate can see a `.db-new-placement` group's long
       option text overflowing the surface" — T073 is the proof of that admission, and **no existing
       gate lane pins T072 or T073**: with BOTH fixes reverted, `sheet-grammar.mjs`,
@@ -829,8 +829,33 @@ Nothing in this repository closes these. An agent never ticks one.
       `button.stacked-lane-anchor`, the harness's own test anchor). Landing it needs its own
       exemption list beside the sweep's existing ones, and the two fidelity fixes above, each of
       which re-derives a large slice of the capture corpus. That is a packet, not a rider on a fix.
+      **Landed, scoped rather than general:** the three gaps above and the document-wide predicate
+      are still not attempted — this closes the guard gap for the one surface both fixes touched,
+      not the general form. `sheet-grammar.mjs` gained two permanent rows against the real
+      `ViewConfigPanelRenderer`, mounted through the same constructed seam every other row in that
+      file's registry uses (`body.is-phone`, the "settings" scenario). **Row stacking:** every
+      `.db-panel-row` that owns both a `.db-view-config-label` and a `.db-view-config-field` (21 of
+      the sheet's 23 rows — the bare textarea and the range+number pair own neither, the same two
+      AC-013 names) is asserted label-above-control at a control width >= 90% of the row's own
+      inset-to-inset span, plus the sheet's own `scrollWidth === clientWidth`. **Red then green:**
+      reverting the row-stacking rule's `flex-direction` unstacks all 21/21 rows; removing the
+      override restores 21/21. **Placement-button ink:** every `.db-new-placement-option` in the
+      sheet is asserted with `getComputedStyle(el).overflowX === "visible" && el.scrollWidth -
+      el.clientWidth > tolerance` — the same predicate tried document-wide and reverted above, here
+      scoped to exactly the three buttons this sheet draws, with nothing else in scope to misfire
+      on. Measured at the operator's 16px default (`--font-ui-small` 15px) and at the text size the
+      shipped defect was measured at (19px): 3/3 buttons clean at both sizes. **Red then green:**
+      reverting the wrap rule's `white-space`/`justify-content`/`height` overflows 1/3 buttons at
+      19px; removing the override returns 0/3. At 15px neither state overflows — the option's
+      string is short enough to fit nowrap at that size regardless, matching the "0px @15px" reading
+      already on record — so the negative control there asserts clean-after only, not a red first.
+      `node tools/live/sheet-grammar.mjs` exits 0 with both new rows and their negative controls
+      green; `npx tsc --noEmit`, `npx vitest run` (1630/1630), `npm run build`,
+      `node tools/storybook/verify-placement.mjs` (412/415, 3 red for a declared reason,
+      unchanged) and `npm run gate` (26 green) all exit 0. Files: `tools/live/sheet-grammar.mjs`
+      only.
 
-- [ ] T075 [P1] Decide the column-width adjuster's frame shape at its real height. T073's fix was
+- [x] T075 [P1] Decide the column-width adjuster's frame shape at its real height. T073's fix was
       first written unscoped, for every `.db-mobile-bottom-sheet .db-new-placement-option`, and
       `verify-placement.mjs` went red on two rows: "the adjuster clears a keyboard no host reported"
       (panel bottom 513 against a 505 floor) and "the adjuster returns to the floor once the keyboard
@@ -850,3 +875,33 @@ Nothing in this repository closes these. An agent never ticks one.
       first gap). Whoever owns that sheet should decide whether its frame shape should follow its real
       height, or whether it should declare `heightRole` rather than be classified. Not decided here:
       a fix for one row's overflow is not the place to change another surface's frame.
+
+      **Decided: the premise above does not hold, and the fix is `heightRole: "floating"`, declared
+      rather than classified.** Measured directly (a scratch harness mounting the real
+      `openColumnWidthAdjuster`, then the real `verify-placement.mjs` adjuster section, both
+      reverted and restored): the host's `height: var(--input-height)` never reaches these buttons
+      at all. `.db-new-placement-option` carries `flex: 1 1 0` — an explicit `flex-basis: 0` — and a
+      flex item's main-axis size on `flex-basis: 0` in a container with no extra space to distribute
+      (this group's own height is intrinsic, never fixed) comes from `min-height` alone; an explicit
+      `height` on the item is not consulted. Confirmed with a bare two-button fixture in a real
+      browser: `height: 44px` beside `min-height: 32px` under `flex: 1 1 0` measures 32px, not 44,
+      every time. So on the shipped app, unmodified, these four presets already render at 32px —
+      not the 44px the open question assumed — and `verify-placement.mjs`'s own adjuster section
+      confirms it: at the CURRENT, shipped CSS (nothing reverted), all three keyboard rows pass, the
+      resting ratio measures ~0.435 against a floating cutoff of ~0.716, and the hysteresis band is
+      nowhere near reached. The failure the open question describes is real, but only when T073's
+      wrap rule is hypothetically unscoped (`min-height` genuinely does raise the rendered height,
+      unlike `height`) — reproduced again here on demand (both keyboard rows red), and not a defect
+      the shipped tree carries. **No shape changed.** `openColumnWidthAdjuster` now declares
+      `heightRole: "floating"` on its `applySheetChrome` call, matching exactly what the classifier
+      already computes for this content today — `verify-placement.mjs`'s own resting-inset row
+      reads the identical `bottom=836 viewport=844` before and after. The reason to declare it
+      anyway: this panel's content is fixed (a header, one range row, one row of four stacked
+      presets) and never varies with vault data, so a live classifier buys nothing a stated fact
+      does not already cover, and declaring it forecloses this exact failure mode permanently rather
+      than leaving it to whichever future change next grows these buttons past the classifier's own
+      hysteresis gap. No ADR: the sheet's classified shape is unchanged, so this is recorded here
+      rather than in `decision-record.md`. `npx tsc --noEmit`, `npx vitest run` (1630/1630),
+      `npm run build`, `node tools/storybook/verify-placement.mjs` (412/415, 3 red for a declared
+      reason, unchanged — all three adjuster-keyboard rows pass) and `npm run gate` (26 green) all
+      exit 0. Files: `src/views/column-width.ts` only.

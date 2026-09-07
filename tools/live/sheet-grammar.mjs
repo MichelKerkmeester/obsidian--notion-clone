@@ -265,6 +265,37 @@ const HANDLE_HEIGHT_PT = 5;
 const HANDLE_DROP_PT = 6;
 const HANDLE_GEOMETRY_TOLERANCE_PT = 1;
 
+// ───────────────────────────────────────────────────────────────────
+// 2j. THE SETTINGS SHEET GUARD
+// ───────────────────────────────────────────────────────────────────
+//
+// The database Settings sheet's row-stacking rule and its placement-button wrap rule both
+// shipped with no lane pinning either one — with both reverted, this file, render-assertions.mjs
+// and touch-targets.mjs all still exit 0. These two rows close that gap for the one surface both
+// fixes touched. They do not attempt the general form the wider problem takes —
+// `getComputedStyle(el).overflowX === "visible" && el.scrollWidth - el.clientWidth > tolerance`
+// swept over the whole document reports 356 pre-existing false positives (a decorative handle bar,
+// a checkbox, a dropdown chevron, this lane's own test anchors) and needs its own exemption list
+// plus two capture-corpus-wide fidelity fixes before it can run everywhere. Scoped to exactly the
+// buttons this sheet draws, the same predicate has nothing else to misfire on.
+const SETTINGS_SHEET_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "settings");
+// A control fills the row's full inset-to-inset span, not a fraction of it — 90% leaves room for
+// a control that legitimately shares its line with an icon or a unit label.
+const SETTINGS_ROW_WIDTH_RATIO_MIN = 0.9;
+// `--font-ui-small` at the operator's 16px default (15px) and at the text size that measured the
+// shipped 78px-of-ink defect (19px, derived from the operator's own capture). Set directly on
+// the button rather than resolved from `--font-text-size`: this harness, unlike a real host, never
+// defines that token, and deriving it everywhere is a gap this guard deliberately leaves alone.
+// `expectRed` names what was actually measured: at this sheet's widened option width the 15px row
+// measures 0px of ink outside even before the wrap fix — the string is short enough to fit nowrap
+// at that size regardless — so the negative control below only requires red at the size that was
+// actually measured red (19px, ~3px of ink outside pre-fix), while both sizes still have to come
+// back clean once the override is removed.
+const SETTINGS_PLACEMENT_FONT_SIZES = [
+  { px: 15, expectRed: false },
+  { px: 19, expectRed: true },
+];
+
 // Each entry names a real parent shape from the render harness and the production opener family
 // used by the child. The adapter below keeps the row contract identical for dropdowns, menus,
 // pickers and host-modal chrome, while the parent and child still go through shipped modules.
@@ -1003,6 +1034,107 @@ window.__shellHandleGeometry = (scenario) => new Promise((resolve) => {
     resolve(measureHandleGeometry());
   });
 });
+
+// The settings sheet's row-stacking guard. Raw geometry only, per row that owns both a label and
+// a field — a bare textarea and the range+number pair own neither and are skipped, since neither
+// ever had a horizontal shape to begin with. Thresholds are applied by the node-side caller, the
+// split every other row above already uses.
+const measureSettingsRowStacking = () => {
+  const sheet = document.querySelector(".db-view-config-panel.db-mobile-bottom-sheet");
+  if (!sheet) return null;
+  const rows = [];
+  for (const row of sheet.querySelectorAll(".db-panel-row")) {
+    const label = row.querySelector(":scope > .db-view-config-label");
+    const field = row.querySelector(":scope > .db-view-config-field");
+    if (!label || !field) continue;
+    const labelRect = label.getBoundingClientRect();
+    const fieldRect = field.getBoundingClientRect();
+    const rowStyle = getComputedStyle(row);
+    const rowInnerWidth = row.clientWidth
+      - (Number.parseFloat(rowStyle.paddingLeft) || 0)
+      - (Number.parseFloat(rowStyle.paddingRight) || 0);
+    rows.push({ labelBottom: labelRect.bottom, fieldTop: fieldRect.top, fieldWidth: fieldRect.width, rowInnerWidth });
+  }
+  return { rows, sheetScrollWidth: sheet.scrollWidth, sheetClientWidth: sheet.clientWidth };
+};
+
+window.__shellSettingsRowStacking = (scenario) => {
+  let measured = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    measured = measureSettingsRowStacking();
+  });
+  return measured;
+};
+
+window.__shellSettingsRowStackingNegativeControl = (scenario) => {
+  const style = document.createElement("style");
+  // The row-stacking rule, reverted: .db-panel-row's shared base (the unscoped rule the filter and
+  // sort sheets keep) is a left-to-right row, and this declaration is what took the settings
+  // sheet's rows back to it.
+  style.textContent = ".db-view-config-panel.db-mobile-bottom-sheet .db-panel-row { flex-direction: row !important; align-items: normal !important; }";
+  document.head.appendChild(style);
+  let broken = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    broken = measureSettingsRowStacking();
+  });
+  style.remove();
+  let fixed = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    fixed = measureSettingsRowStacking();
+  });
+  return { broken, fixed };
+};
+
+// The placement-button ink guard. Raw scrollWidth/clientWidth/overflowX per button, scoped
+// to exactly the buttons this sheet draws — the node-side caller applies the same predicate a
+// wider, document-wide sweep already tried and reverted, here with
+// tried document-wide and reverted, here with nothing else in scope to misfire on.
+const measureSettingsPlacementInk = () => {
+  const sheet = document.querySelector(".db-view-config-panel.db-mobile-bottom-sheet");
+  if (!sheet) return null;
+  const buttons = Array.from(sheet.querySelectorAll(".db-new-placement-option"));
+  if (buttons.length === 0) return null;
+  return buttons.map((button) => ({
+    scrollWidth: button.scrollWidth,
+    clientWidth: button.clientWidth,
+    overflowX: getComputedStyle(button).overflowX,
+  }));
+};
+
+window.__shellSettingsPlacementInk = (scenario, fontSizePx) => {
+  const style = document.createElement("style");
+  style.textContent = ".db-view-config-panel.db-mobile-bottom-sheet .db-new-placement-option { font-size: " + fontSizePx + "px !important; }";
+  document.head.appendChild(style);
+  let measured = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    measured = measureSettingsPlacementInk();
+  });
+  style.remove();
+  return measured;
+};
+
+window.__shellSettingsPlacementInkNegativeControl = (scenario, fontSizePx) => {
+  const brokenStyle = document.createElement("style");
+  // The placement-button wrap rule, reverted: the host button rule's three declarations that fix answered —
+  // nowrap, centred, a fixed height — reinstated on exactly this selector so the sentence-length
+  // option cannot wrap again.
+  brokenStyle.textContent = ".db-view-config-panel.db-mobile-bottom-sheet .db-new-placement-option { font-size: " + fontSizePx + "px !important; white-space: nowrap !important; justify-content: center !important; height: 44px !important; }";
+  document.head.appendChild(brokenStyle);
+  let broken = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    broken = measureSettingsPlacementInk();
+  });
+  brokenStyle.remove();
+  const fixedStyle = document.createElement("style");
+  fixedStyle.textContent = ".db-view-config-panel.db-mobile-bottom-sheet .db-new-placement-option { font-size: " + fontSizePx + "px !important; }";
+  document.head.appendChild(fixedStyle);
+  let fixed = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    fixed = measureSettingsPlacementInk();
+  });
+  fixedStyle.remove();
+  return { broken, fixed };
+};
 
 // The depth cap: a would-be third sheet stacked on a panel-role parent that is itself already two
 // deep. Real createSurfaceShell end to end -- the same call every panel-role DbModal subclass
@@ -2456,6 +2588,89 @@ try {
     if (!dropOk) failures.push(`handle geometry: drop measured ${handleGeometry.drop.toFixed(1)}px, wanted ${HANDLE_DROP_PT}px`);
     console.log(`  ${widthOk && heightOk ? "PASS" : "FAIL"}  handle measures ${handleGeometry.width.toFixed(1)}x${handleGeometry.height.toFixed(1)}, wanted ${HANDLE_WIDTH_PT}x${HANDLE_HEIGHT_PT}`);
     console.log(`  ${dropOk ? "PASS" : "FAIL"}  handle drop measures ${handleGeometry.drop.toFixed(1)}px, wanted ${HANDLE_DROP_PT}px`);
+  }
+  console.log("");
+
+  console.log(`sheet-grammar: settings sheet row stacking — every row's control sits below its label, at >= ${Math.round(SETTINGS_ROW_WIDTH_RATIO_MIN * 100)}% of the sheet's inner width\n`);
+  const settingsRowStacking = await page.evaluate((scenario) => window.__shellSettingsRowStacking(scenario), SETTINGS_SHEET_SURFACE.spec);
+  if (!settingsRowStacking || settingsRowStacking.rows.length === 0) {
+    failures.push("settings sheet row stacking: no rows with both a label and a field to measure");
+    console.log("  FAIL  settings sheet row stacking — no rows with both a label and a field to measure");
+  } else {
+    const stackedCount = settingsRowStacking.rows.filter((row) => row.labelBottom <= row.fieldTop + FRAME_GEOMETRY_TOLERANCE_PX).length;
+    const wideCount = settingsRowStacking.rows.filter((row) => row.fieldWidth >= row.rowInnerWidth * SETTINGS_ROW_WIDTH_RATIO_MIN).length;
+    const total = settingsRowStacking.rows.length;
+    if (stackedCount !== total) failures.push(`settings sheet row stacking: ${total - stackedCount} of ${total} rows do not sit label-above-control`);
+    if (wideCount !== total) failures.push(`settings sheet row stacking: ${total - wideCount} of ${total} rows have a control under ${Math.round(SETTINGS_ROW_WIDTH_RATIO_MIN * 100)}% of the sheet's inner width`);
+    console.log(`  ${stackedCount === total ? "PASS" : "FAIL"}  ${stackedCount}/${total} rows sit label-above-control`);
+    console.log(`  ${wideCount === total ? "PASS" : "FAIL"}  ${wideCount}/${total} rows have a control at >= ${Math.round(SETTINGS_ROW_WIDTH_RATIO_MIN * 100)}% of the sheet's inner width`);
+    const noOverflow = settingsRowStacking.sheetScrollWidth <= settingsRowStacking.sheetClientWidth + FRAME_GEOMETRY_TOLERANCE_PX;
+    if (!noOverflow) failures.push(`settings sheet row stacking: sheet scrollWidth ${settingsRowStacking.sheetScrollWidth} exceeds clientWidth ${settingsRowStacking.sheetClientWidth}`);
+    console.log(`  ${noOverflow ? "PASS" : "FAIL"}  sheet scrollWidth (${settingsRowStacking.sheetScrollWidth}) === clientWidth (${settingsRowStacking.sheetClientWidth})`);
+  }
+
+  const settingsRowStackingControl = await page.evaluate((scenario) => window.__shellSettingsRowStackingNegativeControl(scenario), SETTINGS_SHEET_SURFACE.spec);
+  console.log("sheet-grammar: settings sheet row stacking negative control — the row-stacking rule's flex-direction reverted\n");
+  if (!settingsRowStackingControl.broken || !settingsRowStackingControl.fixed || settingsRowStackingControl.broken.rows.length === 0 || settingsRowStackingControl.fixed.rows.length === 0) {
+    failures.push("settings sheet row stacking negative control: the surface did not mount rows to measure");
+    console.log("  FAIL  settings sheet row stacking negative control — the surface did not mount rows to measure");
+  } else {
+    const brokenStacked = settingsRowStackingControl.broken.rows.filter((row) => row.labelBottom <= row.fieldTop + FRAME_GEOMETRY_TOLERANCE_PX).length;
+    const fixedStacked = settingsRowStackingControl.fixed.rows.filter((row) => row.labelBottom <= row.fieldTop + FRAME_GEOMETRY_TOLERANCE_PX).length;
+    const brokenTotal = settingsRowStackingControl.broken.rows.length;
+    const fixedTotal = settingsRowStackingControl.fixed.rows.length;
+    const wentRed = brokenStacked < brokenTotal;
+    const cleanAfter = fixedStacked === fixedTotal;
+    if (!wentRed) failures.push(`settings sheet row stacking negative control: reverting flex-direction did not unstack any row (${brokenStacked}/${brokenTotal} still measured stacked)`);
+    if (!cleanAfter) failures.push(`settings sheet row stacking negative control: removing the override did not restore stacking (${fixedStacked}/${fixedTotal} measured stacked)`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  reverting flex-direction unstacks rows (${brokenStacked}/${brokenTotal} still stacked)`);
+    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores stacking (${fixedStacked}/${fixedTotal} stacked)`);
+  }
+  console.log("");
+
+  console.log(`sheet-grammar: settings sheet placement-button ink — .db-new-placement-option text stays inside its own box at ${SETTINGS_PLACEMENT_FONT_SIZES.map((s) => s.px).join("px and ")}px\n`);
+  for (const { px: fontSizePx } of SETTINGS_PLACEMENT_FONT_SIZES) {
+    const measured = await page.evaluate(
+      ({ scenario, fontSizePx }) => window.__shellSettingsPlacementInk(scenario, fontSizePx),
+      { scenario: SETTINGS_SHEET_SURFACE.spec, fontSizePx },
+    );
+    if (!measured || measured.length === 0) {
+      failures.push(`settings sheet placement-button ink: no .db-new-placement-option buttons to measure at ${fontSizePx}px`);
+      console.log(`  FAIL  settings sheet placement-button ink — no buttons to measure at ${fontSizePx}px`);
+      continue;
+    }
+    const overflowing = measured.filter((b) => b.overflowX === "visible" && b.scrollWidth - b.clientWidth > OVERFLOW_TOLERANCE_PX);
+    const clean = overflowing.length === 0;
+    if (!clean) {
+      const worst = Math.max(...overflowing.map((b) => b.scrollWidth - b.clientWidth));
+      failures.push(`settings sheet placement-button ink: ${overflowing.length}/${measured.length} buttons paint ink outside their own box at ${fontSizePx}px (worst ${worst.toFixed(1)}px)`);
+    }
+    console.log(`  ${clean ? "PASS" : "FAIL"}  ${measured.length - overflowing.length}/${measured.length} buttons stay inside their own box at ${fontSizePx}px`);
+  }
+  console.log("");
+
+  console.log("sheet-grammar: settings sheet placement-button ink negative control — the placement-button wrap rule's white-space/justify-content/height reverted\n");
+  for (const { px: fontSizePx, expectRed } of SETTINGS_PLACEMENT_FONT_SIZES) {
+    const control = await page.evaluate(
+      ({ scenario, fontSizePx }) => window.__shellSettingsPlacementInkNegativeControl(scenario, fontSizePx),
+      { scenario: SETTINGS_SHEET_SURFACE.spec, fontSizePx },
+    );
+    if (!control.broken || !control.fixed || control.broken.length === 0 || control.fixed.length === 0) {
+      failures.push(`settings sheet placement-button ink negative control: no buttons to measure at ${fontSizePx}px`);
+      console.log(`  FAIL  settings sheet placement-button ink negative control — no buttons to measure at ${fontSizePx}px`);
+      continue;
+    }
+    const brokenOverflowing = control.broken.filter((b) => b.overflowX === "visible" && b.scrollWidth - b.clientWidth > OVERFLOW_TOLERANCE_PX);
+    const fixedOverflowing = control.fixed.filter((b) => b.overflowX === "visible" && b.scrollWidth - b.clientWidth > OVERFLOW_TOLERANCE_PX);
+    // The measured red/green data only shows a red at this sheet's widened option width for the sizes
+    // `expectRed` marks — at 15px the string fits nowrap regardless, so requiring red there would
+    // fail the control at a size the fix never moved. Every size still has to come back clean.
+    const wentRed = expectRed ? brokenOverflowing.length > 0 : true;
+    const cleanAfter = fixedOverflowing.length === 0;
+    if (!wentRed) failures.push(`settings sheet placement-button ink negative control: reverting the wrap rule did not overflow any button at ${fontSizePx}px`);
+    if (!cleanAfter) failures.push(`settings sheet placement-button ink negative control: removing the override left ${fixedOverflowing.length} button(s) overflowing at ${fontSizePx}px`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  reverting the wrap rule ${expectRed ? "overflows" : "leaves (as expected, too narrow a string to matter here)"} ${brokenOverflowing.length}/${control.broken.length} buttons at ${fontSizePx}px`);
+    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override leaves 0/${control.fixed.length} buttons overflowing at ${fontSizePx}px`);
   }
   console.log("");
 
