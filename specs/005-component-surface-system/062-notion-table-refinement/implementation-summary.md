@@ -11,10 +11,10 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/062-notion-table-refinement"
-    last_updated_at: "2026-09-06T16:32:00Z"
-    last_updated_by: "ruling-fold-session"
-    recent_action: "Folded the 18:32 rulings; no criterion gated on a decision"
-    next_safe_action: "Run Leg 1 — the five guards, each observed red under its own control"
+    last_updated_at: "2026-09-07T09:10:00Z"
+    last_updated_by: "defect-closure-session"
+    recent_action: "Closed six recorded defects and the missing AC harness rows (Leg 5)"
+    next_safe_action: "AC-009 (the operator's device read) is the only remaining open row"
     blockers:
       - "T033 is the operator's device read"
     key_files:
@@ -25,14 +25,14 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-062-impl"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 95
     open_questions:
-      - "The frozen divider in dark theme"
-      - "The add-row noun source"
       - "A type-picker row ahead of its data type"
     answered_questions:
       - "The research's second-ranked item landed on main at 41513bd3 and 1a2c7e00 and is not carried"
       - "The digest's two second-hand line citations are exact; a third and fourth registry exist"
+      - "The frozen divider in dark theme: themed per surface, measured 3.21:1 dark / 1.83:1 light"
+      - "The add-row noun source: a per-view configured string, fallback today's 'New'"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
 # Implementation Summary
@@ -103,6 +103,55 @@ and released back with the 8 content-changed captures named. Eight stale evidenc
 `engine-parity`, `surface-census`, `token-census`, `view-census`) re-measured against the moved
 `styles.css`/`table-record-peek.ts`. `npm run gate`: 26/26 green.
 
+**Leg 5 — the six recorded defects, closed at the source.** A second pass over the landed packet,
+fixing what the independent landing verification recorded rather than absorbed:
+
+1. **The dark-theme frozen-column shadow was invisible.** Themed per surface instead of through
+   Obsidian's own (undefined) shadow token: light keeps `rgba(0,0,0,0.25)`, dark switches to
+   `rgba(255,255,255,0.35)` — lightening instead of darkening, the only direction with room to move
+   against a surface this dark. Measured by a new WCAG-contrast pass in `render-assertions.mjs`
+   (alpha-composited over `--db-surface-canvas`, computed in Node since `box-shadow` is a paint
+   effect `getComputedStyle` cannot hand back as a resolved pixel): **red** 1:1 both themes before
+   the ground-truth fix, **green** 1.83:1 light / 3.21:1 dark after, plus a "nothing at rest"
+   assertion (`scrollLeft === 0` paints no shadow) in both themes.
+2. **`.note-database-container:not(.is-phone)` was inert.** `is-phone` sits on the `body`, an
+   ancestor of the container, never on the container itself, so the negation always matched and the
+   freeze rules were never actually scoped away from phone. Rewritten to apply unconditionally and
+   turn off explicitly under `.is-phone` (`position: static`, `left: auto`, `box-shadow: none`).
+   `table-frozen-column-mobile-light.png` moved a real pixel (11,751 of 1,405,392, bounded to the
+   frozen column's own region) confirming the freeze no longer applies on phone; the dark and
+   desktop mobile/light captures were byte-only re-encodes (`pixelHash` unchanged) and were
+   restored to their committed bytes.
+3. **Grouped tables never toggled `is-scrolled-x`.** `.db-grouped-table` owns the horizontal
+   overflow, not the outer `.note-database-container`, and `scroll` does not bubble — the listener
+   bound to the container the way the ungrouped path binds it never fired.
+   `setupFrozenScrollTracking` now takes a `scrollTarget`/`classTarget` pair; the grouped call site
+   binds the listener to `.db-grouped-table` while keying the class off the container, matching the
+   ungrouped path's own convention.
+4. **The chip measurer's 560px cap had no assertion.** `column-width.test.ts` now bounds it from
+   both sides: a short chip set sizes under the cap, a long one collapses to exactly 560.
+5. **The duplicate conditional-tint `td` rule pair was collapsed to one.** The older,
+   lower-specificity selector (`tr.db-conditional-format > td:not(.db-conditional-format)`) was
+   dead weight next to the newer one that actually won the cascade
+   (`tr.db-conditional-format > td:not(.db-cell-selected):not(.db-cell-range-selected)`); removing
+   it means a future regression in the live selector now has nothing left to mask it.
+6. **The harness rows this packet's own acceptance criteria named as missing were built**: a new
+   `table-renderer-freeze-and-switches.test.ts` drives the real `TableRenderer` against a mock DOM
+   for the frozen `left`/unfreeze control, both scroll-listener paths, the vertical-lines gate and
+   the add-row noun; `date-time-format.test.ts` covers `formatDateRangeDisplay`'s ordinary and three
+   malformed cases plus `getDateEndFieldKey`; `cell-renderer-wrap.test.ts` and
+   `table-record-peek.test.ts` each gained a case pinning their own half of the empty-value pair;
+   `render-assertions.mjs`'s new frozen-column CSS pass also reads the resize handle's hover
+   background in both themes.
+
+Two further defects outside the six, named in the original brief rather than `goal.md`'s own list:
+the dead `cell.auditReadonly` i18n key (present in `en`, `zh-CN` and `zh-TW`, referenced nowhere in
+`src/`) was removed from all three; and `created-time`/`last-edited-time` cells switched from the
+date-only formatter to `formatDateTimeValueDisplay` — the vault's own `ctime`/`mtime` carry a time
+component (`parseDateTimeParts` already derives it for a numeric millisecond timestamp), and the
+date-only display was silently dropping it. No decision-record entry was needed for this one: the
+formatter already existed, so this was a fix rather than an open operator question.
+
 ### Files Changed
 
 | File | Change |
@@ -119,7 +168,7 @@ and released back with the 8 content-changed captures named. Eight stale evidenc
 | `src/views/record-surface/cell-editor-date.ts` | End-date row + its own commit/validation path |
 | `src/views/table-record-peek.ts` | Empty-property placeholder |
 | `src/views/view-config-panel-renderer.ts` | Add-row-noun text field |
-| `src/i18n.ts` | New keys across all three locales (columnType.\*, menu.freezeColumn, toolbar.newNoun, viewConfig.addRowNoun, date.\*, cell.auditReadonly, undo.\*) |
+| `src/i18n.ts` | New keys across all three locales (columnType.\*, menu.freezeColumn, toolbar.newNoun, viewConfig.addRowNoun, date.\*, undo.\*); dead `cell.auditReadonly` key removed from all three (Leg 5) |
 | `styles.css` | Freeze sticky/shadow, vertical-lines gate, resize-handle hover, peek-empty-value color |
 | `tools/live/render-assertion-harness.ts` | 5 guard functions; `tableFooterEmpty`/`tableSortRules`/`tableHeaderNoop` scenario fields |
 | `tools/live/render-assertions.mjs` | `TABLE_GUARD_SCENARIOS`, `__footerFloor`, guard reporting sections |
@@ -128,6 +177,15 @@ and released back with the 8 content-changed captures named. Eight stale evidenc
 | `src/data/data-source.test.ts`, `src/views/record-surface/type-picker.test.ts` | New/updated unit coverage |
 | `screenshots/manifest.json`, 8 new PNGs under `screenshots/notion-clone/views/` | Recapture |
 | Evidence artefacts (8 files under `tools/live/*.json`) | Re-measured against the moved tree |
+| `src/views/cell-renderer.ts` (Leg 5) | `created-time`/`last-edited-time` now render through `formatDateTimeValueDisplay`, not the date-only formatter |
+| `styles.css` (Leg 5) | Themed `--db-frozen-col-shadow`; `.is-phone` freeze/shadow reset; duplicate conditional-tint `td` rule removed |
+| `src/views/table-renderer.ts` (Leg 5) | `setupFrozenScrollTracking(scrollTarget, classTarget?)`; grouped call site binds to `.db-grouped-table` |
+| `tools/live/render-assertions.mjs` (Leg 5) | Frozen-column CSS pass: WCAG contrast, nothing-at-rest, `.is-phone` reset, resize-handle hover, in both themes |
+| `src/views/table-renderer-freeze-and-switches.test.ts` (new) | Frozen `left`/unfreeze, both scroll-listener paths, vertical-lines gate, add-row noun |
+| `src/data/date-time-format.test.ts` (new) | `formatDateRangeDisplay`'s ordinary and three malformed cases; `getDateEndFieldKey` |
+| `src/views/cell-renderer-wrap.test.ts`, `src/views/table-record-peek.test.ts` (Leg 5) | The empty-value pair, one case per surface |
+| `src/views/column-width.test.ts` (Leg 5) | The 560px chip-measurer cap, both sides |
+| `tools/lane/css-lane.json` (Leg 5) | Release entry at the post-fix hash, naming the one real content-changed capture |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -181,16 +239,23 @@ renderer (T021a).
 | Check | Result |
 |-------|--------|
 | `npx tsc --noEmit` | Exit 0 |
-| `npx vitest run` | Exit 0, 142 files / 1523 tests |
+| `npx vitest run` | Exit 0, 147 files / 1600 tests |
 | `npm run build` | Exit 0 |
 | `node tools/live/sheet-grammar.mjs` | Exit 0 |
-| `node tools/live/render-assertions.mjs` | Exit 0 — all 5 guards green; each also observed red under its own control (icon call removed, sort block disabled, chip container forced to block, pill colour forced to one value, `td` paint rule disabled, phone floor rule dropped, zero-row footer restored) before being trusted |
-| `npm run screenshots` → `npm run screenshots:verify` | 596 entries; exit 0 |
+| `node tools/live/render-assertions.mjs` | Exit 0 — all 5 Leg-1 guards green as before; the new frozen-column CSS pass green in both themes (contrast 1.83:1 light / 3.21:1 dark, nothing at rest, `.is-phone` reset, resize-handle hover) |
+| `npm run screenshots` → `npm run screenshots:verify` | 604 entries; exit 0 |
 | `npm run gate` | 26/26 green |
 | `node tools/naming/scan-comments.mjs` | Exit 0 — no artifact-id or commented-code violations |
-| `node tools/naming/scan-failing-values.mjs` | Exit 0 — 8 new ticked criteria (C1-C8 in `goal.md`), all carrying their observed-red evidence; bare count unchanged at 144 |
-| `SURFACE_PHASE=062-notion-table-refinement node tools/lane/check-lane.mjs` | Exit 0 |
+| `node tools/naming/scan-failing-values.mjs` | Exit 0 |
+| `node tools/lane/check-lane.mjs` (no `SURFACE_PHASE` needed — baseline now matches) | Exit 0 |
 | `node tools/live/evidence.mjs --check-all` | Exit 0 — 15/15 artefacts fresh |
+
+**Leg 5's own red/green pairs** (`render-assertions.mjs`'s frozen-column CSS pass, all four
+before/after the fix): shadow contrast **1:1 both themes → 1.83:1 light / 3.21:1 dark**;
+`.is-phone` freeze reset **`position: sticky` → `position: static`, shadow painted → `none`**;
+grouped `is-scrolled-x` **never toggled → toggles on `.db-grouped-table`'s own `scroll`, not the
+outer container's**; chip-measurer cap **unbounded (vitest green with the cap deleted) → bounded
+both sides (`column-width.test.ts`)**.
 <!-- /ANCHOR:verification -->
 
 ---
@@ -235,10 +300,8 @@ renderer (T021a).
   and are guarded, but no reader can set `showVerticalLines: false` from the app today short of
   editing the stored view config directly. Matches the task's stated scope; flagged here so it is
   not mistaken for a finished end-to-end feature.
-- **A pre-existing duplicate CSS declaration was found, not touched.** Two selectors both paint the
-  conditional-format tint's `td` background — `tr.db-conditional-format > td:not(.db-conditional-format)`
-  (an older rule) and `tr.db-conditional-format > td:not(.db-cell-selected):not(.db-cell-range-selected)`
-  (a newer, higher-specificity one that actually wins the cascade). Both work; the guard added here
-  proves the *effect*, not which selector produces it, so a future cleanup pass would need to delete
-  both to observe a red control. Left alone — de-duplicating is not in this packet's scope.
+- **The pre-existing duplicate CSS declaration named above is now closed (Leg 5).** The older,
+  lower-specificity `tr.db-conditional-format > td:not(.db-conditional-format)` rule was removed;
+  only `tr.db-conditional-format > td:not(.db-cell-selected):not(.db-cell-range-selected)` remains,
+  so the guard now catches a single-rule regression instead of being masked by the duplicate.
 <!-- /ANCHOR:limitations -->

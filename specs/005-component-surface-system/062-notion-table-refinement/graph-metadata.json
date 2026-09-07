@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Our table view has never been read side by side against the product it is most often compared to",
     "created_at": "2026-09-06T16:15:18.332Z",
-    "last_save_at": "2026-09-07T04:36:07.122Z",
+    "last_save_at": "2026-09-07T07:11:00.332Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:4f8b5beac8a02efd9d8f1575f2035e7f20e72a63bb3e3e17d90e32e3301c6d71",
+    "source_fingerprint": "sha256:84d02be17a6bb74236c8e9b7d5de67800c19baaabcf717ec7b8077ed67507230",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "0b6f6c562c7e389490dcbed312f53b1df74f4800d8ed76af093570ed71a14f04",
       "plan.md": "4671b14c815b1d8e35224dbadbf368e97df6c44c4eb396001a09eb8b6bbdbafe",
-      "tasks.md": "4d2564625ff70e137e479e324b16b016b74d84c656e7ded3a7e678cfd6f74313",
+      "tasks.md": "49a6052ac1eb578e3fbbec4afe63d0f5bf0aaa79fa4187a0128ea00ad5efbf0f",
       "decision-record.md": "5db714911366cad6a0cf71c63f09f180311ec68f909d55542196795fed6d85c5",
-      "implementation-summary.md": "73a40a4d8106fbc24ea1808462900dc2ae2e337f958f7220ad63fb075a98dd04"
+      "implementation-summary.md": "9a93b1e37f881856d962cfdbe16705cf9e3581247e0a4b5463c688e8d62efb01"
     },
     "last_active_child_id": null,
     "last_active_at": null

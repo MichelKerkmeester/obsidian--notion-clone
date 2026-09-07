@@ -256,6 +256,15 @@ Independent of each other. They share `styles.css` and serialize through the par
 - The `064` pointer in ADR-003 has been carried into `064`'s own tasks once that packet exists.
 - `npm run gate` exits 0 and the three build gates with it.
 - The two new capture scenarios exist, are current, and have been looked at.
+
+**2026-09-07 defect-closure pass.** T001-T032 were already `[x]` before this pass and stay that
+way — the six defects the independent landing verification recorded against them (the dark-theme
+shadow, the inert `.is-phone` scope, the grouped-table listener, the unguarded 560px cap, the
+duplicate conditional-tint rule, and the missing AC-001/002/003/005/006/007/008 harness rows) are
+now fixed and asserted at the source; see `acceptance-criteria.md`'s per-row "Verifier 2026-09-07
+(second pass)" notes and `implementation-summary.md`'s Leg 5 for the evidence. No task row changed
+state: the feature work these rows describe was already complete, and what was missing was the
+verification T032 itself names, not a new task. T033 remains `[B]`, operator-owned, unticked.
 <!-- /ANCHOR:completion -->
 
 ---
