@@ -795,6 +795,28 @@ ticks an operator row.**
 
 ## 5. CONTINUITY LOG
 
+- **2026-09-07, `067` follow-up leg: T006 closed live, ADR-003's page pull-back attempted and
+  reverted.** Ran in `.worktrees/215-sheet-family-followup` on top of `173f7d3a`, continuing a
+  paused agent's own uncommitted work (the menu-card add-only toggle fix, already correct on
+  disk). Verified it live at 402px through the shipped modules: all four production `menu`-role
+  surfaces (`owned-menu`, the date/icon/option-color pickers) now read handle absent, close
+  44x44, parent dim ratio 0.390 — closing `067` T006 / AC-002. Also attempted ADR-003's
+  `scale(0.96)` page-under-first-sheet pull-back; it broke `position: fixed` for the row-selection
+  bar (a `transform` on `.note-database-container` creates a new containing block for its
+  fixed-position descendants — CSS Transforms spec behaviour, not a browser bug), caught by
+  `verify-placement.mjs`'s own pre-existing keyboard/selection-bar checks reading impossible
+  numbers with no test update needed to catch it. Fully reverted rather than shipped or patched
+  around; recorded as a residual gap with the prerequisite for a safe re-attempt named (an inner
+  wrapper `.note-database-container` does not currently have). Fixing T006 for real also exposed
+  and repaired ~11 `verify-placement.mjs` assertions written against the old, broken menu-drag
+  behaviour, and a genuine `touch-targets.mjs` false-positive caused by the (later-reverted)
+  page-pull-back. `npm run gate` 26/26 green from the final state. Four commits on
+  `173f7d3a..b1664126`, not pushed. Full detail in `067`'s own `decision-record.md` ADR-002/
+  ADR-003, `tasks.md`, `acceptance-criteria.md` and `implementation-summary.md`, and this
+  worktree's own untracked `.handover.md`. Left open: T015's header-block margin, T020's
+  replace-pair captures, T021's full divider audit (styles.css-only reading done, not checked
+  against a reference capture), the two named lane pairs' rewiring to the real depth-cap call
+  graph, and AC-003's light stacked-parent figure (investigated, not fixed).
 - **2026-09-06 ~10:50, `orchestrate-handover-22`: five new operator reports recorded, `057`
   reopened, the phone-week ruling superseded — documentation-only.** Ran in
   `.worktrees/163-docs-refresh-1045` under the same hard rule as handover-21: nothing outside
