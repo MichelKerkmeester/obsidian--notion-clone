@@ -10,13 +10,13 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/061-notion-sheet-refinement"
-    last_updated_at: "2026-09-07T01:00:00Z"
-    last_updated_by: "implementation-session"
-    recent_action: "Leg A and Leg B implemented, verified live, gate green at 26/26"
-    next_safe_action: "T010 in 067's own folder; AC-005 in the operator's device sitting"
+    last_updated_at: "2026-09-07T06:45:00Z"
+    last_updated_by: "landing-verification"
+    recent_action: "Landed on main; T010 closed, T008 reopened"
+    next_safe_action: "Claim the bottom dock in the date and option cell editors"
     blockers:
       - "AC-005 is the operator's own read, in the same sitting as 067 AC-011"
-      - "T010 touches 067's own folder, outside this session's write authority"
+      - "T008 is open: only cell-editor-text.ts claims the bottom dock, so a tap on a date cell still draws the pill over the date editor"
       - "AC-007 stays parked (ADR-006) behind an Anytype multi-section re-read the operator schedules"
     key_files:
       - "src/views/database-view.ts"
@@ -50,7 +50,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 061-notion-sheet-refinement |
-| **Completed** | Implementation closed 2026-09-07; AC-005 and T010 remain (operator sitting, cross-packet write) |
+| **Completed** | Implementation closed 2026-09-07 and landed on `main`; T008 reopened at the landing, AC-005 remains (operator sitting) |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -201,7 +201,9 @@ difference is which day now reads as "today," unrelated to this edit. Full accou
 | AC-001 to AC-004, AC-006, AC-008 | Met |
 | AC-007 | Waived (ADR-006) |
 | AC-005 | Unmet — the operator's own read, in `067` AC-011's sitting |
-| T010 | Blocked — outside this session's write authority (touches `067`'s own folder) |
+| T010 | Closed at the landing — the two device questions are in `067` AC-011, no new operator row |
+| T008 | **Reopened at the landing.** The text half is confirmed live; the date/datetime editor never claims the dock, so the pill draws over it |
+| Landing re-verification | The shipped `TableRenderer`/`CellRenderer` plus `DatabaseView`'s own `setupTableCellSelection`, driven in headless Chrome at 402x874 (`hasTouch`, forced coarse pointer) and at 1440x900 |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -217,10 +219,17 @@ difference is which day now reads as "today," unrelated to this edit. Full accou
 2. **The single-editable-column "Bulk edit `<Column>`" branch of the overflow menu is implemented
    but not separately exercised by the live lane fixture**, which drives a mixed-column selection
    (the Fill branch). Both branches share the same `openCellSelectionActionsMenu` code path.
-3. **AC-005 and T010 are not agent-closable.** AC-005 is the operator's own device read, shared with
-   `067` AC-011's sitting; T010 (appending two device questions to `067`'s own checklist) touches a
-   different packet's file, outside this implementation pass's write authority.
-4. **AC-007 stays parked**, per ADR-006, behind an Anytype multi-section capture re-read the
+3. **AC-005 is not agent-closable.** It is the operator's own device read, shared with `067`
+   AC-011's sitting. T010 was closed at the landing, which held write authority over `067`.
+4. **The bottom dock is claimed by one editor family, not all of them.** Measured at the landing on
+   the shipped renderers at 402px: the text and single-line editors claim it and the pill is
+   correctly hidden underneath them, but the date/datetime editor mounts into the same bottom band
+   without claiming, so the pill is drawn over its Save/Cancel row. T008 carries the numbers.
+5. **A plain tap still paints a cell selection, through the focus path rather than the press path.**
+   `CellRenderer.selectCell` focuses the `td` before opening the editor, and this view's `td` focus
+   listener assigns `cellSelection`. The pill it builds is hidden while an editor holds the dock and
+   appears when that editor closes. Predates this packet; T004 carries the trace.
+6. **AC-007 stays parked**, per ADR-006, behind an Anytype multi-section capture re-read the
    operator schedules.
 <!-- /ANCHOR:limitations -->
 

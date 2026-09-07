@@ -209,7 +209,7 @@
     ],
     "causal_summary": "The family reads as one surface set until you measure it",
     "created_at": "2026-09-06T15:02:09Z",
-    "last_save_at": "2026-09-07T04:06:22.892Z",
+    "last_save_at": "2026-09-07T04:46:11.505Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,7 +221,7 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:eca5f2f2302b877d817ab1317200b2b544c8673f13fa24d2e6d49ff30fea1682",
+    "source_fingerprint": "sha256:cbd76af8230cb5f65dfca94b7b5b116b4f2a777332e5cb6b2e7741be9208e32a",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "bb92164537e8d88f73d985c6a2f9b96a6bfb95ba08f6c326da962dbdb71740ed",

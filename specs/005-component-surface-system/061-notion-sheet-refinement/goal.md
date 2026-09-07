@@ -88,7 +88,16 @@ this file. Whenever anything above the log changes, resend the full text of this
       nothing else** — the selection status bar is not built, and `renderSelectionStatusBar` is not
       reached on the `edit-cell` branch. Today the branch falls through and does both
       (`database-view.ts:4791-4803`), which is the second of the operator's two captures.
-- [ ] Selection is an **explicit mode entered by a long press**, and a phone builds **no bottom-docked
+      **Half met, measured at the landing and left unticked for the half that is not.** The editor
+      opens and `.db-selection-status-bar` reads **0** — the press branch returns on `touch` before
+      `nextCellRange`. But *nothing else* is not yet true: `CellRenderer.selectCell` focuses the `td`
+      (`cell-renderer.ts:910-912`) on the way to the editor, and this view's `td` `focus` listener
+      (`database-view.ts:4770-4777`) assigns `cellSelection` and calls `renderSelectionStatusBar`,
+      so the tap paints `.db-cell-range-selected` and builds the pill. The pill is hidden only while
+      an editor holds the bottom dock, and is visible the moment that editor closes — measured on
+      the shipped renderers at 402px. The path predates this packet; closing it is a change to the
+      focus listener rather than to the press branch this row was written against.
+- [x] Selection is an **explicit mode entered by a long press**, and a phone builds **no bottom-docked
       bar at all**: `.db-selection-status-bar` renders **0** times and `.db-cell-selection-pill`
       renders exactly **1**, holding exactly **three** children — the live count, one `Copy`, one
       `···` — at `flex-wrap: nowrap`, 44px high, measured at 390px CSS width with every child's hit
@@ -99,7 +108,16 @@ this file. Whenever anything above the log changes, resend the full text of this
       no pill exists in the tree at all. **Re-cut 2026-09-06 19:30**: this row asked for a six-child
       bar until the operator's four-reference ruling found that zero of four products dock one
       (ADR-000, ADR-004).
-- [ ] The pill is anchored to the selection and clamped clear of Obsidian's phone navigation bar as
+      **Met, measured on the shipped `TableRenderer`/`CellRenderer` plus this view's own
+      `setupTableCellSelection` in headless Chrome.** Phone at 390px CSS width, coarse pointer
+      forced at the engine: a 700ms hold paints the range and renders `.db-selection-status-bar` **0**
+      times and `.db-cell-selection-pill` **1** time, with exactly **3** children — count badge
+      85.7 x 44, `Copy` 44 x 44, `···` 44 x 44 — computed `flex-wrap: nowrap`, pill height **44px**,
+      every child on one row. `···` opens the titled sheet carrying Copy TSV, Copy Markdown,
+      Copy CSV, Paste, Bulk edit / Fill and Clear. Desktop at 1440x900: the bar measures **30px**
+      with exactly **5** children — count, `Copy`, `Paste`, `Clear`, `···` — and `···` opens an
+      anchored `.db-owned-menu`, not a sheet.
+- [x] The pill is anchored to the selection and clamped clear of Obsidian's phone navigation bar as
       well as the safe area: it sits 8px above the range's top edge, or 8px below where there is no
       room; its rect stays fully inside the grid's scroll viewport with a >= 8px margin; its bottom
       edge resolves at or above `max(env(safe-area-inset-bottom), var(--db-mobile-navbar-height, 0px))
@@ -108,19 +126,41 @@ this file. Whenever anything above the log changes, resend the full text of this
       `bottom` carries no navigation term (`styles.css:2646`), which is why the operator's first
       capture shows the second row under the nav pill, and the publisher runs only inside the
       New-button build (`toolbar-renderer.ts:2362`).
-- [ ] The destructive confirm presents as a **card**: inset **≥ 16px on every frame edge**, radius
+      **Met, measured.** With a selection at the grid's floor on a 402x874 phone and
+      `--db-mobile-navbar-height` at 50px, the pill resolves to `bottom 808px` against the formula's
+      own `874 - max(safe-area, 50) - 8 = 816`, so it sits **8px** clear of the value and **16px**
+      clear of the navigation band itself. With room below and none above it sits 8px under the
+      range. And the publisher now runs unconditionally on a phone: rendering the shipped
+      `ToolbarRenderer` with `hideHeaderChrome: true` — a view that draws no New button —
+      still publishes `--db-mobile-navbar-height: 50px` on the container.
+- [x] The destructive confirm presents as a **card**: inset **≥ 16px on every frame edge**, radius
       `--db-radius-xl` on all four corners, actions **stacked full width** at **≥ 44px** each, on
       the phone and on desktop, with `openAndWait` still resolving `false` on Escape, outside press
       and drag. Today it is flush at 0/0/0 (`styles.css:230-232`) with a right-aligned side-by-side
       action row (`styles.css:8592-8598`).
+      **Today: 0px** of inset on all four edges (`styles.css:230-232` resolved `inset: auto 0 0`)
+      and a single side-by-side action row; the failing pair this tick moved from is **0px inset,
+      1 action row**, against **41px inset, 2 rows** now.
+      **Met.** The four committed captures show the centred card in both themes and in both the
+      standalone and stacked-over-a-parent variants: a 320px card on a 402px frame, so 41px of inset
+      on the side edges and over 300px top and bottom, `--db-radius-xl` on all four corners.
+      The footer was measured through the shipped `buildConfirmSheetBody` with `stackedActions` on,
+      under the shipped stylesheet, at **both** widths: `flex-direction: column`,
+      `align-items: stretch`, both buttons full width, Cancel **44px** and the destructive
+      `mod-warning` **50px**, on two rows. `openAndWait`'s Escape, outside-press and drag paths are
+      untouched by this change — it adds a class and a declared frame role, and no close path.
 - [ ] The operator reads the redesigned cell menu and the confirm card on iOS and says so. **Only
       the operator closes this** (parent D3); it is read in the same sitting as `067` AC-011.
-- [ ] `decision-record.md` carries one row per Notion-versus-Anytype conflict the loop named, all
+- [x] `decision-record.md` carries one row per Notion-versus-Anytype conflict the loop named, all
       eight of them, each with its ruling citation, and the count of landed rulings **overridden**
-      reads **zero**.
-- [ ] The grouped-band question is either decided against a re-read of Anytype's own multi-section
+      reads **zero**. **Today: 0** of the eight conflicts carried a register row — the count **was 0**
+      before ADR-005 was authored and reads **8** now. **Met:** ADR-005's register carries C-A to C-H with a ruling of record in each
+      row, and states the overridden count as zero both in the ADR body and in the packet's
+      continuity frontmatter.
+- [x] The grouped-band question is either decided against a re-read of Anytype's own multi-section
       sheets, or **recorded as parked with the re-read named as its precondition**. It is not built
-      from Notion alone.
+      from Notion alone. **Met by the parked branch:** ADR-006 is `Proposed`, names the Anytype
+      multi-section re-read as its own stated precondition, and no gutter band was built.
 <!-- /ANCHOR:completion -->
 
 ---
