@@ -15,30 +15,29 @@ _memory:
     packet_pointer: "005-component-surface-system/058-card-title-and-title-formats"
     last_updated_at: "2026-09-07T22:45:00Z"
     last_updated_by: "impl-058-production-verification"
-    recent_action: "Closed D1 on the real BoardRenderer and shipped the file-name titleFormat fix (D7/D8)"
+    recent_action: "Closed D1; shipped titleFormat (D7) plus its consumer (D8) and persistence (D9) fixes"
     next_safe_action: "AC-008's operator device read on a released build; then close"
     blockers:
-      - "Owners 045 (card fields), 054 (record surface) and 056 (card anatomy) must not be edited by this packet directly — it edits the one shared resolver they all call through"
+      - "Owners 045, 054, 056 not edited directly — this packet edits only the shared resolver"
     key_files:
       - "src/data/title-field-display.ts"
-      - "src/views/board-card-properties-panel.ts"
       - "src/views/board-renderer.ts"
       - "src/views/view-config-panel-renderer.ts"
-      - "src/data/types.ts"
+      - "src/data/data-source.ts"
       - "tools/live/render-assertion-harness.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-058-goal"
       parent_session_id: null
-    completion_pct: 95
+    completion_pct: 97
     open_questions:
       - "Does 047's landed Notion harvest change ADR-002's picker-location call once it lands"
     answered_questions:
       - "The per-view title picker is not new work: ViewConfig.titleField already exists (types.ts:570)"
       - "The record surface and phone sheet already read the same titleField as the board, for every view but calendar/timeline (record-detail-panel.ts:485-488)"
-      - "Implementation landed and verified: gate 26 green, replay 28 hold, vitest 1520/1520 (re-proven on the rebased tree); AC-008 stays the operator's"
-      - "D1 closed: a live scenario mounts the real BoardRenderer with a currency titleField and passes unmodified — the claim was correct, only the evidence was fixture-shaped"
-      - "The operator's raw-numeric-filename screenshot was a real second gap (D7): file.name has no column to inherit a format from, so titleFormat was added, plus a board-renderer.ts consumer bug (D8) found only by driving production"
+      - "Implementation landed and verified: gate 26 green, replay 28 hold, vitest 1520/1520; AC-008 stays the operator's"
+      - "D1 closed on the real BoardRenderer: the currency-column claim was already correct, only the evidence was fixture-shaped"
+      - "The file-name titleFormat gap (D7) needed two more fixes found only by driving production/reading persistence: a board-renderer.ts consumer bug (D8) and a data-source.ts round-trip gap (D9)"
 ---
 # Goal: Card Title and Title Formats
 
@@ -73,6 +72,7 @@ Frozen choices. Changing one is an amendment.
 | D6 | **Reference posture.** Anytype has no separate title relation at all — the object's Name is always the title (`screenshots/anytype/README.md:293`) — so Anytype has nothing to adopt for the picker itself, only a reminder that a title always exists. Notion is the operator's actual reference ("ideally we can change which value becomes the card name"), and `047`'s queued Mobbin harvest (Notion iOS+web) has not landed as of this writing — this packet's picker-location and format decisions are designed from the operator's own words and the code already in the tree, not from a Notion capture. Revisit ADR-002 once that harvest lands. |
 | D7 | **The file name is the one title source D3 does not cover, and it gets its own format choice.** D3 says a title reads its column's own format because D2 routes it through that column — but the unset/`file.name` default has no `ColumnDef` to read a format from at all, so D3's premise never applied to it. A `titleFormat` field on `ViewConfig` (`types.ts`) offers plain text (default, today's unchanged behavior) / number / currency (EUR, USD, GBP) / date, applied only while the title reads the file name — never overriding a real column's own format once one is chosen as `titleField`. This is the operator's literal report: board cards titled by a raw numeric file name (`3537.32`), with no column involved to inherit a format from. The picker's own row (`view-config-panel-renderer.ts`, beside the existing Title field row) shows only while the file name is the title source. |
 | D8 | **A file-name-drawn title's consumer, not only its resolver, needed a fix.** `resolveTitleFieldDisplay`'s file-title branch already computed `title.text` correctly once D7 landed, but `board-renderer.ts`'s `getReferenceRowTitle` special-cased `title.isFileTitle` to read `row.file.basename` directly instead — a shortcut that was harmless while the resolver's file-title output and the raw basename were always identical, and silently discarded a `titleFormat` choice the instant they diverged. Found and fixed on the real `BoardRenderer` in headless Chrome, not from reading source alone (`tools/live/render-assertion-harness.ts`) — exactly the gap this packet's earlier fixture-only screenshot evidence could not have caught, since a hand-written fixture never calls `getReferenceRowTitle` at all. |
+| D9 | **A new `ViewConfig` field is not real until the save/load round trip carries it.** `titleField` is read and written at four separate sites in `data-source.ts` (the current views-array parse, the legacy flat-format parse, `parseViewConfig`, and `toViewPayload`); `titleFormat` existed at none of them, which would have let a chosen format work for the current session and silently revert to plain text on the next vault load. Found by reading the persistence layer directly, not by any renderer harness — `tools/live/render-assertion-harness.ts` constructs `ViewConfig` objects in memory and never exercises this path. Fixed with one `parseTitleFormat` helper wired into all four sites, and a round-trip regression test covering both the current and the legacy format plus an unrecognized-value case. |
 <!-- /ANCHOR:directive -->
 
 ---
@@ -141,6 +141,16 @@ Frozen choices. Changing one is an amendment.
       call `getReferenceRowTitle` at all). `board-title-format-numeric-filename` (the live harness)
       and `constructed-board-title-format-filename` (screenshot capture, both themes, phone and
       desktop) both went red against the unmodified `board-renderer.ts` and green after the fix.
+- [x] A `titleFormat` choice survives a save and reload, not only the current session. **Today:
+      RED** — `titleFormat` existed nowhere in `data-source.ts`'s parse/serialize round trip
+      (`grep -n "titleFormat" src/data/data-source.ts` returned nothing), found by reading the
+      persistence layer rather than by any renderer harness: `tools/live/render-assertion-harness.ts`
+      builds `ViewConfig` objects directly and never exercises this path. **Closed 2026-09-07, was
+      `undefined` after a round trip before the fix** (a new `data-source.test.ts` case:
+      `expected undefined to be 'currency-eur'`): `parseTitleFormat` wired into all four
+      `titleField`-adjacent sites (the current and legacy parse paths, `parseViewConfig`,
+      `toViewPayload`); the same test also covers the legacy flat-frontmatter format and an
+      unrecognized stored value (AC-011 Met).
 - [ ] **The operator sets a currency column as a board's card title on a phone, reads it formatted
       the same way that column formats elsewhere (for example `€ 3.537,32`), and reports being able
       to change which property becomes the card's main name.** Only the operator closes this row.

@@ -797,6 +797,7 @@ export class DataSource {
           rowDensity: source["rowDensity"] === "compact" || source["rowDensity"] === "comfortable" ? source["rowDensity"] : undefined,
           wrapText: source["wrapText"] === true,
           titleField: safeString(source["titleField"]) || undefined,
+          titleFormat: this.parseTitleFormat(source["titleFormat"]),
           galleryImageField: safeString(source["galleryImageField"]) || undefined,
           galleryImageAspectRatio: typeof source["galleryImageAspectRatio"] === "number" ? source["galleryImageAspectRatio"] : undefined,
           galleryCardSize: typeof source["galleryCardSize"] === "number" ? source["galleryCardSize"] : undefined,
@@ -984,6 +985,7 @@ export class DataSource {
       rowDensity: v["rowDensity"] === "compact" || v["rowDensity"] === "comfortable" ? v["rowDensity"] : undefined,
       wrapText: v["wrapText"] === true,
       titleField: safeString(v["titleField"]) || undefined,
+      titleFormat: this.parseTitleFormat(v["titleFormat"]),
       galleryImageField: safeString(v["galleryImageField"]) || undefined,
       galleryImageAspectRatio: typeof v["galleryImageAspectRatio"] === "number" ? v["galleryImageAspectRatio"] : undefined,
       galleryCardSize: typeof v["galleryCardSize"] === "number" ? v["galleryCardSize"] : undefined,
@@ -1241,6 +1243,7 @@ export class DataSource {
       rowDensity: view.rowDensity === "compact" || view.rowDensity === "comfortable" ? view.rowDensity : undefined,
       wrapText: view.wrapText === true,
       titleField: view.titleField || "",
+      titleFormat: view.titleFormat || "",
       boardCardOrders: view.boardCardOrders || {},
       boardHiddenGroups: view.boardHiddenGroups || {},
       boardHideEmptyGroups: view.boardHideEmptyGroups,
@@ -1677,6 +1680,11 @@ export class DataSource {
 
   private parseGalleryCardSizePreset(value: unknown): ViewConfig["galleryCardSizePreset"] {
     return value === "small" || value === "medium" || value === "large" ? value : undefined;
+  }
+
+  private parseTitleFormat(value: unknown): ViewConfig["titleFormat"] {
+    return value === "number" || value === "currency-eur" || value === "currency-usd"
+      || value === "currency-gbp" || value === "date" ? value : undefined;
   }
 
   private parseGalleryAspectPreset(value: unknown): ViewConfig["galleryImageAspectRatioPreset"] {

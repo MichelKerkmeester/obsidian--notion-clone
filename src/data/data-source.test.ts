@@ -148,6 +148,52 @@ describe("DataSource view filter tree persistence", () => {
     expect(reparsed!.views[0].timelineWeekLabel).toBe("dateRange");
   });
 
+  it("round-trips titleFormat through toViewPayload/parseViewConfig, both the new and the legacy flat format", () => {
+    const dataSource = source();
+    const parsed = dataSource.parseDatabaseConfig({
+      database: {
+        id: "database",
+        views: [{
+          id: "view",
+          name: "View",
+          viewType: "board",
+          sourceFolder: "",
+          titleFormat: "currency-eur",
+        }],
+      },
+    });
+    const view = parsed!.views[0];
+    expect(view.titleFormat).toBe("currency-eur");
+
+    const payload = (dataSource as unknown as {
+      toViewPayload(view: NonNullable<typeof parsed>["views"][number]): Record<string, unknown>;
+    }).toViewPayload(view);
+    expect(payload.titleFormat).toBe("currency-eur");
+
+    const reparsed = dataSource.parseDatabaseConfig({
+      database: { id: "database", views: [payload] },
+    });
+    expect(reparsed!.views[0].titleFormat).toBe("currency-eur");
+
+    // The legacy flat-format path (old vaults with no database.views array) goes through a
+    // different parse function than the one above and needed the identical fix.
+    const legacyParsed = dataSource.parseDatabaseConfig({
+      viewType: "board",
+      sourceFolder: "",
+      titleFormat: "date",
+    });
+    expect(legacyParsed!.views[0].titleFormat).toBe("date");
+
+    // An unrecognized value must not survive the round trip as a stray string.
+    const invalid = dataSource.parseDatabaseConfig({
+      database: {
+        id: "database",
+        views: [{ id: "view", name: "View", viewType: "board", sourceFolder: "", titleFormat: "not-a-real-format" }],
+      },
+    });
+    expect(invalid!.views[0].titleFormat).toBeUndefined();
+  });
+
   it("round-trips newRowPresets through parseViewConfig and toViewPayload", () => {
     const dataSource = source();
     const presets = { status: "Open", cost: "12" };

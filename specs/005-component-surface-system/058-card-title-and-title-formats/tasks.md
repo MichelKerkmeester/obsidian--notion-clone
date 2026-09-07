@@ -166,6 +166,15 @@ prior AC-001..AC-003 screenshot evidence was hand-written fixture HTML, never th
       tools/naming/scan-failing-values.mjs` (baseline raised by one justified row — the
       currency-column claim was never broken, so it has no failing value to record; see
       `failing-values-baseline.json`'s own note) — all exit 0.
+- [x] T018 Reading `data-source.ts` (not a renderer) for every other site that reads/writes
+      `titleField` found `titleFormat` missing from all four: `parseDatabaseConfig`'s current and
+      legacy-flat parse branches, `parseViewConfig`, and `toViewPayload`. A choice made through the
+      new picker would have worked for the session and silently reverted to plain text on the next
+      vault load — a gap no renderer harness could show, since `tools/live/render-assertion-harness.ts`
+      builds `ViewConfig` objects directly. Red first: a new `data-source.test.ts` case failed
+      `expected undefined to be 'currency-eur'` against the unmodified file. Green: one
+      `parseTitleFormat` helper wired into all four sites; the same test also covers the legacy
+      flat format and an unrecognized stored value. `npx vitest run`: 1656/1656 (D9, AC-011).
 <!-- /ANCHOR:phase-4 -->
 
 ---

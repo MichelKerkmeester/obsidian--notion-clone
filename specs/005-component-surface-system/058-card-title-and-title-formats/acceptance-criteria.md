@@ -12,7 +12,7 @@ _memory:
     packet_pointer: "005-component-surface-system/058-card-title-and-title-formats"
     last_updated_at: "2026-09-07T22:45:00Z"
     last_updated_by: "impl-058-production-verification"
-    recent_action: "Added AC-009 and AC-010, both Met on the real BoardRenderer"
+    recent_action: "Added AC-009, AC-010 and AC-011, all Met"
     next_safe_action: "AC-008's operator device read on a released build; then close"
     blockers:
       - "AC-008 is the operator's device read, unclosable here"
@@ -21,17 +21,19 @@ _memory:
       - "src/views/board-card-properties-panel.ts"
       - "src/views/board-renderer.ts"
       - "src/views/view-config-panel-renderer.ts"
+      - "src/data/data-source.ts"
       - "tools/live/render-assertion-harness.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-058-ac"
       parent_session_id: null
-    completion_pct: 95
+    completion_pct: 97
     open_questions: []
     answered_questions:
       - "AC-001..AC-007 Met: resolver format routing, Title-row picker affordance, cross-surface regression test, gate 26 green, replay 28 hold"
-      - "AC-009 Met: a currency-typed titleField's card title is now proven on the production BoardRenderer (tools/live/render-assertion-harness.ts), not only on hand-written fixture HTML — the claim itself was already correct"
-      - "AC-010 Met: the operator's own screenshot (raw numeric file names as card titles) named a real, second gap — a titleFormat field for the file-name pseudo-field, plus a board-renderer.ts consumer bug (getReferenceRowTitle) found only by driving production"
+      - "AC-009 Met: the currency-column claim is now proven on the production BoardRenderer, not only fixture HTML — the claim was already correct"
+      - "AC-010 Met: a titleFormat field for the file-name pseudo-field, plus a board-renderer.ts consumer bug found only by driving production"
+      - "AC-011 Met: titleFormat was missing from data-source.ts's save/load round trip — found by reading the persistence layer, would have silently reverted on reload"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: acceptance-criteria | v2.2 -->
 # Acceptance Criteria: Card Title and Title Formats
@@ -47,7 +49,7 @@ _memory:
 
 **Packet:** 005-component-surface-system/058-card-title-and-title-formats
 **Level:** 2
-**Status:** Implemented — AC-001 through AC-007, AC-009 and AC-010 Met; AC-008 Unmet, operator-owned
+**Status:** Implemented — AC-001 through AC-007, AC-009, AC-010 and AC-011 Met; AC-008 Unmet, operator-owned
 **Date:** 2026-09-06, production verification and file-name titleFormat added 2026-09-07
 <!-- /ANCHOR:metadata -->
 
@@ -70,6 +72,7 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 | AC-008 | — | Given a released build, When the operator sets a currency column as a board's card title on their phone, Then they report it formatted correctly and report being able to change which property is the card's name | Operator confirmation only | Unmet | - |
 | AC-009 | REQ-001 | Given the production `BoardRenderer` (not fixture HTML) with a currency column set as `titleField`, When mounted in headless Chrome and rendered, Then every drawn card title carries the euro mark and never equals the column's raw stored value | **Met 2026-09-07.** AC-001's own capture evidence was hand-written fixture markup (`tools/screenshots/scenarios/core.mjs`'s `board-card-title-currency`), which resembles the renderer's real output closely enough to pass a visual read without ever calling `resolveTitleFieldDisplay` through the shipped `BoardRenderer`. `tools/live/render-assertion-harness.ts` gained `board-title-currency-column`, a scenario that mounts the real renderer with `titleField` pointed at the schema's own currency column; green on the unmodified tree — this specific claim was already correct in production, D1 was an evidence gap rather than a behavior gap. A matching constructed screenshot (`constructed-board-title-currency`, both themes, phone and desktop, real-renderer-driven) opened and read, and cross-linked from the original fixture via `fixtureOf` | Met | - |
 | AC-010 | REQ-005 | Given a board view whose `titleField` is unset (the file-name default) and a `titleFormat` of `currency-eur` chosen, When the production `BoardRenderer` renders a row whose file name is a plain number (the operator's own report: `3537.32`), Then the card's main name reads the formatted value (`€ 3.537,32`), not the raw file name | **Met 2026-09-07. Two reds, not one.** Red 1 (the feature did not exist): `grep -rn "titleFormat" src` returned nothing; `title-field-display.test.ts`'s new file-name-titleFormat suite (8 cases) and `view-config-panel-renderer.test.ts`'s new "title format row" suite (5 cases) both failed against the unmodified tree, observed by reverting `src/data/types.ts`, `src/data/title-field-display.ts`, `src/i18n.ts` and `src/views/view-config-panel-renderer.ts` together (`git stash`) and re-running. Green once `TitleFileFormat`/`formatFileTitleText`/the "Title format" picker row landed. **Red 2 (a deeper one, found only by driving production):** with the unit-level fix alone in place, `board-renderer.ts`'s `getReferenceRowTitle` still discarded the formatted text for every file-name-drawn title — a `title.isFileTitle` shortcut that read `row.file.basename` directly instead of `title.text`, harmless while the two were always identical and silently wrong the instant `titleFormat` made them diverge. `board-title-format-numeric-filename` (the live harness, mounting the real `BoardRenderer`) failed against the reverted `board-renderer.ts` — "18 card title(s) drawn; 18 missing €, 18 still reading a raw unformatted value" — and passed once `getReferenceRowTitle` was fixed to read `title.text` unconditionally. Neither the unit tests above nor the prior fixture-based captures could have caught this: a unit test calls the resolver directly, and a hand-written fixture never calls `getReferenceRowTitle` at all. Constructed screenshot `constructed-board-title-format-filename` (both themes, phone and desktop, real-renderer-driven) opened and read | Met | - |
+| AC-011 | REQ-005 | Given a `titleFormat` chosen through the picker, When the view is saved to and reloaded from a vault file, Then the choice survives the round trip through `data-source.ts`'s `parseDatabaseConfig`/`toViewPayload`, in both the current views-array format and the legacy flat-frontmatter format | **Met 2026-09-07 — found by reading the persistence layer, not by any renderer harness.** `titleField` is written and read at four separate sites in `data-source.ts` (`parseDatabaseConfig`'s new-format branch, its legacy flat-format branch, `parseViewConfig`, and `toViewPayload`); `titleFormat` existed nowhere in any of the four. Neither the render-assertion harness (which constructs `ViewConfig` objects directly in memory, never through this serialize/deserialize path) nor the panel/unit tests above could have caught this — a chosen format would have worked for the rest of the session and silently reverted to plain text on the next vault load. Red: a new `data-source.test.ts` case failed `expected undefined to be 'currency-eur'` against the unmodified file (`git stash` on `data-source.ts` alone). Green: `parseTitleFormat` added and wired into all four sites; the same test also asserts the legacy flat-format path and that an unrecognized stored value does not survive as a stray string. 14/14 in `data-source.test.ts` | Met | - |
 
 ### Status values
 
@@ -126,5 +129,10 @@ red-first unit/panel coverage landed first; driving the **production** `BoardRen
 second, deeper defect neither the unit tests nor any prior fixture could have seen —
 `board-renderer.ts`'s `getReferenceRowTitle` discarded a file-title's formatted text for a
 `title.isFileTitle`-shortcut that predates this packet. Both reds and both greens are on the real
-renderer. Nine of ten rows now stand at Met; AC-008 is unchanged — the operator's alone.
+renderer. **A third gap surfaced by reading the persistence layer rather than any renderer**:
+`titleFormat` was never wired into `data-source.ts`'s save/load round trip (AC-011) — a choice
+that would have worked for the session and silently reverted on the next vault load, caught by a
+new round-trip test rather than by any harness, since the render-assertion harness builds
+`ViewConfig` objects directly and never exercises this path. Ten of eleven rows now stand at Met;
+AC-008 is unchanged — the operator's alone.
 <!-- /ANCHOR:closure -->
