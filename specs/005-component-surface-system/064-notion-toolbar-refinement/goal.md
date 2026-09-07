@@ -178,11 +178,13 @@ never resolve them silently.
       Anytype's own T001 read records the same add control, so this is the one adoption both
       references agree on.
 - [x] **Every Notion-versus-Anytype disposition the loop named is written down, and none is
-      applied over a landed ruling.** Done: ten ADRs in `decision-record.md` — the ones a landed
-      ruling already decides marked `Accepted` and citing it, the three the operator's ruled
-      2026-09-07 (Europe/Amsterdam) — ADR-001 and ADR-005 `Accepted`, ADR-007 `Declined` — and
-      ADR-010 inherited from `062` because the operator already ruled it — plus the seven
-      corrections D1 requires: per-group visibility routed to `059` rather than built here, the
+      applied over a landed ruling.** **Today: 3 of 10 ADRs — ADR-001, ADR-005, ADR-007 — were
+      `Proposed`, unresolved.** Done: ten ADRs in `decision-record.md` —
+      the ones a landed ruling already decides marked `Accepted` and citing it, the three the
+      operator's ruled 2026-09-07 (Europe/Amsterdam) — ADR-001 and ADR-005 `Accepted`, ADR-007
+      `Declined` — and ADR-010 inherited from `062` because the operator already ruled it — plus
+      the seven corrections D1 requires: per-group visibility routed to `059` rather than built
+      here, the
       conditional-colour reading `062` had already corrected, and five citation corrections.
 - [ ] **Conditional row colour has its own named view-settings row, with an explainer.** **Today:
       the view-settings panel names three controls and not this one.** `renderAppliedSummaries`
