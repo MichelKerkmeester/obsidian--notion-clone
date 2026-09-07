@@ -661,6 +661,12 @@ _memory:
   `059` may add a criterion, a task or an ADR and may not un-tick a row here. Two things do arrive
   from it: four errata notes against `notion-screens-digest.md`, and four device-only checks named
   on this packet's AC-010 operator pass. Both are `059` T003 and T004, and neither changes a Met row.
+  **Both landed 2026-09-07**, in `059`'s implementation-leg landing: the errata are
+  [`notion-screens-digest.md`](notion-screens-digest.md) § 7 (E-1, E-2, E-4, E-5, each also inline
+  beside the claim it corrects; E-3 closed with `dc1d54a9` and gets no note), and the four device
+  checks are [`checklist.md`](checklist.md) C10.1-C10.4 with a pointer from AC-010's own row. Every
+  row in this packet is unchanged: **twelve Met, one Unmet**, and AC-010 stays Unmet — the four new
+  rows are additive and none of them is ticked.
 <!-- /ANCHOR:cross-refs -->
 
 ---

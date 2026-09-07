@@ -180,6 +180,12 @@ the count unconditionally on both platforms, and iOS shows `···`/`+` uncondit
 Notion's always-visible count is not adopted; it is named here as a live disagreement, not folded
 in silently.
 
+> **Erratum E-1** (filed 2026-09-07 by `059-notion-board-refinement` T003). The chip carries the
+> option colour as a **fill**, not as text: `ADR-006` filled it, and the tree reads
+> `background: var(--db-status-bg, transparent)` at `styles.css:9440`. The Notion-vs-ours conflict
+> above survives the correction — it resolves for the newer ruling — but the premise as written is
+> stale.
+
 **Group menu (P2).** Ours is a single floating menu — Sort Ascending, Sort Descending, a separator,
 Collapse Group, Hide Column, Delete Group (`board-renderer.ts:514-536`) — opened per-column from the
 same hover-revealed `···` as P1. There is no dedicated group-management screen, no per-group
@@ -190,11 +196,30 @@ per-group list (`design-trueup.md` §2b, the iOS sheet crawl) — so this is a c
 diverges from both Anytype and us in the same direction**, offering materially more group-management
 surface than either reference.
 
+> **Erratum E-4** (filed 2026-09-07 by `059-notion-board-refinement` T003, in two parts).
+> **(a) As written, the claim was already wrong.** Our column menu never carried "Hide Column" or
+> "Delete Group" for a reader to use: both rows were guarded on `hideGroup`/`deleteGroup`, which
+> **neither host supplied**, so the menu built three rows rather than five, and `src/i18n.ts:136-137`
+> shipped their labels in three locales for rows nothing rendered. The board could not hide a column.
+> **(b) The state has since moved.** `059-notion-board-refinement` landed the Groups panel: the
+> column menu now carries exactly four rows — sort ascending, sort descending, collapse, and
+> **Manage groups** — and per-group visibility, bulk hide/show, drag reorder and "Hide empty groups"
+> all live on that one panel (ADR-004, ADR-011, both Accepted by the operator 2026-09-06 18:36).
+> `deleteGroup` was deleted with its guard and its i18n keys rather than wired. The "no dedicated
+> group-management surface" reading above is therefore **historical**, true only up to `dc1d54a9`.
+
 **Sub-grouping (P3).** Not present in our schema or renderer at all — `board-renderer.ts` groups by
 exactly one field (`groupField` is singular throughout `renderBoardColumn`). Anytype's own kanban
 has no sub-grouping either (`design-trueup.md` §7, "Swimlanes: None. Anytype's kanban is a flat
 strip of columns"). Notion's P3 is therefore a feature neither reference we are bound to shows on
 the board itself; per D3/D6 it is not a gap to close.
+
+> **Erratum E-2** (filed 2026-09-07 by `059-notion-board-refinement` T003). *Only the premise is
+> wrong; the conclusion holds.* The sub-group axis **does** exist in our schema, behind
+> `config.boardSubgroupEnabled` (`board-renderer.ts:63-70`, `:222`, `:639-640`). What is absent is
+> the **layout**: `renderReferenceColumn` (`:263-341`) still renders one flat row and nothing reads
+> the subgroup axis to lay a swimlane out. "Not present in our schema or renderer at all" overstates
+> it; "not rendered" is the accurate form. The D3/D6 conclusion is unaffected.
 
 **Add-card control (P4).** Ours is a bordered 246×42px box on desktop with a bare 14×14px `+`
 centred, and a labelled 44px-minimum row on touch (`styles.css:9616-9656`,
@@ -224,6 +249,14 @@ the page itself cannot scroll in its place. This is `../goal.md`'s own third ame
 already red on the operator's 0.0.29 report, independent of anything in this Notion read — the
 Notion captures cannot confirm or deny it either way (§ 6), so this digest neither closes nor
 reopens that criterion.
+
+> **Erratum E-5** (filed 2026-09-07 by `059-notion-board-refinement` T003). Both stylesheet claims
+> were true when this was written and are **false now**: `dc1d54a9` removed `.db-kanban-cards`'s
+> `overflow-y` entirely and moved the scroll to `.note-database-container.db-kanban-view`
+> (`styles.css:9348-9356`), whose `::-webkit-scrollbar` is `height: 0` at rest and `10px` on hover or
+> `.is-scrolling` (`:9386-9392`). Every `board-renderer.ts` and `styles.css` anchor in this § 4
+> drifted with the same commit, so read the line numbers throughout as of `4294770d`, not as of
+> today's tree. The criterion itself is **closed green**, not open.
 
 ---
 
@@ -279,3 +312,24 @@ of record; nothing below reopens that.
    single "Hide Column" toggle — is a question for the operator, not a decision this digest makes;
    D3 gives accessibility as the only ground for declining a measured Anytype value, and adding
    *more* than Anytype shows is a different kind of change than declining what it shows.
+
+---
+
+## 7. Errata
+
+Filed 2026-09-07 by `059-notion-board-refinement` T003, against the tree as it stands after
+`dc1d54a9` and after `059`'s own Groups-panel landing. Each note also sits inline beside the claim it
+corrects, so a reader reaching the claim first cannot act on the stale form. The digest's prose is
+left as it was written — this is a dated read, and rewriting it in place would erase what was
+actually observed on 2026-09-06.
+
+| Id | Where | What the digest claims | What is true |
+|---|---|---|---|
+| **E-1** | § 4, "Column header (P1)" | Our header chip carries the option colour **as text** | `ADR-006` filled the chip; `styles.css:9440` reads `background: var(--db-status-bg, transparent)`. The Notion-vs-ours conflict survives and resolves for the newer ruling |
+| **E-2** | § 4, "Sub-grouping (P3)" | Sub-grouping is absent from our **schema or renderer at all** | The axis exists behind `config.boardSubgroupEnabled` (`board-renderer.ts:63-70`, `:222`, `:639-640`); only the **layout** is absent — `renderReferenceColumn` (`:263-341`) still renders one flat row. Premise wrong, conclusion unaffected |
+| **E-4** | § 3 P2, § 4 "Group menu (P2)", and the research at § 6 / § 8 | Our column menu carries "Hide Column" and our board can hide a column | It could not: both rows were guarded on `hideGroup`/`deleteGroup`, neither host supplied either, so the menu built **3** rows and `src/i18n.ts:136-137` shipped dead labels in three locales. **Since 059:** the menu carries **4** rows (sort asc, sort desc, collapse, **Manage groups**) and visibility lives on the Groups panel; `deleteGroup` is deleted with its guard and its keys |
+| **E-5** | § 4, "Page scrolling (P7)" | `.db-kanban-cards { overflow-y: auto }` and `.db-kanban-view { overflow: hidden; height: 100% }` are current | `dc1d54a9` removed both. The scroll is on `.note-database-container.db-kanban-view` (`styles.css:9348-9356`); its `::-webkit-scrollbar` is `height: 0` at rest, `10px` on hover or `.is-scrolling` (`:9386-9392`). Every § 4 anchor drifted with that commit. The criterion is **closed green** |
+
+**E-3 gets no note.** It named `acceptance-criteria.md` AC-012's drifted stylesheet anchors, and
+`dc1d54a9` rewrote that row so it cites no stylesheet line at all — `grep -n "9569\|9447\|9472"
+acceptance-criteria.md` returns **0** rows. `059` T001 records it closed.

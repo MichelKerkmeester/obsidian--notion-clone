@@ -350,6 +350,13 @@ describe("DataSource view filter tree persistence", () => {
       database: { id: "database", views: [{ id: "view", name: "View", viewType: "board", sourceFolder: "" }] },
     });
     expect(legacy!.views[0].boardHideEmptyGroups).toBeUndefined();
+
+    // The round-trip above reads and writes inside the `database` object; the legacy strip is a
+    // separate list, and a key missing from it survives at the frontmatter top level as a stale
+    // duplicate of the one the view now owns. Locked the same way `filterTree` and
+    // `boardCardFields` already are.
+    expect((dataSource as unknown as { legacyViewKeys(): string[] }).legacyViewKeys())
+      .toContain("boardHideEmptyGroups");
   });
 
   // A column's wrap is tri-state now, and `false` is a real state rather than a synonym for

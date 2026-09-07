@@ -119,7 +119,7 @@ never resolve them silently.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] **A group's visibility is reachable, and reversible, from a board-mounted surface.**
+- [x] **A group's visibility is reachable, and reversible, from a board-mounted surface.**
       **Today, observed red on the rebased tree, and larger than the research inferred:**
       `hideGroup?` and `deleteGroup?` are declared optional at `src/views/board-renderer.ts:84-85`
       and **neither host supplies them** — the two board actions objects are
@@ -134,7 +134,14 @@ never resolve them silently.
       `2ef31bd5`; `../056-board-anytype-parity/notion-screens-digest.md:119-127`). Done is **0**
       hidden groups unreachable from a board-mounted surface and **100%** of group options —
       visible and hidden — carrying a live visibility toggle that a host actually implements.
-- [ ] **The Groups surface is a `panel`, and its width and dismissal come from the role rather than
+      **Met 2026-09-07** — `showGroup` is a **required** member of `BoardRendererActions` and both hosts implement
+      it beside `hideGroup` (`database-view.ts:800-802`, `embedded-database-renderer.ts:539-541`),
+      each writing and clearing `config.boardHiddenGroups[field]` through its own config-save path.
+      Reachable in two clicks from the board: the column-options `···` opens the menu, whose
+      **Manage groups** row opens the Groups panel — asserted live in `render-assertions.mjs`'s
+      `board-groups-panel/file-view` scenario, which clicks the real button and the real row.
+      `grep -rn "deleteGroup" src/` returns rows only in the two tests that lock its absence.
+- [x] **The Groups surface is a `panel`, and its width and dismissal come from the role rather than
       from Notion.** **Today, observed red:** no such surface exists —
       `grep -rn "manageGroups\|db-board-groups" src/` returns **0**. Notion's is a full screen on
       phone and a right-hand side panel on web (`30ba5533`, `2ef31bd5`), which is Notion's grammar,
@@ -142,7 +149,13 @@ never resolve them silently.
       band `../design-system.md:77` assigns the role, local anchoring per `../design-system.md:126`,
       trapped focus, and dismissal on outside click or Escape — with the phone presentation going
       through `044`'s sheet grammar rather than a second vocabulary.
-- [ ] **Group order is reorderable from the same surface that carries visibility, and it
+      **Met 2026-09-07** — width read from `getSurfaceRoleDefaults("panel").width` rather than a literal;
+      measured in Chrome against the shipped stylesheet at **360px** desktop, **354px** at a 402px
+      phone viewport, **342px** at 390 and **327px** at 375 — inside the 292-360px band at every
+      one. `trapFocus` owns Escape and the focus trap; `installPopoverAutoClose` owns outside
+      pointerdown. The phone presentation joins the existing `.db-view-config-panel` selector
+      lists rather than declaring a second vocabulary.
+- [x] **Group order is reorderable from the same surface that carries visibility, and it
       round-trips.** **Today, observed red:** order and visibility live apart. Reorder is reachable
       only by dragging a column on the board or through the toolbar's group-order popover
       (`src/views/database-view.ts:3119-3287`), which carries **0** visibility controls; visibility
@@ -152,7 +165,13 @@ never resolve them silently.
       the drag and move-up/move-down grammar reused from the shared row builder
       `buildCheckboxPropertyRow` (`src/views/record-surface/property-row.ts:353`) as
       `src/views/board-card-properties-panel.ts:48-125` already uses it — **0** new drag vocabulary.
-- [ ] **"Hide empty groups" ships default OFF and the empty-column state survives.**
+      **Met 2026-09-07** — one drag handle and one move-up/move-down pair per row, both from
+      `buildCheckboxPropertyRow` verbatim — **0** new drag vocabulary — committing through
+      `updateGroupOrder`; the panel re-renders from its own reordered key list and the board reads
+      the persisted order back through `getEffectiveGroupOrder`. Both paths unit-tested in
+      `board-groups-panel.test.ts` (drop and move-arrow), each proven to fail when the callback
+      wiring is mutated.
+- [x] **"Hide empty groups" ships default OFF and the empty-column state survives.**
       **Today, observed red in the reference, not in our tree:** Notion ships the toggle **on** in
       all three of its management captures (`30ba5533`, `e9698e1b`, `2ef31bd5`). Our board renders
       a shared empty card for an empty column at `src/views/board-renderer.ts:324-327`, and that
@@ -160,7 +179,17 @@ never resolve them silently.
       and `constructed-board-empty-column-*`, `056` AC-011). Done is the setting's default reading
       **false**, **0** columns suppressed for emptiness under a default config, and those eight
       capture hashes unchanged.
-- [ ] **The eight declined Notion patterns land zero code change, each with an ADR — seven naming
+      **Met 2026-09-07** — **and superseded in its first half.** **ADR-010, Accepted by the operator
+      2026-09-06 18:36** — verbatim, *"On by default, like Notion"* — **reverses the OFF default
+      this row was written against**. The row is met against the ruling, not against its own
+      original bar: `boardHideEmptyGroups` defaults **`true`** (`board-renderer.ts` filters under
+      `!== false`), is round-tripped **tri-state** and never cast (`data-source.test.ts`), and the
+      second half of the row — *the empty-column state survives* — is met unchanged: the empty card
+      still builds under an explicit `false`, and the four `constructed-board-empty-column-*`
+      captures pin `boardHideEmptyGroups: false` in the fixture itself, so their hashes held
+      through a full recapture. Recorded rather than rewritten, per D15: an operator ruling moved
+      the target, and the original bar stays legible above.
+- [x] **The eight declined Notion patterns land zero code change, each with an ADR — seven naming
       the landed ruling that decides it, and ADR-009 recording a decline no ruling has made.**
       **Today, observed red: 0 of 9** conflict rows in the research register
       (`../056-board-anytype-parity/research/research.md` §9) carry an ADR in this packet, though
@@ -172,7 +201,10 @@ never resolve them silently.
       still the bordered 42px box (`styles.css:9660-9672`), per-type card property icons still
       **0** outside relation, kanban page limit still **10** (`board-renderer.ts:320`), the board
       still a flat strip (`board-renderer.ts:263-341`), and board-level wrap switches still **0**.
-- [ ] **Every record claim contradicted by the current tree carries an errata note.**
+      **Met 2026-09-07** — `decision-record.md` carries eleven ADRs, ten Accepted and ADR-009 Proposed
+      proposing no change; the landing diff names no line in any of the eight declined regions
+      outside the new `.db-board-groups-*` additions.
+- [x] **Every record claim contradicted by the current tree carries an errata note.**
       **Today, observed red: 4 uncorrected.** **E-1** — the digest's header row at
       `notion-screens-digest.md:173-179` describes an unfilled chip that ADR-006 filled
       (`styles.css:9440`). **E-2** — the digest at `:193-195` says sub-grouping is absent from our
@@ -185,7 +217,12 @@ never resolve them silently.
       { overflow: hidden; height: 100% }` as current; `dc1d54a9` removed both, and every
       `board-renderer.ts` and `styles.css` anchor in the digest's §4 drifted with it. Done is **0**
       contradicted claims without a note. **E-3 is not on this list** — see the verification row.
-- [ ] **The page-scroll landing and the erratum it closed are re-read from the final state rather
+      **Met 2026-09-07** — all four filed 2026-09-07 in
+      `../056-board-anytype-parity/notion-screens-digest.md` — a § 7 Errata table plus an inline
+      note beside each of the four claims, so a reader reaching the claim first cannot act on the
+      stale form. E-4 is filed in two parts: the defect as it stood, and the state after this
+      packet's own landing moved it.
+- [x] **The page-scroll landing and the erratum it closed are re-read from the final state rather
       than trusted.** **Today, observed red in the research and green in the tree:** the loop's
       §11 N1 ranks "land T014-T016" as its P0 and its §10 E-3 records `056`
       `acceptance-criteria.md`'s AC-012 citing three drifted stylesheet anchors. Both statements
@@ -196,7 +233,9 @@ never resolve them silently.
       `::-webkit-scrollbar` at `height: 0` at rest rising to `10px` on hover or `.is-scrolling`
       (`:9386-9392`). Done is that re-read recorded here with its command output, and **0** rows in
       this packet that would redo work `dc1d54a9` already landed (D7).
-- [ ] **The four device-only checks are named on `056` AC-010's operator pass rather than left in a
+      **Met 2026-09-07** — recorded with its command output in `acceptance-criteria.md` AC-006 and
+      `tasks.md` T001; **0** tasks in this packet redo any of `dc1d54a9`.
+- [x] **The four device-only checks are named on `056` AC-010's operator pass rather than left in a
       research document.** **Today, observed red:** AC-010's verification cell reads "the operator's
       own words" and enumerates **0** checks
       (`../056-board-anytype-parity/acceptance-criteria.md`, AC-010 row). Done is **4** enumerated:
@@ -205,7 +244,10 @@ never resolve them silently.
       (uncaptured even on Notion's own web — digest `:269-272`), and the phone board on a real
       handset (`056` R5's phone capture is harness-synthetic, forced
       `matchMedia("(pointer: coarse)")`).
-- [ ] **The new surface is captured and locked by lanes that already exist.**
+      **Met 2026-09-07** — all four appended 2026-09-07 as `../056-board-anytype-parity/checklist.md`
+      C10.1-C10.4, with a pointer from that packet's own AC-010 row. **Additive only** — AC-010
+      stays **Unmet**, all four new rows are `[ ]`, and no agent ticks any of them.
+- [x] **The new surface is captured and locked by lanes that already exist.**
       **Today, observed red:** `ls screenshots/notion-clone/panels/ | grep -c board-groups` returns
       **0** against 116 files in that folder. Done is four constructed captures —
       `constructed-board-groups-panel-{desktop,mobile}-{dark,light}.png` — registered in
@@ -213,6 +255,14 @@ never resolve them silently.
       visibility-toggle row added to `tools/live/render-assertions.mjs` with a negative control
       observed red first, `tools/live/sheet-grammar.mjs` still reporting 12 surfaces and 31 stacked
       pairs at exit 0, and **0** new gate lanes.
+      **Met 2026-09-07** — **doubled** — four constructed captures mounting the real renderer through
+      the same two clicks a reader makes, plus the four hand-written fixture captures every other
+      panel also carries, all eight registered in `screenshots/manifest.json`. **Three** assertion
+      rows, not two: the panel width inside the band, a live toggle on every row, and the column
+      menu's own `.db-menu-item` count of **4** — each observed red first. **0** new gate lanes.
+      `sheet-grammar.mjs` exits 0 at 12 surfaces and **34** stacked pairs — the figure this row
+      cites as 31 was already stale before this packet, and is recorded as observed rather than
+      corrected silently, since nothing in this diff touches that registry.
 - [ ] **OPERATOR:** the operator answers the adoption question at
       `../056-board-anytype-parity/notion-screens-digest.md:277-281` — ADR-004, ADR-010 and
       ADR-011, **all three Accepted on the operator's 2026-09-06 18:36 rulings** — before any code

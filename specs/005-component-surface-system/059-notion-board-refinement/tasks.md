@@ -58,12 +58,17 @@ and says so (`goal.md` D7). No operator row is ever ticked by an agent.
       grep -c board-groups` returned **0** against 122 files in that folder (the packet's own prose
       cited 116; the folder had grown by six unrelated captures since it was written — recorded here
       rather than copied stale).
-- [B] T003 [P] **File the four errata, in the documents that make the claims.** **Blocked in this
-      run — outside the write authority this leg was dispatched under**, which scopes writes to
-      `specs/005-component-surface-system/059-notion-board-refinement/**` and treats
-      `../056-board-anytype-parity/**` as read-only. The four notes below are the content a
-      broader-authority pass (or the operator) needs to carry into
-      `../056-board-anytype-parity/notion-screens-digest.md`.
+- [x] T003 [P] **File the four errata, in the documents that make the claims.** Drafted by the
+      implementation leg, which was dispatched under a write authority scoped to
+      `specs/005-component-surface-system/059-notion-board-refinement/**`; **filed 2026-09-07 by the
+      landing pass**, which carries `../056-board-anytype-parity/**` as well. **Green:**
+      `../056-board-anytype-parity/notion-screens-digest.md` gains a **§ 7 Errata** table carrying
+      all four, plus an inline `> **Erratum E-n**` blockquote beside each of the four claims it
+      corrects — so a reader reaching the stale claim first cannot act on it. The digest's own prose
+      is left as written: it is a dated read, and rewriting it in place would erase what was
+      observed on 2026-09-06. **E-4 is filed in two parts**, because the state moved under it: (a)
+      the claim was already wrong when written, and (b) this packet's own landing changed what is
+      true. The four notes, as drafted:
       **E-1** — `../056-board-anytype-parity/notion-screens-digest.md:173-179` describes our header
       chip as carrying the option colour as text; ADR-006 filled it, and the tree reads
       `background: var(--db-status-bg, transparent)` at `styles.css:9440`. The Notion-vs-ours
@@ -82,9 +87,12 @@ and says so (`goal.md` D7). No operator row is ever ticked by an agent.
       the digest's §4 drifted with the same commit.
       **E-3 gets no note** — it named AC-012's drifted anchors, and `dc1d54a9` rewrote that row so
       it cites no stylesheet line at all. T001 records it as closed.
-- [B] T004 [P] **Name the four device-only checks on `056` AC-010's operator pass.** **Blocked in
-      this run for the same reason as T003** — `../056-board-anytype-parity/acceptance-criteria.md`
-      sits outside this leg's write authority. The four items to append, unchanged from the plan:
+- [x] T004 [P] **Name the four device-only checks on `056` AC-010's operator pass.** Drafted by the
+      implementation leg, **appended 2026-09-07 by the landing pass** for the same authority reason
+      as T003. **Green:** `../056-board-anytype-parity/checklist.md` gains **C10.1 through C10.4**,
+      each marked **OPERATOR** and each `[ ]`; `../056-board-anytype-parity/acceptance-criteria.md`'s
+      AC-010 row gains a pointer to them and **stays Unmet**. Additive only — no agent ticks any of
+      the four, and no Met row in `056` moved. The four items, unchanged from the plan:
       (1) page scroll with **0px** desktop scrollbar chrome at rest; (2) the board in dark
       theme — no dark Notion board exists in the harvest on either platform (digest `:262-266`);
       (3) desktop hover-reveal of `···`/`+`, uncaptured even on Notion's own web (`:269-272`);
@@ -181,7 +189,10 @@ the file half: every task below waits only on `058` releasing `src/views/board-r
       renders the empty card) and a new case proves the *default* config renders **0** columns for
       an all-empty group; `data-source.test.ts` round-trips an explicit `false` and confirms an
       unconfigured vault reads `undefined` (tri-state, not cast, so "never configured" stays
-      distinguishable from "explicitly shown"); the four constructed empty-column captures were
+      distinguishable from "explicitly shown"), and — added by the landing pass after a surviving
+      mutation showed the gap — asserts the key is in `legacyViewKeys()`, the separate list that
+      strips a stale top-level duplicate, locked the same way `filterTree` and `boardCardFields`
+      already are; the four constructed empty-column captures were
       not among the 8 pixel-content-changed files this packet's full recapture found — their hashes
       held with the pin in place, matching this row's own bar.
 - [x] T010 **Strings and treatment.** `src/i18n.ts`: `board.manageGroups`, `board.hideAllGroups`,
@@ -248,11 +259,17 @@ the file half: every task below waits only on `058` releasing `src/views/board-r
       gantt guard `056` D7 carries is unaffected — `git diff` names no `pm-gantt-*` file.
 - [x] T014 **Reconcile the record.** `spec.md`, `plan.md`, this file and `acceptance-criteria.md`
       reconciled against the landed tree; `decision-record.md` needed no change — its eleven ADRs
-      already matched what landed. `implementation-summary.md` replaces its placeholder. **Not
-      done in this leg, for the write-authority reason T003/T004 already name:** the parent's
-      `roadmap.md` §5.A row, `goal.md`'s reserved-children row and
-      `../056-board-anytype-parity/tasks.md`'s pointer line all sit outside
-      `specs/005-component-surface-system/059-notion-board-refinement/**` and were not written.
+      already matched what landed. `implementation-summary.md` replaces its placeholder. **The
+      cross-packet half was written 2026-09-07 by the landing pass**, which carries the authority the
+      implementation leg did not: this packet's own `goal.md` completion criteria are now **9 of 10**
+      ticked, each with its evidence (the tenth is the operator's device read and is not ticked);
+      `../roadmap.md` §5.A and its reserved-children row are re-derived from that figure — **90%,
+      9/10, "Shipped + verified, awaiting device"** — as is `../goal.md`'s own children table; and
+      `../056-board-anytype-parity/tasks.md`'s pointer line records where the four errata and the
+      four device checks actually landed, with `056`'s own tally unchanged at twelve Met and one
+      Unmet. **One `goal.md` criterion is ticked as superseded rather than as written:** "Hide empty
+      groups ships default **OFF**" was reversed by ADR-010, and the row carries the reversal above
+      its evidence rather than being rewritten to match what shipped.
 - [ ] T015 **OPERATOR:** the operator reads the Groups panel on iOS and on desktop and reports it as
       an improvement. Nothing in this repository closes this row, and an agent never ticks it.
 <!-- /ANCHOR:phase-3 -->
@@ -262,10 +279,13 @@ the file half: every task below waits only on `058` releasing `src/views/board-r
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-- [ ] All tasks marked `[x]`; **no task is blocked on an operator decision** — ADR-004, ADR-010 and
-      ADR-011 were all ruled on 2026-09-06 18:36
-- [ ] No `[B]` blocked tasks remaining at closure
-- [ ] Every `acceptance-criteria.md` row Met, Waived with an ADR, or Superseded with one
+- [x] All tasks marked `[x]` **except T015, which is the operator's**; **no task is blocked on an
+      operator decision** — ADR-004, ADR-010 and ADR-011 were all ruled on 2026-09-06 18:36
+- [x] No `[B]` blocked tasks remaining at closure — T003 and T004 were filed by the landing pass,
+      which carried the `056` write authority the implementation leg did not
+- [x] Every `acceptance-criteria.md` row Met, Waived with an ADR, or Superseded with one — AC-005 is
+      Met against **ADR-010's reversed bar** (default **on**), recorded as a supersession rather than
+      a rewrite; AC-010 is the operator's and stays Unmet
 - [ ] The operator's own device read reported (T015)
 <!-- /ANCHOR:completion -->
 
