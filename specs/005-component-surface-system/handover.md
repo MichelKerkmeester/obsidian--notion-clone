@@ -43,6 +43,57 @@ _memory:
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
 
+### 2026-09-08, `009` T26 LANDED — `.obnotion-panel-button` padding decision, committed, NOT pushed
+
+**Worktree `.worktrees/227-panel-button-padding` (branch `worktrees/227-panel-button-padding`),
+forked from `origin/main` at `6f679e5e0` (past the `221-live-host-model` landing below).** Closes the
+`009 T26` device defect the 221 leg recorded rather than fixed. The overflow sweep's own diagnostic
+(a temporary `getBoundingClientRect`/`textContent` print, reverted after use) corrected one detail
+of 221's note: the two overflowing descendants at every reported scenario are the sort rule row's
+own **two "×" remove buttons** (one per rule row, sharing an x-position because both rows share the
+same `CONDITION_FIELD_FLOOR_PX`-driven layout) — never the standalone "+ Add sort" button 221 named
+as one of the two.
+
+**Decision, reviewed across every consumer T26 named plus two more the review found.**
+`.obnotion-panel-button` (styles.css:13508) took an explicit `padding: 0 6px`, chosen empirically
+against `tools/live/sheet-grammar.mjs` rather than guessed: `0 8px` still overflowed 1.8-2.8px, `0
+6px` clears every scenario (Chrome and WebKit, as-built/stacked-field/stacked-direction/long-name).
+`column-manager-renderer.ts`'s `.obnotion-column-manager-add-button` (padding `0 6px`) and
+`database-view.ts`/`embedded-database-renderer.ts`'s `.obnotion-group-order-reset` (padding `0
+8px`) already carried their own explicit overrides and were left unchanged; `board-groups-panel.ts`,
+`filter-panel-renderer.ts`, `view-config-panel-renderer.ts` and `cell-editor-option.ts`'s bare
+usages now take the shared base padding, none of them previously overflowing and none newly at
+risk (a narrower box cannot overflow more than a wider one measured clean).
+
+**The narrower box dropped three controls under the 28px touch floor** (sort/filter row's "×" at
+20x28, the filter header's AND/OR toggle at 26x28) — fixed with a new
+`.obnotion-panel-button-narrow` marker (`sort-panel-renderer.ts:238`,
+`filter-panel-renderer.ts:329,604`) taking a `::before` inset (`-6px` top/bottom, `-12px` left, `0`
+right so the invisible hit area cannot reopen the same overflow) for its real touch target — the
+same idiom `obnotion-checkbox` already uses — plus a matching `DECLARED` entry in
+`tools/live/touch-targets.mjs`. First attempt used a symmetric `-6px` inset, which passed the
+element-level overflow check but reopened the SURFACE's own `scrollWidth` (a `::before` is invisible
+to `querySelectorAll` but still paints and counts toward `scrollWidth`); the asymmetric,
+right-frozen inset fixed it. The hand fixture `tools/screenshots/scenarios/panels.mjs` needed the
+same marker added by hand, since it mirrors the renderer markup rather than importing it.
+
+**Verified: `sheet-grammar.mjs` 29 failures → 0; `touch-targets.mjs` 0 new regressions** (fixture
+baseline 171, constructed baseline 785, both held). `npx tsc --noEmit`, `npx vitest run` (1642
+tests), `npm run build` all green. Recaptured from a clean index twice (`npm run screenshots`, 608
+entries both passes); 51 moved captures reproduced byte-identical across both passes — zero jitter.
+Every file judged by decoded pixel delta (`tools/screenshots/pixel-hash.mjs`'s `decodePng`) against
+the HEAD-committed PNG: 4px (maxDelta 1) to 24,601px/0.475% (maxDelta 209);
+`panel-sort-rules-mobile-{dark,light}` also narrowed 804x450 → 798x450. Four captures opened and
+read directly, all correct. `tools/lane/css-lane.json` acquired from `068-rename-to-obnotion` at its
+released hash, edited, and released naming all 51 captures; `check-lane.mjs` exit 0. Every stale
+`tools/live/*.json` refreshed (`evidence.mjs --check-all` — all 15 fresh; `engine-parity.mjs` itself
+still exits 1 on 50 pre-existing Chrome/WebKit width disagreements on unrelated fixtures — not in
+`tools/gate.mjs`'s CHECKS list, left alone). The `sheet-grammar` `expectFail` removed from
+`tools/gate.mjs`. **`npm run gate`: 26 green, 0 red for a declared reason.** `009`'s `tasks.md` T26
+ticked `[x]` with full evidence; `acceptance-criteria.md`'s closure section carries the same
+numbers. Graph metadata backfilled scoped to `009-live-verification` only (never `--all`).
+Orchestrator validation: `RESULT: PASSED`. No operator or device row touched. Committed, **not
+pushed** — a fresh verifier lands it.
 ### 2026-09-08 ~03:15, `058-card-title-and-title-formats` REOPENED LEG LANDED — verified, rebased onto the 221/225/069/067-merged main, pushed to `origin/main` at `1b96a10e`
 
 **Landed.** The card-title production leg's two commits (`5a357737` format + real-renderer proof,

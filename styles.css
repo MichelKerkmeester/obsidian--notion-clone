@@ -13554,7 +13554,9 @@ body.is-phone .obnotion-container .obnotion-menu-item {
 
 /* 面板内通用按钮 */
 .obnotion-container .obnotion-panel-button {
+  position: relative;
   height: 28px;
+  padding: 0 6px;
   border: 0;
   border-radius: var(--obnotion-radius-lg);
   background: transparent;
@@ -13563,6 +13565,20 @@ body.is-phone .obnotion-container .obnotion-menu-item {
   font-size: 12px;
   font-weight: 600;
   box-shadow: none;
+}
+
+/* The icon-only and two-letter members of this class (a rule row's "x" remove, the filter
+   panel's AND/OR toggle) paint under 28px wide at this slim padding, because the sort/filter
+   rule row has no more width to give a wider box under the host's real button padding — the
+   same shape as the checkbox exemption below, and for the same reason: the real hit area comes
+   from this inset instead of a wider visible box. Growing only leftward (0 on the right) keeps
+   the invisible hit area inside the row's already-clean right edge instead of reopening the
+   same overflow this padding was chosen to close. */
+.obnotion-container .obnotion-panel-button-narrow::before {
+  position: absolute;
+  inset: -6px 0 -6px -12px;
+  content: "";
+  pointer-events: auto;
 }
 
 .obnotion-container .obnotion-column-manager-add-button {

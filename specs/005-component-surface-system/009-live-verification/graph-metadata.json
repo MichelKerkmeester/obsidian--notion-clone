@@ -55,7 +55,10 @@
       "src/main.ts",
       "tools/storybook/verify-placement.mjs",
       "tools/screenshots/host-bare-controls.css",
-      "tools/live/sheet-grammar.mjs"
+      "tools/live/sheet-grammar.mjs",
+      "tools/live/touch-targets.mjs",
+      "tools/screenshots/scenarios/panels.mjs",
+      "tools/screenshots/pixel-hash.mjs"
     ],
     "entities": [
       {
@@ -149,6 +152,24 @@
         "source": "derived"
       },
       {
+        "name": "touch-targets.mjs",
+        "kind": "file",
+        "path": "tools/live/touch-targets.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "panels.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/panels.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "pixel-hash.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/pixel-hash.mjs",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -183,29 +204,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "With Obsidian",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Inventory Method",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The program's founding fact is that a release passed every gate and changed nothing on device",
     "created_at": "2026-08-29T14:34:47.371Z",
-    "last_save_at": "2026-09-07T19:48:17.185Z",
+    "last_save_at": "2026-09-07T22:46:57.363Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,12 +219,12 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:1e2ba45bf55a7f209811bdb0aa11b1bca757f1bab6c86d28dfd5cf258533eb87",
+    "source_fingerprint": "sha256:184471fbab49e750eba5d97b932f75a3721be052cb7b06c777a63fdbced131b4",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "921838990aa54b2ca12c6785e34e0c3295b7d9e3137a66615357213b59adf55f",
       "plan.md": "1c6dcf824de8a59d2f89ff36f7d49b59643e58687beab07d557868e9cf8cb4f7",
-      "tasks.md": "cf2c4e3b7a8d7df43738c91faf3ffa613fd6da5387ba259d5c96ea6e82adc0de",
+      "tasks.md": "d5cef8a9ebcf0d3afc183aa6ce183908036981a0636e99e0b27404cda2c4aa6d",
       "implementation-summary.md": "a6ce3320fca498ee46a01db1bcca34e6180f5a8ae283d2358dbc9435b4487cb0"
     },
     "last_active_child_id": null,

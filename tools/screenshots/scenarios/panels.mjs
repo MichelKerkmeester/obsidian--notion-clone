@@ -156,7 +156,7 @@ function filterRow(field, fieldType, operator, value, { canWrap = true } = {}) {
       ${value}
       ${canWrap ? ruleIcon("Add rule group", I.folderPlus) : ""}
       ${ruleIcon("Negate rule", I.circleSlash)}
-      <button type="button" class="obnotion-panel-button">×</button>
+      <button type="button" class="obnotion-panel-button obnotion-panel-button-narrow">×</button>
     </div>`;
 }
 
@@ -288,7 +288,7 @@ export const PANEL_SCENARIOS = [
           ${reorderControls(isFirst, isLast)}
           ${dropdownField("obnotion-panel-dropdown obnotion-sort-field-dropdown", field, TYPE_ICON[type])}
           ${dropdownField("obnotion-panel-dropdown obnotion-sort-direction-dropdown", direction)}
-          <button class="obnotion-panel-button">×</button>
+          <button class="obnotion-panel-button obnotion-panel-button-narrow">×</button>
         </div>`;
       return `
       <div class="obnotion-container">

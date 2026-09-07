@@ -227,6 +227,39 @@ that is not there fails validation.
 
 **Closeable:** No
 
+**T26 landed (device defect, not one of the thirteen AC rows above — this phase's charter, not a
+REQ).** The host stylesheet model (`tools/screenshots/host-bare-controls.css`, carried by
+`tools/live/sheet-grammar.mjs` and its four siblings) surfaced that `.obnotion-container
+.obnotion-panel-button` declared no padding of its own, so the real host `button` rule's 4px/12px
+overflowed the sort panel's own remove buttons by 9.0-10.8px on both Chrome and WebKit (29 red rows,
+a declared `expectFail` in `tools/gate.mjs`). Reviewed every renderer T26 named
+(`board-groups-panel.ts`, `column-manager-renderer.ts`, `database-view.ts`,
+`embedded-database-renderer.ts`, `filter-panel-renderer.ts`, `sort-panel-renderer.ts`) plus the two
+unnamed bare-class consumers found in the process (`view-config-panel-renderer.ts`,
+`cell-editor-option.ts`). Decision: `.obnotion-panel-button` (styles.css:13508) took an explicit
+`padding: 0 6px` — proven empirically against the live sweep, not guessed (`0 8px` still overflowed
+1.8-2.8px; `0 6px` clears every scenario with 1.2-3.8px margin). `column-manager-renderer.ts`'s
+`.obnotion-column-manager-add-button` (padding `0 6px`) and `database-view.ts`/
+`embedded-database-renderer.ts`'s `.obnotion-group-order-reset` (padding `0 8px`) already carried
+their own explicit overrides and were left unchanged. The narrower box dropped the sort/filter rule
+row's "×" remove and the filter header's AND/OR toggle under the 28px touch floor (20x28, 26x28); a
+new `.obnotion-panel-button-narrow` marker on those three controls (`sort-panel-renderer.ts`,
+`filter-panel-renderer.ts` x2) takes a `::before` inset (-6px top/bottom, -12px left, 0 right so the
+invisible hit area cannot reopen the overflow) for its real touch target, the same idiom
+`obnotion-checkbox` already uses, declared in `tools/live/touch-targets.mjs`'s `DECLARED` list.
+`node tools/live/sheet-grammar.mjs`: 29 failures → 0. `node tools/live/touch-targets.mjs`: 0 new
+regressions in either pass (fixture baseline 171, constructed baseline 785, both held). Recaptured
+from a clean index twice (`npm run screenshots`, 608 entries both passes); all 51 moved captures
+reproduced byte-identical across both passes — zero jitter. Every file judged by decoded pixel delta
+(`tools/screenshots/pixel-hash.mjs`'s `decodePng`) against the HEAD-committed PNG: changed-pixel
+counts ranged 4px (maxDelta 1, a sub-pixel stacking-context nudge) to 24,601px / 0.475% (maxDelta
+192-209, the AND/OR toggle and every remove/add button shrinking under the new padding, against a
+largest proportional move of 17,479px / 2.74% on a smaller fixture crop);
+`panel-sort-rules-mobile-{dark,light}` additionally narrowed 804x450 → 798x450. `tools/gate.mjs`'s
+`sheet-grammar` `expectFail` removed. `npm run gate`: 26 green, 0 declared red. Full detail and the
+lane handover: `tasks.md` T26, `../handover.md`'s `009-live-verification` entry, and
+`tools/lane/css-lane.json`'s `009-live-verification` acquire/edit/release history entries.
+
 **Work has started; the app has never been driven.** `tools/live/probe.mjs` is built at the path T5
 named, with the three exit codes it named, and one of them is observed — exit **2**, app closed, on
 2026-08-30. Twelve of thirteen rows are `Unmet`; AC-006 is `Met` and vacuously so, its caveat carried

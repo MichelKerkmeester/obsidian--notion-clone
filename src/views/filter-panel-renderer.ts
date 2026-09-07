@@ -326,7 +326,7 @@ export class FilterPanelRenderer {
         if (tree && !isFilterLeaf(tree)) return;
         const right = header.createDiv({ cls: "obnotion-panel-header-actions" });
         const logicBtn = header.createEl("button", {
-          cls: "obnotion-panel-button",
+          cls: "obnotion-panel-button obnotion-panel-button-narrow",
           text: state.filterLogic === "and" ? t("panel.and") : t("panel.or"),
         });
         right.appendChild(logicBtn);
@@ -601,7 +601,7 @@ export class FilterPanelRenderer {
         if (options?.onNot) {
           this.createFilterTreeIconButton(parent, "circle-slash-2", t("viewConfig.sourceRules.addNot"), options.onNot);
         }
-        const rmBtn = parent.createEl("button", { cls: "obnotion-panel-button", text: "×" });
+        const rmBtn = parent.createEl("button", { cls: "obnotion-panel-button obnotion-panel-button-narrow", text: "×" });
         rmBtn.onclick = () => {
           if (options?.onRemove) {
             options.onRemove();

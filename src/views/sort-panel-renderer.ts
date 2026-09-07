@@ -235,7 +235,7 @@ export class SortPanelRenderer {
         });
       },
       trailing: compact ? undefined : (parent) => {
-        parent.createEl("button", { cls: "obnotion-panel-button", text: "×" }).onclick = () => {
+        parent.createEl("button", { cls: "obnotion-panel-button obnotion-panel-button-narrow", text: "×" }).onclick = () => {
           removeSortRuleAt(state, index);
           actions.save();
           this.render(panel.parentElement as HTMLElement, true, config, state, actions, this.anchorEl || undefined);

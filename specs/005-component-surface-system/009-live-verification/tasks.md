@@ -191,7 +191,7 @@ VERIFIED. These three tasks close the other two, or leave them honestly labelled
 - [ ] **T24** Confirm the production bundle contains no probe API and the working tree is clean.
 - [ ] **T25** Produce the shrunken operator review list: only the checks §3B marks as requiring human
       judgement, with emulated and device results distinguished.
-- [ ] **T26** Give `.obnotion-panel-button` an explicit padding decision. Giving `tools/live/`'s
+- [x] **T26** Give `.obnotion-panel-button` an explicit padding decision. Giving `tools/live/`'s
       lanes the same host stylesheet model `tools/storybook/verify-placement.mjs` already carried
       (`tools/screenshots/host-bare-controls.css`, loaded by `sheet-grammar.mjs`,
       `render-assertions.mjs`, `touch-targets.mjs`, `sheet-rebuild.mjs` and `sheet-teardown.mjs`)
@@ -212,6 +212,61 @@ VERIFIED. These three tasks close the other two, or leave them honestly labelled
       under the real host button rule; a decision recorded (explicit `padding`, or a documented
       reason the host's 4px/12px is correct as-is) for each; `tools/live/sheet-grammar.mjs`'s
       overflow sweep green with the `expectFail` removed from `tools/gate.mjs`.
+      *Status 2026-09-08:* **closed.** The overflow sweep's own diagnostic (a temporary
+      `getBoundingClientRect`/`textContent` print, reverted after use) corrected one detail of the
+      finding above: the two overflowing descendants at every reported scenario are the sort rule
+      row's own **two "×" remove buttons** (one per rule, both landing at the same x-position
+      because both rows share the same `CONDITION_FIELD_FLOOR_PX`-driven layout) — never the
+      standalone "+ Add sort" button, which was never part of the overflow. Reviewed every named
+      renderer plus two more bare-class consumers the review turned up
+      (`view-config-panel-renderer.ts`, `cell-editor-option.ts`):
+      - `sort-panel-renderer.ts`, `filter-panel-renderer.ts` (add-condition/add-filter/AND-OR/×),
+        `board-groups-panel.ts` (Hide all/Show all) — no override before this task; now take the
+        base class's explicit `padding: 0 6px` (styles.css:13508-13520), chosen empirically against
+        the live sweep: `0 8px` still overflowed 1.8-2.8px, `0 6px` clears every scenario (Chrome
+        and WebKit, as-built/stacked-field/stacked-direction/long-name) with 1.2-3.8px margin.
+        filter-panel-renderer.ts's own bare usages were already clean under the full host 12px,
+        verified PASS both before and after — the tighter shared value costs it nothing.
+      - `column-manager-renderer.ts`'s `.obnotion-column-manager-add-button` (padding `0 6px`) and
+        `database-view.ts`/`embedded-database-renderer.ts`'s `.obnotion-group-order-reset` (padding
+        `0 8px`) already declared their own explicit overrides — reviewed, correct as-is, left
+        unchanged.
+      - `view-config-panel-renderer.ts`'s icon+label layout-option button and
+        `cell-editor-option.ts`'s "Clear" button inherit the new base padding; neither was part of
+        any overflow and neither dropped under the touch floor.
+      The narrower box (0 6px vs. the host's 24px total) dropped three specific controls under the
+      28px touch-target ratchet: the sort/filter row's "×" (20x28) and the filter header's AND/OR
+      toggle (26x28). Rather than widen the visible box back into overflow, or silently bump the
+      ratchet's recorded ceiling, these three took a new `.obnotion-panel-button-narrow` marker
+      (`sort-panel-renderer.ts:238`, `filter-panel-renderer.ts:329,604`) with a `::before` inset of
+      `-6px` top/bottom and `-12px` left (`0` on the right, so the invisible hit area cannot reopen
+      the same overflow) for their real touch target — the same idiom `obnotion-checkbox` already
+      uses — with a matching `DECLARED` entry added to `tools/live/touch-targets.mjs`. The hand
+      fixture `tools/screenshots/scenarios/panels.mjs` (a separate, hand-authored HTML mirror the
+      real renderer source does not drive) needed the same marker class added by hand to its two
+      "×" buttons for its own fixture pass to see the exemption.
+      Verified: `node tools/live/sheet-grammar.mjs` 29 failures → 0. `node tools/live/
+      touch-targets.mjs` 0 new regressions in either pass (fixture baseline 171, constructed
+      baseline 785, both held — not bumped). `npx tsc --noEmit`, `npx vitest run` (1642 tests),
+      `npm run build` all green. Recaptured from a clean index twice (`npm run screenshots`, 608
+      entries both passes, `screenshots:verify` exit 0 both times); the 51 moved captures
+      reproduced byte-identical across both passes — zero jitter, nothing to restore. Every file
+      judged by decoded pixel delta (`tools/screenshots/pixel-hash.mjs`'s `decodePng`) against the
+      HEAD-committed PNG: changed-pixel counts ranged 4px (`constructed-column-manager-mobile-
+      dark`, maxDelta 1, a sub-pixel stacking-context nudge from the new `position: relative`) to
+      24,601px / 0.475% (`constructed-filter-panel-nested-desktop-light`, maxDelta 209 — the AND/OR
+      toggle and every remove/add button shrinking under the new padding, against the largest
+      proportional move at 17,479px / 2.74% on the smaller `panel-filter-conditions-desktop-light`
+      fixture crop); `panel-sort-rules-mobile-
+      {dark,light}` additionally narrowed 804x450 → 798x450, the sheet's own fit-content width
+      losing exactly the 6px this fix removed. Four captures opened and read directly:
+      `panel-sort-rules-mobile-dark` and `panel-filter-conditions-mobile-dark` show every remove/
+      add/toggle button fully inside its panel with no overflow; `panel-board-groups-mobile-dark`
+      and `field-cell-edit-select-mobile-dark` (the Hide all/Show all and Clear text buttons, both
+      far wider than the new floor) show no visible regression. `tools/lane/css-lane.json` carries
+      the acquire/edit/release handover from `068-rename-to-obnotion` to `009-live-verification`,
+      naming all 51 captures. `tools/gate.mjs`'s `sheet-grammar` `expectFail` removed. `npm run
+      gate`: **26 green, 0 declared red.**
 
 <!-- /ANCHOR:phase-3 -->
 ---

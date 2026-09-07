@@ -121,6 +121,15 @@ const DECLARED = [
       + " area a bounding box does not include — the same shape as the checkbox exemption above."
       + " Found by the constructed-renderer pass: no fixture mounts the board's pagination dots.",
   },
+  {
+    match: "obnotion-panel-button-narrow",
+    reason: "a sort/filter rule row's icon-only remove and the filter header's AND/OR toggle;"
+      + " the shared panel-button padding was slimmed to 0 6px so the row stops overflowing the"
+      + " real host button padding, which paints these three controls under 28px wide. They take"
+      + " their real touch area from a ::before inset (-6px top/bottom, -12px left, 0 on the"
+      + " right so the invisible area cannot reopen the same overflow), the same shape as the"
+      + " checkbox exemption above.",
+  },
 ];
 
 /**
