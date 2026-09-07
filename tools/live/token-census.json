@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-07T13:27:57.009Z",
+  "measuredAt": "2026-09-07T14:04:11.063Z",
   "inputs": {
-    "styles.css": "a401f36b34f4",
+    "styles.css": "5d6065aaa347",
     "tools/live/token-census.mjs": "f20e5a646c11"
   },
   "tokenRoots": [
@@ -9,9 +9,9 @@
     ".db-surface"
   ],
   "totals": {
-    "classes": 79,
-    "differOnBody": 79,
-    "tokenlessOnBody": 76
+    "classes": 80,
+    "differOnBody": 80,
+    "tokenlessOnBody": 77
   },
   "rows": [
     {
@@ -1213,6 +1213,30 @@
       },
       "marked": {
         "radius": "8px 8px 0px 0px",
+        "font": "16px",
+        "token": "8px"
+      }
+    },
+    {
+      "cls": "db-mobile-menu",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "tokensWhenMarked": true,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      },
+      "marked": {
+        "radius": "0px",
         "font": "16px",
         "token": "8px"
       }

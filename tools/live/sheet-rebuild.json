@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-09-07T13:31:50.457Z",
+  "measuredAt": "2026-09-07T14:09:15.717Z",
   "inputs": {
     "tools/live/sheet-rebuild.mjs": "ff3f4850b7f4",
     "tools/live/sheet-rebuild-harness.ts": "896933a3454c",
     "src/views/toolbar-renderer.ts": "feca46093dfd",
-    "src/views/popover-position.ts": "eea3b7cb22b9",
-    "src/views/mobile-bottom-sheet.ts": "92f6f091173a",
+    "src/views/popover-position.ts": "a10fd5ca2091",
+    "src/views/mobile-bottom-sheet.ts": "8ac56dda1369",
     "src/views/sort-panel-renderer.ts": "d4e4a38bdd82",
     "src/views/filter-panel-renderer.ts": "6f265d0dd002",
     "src/views/view-config-panel-renderer.ts": "98ca8ca10597",
@@ -131,7 +131,7 @@
     {
       "name": "the filter sheet holds still while it rebuilds",
       "pass": true,
-      "detail": "settled at top 527, rebuilt to 627; the deepest point during the rebuild was 627",
+      "detail": "settled at top 836, rebuilt to 836; the deepest point during the rebuild was 836",
       "preFixFailure": "settled at top 701 and the rebuild dropped it to 844 on an 844px screen"
     },
     {

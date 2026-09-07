@@ -1,7 +1,7 @@
 {
-  "holder": "054-record-and-relation-surfaces",
-  "acquiredAt": "2026-09-07T15:35:00.000Z",
-  "baselineHash": "a401f36b34f4",
+  "holder": "067-sheet-family-remediation",
+  "acquiredAt": "2026-09-07T15:55:00.000Z",
+  "baselineHash": "5d6065aaa347",
   "baselineCommit": null,
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -5116,6 +5116,34 @@
         "screenshots/notion-clone/panels/panel-view-config-sheet-mobile-dark.png",
         "screenshots/notion-clone/panels/panel-view-config-sheet-mobile-light.png"
       ]
+    },
+    {
+      "event": "acquire",
+      "phase": "067-sheet-family-remediation",
+      "at": "2026-09-07T15:55:00.000Z",
+      "hash": "a401f36b34f4",
+      "note": "Taken over from 054-record-and-relation-surfaces at its own released hash (a401f36b34f4), nothing outstanding against it beyond the pre-existing ledger. This is the landing of 067's follow-up leg, rebased onto origin/main at b8876332: the leg's own two pre-rebase releases (db7a393f8759, 191652d50658) sat on a stylesheet eight commits behind main and are kept in this history as the record of what was reviewed there, not as a baseline anything in the tree still matches. The stylesheet in the rebased tree carries main's a401f36b34f4 plus this leg's ONE remaining capture-affecting rule -- .db-mobile-bottom-sheet.db-mobile-menu-card .db-mobile-bottom-sheet-handle { display: none } -- moving it to 5d6065aaa347. The page-pull-back rule that the leg's first release also covered no longer exists in the tree: it was reverted in the leg and then dropped outright by the operator's 2026-09-07 ~14:50 ruling."
+    },
+    {
+      "event": "release",
+      "phase": "067-sheet-family-remediation",
+      "at": "2026-09-07T16:10:00.000Z",
+      "hash": "5d6065aaa347",
+      "reviewed": [
+        "screenshots/notion-clone/components/constructed-owned-menu-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-owned-menu-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-datetime-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-datetime-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-icon-picker-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-icon-picker-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-option-color-picker-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-option-color-picker-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-depth3-column-submenu-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-depth3-column-submenu-mobile-light.png"
+      ],
+      "note": "Landing release for 067's follow-up leg, re-derived on the rebased tree rather than carried from the leg's two pre-rebase releases. Baseline a401f36b34f4 -> 5d6065aaa347: the single capture-affecting rule this leg still ships is .db-mobile-bottom-sheet.db-mobile-menu-card .db-mobile-bottom-sheet-handle { display: none } (T006's menu-card fix). The page-pull-back rule the leg's FIRST release also covered is gone from the tree twice over -- reverted in the leg for breaking position: fixed on .db-cell-selection-pill, then dropped outright by the operator's 2026-09-07 ~14:50 ruling (\"Drop the scale cue\") -- so no release on this lane covers it any more. Recaptured TWICE from a clean index (npm run screenshots, 606 entries both passes, screenshots:verify exit 0) before judging anything, because the harness jitters a different set each run. Pass 1 moved 8 files, pass 2 moved 5, and only 2 moved in both -- reference-gantt-subtask-mobile-light and reference-kanban-subtask-mobile-dark, both protected Project Manager entries and both identical between the two passes at a max channel delta of 1, i.e. encoder noise, not content. Every file that moved in either pass was judged by DECODED PIXEL DELTA (numpy abs-diff over RGB, changed-pixel count plus max channel delta against the committed PNG), never by pixelHash -- which this landing re-confirmed is blind here: main's committed manifest carries pixelHash and layoutHash values IDENTICAL to the ones the rebased tree regenerates for all twelve captures below, whose byte sizes differ by as much as 39379 -> 36980. pixelHash alone would have signed off a tree with none of this leg's work in it. All 13 jittered files were restored to committed bytes: board-view-desktop-dark (4 px, max 1), table-frozen-column-desktop-light (37 px, max 32), reference-gantt-desktop-dark (859 px, max 1), reference-gantt-subtask-mobile-light (57 px, max 1), reference-kanban-subtask-mobile-dark (5289 px, max 1), chrome-owned-menu-sheet-mobile-dark (2702 px, max 5, pass 1 only -- pass 2 reproduced the committed bytes exactly), table-frozen-column-mobile-light (36 px, max 1), board-mobile-desktop-dark (1 px, max 1), board-subtask-tree-desktop-dark (1 px, max 1), timeline-view-year-mobile-dark (59 px, max 47, pass 1 only), calendar-mini-calendar-desktop-dark (134 px, max 43, pass 1 only). The twelve captures named above are this release's real content, measured against origin/main's committed bytes: constructed-owned-menu-mobile-dark/light (174485/197405 px, max delta 194/199), constructed-date-picker-mobile-dark/light and constructed-date-picker-datetime-mobile-dark/light (592698-595009 px, max delta 212-242 -- the calendar grid's dense text and borders amplify the handle's removed height into a large changed-pixel count), constructed-icon-picker-mobile-dark/light (864487/864511 px, max delta 225/241), constructed-option-color-picker-mobile-dark/light (275794/275805 px, max delta 225/233), constructed-depth3-column-submenu-mobile-dark/light (30407/31440 px, max delta 18/30). Each reproduces byte-for-byte across both recapture passes, and constructed-owned-menu-mobile-dark and constructed-icon-picker-mobile-dark were opened and read directly at this landing: both show a card with its header title and 44px close at the very top, no grab bar above it, over a dimmed parent -- the intended change, matching the 0.390 parent dim ratio the grammar lane measures for all four menu-role surfaces. field-icon-picker-desktop-dark/light are correctly absent from this release: origin/main's 9d798c69 already landed their real fix, and the rebase carried it in. The 32 protected Project Manager entries carry no content change."
     }
   ],
   "outstanding": [
