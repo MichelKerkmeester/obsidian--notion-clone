@@ -48,7 +48,7 @@ Every leg's proof already has an instrument — the sweep, the grammar lanes, or
 ### Definition of Ready
 - [x] Problem statement clear and scope documented — `spec.md` §2, §3
 - [x] Success criteria measurable — `spec.md` §5, each with a value observed at `80c2bb48`
-- [x] Dependencies identified — the three Proposed ADRs, `053`'s open legs, the parent's CSS lane
+- [x] Dependencies identified — the three Proposed ADRs, `062` ADR-003's inherited ruling, `053`'s open legs, the parent's CSS lane
 
 ### Definition of Done
 - [ ] All acceptance criteria met, waived or superseded — `acceptance-criteria.md`
@@ -86,8 +86,13 @@ hidden-group axis already has exactly one persisted home.
 - **`dropdown-field.ts`**: the search gate at `:228`. **Unchanged by this packet** — the gate
   already lives inside the primitive, and `063`'s `a952e5e7` combobox rule owns the desktop branch.
 - **`styles.css`**: one class for the add control and one for the collapsed label, reusing the
-  landed values — the 28px pitch (`:1821`) and the 11%/17% tints (`:1825`, `:1831`). No new number
+  landed values — the 28px pitch (`:1821`) and the 11%/17% tints (`:1825`, `:1832`). No new number
   (D7).
+- **`view-config-panel-renderer.ts`**: the view-settings panel. REQ-009 adds a fourth summary row
+  to `renderAppliedSummaries` (`:510-518`) and an explainer in the panel's own `hintClass()` idiom
+  (`:569`, `:1688`); the existing `renderConditionalFormatting` section (`:747`, mounted in the
+  view half at `:405`) is opened, never duplicated. It is also the `searchable` precedent
+  (`:1558`).
 - **`tools/live/toolbar-collapse-sweep.ts` + `run-toolbar-collapse-sweep.mjs`**: the existing lane,
   extended with the label and order readings; its gate row is `tools/gate.mjs:80`.
 
@@ -106,7 +111,7 @@ the `:3447` guard terminates for the last view.
 <!-- ANCHOR:affected-surfaces -->
 ## FIX ADDENDUM: AFFECTED SURFACES
 
-Two requirements change markup that other things read or photograph, and one extends a lane that
+Three requirements change markup that other things read or photograph, and one extends a lane that
 is also a gate, so the inventory is not optional.
 
 | Surface | Current Role | Action | Verification |
@@ -114,14 +119,17 @@ is also a gate, so the inventory is not optional.
 | `toolbar-renderer.ts:1180`, `:1330` | Producer: the two `deleteView` call sites, unconfirmed | Update — `051`'s confirm raised ahead of each | `grep -c "buildConfirmSheetBody" src/views/toolbar-renderer.ts` = **0** today; the vitest block afterward |
 | `confirm-sheet.ts:46` | Producer: `051`'s confirm primitive | Unchanged — consumed, never rebuilt | `053`'s AC-105 idiom; `053` goal D8 |
 | `database-view.ts:3445-3456` | Consumer: the host's splice-and-save, guarded at `:3447` | Unchanged — the confirm precedes it, the guard precedes the confirm | The one-view case in the confirm block |
-| `toolbar-renderer.ts:2561-2598` (`:2571`) | Policy: the landed collapse order, `AC-012`/`T008` | Update — one rung at the head; the order untouched (ADR-001) | The sweep's order assertion; the `:2571` array read before and after |
+| `toolbar-renderer.ts:2561-2598` (`:2571`) | Policy: the landed collapse order, `053`'s `AC-012`/`T008` | Update — one rung at the head; the order untouched (ADR-001) | The sweep's order assertion; the `:2571` array read before and after |
 | `toolbar-renderer.ts:2365` | Producer: the New button's label span, drawn off-touch | Update — collapsed by the new first rung | The sweep's label reading; `aria-label` unchanged (NFR-A03) |
 | `filter-panel-renderer.ts:197-202` | Producer: the zero-rule branch, a `db-panel-empty` hint | Update — the entry tier; the ≥1-rule panel byte-identical | The seeded one-rule diff, recorded in `tasks.md` (AC-005) |
 | `filter-panel-renderer.ts:494-501`, `:576-590`; `sort-panel-renderer.ts:199-206` | Producers: the condition dropdowns, flagless | Update — `searchable: true`; nothing else | `grep -c searchable` = **0**/**0** today; the primitive's `:228` owns the gate |
 | `dropdown-field.ts:224-228` | Policy: the search gate — phone `searchable && >8`, desktop the `a952e5e7` combobox rule | Unchanged — this packet adds no second gate | `063`'s ADR-001/ADR-008; the 8-option case is the control, not a new rule |
 | `active-view-controls-renderer.ts:60-180` | Producer: the chip rail, clear-all only (`:150`) | Update — one add control per rule group | `grep -rn "db-active-control-add" src/ styles.css` = **0** today; the presence-iff-≥1-chip test |
-| `styles.css` `:1815-1834` | Policy: the landed chip geometry | Update — one class each, landed values only | `styles.css:1821`, `:1825`, `:1831` read; D7's no-new-number rule |
+| `styles.css` `:1815-1834` | Policy: the landed chip geometry | Update — one class each, landed values only | `styles.css:1821`, `:1825`, `:1832` read; D7's no-new-number rule |
 | `toolbar-renderer.ts:1869-1887`; `types.ts:560`; `data-source.ts:1230`/`:1352`; `board-renderer.ts:192` | The hidden-group axis: rows, declaration, persistence, the board's read | Unchanged until ADR-007 answers; the table's consumption is the unestablished half | ADR-007; `059` REQ-001's zero-writer census; the read before any criterion goes green |
+| `view-config-panel-renderer.ts:510-518` | Producer: the view-settings summary block, three rows — Properties, Filters, Sorts | Update — a fourth named conditional-colour row plus its explainer | `grep -c "this.renderAppliedSummary(" src/views/view-config-panel-renderer.ts` = **3** today; the chart view is the control (AC-012) |
+| `view-config-panel-renderer.ts:747` (`:405`) | Producer: the conditional-formatting section, already per-view and already in the view half of the panel | Unchanged — opened by the new row, never duplicated | ADR-010; CHK-013's no-second-producer rule |
+| `conditional-formatting.ts:168-206`; `table-renderer.ts:85`/`:866`/`:911`; `styles.css:1317-1319` | The capability: evaluation, wiring and paint | Unchanged — REQ-009 moves the way in, not the rules | `062` ADR-003's reads, re-verified here |
 | `tools/live/toolbar-collapse-sweep.ts` | The lane: 250-900px, 10px steps | Update — the label and order readings | T001's red, `$?` read; the `toolbar-collapse` row at `tools/gate.mjs:80` |
 | `044`/`048` lanes | Consumers: the confirm's phone presentation | Unchanged — the grammar lanes must stay green, not be re-specified | `npm run gate`, `$?`; AC-003 |
 

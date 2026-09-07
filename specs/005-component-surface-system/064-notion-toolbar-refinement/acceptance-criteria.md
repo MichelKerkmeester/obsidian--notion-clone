@@ -30,7 +30,8 @@ _memory:
     open_questions:
       - "Which of ADR-007's two readings the operator takes"
     answered_questions:
-      - "The nine dispositions are recorded in decision-record.md and none is applied over a landed ruling"
+      - "The ten dispositions are recorded in decision-record.md and none is applied over a landed ruling"
+      - "AC-012 is inherited from 062 ADR-003 and is not gated: the operator ruled it at 18:32"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: acceptance-criteria | v2.2 -->
 # Acceptance Criteria: Notion Toolbar Refinement
@@ -61,9 +62,11 @@ One row per criterion. `AC-ID` is stable once written: supersede a criterion, ne
 
 Every row's Verification cell names the command or artifact that decides it, and exit statuses are
 read from `$?`, never through a pipe. Where a row records a value observed on today's tree, that
-value was read in this worktree at `80c2bb48`, whose `src/` and `styles.css` are identical to the
-digest's reference HEAD `28e680fc` (`git diff --stat 28e680fc HEAD -- src/` names none of the six
-toolbar-family files), so every red is about the code and not about drift.
+value was read in this worktree at `80c2bb48` and **re-read at the landing**, after the rebase onto
+`31eafb60`. Those twenty-seven commits touched `styles.css` and `view-config-panel-renderer.ts` but
+left the six toolbar-family source files byte-identical, so every red below is about the code and
+not about drift; the two citations that did move with them are corrected in place and recorded in
+`goal.md` §4.
 
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
@@ -72,12 +75,13 @@ toolbar-family files), so every red is about the code and not about drift.
 | AC-003 | REQ-001 | Given the confirm open on a phone, When it presents, Then it is a stacked bottom sheet per `048` D1, and `044`'s sheet grammar and `048`'s stacking stay green | `npm run gate`, `$?` read; the `sheet-grammar` and stacking lanes green | Unmet | - |
 | AC-004 | REQ-002 | Given the filter panel with zero rules, When it opens, Then a searchable flat property list renders, built from the `toPropertyDropdownOption` vocabulary (`filter-panel-renderer.ts:497`), picking a property creates the first leaf through `createDefaultFilterRule` (`:90`) and `appendLeaf` (`:223`), and a `+ Add advanced filter` footer switches to the tree | A test asserting the zero-rule branch renders the list. Red today: the branch renders only the `db-panel-empty` hint at `:197-202` | Unmet | - |
 | AC-005 | REQ-002 | Given the panel already holds exactly one rule, When it renders, Then it is byte-identical before and after REQ-002 — the negative control | A seeded one-rule panel rendered on both sides of the change and diffed; the result recorded in `tasks.md` | Unmet | - |
-| AC-006 | REQ-003 | Given the filter field (`:494-501`), the select/status value (`:576-590`) and the sort field (`sort-panel-renderer.ts:199-206`) dropdowns, When they present in a phone sheet — which is how the panels present on a phone, and where these dropdowns' search rows live — Then a search input shows above 8 options and not at 8, the 8-option case being the control; the gate is the primitive's own (`dropdown-field.ts:228`, the phone-branch rule `063`'s ADR-001 recorded), and the desktop combobox rule (`a952e5e7`) is untouched | Red today: `grep -c searchable` = **0** and **0** — the flag reaches neither panel, so the phone-sheet branch falls to its `searchable === true` default and renders no search row at any count. The flag's precedent: `view-config-panel-renderer.ts:1558`, `:2060`, `:2077` | Unmet | - |
+| AC-006 | REQ-003 | Given the filter field (`:494-501`), the select/status value (`:576-590`) and the sort field (`sort-panel-renderer.ts:199-206`) dropdowns, When they present in a phone sheet — which is how the panels present on a phone, and where these dropdowns' search rows live — Then a search input shows above 8 options and not at 8, the 8-option case being the control; the gate is the primitive's own (`dropdown-field.ts:228`, the phone-branch rule `063`'s ADR-001 recorded), and the desktop combobox rule (`a952e5e7`) is untouched | Red today: `grep -c searchable` = **0** and **0** — the flag reaches neither panel, so the phone-sheet branch falls to its `searchable === true` default and renders no search row at any count. The flag's precedent: `view-config-panel-renderer.ts:1558` — the one real pass-`true` site; `:2064` and `:2082` are `renderSelect`'s parameter and its pass-through | Unmet | - |
 | AC-007 | REQ-004 | Given the toolbar swept 250→900px in 10px steps (`run-toolbar-collapse-sweep.mjs:39`), When the width narrows, Then the New label reads absent before the first width at which any cluster is hidden, zero-overflow holds at every width, the accessible name is unchanged, and the landed `:2571` drop order is not reordered | `tools/live/toolbar-collapse-sweep.ts`'s existing lane, extended with the label reading and the order assertion, run through the `toolbar-collapse` gate row. Red today: the cluster hides while the label is still drawn | Unmet | - |
 | AC-008 | REQ-005 | Given at least one chip in the rail, When the rail renders, Then exactly one `db-active-control-add` control per rule group is present, wired to the existing `toggleFilterPanel` / `toggleSortPanel`, at the landed 28px chip pitch (`styles.css:1821`) and carrying its own accessible name; with zero chips, none | Red today: `grep -rn "db-active-control-add" src/ styles.css` = **0**; a test asserting presence iff at least one chip — the zero-chip case is the control | Unmet | - |
-| AC-009 | REQ-007 | Given every Notion-versus-Anytype disposition the loop named, When this packet's record is read, Then it lives in `decision-record.md` — the ones a landed ruling or the tree decides marked `Accepted` and citing it, the ones it does not marked **Proposed** and the operator's — and none is applied over a landed ruling | `decision-record.md`: nine ADRs plus the four corrections D1 requires, statuses read against `goal.md` D6's three gates | Unmet | - |
+| AC-009 | REQ-007 | Given every Notion-versus-Anytype disposition the loop named, When this packet's record is read, Then it lives in `decision-record.md` — the ones a landed ruling or the tree decides marked `Accepted` and citing it, the ones it does not marked **Proposed** and the operator's — and none is applied over a landed ruling | `decision-record.md`: ten ADRs plus the corrections D1 requires, statuses read against `goal.md` D6's three gates | Unmet | - |
 | AC-010 | REQ-006 | Given the operator's answer on ADR-007, Then either the group popover's select/status rows (`toolbar-renderer.ts:1869-1887`) carry the eye toggle persisting into the existing `boardHiddenGroups` axis (`types.ts:560`, `data-source.ts:1230`, `:1352`; read at `board-renderer.ts:192`) with the table-renderer read recorded, or this row closes **Waived** citing ADR-007 | The operator's answer; the renderer read taken before any code — the board's read is verified, the table's is not, and `059` REQ-001's zero-writer census is the axis's own record | Unmet | - |
 | AC-011 | REQ-008 | Given a released build, When the operator reads the refined toolbar on a device, Then the four device-only checks the loop named — icon-only rail discoverability on a phone, the entry tier inside the phone filter sheet, the delete confirm as a stacked sheet, and tabs against the view switcher both references use — are answered in `053` AC-111's sitting | `053`'s AC-111. Only the operator closes this row; nothing in this repository can | Unmet | - |
+| AC-012 | REQ-009 | Given the view-settings panel on a non-chart view, When it renders, Then a fourth named row sits in the summary block beside Properties, Filters and Sorts, reading the count of `config.conditionalFormats`, carrying an explainer line in the panel's `hintClass()` idiom, and opening the existing `renderConditionalFormatting` section (`:747`) — with no second rule editor created | A test asserting four `db-view-config-summary-row` rows and the named one's count and empty word. Red today: `renderAppliedSummaries` (`view-config-panel-renderer.ts:510-518`) makes exactly **three** calls to `renderAppliedSummary` — Properties, Filters, Sorts (`grep -c "this.renderAppliedSummary(" src/views/view-config-panel-renderer.ts` = **3**) — and none names conditional colour. **Negative control:** a chart view, where `:405`'s guard renders no conditional-formatting section, must render no row either | Unmet | - |
 
 ### Status values
 
@@ -104,9 +108,11 @@ waiver is treated as an unmet criterion rather than as a pass.
 
 **Closeable:** No
 
-Eleven criteria, all `Unmet`, none waived. The packet was opened by a research synthesis and no
+Twelve criteria, all `Unmet`, none waived. The packet was opened by a research synthesis and no
 code has changed yet. ADR-001, ADR-005 and ADR-007 gate REQ-004, REQ-001 and REQ-006, and
 `goal.md` D6 bars their code until the operator answers; AC-011 is the operator's and rides
-`053` AC-111. The two corrections this record's rows depend on — the group-popover anchor and the
-hidden-group axis's state — were verified on this tree, not carried from the loop.
+`053` AC-111. AC-012 is **not** gated: it inherits `062` ADR-003, which the operator ruled Accepted
+at 2026-09-06 18:32. The corrections this record's rows depend on — the group-popover anchor, the
+hidden-group axis's state, the chip tint's line and the `searchable` precedent's — were verified on
+this tree at the landed SHA, not carried from the loop.
 <!-- /ANCHOR:closure -->

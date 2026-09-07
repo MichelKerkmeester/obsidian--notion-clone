@@ -256,8 +256,15 @@ named view-settings row with an explainer, the way Notion presents them, rather 
 database settings?* The answer is yes, and it lands where the earlier text said it would: **it is a
 `053` toolbar item and belongs to `064`, not to this packet.** No criterion and no task opens here.
 
-**`064` does not exist on `main` at the time of this ruling**, so the pointer is carried here until
-it does. What `064` inherits, stated so nothing has to be re-derived: a first-class *Conditional
+**`064` did not exist on `main` at the time of this ruling**, so the pointer was carried here until
+it did. **It landed 2026-09-07** and carries the ruling as its criterion 8, `REQ-009` / `AC-012` /
+`T014`, recorded in `064` ADR-010 — which also corrects one sentence below against the tree: ours
+does **not** live in database settings. `renderConditionalFormatting` is mounted in the view half of
+the panel (`view-config-panel-renderer.ts:405`, after the `viewConfig.viewSection` title at `:387`)
+and the rules are already per-view (`ViewConfig.conditionalFormats`, `data/types.ts:593`; the
+database-level field is deprecated at `:427` and migrated into views on read,
+`data-source.ts:893-899`). So the work is the named summary row and its explainer, not a
+relocation. What `064` inherits, stated so nothing has to be re-derived: a first-class *Conditional
 color* row in the view-settings list with an explainer line, presenting the rules
 `applyConditionalFormat` already evaluates (`src/data/conditional-formatting.ts:168-206`, wired at
 `src/views/table-renderer.ts:85`, `:866`, `:911`, painted at `styles.css:1317-1319`). The capability

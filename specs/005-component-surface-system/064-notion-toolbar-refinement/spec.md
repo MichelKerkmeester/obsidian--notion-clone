@@ -1,6 +1,6 @@
 ---
 title: "Feature Specification: Notion Toolbar Refinement"
-description: "Refine the view toolbar and its view controls against the Notion screen digest: a confirm in front of the two unconfirmed delete-view paths, a zero-rule filter entry tier in front of the nested builder, search on two condition dropdowns, one collapse rung, a chip-rail add control, per-group visibility — and every Notion-versus-Anytype conflict recorded as an ADR rather than applied."
+description: "Refine the view toolbar and its view controls against the Notion screen digest: a confirm in front of the two unconfirmed delete-view paths, a zero-rule filter entry tier in front of the nested builder, search on two condition dropdowns, one collapse rung, a chip-rail add control, per-group visibility, a named conditional-colour view-settings row — and every Notion-versus-Anytype conflict recorded as an ADR rather than applied."
 trigger_phrases:
   - "064 spec"
   - "notion toolbar refinement"
@@ -58,7 +58,10 @@ Notion pipeline reached it, its own `059`-`066` child.
 - One text→icon collapse rung ahead of the landed cluster ladder.
 - An add control in the active-rule chip rail.
 - Per-group visibility on select/status group fields.
-- Nine ADRs recording every Notion-versus-Anytype disposition the loop named.
+- A first-class *Conditional color* row in the view-settings summary block, with an explainer —
+  inherited from `062` ADR-003 and the operator's 18:32 ruling, not proposed here.
+- Ten ADRs recording every Notion-versus-Anytype disposition the loop named, plus the inherited
+  ruling.
 
 **Changelog**:
 - When this phase closes, refresh the matching file in ../changelog/ using the parent packet number plus this phase folder name.
@@ -98,10 +101,12 @@ tree first, without reopening a single landed Anytype ruling.
 - An add control in the chip rail, one per rule group.
 - Per-group visibility toggles for select/status group fields, plus the per-view hidden-group set
   and the renderer read that has to come first.
-- Nine ADRs, and the two record corrections the loop produced.
+- A named conditional-colour row in the view-settings summary block
+  (`view-config-panel-renderer.ts:510-518`), with an explainer, opening the existing section.
+- Ten ADRs, and the record corrections the loop and this landing produced.
 
 ### Out of Scope
-- **The landed collapse order** (`AC-012` / `053` T008) — Notion's New-survives invariant is named
+- **The landed collapse order** (`053`'s `AC-012` / T008) — Notion's New-survives invariant is named
   as a conflict in ADR-001 and the order is not reopened. Additive rung only.
 - **The nested filter builder** — `053` goal D4 rules it stays; REQ-002 extends the branch in front
   of it and changes nothing inside it.
@@ -112,7 +117,9 @@ tree first, without reopening a single landed Anytype ruling.
 - **A phone view switcher** — both references use one and ours keeps measured tabs; unmeasured
   either way, so it is a device question, not a task (F-402).
 - **Notion-only features** — the AI view box, multiple data sources per database, dashboard and map
-  layouts, conditional colour. No our-side surface exists to change.
+  layouts. No our-side surface exists to change. **Conditional colour is not one of them** and was
+  wrongly listed here at this packet's opening: it ships (`conditional-formatting.ts:168-206`), and
+  `062` ADR-003's operator ruling makes its view-settings row REQ-009 below.
 - **The table, board, calendar, record, dropdown and state surfaces** — other owners, other children.
 
 ### Files to Change
@@ -123,7 +130,8 @@ tree first, without reopening a single landed Anytype ruling.
 | `src/views/filter-panel-renderer.ts` | Modify | Zero-rule entry tier at `:197-202`; `searchable` at `:494-501` and `:576-590` |
 | `src/views/sort-panel-renderer.ts` | Modify | `searchable` at `:199-206` |
 | `src/views/active-view-controls-renderer.ts` | Modify | Per-group add control in `render()` (`:72-180`) |
-| `src/types.ts` | Modify | The per-view hidden-group set on `ViewConfig` |
+| `src/data/types.ts` | Read, and modify only if ADR-007 answers "here" | The per-view hidden-group set on `ViewConfig` **already exists** — `boardHiddenGroups` at `:560`, persisted and read. The correction ADR-007 turns on: what is missing is a writer, not the field |
+| `src/views/view-config-panel-renderer.ts` | Modify | REQ-009's named conditional-colour summary row and its explainer, beside the three `renderAppliedSummaries` already emits (`:510-518`); the existing `renderConditionalFormatting` section (`:747`) is opened, never duplicated |
 | `src/views/board-renderer.ts`, `src/views/table-renderer.ts` | Modify | Consume the hidden-group set (REQ-006's first job is reading them — this packet's research did not) |
 | `styles.css` | Modify | One class for the add control and one for the collapsed label; both reuse the landed value inventory |
 | `tools/live/toolbar-collapse-sweep.ts` | Modify | The REQ-004 assertion, red-first |
@@ -145,10 +153,11 @@ tree first, without reopening a single landed Anytype ruling.
 
 | ID | Requirement |
 |----|-------------|
-| REQ-003 | **The condition rows' property and value dropdowns search when the list is long.** `searchable: true` at `filter-panel-renderer.ts:494-501`, `:576-590` and `sort-panel-renderer.ts:199-206`, gated inside `createDropdownField` at 8 options so short lists stay clean. The flag and its precedent already exist (`view-config-panel-renderer.ts:1558`, `:2060`, `:2077`) |
+| REQ-003 | **The condition rows' property and value dropdowns search when the list is long.** `searchable: true` at `filter-panel-renderer.ts:494-501`, `:576-590` and `sort-panel-renderer.ts:199-206`, gated inside `createDropdownField` at 8 options so short lists stay clean. The flag and its precedent already exist (`view-config-panel-renderer.ts:1558` — the one real pass-`true` site; `:2064` and `:2082` are `renderSelect`'s parameter and its pass-through) |
 | REQ-004 | **The New button's label collapses to its icon before any cluster is hidden.** One rung added at the head of `applyToolbarChromeCollapse` (`:2561-2598`), ahead of the `:2571` targets loop. The landed drop order is not changed. **Gated by ADR-001** |
 | REQ-005 | **The chip rail carries its own add control.** One `db-active-control-add` button per rule group in `active-view-controls-renderer.ts` `render()`, wired to the existing panel toggles, at the landed 28px chip pitch |
 | REQ-007 | **The packet's own record says what the tree says.** Two corrections the loop produced are written down rather than absorbed: the digest's §4 P3 row is stale because the desktop side sheet landed after it was written, and the digest's §6 Q4 is answered — our control cluster carries no text label to collapse, so the density comparison lives only on the New button |
+| REQ-009 | **Conditional row colour is found where Notion puts it: its own named view-settings row.** A fourth summary row beside Properties/Filters/Sorts in `renderAppliedSummaries` (`view-config-panel-renderer.ts:510-518`), reading the rule count already on `ViewConfig.conditionalFormats`, carrying an explainer in the panel's own `hintClass()` idiom, and opening the existing `renderConditionalFormatting` section (`:747`) rather than a second editor. **Not gated** — `062` ADR-003 is Accepted, ruled by the operator 2026-09-06 18:32: *"Yes, own row in view settings"* |
 
 ### P2 - Nice to have
 
@@ -171,6 +180,8 @@ tree first, without reopening a single landed Anytype ruling.
   three today, and a panel that already holds a rule is byte-identical to today's.
 - **SC-003**: No landed Anytype ruling is overturned. Every Notion-versus-Anytype conflict the loop
   named carries an ADR; the ones that touch a landed ruling stay **Proposed**.
+- **SC-005**: Conditional row colour is reachable from the view-settings panel by name, with the
+  capability unchanged — the same rules, the same paint, one more way in.
 - **SC-004**: No new CSS value is minted. Every geometry this packet writes is already in the landed
   inventory the research recorded.
 <!-- /ANCHOR:success-criteria -->
@@ -266,7 +277,7 @@ tree first, without reopening a single landed Anytype ruling.
 ## 10. OPEN QUESTIONS
 
 - **ADR-001** — may a text→icon rung be added ahead of a landed drop order the operator approved?
-  Notion's split New survives on every populated capture; `AC-012` drops it first. Both readings are
+  Notion's split New survives on every populated capture; `053`'s `AC-012` drops it first. Both readings are
   recorded and neither is applied.
 - **ADR-005** — should a delete-view confirm exist at all, on Notion-only evidence? Anytype has no
   opinion here, so the ADR rests on consequence rather than on two references agreeing.

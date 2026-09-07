@@ -25,6 +25,7 @@ _memory:
       - "src/views/sort-panel-renderer.ts"
       - "src/views/active-view-controls-renderer.ts"
       - "src/views/confirm-sheet.ts"
+      - "src/views/view-config-panel-renderer.ts"
       - "tools/live/toolbar-collapse-sweep.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
@@ -32,13 +33,14 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "May a text-to-icon rung be added ahead of AC-012's landed drop order"
+      - "May a text-to-icon rung be added ahead of 053's AC-012 landed drop order"
       - "Should a delete-view confirm exist at all on Notion-only evidence"
       - "Is a deleted view genuinely unrecoverable, or is the severity argument resting on an unverified inference"
     answered_questions:
       - "Per-group visibility is 059's, not this packet's: boardHiddenGroups already exists, is persisted and is read; the missing writer is 059 REQ-001/REQ-003's Groups panel"
       - "Our control cluster carries no text label, so the digest's density comparison lives only on the New button"
       - "The digest's own P3 divergence row is stale: the desktop side sheet landed after it was written"
+      - "Conditional row colour is ours already and its view-settings row is this packet's: 062 ADR-003, ruled by the operator at 18:32, routes it here"
 ---
 # Goal: Notion Toolbar Refinement
 
@@ -85,13 +87,13 @@ Frozen choices. Changing one is an amendment.
 
 | ID | Decision |
 |----|----------|
-| D1 | **The research is the read of record for what Notion does; the tree is the read of record for what we do.** Where the loop's synthesis and this tree disagree, the tree wins and the finding is corrected in place, dated. Four of the loop's own claims were corrected that way at this packet's opening — one substantive and three of citation — and each correction is in §4 and in `decision-record.md`, not silently absorbed. |
+| D1 | **The research is the read of record for what Notion does; the tree is the read of record for what we do.** Where the loop's synthesis and this tree disagree, the tree wins and the finding is corrected in place, dated. Four of the loop's own claims were corrected that way at this packet's opening — one substantive and three of citation — and three more at its landing: two citations that had drifted under the twenty-seven commits this packet rebased onto, and the conditional-colour reading `062` ADR-003 had already corrected. Seven in all, each in §4 and in `decision-record.md`, not silently absorbed. |
 | D2 | **Red first, per criterion, on a threshold.** Every row in `acceptance-criteria.md` carries one number or one boolean observed failing on the tree at `80c2bb48` before its fix is written, with the failing figure recorded. Every P0 and P1 threshold here was re-derived against the tree during synthesis rather than taken from the loop's report. |
 | D3 | **Additive only, under parent D15.** This packet may add a criterion, a task or an ADR. It may not un-tick a measured row or overturn a landed Anytype ruling. Where a Notion finding contradicts one, the ADR names both readings and stays **Proposed**. |
-| D4 | **What `053` ruled stays ruled.** The nested filter builder stays (`053` D4). The single icon vocabulary stays (`ADR-001`). The landed collapse drop order stays (`AC-012` / T008); ADR-001 here adds a rung ahead of it and reorders nothing. |
+| D4 | **What `053` ruled stays ruled.** The nested filter builder stays (`053` D4). The single icon vocabulary stays (`ADR-001`). The landed collapse drop order stays (`053`'s `AC-012` / T008); ADR-001 here adds a rung ahead of it and reorders nothing. |
 | D5 | **One owner per shared primitive, carried from `053` D8.** The confirm primitive is `051`'s and REQ-001 consumes it; a second confirm surface on this path would be the exact failure the five family phases were split to avoid. Per-group visibility is **`059`'s**, not this packet's, and ADR-007 records why. |
 | D6 | **Three Proposed ADRs are a real gate, not a formality.** ADR-001, ADR-005 and ADR-007 each decide whether a leg exists at all. No code for REQ-001, REQ-004 or REQ-006 is written before the operator answers. |
-| D7 | **No new value is minted.** Every geometry this packet writes already exists in the landed inventory the research recorded — the 28px chip pitch (`styles.css:1821`), the 11%/17% tints (`:1825`, `:1831`), the badge and tab metrics. A proposal that needs a number the tree does not already carry is a proposal that has not been measured. |
+| D7 | **No new value is minted.** Every geometry this packet writes already exists in the landed inventory the research recorded — the 28px chip pitch (`styles.css:1821`), the 11%/17% tints (`:1825`, `:1832`), the badge and tab metrics. A proposal that needs a number the tree does not already carry is a proposal that has not been measured. |
 | D8 | Shipped, verified and operator-confirmed are three states (parent D3). A green lane does not close this phase; `053` AC-111 is where the operator's read of this surface lands. |
 <!-- /ANCHOR:directive -->
 
@@ -149,8 +151,8 @@ never resolve them silently.
 - [ ] **A long property list is searchable where a rule is edited.** **Today: `searchable` appears
       zero times in either panel.** `grep -c searchable src/views/filter-panel-renderer.ts
       src/views/sort-panel-renderer.ts` returns **0** and **0**, while the flag exists on
-      `createDropdownField` and is already passed elsewhere (`view-config-panel-renderer.ts:1558`,
-      `:2060`, `:2077`). Done is: the filter field dropdown (`filter-panel-renderer.ts:494-501`),
+      `createDropdownField` and is already passed elsewhere (`view-config-panel-renderer.ts:1558` (the one real pass-`true` site;
+      `:2064` and `:2082` are `renderSelect`'s parameter and its pass-through)). Done is: the filter field dropdown (`filter-panel-renderer.ts:494-501`),
       the select/status value dropdown (`:576-590`) and the sort field dropdown
       (`sort-panel-renderer.ts:199-206`) rendering a search input above 8 options and not at 8, the
       gate owned inside the primitive. Notion basis: P4/P5, `1067756c` / `82d66d47` / `86a8e66c`.
@@ -164,7 +166,7 @@ never resolve them silently.
       every width, and the accessible name is unchanged. The landed drop order is not reordered.
       Notion basis: P1 — the split New survives on every populated capture including the narrow
       no-tab cases (`21d71e5f`, `795eb9b5`). **Gated by ADR-001**, which names the conflict with
-      `AC-012` and leaves it standing.
+      `053`'s `AC-012` and leaves it standing.
 - [ ] **The chip rail can add the next rule from the rail.** **Today: it cannot.** `render()`
       (`active-view-controls-renderer.ts:60`) draws chips, a logic toggle and one rail-level button,
       the clear-all at `:150`; `grep -rn "db-active-control-add" src/ styles.css` returns **0**.
@@ -175,10 +177,26 @@ never resolve them silently.
       references agree on.
 - [ ] **Every Notion-versus-Anytype disposition the loop named is written down, and none is
       applied over a landed ruling.** **Today: they live only in a research document.** Done is:
-      nine ADRs in `decision-record.md` — the ones a landed ruling already decides marked
-      `Accepted` and citing it, the ones it does not marked **Proposed** and the operator's — plus
-      the four corrections D1 requires: per-group visibility routed to `059` rather than built here,
-      and the three citation corrections in §4.
+      ten ADRs in `decision-record.md` — the ones a landed ruling already decides marked
+      `Accepted` and citing it, the ones it does not marked **Proposed** and the operator's, and
+      ADR-010 inherited from `062` because the operator already ruled it — plus the seven
+      corrections D1 requires: per-group visibility routed to `059` rather than built here, the
+      conditional-colour reading `062` had already corrected, and five citation corrections.
+- [ ] **Conditional row colour has its own named view-settings row, with an explainer.** **Today:
+      the view-settings panel names three controls and not this one.** `renderAppliedSummaries`
+      (`view-config-panel-renderer.ts:510-518`) emits exactly **three** `db-view-config-summary-row`
+      rows — Properties, Filters, Sorts — and none of them is conditional colour; the capability's
+      only surface is the inline `db-conditional-format-settings` block
+      (`renderConditionalFormatting`, `:747`, mounted in the **view** section at `:405`), whose
+      heading carries no value summary and whose only hint is its empty state (`:782`). Done is: a
+      fourth named row in that summary block, reading the rule count `applyConditionalFormat`
+      already evaluates (`conditional-formatting.ts:168-206`, wired at `table-renderer.ts:85`,
+      `:866`, `:911`, painted at `styles.css:1317-1319`), carrying an explainer line in the
+      `hintClass()` idiom the panel already uses (`:569`, `:1688`), and opening the existing
+      section rather than a second editor. The capability does not move; only its home does.
+      **Operator-ruled, not proposed:** `062` ADR-003, 2026-09-06 18:32, verbatim *"Yes, own row in
+      view settings"*. Notion basis: `142cef4e`, listed in `ac0d576b`, `2517d4cf`, `9e80b489` and
+      `420dd630`. ADR-010 records what the ruling corrects.
 - [ ] **The operator reads the refined toolbar on a device.** Four device-only checks the loop named
       — icon-only rail discoverability on a phone, the entry tier inside the phone filter sheet, the
       delete confirm as a stacked sheet, and tabs against the view switcher both references use —
@@ -200,8 +218,9 @@ Everything below is VOLATILE.
 | Notion digest | Done | `../053-toolbar-and-view-controls/notion-screens-digest-toolbar.md`, 104 screens, thirteen patterns |
 | Deep-research loop | Done | `/deep:research:auto`, **5 of 5** iterations, `stopPolicy: max-iterations`, one lineage `glm-openrouter-toolbar` on **cli-pi / `z-ai/glm-5.3-flash`** (the OpenRouter route) at `reasoningEffort: max`, 34 findings merged, 6 of 6 questions answered, **zero image reads**, 39 minutes wall. `../053-toolbar-and-view-controls/research/notion-toolbar/` |
 | Opus synthesis | Done | This packet, plus the parent amendments |
-| Level chosen | Done | `recommend-level.sh --loc 600 --files 10 --db` → Level 2, **48/100**, confidence **82%**, phase score **0/50** against the 25 bar. A standard child, never a phase parent. Without `--db`: 41/100, still Level 2 — recorded so the sensitivity is visible |
-| Red-first anchors | Done | Every criterion re-derived on the tree at `80c2bb48` during synthesis. The six toolbar-family source files are byte-identical to the digest's reference HEAD `28e680fc` (`git diff --stat 28e680fc HEAD -- src/` names none of them), so every red is about the code and not about drift |
+| Level chosen | Done | `recommend-level.sh --loc 600 --files 10 --db` → Level 2, **48/100**, confidence **82%**, phase score **0/50** against the 25 bar. A standard child, never a phase parent. Without `--db`: the tool prints **41/100, Level 1 (Baseline)**, confidence 80% — recorded so the sensitivity is visible, and the packet stays Level 2 on the documented go-higher judgment, because the `ViewConfig` reach REQ-006 and REQ-009 have is real whether or not the flag is passed |
+| Red-first anchors | Done | Every criterion re-derived on the tree at `80c2bb48` during synthesis, then **re-read at the landing after the rebase onto `31eafb60`** — twenty-seven commits that did touch `styles.css` and `view-config-panel-renderer.ts` but left the six toolbar-family source files byte-identical (`git diff --stat 80c2bb48 HEAD -- src/views/toolbar-renderer.ts …` is empty). Every anchor above holds at the landed SHA; the two that had drifted are corrected below |
+| Landing verification | Done | Twenty-eight anchors re-read on the rebased tree; two citations corrected, one criterion added (the conditional-colour row), `recommend-level.sh --loc 600 --files 10 --db` reproduced at 48/100 / 82% / phase 0/50 |
 | Implementation | Not started | No code touched by this packet |
 
 ### Deviations and findings
@@ -212,5 +231,7 @@ Everything below is VOLATILE.
 | **Three of the loop's citations did not survive the tree** | The files are unchanged since the loop read them, so this is the model approximating line numbers, not the tree moving. The zero-rule filter branch is at `filter-panel-renderer.ts:197-202`, not `:184-191`; leaf creation is `:90` and `:223`, not `:100-104`; the filter field dropdown is `:494-501`, not `:517-527`; the select/status value dropdown is `:576-590`, not `:672-690`; the sort field dropdown is `sort-panel-renderer.ts:199-206`, not `:158-168`; `renderGroupPopoverRow` is `toolbar-renderer.ts:1869-1887`, not `:1878-1896`. Every criterion above carries the verified anchor. |
 | **Two of the digest's own rows are answered or stale, and both are recorded** | Its §4 P3 row calls our settings surface "a popover/sheet" and the right-docked shape a difference — the desktop side sheet has since landed (`view-config-panel-renderer.ts` `presentPanel`, `surface-shell.ts:185`), so the shape conflict dissolved before this loop ran (ADR-008). And its §6 Q4 asks whether our control cluster carries a text label to collapse: `createControlClusterButton` (`toolbar-primitives.ts:186-220`) creates an icon, an optional badge and an `aria-label`, and no text node — so the answer is no, and the density comparison lives only on the New button (ADR-002). |
 | **The top-ranked task rests on an inference, and it is named as one** | REQ-001's severity argument is that a deleted view is unrecoverable. That is asserted from the absence of an undo affordance in the delete path, not from a read of the persistence layer. It is cheap to close and it is `spec.md` §10's `UNKNOWN` row until someone does. |
+| **Two citations drifted under the rebase, and both are corrected at the landed SHA** | This packet was written against `80c2bb48` and landed on top of twenty-seven further commits. Two of its anchors moved with them. The chip rail's hover tint is `styles.css:1832`, not `:1831` — `:1831` is the `:focus-within` selector line, and the off-by-one predates the rebase. And the `searchable` precedent in `view-config-panel-renderer.ts` is `:1558` for the one real pass-`true` site; the other two citations, `:2060` and `:2077`, were never pass sites at all — they are `renderSelect`'s `searchable` parameter and its pass-through, and the twenty-seven commits moved them to **`:2064`** and **`:2082`**. Both corrections are made in place rather than left for the leg that would trip on them. |
+| **The conditional-colour row is inherited, not discovered — and this packet had it filed as out of scope** | `spec.md` §3 listed conditional colour among the "Notion-only features … no our-side surface exists to change", which repeats the toolbar digest's own row for `142cef4e` ("Notion-only feature, no Anytype or our equivalent"). Both are wrong, and `062` ADR-003 had already corrected them before this packet was written: `applyConditionalFormat` ships (`conditional-formatting.ts:168-206`), and the operator ruled at 2026-09-06 18:32 — *"Yes, own row in view settings"* — routing the presentation work **here**. One further correction the tree forces on the inherited text: `062` ADR-003 says ours "lives in database settings", and it does not. `renderConditionalFormatting` is mounted in the **view** section (`view-config-panel-renderer.ts:405`, after the `viewConfig.viewSection` title at `:387`), and the rules are per-view — `ViewConfig.conditionalFormats` (`data/types.ts:593`), with the database-level field deprecated and migrated into views on read (`data/types.ts:427`, `data-source.ts:893-899`). So the work is the named summary row and the explainer, not a relocation. ADR-010, criterion 8, T014. |
 | **Two Notion pipelines were bound to `053`** | The table pipeline landed first and holds `notion-screens-digest.md` and `research/`; this one filed as `notion-screens-digest-toolbar.md` and `research/notion-toolbar/`. Nothing was overwritten and no landed citation broke, but the collision was invisible until a rebase refused the checkout. ADR-009 records it, and the research's §15 records the fix for the next run. |
 <!-- /ANCHOR:log -->

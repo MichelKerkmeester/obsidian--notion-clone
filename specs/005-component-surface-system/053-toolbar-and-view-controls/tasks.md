@@ -332,5 +332,8 @@ and stay unticked — an agent never ticks them.
       `064-notion-toolbar-refinement/` beside this packet. Its handoff criteria sequence it after any
       leg of this packet still in `toolbar-renderer.ts`, `filter-panel-renderer.ts`,
       `sort-panel-renderer.ts` or `active-view-controls-renderer.ts`, with the `styles.css` lane the
-      parent's; it is additive under parent D15 and restates none of this packet's rows
+      parent's; it is additive under parent D15 and restates none of this packet's rows. It also
+      carries one ruling that is not the loop's: `062` ADR-003, the operator's 2026-09-06 18:32
+      *"Yes, own row in view settings"* for conditional row colour, which routed to a `053` child
+      because the view-settings entry is this packet's. `064` ADR-010 holds it
 <!-- /ANCHOR:phase-7 -->

@@ -108,8 +108,8 @@ runs, the code waits.
       `a952e5e7` already searches at any count, and this leg touches none of that). Neither panel
       passes the flag today, so their phone-sheet presentations fall to the `searchable === true`
       default and render no search row at any count — that is the red. **Notion:** P4/P5,
-      `1067756c` / `82d66d47` / `86a8e66c`; the in-repo precedent: `view-config-panel-renderer.ts:1558`,
-      `:2060`, `:2077`. (F-203.) (`src/views/filter-panel-renderer.ts`, `src/views/sort-panel-renderer.ts`)
+      `1067756c` / `82d66d47` / `86a8e66c`; the in-repo precedent: `view-config-panel-renderer.ts:1558` (the one real pass-`true` site;
+      `:2064` and `:2082` are `renderSelect`'s parameter and its pass-through). (F-203.) (`src/views/filter-panel-renderer.ts`, `src/views/sort-panel-renderer.ts`)
 - [ ] T007 [P0] [B] Add one rung at the head of `applyToolbarChromeCollapse` (`toolbar-renderer.ts:2561`)
       that collapses the `:2365` label span before the `:2571` targets loop runs. The landed order
       — `[newCluster, query, props, add]` — is not reordered, and nothing behind the rung moves
@@ -122,7 +122,7 @@ runs, the code waits.
       `render()` (`active-view-controls-renderer.ts:60`), present exactly when at least one chip is
       visible — the zero-chip case is the control — wired to the existing
       `toggleFilterPanel` / `toggleSortPanel` (declared at `toolbar-renderer.ts:157`/`:167`), at the
-      landed 28px chip pitch (`styles.css:1821`) and the 11%/17% tints (`:1825`, `:1831`), carrying
+      landed 28px chip pitch (`styles.css:1821`) and the 11%/17% tints (`:1825`, `:1832`), carrying
       its own accessible name (NFR-A02). No second rail anatomy — `053`'s ADR-001 rail-extension
       ruling and ADR-006 here both pin the per-rule shape (F-205, F-207). Red first: the census in
       T002 = **0**. **Notion:** P2 `d8abbe0b`; Anytype's own T001 read records the same control —
@@ -136,7 +136,7 @@ runs, the code waits.
       toggle for select/status group fields, persisting into the existing axis with no second
       writer (the criterion), or REQ-006 closes Waived citing ADR-007 and the axis stays `059`'s.
       **Blocked on** the operator's answer to ADR-007. **Notion:** P7 `e9698e1b` (F-302).
-      (`src/views/toolbar-renderer.ts`, `src/types.ts` if the answer keeps the type here)
+      (`src/views/toolbar-renderer.ts`; `src/data/types.ts` only if the answer keeps the writer here — the field itself already exists at `:560`)
 - [ ] T010 [P1] [P] Verify the two record corrections REQ-007 carried at this packet's opening
       stand and were not absorbed: the digest's §4 P3 row is stale because the desktop side sheet
       landed after it was written (ADR-008), and the digest's §6 Q4 is answered — our control
@@ -145,6 +145,20 @@ runs, the code waits.
       against the citations they name and ticks nothing they would have to move. Runnable
       immediately and independent of every other leg.
       (`specs/005-component-surface-system/064-notion-toolbar-refinement/decision-record.md`)
+- [ ] T014 [P1] Give conditional row colour its own named view-settings row. Red first, and the
+      red is a count: `grep -c "this.renderAppliedSummary(" src/views/view-config-panel-renderer.ts`
+      = **3** today — Properties, Filters, Sorts, emitted by `renderAppliedSummaries` at
+      `:510-518` — and none of them is conditional colour, while the capability's only surface is
+      the inline `db-conditional-format-settings` block (`renderConditionalFormatting`, `:747`,
+      mounted in the **view** section at `:405`). Add a fourth summary row reading the count of
+      `config.conditionalFormats`, an explainer line in the panel's own `hintClass()` idiom
+      (`:569`, `:1688`), and a click that opens the existing `:747` section — **no second rule
+      editor** (CHK-013). **Negative control:** a chart view, whose `:405` guard mounts no section,
+      renders no row. **Not blocked:** this is `062` ADR-003, Accepted, ruled by the operator at
+      2026-09-06 18:32 — *"Yes, own row in view settings"*; ADR-010 records what the ruling
+      corrects, including that ours is already per-view and already in the view half of the panel,
+      so nothing relocates. **Notion:** `142cef4e`, listed in `ac0d576b`, `2517d4cf`, `9e80b489`,
+      `420dd630`. (`src/views/view-config-panel-renderer.ts`, `styles.css`)
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -211,7 +225,7 @@ runs, the code waits.
 <!-- ANCHOR:pre-impl -->
 ## Pre-Implementation
 
-- [x] CHK-001 [P0] Requirements documented in spec.md — REQ-001 through REQ-008
+- [x] CHK-001 [P0] Requirements documented in spec.md — REQ-001 through REQ-009
 - [x] CHK-002 [P0] Technical approach defined in plan.md — §3 and the affected-surfaces addendum
 - [ ] CHK-003 [P1] Dependencies identified and available — ADR-001, ADR-005 and ADR-007 are Proposed, so T004, T007 and T009 here are `[B]`; the proofs in Phase 1 are not
 <!-- /ANCHOR:pre-impl -->
@@ -234,7 +248,7 @@ runs, the code waits.
 
 - [ ] CHK-020 [P0] All acceptance criteria met, waived or superseded
 - [ ] CHK-021 [P0] Every red observed failing first, with its command and `$?`
-- [ ] CHK-022 [P1] The negative controls exercised: the one-rule panel byte-identical (AC-005), the 8-option case (AC-006), the zero-chip rail (AC-008), the one-view guard (AC-002)
+- [ ] CHK-022 [P1] The negative controls exercised: the one-rule panel byte-identical (AC-005), the 8-option case (AC-006), the zero-chip rail (AC-008), the one-view guard (AC-002), the chart view (AC-012)
 - [ ] CHK-023 [P1] The collapse sweep's readings proven non-vacuous by T001's no-cluster-hidden control
 <!-- /ANCHOR:testing -->
 
@@ -243,7 +257,7 @@ runs, the code waits.
 <!-- ANCHOR:fix-completeness -->
 ## Fix Completeness
 
-- [ ] CHK-FIX-001 [P0] Each finding carries a class: REQ-001 is `instance-only` × 2 call sites in one file, whose presentation rides the existing `044`/`048` lanes; REQ-002 is `instance-only` (one branch, the ≥1-rule panel its negative control); REQ-003 is `algorithmic` (the flag meeting a gate that already lives inside the primitive); REQ-005 is `instance-only`; REQ-006 is `cross-consumer` (one persisted axis, two candidate writers, which is why it is gated).
+- [ ] CHK-FIX-001 [P0] Each finding carries a class: REQ-001 is `instance-only` × 2 call sites in one file, whose presentation rides the existing `044`/`048` lanes; REQ-002 is `instance-only` (one branch, the ≥1-rule panel its negative control); REQ-003 is `algorithmic` (the flag meeting a gate that already lives inside the primitive); REQ-005 is `instance-only`; REQ-009 is `instance-only` (one summary block, the chart view its control); REQ-006 is `cross-consumer` (one persisted axis, two candidate writers, which is why it is gated).
 - [ ] CHK-FIX-002 [P0] Same-class producer inventory completed (T002's greps), or instance-only status proven by grep.
 - [ ] CHK-FIX-003 [P0] Consumer inventory completed for the changed markup — the registered captures named in T002, the collapse lane's readings, and the `sheet-grammar`/stacking lanes the confirm's phone presentation rides.
 - [ ] CHK-FIX-004 [P0] N/A — no security, path, parser or redaction surface in this packet. Recorded rather than silently dropped.
@@ -289,10 +303,10 @@ runs, the code waits.
 | Category | Total | Verified |
 |----------|-------|----------|
 | P0 Items | 9 | 0/9 |
-| P1 Items | 11 | 0/11 |
+| P1 Items | 12 | 0/12 |
 | P2 Items | 2 | 0/2 |
 
-**Verification Date**: 2026-09-06
+**Verification Date**: 2026-09-07
 <!-- /ANCHOR:summary -->
 
 ---
