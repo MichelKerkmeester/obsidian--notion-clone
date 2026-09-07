@@ -39,6 +39,12 @@ export interface SweepReading {
   propertiesClusterVisible: boolean;
   addTabVisible: boolean;
   tabRowIsDropdown: boolean;
+  /** The New button's text label — collapses to icon-only one rung ahead of the cluster ladder
+   *  below, so this reads false at widths where every cluster above is still visible. */
+  newLabelVisible: boolean;
+  /** The New button's accessible name, read straight off the DOM: the rung is visual only, so
+   *  this must hold steady across every width the label itself collapses at. */
+  newButtonAriaLabel: string | null;
   /** The gear: a permanent rail control, one more than this sweep counted before it existed.
    *  Never hidden by `applyToolbarChromeCollapse` — it sits in the utilities cluster beside
    *  "···", which the same collapse ladder already leaves alone at every width. */
@@ -120,6 +126,8 @@ export async function runToolbarCollapseSweep(host: HTMLElement, widths: number[
       addTabVisible: isVisible(toolbar.querySelector(".db-view-tab-add")),
       tabRowIsDropdown: Boolean(toolbar.querySelector(".db-view-tab-collapsed-trigger")),
       settingsButtonVisible: isVisible(toolbar.querySelector(".db-toolbar-settings-btn")),
+      newLabelVisible: isVisible(toolbar.querySelector(".db-new-button-label")),
+      newButtonAriaLabel: toolbar.querySelector(".db-new-button-primary")?.getAttribute("aria-label") ?? null,
     });
   }
   return readings;

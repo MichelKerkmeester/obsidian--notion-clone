@@ -150,6 +150,7 @@ function px(width) {
 }
 
 const switchPoints = {
+  newLabelDropsAt: firstDropWidth(readings, "newLabelVisible"),
   newClusterDropsAt: firstDropWidth(readings, "newClusterVisible"),
   queryClusterDropsAt: firstDropWidth(readings, "queryClusterVisible"),
   propertiesClusterDropsAt: firstDropWidth(readings, "propertiesClusterVisible"),
@@ -158,11 +159,45 @@ const switchPoints = {
 };
 
 console.log("\n=== embedded toolbar collapse ladder, 250px-900px sweep, 10px steps ===");
+console.log(`  New label drops at:         ${px(switchPoints.newLabelDropsAt)}`);
 console.log(`  New button drops at:        ${px(switchPoints.newClusterDropsAt)}`);
 console.log(`  Icon cluster (query) drops: ${px(switchPoints.queryClusterDropsAt)}`);
 console.log(`  Icon cluster (props) drops: ${px(switchPoints.propertiesClusterDropsAt)}`);
 console.log(`  Add-view "+" drops at:      ${px(switchPoints.addTabDropsAt)}`);
 console.log(`  Tab row becomes dropdown:   ${px(switchPoints.tabRowBecomesDropdownAt)}`);
+
+// The label rung sits ahead of the cluster ladder, so at no swept width may a
+// cluster already be hidden while the label still reads visible. Read across every row rather
+// than compare switch points alone, because the fixture's own ladder is not monotonic once the
+// tab strip re-competes for room at wider steps (the New cluster drops a second time past 710px
+// in this fixture, unrelated to this rung) — a single "first drop" comparison would miss a
+// violation hiding inside that non-monotonic tail.
+const clusterKeys = ["newClusterVisible", "queryClusterVisible", "propertiesClusterVisible", "addTabVisible"];
+const labelAheadViolations = readings.filter((r) => r.newLabelVisible && clusterKeys.some((key) => r[key] === false));
+if (labelAheadViolations.length > 0) {
+  console.error(`\ntoolbar-collapse-sweep: FAIL — the New label is still visible at ${labelAheadViolations.length} width(s) where a cluster is already hidden:`);
+  for (const r of labelAheadViolations.slice(0, 10)) {
+    console.error(`  - ${r.width}px`);
+  }
+  process.exit(1);
+}
+
+// The negative control: at a width where nothing collapses, the label must read present — a
+// probe that reported the label absent everywhere would pass the check above vacuously.
+const roomiest = readings.filter((r) => clusterKeys.every((key) => r[key] !== false));
+const vacuous = roomiest.length > 0 && roomiest.every((r) => !r.newLabelVisible);
+if (vacuous) {
+  console.error("\ntoolbar-collapse-sweep: FAIL — the label never reads present even where no cluster is hidden; the reading is vacuous.");
+  process.exit(1);
+}
+
+// NFR-A03: the rung is visual only. The button's own accessible name must survive every width,
+// whether the label is drawn or not.
+const ariaDrift = readings.filter((r) => r.newButtonAriaLabel !== readings[0].newButtonAriaLabel);
+if (ariaDrift.length > 0 || !readings[0].newButtonAriaLabel) {
+  console.error("\ntoolbar-collapse-sweep: FAIL — the New button's accessible name changed across the sweep or was never read.");
+  process.exit(1);
+}
 
 const belowFloorDropdownAt = widestDropdownWidth(belowFloorReadings);
 console.log("\n=== below the 250px floor, informational only — confirms the rung engages ===");

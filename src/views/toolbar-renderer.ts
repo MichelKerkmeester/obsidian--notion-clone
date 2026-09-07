@@ -2366,7 +2366,7 @@ export class ToolbarRenderer {
     // Touch surfaces get the icon alone: the button is a floating action button there, and a
     // text label makes it wide enough to cover the rows it floats over. The accessible name
     // is already on the button itself, so dropping the visible span costs nothing to a reader.
-    if (!isTouchDevice(this.toolbarRoot)) newBtn.createSpan({ text: label });
+    if (!isTouchDevice(this.toolbarRoot)) newBtn.createSpan({ cls: "db-new-button-label", text: label });
     setTooltip(newBtn, tooltip, { delay: 100 });
     const create = (template: NewRecordTemplateConfig | null | undefined) => {
       const position = actions.getCreateEntryPosition?.(this.newRecordPlacement);
@@ -2576,11 +2576,17 @@ export class ToolbarRenderer {
     const query = toolbar.querySelector<HTMLElement>(".db-toolbar-query-cluster");
     const props = toolbar.querySelector<HTMLElement>(".db-toolbar-properties-cluster");
     const add = toolbar.querySelector<HTMLElement>(".db-view-tab-add");
+    const newLabel = toolbar.querySelector<HTMLElement>(".db-new-button-label");
     const targets = [newCluster, query, props, add].filter((el): el is HTMLElement => Boolean(el));
     for (const el of targets) el.style.display = "";
+    if (newLabel) newLabel.style.display = "";
     this.restoreCollapsedTabStrip(toolbar);
     const naturalWidth = toolbar.scrollWidth;
     if (naturalWidth <= toolbar.clientWidth + 1) return;
+    // One rung ahead of the ladder below: the New button loses its word before the row loses a
+    // whole control. The button's own aria-label carries the accessible name regardless, so this
+    // step is visual only and the drop order after it is unmoved.
+    if (newLabel && toolbar.scrollWidth > toolbar.clientWidth + 1) newLabel.style.display = "none";
     for (const el of targets) {
       if (toolbar.scrollWidth <= toolbar.clientWidth + 1) break;
       el.style.display = "none";
