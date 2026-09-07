@@ -52,12 +52,6 @@ export function measureInteractiveBoxes({ selector, floor, enhanced, declared, r
   const rows = [];
   let seen = 0;
   for (const el of document.querySelectorAll(selector)) {
-    // A control behind an open sheet's scrim is covered rather than small: the page under a
-    // first sheet is deliberately pulled back and dimmed, and the scrim between the two blocks
-    // every pointer event from reaching it. Measuring its shrunken box against the floor would
-    // report a target no finger can reach in either direction — too small to tap, and also never
-    // offered a tap at all.
-    if (el.closest(".db-page-pulled-back")) continue;
     const rect = el.getBoundingClientRect();
     // A control with no box is not rendered on this surface; it is not a small target.
     if (rect.width === 0 || rect.height === 0) continue;
