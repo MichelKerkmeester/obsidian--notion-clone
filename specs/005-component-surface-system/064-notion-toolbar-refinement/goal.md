@@ -13,8 +13,8 @@ _memory:
     packet_pointer: "005-component-surface-system/064-notion-toolbar-refinement"
     last_updated_at: "2026-09-07T00:00:00Z"
     last_updated_by: "fold-064-rulings-session"
-    recent_action: "Folded three operator rulings (2026-09-07, Europe/Amsterdam) into ADR-001, ADR-005 and ADR-007"
-    next_safe_action: "Implement T004's two-branch read and T007's rung"
+    recent_action: "Landed the implementation and its verification; 7 of 8 criteria closed"
+    next_safe_action: "The operator's device sitting (T013), which rides 053 AC-111"
     blockers:
       - "styles.css edits are serialized by the parent's CSS lane"
       - "053 owns every file this packet edits and is sequenced ahead of it"
@@ -30,15 +30,16 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-064-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 88
     open_questions:
-      - "Is a deleted view recoverable by any existing undo path — the read ADR-005 requires before either of its branches is written"
+      - "T016's three gaps: three source-grep suites, the unphotographed chip-rail add control, and the 29x14 px toast action"
     answered_questions:
       - "Per-group visibility is 059's: boardHiddenGroups exists; the missing writer is 059's Groups panel"
       - "Our control cluster carries no text label; the density comparison lives only on the New button"
       - "The digest's P3 divergence row is stale: the desktop side sheet landed after it was written"
       - "ADR-001 and ADR-005 Accepted, ADR-007 Declined — ruled 2026-09-07 (Europe/Amsterdam)"
       - "Conditional row colour is ours already; its view-settings row routes here via 062 ADR-003"
+      - "A deleted view IS recoverable: deleteView already saves through recordConfigHistory, so ADR-005 took Branch B — no confirm, an Undo toast"
 ---
 # Goal: Notion Toolbar Refinement
 
@@ -128,11 +129,12 @@ never resolve them silently.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] **A view cannot be destroyed without a confirmation, on either path.** **Today: neither path
+- [x] **A view cannot be destroyed without a confirmation, on either path.** **Today: neither path
       confirms.** The all-views hub row pushes `run: () => actions.deleteView(index)`
       (`toolbar-renderer.ts:1180`) and the tab context menu `onClick: () => actions.deleteView(viewIndex)`
       (`:1330`); the host splices and saves (`database-view.ts:3445-3456`) with the last-view early
-      return at `:3447` as its only guard, and a grep for a confirm on either path returns nothing.
+      return at `:3447` as its only guard, and a grep for a confirm on either path returns nothing —
+      **recorded 0 confirms across 2 delete paths** before this leg.
       Done is, **in the branch ADR-005's persistence-layer read finds unrecoverable**: `051`'s
       confirm primitive (`confirm-sheet.ts:46`) raised on both paths, one-scope, naming the view;
       decline byte-identical to no action; accept deleting exactly one view; the phone presentation
@@ -140,8 +142,9 @@ never resolve them silently.
       instead. Notion basis: P9, `55602f6a` / `348fd2b7` — the two-scope radio half is **not**
       adopted, because our views own no data sources. **Ruled by ADR-005**, 2026-09-07
       (Europe/Amsterdam), verbatim *"Confirm only if unrecoverable"* — no longer gated.
-- [ ] **The first filter rule costs one click from an empty panel, and a panel that already holds a
-      rule is unchanged.** **Today: three clicks, and the empty state is a sentence.** The zero-rule
+- [x] **The first filter rule costs one click from an empty panel, and a panel that already holds a
+      rule is unchanged.** **Today: three clicks, and the empty state is a sentence — recorded 3 clicks
+      to the first rule, from a zero-rule branch that draws 1 element.** The zero-rule
       branch renders `db-panel-empty` and nothing else (`filter-panel-renderer.ts:197-202`); the
       first rule takes open-panel → open-field-dropdown → pick. Done is: a searchable property list
       in that branch, built from the `toPropertyDropdownOption` vocabulary already in the file
@@ -149,15 +152,15 @@ never resolve them silently.
       (`:223`), with a `+ Add advanced filter` footer into the tree — and a seeded one-rule panel
       rendering byte-identical before and after, which is the negative control. Notion basis: P4,
       `86a8e66c` / `8ff7ae4b` / `1f10ae24`. The builder is untouched (`053` D4).
-- [ ] **A long property list is searchable where a rule is edited.** **Today: `searchable` appears
+- [x] **A long property list is searchable where a rule is edited.** **Today: `searchable` appears
       zero times in either panel.** `grep -c searchable src/views/filter-panel-renderer.ts
-      src/views/sort-panel-renderer.ts` returns **0** and **0**, while the flag exists on
+      src/views/sort-panel-renderer.ts` **recorded 0** and **recorded 0**, while the flag exists on
       `createDropdownField` and is already passed elsewhere (`view-config-panel-renderer.ts:1558` (the one real pass-`true` site;
       `:2064` and `:2082` are `renderSelect`'s parameter and its pass-through)). Done is: the filter field dropdown (`filter-panel-renderer.ts:494-501`),
       the select/status value dropdown (`:576-590`) and the sort field dropdown
       (`sort-panel-renderer.ts:199-206`) rendering a search input above 8 options and not at 8, the
       gate owned inside the primitive. Notion basis: P4/P5, `1067756c` / `82d66d47` / `86a8e66c`.
-- [ ] **The New button's label collapses before any control is dropped.** **Today: the cluster goes
+- [x] **The New button's label collapses before any control is dropped.** **Today: the cluster goes
       first while the label is still drawn.** `applyToolbarChromeCollapse` hides whole clusters in
       the order `[newCluster, query, props, add]` (`toolbar-renderer.ts:2561`, targets at `:2571`)
       and the label span is created unconditionally off-touch at `:2365`. Done is: one rung at the
@@ -169,9 +172,9 @@ never resolve them silently.
       no-tab cases (`21d71e5f`, `795eb9b5`). **Ruled by ADR-001**, 2026-09-07 (Europe/Amsterdam),
       verbatim *"Yes, icons first then the drop order"* — the conflict with `053`'s `AC-012` is
       named and the drop order stands, unmoved, after the icon step.
-- [ ] **The chip rail can add the next rule from the rail.** **Today: it cannot.** `render()`
+- [x] **The chip rail can add the next rule from the rail.** **Today: it cannot.** `render()`
       (`active-view-controls-renderer.ts:60`) draws chips, a logic toggle and one rail-level button,
-      the clear-all at `:150`; `grep -rn "db-active-control-add" src/ styles.css` returns **0**.
+      the clear-all at `:150`; `grep -rn "db-active-control-add" src/ styles.css` **recorded 0**.
       Done is: one add control per rule group, wired to the existing `toggleFilterPanel` /
       `toggleSortPanel`, present exactly when at least one chip is visible, at the landed 28px chip
       pitch (`styles.css:1821`) and carrying its own accessible name. Notion basis: P2, `d8abbe0b`;
@@ -186,7 +189,7 @@ never resolve them silently.
       the seven corrections D1 requires: per-group visibility routed to `059` rather than built
       here, the
       conditional-colour reading `062` had already corrected, and five citation corrections.
-- [ ] **Conditional row colour has its own named view-settings row, with an explainer.** **Today:
+- [x] **Conditional row colour has its own named view-settings row, with an explainer.** **Today:
       the view-settings panel names three controls and not this one.** `renderAppliedSummaries`
       (`view-config-panel-renderer.ts:510-518`) emits exactly **three** `db-view-config-summary-row`
       rows — Properties, Filters, Sorts — and none of them is conditional colour; the capability's
@@ -226,7 +229,8 @@ Everything below is VOLATILE.
 | Red-first anchors | Done | Every criterion re-derived on the tree at `80c2bb48` during synthesis, then **re-read at the landing after the rebase onto `31eafb60`** — twenty-seven commits that did touch `styles.css` and `view-config-panel-renderer.ts` but left the six toolbar-family source files byte-identical (`git diff --stat 80c2bb48 HEAD -- src/views/toolbar-renderer.ts …` is empty). Every anchor above holds at the landed SHA; the two that had drifted are corrected below |
 | Landing verification | Done | Twenty-eight anchors re-read on the rebased tree; two citations corrected, one criterion added (the conditional-colour row), `recommend-level.sh --loc 600 --files 10 --db` reproduced at 48/100 / 82% / phase 0/50 |
 | Operator rulings on ADR-001, ADR-005, ADR-007 | Done | Ruled 2026-09-07 (Europe/Amsterdam); folded into `decision-record.md`, `spec.md`, `acceptance-criteria.md` and `tasks.md` the same day. ADR-001 and ADR-005 Accepted, ADR-007 Declined |
-| Implementation | Not started | No code touched by this packet |
+| Implementation | Done | Six commits: the collapse rung, the Undo toast in place of a confirm, the filter entry tier and its searchable dropdowns, the chip-rail add control, the conditional-colour row, and the re-derived evidence. `npm run gate` **26 green** |
+| Landing verification | Done | Rebased onto `origin/main` over twenty-seven commits; every `Met` row re-derived and mutation-tested one surface at a time; `sheet-rebuild`'s re-based check corrected and red-proved; one claim refuted (the selected tab is not restored by the Undo) and three gaps recorded. `tasks.md` T015 and T016 |
 
 ### Deviations and findings
 

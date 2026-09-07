@@ -168,13 +168,15 @@ its plan without a branch decision.
 |-------|--------|
 | `npx tsc --noEmit` | Exit **0** |
 | `npm run build` | Exit **0** (`main.js` regenerated) |
-| `npx vitest run` | Exit **0** — 146 files, 1557 tests |
+| `npx vitest run` | Exit **0** — **149 files, 1600 tests** on the rebased tree (146 / 1557 before it; the difference is main's own landings) |
 | `node tools/live/sheet-grammar.mjs` | Exit **0** |
 | `node tools/live/render-assertions.mjs` | Exit **0** |
 | `node tools/naming/scan-comments.mjs` | Exit **0** — no artifact ids, comment grammar intact |
 | `node tools/naming/scan-failing-values.mjs` | Exit **0** |
-| `npm run gate` | Exit **0** — **26 green, 0 red for a declared reason**, including `toolbar-collapse` (red in T001, green after T007) and `sheet-rebuild` (two scoped fixes, recorded in `tasks.md` T011) |
-| `npm run screenshots` + `npm run screenshots:verify` | Full recapture (588 entries); exit **0**. Zero captures carry this packet's content — 17 moved bytes at identical pixelHash/layoutHash (rerun jitter) and were restored to committed bytes |
+| `npm run gate` | Exit **0** — **26 green, 0 red for a declared reason**, read twice on the rebased tree; the first run was RED on `evidence` alone (8 of 15 artefacts still describing the pre-rebase tree) and was cleared by re-running each artefact's own tool. Includes `toolbar-collapse` (red in T001, green after T007) and `sheet-rebuild` (three scoped fixes, `tasks.md` T011) |
+| `npm run screenshots` + `npm run screenshots:verify` | Full recapture (**604 entries**) on the rebased tree; exit **0**. Zero captures carry this packet's content — **4** moved bytes at identical pixelHash/layoutHash (rerun jitter) and were restored to committed bytes, with the manifest's `bytes` fields reconciled to them |
+| Mutation testing, one per new surface | Every mutation red except one: the entry tier's per-row property binding survives its suite. `tasks.md` T015, gap in T016(a) |
+| Captures opened and read | `constructed-toolbar-{desktop,mobile}-{dark,light}` and `chrome-toast-success-{desktop,mobile}-{dark,light}` |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -191,16 +193,33 @@ its plan without a branch decision.
    Branch A never ships, so the criterion's own precondition is never reached. This is recorded as
    a supersession citing ADR-005 rather than a pass, so a later reader does not mistake "never
    applicable" for "verified."
-3. **The `sheet-rebuild` fix widens what counts as a legitimate resize.** The corrected check still
-   catches the documented failure mode (a replayed entrance reaching the viewport floor) but no
-   longer treats every downward movement as suspicious. This is a real loosening of a shared,
-   cross-packet regression lane, made because the old assumption was already false for a shipped
-   feature, not because the guard was in the way.
+3. **The `sheet-rebuild` re-basing was wrong once and is now measured.** The leg's first
+   correction tested for the viewport's own floor and did **not** catch the failure mode it named:
+   with the entrance replay reintroduced, the filter sheet bottomed out at 836 on an 844px screen,
+   because this sheet floats 8px off the bottom, so `>= 840` read the replay as held. The landed
+   check measures against the deeper of the two resting positions — the opening top and the
+   rebuilt top — which catches the replay (836 against a 626 floor) and still allows the
+   legitimate 100px content change (626 against the same floor). Both directions were observed;
+   `tasks.md` T011 carries the numbers. It is still a loosening of a shared, cross-packet lane
+   relative to the original downward-only rule, made because that rule was already false for a
+   shipped feature.
 4. **Engine-parity's Chrome/WebKit sub-pixel disagreements are pre-existing and unrelated.**
    Re-running `tools/live/engine-parity.mjs` to refresh its staleness stamp (a step `evidence.mjs`
    required once `styles.css` moved) surfaced 44 elements disagreeing across engines — none of them
    in a surface this packet touched (add-view-popover, dropdown-field, calendar widgets, the base
    import modal). Recorded rather than silently absorbed; not investigated further as out of scope.
+   `engine-parity` is not a `gate.mjs` row — only its artefact's freshness is gated — so its
+   non-zero exit does not enter the 26.
+5. **The Undo does not restore the selected tab.** Measured at the landing: deleting the selected
+   view and pressing the toast's Undo brings the view and its whole config back, and leaves the
+   selection on the neighbour the delete had moved it to. `recordConfigHistory` is handed a
+   `viewId` resolved after the splice, so the history entry names the surviving view. No criterion
+   claims otherwise and the resulting state is coherent, so this is recorded rather than fixed.
+6. **Three of this packet's five suites are source greps.** `filter-panel-renderer.test.ts`,
+   `sort-panel-renderer.test.ts` and `active-view-controls-renderer.test.ts` assert on the shipped
+   source rather than on rendered DOM, and one real defect passes them (see `tasks.md` T016(a)).
+   The chip-rail add control additionally has no capture, and `.db-toast-action` is a 29x14 px tap
+   target that nothing measures — T016(b) and T016(c).
 <!-- /ANCHOR:limitations -->
 
 ---

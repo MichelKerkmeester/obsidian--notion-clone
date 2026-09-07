@@ -299,7 +299,7 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       `tools/live/*.ts` is covered by neither `tsconfig.json` nor `lint:tools` (`053`'s recorded
       gate gap), so the sweep's evidence is the lane's own exit status, not the typecheck.
       **Evidence.** `npx tsc --noEmit` exit **0**. `npm run build` exit **0** (`main.js`
-      regenerated). `npx vitest run` exit **0**, 146 files / 1557 tests. `npm run gate` exit **0**,
+      regenerated). `npx vitest run` exit **0**, 149 files / **1600** tests on the rebased tree (146 files / 1557 tests before it; the difference is main's own landings, not this packet's). `npm run gate` exit **0**,
       **26 green, 0 red for a declared reason** — `toolbar-collapse` green, observed red in T001.
       Two lanes needed a fix to reach green, both scoped and recorded: `sheet-rebuild` (below), and
       `evidence` (all 15 stamped `tools/live/*.json` artefacts re-derived after `styles.css` and
@@ -315,31 +315,134 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       sheet's top edge legitimately settles lower after that one transition — the existing
       tolerance (`deepest <= settledTop + 4`) assumed adding a rule only ever grows the sheet, an
       assumption this feature breaks for exactly this one transition. Root-caused rather than
-      patched: `tools/live/sheet-rebuild.mjs`'s check now detects the actual historical failure
-      mode (a replayed entrance drops the panel's top edge to the viewport's own floor,
-      `deepest >= viewportHeight - 4`) instead of flagging any downward movement, which still
-      catches a genuine re-entrance (the pre-fix baseline this file documents dropped to 844 on an
-      844px screen — the full viewport) while correctly allowing a bounded, content-driven resize.
-      `node tools/live/sheet-rebuild.mjs` exit **0** after both fixes.
+      patched, then **corrected at the landing**: the leg's first formulation tested for the
+      viewport's own floor (`deepest >= viewportHeight - 4`), and the landing verification proved
+      that formulation does not catch the defect it was written for. Reintroducing the historical
+      failure — `playSheetEntrance` forced past its `is-visible` guard, so a rebuilt panel replays
+      its entrance — dropped the filter sheet to **836 on an 844px screen**, not to 844, because
+      this sheet **floats 8px off the bottom**; `>= 840` therefore reported the replay as held, and
+      the lane failed only through the neighbouring five-taps row. The check now measures against
+      the surface rather than the screen: the floor is the **deeper of the two resting positions**
+      — the opening top and the rebuilt top — so a shape change settles at one of them and a
+      replayed entrance drops below both. Read both ways at the landing. Green tree: the filter
+      sheet settles at 526, rebuilds to 626, deepest 626 → PASS, which is the legitimate 100px
+      content change. With the replay reintroduced: settles 526, rebuilds to 626, deepest 836 →
+      **FAIL on this row**, `node tools/live/sheet-rebuild.mjs` exit **1**. The same file's own
+      third control already subtracted the resting inset (`floor - restingBottom - 1`); this row
+      now does the equivalent. `node tools/live/sheet-rebuild.mjs` exit **0** on the green tree
+      after all three fixes.
 - [x] T012 [P0] Name every registered capture whose picture the landed legs moved, re-take it,
       open the image and read it, then release the parent's CSS lane naming what moved — the
       `screenshots-fresh` lane's pixelHash failures are the detector, and `screenshot-currency.md`
       §3 is the standard the read owes: the harness renders fixture markup, so a picture that
       changed and was not looked at is a read owed, not a pass. (`screenshots/`, `tools/lane/css-lane.json`)
-      **Evidence.** `npm run screenshots` (full recapture, 588 entries) then `npm run
-      screenshots:verify`. Zero captures carry this packet's content: every registered scenario in
+      **Evidence, re-derived at the landing on the rebased tree.** `npm run screenshots` (full
+      recapture, **604 entries**) then `npm run screenshots:verify`. Zero captures carry this packet's content: every registered scenario in
       `tools/screenshots/scenarios/*.mjs` builds its own static HTML fixture rather than mounting
       the real renderers this packet edited, and no new class this packet introduced
       (`db-active-control-add`, the reused `db-dropdown-search`/`db-dropdown-options`/
-      `db-view-config-row-clickable`) appears in any fixture. 17 captures moved bytes at identical
-      `pixelHash`/`layoutHash` (`styles.css`'s content hash changing invalidates every capture's
-      recorded source hash, and Chrome's own PNG encoder is not byte-reproducible run to run) and
-      were restored to their committed bytes with `git checkout HEAD --`; `manifest.json`'s
-      re-derived hashes were kept. `screenshots:verify` exit **0** — "588 entries match their
-      sources, and none is blank or identical across themes." `tools/lane/css-lane.json` released
-      at `styles.css` hash `906faaa13a08`, naming zero reviewed captures (there was nothing to
-      review) and recording the one-class CSS addition and the two reused-class components; `node
+      `db-view-config-row-clickable`) appears in any fixture. One capture does mount the
+      real chip-rail renderer — `constructed-active-view-controls`, through
+      `tools/live/render-assertion-harness.ts:3207` — and it is byte-identical, because that
+      harness supplies an actions bag with no `addFilter`/`addSort`; both are optional, so the add
+      control does not draw there. That is recorded as an open gap in T016 rather than as coverage.
+      **Four** captures moved bytes at identical `pixelHash`/`layoutHash` (`styles.css`'s content
+      hash changing invalidates every capture's recorded source hash, and Chrome's own PNG encoder
+      is not byte-reproducible run to run) — `constructed-cell-editor-select-desktop-dark`,
+      `board-view-desktop-dark`, `reference-gantt-subtask-mobile-light` and
+      `reference-kanban-subtask-mobile-dark` — and were restored to their committed bytes, with
+      `manifest.json`'s own `bytes` fields reconciled back to the restored files and its re-derived
+      source hashes kept. `screenshots:verify` exit **0** — "604 entries match their sources, and
+      none is blank or identical across themes." The four toolbar captures
+      (`constructed-toolbar-{desktop,mobile}-{dark,light}`) were opened and read: the desktop pair
+      still draws the New button's word at full width, so the rung is correctly inert there, and
+      the mobile pair is unchanged because the touch branch never creates the label span at all.
+      `tools/lane/css-lane.json` released at `styles.css` hash `6da9460cc5a9`, re-derived onto
+      `061`'s released stylesheet rather than `060`'s, naming zero reviewed captures; `node
       tools/lane/check-lane.mjs` exit **0**, "release names all 0 changed capture(s)".
+- [x] T015 [P0] **Landing verification (Opus).** Rebase onto `origin/main` (twenty-seven further
+      commits: `059`, `060`, `061`, `062`, `065`, `066`), re-derive every generated artefact, then
+      treat each of the implementation leg's claims as a hypothesis and test it. Three conflicts,
+      all resolved by intent keeping both landings: `database-view.test.ts` (main's board
+      group-visibility suite and this packet's delete-view suite both opened a section 4 — main's
+      keeps 4, this packet's is renumbered 5), `tools/lane/css-lane.json` (merged append-only,
+      re-derived onto `061`'s released stylesheet), and the generated evidence set (resolved to
+      main's side, then re-run by each owning tool).
+      **Mutation testing, one per new surface — every mutation observed red except where noted.**
+      Dropping `pendingUndoLabel = t("undo.deleteViewConfig")` fails the delete-view suite;
+      applying `entry.after` instead of `entry.before` on undo fails it on
+      `expected [Board] to have a length of 2`, so the restore assertion is load-bearing.
+      Reverting the entry tier to `db-panel-empty` fails `filter-panel-renderer.test.ts`; dropping
+      `searchable: true` fails `sort-panel-renderer.test.ts` (2 of 2); dropping the filter add
+      control, and separately its `aria-label`, each fail `active-view-controls-renderer.test.ts`;
+      dropping the conditional-colour row, its explainer line, and its `viewType !== "chart"`
+      guard each fail `view-config-panel-renderer.test.ts` on a different row, the last on the
+      chart negative control. Disabling the collapse rung while keeping the label class fails
+      `run-toolbar-collapse-sweep.mjs` with "the New label is still visible at 212 width(s) where
+      a cluster is already hidden" (exit 1); restoring main's whole `toolbar-renderer.ts` fails it
+      on the vacuity control instead. **One mutation survived and is recorded as a gap in T016.**
+      **The collapse rung, measured.** Swept 250-900px at 2px steps: the label is absent while
+      every cluster is still drawn across **456-486px** — a 32px band — and the rung buys the New
+      cluster **32px**, dropping it at 456px where the pre-rung tree dropped it at 488px. At the
+      four widths the landing brief named the ordering is not observable, because at all four the
+      cluster is already hidden: 390px and 402px are below the whole ladder, and 768px and 1024px
+      sit in this fixture's non-monotonic tail (the New cluster hides again from 716px up). That
+      tail is **pre-existing** — measured with the rung disabled and present there too — and is a
+      property of the fixture's natural width, not a regression from this rung.
+      `newButtonAriaLabel` reads `"New"` at every swept width.
+      **The combobox rule (`a952e5e7`) cannot be regressed by this leg**, and that is structural
+      rather than lucky: `dropdown-field.ts:276` reads
+      `phoneSheet ? options.searchable === true && options.options.length > 8 : true`, so on
+      desktop the flag is ignored and every dropdown is already a combobox. The three
+      `searchable: true` passes reach only the phone-sheet branch, which is what `AC-006` claims.
+      **Delete-view undo, driven through the real methods.** The toast is raised with
+      `notice.deletedView` interpolating `{name: "Table"}` and an action labelled `toolbar.undo`;
+      pressing that action restores both views and the deleted view's whole config (`viewType`,
+      `schema`, `sourceFolder`). **One part of the leg's report is refuted: the selected tab is
+      not restored.** With view index 1 selected and deleted, `currentViewIndex` reads 0 after the
+      delete and still 0 after the undo — the restored view is back in the strip but the selection
+      stays on the neighbour the delete moved it to. Measured with and without `id` fields on the
+      views, so it is not a fixture artefact: `recordConfigHistory` is handed the mutation's
+      `viewId`, which is resolved **after** the splice, so the entry names the surviving view. No
+      criterion here claims otherwise — `AC-001` asks only that the views come back — and the
+      state is coherent rather than broken, so this is recorded, not fixed.
+      **The toast's presentation, measured live in Chrome** at 390x844 and 1200x800, both themes.
+      Phone: the card sits at x=16 w=358 in a 390px viewport — 16px insets on both sides, so
+      `066`'s centred band applies to this toast as it does to every other. Desktop: the landed
+      384px card, right-anchored 12px in. The repository's own themed toast captures
+      (`chrome-toast-success-{desktop,mobile}-{dark,light}`) were opened: check glyph, message,
+      close control and an accent-coloured Undo, legible in both themes, and this packet's message
+      is far shorter than the one they photograph. **One measurement is a gap, recorded in T016:**
+      `.db-toast-action` renders 29x14 CSS px.
+      **Gate.** `npx tsc --noEmit` exit **0**; `npx vitest run` **1600/1600** across 149 files;
+      `npm run build` exit **0**; `node tools/naming/scan-comments.mjs` PASS over 495 files, 0
+      artifact-id violations; `npm run gate` exit **0** at **26 green, 0 red for a declared
+      reason**, read twice — the first run was RED on `evidence` alone (8 of 15 artefacts
+      describing the pre-rebase tree), which was cleared by re-running each artefact's own tool
+      rather than editing a number.
+- [x] T016 [P1] **Open gaps this landing recorded, neither blocking nor closed.** The row is
+      closed because naming them is its deliverable; each gap itself stays open, with an owner. Three, each with
+      an owner that is not this packet's remaining work.
+      **(a) Three of the five suites this packet adds are source greps, not behaviour.**
+      `filter-panel-renderer.test.ts`, `sort-panel-renderer.test.ts` and
+      `active-view-controls-renderer.test.ts` read the shipped source and assert on strings. Their
+      stated reason — that the `node` environment cannot mount Obsidian's DOM helpers — is
+      contradicted inside this same packet by `view-config-panel-renderer.test.ts`, which mounts
+      the real renderer on a hand-built tree and asks it real questions. The cost is measurable:
+      rewriting the entry tier so **every** property row creates its rule on the first property
+      (`addFirstLeaf(columns[0].key)` for `addFirstLeaf(col.key)`) leaves all seven
+      `filter-panel-renderer.test.ts` assertions green. That is a real defect no test here sees.
+      **(b) The chip rail's add control ships unphotographed and behaviourally untested.** No
+      registered capture draws it, because the one capture that mounts the real renderer supplies
+      no `addFilter`/`addSort`. Giving `render-assertion-harness.ts` those two actions would give
+      `REQ-005` real coverage and a picture — and would move four captures, so it needs a lane
+      acquire, a recapture and an operator read, which is why it is filed rather than done here.
+      **(c) `.db-toast-action` is a 29x14 px tap target on a phone.** `styles.css`'s
+      `.db-toast-action` sets `padding: 0` with no min-height, and `tools/live/touch-targets.json`
+      carries no `db-toast` entry, so nothing measures it. This packet's Undo rides that control,
+      which is what makes it worth naming here, but the control belongs to the toast's owner
+      (`051`/`066`) and `D5` says a shared primitive has one owner. Ctrl+Z and the toolbar's own
+      Undo action reach the same history entry, so the recovery path does not depend on it.
 - [ ] T013 [P0] **Operator row — never ticked by an agent.** The four device-only checks the loop
       named — icon-only rail discoverability on a phone, the entry tier inside the phone filter
       sheet, the delete confirm as a stacked sheet, and tabs against the view switcher both
@@ -471,7 +574,9 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
 
 Every `CHK-*` row above is closed. `T013` in the tasks list above is the one row still open —
 the operator's device sitting — and it is not one of the `CHK-*` verification items this table
-counts.
+counts. `T015` (landing verification) and `T016` (the three gaps that landing recorded) were added
+at the landing and are closed; the three gaps `T016` names are open with owners, and none of them
+blocks a criterion this packet can close.
 
 **Verification Date**: 2026-09-07
 <!-- /ANCHOR:summary -->
