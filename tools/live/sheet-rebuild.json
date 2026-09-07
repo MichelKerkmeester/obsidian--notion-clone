@@ -1,15 +1,15 @@
 {
-  "measuredAt": "2026-09-07T07:48:13.583Z",
+  "measuredAt": "2026-09-07T08:01:32.503Z",
   "inputs": {
     "tools/live/sheet-rebuild.mjs": "ff3f4850b7f4",
     "tools/live/sheet-rebuild-harness.ts": "896933a3454c",
     "src/views/toolbar-renderer.ts": "feca46093dfd",
     "src/views/popover-position.ts": "eea3b7cb22b9",
-    "src/views/mobile-bottom-sheet.ts": "0571368a658b",
+    "src/views/mobile-bottom-sheet.ts": "92f6f091173a",
     "src/views/sort-panel-renderer.ts": "d4e4a38bdd82",
     "src/views/filter-panel-renderer.ts": "6f265d0dd002",
     "src/views/view-config-panel-renderer.ts": "98ca8ca10597",
-    "src/views/overlay-stack.ts": "943698865bdb",
+    "src/views/overlay-stack.ts": "a071087814ea",
     "src/views/popover-auto-close.ts": "b81714513ff4"
   },
   "cases": 53,
@@ -89,7 +89,7 @@
     {
       "name": "settings sheet chrome survives its own scroll",
       "pass": true,
-      "detail": "the band held at 48px through a 200px scroll (48px at rest), and the header stayed put at 44px from the sheet's top edge",
+      "detail": "the band held at 47px through a 200px scroll (47px at rest), and the header stayed put at 43px from the sheet's top edge",
       "preFixFailure": "the grab band went from 48px to ZERO after a 200px scroll — the bar and the header scrolled off the top with the content"
     },
     {
@@ -131,7 +131,7 @@
     {
       "name": "the filter sheet holds still while it rebuilds",
       "pass": true,
-      "detail": "settled at top 526, rebuilt to 626; the deepest point during the rebuild was 626",
+      "detail": "settled at top 527, rebuilt to 627; the deepest point during the rebuild was 627",
       "preFixFailure": "settled at top 701 and the rebuild dropped it to 844 on an 844px screen"
     },
     {
@@ -143,7 +143,7 @@
     {
       "name": "a sheet that is genuinely opening still rises",
       "pass": true,
-      "detail": "the entrance still runs: first seen at 836 on a 844px screen (resting 8px off the floor), settled at 659",
+      "detail": "the entrance still runs: first seen at 836 on a 844px screen (resting 8px off the floor), settled at 660",
       "preFixFailure": null
     },
     {

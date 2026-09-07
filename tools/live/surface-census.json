@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-07T07:20:58.895Z",
+  "measuredAt": "2026-09-07T07:59:01.702Z",
   "inputs": {
-    "styles.css": "cd0beccfa123",
+    "styles.css": "4edd4f3da2ef",
     "tools/live/surface-census.mjs": "ea52a1e1e8f5",
     "src/views/surface-contract.ts": "ca203fa23a84",
     "src/views/record-detail-panel.ts": "b1bf1a174b87",
@@ -10,10 +10,10 @@
   },
   "totals": {
     "rendered": 86,
-    "buildable": 232,
+    "buildable": 233,
     "declared": 6,
     "renderedOnly": 0,
-    "buildableNotRendered": 146,
+    "buildableNotRendered": 147,
     "untokened": 0,
     "unroled": 86,
     "recordSurfaceHandBuilt": 0
@@ -1047,7 +1047,7 @@
       "mountParent": "db-view-config-panel",
       "tokens": true,
       "role": null,
-      "rect": "36x4",
+      "rect": "34x5",
       "scenarios": [
         "panel-view-config-sheet",
         "panel-record-detail-sheet",
@@ -1111,7 +1111,7 @@
       "mountParent": "note-database-container",
       "tokens": true,
       "role": null,
-      "rect": "1440x312",
+      "rect": "1440x311",
       "scenarios": [
         "panel-column-width-sheet"
       ]
@@ -1666,6 +1666,7 @@
     "db-filter-value-dropdown",
     "db-icon-picker-body",
     "db-icon-picker-empty",
+    "db-mobile-menu-card",
     "db-sheet-modal-header",
     "db-sheet-original-title",
     "db-sheet-card",

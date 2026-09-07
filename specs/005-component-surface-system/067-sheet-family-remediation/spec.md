@@ -46,7 +46,7 @@ serialized by the parent's CSS lane; ADR-004 is blocked on the operator.
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P0 |
-| **Status** | Draft |
+| **Status** | In Progress — landed on `main` 2026-09-07; 7 of 11 rows Met, AC-002 refuted and reopened, AC-007 and AC-010 partly closed, AC-011 the operator's |
 | **Created** | 2026-09-06 |
 | **Branch** | `worktrees/172-research-sheet-family` (documentation only; implementation legs get their own) |
 | **Parent Spec** | ../spec.md |

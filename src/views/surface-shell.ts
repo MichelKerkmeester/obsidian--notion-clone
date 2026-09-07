@@ -22,7 +22,7 @@
 import { setIcon } from "obsidian";
 import { t } from "../i18n";
 import { isTouchDevice } from "../data/touch-environment";
-import { attachSheetChromeToModal, createSheetHeader, type SheetHeaderHandle } from "./mobile-bottom-sheet";
+import { attachSheetChromeToModal, createSheetHeader, SHEET_SURFACE_CLASS, type SheetHeaderHandle } from "./mobile-bottom-sheet";
 import { keepSheetPlaced, placeSheet } from "./popover-position";
 import { overlayStack } from "./overlay-stack";
 
@@ -526,6 +526,13 @@ export function createSurfaceShell(options: SurfaceShellOptions): SurfaceShellHa
             })
           : undefined,
       });
+      // Absorbed rather than presented: the depth cap handed this element to a parent shell's own
+      // `replace`, and `applySheetChrome` took the sheet class back off to say so. Placing it
+      // anyway would pin the grafted body to the viewport as a fixed, full-bleed layer — the
+      // parent frame collapses behind it and the header this move just retitled goes off-screen —
+      // so the sheet class is read back as the one authority on whether this element is a sheet at
+      // all, rather than a second flag the two sides could disagree about.
+      if (!options.element.hasClass(SHEET_SURFACE_CLASS)) return;
       placeSheet(options.element);
       releasePlacement = keepSheetPlaced(options.element);
     },

@@ -139,7 +139,7 @@ never resolve them silently.
       affordance set from `design-trueup.md` row 26. Done is: no grab handle on a `menu`-role phone
       surface, the **44px close retained** (E1), and the parent treatment settled against the
       captures rather than chosen.
-- [ ] **The page under a first sheet is dimmed to the measured level, and no lane row is missing
+- [x] **The page under a first sheet is dimmed to the measured level, and no lane row is missing
       for it.** **Today: 0.75 of undimmed against a measured 0.519.** `.db-mobile-sheet-scrim` is
       `rgba(0,0,0,0.25)` (`styles.css:319`) against `0.519 / 0.520 / 0.505` luminance across three
       bands (`design-trueup.md` §2b, C3) — roughly half the measured strength. **The stacked-parent
@@ -151,14 +151,17 @@ never resolve them silently.
       Done is: 0.519 ± 0.02 on the page under a first sheet, 0.710 ± 0.02 held on the parent, a lane
       row on the computed alpha, and the `scale(0.96) translateY(4px)` cue dispositioned in
       `decision-record.md` rather than left design-inferred.
-- [ ] **Zero surfaces bypass the shell, and every shipping phone sheet is registered.** **Today:
-      three bypasses and three unregistered surfaces, and they are the same three.**
+- [x] **Zero surfaces bypass the shell, and every shipping phone sheet is registered.** **Today: 3
+      bypasses and 3 unregistered surfaces, and they are the same three.**
       `attachSheetChromeToModal` is called outside `surface-shell.ts` at `main.ts:3047`,
       `image-file-suggest-modal.ts:40` and `markdown-file-suggest-modal.ts:34`, each repeating the
       same `isTouchDevice` → chrome → `placeSheet` → `keepSheetPlaced` dance; none appears in
       `sheet-grammar.mjs`'s 14 registered surfaces. Done is: **0** direct call sites or a written
-      reason per survivor, and all three in the registered set.
-- [ ] **Every measured value has one source of truth, and a check fails when the stylesheet
+      reason per survivor, and all three in the registered set. **Closed 2026-09-07 at the landing:
+      3 -> 0** direct call sites (`rg -n "attachSheetChromeToModal\(" src --type ts` returns only
+      the definition itself), and all three suggest surfaces are registered and pass all eight
+      grammar columns live.
+- [x] **Every measured value has one source of truth, and a check fails when the stylesheet
       disagrees with it.** **Today: six declared constants with no consumer.** `SHELL_ENTER_MS =
       200`, `SHELL_EXIT_MS = 150`, `SHELL_PHONE_ROW_HEIGHT_PT = 50`,
       `SHELL_PHONE_HEADER_HEIGHT_PT = 70`, `SHELL_PRIMARY_ACTION_HEIGHT_PT = 50`,

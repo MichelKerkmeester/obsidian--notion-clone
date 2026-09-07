@@ -86,6 +86,14 @@ export interface SheetChromeOptions {
  * Idempotent: re-applying will not stack handles, and turning the sheet off removes the handle it
  * added rather than leaving an orphan behind.
  */
+/**
+ * The class that IS the sheet presentation — every fixed-position, height-capped, portalled rule
+ * the phone sheet has hangs off it. Exported because it is also the one honest answer to "did this
+ * element actually become a sheet?", which a caller downstream of `applySheetChrome` needs when the
+ * depth cap may have absorbed the element into another surface instead.
+ */
+export const SHEET_SURFACE_CLASS = "db-mobile-bottom-sheet";
+
 export function applySheetChrome(
   panel: HTMLElement,
   isSheet: boolean,
@@ -108,10 +116,10 @@ export function applySheetChrome(
   // to take it back off again. A panel the depth cap absorbs into its parent's own body
   // (`setSheetMount` returning `false`) never becomes an independent sheet, so that one case
   // reverses the class rather than never having applied it.
-  panel.toggleClass("db-mobile-bottom-sheet", isSheet);
+  panel.toggleClass(SHEET_SURFACE_CLASS, isSheet);
   const stayedIndependent = setSheetMount(panel, isSheet, options);
   if (isSheet && !stayedIndependent) {
-    panel.removeClass("db-mobile-bottom-sheet");
+    panel.removeClass(SHEET_SURFACE_CLASS);
     return false;
   }
   const existingHandle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");

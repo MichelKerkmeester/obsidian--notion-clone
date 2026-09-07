@@ -39,7 +39,7 @@
       "fuzzy"
     ],
     "importance_tier": "important",
-    "status": "draft",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -52,13 +52,14 @@
       "src/views/surface-shell.ts",
       "src/views/mobile-bottom-sheet.ts",
       "src/views/popover-host.ts",
-      "src/views/modals/db-modal.ts",
+      "src/views/confirm-sheet.ts",
       "src/main.ts",
       "src/views/image-file-suggest-modal.ts",
       "src/views/markdown-file-suggest-modal.ts",
-      "src/views/confirm-sheet.ts",
+      "src/views/modals/csv-markdown-export-modal.ts",
+      "src/settings.ts",
       "tools/live/sheet-grammar.mjs",
-      "tools/screenshots/constructed-scenarios.mjs",
+      "src/views/overlay-stack.test.ts",
       "tools/storybook/verify-placement.mjs"
     ],
     "entities": [
@@ -129,9 +130,9 @@
         "source": "derived"
       },
       {
-        "name": "db-modal.ts",
+        "name": "confirm-sheet.ts",
         "kind": "code",
-        "path": "src/views/modals/db-modal.ts",
+        "path": "src/views/confirm-sheet.ts",
         "source": "derived"
       },
       {
@@ -153,9 +154,15 @@
         "source": "derived"
       },
       {
-        "name": "confirm-sheet.ts",
+        "name": "csv-markdown-export-modal.ts",
         "kind": "code",
-        "path": "src/views/confirm-sheet.ts",
+        "path": "src/views/modals/csv-markdown-export-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "settings.ts",
+        "kind": "code",
+        "path": "src/settings.ts",
         "source": "derived"
       },
       {
@@ -165,9 +172,9 @@
         "source": "derived"
       },
       {
-        "name": "constructed-scenarios.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "name": "overlay-stack.test.ts",
+        "kind": "test",
+        "path": "src/views/overlay-stack.test.ts",
         "source": "derived"
       },
       {
@@ -199,17 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Parent Spec",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The family reads as one surface set until you measure it",
     "created_at": "2026-09-06T15:02:09Z",
-    "last_save_at": "2026-09-07T04:46:11.505Z",
+    "last_save_at": "2026-09-07T07:49:52.399Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:cbd76af8230cb5f65dfca94b7b5b116b4f2a777332e5cb6b2e7741be9208e32a",
+    "source_fingerprint": "sha256:a542b476c0d48607c26d701534a30c089bbf8789e4200edf33ac641165a63ea1",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "bb92164537e8d88f73d985c6a2f9b96a6bfb95ba08f6c326da962dbdb71740ed",
+      "spec.md": "e45029c2cd69f0c7cafc1ffc364a3291c9f66aae3765b1d34396322a8d3b2d40",
       "plan.md": "78821cc220bcb362b54e1d6fc531d8aa50f7691dc7694cecabb13554e55a8e1a",
-      "tasks.md": "13e477f202fdee0983ff43575ced1220eada53ba04fc8cff33d4ccb4815e2959",
-      "decision-record.md": "c69828d1432d9b68ae05c3faf08b153e3b659f6fda4964fd775868064a6847b6",
-      "implementation-summary.md": "f3702daba4ee1893931dfa7262f22b9e97de8abdcbe3a040f8bc22ca0a9659a7"
+      "tasks.md": "a2670ea0a228ec752376e9cf3fcbbc785a6a6328f0eb215cd671e3075cf622d6",
+      "decision-record.md": "974f05a8e00da095aa5ac32152c2e3bd52ee44e94711c7ec148cd7738f8999d4",
+      "implementation-summary.md": "c18f855a72ad041d45c6c47e30a3ea9ea582907eb3c9975f7660c58b4d135f37"
     },
     "last_active_at": null
   }

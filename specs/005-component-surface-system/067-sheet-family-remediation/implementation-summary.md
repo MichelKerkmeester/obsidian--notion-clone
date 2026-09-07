@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Sheet Family Remediation"
-description: "Nothing has been implemented. This records the packet opening, the level and phase arithmetic behind it, and what the first leg will have to show."
+description: "What the sheet-family remediation landed on main, what landing verification confirmed by measurement, what it refuted, and what stays open."
 trigger_phrases:
   - "implementation summary"
   - "what shipped"
@@ -11,10 +11,10 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/067-sheet-family-remediation"
-    last_updated_at: "2026-09-06T15:02:10Z"
-    last_updated_by: "opus-synthesis-session"
-    recent_action: "Opened the packet from the sheet family research synthesis; no code touched"
-    next_safe_action: "Run Leg 1 — settle ADR-002 parent clause, record the scrim baseline and the handle contrast"
+    last_updated_at: "2026-09-07T09:50:00Z"
+    last_updated_by: "landing-verifier"
+    recent_action: "Landed on main; gate 26/26, T006 refuted at landing"
+    next_safe_action: "Repair T006 with its positioning half, then T015, T020, T021"
     blockers:
       - "T008 and ADR-004 are the operator's, carried from 051 T010"
       - "T023 is the operator's device read"
@@ -25,12 +25,13 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-067-impl"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 43
     open_questions:
-      - "Dimmed or undimmed parent under a stacked menu"
-      - "The FuzzySuggest disposition"
+      - "How the menu card should sit once it survives the placement pass: anchored or docked"
     answered_questions:
       - "The commit-id discrepancy the research flagged is not one: be578988, 772b24d2 and e632a1e1 are three commits with three roles"
+      - "Dimmed parent under a stacked menu, per the operator's 2026-09-07 Notion ruling (ADR-002)"
+      - "The FuzzySuggest disposition: route through the shell (ADR-004), landed with 0 call sites left"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
 # Implementation Summary
@@ -46,7 +47,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 067-sheet-family-remediation |
-| **Completed** | Implemented, not device-verified — T020, T021, AC-007's header-block clause and AC-011 remain open |
+| **Completed** | Landed on `main` 2026-09-07, not device-verified — T006 (refuted at landing), T020, T021, AC-007's header-block clause and AC-011 remain open |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -55,8 +56,7 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-The depth cap and its replace producer (T004-T005), the `menu`-role handle-less card and its own
-scrim band (T006), the page-under-sheet scrim raised to the measured band with the stacked-parent
+The depth cap and its replace producer (T004-T005), the page-under-sheet scrim raised to the measured band with the stacked-parent
 band held unchanged (T007), all three `FuzzySuggestModal` surfaces routed through
 `createSurfaceShell` and registered in the lane (T008-T010), the declared-constants-to-stylesheet
 bridge for the motion band (T011-T012), the phone row-pitch floor (T013), the corrected handle
@@ -64,7 +64,11 @@ geometry (T014), primary-action-pill and header-chip producers (T015, partial), 
 titles with one surviving scrape chain (T016), the re-derived gap cap (T017), a declared height
 role (T018), and focus restoration wired for sheet dismissal (T019).
 
-**Not built**: the header-block margin re-tune (T015's third clause — left red to avoid
+**Not built**: the `menu`-role handle-less card (T006 — the class and its two guards are in the
+tree and correct in isolation, but `setSheetMount` strips the class on the placement pass, so no
+production `menu`-family surface is handle-less and only `owned-menu` reaches the menu dim band;
+reopened at landing and paired with the anchored-vs-docked positioning for one follow-up change),
+the header-block margin re-tune (T015's third clause — left red to avoid
 reintroducing a documented close/grab-band touch-target regression), the replace-pair capture
 scenarios (T020), the divider-inset audit (T021), and the `scale(0.96)` extension to the
 first-sheet page ADR-003 describes (a selector-scoping risk, named in that ADR rather than forced).
@@ -75,9 +79,9 @@ AC-011 is the operator's device read and is untouched.
 | File | Action | Purpose |
 |------|--------|---------|
 | `src/views/overlay-stack.ts` | Modified | The depth cap in `register`, scoped to sheets via an opt-in `replace` callback; a focus-restoration anchor |
-| `src/views/surface-shell.ts` | Modified | The sub-page replace producer (`attemptReplace`), `menu`/`panel`/`condition panel` role wiring into chrome, a header-chip producer |
+| `src/views/surface-shell.ts` | Modified | The sub-page replace producer (`attemptReplace`), `menu`/`panel`/`condition panel` role wiring into chrome, a header-chip producer, and the landing repair that stops an absorbed panel being placed as its own sheet |
 | `src/views/mobile-bottom-sheet.ts` | Modified | Handle geometry unchanged in code (styles.css owns the numbers), `SheetChromeOptions.heightRole`/`.menuCard`/`.replace`, three-band scrim-alpha selection, focus-restoration anchor capture, the depth-cap short-circuit in `setSheetMount`/`applySheetChrome` |
-| `src/views/popover-host.ts` | Modified | `mountPickerSheetHeader` marks its callers `db-mobile-menu-card` and strips the handle |
+| `src/views/popover-host.ts` | Modified | `mountPickerSheetHeader` marks its callers `db-mobile-menu-card` and strips the handle — landed, but `setSheetMount`'s own toggle strips the class again on the placement pass that follows, so it has no effect today (T006, reopened) |
 | `src/views/confirm-sheet.ts` | Modified | `buildPrimaryActionPill` producer |
 | `src/main.ts`, `src/views/image-file-suggest-modal.ts`, `src/views/markdown-file-suggest-modal.ts` | Modified | Route through `createSurfaceShell`; the double-title scrape removed as a side effect |
 | `src/views/modals/csv-markdown-export-modal.ts`, `src/settings.ts` | Modified | Declared title/role, closing two of the three T016 survivors |
@@ -130,12 +134,14 @@ re-encodes falls under `screenshots/project-manager/`).
 | Red-first anchors verified against the tree at `6b16b87a` | PASS — every P0 and P1 threshold confirmed failing by direct read, `file:line` in `acceptance-criteria.md`, before its fix landed |
 | `npx tsc --noEmit` | PASS — exit 0 |
 | `npm run build` | PASS — exit 0 |
-| `npx vitest run` | PASS — 1537/1537 tests, 143/143 files |
+| `npx vitest run` | PASS — 1603/1603 tests, 149/149 files, on the rebased tree |
 | `node tools/live/sheet-grammar.mjs` | PASS — exit 0, including the new depth-cap, scrim-alpha (page + menu), motion-band + motion-exit-band, row-pitch and handle-geometry rows and their negative controls, plus all three registered FuzzySuggest surfaces on all 8 grammar columns |
 | `node tools/live/render-assertions.mjs` | PASS — exit 0 |
 | `node tools/naming/scan-comments.mjs` | PASS — exit 0, no artifact-id violations |
 | `node tools/naming/scan-failing-values.mjs` | PASS — exit 0 |
-| `npm run gate` (foreground, exit read from `$?`) | **PASS — 26/26 lanes green**, 0 red for a declared reason. Two lanes needed real follow-up work beyond the code change itself: `screenshots-fresh` (a full recapture, 73 real content changes reviewed and named, 32 byte-only re-encodes restored to their committed bytes) and `css-lane` (handed over from `063-notion-dropdown-refinement` to this phase, in `tools/lane/css-lane.json`'s own history). `sheet-teardown` and `verify-placement` briefly regressed during implementation (a deferred scrim-removal attempt broke synchronous-teardown assumptions in both) and were fixed by reverting the deferral, not by loosening either check |
+| Landing verification at 402px, through the shipped modules | The depth cap holds (2 sheets before and after a three-deep `panel` chain, content grafted, title swapped, back control shown and reversible; a `dialog` chain still stacks to 3) — but the absorbed panel was still being placed as its own sheet, **repaired here**. Scrim measured off decoded PNGs: page under a first sheet **0.521 light / 0.533 dark**, stacked parent **0.7065 dark / 0.7580 light** against **0.7074 / 0.7575** on the pre-packet tree. Handle 34.0x5.0 at a 6.0 drop; close 44x44; phone row pitch 48px against the 44px floor. T006 **refuted**: no production `menu`-family surface carries `db-mobile-menu-card` or loses its handle |
+| Mutation testing, one per new surface | The three depth-cap unit tests go red when the cap's threshold moves (`>= 2` -> `>= 3`); the scrim-alpha, menu-scrim-alpha, motion-band, motion-exit-band, row-pitch and handle-geometry lane rows each go red when their own stylesheet value is mutated; the two new depth-cap geometry assertions go red when the placement guard is removed, while the four structural ones stay green |
+| `npm run gate` (foreground, exit read from `$?`) | **PASS — 26/26 lanes green**, 0 red for a declared reason. Two lanes needed real follow-up work beyond the code change itself: `screenshots-fresh` (a full recapture on the rebased tree, 604 entries; 21 real content changes reviewed and named, 22 byte-only re-encodes restored to their committed bytes) and `css-lane` (handed over from `063-notion-dropdown-refinement` to this phase, in `tools/lane/css-lane.json`'s own history). `sheet-teardown` and `verify-placement` briefly regressed during implementation (a deferred scrim-removal attempt broke synchronous-teardown assumptions in both) and were fixed by reverting the deferral, not by loosening either check |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -150,11 +156,21 @@ re-encodes falls under `screenshots/project-manager/`).
    still assert their pre-existing stack shape; both hops in that harness are synthetic stand-ins,
    not the real production call graph, so retargeting them was judged higher-risk than adding a
    dedicated, real-`createSurfaceShell` depth-cap check (which exists and passes).
-3. **T006's anchored-vs-docked positioning is not implemented.** ADR-002 describes a `menu`-role
-   card anchored to its trigger rather than docked full-width to the bottom edge; that geometry
-   change lives in `popover-position.ts`, outside this packet's declared file scope, and AC-002's
-   own Verification cell does not require it. The handle-less card and its own dim band are built
-   and verified; the positioning shape is unchanged.
+3. **T006 does not reach a production surface, and its positioning half was never started.** The
+   `db-mobile-menu-card` class, `applySheetChrome`'s rebuild guard and `setScrim`'s third alpha band
+   are all in the tree and correct in isolation, but `setSheetMount` re-runs
+   `panel.toggleClass("db-mobile-menu-card", Boolean(options.menuCard))` on the placement pass that
+   follows `mountPickerSheetHeader`, with `menuCard` undefined for every caller that arrives that
+   way — so the class is stripped and the handle grows back. Measured at 402px: `owned-menu`, the
+   icon picker, the date-value picker and the option colour picker all still carry the 34x5pt handle
+   and none carries the class; only `owned-menu` reaches the 0.61 dim band, and it does so through
+   its own pre-existing `role="menu"` ARIA attribute. The lane's `menu scrim alpha` row is green on
+   a synthetic `createSurfaceShell({ role: "menu" })` mount and **no `DbModal` subclass declares
+   that role**, so it proves the branch rather than the surface. Left unrepaired at landing on
+   purpose: making four surfaces handle-less and moving three of them to a stronger dim is a visible
+   change whose other half — ADR-002's anchored-vs-docked geometry, which lives in
+   `popover-position.ts` — is already deferred, and the two should land together in front of the
+   operator rather than one at a time.
 4. **ADR-003's `scale(0.96)` extension to the first-sheet page is not implemented.** The selector
    that would apply it to the workspace view root (not the sheet itself, not every `.note-database-
    container`) was not identified without risking an unverified, broad visual change. Named here

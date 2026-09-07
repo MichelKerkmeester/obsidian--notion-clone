@@ -1021,6 +1021,15 @@ window.__shellDepthCapReplace = () => {
   childShell.apply();
 
   const afterSheets = document.querySelectorAll(".db-mobile-bottom-sheet").length;
+  // Where the grafted body actually LANDS, not just where the DOM says it is. An absorbed panel
+  // that the shell still placed keeps placeSheet's own inline position:fixed/left:0/right:0, so it
+  // paints as a full-bleed layer over the parent it was grafted into while every structural fact
+  // above still reads green -- the parent frame collapses behind it and the header this move just
+  // retitled leaves the screen. Read as computed position plus containment inside the parent's own
+  // rect, because those are the two things a reader of the surface would notice.
+  const childStyle = getComputedStyle(child.modalEl);
+  const childRect = child.modalEl.getBoundingClientRect();
+  const parentRect = parent.modalEl.getBoundingClientRect();
   const result = {
     beforeSheets,
     afterSheets,
@@ -1028,6 +1037,13 @@ window.__shellDepthCapReplace = () => {
     parentHasBack: Boolean(parent.modalEl.querySelector(".db-shell-back")),
     childBecameSheet: child.modalEl.classList.contains("db-mobile-bottom-sheet"),
     childGraftedIntoParent: parent.modalEl.contains(child.modalEl),
+    childPosition: childStyle.position,
+    childInsideParentRect: childRect.left >= parentRect.left - 0.5
+      && childRect.right <= parentRect.right + 0.5
+      && childRect.top >= parentRect.top - 0.5
+      && childRect.bottom <= parentRect.bottom + 0.5,
+    childRect: { left: childRect.left, right: childRect.right, top: childRect.top, bottom: childRect.bottom },
+    parentRect: { left: parentRect.left, right: parentRect.right, top: parentRect.top, bottom: parentRect.bottom },
   };
 
   childShell.destroy();
@@ -2427,6 +2443,12 @@ try {
     console.log(`  ${grafted ? "PASS" : "FAIL"}  the child's content was grafted into the parent`);
     console.log(`  ${titleSwapped ? "PASS" : "FAIL"}  the parent header title swapped to "${depthCapReplace.parentHeaderTitle}"`);
     console.log(`  ${backShown ? "PASS" : "FAIL"}  a back control appeared on the parent`);
+    const notPlaced = depthCapReplace.childPosition !== "fixed";
+    const contained = depthCapReplace.childInsideParentRect === true;
+    if (!notPlaced) failures.push(`depth cap: the grafted body computes position: ${depthCapReplace.childPosition} — it was still placed as its own sheet`);
+    if (!contained) failures.push(`depth cap: the grafted body ${JSON.stringify(depthCapReplace.childRect)} does not sit inside the parent frame ${JSON.stringify(depthCapReplace.parentRect)}`);
+    console.log(`  ${notPlaced ? "PASS" : "FAIL"}  the grafted body is not positioned as a sheet (position: ${depthCapReplace.childPosition})`);
+    console.log(`  ${contained ? "PASS" : "FAIL"}  the grafted body sits inside the parent frame`);
   }
   console.log("");
 
