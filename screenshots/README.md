@@ -31,7 +31,7 @@ Sources: `src/data/title-field-display.ts`, `src/views/board-renderer.ts`, `src/
 
 ### Board view — drag and drop-target language
 
-A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (db-kanban-drop-target), and the dragged card keeps the dragstart lift (db-kanban-card--dragging) — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.
+A frozen mid-drag frame, reordering a card inside its own column: the cards container carries the class its own dragover listener adds (obnotion-kanban-drop-target), and the dragged card keeps the dragstart lift (obnotion-kanban-card--dragging) — the same classes the drag handlers add on dragover/dragenter, applied without a live pointer. The reference reorders live by moving the dragged card's own element ahead of or behind its neighbour on dragover, not by drawing a separate before/after insertion line, so the third card here is an ordinary neighbour rather than a distinct hovered state.
 
 | dark | light |
 |---|---|
@@ -71,7 +71,7 @@ Sources: `src/views/active-rule-popover-renderer.ts`, `src/views/filter-panel-re
 
 ### Active rule popover — sort
 
-The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.
+The sort variant adds obnotion-sort-panel and drops the drag handle and reorder buttons the full panel shows.
 
 | dark | light |
 |---|---|
@@ -91,7 +91,7 @@ Sources: `src/views/active-view-controls-renderer.ts`
 
 ### Chart view — empty state
 
-Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body. The card inside .db-chart-empty is the shared EmptyStateRenderer markup, not chart's own retired db-chart-empty-* vocabulary; chart-renderer.ts maps its six reasons onto the nearest shared reason for the title only, and always supplies its own message.
+Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body. The card inside .obnotion-chart-empty is the shared EmptyStateRenderer markup, not chart's own retired obnotion-chart-empty-* vocabulary; chart-renderer.ts maps its six reasons onto the nearest shared reason for the title only, and always supplies its own message.
 
 | dark | light |
 |---|---|
@@ -131,7 +131,7 @@ Sources: `src/views/group-label-renderer.ts`, `src/views/table-renderer.ts`, `sr
 
 ### Owned menu — the shell every context menu uses
 
-Deliberately not wrapped in note-database-container: this menu mounts on document.body, so a fixture that wrapped it would photograph a surface the plugin never ships. Chromed from Obsidian's own menu variables so it matches the app's real menus and follows a theme that restyles them.
+Deliberately not wrapped in obnotion-container: this menu mounts on document.body, so a fixture that wrapped it would photograph a surface the plugin never ships. Chromed from Obsidian's own menu variables so it matches the app's real menus and follows a theme that restyles them.
 
 | dark | light |
 |---|---|
@@ -211,7 +211,7 @@ Sources: `src/views/toast.ts`
 
 ### Toast — success, with an Undo action
 
-The shared feedback surface `showToast` builds, raised here exactly as the gallery-migration notice raises it: success severity, paired with the check glyph rather than colour alone, and an Undo action. Not wrapped in `note-database-container`: this stack mounts on `doc.body`, so a fixture that wrapped it would photograph a surface the plugin never ships.
+The shared feedback surface `showToast` builds, raised here exactly as the gallery-migration notice raises it: success severity, paired with the check glyph rather than colour alone, and an Undo action. Not wrapped in `obnotion-container`: this stack mounts on `doc.body`, so a fixture that wrapped it would photograph a surface the plugin never ships.
 
 | dark | light |
 |---|---|
@@ -241,7 +241,7 @@ Sources: `src/views/toolbar-renderer.ts`
 
 ### More-tools dropdown
 
-The toolbar's overflow menu. Rows come from the shared createMenuRow but carry db-toolbar-menu-row, whose own inline padding is what the heading is aligned to.
+The toolbar's overflow menu. Rows come from the shared createMenuRow but carry obnotion-toolbar-menu-row, whose own inline padding is what the heading is aligned to.
 
 | dark | light |
 |---|---|
@@ -593,7 +593,7 @@ Sources: `src/views/icon-picker-popover.ts`, `tools/bench/table-render-bench.ts`
 
 ### Number display styles (constructed)
 
-renderRating, renderProgress and renderProgressRing's own entries, one style per row including the tinted variants that paint through the db-num-color-* classes.
+renderRating, renderProgress and renderProgressRing's own entries, one style per row including the tinted variants that paint through the obnotion-num-color-* classes.
 
 | dark | light |
 |---|---|
@@ -653,7 +653,7 @@ Sources: `src/views/cell-renderer.ts`, `src/views/record-surface/cell-editor-opt
 
 ### Text cell in edit state
 
-Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.
+Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with obnotion-cell-editing (the accent inset); the single-line one marks its cell with obnotion-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.
 
 | dark | light |
 |---|---|
@@ -703,7 +703,7 @@ Sources: `src/views/icon-picker-popover.ts`, `src/views/record-icon-renderer.ts`
 
 ### Number display styles
 
-Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.
+Rating, progress bar and progress ring all tint through obnotion-num-color-*, which sets --obnotion-number-color. Half slots are the accent overlay clipped to 50%.
 
 | dark | light |
 |---|---|
@@ -723,7 +723,7 @@ Sources: `src/views/option-color-picker.ts`, `src/views/popover-host.ts`, `style
 
 ### Record icon
 
-The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.
+The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries obnotion-record-icon-color-*; an emoji token renders through obnotion-record-icon-emoji.
 
 | dark | light |
 |---|---|
@@ -861,7 +861,7 @@ ConfirmModal's own onOpen, mounted the same way: the real buildConfirmSheetBody 
 |---|---|
 | ![constructed-modal-sheet-confirm dark](notion-clone/panels/constructed-modal-sheet-confirm-mobile-dark.png) | ![constructed-modal-sheet-confirm light](notion-clone/panels/constructed-modal-sheet-confirm-mobile-light.png) |
 
-Sources: `src/views/modals/db-modal.ts`, `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/modals/confirm-modal.ts`, `src/views/confirm-sheet.ts`
+Sources: `src/views/modals/obnotion-modal.ts`, `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/modals/confirm-modal.ts`, `src/views/confirm-sheet.ts`
 
 ### Confirm sheet, stacked over the Properties sheet (constructed)
 
@@ -871,7 +871,7 @@ The same real ConfirmModal, stacked over the column-manager sheet — the operat
 |---|---|
 | ![constructed-modal-sheet-confirm-stacked dark](notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-dark.png) | ![constructed-modal-sheet-confirm-stacked light](notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-light.png) |
 
-Sources: `src/views/modals/db-modal.ts`, `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/modals/confirm-modal.ts`, `src/views/confirm-sheet.ts`, `src/views/column-manager-renderer.ts`, `tools/bench/table-render-bench.ts`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
+Sources: `src/views/modals/obnotion-modal.ts`, `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/modals/confirm-modal.ts`, `src/views/confirm-sheet.ts`, `src/views/column-manager-renderer.ts`, `tools/bench/table-render-bench.ts`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
 
 ### Edit property sheet — a DbModal presented as a phone sheet (constructed)
 
@@ -881,7 +881,7 @@ ColumnRenameModal's own onOpen ("Edit property — Month"), invoked on an instan
 |---|---|
 | ![constructed-modal-sheet-property-editor dark](notion-clone/panels/constructed-modal-sheet-property-editor-mobile-dark.png) | ![constructed-modal-sheet-property-editor light](notion-clone/panels/constructed-modal-sheet-property-editor-mobile-light.png) |
 
-Sources: `src/views/modals/db-modal.ts`, `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/modals/column-rename-modal.ts`
+Sources: `src/views/modals/obnotion-modal.ts`, `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/modals/column-rename-modal.ts`
 
 ### Edit property sheet, stacked over the Properties sheet (constructed)
 
@@ -891,7 +891,7 @@ The same real ColumnRenameModal, opened over a mounted column-manager sheet — 
 |---|---|
 | ![constructed-modal-sheet-property-editor-stacked dark](notion-clone/panels/constructed-modal-sheet-property-editor-stacked-mobile-dark.png) | ![constructed-modal-sheet-property-editor-stacked light](notion-clone/panels/constructed-modal-sheet-property-editor-stacked-mobile-light.png) |
 
-Sources: `src/views/modals/db-modal.ts`, `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/modals/column-rename-modal.ts`, `src/views/column-manager-renderer.ts`, `tools/bench/table-render-bench.ts`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
+Sources: `src/views/modals/obnotion-modal.ts`, `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/modals/column-rename-modal.ts`, `src/views/column-manager-renderer.ts`, `tools/bench/table-render-bench.ts`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
 
 ### Record detail panel (constructed)
 
@@ -1005,7 +1005,7 @@ Sources: `src/views/column-manager-renderer.ts`, `src/views/property-type-icon.t
 
 ### Column width adjuster — mobile bottom sheet
 
-The adjuster mounts through the shared sheet host (applySheetChrome, placeSheet, attachSheetDragToDismiss) with the same panel-family body every other sheet in this file uses: db-panel-header with a db-cell-edit-close close button, a db-panel-row holding the shared db-view-config-range/db-view-config-number slider-and-value, and a second db-panel-row holding the db-new-placement preset group. No explicit width is set, so Auto is the selected preset and the field shows the column's fallback width.
+The adjuster mounts through the shared sheet host (applySheetChrome, placeSheet, attachSheetDragToDismiss) with the same panel-family body every other sheet in this file uses: obnotion-panel-header with a obnotion-cell-edit-close close button, a obnotion-panel-row holding the shared obnotion-view-config-range/obnotion-view-config-number slider-and-value, and a second obnotion-panel-row holding the obnotion-new-placement preset group. No explicit width is set, so Auto is the selected preset and the field shows the column's fallback width.
 
 | dark | light |
 |---|---|
@@ -1045,7 +1045,7 @@ Sources: `src/views/record-detail-panel.ts`, `src/views/card-field-renderer.ts`,
 
 ### Record detail — mobile bottom sheet
 
-The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.
+The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing obnotion-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.
 
 | dark | light |
 |---|---|
@@ -1055,7 +1055,7 @@ Sources: `src/views/record-detail-panel.ts`, `src/views/popover-position.ts`, `s
 
 ### Record detail — note body being typed
 
-Tapping the rendered body swaps it for a textarea. The box grows to its content rather than scrolling inside itself, because the sheet is already a scroll container. What a capture cannot show is the software keyboard: the sheet lifts and shortens against --db-keyboard-inset only when one is open, and no capture has one, so this is the editor at an inset of zero. Focus and the keyboard-avoided sheet are device-verified.
+Tapping the rendered body swaps it for a textarea. The box grows to its content rather than scrolling inside itself, because the sheet is already a scroll container. What a capture cannot show is the software keyboard: the sheet lifts and shortens against --obnotion-keyboard-inset only when one is open, and no capture has one, so this is the editor at an inset of zero. Focus and the keyboard-avoided sheet are device-verified.
 
 | dark | light |
 |---|---|
@@ -1145,7 +1145,7 @@ Sources: `src/views/view-config-panel-renderer.ts`, `src/views/dropdown-field.ts
 
 ### Settings — mobile bottom sheet
 
-The phone form of the settings panel: a grab handle, a header with a permanent db-sheet-close button (the drag band alone was reported as an unusable sole dismissal on a form this long), and a body that scrolls under the fixed header. Every row is `.db-panel-row` and every hint `.db-panel-hint` — the same wrapper classes the sort, filter and column-width sheets already draw — and the computed-sync choice is the shared `.db-new-placement` segmented group rather than the desktop's card-radio pair. The two switches are the shared checkbox, not the desktop's `.db-toggle-switch`. Conditional formatting and status presets sit further down and are not in frame.
+The phone form of the settings panel: a grab handle, a header with a permanent obnotion-sheet-close button (the drag band alone was reported as an unusable sole dismissal on a form this long), and a body that scrolls under the fixed header. Every row is `.obnotion-panel-row` and every hint `.obnotion-panel-hint` — the same wrapper classes the sort, filter and column-width sheets already draw — and the computed-sync choice is the shared `.obnotion-new-placement` segmented group rather than the desktop's card-radio pair. The two switches are the shared checkbox, not the desktop's `.obnotion-toggle-switch`. Conditional formatting and status presets sit further down and are not in frame.
 
 | dark | light |
 |---|---|
@@ -1255,7 +1255,7 @@ Sources: `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts`, `src
 
 ### Calendar empty state — no date property
 
-renderEmpty() returns before .db-calendar is ever created, so the card lands as a direct child of .note-database-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .db-calendar descendant, or it never applies.
+renderEmpty() returns before .obnotion-calendar is ever created, so the card lands as a direct child of .obnotion-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .obnotion-calendar descendant, or it never applies.
 
 | dark | light |
 |---|---|
@@ -1505,7 +1505,7 @@ Sources: `src/views/table-renderer.ts`, `src/views/table-column-layout-sync.ts`,
 
 ### Table with vertical grid lines off
 
-The Show vertical lines view switch off: db-no-vertical-lines on the table removes every td/th right border, and nothing else — row backgrounds, the bottom border and conditional-format tints are unaffected.
+The Show vertical lines view switch off: obnotion-no-vertical-lines on the table removes every td/th right border, and nothing else — row backgrounds, the bottom border and conditional-format tints are unaffected.
 
 | dark | light |
 |---|---|
@@ -1533,7 +1533,7 @@ Sources: `src/data/column-types.ts`, `src/views/cell-renderer.ts`, `src/views/in
 
 ### Table wrap on — the same markdown column wraps
 
-The same column and the same source values with the switch on: db-cell-wrap sets white-space: normal, so the long sentence takes a second line and the value's own line breaks render as real line breaks again. The phone renders this identically now.
+The same column and the same source values with the switch on: obnotion-cell-wrap sets white-space: normal, so the long sentence takes a second line and the value's own line breaks render as real line breaks again. The phone renders this identically now.
 
 | dark | light |
 |---|---|
