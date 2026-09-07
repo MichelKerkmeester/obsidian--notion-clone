@@ -124,7 +124,8 @@ and by supplying `addFilter`/`addSort` in `render-assertion-harness.ts`'s own ac
 29x14 `.db-toast-action` tap target is raised to a 44px phone floor (`styles.css`, `.is-phone
 .db-toast-action`) with a matching `RAISED` entry in `tools/live/touch-targets.mjs`; and AC-001's
 recorded gap — undo not restoring the selected tab — is fixed in `deleteView` (`database-view.ts`).
-`npx tsc --noEmit`, `npm run build` and `npx vitest run` (149 files / **1602** tests) all exit
+`npx tsc --noEmit`, `npm run build` and `npx vitest run` (149 files / **1602** tests, **1609**
+on the follow-up landing's rebased tree — the four added are main's own) all exit
 **0**, and `npm run gate` exits **0** at **26 green, 0 red for a declared reason** — including
 `toolbar-collapse` (observed red in T001, green after T007) and `sheet-rebuild` (three scoped
 fixes recorded in `tasks.md` T011, the third one made at the landing after the leg's own

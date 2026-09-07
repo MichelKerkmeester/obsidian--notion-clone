@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-07T08:14:40.622Z",
+  "measuredAt": "2026-09-07T08:31:58.034Z",
   "inputs": {
-    "styles.css": "775de2bcac81",
+    "styles.css": "acd49f23b031",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "eea3b7cb22b9"
   },
@@ -141,8 +141,8 @@
     "src/views/confirm-sheet.ts:87  .db-modal-help",
     "src/views/database-view.ts:3161  .db-group-order-popover",
     "src/views/database-view.ts:3275  .db-panel-button",
-    "src/views/database-view.ts:7134  .db-calendar-search-results-popover",
-    "src/views/database-view.ts:12097  .db-dropdown-popover",
+    "src/views/database-view.ts:7139  .db-calendar-search-results-popover",
+    "src/views/database-view.ts:12102  .db-dropdown-popover",
     "src/views/date-value-picker.ts:145  .db-cell-edit-popover",
     "src/views/date-value-picker.ts:232  .db-calendar-mini-popover",
     "src/views/dropdown-field.ts:164  .db-dropdown-field-text",

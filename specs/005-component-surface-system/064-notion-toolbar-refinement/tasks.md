@@ -491,6 +491,40 @@ REQ-006 closes Waived rather than being built. No task below carries `[B]` any l
       tools/lane/check-lane.mjs` exit **0**, "release names all 4 changed capture(s)". `node
       tools/live/touch-targets.mjs` exit **0**. Ctrl+Z and the toolbar's own Undo action still
       reach the same history entry regardless, so the recovery path never depended on this fix.
+- [x] T017 [P0] **Landing verification of the T015/T016 follow-up (Opus).** Rebased
+      `worktrees/212-toolbar-followups` onto `origin/main` twice — first at `6ca4a5c3` (nine
+      commits: `061`, `062`, `063`, `065` and their evidence re-derivations), then at `173f7d3a`
+      after `067-sheet-family-remediation` landed and took the css-lane between the first gate and
+      the push. Both passes conflicted only in generated evidence: `main.js`, `screenshots/manifest.json` and fifteen `tools/live/*.json`
+      artefacts were resolved to main's side and re-derived by their own tools, and
+      `tools/lane/css-lane.json` was merged append-only — main's `065`/`063`/`067` entries kept in
+      order, this packet's `edit`/`release` re-stamped at the merged stylesheet's own hash
+      (`49e78c56ab73` after the second pass) with a fresh `acquire` naming the handover from `063`, and the
+      branch-local harness-only release folded into the release rather than replayed against a
+      hash the tree no longer holds. `styles.css` itself merged without conflict. Every claim of
+      the follow-up was re-tested on the rebased tree by applying its own named mutation:
+      `addFirstLeaf(columns[0].key)` fails `filter-panel-renderer.test.ts` with `expected
+      'file.name' to be 'colB'`; dropping `searchable: true` from the sort field dropdown fails
+      `sort-panel-renderer.test.ts` twice; breaking `appendAddButton`'s `onAdd(add)` fails
+      `active-view-controls-renderer.test.ts` twice; removing `addFilter`/`addSort` from
+      `render-assertion-harness.ts`'s bag fails `render-assertions.mjs` on both chip-rail
+      scenarios (`0 add control(s), want 1`, exit **1**); reverting the `.is-phone
+      .db-toast-action` rule fails `touch-targets.mjs` with `30x15, under its named 44px floor`
+      (exit **1**), and reverting the RAISED entry as well returns the fixture ceiling to **186**;
+      reverting `deleteView`'s `viewId` override fails `database-view.test.ts` with `expected +0 to
+      be 1`. All four changed captures were opened and read. A live measurement at the capture
+      corpus's own phone width (402px, coarse pointer, `is-phone`) reads `.db-toast-action` at
+      **45.08 x 45.08** with the fix and **30.23 x 14.7** without it, the text's own range box
+      unchanged at **30.23 x 14.7** in both — the hit box grew, the glyph did not. `npx tsc
+      --noEmit` exit **0**; `npx vitest run` exit **0**, **149 files / 1609 tests** (1602 before
+      the rebase, 1606 after the first pass; every added case is main's own); `npm run build` exit
+      **0**; `npm run screenshots` **606 entries** with `screenshots:verify` exit **0**, and the
+      captures that moved bytes at unchanged `pixelHash` restored to their committed bytes (four
+      after the first pass, seventeen after the second — only this packet's own four ever moved
+      content); `node tools/lane/check-lane.mjs` exit **0**, "release names all 4
+      changed capture(s)"; `npm run gate` exit **0**, **26 green, 0 red for a declared reason** on both
+      passes, after the stale evidence artefacts each run named (eight, then twelve) were
+      re-derived by their own tools. Packet validation `RESULT: PASSED`, 0 errors 0 warnings.
 - [ ] T013 [P0] **Operator row — never ticked by an agent.** The four device-only checks the loop
       named — icon-only rail discoverability on a phone, the entry tier inside the phone filter
       sheet, the delete confirm as a stacked sheet, and tabs against the view switcher both
@@ -625,7 +659,8 @@ the operator's device sitting — and it is not one of the `CHK-*` verification 
 counts. `T015` (landing verification) and `T016` (the three gaps that landing recorded) were added
 at the landing and are closed; a follow-up has since closed all three gaps `T016` named and the
 undo-selection gap `T015` recorded — none of them ever blocked a criterion this packet could close,
-and none is open any longer.
+and none is open any longer. `T017` is that follow-up's own landing verification, added on the
+rebase onto `6ca4a5c3` and closed there; like `T015` and `T016` it is not a `CHK-*` row.
 
 **Verification Date**: 2026-09-07
 <!-- /ANCHOR:summary -->

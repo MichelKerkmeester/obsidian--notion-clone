@@ -210,7 +210,7 @@
     ],
     "causal_summary": "A five-iteration Notion research loop read 104 captures against this surface and found that twelve",
     "created_at": "2026-09-06T16:50:17Z",
-    "last_save_at": "2026-09-07T07:45:09.121Z",
+    "last_save_at": "2026-09-07T08:27:16.611Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b9578a831a7cb5b8044f3e53830522ba3fc195f7010d61573bf2311a4593a634",
+    "source_fingerprint": "sha256:ad3801010a76a33bad0aa5e39b56c9f2d97f5fba4378498e00a5ce0f3dd385aa",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "38f5daee416ff4819faa1b6d71b3b99b90e33e4700ca3b7a0b1b5c8d56c3ba05",
       "plan.md": "f1a18ecbb545c6fefe11837c7675961a4a7893c62a2a767186518e5717e18f33",
-      "tasks.md": "0ca5db256aec3dce8ee4975b46634ef43569bd3d0a284e040670811726a9d7e0",
+      "tasks.md": "0206b2e24b29809c82c5b8dc677f92fd806d484f034217fed0868a64e1e5c674",
       "decision-record.md": "63eee2521088a8dfee30ecc7f058cb28cf452a5690ea1bc4a4919729a0007e7f",
-      "implementation-summary.md": "cef56f8ff81a07b4ac8d1063f7ba6003e156426305c19fd3d13a60c0e29eb90e"
+      "implementation-summary.md": "dea99a998a8a6ef20cd96bf2441507ea1cfa519fec4c8c99342d8c72df779a6b"
     },
     "last_active_at": null
   }

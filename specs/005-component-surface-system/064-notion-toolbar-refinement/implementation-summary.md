@@ -171,10 +171,10 @@ its plan without a branch decision.
 |-------|--------|
 | `npx tsc --noEmit` | Exit **0** |
 | `npm run build` | Exit **0** (`main.js` regenerated) |
-| `npx vitest run` | Exit **0** — **149 files, 1600 tests** on the rebased tree (146 / 1557 before it; the difference is main's own landings). Follow-up: **1602 tests** (2 new cases: the `addFirstLeaf`-mutant click test, the undo-selection test) |
+| `npx vitest run` | Exit **0** — **149 files, 1600 tests** on the rebased tree (146 / 1557 before it; the difference is main's own landings). Follow-up: **1602 tests** (2 new cases: the `addFirstLeaf`-mutant click test, the undo-selection test). Follow-up landing: **1606 tests** rebased onto `6ca4a5c3`, **1609** rebased again onto `173f7d3a` — every added case is main's own |
 | `node tools/live/sheet-grammar.mjs` | Exit **0** |
 | `node tools/live/render-assertions.mjs` | Exit **0**. Follow-up: still exit **0** with `chipRailAssertions`'s new add-control check |
-| `node tools/live/touch-targets.mjs` | Follow-up: Exit **0** — fixture baseline 185 (was 186), constructed baseline 810 (unchanged); red-proved by reverting the `.db-toast-action` CSS alone (`30x15, under its named 44px floor`) |
+| `node tools/live/touch-targets.mjs` | Follow-up: Exit **0** — fixture baseline 185 (was 186), constructed baseline 810 (unchanged; **807** on the follow-up landing's merged tree, lowered by main's own landings and re-pinned by them, not here); red-proved by reverting the `.db-toast-action` CSS alone (`30x15, under its named 44px floor`) |
 | `node tools/naming/scan-comments.mjs` | Exit **0** — no artifact ids, comment grammar intact |
 | `node tools/naming/scan-failing-values.mjs` | Exit **0** |
 | `npm run gate` | Exit **0** — **26 green, 0 red for a declared reason**, read twice on the rebased tree; the first run was RED on `evidence` alone (8 of 15 artefacts still describing the pre-rebase tree) and was cleared by re-running each artefact's own tool. Includes `toolbar-collapse` (red in T001, green after T007) and `sheet-rebuild` (three scoped fixes, `tasks.md` T011). Follow-up: read again after the `.db-toast-action` `styles.css` edit moved its hash — RED on `evidence` alone again (8 of 15 artefacts, the same 8 that read `styles.css` as an input), cleared the same way; **26 green** on the re-run |
