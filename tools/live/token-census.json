@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-07T05:19:34.065Z",
+  "measuredAt": "2026-09-07T06:20:27.870Z",
   "inputs": {
-    "styles.css": "c5352cae3eff",
+    "styles.css": "6da9460cc5a9",
     "tools/live/token-census.mjs": "f20e5a646c11"
   },
   "tokenRoots": [

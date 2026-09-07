@@ -4871,7 +4871,7 @@
       "at": "2026-09-07T06:10:00.000Z",
       "hash": "6da9460cc5a9",
       "reviewed": [],
-      "note": "PLACEHOLDER_RELEASE_NOTE"
+      "note": "Full recapture on the rebased tree (npm run screenshots, 604 entries), screenshots:verify exit 0. Zero captures carry this edit's content: the one new selector (db-active-control-add) is additive-only and no registered scenario exercises it — the constructed chip-rail capture mounts the real renderer with an actions bag that supplies no addFilter/addSort, so the control does not draw there and the four constructed-active-view-controls pictures are byte-identical. The four toolbar captures (constructed-toolbar-{desktop,mobile}-{dark,light}) were opened and read: the desktop pair still draws the New button's word at full width, so the collapse rung is correctly inert there, and the mobile pair is unchanged because the touch branch never creates the label span. Four captures moved bytes at identical pixelHash and layoutHash under the rerun nondeterminism check-lane.mjs already documents (constructed-cell-editor-select-desktop-dark, board-view-desktop-dark, reference-gantt-subtask-mobile-light, reference-kanban-subtask-mobile-dark) and were restored to their committed bytes, with the manifest's own bytes fields reconciled back to the restored files."
     }
   ],
   "outstanding": [

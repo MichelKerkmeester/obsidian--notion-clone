@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-07T05:19:24.445Z",
+  "measuredAt": "2026-09-07T06:20:17.165Z",
   "inputs": {
-    "styles.css": "c5352cae3eff",
+    "styles.css": "6da9460cc5a9",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "eea3b7cb22b9"
   },
@@ -9,7 +9,7 @@
     {
       "name": "contract scan — surfaces created without a declared role",
       "enforced": false,
-      "value": 159,
+      "value": 162,
       "target": 0,
       "note": "counted, not gated: gating today would fail on known debt",
       "gated": false,
@@ -27,7 +27,7 @@
     {
       "name": "reachability — buildable surfaces no fixture renders",
       "enforced": false,
-      "value": 145,
+      "value": 146,
       "target": 0,
       "note": "nothing photographs or measures these, so nothing would notice if they broke",
       "gated": false,
@@ -139,10 +139,10 @@
     "src/views/column-width.ts:379  .db-panel-row",
     "src/views/column-width.ts:403  .db-panel-row",
     "src/views/confirm-sheet.ts:58  .db-modal-help",
-    "src/views/database-view.ts:3159  .db-group-order-popover",
-    "src/views/database-view.ts:3273  .db-panel-button",
-    "src/views/database-view.ts:7109  .db-calendar-search-results-popover",
-    "src/views/database-view.ts:12072  .db-dropdown-popover",
+    "src/views/database-view.ts:3161  .db-group-order-popover",
+    "src/views/database-view.ts:3275  .db-panel-button",
+    "src/views/database-view.ts:7128  .db-calendar-search-results-popover",
+    "src/views/database-view.ts:12091  .db-dropdown-popover",
     "src/views/date-value-picker.ts:140  .db-cell-edit-popover",
     "src/views/date-value-picker.ts:227  .db-calendar-mini-popover",
     "src/views/dropdown-field.ts:164  .db-dropdown-field-text",
@@ -153,12 +153,15 @@
     "src/views/embedded-database-renderer.ts:1395  .db-calendar-search-results-popover",
     "src/views/embedded-database-renderer.ts:3096  .db-group-order-popover",
     "src/views/embedded-database-renderer.ts:3212  .db-panel-button",
-    "src/views/filter-panel-renderer.ts:176  .db-filter-panel",
-    "src/views/filter-panel-renderer.ts:198  .db-panel-empty",
-    "src/views/filter-panel-renderer.ts:218  .db-panel-button",
-    "src/views/filter-panel-renderer.ts:268  .db-panel-header-actions",
-    "src/views/filter-panel-renderer.ts:269  .db-panel-button",
-    "src/views/filter-panel-renderer.ts:544  .db-panel-button",
+    "src/views/filter-panel-renderer.ts:177  .db-filter-panel",
+    "src/views/filter-panel-renderer.ts:214  .db-panel-button",
+    "src/views/filter-panel-renderer.ts:245  .db-panel-empty",
+    "src/views/filter-panel-renderer.ts:252  .db-dropdown-search",
+    "src/views/filter-panel-renderer.ts:256  .db-dropdown-options",
+    "src/views/filter-panel-renderer.ts:279  .db-panel-button",
+    "src/views/filter-panel-renderer.ts:327  .db-panel-header-actions",
+    "src/views/filter-panel-renderer.ts:328  .db-panel-button",
+    "src/views/filter-panel-renderer.ts:604  .db-panel-button",
     "src/views/icon-picker-popover.ts:65  .db-icon-picker-popover",
     "src/views/icon-picker-popover.ts:122  .db-icon-picker-header",
     "src/views/icon-picker-popover.ts:123  .db-icon-picker-tabs",
@@ -236,7 +239,7 @@
     "src/views/sort-panel-renderer.ts:124  .db-panel-hint",
     "src/views/sort-panel-renderer.ts:129  .db-panel-empty",
     "src/views/sort-panel-renderer.ts:134  .db-panel-button",
-    "src/views/sort-panel-renderer.ts:237  .db-panel-button",
+    "src/views/sort-panel-renderer.ts:238  .db-panel-button",
     "src/views/toolbar-renderer.ts:615  .db-database-popover",
     "src/views/toolbar-renderer.ts:700  .db-database-popover-select",
     "src/views/toolbar-renderer.ts:1368  .db-panel-row",
@@ -256,6 +259,6 @@
     "src/views/toolbar-renderer.ts:2530  .db-menu-item",
     "src/views/view-config-panel-renderer.ts:355  .db-view-config-panel",
     "src/views/view-config-panel-renderer.ts:392  .db-panel-button",
-    "src/views/view-config-panel-renderer.ts:1536  .db-dropdown-field"
+    "src/views/view-config-panel-renderer.ts:1562  .db-dropdown-field"
   ]
 }
