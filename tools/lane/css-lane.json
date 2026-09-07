@@ -1,7 +1,7 @@
 {
-  "holder": "061-notion-sheet-refinement",
+  "holder": "064-notion-toolbar-refinement",
   "acquiredAt": "2026-09-07T05:17:27.000Z",
-  "baselineHash": "c5352cae3eff",
+  "baselineHash": "6da9460cc5a9",
   "baselineCommit": null,
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -4850,6 +4850,28 @@
         "screenshots/notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-light.png"
       ],
       "note": "Rebased a second time, onto 065-notion-record-refinement's released stylesheet; the entry is re-derived rather than replayed. The four confirm captures are the only in-scope pictures this leg moves: the confirm's declared card frame (.db-sheet-card) draws a centred 320px card with a stacked, full-width footer (.db-confirm-stacked) instead of a flush bottom sheet with a right-aligned action row, in both themes and in both the standalone and stacked-over-a-parent variants, all four opened and read. The stacked pair also carries 065's own parent-sheet changes underneath, which is why it was recaptured on the merged tree rather than carried across. The eight date-picker captures this leg's own run had moved carried only the harness's \"today\" drift and were restored to the committed bytes rather than recommitted as churn. No selector outside .db-cell-selection-pill / .db-selection-more / .db-sheet-card / .db-confirm-stacked / .db-shell-header-leading was touched, and none of those overlaps 065's record-surface rules or 060's calendar rules."
+    },
+    {
+      "event": "acquire",
+      "phase": "064-notion-toolbar-refinement",
+      "at": "2026-09-07T06:10:00.000Z",
+      "hash": "c5352cae3eff",
+      "note": "Taken over from 061-notion-sheet-refinement at its own released hash, nothing outstanding against it, for REQ-005 (the chip rail add control). REQ-009's conditional-colour summary row mints no CSS: it reuses db-view-config-summary-row and db-view-config-row-clickable. Re-derived at the landing, onto 061's released stylesheet rather than 060's, which is what the earlier entry had been written against."
+    },
+    {
+      "event": "edit",
+      "phase": "064-notion-toolbar-refinement",
+      "at": "2026-09-07T06:10:00.000Z",
+      "hash": "6da9460cc5a9",
+      "note": "One class for the chip-rail add control (db-active-control-add, at the landed 28px pitch and the 11%/17% accent tints the rail's own chips already carry) — the entry-tier property list and the conditional-colour summary row both reuse existing classes (db-dropdown-search/db-dropdown-options/db-menu-item, db-view-config-row-clickable) and mint nothing new. No selector an existing capture exercises was touched."
+    },
+    {
+      "event": "release",
+      "phase": "064-notion-toolbar-refinement",
+      "at": "2026-09-07T06:10:00.000Z",
+      "hash": "6da9460cc5a9",
+      "reviewed": [],
+      "note": "PLACEHOLDER_RELEASE_NOTE"
     }
   ],
   "outstanding": [

@@ -1981,6 +1981,33 @@
   color: var(--text-error);
 }
 
+/* One add control per rule group, at the landed chip pitch and tints — no new geometry. */
+.note-database-container .db-active-control-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: var(--db-radius-md);
+  background: color-mix(in srgb, var(--interactive-accent) 11%, transparent);
+  box-shadow: none;
+  color: var(--text-accent);
+  padding: 0;
+}
+
+.note-database-container .db-active-control-add:hover,
+.note-database-container .db-active-control-add:focus-visible {
+  background: color-mix(in srgb, var(--interactive-accent) 17%, transparent);
+  color: var(--text-accent-hover, var(--text-accent));
+}
+
+.note-database-container .db-active-control-add svg {
+  width: 14px;
+  height: 14px;
+}
+
 .note-database-container .db-active-control-logic {
   flex: 0 0 auto;
   height: 26px;

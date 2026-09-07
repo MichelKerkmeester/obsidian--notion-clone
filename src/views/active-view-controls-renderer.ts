@@ -33,6 +33,11 @@ export interface ActiveViewControlsActions {
   toggleFilterLogic(): void;
   clearAll(): void;
   getStatusMessage?(): string;
+  /** Opens the filter panel to add the next rule. Optional: a host that omits it keeps the rail
+   *  exactly as it rendered before this control existed, rather than being forced to wire it. */
+  addFilter?(anchorEl: HTMLElement): void;
+  /** Opens the sort panel to add the next rule. Same optionality as addFilter. */
+  addSort?(anchorEl: HTMLElement): void;
 }
 
 interface EffectiveFilterEntry {
@@ -125,6 +130,7 @@ export class ActiveViewControlsRenderer {
         this.setEditLabel(chip, `${column?.label || rule.field} · ${detail}`);
         this.appendRemoveButton(chip, t("toolbar.sort"), () => actions.removeSort(index));
       }
+      if (actions.addSort) this.appendAddButton(sortGroup, t("panel.addSort"), actions.addSort);
     }
 
     if (filters.length > 0) {
@@ -144,6 +150,7 @@ export class ActiveViewControlsRenderer {
       for (const { rule, index } of filters) {
         this.renderFilterChip(filterGroup, rule, index, columns, actions);
       }
+      if (actions.addFilter) this.appendAddButton(filterGroup, t("panel.addCondition"), actions.addFilter);
     }
     scroller.scrollLeft = previousScrollLeft;
     const clear = rail.createEl("button", {
@@ -223,6 +230,21 @@ export class ActiveViewControlsRenderer {
       event.preventDefault();
       event.stopPropagation();
       onRemove();
+    };
+  }
+
+  /** One add control per rule group, at the end of its chips — present only when the group
+   *  itself is present, so the zero-chip case (the group never renders) is the control. */
+  private appendAddButton(group: HTMLElement, label: string, onAdd: (anchorEl: HTMLElement) => void): void {
+    const add = group.createEl("button", {
+      cls: "db-active-control-add",
+      attr: { type: "button", title: label, "aria-label": label },
+    });
+    setIcon(add, "plus");
+    add.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      onAdd(add);
     };
   }
 }
