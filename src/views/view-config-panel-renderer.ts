@@ -521,15 +521,41 @@ export class ViewConfigPanelRenderer {
     this.renderAppliedSummary(panel, t("viewConfig.properties"), hiddenCount, t("toolbar.noHiddenProperties"));
     this.renderAppliedSummary(panel, t("viewConfig.filters"), filterCount, t("toolbar.noFilters"));
     this.renderAppliedSummary(panel, t("viewConfig.sorts"), sortCount, t("toolbar.noSorts"));
+    // Same guard renderConditionalFormatting mounts under (config.viewType !== "chart" &&
+    // actions.database): a summary row promising a section that section's own guard never
+    // renders would be a row with nothing behind it. The capability does not move — only its
+    // way in gets a name.
+    if (config.viewType !== "chart" && actions.database) {
+      this.renderConditionalColorSummary(panel, config);
+    }
   }
 
-  private renderAppliedSummary(panel: HTMLElement, label: string, count: number, emptyWord: string): void {
+  private renderConditionalColorSummary(panel: HTMLElement, config: ViewConfig): void {
+    const count = (config.conditionalFormats || []).length;
+    const row = this.renderAppliedSummary(panel, t("viewConfig.conditionalColor"), count, t("toolbar.noConditionalColors"));
+    row.createDiv({ cls: this.hintClass(), text: t("viewConfig.conditionalColorHint") });
+    const open = () => {
+      panel.querySelector<HTMLElement>(".db-conditional-format-settings")?.scrollIntoView?.({ behavior: "smooth", block: "start" });
+    };
+    row.setAttr("role", "button");
+    row.setAttr("tabindex", "0");
+    row.addClass("db-view-config-row-clickable");
+    row.onclick = open;
+    row.onkeydown = (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      open();
+    };
+  }
+
+  private renderAppliedSummary(panel: HTMLElement, label: string, count: number, emptyWord: string): HTMLElement {
     const row = panel.createDiv({ cls: this.rowClass("db-view-config-summary-row") });
     row.createDiv({ cls: "db-view-config-label", text: label });
     row.createDiv({
       cls: "db-view-config-field db-view-config-summary",
       text: count > 0 ? t("toolbar.appliedCount", { count }) : emptyWord,
     });
+    return row;
   }
 
   private renderViewType(panel: HTMLElement, config: ViewConfig, actions: ViewConfigPanelActions): void {

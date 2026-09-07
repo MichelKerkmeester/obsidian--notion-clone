@@ -367,3 +367,50 @@ describe("settings sheet body grammar", () => {
     expect(database.computedSyncMode).toBe("manual");
   });
 });
+
+// ───────────────────────────────────────────────────────────────────
+// 5. CONDITIONAL-COLOUR SUMMARY ROW
+// ───────────────────────────────────────────────────────────────────
+
+describe("conditional-colour summary row", () => {
+  it("adds a fourth named row beside Properties/Filters/Sorts, with an explainer and the rule count", () => {
+    // Red before this leg: renderAppliedSummaries made exactly 3 calls to renderAppliedSummary —
+    // Properties, Filters, Sorts — and none named conditional colour.
+    const { panel } = mount(false);
+    const rows = panel.querySelectorAll(".db-view-config-summary-row");
+    expect(rows).toHaveLength(4);
+    const labels = rows.map((row) => row.querySelector(".db-view-config-label")?.textContent);
+    expect(labels).toEqual(["Properties", "Filters", "Sorts", "Conditional color"]);
+    const colorRow = rows[3];
+    expect(colorRow.querySelector(".db-view-config-summary")?.textContent).toBe("No color rules");
+    // hintClass() resolves to db-view-config-help on desktop, db-panel-hint on a phone sheet —
+    // this mount is desktop, so the explainer carries the desktop class.
+    expect(colorRow.querySelector(".db-view-config-help")).not.toBeNull();
+  });
+
+  it("opens the existing conditional-formatting section rather than a second editor", () => {
+    const { panel } = mount(false);
+    const rows = panel.querySelectorAll(".db-view-config-summary-row");
+    const colorRow = rows[3];
+    expect(colorRow.hasClass("db-view-config-row-clickable")).toBe(true);
+    const section = panel.querySelector(".db-conditional-format-settings");
+    expect(section).not.toBeNull();
+    // No throw: scrollIntoView is guarded for the fake DOM this suite mounts on, and the real
+    // click handler resolves the same section the row promises rather than building another.
+    expect(() => colorRow.onclick?.()).not.toThrow();
+    // Exactly one conditional-formatting section exists — the row opens it, it does not clone it.
+    expect(panel.querySelectorAll(".db-conditional-format-settings")).toHaveLength(1);
+  });
+
+  it("renders no row for a chart view, whose own guard mounts no conditional-formatting section — the negative control", () => {
+    const { container } = makeDoc(false);
+    const config: ViewConfig = { ...makeConfig(), viewType: "chart" };
+    const database = makeDatabase(config);
+    new ViewConfigPanelRenderer().render(container as unknown as HTMLElement, true, config, makeActions(database));
+    const panel = container.querySelector(".db-view-config-panel");
+    if (!panel) throw new Error("settings panel did not mount");
+    const rows = panel.querySelectorAll(".db-view-config-summary-row");
+    expect(rows).toHaveLength(3);
+    expect(panel.querySelector(".db-conditional-format-settings")).toBeNull();
+  });
+});
