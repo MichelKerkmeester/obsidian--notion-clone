@@ -760,27 +760,37 @@ try {
     await page.waitForTimeout(600);
     const track = await page.evaluate(() => window.__sheetTrack());
     const deepest = track.length > 0 ? Math.max(...track) : Number.NaN;
-    const viewportHeight = await page.evaluate(() => window.innerHeight);
-    // A replayed entrance is a specific, recognizable failure: the start class pushes the WHOLE
-    // panel below the fold, so its top reaches the viewport's own floor before sliding back up —
-    // that is what "dropped it to 844 on an 844px screen" (the pre-fix number this lane still
-    // documents) actually measures. A panel whose own content genuinely changes shape between the
-    // two samples — the filter sheet's entry tier collapsing into its first condition row is
-    // exactly this — legitimately settles somewhere between the old and new resting positions,
-    // never anywhere near that floor. Testing for the floor rather than for any downward movement
-    // keeps this a check for the replay bug, not a check that the two renders happen to be the
-    // same height.
-    const replayedEntrance = Number.isFinite(deepest) && deepest >= viewportHeight - 4;
-    const held = Number.isFinite(deepest) && !replayedEntrance;
+    // The floor is the DEEPER of the two resting positions, not the first one.
+    //
+    // Downward-only against the opening position was right while both renders of a panel were the
+    // same height. The filter sheet's entry tier is not: it is a tall property list that collapses
+    // into one short condition row, so the sheet legitimately ends up 100px lower than it started
+    // and a check pinned to the opening position fails on a shape change rather than on movement.
+    //
+    // Pinning to the viewport floor instead is the other error, and it was measured: with the
+    // entrance replay reintroduced (playSheetEntrance forced past its is-visible guard) the filter
+    // sheet bottomed out at 836 on an 844px screen, because this sheet FLOATS 8px off the bottom
+    // — so a `>= innerHeight - 4` test sits 4px inside a boundary the surface never reaches and
+    // reports the replay as held. The control below already knew this and subtracts the resting
+    // inset; this row now does the equivalent by measuring against the surface rather than the
+    // screen.
+    //
+    // A replayed entrance drops the panel below BOTH resting positions and slides back; a shape
+    // change settles at one of them. That is the difference this reads.
+    const settledAfter = (await page.evaluate(() => window.__addRowProbe())).panelTop;
+    const resting = Math.max(settledTop, settledAfter ?? settledTop);
+    const held = Number.isFinite(deepest) && deepest <= resting + 4;
     addRowResult.push({
       name: `the ${kind} sheet holds still while it rebuilds`,
       pass: held,
       detail: !Number.isFinite(deepest)
         ? "the sheet was never sampled, so this run proves nothing"
         : held
-          ? `settled at top ${settledTop.toFixed(0)}; the deepest point during the rebuild was ${deepest.toFixed(0)}`
-          : `settled at top ${settledTop.toFixed(0)} and the rebuild dropped it to ${deepest.toFixed(0)} on a ${viewportHeight}px screen`
-            + " — the surface replayed its entrance, so it is moving under the finger",
+          ? `settled at top ${settledTop.toFixed(0)}, rebuilt to ${(settledAfter ?? settledTop).toFixed(0)};`
+            + ` the deepest point during the rebuild was ${deepest.toFixed(0)}`
+          : `settled at top ${settledTop.toFixed(0)}, rebuilt to ${(settledAfter ?? settledTop).toFixed(0)},`
+            + ` and the rebuild dropped it to ${deepest.toFixed(0)} — below both resting positions,`
+            + " so the surface replayed its entrance and is moving under the finger",
     });
 
     // 2. THE CONSEQUENCE. Five taps at ONE coordinate, at a rate a person actually taps. Every one
