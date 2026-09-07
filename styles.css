@@ -21349,6 +21349,11 @@ img.db-text-md-image {
   }
 
   .db-toast.is-inline {
+    /* `.db-toast` is content-box, so a bare `width: 100%` renders the card 32px wider than the
+       host its own padding sits inside — measured at 402px it ran from the rail's 16px left inset
+       to 16px PAST the right edge, undoing the centring this band exists for. The card's padding
+       has to count toward the host's width, not add to it. */
+    box-sizing: border-box;
     width: 100%;
   }
 }

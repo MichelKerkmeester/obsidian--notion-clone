@@ -95,12 +95,21 @@ creates no new lane file and never ticks an operator device row.
       fixed regardless of reason), a label, a chevron action, `role="status"` +
       `aria-live="polite"`, no dismiss control. Additive: the fourteen-member `EmptyStateReason`
       union (`empty-state-renderer.ts:25-39`) is unchanged, and no existing call site was rewired to
-      call it — it is a second presentation callers may adopt, exercised directly by its own tests.
-      **Red-first proof (observed):** stashed the method and reran `empty-state-renderer.test.ts` —
-      4 new tests failed with `renderInlineChip is not a function`. **Green:** restored — 35/35 pass,
-      covering both `source-missing` and `group-relation-deleted`, the wired chevron action, and the
-      no-action/no-button case.
-      (`src/views/empty-state-renderer.ts`, `src/views/empty-state-renderer.test.ts`)
+      call it. **Red-first proof (observed):** stashed the method and reran
+      `empty-state-renderer.test.ts` — 4 new tests failed with `renderInlineChip is not a function`.
+      **Green:** restored — 35/35 pass, covering both `source-missing` and `group-relation-deleted`,
+      the wired chevron action, and the no-action/no-button case.
+      **Amended at landing:** additive was not enough. AC-004's `When` is a board rendering, and no
+      board rendered the chip, so the criterion was proven by a method nothing called.
+      `BoardRenderer.render` already receives an `EmptyStateOptions` from both call sites
+      (`database-view.ts:10659-10665`, `embedded-database-renderer.ts:1287`) and dropped it on the
+      floor, so a board whose group relation was deleted rendered a blank strip. Four lines in
+      `render` now hand a stale reference to `renderInlineChip`; an ordinary empty result is
+      untouched and still belongs to the per-column card, gated by `STALE_REFERENCE_REASONS`
+      exported beside the reason union. **Red-first proof (observed):** removed the four lines and
+      reran — 2 of the 4 new `board-renderer-hierarchy.test.ts` cases failed; restored — 9/9 pass.
+      (`src/views/empty-state-renderer.ts`, `src/views/empty-state-renderer.test.ts`,
+      `src/views/board-renderer.ts`, `src/views/board-renderer-hierarchy.test.ts`)
 - [x] T008 [P1] **Add the `.db-inline-chip` block.** Beside `.db-empty-card.is-compact`: background
       `color-mix(in srgb, var(--text-error) 10%, var(--background-primary))`, icon on
       `var(--text-error)`, **zero hex literals**, action tap target `30px` matching `.db-menu-item`'s
@@ -136,10 +145,17 @@ creates no new lane file and never ticks an operator device row.
       resolves to 384px, giving a left margin of `430 - 16 - 384 = 30px` against a right margin of
       16px. **Green (by the same arithmetic on the new rule):** both anchors now read
       `left = right = var(--db-space-6)` (16px) at both viewports, symmetric by construction rather
-      than by accident. **Residual:** the browser-measured lane row AC-009 asks for (computed
-      margins read from a live render at 390px and 430px) was not built — see T012's own residual
-      note; this task's proof is arithmetic on the values the existing CSS and the new rule both
-      state literally, not an independent measurement. (`styles.css`)
+      than by accident.
+      **Measured at landing, and the arithmetic was half wrong.** Mounting the DOM `showToast`
+      actually builds against the shipped stylesheet in Chrome at 390px, 402px and 430px: the stack
+      centred exactly as claimed (left 16px, right 16px, 0px difference), but the rail's card read
+      left 16px against right **−16px** — 32px too wide, hanging off the edge the centring exists to
+      square up. `.db-toast` is `box-sizing: content-box`, so the band's `width: 100%` added the
+      card's own 32px of padding to its host's width instead of counting it inside. The arithmetic
+      could not see this: it reasoned about the declared values, and the defect is in how the box
+      model resolves them. Fixed with one declaration beside that `width: 100%`; re-measured, both
+      cards now read 16px/16px at all three widths, and desktop at 1280px is unchanged (stack
+      `right: 12px` at 384px, rail `right: 16px`). (`styles.css`)
 - [x] T010 [P1] **Reconcile `055`'s stale rows and lagging checkboxes.** In
       `../055-states-feedback-and-motion/goal.md`: the toast row now reads **239** (re-derived
       2026-09-07, after T006 landed — not the 242 this packet opened with) with
@@ -177,7 +193,9 @@ creates no new lane file and never ticks an operator device row.
       the production `showToast` (T004, T005); the notice census, the chip's hex-free background and
       the fast-band declaration census are proven by direct `grep`/`rg` reads against the shipped
       `styles.css` and source (T006, T008, T009); the phone-band placement is proven by CSS
-      arithmetic against the same constants a lane row would read (T017). What is missing is the
+      arithmetic against the same constants a lane row would read (T017) — arithmetic that landing
+      then caught out on the rail, exactly the kind of miss a browser-measured row exists to prevent.
+      What is missing is the
       *permanent, browser-measured* form: none of the fourteen `tools/live/*.mjs` scripts currently
       builds a scenario that mounts `toast.ts`, forces a `database-view.ts` failure, or resizes a
       viewport against `.db-toast-stack`/`.db-operation-result-rail` — the closest infrastructure

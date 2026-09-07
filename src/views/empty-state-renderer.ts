@@ -38,6 +38,18 @@ export type EmptyStateReason =
   | "group-relation-deleted"
   | "source-missing";
 
+/**
+ * The reasons that name a reference the view still points at and the vault no longer has, as
+ * opposed to a query that simply matched nothing. They are the ones a context too narrow for a
+ * card renders as an inline chip: a stale reference is a standing condition to point at, not an
+ * empty result to explain, so it gets the permanent chip rather than a card that offers a way
+ * back to data.
+ */
+export const STALE_REFERENCE_REASONS: ReadonlySet<EmptyStateReason> = new Set<EmptyStateReason>([
+  "group-relation-deleted",
+  "source-missing",
+]);
+
 export interface EmptyStateAction {
   label: string;
   icon?: string;

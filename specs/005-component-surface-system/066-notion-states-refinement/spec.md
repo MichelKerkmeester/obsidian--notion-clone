@@ -141,7 +141,9 @@ context allows, with the failure path reporting through the same component as th
 |-----------|-------------|-------------|
 | `src/views/toast.ts` | Modify | Second dismissal constant, selected on the presence of an action |
 | `src/views/database-view.ts` | Modify | Owned `errors.*` catches route through `showToast` |
-| `src/views/empty-state-renderer.ts` | Modify | `renderInlineChip` beside `renderCard` |
+| `src/views/empty-state-renderer.ts` | Modify | `renderInlineChip` beside `renderCard`; `STALE_REFERENCE_REASONS` beside the reason union |
+| `src/views/board-renderer.ts` | Modify | **Amended at landing.** `render`'s `emptyState` parameter, accepted and dropped since it was introduced, now renders the chip for a stale reference — AC-004's `When` is a board rendering, so an unwired producer cannot meet it |
+| `src/views/board-renderer-hierarchy.test.ts` | Modify | **Amended at landing.** The production-path cases for the row above |
 | `styles.css` | Modify | `.db-inline-chip` block; fast-band literals resolved |
 | `src/views/toast.test.ts` | Create | Dwell assertions, both budgets, both negative controls |
 | `src/views/empty-state-renderer.test.ts` | Modify | Chip render, `aria-live`, no auto-dismiss |

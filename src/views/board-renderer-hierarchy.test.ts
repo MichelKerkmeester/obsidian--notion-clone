@@ -22,6 +22,7 @@
 import { describe, expect, it, vi, beforeAll } from "vitest";
 import { BoardGroup, BoardRenderer, BoardRendererActions } from "./board-renderer";
 import { ColumnDef, RowData, ViewConfig } from "../data/types";
+import type { EmptyStateOptions } from "./empty-state-renderer";
 import type { App, TFile } from "obsidian";
 
 vi.mock("obsidian", () => ({
@@ -564,5 +565,56 @@ describe("default board card properties", () => {
     const card = todoCard(container);
     const titleRow = card.querySelector<MockElement>(".db-kanban-card-title-row");
     expect(renderRecordIcon).toHaveBeenCalledWith(titleRow, expect.anything(), REFERENCE_CONFIG, true, true);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 10. THE STALE-RELATION BOARD
+// ───────────────────────────────────────────────────────────────────
+//
+// A board grouped by a property the schema no longer carries has no column to
+// draw, so the view hands the renderer a reason instead of groups. These pin
+// that the renderer actually renders it: the parameter was accepted and
+// dropped, which left a deleted relation answered by a blank strip.
+
+describe("board renderer stale-relation empty state", () => {
+  const REFERENCE_CONFIG: ViewConfig = { ...CONFIG, boardExtensionsEnabled: undefined };
+
+  function renderWith(groups: BoardGroup[], emptyState?: EmptyStateOptions): MockElement {
+    const container = new MockElement("div");
+    new BoardRenderer({} as unknown as App, createActions())
+      .render(container as unknown as HTMLElement, REFERENCE_CONFIG, groups, "status", emptyState);
+    return container;
+  }
+
+  const staleRelation = (onClick = () => {}): EmptyStateOptions => ({
+    reason: "group-relation-deleted",
+    actions: [{ label: "Open view settings", icon: "settings", primary: true, onClick }],
+  });
+
+  it("renders the inline chip when the group field's relation is gone", () => {
+    const chip = renderWith([], staleRelation()).querySelector<MockElement>(".db-inline-chip");
+    expect(chip).not.toBeNull();
+    expect(chip?.getAttribute("data-empty-reason")).toBe("group-relation-deleted");
+    expect(chip?.getAttribute("aria-live")).toBe("polite");
+  });
+
+  it("wires the chip's chevron to the reason's own action", () => {
+    let opened = 0;
+    const container = renderWith([], staleRelation(() => { opened += 1; }));
+    const action = container.querySelector<MockElement>(".db-inline-chip-action");
+    expect(action).not.toBeNull();
+    action?.onclick?.({});
+    expect(opened).toBe(1);
+  });
+
+  it("leaves an ordinary empty result to the card, never the chip", () => {
+    const container = renderWith([], { reason: "search-empty" });
+    expect(container.querySelector(".db-inline-chip")).toBeNull();
+  });
+
+  it("renders no chip while the board still has a column to draw", () => {
+    const container = renderWith(GROUPS, staleRelation());
+    expect(container.querySelector(".db-inline-chip")).toBeNull();
   });
 });

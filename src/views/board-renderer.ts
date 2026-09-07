@@ -35,7 +35,7 @@ import { isSameBoardGroup, resolveBoardContainerDropOrder } from "../data/board-
 import { resolveBoardCardFields } from "./board-card-fields";
 import { resolveTitleFieldDisplay } from "../data/title-field-display";
 import { isImeComposing } from "../data/keyboard-utils";
-import { EmptyStateOptions, EmptyStateRenderer } from "./empty-state-renderer";
+import { EmptyStateOptions, EmptyStateRenderer, STALE_REFERENCE_REASONS } from "./empty-state-renderer";
 import { renderCardField, renderCardFieldValue } from "./card-field-renderer";
 import { getPropertyEmptyPrompt } from "./record-surface/property-row";
 import { createCheckbox } from "./checkbox";
@@ -200,6 +200,14 @@ export class BoardRenderer {
       ? new Set(this.actions.getColumns(config).map((col) => col.key))
       : undefined;
     this.renderReferenceBoard(container, config, groups, groupField);
+    // A group field the schema no longer carries leaves no column to draw at all, so the caller
+    // hands the reason down here and nothing had been rendering it: the board answered a deleted
+    // relation with a blank strip. The column strip is exactly the narrow context the inline chip
+    // is for. Only a stale reference gets it — an empty result belongs to the per-column card
+    // above, and with no columns there is nothing to hang one in.
+    if (emptyState && groups.length === 0 && STALE_REFERENCE_REASONS.has(emptyState.reason)) {
+      this.emptyStateRenderer.renderInlineChip(container, emptyState);
+    }
   }
 
   // ───────────────────────────────────────────────────────────────────
