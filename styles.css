@@ -12047,9 +12047,21 @@ body.is-phone .note-database-container .db-record-detail-panel {
    `.db-panel-row` declares for the anchored panels it was written for — report 41's "row labels sit
    ~4px from the edge" was this surface's rows carrying only that 2px with no container-level inset
    to add to it, since the sheet itself is zeroed left/right above so its dividers can run edge to
-   edge. */
+   edge.
+
+   `.db-panel-row`'s own base is a left-to-right row, correct for the short single-value rows the
+   filter and sort sheets share it for. This sheet's own rows carry a long label, a wide control
+   (a segmented choice, a dropdown paired with a button, a path plus an engine picker) and an
+   explainer paragraph, and splitting that across a label column and a field column on a 390px
+   phone left the label stranded far from a control it barely had room for, the control's own text
+   still squeezed into whatever the label didn't take. Column stacking gives every row's control the
+   sheet's full width instead of a remainder, which is what a wide control or a multi-line option
+   list actually needs to stay inside the sheet at all. */
 .db-view-config-panel.db-mobile-bottom-sheet .db-panel-row {
   padding-inline: var(--db-sheet-inset);
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--db-space-2);
 }
 
 .db-view-config-panel.db-mobile-bottom-sheet > .db-panel-header {
@@ -12080,32 +12092,29 @@ body.is-phone .note-database-container .db-record-detail-panel {
 }
 
 /* The row wrapper itself is the shared `.db-panel-row` grammar now, styled by the unscoped rules
-   every other phone sheet's rows already read (§21 PANEL ROWS). Nothing here draws
-   `.db-view-config-row` on a sheet any more; the phone-only stacking and divider this class pair
-   once carried are retired rather than duplicated onto the new class. What stays scoped below is
-   the settings-specific label/field/control sizing that `.db-panel-row` does not know about. */
-/* `flex-shrink: 0` is the record sheet's own fix for the same shape (`.db-record-detail-field-label`,
-   §10 above): a stacked field's `width: 100%` control pulls the row's flex-basis math toward
-   itself, and a label with no floor of its own gives up the difference. Measured on the retired
-   stacking rule's removal: "Source folder", "Source rules" and "New note folder" wrapped to two
-   or three lines apiece while single-word labels on the same row shape stayed put by accident of
-   length alone — a defect only a stacked field exposes, non-stack rows have no `width: 100%`
-   child pulling against them. */
+   every other phone sheet's rows already read (§21 PANEL ROWS), plus the column stacking declared
+   on the row above. What stays scoped below is the settings-specific label/field/control sizing
+   that `.db-panel-row` does not know about. */
 .db-view-config-panel.db-mobile-bottom-sheet .db-view-config-label {
-  flex-shrink: 0;
   font-size: var(--db-font-base);
   color: var(--text-muted);
 }
 
-/* The field row runs left to right and its control takes the width. Right-alignment is what put a
-   value against the far edge with the label stranded across the screen from it. */
+/* The field sits on its own line below the label now, so its own children still run left to right
+   — a control beside its own icon, or a dropdown beside its "Manage" button — but the field itself
+   no longer competes with the label for width; it gets the row's full inset-to-inset span. */
 .db-view-config-panel.db-mobile-bottom-sheet .db-view-config-field {
   justify-content: flex-start;
   align-items: center;
   gap: var(--db-space-3);
 }
 
-.db-view-config-panel.db-mobile-bottom-sheet .db-view-config-field:not(.db-view-config-field-stack) > :first-child {
+/* `:not(.db-checkbox)` because the row now hands the field its full inset-to-inset width: a
+   checkbox switch is the field's only child on the same shape a dropdown or text input is, and
+   without the exclusion this rule's `flex: 1 1 auto` outranks the checkbox's own fixed `18px`
+   basis on specificity alone, stretching the switch across the whole row instead of leaving it a
+   thumb-sized control at the row's start. */
+.db-view-config-panel.db-mobile-bottom-sheet .db-view-config-field:not(.db-view-config-field-stack) > :first-child:not(.db-checkbox) {
   flex: 1 1 auto;
   min-width: 0;
 }

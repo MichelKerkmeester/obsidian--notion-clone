@@ -185,6 +185,23 @@ claim — a lander re-runs every check itself and judges a moved capture by deco
 orchestrator is rebuilt only from a clean Public-repo tree, never from inside a worktree with local
 drift.
 
+### 2026-09-07 ~11:42, `worktrees/216-settings-sheet-phone`, T072 landed against `054`
+
+Operator report (iOS, 0.0.30, ~10:20): *"View sheet still had bad ui ux and horizontal overflow on
+0.30 btw"*, capture `operator-settings-sheet-ios-0030.png` (the operator's own, not committed
+here). Root cause: `.db-view-config-panel.db-mobile-bottom-sheet .db-panel-row` never overrode the
+shared `.db-panel-row`'s left-to-right flex row, so the database Settings sheet's rows split the
+phone's width between a label column and whatever it left the control — same shape as the anchored
+desktop panel — instead of stacking one column the rest of this family's phone sheets already use.
+Fixed in `styles.css` only: the row stacks to a column inside this sheet, and `.db-checkbox` is
+excluded from the field's `:first-child` flex-grow rule (a second, real defect the wider field
+exposed — checkbox switches were stretching to the row's full width). Recorded as roadmap row 66,
+`054/tasks.md` T072, `054/acceptance-criteria.md` AC-013 (Met), `054/checklist.md` CHK-026 and
+OPS-004 (operator device confirmation, not agent-ticked). `npm run gate` 26 green, committed on
+`worktrees/216-settings-sheet-phone` (local, not pushed — a fresh verifier lands it; see that
+branch's own HEAD for the exact commit). Full detail: this session's own `.handover.md` in that
+worktree (untracked) and `054`'s own docs above.
+
 ### 2026-09-06 ~20:10, `orchestrate-handover-24`, read from `.worktrees/193-goal-refresh-0930`
 
 **Documentation only.** No `src/`, `styles.css`, `tools/` or `main.js` file was touched. Main moved

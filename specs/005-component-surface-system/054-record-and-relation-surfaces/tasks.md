@@ -738,3 +738,36 @@ Nothing in this repository closes these. An agent never ticks one.
 | L6 | 5 | 5 (T060-T064; the standalone-mount half of T061/T062's proof and the "new row" half of T064's proof stay narrowed gaps, named in each task's own entry) |
 | L7 | 2 | 0 (T070 blocked on T011/T023's missing census lane, its four named retirements otherwise already complete; T071 attempted and reverted — a real `column-manager` row-class gap found, fix is outside this leg's file group) |
 | Operator | 3 | 0 (never agent-ticked) |
+
+---
+
+## Operator report — database Settings sheet row grammar (2026-09-07)
+
+- [x] T072 [P0] Fix the database Settings sheet's row layout on phone: `.db-panel-row` (and
+      `.db-view-config-field`'s `:first-child` flex rule) inside `.db-view-config-panel.db-mobile-
+      bottom-sheet` kept label and control side by side, the same left-to-right row the anchored
+      desktop panel uses, instead of stacking (label above, full-width control below, explainer
+      under the control) the way the rest of this family's phone sheets do. **Proof:** measured on
+      the real renderer's markup at 402px before and after — the Formula result storage row's
+      field width went **238px → 370px** (full sheet inset-to-inset span) and its label went from
+      floating mid-height of the control (label top 731.75 against field top 654, a **6px**
+      horizontal gap — the two-column shape) to sitting fully above it (label bottom 674.3, field
+      top 678.3); sheet `scrollWidth`/`clientWidth` held **402/402** in both states at this
+      viewport (this harness never reproduced literal px overflow, even before the fix — recorded
+      rather than asserted, since the operator's own device capture shows text clipped at the
+      sheet's right edge and this fix removes the row squeeze regardless of the exact device font
+      metrics that produced it). A second, real regression was caught by the same measurement: once
+      the field stopped being squeezed, `.db-checkbox`'s own fixed `18px` flex-basis lost to the
+      field's `:first-child { flex: 1 1 auto }` rule on specificity, stretching every checkbox
+      switch across the full row — fixed by excluding `.db-checkbox` from that rule.
+      `npx tsc --noEmit`, `npx vitest run` (1628/1628), `npm run build`,
+      `node tools/live/sheet-grammar.mjs` (26 registered checks + the overflow sweep, all green,
+      unchanged pass/fail shape before and after) and `node tools/live/render-assertions.mjs` all
+      exit 0. `npm run screenshots` (606 entries) + `screenshots:verify` exit 0; eight captures
+      carry real content — `panel-view-config-sheet-mobile-{dark,light}`,
+      `constructed-view-config-mobile-{dark,light}` (this sheet, opened and read), and
+      `constructed-board-card-properties-mobile-{dark,light}` (the board view-config variant
+      sharing the same row grammar, same fix, opened and read) — plus `field-icon-picker-desktop-
+      {dark,light}`, opened and confirmed as an unrelated few-pixel icon-glyph rerun drift outside
+      this edit's selector scope, kept rather than restored since its pixelHash genuinely differs.
+      `npm run gate` — 26 green, 0 red. Files: `styles.css` only; no renderer or i18n change.
