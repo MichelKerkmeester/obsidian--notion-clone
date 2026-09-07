@@ -11,14 +11,13 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/063-notion-dropdown-refinement"
-    last_updated_at: "2026-09-06T17:08:00Z"
-    last_updated_by: "ruling-fold-session"
-    recent_action: "Folded the 19:08 carve-out ruling; no ADR in this packet is open"
-    next_safe_action: "Run T001, the red-first DOM-order assertion, and read its exit status"
+    last_updated_at: "2026-09-07T04:05:00Z"
+    last_updated_by: "landing-verification-session"
+    recent_action: "Landed T001-T017 and re-derived the completion criteria: 6 of 8 ticked"
+    next_safe_action: "Operator closes the eighth criterion (AC-011) on iOS and desktop"
     blockers:
-      - "styles.css edits are serialized by the parent's CSS lane"
-      - "dropdown-field.ts and menu-row.ts are 052's file group, taken one leg at a time"
-      - "T005 and T006 ride 052's open T008/T009 legs and do not open those files alone"
+      - "The submenu-parent criterion rides 052's still-open T008/T009, which own the caller files"
+      - "The operator's own read is the eighth criterion and is never ticked by an agent"
     key_files:
       - "src/views/dropdown-field.ts"
       - "src/views/menu-row.ts"
@@ -32,15 +31,15 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-063-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 75
     open_questions:
-      - "Does a colour swatch carry a visible label, or do the accessible name and the check icon suffice"
-      - "Which anchored dropdown surfaces the operator reads as cramped, and at what measured width or height"
+      - "Which anchored dropdown surfaces the escalation's estimate actually selects, against the operator's own read"
     answered_questions:
       - "E3 takes no carve-out: red plus a trash icon on every destructive row (operator 19:08)"
       - "The trailing check is a landed ruling (G14, 052 ADR-005) that only dropdown-field.ts still lags"
       - "Every desktop dropdown is a combobox and the count gate is the phone's alone (ADR-006, a952e5e7)"
-      - "The colour picker's grid is settled: G15 kept the grid and its accessible-name clause has landed"
+      - "The colour picker is a one-column labelled list, not a grid (ADR-004, Accepted 2026-09-06 19:08)"
+      - "A colour swatch carries a visible name: the name is the non-colour signal E3's WCAG 1.4.1 ground requires"
 ---
 # Goal: Notion Dropdown, Menu and Picker Refinement
 
@@ -94,8 +93,13 @@ it there first, then resend the parent.
 Each row carries its threshold, the value observed red on today's tree, the Notion screens that
 motivate it, and our own `file:line`.
 
-- [ ] **The dropdown popover's selection check is the row's last element child, sitting in a
-      trailing 16px track.** **Today: RED, measured.** `src/views/dropdown-field.ts:349` creates the
+- [x] **The dropdown popover's selection check is the row's last element child, sitting in a
+      trailing 16px track.** **Today: GREEN, landed.** The check span is created after the icon,
+      label and swatches, and the four grid variants put the 16px track last; the extended
+      `constructed-dropdown` marker asserts `lastElementChild === check` and was observed red on the
+      pre-flip tree (exit 1, `dropdownPopover was false, wanted true`) and green after. Read on the
+      re-taken `constructed-dropdown-desktop-light.png`: the tick sits at the row's right inset.
+      Observed red before green, measured: `src/views/dropdown-field.ts:349` creates the
       check span **first** — check, then icon, then label, then swatches — and
       `styles.css:3237-3241` fixes that order structurally with
       `grid-template-columns: 16px minmax(0, 1fr)`, with the same leading track in the three
@@ -117,7 +121,12 @@ motivate it, and our own `file:line`.
       and our own `052/design-trueup.md` §4 M7 flagged it against Anytype first. Threshold: those
       four rows carry their current value; a row whose child has no current value keeps the bare
       chevron; `menu-row.ts` is not changed.
-- [ ] **Each relative date preset carries the date it resolves to.** **Today: RED, 0 of 3.**
+- [x] **Each relative date preset carries the date it resolves to.** **Today: GREEN, 3 of 3.**
+      Each relative preset builds a `.db-date-preset-label` over a `.db-date-preset-subline`
+      carrying `formatDateValueDisplay`'s resolved literal ("Today / September 7, 2026" on the
+      re-taken `constructed-date-picker-desktop-light.png`); `Clear`, which resolves to nothing,
+      keeps a bare label. The 252px width role is untouched and the phone floor is reapplied at
+      44px. Observed red at 0 of 3, and the presets block was measured before and after:
       `date-value-picker.ts:157-171` builds Today, Tomorrow and Next week as bare
       `.db-date-preset` buttons carrying a label and nothing else. Notion pairs each relative
       preset with its literal (`cfca14fb`: "In an hour / In a day / In a week", each with a
@@ -125,9 +134,14 @@ motivate it, and our own `file:line`.
       secondary-text role; the picker's width role stays the hard 252 at
       `popover-host.ts:229-233`; no preset's tap target drops below the 28px desktop floor or the
       44px phone floor (`design-system.md` §9); the height growth is measured before and after.
-- [ ] **A desktop dropdown that cannot be shown comfortably as an anchored popover presents as a
+- [x] **A desktop dropdown that cannot be shown comfortably as an anchored popover presents as a
       sheet opened by a dedicated button.** **Added 2026-09-06** from the operator's ruling.
-      **Today: RED, 0 escalation paths.** `dropdown-field.ts:421` positions every desktop dropdown
+      **Today: GREEN, one escalation path in the primitive.** `resolveDesktopDropdownFit` decides
+      cramped from the same numbers the anchored branch derives — the width clamp falling short of
+      `preferredWidth`, or `resolveAnchoredPopoverBox`'s cap falling short of the natural height —
+      and `openDropdownPopover` escalates to the phone sheet's own chrome via `forceSheet`. Four
+      new `dropdown-field.test.ts` cases and three `popover-position.test.ts` cases cover both
+      sides; `sheet-grammar` and `sheet-teardown` stay green. Observed red at 0 escalation paths: `dropdown-field.ts:421` positions every desktop dropdown
       with `{ preferredWidth: 280, maxWidth: 360, minWidth: 180, gap: 6 }` and has no branch that
       can present it any other way; the sheet branch at `dropdown-field.ts:224` is phone-only.
       Notion carries both shapes and moves between them — a sheet with a `Done` header
@@ -138,25 +152,32 @@ motivate it, and our own `file:line`.
       `owned-menu.ts:360`'s viewport cap so the list scrolls; the escalation is decided once in the
       dropdown primitive rather than per call site; the dedicated button carries the 28px desktop
       target floor; and `048`'s stacking model and `044`'s sheet grammar stay green.
-- [ ] **Every desktop dropdown still opens with a search input active, including any surface the
+- [x] **Every desktop dropdown still opens with a search input active, including any surface the
       escalation converts to a sheet.** `dropdown-field.ts:228`'s desktop branch is unconditional
       today (`searchable = phoneSheet ? … : true`, landed at `a952e5e7` / ADR-006) and the
       criterion is that it stays that way through the escalation — Notion agrees at any option
-      count (**N3** `8ff7ae4b` on a 3-option list, `86a8e66c`). **Today: unexercised**, because no
-      desktop sheet surface exists yet to carry it. The phone sheet's `> 8` count gate at
+      count (**N3** `8ff7ae4b` on a 3-option list, `86a8e66c`). **Today: GREEN, exercised.** The
+      escalated sheet is never `comboboxInput`-backed, so it always takes the in-panel search
+      branch; a test asserts the input exists and holds focus on the escalated surface, and the
+      real renderer still filters as you type on the anchored one
+      (`constructed-dropdown-search-desktop-dark.png`, "ri" narrowing to Priority / Risk burn). The phone sheet's `> 8` count gate at
       `dropdown-field.ts:228` is untouched: ADR-006 ruled it the phone's alone.
-- [ ] **`npm run gate` exits 0 with the `constructed-dropdown` lane asserting the trailing check,
+- [x] **`npm run gate` exits 0 with the `constructed-dropdown` lane asserting the trailing check,
       observed red first.** The lane exists — `tools/live/constructed-state-assertions.mjs:417-420`
       with the `dropdownPopover` marker at `:123` — and is extended, not replaced; its fixture
-      counterpart at `tools/screenshots/scenarios/core.mjs:251-256` moves with it. **Today: RED**,
-      because the marker asserts only that a disabled option exists. Threshold: the extended marker
+      counterpart at `tools/screenshots/scenarios/core.mjs:251-256` moves with it. **Today: GREEN**, 26 lanes green
+      at `SURFACE_PHASE=063`, exit 0. Was red, because the marker asserted only that a disabled
+      option exists. Threshold: the extended marker
       fails on today's tree with its exit status read, passes after, and the
       `constructed-dropdown` capture is re-taken and opened, with the pixel read owed to an
       image-capable leg per D5.
-- [ ] **The option colour picker is a one-column labelled list — dot, visible name, trailing tick —
+- [x] **The option colour picker is a one-column labelled list — dot, visible name, trailing tick —
       on desktop and on the phone alike.** Added 2026-09-06 ~19:08 from the operator's ruling,
       verbatim: *"Check fibery, anytype and notion and suggest best ui ux"* (ADR-004, REQ-008).
-      **Today: RED, 16 of 16.** `option-color-picker.ts:72-88` emits sixteen unlabelled
+      **Today: GREEN, 16 rows and 0 swatches.** Read on all four re-taken captures: 224px panel, 16px
+      dot, `t()`-resolved name, trailing tick on the current row alone; the phone sheet carries the
+      family's header and 44px rows and scrolls inside the `90svh` cap. Observed red at 16 of 16
+      swatches and 0 rows: `option-color-picker.ts:72-88` emits sixteen unlabelled
       `db-color-picker-swatch` buttons into a 96px wrapping flex box, with the check drawn inside
       the selected swatch rather than trailing in a row. Thresholds: sixteen `.db-dropdown-option`
       rows and zero swatches; a 16px leading dot; the desktop row at the family's 30px floor
