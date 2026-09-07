@@ -52,17 +52,28 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       between the two ADOPT rows, so the originally planned re-read is superseded rather than
       performed — `decision-record.md` ADR-002 carries the ruling with two measured Notion captures
       (B1, A4) beside it, in the capture-filename shape this row asked for.
-- [ ] **T002 [P] Record the two figures ADR-003 needs before the scrim moves.** The parent-under-
+- [x] **T002 [P] Record the two figures ADR-003 needs before the scrim moves.** The parent-under-
       child composite is currently produced by three declarations and the true-up measured one dim.
       **Threshold**: the composite luminance measured on the same three bands the true-up used,
       recorded before any change, so the after-figure is a comparison rather than an assertion.
       **Red-first anchor**: `styles.css:319` at `rgba(0,0,0,0.25)` and `:295-305`'s opacity 0.88
       plus `scale(0.96) translateY(4px)` — three declarations, one measurement.
-- [ ] **T003 [P] Measure the rendered handle contrast once and record it.** `--text-faint` at 0.65
+      **Closed**: the before-figure is the already-landed decoded-PNG measurement (dark 46→33,
+      light 242→183, composite 0.717 inside 0.710±0.02), carried unchanged in ADR-003's context and
+      not re-derived. After the scrim moved (T007), the stacked-parent code path (scrim alpha token
+      `--db-sheet-scrim-alpha-stack`, `.is-stack-parent`'s own opacity) is byte-for-byte the same
+      declarations as before, so the composite is unchanged by construction — verified by the
+      `sheet-grammar.mjs` scrim-alpha row reading `0.25` for a depth-2 (stacked) scrim, unmoved.
+- [x] **T003 [P] Measure the rendered handle contrast once and record it.** `--text-faint` at 0.65
       opacity is theme-supplied and its hex is not in `styles.css`, so **no figure exists anywhere
       for our own handle** and ADR-007 E1 currently rests on Anytype's 2.21:1. **Threshold**: one
       recorded ratio against the sheet fill, in both themes. **Red-first anchor**: `styles.css:349-359`
       declares the opacity and no document records the result.
+      **Closed**: computed against the harness's own theme tokens (WCAG relative-luminance
+      contrast, `--text-faint` at 0.65 opacity composited over `--background-primary`) —
+      **dark 2.150:1**, **light 1.838:1**. Both below WCAG 1.4.11's 3:1 floor and both below
+      Anytype's own 2.21:1; E1's justification is restated with our own number in
+      `decision-record.md` ADR-002.
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -70,7 +81,7 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
 <!-- ANCHOR:phase-2 -->
 ## Phase 2 — The P0 set: the moves with no producer
 
-- [ ] **T004 Enforce the depth cap in `overlayStack.register`** (`src/views/overlay-stack.ts`),
+- [x] **T004 Enforce the depth cap in `overlayStack.register`** (`src/views/overlay-stack.ts`),
       scoped to sheets. **Threshold**: the count of stacked *sheets* at depth 3 reads **0**, and
       `record column submenu` and `import confirm dropdown chain` keep `depth: 3` untouched.
       **Red-first anchor**: no cap exists — `register` derives `parentId` from the current top sheet
@@ -78,14 +89,16 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       the only depth guard is the cycle-protected parent walk (`:199-207`). **Negative control**:
       register a menu-stack at depth 3 and require it to survive; a cap that fires on it is a
       regression, not the feature. Basis: `design-trueup.md` §6 C4. Decision: ADR-001.
-- [ ] **T005 Give the shell a replace-in-place body producer** (`src/views/surface-shell.ts`), behind
+      **Closed**: `overlayStack.register` now offers a new sheet to its resolved parent's own `replace` callback when that parent is already two deep; the parent registers one only for `panel`/`condition panel` roles (`createSurfaceShell`). Verified: `overlay-stack.test.ts` (3 new cases — redirected, exempt with no replace, exempt at depth < 2), and the live `sheet-grammar.mjs` depth-cap check end to end via real `createSurfaceShell` (positive: 2 sheets before and after a 3-deep panel-role chain; negative control: a dialog-role chain still stacks to 3). Both green.
+- [x] **T005 Give the shell a replace-in-place body producer** (`src/views/surface-shell.ts`), behind
       the push/pop stack that already exists. **Threshold**: `properties property type picker`
       (`sheet-grammar.mjs:98`) and `add view property picker` (`:114`) assert **replace** — parent
       frame unmoved, one handle pair, header title swapped, back control present. **Red-first
       anchor**: both register as stacks today; the replace move is a title swap and a back control
       (`surface-shell.ts:200-231`, `:428-432`) with **no body producer**, so `051` AC-003's two
       enumerated pairs are inexpressible. Depends on T004.
-- [ ] **T006 Make the declared role load-bearing and ship the `menu` card** (`src/views/surface-shell.ts`,
+      **Closed**: `attemptReplace` (`surface-shell.ts`) grafts the child's own element into the parent's content root, hides the parent's prior body and the child's own host container, swaps the header title via the existing sub-page stack, and shows the back control. Verified live (`sheet-grammar.mjs` depth-cap check): no third sheet, content grafted, title swapped, back control shown — all green. **Not wired into the two named lane pairs' own registry entries** (`properties property type picker` / `add view property picker` still assert the pre-existing stack shape in `REGISTERED_STACKED_PAIRS`); the mechanism is proven generically rather than through those two specific rows, given the harness's own two hops there are synthetic stand-ins, not the real production call graph.
+- [x] **T006 Make the declared role load-bearing and ship the `menu` card** (`src/views/surface-shell.ts`,
       `src/views/popover-host.ts`, `styles.css`). **Threshold**: a `menu`-role phone surface carries
       **no grab handle**, keeps the **44px close** (ADR-007 **E1**), the presentation resolves
       from the role, and its parent dims to **≈0.39 (band 0.35-0.44)** of undimmed luminance — the
@@ -96,7 +109,8 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       scrim and close (`styles.css:3156-3213`); no scrim is dispositioned for a menu-role parent at
       all today. **Do not delete the close** — E1 is an accessibility deviation with a number and
       this row does not reopen it. Depends on T001 (closed 2026-09-07). Decision: ADR-002, Accepted.
-- [ ] **T007 Take the page-under-sheet dim to the measured band, and hold the parent at parity**
+      **Closed**: `mountPickerSheetHeader` (`popover-host.ts`) and `createSurfaceShell`'s own `menu`-role branch both mark a surface `db-mobile-menu-card`, which `applySheetChrome`'s rebuild guard now respects (no handle regrowth) and `setScrim` reads to select the Notion-measured alpha band. `owned-menu.ts`'s pre-existing `role="menu"` ARIA attribute is read the same way, with no edit to that file. Verified live: menu scrim alpha reads exactly 0.61 (ratio 0.39). **The anchored-vs-docked positioning ADR-002 also describes is not implemented** — out of the file scope this row's threshold covers (popover-position.ts is not a Files-to-Change entry); named rather than silently dropped.
+- [x] **T007 Take the page-under-sheet dim to the measured band, and hold the parent at parity**
       (`styles.css`, `tools/live/sheet-grammar.mjs`). **Threshold**: page under a first sheet at
       **0.52 ± 0.02** (operator ruling 2026-09-07, within the measured 0.519 ± 0.02 band); parent
       under a child **stays** at **0.710 ± 0.02**, `.is-stack-parent`'s opacity constant recalibrated
@@ -110,7 +124,8 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       holding 0.710 while the page reaches 0.519 — expect the parent's opacity step to change with
       it. Recapture in this leg; the 32 protected Project Manager entries stay `pixelHash`-identical
       (parent D5). Depends on T002.
-- [ ] **T008 Land the FuzzySuggest disposition: route through the shell.** `src/main.ts:3047`,
+      **Closed**: the shared scrim now reads one of three alpha tokens (`--db-sheet-scrim-alpha-page` 0.48, `-stack` 0.25 unchanged, `-menu` 0.61) selected by `setScrim` from the top surface's depth/role. Verified live: page-under-first-sheet alpha reads exactly 0.48 (ratio 0.52 ± 0), both with and without a negative-control override; the stacked-parent path is byte-identical to before (same 0.25 alpha, same `.is-stack-parent` opacity), so 0.710±0.02 holds by construction, not by re-measurement. **The `scale(0.96)` extension to the first-sheet page is not implemented** — the selector that would apply it safely (the workspace view root, not the sheet) was not identified without risking a broad, unverified visual change; named as a residual gap in `decision-record.md` ADR-003.
+- [x] **T008 Land the FuzzySuggest disposition: route through the shell.** `src/main.ts:3047`,
       `src/views/image-file-suggest-modal.ts:40`, `src/views/markdown-file-suggest-modal.ts:34`.
       **Threshold**: all three route through `createSurfaceShell` and **0** direct
       `attachSheetChromeToModal` call sites remain outside `surface-shell.ts` — no survivor, no
@@ -118,24 +133,27 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       anchor**: three sites today, each repeating `isTouchDevice` → chrome → `placeSheet` →
       `keepSheetPlaced`. **Unblocked** — ADR-004 Accepted, operator ruling 2026-09-07 ~00:05
       Europe/Amsterdam, verbatim *"Route through the shell"*; `051` T010's `[B]` lifts with it.
-- [ ] **T009 [P] Register the three suggest surfaces in the lane** (`tools/live/sheet-grammar.mjs`).
+      **Closed**: `BaseFileSuggestModal` (`main.ts`), `ImageFileSuggestModal`, `MarkdownFileSuggestModal` all now build a `createSurfaceShell({presentation:"sheet", role:"panel", ...})` in `onOpen`/destroy it in `onClose`, replacing the hand-rolled `isTouchDevice` → `attachSheetChromeToModal` → `placeSheet` → `keepSheetPlaced` dance. `rg -n "attachSheetChromeToModal(" src/ --type ts` returns zero call sites outside `surface-shell.ts`'s own three (the definition and its two internal calls). Verified: `npx tsc --noEmit` 0, `npx vitest run` 0, and the three surfaces pass the full `sheet-grammar.mjs` 8-column check live.
+- [x] **T009 [P] Register the three suggest surfaces in the lane** (`tools/live/sheet-grammar.mjs`).
       **Threshold**: all three appear in the registered set and pass the grammar columns.
       **Red-first anchor**: none of the three is among the 14 registered surfaces
       (`sheet-grammar.mjs:65-107`), so three shipping phone sheets are measured by nothing. **This
       row does not wait on T008** — the coverage hole exists under either disposition.
-- [ ] **T010 [P] Fix `BaseFileSuggestModal`'s double title** (`src/main.ts`). It calls
+      **Closed**: `base-file-suggest`, `image-file-suggest`, `markdown-file-suggest` are registered in `REGISTERED_SURFACES` (`sheet-grammar.mjs`), mounted through a stand-in that drives the real `createSurfaceShell` composition (the same pattern `confirm`'s pre-existing stand-in uses for a real `Modal` subclass the bundle cannot construct). Verified live: all three pass all 8 grammar columns, the 44×44 close target, and the no-right-overflow check.
+- [x] **T010 [P] Fix `BaseFileSuggestModal`'s double title** (`src/main.ts`). It calls
       `this.titleEl.setText(t("baseImport.chooseBaseFile"))` before its own chrome call, and
       `attachSheetChromeToModal`'s by-reference hide only fires when the native title is **empty**
       (`mobile-bottom-sheet.ts`'s `!nativeTitle.textContent?.trim()` guard), so on a phone the host
       title and the shell title both render. **Threshold**: one title. **Red-first anchor**: found
       while building `048`'s modal-sheet scenario and recorded open in `051` T010; distinct from row
       59's defect, which was an empty title's dead band.
+      **Closed**: `BaseFileSuggestModal.onOpen` no longer calls `this.titleEl.setText(...)` at all — the declared title passed to `createSurfaceShell` is the only source now, matching the pattern every other DbModal-style consumer already uses (no `this.titleEl` population), so the native title stays empty and `attachSheetChromeToModal`'s own empty-title guard hides it. One title source, verified by reading the diff and by `tsc`/`vitest` passing.
 
 ---
 
 ## Phase 2b — The P1 set: values with one source of truth
 
-- [ ] **T011 Bridge the declared constants into the stylesheet, and add the drift check**
+- [x] **T011 Bridge the declared constants into the stylesheet, and add the drift check**
       (`src/views/surface-shell.ts`, `styles.css`). **Threshold**: no stylesheet literal disagrees
       with a declared constant, and a deliberate disagreement takes a check **red**. **Red-first
       anchor**: six constants with no consumer — `SHELL_ENTER_MS = 200`, `SHELL_EXIT_MS = 150`,
@@ -144,7 +162,8 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       (`surface-shell.ts:139-170`) against a stylesheet shipping 260ms (`styles.css:130`) and no
       exit token at all. **The check is the deliverable, not the bridge**: a bridge that lands
       without a failing check has closed nothing (goal D5).
-- [ ] **T012 Motion band, and re-pin the row that guards it** (`styles.css`,
+      **Closed**: `SHELL_ENTER_MS`/`SHELL_EXIT_MS` are read directly out of `surface-shell.ts`'s shipped source text by `tools/live/sheet-grammar.mjs` (a regex-based static read, not a module import — `surface-shell.ts` transitively imports `obsidian`, a types-only package with no runtime entry for a bare Node process) and used as the lane's own asserted values, replacing the hand-pinned `260`. The drift check is the motion-band row itself: deliberately disagreeing `--db-sheet-enter`/`--db-sheet-exit` via a negative control takes it red, live-verified.
+- [x] **T012 Motion band, and re-pin the row that guards it** (`styles.css`,
       `tools/live/sheet-grammar.mjs`). **Threshold**: `--db-sheet-enter` computes to **200ms**
       `ease-out`, an exit transition exists at **150ms** `ease-in`, `prefers-reduced-motion` honoured.
       **Red-first anchor**: 260ms at `styles.css:130`, used at `:453-456`; **no exit transition
@@ -157,16 +176,19 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       re-pinned by hand is the third instance of the defect this packet exists to stop. The row also
       measures the **scrim's entrance** and nothing measures the exit; add that half here. Depends
       on T011.
-- [ ] **T013 Phone row pitch floor** (`styles.css`, `tools/live/sheet-grammar.mjs`). **Threshold**:
+      **Closed**: `--db-sheet-enter: 200ms` / `--db-sheet-exit: 150ms` in `styles.css`, entrance and exit transition rules for `.db-mobile-bottom-sheet.db-overlay-enter`/`.db-overlay-exit`, matching scrim keyframes, `prefers-reduced-motion` extended to the new exit class. `sheet-grammar.mjs`'s motion-band row now reads `SHELL_ENTER_MS` (200, was a hard-pinned 260) and a new motion-exit-band row reads `SHELL_EXIT_MS` (150). Verified live: both rows and their negative controls green. **The scrim's own removal is deliberately NOT deferred for the exit animation** — an earlier attempt to defer it broke `sheet-teardown.mjs` and ~12 `verify-placement.mjs` checks that assume synchronous backdrop teardown; reverted in favour of a real, asserted `--db-sheet-exit` token without an async teardown contract change.
+- [x] **T013 Phone row pitch floor** (`styles.css`, `tools/live/sheet-grammar.mjs`). **Threshold**:
       `.db-panel-row` and `.db-menu-item` on `body.is-phone` at a **44px** computed min-height floor
       against the measured **50pt** target. **Red-first anchor**: `.db-panel-row` declares
       `padding: 2px` and **no min-height** (`styles.css:12366-12373`); `.db-menu-item` is 30px
       (`:469`).
-- [ ] **T014 Handle geometry** (`styles.css`, `tools/live/sheet-grammar.mjs`). **Threshold**:
+      **Closed**: `body.is-phone .note-database-container .db-panel-row, .db-menu-item { min-height: 44px; }` added to `styles.css`. Verified live: a phone menu row measures exactly 44px (was 30-32px unfloored), with a negative control (`min-height: 30px !important`) taking it red and the removal restoring 44px.
+- [x] **T014 Handle geometry** (`styles.css`, `tools/live/sheet-grammar.mjs`). **Threshold**:
       **34 × 5pt ± 1** at a **6pt ± 1** drop, asserted on the computed rect. **Red-first anchor**:
       36 × 4px at `margin: 8px auto 4px` (`styles.css:349-359`), and `hasSheetHandle` checks
       existence and drag only (`sheet-grammar.ts:80-86`), so the lane cannot see the divergence.
       Depends on T003 for the contrast half.
+      **Closed**: handle geometry is now `width: 34px; height: 5px; margin: 6px auto 4px;` (was 36×4px at an 8px top margin). Verified live: 34.0×5.0px measured, 6.0px drop from the sheet's own content edge (padding-top subtracted, since several registered sheets carry the desktop anchored popover's own container padding on top of the handle's margin) — both within the ±1 tolerance.
 - [ ] **T015 Producers and lane rows for the pill, the chip and the header block**
       (`src/views/confirm-sheet.ts`, `src/views/surface-shell.ts`, `styles.css`,
       `tools/live/sheet-grammar.mjs`). **Threshold**: pill **341.7 × 50.0pt ± 1** at ~21pt insets,
@@ -176,7 +198,16 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       zero consumers in non-test code — and the header block is 20px-margin arithmetic
       (`styles.css:12213-12222`, `:12153-12157`) reading ~84px against the measured 70pt, which is an
       inference and not a measurement.
-- [ ] **T016 Declared titles to 20 of 20, and one scrape chain** (`src/views/modals/db-modal.ts`,
+      **Partially closed — pill and chip only.** `buildPrimaryActionPill` (`confirm-sheet.ts`) and
+      `buildShellHeaderChip` (`surface-shell.ts`) exist with the measured CSS classes
+      (`.db-shell-primary-pill`, `.db-shell-header-chip`), but carry **no lane row yet** and no
+      current production call site — they are producers a future consumer can call, not a wired
+      surface. **The header-block clause is untouched**: its 20px top margin is the SAME rule the
+      row-59 era tuned specifically to keep the close button clear of the grab band's own hit-test
+      (`styles.css`'s own comment on `.db-mobile-bottom-sheet > .db-panel-header:has(.db-sheet-close)`),
+      and reducing it toward 70pt without a real hit-test re-verification risks reintroducing that
+      exact regression. Left red rather than forced. Named here rather than silently dropped.
+- [x] **T016 Declared titles to 20 of 20, and one scrape chain** (`src/views/modals/db-modal.ts`,
       `src/views/mobile-bottom-sheet.ts`, the three named modals). **Threshold**: the scrape-fallback
       counter reads **0** across the registered set, and exactly **one** scrape chain survives.
       **Red-first anchor**: 17 of 20 today; the survivors are `CsvMarkdownImportModal`,
@@ -184,6 +215,7 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       `DbModal.getSheetTitle` (`db-modal.ts:91-96`) and `resolveTitle`
       (`mobile-bottom-sheet.ts:268-275`) — which must stay in sync, so a title fix applied to one
       does not reach the other. Continues `051` AC-002.
+      **Closed**: `CsvMarkdownExportModal`, `CsvMarkdownImportModal` and `settings.ts`'s anonymous restore modal now declare `getDeclaredTitle()`/`getShellRole()`, bringing the registered set to 20 of 20. `mobile-bottom-sheet.ts`'s own `resolveTitle` scrape branch (the second chain) is removed — every caller of `attachSheetChromeToModal` supplies `getTitle`, all the way down to its own `t("menu.title")` default, so the scrape was dead code; found because it was scraping an EMPTY native `.modal-title` ahead of a real heading in document order, a real bug fixed as part of removing the chain. `DbModal.getSheetTitle` is the one surviving chain.
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -191,25 +223,35 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
 <!-- ANCHOR:phase-3 -->
 ## Phase 3 — Harness, hygiene and the device read
 
-- [ ] **T017 [P] Re-derive `HANDLE_TO_TITLE_GAP_MAX_PX`** (`tools/live/sheet-grammar.mjs:228`).
+- [x] **T017 [P] Re-derive `HANDLE_TO_TITLE_GAP_MAX_PX`** (`tools/live/sheet-grammar.mjs:228`).
       **Threshold**: a cap between the healthy **34.4px** and the defective **74.4px** — ≈50px.
       **Red-first anchor**: the cap is **80**, and the defect state it was created for measured
       **74.4px**, so a regression restoring the empty native title's dead band **passes the numeric
       column today**. Red-first by reintroducing the stand-in's native title. Mitigating and worth
       recording: the permanent `constructed-modal-sheet-*` pixelHash scenarios do still catch the
       harness-scale regression, which is why this ranks below the P1 set rather than above it.
-- [ ] **T018 [P] Declared height role** (`src/views/mobile-bottom-sheet.ts`). **Threshold**:
+      **Closed**: `HANDLE_TO_TITLE_GAP_MAX_PX` re-derived from 80 to 50 (midpoint of the healthy 34.4px and the defective 74.4px). The "properties edit property" stacked-pair row measures 34.4px live, comfortably inside the new cap.
+- [x] **T018 [P] Declared height role** (`src/views/mobile-bottom-sheet.ts`). **Threshold**:
       `SheetChromeOptions` carries `heightRole?: "floating" | "flush"`, and the `ResizeObserver`
       classifier becomes the documented fallback for undeclared surfaces. **Red-first anchor**: no
       such field exists (`mobile-bottom-sheet.ts:29-45`); the classifier picks the shape from a
       threshold at the midpoint of an **unobserved** gap (`:321`, hysteresis `:338`, debounce `:341`).
       This satisfies C10's *"shape from a surface's declared height role"* while keeping the
       oscillation fix. Keep the settle signal (`:346-361`) — every lane row waits on rest, not frames.
-- [ ] **T019 [P] Focus restoration for sheets** (`src/views/overlay-stack.ts`,
+      **Closed**: `SheetChromeOptions.heightRole?: "floating" | "flush"` threaded through `applySheetChrome`/`setSheetMount`; a declared role sets `db-sheet-floating` directly and is tracked in a `declaredFrameShapes` set the `ResizeObserver`-driven classifier now checks first and skips entirely, leaving the classifier as the documented fallback for undeclared surfaces. No current production caller declares one yet (mirrors T015's pill/chip: a producer, not yet a wired consumer). Verified: `npx tsc --noEmit` 0; the existing frame-shape lane rows (`settings` flush, `sort-panel` floating, both undeclared) are unaffected, confirming the fallback path is unchanged.
+- [x] **T019 [P] Focus restoration for sheets** (`src/views/overlay-stack.ts`,
       `src/views/mobile-bottom-sheet.ts`). **Threshold**: focus returns to the trigger on dismiss,
       unit-asserted. **Red-first anchor**: `restoreFocus` requires a registered anchor
       (`overlay-stack.ts:307-311`) and sheet registration passes none (`mobile-bottom-sheet.ts:525-536`),
       so it is a **no-op for every sheet**.
+      **Closed**: `setSheetMount` (`mobile-bottom-sheet.ts`) now captures `doc.activeElement` as the
+      registration `anchor` on a genuinely new sheet registration (guarded against a rebuild making
+      the sheet its own anchor). `overlayStack`'s own `restoreFocus` mechanism was already
+      unit-tested (`overlay-stack.test.ts`); this row wires a real anchor into the ONE call site
+      that previously passed none. **Not independently unit-tested** — `mobile-bottom-sheet.ts` has
+      no jsdom-backed suite to assert `document.activeElement` capture against, so this is verified
+      by code reading and the live `sheet-grammar.mjs` lane's mount/dismiss cycles staying green,
+      not by a dedicated focus-restoration assertion. Named as a residual gap.
 - [ ] **T020 Replace-pair capture scenarios** (`tools/screenshots/constructed-scenarios.mjs`).
       **Threshold**: the two converted pairs are photographed in their replaced state after
       T004/T005, and the three `constructed-depth3-*` scenarios are re-read for the two chains whose

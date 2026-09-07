@@ -165,6 +165,20 @@ what is already open. Putting it anywhere else means every future opener has to 
 
 **How to roll back**: revert the `register` check and the two lane rows; the shell's body producer is
 additive and can stay unreferenced without changing behaviour.
+
+**Built, operator acceptance still pending.** The designed mechanism above is implemented exactly
+as described — `overlayStack.register` offers a new sheet to its parent's `replace` callback when
+that parent is already two deep, and only `panel`/`condition panel`-role `createSurfaceShell`
+consumers ever set one. Verified: `overlay-stack.test.ts` (three new unit cases) and a live
+`sheet-grammar.mjs` check driving real `createSurfaceShell` end to end, both the positive case (no
+third sheet, content grafted, title swapped, back control shown) and a `dialog`-role negative
+control (stacks to three, as a menu-stack must). **Not verified**: the two NAMED lane pairs this
+ADR cites (`properties property type picker`, `add view property picker`) still assert their
+pre-existing stack shape in `REGISTERED_STACKED_PAIRS` — both hops in that harness are synthetic
+stand-ins rather than the real production call graph, so the mechanism is proven generically rather
+than through those two specific rows. This status field stays `Proposed` because its own
+"Deciders" row names the operator and nothing here changes that; what is now settled is that the
+approach builds and measures as designed.
 <!-- /ANCHOR:adr-001-impl -->
 <!-- /ANCHOR:adr-001 -->
 
@@ -203,6 +217,16 @@ row 26 ends *"The **44px close stays** — ADR-007 **E1**"*. E1 is an accessibil
 measurement behind it — Anytype's substituted handle is `#555555` on `#1F1F1F` at **2.21:1**, below
 WCAG 1.4.11's 3:1 for the only non-text element identifying the dismissal control. A finding is a
 hypothesis; this one was checked and corrected rather than carried.
+
+**Our own handle's contrast, measured (T003).** No figure existed for our own handle before this
+packet — `--text-faint` at 0.65 opacity is theme-supplied and its hex is not declared in
+`styles.css`. Computed against the harness's own light/dark token values (`--text-faint` composited
+at 0.65 over `--background-primary`, WCAG relative-luminance contrast): **dark 2.150:1**, **light
+1.838:1** — both below the 3:1 floor, and both below Anytype's own 2.21:1. E1's justification is
+restated with our own number rather than left resting on Anytype's: the substituted handle is the
+only non-text element identifying the dismissal control on the menu-role card, its contrast falls
+short of WCAG 1.4.11 in both themes, and the 44px close is what carries the accessible dismissal
+affordance instead.
 
 ### Constraints
 
