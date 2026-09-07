@@ -48,19 +48,19 @@
       "goal.md",
       "decision-record.md",
       "implementation-summary.md",
-      "screenshots/manifest.json",
+      "tools/naming/rename-prefixes.mjs",
       "tools/lane/css-lane.json",
-      "repo-rules/spec-tree-layout.md",
+      "src/data/legacy-plugin-data-migration.ts",
+      "src/views/modals/linked-view-block-aliases.test.ts",
       "src/main.ts",
-      "src/i18n.ts",
       "src/views/database-view.ts",
-      "src/views/database-file-view.ts",
       "src/views/modals/linked-view-block.ts",
+      "src/views/embedded-database-renderer.ts",
+      "repo-rules/spec-tree-layout.md",
+      "src/i18n.ts",
+      "src/views/database-file-view.ts",
       "src/data/csv-markdown-zip-export.ts",
-      "src/data/conditional-formatting.ts",
-      ".storybook/preview.ts",
-      ".github/workflows/release.yml",
-      "tools/naming/failing-values-baseline.json"
+      "src/data/conditional-formatting.ts"
     ],
     "entities": [
       {
@@ -106,9 +106,9 @@
         "source": "derived"
       },
       {
-        "name": "manifest.json",
-        "kind": "config",
-        "path": "screenshots/manifest.json",
+        "name": "rename-prefixes.mjs",
+        "kind": "file",
+        "path": "tools/naming/rename-prefixes.mjs",
         "source": "derived"
       },
       {
@@ -118,9 +118,15 @@
         "source": "derived"
       },
       {
-        "name": "spec-tree-layout.md",
-        "kind": "doc",
-        "path": "repo-rules/spec-tree-layout.md",
+        "name": "legacy-plugin-data-migration.ts",
+        "kind": "code",
+        "path": "src/data/legacy-plugin-data-migration.ts",
+        "source": "derived"
+      },
+      {
+        "name": "linked-view-block-aliases.test.ts",
+        "kind": "test",
+        "path": "src/views/modals/linked-view-block-aliases.test.ts",
         "source": "derived"
       },
       {
@@ -130,27 +136,39 @@
         "source": "derived"
       },
       {
-        "name": "i18n.ts",
-        "kind": "code",
-        "path": "src/i18n.ts",
-        "source": "derived"
-      },
-      {
         "name": "database-view.ts",
         "kind": "code",
         "path": "src/views/database-view.ts",
         "source": "derived"
       },
       {
-        "name": "database-file-view.ts",
-        "kind": "code",
-        "path": "src/views/database-file-view.ts",
-        "source": "derived"
-      },
-      {
         "name": "linked-view-block.ts",
         "kind": "code",
         "path": "src/views/modals/linked-view-block.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.ts",
+        "kind": "code",
+        "path": "src/views/embedded-database-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "spec-tree-layout.md",
+        "kind": "doc",
+        "path": "repo-rules/spec-tree-layout.md",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-file-view.ts",
+        "kind": "code",
+        "path": "src/views/database-file-view.ts",
         "source": "derived"
       },
       {
@@ -163,24 +181,6 @@
         "name": "conditional-formatting.ts",
         "kind": "code",
         "path": "src/data/conditional-formatting.ts",
-        "source": "derived"
-      },
-      {
-        "name": "preview.ts",
-        "kind": "code",
-        "path": ".storybook/preview.ts",
-        "source": "derived"
-      },
-      {
-        "name": "release.yml",
-        "kind": "config",
-        "path": ".github/workflows/release.yml",
-        "source": "derived"
-      },
-      {
-        "name": "failing-values-baseline.json",
-        "kind": "config",
-        "path": "tools/naming/failing-values-baseline.json",
         "source": "derived"
       },
       {
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The product has one name in the operator's head and a different one in every file",
     "created_at": "2026-09-06T16:08:10Z",
-    "last_save_at": "2026-09-06T21:48:40.614Z",
+    "last_save_at": "2026-09-07T17:56:59.818Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:92a361f9e6aedf1ad4de3ae340eaa6a3925f29b096b72bd9f26e5bb6fa8251c7",
+    "source_fingerprint": "sha256:216a4ce8009c9c819504e3d1026d4e5973ccef8fe39af0c1b6bf3559f22a920e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "83aefe0c0e155f3e2f7d959db00742e9bb36af8000d7ad3e20e485ba02f2c4b0",
       "plan.md": "74ea00d69175896961e54654a1d66593b87013b5a9ecf906e3e91aa2cd52e6e2",
-      "tasks.md": "bbd2943b2d0405479ae60dab33151b85440c90ad911c500e6197c0070e94cf6f",
-      "decision-record.md": "04104ea0f1bae42c69ca0a838ccba7006305bc78a06880cf47a7c7c362572e56",
-      "implementation-summary.md": "72a2254a6f7f94a62ec8a473f20a336ebfb16d193670e6a76e4d515ed7886f90"
+      "tasks.md": "d81ddb291fc8ccf44ebdf204e65c36a2edb68957e9c140a1830e40fd01221f48",
+      "decision-record.md": "051382f67a35f8b87566d91f78817edc42484a78b9f4d44778e0386fbc14377f",
+      "implementation-summary.md": "c9a5280d270e195eca70bddb23e2808739c697c01ba232f13bf9408898728f25"
     },
     "last_active_at": null
   }

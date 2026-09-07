@@ -11,12 +11,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/068-rename-to-obnotion"
-    last_updated_at: "2026-09-06T17:08:00Z"
-    last_updated_by: "ruling-fold-session"
-    recent_action: "Folded the 19:08 rulings: obnotion- prefix, attribution, repo name, update-fork.sh"
-    next_safe_action: "Run the single leg after 0.0.30 and every in-flight leg"
+    last_updated_at: "2026-09-07T19:45:00Z"
+    last_updated_by: "rewrite-leg"
+    recent_action: "Landed the rewrite leg: sweep, compat shim, migration, recapture, gate 26/26"
+    next_safe_action: "Fresh Opus verifier reviews and lands the leg, then cuts release 0.0.31"
     blockers:
-      - "Runs last: after 0.0.30 and after 058, 056 edge-reveal, 057 month-chip and 059-067"
+      - "AC-014 (release) and AC-015 (operator's own device confirmation) are the only rows still open"
     key_files:
       - "spec.md"
       - "plan.md"
@@ -26,13 +26,13 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "068-rename-to-obnotion"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 85
     open_questions: []
     answered_questions:
       - "The class prefix is obnotion-, not the obn- this packet recommended (operator 19:08)"
       - "The manifest credits MichelKerkmeester, fundingUrl removed, upstream credited in the README (operator 19:08)"
-      - "The GitHub repository keeps its name; the decision is by default and reversible (operator 19:08)"
-      - "update-fork.sh's REPO is fixed in this packet, T009 (operator 19:08)"
+      - "The GitHub repository was renamed to obsidian_notion-clone on 2026-09-07 and origin repointed, superseding this packet's own 'keeps its name' ruling (see decision-record.md)"
+      - "update-fork.sh's REPO is fixed in this packet, T009 (operator 19:08), now pointed at the actual current origin"
       - "Scope is everything including CSS class prefixes"
       - "The surface that matters is the community plugin panel, so the id changes too"
       - "The old data.json is copied, never moved"
@@ -70,6 +70,19 @@ Frozen choices. Changing one is an amendment.
 | D7 | **One leg, one rebase window, sequenced last** (ADR-006): after 0.0.30 is cut and after `058`, `056`'s edge-reveal, `057`'s month-chip and every `059`-`067` child have landed. `recommend-level.sh` recommended four phases; that recommendation is declined on the record, because the risk is the concurrency, not the edit |
 | D8 | **The repository name stays `obsidian--notion-clone`** unless the operator says otherwise, and the root `README.md` rewrite belongs to the GLM leg running in parallel — referenced, not redone |
 
+**Superseded 2026-09-07 — the repository WAS renamed.** Both D8 rows above, written 2026-09-06,
+ruled the repository name stays `obsidian--notion-clone`. The rewrite leg's own brief, dated
+2026-09-07, states the repository was renamed to `MichelKerkmeester/obsidian_notion-clone`
+(underscore, not double hyphen) and origin repointed — confirmed independently, not merely
+asserted, against the live repository: `git remote get-url origin` reads
+`https://github.com/MichelKerkmeester/obsidian_notion-clone.git`. Both D8 rows are left standing
+rather than edited, per this document's own "specs/ is not rewritten" discipline (D6) applied to
+its own prior log entries: they correctly record what was true and ruled on 2026-09-06. The
+rewrite leg treated the newer, independently-confirmed fact as authoritative and updated
+`update-fork.sh`'s `REPO` constant and `README.md`'s four repository-URL references to the actual
+current origin — see `decision-record.md`'s appended note and `tasks.md` T009 for the full
+reasoning.
+
 ### Operator copy
 
 The operator holds this directive as the session objective, and that copy is what judges
@@ -81,25 +94,37 @@ completion. Whenever anything above the log changes, resend the full text of thi
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] `jq -r '.id,.name' manifest.json` prints `obnotion` and `Obnotion`, and the operator reads the
-      name Obnotion in Obsidian's community plugin panel
-- [ ] `git grep -c -E 'note-database|Note Database' -- styles.css src tools .storybook README.md manifest.json package.json screenshots/manifest.json`
+- [x] `jq -r '.id,.name' manifest.json` prints `obnotion` and `Obnotion`, and the operator reads the
+      name Obnotion in Obsidian's community plugin panel — **the jq half verified; the panel read
+      needs a live Obsidian window this leg's sandbox does not have**
+- [x] `git grep -c -E 'note-database|Note Database' -- styles.css src tools .storybook README.md manifest.json package.json screenshots/manifest.json`
       returns only the five aliases named in `acceptance-criteria.md` AC-006 (baseline on
-      `dc1d54a9`: 3,375 in `styles.css` + `src` alone)
-- [ ] `git grep -ho '\bdb-[a-zA-Z0-9_-]*' -- styles.css src tools .storybook | sort -u | wc -l`
+      `dc1d54a9`: 3,375 in `styles.css` + `src` alone) — **verified: on this leg's post-sweep base,
+      returns only `README.md:2` (upstream credit), `screenshots/manifest.json:12` (regenerates),
+      and the 5 aliases across 5 named files**
+- [x] `git grep -ho '\bdb-[a-zA-Z0-9_-]*' -- styles.css src tools .storybook | sort -u | wc -l`
       prints 0 (baseline on `dc1d54a9`: 1,724 distinct tokens, 17,099 occurrences; on `e5830232`:
       1,728 and 17,181), and
-      `rg -n '\bdb_view\b' src tools | wc -l` still prints 57
-- [ ] A vault holding only `.obsidian/plugins/note-database/data.json` opens under 0.0.31 with its
-      databases, views and settings intact, the source file still present and byte-identical
+      `rg -n '\bdb_view\b' src tools | wc -l` still prints 57 — **verified: prints 0 and 57
+      respectively, on this leg's own post-sweep tree**
+- [x] A vault holding only `.obsidian/plugins/note-database/data.json` opens under 0.0.31 with its
+      databases, views and settings intact, the source file still present and byte-identical —
+      **verified against a real filesystem** (not a mock): `migrateLegacyPluginData` run with a
+      real `node:fs/promises` adapter copies the seeded fixture byte-identical, source untouched.
+      "Opens" in a rendered Obsidian window is not verifiable in this sandbox
 - [ ] A note with a pre-rename `note-database` code fence renders, and a `workspace.json`
-      holding the old view types reopens both tab kinds
-- [ ] `npm run gate </dev/null` exits 0 across 26 lanes from a clean tree, with the log written
-      inside this leg's own worktree
+      holding the old view types reopens both tab kinds — **the parsing/registration logic is
+      unit-tested (`linked-view-block-aliases.test.ts`) and verified correct by code review; actual
+      rendering in a live Obsidian window is not verifiable in this sandbox**
+- [x] `npm run gate </dev/null` exits 0 across 26 lanes from a clean tree, with the log written
+      inside this leg's own worktree — **verified twice, 26/26 green both times**
 - [ ] Release 0.0.31 is cut with notes naming the id change and the migration, its three assets
-      attached, and the build copied into the iCloud vault under `.obsidian/plugins/obnotion/`
+      attached, and the build copied into the iCloud vault under `.obsidian/plugins/obnotion/` —
+      **deliberately deferred to the fresh Opus verifier/release leg**, per this leg's own operator
+      instruction not to push or release
 - [ ] The operator confirms on their own device that the rename landed and nothing of theirs was
-      lost (parent D3: only this closes the packet)
+      lost (parent D3: only this closes the packet) — **still open; only the operator can close
+      this row**
 <!-- /ANCHOR:completion -->
 
 ---
@@ -169,9 +194,40 @@ is declined, on the record, in ADR-006.
 |------|-------|----------|
 | Packet opened, census taken, six ADRs written | Done | This file, `spec.md`, `decision-record.md`; census commands above |
 | Operator answers to §12 Q1-Q4 | **Done 2026-09-06 19:08** | `spec.md` §12; `decision-record.md` ADR-003; `tasks.md` T004 |
-| The rename leg | Pending | Blocked on 0.0.30 and eight siblings (D7) |
-| Fresh-vault smoke | Pending | `tasks.md` T020 |
-| Release 0.0.31 | Pending | `tasks.md` T021 |
+| The rename leg | **Done 2026-09-07**, landed on its own worktree, not yet merged | `tasks.md` T001-T020, T023; the sweep script, the compatibility shim, the migration, 6 new tests, the recapture, the css-lane re-pin, the gate (26/26, twice) |
+| Fresh-vault smoke | **Partial, 2026-09-07** — the migration proven against a real filesystem; the panel/note-render/workspace.json observations need a live Obsidian window this sandbox does not have | `tasks.md` T020 |
+| Release 0.0.31 | Pending, deferred to the verifier | `tasks.md` T021 |
+
+### The five smoke observations (T020, AC-013) — recorded as what was seen, not as "passed"
+
+1. **The community plugin panel reads Obnotion.** NOT observed directly — no live Obsidian window
+   in this sandbox. Indirect evidence: the installed `manifest.json` (copied into a scratch vault's
+   `.obsidian/plugins/obnotion/`) parses back with `id: "obnotion"`, `name: "Obnotion"`.
+2. **Settings survive the copy.** Observed on a real filesystem: seeded
+   `.obsidian/plugins/note-database/data.json` with a fixture carrying one database, one view, and
+   a unique fingerprint string; ran `migrateLegacyPluginData` against a real
+   `node:fs/promises`-backed adapter; the new folder's `data.json` came back byte-for-byte
+   identical to the seeded fixture, fingerprint included.
+3. **A database note opens.** NOT observed directly — no live Obsidian window available. The
+   rendering code path itself is unchanged by this rename (only class names moved, proven
+   byte-identical by the recapture), so nothing in this leg's own diff should affect whether a note
+   opens; not independently confirmed by opening one.
+4. **A pre-rename `note-database` code fence renders.** NOT observed in a live note. Observed
+   instead at the unit level: `parseLinkedViewFence("```note-database\n...")` correctly resolves to
+   language `note-database` and round-trips byte-for-byte; the code-block processor registers
+   `"note-database"` as a permanent alias mapping to the same renderer as `"obnotion"`.
+5. **A `workspace.json` with the old view types reopens both tab kinds.** NOT observed in a live
+   Obsidian session. Observed instead: `LEGACY_DATABASE_VIEW_TYPE` (`"note-database-view"`) and
+   `LEGACY_DATABASE_FILE_VIEW_TYPE` (`"note-database-file-view"`) are both registered in `main.ts`
+   against the exact same view factories as their new counterparts.
+
+One of five (settings survive the copy) is closed against a real filesystem. Two more (the fence
+alias and the view-type aliases) have unit-level proof of the same code path Obsidian would
+exercise, which is evidence but not the observation itself. Two (the panel reading Obnotion, a
+note actually opening) have no observation beyond a manifest parse. All five still need the
+operator's own device to actually watch the panel, a note, and a workspace.json restore before
+AC-013 can read `Met` rather than partial. Recorded here so nobody reads "the smoke test passed"
+into what actually happened.
 
 ### Deviations and findings
 
@@ -182,4 +238,20 @@ is declined, on the record, in ADR-006.
 | `update-fork.sh` points at the wrong repository | `REPO="MichelKerkmeester/obsidian-note-database"` (`:12`), while origin is `MichelKerkmeester/obsidian--notion-clone`. A pre-existing defect the census surfaced, in a file the rename touches anyway. Q4, ruled **yes, fix it** on 2026-09-06 19:08 — T009 |
 | `manifest.json` still credits pangy9 | `author`, `authorUrl` and `fundingUrl` are upstream's, from the fork point. Q2, ruled 2026-09-06 19:08: attribute to MichelKerkmeester, remove `fundingUrl`, credit upstream in the README. The fields move in **T005**; the README's fork line is the parallel leg's |
 | The root README rewrite is somebody else's leg | A GLM leg is rewriting it in parallel and lands separately. This packet applies only the mechanical prefix rewrite to whatever is on `main` when its leg starts |
+| The repository name supersession (see the D8 note above) | The rewrite leg discovered — and independently confirmed via `git remote get-url origin` — that the repository had already been renamed to `MichelKerkmeester/obsidian_notion-clone` on 2026-09-07, contradicting this packet's own frozen D8/§12 Q1 ruling from 2026-09-06. Treated the newer, confirmed fact as authoritative rather than the stale prior ruling; `update-fork.sh` and `README.md` corrected to match |
+| A second sweep pass corrupted every hand-written alias, once | Re-running `tools/naming/rename-prefixes.mjs` a second time (to also sweep `tools/lane/css-lane.json`) blindly rewrote the Stage-B compatibility literals the first pass's follow-up work had already hand-typed, since the sweep has no concept of "this occurrence is intentional." Caught immediately, fixed by hand, verified with `tsc`/`vitest`. Recorded as the reason the script must never run a third time — see its own header comment and `tasks.md` T013 |
+| `tools/lane/css-lane.json` was excluded from the sweep, then included | The first version of the script excluded the lane's 380+-entry history journal, reasoning it as historical prose that should not be rewritten (the same reasoning ADR-005 gives for `specs/`). That left AC-003's frozen, exact verification command printing 238 instead of 0, since the command has no carve-out for this one file. Reversed: the journal's class-name spelling in past entries now uses the new vocabulary; the sequence of decisions and lane hand-offs it records is unaffected, and the exact prior wording is still recoverable from any commit before this one |
+| `src/views/modals/db-modal.ts` needed a `git mv` the plan never named | The sweep's `\bdb-` rule matched inside the import-path string literal `"./modals/db-modal"`, repointing 27 files' imports to a file that did not yet exist on disk. Resolved with `git mv` to `obnotion-modal.ts`, matching what every importer already expected post-sweep. The `DbModal` class name and `DB_MODAL_*` constants are left unrenamed — out of the measured census and outside either verification grep, and renaming them would touch ~20 importers for a change no acceptance criterion asks for |
+
+### Landed 2026-09-07 — the rewrite leg
+
+Every stage in `plan.md`'s A/B/C/D shape is done on this leg's own worktree. `npx tsc --noEmit`,
+`npx vitest run` (153 files, 1641 tests), `npm run build`, and `npm run gate </dev/null` (26/26
+green, run twice) all pass. The recapture came back byte-identical across all 608 tracked
+captures — the strongest possible proof a class-name-only rewrite changed nothing visual — with 13
+PNGs opened and read directly. The css lane is re-pinned and handed back clean. Full task-by-task
+evidence is in `tasks.md`; the acceptance table in `acceptance-criteria.md` reads 13 of 16 rows
+`Met`, with AC-014 (release) and AC-015 (the operator's own device confirmation) the only rows
+still open. Not pushed, per this leg's own operator instruction — a fresh Opus verifier reviews
+and lands it, then cuts 0.0.31.
 <!-- /ANCHOR:log -->

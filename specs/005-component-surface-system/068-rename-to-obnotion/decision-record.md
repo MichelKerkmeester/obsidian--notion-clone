@@ -755,3 +755,71 @@ silently.
 **How to roll back**: the whole leg is one branch; `git revert` its commits on `main`.
 <!-- /ANCHOR:adr-006-impl -->
 <!-- /ANCHOR:adr-006 -->
+
+---
+
+<!-- ANCHOR:landing-addendum -->
+## Landing Addendum — 2026-09-07, the rewrite leg
+
+Recorded when the rewrite leg landed, not as a new ADR (none of the six decisions above changed),
+but because two genuine deviations from what this document and `spec.md`/`goal.md` said going in
+were discovered during implementation and CLAUDE.md's own discipline requires recording a
+deviation with its reasoning rather than silently absorbing or ignoring it.
+
+### 1. The repository-name ruling (§12 Q1, D8, ADR-001's scope note) is superseded
+
+`spec.md` §12 Q1 and `goal.md` D8 both rule, 2026-09-06 19:08, that the GitHub repository keeps its
+name (`obsidian--notion-clone`) — a decision taken by default and recorded as reversible. The
+rewrite leg's own brief, dated 2026-09-07, states the repository was renamed to
+`MichelKerkmeester/obsidian_notion-clone` (single underscore, not double hyphen) and origin
+repointed. This was not simply trusted: the rewrite leg ran `git remote get-url origin` against
+the live repository and confirmed it independently — the remote genuinely reads
+`https://github.com/MichelKerkmeester/obsidian_notion-clone.git`.
+
+**Resolution**: the newer, independently-confirmed fact is authoritative over this packet's own
+frozen ruling, which was correct when written and is now simply superseded by an event outside
+this packet's control (the operator renamed the repository the day after ruling it would stay put
+— reversible decisions get reversed sometimes). `update-fork.sh`'s `REPO` constant and 4 stale
+`obsidian--notion-clone` references in `README.md` were corrected to the actual current origin.
+Nothing in `spec.md`, `goal.md` or this document is edited to pretend the original ruling said
+something different — both carry an appended note pointing here, per this program's own
+"specs/ is not rewritten" discipline applied to a packet's own prior log entries.
+
+### 2. The mechanical sweep's literal execution order differs from `plan.md`'s stage lettering
+
+`plan.md` §1 states Stage B (the compatibility shim) lands before Stage C (the prefix sweep), so
+that "the sweep cannot silently break a contract that has no fallback yet." That is a commit-safety
+rationale about what an interrupted leg looks like mid-flight, not a technical requirement for how
+a text-substitution script must execute — and landing it in that literal order turns out to be
+impossible: a blind sweep operating on file contents cannot distinguish "this exact
+`note-database-view` string is the intentional backward-compat literal Stage B just wrote" from
+"this one is unswept residue Stage C hasn't reached yet." Both look like identical bytes.
+
+**Resolution**: the actual edit order was sweep first (Stage C), then the five compatibility
+aliases hand-written after (Stage B), since each old-string literal is typed in once nothing
+further will process it. This was discovered non-hypothetically: re-running the sweep a second
+time (to additionally cover `tools/lane/css-lane.json`, see below) silently overwrote every
+already-hand-written alias, proving the concern was real rather than theoretical. The committed
+git history still groups into the plan's identity → compatibility → sweep → evidence narrative by
+commit content, independent of the wall-clock order the edits were typed in. End state and every
+acceptance criterion in `acceptance-criteria.md` are identical either way — this is an
+implementation-order choice, not a scope or outcome change.
+
+### 3. `tools/lane/css-lane.json`'s exclusion from the sweep was reversed
+
+The sweep script's first version excluded `tools/lane/css-lane.json` from its rewrite scope,
+reasoning its 380-entry `history` array as a chronological journal whose prose should not be made
+to claim a class name existed at a point in the past when it did not — the same failure ADR-005
+names for rewriting `specs/`. This left `acceptance-criteria.md` AC-003's frozen, literal
+verification command (`git grep -ho '\bdb-[a-zA-Z0-9_-]*' -- styles.css src tools .storybook |
+sort -u | wc -l`, which has no carve-out for this one file) printing 238 rather than the required
+0, since the command's own file-glob includes everything under `tools/`.
+
+**Resolution**: reversed. The frozen acceptance criterion, written before any implementation
+started, takes precedence over a reasoned-but-unwritten exception invented during implementation.
+The journal's prose now spells past decisions using the current class-name vocabulary; the actual
+sequence of lane hand-offs and what each historical edit changed is unaffected by which spelling
+names the class, and the exact prior wording remains fully recoverable from any commit before this
+leg's own. `holder`/`baselineHash`/new history entries are still edited by hand, never by the
+sweep script, both to acquire the lane (T002) and to hand it back (T016).
+<!-- /ANCHOR:landing-addendum -->

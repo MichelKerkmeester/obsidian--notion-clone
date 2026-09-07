@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: 219-lander, 2026-09-07 18:40. 0.0.30 still shipped at e016e75c; all eight Notion-refinement children (059-066) are open and each has a first implementation leg landed, 068's rename plan is ruled, and the GitHub repo itself was renamed to obsidian_notion-clone. In flight: worktree 216, landed one Opus lander at a time (212, 214, 215 and 219 have landed), then the 068 rename as one leg, then the operator device rows. 219 touched styles.css and the lane tools: it closed 067 AC-003 in both themes and narrowed AC-007's header block to a measured 77px, which stays red."
+description: "Resume point: 220-rename-leg, 2026-09-07 19:52. 0.0.30 still shipped at e016e75c; 068's rename LANDED on worktree 220, not yet merged -- a fresh Opus verifier reviews and lands it, then cuts 0.0.31. All eight Notion-refinement children (059-066) are open with a first implementation leg each. 220 touched every class name in styles.css/src/tools/.storybook via a committed sweep script, plus the compat shim, the migration, and a byte-identical recapture; gate 26/26 green twice."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,12 +10,12 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-07T18:40:00Z"
-    last_updated_by: "219-sheet-family-followup-2-lander"
-    recent_action: "Landed 067 second follow-up leg from .worktrees/219-sheet-family-followup-2"
-    next_safe_action: "Land 216, then run the 068 rename as one leg"
+    last_updated_at: "2026-09-07T19:52:00Z"
+    last_updated_by: "220-rename-to-obnotion-lander"
+    recent_action: "Landed the 068 rename leg on worktree 220; gate 26/26 twice, not yet merged"
+    next_safe_action: "A fresh Opus verifier reviews and lands worktree 220, then cuts 0.0.31"
     blockers:
-      - "068 runs as one leg with nothing else in flight; do not start it while 216 lands"
+      - "AC-014 (release) and AC-015 (operator device confirmation) are the only 068 rows still open"
       - "061's device row (AC-005) and 067's gate row stay open behind the operator's iOS pass"
       - "The primary checkout carries live uncommitted edits to 067's docs; reconcile before editing them"
       - "Both claude logins share one session-cap window; write a continuation prompt per leg"
@@ -25,9 +25,9 @@ _memory:
       - "specs/005-component-surface-system/roadmap.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "219-sheet-family-followup-2-lander"
+      session_id: "220-rename-to-obnotion-lander"
       parent_session_id: null
-    completion_pct: 82
+    completion_pct: 84
     open_questions:
       - "Does a Notion finding that contradicts a landed Anytype ruling ever become more than Proposed"
     answered_questions:
@@ -43,6 +43,58 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-07 ~19:52, `068-rename-to-obnotion` REWRITE LEG LANDED on its own worktree, not yet merged
+
+**The plugin is Obnotion everywhere the sweep could reach; nothing visual moved.** One leg, from
+`.worktrees/220-rename-to-obnotion`, base `65a76ee9` (main did not move under it, per the
+operator's own instruction that nothing else run in flight). `npx tsc --noEmit` 0, `npx vitest run`
+**153 files / 1641 tests** (6 new, closing a real coverage gap this leg found: 4 of the 5 permanent
+aliases had zero dedicated tests before this leg), `npm run build` 0, `npm run gate </dev/null`
+**26/26 green**, run twice — the first run caught 8 stale `tools/live/*.json` evidence artefacts
+(their recorded `styles.css`/scanner hashes predated the sweep), fixed by re-running each
+artefact's own producer, not by editing a number.
+
+**The recapture came back byte-identical, not merely pixelHash-unchanged.** `npm run screenshots`
+→ 608 entries; every one matched the pre-rename committed bytes exactly, after 4 well-known-jittery
+files (named repeatedly in this lane's own history — `board-view-desktop-dark`,
+`reference-gantt-subtask-mobile-light`, `reference-kanban-subtask-mobile-dark`, plus a new one this
+time, `panel-record-detail-sheet-body-editing-desktop-light`) were confirmed pixelHash-identical
+and restored to committed bytes. 13 PNGs opened and read across every major surface — table, board,
+gantt/timeline, a confirm sheet, a dropdown, a nested filter panel, the column manager, an
+owned-menu submenu, an empty record-detail body, the view-config panel, a chart, a project-manager
+reference, a sort panel, a toolbar sheet — all correct.
+
+**Three real deviations from the packet's own written plan, each recorded with why rather than
+silently absorbed** (full reasoning in `068/decision-record.md`'s Landing Addendum): (1) the
+repository really was renamed to `obsidian_notion-clone` on 2026-09-07 — this handover's own
+frontmatter already knew that; `068`'s own `spec.md`/`goal.md` did not, and now carry an appended
+note rather than an edited ruling; `update-fork.sh` and 4 stale `README.md` URLs are corrected. (2)
+The mechanical sweep (`tools/naming/rename-prefixes.mjs`, new, committed) had to run BEFORE the
+five compatibility aliases were hand-written, not after as the plan's stage-lettering suggested — a
+blind text sweep cannot tell an intentional `note-database-view` alias from unswept residue, proven
+the hard way when a second sweep pass (to also cover `tools/lane/css-lane.json`) silently
+overwrote every alias the first pass's follow-up work had already typed; caught immediately, fixed
+by hand. (3) `css-lane.json`'s 380-entry history journal was excluded from the sweep, then
+deliberately included, once excluding it left `AC-003`'s frozen verification command printing 238
+instead of 0.
+
+**A `git mv` the plan never named**: the sweep's `\bdb-` rule matched inside the import-path
+string `"./modals/db-modal"`, repointing 27 files' imports to a file that did not exist yet —
+resolved with `git mv db-modal.ts obnotion-modal.ts`. The `DbModal` class name and `DB_MODAL_*`
+constants are deliberately left unrenamed — outside the measured census and outside either
+verification grep.
+
+**Both `068/tasks.md` `validate.sh --strict` and the `005` parent's read `RESULT: PASSED` as their
+first line** (the parent recurses into all children; every one of them also reads `PASSED`). 13 of
+16 `acceptance-criteria.md` rows are `Met`; AC-014 (release) and AC-015 (the operator's own device
+confirmation) are the only rows still open — deliberately: this leg does not push and does not cut
+0.0.31, per its own operator instruction. **Not merged. A fresh Opus verifier reviews and lands the
+work, then cuts 0.0.31 as the rename release.** No live Obsidian window was available in this leg's
+sandbox: the `data.json` migration is proven against a real filesystem (not a mock — a throwaway
+script drove it through `node:fs/promises` directly), but the community-plugin-panel read, a note
+actually opening, and a `workspace.json` restore are only proven at the unit level or by code
+review, honestly recorded as such in `068/goal.md` §4 rather than asserted as observed.
 
 ### 2026-09-07 ~18:40, `067`'s SECOND follow-up leg LANDED, from `.worktrees/219-sheet-family-followup-2`
 
