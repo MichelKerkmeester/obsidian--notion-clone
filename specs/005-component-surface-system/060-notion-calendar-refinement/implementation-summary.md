@@ -146,7 +146,7 @@ below, alongside the two naming scans and the full `npm run gate`.
 | Research loop completed | PASS - 5/5 iterations, `stopReason maxIterationsReached`, lineage `glm-devpass-calendar` |
 | Findings reconciled against `main` | PASS - of the loop's six ranked rows, four closed and two are still red at `3e1c3c65`; the rank-1 of those two moved scale rather than closing |
 | Code legs | PASS - both landed; each proven red first and pinned with a negative control |
-| Three gates | PASS - `npx tsc --noEmit` exit 0, `npm run build` exit 0, `npx vitest run` exit 0 (1525/1525 across 142 files) |
+| Three gates | PASS - `npx tsc --noEmit` exit 0, `npm run build` exit 0, `npx vitest run` exit 0 (1539/1539 across 143 files, on the tree rebased onto `origin/main`) |
 | Full gate | PASS - `npm run gate` 26/26 lanes green, run once in the foreground from the final tree |
 | Screenshot gate | PASS - `npm run screenshots:verify` exit 0 after a second full recapture (588 entries); six captures carry content and were reopened |
 | CSS lane | PASS - `npm run lane:check` exit 0, held by this packet, release names all six changed captures |

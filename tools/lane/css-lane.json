@@ -1,7 +1,7 @@
 {
-  "holder": "063-notion-dropdown-refinement",
-  "acquiredAt": "2026-09-06T23:30:00.000Z",
-  "baselineHash": "07578ed6d5e4",
+  "holder": "060-notion-calendar-refinement",
+  "acquiredAt": "2026-09-07T04:14:24.359Z",
+  "baselineHash": "78a52c50b06b",
   "baselineCommit": null,
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -4640,6 +4640,39 @@
         "screenshots/notion-clone/components/constructed-dropdown-search-desktop-light.png"
       ],
       "note": "REQ-001 trailing-check grid tracks across .db-dropdown-option (container scope plus the three body-mounted duplicates: db-column-menu-subpopover, db-dropdown-popover-context-settings/-modal, db-displayopt-dropdown-popover); REQ-003 date-preset subline stacking plus a 44px phone floor for .db-date-preset; REQ-008 the option colour picker rebuilt as a one-column labelled list (SWATCH_PICKER_POPOVER 124->224, the swatch grid rules deleted, a new .db-color-picker-popup .db-dropdown-option scope added). Full recapture (588 entries), screenshots:verify exit 0. 41 captures carry real content changes, all opened and read in at least one theme/device: the dropdown family check now trails, the option colour picker reads as a named list on desktop and the phone sheet (Rose visibly clipped by the 90svh cap, matching the family real renderer), the date presets carry their resolved literal computed from the harness's real \"today\", and the depth3 column-type/import-confirm submenus (dropdown-field.ts consumers) show the same trailing check. 17 further captures the initial capture run also moved (card-covers, list-migrated, table-footer, table-grouped, cell-editor-select/text, icon-picker, record-icon, status-colors, board-view-desktop, constructed-table-mobile) were confirmed pixel-identical on inspection and none of their sources include styles.css or any file this leg touched, so they were restored to their committed bytes rather than recommitted as churn; their manifest entries carry the current sourceHashes (styles.css and any touched tool file) with the original pixelHash/layoutHash/bytes, matching the restored file exactly."
+    },
+    {
+      "event": "acquire",
+      "phase": "060-notion-calendar-refinement",
+      "at": "2026-09-07T04:14:24.359Z",
+      "hash": "07578ed6d5e4",
+      "note": "Taken over from 063-notion-dropdown-refinement at its own released hash, with nothing outstanding against it, to rebase this packet onto it."
+    },
+    {
+      "event": "edit",
+      "phase": "060-notion-calendar-refinement",
+      "at": "2026-09-07T04:14:24.359Z",
+      "hash": "78a52c50b06b",
+      "note": "Two rules, one surface. One lifts .db-calendar-mini-day to 44px under .is-phone across both hosts of the date picker’s day grid (.note-database-container and the .db-cell-edit-popover.db-date-edit-popover variant). The second widens both hosts to 332px, because the first alone makes the seven-column repeat(7, 1fr) grid want 308px inside a 252px host with 12px padding: the toolbar popover spilled its seventh column past its own border, the date-edit popover clipped Sunday against its overflow: hidden, and the weekday header, a separate grid with no cell floor, stopped lining up with the days. 332px is 7 x 44 plus that padding and the 402px phone frame holds it. No CSS retired: the all-day strip’s range-string removal (calendar-renderer.ts) touches no selector this lane governs."
+    },
+    {
+      "event": "release",
+      "phase": "060-notion-calendar-refinement",
+      "at": "2026-09-07T04:14:24.359Z",
+      "hash": "78a52c50b06b",
+      "reviewed": [
+        "screenshots/notion-clone/fields/constructed-date-picker-datetime-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-datetime-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-mobile-light.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-datetime-mobile-dark.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-datetime-mobile-light.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-mobile-dark.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-mobile-light.png",
+        "screenshots/notion-clone/views/calendar-mini-calendar-mobile-dark.png",
+        "screenshots/notion-clone/views/calendar-mini-calendar-mobile-light.png"
+      ],
+      "note": "Full recapture on the rebased tree (588 entries), verify.mjs exit 0. Ten captures carry this edit’s content: the toolbar mini calendar and the three date-picker fixtures (plain and datetime, popover and bottom sheet), phone profile, both themes. Each opened and read - day cells paint at the 44px floor and all seven columns sit inside their host, aligned with the weekday header. Seventeen further captures moved bytes at identical pixelHash and layoutHash and were restored to their committed bytes."
     }
   ],
   "outstanding": [
