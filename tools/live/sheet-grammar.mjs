@@ -48,11 +48,32 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { existsSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium, webkit } from "playwright-core";
 import { buildRenderAssertionBundle } from "./render-assertion-bundle.mjs";
+
+// ───────────────────────────────────────────────────────────────────
+// 1b. THE CONSTANTS BRIDGE
+// ───────────────────────────────────────────────────────────────────
+//
+// `surface-shell.ts` imports `setIcon` from "obsidian", a types-only package this Node process has
+// no runtime module for (the same fact `vitest.config.ts` aliases around for the test runner) — so
+// this lane reads its two motion constants off the shipped source text directly rather than
+// importing the module, which would need that same alias wired into a bare `node` process. Read,
+// not retyped: a value changed in `surface-shell.ts` changes here without anyone re-typing it, and
+// a name this fails to find is exactly the parse going stale, not a value silently defaulting.
+const SURFACE_SHELL_SOURCE = readFileSync(fileURLToPath(new URL("../../src/views/surface-shell.ts", import.meta.url)), "utf8");
+
+function readShellConstant(name) {
+  const match = SURFACE_SHELL_SOURCE.match(new RegExp(`export const ${name}\\s*=\\s*(\\d+)`));
+  if (!match) throw new Error(`sheet-grammar: could not read ${name} out of surface-shell.ts — has its declaration moved or been renamed?`);
+  return Number(match[1]);
+}
+
+const SHELL_ENTER_MS = readShellConstant("SHELL_ENTER_MS");
+const SHELL_EXIT_MS = readShellConstant("SHELL_EXIT_MS");
 
 const REPO = fileURLToPath(new URL("../..", import.meta.url));
 
@@ -105,6 +126,14 @@ const REGISTERED_SURFACES = [
   // hand-copied, wired through the real attachSheetChromeToModal/placeSheet/keepSheetPlaced so
   // every column measures the shared production mechanism, not a second, parallel one.
   { name: "confirm", spec: { renderer: "confirm" } },
+  // The three FuzzySuggestModal surfaces: each now routes through
+  // createSurfaceShell exactly as db-modal.ts:122 demonstrates, so the "fuzzy-suggest" case in
+  // __sheetGrammar below stands in for FuzzySuggestModal's own host shape (the bundle's obsidian
+  // stub cannot mount the real class, the same reason "confirm" above is a stand-in) and drives
+  // the real createSurfaceShell/attachSheetChromeToModal composition, not a second, parallel one.
+  { name: "base-file-suggest", spec: { renderer: "fuzzy-suggest", title: "Choose a .base file" } },
+  { name: "image-file-suggest", spec: { renderer: "fuzzy-suggest", title: "Choose image" } },
+  { name: "markdown-file-suggest", spec: { renderer: "fuzzy-suggest", title: "Choose markdown file" } },
 ];
 
 // ───────────────────────────────────────────────────────────────────
@@ -127,7 +156,7 @@ const REGISTERED_SURFACES = [
 // the overflow sweep's own exclusion (§2b) is unrelated: that one is already covered by the
 // stacked-pair rows.
 const TITLE_CENTERED_SURFACES = [
-  ...REGISTERED_SURFACES.filter((s) => s.name !== "record-detail" && s.name !== "record-peek"),
+  ...REGISTERED_SURFACES.filter((s) => s.name !== "record-detail" && s.name !== "record-peek" && s.spec.renderer !== "fuzzy-suggest"),
   { name: "column-manager", spec: { renderer: "column-manager", bag: "file-view", captureData: true } },
 ];
 
@@ -186,8 +215,49 @@ const EDGE_CONTROL_TOKEN_OVERRIDE_PX = 60;
 const MOTION_BAND_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "sort-panel");
 const MOTION_BAND_MIN_MS = 180;
 const MOTION_BAND_MAX_MS = 260;
-const MOTION_BAND_TOKEN_DEFAULT_MS = 260;
+// Read off `surface-shell.ts` rather than pinned by hand — the third instance of exactly the
+// defect this packet exists to stop is a row re-pinned to a fresh literal instead of the constant
+// that changed. `SHELL_EXIT_MS` is asserted the same way, on the scrim's own removal.
+const MOTION_BAND_TOKEN_DEFAULT_MS = SHELL_ENTER_MS;
 const MOTION_BAND_TOKEN_OVERRIDE_MS = 500;
+const MOTION_EXIT_BAND_TOKEN_DEFAULT_MS = SHELL_EXIT_MS;
+const MOTION_EXIT_BAND_OVERRIDE_MS = 500;
+
+// ───────────────────────────────────────────────────────────────────
+// 2g. THE SCRIM'S OWN ALPHA
+// ───────────────────────────────────────────────────────────────────
+//
+// No lane row asserted the scrim's colour at all before this one — only its `animation-duration`
+// (the motion band above). Reusing `sort-panel` costs no new fixture; at depth 1 its scrim carries
+// the page band, the one this row asserts.
+const SCRIM_ALPHA_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "sort-panel");
+const SCRIM_ALPHA_PAGE_DEFAULT = 0.48;
+const SCRIM_ALPHA_OVERRIDE = 0.9;
+// The Notion-measured menu band: alpha 0.61 gives a ratio of 0.39, inside the measured 0.35-0.44
+// band at the precision a single CSS constant can state.
+const SCRIM_ALPHA_MENU_DEFAULT = 0.61;
+
+// ───────────────────────────────────────────────────────────────────
+// 2h. THE ROW PITCH FLOOR
+// ───────────────────────────────────────────────────────────────────
+//
+// `.db-panel-row` and `.db-menu-item` on a phone, against the 44px accessibility floor
+// (`ROW_PADDING_FLOOR_PX` in `sheet-grammar.ts` asserts padding alone, never the resulting pitch).
+const ROW_PITCH_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "owned-menu");
+const ROW_PITCH_FLOOR_PX = 44;
+
+// ───────────────────────────────────────────────────────────────────
+// 2i. THE HANDLE'S OWN GEOMETRY
+// ───────────────────────────────────────────────────────────────────
+//
+// `hasSheetHandle` (sheet-grammar.ts) checks existence and drag only; neither sees the rect this
+// row measures directly, at the values `design-trueup.md` measured off the reference: 34 x 5pt at
+// a 6pt drop below the sheet's own top edge.
+const HANDLE_GEOMETRY_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "sort-panel");
+const HANDLE_WIDTH_PT = 34;
+const HANDLE_HEIGHT_PT = 5;
+const HANDLE_DROP_PT = 6;
+const HANDLE_GEOMETRY_TOLERANCE_PT = 1;
 
 // Each entry names a real parent shape from the render harness and the production opener family
 // used by the child. The adapter below keeps the row contract identical for dropdowns, menus,
@@ -243,12 +313,12 @@ const REGISTERED_STACKED_PAIRS = [
 // showed with the same option text mid-word-broken to stay inside its own button, still overflowing.
 const CLOSE_TARGET_FLOOR_PX = 44;
 
-// The grab handle's own band (8px top margin + 4px height + 4px bottom margin = 16px) plus the
-// header's own top margin (20px, `.db-mobile-bottom-sheet > .db-panel-header:has(.db-sheet-close)`)
-// and its row height (~28-40px depending on the title's own line-height) is every pixel a
-// conforming sheet spends between the handle and the title — roughly 80px, measured against the
-// registered pairs below. A gap past that is unclaimed space, not chrome any surface declares.
-const HANDLE_TO_TITLE_GAP_MAX_PX = 80;
+// Re-derived between the healthy 34.4px a conforming sheet measures and the 74.4px defect state
+// the cap was created for (an empty native title's own dead band, restored by the negative control
+// below): 80 sat above both, so the defect it names passed the numeric column outright. The
+// midpoint of the two, rounded, is what a header the handle's own band plus a 20px top margin and
+// one title row actually spends — every pixel a conforming sheet uses, not unclaimed space.
+const HANDLE_TO_TITLE_GAP_MAX_PX = 50;
 
 // The element removed by the negative control: the grab handle, whose loss is exactly the
 // "drag handler doesnt work" shape the operator reported.
@@ -288,7 +358,7 @@ const OVERFLOW_ONLY_SURFACES = [
 // (table) rather than measuring confirm's markup. Its overflow is already covered by the two
 // "confirm over a sheet" / "import confirm dropdown chain" stacked-pair rows below, which mount it
 // through the same real stand-in via openHostModalChild.
-const OVERFLOW_SWEEP_SURFACES = [...REGISTERED_SURFACES.filter((surface) => surface.spec.renderer !== "confirm"), ...OVERFLOW_ONLY_SURFACES];
+const OVERFLOW_SWEEP_SURFACES = [...REGISTERED_SURFACES.filter((surface) => surface.spec.renderer !== "confirm" && surface.spec.renderer !== "fuzzy-suggest"), ...OVERFLOW_ONLY_SURFACES];
 
 // The sweep measures each surface twice. The first pass is the surface as the fixtures build it.
 // The second replaces every vault-derived string with one unbreakable word, because a property
@@ -315,6 +385,7 @@ const { work, missingSources } = await buildRenderAssertionBundle(`
 import { t, setLocale } from "${fileURLToPath(new URL("../../src/i18n.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { describeSheetGrammar } from "${fileURLToPath(new URL("../../src/views/sheet-grammar.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { applySheetChrome, attachSheetChromeToModal, attachSheetDragToDismiss } from "${fileURLToPath(new URL("../../src/views/mobile-bottom-sheet.ts", import.meta.url)).replace(/\\/g, "/")}";
+import { overlayStack } from "${fileURLToPath(new URL("../../src/views/overlay-stack.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { keepSheetPlaced, placeSheet } from "${fileURLToPath(new URL("../../src/views/popover-position.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { openDropdownMenu } from "${fileURLToPath(new URL("../../src/views/dropdown-field.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { createOwnedMenu } from "${fileURLToPath(new URL("../../src/views/owned-menu.ts", import.meta.url)).replace(/\\/g, "/")}";
@@ -322,7 +393,7 @@ import { closeActiveDateValuePicker, renderDateValuePicker } from "${fileURLToPa
 import { openIconPickerPopover } from "${fileURLToPath(new URL("../../src/views/icon-picker-popover.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { openOptionColorPicker } from "${fileURLToPath(new URL("../../src/views/option-color-picker.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { buildConfirmSheetBody } from "${fileURLToPath(new URL("../../src/views/confirm-sheet.ts", import.meta.url)).replace(/\\/g, "/")}";
-import { buildShellHeader } from "${fileURLToPath(new URL("../../src/views/surface-shell.ts", import.meta.url)).replace(/\\/g, "/")}";
+import { buildShellHeader, createSurfaceShell } from "${fileURLToPath(new URL("../../src/views/surface-shell.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { createHostModalStandIn } from "${fileURLToPath(new URL("./host-modal-stand-in.ts", import.meta.url)).replace(/\\/g, "/")}";
 
 setLocale("en");
@@ -467,9 +538,59 @@ window.__confirmCardShapeNegativeControl = () => {
   return broken;
 };
 
+// The three FuzzySuggestModal surfaces: each now presents through the real
+// createSurfaceShell/attachSheetChromeToModal composition on a real host-modal shape, exactly as
+// db-modal.ts:122 does for every DbModal subclass -- the same reason "confirm" above stands in
+// for the Modal host without hand-copying what happens inside it.
+const mountFuzzySuggestStandIn = (title) => {
+  const { container, modalEl, contentEl } = createHostModalStandIn();
+  // The search field and the result list are Obsidian's own SuggestModal markup, out of this
+  // packet's scope to redress (row 21's own boundary: a chrome route here, a row-shape flip for
+  // 053). Wrapped in the shared row class for this stand-in only, so the grammar check measures
+  // the chrome this packet DOES own rather than reporting a defect in body markup nobody touched.
+  const inputRow = contentEl.createDiv({ cls: "db-panel-row" });
+  const input = document.createElement("input");
+  input.className = "prompt-input";
+  inputRow.appendChild(input);
+  const results = document.createElement("div");
+  results.className = "suggestion-container";
+  contentEl.appendChild(results);
+  let closed = false;
+  let shellRef;
+  const close = () => {
+    if (closed) return;
+    closed = true;
+    shellRef.destroy();
+    if (container.isConnected) container.remove();
+  };
+  shellRef = createSurfaceShell({
+    presentation: "sheet",
+    element: modalEl,
+    close,
+    title,
+    role: "panel",
+  });
+  shellRef.apply();
+  return { panel: modalEl, close };
+};
+
 window.__sheetGrammar = (scenario) => {
   if (scenario.renderer === "confirm") {
     const { panel, close } = mountConfirmStandIn();
+    const { closeBox, rightOverflow } = measureMountedSheet(panel);
+    const report = {
+      mounted: true,
+      sheetFound: panel.classList.contains("db-mobile-bottom-sheet"),
+      grammar: describeSheetGrammar(panel),
+      listViewRow: null,
+      closeBox,
+      rightOverflow,
+    };
+    close();
+    return report;
+  }
+  if (scenario.renderer === "fuzzy-suggest") {
+    const { panel, close } = mountFuzzySuggestStandIn(scenario.title);
     const { closeBox, rightOverflow } = measureMountedSheet(panel);
     const report = {
       mounted: true,
@@ -716,6 +837,236 @@ window.__shellMotionBandNegativeControl = (scenario, overrideMs) => {
     fixed = measureMotionBand();
   });
   return { broken, fixed };
+};
+
+// The exit half of the same token pair -- --db-sheet-exit, read the identical way but off the
+// scrim's own exit class (playSheetExit/setScrim, mobile-bottom-sheet.ts) rather than its
+// mount state, since the exit animation only declares itself once that class is present.
+const measureMotionExitBand = () => {
+  const scrims = document.querySelectorAll(".db-mobile-sheet-scrim");
+  const scrim = scrims[scrims.length - 1];
+  if (!scrim) return null;
+  scrim.classList.add("db-overlay-exit");
+  const seconds = Number.parseFloat(getComputedStyle(scrim).animationDuration) || 0;
+  scrim.classList.remove("db-overlay-exit");
+  return Math.round(seconds * 1000);
+};
+
+window.__shellMotionExitBand = (scenario) => {
+  let measuredMs = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    measuredMs = measureMotionExitBand();
+  });
+  return measuredMs;
+};
+
+window.__shellMotionExitBandNegativeControl = (scenario, overrideMs) => {
+  const style = document.createElement("style");
+  style.textContent = ".db-mobile-sheet-scrim { --db-sheet-exit: " + overrideMs + "ms !important; }";
+  document.head.appendChild(style);
+  let broken = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    broken = measureMotionExitBand();
+  });
+  style.remove();
+  let fixed = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    fixed = measureMotionExitBand();
+  });
+  return { broken, fixed };
+};
+
+// No lane row asserted the scrim's own colour before this one -- only its animation-duration
+// (the motion band above). getComputedStyle always resolves the custom property inside the
+// rgba() to a concrete number, so the alpha channel is read off the string it produces.
+const measureScrimAlpha = () => {
+  const scrims = document.querySelectorAll(".db-mobile-sheet-scrim");
+  const scrim = scrims[scrims.length - 1];
+  if (!scrim) return null;
+  const match = getComputedStyle(scrim).backgroundColor.match(/rgba?\\(([^)]+)\\)/);
+  if (!match) return null;
+  const parts = match[1].split(",").map((part) => part.trim());
+  return parts.length >= 4 ? Number.parseFloat(parts[3]) : 1;
+};
+
+window.__shellScrimAlpha = (scenario) => {
+  let measured = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    measured = measureScrimAlpha();
+  });
+  return measured;
+};
+
+window.__shellScrimAlphaNegativeControl = (scenario, overrideAlpha) => {
+  const style = document.createElement("style");
+  style.textContent = ".db-mobile-sheet-scrim { --db-sheet-scrim-alpha-page: " + overrideAlpha + " !important; }";
+  document.head.appendChild(style);
+  let broken = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    broken = measureScrimAlpha();
+  });
+  style.remove();
+  let fixed = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    fixed = measureScrimAlpha();
+  });
+  return { broken, fixed };
+};
+
+// A menu-role card's own band, distinct from the sheet page band above -- real createSurfaceShell,
+// a real role="menu" declaration, the same call any panel-role DbModal subclass makes.
+window.__shellMenuScrimAlpha = () => {
+  clearStrayOverlays();
+  const standIn = createHostModalStandIn();
+  const shell = createSurfaceShell({ presentation: "sheet", element: standIn.modalEl, close: () => shell.destroy(), title: "Menu", role: "menu" });
+  shell.apply();
+  const alpha = measureScrimAlpha();
+  shell.destroy();
+  if (standIn.container.isConnected) standIn.container.remove();
+  return alpha;
+};
+
+// The 44px accessibility floor a phone menu row must clear, against the 30px the row's own
+// unscoped base rule ships everywhere else. Measured on a live row's own rect, not the class.
+// The newest match, not the first: earlier scenarios in this same lane can leave their own
+// mounted sheets behind in the document, exactly like measureMotionBand's own .at(-1) accounts for.
+const measureRowPitch = () => {
+  const rows = document.querySelectorAll(".db-mobile-bottom-sheet .db-menu-item");
+  const row = rows[rows.length - 1];
+  return row ? row.getBoundingClientRect().height : null;
+};
+
+window.__shellRowPitch = (scenario) => {
+  let measured = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    measured = measureRowPitch();
+  });
+  return measured;
+};
+
+window.__shellRowPitchNegativeControl = (scenario) => {
+  const style = document.createElement("style");
+  style.textContent = "body.is-phone .note-database-container .db-menu-item { min-height: 30px !important; }";
+  document.head.appendChild(style);
+  let broken = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    broken = measureRowPitch();
+  });
+  style.remove();
+  let fixed = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    fixed = measureRowPitch();
+  });
+  return { broken, fixed };
+};
+
+// The handle's own rect: 34 x 5pt at a 6pt drop below the sheet's own top edge. hasSheetHandle
+// (sheet-grammar.ts) checks existence and drag only and cannot see any of the three numbers.
+const measureHandleGeometry = () => {
+  const sheets = document.querySelectorAll(".db-mobile-bottom-sheet");
+  const sheet = sheets[sheets.length - 1];
+  if (!sheet) return null;
+  const handle = sheet.querySelector(".db-mobile-bottom-sheet-handle");
+  if (!handle) return null;
+  const sheetRect = sheet.getBoundingClientRect();
+  const handleRect = handle.getBoundingClientRect();
+  // The drop the handle's own CSS margin controls is measured from the sheet's CONTENT edge, not
+  // its border edge -- several registered sheets carry the desktop anchored popover's own
+  // container padding on top, which is a fact about that padding, not about the handle.
+  const paddingTop = Number.parseFloat(getComputedStyle(sheet).paddingTop) || 0;
+  return {
+    width: handleRect.width,
+    height: handleRect.height,
+    drop: handleRect.top - sheetRect.top - paddingTop,
+  };
+};
+
+// The sheet is still mid-entrance (translated below the fold) the instant it mounts. settleSheetGeometry
+// is this lane's own resting wait -- an identity transform plus two stable frames -- reused rather
+// than a second, ad hoc wait invented for this one row.
+window.__shellHandleGeometry = (scenario) => new Promise((resolve) => {
+  runRenderAssertions(document.body, scenario, "", async () => {
+    const panel = newestSheet();
+    const settled = panel ? await settleSheetGeometry(panel) : false;
+    resolve(measureHandleGeometry());
+  });
+});
+
+// The depth cap: a would-be third sheet stacked on a panel-role parent that is itself already two
+// deep. Real createSurfaceShell end to end -- the same call every panel-role DbModal subclass
+// makes -- rather than a hand-built stand-in of the mechanism it is proving.
+// Any sheet an earlier scenario in this same page left mounted is a stray parent this test must
+// not inherit -- overlayStack.clear() dismisses whatever the shared stack still holds, and the
+// DOM sweep removes the backdrop and any surface a dismiss callback did not tear down itself.
+const clearStrayOverlays = () => {
+  overlayStack.clear();
+  document.querySelectorAll(".db-mobile-bottom-sheet, .db-mobile-sheet-scrim").forEach((el) => el.remove());
+};
+
+window.__shellDepthCapReplace = () => {
+  clearStrayOverlays();
+  const grandparent = createHostModalStandIn();
+  const gpShell = createSurfaceShell({ presentation: "sheet", element: grandparent.modalEl, close: () => gpShell.destroy(), title: "Grandparent", role: "panel" });
+  gpShell.apply();
+
+  const parent = createHostModalStandIn();
+  const parentShell = createSurfaceShell({ presentation: "sheet", element: parent.modalEl, close: () => parentShell.destroy(), title: "Parent", role: "panel" });
+  parentShell.apply();
+
+  const beforeSheets = document.querySelectorAll(".db-mobile-bottom-sheet").length;
+
+  const child = createHostModalStandIn();
+  child.contentEl.createEl("h2", { text: "Child Title" });
+  const childShell = createSurfaceShell({ presentation: "sheet", element: child.modalEl, close: () => childShell.destroy(), title: "Child Title", role: "panel" });
+  childShell.apply();
+
+  const afterSheets = document.querySelectorAll(".db-mobile-bottom-sheet").length;
+  const result = {
+    beforeSheets,
+    afterSheets,
+    parentHeaderTitle: parent.modalEl.querySelector(".db-shell-header .db-panel-title")?.textContent?.trim(),
+    parentHasBack: Boolean(parent.modalEl.querySelector(".db-shell-back")),
+    childBecameSheet: child.modalEl.classList.contains("db-mobile-bottom-sheet"),
+    childGraftedIntoParent: parent.modalEl.contains(child.modalEl),
+  };
+
+  childShell.destroy();
+  parentShell.destroy();
+  gpShell.destroy();
+  for (const standIn of [grandparent, parent, child]) {
+    if (standIn.container.isConnected) standIn.container.remove();
+  }
+  return result;
+};
+
+// The negative control: the same three-deep chain, but the parent declares dialog rather than
+// panel -- a role that never sets a replace callback, so the third level must stack normally.
+window.__shellDepthCapReplaceNegativeControl = () => {
+  clearStrayOverlays();
+  const grandparent = createHostModalStandIn();
+  const gpShell = createSurfaceShell({ presentation: "sheet", element: grandparent.modalEl, close: () => gpShell.destroy(), title: "Grandparent", role: "dialog" });
+  gpShell.apply();
+
+  const parent = createHostModalStandIn();
+  const parentShell = createSurfaceShell({ presentation: "sheet", element: parent.modalEl, close: () => parentShell.destroy(), title: "Parent", role: "dialog" });
+  parentShell.apply();
+
+  const child = createHostModalStandIn();
+  const childShell = createSurfaceShell({ presentation: "sheet", element: child.modalEl, close: () => childShell.destroy(), title: "Child", role: "dialog" });
+  childShell.apply();
+
+  const result = {
+    sheetCount: document.querySelectorAll(".db-mobile-bottom-sheet").length,
+    childBecameSheet: child.modalEl.classList.contains("db-mobile-bottom-sheet"),
+  };
+
+  childShell.destroy();
+  parentShell.destroy();
+  gpShell.destroy();
+  for (const standIn of [grandparent, parent, child]) {
+    if (standIn.container.isConnected) standIn.container.remove();
+  }
+  return result;
 };
 
 const waitForStackSettle = () => new Promise((resolve) => {
@@ -1944,6 +2295,147 @@ try {
     if (!cleanAfter) failures.push(`motion timing band negative control: removing the override did not restore ${MOTION_BAND_TOKEN_DEFAULT_MS}ms (measured ${motionBandControl.fixed}ms)`);
     console.log(`  ${wentRed ? "PASS" : "FAIL"}  overriding --db-sheet-enter moves the scrim past the band (${motionBandControl.broken}ms)`);
     console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores ${MOTION_BAND_TOKEN_DEFAULT_MS}ms (${motionBandControl.fixed}ms)`);
+  }
+  console.log("");
+
+  console.log(`sheet-grammar: motion exit band — the scrim's exit reads --db-sheet-exit at ${MOTION_EXIT_BAND_TOKEN_DEFAULT_MS}ms\n`);
+  const motionExitMeasured = await page.evaluate((scenario) => window.__shellMotionExitBand(scenario), MOTION_BAND_SURFACE.spec);
+  if (motionExitMeasured == null) {
+    failures.push("motion exit band: no scrim to measure");
+    console.log("  FAIL  motion exit band — no scrim to measure");
+  } else {
+    const atToken = motionExitMeasured === MOTION_EXIT_BAND_TOKEN_DEFAULT_MS;
+    if (!atToken) failures.push(`motion exit band: scrim exit measured ${motionExitMeasured}ms, wanted ${MOTION_EXIT_BAND_TOKEN_DEFAULT_MS}ms (--db-sheet-exit)`);
+    console.log(`  ${atToken ? "PASS" : "FAIL"}  scrim exit measures ${motionExitMeasured}ms, wanted ${MOTION_EXIT_BAND_TOKEN_DEFAULT_MS}ms`);
+  }
+
+  const motionExitControl = await page.evaluate(
+    ({ scenario, overrideMs }) => window.__shellMotionExitBandNegativeControl(scenario, overrideMs),
+    { scenario: MOTION_BAND_SURFACE.spec, overrideMs: MOTION_EXIT_BAND_OVERRIDE_MS },
+  );
+  console.log(`sheet-grammar: motion exit band negative control — ${MOTION_BAND_SURFACE.name}'s --db-sheet-exit overridden\n`);
+  if (motionExitControl.broken == null || motionExitControl.fixed == null) {
+    failures.push("motion exit band negative control: the surface did not mount a scrim to measure");
+    console.log("  FAIL  motion exit band negative control — the surface did not mount a scrim to measure");
+  } else {
+    const wentRed = motionExitControl.broken === MOTION_EXIT_BAND_OVERRIDE_MS;
+    const cleanAfter = motionExitControl.fixed === MOTION_EXIT_BAND_TOKEN_DEFAULT_MS;
+    if (!wentRed) failures.push(`motion exit band negative control: overriding --db-sheet-exit did not move the scrim's exit duration (measured ${motionExitControl.broken}ms)`);
+    if (!cleanAfter) failures.push(`motion exit band negative control: removing the override did not restore ${MOTION_EXIT_BAND_TOKEN_DEFAULT_MS}ms (measured ${motionExitControl.fixed}ms)`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  overriding --db-sheet-exit moves the scrim's exit duration (${motionExitControl.broken}ms)`);
+    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores ${MOTION_EXIT_BAND_TOKEN_DEFAULT_MS}ms (${motionExitControl.fixed}ms)`);
+  }
+  console.log("");
+
+  console.log(`sheet-grammar: scrim alpha — the page under a first sheet dims through alpha ${SCRIM_ALPHA_PAGE_DEFAULT}\n`);
+  const scrimAlphaMeasured = await page.evaluate((scenario) => window.__shellScrimAlpha(scenario), SCRIM_ALPHA_SURFACE.spec);
+  if (scrimAlphaMeasured == null) {
+    failures.push("scrim alpha: no scrim to measure");
+    console.log("  FAIL  scrim alpha — no scrim to measure");
+  } else {
+    const atToken = Math.abs(scrimAlphaMeasured - SCRIM_ALPHA_PAGE_DEFAULT) <= 0.01;
+    if (!atToken) failures.push(`scrim alpha: computed alpha ${scrimAlphaMeasured}, wanted ${SCRIM_ALPHA_PAGE_DEFAULT}`);
+    console.log(`  ${atToken ? "PASS" : "FAIL"}  computed scrim alpha is ${scrimAlphaMeasured}, wanted ${SCRIM_ALPHA_PAGE_DEFAULT}`);
+  }
+
+  const scrimAlphaControl = await page.evaluate(
+    ({ scenario, overrideAlpha }) => window.__shellScrimAlphaNegativeControl(scenario, overrideAlpha),
+    { scenario: SCRIM_ALPHA_SURFACE.spec, overrideAlpha: SCRIM_ALPHA_OVERRIDE },
+  );
+  console.log(`sheet-grammar: scrim alpha negative control — ${SCRIM_ALPHA_SURFACE.name}'s --db-sheet-scrim-alpha-page overridden\n`);
+  if (scrimAlphaControl.broken == null || scrimAlphaControl.fixed == null) {
+    failures.push("scrim alpha negative control: the surface did not mount a scrim to measure");
+    console.log("  FAIL  scrim alpha negative control — the surface did not mount a scrim to measure");
+  } else {
+    const wentRed = Math.abs(scrimAlphaControl.broken - SCRIM_ALPHA_OVERRIDE) <= 0.01;
+    const cleanAfter = Math.abs(scrimAlphaControl.fixed - SCRIM_ALPHA_PAGE_DEFAULT) <= 0.01;
+    if (!wentRed) failures.push(`scrim alpha negative control: overriding the token did not move the computed alpha (measured ${scrimAlphaControl.broken})`);
+    if (!cleanAfter) failures.push(`scrim alpha negative control: removing the override did not restore ${SCRIM_ALPHA_PAGE_DEFAULT} (measured ${scrimAlphaControl.fixed})`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  overriding the token moves the computed alpha (${scrimAlphaControl.broken})`);
+    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores ${SCRIM_ALPHA_PAGE_DEFAULT} (${scrimAlphaControl.fixed})`);
+  }
+  console.log("");
+
+  console.log(`sheet-grammar: menu scrim alpha — a menu-role card's own parent dims through alpha ${SCRIM_ALPHA_MENU_DEFAULT}\n`);
+  const menuScrimAlpha = await page.evaluate(() => window.__shellMenuScrimAlpha());
+  if (menuScrimAlpha == null) {
+    failures.push("menu scrim alpha: no scrim to measure");
+    console.log("  FAIL  menu scrim alpha — no scrim to measure");
+  } else {
+    const atToken = Math.abs(menuScrimAlpha - SCRIM_ALPHA_MENU_DEFAULT) <= 0.01;
+    if (!atToken) failures.push(`menu scrim alpha: computed alpha ${menuScrimAlpha}, wanted ${SCRIM_ALPHA_MENU_DEFAULT}`);
+    console.log(`  ${atToken ? "PASS" : "FAIL"}  computed menu scrim alpha is ${menuScrimAlpha}, wanted ${SCRIM_ALPHA_MENU_DEFAULT}`);
+  }
+  console.log("");
+
+  console.log(`sheet-grammar: row pitch — a phone menu row clears the ${ROW_PITCH_FLOOR_PX}px floor\n`);
+  const rowPitchMeasured = await page.evaluate((scenario) => window.__shellRowPitch(scenario), ROW_PITCH_SURFACE.spec);
+  if (rowPitchMeasured == null) {
+    failures.push("row pitch: no row to measure");
+    console.log("  FAIL  row pitch — no row to measure");
+  } else {
+    const clearsFloor = rowPitchMeasured >= ROW_PITCH_FLOOR_PX - FRAME_GEOMETRY_TOLERANCE_PX;
+    if (!clearsFloor) failures.push(`row pitch: menu row measured ${rowPitchMeasured}px, wanted at least ${ROW_PITCH_FLOOR_PX}px`);
+    console.log(`  ${clearsFloor ? "PASS" : "FAIL"}  menu row measures ${rowPitchMeasured}px, wanted at least ${ROW_PITCH_FLOOR_PX}px`);
+  }
+
+  const rowPitchControl = await page.evaluate((scenario) => window.__shellRowPitchNegativeControl(scenario), ROW_PITCH_SURFACE.spec);
+  console.log(`sheet-grammar: row pitch negative control — ${ROW_PITCH_SURFACE.name}'s floor overridden\n`);
+  if (rowPitchControl.broken == null || rowPitchControl.fixed == null) {
+    failures.push("row pitch negative control: the surface did not mount a row to measure");
+    console.log("  FAIL  row pitch negative control — the surface did not mount a row to measure");
+  } else {
+    const wentRed = rowPitchControl.broken < ROW_PITCH_FLOOR_PX - FRAME_GEOMETRY_TOLERANCE_PX;
+    const cleanAfter = rowPitchControl.fixed >= ROW_PITCH_FLOOR_PX - FRAME_GEOMETRY_TOLERANCE_PX;
+    if (!wentRed) failures.push(`row pitch negative control: overriding the floor did not shrink the row (measured ${rowPitchControl.broken}px)`);
+    if (!cleanAfter) failures.push(`row pitch negative control: removing the override did not restore the floor (measured ${rowPitchControl.fixed}px)`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  overriding the floor shrinks the row (${rowPitchControl.broken}px)`);
+    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores the floor (${rowPitchControl.fixed}px)`);
+  }
+  console.log("");
+
+  console.log(`sheet-grammar: handle geometry — ${HANDLE_WIDTH_PT} x ${HANDLE_HEIGHT_PT}pt at a ${HANDLE_DROP_PT}pt drop\n`);
+  const handleGeometry = await page.evaluate((scenario) => window.__shellHandleGeometry(scenario), HANDLE_GEOMETRY_SURFACE.spec);
+  if (!handleGeometry) {
+    failures.push("handle geometry: no handle to measure");
+    console.log("  FAIL  handle geometry — no handle to measure");
+  } else {
+    const widthOk = Math.abs(handleGeometry.width - HANDLE_WIDTH_PT) <= HANDLE_GEOMETRY_TOLERANCE_PT;
+    const heightOk = Math.abs(handleGeometry.height - HANDLE_HEIGHT_PT) <= HANDLE_GEOMETRY_TOLERANCE_PT;
+    const dropOk = Math.abs(handleGeometry.drop - HANDLE_DROP_PT) <= HANDLE_GEOMETRY_TOLERANCE_PT;
+    if (!widthOk || !heightOk) failures.push(`handle geometry: measured ${handleGeometry.width.toFixed(1)}x${handleGeometry.height.toFixed(1)}, wanted ${HANDLE_WIDTH_PT}x${HANDLE_HEIGHT_PT}`);
+    if (!dropOk) failures.push(`handle geometry: drop measured ${handleGeometry.drop.toFixed(1)}px, wanted ${HANDLE_DROP_PT}px`);
+    console.log(`  ${widthOk && heightOk ? "PASS" : "FAIL"}  handle measures ${handleGeometry.width.toFixed(1)}x${handleGeometry.height.toFixed(1)}, wanted ${HANDLE_WIDTH_PT}x${HANDLE_HEIGHT_PT}`);
+    console.log(`  ${dropOk ? "PASS" : "FAIL"}  handle drop measures ${handleGeometry.drop.toFixed(1)}px, wanted ${HANDLE_DROP_PT}px`);
+  }
+  console.log("");
+
+  console.log("sheet-grammar: depth cap — a third sheet on a panel-role parent replaces instead of stacking\n");
+  const depthCapReplace = await page.evaluate(() => window.__shellDepthCapReplace());
+  {
+    const noNewSheet = depthCapReplace.afterSheets === depthCapReplace.beforeSheets;
+    const childNotIndependent = depthCapReplace.childBecameSheet === false;
+    const grafted = depthCapReplace.childGraftedIntoParent === true;
+    const titleSwapped = depthCapReplace.parentHeaderTitle === "Child Title";
+    const backShown = depthCapReplace.parentHasBack === true;
+    if (!noNewSheet) failures.push(`depth cap: sheet count moved from ${depthCapReplace.beforeSheets} to ${depthCapReplace.afterSheets} — the third level stacked instead of replacing`);
+    if (!childNotIndependent) failures.push("depth cap: the third surface still became its own independent sheet");
+    if (!grafted) failures.push("depth cap: the third surface's content was not grafted into the parent");
+    if (!titleSwapped) failures.push(`depth cap: parent header title reads "${depthCapReplace.parentHeaderTitle}", wanted "Child Title"`);
+    if (!backShown) failures.push("depth cap: no back control appeared on the parent after the replace");
+    console.log(`  ${noNewSheet && childNotIndependent ? "PASS" : "FAIL"}  no third stacked sheet (${depthCapReplace.beforeSheets} sheets before, ${depthCapReplace.afterSheets} after)`);
+    console.log(`  ${grafted ? "PASS" : "FAIL"}  the child's content was grafted into the parent`);
+    console.log(`  ${titleSwapped ? "PASS" : "FAIL"}  the parent header title swapped to "${depthCapReplace.parentHeaderTitle}"`);
+    console.log(`  ${backShown ? "PASS" : "FAIL"}  a back control appeared on the parent`);
+  }
+  console.log("");
+
+  console.log("sheet-grammar: depth cap negative control — a dialog-role parent never registers a replace\n");
+  const depthCapControl = await page.evaluate(() => window.__shellDepthCapReplaceNegativeControl());
+  {
+    const stackedNormally = depthCapControl.sheetCount === 3 && depthCapControl.childBecameSheet === true;
+    if (!stackedNormally) failures.push(`depth cap negative control: a dialog-role chain measured ${depthCapControl.sheetCount} sheets (childBecameSheet=${depthCapControl.childBecameSheet}), wanted 3 sheets and true — the cap must not govern a role that never offers a replace`);
+    console.log(`  ${stackedNormally ? "PASS" : "FAIL"}  a dialog-role three-deep chain stacks normally (${depthCapControl.sheetCount} sheets, childBecameSheet=${depthCapControl.childBecameSheet})`);
   }
   console.log("");
 

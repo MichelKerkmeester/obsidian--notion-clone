@@ -2470,7 +2470,7 @@ const motionResults = await section("the sheet entrance with motion allowed", ()
   out.push({
     name: "the entrance runs on the shared sheet duration, easing out, on transform alone",
     pass: easing.transitionProperty === "transform"
-      && easing.transitionDuration === "0.26s"
+      && easing.transitionDuration === "0.2s"
       && easing.transitionTimingFunction === "ease-out",
     detail: `${easing.transitionProperty} ${easing.transitionDuration} ${easing.transitionTimingFunction}`,
   });
@@ -6609,11 +6609,13 @@ await section("lifted probes: the sheet audit", async () => {
 
   // ── ASK 5 — the grab band, as accepted: 35px, full width ──────────────
   // The 48px ask was closed: the band gets the chrome above the header and no more, which is
-  // --db-space-6 (16) + the handle's 8px top margin + its 4px bar + its 4px bottom reach = 32px.
-  // That clears WCAG 2.5.8's 24px AA target and falls short of 2.5.5's 44px AAA one, knowingly.
-  // The prose record says 35px; the stylesheet's own arithmetic says 32px, and this is the number.
-  record(5, "the grab band takes all the chrome above the header", geom.bandRows >= 32 && geom.bandTop <= 1,
-    `band answers presses over y=${geom.bandTop}..${geom.bandBottom} of the sheet = ${geom.bandRows}px (>= the 24px WCAG 2.5.8 AA target; the written record's "35px" is 3px optimistic)`);
+  // --db-space-6 (16) + the handle's 6pt top margin + its 5pt bar + its 4px bottom reach = 31px —
+  // the measured 34x5pt handle at a 6pt drop, one pixel under the previous 36x4px/8px shape's own
+  // 32px sum. That clears WCAG 2.5.8's 24px AA target and falls short of 2.5.5's 44px AAA one,
+  // knowingly. The prose record says 35px; the stylesheet's own arithmetic says 31px, and this is
+  // the number.
+  record(5, "the grab band takes all the chrome above the header", geom.bandRows >= 31 && geom.bandTop <= 1,
+    `band answers presses over y=${geom.bandTop}..${geom.bandBottom} of the sheet = ${geom.bandRows}px (>= the 24px WCAG 2.5.8 AA target; the written record's "35px" is 4px optimistic)`);
   // Full width less the sheet's own border and scroll gutter, which clip the band's box.
   record(5, "the grab band spans the full sheet width", geom.bandWidth >= geom.panelWidth - 4,
     `band x=${geom.bandLeft}..${geom.bandRight} = ${geom.bandWidth}px of a ${geom.panelWidth}px sheet`);
@@ -6815,7 +6817,7 @@ await section("lifted probes: the sheet audit", async () => {
       onBandIsHandle: onBand === handle,
     };
   });
-  record(7, "the scrim is a 25% black modal layer", scrim.background === "rgba(0, 0, 0, 0.25)" && scrim.pointerEvents === "auto",
+  record(7, "the scrim is a 48% black modal layer", scrim.background === "rgba(0, 0, 0, 0.48)" && scrim.pointerEvents === "auto",
     `background ${scrim.background}, pointer-events ${scrim.pointerEvents}`);
   record(7, "the scrim blocks the app behind the sheet", scrim.behindIsScrim,
     `a press 120px above the sheet lands on "${scrim.behind}"`);
