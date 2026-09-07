@@ -31,7 +31,7 @@ import { EMPTY_ROWS, buildDuplicateNameIndex, getFileTitleDisplay } from "./file
 import { clampCardFieldWidth, getFieldWidth } from "./column-width";
 import { renderGroupExpandControls } from "./group-expand-controls";
 import { getGroupVisibleCount } from "../data/group-visibility";
-import { isSameBoardGroup, resolveBoardContainerDropOrder } from "../data/board-container-drop";
+import { isSameBoardGroup, resolveBoardColumnByPoint, resolveBoardContainerDropOrder } from "../data/board-container-drop";
 import { resolveBoardCardFields } from "./board-card-fields";
 import { resolveTitleFieldDisplay } from "../data/title-field-display";
 import { isImeComposing } from "../data/keyboard-utils";
@@ -57,6 +57,22 @@ const CARD_FROM_GROUP_MIME = "application/x-obnotion-card-from-group";
  *  desktop scrollbar reveals from a hover. Anywhere else in the pane leaves it hidden — a reader
  *  scanning cards should not have a bar paint under their pointer just for being on the page. */
 const SCROLLBAR_EDGE_HOVER_PX = 16;
+/** Long-press-to-lift delay, in milliseconds — the same threshold `attachLongPress`
+ *  (`touch-environment.ts`) uses for the row/cell context-menu gesture, so a phone reader learns
+ *  one hold duration for the whole surface rather than a second one specific to the board. */
+const TOUCH_DRAG_LIFT_DELAY_MS = 450;
+/** How far the pointer may wander before the pending lift is cancelled — `attachLongPress`'s own
+ *  default tolerance. */
+const TOUCH_DRAG_MOVE_TOLERANCE_PX = 10;
+/** How close the pointer must sit to the scrolling container's left or right edge, in pixels,
+ *  before a lifted card auto-scrolls it — wide enough for a fingertip to find without needing the
+ *  card dragged flush against the pane's edge. */
+const TOUCH_DRAG_SCROLL_EDGE_PX = 48;
+/** Auto-scroll step, applied once per `TOUCH_DRAG_SCROLL_INTERVAL_MS` while the pointer sits
+ *  inside the edge band — a steady creep rather than a jump, so the reader can still see the
+ *  column they are about to cross into. */
+const TOUCH_DRAG_SCROLL_STEP_PX = 18;
+const TOUCH_DRAG_SCROLL_INTERVAL_MS = 60;
 
 // ───────────────────────────────────────────────────────────────────
 // 3. TYPES
@@ -144,6 +160,29 @@ interface ParsedLink {
   external: boolean;
 }
 
+/** State for the phone drag lifted by a long press — the touch counterpart of the desktop
+ *  `dragstart`/`dragover`/`drop` trio, since a coarse pointer has no native drag image or
+ *  `DataTransfer` to carry one. */
+interface TouchDragState {
+  path: string;
+  row: RowData;
+  groupField: string;
+  fromGroupKey: string;
+  card: HTMLElement;
+  ghost: HTMLElement;
+  pointerId: number;
+  /** Where inside the card the pointer took hold, so the ghost tracks the finger at the same
+   *  relative point instead of snapping its own top-left corner under it. */
+  offsetX: number;
+  offsetY: number;
+  hitKey: string | null;
+  scrollContainer: HTMLElement;
+  autoScrollTimer?: number;
+  autoScrollDirection: -1 | 0 | 1;
+  onKeyDown: (event: KeyboardEvent) => void;
+  onClickCapture: (event: Event) => void;
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 4. RENDERER
 // ───────────────────────────────────────────────────────────────────
@@ -188,10 +227,20 @@ export class BoardRenderer {
   /** Every group key this render saw before the hidden/empty filters ran, so the Groups panel can
    *  list an option that the board itself no longer renders a column for. */
   private allGroupKeysForPanel: string[] = [];
+  /** Every rendered column's cards container, keyed by group, rebuilt once per render — the
+   *  touch-drag hit-test candidates `resolveBoardColumnByPoint` needs, so a lifted card can be
+   *  resolved to a column by geometry alone, the same way the desktop path never asks
+   *  `elementFromPoint` to find one. */
+  private touchDragColumns: Array<{ key: string; cardsEl: HTMLElement; group: BoardGroup }> = [];
+  /** The in-flight touch drag, if a card is currently lifted; unset otherwise. */
+  private touchDrag?: TouchDragState;
 
   constructor(private app: App, private actions: BoardRendererActions) {}
 
   render(container: HTMLElement, config: ViewConfig, groups: BoardGroup[], groupField: string, emptyState?: EmptyStateOptions): void {
+    // A re-render mid-drag would otherwise replace the column the drag's own listeners and hit-test
+    // list still point at, leaving a ghost with nothing under it to drop onto.
+    this.cancelCardTouchDrag();
     this.clear(container);
     this.touchMode = isTouchDevice(container);
     this.rowByPath = new Map(groups.flatMap((group) => group.rows.map((row) => [row.file.path, row] as const)));
@@ -240,6 +289,7 @@ export class BoardRenderer {
     groupField: string,
   ): void {
     this.referenceRenderArgs = { container, config, groups, groupField };
+    this.touchDragColumns = [];
     // Resolved once per render, not per card: the card field list is a property of the view.
     this.referenceCardFields = resolveBoardCardFields(config, getColumnsInOrder(config), {
       groupField,
@@ -354,6 +404,7 @@ export class BoardRenderer {
     }
 
     const cardsEl = col.createDiv({ cls: "obnotion-kanban-cards", attr: { "data-status": group.key } });
+    this.touchDragColumns.push({ key: group.key, cardsEl, group });
     this.attachReferenceDropHandlers(cardsEl, group, groupField);
     // The kanban page limit is 10, distinct from every other layout's own default; applied
     // locally rather than through the shared unlimited-by-default config field so no other
@@ -442,7 +493,8 @@ export class BoardRenderer {
         role: "row",
       },
     });
-    card.draggable = !this.actions.isReadOnly && !this.touchMode;
+    const draggableAllowed = !this.actions.isReadOnly;
+    card.draggable = draggableAllowed && !this.touchMode;
     // The card, not the row alone: the record surface is placed against the element it was
     // opened from. Handed nothing to point at, the host falls back to the whole scrolling
     // container, which has no room above or below itself — so the panel renders as a clipped
@@ -472,6 +524,9 @@ export class BoardRenderer {
         card.removeClass("obnotion-kanban-card--dragging");
         card.removeClass("obnotion-kanban-card--drag-fade");
       });
+    }
+    if (draggableAllowed && this.touchMode) {
+      this.attachCardTouchDrag(card, row, group, groupField);
     }
 
     // Folds the "covers" extension: the control (Cover: Select) is Anytype's, and it is off by
@@ -763,7 +818,221 @@ export class BoardRenderer {
     return Array.from(event.dataTransfer?.types || []).includes(CARD_MIME);
   }
 
+  // ───────────────────────────────────────────────────────────────────
+  // 4c. PHONE DRAG (long-press lift, no native DataTransfer)
+  // ───────────────────────────────────────────────────────────────────
+  //
+  // A coarse pointer has no `dragstart`/`dragover`/`drop` cycle to carry a card between columns —
+  // `card.draggable` is false in touch mode precisely because the native drag image and drop
+  // feedback both assume a mouse. This attaches the phone equivalent: a long press (the same
+  // threshold and haptic `attachLongPress` uses for the row/cell context menu) lifts the card
+  // behind a floating ghost that tracks the finger, `resolveBoardColumnByPoint` resolves the
+  // column underneath it by geometry — the same helper a mouse-drag's empty-space fallback would
+  // use — and the drop calls the identical `moveCardAndOrder` the desktop path calls, so a
+  // cross-group move commits through the one write path regardless of which pointer made it.
 
+  private attachCardTouchDrag(card: HTMLElement, row: RowData, group: BoardGroup, groupField: string): void {
+    let timer: number | undefined;
+    let startX = 0;
+    let startY = 0;
+    let pendingPointerId: number | undefined;
+
+    const clearPending = () => {
+      if (timer !== undefined) window.clearTimeout(timer);
+      timer = undefined;
+      pendingPointerId = undefined;
+    };
+
+    card.addEventListener("pointerdown", (event: PointerEvent) => {
+      if (event.button !== 0 || (event.pointerType !== "touch" && event.pointerType !== "pen")) return;
+      if (isHTMLElement(event.target) && event.target.closest("a, button, input, select, textarea")) return;
+      if (this.touchDrag) return;
+      clearPending();
+      pendingPointerId = event.pointerId;
+      startX = event.clientX;
+      startY = event.clientY;
+      timer = window.setTimeout(() => {
+        timer = undefined;
+        this.beginCardTouchDrag(card, row, group, groupField, event, startX, startY);
+      }, TOUCH_DRAG_LIFT_DELAY_MS);
+    });
+    card.addEventListener("pointermove", (event: PointerEvent) => {
+      if (this.touchDrag?.pointerId === event.pointerId) {
+        this.moveCardTouchDrag(event);
+        return;
+      }
+      if (pendingPointerId !== event.pointerId) return;
+      if (Math.hypot(event.clientX - startX, event.clientY - startY) > TOUCH_DRAG_MOVE_TOLERANCE_PX) clearPending();
+    });
+    card.addEventListener("pointerup", (event: PointerEvent) => {
+      if (this.touchDrag?.pointerId === event.pointerId) {
+        this.endCardTouchDrag(event);
+      }
+      if (pendingPointerId === event.pointerId) clearPending();
+    });
+    card.addEventListener("pointercancel", (event: PointerEvent) => {
+      if (this.touchDrag?.pointerId === event.pointerId) this.cancelCardTouchDrag();
+      if (pendingPointerId === event.pointerId) clearPending();
+    });
+  }
+
+  private beginCardTouchDrag(
+    card: HTMLElement,
+    row: RowData,
+    group: BoardGroup,
+    groupField: string,
+    event: PointerEvent,
+    startX: number,
+    startY: number,
+  ): void {
+    const scrollContainer = this.referenceRenderArgs?.container;
+    if (!scrollContainer) return;
+    const rect = card.getBoundingClientRect();
+    const doc = card.ownerDocument;
+    if (typeof navigator !== "undefined") navigator.vibrate?.(20);
+    card.setPointerCapture?.(event.pointerId);
+    card.addClass("obnotion-kanban-card--touch-lifted");
+
+    const ghost = card.cloneNode(true) as HTMLElement;
+    ghost.addClass("obnotion-kanban-card--touch-ghost");
+    ghost.removeClass("obnotion-kanban-card--touch-lifted");
+    ghost.style.width = `${rect.width}px`;
+    ghost.style.height = `${rect.height}px`;
+    ghost.style.transform = `translate(${rect.left}px, ${rect.top}px)`;
+    doc.body.appendChild(ghost);
+
+    const onKeyDown = (keyEvent: KeyboardEvent) => {
+      if (keyEvent.key === "Escape") this.cancelCardTouchDrag();
+    };
+    // A lift that completes without the pointer ever crossing the move tolerance would otherwise
+    // still be sitting under the finger when it lifts, and the `click` that follows a `pointerup`
+    // would open the card the reader only meant to move — swallowed once, the same one-shot
+    // grammar `attachLongPress` uses for its own compatibility click.
+    const onClickCapture = (clickEvent: Event) => {
+      card.removeEventListener("click", onClickCapture, true);
+      clickEvent.preventDefault();
+      clickEvent.stopPropagation();
+      clickEvent.stopImmediatePropagation();
+    };
+    card.addEventListener("click", onClickCapture, true);
+    doc.addEventListener("keydown", onKeyDown, true);
+
+    this.touchDrag = {
+      path: row.file.path,
+      row,
+      groupField,
+      fromGroupKey: group.key,
+      card,
+      ghost,
+      pointerId: event.pointerId,
+      offsetX: startX - rect.left,
+      offsetY: startY - rect.top,
+      // Unset, not the starting group: the first `updateTouchDragHit` call must still paint a
+      // highlight even when the pointer never left the source column, and comparing against the
+      // starting key would treat "still over the source" as "nothing changed" and skip it.
+      hitKey: null,
+      scrollContainer,
+      autoScrollDirection: 0,
+      onKeyDown,
+      onClickCapture,
+    };
+  }
+
+  private moveCardTouchDrag(event: PointerEvent): void {
+    const drag = this.touchDrag;
+    if (!drag) return;
+    drag.ghost.style.transform = `translate(${event.clientX - drag.offsetX}px, ${event.clientY - drag.offsetY}px)`;
+    this.updateTouchDragHit(event.clientX, event.clientY);
+    this.updateTouchAutoScroll(event.clientX);
+  }
+
+  private endCardTouchDrag(event: PointerEvent): void {
+    const drag = this.touchDrag;
+    if (!drag) return;
+    this.updateTouchDragHit(event.clientX, event.clientY);
+    const hitKey = drag.hitKey;
+    const target = hitKey !== null ? this.touchDragColumns.find((col) => col.key === hitKey) : undefined;
+    this.teardownCardTouchDrag();
+    if (!target) return;
+    const drop = resolveBoardContainerDropOrder({
+      rows: target.group.rows,
+      draggedPath: drag.path,
+      fromGroup: drag.fromGroupKey,
+      groupKey: target.key,
+      fromSubgroup: undefined,
+      subgroupKey: undefined,
+    });
+    if (drop.keepInPlace) return;
+    void this.moveCardAndOrder(drag.row, drag.groupField, target.key, drag.fromGroupKey, drag.path, drop.order);
+  }
+
+  private cancelCardTouchDrag(): void {
+    if (!this.touchDrag) return;
+    this.teardownCardTouchDrag();
+  }
+
+  private teardownCardTouchDrag(): void {
+    const drag = this.touchDrag;
+    if (!drag) return;
+    this.stopTouchAutoScroll();
+    drag.ghost.remove();
+    drag.card.removeClass("obnotion-kanban-card--touch-lifted");
+    // `onClickCapture` outlives this teardown on purpose: the pointer's own compatibility `click`
+    // has not fired yet when a `pointerup` handler runs, so removing the swallow here would leave
+    // nothing behind to catch it and the drop would re-open the very card it just moved. It
+    // removes itself the moment it actually swallows one, the same one-shot grammar
+    // `attachLongPress` uses for its own compatibility click.
+    drag.card.ownerDocument.removeEventListener("keydown", drag.onKeyDown, true);
+    for (const col of this.touchDragColumns) col.cardsEl.removeClass("obnotion-kanban-drop-target");
+    this.touchDrag = undefined;
+  }
+
+  private updateTouchDragHit(clientX: number, clientY: number): void {
+    const drag = this.touchDrag;
+    if (!drag) return;
+    const candidates = this.touchDragColumns.map((col) => {
+      const rect = col.cardsEl.getBoundingClientRect();
+      return { key: col.key, rect: { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom } };
+    });
+    const hitKey = resolveBoardColumnByPoint(candidates, clientX, clientY);
+    if (hitKey === drag.hitKey) return;
+    const previous = drag.hitKey !== null ? this.touchDragColumns.find((col) => col.key === drag.hitKey) : undefined;
+    previous?.cardsEl.removeClass("obnotion-kanban-drop-target");
+    const next = hitKey !== null ? this.touchDragColumns.find((col) => col.key === hitKey) : undefined;
+    next?.cardsEl.addClass("obnotion-kanban-drop-target");
+    drag.hitKey = hitKey;
+  }
+
+  /** Scrolls the pane horizontally while the pointer sits inside either edge band — the board
+   *  scrolls as a page (`dc1d54a9`), so this scrolls the same container the desktop scrollbar
+   *  reveal listens on, leaving `scrollbarRevealTeardown` untouched: touch mode never attaches
+   *  that listener in the first place (there is no scrollbar to reveal), so the two never
+   *  contend for the same element. */
+  private updateTouchAutoScroll(clientX: number): void {
+    const drag = this.touchDrag;
+    if (!drag) return;
+    const rect = drag.scrollContainer.getBoundingClientRect();
+    const direction: -1 | 0 | 1 = clientX - rect.left <= TOUCH_DRAG_SCROLL_EDGE_PX
+      ? -1
+      : rect.right - clientX <= TOUCH_DRAG_SCROLL_EDGE_PX
+        ? 1
+        : 0;
+    if (direction === drag.autoScrollDirection) return;
+    drag.autoScrollDirection = direction;
+    this.stopTouchAutoScroll();
+    if (direction === 0) return;
+    drag.autoScrollTimer = window.setInterval(() => {
+      drag.scrollContainer.scrollLeft += direction * TOUCH_DRAG_SCROLL_STEP_PX;
+    }, TOUCH_DRAG_SCROLL_INTERVAL_MS);
+  }
+
+  private stopTouchAutoScroll(): void {
+    const drag = this.touchDrag;
+    if (!drag?.autoScrollTimer) return;
+    window.clearInterval(drag.autoScrollTimer);
+    drag.autoScrollTimer = undefined;
+    drag.autoScrollDirection = 0;
+  }
 
   private getCellValue(row: RowData, col: ColumnDef): unknown {
     if (col.key === "file.name") return getFileTitleDisplay(row, EMPTY_ROWS, this.duplicateNames).displayPath;

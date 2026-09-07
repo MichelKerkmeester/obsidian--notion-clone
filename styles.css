@@ -10020,6 +10020,26 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
 .obnotion-container .obnotion-kanban-card--drag-fade {
   opacity: 0.5;
 }
+/* The phone counterpart of `--drag-fade`: the lifted card fades in place while its floating
+   ghost carries the finger, the same "raised, then dimmed" language the mouse path uses. */
+.obnotion-container .obnotion-kanban-card--touch-lifted {
+  opacity: 0.5;
+}
+/* A clone of the lifted card, positioned by `transform: translate()` on every pointer move —
+   compositor-only, no layout per frame — rather than by `top`/`left`. Fixed to the viewport
+   since the pane it was lifted from scrolls under it during auto-scroll. */
+.obnotion-container .obnotion-kanban-card--touch-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  pointer-events: none;
+  z-index: var(--obnotion-layer-popover, 100);
+  box-shadow: var(--obnotion-elevation-2);
+  border-color: var(--interactive-accent);
+  opacity: 0.92;
+  will-change: transform;
+}
 
 .obnotion-container .obnotion-kanban-card-body {
   display: flex;

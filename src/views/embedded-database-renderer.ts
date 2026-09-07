@@ -3331,6 +3331,12 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     return !(file instanceof TFile);
   }
 
+  /**
+   * `BoardRendererActions.updateGroup` — reached only from `board-renderer.ts`'s
+   * `moveCardAndOrder` fallback, which calls it exactly when a drag (mouse or touch) carried a
+   * card across groups. A same-group reorder never reaches this method at all, so the toast below
+   * is never raised for one — it names the move it was actually raised for.
+   */
   private async updateBoardGroup(row: RowData, field: string, value: string): Promise<void> {
     if (this.isViewReadOnly()) {
       new Notice(t("notice.embedReadonly", { action: t("notice.editEntry") }));
@@ -3343,6 +3349,11 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       row.frontmatter[field] = value;
       this.pushHistory({ type: "cell", label: t("undo.editCell"), file: row.file, key: field, oldValue, newValue: value });
       if (this.config) this.renderResults(this.config);
+      showToast(this.containerEl.ownerDocument, {
+        severity: "success",
+        message: t("operation.moved", { count: 1 }),
+        action: { label: t("toolbar.undo"), onClick: () => this.undoLastEdit() },
+      });
     } catch (err) {
       new Notice(t("errors.updateFailed", { error: String(err) }));
     }
