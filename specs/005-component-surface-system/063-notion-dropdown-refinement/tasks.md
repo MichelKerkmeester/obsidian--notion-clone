@@ -1,6 +1,6 @@
 ---
 title: "Tasks: Notion Dropdown, Menu and Picker Refinement"
-description: "Seventeen legs: four that make the reds visible, nine that close them, and four that verify — each naming its command and reading its exit status."
+description: "Seventeen implementation legs plus four landing-verification legs that closed the evidence gaps a re-read of the landed tree found — each naming its command and reading its exit status."
 trigger_phrases:
   - "063 tasks"
   - "notion dropdown refinement tasks"
@@ -330,6 +330,92 @@ red states the value it observed before and after, not the value it expected.
 
 ---
 
+<!-- ANCHOR:phase-4 -->
+## Phase 4: Landing-Verification Evidence Closure
+
+A landing verifier re-reading this packet's own landed tree found three claims the recorded
+evidence did not actually support: a criterion photographed nothing, a written assertion never ran
+in any gate lane, and a capture baked in the day it happened to be taken on. `goal.md` §3 and
+`decision-record.md`'s rulings are unchanged; each leg below closes a gap in the *evidence* for an
+already-landed row, not a new criterion.
+
+- [x] T018 [P0] The desktop-sheet escalation (goal.md §3's fourth criterion) had zero
+      `desktop-sheet` manifest hits — every existing dropdown capture is either the ordinary
+      anchored popover or the phone sheet, so the escalation branch `dropdown-field.ts:267` builds
+      had never been photographed. Added a `dropdownDesktopSheet` `ScenarioSpec` option
+      (`tools/live/render-assertion-harness.ts`) that mounts `createDropdownField` with thirty
+      options — long enough that `resolveDesktopDropdownFit`'s natural-height estimate cannot fit
+      beside the anchor at any position in the capture's own viewport, the measured condition the
+      primitive itself escalates on, not a hand-set flag — and registered a desktop-only
+      `constructed-dropdown-desktop-sheet` scenario (`tools/screenshots/constructed-scenarios.mjs`).
+      **Red observed:** before this leg, `rg -rn "desktop-sheet" screenshots/manifest.json` matched
+      nothing. **Green:** `npm run screenshots` → 598 entries (up from 588), both themes captured;
+      `npm run screenshots:verify` → exit 0. Both PNGs opened and read: a titled "Property" sheet
+      with a focused, unconditional search input and the row list scrolled to the current
+      selection, in both light and dark. (`tools/live/render-assertion-harness.ts`,
+      `tools/screenshots/constructed-scenarios.mjs`, `tools/screenshots/constructed-capture.test.mjs`)
+- [x] T019 [P0] The colour picker's 16-row/0-swatch assertion (`render-assertion-harness.ts`'s
+      `color-picker` branch) was unreachable by any gate lane: `render-assertions.mjs` runs
+      `SCENARIOS` in full but selects only a narrow, explicitly-named subset of `STATE_SCENARIOS`
+      for its own per-scenario assertions, and `field-option-color-picker/file-view` (the
+      colour-picker's only `STATE_SCENARIOS` entry) was not a member of either set. **Red,
+      confirmed two ways.** First, structurally: with the fix absent, `node
+      tools/live/render-assertions.mjs` exits 0 without ever printing a `field-option-color-picker`
+      line. Second, behaviourally — the gap the packet's own evidence claimed did not exist:
+      temporarily reintroduced one `.db-color-picker-swatch` element into
+      `option-color-picker.ts`'s row loop and reran the unwired gate; exit 0, no failure reported,
+      proving the regression was invisible to it. Added
+      `scenario.renderer === "color-picker"` to the selection filter (`render-assertions.mjs`,
+      next to the existing `tab-menu`/`chartVariant`/`emptyReason`/`boardGroupsPanel` members it
+      already special-cases for the same reason). **Red, wired:** with the same one-swatch
+      reintroduced and the wiring in place, `node tools/live/render-assertions.mjs` → exit 1,
+      `field-option-color-picker/file-view: the colour picker drew its sixteen labelled rows with
+      the current one selected — 16 row(s)` (one stray swatch present). **Green:** reverted the
+      temporary swatch (git diff clean on `option-color-picker.ts`), reran → exit 0, the same
+      assertion line now `PASS`. (`tools/live/render-assertions.mjs`)
+- [x] T020 [P0] The three `constructed-date-picker-*` captures baked in the day they were taken:
+      `date-value-picker.ts:135` read `getLocalDateKey()`, which defaults to `new Date()` — the
+      real system clock — while every other constructed scenario in this bundle (the timeline,
+      the gantt) already reads the shared `renderNow()`/`setFrozenRenderNow` seam
+      (`src/data/calendar-date-time.ts`) that `render-assertion-harness.ts` freezes once at import
+      time. A recapture on a different real-world day would silently move the preset subline with
+      no source-level change to explain it. **Red observed:** the previously-committed
+      `constructed-date-picker-desktop-light.png` read "Today / September 7, 2026" — that day's
+      real date, not the harness's frozen 2026-03-25. Changed `date-value-picker.ts`'s `todayKey`
+      to `getLocalDateKey(renderNow())`; production behaviour is unchanged (`renderNow()` returns
+      `new Date()` whenever nothing has frozen it, which production never does). **Green:**
+      `npm run screenshots` regenerated the eight `constructed-date-picker(-datetime)-*` captures;
+      opened and read: the subline now reads "Today / March 25, 2026" in both themes, matching the
+      harness's pinned instant regardless of which real day the capture ran on. Also fixed a
+      one-line fixture/product drift the same review surfaced in the unrelated hand-written
+      fixture: `tools/screenshots/scenarios/fields.mjs`'s `field-date-value-picker(-datetime)`
+      presets read "Aug 21"/"Aug 22"/"Aug 28", an abbreviated month `formatDateValueDisplay`
+      never emits (`date-time-format.ts`'s `formatDateParts` uses `month: "long"`) — corrected to
+      "August 21"/"August 22"/"August 28" in both scenario blocks; the eight
+      `field-date-value-picker(-datetime)-*` fixture captures re-taken and opened, matching the
+      product's own month format. (`src/views/date-value-picker.ts`,
+      `tools/screenshots/scenarios/fields.mjs`)
+- [x] T021 [P0] Full verification: `npx tsc --noEmit` exit 0; `npx vitest run` exit 0 — 145 files,
+      1576 tests (`constructed-capture.test.mjs`'s registered-scenario-id list updated for the new
+      `constructed-dropdown-desktop-sheet` entry, the one test this leg's own addition touched);
+      `npm run build` exit 0; `node tools/live/render-assertions.mjs` exit 0; `node
+      tools/screenshots/verify.mjs` exit 0 — 598 entries current. `npm run gate` (foreground,
+      `</dev/null`): first pass RED on `css-lane` — this leg moved eighteen in-scope captures
+      (the eight `constructed-date-picker(-datetime)-*`, the eight `field-date-value-picker
+      (-datetime)-*`, and the two new `constructed-dropdown-desktop-sheet-desktop-*`) with no
+      styles.css edit, so the lane's already-released newest entry did not name them. Took the
+      lane over from `059-notion-board-refinement` at its own released hash (`fc00d8134c97`,
+      unmoved — no stylesheet edit here) and released again naming all eighteen. Second run: **26
+      green, 0 red.** Four further captures (`constructed-cell-editor-select-desktop-dark`,
+      `board-view-desktop-dark`, `reference-gantt-subtask-mobile-light`,
+      `reference-kanban-subtask-mobile-dark`) moved bytes on the same recapture at identical
+      `pixelHash`/`layoutHash` — opened, confirmed pixel-identical, restored to their committed
+      bytes rather than recommitted as churn (`check-lane.mjs`'s own byte-vs-content distinction
+      excludes these from the review it demands). (`tools/lane/css-lane.json`)
+<!-- /ANCHOR:phase-4 -->
+
+---
+
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
@@ -339,6 +425,9 @@ red states the value it observed before and after, not the value it expected.
       own prior text. A P1 blocked on an open upstream leg, not a P0; recorded rather than forced.
 - [x] Every red in `goal.md` §3 observed failing before its fix, with the command and `$?` recorded
       (T001, T006/T007's own describe block, T009's date-picker cases, T015's colour-picker suite)
+- [x] T018-T021 marked `[x]`: the landing verifier's three evidence gaps (no desktop-sheet capture,
+      the colour-picker assertion unreachable by any gate lane, the date-picker captures baking in
+      the capture day) are closed, each red observed before its fix
 <!-- /ANCHOR:completion -->
 
 ---

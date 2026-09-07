@@ -359,6 +359,16 @@ openDropdownMenu's own entry with a selected option, a plain one and a disabled 
 
 Sources: `src/views/dropdown-field.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
+### Dropdown escalated to a desktop sheet (constructed)
+
+createDropdownField's own entry with thirty options — long enough that resolveDesktopDropdownFit's natural-height estimate cannot fit beside the anchor at any position in this viewport, the measured condition the anchored branch itself escalates on. The trigger stays a button; the escalated sheet carries the family's own titled header and an unconditional search row instead of the trigger-as-query-field the ordinary combobox scenario shows.
+
+| dark | light |
+|---|---|
+| ![constructed-dropdown-desktop-sheet dark](notion-clone/components/constructed-dropdown-desktop-sheet-desktop-dark.png) | ![constructed-dropdown-desktop-sheet light](notion-clone/components/constructed-dropdown-desktop-sheet-desktop-light.png) |
+
+Sources: `src/views/dropdown-field.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/popover-position.ts`
+
 ### Searchable dropdown with a typed filter (constructed)
 
 createDropdownField's own combobox entry: a labelled field clicked open, its trigger replaced in place by the query input, and "ri" typed into it so the list narrows live. The phone profile of the same scenario shows the sheet's own search row instead, the grammar the desktop change leaves alone.

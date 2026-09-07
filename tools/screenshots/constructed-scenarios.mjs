@@ -532,6 +532,7 @@ const SPEC_OPTIONS = [
   "boardEmptyColumn", "boardGroupsPanel", "tableGroups", "tableFooter", "fullStatusPalette",
   "recordIconColumn", "calendarRecordIcon", "calendarUnscheduled", "calendarMultiDay", "columnHeaderController", "longHeaderLabel", "migratedFromList",
   "viewConfigVariant", "boardCardFieldsHidden", "tableColumnCount", "recordPlacement", "dropdownSearch",
+  "dropdownDesktopSheet",
 ];
 
 function constructedScenario(view, opts) {
@@ -562,6 +563,7 @@ function constructedScenario(view, opts) {
     // modes) rather than an "element" crop that would clip it to nothing.
     group: opts.group || "views",
     ...(opts.capture ? { capture: opts.capture } : {}),
+    ...(opts.devices ? { devices: opts.devices } : {}),
     sources: opts.sources,
     renderer: opts.renderer,
     bag: "file-view",
@@ -1295,6 +1297,25 @@ export const CONSTRUCTED_SCENARIOS = [
       + "replaced in place by the query input, and \"ri\" typed into it so the list narrows live. "
       + "The phone profile of the same scenario shows the sheet's own search row instead, the "
       + "grammar the desktop change leaves alone.",
+  }),
+  constructedScenario("dropdown-desktop-sheet", {
+    renderer: "dropdown",
+    dropdownDesktopSheet: true,
+    group: "components",
+    capture: "viewport",
+    // The phone sheet is already the subject of every other dropdown capture in this family;
+    // this one exists to show the desktop-only escalation, which `isDesktopDropdownCramped`
+    // never reaches on a phone (`phoneSheet` short-circuits it in `openDropdownPopover`).
+    devices: ["desktop"],
+    title: "Dropdown escalated to a desktop sheet (constructed)",
+    sources: constructedSources("src/views/dropdown-field.ts", "tools/bench/table-render-bench.ts")
+      .concat(["src/views/popover-position.ts"]),
+    note: "createDropdownField's own entry with thirty options — long enough that "
+      + "resolveDesktopDropdownFit's natural-height estimate cannot fit beside the anchor at any "
+      + "position in this viewport, the measured condition the anchored branch itself escalates "
+      + "on. The trigger stays a button; the escalated sheet carries the family's own titled "
+      + "header and an unconditional search row instead of the trigger-as-query-field the ordinary "
+      + "combobox scenario shows.",
   }),
   constructedScenario("empty-state", {
     renderer: "empty-state",

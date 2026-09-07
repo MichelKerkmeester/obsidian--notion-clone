@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The dropdown, menu and picker family came out of `052` substantially aligned with both of its",
     "created_at": "2026-09-06T16:06:28Z",
-    "last_save_at": "2026-09-07T04:04:27.434Z",
+    "last_save_at": "2026-09-07T05:44:55.343Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:608eb00fb21a2c599e2ab30608d503d3f0d985de69eeaf89b0847cb03e20d7ac",
+    "source_fingerprint": "sha256:92499e14428c3b821f04b3b3368bb28193d6eddf4a31dadb99381c2e58084a7b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "538c91a5aae8c6ff8911b148ff11c9a2a7e1e56c1ba1aea411fe2d8bc6254eac",
       "plan.md": "d6f2e46043fc002b33474e8ca8d01000a8c8a818d99bcdcee6cb7efecd7902ed",
-      "tasks.md": "b0981f5610b25ba2013d802271a6a6e3dc8cdc6c6a019a4c02f1d5370bc460f8",
+      "tasks.md": "f288cbd4ad1e04547c069bddcea223f3de50d0cd6dd5daffc6fae63565d1a144",
       "decision-record.md": "1bbe202cc58e9e1d1aacd25382a3d4d742dcff1ebe73863f78653c71e106d1fb",
-      "implementation-summary.md": "a6a45d34a3c32ce43ed61eee7d70ad933214551edafa03c7eca83e94919eadbd"
+      "implementation-summary.md": "dc0f80e653e6a32c0a78ec6c635adeaab0b11bc03630ab4801d3eec1d9b056e0"
     },
     "last_active_at": null
   }

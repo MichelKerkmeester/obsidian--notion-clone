@@ -121,6 +121,7 @@ describe("constructed scenario registry", () => {
       "constructed-depth3-import-confirm-dropdown",
       "constructed-depth3-property-type-picker",
       "constructed-dropdown",
+      "constructed-dropdown-desktop-sheet",
       "constructed-dropdown-search",
       "constructed-empty-state",
       "constructed-file-fields",

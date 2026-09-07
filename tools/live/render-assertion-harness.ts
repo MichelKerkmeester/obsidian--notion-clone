@@ -523,6 +523,13 @@ export interface ScenarioSpec {
    */
   dropdownSearch?: boolean;
   /**
+   * Opt-in, renderer "dropdown" only: mounts a labelled field with a list long enough that its
+   * natural height cannot fit beside the anchor at any position in the capture's own viewport,
+   * driving `createDropdownField`'s real desktop-sheet escalation rather than the ordinary
+   * anchored popover `dropdownSearch` and the plain `dropdown` scenario both show.
+   */
+  dropdownDesktopSheet?: boolean;
+  /**
    * Opt-in, renderer "table" only: mounts a `tools/mock-data` use case's own columns and records
    * instead of the generated bench fixture. The fixture gives every row the same field count and
    * the same value lengths, so no fixture scenario can show a row that grew past its neighbours;
@@ -3840,6 +3847,48 @@ export function runRenderAssertions(
       results.push(multiMarkerAssertion(container,
         [".db-dropdown-popover", ".db-dropdown-option:not(.is-hidden)"],
         "the combobox opened its list and filtered it to the typed query"));
+    }
+  } else if (scenario.renderer === "dropdown" && scenario.dropdownDesktopSheet) {
+    // The desktop-sheet escalation: the same labelled-field entry `dropdownSearch` drives, but
+    // with a list long enough (thirty rows) that its natural height cannot fit beside the anchor
+    // at any position in this page's own viewport — `isDesktopDropdownCramped` reads that from
+    // the same numbers `resolveDesktopDropdownFit` derives, not a hand-set flag, so this scenario
+    // proves the escalation rather than asserting a class the primitive never earned. The trigger
+    // never becomes the query field on this path; the escalated sheet carries its own titled
+    // header and search row instead.
+    const row = container.createDiv({
+      cls: "db-panel-row",
+      attr: { style: "width:320px;margin:16px" },
+    });
+    createDropdownField({
+      parent: row,
+      label: "Property",
+      className: "db-panel-dropdown db-filter-field-dropdown",
+      hideLabel: true,
+      searchable: true,
+      options: Array.from({ length: 30 }, (_, index) => ({
+        value: `property-${index}`,
+        text: `Property ${index + 1}`,
+      })),
+      value: "property-0",
+      onChange: () => undefined,
+    });
+    row.querySelector<HTMLButtonElement>(".db-dropdown-field")?.click();
+    container.setAttribute(PROVENANCE_ATTR, "dropdown-field");
+    bagKeys = [];
+
+    results.push(provenanceResult(container, "dropdown-field"));
+    if (results[0].pass) {
+      results.push({
+        name: "a cramped anchored placement escalated to a titled sheet with its own search row",
+        pass: Boolean(container.querySelector(".db-dropdown-popover.db-dropdown-popover-desktop-sheet"))
+          && Boolean(container.querySelector(".db-dropdown-popover-desktop-sheet .db-panel-title"))
+          && Boolean(container.querySelector(".db-dropdown-popover-desktop-sheet .db-dropdown-search input"))
+          && row.querySelector(".db-dropdown-field-input") == null,
+        detail: container.querySelector(".db-dropdown-popover-desktop-sheet")
+          ? "desktop-sheet class, titled header and search row all present, trigger never converted"
+          : "no .db-dropdown-popover-desktop-sheet — the anchored branch fired instead",
+      });
     }
   } else if (scenario.renderer === "dropdown") {
     // The dropdown popover: openDropdownMenu's own entry, the same call the column manager's

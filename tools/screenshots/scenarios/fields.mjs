@@ -297,9 +297,9 @@ export const FIELDS_SCENARIOS = [
 
         <div class="db-cell-edit-popover db-date-edit-popover db-date-value-popover" role="dialog" aria-label="Value">
           <div class="db-date-presets" role="group" aria-label="Quick dates">
-            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Today</span><span class="db-date-preset-subline">Aug 21</span></button>
-            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Tomorrow</span><span class="db-date-preset-subline">Aug 22</span></button>
-            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Next week</span><span class="db-date-preset-subline">Aug 28</span></button>
+            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Today</span><span class="db-date-preset-subline">August 21</span></button>
+            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Tomorrow</span><span class="db-date-preset-subline">August 22</span></button>
+            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Next week</span><span class="db-date-preset-subline">August 28</span></button>
             <button type="button" class="db-date-preset"><span class="db-date-preset-label">Clear</span></button>
           </div>
           <div class="db-date-segments">
@@ -344,9 +344,9 @@ export const FIELDS_SCENARIOS = [
 
         <div class="db-cell-edit-popover db-date-edit-popover db-date-value-popover is-datetime" role="dialog" aria-label="Value">
           <div class="db-date-presets" role="group" aria-label="Quick dates">
-            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Today</span><span class="db-date-preset-subline">Aug 21</span></button>
-            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Tomorrow</span><span class="db-date-preset-subline">Aug 22</span></button>
-            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Next week</span><span class="db-date-preset-subline">Aug 28</span></button>
+            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Today</span><span class="db-date-preset-subline">August 21</span></button>
+            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Tomorrow</span><span class="db-date-preset-subline">August 22</span></button>
+            <button type="button" class="db-date-preset"><span class="db-date-preset-label">Next week</span><span class="db-date-preset-subline">August 28</span></button>
             <button type="button" class="db-date-preset"><span class="db-date-preset-label">Clear</span></button>
           </div>
           <div class="db-date-segments">

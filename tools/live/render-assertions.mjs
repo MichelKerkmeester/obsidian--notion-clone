@@ -631,10 +631,15 @@ try {
   // asserting the shared card, its action, and the retired private markup's absence. The two
   // emptyReason scenarios join for the same reason again: the permanent row proving the
   // source-missing and no-matching-data flavours render distinctly through getEmptyStateReason's
-  // own predicate, not a hand-supplied reason string.
+  // own predicate, not a hand-supplied reason string. The option colour picker joins them for
+  // the same reason a third time: its own row/swatch-count assertion lives in
+  // render-assertion-harness.ts's "color-picker" branch, but `field-option-color-picker/file-view`
+  // was never a member of `outcomes` or of this filter, so that assertion never ran in this gate
+  // — a regression to the old sixteen-swatch grid would have exited 0 here regardless.
   const rulesScenarios = STATE_SCENARIOS.filter((scenario) =>
     scenario.rules != null || scenario.toolbarPopover === "tab-menu" || scenario.chartVariant === "empty"
-    || scenario.emptyReason != null || scenario.boardGroupsPanel === true);
+    || scenario.emptyReason != null || scenario.boardGroupsPanel === true
+    || scenario.renderer === "color-picker");
   const rulesOutcomes = await page.evaluate(
     (scenarios) => scenarios.map((scenario) => window.__renderAssertions(scenario)),
     rulesScenarios,

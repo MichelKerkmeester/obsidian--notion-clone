@@ -1,8 +1,8 @@
 {
-  "measuredAt": "2026-09-07T07:22:51.796Z",
+  "measuredAt": "2026-09-07T07:38:17.003Z",
   "inputs": {
-    "tools/live/render-assertions.mjs": "60da93e475ec",
-    "tools/live/render-assertion-harness.ts": "1b2de26aeea2",
+    "tools/live/render-assertions.mjs": "f66aefa56f9f",
+    "tools/live/render-assertion-harness.ts": "2c3471de024f",
     "styles.css": "cd0beccfa123",
     "src/views/table-renderer.ts": "36ff7802e9d6",
     "src/views/board-renderer.ts": "13e66fe8b711",

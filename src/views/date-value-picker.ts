@@ -20,6 +20,7 @@ import {
   getLocalDateKey,
   getWeekdayLabels,
   parseDateKeyToUtc,
+  renderNow,
 } from "../data/calendar-date-time";
 import { getEffectiveLocale, t } from "../i18n";
 import { formatDateValueDisplay } from "../data/date-time-format";
@@ -131,7 +132,11 @@ function openDateValuePicker(
   const originalValue = normalizeDatePickerValue(options.value, includeTime);
   const originalDisplayText = options.displayText;
   let committedValue = originalValue;
-  const todayKey = getLocalDateKey();
+  // renderNow() returns the real clock unless a caller has frozen it (production never does),
+  // so this reads exactly like `new Date()` at runtime — but it lets a capture or gate harness
+  // pin "today" the same way it already pins the calendar/timeline/gantt renderers, instead of
+  // this picker alone drawing its presets against whatever day the run happens to execute on.
+  const todayKey = getLocalDateKey(renderNow());
   let pickerMonthKey = (originalValue || todayKey).slice(0, 7);
   let pickerMode: MiniCalendarMode = "day";
   let closed = false;

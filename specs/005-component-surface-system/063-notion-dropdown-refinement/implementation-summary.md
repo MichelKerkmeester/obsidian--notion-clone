@@ -11,21 +11,20 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/063-notion-dropdown-refinement"
-    last_updated_at: "2026-09-07T00:30:00Z"
-    last_updated_by: "implementation-session"
-    recent_action: "Implemented T001-T017 (T008 stays [B] on 052's open T008/T009); full gate 26 green"
+    last_updated_at: "2026-09-07T08:10:00Z"
+    last_updated_by: "landing-evidence-closure-session"
+    recent_action: "Closed T018-T021 (3 landing-verification evidence gaps); gate 26 green"
     next_safe_action: "Operator closes T013/AC-011"
     blockers:
       - "T008/AC-007 blocked on 052's open T008 and T009 (caller files owned there)"
       - "T013/AC-011 is the operator's and is never ticked by an agent"
     key_files:
       - "src/views/dropdown-field.ts"
-      - "src/views/popover-position.ts"
       - "src/views/option-color-picker.ts"
       - "src/views/date-value-picker.ts"
-      - "src/views/column-menu.ts"
-      - "styles.css"
-      - "src/i18n.ts"
+      - "tools/live/render-assertion-harness.ts"
+      - "tools/live/render-assertions.mjs"
+      - "tools/screenshots/constructed-scenarios.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-063-summary"
@@ -36,6 +35,7 @@ _memory:
     answered_questions:
       - "The cramped condition is decided upfront from the family's own row/search/section tokens, not a full pre-render — avoids unwinding createDropdownField's trigger-to-input conversion"
       - "The colour picker's leading dot is a dedicated 16px class, not the existing 12px chip dot"
+      - "date-value-picker.ts's todayKey read the real clock instead of the shared renderNow() seam"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
 # Implementation Summary
@@ -89,6 +89,16 @@ recorded red on the rebased tree:
    (not grid) keyboard navigation. `SWATCH_PICKER_POPOVER` moved from 124 to 224, and the grid's
    own stylesheet block (including its phone-specific 44px swatch rules) was deleted rather than
    left inert. Sixteen colour-name keys were added to `src/i18n.ts` (en/zh-CN/zh-TW).
+5. **A landing-verification pass closed three evidence gaps in the four rows above, rather than
+   changing any of them.** A re-read of the landed tree found: no capture existed of the desktop
+   sheet escalation actually firing (every dropdown capture on file was the ordinary popover or the
+   phone sheet); the colour picker's own 16-row/0-swatch assertion in
+   `render-assertion-harness.ts` was written but never selected into any gate lane's executed set,
+   so a regression to the old swatch grid would have passed silently; and the three
+   `constructed-date-picker-*` captures baked in the real day they were taken because
+   `date-value-picker.ts` read the system clock directly instead of the shared frozen-clock seam
+   the rest of the constructed bundle already uses. `tasks.md` T018-T021 record each gap red before
+   its fix.
 
 ### Files Changed
 
@@ -111,8 +121,15 @@ recorded red on the rebased tree:
 | `tools/screenshots/scenarios/fields.mjs` | Modified | Date-preset subline markup; colour-picker fixture rebuilt, phone variant now branches on device to show the real sheet |
 | `tools/storybook/verify-placement.mjs` | Modified | Retired the swatch-grid-specific measurement the rebuild made moot; the unrelated chip-distinctness check stays |
 | `specs/.../052-.../goal.md` | Modified | Two stale "Today:" criterion texts refreshed against the landed tree (T010; ticks nothing) |
-| `tools/lane/css-lane.json` | Modified | Acquired from `058`, released at `07578ed6d5e4` naming 42 reviewed captures |
+| `tools/lane/css-lane.json` | Modified | Acquired from `058`, released at `07578ed6d5e4` naming 42 reviewed captures; taken over again from `059` at `fc00d8134c97` (unmoved — no stylesheet edit) for the evidence-closure pass, releasing naming 18 more |
 | 42 `screenshots/**/*.png` | Re-captured | Real content moved by this leg's own sources |
+| `tools/live/render-assertion-harness.ts` | Modified again | Added the `dropdownDesktopSheet` `ScenarioSpec` option and its dispatch branch |
+| `tools/live/render-assertions.mjs` | Modified | Wired `field-option-color-picker`'s scenario into the selected-assertion filter |
+| `tools/screenshots/constructed-scenarios.mjs` | Modified | Registered the desktop-only `constructed-dropdown-desktop-sheet` scenario; added `devices` passthrough |
+| `tools/screenshots/constructed-capture.test.mjs` | Modified | Registered-scenario-id list updated for the new entry |
+| `tools/screenshots/scenarios/fields.mjs` | Modified again | Fixed the "Aug 21"-style abbreviated presets to the product's own "August 21" format |
+| `src/views/date-value-picker.ts` | Modified again | `todayKey` now reads `renderNow()` instead of the real system clock |
+| 18 `screenshots/**/*.png` | Re-captured | 8 `constructed-date-picker(-datetime)-*` (frozen clock), 8 `field-date-value-picker(-datetime)-*` (fixture text), 2 `constructed-dropdown-desktop-sheet-*` (new scenario) |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -134,6 +151,18 @@ foreground. The gate's first run surfaced two red lanes this leg's own edits cau
 (`operator-list`, stale after `tasks.md`/`052/goal.md` rows changed; `evidence`, eight artefacts
 recorded against the pre-edit `styles.css`/`popover-position.ts` hashes) — both closed by
 re-running their own generators, not by editing recorded numbers. The second run: 26 green, 0 red.
+
+A later landing-verification pass (T018-T021) found the recorded evidence for three of the rows
+above did not hold up to a second read and closed each gap without touching `goal.md`,
+`decision-record.md`, or any already-`[x]` criterion: added the `dropdownDesktopSheet` scenario and
+captured it (T018); wired the colour picker's own assertion into `render-assertions.mjs`'s
+selection, proving it red with a temporarily-reintroduced swatch and green with it removed (T019);
+pointed `date-value-picker.ts` at the shared `renderNow()` seam and recaptured the eight captures
+that had been reading the real clock, plus a one-line fixture-text fix the same review surfaced
+(T020). Verification (T021) reran the full stack; the gate's first pass went red on `css-lane`
+because this pass moved eighteen captures with no stylesheet edit, closed by taking the lane over
+from its current holder at its own released hash and releasing again naming all eighteen. Second
+run: 26 green, 0 red.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -168,6 +197,22 @@ re-running their own generators, not by editing recorded numbers. The second run
 | `npm run screenshots:verify` | Exit 0 — 588 entries current |
 | `node tools/lane/check-lane.mjs` | Exit 0 — release names all 42 changed captures |
 | `SURFACE_PHASE=063-notion-dropdown-refinement npm run gate` | Exit 0 — **26 green, 0 red** |
+
+**T018-T021 (landing-verification evidence closure):**
+
+| Check | Result |
+|-------|--------|
+| `npx tsc --noEmit` | Exit 0, no output |
+| `npx vitest run` | Exit 0 — 145 files, 1576 tests (`constructed-capture.test.mjs`'s id list updated) |
+| `npm run build` | Exit 0, `main.js` rewritten |
+| `node tools/live/render-assertions.mjs`, colour-picker assertion unwired | Exit 0 with one swatch reintroduced — the gap, reproduced |
+| `node tools/live/render-assertions.mjs`, wired, one swatch reintroduced | Exit 1 — `field-option-color-picker/file-view: … — 16 row(s)` |
+| `node tools/live/render-assertions.mjs`, wired, swatch reverted | Exit 0 — same assertion `PASS` |
+| `npm run screenshots` | 598 entries (up from 588) |
+| `node tools/screenshots/verify.mjs` | Exit 0 — 598 entries current |
+| `node tools/lane/check-lane.mjs`, before the takeover | Exit 1 — 18 changed capture(s) `059`'s release does not name |
+| `node tools/lane/check-lane.mjs`, after the takeover/release | Exit 0 — release names all 18 changed capture(s) |
+| `npm run gate` (foreground, `</dev/null`) | Exit 0 — **26 green, 0 red** |
 <!-- /ANCHOR:verification -->
 
 ---
