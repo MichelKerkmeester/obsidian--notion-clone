@@ -1,6 +1,6 @@
 ---
 title: "Tasks: Notion Record Refinement"
-description: "Fourteen tasks in five legs: the empty-copy and type-size leg, the option split, the add-property surface, the three rows the 2026-09-06 19:05 rulings opened, and the one item still operator-gated."
+description: "Fifteen tasks in five legs plus one follow-up: the empty-copy and type-size leg, the option split, the add-property surface, the three rows the 2026-09-06 19:05 rulings opened, the one item still operator-gated, and the touch-target fix closing a shortfall found by the 059 landing's own triage."
 trigger_phrases:
   - "065 tasks"
   - "record refinement tasks"
@@ -312,6 +312,35 @@ T013.
   and the observed green — not assertions
   - **Evidence:** see `acceptance-criteria.md` — every AC-001 through AC-015 row carries a Met status
     with the command and the observed value, except AC-012 (the operator's device read, left Unmet)
+
+- [x] T015 [P1] Fix the three `db-record-detail-hidden-toggle` touch-target shortfalls the
+  059-notion-board-refinement landing's own triage found in this leg's row grammar
+  (`styles.css:10752-10758`, `:10886-10895`)
+  - The disclosure toggle (`record-detail-panel.ts`'s hidden-group button, shared by the record-
+    detail and record-peek surfaces) measured 120x20 on the phone sheet — a standalone tappable
+    control, not a value living inside an already-sized cell, so it needed the same floor the
+    table's load-more button and footer trigger already raise on
+  - **Threshold:** the toggle's hit rect is >=44x44 on the phone sheet, the per-row eye button's
+    hit rect is >=44x44 once its group is expanded, the anchored desktop popover keeps its compact
+    height, and the row's own pitch (`--db-sheet-row-min-height`) is unchanged
+  - **Red first:** `node tools/live/touch-targets.mjs --json` measured 3 `db-record-detail-hidden-
+    toggle` instances under the 44px floor (120x20, two on record-detail/file-view, one on record-
+    peek/file-view); pinned rather than absorbed in `touch-targets-constructed-baseline.json`'s
+    `rebaseReconciliation2026_09_07` entry
+  - **Evidence:** `.db-mobile-bottom-sheet .db-record-detail-hidden-toggle` gains `min-height:
+    44px`; `.db-mobile-bottom-sheet .db-record-detail-hidden-eye` gains `min-width`/`min-height:
+    44px`, filling the row's own already-reserved 44px pitch rather than growing it. Live-measured
+    at 402px in headless Chrome: the toggle reads 120x44, the eye button 44x44 once expanded, and
+    the row itself 48px before and after the change on both the record-detail and record-peek
+    scenarios. `mobile-table-and-panel-ux.test.ts` gained a case pinning both raised selectors plus
+    a negative control (the row pitch, the chevron and the drag handle stay unraised).
+    `touch-targets-constructed-baseline.json`'s `under` count is lowered 810 -> 807 (18 classes,
+    down from 19 — `db-record-detail-hidden-toggle` no longer appears in the undeclared list at
+    all), never raised. Full recapture on the landing rebase onto `origin/main` af0e8796: 604
+    entries, `screenshots:verify` exit 0, and every one of the 604 `pixelHash` values identical to
+    its committed value. Six unrelated captures jittered on the recapture and were restored to
+    their committed bytes rather than reviewed (`tools/lane/css-lane.json`'s newest release note
+    names all six)
 <!-- /ANCHOR:phase-3 -->
 
 ---
@@ -481,11 +510,13 @@ the ruling is the failure D4 names.
 | Category | Total | Verified |
 |----------|-------|----------|
 | P0 Items | 13 | 13/13 |
-| P1 Items | 12 | 12/12 |
+| P1 Items | 13 | 13/13 |
 | P2 Items | 3 | 2/3 |
 
-**Verification Date**: 2026-09-07. CHK-042 (P2) landed with `CODE.md` updated. T008 (P2) is the
-sole deferred item, with its reason recorded beside it.
+**Verification Date**: 2026-09-07. CHK-042 (P2) landed with `CODE.md` updated. T015 (P1) closed the
+three `db-record-detail-hidden-toggle` touch-target shortfalls the 059-notion-board-refinement
+landing's own triage found in this leg's row grammar. T008 (P2) is the sole deferred item, with its
+reason recorded beside it.
 <!-- /ANCHOR:summary -->
 
 ---

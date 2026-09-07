@@ -10749,6 +10749,14 @@ body.db-bottom-dock-taken .note-database-container .db-cell-selection-pill {
   color: var(--text-normal);
 }
 
+/* A standalone tappable control, not a value living inside an already-sized cell — the same
+   reasoning the table's load-more button and footer trigger raise on for exactly this reason. The
+   4px/6px padding above measured 20px tall, well under the 44px floor a thumb needs; the sheet is
+   the only context that needs the floor, so the anchored desktop popover keeps its compact height. */
+.db-mobile-bottom-sheet .db-record-detail-hidden-toggle {
+  min-height: 44px;
+}
+
 .note-database-container .db-record-detail-hidden-fields,
 .db-mobile-bottom-sheet .db-record-detail-hidden-fields {
   display: flex;
@@ -10873,6 +10881,17 @@ body.db-bottom-dock-taken .note-database-container .db-cell-selection-pill {
 .db-mobile-bottom-sheet .db-record-detail-hidden-eye:disabled {
   cursor: default;
   opacity: 0.5;
+}
+
+/* The row's own phone pitch already reserves 44px of content height per row (the mobile sheet sets
+   `--db-sheet-row-min-height`, and the row rule above reads it) — so filling that height with the
+   eye button's own hit box needs no row-height change, only a control that actually uses the room
+   the row already sets aside. The glyph inside stays the same size; only the button's own padding
+   box grows. Width follows the same reasoning: the row's trailing `auto` columns have flex to
+   give, so a wider eye button costs nothing but headroom in the name column already sized for it. */
+.db-mobile-bottom-sheet .db-record-detail-hidden-eye {
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .note-database-container .db-record-detail-hidden-chevron,

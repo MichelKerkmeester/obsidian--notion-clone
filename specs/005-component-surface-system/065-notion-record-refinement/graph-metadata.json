@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Three changes this program already ruled on Anytype evidence are half-landed on the record surface:",
     "created_at": "2026-09-06T16:06:31Z",
-    "last_save_at": "2026-09-07T04:38:19.876Z",
+    "last_save_at": "2026-09-07T07:24:43.227Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:ca0ebfb602ad408da7990659e70c4e393e13c01ba1953626ded1f6f7d8ff2cca",
+    "source_fingerprint": "sha256:cb8d8890259628dc6c088e5ac15251ee0c6435aa0f03fe1ca31dbcdb1ac78368",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "3da496d0dc014c6d9af273db0ed2ef90bca485f5d023a8f1d7eefcfb3618b2ce",
       "plan.md": "5674cba8d4bc7c134c91d0aa22500e205d8d70ae3cae0ea511475f67abf2ccaf",
-      "tasks.md": "638d3b7a4d41867f531f1cb4659a3ed9553b414908d5d1b225b0921b2e82d507",
+      "tasks.md": "9f041117085ff388fdf765394585a6ce717edb7dfb7e56582d5ccb8837378a2e",
       "decision-record.md": "600c68f02c93d38daa1d47bed5914f90b493197f4d32784bd1688b6156b06963",
-      "implementation-summary.md": "419067061761c98b38d2990b1b476274f53a424364a84a25f272ce4215894b82"
+      "implementation-summary.md": "9fa13e7112c86c681f686135decc482cf426a503a77415f3d292b1b4850b7cab"
     },
     "last_active_child_id": null,
     "last_active_at": null

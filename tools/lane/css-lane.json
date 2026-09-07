@@ -1,7 +1,7 @@
 {
-  "holder": "064-notion-toolbar-refinement",
-  "acquiredAt": "2026-09-07T05:17:27.000Z",
-  "baselineHash": "6da9460cc5a9",
+  "holder": "065-notion-record-refinement",
+  "acquiredAt": "2026-09-07T09:20:00.000Z",
+  "baselineHash": "cd0beccfa123",
   "baselineCommit": null,
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -4872,6 +4872,21 @@
       "hash": "6da9460cc5a9",
       "reviewed": [],
       "note": "Full recapture on the rebased tree (npm run screenshots, 604 entries), screenshots:verify exit 0. Zero captures carry this edit's content: the one new selector (db-active-control-add) is additive-only and no registered scenario exercises it — the constructed chip-rail capture mounts the real renderer with an actions bag that supplies no addFilter/addSort, so the control does not draw there and the four constructed-active-view-controls pictures are byte-identical. The four toolbar captures (constructed-toolbar-{desktop,mobile}-{dark,light}) were opened and read: the desktop pair still draws the New button's word at full width, so the collapse rung is correctly inert there, and the mobile pair is unchanged because the touch branch never creates the label span. Four captures moved bytes at identical pixelHash and layoutHash under the rerun nondeterminism check-lane.mjs already documents (constructed-cell-editor-select-desktop-dark, board-view-desktop-dark, reference-gantt-subtask-mobile-light, reference-kanban-subtask-mobile-dark) and were restored to their committed bytes, with the manifest's own bytes fields reconciled back to the restored files."
+    },
+    {
+      "event": "acquire",
+      "phase": "065-notion-record-refinement",
+      "at": "2026-09-07T09:20:00.000Z",
+      "hash": "6da9460cc5a9",
+      "note": "Taken over from 064-notion-toolbar-refinement at its own released hash (6da9460cc5a9), with nothing outstanding against it. Re-derived on the landing rebase onto origin/main af0e8796 — the earlier entry had been written against 059-notion-board-refinement’s released stylesheet, which is not what the lane held by the time this leg landed. Two additive declaration blocks follow, both scoped to the phone sheet: a min-height on the hidden-properties disclosure and a min-width/min-height pair on the per-row eye button. No existing selector’s declaration block is edited."
+    },
+    {
+      "event": "release",
+      "phase": "065-notion-record-refinement",
+      "at": "2026-09-07T09:25:00.000Z",
+      "hash": "cd0beccfa123",
+      "reviewed": [],
+      "note": "The 059 landing’s touch-targets triage pinned 3 db-record-detail-hidden-toggle shortfalls rather than absorbing them; this closes them at the source. .db-mobile-bottom-sheet .db-record-detail-hidden-toggle gains min-height: 44px, and .db-mobile-bottom-sheet .db-record-detail-hidden-eye gains min-width/min-height: 44px — the eye fills the 44px the row’s own --db-sheet-row-min-height already reserves rather than growing the row. Measured live at 402px on the real record sheet through the production renderer (record-detail and record-peek): the toggle moved 119.86x20 -> 119.86x44, the eye 12.78x16 -> 44x44, the row pitch unchanged at 377x48 on both surfaces, the 16px glyph, the 14x18.84 chevron and the 18x18.84 drag handle all unchanged. Full recapture on the rebased tree (npm run screenshots, 604 entries), screenshots:verify exit 0. Zero captures changed content: every one of the 604 pixelHashes is identical to the committed value, so this release owes no review. Six captures moved bytes at identical pixelHash and layoutHash under the rerun nondeterminism check-lane.mjs already documents (constructed-cell-editor-select-desktop-dark, field-record-icon-mobile-light, panel-record-detail-sheet-title-currency-mobile-light, board-view-desktop-dark, reference-gantt-subtask-mobile-light, reference-kanban-subtask-mobile-dark) and were restored to their committed bytes, with the manifest’s own bytes fields reconciled back to the restored files. The eight chrome-toast captures carry a second, separate rerun nondeterminism that moves layoutHash at a stable pixelHash; those layoutHashes were likewise restored to their committed values rather than recommitted as churn this edit did not cause."
     }
   ],
   "outstanding": [

@@ -11,9 +11,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/065-notion-record-refinement"
-    last_updated_at: "2026-09-07T01:30:00Z"
+    last_updated_at: "2026-09-07T08:30:00Z"
     last_updated_by: "implementation-session"
-    recent_action: "Legs A, B, C and E landed in one commit; 26-lane gate green"
+    recent_action: "T015 fixed 3 db-record-detail-hidden-toggle touch-target shortfalls; gate 26/26 green"
     next_safe_action: "C7 is the operator's own device read; nothing else is agent-schedulable"
     blockers: []
     key_files:
@@ -168,6 +168,24 @@ It also found two things the leg's own pass had not, both since fixed and re-mea
 
 Neither fix moves a capture — no capture types a query, and no capture fixture carries an empty
 `status` column — and `check-lane.mjs` reports 0 changed captures against the new baseline.
+
+### Follow-up: hidden-toggle touch targets (2026-09-07)
+
+The 059-notion-board-refinement landing's own touch-targets triage found 3
+`db-record-detail-hidden-toggle` shortfalls (120x20 on the phone sheet, under the 44px floor) that
+this leg's hidden-group row grammar introduced, and pinned them rather than absorbing the fix —
+recorded in `touch-targets-constructed-baseline.json`'s `rebaseReconciliation2026_09_07` entry.
+Closed at the source: `.db-mobile-bottom-sheet .db-record-detail-hidden-toggle` gains `min-height:
+44px`, and `.db-mobile-bottom-sheet .db-record-detail-hidden-eye` gains `min-width`/`min-height:
+44px`, filling the row's own already-reserved 44px pitch (`--db-sheet-row-min-height`) rather than
+growing it. Live-measured at 402px: the toggle now reads 120x44, the eye button 44x44 once its
+group expands, and the row itself 48px before and after — unchanged. `mobile-table-and-panel-ux
+.test.ts` gained a case with a negative control (row pitch, chevron and drag handle stay unraised).
+`touch-targets-constructed-baseline.json`'s `under` count is lowered 810 -> 807, never raised — the
+class dropped out of the corpus entirely (19 -> 18 classes). Full recapture on the landing rebase
+onto `origin/main` af0e8796 (604 entries, `screenshots:verify` exit 0, every `pixelHash` identical
+to its committed value); six unrelated captures jittered on the recapture and were restored to
+their committed bytes. See `tasks.md`'s T015 for the full evidence trail.
 <!-- /ANCHOR:verification -->
 
 ---

@@ -146,4 +146,25 @@ describe("mobile table and panel UX", () => {
     expect(recordPanelSource).toContain('hasClass("db-mobile-bottom-sheet")');
     expect(recordPanelSource).toContain("attachSheetDragToDismiss");
   });
+
+  it("raises the hidden-properties disclosure and its eye button to a 44px hit box on the sheet, leaving the anchored desktop popover and the row pitch alone", () => {
+    // The disclosure toggle: a standalone tappable control, the same reasoning the table's
+    // load-more button and footer trigger already raise on. Sheet-only, so the anchored desktop
+    // popover (no `.db-mobile-bottom-sheet` ancestor) keeps its compact height.
+    expect(declarationsFor(".db-mobile-bottom-sheet .db-record-detail-hidden-toggle")).toMatch(/min-height:\s*44px/);
+    expect(declarationsFor(".note-database-container .db-record-detail-hidden-toggle")).not.toMatch(/min-height/);
+
+    // The per-row eye button: fills the 44px the row's own `--db-sheet-row-min-height` already
+    // reserves per row on the sheet, rather than growing the row.
+    expect(declarationsFor(".db-mobile-bottom-sheet .db-record-detail-hidden-eye")).toMatch(/min-width:\s*44px/);
+    expect(declarationsFor(".db-mobile-bottom-sheet .db-record-detail-hidden-eye")).toMatch(/min-height:\s*44px/);
+
+    // Negative control: the row pitch itself is untouched by this fix, and neither the chevron nor
+    // the drag handle — decorative spans with no click handler — gained a hit box they cannot use.
+    expect(declarationsFor(".db-mobile-bottom-sheet .db-record-detail-hidden-row")).toMatch(
+      /min-height:\s*var\(--db-sheet-row-min-height,\s*30px\)/
+    );
+    expect(declarationsFor(".db-mobile-bottom-sheet .db-record-detail-hidden-chevron")).not.toMatch(/min-width|min-height/);
+    expect(declarationsFor(".db-mobile-bottom-sheet .db-record-detail-hidden-drag")).not.toMatch(/min-width|min-height/);
+  });
 });
