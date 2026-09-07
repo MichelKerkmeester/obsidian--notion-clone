@@ -677,6 +677,14 @@ class TrashManagerModal extends DbModal {
       this.onOpen();
     };
     const restoreModal = new class extends DbModal {
+      protected getDeclaredTitle(): string {
+        return t("settings.trash.restoreTitle", { name: item.database.name || t("common.untitled") });
+      }
+
+      protected getShellRole(): SurfaceShellRole {
+        return "dialog";
+      }
+
       onOpen(): void {
         super.onOpen();
         this.contentEl.empty();

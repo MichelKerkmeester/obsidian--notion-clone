@@ -13,6 +13,7 @@
 import { t } from "../../i18n";
 import { CsvMarkdownExportOptions } from "../../data/csv-markdown-zip-export";
 import { DbModal } from "./db-modal";
+import type { SurfaceShellRole } from "../surface-shell";
 import { createCheckbox } from "../checkbox";
 
 // ───────────────────────────────────────────────────────────────────
@@ -22,6 +23,14 @@ import { createCheckbox } from "../checkbox";
 export class CsvMarkdownExportModal extends DbModal {
   private resolve?: (options: CsvMarkdownExportOptions | null) => void;
   private includeFrontmatter = true;
+
+  protected getDeclaredTitle(): string {
+    return t("csvMarkdownExport.title");
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "panel";
+  }
 
   openAndWait(): Promise<CsvMarkdownExportOptions | null> {
     return new Promise((resolve) => {

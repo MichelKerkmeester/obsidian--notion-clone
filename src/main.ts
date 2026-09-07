@@ -49,9 +49,7 @@ import { safeString, isRecord } from "./data/safe-string";
 import { isElement } from "./views/dom-guards";
 import { NOTE_DATABASE_HOVER_LINK_SOURCE } from "./views/hover-link-preview";
 import { DbModal } from "./views/modals/db-modal";
-import { attachSheetChromeToModal } from "./views/mobile-bottom-sheet";
-import { keepSheetPlaced, placeSheet } from "./views/popover-position";
-import { isTouchDevice } from "./data/touch-environment";
+import { createSurfaceShell, type SurfaceShellHandle, type SurfaceShellRole } from "./views/surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -2892,6 +2890,14 @@ class CsvMarkdownImportModal extends DbModal {
     super(app);
   }
 
+  protected getDeclaredTitle(): string {
+    return t("csvMarkdownImport.title");
+  }
+
+  protected getShellRole(): SurfaceShellRole {
+    return "panel";
+  }
+
   openAndWait(): Promise<CsvMarkdownImportResult | null> {
     return new Promise((resolve) => {
       this.resolve = resolve;
@@ -3019,8 +3025,7 @@ class CsvMarkdownImportModal extends DbModal {
 // ───────────────────────────────────────────────────────────────────
 
 class BaseFileSuggestModal extends FuzzySuggestModal<TFile> {
-  private releaseSheetChrome: (() => void) | undefined;
-  private releaseSheetPlacement: (() => void) | undefined;
+  private shell: SurfaceShellHandle | undefined;
 
   constructor(
     app: App,
@@ -3042,28 +3047,19 @@ class BaseFileSuggestModal extends FuzzySuggestModal<TFile> {
 
   onOpen(): void {
     void super.onOpen();
-    this.titleEl.setText(t("baseImport.chooseBaseFile"));
-    const asSheet = isTouchDevice(this.contentEl);
-    this.releaseSheetChrome = attachSheetChromeToModal(
-      this.modalEl,
-      asSheet,
-      () => this.close(),
-      {
-        title: t("baseImport.chooseBaseFile"),
-        getTitle: () => this.titleEl?.textContent?.trim() || t("baseImport.chooseBaseFile"),
-      },
-    );
-    if (asSheet) {
-      placeSheet(this.modalEl);
-      this.releaseSheetPlacement = keepSheetPlaced(this.modalEl);
-    }
+    this.shell = createSurfaceShell({
+      presentation: "sheet",
+      element: this.modalEl,
+      close: () => this.close(),
+      title: t("baseImport.chooseBaseFile"),
+      role: "panel",
+    });
+    this.shell.apply();
   }
 
   onClose(): void {
-    this.releaseSheetPlacement?.();
-    this.releaseSheetPlacement = undefined;
-    this.releaseSheetChrome?.();
-    this.releaseSheetChrome = undefined;
+    this.shell?.destroy();
+    this.shell = undefined;
     super.onClose();
   }
 
