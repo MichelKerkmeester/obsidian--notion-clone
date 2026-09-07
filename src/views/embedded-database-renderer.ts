@@ -4389,7 +4389,15 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private setupEmbedCellSelection(td: HTMLElement, row: RowData, col: ColumnDef): void {
     td.setAttr("role", "gridcell");
     td.tabIndex = this.cellSelection ? -1 : 0;
+    // Shares the host view's press rule rather than restating it. These two files each grew their
+    // own copy of the branch and each independently decided that touch means "shift is held", so a
+    // repair to one of them would have left the other still painting the block that was reported.
+    const cellGesture = trackCellGesture(td);
     td.addEventListener("focus", () => {
+      // The cell renderer's own tap-to-edit path focuses the cell on its way into the editor, and
+      // that focus lands here too. A touch tap edits and does not select, so a focus this tracker
+      // attributes to touch must not paint one — mirrors the host table view's identical guard.
+      if (cellGesture() === "touch") return;
       if (this.isEmbedCellSelected(row.file.path, col.key)) return;
       this.captureEmbedReturnFocus();
       const addr: CellAddress = { rowPath: row.file.path, colKey: col.key };
@@ -4397,10 +4405,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.renderEmbedCellSelectionClasses();
       this.renderEmbedSelectionStatusBar();
     });
-    // Shares the host view's press rule rather than restating it. These two files each grew their
-    // own copy of the branch and each independently decided that touch means "shift is held", so a
-    // repair to one of them would have left the other still painting the block that was reported.
-    const cellGesture = trackCellGesture(td);
     const handleMouseDown = (event: MouseEvent) => {
       if (event.button !== 0) return;
       if (!this.config) return;

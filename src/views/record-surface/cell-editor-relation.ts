@@ -18,6 +18,7 @@ import { isImeComposing } from "../../data/keyboard-utils";
 import { parseRelationValues } from "../../data/relation-links";
 import { ColumnDef, RowData } from "../../data/types";
 import { t } from "../../i18n";
+import { claimBottomDock } from "../mobile-bottom-sheet";
 import { isMobileBottomSheet, positionToolbarPopover } from "../popover-position";
 import { installPopoverAutoClose } from "../popover-auto-close";
 import { RELATION_PICKER_POPOVER } from "../popover-host";
@@ -79,6 +80,10 @@ export function openRelationEditor(
   const popover = host.createDiv({ cls: "db-cell-option-popover db-relation-popover" });
   popover.setAttr("role", "dialog");
   popover.setAttr("aria-label", col.label || col.key);
+  // Claimed for the editor's whole life, matching `openSingleLineEditor`'s identical pair: without
+  // it a phone's selection pill stays docked in the band this popover can occupy near the grid's
+  // bottom edge, and the two are drawn on top of each other.
+  claimBottomDock(target.ownerDocument, "cell-editor", true);
   let closed = false;
   let removeAutoClose: (() => void) | undefined;
   const close = () => {
@@ -86,6 +91,7 @@ export function openRelationEditor(
     closed = true;
     removeAutoClose?.();
     popover.remove();
+    claimBottomDock(target.ownerDocument, "cell-editor", false);
     if (ctx.getActiveOptionPopoverClose() === close) ctx.setActiveOptionPopoverClose(undefined);
     session?.onClose?.();
   };

@@ -28,6 +28,7 @@ import { t } from "../../i18n";
 import { confirmWithModal } from "../modals/confirm-modal";
 import { createMenuRow } from "../menu-row";
 import { isHTMLElement } from "../dom-guards";
+import { claimBottomDock } from "../mobile-bottom-sheet";
 import { closeActiveOptionColorPicker, openOptionColorPicker } from "../option-color-picker";
 import { installPopoverAutoClose } from "../popover-auto-close";
 import { clamp, getVisiblePopoverBounds, resolvePopoverHorizontalLeft, setPosition } from "../popover-position";
@@ -224,6 +225,10 @@ export function openOptionEditor(
     : [normalizeOptionValueForKey(optionKey, currentValue)].filter(Boolean);
   const selected = new Set(originalValues);
   const popover = host.createDiv({ cls: "db-cell-option-popover" });
+  // Claimed for the editor's whole life, matching `openSingleLineEditor`'s identical pair: without
+  // it a phone's selection pill stays docked in the band this popover can occupy near the grid's
+  // bottom edge, and the two are drawn on top of each other.
+  claimBottomDock(td.ownerDocument, "cell-editor", true);
   let activeOptionIndex = 0;
   let closed = false;
   let sessionClose: (() => void) | undefined;
@@ -245,6 +250,7 @@ export function openOptionEditor(
     if (sessionClose && ctx.getActiveTextEditClose() === sessionClose) ctx.setActiveTextEditClose(undefined);
     removeAutoClose?.();
     popover.remove();
+    claimBottomDock(td.ownerDocument, "cell-editor", false);
     // Clean up any leaked color picker popups on window.activeDocument.body
     window.activeDocument.body.querySelectorAll(".db-color-picker-popup").forEach(el => el.remove());
     window.activeDocument.removeEventListener("keydown", onKeydown, true);

@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Notion Sheet Refinement"
-description: "Both legs landed: the tap that edits instead of selecting, the long-press entry, the anchored pill and its clamp, the ··· overflow, and the confirm's declared card frame — verified live, gate green at 26/26."
+description: "Both legs landed: the tap that edits instead of selecting, the long-press entry, the anchored pill and its clamp, the ··· overflow, every editor claiming the bottom dock, and the confirm's declared card frame — verified live, gate green at 26/26."
 trigger_phrases:
   - "061 implementation summary"
   - "notion sheet refinement shipped"
@@ -10,31 +10,31 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/061-notion-sheet-refinement"
-    last_updated_at: "2026-09-07T06:45:00Z"
+    last_updated_at: "2026-09-07T08:30:00Z"
     last_updated_by: "landing-verification"
-    recent_action: "Landed on main; T010 closed, T008 reopened"
-    next_safe_action: "Claim the bottom dock in the date and option cell editors"
+    recent_action: "T008 and T012 closed; dock claim + focus-path selection fix, gate 26/26"
+    next_safe_action: "AC-005 in the operator's own sitting, shared with 067 AC-011"
     blockers:
       - "AC-005 is the operator's own read, in the same sitting as 067 AC-011"
-      - "T008 is open: only cell-editor-text.ts claims the bottom dock, so a tap on a date cell still draws the pill over the date editor"
       - "AC-007 stays parked (ADR-006) behind an Anytype multi-section re-read the operator schedules"
     key_files:
       - "src/views/database-view.ts"
       - "src/views/embedded-database-renderer.ts"
-      - "src/views/table-cell-gesture.ts"
-      - "src/views/mobile-bottom-sheet.ts"
+      - "src/views/record-surface/cell-editor-date.ts"
+      - "src/views/record-surface/cell-editor-option.ts"
+      - "src/views/record-surface/cell-editor-relation.ts"
       - "src/views/modals/confirm-modal.ts"
-      - "styles.css"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-061-impl"
       parent_session_id: null
-    completion_pct: 85
+    completion_pct: 95
     open_questions: []
     answered_questions:
-      - "Embedded renderer's own bar (renderEmbedSelectionStatusBar) left unchanged — a third bar producer, edit actions already hidden there, no report against it"
-      - "Card centred by translate, not inset+margin:auto — the latter stretched to fill the inset box on this engine instead of sizing to content"
-      - "Card width fixed at 320px, not fit-content — the header's 1fr/1fr grid resolves width from track content under a shrink-to-fit ancestor, skewing it"
+      - "Embedded renderer's own bar left unchanged — a third producer, actions already hidden, no report against it"
+      - "Card centred by translate, not inset+margin:auto — the latter stretched to fill the box on this engine"
+      - "Card width fixed at 320px — a shrink-to-fit header grid skewed its own intrinsic width"
+      - "Relation editor's own claim isolated via a narrow-split-pane page, not the phone-sheet fixture"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
 # Implementation Summary
@@ -50,7 +50,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 061-notion-sheet-refinement |
-| **Completed** | Implementation closed 2026-09-07 and landed on `main`; T008 reopened at the landing, AC-005 remains (operator sitting) |
+| **Completed** | Implementation closed 2026-09-07 and landed on `main`; T008 and the focus-listener residual (T012) closed on a follow-up pass the same day; AC-005 remains (operator sitting) |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -90,9 +90,22 @@ ADR-004 Accepted, ADR-006 Parked).
   Fill or Bulk-edit `<Column>` (context-dependent), then Clear last and alone with `warning: true`.
   Both the pill's `···` and the desktop bar's collapsed `···` call it. Desktop's bar collapses to
   five children (count, Copy, Paste, Clear, `···`) at its declared 30px, unchanged grammar.
-- **Every cell editor claims the bottom dock.** `openTextPopoverEditor` now claims and releases
-  `claimBottomDock` exactly as `openSingleLineEditor` already did; the picker family (date, option,
-  relation) already inherits the claim automatically through the generic sheet-mount path.
+- **Every cell editor claims the bottom dock.** `openTextPopoverEditor` claims and releases
+  `claimBottomDock` exactly as `openSingleLineEditor` already did. The picker family's own inherited
+  claim through the generic sheet-mount path turned out not to cover every case: `openDateEditor`'s
+  mobile branch is an inline overlay, not a registered sheet, so it never inherited the claim at
+  all, and `openOptionEditor` mounts its popover directly rather than through the sheet-mount path
+  either. Both now carry the same explicit claim/release pair, and `openRelationEditor` gained one
+  too even though its own `positionToolbarPopover` call already claims the dock as `"sheet"` on a
+  true phone context — the explicit claim is what still covers a narrow split pane, where that
+  inherited path does not apply.
+- **The focus path stopped painting a selection a tap never asked for.** The press branch's own
+  fix (T004) left a second producer: `CellRenderer.selectCell` focuses the `td` on the way into the
+  editor, and this view's `focus` listener assigned a selection from any focus regardless of
+  source. It now reads the same touch/mouse gesture tracker the press handler already uses and
+  defers whenever the focus arrived from a touch tap — a keyboard tab-stop or a mouse click, which
+  never fire a `pointerdown` on the cell first, are unaffected. Mirrored in the embedded renderer's
+  identical listener.
 - **Left open:** the embedded renderer's own `renderEmbedSelectionStatusBar` (a genuine third
   bar-shaped-chrome producer) is unchanged — its edit actions are already hidden for the embed
   context and no operator report names it; recorded rather than silently folded in.
@@ -120,10 +133,13 @@ ADR-004 Accepted, ADR-006 Parked).
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `src/views/database-view.ts` | Update | Touch early-return, long-press entry, pill render/anchor/clamp, overflow menu, dock cleanup |
-| `src/views/embedded-database-renderer.ts` | Update | Same touch early-return and long-press entry; row-menu long-press exclusion |
+| `src/views/database-view.ts` | Update | Touch early-return, long-press entry, pill render/anchor/clamp, overflow menu, dock cleanup; focus listener now defers to the touch/mouse gesture tracker |
+| `src/views/embedded-database-renderer.ts` | Update | Same touch early-return and long-press entry; row-menu long-press exclusion; same focus-listener gesture guard |
 | `src/views/table-cell-gesture.ts` | Update | `isTableCellTarget` added |
 | `src/views/record-surface/cell-editor-text.ts` | Update | `openTextPopoverEditor` claims/releases the bottom dock |
+| `src/views/record-surface/cell-editor-date.ts` | Update | `openDateEditor` claims/releases the bottom dock |
+| `src/views/record-surface/cell-editor-option.ts` | Update | `openOptionEditor` claims/releases the bottom dock |
+| `src/views/record-surface/cell-editor-relation.ts` | Update | `openRelationEditor` claims/releases the bottom dock |
 | `src/views/toolbar-renderer.ts` | Update | `reserveMobileFabInset` runs unconditionally on a phone |
 | `src/views/mobile-bottom-sheet.ts` | Update | `frameRole` on `SheetChromeOptions`/`attachSheetChromeToModal`; `.db-sheet-card` toggle; classifier bail-out |
 | `src/views/surface-shell.ts` | Update | `frameRole` on `SurfaceShellOptions`; `SHELL_CARD_INSET_PT` constant |
@@ -133,8 +149,8 @@ ADR-004 Accepted, ADR-006 Parked).
 | `src/i18n.ts` | Update | `selection.bulkEditColumn`, `selection.moreActions` |
 | `styles.css` | Update | `.db-sheet-card`, `.db-confirm-stacked`, `.db-cell-selection-pill` family, dock-taken hide rule, shell-header leading `min-width` |
 | `tools/live/sheet-grammar.mjs` | Update | Confirm-card inset/radius/action-layout measurement + negative control |
-| `tools/storybook/verify-placement.mjs` | Update | Standalone selection fixture switched to row selection (bar mechanics unchanged); new pill section (shape, anchor, clamp, overflow reachability, dock-hide) with self-contained negative controls |
-| `src/views/table-cell-gesture.test.ts` | New | Unit coverage for `isTableCellTarget` |
+| `tools/storybook/verify-placement.mjs` | Update | Standalone selection fixture switched to row selection (bar mechanics unchanged); pill section (shape, anchor, clamp, overflow reachability, dock-hide); a touch-tap-through-focus-path section; a dock-claim section covering date/option/relation editors plus an isolated relation-only narrow-split-pane check — all with self-contained or revert-and-restore negative controls |
+| `src/views/table-cell-gesture.test.ts` | Update | Unit coverage for `isTableCellTarget`, rebuilt on a real minimal element tree (parent chain, real `closest()`/selector matching) rather than a fake whose `closest()` ignored its argument, so a wrong selector or a dropped `isHTMLElement` guard now fails the suite |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -147,11 +163,11 @@ Read from the final tree, exit codes read from `$?` or a file:
 | Check | Result |
 |-------|--------|
 | `npx tsc --noEmit` | 0 |
-| `npx vitest run` | 1523/1523 green |
+| `npx vitest run` | 1585/1585 green |
 | `npm run build` | 0 |
-| `node tools/live/sheet-grammar.mjs` | PASS, including the new confirm-card measurement and its negative control |
+| `node tools/live/sheet-grammar.mjs` | PASS, including the confirm-card measurement and its negative control |
 | `node tools/live/render-assertions.mjs` | PASS |
-| `node tools/storybook/verify-placement.mjs` | 393/396 (3 declared-red, pre-existing baseline), including the new pill section |
+| `node tools/storybook/verify-placement.mjs` | 403/406 (3 declared-red, pre-existing baseline), including the pill, touch-tap-through-focus, and dock-claim sections |
 | `node tools/naming/scan-comments.mjs` | PASS — 0 artifact-id violations |
 | `node tools/naming/scan-failing-values.mjs` | PASS |
 | `npm run gate` (foreground, stdin `/dev/null`, exit read from file) | **PASS — 26/26 green** |
@@ -166,12 +182,28 @@ the pill branch and the old bar branch cannot coexist in the new code); the navb
 confirm card's inset/radius/stacked-layout (stripping `.db-sheet-card`/`.db-confirm-stacked` went
 flush-left with side-by-side actions).
 
+On this follow-up pass: the touch-tap-through-focus-path assertions (reverting the focus listener's
+gesture guard showed a live `cellSelection` right after the tap and a pill reading "1 cell
+selected" after Escape closed the editor — the operator's own residual, reproduced); the
+date/option editors' dock-claim assertions (reverting their `claimBottomDock` pair showed the pill
+at `display: flex` while the editor was open, over the date editor's own Save/Cancel row); and the
+relation editor's own claim, isolated in a narrow-split-pane page where `positionToolbarPopover`'s
+inherited sheet-mount claim does not apply (reverting its pair left the dock unclaimed there, where
+the phone-sheet page's own inherited claim would otherwise have hidden the gap). `table-cell-gesture.test.ts`'s
+two new mutants — a dropped attribute clause in the selector, and a dropped `isHTMLElement` guard —
+were both confirmed red against the mutated source and green against the shipped one.
+
 The 32 Project Manager reference captures stayed `pixelHash`-identical throughout (parent D5).
-Twelve screenshots moved content and were opened and read in both themes: four are this leg's own
-(the confirm card, standalone and stacked over the Properties sheet); eight are
+Twelve screenshots moved content and were opened and read in both themes at the first landing: four
+are this leg's own (the confirm card, standalone and stacked over the Properties sheet); eight are
 `constructed-date-picker(-datetime)-*`, which mount the real component and read the actual date —
 the session crossed a calendar day between the prior packet's capture and this one, and the only
-difference is which day now reads as "today," unrelated to this edit. Full accounting is in
+difference is which day now reads as "today," unrelated to this edit. On this follow-up pass a full
+recapture (604 screenshots) left every PNG byte-identical to what is committed; six files jittered
+on the capture host (board, timeline and two Project Manager reference views, plus the desktop
+option-editor screenshot and a view-config panel — none of them a scenario that renders an open
+cell editor alongside a live selection pill, the only combination either fix could visibly change)
+and were restored to their committed bytes rather than kept. Full accounting is in
 `tools/lane/css-lane.json`'s release entry for this phase.
 <!-- /ANCHOR:how-delivered -->
 
@@ -202,8 +234,10 @@ difference is which day now reads as "today," unrelated to this edit. Full accou
 | AC-007 | Waived (ADR-006) |
 | AC-005 | Unmet — the operator's own read, in `067` AC-011's sitting |
 | T010 | Closed at the landing — the two device questions are in `067` AC-011, no new operator row |
-| T008 | **Reopened at the landing.** The text half is confirmed live; the date/datetime editor never claims the dock, so the pill draws over it |
+| T008 | **Closed.** The text editor's claim was confirmed live at the first landing; the date, option and relation editors now carry the same claim/release pair, each measured live |
+| T012 (new) | **Closed.** The focus listener a plain tap reaches through `CellRenderer.selectCell`'s own `td.focus()` now defers to the same gesture tracker the press handler reads, and no longer paints a selection from a touch tap |
 | Landing re-verification | The shipped `TableRenderer`/`CellRenderer` plus `DatabaseView`'s own `setupTableCellSelection`, driven in headless Chrome at 402x874 (`hasTouch`, forced coarse pointer) and at 1440x900 |
+| Follow-up verification | The same shipped renderers, driven through `cellRenderer.startEdit`/`renderCell` and `DatabaseView.prototype.setupTableCellSelection` against a real `<td>` and a real `renderSelectionStatusBar`-built pill, in headless Chrome at 402x874 and, for the relation editor's isolated check, at 1000x700 with no touch/phone flags |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -221,15 +255,12 @@ difference is which day now reads as "today," unrelated to this edit. Full accou
    (the Fill branch). Both branches share the same `openCellSelectionActionsMenu` code path.
 3. **AC-005 is not agent-closable.** It is the operator's own device read, shared with `067`
    AC-011's sitting. T010 was closed at the landing, which held write authority over `067`.
-4. **The bottom dock is claimed by one editor family, not all of them.** Measured at the landing on
-   the shipped renderers at 402px: the text and single-line editors claim it and the pill is
-   correctly hidden underneath them, but the date/datetime editor mounts into the same bottom band
-   without claiming, so the pill is drawn over its Save/Cancel row. T008 carries the numbers.
-5. **A plain tap still paints a cell selection, through the focus path rather than the press path.**
-   `CellRenderer.selectCell` focuses the `td` before opening the editor, and this view's `td` focus
-   listener assigns `cellSelection`. The pill it builds is hidden while an editor holds the dock and
-   appears when that editor closes. Predates this packet; T004 carries the trace.
-6. **AC-007 stays parked**, per ADR-006, behind an Anytype multi-section capture re-read the
+4. **Closed on this follow-up pass, recorded here rather than removed from the record.** The two
+   defects the first landing left open — the bottom dock claimed by one editor family rather than
+   all of them (T008), and a plain tap still painting a selection through the focus path rather than
+   the press path (T012) — are both closed and measured live; see the Verification table above and
+   `tasks.md`'s T008/T012 rows for the numbers.
+5. **AC-007 stays parked**, per ADR-006, behind an Anytype multi-section capture re-read the
    operator schedules.
 <!-- /ANCHOR:limitations -->
 

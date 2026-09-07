@@ -13,16 +13,20 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/061-notion-sheet-refinement"
-    last_updated_at: "2026-09-06T19:30:00Z"
-    last_updated_by: "design-research-session"
-    recent_action: "Re-cut completion criteria 2 and 3 to the anchored-pill model; still seven criteria"
-    next_safe_action: "Take AC-002 red-first; no pill exists in the tree"
+    last_updated_at: "2026-09-07T08:30:00Z"
+    last_updated_by: "landing-verification"
+    recent_action: "Criterion 1 fully closed; focus-path selection fix on top of T004"
+    next_safe_action: "AC-005 in the operator's own sitting, shared with 067 AC-011"
     blockers:
       - "AC-005 is the operator's sign-off on the confirm card and nothing here can close it"
       - "AC-007 is parked on an Anytype multi-section capture re-read the operator schedules"
     key_files:
       - "src/views/database-view.ts"
+      - "src/views/embedded-database-renderer.ts"
       - "src/views/record-surface/cell-editor-text.ts"
+      - "src/views/record-surface/cell-editor-date.ts"
+      - "src/views/record-surface/cell-editor-option.ts"
+      - "src/views/record-surface/cell-editor-relation.ts"
       - "src/views/table-cell-gesture.ts"
       - "src/views/confirm-sheet.ts"
       - "src/views/mobile-bottom-sheet.ts"
@@ -31,7 +35,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-061-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 95
     open_questions: []
     answered_questions:
       - "Notion contributes shape and arrangement only; the digest's thumbnails carry no sampled colour or timing"
@@ -84,19 +88,24 @@ this file. Whenever anything above the log changes, resend the full text of this
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] A single tap on an editable, non-title cell on a phone opens **that column's value editor and
+- [x] A single tap on an editable, non-title cell on a phone opens **that column's value editor and
       nothing else** — the selection status bar is not built, and `renderSelectionStatusBar` is not
       reached on the `edit-cell` branch. Today the branch falls through and does both
       (`database-view.ts:4791-4803`), which is the second of the operator's two captures.
-      **Half met, measured at the landing and left unticked for the half that is not.** The editor
-      opens and `.db-selection-status-bar` reads **0** — the press branch returns on `touch` before
-      `nextCellRange`. But *nothing else* is not yet true: `CellRenderer.selectCell` focuses the `td`
-      (`cell-renderer.ts:910-912`) on the way to the editor, and this view's `td` `focus` listener
-      (`database-view.ts:4770-4777`) assigns `cellSelection` and calls `renderSelectionStatusBar`,
-      so the tap paints `.db-cell-range-selected` and builds the pill. The pill is hidden only while
-      an editor holds the bottom dock, and is visible the moment that editor closes — measured on
-      the shipped renderers at 402px. The path predates this packet; closing it is a change to the
-      focus listener rather than to the press branch this row was written against.
+      **Met.** The press branch returns on `touch` before `nextCellRange`, so `.db-selection-status-bar`
+      reads **0** after a tap — that half landed first. The second half stayed open at that landing:
+      `CellRenderer.selectCell` focuses the `td` (`cell-renderer.ts:910-912`) on the way to the
+      editor, and this view's `td` `focus` listener (`database-view.ts:4770-4789`) assigned
+      `cellSelection` and called `renderSelectionStatusBar` from any focus regardless of source, so
+      the tap still painted `.db-cell-range-selected` and built the pill — hidden only while an
+      editor held the bottom dock, visible the moment it closed. **Closed**: the focus listener now
+      reads the same touch/mouse gesture tracker the press handler already uses and returns before
+      assigning a selection when the focus arrived from a touch tap; a keyboard tab-stop or a mouse
+      click still selects, since neither fires a `pointerdown` on this cell first. Measured live on
+      the shipped renderers at 402px: a touch tap opens `.db-cell-edit-popover` with `cellSelection`
+      reading `null` immediately, and after Escape closes the editor the pill count reads **0** and
+      `cellSelection` stays `null`. Reverted, the same read showed a live selection and a pill
+      reading "1 cell selected" — the operator's exact residual, reproduced and then closed.
 - [x] Selection is an **explicit mode entered by a long press**, and a phone builds **no bottom-docked
       bar at all**: `.db-selection-status-bar` renders **0** times and `.db-cell-selection-pill`
       renders exactly **1**, holding exactly **three** children — the live count, one `Copy`, one

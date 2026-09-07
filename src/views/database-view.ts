@@ -4798,7 +4798,14 @@ export class DatabaseView extends FileView {
       'td[data-note-database-row-path][data-note-database-column-key][tabindex="0"]'
     );
     td.tabIndex = isFocusCell || (!this.cellSelection && !hasGridTabStop) ? 0 : -1;
+    const cellGesture = trackCellGesture(td);
     td.addEventListener("focus", () => {
+      // The cell renderer's own tap-to-edit path focuses the cell on its way into the editor
+      // (`CellRenderer.selectCell`), and that focus lands here too. A touch tap edits and never
+      // selects, so a focus this tracker attributes to touch must not paint one — only a keyboard
+      // tab-stop or a mouse click, whose focus this same tracker still reports as "mouse", reaches
+      // the selection below.
+      if (cellGesture() === "touch") return;
       const active = this.cellSelection ? this.getCellSelectionActiveAddress() : null;
       if (active?.rowPath === address.rowPath && active.colKey === address.colKey) return;
       this.clearSelection();
@@ -4806,7 +4813,6 @@ export class DatabaseView extends FileView {
       this.renderCellSelectionClasses();
       this.renderSelectionStatusBar();
     });
-    const cellGesture = trackCellGesture(td);
     td.addEventListener("mousedown", (event) => {
       if (event.button !== 0) return;
       if (this.isInteractiveCellTarget(event.target)) return;

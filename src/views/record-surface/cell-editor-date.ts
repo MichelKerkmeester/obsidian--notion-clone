@@ -25,6 +25,7 @@ import { getEffectiveLocale, t } from "../../i18n";
 import { MiniCalendarEventIndex, MiniCalendarMode, renderMiniCalendar } from "../calendar-mini-calendar-renderer";
 import { buildDatePickerWeeks, formatDatePickerMonthTitle, getDatePickerYearRangeStart, shiftDatePickerMonth } from "../date-picker-model";
 import { isHTMLElement } from "../dom-guards";
+import { claimBottomDock } from "../mobile-bottom-sheet";
 import { clamp, getVisiblePopoverBounds, resolveAnchoredPopoverTop, setPosition } from "../popover-position";
 import type { TableCellNavigationIntent } from "../../data/table-keyboard-navigation";
 import { bulkAnchorRect, renderDraftFailure, showValidationError, type CellEditorContext, type CellEditSession } from "./cell-editor-shared";
@@ -86,6 +87,10 @@ export function openDateEditor(
 
   ctx.getActiveTextEditClose()?.();
   td.addClass("db-cell-editing");
+  // Claimed for the editor's whole life, matching `openSingleLineEditor`'s identical pair: without
+  // it a phone's selection pill stays docked in the band this popover's mobile Save/Cancel row
+  // occupies, and the two are drawn on top of each other.
+  claimBottomDock(td.ownerDocument, "cell-editor", true);
 
   const isMixed = !!session?.mixed;
   const dateParts = isMixed ? null : parseDateTimeParts(currentValue);
@@ -194,6 +199,7 @@ export function openDateEditor(
     removeMobileViewportListeners();
     popover.remove();
     td.removeClass("db-cell-editing");
+    claimBottomDock(td.ownerDocument, "cell-editor", false);
     window.activeDocument.removeEventListener("mousedown", onOutside, true);
     window.activeDocument.removeEventListener("keydown", onDocumentKeydown, true);
     if (ctx.getActiveTextEditClose() === close) ctx.setActiveTextEditClose(undefined);

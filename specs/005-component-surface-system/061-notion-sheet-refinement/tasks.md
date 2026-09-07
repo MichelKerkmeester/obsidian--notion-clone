@@ -11,22 +11,25 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/061-notion-sheet-refinement"
-    last_updated_at: "2026-09-07T06:45:00Z"
+    last_updated_at: "2026-09-07T08:30:00Z"
     last_updated_by: "landing-verification"
-    recent_action: "Landed on main; T010 closed, T008 reopened"
-    next_safe_action: "Claim the bottom dock in the date and option cell editors"
+    recent_action: "T008 closed; T012 added and closed (dock claim + focus-path selection fix)"
+    next_safe_action: "AC-005 is the operator's own read, in the same sitting as 067 AC-011"
     blockers:
-      - "T008 is open: only cell-editor-text.ts claims the bottom dock, so the date/datetime editor still draws the selection pill over itself — measured live at 402px on the shipped renderers"
+      - "AC-005 is the operator's own device read, shared with 067 AC-011's sitting — not agent-closable"
     key_files:
       - "src/views/database-view.ts"
+      - "src/views/embedded-database-renderer.ts"
       - "src/views/record-surface/cell-editor-text.ts"
-      - "src/views/confirm-sheet.ts"
+      - "src/views/record-surface/cell-editor-date.ts"
+      - "src/views/record-surface/cell-editor-option.ts"
+      - "src/views/record-surface/cell-editor-relation.ts"
       - "tools/storybook/verify-placement.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-061-tasks"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 95
     open_questions: []
     answered_questions:
       - "No new lane is created; three existing lanes gain rows"
@@ -124,6 +127,36 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
       **Closed:** the caller now returns on `open-record` OR `gesture === "touch"` — a phone tap never reaches `nextCellRange`/`renderSelectionStatusBar` regardless of what `resolveCellTapAction` answers, so `edit-cell` and the touch half of `select-cell` both defer to the cell renderer's own click handler. Desktop's mouse branch is unchanged (same `nextCellRange`/`isSelectingCells` calls, gesture guaranteed `"mouse"` past the early return). Mirrored in `embedded-database-renderer.ts`'s `handleMouseDown`. `verify-placement.mjs`'s pill section (added under T006) asserts `.db-selection-status-bar` renders 0 times for a touch cell selection — PASS. Re-measured at the landing on the shipped renderers at 402px: after a touch tap the container holds **0** `.db-selection-status-bar` elements, so the stated threshold holds.
       **Residual, recorded rather than folded into this row.** The press handler is no longer a producer of selection, but a second path still is: `CellRenderer.makeEditable`'s own click handler calls `selectCell(td)` → `td.focus()` (`cell-renderer.ts:910-912`) before it opens the editor, and this file's `td` `focus` listener (`database-view.ts:4770-4777`) assigns `cellSelection` and calls `renderSelectionStatusBar`. So a plain tap paints `.db-cell-range-selected` on the cell and builds the pill; the pill is invisible only for as long as the editor holds the bottom dock, and becomes visible the moment that editor closes. That path predates this packet — before it the same focus listener produced the bar — so it is not a regression, but ADR-000's *tap edits, long-press selects* is not fully delivered while it stands. Closing it is a change to the focus listener, not to the press handler this row is about.
 
+- [x] **T012** [P0] The residual T004 left open: a plain touch tap must not paint a selection
+      through the focus path either (`src/views/database-view.ts:4770-4789`,
+      `src/views/embedded-database-renderer.ts:4389-4399`).
+      **Threshold:** after a touch tap on an editable cell opens the editor and Escape closes it,
+      `.db-cell-selection-pill` is absent and `cellSelection` reads `undefined`; a keyboard tab-stop
+      or a mouse click still enters selection through this same listener, unchanged.
+      **Red-first proof:** `CellRenderer.selectCell` calls `td.focus()` on the way into the editor
+      (`cell-renderer.ts:910-912`), and the `focus` listener this row edits assigned `cellSelection`
+      and called `renderSelectionStatusBar` unconditionally, so a plain tap painted a one-cell
+      selection the operator never made — invisible only while the editor held the bottom dock,
+      visible the moment it closed. **Source:** T004's own residual note; ADR-002. **Lane:** a new
+      `verify-placement.mjs` section mounts the shipped `CellRenderer` and
+      `DatabaseView.prototype.setupTableCellSelection` on a real `<td>`, dispatches a real touch
+      `pointerdown`/`click`, and asserts the pill and `cellSelection` stay absent through an Escape
+      close.
+      **Closed.** The focus listener now reads the same `trackCellGesture` tracker
+      `setupTableCellSelection`'s own mousedown handler already used, moved above the listener so it
+      shares one tracker rather than two, and returns before touching `cellSelection` whenever that
+      tracker reports `"touch"` — a focus arriving from the cell renderer's own tap-to-edit path.
+      Mirrored in `embedded-database-renderer.ts`'s identical `focus` listener. A keyboard tab-stop
+      or a mouse click never reaches a `pointerdown` on this `td` first, so the tracker still
+      defaults to `"mouse"` for them and today's behaviour is unchanged. Measured live on the shipped
+      renderers in headless Chrome at 402px (`tools/storybook/verify-placement.mjs`, "a plain tap
+      edits and never paints a selection through the focus path"): tapping an editable cell opens
+      `.db-cell-edit-popover` with `cellSelection` reading `null` immediately after the tap, and
+      after Escape the pill count reads **0** and `cellSelection` stays `null`. Red first: with the
+      guard reverted, the same read showed `cellSelection` populated right after the tap and, after
+      Escape, one `.db-cell-selection-pill` reading **"1 cell selected"** — the operator's exact
+      residual, reproduced live and then closed.
+
 - [x] **T005** [P0] Selection becomes an explicit mode entered by a **long press on a cell**
       (`src/views/table-cell-gesture.ts`, `src/views/database-view.ts`).
       **Threshold:** a long press on a cell enters selection mode and renders the pill; **no other
@@ -178,7 +211,7 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
       `styles.css:2639-2644` already documents for `--db-keyboard-inset`.
       **Closed:** the pill is positioned in script (`positionCellSelectionPill`), not CSS — anchored 8px above the union rect of the selected cells, clamped inside the grid viewport with an 8px margin, and clamped so its bottom edge never crosses `max(safe-area-inset-bottom, --db-mobile-navbar-height) + 8px`. `toolbar-renderer.ts`'s `reserveMobileFabInset` now runs unconditionally on a phone (moved out of `renderNewButton`, into `render()` before the `hideHeaderChrome` early return) so the variable exists whether or not the New button renders. `verify-placement.mjs` measures the 8px anchor and the viewport margin directly, and a self-contained negative control (a range near the viewport floor, where the clamp is the binding constraint) proves the navbar term is load-bearing: gap 552.0px→(dropped)→96.0px→(restored)→552.0px style deltas, all PASS.
 
-- [ ] **T008** [P0] Every cell editor claims the bottom dock while it is open
+- [x] **T008** [P0] Every cell editor claims the bottom dock while it is open
       (`src/views/record-surface/cell-editor-text.ts:331` and its close path; the other editors per
       T003's inventory).
       **Threshold:** `body.db-bottom-dock-taken` is present for the whole life of every cell editor
@@ -188,8 +221,8 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
       (`styles.css:2635-2637`) does not fire for a multi-line text cell, which is exactly the
       operator's second capture. **Source:** ADR-003. **Lane:** the class asserted while the editor
       is open, control = remove the claim and require the bar to reappear.
-      **Half closed.** `openTextPopoverEditor` now calls `claimBottomDock(td.ownerDocument, "cell-editor", true)` right after `td.addClass("db-cell-editing")`, and releases it in its one `close()` alongside `openSingleLineEditor`'s identical pair — commit, cancel and outside-press all route through that same `close()`, so the release is unconditional on how the editor ends. That half is confirmed on the shipped renderers in headless Chrome at 402px: tapping the text column mounts `.db-cell-edit-popover[data-note-database-editor-kind="text"]`, `body.db-bottom-dock-taken` reads present, and the pill's computed `display` reads `none`.
-      **Still open, and this is why the row is not ticked:** the threshold is written over **every** cell editor and `claimBottomDock` has exactly two callers in `src/views/record-surface/`, both in `cell-editor-text.ts` (`:212`/`:233` and `:351`/`:418`). Nothing in `cell-editor-date.ts`, `cell-editor-option.ts` or the relation editor claims it. Measured on the same mount: a tap on a date column mounts `.db-cell-edit-popover.is-mobile.is-inline-overlay.db-date-edit-popover`, which `positionTextEditPopover`'s sibling anchors into the same `bottom: 10px + safe-area` band, with `body.db-bottom-dock-taken` **absent** and the pill's computed `display` reading `flex` — the pill is drawn over the date editor's own Save/Cancel row, which is the operator's second capture in a different column type. Two of sixteen constructed columns reproduce it (`field2`, `field10`, both `date`). The remaining editors need the same two-line pair before this row can be ticked.
+      **Half closed at the first landing.** `openTextPopoverEditor` now calls `claimBottomDock(td.ownerDocument, "cell-editor", true)` right after `td.addClass("db-cell-editing")`, and releases it in its one `close()` alongside `openSingleLineEditor`'s identical pair — commit, cancel and outside-press all route through that same `close()`, so the release is unconditional on how the editor ends. That half is confirmed on the shipped renderers in headless Chrome at 402px: tapping the text column mounts `.db-cell-edit-popover[data-note-database-editor-kind="text"]`, `body.db-bottom-dock-taken` reads present, and the pill's computed `display` reads `none`.
+      **Closed.** `cell-editor-date.ts:openDateEditor`, `cell-editor-option.ts:openOptionEditor` and `cell-editor-relation.ts:openRelationEditor` each gained the same `claimBottomDock(doc, "cell-editor", true)`/`false` pair — claimed right after the popover is created, released inside the one `close()` every exit path (commit, cancel, Escape, outside-press) already funnels through, exactly `openSingleLineEditor`'s shape. `claimBottomDock` now has five callers in `src/views/record-surface/` across the four editor files. Measured live on the shipped renderers in headless Chrome at 402px, driven through `cellRenderer.startEdit` against a real `DatabaseView.prototype.renderSelectionStatusBar`-built pill (`tools/storybook/verify-placement.mjs`, "every cell editor claims the bottom dock while it is open"): for each of date, select and relation — `body.db-bottom-dock-taken` reads **absent** before, **present** while the editor is open (with the editor's own popover confirmed in the tree), and the pill's computed `display` folds to **none** while it is open; Escape releases the claim and the pill's `display` returns to non-`none`. Red first: with the three claim/release pairs reverted, the date and select rows read `pill display=flex` while open (the operator's second capture, reproduced live) and both `claims the bottom dock` assertions failed. The relation editor's own claim needed a second, targeted proof — `positionToolbarPopover`'s own `applySheetChrome` call already claims the dock as `"sheet"` whenever `isMobileBottomSheet` reads true, which masks a missing `"cell-editor"` claim on the `is-phone` fixture the other two use — so a narrow (380px) split pane on an ordinary 1000px desktop page, where `isMobileBottomSheet` reads false but the pill's own `isTouchDevice` predicate still reads true from the container's width, isolates the relation editor's own claim: reverted, the dock stayed unclaimed there too; restored, it claims and releases correctly. All ten assertions (three editors × three lifecycle checks, plus the isolated relation check) pass on the restored source.
 
 - [x] **T011** [P0] `···` opens a titled sheet on the phone and an anchored menu on desktop, and
       the desktop bar collapses to five children
@@ -261,10 +294,10 @@ Following `051`'s notation, every implementation task carries **threshold**, **r
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-- [ ] All tasks marked `[x]`
-- [ ] No `[B]` blocked tasks remaining
-- [ ] Every negative control observed red before its row was called green
-- [ ] `acceptance-criteria.md` AC-001 to AC-004, AC-006, AC-007 and AC-008 `Met`, `Waived` or `Superseded`
+- [x] All tasks marked `[x]`
+- [x] No `[B]` blocked tasks remaining
+- [x] Every negative control observed red before its row was called green
+- [x] `acceptance-criteria.md` AC-001 to AC-004, AC-006, AC-007 and AC-008 `Met`, `Waived` or `Superseded`
 - [ ] AC-005 answered by the operator, in `067` AC-011's sitting
 <!-- /ANCHOR:completion -->
 

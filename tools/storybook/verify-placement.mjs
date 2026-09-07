@@ -11078,6 +11078,339 @@ await section("one thing owns the phone's bottom edge", async () => {
 
 
 // ───────────────────────────────────────────────────────────────────
+// A PLAIN TAP EDITS AND NEVER PAINTS A SELECTION THROUGH THE FOCUS PATH
+// ───────────────────────────────────────────────────────────────────
+//
+// The press branch was fixed to defer every touch tap to the cell renderer's own click handler,
+// but that handler focuses the cell on its way into the editor (`CellRenderer.selectCell` calls
+// `td.focus()`), and this view's own `focus` listener used to treat every focus as a request to
+// select — keyboard tab, a mouse click, or a tap it had just deferred to someone else. So a plain
+// tap still painted a one-cell selection; it stayed invisible only while the editor held the
+// bottom dock, and the pill appeared the moment that editor closed. Mounted through the shipped
+// `CellRenderer` and `DatabaseView.prototype.setupTableCellSelection` rather than a hand-built
+// stand-in, so the real click listener, the real focus listener and the real pill builder are all
+// exercised together — the class of bug a stub that skips wiring cannot reproduce.
+
+const tapFocusResults = [];
+
+await section("a plain tap edits and never paints a selection through the focus path", async () => {
+  const record = (name, pass, detail) => tapFocusResults.push({ name, pass, detail });
+  const page = await browser.newPage({
+    reducedMotion: "reduce",
+    viewport: { width: 402, height: 874 },
+    hasTouch: true,
+    isMobile: true,
+  });
+  await page.setContent(page_html.replace("<body>", phoneBody));
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(async () => {
+    const { DatabaseView, CellRenderer } = globalThis.__dock;
+    const settle = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    const macrotask = () => new Promise((resolve) => setTimeout(resolve, 30));
+    const host = document.querySelector(".note-database-container");
+    const container = host.createDiv({ cls: "note-database-container" });
+
+    const col = { key: "notes", label: "Notes", type: "text" };
+    const row = {
+      file: { path: "tap-note.md", name: "tap-note.md", basename: "tap-note" },
+      frontmatter: { notes: "" },
+      computed: {},
+    };
+
+    // `Object.create` gives a real view without the constructor, which wants an Obsidian leaf this
+    // page has no way to supply — the same convention the selection-bar and pill fixtures above use.
+    const view = Object.create(DatabaseView.prototype);
+    view.containerEl_ = container;
+    view.cellSelection = null;
+    view.selectedRows = new Set();
+    view.lastSelectedRowPath = null;
+    view.pendingCellCut = undefined;
+    view.isSelectingCells = false;
+    view.selectionStatusBar = undefined;
+    view.cellSelectionPill = undefined;
+    view.pendingCellFillDraft = null;
+    view.showCellFillInput = false;
+    view.historyStack = [];
+    view.bulkEditingColumnKey = undefined;
+    view.getConfig = () => ({ schema: { columns: [col] } });
+    view.getRenderedTableRowPaths = () => [row.file.path];
+    view.getRenderedTableColumnKeys = () => [col.key];
+
+    const cellRenderer = new CellRenderer({ openNote() {}, getRows: () => [row] }, async () => {});
+    view.cellRenderer = cellRenderer;
+
+    // A real `<td>` with the same dataset attributes `table-renderer.ts` writes on every cell, so
+    // the selectors both the click handler and the selection renderer read find it.
+    const table = container.createEl("table");
+    const tbody = table.createEl("tbody");
+    const tr = tbody.createEl("tr");
+    const td = tr.createEl("td", {
+      attr: {
+        "data-note-database-row-path": row.file.path,
+        "data-note-database-column-key": col.key,
+      },
+    });
+    cellRenderer.renderCell(td, row, col);
+    DatabaseView.prototype.setupTableCellSelection.call(view, td, row, col);
+    await settle();
+
+    // A real touch tap: `pointerdown` carries the pointer type `resolveCellTapAction` reads,
+    // dispatched before the `click` the way a real touchscreen's compatibility event follows it.
+    td.dispatchEvent(new PointerEvent("pointerdown", {
+      bubbles: true, cancelable: true, button: 0, pointerId: 1, isPrimary: true, pointerType: "touch",
+    }));
+    td.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, button: 0 }));
+    await settle();
+    // The editor's own outside-press/Escape listeners attach on a macrotask after it opens.
+    await macrotask();
+
+    const afterTap = {
+      hasEditor: Boolean(container.querySelector(".db-cell-edit-popover")),
+      pillCountAfterTap: container.querySelectorAll(":scope > .db-cell-selection-pill").length,
+      cellSelectionAfterTap: view.cellSelection ? { ...view.cellSelection } : null,
+    };
+
+    // Closed the way a person closes it — Escape — so the editor's own close path (which releases
+    // the bottom-dock claim) runs, rather than skipping it by removing the node by hand.
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await settle();
+    await macrotask();
+
+    return {
+      ...afterTap,
+      hasEditorAfterEscape: Boolean(container.querySelector(".db-cell-edit-popover")),
+      pillCountAfterEscape: container.querySelectorAll(":scope > .db-cell-selection-pill").length,
+      cellSelectionAfterEscape: view.cellSelection ? { ...view.cellSelection } : null,
+      pillText: container.querySelector(":scope > .db-cell-selection-pill .db-selection-count-badge")?.textContent || null,
+    };
+  });
+  await page.close();
+
+  record("a touch tap opens the column's editor",
+    measured.hasEditor,
+    `.db-cell-edit-popover present after tap=${measured.hasEditor}`);
+
+  record("a touch tap never paints a selection through the focus path",
+    measured.cellSelectionAfterTap === null,
+    `cellSelection right after the tap=${JSON.stringify(measured.cellSelectionAfterTap)} (want null)`);
+
+  record("no selection pill survives the editor closing on a plain tap",
+    measured.pillCountAfterEscape === 0 && measured.cellSelectionAfterEscape === null,
+    `pill count after Escape=${measured.pillCountAfterEscape} (want 0), pill text=${measured.pillText ?? "(none)"}, `
+      + `cellSelection after Escape=${JSON.stringify(measured.cellSelectionAfterEscape)} (want null). `
+      + `Before the focus-listener fix, closing the editor uncovered a pill reading "1 cell selected" — `
+      + `built from the focus \`CellRenderer.selectCell\` fires on its way into the editor, invisible `
+      + `only while that same editor held the bottom dock`);
+});
+
+
+// ───────────────────────────────────────────────────────────────────
+// EVERY CELL EDITOR CLAIMS THE BOTTOM DOCK WHILE IT IS OPEN
+// ───────────────────────────────────────────────────────────────────
+//
+// The text editor already claimed the dock. The date, the option (select/status/multi-select) and
+// the relation editor did not, so a tap on a date column mounted its own bottom-anchored
+// Save/Cancel row directly on top of a selection pill the dock-hide rule never got told to hide —
+// the operator's second capture, in a different column type than the one that closed it first. All
+// three now claim the same way `openSingleLineEditor` does, and this measures the live effect
+// rather than the source line: the class present on `body` while each is open, the pill's computed
+// `display` folding to `none` underneath it, and both releasing again once the editor closes.
+
+const dockClaimResults = [];
+
+await section("every cell editor claims the bottom dock while it is open", async () => {
+  const record = (name, pass, detail) => dockClaimResults.push({ name, pass, detail });
+  const page = await browser.newPage({
+    reducedMotion: "reduce",
+    viewport: { width: 402, height: 874 },
+    hasTouch: true,
+    isMobile: true,
+  });
+  await page.setContent(page_html.replace("<body>", phoneBody));
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(async () => {
+    const { DatabaseView, CellRenderer } = globalThis.__dock;
+    const host = document.querySelector(".note-database-container");
+
+    // A live selection pill to fold under the dock claim, built the same way the pill-shape
+    // section above builds one: the shipped `renderSelectionStatusBar`, driven with a touch cell
+    // selection, rather than a stand-in div carrying the class by hand.
+    const makeFixture = () => {
+      const container = host.createDiv({ cls: "note-database-container" });
+      const addr = { rowPath: "pill-note.md", colKey: "amount" };
+      const view = Object.create(DatabaseView.prototype);
+      view.containerEl_ = container;
+      view.selectedRows = new Set();
+      view.cellSelection = { anchor: addr, focus: addr };
+      view.selectionStatusBar = undefined;
+      view.cellSelectionPill = undefined;
+      view.pendingCellFillDraft = null;
+      view.showCellFillInput = false;
+      view.historyStack = [];
+      view.getSelectedCellAddresses = () => [addr];
+      view.getConfig = () => ({ schema: { columns: [] } });
+      const marker = container.createDiv({ cls: "db-cell-range-selected" });
+      marker.setCssProps({ position: "fixed", top: "300px", left: "40px", width: "100px", height: "36px" });
+      DatabaseView.prototype.renderSelectionStatusBar.call(view);
+      return { container, pill: container.querySelector(":scope > .db-cell-selection-pill") };
+    };
+
+    // The relation editor always portals to `document.body` regardless of the cell's own
+    // container (unlike the date/option editors, which mount inside it when one is found), so the
+    // editor-presence read is global rather than scoped to the fixture's own container.
+    const readState = (pill) => ({
+      dockTaken: document.body.classList.contains("db-bottom-dock-taken"),
+      pillDisplay: pill ? getComputedStyle(pill).display : null,
+      hasEditor: Boolean(document.querySelector(".db-cell-edit-popover, .db-cell-option-popover")),
+    });
+    const settle = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    // Both the date and text editors attach their outside-press/Escape listeners on a macrotask
+    // after opening (matching the text editor's own claim, proved live above); waiting one out here
+    // is what lets Escape actually reach them instead of finding no listener yet.
+    const macrotask = () => new Promise((resolve) => setTimeout(resolve, 30));
+
+    const openAndMeasure = async (col, row, currentValue, dataSource) => {
+      const { container, pill } = makeFixture();
+      const before = readState(pill);
+      const cellRenderer = new CellRenderer(dataSource || { openNote() {}, getRows: () => [row] }, async () => {});
+      const td = container.createEl("td", {
+        attr: { "data-note-database-row-path": row.file.path, "data-note-database-column-key": col.key },
+      });
+      cellRenderer.startEdit(td, row, col, undefined, currentValue);
+      await settle();
+      await macrotask();
+      const whileOpen = readState(pill);
+      document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+      await settle();
+      await macrotask();
+      const after = readState(pill);
+      container.remove();
+      return { before, whileOpen, after };
+    };
+
+    const date = await openAndMeasure(
+      { key: "due", label: "Due", type: "date" },
+      { file: { path: "date-note.md", name: "date-note.md", basename: "date-note" }, frontmatter: { due: "" }, computed: {} },
+      "",
+    );
+    const option = await openAndMeasure(
+      { key: "status", label: "Status", type: "select" },
+      { file: { path: "opt-note.md", name: "opt-note.md", basename: "opt-note" }, frontmatter: { status: "" }, computed: {} },
+      "",
+    );
+    const relationDb = { id: "d1", schema: { columns: [] } };
+    const relation = await openAndMeasure(
+      { key: "links", label: "Links", type: "relation", relationConfig: { targetDatabaseId: "d1" } },
+      { file: { path: "rel-note.md", name: "rel-note.md", basename: "rel-note" }, frontmatter: { links: "" }, computed: {} },
+      "",
+      {
+        openNote() {}, getRows: () => [],
+        getViewDefFiles: () => [{ config: relationDb }],
+        getRecordsForDatabase: () => [],
+      },
+    );
+
+    return { date, option, relation };
+  });
+  await page.close();
+
+  for (const [label, editorType, r] of [
+    ["date", "date", measured.date],
+    ["option", "select", measured.option],
+    ["relation", "relation", measured.relation],
+  ]) {
+    record(`the ${label} editor claims the bottom dock while it is open`,
+      r.whileOpen.hasEditor && r.whileOpen.dockTaken && !r.before.dockTaken,
+      `before=${r.before.dockTaken} while open=${r.whileOpen.dockTaken} (editor present=${r.whileOpen.hasEditor}, `
+        + `type=${editorType})`);
+    record(`the ${label} editor hides the selection pill while it is open`,
+      r.whileOpen.pillDisplay === "none",
+      `pill display before=${r.before.pillDisplay} while ${label} editor open=${r.whileOpen.pillDisplay} (want none)`);
+    record(`the ${label} editor releases the dock and the pill reappears on Escape`,
+      !r.after.dockTaken && r.after.pillDisplay !== "none" && !r.after.hasEditor,
+      `after Escape: dock taken=${r.after.dockTaken}, pill display=${r.after.pillDisplay}, `
+        + `editor still present=${r.after.hasEditor}`);
+  }
+});
+
+// The relation editor's own popover positions itself through `positionToolbarPopover`, which
+// claims the dock as a side effect (`applySheetChrome` → `setSheetMount` → `claimBottomDock(doc,
+// "sheet", true)`) whenever `isMobileBottomSheet` reads true — which it always does on the
+// `is-phone` page the check above uses, so that page cannot tell whether the relation editor's own
+// claim (added below `openRelationEditor`'s popover creation) is doing anything or is redundant
+// with the inherited one. A narrow split pane on an otherwise ordinary desktop page separates them:
+// `isTouchDevice` still reads true from the container's own width (the same predicate the pill
+// itself renders on), but `isMobileBottomSheet` reads false — no `is-phone` class, and a real
+// viewport over its 600px floor — so only the relation editor's own claim can explain the dock
+// being taken here.
+await section("the relation editor claims the bottom dock in a narrow split pane too", async () => {
+  const record = (name, pass, detail) => dockClaimResults.push({ name, pass, detail });
+  const page = await browser.newPage({ reducedMotion: "reduce", viewport: { width: 1000, height: 700 } });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(async () => {
+    const { CellRenderer } = globalThis.__dock;
+    const settle = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    const macrotask = () => new Promise((resolve) => setTimeout(resolve, 30));
+    const host = document.querySelector(".note-database-container");
+    const container = host.createDiv({ cls: "note-database-container" });
+    container.setCssProps({ width: "380px" });
+
+    const row = {
+      file: { path: "rel-pane-note.md", name: "rel-pane-note.md", basename: "rel-pane-note" },
+      frontmatter: { links: "" },
+      computed: {},
+    };
+    const col = { key: "links", label: "Links", type: "relation", relationConfig: { targetDatabaseId: "d1" } };
+    const relationDb = { id: "d1", schema: { columns: [] } };
+    const dataSource = {
+      openNote() {}, getRows: () => [],
+      getViewDefFiles: () => [{ config: relationDb }],
+      getRecordsForDatabase: () => [],
+    };
+    const td = container.createEl("td", {
+      attr: { "data-note-database-row-path": row.file.path, "data-note-database-column-key": col.key },
+    });
+
+    const before = {
+      dockTaken: document.body.classList.contains("db-bottom-dock-taken"),
+      isTouch: /* mirrors production's own predicate */ container.getBoundingClientRect().width <= 760,
+      isPhoneSheet: document.body.classList.contains("is-phone"),
+    };
+    new CellRenderer(dataSource, async () => {}).startEdit(td, row, col, undefined, "");
+    await settle();
+    await macrotask();
+    const whileOpen = {
+      dockTaken: document.body.classList.contains("db-bottom-dock-taken"),
+      hasEditor: Boolean(document.querySelector(".db-cell-option-popover")),
+    };
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await settle();
+    await macrotask();
+    const after = { dockTaken: document.body.classList.contains("db-bottom-dock-taken") };
+    return { before, whileOpen, after };
+  });
+  await page.close();
+
+  record("the relation editor's own claim holds even where the sheet-mount inheritance does not apply",
+    !measured.before.isPhoneSheet && measured.before.isTouch && !measured.before.dockTaken
+      && measured.whileOpen.hasEditor && measured.whileOpen.dockTaken && !measured.after.dockTaken,
+    `isPhoneSheet=${measured.before.isPhoneSheet} isTouch=${measured.before.isTouch}, `
+      + `dock before=${measured.before.dockTaken} while open=${measured.whileOpen.dockTaken} `
+      + `(editor present=${measured.whileOpen.hasEditor}) after Escape=${measured.after.dockTaken}`);
+});
+
+
+// ───────────────────────────────────────────────────────────────────
 // A VIEW-SWITCHER ROW ON A PHONE CARRIES ONE TRAILING CONTROL
 // ───────────────────────────────────────────────────────────────────
 //
@@ -11207,7 +11540,7 @@ await section("a view-switcher row on a phone carries one trailing control", asy
       + `been cut. Before the control existed this measured 0`);
 });
 
-results.push(...tallSheetResults, ...dockResults, ...viewRowResults, ...phoneResults, ...menuResults, ...columnWidthKeyboardResults, ...addViewDesktopResults, ...addViewPhoneResults,
+results.push(...tallSheetResults, ...dockResults, ...tapFocusResults, ...dockClaimResults, ...viewRowResults, ...phoneResults, ...menuResults, ...columnWidthKeyboardResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
   ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...propertyGeometryResults, ...openTargetResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...toastResults, ...bandResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...rowSlackResults, ...sectionFailures);

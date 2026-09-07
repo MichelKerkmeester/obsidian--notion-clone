@@ -53,14 +53,14 @@
       "src/views/embedded-database-renderer.ts",
       "src/views/table-cell-gesture.ts",
       "src/views/record-surface/cell-editor-text.ts",
+      "src/views/record-surface/cell-editor-date.ts",
+      "src/views/record-surface/cell-editor-option.ts",
+      "src/views/record-surface/cell-editor-relation.ts",
       "src/views/toolbar-renderer.ts",
       "src/views/mobile-bottom-sheet.ts",
       "src/views/surface-shell.ts",
       "src/views/modals/db-modal.ts",
-      "src/views/modals/confirm-modal.ts",
-      "src/views/confirm-sheet.ts",
-      "src/i18n.ts",
-      "tools/live/sheet-grammar.mjs"
+      "src/views/modals/confirm-modal.ts"
     ],
     "entities": [
       {
@@ -136,6 +136,24 @@
         "source": "derived"
       },
       {
+        "name": "cell-editor-date.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/cell-editor-date.ts",
+        "source": "derived"
+      },
+      {
+        "name": "cell-editor-option.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/cell-editor-option.ts",
+        "source": "derived"
+      },
+      {
+        "name": "cell-editor-relation.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/cell-editor-relation.ts",
+        "source": "derived"
+      },
+      {
         "name": "toolbar-renderer.ts",
         "kind": "code",
         "path": "src/views/toolbar-renderer.ts",
@@ -166,24 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "confirm-sheet.ts",
-        "kind": "code",
-        "path": "src/views/confirm-sheet.ts",
-        "source": "derived"
-      },
-      {
-        "name": "i18n.ts",
-        "kind": "code",
-        "path": "src/i18n.ts",
-        "source": "derived"
-      },
-      {
-        "name": "sheet-grammar.mjs",
-        "kind": "file",
-        "path": "tools/live/sheet-grammar.mjs",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Tapping a cell on a phone does two things at once and shows the worse one",
     "created_at": "2026-09-06T16:03:53Z",
-    "last_save_at": "2026-09-07T04:53:10.778Z",
+    "last_save_at": "2026-09-07T06:36:46.371Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -223,14 +223,14 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:c388023cfbbc26d44eebd4c4d348e643f2535ff8945a0c40eae809920eeac282",
+    "source_fingerprint": "sha256:6238e717d21ddefdb14b168061ad4da7db6c595b26ef9cefefdff4d1efdaa666",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "ca28555087f3b82e63feb7ffb9b2dd027bb6e80eced4d7dd22152e5b625fcdfa",
       "plan.md": "65e57c73fccfdca2c9ba7b34a52c4c7b7626976ae5b9f7f361f0bc361d1bdb96",
-      "tasks.md": "1649bc75742b8069a9187c3ac462e57c152bd7f35aebae5c15a981056cb8ee79",
+      "tasks.md": "c5fba0f616673d881dd7705ac87718624a679abe8136165224618f1d3199de8e",
       "decision-record.md": "9ea12681150a71efa545152feed51ba98b430f114b14d91c739ffc4a1ea1a290",
-      "implementation-summary.md": "e7ce99d2433ef3506aee62696086461820b2ec8e6a17a55fd6b4e134693eada0",
+      "implementation-summary.md": "e666d1e6ba940d8bd2f388b22b3c1af207a3b093e3d1f10daa745ef4fa6f7221",
       "research/research.md": "40717726b482000cf2fb1645c3e057649717c6747ace587f6b048840873a5a74"
     },
     "last_active_at": null
