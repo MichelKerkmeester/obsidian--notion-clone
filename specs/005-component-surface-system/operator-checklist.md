@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-07: **69 phases**, **7 with nothing left**, **231 rows** waiting on a device.
+Derived 2026-09-07: **69 phases**, **7 with nothing left**, **222 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -394,18 +394,9 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] Conditional row colour has its own named view-settings row, with an explainer. Today: the view-settings panel names three controls and not this one. `renderAppliedSummaries` (`view-config-panel-renderer.ts:510-518`) emits exactly three `db-view-config-summary-row` rows — Properties, Filters, Sorts — and none of them is conditional colour; the capability's only surface is the inline `db-conditional-format-settings` block (`renderConditionalFormatting`, `:747`, mounted in the view section at `:405`), whose heading carries no value summary and whose only hint is its empty state (`:782`). Done is: a fourth named row in that summary block, reading the rule count `applyConditionalFormat` already evaluates (`conditional-formatting.ts:168-206`, wired at `table-renderer.ts:85`, `:866`, `:911`, painted at `styles.css:1317-1319`), carrying an explainer line in the `hintClass()` idiom the panel already uses (`:569`, `:1688`), and opening the existing section rather than a second editor. The capability does not move; only its home does.
 - [ ] The operator reads the refined toolbar on a device. Four device-only checks the loop named — icon-only rail discoverability on a phone, the entry tier inside the phone filter sheet, the delete confirm as a stacked sheet, and tabs against the view switcher both references use — ride `053` AC-111 and are answered in the same sitting. Only the operator closes this row; nothing in this repository can.
 
-## 065-notion-record-refinement — 0/10
+## 065-notion-record-refinement — 9/10
 
-- [ ] C1 — The word "Empty" is gone from the board card where an editor exists. `getEmptyDisplayValue` delegates to `getPropertyEmptyPrompt`, preserving the `multi-select → [prompt]` array shape and the `checkbox → false` case exactly as `record-detail-panel.ts:514-519` already does.
-- [ ] C2 — The prompt covers every format that has an editor, not three. `getPropertyEmptyPrompt` returns a verb+noun prompt for `number`, `date`, `datetime`, `currency`, `text` and `files` beside the three it already carries, with the new keys added to both locales.
-- [ ] C3 — The desktop record-sheet label and its value are the same computed size. The `font-size: var(--font-smaller)` declaration is dropped from the desktop arm of `.db-record-detail-field-label`; the phone arm is untouched.
-- [ ] C4 — Single-select renders as coloured text and multi-select as chips, on both surfaces. The record sheet's and the board card's option branches consume `renderOptionValue` instead of the filled-badge path.
-- [ ] C5 — Typing a name and picking a format produces a named column of that format, in one pass. The add-property picker forwards its query on selection, not only on the create fall-through.
-- [ ] C6 — The record sheet carries an add-property entry. *(ADR-008, Accepted 2026-09-06 19:05 — operator, verbatim: "Trailing '+ Add a property' row")* A muted trailing row below the last field and above the hidden group opens the existing search-first picker through `052`'s picker host per `054` D8.
 - [ ] C7 — The operator reads a record on iOS and on desktop and reports the refinement as landed. ADR-005, ADR-006, ADR-007 and ADR-008 were taken on 2026-09-06 19:05, so this row no longer waits on a ruling — only on a device. *(operator-owned; never ticked by an agent)*
-- [ ] C8 — The record sheet's hidden group holds view-hidden columns, not empty fields. *(ADR-006, Accepted 2026-09-06 19:05 — operator, verbatim: "View-hidden columns, like Notion and the peek")* The caller passes visible columns only today, so the sheet never sees a view-hidden column at all; the population has to reach it before the group can hold it. The peek already computes the complement of `visibleKeys` and is the shape to match.
-- [ ] C9 — Every hidden-group row carries Notion's full grammar. *(ADR-005, Accepted 2026-09-06 19:05 — operator, verbatim: "Mimic notion also regarding other features we might be missing")* Drag handle, type icon, name, eye toggle and chevron per row — the anatomy `buildCheckboxPropertyRow` already carries (`src/views/record-surface/property-row.ts:330-395`); Shown and Hidden sections with a bulk link each; the Hidden section rendered only when non-empty; the count staying on the entry row per A4; the title row's eye disabled.
-- [ ] C10 — The property-visibility list can be searched. *(the 2026-09-06 19:05 sweep, S1 — the one gap it found that no ADR above already carries)* Reuse the picker's own input rather than minting a second one.
 
 ## 066-notion-states-refinement — 0/6
 

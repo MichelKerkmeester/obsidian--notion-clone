@@ -1,7 +1,7 @@
 {
   "holder": "065-notion-record-refinement",
   "acquiredAt": "2026-09-06T22:53:00Z",
-  "baselineHash": "9b3146f3aeb6",
+  "baselineHash": "beebb54a8946",
   "baselineCommit": null,
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -4743,9 +4743,18 @@
       "event": "release",
       "phase": "065-notion-record-refinement",
       "at": "2026-09-07T05:40:00Z",
-      "hash": "9b3146f3aeb6",
-      "reviewed": [],
-      "note": "Landing verification of 065 raised the visibility-list filter rule's specificity to .db-column-manager-row.db-column-manager-row-search-hidden. The single-class form it replaced tied .db-column-manager-row's own display:grid on specificity and lost on order, so a typed query marked rows it never hid — measured live at 402px and 1440 (display stayed 'grid' before, 'none' after). No capture moves: no capture types a query."
+      "hash": "beebb54a8946",
+      "reviewed": [
+        "screenshots/notion-clone/fields/constructed-cell-editor-select-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-depth3-column-submenu-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-depth3-column-submenu-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-mobile-light.png",
+        "screenshots/notion-clone/views/timeline-view-day-mobile-light.png",
+        "screenshots/project-manager/reference-gantt-subtask-mobile-light.png",
+        "screenshots/project-manager/reference-kanban-subtask-mobile-dark.png"
+      ],
+      "note": "Landing verification of 065 raised the visibility-list filter rule's specificity to .db-column-manager-row.db-column-manager-row-search-hidden. The single-class form it replaced tied .db-column-manager-row's own display:grid on specificity and lost on order, so a typed query marked rows it never hid — measured live at 402px and 1440 (display stayed 'grid' before, 'none' after). No capture moves: no capture types a query. Recaptured on the rebased tree (060's calendar edits merged in): the four depth-3 column-manager stacks redraw with the search field, and the cell-editor-select table redraws unchanged. The timeline day view, the gantt subtask reference and the kanban subtask reference moved because the capture run crossed a calendar day and their today-line and overdue badges follow it — all eight opened and read."
     }
   ],
   "outstanding": [
