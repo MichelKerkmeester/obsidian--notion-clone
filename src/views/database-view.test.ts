@@ -19,7 +19,7 @@
 
 import { describe, expect, it, vi, beforeAll, type Mock } from "vitest";
 import { TFile } from "obsidian";
-import type { RowData, ViewConfig, DatabaseConfig, SubtaskMoveRequest, SubtaskMovePlan } from "../data/types";
+import type { ColumnDef, RowData, ViewConfig, DatabaseConfig, SubtaskMoveRequest, SubtaskMovePlan } from "../data/types";
 import type { DataSource, DataWriteContext } from "../data/data-source";
 import type { WorkspaceLeaf } from "obsidian";
 import { DatabaseView } from "./database-view";
@@ -123,6 +123,8 @@ interface DatabaseViewHarness {
   instanceId: string;
   historyStack: TestHistoryEntry[];
   currentViewIndex: number;
+  currentDbIndex: number;
+  viewEntries: { config: DatabaseConfig; sourcePath: string }[];
   refresh(options?: { viewport?: unknown }): void;
   deleteView(viewIndex: number): void;
   undoLastEdit(): Promise<void>;
@@ -138,6 +140,7 @@ interface FakeDataSource {
   onViewConfigChanged(): () => void;
   invalidateRecordCache(): void;
   mutateFrontmatter(): Promise<void>;
+  getFrontmatterSnapshot: Mock<(file: TFile) => Record<string, unknown>>;
 }
 
 // The stub is what `window` points at once installed, so its timers cannot
@@ -179,13 +182,13 @@ function treeFixture(): RowData[] {
   ];
 }
 
-function createView(extraViews: ViewConfig[] = []): { harness: DatabaseViewHarness; dataSource: FakeDataSource; viewConfig: ViewConfig; dbConfig: DatabaseConfig } {
+function createView(extraViews: ViewConfig[] = [], columns: ColumnDef[] = []): { harness: DatabaseViewHarness; dataSource: FakeDataSource; viewConfig: ViewConfig; dbConfig: DatabaseConfig } {
   const dbFile = new TFile();
   dbFile.path = "db.md";
   const viewConfig: ViewConfig = {
     name: "Board",
     sourceFolder: "Tasks",
-    schema: { columns: [], computedFields: [] },
+    schema: { columns, computedFields: [] },
     viewType: "board",
     manualOrder: { ranks: {} },
   };
@@ -193,9 +196,15 @@ function createView(extraViews: ViewConfig[] = []): { harness: DatabaseViewHarne
     id: "db1",
     name: "Tasks",
     sourceFolder: "Tasks",
-    schema: { columns: [], computedFields: [] },
+    schema: { columns, computedFields: [] },
     views: [viewConfig, ...extraViews],
   };
+  // Built before `dataSource`/`app` so both can resolve a row's own file and frontmatter by
+  // path — `commitConfigAndCellChanges` (the config-transaction path a cross-group board move
+  // takes) looks a changed row's file back up through `app.vault.getAbstractFileByPath` and reads
+  // its current frontmatter through `dataSource.getFrontmatterSnapshot` before diffing against it,
+  // neither of which the subtask-move bindings above ever needed.
+  const rows = treeFixture();
   const dataSource: FakeDataSource = {
     getViewDefFiles: () => [{ file: dbFile, config: dbConfig }],
     updateFrontmatter: vi.fn(async () => {}),
@@ -212,9 +221,13 @@ function createView(extraViews: ViewConfig[] = []): { harness: DatabaseViewHarne
     onViewConfigChanged: () => () => {},
     invalidateRecordCache: vi.fn(),
     mutateFrontmatter: vi.fn(async () => {}),
+    getFrontmatterSnapshot: vi.fn((file: TFile) => rows.find((row) => row.file.path === file.path)?.frontmatter ?? {}),
   };
   const app = {
-    vault: { getAbstractFileByPath: (path: string) => (path === dbFile.path ? dbFile : null) },
+    vault: {
+      getAbstractFileByPath: (path: string) =>
+        path === dbFile.path ? dbFile : rows.find((row) => row.file.path === path)?.file ?? null,
+    },
     metadataCache: {},
     workspace: {},
     fileManager: {},
@@ -228,7 +241,12 @@ function createView(extraViews: ViewConfig[] = []): { harness: DatabaseViewHarne
     undefined,
   );
   const harness = view as unknown as DatabaseViewHarness;
-  harness.rows = treeFixture();
+  harness.rows = rows;
+  // `getCurrentEntry()` reads this rather than `dataSource.getViewDefFiles()` directly — unset,
+  // it leaves every action that needs the entry's own `DatabaseConfig` (a cross-group board move
+  // among them) silently returning early rather than reaching the data source at all.
+  harness.viewEntries = [{ config: dbConfig, sourcePath: dbFile.path }];
+  harness.currentDbIndex = 0;
   return { harness, dataSource, viewConfig, dbConfig };
 }
 
@@ -436,6 +454,44 @@ describe("DatabaseView board group visibility host bindings", () => {
     await flushConfigWrite();
     expect(dataSource.updateViewDefFile).toHaveBeenCalledTimes(1);
     expect(dataSource.updateViewDefFile.mock.calls[0][1].views[0].boardHideEmptyGroups).toBe(false);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 4b. BOARD CROSS-GROUP MOVE — DESKTOP AND TOUCH SHARE ONE HOST BINDING
+// ───────────────────────────────────────────────────────────────────
+//
+// `board-renderer.ts`'s `moveCardAndOrder` reaches `moveRowWithGroupUpdatesAndPosition` whether
+// the drag started from a `dragstart` (desktop) or a long-press lift (phone) — this host's
+// implementation of that binding cannot tell which pointer moved the card, so one test here
+// stands for both. The Undo affordance itself is `showOperationResult`'s own toast, skipped in
+// this harness for the same reason `deleteView`'s is (no `containerEl_`, so `showToast` never
+// mounts) — what this pins is the undo path underneath it: the same generic config-history
+// mechanism `deleteView` above already proves reverses a view deletion, reversing a cross-group
+// frontmatter write instead.
+
+describe("DatabaseView board cross-group move host binding", () => {
+  it("writes the grouped field through updateFrontmatter and undoes back to the source group", async () => {
+    const { harness, dataSource } = createView([], [{ key: "status", label: "Status", type: "select" }]);
+    const row = harness.rows.find((candidate) => candidate.file.path === "root.md")!;
+    row.frontmatter.status = "Open";
+
+    await harness.boardRenderer.actions.moveRowWithGroupUpdatesAndPosition?.(
+      row,
+      [{ field: "status", fromGroupKey: "Open", toGroupKey: "In Progress" }],
+      undefined,
+      undefined,
+    );
+
+    expect(dataSource.updateFrontmatter).toHaveBeenCalledWith(
+      row.file,
+      { status: "In Progress" },
+      expect.anything(),
+    );
+    expect(harness.historyStack).toHaveLength(1);
+
+    await harness.undoLastEdit();
+    expect(dataSource.updateFrontmatter).toHaveBeenLastCalledWith(row.file, { status: "Open" }, expect.anything());
   });
 });
 

@@ -166,7 +166,11 @@ class FakeElement {
   scrollLeft = 0;
   textContent = "";
   isConnected = false;
-  ownerDocument = { defaultView: null };
+  // `body` is set by `createRenderer()` after construction, to one further `FakeElement` — giving
+  // it a default `new FakeElement()` here would recurse (that element's own `ownerDocument` field
+  // would try to build another body of its own, forever). `showToast` reaches `doc.body.createDiv`
+  // for the board-move Undo toast, the one call site in this file that needs a body at all.
+  ownerDocument: { defaultView: null; body?: FakeElement } = { defaultView: null };
   onclick: (() => void) | null = null;
   draggable = false;
   style: { width?: string; maxWidth?: string; overflowX?: string } = {};
@@ -208,6 +212,14 @@ class FakeElement {
     for (const [name, value] of Object.entries(options.attr ?? {})) el.setAttribute(name, value);
     this.children.push(el);
     return el;
+  }
+
+  /** `showToast`'s own stack renders only its first child, so a new toast has to become that
+   *  first child rather than queue behind whatever is already showing — the one caller here that
+   *  needs `prepend` rather than `createDiv`'s own append. */
+  prepend(child: FakeElement): void {
+    child.parentElement = this;
+    this.children.unshift(child);
   }
 
   toggleClass(name: string, on: boolean): void {
@@ -317,7 +329,7 @@ function treeFixture(): RowData[] {
   ];
 }
 
-function createRenderer(): { harness: EmbeddedHarness; dataSource: FakeDataSource; viewConfig: ViewConfig } {
+function createRenderer(): { harness: EmbeddedHarness; dataSource: FakeDataSource; viewConfig: ViewConfig; containerEl: FakeElement } {
   const sourceFile = new TFile();
   sourceFile.path = "source.md";
   const dbFile = new TFile();
@@ -364,6 +376,7 @@ function createRenderer(): { harness: EmbeddedHarness; dataSource: FakeDataSourc
     fileManager: {},
   };
   const containerEl = new FakeElement();
+  containerEl.ownerDocument.body = new FakeElement();
   const renderer = new EmbeddedDatabaseRenderer(
     app as unknown as App,
     containerEl as unknown as HTMLElement,
@@ -380,7 +393,7 @@ function createRenderer(): { harness: EmbeddedHarness; dataSource: FakeDataSourc
   harness.config = viewConfig;
   harness.currentDbConfig = dbConfig;
   harness.currentSourcePath = dbFile.path;
-  return { harness, dataSource, viewConfig };
+  return { harness, dataSource, viewConfig, containerEl };
 }
 
 function planFor(request: SubtaskMoveRequest, rows: RowData[]): { request: SubtaskMoveRequest; plan: SubtaskMovePlan } {
@@ -552,6 +565,48 @@ describe("EmbeddedDatabaseRenderer board group visibility host bindings", () => 
     await flushBackgroundSave();
     expect(dataSource.updateViewDefFile).toHaveBeenCalledTimes(1);
     expect(dataSource.updateViewDefFile.mock.calls[0][1].views[0].boardHideEmptyGroups).toBe(false);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 3b. BOARD CROSS-GROUP MOVE UNDO TOAST
+// ───────────────────────────────────────────────────────────────────
+//
+// `updateGroup` is reached only from `board-renderer.ts`'s `moveCardAndOrder` fallback — the path
+// a cross-group drag (mouse or the phone long-press lift) takes on a host that has no
+// `moveRowWithGroupUpdatesAndPosition` of its own, which is every embed. Before this packet the
+// frontmatter write landed silently; a reader had no way back to the column a card left.
+
+describe("EmbeddedDatabaseRenderer board cross-group move Undo toast", () => {
+  it("writes the frontmatter and raises an Undo toast wired to undoLastEdit", async () => {
+    const { harness, dataSource, containerEl } = createRenderer();
+    const row = harness.rows[0]!; // root.md
+
+    await harness.boardRenderer.actions.updateGroup(row, "status", "Done", "Open");
+
+    expect(dataSource.updateFrontmatter).toHaveBeenCalledWith(
+      row.file,
+      { status: "Done" },
+      expect.objectContaining({ sourceInstanceId: expect.any(String) }),
+    );
+
+    const toastAction = containerEl.ownerDocument.body!.querySelector(".obnotion-toast-action");
+    expect(toastAction).toBeTruthy();
+
+    const undoSpy = vi.spyOn(harness, "undoLastEdit" as never);
+    toastAction!.onclick?.();
+    expect(undoSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("raises no toast when the group value did not actually change", async () => {
+    const { harness, dataSource, containerEl } = createRenderer();
+    const row = harness.rows[0]!;
+    row.frontmatter.status = "Done";
+
+    await harness.boardRenderer.actions.updateGroup(row, "status", "Done", "Done");
+
+    expect(dataSource.updateFrontmatter).not.toHaveBeenCalled();
+    expect(containerEl.ownerDocument.body!.querySelector(".obnotion-toast-action")).toBeNull();
   });
 });
 

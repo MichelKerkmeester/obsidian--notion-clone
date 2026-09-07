@@ -27,12 +27,12 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { afterEach, describe, expect, it, vi, beforeAll } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi, beforeAll } from "vitest";
 import { BoardGroup, BoardRenderer, BoardRendererActions } from "./board-renderer";
 import { clearRenderedViewRoots } from "./rendered-view-roots";
 import { ColumnDef, RowData, StatusColor, ViewConfig } from "../data/types";
 import { setFrozenRenderNow } from "../data/calendar-date-time";
-import { TFile, setIcon, setTooltip } from "obsidian";
+import { Platform, TFile, setIcon, setTooltip } from "obsidian";
 import type { App } from "obsidian";
 // @ts-expect-error -- a tools-side .mjs fixture with no type declarations; imported so the parity
 // check reads the markup the screenshot capture actually renders rather than reimplementing it.
@@ -138,7 +138,14 @@ class MockElement {
   public children: MockElement[] = [];
   public parentElement: MockElement | null = null;
   public rect = { left: 0, right: 0, top: 0, bottom: 0 };
-  private listeners = new Map<string, Set<Listener>>();
+  /** Set by the touch-drag auto-scroll tests; a plain field, not a real scroll container. */
+  public scrollLeft = 0;
+  // Capture and bubble kept apart, not one shared map: the touch-drag ghost's click-swallow
+  // listener is registered with `capture: true` specifically so it runs before the card's own
+  // bubble-phase "open the record" listener on the same element — the one piece of DOM event
+  // order this harness has to get right for that guarantee to mean anything in a test.
+  private captureListeners = new Map<string, Set<Listener>>();
+  private bubbleListeners = new Map<string, Set<Listener>>();
 
   constructor(tagName = "div", className = "") {
     this.tagName = tagName.toUpperCase();
@@ -252,25 +259,53 @@ class MockElement {
     Object.assign(this.style, props);
   }
 
-  addEventListener(type: string, handler: Listener, _capture?: boolean): void {
-    if (!this.listeners.has(type)) this.listeners.set(type, new Set());
-    this.listeners.get(type)!.add(handler);
+  addEventListener(type: string, handler: Listener, capture = false): void {
+    const map = capture ? this.captureListeners : this.bubbleListeners;
+    if (!map.has(type)) map.set(type, new Set());
+    map.get(type)!.add(handler);
   }
 
-  removeEventListener(type: string, handler: Listener, _capture?: boolean): void {
-    this.listeners.get(type)?.delete(handler);
+  removeEventListener(type: string, handler: Listener, capture = false): void {
+    (capture ? this.captureListeners : this.bubbleListeners).get(type)?.delete(handler);
   }
 
   dispatchEvent(event: Record<string, unknown>): boolean {
-    const set = this.listeners.get(event.type as string);
-    if (set) {
-      for (const handler of set) handler(event);
+    let stopped = false;
+    const originalStopImmediate = event.stopImmediatePropagation as (() => void) | undefined;
+    // A shallow copy so every handler sees the caller's own fields, plus one override: calling
+    // `stopImmediatePropagation()` here also raises this dispatch's own flag, the way a real
+    // event's flag halts the rest of its own dispatch — bubble-phase handlers below never run
+    // once a capture-phase one has called it.
+    const patched: Record<string, unknown> = {
+      ...event,
+      stopImmediatePropagation: () => { stopped = true; originalStopImmediate?.(); },
+    };
+    for (const handler of this.captureListeners.get(event.type as string) || []) {
+      handler(patched);
+      if (stopped) return true;
+    }
+    for (const handler of this.bubbleListeners.get(event.type as string) || []) {
+      handler(patched);
+      if (stopped) return true;
     }
     return true;
   }
 
-  getBoundingClientRect(): { left: number; right: number; top: number; bottom: number } {
-    return this.rect;
+  /** Deep enough for the touch-drag ghost: the class list, style and rect the ghost is built
+   *  from, plus the child tree so the clone visually reads as the card it stands in for. */
+  cloneNode(deep = false): MockElement {
+    const clone = new MockElement(this.tagName, this.className);
+    clone.textContent = this.textContent;
+    Object.assign(clone.style, this.style);
+    clone.rect = { ...this.rect };
+    if (deep) {
+      for (const child of this.children) clone.appendChild(child.cloneNode(true));
+    }
+    return clone;
+  }
+
+  getBoundingClientRect(): { left: number; right: number; top: number; bottom: number; width: number; height: number } {
+    return { ...this.rect, width: this.rect.right - this.rect.left, height: this.rect.bottom - this.rect.top };
   }
 
   querySelector<T = MockElement>(selector: string): T | null {
@@ -311,6 +346,14 @@ class MockElement {
     };
     return walk(this);
   }
+
+  // Every mock element shares the one fake document `beforeAll` builds below — the touch-drag
+  // ghost is appended to it and the Escape cancel listens on it, exactly as the real renderer
+  // reaches `card.ownerDocument` rather than a module-level `document`.
+  get ownerDocument(): FakeDocument {
+    if (!sharedFakeDoc) throw new Error("ownerDocument read before beforeAll built the fake document");
+    return sharedFakeDoc;
+  }
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -321,22 +364,62 @@ class MockElement {
 // own; the renderer's drag handlers schedule through `window.setTimeout`.
 const originalSetTimeout = setTimeout;
 const originalClearTimeout = clearTimeout;
+const originalSetInterval = setInterval;
+const originalClearInterval = clearInterval;
 
-beforeAll(() => {
-  const fakeDoc = {
+/** The fake `Document` every `MockElement.ownerDocument` resolves to — real listener bookkeeping
+ *  (not `vi.fn()` stubs), so the touch-drag ghost's `keydown`/Escape listener can actually be
+ *  dispatched through it the way the renderer reaches `card.ownerDocument.addEventListener`. */
+interface FakeDocument {
+  body: MockElement;
+  addEventListener(type: string, handler: Listener, capture?: boolean): void;
+  removeEventListener(type: string, handler: Listener, capture?: boolean): void;
+  dispatchEvent(event: Record<string, unknown>): boolean;
+  createElement(): MockElement;
+  createElementNS(ns: string, tag: string): MockElement;
+  querySelector: ReturnType<typeof vi.fn>;
+  querySelectorAll: ReturnType<typeof vi.fn>;
+}
+
+let sharedFakeDoc: FakeDocument | undefined;
+
+function makeFakeDocument(): FakeDocument {
+  const listeners = new Map<string, Set<Listener>>();
+  return {
     body: new MockElement("body"),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
+    addEventListener: (type, handler) => {
+      if (!listeners.has(type)) listeners.set(type, new Set());
+      listeners.get(type)!.add(handler);
+    },
+    removeEventListener: (type, handler) => {
+      listeners.get(type)?.delete(handler);
+    },
+    dispatchEvent: (event) => {
+      for (const handler of listeners.get(event.type as string) || []) handler(event);
+      return true;
+    },
     createElement: () => new MockElement(),
     createElementNS: (_ns: string, tag: string) => new MockElement(tag),
     querySelector: vi.fn(),
     querySelectorAll: vi.fn(() => []),
   };
+}
+
+beforeAll(() => {
+  const fakeDoc = makeFakeDocument();
+  sharedFakeDoc = fakeDoc;
   vi.stubGlobal("activeDocument", fakeDoc);
   vi.stubGlobal("window", {
     activeDocument: fakeDoc,
-    setTimeout: originalSetTimeout,
-    clearTimeout: originalClearTimeout,
+    // Thin wrappers over the *current* global timer, looked up at call time rather than captured
+    // once here — the touch-drag tests below call `vi.useFakeTimers()`, which swaps the global
+    // `setTimeout`/`setInterval` identifiers those globals resolve through, and a captured
+    // reference to the pre-fake-timer function would keep scheduling in real wall-clock time
+    // regardless of `vi.advanceTimersByTime`.
+    setTimeout: (...args: Parameters<typeof originalSetTimeout>) => setTimeout(...args),
+    clearTimeout: (...args: Parameters<typeof originalClearTimeout>) => clearTimeout(...args),
+    setInterval: (...args: Parameters<typeof originalSetInterval>) => setInterval(...args),
+    clearInterval: (...args: Parameters<typeof originalClearInterval>) => clearInterval(...args),
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
   });
@@ -832,6 +915,182 @@ describe("kanban interaction parity", () => {
 
     expect(actions.moveRowWithGroupUpdatesAndPosition).not.toHaveBeenCalled();
     expect(actions.moveRowToPosition).not.toHaveBeenCalled();
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 7b. PHONE TOUCH DRAG PARITY
+// ───────────────────────────────────────────────────────────────────
+//
+// A coarse pointer never sets `card.draggable`, so none of the dragstart/dragover/drop cycle
+// above ever fires on phone. This is the long-press counterpart: `Platform.isMobile` stands in
+// as the device's own signal — touch-environment.ts's three-signal detection is unit-tested
+// elsewhere — and every gesture step is a plain `pointerdown`/`pointermove`/`pointerup`,
+// dispatched straight at the card in the same "type plus fields" shape the desktop drag tests
+// above already use. MockElement's `getBoundingClientRect` starts every element at an all-zero
+// rect, so the column rects below are set explicitly, giving `resolveBoardColumnByPoint` real
+// geometry to resolve against.
+
+function touchPointerEvent(type: string, overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    type,
+    button: 0,
+    pointerType: "touch",
+    pointerId: 7,
+    clientX: 0,
+    clientY: 0,
+    preventDefault: vi.fn(),
+    stopPropagation: vi.fn(),
+    stopImmediatePropagation: vi.fn(),
+    ...overrides,
+  };
+}
+
+describe("kanban phone touch drag interaction", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    (Platform as typeof Platform & { isMobile: boolean }).isMobile = true;
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    (Platform as typeof Platform & { isMobile: boolean }).isMobile = false;
+  });
+
+  function setupBoard(actions = createActions()) {
+    const { board, container } = renderBoard(actions);
+    const columns = board.querySelectorAll<MockElement>(".obnotion-kanban-cards");
+    const todoCards = columns[0]!;
+    const doneCards = columns[1]!;
+    todoCards.rect = { left: 0, right: 280, top: 0, bottom: 600 };
+    doneCards.rect = { left: 300, right: 580, top: 0, bottom: 600 };
+    const card = todoCards.querySelectorAll<MockElement>(":scope > .obnotion-kanban-card")[1]!; // child row
+    return { board, container, actions, todoCards, doneCards, card };
+  }
+
+  function ghosts(): MockElement[] {
+    return sharedFakeDoc!.body.querySelectorAll<MockElement>(".obnotion-kanban-card--touch-ghost");
+  }
+
+  it("keeps the card non-draggable natively — the pointer gesture carries the whole move", () => {
+    const { card } = setupBoard();
+    expect(card.draggable).toBe(false);
+  });
+
+  it("long-presses to lift the card behind a ghost, highlights the column under the finger, and drops it through the same cross-group path the mouse uses", () => {
+    const { actions, todoCards, doneCards, card } = setupBoard();
+
+    card.dispatchEvent(touchPointerEvent("pointerdown", { clientX: 10, clientY: 10 }));
+    expect(ghosts()).toHaveLength(0); // nothing before the long-press threshold
+    vi.advanceTimersByTime(450);
+
+    expect(ghosts()).toHaveLength(1);
+    expect(card.hasClass("obnotion-kanban-card--touch-lifted")).toBe(true);
+
+    card.dispatchEvent(touchPointerEvent("pointermove", { clientX: 400, clientY: 40 }));
+    expect(doneCards.hasClass("obnotion-kanban-drop-target")).toBe(true);
+    expect(todoCards.hasClass("obnotion-kanban-drop-target")).toBe(false);
+    expect(ghosts()[0]!.style.transform).toContain("translate(");
+
+    card.dispatchEvent(touchPointerEvent("pointerup", { clientX: 400, clientY: 40 }));
+
+    expect(actions.moveRowWithGroupUpdatesAndPosition).toHaveBeenCalledTimes(1);
+    const [movedRow, groupUpdates] = vi.mocked(actions.moveRowWithGroupUpdatesAndPosition).mock.calls[0]!;
+    expect(movedRow.file.path).toBe(CHILD_PATH);
+    expect(groupUpdates).toEqual([{ field: "status", fromGroupKey: "To Do", toGroupKey: "Done" }]);
+    // The lift's own affordances clear once the drop lands.
+    expect(ghosts()).toHaveLength(0);
+    expect(card.hasClass("obnotion-kanban-card--touch-lifted")).toBe(false);
+    expect(doneCards.hasClass("obnotion-kanban-drop-target")).toBe(false);
+  });
+
+  it("drops the card back onto its own column without a spurious group or order update", () => {
+    const { actions, todoCards, card } = setupBoard();
+
+    card.dispatchEvent(touchPointerEvent("pointerdown", { clientX: 10, clientY: 10 }));
+    vi.advanceTimersByTime(450);
+    card.dispatchEvent(touchPointerEvent("pointermove", { clientX: 20, clientY: 100 }));
+    expect(todoCards.hasClass("obnotion-kanban-drop-target")).toBe(true);
+    card.dispatchEvent(touchPointerEvent("pointerup", { clientX: 20, clientY: 100 }));
+
+    expect(actions.moveRowWithGroupUpdatesAndPosition).not.toHaveBeenCalled();
+    expect(actions.moveRowToPosition).not.toHaveBeenCalled();
+  });
+
+  it("never lifts a card on a read-only board", () => {
+    const actions = createActions({ isReadOnly: true });
+    const { card } = setupBoard(actions);
+
+    card.dispatchEvent(touchPointerEvent("pointerdown", { clientX: 10, clientY: 10 }));
+    vi.advanceTimersByTime(450);
+
+    expect(ghosts()).toHaveLength(0);
+    expect(card.hasClass("obnotion-kanban-card--touch-lifted")).toBe(false);
+    card.dispatchEvent(touchPointerEvent("pointerup", { clientX: 10, clientY: 10 }));
+    expect(actions.moveRowWithGroupUpdatesAndPosition).not.toHaveBeenCalled();
+  });
+
+  it("cancels the lift on Escape, leaving the card in place and its group untouched", () => {
+    const { actions, doneCards, card } = setupBoard();
+
+    card.dispatchEvent(touchPointerEvent("pointerdown", { clientX: 10, clientY: 10 }));
+    vi.advanceTimersByTime(450);
+    card.dispatchEvent(touchPointerEvent("pointermove", { clientX: 400, clientY: 40 }));
+    expect(doneCards.hasClass("obnotion-kanban-drop-target")).toBe(true);
+
+    sharedFakeDoc!.dispatchEvent({ type: "keydown", key: "Escape" });
+
+    expect(ghosts()).toHaveLength(0);
+    expect(card.hasClass("obnotion-kanban-card--touch-lifted")).toBe(false);
+    expect(doneCards.hasClass("obnotion-kanban-drop-target")).toBe(false);
+
+    // A pointerup after the cancel is a stale gesture — it must not resurrect the move.
+    card.dispatchEvent(touchPointerEvent("pointerup", { clientX: 400, clientY: 40 }));
+    expect(actions.moveRowWithGroupUpdatesAndPosition).not.toHaveBeenCalled();
+  });
+
+  it("leaves a short tap alone: below the lift threshold, the card still opens on click", () => {
+    const actions = createActions();
+    const { card } = setupBoard(actions);
+
+    card.dispatchEvent(touchPointerEvent("pointerdown", { clientX: 10, clientY: 10 }));
+    vi.advanceTimersByTime(100);
+    card.dispatchEvent(touchPointerEvent("pointerup", { clientX: 10, clientY: 10 }));
+    card.dispatchEvent({ type: "click", target: card });
+
+    expect(actions.openRow).toHaveBeenCalledTimes(1);
+    expect(ghosts()).toHaveLength(0);
+  });
+
+  it("swallows the click that follows a completed lift, so the drop does not also open the card", () => {
+    const actions = createActions();
+    const { card } = setupBoard(actions);
+
+    card.dispatchEvent(touchPointerEvent("pointerdown", { clientX: 10, clientY: 10 }));
+    vi.advanceTimersByTime(450); // past the lift threshold — the drag actually began
+    card.dispatchEvent(touchPointerEvent("pointerup", { clientX: 10, clientY: 10 })); // dropped back in place
+    card.dispatchEvent({ type: "click", target: card, preventDefault: vi.fn(), stopPropagation: vi.fn() });
+
+    expect(actions.openRow).not.toHaveBeenCalled();
+  });
+
+  it("auto-scrolls the pane while the pointer sits inside the scroll container's edge band", () => {
+    const { card, container } = setupBoard();
+    container.rect = { left: 0, right: 600, top: 0, bottom: 800 };
+    container.scrollLeft = 200;
+
+    card.dispatchEvent(touchPointerEvent("pointerdown", { clientX: 10, clientY: 10 }));
+    vi.advanceTimersByTime(450);
+    card.dispatchEvent(touchPointerEvent("pointermove", { clientX: 8, clientY: 40 })); // inside the 48px left edge band
+    vi.advanceTimersByTime(180);
+    expect(container.scrollLeft).toBeLessThan(200);
+
+    card.dispatchEvent(touchPointerEvent("pointermove", { clientX: 140, clientY: 40 })); // clear of both edges
+    const afterLeaving = container.scrollLeft;
+    vi.advanceTimersByTime(180);
+    expect(container.scrollLeft).toBe(afterLeaving);
+
+    card.dispatchEvent(touchPointerEvent("pointerup", { clientX: 140, clientY: 40 }));
   });
 });
 
