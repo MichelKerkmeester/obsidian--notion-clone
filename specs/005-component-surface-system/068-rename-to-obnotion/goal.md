@@ -96,28 +96,40 @@ completion. Whenever anything above the log changes, resend the full text of thi
 
 - [x] `jq -r '.id,.name' manifest.json` prints `obnotion` and `Obnotion`, and the operator reads the
       name Obnotion in Obsidian's community plugin panel — **the jq half verified; the panel read
-      needs a live Obsidian window this leg's sandbox does not have**
+      needs a live Obsidian window this leg's sandbox does not have. Before the rename the id was
+      `note-database` (watched red: `jq -r '.id' manifest.json` printed `note-database` pre-fix,
+      prints `obnotion` after)**
 - [x] `git grep -c -E 'note-database|Note Database' -- styles.css src tools .storybook README.md manifest.json package.json screenshots/manifest.json`
       returns only the five aliases named in `acceptance-criteria.md` AC-006 (baseline on
       `dc1d54a9`: 3,375 in `styles.css` + `src` alone) — **verified: on this leg's post-sweep base,
       returns only `README.md:2` (upstream credit), `screenshots/manifest.json:12` (regenerates),
-      and the 5 aliases across 5 named files**
+      and the 5 aliases across 5 named files. Watched red pre-fix: on the leg's own base the same
+      grep counted 3,485 hits in `styles.css` + `src` alone (recorded in the leg handover's
+      census), reverting the sweep reproduces the red**
 - [x] `git grep -ho '\bdb-[a-zA-Z0-9_-]*' -- styles.css src tools .storybook | sort -u | wc -l`
       prints 0 (baseline on `dc1d54a9`: 1,724 distinct tokens, 17,099 occurrences; on `e5830232`:
       1,728 and 17,181), and
       `rg -n '\bdb_view\b' src tools | wc -l` still prints 57 — **verified: prints 0 and 57
-      respectively, on this leg's own post-sweep tree**
+      respectively, on this leg's own post-sweep tree. Watched red pre-fix: on base `65a76ee9` the
+      first grep printed 1,247 distinct `.db-*` selectors / 18,444 occurrences, reverting the sweep
+      reproduces the red**
 - [x] A vault holding only `.obsidian/plugins/note-database/data.json` opens under 0.0.31 with its
       databases, views and settings intact, the source file still present and byte-identical —
       **verified against a real filesystem** (not a mock): `migrateLegacyPluginData` run with a
       real `node:fs/promises` adapter copies the seeded fixture byte-identical, source untouched.
-      "Opens" in a rendered Obsidian window is not verifiable in this sandbox
+      Watched red: with the `already-present` guard removed from `migrateLegacyPluginData` the
+      migration's own test file went red (2 failed / 5). "Opens" in a rendered Obsidian window is
+      not verifiable in this sandbox
 - [ ] A note with a pre-rename `note-database` code fence renders, and a `workspace.json`
       holding the old view types reopens both tab kinds — **the parsing/registration logic is
       unit-tested (`linked-view-block-aliases.test.ts`) and verified correct by code review; actual
       rendering in a live Obsidian window is not verifiable in this sandbox**
 - [x] `npm run gate </dev/null` exits 0 across 26 lanes from a clean tree, with the log written
-      inside this leg's own worktree — **verified twice, 26/26 green both times**
+      inside this leg's own worktree — **verified twice by the rewrite leg, 26/26 green both
+      times, and re-run by the landing verifier from the final tree: 26/26 green. Watched red:
+      the failing-values lane went red once the doc-closing commit ticked criteria without their
+      moved-from numbers (152 bare against baseline 147), fixed in the same commit that lands
+      this sentence**
 - [ ] Release 0.0.31 is cut with notes naming the id change and the migration, its three assets
       attached, and the build copied into the iCloud vault under `.obsidian/plugins/obnotion/` —
       **deliberately deferred to the fresh Opus verifier/release leg**, per this leg's own operator
