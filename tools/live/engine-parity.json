@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-07T07:58:32.171Z",
+  "measuredAt": "2026-09-07T08:14:46.786Z",
   "inputs": {
-    "styles.css": "4edd4f3da2ef",
+    "styles.css": "775de2bcac81",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
     "fixtures": 82,
-    "differences": 52
+    "differences": 44
   },
   "differences": [
     {
@@ -176,70 +176,6 @@
       "index": 0,
       "notes": [
         "width 193 vs 215.31"
-      ]
-    },
-    {
-      "scenarioId": "panel-invalid-events-modal",
-      "selector": "input[type=\"checkbox\"]",
-      "index": 0,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
-      ]
-    },
-    {
-      "scenarioId": "panel-invalid-events-modal",
-      "selector": "input[type=\"checkbox\"]",
-      "index": 1,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
-      ]
-    },
-    {
-      "scenarioId": "panel-invalid-events-modal",
-      "selector": "input[type=\"checkbox\"]",
-      "index": 2,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
-      ]
-    },
-    {
-      "scenarioId": "panel-invalid-events-modal",
-      "selector": "input[type=\"checkbox\"]",
-      "index": 3,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
-      ]
-    },
-    {
-      "scenarioId": "panel-invalid-events-modal",
-      "selector": ".db-checkbox",
-      "index": 0,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
-      ]
-    },
-    {
-      "scenarioId": "panel-invalid-events-modal",
-      "selector": ".db-checkbox",
-      "index": 1,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
-      ]
-    },
-    {
-      "scenarioId": "panel-invalid-events-modal",
-      "selector": ".db-checkbox",
-      "index": 2,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
-      ]
-    },
-    {
-      "scenarioId": "panel-invalid-events-modal",
-      "selector": ".db-checkbox",
-      "index": 3,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
       ]
     },
     {
