@@ -16181,7 +16181,7 @@
         "src/views/record-detail-panel.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "0b68f6f467e4",
+      "layoutHash": "a6b237bb674a",
       "pixelHash": "9cdc389e302b",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "596d9dba1a40",
@@ -18055,7 +18055,7 @@
         "src/views/card-field-renderer.ts",
         "src/views/record-surface/property-row.ts"
       ],
-      "layoutHash": "53e338191c49",
+      "layoutHash": "1de6906ec7bf",
       "pixelHash": "463075a5d5c3",
       "sourceHashes": {
         "src/views/board-renderer.ts": "5016db7e7fe5",
@@ -18075,7 +18075,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 216975,
+      "bytes": 216993,
       "fixtureOf": "constructed-board"
     },
     {
@@ -24513,7 +24513,7 @@
         "specs/context/obsidian-pm-main/src/styles/widgets.css",
         "specs/context/obsidian-pm-main/src/styles/utilities.css"
       ],
-      "layoutHash": "d060c623d052",
+      "layoutHash": "5123cd10c2a8",
       "pixelHash": "c6420b762474",
       "sourceHashes": {
         "specs/context/obsidian-pm-main/src/views/gantt/GanttView.ts": "66185aa981f4",
@@ -24554,7 +24554,7 @@
       },
       "note": "The same gantt over the tree-wired rows: the nested children render as indented label rows with collapse toggles, beside constructed-timeline-subtask.",
       "capture": "viewport",
-      "bytes": 71079,
+      "bytes": 71069,
       "source": "reference",
       "renderer": "pm-gantt",
       "referenceOf": "constructed-timeline-subtask"
@@ -25037,7 +25037,7 @@
       },
       "note": "The same kanban with the first three rows wired into a parent with two children and the config's kanbanShowSubtasks on, so the subtask cards carry the parent chip the way constructed-board-subtask draws its tree.",
       "capture": "viewport",
-      "bytes": 79794,
+      "bytes": 79773,
       "source": "reference",
       "renderer": "pm-kanban",
       "referenceOf": "constructed-board-subtask"

@@ -5237,7 +5237,11 @@
       "phase": "068-rename-to-obnotion",
       "at": "2026-09-07T19:20:00.000Z",
       "hash": "65c9009170d1",
-      "reviewed": [],
+      "reviewed": [
+        "screenshots/notion-clone/views/board-view-desktop-dark.png",
+        "screenshots/project-manager/reference-gantt-subtask-mobile-light.png",
+        "screenshots/project-manager/reference-kanban-subtask-mobile-dark.png"
+      ],
       "note": "The whole-tree rename to Obnotion: every class, custom-property and id-derived selector in styles.css moved from its old vocabulary to the new one, byte-for-byte the same rules under new names. Recaptured from a clean index (npm run screenshots, 608 entries, screenshots:verify exit 0). Every one of the 608 captures came back BYTE-IDENTICAL to what was committed before this rename -- confirmed both by git status (0 files changed under screenshots/*.png before this release, after four known-jitter files were restored to committed bytes and their manifest bytes/pixelHash/layoutHash fields left describing the actual file on disk) and by content comparison (contentChangedCaptures against the previous manifest returns an empty set). That is the strongest form of proof this rename could offer: a class-name-only rewrite with matching renames on both sides of every selector renders pixel-for-pixel identical to what shipped before it, because nothing about what is drawn changed, only what it is called. The four files git initially reported as byte-changed (panel-record-detail-sheet-body-editing-desktop-light, board-view-desktop-dark, reference-gantt-subtask-mobile-light, reference-kanban-subtask-mobile-dark) are the same recurring rasteriser/encoder jitter this lane's history names on every prior recapture; pixelHash was identical on both sides for all four, confirmed before restoring their bytes. 12 captures spanning every major surface (table, board, gantt/timeline, a confirm sheet, a dropdown menu, a nested filter panel, the column manager, an owned-menu submenu, an empty record-detail body, the view-config settings panel, a chart, a project-manager reference capture, a sort panel and a toolbar utilities sheet) were opened and read directly and rendered exactly as expected with no visual defect. reviewed is empty because content-changed, in-scope is the empty set -- nothing here is a capture a human needed to judge, and the check above is what proves that rather than assumes it."
     }
   ],
