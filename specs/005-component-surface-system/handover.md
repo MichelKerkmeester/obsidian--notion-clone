@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: 225-timeline-view-teardown LANDED at b6a0f847, 2026-09-08 01:20. 0.0.31 shipped at 5e7f1426 as the RENAME release (id obnotion, vault obnotion/, repo obsidian_notion-clone). Two legs in flight, each awaiting a GLM lander: 067 follow-up 3 (wt 222) and the 069-board-cross-group-drag child (wt 224); the timeline-to-table view-switch teardown fix landed at b6a0f847. NO Opus agents (operator 2026-09-07 18:40); GLM 5.3 flash max via cli-pi DevPass carries landings/docs/releases, monitored every 5 min with a 15-min stall relaunch."
+description: "Resume point: 069-board-cross-group-drag LANDED at d32d185d, 2026-09-08. 0.0.31 shipped at 5e7f1426 as the RENAME release (id obnotion, vault obnotion/, repo obsidian_notion-clone). One leg in flight, awaiting its GLM lander: 067 follow-up 3 (wt 222); 221, 225 and 069 are all landed (6f679e5e, b6a0f847, d32d185d). NO Opus agents (operator 2026-09-07 18:40); GLM 5.3 flash max via cli-pi DevPass carries landings/docs/releases, monitored every 5 min with a 15-min stall relaunch."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,13 +10,12 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T01:20:00Z"
-    last_updated_by: "225-timeline-view-teardown-lander"
-    recent_action: "Verified and pushed 225-timeline-view-teardown to main at b6a0f847; gate 25+1 declared, T26 open"
-    next_safe_action: "Land 067 follow-up 3 (wt 222) and 069 (wt 224), then cut 0.0.32"
+    last_updated_at: "2026-09-08T02:30:00Z"
+    last_updated_by: "069-board-cross-group-drag-lander"
+    recent_action: "Verified and pushed 069-board-cross-group-drag to main at d32d185d; gate 25+1 declared"
+    next_safe_action: "Land 067 follow-up 3 (wt 222), then cut 0.0.32"
     blockers:
       - "009 T26: .obnotion-panel-button sort-panel overflow ~10px under real host cascade (expectFail)"
-      - "069-board-cross-group-drag touch drag-and-drop leg in progress (worktree 224)"
       - "067 follow-up 3 (wt 222) lander still pending (221-live-host-model landed 6f679e5e)"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
@@ -43,6 +42,48 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08 ~02:30, `069-board-cross-group-drag` LANDED — verified, rebased onto the 221/225-merged main, pushed to `origin/main` at `d32d185d`
+
+**Landed.** The leg's five commits (`60e2e617`..`2dd12e2c`, authored 2026-09-07 ~21:40–23:30) replayed as
+`86b2e618`..`fc7c18e1` onto `a35f17ab`, plus this verifier's `d32d185d`, are on `origin/main`;
+`git log --oneline -1 origin/main` = `d32d185d`. Owner: its own phase child `069-board-cross-group-drag`
+(the parent's report ledger carries it as §4 row 68, because the rebase's 225 conflict gave the timeline
+report the row 67 both sides had added). Every claim was re-proven from the final state, in the worktree,
+before the push:
+
+- **Rebase**: 4 conflict rounds, all resolved. `main.js` and 11 generated artefacts took main's side; the
+  parent's `goal.md`/`roadmap.md` kept BOTH intents (main's 068-landed wording + the leg's 069 row);
+  225's `teardownOutgoingViewRenderer` and 069's drag + Undo-toast code verified both present post-merge;
+  `tools/lane/css-lane.json` auto-merged and its newest `baselineHash` `41ffc99c0cc3` equals the live
+  `styles.css` (upstream never touched the stylesheet after 5e7f1426, so the leg's recorded hash held).
+- **Mutation proofs, all directions**: (a) `TOUCH_DRAG_LIFT_DELAY_MS` 450→1e9 → the phone case lost its
+  ghost (live tool: desktop PASS, then `TypeError ... reading 'left'` at `board-cross-group-drag.mjs:292`,
+  exit 1) and `board-renderer-parity.test.ts` went 5 failed | 29 passed (34); restored, 34/34. (b) the
+  Undo `showToast` removed from `updateBoardGroup` → `embedded-database-renderer.test.ts` 1 failed |
+  25 passed (26); restored, 26/26. (c) no mutation named for `database-view.test.ts`, so its guarded line
+  (`moveRowWithGroupUpdatesAndPosition`'s `commitConfigAndCellChanges`) was reverted → 1 failed |
+  13 passed (14); restored, 14/14.
+- **The unmutated proof, post-rebase, post-build**: `node tools/live/board-cross-group-drag.mjs` → exit 0,
+  `RESULT: PASSED` — desktop drag, phone drag at 402x874 with **ghost delta 0.0px**, reverse, same-column
+  no-op, read-only no-lift, all PASS.
+- **The gate**: exit 0, `PASS — 25 green, 1 red for a declared reason`. The one red is `sheet-grammar`'s
+  declared 009/T26 (221's expectFail — the same shape 225's landing recorded); `sheet-rebuild` green, no
+  transient, no re-run owed.
+- **Everything else**: tsc 0; build 0; vitest 153 files / **1656** (the leg's 1652 + 221/225's additions);
+  `npm run screenshots` twice, 608/608 — one jitter PNG (`reference-kanban-mobile-light`, 1800 px,
+  channel delta 1, moved in one run only) reverted with its manifest `bytes` restored, so **0 real content
+  moves**; the 5 stale evidence artefacts re-derived by their own owners (capture-device-parity,
+  renderer-coverage via render-assertions, replay — "all 28 results still hold", touch-targets,
+  unstyled-links), then 15/15 fresh; operator-checklist `--check` PASS (180 rows / 63 phases, current);
+  `scan-comments` / `scan-failing-values` 0.
+- **Specs**: 069 validated `--strict` → `RESULT: PASSED` first try; the parent's first run FAILED on
+  exactly `SOURCE_FINGERPRINT_MISMATCH` (plus 069 missing from `children_ids` — both artifacts of taking
+  main's side for the parent's graph-metadata at the conflict) and was healed by the mandated
+  `backfill-graph-metadata.js` (changed: 1), then **PASSED**; 069's own backfill refreshed with changed: 0.
+- **Docs**: the mandated §5.A recount — 069's `goal.md` §3 carries 8 criteria, 7 `- [x]` plus the
+  operator's own `- [ ]` → **7/8 = 88%, the committed figure already correct, 0 edits**; AC-010 stays
+  Unmet/unticked and no device row moved.
 
 ### 2026-09-08 ~01:20, `225-timeline-view-teardown` LANDED — verified, rebased onto 221's `3005e5bd`, pushed to `origin/main` at `b6a0f847`
 
