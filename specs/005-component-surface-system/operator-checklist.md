@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-08: **76 phases**, **8 with nothing left**, **187 rows** waiting on a device.
+Derived 2026-09-08: **76 phases**, **8 with nothing left**, **186 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -367,9 +367,8 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] C7 — The operator reads a record on iOS and on desktop and reports the refinement as landed. ADR-005, ADR-006, ADR-007 and ADR-008 were taken on 2026-09-06 19:05, so this row no longer waits on a ruling — only on a device. *(operator-owned; never ticked by an agent)*
 
-## 066-notion-states-refinement — 4/6
+## 066-notion-states-refinement — 5/6
 
-- [ ] A toast that carries an action stays long enough to act on, and a plain success does not.
 - [ ] The operator's rulings are recorded and the refined surface is read on a device. The two conflicts that held landed Anytype rulings were ruled on 2026-09-06 18:50: the second destructive red weight — *"Keep one weight"*, so the single `danger` boolean at `src/views/modals/confirm-modal.ts:28` themed to `mod-warning` at `src/views/confirm-sheet.ts:69` stays with 0 lines of code — and the toast placement — *"Centre on phone, keep corner on desktop"*, so the shared toast/rail placement centres on phone with symmetric margins (T017, AC-009) while the Anytype-measured corner at `styles.css:2724-2736` stays. Three device facts ride the existing operator pass: D-1, iOS `Reduce Motion` stops the shimmer and snaps entrances inside the plugin's WKWebView, and D-2, the Undo target is one-hand reachable at the rail's clamped phone width `min(384px, calc(100vw - 32px))` (`styles.css:2756-2767`), without which a 5000ms window is a number and not an affordance; plus the centred-placement read ADR-002's ruling owes. Only the operator closes this row; nothing in this repository can.
 
 ## 067-sheet-family-remediation — 3/7

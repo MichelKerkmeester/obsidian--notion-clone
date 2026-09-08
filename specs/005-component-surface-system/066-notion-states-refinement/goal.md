@@ -146,7 +146,7 @@ never resolve them silently.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] **A toast that carries an action stays long enough to act on, and a plain success does not.**
+- [x] **A toast that carries an action stays long enough to act on, and a plain success does not.**
       **Observed red 2026-09-06 at `38bba1e3`: one budget, 2200ms, for both.**
       `AUTO_DISMISS_MS = 2200` is the only dismissal constant in the component
       (`src/views/toast.ts:62`) and the only `setTimeout` reads it unconditionally for every
@@ -155,7 +155,8 @@ never resolve them silently.
       (`:2718-2723`, `src/views/embedded-database-renderer.ts:793`). Notion carries undo in a toast
       with an action slot on both platforms (`screen:7a0e976e`, `screen:56f376d3`) but a still
       cannot show a duration, so **no Notion number is adopted** (D2). Done is: a toast carrying an
-      action stays connected **≥5000ms**, a plain success still clears at **2200ms**, an `error`
+      action stays connected **3500ms** (ADR-005, 2026-09-08: the operator's dated report outweighed
+      the 5000ms desk inference this criterion originally anticipated), a plain success still clears at **2200ms**, an `error`
       still waits for the reader, and one lane row reads the two computed budgets apart.
       **Substantively green 2026-09-07, deliberately left unticked:** `ACTION_DISMISS_MS = 5000`
       selected on `options.action`, proven by a fake-timer matrix driving the production
@@ -170,6 +171,11 @@ never resolve them silently.
       boundary for no new coverage. Neither buys anything a `setTimeout`-reading Vitest test does
       not already buy at a fraction of the cost, so the matrix (T004) stays the row of record and
       this criterion stays open rather than ticked on a row that would exist only to say so.
+      **Ticked 2026-09-08 at landing-verification.** AC-010's own THEN demanded the toast lane prove
+      the threshold red before the change, so the 243 leg built the browser-measured dwell row anyway
+      (plus a second for the close control's 56×56, AC-011); both ran red against the pre-fix tree and
+      green after, which discharges this block's own rationale. Verified on the rebased tree (`6134f29d`):
+      `verify-placement` 418/420, 2 declared, 0 relaxed floors; mutation-checked both ways.
 - [x] **Every operation failure this plugin owns reports through the toast, with the census moving.**
       **Observed red 2026-09-06: 242 bare `new Notice(` sites, and three of them are the same
       `errors.deleteFailed` key.** `deleteRow`'s catch (`src/views/database-view.ts:8378`),
@@ -271,6 +277,7 @@ Everything below is a running record. It never overrides the directive above.
 | 2026-09-06 | **The operator ruled the two held conflicts at 18:50.** ADR-001 — *"Keep one weight"*; ADR-002 — *"Centre on phone, keep corner on desktop"*, which reverses ADR-002's hold-everywhere proposal and moves the phone half of the shared toast/rail placement into this packet's scope as T017 and AC-009, the desktop corner staying measured-Anytype. The centred stack owes the device pass a read, recorded on AC-008 and T015. ADR-003 and ADR-004 remain open by their own terms. |
 | 2026-09-07 | **T012 landed** as a new section in `tools/storybook/verify-placement.mjs` (the file already driving `showToast` for AC-001/AC-002, kept as the owning lane rather than a 27th one): five permanent rows for AC-009's phone-band and desktop-corner geometry and this packet's own notice census, each watched red under a targeted negative control and restored. The dwell criterion's own named lane row stays unbuilt on purpose — a fake-timer Vitest matrix is the right strength for a millisecond-scale timer, and that criterion stays open rather than ticked on a row that would add cost without adding coverage. |
 | 2026-09-08 | **AC-010/AC-011 built at `8bc8f050`, landing pending.** The Sonnet leg in `.worktrees/243-toast-dwell-and-close` cut the action-carrying Undo toast's dwell 5000ms→3500ms and gave its close control a ≥56×67px hit area (the `touch-targets` ratchet moved 171→169); its lander was paused mid-chain by the operator before rebasing onto `origin/main`. Both rows stay `Unmet` in `acceptance-criteria.md` until that lander resumes and verifies the landed evidence itself. |
+| 2026-09-08 | **Landed + landing-verified.** The lander resumed: the leg's two commits replayed onto `origin/main` (`7e5855bb`) as `6134f29d`+`cb351385`; 15 evidence lanes re-derived on the merged tree (`engine-parity` stays informational-1: 43=43, identical disagreement set); screenshots ×2 with one real mover (`constructed-toolbar-add-view-mobile-light`, named in the 066 lane release's `reviewed`) and one jitter restored; `npm run gate` 27 green, 0 red; `evidence --check-all` 15/15; orchestrator `--strict` PASSED on both this packet and `005` after graph-metadata backfill; AC-010/AC-011 read `Met` with the verification evidence they name. Criterion 1 above is now ticked (5/6). The device read (AC-008) stays the operator's. |
 
 ### Deviations and findings
 
