@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T22:29:00Z"
-    last_updated_by: "246-goal-refresh-evening"
-    recent_action: "Resume ritual: goals refreshed; 8 packets landed, 066+071/002 built-unlanded, rulings folded"
-    next_safe_action: "Resume 071/002's paused rebase, then 066's paused chain, then cut 0.0.34"
+    last_updated_at: "2026-09-08T21:54:00Z"
+    last_updated_by: "242-landing-verify-continuation"
+    recent_action: "071/002 settings-sheet LANDED+pushed (7d468a99): goal 2/3, gate 27/0"
+    next_safe_action: "Resume 066's paused chain next, then cut 0.0.34; 071/002 landed (7d468a99)"
     blockers:
       - "071/002 lander paused mid-rebase (.worktrees/242); 066 lander paused mid-chain (.worktrees/243) — do not touch either worktree until it resumes"
       - "071/003 (.worktrees/244) and 071/004 (.worktrees/245) are in progress, uncommitted; do not touch those worktrees either"
@@ -45,6 +45,32 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08 ~23:55, `071/002-settings-sheet` LANDED on `origin/main` — landing-verified, twice-rebased, pushed
+
+**What landed:** the GLM leg's two commits (`f0ffadc7`+`70ee0b95` in `.worktrees/242-settings-sheet-notion`)
+replayed onto main twice — over 072/073/074/008-002, then again over 656249dd's evening goal reconciliation —
+and landed as `5aa0ffd4`+`8b213929`, with this continuation's verification at `7d468a99`. **How:** conflicts
+per the brief — 15 `tools/live` census JSONs took main's side and were then re-derived (12 of 13 stamps-only;
+engine-parity 50→43 disagreements, the 7 `panel-view-config-sheet` cross-engine (Chrome vs WebKit)
+input-width disagreements the settings edit itself closed; exit 1 stays INFORMATIONAL by design);
+`tools/lane/css-lane.json` → both sides' histories kept append-only plus a post-rebase 002
+acquire/edit/release triplet, baselineHash = `ab74688a3dca` (first 12 of sha256 of the merged stylesheet),
+release note finalized after the recapture (8 reviewed, 6 movers, 0 restores); the 005 handover's
+divergent §1 bullet lists and 002's goal.md progress/deviations rows union-merged. **Verified with
+suspicion, by numbers:** settings rows 12/12 compact one-line @ 48.0px, 9/9 editors, headings 16px+1px,
+extent 401 == 401 at 402px, selects 0 native / 4 own pickers — sheet-grammar 2134 PASS / 0 FAIL on the
+merged stylesheet; both mutations replayed red then restored (lane `4/9 + 5 overflow` FAILs, unit test
+1 failed / 5 passed); the 0.0.31 guard-row fix still green; gap-table reference columns honestly `TBD`
+(no third-party reference carries readable measurements — harvest.json, anytype sources.md and 001's
+inventory checked by script) ⇒ goal criterion 2 unticked, **goal 2/3**, `acceptance-criteria.md` 3/3
+`Met`; screenshots ×3 616/616, 6 movers 0 restores (4 = 073's reference-size checkbox glyphs inside the
+replayed settings surfaces, board-view-desktop-dark 4px@1 both runs, constructed-toolbar-add-view-mobile-light
+96px@196 third pass); vitest 1733/1733 (160 files); gate 27/0 (1st run; the 2nd caught the criterion-2
+untick and the operator checklist regenerated, 187 rows / 68 phases; 3rd PASS = final state); validate
+`--strict` `RESULT: PASSED` (2 advisory warnings, unchanged); scans 0. Docs reconciled: 002 goal/impl-summary,
+071 goal (frontmatter + criterion-2 note + progress row), roadmap row 74 → LANDED. The 071 D3 operator
+device row untouched, never ticked by an agent. **Pushed: `d43e38d5..7d468a99` on `origin/main`.**
 
 ### 2026-09-08 ~22:29, evening resume ritual — goals refreshed, implementation still paused
 
