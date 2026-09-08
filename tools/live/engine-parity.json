@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-08T15:37:48.564Z",
+  "measuredAt": "2026-09-08T17:16:13.822Z",
   "inputs": {
-    "styles.css": "e061ee373e17",
+    "styles.css": "42b9b9fafd8c",
     "tools/live/engine-parity.mjs": "de4db2b1d210",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
     "fixtures": 82,
-    "differences": 56
+    "differences": 50
   },
   "differences": [
     {
@@ -224,54 +224,6 @@
       "index": 5,
       "notes": [
         "width 1167 vs 1159"
-      ]
-    },
-    {
-      "scenarioId": "panel-computed-cleanup-modal",
-      "selector": "input[type=\"checkbox\"]",
-      "index": 0,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
-      ]
-    },
-    {
-      "scenarioId": "panel-computed-cleanup-modal",
-      "selector": "input[type=\"checkbox\"]",
-      "index": 1,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
-      ]
-    },
-    {
-      "scenarioId": "panel-computed-cleanup-modal",
-      "selector": "input[type=\"checkbox\"]",
-      "index": 2,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
-      ]
-    },
-    {
-      "scenarioId": "panel-computed-cleanup-modal",
-      "selector": ".obnotion-checkbox",
-      "index": 0,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
-      ]
-    },
-    {
-      "scenarioId": "panel-computed-cleanup-modal",
-      "selector": ".obnotion-checkbox",
-      "index": 1,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
-      ]
-    },
-    {
-      "scenarioId": "panel-computed-cleanup-modal",
-      "selector": ".obnotion-checkbox",
-      "index": 2,
-      "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
       ]
     },
     {

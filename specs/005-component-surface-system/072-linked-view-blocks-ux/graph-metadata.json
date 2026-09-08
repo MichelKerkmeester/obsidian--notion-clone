@@ -208,7 +208,7 @@
     ],
     "causal_summary": "The operator reports two things in one line: \"the seperate views from database is pretty bugged ui ux wise and dragging doesnt work on mobile like it would on notion.\" \"Separate views\" most likely names embedded/linked database views inside a note (`046-linked-views-notion-parity`'s territory), but the drag half could name table row/column drag rather than board drag, which `069` already shipped for mobile in 0.0.32",
     "created_at": "2026-09-08T06:23:35Z",
-    "last_save_at": "2026-09-08T16:46:28.708Z",
+    "last_save_at": "2026-09-08T17:29:56.306Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,7 +220,7 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:f1a191f2ab3f4c3d5bb1c8bf953104c9df41381ac6a3a30f644f76e4cdb13527",
+    "source_fingerprint": "sha256:902409fa5b97a2cbc96cdb3982785a3ab6214c212a58946c069bed8e216e4f54",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "ff82230f710e0b2a8e512843e3ca6feb7b1f0429fea26ba64cdd888b1270ec17",

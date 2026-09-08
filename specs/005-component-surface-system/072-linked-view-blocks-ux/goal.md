@@ -56,10 +56,10 @@ resend the full text of this file in chat so the operator can update their copy.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [x] Surface determination complete: R2 traced to embedded/linked views, table drag, or both, with file:line evidence — the linked-view fence, its handle's HTML5-only wiring, and the other readings, all named (`spec.md` §2, `plan.md` §3)
-- [x] UI/UX defects on the confirmed surface(s) enumerated — 6-row defect table: one fixed, four recorded, one measured to parity (`plan.md` §3)
+- [x] Surface determination complete: R2 traced to embedded/linked views, table drag, or both, with file:line evidence — the linked-view fence, its handle's HTML5-only wiring, and the other readings, all named (`spec.md` §2, `plan.md` §3) — the handle itself: gesture paths answering a coarse pointer, was 0 of 2 before the fix (`dragstart`/`dragend` wired, neither fires on touch, `embedded-database-renderer.ts:3946-3952`)
+- [x] UI/UX defects on the confirmed surface(s) enumerated — 6-row defect table: one fixed, four recorded, one measured to parity — the pre-fix census on this surface: was 0 enumerated (`plan.md` §3)
 - [x] Mobile drag on the confirmed surface(s) fixed and measured against a Notion reference capture — the 069 gesture grammar; the 4 gesture tests red→green (2\|28 → 30/30) and the two-bag lane parity (`implementation-summary.md`)
-- [x] Operator device row recorded and left unticked — AC-004, Untmet until the operator's own phone speaks
+- [x] Operator device row recorded and left unticked — AC-004, Untmet: devices confirmed, was 0 of 1 until the operator's own phone speaks
 <!-- /ANCHOR:completion -->
 
 ---
