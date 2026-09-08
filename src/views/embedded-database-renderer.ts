@@ -98,6 +98,9 @@ import { ViewConfigPanelRenderer } from "./view-config-panel-renderer";
 import { DATABASE_VIEW_TYPE, DatabaseView, getObnotionPlugin } from "./database-view";
 import { applyListMigration, planListMigration } from "../data/list-migration";
 import { applyGalleryMigration, planGalleryMigration } from "../data/gallery-migration";
+import { applyChartMigration, planChartMigration } from "../data/chart-migration";
+import { applyCalendarMigration, planCalendarMigration } from "../data/calendar-migration";
+import { applyTimelineMigration, planTimelineMigration } from "../data/timeline-migration";
 import { resolveViewIndex } from "../data/view-selection";
 
 import { isInsideOpenSheet } from "./mobile-bottom-sheet";
@@ -390,6 +393,12 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
    * set guards the attempt within one, since an embed re-renders on every data change.
    */
   private migratedGalleryViews = new Set<string>();
+  /** Databases already offered the chart migration this session, by database id. Same reasoning as `migratedGalleryViews`. */
+  private migratedChartViews = new Set<string>();
+  /** Databases already offered the calendar migration this session, by database id. Same reasoning as `migratedGalleryViews`. */
+  private migratedCalendarViews = new Set<string>();
+  /** Databases already offered the timeline migration this session, by database id. Same reasoning as `migratedGalleryViews`. */
+  private migratedTimelineViews = new Set<string>();
   private viewIndexOverride: number | null = null;
   private selectedRows = new Set<string>();
   private lastSelectedRowPath: string | null = null;
@@ -744,6 +753,9 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     }
     this.migrateGalleryViewOnOpen(config);
     this.migrateListViewOnOpen(config);
+    this.migrateChartViewOnOpen(config);
+    this.migrateCalendarViewOnOpen(config);
+    this.migrateTimelineViewOnOpen(config);
     // Reset scroll to the top on an actual view-type switch: switching into a
     // tall calendar/timeline embed must start at the top instead of keeping the
     // previous view's mid-page scroll. Filter/sort/data refreshes reuse the same
@@ -846,6 +858,110 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     } catch (err) {
       if (config.viewType === "table") config.viewType = "list";
       console.error("Obnotion: failed to migrate an embedded list view to a table", err);
+    }
+  }
+
+  /**
+   * Turn an embedded chart into a table the first time its view renders.
+   *
+   * Same shape as `migrateListViewOnOpen`: chart's target equals the unknown-type fallback, so the
+   * rewrite is a plain type-string change and the notice is a plain `Notice`.
+   */
+  private migrateChartViewOnOpen(config: ViewConfig): void {
+    const db = this.currentDbConfig;
+    if (!config?.id || !db?.id) return;
+    const plan = planChartMigration(config);
+    if (!plan) return;
+    const plugin = getObnotionPlugin(this.app);
+    const alreadyNotified = plugin?.settings.chartMigrationNotices?.includes(db.id) ?? false;
+    if (!alreadyNotified) {
+      if (this.migratedChartViews.has(db.id)) return;
+      this.migratedChartViews.add(db.id);
+    }
+    try {
+      if (!applyChartMigration(config, plan)) return;
+      this.persistEmbeddedConfigToSource();
+      if (plugin && !alreadyNotified) {
+        plugin.settings.chartMigrationNotices = [...(plugin.settings.chartMigrationNotices ?? []), db.id];
+        void plugin.saveSettings();
+      }
+      if (!alreadyNotified) {
+        new Notice(t("notice.chartMigrated", { name: config.name || t("common.chartView") }));
+      }
+    } catch (err) {
+      if (config.viewType === "table") config.viewType = "chart";
+      console.error("Obnotion: failed to migrate an embedded chart view to a table", err);
+    }
+  }
+
+  /**
+   * Turn an embedded calendar into a table the first time its view renders.
+   *
+   * Carries `calendarStartDateField` onto the table's own sort column, same reasoning as
+   * `calendar-migration.ts`'s header comment.
+   */
+  private migrateCalendarViewOnOpen(config: ViewConfig): void {
+    const db = this.currentDbConfig;
+    if (!config?.id || !db?.id) return;
+    const plan = planCalendarMigration(config);
+    if (!plan) return;
+    const plugin = getObnotionPlugin(this.app);
+    const alreadyNotified = plugin?.settings.calendarMigrationNotices?.includes(db.id) ?? false;
+    if (!alreadyNotified) {
+      if (this.migratedCalendarViews.has(db.id)) return;
+      this.migratedCalendarViews.add(db.id);
+    }
+    try {
+      if (!applyCalendarMigration(config, plan)) return;
+      this.persistEmbeddedConfigToSource();
+      if (plugin && !alreadyNotified) {
+        plugin.settings.calendarMigrationNotices = [...(plugin.settings.calendarMigrationNotices ?? []), db.id];
+        void plugin.saveSettings();
+      }
+      if (!alreadyNotified) {
+        new Notice(t("notice.calendarMigrated", { name: config.name || t("common.calendarView") }));
+      }
+    } catch (err) {
+      if (config.viewType === "table") config.viewType = "calendar";
+      console.error("Obnotion: failed to migrate an embedded calendar view to a table", err);
+    }
+  }
+
+  /**
+   * Turn an embedded timeline into a board the first time its view renders.
+   *
+   * Same shape as `migrateGalleryViewOnOpen`: timeline's target (board) differs from the
+   * unknown-type fallback, so the migration carries `timelineGroupField` onto `boardGroupField`
+   * and the notice is an undo-carrying toast rather than a plain `Notice`.
+   */
+  private migrateTimelineViewOnOpen(config: ViewConfig): void {
+    const db = this.currentDbConfig;
+    if (!config?.id || !db?.id) return;
+    const plan = planTimelineMigration(config);
+    if (!plan) return;
+    const plugin = getObnotionPlugin(this.app);
+    const alreadyNotified = plugin?.settings.timelineMigrationNotices?.includes(db.id) ?? false;
+    if (!alreadyNotified) {
+      if (this.migratedTimelineViews.has(db.id)) return;
+      this.migratedTimelineViews.add(db.id);
+    }
+    try {
+      if (!applyTimelineMigration(config, plan)) return;
+      this.persistEmbeddedConfigToSource();
+      if (plugin && !alreadyNotified) {
+        plugin.settings.timelineMigrationNotices = [...(plugin.settings.timelineMigrationNotices ?? []), db.id];
+        void plugin.saveSettings();
+      }
+      if (!alreadyNotified) {
+        showToast(this.containerEl.ownerDocument, {
+          severity: "success",
+          message: t("notice.timelineMigrated", { name: config.name || t("common.timelineView") }),
+          action: { label: t("toolbar.undo"), onClick: () => this.undoLastEdit() },
+        });
+      }
+    } catch (err) {
+      if (config.viewType === "board") config.viewType = "timeline";
+      console.error("Obnotion: failed to migrate an embedded timeline view to a board", err);
     }
   }
 

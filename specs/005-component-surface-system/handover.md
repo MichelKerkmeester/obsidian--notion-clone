@@ -2117,3 +2117,31 @@ program-level decision record only.
   `worktrees/225-timeline-view-teardown` at HEAD (see that branch's own commit); **not pushed** —
   a fresh verifier lands it. Row 67 stays awaiting the operator's own device read, never ticked
   by an agent.
+- **2026-09-08, `008-calendar-timeline-chart-deprecation/002-settings-redirect-and-migrate`
+  implemented and verified, not yet released.** Mirroring `007`'s gallery settings-redirect
+  mechanism, calendar/timeline/chart are withdrawn from every picker (toolbar add-view/view-type
+  menu, view-config panel, plugin-settings default-view dropdown), each keeping its own
+  current-type escape hatch. New pure plan/apply modules `src/data/{chart,calendar,timeline}-
+  migration.ts` redirect an existing view on open: chart and calendar land on table (their target
+  equals the settings-load sanitizer's bare unknown-type fallback, so that exemption closes for
+  free — `chart-migration.ts`/`calendar-migration.ts`, plain `Notice`, no undo, matching `006`'s
+  list precedent); timeline lands on board, carrying its lane field onto the board's own grouping
+  field, and routes through the real migration at settings-load rather than the bare fallback
+  (target differs from the fallback, would strand the lane grouping otherwise — matching `007`'s
+  gallery precedent, undo-carrying toast). Both render hosts (`database-view.ts`,
+  `embedded-database-renderer.ts`) gained the three on-open hooks; `parseViewType()` stays open on
+  purpose, same reasoning as gallery/list. Red first: `calendar-timeline-chart-hide-and-migrate
+  .test.ts` failed 12/15 against the pre-edit tree, green after (15/15); a mutation check (dropped
+  the toolbar's chart filter clause) re-failed two tests and was reverted. Two pre-existing suites
+  this phase's edits legitimately invalidated were fixed (`gallery-hide-and-migrate.test.ts`,
+  `settings.test.ts`), and three `tools/storybook/verify-placement.mjs` floors were stepped down
+  for three fewer add-view rows and four new owned `Notice` sites. Full battery: `npx tsc --noEmit`
+  0, `npx vitest run` 1707/1707, `npm run build` 0, the live-tools lanes 0, two `npm run
+  screenshots` passes (616 each) with ten movers judged encoder jitter by decoded pixel-hash
+  (pixelHash/layoutHash identical to the committed baseline in every case) and reverted, four real
+  movers (`constructed-toolbar-add-view-*`) named in `tools/lane/css-lane.json`'s current
+  `009-live-verification` release `reviewed` array (`styles.css` itself never moved, so no new
+  lane triplet), `evidence.mjs --check-all` 15/15 fresh, `npm run gate` 27/27 green. Landed on
+  `worktrees/240-deprecation-redirect` at HEAD (see that branch's own commits); **not pushed** —
+  a fresh verifier lands it. AC-007 (a released version) stays `Unmet`; `003` (remove the three
+  renderers) waits for that release the same way it waited for `007`'s.

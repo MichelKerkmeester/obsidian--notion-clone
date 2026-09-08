@@ -9,19 +9,21 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation"
-    last_updated_at: "2026-09-08T11:45:00Z"
-    last_updated_by: "234-calendar-timeline-chart-audit"
-    recent_action: "001-usage-and-migration-audit closed 3/3, landing-verified (7a6d4cc6)"
-    next_safe_action: "002-settings-redirect-and-migrate starts from 001's inventory.md"
-    blockers: []
+    last_updated_at: "2026-09-08T15:30:00Z"
+    last_updated_by: "240-deprecation-redirect"
+    recent_action: "002-settings-redirect-and-migrate implemented and verified, gate 27/27"
+    next_safe_action: "Cut a release carrying 002's redirect, then 003-remove-renderers-and-harness can start"
+    blockers:
+      - "002's own AC-007 (a released version) is Unmet; 003 waits for it"
     key_files:
       - "spec.md"
       - "001-usage-and-migration-audit/inventory.md"
+      - "002-settings-redirect-and-migrate/decision-record.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "008-calendar-timeline-chart-deprecation-scaffold"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 40
     open_questions: []
     answered_questions: []
 ---
@@ -94,10 +96,13 @@ string, not these files.
 | Item | State | Evidence |
 |------|-------|----------|
 | Packet opened, four child phases scaffolded | Done | This scaffold, 2026-09-08 |
+| 001-usage-and-migration-audit | Done | `001-usage-and-migration-audit/inventory.md`, landing-verified 7a6d4cc6 |
+| 002-settings-redirect-and-migrate | Implemented, verified, pending release | `002-settings-redirect-and-migrate/implementation-summary.md`, `npm run gate` 27/27 on `worktrees/240-deprecation-redirect` |
 
 ### Deviations and findings
 
 | Item | Note |
 |------|------|
 | Combined into one phase parent | Both phase-qualification thresholds are met independently (`recommend-level.sh --loc 1000 --files 20 --architectural`); one packet avoids three separate top-level packets re-deciding the same archive location and README strip |
+| 002's three types split into two fallback shapes | Chart/calendar's redirect target equals the settings-load sanitizer's bare unknown-type fallback and closes for free; timeline's does not and routes through a real migration — `002/decision-record.md` ADR-001 |
 <!-- /ANCHOR:log -->

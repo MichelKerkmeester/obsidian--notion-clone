@@ -21,6 +21,9 @@ import { evaluateBaseFilterExpression } from "../data/base-expression";
 import { moveDatabaseFilePath, sortDatabaseFileEntries } from "../data/database-file-order";
 import { applyGalleryMigration, planGalleryMigration } from "../data/gallery-migration";
 import { applyListMigration, planListMigration } from "../data/list-migration";
+import { applyChartMigration, planChartMigration } from "../data/chart-migration";
+import { applyCalendarMigration, planCalendarMigration } from "../data/calendar-migration";
+import { applyTimelineMigration, planTimelineMigration } from "../data/timeline-migration";
 import { QueryEngine } from "../data/query-engine";
 import { PropertyService } from "../data/property-service";
 import { ComputedFieldEngine } from "../data/computed-field";
@@ -583,6 +586,19 @@ export class DatabaseView extends FileView {
    * edit, and a migration that failed must not be retried — and re-announced — on every render.
    */
   private migratedListViews = new Set<string>();
+  /**
+   * Databases already offered the chart migration this session, by database id.
+   *
+   * The persisted notice record guards the notice across sessions; this set guards the attempt
+   * within one, for the same reason the gallery and list migrations keep one: `refresh` runs on
+   * every scroll and edit, and a migration that failed must not be retried — and re-announced —
+   * on every render.
+   */
+  private migratedChartViews = new Set<string>();
+  /** Databases already offered the calendar migration this session, by database id. Same reasoning as `migratedChartViews`. */
+  private migratedCalendarViews = new Set<string>();
+  /** Databases already offered the timeline migration this session, by database id. Same reasoning as `migratedChartViews`. */
+  private migratedTimelineViews = new Set<string>();
   private undoActionEl?: HTMLElement;
   private viewStateStore = new ViewStateStore();
   private viewState?: DatabaseViewState;
@@ -2789,6 +2805,120 @@ export class DatabaseView extends FileView {
     } catch (err) {
       if (view.viewType === "table") view.viewType = "list";
       console.error("Obnotion: failed to migrate a list view to a table", err);
+    }
+  }
+
+  /**
+   * Turn an existing chart into a table the first time its view is rendered.
+   *
+   * Same shape as `migrateListViewOnOpen`: chart's target equals the unknown-type fallback, so the
+   * rewrite is a plain type-string change with no field to carry, and the notice is a plain
+   * `Notice` rather than an undo-carrying toast.
+   */
+  private migrateChartViewOnOpen(): void {
+    if (!this.hasActiveDatabase()) return;
+    const db = this.getActiveDb();
+    const view = this.getActiveView();
+    if (!view?.id || !db?.id) return;
+    const plan = planChartMigration(view);
+    if (!plan) return;
+    const plugin = getObnotionPlugin(this.app);
+    const alreadyNotified = plugin?.settings.chartMigrationNotices?.includes(db.id) ?? false;
+    if (!alreadyNotified) {
+      if (this.migratedChartViews.has(db.id)) return;
+      this.migratedChartViews.add(db.id);
+    }
+    try {
+      if (!applyChartMigration(view, plan)) return;
+      this.scheduleConfigSave();
+      if (plugin && !alreadyNotified) {
+        plugin.settings.chartMigrationNotices = [...(plugin.settings.chartMigrationNotices ?? []), db.id];
+        void plugin.saveSettings();
+      }
+      if (!alreadyNotified) {
+        new Notice(t("notice.chartMigrated", { name: view.name || t("common.chartView") }));
+      }
+    } catch (err) {
+      if (view.viewType === "table") view.viewType = "chart";
+      console.error("Obnotion: failed to migrate a chart view to a table", err);
+    }
+  }
+
+  /**
+   * Turn an existing calendar into a table the first time its view is rendered.
+   *
+   * Carries `calendarStartDateField` onto the table's own sort column, same reasoning as
+   * `calendar-migration.ts`'s header comment. The notice is a plain `Notice`, matching the list
+   * and chart migrations, since the target equals the unknown-type fallback.
+   */
+  private migrateCalendarViewOnOpen(): void {
+    if (!this.hasActiveDatabase()) return;
+    const db = this.getActiveDb();
+    const view = this.getActiveView();
+    if (!view?.id || !db?.id) return;
+    const plan = planCalendarMigration(view);
+    if (!plan) return;
+    const plugin = getObnotionPlugin(this.app);
+    const alreadyNotified = plugin?.settings.calendarMigrationNotices?.includes(db.id) ?? false;
+    if (!alreadyNotified) {
+      if (this.migratedCalendarViews.has(db.id)) return;
+      this.migratedCalendarViews.add(db.id);
+    }
+    try {
+      if (!applyCalendarMigration(view, plan)) return;
+      this.scheduleConfigSave();
+      if (plugin && !alreadyNotified) {
+        plugin.settings.calendarMigrationNotices = [...(plugin.settings.calendarMigrationNotices ?? []), db.id];
+        void plugin.saveSettings();
+      }
+      if (!alreadyNotified) {
+        new Notice(t("notice.calendarMigrated", { name: view.name || t("common.calendarView") }));
+      }
+    } catch (err) {
+      if (view.viewType === "table") view.viewType = "calendar";
+      console.error("Obnotion: failed to migrate a calendar view to a table", err);
+    }
+  }
+
+  /**
+   * Turn an existing timeline into a board the first time its view is rendered.
+   *
+   * Same shape as `migrateGalleryViewOnOpen`: timeline's target (board) differs from the
+   * unknown-type fallback, so the migration carries `timelineGroupField` onto `boardGroupField`
+   * and the notice is an undo-carrying toast rather than a plain `Notice` — the same reasoning
+   * `timeline-migration.ts`'s header comment gives.
+   */
+  private migrateTimelineViewOnOpen(): void {
+    if (!this.hasActiveDatabase()) return;
+    const db = this.getActiveDb();
+    const view = this.getActiveView();
+    if (!view?.id || !db?.id) return;
+    const plan = planTimelineMigration(view);
+    if (!plan) return;
+    const plugin = getObnotionPlugin(this.app);
+    const alreadyNotified = plugin?.settings.timelineMigrationNotices?.includes(db.id) ?? false;
+    if (!alreadyNotified) {
+      if (this.migratedTimelineViews.has(db.id)) return;
+      this.migratedTimelineViews.add(db.id);
+    }
+    try {
+      if (!applyTimelineMigration(view, plan)) return;
+      this.pendingUndoLabel = t("undo.timelineMigration");
+      this.scheduleConfigSave();
+      if (plugin && !alreadyNotified) {
+        plugin.settings.timelineMigrationNotices = [...(plugin.settings.timelineMigrationNotices ?? []), db.id];
+        void plugin.saveSettings();
+      }
+      if (!alreadyNotified && this.containerEl_) {
+        showToast(this.containerEl_.ownerDocument, {
+          severity: "success",
+          message: t("notice.timelineMigrated", { name: view.name || t("common.timelineView") }),
+          action: { label: t("toolbar.undo"), onClick: () => this.undoLastEdit() },
+        });
+      }
+    } catch (err) {
+      if (view.viewType === "board") view.viewType = "timeline";
+      console.error("Obnotion: failed to migrate a timeline view to a board", err);
     }
   }
 
@@ -12163,6 +12293,9 @@ export class DatabaseView extends FileView {
     if (!this.containerEl_) return;
     this.migrateGalleryViewOnOpen();
     this.migrateListViewOnOpen();
+    this.migrateChartViewOnOpen();
+    this.migrateCalendarViewOnOpen();
+    this.migrateTimelineViewOnOpen();
     const interaction = this.captureInteractionSnapshot();
     this.showSkeletonLoader();
     const nextViewType = this.hasActiveDatabase() ? (this.getConfig()?.viewType || "table") : "table";

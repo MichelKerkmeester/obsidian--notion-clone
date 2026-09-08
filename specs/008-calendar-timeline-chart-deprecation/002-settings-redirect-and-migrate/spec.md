@@ -30,7 +30,7 @@ Hide calendar, timeline and chart from every picker/switcher/settings surface, a
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P1 |
-| **Status** | Draft — blocked on Phase 1 |
+| **Status** | Implemented, pending release cut |
 | **Created** | 2026-09-08 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |
@@ -83,7 +83,17 @@ Hide calendar, timeline and chart from every picker/switcher/settings surface, a
 
 | File Path | Change Type | Description |
 |-----------|-------------|-------------|
-| Named once Phase 1's audit and this phase's own investigation identify the exact files | TBD | See requirements |
+| `src/data/chart-migration.ts` | Created | Chart→table plan/apply |
+| `src/data/calendar-migration.ts` | Created | Calendar→table plan/apply, carries the sort date field |
+| `src/data/timeline-migration.ts` | Created | Timeline→board plan/apply, carries the lane group field |
+| `src/data/types.ts` | Modified | Three new `PluginSettings` migration-notice fields |
+| `src/main.ts` | Modified | Settings-load sanitizer routes chart/calendar/timeline per ADR-001 |
+| `src/views/database-view.ts` | Modified | Three on-open migration hooks, standalone host |
+| `src/views/embedded-database-renderer.ts` | Modified | Three on-open migration hooks, embedded host |
+| `src/views/toolbar-renderer.ts` | Modified | Picker withdrawal, add-view/view-type menu |
+| `src/views/view-config-panel-renderer.ts` | Modified | Picker withdrawal, view-config panel |
+| `src/settings.ts` | Modified | Default-view dropdown withdrawal |
+| `src/i18n.ts` | Modified | Migration-notice strings, three locales |
 <!-- /ANCHOR:scope -->
 
 ---

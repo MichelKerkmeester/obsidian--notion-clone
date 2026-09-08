@@ -319,14 +319,11 @@ describe("SettingsTab reconciled view vocabulary", () => {
     expect(row).toBeDefined();
     expect(row?.desc).toBe(t("settings.defaultView.desc"));
     expect(row?.dropdown?.options.map((option) => option.value)).toEqual([
-      "table", "board", "chart", "calendar", "timeline",
+      "table", "board",
     ]);
     expect(row?.dropdown?.options.map((option) => option.text)).toEqual([
       t("common.tableView"),
       t("common.boardView"),
-      t("common.chartView"),
-      t("common.calendarView"),
-      t("common.timelineView"),
     ]);
   });
 
@@ -336,9 +333,9 @@ describe("SettingsTab reconciled view vocabulary", () => {
 
     const row = dom.instances.find((setting) => setting.name === t("settings.defaultView.name"));
     expect(row).toBeDefined();
-    row?.dropdown?.select("calendar");
+    row?.dropdown?.select("board");
 
-    expect(plugin.settings.defaultViewType).toBe("calendar");
+    expect(plugin.settings.defaultViewType).toBe("board");
     expect(plugin.saveSettings).toHaveBeenCalled();
   });
 
@@ -358,13 +355,27 @@ describe("SettingsTab reconciled view vocabulary", () => {
     expect(row?.dropdown?.options.some((option) => option.value === "list")).toBe(false);
   });
 
+  it("keeps chart, calendar and timeline out of the offered default views", () => {
+    // Withdrawn all three the same way gallery and list already are: a database can no
+    // longer be minted as one, so the default-view dropdown must not offer any of them either.
+    openTab();
+
+    const row = dom.instances.find((setting) => setting.name === t("settings.defaultView.name"));
+    expect(row?.dropdown?.options.some((option) => option.value === "chart")).toBe(false);
+    expect(row?.dropdown?.options.some((option) => option.value === "calendar")).toBe(false);
+    expect(row?.dropdown?.options.some((option) => option.value === "timeline")).toBe(false);
+  });
+
   it("normalises the stored default view to a known type", () => {
-    expect(DEFAULT_VIEW_TYPES).toEqual(["table", "board", "chart", "calendar", "timeline"]);
-    expect(normalizeDefaultViewType("timeline")).toBe("timeline");
+    expect(DEFAULT_VIEW_TYPES).toEqual(["table", "board"]);
+    expect(normalizeDefaultViewType("board")).toBe("board");
     expect(normalizeDefaultViewType("table")).toBe("table");
     expect(normalizeDefaultViewType(undefined)).toBe("table");
     expect(normalizeDefaultViewType("gallery")).toBe("table");
     expect(normalizeDefaultViewType("list")).toBe("table");
+    expect(normalizeDefaultViewType("chart")).toBe("table");
+    expect(normalizeDefaultViewType("calendar")).toBe("table");
+    expect(normalizeDefaultViewType("timeline")).toBe("table");
     expect(normalizeDefaultViewType("bogus")).toBe("table");
   });
 });

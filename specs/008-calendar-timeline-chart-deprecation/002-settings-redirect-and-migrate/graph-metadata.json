@@ -38,7 +38,7 @@
       "testing",
       "strategy"
     ],
-    "importance_tier": "normal",
+    "importance_tier": "critical",
     "status": "in_progress",
     "key_files": [
       "spec.md",
@@ -46,7 +46,21 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "implementation-summary.md"
+      "decision-record.md",
+      "implementation-summary.md",
+      "src/data/chart-migration.ts",
+      "src/data/calendar-migration.ts",
+      "src/data/timeline-migration.ts",
+      "src/data/types.ts",
+      "src/main.ts",
+      "src/views/database-view.ts",
+      "src/views/embedded-database-renderer.ts",
+      "src/views/toolbar-renderer.ts",
+      "src/views/view-config-panel-renderer.ts",
+      "src/settings.ts",
+      "src/i18n.ts",
+      "src/views/calendar-timeline-chart-hide-and-migrate.test.ts",
+      "src/settings.test.ts"
     ],
     "entities": [
       {
@@ -80,9 +94,93 @@
         "source": "derived"
       },
       {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "chart-migration.ts",
+        "kind": "code",
+        "path": "src/data/chart-migration.ts",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-migration.ts",
+        "kind": "code",
+        "path": "src/data/calendar-migration.ts",
+        "source": "derived"
+      },
+      {
+        "name": "timeline-migration.ts",
+        "kind": "code",
+        "path": "src/data/timeline-migration.ts",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "main.ts",
+        "kind": "code",
+        "path": "src/main.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.ts",
+        "kind": "code",
+        "path": "src/views/embedded-database-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "view-config-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/view-config-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "settings.ts",
+        "kind": "code",
+        "path": "src/settings.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-timeline-chart-hide-and-migrate.test.ts",
+        "kind": "test",
+        "path": "src/views/calendar-timeline-chart-hide-and-migrate.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "settings.test.ts",
+        "kind": "test",
+        "path": "src/settings.test.ts",
         "source": "derived"
       },
       {
@@ -108,95 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Parent Spec",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Parent Packet",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Clean Architecture",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Key Components",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Data Flow",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Current Role",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Once removed from the picker, an existing view configured as calendar, timeline or chart must still open — as its Phase-1-decided redirect target — rather than fail to render, matching `006`'s hide-and-migrate phase and `007`'s settings-redirect-and-migrate phase",
     "created_at": "2026-09-08T06:24:15Z",
-    "last_save_at": "2026-09-08T06:50:06.723Z",
+    "last_save_at": "2026-09-08T13:25:05.946Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -205,15 +219,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:cbdb1a068268cf8c9cf3789260369bddf6c481544909a26d1f3ed3fd6a437e36",
+    "source_fingerprint": "sha256:99a226bc2b7b686bcb8ec055a3be2de9f5085f5103eb4d5d7189cf1f7a74bceb",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "d900313c56921e62ea2946551755162e4e968fbfb9431cad209b39ca20c0b9f8",
+      "spec.md": "76a7f143e7f56ee5f9c718f8ce6e3a18bdf70603e8f8da1153259c8bf7027c9b",
       "plan.md": "457cc3f7a24db94e0923cb75181efe3ace635c0bb2231f838a0e35deb76eee33",
-      "tasks.md": "66781b74f30cd0138e11692d7148975bb6943254e1406e7a9460ae522d9593b7",
-      "implementation-summary.md": "4e56033fa029c89731de7810e5bd98ac7315155bf7a1273c1c2374a3a5dc867a"
+      "tasks.md": "f6ef7b8e0c34ab5f14112bdc67401c20cd0514dffc41f608e158b1891f70a0e5",
+      "decision-record.md": "5e580429144e15b6eef6b3313c98c3a411488ffa7a5e3a096f1df77f14c1db4c",
+      "implementation-summary.md": "2ebb2271c6e7ea1e0f15761e7c427443cd3213a50298e73e52061e141cbfbb99"
     },
     "last_active_at": null
   }

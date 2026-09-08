@@ -82,13 +82,12 @@ export interface CreateEntryIntent {
 }
 
 /**
- * The view types a user may pick, with the gallery and the list withdrawn.
+ * The view types a user may pick, with the gallery, list, chart, calendar and timeline withdrawn.
  *
- * Deprecated, not deleted, and the difference is the whole point. `gallery` and `list` are values
- * in a persisted union — they are written into vault files — so removing their renderers would
- * leave every database already configured as one unable to open. Withdrawing them from the
- * pickers stops anyone new arriving at them while every existing one keeps working, and the step
- * is reversible by deleting one filter.
+ * Deprecated, not deleted, and the difference is the whole point. Each is a value in a persisted
+ * union — written into vault files — so removing its renderer would leave every database already
+ * configured as one unable to open. Withdrawing them from the pickers stops anyone new arriving at
+ * them while every existing one keeps working, and the step is reversible by deleting one filter.
  *
  * `current` is what keeps that honest: a database that IS one of the withdrawn types still sees
  * the option, or its own type picker would show a value it does not offer and the control would
@@ -104,7 +103,13 @@ export function getViewTypeOptions(current?: DatabaseViewType): Array<{ value: D
     { value: "calendar", text: t("common.calendarView"), icon: getViewTypeIconName("calendar") },
     { value: "timeline", text: t("common.timelineView"), icon: getViewTypeIconName("timeline") },
   ];
-  return all.filter((option) => (option.value !== "gallery" || current === "gallery") && (option.value !== "list" || current === "list"));
+  return all.filter((option) =>
+    (option.value !== "gallery" || current === "gallery") &&
+    (option.value !== "list" || current === "list") &&
+    (option.value !== "chart" || current === "chart") &&
+    (option.value !== "calendar" || current === "calendar") &&
+    (option.value !== "timeline" || current === "timeline")
+  );
 }
 
 export function getViewTypeIconName(viewType: DatabaseViewType): string {

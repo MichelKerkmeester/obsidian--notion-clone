@@ -824,6 +824,27 @@ export interface PluginSettings {
    * fires once per database, remembered here rather than per session.
    */
   galleryMigrationNotices?: string[];
+  /**
+   * Database ids whose chart-view retirement notice has been shown.
+   *
+   * Same reasoning as `listMigrationNotices`: the migration rewrites the view once and the notice
+   * fires once per database, remembered here rather than per session.
+   */
+  chartMigrationNotices?: string[];
+  /**
+   * Database ids whose calendar-view retirement notice has been shown.
+   *
+   * Same reasoning as `listMigrationNotices`: the migration rewrites the view once and the notice
+   * fires once per database, remembered here rather than per session.
+   */
+  calendarMigrationNotices?: string[];
+  /**
+   * Database ids whose timeline-view retirement notice has been shown.
+   *
+   * Same reasoning as `galleryMigrationNotices`: the migration rewrites the view once and the
+   * notice fires once per database, remembered here rather than per session.
+   */
+  timelineMigrationNotices?: string[];
 }
 
 export interface TrashedDatabase {

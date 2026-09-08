@@ -74,10 +74,11 @@ export function createDefaultSettings(): PluginSettings {
 /**
  * View types offered as the default for new databases.
  *
- * Gallery and list stay out: both are legacy-only types, kept for existing
- * views and never offered when creating something new.
+ * Gallery, list, chart, calendar and timeline stay out: all five are
+ * legacy-only types, kept for existing views and never offered when
+ * creating something new.
  */
-export const DEFAULT_VIEW_TYPES: DatabaseViewType[] = ["table", "board", "chart", "calendar", "timeline"];
+export const DEFAULT_VIEW_TYPES: DatabaseViewType[] = ["table", "board"];
 
 /** An unrecognised stored value is the table default, not a crash and not a new behaviour. */
 export function normalizeDefaultViewType(value: unknown): DatabaseViewType {

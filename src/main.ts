@@ -17,6 +17,7 @@ import { readSheetTrace, setSheetTraceEnabled } from "./views/sheet-trace";
 import { App, Component, FuzzySuggestModal, loadMathJax, MarkdownRenderer, MarkdownView, Modal, Plugin, WorkspaceLeaf, Notice, TFile, normalizePath, parseYaml, stringifyYaml } from "obsidian";
 import { DataSource } from "./data/data-source";
 import { applyGalleryMigration, planGalleryMigration } from "./data/gallery-migration";
+import { applyTimelineMigration, planTimelineMigration } from "./data/timeline-migration";
 import { migrateLegacyPluginData } from "./data/legacy-plugin-data-migration";
 import { sortDatabaseFileEntries } from "./data/database-file-order";
 import { DatabaseView, DATABASE_VIEW_TYPE, LEGACY_DATABASE_VIEW_TYPE } from "./views/database-view";
@@ -167,15 +168,20 @@ export default class ObnotionPlugin extends Plugin {
             if (v.filters != null && !Array.isArray(v.filters)) v.filters = undefined;
             if (v.filterLogic !== "or") v.filterLogic = "and";
             if (!v.name) v.name = `${t("common.database")} ${i + 1}`;
-            // Gallery is no longer exempt from this coercion, but a bare fallback to "table" would
-            // strand the cover before any render ever sees the view: this runs at settings load,
-            // before the on-open migration in database-view.ts/embedded-database-renderer.ts gets a
-            // chance to carry it. Route it through the real migration instead of the unknown-type
-            // default so the redirect and the cover carry happen together.
+            // Gallery and timeline are no longer exempt from this coercion, but a bare fallback to
+            // "table" would strand the cover / lane grouping before any render ever sees the view:
+            // this runs at settings load, before the on-open migration in
+            // database-view.ts/embedded-database-renderer.ts gets a chance to carry it. Route each
+            // through its real migration instead of the unknown-type default so the redirect and
+            // the carried field happen together. Chart and calendar close for free: their target
+            // already equals this fallback, so no special case is needed for them.
             if (v.viewType === "gallery") {
               const galleryPlan = planGalleryMigration(v as unknown as ViewConfig);
               if (galleryPlan) applyGalleryMigration(v as unknown as ViewConfig, galleryPlan);
-            } else if (v.viewType !== "board" && v.viewType !== "chart") {
+            } else if (v.viewType === "timeline") {
+              const timelinePlan = planTimelineMigration(v as unknown as ViewConfig);
+              if (timelinePlan) applyTimelineMigration(v as unknown as ViewConfig, timelinePlan);
+            } else if (v.viewType !== "board") {
               v.viewType = "table";
             }
             // Wrap as DatabaseConfig with one ViewConfig child
@@ -214,11 +220,15 @@ export default class ObnotionPlugin extends Plugin {
             for (const view of dbViews) {
               if (!isRecord(view)) continue;
               // Same reasoning as the legacy-migration sanitizer above: route a persisted gallery
-              // through the real migration rather than the bare unknown-type fallback.
+              // or timeline through its real migration rather than the bare unknown-type fallback;
+              // chart and calendar close for free since their target equals this fallback.
               if (view.viewType === "gallery") {
                 const galleryPlan = planGalleryMigration(view as unknown as ViewConfig);
                 if (galleryPlan) applyGalleryMigration(view as unknown as ViewConfig, galleryPlan);
-              } else if (view.viewType !== "board" && view.viewType !== "chart") {
+              } else if (view.viewType === "timeline") {
+                const timelinePlan = planTimelineMigration(view as unknown as ViewConfig);
+                if (timelinePlan) applyTimelineMigration(view as unknown as ViewConfig, timelinePlan);
+              } else if (view.viewType !== "board") {
                 view.viewType = "table";
               }
             }

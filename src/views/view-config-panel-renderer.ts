@@ -563,9 +563,10 @@ export class ViewConfigPanelRenderer {
     this.renderSelect(
       panel,
       t("viewConfig.viewType"),
-      // The gallery and the list are withdrawn from the picker but kept for a database that
-      // already is one — otherwise its own type control would display a value it does not list.
-      // Deprecated rather than deleted because the types are persisted in vault files.
+      // The gallery, list, chart, calendar and timeline are withdrawn from the picker but kept
+      // for a database that already is one — otherwise its own type control would display a
+      // value it does not list. Deprecated rather than deleted because the types are persisted
+      // in vault files.
       [
         { value: "table", text: t("common.tableView"), icon: "table" },
         { value: "board", text: t("common.boardView"), icon: "layout-grid" },
@@ -574,7 +575,13 @@ export class ViewConfigPanelRenderer {
         { value: "chart", text: t("common.chartView"), icon: "bar-chart" },
         { value: "calendar", text: t("common.calendarView"), icon: "calendar-days" },
         { value: "timeline", text: t("common.timelineView"), icon: "chart-gantt" },
-      ].filter((option) => (option.value !== "gallery" || config.viewType === "gallery") && (option.value !== "list" || config.viewType === "list")),
+      ].filter((option) =>
+        (option.value !== "gallery" || config.viewType === "gallery") &&
+        (option.value !== "list" || config.viewType === "list") &&
+        (option.value !== "chart" || config.viewType === "chart") &&
+        (option.value !== "calendar" || config.viewType === "calendar") &&
+        (option.value !== "timeline" || config.viewType === "timeline")
+      ),
       config.viewType || "table",
       (value) => {
         const next = value as DatabaseViewType;

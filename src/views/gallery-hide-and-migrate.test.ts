@@ -55,7 +55,10 @@ describe("the settings-load sanitizer stops exempting gallery", () => {
   it("no longer leaves a loaded gallery view as a gallery", () => {
     // The exemption used to read: v.viewType !== "board" && v.viewType !== "gallery" && ... — a
     // gallery survived settings load unchanged. It must not any more, in either sanitizer site.
-    const sanitizerLines = mainSource.split("\n").filter((line) => line.includes('viewType !== "board"') && line.includes('!== "chart"'));
+    // `!== "chart"` is gone from this line too now that chart's exemption closed for free, the
+    // same way this suite already proved gallery's could not close for free, so the pin matches
+    // on the bare fallback branch itself rather than on a `!== "chart"` fragment.
+    const sanitizerLines = mainSource.split("\n").filter((line) => line.includes('viewType !== "board"'));
     expect(sanitizerLines.length).toBeGreaterThanOrEqual(2);
     for (const line of sanitizerLines) {
       expect(line).not.toContain('!== "gallery"');
