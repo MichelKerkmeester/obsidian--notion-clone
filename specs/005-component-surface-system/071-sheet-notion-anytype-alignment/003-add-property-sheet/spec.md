@@ -30,7 +30,7 @@ Fix the property-type picker sheet's keyboard-overlap defect and redesign it aga
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P2 |
-| **Status** | Draft — blocked on Phase 1 |
+| **Status** | Implemented — 2026-09-08 (see acceptance-criteria.md's evidence block) |
 | **Created** | 2026-09-08 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |
@@ -84,8 +84,25 @@ This sheet family's layout, spacing and control styling match its mapped Notion/
 
 | File Path | Change Type | Description |
 |-----------|-------------|-------------|
-| Sheet source(s) for this family (named once Phase 1's inventory identifies the exact files) | Modify | Reference-driven redesign |
+| `src/views/modals/create-property-modal.ts` | Modify | Reference-driven redesign (named by 001's inventory row 2: producer of the add-property / property-type-picker family) |
 | `styles.css` | Modify | Layout/spacing rules for this sheet family |
+
+### 4b. Reference Gap Table (recorded at leg start, 2026-09-08)
+
+Sources. **Current**: the grammar's `properties create property` stacked-pair lane as it runs in this worktree (390×844, both engines) and the landed `styles.css`/producer read. **Reference**: 001's inventory row 2 mapping — Notion `notion/ios/database` (properties-01/02, +13), Anytype `anytype/desktop/app` (filter-property-picker, newobject-type-picker, +1) and `anytype/mobile/app` (space-typeslist, +2). The reference harvests carry no pixel measurements (`screenshots/notion/ios/harvest.json` rows are id/url/mobbin-link only), so the reference column records what the 053 digest read at filename level, and the Target column carries the operator's quantified bands for this leg. The inventory also records that no pixel reference covers our absorbed replace-in-place shape, so the targets govern the row grammar, not a photographed composite.
+
+| Element | Current (measured / landed) | Notion reference | Anytype reference | Target (this leg) |
+|---------|-----------------------------|------------------|-------------------|-------------------|
+| Sheet vs note header, keyboard up | Keyboard inset rides the host `--keyboard-height` variable; no note-header relationship is measured anywhere in the harness (page body is bare — no note-header fixture exists) | sheet clears the note's header while the keyboard is up | (modal type grid; no keyboard read) | Sheet top ≥ note-header bottom (44px fixture) with a 336px keyboard, proven through the visualViewport device path, not the host variable; sheet height ≤ viewport − 336 − 44 |
+| Type list | Absorbed trigger: a closed dropdown field; choosing a format replaces the create panel in place (the `property-type-picker` / `-replaced` constructed captures). 0 list rows in the create surface | property-type rows, icon + label (properties-01/02 read; relation ↗ icon noted for the icon set) | modal type grid; space-typeslist | The 21 formats as inline scrollable rows in the create surface, 44–52px pitch, each icon + label, the list scrolling inside the sheet's existing 90svH cap |
+| Name field | First form row, styled like the key row; unrelated to any list | the name step precedes the type list | (type grid has none) | Pinned above the list: input bottom ≤ list top, and it does not scroll with the list |
+| Row height | n/a in this surface (its options live on the replaced surface) | ~44px rows | (grid tiles) | 44–52px pitch, no gaps |
+| Header | Conforms already: title ≥16px, close ≥44×44, header inset ≥16px, handle→title 18.4px, one opaque #2E2E2E fill, exactly one visible close | (full-height pushes; n/a) | titled | Keep; the grammar's existing rows continue to enforce it |
+| Label/value layout | label above control (`.obnotion-modal-row`) | value rows | — | unchanged outside the type list |
+| Dividers / section grouping | none in the create modal; our format ladder groups Basic/Options/Advanced for the column-menu submenu | (properties-01 shows a plain list + "+ New property" footer) | (modal grid) | one flat list; the grouping stays the column-menu's own concern (decision recorded) |
+| Selects / toggles | trigger + replace-in-place; the trigger's search input | none on this surface | — | inline selection; the trigger and its search retire with the absorbed shape |
+| Padding | header inset ≥16 (shell); body padding from `.obnotion-modal`; the global overflow sweep runs 390px only | 16px-scale insets | — | 16px horizontal padding, asserted at the rows; no horizontal overflow re-asserted at 402×874 |
+| Typography | title ≥16px; control text = `.obnotion-modal` ladder | — | — | unchanged; one 11px reason line under a disabled format's label |
 <!-- /ANCHOR:scope -->
 
 ---

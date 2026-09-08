@@ -358,7 +358,7 @@ const REGISTERED_STACKED_PAIRS = [
   { name: "filter date value picker", parent: { renderer: "filter-panel", bag: "file-view", captureData: true }, child: { kind: "date" } },
   { name: "sort field picker", parent: { renderer: "sort-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".obnotion-sort-field-dropdown" } },
   { name: "sort direction picker", parent: { renderer: "sort-panel", bag: "file-view", captureData: true }, child: { kind: "dropdown", selector: ".obnotion-sort-direction-dropdown" } },
-  { name: "properties create property", parent: { renderer: "column-manager", bag: "file-view", captureData: true }, child: { kind: "modal", title: "Create property" } },
+  { name: "properties create property", parent: { renderer: "column-manager", bag: "file-view", captureData: true }, child: { kind: "modal", title: "Create property", producer: "create-property" } },
   // The operator's own report, 2026-09-06: "Edit property — Month" opened from the per-column
   // overflow row on a shipped column, not the "+ Add column" row above. Same K3 opener family as
   // the row above (`ColumnRenameModal extends DbModal`, `applyPresentation`'s shared mechanism),
@@ -522,6 +522,7 @@ import { closeActiveDateValuePicker, renderDateValuePicker } from "${fileURLToPa
 import { openIconPickerPopover } from "${fileURLToPath(new URL("../../src/views/icon-picker-popover.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { openOptionColorPicker } from "${fileURLToPath(new URL("../../src/views/option-color-picker.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { buildConfirmSheetBody, buildPrimaryActionPill } from "${fileURLToPath(new URL("../../src/views/confirm-sheet.ts", import.meta.url)).replace(/\\/g, "/")}";
+import { renderCreatePropertyBody } from "${fileURLToPath(new URL("../../src/views/modals/create-property-modal.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { buildShellHeader, buildShellHeaderChip, createSurfaceShell } from "${fileURLToPath(new URL("../../src/views/surface-shell.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { createHostModalStandIn } from "${fileURLToPath(new URL("./host-modal-stand-in.ts", import.meta.url)).replace(/\\/g, "/")}";
 
@@ -1737,15 +1738,34 @@ const openPickerChild = (parent, child) => {
 // that neutralising code does anything at all. \`createHostModalStandIn\` (host-modal-stand-in.ts)
 // is the one place that shape is built; the constructed screenshot scenarios for a stacked
 // DbModal share it rather than each mounting their own copy.
+const CREATE_PROPERTY_HARNESS_CONFIG = {
+  // Three formats across the schema and deliberately NO relation column, so the type list's
+  // rollup row is the gated one and the lane can require its reason to be present, not just the
+  // row. \`renderCreatePropertyBody\` reads only \`schema.columns\`, so the rest of the shape the
+  // real ViewConfig carries is not needed for the body's choices.
+  schema: { columns: [{ key: "Name", type: "text" }, { key: "Due", type: "date" }, { key: "Amount", type: "number" }] },
+};
+
 const openHostModalChild = (parent, child) => {
   const { container, modalEl, contentEl: content, closeButton } = createHostModalStandIn();
-  const heading = document.createElement("h3");
-  heading.textContent = child.title || "Choose file";
-  content.appendChild(heading);
-  const body = document.createElement("div");
-  body.className = "obnotion-modal-help";
-  body.textContent = child.kind === "fuzzy" ? "Search files" : "Confirm this change";
-  content.appendChild(body);
+  if (child.producer === "create-property") {
+    // The real body, not a sketch of it: the same builder the shipped modal mounts, so every
+    // picker row this lane reads is the producer's own DOM. The class cannot run here (the
+    // bundle's obsidian stub only throws), which is why the builder, not the modal, is the
+    // shared seam.
+    renderCreatePropertyBody(content, CREATE_PROPERTY_HARNESS_CONFIG, { title: child.title || "Create property" }, {
+      onConfirm: () => close(),
+      onCancel: () => close(),
+    });
+  } else {
+    const heading = document.createElement("h3");
+    heading.textContent = child.title || "Choose file";
+    content.appendChild(heading);
+    const body = document.createElement("div");
+    body.className = "obnotion-modal-help";
+    body.textContent = child.kind === "fuzzy" ? "Search files" : "Confirm this change";
+    content.appendChild(body);
+  }
   let releaseChrome;
   let releasePlacement;
   let closed = false;
@@ -1979,6 +1999,117 @@ const measureStackedPair = async (pair) => {
     Element.prototype.setPointerCapture = realCapture;
     Element.prototype.releasePointerCapture = realRelease;
   }
+
+  // ── the keyboard's device path, measured after every stack-derived fact above ──
+  // The block before this one publishes the inset through the host's \`--keyboard-height\` and
+  // re-places by hand. A device does neither: the host publishes nothing it needn't, and the
+  // software keyboard reports itself by shrinking the visual viewport, which the sheet's own
+  // placement subscription answers. This block removes the published number, then shrinks the
+  // viewport the way the platform does (the same instance-shadows-the-accessor override
+  // verify-placement uses), so the sheet's subscription — not the harness's manual nudge — has
+  // to come down. Two steps, because a placement that rewrites 336 over 336 proves nothing:
+  // step 1 takes the inset away (336 must become 0 through the event alone), step 2 gives the
+  // keyboard back. The note header the sheet must stop under has no fixture of its own in this
+  // harness — the page is a bare body — so one fixed 44px bar stands in: one 44px row of the
+  // note's own grammar, the thing the operator watched the picker ride over.
+  const noteHeader = document.createElement("div");
+  noteHeader.className = "obnotion-grammar-note-header";
+  noteHeader.style.cssText = "position:fixed;top:0;left:0;right:0;height:44px;pointer-events:none;";
+  document.body.appendChild(noteHeader);
+  let device = null;
+  let picker = null;
+  try {
+    document.documentElement.style.removeProperty("--keyboard-height");
+    if (window.visualViewport) window.visualViewport.dispatchEvent(new window.Event("resize"));
+    await waitForStackSettle();
+    const droppedBottom = Number.parseFloat(child.style.getPropertyValue("--obnotion-mobile-sheet-bottom"));
+
+    let restoreViewport = () => {};
+    if (window.visualViewport) {
+      const resting = window.visualViewport.height;
+      Object.defineProperty(window.visualViewport, "height", {
+        configurable: true,
+        get: () => resting - 336,
+      });
+      restoreViewport = () => { delete window.visualViewport.height; };
+      window.visualViewport.dispatchEvent(new window.Event("resize"));
+    }
+    await waitForStackSettle();
+    await settleSheetGeometry(child);
+
+    const headerBottom = noteHeader.getBoundingClientRect().bottom;
+    const sheetRect = child.getBoundingClientRect();
+    const sheetBottomVar = Number.parseFloat(child.style.getPropertyValue("--obnotion-mobile-sheet-bottom"));
+    const probedSheet = getComputedStyle(child);
+    const probedContent = child.querySelector(".obnotion-create-property-modal");
+    const probedContentStyle = probedContent ? getComputedStyle(probedContent) : null;
+    device = {
+      probeSheetDisplay: probedSheet.display,
+      probeSheetHeight: probedSheet.height,
+      probeContentDisplay: probedContentStyle ? probedContentStyle.display : "no-content-el",
+      probeContentHeight: probedContentStyle ? probedContentStyle.height : "no-content-el",
+      dropped: droppedBottom === 0,
+      droppedBottom,
+      keyboard: sheetBottomVar === 336,
+      sheetBottomVar,
+      headerBottom,
+      sheetTop: sheetRect.top,
+      clearsHeader: sheetRect.top >= headerBottom - 0.5,
+      sheetHeight: sheetRect.height,
+      // The binding contract: the sheet's appetite is bounded by what the viewport, the keyboard
+      // and the note's own header leave, so the picker the keyboard raises cannot climb past the
+      // header it is meant to sit under.
+      heightCap: sheetRect.height <= (window.innerHeight - 336 - 44) + 0.5,
+      viewport: window.innerHeight,
+    };
+
+    if (pair.child.producer === "create-property") {
+      const list = child.querySelector(".obnotion-create-property-type-list");
+      if (list) {
+        const rows = Array.from(list.querySelectorAll(".obnotion-create-property-type-option"));
+        const listRect = list.getBoundingClientRect();
+        const nameInput = child.querySelector("input");
+        let pitchMin = Infinity;
+        let pitchMax = 0;
+        let pitchOK = rows.length >= 2;
+        for (let i = 1; i < rows.length; i++) {
+          const step = rows[i].getBoundingClientRect().top - rows[i - 1].getBoundingClientRect().top;
+          pitchMin = Math.min(pitchMin, step);
+          pitchMax = Math.max(pitchMax, step);
+          if (step < 44 - 0.5 || step > 52 + 0.5) pitchOK = false;
+        }
+        const rowsOK = rows.length > 0 && rows.every((row) =>
+          row.querySelector("svg") && (row.textContent || "").trim().length > 0);
+        const sheetLeft = sheetRect.left;
+        const sheetRight = sheetRect.right;
+        const firstRow = rows[0] ? rows[0].getBoundingClientRect() : null;
+        picker = {
+          rows: rows.length,
+          pitchOK,
+          pitchMin: Number.isFinite(pitchMin) ? pitchMin : 0,
+          pitchMax,
+          iconLabel: rowsOK,
+          reasonShown: rows.some((row) => row.querySelector(".obnotion-create-property-type-option-reason")),
+          selectedMarked: rows.some((row) => row.classList.contains("is-selected")),
+          namePinned: Boolean(nameInput && list && nameInput.getBoundingClientRect().bottom <= listRect.top + 0.5),
+          padding16: Boolean(firstRow) && firstRow.left >= sheetLeft + 16 - 0.5 && firstRow.right <= sheetRight - 16 + 0.5,
+          scrolls: list.scrollHeight > list.clientHeight + 1,
+          listScrollHeight: list.scrollHeight,
+          listClientHeight: list.clientHeight,
+          noHorizontal: list.scrollWidth <= list.clientWidth + 1
+            && child.scrollWidth <= child.clientWidth + 1
+            && document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1,
+        };
+      }
+    }
+  } finally {
+    if (window.visualViewport) {
+      delete window.visualViewport.height;
+      window.visualViewport.dispatchEvent(new window.Event("resize"));
+    }
+    noteHeader.remove();
+  }
+
   const expectedDepth = pair.child.depth || 2;
   const childBottom = childBottomAtRest;
   const parentBottom = parentBottomAtRest;
@@ -2012,6 +2143,8 @@ const measureStackedPair = async (pair) => {
     settleRecords,
     parentSettled,
     childSettled,
+    device,
+    picker,
   };
   document.documentElement.style.removeProperty("--keyboard-height");
   opened.close();
@@ -2689,6 +2822,21 @@ try {
       ["parent entrance settled before measurement", report.parentSettled],
       ["child entrance settled before measurement", report.childSettled],
     ];
+    if (report.device) checks.push(
+      [`device keyboard: the sheet came down on the viewport event (${report.device.droppedBottom} → ${report.device.sheetBottomVar})`, report.device.dropped && report.device.keyboard],
+      [`sheet clears the note header with the keyboard up (top ${report.device.sheetTop.toFixed(1)}px ≥ header bottom ${report.device.headerBottom.toFixed(1)}px)`, report.device.clearsHeader],
+      [`sheet height ≤ viewport − keyboard − header (${report.device.sheetHeight.toFixed(1)} ≤ ${(report.device.viewport - 380).toFixed(1)}; sheet ${report.device.probeSheetDisplay}/${report.device.probeSheetHeight}, content ${report.device.probeContentDisplay}/${report.device.probeContentHeight})`, report.device.heightCap],
+    );
+    if (report.picker) checks.push(
+      [`type list: ${report.picker.rows} rows, pitch within 44–52px (min ${report.picker.pitchMin.toFixed(1)} / max ${report.picker.pitchMax.toFixed(1)})`, report.picker.rows >= 2 && report.picker.pitchOK],
+      ["every type row: icon + label", report.picker.iconLabel],
+      ["a gated format renders its reason inline", report.picker.reasonShown],
+      ["the current format is marked", report.picker.selectedMarked],
+      ["name field pinned above the list", report.picker.namePinned],
+      ["16px horizontal padding (row insets)", report.picker.padding16],
+      [`type list scrolls inside the sheet (${report.picker.listScrollHeight}>${report.picker.listClientHeight})`, report.picker.scrolls],
+      ["no horizontal overflow (list, sheet, document)", report.picker.noHorizontal],
+    );
     if (pair.child.overflow) checks.push([
       `long list scrolls with a visible fade (${report.overflowMeasured.scrollHeight}>${report.overflowMeasured.clientHeight})`,
       report.overflow,
@@ -2696,6 +2844,21 @@ try {
     for (const [label, ok] of checks) {
       if (!ok) failures.push(`${pair.name}: ${label}`);
       console.log(`  ${ok ? "PASS" : "FAIL"}  ${pair.name} — ${label}`);
+    }
+    // The operator's phone is 402×874, not the lane's 390×844 — the phone the R6 report came
+    // from. The geometry reads above (a 336px keyboard through the visual-viewport hook) and the
+    // no-overflow sweep both re-run at that exact viewport once, for this one pair, so the
+    // MusmNotion-shaped contract holds where the defect was actually photographed, not only where
+    // the lane happens to be wide. Everything restores to 390×844 before the next pair mounts.
+    if (pair.name === "properties create property" && report.device && report.picker) {
+      await page.setViewportSize({ width: 402, height: 874 });
+      const report402 = await page.evaluate((shape) => window.__stackedSheetGrammar(shape), pair);
+      const clears402 = Boolean(report402.device?.clearsHeader);
+      const overflowFree402 = Boolean(report402.picker?.noHorizontal) && report402.picker.rows === report.picker.rows;
+      const ok402 = !report402.error && clears402 && overflowFree402;
+      if (!ok402) failures.push(`properties create property: the 402×874 pass failed (${report402.error || `clears ${clears402}, overflowFree ${overflowFree402}`})`);
+      console.log(`  ${ok402 ? "PASS" : "FAIL"}  ${pair.name} — no horizontal overflow at 402×874 (sheet top ${report402.device?.sheetTop?.toFixed(1) ?? "n/a"}px, rows ${report402.picker?.rows ?? 0})`);
+      await page.setViewportSize({ width: 390, height: 844 });
     }
     console.log("");
   }

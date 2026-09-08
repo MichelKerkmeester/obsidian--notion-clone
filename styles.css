@@ -14769,6 +14769,127 @@ body.is-phone .obnotion-container .obnotion-menu-item {
   line-height: 1.4;
 }
 
+/* The create-property sheet carries its references' shape: the name field and key stay pinned
+   above the format list, and the LIST — not the form — scrolls, inside the sheet's existing
+   keyboard-aware 90svH ceiling (`.obnotion-mobile-bottom-sheet`'s own cap). The whole form used
+   to trade places with a replaced-in-place picker, which both moved what the user had already
+   typed and left the note's header underneath whatever the keyboard's inset pushed the sheet
+   into; pinning the fields and scrolling only the list bounds the sheet instead of its appetite.
+   The 16px inline padding is this sheet's own — a native `.modal-content` inherits it from the
+   host theme, which the sheet's placement already overrides, so it is stated here rather than
+   assumed. */
+.obnotion-mobile-bottom-sheet > .obnotion-create-property-modal {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0 16px 12px;
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+.obnotion-mobile-bottom-sheet:has(> .obnotion-create-property-modal) {
+  display: flex;
+  flex-direction: column;
+  /* Height, not only the cap: the pinned fields alone under-fill the 90svH ceiling, so an
+     auto-height sheet would collapse to them and the list's own `flex: 1 1 0` would divide a
+     zero-height box — 21 formats in a scrollbox nobody can see. A definite height gives the
+     list the remainder, and the sheet reads the same keyboard-aware arithmetic its cap uses. */
+  height: calc(90svh - var(--obnotion-mobile-sheet-bottom, 0px));
+}
+
+.obnotion-create-property-modal h3 {
+  margin: 4px 0 2px;
+  font-size: 16px;
+}
+
+.obnotion-create-property-modal .obnotion-create-property-type-list {
+  flex: 1 1 0;
+  min-height: 0;
+  margin-top: 8px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.obnotion-create-property-type-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.obnotion-create-property-type-option:focus-visible {
+  outline: 1px solid var(--text-faint);
+}
+
+.obnotion-create-property-type-option.is-selected {
+  background: var(--obnotion-surface-overlay);
+}
+
+.obnotion-create-property-type-option.is-selected::after {
+  content: "✓";
+  margin-left: auto;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.obnotion-create-property-type-option.is-disabled,
+.obnotion-create-property-type-option.is-readonly {
+  cursor: default;
+}
+
+.obnotion-create-property-type-option.is-disabled .obnotion-create-property-type-option-label {
+  color: var(--text-faint);
+}
+
+.obnotion-create-property-type-option-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: var(--text-faint);
+}
+
+.obnotion-create-property-type-option.is-selected .obnotion-create-property-type-option-icon {
+  color: var(--text-normal);
+}
+
+.obnotion-create-property-type-option-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.obnotion-create-property-type-option-text {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+.obnotion-create-property-type-option-label {
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+.obnotion-create-property-type-option-reason {
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.3;
+}
+
 .obnotion-modal .obnotion-modal-row.obnotion-modal-row-with-help {
   align-items: flex-start;
 }

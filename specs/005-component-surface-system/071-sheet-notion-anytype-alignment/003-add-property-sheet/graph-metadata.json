@@ -38,7 +38,7 @@
       "testing",
       "strategy"
     ],
-    "importance_tier": "normal",
+    "importance_tier": "important",
     "status": "in_progress",
     "key_files": [
       "spec.md",
@@ -46,7 +46,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "implementation-summary.md"
+      "decision-record.md",
+      "implementation-summary.md",
+      "src/views/modals/create-property-modal.ts",
+      "src/views/modals/create-property-modal.test.ts",
+      "tools/live/sheet-grammar.mjs",
+      "tools/lane/css-lane.json",
+      "screenshots/manifest.json",
+      "tools/naming/scan-comments.mjs",
+      "tools/lane/check-lane.mjs",
+      "screenshots/notion/ios/harvest.json",
+      "specs/005-component-surface-system/071-sheet-notion-anytype-alignment/001-sheet-story-coverage-audit/inventory.md"
     ],
     "entities": [
       {
@@ -80,9 +90,69 @@
         "source": "derived"
       },
       {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "create-property-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/create-property-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "create-property-modal.test.ts",
+        "kind": "test",
+        "path": "src/views/modals/create-property-modal.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "scan-comments.mjs",
+        "kind": "file",
+        "path": "tools/naming/scan-comments.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "harvest.json",
+        "kind": "config",
+        "path": "screenshots/notion/ios/harvest.json",
+        "source": "derived"
+      },
+      {
+        "name": "inventory.md",
+        "kind": "doc",
+        "path": "specs/005-component-surface-system/071-sheet-notion-anytype-alignment/001-sheet-story-coverage-audit/inventory.md",
         "source": "derived"
       },
       {
@@ -132,71 +202,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Clean Architecture",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Key Components",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Data Flow",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Current Role",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The operator's R6 screenshot shows the property-type picker (Select, Multi-select, Status, Formula, Relation, Rollup, Files, and the four timestamp/user types) rendering as a tall sheet that covers the note header while the keyboard is up — a layout defect distinct from any prior sheet-family fix",
     "created_at": "2026-09-08T06:24:04Z",
-    "last_save_at": "2026-09-08T06:50:06.207Z",
+    "last_save_at": "2026-09-08T21:23:37.810Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -205,15 +215,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:1696f97fad317822be8cdb65d29f89479c4626a7f50277752d2c175a327fa386",
+    "source_fingerprint": "sha256:02b85771205b7d0a7a4dbe4104ce6b21db05ea30cc99d677f48b878a69f3434d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "82739bb073201c6304e2b6bbcf41c8aa322162c048919693f1dfecb48fa6b020",
+      "spec.md": "56f95fc617afdcd8d8b48473bddeafb7b802031ddd147bb93a806d98a70e9f30",
       "plan.md": "2c0381156e9a657feecee4100a3d8f64b6cee3a5595aec3af431b9d179d3136e",
-      "tasks.md": "b18a979eeb77d7aeb6a8a7b424a0405d985432a574a3665c34b44b9e5f5832f7",
-      "implementation-summary.md": "87afbbb2fd2703ec77254e510b08c0e87e10acb2b4144d1d6c8e733baed92411"
+      "tasks.md": "7891b822285e14d3e4edfc2514e59a8b08567d931beb34761aafc26da49a948d",
+      "decision-record.md": "c3124bb98109ba42645d425cacdb63d63d50823efc08a0dc6fd429b389835c57",
+      "implementation-summary.md": "66e9aa96189095a0f3dc41110665d0c808e6325fbdca9247728934b92b113c0e"
     },
     "last_active_at": null
   }

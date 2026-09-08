@@ -1,7 +1,7 @@
 {
-  "holder": "066-notion-states-refinement",
-  "acquiredAt": "2026-09-08T17:48:47.000Z",
-  "baselineHash": "73297de05d54",
+  "holder": "003-add-property-sheet",
+  "acquiredAt": "2026-09-08T21:06:59Z",
+  "baselineHash": "8991c15f8106",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -5809,6 +5809,31 @@
       "hash": "9e9ab2f9ef5f",
       "reviewed": [],
       "note": "npm run screenshots ran five times against this edit (616 entries, exit 0 every time; screenshots:verify exit 0 on the final tree). Zero content changes on either toast fixture (chrome-toast-success, chrome-toast-error) across every run — pixelHash and layoutHash both identical to the committed blobs on every pass, confirmed directly: the ::before inset paints nothing, so it has no pixel to move. `reviewed` is empty because `git status` reports no PNG under this lane's own render roots as changed on the tree this release commits — the edit's only visible-in-principle surface (the close button's hit area) never was one. Five unrelated single-run transients surfaced and self-reverted across the runs (board-mobile-desktop-dark 1px@1, board-view-desktop-dark 4px@1 and separately 1px@1, table-frozen-column-mobile-light 0px, panel-record-detail-sheet-mobile-light 31959px@2, constructed-column-manager-mobile-dark 462px@176, panel-record-detail-sheet-body-empty-desktop-light 20943px@1, timeline-view-day-mobile-dark 237px@47) — none touch this edit's own surface, none reproduced on the next run, and none are named here because none are in the committed diff: each was judged by decoded pixel delta against the HEAD blob and restored via `git checkout --` before this release, matching this lane's own established practice for capture-pipeline jitter."
+    },
+    {
+      "event": "acquire",
+      "phase": "003-add-property-sheet",
+      "at": "2026-09-08T21:06:59Z",
+      "hash": "e061ee373e17",
+      "note": "Taking the lane over from 073-checkbox-controls at its own released hash (HEAD 00cb6686) for the add-property / property-type-picker sheet redesign: the whole 21-format picker moves inside the create-property sheet, which needs its own keyboard-aware ceiling rules in styles.css."
+    },
+    {
+      "event": "edit",
+      "phase": "003-add-property-sheet",
+      "at": "2026-09-08T21:06:59Z",
+      "hash": "8991c15f8106",
+      "note": "styles.css: the create-property body pinned (name+key rows outside the scrollbox), the format list becomes the sole scrolling element under the sheet's 90svH cap, 44px minimum-pitch icon+label rows, 16px inline padding, definite sheet height under the :has(> .obnotion-create-property-modal) guard. Selector scope: .obnotion-create-property-* plus one guarded .obnotion-mobile-bottom-sheet:has() arm — no rule outside the create-property family."
+    },
+    {
+      "event": "release",
+      "phase": "003-add-property-sheet",
+      "at": "2026-09-08T21:06:59Z",
+      "hash": "8991c15f8106",
+      "reviewed": [
+        "screenshots/notion-clone/views/board-mobile-desktop-dark.png",
+        "screenshots/notion-clone/views/board-view-desktop-dark.png"
+      ],
+      "note": "npm run screenshots twice, exit 0 both. 2 movers, both sampled in two consecutive runs: board-mobile-desktop-dark 1px@max1 and board-view-desktop-dark 4px@max1 — the identical counts 073 saw on the same captures; this leg styles only .obnotion-create-property-* (no board-view rule touched), so the movers are the known lane instability 073 recorded, kept as real movers at their recaptured bytes rather than restored."
     }
   ],
   "outstanding": [
