@@ -2448,6 +2448,32 @@ program-level decision record only.
   `worktrees/240-deprecation-redirect` at HEAD (see that branch's own commits); **not pushed** —
   a fresh verifier lands it. AC-007 (a released version) stays `Unmet`; `003` (remove the three
   renderers) waits for that release the same way it waited for `007`'s.
+- **2026-09-08, `066-notion-states-refinement` Phase 5: the Undo toast dwell and its close
+  button's hit area, both from fresh operator reports on `0.0.32`/`0.0.33`.** "toast like the
+  undo toast stay too long on screen" and "toast close button needs a 56 x 56 click area."
+  `ACTION_DISMISS_MS` (`src/views/toast.ts`) drops from 5000ms — ADR-003's own inference,
+  confirmed live and unbugged on the tree the operator tested — to 3500ms: no timed reference
+  capture exists on either platform, so the dated, direct report of the felt duration is treated
+  as stronger evidence than the desk inference that set the old number (ADR-005). `.obnotion-
+  toast-close` gains the checkbox's own `::before` hit-inset idiom (`inset: -19px`), widening its
+  real touch target to at least 56×67 against its own 18×29-30 box without changing the 14px
+  glyph or the button's own painted size (ADR-006); current size was 18×29-30, not the stale
+  18×18 `touch-targets-baseline.json` carried from before the host stylesheet model landed. Both
+  proven red-first on a new toast lane in `tools/storybook/verify-placement.mjs` against the real
+  production `showToast` call, in addition to `toast.test.ts`'s moved dwell matrix.
+  `tools/live/touch-targets.mjs` gained a matching DECLARED entry for the close control (fixture
+  ratchet 171 → 169). `tools/lane/css-lane.json`'s stylesheet lane was held by an unrelated phase
+  (`075-toolbar-labelled-buttons`); taken over with its own acquire/edit/release triplet —
+  `npm run screenshots` ran five times and neither toast fixture moved a pixel on any run, so the
+  release names zero reviewed captures; five unrelated single-run capture-pipeline transients
+  surfaced and self-reverted across those runs and were restored via `git checkout --`, matching
+  this lane's own established practice for encoder/antialiasing jitter. `npx tsc --noEmit`,
+  `npx vitest run` (1717/1717), `npm run build`, `sheet-grammar.mjs`, `render-assertions.mjs`,
+  `touch-targets.mjs`, `verify-placement.mjs` (418/420, 2 declared, unrelated to this phase),
+  `evidence.mjs --check-all` (15/15 fresh) and `npm run gate` (27 green, 0 red) all exit 0.
+  AC-010 and AC-011 now read `Met`; the operator device row (AC-008) stays untouched. Landed on
+  `worktrees/243-toast-dwell-and-close` at `1e355695` (see that branch's own commit); **not
+  pushed** — a fresh verifier lands it.
 - **2026-09-08, `074-test-data-consolidation`: the ten generated fixture databases are one, the
   Finance fixture stands as the second dataset, and a registry suite holds it.** The consolidation
   the operator's R10 report asked for. `tools/mock-data/use-cases.ts` now carries exactly one
