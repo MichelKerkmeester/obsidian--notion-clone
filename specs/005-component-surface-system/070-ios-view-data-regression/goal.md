@@ -61,7 +61,10 @@ of this file in chat so the operator can update their copy.
 ## 3. COMPLETION CRITERIA
 
 - [x] The harness reproduces the empty-property read against a fixture mirroring the operator's shapes, cold-cache case included, before any fix
-- [x] Root cause identified with file:line evidence among data-source.ts, title-field-display.ts, legacy-plugin-data-migration.ts, or a confirmed fourth cause — confirmed in data-source.ts (`getViewDefFiles()` + `getCachedRecords()`, no `"resolved"` catch-all); the other two excluded with evidence
+      (Watched it red before the fix: 0/18 table property cells, 0/8 board cells —
+      `table-poisoned-by-early-view-def-scan` and `board-poisoned-by-early-view-def-scan`;
+      the per-file-"changed" control stayed 18/18, isolating the cause.)
+- [x] Root cause identified with file:line evidence among data-source.ts, title-field-display.ts, legacy-plugin-data-migration.ts, or a confirmed fourth cause — the read it explains was 0/18 populated properties before the fix and 18/18 after; confirmed in data-source.ts (`getViewDefFiles()` + `getCachedRecords()`, no `"resolved"` catch-all); the other two excluded with evidence
 - [x] Fix lands with a test proven to fail against the pre-fix code and pass after
 - [ ] Finance Reports table and Database Testbed board both recaptured showing populated properties — the harness's own fixture-driven captures prove the mechanism; the operator's own two surfaces need their own device
 - [x] Operator device row recorded and left unticked pending the operator's own re-check

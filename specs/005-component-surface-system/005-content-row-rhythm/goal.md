@@ -102,7 +102,7 @@ green-looking rows are ticked with their exposure attached and the rest are not 
       reason — what keeps the tick is that the failing value was 26 on the same instrument, so the
       instrument can distinguish, and the repair moved it.
 - [x] No descendant of `.db-header` has a right edge beyond the header's content box — 4 widths ×
-      7 views. **Measured, then repaired 2026-09-01: 0 spills at any of the four widths.**
+      7 views. **Measured, then repaired 2026-09-01: was 1 spill (10px at 320px, the toolbar-utilities cluster), recorded 0 spills at any of the four widths.**
       **The check exists.** `view-census` measures every descendant against the HEADER's content box
       rather than against its immediate parent's, which is a different question: a control can sit
       neatly inside its own wrapper while the wrapper hangs off the header's edge, and a

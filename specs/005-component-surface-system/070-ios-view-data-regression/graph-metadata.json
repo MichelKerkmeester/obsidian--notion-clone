@@ -204,7 +204,7 @@
     ],
     "causal_summary": "On the operator's iPhone, on the build that shipped as 0.0.32, every database view renders with its property columns empty while the title/file-name column still resolves correctly",
     "created_at": "2026-09-08T06:20:03Z",
-    "last_save_at": "2026-09-08T08:25:22.425Z",
+    "last_save_at": "2026-09-08T09:21:20.641Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,7 +215,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:f6bb73e3349f0e95772f4d724e0b0b86200936ed77e214f0be7773e1a6200d71",
+    "source_fingerprint": "sha256:d3f42c206a603b9beb21783cf21fae90ce403f9333330d4d688090f43043845b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "fae33f587133cdb494002f0fcee01915c58bdc088ba8bea39e2064b4d3254e5d",

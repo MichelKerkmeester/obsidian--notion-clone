@@ -10,13 +10,13 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T08:52:00Z"
-    last_updated_by: "232-scaffold-0032-reports"
-    recent_action: "070 root-caused and fixed (code leg, not pushed); 27 green gate; AC-005/006 need the operator's device"
-    next_safe_action: "Push/merge 070's leg, then 071's audit, then 073, 072, then device rows"
+    last_updated_at: "2026-09-08T09:52:53Z"
+    last_updated_by: "233-ios-view-data-regression"
+    recent_action: "070 landed: 694d7390+landing, 27/0 gate, cold-cache lane; AC-005/006 operator-owned"
+    next_safe_action: "070 done pending device; 071's audit, then 073, 072, then device rows"
     blockers:
-      - "067 residual: T015 header block 75px (1 past 66-74), T020 partial (one pair genuinely 2-level), T021 2 of 3 divider contexts, AC-011 iOS pass operator-owned"
-      - "070 AC-005/AC-006 need the operator's own device; 073/074 AC-004 can now proceed against 070's fix; 071/001's audit blocks every other 071 child; 008/001's audit blocks 008/002-004"
+      - "067 residual: T015 75px (1 past 66-74), T020 partial (one pair 2-level), T021 2 of 3 divider contexts, AC-011 iOS pass operator-owned"
+      - "070 AC-005/006 need the operator's device; 073/074 AC-004 unblocked by 070's fix; 071 and 008/001's audits block their children"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
@@ -25,20 +25,16 @@ _memory:
       - "specs/008-calendar-timeline-chart-deprecation/spec.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "232-scaffold-0032-reports"
-      parent_session_id: "231-goal-refresh-0032"
+      session_id: "233-ios-view-data-regression"
+      parent_session_id: "surface-system-parent"
     completion_pct: 85
     open_questions:
       - "Does a Notion finding that contradicts a landed Anytype ruling ever become more than Proposed"
       - "Which surface(s) does R2 actually name — embedded/linked views, table drag, or both (072)"
     answered_questions:
-      - "The cell model: tap edits, long-press selects, a 3-control anchored pill, an overflow sheet, the editor at the cell"
       - "068 renames to obnotion- with a data.json migration, author MichelKerkmeester, repo obsidian_notion-clone"
       - "GLM route: --provider llmgateway --model glm-5.3-flash --thinking max"
-      - "All eight Notion-refinement children are open with a first implementation leg each"
-      - "0.0.31 shipped 5e7f1426 as the rename release; NO Opus agents, GLM 5.3 flash max landers only"
       - "0.0.32 shipped f0597bcd as the fix release; all six queued landings closed, 009 T26 gate expectFail discharged (26 green, 0 red)"
-      - "R1's diagnosis: nothing lost by deleting note-database, both data.json files hold databases: [], frontmatter is intact on disk"
       - "GLM 5.3 flash max now carries implementation legs too; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh"
 ---
 # Session Handover: Component Surface System

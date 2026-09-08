@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-08: **76 phases**, **7 with nothing left**, **207 rows** waiting on a device.
+Derived 2026-09-08: **76 phases**, **7 with nothing left**, **203 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -389,13 +389,9 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] OPERATOR: the operator drags a card between two columns on their own phone and confirms the move landed in the note's frontmatter. Nothing in this repository can close this row, and an agent never ticks it.
 
-## 070-ios-view-data-regression — 0/5
+## 070-ios-view-data-regression — 4/5
 
-- [ ] The harness reproduces the empty-property read against a fixture mirroring the operator's shapes, cold-cache case included, before any fix
-- [ ] Root cause identified with file:line evidence among data-source.ts, title-field-display.ts, legacy-plugin-data-migration.ts, or a confirmed fourth cause
-- [ ] Fix lands with a test proven to fail against the pre-fix code and pass after
-- [ ] Finance Reports table and Database Testbed board both recaptured showing populated properties
-- [ ] Operator device row recorded and left unticked pending the operator's own re-check
+- [ ] Finance Reports table and Database Testbed board both recaptured showing populated properties — the harness's own fixture-driven captures prove the mechanism; the operator's own two surfaces need their own device
 
 ## 071-sheet-notion-anytype-alignment — 0/4
 
