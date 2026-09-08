@@ -65,10 +65,12 @@ const AUTO_DISMISS_MS = 2200;
 /**
  * A success toast that carries an action (an Undo, a Retry) stays connected this much longer
  * instead: an affordance the reader has not yet had time to reach for is not one they can act on.
- * Inferred rather than measured — the shortest window that comfortably covers reading the
- * message, aiming for the button and pressing it, without claiming parity with any reference.
+ * Inferred rather than measured — a window that covers reading the message, aiming for the
+ * button and pressing it, without claiming parity with any reference. Shortened from an earlier,
+ * longer inference after a direct report that it lingered — the reader who wants it gone sooner
+ * now also has a real close target to reach for instead of hunting for a sliver of one.
  */
-const ACTION_DISMISS_MS = 5000;
+const ACTION_DISMISS_MS = 3500;
 
 const stacks = new WeakMap<Document, HTMLElement>();
 

@@ -8860,6 +8860,146 @@ await section("the toast pairs severity with a glyph and its action reaches its 
 });
 
 // ───────────────────────────────────────────────────────────────────
+// THE UNDO TOAST DOES NOT OUTSTAY ITS WELCOME
+// ───────────────────────────────────────────────────────────────────
+//
+// A direct report against the shipped Undo toast: it stayed on screen too long. The dwell matrix
+// in `toast.test.ts` proves the constant against fake timers, which settles the arithmetic but not
+// the felt duration a reader actually watches. This drives the same production `showToast` a
+// delete-then-Undo raises, on the phone presentation, and waits real wall-clock time either side of
+// the budget rather than advancing a mock clock.
+
+const undoDwellResults = [];
+
+// Mirrors `ACTION_DISMISS_MS` in `src/views/toast.ts`. Kept as its own literal here, the same way
+// `toast.test.ts`'s dwell matrix asserts the figure against the module's source, rather than
+// importing a value that would let a change to one silently stop proving the other.
+const ACTION_DISMISS_MS = 3500;
+const DWELL_MARGIN_MS = 400;
+
+await section("the Undo toast clears within its shortened budget rather than lingering toward the longer figure it replaced", async () => {
+  const page = await browser.newPage({
+    viewport: { width: 390, height: 844 }, reducedMotion: "reduce", isMobile: true, hasTouch: true,
+  });
+  await page.setContent(page_html);
+  await page.evaluate(() => document.body.classList.add("is-mobile", "is-phone"));
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  await page.evaluate(() => {
+    globalThis.__toast.showToast(document, {
+      severity: "success",
+      message: "Row deleted",
+      action: { label: "Undo", onClick: () => {} },
+    });
+  });
+
+  await page.waitForTimeout(ACTION_DISMISS_MS - DWELL_MARGIN_MS);
+  const stillUp = await page.evaluate(() => document.querySelectorAll(".obnotion-toast").length);
+
+  await page.waitForTimeout(DWELL_MARGIN_MS * 2);
+  const goneAfter = await page.evaluate(() => document.querySelectorAll(".obnotion-toast").length);
+
+  await page.close();
+
+  const record = (name, pass, detail) => undoDwellResults.push({ name, pass, detail });
+
+  record("the Undo toast is still up shortly before its budget elapses",
+    stillUp === 1,
+    `${stillUp} card(s) present at ${ACTION_DISMISS_MS - DWELL_MARGIN_MS}ms. A reader who is still `
+      + `reading and aiming should not find it gone already`);
+
+  record(`the Undo toast clears by ${ACTION_DISMISS_MS + DWELL_MARGIN_MS}ms, not stretched back toward the longer figure it replaced`,
+    goneAfter === 0,
+    `${goneAfter} card(s) present at ${ACTION_DISMISS_MS + DWELL_MARGIN_MS}ms. The reported failure `
+      + `was screen time, not a missing dismissal`);
+});
+
+// ───────────────────────────────────────────────────────────────────
+// THE TOAST'S CLOSE CONTROL IS EASY TO REACH WITHOUT GROWING ITS GLYPH
+// ───────────────────────────────────────────────────────────────────
+//
+// A second report against the same card: its close button was too small to reach reliably.
+// `tools/live/touch-targets.mjs` cannot settle this — it reads `getBoundingClientRect()`, which
+// does not see a pseudo-element's inset, so the same shape as the checkbox's own exemption there
+// (see its DECLARED entry) needs a measurement that can. This mounts the production toast and
+// reads the close button's box together with its computed `::before`, the same idiom the checkbox
+// uses, and also proves the wider invisible area does not reach far enough to swallow the Undo
+// button beside it.
+
+const undoCloseHitResults = [];
+
+await section("the toast close control exposes a 56x56 hit area without changing the visible glyph", async () => {
+  const page = await browser.newPage({
+    viewport: { width: 390, height: 844 }, reducedMotion: "reduce", isMobile: true, hasTouch: true,
+  });
+  await page.setContent(page_html);
+  await page.evaluate(() => document.body.classList.add("is-mobile", "is-phone"));
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(async () => {
+    // Read after a settle rather than immediately: the card carries `animation: obnotion-toast-in`,
+    // a transform-scale entrance that moves every rect it touches for as long as it runs — even
+    // under `reducedMotion: "reduce"`, which shortens the duration but does not skip the keyframes
+    // — so a rect read on the same tick is an animation frame, not a layout. Same idiom the phone
+    // band measurement below this section uses.
+    const settle = () => new Promise((resolve) => setTimeout(resolve, 60));
+
+    globalThis.__toast.showToast(document, {
+      severity: "success",
+      message: "Row deleted",
+      action: { label: "Undo", onClick: () => {} },
+    });
+    await settle();
+    const closeBtn = document.querySelector(".obnotion-toast-close");
+    const closeRect = closeBtn.getBoundingClientRect();
+    const before = getComputedStyle(closeBtn, "::before");
+    const glyphRect = closeBtn.querySelector("svg").getBoundingClientRect();
+
+    const actionBtn = document.querySelector(".obnotion-toast-action");
+    const actionRect = actionBtn.getBoundingClientRect();
+    const centerX = actionRect.left + actionRect.width / 2;
+    const centerY = actionRect.top + actionRect.height / 2;
+    const hitAtActionCenter = document.elementFromPoint(centerX, centerY);
+
+    return {
+      closeBox: { width: closeRect.width, height: closeRect.height },
+      before: {
+        top: parseFloat(before.top), right: parseFloat(before.right),
+        bottom: parseFloat(before.bottom), left: parseFloat(before.left),
+      },
+      glyph: { width: glyphRect.width, height: glyphRect.height },
+      actionOwnsItsCenter: hitAtActionCenter === actionBtn || actionBtn.contains(hitAtActionCenter),
+    };
+  });
+
+  await page.close();
+
+  const hitWidth = Math.round(measured.closeBox.width + Math.abs(measured.before.left) + Math.abs(measured.before.right));
+  const hitHeight = Math.round(measured.closeBox.height + Math.abs(measured.before.top) + Math.abs(measured.before.bottom));
+
+  const record = (name, pass, detail) => undoCloseHitResults.push({ name, pass, detail });
+
+  record("the close control's real hit area — its box plus the ::before inset — reaches 56x56",
+    hitWidth >= 56 && hitHeight >= 56,
+    `box ${measured.closeBox.width}x${measured.closeBox.height} plus a ::before inset of `
+      + `top ${measured.before.top} right ${measured.before.right} bottom ${measured.before.bottom} `
+      + `left ${measured.before.left} computes to ${hitWidth}x${hitHeight}`);
+
+  record("the close glyph stays the size it was drawn at",
+    Math.round(measured.glyph.width) === 14 && Math.round(measured.glyph.height) === 14,
+    `${measured.glyph.width}x${measured.glyph.height}. The hit area grew invisibly; the icon did not`);
+
+  record("the enlarged close hit area does not reach far enough to swallow the Undo button beside it",
+    measured.actionOwnsItsCenter,
+    `elementFromPoint at the Undo button's own centre resolved outside it. An invisible hit area `
+      + `that reaches a neighbouring control would make that control unreliable to press`);
+});
+
+// ───────────────────────────────────────────────────────────────────
 // THE PHONE BAND CENTRES THE STACK AND THE RAIL; THE DESKTOP CORNER STAYS
 // ───────────────────────────────────────────────────────────────────
 //
@@ -11529,7 +11669,7 @@ await section("a view-switcher row on a phone carries one trailing control", asy
 results.push(...tallSheetResults, ...dockResults, ...tapFocusResults, ...dockClaimResults, ...viewRowResults, ...phoneResults, ...menuResults, ...columnWidthKeyboardResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...propertyGeometryResults, ...openTargetResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...toastResults, ...bandResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...rowSlackResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...propertyGeometryResults, ...openTargetResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...toastResults, ...undoDwellResults, ...undoCloseHitResults, ...bandResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...rowSlackResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });

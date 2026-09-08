@@ -11,10 +11,10 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/066-notion-states-refinement"
-    last_updated_at: "2026-09-07T00:30:00Z"
-    last_updated_by: "notion-states-implementation-session"
-    recent_action: "Landed the six code legs and the 055 reconciliation, red-first proven"
-    next_safe_action: "Verifier rebases, runs the full gate, lands; T012's lane rows stay open"
+    last_updated_at: "2026-09-08T17:50:00Z"
+    last_updated_by: "toast-dwell-and-close-target-session"
+    recent_action: "Landed Phase 5: Undo toast dwell (ADR-005) and close hit area (ADR-006)"
+    next_safe_action: "Verifier runs the full gate and lands; AC-008 and T012's lane-row extension stay open"
     blockers:
       - "AC-008 (the operator device pass) and the tools/live lane-row extension (T012) are not this session's to close"
     key_files:
@@ -48,7 +48,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 066-notion-states-refinement |
-| **Completed** | Partial — six code legs, the reconciliation and a landing-verification capture-pipeline fix (T018) landed 2026-09-07; two device/lane items open |
+| **Completed** | Partial — six code legs, the reconciliation and a landing-verification capture-pipeline fix (T018) landed 2026-09-07; Phase 5's toast dwell (T021) and close hit-area (T022) legs landed 2026-09-08; AC-008 (operator device pass) and the tools/live lane-row extension (T012) remain open |
 | **Level** | 3 |
 <!-- /ANCHOR:metadata -->
 
@@ -211,6 +211,61 @@ the lineage trail on disk and git-ignored.
    centred placement all ride `055`'s operator device pass. AC-009's margins are now measured rather
    than argued, but the measurement was a one-off run at landing — T012's lane row, which would have
    caught the `box-sizing` overflow without a person going looking for it, still does not exist.
-4. **ADR-003's 5000ms dwell is still an inference**, as recorded — the device pass is the check that
-   would move it, unchanged by this landing.
+4. **ADR-003's 5000ms dwell was an inference.** A fresh operator report on 2026-09-08 moved it: see
+   Phase 5 below and ADR-005. 3500ms is still an inference — a smaller one, and no longer the first
+   guess made before any number shipped — and the device pass remains the check that could move it
+   again.
 <!-- /ANCHOR:limitations -->
+
+---
+
+<!-- ANCHOR:phase-5 -->
+## Phase 5: Toast dwell and close-target reports (2026-09-08)
+
+Two fresh operator reports on the shipped `0.0.32`/`0.0.33`: the Undo toast stays on screen too
+long, and its close button needs a 56×56 click area (AC-010, AC-011).
+
+**The dwell (T021, AC-010, ADR-005).** No timed reference capture exists for either platform's undo
+toast — the digest is a still harvest, the same fact ADR-003 already recorded. `ACTION_DISMISS_MS`
+was 5000ms, ADR-003's own inference, confirmed live and unbugged on the tree the operator tested. A
+dated, direct report of the felt duration is stronger evidence than a desk inference made before any
+number existed, so the budget is cut 30% to 3500ms. Red-first: `toast.test.ts`'s dwell matrix moved
+its checkpoints (still connected at 3000ms; gone by 4000ms, which the 5000ms figure it replaced would
+still show connected at) and was confirmed red against the reverted constant. A second, independent
+proof was added to the toast lane in `tools/storybook/verify-placement.mjs`: two rows drive the real
+production `showToast` call with real timers on the phone viewport, confirmed red against the pre-fix
+constant (`1 card(s) present at 3900ms`) and green after.
+
+**The close hit area (T022, AC-011, ADR-006).** Current size recorded before the fix:
+`.obnotion-toast-close`'s own box is 18px wide by 29-30px tall (18px from its own padding around a
+14px glyph; the height comes from the host's own bare-`<button>` rule, since nothing in the toast's
+own rule overrides it) — not the 18×18 `touch-targets-baseline.json` had recorded on 2026-09-05,
+which predates the host stylesheet model this file's own `hostStylesheetModelLowering` entry landed
+two days later. `tools/live/touch-targets.mjs` measures `getBoundingClientRect()` and cannot see a
+pseudo-element's inset, so it cannot prove 56×56 either way; ADR-006 gives `.obnotion-toast-close`
+the checkbox's own idiom (`::before { position: absolute; inset: -19px; content: ""; pointer-events:
+auto; }`), computing to at least 56×67 against the button's real box, and a matching DECLARED entry
+documents why the bounding-box sweep still shows a shortfall. The toast lane proves the real number:
+red before the fix (`box 18x30 plus a ::before inset of top NaN...`), green after (`... computes to
+56x67`), the glyph confirmed unchanged at 14×14, and a paired `elementFromPoint` check confirming the
+wider invisible area does not reach the Undo action button beside it.
+
+**The CSS lane.** `styles.css` moved under a lane held by a different, unrelated phase
+(`075-toolbar-labelled-buttons`). Taken over properly in `tools/lane/css-lane.json`: an acquire from
+075's own released hash, an edit entry describing the `.obnotion-toast-close` change, and a release
+naming zero reviewed captures — `npm run screenshots` ran five times against the fix and neither
+toast fixture (`chrome-toast-success`, `chrome-toast-error`) moved a single pixel on any run, so
+nothing in this lane's own render roots shows as changed in the committed diff. Five unrelated
+single-run capture-pipeline transients surfaced and self-reverted across those runs (none touching
+the toast surface, none reproducing) and were restored via `git checkout --`, matching this lane's
+own established practice for encoder/antialiasing jitter.
+
+**Verification.** `npx tsc --noEmit` exit 0; `npx vitest run` 1717/1717 across 158 files; `npm run
+build` exit 0; `node tools/live/sheet-grammar.mjs`, `render-assertions.mjs`, `touch-targets.mjs`
+(ratchet 171 → 169) all exit 0; `node tools/storybook/verify-placement.mjs` 418/420 (2 declared,
+unrelated to this phase), exit 0; `node tools/live/evidence.mjs --check-all` all 15 artefacts fresh;
+`npm run gate` — 27 green, 0 red, exit 0; `node tools/naming/scan-comments.mjs` and
+`scan-failing-values.mjs` both exit 0.
+
+No operator device row was ticked. AC-008 remains open, unchanged by this phase.
+<!-- /ANCHOR:phase-5 -->

@@ -123,6 +123,15 @@ const DECLARED = [
       + " Found by the constructed-renderer pass: no fixture mounts the board's pagination dots.",
   },
   {
+    match: "obnotion-toast-close",
+    reason: "the close button's own box measures 18x29-30 here (18px wide; the host's bare-button"
+      + " height rule sets the rest) and takes its real touch area from a ::before inset of -19px on"
+      + " every side (styles.css's obnotion-toast-close block), at least 56x56 effective hit area a"
+      + " bounding box does not include — the same shape as the checkbox exemption above, proven by"
+      + " the toast lane in tools/storybook/verify-placement.mjs rather than by this bounding-box"
+      + " sweep",
+  },
+  {
     match: "obnotion-panel-button-narrow",
     reason: "a sort/filter rule row's icon-only remove and the filter header's AND/OR toggle;"
       + " the shared panel-button padding was slimmed to 0 6px so the row stops overflowing the"

@@ -334,6 +334,173 @@ option is taken, the five residual `var(--db-transition-fast)` uses (`:2037`, `:
 
 ---
 
+<!-- ANCHOR:adr-005 -->
+## ADR-005: The Undo toast's dwell shortens from 5000ms to 3500ms, on a direct operator report
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-08 |
+| **Deciders** | Operator (report), implementer (the number) |
+
+---
+
+<!-- ANCHOR:adr-005-context -->
+### Context
+
+ADR-003 set `ACTION_DISMISS_MS = 5000` as an inference — "the shortest window that comfortably
+covers read, aim and act" — and left it Proposed, naming the phone device pass (D-2) as the only
+check that would move it. That inference shipped in `0.0.32` and is still live in this tree today.
+
+**A fresh, dated operator report supersedes the inference before the device pass ever ran.** On
+2026-09-08 the operator reported, verbatim: "toast like the undo toast stay too long on screen."
+This is not the D-2 reachability check ADR-003 named — it is the reader's own account of the felt
+duration, on the exact number ADR-003 chose. `ACTION_DISMISS_MS` was confirmed at 5000ms in the
+tree the operator tested (`8614ead0`, an ancestor of the `0.0.32` release tag), and no bug or
+extension of the timer was found: `database-view.ts`'s delete-then-Undo call site raises the toast
+with `severity: "success"` and `action` set, exactly the shape `ACTION_DISMISS_MS` gates on.
+
+### Constraints
+
+- No Notion or Anytype capture carries a timing manifest row for either reference's undo toast — a
+  still cannot show a duration, the same fact ADR-003 already recorded. The operator's own report is
+  the only fresh evidence available, and it is stronger than the original inference: it is a
+  dated account of the actual shipped number, not a guess made before any number existed.
+- The plain-success budget (`AUTO_DISMISS_MS = 2200`) is untouched — the report named the Undo toast
+  specifically, and a plain success has nothing to act on.
+- The `error` branch stays wait-for-the-reader, unchanged by this decision.
+
+<!-- /ANCHOR:adr-005-context -->
+
+<!-- ANCHOR:adr-005-decision -->
+### Decision
+
+**Shorten `ACTION_DISMISS_MS` from 5000ms to 3500ms, a 30% cut, and pair it with AC-011's enlarged
+close hit area.** 3500ms is itself an inference — no reference supplies a number this packet can
+adopt instead — but it is no longer a first guess: it is a deliberate reduction from a value already
+proven too long by the person who has to read the toast. The two changes are paired because a
+shorter window increases the cost of an unreachable close control: a reader who wants the card gone
+sooner now also has a real 56×56 target to reach for, rather than the 18×18 sliver AC-011 measured.
+
+**D-2 remains the check that could move it again.** If the shortened window turns out to be too
+short for the rail's clamped phone width to reach the Undo action inside it, that is a device fact,
+not a number this decision can anticipate from a desktop tree.
+
+<!-- /ANCHOR:adr-005-decision -->
+
+<!-- ANCHOR:adr-005-alternatives -->
+### Alternatives Considered
+
+| Alternative | Why not |
+|---|---|
+| Keep 5000ms and wait for the operator device pass (D-2) to move it | The device pass answers reachability, not felt duration; the operator has already reported the duration itself as the problem |
+| Set exactly Notion's ~5s framing this packet's own dispatch note carries | That is the number already shipping and already reported too long — repeating it would not address the report at all |
+| Cut to the plain-success budget (2200ms) | Erases the distinction ADR-003 exists to protect: an action-carrying toast still needs more time than a plain notice with nothing to press |
+| Make the timer pause on hover/focus/touch | No reference capture shows either platform doing this, and inventing the behaviour without evidence would be exactly the phantom edge-case handling this packet's own process rules against; the shortened window plus the larger close target cover the same need without it |
+
+<!-- /ANCHOR:adr-005-alternatives -->
+
+<!-- ANCHOR:adr-005-consequences -->
+### Consequences
+
+One constant in `toast.ts`. `toast.test.ts`'s dwell matrix moves its checkpoints to prove the new
+figure and to fail against the value it replaced (still connected at 3000ms; gone by 4000ms, which
+the old 5000ms figure would still show connected at). The toast lane in
+`tools/storybook/verify-placement.mjs` adds a real-timer row on the production `showToast` call,
+proving the same two facts against the actual card rather than a mocked clock.
+<!-- /ANCHOR:adr-005-consequences -->
+<!-- /ANCHOR:adr-005 -->
+
+---
+
+<!-- ANCHOR:adr-006 -->
+## ADR-006: The toast close control gets an invisible 56×56 hit inset, the checkbox's own idiom
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-08 |
+| **Deciders** | Operator (report), implementer (the mechanism) |
+
+---
+
+<!-- ANCHOR:adr-006-context -->
+### Context
+
+A second, paired operator report on 2026-09-08, verbatim: "toast close button needs a 56 x 56 click
+area." Measured before this decision, `.obnotion-toast-close`'s own box is 18px wide by 29-30px
+tall under this repository's harnesses — 18px from its own `padding: 2px` around a 14px glyph, 29-
+30px because nothing in the rule overrides the height the host's own bare `<button>` rule sets
+(`tools/screenshots/host-bare-controls.css`, `--input-height: 30px`, read from Obsidian's shipped
+`app.css`). `tools/live/touch-targets-baseline.json`'s `toastFixtureRaise` entry recorded this
+control at 18x18 on 2026-09-05, before `hostStylesheetModelLowering` (2026-09-07) gave the fixture
+pass that host button model; the 18x18 figure was already stale by the time this decision measured
+the tree fresh, and this record corrects it rather than repeating it.
+
+The card's own visual weight is set by its message and its Undo action; widening the close button's
+own painted box to 56×56 would make a small, secondary control the loudest shape on the card.
+
+### Constraints
+
+- The visible glyph (14×14) must not change size — the report names the click AREA, not the icon.
+- `tools/live/touch-targets.mjs` measures `getBoundingClientRect()` on the interactive element
+  itself; it has no way to see a pseudo-element's inset, so a check for the real hit area has to
+  live somewhere that can read `getComputedStyle(el, "::before")`.
+- The enlarged hit area must not swallow the Undo action button that sits beside the close control
+  in the same header row.
+
+<!-- /ANCHOR:adr-006-context -->
+
+<!-- ANCHOR:adr-006-decision -->
+### Decision
+
+**Reuse `input[type="checkbox"].obnotion-checkbox`'s own idiom: the visible box stays its drawn
+size, and a borderless `::before { position: absolute; inset: -19px; content: ""; pointer-events:
+auto; }` takes the real hit area past its edge.** Against the button's own 18×29-30 box this
+computes to at least 56 wide by 67 tall — the width lands exactly on the 56px floor the report
+named; the height clears it with margin because the box was already taller than wide. `styles.css`
+gains `position: relative` on `.obnotion-toast-close` so the pseudo-element's `absolute` positioning
+resolves against it, matching the checkbox's own containing-block setup.
+
+`tools/live/touch-targets.mjs`'s DECLARED list gains a matching `obnotion-toast-close` entry, the
+same shape as the checkbox and board-pagination-dot entries beside it: the bounding-box sweep cannot
+prove 56×56, so it is told why the shortfall it still measures is not a defect, and the toast lane in
+`tools/storybook/verify-placement.mjs` proves the real number instead — reading the button's box
+together with its computed `::before`, and separately confirming `elementFromPoint` at the Undo
+button's own centre still resolves inside the Undo button rather than being swallowed by the wider
+invisible close target beside it.
+
+<!-- /ANCHOR:adr-006-decision -->
+
+<!-- ANCHOR:adr-006-alternatives -->
+### Alternatives Considered
+
+| Alternative | Why not |
+|---|---|
+| Grow the button's own box (`min-width`/`min-height: 56px`), the same shape `.is-phone .obnotion-toast-action` already uses at 46px | Makes the close control visually as large as the card's primary action, which nothing in the report or either reference asks for; the glyph would sit inside a conspicuously larger button even though its own pixels stay 14×14 |
+| A flat, unconditional inset the same magnitude on all four sides without checking neighbours | This is what was tried first; measuring it against the actual header layout (26px total width padding either side of an 18px box, a 12px `margin-top` gap to the actions row) is what surfaced the need for the `elementFromPoint` proof below, which passed without needing to bias the inset asymmetrically — recorded here so a future change to the header's spacing knows this proof exists and should be re-run |
+| Scope the `::before` rule to `.is-phone` only, matching `obnotion-toast-action`'s own phone-only raise | The close control's small size is not a phone-only problem — a mouse pointer benefits from a larger target too, and nothing about the fix's mechanism needs a coarse-pointer gate the checkbox's own idiom does not carry either |
+
+<!-- /ANCHOR:adr-006-alternatives -->
+
+<!-- ANCHOR:adr-006-consequences -->
+### Consequences
+
+Four lines in `styles.css` (`position: relative` plus a four-line `::before` rule) and one DECLARED
+entry in `tools/live/touch-targets.mjs`. `tools/live/touch-targets-baseline.json`'s fixture ratchet
+drops from 171 to 169 — the two `obnotion-toast-close` instances `chrome-toast-success` and
+`chrome-toast-error` already carried move from undeclared to declared, not a new repair elsewhere.
+Three new rows land in the toast lane (`tools/storybook/verify-placement.mjs`): the hit-area
+measurement, an unchanged-glyph guard, and the neighbour-occlusion proof.
+<!-- /ANCHOR:adr-006-consequences -->
+<!-- /ANCHOR:adr-006 -->
+
+---
+
 <!-- ANCHOR:recorded-not-built -->
 ## Recorded, not built
 

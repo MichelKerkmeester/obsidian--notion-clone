@@ -395,12 +395,22 @@ worked around.
 Two fresh operator reports on 0.0.32: toasts (naming the Undo toast specifically) stay on screen
 too long, and the toast's close button needs a 56×56px hit area.
 
-- [ ] T021 Measure the live Undo toast's current dwell against Notion's own reference (~5s, or the
+- [x] T021 Measure the live Undo toast's current dwell against Notion's own reference (~5s, or the
       documented assumption if no timed reference capture exists). Add a red-first toast-lane row,
-      set a threshold, land the fix, leave an operator device row unticked (AC-010)
-- [ ] T022 Measure the toast close control's current hit area with `tools/live/touch-targets.mjs`,
+      set a threshold, land the fix, leave an operator device row unticked (AC-010). No timed
+      reference exists on either tree; `ACTION_DISMISS_MS` was 5000ms (ADR-003), confirmed live on
+      the operator's own release. The 2026-09-08 report is treated as stronger evidence than the
+      original inference, so ADR-005 cuts it 30% to 3500ms. Two real-timer rows added to
+      `tools/storybook/verify-placement.mjs`'s toast lane, `toast.test.ts`'s dwell matrix moved,
+      both confirmed red against the pre-fix constant and green after
+- [x] T022 Measure the toast close control's current hit area with `tools/live/touch-targets.mjs`,
       record it, land a 56×56px fix with the visual glyph size unchanged (unless the Notion/Anytype
-      references say otherwise), red-first (AC-011)
+      references say otherwise), red-first (AC-011). Current box recorded as 18x29-30 (not the
+      stale 18x18 `touch-targets-baseline.json` carried from before the host stylesheet model
+      landed). ADR-006 gives `.obnotion-toast-close` the checkbox's own `::before` inset idiom
+      (56x67 real hit area, glyph unchanged at 14x14); `touch-targets.mjs` gains a matching
+      DECLARED entry (ratchet 171 -> 169) and the toast lane proves the real number plus a
+      neighbour-occlusion guard against the Undo action beside it
 <!-- /ANCHOR:phase-5 -->
 
 ---

@@ -41,7 +41,7 @@ describe("toast", () => {
 
   it("gives a plain success its existing 2200ms budget and a longer one when an action is attached", () => {
     expect(toastSource).toMatch(/const AUTO_DISMISS_MS = 2200;/);
-    expect(toastSource).toMatch(/const ACTION_DISMISS_MS = 5000;/);
+    expect(toastSource).toMatch(/const ACTION_DISMISS_MS = 3500;/);
     expect(toastSource).toMatch(/timer = window\.setTimeout\(close, options\.action \? ACTION_DISMISS_MS : AUTO_DISMISS_MS\);/);
   });
 
@@ -188,9 +188,15 @@ describe("toast dwell matrix", () => {
     expect(stack.children.length).toBe(0);
   });
 
-  it("still clears a success toast carrying an action once its longer budget elapses", () => {
+  it("clears the shortened action-toast budget by 4000ms, not stretched back toward the longer figure it replaced", () => {
     const stack = mount({ severity: "success", message: "Row deleted", action: { label: "Undo", onClick: () => {} } });
-    vi.advanceTimersByTime(5001);
+    vi.advanceTimersByTime(4000);
+    expect(stack.children.length).toBe(0);
+  });
+
+  it("still clears a success toast carrying an action once its budget elapses", () => {
+    const stack = mount({ severity: "success", message: "Row deleted", action: { label: "Undo", onClick: () => {} } });
+    vi.advanceTimersByTime(3501);
     expect(stack.children.length).toBe(0);
   });
 

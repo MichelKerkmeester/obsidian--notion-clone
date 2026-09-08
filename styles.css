@@ -3038,6 +3038,7 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
 }
 
 .obnotion-toast-close {
+  position: relative;
   flex: 0 0 auto;
   display: inline-flex;
   border: 0;
@@ -3057,6 +3058,16 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
 .obnotion-toast-close svg {
   width: 14px;
   height: 14px;
+}
+
+/* The same idiom the checkbox uses: the visible glyph and its padded box stay the size they were
+   drawn at, and a borderless pseudo-element takes the actual touch area past the edge of that box
+   — reported small a tap widens by feel, never by an icon growing. */
+.obnotion-toast-close::before {
+  position: absolute;
+  inset: -19px;
+  content: "";
+  pointer-events: auto;
 }
 
 /* The action row, read off the source at the same `gap: 8px` / `margin-top: 12px` it measures.
