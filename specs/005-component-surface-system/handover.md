@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: 067 follow-up 3 LANDED at fa980f8c, 2026-09-08. 0.0.31 shipped at 5e7f1426 as the RENAME release (id obnotion, vault obnotion/, repo obsidian_notion-clone). 221, 225, 069 and 067 follow-up 3 are all landed (6f679e5e, b6a0f847, d32d185d, fa980f8c). NO Opus agents (operator 2026-09-07 18:40); GLM 5.3 flash max via cli-pi DevPass carries landings/docs/releases, monitored every 5 min with a 15-min stall relaunch."
+description: "Resume point: 058's reopened card-title leg LANDED at 1b96a10e, 2026-09-08. 0.0.31 shipped at 5e7f1426 as the RENAME release (id obnotion, vault obnotion/, repo obsidian_notion-clone). 221, 225, 069, 067 follow-up 3 and 058's reopened leg are all landed. NO Opus agents (operator 2026-09-07 18:40); GLM 5.3 flash max via cli-pi DevPass carries landings/docs/releases, monitored every 5 min with a 15-min stall relaunch."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T02:05:00Z"
-    last_updated_by: "067-followup-3-lander"
-    recent_action: "Landed 067 follow-up 3 at fa980f8c: NC-proven, 17+3 capture passes, gate 25+1 declared"
+    last_updated_at: "2026-09-08T03:15:00Z"
+    last_updated_by: "058-title-production-landing-verifier"
+    recent_action: "Landed 058's reopened titleFormat leg at 1b96a10e; row 69; gate 25+1 declared"
     next_safe_action: "Cut 0.0.32"
     blockers:
       - "009 T26: .obnotion-panel-button sort-panel overflow ~10px under real host cascade (expectFail)"
@@ -42,6 +42,49 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08 ~03:15, `058-card-title-and-title-formats` REOPENED LEG LANDED — verified, rebased onto the 221/225/069/067-merged main, pushed to `origin/main` at `1b96a10e`
+
+**Landed.** The card-title production leg's two commits (`5a357737` format + real-renderer proof,
+`cec1223e` titleFormat persistence) replayed as `e634e5ef` + `42de57b6` onto `5024fedf`, with this
+verifier's two commits (`33f90502` pre-rebase mutation log, `1b96a10e` re-derived evidence) also on
+`origin/main`; `git log --oneline -1 origin/main` = `1b96a10e`. Every claim re-proven before the push:
+
+- **Claims**: the picker pre-existed (`titleField`, `058`'s first landing — CONFIRMED by source read);
+  `TitleFileFormat`/`ViewConfig.titleFormat` + the file-name branch through `formatFileTitleText`
+  (CONFIRMED, types.ts:359, title-field-display.ts:48); the "Title format" picker row
+  (CONFIRMED, view-config-panel-renderer.ts:455/2007); `getReferenceRowTitle` reads `title.text`
+  unconditionally (CONFIRMED, board-renderer.ts:585 after the rebase); `titleFormat` at all four
+  data-source.ts sites (CONFIRMED, :800/:988/:1246/:1685).
+- **Mutations went red on demand**: (a) reverting `getReferenceRowTitle` to the
+  `title.isFileTitle ? row.file.basename : title.text` shortcut → `render-assertions.mjs` **exit 1**,
+  failing the new real-BoardRenderer scenario — 18 card titles drawn, 18 missing the € mark, 18 still
+  reading raw values [3537.32, 9532.82, 15528.32]; (b) dropping `titleFormat` from `toViewPayload` →
+  `data-source.test.ts` **exit 1**, the round-trip test failing `expected undefined to be
+  'currency-eur'`. Green after restore both times.
+- **Baseline raise checked**: failing-values 147→148, exactly +1, the added row naming AC-009's
+  never-broken evidence-upgrade criterion — CONFIRMED, no other raise.
+- **Rebase**: 2 stops, 18 conflict files. Generated artefacts (main.js, manifest, 2 PNGs, 7
+  tools/live JSONs) took MAIN's side and were re-derived; roadmap.md merged keeping main's rows 67
+  (timeline) and 68 (cross-group drag), **this leg's row renumbered 67 → 69**; css-lane.json merged
+  append-only from the three blobs (base 384 + main 8 + leg 1 = 393) after a text-patch first try
+  dropped one main entry — caught by count and rebuilt deterministically. styles.css byte-identical
+  to main; `baselineHash` e1de47b5feec = `shasum -a 256 styles.css`, no patch.
+- **Re-derived on the merged tree**: build 0, tsc 0, vitest **1671/1671** (153 files), screenshots
+  twice (616 entries, exit 0 both) with a decoded pixel-delta pass judging the movers — **3 real
+  changes (maxDelta 192/209/121, both runs identical), 0 jitter**, named in a css-lane release entry
+  (check-lane exit 0, "release names all 2 changed capture(s)" — the third mover sits outside the
+  lane's capture roots); the 7 live JSONs re-run through their own tools, `evidence --check-all` 15/15
+  fresh; replay 28/28 hold.
+- **Gate**: exit 0, `PASS — 25 green, 1 red for a declared reason` — the red is sheet-grammar's
+  declared expectFail (009's padding gap), which main's 067-follow-up-3 landing declared after this
+  leg branched (the leg's own 26-green reading predates it).
+- **Validation**: orchestrator `--strict` on 058 and on the 005 root → `RESULT: PASSED` (before and
+  after `backfill-graph-metadata.js`, which changed 0 files); scan-comments and scan-failing-values
+  exit 0.
+- **Roadmap**: §4 row 69's verification clause refreshed with the re-derived numbers and the renumber
+  note; §5.A's 058 row re-derived to **7/8** goal criteria (88%) and **10/11** AC rows Met. AC-008
+  (the operator's own device read) stays open — no operator/device row was ticked.
 
 ### 2026-09-08, `067-sheet-family-remediation` follow-up 3 LANDED — verified, rebased onto the 221/225/069-merged main, pushed to `origin/main` at `fa980f8c`
 
