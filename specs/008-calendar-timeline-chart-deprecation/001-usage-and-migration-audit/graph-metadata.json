@@ -46,7 +46,8 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/views/calendar-timeline-renderer.ts"
     ],
     "entities": [
       {
@@ -83,6 +84,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-timeline-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-timeline-renderer.ts",
         "source": "derived"
       },
       {
@@ -186,17 +193,11 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The operator has decided to retire calendar, timeline and chart views, but no inventory yet exists of which live databases actually use them, so a removal phase would be guessing at blast radius rather than measuring it",
     "created_at": "2026-09-08T06:24:14Z",
-    "last_save_at": "2026-09-08T06:50:06.633Z",
+    "last_save_at": "2026-09-08T08:41:45.297Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,13 +208,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8043d7a4aae168a478a97d6adbf9ddfaa5c8963454ff6ac2599be2821457dac2",
+    "source_fingerprint": "sha256:b896c1698f2d01aa01a2f99a226a5e121771906d02fd765176a3a130716ffc48",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "782d376d1a57a988f7f002a4f02d2ea497918c44ba806712ab389c7290092d99",
       "plan.md": "ee3413fd9efbd3e206cac4aa4d0c8854e34b0d3963fe2ca61e67a4839151c285",
-      "tasks.md": "ce262727678b239dc275ae3ddf318992f40027b0ecfb9c0b2f1b2ed2eda20de7",
-      "implementation-summary.md": "8f027dd5314f553ab8aac35b01b9f0dc229a304e473402012dcfbb7439752b7d"
+      "tasks.md": "c0b761fb71132f13a2eb96e15b9ca9c4c26698e6c86a624467db4b50cb57bfe6",
+      "implementation-summary.md": "337ee8e35122022cfaa5d5892df40bff15429c8d9f8dcdcb71d2237992b9ae7d"
     },
     "last_active_at": null
   }

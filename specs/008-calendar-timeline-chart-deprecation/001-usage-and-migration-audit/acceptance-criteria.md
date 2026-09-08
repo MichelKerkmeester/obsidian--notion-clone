@@ -28,8 +28,8 @@ contextType: "implementation"
 
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
-| AC-001 | REQ-001 | Given the operator vault and every fixture/test vault, When scanned for `database:` frontmatter configuring calendar, timeline or chart, Then every match is listed with a decided redirect target | Inventory table | Unmet | - |
-| AC-002 | REQ-002 | Given the inventory, When the DatabaseViewType retention decision is made, Then it is recorded with a reason, matching 006's rigor | `spec.md` or `decision-record.md` entry | Unmet | - |
+| AC-001 | REQ-001 | Given the operator vault and every fixture/test vault, When scanned for `database:` frontmatter configuring calendar, timeline or chart, Then every match is listed with a decided redirect target | Inventory table | Met — `inventory.md` §2.1: all 33 vault views named with file:line and target; §2.2: 0 shipped fixture-vault views, programmatic harness fixtures named; §1.2 holds the per-type reasons | - |
+| AC-002 | REQ-002 | Given the inventory, When the DatabaseViewType retention decision is made, Then it is recorded with a reason, matching 006's rigor | `spec.md` or `decision-record.md` entry | Met — `inventory.md` §1.1: the union keeps the three ids (accepted-but-redirected), reason grounded in 007-001's fallback-equality mechanism finding and 006's precedent, same rigor | - |
 
 ### Status values
 
@@ -46,7 +46,7 @@ contextType: "implementation"
 <!-- ANCHOR:closure -->
 ## 3. CLOSURE STATEMENT
 
-**Closeable:** No
+**Closeable:** Yes
 
-Not yet started.
+Closed 2026-09-08 by the 234-calendar-timeline-chart-audit leg: both criteria Met (see §2), REQ-003's decision recorded in `inventory.md` §1.3, the audit's only artifact. Read-only against `src/`/`tools/` per goal D1; verification suite (tsc, vitest 1671/153, build, the three naming scans) all exit 0 in `implementation-summary.md`.
 <!-- /ANCHOR:closure -->

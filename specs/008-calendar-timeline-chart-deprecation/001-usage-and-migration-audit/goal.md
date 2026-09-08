@@ -51,9 +51,9 @@ resend the full text of this file in chat so the operator can update their copy.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] Inventory table produced naming every live view of the three types
-- [ ] Redirect target decided and reasoned for every view found
-- [ ] DatabaseViewType retention-vs-redirect decision recorded
+- [x] Inventory table produced naming every live view of the three types — `inventory.md` §2.1: 33 views (11 databases × one calendar, one timeline, one chart), each with its file:line in the operator's vault; §2.2 records 0 shipped fixture-vault views and names the programmatic harness fixtures instead
+- [x] Redirect target decided and reasoned for every view found — `inventory.md` §1.2: calendar→table, timeline→board, chart→table, each with the code-grounded reason; applied uniformly to all 33 rows via the referenced column
+- [x] DatabaseViewType retention-vs-redirect decision recorded — `inventory.md` §1.1: the three ids stay, accepted-but-redirected, with the 007-001/006 mechanism reason; the embedded-host question (REQ-003) answered in §1.3
 <!-- /ANCHOR:completion -->
 
 ---
@@ -66,10 +66,14 @@ resend the full text of this file in chat so the operator can update their copy.
 | Item | State | Evidence |
 |------|-------|----------|
 | Packet opened | Done | This scaffold, 2026-09-08 |
+| Operator-vault scan | Done | Fresh read-only grep, 2026-09-08: 15 `db_view` files, 76 views, 33 of the three types (`inventory.md` §2.1) — supersedes 007-001's 1-file/`b240a8d5` read |
+| Retention + targets decided | Done | `inventory.md` §1.1-§1.2 |
+| REQ-003 embedded host decided | Done | `inventory.md` §1.3: yes, prophylactic, transplant shape at `embedded-database-renderer.ts:742,776-800` |
 
 ### Deviations and findings
 
 | Item | Note |
 |------|------|
-| None yet | Work has not started |
+| Vault grew 15× since 007-001 | 1 `db_view` file at `b240a8d5`, 15 at this audit's read; phase 2 must re-grep before writing migrations |
+| Spec's phase-context names a changelog | No `changelog/` directory exists under the parent packet; limitation recorded in `implementation-summary.md` |
 <!-- /ANCHOR:log -->
