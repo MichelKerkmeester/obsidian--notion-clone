@@ -47,6 +47,9 @@
       "acceptance-criteria.md",
       "goal.md",
       "implementation-summary.md",
+      "tools/storybook/sheet-inventory.mjs",
+      "tools/storybook/sheet-inventory.test.mjs",
+      "tools/live/sheet-grammar.mjs",
       "tools/storybook/story-coverage.mjs",
       "screenshots/manifest.json"
     ],
@@ -85,6 +88,24 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-inventory.mjs",
+        "kind": "file",
+        "path": "tools/storybook/sheet-inventory.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-inventory.test.mjs",
+        "kind": "file",
+        "path": "tools/storybook/sheet-inventory.test.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
         "source": "derived"
       },
       {
@@ -176,29 +197,11 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The operator's R7 asks a direct question this program has never answered as a single artifact: \"Do we truly have screenshots and stories for every single sheet in app currently?\" Coverage has been built incrementally, sheet by sheet, packet by packet (`013`, `027`, `048`, `051`, `054`, `067`), and no single document lists every sheet-capable surface against its coverage and reference state",
     "created_at": "2026-09-08T06:24:03Z",
-    "last_save_at": "2026-09-08T06:50:06.034Z",
+    "last_save_at": "2026-09-08T10:30:56.288Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,13 +212,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:c8040541ad2ef5915b124493a6dcd5cd50598fe724df6f42f0fb02b69d9ef802",
+    "source_fingerprint": "sha256:fe2a795ff5161884415a32575f999ef19bb9fa49b0de653630abca2e8d7a9ddd",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "1e0241a6375e9645da2c266b508caa42f93331d1d45772ec304e504fc7aecf94",
+      "spec.md": "5b9d26d55ee585f4b1ad94313723ced372a3c2b413b627058419d21065e4d492",
       "plan.md": "712cc9132e9618e4aeb4e4df83d065233cec4a9b182c7579aa7e00eb60e89393",
-      "tasks.md": "dc1f78898ca16a345d1e8f446144457385bd63d791952a14182fb93022e56991",
-      "implementation-summary.md": "0431c90c035b59933ac73ff5d78a53a6d10e292a04a41cb6f811265cac379120"
+      "tasks.md": "99b6845f6513435da3fd8299c89aa81216b039bd53ae351c9f79331dc6780119",
+      "implementation-summary.md": "7cbb2d51083d7a2020f6c69a325385447d9850fa38b74a65df878ff6001325c2"
     },
     "last_active_at": null
   }

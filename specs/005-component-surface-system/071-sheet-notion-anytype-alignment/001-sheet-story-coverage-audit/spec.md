@@ -32,7 +32,7 @@ The operator asked whether the app truly has screenshots and stories for every s
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P1 |
-| **Status** | Draft — opened 2026-09-08, nothing started |
+| **Status** | Implemented (inventory leg) — 2026-09-08: 86-row inventory + regenerating script + count test landed; 002-006 not started |
 | **Created** | 2026-09-08 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |

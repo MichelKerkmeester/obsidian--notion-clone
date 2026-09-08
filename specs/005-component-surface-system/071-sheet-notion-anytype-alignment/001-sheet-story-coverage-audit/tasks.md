@@ -32,11 +32,12 @@ contextType: "general"
 ---
 
 <!-- ANCHOR:phase-1 -->
-## Phase 1: Setup
+## Phase 1: Enumeration (evidence gathered before any row was written)
 
-- [ ] T001 Create project structure
-- [ ] T002 Install dependencies
-- [ ] T003 [P] Configure development tools
+- [x] T001 [P] Run the coverage gate and record its census: `node tools/storybook/story-coverage.mjs` → 19/40 renderable modules with stories, 21 allowlisted, 0 missing, 0 stale, 0 unreasoned, exit 0
+- [x] T002 [P] Read the sheet-grammar registries: 17 REGISTERED_SURFACES, 32 REGISTERED_STACKED_PAIRS, 11 OVERFLOW_ONLY_SURFACES (`tools/live/sheet-grammar.mjs`; read as data — the lane launches Playwright on import)
+- [x] T003 [P] Producer sweep over src/: the createSurfaceShell call sites, 19 DbModal subclasses plus 3 FuzzySuggestModal subclasses plus the anonymous trash-restore modal, toast, column menu, bulk-edit menu, the four view-toolbar option popovers
+- [x] T004 [P] Reference-tree census: `screenshots/notion/ios|web` (webp, `notion-ios-<category>-*`) and `screenshots/anytype/desktop|mobile` (`anytype-mobile-sheet-*` is the phone-sheet reference family); capture ids counted from `screenshots/manifest.json` (162 unique ids, 616 scenario rows)
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -44,10 +45,9 @@ contextType: "general"
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [ ] T004 [Implement core feature 1]
-- [ ] T005 [Implement core feature 2]
-- [ ] T006 [Implement core feature 3]
-- [ ] T007 [Add error handling]
+- [x] T005 `inventory.md` — 86 rows (54 primary + 32 stacked children). Settings sheet and add-property / property-type picker sheet are rows 1-2, their producer, captures and references named; every row carries producer file:line, phone presentation, story state (yes / allowlisted / untracked, with the reason), capture ids, reference mappings or the recorded absence, and a filename-level first-read gap note
+- [x] T006 `tools/storybook/sheet-inventory.mjs` — regenerates the rows and summary between the document's anchors from the registries, the scanned producer classes, `story-coverage.mjs --json`, the screenshot manifest and the reference trees; `--check` exits 1 when the committed document drifts
+- [x] T007 `tools/storybook/sheet-inventory.test.mjs` — 9 tests: the registry counts, the coverage census pinned at 40 = 19 + 21, modal producers re-counted by independent grep (19 + 3, plus 1 unnamed), every cited producer line opened and read, every cited reference directory stated to exist, every capture id checked against the manifest, both gated rows asserted, and the committed document required to equal what the registries now produce
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -55,9 +55,10 @@ contextType: "general"
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] T008 Test happy path manually
-- [ ] T009 Test edge cases
-- [ ] T010 Update documentation
+- [x] T008 `npx tsc --noEmit` exit 0; `npx vitest run` 1680/1680 (154 files); `npm run build` exit 0
+- [x] T009 `node tools/naming/scan-comments.mjs` exit 0; `node tools/naming/scan-failing-values.mjs` PASS; `node tools/naming/build-operator-checklist.mjs` + `--check` exit 0 (207 rows, current)
+- [x] T010 `npm run gate` exit 0 — 26 green, 0 red (first run caught 5 no-unused-vars in the two new files; fixed; rerun green). styles.css and renderers untouched, so the screenshots/pixel-delta legs were not owed
+- [x] T011 Packet docs reconciled: goal completion criteria ticked with their numbers, spec status, acceptance criteria, this file, implementation-summary
 <!-- /ANCHOR:phase-3 -->
 
 ---
