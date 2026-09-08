@@ -9,8 +9,7 @@ trigger_phrases:
 
 # tools/mock-data/csv: the CSV export files
 
-Ten generated files, one per use case, a generic CSV export for any tool that imports one. They are
-output, not source.
+One generated file, a generic CSV export for any tool that imports one. It is output, not source.
 
 ## 1. REGENERATE, DO NOT EDIT
 

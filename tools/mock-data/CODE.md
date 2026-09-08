@@ -1,6 +1,6 @@
 ---
 title: "tools/mock-data: generator topology and flow"
-description: "Code map for the mock-data catalogue: one schema shape dressed in ten vocabularies, one seeded stream, three emitters that translate and never invent."
+description: "Code map for the mock-data catalogue: one schema shape dressed in one vocabulary, one seeded stream, three emitters that translate and never invent."
 trigger_phrases:
   - "mock data generator code map"
   - "catalogue facet schema"
@@ -13,7 +13,7 @@ trigger_phrases:
 
 ## 1. OVERVIEW
 
-Eight source files, one direction of flow:
+Nine source files, one direction of flow:
 
 ```
 use-cases.ts  ─┐
@@ -25,7 +25,11 @@ random.ts     ─┘                  ├─► emit-portable.ts ─► catalogu
 
 `catalogue.ts` is the only file that decides shape. `use-cases.ts` is only vocabulary. That split is
 what makes "the three environments hold the same thing" a property of the code rather than a claim in
-a document: the shape is one decision made once, and ten vocabularies cannot change it.
+a document: the shape is one decision made once, and the vocabulary cannot change it.
+
+`consolidation.test.mjs` is the registry: it keeps the catalogue at one Testbed database, the
+render-assertion mounts pointed at it, and the cold-cache Finance fixture accounted for as the
+second dataset.
 
 ---
 

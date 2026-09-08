@@ -90,8 +90,7 @@ const REPO = fileURLToPath(new URL("../..", import.meta.url));
 // 390x844 and at this check's 1100x900, identically. It is measured here because
 // this is where renderer-built DOM is asserted, not because the width is right.
 const RHYTHM_SCENARIOS = [
-  { name: "table-catalogue-home-inventory/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "home-inventory" },
-  { name: "table-catalogue-project-tracker/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "project-tracker" },
+  { name: "table-catalogue-testbed/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "testbed" },
 ];
 
 // The comfortable density (40px) plus one border, plus the 8px a coarse-pointer
@@ -112,16 +111,16 @@ const ROW_HEIGHT_CEILING = 49;
 // negative control: a check that cannot go red when wrap is actually on proves nothing about the
 // toggle actually reaching the renderer.
 const WRAP_TOGGLE_SCENARIOS = [
-  { name: "table-catalogue-home-inventory-wrap-off/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "home-inventory" },
-  { name: "table-catalogue-home-inventory-wrap-on/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "home-inventory", wrapText: true },
-  // A third mount, paired with neither of the above: home-inventory's chips prove the flex
+  { name: "table-catalogue-testbed-wrap-off/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "testbed" },
+  { name: "table-catalogue-testbed-wrap-on/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "testbed", wrapText: true },
+  // A third mount, paired with neither of the above: the testbed's option chips prove the flex
   // containers clip, but a markdown column whose source value carries literal newlines takes a
   // different path to the DOM (`renderInlineMarkdown` turns each `\n` into a real `<br>`), and a
   // `<br>` forces its line break regardless of `white-space: nowrap` on every ancestor. This
   // column carries no wrap override of its own — it follows the view, which is off here — so the
   // clip this proves is the same one the chip pair proves, reached through markdown instead of a
   // flex-wrap container.
-  { name: "table-catalogue-habit-health-log-markdown-newline-wrap-off/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "habit-health-log", catalogueMarkdownNewline: true },
+  { name: "table-catalogue-testbed-markdown-newline-wrap-off/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "testbed", catalogueMarkdownNewline: true },
 ];
 
 // ───────────────────────────────────────────────────────────────────
@@ -134,13 +133,13 @@ const WRAP_TOGGLE_SCENARIOS = [
 // class the desktop reported — a cell that wraps and takes the whole row with it — was invisible
 // there and a green phone lane said nothing about it.
 //
-// The catalogue is the Habit and Health Log the operator photographed, and its Journal column is
-// the one that grew: a long-text column carrying its own wrap mode, in a table whose switch was
-// off. It measured 300px against neighbours at 36px. Both directions are asserted, because a
+// The catalogue's own long-text column is the one that grew: its notes column carries its own
+// wrap mode, in a table whose switch was off, and it measured 300px against neighbours at 36px.
+// Both directions are asserted, because a
 // check that cannot go red when the switch is on proves nothing about the switch.
 const WRAP_DESKTOP_SCENARIOS = [
-  { name: "table-catalogue-habit-health-log-wrap-off/desktop", renderer: "table", bag: "file-view", catalogueUseCase: "habit-health-log" },
-  { name: "table-catalogue-habit-health-log-wrap-on/desktop", renderer: "table", bag: "file-view", catalogueUseCase: "habit-health-log", wrapText: true },
+  { name: "table-catalogue-testbed-wrap-off/desktop", renderer: "table", bag: "file-view", catalogueUseCase: "testbed" },
+  { name: "table-catalogue-testbed-wrap-on/desktop", renderer: "table", bag: "file-view", catalogueUseCase: "testbed", wrapText: true },
 ];
 
 // A single line of body text in a data cell, measured: 16px for a bare sentence, 23px for the

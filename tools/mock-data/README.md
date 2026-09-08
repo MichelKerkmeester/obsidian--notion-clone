@@ -1,6 +1,6 @@
 ---
 title: "tools/mock-data: the shared test-environment catalogue"
-description: "One deterministic record set, ten use cases, three destinations — the Obsidian vault, an Anytype demo space and a CSV export for any tool that reads one — all built from the same catalogue so a difference between them is a finding rather than noise."
+description: "One deterministic record set, one use case, three destinations — the Obsidian vault, an Anytype demo space and a CSV export for any tool that reads one — all built from the same catalogue so a difference between them is a finding rather than noise."
 trigger_phrases:
   - "obsidian plugin mock data generator"
   - "test environment catalogue"
@@ -26,34 +26,25 @@ node tools/mock-data/generate.ts                      # catalogue.json + csv/
 node tools/mock-data/generate.ts --vault "<vault>"    # also the Obsidian notes
 node tools/mock-data/capture.mjs                      # photograph each database in the real renderer
 npx vitest run tools/mock-data/catalogue.test.mjs      # determinism, counts, coverage
+npx vitest run tools/mock-data/consolidation.test.mjs  # one dataset, every harness mount on it
 ```
 
 Node runs the TypeScript directly; there is no build step.
 
 ## 2. WHAT IT PRODUCES
 
-Ten use cases, 326 records, 28 columns each, five views each.
+One use case — the Testbed: 36 records, 28 columns, six views. There is one because there is one
+testbed; the earlier domain-flavoured copies of the same shape were many places for a harness's
+values to disagree, and the point of the consolidated database is that they cannot.
 
-| Use case | Records |
-|---|---:|
-| Project Tracker | 36 |
-| CRM Contacts and Deals | 34 |
-| Reading List | 32 |
-| Recipes and Meal Plan | 30 |
-| Habit and Health Log | 40 |
-| Travel Itinerary | 28 |
-| Home Inventory | 34 |
-| Content Calendar | 32 |
-| Course Notes and Study | 30 |
-| Finance Reports | 30 |
-
-Every use case carries the same 28 columns, which is what makes the three environments comparable.
+Every record carries the same 28 columns, which is what makes the three environments comparable.
 Between them the columns exercise all thirteen `ColumnDef` types the plugin declares, plus the five
 display variants that are not types: markdown text, the three link schemes, and the rating, progress
 and ring number styles.
 
-The last record of every use case is deliberately empty. An environment with no empty row cannot
-answer what an empty cell renders as.
+The last record is deliberately empty, and the first is deliberately full: every optional facet
+filled. An environment with no empty row cannot answer what an empty cell renders as, and one with
+no complete row cannot answer what a fully populated record costs to render.
 
 ## 3. THE THREE OUTPUTS
 
@@ -75,9 +66,11 @@ Neither portable output invents a created or modified timestamp. Those two colum
 
 ## 4. VIEWS
 
-Each database declares table, board, calendar, timeline and chart. Those are the five view types the
+Each database declares table, board, calendar, timeline and chart. Those are the view types the
 plugin ships and keeps. The list and gallery renderers have both been removed from the tree, so a
-generated view of either would be configuration for a surface the plugin no longer renders.
+generated view of either would be configuration for a surface the plugin no longer renders. A
+second table declares a sort and a filter, so the note also carries a deliberately ordered,
+deliberately narrowed view and not only the everything-shown default.
 
 ## 5. WHAT A GREEN RUN HERE DOES NOT PROVE
 

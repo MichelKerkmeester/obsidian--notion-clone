@@ -94,8 +94,8 @@ describe("generated data is reproducible", () => {
 // ───────────────────────────────────────────────────────────────────
 
 describe("record counts", () => {
-  it("carries ten use cases", () => {
-    expect(catalogue.useCases).toHaveLength(10);
+  it("carries one use case", () => {
+    expect(catalogue.useCases).toHaveLength(1);
   });
 
   it("gives every use case between twenty and forty records", () => {
@@ -165,10 +165,10 @@ describe("type coverage", () => {
     }
   });
 
-  it("gives every use case the five view types the plugin ships and keeps", () => {
+  it("gives the use case the view types the plugin ships and keeps, plus a second, filtered and sorted table", () => {
     for (const useCase of catalogue.useCases) {
       expect(useCase.views.map((view) => view.type), useCase.id)
-        .toEqual(["table", "board", "calendar", "timeline", "chart"]);
+        .toEqual(["table", "board", "calendar", "timeline", "chart", "table"]);
     }
   });
 

@@ -8,22 +8,23 @@ importance_tier: "important"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "074-test-data-consolidation"
+    packet_pointer: "005-component-surface-system/074-test-data-consolidation"
     last_updated_at: "2026-09-08T08:30:00Z"
     last_updated_by: "markdown-scaffold"
-    recent_action: "Authored the durable directive from the operator's R10 report"
-    next_safe_action: "Inventory every test/fixture dataset before designing"
+    recent_action: "Landed the consolidation; Finance fixture kept; registry red-then-green; gate 27/0"
+    next_safe_action: "Await the fresh verifier; the operator adopts testbed-proposal.md"
     blockers:
-      - "Finance data visibility depends on 070 landing"
+      - "The on-device confirmation of the Finance databases and the adoption of testbed-proposal.md are the operator's rows; this packet never writes their vault"
     key_files:
       - "spec.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "074-test-data-consolidation-scaffold"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 90
     open_questions: []
-    answered_questions: []
+    answered_questions:
+      - "Surviving view types: table, board, calendar, timeline, chart (decision-record ADR-0001)"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
 # Goal: Test Data Consolidation
@@ -54,10 +55,10 @@ resend the full text of this file in chat so the operator can update their copy.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] Every test/fixture dataset the project ships or seeds inventoried
-- [ ] One consolidated testbed database designed and built, covering every surviving view/column/grouping/filter/sort/formula/relation
-- [ ] Capture, story and phone-smoke harnesses migrated onto the one consolidated database, each re-verified against its own pass/fail criteria
-- [ ] Finance databases confirmed visible once 070 lands, documented as the kept second dataset
+- [x] Every test/fixture dataset the project ships or seeds inventoried — the Dataset Inventory table in the packet's `tasks.md`, counts read from the files themselves; the catalogue was 10 databases and roughly 326 records when this opened
+- [x] One consolidated testbed database designed and built, covering every surviving view/column/grouping/filter/sort/formula/relation — 36 records, 28 columns, five surviving view types plus the deliberately sorted-and-filtered second table; no non-default sort and no non-empty filter existed in the generated notes before the fix; the survivors question answered as decision-record ADR-0001, the coverage as ADR-0004
+- [x] Capture, story and phone-smoke harnesses migrated onto the one consolidated database, each re-verified against its own pass/fail criteria — every catalogue mount repointed; the suite was 1672 tests, now 1678 with the registry's six; the constructed, bench, smoke and story bodies reference no use case and stay, as their lanes' measured subjects (ADR-0003); every criterion re-measured, none loosened
+- [ ] Finance databases confirmed visible once 070 lands, documented as the kept second dataset — code-side proven and documented (ADR-0005, the cold-cache lane, `testbed-proposal.md`); the on-device read of the operator's own Finance databases is the operator's row and this leg does not tick it
 <!-- /ANCHOR:completion -->
 
 ---
@@ -70,10 +71,14 @@ resend the full text of this file in chat so the operator can update their copy.
 | Item | State | Evidence |
 |------|-------|----------|
 | Packet opened | Done | This scaffold, 2026-09-08 |
+| Implementation leg, 2026-09-08 | Done | The consolidation landed in the worktree: ten fixture databases → one Testbed (36 records), the 070 Finance fixture kept as the second dataset, every mount repointed; registry suite 4-of-6 red → 6/6 green; vitest 153/1672 → 154/1678; the full ladder and the gate (27 green, 0 declared red) all exit 0; details, deviations and the capture disposition in the packet's `implementation-summary.md` and `decision-record.md` |
 
 ### Deviations and findings
 
 | Item | Note |
 |------|------|
-| None yet | Work has not started |
+| Found: the capture, story and smoke bodies the spec's scope lists were never separate fixtures | The scenario markup, the constructed lane's small dataset, the bench volume and the story files reference no catalogue use case — read, not assumed — so they stayed, and the spec's “Files to Change” overcounted them; recorded as decision-record ADR-0003 rather than silently narrowing the scope |
+| Found: no committed capture moved | The consolidated dataset feeds no PNG — the capture corpus photographs scenario markup, constructed states and the reference benches; swept twice per the fixture-changing discipline, three single-channel-unit jitter flips restored by the second run (decision-record ADR-0006) |
+| Note: the Anytype report JSONs and `screenshots/anytype/` still describe the last physical ten-set load | This packet cannot re-run the application; the loaders already iterate the one-database catalogue, and `anytype/README.md` says so — the next physical `load.mjs --reset` refreshes them |
+| Found: stories needed no repoint | Every story constructs its own components inline; the “catalogue” in their headers is the story-coverage sense of the word — verified import-by-import |
 <!-- /ANCHOR:log -->

@@ -28,10 +28,10 @@ contextType: "implementation"
 
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
-| AC-001 | REQ-001 | Given the project's fixture/test surfaces (`tools/screenshots/`, `tools/storybook/`, any smoke vault), When inventoried, Then every dataset is named with its current row/view/column coverage | Inventory table | Unmet | - |
-| AC-002 | REQ-002 | Given the inventory, When the consolidated testbed database is built, Then it covers every surviving view type, column type, grouping, filter, sort, formula and relation the inventory found | Database definition + coverage checklist | Unmet | - |
-| AC-003 | REQ-003 | Given the consolidated database, When each harness (capture, story, phone-smoke) is rerun against it, Then each passes its own pre-existing pass/fail criteria | Harness command output, before/after | Unmet | - |
-| AC-004 | REQ-004 | Given `070`'s fix lands, When the Finance databases are opened, Then their properties render populated, and this is documented as the kept second dataset | Recapture + spec note | Unmet | - |
+| AC-001 | REQ-001 | Given the project's fixture/test surfaces (`tools/screenshots/`, `tools/storybook/`, any smoke vault), When inventoried, Then every dataset is named with its current row/view/column coverage | Inventory table | Met — the Dataset Inventory table in `tasks.md` names all seven bodies with rows/columns/views/fates; counts read from the files, with the uncountable operator vault marked as theirs | - |
+| AC-002 | REQ-002 | Given the inventory, When the consolidated testbed database is built, Then it covers every surviving view type, column type, grouping, filter, sort, formula and relation the inventory found | Database definition + coverage checklist | Met — the testbed note declares 28 columns (all 13 plugin column types + the 5 display variants), six views (table, board, calendar, timeline, chart — the survivors, ADR-0001 — plus a deliberately sorted-and-filtered second table, ADR-0004), grouping on board/timeline/chart, a computed formula, a relation, a rollup, and deliberately full-first/sparse-last records; asserted by `consolidation.test.mjs` and `catalogue.test.mjs`, confirmed by the generator's own report: 36 records, 13 column types, 24 neutral types, 6 views | - |
+| AC-003 | REQ-003 | Given the consolidated database, When each harness (capture, story, phone-smoke) is rerun against it, Then each passes its own pre-existing pass/fail criteria | Harness command output, before/after | Met — capture: vitest 153 files/1672 → 154/1678, `render-assertions` (rhythm 36 rows, 1 distinct height, 35px ≤ 49; wrap lanes all PASS), the constructed/reference sweeps `npm run screenshots` ×2 (616/616; run 2 byte-identical to the commit) and `screenshots:verify` (616 match); story: `story-coverage` (19/40, 21 exempt) and placement (413/415, 2 declared) — the stories imported nothing from the catalogue, so their criteria hold unchanged; phone-smoke: sheet-teardown, sheet-rebuild, toolbar-collapse, cold-cache-property-read all green in the gate. Their pass/fail criteria were not loosened; the numbers were re-measured, not re-declared | - |
+| AC-004 | REQ-004 | Given `070`'s fix lands, When the Finance databases are opened, Then their properties render populated, and this is documented as the kept second dataset | Recapture + spec note | Met — 070 landed at `a75a1ae2` (main head `f91370f1` carries it); the 070-built, operator-shaped Finance fixture (the second dataset, ADR-0005) renders populated properties in the cold-cache lane, green in the gate; kept, not folded, per ADR-0005 and documented for the operator in `testbed-proposal.md`. The operator's own on-device read of their Finance databases remains their row and was not ticked here | - |
 
 ### Status values
 
@@ -48,7 +48,7 @@ contextType: "implementation"
 <!-- ANCHOR:closure -->
 ## 3. CLOSURE STATEMENT
 
-**Closeable:** No
+**Closeable:** Yes
 
-Not yet started; blocked on 070 for AC-004.
+All four criteria verified 2026-09-08 (evidence in the Status cells above and the verification table in `implementation-summary.md`). What stays human: the operator's adoption of `testbed-proposal.md` against their own vault, and their on-device read of the Finance databases — this packet deliberately ticks neither.
 <!-- /ANCHOR:closure -->

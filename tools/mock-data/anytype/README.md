@@ -1,6 +1,6 @@
 ---
 title: "tools/mock-data/anytype: loading the catalogue into Anytype"
-description: "Builds the Anytype reference environment from catalogue.json — ten sets, 326 records, every column a typed relation — over Anytype's local HTTP API, with the views and the capture sweep driven through the renderer because the API has no route for them."
+description: "Builds the Anytype reference environment from catalogue.json — one Testbed set, 36 records, every column a typed relation — over Anytype's local HTTP API, with the views and the capture sweep driven through the renderer because the API has no route for them."
 trigger_phrases:
   - "load catalogue into anytype"
   - "anytype local api loader"
@@ -11,14 +11,18 @@ trigger_phrases:
 
 # tools/mock-data/anytype: loading the catalogue into Anytype
 
-This folder turns `tools/mock-data/catalogue.json` into a live Anytype space: ten collections, one
-per use case, 326 records, and every neutral column created as a correctly typed Anytype relation.
-It then gives each collection six view layouts, a sort and a filter, and photographs all of it in
+This folder turns `tools/mock-data/catalogue.json` into a live Anytype space: one Testbed
+collection, 36 records, and every neutral column created as a correctly typed Anytype relation.
+It then gives the collection six view layouts, a sort and a filter, and photographs all of it in
 both themes.
 
 It exists because the comparison this repository wants — our board and property surfaces against
 Anytype's — is only a comparison when both hold the same records. Anytype's own shipped demo is not
 that.
+
+The committed reports here, and the captures under `screenshots/anytype/`, still describe the last
+physical load, which built the catalogue's earlier multi-set shape; they refresh at the next
+`load.mjs --reset`, which now loads the single Testbed set.
 
 ## 1. QUICK START
 

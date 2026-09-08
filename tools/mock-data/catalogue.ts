@@ -1,6 +1,6 @@
 // ───────────────────────────────────────────────────────────────────
 // MODULE:    catalogue
-// COMPONENT: one schema shape, ten vocabularies, one deterministic record set
+// COMPONENT: one schema shape, one testbed vocabulary, one deterministic record set
 // ───────────────────────────────────────────────────────────────────
 //
 // The acceptance question this file answers is "do the three environments hold
@@ -28,7 +28,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import type { ColumnDef, DatabaseViewType, StatusOptionDef } from "../../src/data/types";
+import type { ColumnDef, DatabaseViewType, FilterRule, SortRule, StatusOptionDef } from "../../src/data/types";
 import { SeededRandom } from "./random.ts";
 import { USE_CASES, type UseCaseVocabulary } from "./use-cases.ts";
 
@@ -167,6 +167,11 @@ export interface CatalogueView {
   titleField?: string;
   colorField?: string;
   chartValueField?: string;
+  /** A non-default sort for this view's sortRules, so the note declares a
+   *  deliberately ordered view instead of only the everything-shown default. */
+  sort?: SortRule;
+  /** A non-empty filter for this view, the plugin's own rule shape. */
+  filter?: FilterRule;
 }
 
 export interface CatalogueUseCase {
@@ -266,6 +271,17 @@ function buildViews(vocabulary: UseCaseVocabulary): CatalogueView[] {
       id: `${prefix}-chart`, name: "By status", type: "chart",
       groupField: FACET_SHAPES.status.key, chartValueField: FACET_SHAPES.currency.key,
     },
+    // The second table is the deliberately filtered and sorted one: it proves
+    // the note can declare a non-default sort and a non-empty filter the way
+    // the plugin's own views do, instead of the harness only ever mounting the
+    // everything-shown default. Its filter keeps the records that carry a
+    // status, so the deliberately sparse record is the one it excludes — the
+    // same row the everything-shown table keeps for the empty-cell reads.
+    {
+      id: `${prefix}-table-sorted`, name: "Sorted and filtered", type: "table",
+      sort: { field: FACET_SHAPES.status.key, direction: "asc" },
+      filter: { field: FACET_SHAPES.status.key, op: "notempty" },
+    },
   ];
 }
 
@@ -307,6 +323,13 @@ function buildRecords(vocabulary: UseCaseVocabulary, seed: string): CatalogueRec
     if (index === records.length - 1) return;
 
     const optional = (chance: number): boolean => random.chance(chance);
+    // The first record is the deliberately full one: every optional facet is
+    // filled, so a missing value in a rendered vault is always a question
+    // about the renderer, never about whether the fixture meant to have one.
+    // The chance still rolls for that record, so the draw order — and
+    // therefore every later record — stays where it was.
+    const every = index === 0;
+    const keep = (chance: number): boolean => every || random.chance(chance);
     const startOffset = random.int(-58, 58);
     const spanDays = random.int(1, 21);
 
@@ -314,42 +337,42 @@ function buildRecords(vocabulary: UseCaseVocabulary, seed: string): CatalogueRec
     // A wrapped multi-line cell is its own renderer path, and it is the one that
     // has to survive a narrow column. Left empty on some rows so the wrapped and
     // the empty case both appear in every environment.
-    if (optional(0.7)) record.values.notes = random.pick(vocabulary.notes);
-    if (optional(0.85)) record.values.markdown = random.pick(vocabulary.markdown);
-    if (optional(0.8)) {
+    if (keep(0.7)) record.values.notes = random.pick(vocabulary.notes);
+    if (keep(0.85)) record.values.markdown = random.pick(vocabulary.markdown);
+    if (keep(0.8)) {
       const slug = record.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 72);
       record.values.url = `${vocabulary.urlHost}/${slug}`;
     }
-    if (optional(0.75)) {
+    if (keep(0.75)) {
       const person = random.pick(vocabulary.people);
       const local = person.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z]+/g, ".");
       record.values.email = `${local}@${vocabulary.emailDomain}`;
     }
-    if (optional(0.6)) record.values.phone = `+31 20 ${random.int(100, 999)} ${random.int(1000, 9999)}`;
+    if (keep(0.6)) record.values.phone = `+31 20 ${random.int(100, 999)} ${random.int(1000, 9999)}`;
 
     record.values.number = random.amount(vocabulary.number[0], vocabulary.number[1], vocabulary.number[2]);
-    if (optional(0.9)) record.values.rating = random.int(1, 5);
-    if (optional(0.9)) record.values.progress = random.int(0, 100);
-    if (optional(0.8)) record.values.ring = random.int(0, 100);
-    if (optional(0.92)) record.values.currency = random.amount(vocabulary.currency[0], vocabulary.currency[1], 2);
+    if (keep(0.9)) record.values.rating = random.int(1, 5);
+    if (keep(0.9)) record.values.progress = random.int(0, 100);
+    if (keep(0.8)) record.values.ring = random.int(0, 100);
+    if (keep(0.92)) record.values.currency = random.amount(vocabulary.currency[0], vocabulary.currency[1], 2);
 
     record.values.status = random.pick(vocabulary.status).value;
-    if (optional(0.9)) record.values.select = random.pick(vocabulary.select).value;
-    if (optional(0.85)) record.values.person = random.pick(vocabulary.people);
+    if (keep(0.9)) record.values.select = random.pick(vocabulary.select).value;
+    if (keep(0.85)) record.values.person = random.pick(vocabulary.people);
     // One value on some rows and six on others is what makes a wrapping bug
     // visible; a fixed count never wraps or always does.
-    if (optional(0.9)) {
+    if (keep(0.9)) {
       record.values.multiSelect = random.sample(vocabulary.multiSelect, random.int(1, Math.min(6, vocabulary.multiSelect.length)))
         .map((option) => option.value);
     }
-    if (optional(0.7)) record.values.tags = random.sample(vocabulary.tags, random.int(1, 2));
-    record.values.checkbox = random.chance(0.3);
+    if (keep(0.7)) record.values.tags = random.sample(vocabulary.tags, random.int(1, 2));
+    record.values.checkbox = keep(0.3);
 
-    if (optional(0.9)) record.values.date = dateKey(startOffset + spanDays);
+    if (keep(0.9)) record.values.date = dateKey(startOffset + spanDays);
     record.values.rangeStart = dateKey(startOffset);
     record.values.rangeEnd = dateKey(startOffset + spanDays);
-    if (optional(0.8)) record.values.datetime = dateTimeKey(startOffset - random.int(0, 12), random.int(7, 19), random.pick([0, 15, 30, 45]));
-    if (optional(0.55)) record.values.files = random.sample(ATTACHMENTS, random.int(1, 2));
+    if (keep(0.8)) record.values.datetime = dateTimeKey(startOffset - random.int(0, 12), random.int(7, 19), random.pick([0, 15, 30, 45]));
+    if (keep(0.55)) record.values.files = random.sample(ATTACHMENTS, random.int(1, 2));
   });
 
   // Relations are wired after every record exists, so a link can point forwards
@@ -357,7 +380,9 @@ function buildRecords(vocabulary: UseCaseVocabulary, seed: string): CatalogueRec
   const linkable = records.slice(0, -1);
   records.forEach((record, index) => {
     if (index === records.length - 1) return;
-    if (!random.chance(0.6)) return;
+    // The deliberately full record always relates; elsewhere the existing
+    // chance decides, so the graph still skips rows.
+    if (index !== 0 && !random.chance(0.6)) return;
     const others = linkable.filter((candidate) => candidate.id !== record.id);
     record.values.relation = random.sample(others, random.int(1, 2)).map((target) => target.id);
   });

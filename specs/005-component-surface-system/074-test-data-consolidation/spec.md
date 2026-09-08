@@ -9,13 +9,12 @@ importance_tier: "normal"
 contextType: "implementation"
 _memory:
   continuity:
-    packet_pointer: "074-test-data-consolidation"
+    packet_pointer: "005-component-surface-system/074-test-data-consolidation"
     last_updated_at: "2026-09-08T08:30:00Z"
     last_updated_by: "markdown-scaffold"
-    recent_action: "Opened the packet from the operator's R10 report"
-    next_safe_action: "Inventory every test/fixture dataset before consolidating"
-    blockers:
-      - "The Finance data's visibility depends on 070 landing first (\"restored\" means visible again, not recovered — the diagnosis found the data intact)"
+    recent_action: "Consolidation implemented; Finance fixture kept; registry red-then-green; gate 27/0"
+    next_safe_action: "Await the fresh verifier; the operator adopts testbed-proposal.md"
+    blockers: []
     key_files:
       - "tools/screenshots/"
       - "tools/storybook/"
@@ -23,12 +22,12 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "074-test-data-consolidation-scaffold"
       parent_session_id: null
-    completion_pct: 0
-    open_questions:
-      - "Which view types survive 006-009's deprecations and therefore need a representative view in the one big testbed database?"
+    completion_pct: 90
+    open_questions: []
     answered_questions:
       - "The operator's own Database Testbed folder is operator-owned; this packet proposes the consolidated shape for it but does not overwrite it without the operator's own action"
       - "\"With data restored\" means visible again, not recovered: 070's diagnosis already found the Finance frontmatter intact on disk"
+      - "Surviving view types: table, board, calendar, timeline, chart — list and gallery renderers are gone from the tree (decision-record ADR-0001)"
 ---
 
 <!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
@@ -44,7 +43,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P2 |
-| **Status** | Draft — opened 2026-09-08, nothing started |
+| **Status** | Implemented 2026-09-08 — consolidation landed in the worktree; closure evidence in `implementation-summary.md` |
 | **Created** | 2026-09-08 |
 | **Branch** | `main` |
 | **Parent Spec** | `../005-component-surface-system/` |
@@ -168,7 +167,7 @@ One consolidated testbed database is the shared fixture for capture, story and p
 
 ## 10. OPEN QUESTIONS
 
-- Which view types survive `006`-`009`'s deprecations and need a representative view in the new testbed database?
+- (none — the surviving-views question is answered as decision-record ADR-0001: table, board, calendar, timeline, chart; list and gallery renderers are gone from the tree, so a fixture view of either would configure a surface nothing paints)
 <!-- /ANCHOR:questions -->
 
 ---

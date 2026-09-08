@@ -143,8 +143,8 @@ export const STATE_SCENARIOS = [
   // The two reasons getEmptyStateReason's own predicate distinguishes at sourceCount === 0 versus
   // a positive sourceCount with nothing active — mounted on the catalogue's real columns, zero
   // rows, so the reason is the predicate's own output rather than a hand-supplied string.
-  { name: "table-empty-source-missing/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "home-inventory", emptyReason: "source-missing" },
-  { name: "table-empty-no-matching-data/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "home-inventory", emptyReason: "no-matching-data" },
+  { name: "table-empty-source-missing/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "testbed", emptyReason: "source-missing" },
+  { name: "table-empty-no-matching-data/file-view", renderer: "table", bag: "file-view", catalogueUseCase: "testbed", emptyReason: "no-matching-data" },
   { name: "core-column-header/file-view", renderer: "column-header", bag: "file-view", captureData: true },
   { name: "table-column-headers/file-view", renderer: "table", bag: "file-view", captureData: true, columnHeaderController: true, longHeaderLabel: true },
   // The board state variants.

@@ -238,6 +238,20 @@ function viewBlock(useCase: CatalogueUseCase, view: CatalogueUseCase["views"][nu
     block.chartShowTitle = true;
     block.chartTitle = `${useCase.name} by ${keyOf(useCase, "status")}`;
   }
+  // A deliberately sorted or filtered view declares it the way the plugin's
+  // own views do; every other view keeps the everything-shown default. The
+  // single-sort fields are written alongside sortRules so the two
+  // representations of the same ordering agree whichever the reader consults.
+  if (view.sort) {
+    block.sortColumn = view.sort.field;
+    block.sortDirection = view.sort.direction;
+    block.sortRules = [view.sort];
+  }
+  if (view.filter) {
+    const filter: Record<string, YamlValue> = { field: view.filter.field, op: view.filter.op };
+    if (view.filter.value !== undefined) filter.value = view.filter.value;
+    block.filters = [filter];
+  }
   return block;
 }
 

@@ -3,6 +3,7 @@
   "packet_id": "005-component-surface-system/074-test-data-consolidation",
   "spec_folder": "005-component-surface-system/074-test-data-consolidation",
   "parent_id": "005-component-surface-system",
+  "status_review_required": true,
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -38,15 +39,29 @@
       "plan",
       "technical"
     ],
-    "importance_tier": "normal",
-    "status": "in_progress",
+    "importance_tier": "important",
+    "status": "complete",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "implementation-summary.md"
+      "decision-record.md",
+      "implementation-summary.md",
+      "tools/mock-data/consolidation.test.mjs",
+      "tools/mock-data/use-cases.ts",
+      "tools/mock-data/catalogue.ts",
+      "tools/mock-data/emit-obsidian.ts",
+      "tools/mock-data/catalogue.test.mjs",
+      "tools/mock-data/catalogue.json",
+      "tools/mock-data/csv/testbed.csv",
+      "tools/live/render-assertions.mjs",
+      "tools/live/render-assertion-bundle.mjs",
+      "tools/mock-data/README.md",
+      "tools/mock-data/generate.ts",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/live/database-cold-cache-property-read.mjs"
     ],
     "entities": [
       {
@@ -80,9 +95,93 @@
         "source": "derived"
       },
       {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "consolidation.test.mjs",
+        "kind": "file",
+        "path": "tools/mock-data/consolidation.test.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "use-cases.ts",
+        "kind": "code",
+        "path": "tools/mock-data/use-cases.ts",
+        "source": "derived"
+      },
+      {
+        "name": "catalogue.ts",
+        "kind": "code",
+        "path": "tools/mock-data/catalogue.ts",
+        "source": "derived"
+      },
+      {
+        "name": "emit-obsidian.ts",
+        "kind": "code",
+        "path": "tools/mock-data/emit-obsidian.ts",
+        "source": "derived"
+      },
+      {
+        "name": "catalogue.test.mjs",
+        "kind": "file",
+        "path": "tools/mock-data/catalogue.test.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "catalogue.json",
+        "kind": "config",
+        "path": "tools/mock-data/catalogue.json",
+        "source": "derived"
+      },
+      {
+        "name": "testbed.csv",
+        "kind": "file",
+        "path": "tools/mock-data/csv/testbed.csv",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertions.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-bundle.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertion-bundle.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
+        "kind": "doc",
+        "path": "tools/mock-data/README.md",
+        "source": "derived"
+      },
+      {
+        "name": "generate.ts",
+        "kind": "code",
+        "path": "tools/mock-data/generate.ts",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "database-cold-cache-property-read.mjs",
+        "kind": "file",
+        "path": "tools/live/database-cold-cache-property-read.mjs",
         "source": "derived"
       },
       {
@@ -98,12 +197,6 @@
         "source": "derived"
       },
       {
-        "name": "The Finance",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
         "name": "Database Testbed",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -114,89 +207,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Problem Statement The",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Clean Architecture",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Key Components",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Data Flow",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Current Role",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The operator wants less test data overall: one big testbed database with an overview and every view type/column type/grouping/filter/sort/formula/relation the harnesses need, alongside the operator's own Finance databases (Reports/Income/Expenses/Sales, imported from Notion) as a second, real-world dataset — rather than the current spread of separate fixture vaults, screenshot fixtures, story fixtures and an operator-maintained Testbed folder that do not share a single source of truth",
     "created_at": "2026-09-08T06:23:37Z",
-    "last_save_at": "2026-09-08T06:48:10.349Z",
+    "last_save_at": "2026-09-08T14:39:22.255Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -205,15 +220,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:4a74fb2a8d22feb9f567bb99e3d47784f6d5ce35a76e9453984791263a6af54f",
+    "source_fingerprint": "sha256:b625c543d4cfd4397d700c4eeb8d6bbaf54d9abc3153cf77ef2781adc7686a92",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "25bb5ea0e90a4a479321815203c59f0b59d4da90ac9967f1330c89221c4ca712",
-      "plan.md": "e2e14bd0eb68fae8e23dc2b33934c919b4878afa99b45c5c9830b5a71b5312bc",
-      "tasks.md": "901ed5f614fda6a845c78adb8a42ed24ca33f05140598df9a5f03c841acc25d0",
-      "implementation-summary.md": "948c1d3f79596b6d8fa6ca0a61db83c87cb7b0e6b0767de42f46f88f48286431"
+      "spec.md": "b5153eb29502a833e6520db42280438188aea2ff655fe340f27415c5a9978fea",
+      "plan.md": "d05d8be6d7b445df368ba92beefc9c9fa2d3b6eacd378d1381e34be344bf79cb",
+      "tasks.md": "0587a94bc297b2b1ea46cb81ede71dc5bc8d1ec0056328ed43bfaa387596140a",
+      "decision-record.md": "9976d02fa271817658326058fb8e7065c9c52b8c858ba38b01f4bba0e3461d6a",
+      "implementation-summary.md": "2a7fce06515bcb1b26c4d485717535ef48be0aa1a76eda9475f30433c514326f"
     },
     "last_active_at": null
   }
