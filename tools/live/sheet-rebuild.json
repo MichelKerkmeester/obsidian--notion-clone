@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-09-08T00:16:56.918Z",
+  "measuredAt": "2026-09-08T01:49:48.158Z",
   "inputs": {
     "tools/live/sheet-rebuild.mjs": "fd7ad549bd82",
     "tools/live/sheet-rebuild-harness.ts": "8b56d2b01f48",
     "src/views/toolbar-renderer.ts": "8aef36ac094a",
-    "src/views/popover-position.ts": "2bab65e868fe",
+    "src/views/popover-position.ts": "ff8449f865d9",
     "src/views/mobile-bottom-sheet.ts": "a2360ab4d988",
     "src/views/sort-panel-renderer.ts": "8e715d344de9",
     "src/views/filter-panel-renderer.ts": "dc0b2f9f2ac8",
@@ -89,7 +89,7 @@
     {
       "name": "settings sheet chrome survives its own scroll",
       "pass": true,
-      "detail": "the band held at 47px through a 200px scroll (47px at rest), and the header stayed put at 29px from the sheet's top edge",
+      "detail": "the band held at 45px through a 200px scroll (45px at rest), and the header stayed put at 27px from the sheet's top edge",
       "preFixFailure": "the grab band went from 48px to ZERO after a 200px scroll — the bar and the header scrolled off the top with the content"
     },
     {
@@ -119,7 +119,7 @@
     {
       "name": "the sort sheet holds still while it rebuilds",
       "pass": true,
-      "detail": "settled at top 674, rebuilt to 655; the deepest point during the rebuild was 674",
+      "detail": "settled at top 676, rebuilt to 657; the deepest point during the rebuild was 676",
       "preFixFailure": "settled at top 708 and the rebuild dropped it to 844 on an 844px screen"
     },
     {
@@ -131,7 +131,7 @@
     {
       "name": "the filter sheet holds still while it rebuilds",
       "pass": true,
-      "detail": "settled at top 541, rebuilt to 639; the deepest point during the rebuild was 639",
+      "detail": "settled at top 543, rebuilt to 641; the deepest point during the rebuild was 641",
       "preFixFailure": "settled at top 701 and the rebuild dropped it to 844 on an 844px screen"
     },
     {
@@ -143,7 +143,7 @@
     {
       "name": "a sheet that is genuinely opening still rises",
       "pass": true,
-      "detail": "the entrance still runs: first seen at 836 on a 844px screen (resting 8px off the floor), settled at 674",
+      "detail": "the entrance still runs: first seen at 836 on a 844px screen (resting 8px off the floor), settled at 676",
       "preFixFailure": null
     },
     {
