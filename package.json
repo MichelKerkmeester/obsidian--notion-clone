@@ -1,6 +1,6 @@
 {
   "name": "obsidian-obnotion",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "description": "Database views for notes with table, board, list, chart, calendar, timeline, inline markdown, formulas, and source rules.",
   "main": "main.js",
   "scripts": {
