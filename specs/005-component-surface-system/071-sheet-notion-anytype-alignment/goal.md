@@ -9,12 +9,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/071-sheet-notion-anytype-alignment"
-    last_updated_at: "2026-09-08T22:29:00Z"
-    last_updated_by: "246-goal-refresh-evening"
-    recent_action: "001 LANDED 31f712c3; 002 built 70ee0b95, lander paused; 003/004 in progress"
-    next_safe_action: "Resume 002's paused lander first, then land 003/004 as they finish"
+    last_updated_at: "2026-09-08T21:40:24Z"
+    last_updated_by: "242-landing-verify-continuation"
+    recent_action: "002-settings-sheet LANDED+verified 8b213929: goal 2/3, gate 27/0"
+    next_safe_action: "003/004 finish+land, then 005/006; 008/003-004 wait on the next release"
     blockers:
-      - "002's landing lander (`.worktrees/242-settings-sheet-notion`) was paused mid-rebase; do not touch that worktree until it resumes"
+      - "002's landing is complete (`8b213929`, continuation-verified); the .worktrees/242 worktree can be retired once the 005-handover entry lands"
       - "003 (`.worktrees/244-add-property-sheet`) and 004 (`.worktrees/245-view-config-sheet`) are in progress, uncommitted; do not touch those worktrees either"
     key_files:
       - "spec.md"
@@ -83,7 +83,7 @@ string, not these files.
 ## 3. COMPLETION CRITERIA
 
 - [x] 001's inventory table exists and names every sheet-capable surface with its coverage and reference state — `001/inventory.md` holds 86 rows (54 primary + 32 stacked) with 0 blank cells, 68 rows carrying captures, 46 recording "none" references by name; the parent figure was 0/4 when the packet landed 2026-09-08 (`527e8455`), the packet's own 3/3 criteria are all ticked, its 9-test count suite and the 27/0 gate are green; the three redesign criteria stay open, so the parent's figure is 1/4
-- [ ] 002 (settings sheet) and 003 (add-property sheet) both redesigned, recaptured and matched against their mapped reference — 002 built at `70ee0b95` with its lander paused mid-rebase; 003 in progress, uncommitted; neither landed
+- [ ] 002 (settings sheet) and 003 (add-property sheet) both redesigned, recaptured and matched against their mapped reference — 002 LANDED+verified post-rebase at `8b213929` (goal 2/3: the reference columns stay `TBD`, D-005); 003 in progress, uncommitted
 - [ ] 004, 005 and 006 (view-config, filter/sort/group, record/menu) each redesigned, recaptured and matched against their mapped reference — 004 in progress, uncommitted; 005/006 not started
 - [ ] No prior sheet fix (054, 058, 045, 067) regresses as a result of any redesign in this packet
 <!-- /ANCHOR:completion -->
@@ -99,7 +99,7 @@ string, not these files.
 |------|-------|----------|
 | Packet opened, six child phases scaffolded | Done | This scaffold, 2026-09-08 |
 | 001-sheet-story-coverage-audit | Done | Landed `31f712c3`/`16547b92`; `001/inventory.md` 86-row coverage table |
-| 002-settings-sheet | Built, landing paused | `f0ffadc7`/`70ee0b95` in `.worktrees/242-settings-sheet-notion`; lander paused mid-rebase by the operator |
+| 002-settings-sheet | LANDED, landing-verified | `f0ffadc7`+`70ee0b95` rebased+landed as `5aa0ffd4`+`8b213929` on `origin/main`; continuation verification: gate 27/0, evidence re-derived, goal 2/3 (D-005) |
 | 003-add-property-sheet | In progress | `.worktrees/244-add-property-sheet`, uncommitted |
 | 004-view-config-sheet | In progress | `.worktrees/245-view-config-sheet`, uncommitted |
 | 005-filter-sort-group-sheets, 006-record-and-menu-sheets | Not started | — |

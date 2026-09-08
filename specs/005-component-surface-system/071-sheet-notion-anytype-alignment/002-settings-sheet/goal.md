@@ -52,7 +52,7 @@ resend the full text of this file in chat so the operator can update their copy.
 ## 3. COMPLETION CRITERIA
 
 - [x] Phase 1's reference mapping read before redesign starts
-- [x] Settings sheet redesigned and recaptured against its mapped reference
+- [ ] Settings sheet redesigned and recaptured against its mapped reference — the recapture ran (616/616 twice; 6 movers, 0 restores) but the reference columns stay `TBD` (D-005: no third-party reference carries readable measurements), so the against-its-reference half is recorded, not proven
 - [x] No regression on 054 T072's row-grammar and overflow fixes
 <!-- /ANCHOR:completion -->
 
@@ -74,7 +74,7 @@ resend the full text of this file in chat so the operator can update their copy.
 | Unit-test revert proof | Done | 6/6 → 1 failed / 5 passed on revert → 6/6 (`src/views/view-config-sheet-row-grammar.test.ts`) |
 | Captures + evidence + gate | Done | 616/616 ×2 + pixel-delta/jitter policy; evidence 15/15 fresh; gate 27/27, exit 0, css-lane ledger signed (`368631d8cd1f`) |
 | Docs + validation | Done | Orchestrator `--strict` → `RESULT: PASSED`; graph metadata backfilled |
-| Built, landing pending | Done | The GLM leg landed `f0ffadc7` (settings rows red-first) + `70ee0b95` in `.worktrees/242-settings-sheet-notion`; its lander was paused mid-rebase (rebase conflicts) by the operator before reaching `origin/main` |
+| Built, landing pending → LANDED+verified | Done | The GLM leg landed `f0ffadc7` (settings rows red-first) + `70ee0b95` in `.worktrees/242-settings-sheet-notion`; the continuation landing-verification resolved the two paused rebase rounds (072/073/074/008-002, then 656249dd's goal reconciliation) and landed the leg as `5aa0ffd4`+`8b213929` — gate 27/0, evidence re-derived against the merged stylesheet |
 
 ### Deviations and findings
 
@@ -84,5 +84,5 @@ resend the full text of this file in chat so the operator can update their copy.
 | 1px left border, none right | Side-sheet grammar asymmetry, shipped; flagged for 071 legs 004/005/006 |
 | Divider token fallback | 0px dividers where the host border token is missing; #333333 fallback (D-004) |
 | engine-parity exits 1 | INFORMATIONAL by design: 50→53 disagreements, +10/−7, all panel-base-import-modal checkbox-tint notes, 0 settings fixtures; committed = 50 |
-| Built at `70ee0b95`, landing paused mid-rebase | The three criteria below read `Unmet` in `acceptance-criteria.md` and stay that way until the paused lander resumes its rebase and verifies the landed evidence against `origin/main` itself |
+| Built at `70ee0b95`, landed+verified at `8b213929` | The continuation landing-verification resumed the paused rebase, re-derived the evidence against the merged stylesheet and re-ran the 27-lane gate; `acceptance-criteria.md`'s 3 rows read `Met` (AC-002's convergence is our own measured before/after; the reference columns stay `TBD`, D-005 — which is why goal criterion 2 stays unticked) |
 <!-- /ANCHOR:log -->

@@ -38,15 +38,23 @@
       "testing",
       "strategy"
     ],
-    "importance_tier": "normal",
-    "status": "in_progress",
+    "importance_tier": "important",
+    "status": "complete",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "implementation-summary.md"
+      "decision-record.md",
+      "implementation-summary.md",
+      "tools/live/sheet-grammar.mjs",
+      "src/views/view-config-sheet-row-grammar.test.ts",
+      "screenshots/manifest.json",
+      "tools/lane/css-lane.json",
+      "screenshots/notion/ios/harvest.json",
+      "src/views/view-config-panel-renderer.ts",
+      "tools/live/capture-device-parity.json"
     ],
     "entities": [
       {
@@ -80,9 +88,57 @@
         "source": "derived"
       },
       {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "view-config-sheet-row-grammar.test.ts",
+        "kind": "test",
+        "path": "src/views/view-config-sheet-row-grammar.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "harvest.json",
+        "kind": "config",
+        "path": "screenshots/notion/ios/harvest.json",
+        "source": "derived"
+      },
+      {
+        "name": "view-config-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/view-config-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "capture-device-parity.json",
+        "kind": "config",
+        "path": "tools/live/capture-device-parity.json",
         "source": "derived"
       },
       {
@@ -134,69 +190,21 @@
         "source": "derived"
       },
       {
+        "name": "Overview The Settings",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
         "name": "Clean Architecture",
         "kind": "proper_noun",
         "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Key Components",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Data Flow",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Current Role",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "tasks.md",
         "source": "derived"
       }
     ],
     "causal_summary": "The operator reports the Settings sheet's UI/UX is bad, without naming a specific defect — a whole-surface judgement rather than a single bug, in the pattern of prior whole-surface calls (row 63's calendar gestalt judgement, `roadmap.md` §4)",
     "created_at": "2026-09-08T06:24:03Z",
-    "last_save_at": "2026-09-08T20:45:31.513Z",
+    "last_save_at": "2026-09-08T21:47:18.647Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -205,15 +213,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:77476e7da22846d95b51a3fbc239e63dc5e423876d522038d16533db39e5e1c2",
+    "source_fingerprint": "sha256:b317201c68a5222d4839af1f8c7532f35a3c29c62ba1887e2ba7f7e22f9e2b42",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "9ee1fbb434756323a91f195af1c904bc589dcb36fd6abcd99a94b76bbe457054",
-      "plan.md": "6ddd34dc0a2ecc25135538fae79c1d40d5d82f30a3cd013089dd0dd392d48062",
-      "tasks.md": "2f718154a29c23b6d395cd486f953fefbaccc1b567b29f5d07b2d2947a1d6c6d",
-      "implementation-summary.md": "64c5138477acf6420f1aa3832ebadd2d2512b87e0f2cdeb7b4cd5bfa9fd7ba82"
+      "spec.md": "65951d5f87b6b9fbb1fe320b41a2d161461704708539ed48e1137cb947dd5893",
+      "plan.md": "61d98412d4afb475421a44f6e75f6018e8ce0f2667808b223c0b1ba96f3ee4e5",
+      "tasks.md": "3ffe8d81c1e75bb212f08211a8d8a260f40eeede57ebc974eef59228631e6956",
+      "decision-record.md": "bc5e175ef496208bdd6ea856b4a24bc6f18a7acb26b7ca937c4f3fddff82abd3",
+      "implementation-summary.md": "d4a8dd53e08924124e4e8e4926128904a1e83e08da7a2cd402207850c01eeece"
     },
     "last_active_at": null
   }

@@ -5776,14 +5776,16 @@
       "at": "2026-09-08T21:02:45Z",
       "hash": "ab74688a3dca",
       "reviewed": [
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-mobile-light.png",
         "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-dark.png",
         "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-light.png",
         "screenshots/notion-clone/panels/constructed-view-config-mobile-dark.png",
         "screenshots/notion-clone/panels/constructed-view-config-mobile-light.png",
         "screenshots/notion-clone/panels/panel-view-config-sheet-mobile-dark.png",
-        "screenshots/notion-clone/panels/panel-view-config-sheet-mobile-light.png"
+        "screenshots/notion-clone/panels/panel-view-config-sheet-mobile-light.png",
+        "screenshots/notion-clone/views/board-view-desktop-dark.png"
       ],
-      "note": "PENDING-STEP-6: continuation recapture decides the mover set; note finalized before the gate."
+      "note": "Recaptured 3x post-rebase (npm run screenshots, 616 entries, exit 0; a third run was needed because the pixel-delta bookkeeping lacked a prior-run sample, the 073 precedent) and every mover judged by decoded pixel delta against the committed blobs. 6 movers, all kept, none restored. 4 are this edit's own surface family: panel-view-config-sheet-mobile-{dark,light} 115366/115371 changed pixels at max channel delta 209, constructed-board-card-properties-mobile-{dark,light} 330249/330316 at 192/209 - 073's reference-size checkbox glyphs now painting inside this lane's replayed settings surfaces. constructed-view-config-mobile-{dark,light} did not move (their markup reaches no checkbox). board-view-desktop-dark 4px at max channel delta 1 moved in BOTH sampled runs - the lane's recurring rasteriser jitter at stable numbers, kept as a real mover (073 precedent). constructed-toolbar-add-view-mobile-light 96px at 196 reproduced the committed blob in runs 1-2 and moved on run 3; kept by the lane's <=12-delta rule (196 > 12), its one-pass variance recorded here. 0 jitter restores, so the third run's manifest records every kept mover's own bytes. After: the 13 stale evidence artefacts re-derived against ab74688a3dca - 12 stamps-only, engine-parity 50->43 disagreements, the 7 panel-view-config-sheet cross-engine input-width disagreements closed by this edit, exits 1 INFORMATIONAL by design at >0."
     }
   ],
   "outstanding": [

@@ -147,14 +147,14 @@
     ],
     "causal_summary": "The operator reports three separate sheet-family defects in the same batch — the settings sheet's UI/UX (R5), the add-property / property-type picker sheet rendering as a tall sheet that covers the note header while the keyboard is up (R6, screenshot evidence) — and asks a fourth, structural question: does the app actually have screenshot and story coverage for every sheet it can open, checked one by one against Notion and Anytype (R7)?",
     "created_at": "2026-09-08T06:24:02Z",
-    "last_save_at": "2026-09-08T20:44:51.238Z",
+    "last_save_at": "2026-09-08T21:47:18.746Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:acbf5e8c2f2e448857e3b4b6b64da8f5a79be80d78f0c18932293565e8f775c8",
+    "source_fingerprint": "sha256:65d515281b6a93b6439f757c7698124a1fe0b0c37ae60c10f426337d1982874c",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "a17f08b3e0271f07b0dbae52275b226f486747d7e0ebbfb3eb26b6b908ff437e"
