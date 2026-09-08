@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-08T01:41:08.516Z",
+  "measuredAt": "2026-09-08T03:56:20.348Z",
   "inputs": {
-    "styles.css": "e1de47b5feec",
+    "styles.css": "704f768371da",
     "tools/live/surface-census.mjs": "982af0f4c165",
     "src/views/surface-contract.ts": "99972eb224df",
     "src/views/record-detail-panel.ts": "596d9dba1a40",
@@ -10,10 +10,10 @@
   },
   "totals": {
     "rendered": 86,
-    "buildable": 234,
+    "buildable": 235,
     "declared": 6,
     "renderedOnly": 0,
-    "buildableNotRendered": 148,
+    "buildableNotRendered": 149,
     "untokened": 0,
     "unroled": 86,
     "recordSurfaceHandBuilt": 0
@@ -953,7 +953,7 @@
       "mountParent": "obnotion-panel-row",
       "tokens": true,
       "role": null,
-      "rect": "32x28",
+      "rect": "20x28",
       "scenarios": [
         "panel-filter-conditions",
         "panel-filter-conditions",
@@ -1660,6 +1660,7 @@
     "obnotion-dropdown-popover-context-settings",
     "obnotion-dropdown-popover-context-modal",
     "obnotion-dropdown-popover-context-container",
+    "obnotion-panel-button-narrow",
     "obnotion-source-rule-dropdown",
     "obnotion-panel-dropdown",
     "obnotion-filter-field-dropdown",

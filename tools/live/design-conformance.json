@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-08T01:40:32.253Z",
+  "measuredAt": "2026-09-08T03:55:35.605Z",
   "inputs": {
-    "styles.css": "e1de47b5feec",
+    "styles.css": "704f768371da",
     "tools/live/design-conformance.mjs": "8e86069bc5a3",
     "src/views/popover-position.ts": "ff8449f865d9"
   },
@@ -259,6 +259,6 @@
     "src/views/toolbar-renderer.ts:2530  .obnotion-menu-item",
     "src/views/view-config-panel-renderer.ts:355  .obnotion-view-config-panel",
     "src/views/view-config-panel-renderer.ts:392  .obnotion-panel-button",
-    "src/views/view-config-panel-renderer.ts:1562  .obnotion-dropdown-field"
+    "src/views/view-config-panel-renderer.ts:1563  .obnotion-dropdown-field"
   ]
 }
