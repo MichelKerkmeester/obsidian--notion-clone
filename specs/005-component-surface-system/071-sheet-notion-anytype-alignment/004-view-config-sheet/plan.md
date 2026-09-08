@@ -22,14 +22,33 @@ contextType: "general"
 ### Technical Context
 
 | Aspect | Value |
-|--------|-------|
-| **Language/Stack** | [e.g., TypeScript, Python 3.11] |
-| **Framework** | [e.g., React, FastAPI] |
-| **Storage** | [e.g., PostgreSQL, None] |
-| **Testing** | [e.g., Jest, pytest] |
+|-------|-------|
+| **Language/Stack** | TypeScript (Obsidian plugin), esbuild, Vitest, Puppeteer harnesses under `tools/` |
+| **Framework** | Obsidian plugin API; this leg: the settings sheet's CSS grammar and its lane |
+| **Storage** | None (plugin CSS + lane/assertion tooling) |
+| **Testing** | `tools/live/sheet-grammar.mjs` (live, measured), `src/views/view-config-sheet-row-grammar.test.ts` (unit), the gate's 27 lanes |
 
 ### Overview
-[2-3 sentences: what this implements and the technical approach]
+
+Redesign the settings sheet's rows (the view-config panel, producer `src/views/database-view.ts:5299`,
+presented by `src/views/view-config-panel-renderer.ts`) from 002's column-stacked shape to the
+reference's one-line list grammar — label left, control right, 44–52px pitch, inset hairline
+dividers — in `styles.css`, measured red→green by `tools/live/sheet-grammar.mjs` and pinned by a unit
+regression suite.
+
+### Reference mapping (Phase 1, quoted)
+
+Inventory row 42, verbatim: *"Settings sheet (view-config; the settings leg's surface) |
+src/views/database-view.ts:5299 | sheet (flush frame) | no (untracked — the view-config sheet is
+covered by the panel-view-config captures, not a story) | panel-view-config; panel-view-config-sheet |
+notion/ios/settings (24 …); notion/web/settings (51 …) / anytype/mobile/sheets (4 …);
+anytype/desktop/app (3 …) | Notion's settings references are full-height iOS pushes; our settings
+sheet is a 90svH-capped flush bottom sheet. Direction holds, but the two shapes have never been put
+side by side — filename read only."*
+
+That row maps this sheet to the Notion iOS/Web settings family against Anytype's sheets/app; where
+Notion and Anytype disagree, the shared inset-list grammar 002 already adopted decides (see
+`spec.md` §4 for the provenance of every number this redesign measured against).
 <!-- /ANCHOR:summary -->
 
 ---
@@ -38,14 +57,14 @@ contextType: "general"
 ## 2. QUALITY GATES
 
 ### Definition of Ready
-- [ ] Problem statement clear and scope documented
-- [ ] Success criteria measurable
-- [ ] Dependencies identified
+- [x] Problem statement clear and scope documented
+- [x] Success criteria measurable
+- [x] Dependencies identified
 
 ### Definition of Done
-- [ ] All acceptance criteria met
-- [ ] Tests passing (if applicable)
-- [ ] Docs updated (spec/plan/tasks)
+- [x] All acceptance criteria met
+- [x] Tests passing (if applicable)
+- [x] Docs updated (spec/plan/tasks)
 <!-- /ANCHOR:quality-gates -->
 
 ---

@@ -28,9 +28,9 @@ contextType: "implementation"
 
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
-| AC-001 | REQ-001 | Given Phase 1's inventory, When this phase starts, Then it cites the exact reference mapping row for the view-config sheet | `plan.md`, quoting the Phase 1 row | Unmet | - |
-| AC-002 | REQ-002 | Given the redesigned sheet, When captured against its reference, Then layout is measured as converged | Before/after capture with measurements | Unmet | - |
-| AC-003 | REQ-003 | Given the redesign, When 058's title field/format controls and 045's column-visibility controls are rerun, Then they still function correctly | Regression check | Unmet | - |
+| AC-001 | REQ-001 | Given Phase 1's inventory, When this phase starts, Then it cites the exact reference mapping row for the view-config sheet | `plan.md` §1 quotes inventory row 42 verbatim (producer `src/views/database-view.ts:5299`; notion/ios/settings 24 + notion/web/settings 51 vs anytype/mobile/sheets 4 + anytype/desktop/app 3, flagged "filename read only") | Met | - |
+| AC-002 | REQ-002 | Given the redesigned sheet, When captured against its reference, Then layout is measured as converged | The reference-gap table (`spec.md` §4) carries the before numbers; the lane measures the after: 13/13 rows label-left/control-right, 6/6 pitches 48.0px, 18/18 inset hairlines, 16px heading insets, 0 native selects, no overflow — and the recapture (twice, 616/616, exit 0 both) moved exactly the redesigned surface: constructed-view-config and panel-view-config-sheet, dark and light, 342–345k pixels, maxDelta 176–196; constructed-board-card-properties, dark and light, 440k, 194–209 | Met | - |
+| AC-003 | REQ-003 | Given the redesign, When 058's title field/format controls and 045's column-visibility controls are rerun, Then they still function correctly | `npx vitest run` 1729/1729 (their suites included), `render-assertions`/`touch-targets`/`verify-placement`/`sheet-grammar` all 0, gate 27/27 — the controls' producer markup is untouched; only their row's presentation moved | Met | - |
 
 ### Status values
 
@@ -47,7 +47,7 @@ contextType: "implementation"
 <!-- ANCHOR:closure -->
 ## 3. CLOSURE STATEMENT
 
-**Closeable:** No
-
-Not yet started.
+**Closeable:** Yes — this leg's own work. The operator's device recheck stays the operator's row
+(071 D3) and is not ticked here; the reference side is measured by number, not by eye (see
+`implementation-summary.md` → Known Limitations).
 <!-- /ANCHOR:closure -->

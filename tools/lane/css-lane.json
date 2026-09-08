@@ -1,7 +1,7 @@
 {
-  "holder": "003-add-property-sheet",
-  "acquiredAt": "2026-09-08T21:06:59Z",
-  "baselineHash": "f3feddd7c055",
+  "holder": "004-view-config-sheet",
+  "acquiredAt": "2026-09-08T22:00:57Z",
+  "baselineHash": "92ad633b2666",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -5859,6 +5859,35 @@
         "screenshots/notion-clone/views/timeline-subtask-tree-desktop-light.png"
       ],
       "note": "Re-verified across the 0.0.34 release-cut rebase (the leg's commit now 6a828e7e on e75a979c; styles.css itself unmoved at f3feddd7c055). Round 2, screenshots x2, 616/616, exit 0 both: 29 movers, 28 moved in BOTH sampled runs -> kept real; 1 jitter, calendar-empty-state-mobile-light 12px at max channel delta 1, moved only in the second sampled run -> restored at its committed bytes with the manifest's bytes field patched back to 33534 (pixelHash/layoutHash/sourceHashes unchanged), screenshots:verify exit 0. Round 1 (the pass this triplet signed) had all 29 in both runs; the 2 content-movers reproduced: constructed-cell-editor-text-mobile-light 24165px at max delta 9, timeline-subtask-tree-desktop-light 5030px at max delta 12 - the 072/002/066 intents this rebase carries (this edit's selectors scope to .obnotion-create-property-*, neither mover's surface is in that family; their pixelHash change is recorded so the next lane sees a fresh, reviewed baseline). The 27 further captures move bytes only at identical pixelHash/layoutHash: board-view-desktop-dark 4px@1, board/record-detail/timeline families - the lane instability 073/002 recorded, at stable counts, moved in both runs. capture-device-parity's stamps refreshed once more after the recapture moved the manifest's sourceHashes."
+    },
+    {
+      "event": "acquire",
+      "phase": "004-view-config-sheet",
+      "at": "2026-09-08T22:00:57Z",
+      "hash": "e061ee373e17",
+      "note": "Acquiring the css lane for the settings sheet reference row redesign: the sheet rows leave the 073-era column-stacked shape for the reference one-line label-left/control-right grammar with inset hairlines, and the 073 checkbox remediation had released at e061ee373e17 with nothing outstanding of its own."
+    },
+    {
+      "event": "edit",
+      "phase": "004-view-config-sheet",
+      "at": "2026-09-08T22:00:57Z",
+      "hash": "8c438f60947f",
+      "note": "styles.css: the settings sheet's rows read label left / control right on the 44px floor with the shared 6px gap, a row after a row draws a 1px hairline inset 16px left / 0px right (divider token with a literal rgba stand-in), section headings ride the sheet's 16px inset instead of 12px, the preset picker shares its line with its Manage button, and the read-only note rides the sheet inset. The stacked shape stays for the field-stack, textarea, read-only multiline, range and placement-group rows."
+    },
+    {
+      "event": "release",
+      "phase": "004-view-config-sheet",
+      "at": "2026-09-08T22:00:57Z",
+      "hash": "8c438f60947f",
+      "reviewed": [
+        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-view-config-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-view-config-mobile-light.png",
+        "screenshots/notion-clone/panels/panel-view-config-sheet-mobile-dark.png",
+        "screenshots/notion-clone/panels/panel-view-config-sheet-mobile-light.png"
+      ],
+      "note": "Recaptured twice from a clean index (npm run screenshots, 616 entries, exit 0 both; identical PNG sets both runs, so nothing on this release is a one-run phantom). 6 captures moved content, all of them the redesigned surface: the view-config sheet's own 4 (constructed-view-config, panel-view-config-sheet, dark and light) and the 2 constructed-board-card-properties, which render the same .obnotion-view-config-panel and so move with it. Read by number, not by eye: view-config 342-345k pixels moved (maxDelta 176-196), board-card-properties 440k (maxDelta 194-209) — the redesign's geometry, deterministic across both runs, no jitter. Two board-view captures moved 1-4 pixels at maxDelta 1 and the working manifest reads their pixelHash unchanged, so they are byte movers, not a review this release owes. This leg reviews by measurement (headless)."
     }
   ],
   "outstanding": [

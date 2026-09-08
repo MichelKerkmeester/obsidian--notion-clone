@@ -32,11 +32,10 @@ contextType: "general"
 ---
 
 <!-- ANCHOR:phase-1 -->
-## Phase 1: Setup
+## Phase 1: Reference reading and measurement
 
-- [ ] T001 Create project structure
-- [ ] T002 Install dependencies
-- [ ] T003 [P] Configure development tools
+- [x] T001 Read 001's reference mapping for this sheet family before any redesign work starts (`specs/005-component-surface-system/071-sheet-notion-anytype-alignment/001-sheet-story-coverage-audit/inventory.md` row 42: producer `src/views/database-view.ts:5299`; references notion/ios/settings 24 + notion/web/settings 51 against anytype/mobile/sheets 4 + anytype/desktop/app 3, flagged "filename read only")
+- [x] T002 Record the current-vs-reference gap table with what is actually measurable (`spec.md` §4, `reference-gap`): the harvest manifests carry ids only, so the reference-side numbers are 002's adopted inset-list grammar plus the Anytype 402pt-logical geometry, and the current side is measured from the shipped stylesheet and lane
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -44,10 +43,11 @@ contextType: "general"
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [ ] T004 [Implement core feature 1]
-- [ ] T005 [Implement core feature 2]
-- [ ] T006 [Implement core feature 3]
-- [ ] T007 [Add error handling]
+- [x] T003 RED — reference row grammar in `tools/live/sheet-grammar.mjs`: plain rows label-left/control-right, 44–52px pitch between adjacent plain rows, 1px hairline inset 16px left / 0px right on row-after-row and on following section headings, 16px edge insets, zero native `<select>`, ≥90%-width stacked editors, no horizontal overflow; plus the negative control that reverts the grammar by override and expects the numbers to go wrong
+- [x] T004 Implement the geometry in `styles.css`: one-line rows (flex-basis-zero field, right-grounded), 44px row floor, no inter-row cushion, the `:has` stacked exceptions (field-stack, textarea, read-only multiline, range, placement group), the shared `::before` hairline with token-plus-literal colour, 16px section-heading inset, the preset picker sharing its line with its Manage button, the read-only note on the sheet inset
+- [x] T005 Unit regression suite `src/views/view-config-sheet-row-grammar.test.ts`, proven to fail against a reverted line (1 failed / 5 passed with `flex: 1 1 0` → `1 1 auto`, 6/6 restored)
+- [x] T006 GREEN — lane 13/13 direction, 6/6 pitch 48.0px, 18/18 hairlines, 16px insets, 1/1 heading, 0 native selects, 7/7 stacks, no overflow, negative control red
+- [x] T007 Error handling/a11y carried, not regressed: focus trap, roles and the 44px touch floors untouched; the 058 title-field/format and 045 column-visibility controls keep their producer markup and their tests
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -55,9 +55,12 @@ contextType: "general"
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] T008 Test happy path manually
-- [ ] T009 Test edge cases
-- [ ] T010 Update documentation
+- [x] T008 Gates: `npx tsc --noEmit` 0, `npm run build` 0, `npx vitest run` 1729/1729 (`tools/gate.mjs` health)
+- [x] T009 Live lanes: `sheet-grammar` 0, `render-assertions` 0, `touch-targets` 0, `verify-placement` 0
+- [x] T010 Screenshots twice from a clean index (616, exit 0 both) + pixel-delta read: 6 content moves all on the redesigned surface, 2 byte movers, no one-run phantom; css-lane acquire/edit/release with the 6 named, `check-lane` 0
+- [x] T011 Evidence: the 11 artefacts that went stale against the edited stylesheet re-derived by their own producing tools, then `evidence --check-all` 15/15 fresh; `engine-parity` 82 fixtures / 43 differences, none in this family (pre-existing condition, recorded)
+- [x] T012 `npm run gate` — 27 green, 0 red for a declared reason; `scan-comments` / `scan-failing-values` 0
+- [x] T013 Docs: this file, `acceptance-criteria.md`, `implementation-summary.md`, `decision-record.md` (created), `goal.md` criteria; packet validated strict (RESULT: PASSED); graph metadata backfilled scoped to this packet; the 005 track handover carries this leg's entry
 <!-- /ANCHOR:phase-3 -->
 
 ---
@@ -65,9 +68,9 @@ contextType: "general"
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-- [ ] All tasks marked `[x]`
-- [ ] No `[B]` blocked tasks remaining
-- [ ] Manual verification passed
+- [x] All tasks marked `[x]` — 13 of 13; no `[B]` tasks
+- [x] No `[B]` blocked tasks remaining
+- [x] Manual verification: the lane's own measured numbers stand in for the headless leg's eye; the operator's device recheck remains the operator's row and is not ticked here
 <!-- /ANCHOR:completion -->
 
 ---
@@ -78,176 +81,3 @@ contextType: "general"
 - **Specification**: See `spec.md`
 - **Plan**: See `plan.md`
 <!-- /ANCHOR:cross-refs -->
-
----
-
-## Verification Checklist
-
-<!-- ANCHOR:protocol -->
-## Verification Protocol
-
-| Priority | Handling | Completion Impact |
-|----------|----------|-------------------|
-| **[P0]** | HARD BLOCKER | Cannot claim done until complete |
-| **[P1]** | Required | Must complete OR get user approval |
-| **[P2]** | Optional | Can defer with documented reason |
-<!-- /ANCHOR:protocol -->
-
----
-
-<!-- ANCHOR:pre-impl -->
-## Pre-Implementation
-
-- [ ] CHK-001 [P0] Requirements documented in spec.md
-- [ ] CHK-002 [P0] Technical approach defined in plan.md
-- [ ] CHK-003 [P1] Dependencies identified and available
-<!-- /ANCHOR:pre-impl -->
-
----
-
-<!-- ANCHOR:code-quality -->
-## Code Quality
-
-- [ ] CHK-010 [P0] Code passes lint/format checks
-- [ ] CHK-011 [P0] No console errors or warnings
-- [ ] CHK-012 [P1] Error handling implemented
-- [ ] CHK-013 [P1] Code follows project patterns
-<!-- /ANCHOR:code-quality -->
-
----
-
-<!-- ANCHOR:testing -->
-## Testing Checklist
-
-- [ ] CHK-020 [P0] All acceptance criteria met
-- [ ] CHK-021 [P0] Manual testing complete
-- [ ] CHK-022 [P1] Edge cases tested
-- [ ] CHK-023 [P1] Error scenarios validated
-<!-- /ANCHOR:testing -->
-
----
-
-<!-- ANCHOR:fix-completeness -->
-## Fix Completeness
-
-- [ ] CHK-FIX-001 [P0] Each actionable finding has a finding class: `instance-only`, `class-of-bug`, `cross-consumer`, `algorithmic`, `matrix/evidence`, or `test-isolation`.
-- [ ] CHK-FIX-002 [P0] Same-class producer inventory completed, or instance-only status proven by grep.
-- [ ] CHK-FIX-003 [P0] Consumer inventory completed for changed helpers, policies, schema fields, response fields, docs, and tests.
-- [ ] CHK-FIX-004 [P0] Security/path/parser/redaction fixes include adversarial table tests for delimiter, joined-input, outside-root, no-op, and fallback cases.
-- [ ] CHK-FIX-005 [P1] Matrix axes and row count are listed before completion is claimed.
-- [ ] CHK-FIX-006 [P1] Hostile env/global-state variant executed when tests or code read process-wide state.
-- [ ] CHK-FIX-007 [P1] Evidence is pinned to a fix SHA or explicit diff range, not a moving branch-relative range.
-<!-- /ANCHOR:fix-completeness -->
-
----
-
-<!-- ANCHOR:security -->
-## Security
-
-- [ ] CHK-030 [P0] No hardcoded secrets
-- [ ] CHK-031 [P0] Input validation implemented
-- [ ] CHK-032 [P1] Auth/authz working correctly
-<!-- /ANCHOR:security -->
-
----
-
-<!-- ANCHOR:docs -->
-## Documentation
-
-- [ ] CHK-040 [P1] Spec/plan/tasks synchronized
-- [ ] CHK-041 [P1] Code comments adequate
-- [ ] CHK-042 [P2] README updated (if applicable)
-<!-- /ANCHOR:docs -->
-
----
-
-<!-- ANCHOR:file-org -->
-## File Organization
-
-- [ ] CHK-050 [P1] Temp files in scratch/ only
-- [ ] CHK-051 [P1] scratch/ cleaned before completion
-<!-- /ANCHOR:file-org -->
-
----
-
-<!-- ANCHOR:summary -->
-## Verification Summary
-
-| Category | Total | Verified |
-|----------|-------|----------|
-| P0 Items | [X] | [ ]/[X] |
-| P1 Items | [Y] | [ ]/[Y] |
-| P2 Items | [Z] | [ ]/[Z] |
-
-**Verification Date**: 2026-09-08
-<!-- /ANCHOR:summary -->
-
----
-
-<!-- ANCHOR:arch-verify -->
-## L3+: Architecture Verification
-
-- [ ] CHK-100 [P0] Architecture decisions documented in decision-record.md
-- [ ] CHK-101 [P1] All ADRs have status (Proposed/Accepted)
-- [ ] CHK-102 [P1] Alternatives documented with rejection rationale
-- [ ] CHK-103 [P2] Migration path documented (if applicable)
-<!-- /ANCHOR:arch-verify -->
-
----
-
-<!-- ANCHOR:perf-verify -->
-## L3+: Performance Verification
-
-- [ ] CHK-110 [P1] Response time targets met (NFR-P01)
-- [ ] CHK-111 [P1] Throughput targets met (NFR-P02)
-- [ ] CHK-112 [P2] Load testing completed
-- [ ] CHK-113 [P2] Performance benchmarks documented
-<!-- /ANCHOR:perf-verify -->
-
----
-
-<!-- ANCHOR:deploy-ready -->
-## L3+: Deployment Readiness
-
-- [ ] CHK-120 [P0] Rollback procedure documented and tested
-- [ ] CHK-121 [P0] Feature flag configured (if applicable)
-- [ ] CHK-122 [P1] Monitoring/alerting configured
-- [ ] CHK-123 [P1] Runbook created
-- [ ] CHK-124 [P2] Deployment runbook reviewed
-<!-- /ANCHOR:deploy-ready -->
-
----
-
-<!-- ANCHOR:compliance-verify -->
-## L3+: Compliance Verification
-
-- [ ] CHK-130 [P1] Security review completed
-- [ ] CHK-131 [P1] Dependency licenses compatible
-- [ ] CHK-132 [P2] OWASP Top 10 checklist completed
-- [ ] CHK-133 [P2] Data handling compliant with requirements
-<!-- /ANCHOR:compliance-verify -->
-
----
-
-<!-- ANCHOR:docs-verify -->
-## L3+: Documentation Verification
-
-- [ ] CHK-140 [P1] All spec documents synchronized
-- [ ] CHK-141 [P1] API documentation complete (if applicable)
-- [ ] CHK-142 [P2] User-facing documentation updated
-- [ ] CHK-143 [P2] Knowledge transfer documented
-<!-- /ANCHOR:docs-verify -->
-
----
-
-<!-- ANCHOR:sign-off -->
-## L3+: Sign-Off
-
-| Approver | Role | Status | Date |
-|----------|------|--------|------|
-| [Name] | Technical Lead | [ ] Approved | |
-| [Name] | Product Owner | [ ] Approved | |
-| [Name] | QA Lead | [ ] Approved | |
-<!-- /ANCHOR:sign-off -->
-
-

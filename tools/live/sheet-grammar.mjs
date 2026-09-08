@@ -309,18 +309,9 @@ const SETTINGS_SHEET_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "setti
 // A control fills the row's full inset-to-inset span, not a fraction of it — 90% leaves room for
 // a control that legitimately shares its line with an icon or a unit label.
 const SETTINGS_ROW_WIDTH_RATIO_MIN = 0.9;
-
-// The reference row grammar's pitch window for compact rows: the 44px touch floor this stylesheet
-// already ratchets everywhere, up to the tallest one-line setting row the reference's density
-// spends. Editors (a text field, a path+engine picker, a preset button row) carry multi-line
-// bodies and are exempt — their height is their content's, not the row's.
-const SETTINGS_COMPACT_ROW_PITCH_MIN_PX = 44;
-const SETTINGS_COMPACT_ROW_PITCH_MAX_PX = 52;
-
-// The one horizontal inset this sheet commits to. Rows, section headings, the header and the
-// readonly note all share it, so a divider opening a section runs through the same gutters the
-// rows it introduces use — a 12px heading beside 16px rows read as a dent, not a divider.
 const SETTINGS_SHEET_INSET_PX = 16;
+const SETTINGS_ROW_PITCH_MIN_PX = 44;
+const SETTINGS_ROW_PITCH_MAX_PX = 52;
 // `--font-ui-small` at the operator's 16px default (15px) and at a size proven to overflow under
 // the host model this page now carries. Set directly on the button rather than resolved from
 // `--font-text-size`: this harness, unlike a real host, never defines that token, and deriving it
@@ -1319,88 +1310,127 @@ window.__shellHandleGeometry = (scenario) => new Promise((resolve) => {
   });
 });
 
-// The settings sheet's row-stacking guard. Raw geometry only, per row that owns both a label and
-// a field — a bare textarea and the range+number pair own neither and are skipped, since neither
-// ever had a horizontal shape to begin with. Thresholds are applied by the node-side caller, the
-// split every other row above already uses.
-const measureSettingsRowStacking = () => {
+// The settings sheet's reference row grammar, on the phone. Rows come in two shapes. A plain
+// setting — one label, one control, nothing else, no hint of any kind — answers the reference
+// list's questions: the control sits on the label's own line, consecutive plain rows that are
+// also element-adjacent sit a 44-52px pitch apart, and a row whose previous element sibling is
+// another row draws a 1px hairline inset 16px from the sheet's left edge and 0px from its right.
+// A wide editor row (a field-stack) keeps the stacked control-below-label shape and is probed
+// only for the control width that shape exists to give. Raw geometry only; thresholds are
+// applied by the node-side caller, the split the rows above already use.
+const isSettingsPlainRow = (row) =>
+  row.querySelector(":scope > .obnotion-view-config-field-stack") == null &&
+  row.querySelector("textarea") == null &&
+  row.querySelector(".obnotion-new-placement-option") == null &&
+  row.querySelector(".obnotion-conditional-format-settings") == null &&
+  row.querySelector(".obnotion-panel-hint") == null;
+const isSettingsStackRow = (row) => row.querySelector(":scope > .obnotion-view-config-field-stack") != null;
+
+const measureSettingsRowGrammar = () => {
   const sheet = document.querySelector(".obnotion-view-config-panel.obnotion-mobile-bottom-sheet");
   if (!sheet) return null;
+  const sheetRect = sheet.getBoundingClientRect();
   const rows = [];
-  for (const row of sheet.querySelectorAll(".obnotion-panel-row")) {
+  const byEl = new Map();
+  const rowEls = Array.from(sheet.querySelectorAll(".obnotion-panel-row"));
+  for (const row of rowEls) {
     const label = row.querySelector(":scope > .obnotion-view-config-label");
     const field = row.querySelector(":scope > .obnotion-view-config-field");
     if (!label || !field) continue;
+    const rowStyle = getComputedStyle(row);
+    const rowRect = row.getBoundingClientRect();
     const labelRect = label.getBoundingClientRect();
     const fieldRect = field.getBoundingClientRect();
-    const rowStyle = getComputedStyle(row);
+    const dividerStyle = getComputedStyle(row, "::before");
     const rowInnerWidth = row.clientWidth
       - (Number.parseFloat(rowStyle.paddingLeft) || 0)
       - (Number.parseFloat(rowStyle.paddingRight) || 0);
-    // Rows split two ways. Editors (a stacked field, a preset button row) carry multi-line bodies
-    // and keep the control below the label at full width; everything else (a dropdown, a switch,
-    // a summary count) is a compact one-line setting: label left, control right, the reference's
-    // own row. Which way a row splits decides which half of the grammar asserts it.
-    const multiControl = field.classList.contains("obnotion-view-config-field-stack")
-      || field.classList.contains("obnotion-view-config-inline-controls");
-    const singleLine = fieldRect.top <= labelRect.bottom - 2 && labelRect.top <= fieldRect.bottom - 2;
-    rows.push({
-      labelBottom: labelRect.bottom,
-      fieldTop: fieldRect.top,
+    const prev = row.previousElementSibling;
+    const record = {
+      plain: isSettingsPlainRow(row),
+      stack: isSettingsStackRow(row),
+      direction: rowStyle.flexDirection,
+      sameLine:
+        Math.abs((labelRect.top + labelRect.height / 2) - (fieldRect.top + fieldRect.height / 2)) <= 4 &&
+        fieldRect.right <= rowRect.right - (Number.parseFloat(rowStyle.paddingRight) || 0) + 1 &&
+        labelRect.left >= rowRect.left + (Number.parseFloat(rowStyle.paddingLeft) || 0) - 1,
       fieldWidth: fieldRect.width,
+      rowWidth: rowRect.width,
       rowInnerWidth,
-      rowHeight: row.getBoundingClientRect().height,
-      multiControl,
-      singleLine,
+      paddingLeft: Number.parseFloat(rowStyle.paddingLeft) || 0,
+      pitchToNextPlain: null,
+      divider: dividerStyle.content === "none" ? null : {
+        height: Number.parseFloat(dividerStyle.height) || 0,
+        left: Number.parseFloat(dividerStyle.left) || 0,
+        right: Number.parseFloat(dividerStyle.right) || 0,
+        width: Number.parseFloat(dividerStyle.width) || 0,
+        color: dividerStyle.backgroundColor,
+      },
+      dividerExpected: prev != null && prev.classList.contains("obnotion-panel-row"),
+    };
+    rows.push(record);
+    byEl.set(row, record);
+  }
+  // The pitch: only between consecutive plain rows that are also element-adjacent — a hint or a
+  // note between two rows is the reference's own variation, not a pitch this grammar answers for.
+  for (let i = 0; i + 1 < rowEls.length; i += 1) {
+    const a = rowEls[i];
+    const b = rowEls[i + 1];
+    if (a.nextElementSibling !== b) continue;
+    if (!isSettingsPlainRow(a) || !isSettingsPlainRow(b)) continue;
+    const record = byEl.get(a);
+    if (record) record.pitchToNextPlain = b.getBoundingClientRect().top - a.getBoundingClientRect().top;
+  }
+  const sections = [];
+  for (const title of sheet.querySelectorAll(".obnotion-view-config-section-title")) {
+    const style = getComputedStyle(title);
+    const dividerStyle = getComputedStyle(title, "::before");
+    sections.push({
+      paddingLeft: Number.parseFloat(style.paddingLeft) || 0,
+      divider: dividerStyle.content === "none" ? null : {
+        height: Number.parseFloat(dividerStyle.height) || 0,
+        left: Number.parseFloat(dividerStyle.left) || 0,
+        right: Number.parseFloat(dividerStyle.right) || 0,
+        color: dividerStyle.backgroundColor,
+      },
+      dividerExpected: title.previousElementSibling != null,
     });
   }
-  // The sheet's own shared insets, read off what it actually renders: a section heading's gutter
-  // (the divider inset), the readonly note's, and whether any control here is still a native
-  // select — the picker grammar this sheet uses is its own dropdown, not a host widget.
-  const sectionTitles = Array.from(sheet.querySelectorAll(".obnotion-view-config-section-title")).map((title) => {
-    const s = getComputedStyle(title);
-    return { paddingLeft: Number.parseFloat(s.paddingLeft), paddingRight: Number.parseFloat(s.paddingRight), borderTopWidth: s.borderTopWidth };
-  });
-  const note = sheet.querySelector(".obnotion-view-config-readonly-note");
-  // Same extent rule as the sweep: the sheet's own 1px left border is not sideways scroll.
-  const sheetScrollExtent = sheet.scrollWidth - (Number.parseFloat(getComputedStyle(sheet).borderLeftWidth) || 0);
   return {
     rows,
+    sections,
+    nativeSelectCount: sheet.querySelectorAll("select").length,
     sheetScrollWidth: sheet.scrollWidth,
-    sheetScrollExtent,
     sheetClientWidth: sheet.clientWidth,
-    sectionTitles,
-    noteMarginLeft: note ? Number.parseFloat(getComputedStyle(note).marginLeft) : null,
-    noteCount: note ? 1 : 0,
-    selectCount: sheet.querySelectorAll("select").length,
-    dropdownCount: sheet.querySelectorAll(".obnotion-view-config-dropdown").length,
   };
 };
 
-window.__shellSettingsRowStacking = (scenario) => {
+window.__shellSettingsRowGrammar = (scenario) => {
   let measured = null;
   runRenderAssertions(document.body, scenario, "", () => {
-    measured = measureSettingsRowStacking();
+    measured = measureSettingsRowGrammar();
   });
   return measured;
 };
 
-window.__shellSettingsRowStackingNegativeControl = (scenario) => {
+window.__shellSettingsRowGrammarNegativeControl = (scenario) => {
   const style = document.createElement("style");
-  // The editor rows' stacking, reverted: .obnotion-panel-row's shared base (the unscoped rule the
-  // filter and sort sheets keep) is a left-to-right row, and forcing it back answers only the
-  // stacked half of the grammar — the compact one-line rows already read this direction, so this
-  // override proves the editor half alone.
-  style.textContent = ".obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row { flex-direction: row !important; align-items: normal !important; }";
+  // The reference row grammar, reverted: the plain rows go back to the stacked control-below-label
+  // shape, the old 6px pitch cushion comes back doubled, the inset hairlines vanish, and the
+  // section heading's inset returns to its pre-alignment 12px.
+  style.textContent =
+    ".obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row:not(:has(> .obnotion-view-config-field-stack)) { flex-direction: column !important; align-items: stretch !important; margin-bottom: 12px !important; }" +
+    ".obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row::before, .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-section-title::before { content: none !important; }" +
+    ".obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-section-title { padding-left: 12px !important; }";
   document.head.appendChild(style);
   let broken = null;
   runRenderAssertions(document.body, scenario, "", () => {
-    broken = measureSettingsRowStacking();
+    broken = measureSettingsRowGrammar();
   });
   style.remove();
   let fixed = null;
   runRenderAssertions(document.body, scenario, "", () => {
-    fixed = measureSettingsRowStacking();
+    fixed = measureSettingsRowGrammar();
   });
   return { broken, fixed };
 };
@@ -3311,101 +3341,121 @@ try {
   }
   console.log("");
 
-  console.log(`sheet-grammar: settings sheet — the reference row grammar: compact rows are one line (label left, control right) at 44–52px, editors keep the control below the label at full width\n`);
-  const settingsRowStacking = await page.evaluate((scenario) => window.__shellSettingsRowStacking(scenario), SETTINGS_SHEET_SURFACE.spec);
-  if (!settingsRowStacking || settingsRowStacking.rows.length === 0) {
-    failures.push("settings sheet: no rows with both a label and a field to measure");
-    console.log("  FAIL  settings sheet — no rows with both a label and a field to measure");
+  console.log(`sheet-grammar: settings sheet reference row grammar — plain rows put the control on the label's own line, consecutive plain rows sit ${SETTINGS_ROW_PITCH_MIN_PX}-${SETTINGS_ROW_PITCH_MAX_PX}px apart, a row after a row draws a 1px hairline inset ${SETTINGS_SHEET_INSET_PX}px from the left / 0px from the right, every row and section heading sits ${SETTINGS_SHEET_INSET_PX}px from the sheet's edges, the sheet mounts no native select, and stack rows keep >= ${Math.round(SETTINGS_ROW_WIDTH_RATIO_MIN * 100)}% of the sheet's inner width for their control\n`);
+  const settingsRowGrammar = await page.evaluate((scenario) => window.__shellSettingsRowGrammar(scenario), SETTINGS_SHEET_SURFACE.spec);
+  if (!settingsRowGrammar || settingsRowGrammar.rows.length === 0) {
+    failures.push("settings sheet reference row grammar: no rows with both a label and a field to measure");
+    console.log("  FAIL  settings sheet reference row grammar — no rows with both a label and a field to measure");
   } else {
-    const stackRows = settingsRowStacking.rows.filter((row) => row.multiControl);
-    const compactRows = settingsRowStacking.rows.filter((row) => !row.multiControl);
-    if (stackRows.length === 0) {
-      failures.push("settings sheet: no editor rows (stacked field or preset row) to measure");
-      console.log("  FAIL  settings sheet — no editor rows (stacked field or preset row) to measure");
-    }
-    if (compactRows.length === 0) {
-      failures.push("settings sheet: no compact one-line rows to measure");
-      console.log("  FAIL  settings sheet — no compact one-line rows to measure");
-    }
-    const stackedCount = stackRows.filter((row) => row.labelBottom <= row.fieldTop + FRAME_GEOMETRY_TOLERANCE_PX).length;
-    const wideCount = stackRows.filter((row) => row.fieldWidth >= row.rowInnerWidth * SETTINGS_ROW_WIDTH_RATIO_MIN).length;
-    if (stackRows.length > 0) {
-      if (stackedCount !== stackRows.length) failures.push(`settings sheet: ${stackRows.length - stackedCount} of ${stackRows.length} editor rows do not sit label-above-control`);
-      if (wideCount !== stackRows.length) failures.push(`settings sheet: ${stackRows.length - wideCount} of ${stackRows.length} editor rows have a control under ${Math.round(SETTINGS_ROW_WIDTH_RATIO_MIN * 100)}% of the sheet's inner width`);
-      console.log(`  ${stackedCount === stackRows.length ? "PASS" : "FAIL"}  ${stackedCount}/${stackRows.length} editor rows sit label-above-control`);
-      console.log(`  ${wideCount === stackRows.length ? "PASS" : "FAIL"}  ${wideCount}/${stackRows.length} editor rows have a control at >= ${Math.round(SETTINGS_ROW_WIDTH_RATIO_MIN * 100)}% of the sheet's inner width`);
-    }
-    const lineCount = compactRows.filter((row) => row.singleLine).length;
-    const pitchCount = compactRows.filter((row) => row.rowHeight >= SETTINGS_COMPACT_ROW_PITCH_MIN_PX && row.rowHeight <= SETTINGS_COMPACT_ROW_PITCH_MAX_PX).length;
-    if (compactRows.length > 0) {
-      if (lineCount !== compactRows.length) failures.push(`settings sheet: ${compactRows.length - lineCount} of ${compactRows.length} compact rows do not sit label-beside-control on one line`);
-      if (pitchCount !== compactRows.length) failures.push(`settings sheet: ${compactRows.length - pitchCount} of ${compactRows.length} compact rows sit outside the ${SETTINGS_COMPACT_ROW_PITCH_MIN_PX}–${SETTINGS_COMPACT_ROW_PITCH_MAX_PX}px pitch window`);
-      console.log(`  ${lineCount === compactRows.length ? "PASS" : "FAIL"}  ${lineCount}/${compactRows.length} compact rows sit label-beside-control on one line`);
-      console.log(`  ${pitchCount === compactRows.length ? "PASS" : "FAIL"}  ${pitchCount}/${compactRows.length} compact rows pitch between ${SETTINGS_COMPACT_ROW_PITCH_MIN_PX} and ${SETTINGS_COMPACT_ROW_PITCH_MAX_PX}px`);
-    }
-    if (compactRows.length > 0) {
-      const worst = compactRows.reduce((acc, row) => Math.max(acc, row.rowHeight), 0);
-      console.log(`        compact row heights: ${compactRows.map((row) => row.rowHeight.toFixed(1)).join(", ")} (worst ${worst.toFixed(1)}px)`);
-    }
-    if (settingsRowStacking.selectCount !== 0) failures.push(`settings sheet: ${settingsRowStacking.selectCount} native select(s) — the picker grammar here is the sheet's own dropdown`);
-    if (settingsRowStacking.dropdownCount < 1) failures.push("settings sheet: no own-dropdown picker found on the sheet");
-    console.log(`  ${settingsRowStacking.selectCount === 0 && settingsRowStacking.dropdownCount >= 1 ? "PASS" : "FAIL"}  selects render as the sheet's own dropdown (native selects: ${settingsRowStacking.selectCount}, own pickers: ${settingsRowStacking.dropdownCount})`);
-    const badTitles = settingsRowStacking.sectionTitles.filter((title, index) => {
-      const insetOk = title.paddingLeft === SETTINGS_SHEET_INSET_PX && title.paddingRight === SETTINGS_SHEET_INSET_PX;
-      // The first heading's top divider is the :first-of-type reset — the header's own border-bottom
-      // sits right above it, and doubling the line there is what the reset exists for.
-      const borderOk = title.borderTopWidth === "1px" || (index === 0 && title.borderTopWidth === "0px");
-      return !(insetOk && borderOk);
-    });
-    if (settingsRowStacking.sectionTitles.length === 0) {
-      failures.push("settings sheet: no section headings to measure — the divider grammar has nothing to read");
-      console.log("  FAIL  settings sheet — no section headings to measure");
+    const plainRows = settingsRowGrammar.rows.filter((row) => row.plain);
+    if (plainRows.length === 0) {
+      failures.push("settings sheet reference row grammar: no plain setting row to measure");
+      console.log("  FAIL  settings sheet reference row grammar — no plain setting row to measure");
     } else {
-      if (badTitles.length > 0) failures.push(`settings sheet: ${badTitles.length} of ${settingsRowStacking.sectionTitles.length} section headings do not sit on the shared ${SETTINGS_SHEET_INSET_PX}px inset with a 1px divider`);
-      console.log(`  ${badTitles.length === 0 ? "PASS" : "FAIL"}  ${settingsRowStacking.sectionTitles.length}/${settingsRowStacking.sectionTitles.length} section headings sit on the shared ${SETTINGS_SHEET_INSET_PX}px inset with a 1px divider (${settingsRowStacking.sectionTitles.map((t) => `${t.paddingLeft}px/${t.borderTopWidth}`).join(", ")})`);
+      const wrongDirection = plainRows.filter((row) => row.direction !== "row" || !row.sameLine);
+      if (wrongDirection.length > 0) failures.push(`settings sheet reference row grammar: ${wrongDirection.length} of ${plainRows.length} plain rows do not put the control on the label's own line (first: direction ${wrongDirection[0].direction}, sameLine ${wrongDirection[0].sameLine})`);
+      console.log(`  ${wrongDirection.length === 0 ? "PASS" : "FAIL"}  ${plainRows.length - wrongDirection.length}/${plainRows.length} plain rows sit label-left/control-right`);
     }
-    if (settingsRowStacking.noteCount > 0) {
-      const noteOk = settingsRowStacking.noteMarginLeft === SETTINGS_SHEET_INSET_PX;
-      if (!noteOk) failures.push(`settings sheet: the readonly note's left margin measures ${settingsRowStacking.noteMarginLeft}px, wanted ${SETTINGS_SHEET_INSET_PX}px`);
-      console.log(`  ${noteOk ? "PASS" : "FAIL"}  the readonly note's margin sits on the shared ${SETTINGS_SHEET_INSET_PX}px inset (${settingsRowStacking.noteMarginLeft}px)`);
+    const pitchRows = settingsRowGrammar.rows.filter((row) => row.pitchToNextPlain != null);
+    if (pitchRows.length === 0) {
+      failures.push("settings sheet reference row grammar: no consecutive plain-row pair to measure the pitch of");
+      console.log("  FAIL  settings sheet reference row grammar — no consecutive plain-row pair to measure the pitch of");
+    } else {
+      const pitches = pitchRows.map((row) => row.pitchToNextPlain);
+      const minPitch = Math.min(...pitches);
+      const maxPitch = Math.max(...pitches);
+      const offBand = pitchRows.filter((row) => row.pitchToNextPlain < SETTINGS_ROW_PITCH_MIN_PX - FRAME_GEOMETRY_TOLERANCE_PX || row.pitchToNextPlain > SETTINGS_ROW_PITCH_MAX_PX + FRAME_GEOMETRY_TOLERANCE_PX);
+      if (offBand.length > 0) failures.push(`settings sheet reference row grammar: ${offBand.length} of ${pitchRows.length} plain-row pitches leave the ${SETTINGS_ROW_PITCH_MIN_PX}-${SETTINGS_ROW_PITCH_MAX_PX}px band (measured ${minPitch.toFixed(1)}-${maxPitch.toFixed(1)}px)`);
+      console.log(`  ${offBand.length === 0 ? "PASS" : "FAIL"}  ${pitchRows.length - offBand.length}/${pitchRows.length} plain-row pitches sit inside ${SETTINGS_ROW_PITCH_MIN_PX}-${SETTINGS_ROW_PITCH_MAX_PX}px (measured ${minPitch.toFixed(1)}-${maxPitch.toFixed(1)}px)`);
     }
-    const noOverflow = settingsRowStacking.sheetScrollExtent <= settingsRowStacking.sheetClientWidth + FRAME_GEOMETRY_TOLERANCE_PX;
-    if (!noOverflow) failures.push(`settings sheet: sheet scrollWidth ${settingsRowStacking.sheetScrollWidth} (extent ${settingsRowStacking.sheetScrollExtent}) exceeds clientWidth ${settingsRowStacking.sheetClientWidth}`);
-    console.log(`  ${noOverflow ? "PASS" : "FAIL"}  sheet scrollWidth (${settingsRowStacking.sheetScrollWidth}, extent ${settingsRowStacking.sheetScrollExtent}) === clientWidth (${settingsRowStacking.sheetClientWidth}, harness width) — no horizontal overflow`);
+    const dividerRows = settingsRowGrammar.rows.filter((row) => row.dividerExpected);
+    if (dividerRows.length === 0) {
+      failures.push("settings sheet reference row grammar: no row follows another row closely enough to owe a divider");
+      console.log("  FAIL  settings sheet reference row grammar — no divider-owing row");
+    } else {
+      const wrongDividers = dividerRows.filter((row) => !row.divider
+        || Math.abs(row.divider.height - 1) > 0.5
+        || Math.abs(row.divider.left - SETTINGS_SHEET_INSET_PX) > 0.5
+        || Math.abs(row.divider.right) > 0.5
+        || (Number.isFinite(row.divider.width) && row.divider.width > 0 && Math.abs(row.divider.width - (row.rowWidth - SETTINGS_SHEET_INSET_PX)) > 1)
+        || row.divider.color === "transparent"
+        || row.divider.color === "rgba(0, 0, 0, 0)");
+      if (wrongDividers.length > 0) failures.push(`settings sheet reference row grammar: ${wrongDividers.length} of ${dividerRows.length} divider-owing rows do not draw a 1px hairline inset ${SETTINGS_SHEET_INSET_PX}px left / 0px right`);
+      console.log(`  ${wrongDividers.length === 0 ? "PASS" : "FAIL"}  ${dividerRows.length - wrongDividers.length}/${dividerRows.length} divider-owing rows draw the reference hairline`);
+    }
+    const insetOffRows = settingsRowGrammar.rows.filter((row) => Math.abs(row.paddingLeft - SETTINGS_SHEET_INSET_PX) > 0.5);
+    const sectionsOff = (settingsRowGrammar.sections || []).filter((section) => Math.abs(section.paddingLeft - SETTINGS_SHEET_INSET_PX) > 0.5);
+    if (insetOffRows.length > 0) failures.push(`settings sheet reference row grammar: ${insetOffRows.length} rows do not sit ${SETTINGS_SHEET_INSET_PX}px from the sheet's edges`);
+    if (sectionsOff.length > 0) failures.push(`settings sheet reference row grammar: ${sectionsOff.length} section headings do not sit ${SETTINGS_SHEET_INSET_PX}px from the sheet's edges`);
+    console.log(`  ${insetOffRows.length === 0 && sectionsOff.length === 0 ? "PASS" : "FAIL"}  rows and section headings sit ${SETTINGS_SHEET_INSET_PX}px from the sheet's edges (${settingsRowGrammar.rows.length} rows, ${(settingsRowGrammar.sections || []).length} headings)`);
+    const sectionsDividers = (settingsRowGrammar.sections || []).filter((section) => section.dividerExpected);
+    if (sectionsDividers.length > 0) {
+      const sectionsWrong = sectionsDividers.filter((section) => !section.divider
+        || Math.abs(section.divider.height - 1) > 0.5
+        || Math.abs(section.divider.left - SETTINGS_SHEET_INSET_PX) > 0.5
+        || Math.abs(section.divider.right) > 0.5
+        || section.divider.color === "transparent"
+        || section.divider.color === "rgba(0, 0, 0, 0)");
+      if (sectionsWrong.length > 0) failures.push(`settings sheet reference row grammar: ${sectionsWrong.length} of ${sectionsDividers.length} section headings do not carry the reference hairline`);
+      console.log(`  ${sectionsWrong.length === 0 ? "PASS" : "FAIL"}  ${sectionsDividers.length - sectionsWrong.length}/${sectionsDividers.length} section headings carry the reference hairline`);
+    }
+    if (settingsRowGrammar.nativeSelectCount !== 0) failures.push(`settings sheet reference row grammar: the sheet mounts ${settingsRowGrammar.nativeSelectCount} native <select> element(s) instead of the plugin's own picker`);
+    console.log(`  ${settingsRowGrammar.nativeSelectCount === 0 ? "PASS" : "FAIL"}  the sheet mounts ${settingsRowGrammar.nativeSelectCount} native select(s) — every choice goes through the plugin's own picker`);
+    const stackRows = settingsRowGrammar.rows.filter((row) => row.stack);
+    if (stackRows.length === 0) {
+      console.log("  PASS  0 stack rows — this scenario mounts no wide editor to width-check");
+    } else {
+      const narrowStacks = stackRows.filter((row) => row.fieldWidth < row.rowInnerWidth * SETTINGS_ROW_WIDTH_RATIO_MIN - FRAME_GEOMETRY_TOLERANCE_PX);
+      if (narrowStacks.length > 0) failures.push(`settings sheet reference row grammar: ${narrowStacks.length} of ${stackRows.length} stack rows give their control less than ${Math.round(SETTINGS_ROW_WIDTH_RATIO_MIN * 100)}% of the sheet's inner width`);
+      console.log(`  ${narrowStacks.length === 0 ? "PASS" : "FAIL"}  ${stackRows.length - narrowStacks.length}/${stackRows.length} stack rows keep their control at >= ${Math.round(SETTINGS_ROW_WIDTH_RATIO_MIN * 100)}% of the sheet's inner width`);
+    }
+    const noOverflow = settingsRowGrammar.sheetScrollWidth <= settingsRowGrammar.sheetClientWidth + FRAME_GEOMETRY_TOLERANCE_PX;
+    if (!noOverflow) failures.push(`settings sheet reference row grammar: sheet scrollWidth ${settingsRowGrammar.sheetScrollWidth} exceeds clientWidth ${settingsRowGrammar.sheetClientWidth}`);
+    console.log(`  ${noOverflow ? "PASS" : "FAIL"}  sheet scrollWidth (${settingsRowGrammar.sheetScrollWidth}) === clientWidth (${settingsRowGrammar.sheetClientWidth})`);
   }
   console.log("");
 
-  const settingsRowStackingControl = await page.evaluate((scenario) => window.__shellSettingsRowStackingNegativeControl(scenario), SETTINGS_SHEET_SURFACE.spec);
-  console.log("sheet-grammar: settings sheet row grammar negative control — the editor rows' stacking forced back to the shared left-to-right base\n");
-  if (!settingsRowStackingControl.broken || !settingsRowStackingControl.fixed || settingsRowStackingControl.broken.rows.length === 0 || settingsRowStackingControl.fixed.rows.length === 0) {
-    failures.push("settings sheet row grammar negative control: the surface did not mount rows to measure");
-    console.log("  FAIL  settings sheet row grammar negative control — the surface did not mount rows to measure");
+  const settingsRowGrammarControl = await page.evaluate((scenario) => window.__shellSettingsRowGrammarNegativeControl(scenario), SETTINGS_SHEET_SURFACE.spec);
+  console.log("sheet-grammar: settings sheet reference row grammar negative control — the reference grammar's direction, cushion, hairlines and heading inset all reverted\n");
+  if (!settingsRowGrammarControl.broken || !settingsRowGrammarControl.fixed || settingsRowGrammarControl.broken.rows.length === 0 || settingsRowGrammarControl.fixed.rows.length === 0) {
+    failures.push("settings sheet reference row grammar negative control: the surface did not mount rows to measure");
+    console.log("  FAIL  settings sheet reference row grammar negative control — the surface did not mount rows to measure");
   } else {
-    const editorTotal = settingsRowStackingControl.fixed.rows.filter((row) => row.multiControl).length;
-    const brokenStacked = settingsRowStackingControl.broken.rows.filter((row) => row.multiControl && row.labelBottom <= row.fieldTop + FRAME_GEOMETRY_TOLERANCE_PX).length;
-    const fixedStacked = settingsRowStackingControl.fixed.rows.filter((row) => row.multiControl && row.labelBottom <= row.fieldTop + FRAME_GEOMETRY_TOLERANCE_PX).length;
-    const wentRed = editorTotal > 0 && brokenStacked < editorTotal;
-    const compactTotal = settingsRowStackingControl.fixed.rows.filter((row) => !row.multiControl).length;
-    const fixedLines = settingsRowStackingControl.fixed.rows.filter((row) => !row.multiControl && row.singleLine).length;
-    const cleanAfter = fixedStacked === editorTotal && (compactTotal === 0 || fixedLines === compactTotal);
-    if (!wentRed) failures.push(`settings sheet row grammar negative control: reverting flex-direction did not unstack any editor row (${brokenStacked}/${editorTotal} still measured stacked)`);
-    if (!cleanAfter) failures.push(`settings sheet row grammar negative control: removing the override did not restore the grammar (${fixedStacked}/${editorTotal} editor rows stacked, ${fixedLines}/${compactTotal} compact rows one-line)`);
-    console.log(`  ${wentRed ? "PASS" : "FAIL"}  reverting flex-direction unstacks editor rows (${brokenStacked}/${editorTotal} still stacked)`);
-    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override restores the grammar (${fixedStacked}/${editorTotal} editor rows stacked, ${fixedLines}/${compactTotal} compact rows one-line)`);
-  }
-  console.log("");
-
-  const settingsGrammarColumnControl = await page.evaluate((scenario) => window.__shellSettingsRowGrammarColumnControl(scenario), SETTINGS_SHEET_SURFACE.spec);
-  console.log("sheet-grammar: settings sheet row grammar column control — every row forced back onto the shared column grammar\n");
-  if (!settingsGrammarColumnControl || settingsGrammarColumnControl.rows.length === 0) {
-    failures.push("settings sheet row grammar column control: the surface did not mount rows to measure");
-    console.log("  FAIL  settings sheet row grammar column control — the surface did not mount rows to measure");
-  } else {
-    const compactTotal = settingsRowStacking && settingsRowStacking.rows ? settingsRowStacking.rows.filter((row) => !row.multiControl).length : 0;
-    const brokenLines = settingsGrammarColumnControl.rows.filter((row) => !row.multiControl && row.singleLine).length;
-    const wentRed = compactTotal > 0 && brokenLines < compactTotal;
-    if (!wentRed) failures.push(`settings sheet row grammar column control: forcing column did not unline any compact row (${brokenLines}/${compactTotal} still one-line)`);
-    console.log(`  ${wentRed ? "PASS" : "FAIL"}  forcing column unlines compact rows (${brokenLines}/${compactTotal} still one-line)`);
+    const aspectState = (grammar) => {
+      const plain = grammar.rows.filter((row) => row.plain);
+      const wrongDirection = plain.filter((row) => row.direction !== "row" || !row.sameLine).length;
+      const pitchRows = grammar.rows.filter((row) => row.pitchToNextPlain != null);
+      const offPitch = pitchRows.filter((row) => row.pitchToNextPlain < SETTINGS_ROW_PITCH_MIN_PX - FRAME_GEOMETRY_TOLERANCE_PX || row.pitchToNextPlain > SETTINGS_ROW_PITCH_MAX_PX + FRAME_GEOMETRY_TOLERANCE_PX).length;
+      const owed = [
+        ...grammar.rows.filter((row) => row.dividerExpected),
+        ...(grammar.sections || []).filter((section) => section.dividerExpected),
+      ];
+      const wrongDividers = owed.filter((rule) => !rule.divider
+        || Math.abs(rule.divider.height - 1) > 0.5
+        || Math.abs(rule.divider.left - SETTINGS_SHEET_INSET_PX) > 0.5
+        || Math.abs(rule.divider.right) > 0.5).length;
+      const insetOff =
+        grammar.rows.filter((row) => Math.abs(row.paddingLeft - SETTINGS_SHEET_INSET_PX) > 0.5).length +
+        (grammar.sections || []).filter((section) => Math.abs(section.paddingLeft - SETTINGS_SHEET_INSET_PX) > 0.5).length;
+      return { wrongDirection, offPitch, wrongDividers, insetOff, owed: owed.length };
+    };
+    const broken = aspectState(settingsRowGrammarControl.broken);
+    const fixed = aspectState(settingsRowGrammarControl.fixed);
+    const wentRed = broken.wrongDirection > 0;
+    const pitchWentRed = broken.offPitch > 0;
+    const dividersWentRed = broken.wrongDividers > 0;
+    const insetWentRed = broken.insetOff > 0;
+    const cleanAfter = fixed.wrongDirection === 0 && fixed.offPitch === 0 && fixed.wrongDividers === 0 && fixed.insetOff === 0;
+    if (!wentRed) failures.push("settings sheet reference row grammar negative control: reverting the direction did not unline any plain row");
+    if (!pitchWentRed) failures.push("settings sheet reference row grammar negative control: the 12px cushion did not push any plain-row pitch out of the band");
+    if (!dividersWentRed) failures.push("settings sheet reference row grammar negative control: stripping the hairlines left every divider-owing row apparently correct");
+    if (!insetWentRed) failures.push("settings sheet reference row grammar negative control: the 12px inset overrides did not read as off-inset");
+    if (!cleanAfter) failures.push(`settings sheet reference row grammar negative control: removing the overrides left the grammar wrong (direction ${fixed.wrongDirection}, pitch ${fixed.offPitch}, divider ${fixed.wrongDividers}, inset ${fixed.insetOff})`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  reverting the direction unlines plain rows (${broken.wrongDirection})`);
+    console.log(`  ${pitchWentRed ? "PASS" : "FAIL"}  the cushion pushes pitches out of the band (${broken.offPitch})`);
+    console.log(`  ${dividersWentRed ? "PASS" : "FAIL"}  stripping loses the hairlines (${broken.wrongDividers} of ${broken.owed})`);
+    console.log(`  ${insetWentRed ? "PASS" : "FAIL"}  the 12px inset overrides read off-inset (${broken.insetOff})`);
+    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the overrides restores the grammar`);
   }
   console.log("");
 

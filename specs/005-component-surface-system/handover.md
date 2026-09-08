@@ -14,7 +14,6 @@ _memory:
     last_updated_by: "244-landing-verify"
     recent_action: "071/003 LANDED+pushed (81b6e328): goal 3/3, 071 2/4, gate 27/0 twice"
     next_safe_action: "071/004 lands next (.worktrees/245); 0.0.34 is cut; 008/003's AC-007 discharged on paper"
-    blockers:
       - "066's device read (AC-008) and 075's AC-006 still wait on the operator's handset pass — never agent-ticked"
       - "071/004 (`.worktrees/245-view-config-sheet`) is in progress, uncommitted; do not touch that worktree"
       - "008/002's AC-007 is discharged by the 0.0.34 cut (e75a979c) — 008's own goal/roadmap still to be reconciled by that packet"
@@ -195,6 +194,38 @@ deferrals. `npx vitest run` 159 files / 1727 tests, `tsc --noEmit` 0, `npm run b
 `npm run gate` **PASS — 27 green, 0 red** (run 3; run 1's single red was failing-values before
 the criteria reconciliation), `validate --strict` PASSED on 072 and 005, `scan-comments` 0,
 `evidence --check-all` 15/15 fresh, 005 + 072 graph metadata backfilled.
+
+### 2026-09-08 ~22:40, `004-view-config-sheet` implemented in `.worktrees/245-view-config-sheet` — gate 27/27, validated strict, NOT yet committed
+
+**Implemented, not landed.** The settings sheet's rows (the view-config panel, inventory row 42's
+surface) left 002's column-stacked shape for the reference's one-line list grammar: 13/13 plain
+rows label-left/control-right, 6/6 pitches 48.0px (the reference band 44–52; they measured
+54.0–78.3px red), 18/18 divider-owing rows with the 1px hairline inset 16px left / 0px right
+(extent-minus-border, divider token with a literal rgba stand-in because the harness defines no
+`--background-modifier-border`), section headings at the sheet's 16px inset (was 12px), 0 native
+selects, 7/7 stacked editors still ≥90% width, no horizontal overflow (390 == 390). The five
+wide-editor shapes keep 002's stacked shape via `:has` exceptions — 002's own width finding is why
+(ADR-001 in the packet's new `decision-record.md`; the divider-as-measured-`::before` and the
+flex-basis-0 field are ADR-002/ADR-003). The lane's reference grammar + negative control landed in
+`tools/live/sheet-grammar.mjs` (run 1), the unit pin `src/views/view-config-sheet-row-grammar.test.ts`
+is proven to fail against a reverted line (1 failed/5 passed on `flex: 1 1 0` → `1 1 auto`, 6/6
+restored), and the whole ladder is green from the final state: tsc 0, build 0, vitest 1729/1729,
+sheet-grammar/render-assertions/touch-targets/verify-placement 0, `npm run screenshots` twice
+(616, exit 0 both; pixel-delta: 6 content moves, all the redesigned surface — view-config 342–345k
+pixels/maxDelta 176–196, board-card-properties 440k/194–209 — 2 board-view 1–4px/Δ1 byte movers,
+run 1's 11px jitter restored identical in run 2), the 11 evidence artefacts the stylesheet made
+stale re-derived by their own producing tools then 15/15 fresh (engine-parity: 82 fixtures, 43
+differences, none in this family — the 074 record's 50 predates this markup; still exit 1,
+pre-existing, not a gate CHECK), `check-lane` 0 after the acquire/edit/release takeover (release
+names all 6 content moves; the takeover rides this leg's single commit — ADR-004), `npm run gate`
+**27 green, 0 red**, `scan-comments`/`scan-failing-values` 0, packet `--strict` RESULT: PASSED,
+graph metadata backfilled scoped to `004-view-config-sheet`. Accepted: AC-001–003 Met with
+evidence; the operator device recheck stays unticked; the reference side is measured by number,
+not by eye (headless leg). Still owed: the operator device recheck; the commit (this worktree,
+`245-view-config-sheet`, branch off origin/main at 14bcaf10); `../changelog/` still does not exist
+(002/003 precedent) — recorded in the packet's limitations. Details in the packet's
+`implementation-summary.md`, `decision-record.md`, `tasks.md`, `acceptance-criteria.md` and
+`spec.md` §4, and the worktree's own untracked `.handover.md`.
 
 ### 2026-09-08 ~16:45, `074-test-data-consolidation` LANDED on `origin/main` — landing-verified, rebased, pushed
 

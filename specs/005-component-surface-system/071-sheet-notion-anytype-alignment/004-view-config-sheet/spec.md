@@ -30,7 +30,7 @@ Redesign the view-config sheet (title field, title format, column visibility and
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P2 |
-| **Status** | Draft — blocked on Phase 1 |
+| **Status** | Implemented (view-config leg) — 2026-09-08: the sheet rows redesigned to the reference one-line grammar, asserted red→green in the settings lane, recaptured, 27/27 gate; operator device recheck still owed |
 | **Created** | 2026-09-08 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |
@@ -163,3 +163,33 @@ Not detailed at scaffold time — see §6.
 
 - **Parent**: `../spec.md`
 - **Depends on**: `../001-sheet-story-coverage-audit/`
+
+---
+
+<!-- ANCHOR:reference-gap -->
+## 4. REFERENCE GAP — current sheet vs Notion vs Anytype (measured 2026-09-08, lane: `settings`)
+
+Provenance: 001's inventory row 42 flags this family's references "filename read only"; the harvest
+manifests (`screenshots/notion/ios/harvest.json`, `screenshots/notion/web/harvest.json`) carry Mobbin
+ids and URLs only — no pixel measurements — and the Anytype captures have no harvest manifest. The
+reference-side numbers below are therefore the ones 002's landed settings-sheet grammar adopted for
+this same reference family (Notion iOS inset-separated list: 1px-left/0px-right divider inset
+asymmetry, extent-minus-border divider predicate, divider token fallback; 44–52px row pitch against
+the §21-recorded 50pt target) plus the Anytype captures' device geometry (1206x2622 @3x = 402x874pt
+logical — the 402px lane width). Current-side numbers are measured from the shipped
+`styles.css`/`tools/live/sheet-grammar.mjs` lanes.
+
+| Element | Current (measured, where) | Notion reference | Anytype reference | Gap / target |
+|---|---|---|---|---|
+| Header / title | 16px/600 title, 1px bottom hairline, padding 0/16px/6px/16px, close 44x44 (`styles.css:12148-12170`) | Sheet-titled push, 16pt-side insets, hairline under header | Same: 402pt-logical sheet, inset header | Converged; keep |
+| Row direction | Column-stacked: label ABOVE field, `flex-direction: column`, gap 4px (`styles.css:12131-12137`, 002 operator decision 2026-09-05) | Single-line rows, label left / value+control+chevron right | Single-line list rows, same grammar | **Flip to label-left/control-right** |
+| Rows / grouping | One setting per row, but wide controls (segmented, dropdown+button, path+picker) drove the 002 stacking decision | One setting per row, inset-separated grouped lists | Same list grammar | Keep one-setting-per-row; grouping via inset dividers |
+| Row pitch | 44px floor on phone (`styles.css:13271`) + 4px gap + 6px margin ⇒ ~50–54px, unasserted | 44–52pt; §21 records 50pt measured target | ~50pt logical | **Assert 44–52px pitch** |
+| Dividers | Section-title `border-top` hairline only, full-bleed; rows undivided (`styles.css:12249-12253`) | 1px hairline, inset 16px left / 0px right (002 finding), extent = row extent minus border, `--obnotion-border-subtle` with token fallback | Same inset hairline | **Per-row inset divider; 1px-left/0px-right; extent-minus-border predicate; token fallback** |
+| Section headings | 12px/12px/4px padding — 12px inset vs rows' 16px (`styles.css:12249`) | 16px inset, aligned over the list inset | Same | **Align to 16px** |
+| Selects | Native `<select>` stretched full-width 44px/16px (`styles.css:12227-12236`, `:13347`) | Own picker, no native list over the sheet | Own picker | **Selects rendered as the plugin's own sheet-native picker (`.obnotion-view-config-dropdown` → `.obnotion-dropdown-popover`)** |
+| Toggles | `.obnotion-checkbox` switch, 18px basis, excluded from flex-grow (`styles.css:12186-12194`) | UIToggle at the row's right | Switch at row's right | Right-align with the control column |
+| Horizontal padding | 16px rows/header; 12px section titles + readonly notes | 16px throughout | 16pt logical | **Consistent 16px** |
+| Typography | Labels 14px (`--obnotion-font-base`) muted, values/controls 16px (iOS zoom guard, `styles.css:12213-12221`) | 17pt labels, muted secondary | Same scale | Converged via token ladder; keep |
+| Overflow | scrollWidth 390 == clientWidth 390 (lane PASS, as built) | n/a | 402pt-logical | **Keep: scrollWidth == clientWidth at 402px** |
+<!-- /ANCHOR:reference-gap -->
