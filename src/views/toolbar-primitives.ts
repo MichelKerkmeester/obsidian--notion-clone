@@ -181,6 +181,16 @@ export interface ControlClusterButtonOptions {
   onClick?(): void;
 }
 
+/**
+ * Append the text label a phone toolbar control shows beside its icon. Present in the DOM at
+ * every width — a control's accessible name and tooltip already carry the same text — and shown
+ * only where `.is-phone`'s own stylesheet rule turns it on, so the desktop presentation this
+ * control ships with today is untouched by construction rather than by a runtime branch here.
+ */
+export function appendToolbarControlLabel(button: HTMLElement, text: string): HTMLSpanElement {
+  return button.createSpan({ cls: "obnotion-toolbar-control-label", text });
+}
+
 /** Build a toolbar trigger whose visible and announced state cannot drift from its count. */
 export function createControlClusterButton(parent: HTMLElement, options: ControlClusterButtonOptions): HTMLButtonElement {
   const button = parent.createEl("button", {
@@ -194,6 +204,7 @@ export function createControlClusterButton(parent: HTMLElement, options: Control
     },
   });
   setIcon(button, options.icon);
+  appendToolbarControlLabel(button, options.label);
   setTooltip(button, options.label, { delay: 100 });
   button.toggleClass("is-active", options.state === "active");
   button.toggleClass("is-add", options.state === "add");

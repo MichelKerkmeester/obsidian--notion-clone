@@ -38,7 +38,7 @@
       "plan",
       "technical"
     ],
-    "importance_tier": "normal",
+    "importance_tier": "important",
     "status": "in_progress",
     "key_files": [
       "spec.md",
@@ -46,9 +46,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md",
       "tools/live/touch-targets.mjs",
-      "src/views/database-view.ts"
+      "src/views/toolbar-primitives.ts",
+      "src/views/toolbar-renderer.ts",
+      "tools/live/phone-toolbar-scroll.ts",
+      "tools/live/run-phone-toolbar-scroll.mjs",
+      "tools/lane/css-lane.json",
+      "src/views/database-view.ts",
+      "tools/live/run-toolbar-collapse-sweep.mjs",
+      "tools/live/sheet-grammar.mjs"
     ],
     "entities": [
       {
@@ -82,6 +90,12 @@
         "source": "derived"
       },
       {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
@@ -94,9 +108,51 @@
         "source": "derived"
       },
       {
+        "name": "toolbar-primitives.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-primitives.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "phone-toolbar-scroll.ts",
+        "kind": "code",
+        "path": "tools/live/phone-toolbar-scroll.ts",
+        "source": "derived"
+      },
+      {
+        "name": "run-phone-toolbar-scroll.mjs",
+        "kind": "file",
+        "path": "tools/live/run-phone-toolbar-scroll.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
         "name": "database-view.ts",
         "kind": "code",
         "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "run-toolbar-collapse-sweep.mjs",
+        "kind": "file",
+        "path": "tools/live/run-toolbar-collapse-sweep.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
         "source": "derived"
       },
       {
@@ -146,59 +202,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Clean Architecture",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Key Components",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Data Flow",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Current Role",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The operator wants the phone view toolbar's icon-only buttons (filter, sort, group, columns, settings, more — visible in the R1 evidence screenshot `ios-finance-table-empty-0032.png`, operator-owned, not committed here) restyled as icon+label buttons, citing an Obsidian Bases calendar toolbar as the reference: a single row of \"↑↓ Sort\", \"≡ Filter\", \"☰ Properties\", \"+ New\" with visible text labels, no bare icon cluster",
     "created_at": "2026-09-08T06:35:40Z",
-    "last_save_at": "2026-09-08T06:48:10.446Z",
+    "last_save_at": "2026-09-08T10:02:50.825Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,15 +215,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:04543f5b5f4c1d919a09ad07684b92f66a15bf11ecbf17784efc855f9c49d07c",
+    "source_fingerprint": "sha256:03e1ff2461bb3929d58fea0bd9cd63efe314db581d9b4bbed98bf7679821f2c9",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "1b4480c276582e42fc5f0024e6f5d50aeb4fd215601a98470eabd4c1024a1cb4",
-      "plan.md": "9b0c99f7132c9e93154d585ea6dbf1b919a678122cac649cf8ad868de083a947",
-      "tasks.md": "46422cbaf37e420c300be1871b2c1d0bfb36a0f9ce22b4a85ea81774c819ef33",
-      "implementation-summary.md": "4257d21132dc429c7b6b5753b9b83efbecde14666ebd982b9df0a8503efc9bb6"
+      "spec.md": "b71de3b4d2a5b0a39515dcf1c398c8afb5b3d9eb26435fc5a4996d9d9523b504",
+      "plan.md": "87a3d7a13102a71893a1ada3cfe25616d4e12611ca0e6909f1402cfd684b5c64",
+      "tasks.md": "2a305666f0376d77f2e81b9af3f04842f0e7e40841741fa557928696a7c75e4b",
+      "decision-record.md": "73af3c49fea311418162f4c9424fc5c7429351004b11a2ab2ab795f3f4df55e4",
+      "implementation-summary.md": "5f69698beb8b9382606e7b186b272e065c9ee9d95f0854ce93e72abfdd7b9aa9"
     },
     "last_active_at": null
   }

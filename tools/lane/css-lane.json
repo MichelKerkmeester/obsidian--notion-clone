@@ -1,7 +1,7 @@
 {
-  "holder": "009-live-verification",
-  "acquiredAt": "2026-09-07T22:40:51.390Z",
-  "baselineHash": "704f768371da",
+  "holder": "075-toolbar-labelled-buttons",
+  "acquiredAt": "2026-09-08T09:46:15.000Z",
+  "baselineHash": "ebf39eefa348",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -5495,6 +5495,39 @@
         "screenshots/notion-clone/views/board-subtask-tree-mobile-dark.png"
       ],
       "note": "Landing-verifier re-derivation pass on the 221/225/069/067/058-merged main, not a new stylesheet edit: the rebase auto-merged this packet's panel-button padding+narrow inset with 069's touch-lifted/ghost rules, baselineHash recomputed to 704f768371da (sha256-12 of the merged styles.css) and every tools/live evidence artefact re-run against it. npm run screenshots ran seven times (616 entries, exit 0 each); the decoded pixel-delta pass judged every mover across the final two runs. 13 captures moved stably in BOTH runs and are kept and named here: the 12 mobile panel captures (constructed-board-groups-panel, constructed-column-manager, constructed-filter-panel, constructed-filter-panel-nested, constructed-sort-panel-calendar, constructed-sort-panel, dark+light each) with changedPixels 3-9755 and max channel delta 1-209 -- the 10 outside column-manager are this packet's own panel-button/narrow-inset content; column-manager's two are 3px/8px sub-bucket antialiasing with pixelHash/layoutHash unchanged -- plus board-subtask-tree-mobile-dark (38px, maxDelta 121, fingerprint stable). 34 desktop manifest entries were reconciled from the manifest main carried to the ones matching the PNG blobs the rebase auto-merged from this leg (the rebase had left manifest and blobs describing different captures for them; byte compare proved the blobs untouched, so only manifest rows moved -- no image content changed). Jitter, judged per the <=12 maxDelta and moved-in-one-run rule and restored to the committed blobs with manifest bytes patched back: board-view-desktop-dark (4px@1), board-mobile-desktop-dark (1px@1); single-run transients that self-reverted across passes: panel-record-detail-title-currency-desktop-dark (51px@192), table-frozen-column-desktop-dark (38px@29), reference-gantt-subtask-mobile-light (146px@132), reference-kanban-mobile-dark (4301px@1), constructed-toolbar-utilities-mobile-light (14px@196)."
+    },
+    {
+      "event": "acquire",
+      "phase": "075-toolbar-labelled-buttons",
+      "at": "2026-09-08T09:46:15.000Z",
+      "hash": "704f768371da",
+      "note": "Taking the lane over from 009-live-verification at its own released hash to give the phone toolbar's filter/sort/group/columns/settings/more controls a visible icon+label, per the operator's Notion/Anytype/Bases-calendar reference and D1's never-wrap-or-collapse-on-phone ruling."
+    },
+    {
+      "event": "edit",
+      "phase": "075-toolbar-labelled-buttons",
+      "at": "2026-09-08T09:46:16.000Z",
+      "hash": "ebf39eefa348",
+      "note": "styles.css: a new `.obnotion-toolbar-control-label` span (declared `display: none` at its base rule beside `.obnotion-toolbar-icon-button`) is appended by `appendToolbarControlLabel` (toolbar-primitives.ts) inside `createControlClusterButton` and at the three `createIconButton` call sites (settings, utilities/\"more\", group) in toolbar-renderer.ts. A `.is-phone`-scoped rule turns the label back on and widens `.obnotion-filter-btn, .obnotion-sort-btn, .obnotion-group-btn, .obnotion-col-manager-btn, .obnotion-toolbar-settings-btn, .obnotion-toolbar-more-btn` to `width: auto; min-width: 44px; height: 44px; padding: 0 var(--obnotion-space-4); gap: var(--obnotion-space-3)` (desktop and the embedded/codeblock toolbar keep their existing 28px icon-only row unchanged, since the label rule and the sizing rule both live only under `.is-phone`). A `.is-phone .obnotion-toolbar { flex-wrap: nowrap }` rule pins D1's own ruling -- the row never takes a second line even though the shared (non-phone) toolbar rule allows wrapping at narrow desktop widths; `.obnotion-toolbar-right`'s pre-existing `overflow-x: auto` and hidden scrollbar are what carry the scroll behaviour itself, unchanged by this edit."
+    },
+    {
+      "event": "release",
+      "phase": "075-toolbar-labelled-buttons",
+      "at": "2026-09-08T09:46:17.000Z",
+      "hash": "ebf39eefa348",
+      "reviewed": [
+        "screenshots/notion-clone/components/chrome-toolbar-mobile-dark.png",
+        "screenshots/notion-clone/components/chrome-toolbar-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-search-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-search-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-utilities-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-utilities-mobile-light.png"
+      ],
+      "note": "npm run screenshots ran twice from a clean-except-toolbar tree (616 entries, exit 0 both times); the same 10 components/*toolbar*-mobile-* captures moved in both runs and nothing else did. Every mover judged by decoded pixel delta (tools/screenshots/pixel-hash.mjs decodePng) against the HEAD-committed PNG, not by pixelHash alone: chrome-toolbar-mobile-{dark,light} grew 804x230 -> 804x262 (the row's own height, now that its buttons are 44px tall in a stacked is-phone layout); the eight constructed-toolbar-* captures moved 11057-20350 pixels (0.8-1.4 percent) at max channel delta 49-145, the labelled buttons themselves plus their wider hit area. One unrelated capture, screenshots/notion-clone/views/table-frozen-column-mobile-light.png, moved in the second run only at 36px / maxDelta 1 against its own HEAD blob (pixelHash unchanged, d44750601e3a both before and after) -- sub-pixel antialiasing jitter, not this edit's (table-renderer.ts, not toolbar-renderer.ts or styles.css's toolbar rules); restored via `git checkout --` rather than kept."
     }
   ],
   "outstanding": [

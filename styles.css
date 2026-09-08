@@ -2316,6 +2316,13 @@
   color: var(--text-normal);
 }
 
+/* The phone control label sits in the DOM at every width (its text doubles as the accessible
+   name's source), but stays hidden here — the desktop and embedded presentation keeps today's
+   icon-only row unchanged. `.is-phone`'s own rule below is what turns it on. */
+.obnotion-container .obnotion-toolbar-control-label {
+  display: none;
+}
+
 .view-header .obnotion-view-undo-action-near-nav {
   order: 2;
   margin-inline: 4px 8px;
@@ -20953,6 +20960,42 @@ body.pm-resize-active * {
 
 .is-phone .obnotion-container .obnotion-toolbar-right::-webkit-scrollbar {
   display: none;
+}
+
+/* Icon+label buttons on phone (filter/sort/group/columns/settings/more), matching the operator's
+ * Bases-calendar-toolbar reference: each control carries a visible text label beside its icon,
+ * never wraps or collapses, and the row scrolls horizontally once the labelled set exceeds the
+ * viewport — `.obnotion-toolbar-right`'s existing overflow-x already does that scrolling, this
+ * only widens the buttons the row now has to fit. Desktop and the embedded/codeblock toolbar are
+ * untouched: the label declares `display: none` above, and only this `.is-phone` rule turns it
+ * back on.
+ */
+.is-phone .obnotion-container :is(
+  .obnotion-filter-btn,
+  .obnotion-sort-btn,
+  .obnotion-group-btn,
+  .obnotion-col-manager-btn,
+  .obnotion-toolbar-settings-btn,
+  .obnotion-toolbar-more-btn
+) {
+  width: auto;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 var(--obnotion-space-4);
+  gap: var(--obnotion-space-3);
+}
+
+.is-phone .obnotion-container .obnotion-toolbar-control-label {
+  display: inline-flex;
+  font-size: var(--obnotion-font-md);
+  color: inherit;
+  white-space: nowrap;
+}
+
+/* The row itself never wraps to a second line on phone — D1's "scroll only" ruling — even though
+ * the shared (non-phone) toolbar rule allows wrapping at narrow desktop widths. */
+.is-phone .obnotion-container .obnotion-toolbar {
+  flex-wrap: nowrap;
 }
 
 .is-phone .obnotion-container .obnotion-mobile-reorder-controls,

@@ -160,6 +160,29 @@ this leg's worktree diff is `src/data/data-source.ts`, `src/data/data-source.tes
 
 ---
 
+### 2026-09-08 ~09:46, `075-toolbar-labelled-buttons` IMPLEMENTED — AC-001 through AC-005 Met, gate 26 green, NOT committed at write time
+
+Native Sonnet leg, worktree `236-toolbar-labelled-buttons` off `origin/main` at `bf694181`. The phone
+toolbar's filter/sort/group/columns/settings/more buttons gained a visible icon+label via a new
+`appendToolbarControlLabel` helper (`toolbar-primitives.ts`), shown only under `.is-phone` and widened
+to 44px there; desktop and the embedded/codeblock toolbar are unchanged (ADR-001,
+`decision-record.md`, citing `screenshots/notion/web/` and `screenshots/anytype/desktop/` — both keep
+their own dense toolbars icon-only with hover tooltips). A new `tools/live/run-phone-toolbar-scroll.mjs`
+lane proved the change red-then-green at a 402px viewport (labels present, single line, 44px floor,
+`scrollWidth > clientWidth`, last control reachable, scrollbar hidden); a one-line CSS revert
+reproduced red and was restored. The two pre-existing toolbar lanes (`009`'s
+`run-toolbar-collapse-sweep.mjs`, `044`'s `sheet-grammar.mjs`) reran with identical results before and
+after — neither needed a behavioural update, since both mount the embedded/desktop shape this ADR
+leaves untouched. Full verification: `tsc`/`vitest`/`build` clean, `verify-placement.mjs` 413/415 (2
+declared, unchanged), two `npm run screenshots` passes judged by decoded pixel delta (10 real toolbar
+captures moved consistently across both runs; one unrelated jitter capture on
+`table-frozen-column-mobile-light.png` reverted), every stale evidence artifact re-run to freshness,
+`npm run gate` once at 26 green/0 red, `scan-comments.mjs`/`scan-failing-values.mjs` clean. A
+pre-existing, unrelated `engine-parity.mjs` Chrome/WebKit width disagreement was confirmed present on
+the unmodified tree too (stash/rerun) — not this packet's controls, left for a separate fix. AC-006
+(the operator's own device confirmation) stays intentionally unticked. `validate.sh --strict` PASSED
+after a scoped `backfill-graph-metadata.js` run (0 errors, 0 warnings).
+
 ### 2026-09-08 08:07-08:52, seven packets opened from the operator's 0.0.32 device pass, and two delegation rulings
 
 `0.0.32` (`f0597bcd`) reached the operator's phone at 08:06; fourteen reports and rulings arrived

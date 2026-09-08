@@ -9,7 +9,7 @@ importance_tier: "normal"
 contextType: "implementation"
 _memory:
   continuity:
-    packet_pointer: "075-toolbar-labelled-buttons"
+    packet_pointer: "005-component-surface-system/075-toolbar-labelled-buttons"
     last_updated_at: "2026-09-08T08:52:00Z"
     last_updated_by: "markdown-scaffold"
     recent_action: "Opened the packet from the operator's R14 report and reference screenshot"

@@ -161,6 +161,44 @@ const RAISED = [
       + " fixture only renders on a phone body), the icon and label kept at their existing size and"
       + " centred in the wider box",
   },
+  {
+    match: "obnotion-filter-btn",
+    floor: ENHANCED,
+    reason: "the phone toolbar's labelled filter button, operator-ruled 2026-09-08 at 44px on"
+      + " phone (28px desktop, out of this floor's reach since the fixture only renders on a phone"
+      + " body) — a regression back into the 28-44px band would silently undo the labelled row's"
+      + " own touch-target requirement",
+  },
+  {
+    match: "obnotion-sort-btn",
+    floor: ENHANCED,
+    reason: "the phone toolbar's labelled sort button, same 2026-09-08 ruling as the filter button"
+      + " beside it",
+  },
+  {
+    match: "obnotion-group-btn",
+    floor: ENHANCED,
+    reason: "the phone toolbar's labelled group button, same 2026-09-08 ruling as the filter"
+      + " button beside it",
+  },
+  {
+    match: "obnotion-col-manager-btn",
+    floor: ENHANCED,
+    reason: "the phone toolbar's labelled properties (columns) button, same 2026-09-08 ruling as"
+      + " the filter button beside it",
+  },
+  {
+    match: "obnotion-toolbar-settings-btn",
+    floor: ENHANCED,
+    reason: "the phone toolbar's labelled settings button, same 2026-09-08 ruling as the filter"
+      + " button beside it",
+  },
+  {
+    match: "obnotion-toolbar-more-btn",
+    floor: ENHANCED,
+    reason: "the phone toolbar's labelled utilities (\"more\") button, same 2026-09-08 ruling as"
+      + " the filter button beside it",
+  },
 ];
 
 // ───────────────────────────────────────────────────────────────────

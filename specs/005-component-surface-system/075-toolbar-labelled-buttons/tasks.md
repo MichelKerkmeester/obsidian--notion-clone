@@ -32,11 +32,11 @@ contextType: "general"
 ---
 
 <!-- ANCHOR:phase-1 -->
-## Phase 1: Setup
+## Phase 1: Red
 
-- [ ] T001 Create project structure
-- [ ] T002 Install dependencies
-- [ ] T003 [P] Configure development tools
+- [x] T001 Write `tools/live/phone-toolbar-scroll.ts`: mount the full phone toolbar (`.is-phone`, `showDatabaseChrome: true`), every optional control enabled, measure row height/single-line, label presence, ≥44px, scroll overflow, last-control reachability, scrollbar hidden
+- [x] T002 Write `tools/live/run-phone-toolbar-scroll.mjs`: bundle and run T001's harness at a 402px viewport in real Chrome
+- [x] T003 Run the new lane against the unmodified codebase and confirm it fails for the right reasons (no labels, 28px controls, no overflow at 398/398)
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -44,10 +44,10 @@ contextType: "general"
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [ ] T004 [Implement core feature 1]
-- [ ] T005 [Implement core feature 2]
-- [ ] T006 [Implement core feature 3]
-- [ ] T007 [Add error handling]
+- [x] T004 Add `appendToolbarControlLabel` to `toolbar-primitives.ts`; call it from `createControlClusterButton` (filter/sort/columns)
+- [x] T005 Call `appendToolbarControlLabel` from the three `createIconButton` call sites in `toolbar-renderer.ts` (settings, utilities/"more", group — group's call sits after `appendSvg` so the icon precedes the label)
+- [x] T006 `styles.css`: base `.obnotion-toolbar-control-label { display: none }`; `.is-phone`-scoped rule turns it on and widens the six control classes to `min-width: 44px; height: 44px; padding: 0 var(--obnotion-space-4); gap: var(--obnotion-space-3)`; `.is-phone .obnotion-toolbar { flex-wrap: nowrap }` pins D1
+- [x] T007 Measure the operator's reference screenshot for label size/spacing; record the measurement table and documented tolerance in `plan.md`
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -55,9 +55,17 @@ contextType: "general"
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] T008 Test happy path manually
-- [ ] T009 Test edge cases
-- [ ] T010 Update documentation
+- [x] T008 Rerun the new lane; confirm green (52px row, 44px controls, scrolls, last control reachable)
+- [x] T009 Revert one CSS line, confirm red, restore, confirm green again (red→green discipline proven)
+- [x] T010 Rerun `run-toolbar-collapse-sweep.mjs` (009) and `sheet-grammar.mjs` (044); confirm both PASS unaffected
+- [x] T011 Add six `RAISED` entries to `tools/live/touch-targets.mjs` locking the 44px floor for the labelled controls; confirm PASS
+- [x] T012 `npx tsc --noEmit`, `npx vitest run`, `npm run build`, `render-assertions.mjs`, `verify-placement.mjs` — all exit 0
+- [x] T013 `npm run screenshots` twice; judge every mover by decoded pixel delta; revert the one jitter-only capture (`table-frozen-column-mobile-light.png`, maxDelta 1, moved in one run only); append the acquire/edit/release triplet to `tools/lane/css-lane.json`
+- [x] T014 `node tools/live/evidence.mjs --check-all`; re-run every stale lane until all 15 artifacts report fresh
+- [x] T015 `npm run gate` once, foreground; confirm 26 green, 0 red
+- [x] T016 `scan-comments.mjs`, `scan-failing-values.mjs` — both exit 0
+- [x] T017 Record the desktop-vs-phone decision as ADR-001 in `decision-record.md`
+- [x] T018 Update `acceptance-criteria.md`, `implementation-summary.md`, `plan.md`, this file with the real evidence; leave AC-006 unticked (operator-owned)
 <!-- /ANCHOR:phase-3 -->
 
 ---
@@ -65,9 +73,9 @@ contextType: "general"
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-- [ ] All tasks marked `[x]`
-- [ ] No `[B]` blocked tasks remaining
-- [ ] Manual verification passed
+- [x] All agent-owned tasks marked `[x]`
+- [x] No `[B]` blocked tasks remaining
+- [ ] Manual verification passed — operator device check (AC-006), intentionally left open
 <!-- /ANCHOR:completion -->
 
 ---

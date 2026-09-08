@@ -40,6 +40,7 @@ import { createCheckbox } from "./checkbox";
 import { isTouchDevice } from "../data/touch-environment";
 import { applyViewRowPresets, writablePresetColumns } from "../data/view-row-presets";
 import {
+  appendToolbarControlLabel,
   createControlClusterButton,
   createPopoverShell,
   createSettingsEntry,
@@ -438,6 +439,7 @@ export class ToolbarRenderer {
     // for neither, the same division the utilities button next to it already keeps — asking
     // both would draw the icon twice.
     const button = this.createIconButton(toolbar, "settings", t("toolbar.settings"), "obnotion-toolbar-settings-btn");
+    appendToolbarControlLabel(button, t("toolbar.settings"));
     button.setAttribute("aria-controls", "obnotion-view-config-panel");
     createSettingsEntry(button, {
       label: t("toolbar.settings"),
@@ -457,6 +459,7 @@ export class ToolbarRenderer {
     actions: ToolbarActions,
   ): void {
     const button = this.createIconButton(toolbar, "more-horizontal", t("toolbar.utilities"), "obnotion-toolbar-more-btn");
+    appendToolbarControlLabel(button, t("toolbar.utilities"));
     button.setAttribute("aria-haspopup", "menu");
     button.setAttribute("aria-expanded", "false");
     button.setAttribute("aria-controls", "obnotion-toolbar-utilities");
@@ -1716,6 +1719,10 @@ export class ToolbarRenderer {
     btn.setAttribute("aria-expanded", "false");
     btn.setAttribute("aria-controls", "obnotion-group-popover");
     appendSvg(btn, ToolbarRenderer.ICONS.group);
+    // After the icon, not inside `createIconButton`: the group icon is a composite SVG appended
+    // here rather than through `createIconButton`'s own `setIcon` call, so appending the label
+    // before this line would draw the text ahead of the icon it is meant to sit beside.
+    appendToolbarControlLabel(btn, t("toolbar.group"));
     if (groupValue) btn.addClass("is-active");
     btn.onclick = (event) => {
       event.preventDefault();
