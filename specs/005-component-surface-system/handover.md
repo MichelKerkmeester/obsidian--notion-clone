@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T16:45:00Z"
-    last_updated_by: "239-test-data-landing-verify"
-    recent_action: "074 test-data landed+pushed (f2df348d): goal 3/4, gate 27/0"
-    next_safe_action: "Cut the release carrying 002's redirect (AC-007), then 008/003; 072, then device rows"
+    last_updated_at: "2026-09-08T17:44:56Z"
+    last_updated_by: "241-landing-verify"
+    recent_action: "072 linked-view-ux landed+pushed (91501ed5): goal 4/4, gate 27/0"
+    next_safe_action: "Cut the release carrying 002's redirect (AC-007), then 008/003; the device rows"
     blockers:
       - "067 residual: T015 75px (1 past 66-74), T020 partial (one pair 2-level), T021 2 of 3 divider contexts, AC-011 iOS pass operator-owned"
       - "070 AC-005/006 and 074's Finance on-device read need the operator's device; 008/001+002 closed — 003/004 wait on a release carrying 002's redirect (AC-007); 071's audit landed (31f712c3, 86 rows, 1/4) — 002-006 unblocked"
@@ -44,6 +44,39 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08 ~20:05, `072-linked-view-blocks-ux` LANDED on `origin/main` — landing-verified, rebased, pushed
+
+**Landed.** Leg `085e55d5` (GLM, feat(linked-views), 36 files, +2620/−1251) replayed as `4123c05d`
+onto `00cb6686` (12 commits: 071/001, 008/002, 073, 074 and 074's fixture consolidation), plus
+this verifier's reconciliation `91501ed5`, on `origin/main` (`00cb6686..91501ed5`, push 1, no
+rejection). 21 conflicts: 20 generated artefacts taken from main's side (`main.js`, the
+screenshot manifest, `005/graph-metadata.json`, 17 `tools/live/*.json`); `css-lane.json` merged
+append-only (main's 073 events + the leg's 072 triplet, holder 072) with the events-array seam
+the first splice dropped repaired; the track handover kept both landings' bullets, 072's (the
+newest landing) on top. What the verification re-observed rather than trusted: both claim-named
+mutations — (a) `bindLinkedViewTouchMove` no-op'd → **2 failed / 28 passed** (the leg's claimed
+red), restored 30/30; (b) the `.is-touch-lifted` rule lifted → the lane still PASSED, because
+the lane asserts only the resting handle's 44×44 + `touch-action: none` — the lifted treatment's
+only automated witness is the unit tests' class toggle; recorded, not patched.
+`board-cross-group-drag` 0; the lane PASSED post-rebase with no 074-fixture repoint needed. 13
+stale evidence artefacts re-measured by their own tools (`styles.css`
+`e061ee373e17`→`42b9b9fafd8c`); `engine-parity`'s fresh 50-diff list is identical to the leg's
+own pre-rebase measurement — 6 fewer than 074's 56, all six the `panel-computed-cleanup-modal`
+checkbox rows, 0 new. Screenshots twice (616/616, exit 0): 1 real mover kept across both
+passes, `chrome-owned-menu-sheet-mobile-dark` 2702px @ maxDelta 5 — the same numbers the leg
+recorded; the leg's other 3 movers now reproduce their committed bytes and drop out; named in
+the lane's post-rebase acquire/edit/release (`42b9b9fafd8c`), `check-lane` 0. The
+failing-values ratchet: 072's three vocabulary-bare `goal.md` criteria recorded their
+moved-FROM numbers (the pre-fix gesture paths "was 0 of 2", "was 0" enumerated defects, "was 0
+of 1" devices) — no threshold edited; PASS at 148/148. Roadmap: the §5 "none yet started"
+bullet reads implemented+verified **4/4** (criterion 4 is the device-ROW-RECORDED row;
+`acceptance-criteria.md` AC-004 stays recorded-unticked — the operator's), and §4 row 71 gained
+the LANDED clause; defect rows 4-6 (table row / view-tab / switcher, HTML5-only) stay recorded
+deferrals. `npx vitest run` 159 files / 1727 tests, `tsc --noEmit` 0, `npm run build` 0,
+`npm run gate` **PASS — 27 green, 0 red** (run 3; run 1's single red was failing-values before
+the criteria reconciliation), `validate --strict` PASSED on 072 and 005, `scan-comments` 0,
+`evidence --check-all` 15/15 fresh, 005 + 072 graph metadata backfilled.
 
 ### 2026-09-08 ~16:45, `074-test-data-consolidation` LANDED on `origin/main` — landing-verified, rebased, pushed
 
