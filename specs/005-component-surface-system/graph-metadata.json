@@ -72,7 +72,8 @@
     "005-component-surface-system/065-notion-record-refinement",
     "005-component-surface-system/068-rename-to-obnotion",
     "005-component-surface-system/060-notion-calendar-refinement",
-    "005-component-surface-system/064-notion-toolbar-refinement"
+    "005-component-surface-system/064-notion-toolbar-refinement",
+    "005-component-surface-system/069-board-cross-group-drag"
   ],
   "manual": {
     "depends_on": [],
@@ -121,6 +122,7 @@
       "001-overlay-placement-and-menu-language/spec.md",
       "tools/live/probe.mjs",
       "tools/storybook/verify-placement.mjs",
+      "tools/live/board-cross-group-drag.mjs",
       "src/views/board-renderer.ts",
       "tools/live/renderer-coverage.json",
       "tools/live/replay.json",
@@ -129,8 +131,7 @@
       "tools/screenshots/runtime-vars.css",
       "tools/live/touch-targets.mjs",
       "tools/live/unstyled-links.mjs",
-      "tools/screenshots/capture.mjs",
-      "tools/screenshots/theme.css"
+      "tools/screenshots/capture.mjs"
     ],
     "entities": [
       {
@@ -188,6 +189,12 @@
         "source": "derived"
       },
       {
+        "name": "board-cross-group-drag.mjs",
+        "kind": "file",
+        "path": "tools/live/board-cross-group-drag.mjs",
+        "source": "derived"
+      },
+      {
         "name": "board-renderer.ts",
         "kind": "code",
         "path": "src/views/board-renderer.ts",
@@ -242,12 +249,6 @@
         "source": "derived"
       },
       {
-        "name": "theme.css",
-        "kind": "file",
-        "path": "tools/screenshots/theme.css",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -280,7 +281,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-07T23:29:40.142Z",
+    "last_save_at": "2026-09-08T00:20:24.812Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -288,10 +289,10 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:fea863e96e0f364c1b43d88485717f6e62b6d2938bdb65976f3d115bc19acdc0",
+    "source_fingerprint": "sha256:1769f16086b2ddc63ad9c73222827e6d58f37e351c29603c788f11ef651161ce",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "630267131fd8dbccc08486da76f82bae702c727b6cebc2aa5942a04601ff40a5",
+      "spec.md": "d555fe2d05a8e10476a09464e12aa382dea3fa399b611db29f544003d2dfcd15",
       "handover.md": "14f126629c1549a679394615920b90dc3e0db83a77e491e049f2d6ea8b50c93e"
     },
     "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",
