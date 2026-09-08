@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-08: **76 phases**, **7 with nothing left**, **194 rows** waiting on a device.
+Derived 2026-09-08: **76 phases**, **7 with nothing left**, **191 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -410,12 +410,9 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] The board card's "Pinned"-style control specifically renders as a checkbox with its real value, not a bare "0" (dependent on 070 restoring property reads) Pre-fix the value slot read as a bare "0" through 070's then-broken property read; recorded 0 bare-"0" occurrences in the mounted board card (36 checkbox fields, 18 checked). Landing verification: the control-geometry pass prints these numbers but only FAILS on field presence (boardCheckboxFields === 0); the 18-checked and 0-bare-"0" figures are informational output, not assertions — criterion unticked until the pass asserts the value.
 
-## 074-test-data-consolidation — 0/4
+## 074-test-data-consolidation — 3/4
 
-- [ ] Every test/fixture dataset the project ships or seeds inventoried
-- [ ] One consolidated testbed database designed and built, covering every surviving view/column/grouping/filter/sort/formula/relation
-- [ ] Capture, story and phone-smoke harnesses migrated onto the one consolidated database, each re-verified against its own pass/fail criteria
-- [ ] Finance databases confirmed visible once 070 lands, documented as the kept second dataset
+- [ ] Finance databases confirmed visible once 070 lands, documented as the kept second dataset — code-side proven and documented (ADR-0005, the cold-cache lane, `testbed-proposal.md`); the on-device read of the operator's own Finance databases is the operator's row and this leg does not tick it
 
 ## 075-toolbar-labelled-buttons — 4/5
 
