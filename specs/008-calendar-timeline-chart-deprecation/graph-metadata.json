@@ -132,6 +132,12 @@
         "source": "derived"
       },
       {
+        "name": "targets",
+        "kind": "key_phrase",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
         "name": "1. DURABLE DIRECTIVE",
         "kind": "heading",
         "path": "goal.md",
@@ -142,24 +148,18 @@
         "kind": "heading",
         "path": "goal.md",
         "source": "derived"
-      },
-      {
-        "name": "Operator copy",
-        "kind": "heading",
-        "path": "goal.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The operator has decided to retire the calendar, timeline and chart views: \"deprecate calendar and timeline view completely\" (08:25), and separately, \"Also deprecate chart view\" (08:38), naming the same deprecation scope, archive folder and README strip",
     "created_at": "2026-09-08T06:24:14Z",
-    "last_save_at": "2026-09-08T14:38:49.659Z",
+    "last_save_at": "2026-09-08T20:44:51.152Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:0911c7d244723d4a8cdc259121d6bc4cd87cb6df8e591e1019661aef0e3809e2",
+    "source_fingerprint": "sha256:33a1f35cf9931fc4441a2cbb233bb31661c60d58ee8d204894bf34d8bcb8d4f6",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b2f5829c2c32cd4c331f3f1760d52f1c8f1d0e551f7c8766f751ad49b20dc638"

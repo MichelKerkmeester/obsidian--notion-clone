@@ -395,8 +395,8 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 ## 071-sheet-notion-anytype-alignment — 1/4
 
-- [ ] 002 (settings sheet) and 003 (add-property sheet) both redesigned, recaptured and matched against their mapped reference
-- [ ] 004, 005 and 006 (view-config, filter/sort/group, record/menu) each redesigned, recaptured and matched against their mapped reference
+- [ ] 002 (settings sheet) and 003 (add-property sheet) both redesigned, recaptured and matched against their mapped reference — 002 built at `70ee0b95` with its lander paused mid-rebase; 003 in progress, uncommitted; neither landed
+- [ ] 004, 005 and 006 (view-config, filter/sort/group, record/menu) each redesigned, recaptured and matched against their mapped reference — 004 in progress, uncommitted; 005/006 not started
 - [ ] No prior sheet fix (054, 058, 045, 067) regresses as a result of any redesign in this packet
 
 ## 073-checkbox-controls — 4/5

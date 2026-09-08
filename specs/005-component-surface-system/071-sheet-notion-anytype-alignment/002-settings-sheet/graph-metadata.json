@@ -196,7 +196,7 @@
     ],
     "causal_summary": "The operator reports the Settings sheet's UI/UX is bad, without naming a specific defect — a whole-surface judgement rather than a single bug, in the pattern of prior whole-surface calls (row 63's calendar gestalt judgement, `roadmap.md` §4)",
     "created_at": "2026-09-08T06:24:03Z",
-    "last_save_at": "2026-09-08T06:50:06.122Z",
+    "last_save_at": "2026-09-08T20:45:31.513Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,7 +207,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:3637216d79f9b422a2ea37418226988f45e1214c75118221ef5020096b1b851c",
+    "source_fingerprint": "sha256:77476e7da22846d95b51a3fbc239e63dc5e423876d522038d16533db39e5e1c2",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "9ee1fbb434756323a91f195af1c904bc589dcb36fd6abcd99a94b76bbe457054",

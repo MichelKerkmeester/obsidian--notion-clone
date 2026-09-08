@@ -69,10 +69,14 @@ resend the full text of this file in chat so the operator can update their copy.
 | Item | State | Evidence |
 |------|-------|----------|
 | Packet opened | Done | This scaffold, 2026-09-08 |
+| LANDED on `origin/main` | Done | Leg `bd09bd30` (Sonnet) rebased onto `14bcaf10` (11 conflicts, main's side taken) → `e6445bb7`, plus the verifier's reconciliation `b5f4ccd4` (`14bcaf10..b5f4ccd4`); full vitest 1716/1716; build 0, tsc 0; gate 27 green, 0 red; `validate --strict` PASSED for 002 and the 008 parent |
 
 ### Deviations and findings
 
 | Item | Note |
 |------|------|
-| None yet | Work has not started |
+| The rebase exposed one real casualty | 071/001's committed `inventory.md` went stale on the code's new `database-view.ts`/`toolbar-renderer.ts` line numbers; regenerated via `tools/storybook/sheet-inventory.mjs` (86 surfaces, 9/9 tests green) |
+| Both mutations re-observed, not trusted | Chart's toolbar filter clause dropped → 2 failed/13 passed, restored 15/15; the on-open timeline hook deleted from `database-view.ts` → 1 failed/14 passed, restored 15/15 |
+| Screenshots judged by decoded pixel delta, not pixelHash | 5 movers kept REAL (the redirect's withdrawn picker rows), 2 single-run ≤12-delta movers restored; `styles.css` never moved, so the existing 009 `reviewed` entry absorbed the 3 new mover names |
+| AC-007 stays Unmet on purpose | It requires a released version carrying the redirect; 003-remove-renderers-and-harness waits for that cut |
 <!-- /ANCHOR:log -->

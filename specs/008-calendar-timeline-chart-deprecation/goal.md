@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation"
-    last_updated_at: "2026-09-08T16:20:00Z"
-    last_updated_by: "240-deprecation-redirect-verify"
-    recent_action: "002 LANDED b5f4ccd4: 2/2 criteria, gate 27/0; 003/004 next after the release"
-    next_safe_action: "Cut a release carrying 002's redirect, then 003-remove-renderers-and-harness can start"
+    last_updated_at: "2026-09-08T22:29:00Z"
+    last_updated_by: "246-goal-refresh-evening"
+    recent_action: "001+002 LANDED (7a6d4cc6, b5f4ccd4/9ffa7ed2); 003 waits on the 0.0.34 release cut"
+    next_safe_action: "Cut 0.0.34 (discharges AC-007), then start 003-remove-renderers-and-harness"
     blockers:
       - "002's own AC-007 (a released version) is Unmet; 003 waits for it"
     key_files:
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "008-calendar-timeline-chart-deprecation-scaffold"
       parent_session_id: null
-    completion_pct: 40
+    completion_pct: 50
     open_questions: []
     answered_questions: []
 ---
@@ -80,8 +80,8 @@ string, not these files.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] 001's audit inventories every live calendar/timeline/chart view and names each one's settings-redirect target
-- [ ] 002 ships the settings redirect; no picker/switcher/settings surface can create or select the three types
+- [x] 001's audit inventories every live calendar/timeline/chart view and names each one's settings-redirect target — 33 views named with targets, landed `7a6d4cc6`
+- [x] 002 ships the settings redirect; no picker/switcher/settings surface can create or select the three types — landed `b5f4ccd4`/`9ffa7ed2`, 2/2 criteria, gate 27/0; AC-007 (a release carrying the redirect) stays Unmet until 0.0.34 cuts
 - [ ] 003 removes the three renderers and harness lanes from the bundle and archives the code with a restore-path README and an ADR
 - [ ] 004 strips calendar/timeline/gallery/chart mentions from the root README and community-plugin description, and documents 037's timeline landing as superseded
 <!-- /ANCHOR:completion -->
@@ -97,7 +97,7 @@ string, not these files.
 |------|-------|----------|
 | Packet opened, four child phases scaffolded | Done | This scaffold, 2026-09-08 |
 | 001-usage-and-migration-audit | Done | `001-usage-and-migration-audit/inventory.md`, landing-verified 7a6d4cc6 |
-| 002-settings-redirect-and-migrate | Implemented, verified, pending release | `002-settings-redirect-and-migrate/implementation-summary.md`, `npm run gate` 27/27 on `worktrees/240-deprecation-redirect` |
+| 002-settings-redirect-and-migrate | Done | Landed `b5f4ccd4`/`9ffa7ed2`; `002-settings-redirect-and-migrate/implementation-summary.md`, gate 27/0; AC-007 (release) pending 0.0.34 |
 
 ### Deviations and findings
 

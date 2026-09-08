@@ -68,10 +68,13 @@ resend the full text of this file in chat so the operator can update their copy.
 | Item | State | Evidence |
 |------|-------|----------|
 | Packet opened | Done | This scaffold, 2026-09-08 |
+| LANDED on `origin/main` | Done | Leg `16547b92` (GLM) rebased onto `90e60d00` → `527e8455`, plus the verifier's reconciliation `31f712c3` (`90e60d00..31f712c3`); 86-row inventory (54 primary + 32 stacked) regenerated post-rebase with 0 diff; 9-test count suite mutation-proven (9/9); gate 27 green, 0 red; `validate --strict` PASSED for 001, 071 and 005 |
 
 ### Deviations and findings
 
 | Item | Note |
 |------|------|
-| None yet | Work has not started |
+| The freshness test earned its keep | Went RED after the rebase because 070's landing shifted `toolbar-renderer.ts`, moving 3 cited producer lines :201→:202 (add-view, toolbar-utilities, toolbar-tab-menu); regenerated with unchanged counts |
+| Screenshots judged by decoded pixel delta, not pixelHash | 5 PNGs kept REAL (one-px movers present in both delta runs), 4 jitter movers (Δ1, one run only) restored with their manifest `bytes` patched back |
+| One evidence artefact was stale | `capture-device-parity.json`'s recorded manifest-hash input; re-run by its own tool (146 differing / 0 identical vs baseline 4, PASS) |
 <!-- /ANCHOR:log -->

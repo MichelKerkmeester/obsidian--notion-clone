@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: 0.0.32 shipped at f0597bcd; the operator's 08:07-08:52 device pass on it opened seven new packets (070-075, 008) plus two reopens (058 AC-012, 066 AC-010/011), scaffolded 2026-09-08, nothing implemented yet. GLM 5.3 flash max now carries implementation legs (superseding the prior NO-Opus wording); one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding runs on Sonnet 5 xhigh."
+description: "Resume point 2026-09-08 ~22:29: 0.0.33 shipped at f91370f1. Landed: 070, 072, 073, 074, 075, 071/001, 008/001, 008/002. Built, landing pending: 071/002 (70ee0b95, lander paused mid-rebase) and 066 AC-010/011 (8bc8f050, lander paused mid-chain). In progress, uncommitted: 071/003, 071/004. Implementation stays paused until this handover is reviewed. GLM 5.3 flash max carries implementation legs; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,13 +10,14 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T17:44:56Z"
-    last_updated_by: "241-landing-verify"
-    recent_action: "072 linked-view-ux landed+pushed (91501ed5): goal 4/4, gate 27/0"
-    next_safe_action: "Cut the release carrying 002's redirect (AC-007), then 008/003; the device rows"
+    last_updated_at: "2026-09-08T22:29:00Z"
+    last_updated_by: "246-goal-refresh-evening"
+    recent_action: "Resume ritual: goals refreshed; 8 packets landed, 066+071/002 built-unlanded, rulings folded"
+    next_safe_action: "Resume 071/002's paused rebase, then 066's paused chain, then cut 0.0.34"
     blockers:
-      - "067 residual: T015 75px (1 past 66-74), T020 partial (one pair 2-level), T021 2 of 3 divider contexts, AC-011 iOS pass operator-owned"
-      - "070 AC-005/006 and 074's Finance on-device read need the operator's device; 008/001+002 closed — 003/004 wait on a release carrying 002's redirect (AC-007); 071's audit landed (31f712c3, 86 rows, 1/4) — 002-006 unblocked"
+      - "071/002 lander paused mid-rebase (.worktrees/242); 066 lander paused mid-chain (.worktrees/243) — do not touch either worktree until it resumes"
+      - "071/003 (.worktrees/244) and 071/004 (.worktrees/245) are in progress, uncommitted; do not touch those worktrees either"
+      - "008/003 waits on 0.0.34 (carries 008/002's redirect, discharges AC-007)"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
@@ -25,17 +26,17 @@ _memory:
       - "specs/008-calendar-timeline-chart-deprecation/001-usage-and-migration-audit/inventory.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "233-ios-view-data-regression"
+      session_id: "246-goal-refresh-evening"
       parent_session_id: "surface-system-parent"
-    completion_pct: 85
+    completion_pct: 88
     open_questions:
       - "Does a Notion finding that contradicts a landed Anytype ruling ever become more than Proposed"
-      - "Which surface(s) does R2 actually name — embedded/linked views, table drag, or both (072)"
+      - "Does the 3500ms Undo dwell (built at 8bc8f050) survive the paused lander's own re-judgment"
     answered_questions:
       - "068 renames to obnotion- with a data.json migration, author MichelKerkmeester, repo obsidian_notion-clone"
-      - "GLM route: --provider llmgateway --model glm-5.3-flash --thinking max"
-      - "0.0.32 shipped f0597bcd; the six queued landings closed; 009 T26 discharged (26 green, 0 red)"
-      - "GLM 5.3 flash max now carries implementation legs too; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh"
+      - "GLM route: --provider llmgateway --model glm-5.3-flash --thinking high (max hangs on launch)"
+      - "0.0.33 shipped f91370f1; 070, 072, 073, 074, 075, 071/001, 008/001, 008/002 landed"
+      - "GLM 5.3 flash max carries implementation legs; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh"
 ---
 # Session Handover: Component Surface System
 
@@ -44,6 +45,44 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08 ~22:29, evening resume ritual — goals refreshed, implementation still paused
+
+**What landed since the morning scaffold (`bf694181`), each verified by a fresh lander:** `070`
+(`a75a1ae2`, + handover `8fa18d48`) → release **0.0.33** (`f91370f1`, tag, workflows green,
+installed to the operator vault); `008/001` (`7a6d4cc6`, +`27be49b5`); `075` (`8aec7d64`,
++`90e60d00`); `071/001` (`31f712c3`, +`14bcaf10`); `008/002` (`b5f4ccd4`, +`9ffa7ed2`); `073`
+(`f846e605`, +`8750c3c2`); `074` (`f2df348d`, +`00cb6686`); `072` (`91501ed5`, +`6365dfb1`).
+
+**Built, landing pending (their landers were paused by the operator mid-run, worktrees untouched
+since):** `071/002-settings-sheet` at `70ee0b95` (`.worktrees/242-settings-sheet-notion`, lander
+paused mid-rebase, rebase conflicts); `066` AC-010/AC-011 (toast dwell 5000→3500ms, 56×67px close
+hit) at `8bc8f050` (`.worktrees/243-toast-dwell-and-close`, lander paused mid-chain before rebasing
+onto `origin/main`).
+
+**In progress, uncommitted:** `071/003-add-property-sheet` (`.worktrees/244-add-property-sheet`),
+`071/004-view-config-sheet` (`.worktrees/245-view-config-sheet`).
+
+**Docs reconciled this pass:** `070`, `072`, `073`, `074`, `075`, `071/001`, `008/001`, `008/002`
+goal.md criteria checked against their landed evidence (`071/001` and `008/002` still had stale
+Log sections despite ticked criteria — fixed); `066` and `071/002` goal.md logs annotated with
+their built-unlanded state; the `008` and `071` parent `goal.md` DONE tables and continuity
+refreshed; the `005` parent `goal.md` DONE table's `072`/`073`/`074` rows corrected from stale `0/N`
+placeholders to the recounted `4/4`/`4/5`/`3/4`; `roadmap.md` §5.A gained the six missing
+`070`-`075` rows (the table stopped at `069`); §4 rows 74/75/81/82 updated from "opened, blocked" or
+"opened, not started" to their actual unblocked/built/in-progress state; `operator-checklist.md`
+regenerated.
+
+**Delegation rulings, verbatim, folded into `goal-prompt.md`:** *"Use GLM 5.3 flash max as much as
+possible for any implementation work"*; *"Only using one Opus 5 xhigh orchestrator at a time of you
+are the master orchestrator/ reviewer of"*; *"Scaffold phases with sonnet 5 xhigh"*; and the resume
+ritual itself — on resume, refresh goals first and post the updated body before continuing.
+GLM launches at `--thinking high` (`max` hangs on launch); GLM legs need a write-first brief (first
+tool call writes, ≤3 calls between writes) or they run read-only for 20-45 minutes and are killed;
+four legs (`070`, `075`, `008/002`, `066`) escalated to Sonnet after two write-free GLM runs each.
+
+**Implementation stays paused** per the operator's 20:01/20:20 instruction until this body is
+reviewed. Next: land `071/002` (resume its paused rebase) then `066`, cut 0.0.34, then `008/003`.
 
 ### 2026-09-08 ~20:05, `072-linked-view-blocks-ux` LANDED on `origin/main` — landing-verified, rebased, pushed
 

@@ -66,10 +66,11 @@ resend the full text of this file in chat so the operator can update their copy.
 | Item | State | Evidence |
 |------|-------|----------|
 | Packet opened | Done | This scaffold, 2026-09-08 |
+| Built, landing pending | Done | The GLM leg landed `f0ffadc7` (settings rows red-first) + `70ee0b95` in `.worktrees/242-settings-sheet-notion`; its lander was paused mid-rebase (rebase conflicts) by the operator before reaching `origin/main` |
 
 ### Deviations and findings
 
 | Item | Note |
 |------|------|
-| None yet | Work has not started |
+| Built at `70ee0b95`, landing paused mid-rebase | The three criteria below read `Unmet` in `acceptance-criteria.md` and stay that way until the paused lander resumes its rebase and verifies the landed evidence against `origin/main` itself |
 <!-- /ANCHOR:log -->

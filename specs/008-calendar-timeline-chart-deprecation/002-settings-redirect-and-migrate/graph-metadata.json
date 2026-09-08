@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Once removed from the picker, an existing view configured as calendar, timeline or chart must still open — as its Phase-1-decided redirect target — rather than fail to render, matching `006`'s hide-and-migrate phase and `007`'s settings-redirect-and-migrate phase",
     "created_at": "2026-09-08T06:24:15Z",
-    "last_save_at": "2026-09-08T14:33:12.546Z",
+    "last_save_at": "2026-09-08T20:45:31.686Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,7 +222,7 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:c4e9f854c0baf25b51bf4d63c4e0461e7eb29d9c1879f17a70c98dd684103513",
+    "source_fingerprint": "sha256:ba03173166f0e7e03e739a86a12ca256915d4762793ff2c6a22fc5c91911e5a6",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "76a7f143e7f56ee5f9c718f8ce6e3a18bdf70603e8f8da1153259c8bf7027c9b",
