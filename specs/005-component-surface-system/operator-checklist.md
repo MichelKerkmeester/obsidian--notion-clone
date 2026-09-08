@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-08: **76 phases**, **7 with nothing left**, **203 rows** waiting on a device.
+Derived 2026-09-08: **76 phases**, **7 with nothing left**, **199 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -422,12 +422,8 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] Capture, story and phone-smoke harnesses migrated onto the one consolidated database, each re-verified against its own pass/fail criteria
 - [ ] Finance databases confirmed visible once 070 lands, documented as the kept second dataset
 
-## 075-toolbar-labelled-buttons — 0/5
+## 075-toolbar-labelled-buttons — 4/5
 
-- [ ] Phone toolbar controls render as icon+label buttons matching the reference's measured size and spacing
-- [ ] Touch targets measure ≥44×44px
-- [ ] The existing 009/044 toolbar-collapse and sheet-grammar lanes updated red-first, then a new scroll-overflow lane (402px viewport, `scrollWidth > clientWidth`, last control reachable) is green
-- [ ] Desktop toolbar decision recorded as an ADR
 - [ ] Operator device row recorded and left unticked
 
 ## Nothing left to check

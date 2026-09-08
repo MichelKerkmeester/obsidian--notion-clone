@@ -18165,7 +18165,7 @@
       },
       "note": "The reference board inside the default-width container: its fixed-width columns page horizontally on a phone while the card tree remains unchanged.",
       "capture": "viewport",
-      "bytes": 181633,
+      "bytes": 181631,
       "fixtureOf": "constructed-board"
     },
     {
@@ -18475,7 +18475,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 216993,
+      "bytes": 216975,
       "fixtureOf": "constructed-board"
     },
     {
@@ -18679,7 +18679,7 @@
       },
       "note": "renderEmpty() returns before .obnotion-calendar is ever created, so the card lands as a direct child of .obnotion-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .obnotion-calendar descendant, or it never applies.",
       "capture": "viewport",
-      "bytes": 33169,
+      "bytes": 33170,
       "fixtureOf": "constructed-calendar-empty"
     },
     {
@@ -18712,7 +18712,7 @@
       },
       "note": "renderEmpty() returns before .obnotion-calendar is ever created, so the card lands as a direct child of .obnotion-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .obnotion-calendar descendant, or it never applies.",
       "capture": "viewport",
-      "bytes": 33528,
+      "bytes": 33534,
       "fixtureOf": "constructed-calendar-empty"
     },
     {
@@ -22721,7 +22721,7 @@
       },
       "note": "The title column pinned via the column menu's Freeze row, table scrolled sideways so content passes under it. Nothing at rest — the right-edge shadow paints only once is-scrolled-x is present, which is table-renderer.ts's own scroll listener toggling it.",
       "capture": "viewport",
-      "bytes": 46873
+      "bytes": 46895
     },
     {
       "id": "table-mobile",

@@ -206,7 +206,7 @@
     ],
     "causal_summary": "The operator wants the phone view toolbar's icon-only buttons (filter, sort, group, columns, settings, more — visible in the R1 evidence screenshot `ios-finance-table-empty-0032.png`, operator-owned, not committed here) restyled as icon+label buttons, citing an Obsidian Bases calendar toolbar as the reference: a single row of \"↑↓ Sort\", \"≡ Filter\", \"☰ Properties\", \"+ New\" with visible text labels, no bare icon cluster",
     "created_at": "2026-09-08T06:35:40Z",
-    "last_save_at": "2026-09-08T10:02:50.825Z",
+    "last_save_at": "2026-09-08T12:22:41.394Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,7 +218,7 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:03e1ff2461bb3929d58fea0bd9cd63efe314db581d9b4bbed98bf7679821f2c9",
+    "source_fingerprint": "sha256:611482ceaffd313acfbc00cf8508168b2db8cd38f42a60a037563f19775c4d7e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b71de3b4d2a5b0a39515dcf1c398c8afb5b3d9eb26435fc5a4996d9d9523b504",
