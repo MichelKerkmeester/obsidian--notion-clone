@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T09:52:53Z"
+    last_updated_at: "2026-09-08T09:56:00Z"
     last_updated_by: "233-ios-view-data-regression"
-    recent_action: "070 landed: 694d7390+landing, 27/0 gate, cold-cache lane; AC-005/006 operator-owned"
+    recent_action: "070 landed+pushed (a75a1ae2): 27/0 gate, cold-cache lane; AC-005/006 operator-owned"
     next_safe_action: "070 done pending device; 071's audit, then 073, 072, then device rows"
     blockers:
       - "067 residual: T015 75px (1 past 66-74), T020 partial (one pair 2-level), T021 2 of 3 divider contexts, AC-011 iOS pass operator-owned"
@@ -44,6 +44,46 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08 09:44, `070-ios-view-data-regression` LANDED on `origin/main` — landing-verified and reconciled
+
+**Landed.** The leg's `694d7390` plus the landing's reconciliation commit are on `origin/main`
+(`bf694181..a75a1ae2`; the leg needed no rebase — `origin/main` was still exactly `bf694181`, where
+the leg had parked). What the landing-verification pass re-observed rather than trusted: the
+mutation battery replayed with the `metadataCache.on("resolved")` subscription commented out — the
+cold-cache unit test went red (`expected {} to deeply equal { income: 1000 }`), the harness failed
+0/18 table cells and 0/8 board cells (its own `pre-fix-red` mode passed against the mutated
+source), and restoring the subscription returned 18/18 + 8/8, exit 0. `tsc` 0, `build` 0, `vitest`
+1672/1672 (153 files). Screenshots ran three times; the pixel-delta check (scripts print numbers,
+no image reads) found the two SS2 movers — `board-mobile-desktop-dark` (1 px) and
+`board-view-desktop-dark` (4 px), maxDelta 1 — moved in only one of the two compared captures, so
+both are jitter: the final tree is byte-identical to the committed captures, no css-lane movement,
+no release entry.
+
+**The landing's first gate run was 25 green / 2 red, not the leg's 27/0** — the leg's own gate had
+run before its final documentation edits. `failing-values` printed the three bare rows; each was
+fixed only where its message points, by recording the true failing value: 070's reproduction and
+root-cause criteria (the 0/18 → 18/18 pair above), and 005-content-row-rhythm's header-spill
+criterion ("was 1 spill (10px at 320px...), recorded 0 spills" — its own prose, now in corpus
+vocabulary; bare 147 <= 148). The operator checklist regenerated (203 rows, 69 phases). Goal figure
+reconciled 0/6 -> **4/5** (the criteria block is 4 ticked of 5; the unticked one is the device row
+and stays unticked) with the landing recorded on the 005 goal's phase row and roadmap section 4 row
+70; 5.A itself stops at phase 058, so 070 has no row there to update.
+
+**Continuity, this packet:** the root's continuity block came back 2518 bytes with a dangling
+`parent_session_id` (231) and a narrative `recent_action`. Now: `parent_session_id` ->
+`surface-system-parent` (a session_id this packet's own spec.md/goal.md record — the kit collects
+root-folder docs' session_ids only), three answered_questions pruned to recorded-elsewhere (the
+cell-model reading lives in `058`'s packet and the 08:07-08:52 entry below; the eight-children
+state lives in the goal phase table; the 0.0.31/NO-Opus line is superseded by this file's own
+description), 1967 bytes, `recent_action` 88 chars. The 005 root and the 070 packet both validate
+`RESULT: PASSED`, 0 errors 0 warnings, after their own backfills.
+
+**Still open, unchanged:** AC-005 (recapture of the operator's literal vault) and AC-006 (the
+operator's own device) — the harness's fixture captures are the only proof either surface renders
+populated; the "Total 37 unfiltered" detail stays an open, unconfirmed question recorded in the
+packet's goal.md. `gate: PASS — 27 green, 0 red` at the landing's final state, with the
+`cold-cache-property-read` lane green.
 
 ### 2026-09-08, `070-ios-view-data-regression` root-caused and fixed — code leg, not pushed
 
