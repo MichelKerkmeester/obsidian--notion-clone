@@ -183,8 +183,22 @@ export class DataSource {
       if (registerEvent) registerEvent(eventRef);
       else this.trackEvent(eventRef);
     };
-    // "resolved" has no file identity and fires broadly; concrete cache/vault
-    // events below are the authoritative refresh signal.
+    // A record cache built while the metadata cache was still cold — via getCachedRecords, or via
+    // getViewDefFiles' own eager seed while scanning for db_view notes — holds every file's
+    // frontmatter as {} until something refreshes each entry, and refreshCachedRecord below only
+    // ever runs per file, off that file's own "changed"/"create"/"rename". A file that already had
+    // an entry before its own such event next fires (the exact shape of a first-load race: the
+    // view opens and reads before the vault's initial resolution reaches every note) stays
+    // poisoned indefinitely. "resolved" carries no file identity, but it is Obsidian's own
+    // guarantee that every file's cache is now current, so it is the one signal that can still
+    // catch a file none of the per-file events above happens to touch again.
+    track(this.metadataCache.on("resolved", () => {
+      if (!this.recordCache) return;
+      for (const file of this.vault.getMarkdownFiles()) {
+        this.refreshCachedRecord(file);
+        this.scheduleNotify("changed", file.path, undefined, "metadata");
+      }
+    }));
     track(this.metadataCache.on("changed", (file) => {
       this.cancelModifyRecheck(file.path);
       // metadataCache.changed is the hand-off from optimistic plugin overlays

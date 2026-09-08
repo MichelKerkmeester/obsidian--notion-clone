@@ -68,6 +68,12 @@ const CHECKS = [
   // froze the app through every other check. This one bundles the shipped renderers and asserts
   // structural facts about what they build, so a renderer change moves a number in a gate.
   { name: "render-assertions", cmd: ["node", "tools/live/render-assertions.mjs"] },
+  // A record cache built while the metadata cache is still cold can stay poisoned with empty
+  // frontmatter forever, if the file that raced ahead never gets a per-file refresh of its own —
+  // exactly the shape of a view opened at first load, before the vault finishes resolving. This
+  // mounts the real DataSource/RowPipeline/TableRenderer/BoardRenderer against a controllable
+  // fixture and proves the cold-then-resolved recovery path, not just the warm-cache happy path.
+  { name: "cold-cache-property-read", cmd: ["node", "tools/live/database-cold-cache-property-read.mjs"] },
   // The embedded toolbar decides what to hide by measuring its own natural width, so the only
   // honest check is a real one: this mounts the shipped ToolbarRenderer in the codeblock-embed
   // shape and steps the container 250px to 900px, failing if the row ever overflows its own box.

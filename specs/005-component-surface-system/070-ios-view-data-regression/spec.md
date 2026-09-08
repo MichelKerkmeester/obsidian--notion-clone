@@ -13,25 +13,27 @@ _memory:
     packet_pointer: "070-ios-view-data-regression"
     last_updated_at: "2026-09-08T08:44:00Z"
     last_updated_by: "markdown-scaffold"
-    recent_action: "Opened the packet from the operator's R1 report and its 08:44 clarification"
-    next_safe_action: "Reproduce the empty-property read with a mirrored fixture"
+    recent_action: "Root-caused and fixed the cold-cache record-cache poisoning; harness and unit test both green"
+    next_safe_action: "Await the operator's device recheck (AC-006) and vault recapture (AC-005)"
     blockers:
-      - "No confirmed root cause yet; three suspects named in §7, none excluded"
+      - "AC-005/AC-006 need the operator's own iPhone and vault, unavailable here"
     key_files:
       - "src/data/data-source.ts"
-      - "src/data/title-field-display.ts"
-      - "src/data/legacy-plugin-data-migration.ts"
+      - "tools/live/database-cold-cache-property-read.mjs"
+      - "src/data/data-source.test.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "070-ios-view-data-regression-scaffold"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 85
     open_questions:
-      - "Does the empty read reproduce cold-cache-only, or on every load on iOS regardless of cache state?"
-      - "Is titleFormat (058) implicated, or is this a pre-existing iOS-only read path never exercised until now?"
+      - "Desktop-vs-iOS reach: the race is platform-agnostic in principle; iOS-only is inferred, not confirmed"
     answered_questions:
-      - "Nothing was lost by deleting note-database: both the old and fresh data.json hold databases: [] (settings only), row values live in each note's frontmatter, and the view definition lives in Finance Reports.md frontmatter"
-      - "The operator's 08:44 clarification: ALL properties are empty on iOS, not just Income; the title/file-name column still renders; the Testbed board shows all 27 cards under No value with an empty Pinned checkbox and a bare 0"
+      - "Nothing lost by deleting note-database: both data.json files hold databases: [] (settings only)"
+      - "08:44 clarification: ALL properties empty on iOS; title/file-name still renders; Testbed all No value"
+      - "Root cause: getViewDefFiles() (data-source.ts:510-566) seeds the record cache cold on its first scan; getCachedRecords()'s build-once guard never rebuilds it; warm-from-start is unaffected"
+      - "titleFormat/058 and legacy-plugin-data-migration.ts excluded with evidence; see implementation-summary.md"
+      - "This is a pre-existing latent bug the fresh-load path exposed, not something the rename or 058 introduced: git blame traces the exact poisoning lines to commit ce0bb30ec (upstream 'Release 1.2.6', 2026-07-19), well before this fork's rename and titleFormat work"
 ---
 
 <!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
@@ -47,7 +49,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P0 |
-| **Status** | Draft — opened 2026-09-08, nothing started |
+| **Status** | Root-caused and fixed 2026-09-08 — AC-001 through AC-004 met; AC-005/AC-006 pending the operator's own device |
 | **Created** | 2026-09-08 |
 | **Branch** | `main` |
 | **Parent Spec** | `../005-component-surface-system/` |
@@ -193,8 +195,14 @@ Every property on every view reads and renders its value from frontmatter on iOS
 
 ## 10. OPEN QUESTIONS
 
-- Does the empty read reproduce with the metadata cache warm too, or only cold?
-- Does the same defect reach the desktop build, or is it iOS-only (as reported)?
+- **Answered:** the empty read reproduces cold-cache-only. A fixture warm from the start (never
+  cold) rendered 18/18 property cells populated; the same fixture with an early scan that ran
+  while cold, followed by the vault resolving moments later, reproduced 0/18 — see
+  `implementation-summary.md`.
+- Does the same defect reach the desktop build, or is it iOS-only (as reported)? The mechanism
+  (an early record-cache read racing the metadata cache's initial resolution) is platform-agnostic
+  in principle; this packet did not confirm whether desktop's typically-faster or
+  differently-ordered vault resolution makes the race unobservable there in practice.
 <!-- /ANCHOR:questions -->
 
 ---

@@ -8,6 +8,7 @@
 // ───────────────────────────────────────────────────────────────────
 import { describe, expect, it, vi } from "vitest";
 import type { App } from "obsidian";
+import { TFile } from "obsidian";
 import { DataSource } from "./data-source";
 import type { SourceRuleNode } from "./types";
 
@@ -15,7 +16,22 @@ vi.mock("obsidian", () => ({
   App: class {},
   EventRef: class {},
   MetadataCache: class {},
-  TFile: class {},
+  // Real enough for `instanceof TFile` and the path-derived fields DataSource itself reads
+  // (extension, basename) — no other test in this file constructs one, so this is safe to widen.
+  TFile: class {
+    path: string;
+    name: string;
+    basename: string;
+    extension: string;
+    constructor(path: string) {
+      this.path = path;
+      const slash = path.lastIndexOf("/");
+      this.name = slash >= 0 ? path.slice(slash + 1) : path;
+      const dot = this.name.lastIndexOf(".");
+      this.basename = dot > 0 ? this.name.slice(0, dot) : this.name;
+      this.extension = dot > 0 ? this.name.slice(dot + 1) : "";
+    }
+  },
   Vault: class {},
   getAllTags: vi.fn(),
   normalizePath: (path: string) => path,
@@ -23,9 +39,30 @@ vi.mock("obsidian", () => ({
   stringifyYaml: vi.fn(),
 }));
 
+/** A minimal, controllable event bus matching the `.on()`/`.trigger()` shape DataSource expects
+ *  off both `app.vault` and `app.metadataCache`. */
+class FakeEventBus {
+  private listeners = new Map<string, Set<(...args: unknown[]) => void>>();
+  on(name: string, cb: (...args: unknown[]) => void) {
+    const set = this.listeners.get(name) ?? new Set();
+    set.add(cb);
+    this.listeners.set(name, set);
+    return { offref: () => set.delete(cb) };
+  }
+  trigger(name: string, ...args: unknown[]) {
+    for (const cb of this.listeners.get(name) ?? []) cb(...args);
+  }
+}
+
 Object.defineProperty(globalThis, "window", {
   configurable: true,
-  value: { activeDocument: { documentElement: { lang: "en" } } },
+  // setTimeout/clearTimeout are real (delegated to the global ones) because scheduleNotify's
+  // debounce and the cold-cache recovery test below both need a timer that actually fires.
+  value: {
+    activeDocument: { documentElement: { lang: "en" } },
+    setTimeout: (...args: Parameters<typeof setTimeout>) => setTimeout(...args),
+    clearTimeout: (...args: Parameters<typeof clearTimeout>) => clearTimeout(...args),
+  },
 });
 
 const tree: SourceRuleNode = {
@@ -487,5 +524,95 @@ describe("DataSource view filter tree persistence", () => {
     const schemaColumns = parsed!.views[0].schema.columns;
 
     expect(schemaColumns.map((col) => col.wrap)).toEqual([false, true, undefined]);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 3. COLD-CACHE RECORD RECOVERY
+// ───────────────────────────────────────────────────────────────────
+//
+// getViewDefFiles() seeds the whole-vault record cache the first time it runs (to know every
+// file's frontmatter while scanning for db_view notes), using whatever the metadata cache reports
+// AT THAT MOMENT. If that first scan runs before the vault finishes resolving — the exact shape of
+// a view opened at first load — every record's frontmatter is cached as {} and getCachedRecords'
+// own "only build once" guard never rebuilds it. Reverting the "resolved" listener in
+// startListening() (data-source.ts) reproduces the reported defect: this test goes red without it.
+
+class FakeVault extends FakeEventBus {
+  constructor(private readonly fileList: InstanceType<typeof TFile>[]) {
+    super();
+  }
+  getMarkdownFiles() {
+    return this.fileList;
+  }
+  getAbstractFileByPath(path: string) {
+    return this.fileList.find((f) => f.path === path) ?? null;
+  }
+}
+
+class FakeMetadataCache extends FakeEventBus {
+  private frontmatterByPath = new Map<string, Record<string, unknown>>();
+  private resolvedPaths = new Set<string>();
+  seed(path: string, frontmatter: Record<string, unknown>) {
+    this.frontmatterByPath.set(path, frontmatter);
+  }
+  resolveAll(paths: Iterable<string>) {
+    for (const path of paths) this.resolvedPaths.add(path);
+  }
+  getFileCache(file: { path: string }) {
+    if (!this.resolvedPaths.has(file.path)) return undefined;
+    return { frontmatter: this.frontmatterByPath.get(file.path) ?? {} };
+  }
+}
+
+/** The real TFile's ambient type has no public constructor; the mocked one above takes a path. */
+function fakeFile(path: string): TFile {
+  return new (TFile as unknown as new (path: string) => TFile)(path);
+}
+
+describe("DataSource cold-cache record recovery", () => {
+  it("recovers a record cache poisoned by a view-def scan that ran before the vault resolved", () => {
+    const dbFile = fakeFile("Finance/Finance Reports.md");
+    const recordFile = fakeFile("Finance/Reports/01 - Jan.md");
+    const vault = new FakeVault([dbFile, recordFile]);
+    const metadataCache = new FakeMetadataCache();
+    metadataCache.seed(dbFile.path, {
+      db_view: true,
+      database: {
+        id: "fixture",
+        sourceFolder: "Finance/Reports",
+        columns: [
+          { key: "file.name", label: "Month", type: "text" },
+          { key: "income", label: "Income", type: "currency" },
+        ],
+        views: [{ id: "view-all", name: "All", viewType: "table", sourceFolder: "" }],
+      },
+    });
+    metadataCache.seed(recordFile.path, { income: 1000 });
+
+    const dataSource = new DataSource({ vault, metadataCache } as unknown as App);
+    dataSource.startListening();
+
+    // Early, cold scan: no file has resolved yet, so no db_view note is recognized — but every
+    // vault file's frontmatter is still seeded into the record cache at this moment ({} for both).
+    expect(dataSource.getViewDefFiles()).toEqual([]);
+
+    // The vault finishes resolving moments later, the way it does in the real app.
+    metadataCache.resolveAll([dbFile.path, recordFile.path]);
+
+    const defFiles = dataSource.getViewDefFiles();
+    expect(defFiles).toHaveLength(1);
+    const config = defFiles[0].config;
+
+    const beforeRecovery = dataSource.getRecordsForDatabase(config)
+      .find((record) => record.file.path === recordFile.path);
+    expect(beforeRecovery?.frontmatter).toEqual({});
+
+    // Obsidian's own guarantee that every file's cache is now current.
+    metadataCache.trigger("resolved");
+
+    const afterRecovery = dataSource.getRecordsForDatabase(config)
+      .find((record) => record.file.path === recordFile.path);
+    expect(afterRecovery?.frontmatter).toEqual({ income: 1000 });
   });
 });

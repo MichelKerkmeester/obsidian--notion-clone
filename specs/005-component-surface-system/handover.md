@@ -12,11 +12,11 @@ _memory:
     packet_pointer: "005-component-surface-system"
     last_updated_at: "2026-09-08T08:52:00Z"
     last_updated_by: "232-scaffold-0032-reports"
-    recent_action: "Scaffolded 070-075, 008, and 058/066 reopens from the operator's 08:07-08:52 reports"
-    next_safe_action: "Run 070 first (P0), then 071's audit, then 073, 072, then device rows"
+    recent_action: "070 root-caused and fixed (code leg, not pushed); 27 green gate; AC-005/006 need the operator's device"
+    next_safe_action: "Push/merge 070's leg, then 071's audit, then 073, 072, then device rows"
     blockers:
       - "067 residual: T015 header block 75px (1 past 66-74), T020 partial (one pair genuinely 2-level), T021 2 of 3 divider contexts, AC-011 iOS pass operator-owned"
-      - "070 blocks 073 AC-004 and 074 AC-004 (property-read restoration); 071/001's audit blocks every other 071 child; 008/001's audit blocks 008/002-004"
+      - "070 AC-005/AC-006 need the operator's own device; 073/074 AC-004 can now proceed against 070's fix; 071/001's audit blocks every other 071 child; 008/001's audit blocks 008/002-004"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
@@ -48,6 +48,48 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08, `070-ios-view-data-regression` root-caused and fixed — code leg, not pushed
+
+**Root cause confirmed with file:line evidence, in `data-source.ts`, not the two suspects the
+scaffold named.** `DataSource.getViewDefFiles()` (`data-source.ts:510-566`) — the scan every view
+construction runs to find its own `db_view` note — seeds the whole-vault record cache the FIRST
+time it is called, using whatever `metadataCache.getFileCache()` reports at that exact moment
+(`toRawRecord`, `:1785`). A view restored at first load, before Obsidian's metadata cache finishes
+resolving every file, calls this before the vault settles: every record gets cached with `{}`
+frontmatter, and `getCachedRecords()`'s own "build once" guard (`if (!this.recordCache)`, `:1794`)
+never rebuilds it — the only existing recovery (`refreshCachedRecord`, off
+`metadataCache.on("changed")`/`vault.on("create"/"rename")`) only ever refreshes a file whose OWN
+such event fires again, which does not reliably happen for a file merely present at boot rather
+than freshly edited. The `db_view` note's own frontmatter resolving moments later is why column
+headers were always correct while every property stayed empty — the second scan recognizes the
+database, but the poisoned record snapshot from the first scan is never rebuilt. `git blame` traces
+the exact lines to commit `ce0bb30ec` ("Release 1.2.6", 2026-07-19, upstream) — a pre-existing
+latent bug the fresh-load path exposed, not a rename or `058` regression. `title-field-display.ts`
+(title/card display only, never a table property cell) and `legacy-plugin-data-migration.ts`
+(copies `data.json` bytes only, no `metadataCache`/`vault` read) are both excluded with evidence.
+
+**Fix**: `DataSource.startListening()` now also subscribes to `metadataCache.on("resolved")` —
+Obsidian's own identity-less "every file is current" signal — and refreshes every cached record
+from it when a record cache already exists. Additive: unchanged behavior when the cache was never
+poisoned.
+
+**Evidence**: a new permanent gate lane, `tools/live/database-cold-cache-property-read.mjs` (real
+`DataSource`/`RowPipeline`/`TableRenderer`/`CellRenderer`/`BoardRenderer`, headless Chrome, 402x874,
+Finance/Testbed-shaped fixtures), reproduced 0/18 table cells and 0/8 board cells populated pre-fix
+(`COLD_CACHE_EXPECT=pre-fix-red`), matching the operator's screenshots exactly, and 18/18 + 8/8 with
+correct sort post-fix. A mutation-proven unit test in `src/data/data-source.test.ts` was confirmed
+red via `git stash` before counting as evidence. Full battery: `tsc` 0, `vitest` 1672/1672 (153
+files), `build` 0, `render-assertions`/`sheet-grammar` PASS, `npm run gate` **27 green, 0 red** (26
+pre-existing + the new lane), `scan-comments`/`scan-failing-values` 0. AC-001 through AC-004 met;
+AC-005 only partially (fixture recapture, not the operator's own vault) and AC-006 remain open —
+both need the operator's own iPhone. One open, unconfirmed detail: the operator's "Total 37
+unfiltered" row count did not reproduce (the same filtered-view scenario under a poisoned cache
+returns 0 matching rows here, not an unfiltered 37) — recorded rather than guessed at. Not pushed;
+this leg's worktree diff is `src/data/data-source.ts`, `src/data/data-source.test.ts`,
+`tools/gate.mjs`, and the two new `tools/live/*.mjs` files, plus this packet's docs.
+
+---
 
 ### 2026-09-08 08:07-08:52, seven packets opened from the operator's 0.0.32 device pass, and two delegation rulings
 

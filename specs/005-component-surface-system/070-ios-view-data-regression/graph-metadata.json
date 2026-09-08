@@ -48,10 +48,13 @@
       "goal.md",
       "implementation-summary.md",
       "src/data/data-source.ts",
+      "tools/live/database-cold-cache-property-read.mjs",
+      "src/data/data-source.test.ts",
+      "tools/live/vault-read-obsidian-stub.mjs",
+      "tools/gate.mjs",
       "src/data/title-field-display.ts",
       "src/data/legacy-plugin-data-migration.ts",
-      "tools/live/render-assertion-harness.ts",
-      "screenshots/manifest.json"
+      "tools/live/render-assertion-harness.ts"
     ],
     "entities": [
       {
@@ -97,6 +100,30 @@
         "source": "derived"
       },
       {
+        "name": "database-cold-cache-property-read.mjs",
+        "kind": "file",
+        "path": "tools/live/database-cold-cache-property-read.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "data-source.test.ts",
+        "kind": "test",
+        "path": "src/data/data-source.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "vault-read-obsidian-stub.mjs",
+        "kind": "file",
+        "path": "tools/live/vault-read-obsidian-stub.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
+        "source": "derived"
+      },
+      {
         "name": "title-field-display.ts",
         "kind": "code",
         "path": "src/data/title-field-display.ts",
@@ -115,19 +142,7 @@
         "source": "derived"
       },
       {
-        "name": "manifest.json",
-        "kind": "config",
-        "path": "screenshots/manifest.json",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Finance Reports",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -157,6 +172,12 @@
         "source": "derived"
       },
       {
+        "name": "Finance Reports",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Implementation Plan",
         "kind": "proper_noun",
         "path": "plan.md",
@@ -179,29 +200,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Key Components",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "On the operator's iPhone, on the build that shipped as 0.0.32, every database view renders with its property columns empty while the title/file-name column still resolves correctly",
     "created_at": "2026-09-08T06:20:03Z",
-    "last_save_at": "2026-09-08T06:48:10.084Z",
+    "last_save_at": "2026-09-08T08:25:22.425Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -212,13 +215,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:518de1b56caf47b159bb0909199949bfded6b87c58caa07016eff75aa4d64d1f",
+    "source_fingerprint": "sha256:f6bb73e3349f0e95772f4d724e0b0b86200936ed77e214f0be7773e1a6200d71",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "ed32be41d19466926059d3aea6275c125cc5686d77551cfa4e561cdb2954a72e",
+      "spec.md": "fae33f587133cdb494002f0fcee01915c58bdc088ba8bea39e2064b4d3254e5d",
       "plan.md": "39b098dbe75659e775079dc0442f912544d1acebffb34008c35dae5fa6f0e3b2",
-      "tasks.md": "b3214351dec3e1734c375afb112ab5d1d0f0ec9dccab120f130b4041990c342c",
-      "implementation-summary.md": "5449dece47f814d466187099fda97df07a35758a891f87dafd94e8b84aa7816b"
+      "tasks.md": "3845a280a43552687a640dac50efb2a1ca01a190cde8ea5638489d4e484b2e1e",
+      "implementation-summary.md": "136304ec66a42e97f9dc010df8046f1711ab87e2b5817c571222a5680b2d234f"
     },
     "last_active_at": null
   }
