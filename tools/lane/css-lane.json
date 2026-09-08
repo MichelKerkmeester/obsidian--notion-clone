@@ -1,7 +1,13 @@
 {
+<<<<<<< HEAD
   "holder": "072-linked-view-blocks-ux",
   "acquiredAt": "2026-09-08T17:19:55Z",
   "baselineHash": "42b9b9fafd8c",
+=======
+  "holder": "002-settings-sheet",
+  "acquiredAt": "2026-09-08T16:34:18.000Z",
+  "baselineHash": "368631d8cd1f",
+>>>>>>> f0ffadc7 (feat(styles): collapse settings-sheet control rows to the Notion single line)
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -5538,6 +5544,7 @@
     },
     {
       "event": "acquire",
+<<<<<<< HEAD
       "phase": "073-checkbox-controls",
       "at": "2026-09-08T10:50:00.000Z",
       "hash": "704f768371da",
@@ -5726,6 +5733,34 @@
         "screenshots/notion-clone/components/chrome-owned-menu-sheet-mobile-dark.png"
       ],
       "note": "Recaptured twice post-rebase (npm run screenshots, 616 entries, exit 0 both) and judged by decoded pixel delta against the committed blobs. 1 content-changed capture named: chrome-owned-menu-sheet-mobile-dark 2702px at max channel delta 5, identical numbers across both passes -- the same mover at the same numbers the pre-rebase leg recorded, so kept (real, not jitter). The pre-rebase release's other 3 movers (board-mobile-desktop-dark 1px@1, calendar-empty-state-mobile-{dark,light} 11px/12px@1) reproduce their committed bytes after the 073/074 replay and drop out. No capture's markup reaches .is-touch-lifted; the mover's delta is the rasteriser, not this edit."
+=======
+      "phase": "002-settings-sheet",
+      "at": "2026-09-08T16:34:18.000Z",
+      "hash": "ebf39eefa348",
+      "note": "Taking the lane over from 075-toolbar-labelled-buttons at its own released hash to re-grammar the settings sheet (the view-config panel) phone rows: compact settings onto one line (label left, control right, 44-52px), editors keeping the stacked full-width control, section headings on the rows own 16px inset with a resolving divider."
+    },
+    {
+      "event": "edit",
+      "phase": "002-settings-sheet",
+      "at": "2026-09-08T16:34:18.000Z",
+      "hash": "368631d8cd1f",
+      "note": "styles.css, all sheet-scoped to .obnotion-view-config-panel.obnotion-mobile-bottom-sheet: the blanket column-stacking rule (.obnotion-panel-row) becomes a shared one-line rule (row inset + justify-content: space-between) plus a :has() column group for exactly the editor rows (a -field-stack or -inline-controls field, a range pair, a textarea), so compact rows (dropdown, switch, summary) read label-left/control-right at the 44px floor; the compact field takes the span right of its label (flex 1 1 auto, justify-end, min-width 0) and a compact dropdowns value lands against the chevron via margin-inline-start: auto on .obnotion-dropdown-field-value inside a flexed .obnotion-dropdown-field-text; section-title insets move from the 12px spacing step to the rows own 16px --obnotion-sheet-inset with the 1px top divider, and the readonly note joins them; --obnotion-border-subtle gains a #333333 fallback inside its color-mix because a var() left unresolved there computes the whole border to its initial (style: none, 0px) wherever no theme defines the host token, which is also why the lane harness now sets --background-modifier-border. tools/live/sheet-grammar.mjs: the settings guard re-derived to the reference grammar (compact rows one-line at 44-52px, editors label-above-control at >=90% width, headings inset+divider, zero native selects, scrollExtent = scrollWidth - borderLeft), a second negative control forces the column back to prove the compact half, the phones viewport moves 390x844 -> 402x874, and the sort-panel header band ceiling takes the 1px the now-resolving header divider paints (75 -> 76). The producer was not edited: the split keys on the field-variant classes the renderer already lands."
+    },
+    {
+      "event": "release",
+      "phase": "002-settings-sheet",
+      "at": "2026-09-08T16:34:18.000Z",
+      "hash": "368631d8cd1f",
+      "reviewed": [
+        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-view-config-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-view-config-mobile-light.png",
+        "screenshots/notion-clone/panels/panel-view-config-sheet-mobile-dark.png",
+        "screenshots/notion-clone/panels/panel-view-config-sheet-mobile-light.png"
+      ],
+      "note": "npm run screenshots ran twice from a clean-except-settings tree (616 entries, exit 0 both) and every mover was judged by decoded pixel delta against the HEAD-committed PNG, not by pixelHash/bytes alone. 6 captures carry a real content change (pixelHash moved) and are named above -- all six are this edit own surface family, the settings sheet and the two constructed fixtures that render it: panel-view-config-sheet-mobile-{dark,light} (120213/120218 changed pixels, max channel delta 209), constructed-view-config-mobile-{dark,light} (204494/204566, 192/209) and constructed-board-card-properties-mobile-{dark,light} (324414/324483, 192/209), the constructed board-variant of the same view-config panel whose compact rows now sit on one line. 2 more moved bytes but not pixelHash (add-view-popover-desktop-light at 42px, timeline-view-month-mobile-light at 2689px, both sub-bucket) and are kept, not owed. 2 further captures moved in one run only at a max channel delta of 1 (board-mobile-desktop-dark 1px, calendar-empty-state-mobile-dark 11px, both under the lane established <=12 jitter floor and neither selector this edit touches): restored to their committed bytes, their manifest pixelHash patched back to the committed value while their sourceHashes stay current. Every judgement here is the machine printed numbers (pixel-delta, the sheet-grammar lane, the vite suite); the visual read of the six remains the operator device pass. The live lane, the placement ratchet, the touch sweep and the unit suite (1,687) are green at this hash; the reference row-grammar unit suite (src/views/view-config-sheet-row-grammar.test.ts) pins the declarations the captures are cut against and fails against a reverted stacking line."
+>>>>>>> f0ffadc7 (feat(styles): collapse settings-sheet control rows to the Notion single line)
     }
   ],
   "outstanding": [

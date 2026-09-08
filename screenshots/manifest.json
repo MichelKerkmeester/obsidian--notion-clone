@@ -15557,7 +15557,7 @@
         "src/views/dropdown-field.ts"
       ],
       "layoutHash": "dead6c94bb85",
-      "pixelHash": "3f6e2a6bd2c9",
+      "pixelHash": "56d3355f5a9e",
       "sourceHashes": {
         "src/views/view-config-panel-renderer.ts": "369be9ac3df5",
         "tools/bench/table-render-bench.ts": "bf0c51517e63",
@@ -15581,7 +15581,7 @@
       },
       "note": "ViewConfigPanelRenderer's own render for a table view with a one-view database, so both the database-scoped and the view-scoped sections draw.",
       "capture": "viewport",
-      "bytes": 103186,
+      "bytes": 106895,
       "source": "constructed",
       "renderer": "view-config",
       "bag": "file-view",
@@ -15605,7 +15605,7 @@
         "src/views/dropdown-field.ts"
       ],
       "layoutHash": "dead6c94bb85",
-      "pixelHash": "460ef47589ab",
+      "pixelHash": "0259fbd746a7",
       "sourceHashes": {
         "src/views/view-config-panel-renderer.ts": "369be9ac3df5",
         "tools/bench/table-render-bench.ts": "bf0c51517e63",
@@ -15629,7 +15629,7 @@
       },
       "note": "ViewConfigPanelRenderer's own render for a table view with a one-view database, so both the database-scoped and the view-scoped sections draw.",
       "capture": "viewport",
-      "bytes": 106824,
+      "bytes": 110672,
       "source": "constructed",
       "renderer": "view-config",
       "bag": "file-view",
@@ -18679,7 +18679,7 @@
       },
       "note": "renderEmpty() returns before .obnotion-calendar is ever created, so the card lands as a direct child of .obnotion-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .obnotion-calendar descendant, or it never applies.",
       "capture": "viewport",
-      "bytes": 33169,
+      "bytes": 33170,
       "fixtureOf": "constructed-calendar-empty"
     },
     {

@@ -91,7 +91,11 @@
   /* The sheet header's close button and the shell's own back control, so a second edge slot
      added later reads the size the first one already declared instead of repeating "44px". */
   --obnotion-shell-edge-control-size: 44px;
-  --obnotion-border-subtle: color-mix(in srgb, var(--background-modifier-border) 40%, transparent);
+  /* The host's border token carries a fallback: a var() left unresolved inside color-mix turns the
+     whole property back into its initial value, and border-style:initial is none — a divider whose
+     width computes to 0px, invisible anywhere the host theme does not define that token. #333333
+     is the dark-theme border grey these sheets' #1e1e1e backgrounds are drawn against. */
+  --obnotion-border-subtle: color-mix(in srgb, var(--background-modifier-border, #333333) 40%, transparent);
   --obnotion-border-regular: color-mix(in srgb, var(--background-modifier-border) 70%, transparent);
   --obnotion-border-emphasis: var(--background-modifier-border);
   --obnotion-surface-canvas: var(--background-primary);
@@ -12121,17 +12125,26 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
    edge.
 
    `.obnotion-panel-row`'s own base is a left-to-right row, correct for the short single-value rows the
-   filter and sort sheets share it for. This sheet's own rows carry a long label, a wide control
-   (a segmented choice, a dropdown paired with a button, a path plus an engine picker) and an
-   explainer paragraph, and splitting that across a label column and a field column on a 390px
-   phone left the label stranded far from a control it barely had room for, the control's own text
-   still squeezed into whatever the label didn't take. Column stacking gives every row's control the
-   sheet's full width instead of a remainder, which is what a wide control or a multi-line option
-   list actually needs to stay inside the sheet at all. */
+   filter and sort sheets share it for. This sheet's rows split two ways, by what their field
+   carries: editors (a segmented choice, a dropdown paired with a button, a path plus an engine
+   picker, an explainer paragraph) keep the control stacked below the label at the sheet's full
+   width, which is what a wide control or a multi-line option list needs to stay inside the sheet
+   at all; every other setting reads as the reference's own one-line row — label left, control
+   right, the 44px touch floor to the reference's top of pitch. Which way a row splits is decided
+   purely by its field, so the split lives in the :has() rule below and the rows themselves share
+   one grammar. */
 .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row {
   padding-inline: var(--obnotion-sheet-inset);
+  justify-content: space-between;
+}
+
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row:has(> .obnotion-view-config-field-stack),
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row:has(> .obnotion-view-config-inline-controls),
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row:has(> .obnotion-view-config-range),
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row:has(> .obnotion-view-config-textarea) {
   flex-direction: column;
   align-items: stretch;
+  justify-content: flex-start;
   gap: var(--obnotion-space-2);
 }
 
@@ -12171,20 +12184,36 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
   color: var(--text-muted);
 }
 
-/* The field sits on its own line below the label now, so its own children still run left to right
-   — a control beside its own icon, or a dropdown beside its "Manage" button — but the field itself
-   no longer competes with the label for width; it gets the row's full inset-to-inset span. */
+/* Compact rows: the field takes the span right of the label and hugs the row's far inset — a
+   checkbox, a summary count, a value+chevron. Editor stacks re-assert their own alignment further
+   down at the same specificity and later, so they keep theirs. */
 .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-field {
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-items: center;
   gap: var(--obnotion-space-3);
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
-/* `:not(.obnotion-checkbox)` because the row now hands the field its full inset-to-inset width: a
-   checkbox switch is the field's only child on the same shape a dropdown or text input is, and
-   without the exclusion this rule's `flex: 1 1 auto` outranks the checkbox's own fixed `18px`
-   basis on specificity alone, stretching the switch across the whole row instead of leaving it a
-   thumb-sized control at the row's start. */
+/* A compact dropdown's value reads against the chevron at the row's far edge, the reference's
+   value+disclosure pairing, not floating at the pill's left while its box spans the row. The text
+   wrapper goes flex so the value's auto margin can actually reach. */
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-dropdown .obnotion-dropdown-field-text {
+  display: flex;
+  align-items: baseline;
+  gap: var(--obnotion-space-2);
+  min-width: 0;
+}
+
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-dropdown .obnotion-dropdown-field-value {
+  margin-inline-start: auto;
+}
+
+/* `:not(.obnotion-checkbox)` because the compact field spans right of the label (and an editor's
+   field the full row): a checkbox switch is the field's only child on the same shape a dropdown or
+   text input is, and without the exclusion this rule's `flex: 1 1 auto` outranks the checkbox's own
+   fixed `18px` basis on specificity alone, stretching the switch across the whole row instead of
+   leaving it a thumb-sized control at the row's right edge. */
 .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-field:not(.obnotion-view-config-field-stack) > :first-child:not(.obnotion-checkbox) {
   flex: 1 1 auto;
   min-width: 0;
@@ -12245,10 +12274,11 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
    sheet; the sheet-only size bump this class once carried is retired rather than duplicated onto
    the new class. */
 
-/* Section headers sit on the sheet's inset and carry the divider that opens each group. */
+/* Section headers sit on the rows' inset — the same 16px, not the smaller spacing step — so the
+   divider that opens each group runs through the gutters the rows it introduces use. */
 .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-section-title {
   margin: 0;
-  padding: var(--obnotion-space-5) var(--obnotion-space-5) var(--obnotion-space-2);
+  padding: var(--obnotion-space-5) var(--obnotion-sheet-inset) var(--obnotion-space-2);
   border-top: 1px solid var(--obnotion-border-subtle);
 }
 
@@ -12257,7 +12287,7 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
 }
 
 .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-readonly-note {
-  margin: var(--obnotion-space-3) var(--obnotion-space-5);
+  margin: var(--obnotion-space-3) var(--obnotion-sheet-inset);
 }
 
 /* Every action inside the sheet is something a thumb has to land on. The two icon buttons here are
