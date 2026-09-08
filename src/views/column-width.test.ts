@@ -152,10 +152,11 @@ describe("the column-width adjuster presents as a shared bottom sheet on a phone
   });
 
   it("renders the four presets as the shared exclusive-choice group with a selected state", () => {
-    // The same radio group the new-record placement uses: equal options, one selected.
+    // The same single-select group the new-record placement uses: equal options, one selected,
+    // the exclusivity carried by the group's behaviour rather than the control type.
     expect(columnWidthSource).toContain('cls: "obnotion-new-placement"');
     expect(columnWidthSource).toContain('"obnotion-new-placement-option"');
-    expect(columnWidthSource).toContain('role: "radio"');
+    expect(columnWidthSource).toContain('role: "checkbox"');
     expect(columnWidthSource).toContain('"aria-checked"');
     expect(columnWidthSource).toContain('"is-active"');
     for (const key of ["auto", "narrow", "medium", "wide"]) {

@@ -38,7 +38,7 @@
       "architecture",
       "decisions"
     ],
-    "importance_tier": "normal",
+    "importance_tier": "important",
     "status": "in_progress",
     "key_files": [
       "spec.md",
@@ -46,9 +46,21 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md",
+      "styles.css",
+      "tools/live/touch-targets.mjs",
+      "src/views/view-config-panel-renderer.ts",
+      "src/views/toolbar-renderer.ts",
+      "src/views/column-width.ts",
+      "src/views/view-config-panel-renderer.test.ts",
+      "src/views/column-width.test.ts",
+      "src/views/checkbox-family-coverage.test.ts",
+      "tools/lane/css-lane.json",
+      "screenshots/manifest.json",
       "src/views/board-renderer.ts",
-      "styles.css"
+      "src/views/checkbox.ts",
+      "src/views/table-renderer.ts"
     ],
     "entities": [
       {
@@ -82,9 +94,75 @@
         "source": "derived"
       },
       {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "styles.css",
+        "kind": "file",
+        "path": "styles.css",
+        "source": "derived"
+      },
+      {
+        "name": "touch-targets.mjs",
+        "kind": "file",
+        "path": "tools/live/touch-targets.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "view-config-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/view-config-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-width.ts",
+        "kind": "code",
+        "path": "src/views/column-width.ts",
+        "source": "derived"
+      },
+      {
+        "name": "view-config-panel-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/view-config-panel-renderer.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-width.test.ts",
+        "kind": "test",
+        "path": "src/views/column-width.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "checkbox-family-coverage.test.ts",
+        "kind": "test",
+        "path": "src/views/checkbox-family-coverage.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
         "source": "derived"
       },
       {
@@ -94,9 +172,15 @@
         "source": "derived"
       },
       {
-        "name": "styles.css",
-        "kind": "file",
-        "path": "styles.css",
+        "name": "checkbox.ts",
+        "kind": "code",
+        "path": "src/views/checkbox.ts",
+        "source": "derived"
+      },
+      {
+        "name": "table-renderer.ts",
+        "kind": "code",
+        "path": "src/views/table-renderer.ts",
         "source": "derived"
       },
       {
@@ -122,83 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Parent Spec",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Problem Statement The",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Clean Architecture",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Key Components",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Data Flow",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Current Role",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The operator reports two related defects (R3): checkboxes and radios are too large on phone, and the app should not have radio-style inputs at all — only checkboxes",
     "created_at": "2026-09-08T06:23:36Z",
-    "last_save_at": "2026-09-08T06:45:56.878Z",
+    "last_save_at": "2026-09-08T13:27:51.425Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,15 +219,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:52f6012fd9fbedfafb926791aa6b17cd14af3c30cabad18d55ed767869752d35",
+    "source_fingerprint": "sha256:196be936797179de01eb5d3ce0e1318586671b2e55dd7ef330d39a386a688eff",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "ffa94059ad02e378185f787134713cb61ddc3fb912fc54b1fab40a55868d3426",
+      "spec.md": "bddf9d7b587ad2a0353dd09203e45b93f07c7e95d3ef58bd05b088a2ef841be4",
       "plan.md": "223922e61ac06e0e41da7fa170d3c0be0b2cab84623ff9e79a1e83f53a9bd1f3",
-      "tasks.md": "5fdf007e3af02cf46ed8fdb2dc072efa7b2f18cf6ca8fb07146787e8c05932ac",
-      "implementation-summary.md": "f1a3daa386481ae49770b66dede8a410680ced82eb05af13c585632727ca3c84"
+      "tasks.md": "96ab9e0c6c5214d0f5b2ead548ae74800e09a74354475c5b92a035bd22d49283",
+      "decision-record.md": "85180039d0427b7e85f3639c97f85ce33fcbcbec550d03aab3975b51317c263d",
+      "implementation-summary.md": "a0053343cd5c72e329d5d8c817f17f2ccf89352e830a8b060251abbccf7682a9"
     },
     "last_active_at": null
   }

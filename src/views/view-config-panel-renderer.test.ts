@@ -4,7 +4,8 @@
 // ───────────────────────────────────────────────────────────────────
 //
 // The settings sheet already wore shared chrome. Its body still drew the
-// desktop two-column grid, a native radio group, and a switch that is not
+// desktop two-column grid, a native radio group (the computed-sync cards, since
+// converted to the shared checkbox), and a switch that is not
 // the shared checkbox. This suite mounts the real renderer on a hand-built
 // tree (no jsdom) and asks describeSheetGrammar the structural questions it
 // can still answer without a CSS engine (dropdown, segmented), plus the
@@ -341,16 +342,32 @@ describe("settings sheet body grammar", () => {
     for (const input of checkboxes) expect(input.classList.contains("obnotion-checkbox")).toBe(true);
   });
 
-  it("on desktop, keeps the two-column grid, radios and switch", () => {
+  it("on desktop, keeps the two-column grid, the computed-sync checkbox cards and the switch", () => {
     const { panel } = mount(false);
     expect(panel.querySelector(".obnotion-view-config-row")).not.toBeNull();
     expect(panel.querySelector(".obnotion-panel-row")).toBeNull();
-    expect(panel.querySelector("input[type='radio']")).not.toBeNull();
+    // No radio of either spelling is left: the cards' boxes are the shared factory's, and the
+    // choice's exclusivity lives in the group's behaviour, not in the control type. (The harness
+    // here matches single simple selectors, so the cards are found by class and their box
+    // asked for directly.)
+    expect(panel.querySelector("input[type='radio']")).toBeNull();
+    const syncCards = panel.querySelectorAll(".obnotion-computed-sync-card");
+    expect(syncCards.length).toBeGreaterThan(0);
+    for (const cardEl of syncCards) {
+      const box = cardEl.querySelector(".obnotion-checkbox");
+      expect(box).not.toBeNull();
+      expect(box!.tagName).toBe("INPUT");
+    }
+    expect(syncCards.filter((cardEl) => cardEl.hasClass("is-active")).length).toBe(1);
     expect(panel.querySelector(".obnotion-toggle-switch")).not.toBeNull();
     expect(panel.querySelector(".obnotion-new-placement")).toBeNull();
     // `rows` is not asked here for the same reason noted above; `.obnotion-panel-row`'s absence is
     // already asserted two lines up, which is the structural half this tree can answer.
     const report = describeSheetGrammar(panel as unknown as HTMLElement);
+    // With the native radios gone the predicate's only remaining miss on this panel is the
+    // desktop switch, which deliberately keeps its own class on desktop (the phone's shared
+    // -checkbox toggle is the other arm of that ternary); the desktop panel is not a registered
+    // grammar surface, so the column stays what it was — one raw input short of the family.
     expect(report.segmented).toBe(false);
   });
 

@@ -9,24 +9,25 @@ importance_tier: "normal"
 contextType: "implementation"
 _memory:
   continuity:
-    packet_pointer: "073-checkbox-controls"
-    last_updated_at: "2026-09-08T08:20:00Z"
-    last_updated_by: "markdown-scaffold"
-    recent_action: "Opened the packet from the operator's R3 report"
-    next_safe_action: "Inventory every radio-style control before converting any of them"
+    packet_pointer: "005-component-surface-system/073-checkbox-controls"
+    last_updated_at: "2026-09-08T14:45:00Z"
+    last_updated_by: "implementation-leg"
+    recent_action: "Implemented and gate-verified; awaiting the operator device check"
+    next_safe_action: "Operator device confirmation (AC-005), then close the packet"
     blockers: []
     key_files:
-      - "src/views/board-renderer.ts"
       - "styles.css"
+      - "tools/live/touch-targets.mjs"
+      - "src/views/view-config-panel-renderer.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "073-checkbox-controls-scaffold"
+      session_id: "073-checkbox-controls-implementation"
       parent_session_id: null
-    completion_pct: 0
-    open_questions:
-      - "How many distinct radio-style controls exist across the app beyond the board card's checkbox-property control shown in the R3 screenshot?"
+    completion_pct: 90
+    open_questions: []
     answered_questions:
       - "R3 evidence: Database Testbed board, group 'No value', 27 cards, each showing a large empty circle control labelled 'Pinned' above a bare '0' — screenshot ios-testbed-board-checkbox-0032.png (operator-owned, not committed here)"
+      - "How many distinct radio-style controls exist across the app beyond the board card's control? Exactly 3 producer sites (toolbar-renderer.ts placement, column-width.ts presets, view-config-panel-renderer.ts computed-sync); the 13 other `radio` mentions in src are selectors, grammar guards and tests, not producers."
 ---
 
 <!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
@@ -42,7 +43,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P2 |
-| **Status** | Draft — opened 2026-09-08, nothing started |
+| **Status** | Implemented — evidence complete 2026-09-08, awaiting the operator's device confirmation (AC-005) |
 | **Created** | 2026-09-08 |
 | **Branch** | `main` |
 | **Parent Spec** | `../005-component-surface-system/` |

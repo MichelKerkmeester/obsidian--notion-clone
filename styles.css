@@ -21195,7 +21195,11 @@ body.pm-resize-active * {
      since grown to 28 to clear the touch floor while the column stayed at 48. Measured result:
      the button's right edge sat 14px past the checkbox's left edge — two targets drawn on top of
      one another, which is what the reorder button having no room looks like.
-     4 pad + 28 button + 4 gap + 28 checkbox = 64, and 64 is the next step on the spacing scale.
+     4 pad + 28 button + 4 gap + 16 checkbox = 52, and 64 is the next step on the spacing scale —
+     which is also what keeps the two targets separated: the checkbox's -15px ::before reaches
+     15px left of its 16px box, and the surplus 12px of this 64 rides between the controls, on
+     top of the 4px gap, so the invisible inset stops 1px short of the button instead of
+     swallowing its right edge.
      Layout is unchanged otherwise: the left control stays in flow and the checkbox stays pinned
      right, so the header and every row still land on one column. */
   width: 64px;
@@ -21218,9 +21222,13 @@ body.pm-resize-active * {
 .is-phone .obnotion-container .obnotion-table:not(:has(.obnotion-table-mobile-move-btn)) col.obnotion-select-colgroup,
 .is-phone .obnotion-container .obnotion-table:not(:has(.obnotion-table-mobile-move-btn)) th.obnotion-select-col,
 .is-phone .obnotion-container .obnotion-table:not(:has(.obnotion-table-mobile-move-btn)) td.obnotion-select-col {
-  width: 40px;
-  min-width: 40px;
-  max-width: 40px;
+  /* 28 = 16 checkbox + the same 12 of border, right pin and allowance the 40px carried around its
+     28px one; the glyph went back to the reference's size, so the reserve follows it. What the
+     column keeps is the 1px border, the 4px pin and the 7px of breathing room — no second
+     control's worth of anything. */
+  width: 28px;
+  min-width: 28px;
+  max-width: 28px;
 }
 
 .is-phone .obnotion-container .obnotion-table-mobile-move-btn {
@@ -21741,15 +21749,17 @@ img.obnotion-text-md-image {
   .obnotion-container .obnotion-group-divider-checkbox,
   .obnotion-container .obnotion-selection-clear-checkbox {
     position: relative;
-    min-width: 28px;
-    min-height: 28px;
+    /* Same trade as the shared rule above: the glyph stays the reference's size and the ::before
+       underneath pays the 44px, instead of this trio's 28px minimum doubling every box. */
+    min-width: 0px;
+    min-height: 0px;
   }
 
   .obnotion-container .obnotion-table .obnotion-select-col .obnotion-select-inner input[type="checkbox"]::before,
   .obnotion-container .obnotion-group-divider-checkbox::before,
   .obnotion-container .obnotion-selection-clear-checkbox::before {
     position: absolute;
-    inset: -8px;
+    inset: -15px;
     content: "";
     pointer-events: auto;
   }
@@ -22015,9 +22025,15 @@ img.obnotion-text-md-image {
   width: auto !important;
   min-width: 0 !important;
 }
-.is-phone .obnotion-container .obnotion-table col[data-obnotion-column-key] {
+.is-phone .obnotion-container .obnotion-table col[data-obnotion-column-key],
+.is-phone .obnotion-container .obnotion-table col.obnotion-select-colgroup {
   width: auto !important;
 }
+
+/* The select column carries its own 40px hint above, written for its 28px box; in auto layout a
+   <col> width is the column's preferred size, so without this release the sorted column stays 40
+   even after its checkbox went back to the reference's 16px. Released, the phone's 28px — the
+   21175 block's own number — is what sizes it. */
 .is-phone .obnotion-container .obnotion-table td:not(.obnotion-select-col):not(.obnotion-record-icon-col):not(.obnotion-cell-wrap),
 .is-phone .obnotion-container .obnotion-table th[data-obnotion-column-key] {
   max-width: 60vw;
@@ -23793,9 +23809,13 @@ input[type="checkbox"].obnotion-checkbox.obnotion-checkbox-field {
 }
 
 @media (pointer: coarse) {
+  /* A touch surface paints the reference's glyph, not a doubled one: this minimum used to grow
+     every box to 28px, which put the board card's 14px circle and the 16px row check at twice the
+     size Notion and Anytype draw them. The 28px of target is not lost — the ::before inset after
+     the shared rule's -6px grows it back, invisibly, around every glyph. */
   input[type="checkbox"].obnotion-checkbox {
-    min-width: 28px;
-    min-height: 28px;
+    min-width: 0px;
+    min-height: 0px;
   }
 
   /* Two classes that sat 2px under this project's own floor on every touch surface, 62 controls
@@ -23829,6 +23849,18 @@ input[type="checkbox"].obnotion-checkbox::before {
   inset: -6px;
   content: "";
   pointer-events: auto;
+}
+
+/* The touch-surface half of that trade: the inset is the part a bounding box cannot see, so the
+   reference-sized glyph keeps its 44px of target around it — 14px of circle becomes 44, 16 and 18
+   become 46 and 48. It lives after the -6px rule because the cascade reads the later equal, and
+   the pointer, not the file order, decides which one applies. The switch's track keeps its own
+   measured -6px; this is the checkbox glyph's, where the floor was being paid in pixels the
+   reference never painted. */
+@media (pointer: coarse) {
+  input[type="checkbox"].obnotion-checkbox::before {
+    inset: -15px;
+  }
 }
 
 input[type="checkbox"].obnotion-checkbox:checked,

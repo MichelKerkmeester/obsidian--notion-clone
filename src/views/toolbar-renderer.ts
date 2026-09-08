@@ -2220,7 +2220,7 @@ export class ToolbarRenderer {
 
   private installMenuKeyboardNavigation(panel: HTMLElement): void {
     const items = () => Array.from(panel.querySelectorAll<HTMLElement>(
-      "button[role=menuitem]:not(:disabled), button[role=option]:not(:disabled), button[role=radio]:not(:disabled)",
+      "button[role=menuitem]:not(:disabled), button[role=option]:not(:disabled), button[role=checkbox]:not(:disabled)",
     ));
     const update = (active?: HTMLElement) => {
       const currentItems = items();
@@ -2475,14 +2475,16 @@ export class ToolbarRenderer {
     const panel = shell.panel;
     const placement = panel.createDiv({ cls: "obnotion-new-placement", attr: { role: "group", "aria-label": t("toolbar.insertPlacement") } });
     for (const option of [{ value: "top" as const, label: t("toolbar.insertAtTop") }, { value: "bottom" as const, label: t("toolbar.insertAtBottom") }]) {
+      // The options carry checkbox semantics, not radio: the group is the single-select, so
+      // activating one option clears the other — the control type stays out of the contract.
       const button = placement.createEl("button", {
         cls: `obnotion-new-placement-option${this.newRecordPlacement === option.value ? " is-active" : ""}`,
         text: option.label,
-        attr: { type: "button", role: "radio", "aria-checked": this.newRecordPlacement === option.value ? "true" : "false" },
+        attr: { type: "button", role: "checkbox", "aria-checked": this.newRecordPlacement === option.value ? "true" : "false" },
       });
       button.onclick = () => {
         this.newRecordPlacement = option.value;
-        placement.querySelectorAll<HTMLElement>("[role=radio]").forEach((el) => {
+        placement.querySelectorAll<HTMLElement>("[role=checkbox]").forEach((el) => {
           const selected = el === button;
           el.setAttribute("aria-checked", String(selected));
           el.toggleClass("is-active", selected);

@@ -107,8 +107,9 @@ const DECLARED = [
   },
   {
     match: "obnotion-checkbox",
-    reason: "the checkbox paints at 28px and takes its touch area from a ::before inset, which a"
-      + " bounding box does not include; the checkbox tool measures that surface directly",
+    reason: "the checkbox paints the reference's 14-18px glyph on the phone and takes its touch"
+      + " area from a -15px ::before inset, which a bounding box does not include; the control"
+      + " geometry pass measures that surface directly",
   },
   {
     match: "obnotion-mobile-bottom-sheet-handle",
@@ -256,16 +257,27 @@ const runtime = readFileSync(join(REPO, "tools/screenshots/runtime-vars.css"), "
 async function assertPremise(page, scenarioId) {
   const state = await page.evaluate(() => ({
     coarse: window.matchMedia("(pointer: coarse)").matches,
-    // A control the coarse rules raise, built here rather than borrowed from a scenario so the
-    // canary cannot go missing when a fixture changes.
+    // A control the coarse rules shape, built here rather than borrowed from a scenario so the
+    // canary cannot go missing when a fixture changes. Both halves of its shape are the premise:
+    // the row-role glyph paints the reference's 16px, and the -15px ::before around it pays the
+    // 44px a bounding box cannot see — lose either rule and the number that survives here is the
+    // old one, which is exactly the failure a green run hides.
     canary: (() => {
       const probe = document.createElement("input");
       probe.type = "checkbox";
       probe.className = "obnotion-checkbox obnotion-checkbox-row";
       document.body.appendChild(probe);
       const box = probe.getBoundingClientRect();
+      const spread = getComputedStyle(probe, "::before");
+      const part = (edge) => { const v = parseFloat(spread[edge]); return Number.isFinite(v) ? v : 0; };
+      const measured = {
+        width: Math.round(box.width),
+        height: Math.round(box.height),
+        hitWidth: Math.round(box.width - part("left") - part("right")),
+        hitHeight: Math.round(box.height - part("top") - part("bottom")),
+      };
       probe.remove();
-      return { width: Math.round(box.width), height: Math.round(box.height) };
+      return measured;
     })(),
   }));
   if (!state.coarse) {
@@ -274,11 +286,12 @@ async function assertPremise(page, scenarioId) {
       + " renders, and the count would be far too high rather than too low.");
     return false;
   }
-  if (state.canary.width < FLOOR || state.canary.height < FLOOR) {
+  if (state.canary.width !== 16 || state.canary.height !== 16 || state.canary.hitWidth < 44 || state.canary.hitHeight < 44) {
     console.error(`touch-targets: REFUSED on scenario "${scenarioId}" — the coarse-pointer canary measured `
-      + `${state.canary.width}x${state.canary.height}, under the ${FLOOR}px floor it is raised to.`
-      + " The stylesheet is not attached, or the rule that raises it is gone. Either way the run"
-      + " would report a number about a page the plugin did not style.");
+      + `${state.canary.width}x${state.canary.height} (glyph, hit ${state.canary.hitWidth}x${state.canary.hitHeight} via ::before),`
+      + " not the reference's 16px glyph inside its 44px+ invisible inset. The stylesheet is not"
+      + " attached, or the rule that releases the glyph or the inset that carries its target is"
+      + " gone. Either way the run would report a number about a page the plugin did not style.");
     return false;
   }
   return true;
@@ -346,6 +359,42 @@ window.__measureConstructedTouch = (scenario, opts) => {
   });
   return { measurement, provenance };
 };
+
+// What a control looks like, not what a thumb lands on: the pass at the bottom of this file
+// measures the glyph boxes and the invisible ::before they hide their hit area in, because a
+// reference drawn at 16px can sit next to a floor census drawn at 28px and neither tool notices
+// the difference — one photographs a pointer the control never renders under, the other never
+// asks what a control looks like at all.
+window.__controlGeometryProbe = (scenario) => {
+  let probe = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    const visible = (el) => { const r = el.getBoundingClientRect(); return r.width > 0 || r.height > 0; };
+    const glyph = (el) => {
+      const box = el.getBoundingClientRect();
+      const spread = getComputedStyle(el, "::before");
+      // The ::before carries the touch target: it paints (box - left - right) wide, because the
+      // inset offsets are negative. Where no pseudo answers, the reads come back NaN and the
+      // box itself is what there is to hit.
+      const part = (edge) => { const v = parseFloat(spread[edge]); return Number.isFinite(v) ? v : 0; };
+      return {
+        classes: String(el.className || "").slice(0, 90),
+        width: Math.round(box.width),
+        height: Math.round(box.height),
+        hitWidth: Math.round(box.width - part("left") - part("right")),
+        hitHeight: Math.round(box.height - part("top") - part("bottom")),
+      };
+    };
+    probe = {
+      radios: [...document.querySelectorAll('input[type="radio"],[role="radio"]')].filter(visible).length,
+      glyphs: [...document.querySelectorAll('input[type="checkbox"]')].filter(visible).map(glyph),
+      boardCheckboxFields: document.querySelectorAll(".obnotion-kanban-card-meta .is-checkbox-field").length,
+      boardCheckedFields: document.querySelectorAll(".obnotion-kanban-card-meta .is-checkbox-field input:checked").length,
+      boardBareZeroFields: [...document.querySelectorAll(".obnotion-kanban-card-meta .obnotion-board-card-field")]
+        .filter((field) => field.textContent.trim() === "0").length,
+    };
+  });
+  return probe;
+};
 `);
 
 if (missingSources.length > 0) {
@@ -399,6 +448,86 @@ for (const scenario of MEASURED_SCENARIOS) {
   constructedScenariosRendered += 1;
   constructedMeasured += measurement.seen;
   constructedFindings.push(...measurement.rows);
+}
+
+// ─── PASS 3: CONTROL GEOMETRY ──────────────────────────────────────────────────
+// The floor pass above measures where a thumb lands. This one measures what the control
+// actually LOOKS like, because the two diverge on exactly the control the operator reported:
+// under a pointer:coarse the shared checkbox paints its glyph at 28px while the references
+// (Notion, Anytype) draw it at 14-18px, and neither the capture corpus nor the floor census
+// catches the gap — the corpus renders a desktop pointer, the census never asks what a control
+// looks like. So three production scenarios mount here — the board card with its checkbox
+// property, the table with its select-column checkbox, and the view-config panel, the one
+// surface still drawing native radios — and each mount answers three questions, by measurement
+// rather than by looking: how many radio-shaped controls remain, what size every checkbox glyph
+// paints, and whether the invisible ::before the hit area rides on clears 44px around it. The
+// radio count is also what keeps the conversion honest afterwards: a converted control that
+// quietly grows a radio back fails here, not on a device.
+const GEOMETRY_SCENARIO_NAMES = ["board/file-view", "table/file-view", "panel-view-config/file-view"];
+const GEOMETRY_GLYPH_MIN = 14;
+const GEOMETRY_GLYPH_MAX = 18;
+const GEOMETRY_HIT_FLOOR = 44;
+
+const geometryScenarios = MEASURED_SCENARIOS.filter((scenario) => GEOMETRY_SCENARIO_NAMES.includes(scenario.name));
+if (geometryScenarios.length !== GEOMETRY_SCENARIO_NAMES.length) {
+  console.error(`touch-targets: FAIL — the control-geometry pass mounts ${GEOMETRY_SCENARIO_NAMES.length} scenario(s) but the registry carries ${geometryScenarios.length}: ${GEOMETRY_SCENARIO_NAMES.join(", ")}`);
+  await browser.close();
+  process.exit(1);
+}
+
+const geometryFailures = [];
+let geometryGlyphs = 0;
+let geometryRadios = 0;
+let boardGeometry = null;
+
+for (const scenario of geometryScenarios) {
+  const label = scenarioLabel(scenario);
+  // The board and table benches default to the 1600-row structural shape, whose cells are
+  // plain-text stubs — no board card here would carry a checkbox property at all, and the pass
+  // would measure nothing. `captureData` is the harness's own opt-in for the capture-sized
+  // "mixed" dataset whose rows carry the real typed columns (select, checkbox, date, currency,
+  // relation); the floor passes deliberately stay on the benches their bounds were calibrated
+  // against, so this stays a copy: the counted measurements above keep their shape, this one
+  // measures what the shipped types actually paint.
+  const mountsCaptureData = scenario.renderer === "board" || scenario.renderer === "table";
+  const probe = await page.evaluate(
+    (s) => window.__controlGeometryProbe(s),
+    mountsCaptureData ? { ...scenario, captureData: true } : scenario,
+  );
+  if (!probe) {
+    geometryFailures.push(`${label}: the geometry probe returned nothing — the mount produced no measurable DOM`);
+    continue;
+  }
+  geometryRadios += probe.radios;
+  geometryGlyphs += probe.glyphs.length;
+  for (const g of probe.glyphs) {
+    if (g.width < GEOMETRY_GLYPH_MIN || g.width > GEOMETRY_GLYPH_MAX || g.height < GEOMETRY_GLYPH_MIN || g.height > GEOMETRY_GLYPH_MAX) {
+      geometryFailures.push(`${label} ${g.classes} paints its glyph at ${g.width}x${g.height}, outside the ${GEOMETRY_GLYPH_MIN}-${GEOMETRY_GLYPH_MAX}px reference band`);
+    }
+    if (g.hitWidth < GEOMETRY_HIT_FLOOR || g.hitHeight < GEOMETRY_HIT_FLOOR) {
+      geometryFailures.push(`${label} ${g.classes} hit area ${g.hitWidth}x${g.hitHeight} (glyph + ::before), under the ${GEOMETRY_HIT_FLOOR}px the inset owes`);
+    }
+  }
+  if (scenario.name.startsWith("board/")) boardGeometry = probe;
+}
+
+if (boardGeometry && boardGeometry.boardCheckboxFields === 0) {
+  geometryFailures.push("board: the card carries no checkbox-property field, so there is no glyph the reference band can be measured against");
+}
+
+console.log(`\ntouch-targets: [geometry] ${geometryGlyphs} checkbox glyph(s) across ${geometryScenarios.length} scenario(s), ` +
+  `band ${GEOMETRY_GLYPH_MIN}-${GEOMETRY_GLYPH_MAX}px, ::before hit >= ${GEOMETRY_HIT_FLOOR}px, ${geometryRadios} radio-shaped control(s)`);
+if (boardGeometry) {
+  console.log(`touch-targets: [geometry] board card: ${boardGeometry.boardCheckboxFields} checkbox field(s), ` +
+    `${boardGeometry.boardCheckedFields} checked, ${boardGeometry.boardBareZeroFields} field(s) rendering a bare "0"`);
+}
+
+if (geometryRadios !== 0 || geometryFailures.length > 0) {
+  for (const line of geometryFailures.slice(0, 12)) console.error(`  FAIL ${line}`);
+  if (geometryFailures.length > 12) console.error(`  FAIL ...and ${geometryFailures.length - 12} more`);
+  if (geometryRadios !== 0) console.error(`  FAIL ${geometryRadios} radio-shaped control(s) remain; the choice grammar is checkboxes, not radios`);
+  await browser.close();
+  process.exit(1);
 }
 
 rmSync(work, { recursive: true, force: true });

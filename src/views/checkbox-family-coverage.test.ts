@@ -245,6 +245,22 @@ describe("every checkbox family the plugin builds is also rendered by a fixture"
     ).toEqual([]);
   });
 
+  it("keeps the phone glyph at the reference size and pays the touch floor in hit area, not pixels", () => {
+    // The coarse-pointer minimum used to paint every glyph at 28px — twice what the Notion and
+    // Anytype references draw — so the shared rule releases the box on a touch surface and a
+    // -15px ::before pays the 44px target instead, where a bounding box cannot see it. Either
+    // half reverting fails here: the 28px minimum coming back, or the inset shrinking.
+    const css = readFileSync(join(REPO, "styles.css"), "utf8");
+    expect(
+      /@media \(pointer: coarse\) \{\s*\/\*[\s\S]*?\*\/\s*input\[type="checkbox"\]\.obnotion-checkbox \{\s*min-width: 0px;\s*min-height: 0px;/.test(css),
+      "the shared checkbox's pointer:coarse pass no longer releases the 28px minimum",
+    ).toBe(true);
+    expect(
+      /@media \(pointer: coarse\) \{\s*input\[type="checkbox"\]\.obnotion-checkbox::before \{\s*inset: -15px;/.test(css),
+      "the shared checkbox's -15px touch inset is gone",
+    ).toBe(true);
+  });
+
   it("keeps the switch the only checkbox built outside the factory", () => {
     // A ninth raw creation site would be a family with no role, no shared appearance contract and
     // no place in the coverage assertion above — invisible to both checks unless this one fails.

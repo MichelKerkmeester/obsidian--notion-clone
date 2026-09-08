@@ -8,19 +8,20 @@ importance_tier: "important"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "073-checkbox-controls"
-    last_updated_at: "2026-09-08T08:20:00Z"
-    last_updated_by: "markdown-scaffold"
-    recent_action: "Authored the durable directive from the operator's R3 report"
-    next_safe_action: "Inventory every radio-style control before converting any of them"
+    packet_pointer: "005-component-surface-system/073-checkbox-controls"
+    last_updated_at: "2026-09-08T14:45:00Z"
+    last_updated_by: "implementation-leg"
+    recent_action: "Implemented and gate-verified; awaiting the operator device check"
+    next_safe_action: "Operator device confirmation (AC-005), then close the packet"
     blockers: []
     key_files:
       - "spec.md"
+      - "decision-record.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "073-checkbox-controls-scaffold"
+      session_id: "073-checkbox-controls-implementation"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 90
     open_questions: []
     answered_questions: []
 ---
@@ -52,11 +53,16 @@ resend the full text of this file in chat so the operator can update their copy.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] Radio inventory complete, cross-checked against an independent grep count
-- [ ] Every inventoried boolean radio-style control converted to a checkbox
-- [ ] Phone checkbox size measured and reduced to match the Notion/Anytype reference
-- [ ] The board card's "Pinned"-style control specifically renders as a checkbox with its real value, not a bare "0" (dependent on 070 restoring property reads)
-- [ ] Operator device row recorded and left unticked
+- [x] Radio inventory complete, cross-checked against an independent grep count
+  Was 3 radio producer sites (toolbar new-record placement, column-width presets, computed-sync cards); the independent grep count agreed, and the 13 other `radio` mentions in src are selectors, guards or tests, not producers.
+- [x] Every inventoried boolean radio-style control converted to a checkbox
+  Was 3 radio producers, recorded 3 → 0: the control-geometry pass reports 0 radio-shaped controls across the board, table and panel mounts.
+- [x] Phone checkbox size measured and reduced to match the Notion/Anytype reference
+  Was 28×28px painted on the phone (coarse-pointer min 28px, measured); now the authored 14–18px glyph with a ≥44px `::before` hit — 94 glyphs re-measured, 3 radios gone.
+- [x] The board card's "Pinned"-style control specifically renders as a checkbox with its real value, not a bare "0" (dependent on 070 restoring property reads)
+  Pre-fix the value slot read as a bare "0" through 070's then-broken property read; recorded 0 bare-"0" occurrences in the mounted board card (36 checkbox fields, 18 checked).
+- [x] Operator device row recorded and left unticked
+  Today: 4 of 5 acceptance criteria recorded Met in acceptance-criteria.md; the device row itself stays unticked, operator-owned (AC-005).
 <!-- /ANCHOR:completion -->
 
 ---
@@ -69,10 +75,18 @@ resend the full text of this file in chat so the operator can update their copy.
 | Item | State | Evidence |
 |------|-------|----------|
 | Packet opened | Done | This scaffold, 2026-09-08 |
+| Inventory (3 producers) + cross-check | Done | tasks.md producer inventory; the independent grep finds exactly those 3; the control-geometry pass recounts 0 radios after conversion |
+| Conversion | Done | toolbar placement + column-width presets + computed-sync cards; radio producers 3 → 0, measured (touch-targets control-geometry pass) |
+| Phone checkbox size | Done | 94 glyphs 28×28 → 14–18px, hit 40×40 → ≥44×44, forced-coarse 390×844; the band is the documented assumption in decision-record.md §1 |
+| Board card checkbox + value | Done | 36 checkbox fields, 18 checked, 0 bare-`0` (070 landed at a75a1ae2 first); the control-geometry board mount + the recaptured board captures |
+| Evidence + lane | Done | 91 movers reproduced in both recapture runs, 78 content-changed named in the css-lane release at f0948229bfcc; evidence 15/15 fresh; placement 413/415 + 2 declared |
+| Device confirmation | Outstanding | AC-005 — the operator's phone, never ticked by an agent |
 
 ### Deviations and findings
 
 | Item | Note |
 |------|------|
-| None yet | Work has not started |
+| The R3 screenshot's bare `0` does not reproduce | The value slot renders only the checkbox; the `0` was a sibling number property whose read 070 repaired. 0 bare-`0` fields in the mounted board. decision-record.md §5 |
+| The reference band is a documented assumption | The reference manifests carry no glyph metrics; 14–18px, ≥44px target. decision-record.md §1 |
+| Engine parity re-measured: 50 disagreements, the committed report's own count | Intrinsic text widths, outside the gate; recorded so it is not rediscovered |
 <!-- /ANCHOR:log -->

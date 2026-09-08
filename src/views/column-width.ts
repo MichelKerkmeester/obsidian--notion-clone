@@ -407,10 +407,12 @@ export function openColumnWidthAdjuster(options: ColumnWidthAdjusterOptions): ()
   });
   const presetButtons: Array<{ button: HTMLButtonElement; mode: "auto" | "width"; width: number }> = [];
   const addPresetButton = (mode: "auto" | "width", width: number, label: string): void => {
+    // Same grammar as the new-record placement: exclusive choice carried by the group's
+    // behaviour, not by the control type, so every option is a checkbox-semantics control.
     const button = group.createEl("button", {
       cls: "obnotion-new-placement-option",
       text: label,
-      attr: { type: "button", role: "radio", "aria-checked": "false" },
+      attr: { type: "button", role: "checkbox", "aria-checked": "false" },
     });
     presetButtons.push({ button, mode, width });
   };

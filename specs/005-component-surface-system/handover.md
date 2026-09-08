@@ -2150,6 +2150,38 @@ program-level decision record only.
   `worktrees/225-timeline-view-teardown` at HEAD (see that branch's own commit); **not pushed** —
   a fresh verifier lands it. Row 67 stays awaiting the operator's own device read, never ticked
   by an agent.
+- **2026-09-08, `073-checkbox-controls`: the R3 checkbox/radio report implemented, evidence
+  recorded, gate green, not closed.** Operator report (R3, 08:12, 0.0.32): *"Also checkboxes and
+  radios are too big. And also we shouldnt have radio inputs only checkboxes."* Root cause,
+  measured: the shared checkbox's `pointer: coarse` block (`styles.css:23752`) forced
+  `min-width/min-height: 28px` on every owned glyph, doubling the authored 14/16/18px — the
+  board card's 14px reference-matched circle shipped 28px, which is the "too big". Three
+  producer sites carried radios (toolbar placement `role=radio` buttons, column-width presets,
+  computed-sync native `input[type=radio]` cards). **Fixed**: the coarse minimum released to
+  `0px` with the 44px target paid by a new `-15px` `::before` pass (cascade-ordered after the
+  -6px base rule; 14→44, 16→46, 18→48); the select-column/divider/selection-clear trio repeats
+  it; the 28px-era 40px select-column reserve drops to 28px (its `<col>` hint released into the
+  21968 auto-layout block — a col width floors an auto-layout column silently; caught by the
+  placement lane's own arithmetic, repaired, 413/415 + 2 declared restored); the three producers
+  converted to checkbox semantics with the exclusivity held by each group's behaviour
+  (decision-record.md §3); the computed-sync cards' native radios became the shared checkbox.
+  **Evidence**: a new control-geometry pass in `tools/live/touch-targets.mjs` (third pass,
+  mounts board card + table + view-config through the render-assertion bundle on a forced-coarse
+  390×844 page, capture-sized rows for board/table because the 1600-row bench carries no
+  checkbox column) reads 94 glyphs at 28×28 / hit 40×40 / 3 radios before and 14–18px / ≥44×44 /
+  0 radios after, board 36 checkbox fields, 18 checked, 0 bare-`0` (070's property-reads landed
+  first; the screenshot's `0` was a sibling number property — decision-record.md §5). Unit
+  red/green proven by reverting the -15px line. `npx tsc --noEmit`, `npx vitest run` (1673),
+  `npm run build`, sheet-grammar, render-assertions, touch-targets (ratchets 171/785), placement
+  (413/415, 2 declared), two clean `npm run screenshots` runs (616; 91 movers, every one
+  reproduced in both runs, judged by decoded pixel delta, one 4px@1 jitter candidate
+  self-reverted; 4 fit-content canvases 8–18px shorter) — all exit 0; evidence 15/15 fresh
+  after 12 stale artefacts were re-measured by their own tools; the css-lane ran
+  acquire → edit → release at `f0948229bfcc` with all 78 content-changed captures named,
+  `check-lane` 0. Packet + parent `005-component-surface-system` validate `--strict`
+  (`Errors: 0, Warnings: 0`). Worktree `237-checkbox-controls` at its own HEAD; **not pushed** —
+  a fresh verifier lands it. `acceptance-criteria.md` AC-001…AC-004 Met with recorded evidence;
+  **AC-005 (operator's own device confirmation) stays unticked** — never an agent's to tick.
 - **2026-09-08, `008-calendar-timeline-chart-deprecation/002-settings-redirect-and-migrate`
   implemented and verified, not yet released.** Mirroring `007`'s gallery settings-redirect
   mechanism, calendar/timeline/chart are withdrawn from every picker (toolbar add-view/view-type

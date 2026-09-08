@@ -1757,9 +1757,10 @@ export class ViewConfigPanelRenderer {
       return true;
     };
     if (this.asSheet) {
-      // Exclusive choice as the shared segmented group, not a native radio
-      // set: the OS radio is a second choice grammar on a sheet that already
-      // uses one segmented control everywhere else.
+      // Exclusive choice as the shared segmented group: every choice on a sheet is either the
+      // shared checkbox or this group, and the group's single-select lives in its behaviour —
+      // activating one option clears the others — not in the control type, so the options carry
+      // checkbox semantics like the new-record placement they share the idiom with.
       const group = field.createDiv({
         cls: "obnotion-new-placement",
         attr: { role: "group", "aria-label": t("viewConfig.computedSyncMode") },
@@ -1779,7 +1780,7 @@ export class ViewConfigPanelRenderer {
           text: option.title,
           attr: {
             type: "button",
-            role: "radio",
+            role: "checkbox",
             "aria-checked": option.value === mode ? "true" : "false",
           },
         });
@@ -1803,12 +1804,16 @@ export class ViewConfigPanelRenderer {
         const card = cards.createEl("label", {
           cls: `obnotion-computed-sync-card${option.value === mode ? " is-active" : ""}`,
         });
-        const radio = card.createEl("input", {
-          attr: { type: "radio", name: "computed-sync-mode", value: option.value },
-        });
-        radio.checked = option.value === mode;
-        radio.onchange = async () => {
-          if (!radio.checked) return;
+        // One choice, held by behaviour: the card's box is the shared checkbox, and the group
+        // keeps exactly one of them true through the same reflect the selection calls. Tapping
+        // the selected card re-asserts it rather than clearing it, the way the radio set did.
+        const box = createCheckbox(card, { role: "field", attr: { value: option.value } });
+        box.checked = option.value === mode;
+        box.onchange = async () => {
+          if (!box.checked) {
+            box.checked = true;
+            return;
+          }
           if (!await changeMode(option.value)) reflect();
         };
         const body = card.createDiv({ cls: "obnotion-computed-sync-card-body" });
