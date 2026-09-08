@@ -59,8 +59,8 @@ resend the full text of this file in chat so the operator can update their copy.
   Was 3 radio producers, recorded 3 → 0: the control-geometry pass reports 0 radio-shaped controls across the board, table and panel mounts.
 - [x] Phone checkbox size measured and reduced to match the Notion/Anytype reference
   Was 28×28px painted on the phone (coarse-pointer min 28px, measured); now the authored 14–18px glyph with a ≥44px `::before` hit — 94 glyphs re-measured, 3 radios gone.
-- [x] The board card's "Pinned"-style control specifically renders as a checkbox with its real value, not a bare "0" (dependent on 070 restoring property reads)
-  Pre-fix the value slot read as a bare "0" through 070's then-broken property read; recorded 0 bare-"0" occurrences in the mounted board card (36 checkbox fields, 18 checked).
+- [ ] The board card's "Pinned"-style control specifically renders as a checkbox with its real value, not a bare "0" (dependent on 070 restoring property reads)
+  Pre-fix the value slot read as a bare "0" through 070's then-broken property read; recorded 0 bare-"0" occurrences in the mounted board card (36 checkbox fields, 18 checked). Landing verification: the control-geometry pass prints these numbers but only FAILS on field presence (boardCheckboxFields === 0); the 18-checked and 0-bare-"0" figures are informational output, not assertions — criterion unticked until the pass asserts the value.
 - [x] Operator device row recorded and left unticked
   Today: 4 of 5 acceptance criteria recorded Met in acceptance-criteria.md; the device row itself stays unticked, operator-owned (AC-005).
 <!-- /ANCHOR:completion -->

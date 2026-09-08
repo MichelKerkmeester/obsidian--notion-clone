@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-08T09:49:27.617Z",
+  "measuredAt": "2026-09-08T15:38:52.490Z",
   "inputs": {
-    "styles.css": "ebf39eefa348",
+    "styles.css": "e061ee373e17",
     "tools/live/view-census.mjs": "475c0e3f6fe3",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -2717,7 +2717,7 @@
       "tag": "button",
       "cls": "obnotion-selection-action",
       "parentCls": "obnotion-selection-status-bar",
-      "by": 27.8,
+      "by": 15.8,
       "scrolls": true,
       "pastHeader": 0
     },

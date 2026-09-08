@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-08: **76 phases**, **7 with nothing left**, **198 rows** waiting on a device.
+Derived 2026-09-08: **76 phases**, **7 with nothing left**, **194 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -406,13 +406,9 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] Mobile drag on the confirmed surface(s) fixed and measured against a Notion reference capture
 - [ ] Operator device row recorded and left unticked
 
-## 073-checkbox-controls — 0/5
+## 073-checkbox-controls — 4/5
 
-- [ ] Radio inventory complete, cross-checked against an independent grep count
-- [ ] Every inventoried boolean radio-style control converted to a checkbox
-- [ ] Phone checkbox size measured and reduced to match the Notion/Anytype reference
-- [ ] The board card's "Pinned"-style control specifically renders as a checkbox with its real value, not a bare "0" (dependent on 070 restoring property reads)
-- [ ] Operator device row recorded and left unticked
+- [ ] The board card's "Pinned"-style control specifically renders as a checkbox with its real value, not a bare "0" (dependent on 070 restoring property reads) Pre-fix the value slot read as a bare "0" through 070's then-broken property read; recorded 0 bare-"0" occurrences in the mounted board card (36 checkbox fields, 18 checked). Landing verification: the control-geometry pass prints these numbers but only FAILS on field presence (boardCheckboxFields === 0); the 18-checked and 0-bare-"0" figures are informational output, not assertions — criterion unticked until the pass asserts the value.
 
 ## 074-test-data-consolidation — 0/4
 

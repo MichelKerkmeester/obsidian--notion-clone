@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-08T09:47:37.280Z",
+  "measuredAt": "2026-09-08T15:36:32.839Z",
   "inputs": {
-    "styles.css": "ebf39eefa348",
+    "styles.css": "e061ee373e17",
     "tools/live/checkbox-appearance.mjs": "4d9a6548d2e3",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
@@ -13,8 +13,8 @@
     "appearanceSelfOwned": 180,
     "tokenDependent": 169,
     "platformBox": 0,
-    "distinctShapes": 4,
-    "stateFamilies": 4,
+    "distinctShapes": 3,
+    "stateFamilies": 3,
     "stateFailures": 0,
     "roleGroups": 4,
     "roleShapeSplits": 0,
@@ -42,9 +42,8 @@
     }
   ],
   "shapes": {
-    "16x16 r=4px": 127,
+    "16x16 r=4px": 139,
     "18x18 r=4px": 30,
-    "28x28 r=4px": 12,
     "34x18 r=9999px": 11
   },
   "states": [
@@ -65,18 +64,6 @@
       "classes": [
         "obnotion-checkbox",
         "obnotion-checkbox-field"
-      ],
-      "checkedDiffers": true,
-      "indeterminateDiffers": true,
-      "disabledDiffers": true,
-      "focusDiffers": true,
-      "rest": "rgb(255, 255, 255) | rgb(130, 135, 142) | none | none | 1"
-    },
-    {
-      "shape": "28x28 r=4px",
-      "classes": [
-        "obnotion-checkbox",
-        "obnotion-checkbox-row"
       ],
       "checkedDiffers": true,
       "indeterminateDiffers": true,
@@ -1236,8 +1223,8 @@
       "measured": {
         "appearance": "none",
         "radius": "4px",
-        "width": 28,
-        "height": 28
+        "width": 16,
+        "height": 16
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "obnotion-container obnotion-width-default"
@@ -1259,8 +1246,8 @@
       "measured": {
         "appearance": "none",
         "radius": "4px",
-        "width": 28,
-        "height": 28
+        "width": 16,
+        "height": 16
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "obnotion-container obnotion-width-default"
@@ -1282,8 +1269,8 @@
       "measured": {
         "appearance": "none",
         "radius": "4px",
-        "width": 28,
-        "height": 28
+        "width": 16,
+        "height": 16
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "obnotion-container obnotion-width-default"
@@ -1305,8 +1292,8 @@
       "measured": {
         "appearance": "none",
         "radius": "4px",
-        "width": 28,
-        "height": 28
+        "width": 16,
+        "height": 16
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "obnotion-container obnotion-width-default"
@@ -1328,8 +1315,8 @@
       "measured": {
         "appearance": "none",
         "radius": "4px",
-        "width": 28,
-        "height": 28
+        "width": 16,
+        "height": 16
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "obnotion-container obnotion-width-default"
@@ -1351,8 +1338,8 @@
       "measured": {
         "appearance": "none",
         "radius": "4px",
-        "width": 28,
-        "height": 28
+        "width": 16,
+        "height": 16
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "obnotion-container obnotion-width-default"
@@ -1374,8 +1361,8 @@
       "measured": {
         "appearance": "none",
         "radius": "4px",
-        "width": 28,
-        "height": 28
+        "width": 16,
+        "height": 16
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "obnotion-container obnotion-width-default"
@@ -1397,8 +1384,8 @@
       "measured": {
         "appearance": "none",
         "radius": "4px",
-        "width": 28,
-        "height": 28
+        "width": 16,
+        "height": 16
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "obnotion-container obnotion-width-default"
@@ -1420,8 +1407,8 @@
       "measured": {
         "appearance": "none",
         "radius": "4px",
-        "width": 28,
-        "height": 28
+        "width": 16,
+        "height": 16
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "obnotion-container obnotion-width-default"
@@ -1443,8 +1430,8 @@
       "measured": {
         "appearance": "none",
         "radius": "4px",
-        "width": 28,
-        "height": 28
+        "width": 16,
+        "height": 16
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "obnotion-container obnotion-width-default"
@@ -1466,8 +1453,8 @@
       "measured": {
         "appearance": "none",
         "radius": "4px",
-        "width": 28,
-        "height": 28
+        "width": 16,
+        "height": 16
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "obnotion-container obnotion-width-default"
@@ -1489,8 +1476,8 @@
       "measured": {
         "appearance": "none",
         "radius": "4px",
-        "width": 28,
-        "height": 28
+        "width": 16,
+        "height": 16
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "obnotion-container obnotion-width-default"

@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The operator reports two related defects (R3): checkboxes and radios are too large on phone, and the app should not have radio-style inputs at all — only checkboxes",
     "created_at": "2026-09-08T06:23:36Z",
-    "last_save_at": "2026-09-08T13:27:51.425Z",
+    "last_save_at": "2026-09-08T15:53:54.934Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,7 +222,7 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:196be936797179de01eb5d3ce0e1318586671b2e55dd7ef330d39a386a688eff",
+    "source_fingerprint": "sha256:1dad0febf6d9d3bef1fe0183a1c9d22820acd809f69dfa64048756580c46201b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "bddf9d7b587ad2a0353dd09203e45b93f07c7e95d3ef58bd05b088a2ef841be4",

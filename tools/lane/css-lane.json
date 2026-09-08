@@ -1,6 +1,6 @@
 {
   "holder": "073-checkbox-controls",
-  "acquiredAt": "2026-09-08T10:50:00.000Z",
+  "acquiredAt": "2026-09-08T15:47:38Z",
   "baselineHash": "e061ee373e17",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -5649,6 +5649,33 @@
         "screenshots/notion-clone/views/table-view-mobile-light.png"
       ],
       "note": "Recaptured twice from a clean index (npm run screenshots, 616 entries, exit 0 both). 92 PNGs byte-moved after run 1, 91 after run 2; board-view-desktop-dark (4px @ maxDelta 1, the lanes recurring rasteriser jitter) came back byte-identical in the second run and sits at its committed bytes. All 91 above moved in BOTH runs and are kept: 87 canvas-identical movers whose checkbox glyphs painted 28px and now paint the reference 14-18px (every board card, table select column, record surface, panel, modal and menu row that carries one), plus 4 fit-content canvases that follow their rows tighter: panel-base-import-modal-mobile-{dark,light} 804x840 -> 804x832, panel-column-manager-mobile-{dark,light} 748x636 -> 748x618. Every file judged by decoded pixel delta against the committed blobs (max channel delta 1-244, changedPixels 1-180151); no jitter threshold candidate existed to restore because the second run reproduced every mover. constructed-view-config-desktop-{dark,light} are the one desktop pair, the computed-sync radios becoming checkbox glyphs; the other 89 are phone captures, which is what a pointer:coarse-only edit should move. 0 of the protected project-manager/ entries changed. After: 94 checkbox glyphs measured in the 14-18px band with 44px+ ::before targets and 0 radio-shaped controls (touch-targets control-geometry pass), placement 413/415 + 2 declared, the sheets grammar, render assertions, replay (39/39) and the ratchets (171/785) all at their recorded numbers."
+    },
+    {
+      "event": "acquire",
+      "phase": "073-checkbox-controls",
+      "at": "2026-09-08T15:47:38Z",
+      "hash": "ebf39eefa348",
+      "note": "Post-rebase re-acquisition: the 073 edits replayed onto 075's label styles, so the physical starting stylesheet is 075's released ebf39eefa348, not the 704f768371da this packet's pre-rebase acquire recorded; that earlier triplet stays as recorded (append-only)."
+    },
+    {
+      "event": "edit",
+      "phase": "073-checkbox-controls",
+      "at": "2026-09-08T15:47:38Z",
+      "hash": "e061ee373e17",
+      "note": "styles.css: 073's coarse-block release, -15px ::before pass, select-column trio and 40px-reserve removal merged with 075's .obnotion-toolbar-control-label additions in one rebased stylesheet; the lane's baselineHash recomputed from the merged file."
+    },
+    {
+      "event": "release",
+      "phase": "073-checkbox-controls",
+      "at": "2026-09-08T15:47:38Z",
+      "hash": "e061ee373e17",
+      "reviewed": [
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-mobile-light.png",
+        "screenshots/notion-clone/views/board-view-desktop-dark.png"
+      ],
+      "note": "Recaptured 3x post-rebase (npm run screenshots, 616 entries, exit 0; a third run was needed because the pixel-delta bookkeeping lacked a prior-run sample). 4 content-changed captures named. 2 <=12-delta movers restored at their committed bytes/sourceHashes (board-mobile-desktop-dark 1px@1, constructed-calendar-week-desktop-light 8876px@1); board-view-desktop-dark 4px@1 moved in BOTH sampled runs, so it is kept as a real mover, not jitter."
     }
   ],
   "outstanding": [
