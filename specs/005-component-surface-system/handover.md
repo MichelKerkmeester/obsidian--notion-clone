@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point 2026-09-08 ~22:29: 0.0.33 shipped at f91370f1. Landed: 070, 072, 073, 074, 075, 071/001, 008/001, 008/002. Built, landing pending: 071/002 (70ee0b95, lander paused mid-rebase) and 066 AC-010/011 (8bc8f050, lander paused mid-chain). In progress, uncommitted: 071/003, 071/004. Implementation stays paused until this handover is reviewed. GLM 5.3 flash max carries implementation legs; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh."
+description: "Resume point 2026-09-09 ~01:35: 0.0.33 shipped at f91370f1. Landed: 070, 072, 073, 074, 075, 071/001, 008/001, 008/002, 071/002, 066 rows 81-82 (c5bbcf93). In progress, uncommitted: 071/003, 071/004. Implementation stays paused until this handover is reviewed. GLM 5.3 flash max carries implementation legs; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,12 +10,12 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T21:54:00Z"
-    last_updated_by: "242-landing-verify-continuation"
-    recent_action: "071/002 settings-sheet LANDED+pushed (7d468a99): goal 2/3, gate 27/0"
-    next_safe_action: "Resume 066's paused chain next, then cut 0.0.34; 071/002 landed (7d468a99)"
+    last_updated_at: "2026-09-09T01:35:00Z"
+    last_updated_by: "243-landing-verify"
+    recent_action: "066 wave2 (toast dwell+close) LANDED+pushed (c5bbcf93): goal 5/6, gate 27/0"
+    next_safe_action: "Resume 071/003+004 next, then cut 0.0.34; 066 wave2 and 071/002 both landed"
     blockers:
-      - "071/002 lander paused mid-rebase (.worktrees/242); 066 lander paused mid-chain (.worktrees/243) — do not touch either worktree until it resumes"
+      - "066's device read (AC-008) and 075's AC-006 still wait on the operator's handset pass — never agent-ticked"
       - "071/003 (.worktrees/244) and 071/004 (.worktrees/245) are in progress, uncommitted; do not touch those worktrees either"
       - "008/003 waits on 0.0.34 (carries 008/002's redirect, discharges AC-007)"
     key_files:
@@ -31,9 +31,9 @@ _memory:
     completion_pct: 88
     open_questions:
       - "Does a Notion finding that contradicts a landed Anytype ruling ever become more than Proposed"
-      - "Does the 3500ms Undo dwell (built at 8bc8f050) survive the paused lander's own re-judgment"
     answered_questions:
       - "068 renames to obnotion- with a data.json migration, author MichelKerkmeester, repo obsidian_notion-clone"
+      - "The 3500ms dwell and the ::before -19px close hit survived this verifier: mutations red→restored, gate 27/0"
       - "GLM route: --provider llmgateway --model glm-5.3-flash --thinking high (max hangs on launch)"
       - "0.0.33 shipped f91370f1; 070, 072, 073, 074, 075, 071/001, 008/001, 008/002 landed"
       - "GLM 5.3 flash max carries implementation legs; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh"
@@ -42,6 +42,28 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-09 ~01:35, `066-notion-states-refinement` wave 2 (rows 81-82) LANDED on `origin/main` — landing-verified, rebased, pushed
+
+**What landed:** the Sonnet leg's two commits (`1e355695`+`8bc8f050` in `.worktrees/243-toast-dwell-and-close`)
+replayed onto `7e5855bb` as `6134f29d`+`cb351385`, with this verifier's pass at `c5bbcf93`. **How:** 17
+conflicted generated/evidence/graph-metadata files took main's side and were re-derived; `touch-targets-
+baseline.json` (leg's 171→169) auto-merged; `tools/lane/css-lane.json` → both sides' histories kept
+append-only, the 066 triplet re-appended, `baselineHash` = `73297de05d54` (sha256 of the merged stylesheet,
+`check-lane` 0); the handover's §1 union-merged, 066's bullet above 074's, newest-first. **Verified, by
+numbers:** both mutations replayed red then restored (dwell 3/16 → 16/16; hit-inset: the 18×29 declared box,
+169=169 — a bounding-box sweep cannot see the inset, the ≥56×67 proof lives in the placement lane);
+placement 418/420, 2 declared, the +5 all new toast rows, 0 relaxed floors; vitest 1734/1734 (160 files);
+13 stale evidence lanes re-derived, engine-parity informational-1 (43=43, identical disagreement set);
+screenshots ×2 616/616, 2 movers — `constructed-toolbar-add-view-mobile-light` 96px@196 REAL (stale since
+008/002+071/002, which never recaptured it) kept and named in the 066 release's `reviewed`,
+`reference-gantt-subtask-desktop-light` 2487px@1 jitter restored with its manifest bytes; the manifest's
+other 628 lines = freshness stamps only. FINAL gate from the committed state: 27/0. `validate --strict`
+PASSED on 066 and 005 after graph-metadata backfill. Docs: goal criterion 1 ticked (**5/6** — the
+deliberately-unticked 09-07 note is discharged by the leg's own browser-measured dwell row, which AC-010's
+THEN demanded; done figure corrected to 3500ms), roadmap §5.A 066 67%→83% and report rows 81/82 → LANDED,
+operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row untouched. **Pushed:
+`7e5855bb..c5bbcf93` on `origin/main`.**
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
