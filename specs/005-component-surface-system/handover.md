@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: 069-board-cross-group-drag LANDED at d32d185d, 2026-09-08. 0.0.31 shipped at 5e7f1426 as the RENAME release (id obnotion, vault obnotion/, repo obsidian_notion-clone). One leg in flight, awaiting its GLM lander: 067 follow-up 3 (wt 222); 221, 225 and 069 are all landed (6f679e5e, b6a0f847, d32d185d). NO Opus agents (operator 2026-09-07 18:40); GLM 5.3 flash max via cli-pi DevPass carries landings/docs/releases, monitored every 5 min with a 15-min stall relaunch."
+description: "Resume point: 067 follow-up 3 LANDED at fa980f8c, 2026-09-08. 0.0.31 shipped at 5e7f1426 as the RENAME release (id obnotion, vault obnotion/, repo obsidian_notion-clone). 221, 225, 069 and 067 follow-up 3 are all landed (6f679e5e, b6a0f847, d32d185d, fa980f8c). NO Opus agents (operator 2026-09-07 18:40); GLM 5.3 flash max via cli-pi DevPass carries landings/docs/releases, monitored every 5 min with a 15-min stall relaunch."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,13 +10,13 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T02:30:00Z"
-    last_updated_by: "069-board-cross-group-drag-lander"
-    recent_action: "Verified and pushed 069-board-cross-group-drag to main at d32d185d; gate 25+1 declared"
-    next_safe_action: "Land 067 follow-up 3 (wt 222), then cut 0.0.32"
+    last_updated_at: "2026-09-08T02:05:00Z"
+    last_updated_by: "067-followup-3-lander"
+    recent_action: "Landed 067 follow-up 3 at fa980f8c: NC-proven, 17+3 capture passes, gate 25+1 declared"
+    next_safe_action: "Cut 0.0.32"
     blockers:
       - "009 T26: .obnotion-panel-button sort-panel overflow ~10px under real host cascade (expectFail)"
-      - "067 follow-up 3 (wt 222) lander still pending (221-live-host-model landed 6f679e5e)"
+      - "067 residual: T015 header block 75px (1 past 66-74), T021 2 of 3 divider contexts, AC-011 iOS pass"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
@@ -42,6 +42,47 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08, `067-sheet-family-remediation` follow-up 3 LANDED — verified, rebased onto the 221/225/069-merged main, pushed to `origin/main` at `fa980f8c`
+
+**Landed.** The leg's single commit `5fa01d46` (75 files, no test files) replayed as `82971d74` onto
+`87ec4c8f`, plus this verifier's `fa980f8c` (36 files of re-derived evidence), are on `origin/main`;
+`git log --oneline -1 origin/main` = `fa980f8c`. Every claim was re-proven from the final state, in the
+worktree, before the push:
+
+- **Rebase**: 18 conflicts, all resolved. `main.js`, `screenshots/manifest.json` and 15 freshness
+  manifests took MAIN's side (`--ours` = `87ec4c8f`, proven by blob-compare) and were then re-derived;
+  `tools/lane/css-lane.json` merged by hand keeping BOTH sides' entries append-only and chronological
+  (069's acquire/release at 20:50/21:05, then 067's acquire/edit/release at 21:10/21:40/21:55), header
+  holder 067, `baselineHash` = `e1de47b5feec` = the post-rebase `styles.css` by `shasum -a 256`. The
+  stylesheet itself merged CLEANLY — its delta vs `87ec4c8f` is exactly the leg's three hunks plus
+  commentary (45+/17-). Because the 75 files carried no test files, the leg's guards were proven by
+  their own negative controls, not the mutation-on-test-file loop: the `.obnotion-modal
+  .obnotion-dropdown-option` grid columns swapped back — NOTHING went red (render-assertions 0,
+  sheet-grammar 0 FAIL; a finding, not a failure — no lane observes the column order, so the
+  label-truncation proof rests on the rule and the committed captures); `realShell: false` on
+  `properties property type picker` — exactly one red, `child depth 3 (want 2)`, exit 1, then green
+  restored; the pill row's built-in 30px override — 50→30 red→50 green, the chip's 44×44 vs its 30×30
+  control likewise, and the header block 75px with the 20px control reading 91→75.
+- **The gate**: exit 0, `PASS — 25 green, 1 red for a declared reason`. The one red is `sheet-grammar`'s
+  declared 009/T26 — the same shape 069's landing recorded; the leg's own 26/0 reading predates 221's
+  host-stylesheet model, which introduced the expectFail.
+- **Everything else**: tsc 0; build 0; vitest 153 files / **1656** (the leg's 1641 + 221/069's 15);
+  `npm run screenshots` twice, 608/608, deltas BIT-IDENTICAL across runs — **17 real content moves kept
+  and named in css-lane's new acquire/edit/release triplet** (max channel delta 36–180; the DARK mirrors
+  of the moves this packet's own release already reviewed as LIGHT, reached by 069's
+  `tools/screenshots/host-bare-controls.css` +50 and the 221/225/069 renderer changes — upstream itself
+  recaptured 0 PNGs); 3 reference-gantt jitter files (max delta 1, first run only) restored, manifest
+  already agreeing, **0 manifest patches**; 0 of the 32 protected `project-manager/` entries changed.
+  The 15 stale evidence artefacts re-derived by their own producing tools (engine-parity steady at its
+  recorded 50-difference set, bit-identical to both `87ec4c8f`'s and `5fa01d46`'s), then 15/15 fresh.
+  `scan-comments` / `scan-failing-values` 0. 067 `--strict` → `RESULT: PASSED` (before AND after
+  backfill); the 005 root → `RESULT: PASSED`; both `backfill-graph-metadata.js` runs: refreshed 1,
+  changed 0.
+- **Roadmap §5.A**: 067's row reads **3/7** — unchanged, exactly the 3 `[x]` / 4 `[ ]` counted in 067
+  `goal.md`'s completion criteria; the gate row stays unticked per the leg's own recorded deferral to
+  this reconciliation, and the iOS row is the operator's. No `[B]`/operator row changed in the leg's
+  diff (0 checkbox-line changes, 067-scoped).
 
 ### 2026-09-08 ~02:30, `069-board-cross-group-drag` LANDED — verified, rebased onto the 221/225-merged main, pushed to `origin/main` at `d32d185d`
 
