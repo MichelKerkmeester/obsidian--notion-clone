@@ -144,14 +144,14 @@
     ],
     "causal_summary": "The operator has decided to retire the calendar, timeline and chart views: \"deprecate calendar and timeline view completely\" (08:25), and separately, \"Also deprecate chart view\" (08:38), naming the same deprecation scope, archive folder and README strip",
     "created_at": "2026-09-08T06:24:14Z",
-    "last_save_at": "2026-09-08T06:50:06.548Z",
+    "last_save_at": "2026-09-08T11:33:04.806Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:211a18d859f9634386a4e18b4f7ca9344231cb21722b69a1b0ea51b9e4026036",
+    "source_fingerprint": "sha256:e015f3f72ecdf27d37cfe2cd9d0d5fdf6f7c31b7d079e3a6a5b29a0603b64764",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b2f5829c2c32cd4c331f3f1760d52f1c8f1d0e551f7c8766f751ad49b20dc638"

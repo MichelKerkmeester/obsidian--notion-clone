@@ -10,19 +10,20 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T09:56:00Z"
-    last_updated_by: "233-ios-view-data-regression"
-    recent_action: "070 landed+pushed (a75a1ae2): 27/0 gate, cold-cache lane; AC-005/006 operator-owned"
-    next_safe_action: "070 done pending device; 071's audit, then 073, 072, then device rows"
+    last_updated_at: "2026-09-08T11:45:00Z"
+    last_updated_by: "234-calendar-timeline-chart-audit"
+    recent_action: "008/001 landed+pushed (7a6d4cc6): 3/3 criteria, 33 views, 27/0 gate"
+    next_safe_action: "008/002 redirect from 001's inventory.md; 071, 073, 072, then device rows"
     blockers:
       - "067 residual: T015 75px (1 past 66-74), T020 partial (one pair 2-level), T021 2 of 3 divider contexts, AC-011 iOS pass operator-owned"
-      - "070 AC-005/006 need the operator's device; 073/074 AC-004 unblocked by 070's fix; 071 and 008/001's audits block their children"
+      - "070 AC-005/006 need the operator's device; 073/074 AC-004 unblocked by 070's fix; 008/001 closed — 008/002-004 unblocked (redirect → remove → archive); 071's audit still blocks its children"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
       - "specs/005-component-surface-system/roadmap.md"
       - "specs/005-component-surface-system/070-ios-view-data-regression/spec.md"
       - "specs/008-calendar-timeline-chart-deprecation/spec.md"
+      - "specs/008-calendar-timeline-chart-deprecation/001-usage-and-migration-audit/inventory.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "233-ios-view-data-regression"
@@ -44,6 +45,38 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08 ~11:40, `008-calendar-timeline-chart-deprecation/001-usage-and-migration-audit` LANDED on `origin/main` — landing-verified and reconciled
+
+**Landed.** The GLM docs leg's `ea9fcaba` (rebased without conflict to `13aeac68` over 070's four
+commits — `694d7390`, `a75a1ae2`, `8fa18d48`, the 0.0.33 release — the leg's six files are
+packet-docs-only) plus this verifier's reconciliation `7a6d4cc6` are on `origin/main`
+(`f91370f1..7a6d4cc6`). What the verification re-observed rather than trusted: the operator's vault
+re-grepped read-only — **15** `db_view` files, **76** views, exactly **11 calendar / 11 timeline /
+11 chart** (all 33 inside the eleven `Database Testbed` databases; `Finance/*` = table/board only;
+0 gallery/list; 0 `defaultViewType` overrides; 0 fence-configured), 9 of the 33 §2.1 rows re-read
+at their exact `file:line`; the `src` occurrence counts reproduced exactly (calendar 2767, timeline
+2756, gantt 765, chart 3236); the README/manifest/package strip list read verbatim at
+`README.md:3,19,20,21,23,73` / `manifest.json:6` / `package.json:4,61`. Goal figure 3/3 — no
+criterion names the operator or a device, so nothing was left unticked.
+
+**Two 007-era line anchors were wrong even at the pinned `bf694181` and are what the reconciliation
+fixed** (corrected on the leg's own tree, not shifted by 070): `migrateListViewOnOpen` is *called*
+at `embedded-database-renderer.ts:746` and *defined* at `:825` (the 007-002 gallery copy `:745`/`:782`),
+not `:742,776-800`; and the main-view counterpart calls sit at `database-view.ts:12164-12165`,
+inside `refresh()`, not `:11678`. `inventory.md`'s other 20+ spot-checked anchors were all correct
+at the pin.
+
+**Gates at the reconciliation's final state:** `build` 0, `tsc` 0, `vitest` 1672/1672 (153 files),
+`gate: PASS — 27 green, 0 red` (the 070 cold-cache lane counted; it was on main before this leg's
+rebase). Screenshots ran three times: each run's movers were jitter-class and self-healed by the
+next (largest: `timeline-view-month-mobile-dark` 59px/Δ47, matched committed the run after), so the
+final tree is byte-identical to the committed captures — no css-lane movement, no release entry.
+No `tools/live/*.json` went stale (gate churn was `measuredAt`-only, restored, same precedent 070
+used). No test file shipped (docs-only leg — no mutation testing owed; the three naming scans and
+the operator-checklist `--check` all exit 0). Child and parent both `RESULT: PASSED` after their
+backfills (child: refreshed 1; parent: changed 0). **Still open:** 008/002-004 — nothing removed
+yet; the redirect charter is `inventory.md` §5-§6.
 
 ### 2026-09-08 09:44, `070-ios-view-data-regression` LANDED on `origin/main` — landing-verified and reconciled
 

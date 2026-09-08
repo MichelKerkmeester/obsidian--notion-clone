@@ -9,13 +9,14 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation"
-    last_updated_at: "2026-09-08T08:30:00Z"
-    last_updated_by: "markdown-scaffold"
-    recent_action: "Authored the durable directive and opened all four child phases"
-    next_safe_action: "Run 001-usage-and-migration-audit before any removal"
+    last_updated_at: "2026-09-08T11:45:00Z"
+    last_updated_by: "234-calendar-timeline-chart-audit"
+    recent_action: "001-usage-and-migration-audit closed 3/3, landing-verified (7a6d4cc6)"
+    next_safe_action: "002-settings-redirect-and-migrate starts from 001's inventory.md"
     blockers: []
     key_files:
       - "spec.md"
+      - "001-usage-and-migration-audit/inventory.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "008-calendar-timeline-chart-deprecation-scaffold"
