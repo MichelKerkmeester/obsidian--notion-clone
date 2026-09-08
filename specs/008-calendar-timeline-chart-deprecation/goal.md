@@ -9,9 +9,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation"
-    last_updated_at: "2026-09-08T15:30:00Z"
-    last_updated_by: "240-deprecation-redirect"
-    recent_action: "002-settings-redirect-and-migrate implemented and verified, gate 27/27"
+    last_updated_at: "2026-09-08T16:20:00Z"
+    last_updated_by: "240-deprecation-redirect-verify"
+    recent_action: "002 LANDED b5f4ccd4: 2/2 criteria, gate 27/0; 003/004 next after the release"
     next_safe_action: "Cut a release carrying 002's redirect, then 003-remove-renderers-and-harness can start"
     blockers:
       - "002's own AC-007 (a released version) is Unmet; 003 waits for it"
