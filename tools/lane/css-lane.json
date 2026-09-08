@@ -5388,6 +5388,18 @@
         "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-light.png"
       ],
       "note": "styles.css itself was not edited by this leg (hash unchanged, no acquire needed) -- this entry accounts for the capture set two new constructed board scenarios moved, plus the settings-sheet capture that now shows the new Title format row. Two new scenarios (constructed-board-title-currency, constructed-board-title-format-filename) mount the real BoardRenderer with a currency-typed titleField and, separately, a numeric file name plus a euro titleFormat choice -- both opened and read in both themes, desktop and mobile: card titles read formatted euro currency, never the raw stored number or raw file name. constructed-board-card-properties moved because the settings sheet it captures now includes the new Title format row beneath Title field, opened and read on desktop and mobile, both themes. One additional byte-changed capture, screenshots/notion-clone/views/board-mobile-desktop-dark.png (a hand-written fixture, not driven by this leg's code change), was pixel-identical PNG-encoder jitter -- confirmed by comparing its manifest pixelHash before and after (unchanged) -- and was restored to its committed bytes rather than left drifting."
+    },
+    {
+      "event": "release",
+      "phase": "058-card-title-and-title-formats",
+      "at": "2026-09-08T02:42:41.000Z",
+      "hash": "e1de47b5feec",
+      "reviewed": [
+        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-light.png",
+        "screenshots/notion-clone/views/board-subtask-tree-mobile-dark.png"
+      ],
+      "note": "Landing-verifier re-derivation pass on the 221/225/069/067-merged main, not a stylesheet edit: styles.css is byte-identical to the rebased base (sha256-12 e1de47b5feec, the committed baselineHash -- no acquire needed, this entry accounts for the captures the re-derivation moved). npm run screenshots ran twice (616 entries, exit 0 both) and a decoded pixel-delta pass against the committed blobs judged every mover: 3 real changes, 0 jitter. constructed-board-card-properties-mobile-dark changedPixels=63525 maxDelta=192, constructed-board-card-properties-mobile-light changedPixels=63529 maxDelta=209 (the packet's own settings-sheet scenario redrawn by the merged tree's renderers -- the Title field / Title format rows this packet added now render over the 221/225/069 host changes), board-subtask-tree-mobile-dark changedPixels=38 maxDelta=121 (a fixture capture the merged tree's renderers draw differently; 38px is small but its max channel delta 121 is far over the lane's established <=12 encoder-jitter floor, so real, kept). All max deltas sit far above the jitter floor and each file moved in BOTH runs with identical numbers, so none were restored. Evidence recorded from the decoded pixel-delta tool's measurements; per-capture visual reads remain the operator's device pass, unchanged."
     }
   ],
   "outstanding": [
