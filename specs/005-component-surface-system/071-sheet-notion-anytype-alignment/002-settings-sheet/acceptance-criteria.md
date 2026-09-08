@@ -28,9 +28,9 @@ contextType: "implementation"
 
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
-| AC-001 | REQ-001 | Given Phase 1's inventory, When this phase starts, Then it cites the exact reference mapping row for the Settings sheet | `plan.md`, quoting the Phase 1 row | Unmet | - |
-| AC-002 | REQ-002 | Given the redesigned sheet, When captured against its reference, Then spacing/layout/row-grammar are measured as converged, not merely eyeballed | Before/after capture with measurements | Unmet | - |
-| AC-003 | REQ-003 | Given the redesign, When `054` T072's row-grammar and overflow checks are rerun, Then they still pass | Regression check, command output | Unmet | - |
+| AC-001 | REQ-001 | Given Phase 1's inventory, When this phase starts, Then it cites the exact reference mapping row for the Settings sheet | `plan.md`, quoting the Phase 1 row | Met | - |
+| AC-002 | REQ-002 | Given the redesigned sheet, When captured against its reference, Then spacing/layout/row-grammar are measured as converged, not merely eyeballed | Before/after capture with measurements | Met | - |
+| AC-003 | REQ-003 | Given the redesign, When `054` T072's row-grammar and overflow checks are rerun, Then they still pass | Regression check, command output | Met | - |
 
 ### Status values
 
@@ -47,7 +47,9 @@ contextType: "implementation"
 <!-- ANCHOR:closure -->
 ## 3. CLOSURE STATEMENT
 
-**Closeable:** No
+**Closeable:** Yes
 
-Not yet started.
+- AC-001: `plan.md` §1 quotes the inventory row (producer `src/views/database-view.ts:5169`, captures `panel-view-config` / `panel-view-config-sheet`, references `notion/ios/settings` 24 / `notion/web/settings` 51 / `anytype/mobile/sheets` 4 / `anytype/desktop/app` 3).
+- AC-002: measured, not eyeballed — RED 0/12 compact one-line, 3/12 pitch, headings 12px/0px, exit 1 → GREEN 12/12 compact @ 48.0px, 9/9 editors, headings 16px + 1px divider, extent 401 == 401 @ 402px, exit 0 (`tools/live/sheet-grammar.mjs`); unit revert-proof 6/6 → 1 failed → 6/6 (`src/views/view-config-sheet-row-grammar.test.ts`); gap table `spec.md` §13; reference columns honestly `TBD` (third-party captures carry no readable measurements — D-005).
+- AC-003: 054 T072 regression — sheet-grammar exit 0 (eight grammar columns, all registered surfaces, both engines, extent within clientWidth); guard/stacking rows unchanged and green; touch-targets 0; gate 27/27, exit 0.
 <!-- /ANCHOR:closure -->

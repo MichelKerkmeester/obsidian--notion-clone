@@ -23,13 +23,29 @@ contextType: "general"
 
 | Aspect | Value |
 |--------|-------|
-| **Language/Stack** | [e.g., TypeScript, Python 3.11] |
-| **Framework** | [e.g., React, FastAPI] |
-| **Storage** | [e.g., PostgreSQL, None] |
-| **Testing** | [e.g., Jest, pytest] |
+| **Language/Stack** | TypeScript, Obsidian plugin, no framework |
+| **Framework** | Plugin's own panel/sheet renderers |
+| **Storage** | None (styles + captures only) |
+| **Testing** | Vitest + the live lane harness (`tools/live/sheet-grammar.mjs`) |
 
 ### Overview
-[2-3 sentences: what this implements and the technical approach]
+The Settings sheet (the view-config sheet) renders its rows through a two-column remnant and
+loose selects; this phase collapses control rows to a Notion-shaped single line (label left /
+control right, 44–52px pitch), pins section headings and dividers to a 16px inset, keeps selects
+sheet-native, and proves the fit at 402px — by extending the sheet-grammar lane red-first, then
+teaching `styles.css` the grammar. Producer untouched (D-001 of the decision record).
+
+### Phase 1 reference mapping (AC-001 evidence)
+Quoted from the inventory this phase depends on (`../001-sheet-story-coverage-audit/inventory.md`, row 1):
+
+> Settings sheet — producer `src/views/database-view.ts:5169`; captures
+> `panel-view-config` / `panel-view-config-sheet` (mobile); capture sources:
+> `view-config-panel-renderer.ts`, `mobile-bottom-sheet.ts`, `popover-position.ts`,
+> `checkbox.ts`, `dropdown-field.ts`; references: `notion/ios/settings` (24),
+> `notion/web/settings` (51), `anytype/mobile/sheets` (4), `anytype/desktop/app` (3).
+
+The redesign maps this sheet to the Notion references (operator R5: "all sheets should mimic
+notion way closer"); the target grammar is in `spec.md` §13.
 <!-- /ANCHOR:summary -->
 
 ---
@@ -43,9 +59,9 @@ contextType: "general"
 - [ ] Dependencies identified
 
 ### Definition of Done
-- [ ] All acceptance criteria met
-- [ ] Tests passing (if applicable)
-- [ ] Docs updated (spec/plan/tasks)
+- [x] All acceptance criteria met
+- [x] Tests passing (if applicable)
+- [x] Docs updated (spec/plan/tasks)
 <!-- /ANCHOR:quality-gates -->
 
 ---

@@ -169,3 +169,27 @@ Not detailed at scaffold time — see §6 RISKS & DEPENDENCIES for the risks kno
 
 - **Parent**: `../spec.md`
 - **Depends on**: `../001-sheet-story-coverage-audit/`
+
+---
+
+<!-- ANCHOR:gap-table -->
+## 13. GAP TABLE — Settings sheet vs Notion/Anytype references
+
+Source surface: Settings sheet = the view-config sheet, producer `src/views/database-view.ts:5169` (inventory row 1, `../001-sheet-story-coverage-audit/inventory.md`). Inventory first-read gap: the Notion references are full-height iOS pushes while ours is a 90svH-capped flush bottom sheet, and the two shapes have never been compared side by side ("filename read only"). Reference captures: `notion/ios/settings` (24), `notion/web/settings` (51), `anytype/mobile/sheets` (4, incl. `anytype-mobile-sheet-app-settings-dark.png` / `-light.png`), `anytype/desktop/app` (3). Manifest rows carry the measurements; the PNGs are not read directly.
+
+Numbers below are for this sheet as it renders today, measured by the sheet-grammar lane. The reference captures (`screenshots/notion/ios/harvest.json`, the Anytype images) carry filenames only — no dimensions, and no image-viewing is available in this harness — so the reference columns stay `TBD (no numbers in the reference manifests)`; the Target column carries the operator's Notion-shape directives, which the lane asserts and this implementation proves.
+
+| Element | Current (this sheet, measured) | Notion (ref) | Anytype (ref) | Target (Notion-shaped) |
+|---------|-------------------------------|--------------|---------------|------------------------|
+| Header | 44×44 close target, title ≥16px, handle-to-title 18.4px (lane) | TBD | TBD | Keep 44×44 close, 16px title; follow reference header hierarchy TBD |
+| Row height / pitch | row-stacking guard: width ratio ≥0.9, stacking pitch TBD | TBD | TBD | 44–52px row pitch, one setting per row |
+| Label / value layout | two-column grid remnants; rows guard fixes 0.0.31; exact column widths TBD | TBD | TBD | Single-column rows, label left / control right |
+| Dividers | divider inset TBD | TBD | TBD | Section divider inset matches reference inset TBD |
+| Section grouping | section headings: none asserted in lane today | TBD | TBD | Section headings present, reference-styled |
+| Selects | select list overflows on the phone (0.0.30 report); guard-row fix 0.0.31; stacked dropdown pairs pass today | TBD | TBD | Select rendered as the plugin's own sheet-native picker, no overflowing native select list |
+| Toggles | control: TBD | TBD | TBD | Reference-styled switch, 44px row target |
+| Horizontal padding | 16px header/body inset (lane, stacked-pair child header inset ≥16px); body-side 16px: TBD | TBD | TBD | Consistent 16px horizontal padding, sheet-wide |
+| Typography | title ≥16px (lane); body/label sizes TBD | TBD | TBD | Within token ladder 11/12/13/16/22 — no new tokens |
+| Surface height / overflow | 90svH cap (759.6px of an 844px viewport, lane comment); no right-edge overflow (lane) | full-height iOS push | TBD | 90svH-capped flush sheet retained; no horizontal overflow at 402px (scrollWidth == clientWidth) |
+
+<!-- /ANCHOR:gap-table -->

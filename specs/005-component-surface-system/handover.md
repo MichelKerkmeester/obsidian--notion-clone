@@ -2280,6 +2280,41 @@ program-level decision record only.
   `worktrees/225-timeline-view-teardown` at HEAD (see that branch's own commit); **not pushed** —
   a fresh verifier lands it. Row 67 stays awaiting the operator's own device read, never ticked
   by an agent.
+
+- **2026-09-08, `002-settings-sheet`: the Settings sheet's rows taught the Notion grammar, measured
+  red → green, gate 27/27.** Operator R5 08:10 on 0.0.31, main at `14bcaf10`: "Also settings sheet
+  has really bad ui. Actually all sheets should mimic notion way closer" — the 0.0.30 phone report's
+  two-column grid and overflowing select list, which the 0.0.31 guard-row fix only half-closed.
+  Root cause, measured: the panel-row column override in `styles.css` applied unconditionally, so
+  control rows (dropdown/checkbox/switch/summary/readonly) each burned a second column; the fixes
+  scope that override to editor rows via the field-variant classes the renderer already lands
+  (`-field-stack` vs the control variants), so the producer is untouched. **Red**:
+  `tools/live/sheet-grammar.mjs`'s settings leg extended to assert the shape — compact rows one
+  line (label left / control right) at 44–52px pitch, editors keep label-above at ≥90% width,
+  section headings 16px inset + 1px divider (first-of-type 0px), selects = the plugin's own
+  sheet-native picker, extent (scrollWidth − the sheet's 1px left border) == clientWidth at
+  402×874 — ran 0/12 compact one-line, 3/12 pitch, headings 12px/0px, 4 failures, exit 1.
+  **Green**: 12/12 compact @ 48.0px, 9/9 editors, headings 16px + 1px, extent 401 == 401, exit 0.
+  `src/views/view-config-sheet-row-grammar.test.ts` (new, 6 its, reads `styles.css`) bites: revert
+  the blanket override line → 1 failed / 5 passed → 6/6. **Reference honesty**: the third-party
+  Notion/Anytype captures carry no readable measurements and this harness prints numbers, not
+  pixels, so the gap table's reference columns stay `TBD` (decision-record D-005); the asserted
+  targets are the operator's directives. **Findings for 071's later legs**: phone sheets carry a
+  1px left border and none right (side-sheet grammar, shipped asymmetric — extent predicate
+  subtracts it); the subtle-divider token is a 40% color-mix of the host's border token, so it
+  reads 0px wherever that token is missing, closed by a #333333 fallback. **Evidence**: `npx tsc
+  --noEmit`, `npx vitest run` (1687/1687), `npm run build`, render-assertions, touch-targets,
+  verify-placement, both naming scans all 0; screenshots ×2 616/616 + pixel-delta (6
+  PIXEL-changed, all the settings view-config family; 4 byte-only; 2 jitter ≤12 restored with
+  manifest hashes patched); evidence 15/15 fresh after 9 writers re-run (engine-parity exits 1
+  INFORMATIONAL by design: 50→53 disagreements, +10/−7, 0 settings fixtures; committed = 50);
+  `npm run gate` 2nd run 27/27, exit 0, after the css-lane acquire/edit/release cycle signed the
+  ledger to this packet (baselineHash `368631d8cd1f` = first 12 of sha256(styles.css)). Packet
+  validates `--strict` → `RESULT: PASSED` (2 advisory warnings: no AI-protocol section, 1 phase
+  vs the Level-3 minimum — advice, not errors); graph metadata backfilled after the last doc
+  edit. Owned by this packet; goal.md completion criteria 3/3; **not pushed** — a fresh verifier
+  lands it. The 071 D3 operator device row stays awaiting the operator's own device read, never
+  ticked by an agent.
 - **2026-09-08, `072-linked-view-blocks-ux`: the fence's drag handle learned to work on a phone;
   the linked-view readings recorded.** Operator R2, 2026-09-08 08:08, verbatim: "Also the seperate
   views from database is pretty bugged ui ux wise and dragging doesnt work on mobile like it would
