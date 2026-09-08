@@ -53,7 +53,7 @@ A deprecated view is not a stored variant with its own persistence: the id lives
 
 ### 1.3 DECISION (REQ-003): the embedded codeblock host needs its own migration pass — yes
 
-Precedent: 007-002 ADR-001 (the embedded host gained the gallery migration call even though 046's ADR-001 had already settled the categorical objection). Present necessity: **0** fence-configured views of the three types exist today (the only real fences, `Finance/Finance Overview.md:8,14,20,26`, carry `dbPath`+`viewId` only and reference table views), so the pass is prophylactic. It is still required: the embedded host resolves the referenced view's config itself, and any future fence pointing at one of the 33 affected viewIds would render through the embedded host without the main view's on-open migration. Transplant shape already ships: `migrateListViewOnOpen(config)` at `src/views/embedded-database-renderer.ts:742,776-800` (built by 006), copied for gallery by 007-002; `migrateGalleryViewOnOpen`'s main-view counterpart call is `src/views/database-view.ts:11678` — phase 2 adds the three new migrations beside it.
+Precedent: 007-002 ADR-001 (the embedded host gained the gallery migration call even though 046's ADR-001 had already settled the categorical objection). Present necessity: **0** fence-configured views of the three types exist today (the only real fences, `Finance/Finance Overview.md:8,14,20,26`, carry `dbPath`+`viewId` only and reference table views), so the pass is prophylactic. It is still required: the embedded host resolves the referenced view's config itself, and any future fence pointing at one of the 33 affected viewIds would render through the embedded host without the main view's on-open migration. Transplant shape already ships: `migrateListViewOnOpen(config)` — defined at `src/views/embedded-database-renderer.ts:825`, called from the embedded render path at `:746` (built by 006), with 007-002's gallery copy beside it (`:745` call, `:782` def); the main-view counterpart calls sit at `src/views/database-view.ts:12164-12165` — phase 2 adds the three new migrations beside them.
 
 ---
 
@@ -221,9 +221,9 @@ Communityoplágia note: `manifest.json`'s description is what the Obsidian commu
 
 Shipped 007 pattern to transplant (evidence: 007-001 implementation-summary §1/§6; 007-002 decision-record ADR-001/ADR-002):
 
-1. **Settings-load / on-open sanitizer**: `main.ts`'s load path + `database-view.ts:2718-2728`-style `migrateXxxViewOnOpen()`, called from `refresh()` at `:11678`'s call site — add the three; do **not** close the surfaces by deletion.
+1. **Settings-load / on-open sanitizer**: `main.ts`'s load path + `database-view.ts:2718-2728`-style `migrateXxxViewOnOpen()`, called from `refresh()`'s head (`src/views/database-view.ts:12164-12165`) — add the three; do **not** close the surfaces by deletion.
 2. **`parseViewType()` stays open** through the redirect phase (`data-source.ts:1566-1567`); regression test guards that the old ids still parse so the migration can see them. When the timeline (board-target) migration routes through the real migration, its exemption may close like 007-002's ADR-002; the `table`-target exemptions (chart, calendar) may close for free, exactly 006's `e0e1c568` list case.
-3. **Embedded host**: add the call beside `migrateListViewOnOpen` (`embedded-database-renderer.ts:742,776-800`) — §1.3.
+3. **Embedded host**: add the call beside `migrateListViewOnOpen` (`embedded-database-renderer.ts:746`, definition `:825`) — §1.3.
 4. **Per-view, not per-database**: the redirect rewrites only the affected `views[]` entries (spec.md §8); the 4 Finance databases' table/board views are untouched, and no view here is the sole view of its database, so no default-view churn.
 
 Declared losses to name in phase 2's notice copy (from §1.2): chart — all aggregation/bucketing/palette config; calendar — grid arrangement, end-date spans, title/color; timeline — the time axis, start/end dates. Carried: timeline's lane→group (group/title/color), calendar's start-date→table sort target.

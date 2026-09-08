@@ -9,17 +9,18 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation/001-usage-and-migration-audit"
-    last_updated_at: "2026-09-08T08:30:00Z"
-    last_updated_by: "markdown-scaffold"
-    recent_action: "Authored the directive"
-    next_safe_action: "Execute against the completion criteria"
+    last_updated_at: "2026-09-08T11:30:00Z"
+    last_updated_by: "234-calendar-timeline-chart-audit"
+    recent_action: "Landed: 3/3 criteria, 33 views named with targets; verifier-confirmed"
+    next_safe_action: "002-settings-redirect-and-migrate starts from inventory.md"
     blockers: []
-    key_files: []
+    key_files:
+      - "specs/008-calendar-timeline-chart-deprecation/001-usage-and-migration-audit/inventory.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "001-usage-and-migration-audit-scaffold"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -68,7 +69,7 @@ resend the full text of this file in chat so the operator can update their copy.
 | Packet opened | Done | This scaffold, 2026-09-08 |
 | Operator-vault scan | Done | Fresh read-only grep, 2026-09-08: 15 `db_view` files, 76 views, 33 of the three types (`inventory.md` §2.1) — supersedes 007-001's 1-file/`b240a8d5` read |
 | Retention + targets decided | Done | `inventory.md` §1.1-§1.2 |
-| REQ-003 embedded host decided | Done | `inventory.md` §1.3: yes, prophylactic, transplant shape at `embedded-database-renderer.ts:742,776-800` |
+| REQ-003 embedded host decided | Done | `inventory.md` §1.3: yes, prophylactic, transplant shape at `embedded-database-renderer.ts:746,782,825` |
 
 ### Deviations and findings
 
