@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T11:45:00Z"
-    last_updated_by: "234-calendar-timeline-chart-audit"
-    recent_action: "008/001 landed+pushed (7a6d4cc6): 3/3 criteria, 33 views, 27/0 gate"
+    last_updated_at: "2026-09-08T14:30:00Z"
+    last_updated_by: "236-toolbar-labelled-buttons"
+    recent_action: "075 landed+pushed (8aec7d64): 4/5 criteria, 398/398→532/398, gate 27/0"
     next_safe_action: "008/002 redirect from 001's inventory.md; 071, 073, 072, then device rows"
     blockers:
       - "067 residual: T015 75px (1 past 66-74), T020 partial (one pair 2-level), T021 2 of 3 divider contexts, AC-011 iOS pass operator-owned"
@@ -45,6 +45,37 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08 ~14:30, `075-toolbar-labelled-buttons` LANDED on `origin/main` — landing-verified, rebased, pushed
+
+**Landed.** Leg `9bcbff0e` (Sonnet, feat(toolbar), rebased onto `27be49b5` over 070 + 008/001) plus this
+verifier's reconciliation `8aec7d64` are on `origin/main` (`27be49b5..8aec7d64`, push 1, no rejection).
+What the verification re-observed rather than trusted: step-2 mutations replayed — reverting the
+`.is-phone` label rule to `display:none` sent `run-phone-toolbar-scroll.mjs` red (EXIT 1, every control
+bare, scrollWidth 398 / clientWidth 398, no overflow) and reverting one control's 44px height sent
+touch-targets red (EXIT 1, the labelled filter measured 44x28 / 72x28 under its 44px RAISED floor,
+baselines 171/785 unchanged); both restored, the same tools green (EXIT 0, 532/398, last control
+reachable, 171/785). No vitest test file was added by the leg, so the guarded source line
+(`toolbar-primitives.ts`'s `appendToolbarControlLabel(button, options.label)`) was mutated instead:
+red again, exactly the three cluster buttons unlabelled. Labels the leg chose read **Filter / Sort /
+Properties / Group / Settings / More tools** — the reference's fourth control ("Properties or
+Columns") landed on Properties, which the reference's own vocabulary offers; note for the operator:
+"New" carries no label (the creation control keeps its existing shape) and the reference's "+ New"
+label is therefore not reproduced — judged a finding, not a failure. Desktop/embedded stay 28px
+icon-only per ADR-001. Post-rebase: 7 evidence artefacts taken from main's side were stale by design
+and were re-derived by their own tools (`evidence.mjs --check-all` 15/15 fresh); 4 PNGs moved
+deterministically (1-12px, maxDelta 1, both runs) and were judged REAL, not jitter, by the tool's own
+both-runs rule; the leg's 10 toolbar captures did not move again. The failing-values lane went red
+once (151 bare vs 148) and was fixed by recording the criteria's failing numbers in `075/goal.md`
+itself, no thresholds touched; the gate then passed three times, the last after every edit: **27
+green, 0 red** (cold-cache lane intact), `tsc` 0, `vitest` 1672/1672 (153 files), `build` 0, `validate
+--strict` PASSED for 075 and 005 after `backfill-graph-metadata.js`. Docs reconciled: roadmap §4 row
+83 and the parent goal.md DONE table now carry the 4/5 goal figure (the fifth criterion is the
+operator's own device row — never agent-ticked); FINDING: roadmap §5.A's table stops at 069, so no
+075 (or 070-074) §5.A row exists to update — 070's landing set the precedent of §4 + DONE table
+instead.
+
+---
 
 ### 2026-09-08 ~11:40, `008-calendar-timeline-chart-deprecation/001-usage-and-migration-audit` LANDED on `origin/main` — landing-verified and reconciled
 
