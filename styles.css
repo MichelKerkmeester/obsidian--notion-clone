@@ -16463,6 +16463,15 @@ body.is-phone .obnotion-container .obnotion-menu-item {
   color: var(--text-muted);
 }
 
+/* The phone lift's held state: the same treatment the handle's own hover gives, faded like the
+   board's lifted card, so a lifted-but-not-yet-released handle reads as something the reader
+   is holding, not as a stray press. Nothing about the resting handle changes. */
+.obnotion-embed.obnotion-embed-linked .obnotion-linked-view-drag-handle.is-touch-lifted {
+  background: var(--background-modifier-hover);
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
 .obnotion-embed.obnotion-embed-linked .obnotion-linked-view-drag-dot {
   width: 3px;
   height: 3px;

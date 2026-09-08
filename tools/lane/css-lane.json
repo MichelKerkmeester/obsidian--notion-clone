@@ -1,7 +1,7 @@
 {
-  "holder": "073-checkbox-controls",
-  "acquiredAt": "2026-09-08T15:47:38Z",
-  "baselineHash": "e061ee373e17",
+  "holder": "072-linked-view-blocks-ux",
+  "acquiredAt": "2026-09-08T15:18:00.000Z",
+  "baselineHash": "b6f74a9b34ca",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -5676,6 +5676,30 @@
         "screenshots/notion-clone/views/board-view-desktop-dark.png"
       ],
       "note": "Recaptured 3x post-rebase (npm run screenshots, 616 entries, exit 0; a third run was needed because the pixel-delta bookkeeping lacked a prior-run sample). 4 content-changed captures named. 2 <=12-delta movers restored at their committed bytes/sourceHashes (board-mobile-desktop-dark 1px@1, constructed-calendar-week-desktop-light 8876px@1); board-view-desktop-dark 4px@1 moved in BOTH sampled runs, so it is kept as a real mover, not jitter."
+      "phase": "072-linked-view-blocks-ux",
+      "at": "2026-09-08T15:18:00.000Z",
+      "hash": "ebf39eefa348",
+      "note": "Taking the lane over from 075-toolbar-labelled-buttons at its own released hash, to add the phone touch-lift treatment for the linked-view drag handle: .obnotion-embed-linked .obnotion-linked-view-drag-handle.is-touch-lifted, the board's lifted treatment (hover background, muted text, half opacity) applied for the length of the 450ms long-press gesture the handle's new pointer wiring drives. One new selector on a class no existing capture's markup carries, so no captured scenario should render differently."
+    },
+    {
+      "event": "edit",
+      "phase": "072-linked-view-blocks-ux",
+      "at": "2026-09-08T15:19:00.000Z",
+      "hash": "b6f74a9b34ca",
+      "note": "styles.css: exactly one new rule, .obnotion-embed-linked .obnotion-linked-view-drag-handle.is-touch-lifted, appended after the handle's :hover/:focus-visible block -- the resting handle's bytes are untouched, so its captures should come back unchanged. The 4px toolbar-row overflow the linked-view phone measurements initially reported was a harness artifact, not a stylesheet defect: the lane's bare HTML lacks the border-box reset Obsidian's app.css supplies, so .obnotion-toolbar-right's width:100% plus its 6px/2px/2px padding computed 4px wider than it does in the app; the harness gained the reset and the shipped stylesheet needed nothing."
+    },
+    {
+      "event": "release",
+      "phase": "072-linked-view-blocks-ux",
+      "at": "2026-09-08T16:26:00.000Z",
+      "hash": "b6f74a9b34ca",
+      "reviewed": [
+        "screenshots/notion-clone/components/chrome-owned-menu-sheet-mobile-dark.png",
+        "screenshots/notion-clone/views/board-mobile-desktop-dark.png",
+        "screenshots/notion-clone/views/calendar-empty-state-mobile-dark.png",
+        "screenshots/notion-clone/views/calendar-empty-state-mobile-light.png"
+      ],
+      "note": "npm run screenshots ran twice (616 entries, exit 0 both) and screenshots:verify passed (616 entries, none blank or theme-identical). The same 4 captures moved in BOTH runs with identical numbers, judged by decoded pixel delta against the HEAD-committed blobs, not by pixelHash: chrome-owned-menu-sheet-mobile-dark 2702px at max channel delta 5, board-mobile-desktop-dark 1px at 1, calendar-empty-state-mobile-{dark,light} 11px/12px at 1 each -- all inside the lane's established encoder-jitter band yet stable across passes, so kept rather than restored, and their manifest rows were written by the same runs that produced the blobs. No selector this leg ships (.is-touch-lifted) is reachable by any capture's markup; the movers' deltas come from the rasteriser, not from this edit. tool check-lane reports all 4 as moved-bytes-not-hashes, which is why the buckets missed them -- the decoded deltas above are the record."
     }
   ],
   "outstanding": [

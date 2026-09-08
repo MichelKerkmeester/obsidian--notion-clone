@@ -2208,6 +2208,53 @@ program-level decision record only.
   `worktrees/225-timeline-view-teardown` at HEAD (see that branch's own commit); **not pushed** —
   a fresh verifier lands it. Row 67 stays awaiting the operator's own device read, never ticked
   by an agent.
+- **2026-09-08, `072-linked-view-blocks-ux`: the fence's drag handle learned to work on a phone;
+  the linked-view readings recorded.** Operator R2, 2026-09-08 08:08, verbatim: "Also the seperate
+  views from database is pretty bugged ui ux wise and dragging doesnt work on mobile like it would
+  on notion." Determination first, evidence first (the packet's whole point): "the seperate views
+  from database" reads the **linked-view fence** — a code block embedding another note's database
+  view (`embedded-database-renderer.ts`, fence languages `src/main.ts:477,498`), the feature
+  literally *named* linked views; a database file opened as its own view/tab and the view-picker
+  switch are recorded as routes, not features. "Dragging doesnt work on mobile" reads that fence's
+  **drag handle**: it shipped HTML5-`draggable`-only with no click action (`toolbar-renderer.ts`
+  2663-2676, `embedded-database-renderer.ts` 3946-3952), and a coarse pointer fires neither, so the
+  one affordance the fence points at did nothing on a phone. The other readings — table row
+  reorder (`table-renderer.ts:1101`), view-tab/database-switcher reorder
+  (`toolbar-renderer.ts:718-719,1005-1006,2668`), no column-drag affordance — are the same defect
+  class, enumerated as defect rows 4–6 in the packet's `plan.md` §3 for their own packets, not
+  folded into this diff. **Fixed**: the handle gained the 069 gesture grammar, copied verbatim
+  (450 ms long-press, 10 px pre-lift cancel, `vibrate(20)`; lifted class) — pointerType-`"touch"`
+  only, so the mouse keeps its native drag — a short tap opens the established
+  `openMoveLinkedViewPicker()`, and the release resolves the note under the finger through
+  `completeLinkedViewDropAt`, extracted from `completeLinkedViewDrop` so the HTML5 drop and the
+  touch release share ONE resolution+notice+move+history path. `styles.css`: exactly one new rule
+  (`.is-touch-lifted`), taken through the css-lane acquire/edit/release (handed over from 075 at
+  its released hash; 4 movers, both runs, deltas ≤5, kept; `check-lane` 0). **Evidence**: the 4
+  gesture tests were watched RED against the unfixed tree (2 failed / 28 passed), 30/30 after,
+  each re-proven by a 1-diff mutation (one vacuous assertion caught BY the mutation proof — the
+  cleared class was being read after teardown; the test now reads it mid-hold). The new
+  headless lane `tools/live/embedded-linked-view-ux.mjs` answers the report with numbers at
+  402×874: lane A drives 069's gesture through BOTH action bags — the embedded host's, which
+  lacks the cross-group primary method, so the drop resolves through the
+  `updateGroup` + `moveRowToPosition` fallback — and records lift, ghost delta 0.0 px, target
+  highlight, the card actually landing, the release position surviving the fallback, the reverse
+  gesture, the shared keep-in-place silence, and the read-only no-lift, identical across both
+  bags, `RESULT: PASSED` twice; lane B measures the toolbar's three mounts under `.is-phone`:
+  toolbar row 87 px in all three (delta 0), overflow 0 px, handle 44×44 `touch-action: none`.
+  The lane's own first runs corrected its expectations before they became trust: the same-column
+  drop expectation rewritten to the shipped keep-in-place rule (0 calls, not 1 — the documented
+  container-drop design, 069's precedent), and the 4 px toolbar overflow traced to the HARNESS's
+  missing border-box reset, not the stylesheet (ADR-004 in the packet's decision record; the
+  shipped `styles.css` needed nothing beyond its one rule). Battery, every exit read: `tsc` 0,
+  vitest 0 (1676/1676), build 0, `board-cross-group-drag`/`render-assertions`/`sheet-grammar`/
+  `verify-placement` 0, screenshots ×2 + `screenshots:verify` + decoded pixel-delta, the 12
+  stale evidence artefacts re-measured by their own tools (`engine-parity`'s 50 known differences
+  verified byte-identical to its committed list), the gate ONCE: **exit 0, 27 green, 0 red for a
+  declared reason** (first run: 1 unexpected, the new lane's unused variable; fixed, re-run
+  green), `scan-comments` 0, `scan-failing-values` 0, packet `validate --strict`
+  **RESULT: PASSED, Errors: 0**. Landed in this worktree (branch off origin/main at 90e60d00) at
+  HEAD; **not pushed** — a fresh verifier lands it. AC-004 stays Untmet: the only criterion the
+  operator's own phone can decide.
 - **2026-09-08, `073-checkbox-controls`: the R3 checkbox/radio report implemented, evidence
   recorded, gate green, not closed.** Operator report (R3, 08:12, 0.0.32): *"Also checkboxes and
   radios are too big. And also we shouldnt have radio inputs only checkboxes."* Root cause,

@@ -46,9 +46,19 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md",
       "src/views/embedded-database-renderer.ts",
-      "src/views/board-renderer.ts"
+      "src/views/board-renderer.ts",
+      "tools/live/embedded-linked-view-ux.mjs",
+      "src/views/embedded-database-renderer.test.ts",
+      "tools/lane/css-lane.json",
+      "screenshots/manifest.json",
+      "tools/live/board-cross-group-drag.mjs",
+      "tools/live/render-assertions.mjs",
+      "src/views/modals/create-linked-view-modal.ts",
+      "src/views/database-view.ts",
+      "src/views/table-renderer.ts"
     ],
     "entities": [
       {
@@ -82,6 +92,12 @@
         "source": "derived"
       },
       {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
@@ -97,6 +113,60 @@
         "name": "board-renderer.ts",
         "kind": "code",
         "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-linked-view-ux.mjs",
+        "kind": "file",
+        "path": "tools/live/embedded-linked-view-ux.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/embedded-database-renderer.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "board-cross-group-drag.mjs",
+        "kind": "file",
+        "path": "tools/live/board-cross-group-drag.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertions.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "create-linked-view-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/create-linked-view-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "table-renderer.ts",
+        "kind": "code",
+        "path": "src/views/table-renderer.ts",
         "source": "derived"
       },
       {
@@ -134,71 +204,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Clean Architecture",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Key Components",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Data Flow",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Current Role",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The operator reports two things in one line: \"the seperate views from database is pretty bugged ui ux wise and dragging doesnt work on mobile like it would on notion.\" \"Separate views\" most likely names embedded/linked database views inside a note (`046-linked-views-notion-parity`'s territory), but the drag half could name table row/column drag rather than board drag, which `069` already shipped for mobile in 0.0.32",
     "created_at": "2026-09-08T06:23:35Z",
-    "last_save_at": "2026-09-08T06:48:10.259Z",
+    "last_save_at": "2026-09-08T16:46:28.708Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,15 +217,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:0e3bc43d35cfc1c431ab61a6c6f83e9f2085e0de83e61b52fcb2eefc73ac6b4a",
+    "source_fingerprint": "sha256:f1a191f2ab3f4c3d5bb1c8bf953104c9df41381ac6a3a30f644f76e4cdb13527",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "fa00f8dc76fb5536ff7b073b1451697075b25e5ee47830f8b44a40296cfed3a9",
-      "plan.md": "ff271976e6e0df9cbe619d4ae43d9c231f2ebad3dc08541d3391f146f9e6445b",
-      "tasks.md": "8cb5274fb843b60920756ab7b1ca06fbbe5bcf1389a9bd8af7029cad4111a190",
-      "implementation-summary.md": "a205af662c93ba92cc7e521149f4175034a9b12411a9172d6c44992d92a85a07"
+      "spec.md": "ff82230f710e0b2a8e512843e3ca6feb7b1f0429fea26ba64cdd888b1270ec17",
+      "plan.md": "64d8717b0a26b3d6f40341cefafb71639c844a51c7cfdbbe6482b1dd48a37700",
+      "tasks.md": "7a7cb23888619a8071a26c6e50dfacbfc0ae6ad92fa1abcec2596df741217d26",
+      "decision-record.md": "2de11cd45aa1a9cb05c12065f3e3437b3b0d627db16736937cf15f6344644ee5",
+      "implementation-summary.md": "0d681a3641c47648424ee8b6ec02cdd4b8979686218195c3269370c901b84d30"
     },
     "last_active_at": null
   }

@@ -284,7 +284,7 @@ class FakeElement {
     this.listeners.get(type)?.delete(listener);
   }
 
-  dispatchEvent(event: { type: string; bubbles?: boolean }): void {
+  dispatchEvent(event: { type: string; bubbles?: boolean; pointerType?: string; pointerId?: number; clientX?: number; clientY?: number }): void {
     if (event.type === "click") this.onclick?.();
     for (const listener of this.listeners.get(event.type) ?? []) listener(event);
     if (event.bubbles) this.parentElement?.dispatchEvent(event);
@@ -294,6 +294,18 @@ class FakeElement {
     const classes = selector.split(".").filter(Boolean);
     if (classes.length === 0) return true;
     return classes.every((name) => this.classes.has(name) || this.className.split(/\s+/).includes(name));
+  }
+
+  /** Whether `node` is this element or one of its descendants — the Markdown-leaf lookup in
+   *  `findMarkdownFileAt` asks this of the element a released gesture landed on, when it decides
+   *  which open note the gesture meant. */
+  contains(node: FakeElement | null): boolean {
+    let current = node;
+    while (current) {
+      if (current === this) return true;
+      current = current.parentElement;
+    }
+    return false;
   }
 
   getBoundingClientRect(): { top: number; left: number; right: number; bottom: number } {
@@ -663,6 +675,101 @@ describe("linked embed chrome", () => {
     expect(startDrag).not.toHaveBeenCalled();
     handle.dispatchEvent({ type: "dragstart", bubbles: true });
     expect(startDrag).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("linked embed touch move", () => {
+  const sleep = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
+  const LIFT_MS = 450;
+
+  /** The touch affordance binds through the same :scope selector the desktop drag wiring uses,
+   *  so the gesture tests mount header > handle exactly as that selector demands. */
+  function mountHandle(harness: EmbeddedHarness, containerEl: FakeElement): FakeElement {
+    const header = new FakeElement();
+    header.addClass("obnotion-header");
+    const handle = new FakeElement();
+    handle.addClass("obnotion-linked-view-drag-handle");
+    handle.parentElement = header;
+    header.children.push(handle);
+    header.parentElement = containerEl;
+    containerEl.children.push(header);
+    return handle;
+  }
+
+  function point(handle: FakeElement, type: string, extra: Record<string, unknown> = {}): void {
+    handle.dispatchEvent({ type, pointerType: "touch", pointerId: 1, clientX: 12, clientY: 12, ...extra });
+  }
+
+  it("lifts on a long press and moves the fence to the note under the finger on release", async () => {
+    const { harness, containerEl } = createRenderer();
+    const handle = mountHandle(harness, containerEl);
+    const targetPane = new FakeElement();
+    targetPane.addClass("workspace-leaf-content");
+    const target = targetPane.createDiv({ cls: "view-content" });
+    const destFile = new TFile();
+    destFile.path = "dest.md";
+    (harness as unknown as { app: { workspace: Record<string, unknown> } }).app.workspace = {
+      getLeavesOfType: () => [{ view: { containerEl: targetPane, file: destFile } }],
+      getActiveFile: () => new TFile(),
+    };
+    (containerEl.ownerDocument as unknown as { elementFromPoint: (x: number, y: number) => FakeElement }).elementFromPoint = () => target;
+    const moveToPath = vi.spyOn(harness as unknown as { moveLinkedViewToPath: (path: string) => Promise<void> }, "moveLinkedViewToPath");
+    (harness as unknown as { bindLinkedViewMoveAffordance(): void }).bindLinkedViewMoveAffordance();
+
+    point(handle, "pointerdown");
+    await sleep(LIFT_MS + 60);
+    expect(handle.hasClass("is-touch-lifted")).toBe(true);
+    point(handle, "pointermove", { clientX: 60, clientY: 80 });
+    point(handle, "pointerup", { clientX: 60, clientY: 80 });
+
+    expect(moveToPath).toHaveBeenCalledTimes(1);
+    expect(moveToPath.mock.calls[0][0]).toBe("dest.md");
+  });
+
+  it("opens the move picker when a short tap releases before the lift threshold", async () => {
+    const { harness, containerEl } = createRenderer();
+    const handle = mountHandle(harness, containerEl);
+    const openPicker = vi.spyOn(harness as unknown as { openMoveLinkedViewPicker: () => void }, "openMoveLinkedViewPicker").mockImplementation(() => {});
+    (harness as unknown as { bindLinkedViewMoveAffordance(): void }).bindLinkedViewMoveAffordance();
+
+    point(handle, "pointerdown");
+    await sleep(100);
+    point(handle, "pointerup");
+    await sleep(LIFT_MS);
+
+    expect(openPicker).toHaveBeenCalledTimes(1);
+    expect(handle.hasClass("is-touch-lifted")).toBe(false);
+  });
+
+  it("keeps the mouse gesture untouched so the desktop native drag still owns the handle", () => {
+    const { harness, containerEl } = createRenderer();
+    const handle = mountHandle(harness, containerEl);
+    const openPicker = vi.spyOn(harness as unknown as { openMoveLinkedViewPicker: () => void }, "openMoveLinkedViewPicker");
+    (harness as unknown as { bindLinkedViewMoveAffordance(): void }).bindLinkedViewMoveAffordance();
+
+    handle.dispatchEvent({ type: "pointerdown", pointerType: "mouse", pointerId: 2, clientX: 5, clientY: 5 });
+    handle.dispatchEvent({ type: "pointerup", pointerType: "mouse", pointerId: 2, clientX: 5, clientY: 5 });
+
+    expect(openPicker).not.toHaveBeenCalled();
+    expect(handle.hasClass("is-touch-lifted")).toBe(false);
+  });
+
+  it("cancels the pending lift when the finger wanders past the tolerance, so a scroll release is not a pick", async () => {
+    const { harness, containerEl } = createRenderer();
+    const handle = mountHandle(harness, containerEl);
+    const openPicker = vi.spyOn(harness as unknown as { openMoveLinkedViewPicker: () => void }, "openMoveLinkedViewPicker");
+    (harness as unknown as { bindLinkedViewMoveAffordance(): void }).bindLinkedViewMoveAffordance();
+
+    point(handle, "pointerdown");
+    point(handle, "pointermove", { clientX: 52, clientY: 52 });
+    await sleep(LIFT_MS + 60);
+    // Checked while the finger is still down: the release itself clears the class, so only a
+    // mid-hold read proves the wander really kept the lift from ever firing.
+    const liftedDuringHold = handle.hasClass("is-touch-lifted");
+    point(handle, "pointerup", { clientX: 52, clientY: 52 });
+
+    expect(liftedDuringHold).toBe(false);
+    expect(openPicker).not.toHaveBeenCalled();
   });
 });
 

@@ -10,24 +10,24 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "072-linked-view-blocks-ux"
-    last_updated_at: "2026-09-08T08:07:00Z"
-    last_updated_by: "markdown-scaffold"
-    recent_action: "Opened the packet from the operator's R2 report"
-    next_safe_action: "Determine which surface R2 names before fixing anything"
-    blockers:
-      - "R2 is ambiguous between embedded/linked views and table row/column drag; both must be checked"
+    last_updated_at: "2026-09-08T17:05:00Z"
+    last_updated_by: "implementation-continuation"
+    recent_action: "Determination recorded, the fence handle's touch gap fixed, everything green but the device pass"
+    next_safe_action: "The operator's device pass (AC-004); the four enumerated readings are other packets' work"
+    blockers: []
     key_files:
       - "src/views/embedded-database-renderer.ts"
       - "src/views/board-renderer.ts"
+      - "tools/live/embedded-linked-view-ux.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "072-linked-view-blocks-ux-scaffold"
       parent_session_id: null
-    completion_pct: 0
-    open_questions:
-      - "Does R2 mean embedded/linked database views inside notes, table row/column drag, or both?"
+    completion_pct: 100
+    open_questions: []
     answered_questions:
-      - "Board cross-group drag on mobile already shipped in 069 (0.0.32), so R2 is not that surface"
+      - "Does R2 mean embedded/linked database views inside notes, table row/column drag, or both? — the fence, whose handle was touch-dead; the other readings enumerated, not fixed"
+      - "Board cross-group drag on mobile already shipped in 069 (0.0.32), so R2 is not that surface — but the embedded host's lift was assumed, never measured; this packet measured it: parity"
 ---
 
 <!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
@@ -43,7 +43,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P2 |
-| **Status** | Draft — opened 2026-09-08, nothing started |
+| **Status** | Implemented — 2026-09-08; AC-004 (the operator's device pass) outstanding by design |
 | **Created** | 2026-09-08 |
 | **Branch** | `main` |
 | **Parent Spec** | `../005-component-surface-system/` |
@@ -59,6 +59,27 @@ The operator reports two things in one line: "the seperate views from database i
 
 ### Purpose
 The report is resolved into a named surface (or surfaces) confirmed against the shipped 0.0.32 build, the UI/UX defects on that surface are enumerated, and mobile drag on that surface matches Notion's own feel — measured, not eyeballed.
+
+### Surface determination — 2026-09-08, implementation leg
+
+**What "the separate views from database" can mean in the 0.0.33 tree:**
+
+- **(a) A linked-view fence** — a code block (languages `obnotion` / `database-view` / `note-database`, `src/views/modals/linked-view-block.ts:26`) embedding a view of a database that lives in another note, rendered by `src/views/embedded-database-renderer.ts` (`EMBED_LINKED_CLASS` at `:38`); created by the `create-linked-view` command (`src/main.ts:454`) through `src/views/modals/create-linked-view-modal.ts` ("A linked view is a new view on an existing database plus a fenced block", `:6`), with the fence languages registered at `src/main.ts:477,498`.
+- **(b) A database file opened as its own view/tab** — `src/views/database-view.ts` under `DATABASE_VIEW_TYPE` (`src/main.ts:22`; the pre-rename file-view type string compatibility note at `src/main.ts:345`).
+- **(c) A view of the same database switched via the view picker** — the popover rows at `src/views/toolbar-renderer.ts:669`.
+
+**Evidence for which one the operator meant:** R2's wording — plural "views from database" — matches the feature literally named *linked views*, reading (a); readings (b) and (c) are ways to reach the same database/views UI, not separate features. The paired drag complaint does not disambiguate on its own. The packet proceeds on (a) as the most likely reading, with (b) and (c) recorded so the report is not half-answered.
+
+**What "dragging doesn't work on mobile like it would on Notion" can mean:**
+
+1. **Board card drag** — shipped for mobile in 069 (0.0.32): 450 ms long-press lift, floating ghost, column hit-testing, edge auto-scroll (`src/views/board-renderer.ts:60-77,163-174`). Both hosts instantiate the *same* `BoardRenderer` (`src/views/database-view.ts:800` file view; `src/views/embedded-database-renderer.ts:537` embedded), so the touch wiring should lift on the embedded host too — but 069's live proof drove the file view, so the embedded host's long-press lift is verified empirically below rather than assumed.
+2. **Table row reorder drag** — HTML5 drag only: `handle.draggable = canMoveGroup || canReorder` (`src/views/table-renderer.ts:1101`); no touch/long-press path in the file. A coarse pointer never fires `dragstart`, so row reorder is mouse-only today.
+3. **Column reorder drag** — no column-drag affordance found in `src/views/table-renderer.ts`; the row handle at `:1101` is the only draggable there. If a column drag exists it is not in this file — recorded as absent on the current reading.
+4. **View-tab / database-switcher reorder** — HTML5 drag only: `row.draggable = true; row.ondragstart` (`src/views/toolbar-renderer.ts:718-719`), `tab.draggable = true; tab.ondragstart` (`:1005-1006`), and a third `draggable: "true"` at `:2668`. No coarse-pointer path in the file.
+
+Live RED/GREEN numbers: see `implementation-summary.md`. Like findings 2–4, finding 1's defect
+family (HTML5-`draggable`-only, dead under a coarse pointer) is recorded per producer; this packet
+fixes the fence's own handle and leaves the others to their own packets.
 <!-- /ANCHOR:problem -->
 
 ---
@@ -168,7 +189,7 @@ The report is resolved into a named surface (or surfaces) confirmed against the 
 
 ## 10. OPEN QUESTIONS
 
-- Does the operator mean embedded/linked views inside a note, table row/column drag, or both?
+- ~~Does the operator mean embedded/linked views inside a note, table row/column drag, or both?~~ → Answered 2026-09-08: the determination above names (a) linked-view fences inside notes as the most likely reading, and independently finds table row reorder + view-tab reorder are HTML5-drag-only (mouse-only on phones) while board card drag shipped in 069 for both hosts — both defect families recorded, as REQ-001 requires.
 <!-- /ANCHOR:questions -->
 
 ---

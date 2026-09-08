@@ -4065,6 +4065,83 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     handle.draggable = true;
     handle.addEventListener("dragstart", (event) => this.onLinkedViewDragStart(event));
     handle.addEventListener("dragend", () => this.removeLinkedViewDropTarget?.());
+    this.bindLinkedViewTouchMove(handle);
+  }
+
+  /** A coarse pointer never fires the handle's dragstart/dragover/drop cycle — the same reason
+   *  the board's cards carry their own phone lift — so the handle answers the phone here: a long
+   *  press lifts it, the release resolves the note under the finger through the same
+   *  Markdown-leaf lookup the mouse drop uses, and a short tap (what a phone reader expects a
+   *  plain button to do) opens the same move picker the toolbar menu row opens. The mouse path
+   *  stays entirely with the native drag above; it must not gain a second, competing, lift. */
+  private bindLinkedViewTouchMove(handle: HTMLElement): void {
+    // The long-press language every lifted surface answers to: the board's phone drag and the
+    // row/cell context-menu gesture both lift at this threshold, so a phone reader learns the
+    // gesture once. The tolerance is how far the finger may travel while the press still counts
+    // as "in place"; the haptic is the same pulse the other gestures give.
+    const LIFT_DELAY_MS = 450;
+    const WANDER_TOLERANCE_PX = 10;
+    let pressTimer: ReturnType<typeof setTimeout> | undefined;
+    let pressedPointerId = -1;
+    let startX = 0;
+    let startY = 0;
+    let lifted = false;
+    let gestureCancelled = false;
+    const endPress = (): void => {
+      if (pressTimer !== undefined) {
+        clearTimeout(pressTimer);
+        pressTimer = undefined;
+      }
+    };
+    handle.addEventListener("pointerdown", (event) => {
+      const pointer = event as PointerEvent;
+      if (pointer.pointerType !== "touch") return;
+      endPress();
+      pressedPointerId = pointer.pointerId;
+      startX = pointer.clientX;
+      startY = pointer.clientY;
+      lifted = false;
+      gestureCancelled = false;
+      pressTimer = setTimeout(() => {
+        pressTimer = undefined;
+        lifted = true;
+        handle.addClass("is-touch-lifted");
+        navigator.vibrate?.(20);
+      }, LIFT_DELAY_MS);
+    });
+    handle.addEventListener("pointermove", (event) => {
+      const pointer = event as PointerEvent;
+      if (pointer.pointerId !== pressedPointerId || lifted) return;
+      if (Math.hypot(pointer.clientX - startX, pointer.clientY - startY) > WANDER_TOLERANCE_PX) {
+        endPress();
+        gestureCancelled = true;
+      }
+    });
+    handle.addEventListener("pointerup", (event) => {
+      const pointer = event as PointerEvent;
+      if (pointer.pointerId !== pressedPointerId) return;
+      pressedPointerId = -1;
+      const wasLifted = lifted;
+      endPress();
+      handle.removeClass("is-touch-lifted");
+      if (!wasLifted) {
+        // A release still held where it pressed is a tap; a wander-cancelled press was the start
+        // of a scroll, and releasing it must read as nothing rather than as an intent to pick.
+        if (!gestureCancelled) this.openMoveLinkedViewPicker();
+        return;
+      }
+      const pointed = this.containerEl.ownerDocument.elementFromPoint?.(pointer.clientX, pointer.clientY) ?? null;
+      void this.completeLinkedViewDropAt(pointed);
+    });
+    handle.addEventListener("pointercancel", (event) => {
+      const pointer = event as PointerEvent;
+      if (pointer.pointerId !== pressedPointerId) return;
+      pressedPointerId = -1;
+      lifted = false;
+      gestureCancelled = true;
+      endPress();
+      handle.removeClass("is-touch-lifted");
+    });
   }
 
   private onLinkedViewDragStart(event: DragEvent): void {
@@ -4110,7 +4187,14 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private async completeLinkedViewDrop(event: DragEvent): Promise<void> {
-    const dest = this.findMarkdownFileAt(event.target);
+    await this.completeLinkedViewDropAt(event.target);
+  }
+
+  /** Both input devices resolve the drop through this one sequence — the mouse drop arrives as
+   *  the DragEvent's target, the phone release as whatever elementFromPoint answers — so the
+   *  Markdown-leaf lookup, the failure notice and the move cannot drift apart per device. */
+  private async completeLinkedViewDropAt(target: EventTarget | null): Promise<void> {
+    const dest = this.findMarkdownFileAt(target);
     if (!dest) {
       new Notice(t("notice.linkedViewMoveFailed"));
       return;
