@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T16:20:00Z"
-    last_updated_by: "240-deprecation-redirect-verify"
-    recent_action: "008/002 redirect landed+pushed (b5f4ccd4): 2/2 criteria, gate 27/0"
-    next_safe_action: "Cut the release carrying 002's redirect (AC-007), then 008/003; 071, 073, 072, then device rows"
+    last_updated_at: "2026-09-08T16:09:34Z"
+    last_updated_by: "237-checkbox-landing-verify"
+    recent_action: "073 checkboxes landed+pushed (f846e605): goal 4/5, gate 27/0"
+    next_safe_action: "Cut the release carrying 002's redirect (AC-007), then 008/003; 074, 072, then device rows"
     blockers:
       - "067 residual: T015 75px (1 past 66-74), T020 partial (one pair 2-level), T021 2 of 3 divider contexts, AC-011 iOS pass operator-owned"
       - "070 AC-005/006 need the operator's device; 073/074 AC-004 unblocked by 070's fix; 008/001+002 closed — 003/004 wait on a release carrying 002's redirect (AC-007); 071's audit landed (31f712c3, 86 rows, 1/4) — 002-006 unblocked"
@@ -21,7 +21,6 @@ _memory:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
       - "specs/005-component-surface-system/roadmap.md"
-      - "specs/005-component-surface-system/070-ios-view-data-regression/spec.md"
       - "specs/008-calendar-timeline-chart-deprecation/spec.md"
       - "specs/008-calendar-timeline-chart-deprecation/001-usage-and-migration-audit/inventory.md"
     session_dedup:
@@ -35,7 +34,7 @@ _memory:
     answered_questions:
       - "068 renames to obnotion- with a data.json migration, author MichelKerkmeester, repo obsidian_notion-clone"
       - "GLM route: --provider llmgateway --model glm-5.3-flash --thinking max"
-      - "0.0.32 shipped f0597bcd as the fix release; all six queued landings closed, 009 T26 gate expectFail discharged (26 green, 0 red)"
+      - "0.0.32 shipped f0597bcd; the six queued landings closed; 009 T26 discharged (26 green, 0 red)"
       - "GLM 5.3 flash max now carries implementation legs too; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh"
 ---
 # Session Handover: Component Surface System
@@ -45,6 +44,37 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08 ~16:09, `073-checkbox-controls` LANDED on `origin/main` — landing-verified, rebased, pushed
+
+**Landed.** Leg `1216e843` (GLM, 127 files, +2114/−1474 pre-rebase) replayed as `486aeb70` onto
+`9ffa7ed2` (14 commits: 070's landing docs, 008/001, 075, 071/001, 008/002), plus this verifier's
+reconciliation `f846e605`, on `origin/main` (`9ffa7ed2..f846e605`, push 1, no rejection). 23
+conflicts, all generated but two: 21 artefacts taken from main's side and re-deribed
+(13 stale evidence JSONs re-measured by their own tools — `renderer-coverage`'s owner is
+`render-assertions.mjs`, not its namesake; `capture-device-parity` went stale only through the
+legitimately moved manifest); `css-lane.json` merged append-only (main's 401 history entries +
+073's 3, holder 073, `baselineHash` recomputed = `e061ee373e17`, the 075+073 merged stylesheet)
+plus a post-rebase acquire/edit/release naming the 4 real movers; the track handover kept both
+landings' bullets. What the verification re-observed rather than trusted: the `touch-targets.mjs`
+diff (138+/9−) is every number a measurement premise (glyph exactly 16, `::before` hit ≥44, band
+14–18) and no threshold relaxed; radios 0 in `src` (the one bare-`"radio"` grep hit is the
+icon-picker keyword); both claim-named mutations red→restored→green (−15px→−14px: 1 failed/exit 1
+→4/4; column-width role→radio: 1 failed/exit 1→14/14); the control-geometry pass re-read 94
+glyphs/0 radios/board 36-18-0, but only asserts field presence — so goal criterion 4 (the board
+card renders the checkbox with its real value, dependent on 070) was **unticked** with that reason
+recorded, leaving goal 4/5. Ratchets 171/785 unchanged; placement 413/415+2 declared; vitest
+1717/1717 (158 files), tsc 0, build 0. Three capture runs (616, exit 0; a third was needed because
+the pixel-delta bookkeeping lacked a prior-run sample): 4 REAL movers named in the lane's
+post-rebase release, 2 ≤12-delta movers restored at their committed bytes. Evidence 15/15 fresh;
+engine-parity 56 = the recorded 50 + exactly 6 new, 0 vanished (075's label spans, informational,
+outside the gate). `npm run gate` **PASS — 27 green, 0 red**. `validate --strict` PASSED on the
+packet and the track (the goal untick first broke `GENERATED_METADATA_INTEGRITY`'s stored
+fingerprint; fixed by `backfill-graph-metadata.js`, never by editing derived fields).
+`scan-comments`/`scan-failing-values` 0. Roadmap §4 row 72 (line 424) records the landing and the
+4/5 figure (§5.A is 000-058 by its own header, so the 070/075 precedent of the §4 row applies).
+`acceptance-criteria.md` AC-001…004 Met, **AC-005 (the operator's own device) stays Untmet** —
+the last step before the packet closes.
 
 ### 2026-09-08 ~16:20, `008/002-settings-redirect-and-migrate` LANDED on `origin/main` — landing-verified, rebased, pushed
 
