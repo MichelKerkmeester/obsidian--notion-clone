@@ -10,13 +10,13 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T14:30:00Z"
-    last_updated_by: "236-toolbar-labelled-buttons"
-    recent_action: "075 landed+pushed (8aec7d64): 4/5 criteria, 398/398→532/398, gate 27/0"
+    last_updated_at: "2026-09-08T13:50:00Z"
+    last_updated_by: "235-sheet-story-coverage-audit"
+    recent_action: "071/001 audit landed+pushed (31f712c3): 86-row inventory, 1/4, gate 27/0"
     next_safe_action: "008/002 redirect from 001's inventory.md; 071, 073, 072, then device rows"
     blockers:
       - "067 residual: T015 75px (1 past 66-74), T020 partial (one pair 2-level), T021 2 of 3 divider contexts, AC-011 iOS pass operator-owned"
-      - "070 AC-005/006 need the operator's device; 073/074 AC-004 unblocked by 070's fix; 008/001 closed — 008/002-004 unblocked (redirect → remove → archive); 071's audit still blocks its children"
+      - "070 AC-005/006 need the operator's device; 073/074 AC-004 unblocked by 070's fix; 008/001 closed — 008/002-004 unblocked (redirect → remove → archive); 071's audit landed (31f712c3, 86 rows, 1/4) — 002-006 unblocked"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
@@ -45,6 +45,36 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08 ~15:45, `071/001-sheet-story-coverage-audit` LANDED on `origin/main` — landing-verified, rebased, pushed
+
+**Landed.** Leg `16547b92` (GLM, feat(storybook), 16 files, +1231/−72) rebased onto `90e60d00`
+(7 conflicts, all `tools/live/*.json` measuredAt-only, main's side taken) → `527e8455`, plus this
+verifier's reconciliation `31f712c3`, on `origin/main` (`90e60d00..31f712c3`, push 1, no rejection).
+What the verification re-observed rather than trusted: the 86-row inventory (54 primary + 32
+stacked; rows 1–2 = settings sheet, add-property/property-type picker; 0 blank cells; 68 rows with
+captures; 18 primary rows recording "none" captures; 46 rows "none" references; 22 Notion / 33
+Anytype) regenerated with `git diff --stat` EMPTY pre-rebase; the 9-test count suite green and
+mutation-proven (one primary row deleted → 1 failed | 8 passed, restored → 9/9); the producer greps
+reproduced independently — 19 named `extends DbModal` + 1 unnamed trash-restore = 20, 3
+`FuzzySuggestModal`, 8 `createSurfaceShell(` call sites, nothing missing from the 86. The freshness
+test earned its keep: after the rebase it went RED because 070's landing had shifted
+`toolbar-renderer.ts`, so 3 cited producer lines moved :201→:202 (add-view, toolbar-utilities,
+toolbar-tab-menu); regenerated, counts unchanged, `vitest` 1681/1681 (154 files), `tsc` 0, `build` 0.
+Screenshots ran 3×: 5 PNGs kept REAL (3 one-px movers in both delta runs; add-view-popover-
+desktop-light 42px/Δ132; timeline-view-month-mobile-light 2689px/Δ49), 4 jitter movers (Δ1, one
+run only) restored with their manifest `bytes` patched back; exactly one evidence artefact was
+stale — `capture-device-parity.json`'s recorded manifest-hash input — and its own tool was re-run
+(146 differing / 0 identical vs baseline 4, PASS); the other 6 freshness stamps were re-measured by
+the gate's own lanes (measuredAt only). Gate: **27 green, 0 red** (cold-cache lane intact),
+`validate --strict` PASSED for 001, 071 and 005 after `backfill-graph-metadata.js`. Docs reconciled:
+071's criterion 1 ("001's inventory table exists…") ticked — the parent figure was 0/4, recorded as
+the criterion's failing value, bare ratchet 148→148 — and the 005 DONE-table 071 row corrected
+0/4 → 1/4; as 075's entry already found, roadmap §5.A stops at 069, so the §4 row 76 + DONE-table
+precedent is what this landing followed. 071's children 002–006 are now unblocked; 002 (settings
+sheet) and 003 (add-property sheet) are the mandated next redesigns.
+
+---
 
 ### 2026-09-08 ~14:30, `075-toolbar-labelled-buttons` LANDED on `origin/main` — landing-verified, rebased, pushed
 

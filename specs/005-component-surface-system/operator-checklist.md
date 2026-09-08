@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-08: **76 phases**, **7 with nothing left**, **199 rows** waiting on a device.
+Derived 2026-09-08: **76 phases**, **7 with nothing left**, **198 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -393,9 +393,8 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] Finance Reports table and Database Testbed board both recaptured showing populated properties — the harness's own fixture-driven captures prove the mechanism; the operator's own two surfaces need their own device
 
-## 071-sheet-notion-anytype-alignment — 0/4
+## 071-sheet-notion-anytype-alignment — 1/4
 
-- [ ] 001's inventory table exists and names every sheet-capable surface with its coverage and reference state
 - [ ] 002 (settings sheet) and 003 (add-property sheet) both redesigned, recaptured and matched against their mapped reference
 - [ ] 004, 005 and 006 (view-config, filter/sort/group, record/menu) each redesigned, recaptured and matched against their mapped reference
 - [ ] No prior sheet fix (054, 058, 045, 067) regresses as a result of any redesign in this packet
