@@ -62,7 +62,7 @@
       },
       "note": "Settings above, actions below, one row grammar for both the seven types and the duplicate.",
       "capture": "element",
-      "bytes": 58426,
+      "bytes": 58488,
       "fixtureOf": "constructed-toolbar-add-view"
     },
     {
@@ -18475,7 +18475,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 216975,
+      "bytes": 216993,
       "fixtureOf": "constructed-board"
     },
     {
@@ -18679,7 +18679,7 @@
       },
       "note": "renderEmpty() returns before .obnotion-calendar is ever created, so the card lands as a direct child of .obnotion-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .obnotion-calendar descendant, or it never applies.",
       "capture": "viewport",
-      "bytes": 33170,
+      "bytes": 33169,
       "fixtureOf": "constructed-calendar-empty"
     },
     {
@@ -18712,7 +18712,7 @@
       },
       "note": "renderEmpty() returns before .obnotion-calendar is ever created, so the card lands as a direct child of .obnotion-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .obnotion-calendar descendant, or it never applies.",
       "capture": "viewport",
-      "bytes": 33534,
+      "bytes": 33528,
       "fixtureOf": "constructed-calendar-empty"
     },
     {
@@ -24076,7 +24076,7 @@
       },
       "note": "Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.",
       "capture": "viewport",
-      "bytes": 47089,
+      "bytes": 47197,
       "fixtureOf": "constructed-timeline-month"
     },
     {
