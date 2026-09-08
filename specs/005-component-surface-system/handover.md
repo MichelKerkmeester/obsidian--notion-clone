@@ -10,12 +10,11 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T03:15:00Z"
-    last_updated_by: "058-title-production-landing-verifier"
-    recent_action: "Landed 058's reopened titleFormat leg at 1b96a10e; row 69; gate 25+1 declared"
+    last_updated_at: "2026-09-08T04:10:00Z"
+    last_updated_by: "227-panel-button-padding-landing-verifier"
+    recent_action: "Landed 009 T26 panel-button padding at e1142536; gate 26 green, 0 red"
     next_safe_action: "Cut 0.0.32"
     blockers:
-      - "009 T26: .obnotion-panel-button sort-panel overflow ~10px under real host cascade (expectFail)"
       - "067 residual: T015 header block 75px (1 past 66-74), T021 2 of 3 divider contexts, AC-011 iOS pass"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
@@ -42,6 +41,49 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08 ~04:10, `009` T26 LANDED — `.obnotion-panel-button` padding decision verified, rebased onto the 221/225/069/067/058-merged main, pushed to `origin/main` at `e1142536`
+
+**Landed.** The leg's single commit `3b376a8f` replayed as `40ac626a` onto `f7101325`, with this
+verifier's `e1142536` (32 files of re-derived evidence) on top; `git log --oneline -1 origin/main` =
+`e1142536`. Every claim re-proven from the final state, in the worktree, before the push:
+
+- **Claims**: `padding: 0 6px` on `.obnotion-panel-button` (styles.css:13508) and the
+  `.obnotion-panel-button-narrow` marker with the asymmetric `::before` inset (`-6px 0 -6px -12px`,
+  styles.css:13529) — CONFIRMED by source read, present at sort-panel-renderer.ts:238,
+  filter-panel-renderer.ts:329/604 and in the hand fixture panels.mjs; the touch-targets entry is a
+  DECLARED hit-area declaration naming the inset and why its right edge stays at 0, not a silent
+  exemption. Fixture baseline 171, constructed 785 — both held, neither raised.
+- **Mutations went red on demand**: (a) removing the `padding: 0 6px` declaration →
+  `sheet-grammar.mjs` **exit 1, 29 failures** (the claimed count); (b) dropping the narrow class
+  from the sort-panel remove button → `touch-targets.mjs` **exit 1, 2 controls newly under 28px**
+  (787 vs the recorded 785). Green after restore both times.
+- **Rebase**: one stop, 32 conflict files. Generated artefacts (main.js, manifest, 14 PNGs, 15
+  tools/live JSONs) took MAIN's side and were re-derived; the tracked worktree `.handover.md` was
+  dropped (main had already deleted and gitignored it); this handover merged newest-first;
+  `tools/lane/css-lane.json` merged append-only (base 384 + main 10 + leg 3 entries) with
+  `baselineHash` recomputed to `704f768371da` = the merged styles.css by `shasum -a 256` — the
+  stylesheet auto-merged, keeping both intents (this packet's padding + 069's touch-lifted/ghost
+  rules).
+- **Re-derived on the merged tree**: build 0, tsc 0, vitest **1671/1671** (153 files), screenshots
+  seven passes (616 entries, exit 0 each), every mover judged by decoded pixel delta across the
+  final two recorded runs: **13 real changes moved stably in BOTH runs** — the 12 mobile panel
+  captures (changedPixels 3–9755, maxDelta 1–209; the ten sort/filter/board-groups ones carry this
+  packet's own content, column-manager's two are 3px/8px antialiasing with pixelHash unchanged) plus
+  board-subtask-tree-mobile-dark (38px, maxDelta 121) — all named in a css-lane release entry
+  (check-lane exit 0, "release names all 9 changed capture(s)"). 2 jitter files restored per the
+  maxDelta ≤ 12 single-run rule (board-view-desktop-dark, board-mobile-desktop-dark); 34 desktop
+  manifest rows reconciled to the PNG blobs the rebase auto-merged (byte compare proved no image
+  content changed — only manifest rows moved). All 15 `tools/live` evidence artefacts fresh;
+  verify-placement 413/415 (2 declared red); engine-parity still exits 1 on its pre-existing 50
+  Chrome/WebKit width disagreements (not gated, left open).
+- **Gate**: exit 0, **26 green, 0 red for a declared reason** — the sheet-grammar expectFail this
+  leg removed stays removed on the rebased tree.
+- **Validation**: orchestrator `--strict` on 009 and on the 005 root → `RESULT: PASSED` (before and
+  after `backfill-graph-metadata.js`, which refreshed 1 and changed 0 on 009, then the 005 root
+  again after this entry landed); scan-comments and scan-failing-values exit 0.
+- **Roadmap**: §5.A's 009 row already derived to **33% — 2/6** from goal.md's own criteria count —
+  no edit needed. No operator or device row was ticked.
 
 ### 2026-09-08, `009` T26 LANDED — `.obnotion-panel-button` padding decision, committed, NOT pushed
 
