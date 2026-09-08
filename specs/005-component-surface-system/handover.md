@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: 058's reopened card-title leg LANDED at 1b96a10e, 2026-09-08. 0.0.31 shipped at 5e7f1426 as the RENAME release (id obnotion, vault obnotion/, repo obsidian_notion-clone). 221, 225, 069, 067 follow-up 3 and 058's reopened leg are all landed. NO Opus agents (operator 2026-09-07 18:40); GLM 5.3 flash max via cli-pi DevPass carries landings/docs/releases, monitored every 5 min with a 15-min stall relaunch."
+description: "Resume point: 0.0.32 shipped at f0597bcd, 2026-09-08, the FIX release (Release workflow 34188001070 success). 009 live-host-model, the timeline-teardown fix, 069 board cross-group drag, 067 follow-up 3, 058's reopened title-format leg and 009 T26 panel-button padding are all landed; the T26 gate expectFail is discharged (26 green, 0 red). NO Opus agents (operator 2026-09-07 18:40); GLM 5.3 flash max via cli-pi DevPass carries landings/docs/releases, monitored every 5 min with a 15-min stall relaunch."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,19 +10,19 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T04:10:00Z"
-    last_updated_by: "227-panel-button-padding-landing-verifier"
-    recent_action: "Landed 009 T26 panel-button padding at e1142536; gate 26 green, 0 red"
-    next_safe_action: "Cut 0.0.32"
+    last_updated_at: "2026-09-08T06:50:00Z"
+    last_updated_by: "231-goal-refresh-0032"
+    recent_action: "Refreshed goal-prompt/goal.md/handover for 0.0.32 (f0597bcd)"
+    next_safe_action: "Await operator device reads on 0.0.32, then anything further reported"
     blockers:
-      - "067 residual: T015 header block 75px (1 past 66-74), T021 2 of 3 divider contexts, AC-011 iOS pass"
+      - "067 residual: T015 header block 75px (1 past 66-74), T020 partial (one pair genuinely 2-level), T021 2 of 3 divider contexts, AC-011 iOS pass operator-owned"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
       - "specs/005-component-surface-system/roadmap.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "221-live-host-model-lander"
+      session_id: "231-goal-refresh-0032"
       parent_session_id: null
     completion_pct: 85
     open_questions:
@@ -33,6 +33,7 @@ _memory:
       - "GLM route: --provider llmgateway --model glm-5.3-flash --thinking max"
       - "All eight Notion-refinement children are open with a first implementation leg each"
       - "0.0.31 shipped 5e7f1426 as the rename release; NO Opus agents, GLM 5.3 flash max landers only"
+      - "0.0.32 shipped f0597bcd as the fix release; all six queued landings closed, 009 T26 gate expectFail discharged (26 green, 0 red)"
 ---
 # Session Handover: Component Surface System
 
@@ -41,6 +42,44 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08 ~06:50, 0.0.32 SHIPPED as the FIX release — six queued landings closed, `009` T26's gate `expectFail` discharged
+
+**Shipped.** `0.0.32` cut at `f0597bcd` (tag `0.0.32`; Release workflow `34188001070` **success**),
+carrying every landing queued behind the six-lander order named in the prior refresh, each verified
+by a fresh GLM lander before this doc pass:
+
+- **`009` live-host-model**: `6f679e5e` (host stylesheet model, touch ratchets down) + handover
+  `3005e5bd`.
+- **Timeline→table teardown fix** (owner `037-timeline-gantt-port`, roadmap §4 row 67):
+  `f56931f8` (`pm-gantt-view` added to `VIEW_ROOT_CLASSES`, `destroy()` wired on switch) / `b6a0f847`
+  (re-derived evidence) + handover `bf775938`.
+- **`069-board-cross-group-drag`** (touch long-press lift, ghost, cross-group drop; roadmap §4 row
+  68, AC-010 the operator's own phone drag): `86b2e618`..`87ec4c8f`.
+- **`067-sheet-family-remediation` follow-up 3** (replaced-body grid, registry retarget, pill/chip/
+  header rows): `82971d74` / `fa980f8c` + handover `5024fedf`.
+- **`058-card-title-and-title-formats` reopened leg** (file-name title format + `getReferenceRowTitle`
+  fix + `titleFormat` persistence; roadmap §4 row 69, AC-008 the operator's own device read):
+  `e634e5ef` / `42de57b6` / `1b96a10e` + handover `43f660b5` / `678d535a`.
+- **`009` T26 panel-button padding**: `40ac626a` / `e1142536` + handover `97ed0f81` — the
+  sheet-grammar `expectFail` this decision required is now discharged; the gate reads **26 green, 0
+  red**, no declared exceptions outstanding.
+
+**Hygiene**: two commits, `a35f17ab` and `f7101325`, each stripped a worktree-local `.handover.md`
+note a lander had committed into `main` by mistake (225's and 226's legs respectively); the file is
+gitignored and neither commit touched a tracked spec doc.
+
+**This pass**: `goal-prompt.md`'s STATE and ORDER OF WORK rewritten for 0.0.32 (body recounted at
+3591 of the 4000-character cap; BINDING/PRECEDENCE/RESUME/EVIDENCE/DONE WHEN byte-identical, proven
+by diff); DELEGATION amended only to name the untracked-worktree-note lesson from the hygiene
+commits above. `goal.md`'s DONE table: `058`'s fraction corrected `0/5` → `7/8` (its own goal.md
+Completion Criteria count 7 `[x]` / 1 `[ ]`; the row's older prose narrative was left untouched,
+out of this pass's scope); `069`'s landed-SHA text updated from "Not pushed" to the confirmed
+`d32d185d` / `87ec4c8f` landing. `067` and `068`'s fractions (`3/7`, `5/8`) were recounted and
+already agreed with their own goal.md files — no change.
+
+**Validation**: orchestrator `--strict` on the 005 root → `RESULT: PASSED`; `scan-failing-values.mjs`
+and `build-operator-checklist.mjs --check` exit 0. No operator or device row ticked.
 
 ### 2026-09-08 ~04:10, `009` T26 LANDED — `.obnotion-panel-button` padding decision verified, rebased onto the 221/225/069/067/058-merged main, pushed to `origin/main` at `e1142536`
 
