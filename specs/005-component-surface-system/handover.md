@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point: 0.0.32 shipped at f0597bcd, 2026-09-08, the FIX release (Release workflow 34188001070 success). 009 live-host-model, the timeline-teardown fix, 069 board cross-group drag, 067 follow-up 3, 058's reopened title-format leg and 009 T26 panel-button padding are all landed; the T26 gate expectFail is discharged (26 green, 0 red). NO Opus agents (operator 2026-09-07 18:40); GLM 5.3 flash max via cli-pi DevPass carries landings/docs/releases, monitored every 5 min with a 15-min stall relaunch."
+description: "Resume point: 0.0.32 shipped at f0597bcd; the operator's 08:07-08:52 device pass on it opened seven new packets (070-075, 008) plus two reopens (058 AC-012, 066 AC-010/011), scaffolded 2026-09-08, nothing implemented yet. GLM 5.3 flash max now carries implementation legs (superseding the prior NO-Opus wording); one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding runs on Sonnet 5 xhigh."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,23 +10,27 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-08T06:50:00Z"
-    last_updated_by: "231-goal-refresh-0032"
-    recent_action: "Refreshed goal-prompt/goal.md/handover for 0.0.32 (f0597bcd)"
-    next_safe_action: "Await operator device reads on 0.0.32, then anything further reported"
+    last_updated_at: "2026-09-08T08:52:00Z"
+    last_updated_by: "232-scaffold-0032-reports"
+    recent_action: "Scaffolded 070-075, 008, and 058/066 reopens from the operator's 08:07-08:52 reports"
+    next_safe_action: "Run 070 first (P0), then 071's audit, then 073, 072, then device rows"
     blockers:
       - "067 residual: T015 header block 75px (1 past 66-74), T020 partial (one pair genuinely 2-level), T021 2 of 3 divider contexts, AC-011 iOS pass operator-owned"
+      - "070 blocks 073 AC-004 and 074 AC-004 (property-read restoration); 071/001's audit blocks every other 071 child; 008/001's audit blocks 008/002-004"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
       - "specs/005-component-surface-system/roadmap.md"
+      - "specs/005-component-surface-system/070-ios-view-data-regression/spec.md"
+      - "specs/008-calendar-timeline-chart-deprecation/spec.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "231-goal-refresh-0032"
-      parent_session_id: null
+      session_id: "232-scaffold-0032-reports"
+      parent_session_id: "231-goal-refresh-0032"
     completion_pct: 85
     open_questions:
       - "Does a Notion finding that contradicts a landed Anytype ruling ever become more than Proposed"
+      - "Which surface(s) does R2 actually name — embedded/linked views, table drag, or both (072)"
     answered_questions:
       - "The cell model: tap edits, long-press selects, a 3-control anchored pill, an overflow sheet, the editor at the cell"
       - "068 renames to obnotion- with a data.json migration, author MichelKerkmeester, repo obsidian_notion-clone"
@@ -34,6 +38,8 @@ _memory:
       - "All eight Notion-refinement children are open with a first implementation leg each"
       - "0.0.31 shipped 5e7f1426 as the rename release; NO Opus agents, GLM 5.3 flash max landers only"
       - "0.0.32 shipped f0597bcd as the fix release; all six queued landings closed, 009 T26 gate expectFail discharged (26 green, 0 red)"
+      - "R1's diagnosis: nothing lost by deleting note-database, both data.json files hold databases: [], frontmatter is intact on disk"
+      - "GLM 5.3 flash max now carries implementation legs too; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh"
 ---
 # Session Handover: Component Surface System
 
@@ -42,6 +48,118 @@ _memory:
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-08 08:07-08:52, seven packets opened from the operator's 0.0.32 device pass, and two delegation rulings
+
+`0.0.32` (`f0597bcd`) reached the operator's phone at 08:06; fourteen reports and rulings arrived
+between 08:07 and 08:52, verbatim, addressed in this same scaffold pass (Sonnet 5 xhigh, per the
+operator's own ruling on scaffolding). Six new packets opened under this parent, one new top-level
+sibling packet opened beside `006`/`007`, two existing packets reopened, and one report routed as a
+`058` amendment rather than a new packet. Nothing implemented — this pass is scaffolding only.
+
+**R1** *"I removed note database and now all views no longer have data (finance) on ios"*, clarified
+*"In ios all properties of finance stuff was empty btw"* → `070-ios-view-data-regression` (P0,
+Level 2). **Diagnosis on record before any fix**: nothing was lost by deleting `note-database` —
+both the recovered legacy `data.json` and the fresh `obnotion/data.json` hold `databases: []`
+(settings only); row values live in each note's frontmatter, confirmed intact on disk
+(`Finance/Reports/01 • Jan '25.md` carries `income: 3537.32` etc.); the view definition lives in
+`Finance/Finance Reports.md`'s own frontmatter. This is a read/render regression on iOS in 0.0.32
+(or 0.0.31, never loaded on the phone), not a data-loss event. Three named suspects, none excluded:
+`data-source.ts` (058's titleFormat parse paths), `title-field-display.ts`, and
+`legacy-plugin-data-migration.ts`'s data.json bridge.
+
+**R2** *"Also the seperate views from database is pretty bugged ui ux wise and dragging doesnt work
+on mobile like it would on notion"* → `072-linked-view-blocks-ux` (Level 2). Ambiguous between
+embedded/linked views and table row/column drag; board cross-group drag on mobile already shipped
+in `069`, so the packet's first requirement is determining which surface the 0.0.32 build actually
+shows the defect on.
+
+**R3** *"Also checkboxes and radios are too big. And also we shouldnt have radio inputs only
+checkboxes"* → `073-checkbox-controls` (Level 2), evidenced by the Database Testbed board screenshot
+(27 cards, group "No value", each showing a large empty circle labelled "Pinned" over a bare "0" —
+the same read regression as R1, compounded by the wrong control shape).
+
+**R4** *"Also how to set a board card name + number format? You know that request i asked about?"*
+→ no new packet; routed as `058-card-title-and-title-formats` AC-012/REQ-006/T015. The feature
+shipped in 0.0.32 (view settings ⚙ → Title field / Title format rows); the operator could not find
+it — a discoverability finding, not a missing feature.
+
+**R5** *"Also settings sheet has really bad ui. Actually all sheets should mimic notion way closer"*
+and **R6** *"Also Add property sheet is also completely bugged"* (screenshot: the property-type
+picker rendering as a tall sheet covering the note header while the keyboard is up) and **R7**
+*"Do we truely have screenshots and stories for every single sheet in app currently?"* / *"We
+should and go over them 1 by 1 aligning as close as possible to notion x any type"* →
+`071-sheet-notion-anytype-alignment` (Level 3 phase parent, both phase-qualification thresholds met
+independently per `recommend-level.sh --loc 1200 --files 25 --architectural` → 73/100, phase score
+30/50). Six children: `001-sheet-story-coverage-audit` (active, answers R7, gates every other
+child), `002-settings-sheet` (R5), `003-add-property-sheet` (R6), `004-view-config-sheet`,
+`005-filter-sort-group-sheets`, `006-record-and-menu-sheets`.
+
+**R8** *"Also I want to deprecate calendar and timeline view completely for now"*, **R9** *"And
+remove any mention of that and gallery view from root readme. Do keep the archived code somewhere
+for future use for those deprecated views"*, and **R11** *"Also deprecate chart view"* →
+`008-calendar-timeline-chart-deprecation`, a new top-level packet, sibling to `006`/`007` (not a
+`005` child), Level 3 phase parent (`recommend-level.sh --loc 1000 --files 20 --architectural` →
+72/100, phase score 30/50). **Combined into one phase parent rather than three separate top-level
+packets** — all three renderers already share one outgoing-view teardown mechanism
+(`teardownOutgoingViewRenderer` in `src/views/database-view.ts`, closed for calendar/timeline by
+`037`'s 0.0.31 fix), so one coordinated audit, one settings-redirect mechanism and one archive
+decision avoids re-litigating the same questions three times; the reason is recorded in the
+packet's own `spec.md`/`goal.md`. Four children mirroring `007`'s shape: `001-usage-and-migration-audit`
+(active), `002-settings-redirect-and-migrate`, `003-remove-renderers-and-harness`,
+`004-archive-docs-and-release`. The removed code is archived, not deleted:
+`archive/deprecated-views/<view>/` at repo root, excluded from the build, with a README naming the
+last-live SHA and the restore procedure, recorded as an ADR. **`037-timeline-gantt-port`'s recent
+landing (`f56931f8`, roadmap §4 row 67) is scheduled for archival once `008/003` lands — its own
+history stays, documented as superseded, not deleted.**
+
+**R10** *"Also reduce the test data. Just have 1 big database with an overview, views etc. Alongside
+the finance stuff from my notion with data restored"* → `074-test-data-consolidation` (Level 2).
+"Restored" means visible again, not recovered — R1's diagnosis already found the Finance frontmatter
+intact on disk. The operator's own `Database Testbed/` folder stays operator-owned; this packet only
+proposes its consolidated shape.
+
+**R12** *"Also toast like the undo toast stay too long on screen"* and **R13** *"Also toast close
+button needs a 56 x 56 click area"* → routed into `066-notion-states-refinement` (reopened): new
+AC-010/REQ-008/T021 (dwell, measured against Notion's ~5s reference, red-first against the live
+Undo toast) and AC-011/REQ-009/T022 (56×56px close hit area, red-first).
+
+**R14** *"Lets have these style of buttons for sort filter etc"* (reference: an Obsidian Bases
+calendar phone toolbar, icon+label buttons — "↑↓ Sort" / "≡ Filter" / "☰ Properties" / "+ New"),
+plus *"For mobile add horizontal overflow if it doesnt fit"* → `075-toolbar-labelled-buttons`
+(Level 2). The phone toolbar's icon-only cluster gains text labels matching the reference's measured
+size/spacing; the row scrolls horizontally (never wraps or collapses) when it exceeds the viewport,
+updating the existing `009`/`044` toolbar-collapse lane red-first; the desktop toolbar decision is
+explicit, recorded as an ADR.
+
+**Two delegation rulings**, recorded in `roadmap.md` §6A and folded into `goal-prompt.md`'s
+DELEGATION line: *"Use GLM 5.3 flash max as much as possible for any implementation work"*
+(supersedes the prior NO-Opus-only wording — GLM now carries implementation legs on scripted
+numbered briefs) and *"Only using one Opus 5 xhigh orchestrator at a time of you are the master
+orchestrator/ reviewer of"* / *"Scaffold phases with sonnet 5 xhigh"* (one Opus 5 xhigh
+sub-orchestrator at most, Fable master orchestrator/reviewer, scaffolding on Sonnet 5 xhigh — this
+pass).
+
+**Levels were raised above `recommend-level.sh`'s own answer for five of the six `005` children**
+(`070`, `072`, `073`, `074`, `075` all scored Level 1 on LOC/file inputs; each was raised to Level 2
+by judgment, per the parent's own "when its answer and your judgment differ, go higher" rule, given
+the operator-facing rigor each needs — thresholds, red-before-green, an unticked device row).
+
+**Operator evidence referenced but not committed** (personal data / operator-owned captures, cited
+by path in the relevant packets rather than copied into the repo):
+`ios-finance-table-empty-0032.png` (R1), `ios-testbed-board-checkbox-0032.png` (R3),
+`ios-add-property-sheet-0032.png` (R6), `toolbar-labelled-buttons-reference.png` (R14).
+
+**`006-list-view-deprecation` and `007-gallery-view-deprecation` were both `validate.sh --strict
+FAILED` on `origin/main` going into this pass** — both on `SPECDOC_SUFFICIENCY_001: goal.md:
+missing required anchor 'binding'`, a docs-shape gap: their top-level `goal.md` predates the
+`BINDING` section this contract now requires on a phase parent. Both are a same-day fix, not an
+open row: a `## 2. BINDING` table (phase → child `goal.md`) was added to each, matching their own
+children exactly, `graph-metadata.json` regenerated via the scoped backfill, and both now read
+`validate.sh --strict` `RESULT: PASSED` (`006` 0 errors 0 warnings; `007` 0 errors 1 warning,
+pre-existing and unrelated).
+
+---
 
 ### 2026-09-08 ~06:50, 0.0.32 SHIPPED as the FIX release — six queued landings closed, `009` T26's gate `expectFail` discharged
 

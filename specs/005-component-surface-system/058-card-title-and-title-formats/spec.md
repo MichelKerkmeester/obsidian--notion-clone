@@ -138,6 +138,7 @@ shows it.
 |----|-------------|
 | REQ-003 | A date column chosen as a `titleField` renders through the plugin's existing date format, not an ISO string |
 | REQ-004 | A regression test asserts the board card, the desktop record header and the phone record sheet read the identical `titleField` value for every view type but calendar and timeline |
+| REQ-006 | The shipped Title field / Title format controls are discoverable: the operator (2026-09-08) reported not finding a feature that already shipped, so the affordance, its naming, or its placement in the view settings sheet needs a documented fix |
 
 > Acceptance criteria for these requirements live in `acceptance-criteria.md`,
 > which is the document that decides whether this packet may close.

@@ -212,14 +212,14 @@
     ],
     "causal_summary": "The gallery view is withdrawn but not removed, and has been since `030-gallery-view-deprecation`",
     "created_at": "2026-09-05T03:46:36Z",
-    "last_save_at": "2026-09-06T00:43:47.621Z",
+    "last_save_at": "2026-09-08T06:52:53.492Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:93b7420cd2c12ed22613f3a56b1e35ff295c2a4afc074ff4c02c9763cef1fbe1",
+    "source_fingerprint": "sha256:f3a3484001277f23093827fdab608e817f8bde9eaee0510b9cc5e78f73cacde7",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "8e3cc8927b81b2f73a5752dec426cb2db402b23081c446b82ca508140f2e3acc"

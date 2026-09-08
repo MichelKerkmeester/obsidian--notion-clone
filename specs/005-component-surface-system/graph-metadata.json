@@ -73,7 +73,13 @@
     "005-component-surface-system/068-rename-to-obnotion",
     "005-component-surface-system/060-notion-calendar-refinement",
     "005-component-surface-system/064-notion-toolbar-refinement",
-    "005-component-surface-system/069-board-cross-group-drag"
+    "005-component-surface-system/069-board-cross-group-drag",
+    "005-component-surface-system/070-ios-view-data-regression",
+    "005-component-surface-system/071-sheet-notion-anytype-alignment",
+    "005-component-surface-system/072-linked-view-blocks-ux",
+    "005-component-surface-system/073-checkbox-controls",
+    "005-component-surface-system/074-test-data-consolidation",
+    "005-component-surface-system/075-toolbar-labelled-buttons"
   ],
   "manual": {
     "depends_on": [],
@@ -281,7 +287,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-08T04:53:09.426Z",
+    "last_save_at": "2026-09-08T06:53:43.489Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -289,11 +295,11 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:809ea373186760e9c550a970d65988095cead5b3654ef8c6d7eb72f9ead0486f",
+    "source_fingerprint": "sha256:019ce2da45b74781f98784d71b1d732cdc09f51d9adbdd60337fe6de65b827e2",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d555fe2d05a8e10476a09464e12aa382dea3fa399b611db29f544003d2dfcd15",
-      "handover.md": "75cbea0de89a53fd38b61975ef4e37aa9bf7b397d56517e3df59640f61bd6394"
+      "handover.md": "3ccfedce5cc15abb2a426cbc844392db6fd82113b276127e15798909d8d3e139"
     },
     "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",
     "last_active_at": "2026-09-02T20:00:54.844Z"

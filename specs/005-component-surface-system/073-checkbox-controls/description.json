@@ -1,0 +1,23 @@
+{
+  "specFolder": "005-component-surface-system/073-checkbox-controls",
+  "description": "Checkbox size on phone and removing radio-style inputs in favour of checkboxes",
+  "keywords": [
+    "checkbox",
+    "size",
+    "phone",
+    "removing",
+    "radio-style",
+    "inputs",
+    "favour",
+    "checkboxes"
+  ],
+  "lastUpdated": "2026-09-08T06:23:36.514Z",
+  "specId": "073",
+  "folderSlug": "checkbox-controls",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

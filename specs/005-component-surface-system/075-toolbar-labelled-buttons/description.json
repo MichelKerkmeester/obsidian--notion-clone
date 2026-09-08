@@ -1,0 +1,28 @@
+{
+  "specFolder": "005-component-surface-system/075-toolbar-labelled-buttons",
+  "description": "Phone toolbar icon+label buttons matching the Notion/Anytype/Bases reference, with horizontal overflow scroll",
+  "keywords": [
+    "phone",
+    "toolbar",
+    "icon",
+    "label",
+    "buttons",
+    "matching",
+    "notion",
+    "anytype",
+    "bases",
+    "reference",
+    "horizontal",
+    "overflow",
+    "scroll"
+  ],
+  "lastUpdated": "2026-09-08T06:35:40.364Z",
+  "specId": "075",
+  "folderSlug": "toolbar-labelled-buttons",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

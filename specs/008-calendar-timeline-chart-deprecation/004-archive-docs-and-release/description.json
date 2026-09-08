@@ -1,0 +1,17 @@
+{
+  "specFolder": "008-calendar-timeline-chart-deprecation/004-archive-docs-and-release",
+  "description": "Phase 4: archive-docs-and-release",
+  "keywords": [
+    "phase",
+    "archive-docs-and-release"
+  ],
+  "lastUpdated": "2026-09-08T06:24:17.288Z",
+  "specId": "004",
+  "folderSlug": "archive-docs-and-release",
+  "parentChain": [
+    "008-calendar-timeline-chart-deprecation"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

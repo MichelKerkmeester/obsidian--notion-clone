@@ -1,0 +1,24 @@
+{
+  "specFolder": "005-component-surface-system/070-ios-view-data-regression",
+  "description": "iOS view data regression: currency cells empty and view sort not applied after 0.0.32",
+  "keywords": [
+    "ios",
+    "view",
+    "data",
+    "regression",
+    "currency",
+    "cells",
+    "empty",
+    "sort",
+    "applied"
+  ],
+  "lastUpdated": "2026-09-08T06:20:03.243Z",
+  "specId": "070",
+  "folderSlug": "ios-view-data-regression",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

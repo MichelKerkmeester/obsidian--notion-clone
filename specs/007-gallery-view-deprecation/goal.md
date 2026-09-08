@@ -85,6 +85,28 @@ Frozen choices. Changing one is an amendment.
 
 ---
 
+<!-- ANCHOR:binding -->
+## 2. BINDING
+
+**Read the child goal before working a phase.** Each is authoritative for its
+phase and binds as if written here.
+
+| Phase | Goal document |
+|-------|---------------|
+| 001-usage-and-migration-audit | `001-usage-and-migration-audit/goal.md` |
+| 002-settings-redirect-and-migrate | `002-settings-redirect-and-migrate/goal.md` |
+| 003-remove-renderer-and-harness | `003-remove-renderer-and-harness/goal.md` |
+| 004-docs-and-release | `004-docs-and-release/goal.md` |
+
+**Precedence.** Decisions above outrank child detail. Child detail outranks any
+summary of it. Name a conflict rather than resolving it silently.
+
+**Stop.** Only the criteria below decide done. An evaluator sees the objective
+string, not these files.
+<!-- /ANCHOR:binding -->
+
+---
+
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 

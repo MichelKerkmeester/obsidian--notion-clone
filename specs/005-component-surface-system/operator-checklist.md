@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-08: **70 phases**, **7 with nothing left**, **180 rows** waiting on a device.
+Derived 2026-09-08: **76 phases**, **7 with nothing left**, **207 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -388,6 +388,51 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 ## 069-board-cross-group-drag — 7/8
 
 - [ ] OPERATOR: the operator drags a card between two columns on their own phone and confirms the move landed in the note's frontmatter. Nothing in this repository can close this row, and an agent never ticks it.
+
+## 070-ios-view-data-regression — 0/5
+
+- [ ] The harness reproduces the empty-property read against a fixture mirroring the operator's shapes, cold-cache case included, before any fix
+- [ ] Root cause identified with file:line evidence among data-source.ts, title-field-display.ts, legacy-plugin-data-migration.ts, or a confirmed fourth cause
+- [ ] Fix lands with a test proven to fail against the pre-fix code and pass after
+- [ ] Finance Reports table and Database Testbed board both recaptured showing populated properties
+- [ ] Operator device row recorded and left unticked pending the operator's own re-check
+
+## 071-sheet-notion-anytype-alignment — 0/4
+
+- [ ] 001's inventory table exists and names every sheet-capable surface with its coverage and reference state
+- [ ] 002 (settings sheet) and 003 (add-property sheet) both redesigned, recaptured and matched against their mapped reference
+- [ ] 004, 005 and 006 (view-config, filter/sort/group, record/menu) each redesigned, recaptured and matched against their mapped reference
+- [ ] No prior sheet fix (054, 058, 045, 067) regresses as a result of any redesign in this packet
+
+## 072-linked-view-blocks-ux — 0/4
+
+- [ ] Surface determination complete: R2 traced to embedded/linked views, table drag, or both, with file:line evidence
+- [ ] UI/UX defects on the confirmed surface(s) enumerated
+- [ ] Mobile drag on the confirmed surface(s) fixed and measured against a Notion reference capture
+- [ ] Operator device row recorded and left unticked
+
+## 073-checkbox-controls — 0/5
+
+- [ ] Radio inventory complete, cross-checked against an independent grep count
+- [ ] Every inventoried boolean radio-style control converted to a checkbox
+- [ ] Phone checkbox size measured and reduced to match the Notion/Anytype reference
+- [ ] The board card's "Pinned"-style control specifically renders as a checkbox with its real value, not a bare "0" (dependent on 070 restoring property reads)
+- [ ] Operator device row recorded and left unticked
+
+## 074-test-data-consolidation — 0/4
+
+- [ ] Every test/fixture dataset the project ships or seeds inventoried
+- [ ] One consolidated testbed database designed and built, covering every surviving view/column/grouping/filter/sort/formula/relation
+- [ ] Capture, story and phone-smoke harnesses migrated onto the one consolidated database, each re-verified against its own pass/fail criteria
+- [ ] Finance databases confirmed visible once 070 lands, documented as the kept second dataset
+
+## 075-toolbar-labelled-buttons — 0/5
+
+- [ ] Phone toolbar controls render as icon+label buttons matching the reference's measured size and spacing
+- [ ] Touch targets measure ≥44×44px
+- [ ] The existing 009/044 toolbar-collapse and sheet-grammar lanes updated red-first, then a new scroll-overflow lane (402px viewport, `scrollWidth > clientWidth`, last control reachable) is green
+- [ ] Desktop toolbar decision recorded as an ADR
+- [ ] Operator device row recorded and left unticked
 
 ## Nothing left to check
 

@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/071-sheet-notion-anytype-alignment",
+  "spec_folder": "005-component-surface-system/071-sheet-notion-anytype-alignment",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/001-sheet-story-coverage-audit",
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/002-settings-sheet",
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/003-add-property-sheet",
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/004-view-config-sheet",
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/005-filter-sort-group-sheets",
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/006-record-and-menu-sheets"
+  ],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "071 sheet notion anytype alignment",
+      "sheet family audit",
+      "settings sheet redesign",
+      "add property sheet redesign",
+      "packet goal",
+      "071 goal"
+    ],
+    "key_topics": [
+      "sheet",
+      "notion",
+      "anytype",
+      "alignment",
+      "family",
+      "audit",
+      "settings",
+      "redesign",
+      "property",
+      "packet",
+      "goal",
+      "operator"
+    ],
+    "importance_tier": "important",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "goal.md",
+      "tools/storybook/story-coverage.mjs",
+      "screenshots/manifest.json",
+      "001-sheet-story-coverage-audit/goal.md",
+      "002-settings-sheet/goal.md",
+      "003-add-property-sheet/goal.md",
+      "004-view-config-sheet/goal.md",
+      "005-filter-sort-group-sheets/goal.md",
+      "006-record-and-menu-sheets/goal.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "story-coverage.mjs",
+        "kind": "file",
+        "path": "tools/storybook/story-coverage.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Sheet Family Alignment",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "its",
+        "kind": "key_phrase",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. DURABLE DIRECTIVE",
+        "kind": "heading",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "Decisions",
+        "kind": "heading",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "Operator copy",
+        "kind": "heading",
+        "path": "goal.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The operator reports three separate sheet-family defects in the same batch — the settings sheet's UI/UX (R5), the add-property / property-type picker sheet rendering as a tall sheet that covers the note header while the keyboard is up (R6, screenshot evidence) — and asks a fourth, structural question: does the app actually have screenshot and story coverage for every sheet it can open, checked one by one against Notion and Anytype (R7)?",
+    "created_at": "2026-09-08T06:24:02Z",
+    "last_save_at": "2026-09-08T06:50:40.608Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:67ff8f7e58e9ee49e91193fc1670a1ab694fe141d6002cf55644f1701b295c84",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "a17f08b3e0271f07b0dbae52275b226f486747d7e0ebbfb3eb26b6b908ff437e"
+    },
+    "last_active_at": null
+  }
+}

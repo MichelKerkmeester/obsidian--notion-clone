@@ -1,0 +1,18 @@
+{
+  "specFolder": "005-component-surface-system/071-sheet-notion-anytype-alignment/002-settings-sheet",
+  "description": "Phase 2: settings-sheet",
+  "keywords": [
+    "phase",
+    "settings-sheet"
+  ],
+  "lastUpdated": "2026-09-08T06:24:04.376Z",
+  "specId": "002",
+  "folderSlug": "settings-sheet",
+  "parentChain": [
+    "005-component-surface-system",
+    "071-sheet-notion-anytype-alignment"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

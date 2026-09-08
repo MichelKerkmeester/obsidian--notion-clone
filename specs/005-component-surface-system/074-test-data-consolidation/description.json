@@ -1,0 +1,26 @@
+{
+  "specFolder": "005-component-surface-system/074-test-data-consolidation",
+  "description": "Consolidate test/fixture data into one testbed database plus the restored Finance databases",
+  "keywords": [
+    "consolidate",
+    "test",
+    "fixture",
+    "data",
+    "one",
+    "testbed",
+    "database",
+    "plus",
+    "restored",
+    "finance",
+    "databases"
+  ],
+  "lastUpdated": "2026-09-08T06:23:37.149Z",
+  "specId": "074",
+  "folderSlug": "test-data-consolidation",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

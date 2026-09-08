@@ -1,0 +1,18 @@
+{
+  "specFolder": "005-component-surface-system/071-sheet-notion-anytype-alignment/004-view-config-sheet",
+  "description": "Phase 4: view-config-sheet",
+  "keywords": [
+    "phase",
+    "view-config-sheet"
+  ],
+  "lastUpdated": "2026-09-08T06:24:05.733Z",
+  "specId": "004",
+  "folderSlug": "view-config-sheet",
+  "parentChain": [
+    "005-component-surface-system",
+    "071-sheet-notion-anytype-alignment"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

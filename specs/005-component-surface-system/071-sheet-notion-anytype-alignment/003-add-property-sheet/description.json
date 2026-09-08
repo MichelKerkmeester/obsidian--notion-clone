@@ -1,0 +1,18 @@
+{
+  "specFolder": "005-component-surface-system/071-sheet-notion-anytype-alignment/003-add-property-sheet",
+  "description": "Phase 3: add-property-sheet",
+  "keywords": [
+    "phase",
+    "add-property-sheet"
+  ],
+  "lastUpdated": "2026-09-08T06:24:05.058Z",
+  "specId": "003",
+  "folderSlug": "add-property-sheet",
+  "parentChain": [
+    "005-component-surface-system",
+    "071-sheet-notion-anytype-alignment"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

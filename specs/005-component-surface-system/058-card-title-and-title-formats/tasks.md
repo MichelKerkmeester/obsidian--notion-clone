@@ -179,14 +179,29 @@ prior AC-001..AC-003 screenshot evidence was hand-written fixture HTML, never th
 
 ---
 
+<!-- ANCHOR:phase-5 -->
+## Phase 5: Discoverability (opened 2026-09-08)
+
+The operator asked "how to set a board card name + number format?" on the same build that already
+ships it (058's Phase 4 landing) — the feature exists (Title field / Title format rows, visible
+while the title reads the file name) but the operator could not find it. This is a discoverability
+finding, not a new feature.
+
+- [ ] T015 Investigate why the shipped Title field / Title format rows were not found: affordance
+      visibility, naming, or placement inside the view Settings ⚙ sheet rather than a more visible
+      toolbar/menu location. Propose and land a fix (AC-012)
+<!-- /ANCHOR:phase-5 -->
+
+---
+
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-- [x] All tasks marked `[x]` — except T011, which names the operator's own row and is never ticked
-      by an agent
+- [ ] All tasks marked `[x]` — except T011 (the operator's own row, never ticked by an agent) and
+      T015 (new, opened 2026-09-08, not started)
 - [x] No `[B]` blocked tasks remaining
-- [x] Every acceptance criterion in `acceptance-criteria.md` is `Met`, `Waived` or `Superseded`
-      — except the operator-only row
+- [ ] Every acceptance criterion in `acceptance-criteria.md` is `Met`, `Waived` or `Superseded`
+      — except the operator-only row (AC-008) and the new discoverability row (AC-012, Unmet)
 <!-- /ANCHOR:completion -->
 
 ---

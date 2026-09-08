@@ -1,0 +1,18 @@
+{
+  "specFolder": "005-component-surface-system/071-sheet-notion-anytype-alignment/005-filter-sort-group-sheets",
+  "description": "Phase 5: filter-sort-group-sheets",
+  "keywords": [
+    "phase",
+    "filter-sort-group-sheets"
+  ],
+  "lastUpdated": "2026-09-08T06:24:06.378Z",
+  "specId": "005",
+  "folderSlug": "filter-sort-group-sheets",
+  "parentChain": [
+    "005-component-surface-system",
+    "071-sheet-notion-anytype-alignment"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

@@ -1,0 +1,23 @@
+{
+  "specFolder": "005-component-surface-system/072-linked-view-blocks-ux",
+  "description": "Linked/embedded database views and mobile drag parity with Notion",
+  "keywords": [
+    "linked",
+    "embedded",
+    "database",
+    "views",
+    "mobile",
+    "drag",
+    "parity",
+    "notion"
+  ],
+  "lastUpdated": "2026-09-08T06:23:35.846Z",
+  "specId": "072",
+  "folderSlug": "linked-view-blocks-ux",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

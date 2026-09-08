@@ -173,6 +173,8 @@ context allows, with the failure path reporting through the same component as th
 | REQ-005 | Raw fast-band duration literals in `styles.css` reach zero with comments excluded, and the ease-versus-ease-out choice is recorded as an ADR rather than absorbed. |
 | REQ-006 | The two Notion-versus-Anytype conflicts carry the operator's 2026-09-06 18:50 rulings quoted verbatim: ADR-001 keeps the single destructive weight, ADR-002 splits toast placement by form factor — centred on phone, corner kept on desktop. |
 | REQ-007 | Within the phone band, the toast stack and the operation-result rail — one shared placement — render horizontally centred with symmetric computed margins; outside the band, both measured Anytype corner anchors are unchanged. |
+| REQ-008 | The Undo toast's dwell on phone is measured against Notion's own reference (~5s) and a threshold is set, red-first against the current behavior. Opened 2026-09-08 from the operator's report that toasts stay too long on screen. |
+| REQ-009 | The toast's close control exposes a 56×56px hit area on phone, red-first against the current size, with the visual glyph size unchanged unless the Notion/Anytype references say otherwise. Opened 2026-09-08. |
 
 > Acceptance criteria for these requirements live in `acceptance-criteria.md`,
 > which is the document that decides whether this packet may close.

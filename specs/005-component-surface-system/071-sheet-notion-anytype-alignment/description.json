@@ -1,0 +1,24 @@
+{
+  "specFolder": "005-component-surface-system/071-sheet-notion-anytype-alignment",
+  "description": "Sheet family alignment to Notion x Anytype, one sheet family per phase, audit-first",
+  "keywords": [
+    "sheet",
+    "family",
+    "alignment",
+    "notion",
+    "anytype",
+    "one",
+    "per",
+    "phase",
+    "audit-first"
+  ],
+  "lastUpdated": "2026-09-08T06:24:03.070Z",
+  "specId": "071",
+  "folderSlug": "sheet-notion-anytype-alignment",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "phase"
+}

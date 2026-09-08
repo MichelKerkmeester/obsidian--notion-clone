@@ -389,6 +389,22 @@ worked around.
 
 ---
 
+<!-- ANCHOR:phase-5 -->
+## Phase 5: Toast dwell and close-target reports (opened 2026-09-08)
+
+Two fresh operator reports on 0.0.32: toasts (naming the Undo toast specifically) stay on screen
+too long, and the toast's close button needs a 56×56px hit area.
+
+- [ ] T021 Measure the live Undo toast's current dwell against Notion's own reference (~5s, or the
+      documented assumption if no timed reference capture exists). Add a red-first toast-lane row,
+      set a threshold, land the fix, leave an operator device row unticked (AC-010)
+- [ ] T022 Measure the toast close control's current hit area with `tools/live/touch-targets.mjs`,
+      record it, land a 56×56px fix with the visual glyph size unchanged (unless the Notion/Anytype
+      references say otherwise), red-first (AC-011)
+<!-- /ANCHOR:phase-5 -->
+
+---
+
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 

@@ -1,0 +1,17 @@
+{
+  "specFolder": "008-calendar-timeline-chart-deprecation/003-remove-renderers-and-harness",
+  "description": "Phase 3: remove-renderers-and-harness",
+  "keywords": [
+    "phase",
+    "remove-renderers-and-harness"
+  ],
+  "lastUpdated": "2026-09-08T06:24:16.619Z",
+  "specId": "003",
+  "folderSlug": "remove-renderers-and-harness",
+  "parentChain": [
+    "008-calendar-timeline-chart-deprecation"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

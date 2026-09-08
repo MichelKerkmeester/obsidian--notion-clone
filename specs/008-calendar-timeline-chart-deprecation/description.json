@@ -1,0 +1,29 @@
+{
+  "specFolder": "008-calendar-timeline-chart-deprecation",
+  "description": "Retire calendar, timeline and chart views: hide from pickers, migrate existing views, remove renderers, archive the code, strip README mentions",
+  "keywords": [
+    "retire",
+    "calendar",
+    "timeline",
+    "chart",
+    "views",
+    "hide",
+    "pickers",
+    "migrate",
+    "existing",
+    "remove",
+    "renderers",
+    "archive",
+    "code",
+    "strip",
+    "readme",
+    "mentions"
+  ],
+  "lastUpdated": "2026-09-08T06:24:14.514Z",
+  "specId": "008",
+  "folderSlug": "calendar-timeline-chart-deprecation",
+  "parentChain": [],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "phase"
+}
