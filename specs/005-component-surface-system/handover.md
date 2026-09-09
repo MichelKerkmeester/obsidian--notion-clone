@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T17:05:00Z"
-    last_updated_by: "260-sheet-depth-cap"
-    recent_action: "067 census landed e9c43dba: mutation-proven, gate 27/0, ratchet row reworded"
+    last_updated_at: "2026-09-09T15:20:00Z"
+    last_updated_by: "261-goal-criteria-truth"
+    recent_action: "006 release row ticked (tag 0.0.22 / CHANGELOG 0.0.23); 005 device row reworded"
     next_safe_action: "Operator device rows only: 067/061 iOS pass; confirm 0.0.36 tag"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
@@ -291,6 +291,16 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-09 ~15:20, docs-only truth leg — two top-level goal criteria trued to today's shipped state, worktree `261-goal-criteria-truth`
+
+006's shipped-release criterion ticked with evidence: the hide-and-migrate landed at `e466696b`,
+first contained in tag `0.0.22`, with `CHANGELOG.md`'s `## 0.0.23` heading carrying the removal
+("The list view is retired"); 0.0.36 at `04524885` is the current release. 005's device-freeze
+row kept UNTICKED but its prose refreshed: shipped views are table and board only (list, gallery,
+calendar/timeline/chart archived), so the board's observed red is what the operator re-reads on
+0.0.36, and the 1.4.1 reference is re-dated as this plugin's pre-0.0.x version at `460d4d7`.
+No other criterion touched. Both packets backfilled and re-validated: PASSED.
 
 ### 2026-09-09 ~17:05, the depth-cap census leg LANDING-VERIFIED on `origin/main` — mutation replayed, ratchet reconciled, pushed, worktree `260-sheet-depth-cap`
 

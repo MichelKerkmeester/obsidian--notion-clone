@@ -139,8 +139,9 @@ Three to seven bullets, each checkable without opening another file.
       and what a rollback does not undo. **Done 2026-09-05** by `008-docs-and-release` —
       `README.md`'s view list and `CHANGELOG.md`'s `## 0.0.23 (unreleased)` entry, all four `005`
       losses named individually.
-- [ ] The release ships, carrying the removal. **Owed to the orchestrator's next release (0.0.23)**;
-      `008-docs-and-release` prepared the docs but did not cut it.
+- [x] The release ships, carrying the removal. **Done 2026-09-09**: the hide-and-migrate landed at
+      `e466696b`, first contained in tag `0.0.22`, and the `CHANGELOG.md` `## 0.0.23` heading
+      carries the removal ("The list view is retired"). Current release: 0.0.36, cut at `04524885`.
 - [ ] **The operator opens a vault that had a list view and reports it as migrated rather than
       broken.** Only the operator closes this row.
 <!-- /ANCHOR:completion -->

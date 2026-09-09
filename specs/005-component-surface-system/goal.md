@@ -144,9 +144,11 @@ resolve them silently.
       tree. A cut release is a shipped state and an uncommitted phase is not even that, so this
       reads **1 confirmed of 32** exactly as before. Row 29's per-row confirmation is what would
       move it.
-- [ ] Every view opens on device without freezing. Today only the table does. **2026-09-02:** 1.4.1
-      carries sheet lifecycle fixes, not a view fix, so nothing here changed. The board and gallery
-      remain the two views with an observed red and no verified green.
+- [ ] Every view opens on device without freezing. Today only the table does. **2026-09-09:** the
+      shipped views are table and board only — list, gallery and calendar/timeline/chart views are
+      deprecated and archived — so the board's observed red is what the operator re-reads, now on
+      0.0.36 (cut at `04524885`). The 1.4.1 cited here was this plugin's version at `460d4d7`,
+      before the 0.0.x renumbering; it carried sheet lifecycle fixes, not a view fix.
 - [x] A gate check constructs a production renderer for **every** view. One lane does now, for
       List, Table, Board, Gallery, Calendar and Timeline — **6 of 22**, a ratchet, twelve
       scenarios driven by both action bags. Every view named in an operator report is asserted.
