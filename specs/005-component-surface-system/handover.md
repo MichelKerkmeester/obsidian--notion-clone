@@ -10,12 +10,12 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T09:57:00Z"
-    last_updated_by: "254-goal-refresh-0035"
-    recent_action: "Closing goal refresh LANDED (b1aeb43e): 071 4/4, 008 4/4, gate 27/0"
+    last_updated_at: "2026-09-09T11:40:00Z"
+    last_updated_by: "255-landing-verify"
+    recent_action: "255-pkg-description LANDED+verified (51470e56): description 3→0, lane 13/13, gate 27/0"
     next_safe_action: "Operator device pass on 0.0.35; ORDER OF WORK §1 names every row"
     blockers:
-      - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1) and package.json's description residual"
+      - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
@@ -176,6 +176,30 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-09 ~11:40, `255-pkg-description` LANDED+verified on `origin/main` — the 008/004 npm-listing residual, pushed
+
+**What landed:** the residual leg's single commit `8b14f39f` (17 files) — landing-verified in the
+`255-pkg-description` worktree and pushed as `51470e56` (leg + this verification's freshness
+stamps and roadmap reconciliation). Every claim CONFIRMED: `package.json`'s `description` reads
+"Database views for notes with table, board, inline markdown, formulas, and source rules.",
+retired mentions 3 → 0; the mention lane judges that field alone, its suite 10 → 13,
+mutation-proven (old string restored → 1 failed | 12 passed, scanner exit 1 naming chart 1,
+calendar 1, timeline 1; restored → 13/13, exit 0). 004's AC-001 `Met` with the discharge
+recorded; 008's goal.md LOG and 005's handover carry it; the roadmap's 008 packet paragraph now
+records the residual as discharged (goal figure unchanged at 4/4 — the residual was a LOG
+finding, never a criterion).
+
+**Verification numbers**: rebase no-op (`8b14f39f` already on `13bc4632`); `npm run build` 0;
+`npx tsc --noEmit` 0; `npx vitest run` 1584/1584 (157 files) exit 0; `npm run screenshots`
+×2 exit 0 (480 each, one extra pass to feed the jitter comparison) — `board-view-desktop-dark.png`
+jitter (4px@Δ1, one run only) restored with its manifest `bytes` patched back, the REAL mover
+`board-mobile-desktop-dark.png` kept (1px@Δ1, moved in both sampled runs); evidence 15/15 fresh
+→ no `tools/live/*` re-run; `npm run gate` 27 green, 0 red, exit 0; verify-placement 418/420, 2
+declared; `validate --strict` RESULT: PASSED for 004, the 008 parent AND 005; backfills 004/008/005
+all `changed: 0`; scan-comments and scan-failing-values exit 0. The seven `tools/live/*.json` in
+the verification commit are the gate's own `measuredAt` stamps — content unchanged. Nothing
+open: the only blocker left on this packet's books is the operator's device pass on 0.0.35.
 
 ### 2026-09-09 ~06:20, `008/003-remove-renderers-and-harness` LANDED on `origin/main` — landing-verified, rebased, pushed
 
