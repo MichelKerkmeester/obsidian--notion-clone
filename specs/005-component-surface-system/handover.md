@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T15:59:59Z"
-    last_updated_by: "263-s4-deprecation-deferrals"
-    recent_action: "6 §4 rows 38/39/51/62/63/67 deferred: 0.0.35 removed their views; 20/37 judged out"
+    last_updated_at: "2026-09-09T20:30:00Z"
+    last_updated_by: "264-hv-checklist"
+    recent_action: "Wrote human-verification-checklist.md: 33 device entries, 2 flagged obsolete"
     next_safe_action: "Operator device rows only: 067/061 iOS pass; confirm 0.0.36 tag"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
@@ -291,6 +291,15 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-09 ~20:30, docs-only leg — human-verification-checklist.md written, worktree `264-human-verification-checklist`
+
+New hand-held companion to `operator-checklist.md`: 33 actionable device entries covering the
+still-open §4 rows, the operator-owned AC/D/C rows and the three top-level migration/freeze
+goals, grouped by surface with Mobile/Desktop steps and numeric thresholds. Two requested items
+(`057` G12/G15/AC-010, `060` D1-D4) are flagged closed-by-obsolescence: the calendar view they
+describe is gone from `main.js` since 0.0.35. Orchestrator --strict: PASSED before and after the
+scoped backfill (`refreshed: 1, changed: 0`).
 
 ### 2026-09-09 ~17:59, docs-only deferral leg — 6 §4 rows whose device read the 0.0.35 view removal made impossible, recorded as deferred, worktree `263-s4-deprecation-deferrals`
 
