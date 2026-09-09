@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-09T19:23:31.866Z",
+  "measuredAt": "2026-09-09T20:46:55.899Z",
   "inputs": {
-    "styles.css": "82894e5ae604",
+    "styles.css": "c7a50b8c51e2",
     "tools/live/checkbox-inventory.mjs": "905d8557d4b0"
   },
   "totals": {
@@ -142,7 +142,7 @@
     },
     {
       "file": "src/views/view-config-panel-renderer.ts",
-      "line": 2278,
+      "line": 2289,
       "chain": [
         "obnotion-view-config-panel",
         "obnotion-view-config-field"

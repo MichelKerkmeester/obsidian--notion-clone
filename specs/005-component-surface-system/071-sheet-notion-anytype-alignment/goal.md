@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/071-sheet-notion-anytype-alignment"
-    last_updated_at: "2026-09-09T20:45:00Z"
-    last_updated_by: "007-scaffold"
-    recent_action: "Scaffolded child 007 (0.0.36 device recheck)"
-    next_safe_action: "Execute 007/tasks.md"
+    last_updated_at: "2026-09-09T23:10:00Z"
+    last_updated_by: "007-landing-verify"
+    recent_action: "Child 007 LANDED (provisional metrics), landing-verified on the rebased main"
+    next_safe_action: "Receive T001's operator capture and retune 007's four provisional numbers"
     blockers: []
     key_files:
       - "spec.md"
@@ -104,7 +104,7 @@ string, not these files.
 | 005-filter-sort-group-sheets | LANDED, landing-verified | `9df04459` (two GLM runs + Sonnet) replayed onto the 004+006-merged main as `4c00bf798`, landed `79500b89`; goal 3/3, vitest 1747/1747, sheet-rebuild 0, placement 413/415 (2 declared), evidence 15/15 fresh, gate 27/0 |
 | 006-record-and-menu-sheets | LANDED, landing-verified | Replayed as `a10c11ac` onto the 066+0.0.34+004-merged main, landed `ae89043f`; goal 2/2, gate 27/0, 2166 sheet-grammar checks green |
 | ALL SIX CHILDREN LANDED — parent 4/4 | Done | This refresh, 2026-09-09: criterion 4's own parent-level run confirms no regression on the merged tree (`97395196`): `sheet-grammar.mjs` PASS exit 0, `npx vitest run` PASS exit 0 (157 files / 1581 tests) |
-| 007-settings-sheet-strict-alignment scaffolded | Scaffold only | Operator's 0.0.36 (iOS) device recheck (D3) of the settings sheet: *"Settings sheet still has bad ui overall and needs strict alignment with notion sheets."* `002`'s row grammar stayed converged; the reference inventory this child built found the real gap is structural (card grouping), never compared before because `002` cited the wrong Notion surface (account Settings, not the per-database Settings sheet). Scaffolded in `worktrees/268-settings-sheet-strict`; no implementation yet |
+| 007-settings-sheet-strict-alignment | LANDED, landing-verified | Implementation landed in `worktrees/269-settings-sheet-cards` as `9b6daa3e`+`f2e993e6`, rebased onto origin/main (069/075-merged) as `a56020f7`+`48dbd5d9`; goal 4/5 (the fifth criterion is the operator's own device read, D3). Continuation verification: sheet-grammar card clause RED (0 card containers, exit 1) → GREEN (2/2 cards, radius ≥8px, backgrounds distinct, gap ≥8px, headings above) — reproven by producer mutation (card-wrapper revert → 0 cards, exit 1) and unit mutation (card-background declaration → exactly 1 of 7 fails); vitest 1586/1586, tsc 0, build 0, screenshots ×2 480/480 (0 movers both runs), evidence 16/16 fresh, gate 28/0 (069's lane the 28th), validate --strict PASSED ×3; the four card metrics stay provisional until T001's operator capture |
 
 ### Deviations and findings
 
