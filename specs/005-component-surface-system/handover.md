@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T15:20:00Z"
-    last_updated_by: "261-goal-criteria-truth"
-    recent_action: "006 release row ticked (tag 0.0.22 / CHANGELOG 0.0.23); 005 device row reworded"
+    last_updated_at: "2026-09-09T15:59:59Z"
+    last_updated_by: "263-s4-deprecation-deferrals"
+    recent_action: "6 §4 rows 38/39/51/62/63/67 deferred: 0.0.35 removed their views; 20/37 judged out"
     next_safe_action: "Operator device rows only: 067/061 iOS pass; confirm 0.0.36 tag"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
@@ -291,6 +291,18 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-09 ~17:59, docs-only deferral leg — 6 §4 rows whose device read the 0.0.35 view removal made impossible, recorded as deferred, worktree `263-s4-deprecation-deferrals`
+
+Rows 38, 39, 51, 62, 63 and 67: the operator's 2026-09-08 ruling (rows 77-78, 80) removed the
+calendar, timeline and chart views (008 landed `69308192`/`7fb9fb28`, shipped 0.0.35), so the
+device read each of these rows waited on can no longer happen. Each status cell now heads with
+the deferral, the ruling quoted verbatim, its prior state kept intact, nothing ticked. Rows 20
+and 37 were judged OUT — row 20's report draws the boundary at table-versus-everything-else
+rather than at any one view and 028 closed rows 18-23 with no operator row; row 37's open half
+is the board side-by-side, a surviving surface, its gantt half riding row 38 — both named in a
+new §7 note and left awaiting. Orchestrator --strict: PASSED before and after the scoped
+backfill (`refreshed: 1, changed: 0`).
 
 ### 2026-09-09 ~15:20, docs-only truth leg — two top-level goal criteria trued to today's shipped state, worktree `261-goal-criteria-truth`
 
