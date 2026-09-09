@@ -249,39 +249,13 @@ function buildColumns(vocabulary: UseCaseVocabulary): CatalogueColumn[] {
 
 function buildViews(vocabulary: UseCaseVocabulary): CatalogueView[] {
   const prefix = vocabulary.id;
-  // Table, board, calendar, timeline and chart are the view types the plugin
-  // ships and keeps. List and gallery have both been removed from the tree,
-  // so a generated view of either would be configuration for a surface the
-  // plugin no longer renders.
+  // The operator's ruling for the testbed: one database, a table and a board.
+  // The other view types still render in the plugin, but the fixture the
+  // harnesses mount configures only these two, so a lane that wants a calendar
+  // or a chart builds its own view rather than borrowing one from this dataset.
   return [
     { id: `${prefix}-table`, name: "All records", type: "table" },
     { id: `${prefix}-board`, name: "By status", type: "board", groupField: FACET_SHAPES.status.key },
-    {
-      id: `${prefix}-calendar`, name: "Calendar", type: "calendar",
-      startField: FACET_SHAPES.rangeStart.key, endField: FACET_SHAPES.rangeEnd.key,
-      titleField: "file.name", colorField: FACET_SHAPES.status.key,
-    },
-    {
-      id: `${prefix}-timeline`, name: "Timeline", type: "timeline",
-      startField: FACET_SHAPES.rangeStart.key, endField: FACET_SHAPES.rangeEnd.key,
-      groupField: FACET_SHAPES.status.key, titleField: "file.name",
-      colorField: FACET_SHAPES.status.key,
-    },
-    {
-      id: `${prefix}-chart`, name: "By status", type: "chart",
-      groupField: FACET_SHAPES.status.key, chartValueField: FACET_SHAPES.currency.key,
-    },
-    // The second table is the deliberately filtered and sorted one: it proves
-    // the note can declare a non-default sort and a non-empty filter the way
-    // the plugin's own views do, instead of the harness only ever mounting the
-    // everything-shown default. Its filter keeps the records that carry a
-    // status, so the deliberately sparse record is the one it excludes — the
-    // same row the everything-shown table keeps for the empty-cell reads.
-    {
-      id: `${prefix}-table-sorted`, name: "Sorted and filtered", type: "table",
-      sort: { field: FACET_SHAPES.status.key, direction: "asc" },
-      filter: { field: FACET_SHAPES.status.key, op: "notempty" },
-    },
   ];
 }
 

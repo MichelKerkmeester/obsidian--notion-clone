@@ -11,7 +11,7 @@ contextType: "planning"
 <!-- SPECKIT_TEMPLATE_SOURCE: decision-record | v2.2 -->
 # Testbed Proposal: the operator's `Database Testbed/` after the consolidation
 
-**Packet:** 074-test-data-consolidation · **Date:** 2026-09-08 · **Status:** Proposed — awaiting the operator
+**Packet:** 074-test-data-consolidation · **Date:** 2026-09-08 · **Status:** Proposed — awaiting the operator · **Amended 2026-09-09** to the 0.0.36 ruling (one database, a table view and a board view — see §1A)
 
 The repository now builds one consolidated testbed database. This note is what the operator's own
 vault would look like with it, written so the decision (and any deletion) stays theirs. Nothing in
@@ -29,7 +29,7 @@ Database Testbed/
 │   ├── audit-checklist.md      ← referenced by the new records; kept
 │   └── release-notes.txt       ← referenced by the new records; kept
 └── Testbed/                    ← NEW: the one consolidated database
-    ├── Testbed.md              ← the database note: db_view: true, 28 columns, six views
+    ├── Testbed.md              ← the database note: db_view: true, 28 columns, two views
     └── Records/                ← 36 record notes, "01 — Full record, every facet filled.md" first,
                                 ←   "36 — Sparse record, title only.md" (deliberately empty) last
 ```
@@ -39,10 +39,11 @@ The database note declares, in the same on-disk shape the plugin already reads:
 - **28 columns** — every plugin column type (text, number, date, datetime, currency, select,
   multi-select, status, checkbox, computed, relation, rollup, files) and every display variant
   (markdown text, the https/mailto/tel link schemes, rating, progress, ring);
-- **six views** — the five the plugin ships and keeps (table, board, calendar, timeline, chart; the
-  board, timeline and chart group by status; the calendar and timeline run on the starts/ends range)
-  plus a second table, "Sorted and filtered", carrying a status-ascending sort and a
-  status-notempty filter whose only exclusion is the deliberately sparse record;
+- **two views** — one table, "All records", the everything-shown default; and one board, "By
+  status", grouping on the status column. Amended 2026-09-09 to the 0.0.36 ruling: the note no
+  longer declares the calendar, timeline, chart or the second sorted-and-filtered table the
+  original proposal carried — the plugin retired those views (0.0.35) and the fixture now
+  configures only what the operator ruled on;
 - **a computed formula** over the number and currency columns, and a rollup counting the relation
   column — both configured in the note; the full record exercises them, the sparse record and
   whatever else stays deliberately empty.
@@ -93,8 +94,9 @@ databases — those live wherever the operator keeps them and are never in this 
 
 ## 4. WHAT THE NOTE IS FOR
 
-One database, every column type and surviving view, one record deliberately carrying every property
-and one deliberately carrying nothing: the same population the repository's harnesses mount. When
+One database, every column type and display variant, a table and a board, one record deliberately
+carrying every property and one deliberately carrying nothing: the same population the repository's
+harnesses mount. When
 the operator looks at a defect report against their own testbed, the harness lanes that measure the
 same renderer now measure the same records — the harness's picture and the vault's behaviour are
 about one dataset, not two similar ones.

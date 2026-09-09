@@ -211,7 +211,7 @@
     ],
     "causal_summary": "The operator wants less test data overall: one big testbed database with an overview and every view type/column type/grouping/filter/sort/formula/relation the harnesses need, alongside the operator's own Finance databases (Reports/Income/Expenses/Sales, imported from Notion) as a second, real-world dataset — rather than the current spread of separate fixture vaults, screenshot fixtures, story fixtures and an operator-maintained Testbed folder that do not share a single source of truth",
     "created_at": "2026-09-08T06:23:37Z",
-    "last_save_at": "2026-09-08T14:39:22.255Z",
+    "last_save_at": "2026-09-09T20:45:50.216Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -223,12 +223,12 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b625c543d4cfd4397d700c4eeb8d6bbaf54d9abc3153cf77ef2781adc7686a92",
+    "source_fingerprint": "sha256:c465b4842db8fe4ea3724c80d49889a0686fa6571ce1a67ee080ddb111ada83e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b5153eb29502a833e6520db42280438188aea2ff655fe340f27415c5a9978fea",
       "plan.md": "d05d8be6d7b445df368ba92beefc9c9fa2d3b6eacd378d1381e34be344bf79cb",
-      "tasks.md": "0587a94bc297b2b1ea46cb81ede71dc5bc8d1ec0056328ed43bfaa387596140a",
+      "tasks.md": "b6d41593d61b43e76c1a8a30cae72924bd9a9e6ccbb689dfdffa0664e89d7008",
       "decision-record.md": "9976d02fa271817658326058fb8e7065c9c52b8c858ba38b01f4bba0e3461d6a",
       "implementation-summary.md": "2a7fce06515bcb1b26c4d485717535ef48be0aa1a76eda9475f30433c514326f"
     },

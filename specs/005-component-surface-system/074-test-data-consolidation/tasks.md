@@ -58,6 +58,7 @@ contextType: "general"
 - [x] T008 Green: vitest 154 files / 1678 tests (was 153 / 1672), `story-coverage` 0, `verify-placement` 0 (`sheet-inventory.mjs` is not on this branch — its landing belongs to other packets — skipped per the packet's instruction)
 - [x] T009 Full ladder — every exit recorded in **Verification Results** below; `evidence --check-all` 15/15 fresh after re-measuring the three artefacts the edits made stale
 - [x] T010 Docs: this file, `acceptance-criteria.md` (all four criteria Met, closure Yes), `implementation-summary.md`, `decision-record.md` (six ADRs), `testbed-proposal.md` (the operator's copy; their vault untouched), `plan.md` placeholders filled, goal/spec continuity reconciled; spec validator RESULT: PASSED; graph metadata backfilled; the packet's entry appended to the 005 handover
+- [x] T011 The 2026-09-09 ~20:48 ruling (0.0.36) — one database, table and board views only: RED first (`consolidation.test.mjs` 2 failed | 6 passed: 6 views `[table, board, calendar, timeline, chart, table]`), then `catalogue.ts` `buildViews()` cut to exactly one table + one board, `catalogue.test.mjs` assertion updated, `catalogue.json` regenerated; GREEN 8/8 + 28/28 (full vitest 1587/1587); CSV and Finance fixture untouched; no capture mounted the retired views (480 unchanged apart from one deterministic mover) — gate 27/0; docs amended (AC-005, `testbed-proposal.md`, this file)
 <!-- /ANCHOR:phase-3 -->
 
 ---

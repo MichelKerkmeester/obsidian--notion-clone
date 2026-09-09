@@ -3555,3 +3555,31 @@ tools); gate 27/0 ×2; scan-comments 0; scan-failing-values 0; validate --strict
 **Open**: the four card metrics (radius 8px, inset 16px, gap 12px, the two surface tokens) are
 **provisional** pending T001's full-resolution operator capture, which retunes them; AC-007, the
 operator's own device read (D3), closes the packet. Not pushed — a fresh verifier lands it.
+
+## 074-test-data-consolidation — the 0.0.36 testbed view-set ruling (2026-09-09)
+
+The operator's 0.0.36 ruling — *"Also clean testbed only 1 database with table and boars views"*
+(the boards read; the subject is the testbed fixture's view set) — landed in `074` as AC-005.
+
+**Red → green.** RED (`tools/mock-data/consolidation.test.mjs`, against the untouched tree):
+2 failed | 6 passed — the catalogue built 1 database (`testbed`) with 6 views
+`[table, board, calendar, timeline, chart, table]`. Fix at the source: `catalogue.ts` `buildViews()`
+now declares exactly one table ("All records", the everything-shown default) and one board ("By
+status", grouped by status); `catalogue.json` regenerated (−39 lines). GREEN: registry suite 8/8,
+`catalogue.test.mjs` 28/28, full `vitest` 1587/1587.
+
+**What the ruling did not touch, verified:** the Testbed CSV's 36 rows (views are not in the CSV,
+0 byte diff) and the 070 Finance second dataset. No lane or capture mounted the retired views — the
+only catalogue mounts in `render-assertions.mjs` are table lanes and no `screenshots/manifest.json`
+scenario references the removed view ids — so the 480-capture set needed no orphan sweep.
+
+**The numbers**: `tsc` 0; `vitest` 1587/1587 (0); `build` 0; `sheet-grammar` 0; `render-assertions` 0
+(coverage re-stamped); `verify-placement` 0 (418/420, 2 declared); `screenshots` ×2 exit 0, 480 — one
+deterministic mover kept (panel-record-detail-sheet-body-empty-desktop-dark, 1539px @ Δ1, identical
+across two consecutive runs, +13 manifest bytes), two one-run jitter movers regenerated identical to
+HEAD; `evidence --check-all` 0 after re-running the stale `capture-device-parity` writer (112 pairs
+PASS); `scan-comments` 0; `scan-failing-values` 0; **gate 27 green, 0 red, exit 0**. `074` docs:
+AC-005 (counts RED→GREEN, amending AC-002's six-view shape as superseded-not-withdrawn), T011, goal
+criterion added and ticked, `testbed-proposal.md` amended to the ruling. `roadmap.md` §4 row 87
+quotes the ruling verbatim. Validated strict: `074` and `005` both RESULT: PASSED; graph metadata
+backfilled both. Not pushed — a fresh verifier lands it.

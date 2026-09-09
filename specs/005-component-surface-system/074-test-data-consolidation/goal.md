@@ -11,7 +11,7 @@ _memory:
     packet_pointer: "005-component-surface-system/074-test-data-consolidation"
     last_updated_at: "2026-09-08T08:30:00Z"
     last_updated_by: "markdown-scaffold"
-    recent_action: "Landed the consolidation; Finance fixture kept; registry red-then-green; gate 27/0"
+    recent_action: "Ruling landed 2026-09-09: view set one table + one board (AC-005); gate 27/0"
     next_safe_action: "Await the fresh verifier; the operator adopts testbed-proposal.md"
     blockers:
       - "The on-device confirmation of the Finance databases and the adoption of testbed-proposal.md are the operator's rows; this packet never writes their vault"
@@ -59,6 +59,7 @@ resend the full text of this file in chat so the operator can update their copy.
 - [x] One consolidated testbed database designed and built, covering every surviving view/column/grouping/filter/sort/formula/relation — 36 records, 28 columns, five surviving view types plus the deliberately sorted-and-filtered second table; no non-default sort and no non-empty filter existed in the generated notes before the fix; the survivors question answered as decision-record ADR-0001, the coverage as ADR-0004
 - [x] Capture, story and phone-smoke harnesses migrated onto the one consolidated database, each re-verified against its own pass/fail criteria — every catalogue mount repointed; the suite was 1672 tests, now 1678 with the registry's six; the constructed, bench, smoke and story bodies reference no use case and stay, as their lanes' measured subjects (ADR-0003); every criterion re-measured, none loosened
 - [ ] Finance databases confirmed visible once 070 lands, documented as the kept second dataset — code-side proven and documented (ADR-0005, the cold-cache lane, `testbed-proposal.md`); the on-device read of the operator's own Finance databases is the operator's row and this leg does not tick it
+- [x] The 2026-09-09 ~20:48 ruling (0.0.36: *"Also clean testbed only 1 database with table and board views"*): the testbed's view definitions are exactly one table view and one board view — RED 2 failed | 6 passed (6 views) → GREEN 8/8, full vitest 1587/1587, gate 27/0; recorded as AC-005, which amends the six-view coverage this criterion's second bullet recorded
 <!-- /ANCHOR:completion -->
 
 ---

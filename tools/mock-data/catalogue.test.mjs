@@ -165,10 +165,10 @@ describe("type coverage", () => {
     }
   });
 
-  it("gives the use case the view types the plugin ships and keeps, plus a second, filtered and sorted table", () => {
+  it("gives the use case exactly the view set the operator ruled on: one table and one board", () => {
     for (const useCase of catalogue.useCases) {
       expect(useCase.views.map((view) => view.type), useCase.id)
-        .toEqual(["table", "board", "calendar", "timeline", "chart", "table"]);
+        .toEqual(["table", "board"]);
     }
   });
 

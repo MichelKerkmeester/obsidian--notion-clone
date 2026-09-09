@@ -35,10 +35,11 @@ const REGISTRIES = [
 
 const COLD_CACHE = join(LIVE, "database-cold-cache-property-read.mjs");
 
-/** The view types the plugin still renders. List and gallery were removed from
- *  the tree (src/data/list-migration.ts, src/data/gallery-migration.ts), so a
- *  fixture view of either would be configuration for a surface nothing paints. */
-const SURVIVING_VIEW_TYPES = ["table", "board", "calendar", "timeline", "chart"];
+/** No lane mounts a view of these types from the catalogue any more: the
+ *  testbed's view set is a table and a board, and a lane that wants another
+ *  surface builds its own view config rather than borrowing one from the
+ *  fixture. */
+const RETIRED_VIEW_TYPES = ["list", "gallery", "calendar", "timeline", "chart"];
 
 /** Everything a record note's frontmatter can carry — the facets the catalogue
  *  does not derive from the file itself. */
@@ -54,6 +55,13 @@ describe("one consolidated fixture dataset", () => {
   it("is the only database the catalogue builds, and it is the testbed", () => {
     expect(catalogue.useCases).toHaveLength(1);
     expect(catalogue.useCases[0].id).toBe("testbed");
+  });
+
+  it("carries no view of a retired type and no second table", () => {
+    for (const view of catalogue.useCases[0].views) {
+      expect(RETIRED_VIEW_TYPES, `${view.name} is of type "${view.type}"`).not.toContain(view.type);
+    }
+    expect(catalogue.useCases[0].views.filter((view) => view.type === "table"), "exactly one table view").toHaveLength(1);
   });
 
   it("is the only use case the assertion registries mount", () => {
@@ -83,16 +91,20 @@ describe("one consolidated fixture dataset", () => {
 describe("the consolidated testbed covers the surfaces", () => {
   const testbed = catalogue.useCases[0];
 
-  it("declares only surviving view types, with a second, filtered and sorted table", () => {
-    expect(testbed.views.map((view) => view.type)).toEqual(
-      ["table", "board", "calendar", "timeline", "chart", "table"],
-    );
-    for (const view of testbed.views) {
-      expect(SURVIVING_VIEW_TYPES, `${view.name} is of type "${view.type}"`).toContain(view.type);
-    }
-    const sorted = testbed.views.find((view) => view.sort);
-    expect(sorted, "no view carries a sort").toBeTruthy();
-    expect(sorted?.filter, "the sorted view carries no filter").toBeTruthy();
+  it("declares exactly one table view and one board view, and nothing else", () => {
+    // The operator's ruling: the testbed database is a table and a board. The
+    // other view types still render elsewhere, but the fixture the harnesses
+    // mount no longer configures them, so a lane that wants a calendar or a
+    // chart mounts its own view rather than borrowing one from this dataset.
+    expect(testbed.views.map((view) => view.type)).toEqual(["table", "board"]);
+  });
+
+  it("keeps the table the everything-shown default and the board grouped by status", () => {
+    expect(testbed.views[0].type).toBe("table");
+    expect(testbed.views[0].sort, "the table carries a sort").toBeUndefined();
+    expect(testbed.views[0].filter, "the table carries a filter").toBeUndefined();
+    expect(testbed.views[1].type).toBe("board");
+    expect(testbed.views[1].groupField, "the board groups by status").toBe("status");
   });
 
   it("fills every non-derived facet on its deliberately full record", () => {

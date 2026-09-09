@@ -208,45 +208,6 @@
           "name": "By status",
           "type": "board",
           "groupField": "status"
-        },
-        {
-          "id": "testbed-calendar",
-          "name": "Calendar",
-          "type": "calendar",
-          "startField": "starts",
-          "endField": "ends",
-          "titleField": "file.name",
-          "colorField": "status"
-        },
-        {
-          "id": "testbed-timeline",
-          "name": "Timeline",
-          "type": "timeline",
-          "startField": "starts",
-          "endField": "ends",
-          "groupField": "status",
-          "titleField": "file.name",
-          "colorField": "status"
-        },
-        {
-          "id": "testbed-chart",
-          "name": "By status",
-          "type": "chart",
-          "groupField": "status",
-          "chartValueField": "budget"
-        },
-        {
-          "id": "testbed-table-sorted",
-          "name": "Sorted and filtered",
-          "type": "table",
-          "sort": {
-            "field": "status",
-            "direction": "asc"
-          },
-          "filter": {
-            "field": "status",
-            "op": "notempty"
-          }
         }
       ],
       "records": [
