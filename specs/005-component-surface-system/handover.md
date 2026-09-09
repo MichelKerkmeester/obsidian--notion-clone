@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T12:05:00Z"
-    last_updated_by: "256-landing-verify"
-    recent_action: "256-engine-parity LANDED+verified (1a4c3ff3): steady-gate 23/0, neg-ctrl, 27/0"
+    last_updated_at: "2026-09-09T15:05:00Z"
+    last_updated_by: "257-landing-verify"
+    recent_action: "067 residuals LANDED+verified (5195efb6): T015/T020/T021, 27/0, goal 4/7"
     next_safe_action: "Operator device pass on 0.0.35; ORDER OF WORK §1 names every row"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
@@ -42,6 +42,27 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-09 ~15:05, `067` T015/T020/T021 residuals LANDED+verified on `origin/main` — landing-verified, rebased, pushed, worktree `257-sheet-family-residuals`
+
+**What landed:** the residuals leg as two commits — `b327f1de` (the leg: header block 74px in the
+true 66–74px band via the 2px margin collapse, the divider grammar on the filter/sort/group/Properties
+sheets, the property-type-picker replace-pair, 93 real movers, css-lane re-signed at `4261be904bfb`)
+and this verifier's `5195efb6` (roadmap §5.A 067 row 43%→57% — 4/7, checklist regenerated,
+post-rebase evidence re-stamps). Rebasing onto `820b96ac` took main's side on 10 generated-artefact
+conflicts; **engine-parity re-derived: steady 23, new 0** — the moved sheet geometry produced no new
+disagreement. **Verified by mutation:** T015 — handle margin 2px→4px, lane RED `sort-panel measures
+76px, wanted 66-74px`, restore 2327 asserts green; T021 — the Properties-sheet header hairline rule
+deleted, lane RED `Properties sheet — 2/3 between-section boundaries`, restore green.
+**Verified by instrument:** tsc 0, build 0, vitest 1584 (157 files), sheet-grammar 0,
+verify-placement 418/420 (2 declared, the recorded steady shape), touch-targets 0,
+screenshots ×3 exit 0 with **0 real movers** post-rebase (3 rasteriser-jitter PNGs restored, all
+maxDelta ≤ 12 single-run; `board-mobile-desktop-dark`'s run-3 bytes reproduced the committed blob
+exactly — the recorded recurring mover, 073 precedent), gate 27 green 0 red (after one
+`operator-list` red, fixed by regenerating the named artefact, not thresholds),
+`validate.sh --strict` RESULT: PASSED for 067 and for the 005 parent after backfill, both naming
+scans PASS. goal.md = 4/7 ticked; **roadmap row reconciled to 57% — 4/7 with an amendment clause;**
+AC-011 (the operator's iOS pass) stays open — no agent ticks it.
 
 ### 2026-09-09 ~09:57, closing goal refresh LANDED on `origin/main` — reconciliation, docs-only, gate-verified, worktree `254-goal-refresh-0035`
 
