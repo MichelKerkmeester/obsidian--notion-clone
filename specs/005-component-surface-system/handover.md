@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T22:10:00Z"
-    last_updated_by: "265-toolbar-vertical-lock-verify"
-    recent_action: "Landing-verified 069 board touch drag; 75fb1320 on main"
-    next_safe_action: "Execute 071/007/tasks.md; operator: 067/061 iOS pass, confirm 0.0.36 tag"
+    last_updated_at: "2026-09-09T23:20:00Z"
+    last_updated_by: "269-settings-sheet-cards-verify"
+    recent_action: "Landing-verified 071/007 card grouping; 5efbafa7 on main"
+    next_safe_action: "Execute T001: operator Notion capture retunes 007's four provisional numbers"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
     key_files:
@@ -356,6 +356,10 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-09 ~23:20, 071/007-settings-sheet-strict-alignment card-grouping landing LANDED+verified on `origin/main` — landing verifier, one rebase, pushed
+
+**Landed SHA `5efbafa7` on `origin/main`** (leg commits `9b6daa3e`+`f2e993e6` rebased over the 069/075-merged main as `8bd38d77`+`12735ae9`, verifier commit `5efbafa7`; `git log -1 origin/main` read back). Verified on the merged tree: sheet-grammar card clause GREEN (2/2 cards, radius ≥8px, backgrounds distinct from the canvas, 1/1 gap ≥8px, 2/2 headings above their card, exit 0; 002's row grammar unchanged); mutations re-proven — producer card-wrapper revert → lane RED 0 card containers, exit 1, restored; styles.css card-background declaration → exactly 1 of 7 unit tests fails, restored. Both themes move (the feat commit carries constructed-view-config + board-card-properties dark AND light). Shared header/close untouched (REQ-006: `git diff origin/main..HEAD -- src/views/surface-shell.ts` = 0 lines). vitest 1586/1586; tsc 0; build 0; screenshots ×2 480/480, 0 movers in both recorded runs (an exploratory earlier pair's 2 one-run movers did not reproduce); evidence 16/16 fresh (15 artefacts stale after the rebase, each re-derived by its own tool); gate 28/0 exit 0 (069's lane the 28th); validate --strict RESULT: PASSED ×3 (packet, 071 parent, 005 track — one first-run FAILED on SOURCE_FINGERPRINT_MISMATCH, cleared by the scoped backfill); scan-comments 0; scan-failing-values 0. Docs reconciled: 007 goal 4/5 (fifth criterion the operator's device read, D3 — unticked), 071 goal continuity + progress row updated to LANDED+verified. The four card metrics (radius 8px, inset 16px, gap 12px, canvas/card tokens) stay PROVISIONAL until T001's operator capture. Note: the rebase's conflict resolution initially dropped the leg's 2-line main.js bundle hunk — the fresh build re-derived it; the second rebase (069's own verifier docs) cost one extra backfill. Pushed `63fdcc5e..5efbafa7` after one non-fast-forward rejection, resolved by rebase + targeted graph-metadata regeneration.
 
 ### 2026-09-09 ~22:30, 069-board-cross-group-drag 0.0.36 touch-drag leg LANDED+verified on `origin/main` — landing verifier, two rebases, pushed
 
