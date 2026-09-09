@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T04:28:42Z"
-    last_updated_by: "247-landing-verify"
-    recent_action: "005 LANDED+verified (49ee993d): goal 3/4, 071 3/4, gate 27/0, scans 0"
-    next_safe_action: "071/005 next; the operator device rows stay the operator's"
+    last_updated_at: "2026-09-09T06:50:00Z"
+    last_updated_by: "251-landing-verify"
+    recent_action: "058/AC-012 LANDED+verified (e293f5d5): gate 27/0, vitest 1750, scans 0"
+    next_safe_action: "the operator's device rows (058 AC-008, 066, 075) stay the operator's"
     blockers:
       - "066's device read (AC-008) and 075's AC-006 still wait on the operator's handset pass — never agent-ticked"
       - "071/004's landing is complete (f72e50cd, landing-verified); the .worktrees/245-view-config-sheet worktree can be retired once this 005-handover entry lands"
@@ -125,6 +125,34 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-09 ~06:50, `058-card-title-and-title-formats` (AC-012) LANDED on `origin/main` — landing-verified, rebased, pushed
+
+**What landed:** the GLM leg's single commit (`781124be`, 28 files, +426/−92, "feat(board): discoverable
+card-title control and a self-announcing Title format row (AC-012)") rebased onto `79500b89` — which had
+grown 071/005's landing (49ee993d/4c00bf79) — and landed as `e293f5d5` with this verification as the
+commit itself. **How:** 12 conflicts. The 10 generated artefacts (`screenshots/manifest.json`, 7
+`tools/live/*.json`, `operator-checklist.md`, 071/001's `inventory.md`) took main's side and were
+re-derived; `handover.md` kept both landings' intents (071/005's landing-verify closing bullet + this
+packet's 058 leg section); `css-lane.json` merged append-only — theirs' 006-release note was a strict
+superset (the leg's 4-mover "Follow-up, 2026-09-09" appended) and ours' intermediate entries (incl. the
+005-filter triplet, `038a961610dd`) survived; history 448 entries, baselineHash `55cb284b3244` == the
+merged `styles.css`. `view-config-panel-renderer.test.ts` and both `graph-metadata.json` auto-merged.
+This verification's own commit `e293f5d5` (17 files) carried the re-derived post-rebase truth.
+**Verified, by numbers:** mutations replayed — board entry point removed from `row-menu.ts` → the
+two-tap lane row red (1 failed | 2 passed), restored 3/3; hint argument → `undefined` → 1 failed |
+13 passed (the leg's 1/14), restored 14/14. `sheet-inventory.mjs` no-diff pre-rebase; post-rebase it
+regenerated (86→87 surfaces: 071/005's curated group producer) and vitest went 1750/1750. Screenshots
+×3 exit 0: the 4 hinted `constructed-board-card-properties` captures reproduced their committed bytes
+exactly; 2 REAL movers (board-mobile-desktop-dark 1px@1, board-view-desktop-dark 4px@1, both runs —
+071/003's recurring counts) kept and named on the 005-filter holder's release note. Gate: run 1 FAIL
+on 2 undeclared lanes, both fixed by their own mechanics (operator-checklist regenerated, 071 → 3/4;
+two failing-values rows made legible to the existing vocabulary — 071's "red-before-green" hyphens,
+075's "was 398" — no threshold or baseline edits), final **gate: PASS — 27 green, 0 red**, exit 0.
+`tsc` 0, `build` 0, orchestrator --strict RESULT: PASSED ×2 (058 + the parent, after backfill, drift
+[]), scan-comments 0, scan-failing-values 0 (147 ≤ 148). §5.A's 058 figure 7/8 re-verified, its
+AC-scale prose reconciled to 11-of-12. AC-008 stays Unmet — the operator's device read, never
+agent-ticked.
 
 ### 2026-09-09 ~03:30, `071/006-record-and-menu-sheets` LANDED on `origin/main` — landing-verified, rebased, pushed
 
