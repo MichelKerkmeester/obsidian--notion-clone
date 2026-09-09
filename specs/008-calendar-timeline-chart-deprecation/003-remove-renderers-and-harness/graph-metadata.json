@@ -204,7 +204,7 @@
     ],
     "causal_summary": "Once no surface can open a calendar, timeline or chart view (Phase 2), the renderer code and its harness lanes are dead weight in the shipped bundle; removing them without a restore path would make date/renderer-parity work harder to resurrect later if ever needed",
     "created_at": "2026-09-08T06:24:16Z",
-    "last_save_at": "2026-09-09T05:34:31.792Z",
+    "last_save_at": "2026-09-09T06:17:18.021Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,7 +216,7 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:242edc2b752785abac9d47dff1189d789f4dbbacf4ef6695ed2bc491223a273a",
+    "source_fingerprint": "sha256:89745321f9e14dc3dcfa2bb63b188888323290615c58addf11fc049e26a2d5ce",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "9878078365033a2bc9e4b427768795770ed310249f821ead17519470ae78dfd4",

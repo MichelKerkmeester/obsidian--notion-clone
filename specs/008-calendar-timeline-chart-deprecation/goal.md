@@ -9,9 +9,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation"
-    last_updated_at: "2026-09-09T08:10:00Z"
-    last_updated_by: "250-deprecation-removal"
-    recent_action: "003 LANDED (4/4 criteria, the bundle grep 0, the gate 27/0); only 004 remains"
+    last_updated_at: "2026-09-09T06:20:00Z"
+    last_updated_by: "250-landing-verify"
+    recent_action: "003 LANDED+verified+pushed (7fb9fb28): 4/4, bundle grep 0, gate 27/0; only 004 remains"
     next_safe_action: "004-archive-docs-and-release: the README strip, the superseded note, then the release cut"
     blockers:
       - "004-archive-docs-and-release (the packet's last leg) has not started"

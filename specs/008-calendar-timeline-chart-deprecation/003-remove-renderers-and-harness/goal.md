@@ -9,9 +9,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation/003-remove-renderers-and-harness"
-    last_updated_at: "2026-09-09T08:05:00Z"
-    last_updated_by: "250-deprecation-removal"
-    recent_action: "Landed: 4/4 criteria, bundle grep 0, gate 27/0"
+    last_updated_at: "2026-09-09T06:20:00Z"
+    last_updated_by: "250-landing-verify"
+    recent_action: "Landed+verified+pushed: 4/4 criteria, bundle grep 0, gate 27/0"
     next_safe_action: "Start 004-archive-docs-and-release (root-README strip, then the release cut)"
     blockers: []
     key_files:

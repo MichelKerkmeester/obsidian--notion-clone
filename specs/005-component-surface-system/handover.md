@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T06:50:00Z"
-    last_updated_by: "251-landing-verify"
-    recent_action: "058/AC-012 LANDED+verified (e293f5d5): gate 27/0, vitest 1750, scans 0"
-    next_safe_action: "the operator's device rows (058 AC-008, 066, 075) stay the operator's"
+    last_updated_at: "2026-09-09T06:20:00Z"
+    last_updated_by: "250-landing-verify"
+    recent_action: "008/003 LANDED+verified+pushed (7fb9fb28): grep 0, gate 27/0, 136 captures retired"
+    next_safe_action: "008/004-archive-docs-and-release next; the operator's device rows (066, 075) stay theirs"
     blockers:
       - "066's device read (AC-008) and 075's AC-006 still wait on the operator's handset pass — never agent-ticked"
       - "071/004's landing is complete (f72e50cd, landing-verified); the .worktrees/245-view-config-sheet worktree can be retired once this 005-handover entry lands"
@@ -125,6 +125,33 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-09 ~06:20, `008/003-remove-renderers-and-harness` LANDED on `origin/main` — landing-verified, rebased, pushed
+
+**What landed:** the GLM leg's single commit (`3da33d80`, 203 files, +10628/−23617, "refactor(views): remove the
+retired calendar, timeline and chart renderers") rebased onto `18390d30` — which had grown 071/003, 071/004,
+071/006, 071/005 and 058-AC-012 — and landed as `69308192a` (201 files, +2789/−9553; the 10 renames preserved at
+98–100%, 136 retired captures deleted, 0 added), with this verification as `7fb9fb28`. **How:** 14 conflicts.
+`main.js` and `screenshots/manifest.json` took main's side and were re-derived (build 0, the retired-identifier
+bundle grep 0, screenshots ×2 480/480); the 071/001 coverage inventory and 10 `tools/live/*.json` evidence
+artefacts took the leg's post-removal side, and the 9 whose inputs the merge moved were re-measured by their own
+writers (engine-parity steady at 67 fixtures / 23 disagreements — exit 1 informational by design, not a gate
+lane). The committed 071/001 inventory had first been regenerated against the pre-derivation 616-row manifest;
+regenerated again after the 480-row one (with-captures 68→65), which is what the gate's only red caught.
+`specs/005/roadmap.md`'s row 77 gained the Phase-3 LANDED+verified note and its stale "003-004 not yet started /
+still nothing removed" tail corrected (002's AC-007 was discharged by the 0.0.34 cut); the 008 progress paragraph
+now records 003's 4/4 and 004 still open. **Verified, by numbers:** the bundle grep
+`gantt|calendar-renderer|chart-renderer|CalendarRenderer|ChartRenderer` = 0 (was 5); archived code unreferenced
+by construction — a value-import + use of the archived timeline renderer still bundles 0, and reverting the leg's
+own pin line (`database-view.ts:120`) fails the leg's pin test 1|14, restored 15/15; archived tests ran 0 of 154
+files (test files 160→154 = the 5 archived + temporal-tick-parity deleted); the archive READMEs' last-live SHA
+`e75a979c9a21f6f9` is an `origin/main` ancestor and `git show` returns real renderer bytes for it; vitest
+1571/1571 (156 files); `tsc` 0; pixel-delta: the 61px/204 title-format timestamp mover kept as REAL, the 1px/1
+board jitter restored; evidence 15/15 fresh; `npm run gate` **27 green, 0 red**; strict validation RESULT: PASSED
+for `008/003` and the 008 parent (after: the parent's `next_safe_action` compacted 101→88 —
+`SPECDOC_FRONTMATTER_004`, missed by the leg's child-only validation — then the graph backfill); `scan-comments`
+0, `scan-failing-values` 0. Push: the mass-deletion gate (138 deletions > the 100 ceiling) answered with the
+documented `SPECKIT_ALLOW_MASS_DELETION=1` single-push bypass — the 138 are the leg's own intended archival.
 
 ### 2026-09-09 ~06:50, `058-card-title-and-title-formats` (AC-012) LANDED on `origin/main` — landing-verified, rebased, pushed
 

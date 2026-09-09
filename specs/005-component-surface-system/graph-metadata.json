@@ -133,11 +133,11 @@
       "tools/live/renderer-coverage.json",
       "tools/live/replay.json",
       "src/data/calendar-timeline-model.ts",
-      "src/views/calendar-timeline-renderer.ts",
       "tools/screenshots/runtime-vars.css",
       "tools/live/touch-targets.mjs",
       "tools/live/unstyled-links.mjs",
-      "tools/screenshots/capture.mjs"
+      "tools/screenshots/capture.mjs",
+      "tools/screenshots/theme.css"
     ],
     "entities": [
       {
@@ -225,12 +225,6 @@
         "source": "derived"
       },
       {
-        "name": "calendar-timeline-renderer.ts",
-        "kind": "code",
-        "path": "src/views/calendar-timeline-renderer.ts",
-        "source": "derived"
-      },
-      {
         "name": "runtime-vars.css",
         "kind": "file",
         "path": "tools/screenshots/runtime-vars.css",
@@ -252,6 +246,12 @@
         "name": "capture.mjs",
         "kind": "file",
         "path": "tools/screenshots/capture.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "theme.css",
+        "kind": "file",
+        "path": "tools/screenshots/theme.css",
         "source": "derived"
       },
       {
@@ -287,7 +287,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-09T05:08:32.862Z",
+    "last_save_at": "2026-09-09T06:17:17.843Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -295,11 +295,11 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:7465e208f0c3faf8a5571c1174faee8c11ab68d679fde4ca2a1cd39b1adc3df3",
+    "source_fingerprint": "sha256:dd4d6cd60b60df0b8b51c9ebbc280dcbbc23d11002047c150f7e5a99fab9b87a",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d555fe2d05a8e10476a09464e12aa382dea3fa399b611db29f544003d2dfcd15",
-      "handover.md": "2c6d806e9d9100760b099554a04920261af7b0a3ae35b49d349e6cb0e45e2a20"
+      "handover.md": "5222e63390ddb6d6a18699d713d8f02ed565be8f9ba36676c361f671268caab9"
     },
     "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",
     "last_active_at": "2026-09-02T20:00:54.844Z"
