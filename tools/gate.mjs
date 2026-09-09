@@ -74,6 +74,13 @@ const CHECKS = [
   // mounts the real DataSource/RowPipeline/TableRenderer/BoardRenderer against a controllable
   // fixture and proves the cold-then-resolved recovery path, not just the warm-cache happy path.
   { name: "cold-cache-property-read", cmd: ["node", "tools/live/database-cold-cache-property-read.mjs"] },
+  // A dispatched PointerEvent can never lose a gesture to the page — the browser's input
+  // pipeline makes that decision, and it answers a card long-press followed by a finger move
+  // with `pointercancel` the moment scrolling engages. This lane drives real touch input
+  // through CDP at the phone viewport and proves the board's lifted card keeps the gesture to
+  // its drop (card in the target column, record's grouped property changed), while a plain
+  // vertical flick on a card still scrolls rather than drags.
+  { name: "board-touch-drag", cmd: ["node", "tools/live/board-touch-drag.mjs"] },
   // The embedded toolbar decides what to hide by measuring its own natural width, so the only
   // honest check is a real one: this mounts the shipped ToolbarRenderer in the codeblock-embed
   // shape and steps the container 250px to 900px, failing if the row ever overflows its own box.

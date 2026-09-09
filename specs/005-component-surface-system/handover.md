@@ -357,6 +357,8 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
 
+### 2026-09-09, 069-board-cross-group-drag — the 0.0.36 device report: touch drag dead on phone (this leg)
+
 ### 2026-09-09 ~20:30, docs-only leg — human-verification-checklist.md written, worktree `264-human-verification-checklist`
 
 New hand-held companion to `operator-checklist.md`: 33 actionable device entries covering the
@@ -3423,3 +3425,36 @@ handover commit, still 27/0. css-lane taken over from `067-sheet-family-remediat
 criterion ticked on lane proof with the operator's device re-read riding the unticked AC-006 row;
 roadmap §4 row 86 quotes the report verbatim, §5.A 075 refreshed to 5/5. Validated strict: 075 and 005
 both RESULT: PASSED; graph metadata backfilled both. Not pushed — a fresh verifier lands it.
+## 069-board-cross-group-drag — the 0.0.36 device report: touch drag dead on phone (2026-09-09, this leg)
+
+The operator, verbatim on 0.0.36 iPhone ~20:45: *"You still cant drag and drop board cards to
+different columns on mobile"* — AC-010 failing on device while `069`'s AC-001 harness stayed
+green. The dispatched-`PointerEvent` proof bypasses the one decision a phone's input pipeline
+makes: on the first finger move the compositor claims the touch for page scrolling and answers
+with `pointercancel`, which tore the armed drag down before any drop. Root cause confirmed in-repo
+RED with a new real-input harness (`tools/live/board-touch-drag.mjs`: CDP
+`Input.dispatchTouchEvent`, 390×844, `hasTouch`+`isMobile`, `.is-phone`, hold 550ms asserted
+against the renderer's now-exported 450ms lift threshold, 10-step boundary crossing, card-DOM +
+frontmatter-readback assertions, negative control = plain vertical flick stays the compositor's
+gesture): `touchstart pointermove touchmove pointercancel…`, 0 move calls, exit 1.
+
+**Fix, one producer** (`src/views/board-renderer.ts`): the armed card answers a non-passive
+`touchmove` with `preventDefault` (touch events retarget to the touch-start element, so the
+listener sees the whole gesture) and sets `touch-action: none` at lift, cleared at teardown —
+the pattern the linked-view handle and the sheet grab bar already shipped. Desktop pointer drag
+untouched; the dispatched-event harness and the parity suite stay green.
+
+**GREEN**: exactly 1 `moveRowWithGroupUpdatesAndPosition` `{backlog→todo}`, card DOM in the
+target column, `frontmatter[board_status]="todo"` read back, `pointercancel=false`, exit 0.
+Wired as the gate's 28th lane (`tools/gate.mjs`, evidence stamp `tools/live/board-touch-drag.json`).
+
+**The numbers**: `npx tsc --noEmit` 0; `npx vitest run` 1585/1585; `npm run build` 0;
+`node tools/live/sheet-grammar.mjs` 0; `node tools/live/render-assertions.mjs` 0;
+`node tools/storybook/verify-placement.mjs` 0 (418/420, 2 declared red — unchanged); screenshots
+×2 + pixel-delta (1 jitter, maxDelta 1 ≤ 12, one run only, PNG restored to committed bytes; no
+styles.css change so no css-lane triplet); `node tools/live/evidence.mjs --check-all` 0 (16
+artefacts fresh); `npm run gate` (foreground, `</dev/null`, `$?` read) **28 green, 0 red for a
+declared reason, exit 0**; scan-comments 0; scan-failing-values 0. `069` docs reconciled:
+AC-011 new Met, AC-010 unticked with the 0.0.36 note, tasks T019-T023, goal criterion + LOG,
+parent roadmap §4 row 84 with the report verbatim, state "landed, awaiting device". Validated
+strict, RESULT: PASSED; graph metadata backfilled. Not pushed — a fresh verifier lands it.

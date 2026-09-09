@@ -11,9 +11,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/069-board-cross-group-drag"
-    last_updated_at: "2026-09-07T21:10:00Z"
-    last_updated_by: "board-touch-drag-groups-session"
-    recent_action: "Gate 26 green"
+    last_updated_at: "2026-09-09T21:55:00Z"
+    last_updated_by: "267-board-touch-drag"
+    recent_action: "0.0.36 device report root-caused (scroll takeover); real-touch harness green, gate 28 lanes"
     next_safe_action: "Validate --strict, backfill graph metadata, commit"
     blockers: []
     key_files:
@@ -94,7 +94,22 @@ of this file in chat so the operator can update their copy.
 - [x] An Undo toast follows a cross-group move on the host that lacked one. Observed red before the fix: `embedded-database-renderer.ts`'s `updateBoardGroup` wrote the frontmatter and returned with 0 toast calls — `embedded-database-renderer.test.ts`'s new toast test now passes, and was watched red by removing the `showToast` call before this fix landed.
 - [x] Every new behaviour has a happy-path test plus one edge case (same-column no-op, read-only no-lift, Escape cancels, a tap below the threshold still opens the card, the swallow after a completed lift). Today, before this packet: 0 of these tests existed, since the behaviour itself did not — each was watched red by a targeted one-line mutation of the production code it covers before being left green.
 - [x] `npx tsc --noEmit`, `npx vitest run`, `npm run build`, `node tools/live/render-assertions.mjs`, `node tools/live/sheet-grammar.mjs` all exit 0. Observed red before the fix: none of these five had ever run against the touch-drag code, which did not exist — re-run from the final state rather than trusted from an earlier pass, all five recorded 0 (exit code) just now.
-- [x] `npm run gate` reports all 26 lanes green, read from `$?`. Observed red before the fix: the first run reported 5 unexpected failures (folder-docs, operator-list, css-lane, screenshots-fresh, evidence — all triggered by the `styles.css` hash moving, none by a pixel changing); `npm run gate` now reports `PASS — 26 green, 0 red for a declared reason`, exit 0.
+- [x] A real touch input pipeline — the browser's own scroll-takeover decision, which a dispatched
+      event bypasses — cannot take a lifted card's drag away mid-gesture. Observed red on
+      2026-09-09 against the then-shipped code: the compositor answered the first finger move with
+      `pointercancel` (`touchstart pointermove(67,82) touchmove pointercancel(0,0)…`), 0
+      `moveRowWithGroupUpdatesAndPosition` calls, the card's DOM never left the source column and
+      `frontmatter[board_status]` read back `"backlog"` — which is how the operator could report
+      the drag dead on 0.0.36 while every dispatched-event proof stayed green.
+      `node tools/live/board-touch-drag.mjs` (real CDP touch input, 390×844, hold 550ms > the
+      exported 450ms threshold, 10-step boundary crossing) now reports the drop landed: exactly 1
+      move call `backlog→todo`, the card's DOM in the target column, `frontmatter[board_status]`
+      read back `"todo"`, no `pointercancel` — and its negative control proves a plain vertical
+      flick on a card is still the compositor's gesture (`pointercancel=true`, no ghost, no move).
+      Gate lane `board-touch-drag`: `PASS — 28 green`, exit 0.
+- [x] `npm run gate` reports all 28 lanes green, read from `$?`. Observed red before this fix: the
+      first run of the new lane failed on the then-shipped code, exit 1; `npm run gate` now
+      reports `PASS — 28 green, 0 red for a declared reason`, exit 0.
 - [ ] **OPERATOR:** the operator drags a card between two columns on their own phone and confirms the move landed in the note's frontmatter. Nothing in this repository can close this row, and an agent never ticks it.
 <!-- /ANCHOR:completion -->
 
@@ -116,7 +131,8 @@ into the objective, and it is expected to grow.
 | Unit tests, happy path + edges, mutation-proven | Done | `board-renderer-parity.test.ts` (8 new tests), `embedded-database-renderer.test.ts` (2 new tests), `database-view.test.ts` (1 new test) |
 | Real headless-Chrome proof, desktop + phone | Done | `tools/live/board-cross-group-drag.mjs`, `RESULT: PASSED` |
 | Constructed capture, lifted mid-drag, both themes | Done, not manifest-tracked | `specs/005-component-surface-system/069-board-cross-group-drag/scratch/captures/board-touch-drag-lifted-mobile-{light,dark}.png` |
-| Full gate | Pending | `npm run gate` |
+| Full gate | Done | `npm run gate` — `PASS — 28 green, 0 red for a declared reason`, exit 0 |
+| Real-input touch harness (scroll-takeover proof) | Done | `tools/live/board-touch-drag.mjs`, `RESULT: PASSED`; gate lane `board-touch-drag`; evidence stamp `tools/live/board-touch-drag.json` |
 | Spec validation (`--strict`) | Pending | This packet and the parent |
 
 ### Deviations and findings

@@ -1,0 +1,18 @@
+{
+  "measuredAt": "2026-09-09T19:36:15.250Z",
+  "inputs": {
+    "tools/live/board-touch-drag.mjs": "669118e06aaf",
+    "src/views/board-renderer.ts": "59f6618fd206",
+    "src/data/board-container-drop.ts": "eaf9ff3cc4c0",
+    "src/data/touch-environment.ts": "e4a2a50b20ea",
+    "tools/live/render-assertion-bundle.mjs": "74987129b9ec"
+  },
+  "gate": "board-touch-drag",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "holdMs": 550,
+  "moveSteps": 10,
+  "result": "PASSED"
+}

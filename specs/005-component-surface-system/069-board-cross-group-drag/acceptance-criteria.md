@@ -39,7 +39,7 @@ _memory:
 
 **Packet:** 069-board-cross-group-drag
 **Level:** 2
-**Status:** Implemented — AC-001 through AC-009 Met; AC-010 operator-owned
+**Status:** Implemented — AC-001 through AC-009 Met; AC-011 Met (real-input harness); AC-010 operator-owned, re-reported on 0.0.36
 **Date:** 2026-09-07
 <!-- /ANCHOR:metadata -->
 
@@ -59,7 +59,8 @@ _memory:
 | AC-007 | REQ-007 | Given a read-only board, when a card is held for 450ms, then no ghost appears and no touch-drag listener fires | `board-renderer-parity.test.ts` "never lifts a card on a read-only board"; live proof `phone touch drag read-only (no lift): PASS` | Met | - |
 | AC-008 | REQ-008, REQ-009, REQ-010 | Given a lifted card, when Escape fires, the pointer drops outside every column, or the pointer sits in an edge band, then the drag cancels, the drop is ignored, or the pane auto-scrolls respectively, and a short tap below the threshold still opens the card | `board-renderer-parity.test.ts`: "cancels the lift on Escape...", "leaves a short tap alone...", "swallows the click that follows a completed lift...", "auto-scrolls the pane..." — each proven red by a targeted mutation | Met | - |
 | AC-009 | — | Given the full tree, when the gate runs, then all 26 lanes report green | `npm run gate` → `PASS — 26 green, 0 red for a declared reason`, exit 0 (first run surfaced 5 pre-existing-tree failures from the `styles.css` hash move — folder-docs, operator-list, css-lane, screenshots-fresh, evidence — all resolved by the css-lane acquire/recapture/release, evidence re-stamps, and folder relocation of the live-proof captures, none by a code change) | Met | - |
-| AC-010 | — | The operator drags a card between columns on their own phone and confirms the move landed | Device-only; no command can close this | Unmet | - |
+| AC-010 | — | The operator drags a card between columns on their own phone and confirms the move landed | Device-only; no command can close this. Reported failing on 0.0.36 (operator, 2026-09-09 ~20:45) — the gesture never survived the page's scroll takeover on device; root cause and in-repo proof are AC-011's. Fix landed; re-read owed | Unmet | - |
+| AC-011 | — | Given a REAL touch input pipeline (the browser's own compositor deciding between scrolling and dragging, which dispatched events bypass entirely), when a finger holds a card past the lift threshold and crosses the column boundary, then the drag survives the scroll takeover and the drop lands; and a plain vertical flick on a card scrolls rather than drags | `node tools/live/board-touch-drag.mjs` (gate lane `board-touch-drag`: real CDP touch input, 390×844, `hasTouch`+`isMobile`, hold 550ms > the renderer's exported 450ms threshold read back from source, 10-step crossing). RED pre-fix: `touchstart pointermove(67,82) touchmove pointercancel(0,0) touchmove… touchend`, 0 `moveRowWithGroupUpdatesAndPosition` calls, card DOM never leaves the source column, `frontmatter[board_status]` reads back `"backlog"`, exit 1. GREEN post-fix: ghost after hold, drop-target highlight, `pointercancel=false`, exactly 1 call `{fromGroupKey:"backlog",toGroupKey:"todo"}`, card DOM in the target column, `frontmatter[board_status]="todo"` read back, exit 0. Negative control: the compositor claims the flick (`pointercancel=true`), no ghost mid-flick or after, no move recorded | Met | - |
 
 ### Status values
 
@@ -85,4 +86,11 @@ AC-001 through AC-009 carried the packet: real headless-Chrome proof of both inp
 consciously open: registering the constructed capture in `screenshots/manifest.json`'s tracked
 pipeline (named as a follow-up in `decision-record.md` ADR-005), and the operator's own device
 confirmation (AC-010).
+
+**2026-09-09, reopened by the operator's 0.0.36 device report (§4 row 84).** AC-010 came back
+failing on the operator's own phone while AC-001's harness stayed green — which is the proof that
+the dispatched-`PointerEvent` harness never drove what a phone's input pipeline decides. AC-011
+supplies the missing check: real touch input through CDP, where the compositor's scroll takeover
+is the thing under test. AC-009's "26 lanes" is history, accurate at its landing; the gate now
+carries 28.
 <!-- /ANCHOR:closure -->

@@ -98,6 +98,31 @@ contextType: "general"
       PASSED, 0 FAILED
 - [x] T018 Backfill scoped graph metadata — run individually against this packet and the parent
       (`totalSpecFolders: 1` each), 0 drift remaining
+- [x] T019 RED first: build `tools/live/board-touch-drag.mjs` — real touch input through CDP
+      (`Input.dispatchTouchEvent`), 390×844, `hasTouch`+`isMobile`, `.is-phone`, hold 550ms
+      asserted > the renderer's exported lift threshold, 10-step crossing of the column boundary,
+      release over the target column; assert card DOM in the target column and the record's
+      grouped property read back from the data source; negative control (plain vertical flick on
+      a card never starts a drag). Observed red pre-fix: `pointercancel` on the first move, 0
+      move calls, frontmatter unchanged, exit 1 (`tools/live/board-touch-drag.mjs`)
+- [x] T020 Fix at the source, one producer: the armed drag's card answers a non-passive
+      `touchmove` with `preventDefault` (touch events retarget to the touch-start element, so
+      the listener sees the whole gesture), sets `touch-action: none` at lift and clears it at
+      teardown; the lift threshold is exported so the harness asserts against the real value
+      instead of guessing (`src/views/board-renderer.ts`). Desktop pointer drag untouched;
+      `board-cross-group-drag.mjs` and the parity suite stay green
+- [x] T021 GREEN: re-run the harness — 1 move call `backlog→todo`, card DOM in the target
+      column, `frontmatter[board_status]="todo"` read back, `pointercancel=false`, negative
+      control holds, exit 0; evidence stamp `tools/live/board-touch-drag.json` written by the
+      harness (`tools/live/board-touch-drag.mjs`)
+- [x] T022 Wire the harness as the gate's 28th lane, after the cold-cache lane and before the
+      freshness-check lane, carrying its evidence stamp like its siblings; gate reports
+      `PASS — 28 green, 0 red for a declared reason`, exit 0 (`tools/gate.mjs`)
+- [x] T023 Full verify battery from the final state: `tsc` 0, `vitest` 1585 passed, `build` 0,
+      `sheet-grammar` 0, `render-assertions` 0, `verify-placement` 0 (418/420, 2 declared red),
+      screenshots ×2 + pixel-delta (1 jitter, maxDelta 1 ≤ 12, restored to committed bytes;
+      no styles.css change, so no css-lane triplet), `evidence --check-all` fresh (16),
+      `scan-comments` 0, `scan-failing-values` 0
 <!-- /ANCHOR:phase-3 -->
 
 ---

@@ -57,10 +57,12 @@ const CARD_FROM_GROUP_MIME = "application/x-obnotion-card-from-group";
  *  desktop scrollbar reveals from a hover. Anywhere else in the pane leaves it hidden — a reader
  *  scanning cards should not have a bar paint under their pointer just for being on the page. */
 const SCROLLBAR_EDGE_HOVER_PX = 16;
-/** Long-press-to-lift delay, in milliseconds — the same threshold `attachLongPress`
+/** Long-press-to-lift delay, in milliseconds — exported so a harness can hold longer than the
+ *  gesture the production code actually arms at, rather than guessing at its own threshold.
+ *  The same threshold `attachLongPress`
  *  (`touch-environment.ts`) uses for the row/cell context-menu gesture, so a phone reader learns
  *  one hold duration for the whole surface rather than a second one specific to the board. */
-const TOUCH_DRAG_LIFT_DELAY_MS = 450;
+export const TOUCH_DRAG_LIFT_DELAY_MS = 450;
 /** How far the pointer may wander before the pending lift is cancelled — `attachLongPress`'s own
  *  default tolerance. */
 const TOUCH_DRAG_MOVE_TOLERANCE_PX = 10;
@@ -878,6 +880,16 @@ export class BoardRenderer {
       if (this.touchDrag?.pointerId === event.pointerId) this.cancelCardTouchDrag();
       if (pendingPointerId === event.pointerId) clearPending();
     });
+    // Once the card is lifted the gesture still belongs to the compositor: the first finger
+    // movement lets it claim the touch for page scrolling, and the answer is `pointercancel`,
+    // which tears the armed drag down before any drop can resolve — the drag code was correct
+    // and simply unreachable, the same ownership question the bottom-sheet grab bar had. Touch
+    // events retarget to the touch-start element for the whole gesture, so this listener sees
+    // every move of the touch even after the finger leaves the card. Before the lift nothing
+    // answers here, so a plain scroll started on a card keeps scrolling untouched.
+    card.addEventListener("touchmove", (event: TouchEvent) => {
+      if (this.touchDrag?.card === card) event.preventDefault();
+    }, { passive: false });
   }
 
   private beginCardTouchDrag(
@@ -896,6 +908,11 @@ export class BoardRenderer {
     if (typeof navigator !== "undefined") navigator.vibrate?.(20);
     card.setPointerCapture?.(event.pointerId);
     card.addClass("obnotion-kanban-card--touch-lifted");
+    // From the lift on, the card must not offer the compositor a scrolling target: mid-gesture
+    // this only reaches engines that re-read `touch-action` after the touchstart, but it costs
+    // nothing and keeps the promise in one place — the non-passive `touchmove` above is the
+    // mechanism that holds the gesture for the remainder of it.
+    card.style.touchAction = "none";
 
     const ghost = card.cloneNode(true) as HTMLElement;
     ghost.addClass("obnotion-kanban-card--touch-ghost");
@@ -981,6 +998,7 @@ export class BoardRenderer {
     this.stopTouchAutoScroll();
     drag.ghost.remove();
     drag.card.removeClass("obnotion-kanban-card--touch-lifted");
+    drag.card.style.touchAction = "";
     // `onClickCapture` outlives this teardown on purpose: the pointer's own compatibility `click`
     // has not fired yet when a `pointerup` handler runs, so removing the swallow here would leave
     // nothing behind to catch it and the drop would re-open the very card it just moved. It
