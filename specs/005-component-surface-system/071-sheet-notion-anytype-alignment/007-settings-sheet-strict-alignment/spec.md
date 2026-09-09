@@ -48,7 +48,7 @@ the reference captures inventoried in §13 below.
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P1 |
-| **Status** | Draft — scaffolded, not implemented |
+| **Status** | Implemented 2026-09-09 — card-grouping shell landed on provisional metrics; T001's operator capture and the device read stay open |
 | **Created** | 2026-09-09 |
 | **Branch** | `worktrees/268-settings-sheet-strict` |
 | **Parent Spec** | `../spec.md` |

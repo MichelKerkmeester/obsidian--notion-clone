@@ -287,7 +287,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-09T20:28:39.445Z",
+    "last_save_at": "2026-09-09T20:19:01.596Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -295,11 +295,11 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:bee0405ebd5e2b99749058f1b129d09c21d5dc9ed84f7a89b736c6dfe52dc546",
+    "source_fingerprint": "sha256:d8ba971c5a2c5ad2744de9a8898694dc0d06962e4a79865a1f7dec7c81e48694",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d555fe2d05a8e10476a09464e12aa382dea3fa399b611db29f544003d2dfcd15",
-      "handover.md": "c23c5055b6469cbf2563a037d9c1bb2715d7bc201af6316448b8994bbb1eb2b7"
+      "handover.md": "f53e809323a0560b0e244b815ded7b09f1289b4f4fdc5c9a767e8259f1682764"
     },
     "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",
     "last_active_at": "2026-09-02T20:00:54.844Z"

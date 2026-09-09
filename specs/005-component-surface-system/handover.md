@@ -3462,3 +3462,31 @@ declared reason, exit 0**; scan-comments 0; scan-failing-values 0. `069` docs re
 AC-011 new Met, AC-010 unticked with the 0.0.36 note, tasks T019-T023, goal criterion + LOG,
 parent roadmap §4 row 84 with the report verbatim, state "landed, awaiting device". Validated
 strict, RESULT: PASSED; graph metadata backfilled. Not pushed — a fresh verifier lands it.
+## 071/007-settings-sheet-strict-alignment — the settings sheet's card-grouping shell (2026-09-09)
+
+The operator's row-84 report ("Settings sheet still has bad ui overall and needs strict alignment
+with notion sheets") closed structurally: on the phone sheet, each section's heading now sits
+**above its own rounded card** and the card boundary replaces the opening hairline — the sheet's
+rows collect into `.obnotion-settings-card` containers (producer `view-config-panel-renderer.ts`,
+sheet presentation only; the anchored popover keeps the continuous list) painted
+`--background-primary` at `--obnotion-radius-lg` inside the shared 16px inset with a 12px gap on
+the sheet's own `--obnotion-surface-overlay` canvas; a card's first row draws no divider (067's
+sibling-position mechanism).
+
+**RED/GREEN**: card assertion RED — 0 card containers, lane exit 1; GREEN — 2/2 cards radius ≥8px,
+backgrounds distinct from canvas, 1/1 gap ≥8px, 2/2 headings above their card, exit 0. 002's row
+grammar green unchanged inside the cards (2336 PASS / 0 FAIL). Unit revert-proof: card-background
+declaration removed → exactly 1 test fails, restored → 7/7.
+
+**The numbers**: tsc 0; vitest 1586/1586 (157 files); build 0; sheet-grammar 0; render-assertions
+0; touch-targets 0; verify-placement 0 (418/420, 2 declared); screenshots ×3 480/480 exit 0 (4
+deterministic two-run movers, all this surface: view-config 716882/716962px@Δ192/209,
+board-card-properties 785113/785159px@Δ194/209; 3 one-run ≤4px@Δ1 jitters restored per the lane
+rule; screenshots:verify 0); css-lane acquire/edit/release triplet signed, baselineHash
+`6224cfae4b35`, check-lane 0; evidence 15/15 fresh (14 stale artefacts re-derived by their own
+tools); gate 27/0 ×2; scan-comments 0; scan-failing-values 0; validate --strict PASSED ×3 (packet,
+071 parent first RESULT, 005 track).
+
+**Open**: the four card metrics (radius 8px, inset 16px, gap 12px, the two surface tokens) are
+**provisional** pending T001's full-resolution operator capture, which retunes them; AC-007, the
+operator's own device read (D3), closes the packet. Not pushed — a fresh verifier lands it.
