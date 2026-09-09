@@ -12,7 +12,7 @@ _memory:
     packet_pointer: "005-component-surface-system"
     last_updated_at: "2026-09-09T22:10:00Z"
     last_updated_by: "265-toolbar-vertical-lock-verify"
-    recent_action: "Landing-verified 075 vertical scroll lock; e1594957 on main"
+    recent_action: "Landing-verified 069 board touch drag; 75fb1320 on main"
     next_safe_action: "Execute 071/007/tasks.md; operator: 067/061 iOS pass, confirm 0.0.36 tag"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
@@ -356,6 +356,10 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-09 ~22:30, 069-board-cross-group-drag 0.0.36 touch-drag leg LANDED+verified on `origin/main` — landing verifier, two rebases, pushed
+
+**Landed SHA `75fb1320` on `origin/main`** (leg commit `b4998c5b` replayed over the 075 strip-lock landing; verifier commit `75fb1320`; `git log -1 origin/main` read back). Verified on the merged tree, not the leg's: harness re-run — real CDP touch input, card backlog→todo, frontmatter read back "todo", `pointercancel=false`, exit 0; mutation (non-passive `touchmove` preventDefault removed) re-proven red (`pointercancel` on the first move, 0 move calls, frontmatter "backlog", exit 1), restored green; desktop harness RESULT: PASSED; vitest 1585/1585; tsc 0; build 0. Screenshots ×2 + pixel-delta: 2 real movers kept (board-view-desktop-dark 4px@1 — the leg's own renderer change against 075's stylesheet; panel-record-detail-sheet-body-empty-desktop-dark 1539px@1 — 075's release rippling into a sheet-body fixture), both persisted across both runs. Evidence re-stamped after both rebases (075's landing moved 5 artefacts' inputs), 16/16 fresh. Gate: `PASS — 28 green, 0 red for a declared reason`, exit 0, the board-touch-drag lane riding as the 28th. Validate 069 + 005 --strict RESULT: PASSED (one FAILED on a stale backfill, cleared by re-running the scoped backfills); scan-comments 0; scan-failing-values 0. Docs reconciled: roadmap §4 leg row renumbered 84→86 (main's 075 rows took 84/85), §5.A 069 figure re-derived 7/8 → 8/9, operator-checklist 8/9, AC-010 stays unticked with the re-read-owed note. Pushed after one non-fast-forward rejection (075 landed mid-verify), resolved by second rebase + full re-derivation.
 
 ### 2026-09-09, 069-board-cross-group-drag — the 0.0.36 device report: touch drag dead on phone (this leg)
 
