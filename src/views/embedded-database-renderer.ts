@@ -67,26 +67,17 @@ import { renderRecordIcon } from "./record-icon-renderer";
 import { SortPanelRenderer } from "./sort-panel-renderer";
 import { SummaryRenderer } from "./summary-renderer";
 import { applyConditionalFormat } from "../data/conditional-formatting";
-import { ChartRenderer } from "./chart-renderer";
 import { CalendarToolbarRenderer } from "./calendar-toolbar-renderer";
 import { ChartToolbarRenderer } from "./chart-toolbar-renderer";
 import { getDefaultChartDateBucket, getDefaultChartField, getDefaultChartNumberBucket } from "../data/chart-aggregation";
 import { getDefaultEventDateField, getTimelineDayNonDateTimeColumns } from "../data/calendar-timeline-model";
-import {
-  buildCalendarTimelineSearchResults,
-  CalendarTimelineSearchResultItem,
-  CalendarTimelineSearchResults,
-  formatCalendarTimelineSearchResultDate,
-} from "../data/calendar-timeline-search-results";
 import { InvalidTimelineEventsScanner } from "../data/invalid-time-events";
-import { CalendarRenderer } from "./calendar-renderer";
 import {
   closeRecordDetailPanel,
   getOpenRecordDetailPath,
   openRecordDetailPanel,
   refreshRecordDetailPanel,
 } from "./record-detail-panel";
-import { CalendarTimelineRenderer } from "./calendar-timeline-renderer";
 import { FileTitleDisplay, getFileTitleDisplay } from "./file-title-display";
 import { TableRenderer } from "./table-renderer";
 import { isHTMLElement } from "./dom-guards";
@@ -272,65 +263,10 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private columnHeaderController: ColumnHeaderController;
   private tableRenderer: TableRenderer;
   private boardRenderer: BoardRenderer;
-  private chartRenderer = new ChartRenderer();
   private calendarToolbarRenderer = new CalendarToolbarRenderer();
   private chartToolbarRenderer = new ChartToolbarRenderer();
-  private calendarRenderer = new CalendarRenderer({
-    openRow: (row) => this.dataSource.openNote(row.file),
-    openRecordDetail: (anchorEl, row) => this.openRecordDetailPanel(anchorEl, row),
-    isReadOnly: true,
-    updateCalendarScale: (scale, anchorDateKey) => this.updateCalendarScale(scale, anchorDateKey),
-    onConfigChange: () => {
-      if (!this.config) return;
-      this.persistEmbeddedConfigLocally(this.config);
-      this.renderResults(this.config);
-      this.saveEmbeddedConfigInBackground();
-    },
-    openDateConfig: () => {
-      if (this.config) this.openDateConfiguration(this.config);
-    },
-    getColumns: (config) => getVisibleColumns(config, this.rows, this.vs(config), this.pendingShowColumns),
-    getCalendarInvalidEventCount: () => this.getEmbeddedInvalidEventCount(),
-    openCalendarInvalidEvents: () => this.openEmbeddedInvalidEvents(),
-    renderRecordIcon: (parent, row, config, compact) => this.renderEmbeddedRecordIcon(parent, row, config, compact),
-    applyConditionalFormat: (element, row, config) => applyConditionalFormat(element, row, config, this.currentDbConfig),
-  });
-  private calendarTimelineRenderer = new CalendarTimelineRenderer({
-    openRow: (row) => this.dataSource.openNote(row.file),
-    openRecordDetail: (anchorEl, row) => this.openRecordDetailPanel(anchorEl, row),
-    isReadOnly: true,
-    // Expand/collapse is view-local state, so it stays available even though this embed is
-    // read-only — moveSubtask is a frontmatter write and is deliberately not wired here, mirroring
-    // reorderTimelineEvent/updateEventDates: this timeline never enters a drag path to reach it.
-    isSubtaskCollapsed: (row) => this.isSubtaskCollapsed(this.config, row),
-    toggleSubtaskCollapsed: (row, collapsed) => this.toggleSubtaskCollapsed(this.config, row, collapsed),
-    setSubtaskCollapsedMany: (rows, collapsed) => this.setSubtaskCollapsedMany(this.config, rows, collapsed),
-    // Navigation, not a mutation: the depends-elsewhere chip menu jumps to the dependency
-    // file exactly like openRow opens a record, so it stays available in the read-only embed.
-    openDependencyFile: (path) => {
-      const file = this.app.vault.getAbstractFileByPath(normalizePath(path));
-      if (file instanceof TFile) this.dataSource.openNote(file);
-    },
-    isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.config, field, key),
-    toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.config, field, key),
-    expandGroup: (field, key, count) => this.expandGroup(this.config, field, key, count),
-    updateTimelineAnchor: (dateKey, _label, timeMinutes) => this.updateTimelineAnchor(dateKey, timeMinutes),
-    updateTimelineScale: (scale) => this.updateTimelineScale(scale),
-    onConfigChange: () => {
-      if (!this.config) return;
-      this.persistEmbeddedConfigLocally(this.config);
-      this.renderResults(this.config);
-      this.saveEmbeddedConfigInBackground();
-    },
-    openDateConfig: () => {
-      if (this.config) this.openDateConfiguration(this.config);
-    },
-    getTimelineInvalidEventCount: () => this.getEmbeddedInvalidEventCount(),
-    openTimelineInvalidEvents: () => this.openEmbeddedInvalidEvents(),
-    renderRecordIcon: (parent, row, config, compact) => this.renderEmbeddedRecordIcon(parent, row, config, compact),
-    renderGroupSummaries: (parent, rows, config) => this.summaryRenderer.renderGroupItems(parent, rows, config, this.currentDbConfig),
-    applyConditionalFormat: (element, row, config) => applyConditionalFormat(element, row, config, this.currentDbConfig),
-  });
+
+
   /** 嵌入式展开：只读预览（嵌入式 record mutation 只读，字段不可编辑，仅展示 + 打开笔记）。 */
   private openRecordDetailPanel(anchorEl: HTMLElement, row: RowData): void {
     const config = this.config;
@@ -589,7 +525,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         if (forceReload) this.dataSource.invalidateRecordCache();
         const reloadSource = this.pendingSourceReload || forceReload;
         if (!reloadSource && !request.unknown) {
-          if (this.tryUpdateChangedChartData(request.paths)) return;
           if (this.tryPatchChangedTableRows(request.paths)) return;
         }
         this.refreshChangedData(reloadSource);
@@ -642,7 +577,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.containerEl.ownerDocument.addEventListener("mouseup", this.handleMouseUpBound);
     this.getRefreshWindow().addEventListener("focus", this.handleWindowFocusBound);
     this.containerEl.addEventListener("keydown", this.handleEmbedKeydownBound);
-    this.registerEvent(this.app.workspace.on("css-change", () => this.chartRenderer.refreshTheme()));
     this.observeVisibility();
     this.render();
   }
@@ -653,12 +587,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.touchLayoutState = undefined;
     this.interactionScopes.release(this.interactionScopeId);
     this.refreshCoordinator.destroy();
-    this.chartRenderer.destroy();
-    this.closeCalendarTimelineSearchResultsPanel();
-    // 清理日历渲染器的当前时间定时器/缩放菜单，避免卸载后泄漏
-    this.calendarRenderer.destroy();
-    // 清理时间线渲染器的 observer/popover/定时器和进行中的拖拽监听，避免卸载后泄漏
-    this.calendarTimelineRenderer.destroy();
     this.chartToolbarRenderer.closePopover();
     this.clearComputedSyncTimer();
     this.removeHeaderPopoverAutoClose?.();
@@ -1045,49 +973,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.render();
   }
 
-  /** Keep the connected Chart.js canvas alive for ordinary data refreshes. */
-  private tryUpdateChangedChartData(paths: string[]): boolean {
-    const config = this.config;
-    if (!config || config.viewType !== "chart") return false;
-    const records = this.dataSource.getRecordsForConfig(this.getEffectiveConfig(config));
-    const pipelineConfig = { ...config, manualOrder: undefined };
-    this.rows = this.buildRowsWithRelations(
-      records,
-      pipelineConfig,
-      this.vs(config),
-      this.currentDbConfig,
-      true,
-    );
-    this.timelineInvalidRowsVersion += 1;
-    this.scheduleComputedSync(
-      config,
-      this.getIncrementalComputedSyncRows(config, this.rows, new Set(paths))
-    );
-    this.chartRenderer.render(
-      this.containerEl,
-      this.getStatefulConfig(config),
-      this.rows,
-      config.schema.columns,
-      {
-        onFilter: (rules) => this.applyChartFilters(config, rules),
-        onConfigChange: () => {
-          this.persistEmbeddedConfigLocally(config);
-          this.renderChartOnly(config);
-          this.saveEmbeddedConfigInBackground();
-        },
-      }
-    );
-    this.summaryRenderer.render(this.containerEl, this.rows, config, this.currentDbConfig, {
-      placement: "after-chart",
-      onChange: () => {
-        this.persistEmbeddedConfigLocally(config);
-        this.renderResults(config);
-        this.saveEmbeddedConfigInBackground();
-      },
-    });
-    return true;
-  }
-
   private getIncrementalComputedSyncRows(
     config: ViewConfig,
     rows: RowData[],
@@ -1336,7 +1221,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private renderResults(config: ViewConfig, options: { viewport?: DatabaseViewportRequest } = {}): void {
-    this.closeCalendarTimelineSearchResultsPanel();
     closeRecordDetailPanel();
     const hostViewport = captureEmbeddedHostViewport(this.containerEl);
     // 按当前视图的年份显示策略写入全局，供 DateTimeFormat.shouldShowYear 读取。
@@ -1348,15 +1232,12 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     // (selectViewInView / setViewType / onViewTypeChange).
     const viewType = config.viewType || "table";
     const viewTypeChanged = this.lastRenderedViewType !== viewType;
-    if (viewTypeChanged) this.teardownOutgoingViewRenderer(this.lastRenderedViewType);
     this.lastRenderedViewType = viewType;
     this.containerEl.toggleClass("obnotion-width-wide", config.displayWidth === "wide");
     this.updateFileViewWidthClass(config);
     this.applyViewTypeClass(config.viewType || "table");
     const target = this.containerEl;
-    const staleViewSelector = config.viewType === "chart"
-      ? ".obnotion-summary, .obnotion-table-wrap, .obnotion-grouped-table, .obnotion-board, .obnotion-gallery, .obnotion-gallery-grouped, .obnotion-gallery-total-header, .obnotion-list, .obnotion-list-grouped, .obnotion-list-total-header, .obnotion-calendar, .obnotion-timeline, .pm-gantt-view, .obnotion-empty"
-      : ".obnotion-summary, .obnotion-table-wrap, .obnotion-grouped-table, .obnotion-board, .obnotion-gallery, .obnotion-gallery-grouped, .obnotion-gallery-total-header, .obnotion-list, .obnotion-list-grouped, .obnotion-list-total-header, .obnotion-chart, .obnotion-chart-empty, .obnotion-chart-number, .obnotion-calendar, .obnotion-timeline, .pm-gantt-view, .obnotion-empty";
+    const staleViewSelector = ".obnotion-summary, .obnotion-table-wrap, .obnotion-grouped-table, .obnotion-board, .obnotion-gallery, .obnotion-gallery-grouped, .obnotion-gallery-total-header, .obnotion-list, .obnotion-list-grouped, .obnotion-list-total-header, .obnotion-empty";
     target.querySelectorAll(staleViewSelector).forEach((el) => el.remove());
     if (!config.schema.columns || config.schema.columns.length === 0) {
       this.emptyStateRenderer.renderCard(target, {
@@ -1396,15 +1277,13 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.rows = this.buildRowsWithRelations(records, pipelineConfig, this.vs(config), this.currentDbConfig, true);
     this.timelineInvalidRowsVersion += 1;
     this.scheduleComputedSync(config, this.rows);
-    if (config.viewType !== "chart") {
-      this.summaryRenderer.render(target, this.rows, config, this.currentDbConfig, {
-        onChange: () => {
-          this.persistEmbeddedConfigLocally(config);
-          this.renderResults(config);
-          this.saveEmbeddedConfigInBackground();
-        },
-      });
-    }
+    this.summaryRenderer.render(target, this.rows, config, this.currentDbConfig, {
+      onChange: () => {
+        this.persistEmbeddedConfigLocally(config);
+        this.renderResults(config);
+        this.saveEmbeddedConfigInBackground();
+      },
+    });
     const renderConfig = this.getStatefulConfig(config);
     if (config.viewType === "board") {
       const field = config.boardGroupField || this.vs(config).groupByField || this.getDefaultBoardField(config);
@@ -1421,28 +1300,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
           this.getEmptyStateOptions(config),
         );
       }
-    } else if (config.viewType === "chart") {
-      this.chartRenderer.render(target, renderConfig, this.rows, config.schema.columns, {
-        onFilter: (rules) => this.applyChartFilters(config, rules),
-        onConfigChange: () => {
-          this.persistEmbeddedConfigLocally(config);
-          this.renderChartOnly(config);
-          this.saveEmbeddedConfigInBackground();
-        },
-      });
-    } else if (config.viewType === "calendar") {
-      this.calendarRenderer.render(target, renderConfig, this.rows);
-    } else if (config.viewType === "timeline") {
-      const state = this.vs(config);
-      this.calendarTimelineRenderer.renderTimeline(target, {
-        ...renderConfig,
-        // 同 DatabaseView.getTimelineRenderConfig：分组只跟 state.groupByField，
-        // 避免「无分组」空串被 `||` 回退到历史 timelineGroupField。
-        timelineGroupField: state.groupByField,
-        sortColumn: state.sortColumn,
-        sortDirection: state.sortDirection,
-        sortRules: state.sortRules,
-      }, this.rows);
     } else {
       const fields = getDisplayGroupFields(config, this.vs(config));
       if (fields.length === 0) {
@@ -1476,17 +1333,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         );
       }
     }
-    if (config.viewType === "chart") {
-      this.summaryRenderer.render(target, this.rows, config, this.currentDbConfig, {
-        placement: "after-chart",
-        onChange: () => {
-          this.persistEmbeddedConfigLocally(config);
-          this.renderResults(config);
-          this.saveEmbeddedConfigInBackground();
-        },
-      });
-    }
-    this.renderCalendarTimelineSearchResultsPanel(config);
     this.revealPendingSearchResult();
     if (options.viewport === "reset-top") {
       this.restoreScroll({ top: 0, left: 0 });
@@ -1496,125 +1342,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.restoreEmbeddedHostViewport(hostViewport);
     const searchQuery = this.vs(config).searchText;
     if (searchQuery) highlightSearchMatches(this.containerEl, searchQuery);
-  }
-
-  private renderCalendarTimelineSearchResultsPanel(config: ViewConfig): void {
-    this.closeCalendarTimelineSearchResultsPanel();
-    if (config.viewType !== "calendar" && config.viewType !== "timeline") return;
-    const query = this.vs(config).searchText.trim();
-    if (!query) return;
-    const searchControl = this.containerEl.querySelector<HTMLElement>(".obnotion-search-control");
-    const searchInput = searchControl?.querySelector<HTMLInputElement>(".obnotion-search-input");
-    if (!searchControl || !searchInput) return;
-    if (window.activeDocument.activeElement !== searchInput) return;
-    const visibleRange = config.viewType === "timeline"
-      ? this.calendarTimelineRenderer.getCurrentVisibleRange()
-      : this.calendarRenderer.getCurrentVisibleRange();
-    const results = buildCalendarTimelineSearchResults(this.rows, config, visibleRange);
-    const panel = window.activeDocument.body.createDiv({ cls: "obnotion-calendar-search-results-popover" });
-    this.calendarTimelineSearchResultsEl = panel;
-    this.positionCalendarTimelineSearchResultsPanel(panel, searchControl);
-    this.renderCalendarTimelineSearchResultsContent(panel, results, config, query);
-    panel.onmousedown = (event) => {
-      event.preventDefault();
-    };
-    searchInput.onblur = () => {
-      this.closeCalendarTimelineSearchResultsPanel();
-    };
-    searchInput.onkeydown = (event) => {
-      if (event.key !== "Escape") return;
-      if (this.calendarTimelineSearchResultsEl?.isConnected) {
-        event.preventDefault();
-        event.stopPropagation();
-        this.closeCalendarTimelineSearchResultsPanel();
-        searchInput.blur();
-      }
-    };
-  }
-
-  private renderCalendarTimelineSearchResultsContent(panel: HTMLElement, results: CalendarTimelineSearchResults, config: ViewConfig, query: string): void {
-    panel.createDiv({
-      cls: "obnotion-calendar-search-results-summary",
-      text: t("search.calendarTimelineSummary", { total: results.totalCount, visible: results.visibleCount }),
-    });
-    if (results.totalCount === 0) {
-      panel.createDiv({ cls: "obnotion-calendar-search-results-empty", text: t("search.noMatches") });
-      return;
-    }
-    const list = panel.createDiv({ cls: "obnotion-calendar-search-results-list" });
-    const currentRangeItems = results.items.filter((item) => item.inCurrentRange);
-    const outsideRangeItems = results.items.filter((item) => !item.inCurrentRange);
-    const visibleItems = [...currentRangeItems, ...outsideRangeItems].slice(0, 50);
-    const currentVisibleItems = visibleItems.filter((item) => item.inCurrentRange);
-    const outsideVisibleItems = visibleItems.filter((item) => !item.inCurrentRange);
-    const renderSection = (label: string, items: CalendarTimelineSearchResultItem[]) => {
-      if (items.length === 0) return;
-      const section = list.createDiv({ cls: "obnotion-calendar-search-results-section" });
-      section.createDiv({ cls: "obnotion-calendar-search-results-section-title", text: label });
-      for (const item of items) this.renderCalendarTimelineSearchResultButton(section, config, item, query);
-    };
-    renderSection(t("search.inCurrentRange"), currentVisibleItems);
-    renderSection(t("search.outsideCurrentRange"), outsideVisibleItems);
-    if (results.totalCount > visibleItems.length) {
-      panel.createDiv({
-        cls: "obnotion-calendar-search-results-more",
-        text: t("search.moreResults", { count: results.totalCount - visibleItems.length }),
-      });
-    }
-  }
-
-  private renderCalendarTimelineSearchResultButton(list: HTMLElement, config: ViewConfig, item: CalendarTimelineSearchResultItem, query: string): void {
-    const button = list.createEl("button", {
-      cls: `obnotion-calendar-search-result${item.inCurrentRange ? " is-current-range" : ""}`,
-      attr: { type: "button" },
-    });
-    renderSearchHighlightedText(button.createSpan({ cls: "obnotion-calendar-search-result-title" }), item.title || t("common.untitled"), query);
-    renderSearchHighlightedText(button.createSpan({ cls: "obnotion-calendar-search-result-date" }), formatCalendarTimelineSearchResultDate(item), query);
-    button.onclick = (event) => {
-      event.preventDefault();
-      this.closeCalendarTimelineSearchResultsPanel();
-      const activeEl = window.activeDocument.activeElement;
-      if (activeEl instanceof HTMLElement) activeEl.blur();
-      this.jumpToCalendarTimelineSearchResult(config, item);
-    };
-  }
-
-  private positionCalendarTimelineSearchResultsPanel(panel: HTMLElement, anchor: HTMLElement): void {
-    // The editing area, not the window. `innerWidth`/`innerHeight` span the sidebars and the mobile
-    // navigation bar, so a panel clamped to them slides underneath an open right sidebar and is still
-    // "in bounds" by the arithmetic while being entirely off screen. Null asks for the active
-    // document's bounds rather than a container's, which is what this panel wants: it is created on
-    // `window.activeDocument.body` to escape the view, so no container should narrow it.
-    const placement = calendarSearchResultsPlacement(
-      anchor.getBoundingClientRect(),
-      getVisiblePopoverBounds(null),
-    );
-    panel.setCssProps({
-      left: `${placement.left}px`,
-      top: `${placement.top}px`,
-      width: `${placement.width}px`,
-    });
-  }
-
-  private closeCalendarTimelineSearchResultsPanel(): void {
-    this.calendarTimelineSearchResultsEl?.remove();
-    this.calendarTimelineSearchResultsEl = null;
-  }
-
-  private jumpToCalendarTimelineSearchResult(config: ViewConfig, item: CalendarTimelineSearchResultItem): void {
-    this.pendingSearchResultRevealPath = item.filePath;
-    if (config.viewType === "timeline") {
-      const timeMinutes = (config.timelineScale || "week") === "day" ? item.startMinutes : undefined;
-      this.updateTimelineAnchor(item.startDateKey, timeMinutes);
-      return;
-    }
-    if (config.viewType !== "calendar") return;
-    config.calendarMonth = item.startDateKey.slice(0, 7);
-    config.calendarWeekStart = item.startDateKey;
-    config.calendarDay = item.startDateKey;
-    this.persistEmbeddedConfigLocally(config);
-    this.renderResults(config);
-    this.saveEmbeddedConfigInBackground();
   }
 
   private revealPendingSearchResult(): void {
@@ -1735,7 +1462,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         this.updateToolbarIndicators(config);
         this.renderResults(config, { viewport: "reset-top" });
       },
-      onSearchFocus: () => this.renderCalendarTimelineSearchResultsPanel(config),
+      onSearchFocus: () => undefined,
       setGroupByField: (value) => {
         if (config.viewType === "board") {
           if (!value) return;
@@ -1965,7 +1692,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private rerenderToolbar(config: ViewConfig): void {
-    this.closeCalendarTimelineSearchResultsPanel();
     this.containerEl.querySelector(":scope > .obnotion-header")?.remove();
     this.renderToolbar(config);
   }
@@ -2459,52 +2185,17 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.chartToolbarRenderer.togglePopover(this.containerEl, activeAnchor, config, {
       onChange: () => {
         this.persistEmbeddedConfigLocally(config);
-        this.renderChartOnly(config);
-        this.saveEmbeddedConfigInBackground();
-      },
-      onExportImage: () => this.chartRenderer.exportPng(this.getChartExportFilename(config)),
-      onCopyPng: () => { void this.chartRenderer.copyPng(); },
-    });
-  }
-
-  private getChartExportFilename(config: ViewConfig): string {
-    const dbName = this.currentDbConfig?.name || "database";
-    return `${dbName}-${config.name || "chart"}`.replace(/[\\/:*?"<>|]+/g, "-");
-  }
-
-  private renderChartOnly(config: ViewConfig): void {
-    if (config.viewType !== "chart") return;
-    const renderConfig = this.getStatefulConfig(config);
-    this.chartRenderer.render(this.containerEl, renderConfig, this.rows, config.schema.columns, {
-      onFilter: (rules) => this.applyChartFilters(config, rules),
-      onConfigChange: () => {
-        this.persistEmbeddedConfigLocally(config);
-        this.renderChartOnly(config);
+        this.renderResults(config);
         this.saveEmbeddedConfigInBackground();
       },
     });
   }
 
   private setEmbeddedViewType(config: ViewConfig, value: NonNullable<ViewConfig["viewType"]>): void {
-    if (config.viewType === "chart" && value !== "chart") this.chartRenderer.destroy();
     this.stateStore.persist(config, this.vs(config));
     config.viewType = value;
     this.stateStore.delete(0, this.currentViewIndex);
     this.state = undefined;
-  }
-
-  /** Disconnects the outgoing view's own observers, timers and popover/drag listeners before
-   *  the next view type renders. The stale-root removal above (and `render`'s own `.empty()`
-   *  on its own call path) takes down the outgoing view's DOM; it cannot reach state that lives
-   *  outside the DOM it removes — the timeline's resize observer (which watches the container
-   *  itself, not its own root) and gantt keydown/drag listeners, or the calendar's running
-   *  current-time interval. `renderResults` is this host's single owner of
-   *  `lastRenderedViewType` (its own comment above explains why), so this is the one place a
-   *  switch through any of `render`, `selectViewInView` or `setEmbeddedViewType` is covered. */
-  private teardownOutgoingViewRenderer(outgoing: string | null): void {
-    if (outgoing === "timeline") this.calendarTimelineRenderer.destroy();
-    else if (outgoing === "calendar") this.calendarRenderer.destroy();
-    else if (outgoing === "chart") this.chartRenderer.destroy();
   }
 
   private initializeEmbeddedViewTypeDefaults(config: ViewConfig, value: NonNullable<ViewConfig["viewType"]>): void {

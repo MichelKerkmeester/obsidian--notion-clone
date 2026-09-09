@@ -28,13 +28,9 @@
 //
 // NEGATIVE CONTROLS. Every bound below must have been observed failing before
 // it counts as evidence, and a bound that was never seen failing is not
-// evidence. The list, calendar and timeline bounds reddened on the trees that
-// shipped their defects; board reads 1 against the same bound of 8 with no red
-// on this tree, and the table's per-row bound is new here, so all three own a
-// switch that reintroduces the shape the bound exists to catch.
-// The calendar week and day scenarios are new here and own the same switch;
-// the chart scenario's switch is separate, because the chart has no bag member
-// called per item.
+// evidence. Board reads 1 against the same bound of 8 with no red on this tree,
+// and the table's per-row bound is new here, so both own a switch that
+// reintroduces the shape the bound exists to catch.
 //
 // `RENDER_READ_CONTROL=per-item`, read by the runner and passed into
 // `runRenderAssertions`, arms it: the card and row renderers call the bag's
@@ -42,9 +38,7 @@
 // calls always name the field — and the armed wrapper reads the item's box at
 // that call. Board then reads one per card plus the touch probe, the table one
 // per row plus its O(1) reads, and the check fails naming the
-// scenario; disarmed, each reads its O(1) count. The chart's armed wrapper
-// reads the host's box once per row at the render entry, since neither host
-// passes an action the renderer calls per item.
+// scenario; disarmed, each reads its O(1) count.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -53,12 +47,12 @@
 import { TableRenderer, type TableRendererActions } from "../../src/views/table-renderer";
 import { applyListMigration, planListMigration } from "../../src/data/list-migration";
 import { CellRenderer } from "../../src/views/cell-renderer";
-import { CalendarRenderer, type CalendarRendererActions } from "../../src/views/calendar-renderer";
-import { ChartRenderer, type ChartRendererActions } from "../../src/views/chart-renderer";
+import { CalendarRenderer, type CalendarRendererActions } from "../../archive/deprecated-views/calendar/calendar-renderer";
+import { ChartRenderer, type ChartRendererActions } from "../../archive/deprecated-views/chart/chart-renderer";
 import {
   CalendarTimelineRenderer,
   type CalendarTimelineRendererActions,
-} from "../../src/views/calendar-timeline-renderer";
+} from "../../archive/deprecated-views/timeline/calendar-timeline-renderer";
 import { buildTimelineRangeGeometry } from "../../src/data/calendar-timeline-model";
 import { addDateKeyDays, dateKeyDaysBetween, getLocalDateKey, renderNow, setFrozenRenderNow } from "../../src/data/calendar-date-time";
 import { ChartToolbarRenderer, type ChartToolbarActions } from "../../src/views/chart-toolbar-renderer";
@@ -88,12 +82,12 @@ import {
   makeColumns as makeCalendarColumns,
   makeRows as makeCalendarRows,
   makeConfig as makeCalendarConfig,
-} from "../bench/calendar-render-bench";
+} from "../../archive/deprecated-views/calendar/calendar-render-bench";
 import {
   makeColumns as makeTimelineColumns,
   makeRows as makeTimelineRows,
   makeConfig as makeTimelineConfig,
-} from "../bench/timeline-render-bench";
+} from "../../archive/deprecated-views/timeline/timeline-render-bench";
 import { ToolbarRenderer, type ToolbarActions, type ToolbarViewEntry } from "../../src/views/toolbar-renderer";
 import { ActiveViewControlsRenderer, type ActiveViewControlsActions } from "../../src/views/active-view-controls-renderer";
 import { ActiveRulePopoverRenderer } from "../../src/views/active-rule-popover-renderer";

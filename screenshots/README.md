@@ -89,36 +89,6 @@ The rail lives in the header below the toolbar. Sort chips come first and carry 
 
 Sources: `src/views/active-view-controls-renderer.ts`
 
-### Chart view — empty state
-
-Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body. The card inside .obnotion-chart-empty is the shared EmptyStateRenderer markup, not chart's own retired obnotion-chart-empty-* vocabulary; chart-renderer.ts maps its six reasons onto the nearest shared reason for the title only, and always supplies its own message.
-
-| dark | light |
-|---|---|
-| ![chrome-chart-empty dark](notion-clone/components/chrome-chart-empty-mobile-dark.png) | ![chrome-chart-empty light](notion-clone/components/chrome-chart-empty-mobile-light.png) |
-
-Sources: `src/views/chart-renderer.ts`
-
-### Chart view — single number
-
-The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.
-
-| dark | light |
-|---|---|
-| ![chrome-chart-number dark](notion-clone/components/chrome-chart-number-mobile-dark.png) | ![chrome-chart-number light](notion-clone/components/chrome-chart-number-mobile-light.png) |
-
-Sources: `src/views/chart-renderer.ts`
-
-### Chart options popover
-
-What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.
-
-| dark | light |
-|---|---|
-| ![chrome-chart-options-popover dark](notion-clone/components/chrome-chart-options-popover-mobile-dark.png) | ![chrome-chart-options-popover light](notion-clone/components/chrome-chart-options-popover-mobile-light.png) |
-
-Sources: `src/views/chart-toolbar-renderer.ts`
-
 ### Grouped table header rows
 
 Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.
@@ -329,16 +299,6 @@ The operator's own report: a card whose title source is the (unset, default) fil
 
 Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/title-field-display.ts`
 
-### Calendar settings popover (constructed)
-
-CalendarToolbarRenderer's own togglePopover(), opened at week scale so the Time section (week/day only) is in frame; captured full-page because the popover positions itself with position: fixed, escaping an element-scoped #shot crop.
-
-| dark | light |
-|---|---|
-| ![constructed-calendar-toolbar-options dark](notion-clone/components/constructed-calendar-toolbar-options-mobile-dark.png) | ![constructed-calendar-toolbar-options light](notion-clone/components/constructed-calendar-toolbar-options-mobile-light.png) |
-
-Sources: `src/views/calendar-toolbar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
-
 ### Card covers, board (constructed)
 
 The empty cover in the board card: the renderer with an image field the rows resolve nothing for, which is the only cover state a capture without a vault can show. This used to mount the gallery's own empty cover beside it, asserted by constructed-state-assertions rather than photographed; the gallery is retired, so only the board host is built here now.
@@ -348,16 +308,6 @@ The empty cover in the board card: the renderer with an image field the rows res
 | ![constructed-card-covers dark](notion-clone/components/constructed-card-covers-mobile-dark.png) | ![constructed-card-covers light](notion-clone/components/constructed-card-covers-mobile-light.png) |
 
 Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
-### Chart options popover (constructed)
-
-ChartToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the other two settings popovers.
-
-| dark | light |
-|---|---|
-| ![constructed-chart-toolbar-options dark](notion-clone/components/constructed-chart-toolbar-options-mobile-dark.png) | ![constructed-chart-toolbar-options light](notion-clone/components/constructed-chart-toolbar-options-mobile-light.png) |
-
-Sources: `src/views/chart-toolbar-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/popover-position.ts`
 
 ### Column header affordances (constructed)
 
@@ -448,16 +398,6 @@ renderGroupedTable's own entry over a two-level group tree with summary rules, s
 | ![constructed-table-grouped dark](notion-clone/components/constructed-table-grouped-mobile-dark.png) | ![constructed-table-grouped light](notion-clone/components/constructed-table-grouped-mobile-light.png) |
 
 Sources: `src/views/table-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/group-label-renderer.ts`, `src/views/summary-renderer.ts`
-
-### Timeline settings popover (constructed)
-
-CalendarTimelineToolbarRenderer's own togglePopover(); captured full-page for the same position: fixed reason as the calendar settings popover.
-
-| dark | light |
-|---|---|
-| ![constructed-timeline-toolbar-options dark](notion-clone/components/constructed-timeline-toolbar-options-mobile-dark.png) | ![constructed-timeline-toolbar-options light](notion-clone/components/constructed-timeline-toolbar-options-mobile-light.png) |
-
-Sources: `src/views/calendar-timeline-toolbar-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/views/popover-position.ts`
 
 ### Main toolbar (constructed)
 
@@ -1175,26 +1115,6 @@ Sources: `src/views/view-config-panel-renderer.ts`, `src/views/mobile-bottom-she
 
 ## project-manager
 
-### Project Manager gantt (reference)
-
-The vendored GanttView at its week scale over the timeline bench's rows converted into its Task shape: bars, the milestone diamond, dependency arrows and the today line. Read beside constructed-timeline.
-
-| dark | light |
-|---|---|
-| ![reference-gantt dark](project-manager/reference-gantt-mobile-dark.png) | ![reference-gantt light](project-manager/reference-gantt-mobile-light.png) |
-
-Sources: `specs/context/obsidian-pm-main/src/views/gantt/GanttView.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttHeaderRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttTaskBarRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttDragHandler.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttLinkHandler.ts`, `specs/context/obsidian-pm-main/src/views/gantt/TaskLabelRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/TimelineConfig.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/reference-assertion-bundle.mjs`, `tools/live/reference-mount.ts`, `tools/live/reference-temporal-shim.mjs`, `tools/screenshots/reference-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `tools/bench/reference-fixture.ts`, `src/data/calendar-date-time.ts`, `specs/context/obsidian-pm-main/src/styles/variables.css`, `specs/context/obsidian-pm-main/src/styles/chrome.css`, `specs/context/obsidian-pm-main/src/styles/table.css`, `specs/context/obsidian-pm-main/src/styles/gantt.css`, `specs/context/obsidian-pm-main/src/styles/kanban.css`, `specs/context/obsidian-pm-main/src/styles/widgets.css`, `specs/context/obsidian-pm-main/src/styles/utilities.css`
-
-### Project Manager gantt — subtask tree (reference)
-
-The same gantt over the tree-wired rows: the nested children render as indented label rows with collapse toggles, beside constructed-timeline-subtask.
-
-| dark | light |
-|---|---|
-| ![reference-gantt-subtask dark](project-manager/reference-gantt-subtask-mobile-dark.png) | ![reference-gantt-subtask light](project-manager/reference-gantt-subtask-mobile-light.png) |
-
-Sources: `specs/context/obsidian-pm-main/src/views/gantt/GanttView.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttHeaderRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttTaskBarRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttDragHandler.ts`, `specs/context/obsidian-pm-main/src/views/gantt/GanttLinkHandler.ts`, `specs/context/obsidian-pm-main/src/views/gantt/TaskLabelRenderer.ts`, `specs/context/obsidian-pm-main/src/views/gantt/TimelineConfig.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/reference-assertion-bundle.mjs`, `tools/live/reference-mount.ts`, `tools/live/reference-temporal-shim.mjs`, `tools/screenshots/reference-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `tools/bench/reference-fixture.ts`, `src/data/calendar-date-time.ts`, `specs/context/obsidian-pm-main/src/styles/variables.css`, `specs/context/obsidian-pm-main/src/styles/chrome.css`, `specs/context/obsidian-pm-main/src/styles/table.css`, `specs/context/obsidian-pm-main/src/styles/gantt.css`, `specs/context/obsidian-pm-main/src/styles/kanban.css`, `specs/context/obsidian-pm-main/src/styles/widgets.css`, `specs/context/obsidian-pm-main/src/styles/utilities.css`
-
 ### Project Manager kanban (reference)
 
 The vendored Project Manager plugin's own KanbanView, mounted through the shared obsidian stub over the board bench's rows converted into its Task shape. Read beside constructed-board: the same titles, statuses, dates, priority tiers, hours and assignees. The tag row stays empty on both sides — our card matches a tags column by name and the bench carries none.
@@ -1273,56 +1193,6 @@ Sources: `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts`, `src
 
 Sources: `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`
 
-### Calendar empty state — no date property
-
-renderEmpty() returns before .obnotion-calendar is ever created, so the card lands as a direct child of .obnotion-container — the density rule (styles.css:16849-16864) has to key off that same container, not a .obnotion-calendar descendant, or it never applies.
-
-| dark | light |
-|---|---|
-| ![calendar-empty-state dark](notion-clone/views/calendar-empty-state-mobile-dark.png) | ![calendar-empty-state light](notion-clone/views/calendar-empty-state-mobile-light.png) |
-
-Sources: `src/views/calendar-renderer.ts`, `src/views/empty-state-renderer.ts`
-
-### Mini calendar date picker
-
-Days with events carry a short accent underline; the visible week reads as the selected pill run. The calendar view's own header trigger for this popover is gone; the date-value-picker field editor is the shipped surface that still opens it, so this hand-built fixture documents the popover's own markup rather than a constructed capture of a button that no longer exists.
-
-| dark | light |
-|---|---|
-| ![calendar-mini-calendar dark](notion-clone/views/calendar-mini-calendar-mobile-dark.png) | ![calendar-mini-calendar light](notion-clone/views/calendar-mini-calendar-mobile-light.png) |
-
-Sources: `src/views/calendar-mini-calendar-renderer.ts`, `src/views/date-value-picker.ts`
-
-### Calendar month view
-
-Multi-day all-day bars, timed events, weekend headers, a completed milestone treatment and an overflow week; the unscheduled backlog is omitted because nothing here is unscheduled.
-
-| dark | light |
-|---|---|
-| ![calendar-month-view dark](notion-clone/views/calendar-month-view-mobile-dark.png) | ![calendar-month-view light](notion-clone/views/calendar-month-view-mobile-light.png) |
-
-Sources: `src/views/calendar-renderer.ts`
-
-### Calendar settings popover
-
-The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.
-
-| dark | light |
-|---|---|
-| ![calendar-toolbar-options dark](notion-clone/views/calendar-toolbar-options-mobile-dark.png) | ![calendar-toolbar-options light](notion-clone/views/calendar-toolbar-options-mobile-light.png) |
-
-Sources: `src/views/calendar-toolbar-renderer.ts`, `src/views/dropdown-field.ts`
-
-### Calendar week time grid
-
-Sticky day header and all-day strip over the 08–16 time grid; weekend columns, a completed milestone treatment and the current-time ruler sit in frame; the unscheduled backlog is omitted because nothing here is unscheduled.
-
-| dark | light |
-|---|---|
-| ![calendar-week-time-grid dark](notion-clone/views/calendar-week-time-grid-mobile-dark.png) | ![calendar-week-time-grid light](notion-clone/views/calendar-week-time-grid-mobile-light.png) |
-
-Sources: `src/views/calendar-renderer.ts`
-
 ### Board view (constructed)
 
 The shipped board renderer at the bench shape: 1600 rows into five status columns.
@@ -1343,86 +1213,6 @@ The shipped board renderer with the first capture-sized row wired into a parent 
 
 Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
 
-### Calendar day view (constructed)
-
-The shipped day time grid, scrolled to the workday by the renderer's own post-render correction.
-
-| dark | light |
-|---|---|
-| ![constructed-calendar-day dark](notion-clone/views/constructed-calendar-day-mobile-dark.png) | ![constructed-calendar-day light](notion-clone/views/constructed-calendar-day-mobile-light.png) |
-
-Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
-### Calendar view — no date property (constructed)
-
-The shipped calendar renderer with every date-typed column removed from its schema, reproducing renderMonth's real no-date-field early return.
-
-| dark | light |
-|---|---|
-| ![constructed-calendar-empty dark](notion-clone/views/constructed-calendar-empty-mobile-dark.png) | ![constructed-calendar-empty light](notion-clone/views/constructed-calendar-empty-mobile-light.png) |
-
-Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/empty-state-renderer.ts`
-
-### Calendar month view (constructed)
-
-The shipped month grid anchored on the bench's event dates, one chip carrying a real leading icon; the unscheduled drawer is absent because every bench row has an event date.
-
-| dark | light |
-|---|---|
-| ![constructed-calendar-month dark](notion-clone/views/constructed-calendar-month-mobile-dark.png) | ![constructed-calendar-month light](notion-clone/views/constructed-calendar-month-mobile-light.png) |
-
-Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
-### Calendar month view, unscheduled chip and a multi-day chip (constructed)
-
-The shipped month grid with one row carrying no date (the header's "Unscheduled · N" chip) and one row spanning several days (a multi-day all-day chip), the two states the bench shape alone never draws.
-
-| dark | light |
-|---|---|
-| ![constructed-calendar-month-unscheduled dark](notion-clone/views/constructed-calendar-month-unscheduled-mobile-dark.png) | ![constructed-calendar-month-unscheduled light](notion-clone/views/constructed-calendar-month-unscheduled-mobile-light.png) |
-
-Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
-### Calendar week view (constructed)
-
-The shipped week time grid, scrolled to the workday by the renderer's own post-render correction.
-
-| dark | light |
-|---|---|
-| ![constructed-calendar-week dark](notion-clone/views/constructed-calendar-week-mobile-dark.png) | ![constructed-calendar-week light](notion-clone/views/constructed-calendar-week-mobile-light.png) |
-
-Sources: `src/views/calendar-renderer.ts`, `tools/bench/calendar-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
-### Chart view (constructed)
-
-The shipped chart renderer over the board bench's five status groups, summing a per-row currency/number column into each bar rather than only counting rows.
-
-| dark | light |
-|---|---|
-| ![constructed-chart dark](notion-clone/views/constructed-chart-mobile-dark.png) | ![constructed-chart light](notion-clone/views/constructed-chart-mobile-light.png) |
-
-Sources: `src/views/chart-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
-### Chart view — empty state (constructed)
-
-The shipped chart renderer's allGroupsHidden empty state, reached by hiding every group value the board bench's group field actually produced.
-
-| dark | light |
-|---|---|
-| ![constructed-chart-empty dark](notion-clone/views/constructed-chart-empty-mobile-dark.png) | ![constructed-chart-empty light](notion-clone/views/constructed-chart-empty-mobile-light.png) |
-
-Sources: `src/views/chart-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
-### Chart view — single number (constructed)
-
-The shipped chart renderer's renderNumber branch (chartType: "number"), the one chart type drawn as three divs instead of a Chart.js canvas.
-
-| dark | light |
-|---|---|
-| ![constructed-chart-number dark](notion-clone/views/constructed-chart-number-mobile-dark.png) | ![constructed-chart-number light](notion-clone/views/constructed-chart-number-mobile-light.png) |
-
-Sources: `src/views/chart-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
 ### Linked view in a reading host (constructed)
 
 The shipped table renderer paints the same capture-sized data once as a standalone view and once as a linked view inside a readable-line-width host, with prose before and after it.
@@ -1442,66 +1232,6 @@ The shipped table renderer at the bench's sixteen-column shape, over the capture
 | ![constructed-table dark](notion-clone/views/constructed-table-mobile-dark.png) | ![constructed-table light](notion-clone/views/constructed-table-mobile-light.png) |
 
 Sources: `src/views/table-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
-### Timeline view (constructed)
-
-The shipped week-scale timeline at the bench shape, with the renderer's own group-width correction applied.
-
-| dark | light |
-|---|---|
-| ![constructed-timeline dark](notion-clone/views/constructed-timeline-mobile-dark.png) | ![constructed-timeline light](notion-clone/views/constructed-timeline-mobile-light.png) |
-
-Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
-### Timeline day scale (constructed)
-
-The shipped timeline renderer at its day scale, the scale the fixture this supersedes photographed as hand-written markup.
-
-| dark | light |
-|---|---|
-| ![constructed-timeline-day dark](notion-clone/views/constructed-timeline-day-mobile-dark.png) | ![constructed-timeline-day light](notion-clone/views/constructed-timeline-day-mobile-light.png) |
-
-Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
-### Timeline month scale (constructed)
-
-The shipped timeline renderer at its month scale.
-
-| dark | light |
-|---|---|
-| ![constructed-timeline-month dark](notion-clone/views/constructed-timeline-month-mobile-dark.png) | ![constructed-timeline-month light](notion-clone/views/constructed-timeline-month-mobile-light.png) |
-
-Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
-### Timeline quarter scale (constructed)
-
-The shipped timeline renderer at its quarter scale.
-
-| dark | light |
-|---|---|
-| ![constructed-timeline-quarter dark](notion-clone/views/constructed-timeline-quarter-mobile-dark.png) | ![constructed-timeline-quarter light](notion-clone/views/constructed-timeline-quarter-mobile-light.png) |
-
-Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
-
-### Timeline view — subtask tree (constructed)
-
-The shipped week-scale timeline with the first capture-sized row wired into the same parent/two-children relation the board's constructed subtask tree uses.
-
-| dark | light |
-|---|---|
-| ![constructed-timeline-subtask dark](notion-clone/views/constructed-timeline-subtask-mobile-dark.png) | ![constructed-timeline-subtask light](notion-clone/views/constructed-timeline-subtask-mobile-light.png) |
-
-Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
-
-### Timeline year scale (constructed)
-
-The shipped timeline renderer at its year scale.
-
-| dark | light |
-|---|---|
-| ![constructed-timeline-year dark](notion-clone/views/constructed-timeline-year-mobile-dark.png) | ![constructed-timeline-year light](notion-clone/views/constructed-timeline-year-mobile-light.png) |
-
-Sources: `src/views/calendar-timeline-renderer.ts`, `tools/bench/timeline-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
 ### Table with a frozen column, scrolled sideways
 
@@ -1560,76 +1290,6 @@ The same column and the same source values with the switch on: obnotion-cell-wra
 | ![table-wrap-on dark](notion-clone/views/table-wrap-on-mobile-dark.png) | ![table-wrap-on light](notion-clone/views/table-wrap-on-mobile-light.png) |
 
 Sources: `src/data/column-types.ts`, `src/views/cell-renderer.ts`, `src/views/inline-markdown-renderer.ts`
-
-### Timeline view — subtask tree
-
-The week scale's own bars re-read as a tree: the parent keeps its collapse affordance and the done/total count beside its explicit percentage inside the bar, its two children indent by one depth step, and the second lane stays un-related so the ordinary bar is still in frame beside them.
-
-| dark | light |
-|---|---|
-| ![timeline-subtask-tree dark](notion-clone/views/timeline-subtask-tree-mobile-dark.png) | ![timeline-subtask-tree light](notion-clone/views/timeline-subtask-tree-mobile-light.png) |
-
-Sources: `src/views/calendar-timeline-renderer.ts`, `src/data/subtask-relation.ts`, `src/data/subtask-serialize.ts`, `src/i18n.ts`
-
-### Timeline settings popover
-
-The layout section gates the local-extension column widths: the custom column width switch and its slider only appear once the local-extensions toggle is on (the default render is the reference gantt and ignores them). The week-label select stays visible regardless of scale, matching the reference's always-visible plugin setting. The day-scale slot-duration select is gated behind local extensions AND day scale together, so this fixture — depicted at Week scale — omits it even with extensions on.
-
-| dark | light |
-|---|---|
-| ![timeline-toolbar-options dark](notion-clone/views/timeline-toolbar-options-mobile-dark.png) | ![timeline-toolbar-options light](notion-clone/views/timeline-toolbar-options-mobile-light.png) |
-
-Sources: `src/views/calendar-timeline-toolbar-renderer.ts`, `src/views/dropdown-field.ts`
-
-### Timeline view — Week
-
-Week scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.
-
-| dark | light |
-|---|---|
-| ![timeline-view dark](notion-clone/views/timeline-view-mobile-dark.png) | ![timeline-view light](notion-clone/views/timeline-view-mobile-light.png) |
-
-Sources: `src/views/calendar-timeline-renderer.ts`
-
-### Timeline view — Day
-
-Day scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.
-
-| dark | light |
-|---|---|
-| ![timeline-view-day dark](notion-clone/views/timeline-view-day-mobile-dark.png) | ![timeline-view-day light](notion-clone/views/timeline-view-day-mobile-light.png) |
-
-Sources: `src/views/calendar-timeline-renderer.ts`
-
-### Timeline view — Month
-
-Month scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.
-
-| dark | light |
-|---|---|
-| ![timeline-view-month dark](notion-clone/views/timeline-view-month-mobile-dark.png) | ![timeline-view-month light](notion-clone/views/timeline-view-month-mobile-light.png) |
-
-Sources: `src/views/calendar-timeline-renderer.ts`
-
-### Timeline view — Quarter
-
-Quarter scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.
-
-| dark | light |
-|---|---|
-| ![timeline-view-quarter dark](notion-clone/views/timeline-view-quarter-mobile-dark.png) | ![timeline-view-quarter light](notion-clone/views/timeline-view-quarter-mobile-light.png) |
-
-Sources: `src/views/calendar-timeline-renderer.ts`
-
-### Timeline view — Year
-
-Year scale with boundary ticks, weekend fills, progress, milestone and dependency-line affordances. The window is fixture geometry centred on the pinned date, sized per device width after the container's own left/right padding so today, the bars and the milestone stay in frame — the production default's range is task-driven (buildTimelineRangeGeometry), and the viewport-centred window this fixture used to mirror is a local-extension behaviour gated behind timelineLocalExtensions.
-
-| dark | light |
-|---|---|
-| ![timeline-view-year dark](notion-clone/views/timeline-view-year-mobile-dark.png) | ![timeline-view-year light](notion-clone/views/timeline-view-year-mobile-light.png) |
-
-Sources: `src/views/calendar-timeline-renderer.ts`
 
 ## Reference roots
 

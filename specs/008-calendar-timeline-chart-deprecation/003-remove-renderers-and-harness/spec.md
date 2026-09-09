@@ -30,7 +30,7 @@ Remove the calendar, timeline and chart renderers and their harness lanes from t
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P1 |
-| **Status** | Draft — blocked on Phase 1 |
+| **Status** | Implemented |
 | **Created** | 2026-09-08 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |

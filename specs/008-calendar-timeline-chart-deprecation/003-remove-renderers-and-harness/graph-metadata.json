@@ -38,7 +38,7 @@
       "testing",
       "strategy"
     ],
-    "importance_tier": "normal",
+    "importance_tier": "important",
     "status": "in_progress",
     "key_files": [
       "spec.md",
@@ -46,8 +46,15 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md",
-      "src/views/database-view.ts"
+      "src/views/database-view.ts",
+      "src/views/embedded-database-renderer.ts",
+      "src/views/rendered-view-roots.ts",
+      "tools/live/render-assertion-bundle.mjs",
+      "tools/screenshots/scenarios.mjs",
+      "tools/screenshots/pinned-values-baseline.json",
+      "src/main.ts"
     ],
     "entities": [
       {
@@ -81,6 +88,12 @@
         "source": "derived"
       },
       {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
@@ -90,6 +103,42 @@
         "name": "database-view.ts",
         "kind": "code",
         "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.ts",
+        "kind": "code",
+        "path": "src/views/embedded-database-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "rendered-view-roots.ts",
+        "kind": "code",
+        "path": "src/views/rendered-view-roots.ts",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-bundle.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertion-bundle.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "pinned-values-baseline.json",
+        "kind": "config",
+        "path": "tools/screenshots/pinned-values-baseline.json",
+        "source": "derived"
+      },
+      {
+        "name": "main.ts",
+        "kind": "code",
+        "path": "src/main.ts",
         "source": "derived"
       },
       {
@@ -151,53 +200,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Data Flow",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Current Role",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Once no surface can open a calendar, timeline or chart view (Phase 2), the renderer code and its harness lanes are dead weight in the shipped bundle; removing them without a restore path would make date/renderer-parity work harder to resurrect later if ever needed",
     "created_at": "2026-09-08T06:24:16Z",
-    "last_save_at": "2026-09-08T06:50:06.812Z",
+    "last_save_at": "2026-09-09T05:34:31.792Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,15 +213,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:ec366aa956a51ed23901bf90f52792968a1d2519424c43fd8cf0cd383831c339",
+    "source_fingerprint": "sha256:242edc2b752785abac9d47dff1189d789f4dbbacf4ef6695ed2bc491223a273a",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "d74aa54bce1a658b2886d5f4ce86248578e39571f86213ea74a49dbb7b66e684",
+      "spec.md": "9878078365033a2bc9e4b427768795770ed310249f821ead17519470ae78dfd4",
       "plan.md": "f3cc894f7b08b4381c8fedc06d2f2fa5bfa561e88dff89d01a5243e6ddfb03a9",
-      "tasks.md": "a703d1598538415ebe91631e25d7aa22ea3b3d0a9463708dbc406553548b6c14",
-      "implementation-summary.md": "d9df9c7d6fed69490d86680e730a7208bc1fdd1498adea04fcd4e096e1b5ce0f"
+      "tasks.md": "4c060be08d48449aebceaf9130f73a8e7695217c641d62a3d3c384df755eccbd",
+      "decision-record.md": "c2eb2c0295d335373551955e06a077f354baad726e5c17e71874a504cfd2b00e",
+      "implementation-summary.md": "d2f3a31e7851e693cdf366a2a594fff4a2e6ad5def399d115a5bbe5d96c6ae2f"
     },
     "last_active_at": null
   }

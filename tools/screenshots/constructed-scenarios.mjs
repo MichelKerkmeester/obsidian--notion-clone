@@ -770,57 +770,9 @@ export const CONSTRUCTED_SCENARIOS = [
       .concat(["src/views/card-field-renderer.ts", "src/views/record-surface/property-row.ts"]),
     note: "The shipped board renderer at the bench shape: 1600 rows into five status columns.",
   }),
-  constructedScenario("calendar-month", {
-    renderer: "calendar",
-    scale: "month",
-    calendarRecordIcon: true,
-    title: "Calendar month view (constructed)",
-    sources: constructedSources("src/views/calendar-renderer.ts", "tools/bench/calendar-render-bench.ts"),
-    note: "The shipped month grid anchored on the bench's event dates, one chip carrying a real leading icon; the unscheduled drawer is absent because every bench row has an event date.",
-  }),
-  constructedScenario("calendar-month-unscheduled", {
-    renderer: "calendar",
-    scale: "month",
-    calendarUnscheduled: true,
-    calendarMultiDay: true,
-    title: "Calendar month view, unscheduled chip and a multi-day chip (constructed)",
-    sources: constructedSources("src/views/calendar-renderer.ts", "tools/bench/calendar-render-bench.ts"),
-    note: "The shipped month grid with one row carrying no date (the header's \"Unscheduled · N\" chip) "
-      + "and one row spanning several days (a multi-day all-day chip), the two states the bench shape alone never draws.",
-  }),
-  constructedScenario("calendar-week", {
-    renderer: "calendar",
-    scale: "week",
-    title: "Calendar week view (constructed)",
-    sources: constructedSources("src/views/calendar-renderer.ts", "tools/bench/calendar-render-bench.ts"),
-    note: "The shipped week time grid, scrolled to the workday by the renderer's own post-render correction.",
-  }),
-  constructedScenario("calendar-day", {
-    renderer: "calendar",
-    scale: "day",
-    title: "Calendar day view (constructed)",
-    sources: constructedSources("src/views/calendar-renderer.ts", "tools/bench/calendar-render-bench.ts"),
-    note: "The shipped day time grid, scrolled to the workday by the renderer's own post-render correction.",
-  }),
-  constructedScenario("timeline", {
-    renderer: "timeline",
-    title: "Timeline view (constructed)",
-    sources: constructedSources("src/views/calendar-timeline-renderer.ts", "tools/bench/timeline-render-bench.ts"),
-    note: "The shipped week-scale timeline at the bench shape, with the renderer's own group-width correction applied.",
-  }),
-  constructedScenario("chart", {
-    renderer: "chart",
-    title: "Chart view (constructed)",
-    sources: constructedSources("src/views/chart-renderer.ts", "tools/bench/board-render-bench.ts"),
-    note: "The shipped chart renderer over the board bench's five status groups, summing a "
-      + "per-row currency/number column into each bar rather than only counting rows.",
-  }),
-
-  // ── thirteen fixture-only scenarios: per-view state variants, chart chrome and toolbar
-  // popovers, constructed through the same renderers and — for the popovers — the same real
-  // togglePopover() their production toolbars call, never a hand-applied class. Declared with
-  // fixtureOf from the fixture side (tools/screenshots/scenarios/*.mjs).
-
+  // ── a fixture-only scenario: the board's subtask state variant, constructed through the same
+  // renderer the fixture side (tools/screenshots/scenarios/*.mjs) declares with fixtureOf. The
+  // retired view renderers' variants here were removed with them.
   constructedScenario("board-subtask", {
     renderer: "board",
     subtaskTree: true,
@@ -831,72 +783,6 @@ export const CONSTRUCTED_SCENARIOS = [
     note: "The shipped board renderer with the first capture-sized row wired into a parent (two "
       + "children, explicit progress, expanded) via buildSubtaskRelation's own frontmatter keys.",
   }),
-  constructedScenario("timeline-subtask", {
-    renderer: "timeline",
-    subtaskTree: true,
-    title: "Timeline view — subtask tree (constructed)",
-    sources: constructedSources("src/views/calendar-timeline-renderer.ts", "tools/bench/timeline-render-bench.ts")
-      .concat(["src/data/subtask-relation.ts", "src/data/subtask-serialize.ts", "src/i18n.ts"]),
-    note: "The shipped week-scale timeline with the first capture-sized row wired into the same "
-      + "parent/two-children relation the board's constructed subtask tree uses.",
-  }),
-  constructedScenario("calendar-empty", {
-    renderer: "calendar",
-    emptyState: true,
-    title: "Calendar view — no date property (constructed)",
-    sources: constructedSources("src/views/calendar-renderer.ts", "tools/bench/calendar-render-bench.ts")
-      .concat(["src/views/empty-state-renderer.ts"]),
-    note: "The shipped calendar renderer with every date-typed column removed from its schema, "
-      + "reproducing renderMonth's real no-date-field early return.",
-  }),
-  constructedScenario("chart-number", {
-    renderer: "chart",
-    chartVariant: "number",
-    title: "Chart view — single number (constructed)",
-    sources: constructedSources("src/views/chart-renderer.ts", "tools/bench/board-render-bench.ts"),
-    note: "The shipped chart renderer's renderNumber branch (chartType: \"number\"), the one chart "
-      + "type drawn as three divs instead of a Chart.js canvas.",
-  }),
-  constructedScenario("chart-empty", {
-    renderer: "chart",
-    chartVariant: "empty",
-    title: "Chart view — empty state (constructed)",
-    sources: constructedSources("src/views/chart-renderer.ts", "tools/bench/board-render-bench.ts"),
-    note: "The shipped chart renderer's allGroupsHidden empty state, reached by hiding every "
-      + "group value the board bench's group field actually produced.",
-  }),
-  constructedScenario("calendar-toolbar-options", {
-    renderer: "calendar-toolbar",
-    group: "components",
-    capture: "viewport",
-    title: "Calendar settings popover (constructed)",
-    sources: constructedSources("src/views/calendar-toolbar-renderer.ts", "tools/bench/calendar-render-bench.ts")
-      .concat(["src/views/dropdown-field.ts", "src/views/popover-position.ts"]),
-    note: "CalendarToolbarRenderer's own togglePopover(), opened at week scale so the Time section "
-      + "(week/day only) is in frame; captured full-page because the popover positions itself with "
-      + "position: fixed, escaping an element-scoped #shot crop.",
-  }),
-  constructedScenario("timeline-toolbar-options", {
-    renderer: "timeline-toolbar",
-    group: "components",
-    capture: "viewport",
-    title: "Timeline settings popover (constructed)",
-    sources: constructedSources("src/views/calendar-timeline-toolbar-renderer.ts", "tools/bench/timeline-render-bench.ts")
-      .concat(["src/views/dropdown-field.ts", "src/views/popover-position.ts"]),
-    note: "CalendarTimelineToolbarRenderer's own togglePopover(); captured full-page for the same "
-      + "position: fixed reason as the calendar settings popover.",
-  }),
-  constructedScenario("chart-toolbar-options", {
-    renderer: "chart-toolbar",
-    group: "components",
-    capture: "viewport",
-    title: "Chart options popover (constructed)",
-    sources: constructedSources("src/views/chart-toolbar-renderer.ts", "tools/bench/board-render-bench.ts")
-      .concat(["src/views/popover-position.ts"]),
-    note: "ChartToolbarRenderer's own togglePopover(); captured full-page for the same "
-      + "position: fixed reason as the other two settings popovers.",
-  }),
-
   // ── The toolbar and the surfaces its own buttons open: the plain toolbar, the search control
   // widened by its state's text, and the two popovers reached by clicking the toolbar's own
   // trigger buttons — the same anchors a device tap reaches, never a hand-applied class.
@@ -1484,40 +1370,6 @@ export const CONSTRUCTED_SCENARIOS = [
       + "card-level half of the board-card-properties pair: the panel shows the field unchecked, "
       + "this shows the same list already applied to a real card.",
   }),
-  constructedScenario("timeline-day", {
-    renderer: "timeline",
-    scale: "day",
-    title: "Timeline day scale (constructed)",
-    fixtureOf: "timeline-view-day",
-    sources: constructedSources("src/views/calendar-timeline-renderer.ts", "tools/bench/timeline-render-bench.ts"),
-    note: "The shipped timeline renderer at its day scale, the scale the fixture this supersedes "
-      + "photographed as hand-written markup.",
-  }),
-  constructedScenario("timeline-month", {
-    renderer: "timeline",
-    scale: "month",
-    title: "Timeline month scale (constructed)",
-    fixtureOf: "timeline-view-month",
-    sources: constructedSources("src/views/calendar-timeline-renderer.ts", "tools/bench/timeline-render-bench.ts"),
-    note: "The shipped timeline renderer at its month scale.",
-  }),
-  constructedScenario("timeline-quarter", {
-    renderer: "timeline",
-    scale: "quarter",
-    title: "Timeline quarter scale (constructed)",
-    fixtureOf: "timeline-view-quarter",
-    sources: constructedSources("src/views/calendar-timeline-renderer.ts", "tools/bench/timeline-render-bench.ts"),
-    note: "The shipped timeline renderer at its quarter scale.",
-  }),
-  constructedScenario("timeline-year", {
-    renderer: "timeline",
-    scale: "year",
-    title: "Timeline year scale (constructed)",
-    fixtureOf: "timeline-view-year",
-    sources: constructedSources("src/views/calendar-timeline-renderer.ts", "tools/bench/timeline-render-bench.ts"),
-    note: "The shipped timeline renderer at its year scale.",
-  }),
-
   // ── A DbModal presented as a phone sheet. Every modal fixture in this registry renders as a
   // desktop floating card even at mobile size, so nothing in the corpus regression-tests a modal
   // that presents as a bottom sheet on a touch surface. Each scenario here mounts a REAL DbModal

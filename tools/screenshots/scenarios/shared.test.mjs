@@ -10,7 +10,6 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { ROWS, SUBTASK_FIXTURE_ROWS, boardCard, boardColumn, subtaskBoardCard } from "./shared.mjs";
-import { TIMELINE_FIXTURES, TL_LANES, TL_SUBTASK_LANES, timelineEvent } from "./temporal.mjs";
 import { CORE_SCENARIOS } from "./core.mjs";
 
 // ───────────────────────────────────────────────────────────────────
@@ -153,7 +152,6 @@ describe("board screenshot fixture parity", () => {
 
 describe("subtask screenshot fixture parity", () => {
   const boardRenderer = readFileSync(new URL("../../../src/views/board-renderer.ts", import.meta.url), "utf8");
-  const timelineRenderer = readFileSync(new URL("../../../src/views/calendar-timeline-renderer.ts", import.meta.url), "utf8");
   const styles = readFileSync(new URL("../../../styles.css", import.meta.url), "utf8");
 
   it("keeps the board hierarchy helper in the renderer's child order", () => {
@@ -190,21 +188,14 @@ describe("subtask screenshot fixture parity", () => {
     expect(html).not.toContain('class="obnotion-kanban-card-type">Projects</div>');
   });
 
-  it("keeps every new class in the hand-written board and timeline states styled and sourced", () => {
+  it("keeps every new class in the hand-written board state styled and sourced", () => {
     const boardMarkup = subtaskBoardCard(SUBTASK_FIXTURE_ROWS.parent, { depth: 0 });
-    const treeParent = TL_SUBTASK_LANES.find((lane) => lane.key === "business").events[0];
-    const timelineMarkup = timelineEvent(treeParent, TIMELINE_FIXTURES.week);
     const contracts = [
       ["obnotion-kanban-card", boardRenderer, boardMarkup],
       ["obnotion-kanban-card-body", boardRenderer, boardMarkup],
       ["obnotion-kanban-card-title-row", boardRenderer, boardMarkup],
       ["obnotion-kanban-card-title", boardRenderer, boardMarkup],
       ["obnotion-kanban-card-meta", boardRenderer, boardMarkup],
-      ["pm-gantt-bar-group", timelineRenderer, timelineMarkup],
-      ["pm-gantt-bar", timelineRenderer, timelineMarkup],
-      ["pm-gantt-bar-progress", timelineRenderer, timelineMarkup],
-      ["pm-gantt-drag-handle", timelineRenderer, timelineMarkup],
-      ["pm-gantt-link-dot", timelineRenderer, timelineMarkup],
     ];
     for (const [className, source, markup] of contracts) {
       expect(markup, `${className} is in its fixture`).toContain(className);
@@ -260,19 +251,6 @@ describe("subtask screenshot fixture parity", () => {
     expect(styles).toMatch(/\.is-phone \.obnotion-embed\.obnotion-embed-linked \.obnotion-linked-view-drag-handle\s*\{[^}]*width:\s*44px;[^}]*height:\s*44px;/s);
   });
 
-  it("keeps the tree out of the lanes every ordinary timeline capture renders", () => {
-    // The five scale captures exist to show an un-related bar; the tree has its own scenario.
-    for (const lane of TL_LANES) {
-      for (const event of lane.events) {
-        expect(event.subtask, `${lane.key}/${event.title} carries no subtask state`).toBeUndefined();
-        expect(timelineEvent(event, TIMELINE_FIXTURES.week)).not.toContain("pm-collapse-toggle");
-      }
-    }
-    const treeLane = TL_SUBTASK_LANES.find((lane) => lane.key === "business");
-    expect(treeLane.events.map((event) => event.subtask?.depth)).toEqual([0, 1, 1]);
-    expect(treeLane.events[0].subtask.children).toBe(true);
-    expect(TL_SUBTASK_LANES.find((lane) => lane.key === "personal").events.every((event) => !event.subtask)).toBe(true);
-  });
 });
 
 // ───────────────────────────────────────────────────────────────────

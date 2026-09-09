@@ -34,7 +34,6 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { CORE_SCENARIOS } from "./scenarios/core.mjs";
-import { TEMPORAL_SCENARIOS } from "./scenarios/temporal.mjs";
 import { PANEL_SCENARIOS } from "./scenarios/panels.mjs";
 import { CHROME_SCENARIOS } from "./scenarios/chrome.mjs";
 import { FIELDS_SCENARIOS } from "./scenarios/fields.mjs";
@@ -45,7 +44,6 @@ import { FIELDS_SCENARIOS } from "./scenarios/fields.mjs";
 
 export const SCENARIOS = [
   ...CORE_SCENARIOS,
-  ...TEMPORAL_SCENARIOS,
   ...PANEL_SCENARIOS,
   ...CHROME_SCENARIOS,
   ...FIELDS_SCENARIOS,

@@ -174,6 +174,7 @@ const PRODUCERS = {
   "column-menu": () => resolveProducer("src/views/column-menu.ts", [/class ColumnMenu/]),
   "bulk-edit-field-menu": () => resolveProducer("src/views/bulk-edit-field-menu.ts", [/export function openBulkEditFieldMenu/]),
   "trash-restore": () => resolveProducer("src/settings.ts", [/restoreModal = new class/]),
+  "chart-drilldown": () => resolveProducer("archive/deprecated-views/chart/chart-renderer.ts", [/class ChartDrilldownModal/]),
   "csv-markdown-import": () => resolveProducer("src/main.ts", [/class CsvMarkdownImportModal/]),
 };
 

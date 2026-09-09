@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-09T04:17:45.442Z",
+  "measuredAt": "2026-09-09T04:17:29.156Z",
   "inputs": {
-    "styles.css": "55cb284b3244",
+    "styles.css": "73297de05d54",
     "tools/live/engine-parity.mjs": "de4db2b1d210",
-    "tools/screenshots/scenarios.mjs": "4c26fcda113a"
+    "tools/screenshots/scenarios.mjs": "8e4c7409a92b"
   },
   "totals": {
-    "fixtures": 82,
-    "differences": 43
+    "fixtures": 67,
+    "differences": 23
   },
   "differences": [
     {
@@ -99,78 +99,6 @@
       ]
     },
     {
-      "scenarioId": "calendar-week-time-grid",
-      "selector": "button",
-      "index": 21,
-      "notes": [
-        "width 446.28 vs 449.72"
-      ]
-    },
-    {
-      "scenarioId": "calendar-toolbar-options",
-      "selector": "button",
-      "index": 0,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "calendar-toolbar-options",
-      "selector": "button",
-      "index": 1,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "calendar-toolbar-options",
-      "selector": "button",
-      "index": 2,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "calendar-toolbar-options",
-      "selector": "button",
-      "index": 3,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "calendar-toolbar-options",
-      "selector": "button",
-      "index": 4,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "calendar-toolbar-options",
-      "selector": "button",
-      "index": 5,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "calendar-toolbar-options",
-      "selector": "button",
-      "index": 6,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "calendar-toolbar-options",
-      "selector": "button",
-      "index": 7,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
       "scenarioId": "panel-base-import-modal",
       "selector": "input[type=\"text\"]",
       "index": 0,
@@ -200,94 +128,6 @@
       "index": 3,
       "notes": [
         "width 521.03 vs 539.91"
-      ]
-    },
-    {
-      "scenarioId": "chrome-chart-options-popover",
-      "selector": "input[type=\"text\"]",
-      "index": 0,
-      "notes": [
-        "width 421.3 vs 413.3"
-      ]
-    },
-    {
-      "scenarioId": "chrome-chart-options-popover",
-      "selector": "button",
-      "index": 0,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "chrome-chart-options-popover",
-      "selector": "button",
-      "index": 1,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "chrome-chart-options-popover",
-      "selector": "button",
-      "index": 2,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "chrome-chart-options-popover",
-      "selector": "button",
-      "index": 3,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "chrome-chart-options-popover",
-      "selector": "button",
-      "index": 4,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "chrome-chart-options-popover",
-      "selector": "button",
-      "index": 5,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "chrome-chart-options-popover",
-      "selector": "button",
-      "index": 6,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "chrome-chart-options-popover",
-      "selector": "button",
-      "index": 7,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "chrome-chart-options-popover",
-      "selector": "button",
-      "index": 8,
-      "notes": [
-        "width 520 vs 512"
-      ]
-    },
-    {
-      "scenarioId": "chrome-chart-options-popover",
-      "selector": "button",
-      "index": 9,
-      "notes": [
-        "width 520 vs 512"
       ]
     },
     {

@@ -9,21 +9,23 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation"
-    last_updated_at: "2026-09-08T22:29:00Z"
-    last_updated_by: "246-goal-refresh-evening"
-    recent_action: "001+002 LANDED (7a6d4cc6, b5f4ccd4/9ffa7ed2); 003 waits on the 0.0.34 release cut"
-    next_safe_action: "Cut 0.0.34 (discharges AC-007), then start 003-remove-renderers-and-harness"
+    last_updated_at: "2026-09-09T08:10:00Z"
+    last_updated_by: "250-deprecation-removal"
+    recent_action: "003 LANDED (4/4 criteria, the bundle grep 0, the gate 27/0); only 004 remains"
+    next_safe_action: "004-archive-docs-and-release: strip the root README, record the superseded note, cut the next release"
     blockers:
-      - "002's own AC-007 (a released version) is Unmet; 003 waits for it"
+      - "004-archive-docs-and-release (the packet's last leg) has not started"
     key_files:
       - "spec.md"
       - "001-usage-and-migration-audit/inventory.md"
       - "002-settings-redirect-and-migrate/decision-record.md"
+      - "003-remove-renderers-and-harness/decision-record.md"
+      - "../../../archive/deprecated-views/README.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "008-calendar-timeline-chart-deprecation-scaffold"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 75
     open_questions: []
     answered_questions: []
 ---
@@ -81,8 +83,8 @@ string, not these files.
 ## 3. COMPLETION CRITERIA
 
 - [x] 001's audit inventories every live calendar/timeline/chart view and names each one's settings-redirect target — 33 views named with targets, landed `7a6d4cc6`
-- [x] 002 ships the settings redirect; no picker/switcher/settings surface can create or select the three types — landed `b5f4ccd4`/`9ffa7ed2`, 2/2 criteria, gate 27/0; AC-007 (a release carrying the redirect) stays Unmet until 0.0.34 cuts
-- [ ] 003 removes the three renderers and harness lanes from the bundle and archives the code with a restore-path README and an ADR
+- [x] 002 ships the settings redirect; no picker/switcher/settings surface can create or select the three types — landed `b5f4ccd4`/`9ffa7ed2`, 2/2 criteria, gate 27/0; AC-007 (a release carrying the redirect) discharged — the 0.0.34 tag exists
+- [x] 003 removes the three renderers and harness lanes from the bundle and archives the code with a restore-path README and an ADR — landed this leg (worktree `250-deprecation-removal`; the closing SHA in the dispatch report): 4/4 criteria, the bundle grep 0 (was 5), the gate 27/0, ten sources archived with proven-restore READMEs
 - [ ] 004 strips calendar/timeline/gallery/chart mentions from the root README and community-plugin description, and documents 037's timeline landing as superseded
 <!-- /ANCHOR:completion -->
 
@@ -97,7 +99,8 @@ string, not these files.
 |------|-------|----------|
 | Packet opened, four child phases scaffolded | Done | This scaffold, 2026-09-08 |
 | 001-usage-and-migration-audit | Done | `001-usage-and-migration-audit/inventory.md`, landing-verified 7a6d4cc6 |
-| 002-settings-redirect-and-migrate | Done | Landed `b5f4ccd4`/`9ffa7ed2`; `002-settings-redirect-and-migrate/implementation-summary.md`, gate 27/0; AC-007 (release) pending 0.0.34 |
+| 002-settings-redirect-and-migrate | Done | Landed `b5f4ccd4`/`9ffa7ed2`; `002-settings-redirect-and-migrate/implementation-summary.md`, gate 27/0; AC-007 (release) discharged by the 0.0.34 cut |
+| 003-remove-renderers-and-harness | Done | `003-remove-renderers-and-harness/implementation-summary.md`; 4/4 criteria, the bundle grep 0, the gate 27/0, ten sources archived; validated strict-PASSED — 2026-09-09 |
 
 ### Deviations and findings
 
@@ -105,4 +108,5 @@ string, not these files.
 |------|------|
 | Combined into one phase parent | Both phase-qualification thresholds are met independently (`recommend-level.sh --loc 1000 --files 20 --architectural`); one packet avoids three separate top-level packets re-deciding the same archive location and README strip |
 | 002's three types split into two fallback shapes | Chart/calendar's redirect target equals the settings-load sanitizer's bare unknown-type fallback and closes for free; timeline's does not and routes through a real migration — `002/decision-record.md` ADR-001 |
+| 003's removal kept the harness's retired-view machinery dormant | The gate's lane count held 27→27 and the 002-pinned clauses survived untouched; five turned-unsupplied retired-view tokens recorded, not stood in — `003-remove-renderers-and-harness/decision-record.md` ADR-002/003 |
 <!-- /ANCHOR:log -->

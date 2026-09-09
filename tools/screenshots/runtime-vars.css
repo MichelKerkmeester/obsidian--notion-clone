@@ -28,12 +28,12 @@
    ships. */
 
 /* ── Values the plugin sets from JavaScript at runtime ───────────────────────────────
-   These are measured from the live layout (toolbar height, column widths, timeline
-   geometry) and so are absent when the stylesheet is loaded on its own. Without them the
-   var() calls fall back and surfaces mis-render: the sticky header, for instance, offsets
-   itself by a toolbar that does not exist in a screenshot and covers the first data row.
-   The capture supplies the value a screenshot implies — no toolbar above the table, one
-   column of default width, a timeline scrolled to its origin. */
+   These are measured from the live layout (toolbar height, column widths) and so are
+   absent when the stylesheet is loaded on its own. Without them the var() calls fall
+   back and surfaces mis-render: the sticky header, for instance, offsets itself by a
+   toolbar that does not exist in a screenshot and covers the first data row. The
+   capture supplies the value a screenshot implies — no toolbar above the table, one
+   column of default width. */
 :root,
 .obnotion-container {
   --obnotion-table-header-top: 22px;      /* sticky offset resolves to 0 with no toolbar above */
@@ -49,44 +49,7 @@
   --obnotion-conditional-format-fg: var(--text-normal);
 
   --obnotion-mobile-bar-height: 48px;
-
-  --obnotion-calendar-col-width: 140px;
-  /* The renderer writes both of these inline from config.calendarCellMinHeight ?? 112, clamped
-     to 72-400 — it never measures the pane, so the viewport formula this file used to pin made
-     every capture denser than the product draws. The 112px default is the value the runtime
-     writes when nothing is configured, which is the state a screenshot implies. */
-  --obnotion-calendar-day-min-height: 112px;
-  --obnotion-calendar-month-week-min-height: 112px;
-  --obnotion-calendar-allday-rows: 1;
-  --obnotion-calendar-time-day-count: 7;
   --obnotion-calendar-event-bg: var(--interactive-accent);
-  --obnotion-calendar-segment-lane: 0;
-  --obnotion-calendar-segment-span: 1;
-  --obnotion-calendar-segment-start: 0;
-  --obnotion-calendar-month-flash-column: 0;
-
-  --obnotion-timeline-units: 30;
-  --obnotion-timeline-unit-width: 48px;
-  --obnotion-timeline-group-width: 180px;
-  --obnotion-timeline-event-rows: 1;
-  --obnotion-timeline-band-start: 0;
-  --obnotion-timeline-band-span: 1;
-  --obnotion-timeline-tick-offset: 0;
-  --obnotion-timeline-today-offset-px: 0px;
-  --obnotion-timeline-today-offset-units: 0;
-  --obnotion-timeline-exact-offset: 0px;
-  --obnotion-timeline-exact-width: 0px;
-  --obnotion-timeline-flash-offset: 0px;
-  --obnotion-timeline-flash-span: 0;
-  --obnotion-timeline-snap-left: 0px;
-  --obnotion-timeline-snap-top: 0px;
-  --obnotion-timeline-snap-width: 0px;
-  --obnotion-timeline-create-left: 0px;
-  --obnotion-timeline-create-width: 0px;
-  --obnotion-timeline-reorder-line-top: 0px;
-  --obnotion-timeline-group-tag-bg: var(--background-secondary);
-  --obnotion-timeline-group-tag-fg: var(--text-muted);
-  --obnotion-timeline-event-shadow: 0 2px 7px rgba(0, 0, 0, 0.09);
 }
 
 /* Four variables were removed from this file rather than corrected.

@@ -2827,3 +2827,42 @@ could not decide it), implementation-summary discoverability section + continuit
 strict, RESULT: PASSED, packet graph metadata backfilled. Owned by
 `058-card-title-and-title-formats`. **Not pushed** — a fresh verifier lands it; the operator's
 on-device read stays the operator's row.
+---
+
+## 250-deprecation-removal — 008/003 remove-renderers-and-harness landed (2026-09-09)
+
+`008-calendar-timeline-chart-deprecation/003-remove-renderers-and-harness` is landed in the
+`250-deprecation-removal` worktree: the calendar, timeline and chart view renderers — ten sources
+with their tests and their two dedicated render benches — moved via `git mv` into
+`archive/deprecated-views/<view>/` with a root README plus one per view, each naming the last-live
+SHA (`e75a979c9a21f6f93967a40e24b2a58f474fa9d5`, the commit 0.0.34 was cut from) and the exact
+`git checkout <sha> -- <paths>` restore procedure; all ten restored paths were proven reachable at
+that SHA by `git show`, and the checkout itself was deliberately not executed. Both hosts'
+retired-view plumbing came out (`database-view.ts`, `embedded-database-renderer.ts` — dispatch
+collapsed, teardown/panel/chart legs deleted, the retired stale-selector roots pruned), the last
+bundle references retired (the retired root ids, the retired toolbar and view-config icon/option
+arms), the harness registries trimmed (13+8 rows), the retired captures retired (136 manifest
+rows, 616→480, 138 PNGs deleted), nine replay claims retired and two narrowed, constructed
+scenarios 76→59, reference 4→2, the temporal fixture module and its parity test deleted with
+their last consumer. **The stored-view redirect keeps working** — the hide-and-migrate suite's
+pinned clauses were never touched and stayed 24/24.
+
+**The numbers**: `npx tsc --noEmit` 0; `npx vitest run` 154/154 files, 1555/1555 tests;
+`npm run build` 0; the bundle grep 0 (was 5); screenshots ×2 at 480, pixel-delta clean (one 1-px
+jitter, one 61-px dynamic-timestamp mover), `screenshots:verify` 0; every touched lane
+(`render-assertions`, `sheet-grammar`, `story-coverage`, `verify-placement`, shim-coverage,
+`sheet-inventory` + its test, `replay` 28/28) exit 0; `evidence --check-all` 15/15 after
+re-measuring the one artefact the manifest's hash made stale, by its own writer; the naming scans
+0; `npm run gate` **27 green, 0 red for a declared reason** — lane count 27→27, because the
+harness's retired-view machinery was kept dormant rather than excised so no lane lost its inputs
+(003's decision record, ADR-002). The pinned-values lane went red once, mid-leg: the baseline's
+appended note carried a trailing comma, and five retired-view tokens turned unsupplied when their
+only setters (style-assignments inside the now-archived renderers) left the scanner's roots —
+all five recorded, none stood in (ADR-003), the lane 0 at the final gate. 4/4 acceptance criteria
+`Met`; the packet's docs (tasks, AC, implementation summary, decision record, both goals'
+continuity) carry the same numbers; validated strict, RESULT: PASSED; packet graph metadata
+backfilled. **`037-timeline-gantt-port` is now superseded** (the parent's D4): its renderer — the
+gantt port included — is archived, its landing stays documented in its own packet and in the
+archive README's timeline section, and 004-archive-docs-and-release owns the remaining rows (the
+root-README strip, the community-plugin description, the release cut). Not pushed — a fresh
+verifier lands it.

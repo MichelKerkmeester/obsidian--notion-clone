@@ -176,7 +176,7 @@ describe("calendar pinned values — measured against the Anytype month grid cap
   });
 
   it("pins the month weekday header carrying no column-resize handle, so nothing can set a custom column width on the month wrap", () => {
-    const source = readFileSync(resolve(__dirname, "calendar-renderer.ts"), "utf-8");
+    const source = readFileSync(resolve(__dirname, "../../archive/deprecated-views/calendar/calendar-renderer.ts"), "utf-8");
     const labels = source.slice(source.indexOf("private renderWeekdayLabels("));
     const body = labels.slice(0, labels.indexOf("\n\tprivate "));
     expect(body).not.toContain("obnotion-calendar-col-resize-handle");
@@ -209,7 +209,7 @@ describe("calendar pinned values — measured against the Anytype month grid cap
   });
 
   it("pins the overlap stagger: an overlapping timed block insets by a fixed step and keeps the column's remaining width, not an equal N-way split", () => {
-    const source = readFileSync(resolve(__dirname, "calendar-renderer.ts"), "utf-8");
+    const source = readFileSync(resolve(__dirname, "../../archive/deprecated-views/calendar/calendar-renderer.ts"), "utf-8");
     expect(source).toContain("const CALENDAR_TIMED_STAGGER_STEP = 10;");
     // Negative control: the old equal-split formula must not survive — it is
     // exactly what made a two-way overlap unreadable at a narrow column width.
@@ -232,7 +232,7 @@ describe("calendar pinned values — measured against the Anytype month grid cap
   });
 
   it("pins the mini-calendar button's removal from the calendar's own header", () => {
-    const source = readFileSync(resolve(__dirname, "calendar-renderer.ts"), "utf-8");
+    const source = readFileSync(resolve(__dirname, "../../archive/deprecated-views/calendar/calendar-renderer.ts"), "utf-8");
     expect(source).not.toContain("renderMiniCalendarButton");
     expect(source).not.toContain("toggleMiniCalendar");
   });
@@ -272,7 +272,7 @@ describe("calendar pinned values — measured against the Anytype month grid cap
   });
 
   it("pins the phone add button hidden: the day sheet/long-press is the add path, not a per-day glyph", () => {
-    const source = readFileSync(resolve(__dirname, "calendar-renderer.ts"), "utf-8");
+    const source = readFileSync(resolve(__dirname, "../../archive/deprecated-views/calendar/calendar-renderer.ts"), "utf-8");
     const marker = "  .obnotion-container .obnotion-calendar-add-button {\n    display: none;\n  }";
     expect(STYLES).toContain(marker);
     // Negative control: the old rule forced it visible on every coarse-pointer/narrow view.
@@ -285,7 +285,7 @@ describe("calendar pinned values — measured against the Anytype month grid cap
     // rendered inside the week/day all-day strip's segment loop — one count inside
     // `.obnotion-calendar-week-allday-cols` per multi-day event, proven by a constructed render in
     // `calendar-renderer.test.ts`.
-    const source = readFileSync(resolve(__dirname, "calendar-renderer.ts"), "utf-8");
+    const source = readFileSync(resolve(__dirname, "../../archive/deprecated-views/calendar/calendar-renderer.ts"), "utf-8");
     expect(source).not.toContain('content.createSpan({ cls: "obnotion-calendar-month-dates"');
     // The day popover, the overflow popover and the drag ghost are not in-grid resting chips and
     // keep emitting the range — this is what the shared `.obnotion-calendar-month-dates` rule and its

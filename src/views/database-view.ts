@@ -114,18 +114,10 @@ import { ViewConfigPanelRenderer } from "./view-config-panel-renderer";
 import { ColumnOperations, FrontmatterValueChange } from "./column-operations";
 import { BoardGroup, BoardRenderer } from "./board-renderer";
 import type { BoardSubtaskMove } from "./board-renderer";
-import { ChartRenderer } from "./chart-renderer";
 import { ChartToolbarRenderer } from "./chart-toolbar-renderer";
 import { getDefaultChartDateBucket, getDefaultChartField, getDefaultChartNumberBucket } from "../data/chart-aggregation";
 import { getDefaultEventDateField, getTimelineDayNonDateTimeColumns } from "../data/calendar-timeline-model";
-import {
-  buildCalendarTimelineSearchResults,
-  CalendarTimelineSearchResultItem,
-  CalendarTimelineSearchResults,
-  formatCalendarTimelineSearchResultDate,
-} from "../data/calendar-timeline-search-results";
-import { CalendarTimelineCreateOptions, CalendarTimelineDateChange, CalendarTimelineRenderer } from "./calendar-timeline-renderer";
-import { CalendarRenderer } from "./calendar-renderer";
+import type { CalendarTimelineCreateOptions, CalendarTimelineDateChange } from "../../archive/deprecated-views/timeline/calendar-timeline-renderer";
 import { CalendarToolbarRenderer } from "./calendar-toolbar-renderer";
 import { ColumnRenameModal, ColumnRenameResult } from "./modals/column-rename-modal";
 import { RelationRollupConfigModal, RelationRollupConfigResult, RelationTargetChangeImpact } from "./modals/relation-rollup-config-modal";
@@ -416,78 +408,8 @@ export class DatabaseView extends FileView {
   private activeViewControlsRenderer = new ActiveViewControlsRenderer();
   private activeRulePopoverRenderer = new ActiveRulePopoverRenderer();
   private boardRenderer: BoardRenderer;
-  private chartRenderer = new ChartRenderer();
   private chartToolbarRenderer = new ChartToolbarRenderer();
   private mobileColumnWidthPanelCleanup?: () => void;
-  private calendarTimelineRenderer = new CalendarTimelineRenderer({
-    openRow: (row) => { void this.openRecordAt(row); },
-    openRecordDetail: (anchorEl, row) => { void this.openRecordAt(row, anchorEl); },
-    showRowMenu: (event, row) => this.rowMenu.show(event, row),
-    createEntryForDate: (config, dateKey, options) => {
-      const suppressed = this.suppressNextCreate || this.hasActiveOverlay();
-      this.suppressNextCreate = false;
-      if (suppressed) { this.closeActiveOverlays(); return; }
-      void this.createCalendarTimelineEntry(config, dateKey, options);
-    },
-    updateEventDates: (row, changes) => this.updateCalendarTimelineDates(row, changes),
-    reorderTimelineEvent: (row, beforePath, afterPath) => void this.moveRowToPosition(row.file.path, beforePath, afterPath),
-    moveTimelineEventToGroup: (row, field, fromGroupKey, toGroupKey, beforePath, afterPath) =>
-      this.moveRowToGroupAndPosition(row, field, fromGroupKey, toGroupKey, beforePath, afterPath),
-    moveSubtask: (request, plan) => this.moveSubtask(request, plan),
-    isSubtaskCollapsed: (row) => this.isSubtaskCollapsed(this.getConfig(), row),
-    toggleSubtaskCollapsed: (row, collapsed) => this.toggleSubtaskCollapsed(this.getConfig(), row, collapsed),
-    setSubtaskCollapsedMany: (rows, collapsed) => this.setSubtaskCollapsedMany(this.getConfig(), rows, collapsed),
-    openDependencyFile: (path) => {
-      const file = this.app.vault.getAbstractFileByPath(normalizePath(path));
-      if (file instanceof TFile) void this.app.workspace.getLeaf("tab").openFile(file);
-    },
-    createSubtaskRecord: (parent) => this.createSubtaskRecord(parent),
-    undoGanttEdit: (direction) => {
-      if (direction === "undo") void this.undoLastEdit();
-      else void this.redoLastEdit();
-    },
-    isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.getConfig(), field, key),
-    toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.getConfig(), field, key),
-    expandGroup: (field, key, count) => this.expandGroup(this.getConfig(), field, key, count),
-    getTimelineInvalidEventCount: () => this.getTimelineInvalidEventCount(),
-    openTimelineInvalidEvents: () => { void this.openInvalidEvents(); },
-    updateTimelineAnchor: (dateKey, label, timeMinutes) => this.updateTimelineAnchor(dateKey, label, timeMinutes),
-    updateTimelineScale: (scale, label) => this.updateTimelineScale(scale, label),
-    onConfigChange: (label) => {
-      this.pendingUndoLabel = label || t("undo.viewTypeConfig");
-      this.scheduleConfigSave();
-      this.refresh();
-    },
-    openDateConfig: () => this.openDateConfiguration(),
-    renderRecordIcon: (parent, row, config, compact) => this.renderRowRecordIcon(parent, row, config, compact),
-    renderGroupSummaries: (parent, rows, config) => this.summaryRenderer.renderGroupItems(parent, rows, config, this.getActiveDb()),
-    applyConditionalFormat: (element, row, config) => applyConditionalFormat(element, row, config, this.getActiveDb()),
-  });
-  private calendarRenderer = new CalendarRenderer({
-    openRow: (row) => { void this.openRecordAt(row); },
-    openRecordDetail: (anchorEl, row) => { void this.openRecordAt(row, anchorEl); },
-    showRowMenu: (event, row) => this.rowMenu.show(event, row),
-    createEntryForDate: (config, dateKey, timeRange) => {
-      const suppressed = this.suppressNextCreate || this.hasActiveOverlay();
-      this.suppressNextCreate = false;
-      if (suppressed) { this.closeActiveOverlays(); return; }
-      void this.createCalendarTimelineEntry(config, dateKey, timeRange);
-    },
-    updateEventDates: (row, changes) => this.updateCalendarTimelineDates(row, changes),
-    updateCalendarScale: (scale, anchorDateKey, label) => this.updateCalendarScale(scale, anchorDateKey, label),
-    onConfigChange: (label) => {
-      this.pendingUndoLabel = label || t("undo.viewTypeConfig");
-      this.scheduleConfigSave();
-      this.refresh();
-    },
-    openDateConfig: () => this.openDateConfiguration(),
-    getColumns: (config) => getVisibleColumns(config, this.rows, this.vs(), this.pendingShowColumns),
-    getCalendarInvalidEventCount: () => this.getTimelineInvalidEventCount(),
-    renderRecordIcon: (parent, row, config, compact) => this.renderRowRecordIcon(parent, row, config, compact),
-    applyConditionalFormat: (element, row, config) => applyConditionalFormat(element, row, config, this.getActiveDb()),
-    openCalendarInvalidEvents: () => { void this.openInvalidEvents(); },
-    isReadOnly: false,
-  });
   private calendarToolbarRenderer = new CalendarToolbarRenderer();
   private queryEngine = new QueryEngine();
   private rowPipeline = new RowPipeline();
@@ -902,7 +824,6 @@ export class DatabaseView extends FileView {
           this.pendingSourceReload = false;
         }
         if (!reloadSource && !request.unknown) {
-          if (this.tryUpdateExternalChartData(request.paths)) return;
           if (this.tryPatchExternalTableRows(request.paths)) return;
         }
         this.refresh();
@@ -1442,7 +1363,6 @@ export class DatabaseView extends FileView {
       if (leaf === this.leaf) this.refreshOnActivation();
       else this.closeHeaderPopovers();
     }));
-    this.registerEvent(this.app.workspace.on("css-change", () => this.chartRenderer.refreshTheme()));
     this.registerEvent(this.app.workspace.on("database-icon-visibility-change" as never, () => this.rerenderToolbar()));
     try {
       this.renderToolbar();
@@ -1477,12 +1397,6 @@ export class DatabaseView extends FileView {
     this.touchLayoutState = undefined;
     this.interactionScopes.release(this.interactionScopeId);
     this.refreshCoordinator.destroy();
-    this.chartRenderer.destroy();
-    this.closeCalendarTimelineSearchResultsPanel();
-    // 清理日历渲染器的当前时间定时器/缩放菜单，避免视图关闭后泄漏
-    this.calendarRenderer.destroy();
-    // 清理时间线渲染器的 observer/popover/定时器和进行中的拖拽监听，避免视图关闭后泄漏
-    this.calendarTimelineRenderer.destroy();
     // 取消可能仍在调度的无效时间事件分块扫描，避免视图关闭后继续占用 idle 回调
     this.timelineInvalidEventsScanner.clear();
     this.removeHeaderPopoverAutoClose?.();
@@ -1511,10 +1425,6 @@ export class DatabaseView extends FileView {
     if (this.configSaveTimer !== null) {
       await this.saveConfigImmediately();
     }
-  }
-
-  onResize(): void {
-    this.chartRenderer.resize();
   }
 
   /** Default-width dashboards hide the vertical scrollbar again shortly after scrolling. */
@@ -2134,10 +2044,7 @@ export class DatabaseView extends FileView {
         this.vs().searchText = value;
         this.refresh({ viewport: "reset-top" });
       },
-      onSearchFocus: () => {
-        const config = this.getConfig();
-        if (config) this.renderCalendarTimelineSearchResultsPanel(config);
-      },
+      onSearchFocus: () => undefined,
       setGroupByField: (value) => this.setGroupByField(value),
       setGroupOrderMode: (mode) => this.setGroupOrderMode(mode),
       setShowEmptyGroups: (field, value) => this.setShowEmptyGroups(field, value),
@@ -2469,39 +2376,6 @@ export class DatabaseView extends FileView {
     this.refreshCoordinator.mark(relevant.map((change) => change.path));
   }
 
-  /**
-   * Preserve a connected Chart.js instance for ordinary data changes so its
-   * renderer can use update("none"). Source/config reloads and manual recovery
-   * deliberately bypass this path and rebuild the full view.
-   */
-  private tryUpdateExternalChartData(paths: string[]): boolean {
-    if (!this.containerEl_ || !this.hasActiveDatabase()) return false;
-    const config = this.getConfig();
-    if (config.viewType !== "chart") return false;
-
-    const records = this.includePendingNewRecords(
-      this.dataSource.getRecordsForConfig(this.getEffectiveConfig(this.getActiveDb()))
-    );
-    const pipelineConfig = { ...config, manualOrder: undefined };
-    this.rows = this.buildRowsWithRelations(
-      records,
-      pipelineConfig,
-      this.vs(),
-      this.getActiveDb(),
-      true,
-    );
-    this.timelineInvalidRowsVersion += 1;
-    const computedSync = this.getIncrementalComputedSyncPlan(config, this.rows, new Set(paths));
-    this.scheduleComputedSync(
-      config,
-      computedSync.rows,
-      computedSync.scope
-    );
-    this.renderChart(config);
-    this.renderSummary(config);
-    return true;
-  }
-
   private getIncrementalComputedSyncPlan(
     config: ViewConfig,
     rows: RowData[],
@@ -2662,7 +2536,6 @@ export class DatabaseView extends FileView {
       return;
     }
     const descriptionScroll = this.saveDescriptionScrollPosition();
-    if (config.viewType === "chart" && value !== "chart") this.chartRenderer.destroy();
     this.viewStateStore.persist(config, this.vs());
     config.viewType = value;
     this.viewStateStore.delete(this.currentDbIndex, this.currentViewIndex);
@@ -3099,10 +2972,8 @@ export class DatabaseView extends FileView {
       onChange: (label) => {
         this.pendingUndoLabel = label || t("undo.chartConfig");
         this.scheduleConfigSave();
-        this.renderChart(config);
+        this.refresh();
       },
-      onExportImage: () => this.chartRenderer.exportPng(this.getChartExportFilename(config)),
-      onCopyPng: () => { void this.chartRenderer.copyPng(); },
     });
   }
 
@@ -4182,7 +4053,6 @@ export class DatabaseView extends FileView {
   /** Re-render toolbar with current state (used after view switch) */
   private rerenderToolbar(): void {
     if (!this.containerEl_) return;
-    this.closeCalendarTimelineSearchResultsPanel();
     const existing = this.containerEl_.querySelector(".obnotion-header");
     if (existing) existing.remove();
     this.renderToolbar();
@@ -7152,7 +7022,6 @@ export class DatabaseView extends FileView {
 
   private render(): void {
     this.applyDisplayWidth();
-    this.closeCalendarTimelineSearchResultsPanel();
     this.containerEl_?.toggleClass("has-selection-status", false);
     if (!this.hasActiveDatabase()) {
       this.applyViewTypeClass("table");
@@ -7162,11 +7031,6 @@ export class DatabaseView extends FileView {
     const config = this.getConfig();
     const dbConfig = this.getActiveDb();
     const viewType = config.viewType || "table";
-    // Detect an actual view-type switch so we can reset the calendar/timeline
-    // scroll to the top. Filter/sort/data refreshes keep the same viewType and
-    // must preserve the user's scroll position.
-    const viewTypeChanged = this.lastRenderedViewType !== viewType;
-    if (viewTypeChanged) this.teardownOutgoingViewRenderer(this.lastRenderedViewType);
     this.applyViewTypeClass(viewType);
     if (!config.schema || !config.schema.columns || config.schema.columns.length === 0) {
       if (this.containerEl_) {
@@ -7229,17 +7093,12 @@ export class DatabaseView extends FileView {
     this.timelineInvalidRowsVersion += 1;
     this.scheduleComputedSync(config, this.rows);
 
-    if (config.viewType !== "chart") this.renderSummary(config);
+    this.renderSummary(config);
+
     if (!this.containerEl_) return;
 
     if (config.viewType === "board") {
       this.renderBoard(config);
-    } else if (config.viewType === "chart") {
-      this.renderChart(config);
-    } else if (config.viewType === "calendar") {
-      this.calendarRenderer.render(this.containerEl_, config, this.rows);
-    } else if (config.viewType === "timeline") {
-      this.calendarTimelineRenderer.renderTimeline(this.containerEl_, this.getTimelineRenderConfig(config), this.rows);
     } else {
       const groupFields = getDisplayGroupFields(config, this.vs());
       if (groupFields.length > 0) {
@@ -7248,8 +7107,6 @@ export class DatabaseView extends FileView {
         this.renderTable(config);
       }
     }
-    if (config.viewType === "chart") this.renderSummary(config);
-    this.renderCalendarTimelineSearchResultsPanel(config);
     this.renderSelectionStatusBar();
     this.renderActiveViewControls();
     // Clear pending-show flags after one render cycle
@@ -7258,171 +7115,6 @@ export class DatabaseView extends FileView {
     this.revealPendingNewRow();
     this.revealPendingSearchResult();
     this.lastRenderedViewType = viewType;
-    if (viewTypeChanged && (viewType === "calendar" || viewType === "timeline")) {
-      this.resetCalendarTimelineScroll();
-    }
-  }
-
-  /** Disconnects the outgoing view's own observers, timers and popover/drag listeners before
-   *  the next view type renders into the same container. `clearRenderedViewRoots` (called by
-   *  `refresh` before `render`) takes down the outgoing view's DOM; it cannot reach state that
-   *  lives outside the DOM it removes — the timeline's resize observer (which watches the
-   *  container itself, not its own root) and gantt keydown/drag listeners, or the calendar's
-   *  running current-time interval. Left alone, those keep firing against nodes the next view
-   *  never sees, which is how a switch away from timeline reappeared on top of the view that
-   *  replaced it. Chart already tore itself down on this same transition inside `setViewType`;
-   *  this covers every path that changes `lastRenderedViewType`, including switching view tabs. */
-  private teardownOutgoingViewRenderer(outgoing: DatabaseViewType | null): void {
-    if (outgoing === "timeline") this.calendarTimelineRenderer.destroy();
-    else if (outgoing === "calendar") this.calendarRenderer.destroy();
-    else if (outgoing === "chart") this.chartRenderer.destroy();
-  }
-
-  /** Reset the scroll container to the top when switching INTO a calendar or
-   * timeline view. These views are much taller than the viewport, so without an
-   * explicit reset the container keeps the previous view's scrollTop and the
-   * scrollbar parks in the middle. table/board/gallery/list are short enough that
-   * their content starts at the top naturally. */
-  private resetCalendarTimelineScroll(): void {
-    if (!this.containerEl_) return;
-    this.containerEl_.scrollTop = 0;
-  }
-
-  private renderCalendarTimelineSearchResultsPanel(config: ViewConfig): void {
-    this.closeCalendarTimelineSearchResultsPanel();
-    if (!this.containerEl_ || (config.viewType !== "calendar" && config.viewType !== "timeline")) return;
-    const query = this.vs().searchText.trim();
-    if (!query) return;
-    const searchControl = this.containerEl_.querySelector<HTMLElement>(".obnotion-search-control");
-    const searchInput = searchControl?.querySelector<HTMLInputElement>(".obnotion-search-input");
-    if (!searchControl || !searchInput) return;
-    if (window.activeDocument.activeElement !== searchInput) return;
-    const visibleRange = config.viewType === "timeline"
-      ? this.calendarTimelineRenderer.getCurrentVisibleRange()
-      : this.calendarRenderer.getCurrentVisibleRange();
-    const results = buildCalendarTimelineSearchResults(this.rows, config, visibleRange);
-    const panel = window.activeDocument.body.createDiv({ cls: "obnotion-calendar-search-results-popover" });
-    this.calendarTimelineSearchResultsEl = panel;
-    this.positionCalendarTimelineSearchResultsPanel(panel, searchControl);
-    this.renderCalendarTimelineSearchResultsContent(panel, results, query);
-    panel.onmousedown = (event) => {
-      event.preventDefault();
-    };
-    searchInput.onblur = () => {
-      this.closeCalendarTimelineSearchResultsPanel();
-    };
-    searchInput.onkeydown = (event) => {
-      if (event.key !== "Escape") return;
-      if (this.calendarTimelineSearchResultsEl?.isConnected) {
-        event.preventDefault();
-        event.stopPropagation();
-        this.closeCalendarTimelineSearchResultsPanel();
-        searchInput.blur();
-      }
-    };
-  }
-
-  private renderCalendarTimelineSearchResultsContent(panel: HTMLElement, results: CalendarTimelineSearchResults, query: string): void {
-    panel.createDiv({
-      cls: "obnotion-calendar-search-results-summary",
-      text: t("search.calendarTimelineSummary", { total: results.totalCount, visible: results.visibleCount }),
-    });
-    if (results.totalCount === 0) {
-      panel.createDiv({ cls: "obnotion-calendar-search-results-empty", text: t("search.noMatches") });
-      return;
-    }
-    const list = panel.createDiv({ cls: "obnotion-calendar-search-results-list" });
-    const currentRangeItems = results.items.filter((item) => item.inCurrentRange);
-    const outsideRangeItems = results.items.filter((item) => !item.inCurrentRange);
-    const visibleItems = [...currentRangeItems, ...outsideRangeItems].slice(0, 50);
-    const currentVisibleItems = visibleItems.filter((item) => item.inCurrentRange);
-    const outsideVisibleItems = visibleItems.filter((item) => !item.inCurrentRange);
-    const renderSection = (label: string, items: CalendarTimelineSearchResultItem[]) => {
-      if (items.length === 0) return;
-      const section = list.createDiv({ cls: "obnotion-calendar-search-results-section" });
-      section.createDiv({ cls: "obnotion-calendar-search-results-section-title", text: label });
-      for (const item of items) this.renderCalendarTimelineSearchResultButton(section, item, query);
-    };
-    renderSection(t("search.inCurrentRange"), currentVisibleItems);
-    renderSection(t("search.outsideCurrentRange"), outsideVisibleItems);
-    if (results.totalCount > visibleItems.length) {
-      panel.createDiv({
-        cls: "obnotion-calendar-search-results-more",
-        text: t("search.moreResults", { count: results.totalCount - visibleItems.length }),
-      });
-    }
-  }
-
-  private renderCalendarTimelineSearchResultButton(list: HTMLElement, item: CalendarTimelineSearchResultItem, query: string): void {
-    const button = list.createEl("button", {
-      cls: `obnotion-calendar-search-result${item.inCurrentRange ? " is-current-range" : ""}`,
-      attr: { type: "button" },
-    });
-    renderSearchHighlightedText(button.createSpan({ cls: "obnotion-calendar-search-result-title" }), item.title || t("common.untitled"), query);
-    renderSearchHighlightedText(button.createSpan({ cls: "obnotion-calendar-search-result-date" }), formatCalendarTimelineSearchResultDate(item), query);
-    button.onclick = (event) => {
-      event.preventDefault();
-      this.closeCalendarTimelineSearchResultsPanel();
-      const activeEl = window.activeDocument.activeElement;
-      if (activeEl instanceof HTMLElement) activeEl.blur();
-      this.jumpToCalendarTimelineSearchResult(item);
-    };
-  }
-
-  private positionCalendarTimelineSearchResultsPanel(panel: HTMLElement, anchor: HTMLElement): void {
-    // The editing area, not the window. `innerWidth`/`innerHeight` span the sidebars and the mobile
-    // navigation bar, so a panel clamped to them slides underneath an open right sidebar and is still
-    // "in bounds" by the arithmetic while being entirely off screen. Null asks for the active
-    // document's bounds rather than a container's, which is what this panel wants: it is created on
-    // `window.activeDocument.body` to escape the view, so no container should narrow it.
-    const placement = calendarSearchResultsPlacement(
-      anchor.getBoundingClientRect(),
-      getVisiblePopoverBounds(null),
-    );
-    panel.setCssProps({
-      left: `${placement.left}px`,
-      top: `${placement.top}px`,
-      width: `${placement.width}px`,
-    });
-  }
-
-  private closeCalendarTimelineSearchResultsPanel(): void {
-    this.calendarTimelineSearchResultsEl?.remove();
-    this.calendarTimelineSearchResultsEl = null;
-  }
-
-  private jumpToCalendarTimelineSearchResult(item: CalendarTimelineSearchResultItem): void {
-    const config = this.getConfig();
-    if (!config) return;
-    this.pendingSearchResultRevealPath = item.filePath;
-    if (config.viewType === "timeline") {
-      const timeMinutes = (config.timelineScale || "week") === "day" ? item.startMinutes : undefined;
-      this.updateTimelineAnchor(item.startDateKey, t("undo.timelineAnchorConfig"), timeMinutes);
-      return;
-    }
-    if (config.viewType !== "calendar") return;
-    config.calendarMonth = item.startDateKey.slice(0, 7);
-    config.calendarWeekStart = item.startDateKey;
-    config.calendarDay = item.startDateKey;
-    this.pendingUndoLabel = t("undo.calendarMonthConfig");
-    this.scheduleConfigSave();
-    this.refresh();
-  }
-
-  private getTimelineRenderConfig(config: ViewConfig): ViewConfig {
-    const state = this.vs();
-    return {
-      ...config,
-      // 时间线分组完全跟随 groupByField（ViewStateStore 的统一分组入口）。
-      // 不能用 `state.groupByField || config.timelineGroupField`：用户在分组 popover
-      // 选「无分组」时 groupByField 是空串（falsy），`||` 会回退到历史字段
-      // timelineGroupField，导致「未分组」无法生效。timelineGroupField 是无活跃写入
-      // 入口的历史字段（.base 导入和 setGroupByField 都只写 groupByField）。
-      timelineGroupField: state.groupByField,
-      sortColumn: state.sortColumn,
-      sortDirection: state.sortDirection,
-      sortRules: state.sortRules,
-    };
   }
 
   private updateTimelineAnchor(dateKey: string, label?: string, timeMinutes?: number): void {
@@ -7497,11 +7189,6 @@ export class DatabaseView extends FileView {
         },
       }
     );
-  }
-
-  private getChartExportFilename(config: ViewConfig): string {
-    const dbName = this.getActiveDb()?.name || "database";
-    return `${dbName}-${config.name || "chart"}`.replace(/[\\/:*?"<>|]+/g, "-");
   }
 
   // Status-bar element that anchors the native bulk editor popover. Re-queried on demand because
@@ -11178,49 +10865,6 @@ export class DatabaseView extends FileView {
     for (const group of groups) {
       group.subgroups = this.getBoardSubgroups(config, subgroupField, group.rows);
     }
-  }
-
-  private renderChart(config: ViewConfig): void {
-    // Only the list is windowed, so only the list records an order. Cleared here or a stale list
-    // order would outlive its view and answer for a table's rows.
-    this.renderedRowOrder = null;
-    if (!this.containerEl_) return;
-    this.chartRenderer.render(this.containerEl_, this.getStatefulConfig(config), this.rows, config.schema.columns, {
-      onFilter: (rules) => this.applyChartFilters(config, rules),
-      onConfigChange: (label) => {
-        this.pendingUndoLabel = label || t("undo.chartConfig");
-        this.scheduleConfigSave();
-        this.renderChart(config);
-      },
-    });
-  }
-
-  private applyChartFilters(config: ViewConfig, rules: FilterRule[]): void {
-    if (rules.length === 0) return;
-    const state = this.vs();
-    let filterTree = state.filterTree ?? buildViewFilterTree(state.filters, state.filterLogic);
-    if (filterTree && "type" in filterTree) {
-      if (filterTree.type === "group" && (filterTree.logic === "and" || filterTree.rules.every((rule) => !("type" in rule)))) {
-        filterTree = { ...filterTree, logic: "and" };
-      } else {
-        filterTree = { type: "group", logic: "and", rules: [filterTree] };
-      }
-    }
-    let changed = false;
-    for (const rule of rules) {
-      if (state.filters.some((existing) => filtersEqual(existing, rule))) continue;
-      state.filters.push(rule);
-      filterTree = appendLeaf(filterTree, rule, "and");
-      changed = true;
-    }
-    if (!changed) return;
-    state.filterLogic = "and";
-    state.filterTree = filterTree;
-    this.pendingUndoLabel = t("undo.chartDrilldownFilterConfig");
-    this.viewStateStore.persist(config, state);
-    this.scheduleConfigSave();
-    this.rerenderToolbar();
-    this.refresh();
   }
 
   private getBoardSubgroups(config: ViewConfig, field: string, rows: RowData[]): BoardGroup["subgroups"] {

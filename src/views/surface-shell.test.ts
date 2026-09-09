@@ -262,7 +262,7 @@ const DECLARING_SUBCLASS_FILES = [
   "modals/create-linked-view-modal.ts",
   "modals/computed-frontmatter-cleanup-modal.ts",
   "modals/formula-modal.ts",
-  "chart-renderer.ts",
+  "../../archive/deprecated-views/chart/chart-renderer.ts",
   "modals/invalid-time-events-modal.ts",
   "modals/property-type-conflict-modal.ts",
 ];
@@ -295,7 +295,7 @@ describe("the thirteen sheet subclasses and the four fullscreen ones declare a t
   });
 
   it("moves the other three fullscreen subclasses onto the shell's ordinary sheet resolution", () => {
-    for (const relativePath of ["chart-renderer.ts", "modals/invalid-time-events-modal.ts", "modals/property-type-conflict-modal.ts"]) {
+    for (const relativePath of ["../../archive/deprecated-views/chart/chart-renderer.ts", "modals/invalid-time-events-modal.ts", "modals/property-type-conflict-modal.ts"]) {
       const source = readFileSync(resolve(__dirname, relativePath), "utf8");
       expect(source).not.toContain('super(app, "fullscreen");');
     }

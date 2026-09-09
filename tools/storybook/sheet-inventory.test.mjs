@@ -48,12 +48,13 @@ describe("sheet-inventory", () => {
     const grep = (pattern) =>
       execFileSync("grep", ["-rEn", "--include=*.ts", pattern, "src"], { cwd: REPO, encoding: "utf8" })
         .split("\n").filter((l) => l.trim()).length;
-    // 19 DbModal subclasses + 3 FuzzySuggestModal = 22 named; the anonymous
+    // 18 DbModal subclasses + 3 FuzzySuggestModal = 21 named; the anonymous
     // trash-restore modal in settings.ts adds one unnamed producer.
-    expect(grep("class \\w+ extends DbModal")).toBe(19);
+    expect(grep("class \\w+ extends DbModal")).toBe(18);
     expect(grep("class \\w+ extends FuzzySuggestModal")).toBe(3);
-    // 22 named, of which 5 wear a registry row (confirm, the three suggest
-    // rows, the create-property row) — 17 unfolded + 1 unnamed = 18 rows.
+    // 21 named, of which 5 wear a registry row (confirm, the three suggest
+    // rows, the create-property row) — 16 unfolded, the archived chart drill-down
+    // and 1 unnamed = 18 rows.
     const unfoldedModalKeys = [
       "InvalidTimeEventsModal", "CsvMarkdownExportModal", "StatusPresetManagerModal",
       "StatusOptionsModal", "CreateRecordIconFieldModal", "RelationRollupConfigModal",

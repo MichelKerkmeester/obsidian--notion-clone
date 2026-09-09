@@ -35,10 +35,7 @@
 // scenario. Board reads 1 against a bound of 8 and has no shipped
 // defect on this tree — a bound that was never observed failing is not
 // evidence — and the table's per-row bound (measured 3, same bound of 8) has
-// the same need. The calendar week/day and chart scenarios are new here and
-// own the same control: week/day through the per-item bag seam, the chart
-// through a per-row read at the render entry. Disarmed is the default; the
-// gate never arms it.
+// the same need. Disarmed is the default; the gate never arms it.
 //
 // Usage: node tools/live/render-assertions.mjs
 
@@ -198,43 +195,9 @@ const GEOMETRY_PINS = [
 /** The board scenario this pass mounts: the shipped renderer at its production entry. */
 const GEOMETRY_SCENARIO = SCENARIOS.find((scenario) => scenario.renderer === "board" && scenario.bag === "file-view");
 
-// ───────────────────────────────────────────────────────────────────
-// 2d. PHONE WEEK OVERLAP INK
-// ───────────────────────────────────────────────────────────────────
-//
-// The red value this proves: on a phone's default (fit-to-width) column, two genuinely timed
-// events overlapping the same hour split their day column in half, and the halved block has no
-// room left for a title after its own inset and padding — "one clipped glyph and zero ink" where
-// the two blocks used to read as coloured bars. This measures the DOM proxy for that: both
-// overlap-pair titles must carry a visible ink width past PHONE_OVERLAP_INK_FLOOR once the phone
-// minimum column width (styles.css, `--obnotion-calendar-phone-week-col-min`) is in effect. The split
-// block, not the whole column, is what sets that minimum: a floor sized for an unsplit block
-// leaves the halved one a sliver, which is the reading a capture of this surface showed. It shares
-// the phone-profile rhythm page below (`is-phone` class, theme/runtime tokens attached) rather
-// than opening a third browser page for one more measurement.
-const PHONE_OVERLAP_SCENARIO = {
-  name: "calendar-week-overlap-timed-phone/file-view",
-  renderer: "calendar",
-  bag: "file-view",
-  scale: "week",
-  calendarOverlapTimed: true,
-};
 
-// A read-it floor, not a bare non-zero one, because non-zero is what the defect already measured.
-// Both states measured on this fixture, at the 286px container below:
-//
-//   no minimum column width (`--obnotion-calendar-phone-week-col-min: 0px`, the pre-fix grid)
-//     block 8px, title ink 3px and 1px — a sub-pixel sliver of one letter, not a glyph
-//   the shipped minimum (styles.css)
-//     block 32px, title ink 27px and 25px — three glyphs and the ellipsis
-//
-// 16px sits between the two with margin on both sides rather than on the boundary of either, and
-// is above the ~6px one glyph of the title's 11px face costs, so a single surviving letter still
-// reads as red here.
-const PHONE_OVERLAP_INK_FLOOR = 16;
-
-// Measured on the same phone-profile rhythm page (is-phone class, real token sheets attached) the
-// two passes above share, since the floor this checks is a `.is-phone`-scoped rule and nowhere
+// Measured on the same phone-profile rhythm page (is-phone class, real token sheets attached) as
+// the row-rhythm pass, since the floor this checks is a `.is-phone`-scoped rule and nowhere
 // else resolves it correctly.
 const FOOTER_PHONE_SCENARIO = {
   name: "table-footer-phone/file-view",
@@ -528,51 +491,6 @@ window.__rowRhythm = (scenario) => {
   });
   return out;
 };
-window.__phoneOverlapInk = (scenario) => {
-  let out = null;
-  // This bundle mounts straight into document.body with none of a real device's chrome
-  // (sidebar, workspace-leaf padding) narrowing the pane, so a bare 402px viewport (the real
-  // phone captures' own width) leaves the grid a full ~350px of room here against the ~286px
-  // measured on-device for the columns alone ("seven week columns inside ~286px leave each about
-  // 41px"). Narrowing the whole container (gutter included) to that same 286px reproduces the
-  // chrome's constraint, so the fit-to-width column this measurement's negative control depends
-  // on is the one a phone actually produces rather than a roomier one: with
-  // --obnotion-calendar-phone-week-col-min set to 0px (this fixture's own pre-fix baseline) the
-  // overlap pair reads 1-3px of visible ink at 286px, and PHONE_OVERLAP_INK_FLOOR names why that
-  // counts as none.
-  runRenderAssertions(document.body, scenario, "", (container) => {
-    // Narrowed after mount rather than given its own pre-sized host: sweepPortaledSurfaces
-    // (called at the top of runRenderAssertions, before this callback fires) removes any
-    // document.body child that was not present when the page's very first scenario ran, which
-    // would delete a wrapper created ahead of the render call. Setting the width here, before
-    // the geometry reads below force a layout, narrows the same live box just as effectively.
-    container.style.width = "286px";
-    const blocks = [...container.querySelectorAll(".obnotion-calendar-week-timed-event")];
-    // The title's visible ink, not its laid-out text box: the title is white-space: nowrap, so a
-    // Range over its contents measures the glyph run at its full natural width regardless of how
-    // narrow the block is — the block clips overflow (styles.css), so text wider than the block
-    // never paints past its edge. Intersecting the text's rect with the block's own clipped rect
-    // is what actually decodes as ink versus a blank rect, which is the exact distinction the
-    // red capture above turned on ("one clipped glyph and zero ink").
-    const titleBox = (block) => {
-      const blockRect = block.getBoundingClientRect();
-      const title = block.querySelector(".obnotion-calendar-week-event-title");
-      if (!title) return { blockWidth: Math.round(blockRect.width), visibleWidth: 0, text: "" };
-      const range = title.ownerDocument.createRange();
-      range.selectNodeContents(title);
-      const textRect = range.getBoundingClientRect();
-      range.detach();
-      const visibleWidth = Math.max(0, Math.min(textRect.right, blockRect.right) - Math.max(textRect.left, blockRect.left));
-      return {
-        blockWidth: Math.round(blockRect.width),
-        visibleWidth: Math.round(visibleWidth),
-        text: title.textContent || "",
-      };
-    };
-    out = { blockCount: blocks.length, titles: blocks.map(titleBox) };
-  });
-  return out;
-};
 window.__footerFloor = (scenario) => {
   let out = null;
   runRenderAssertions(document.body, scenario, "", (container) => {
@@ -663,11 +581,9 @@ let outcomes = null;
 let rhythmOutcomes = null;
 let geometryOutcome = null;
 let wrapToggleOutcomes = null;
-let phoneOverlapInk = null;
 let footerFloorOutcome = null;
 let wrapDesktopOutcomes = null;
 let frozenColumnCssOutcome = null;
-let viewSwitchOutcomes = null;
 try {
   browser = await chromium.launch({ executablePath: findChrome() });
   const page = await browser.newPage({ viewport: { width: 1100, height: 900 } });
@@ -679,10 +595,8 @@ try {
   // carry no action bag to compare and are not part of the coverage ratchet below, so they are
   // asserted here rather than folded into `outcomes` — the four rules combinations
   // (none/filter/sort/both) plus the tab-menu row each get their own scenario in STATE_SCENARIOS
-  // and their own red-first pass/fail line. The chart's empty state joins them for the same
-  // reason: chartEmptyAbsorptionAssertion (render-assertion-harness.ts) is the permanent lane row
-  // asserting the shared card, its action, and the retired private markup's absence. The two
-  // emptyReason scenarios join for the same reason again: the permanent row proving the
+  // and their own red-first pass/fail line. The two
+  // emptyReason scenarios join for the same reason: the permanent row proving the
   // source-missing and no-matching-data flavours render distinctly through getEmptyStateReason's
   // own predicate, not a hand-supplied reason string. The option colour picker joins them for
   // the same reason a third time: its own row/swatch-count assertion lives in
@@ -695,7 +609,7 @@ try {
   // — and the query bug that assertion shipped with (matching against `container` for a surface
   // portalled to `document.body`) went unnoticed because nothing ever evaluated it.
   const rulesScenarios = STATE_SCENARIOS.filter((scenario) =>
-    scenario.rules != null || scenario.toolbarPopover === "tab-menu" || scenario.chartVariant === "empty"
+    scenario.rules != null || scenario.toolbarPopover === "tab-menu"
     || scenario.emptyReason != null || scenario.boardGroupsPanel === true
     || scenario.renderer === "color-picker" || scenario.dropdownDesktopSheet === true);
   const rulesOutcomes = await page.evaluate(
@@ -705,17 +619,6 @@ try {
   const guardOutcomes = await page.evaluate(
     (scenarios) => scenarios.map((scenario) => window.__renderAssertions(scenario)),
     TABLE_GUARD_SCENARIOS,
-  );
-  // Reproduces the exact sequence database-view.ts's refresh() and embedded-database-renderer.ts's
-  // renderResults() run on a real view-type switch — mount the outgoing view, run the production
-  // teardown, mount table, on the SAME container the host reuses — and asserts the outgoing view
-  // left nothing behind. This is a permanent regression pin for the operator-reported bug where
-  // switching from timeline (or calendar) back to table left the outgoing view's root sitting over
-  // the table: the timeline's default render roots itself as "pm-gantt-view", a class the teardown's
-  // root-name list did not carry.
-  viewSwitchOutcomes = await page.evaluate(
-    (froms) => froms.map((from) => window.__viewSwitchResidue(from)),
-    ["timeline", "calendar"],
   );
   await page.close();
 
@@ -761,16 +664,9 @@ try {
       (scenarios) => scenarios.map((scenario) => window.__rowRhythm(scenario)),
       WRAP_TOGGLE_SCENARIOS,
     );
-    // 402px, not this page's own 390px: the real phone captures this measurement is a proxy for
-    // (calendar-week-time-grid-mobile-*, screenshots/capture.mjs's "mobile" device) open at 402,
-    // and 402 is where both the red and the green values below were read. The two widths do not
-    // change the verdict — the minimum column width binds at either — but a proxy measured at a
-    // width no capture uses is a number nobody can check against a picture.
+    // 402px, not this page's own 390px: the real phone captures this measurement is a proxy
+    // for open at 402, so the phone profile this floor reads is the one the captures use.
     await rhythmPage.setViewportSize({ width: 402, height: 874 });
-    phoneOverlapInk = await rhythmPage.evaluate(
-      (scenario) => window.__phoneOverlapInk(scenario),
-      PHONE_OVERLAP_SCENARIO,
-    );
     footerFloorOutcome = await rhythmPage.evaluate(
       (scenario) => window.__footerFloor(scenario),
       FOOTER_PHONE_SCENARIO,
@@ -957,12 +853,6 @@ try {
     }
   }
 
-  console.log(`\nrender-assertions: view-switch teardown residue, ${viewSwitchOutcomes.length} scenario(s)\n`);
-  for (const outcome of viewSwitchOutcomes) {
-    const mark = outcome.pass ? "PASS" : "FAIL";
-    if (!outcome.pass) failures.push(`${outcome.name} — ${outcome.detail}`);
-    console.log(`  ${mark}  ${outcome.name.padEnd(38)} ${outcome.detail}`);
-  }
 } catch (error) {
   failures.push(`harness run failed: ${error.message}`);
 } finally {
@@ -1245,35 +1135,6 @@ if (!geometryOutcome || !geometryOutcome.provenance) {
 }
 
 // ───────────────────────────────────────────────────────────────────
-// 4d. PHONE WEEK OVERLAP INK
-// ───────────────────────────────────────────────────────────────────
-
-console.log("\nrender-assertions: phone week overlap-column title ink");
-{
-  const name = PHONE_OVERLAP_SCENARIO.name;
-  if (!phoneOverlapInk || phoneOverlapInk.blockCount !== 2) {
-    failures.push(`${name}: measured ${phoneOverlapInk?.blockCount ?? 0} timed block(s), want 2 — `
-      + "the overlap fixture itself did not render, so this run proves nothing about the overlap column");
-    console.log(`  FAIL  ${name} — ${phoneOverlapInk?.blockCount ?? 0} timed block(s), want 2`);
-  } else {
-    for (const title of phoneOverlapInk.titles) {
-      // Past PHONE_OVERLAP_INK_FLOOR, not merely non-zero: green here is "three glyphs and an
-      // ellipsis", not the whole title — the halved column stays tight even at the phone minimum
-      // — but a 1-3px sliver is antialiasing dust, not a title (see the floor's own comment for
-      // the measured pre/post values).
-      const ok = title.visibleWidth >= PHONE_OVERLAP_INK_FLOOR && title.text.trim().length > 0;
-      console.log(`  ${ok ? "PASS" : "FAIL"}  ${name.padEnd(46)} `
-        + `block ${title.blockWidth}px, visible title ink ${title.visibleWidth}px, floor ${PHONE_OVERLAP_INK_FLOOR}px ("${title.text}")`);
-      if (!ok) {
-        failures.push(`${name}: an overlap-column block's title measured ${title.visibleWidth}px of `
-          + `visible ink against a ${PHONE_OVERLAP_INK_FLOOR}px floor (block ${title.blockWidth}px, `
-          + `text "${title.text}") — no ink, the defect this scenario exists to catch`);
-      }
-    }
-  }
-}
-
-// ───────────────────────────────────────────────────────────────────
 // 4d. FROZEN COLUMN: NOTHING AT REST, THE SHADOW'S CONTRAST, PHONE OFF, THE RESIZE-HANDLE HOVER
 // ───────────────────────────────────────────────────────────────────
 
@@ -1398,7 +1259,7 @@ if (failures.length > 0) {
 
 stamp(
   STAMP_PATH,
-  { constructed, total, note: "was 6/21; gallery renderer retired" },
+  { constructed, total, note: "was 5/20; the retired view renderers left the tree" },
   [
     "tools/live/render-assertions.mjs",
     "tools/live/render-assertion-harness.ts",
@@ -1406,8 +1267,6 @@ stamp(
     ...RENDERER_SOURCES,
     "tools/bench/table-render-bench.ts",
     "tools/bench/board-render-bench.ts",
-    "tools/bench/calendar-render-bench.ts",
-    "tools/bench/timeline-render-bench.ts",
     "src/views/database-view.ts",
     "src/views/embedded-database-renderer.ts",
   ],

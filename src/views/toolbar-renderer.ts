@@ -118,7 +118,6 @@ export function getViewTypeIconName(viewType: DatabaseViewType): string {
   if (viewType === "list") return "list";
   if (viewType === "chart") return "bar-chart";
   if (viewType === "calendar") return "calendar-days";
-  if (viewType === "timeline") return "chart-gantt";
   return "table";
 }
 

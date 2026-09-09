@@ -49,7 +49,7 @@ import {
 import {
   makeColumns as makeTimelineColumns,
   makeRows as makeTimelineRows,
-} from "./timeline-render-bench";
+} from "../../archive/deprecated-views/timeline/timeline-render-bench";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. THE VOCABULARY

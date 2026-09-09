@@ -25,7 +25,6 @@ import type { WorkspaceLeaf } from "obsidian";
 import { DatabaseView } from "./database-view";
 import { planSubtaskMove, toFrontmatterUpdates } from "../data/subtask-serialize";
 import type { BoardRendererActions, BoardSubtaskMove } from "./board-renderer";
-import type { CalendarTimelineRendererActions } from "./calendar-timeline-renderer";
 
 vi.mock("obsidian", () => {
   class TFileMock {
@@ -118,7 +117,6 @@ interface TestHistoryEntry {
 
 interface DatabaseViewHarness {
   boardRenderer: { actions: BoardRendererActions };
-  calendarTimelineRenderer: { actions: CalendarTimelineRendererActions };
   rows: RowData[];
   instanceId: string;
   historyStack: TestHistoryEntry[];
@@ -337,7 +335,7 @@ describe("DatabaseView subtask host bindings", () => {
     const parents = [harness.rows[0], harness.rows[1]]; // root.md, a.md
     const refreshSpy = vi.spyOn(harness, "refresh");
 
-    void harness.calendarTimelineRenderer.actions.setSubtaskCollapsedMany?.(parents, true);
+    void (harness as unknown as { setSubtaskCollapsedMany: (config: ViewConfig | undefined, rows: RowData[], collapsed: boolean) => void }).setSubtaskCollapsedMany(viewConfig, parents, true);
 
     expect(viewConfig.subtaskCollapsed).toEqual({ "root.md": true, "a.md": true });
     expect(refreshSpy).toHaveBeenCalledTimes(1);
@@ -351,7 +349,7 @@ describe("DatabaseView subtask host bindings", () => {
     const { harness, dataSource } = createView();
     const parent = harness.rows[0]; // root.md, subtaskIds ["a.md", "b.md"]
 
-    await harness.calendarTimelineRenderer.actions.createSubtaskRecord?.(parent);
+    await (harness as unknown as { createSubtaskRecord: (parent: RowData) => Promise<void> }).createSubtaskRecord(parent);
 
     expect(dataSource.createNote).toHaveBeenCalledTimes(1);
     const createdFrontmatter = dataSource.createNote.mock.calls[0][2];
@@ -376,7 +374,7 @@ describe("DatabaseView subtask host bindings", () => {
     const { harness } = createView();
     const parent = harness.rows[0]; // root.md, subtaskIds ["a.md", "b.md"]
 
-    await harness.calendarTimelineRenderer.actions.createSubtaskRecord?.(parent);
+    await (harness as unknown as { createSubtaskRecord: (parent: RowData) => Promise<void> }).createSubtaskRecord(parent);
 
     // A separate, untracked parent write here would let Ctrl+Z delete the created
     // child while leaving its path stranded in the parent's subtaskIds — one undo
@@ -402,7 +400,7 @@ describe("DatabaseView subtask host bindings", () => {
 
     // The child file creation itself must not throw back at the caller —
     // the failure is a parent-link write, handled inside createSubtaskRecord.
-    await expect(harness.calendarTimelineRenderer.actions.createSubtaskRecord?.(parent)).resolves.toBeUndefined();
+    await expect((harness as unknown as { createSubtaskRecord: (parent: RowData) => Promise<void> }).createSubtaskRecord(parent)).resolves.toBeUndefined();
 
     // Revert: the just-created child is trashed rather than left dangling
     // with a parentId pointing at a parent that never listed it back.
@@ -580,62 +578,4 @@ describe("DatabaseView deleteView (no confirm — an existing undo path already 
   });
 });
 
-// ───────────────────────────────────────────────────────────────────
-// 5. VIEW-SWITCH TEARDOWN
-// ───────────────────────────────────────────────────────────────────
-//
-// `render()` reused the container across a view-type switch but only ever tore the outgoing
-// renderer down when it happened to be chart (a check inline in `setViewType`, not `render()`
-// itself). Switching away from timeline or calendar left that renderer's resize observer,
-// gantt listeners and current-time interval running against a container the next view had
-// already taken over — see `rendered-view-roots.ts` and `tools/live/render-assertions.mjs`'s
-// "view-switch residue" checks for what that left behind in the DOM itself. This covers the
-// half a DOM check cannot reach: that leaving a view type actually calls that renderer's own
-// `destroy()`, and only when the type is really changing.
 
-interface ViewSwitchHarness {
-  lastRenderedViewType: string | null;
-  render(): void;
-  calendarTimelineRenderer: { destroy: () => void };
-  calendarRenderer: { destroy: () => void };
-}
-
-describe("DatabaseView view-switch teardown", () => {
-  it("switching away from timeline calls the timeline renderer's destroy", () => {
-    const { harness, viewConfig } = createView();
-    const target = harness as unknown as ViewSwitchHarness;
-    const destroySpy = vi.spyOn(target.calendarTimelineRenderer, "destroy");
-
-    target.lastRenderedViewType = "timeline";
-    viewConfig.viewType = "table";
-    target.render();
-
-    expect(destroySpy).toHaveBeenCalledTimes(1);
-  });
-
-  it("switching away from calendar calls the calendar renderer's destroy", () => {
-    const { harness, viewConfig } = createView();
-    const target = harness as unknown as ViewSwitchHarness;
-    const destroySpy = vi.spyOn(target.calendarRenderer, "destroy");
-
-    target.lastRenderedViewType = "calendar";
-    viewConfig.viewType = "table";
-    target.render();
-
-    expect(destroySpy).toHaveBeenCalledTimes(1);
-  });
-
-  it("negative control: re-rendering the same view type skips the teardown", () => {
-    // Proves the guard actually gates on a real type change rather than firing on every
-    // render — without it, this call would also destroy a timeline the user never left.
-    const { harness, viewConfig } = createView();
-    const target = harness as unknown as ViewSwitchHarness;
-    const destroySpy = vi.spyOn(target.calendarTimelineRenderer, "destroy");
-
-    target.lastRenderedViewType = "timeline";
-    viewConfig.viewType = "timeline";
-    target.render();
-
-    expect(destroySpy).not.toHaveBeenCalled();
-  });
-});

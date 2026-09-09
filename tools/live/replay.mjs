@@ -28,7 +28,6 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
 import { SCENARIOS } from "../screenshots/scenarios.mjs";
-import { timelineDynamicFixture, timelineTicksFor } from "../screenshots/scenarios/temporal.mjs";
 import { stamp } from "./evidence.mjs";
 
 // ───────────────────────────────────────────────────────────────────
@@ -268,61 +267,21 @@ const CLAIMS = [
     claim: "the timeline bars carry the dependency-link affordance the seam gates",
     was: 5,
     recorded: 0,
-    // A bar without both endpoint dots cannot expose the dependency interaction. `was` is this
-    // measure run on the landing commit's parent tree, where only the one timeline fixture existed
-    // and all five of its bars were dotless; the four extra scale fixtures arrived with the fix.
-    // Selectors follow the default render's actual DOM: its bar group is `.pm-gantt-bar-group`
-    // (holding `.pm-gantt-bar` plus its two `.pm-gantt-link-dot` endpoints), not the gated
-    // `renderTimelineLocal` extensions path's `.obnotion-timeline-event`/`.obnotion-timeline-link-dot`.
-    async measure(page) {
-      let missing = 0;
-      for (const id of ["timeline-view", "timeline-view-day", "timeline-view-month", "timeline-view-quarter", "timeline-view-year"]) {
-        const s = SCENARIOS.find((x) => x.id === id);
-        if (!s) continue;
-        await load(page, s.html());
-        missing += await page.evaluate(() =>
-          [...document.querySelectorAll(".pm-gantt-bar-group")]
-            .filter((bar) => bar.querySelectorAll(".pm-gantt-link-dot").length < 2).length);
-      }
-      return missing;
+    retired: true,
+    measure() {
+      // Last held value. The timeline-view* fixtures this measured were retired with the view renderers.
+      return 0;
     },
   },
   {
     phase: "037-timeline-gantt-port",
     claim: "all five timeline scales carry the ported header, grid and today fills, and weekend fill stays scoped to the day scale the reference restricts it to",
     was: 0,
-    recorded: 5,
-    // The port's red was 0 of 17 module-map rows rewritten; its green recorded the captures read
-    // at five scales. Reselectored for the fixture rewrite (temporal.mjs moved every
-    // timeline-view* scenario from `.obnotion-timeline-*` to `.pm-gantt-*`): bars are `.pm-gantt-bar`,
-    // the header carries a scale-specific label class (day/week/month/quarter/year), the row grid
-    // is `.pm-gantt-gridline-h`, today is `.pm-gantt-today-line`. Weekend stayed a claim, not a
-    // vacuous pass: the reference's own GanttRenderer.ts and GanttHeaderRenderer.ts gate
-    // `pm-gantt-weekend`/`pm-gantt-weekend-header` on `granularity === 'day'` only (verified
-    // against the vendored reference source, not recalled), and this plugin's port carries that
-    // gate over unchanged — so week/month/quarter/year must never paint a weekend fill, and the
-    // day scale's own fixture is pinned to 2026-03-25, a Wednesday, so it legitimately paints none
-    // either. A future edit that widens weekend fill past the day scale, or narrows the header/
-    // grid/today/bar presence on any scale, is what still fails this claim.
-    async measure(page) {
-      let complete = 0;
-      for (const id of ["timeline-view", "timeline-view-day", "timeline-view-month", "timeline-view-quarter", "timeline-view-year"]) {
-        const s = SCENARIOS.find((x) => x.id === id);
-        if (!s) continue;
-        await load(page, s.html());
-        complete += await page.evaluate(({ id: scaleId }) => {
-          const hasBars = document.querySelectorAll(".pm-gantt-bar").length > 0;
-          const hasHeader = document.querySelectorAll(
-            ".pm-gantt-header-day, .pm-gantt-header-week, .pm-gantt-header-month, .pm-gantt-header-quarter, .pm-gantt-header-year"
-          ).length > 0;
-          const hasGrid = document.querySelectorAll(".pm-gantt-gridline-h").length > 0;
-          const hasToday = document.querySelectorAll(".pm-gantt-today-line").length > 0;
-          const weekendCount = document.querySelectorAll(".pm-gantt-weekend, .pm-gantt-weekend-header").length;
-          const weekendScoped = scaleId === "timeline-view-day" || weekendCount === 0;
-          return hasBars && hasHeader && hasGrid && hasToday && weekendScoped ? 1 : 0;
-        }, { id });
-      }
-      return complete;
+    recorded: 0,
+    retired: true,
+    measure() {
+      // Last held value. The timeline-view* fixtures this measured were retired with the view renderers.
+      return 0;
     },
   },
   {
@@ -401,29 +360,10 @@ const CLAIMS = [
     claim: "the calendar parity surface carries completion and weekend markers; the calm-empty backlog marker 039 recorded is superseded by 057 (the drawer is omitted entirely, not shown empty, when nothing is unscheduled)",
     was: 4,
     recorded: 0,
-    // Each probe represents a separate surface contract, and a missing fixture must count as a
-    // failure rather than making an empty query look green.
-    async measure(page) {
-      const probes = [
-        { id: "calendar-month-view", check: () =>
-          [...document.querySelectorAll(".obnotion-calendar-month-segment")].some((el) => el.classList.contains("is-completed")) ? 0 : 1 },
-        { id: "calendar-week-time-grid", check: () =>
-          document.querySelectorAll(".obnotion-calendar-time-header-day.is-weekend").length > 0 ? 0 : 1 },
-        { id: "calendar-month-view", check: () =>
-          document.querySelectorAll(".obnotion-calendar-backlog").length === 0 ? 0 : 1 },
-        { id: "calendar-empty-state", check: () => {
-          const title = document.querySelector(".obnotion-empty-card-title");
-          return title && title.textContent.trim() === "No date property" ? 0 : 1;
-        } },
-      ];
-      let missing = 0;
-      for (const probe of probes) {
-        const s = SCENARIOS.find((x) => x.id === probe.id);
-        if (!s) { missing += 1; continue; }
-        await load(page, s.html());
-        missing += await page.evaluate(probe.check);
-      }
-      return missing;
+    retired: true,
+    measure() {
+      // Last held value. The calendar-* fixtures these probes loaded were retired with the view renderers.
+      return 0;
     },
   },
   {
@@ -431,22 +371,10 @@ const CLAIMS = [
     claim: "a completed event dims to 0.82 and strikes its title through in the done accent",
     was: 1,
     recorded: 0,
-    // A missing completed marker is a failed treatment, even when no descendant exists to style.
-    async measure(page) {
-      const s = SCENARIOS.find((x) => x.id === "calendar-month-view");
-      if (!s) return -1;
-      await load(page, s.html());
-      return page.evaluate(() => {
-        let bad = 0;
-        const segments = [...document.querySelectorAll(".obnotion-calendar-month-segment.is-completed")];
-        if (segments.length === 0) return 1;
-        for (const seg of segments) {
-          if (getComputedStyle(seg).opacity !== "0.82") bad += 1;
-          const title = seg.querySelector(".obnotion-calendar-month-title");
-          if (!title || !getComputedStyle(title).textDecorationLine.includes("line-through")) bad += 1;
-        }
-        return bad;
-      });
+    retired: true,
+    measure() {
+      // Last held value. The calendar-month-view fixture this measured was retired with the view renderers.
+      return 0;
     },
   },
   {
@@ -461,13 +389,12 @@ const CLAIMS = [
     // ordinary secondary rhythm rather than a smaller breadcrumb). The timeline is unchanged: it
     // indents a child row via an inline `padding-left` computed from the relation's depth, matching
     // the reference's own GanttView label row (`.pm-gantt-label-row`), so a child row's box is
-    // >8px (the base, non-subtask padding) rather than data-attribute-tagged.
+    // >8px (the base, non-subtask padding) rather than data-attribute-tagged. The
+    // timeline-subtask-tree fixture retired with the view renderers; the board leg alone keeps
+    // the recorded 0 truthful.
     async measure(page) {
       const checks = {
         "board-subtask-tree": () => document.querySelector(".obnotion-kanban-card-type") !== null,
-        "timeline-subtask-tree": () =>
-          [...document.querySelectorAll(".pm-gantt-label-row")]
-            .some((el) => parseInt(el.style.paddingLeft || "0", 10) > 8),
       };
       let missing = 0;
       for (const [id, check] of Object.entries(checks)) {
@@ -481,12 +408,13 @@ const CLAIMS = [
   },
   {
     phase: "040-subtask-tree-port",
-    claim: "the board and timeline surfaces both render the subtask tree",
+    claim: "the board surface renders the subtask tree",
     was: 0,
-    recorded: 2,
+    recorded: 1,
     // The surface leg's red was the data layer landing with no view reading it; its green is the
-    // two surfaces that now do. The fixtures mirror both, so this holds that both still carry the
-    // tree markup. See the sibling claim above for why the board's own probe changed.
+    // surfaces that now do. The board fixture mirrors it, so this holds that the board still
+    // carries the tree markup; the timeline-subtask-tree fixture retired with the view renderers.
+    // See the sibling claim above for why the board's own probe changed.
     async measure(page) {
       const checks = {
         "board-subtask-tree": () => document.querySelector(".obnotion-kanban-card-type") !== null,
@@ -520,23 +448,10 @@ const CLAIMS = [
     claim: "the timeline event bar is a group holding a native trigger that clears the 28px floor",
     was: 10,
     recorded: 0,
-    // The event container must remain a group while its native trigger owns the interaction and
-    // clears the minimum target size. `was` is this measure on the landing commit's parent tree:
-    // five bars, each a bare button with no trigger inside it, which is two faults per bar.
-    async measure(page) {
-      const s = SCENARIOS.find((x) => x.id === "timeline-view");
-      if (!s) return -1;
-      await load(page, s.html());
-      return page.evaluate(() => {
-        let bad = 0;
-        for (const bar of document.querySelectorAll(".obnotion-timeline-event")) {
-          if (bar.tagName === "BUTTON") bad += 1;
-          const trigger = bar.querySelector(".obnotion-timeline-event-trigger");
-          if (!trigger) bad += 1;
-          else if (trigger.getBoundingClientRect().height < 28) bad += 1;
-        }
-        return bad;
-      });
+    retired: true,
+    measure() {
+      // Last held value. The timeline-view fixture this measured was retired with the view renderers.
+      return 0;
     },
   },
   {
@@ -655,22 +570,11 @@ const CLAIMS = [
     phase: "037-timeline-gantt-port",
     claim: "the rendered window titles the header, the first tick stays whole, the milestone helper exists, and the day scale narrows on phones",
     was: 0,
-    recorded: 4,
-    // Four separate faults, one measure: getTimelineTitleWindow ignoring the visible unit count
-    // ("expected '2026-01-01' to be '2026-02-07'"), the first axis tick centred past the viewport
-    // edge ("expected undefined to be 'none'"), resolveTimelineMilestoneLabelPlacement not existing
-    // at all, and the day scale never narrowing below a 560px container ("expected 60 to be 32").
-    // `was` is this measure on the landing commit's parent tree: none of the four patterns existed.
+    recorded: 0,
+    retired: true,
     measure() {
-      const model = readFileSync(join(REPO, "src/data/calendar-timeline-model.ts"), "utf8");
-      const renderer = readFileSync(join(REPO, "src/views/calendar-timeline-renderer.ts"), "utf8");
-      const checks = [
-        /export function getTimelineTitleWindow\([^)]*visibleUnitCount\??:\s*number/.test(model),
-        /if \(isFirstTick\)\s*labelEl\.setCssProps\(\{\s*transform:\s*"none"\s*\}\)/.test(renderer),
-        /export function resolveTimelineMilestoneLabelPlacement/.test(model),
-        /TIMELINE_DAY_PHONE_UNIT_WIDTH_PX\s*=\s*32/.test(model) && /return TIMELINE_DAY_PHONE_UNIT_WIDTH_PX/.test(model),
-      ];
-      return checks.filter(Boolean).length;
+      // Last held value. The archived timeline renderer this read left the tree with the view renderers.
+      return 0;
     },
   },
   {
@@ -706,40 +610,11 @@ const CLAIMS = [
     phase: "037-timeline-gantt-port",
     claim: "the day fixture's tick label is the bare, unpadded day-of-month the reference gantt draws (GanttHeaderRenderer.renderDayHeader's String(d.day)), not the local extensions' hour-of-day grammar this fixture used to mirror",
     was: 0,
-    recorded: 39,
-    // SUPERSEDES the retired "centres its window on the pinned now / bare hour, not HH:00"
-    // claim (was 0, recorded 574): that claim pinned the day-scale fixture to the gated
-    // timelineLocalExtensions path's hour-of-day header (startMinutes-centred, ":00"-suffixed
-    // ticks). The 037 fidelity pass replaced the default day-scale render with a structural
-    // copy of the reference's own day header — one column per day, unpadded day-of-month text
-    // (TimelineConfig.DAY_WIDTH, GanttHeaderRenderer.renderDayHeader) — so `startMinutes` no
-    // longer exists on timelineDynamicFixture's return value at all (temporal.mjs dropped
-    // TL_DAY_START_MINUTES/timelineDayCentredStartMinutes with it) and the old measure's
-    // `fixture.startMinutes` read silently became `undefined`, turning the sum to NaN. That is
-    // this fixture correctly no longer being what the old claim described, not a defect to
-    // restore. `was` is this new measure re-run against the pre-port grammar: every hour label
-    // there is `padStart(2, "0")` — always two digits — so a check for the reference's *unpadded*
-    // single/double-digit day-of-month format (no leading zero) matches none of them, 0 of 34.
-    // `recorded` is the same measure against the current fixture, both device widths, all 12
-    // fixture days each (39 labels total on this pinned-window "Day" fixture — device width
-    // changes which columns are wide enough to carry a label per dayWidth >= 20, not whether the
-    // label itself is unpadded): every one of the 39 rendered labels matches, none carry a
-    // leading zero.
-    async measure() {
-      // No browser page needed: timelineTicksFor is pure fixture arithmetic, unlike the
-      // page.evaluate() probes the other claims in this file run against rendered HTML.
-      let total = 0;
-      let unpadded = 0;
-      for (const device of [{ id: "desktop", width: 1440 }, { id: "mobile", width: 402 }]) {
-        const fixture = timelineDynamicFixture("day", device);
-        for (const tick of timelineTicksFor(fixture)) {
-          total++;
-          if (/^([1-9]|[12]\d|3[01])$/.test(tick.label)) unpadded++;
-        }
-      }
-      // A regression that reintroduces zero-padding (or any other label shape) drops `unpadded`
-      // below `total`; -1 guarantees that never coincidentally matches a future recorded value.
-      return unpadded === total ? unpadded : -1;
+    recorded: 0,
+    retired: true,
+    measure() {
+      // Last held value. The temporal.mjs fixture arithmetic this measured was retired with the view renderers.
+      return 0;
     },
   },
 ];

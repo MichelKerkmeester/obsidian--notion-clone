@@ -393,7 +393,7 @@ export class ViewConfigPanelRenderer {
         cls: "obnotion-view-config-layout-options obnotion-panel-button",
         attr: { type: "button", "aria-label": label },
       });
-      setIcon(layoutOptions.createSpan({ cls: "obnotion-panel-button-icon" }), config.viewType === "chart" ? "bar-chart-3" : config.viewType === "timeline" ? "chart-gantt" : "calendar-days");
+      setIcon(layoutOptions.createSpan({ cls: "obnotion-panel-button-icon" }), "calendar-days");
       layoutOptions.createSpan({ cls: "obnotion-panel-button-label", text: label });
       layoutOptions.onclick = () => actions.onOpenLayoutOptions?.(layoutOptions);
     }
@@ -574,7 +574,6 @@ export class ViewConfigPanelRenderer {
         { value: "list", text: t("common.listView"), icon: "list" },
         { value: "chart", text: t("common.chartView"), icon: "bar-chart" },
         { value: "calendar", text: t("common.calendarView"), icon: "calendar-days" },
-        { value: "timeline", text: t("common.timelineView"), icon: "chart-gantt" },
       ].filter((option) =>
         (option.value !== "gallery" || config.viewType === "gallery") &&
         (option.value !== "list" || config.viewType === "list") &&

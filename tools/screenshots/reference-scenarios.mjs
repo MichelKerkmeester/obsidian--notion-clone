@@ -16,8 +16,9 @@
 //
 // Each scenario declares `referenceOf`, naming the constructed scenario it pairs with,
 // so the manifest can record which constructed capture each reference picture is the
-// mirror of: constructed-board <-> reference-kanban, constructed-timeline <->
-// reference-gantt, and the two subtask variants.
+// mirror of: constructed-board <-> reference-kanban, constructed-board-subtask <->
+// reference-kanban-subtask. The timeline/gantt pairing was removed with the retired
+// view renderers.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
@@ -138,18 +139,6 @@ const KANBAN_SOURCES = [
   "tools/bench/board-render-bench.ts",
 ];
 
-const GANTT_SOURCES = [
-  "specs/context/obsidian-pm-main/src/views/gantt/GanttView.ts",
-  "specs/context/obsidian-pm-main/src/views/gantt/GanttHeaderRenderer.ts",
-  "specs/context/obsidian-pm-main/src/views/gantt/GanttRenderer.ts",
-  "specs/context/obsidian-pm-main/src/views/gantt/GanttTaskBarRenderer.ts",
-  "specs/context/obsidian-pm-main/src/views/gantt/GanttDragHandler.ts",
-  "specs/context/obsidian-pm-main/src/views/gantt/GanttLinkHandler.ts",
-  "specs/context/obsidian-pm-main/src/views/gantt/TaskLabelRenderer.ts",
-  "specs/context/obsidian-pm-main/src/views/gantt/TimelineConfig.ts",
-  "tools/bench/timeline-render-bench.ts",
-];
-
 function referenceScenario(view, opts) {
   return {
     id: `reference-${view}`,
@@ -185,16 +174,6 @@ export const REFERENCE_SCENARIOS = [
       + "assignees. The tag row stays empty on both sides — our card matches a tags column by "
       + "name and the bench carries none.",
   }),
-  referenceScenario("gantt", {
-    view: "gantt",
-    renderer: "pm-gantt",
-    referenceOf: "constructed-timeline",
-    title: "Project Manager gantt (reference)",
-    sources: [...GANTT_SOURCES, ...REFERENCE_SHARED_SOURCES],
-    note: "The vendored GanttView at its week scale over the timeline bench's rows converted "
-      + "into its Task shape: bars, the milestone diamond, dependency arrows and the today "
-      + "line. Read beside constructed-timeline.",
-  }),
   referenceScenario("kanban-subtask", {
     view: "kanban",
     subtask: true,
@@ -205,16 +184,6 @@ export const REFERENCE_SCENARIOS = [
     note: "The same kanban with the first three rows wired into a parent with two children "
       + "and the config's kanbanShowSubtasks on, so the subtask cards carry the parent chip "
       + "the way constructed-board-subtask draws its tree.",
-  }),
-  referenceScenario("gantt-subtask", {
-    view: "gantt",
-    subtask: true,
-    renderer: "pm-gantt",
-    referenceOf: "constructed-timeline-subtask",
-    title: "Project Manager gantt — subtask tree (reference)",
-    sources: [...GANTT_SOURCES, ...REFERENCE_SHARED_SOURCES],
-    note: "The same gantt over the tree-wired rows: the nested children render as indented "
-      + "label rows with collapse toggles, beside constructed-timeline-subtask.",
   }),
 ];
 

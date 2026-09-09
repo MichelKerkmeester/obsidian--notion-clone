@@ -101,17 +101,16 @@ describe("the frontmatter parser keeps accepting persisted calendar, timeline an
 });
 
 // ───────────────────────────────────────────────────────────────────
-// 5. THE RENDERERS STAY — THIS PHASE REDIRECTS, IT DOES NOT REMOVE
+// 5. THE RETIRED RENDERERS — REDIRECTED, THEN REMOVED TO THE ARCHIVE
 // ───────────────────────────────────────────────────────────────────
 
-describe("the three renderers are untouched by this phase", () => {
-  it("still dispatches to the chart renderer in the file view", () => {
+describe("the file view survives the retired renderers' removal to the archive", () => {
+  it("still branches the render pipeline on the retired chart view type for its legacy manualOrder handling", () => {
     expect(databaseViewSource).toContain('viewType === "chart"');
   });
 
-  it("still imports the calendar and timeline renderers in the file view", () => {
-    expect(databaseViewSource).toContain("CalendarTimelineRenderer");
-    expect(databaseViewSource).toContain("CalendarRenderer");
+  it("reaches the archived timeline renderer's create and date-change types through the archive import", () => {
+    expect(databaseViewSource).toContain('from "../../archive/deprecated-views/timeline/calendar-timeline-renderer"');
   });
 });
 

@@ -26,7 +26,6 @@ import type { App } from "obsidian";
 import { EmbeddedDatabaseRenderer } from "./embedded-database-renderer";
 import { planSubtaskMove, toFrontmatterUpdates } from "../data/subtask-serialize";
 import type { BoardRendererActions, BoardSubtaskMove } from "./board-renderer";
-import type { CalendarTimelineRendererActions } from "./calendar-timeline-renderer";
 import { getViewTypeOptions } from "./toolbar-renderer";
 import {
   applyLinkedViewMove,
@@ -112,7 +111,6 @@ vi.mock("../i18n", () => ({
 interface EmbeddedHarness {
   boardRenderer: { actions: BoardRendererActions };
   tableRenderer: { actions: { isReadOnly?: boolean; createEntry?: (defaults?: Record<string, unknown>) => void } };
-  calendarTimelineRenderer: { actions: CalendarTimelineRendererActions };
   rows: RowData[];
   config: ViewConfig | undefined;
   currentDbConfig: DatabaseConfig | undefined;
@@ -500,7 +498,7 @@ describe("EmbeddedDatabaseRenderer subtask host bindings", () => {
     const parents = [harness.rows[0], harness.rows[1]]; // root.md, a.md
     const renderSpy = vi.spyOn(harness, "renderResults");
 
-    void harness.calendarTimelineRenderer.actions.setSubtaskCollapsedMany?.(parents, true);
+    void (harness as unknown as { setSubtaskCollapsedMany: (config: ViewConfig | undefined, rows: RowData[], collapsed: boolean) => void }).setSubtaskCollapsedMany(viewConfig, parents, true);
 
     expect(viewConfig.subtaskCollapsed).toEqual({ "root.md": true, "a.md": true });
     expect(renderSpy).toHaveBeenCalledTimes(1);
@@ -527,15 +525,6 @@ describe("EmbeddedDatabaseRenderer subtask host bindings", () => {
     expect(writtenDb.views[0].boardCardFields).toEqual(localConfig.boardCardFields);
   });
 
-  it("openDependencyFile opens the dependency note through the embed's open-note path", () => {
-    const { harness, dataSource } = createRenderer();
-
-    void harness.calendarTimelineRenderer.actions.openDependencyFile?.("db.md");
-
-    const openNote = vi.mocked(dataSource).openNote;
-    expect(openNote).toHaveBeenCalledTimes(1);
-    expect(openNote).toHaveBeenCalledWith(expect.objectContaining({ path: "db.md" }));
-  });
 });
 
 // ───────────────────────────────────────────────────────────────────

@@ -47,27 +47,11 @@ export const SCENARIOS = [
   // file-name titleFormat choice instead.
   { name: "board-title-currency-column/file-view", renderer: "board", bag: "file-view", captureData: true, boardTitleFieldCurrency: true },
   { name: "board-title-format-numeric-filename/file-view", renderer: "board", bag: "file-view", captureData: true, numericFileNames: true, titleFormat: "currency-eur" },
-  { name: "calendar/file-view", renderer: "calendar", bag: "file-view" },
-  { name: "calendar/embed", renderer: "calendar", bag: "embed" },
-  { name: "calendar-week/file-view", renderer: "calendar", bag: "file-view", scale: "week" },
-  { name: "calendar-week/embed", renderer: "calendar", bag: "embed", scale: "week" },
-  { name: "calendar-day/file-view", renderer: "calendar", bag: "file-view", scale: "day" },
-  { name: "calendar-day/embed", renderer: "calendar", bag: "embed", scale: "day" },
-  { name: "timeline/file-view", renderer: "timeline", bag: "file-view" },
-  { name: "timeline/embed", renderer: "timeline", bag: "embed" },
-  // The remaining four scales the timeline ships. "week" is already covered by the implicit
-  // entry above (ScenarioSpec.scale defaults to "week"), so this is the other four, not five.
-  { name: "timeline-day/file-view", renderer: "timeline", bag: "file-view", scale: "day" },
-  { name: "timeline-month/file-view", renderer: "timeline", bag: "file-view", scale: "month" },
-  { name: "timeline-quarter/file-view", renderer: "timeline", bag: "file-view", scale: "quarter" },
-  { name: "timeline-year/file-view", renderer: "timeline", bag: "file-view", scale: "year" },
-  { name: "chart/file-view", renderer: "chart", bag: "file-view" },
 ];
 
 // The per-view state variants and the non-renderer surfaces: the same ScenarioSpec fields
 // constructed-state-assertions.mjs proves mount a real per-state marker (a subtask tree, sparse
-// fields, a no-date-field empty state, the two non-bar chart variants, the mini-calendar popover,
-// the three toolbar settings popovers, the toolbar and its popovers, the anchored panels, the
+// fields, the toolbar and its popovers, the anchored panels, the
 // field editors and pickers, and the value renderers). Exported separately from SCENARIOS rather
 // than merged into it: render-assertions.mjs also reads SCENARIOS, and its BAGS table has no
 // entry for the non-renderer `renderer` values these add (or for the renderer/bag pairs they
@@ -76,14 +60,6 @@ export const SCENARIOS = [
 // action-bag membership, so that constraint does not apply to them.
 export const STATE_SCENARIOS = [
   { name: "board-subtask-tree/file-view", renderer: "board", bag: "file-view", captureData: true, subtaskTree: true },
-  { name: "timeline-subtask-tree/file-view", renderer: "timeline", bag: "file-view", captureData: true, subtaskTree: true },
-  { name: "calendar-mini-calendar/file-view", renderer: "calendar", bag: "file-view", captureData: true, miniCalendar: true },
-  { name: "calendar-empty-state/file-view", renderer: "calendar", bag: "file-view", captureData: true, emptyState: true },
-  { name: "chrome-chart-number/file-view", renderer: "chart", bag: "file-view", captureData: true, chartVariant: "number" },
-  { name: "chrome-chart-empty/file-view", renderer: "chart", bag: "file-view", captureData: true, chartVariant: "empty" },
-  { name: "calendar-toolbar-options/file-view", renderer: "calendar-toolbar", bag: "file-view" },
-  { name: "timeline-toolbar-options/file-view", renderer: "timeline-toolbar", bag: "file-view" },
-  { name: "chrome-chart-options-popover/file-view", renderer: "chart-toolbar", bag: "file-view" },
   // The toolbar and its popovers.
   { name: "chrome-toolbar/file-view", renderer: "toolbar", bag: "file-view", captureData: true },
   { name: "chrome-toolbar-search/file-view", renderer: "toolbar", bag: "file-view", captureData: true, searchText: "notion" },
@@ -161,9 +137,6 @@ export const SCENARIOS_WITH_STATES = [...SCENARIOS, ...STATE_SCENARIOS];
 export const RENDERER_SOURCES = [
   "src/views/table-renderer.ts",
   "src/views/board-renderer.ts",
-  "src/views/calendar-renderer.ts",
-  "src/views/calendar-timeline-renderer.ts",
-  "src/views/chart-renderer.ts",
 ];
 
 // ───────────────────────────────────────────────────────────────────
@@ -197,7 +170,7 @@ export async function buildRenderAssertionBundle(entryBody) {
 
   writeFileSync(entry, `
 import { installObsidianDomShim } from "${resolve(HERE, "../storybook/obsidian-dom-shim.mjs")}";
-import { runRenderAssertions, runViewSwitchResidueCheck } from "${resolve(HERE, "render-assertion-harness")}";
+import { runRenderAssertions } from "${resolve(HERE, "render-assertion-harness")}";
 import { readSheetFrameShapeActivity } from "${resolve(HERE, "../../src/views/mobile-bottom-sheet")}";
 
 installObsidianDomShim(window);
@@ -205,7 +178,6 @@ installObsidianDomShim(window);
 // still be mid-answer when a caller measures or photographs the surface. Every consumer of this
 // bundle gets its settle signal from the shipped module rather than a wait each one guesses at.
 window.__sheetFrameShapeActivity = () => readSheetFrameShapeActivity();
-window.__viewSwitchResidue = (from) => runViewSwitchResidueCheck(document.body, from);
 ${entryBody}
 `);
 

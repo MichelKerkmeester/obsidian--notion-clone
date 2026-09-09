@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-09-09T05:01:22.869Z",
+  "measuredAt": "2026-09-09T05:14:35.773Z",
   "inputs": {
-    "styles.css": "55cb284b3244",
+    "styles.css": "73297de05d54",
     "tools/screenshots/theme.css": "43554e1fbe3e",
-    "tools/screenshots/runtime-vars.css": "65a22a21cf1f",
-    "tools/screenshots/scenarios.mjs": "4c26fcda113a",
-    "tools/live/replay.mjs": "04a70009088f"
+    "tools/screenshots/runtime-vars.css": "96e9c31eb486",
+    "tools/screenshots/scenarios.mjs": "8e4c7409a92b",
+    "tools/live/replay.mjs": "a020449fb0db"
   },
   "claims": [
     {
@@ -104,15 +104,17 @@
       "was": 5,
       "recorded": 0,
       "actual": 0,
-      "held": true
+      "held": true,
+      "retired": true
     },
     {
       "phase": "037-timeline-gantt-port",
       "claim": "all five timeline scales carry the ported header, grid and today fills, and weekend fill stays scoped to the day scale the reference restricts it to",
       "was": 0,
-      "recorded": 5,
-      "actual": 5,
-      "held": true
+      "recorded": 0,
+      "actual": 0,
+      "held": true,
+      "retired": true
     },
     {
       "phase": "038-board-kanban-port",
@@ -136,7 +138,8 @@
       "was": 4,
       "recorded": 0,
       "actual": 0,
-      "held": true
+      "held": true,
+      "retired": true
     },
     {
       "phase": "039-calendar-parity-port",
@@ -144,7 +147,8 @@
       "was": 1,
       "recorded": 0,
       "actual": 0,
-      "held": true
+      "held": true,
+      "retired": true
     },
     {
       "phase": "040-subtask-tree-port",
@@ -156,10 +160,10 @@
     },
     {
       "phase": "040-subtask-tree-port",
-      "claim": "the board and timeline surfaces both render the subtask tree",
+      "claim": "the board surface renders the subtask tree",
       "was": 0,
-      "recorded": 2,
-      "actual": 2,
+      "recorded": 1,
+      "actual": 1,
       "held": true
     },
     {
@@ -176,7 +180,8 @@
       "was": 10,
       "recorded": 0,
       "actual": 0,
-      "held": true
+      "held": true,
+      "retired": true
     },
     {
       "phase": "038-board-kanban-port",
@@ -214,9 +219,10 @@
       "phase": "037-timeline-gantt-port",
       "claim": "the rendered window titles the header, the first tick stays whole, the milestone helper exists, and the day scale narrows on phones",
       "was": 0,
-      "recorded": 4,
-      "actual": 4,
-      "held": true
+      "recorded": 0,
+      "actual": 0,
+      "held": true,
+      "retired": true
     },
     {
       "phase": "037-timeline-gantt-port",
@@ -230,9 +236,10 @@
       "phase": "037-timeline-gantt-port",
       "claim": "the day fixture's tick label is the bare, unpadded day-of-month the reference gantt draws (GanttHeaderRenderer.renderDayHeader's String(d.day)), not the local extensions' hour-of-day grammar this fixture used to mirror",
       "was": 0,
-      "recorded": 39,
-      "actual": 39,
-      "held": true
+      "recorded": 0,
+      "actual": 0,
+      "held": true,
+      "retired": true
     }
   ],
   "reversed": 0

@@ -1,16 +1,16 @@
 {
-  "measuredAt": "2026-09-09T04:16:37.879Z",
+  "measuredAt": "2026-09-09T04:16:31.522Z",
   "inputs": {
-    "styles.css": "55cb284b3244",
+    "styles.css": "73297de05d54",
     "tools/live/checkbox-appearance.mjs": "4d9a6548d2e3",
-    "tools/screenshots/scenarios.mjs": "4c26fcda113a"
+    "tools/screenshots/scenarios.mjs": "8e4c7409a92b"
   },
   "totals": {
-    "checkboxes": 180,
-    "fixtures": 82,
-    "owned": 180,
+    "checkboxes": 171,
+    "fixtures": 67,
+    "owned": 171,
     "appearanceOwnedByAncestor": 0,
-    "appearanceSelfOwned": 180,
+    "appearanceSelfOwned": 171,
     "tokenDependent": 169,
     "platformBox": 0,
     "distinctShapes": 3,
@@ -21,7 +21,7 @@
     "mountGroups": 7,
     "mountShapeSplits": 0,
     "hostProfilesApplied": 3,
-    "boxesUnderHostProfiles": 180,
+    "boxesUnderHostProfiles": 171,
     "movedUnderAHostProfile": 0,
     "worstBorderContrast": 3.09,
     "belowNonTextMinimum": 0,
@@ -44,7 +44,7 @@
   "shapes": {
     "16x16 r=4px": 139,
     "18x18 r=4px": 30,
-    "34x18 r=9999px": 11
+    "34x18 r=9999px": 2
   },
   "states": [
     {
@@ -1481,139 +1481,6 @@
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "obnotion-container obnotion-width-default"
-    },
-    {
-      "scenario": "calendar-toolbar-options",
-      "index": 0,
-      "classes": [
-        "obnotion-toggle-switch"
-      ],
-      "chain": [
-        "obnotion-container",
-        "obnotion-calendar-options-popover obnotion-chart-options-popover",
-        "obnotion-calendar-options-content",
-        "obnotion-chart-options-section",
-        "obnotion-chart-options-row obnotion-chart-options-switch-row"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "9999px",
-        "width": 34,
-        "height": 18
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": null
-    },
-    {
-      "scenario": "calendar-toolbar-options",
-      "index": 1,
-      "classes": [
-        "obnotion-toggle-switch",
-        "obnotion-calendar-show-icon-toggle"
-      ],
-      "chain": [
-        "obnotion-container",
-        "obnotion-calendar-options-popover obnotion-chart-options-popover",
-        "obnotion-calendar-options-content",
-        "obnotion-chart-options-section",
-        "obnotion-chart-options-row obnotion-chart-options-switch-row"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "9999px",
-        "width": 34,
-        "height": 18
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": null
-    },
-    {
-      "scenario": "timeline-toolbar-options",
-      "index": 0,
-      "classes": [
-        "obnotion-toggle-switch"
-      ],
-      "chain": [
-        "obnotion-container",
-        "obnotion-calendar-timeline-options-popover obnotion-chart-options-popover",
-        "obnotion-calendar-timeline-options-content",
-        "obnotion-chart-options-section",
-        "obnotion-chart-options-row obnotion-chart-options-switch-row"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "9999px",
-        "width": 34,
-        "height": 18
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": null
-    },
-    {
-      "scenario": "timeline-toolbar-options",
-      "index": 1,
-      "classes": [
-        "obnotion-toggle-switch"
-      ],
-      "chain": [
-        "obnotion-container",
-        "obnotion-calendar-timeline-options-popover obnotion-chart-options-popover",
-        "obnotion-calendar-timeline-options-content",
-        "obnotion-chart-options-section",
-        "obnotion-chart-options-row obnotion-chart-options-switch-row"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "9999px",
-        "width": 34,
-        "height": 18
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": null
-    },
-    {
-      "scenario": "timeline-toolbar-options",
-      "index": 2,
-      "classes": [
-        "obnotion-toggle-switch"
-      ],
-      "chain": [
-        "obnotion-container",
-        "obnotion-calendar-timeline-options-popover obnotion-chart-options-popover",
-        "obnotion-calendar-timeline-options-content",
-        "obnotion-chart-options-section",
-        "obnotion-chart-options-row obnotion-chart-options-switch-row"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "9999px",
-        "width": 34,
-        "height": 18
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": null
-    },
-    {
-      "scenario": "timeline-toolbar-options",
-      "index": 3,
-      "classes": [
-        "obnotion-toggle-switch"
-      ],
-      "chain": [
-        "obnotion-container",
-        "obnotion-calendar-timeline-options-popover obnotion-chart-options-popover",
-        "obnotion-calendar-timeline-options-content",
-        "obnotion-chart-options-section",
-        "obnotion-chart-options-row obnotion-chart-options-switch-row"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "9999px",
-        "width": 34,
-        "height": 18
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": null
     },
     {
       "scenario": "panel-view-config",
@@ -3927,69 +3794,6 @@
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "obnotion-container"
-    },
-    {
-      "scenario": "chrome-chart-options-popover",
-      "index": 0,
-      "classes": [
-        "obnotion-toggle-switch"
-      ],
-      "chain": [
-        "obnotion-container",
-        "obnotion-chart-options-popover",
-        "obnotion-chart-options-section",
-        "obnotion-chart-options-row obnotion-chart-options-switch"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "9999px",
-        "width": 34,
-        "height": 18
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": null
-    },
-    {
-      "scenario": "chrome-chart-options-popover",
-      "index": 1,
-      "classes": [
-        "obnotion-toggle-switch"
-      ],
-      "chain": [
-        "obnotion-container",
-        "obnotion-chart-options-popover",
-        "obnotion-chart-options-section",
-        "obnotion-chart-options-row obnotion-chart-options-switch"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "9999px",
-        "width": 34,
-        "height": 18
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": null
-    },
-    {
-      "scenario": "chrome-chart-options-popover",
-      "index": 2,
-      "classes": [
-        "obnotion-toggle-switch"
-      ],
-      "chain": [
-        "obnotion-container",
-        "obnotion-chart-options-popover",
-        "obnotion-chart-options-section",
-        "obnotion-chart-options-row obnotion-chart-options-switch"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "9999px",
-        "width": 34,
-        "height": 18
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": null
     },
     {
       "scenario": "chrome-selection-status-bar",
