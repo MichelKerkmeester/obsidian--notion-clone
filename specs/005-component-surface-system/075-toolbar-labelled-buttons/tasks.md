@@ -66,6 +66,7 @@ contextType: "general"
 - [x] T016 `scan-comments.mjs`, `scan-failing-values.mjs` — both exit 0
 - [x] T017 Record the desktop-vs-phone decision as ADR-001 in `decision-record.md`
 - [x] T018 Update `acceptance-criteria.md`, `implementation-summary.md`, `plan.md`, this file with the real evidence; leave AC-006 unticked (operator-owned)
+- [x] T019 Lock the phone strip to horizontal-only scroll (operator 0.0.36 vertical-scroll report): extend `phone-toolbar-scroll.ts` + `run-phone-toolbar-scroll.mjs` with the vertical containment assertions (scrollHeight − clientHeight = 0, `overflow-y` hidden, `touch-action` pan-x, `overscroll-behavior-x` contain, forced `scrollTop` reads back 0, every control's box inside the strip) — red at 6px of travel, `auto`/`auto`/`auto`; fix at the source in `styles.css` (`overflow-y: hidden` on both phone rules, `touch-action: pan-x`, `overscroll-behavior-x: contain`, padding-bottom 2 → 8px so the 8px touch halo stays inside the strip's box, row 52 → 58px with every control fully visible); screenshots ×2 deterministic (12 movers, identical both runs, 0 jitter), evidence 15/15 fresh, touch-targets unchanged, gate 27/0
 <!-- /ANCHOR:phase-3 -->
 
 ---

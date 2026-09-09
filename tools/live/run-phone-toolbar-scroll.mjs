@@ -118,6 +118,11 @@ console.log(`  Last control reachable:  ${reading.lastControlReachable}`);
 console.log(`  Every control labelled:  ${reading.everyControlLabelled}`);
 console.log(`  Every control >= 44px:   ${reading.everyControlAtLeast44}`);
 console.log(`  Scrollbar hidden:        ${reading.scrollbarWidthNone}`);
+console.log(`  Vertical overflow:       ${reading.verticalOverflowPx}px`);
+console.log(`  overflow-y / touch-action: ${reading.overflowYComputed} / ${reading.touchActionComputed}`);
+console.log(`  overscroll-behavior-x:   ${reading.overscrollBehaviorXComputed}`);
+console.log(`  scrollTop after forced 40px: ${reading.scrollTopAfterProgrammatic}`);
+console.log(`  Every control inside strip: ${reading.everyControlInsideStrip}`);
 
 let failed = false;
 
@@ -148,7 +153,37 @@ if (!reading.everyControlAtLeast44) {
 
 if (!reading.scrollbarWidthNone) {
   failed = true;
-  console.error("\nFAIL — the row's scrollbar is not hidden (scrollbar-width !== none), against the existing edge-only scrollbar ruling.");
+  console.error("\nFAIL — the row's scrollbar is not hidden (scrollbarWidth !== none), against the existing edge-only scrollbar ruling.");
+}
+
+if (reading.verticalOverflowPx !== 0) {
+  failed = true;
+  console.error(`\nFAIL — the strip is taller inside than it renders: scrollHeight - clientHeight = ${reading.verticalOverflowPx}px, so its bottom edge clips the controls instead of sizing to them.`);
+}
+
+if (reading.overflowYComputed !== "hidden") {
+  failed = true;
+  console.error(`\nFAIL — computed overflow-y is ${reading.overflowYComputed}, not hidden; the strip is a two-axis scroller.`);
+}
+
+if (!reading.touchActionComputed.includes("pan-x") || reading.touchActionComputed.includes("pan-y")) {
+  failed = true;
+  console.error(`\nFAIL — computed touch-action is ${reading.touchActionComputed}; a vertical gesture on the strip is the strip's to move, not the page's.`);
+}
+
+if (reading.overscrollBehaviorXComputed !== "contain") {
+  failed = true;
+  console.error(`\nFAIL — computed overscroll-behavior-x is ${reading.overscrollBehaviorXComputed}, not contain; the strip's horizontal pan chains into the page's own scroll.`);
+}
+
+if (reading.scrollTopAfterProgrammatic !== 0) {
+  failed = true;
+  console.error(`\nFAIL — forcing the strip 40px down reads back scrollTop ${reading.scrollTopAfterProgrammatic}; the horizontal strip moves vertically.`);
+}
+
+if (!reading.everyControlInsideStrip) {
+  failed = true;
+  console.error(`\nFAIL — control(s) clipped by the strip's box: ${reading.controlsOutsideStrip.join(" | ") || "(none reported)"}`);
 }
 
 if (failed) process.exit(1);

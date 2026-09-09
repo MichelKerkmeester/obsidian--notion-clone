@@ -45,6 +45,27 @@ export interface PhoneToolbarScrollReading {
   shortControls: { className: string; height: number }[];
   /** `getComputedStyle(...).scrollbarWidth === "none"` — the edge-only scrollbar ruling. */
   scrollbarWidthNone: boolean;
+  /** `scrollHeight - clientHeight` — 0 proves the strip sized itself to its tallest child, so no
+   *  control is clipped below the strip's bottom edge. */
+  verticalOverflowPx: number;
+  /** Computed `overflow-y` — the horizontal-only ruling wants `hidden`, never `auto`/`scroll`. */
+  overflowYComputed: string;
+  /** Computed `touch-action` — must contain `pan-x` and not `pan-y`, so a vertical gesture on the
+   *  strip drives the page, never the strip. */
+  touchActionComputed: string;
+  /** Computed `overscroll-behavior-x` — `contain` stops the strip's horizontal pan chaining into
+   *  the page's own scroll. */
+  overscrollBehaviorXComputed: string;
+  /** Reads back after forcing the strip 40px down — 0 proves the strip never scrolls vertically,
+   *  even though an `overflow: hidden` box is still a scroll container a gesture can move. */
+  scrollTopAfterProgrammatic: number;
+  /** Every control's box sits between the strip's top and bottom edges — the buttons must be
+   *  fully visible, not merely clipped cleanly. Horizontal membership is not asserted: the row
+   *  legitimately overflows horizontally (that is what the strip scrolls), and the last control's
+   *  horizontal reachability is already this reading's `lastControlReachable`. */
+  everyControlInsideStrip: boolean;
+  /** Class list of any control whose box poked above the strip's top or below its bottom. */
+  controlsOutsideStrip: string[];
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -134,8 +155,30 @@ export async function measurePhoneToolbarScroll(host: HTMLElement): Promise<Phon
   const tops = controls.map((control) => Math.round(control.getBoundingClientRect().top));
   const singleLine = new Set(tops).size <= 1;
   const rowHeight = Math.round(right.getBoundingClientRect().height);
-  const scrollbarWidth = view.getComputedStyle(right).scrollbarWidth;
+  const rightStyle = view.getComputedStyle(right);
 
+  // Vertical containment: the row legitimately overflows horizontally (that overflow is what the
+  // strip exists to scroll), so only top/bottom membership proves the 44px controls sit fully
+  // inside the strip rather than clipped by it.
+  const stripRect = right.getBoundingClientRect();
+  const controlsOutsideStrip: string[] = [];
+  for (const control of controls) {
+    const rect = control.getBoundingClientRect();
+    if (rect.top < stripRect.top - 1 || rect.bottom > stripRect.bottom + 1) {
+      controlsOutsideStrip.push(control.className);
+    }
+  }
+
+  // An overflow-hidden box is still a scroll container a gesture can move, so the vertical ruling
+  // has to hold twice: no measurable vertical overflow at all, and a forced 40px shift that reads
+  // back 0.
+  right.scrollTop = 40;
+  await new Promise<void>((resolve) => view.requestAnimationFrame(() => resolve()));
+  const scrollTopAfterProgrammatic = right.scrollTop;
+  right.scrollTop = 0;
+  await new Promise<void>((resolve) => view.requestAnimationFrame(() => resolve()));
+
+  const scrollbarWidth = rightStyle.scrollbarWidth;
   const originalScrollLeft = right.scrollLeft;
   right.scrollLeft = right.scrollWidth;
   await new Promise<void>((resolve) => view.requestAnimationFrame(() => resolve()));
@@ -152,6 +195,13 @@ export async function measurePhoneToolbarScroll(host: HTMLElement): Promise<Phon
     clientWidth: right.clientWidth,
     overflowsHorizontally: right.scrollWidth > right.clientWidth + 1,
     lastControlReachable,
+    verticalOverflowPx: right.scrollHeight - right.clientHeight,
+    overflowYComputed: rightStyle.overflowY,
+    touchActionComputed: rightStyle.touchAction,
+    overscrollBehaviorXComputed: rightStyle.overscrollBehaviorX,
+    scrollTopAfterProgrammatic,
+    everyControlInsideStrip: controlsOutsideStrip.length === 0,
+    controlsOutsideStrip,
     everyControlLabelled: missingLabels.length === 0,
     missingLabels,
     everyControlAtLeast44: shortControls.length === 0,

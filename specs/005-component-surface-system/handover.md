@@ -3364,3 +3364,34 @@ tasks.md T018; goal criterion ticked (operator device recheck stays open per D3)
 row 84 quoting the report verbatim, state "landed, awaiting device". Validated strict, RESULT:
 PASSED (005, 071 parent, 005-component-surface-system), scoped backfill each. Not pushed — a
 fresh verifier lands it.
+
+## 075-toolbar-labelled-buttons — the 0.0.36 vertical-scroll lock (2026-09-09)
+
+The operator's 0.0.36 iPhone report — *"The menu with horizontal overflow on mobile allows vertical
+movement which shouldnt happen"*, the labelled toolbar strip shifted DOWN with labels half-clipped below
+its bottom edge — root-caused in the packet's own lane at 402px: the strip was a two-axis gesture
+scroller. Every control paints an invisible 8px touch halo past its own box (`::before` inset −8px), so
+the strip's content sat 6px taller than its box (scrollHeight 58 / clientHeight 52), and the phone
+strip's later `overflow-y: visible` re-declaration computes to `auto` beside the `auto` x-axis — 6px of
+vertical travel, 6px of a 13px label ≈ the half-clipped label photographed.
+
+**Red → green** (extended `run-phone-toolbar-scroll.mjs`, 402px): before — vertical overflow 6px,
+`overflow-y`/`touch-action`/`overscroll-behavior-x` all computed `auto`, forced `scrollTop = 40` read
+back 6, exit 1; after — `overflow-y: hidden` on both phone strip rules, `touch-action: pan-x`,
+`overscroll-behavior-x: contain`, padding-bottom 2 → 8px parking the halo inside the strip's box (the
+height fixed, not the overflow hidden over a clipped row: row 52 → 58px, every control fully visible,
+`everyControlInsideStrip` true) — 0px / hidden / pan-x / contain / 0, exit 0. Horizontal behaviour
+unchanged (532/398, last control reachable).
+
+**The numbers**: `npx tsc --noEmit` 0; `npx vitest run` 1585/1585; `npm run build` 0;
+`node tools/live/sheet-grammar.mjs` 0; `node tools/live/render-assertions.mjs` 0;
+`node tools/storybook/verify-placement.mjs` 0 (418/420, 2 declared — unchanged); `npm run screenshots`
+×2 exit 0 both, 12 toolbar-capture movers reproduced identically in both runs (deterministic, 0 jitter,
+0 restores); `node tools/live/evidence.mjs --check-all` 0 (15 artefacts fresh, 12 stale re-run by their
+own writers); `node tools/naming/scan-comments.mjs` 0, `scan-failing-values.mjs` 0 (450 ticked, baseline
+148); `npm run gate` (foreground, `</dev/null`) **27 green, 0 red, exit 0** — re-run after the css-lane
+handover commit, still 27/0. css-lane taken over from `067-sheet-family-remediation` at its released
+4261be904bfb, released at 82894e5ae604. 075 docs: AC-007 (RED→GREEN numbers recorded), T019, goal
+criterion ticked on lane proof with the operator's device re-read riding the unticked AC-006 row;
+roadmap §4 row 84 quotes the report verbatim, §5.A 075 refreshed to 5/5. Validated strict: 075 and 005
+both RESULT: PASSED; graph metadata backfilled both. Not pushed — a fresh verifier lands it.

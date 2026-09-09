@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/075-toolbar-labelled-buttons"
-    last_updated_at: "2026-09-08T09:46:00Z"
+    last_updated_at: "2026-09-09T20:10:00Z"
     last_updated_by: "code-agent"
-    recent_action: "Implemented, verified (26 green gate), and documented; AC-001..005 Met"
-    next_safe_action: "Awaiting the operator's own device confirmation (AC-006)"
+    recent_action: "AC-007 landed (horizontal-only strip lock), gate 27 green"
+    next_safe_action: "Awaiting operator device confirmation (AC-006)"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "075-toolbar-labelled-buttons-implementation"
       parent_session_id: "075-toolbar-labelled-buttons-scaffold"
-    completion_pct: 90
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -64,6 +64,8 @@ resend the full text of this file in chat so the operator can update their copy.
   - Red: before the labels, the 402px lane's scrollWidth was 398 / clientWidth 398 with no overflow and no visible label; after, 532 / 398 with the last control reachable. The 009/044 lanes report identical results with and without the phone-only edit (the embedded/desktop shape they mount is untouched).
 - [x] Desktop toolbar decision recorded as an ADR
   - The measured failure it closes: the reference's labelled controls measure 44px tall on phone while this toolbar's controls were 28x28 before the fix; ADR-001 records desktop and the embedded/codeblock toolbar staying 28x28 icon-only, a decision recorded with its evidence, not a threshold.
+- [x] The labelled strip never scrolls vertically — horizontal-only, gestures included
+  - Watched it red before green: the extended `run-phone-toolbar-scroll.mjs` lane read 6px of vertical travel (scrollHeight 58 / clientHeight 52 — the 8px touch halo every control paints past its own box overhanging the strip's content box), computed `overflow-y`/`touch-action`/`overscroll-behavior-x` all `auto`, and a forced `scrollTop = 40` reading back 6; after the fix — `overflow-y: hidden` on both phone strip rules, `touch-action: pan-x`, `overscroll-behavior-x: contain`, padding-bottom 8px parking the halo inside the strip's box so the row sizes to its controls (52 → 58px, every control fully visible) — all six vertical assertions read 0 travel / hidden / pan-x / contain / 0 / inside, exit 0.
 - [ ] Operator device row recorded and left unticked
 <!-- /ANCHOR:completion -->
 
@@ -78,6 +80,7 @@ resend the full text of this file in chat so the operator can update their copy.
 |------|-------|----------|
 | Packet opened | Done | This scaffold, 2026-09-08 |
 | Implemented, verified, gate green | Done | `implementation-summary.md` §Verification, `acceptance-criteria.md` AC-001..005 Met, `npm run gate` 26 green |
+| Horizontal-only scroll lock (0.0.36 report) | Done | AC-007 + tasks.md T019: red 6px travel → green 0px, gate 27 green |
 
 ### Deviations and findings
 
