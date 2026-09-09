@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T23:25:00Z"
-    last_updated_by: "272-sheet-notion-audit"
-    recent_action: "Audited all phone sheets vs Notion; scaffolded 071/008-014"
+    last_updated_at: "2026-09-09T23:35:00Z"
+    last_updated_by: "271-testbed-clean-verify"
+    recent_action: "Landing-verified 074 testbed one-DB/two-views ruling; 3b15f925 on main"
     next_safe_action: "Execute 071/010/tasks.md, then 008, 009, 011-014; 007 awaits T001 capture"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
@@ -417,6 +417,10 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-09 ~23:35, 074-test-data-consolidation 0.0.36 testbed ruling leg LANDED+verified on `origin/main` — landing verifier, two rebases, pushed
+
+**Landed SHA `3b15f925` on `origin/main`** (leg commit `1257e34b` replayed twice — over 63fdcc5e as `fc425af9`, then over the 071/007-merged main as `8834369d`; verifier commit `3b15f925`; `git log -1 origin/main` read back). Verified on the merged tree: consolidation.test.mjs asserts 1 database + views exactly `["table", "board"]`; mutations re-proven — a gallery view added to `buildViews()` → RED 2 failed | 6 passed naming it ("Gallery is of type \"gallery\""), guarded-source revert (`catalogue.ts` to pre-leg) → 3 failed | 25 passed, restored 8/8 + 28/28. Screenshots ×4 exit 0 (480 captures; 0 movers across the first pair, 1 real mover on the second pair: chrome-view-switcher-mobile-dark 47px@Δ106, deterministic both runs, kept with its manifest bytes 11641→11587; styles.css untouched, no css-lane triplet); evidence 16/16 fresh (capture-device-parity re-derived after the mover moved its manifest input); vitest 1587→1588/1588 on the 071/007-merged main; tsc 0; build 0. Gate: run 1 FAIL — failing-values: the 074 ruling criterion recorded its numbers but not in the scanner's evidence vocabulary (bare 149 > baseline 148; 071's own bare row had already arrived via 12735ae9) — fixed by rewording the criterion ("RED: 2 failed | 6 passed, the view count was 6 [table, board, calendar, timeline, chart, table]"), baseline file untouched; run 2 PASS — 28 green, 0 red, exit 0. Validate 074 + 005 --strict RESULT: PASSED (074 pre-edit too); scan-comments 0; scan-failing-values 0 (148 = 148). Docs reconciled: roadmap §5 and §5.A 074 figures 3/4 → 4/5 (goal 4/5 — the added ruling criterion ticked; the Finance databases' on-device read stays the operator's, unticked), operator-checklist 074 section 3/4 → 4/5, both packets' graph-metadata backfilled. Both rebases' conflicts: 005/handover.md (both legs' §1 sections kept) and 8× generated artefacts (main's side taken, then re-derived). Pushed `58dc5563..3b15f925` after one non-fast-forward rejection (071/007 + the 272 sheet audit landed mid-verify), resolved by the second rebase + full re-derivation.
 
 ### 2026-09-09 ~23:20, 071/007-settings-sheet-strict-alignment card-grouping landing LANDED+verified on `origin/main` — landing verifier, one rebase, pushed
 
