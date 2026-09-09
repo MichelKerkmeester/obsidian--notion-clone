@@ -3591,3 +3591,43 @@ AC-005 (counts RED→GREEN, amending AC-002's six-view shape as superseded-not-w
 criterion added and ticked, `testbed-proposal.md` amended to the ruling. `roadmap.md` §4 row 87
 quotes the ruling verbatim. Validated strict: `074` and `005` both RESULT: PASSED; graph metadata
 backfilled both. Not pushed — a fresh verifier lands it.
+## 071/010-sheet-copy-touch-idiom — the sheets' copy, touch idiom (2026-09-10)
+
+The audit's §3.16 content finding closed: the four sheet-reachable strings that told a phone user
+to click, double-click or hover now say tap (and 轻点) in all three locales — `panel.emptyFilters`
+and `panel.emptySorts` lost their "below" with the gesture, `panel.doubleClickEdit` reads
+"Double-tap to edit" / 轻点两下编辑属性 / 輕點兩下編輯屬性 (the one shared-string note, recorded:
+desktop's tooltip now says tap too, and its `dblclick` fires from a double-tap in the mobile
+webview, so the sheet is satisfied exactly), and `viewConfig.computedSync.manualHint` keeps its
+button name. The dictionary's ellipsis is spelled one way — U+2026, 23/23/23 — and the property
+label is one word: `panel.field` = Property/属性/屬性, the packet's recorded default D5 (no
+operator ruling had been taken; it is the same word as `filter.field` and of `panel.addColumn` /
+`panel.searchProperties`), unit-held. Fifty-two lines in `src/i18n.ts`; the seven out-of-scope
+cell/desktop gesture strings are byte-identical.
+
+**RED/GREEN**: the new sheet-copy clause in `tools/live/sheet-grammar.mjs` (the sheet-reachable key
+set derived at run time — every dotted identifier the four producers reference, 237 keys — and
+every key read through the shipped `t()`/`setLocale` in the harness bundle, all three locales) ran
+**RED: 14 gesture rows + 2 locale-parity rows, the failing set exactly the four keys and none of
+the seven**; after the dictionary change, **GREEN: 0 of 237 keys matches in any locale, 0 parity
+rows, 2349 PASS / 0 FAIL, exit 0**. The clause itself discovered `viewConfig.computedSync.manualDesc`'s
+two zh rows (EN gestureless, zh kept 点击/點擊 — its EN untouched). `src/i18n.test.ts` (created)
+holds the dictionary beneath: one-ellipsis-per-dictionary, gesture parity, and the one-word label —
+its ellipsis clause proven by the mandated mutation (one ASCII ellipsis reintroduced → exactly
+1 clause fails → restored → 11/11; 12/12 in the final file).
+
+**The numbers**: tsc 0; vitest 1598/1598 (158 files); build 0; sheet-grammar 0; render-assertions
+0; verify-placement 0 (418/420, 2 declared); screenshots ×2, both 0/480 (8 two-run movers kept —
+the sort empty state's 518×23px hint band on all four `constructed-sort-panel-calendar-*` shots and
+the 12–14×4px `Custom property…` ellipsis box on all four `constructed-view-config-*`; 2 one-run
+1–4px@Δ1 jitters restored, their manifest bytes with them; screenshots:verify 0); evidence 16/16
+fresh (capture-device-parity re-ran); gate 28/0 once, from the final state; scan-comments 0;
+scan-failing-values 0; validate --strict `RESULT: PASSED` ×3 (this packet, the 071 parent's first
+RESULT, the 005 track) after the scoped backfill of each.
+
+**Open**: AC-007's filter half — the corpus has no scenario for the filter's empty state, so its
+before/after is the lane's printed `t()` values, not an image (adding it is outside this packet's
+frozen Files-to-Change; 008's leg owns the filter sheet); the two movers' `sources` lists never
+named `src/i18n.ts`, which is why the freshness check alone could not have caught them — recorded
+in the packet's goal.md, unfixed here. AC-008, the operator's own device read (D3), closes the
+packet; until then: landed, awaiting device. Not pushed — a fresh verifier lands it.

@@ -707,6 +707,23 @@ const mountFuzzySuggestStandIn = (title) => {
   return { panel: modalEl, close };
 };
 
+window.__sheetCopyProbe = (keys) => {
+  // Reads every key through the shipped t() lookup in all three locales, so the lane measures
+  // what a phone sheet actually renders rather than the source text. English is restored
+  // because the bundle shares one i18n module with the geometry checks mounted around it.
+  const locales = ["en", "zh-CN", "zh-TW"];
+  const rows = [];
+  try {
+    for (const locale of locales) {
+      setLocale(locale);
+      for (const key of keys) rows.push({ key, locale, value: t(key) });
+    }
+  } finally {
+    setLocale("en");
+  }
+  return rows;
+};
+
 window.__sheetGrammar = (scenario) => {
   if (scenario.renderer === "confirm") {
     const { panel, close } = mountConfirmStandIn();
@@ -4340,6 +4357,48 @@ try {
     console.log(`  ${stackedToThree ? "PASS" : "FAIL"}  the same real dropdown stacks to a third sheet over a dialog-role hop (${namedPairControl.afterSecondHop} sheets)`);
     console.log(`  ${dropdownBecameOwnSheet ? "PASS" : "FAIL"}  the dropdown became its own independent sheet rather than being absorbed`);
   }
+  console.log("");
+
+  // Sheet copy: no string a phone sheet can render names a gesture a phone cannot perform, and
+  // no locale keeps a gesture its English dropped. The key set is derived, never listed: every
+  // dotted identifier the sheet producers reference by name. Dynamically built keys are
+  // invisible here; the clause holds what the producers name literally.
+  console.log("sheet-grammar: sheet copy — a phone sheet's strings name no pointer gesture, in any locale\n");
+  const SHEET_COPY_PRODUCERS = [
+    "filter-panel-renderer.ts",
+    "sort-panel-renderer.ts",
+    "view-config-panel-renderer.ts",
+    "column-manager-renderer.ts",
+  ];
+  const sheetCopyKeys = new Set();
+  for (const producer of SHEET_COPY_PRODUCERS) {
+    const source = readFileSync(join(REPO, "src", "views", producer), "utf8");
+    for (const match of source.matchAll(/"([a-z][a-zA-Z0-9]*(?:\.[a-zA-Z0-9]+)+)"/g)) {
+      sheetCopyKeys.add(match[1]);
+    }
+  }
+  const sheetCopyRows = await page.evaluate((keys) => window.__sheetCopyProbe(keys), [...sheetCopyKeys].sort());
+  const gestureIn = (row) => (row.locale === "en" ? /click|hover/i : /点击|點擊|单击|單擊|雙擊|双击|點選|懸停|悬停/).test(row.value);
+  const sheetCopyGestureRows = sheetCopyRows.filter(gestureIn);
+  if (sheetCopyGestureRows.length > 0) {
+    failures.push(`sheet copy: ${sheetCopyGestureRows.length} sheet-reachable string(s) still name a pointer gesture: ${[...new Set(sheetCopyGestureRows.map((row) => `${row.key} (${row.locale})`))].join(", ")}`);
+  }
+  console.log(`  ${sheetCopyGestureRows.length === 0 ? "PASS" : "FAIL"}  0 of the ${sheetCopyKeys.size} sheet-reachable keys name click, double-click or hover, in any locale (${sheetCopyGestureRows.length} row(s) match)`);
+  const sheetCopyParity = [];
+  const sheetCopyRowsByKey = new Map();
+  for (const row of sheetCopyRows) {
+    if (!sheetCopyRowsByKey.has(row.key)) sheetCopyRowsByKey.set(row.key, []);
+    sheetCopyRowsByKey.get(row.key).push(row);
+  }
+  for (const [key, rows] of sheetCopyRowsByKey) {
+    const english = rows.find((row) => row.locale === "en");
+    if (!english || gestureIn(english)) continue;
+    for (const row of rows) {
+      if (row.locale !== "en" && gestureIn(row)) sheetCopyParity.push(`${key} keeps a gesture in ${row.locale} that English dropped`);
+    }
+  }
+  if (sheetCopyParity.length > 0) failures.push(`sheet copy: ${sheetCopyParity.length} locale-parity row(s): ${sheetCopyParity.join("; ")}`);
+  console.log(`  ${sheetCopyParity.length === 0 ? "PASS" : "FAIL"}  no locale keeps a pointer gesture its English dropped (${sheetCopyParity.length} row(s) differ)`);
   console.log("");
 
   await page.close();

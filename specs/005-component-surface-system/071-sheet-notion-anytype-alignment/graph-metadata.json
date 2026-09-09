@@ -67,7 +67,9 @@
       "011-record-sheet-header-and-icons/goal.md",
       "012-sort-and-group-sheet-rows/goal.md",
       "013-sheet-input-and-action-order/goal.md",
-      "014-sheet-polish/goal.md"
+      "014-sheet-polish/goal.md",
+      "src/i18n.ts",
+      "tools/live/sheet-grammar.mjs"
     ],
     "entities": [
       {
@@ -92,6 +94,18 @@
         "name": "manifest.json",
         "kind": "config",
         "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
         "source": "derived"
       },
       {
@@ -149,13 +163,13 @@
         "source": "derived"
       },
       {
-        "name": "1. DURABLE DIRECTIVE",
-        "kind": "heading",
+        "name": "their",
+        "kind": "key_phrase",
         "path": "goal.md",
         "source": "derived"
       },
       {
-        "name": "Decisions",
+        "name": "1. DURABLE DIRECTIVE",
         "kind": "heading",
         "path": "goal.md",
         "source": "derived"
@@ -163,14 +177,14 @@
     ],
     "causal_summary": "The operator reports three separate sheet-family defects in the same batch — the settings sheet's UI/UX (R5), the add-property / property-type picker sheet rendering as a tall sheet that covers the note header while the keyboard is up (R6, screenshot evidence) — and asks a fourth, structural question: does the app actually have screenshot and story coverage for every sheet it can open, checked one by one against Notion and Anytype (R7)?",
     "created_at": "2026-09-08T06:24:02Z",
-    "last_save_at": "2026-09-09T21:07:21.361Z",
+    "last_save_at": "2026-09-09T22:15:52.920Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:6a73149f3becc084b5cbeb1d48da49b6445c5cc6a84439a535d9e27a3899312d",
+    "source_fingerprint": "sha256:ac564d14b487114e21387ac9aa6a5bc485903210009bee496224b3a42fa4c7bb",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "4218469772e66fb4a77e7cff21a52182d8f0e472fa2816a3bbebd8dcba0d6398"

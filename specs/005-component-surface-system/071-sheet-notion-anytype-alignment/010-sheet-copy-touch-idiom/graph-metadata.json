@@ -39,15 +39,17 @@
       "plan"
     ],
     "importance_tier": "normal",
-    "status": "planned",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "implementation-summary.md",
       "src/i18n.ts",
-      "tools/live/sheet-grammar.mjs"
+      "tools/live/sheet-grammar.mjs",
+      "src/i18n.test.ts"
     ],
     "entities": [
       {
@@ -81,6 +83,12 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "i18n.ts",
         "kind": "code",
         "path": "src/i18n.ts",
@@ -90,6 +98,12 @@
         "name": "sheet-grammar.mjs",
         "kind": "file",
         "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.test.ts",
+        "kind": "test",
+        "path": "src/i18n.test.ts",
         "source": "derived"
       },
       {
@@ -181,23 +195,11 @@
         "kind": "heading",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Phase B: RED — assert the count",
-        "kind": "heading",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Phase C: Implement GREEN",
-        "kind": "heading",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "A phone user opening an empty Filter sheet is told to click something below",
     "created_at": "2026-09-09T21:01:05.656Z",
-    "last_save_at": "2026-09-09T21:07:20.911Z",
+    "last_save_at": "2026-09-09T22:20:51.298Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -205,14 +207,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d8da72f17974d1664222e4ac59ae4c4b5a7a634a9452a665a68bedcf22319586",
+    "source_fingerprint": "sha256:9b563966b434dbabcb7bbfbd11b69a917bf8f1517862b0fe102c13583f3e4e78",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "7f452002c74b5cd3704522b5a500493c9e4935ec0cc3e77469c369c9e7438f6c",
+      "spec.md": "a7970b63119acb2ed3aeeefbaae23c9ab531ac4a015734fa8817f3ea0ef8c804",
       "plan.md": "d1f400ef8609fb2f363c805cac00625291213501c76b52915f9da7dbf3eab971",
-      "tasks.md": "cd9618b92c4a9eeb75d0bef17127731f184ef43ed4a04bfb9e73d8ea478d2090"
+      "tasks.md": "d71d6a83cc0f44f76a1d22a76ccc9f1dea9b82087e6f4b99f077626eaa2d26df",
+      "implementation-summary.md": "cdcc693bc5468c6b4f409274ead77b112d1c3549d01d9c10fb2c537560c77a2c"
     },
     "last_active_child_id": null,
     "last_active_at": null

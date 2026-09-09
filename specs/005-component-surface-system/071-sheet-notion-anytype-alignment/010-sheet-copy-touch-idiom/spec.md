@@ -32,7 +32,7 @@ contextType: "implementation"
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P1 |
-| **Status** | Draft — scaffolded, not implemented |
+| **Status** | LANDED 2026-09-10 — awaiting the operator's device read (D3) |
 | **Created** | 2026-09-09 |
 | **Branch** | `worktrees/272-sheet-notion-audit` |
 | **Parent Spec** | `../spec.md` |
@@ -180,7 +180,7 @@ Every string a phone sheet shows describes something the phone can do, the dicti
 
 ## 12. OPEN QUESTIONS
 
-- Does the sheet-facing property label read "Property" everywhere, aligning with Notion and with our own `panel.addColumn`, or is "Field" retained as a deliberate distinction the operator wants kept?
+- Does the sheet-facing property label read "Property" everywhere, aligning with Notion and with our own `panel.addColumn`, or is "Field" retained as a deliberate distinction the operator wants kept? — **Answered 2026-09-10 by the packet's own recorded default** (goal.md D5; no operator ruling had been taken): **Property** — the same word as `filter.field` in every locale, and the same word `panel.addColumn` ("Add property" / 添加属性 / 新增屬性) and `panel.searchProperties` already use. Held by a unit clause in `src/i18n.test.ts`
 <!-- /ANCHOR:questions -->
 
 ---
