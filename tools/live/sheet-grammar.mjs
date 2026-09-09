@@ -1897,6 +1897,10 @@ window.__shellDepthCapReplaceNegativeControl = () => {
   const result = {
     sheetCount: document.querySelectorAll(".obnotion-mobile-bottom-sheet").length,
     childBecameSheet: child.modalEl.classList.contains("obnotion-mobile-bottom-sheet"),
+    // The exemption the depth cap grants this chain must be STRUCTURAL — the third hop's own
+    // registered parent never carried a replace — not the census's blindness. Read here so the
+    // count below is proven to skip this chain for the reason the criterion names.
+    childParentOffersReplace: overlayStack.getRegisteredParent(child.modalEl)?.replace !== undefined,
   };
 
   childShell.destroy();
@@ -1905,6 +1909,46 @@ window.__shellDepthCapReplaceNegativeControl = () => {
   for (const standIn of [grandparent, parent, child]) {
     if (standIn.container.isConnected) standIn.container.remove();
   }
+  return result;
+};
+
+// The third control, for the ONE outcome neither of the controls above can produce: a governed
+// registration that still stacks. The acceptance case absorbs (the third hop never registers), and
+// the dialog control exempts (no replace is ever offered), so neither can show the census count
+// REGISTER — a predicate pinned only by greens cannot tell counting from blindness. The declined
+// callback is the documented third state of the capability (register stacks the panel when the
+// parent's replace returns false): the third level then stacks exactly as an ungoverned one would,
+// but through a parent that DID offer the cap a replace, so the census must count it.
+window.__shellDepthCapDeclined = () => {
+  clearStrayOverlays();
+  const makeLevel = (title, replace) => {
+    const standIn = createHostModalStandIn();
+    const heading = document.createElement("h3");
+    heading.textContent = title;
+    standIn.contentEl.appendChild(heading);
+    const releaseChrome = attachSheetChromeToModal(standIn.modalEl, true, () => undefined, {
+      title,
+      getTitle: () => title,
+      ...(replace ? { replace } : {}),
+    });
+    return { standIn, releaseChrome };
+  };
+  const level1 = makeLevel("Level One");
+  const level2 = makeLevel("Level Two", () => false);
+  const level3 = makeLevel("Level Three");
+  const third = level3.standIn.modalEl;
+  const result = {
+    thirdBecameSheet: third.classList.contains("obnotion-mobile-bottom-sheet"),
+    thirdRegistrationDepth: overlayStack.getDepth(third),
+    thirdParentOffersReplace: overlayStack.getRegisteredParent(third)?.replace !== undefined,
+  };
+  level3.releaseChrome();
+  level2.releaseChrome();
+  level1.releaseChrome();
+  for (const level of [level3, level2, level1]) {
+    if (level.standIn.container.isConnected) level.standIn.container.remove();
+  }
+  clearStrayOverlays();
   return result;
 };
 
@@ -2301,6 +2345,11 @@ const measureStackedPair = async (pair) => {
     .filter(isVisible)
     .map((row) => row.getBoundingClientRect().height);
   const depthAtRest = Number.parseInt(child.style.getPropertyValue("--obnotion-sheet-depth"), 10);
+  // The registration facts the depth-census reads: the surface this child's own registration
+  // answers to, and whether that parent offered the depth cap a replace. Read while the
+  // registration is still live — the gesture below dismisses it, and a surface registered after
+  // the fact would answer for a chain that no longer exists.
+  const registeredParent = overlayStack.getRegisteredParent(child);
   const childBottomAtRest = Number.parseFloat(child.style.getPropertyValue("--obnotion-mobile-sheet-bottom"));
   const parentBottomAtRest = Number.parseFloat(parent.style.getPropertyValue("--obnotion-mobile-sheet-bottom"));
   const parentDragBefore = rectSnapshot(parent);
@@ -2478,6 +2527,7 @@ const measureStackedPair = async (pair) => {
     dragParentUnchanged,
     depth: depthAtRest,
     expectedDepth,
+    parentOffersReplace: registeredParent?.replace !== undefined,
     childOptionRows: { count: optionRowHeights.length, minHeight: optionRowHeights.length ? Math.min(...optionRowHeights) : null },
     overflow: hasOverflow && hasFade,
     overflowMeasured: { scrollHeight: scrollHost.scrollHeight, clientHeight: scrollHost.clientHeight, fade: hasFade },
@@ -3154,8 +3204,10 @@ try {
   }
   console.log("");
 
+  const stackedPairReports = [];
   for (const pair of REGISTERED_STACKED_PAIRS) {
     const report = await page.evaluate((shape) => window.__stackedSheetGrammar(shape), pair);
+    stackedPairReports.push(report);
     console.log(`sheet-grammar: stacked pair — ${pair.name}\n`);
     if (report.error) {
       failures.push(`${pair.name}: ${report.error}`);
@@ -3234,6 +3286,38 @@ try {
     }
     console.log("");
   }
+
+  // The criterion's own wording, as ONE count over the whole registered set: third hops that still
+  // STACKED although the depth cap governed them — their registered parent offered the cap a
+  // replace callback, and the hop reached depth 3 anyway. The two menu-stack pairs read depth 3
+  // too, but their parents never offered a replace, so the exemption reads structurally here
+  // rather than by naming which pairs may. A governed registration whose parent DECLINES the offer
+  // is the documented way a governed hop still stacks; the control at the end of this block proves
+  // the census counts it, so this zero is a measured one, not the absence of a measurement.
+  console.log("sheet-grammar: depth cap census — no governed third hop stacks\n");
+  const governedStacked = stackedPairReports.filter((report) => !report.error && report.depth === 3 && report.parentOffersReplace);
+  if (governedStacked.length > 0) {
+    failures.push(`depth cap census: ${governedStacked.length} governed third hop(s) still stacked at depth 3 (${governedStacked.map((report) => report.name).join(", ")}) — the cap should have absorbed them`);
+  }
+  console.log(`  ${governedStacked.length === 0 ? "PASS" : "FAIL"}  the count of stacked sheets at depth 3 reads 0 (${governedStacked.length} governed, of ${stackedPairReports.filter((report) => !report.error).length} pairs mounted)`);
+  for (const name of ["record column submenu", "import confirm dropdown chain"]) {
+    const report = stackedPairReports.find((entry) => entry.name === name);
+    if (!report || report.error) {
+      failures.push(`depth cap census: ${name} did not mount, so its depth-3 exemption is unread`);
+      console.log(`  FAIL  ${name} — did not mount`);
+      continue;
+    }
+    const exempt = report.depth === 3 && report.parentOffersReplace === false;
+    if (!exempt) failures.push(`depth cap census: ${name} reads depth ${report.depth} with parentOffersReplace=${report.parentOffersReplace} — a menu-stack the cap does not govern must reach depth 3 through a parent that never offered a replace`);
+    console.log(`  ${exempt ? "PASS" : "FAIL"}  ${name} keeps depth 3, its parent never offered the cap a replace (${report.parentOffersReplace})`);
+  }
+  const declined = await page.evaluate(() => window.__shellDepthCapDeclined());
+  {
+    const counted = declined.thirdBecameSheet && declined.thirdRegistrationDepth === 3 && declined.thirdParentOffersReplace;
+    if (!counted) failures.push(`depth cap census: a governed registration whose parent declined read thirdBecameSheet=${declined.thirdBecameSheet}, registration depth ${declined.thirdRegistrationDepth}, parentOffersReplace=${declined.thirdParentOffersReplace} — the census must count it`);
+    console.log(`  ${counted ? "PASS" : "FAIL"}  a governed registration whose parent declines stacks and is counted (sheet=${declined.thirdBecameSheet}, depth ${declined.thirdRegistrationDepth}, governed=${declined.thirdParentOffersReplace})`);
+  }
+  console.log("");
 
   const stackingControl = await page.evaluate(() => window.__stackedSheetGrammarNegativeControl());
   console.log("sheet-grammar: stacking negative control — child mounted without parent treatment\n");
@@ -4107,6 +4191,9 @@ try {
     const stackedNormally = depthCapControl.sheetCount === 3 && depthCapControl.childBecameSheet === true;
     if (!stackedNormally) failures.push(`depth cap negative control: a dialog-role chain measured ${depthCapControl.sheetCount} sheets (childBecameSheet=${depthCapControl.childBecameSheet}), wanted 3 sheets and true — the cap must not govern a role that never offers a replace`);
     console.log(`  ${stackedNormally ? "PASS" : "FAIL"}  a dialog-role three-deep chain stacks normally (${depthCapControl.sheetCount} sheets, childBecameSheet=${depthCapControl.childBecameSheet})`);
+    const exemptStructurally = depthCapControl.childParentOffersReplace === false;
+    if (!exemptStructurally) failures.push(`depth cap negative control: the dialog-role third hop's registered parent offered a replace (${depthCapControl.childParentOffersReplace}) — the census exemption must be structural, not the census's blindness`);
+    console.log(`  ${exemptStructurally ? "PASS" : "FAIL"}  the dialog-role third hop's parent never offered the cap a replace (${depthCapControl.childParentOffersReplace})`);
   }
   console.log("");
 

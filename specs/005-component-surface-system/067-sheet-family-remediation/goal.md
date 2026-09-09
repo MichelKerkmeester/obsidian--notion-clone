@@ -120,16 +120,25 @@ never resolve them silently.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] **No third stacked sheet exists, and the replace move has a body producer.** **Today: no cap
-      anywhere in the stack API.** `register` derives `parentId` from the current top sheet with no
-      depth check (`overlay-stack.ts:94-96`) and `getDepth` walks the chain unbounded (`:194-209`);
-      the only depth-related guard is the cycle-protected parent walk (`:199-207`). The replace move
-      exists as a header title swap and a back control (`surface-shell.ts:200-231`, `:428-432`) with
-      no body producer, so the two pairs `051` AC-003 enumerates as converting —
-      `properties property type picker` and `add view property picker` — are **inexpressible**. Done
-      is: both pairs assert **replace**, the count of stacked *sheets* at depth 3 reads **0**, and
-      `record column submenu` and `import confirm dropdown chain` keep `depth: 3` untouched, being
-      menu-stacks the cap does not govern.
+- [x] **No third stacked sheet exists, and the replace move has a body producer.** **Now: green —
+      the census this row's own Done clause names reads 0.** The cap and the body producer landed
+      with the packet and its follow-ups: `overlayStack.register` offers a would-be third sheet to
+      its resolved parent's own `replace` callback once that parent is two deep (scoped to sheets,
+      opt-in — only `panel`/`condition panel` role shells register one, so a menu-stack's exemption
+      is structural, not a role read), and `attemptReplace` (`surface-shell.ts`) grafts the third
+      level into the parent's content root, hides the absorbed body's own chrome, swaps the header
+      title and shows the back control. Both named pairs assert **replace**: `properties property
+      type picker`'s registry entry is retargeted to the real panel-role shell (no `depth: 3` — the
+      absorbed third hop never mounts), and `add view property picker` is genuinely two-level with
+      no third level to cap (traced at T020; verified in the tree, not redone). The Done clause's
+      count is now asserted directly: a depth-cap census block in `tools/live/sheet-grammar.mjs`
+      reads every registered pair's child registration through the stack's public
+      `getRegisteredParent` and counts third hops that STACKED although governed — **0 governed of
+      32 pairs mounted** — while `record column submenu` and `import confirm dropdown chain` keep
+      `depth: 3` through parents whose registration never offered a replace. Two controls prove the
+      zero is measured, not vacuous: a governed registration whose parent DECLINES the offer stacks
+      at depth 3 and is counted, and mutating the cap's own threshold takes the lane to exit 1 on
+      exactly the governed pair.
 - [ ] **A `menu`-role surface presents on the phone as a handle-less anchored card, and the
       presentation path reads the role.** **Follow-up leg: handle-less, close-retained, parent-
       dimmed are all done and measured live; the "anchored" half of this row's own wording is

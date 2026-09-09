@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-09T13:00:53.745Z",
+  "measuredAt": "2026-09-09T14:14:18.680Z",
   "inputs": {
     "tools/live/render-assertions.mjs": "463ee6efdd93",
     "tools/live/render-assertion-harness.ts": "c51afbe78a1c",

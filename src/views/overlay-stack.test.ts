@@ -220,6 +220,29 @@ describe("OverlayStack", () => {
     expect(stack.getDepth(child)).toBe(2);
   });
 
+  it("resolves the registered parent a panel's own registration answered to", () => {
+    const stack = new OverlayStack();
+    const doc = createDocument();
+    const grandparent = createElement(doc);
+    const parent = createElement(doc);
+    const child = createElement(doc);
+
+    stack.register({ id: "grandparent", panel: grandparent, isSheet: true, close: () => undefined });
+    // Declining, not accepting: an accepted offer absorbs the third level, it never registers, and
+    // there is no registration whose parent link a depth proof could read. A declined offer
+    // registers the third level with its parent link intact — exactly the surface such a proof reads.
+    stack.register({ id: "parent", panel: parent, isSheet: true, close: () => undefined, replace: () => false });
+    stack.register({ id: "child", panel: child, isSheet: true, close: () => undefined });
+
+    // The registration's own parent — the surface the depth cap consulted — not the nearest
+    // registration beneath it in stack order, which a rebuilt or interleaved surface disagrees with.
+    expect(stack.getRegisteredParent(child)?.id).toBe("parent");
+    expect(stack.getRegisteredParent(child)?.replace).toBeDefined();
+    expect(stack.getRegisteredParent(parent)?.id).toBe("grandparent");
+    expect(stack.getRegisteredParent(parent)?.replace).toBeUndefined();
+    expect(stack.getRegisteredParent(grandparent)).toBeUndefined();
+  });
+
   it("keeps a child attached to a parent that is rebuilt in place", () => {
     const stack = new OverlayStack();
     const doc = createDocument();

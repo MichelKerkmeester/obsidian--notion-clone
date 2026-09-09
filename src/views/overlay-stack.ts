@@ -234,6 +234,20 @@ export class OverlayStack {
     return this.depthOf(surface);
   }
 
+  /**
+   * The registered surface a panel's own registration answers to, by the same parentId walk
+   * `getDepth` follows — not the nearest registration beneath it in stack order, which a rebuilt
+   * or merely interleaved popover can disagree with. The depth cap resolved its absorb-or-stack
+   * decision against this surface, so a proof of that decision reads it here rather than inferring
+   * it from order. Undefined when the panel is itself the root of its chain (or never registered).
+   */
+  getRegisteredParent(panel: HTMLElement): OverlaySurface | undefined {
+    const surface = this.surfaces.find((candidate) => this.livePanel(candidate) === panel);
+    if (!surface?.parentId) return undefined;
+    return this.surfaces.find((candidate) =>
+      candidate.panel.ownerDocument === surface.panel.ownerDocument && candidate.id === surface.parentId);
+  }
+
   /** The same walk `getDepth` does, starting from a surface already in hand rather than a panel. */
   private depthOf(surface: OverlaySurface): number {
     let depth = 1;

@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T15:30:00Z"
-    last_updated_by: "258-goal-refresh-residuals"
-    recent_action: "Reconciled 3 residuals in docs; T022 closed; gate 27/0, vitest 1584/1584, replay 0 reversed"
-    next_safe_action: "Everything past this point is operator-owned; confirm the 0.0.36 tag before 067 device rows"
+    last_updated_at: "2026-09-09T16:25:00Z"
+    last_updated_by: "260-sheet-depth-cap"
+    recent_action: "067 census: 0 governed/32 pairs; goal 5/7; gate 27/0"
+    next_safe_action: "Operator device rows only: 067/061 iOS pass; confirm 0.0.36 tag"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
     key_files:
@@ -30,8 +30,8 @@ _memory:
     open_questions:
       - "Does a Notion finding that contradicts a landed Anytype ruling ever become more than Proposed"
     answered_questions:
-      - "256: the 23 engine-parity disagreements are gated, not suppressed — ADR-001, exit 1 on any new/grown; flicker fixed by settled reads; M1 judged inherent, not fixable-at-stylesheet"
-      - "071/003 landed+verified twice-rebased (81b6e328): goal 3/3, 071 criterion 2/4; both mutations replayed red→restored; 0.0.34 (e75a979c) carries 008/002's redirect, discharging its AC-007 — 008's docs still to tick"
+      - "256: the 23 engine-parity disagreements are gated (ADR-001, exit 1 on growth); flicker fixed by settled reads; M1 judged inherent, not fixable at stylesheet"
+      - "071/003 landed+verified twice-rebased (81b6e328): goal 3/3, 071 criterion 2/4; both mutations replayed red→restored"
       - "068 renames to obnotion- with a data.json migration, author MichelKerkmeester, repo obsidian_notion-clone"
       - "The 3500ms dwell and the ::before -19px close hit survived this verifier: mutations red→restored, gate 27/0"
       - "GLM route: --provider llmgateway --model glm-5.3-flash --thinking high (max hangs on launch)"
@@ -65,6 +65,76 @@ flight on `main`** (`manifest.json`, `package.json`, `versions.json`, `main.js`,
 and does not touch specs; 0.0.35 at `97395196` remains the installed build until that tag and its
 Release/Gates runs are confirmed. Every open row past this point stays operator-owned; no agent
 ticks one.
+
+### 2026-09-09 ~16:25, `067`'s last agent-doable row CLOSED — the depth-cap census leg, worktree `260-sheet-depth-cap`
+
+**What this leg added:** the criterion's own census clause is now asserted. goal.md's depth-cap row
+
+("the count of stacked *sheets* at depth 3 reads **0**") had its mechanism, its unit tests and its
+
+named-pair proofs already landed (`c2ee4f6d` cap+producer, `b327f1de` T020 retargeting) — what was
+
+missing was the COUNT, read as one number over the whole registered set. Landed: a depth-cap census
+
+block in `tools/live/sheet-grammar.mjs` that reads every registered pair's child registration
+
+through the stack's new public `getRegisteredParent` (`overlay-stack.ts`, +1 read method, unit-tested
+
+in `overlay-stack.test.ts` with the declined-offer case) and counts third hops that STACKED although
+
+their registered parent offered the cap a replace: **0 governed of 32 pairs mounted**.
+
+`record column submenu` and `import confirm dropdown chain` keep `depth: 3` with
+
+`parentOffersReplace=false` — the menu-stack exemption asserted structurally, not by name — and the
+
+dialog-role negative control additionally asserts its own third hop's parent never offered a
+
+replace. Two controls prove the zero is a measurement, not vacuity: a governed registration whose
+
+parent DECLINES the offer (`__shellDepthCapDeclined`, exercising the documented third state of the
+
+capability) stacks at depth 3 and IS counted (sheet=true, depth 3, governed=true), and the dialog
+
+control proves the census can look at a stacked governed-shaped chain and correctly skip it.
+
+**Verified by mutation:** weakening the cap's threshold to `>= 3` takes the lane to exit 1 with
+
+`1 governed third hop(s) still stacked (properties property type picker)` plus 10 further failures
+
+(child depth 3 want 2, 2→3 sheets, graft/title/back geometry, the real-call-graph absorption) — all
+
+green again on revert, byte-identical diff. goal.md row ticked 5/7 (the criterion's other clauses —
+
+both named pairs assert replace, add-view traced two-level — were closed at `b327f1de` and verified
+
+in the tree, not redone); AC-011 (operator iOS pass) stays open, never agent-ticked.
+
+**Verified by number:** `npx tsc --noEmit` 0; `npx vitest run` 1585/1585 in 157 files (1 new test),
+
+exit 0; `npm run build` 0; `node tools/live/sheet-grammar.mjs` exit 0, **2333 PASS / 0 FAIL**
+
+(previously 2327; +6 from the census block and the two control assertions); `render-assertions.mjs`
+
+0; `verify-placement.mjs` 418/420 (2 declared, the recorded steady shape); `evidence.mjs
+
+--check-all` re-stamped twice (sheet-rebuild.json, then capture-device-parity.json after the
+
+manifest restamp) → 0; screenshots ×2 exit 0, 480 captures, **3 mover PNGs, all jitter**
+
+(maxDelta 6/2/1 ≤ 12, moved in run 1 only) → restored from HEAD, 0 real movers, manifest diff is
+
+exactly the 8 depth3 entries' `overlay-stack.ts` freshness stamp `cca7015c7a07 → 93e86708c6b3`;
+
+gate 27 green 0 red, exit 0; scan-comments 0, scan-failing-values 0. Changed: `overlay-stack.ts`
+
+(+14), `overlay-stack.test.ts` (+23), `tools/live/sheet-grammar.mjs` (+87), plus regenerated
+
+`main.js`, `renderer-coverage.json`, `sheet-rebuild.json`, `screenshots/manifest.json`.
+
+roadmap §5.A 067 row **57% → 71% (5/7)**; 005/goal.md DONE-table row reconciled. 067 remains open
+
+only on the declined-anchoring row (deliberately carried) and the operator's device read.
 
 ### 2026-09-09 ~15:05, `067` T015/T020/T021 residuals LANDED+verified on `origin/main` — landing-verified, rebased, pushed, worktree `257-sheet-family-residuals`
 
