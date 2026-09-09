@@ -2630,7 +2630,7 @@
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
-      "bytes": 11641,
+      "bytes": 11587,
       "fixtureOf": "constructed-toolbar"
     },
     {

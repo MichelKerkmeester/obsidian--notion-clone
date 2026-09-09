@@ -394,7 +394,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] The board card's "Pinned"-style control specifically renders as a checkbox with its real value, not a bare "0" (dependent on 070 restoring property reads) Pre-fix the value slot read as a bare "0" through 070's then-broken property read; recorded 0 bare-"0" occurrences in the mounted board card (36 checkbox fields, 18 checked). Landing verification: the control-geometry pass prints these numbers but only FAILS on field presence (boardCheckboxFields === 0); the 18-checked and 0-bare-"0" figures are informational output, not assertions — criterion unticked until the pass asserts the value.
 
-## 074-test-data-consolidation — 3/4
+## 074-test-data-consolidation — 4/5
 
 - [ ] Finance databases confirmed visible once 070 lands, documented as the kept second dataset — code-side proven and documented (ADR-0005, the cold-cache lane, `testbed-proposal.md`); the on-device read of the operator's own Finance databases is the operator's row and this leg does not tick it
 
