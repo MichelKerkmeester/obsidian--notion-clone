@@ -40,6 +40,9 @@ export class ColumnRenameModal extends DbModal {
     private col: ColumnDef,
     private allColumns: ColumnDef[],
     private onSave: (result: ColumnRenameResult) => Promise<void | boolean>,
+    // Optional so the panel's read-only callers and any earlier constructor call site keep
+    // their shape; when absent the modal simply renders no delete row of its own.
+    private onDelete?: () => void,
   ) {
     super(app, "sheet");
   }
@@ -115,6 +118,16 @@ export class ColumnRenameModal extends DbModal {
         new Notice(migrateHelpText, 8000);
       };
     }
+
+    const deleteRow = contentEl.createEl("button", {
+      cls: "obnotion-column-delete-row is-warning",
+      attr: { type: "button" },
+      text: t("menu.deleteColumn"),
+    });
+    deleteRow.onclick = () => {
+      this.close();
+      this.onDelete?.();
+    };
 
     const buttonRow = contentEl.createDiv({
       attr: { style: "display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px;" },

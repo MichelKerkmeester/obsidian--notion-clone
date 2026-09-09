@@ -32,7 +32,7 @@ contextType: "implementation"
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P1 |
-| **Status** | Draft — scaffolded, not implemented |
+| **Status** | Implemented — landed, awaiting the operator's device read (D3) |
 | **Created** | 2026-09-09 |
 | **Branch** | `worktrees/272-sheet-notion-audit` |
 | **Parent Spec** | `../spec.md` |
@@ -224,4 +224,12 @@ directly — or it is marked `TBD` and listed in the audit's §5.
 | Title centring | Within **0.49px** of the frame centre (lane) | Not measurable | **No change** — already converged |
 | Native selects | **0** | Notion uses no native pickers either | **No change** — already converged |
 | Destructive row colour | `is-warning` red (`styles.css:813`) | **Inconsistent in Notion**: un-red here, red in four other captures | **No change** — ours is the more consistent; explicitly not copied |
+
+**Landed, 2026-09-09/10** (`worktrees/275-properties-sheet-rows`, awaiting the operator's device
+read D3): the Target column's own numbers now read GREEN on this packet's clauses — 3 interactive
+controls on all 16 rows (wanted ≤4), 16/16 labels key-free, 2 section headers
+(`Shown`/`Hide all`, `Hidden`/`Show all`) each carrying its bulk action on its own line, 0 native
+selects, 34px row heights, 3/3 hairlines, 0.49px centring, WebKit extent 401 ≤ 401. The audit's
+Current column above is preserved as the RED the clauses were written against; the C-2 capture
+dependence stands, so the Notion column stays structural.
 <!-- /ANCHOR:gap-table -->

@@ -680,7 +680,7 @@ export const PANEL_SCENARIOS = [
     width: 600,
     fixtureOf: "constructed-column-manager",
     sources: ["src/views/column-manager-renderer.ts", "src/views/property-type-icon.ts"],
-    note: "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
+    note: "One row per property: drag handle, visibility checkbox, type icon, name — three interactive controls. Wrap, edit and delete live on the edit-property surface the name tap opens, and the shown/hidden partition carries the bulk actions.",
     captureCss: ANCHORED_PANEL_CSS,
     html: () => {
       const row = (col, { visible = true, wrap = false, isFirst = false, isLast = false } = {}) => `
@@ -692,27 +692,38 @@ export const PANEL_SCENARIOS = [
             <span class="obnotion-column-type-icon">${TYPE_ICON[col.type]}</span>
           </span>
           <div class="obnotion-column-name-wrap">
-            <span class="obnotion-column-name" title="Double-click to edit">${col.label} [${col.key}]</span>
+            <span class="obnotion-column-name" title="Double-click to edit"${wrap ? ' style="max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"' : ""}>${col.label}</span>
           </div>
-          <button class="clickable-icon obnotion-column-wrap-toggle${wrap ? " is-active" : ""}">${I.wrapText}</button>
-          <button class="clickable-icon">${I.edit}</button>
-          <button class="clickable-icon obnotion-column-delete-btn">${I.trash}</button>
         </div>`;
       return `
       <div class="obnotion-container">
         <div class="obnotion-column-manager" id="obnotion-column-manager">
           <div class="obnotion-panel-header">
             <span class="obnotion-panel-title">Properties</span>
-            <div class="obnotion-panel-header-actions">
-              <label class="obnotion-column-manager-toggle-all"><input type="checkbox" class="obnotion-checkbox obnotion-checkbox-field"><span>All</span></label>
-            </div>
           </div>
-          ${COLUMN_DEFS.map((col, i) => row(col, {
-            visible: col.key !== "payment",
-            wrap: col.key === "file.name",
-            isFirst: i === 0,
-            isLast: i === COLUMN_DEFS.length - 1,
-          })).join("")}
+          <div class="obnotion-column-manager-section">
+            <div class="obnotion-column-manager-section-header">
+              <span class="obnotion-column-manager-section-title">Shown</span>
+              <button type="button" class="obnotion-column-manager-section-bulk">Hide all</button>
+            </div>
+            ${COLUMN_DEFS.filter((col) => col.key !== "payment").map((col, i, all) => row(col, {
+              visible: true,
+              wrap: col.key === "file.name",
+              isFirst: i === 0,
+              isLast: i === all.length - 1,
+            })).join("")}
+          </div>
+          <div class="obnotion-column-manager-section">
+            <div class="obnotion-column-manager-section-header">
+              <span class="obnotion-column-manager-section-title">Hidden</span>
+              <button type="button" class="obnotion-column-manager-section-bulk">Show all</button>
+            </div>
+            ${COLUMN_DEFS.filter((col) => col.key === "payment").map((col, i, all) => row(col, {
+              visible: false,
+              isFirst: i === 0,
+              isLast: i === all.length - 1,
+            })).join("")}
+          </div>
           <div class="obnotion-column-manager-add-row">
             <button type="button" class="obnotion-panel-button obnotion-column-manager-add-button">
               <span class="obnotion-panel-button-label">+ Add property</span>

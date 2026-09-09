@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-10T00:11:50.077Z",
+  "measuredAt": "2026-09-09T23:14:58.002Z",
   "inputs": {
-    "styles.css": "189a3ef0e188",
+    "styles.css": "0d6a8dbd2fa2",
     "tools/live/view-census.mjs": "475c0e3f6fe3",
     "tools/screenshots/scenarios.mjs": "8e4c7409a92b"
   },
@@ -361,9 +361,9 @@
   ],
   "totals": {
     "fixtures": 67,
-    "escaping": 445,
+    "escaping": 433,
     "growing": 176,
-    "scrolling": 269,
+    "scrolling": 257,
     "rhythmGroups": 12,
     "ragged": 0,
     "probeBlind": 0
@@ -1268,138 +1268,6 @@
       "mean": 34,
       "sd": 0,
       "distinct": 1
-    },
-    {
-      "width": 320,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "clickable-icon",
-      "parentCls": "obnotion-column-manager-row",
-      "by": 18,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "clickable-icon.obnotion-column-delete-btn",
-      "parentCls": "obnotion-column-manager-row",
-      "by": 42,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "clickable-icon",
-      "parentCls": "obnotion-column-manager-row",
-      "by": 18,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "clickable-icon.obnotion-column-delete-btn",
-      "parentCls": "obnotion-column-manager-row",
-      "by": 42,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "clickable-icon",
-      "parentCls": "obnotion-column-manager-row",
-      "by": 18,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "clickable-icon.obnotion-column-delete-btn",
-      "parentCls": "obnotion-column-manager-row",
-      "by": 42,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "clickable-icon",
-      "parentCls": "obnotion-column-manager-row",
-      "by": 18,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "clickable-icon.obnotion-column-delete-btn",
-      "parentCls": "obnotion-column-manager-row",
-      "by": 42,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "clickable-icon",
-      "parentCls": "obnotion-column-manager-row",
-      "by": 18,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "clickable-icon.obnotion-column-delete-btn",
-      "parentCls": "obnotion-column-manager-row",
-      "by": 42,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "clickable-icon",
-      "parentCls": "obnotion-column-manager-row",
-      "by": 18,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "clickable-icon.obnotion-column-delete-btn",
-      "parentCls": "obnotion-column-manager-row",
-      "by": 42,
-      "scrolls": true,
-      "pastHeader": 0
     },
     {
       "width": 320,

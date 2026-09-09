@@ -7996,6 +7996,7 @@ await section("what a single click on a property row reaches", async () => {
     const rows = [...panel.querySelectorAll(".obnotion-column-manager-row")];
     const row = rows[1];
     const named = row.querySelector(".obnotion-column-name").textContent;
+    const deleteBtns = row.querySelectorAll(".obnotion-column-delete-btn").length;
 
     // Every element inside the row, clicked once. `elementFromPoint` at each one's centre would
     // measure the same thing for overlapping children; dispatching on the element itself asks what
@@ -8009,56 +8010,62 @@ await section("what a single click on a property row reaches", async () => {
       for (const call of calls.slice(before)) {
         reached.push({
           on: describe(el),
-          // A click on the trash's own glyph bubbles to the trash, which is one path reported
-          // twice, not two paths. What separates a real second route from that is whether the
-          // element sits inside the delete control at all.
-          insideDelete: Boolean(el.closest(".obnotion-column-delete-btn")),
-          isRow: el === row,
           action: call.action,
           key: call.arg && call.arg.key ? call.arg.key : String(call.arg),
         });
       }
     }
 
+    // The name's own click, isolated: it is the one-tap path to the edit-property surface, which
+    // is where this row's wrap and delete controls live now that the row itself carries none.
+    const nameEl = row.querySelector(".obnotion-column-name");
+    const beforeName = calls.length;
+    nameEl.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+    const nameClicks = calls.slice(beforeName).map((call) => call.action);
+    const nameEditKeys = [...new Set(calls.slice(beforeName)
+      .filter((call) => call.action === "editColumn")
+      .map((call) => call.arg && call.arg.key ? call.arg.key : String(call.arg)))];
+
     const deletes = reached.filter((r) => r.action === "deleteColumn");
     return {
       named,
+      deleteBtns,
       rows: rows.length,
       elements: 1 + row.querySelectorAll("*").length,
       reached,
       deletes,
-      outside: deletes.filter((d) => !d.insideDelete).map((d) => d.on),
-      rowItselfDeletes: deletes.some((d) => d.isRow),
-      deleteKeys: [...new Set(deletes.map((d) => d.key))],
+      nameClicks,
+      nameEditKeys,
     };
   });
 
   const record = (name, pass, detail) => propertyRowResults.push({ name, pass, detail });
   const quote = (value) => JSON.stringify(String(value));
-  const { deletes, deleteKeys } = measured;
+  const { deletes, deleteBtns, nameClicks, nameEditKeys } = measured;
 
-  record("nothing outside the trash control reaches the delete",
-    deletes.length > 0 && measured.outside.length === 0 && !measured.rowItselfDeletes,
+  record("no click anywhere in a property row reaches the delete",
+    deletes.length === 0 && deleteBtns === 0,
     `${measured.elements} element(s) in the row were each clicked once; ${deletes.length} reached `
-      + `deleteColumn and ${measured.outside.length} of those were outside the trash control `
-      + `(${measured.outside.join(", ") || "none"}). The row itself was clicked too, and answered `
-      + `with ${measured.rowItselfDeletes ? "a delete" : "no delete"} — a stray press on the row is `
-      + `the shape this row of the packet is about`);
+      + `deleteColumn, and the row mounts ${deleteBtns} delete control(s). The row carries no `
+      + `destructive action at all — deletion lives on the edit-property surface, behind the one `
+      + `extra tap that separates it from a visibility flick`);
 
-  record("the delete on a named row deletes the property that row names",
-    deleteKeys.length === 1 && measured.named.includes(deleteKeys[0]),
-    `the row reads ${quote(measured.named)} and its delete was handed ${quote(deleteKeys.join(", "))}. `
-      + `Asserted by the column object the action received, not by the row's index — the same index `
-      + `is a different property on phone than on desktop, which is the misattribution this catches`);
+  record("a click on the row's name opens the edit-property surface for the property the row names",
+    nameClicks.length === 1 && nameClicks[0] === "editColumn" && nameEditKeys.length === 1,
+    `the row reads ${quote(measured.named)}; the name's own click reached `
+      + `[${nameClicks.join(", ") || "nothing"}] with key(s) [${nameEditKeys.join(", ") || "none"}], `
+      + `want exactly one editColumn for this row's own column. Asserted by the column object the `
+      + `action received, not by the row's index — the same index is a different property on phone `
+      + `than on desktop, which is the misattribution this catches`);
 
   // A row is more than its delete, and "nothing else deletes" is satisfied by a row where nothing
-  // else does anything. So the rest of the line is asserted as a SET: these four actions and no
+  // else does anything. So the rest of the line is asserted as a SET: these three actions and no
   // others. Dropping any one of them goes red here, which a count or an every() over the same list
   // does not — an every() with one control removed is still true of the remainder.
-  const WANTED = ["editColumn", "moveColumn", "setColumnVisible", "toggleColumnWrap"];
+  const WANTED = ["editColumn", "moveColumn", "setColumnVisible"];
   const others = [...new Set(measured.reached
     .filter((r) => r.action !== "deleteColumn").map((r) => r.action))].sort();
-  record("the rest of the row's primary line offers exactly its four non-destructive actions",
+  record("the rest of the row's primary line offers exactly its three non-destructive actions",
     others.join(",") === WANTED.join(","),
     `the row's other clicks reached [${others.join(", ") || "nothing"}], want `
       + `[${WANTED.join(", ")}]. Reorder is two buttons reaching one action, which is why this is a `

@@ -776,6 +776,68 @@ window.__sheetGrammar = (scenario) => {
   return report;
 };
 
+// The Properties sheet's row model. The grammar columns prove the row exists, clears its
+// padding floor and draws its hairline; they never counted what the row carries or read what
+// the label says, which is how six interactive controls and a printed storage key passed every
+// green run since the sheet shipped. Three facts, measured off the real mounted sheet:
+// the busiest row's interactive-control count, how many labels still render a bracketed
+// storage key, and the shown/hidden section partition with each header's own bulk action —
+// the partition speaks in the record sheet's own four strings, so the clause compares the
+// rendered text against those keys rather than against literals that could drift from them.
+window.__columnManagerRowModel = () => {
+  const SCENARIO = ${JSON.stringify(REGISTERED_SURFACES.find((s) => s.name === "column-manager").spec)};
+  const out = {
+    error: null,
+    rowCount: 0,
+    controlCounts: [],
+    rowHeights: [],
+    totalLabels: 0,
+    bracketedLabels: [],
+    nativeSelects: null,
+    sectionCount: 0,
+    sections: [],
+  };
+  try {
+    runRenderAssertions(document.body, SCENARIO, "", () => {
+      const sheet = mountedSheet();
+      if (!sheet) {
+        out.error = "the Properties sheet did not mount";
+        return;
+      }
+      out.nativeSelects = sheet.querySelectorAll("select").length;
+      for (const row of Array.from(sheet.querySelectorAll(".obnotion-column-manager-row"))) {
+        out.rowCount += 1;
+        out.controlCounts.push(row.querySelectorAll("input:not([type='hidden']), button").length);
+        out.rowHeights.push(Math.round(row.getBoundingClientRect().height * 10) / 10);
+      }
+      for (const nameEl of Array.from(sheet.querySelectorAll(".obnotion-column-manager-row .obnotion-column-name"))) {
+        out.totalLabels += 1;
+        const text = (nameEl.textContent || "").trim();
+        if (/\\[[^\\[\\]\\n]+\\]/.test(text)) out.bracketedLabels.push(text);
+      }
+      for (const header of Array.from(sheet.querySelectorAll(".obnotion-column-manager-section-header"))) {
+        out.sectionCount += 1;
+        out.sections.push({
+          title: (header.querySelector(".obnotion-column-manager-section-title")?.textContent || "").trim(),
+          bulk: (header.querySelector("button.obnotion-column-manager-section-bulk")?.textContent || "").trim(),
+        });
+      }
+      out.expected = {
+        shown: t("panel.shownSection"),
+        hidden: t("panel.hiddenSection"),
+        hideAll: t("panel.hideAllProperties"),
+        showAll: t("panel.showAllProperties"),
+      };
+      out.matches = out.sectionCount === 2
+        && out.sections[0].title === out.expected.shown && out.sections[0].bulk === out.expected.hideAll
+        && out.sections[1].title === out.expected.hidden && out.sections[1].bulk === out.expected.showAll;
+    });
+  } catch (error) {
+    out.error = error.message;
+  }
+  return out;
+};
+
 window.__sheetGrammarNegativeControl = () => {
   const scenario = ${JSON.stringify(REGISTERED_SURFACES.find((s) => s.name === NEGATIVE_CONTROL.surface).spec)};
   let removed = null;
@@ -824,16 +886,17 @@ window.__shellHeaderCentering = (scenario) => {
 // The negative control puts the header back into the two-slot flex row buildShellHeader used to
 // produce before this leg — a fixed-width leading slot facing a content-width trailing one — by
 // overriding the CSS in the page rather than touching a shipped file, so it proves the grid rule
-// is load-bearing rather than merely present. column-manager's trailing box (the "All" toggle
-// plus the close) is wider than the leading slot's old fixed 44px, which is exactly the asymmetry
-// the report measured.
+// is load-bearing rather than merely present. The header's "All" visibility toggle — the 44px on
+// top of the close that made the trailing slot 88px wide, exactly the asymmetry the report
+// measured — now lives on the section headers, so the control reproduces that width itself: the
+// two-slot row only goes visibly off-centre when the trailing slot outgrows the leading 44px.
 window.__shellHeaderCenteringNegativeControl = (scenario) => {
   const style = document.createElement("style");
   style.textContent = [
     ".obnotion-shell-header { display: flex !important; justify-content: flex-start !important; }",
     ".obnotion-shell-header-leading { display: inline-flex !important; flex: 0 0 auto !important; min-width: 44px !important; }",
     ".obnotion-shell-header .obnotion-panel-title { flex: 1 1 auto !important; }",
-    ".obnotion-shell-header-trailing { flex: 0 0 auto !important; justify-self: auto !important; }",
+    ".obnotion-shell-header-trailing { flex: 0 0 auto !important; min-width: 88px !important; }",
   ].join(" ");
   document.head.appendChild(style);
   let broken = null;
@@ -3297,6 +3360,31 @@ try {
       if (!restoredGreen) failures.push(`negative control: the clean re-mount did not restore green`);
       console.log(`  ${restoredGreen ? "PASS" : "FAIL"}  re-mount clean — ${element} green again`);
     }
+  }
+  console.log("");
+
+  // The Properties sheet's row model. The fixture mounts with one property already hidden, so
+  // the partition clause sees both sections; the numbers print so the next reader can compare
+  // against the recorded baseline without trusting a conclusion.
+  const rowModel = await page.evaluate(() => window.__columnManagerRowModel());
+  console.log("sheet-grammar: Properties sheet row model — 3 interactive controls, a key-free label, a shown/hidden partition\n");
+  if (rowModel.error) {
+    failures.push(`Properties sheet row model: ${rowModel.error}`);
+    console.log(`  FAIL  Properties sheet row model — ${rowModel.error}`);
+  } else {
+    const PROPERTIES_ROW_MAX_CONTROLS = 3;
+    const maxControls = Math.max(0, ...rowModel.controlCounts);
+    const overControlled = rowModel.controlCounts.filter((count) => count > PROPERTIES_ROW_MAX_CONTROLS).length;
+    if (rowModel.rowCount === 0) failures.push("Properties sheet row model: mounted 0 property rows");
+    if (overControlled > 0) failures.push(`Properties sheet row model: ${overControlled} of ${rowModel.rowCount} rows carry more than ${PROPERTIES_ROW_MAX_CONTROLS} interactive controls (${JSON.stringify(rowModel.controlCounts)})`);
+    if (rowModel.bracketedLabels.length > 0) failures.push(`Properties sheet row model: ${rowModel.bracketedLabels.length} of ${rowModel.totalLabels} labels still print a bracketed key (${rowModel.bracketedLabels.slice(0, 3).map((text) => `"${text}"`).join(", ")})`);
+    if (!rowModel.matches) failures.push(`Properties sheet row model: the shown/hidden partition did not present both section headers with their own bulk action (found ${rowModel.sectionCount} header(s): ${JSON.stringify(rowModel.sections)}; expected titles/bulk: ${JSON.stringify(rowModel.expected)})`);
+    if (rowModel.nativeSelects !== 0) failures.push(`Properties sheet row model: ${rowModel.nativeSelects} native select(s) on the sheet, wanted 0`);
+    console.log(`  ${maxControls <= PROPERTIES_ROW_MAX_CONTROLS ? "PASS" : "FAIL"}  the busiest property row carries ${maxControls} interactive controls, wanted <= ${PROPERTIES_ROW_MAX_CONTROLS} (all rows: ${JSON.stringify(rowModel.controlCounts)})`);
+    console.log(`        property row heights: ${rowModel.rowHeights.join(", ")}`);
+    console.log(`  ${rowModel.bracketedLabels.length === 0 ? "PASS" : "FAIL"}  ${rowModel.totalLabels - rowModel.bracketedLabels.length}/${rowModel.totalLabels} labels are key-free`);
+    console.log(`  ${rowModel.matches ? "PASS" : "FAIL"}  the shown/hidden partition presents both section headers, each carrying its own bulk action (${rowModel.sectionCount} header(s): ${JSON.stringify(rowModel.sections)})`);
+    console.log(`  ${rowModel.nativeSelects === 0 ? "PASS" : "FAIL"}  the sheet mounts ${rowModel.nativeSelects} native select(s), wanted 0`);
   }
   console.log("");
 

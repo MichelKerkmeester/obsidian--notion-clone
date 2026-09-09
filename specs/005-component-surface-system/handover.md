@@ -3689,3 +3689,54 @@ frozen Files-to-Change; 008's leg owns the filter sheet); the two movers' `sourc
 named `src/i18n.ts`, which is why the freshness check alone could not have caught them — recorded
 in the packet's goal.md, unfixed here. AC-008, the operator's own device read (D3), closes the
 packet; until then: landed, awaiting device. Not pushed — a fresh verifier lands it.
+
+## 071/009-properties-sheet-row-model — the Properties sheet row rebuilt (2026-09-09/10)
+
+The audit's second P1 landed. Eight elements per row, six interactive, the storage key printed in
+every label ("Name [file.name]") — today: three interactive controls, a key-free name, and a
+Shown / Hidden partition, on the ruling "Check more sheets align closer to notion, input, content,
+wise etc" / "Ui improvement is focus here".
+
+**Red → green (the packet's own clauses, `tools/live/sheet-grammar.mjs`).** RED: 6 interactive
+controls on every one of the 16 fixture rows (wanted ≤3 as implemented, ≤4 as specified), 0/16
+labels key-free, 0 section headers. GREEN: 16/16 rows at **3** controls, **16/16** labels
+key-free, **2** section headers — `Shown`/`Hide all` and `Hidden`/`Show all`, the four strings
+`record-detail-panel.ts:222-226` already consumed, no new i18n — each bulk action on its own line,
+the header's All master toggle dissolved into them. 0 native selects; 34px row heights; 3/3
+section-boundary hairlines and 0.49px title centring unchanged; WebKit long-name extent 401 ≤ 401.
+
+**The mechanics.** The row grid went 8 → 5 tracks (the board Properties list rides along through
+its own overrides); wrap and delete moved into the edit-property surface — the rename modal gains
+an optional 5th constructor argument and a full-width `is-warning` Delete property row that closes
+the modal into the confirmed `deleteColumn`, the row's name tap reaches `editColumn` (one tap,
+verified: verify-placement's property-row section rewritten to the no-delete / name-tap /
+three-action contract, 418/420, 2 declared reds). The phone sheet's own scrollbar dropped to 0px:
+the partition's two extra header lines tip long, wrapping names past the 90svh cap, and the
+desktop-WebKit lane then draws the classic 8px bar, eating 8px of root width (extent 397 > 393, ×5)
+— a phone's scrollbar is the overlay kind that never draws, so the sheet scrolls without reserving
+a desktop gutter; the title-centring negative control now injects the historic 88px (All + close)
+trailing width itself, since the shipped header's trailing slot is the close alone.
+
+**One declared scope deviation:** the storybook `panel-column-manager` fixture (a 6th file, outside
+the packet's 5) had to be rewritten to the shipped row — its 8-child hand-HTML wrapped onto a
+second line under the 5-track grid, four panel captures changed size, and `replay.mjs` went BROKE
+(`002-properties-panel` "the properties row stays on one line": recorded 1, now 2). Replay holds
+28/28 after; the deviation is recorded in the packet's `goal.md` deviations table.
+
+**The numbers**: unit red-then-green (`column-manager-renderer.test.ts` 1 failed | 6 passed →
+7/7 on the key-free clause); vitest 1591/1591; tsc 0; build 0; sheet-grammar 0 (RED lane was exit 1
+with exactly the 3 new clauses red); render-assertions 0; verify-placement 0; touch-targets 0;
+screenshots 480×5 exit 0 — decoded-pixel judgment: the redesigned surface 321990-361711px at
+maxDelta 196-225 (4 constructed pairs), its dependent stacks (property editor, confirm card,
+depth-3 type picker — where the delete row now lives) and the rewritten panel fixtures following;
+every mover reproduced identically across runs, none under the 12-delta one-run-only jitter rule,
+2 byte-only movers pixelHash-identical; evidence 16/16 fresh after re-running the 11 stale census
+writers (design-conformance 4/5 enforced, replay 28/28 after the fixture fix); scan-comments 0;
+scan-failing-values 0; **gate 28/28, exit 0**. The css-lane acquired/edited/released at
+`0d6a8dbd2fa2` with 20 captures named reviewed; the two byte-only movers are not billed to the
+release, as the comparator reads them.
+
+**Open**: the operator's device read (D3) — no agent ticks it — and the audit's C-2
+full-resolution Notion Property-visibility capture, which stays §13's Notion column structural.
+`010` owns the tooltip copy, `014` the add-affordance shape. Validated: 009, 071 (first RESULT)
+and 005; graph metadata backfilled each. Not pushed — a fresh verifier lands it.

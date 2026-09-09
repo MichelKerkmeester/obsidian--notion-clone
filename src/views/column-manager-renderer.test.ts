@@ -60,8 +60,10 @@ class MockElement {
   public tagName: string;
   public className: string;
   public value = "";
+  public textContent = "";
   public children: MockElement[] = [];
   public ownerDocument: { body: MockElement };
+  private attrs = new Map<string, string>();
   private listeners = new Map<string, Array<(event: { preventDefault(): void; stopPropagation(): void }) => void>>();
 
   constructor(tagName = "div", ownerDocument?: { body: MockElement }) {
@@ -70,17 +72,27 @@ class MockElement {
     this.ownerDocument = ownerDocument ?? { body: this };
   }
 
-  createDiv(options: { cls?: string } = {}): MockElement {
+  setAttribute(name: string, value: string): void {
+    this.attrs.set(name, value);
+  }
+
+  getAttribute(name: string): string | null {
+    return this.attrs.get(name) ?? null;
+  }
+
+  createDiv(options: { cls?: string | string[]; text?: string } = {}): MockElement {
     return this.createEl("div", options);
   }
 
-  createSpan(options: { cls?: string; text?: string } = {}): MockElement {
+  createSpan(options: { cls?: string | string[]; text?: string } = {}): MockElement {
     return this.createEl("span", options);
   }
 
-  createEl(tag: string, options: { cls?: string; text?: string; attr?: Record<string, string> } = {}): MockElement {
+  createEl(tag: string, options: { cls?: string | string[]; text?: string; attr?: Record<string, string> } = {}): MockElement {
     const el = new MockElement(tag, this.ownerDocument);
-    el.className = options.cls || "";
+    el.className = (Array.isArray(options.cls) ? options.cls.join(" ") : options.cls) || "";
+    if (options.text !== undefined) el.textContent = options.text;
+    for (const [name, attrValue] of Object.entries(options.attr ?? {})) el.setAttribute(name, String(attrValue));
     this.children.push(el);
     return el;
   }
@@ -225,5 +237,73 @@ describe("ColumnManagerRenderer visibility search", () => {
     const hidden = (key: string) => (rowsByKey.get(key) as unknown as MockElement).className.includes("obnotion-column-manager-row-search-hidden");
     expect(hidden("status")).toBe(false);
     expect(hidden("due")).toBe(false);
+  });
+});
+
+describe("ColumnManagerRenderer property row contract", () => {
+  function renderRow() {
+    const panel = new MockElement("div");
+    const renderer = new ColumnManagerRenderer() as unknown as {
+      renderColumnRow(
+        panel: HTMLElement,
+        col: ColumnDef,
+        config: unknown,
+        state: unknown,
+        actions: ColumnManagerActions,
+        columns: ColumnDef[],
+        index: number,
+        total: number
+      ): HTMLElement;
+    };
+    const col: ColumnDef = { key: "status", label: "Status", type: "text" };
+    const state = { hiddenColumns: new Set<string>() };
+    const actions = makeActions();
+    const row = renderer.renderColumnRow(
+      panel as unknown as HTMLElement,
+      col,
+      { viewType: "table" },
+      state,
+      actions,
+      [col],
+      0,
+      1
+    ) as unknown as MockElement;
+    return { row, col, actions };
+  }
+
+  function countInteractive(el: MockElement): number {
+    let count = 0;
+    if (el.tagName === "BUTTON" || (el.tagName === "INPUT" && el.getAttribute("type") !== "hidden")) count += 1;
+    for (const child of el.children) count += countInteractive(child);
+    return count;
+  }
+
+  function findByName(el: MockElement): MockElement | undefined {
+    if (el.className.includes("obnotion-column-name ") || el.className.trim() === "obnotion-column-name") return el;
+    for (const child of el.children) {
+      const hit = findByName(child);
+      if (hit) return hit;
+    }
+    return undefined;
+  }
+
+  it("labels the row with the column name alone, printing no storage key", () => {
+    const { row, col } = renderRow();
+    const nameEl = findByName(row);
+    expect(nameEl).toBeDefined();
+    expect(nameEl!.textContent).toBe(col.label);
+    expect(nameEl!.textContent).not.toMatch(/\[[^\]\n]+\]/);
+  });
+
+  it("carries three interactive controls: two reorder buttons and the visibility checkbox", () => {
+    const { row } = renderRow();
+    expect(countInteractive(row)).toBe(3);
+  });
+
+  it("opens the edit-property surface on a single name tap", () => {
+    const { row, col, actions } = renderRow();
+    findByName(row)!.fire("click");
+    expect(actions.editColumn).toHaveBeenCalledTimes(1);
+    expect(actions.editColumn).toHaveBeenCalledWith(col);
   });
 });

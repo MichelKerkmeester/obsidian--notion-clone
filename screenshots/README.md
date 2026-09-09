@@ -955,7 +955,7 @@ Sources: `src/views/board-groups-panel.ts`, `src/views/record-surface/property-r
 
 ### Column manager
 
-One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.
+One row per property: drag handle, visibility checkbox, type icon, name — three interactive controls. Wrap, edit and delete live on the edit-property surface the name tap opens, and the shown/hidden partition carries the bulk actions.
 
 | dark | light |
 |---|---|

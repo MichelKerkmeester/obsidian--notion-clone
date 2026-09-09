@@ -105,12 +105,55 @@ export class ColumnManagerRenderer {
       header.parentElement.insertBefore(panel, header.nextSibling);
     }
 
-    this.renderHeader(panel, columns, config, state, actions);
+    this.renderHeader(panel, actions);
     const searchInput = this.renderSearchRow(panel);
     const rowsByKey = new Map<string, HTMLElement>();
-    columns.forEach((col, index) => {
-      rowsByKey.set(col.key, this.renderColumnRow(panel, col, config, state, actions, columns, index, columns.length));
-    });
+    // Shown/Hidden partition. The record sheet already speaks this vocabulary (its own sections
+    // reuse the same four strings); the properties sheet — whose whole job is showing and hiding
+    // properties — is where a reader looks for it. A required column (the title field, a board's
+    // group field) counts as shown no matter what the hidden set says, because its checkbox is
+    // disabled checked. The hidden section draws only when something is hidden — an empty
+    // "nothing is hidden" heading is a header over blank space — so an all-shown sheet keeps the
+    // flat list it has always rendered, hairlines included.
+    const isShown = (col: ColumnDef): boolean =>
+      Boolean(this.getRequiredColumnReason(config, state, col)) || !state.hiddenColumns.has(col.key);
+    const hiddenColumns = columns.filter((col) => !isShown(col));
+    if (hiddenColumns.length === 0) {
+      columns.forEach((col, index) => {
+        rowsByKey.set(col.key, this.renderColumnRow(panel, col, config, state, actions, columns, index, columns.length));
+      });
+    } else {
+      const renderSection = (title: string, bulkLabel: string, sectionColumns: ColumnDef[], onBulk: () => void): void => {
+        const section = panel.createDiv({ cls: "obnotion-column-manager-section" });
+        const header = section.createDiv({ cls: "obnotion-column-manager-section-header" });
+        header.createSpan({ cls: "obnotion-column-manager-section-title", text: title });
+        const bulk = header.createEl("button", {
+          cls: "obnotion-column-manager-section-bulk",
+          attr: { type: "button" },
+          text: bulkLabel,
+        });
+        bulk.onclick = (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          onBulk();
+        };
+        sectionColumns.forEach((col, index) => {
+          rowsByKey.set(col.key, this.renderColumnRow(section, col, config, state, actions, columns, index, columns.length));
+        });
+      };
+      // The bulk action lives on the section header it governs, where the old header's master
+      // checkbox sat. The range-selection anchor follows the same rule that checkbox set: hiding
+      // everything drops the anchor, showing everything parks it on the last selectable key.
+      renderSection(t("panel.shownSection"), t("panel.hideAllProperties"), columns.filter((col) => isShown(col)), () => {
+        actions.setAllColumnsVisible(false);
+        this.lastSelectedColumnVisibilityKey = null;
+      });
+      renderSection(t("panel.hiddenSection"), t("panel.showAllProperties"), hiddenColumns, () => {
+        actions.setAllColumnsVisible(true);
+        const selectableKeys = this.getColumnVisibilityKeys(columns, config, state);
+        this.lastSelectedColumnVisibilityKey = selectableKeys[selectableKeys.length - 1] || null;
+      });
+    }
     this.wireVisibilitySearch(searchInput, columns, rowsByKey);
 
     if (!actions.isReadOnly) {
@@ -226,41 +269,22 @@ export class ColumnManagerRenderer {
 
   private renderHeader(
     panel: HTMLElement,
-    columns: ColumnDef[],
-    config: ViewConfig,
-    state: DatabaseViewState,
     actions: ColumnManagerActions
   ): void {
-    const addToggle = (header: HTMLElement): void => {
-      const right = header.createDiv({ cls: "obnotion-panel-header-actions" });
-      const toggleLabel = right.createEl("label", { cls: "obnotion-column-manager-toggle-all" });
-      const toggleAll = createCheckbox(toggleLabel, { role: "field" });
-      const visibleCount = columns.filter((col) => !state.hiddenColumns.has(col.key)).length;
-      toggleAll.checked = visibleCount === columns.length;
-      toggleAll.indeterminate = visibleCount > 0 && visibleCount < columns.length;
-      toggleAll.onchange = () => {
-        actions.setAllColumnsVisible(toggleAll.checked);
-        const selectableKeys = this.getColumnVisibilityKeys(columns, config, state);
-        this.lastSelectedColumnVisibilityKey = toggleAll.checked ? selectableKeys[selectableKeys.length - 1] || null : null;
-      };
-      toggleLabel.createSpan({ text: t("panel.all") });
-    };
     if (isMobileBottomSheet(panel.ownerDocument)) {
       buildShellHeader(panel, {
         title: t("toolbar.properties"),
         onClose: () => actions.close(),
-        beforeClose: addToggle,
       });
     } else {
       // The shared desktop header, title-only (no icon, no open/close — this panel closes through its
-      // own toolbar toggle, not a header button) with the select-all toggle as trailing content.
+      // own toolbar toggle, not a header button).
       buildDesktopRecordHeader({
         parent: panel,
         title: t("toolbar.properties"),
         titleIsEmpty: false,
         headerClass: "obnotion-panel-header",
         titleClass: "obnotion-panel-title",
-        renderTrailing: addToggle,
       });
     }
   }
@@ -377,38 +401,19 @@ export class ColumnManagerRenderer {
       renderTypeIcon: (iconParent) => renderPropertyTypeIcon(iconParent, col, "obnotion-column-type-icon"),
       nameWrapClass: "obnotion-column-name-wrap",
       nameClass: "obnotion-column-name",
-      nameText: `${col.label} [${col.key}]`,
+      nameText: col.label,
     });
 
     handle.nameEl.title = t("panel.doubleClickEdit");
-    handle.nameEl.addEventListener("dblclick", () => actions.editColumn(col));
+    // One tap opens the edit-property surface: it owns the wrap and delete controls this row no
+    // longer carries, and a pointer-gesture-only affordance has no phone equivalent anyway.
+    handle.nameEl.addEventListener("click", () => actions.editColumn(col));
     if (requiredReason) {
       handle.nameWrap.createDiv({
         cls: "obnotion-column-group-hint",
         text: requiredReason,
         attr: { title: requiredReason },
       });
-    }
-    const wrapBtn = handle.row.createEl("button", {
-      cls: `clickable-icon obnotion-column-wrap-toggle${col.wrap ? " is-active" : ""}`,
-      attr: {},
-    });
-    setIcon(wrapBtn, "wrap-text");
-    setTooltip(wrapBtn, t("panel.wrap"), { delay: 100 });
-    wrapBtn.onclick = () => actions.toggleColumnWrap(col);
-
-    if (!actions.isReadOnly) {
-      const editBtn = handle.row.createEl("button", { cls: "clickable-icon" });
-      setIcon(editBtn, "edit");
-      editBtn.onclick = () => actions.editColumn(col);
-
-      const deleteBtn = handle.row.createEl("button", {
-        cls: "clickable-icon obnotion-column-delete-btn",
-        attr: {},
-      });
-      setIcon(deleteBtn, "trash");
-      setTooltip(deleteBtn, t("common.delete"), { delay: 100 });
-      deleteBtn.onclick = () => actions.deleteColumn(col);
     }
     return handle.row;
   }

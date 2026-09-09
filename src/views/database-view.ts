@@ -5615,6 +5615,8 @@ export class DatabaseView extends FileView {
         this.applyColumnTypeToColumn(col, decision.type);
       }
       await this.columnOperations.renameColumn(col, result);
+    }, () => {
+      void this.columnOperations.deleteColumn(col);
     }).open();
   }
 

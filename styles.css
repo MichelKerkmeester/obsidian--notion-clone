@@ -7757,6 +7757,29 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
   padding: 2px;
 }
 
+/* The edit-property surface's own destructive action: a full-width row under the editable fields,
+   reading in the error colour the shared menu rows use for a destructive row. The confirm card it
+   leads to keeps its own treatment; this is the reach, not the second confirmation. */
+.obnotion-modal .obnotion-column-delete-row {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 8px 12px;
+  border-radius: var(--obnotion-radius-lg);
+  border: 1px solid var(--background-modifier-border);
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.obnotion-modal .obnotion-column-delete-row.is-warning {
+  color: var(--text-error);
+}
+
+.obnotion-modal .obnotion-column-delete-row:hover:not(:disabled) {
+  background: var(--background-modifier-hover);
+}
+
 /* 多选标签容器 */
 .obnotion-container .obnotion-multi-select-values {
   display: flex;
@@ -13517,6 +13540,18 @@ body.is-phone .obnotion-container .obnotion-shell-header .obnotion-panel-title {
 .obnotion-column-manager.obnotion-mobile-bottom-sheet {
   padding-right: 0 !important;
   padding-left: 0 !important;
+  /* The shown/hidden partition adds two header lines, which tips a sheet of long, wrapping
+     property names past the 90svh cap — and the desktopWebKit lane then draws this sheet's
+     scrollbar as the container's classic 8px bar, eating 8px of the root's width and tripping the
+     horizontal-overflow clause. A phone's scrollbar is the overlay kind that never draws (the
+     ruling on the portalled-sheet rule above), so this sheet's own bar stays 0px: it scrolls all
+     the same, just without reserving a desktop gutter the overlay never paints. */
+  scrollbar-width: none;
+}
+
+.obnotion-column-manager.obnotion-mobile-bottom-sheet::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 .obnotion-column-manager.obnotion-mobile-bottom-sheet > .obnotion-panel-header {
@@ -13534,12 +13569,14 @@ body.is-phone .obnotion-container .obnotion-shell-header .obnotion-panel-title {
   position: relative;
 }
 
-.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-row + .obnotion-column-manager-add-row {
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-row + .obnotion-column-manager-add-row,
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section + .obnotion-column-manager-add-row {
   padding-inline: var(--obnotion-sheet-inset);
   position: relative;
 }
 
-.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-row + .obnotion-column-manager-add-row::before {
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-row + .obnotion-column-manager-add-row::before,
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section + .obnotion-column-manager-add-row::before {
   content: "";
   position: absolute;
   top: 0;
@@ -13547,6 +13584,43 @@ body.is-phone .obnotion-container .obnotion-shell-header .obnotion-panel-title {
   right: 0;
   height: 1px;
   background: var(--obnotion-border-subtle, rgba(221, 221, 221, 0.4));
+}
+
+/* The shown/hidden partition: a section header line — the section's name on the left, the bulk
+   action that governs exactly its own members on the right — sitting on the same 16px inset the
+   sheet's rows use, in the record sheet's own section-header vocabulary (faint uppercase title,
+   muted bulk link). The bulk link carries its own padding so the hit area clears a thumb even
+   though the text itself is small. */
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--obnotion-space-3);
+  padding: 6px var(--obnotion-sheet-inset) 2px;
+  position: relative;
+}
+
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section-title {
+  color: var(--text-faint);
+  font-size: var(--font-smaller, 0.8em);
+  text-transform: uppercase;
+}
+
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section-bulk {
+  margin: 0;
+  padding: 6px 2px;
+  border: 0;
+  appearance: none;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-muted);
+  font-size: var(--font-smaller, 0.8em);
+  cursor: pointer;
+}
+
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section-bulk:hover {
+  color: var(--text-normal);
+  text-decoration: underline;
 }
 
 /* ───────────────────────────────────────────────────────────────
@@ -14131,10 +14205,10 @@ body.is-phone .obnotion-container .obnotion-menu-item {
    only its content width and clipped.
 
    The columns for the two platform-specific children collapse to zero where they do not apply, so
-   the same eight-column frame describes every regime. */
+   the same five-column frame describes every regime. */
 .obnotion-container .obnotion-column-manager-row {
   display: grid;
-  grid-template-columns: 18px 0 20px 18px minmax(120px, 1fr) auto auto auto;
+  grid-template-columns: 18px 0 20px 18px minmax(120px, 1fr);
   align-items: center;
   gap: 6px;
   min-height: 30px;
@@ -14148,20 +14222,16 @@ body.is-phone .obnotion-container .obnotion-menu-item {
 .obnotion-container .obnotion-column-manager-row > .obnotion-column-type { grid-column: 4; }
 .obnotion-container .obnotion-column-manager-row > .obnotion-column-name-wrap { grid-column: 5; }
 
-/* The board Properties list reuses this row wholesale but has no wrap/edit/delete actions, so the
-   three trailing `auto` tracks never gain a child — only their gaps do, narrowing the name column
-   by three unclaimed gaps' worth of width for no reason. Five tracks, not eight. */
+/* The board Properties list reuses this row wholesale and has never carried trailing actions;
+   the properties sheet joined it when its own wrap and delete controls moved into the
+   edit-property surface, so the shared frame is now the five tracks both really need. */
 .obnotion-container .obnotion-view-config-panel .obnotion-column-manager-row {
   grid-template-columns: 18px 0 20px 18px minmax(120px, 1fr);
 }
 
-/* The three trailing actions, claimed rather than auto-placed.
-   They were left to fill forward from column 6, which works only while all three render — hide the
-   wrap toggle and the other two shift left, which is the exact failure this frame exists to stop.
-   Naming them costs three lines and removes the caveat. */
-.obnotion-container .obnotion-column-manager-row > .clickable-icon:nth-of-type(1) { grid-column: 6; }
-.obnotion-container .obnotion-column-manager-row > .clickable-icon:nth-of-type(2) { grid-column: 7; }
-.obnotion-container .obnotion-column-manager-row > .clickable-icon:nth-of-type(3) { grid-column: 8; }
+/* The three trailing actions moved into the edit-property surface (a `Wrap content` toggle and a
+   `Delete property` row beside it), so the row keeps nothing beyond the name track and the
+   placement rules that used to pin them to tracks 6-8 are gone with them. */
 
 .obnotion-container .obnotion-column-manager-row:hover {
   background: var(--background-modifier-hover);
@@ -21439,7 +21509,7 @@ body.pm-resize-active * {
 /* The drag handle is hidden on a phone and the reorder arrows take its place, so column 1
    collapses and column 2 opens. Same frame, same order, one swap. */
 .is-phone .obnotion-container .obnotion-column-manager-row {
-  grid-template-columns: 0 auto 20px 18px minmax(120px, 1fr) auto auto auto;
+  grid-template-columns: 0 auto 20px 18px minmax(120px, 1fr);
 }
 
 .is-phone .obnotion-settings .setting-group {
@@ -21557,7 +21627,7 @@ body.pm-resize-active * {
    hidden that was the type icon, and the property name fell onto an auto track and clipped. The
    order now matches the frame; the phone difference is which column is collapsed, nothing else. */
 .is-phone .obnotion-container .obnotion-column-manager-row {
-  grid-template-columns: 0 auto 20px 18px minmax(96px, 1fr) auto auto auto;
+  grid-template-columns: 0 auto 20px 18px minmax(96px, 1fr);
 }
 
 /* Same reasoning as the desktop override above: the board Properties list has no trailing
