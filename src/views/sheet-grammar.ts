@@ -120,6 +120,13 @@ function hasPaddedRows(panel: HTMLElement): boolean {
     // padding here would be the exact double-count that design removed. Presence still counts
     // toward the column; the per-row floor does not apply to this one documented exception.
     if (row.closest(".obnotion-add-view-form")) return true;
+    // The record sheet's field rows carry no horizontal padding of their own: the phone surface
+    // spends one shared 16px content inset, and the label's reading line, the hairline under each
+    // row and the disclosure's section dividers all take their left edge from that one value
+    // instead of the row doubling it. The vertical padding clears the floor, and the box the
+    // touch pitch answers to — border-box, 44px, hairline included — is measured directly by the
+    // record sheet's own grammar rows, which also assert the shared inset this exemption trusts.
+    if (row.classList.contains("obnotion-record-detail-field")) return true;
     const style = view.getComputedStyle(row);
     return [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft].every((value) => {
       const px = Number.parseFloat(value);

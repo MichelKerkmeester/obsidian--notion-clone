@@ -51,8 +51,8 @@ resend the full text of this file in chat so the operator can update their copy.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] Phase 1's reference mapping read before redesign starts
-- [ ] Surfaces redesigned and recaptured against their mapped reference
+- [x] Phase 1's reference mapping read before redesign starts
+- [ ] Surfaces redesigned and recaptured against their mapped reference — the redesign is measured (RED 21/21 rows at 61.0px → GREEN 21/21 at 44.0px, inset 16.0px, headings 16.0px/1px, exit 1 → exit 0) and the recapture ran (616/616 twice; 21 content movers judged, 9 jitter restored, 9 byte-only); the reference columns stay `TBD` (D-005, inherited: no third-party reference carries readable measurements), so the against-its-reference half is recorded, not proven
 <!-- /ANCHOR:completion -->
 
 ---
@@ -65,10 +65,22 @@ resend the full text of this file in chat so the operator can update their copy.
 | Item | State | Evidence |
 |------|-------|----------|
 | Packet opened | Done | This scaffold, 2026-09-08 |
+| Phase 1 mapping read | Done | The inventory rows quoted in `plan.md` §1: the record sheet (line 47, `src/views/record-detail-panel.ts:172`), the record peek (line 48), the six menu-card children (lines 120–125), the column-menu popover (line 94) |
+| Gap table | Done | `spec.md` §13 — current numbers measured by the lane; reference columns honest `TBD` (D-005, inherited) |
+| RED | Done | 21/21 property rows one-line but all 21 at 61.0px (last 60.0), labels 25.0px, section headings 13.0px/0px, 4 failures, exit 1 (`tools/live/sheet-grammar.mjs`) |
+| Implemented | Done | `styles.css` only; the producers untouched except the row-pitch contract's second documented exception (decision-record D-001/D-004) |
+| GREEN | Done | 21/21 property rows at 44.0px, inset 16.0px, heading 16.0px/1px, 0 native selects, extent 401 ≤ 401 @ 402px, 2166 PASS / 0 FAIL, exit 0 |
+| Unit-test revert proof | Done | 5/5 → 1 failed / 4 passed on the shared-inset line → 5/5 (`src/views/record-sheet-row-grammar.test.ts`) |
+| Captures + evidence + gate | Done | 616/616 ×2 + the decoded pixel-delta judgement (21 content movers, 9 jitter restores, 9 byte-only); evidence 15/15 fresh after 11 writers re-run (engine-parity 1 INFORMATIONAL); gate 27/27, exit 0; the css-lane acquired/edited/released, holder = this packet, baselineHash `eba321e38ac0` |
+| Docs + validation | Done | This log, `acceptance-criteria.md` (3 × `Met`), `implementation-summary.md`, `decision-record.md`, `tasks.md`; the orchestrator's `--strict` verdict and the graph-metadata backfill recorded with the commit |
 
 ### Deviations and findings
 
 | Item | Note |
 |------|------|
-| None yet | Work has not started |
+| The 44px touch floor's box was unnamed | The same row measured 61.0px (content-box: floor + the row's 8px/8px padding + 1px hairline; the last row 60.0) and 44px elsewhere — the five measured row shapes now name `border-box` (D-002) |
+| The rows' second zero-horizontal-padding exception | The record field row joins the Add-view precedent in the row-pitch contract; the surface's one 16px inset is the label's, the hairlines' and the section dividers' single reading line (D-001/D-004) |
+| 067's seventeen outstanding capture reads | The five this release actually moved are judged and named in the css-lane release (body-empty-desktop-light 62,773px @214, its dark pair, the depth3 pair, chrome-owned-menu-sheet); the twelve that did not move stay 067's (D-record §4) |
+| Reference measurements | `TBD`, the settings leg's ruling inherited: the third-party captures carry no readable numbers; the directives are the targets (D-005) |
+| engine-parity exits 1 | INFORMATIONAL by design: 43→67 disagreeing elements, +6 selector-pairs, all three panel-modal checkbox-tint notes, 0 record-family fixtures — the 002 precedent |
 <!-- /ANCHOR:log -->

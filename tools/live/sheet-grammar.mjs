@@ -306,6 +306,7 @@ const HANDLE_GEOMETRY_TOLERANCE_PT = 1;
 // the negative control's override converge on the same measurement. The stacking row above has no
 // such dependency and goes red on the tree alone.
 const SETTINGS_SHEET_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "settings");
+const RECORD_SHEET_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "record-detail");
 // A control fills the row's full inset-to-inset span, not a fraction of it — 90% leaves room for
 // a control that legitimately shares its line with an icon or a unit label.
 const SETTINGS_ROW_WIDTH_RATIO_MIN = 0.9;
@@ -1456,6 +1457,94 @@ window.__shellSettingsRowGrammarColumnControl = (scenario) => {
   return broken;
 };
 
+// The record sheet's row grammar — the same reference shape the settings sheet asserts, inherited
+// onto this family: one property per row, label left / value right on one line, inside the 44-52px
+// pitch window, everything on the sheet's shared 16px inset, a hairline under every row but the
+// last, section headings that sit on the same inset behind their own 1px divider, and no native
+// select (the pickers here are the sheet's own stacked menus — the select-value pair in the
+// stacked-pair rows proves the menu half; this row proves the native half stayed absent).
+const measureRecordRowGrammar = () => {
+  const sheet = document.querySelector(".obnotion-record-detail-panel.obnotion-mobile-bottom-sheet");
+  if (!sheet) return null;
+  // The disclosure defaults to collapsed, and a collapsed subtree measures zeros — so a mount that
+  // hid it would otherwise read its section headings as sitting at 0,0 rather than skip them. The
+  // panel's own expanded state is what a reader sees, so the measurement reads it expanded.
+  const disclosureToggle = sheet.querySelector(":scope > .obnotion-record-detail-scroll .obnotion-record-detail-hidden-toggle");
+  if (disclosureToggle && disclosureToggle.getAttribute("aria-expanded") === "false") disclosureToggle.click();
+  const sheetRect = sheet.getBoundingClientRect();
+  // The sheet's own 1px left border counts into its border box but not into its content: the
+  // inset the rows answer to is measured from the content edge, the same side the extent reads
+  // from — a border-box left edge would book the border as inset and read 1px more than the
+  // sheet actually gives its rows.
+  const sheetContentLeft = sheetRect.left + (Number.parseFloat(getComputedStyle(sheet).borderLeftWidth) || 0);
+  const rows = [];
+  for (const row of sheet.querySelectorAll(".obnotion-record-detail-field")) {
+    const label = row.querySelector(":scope > .obnotion-record-detail-field-label");
+    const value = row.querySelector(":scope > .obnotion-board-card-value");
+    if (!label || !value) continue;
+    const labelRect = label.getBoundingClientRect();
+    const valueRect = value.getBoundingClientRect();
+    // A wrapped note, a chip block or a colour stack reads as its own editor: exempt from the
+    // one-line pitch window exactly the way the settings sheet's editor rows are.
+    const compact = valueRect.height <= 30;
+    const oneLine = valueRect.top <= labelRect.bottom - 2 && labelRect.top <= valueRect.bottom - 2;
+    rows.push({
+      compact,
+      oneLine,
+      inset: labelRect.left - sheetContentLeft,
+      rowHeight: row.getBoundingClientRect().height,
+      borderBottomWidth: getComputedStyle(row).borderBottomWidth,
+    });
+  }
+  const lastRow = sheet.querySelector(".obnotion-record-detail-fields > .obnotion-record-detail-field:last-child");
+  const sectionHeaders = Array.from(sheet.querySelectorAll(".obnotion-record-detail-hidden-section-header")).map((header) => {
+    const rect = header.getBoundingClientRect();
+    return { inset: rect.left - sheetContentLeft, borderTopWidth: getComputedStyle(header).borderTopWidth };
+  });
+  // Same extent rule the sweep and the settings sheet use: the sheet's own 1px left border is not
+  // sideways scroll.
+  const sheetScrollExtent = sheet.scrollWidth - (Number.parseFloat(getComputedStyle(sheet).borderLeftWidth) || 0);
+  return {
+    rows,
+    inset: rows.length > 0 ? rows[0].inset : null,
+    lastRowBorderBottom: lastRow ? getComputedStyle(lastRow).borderBottomWidth : null,
+    sectionHeaders,
+    selectCount: sheet.querySelectorAll("select").length,
+    sheetPaddingLeft: Number.parseFloat(getComputedStyle(sheet).paddingLeft),
+    sheetScrollWidth: sheet.scrollWidth,
+    sheetScrollExtent,
+    sheetClientWidth: sheet.clientWidth,
+  };
+};
+
+window.__shellRecordRowGrammar = (scenario) => {
+  let measured = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    measured = measureRecordRowGrammar();
+  });
+  return measured;
+};
+
+// The shared inset and the 44px row floor, reverted together: the two declarations this grammar
+// reads. What comes back red is exactly the one-line, inset, 44px shape; removing the override
+// restores it — the same question the negative controls above ask their own targets.
+window.__shellRecordRowGrammarNegativeControl = (scenario) => {
+  const style = document.createElement("style");
+  style.textContent = ".obnotion-record-detail-panel.obnotion-mobile-bottom-sheet { padding-inline: 0 !important; } "
+    + ".obnotion-record-detail-panel.obnotion-mobile-bottom-sheet .obnotion-record-detail-field { min-height: 0 !important; padding: 2px 6px !important; }";
+  document.head.appendChild(style);
+  let broken = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    broken = measureRecordRowGrammar();
+  });
+  style.remove();
+  let fixed = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    fixed = measureRecordRowGrammar();
+  });
+  return { broken, fixed };
+};
+
 // The placement-button ink guard. Raw scrollWidth/clientWidth/overflowX per button, scoped
 // to exactly the buttons this sheet draws — the node-side caller applies the same predicate a
 // wider, document-wide sweep already tried and reverted, here with nothing else in scope to
@@ -1996,6 +2085,14 @@ const measureStackedPair = async (pair) => {
   // Read every stack-derived fact before the gesture below. A drag past the flick threshold is
   // meant to dismiss the child, so a depth or inset sampled afterwards describes a stack that has
   // already come apart rather than the one under test.
+  // The record family's own picker and menu children, measured at their rows: the 44px phone
+  // floor these rows clear is the same reference grammar every menu in the family answers to, so
+  // it is read here where the family actually mounts its menus, not only on the synthetic stand-in
+  // the row-pitch control below mounts. Children whose lists are neither action rows nor option
+  // rows (a date grid, an icon grid) simply report none and are skipped.
+  const optionRowHeights = Array.from(top.querySelectorAll(".obnotion-menu-item, .obnotion-dropdown-option"))
+    .filter(isVisible)
+    .map((row) => row.getBoundingClientRect().height);
   const depthAtRest = Number.parseInt(child.style.getPropertyValue("--obnotion-sheet-depth"), 10);
   const childBottomAtRest = Number.parseFloat(child.style.getPropertyValue("--obnotion-mobile-sheet-bottom"));
   const parentBottomAtRest = Number.parseFloat(parent.style.getPropertyValue("--obnotion-mobile-sheet-bottom"));
@@ -2174,6 +2271,7 @@ const measureStackedPair = async (pair) => {
     dragParentUnchanged,
     depth: depthAtRest,
     expectedDepth,
+    childOptionRows: { count: optionRowHeights.length, minHeight: optionRowHeights.length ? Math.min(...optionRowHeights) : null },
     overflow: hasOverflow && hasFade,
     overflowMeasured: { scrollHeight: scrollHost.scrollHeight, clientHeight: scrollHost.clientHeight, fade: hasFade },
     settleRecords,
@@ -2877,6 +2975,10 @@ try {
       `long list scrolls with a visible fade (${report.overflowMeasured.scrollHeight}>${report.overflowMeasured.clientHeight})`,
       report.overflow,
     ]);
+    if (report.childOptionRows.count > 0) checks.push([
+      `child option rows clear the 44px touch floor (worst ${report.childOptionRows.minHeight.toFixed(1)}px, ${report.childOptionRows.count} rows)`,
+      report.childOptionRows.minHeight >= 44,
+    ]);
     for (const [label, ok] of checks) {
       if (!ok) failures.push(`${pair.name}: ${label}`);
       console.log(`  ${ok ? "PASS" : "FAIL"}  ${pair.name} — ${label}`);
@@ -3509,6 +3611,71 @@ try {
     if (!cleanAfter) failures.push(`settings sheet placement-button ink negative control: removing the override left ${fixedOverflowing.length} button(s) overflowing at ${fontSizePx}px`);
     console.log(`  ${wentRed ? "PASS" : "FAIL"}  reverting the wrap rule ${expectRed ? "overflows" : "leaves (as expected, too narrow a string to matter here)"} ${brokenOverflowing.length}/${control.broken.length} buttons at ${fontSizePx}px`);
     console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override leaves 0/${control.fixed.length} buttons overflowing at ${fontSizePx}px`);
+  }
+  console.log("");
+
+  console.log(`sheet-grammar: record sheet — the reference row grammar: one property per row, label left / value right on one line at 44–52px, on the shared 16px inset, a hairline under every row but the last, section headings on the same inset, no native select\n`);
+  const recordRowGrammar = await page.evaluate((scenario) => window.__shellRecordRowGrammar(scenario), RECORD_SHEET_SURFACE.spec);
+  if (!recordRowGrammar || recordRowGrammar.rows.length === 0) {
+    failures.push("record sheet: no property rows to measure");
+    console.log("  FAIL  record sheet — no property rows to measure");
+  } else {
+    const compactRows = recordRowGrammar.rows.filter((row) => row.compact);
+    if (compactRows.length === 0) {
+      failures.push("record sheet: no compact one-line property rows to measure");
+      console.log("  FAIL  record sheet — no compact one-line property rows to measure");
+    } else {
+      const lineCount = compactRows.filter((row) => row.oneLine).length;
+      const pitchCount = compactRows.filter((row) => row.rowHeight >= SETTINGS_ROW_PITCH_MIN_PX && row.rowHeight <= SETTINGS_ROW_PITCH_MAX_PX).length;
+      if (lineCount !== compactRows.length) failures.push(`record sheet: ${compactRows.length - lineCount} of ${compactRows.length} property rows do not sit label-beside-value on one line`);
+      if (pitchCount !== compactRows.length) failures.push(`record sheet: ${compactRows.length - pitchCount} of ${compactRows.length} property rows sit outside the ${SETTINGS_ROW_PITCH_MIN_PX}–${SETTINGS_ROW_PITCH_MAX_PX}px pitch window`);
+      console.log(`  ${lineCount === compactRows.length ? "PASS" : "FAIL"}  ${lineCount}/${compactRows.length} property rows sit label-beside-value on one line`);
+      console.log(`  ${pitchCount === compactRows.length ? "PASS" : "FAIL"}  ${pitchCount}/${compactRows.length} property rows pitch between ${SETTINGS_ROW_PITCH_MIN_PX} and ${SETTINGS_ROW_PITCH_MAX_PX}px`);
+      console.log(`        property row heights: ${compactRows.map((row) => row.rowHeight.toFixed(1)).join(", ")}`);
+    }
+    const hairlines = recordRowGrammar.rows.filter((row) => row.borderBottomWidth === "1px").length;
+    const lastIsBare = recordRowGrammar.lastRowBorderBottom === "0px";
+    const hairlineOk = hairlines === recordRowGrammar.rows.length - 1 && lastIsBare;
+    if (!hairlineOk) failures.push(`record sheet: the under-row hairline measures wrong (${hairlines}/${recordRowGrammar.rows.length - 1} at 1px, last ${recordRowGrammar.lastRowBorderBottom})`);
+    console.log(`  ${hairlineOk ? "PASS" : "FAIL"}  a 1px hairline sits under every property row but the last (${hairlines}/${recordRowGrammar.rows.length - 1}, last: ${recordRowGrammar.lastRowBorderBottom})`);
+    const insetOk = recordRowGrammar.inset != null && Math.abs(recordRowGrammar.inset - SETTINGS_SHEET_INSET_PX) <= FRAME_GEOMETRY_TOLERANCE_PX;
+    if (!insetOk) failures.push(`record sheet: the rows' shared inset measures ${recordRowGrammar.inset == null ? "n/a" : recordRowGrammar.inset.toFixed(1) + "px"}, wanted ${SETTINGS_SHEET_INSET_PX}px`);
+    console.log(`  ${insetOk ? "PASS" : "FAIL"}  the rows sit on the shared ${SETTINGS_SHEET_INSET_PX}px inset (measured ${recordRowGrammar.inset == null ? "n/a" : recordRowGrammar.inset.toFixed(1) + "px"}, sheet padding-left ${recordRowGrammar.sheetPaddingLeft}px)`);
+    if (recordRowGrammar.sectionHeaders.length === 0) {
+      failures.push("record sheet: no section headings to measure — the disclosure's divider grammar has nothing to read");
+      console.log("  FAIL  record sheet — no section headings to measure");
+    } else {
+      const badHeaders = recordRowGrammar.sectionHeaders.filter((header) => header.borderTopWidth !== "1px" || Math.abs(header.inset - SETTINGS_SHEET_INSET_PX) > FRAME_GEOMETRY_TOLERANCE_PX);
+      if (badHeaders.length > 0) failures.push(`record sheet: ${badHeaders.length} of ${recordRowGrammar.sectionHeaders.length} section headings miss the shared ${SETTINGS_SHEET_INSET_PX}px inset behind a 1px divider`);
+      console.log(`  ${badHeaders.length === 0 ? "PASS" : "FAIL"}  ${recordRowGrammar.sectionHeaders.length}/${recordRowGrammar.sectionHeaders.length} section headings sit on the shared ${SETTINGS_SHEET_INSET_PX}px inset behind a 1px divider (${recordRowGrammar.sectionHeaders.map((h) => `${h.inset.toFixed(1)}px/${h.borderTopWidth}`).join(", ")})`);
+    }
+    const noNativeSelect = recordRowGrammar.selectCount === 0;
+    if (!noNativeSelect) failures.push(`record sheet: ${recordRowGrammar.selectCount} native select(s) — the pickers here are the sheet's own stacked menus`);
+    console.log(`  ${noNativeSelect ? "PASS" : "FAIL"}  no native select on the sheet (native selects: ${recordRowGrammar.selectCount})`);
+    const noOverflow = recordRowGrammar.sheetScrollExtent <= recordRowGrammar.sheetClientWidth + FRAME_GEOMETRY_TOLERANCE_PX;
+    if (!noOverflow) failures.push(`record sheet: sheet scrollWidth ${recordRowGrammar.sheetScrollWidth} (extent ${recordRowGrammar.sheetScrollExtent}) exceeds clientWidth ${recordRowGrammar.sheetClientWidth}`);
+    console.log(`  ${noOverflow ? "PASS" : "FAIL"}  sheet scrollWidth (${recordRowGrammar.sheetScrollWidth}, extent ${recordRowGrammar.sheetScrollExtent}) <= clientWidth (${recordRowGrammar.sheetClientWidth}) — no horizontal overflow at 402px`);
+  }
+  console.log("");
+
+  const recordRowControl = await page.evaluate((scenario) => window.__shellRecordRowGrammarNegativeControl(scenario), RECORD_SHEET_SURFACE.spec);
+  console.log("sheet-grammar: record sheet row grammar negative control — the shared inset and the 44px row floor, reverted together\n");
+  if (!recordRowControl.broken || !recordRowControl.fixed || recordRowControl.broken.rows.length === 0 || recordRowControl.fixed.rows.length === 0) {
+    failures.push("record sheet row grammar negative control: the surface did not mount property rows to measure");
+    console.log("  FAIL  record sheet row grammar negative control — the surface did not mount property rows to measure");
+  } else {
+    const compactBroken = recordRowControl.broken.rows.filter((row) => row.compact);
+    const compactFixed = recordRowControl.fixed.rows.filter((row) => row.compact);
+    const shortBroken = compactBroken.filter((row) => row.rowHeight < SETTINGS_ROW_PITCH_MIN_PX).length;
+    const brokenInset = recordRowControl.broken.inset;
+    const wentRed = (compactBroken.length > 0 && shortBroken === compactBroken.length)
+      || (brokenInset != null && Math.abs(brokenInset - SETTINGS_SHEET_INSET_PX) > FRAME_GEOMETRY_TOLERANCE_PX);
+    const pitchFixed = compactFixed.length > 0 && compactFixed.every((row) => row.rowHeight >= SETTINGS_ROW_PITCH_MIN_PX && row.rowHeight <= SETTINGS_ROW_PITCH_MAX_PX);
+    const insetFixed = recordRowControl.fixed.inset != null && Math.abs(recordRowControl.fixed.inset - SETTINGS_SHEET_INSET_PX) <= FRAME_GEOMETRY_TOLERANCE_PX;
+    if (!wentRed) failures.push(`record sheet row grammar negative control: reverting the inset and the row floor measured green (inset ${brokenInset == null ? "n/a" : brokenInset.toFixed(1) + "px"}, ${compactBroken.length - shortBroken}/${compactBroken.length} rows still in the pitch window)`);
+    if (compactFixed.length > 0 && !(pitchFixed && insetFixed)) failures.push(`record sheet row grammar negative control: removing the override did not restore the grammar (pitch ${pitchFixed}, inset ${insetFixed})`);
+    console.log(`  ${wentRed ? "PASS" : "FAIL"}  reverting the inset and the floor goes red (inset ${brokenInset == null ? "n/a" : brokenInset.toFixed(1) + "px"}, ${shortBroken}/${compactBroken.length} rows under the floor)`);
+    console.log(`  ${pitchFixed && insetFixed ? "PASS" : "FAIL"}  removing the override restores the grammar (pitch ok: ${pitchFixed}, inset back to ${SETTINGS_SHEET_INSET_PX}px: ${insetFixed})`);
   }
   console.log("");
 

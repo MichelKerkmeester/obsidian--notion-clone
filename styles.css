@@ -11182,6 +11182,13 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
      the same range. */
   min-height: 50svh;
 
+  /* One content inset for the whole surface: the property rows, the disclosure's section headings,
+     the note and the header all read their left edge from this one value, so a divider opening a
+     section runs through the same gutters the rows it introduces use. The anchored presentation's
+     12px read half a step shallower than every phone sheet's shared inset, and the row heights
+     below answer to this edge — 12px there reads as a second, competing inset. */
+  padding-inline: var(--obnotion-sheet-inset);
+
   /* WCAG 2.5.5 target size, and the only value here that is not a step on the spacing scale. The
      neighbouring steps miss it in both directions: 32px is under the standard, 48px costs a row of
      content on every screen.
@@ -11221,7 +11228,9 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
      baseline would strand both against the top edge. */
   align-items: center;
   gap: var(--obnotion-space-4);
-  padding: var(--obnotion-space-4) var(--obnotion-space-5);
+  /* The horizontal inset lives on the sheet, not here — a second one inside the row would book
+     the same gutter twice and pin the label 24px+ deep instead of the shared 16px. */
+  padding: var(--obnotion-space-4) 0;
   min-height: var(--obnotion-sheet-row-min-height);
 }
 
@@ -11290,6 +11299,40 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
 .obnotion-record-detail-panel.obnotion-mobile-bottom-sheet .obnotion-cell-line-edit-popover .obnotion-cell-line-input {
   height: 100%;
   min-height: 0;
+}
+
+/* The 44px touch floor counts the row's whole box — its padding and border live inside the 44, not
+   stacked outside it. Left unstated, that arithmetic inherits whatever box-sizing the surrounding
+   context assumes, and the same row measured 44px under one assumption and 61px under the other —
+   the floor drifted by the row's own padding. These are the rows the pitch grammar measures, so
+   the box they measure is named here rather than assumed. */
+.obnotion-record-detail-panel.obnotion-mobile-bottom-sheet :is(
+    .obnotion-record-detail-field,
+    .obnotion-record-detail-hidden-toggle,
+    .obnotion-record-detail-add-button,
+    .obnotion-record-detail-hidden-row,
+    .obnotion-record-detail-hidden-section-header
+  ) {
+  box-sizing: border-box;
+}
+
+/* The disclosure's own rows and its two section headings sit on the sheet's inset, not on a second
+   one: their padding keeps its vertical rhythm and drops the 6px of its own. The heading opens
+   its section behind its own hairline — the same faint step the property rows and the note use —
+   so the shown and hidden groups read as lists under a heading rather than as one unbroken run. */
+.obnotion-record-detail-panel.obnotion-mobile-bottom-sheet .obnotion-record-detail-hidden-toggle,
+.obnotion-record-detail-panel.obnotion-mobile-bottom-sheet .obnotion-record-detail-add-button {
+  padding: var(--obnotion-space-2) 0;
+}
+
+.obnotion-record-detail-panel.obnotion-mobile-bottom-sheet .obnotion-record-detail-hidden-row {
+  padding: 2px 0;
+}
+
+.obnotion-record-detail-panel.obnotion-mobile-bottom-sheet .obnotion-record-detail-hidden-section-header {
+  padding: 2px 0;
+  margin-top: var(--obnotion-space-3);
+  border-top: 1px solid var(--obnotion-border-subtle);
 }
 
 /* ── The note, under its properties ──────────────────────────────────

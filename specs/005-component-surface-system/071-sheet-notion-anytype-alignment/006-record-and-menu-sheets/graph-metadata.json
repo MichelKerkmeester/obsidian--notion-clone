@@ -38,7 +38,7 @@
       "approach",
       "architecture"
     ],
-    "importance_tier": "normal",
+    "importance_tier": "important",
     "status": "in_progress",
     "key_files": [
       "spec.md",
@@ -46,7 +46,14 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "implementation-summary.md"
+      "decision-record.md",
+      "implementation-summary.md",
+      "tools/live/sheet-grammar.mjs",
+      "src/views/sheet-grammar.ts",
+      "src/views/record-sheet-row-grammar.test.ts",
+      "tools/lane/css-lane.json",
+      "screenshots/manifest.json",
+      "screenshots/notion/ios/harvest.json"
     ],
     "entities": [
       {
@@ -80,9 +87,51 @@
         "source": "derived"
       },
       {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.ts",
+        "kind": "code",
+        "path": "src/views/sheet-grammar.ts",
+        "source": "derived"
+      },
+      {
+        "name": "record-sheet-row-grammar.test.ts",
+        "kind": "test",
+        "path": "src/views/record-sheet-row-grammar.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "harvest.json",
+        "kind": "config",
+        "path": "screenshots/notion/ios/harvest.json",
         "source": "derived"
       },
       {
@@ -134,69 +183,27 @@
         "source": "derived"
       },
       {
-        "name": "Clean Architecture",
+        "name": "Overview The",
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
       },
       {
-        "name": "Key Components",
+        "name": "Where Notion",
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
       },
       {
-        "name": "Data Flow",
-        "kind": "proper_noun",
+        "name": "and",
+        "kind": "key_phrase",
         "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Current Role",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "tasks.md",
         "source": "derived"
       }
     ],
     "causal_summary": "The record detail sheet and menu-card popovers (the cell action bar named in roadmap row 65, dropdown menus from 052/063) were each fixed against individual reports rather than a single reference pass",
     "created_at": "2026-09-08T06:24:06Z",
-    "last_save_at": "2026-09-08T06:50:06.462Z",
+    "last_save_at": "2026-09-09T00:50:34.957Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -205,15 +212,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:9575589acadccd14a1445e670a9b00a8a3b010a6cf63119f723f90eea263262e",
+    "source_fingerprint": "sha256:d35a4a3b358d310e6abe988126966436d568a583f24c8dcc46d06d075c8440c9",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "43f429ccec07c7a45d8f7e3dec9e4a72ec12bbc84b9bf3875e953ea397f467b5",
-      "plan.md": "cf3ebc5e745f59fe8232c80bd812eefd354aa16383fc4e55fda89e3de3adbfa0",
-      "tasks.md": "eef3fec95f25806b5baa62a65f01f861f537c9527f9438d5766c256c2ea385eb",
-      "implementation-summary.md": "9b0ba44f42857ffceb8bb61e6690ccdb72b011c9f47b46f9d1b82f3e31eae759"
+      "spec.md": "858d1de1904ef2dd881937f9fc0d42cc83929b12e26828eb1cf09a9ab360eeca",
+      "plan.md": "2523413b7f88c5b9575961517c6324b4795dea7788c74a13822b46b559b93bae",
+      "tasks.md": "78636a6a6e6cca776779da4be8246c2d77b3cf301394d92b043779a856ced4bb",
+      "decision-record.md": "6b36a16469c4f104c843e13e0d7a8858d654ab728d9fb7f31a97339405f161b2",
+      "implementation-summary.md": "085525d4a11453f8cd49889b4092b3731f42ecbf5a613dfd9651f32c492bdfd6"
     },
     "last_active_at": null
   }
