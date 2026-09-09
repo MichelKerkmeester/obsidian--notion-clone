@@ -113,6 +113,34 @@ Per-phase detail lives in each child's `plan.md`; this row summarizes the audit 
 | 5 | `005-filter-sort-group-sheets/` | Filter, sort and group sheets redesign | draft |
 | 6 | `006-record-and-menu-sheets/` | Record detail sheet and menu-card popovers redesign | draft |
 | 7 | `007-settings-sheet-strict-alignment/` | Settings sheet card-grouping shell, opened after the operator's 0.0.36 device recheck found the redesigned sheet still bad | scaffolded |
+| 8 | `008-filter-sheet-row-model/` | Filter sheet: a condition's property/operator/value stack across three rows instead of sharing one with three icon buttons — the sheet renders property names as two characters today | scaffolded |
+| 9 | `009-properties-sheet-row-model/` | Properties sheet: cut the row from eight elements to four, drop the printed storage key, add the Shown/Hidden partition, and move wrap and delete into an edit-property sheet | scaffolded |
+| 10 | `010-sheet-copy-touch-idiom/` | Copy: the four strings that tell a phone user to click or double-click, one ellipsis spelling, one word for a property | scaffolded |
+| 11 | `011-record-sheet-header-and-icons/` | Record sheet: the one phone-sheet title that does not centre, and the title-centring contract that covers thirteen surfaces and misses this family's two | scaffolded |
+| 12 | `012-sort-and-group-sheet-rows/` | Sort: a two-row rule with a labelled delete and one reorder affordance rather than two. Group: the Shown/Hidden partition and header-level bulk actions | scaffolded |
+| 13 | `013-sheet-input-and-action-order/` | Four sheets whose controls are ordered against the action they serve — the confirm card puts Cancel above the destructive action, Notion puts it below in 4/4 captures | scaffolded |
+| 14 | `014-sheet-polish/` | The audit's P3 residue in one packet: the icon picker's crowded search row, the side-by-side add affordances, and the convergence findings recorded so they are not re-audited | scaffolded |
+
+### The 2026-09-09 audit wave (phases 8-14)
+
+Phases 8 through 14 were opened together by one artefact, `sheet-notion-audit.md`, written in this
+packet under the operator's 2026-09-09 ~22:30 ruling — *"Check more sheets align closer to notion,
+input, content, wise etc"* and *"Ui improvement is focus here"*. The audit covers every shipped
+phone sheet at the level of inputs and content, and counts **16 P1, 26 P2 and 13 P3** deltas
+across sixteen surfaces.
+
+**Read `sheet-notion-audit.md` §0 before working any of the seven.** Every Notion iOS capture in
+this repository is 299x678 — a Mobbin thumbnail, verified with `sips` across the tree — so no
+numeric threshold in any of these phases may be derived from a Notion asset. Each phase's Notion
+column is structural; each numeric target is our own measurement, an internal-consistency target,
+or `TBD` pending one of the six operator captures the audit lists in its §5.
+
+**Implementation order** is `010` → `008` → `009` → `011` → `012` → `013` → `014`: copy first
+because it is the smallest and touches no layout, then the two P1 row models, then the record
+header, then the P2 wave, then polish last.
+
+**Three contradictions are held Proposed, not resolved** (audit §6): card grouping is `007`'s to
+decide, the AND/OR conjunction control is retained by default, and the layout choice stays as rows.
 
 ### Phase Transition Rules
 

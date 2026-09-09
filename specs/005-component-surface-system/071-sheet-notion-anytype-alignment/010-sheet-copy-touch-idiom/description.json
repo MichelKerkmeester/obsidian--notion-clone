@@ -1,0 +1,15 @@
+{
+  "level": "3",
+  "specFolder": "005-component-surface-system/071-sheet-notion-anytype-alignment/010-sheet-copy-touch-idiom",
+  "description": "Four sheet-reachable strings tell a phone user to click or double-click",
+  "keywords": ["copy","i18n","touch","click","double-click","ellipsis","property","field","sheet","strings"],
+  "lastUpdated": "2026-09-09T22:50:00.000Z",
+  "specId": "010",
+  "folderSlug": "sheet-copy-touch-idiom",
+  "parentChain": [
+    "005-component-surface-system",
+    "071-sheet-notion-anytype-alignment"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

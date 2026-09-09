@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/071-sheet-notion-anytype-alignment/011-record-sheet-header-and-icons",
+  "spec_folder": "005-component-surface-system/071-sheet-notion-anytype-alignment/011-record-sheet-header-and-icons",
+  "parent_id": "005-component-surface-system/071-sheet-notion-anytype-alignment",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "071 phase 11",
+      "record sheet header centring",
+      "record peek title left aligned",
+      "record property type icon",
+      "implementation plan",
+      "technical approach",
+      "architecture decisions",
+      "testing strategy",
+      "task breakdown",
+      "implementation tasks",
+      "verification checklist",
+      "task dependencies"
+    ],
+    "key_topics": [
+      "phase",
+      "record",
+      "sheet",
+      "header",
+      "centring",
+      "peek",
+      "title",
+      "left",
+      "aligned",
+      "property",
+      "type",
+      "icon"
+    ],
+    "importance_tier": "normal",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "screenshots/notion-clone/panels/constructed-record-detail-mobile-light.png",
+      "screenshots/notion/ios/database/notion-ios-database-row-page-03-0cb59457-00da-4154-b7c0-5bb2a4831ba2.webp",
+      "src/views/record-detail-panel.ts",
+      "src/views/table-record-peek.ts",
+      "tools/live/sheet-grammar.mjs",
+      "screenshots/notion/ios/flows/database-detail/notion-ios-flow-database-detail-01-74da3d7a-b6b7-4ab8-ba38-9a17f04de3da.webp",
+      "src/i18n.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-record-detail-mobile-light.png",
+        "kind": "file",
+        "path": "screenshots/notion-clone/panels/constructed-record-detail-mobile-light.png",
+        "source": "derived"
+      },
+      {
+        "name": "notion-ios-database-row-page-03-0cb59457-00da-4154-b7c0-5bb2a4831ba2.webp",
+        "kind": "file",
+        "path": "screenshots/notion/ios/database/notion-ios-database-row-page-03-0cb59457-00da-4154-b7c0-5bb2a4831ba2.webp",
+        "source": "derived"
+      },
+      {
+        "name": "record-detail-panel.ts",
+        "kind": "code",
+        "path": "src/views/record-detail-panel.ts",
+        "source": "derived"
+      },
+      {
+        "name": "table-record-peek.ts",
+        "kind": "code",
+        "path": "src/views/table-record-peek.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "notion-ios-flow-database-detail-01-74da3d7a-b6b7-4ab8-ba38-9a17f04de3da.webp",
+        "kind": "file",
+        "path": "screenshots/notion/ios/flows/database-detail/notion-ios-flow-database-detail-01-74da3d7a-b6b7-4ab8-ba38-9a17f04de3da.webp",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Record Sheet Header",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Property Icons",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview The",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Every Notion",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Notion",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Producer",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Thirteen phone sheets centre their titles and two do not, and the gate cannot tell",
+    "created_at": "2026-09-09T21:01:05.754Z",
+    "last_save_at": "2026-09-09T21:07:21.016Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:f8783db5a4289680acf1a7bff19b7af4c0d8a23f19a1262371772f9993f36c1a",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "a047e5594733bec6819a23081a316bb065d5c54df2be46b957e6f2e900ddf488",
+      "plan.md": "b32c91e5020ab5d4ae93c3b95064eccfbae4d3d3c9a8788ad8c9c0ff461e4555",
+      "tasks.md": "712fc18db50992bc83fe547957533fdd78f5d842913fc080aec7ae6244977aaa"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

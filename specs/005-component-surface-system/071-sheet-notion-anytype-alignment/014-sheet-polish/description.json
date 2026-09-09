@@ -1,0 +1,15 @@
+{
+  "level": "3",
+  "specFolder": "005-component-surface-system/071-sheet-notion-anytype-alignment/014-sheet-polish",
+  "description": "The P3 residue of the sheet-notion audit, gathered so it does not scatter",
+  "keywords": ["polish","icon","picker","remove","header","add","affordance","row","button","p3"],
+  "lastUpdated": "2026-09-09T22:50:00.000Z",
+  "specId": "014",
+  "folderSlug": "sheet-polish",
+  "parentChain": [
+    "005-component-surface-system",
+    "071-sheet-notion-anytype-alignment"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

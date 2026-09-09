@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/071-sheet-notion-anytype-alignment/009-properties-sheet-row-model",
+  "spec_folder": "005-component-surface-system/071-sheet-notion-anytype-alignment/009-properties-sheet-row-model",
+  "parent_id": "005-component-surface-system/071-sheet-notion-anytype-alignment",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "071 phase 9",
+      "properties sheet row model",
+      "property row shows storage key",
+      "properties shown hidden sections",
+      "implementation plan",
+      "technical approach",
+      "architecture decisions",
+      "testing strategy",
+      "task breakdown",
+      "implementation tasks",
+      "verification checklist",
+      "task dependencies"
+    ],
+    "key_topics": [
+      "phase",
+      "properties",
+      "sheet",
+      "row",
+      "model",
+      "property",
+      "shows",
+      "storage",
+      "key",
+      "shown",
+      "hidden",
+      "sections"
+    ],
+    "importance_tier": "normal",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png",
+      "screenshots/notion/ios/flows/hiding-properties/notion-ios-flow-hiding-properties-02-9867cb76-74ed-4ff0-9254-398aeff2265e.webp",
+      "screenshots/notion/ios/database/notion-ios-database-properties-05-086606f1-d300-4d22-a236-46180752ed89.webp",
+      "src/i18n.ts",
+      "src/views/column-manager-renderer.ts",
+      "src/views/database-view.ts",
+      "tools/live/sheet-grammar.mjs",
+      "src/views/column-manager-renderer.test.ts",
+      "screenshots/notion/ios/flows/adding-new-properties/notion-ios-flow-adding-new-properties-02-2f52d1bc-fcf7-4da5-8f96-6b1e31339dc4.webp",
+      "src/views/record-detail-panel.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-column-manager-mobile-light.png",
+        "kind": "file",
+        "path": "screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png",
+        "source": "derived"
+      },
+      {
+        "name": "notion-ios-flow-hiding-properties-02-9867cb76-74ed-4ff0-9254-398aeff2265e.webp",
+        "kind": "file",
+        "path": "screenshots/notion/ios/flows/hiding-properties/notion-ios-flow-hiding-properties-02-9867cb76-74ed-4ff0-9254-398aeff2265e.webp",
+        "source": "derived"
+      },
+      {
+        "name": "notion-ios-database-properties-05-086606f1-d300-4d22-a236-46180752ed89.webp",
+        "kind": "file",
+        "path": "screenshots/notion/ios/database/notion-ios-database-properties-05-086606f1-d300-4d22-a236-46180752ed89.webp",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-manager-renderer.ts",
+        "kind": "code",
+        "path": "src/views/column-manager-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "column-manager-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/column-manager-renderer.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "record-detail-panel.ts",
+        "kind": "code",
+        "path": "src/views/record-detail-panel.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Properties Sheet Row Model",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Properties",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview The Properties",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Every Notion",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "This sheet passes every assertion it has",
+    "created_at": "2026-09-09T21:01:05.568Z",
+    "last_save_at": "2026-09-09T21:07:20.828Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:72e560b7055a2a831cc7ee8586d4061f721dd945a6905b38dc804222c6a34c0d",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "487c806f3d4fbe05f038d9b34aa5abd86e7305e9f1176cd778b164ec3e988878",
+      "plan.md": "acd514f7026aca33a8acb8c1f097014c1f06cfac071f0f1bc86f376469204197",
+      "tasks.md": "4b230f0127a46817a7e48e181bc9a07aa198c262497c424b558f6ecc1b7518be"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

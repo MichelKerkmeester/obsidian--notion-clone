@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T23:20:00Z"
-    last_updated_by: "269-settings-sheet-cards-verify"
-    recent_action: "Landing-verified 071/007 card grouping; 5efbafa7 on main"
-    next_safe_action: "Execute T001: operator Notion capture retunes 007's four provisional numbers"
+    last_updated_at: "2026-09-09T23:25:00Z"
+    last_updated_by: "272-sheet-notion-audit"
+    recent_action: "Audited all phone sheets vs Notion; scaffolded 071/008-014"
+    next_safe_action: "Execute 071/010/tasks.md, then 008, 009, 011-014; 007 awaits T001 capture"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
     key_files:
@@ -89,6 +89,67 @@ and the 005 root (backfill refreshed, both re-validated PASSED), scan-comments 0
 scan-failing-values 0. Docs figures re-derived: 071/005 goal 4/4, 071 parent 4/4 — both already
 correct, no tick names the operator or a device. The operator's own device recheck stays open per
 D3 — the pixel evidence is the harness read, not the device read.
+
+### 2026-09-09 ~22:30, `071` SHEET-NOTION AUDIT + children `008`-`014` SCAFFOLDED — not implemented, worktree `272-sheet-notion-audit`
+
+**What opened this:** the operator widened `007`'s single-sheet ruling to the whole family,
+verbatim: *"Check more sheets align closer to notion, input, content, wise etc"* and *"Ui
+improvement is focus here"* (`roadmap.md` §4 row 87). The artefact is
+`071/sheet-notion-audit.md` — one section per shipped phone sheet with the Notion screens it
+corresponds to, a row-by-row Notion-versus-ours table, the input and content deltas, a
+UI-improvement priority, and the findings that need an operator capture. **16 P1, 26 P2, 13 P3**
+across sixteen surfaces.
+
+**Read the audit's §0 before quoting any number from it.** Every one of the 1,315 Notion iOS
+captures in this repository is **299x678** — a Mobbin thumbnail, `sips`-confirmed on a 400-file
+sample and on all 171 files in the five folders these families lean on, with no width/height key
+anywhere in `harvest.json`. No numeric threshold in any of the seven children is derived from a
+Notion asset. Each Notion column is structural; each number is ours, an internal-consistency
+target, or `TBD` against one of the six operator captures listed in the audit's §5.
+
+**Two mechanisms account for nearly every finding, and both are the class `007` hit.**
+*A — the lane measures the shell, never the content.* `sheet-grammar.mjs` passes on every surface
+and its eight "grammar columns" are boolean presence checks printing `true`. So the Filter sheet
+scores 8/8, prints 3/3 rows inside the 44-52px band and 0 native selects, and still renders its
+property names as `F…`, `gr…`, `is…` — six controls share one 48px row where Notion stacks three.
+*B — a contract passes because its surface list omits the surface.* The title-centring clause
+covers **13** header-bearing surfaces; `record-detail` and `record-peek` are absent because it
+queries `.obnotion-shell-header` (`sheet-grammar.mjs:3402`) and the record family mounts its own.
+The record title is the one phone-sheet title that does not centre, and the gate could not say so.
+
+**Two defects are ours and measured, not read off an image.** The lane prints each panel sheet's
+row inset at `sheet-grammar.mjs:3998` and never asserts it — filter has been at **25.0px** against
+sort's **16.0px** in every green run since `005` landed. And the three panel sheets carry
+**332 / 357 / 341px** row spans on one 402px frame. On the content side, **four** strings naming a
+pointer gesture reach a phone sheet renderer, producers grep-confirmed, including
+`panel.doubleClickEdit` — "Double-click to edit" — on every property row (`column-manager-renderer.ts:383`).
+
+**Seven children scaffolded**, each with `spec.md` (delta table + thresholds), `plan.md`, `tasks.md`
+(write-first, RED lane assertion named first per task), `acceptance-criteria.md` and `goal.md`:
+`008-filter-sheet-row-model` (P1), `009-properties-sheet-row-model` (P1),
+`010-sheet-copy-touch-idiom` (P1 content), `011-record-sheet-header-and-icons` (P1),
+`012-sort-and-group-sheet-rows` (P2), `013-sheet-input-and-action-order` (P2),
+`014-sheet-polish` (P3, gathered so it neither scatters nor gets promoted).
+**Implementation order for the GLM leg: `010` → `008` → `009` → `011` → `012` → `013` → `014`.**
+
+**Three contradictions held Proposed, per D15** (audit §6): card grouping is `007`'s to decide and
+no child adds one; the `AND (all)`/`OR (any)` control is **retained** by default; the layout choice
+**stays as rows**, because `toolbar-renderer.ts:1494-1502` documents a real defect in our own former
+tiles that Notion's per-layout icons may not share. The audit also records what it deliberately
+does **not** propose — most pointedly Notion's settings-as-router model, which row 83 already ruled
+against — and two findings of *convergence*: our option colour picker is already Notion's control,
+and the column-width sheet has **no Notion reference at all**.
+
+**Verification:** `orchestrator --strict` `RESULT: PASSED` for all seven children, the `071` parent
+and the `005` root, after backfilling graph metadata for each touched folder. Docs only — no code,
+style or lane file was changed by this leg. The `071` parent's Phase Documentation Map and
+`goal.md` binding/log tables gained the seven rows; `roadmap.md` §4 row 87 and §5.A's `071` row
+record the ruling and the findings.
+
+**One pre-existing discrepancy found and left alone:** `tools/storybook/sheet-inventory.mjs` prints
+**87 surfaces (55 primary + 32 stacked)** and regenerates `071/001/inventory.md` byte-identical,
+while `071/goal.md` and `roadmap.md` both say **86**. Out of this leg's write authority; recorded
+rather than fixed.
 
 ### 2026-09-09 ~20:38, `071/007-settings-sheet-strict-alignment` SCAFFOLDED — not implemented, worktree `268-settings-sheet-strict`
 

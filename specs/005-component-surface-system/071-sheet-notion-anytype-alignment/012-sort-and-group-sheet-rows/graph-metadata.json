@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/071-sheet-notion-anytype-alignment/012-sort-and-group-sheet-rows",
+  "spec_folder": "005-component-surface-system/071-sheet-notion-anytype-alignment/012-sort-and-group-sheet-rows",
+  "parent_id": "005-component-surface-system/071-sheet-notion-anytype-alignment",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "071 phase 12",
+      "sort sheet rule rows",
+      "group sheet shown hidden",
+      "sort reorder arrows drag handle",
+      "implementation plan",
+      "technical approach",
+      "architecture decisions",
+      "testing strategy",
+      "task breakdown",
+      "implementation tasks",
+      "verification checklist",
+      "task dependencies"
+    ],
+    "key_topics": [
+      "phase",
+      "sort",
+      "sheet",
+      "rule",
+      "rows",
+      "group",
+      "shown",
+      "hidden",
+      "reorder",
+      "arrows",
+      "drag",
+      "handle"
+    ],
+    "importance_tier": "normal",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "src/views/sort-panel-renderer.ts",
+      "src/views/toolbar-renderer.ts",
+      "tools/live/sheet-grammar.mjs",
+      "src/views/sort-panel-renderer.test.ts",
+      "src/i18n.ts",
+      "screenshots/notion-clone/panels/constructed-sort-panel-mobile-light.png"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "sort-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/sort-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sort-panel-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/sort-panel-renderer.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-sort-panel-mobile-light.png",
+        "kind": "file",
+        "path": "screenshots/notion-clone/panels/constructed-sort-panel-mobile-light.png",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Group Sheet Rows",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview The",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Every Notion",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Notion",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Producer",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Both sheets pass every clause they have",
+    "created_at": "2026-09-09T21:01:05.840Z",
+    "last_save_at": "2026-09-09T21:07:21.106Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:b2eab86d18d99f67e4989b06e34b59c83c1afd40bb076051e0bcecd81d3d03ee",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "9066ea890e95d146af2340e18e5c13be1885579fc78ba6573c7542be67d96900",
+      "plan.md": "c764bd54e5efaf3d5edd1963223f25dcbdfd5accec8ee32d2c67f0ebd767e5e4",
+      "tasks.md": "9c15f61d7a7fbf245c4d969786d6bcb5d4f9b2f6486faf5f71e3661abd94e8ba"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

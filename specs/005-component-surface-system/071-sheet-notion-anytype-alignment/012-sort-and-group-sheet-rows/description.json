@@ -1,0 +1,15 @@
+{
+  "level": "3",
+  "specFolder": "005-component-surface-system/071-sheet-notion-anytype-alignment/012-sort-and-group-sheet-rows",
+  "description": "The sort rule carries five controls on one row and the group sheet has no shown/hidden split",
+  "keywords": ["sort","group","sheet","rule","rows","direction","reorder","shown","hidden","notion","delete"],
+  "lastUpdated": "2026-09-09T22:50:00.000Z",
+  "specId": "012",
+  "folderSlug": "sort-and-group-sheet-rows",
+  "parentChain": [
+    "005-component-surface-system",
+    "071-sheet-notion-anytype-alignment"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

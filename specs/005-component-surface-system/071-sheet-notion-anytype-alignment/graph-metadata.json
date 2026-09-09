@@ -10,7 +10,14 @@
     "005-component-surface-system/071-sheet-notion-anytype-alignment/004-view-config-sheet",
     "005-component-surface-system/071-sheet-notion-anytype-alignment/005-filter-sort-group-sheets",
     "005-component-surface-system/071-sheet-notion-anytype-alignment/006-record-and-menu-sheets",
-    "005-component-surface-system/071-sheet-notion-anytype-alignment/007-settings-sheet-strict-alignment"
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/007-settings-sheet-strict-alignment",
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/008-filter-sheet-row-model",
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/009-properties-sheet-row-model",
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/010-sheet-copy-touch-idiom",
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/011-record-sheet-header-and-icons",
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/012-sort-and-group-sheet-rows",
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/013-sheet-input-and-action-order",
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/014-sheet-polish"
   ],
   "manual": {
     "depends_on": [],
@@ -53,7 +60,14 @@
       "004-view-config-sheet/goal.md",
       "005-filter-sort-group-sheets/goal.md",
       "006-record-and-menu-sheets/goal.md",
-      "007-settings-sheet-strict-alignment/goal.md"
+      "007-settings-sheet-strict-alignment/goal.md",
+      "008-filter-sheet-row-model/goal.md",
+      "009-properties-sheet-row-model/goal.md",
+      "010-sheet-copy-touch-idiom/goal.md",
+      "011-record-sheet-header-and-icons/goal.md",
+      "012-sort-and-group-sheet-rows/goal.md",
+      "013-sheet-input-and-action-order/goal.md",
+      "014-sheet-polish/goal.md"
     ],
     "entities": [
       {
@@ -117,6 +131,12 @@
         "source": "derived"
       },
       {
+        "name": "The Notion",
+        "kind": "proper_noun",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
         "name": "the",
         "kind": "key_phrase",
         "path": "goal.md",
@@ -139,27 +159,21 @@
         "kind": "heading",
         "path": "goal.md",
         "source": "derived"
-      },
-      {
-        "name": "Operator copy",
-        "kind": "heading",
-        "path": "goal.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The operator reports three separate sheet-family defects in the same batch — the settings sheet's UI/UX (R5), the add-property / property-type picker sheet rendering as a tall sheet that covers the note header while the keyboard is up (R6, screenshot evidence) — and asks a fourth, structural question: does the app actually have screenshot and story coverage for every sheet it can open, checked one by one against Notion and Anytype (R7)?",
     "created_at": "2026-09-08T06:24:02Z",
-    "last_save_at": "2026-09-09T20:57:00.898Z",
+    "last_save_at": "2026-09-09T21:07:21.361Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:818370e41ab4487f8673b8db5b63534cf3f8a76352c26c466d50342850abef8c",
+    "source_fingerprint": "sha256:6a73149f3becc084b5cbeb1d48da49b6445c5cc6a84439a535d9e27a3899312d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "a9c92eed26fad9c54faa63ba827c28f07405061ebe5d622d3a5258289caa8485"
+      "spec.md": "4218469772e66fb4a77e7cff21a52182d8f0e472fa2816a3bbebd8dcba0d6398"
     },
     "last_active_at": null
   }

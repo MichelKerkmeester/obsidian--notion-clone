@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/071-sheet-notion-anytype-alignment"
-    last_updated_at: "2026-09-09T23:10:00Z"
-    last_updated_by: "007-landing-verify"
-    recent_action: "Child 007 LANDED (provisional metrics), landing-verified on the rebased main"
-    next_safe_action: "Receive T001's operator capture and retune 007's four provisional numbers"
+    last_updated_at: "2026-09-09T23:20:00Z"
+    last_updated_by: "272-sheet-notion-audit"
+    recent_action: "Audited every phone sheet vs Notion; scaffolded children 008-014"
+    next_safe_action: "Execute 010/tasks.md, then 008, 009, 011-014; 007 awaits its operator capture"
     blockers: []
     key_files:
       - "spec.md"
@@ -41,6 +41,7 @@ _memory:
 | D1 | No child phase after 001 may redesign a sheet without first citing 001's reference-mapping row for it |
 | D2 | The settings sheet (002) and add-property sheet (003) are the first two rows, per the operator |
 | D3 | Only the operator's own device recheck may close a device row; no agent ticks it |
+| D4 | **No numeric threshold anywhere in this packet may be derived from a Notion iOS asset.** Every one of the 1,315 captures under `screenshots/notion/ios/` is 299x678 (`sips`-confirmed on a 400-file sample and on all 171 files in the five folders the sheet families lean on). The Notion column in every child's gap table is structural; every number is ours, an internal-consistency target, or `TBD` pending an operator capture. Established by `007` D2 for one sheet, generalised to all of them by `sheet-notion-audit.md` §0 |
 
 ### Operator copy
 
@@ -68,6 +69,13 @@ phase and binds as if written here.
 | 005-filter-sort-group-sheets | `005-filter-sort-group-sheets/goal.md` |
 | 006-record-and-menu-sheets | `006-record-and-menu-sheets/goal.md` |
 | 007-settings-sheet-strict-alignment | `007-settings-sheet-strict-alignment/goal.md` |
+| 008-filter-sheet-row-model | `008-filter-sheet-row-model/goal.md` |
+| 009-properties-sheet-row-model | `009-properties-sheet-row-model/goal.md` |
+| 010-sheet-copy-touch-idiom | `010-sheet-copy-touch-idiom/goal.md` |
+| 011-record-sheet-header-and-icons | `011-record-sheet-header-and-icons/goal.md` |
+| 012-sort-and-group-sheet-rows | `012-sort-and-group-sheet-rows/goal.md` |
+| 013-sheet-input-and-action-order | `013-sheet-input-and-action-order/goal.md` |
+| 014-sheet-polish | `014-sheet-polish/goal.md` |
 
 **Precedence.** Decisions above outrank child detail. Child detail outranks any
 summary of it. Name a conflict rather than resolving it silently.
@@ -105,6 +113,7 @@ string, not these files.
 | 006-record-and-menu-sheets | LANDED, landing-verified | Replayed as `a10c11ac` onto the 066+0.0.34+004-merged main, landed `ae89043f`; goal 2/2, gate 27/0, 2166 sheet-grammar checks green |
 | ALL SIX CHILDREN LANDED — parent 4/4 | Done | This refresh, 2026-09-09: criterion 4's own parent-level run confirms no regression on the merged tree (`97395196`): `sheet-grammar.mjs` PASS exit 0, `npx vitest run` PASS exit 0 (157 files / 1581 tests) |
 | 007-settings-sheet-strict-alignment | LANDED, landing-verified | Implementation landed in `worktrees/269-settings-sheet-cards` as `9b6daa3e`+`f2e993e6`, rebased onto origin/main (069/075-merged) as `a56020f7`+`48dbd5d9`; goal 4/5 (the fifth criterion is the operator's own device read, D3). Continuation verification: sheet-grammar card clause RED (0 card containers, exit 1) → GREEN (2/2 cards, radius ≥8px, backgrounds distinct, gap ≥8px, headings above) — reproven by producer mutation (card-wrapper revert → 0 cards, exit 1) and unit mutation (card-background declaration → exactly 1 of 7 fails); vitest 1586/1586, tsc 0, build 0, screenshots ×2 480/480 (0 movers both runs), evidence 16/16 fresh, gate 28/0 (069's lane the 28th), validate --strict PASSED ×3; the four card metrics stay provisional until T001's operator capture |
+| **Phases 008-014 scaffolded from `sheet-notion-audit.md`** | Scaffold only | Operator ruling 2026-09-09 ~22:30 (D3, verbatim): *"Check more sheets align closer to notion, input, content, wise etc"* / *"Ui improvement is focus here"*. `sheet-notion-audit.md` audits every shipped phone sheet at the level of inputs and content — 16 P1, 26 P2, 13 P3 across sixteen surfaces — and opens seven children. Each validates `RESULT: PASSED`. Implementation order `010` → `008` → `009` → `011` → `012` → `013` → `014`. No implementation yet |
 
 ### Deviations and findings
 
@@ -112,4 +121,7 @@ string, not these files.
 |------|------|
 | Combined into one phase parent | Both phase-qualification thresholds (architectural cross-cutting change across every sheet family, plus file/LOC scores) are met independently, per `recommend-level.sh --loc 1200 --files 25 --architectural`; one coordinated packet avoids re-litigating the audit per sheet family |
 | The packet's 100%/4/4 completion figure is unaffected by 007 | 007 exists because of D3 (the operator's own device recheck), which `goal.md`'s completion criteria already treat as a standing open item separate from the four tallied criteria — the 0.0.36 report is that open item resolving negatively for the settings sheet specifically, not a contradiction of anything already ticked |
+| The audit's central finding is that the lane measures the shell, not the content | `node tools/live/sheet-grammar.mjs` passes on every surface, and its eight "grammar columns" — `surface`, `handle`, `header`, `rows`, `segmented`, `keyboard`, `safeArea`, `dropdown` — are boolean presence checks that each print `true`. They prove a sheet has chrome. They never count the controls on a row or read a label. That is why the Filter sheet scores 8/8, prints 3/3 rows inside the 44-52px band and 0 native selects, and still renders its property names as `F…`, `gr…`, `is…`. Recorded as Mechanism A in `sheet-notion-audit.md` §1 |
+| A second mechanism: a contract passes because its surface list omits the surface | The title-centring clause covers **13** header-bearing surfaces. `record-detail` and `record-peek` are not among them, because the clause queries `.obnotion-shell-header` (`sheet-grammar.mjs:3402`) and the record family mounts `.obnotion-record-detail-header` instead. So the record sheet's title is the one phone-sheet title that does not centre, and the assertion that would have caught it was never eligible to fail. `007` found the same class of gap by a different route. Mechanism B, `sheet-notion-audit.md` §1; owned by `011` |
+| The 071 completion figure is unaffected by 008-014, for the same reason it was unaffected by 007 | The four tallied criteria are about the six original children and they remain met. Phases 008-014 exist because of D3 — the operator's own device recheck — which `goal.md` already treats as a standing open item separate from the tally. The 2026-09-09 ~22:30 ruling is that open item resolving negatively for the remaining sheets, not a contradiction of anything already ticked |
 <!-- /ANCHOR:log -->

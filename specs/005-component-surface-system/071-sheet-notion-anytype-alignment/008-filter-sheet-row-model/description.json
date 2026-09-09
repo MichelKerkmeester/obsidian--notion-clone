@@ -1,0 +1,27 @@
+{
+  "level": "3",
+  "specFolder": "005-component-surface-system/071-sheet-notion-anytype-alignment/008-filter-sheet-row-model",
+  "description": "The phone Filter sheet packs six controls onto one condition row so property names truncate",
+  "keywords": [
+    "phone",
+    "filter",
+    "sheet",
+    "condition",
+    "row",
+    "controls",
+    "property",
+    "truncated",
+    "notion",
+    "stacked",
+    "inset"
+  ],
+  "specId": "008",
+  "folderSlug": "filter-sheet-row-model",
+  "parentChain": [
+    "005-component-surface-system",
+    "071-sheet-notion-anytype-alignment"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "lastUpdated": "2026-09-09T22:50:00.000Z"
+}

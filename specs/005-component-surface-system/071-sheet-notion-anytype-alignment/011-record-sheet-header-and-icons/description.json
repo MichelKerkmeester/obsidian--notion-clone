@@ -1,0 +1,15 @@
+{
+  "level": "3",
+  "specFolder": "005-component-surface-system/071-sheet-notion-anytype-alignment/011-record-sheet-header-and-icons",
+  "description": "The record sheet is the one phone sheet title that does not centre",
+  "keywords": ["record","sheet","header","title","centring","contract","property","type","icon","peek"],
+  "lastUpdated": "2026-09-09T22:50:00.000Z",
+  "specId": "011",
+  "folderSlug": "record-sheet-header-and-icons",
+  "parentChain": [
+    "005-component-surface-system",
+    "071-sheet-notion-anytype-alignment"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

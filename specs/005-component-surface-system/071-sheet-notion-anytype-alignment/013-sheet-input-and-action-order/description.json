@@ -1,0 +1,15 @@
+{
+  "level": "3",
+  "specFolder": "005-component-surface-system/071-sheet-notion-anytype-alignment/013-sheet-input-and-action-order",
+  "description": "Four sheets order their inputs and actions against the Notion reading",
+  "keywords": ["add-view","date","picker","confirm","order","input","action","toolbar","preset","notion","calendar"],
+  "lastUpdated": "2026-09-09T22:50:00.000Z",
+  "specId": "013",
+  "folderSlug": "sheet-input-and-action-order",
+  "parentChain": [
+    "005-component-surface-system",
+    "071-sheet-notion-anytype-alignment"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

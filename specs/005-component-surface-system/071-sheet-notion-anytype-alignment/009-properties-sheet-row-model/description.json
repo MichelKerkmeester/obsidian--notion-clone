@@ -1,0 +1,15 @@
+{
+  "level": "3",
+  "specFolder": "005-component-surface-system/071-sheet-notion-anytype-alignment/009-properties-sheet-row-model",
+  "description": "The Properties sheet carries eight elements per row and prints the internal storage key",
+  "keywords": ["phone","properties","sheet","row","controls","storage","key","shown","hidden","notion","edit"],
+  "lastUpdated": "2026-09-09T22:50:00.000Z",
+  "specId": "009",
+  "folderSlug": "properties-sheet-row-model",
+  "parentChain": [
+    "005-component-surface-system",
+    "071-sheet-notion-anytype-alignment"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}
