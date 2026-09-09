@@ -61,7 +61,7 @@ resend the full text of this file in chat so the operator can update their copy.
 - [x] Touch targets measure ≥44×44px
   - Watched it red: reverting one control's 44px height measured the labelled filter button 44x28 (constructed fixture 72x28) under its named 44px RAISED floor — it was 28x28 before the fix; restored, the same lane passes.
 - [x] The existing 009/044 toolbar-collapse and sheet-grammar lanes rerun and pass (unaffected by the phone-only edit), and a new scroll-overflow lane (402px viewport, `scrollWidth > clientWidth`, last control reachable) is red-then-green
-  - Red: before the labels, the 402px lane measured scrollWidth 398 / clientWidth 398 with no overflow and no visible label; after, 532 / 398 with the last control reachable. The 009/044 lanes report identical results with and without the phone-only edit (the embedded/desktop shape they mount is untouched).
+  - Red: before the labels, the 402px lane's scrollWidth was 398 / clientWidth 398 with no overflow and no visible label; after, 532 / 398 with the last control reachable. The 009/044 lanes report identical results with and without the phone-only edit (the embedded/desktop shape they mount is untouched).
 - [x] Desktop toolbar decision recorded as an ADR
   - The measured failure it closes: the reference's labelled controls measure 44px tall on phone while this toolbar's controls were 28x28 before the fix; ADR-001 records desktop and the embedded/codeblock toolbar staying 28x28 icon-only, a decision recorded with its evidence, not a threshold.
 - [ ] Operator device row recorded and left unticked
