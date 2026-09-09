@@ -9,9 +9,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation"
-    last_updated_at: "2026-09-09T08:55:00Z"
-    last_updated_by: "252-deprecation-readme-strip"
-    recent_action: "004's docs leg LANDED (252): README+description stripped, the note, the lane 10/10"
+    last_updated_at: "2026-09-09T09:30:00Z"
+    last_updated_by: "252-landing-verify"
+    recent_action: "004's docs leg LANDED+verified+pushed (e968d5ca→f1eb93f5): 3/3, gate 27/0, 0 PNGs moved"
     next_safe_action: "Cut 0.0.35 publishing the drafted notes, then push"
     blockers:
       - "The 0.0.35 release cut that publishes the drafted notes (and the push) — the packet's last step, a later leg"

@@ -10,14 +10,14 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T06:20:00Z"
-    last_updated_by: "250-landing-verify"
-    recent_action: "008/003 LANDED+verified+pushed (7fb9fb28): grep 0, gate 27/0, 136 captures retired"
-    next_safe_action: "008/004-archive-docs-and-release next; the operator's device rows (066, 075) stay theirs"
+    last_updated_at: "2026-09-09T09:30:00Z"
+    last_updated_by: "252-landing-verify"
+    recent_action: "008/004 LANDED+verified+pushed (f1eb93f5): mentions 13→0, gate 27/0, 0 PNGs moved"
+    next_safe_action: "Cut 0.0.35 publishing 008/004's drafted notes; device rows (066, 075) stay the operator's"
     blockers:
       - "066's device read (AC-008) and 075's AC-006 still wait on the operator's handset pass — never agent-ticked"
       - "071/004's landing is complete (f72e50cd, landing-verified); the .worktrees/245-view-config-sheet worktree can be retired once this 005-handover entry lands"
-      - "008/002's AC-007 is discharged by the 0.0.34 cut (e75a979c) — 008's own goal/roadmap still to be reconciled by that packet"
+      - "008/002's AC-007 discharged by the 0.0.34 cut (e75a979c); 008's own goal/roadmap reconciled by 252's landing verifier (f1eb93f5) — 0.0.35 publishing 004's drafted notes remains"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
@@ -43,6 +43,26 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-09 ~09:30, `008/004-archive-docs-and-release` LANDED on `origin/main` — docs-only, landing-verified, pushed
+
+**What landed:** the docs leg's single commit (`e968d5ca` in `.worktrees/252-deprecation-readme-strip`, GLM,
+"docs(readme): strip the retired view mentions, add the archived-views note and the mention lane")
+replayed onto `48e85567` — a no-op rebase, main carried nothing since — plus this verifier's
+reconciliation at `f1eb93f5` (roadmap §5.A rows 78/77 → LANDED 3/3; the gate's seven evidence lanes
+re-derived, `measuredAt`-only). **Verified, by numbers:** the enforced-mention grep over
+README.md+manifest.json = exactly 1 hit, the sanctioned "Deprecated views" sentence at README.md:22
+pointing at `archive/deprecated-views/README.md` (7 keyword occurrences, all inside the note; no
+feature claim outside it — the leg's 13→0 claim CONFIRMED); mention-lane mutation: one "calendar
+view" sentence re-added → 1 failed | 9 passed of 10, restored → 10/10; the suite replayed against
+the pre-leg README/manifest → 1|9 red, restored → 10/10; 037's supersession note in its own
+goal.md (2026-09-09, cites `7fb9fb28`, history intact); 002's AC-007 reads Met, 0.0.34 =
+`e75a979c9a21…` == `git rev-parse 0.0.34^{commit}`; 008 parent criterion 4 stays ticked (strip +
+supersede + notes DRAFTED; the 0.0.35 cut itself stays open); build 0, tsc 0, vitest 1581/1581,
+screenshots ×2 both 0 moved PNGs (pixel-delta 0; one 1-line manifest `bytes` jitter 181633→181631
+restored), gate **27 green, 0 red**, `validate --strict` RESULT: PASSED for 004 and the 008 parent,
+scan-comments 0, scan-failing-values 0. package.json's description still names the retired views —
+deliberate, an open row for the 0.0.35 release leg.
 
 ### 2026-09-09 ~04:30, `071/005-filter-sort-group-sheets` LANDED on `origin/main` — landing-verified, rebased, pushed
 
