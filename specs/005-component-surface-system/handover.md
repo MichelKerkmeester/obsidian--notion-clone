@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T02:30:00Z"
-    last_updated_by: "245-landing-verify"
-    recent_action: "004 LANDED+verified (f72e50cd): goal 3/3, 071 2/4, gate 27/0, scans 0"
-    next_safe_action: "005/006 of 071 next; the operator device rows stay the operator's"
+    last_updated_at: "2026-09-09T03:30:00Z"
+    last_updated_by: "248-landing-verify"
+    recent_action: "006 LANDED+verified (8bd6973e): goal 2/2, 071 2/4, gate 27/0, scans 0"
+    next_safe_action: "071/005 next; the operator device rows stay the operator's"
     blockers:
       - "066's device read (AC-008) and 075's AC-006 still wait on the operator's handset pass — never agent-ticked"
       - "071/004's landing is complete (f72e50cd, landing-verified); the .worktrees/245-view-config-sheet worktree can be retired once this 005-handover entry lands"
@@ -98,6 +98,42 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-09 ~03:30, `071/006-record-and-menu-sheets` LANDED on `origin/main` — landing-verified, rebased, pushed
+
+**What landed:** the GLM leg's single commit (`77e74368` in this worktree, 42 files, +813/−488) replayed onto
+`b8b76435` — which had grown the 066 wave-2 toast, the 0.0.34 cut, `071/003-add-property-sheet` and
+`071/004-view-config-sheet` with its landing-verification — and landed as `a10c11ac`, with this continuation's
+verification as the commit right after it (`8bd6973e`). **How:** 17 conflicts, all generated artefacts: the 16
+(`screenshots/manifest.json` + 15 `tools/live/*.json`) took main's side and were re-derived; `css-lane.json`
+merged append-only (main's 066/003/004 histories + the leg's 006 triplet) with a post-rebase 006
+acquire/edit/release triplet, holder 006, baselineHash = `8123dd3b4e9e` (sha256 of the merged styles.css);
+`styles.css` and `sheet-grammar.mjs` auto-merged. The one real casualty: 004's rewritten definitions lost the
+`SETTINGS_COMPACT_ROW_PITCH_*` names the record grammar inherited under their 002-era spellings (gate run 1:
+lint 9 no-undef, the sheet-grammar harness dead at `SETTINGS_COMPACT_ROW_PITCH_MIN_PX is not defined`) — the
+9 references were repointed to the identical-semantics 44/52 `SETTINGS_ROW_PITCH_*` window and amended into
+the replay. **Verified with suspicion, by numbers:** the record grammar — 21/21 property rows 44.0px (border-
+box, was 61.0×20+60.0×1), inset 16.0px, 1/1 section headings 16.0px/1px, hairline 20/20 (last 0px), 0 native
+selects, extent 401 ≤ 401, 4/4 record menu pairs 44.0px, 0 FAIL; mutations re-proven — deleting the
+section-header `border-top` alone flips exactly that lane row (16.0px/0px, lane exit 1, 1 failure), the unit
+pin reads 5/5 → 1 failed | 4 passed → 5/5 on the surface-inset revert (`--obnotion-sheet-inset`→`--obnotion-
+space-5`); vitest 1747/1747 (162 files = main's 161 + this leg's), tsc 0, build 0; screenshots ×2 616/616 —
+12 content movers, every one moved in BOTH sampled runs → kept (chrome-owned-menu-sheet-mobile-dark 2702@5,
+active-rule-filter 11897@17, calendar-toolbar-options 6376@15, table-mobile-desktop-light 316@32 — the
+leg's own counts reproduced; record-body-empty foursome 1494–6971px@1–2; add-view-dark 159@176; timeline-
+year-dark 483@12; calendar-empty-state pair 5/12px@1), 1 jitter (board-view-desktop-dark 4px@max1, run-2
+only) restored at committed bytes, its manifest row's styles.css stamp alone refreshed; evidence 15/15 after
+the 13 flagged artefacts were re-derived by their own writers (render-assertions exit 0; engine-parity 82
+fixtures / 43 differences = 002's recorded steady state, exit 1 INFORMATIONAL by design); scans 0. Gate re-run
+**27 green, 0 red**. `--strict` `RESULT: PASSED` on 006, 071 and 005 after the graph-metadata backfill.
+Docs reconciled: the 006 goal criterion 2 ticked (1/2 → 2/2, the 003/004 precedent — the before/after is the
+lane's printed numbers, the family has no committed PNG), the 071 goal criterion 3's 006 clause (figure stays
+2/4, 005 still not started), the roadmap §5.A 071 row, the operator checklist regenerated (185 rows / 68
+phases — my first doc edits went red on the operator-list lane exactly as the gate intends). D15: the 061/065/
+067 rulings (handle-less anchored card, 44px close, 0.52 scrim, shared shell) not reopened — inherited and
+re-proven where the record family mounts its menus (D-005, 4/4 record pairs); no contradiction, no Proposed
+ADR owed. The 071 D3 operator device rows untouched, never ticked by an agent. **Pushed:
+`b8b76435..8bd6973e` on `origin/main` (the verification pair).**
 
 ### 2026-09-09 ~04:30, `071/004-view-config-sheet` LANDED on `origin/main` — landing-verified, rebased, pushed
 
