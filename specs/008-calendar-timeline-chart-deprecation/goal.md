@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation"
-    last_updated_at: "2026-09-09T09:53:00Z"
-    last_updated_by: "goal-refresh-0035"
-    recent_action: "0.0.35 published (97395196); packet 4/4, all four children closed"
-    next_safe_action: "Packet closed; package.json description stays an open residual"
+    last_updated_at: "2026-09-09T09:56:00Z"
+    last_updated_by: "255-pkg-description"
+    recent_action: "0.0.35 published (97395196); 4/4 closed; the package.json residual 3 → 0"
+    next_safe_action: "Packet closed, the package.json residual discharged; push 0.0.35 — a fresh verifier lands it"
     blockers: []
     key_files:
       - "spec.md"
@@ -104,6 +104,7 @@ string, not these files.
 | 003-remove-renderers-and-harness | Done | `003-remove-renderers-and-harness/implementation-summary.md`; 4/4 criteria, the bundle grep 0, the gate 27/0, ten sources archived; validated strict-PASSED — 2026-09-09 |
 | 004-archive-docs-and-release | Done | `004-archive-docs-and-release/implementation-summary.md`; 2/2 acceptance criteria Met, the note-exemption ruling recorded in the phase goal's LOG, the gate 27/0; the release notes drafted and published — 2026-09-09 |
 | 0.0.35 cut and published | Done | Tag `0.0.35` at `97395196`; GitHub release published (`gh release view 0.0.35`), the drafted removal/archive/restore copy is the published body. ALL FOUR CHILDREN CLOSED — parent 4/4 |
+| 255 residual: `package.json`'s description | Done | Retired mentions 3 → 0 (chart 1, calendar 1, timeline 1); the mention lane extended to read the description field, RED/GREEN recorded; the gate 27/0 — 2026-09-09 |
 
 ### Deviations and findings
 
@@ -112,5 +113,5 @@ string, not these files.
 | Combined into one phase parent | Both phase-qualification thresholds are met independently (`recommend-level.sh --loc 1000 --files 20 --architectural`); one packet avoids three separate top-level packets re-deciding the same archive location and README strip |
 | 002's three types split into two fallback shapes | Chart/calendar's redirect target equals the settings-load sanitizer's bare unknown-type fallback and closes for free; timeline's does not and routes through a real migration — `002/decision-record.md` ADR-001 |
 | 003's removal kept the harness's retired-view machinery dormant | The gate's lane count held 27→27 and the 002-pinned clauses survived untouched; five turned-unsupplied retired-view tokens recorded, not stood in — `003-remove-renderers-and-harness/decision-record.md` ADR-002/003 |
-| `package.json`'s `description` field still names the retired views | Read 2026-09-09: `"Database views for notes with table, board, list, chart, calendar, timeline, inline markdown, formulas, and source rules."` — 004's AC-001 scoped "the community-plugin description" to `manifest.json` (already 0 mentions), not `package.json`; this field was never in that criterion's scope, so it stays open as a residual, not a broken tick |
+| `package.json`'s `description` field still names the retired views | Read 2026-09-09: `"Database views for notes with table, board, list, chart, calendar, timeline, inline markdown, formulas, and source rules."` — 004's AC-001 scoped "the community-plugin description" to `manifest.json` (already 0 mentions), not `package.json`; this field was never in that criterion's scope, so it stays open as a residual, not a broken tick. Discharged 2026-09-09 by the residual leg (worktree `255-pkg-description`): the description now reads `Database views for notes with table, board, inline markdown, formulas, and source rules.` — 3 → 0 — and the lane reads `package.json`'s `description` field alone (its dependency and keyword lists are code identifiers, not prose copy); RED/GREEN recorded in 004's implementation summary, the gate 27/0 |
 <!-- /ANCHOR:log -->

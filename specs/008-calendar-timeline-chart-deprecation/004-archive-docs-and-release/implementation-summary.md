@@ -11,15 +11,16 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation/004-archive-docs-and-release"
-    last_updated_at: "2026-09-09T08:55:00Z"
-    last_updated_by: "252-deprecation-readme-strip"
-    recent_action: "Landed: the strip, the note, the description, the mention lane; 2/2 ACs"
-    next_safe_action: "Cut 0.0.35 publishing the drafted notes, then push"
+    last_updated_at: "2026-09-09T09:55:00Z"
+    last_updated_by: "255-pkg-description"
+    recent_action: "Landed: the strip, the note, both descriptions, the mention lane, the residual; 2/2 ACs"
+    next_safe_action: "Push 0.0.35 — the cut is published; a fresh verifier lands it"
     blockers:
-      - "The 0.0.35 cut that publishes the drafted notes — a later leg, not this dispatch"
+      - "The 0.0.35 push — this dispatch said do not push; a fresh verifier lands it"
     key_files:
       - "../../../README.md"
       - "../../../manifest.json"
+      - "../../../package.json"
       - "../../../tools/naming/scan-deprecated-views.mjs"
       - "../../../tools/naming/scan-deprecated-views.test.mjs"
       - "../../../archive/deprecated-views/README.md"
@@ -152,6 +153,9 @@ gitignored `.handover.md`.
 | `node tools/naming/scan-failing-values.mjs` | 0 |
 | `npm run gate` (foreground, `</dev/null`, `$?` read) | **27 green, 0 red for a declared reason, exit 0** |
 | `git rev-parse 0.0.34^{commit}` (002's AC-007 evidence) | `e75a979c9a21f6f93967a40e24b2a58f474fa9d5` — the "chore(release): cut 0.0.34" commit |
+| The residual leg — the extended lane RED, the old description restored | exit 1 — `package.json`: 3 retired-view mention(s) (chart 1, calendar 1, timeline 1); the lane's suite 1 failed, 12 passed |
+| — GREEN, the discharged copy restored | exit 0 — `package.json`'s description: 0; the suite 13/13 (3 new cases) |
+| The residual leg's battery: `npx tsc --noEmit` 0; `npx vitest run` 1584/1584; `npm run build` 0; `node tools/live/sheet-grammar.mjs` 0; `node tools/live/render-assertions.mjs` 0; `node tools/storybook/verify-placement.mjs` 0 (418/420 geometry checks, 2 red for a declared reason, unchanged); `node tools/live/evidence.mjs --check-all` 0 (15 artefacts fresh); `node tools/naming/scan-comments.mjs` 0; `node tools/naming/scan-failing-values.mjs` 0; `npm run gate` (foreground, `</dev/null`, `$?` read) | **27 green, 0 red for a declared reason, exit 0** — no styles or renderers changed, so no capture pass |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -163,10 +167,18 @@ gitignored `.handover.md`.
    (`../changelog/008-004-archive-docs-and-release.md`, drafted, describing the removal and the
    archive/restore path) and the goal's criterion is discharged by their existence; publishing
    them — the cut, then the push — is the packet's last step, a later leg's. Not this dispatch:
-   it was sent with "Do NOT push".
-2. **`package.json`'s description still names the retired views.** Out of the named scope
-   (`README.md`, `manifest.json`); the lane does not read it, so nothing fails. Recorded here so
-   the next pass knows it is deliberate, not missed.
+   it was sent with "Do NOT push". Cut and published since — 2026-09-09, tag `0.0.35` at
+   `97395196`, the drafted copy is the published body (the closure statement cites
+   `gh release view 0.0.35`); the push is what remains.
+2. **`package.json`'s description named the retired views — discharged 2026-09-09 by the
+   residual leg.** The dispatch's scope (`README.md`, `manifest.json`) left it out; the residual
+   leg landed it: the description now reads `Database views for notes with table, board, inline
+   markdown, formulas, and source rules.` (the community-plugin wording, this copy's own feature
+   tail kept), retired mentions 3 → 0, and the lane reads `package.json`'s `description` field —
+   its dependency and keyword lists are code identifiers (one of them is the shipped `chart.js`
+   dependency), not prose copy, so the lane judges the description alone and a missing one is
+   itself a violation. RED first (the old string restored: 3 mentions, the suite 1 failed | 12
+   passed, the lane exit 1), then GREEN (0 mentions, 13/13, exit 0).
 3. **The note's 7 mentions are permanent.** By design — they are the pointer. Anyone expecting a
    literal `grep -in`-zero README should read the lane's report line, which splits the enforced
    from the exempted.
@@ -181,4 +193,7 @@ are the copy), pushes, and closes the packet: the 008 parent's four completion c
 otherwise ticked, and the parent's continuity (updated this leg, completion 95) already names the
 cut as the next safe action. 002's AC-007 is discharged (0.0.34 = `e75a979c`, verified), 037's
 supersession note is in its own goal.md, and the note-exemption ruling means the 0.0.35 note's
-copy can name the removed views freely — the lane only watches the feature prose.
+copy can name the removed views freely — the lane only watches the feature prose. Since this
+leg: 0.0.35 was cut and published (tag `0.0.35` at `97395196`; the closure statement cites the
+published release), and the `package.json` residual was discharged by the residual leg — the
+description 3 → 0, the lane reads it — so what remains of this phase is the push alone.

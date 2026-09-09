@@ -4,16 +4,18 @@
 // COMPONENT: sk-code-obsidian source-gate — retired-view mention scanner
 // ───────────────────────────────────────────────────────────────────
 //
-// The root README and the community-plugin description shipped describing
-// views that are no longer in the bundle, so the docs told any new reader the
-// plugin had five view types when it now has two. Until this scanner existed
-// the only proof the copy was current was reading the prose by eye, and this
-// leg caught the drift precisely because nobody had.
+// The root README, the community-plugin description, and the npm-listing
+// description shipped describing views that are no longer in the bundle, so the
+// docs told any new reader the plugin had five view types when it now has two.
+// Until this scanner existed the only proof the copy was current was reading the
+// prose by eye, and this leg caught the drift precisely because nobody had.
 //
 // The rule it enforces: outside the sanctioned "Deprecated views" note, the
 // root README may carry zero mentions of the retired view names, and
 // manifest.json may carry zero anywhere — its description field has no room
-// for a note, so its copy must name only what still ships. The note itself is
+// for a note, so its copy must name only what still ships. package.json is
+// judged on its description field alone: the dependency and keyword lists name
+// identifiers of shipped code, not prose copy. The note itself is
 // the pointer the operator asked for: it tells the reader where the removed
 // code lives and how it comes back, so its own mentions are the point, not
 // the drift, and they are counted but never enforced.
@@ -42,6 +44,7 @@ const KEYWORD_RE = /\b(?:calendar|timeline|gantt|chart|gallery|list views?)\b/gi
 
 const README_NAME = "README.md";
 const MANIFEST_NAME = "manifest.json";
+const PACKAGE_NAME = "package.json";
 const NOTE_HEADING = "## Deprecated views";
 const ARCHIVE_README = "archive/deprecated-views/README.md";
 
@@ -87,12 +90,36 @@ function countMatches(text, skipLines) {
 // string without touching the real tree — everything above is pure
 // text-in, verdict-out. Returns the match counts plus one list of concrete
 // violations, empty when the file is clean.
+// The lane judges prose copy, so for the npm manifest it reads the description
+// field alone — its dependency and keyword lists are code identifiers (one of
+// them is a shipped dependency's own package name, retired-view-adjacent by
+// coincidence, not by drift). Returns undefined when no description exists.
+function packageDescription(text) {
+  try {
+    const parsed = JSON.parse(text);
+    if (typeof parsed?.description === "string") return parsed.description;
+  } catch {
+    // not JSON — fall through
+  }
+  return undefined;
+}
+
 export function scanText(text, filename) {
-  const isManifest = path.basename(filename) === MANIFEST_NAME;
+  const base = path.basename(filename);
+  const isPackage = base === PACKAGE_NAME;
+  const isNoteless = isPackage || base === MANIFEST_NAME;
   const violations = [];
 
-  if (isManifest) {
-    const counts = countMatches(text);
+  if (isNoteless) {
+    const subject = isPackage ? packageDescription(text) : text;
+    if (subject === undefined) {
+      return {
+        counts: countMatches(""),
+        note: null,
+        violations: [`${filename}: no description field to scan`],
+      };
+    }
+    const counts = countMatches(subject);
     if (counts.enforced > 0) {
       violations.push(
         `${filename}: ${counts.enforced} retired-view mention(s) outside any note: ${JSON.stringify(counts.details)}`,
@@ -126,7 +153,7 @@ export function scanText(text, filename) {
 
 function scan() {
   const results = [];
-  for (const name of [README_NAME, MANIFEST_NAME]) {
+  for (const name of [README_NAME, MANIFEST_NAME, PACKAGE_NAME]) {
     const abs = path.join(REPO_ROOT, name);
     const result = scanText(readFileSync(abs, "utf8"), name);
     results.push(result);

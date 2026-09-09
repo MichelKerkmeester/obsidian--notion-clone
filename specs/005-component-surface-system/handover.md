@@ -2984,3 +2984,31 @@ notes drafted at `008-…/changelog/008-004-archive-docs-and-release.md`. Valida
 RESULT: PASSED; packet graph metadata backfilled. **Open: the 0.0.35 cut that publishes the
 drafted notes, then the push** — the packet's last step, a later leg's. Not pushed — a fresh
 verifier lands it.
+
+## 255-pkg-description — 008/004 residual: the npm-listing description (2026-09-09)
+
+The open row 004's lander recorded — `package.json`'s `description` still naming the retired
+views — is discharged in the `255-pkg-description` worktree: the description now reads "Database
+views for notes with table, board, inline markdown, formulas, and source rules." (the
+community-plugin wording, this copy's own feature tail kept — inline markdown, formulas, source
+rules), retired mentions 3 → 0 (chart 1, calendar 1, timeline 1). The mention lane now reads
+`package.json` too, judging its `description` field alone: the dependency and keyword lists are
+code identifiers (one of them is the shipped `chart.js` dependency, retired-view-adjacent by
+coincidence), not prose copy, and a missing description field is itself a violation. The lane's
+suite grows 10 → 13.
+
+**RED/GREEN**: the old string restored, the extended lane run — `package.json`: 3 retired-view
+mention(s), the suite 1 failed | 12 passed, the lane exit 1; the new copy restored — the
+description 0, the suite 13/13, the lane exit 0.
+
+**The numbers**: `npx tsc --noEmit` 0; `npx vitest run` 1584/1584; `npm run build` 0;
+`node tools/live/sheet-grammar.mjs` 0; `node tools/live/render-assertions.mjs` 0;
+`node tools/storybook/verify-placement.mjs` 0 (418/420 geometry checks, 2 red for a declared
+reason — unchanged); `node tools/live/evidence.mjs --check-all` 0 (15 artefacts fresh);
+`node tools/naming/scan-comments.mjs` 0; `node tools/naming/scan-failing-values.mjs` 0 (447
+ticked, the recorded baselines); `npm run gate` (foreground, `</dev/null`, `$?` read) **27 green,
+0 red for a declared reason, exit 0** — lane count 27→27. No styles or renderers changed, so no
+capture pass. 004's AC-001 evidence and closure, its implementation summary
+(limitations/verification/continuation/continuity) and the 008 parent's goal continuity + LOG
+reconciled; validated strict, RESULT: PASSED; 004/008/005 graph metadata backfilled. Not pushed —
+a fresh verifier lands it.

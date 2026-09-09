@@ -120,6 +120,37 @@ describe("scanText over the manifest's description field", () => {
 });
 
 // ───────────────────────────────────────────────────────────────────
+// 3b. THE NPM-LISTING DESCRIPTION: PROSE ONLY, IDENTIFIERS ARE NOT COPY
+// ───────────────────────────────────────────────────────────────────
+
+describe("scanText over the package's description field", () => {
+  it("counts a retired-view mention inside the description", () => {
+    const withMention = '{"description": "table, board, list, chart, calendar, timeline, inline markdown"}';
+    const result = scanText(withMention, "package.json");
+    expect(result.counts.enforced).toBe(3);
+    expect(result.note).toBeNull();
+    expect(result.violations).toHaveLength(1);
+    expect(result.violations[0]).toContain("3 retired-view mention(s)");
+  });
+
+  it("judges the description field alone: shipped dependencies and keywords are identifiers, not copy", () => {
+    const clean = JSON.stringify({
+      description: "Database views for notes with table, board, inline markdown, formulas, and source rules.",
+      keywords: ["obsidian", "plugin", "database", "table", "kanban", "list", "frontmatter"],
+      dependencies: { "chart.js": "^4.5.1" },
+    });
+    const result = scanText(clean, "package.json");
+    expect(result.counts.enforced).toBe(0);
+    expect(result.violations).toHaveLength(0);
+  });
+
+  it("violates when no description field exists at all", () => {
+    const result = scanText('{"name": "obsidian-obnotion"}', "package.json");
+    expect(result.violations).toEqual(["package.json: no description field to scan"]);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
 // 4. THE EXIT CODE CONTRACT
 // ───────────────────────────────────────────────────────────────────
 
