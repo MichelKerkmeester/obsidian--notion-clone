@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T23:35:00Z"
-    last_updated_by: "271-testbed-clean-verify"
-    recent_action: "Landing-verified 074 testbed one-DB/two-views ruling; 3b15f925 on main"
+    last_updated_at: "2026-09-09T23:55:00Z"
+    last_updated_by: "270-card-field-names"
+    recent_action: "Landing-verified 045 board-card field names; 0429d4d7+2d6d608c on main"
     next_safe_action: "Execute 071/010/tasks.md, then 008, 009, 011-014; 007 awaits T001 capture"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
@@ -41,6 +41,10 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-09 ~23:55, `045` board-card field names LANDING-VERIFIED — landed on main as `2d6d608c`, worktree `270-card-field-names`
+
+**What this verifier confirmed** on the styles-only leg (single commit, three-times replayed: `ab099f87` → `659e8c37` → `0429d4d7`, this verifier's reconciliation atop it as `ea234322` → `71dcd585` → `2d6d608c`, all pushed) of the 0.0.36 report *"Board cards should also show field name and not just value"*: the shared card-field renderer always emitted each property's name span (`card-field-renderer.ts:105`, text = `col.label`, the schema display name, never the key); the kanban meta block only hid it. The fix un-hides it — 12px in the muted token before the value, the value keeping `tabular-nums`, the property grid 1fr 1fr at a 360px-or-wider viewport and 1fr below (`@media (max-width: 359.9px)`), the meta-scoped value clamp 2 → 1 so the measured uniform 25px row pitch survives, chip rows `grid-column: 1/-1` so a wrapped badge row cannot stretch its grid neighbour. Mutation re-proof by this verifier on the merged tree: the label rule re-hid (`display: none`) → `render-assertions` exit 1, exactly the leg's RED numbers (36 visible of 306, 13px / `rgb(108,111,116)`, pin 13px ≠ 12px); restored → exit 0 (306/306, 12px / `rgb(154,155,158)`, 2 columns at 1440px / 1 at 340px). Battery on the twice-more-rebased main (58dc5563's 071 sheet-audit docs, then 3b15f925/5cd44328's 074 testbed fixture — both no source/stylesheet change): build 0, tsc 0, vitest 1586 → 1588/1588 (074's two new tests), screenshots ×2 per round, three judged pixel-delta rounds — 1st: board-mobile-desktop-dark 2px@1 both runs REAL (the merged 075/069/007+045 stylesheet's 2-antialiased-pixel read; the leg's pre-rebase blob struck); 2nd: field-file-fields-desktop-light 42px@165 then 57px@165, a minutes-relative read, both > 12, REAL; 3rd: those two again (chrome-view-switcher-mobile-dark 47px@max106, both runs identical — these fixtures render wall-clock-dependent reads, so the hour moves them) plus board-mobile 2px@1 one-run → jitter, restored to its committed bytes with its manifest row (bytes 242584, pixelHash 2ab2cdd02bb4) patched back, and panel-record-detail-sheet-body-empty-desktop-light 6973px@max1 in one run only whose second run itself restored the committed variant. All kept movers named in the 045 `css-lane` release note's `reviewed` (3); the lane's history grew 460 → 463 (main's + this leg's triplet, append-only) → 466, holder `045-board-card-properties`, baselineHash `fcaf3fec28cf` = post-rebase `styles.css`. The 074 leg's committed stamps carried pre-merge `styles.css` input hashes, so five artefacts (renderer-coverage, replay, touch-targets, unstyled-links, capture-device-parity) were re-measured by their own writers; evidence `--check-all` 16/16 fresh. Battery: gate **28 green / 0 red** exit 0 on the final tree (069's `board-touch-drag` lane the 28th), `validate --strict` **RESULT: PASSED** for 045 and the 005 root (backfill `changed: 0` each round), scan-comments 0, scan-failing-values 0. Docs re-derived, not carried: **REQ-009** (the report quoted verbatim), **AC-008** with the RED→GREEN numbers, tasks **T015**, goal criterion 7 of 7 — `goal.md` reads 1/7 ticked, so §5.A's `045` row moved **0% — 0/6 → 14% — 1/7**; §4's fix row landed as a third row numbered 86 (main already numbers 075's and 069's rows 86; the collision was left to a later amnesty, and the 071-audit 87 below it now duplicates 074's 87 the same way). AC-008 records Met; AC-006, the operator's own iPhone read, stays the packet's only open row.
 
 ### 2026-09-09 ~22:10, `075` vertical-scroll lock LANDING-VERIFIED — landed on main as `e1594957`, worktree `265-toolbar-vertical-lock`
 
