@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point 2026-09-09 ~04:30: 071/005 LANDED+verified (49ee993d, 071 3/4). Earlier: 0.0.34 cut at e75a979c. Landed: 070, 072, 073, 074, 075, 071/001, 008/001, 008/002, 071/002, 066 rows 81-82 (c5bbcf93), 071/003 (81b6e328), 071/004 (f72e50cd), 071/006 (ae89043f). Implementation stays paused until this handover is reviewed. GLM 5.3 flash max carries implementation legs; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh."
+description: "Resume point 2026-09-09 ~09:57: closing goal refresh LANDED (b1aeb43e) — 071 parent 4/4 (all six children landed, no-regression closed), 008 packet 4/4 (0.0.35 shipped and published at 97395196). Earlier: 0.0.34 cut e75a979c, 0.0.35 cut 97395196. Landed: 070, 072, 073, 074, 075, 071/001-006, 008/001-004, 066 rows 81-82, 058 AC-012. Only operator-owned device rows remain open. GLM 5.3 flash max carries implementation legs; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,23 +10,21 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T09:30:00Z"
-    last_updated_by: "252-landing-verify"
-    recent_action: "008/004 LANDED+verified+pushed (f1eb93f5): mentions 13→0, gate 27/0, 0 PNGs moved"
-    next_safe_action: "Cut 0.0.35 publishing 008/004's drafted notes; device rows (066, 075) stay the operator's"
+    last_updated_at: "2026-09-09T09:57:00Z"
+    last_updated_by: "254-goal-refresh-0035"
+    recent_action: "Closing goal refresh LANDED (b1aeb43e): 071 4/4, 008 4/4, gate 27/0"
+    next_safe_action: "Operator device pass on 0.0.35; ORDER OF WORK §1 names every row"
     blockers:
-      - "066's device read (AC-008) and 075's AC-006 still wait on the operator's handset pass — never agent-ticked"
-      - "071/004's landing is complete (f72e50cd, landing-verified); the .worktrees/245-view-config-sheet worktree can be retired once this 005-handover entry lands"
-      - "008/002's AC-007 discharged by the 0.0.34 cut (e75a979c); 008's own goal/roadmap reconciled by 252's landing verifier (f1eb93f5) — 0.0.35 publishing 004's drafted notes remains"
+      - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1) and package.json's description residual"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
       - "specs/005-component-surface-system/roadmap.md"
-      - "specs/008-calendar-timeline-chart-deprecation/spec.md"
-      - "specs/008-calendar-timeline-chart-deprecation/001-usage-and-migration-audit/inventory.md"
+      - "specs/005-component-surface-system/071-sheet-notion-anytype-alignment/goal.md"
+      - "specs/008-calendar-timeline-chart-deprecation/goal.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "246-goal-refresh-evening"
+      session_id: "254-goal-refresh-0035"
       parent_session_id: "surface-system-parent"
     completion_pct: 88
     open_questions:
@@ -43,6 +41,39 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-09 ~09:57, closing goal refresh LANDED on `origin/main` — reconciliation, docs-only, gate-verified, worktree `254-goal-refresh-0035`
+
+**What landed:** `b1aeb43e` (this refresh) reconciles every goal.md/acceptance-criteria.md touched by
+today's landers against the merged tree at `97395196` (0.0.35). **071 parent, 4/4 (was 3/4):**
+`071/005-filter-sort-group-sheets/goal.md` had never been ticked after its `79500b89` landing — all
+three checkboxes were still `[ ]` despite its own `acceptance-criteria.md` reading 3×`Met`; ticked
+with evidence (Phase 1 mapping, the group popover's scrollbar-hide + sibling-divider fix, the
+`85ff504` freeze regression). The parent's own fourth criterion — no regression on 054/058/045/067 —
+was open with no child citing all four by name; closed by this refresh's own from-scratch reruns from
+the worktree: `node tools/live/sheet-grammar.mjs` PASS exit 0 (every registered surface, both engines,
+zero sideways overflow), `npx vitest run` PASS exit 0 (157 files / 1581 tests, 0 failures — the drop
+from ~1747 is 008/003's archived renderer tests, expected). **008 parent, 4/4 (was 3/4 + pending):**
+004's release-notes criterion read "publishing waits on the 0.0.35 cut" — stale, since 0.0.35 had
+already shipped; `gh release view 0.0.35` confirms the published body carries the drafted
+removal/archive/restore copy verbatim in substance. Ticked, with the packet's own closure statement
+corrected to match. **Carried through:** `005/goal.md` DONE-table fractions (071 1/4→4/4, 066 4/6→5/6,
+both stale from before today's landings), `roadmap.md` §5.A (071, 058, 008 figures) and §4 rows
+73/76-80 (each had either a stale "not yet started"/"open" claim or a stale landing SHA), `goal-prompt.md`
+STATE (dated now, 0.0.35 shipped) and ORDER OF WORK (the 20-row operator-device list moved to item 1,
+diff-confirmed byte-identical elsewhere: BINDING/PRECEDENCE/RESUME/DELEGATION/EVIDENCE/DONE WHEN
+untouched), body **3705 chars** (cap 4000). **Verified, by numbers:** `NODE_PRESERVE_SYMLINKS=1`
+strict validation first-`RESULT:` line — 005 PASSED, 006 PASSED, `006/007-remove-renderer-and-harness`
+PASSED, 008 PASSED (both 005 and 008 needed a scoped `backfill-graph-metadata.ts` re-derive after the
+doc edits, run through `realpath` per the symlink no-op trap; 008's `next_safe_action` also needed
+shortening to pass `SPECDOC_FRONTMATTER_004`'s 96-char/non-narrative rule); `npm run gate` PASS, 27
+green / 0 red, exit 0 (`operator-list` read RED once before `node tools/naming/build-operator-checklist.mjs`
+regenerated it for the day's re-ticked rows, then green); `npm run replay` PASS, 28 held, 0 reversed;
+`scan-failing-values.mjs` PASS, no newly-ticked criterion arrived without its failing value. Every §4
+report row (70-83) now carries either a landed SHA or an explicit named operator deferral — row 79
+(074) was neither (stale "not yet started" with no deferral line) and now reads both. `package.json`'s
+own `description` field still names the retired views — recorded as an open residual in both 008's own
+goal.md and this handover, since 004's AC-001 scoped only `manifest.json`'s description.
 
 ### 2026-09-09 ~09:30, `008/004-archive-docs-and-release` LANDED on `origin/main` — docs-only, landing-verified, pushed
 
