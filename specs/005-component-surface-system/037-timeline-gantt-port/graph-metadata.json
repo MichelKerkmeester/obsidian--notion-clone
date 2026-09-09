@@ -47,12 +47,9 @@
       "acceptance-criteria.md",
       "goal.md",
       "implementation-summary.md",
-      "src/views/calendar-timeline-renderer.ts",
       "src/data/calendar-timeline-model.ts",
       "src/data/calendar-interaction-model.ts",
       "src/data/calendar-title-formatter.ts",
-      "tools/screenshots/scenarios/temporal.mjs",
-      "tools/screenshots/scenarios/temporal-tick-parity.test.mjs",
       "tools/screenshots/scenarios/shared.test.mjs",
       "tools/screenshots/theme.css",
       "tools/live/replay.mjs",
@@ -60,7 +57,10 @@
       "tools/lane/css-lane.json",
       "src/views/database-view.ts",
       "src/views/embedded-database-renderer.ts",
-      "src/views/calendar-timeline-toolbar-renderer.ts"
+      "src/views/calendar-timeline-toolbar-renderer.ts",
+      "src/data/types.ts",
+      "src/i18n.ts",
+      "tools/screenshots/capture.mjs"
     ],
     "entities": [
       {
@@ -100,12 +100,6 @@
         "source": "derived"
       },
       {
-        "name": "calendar-timeline-renderer.ts",
-        "kind": "code",
-        "path": "src/views/calendar-timeline-renderer.ts",
-        "source": "derived"
-      },
-      {
         "name": "calendar-timeline-model.ts",
         "kind": "code",
         "path": "src/data/calendar-timeline-model.ts",
@@ -121,18 +115,6 @@
         "name": "calendar-title-formatter.ts",
         "kind": "code",
         "path": "src/data/calendar-title-formatter.ts",
-        "source": "derived"
-      },
-      {
-        "name": "temporal.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/scenarios/temporal.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "temporal-tick-parity.test.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/scenarios/temporal-tick-parity.test.mjs",
         "source": "derived"
       },
       {
@@ -184,6 +166,24 @@
         "source": "derived"
       },
       {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "`src/views/calendar-timeline-renderer.ts` (2,390 lines) already owns an action contract, CSS-unit geometry,",
     "created_at": "2026-09-02T21:51:11Z",
-    "last_save_at": "2026-09-07T20:23:21.946Z",
+    "last_save_at": "2026-09-09T07:02:29.831Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,7 +221,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d9d33c96975581bb55804783645c2687a95da4ff0c758850380fa1ceab0d15e0",
+    "source_fingerprint": "sha256:df0c4a7b31d01eb90367c80845b60921b13b446f615c6aa0b6100796c2355d3d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "74bbf87d098470b47f84a9b93dd94a417e794bebed30843aed6ab34ac065f89b",

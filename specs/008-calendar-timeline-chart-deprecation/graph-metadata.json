@@ -48,9 +48,11 @@
       "002-settings-redirect-and-migrate/goal.md",
       "003-remove-renderers-and-harness/goal.md",
       "004-archive-docs-and-release/goal.md",
+      "changelog/008-004-archive-docs-and-release.md",
       "001-usage-and-migration-audit/inventory.md",
       "002-settings-redirect-and-migrate/implementation-summary.md",
       "003-remove-renderers-and-harness/implementation-summary.md",
+      "004-archive-docs-and-release/implementation-summary.md",
       "003-remove-renderers-and-harness/decision-record.md"
     ],
     "entities": [
@@ -70,6 +72,12 @@
         "name": "database-view.ts",
         "kind": "code",
         "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "008-004-archive-docs-and-release.md",
+        "kind": "doc",
+        "path": "changelog/008-004-archive-docs-and-release.md",
         "source": "derived"
       },
       {
@@ -147,14 +155,14 @@
     ],
     "causal_summary": "The operator has decided to retire the calendar, timeline and chart views: \"deprecate calendar and timeline view completely\" (08:25), and separately, \"Also deprecate chart view\" (08:38), naming the same deprecation scope, archive folder and README strip",
     "created_at": "2026-09-08T06:24:14Z",
-    "last_save_at": "2026-09-09T06:17:17.940Z",
+    "last_save_at": "2026-09-09T07:05:58.168Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:87c970e731a28973a3d3941ef6ff0bfbe56b980ddf5f0e717501038f48fa7a7c",
+    "source_fingerprint": "sha256:a7517e3ccc7077f70e06c103c309ae76e815c7ac2c1c5d183da534ede67ac2ae",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b2f5829c2c32cd4c331f3f1760d52f1c8f1d0e551f7c8766f751ad49b20dc638"

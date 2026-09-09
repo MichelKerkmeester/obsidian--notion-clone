@@ -3,7 +3,7 @@
   "name": "Obnotion",
   "version": "0.0.34",
   "minAppVersion": "1.7.2",
-  "description": "Database views for notes with table, board, chart, calendar, timeline, formulas, filters, and inline editing.",
+  "description": "Database views for notes with table, board, formulas, filters, and inline editing.",
   "author": "MichelKerkmeester",
   "authorUrl": "https://github.com/MichelKerkmeester",
   "isDesktopOnly": false

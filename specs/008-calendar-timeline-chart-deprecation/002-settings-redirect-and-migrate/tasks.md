@@ -77,7 +77,7 @@ contextType: "general"
 
 - [x] All tasks marked `[x]`
 - [x] No `[B]` blocked tasks remaining
-- [ ] Every acceptance criterion in `acceptance-criteria.md` is `Met`, `Waived` or `Superseded` — AC-007 (a released version) is `Unmet`, matching 007-002's own precedent; not this dispatch's to close
+- [x] Every acceptance criterion in `acceptance-criteria.md` is `Met`, `Waived` or `Superseded` — AC-007 (a released version) discharged 2026-09-09: 0.0.34 shipped the redirect at `e75a979c` before 003's removal landed; recorded by the 008/004 docs leg
 <!-- /ANCHOR:completion -->
 
 ---
@@ -134,7 +134,7 @@ status.
 <!-- ANCHOR:testing -->
 ## Testing Checklist
 
-- [x] CHK-020 [P0] AC-001 through AC-006 `Met`; AC-007 (a released version) `Unmet`, not this dispatch's to close
+- [x] CHK-020 [P0] AC-001 through AC-007 `Met` — AC-007 discharged 2026-09-09 (0.0.34 = `e75a979c` carries the redirect; recorded by the 008/004 docs leg)
 - [x] CHK-021 [P0] Every closed surface observed RED before green: `calendar-timeline-chart-hide-and-migrate.test.ts` ran against the pre-edit source first (12/15 failing), then green after the edit (15/15)
 - [x] CHK-022 [P1] Migrate-twice-is-a-no-op asserted at the pure-function level for all three migrations (`refuses to apply a second time` cases); the on-open persisted-notice guard mirrors gallery/list's already-tested shape in both hosts
 - [x] CHK-023 [P1] A view with no field to carry (no `calendarStartDateField`/`timelineGroupField`) migrates without error — asserted directly in each unit suite

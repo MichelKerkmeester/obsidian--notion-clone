@@ -1,6 +1,6 @@
 # Obnotion
 
-Obnotion adds database views to [Obsidian](https://obsidian.md). Each database is an ordinary Markdown file with `db_view: true` in its frontmatter; its records are notes in your vault, and their property values live in frontmatter. Table, board, chart, calendar, and timeline views read and write those same files, and each view's configuration is saved in the database file beside the data. Records, properties, and relations stay in the vault as plain Markdown.
+Obnotion adds database views to [Obsidian](https://obsidian.md). Each database is an ordinary Markdown file with `db_view: true` in its frontmatter; its records are notes in your vault, and their property values live in frontmatter. Table and board views read and write those same files, and each view's configuration is saved in the database file beside the data. Records, properties, and relations stay in the vault as plain Markdown.
 
 ## Project status
 
@@ -12,15 +12,14 @@ Source: [MichelKerkmeester/obsidian_notion-clone](https://github.com/MichelKerkm
 
 ## Views
 
-A database can hold several saved views over the same notes, each with its own filters, sorting, grouping, visible properties, and layout. Five view types are available:
+A database can hold several saved views over the same notes, each with its own filters, sorting, grouping, visible properties, and layout. Two view types are available:
 
 - **Table** — editable cells, column resize and reorder, range selection with copy, cut, paste, and fill, keyboard navigation, bulk editing, and single-step undo.
 - **Board** — cards grouped by a select or status property, with optional subgroups, card covers (property, fit mode, and aspect ratio), a configurable card field list, hidden groups, and manual card order.
-- **Chart** — bar, horizontal bar, line, area, pie, donut, number, stacked, grouped, percent-stacked, and mixed charts, with count, sum, average, and other aggregations, date and numeric bucketing, color palettes, reference lines, and drilldown into the records behind a value.
-- **Calendar** — month, week, and day grids. Records are placed by date or datetime properties, with an optional end date for multi-day events and optional title and color properties.
-- **Timeline** — day, week, month, quarter, and year scales, with optional grouping lanes, title, color, and end-date properties.
 
-Databases configured as gallery or list views in older versions are migrated on first open: a gallery becomes a board, a list becomes a table, and each conversion shows a one-time notice. The gallery notice offers an Undo action.
+## Deprecated views
+
+The chart, calendar, and timeline views were removed in 0.0.34. Their code is archived under [`archive/deprecated-views/`](archive/deprecated-views/README.md) for future use. Databases configured as gallery or list views in older versions are migrated on first open — a gallery becomes a board, a list becomes a table, and each conversion shows a one-time notice; the gallery notice offers an Undo action.
 
 A database view can be embedded in any note as a code block; the **Create linked view** command inserts one.
 
@@ -70,7 +69,7 @@ A ribbon icon opens the dashboard. The command palette offers:
 - **Language** — System, English, Simplified Chinese, or Traditional Chinese.
 - **Default output folder** — the vault path for generated database files and for new notes when a database has no folder of its own.
 - **Where a record opens** — Record panel, Preview layer, Current tab, Split pane, or New window.
-- **Default view for new databases** — table, board, chart, calendar, or timeline.
+- **Default view for new databases** — table or board.
 - **Always open database files in new tab** and **Prevent duplicate database file tabs**.
 - **Show database icon** — the icon slot in the database header.
 - **Trace sheet lifecycle** — phone sheet diagnostics.

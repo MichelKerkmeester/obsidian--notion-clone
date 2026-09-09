@@ -34,7 +34,7 @@ contextType: "implementation"
 | AC-004 | REQ-003 | Given a chart/calendar/timeline-configured codeblock embed, When it renders, Then it is migrated the same way the standalone host is (mirrors 007's ADR-001: the embedded host gains the call rather than staying inert) | `calendar-timeline-chart-hide-and-migrate.test.ts` §6, `embedded-database-renderer.ts` carries all three `plan*Migration`/`migrate*ViewOnOpen` pairs, called from `render()`'s head | Met | - |
 | AC-005 | REQ-002 | Given `data-source.ts`'s `parseViewType()`, When a db_view file's frontmatter is read, Then it still accepts all three ids — closing it would coerce a persisted view to its fallback before any host's on-open migration ever ran, the same reasoning `gallery`/`list` stay open for | `calendar-timeline-chart-hide-and-migrate.test.ts` §4 | Met | - |
 | AC-006 | REQ-001, REQ-002 | Given the finished phase, When `npm run gate` runs, Then it exits 0 read from `$?`, and every closed surface has a test that was observed failing first | `npm run gate` exit 0 (27/27 lanes green); red-first record in `tasks.md` T004 (12 failed/3 passed against the pre-edit source) | Met | - |
-| AC-007 | REQ-002 | Given this phase's work is merged, When `003` (remove renderers) is considered, Then a **released** version number carries the migration — merged is not shipped | The release tag and the version in `manifest.json` — not this dispatch's to cut | Unmet | - |
+| AC-007 | REQ-002 | Given this phase's work is merged, When `003` (remove renderers) is considered, Then a **released** version number carries the migration — merged is not shipped | 0.0.34: the tag exists and points at `e75a979c9a21f6f93967a40e24b2a58f474fa9d5` (`git rev-parse 0.0.34^{commit}`, verified 2026-09-09), whose commit reads "chore(release): cut 0.0.34", and `manifest.json`'s `version` field reads 0.0.34 — the redirect shipped to users before 003's removal landed. Discharged by the 008/004 docs leg | Met | - |
 
 ### Status values
 
@@ -51,9 +51,10 @@ contextType: "implementation"
 <!-- ANCHOR:closure -->
 ## 3. CLOSURE STATEMENT
 
-**Closeable:** No
+**Closeable:** Yes
 
-AC-001 through AC-006 are `Met` with observed evidence. AC-007 is the one row that most wants to be
-waived and must not be: `003` cannot delete the three renderers until a released version has carried
-this redirect to users, matching the same gate 007-002 left open for gallery's release cut.
+AC-001 through AC-006 are `Met` with observed evidence. AC-007 — the row that most wanted to be
+waived and must not be, because 003 could not delete the three renderers until a released version
+had carried this redirect to users — was discharged 2026-09-09: 0.0.34 shipped the redirect at
+`e75a979c` before 003's removal landed (`7fb9fb28`). Recorded by the 008/004 docs leg.
 <!-- /ANCHOR:closure -->

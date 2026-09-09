@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Once removed from the picker, an existing view configured as calendar, timeline or chart must still open — as its Phase-1-decided redirect target — rather than fail to render, matching `006`'s hide-and-migrate phase and `007`'s settings-redirect-and-migrate phase",
     "created_at": "2026-09-08T06:24:15Z",
-    "last_save_at": "2026-09-08T20:45:31.686Z",
+    "last_save_at": "2026-09-09T07:05:58.086Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,14 +222,14 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:ba03173166f0e7e03e739a86a12ca256915d4762793ff2c6a22fc5c91911e5a6",
+    "source_fingerprint": "sha256:bd26773c541ecb99574c5e6ed56ea8734f186f6c71d5d484c11a04f956ca34ec",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "76a7f143e7f56ee5f9c718f8ce6e3a18bdf70603e8f8da1153259c8bf7027c9b",
       "plan.md": "457cc3f7a24db94e0923cb75181efe3ace635c0bb2231f838a0e35deb76eee33",
-      "tasks.md": "f6ef7b8e0c34ab5f14112bdc67401c20cd0514dffc41f608e158b1891f70a0e5",
+      "tasks.md": "a67b29e6d1268673c93065f322ccadf14167ed7e3f4fa568240e1c54443ac0fe",
       "decision-record.md": "5e580429144e15b6eef6b3313c98c3a411488ffa7a5e3a096f1df77f14c1db4c",
-      "implementation-summary.md": "2ebb2271c6e7ea1e0f15761e7c427443cd3213a50298e73e52061e141cbfbb99"
+      "implementation-summary.md": "41e03eff94471fd85362c1c98ae06d76a65e5a4852902cd8e443195f1a2aa6ca"
     },
     "last_active_at": null
   }

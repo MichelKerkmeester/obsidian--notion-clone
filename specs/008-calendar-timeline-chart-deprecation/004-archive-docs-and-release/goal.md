@@ -9,17 +9,23 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation/004-archive-docs-and-release"
-    last_updated_at: "2026-09-08T08:30:00Z"
-    last_updated_by: "markdown-scaffold"
-    recent_action: "Authored the directive"
-    next_safe_action: "Execute against the completion criteria"
-    blockers: []
-    key_files: []
+    last_updated_at: "2026-09-09T08:55:00Z"
+    last_updated_by: "252-deprecation-readme-strip"
+    recent_action: "Landed: the strip, the note, the description, the mention lane; 3/3 criteria"
+    next_safe_action: "Cut 0.0.35 publishing the drafted notes, then push"
+    blockers:
+      - "The 0.0.35 cut that publishes the drafted notes (and the push) — a later leg, not this dispatch"
+    key_files:
+      - "../../../README.md"
+      - "../../../manifest.json"
+      - "../../../tools/naming/scan-deprecated-views.mjs"
+      - "../../../archive/deprecated-views/README.md"
+      - "../changelog/008-004-archive-docs-and-release.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "004-archive-docs-and-release-scaffold"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 90
     open_questions: []
     answered_questions: []
 ---
@@ -51,9 +57,9 @@ resend the full text of this file in chat so the operator can update their copy.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] README.md and community-plugin description stripped of all four view mentions
-- [ ] 037-timeline-gantt-port documented as superseded without deleting its history
-- [ ] Release notes describe the removal and the archive/restore path
+- [x] README.md and community-plugin description stripped of all four view mentions — the root README's enforced mentions 13 → 0 (7 remain, all inside the sanctioned "Deprecated views" note, which the operator's R9 copy mandates as the pointer to the archive); the description in `manifest.json` 3 → 0; enforced by the new `tools/naming/scan-deprecated-views.mjs` lane, 10/10 tests, worktree `252-deprecation-readme-strip`
+- [x] 037-timeline-gantt-port documented as superseded without deleting its history — the 2026-09-09 note in 037's own goal.md LOG names the archival, the last-live SHA and the restore procedure, and states that every prior row stands; nothing deleted
+- [x] Release notes describe the removal and the archive/restore path — drafted at `../changelog/008-004-archive-docs-and-release.md`; publishing waits on the 0.0.35 cut (not this dispatch)
 <!-- /ANCHOR:completion -->
 
 ---
@@ -66,10 +72,12 @@ resend the full text of this file in chat so the operator can update their copy.
 | Item | State | Evidence |
 |------|-------|----------|
 | Packet opened | Done | This scaffold, 2026-09-08 |
+| 004 docs leg (worktree `252-deprecation-readme-strip`) | Done | This leg, 2026-09-09: the README strip, the note, the manifest description, the mention lane (red 13+3 → green 0+7/0), the verification battery, the drafted release notes |
 
 ### Deviations and findings
 
 | Item | Note |
 |------|------|
-| None yet | Work has not started |
+| Note exemption | The directive's "zero mentions" objective and the operator's note mandate (R9) meet in the enforced rule "zero outside the note": the note's 7 mentions ARE the pointer the operator asked for, so the lane counts them without failing on them |
+| Counts, two rulers | The leg's recon grep (5 keywords, substring match) read the root README 13 → 6; the lane (6 keyword shapes, adding "list views", word-bounded) reads 13 → 0 outside the note + 7 inside. Same 13 before, different composition after; the lane's numbers are the enforced ones. Both recorded in the implementation summary |
 <!-- /ANCHOR:log -->

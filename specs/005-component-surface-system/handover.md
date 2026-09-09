@@ -2893,3 +2893,43 @@ gantt port included — is archived, its landing stays documented in its own pac
 archive README's timeline section, and 004-archive-docs-and-release owns the remaining rows (the
 root-README strip, the community-plugin description, the release cut). Not pushed — a fresh
 verifier lands it.
+
+## 252-deprecation-readme-strip — 008/004 archive-docs: the root-README strip, the note and the mention lane (2026-09-09)
+
+`008-calendar-timeline-chart-deprecation/004-archive-docs-and-release` is landed in the
+`252-deprecation-readme-strip` worktree: the root README stripped of the retired views — the
+intro's view list reads "Table and board views read and write those same files", the Views
+section holds two bullets ("Five view types" → "Two view types"), the Settings default-view row
+reads "table or board" — with one short "Deprecated views" note carrying the pointer the operator
+mandated (R9: "Do keep the archived code somewhere for future use for those deprecated views"): it
+names the 0.0.34 removal, points at `archive/deprecated-views/README.md` for the restore path,
+and absorbs the former gallery/list migration paragraph (gallery → board, list → table, the
+one-time notice, the gallery notice's Undo) so the feature list loses the words while the shipped
+behavior's truth stays. The community-plugin description in `manifest.json` now reads "Database
+views for notes with table, board, formulas, filters, and inline editing." The early-alpha
+paragraph, the record sheet, the linked views and the phone-surface copy are untouched.
+
+**The lane**: RED FIRST — `tools/naming/scan-deprecated-views.mjs` plus a 10-case vitest suite,
+to the `scan-comments` conventions, run against the pre-strip copies restored from
+`git show HEAD:…`: `README.md` 13 enforced mentions outside any note (chart 3, calendar 3,
+timeline 3, gallery 3, "list views" 1), the description 3, plus the note-missing violation —
+exit 1. GREEN against the stripped tree: 0 outside the note / 7 inside (chart 1, calendar 1,
+timeline 1, gallery 3, "list views" 1), the description 0, exit 0. The note's mentions are
+counted, not enforced — the enforced rule is "zero outside the note", which is where the
+directive's "zero mentions" objective and the operator's note mandate meet; the ruling is
+recorded in the phase goal's LOG. The suite rides the gate's existing tests lane (vitest picks
+`tools/**/*.test.mjs`); no gate row added. (The leg's recon grep — five keywords, substring
+match, no "list views" — reads 13 → 6; both rulers recorded in the implementation summary.)
+
+**The numbers**: `npx tsc --noEmit` 0; `npx vitest run` 1581/1581 (the 10 new cases included);
+`npm run build` 0; `scan-comments` 0; `scan-failing-values` 0; `npm run gate` (foreground,
+`</dev/null`, exit read) **27 green, 0 red for a declared reason** — lane count 27→27. 2/2
+acceptance criteria `Met`. 037-timeline-gantt-port's own goal.md gained the supersession note
+004's requirement asks for (the 2026-09-09 LOG paragraph: the archive path, the last-live SHA,
+the restore procedure, nothing deleted). 002's AC-007 discharged — 0.0.34 = `e75a979c`, verified
+by `git rev-parse 0.0.34^{commit}` — and 002's goal/AC/tasks/summary/continuity reconciled; the
+008 parent's 004 criterion ticked, fractions reconciled (004 → 90, the parent → 95); the release
+notes drafted at `008-…/changelog/008-004-archive-docs-and-release.md`. Validated strict,
+RESULT: PASSED; packet graph metadata backfilled. **Open: the 0.0.35 cut that publishes the
+drafted notes, then the push** — the packet's last step, a later leg's. Not pushed — a fresh
+verifier lands it.

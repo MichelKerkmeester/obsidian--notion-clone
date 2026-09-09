@@ -46,7 +46,10 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "archive/deprecated-views/README.md",
+      "tools/naming/scan-deprecated-views.mjs",
+      "tools/naming/scan-deprecated-views.test.mjs"
     ],
     "entities": [
       {
@@ -83,6 +86,24 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
+        "kind": "doc",
+        "path": "archive/deprecated-views/README.md",
+        "source": "derived"
+      },
+      {
+        "name": "scan-deprecated-views.mjs",
+        "kind": "file",
+        "path": "tools/naming/scan-deprecated-views.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "scan-deprecated-views.test.mjs",
+        "kind": "file",
+        "path": "tools/naming/scan-deprecated-views.test.mjs",
         "source": "derived"
       },
       {
@@ -174,29 +195,11 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The root README and community-plugin description still describe views this packet retires; leaving them in place after Phase 3's removal would misrepresent what the plugin currently does",
     "created_at": "2026-09-08T06:24:16Z",
-    "last_save_at": "2026-09-08T06:50:06.905Z",
+    "last_save_at": "2026-09-09T07:05:58.003Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,13 +210,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:4cf789698e5076600538c3f6ebdbaaddb926ef1c2437c9a743722042982d1968",
+    "source_fingerprint": "sha256:25bfa4bcc3bcea20f43a41c1b29ea0b15c1324d5349faf0b39f0a5661d0a5d10",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "9d9f31e5f96fc414bc8e07ae79810aeda00c56f0c37d82f58ffcfbfc89d4307b",
       "plan.md": "5f416b8093e9ba6b2adf461d090c328f075c2b4aed9b531c73b476c1f56832a4",
-      "tasks.md": "918ed0d623251898c7793b0c0bb23ba132d719ef29dde52cfec3ab6ee0f1163a",
-      "implementation-summary.md": "79ffcb6403f02dde6d7ab6fd31f9b0d5a35b11a59f2c30bdfb79df990deb50a7"
+      "tasks.md": "b6bdb200708de91718ebe835e958d8db1b9b4690a84c886c1be52972ca1aa17f",
+      "implementation-summary.md": "0c75589cf84f19585b88f11ca7fb4c6f4b0235afb2100d1014acb3f1db059543"
     },
     "last_active_at": null
   }

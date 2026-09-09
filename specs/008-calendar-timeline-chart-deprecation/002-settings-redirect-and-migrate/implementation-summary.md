@@ -11,12 +11,11 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation/002-settings-redirect-and-migrate"
-    last_updated_at: "2026-09-08T15:25:00Z"
-    last_updated_by: "redirect-and-migrate-run"
-    recent_action: "Implemented and verified the settings redirect"
-    next_safe_action: "Hand off for a release cut; 003 (remove renderers) waits for it"
-    blockers:
-      - "AC-007 (a released version number) is not this dispatch's to close"
+    last_updated_at: "2026-09-09T08:55:00Z"
+    last_updated_by: "252-deprecation-readme-strip"
+    recent_action: "Closed: AC-007 discharged — 0.0.34 shipped the redirect at e75a979c (008/004 docs leg)"
+    next_safe_action: "None — closed; 003 landed 7fb9fb28"
+    blockers: []
     key_files:
       - "src/main.ts"
       - "src/data/chart-migration.ts"
@@ -31,7 +30,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "calendar-timeline-chart-008-002-impl"
       parent_session_id: null
-    completion_pct: 95
+    completion_pct: 100
     open_questions: []
     answered_questions:
       - "Chart/calendar close for free at the settings-load sanitizer; timeline routes through a real migration — decision-record.md ADR-001"
@@ -160,11 +159,11 @@ themselves.
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **AC-007 (a released version) is `Unmet`.** This dispatch implements and verifies the redirect on
-   this worktree branch; cutting the release that carries it to users is the orchestrator's next
-   step, matching the identical gate 007-002 left open for gallery before its own release.
-2. **The renderers are unchanged.** `003` still owns deleting the calendar/timeline/chart renderer
-   subtrees and archiving them; this phase's redirect is what makes that deletion safe once it runs.
+1. **AC-007 (a released version) — discharged 2026-09-09.** This dispatch implemented and verified the redirect on
+   its worktree branch; 0.0.34 then shipped it to users at `e75a979c`, before 003's removal landed. Recorded by the
+   008/004 docs leg; the criterion reads `Met` and the closure statement `Closeable: Yes`.
+2. **The renderers — settled.** 003's deletion of the calendar/timeline/chart renderer subtrees and their archival
+   landed (`7fb9fb28`); the redirect this phase shipped is what made that deletion safe, exactly as designed.
 <!-- /ANCHOR:limitations -->
 
 ---

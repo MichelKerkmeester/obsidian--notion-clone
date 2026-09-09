@@ -9,12 +9,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation/002-settings-redirect-and-migrate"
-    last_updated_at: "2026-09-08T16:10:00Z"
-    last_updated_by: "240-deprecation-redirect-verify"
-    recent_action: "Landed: 2/2 criteria, redirect+migration verified, gate 27/0; AC-007 awaits release"
-    next_safe_action: "Cut the release carrying 002's redirect (AC-007), then 003-remove-renderers-and-harness"
-    blockers:
-      - "AC-007 (a released version carrying the redirect) is Unmet until the next release cut"
+    last_updated_at: "2026-09-09T08:55:00Z"
+    last_updated_by: "252-deprecation-readme-strip"
+    recent_action: "Closed: 7/7 criteria; AC-007 discharged, 0.0.34 = e75a979c"
+    next_safe_action: "None; 003 landed 7fb9fb28, the 0.0.35 cut awaits 004's notes"
+    blockers: []
     key_files:
       - "decision-record.md"
       - "implementation-summary.md"
@@ -79,4 +78,5 @@ resend the full text of this file in chat so the operator can update their copy.
 | Both mutations re-observed, not trusted | Chart's toolbar filter clause dropped → 2 failed/13 passed, restored 15/15; the on-open timeline hook deleted from `database-view.ts` → 1 failed/14 passed, restored 15/15 |
 | Screenshots judged by decoded pixel delta, not pixelHash | 5 movers kept REAL (the redirect's withdrawn picker rows), 2 single-run ≤12-delta movers restored; `styles.css` never moved, so the existing 009 `reviewed` entry absorbed the 3 new mover names |
 | AC-007 stays Unmet on purpose | It requires a released version carrying the redirect; 003-remove-renderers-and-harness waits for that cut |
+| AC-007 discharged, 2026-09-09 | 0.0.34 shipped the redirect at `e75a979c` before 003's removal landed; the criteria row now reads `Met` and the closure statement `Closeable: Yes` — recorded by the 008/004 docs leg, evidence pinned to `git rev-parse 0.0.34^{commit}` |
 <!-- /ANCHOR:log -->

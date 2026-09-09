@@ -9,23 +9,25 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation"
-    last_updated_at: "2026-09-09T06:20:00Z"
-    last_updated_by: "250-landing-verify"
-    recent_action: "003 LANDED+verified+pushed (7fb9fb28): 4/4, bundle grep 0, gate 27/0; only 004 remains"
-    next_safe_action: "004-archive-docs-and-release: the README strip, the superseded note, then the release cut"
+    last_updated_at: "2026-09-09T08:55:00Z"
+    last_updated_by: "252-deprecation-readme-strip"
+    recent_action: "004's docs leg LANDED (252): README+description stripped, the note, the lane 10/10"
+    next_safe_action: "Cut 0.0.35 publishing the drafted notes, then push"
     blockers:
-      - "004-archive-docs-and-release (the packet's last leg) has not started"
+      - "The 0.0.35 release cut that publishes the drafted notes (and the push) — the packet's last step, a later leg"
     key_files:
       - "spec.md"
       - "001-usage-and-migration-audit/inventory.md"
       - "002-settings-redirect-and-migrate/decision-record.md"
       - "003-remove-renderers-and-harness/decision-record.md"
+      - "004-archive-docs-and-release/implementation-summary.md"
+      - "changelog/008-004-archive-docs-and-release.md"
       - "../../../archive/deprecated-views/README.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "008-calendar-timeline-chart-deprecation-scaffold"
       parent_session_id: null
-    completion_pct: 75
+    completion_pct: 95
     open_questions: []
     answered_questions: []
 ---
@@ -85,7 +87,7 @@ string, not these files.
 - [x] 001's audit inventories every live calendar/timeline/chart view and names each one's settings-redirect target — 33 views named with targets, landed `7a6d4cc6`
 - [x] 002 ships the settings redirect; no picker/switcher/settings surface can create or select the three types — landed `b5f4ccd4`/`9ffa7ed2`, 2/2 criteria, gate 27/0; AC-007 (a release carrying the redirect) discharged — the 0.0.34 tag exists
 - [x] 003 removes the three renderers and harness lanes from the bundle and archives the code with a restore-path README and an ADR — landed this leg (worktree `250-deprecation-removal`; the closing SHA in the dispatch report): 4/4 criteria, the bundle grep 0 (was 5), the gate 27/0, ten sources archived with proven-restore READMEs
-- [ ] 004 strips calendar/timeline/gallery/chart mentions from the root README and community-plugin description, and documents 037's timeline landing as superseded
+- [x] 004 strips calendar/timeline/gallery/chart mentions from the root README and community-plugin description, and documents 037's timeline landing as superseded — landed this leg (worktree `252-deprecation-readme-strip`): the root README's enforced mentions 13 → 0 outside the mandated "Deprecated views" note (7 inside — the note is the operator-mandated pointer to the archive), the description in `manifest.json` 3 → 0, 037's supersession recorded in its own goal.md; the new mention lane 10/10, the gate 27/0; the drafted release notes (`changelog/008-004-archive-docs-and-release.md`) wait on the 0.0.35 cut
 <!-- /ANCHOR:completion -->
 
 ---
@@ -101,6 +103,7 @@ string, not these files.
 | 001-usage-and-migration-audit | Done | `001-usage-and-migration-audit/inventory.md`, landing-verified 7a6d4cc6 |
 | 002-settings-redirect-and-migrate | Done | Landed `b5f4ccd4`/`9ffa7ed2`; `002-settings-redirect-and-migrate/implementation-summary.md`, gate 27/0; AC-007 (release) discharged by the 0.0.34 cut |
 | 003-remove-renderers-and-harness | Done | `003-remove-renderers-and-harness/implementation-summary.md`; 4/4 criteria, the bundle grep 0, the gate 27/0, ten sources archived; validated strict-PASSED — 2026-09-09 |
+| 004-archive-docs-and-release | Done, the 0.0.35 cut pending | `004-archive-docs-and-release/implementation-summary.md`; 2/2 acceptance criteria Met, the note-exemption ruling recorded in the phase goal's LOG, the gate 27/0; the release notes drafted, publishing waits on the cut — 2026-09-09 |
 
 ### Deviations and findings
 

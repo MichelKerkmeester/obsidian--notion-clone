@@ -324,4 +324,19 @@ dispositions with no code change owed (an accepted invalid-date adaptation and a
 fixture-parity item never given an id), and T050 records the milestone-overpaint disposition and
 adds the new row. No code changed this pass — this is a confirmation and a disposition record, not
 an implementation.
+
+### 2026-09-09 — Landing superseded by the 008 packet's archival (004's REQ-002 note, no criterion change)
+
+The 008 packet's phase 3 removed the calendar, timeline and chart renderers from the shipped
+bundle and archived their sources under `archive/deprecated-views/` (landed `7fb9fb28` from
+worktree `250-deprecation-removal`); the timeline renderer this packet built — the gantt port
+included — now lives there, with its last-live SHA `e75a979c9a21f6f93967a40e24b2a58f474fa9d5`
+(the commit 0.0.34 was cut from) and the exact `git checkout <sha> -- <paths>` restore procedure
+named in that archive's README. This note records the supersession per 008's D4, as 008/004's
+spec requires; every row above stands and nothing was deleted. Consequence for the open rows
+above: they now describe archived code, so they only regain product meaning if the renderer is
+restored — the operator-confirmed vault compare and the milestone-overpaint keep-vs-revert
+ruling (roadmap rows 38/39) move with the code into that state. Recorded by 008/004's docs leg
+(worktree `252-deprecation-readme-strip`); no criterion here is ticked or unticked and
+`completion_pct` is unchanged.
 <!-- /ANCHOR:log -->
