@@ -199,7 +199,7 @@
     ],
     "causal_summary": "The root README and community-plugin description still describe views this packet retires; leaving them in place after Phase 3's removal would misrepresent what the plugin currently does",
     "created_at": "2026-09-08T06:24:16Z",
-    "last_save_at": "2026-09-09T07:05:58.003Z",
+    "last_save_at": "2026-09-09T08:00:38.064Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -210,7 +210,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:25bfa4bcc3bcea20f43a41c1b29ea0b15c1324d5349faf0b39f0a5661d0a5d10",
+    "source_fingerprint": "sha256:07b79384bdc2d50afbd138a01c538a5cc5c37c090b0fac1f692dba6a447e909a",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "9d9f31e5f96fc414bc8e07ae79810aeda00c56f0c37d82f58ffcfbfc89d4307b",

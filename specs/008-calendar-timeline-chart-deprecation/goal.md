@@ -9,12 +9,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "008-calendar-timeline-chart-deprecation"
-    last_updated_at: "2026-09-09T09:30:00Z"
-    last_updated_by: "252-landing-verify"
-    recent_action: "004's docs leg LANDED+verified+pushed (e968d5ca→f1eb93f5): 3/3, gate 27/0, 0 PNGs moved"
-    next_safe_action: "Cut 0.0.35 publishing the drafted notes, then push"
-    blockers:
-      - "The 0.0.35 release cut that publishes the drafted notes (and the push) — the packet's last step, a later leg"
+    last_updated_at: "2026-09-09T09:53:00Z"
+    last_updated_by: "goal-refresh-0035"
+    recent_action: "0.0.35 published (97395196); packet 4/4, all four children closed"
+    next_safe_action: "Packet closed; package.json description stays an open residual"
+    blockers: []
     key_files:
       - "spec.md"
       - "001-usage-and-migration-audit/inventory.md"
@@ -27,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "008-calendar-timeline-chart-deprecation-scaffold"
       parent_session_id: null
-    completion_pct: 95
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -87,7 +86,7 @@ string, not these files.
 - [x] 001's audit inventories every live calendar/timeline/chart view and names each one's settings-redirect target — 33 views named with targets, landed `7a6d4cc6`
 - [x] 002 ships the settings redirect; no picker/switcher/settings surface can create or select the three types — landed `b5f4ccd4`/`9ffa7ed2`, 2/2 criteria, gate 27/0; AC-007 (a release carrying the redirect) discharged — the 0.0.34 tag exists
 - [x] 003 removes the three renderers and harness lanes from the bundle and archives the code with a restore-path README and an ADR — landed this leg (worktree `250-deprecation-removal`; the closing SHA in the dispatch report): 4/4 criteria, the bundle grep 0 (was 5), the gate 27/0, ten sources archived with proven-restore READMEs
-- [x] 004 strips calendar/timeline/gallery/chart mentions from the root README and community-plugin description, and documents 037's timeline landing as superseded — landed this leg (worktree `252-deprecation-readme-strip`): the root README's enforced mentions 13 → 0 outside the mandated "Deprecated views" note (7 inside — the note is the operator-mandated pointer to the archive), the description in `manifest.json` 3 → 0, 037's supersession recorded in its own goal.md; the new mention lane 10/10, the gate 27/0; the drafted release notes (`changelog/008-004-archive-docs-and-release.md`) wait on the 0.0.35 cut
+- [x] 004 strips calendar/timeline/gallery/chart mentions from the root README and community-plugin description, and documents 037's timeline landing as superseded — landed this leg (worktree `252-deprecation-readme-strip`): the root README's enforced mentions 13 → 0 outside the mandated "Deprecated views" note (7 inside — the note is the operator-mandated pointer to the archive), the description in `manifest.json` 3 → 0, 037's supersession recorded in its own goal.md; the new mention lane 10/10, the gate 27/0; the drafted release notes (`changelog/008-004-archive-docs-and-release.md`) **published 2026-09-09** in the 0.0.35 GitHub release (tag `0.0.35`, commit `97395196`) — `gh release view 0.0.35` confirms the published body names the removal, the archive location and the restore procedure
 <!-- /ANCHOR:completion -->
 
 ---
@@ -103,7 +102,8 @@ string, not these files.
 | 001-usage-and-migration-audit | Done | `001-usage-and-migration-audit/inventory.md`, landing-verified 7a6d4cc6 |
 | 002-settings-redirect-and-migrate | Done | Landed `b5f4ccd4`/`9ffa7ed2`; `002-settings-redirect-and-migrate/implementation-summary.md`, gate 27/0; AC-007 (release) discharged by the 0.0.34 cut |
 | 003-remove-renderers-and-harness | Done | `003-remove-renderers-and-harness/implementation-summary.md`; 4/4 criteria, the bundle grep 0, the gate 27/0, ten sources archived; validated strict-PASSED — 2026-09-09 |
-| 004-archive-docs-and-release | Done, the 0.0.35 cut pending | `004-archive-docs-and-release/implementation-summary.md`; 2/2 acceptance criteria Met, the note-exemption ruling recorded in the phase goal's LOG, the gate 27/0; the release notes drafted, publishing waits on the cut — 2026-09-09 |
+| 004-archive-docs-and-release | Done | `004-archive-docs-and-release/implementation-summary.md`; 2/2 acceptance criteria Met, the note-exemption ruling recorded in the phase goal's LOG, the gate 27/0; the release notes drafted and published — 2026-09-09 |
+| 0.0.35 cut and published | Done | Tag `0.0.35` at `97395196`; GitHub release published (`gh release view 0.0.35`), the drafted removal/archive/restore copy is the published body. ALL FOUR CHILDREN CLOSED — parent 4/4 |
 
 ### Deviations and findings
 
@@ -112,4 +112,5 @@ string, not these files.
 | Combined into one phase parent | Both phase-qualification thresholds are met independently (`recommend-level.sh --loc 1000 --files 20 --architectural`); one packet avoids three separate top-level packets re-deciding the same archive location and README strip |
 | 002's three types split into two fallback shapes | Chart/calendar's redirect target equals the settings-load sanitizer's bare unknown-type fallback and closes for free; timeline's does not and routes through a real migration — `002/decision-record.md` ADR-001 |
 | 003's removal kept the harness's retired-view machinery dormant | The gate's lane count held 27→27 and the 002-pinned clauses survived untouched; five turned-unsupplied retired-view tokens recorded, not stood in — `003-remove-renderers-and-harness/decision-record.md` ADR-002/003 |
+| `package.json`'s `description` field still names the retired views | Read 2026-09-09: `"Database views for notes with table, board, list, chart, calendar, timeline, inline markdown, formulas, and source rules."` — 004's AC-001 scoped "the community-plugin description" to `manifest.json` (already 0 mentions), not `package.json`; this field was never in that criterion's scope, so it stays open as a residual, not a broken tick |
 <!-- /ANCHOR:log -->

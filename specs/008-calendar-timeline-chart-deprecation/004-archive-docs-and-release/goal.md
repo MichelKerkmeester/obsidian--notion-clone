@@ -59,7 +59,7 @@ resend the full text of this file in chat so the operator can update their copy.
 
 - [x] README.md and community-plugin description stripped of all four view mentions — the root README's enforced mentions 13 → 0 (7 remain, all inside the sanctioned "Deprecated views" note, which the operator's R9 copy mandates as the pointer to the archive); the description in `manifest.json` 3 → 0; enforced by the new `tools/naming/scan-deprecated-views.mjs` lane, 10/10 tests, worktree `252-deprecation-readme-strip`
 - [x] 037-timeline-gantt-port documented as superseded without deleting its history — the 2026-09-09 note in 037's own goal.md LOG names the archival, the last-live SHA and the restore procedure, and states that every prior row stands; nothing deleted
-- [x] Release notes describe the removal and the archive/restore path — drafted at `../changelog/008-004-archive-docs-and-release.md`; publishing waits on the 0.0.35 cut (not this dispatch)
+- [x] Release notes describe the removal and the archive/restore path — drafted at `../changelog/008-004-archive-docs-and-release.md`; **published 2026-09-09** in the 0.0.35 GitHub release (tag `0.0.35`, commit `97395196`): the published body names the removed renderers, the `archive/deprecated-views/` location, the restore READMEs and the `git checkout <sha> -- <paths>` procedure, and confirms the 0.0.34 redirects (calendar→table, timeline→board, chart→table) stay in place
 <!-- /ANCHOR:completion -->
 
 ---
@@ -73,6 +73,7 @@ resend the full text of this file in chat so the operator can update their copy.
 |------|-------|----------|
 | Packet opened | Done | This scaffold, 2026-09-08 |
 | 004 docs leg (worktree `252-deprecation-readme-strip`) | Done | This leg, 2026-09-09: the README strip, the note, the manifest description, the mention lane (red 13+3 → green 0+7/0), the verification battery, the drafted release notes |
+| Release notes published | Done | 0.0.35 cut at `97395196`, GitHub release published 2026-09-09; the release body carries the drafted removal/archive/restore copy (`gh release view 0.0.35`) |
 
 ### Deviations and findings
 

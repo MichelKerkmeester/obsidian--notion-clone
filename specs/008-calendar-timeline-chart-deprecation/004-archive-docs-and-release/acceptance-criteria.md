@@ -50,9 +50,11 @@ contextType: "implementation"
 
 Both criteria are `Met` with observed evidence: the mention counts (the root README 13 → 0 outside
 the mandated note, the community-plugin description 3 → 0) read by the scanner lane this leg added,
-and 037's own supersession note. REQ-003 (P1) is discharged by the drafted release notes at
-`../changelog/008-004-archive-docs-and-release.md`, which describe the removal and the
-archive/restore path; publishing them is the 0.0.35 cut's, a later leg's. The closure's
-verification date is 2026-09-09; the numbers it cites are read exit codes and counted outputs,
-recorded in `tasks.md` and the implementation summary.
+and 037's own supersession note. REQ-003 (P1) is discharged: the drafted release notes at
+`../changelog/008-004-archive-docs-and-release.md` were published 2026-09-09 in the 0.0.35 GitHub
+release (tag `0.0.35`, commit `97395196`) — `gh release view 0.0.35` confirms the published body
+names the removed renderers, the archive location, the restore READMEs and the
+`git checkout <sha> -- <paths>` procedure. The closure's verification date is 2026-09-09; the
+numbers it cites are read exit codes and counted outputs, recorded in `tasks.md` and the
+implementation summary.
 <!-- /ANCHOR:closure -->

@@ -208,7 +208,7 @@
     ],
     "causal_summary": "The filter, sort and group sheets have a history of freezing on add/close (roadmap §4 rows 21-23, fixed in 85ff504) and have not been redesigned against a single reference since",
     "created_at": "2026-09-08T06:24:05Z",
-    "last_save_at": "2026-09-09T01:54:06.953Z",
+    "last_save_at": "2026-09-09T08:00:37.908Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,7 +220,7 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:9a4e02f43c4fac420796cc46fa13e5f25532e568781ddadfc8ba51ca7eefc3d4",
+    "source_fingerprint": "sha256:689860a1cb5216eff91715197ac13650b212c4b8c325d634f04b84e5fc814f31",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "6cc31d0621ac2d970907e50c9365d1da787b44911733a9c7384f694198272e4a",
