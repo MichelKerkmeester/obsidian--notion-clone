@@ -9,7 +9,8 @@
     "005-component-surface-system/071-sheet-notion-anytype-alignment/003-add-property-sheet",
     "005-component-surface-system/071-sheet-notion-anytype-alignment/004-view-config-sheet",
     "005-component-surface-system/071-sheet-notion-anytype-alignment/005-filter-sort-group-sheets",
-    "005-component-surface-system/071-sheet-notion-anytype-alignment/006-record-and-menu-sheets"
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/006-record-and-menu-sheets",
+    "005-component-surface-system/071-sheet-notion-anytype-alignment/007-settings-sheet-strict-alignment"
   ],
   "manual": {
     "depends_on": [],
@@ -51,7 +52,8 @@
       "003-add-property-sheet/goal.md",
       "004-view-config-sheet/goal.md",
       "005-filter-sort-group-sheets/goal.md",
-      "006-record-and-menu-sheets/goal.md"
+      "006-record-and-menu-sheets/goal.md",
+      "007-settings-sheet-strict-alignment/goal.md"
     ],
     "entities": [
       {
@@ -127,6 +129,12 @@
         "source": "derived"
       },
       {
+        "name": "notion",
+        "kind": "key_phrase",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
         "name": "1. DURABLE DIRECTIVE",
         "kind": "heading",
         "path": "goal.md",
@@ -137,27 +145,21 @@
         "kind": "heading",
         "path": "goal.md",
         "source": "derived"
-      },
-      {
-        "name": "Operator copy",
-        "kind": "heading",
-        "path": "goal.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The operator reports three separate sheet-family defects in the same batch — the settings sheet's UI/UX (R5), the add-property / property-type picker sheet rendering as a tall sheet that covers the note header while the keyboard is up (R6, screenshot evidence) — and asks a fourth, structural question: does the app actually have screenshot and story coverage for every sheet it can open, checked one by one against Notion and Anytype (R7)?",
     "created_at": "2026-09-08T06:24:02Z",
-    "last_save_at": "2026-09-09T08:00:37.742Z",
+    "last_save_at": "2026-09-09T18:57:23.013Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:6556efbf7ea4b9fb33822fa71413a95db767e36db83aa99dc00c9b081b139efa",
+    "source_fingerprint": "sha256:1a511d9d42e449631987191694d43479db654d5a4f1eb88890603bbe429adacc",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "a17f08b3e0271f07b0dbae52275b226f486747d7e0ebbfb3eb26b6b908ff437e"
+      "spec.md": "a9c92eed26fad9c54faa63ba827c28f07405061ebe5d622d3a5258289caa8485"
     },
     "last_active_at": null
   }

@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/071-sheet-notion-anytype-alignment"
-    last_updated_at: "2026-09-09T09:52:00Z"
-    last_updated_by: "goal-refresh-0035"
-    recent_action: "All six children landed; parent 4/4, packet closeable"
-    next_safe_action: "Operator device recheck (D3); operator-only rows in the 0.0.35 goal-prompt"
+    last_updated_at: "2026-09-09T20:45:00Z"
+    last_updated_by: "007-scaffold"
+    recent_action: "Scaffolded child 007 (0.0.36 device recheck)"
+    next_safe_action: "Execute 007/tasks.md"
     blockers: []
     key_files:
       - "spec.md"
@@ -67,6 +67,7 @@ phase and binds as if written here.
 | 004-view-config-sheet | `004-view-config-sheet/goal.md` |
 | 005-filter-sort-group-sheets | `005-filter-sort-group-sheets/goal.md` |
 | 006-record-and-menu-sheets | `006-record-and-menu-sheets/goal.md` |
+| 007-settings-sheet-strict-alignment | `007-settings-sheet-strict-alignment/goal.md` |
 
 **Precedence.** Decisions above outrank child detail. Child detail outranks any
 summary of it. Name a conflict rather than resolving it silently.
@@ -103,10 +104,12 @@ string, not these files.
 | 005-filter-sort-group-sheets | LANDED, landing-verified | `9df04459` (two GLM runs + Sonnet) replayed onto the 004+006-merged main as `4c00bf798`, landed `79500b89`; goal 3/3, vitest 1747/1747, sheet-rebuild 0, placement 413/415 (2 declared), evidence 15/15 fresh, gate 27/0 |
 | 006-record-and-menu-sheets | LANDED, landing-verified | Replayed as `a10c11ac` onto the 066+0.0.34+004-merged main, landed `ae89043f`; goal 2/2, gate 27/0, 2166 sheet-grammar checks green |
 | ALL SIX CHILDREN LANDED — parent 4/4 | Done | This refresh, 2026-09-09: criterion 4's own parent-level run confirms no regression on the merged tree (`97395196`): `sheet-grammar.mjs` PASS exit 0, `npx vitest run` PASS exit 0 (157 files / 1581 tests) |
+| 007-settings-sheet-strict-alignment scaffolded | Scaffold only | Operator's 0.0.36 (iOS) device recheck (D3) of the settings sheet: *"Settings sheet still has bad ui overall and needs strict alignment with notion sheets."* `002`'s row grammar stayed converged; the reference inventory this child built found the real gap is structural (card grouping), never compared before because `002` cited the wrong Notion surface (account Settings, not the per-database Settings sheet). Scaffolded in `worktrees/268-settings-sheet-strict`; no implementation yet |
 
 ### Deviations and findings
 
 | Item | Note |
 |------|------|
 | Combined into one phase parent | Both phase-qualification thresholds (architectural cross-cutting change across every sheet family, plus file/LOC scores) are met independently, per `recommend-level.sh --loc 1200 --files 25 --architectural`; one coordinated packet avoids re-litigating the audit per sheet family |
+| The packet's 100%/4/4 completion figure is unaffected by 007 | 007 exists because of D3 (the operator's own device recheck), which `goal.md`'s completion criteria already treat as a standing open item separate from the four tallied criteria — the 0.0.36 report is that open item resolving negatively for the settings sheet specifically, not a contradiction of anything already ticked |
 <!-- /ANCHOR:log -->

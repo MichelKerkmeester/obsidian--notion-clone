@@ -1,0 +1,27 @@
+{
+  "level": "3",
+  "specFolder": "005-component-surface-system/071-sheet-notion-anytype-alignment/007-settings-sheet-strict-alignment",
+  "description": "The phone Settings sheet's card/grouping shell never matched Notion's own grouped-card",
+  "keywords": [
+    "phone",
+    "settings",
+    "sheet",
+    "card",
+    "grouping",
+    "shell",
+    "never",
+    "matched",
+    "notion",
+    "own",
+    "grouped-card"
+  ],
+  "lastUpdated": "2026-09-09T18:56:34.618Z",
+  "specId": "007",
+  "folderSlug": "settings-sheet-strict-alignment",
+  "parentChain": [
+    "005-component-surface-system",
+    "071-sheet-notion-anytype-alignment"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

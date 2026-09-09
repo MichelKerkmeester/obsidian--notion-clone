@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T20:30:00Z"
-    last_updated_by: "264-hv-checklist"
-    recent_action: "Wrote human-verification-checklist.md: 33 device entries, 2 flagged obsolete"
-    next_safe_action: "Operator device rows only: 067/061 iOS pass; confirm 0.0.36 tag"
+    last_updated_at: "2026-09-09T20:45:00Z"
+    last_updated_by: "268-settings-sheet-strict"
+    recent_action: "Scaffolded 071/007 (settings sheet strict alignment), 0.0.36 report"
+    next_safe_action: "Execute 071/007/tasks.md; operator: 067/061 iOS pass, confirm 0.0.36 tag"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
     key_files:
@@ -35,13 +35,30 @@ _memory:
       - "068 renames to obnotion- with a data.json migration, author MichelKerkmeester, repo obsidian_notion-clone"
       - "The 3500ms dwell and the ::before -19px close hit survived this verifier: mutations red→restored, gate 27/0"
       - "GLM route: --provider llmgateway --model glm-5.3-flash --thinking high (max hangs on launch)"
-      - "0.0.33 shipped f91370f1; 070, 072, 073, 074, 075, 071/001, 008/001, 008/002 landed"
       - "GLM 5.3 flash max carries implementation legs; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh"
 ---
 # Session Handover: Component Surface System
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-09 ~20:38, `071/007-settings-sheet-strict-alignment` SCAFFOLDED — not implemented, worktree `268-settings-sheet-strict`
+
+**What opened this:** the operator's 0.0.36 (iOS) device recheck of `002-settings-sheet`'s landed
+redesign (071/goal.md D3), verbatim: *"Settings sheet still has bad ui overall and needs strict
+alignment with notion sheets."* `002`'s row-internal grammar (pitch, dividers, sheet-native
+pickers) stays green and unchanged — this scaffold's reference inventory found the actual gap:
+`002`'s own gap table cited `notion/ios/settings`/`notion/web/settings` as the reference, but those
+are Notion's account-level Settings pages; the per-database "Settings" bottom sheet
+(`screenshots/notion/ios/flows/database-settings/`) was never opened. Viewed directly, Notion
+groups its settings rows into 2-3 separate rounded cards on a neutral canvas; our sheet renders one
+continuous flat list on one background — the central structural gap `071/007/spec.md` §13 tables.
+**Scaffolded only**: `spec.md`, `plan.md`, `tasks.md` (12 write-first tasks), `acceptance-criteria.md`,
+`goal.md`; the 071 parent's Phase Documentation Map and goal.md binding/log tables gained a 007 row;
+`roadmap.md` §4 row 84 and §5.A's 071 row record the report and the finding. No landed Anytype
+ruling is contradicted (071/goal.md D15 defaults to Anytype only for the board and the calendar),
+so no Proposed ADR was opened in §7. `validate.sh --strict` RESULT: PASSED for 071/007, the 071
+parent and the 005 root, after backfilling graph metadata for 071/007 and the 071 parent.
 
 ### 2026-09-09 ~15:30, residual goal refresh RECONCILED — docs-only, gate-verified, worktree `258-goal-refresh-residuals`
 
