@@ -203,7 +203,7 @@
     ],
     "causal_summary": "The record detail sheet and menu-card popovers (the cell action bar named in roadmap row 65, dropdown menus from 052/063) were each fixed against individual reports rather than a single reference pass",
     "created_at": "2026-09-08T06:24:06Z",
-    "last_save_at": "2026-09-09T00:50:34.957Z",
+    "last_save_at": "2026-09-09T03:20:17.854Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,7 +215,7 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d35a4a3b358d310e6abe988126966436d568a583f24c8dcc46d06d075c8440c9",
+    "source_fingerprint": "sha256:082a4ef7674f38e501936a0a471f5e57f3d04ee1f5a23a88ebc82bf2d3f37d6a",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "858d1de1904ef2dd881937f9fc0d42cc83929b12e26828eb1cf09a9ab360eeca",

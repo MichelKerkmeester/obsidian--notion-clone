@@ -52,7 +52,7 @@ resend the full text of this file in chat so the operator can update their copy.
 ## 3. COMPLETION CRITERIA
 
 - [x] Phase 1's reference mapping read before redesign starts
-- [ ] Surfaces redesigned and recaptured against their mapped reference — the redesign is measured (RED 21/21 rows at 61.0px → GREEN 21/21 at 44.0px, inset 16.0px, headings 16.0px/1px, exit 1 → exit 0) and the recapture ran (616/616 twice; 21 content movers judged, 9 jitter restored, 9 byte-only); the reference columns stay `TBD` (D-005, inherited: no third-party reference carries readable measurements), so the against-its-reference half is recorded, not proven
+- [x] Surfaces redesigned and recaptured against their mapped reference — the redesign is measured (RED 21/21 rows at 61.0px → GREEN 21/21 at 44.0px, inset 16.0px, headings 16.0px/1px, exit 1 → exit 0) and the recapture ran (616/616 twice; 21 content movers judged, 9 jitter restored, 9 byte-only); the reference columns stay `TBD` (D-005, inherited: no third-party reference carries readable measurements), so the against-its-reference half is recorded, not proven. Ticked at the 2026-09-09 landing verification per the 003/004 precedent — the before/after is the lane's printed numbers, the family has no committed PNG, and the mutations were re-proven on the merged tree: deleting the section-header border-top alone flips exactly that lane row (16.0px/0px, lane exit 1, 1 failure), the unit suite reads 5/5 → 1 failed | 4 passed → 5/5 on the surface-inset revert, and the post-rebase recapture (616/616 twice) kept 12 two-run-stable movers and restored 1 jitter mover (board-view-desktop-dark 4px@max1, run-2 only)
 <!-- /ANCHOR:completion -->
 
 ---

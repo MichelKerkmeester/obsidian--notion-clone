@@ -394,7 +394,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 ## 071-sheet-notion-anytype-alignment — 2/4
 
-- [ ] 004, 005 and 006 (view-config, filter/sort/group, record/menu) each redesigned, recaptured and matched against their mapped reference — 004 in progress, uncommitted; 005/006 not started
+- [ ] 004, 005 and 006 (view-config, filter/sort/group, record/menu) each redesigned, recaptured and matched against their mapped reference — 004 LANDED+verified 2026-09-09, landed as `f72e50cd` on the 071/002/003-merged main (goal 3/3: the reference match is the lane's printed numbers — 13/13 direction, 6/6 plain-row pitches 48.0px inside the 44–52 band, 18/18 divider-owing rows, 16px insets, 0 native selects, the 5-part negative control red→green; the reference-mapping half rides D-005, the device read stays the operator's, D3; the merged-stylesheet overflow check measures 002's extent-minus-border, 389 == 389, after the border-subtle token's #333333 definition-site fallback made the sheet's own 1px left border resolve); 006 (record + menu) LANDED+verified 2026-09-09, replayed as `a10c11ac` onto the 066+0.0.34+004-merged main (goal 2/2: 21/21 record property rows 61.0px → 44.0px border-box, one shared 16px surface inset, 1/1 section headings 16.0px/1px behind a 1px border-subtle divider, 20/20 hairlines, 0 native selects, extent 401 ≤ 401; the menu-card half ships no stylesheet and re-proves the 061/067 rulings where the record family mounts its menus — 4/4 record pairs 44.0px; the reference-mapping half rides D-005, the device read stays the operator's, D3; gate 27/0); 005 not started
 - [ ] No prior sheet fix (054, 058, 045, 067) regresses as a result of any redesign in this packet
 
 ## 073-checkbox-controls — 4/5
