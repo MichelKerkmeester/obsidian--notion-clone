@@ -398,7 +398,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] Finance databases confirmed visible once 070 lands, documented as the kept second dataset — code-side proven and documented (ADR-0005, the cold-cache lane, `testbed-proposal.md`); the on-device read of the operator's own Finance databases is the operator's row and this leg does not tick it
 
-## 075-toolbar-labelled-buttons — 4/5
+## 075-toolbar-labelled-buttons — 5/6
 
 - [ ] Operator device row recorded and left unticked
 
