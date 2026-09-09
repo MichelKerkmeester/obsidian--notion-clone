@@ -2682,7 +2682,7 @@ const measureOverflow = (surface) => {
     node: describeNode(surface),
     scrollWidth: surface.scrollWidth,
     clientWidth: surface.clientWidth,
-    // 006's extents: scrollWidth counts the box's own left border; clientWidth does not — a
+    // The extent: scrollWidth counts the box's own left border; clientWidth does not — a
     // bordered sheet measures 1px of sideways scroll it never scrolls. The extent is what the
     // comparison reads. The integers above round; a sub-pixel box (0.5px borders, fractional
     // insets) hides between them, so the box's own width and border pair say which side of the
@@ -2691,7 +2691,7 @@ const measureOverflow = (surface) => {
     rectWidth: Number(surfaceRect.width.toFixed(2)),
     borderLeftWidth: style0.borderLeftWidth,
     borderRightWidth: style0.borderRightWidth,
-    // 005's farthest-margin-edge diagnosis: whichever descendant's distance equals scrollWidth IS
+    // The farthest-margin-edge diagnosis: whichever descendant's distance equals scrollWidth IS
     // the rule at fault, so the failure names it (and its box, borders, paddings, scrollLeft).
     boxWidth: Number(surfaceRect.width.toFixed(2)),
     borders: [style.borderLeftWidth, style.borderRightWidth].join("/"),
