@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-09T19:19:11.059Z",
+  "measuredAt": "2026-09-09T20:00:17.616Z",
   "inputs": {
-    "styles.css": "4261be904bfb",
+    "styles.css": "82894e5ae604",
     "tools/live/design-conformance.mjs": "8e86069bc5a3",
     "src/views/popover-position.ts": "a65201a60e11"
   },
@@ -81,7 +81,7 @@
     {
       "name": "cascade — property values overridden by a later duplicate block",
       "enforced": false,
-      "value": 136,
+      "value": 135,
       "target": 0,
       "note": "each needs a disposition: intended, or a defect",
       "gated": false,

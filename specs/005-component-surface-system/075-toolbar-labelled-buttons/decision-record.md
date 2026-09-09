@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "075-toolbar-labelled-buttons-implementation"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 83
     open_questions: []
     answered_questions:
       - "Desktop keeps its existing icon-only toolbar; only the full phone view's row gains labels"

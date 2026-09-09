@@ -3393,5 +3393,5 @@ own writers); `node tools/naming/scan-comments.mjs` 0, `scan-failing-values.mjs`
 handover commit, still 27/0. css-lane taken over from `067-sheet-family-remediation` at its released
 4261be904bfb, released at 82894e5ae604. 075 docs: AC-007 (RED→GREEN numbers recorded), T019, goal
 criterion ticked on lane proof with the operator's device re-read riding the unticked AC-006 row;
-roadmap §4 row 84 quotes the report verbatim, §5.A 075 refreshed to 5/5. Validated strict: 075 and 005
+roadmap §4 row 86 quotes the report verbatim, §5.A 075 refreshed to 5/5. Validated strict: 075 and 005
 both RESULT: PASSED; graph metadata backfilled both. Not pushed — a fresh verifier lands it.
