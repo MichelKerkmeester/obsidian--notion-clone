@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T23:55:00Z"
-    last_updated_by: "270-card-field-names"
-    recent_action: "Landing-verified 045 board-card field names; 0429d4d7+2d6d608c on main"
-    next_safe_action: "Execute 071/010/tasks.md, then 008, 009, 011-014; 007 awaits T001 capture"
+    last_updated_at: "2026-09-09T22:54:00Z"
+    last_updated_by: "273-sheet-copy-idiom"
+    recent_action: "Landing-verified 071/010 sheet-copy touch-idiom; 41b9619f+822d9746 on main"
+    next_safe_action: "Execute 071/008, then 009, 011-014; 007 awaits T001 capture"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
     key_files:
@@ -41,6 +41,10 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-10 ~00:54, `071/010` sheet-copy-touch-idiom LANDING-VERIFIED — landed on main as `822d9746`, worktree `273-sheet-copy-idiom`
+
+**What this verifier confirmed** on the copy leg (single commit `6a584630` on its 58dc5563 base, rebased onto `dedb52df` — the 045 field-names ×2, 074 testbed ×2 and the 0.0.37 release — as `41b9619f`, then this verifier's reconciliation as `822d9746`, both pushed): the §3.16 finding's four sheet-reachable gesture strings read tap/轻点 in all three locales. Mutation re-proofs by this verifier on the merged tree: reverting the leg's 52-line `src/i18n.ts` hunk → `sheet-grammar` exit 1 with exactly **14 gesture rows + 2 locale-parity rows, the failing set exactly the four keys and none of the seven** (237 derived keys); restored → exit 0, 2349 PASS / 0 FAIL; the 071/002–007 assertions held green in the same runs (44–52px pitches, 16px insets, 0 native selects, 067 divider hairlines, 007's 2/2 cards). The unit clause's own named mutation: `menu.changeType` → ASCII ellipsis → `npx vitest run src/i18n.test.ts` exactly 1 failed | 11 passed (the EN U+2026 clause); restored → 12/12. The 10 rebase conflicts were all metadata: 10 generated artefacts took main's side and were re-derived, `005/handover.md` kept both sections chronologically (074 then 010). Post-rebase `npm run screenshots` ×2 (480 each, exit 0) judged by decoded pixel delta across both runs: 2 REAL movers kept — `panel-base-import-modal-desktop-light` 66px@Δ209 (attributed: the leg's `baseImport.chooseBaseFilePlaceholder` → "Search .base files…", which that modal paints) and `field-file-fields-desktop-light` 15px@Δ83 — 0 jitters, and the leg's own 8 movers reproduced exactly. Evidence 16/16 fresh after the `capture-device-parity` writer re-ran (its manifest input moved 866f3a603832 → 72fe46e75bc8); `screenshots:verify` 480 current; no stylesheet change → the css-lane untouched (holder `045`, baselineHash `fcaf3fec28cf` = post-rebase styles.css; the 2 movers are named here because no triplet was owed). Gate **28/0** twice, the second from the final state; `validate --strict` RESULT: PASSED ×3 (010, 071 parent's first RESULT, 005 track) — 005 failed once pre-backfill (SOURCE_FINGERPRINT_MISMATCH, expected: its metadata was main's side) and passed after the scoped backfill; scan-comments 0, scan-failing-values 0. vitest 1600/1600 (158 files — 074's two). Docs re-derived, not carried: `roadmap.md`'s §4 row 87 and §5.A's 071 row already carried the 010 LANDED note; 071's goal reads 4/4 = §5.A's 100%—4/4, the child's goal reads 5/7 (71%, `completion_pct`) with AC-007 (the filter half of the capture) and AC-008 (the operator's device read, D3) the two open rows; no operator or device row ticked.
 
 ### 2026-09-09 ~23:55, `045` board-card field names LANDING-VERIFIED — landed on main as `2d6d608c`, worktree `270-card-field-names`
 
