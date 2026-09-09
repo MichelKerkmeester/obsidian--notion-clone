@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T21:55:00Z"
-    last_updated_by: "266-sort-sheet-flush-verify"
-    recent_action: "Landing-verified 071/005 sort-sheet flush fix; ae901a6e on main"
+    last_updated_at: "2026-09-09T22:10:00Z"
+    last_updated_by: "265-toolbar-vertical-lock-verify"
+    recent_action: "Landing-verified 075 vertical scroll lock; e1594957 on main"
     next_safe_action: "Execute 071/007/tasks.md; operator: 067/061 iOS pass, confirm 0.0.36 tag"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
@@ -41,6 +41,34 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-09 ~22:10, `075` vertical-scroll lock LANDING-VERIFIED — landed on main as `e1594957`, worktree `265-toolbar-vertical-lock`
+
+**What this verifier confirmed** on the 075 toolbar leg (rebuilt as `d8d12499` + `663d9970` +
+`d98f5ae4` on the 005-sort-sheet main, landing artefacts committed as `e1594957`, all pushed): the
+0.0.36 report *"The menu with horizontal overflow on mobile allows vertical movement which shouldnt
+happen"* is fixed at the strip's own rules — `overflow-y: hidden` on both `.is-phone
+.obnotion-toolbar-right` declarations, `touch-action: pan-x`, `overscroll-behavior-x: contain`,
+padding-bottom 2 → 8px parking every control's 8px `::before` touch halo inside the strip's box so
+the row sizes to its controls (52 → 58px, `everyControlInsideStrip` true, nothing clipped). Mutation
+re-proof by this verifier on the merged tree: media rule reverted to `overflow-y: visible` → exit 1
+(computed `overflow-y` `auto`); base rule's padding reverted to 2px → exit 1 with the AC-007 red
+numbers reproduced (vertical overflow 6px = scrollHeight 58 / clientHeight 52, forced `scrollTop = 40`
+reads back 6); restored → exit 0 (0px / hidden / pan-x / contain / 0, horizontal unchanged 532/398).
+css-lane conflict resolved append-only over main's 005-sort-sheet triplet (451 common → 456 entries,
+holder 075, baselineHash 82894e5ae604 = post-rebase styles.css, no restamp needed); the lane released
+at the landing with the 2 real movers named. Recapture x2 on the merged tree: 2 movers, both
+deterministic (identical both runs, maxDelta 1) — panel-record-detail-sheet-body-empty-desktop-dark
+1539px (one of 067's recorded seventeen, first recapture on a tree carrying 173f7d3a; 067's verdict
+review stays 067's debt) and board-view-desktop-dark 4px; the leg's 12 toolbar movers reproduce
+byte-identically. Battery: build 0, tsc 0, vitest 1585/1585, evidence 15/15 after re-running six
+stale writers, gate **27 green / 0 red** exit 0, `validate --strict` **RESULT: PASSED** for 075 and
+the 005 root (backfilled), scan-comments 0, scan-failing-values 0 (450/148 baselines). touch-targets
+did not ratchet (fixture 849/145/253, constructed 16997/703/10545 — unchanged). Docs re-derived at
+the landing, not carried: the toolbar row is **roadmap §4 row 86** (main's 84 = 071/007 scaffold,
+85 = sort sheet), §5.A corrected **5/5 → 5/6 = 83%** against goal.md's actual criteria count, packet
+continuity reconciled to 83. AC-006 stays unticked — the operator's own iPhone re-read of the strip
+(now covering the vertical lock too) is the packet's closing condition.
 
 ### 2026-09-09 ~21:55, sort-sheet flush frame fix LANDING-VERIFIED — landed on main as `ae901a6e`, worktree `266-sort-sheet-flush`
 
