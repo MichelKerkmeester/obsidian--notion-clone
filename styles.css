@@ -24415,6 +24415,51 @@ input[type="checkbox"].obnotion-checkbox:disabled {
   flex: 0 0 28px;
 }
 
+/* A filter condition's property, operator and value each get their own row instead of
+   sharing one — the property control's whole box is the row now, not a fixed fraction of it, so
+   a 12+ character name has somewhere to render without the two-character crop the shared row
+   left it. The generic `.obnotion-panel-dropdown`/input flex rule above already gives each of
+   these a full line (it targets any `.obnotion-panel-row` at any depth); only the operator's own
+   96px cap two rules up would still apply when a condition sits directly under the sheet root
+   (an ungrouped single rule), so it is restated here at the same specificity, later in the
+   cascade, for the row shape that cap was never meant to reach. */
+.is-phone .obnotion-filter-panel.obnotion-mobile-bottom-sheet .obnotion-filter-condition-row > .obnotion-filter-operator-dropdown {
+  flex: 1 1 0;
+}
+
+/* The rule-tree's own left border/indent (`.obnotion-source-rule-node`, § SOURCE RULES) marks
+   nesting on the desktop editor, where a condition can sit under several stacked groups. At the
+   sheet's own root there is nothing for it to distinguish from — three flat conditions combined
+   by one AND/OR read as a single unindented list everywhere else in this sheet family — so on
+   the phone sheet the root node's own indent is neutralized, which is what let its rows drift
+   9px off the shared 16px inset (25.0px measured) instead of sitting on it like sort's and
+   group's rows. A nested group (a real AND inside an OR) keeps its own indent: only the sheet's
+   direct child loses it, not `.obnotion-source-rule-node` wherever it occurs. */
+.is-phone .obnotion-filter-panel.obnotion-mobile-bottom-sheet > .obnotion-source-rule-node {
+  border-left: 0;
+  padding-left: 0;
+}
+
+/* The rule's own actions (turn into group, negate, remove) render as labelled rows below the
+   condition instead of unlabelled icon buttons sharing its line — `.obnotion-menu-item` already
+   carries its own 44px phone floor and 16px inset (unscoped, § MENU ROW), the same shape the
+   group sheet's own rows use, so no geometry is restated here for it. */
+
+/* Pinned to the sheet's own scrolling viewport rather than left in normal flow. A stacked
+   condition can now run to several rows, so tapping "+ Add condition" repeatedly — the way a
+   person actually taps, not once and re-aimed — used to land on whatever the growing list put
+   under the next tap once the button moved down with it. Sticking it to the bottom of the sheet
+   the button already scrolls inside keeps the tap target where the thumb left it, the same
+   footer-affordance shape Notion's own advanced-filter sheet keeps at its list's edge. */
+.is-phone .obnotion-filter-panel.obnotion-mobile-bottom-sheet .obnotion-filter-add-condition {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  width: 100%;
+  background: var(--obnotion-surface-overlay);
+  box-shadow: 0 -1px 0 var(--obnotion-border-subtle);
+}
+
 /* The drag token and the reorder pair keep their own width, so the property control keeps the
    line's slack. */
 .is-phone .obnotion-sort-panel.obnotion-mobile-bottom-sheet > .obnotion-panel-row > .obnotion-panel-drag,

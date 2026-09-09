@@ -22,7 +22,8 @@ import type { ColumnDef, FilterRule, SourceRuleNode, ViewConfig } from "../data/
 import { appendLeaf, buildViewFilterTree, flattenLeaves, removeLeafAt } from "../data/view-filter-tree";
 import { t } from "../i18n";
 import { createDropdownField } from "./dropdown-field";
-import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
+import { createMenuRow } from "./menu-row";
+import { isMobileBottomSheet, PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
 import { buildShellHeader } from "./surface-shell";
 import { renderDropdownPropertyTypeIcon, toPropertyDropdownOption } from "./property-type-icon";
 import { DatabaseViewState } from "./view-state-store";
@@ -212,7 +213,7 @@ export class FilterPanelRenderer {
         (next) => this.replaceFilterTree(containerEl, state, config, actions, next)
       );
       const addBtn = panel.createEl("button", {
-        cls: "obnotion-panel-button",
+        cls: "obnotion-panel-button obnotion-filter-add-condition",
         text: `+ ${t("panel.addCondition")}`,
       });
       addBtn.onclick = () => {
@@ -223,7 +224,14 @@ export class FilterPanelRenderer {
         actions.refresh();
       };
     }
-    positionToolbarPopover(panel, this.anchorEl || undefined, PANEL_POPOVER);
+    positionToolbarPopover(panel, this.anchorEl || undefined, {
+      ...PANEL_POPOVER,
+      // Sort declares this for the identical reason (`sort-panel-renderer.ts`): a short body
+      // otherwise falls to the mounted classifier's floating, margined card while its stacked
+      // condition rows can just as easily run long, and a sheet that floats on one filter and
+      // spans the viewport on the next disagrees with itself, not only with its sibling sheets.
+      heightRole: "flush",
+    });
     if (savedScroll) panel.scrollTop = savedScroll;
   }
 
@@ -547,53 +555,86 @@ export class FilterPanelRenderer {
     const ops = getFilterOperatorsForColumn(currentCol);
     if (!ops.some(([op]) => op === rule.op)) rule.op = ops[0]?.[0] || "eq";
 
+    const removeRule = (): void => {
+      if (options?.onRemove) {
+        options.onRemove();
+        return;
+      }
+      removeFilterRuleAt(state, index);
+      actions.saveState();
+      rerender();
+      actions.refresh();
+    };
+
+    const buildField = (parent: HTMLElement): void => {
+      createDropdownField({
+        parent,
+        label: t("panel.field"),
+        options: allCols.map((col) => toPropertyDropdownOption(col)),
+        value: currentField,
+        className: "obnotion-panel-dropdown obnotion-filter-field-dropdown",
+        hideLabel: true,
+        searchable: true,
+        renderIcon: renderDropdownPropertyTypeIcon,
+        onChange: (value) => {
+          rule.field = value;
+          const nextCol = allCols.find((col) => col.key === rule.field);
+          const nextOps = getFilterOperatorsForColumn(nextCol);
+          if (!nextOps.some(([op]) => op === rule.op)) rule.op = nextOps[0]?.[0] || "eq";
+          rule.value = "";
+          actions.saveState();
+          rerender();
+          actions.refresh();
+        },
+      });
+    };
+    const buildOperator = (parent: HTMLElement): void => {
+      createDropdownField({
+        parent,
+        label: t("panel.operator"),
+        options: ops.map(([value, label]) => ({ value, text: label })),
+        value: rule.op,
+        className: "obnotion-panel-dropdown obnotion-filter-operator-dropdown",
+        hideLabel: true,
+        onChange: (value) => {
+          rule.op = value as FilterRule["op"];
+          actions.saveState();
+          rerender();
+          actions.refresh();
+        },
+      });
+    };
+    const buildValue = (parent: HTMLElement): void => {
+      if (rule.op !== "empty" && rule.op !== "notempty") {
+        this.renderValueInput(parent, rule, currentCol, actions);
+        return;
+      }
+      // A labelled placeholder, not the bare "—" glyph a reader cannot act on — the same "Value"
+      // text the free-value control's own placeholder already carries.
+      parent.createSpan({ text: t("panel.value"), cls: "obnotion-panel-empty-value" });
+    };
+    // A checkbox condition is fully expressed by its operator ("is checked" / "is not checked")
+    // and never takes a free value, so its row is omitted rather than shown with nothing in it.
+    const hasValueRow = currentCol?.type !== "checkbox";
+
+    if (!options?.compact && isMobileBottomSheet(containerEl.ownerDocument)) {
+      this.renderStackedConditionRow(panel, {
+        buildField,
+        buildOperator,
+        buildValue: hasValueRow ? buildValue : undefined,
+        onWrap: options?.onWrap,
+        onNot: options?.onNot,
+        showRemove: options?.showRemove !== false,
+        onRemove: removeRule,
+      });
+      return;
+    }
+
     createConditionRow(panel, {
       compact: options?.compact,
-      field: (parent) => {
-        createDropdownField({
-          parent,
-          label: t("panel.field"),
-          options: allCols.map((col) => toPropertyDropdownOption(col)),
-          value: currentField,
-          className: "obnotion-panel-dropdown obnotion-filter-field-dropdown",
-          hideLabel: true,
-          searchable: true,
-          renderIcon: renderDropdownPropertyTypeIcon,
-          onChange: (value) => {
-            rule.field = value;
-            const nextCol = allCols.find((col) => col.key === rule.field);
-            const nextOps = getFilterOperatorsForColumn(nextCol);
-            if (!nextOps.some(([op]) => op === rule.op)) rule.op = nextOps[0]?.[0] || "eq";
-            rule.value = "";
-            actions.saveState();
-            rerender();
-            actions.refresh();
-          },
-        });
-      },
-      operator: (parent) => {
-        createDropdownField({
-          parent,
-          label: t("panel.operator"),
-          options: ops.map(([value, label]) => ({ value, text: label })),
-          value: rule.op,
-          className: "obnotion-panel-dropdown obnotion-filter-operator-dropdown",
-          hideLabel: true,
-          onChange: (value) => {
-            rule.op = value as FilterRule["op"];
-            actions.saveState();
-            rerender();
-            actions.refresh();
-          },
-        });
-      },
-      value: (parent) => {
-        if (rule.op !== "empty" && rule.op !== "notempty") {
-          this.renderValueInput(parent, rule, currentCol, actions);
-          return;
-        }
-        parent.createSpan({ text: "—", cls: "obnotion-panel-empty-value" });
-      },
+      field: buildField,
+      operator: buildOperator,
+      value: buildValue,
       trailing: options?.showRemove === false ? undefined : (parent) => {
         if (options?.onWrap) {
           this.createFilterTreeIconButton(parent, "folder-plus", t("viewConfig.sourceRules.addGroup"), options.onWrap);
@@ -602,18 +643,63 @@ export class FilterPanelRenderer {
           this.createFilterTreeIconButton(parent, "circle-slash-2", t("viewConfig.sourceRules.addNot"), options.onNot);
         }
         const rmBtn = parent.createEl("button", { cls: "obnotion-panel-button obnotion-panel-button-narrow", text: "×" });
-        rmBtn.onclick = () => {
-          if (options?.onRemove) {
-            options.onRemove();
-            return;
-          }
-          removeFilterRuleAt(state, index);
-          actions.saveState();
-          rerender();
-          actions.refresh();
-        };
+        rmBtn.onclick = removeRule;
       },
     });
+  }
+
+  /**
+   * The phone sheet's own condition shape: property, operator and value each on their own
+   * full-width row instead of three controls sharing one, so a property name gets the row's
+   * whole inner width rather than a fixed fraction of it. The rule's own actions move off the
+   * condition row entirely and render as labelled rows afterward — `createMenuRow` is the same
+   * primitive every other action-in-a-list surface here already uses, so "Remove" reads in the
+   * same destructive red (`is-warning`) three other producers already carry rather than a second
+   * copy of that treatment.
+   */
+  private renderStackedConditionRow(
+    panel: HTMLElement,
+    parts: {
+      buildField: (parent: HTMLElement) => void;
+      buildOperator: (parent: HTMLElement) => void;
+      buildValue?: (parent: HTMLElement) => void;
+      onWrap?: () => void;
+      onNot?: () => void;
+      showRemove: boolean;
+      onRemove: () => void;
+    }
+  ): void {
+    const appendConditionRow = (build: (row: HTMLElement) => void): void => {
+      build(panel.createDiv({ cls: "obnotion-panel-row obnotion-filter-condition-row" }));
+    };
+    appendConditionRow(parts.buildField);
+    appendConditionRow(parts.buildOperator);
+    if (parts.buildValue) appendConditionRow(parts.buildValue);
+    if (parts.onWrap) {
+      createMenuRow(panel, {
+        cls: "obnotion-filter-condition-action",
+        icon: "folder-plus",
+        label: t("viewConfig.sourceRules.addGroup"),
+        onClick: parts.onWrap,
+      });
+    }
+    if (parts.onNot) {
+      createMenuRow(panel, {
+        cls: "obnotion-filter-condition-action",
+        icon: "circle-slash-2",
+        label: t("viewConfig.sourceRules.addNot"),
+        onClick: parts.onNot,
+      });
+    }
+    if (parts.showRemove) {
+      createMenuRow(panel, {
+        cls: "obnotion-filter-condition-action",
+        icon: "trash-2",
+        label: t("viewConfig.sourceRules.remove"),
+        warning: true,
+        onClick: parts.onRemove,
+      });
+    }
   }
 
   private renderValueInput(row: HTMLElement, rule: FilterRule, col: ColumnDef | undefined, actions: FilterPanelActions): void {

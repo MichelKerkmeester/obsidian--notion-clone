@@ -59,7 +59,7 @@ regression-checked); the audit's §3.9 gap table.
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P1 |
-| **Status** | Draft — scaffolded, not implemented |
+| **Status** | Implemented 2026-09-09 — lane-proven; AC-007 Waived at the group boundary (see `../../roadmap.md` §7.17); AC-011 (operator device read, D3) open |
 | **Created** | 2026-09-09 |
 | **Branch** | `worktrees/272-sheet-notion-audit` |
 | **Parent Spec** | `../spec.md` |
@@ -261,17 +261,17 @@ for each, so the next regression is caught by the gate rather than by the operat
 only**, and every number in the Target column is ours, from `node tools/live/sheet-grammar.mjs` or
 from `styles.css` read directly.
 
-| Property | Current (ours, measured) | Notion (ref, observed structure) | Target |
-|---|---|---|---|
-| Controls per condition row | **6** (property, operator, value, folder-plus, circle-slash-2, ×) — `filter-panel-renderer.ts:555-604` | Property / operator / value on **3 stacked rows** in one card; actions in a **second card** as labelled rows | **≤4** interactive controls per row; condition spans 3 rows |
-| Property name legibility | Truncated to **2 characters** (`F…`, `gr…`, `is…`) in `constructed-filter-panel-mobile-light.png` | Full property name plus its type icon on its own row | A **12-character** name renders untruncated at 402px |
-| Rule actions | 3 **unlabelled** icon buttons on the row | **"Remove"** (red, trash), **"Duplicate"**, **"Turn into group"** — labelled rows | **0** icon-only buttons on a condition row |
-| Empty value | Bare **`—`** glyph (`:595`) | Gray placeholder **"Value"** + an **"Edit"** link | A labelled affordance; 0 bare em-dash value cells |
-| Row inset from sheet edge | **25.0px** (lane, printed at `sheet-grammar.mjs:3998`, **not asserted**) | Rows inset from the card edge; exact px **not measurable at 299x678** | **16.0px**, asserted — matching sort's measured 16.0px (internal-consistency target, not a Notion number) |
-| Row span | **332px** (filter) vs **357px** (sort) vs **341px** (group) | Not measurable | One shared span, **±2px** |
-| Conjunction control | `AND (all)` / `OR (any)` dropdown (`:328-330`) | **No inline AND/OR control in any capture**; nesting only | **No change** — Proposed, §6 ADR-B |
-| Row pitch | 3/3 at **48px**, inside the 44-52 band | Not measurable | **No change** — regression-checked (REQ-006) |
-| Panel padding | **16px / 16px** | Not measurable | **No change** |
-| Native selects | **0** | Notion uses no native pickers either | **No change** — already converged |
-| Add affordance | `+ Add condition`, `+ Add advanced filter` | **"Add filter rule"**, **"Add filter group"** (subtitle "A group to nest more filters") | Copy alignment only; low priority |
+| Property | Current (ours, measured) | Notion (ref, observed structure) | Target | Landed (ours, measured) |
+|---|---|---|---|---|
+| Controls per condition row | **6** (property, operator, value, folder-plus, circle-slash-2, ×) — `filter-panel-renderer.ts:555-604` | Property / operator / value on **3 stacked rows** in one card; actions in a **second card** as labelled rows | **≤4** interactive controls per row; condition spans 3 rows | **1** control per stacked row (property/operator/value each own row); actions moved off entirely onto their own labelled rows |
+| Property name legibility | Truncated to **2 characters** (`F…`, `gr…`, `is…`) in `constructed-filter-panel-mobile-light.png` | Full property name plus its type icon on its own row | A **12-character** name renders untruncated at 402px | A 24-character name renders whole (scrollWidth ≤ clientWidth) on its own full-width row |
+| Rule actions | 3 **unlabelled** icon buttons on the row | **"Remove"** (red, trash), **"Duplicate"**, **"Turn into group"** — labelled rows | **0** icon-only buttons on a condition row | **0** — "Turn into group" / "Negate" / "Remove" render as `createMenuRow` labelled rows, Remove in `is-warning` red |
+| Empty value | Bare **`—`** glyph (`:595`) | Gray placeholder **"Value"** + an **"Edit"** link | A labelled affordance; 0 bare em-dash value cells | Gray "Value" placeholder (`t("panel.value")`); 0 bare `—` cells. Checkbox conditions omit the value row entirely (§8 edge case) |
+| Row inset from sheet edge | **25.0px** (lane, printed at `sheet-grammar.mjs:3998`, **not asserted**) | Rows inset from the card edge; exact px **not measurable at 299x678** | **16.0px**, asserted — matching sort's measured 16.0px (internal-consistency target, not a Notion number) | **16.0px**, asserted and green — the root rule-tree node's indent neutralized on the phone sheet only |
+| Row span | **332px** (filter) vs **357px** (sort) vs **341px** (group) | Not measurable | One shared span, **±2px** | Filter/sort **357/357px** (filter now declares the same `heightRole: "flush"` sort already did). Group's 341px is unchanged and out of this phase's scope — Proposed ADR, `../../roadmap.md` §7.17 |
+| Conjunction control | `AND (all)` / `OR (any)` dropdown (`:328-330`) | **No inline AND/OR control in any capture**; nesting only | **No change** — Proposed, §6 ADR-B | Unchanged, confirmed — still Proposed |
+| Row pitch | 3/3 at **48px**, inside the 44-52 band | Not measurable | **No change** — regression-checked (REQ-006) | Unchanged, regression-checked green (both engines) |
+| Panel padding | **16px / 16px** | Not measurable | **No change** | Unchanged, regression-checked green |
+| Native selects | **0** | Notion uses no native pickers either | **No change** — already converged | Unchanged, **0** |
+| Add affordance | `+ Add condition`, `+ Add advanced filter` | **"Add filter rule"**, **"Add filter group"** (subtitle "A group to nest more filters") | Copy alignment only; low priority | Unchanged (out of scope this phase); "+ Add condition" is now `position: sticky` on the phone sheet so repeated taps keep landing on it as the list grows |
 <!-- /ANCHOR:gap-table -->

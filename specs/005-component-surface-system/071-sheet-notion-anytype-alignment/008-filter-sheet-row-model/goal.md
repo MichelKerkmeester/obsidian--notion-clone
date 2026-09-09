@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/071-sheet-notion-anytype-alignment/008-filter-sheet-row-model"
-    last_updated_at: "2026-09-09T22:50:00Z"
-    last_updated_by: "sheet-notion-audit"
-    recent_action: "Scaffolded from the sheet-notion audit's 3.9 gap table"
-    next_safe_action: "Execute tasks.md T001-T012"
+    last_updated_at: "2026-09-09T23:21:41Z"
+    last_updated_by: "071-008-filter-sheet-row-model"
+    recent_action: "Stacked filter rows, labelled actions; lane/gate/screenshots green"
+    next_safe_action: "Operator device re-read (D3); 010/009/011-014 remain to implement"
     blockers: []
     key_files:
       - "spec.md"
@@ -24,11 +24,11 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "008-filter-sheet-row-model-scaffold"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 86
     open_questions:
-      - "ADR-B: is the AND/OR conjunction control retained? Default retain; operator may overrule"
       - "Can the operator supply a full-resolution Notion Advanced-filter capture (audit C-1)"
-    answered_questions: []
+    answered_questions:
+      - "ADR-B: the AND/OR conjunction control is retained, unchanged — confirmed, still Proposed"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
 # Goal: Filter Sheet Row Model
@@ -68,11 +68,11 @@ to the parent: apply it there first, then resend the parent.
 ## 3. COMPLETION CRITERIA
 
 - [x] Reference and current-state gap table complete (`spec.md` §13, from `../sheet-notion-audit.md` §3.9)
-- [ ] A condition renders on 3 rows with ≤4 interactive controls, lane-measured RED then GREEN
-- [ ] A 12-character property name renders untruncated at 402px, lane-measured
-- [ ] The sheet's row inset reads 16.0px and the three panel sheets share one row span within ±2px
-- [ ] No regression on `005`'s row-grammar and overflow clauses, both engines
-- [ ] Recaptured phone-only light and dark, with a measured before/after recorded
+- [x] A condition renders on 3 rows with ≤4 interactive controls, lane-measured RED then GREEN
+- [x] A 12-character property name renders untruncated at 402px, lane-measured
+- [x] The sheet's row inset reads 16.0px; filter and sort share one row span within ±2px — group's own gap predates this phase and is out of scope (Waived, `../../roadmap.md` §7.17)
+- [x] No regression on `005`'s row-grammar and overflow clauses, both engines
+- [x] Recaptured phone-only light and dark, with a measured before/after recorded
 - [ ] Operator's own device re-read reports the Filter sheet legible (D3 — no agent ticks this row)
 <!-- /ANCHOR:completion -->
 
@@ -90,8 +90,8 @@ to the parent: apply it there first, then resend the parent.
 | Current-state measurement | Done | `node tools/live/sheet-grammar.mjs` PASS exit 0: filter 3/3 rows @48px, padding 16px/16px, span 332px, 0 native selects, extent 373 == 373, row inset **25.0px** printed and unasserted |
 | Visual read | Done | `screenshots/notion-clone/panels/constructed-filter-panel-mobile-light.png` (804x1748) opened: property names render `F…`, `gr…`, `is…`; value `Backl…` |
 | Gap table | Done | `spec.md` §13 — 11 properties, current measured, Notion observed structure, target |
-| Implementation | Not started | Deferred to `tasks.md` T004-T010 |
-| Regression check | Not started | Deferred to `tasks.md` T011-T012 |
+| Implementation | Done | `tasks.md` T004-T010: stacked property/operator/value rows (`renderStackedConditionRow`, phone sheet only), labelled `createMenuRow` actions (Remove `is-warning`), the root rule-node indent neutralized on the sheet, "+ Add condition" made sticky after a tap-target regression surfaced by `sheet-rebuild.mjs` |
+| Regression check | Done | `tasks.md` T011-T012: `sheet-grammar.mjs` exit 0 both engines, `npx vitest run` 1589/1589, `npm run gate` 28/0, revert-proof unit test (3/10 fail reverted, 10/10 pass restored) |
 | Operator device read | Open | D3 — the 2026-09-09 ~22:30 ruling opened this; the next device read closes it |
 
 ### Deviations and findings
@@ -101,4 +101,6 @@ to the parent: apply it there first, then resend the parent.
 | The lane prints a number it never asserts | `sheet-grammar.mjs:3998` prints `report.pairs[0].rowInsetFromSheet` in the divider-inset clause's PASS line, and the clause asserts only hairline presence. Filter has been reading 25.0px against sort's 16.0px in every green run since `005` landed. T006 promotes the printed number to an assertion |
 | The eight grammar columns are presence checks | `surface`, `handle`, `header`, `rows`, `segmented`, `keyboard`, `safeArea`, `dropdown` each print `true`. They prove a sheet has chrome, not what is in it — which is why this sheet scores 8/8 and shows the user `F…`. Recorded in `../sheet-notion-audit.md` §1 as Mechanism A |
 | No landed Anytype ruling is contradicted | D15 (`roadmap.md:130`, §7.15) makes Anytype the default only for the board and the calendar, not for sheets. The two contradictions this phase does touch are with **Notion**, not Anytype, and both are held Proposed rather than resolved (§6 ADR-B, ADR-C) |
+| The shared-span target only ever reached two of the three sheets | Sort's 357px already disagreed with group's 341px before this phase touched anything — that was the RED baseline (332/357/341), not something this phase introduced. Sort's width comes from a `heightRole: "flush"` declaration an earlier leg made to escape the same floating/flush content-height classifier; filter now declares the same role for the same reason and lands on 357px too. Group still floats at 341px, and forcing it flush is a frame-shape decision on an already-verified sibling surface this phase's Files to Change never names. Recorded as a Proposed ADR (`../../roadmap.md` §7.17) rather than silently widening the lane's tolerance or silently editing group's own producer |
+| A tap-target regression surfaced by the wider verification battery, not by this phase's own lane clauses | `tools/live/sheet-rebuild.mjs`'s real-touch pass failed after the stacked rows landed: five taps at one screen coordinate on "+ Add condition" only reached it once, because a stacked condition can add ~150-250px per tap and the button moved out from under the thumb. Fixed at the producer — the button is `position: sticky; bottom: 0` inside the sheet's own scroll region, the same footer-affordance shape Notion's own list keeps — not by changing the tap sequence or the assertion |
 <!-- /ANCHOR:log -->

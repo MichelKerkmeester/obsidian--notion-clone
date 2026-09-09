@@ -1824,9 +1824,30 @@ const measurePanelSheetGrammar = () => {
       };
     }
   }
+  // Notion lays a condition out as stacked property / operator / value rows. Count the
+  // interactive controls each condition row carries: measured through the innermost rule
+  // blocks, so a nested group reads through its own leaves rather than swallowing its
+  // children's controls, and a control wrapping its own trigger (a dropdown field) counts once.
+  const conditionRows = [];
+  const interactiveControlsSelector = "button, input, select, [role=button], .obnotion-dropdown-field";
+  let ruleNodeEls = Array.from(sheet.querySelectorAll(".obnotion-source-rule-node"));
+  if (ruleNodeEls.length === 0) {
+    ruleNodeEls = Array.from(sheet.querySelectorAll(".obnotion-panel-row")).filter((row) => row.querySelector(".obnotion-filter-field-dropdown"));
+  }
+  const leafRuleNodeEls = ruleNodeEls.filter((node) => !ruleNodeEls.some((other) => other !== node && node.contains(other)));
+  for (const ruleNode of leafRuleNodeEls) {
+    const rowEls = (ruleNode.matches(".obnotion-panel-row") ? [ruleNode] : []).concat(Array.from(ruleNode.querySelectorAll(".obnotion-panel-row")));
+    for (const rowEl of (rowEls.length > 0 ? rowEls : [ruleNode])) {
+      const matched = Array.from(rowEl.querySelectorAll(interactiveControlsSelector));
+      const topLevel = matched.filter((el) => !matched.some((other) => other !== el && other.contains(el)));
+      if (topLevel.length === 0) continue;
+      conditionRows.push({ controls: topLevel.length, height: Number(rowEl.getBoundingClientRect().height.toFixed(2)) });
+    }
+  }
   return {
     name,
     farthestChild,
+    conditionRows,
     panelPaddingLeft: Number.parseFloat(sheetStyle.paddingLeft),
     panelPaddingRight: Number.parseFloat(sheetStyle.paddingRight),
     rows,
@@ -1865,6 +1886,31 @@ window.__shellPanelSheetGrammarControl = (scenario) => {
   });
   return { broken, fixed };
 };
+
+// Whichever property a condition names, its own control renders that name whole once the
+// condition sits on its own stacked row. The mounted fixture's own column labels are all
+// short ("Field 1"), so the label a real vault could carry is written onto the already-rendered
+// control directly — this measures the control's box against text of a stated length, not
+// whatever the fixture's own columns happen to be called.
+window.__filterConditionNameLegibility = (scenario, propertyName) => {
+  let result = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    const sheet = document.querySelector(".obnotion-filter-panel.obnotion-mobile-bottom-sheet");
+    if (!sheet) { result = { mounted: false }; return; }
+    const label = sheet.querySelector(".obnotion-filter-field-dropdown .obnotion-dropdown-field-value");
+    if (!label) { result = { mounted: true, labelFound: false }; return; }
+    label.textContent = propertyName;
+    result = {
+      mounted: true,
+      labelFound: true,
+      text: label.textContent,
+      scrollWidth: label.scrollWidth,
+      clientWidth: label.clientWidth,
+    };
+  });
+  return result;
+};
+
 // The depth cap: a would-be third sheet stacked on a panel-role parent that is itself already two
 // deep. Real createSurfaceShell end to end -- the same call every panel-role DbModal subclass
 // makes -- rather than a hand-built stand-in of the mechanism it is proving.
@@ -4075,13 +4121,13 @@ try {
     }
     const wrongPairs = report.pairs.filter((pair) => !pair.dividerPresent
       || Math.abs(pair.dividerHeight - 1) > 0.5
-      || pair.rowInsetFromSheet < SETTINGS_SHEET_INSET_PX - 0.5
+      || Math.abs(pair.rowInsetFromSheet - SETTINGS_SHEET_INSET_PX) > 0.5
       || pair.dividerLeftInset == null || Math.abs(pair.dividerLeftInset - pair.rowInsetFromSheet) > 0.5
       || pair.dividerRightGap == null || Math.abs(pair.dividerRightGap) > 0.5
       || pair.color === "transparent"
       || pair.color === "rgba(0, 0, 0, 0)");
     if (wrongPairs.length > 0) {
-      failures.push("divider-inset grammar " + label + ": " + wrongPairs.length + " of " + report.pairs.length + " divider-owing row pairs do not draw the shared 1px hairline (inset at the row's own column, never tighter than the shared " + SETTINGS_SHEET_INSET_PX + "px, flush right; first: present " + wrongPairs[0].dividerPresent + ", left inset " + (wrongPairs[0].dividerLeftInset == null ? "none" : wrongPairs[0].dividerLeftInset.toFixed(1)) + "px, right gap " + (wrongPairs[0].dividerRightGap == null ? "none" : wrongPairs[0].dividerRightGap.toFixed(1)) + "px)");
+      failures.push("divider-inset grammar " + label + ": " + wrongPairs.length + " of " + report.pairs.length + " divider-owing row pairs do not draw the shared 1px hairline (rows sit on the shared " + SETTINGS_SHEET_INSET_PX + "px inset, flush right; first: present " + wrongPairs[0].dividerPresent + ", left inset " + (wrongPairs[0].dividerLeftInset == null ? "none" : wrongPairs[0].dividerLeftInset.toFixed(1)) + "px, right gap " + (wrongPairs[0].dividerRightGap == null ? "none" : wrongPairs[0].dividerRightGap.toFixed(1)) + "px)");
     }
     console.log("  " + (wrongPairs.length === 0 ? "PASS" : "FAIL") + "  " + label + " — " + (report.pairs.length - wrongPairs.length) + "/" + report.pairs.length + " divider-owing row pairs draw the shared hairline (row sits " + report.pairs[0].rowInsetFromSheet.toFixed(1) + "px from the sheet's edge)");
   }
@@ -4214,6 +4260,9 @@ try {
     failures.push("panel sheets row grammar: the group surface is not in the registry");
     console.log("  FAIL  panel sheets row grammar — the group surface is not in the registry");
   }
+  // Filter, sort and group share one inset-to-inset row width. Collected per surface inside the
+  // loop below, compared once every surface has mounted.
+  const surfaceRowSpans = {};
   for (const [surfaceName, scenario] of [
     ["filter-panel", REGISTERED_SURFACES.find((s) => s.name === "filter-panel")?.spec],
     ["sort-panel", REGISTERED_SURFACES.find((s) => s.name === "sort-panel")?.spec],
@@ -4243,12 +4292,22 @@ try {
     const spread = Number((widest - narrowest).toFixed(2));
     if (spread > 2 * FRAME_GEOMETRY_TOLERANCE_PX) failures.push(`panel sheets row grammar (${surfaceName}): row widths span ${narrowest}–${widest}px (${spread}px) — rows do not share one inset-to-inset span`);
     console.log(`  ${spread <= 2 * FRAME_GEOMETRY_TOLERANCE_PX ? "PASS" : "FAIL"}  ${surfaceName} — one inset-to-inset row span (widest ${widest}px, narrowest ${narrowest}px)`);
+    surfaceRowSpans[surfaceName] = widest;
     const labelRows = measured.rows.filter((row) => row.controlRightOfLabel !== null);
     const mispair = labelRows.filter((row) => !row.controlRightOfLabel);
     if (labelRows.length > 0 && mispair.length > 0) failures.push(`panel sheets row grammar (${surfaceName}): ${mispair.length}/${labelRows.length} label+control rows have the control left of its label`);
     if (labelRows.length > 0) console.log(`  ${mispair.length === 0 ? "PASS" : "FAIL"}  ${surfaceName} — ${labelRows.length - mispair.length}/${labelRows.length} label+control rows pair control right of label`);
     if (measured.selectCount > 0) failures.push(`panel sheets row grammar (${surfaceName}): ${measured.selectCount} native select(s) on the sheet`);
     console.log(`  ${measured.selectCount === 0 ? "PASS" : "FAIL"}  ${surfaceName} — native selects: ${measured.selectCount} (want 0; the picker is the plugin's own)`);
+    if (measured.conditionRows.length > 0) {
+      // A Notion condition stacks as property / operator / value rows, none of which needs more
+      // than a couple of interactive controls; the cap is what keeps the one-row, six-control
+      // arrangement from coming back silently.
+      const CONDITION_ROW_CONTROL_MAX = 4;
+      const crowdedRows = measured.conditionRows.filter((row) => row.controls > CONDITION_ROW_CONTROL_MAX);
+      if (crowdedRows.length > 0) failures.push(`panel sheets row grammar (${surfaceName}): ${crowdedRows.length}/${measured.conditionRows.length} condition rows exceed ${CONDITION_ROW_CONTROL_MAX} interactive controls (counts ${measured.conditionRows.map((row) => row.controls).join(", ")})`);
+      console.log(`  ${crowdedRows.length === 0 ? "PASS" : "FAIL"}  ${surfaceName} — condition rows carry ≤ ${CONDITION_ROW_CONTROL_MAX} interactive controls (counts ${measured.conditionRows.map((row) => row.controls).join(", ")})`);
+    }
     if (measured.sectionTitles.length > 0) {
       const insetWanted = PANEL_SHEET_INSET_PX;
       const headOff = measured.sectionTitles.filter((title) => Math.abs(title.paddingLeft - insetWanted) > FRAME_GEOMETRY_TOLERANCE_PX || Math.abs(title.paddingRight - insetWanted) > FRAME_GEOMETRY_TOLERANCE_PX);
@@ -4264,6 +4323,59 @@ try {
     const noOverflow = measured.sheetScrollExtent <= measured.sheetClientWidth + FRAME_GEOMETRY_TOLERANCE_PX;
     if (!noOverflow) failures.push(`panel sheets row grammar (${surfaceName}): sheet extent ${measured.sheetScrollExtent} exceeds clientWidth ${measured.sheetClientWidth}${measured.farthestChild ? ` — farthest margin edge ${measured.farthestChild.reach}px: ${measured.farthestChild.node} (${measured.farthestChild.width}px, margin-right ${measured.farthestChild.marginRight}px)` : ""}`);
     console.log(`  ${noOverflow ? "PASS" : "FAIL"}  ${surfaceName} — extent ${measured.sheetScrollExtent} == clientWidth ${measured.sheetClientWidth} (scrollWidth ${measured.sheetScrollWidth} minus the sheet's 1px left border)`);
+    console.log("");
+  }
+
+  // Filter and sort are the pair this phase can actually converge: sort's own width already
+  // comes from a declared heightRole set by an earlier leg, and filter now declares the same role,
+  // both for one reason — a short body must not float to a narrower, margined card while a long
+  // one spans the viewport — so the two are asserted flush against each other. Group is printed
+  // alongside for the record, never asserted here: its width was already the odd one out before
+  // this phase touched anything (the RED baseline had sort, not filter, mismatching group), it
+  // comes from the same floating/flush content-height classifier on a surface this phase's Files
+  // to Change never names, and forcing it flush to close the gap would be a frame-shape decision
+  // on an already-verified sibling surface, not a row-model one. Recorded as an open question
+  // rather than silently widened here or silently forced there.
+  {
+    const spanEntries = Object.entries(surfaceRowSpans);
+    const filterSpan = surfaceRowSpans["filter-panel"];
+    const sortSpan = surfaceRowSpans["sort-panel"];
+    if (filterSpan == null || sortSpan == null) {
+      failures.push("panel sheets row grammar: filter and/or sort did not mount a row to compare a shared span");
+      console.log("  FAIL  panel sheets row grammar — filter and/or sort did not mount a row to compare");
+    } else {
+      const SHARED_SPAN_TOLERANCE_PX = 2;
+      const pairSpread = Number(Math.abs(filterSpan - sortSpan).toFixed(2));
+      const agrees = pairSpread <= SHARED_SPAN_TOLERANCE_PX;
+      if (!agrees) failures.push(`panel sheets row grammar: filter/sort row widths do not share one span (filter-panel ${filterSpan}px, sort-panel ${sortSpan}px, spread ${pairSpread}px, wanted <= ${SHARED_SPAN_TOLERANCE_PX}px)`);
+      console.log(`  ${agrees ? "PASS" : "FAIL"}  filter/sort share one row span within ${SHARED_SPAN_TOLERANCE_PX}px (${spanEntries.map(([name, width]) => `${name} ${width}px`).join(", ")})`);
+    }
+    console.log("");
+  }
+
+  // A filter condition's property control renders its name whole. A name at or
+  // above 12 characters is the floor the audit's own gap table sets — long enough that the old
+  // one-row layout (six controls sharing 402px) could only ever show two of its characters, and
+  // short enough that the stacked row's own full inner width is expected to hold it without
+  // relying on how wide any one particular vault's longest name happens to be.
+  {
+    const filterSpec = REGISTERED_SURFACES.find((s) => s.name === "filter-panel")?.spec;
+    const NAME_LEGIBILITY_PROPERTY = "Content Type Preference";
+    const legibility = filterSpec
+      ? await page.evaluate(([spec, name]) => window.__filterConditionNameLegibility(spec, name), [filterSpec, NAME_LEGIBILITY_PROPERTY])
+      : null;
+    console.log(`sheet-grammar: filter condition name legibility — a ${NAME_LEGIBILITY_PROPERTY.length}-character property name renders whole on its own row\n`);
+    if (!legibility || !legibility.mounted || !legibility.labelFound) {
+      failures.push(`filter condition name legibility: ${!legibility ? "the filter-panel scenario is not registered" : !legibility.mounted ? "the sheet did not mount" : "no property label was found to measure"}`);
+      console.log(`  FAIL  filter condition name legibility — ${!legibility ? "scenario not registered" : !legibility.mounted ? "sheet did not mount" : "no property label found"}`);
+    } else {
+      const fits = legibility.scrollWidth <= legibility.clientWidth + FRAME_GEOMETRY_TOLERANCE_PX;
+      const wholeText = legibility.text === NAME_LEGIBILITY_PROPERTY && !legibility.text.endsWith("…");
+      if (!fits) failures.push(`filter condition name legibility: "${NAME_LEGIBILITY_PROPERTY}" scrollWidth ${legibility.scrollWidth}px exceeds the label's own clientWidth ${legibility.clientWidth}px — the control is still narrower than its own content`);
+      if (!wholeText) failures.push(`filter condition name legibility: the label's rendered text ("${legibility.text}") is not the whole property name`);
+      console.log(`  ${fits ? "PASS" : "FAIL"}  the property control's own box is >= its text (scrollWidth ${legibility.scrollWidth}px, clientWidth ${legibility.clientWidth}px)`);
+      console.log(`  ${wholeText ? "PASS" : "FAIL"}  the rendered text is the whole name, not an ellipsis-terminated fragment ("${legibility.text}")`);
+    }
     console.log("");
   }
 

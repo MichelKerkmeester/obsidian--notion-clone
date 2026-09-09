@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T22:54:00Z"
-    last_updated_by: "273-sheet-copy-idiom"
-    recent_action: "Landing-verified 071/010 sheet-copy touch-idiom; 41b9619f+822d9746 on main"
-    next_safe_action: "Execute 071/008, then 009, 011-014; 007 awaits T001 capture"
+    last_updated_at: "2026-09-09T23:21:41Z"
+    last_updated_by: "071-008-filter-sheet-row-model"
+    recent_action: "Implemented 071/008 filter-sheet stacking; lane/gate green; not pushed"
+    next_safe_action: "Land 071/008 (274-filter-sheet-rows); then 009, 011-014; 007 awaits T001 capture"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
     key_files:
@@ -429,6 +429,30 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 ### 2026-09-09 ~23:35, 074-test-data-consolidation 0.0.36 testbed ruling leg LANDED+verified on `origin/main` — landing verifier, two rebases, pushed
 
 **Landed SHA `3b15f925` on `origin/main`** (leg commit `1257e34b` replayed twice — over 63fdcc5e as `fc425af9`, then over the 071/007-merged main as `8834369d`; verifier commit `3b15f925`; `git log -1 origin/main` read back). Verified on the merged tree: consolidation.test.mjs asserts 1 database + views exactly `["table", "board"]`; mutations re-proven — a gallery view added to `buildViews()` → RED 2 failed | 6 passed naming it ("Gallery is of type \"gallery\""), guarded-source revert (`catalogue.ts` to pre-leg) → 3 failed | 25 passed, restored 8/8 + 28/28. Screenshots ×4 exit 0 (480 captures; 0 movers across the first pair, 1 real mover on the second pair: chrome-view-switcher-mobile-dark 47px@Δ106, deterministic both runs, kept with its manifest bytes 11641→11587; styles.css untouched, no css-lane triplet); evidence 16/16 fresh (capture-device-parity re-derived after the mover moved its manifest input); vitest 1587→1588/1588 on the 071/007-merged main; tsc 0; build 0. Gate: run 1 FAIL — failing-values: the 074 ruling criterion recorded its numbers but not in the scanner's evidence vocabulary (bare 149 > baseline 148; 071's own bare row had already arrived via 12735ae9) — fixed by rewording the criterion ("RED: 2 failed | 6 passed, the view count was 6 [table, board, calendar, timeline, chart, table]"), baseline file untouched; run 2 PASS — 28 green, 0 red, exit 0. Validate 074 + 005 --strict RESULT: PASSED (074 pre-edit too); scan-comments 0; scan-failing-values 0 (148 = 148). Docs reconciled: roadmap §5 and §5.A 074 figures 3/4 → 4/5 (goal 4/5 — the added ruling criterion ticked; the Finance databases' on-device read stays the operator's, unticked), operator-checklist 074 section 3/4 → 4/5, both packets' graph-metadata backfilled. Both rebases' conflicts: 005/handover.md (both legs' §1 sections kept) and 8× generated artefacts (main's side taken, then re-derived). Pushed `58dc5563..3b15f925` after one non-fast-forward rejection (071/007 + the 272 sheet audit landed mid-verify), resolved by the second rebase + full re-derivation.
+### 2026-09-09 ~23:21, 071/008-filter-sheet-row-model IMPLEMENTED (native Sonnet, worktree `274-filter-sheet-rows`, not pushed)
+
+**Implemented, not yet landed to `origin/main`.** The phone Filter sheet's condition rows stack
+property/operator/value onto three full-width rows (`renderStackedConditionRow`, phone-sheet-gated
+via `isMobileBottomSheet`; the desktop popover and the compact chip-rail editor keep the original
+single row), the rule's own actions (turn into group, negate, remove) render as labelled
+`createMenuRow` rows off the condition row, Remove in `is-warning` red, and the sheet's row inset
+moved from 25.0px to the shared 16.0px by neutralizing the rule-tree's own indent at the sheet's
+root only (nested groups keep theirs). The bare `—` empty-value glyph is now a labelled "Value"
+placeholder on every presentation. Four new `sheet-grammar.mjs` clauses ran RED before GREEN:
+controls-per-row (6/6/5 → ≤4, every stacked row carries 1), name legibility (a 24-char name
+scrollWidth 119px > clientWidth 14px → fits), row inset (25.0px → 16.0px), and filter/sort shared
+row span (332/357px → 357/357px; group's own 341px predates this phase and is printed, not
+asserted — Waived AC-007, Proposed ADR `roadmap.md` §7.17, since closing it needs a `heightRole`
+declaration on group's own producer outside this phase's scope). A real tap-target regression the
+wider battery found (`sheet-rebuild.mjs`: repeated taps on "+ Add condition" missing once the
+stacked list grew tall enough to move the button) was fixed by making that button
+`position: sticky`. `005`'s own row-grammar reruns green unchanged, both engines. Full battery:
+tsc 0, build 0, vitest 1589/1589 (10 new tests, 3 revert-proof), `npm run screenshots` ×2 +
+decoded-pixel review (8 real movers kept, 1 pre-existing unrelated sub-pixel mover kept, 1 jitter
+reverted), css-lane takeover-then-release triplet (`007` had released in history without
+advancing its top pointer — corrected here), evidence 16/16 fresh, `npm run gate` 28/0, scans 0.
+AC-011 (operator device read, D3) stays unticked. HEAD SHA and exact exit codes are in this
+packet's own `implementation-summary.md`; nothing pushed — a fresh lander lands it.
 
 ### 2026-09-09 ~23:20, 071/007-settings-sheet-strict-alignment card-grouping landing LANDED+verified on `origin/main` — landing verifier, one rebase, pushed
 
