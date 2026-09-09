@@ -382,7 +382,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] Release 0.0.31 is cut with notes naming the id change and the migration, its three assets attached, and the build copied into the iCloud vault under `.obsidian/plugins/obnotion/` —
 - [ ] The operator confirms on their own device that the rename landed and nothing of theirs was lost (parent D3: only this closes the packet) — still open; only the operator can close this row
 
-## 069-board-cross-group-drag — 7/8
+## 069-board-cross-group-drag — 8/9
 
 - [ ] OPERATOR: the operator drags a card between two columns on their own phone and confirms the move landed in the note's frontmatter. Nothing in this repository can close this row, and an agent never ticks it.
 
