@@ -21315,7 +21315,11 @@ body.pm-resize-active * {
   justify-content: flex-start;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 6px 2px 2px;
+  /* Every control paints an 8px touch halo past its own box (`::before` inset -8), so the halo
+     reaches 8px below the row; 8px of bottom padding parks that overhang inside the strip's own
+     box — the content height then equals the box at any control height, leaving the single-axis
+     scroller nothing to move vertically. */
+  padding: 6px 2px 8px;
   scrollbar-width: none;
 }
 
@@ -24097,7 +24101,13 @@ body.is-tablet .obnotion-container .obnotion-record-open-btn {
 
 .is-phone .obnotion-container .obnotion-toolbar-right {
   overflow-x: auto;
-  overflow-y: visible;
+  /* Horizontal only: `visible` computes to `auto` next to the `auto` x-axis, which hands the
+     gesture an extra 6px of vertical travel on the row — hidden (with the halo's overhang parked
+     in the padding above) leaves it nothing to move. pan-x sends vertical gestures to the page
+     and `contain` stops the horizontal pan chaining into the page's own scroll. */
+  overflow-y: hidden;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
   box-shadow: inset 10px 0 12px -14px var(--text-muted), inset -10px 0 12px -14px var(--text-muted);
 }
 
@@ -24109,7 +24119,9 @@ body.is-tablet .obnotion-container .obnotion-record-open-btn {
 
   .is-phone .obnotion-container .obnotion-toolbar-right {
     overflow-x: auto;
-    overflow-y: visible;
+    overflow-y: hidden;
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
     box-shadow: inset 10px 0 12px -14px var(--text-muted), inset -10px 0 12px -14px var(--text-muted);
   }
 }

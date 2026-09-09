@@ -1,7 +1,7 @@
 {
- "holder": "005-filter-sort-group-sheets",
- "acquiredAt": "2026-09-09T19:17:54.193Z",
- "baselineHash": "4261be904bfb",
+ "holder": "075-toolbar-labelled-buttons",
+ "acquiredAt": "2026-09-09T19:28:50Z",
+ "baselineHash": "82894e5ae604",
  "inScopeCaptureRoots": [
   "screenshots/notion-clone/",
   "screenshots/project-manager/"
@@ -6233,6 +6233,20 @@
     "screenshots/notion-clone/panels/constructed-sort-panel-mobile-light.png"
    ],
    "note": "Captured twice (npm run screenshots </dev/null, 480 entries, exit 0 both) and judged by decoded pixel delta against the committed blobs across both runs, no image opened by eye: 4 content movers, every one the sort sheet's own captures, every one moved in BOTH runs at IDENTICAL counts and channel deltas (constructed-sort-panel-mobile-dark 117957px@192, -light 136281@209, -calendar-dark 85754@176, -calendar-light 104017@196) — the sort sheet trading the floating card (8px insets, 16px corners) for the flush frame (full width, bottom edge down, 8px top corners), exactly the reported defect, kept as real. board-mobile-desktop-dark moved 1px@1 in the second sampled run only, judged jitter by the rule (max channel delta <= 12, one run) and restored at its committed bytes with its manifest row's bytes field patched back (181633) and the fresh sourceHashes kept. The stylesheet never moved: baselineHash stays 4261be904bfb, the first 12 of the working tree's sha256. screenshots:verify exit 0. This leg reviews by measurement (headless); the visual read stays the operator device pass."
+  },
+  {
+   "event": "acquire",
+   "phase": "075-toolbar-labelled-buttons",
+   "at": "2026-09-09T19:28:50Z",
+   "hash": "82894e5ae604",
+   "note": "Post-release takeover from 067-sheet-family-remediation (released 4261be904bfb, committed at HEAD) to land the operator's 0.0.36 vertical-scroll report against the toolbar's own horizontal strip: the phone strip was a two-axis gesture scroller."
+  },
+  {
+   "event": "edit",
+   "phase": "075-toolbar-labelled-buttons",
+   "at": "2026-09-09T19:28:50Z",
+   "hash": "82894e5ae604",
+   "note": "styles.css, phone-scoped to .is-phone .obnotion-container .obnotion-toolbar-right: overflow-y visible->hidden at both the base and the max-width 700px re-declaration (visible computes to auto beside the auto x-axis, which is what handed the strip 6px of vertical travel), plus touch-action pan-x and overscroll-behavior-x contain; padding-bottom 2->8px parks the 8px touch halo every control paints past its own box inside the strip's own box, so the content height equals the box at any control height and the row grows 52->58px with every control still fully visible - the height fixed, not the overflow hidden over a clipped row."
   }
  ],
  "outstanding": [
@@ -6245,5 +6259,6 @@
   "The list roving-tabindex selector at src/views/card-roving-tabindex.ts:313 queries .obnotion-card-field, .obnotion-gallery-card-field and .obnotion-list-row-field. None of the three is built or styled anywhere: the renderers pass obnotion-board-card-field, obnotion-gallery-field and obnotion-list-field. Not a behaviour defect - card-field-renderer.ts sets data-obnotion-column-key and role=gridcell on every field, and the selector's other two arms match through those - so the three names are dead weight rather than broken navigation. Found while closing the row matrix's invented classes and left alone: it is outside 005's scope, and the same rot in one more place is worth recording rather than folding into an unrelated diff.",
   "The obnotion-board-* stylesheet family is now largely dead and was deliberately not cut here. The default board is the only board, and it builds obnotion-kanban-* markup; the extensions branch that built .obnotion-board-column, .obnotion-board-subgroup, .obnotion-board-add-column and their checkboxes is gone. Some of the family is still live and must survive any cut — .obnotion-board-card-cover and .obnotion-board-card-field are both built by the kanban card — so this is a per-rule audit, not a section delete, and it moves captures. One concrete consequence is already measurable: styles.css reads var(--obnotion-board-column-width, 220px) for .obnotion-board-column and nothing assigns that property any more, so the rule resolves its fallback for every user. It is dead rather than wrong, but it is exactly the class scan-pinned-values.mjs exists to catch, and it will stay invisible while the rule it belongs to is unreachable.",
   "067-sheet-family-remediation: seventeen captures on this lane still show the surface as it looked BEFORE the depth-cap fix at 173f7d3a. Found by 062's landing verifier, which recaptured on the merged tree and then measured decoded pixels rather than trusting pixelHash: panel-record-detail-sheet-body-empty-desktop-light moves 46,779 pixels at a max channel delta of 214, its dark pair 46,752 at 209, constructed-chart-toolbar-options-mobile-dark and constructed-column-manager-mobile-dark about 260,800 each at 45, and eleven more record-detail-sheet, modal-sheet-property-editor, depth3-dropdown and owned-menu-sheet captures between 10,548 and 42,211 pixels at 46 to 78. Every one of them hashes IDENTICALLY, which is why 173f7d3a's own recapture read them as byte-only re-encodes and restored them. pixelHash averages a 16x16 grid into 32 buckets, so any change confined to a narrow band or a small region moves a cell's average by less than one bucket and hashes the same - 062 hit the identical trap on its frozen-column shadow and fixed it by measuring pixels. Reproduced with 067's OWN stylesheet in the tree (identical counts), so this is 067's debt and not 062's: left restored here rather than recommitted, because reviewing another lane's surface is a review this packet cannot honestly sign. 067 owes a recapture measured by decoded pixel delta, and a read of each of the seventeen."
- ]
+ ],
+ "baselineCommit": null
 }
