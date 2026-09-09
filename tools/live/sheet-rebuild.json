@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-09T20:09:48.233Z",
+  "measuredAt": "2026-09-09T20:24:43.439Z",
   "inputs": {
     "tools/live/sheet-rebuild.mjs": "fd7ad549bd82",
     "tools/live/sheet-rebuild-harness.ts": "8b56d2b01f48",

@@ -281,7 +281,7 @@
       "pixelHash": "cdf72ff39d76",
       "sourceHashes": {
         "src/views/board-renderer.ts": "59f6618fd206",
-        "styles.css": "4261be904bfb",
+        "styles.css": "82894e5ae604",
         "tools/screenshots/theme.css": "43554e1fbe3e",
         "tools/screenshots/runtime-vars.css": "96e9c31eb486",
         "tools/screenshots/scenarios.mjs": "8e4c7409a92b",
@@ -310,7 +310,7 @@
       "pixelHash": "01bec69fdb36",
       "sourceHashes": {
         "src/views/board-renderer.ts": "59f6618fd206",
-        "styles.css": "4261be904bfb",
+        "styles.css": "82894e5ae604",
         "tools/screenshots/theme.css": "43554e1fbe3e",
         "tools/screenshots/runtime-vars.css": "96e9c31eb486",
         "tools/screenshots/scenarios.mjs": "8e4c7409a92b",
@@ -339,7 +339,7 @@
       "pixelHash": "5159d00cc99e",
       "sourceHashes": {
         "src/views/board-renderer.ts": "59f6618fd206",
-        "styles.css": "4261be904bfb",
+        "styles.css": "82894e5ae604",
         "tools/screenshots/theme.css": "43554e1fbe3e",
         "tools/screenshots/runtime-vars.css": "96e9c31eb486",
         "tools/screenshots/scenarios.mjs": "8e4c7409a92b",
@@ -368,7 +368,7 @@
       "pixelHash": "80bef0e36b0b",
       "sourceHashes": {
         "src/views/board-renderer.ts": "59f6618fd206",
-        "styles.css": "4261be904bfb",
+        "styles.css": "82894e5ae604",
         "tools/screenshots/theme.css": "43554e1fbe3e",
         "tools/screenshots/runtime-vars.css": "96e9c31eb486",
         "tools/screenshots/scenarios.mjs": "8e4c7409a92b",
@@ -397,7 +397,7 @@
       "pixelHash": "1a7ac0a005c2",
       "sourceHashes": {
         "src/views/board-renderer.ts": "59f6618fd206",
-        "styles.css": "4261be904bfb",
+        "styles.css": "82894e5ae604",
         "tools/screenshots/theme.css": "43554e1fbe3e",
         "tools/screenshots/runtime-vars.css": "96e9c31eb486",
         "tools/screenshots/scenarios.mjs": "8e4c7409a92b",
@@ -427,7 +427,7 @@
       "pixelHash": "d779403a5ab4",
       "sourceHashes": {
         "src/views/board-renderer.ts": "59f6618fd206",
-        "styles.css": "4261be904bfb",
+        "styles.css": "82894e5ae604",
         "tools/screenshots/theme.css": "43554e1fbe3e",
         "tools/screenshots/runtime-vars.css": "96e9c31eb486",
         "tools/screenshots/scenarios.mjs": "8e4c7409a92b",
@@ -457,7 +457,7 @@
       "pixelHash": "6825d718b4c7",
       "sourceHashes": {
         "src/views/board-renderer.ts": "59f6618fd206",
-        "styles.css": "4261be904bfb",
+        "styles.css": "82894e5ae604",
         "tools/screenshots/theme.css": "43554e1fbe3e",
         "tools/screenshots/runtime-vars.css": "96e9c31eb486",
         "tools/screenshots/scenarios.mjs": "8e4c7409a92b",
@@ -487,7 +487,7 @@
       "pixelHash": "8601a84968d5",
       "sourceHashes": {
         "src/views/board-renderer.ts": "59f6618fd206",
-        "styles.css": "4261be904bfb",
+        "styles.css": "82894e5ae604",
         "tools/screenshots/theme.css": "43554e1fbe3e",
         "tools/screenshots/runtime-vars.css": "96e9c31eb486",
         "tools/screenshots/scenarios.mjs": "8e4c7409a92b",
@@ -517,7 +517,7 @@
       "pixelHash": "71b7f71eb909",
       "sourceHashes": {
         "src/views/board-renderer.ts": "59f6618fd206",
-        "styles.css": "4261be904bfb",
+        "styles.css": "82894e5ae604",
         "tools/screenshots/theme.css": "43554e1fbe3e",
         "tools/screenshots/runtime-vars.css": "96e9c31eb486",
         "tools/screenshots/scenarios.mjs": "8e4c7409a92b",
@@ -547,7 +547,7 @@
       "pixelHash": "bd55ada2c359",
       "sourceHashes": {
         "src/views/board-renderer.ts": "59f6618fd206",
-        "styles.css": "4261be904bfb",
+        "styles.css": "82894e5ae604",
         "tools/screenshots/theme.css": "43554e1fbe3e",
         "tools/screenshots/runtime-vars.css": "96e9c31eb486",
         "tools/screenshots/scenarios.mjs": "8e4c7409a92b",
@@ -577,7 +577,7 @@
       "pixelHash": "eff3aed6ed7a",
       "sourceHashes": {
         "src/views/board-renderer.ts": "59f6618fd206",
-        "styles.css": "4261be904bfb",
+        "styles.css": "82894e5ae604",
         "tools/screenshots/theme.css": "43554e1fbe3e",
         "tools/screenshots/runtime-vars.css": "96e9c31eb486",
         "tools/screenshots/scenarios.mjs": "8e4c7409a92b",
@@ -607,7 +607,7 @@
       "pixelHash": "41153e71a426",
       "sourceHashes": {
         "src/views/board-renderer.ts": "59f6618fd206",
-        "styles.css": "4261be904bfb",
+        "styles.css": "82894e5ae604",
         "tools/screenshots/theme.css": "43554e1fbe3e",
         "tools/screenshots/runtime-vars.css": "96e9c31eb486",
         "tools/screenshots/scenarios.mjs": "8e4c7409a92b",
@@ -15368,7 +15368,7 @@
       },
       "note": "A record whose note has frontmatter and nothing else. One faint line rather than an empty box: without an affordance the records most in need of a body would be exactly the ones that could not be given one.",
       "capture": "viewport",
-      "bytes": 52182,
+      "bytes": 52195,
       "fixtureOf": "constructed-record-detail-body-empty"
     },
     {
@@ -16792,7 +16792,7 @@
       },
       "note": "The reference board inside the default-width container: its fixed-width columns page horizontally on a phone while the card tree remains unchanged.",
       "capture": "viewport",
-      "bytes": 181631,
+      "bytes": 181633,
       "fixtureOf": "constructed-board"
     },
     {
@@ -17094,7 +17094,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 216975,
+      "bytes": 216993,
       "fixtureOf": "constructed-board"
     },
     {
