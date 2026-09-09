@@ -1,14 +1,14 @@
 {
-  "measuredAt": "2026-09-09T05:15:32.619Z",
+  "measuredAt": "2026-09-09T06:07:16.011Z",
   "inputs": {
     "tools/live/render-assertions.mjs": "463ee6efdd93",
-    "tools/live/render-assertion-harness.ts": "6780d687cf2f",
-    "styles.css": "73297de05d54",
+    "tools/live/render-assertion-harness.ts": "c51afbe78a1c",
+    "styles.css": "55cb284b3244",
     "src/views/table-renderer.ts": "69bc5595a179",
     "src/views/board-renderer.ts": "d24559147f98",
     "tools/bench/table-render-bench.ts": "bf0c51517e63",
     "tools/bench/board-render-bench.ts": "0dd4dca16dd0",
-    "src/views/database-view.ts": "517bf0b7d943",
+    "src/views/database-view.ts": "5905fb4c64e8",
     "src/views/embedded-database-renderer.ts": "980a549b3d47"
   },
   "constructed": 2,

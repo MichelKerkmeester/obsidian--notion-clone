@@ -44,13 +44,14 @@
       "spec.md",
       "goal.md",
       "src/views/database-view.ts",
-      "src/views/calendar-renderer.ts",
       "001-usage-and-migration-audit/goal.md",
       "002-settings-redirect-and-migrate/goal.md",
       "003-remove-renderers-and-harness/goal.md",
       "004-archive-docs-and-release/goal.md",
       "001-usage-and-migration-audit/inventory.md",
-      "002-settings-redirect-and-migrate/implementation-summary.md"
+      "002-settings-redirect-and-migrate/implementation-summary.md",
+      "003-remove-renderers-and-harness/implementation-summary.md",
+      "003-remove-renderers-and-harness/decision-record.md"
     ],
     "entities": [
       {
@@ -69,12 +70,6 @@
         "name": "database-view.ts",
         "kind": "code",
         "path": "src/views/database-view.ts",
-        "source": "derived"
-      },
-      {
-        "name": "calendar-renderer.ts",
-        "kind": "code",
-        "path": "src/views/calendar-renderer.ts",
         "source": "derived"
       },
       {
@@ -138,13 +133,13 @@
         "source": "derived"
       },
       {
-        "name": "1. DURABLE DIRECTIVE",
-        "kind": "heading",
+        "name": "proven-restore READMEs",
+        "kind": "key_phrase",
         "path": "goal.md",
         "source": "derived"
       },
       {
-        "name": "Decisions",
+        "name": "1. DURABLE DIRECTIVE",
         "kind": "heading",
         "path": "goal.md",
         "source": "derived"
@@ -152,14 +147,14 @@
     ],
     "causal_summary": "The operator has decided to retire the calendar, timeline and chart views: \"deprecate calendar and timeline view completely\" (08:25), and separately, \"Also deprecate chart view\" (08:38), naming the same deprecation scope, archive folder and README strip",
     "created_at": "2026-09-08T06:24:14Z",
-    "last_save_at": "2026-09-08T20:44:51.152Z",
+    "last_save_at": "2026-09-09T06:11:00.447Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:33a1f35cf9931fc4441a2cbb233bb31661c60d58ee8d204894bf34d8bcb8d4f6",
+    "source_fingerprint": "sha256:a56d38957a107ec6a7d960b50e081d7d7e33c94c29a7b2d0a480bfdd899504bb",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b2f5829c2c32cd4c331f3f1760d52f1c8f1d0e551f7c8766f751ad49b20dc638"

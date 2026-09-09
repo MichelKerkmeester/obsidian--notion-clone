@@ -12,7 +12,7 @@ _memory:
     last_updated_at: "2026-09-09T08:10:00Z"
     last_updated_by: "250-deprecation-removal"
     recent_action: "003 LANDED (4/4 criteria, the bundle grep 0, the gate 27/0); only 004 remains"
-    next_safe_action: "004-archive-docs-and-release: strip the root README, record the superseded note, cut the next release"
+    next_safe_action: "004-archive-docs-and-release: the README strip, the superseded note, then the release cut"
     blockers:
       - "004-archive-docs-and-release (the packet's last leg) has not started"
     key_files:
