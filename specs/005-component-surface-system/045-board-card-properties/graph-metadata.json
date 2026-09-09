@@ -51,6 +51,8 @@
       "src/views/board-renderer.ts",
       "src/data/types.ts",
       "src/views/toolbar-renderer.ts",
+      "styles.css",
+      "tools/live/render-assertions.mjs",
       "src/data/board-card-fields.ts",
       "src/views/board-card-fields.ts",
       "src/data/data-source.ts",
@@ -58,9 +60,7 @@
       "src/views/view-config-panel-renderer.ts",
       "src/views/embedded-database-renderer.ts",
       "src/i18n.ts",
-      "src/views/board-card-fields.test.ts",
-      "src/views/board-card-properties-panel.stories.ts",
-      "tools/lane/css-lane.json"
+      "src/views/board-card-fields.test.ts"
     ],
     "entities": [
       {
@@ -124,6 +124,18 @@
         "source": "derived"
       },
       {
+        "name": "styles.css",
+        "kind": "file",
+        "path": "styles.css",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertions.mjs",
+        "source": "derived"
+      },
+      {
         "name": "board-card-fields.ts",
         "kind": "code",
         "path": "src/data/board-card-fields.ts",
@@ -166,18 +178,6 @@
         "source": "derived"
       },
       {
-        "name": "board-card-properties-panel.stories.ts",
-        "kind": "code",
-        "path": "src/views/board-card-properties-panel.stories.ts",
-        "source": "derived"
-      },
-      {
-        "name": "css-lane.json",
-        "kind": "config",
-        "path": "tools/lane/css-lane.json",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The operator asked, verbatim: \"Also make it possible to adjust visible properties in board card",
     "created_at": "2026-09-04T19:01:24Z",
-    "last_save_at": "2026-09-05T09:26:23.617Z",
+    "last_save_at": "2026-09-09T20:52:16.880Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -222,12 +222,12 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:033d63f4adef8614a4831f8e206816c600622587d93dfe0311f697f0a152b241",
+    "source_fingerprint": "sha256:7d84e569c1b09848e8c24bf26901f977f85d19fdc4c08f7b0da3a1ceae55abd8",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "4b9aa9c4c5f4b72de8c45d62d46a3e65ab449149b1119b00602022c80a8a121f",
+      "spec.md": "b0cc8def4e8ea40184778f3b21b5f84478d7e7094be463025d8bebfa85307470",
       "plan.md": "aaf4ae6fbf8a21541c940331be940256a0ed77330bac44ae78e276ad1bfda386",
-      "tasks.md": "d36652f4b3f2a24321dfd9c2373456dd135cdebeffdad7f591e9780715382bcf",
+      "tasks.md": "f4944651babec4984920bdde8bc2387d4de46f82bf72b481c86d145e8e18ae39",
       "decision-record.md": "bae64403b656ddde32168eda3fe7190bd0479427b0424c39ec5135a28b4bd5f7",
       "implementation-summary.md": "d352a408c4bbf7f67635d90781eb8372f7bfb8cd3f3b6c88c5ed2ea79f36fa9e"
     },

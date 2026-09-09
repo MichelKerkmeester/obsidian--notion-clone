@@ -10132,18 +10132,29 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
   white-space: nowrap;
 }
 
-/* Property rows: values only, one per line, one fixed 25px pitch, no per-type dedicated slots.
-   The label span still exists in the DOM (`card-field-renderer.ts` is shared with the gallery
-   and list cards) — it is hidden here rather than removed, except on a checkbox row, which keeps
-   its property name beside the glyph. The card's type-name slot is styled alongside these rows
-   above, not part of this block. */
+/* Property rows: the field name and its value, one per line, one fixed 25px pitch. The name span
+   the shared card renderer emits (the column's display name from the schema, never the raw key)
+   used to be hidden here so the card read values only — but a value without its name does not say
+   which property it belongs to, so the name now sits before the value in the muted voice, and the
+   value keeps the digits aligned (tabular-nums) it had when numbers stood alone. The checkbox row
+   keeps its own shape — glyph first, name after — and the cover image row carries no name over an
+   image. The card's type-name slot is styled alongside these rows above, not part of this block. */
 .obnotion-container .obnotion-kanban-card-meta {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 12px;
+}
+/* Below a 360px-wide viewport the grid collapses to one column: two named values side by side
+   would leave neither the name nor the value room on the narrowest phones. */
+@media (max-width: 359.9px) {
+  .obnotion-container .obnotion-kanban-card-meta {
+    grid-template-columns: 1fr;
+  }
 }
 .obnotion-container .obnotion-kanban-card-meta .obnotion-board-card-field {
   display: flex;
   align-items: center;
+  min-width: 0;
   min-height: 25px;
   gap: 8px;
   /* The shared field's own 2px padding survives under min-height and pushes a content-box row
@@ -10153,7 +10164,13 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
   color: var(--text-muted);
 }
 .obnotion-container .obnotion-kanban-card-meta .obnotion-board-card-field:not(.is-checkbox-field) > .obnotion-board-card-field-label {
-  display: none;
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .obnotion-container .obnotion-kanban-card-meta .obnotion-board-card-field.is-checkbox-field > .obnotion-board-card-field-label {
   order: 2;
@@ -10174,6 +10191,7 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
   text-align: left;
   word-break: normal;
   overflow-wrap: normal;
+  font-variant-numeric: tabular-nums;
 }
 /* The reference's checkbox glyph is a circle, not this project's usual rounded square —
    scoped to the kanban card only, since every other checkbox family keeps the app-wide shape.
@@ -10197,6 +10215,13 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
 .obnotion-container .obnotion-kanban-card-meta .obnotion-board-card-badges {
   gap: 8px;
   flex-wrap: wrap;
+}
+
+/* Chip and relation rows span the full meta row: their badge row wraps to its own line when the
+   options do not fit, and a wrapped badge row shares a grid row with the next property, whose
+   row then stretches with it. Full-width badge rows keep every row at the measured pitch. */
+.obnotion-container .obnotion-kanban-card-meta .obnotion-board-card-field:has(.has-badges) {
+  grid-column: 1 / -1;
 }
 
 /* The "+ New" control: a bordered box below the last card on desktop, a labelled row on touch.
@@ -10731,14 +10756,16 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
   word-break: break-word;
 }
 
-.obnotion-container .obnotion-board-card-field:not(.obnotion-board-card-field-wrap):not(.is-image-field):not(.is-checkbox-field) .obnotion-board-card-value:not(.has-badges),
-.obnotion-container .obnotion-board-card-field:not(.obnotion-board-card-field-wrap):not(.is-image-field):not(.is-checkbox-field) .obnotion-board-card-link {
+.obnotion-container .obnotion-kanban-card-meta .obnotion-board-card-field:not(.obnotion-board-card-field-wrap):not(.is-image-field):not(.is-checkbox-field) .obnotion-board-card-value:not(.has-badges),
+.obnotion-container .obnotion-kanban-card-meta .obnotion-board-card-field:not(.obnotion-board-card-field-wrap):not(.is-image-field):not(.is-checkbox-field) .obnotion-board-card-link {
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  /* One line, not the shared two: the meta row's pitch is the uniform 25px the card was measured
+     at, and a value that grew a second line would set its own row's height. */
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
 }
 
 /* 卡片底部标签区域 */

@@ -221,7 +221,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] The operator opens the column-width adjuster, the settings sheet and the Add view sheet on iOS and reports each as aligned with the other sheets. Only the operator closes this row; nothing in this repository can.
 
-## 045-board-card-properties — 0/6
+## 045-board-card-properties — 1/7
 
 - [ ] Two board views over one database render different card field sets in different orders, with the database's table column visibility unchanged. Today: not expressible — `board-renderer.ts:1439` reads the same `getVisibleColumns` result the table reads.
 - [ ] A `status` column can be made to render in the card's meta grid. Today: impossible — `board-renderer.ts:1481-1482` removes every `select` and `status` column from the grid unconditionally, routing them to the title chips instead.

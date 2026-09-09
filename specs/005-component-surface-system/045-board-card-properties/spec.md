@@ -11,16 +11,18 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/045-board-card-properties"
-    last_updated_at: "2026-09-05T07:20:00Z"
-    last_updated_by: "desktop-board-bugs"
-    recent_action: "Amended REQ-007 per ADR-003 after the operator's desktop report"
-    next_safe_action: "Operator confirms roadmap row 49 on 0.0.25"
+    last_updated_at: "2026-09-09T20:40:00Z"
+    last_updated_by: "270-card-field-names"
+    recent_action: "REQ-009/AC-008/T015: field names on the board card's meta grid, landed styles-only"
+    next_safe_action: "Operator reads the board card on a released device (AC-006)"
     blockers:
       - "AC-006 is operator-only"
     key_files:
       - "src/views/board-renderer.ts"
       - "src/data/types.ts"
       - "src/views/toolbar-renderer.ts"
+      - "styles.css"
+      - "tools/live/render-assertions.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-045-spec"
@@ -185,6 +187,7 @@ the board.
 | REQ-006 | Order is changeable by drag on desktop and by an explicit move affordance on touch, because a drag handle inside a scrolling sheet is not reachable with a thumb. |
 | REQ-007 | **AMENDED 2026-09-05 by `decision-record.md` ADR-003 — read that before this row.** As written, this required the control to render only where `boardExtensionsEnabled` is on, so the default board stayed a one-to-one obsidian-pm kanban copy whose card renders a *fixed* set of slots — `time`, `progress`, `due`, `tags`, `people`, matching `KanbanCardProps` (`specs/context/obsidian-pm-main/src/ui/composites/KanbanCard.ts:10`). **Nothing in `src/` ever sets that flag**, so the confinement did not protect the reference card, it withheld the control from the only board card that ships, and the operator reported the symptom on 2026-09-05. **The amended requirement:** the card's five reference slots are filled from the view's visible field list rather than from a fixed scan, and every configured field taking no slot renders beside them in panel order. A stored list may empty a reference slot; it may never move one, and the reference tree — title row, type chips, time chip, progress bar, footer avatar stack and due chip — is otherwise unchanged. |
 | REQ-008 | No spec path, phase number, task id or requirement id appears in any code comment this phase writes. |
+| REQ-009 | **ADDED 2026-09-09 from the operator's 0.0.36 report** — *"Board cards should also show field name and not just value"*: every property the card's meta grid renders carries its field's display name (the column's schema label, never the raw key) as a visible, secondary label beside or above the value, on phone and desktop, without growing the card's measured row pitch and without moving the title, description or type-name slots. |
 
 > Acceptance criteria for these requirements live in `acceptance-criteria.md`,
 > which is the document that decides whether this packet may close.

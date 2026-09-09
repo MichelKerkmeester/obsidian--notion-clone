@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/045-board-card-properties"
-    last_updated_at: "2026-09-04T18:47:26Z"
-    last_updated_by: "phase-author"
-    recent_action: "Authored the durable directive from the operator's board-properties ask"
-    next_safe_action: "Execute against the completion criteria"
+    last_updated_at: "2026-09-09T20:40:00Z"
+    last_updated_by: "270-card-field-names"
+    recent_action: "Field-names criterion added; AC-008 met; operator device read (AC-006) open"
+    next_safe_action: "Operator reads the board card on a released device (AC-006)"
     blockers:
       - "Reference-fidelity boundary with 038 REQ-007 must hold before anything else lands"
     key_files:
@@ -83,6 +83,7 @@ Three to seven bullets, each checkable without opening another file.
       parity fixtures are unchanged. **Today: trivially true; the point is that it stays true.**
 - [ ] The Properties control opens on desktop and on the phone, the phone one built from `044`'s
       sheet row grammar with an explicit move affordance. **Today: the control does not exist.**
+- [x] Every property the card's meta grid renders carries its field's display name beside its value — 12px muted, before the value, phone and desktop, the property grid two columns at a 360px-or-wider viewport and one below, the measured uniform 25px row pitch, the title/description/type-name slots and the value's tabular-numeric digits unchanged. **Today: shown** — render-assertions red:36 of 306 labels visible, 13px/`rgb(108,111,116)`, digits `normal`, 1 column at 1440px and 340px) → GREEN (306 of 306, 12px/`rgb(154,155,158)`, `tabular-nums`, 2 columns at 1440px / 1 at 340px, row pitch 17×25px); see AC-008 in `acceptance-criteria.md`.
 - [ ] **The operator arranges a board card's properties on a phone and reports it as close to
       Notion's.** Only the operator closes this row.
 <!-- /ANCHOR:completion -->

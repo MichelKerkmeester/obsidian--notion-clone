@@ -190,6 +190,17 @@ const GEOMETRY_PINS = [
   // inference. It is inert as well as unwanted: the header's nearest scrollport would be the
   // board, which scrolls in neither axis.
   { label: "header position", selector: ".obnotion-kanban-col-header", prop: "position", expected: "static" },
+  // A card's property rows read values only — the field name span the shared card renderer
+  // emits for every row was hidden on the board, so a reader could not tell which property a
+  // value belongs to. The name reads at 12px beside the value; the selector skips the checkbox
+  // row (its glyph carries the meaning beside its own name) and the cover image row (no name
+  // over an image).
+  {
+    label: "field label size",
+    selector: ".obnotion-kanban-card-meta .obnotion-board-card-field:not(.is-checkbox-field):not(.is-image-field) > .obnotion-board-card-field-label",
+    prop: "fontSize",
+    expected: "12px",
+  },
 ];
 
 /** The board scenario this pass mounts: the shipped renderer at its production entry. */
@@ -417,6 +428,51 @@ window.__boardGeometry = (scenario) => {
   });
   return { provenance, ...measurement };
 };
+window.__cardFieldLabels = (scenario) => {
+  let out = null;
+  runRenderAssertions(document.body, scenario, "", (container, results) => {
+    const provenance = results.length > 0 && results[0].pass;
+    // The cover-image row carries no name over an image by design, so it is excluded from the
+    // count the visibility claim is made against; every other meta row must show its name.
+    const fields = [...container.querySelectorAll(
+      ".obnotion-kanban-card-meta .obnotion-board-card-field:not(.is-image-field)")];
+    const labels = fields
+      .map((field) => field.querySelector(":scope > .obnotion-board-card-field-label"))
+      .filter(Boolean);
+    const visible = labels.filter((label) => {
+      const style = getComputedStyle(label);
+      return style.display !== "none" && style.visibility !== "hidden" && label.textContent.trim().length > 0;
+    });
+    // The name's colour must be the muted token, not the value colour: the whole point of the
+    // row is that the name reads secondary to what it names. A probe normalises the token into
+    // an rgb() string the same way the label's own inheritance does.
+    const probe = document.createElement("div");
+    probe.style.color = "var(--text-muted)";
+    container.appendChild(probe);
+    const mutedColor = getComputedStyle(probe).color;
+    probe.remove();
+    const labelStyles = visible.length > 0
+      ? (() => { const s = getComputedStyle(visible[0]); return { fontSize: s.fontSize, color: s.color }; })()
+      : null;
+    const value = container.querySelector(
+      ".obnotion-kanban-card-meta .obnotion-board-card-field:not(.is-checkbox-field) .obnotion-board-card-value");
+    const meta = container.querySelector(".obnotion-kanban-card-meta");
+    out = {
+      provenance,
+      fieldCount: fields.length,
+      labelCount: labels.length,
+      visibleLabelCount: visible.length,
+      sampleLabels: visible.slice(0, 4).map((label) => label.textContent.trim()),
+      labelStyles,
+      mutedColor,
+      valueNumeric: value ? getComputedStyle(value).fontVariantNumeric : null,
+      // Track count off the used grid: two space-separated tracks at 360px viewport and above,
+      // one below — a wide card lays two property rows side by side, a narrow one stacks them.
+      metaColumns: meta ? getComputedStyle(meta).gridTemplateColumns.split(" ").length : 0,
+    };
+  });
+  return out;
+};
 window.__rowRhythm = (scenario) => {
   let out = null;
   runRenderAssertions(document.body, scenario, "", (container) => {
@@ -580,6 +636,8 @@ let browser;
 let outcomes = null;
 let rhythmOutcomes = null;
 let geometryOutcome = null;
+let cardLabelWide = null;
+let cardLabelNarrow = null;
 let wrapToggleOutcomes = null;
 let footerFloorOutcome = null;
 let wrapDesktopOutcomes = null;
@@ -701,6 +759,18 @@ try {
     }
     geometryOutcome = await geometryPage.evaluate(
       (scenario) => window.__boardGeometry(scenario),
+      { ...GEOMETRY_SCENARIO, captureData: true },
+    );
+    // The field-name pass rides the geometry page: same bundle, same token sheets, one desktop
+    // evaluation and one below the 360px mark where the property grid must have collapsed to a
+    // single column. The viewport, not the page, is the switch the media query reads.
+    cardLabelWide = await geometryPage.evaluate(
+      (scenario) => window.__cardFieldLabels(scenario),
+      { ...GEOMETRY_SCENARIO, captureData: true },
+    );
+    await geometryPage.setViewportSize({ width: 340, height: 900 });
+    cardLabelNarrow = await geometryPage.evaluate(
+      (scenario) => window.__cardFieldLabels(scenario),
       { ...GEOMETRY_SCENARIO, captureData: true },
     );
     await geometryPage.close();
@@ -1131,6 +1201,54 @@ if (!geometryOutcome || !geometryOutcome.provenance) {
     + `${JSON.stringify(restWidth)} at rest, ${JSON.stringify(activeWidth)} scrolling, ${JSON.stringify(edgeWidth)} `
     + `edge-hovered, expected "0px" / "10px" / "10px" — the same ruling that hides the horizontal bar at rest `
     + `hides the vertical one, and the app-wide 8px width is what it has to override to do it`);
+
+  // Every property row a card draws must carry the property's name — values alone left a card
+  // whose numbers had no owners. The name comes from the shared card renderer, which reads the
+  // column's display name (the schema label), never the raw key, so what proves here is exactly
+  // what a reader sees. The checkbox row is counted in the fields and in the labels: its own
+  // name was always shown, which makes it the negative leg of the visibility claim.
+  console.log("\nrender-assertions: board card field names");
+  if (!cardLabelWide || !cardLabelWide.provenance) {
+    failures.push("board card field names: the board scenario did not carry the production-render marker");
+    console.log("  FAIL  board card field names — no production-render marker");
+  } else {
+    const wide = cardLabelWide;
+    const namedOk = wide.fieldCount > 0 && wide.labelCount === wide.fieldCount
+      && wide.visibleLabelCount === wide.fieldCount;
+    console.log(`  ${namedOk ? "PASS" : "FAIL"}  ${"field names".padEnd(16)} `
+      + `${wide.visibleLabelCount} visible of ${wide.fieldCount} meta field(s)`);
+    if (!namedOk) failures.push(`board card field names: ${wide.visibleLabelCount} label(s) visible of `
+      + `${wide.fieldCount} meta field(s) on ${wide.labelCount} label element(s) — every property row a `
+      + `card draws must show its field's name (values alone do not say which property they belong to)`);
+    const styleOk = wide.labelStyles != null && wide.labelStyles.fontSize === "12px"
+      && wide.labelStyles.color === wide.mutedColor;
+    console.log(`  ${styleOk ? "PASS" : "FAIL"}  ${"label style".padEnd(16)} `
+      + `${wide.labelStyles ? `${wide.labelStyles.fontSize} / ${wide.labelStyles.color}` : "none"}`);
+    if (!styleOk) failures.push(`board card field names (label style): the visible label read `
+      + `${wide.labelStyles ? `${wide.labelStyles.fontSize} / ${wide.labelStyles.color}` : "nothing"}, expected `
+      + `12px in the muted token (${wide.mutedColor}) — the name reads secondary to the value it names`);
+    const numericOk = wide.valueNumeric != null && wide.valueNumeric.includes("tabular-nums");
+    console.log(`  ${numericOk ? "PASS" : "FAIL"}  ${"value digits".padEnd(16)} `
+      + `${JSON.stringify(wide.valueNumeric)}`);
+    if (!numericOk) failures.push(`board card field names (value digits): the property value read `
+      + `${JSON.stringify(wide.valueNumeric)} for font-variant-numeric, expected tabular-nums to survive — `
+      + `aligning the name column must not cost the numbers their digit grid`);
+
+    const narrow = cardLabelNarrow;
+    if (!narrow || !narrow.provenance) {
+      failures.push("board card field names (narrow): the 340px pass did not measure a provenanced board");
+      console.log("  FAIL  field names (narrow) — no provenanced measurement at 340px");
+    } else {
+      const wideTwoCol = wide.metaColumns === 2;
+      const narrowOneCol = narrow.metaColumns === 1;
+      console.log(`  ${wideTwoCol && narrowOneCol ? "PASS" : "FAIL"}  ${"meta grid".padEnd(16)} `
+        + `${wide.metaColumns} column(s) at 1440px, ${narrow.metaColumns} at 340px`);
+      if (!wideTwoCol || !narrowOneCol) failures.push(`board card field names (meta grid): the property grid `
+        + `computed ${wide.metaColumns} column(s) at 1440px and ${narrow.metaColumns} at 340px — two columns `
+        + `at 360px viewport and above, one below, so a card with many fields stays two-across on `
+        + `desktop and stacks on a narrow phone without ever overflowing`);
+    }
+  }
 
 }
 
