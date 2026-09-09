@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-09T04:16:38.280Z",
+  "measuredAt": "2026-09-09T12:14:40.185Z",
   "inputs": {
-    "styles.css": "55cb284b3244",
+    "styles.css": "4261be904bfb",
     "tools/live/checkbox-inventory.mjs": "905d8557d4b0"
   },
   "totals": {
@@ -103,7 +103,7 @@
     },
     {
       "file": "src/views/toolbar-renderer.ts",
-      "line": 1916,
+      "line": 1915,
       "chain": [
         "obnotion-database-popover",
         "obnotion-new-preset-row obnotion-menu-item"
@@ -116,7 +116,7 @@
     },
     {
       "file": "src/views/toolbar-renderer.ts",
-      "line": 1936,
+      "line": 1935,
       "chain": [
         "obnotion-database-popover",
         "obnotion-new-preset-row obnotion-menu-item"
@@ -129,7 +129,7 @@
     },
     {
       "file": "src/views/toolbar-renderer.ts",
-      "line": 2008,
+      "line": 2007,
       "chain": [
         "obnotion-database-popover",
         "obnotion-new-preset-row obnotion-menu-item"
@@ -142,7 +142,7 @@
     },
     {
       "file": "src/views/view-config-panel-renderer.ts",
-      "line": 2266,
+      "line": 2278,
       "chain": [
         "obnotion-view-config-panel",
         "obnotion-view-config-field"

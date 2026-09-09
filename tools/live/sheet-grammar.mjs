@@ -433,22 +433,13 @@ const HEADER_BLOCK_SURFACE = REGISTERED_SURFACES.find((s) => s.name === "sort-pa
 // absolute 341.7px, which was measured on Anytype's own device pixel width, not this harness's.
 const PRIMARY_ACTION_PILL_INSET_PX = 21;
 // The measured reference band is 66-74px (a close-button sheet's frame top edge to its first
-// row, ≈70pt ± 4). `sort-panel` measures 75px — re-derived here to the achieved figure rather
-// than left at the unreached reference ceiling, the same move this file's own gap-cap constant
-// above made: the header's own top margin was live-swept down to the smallest value that still
-// clears a real hit-test (paired with loosening the shared grab band's own reach just enough to
-// keep that hit-test's own accessibility floor, both proven against a real placement pass and a
-// real touch-target sweep staying green at every step), and going lower buys nothing further —
-// every value from 0 to 4px collapses to the same 75px because the header's own margin is
-// smaller than the handle's own already-shipped bottom margin, and adjacent-margin collapsing
-// takes the larger of the two. Closing the remaining 1px needs that handle geometry reopened,
-// a different deliverable than this row's own file group covers — so this row pins the achieved
-// 75px rather than the unreached 74px, and the packet's own criteria keep the header-block
-// clause unmet against the true reference band instead of declaring parity a corrected
-// assertion does not represent. The 76 ceiling: the achieved 75 plus the header's own 1px
-// divider, which resolves to real paint now that the subtle-border token carries a fallback for
-// tokenless contexts.
-const HEADER_BLOCK_BAND_PX = { min: 66, max: 76 };
+// row, ≈70pt ± 4). The lane went RED at 76px — the shared row-grammar work added 1px to the
+// close-button header's block — so the band here is the true reference again rather than a
+// pinned achieved figure: the 2px comes back out of the header's own top margin at the source,
+// the same margin the negative control below proves passes 1:1 into this measure, while the
+// grab band's own reach and the close control's 44px accessibility floor stay untouched (proven
+// against a real placement pass and a real touch-target sweep staying green).
+const HEADER_BLOCK_BAND_PX = { min: 66, max: 74 };
 
 // ───────────────────────────────────────────────────────────────────
 // 2b. THE OVERFLOW SWEEP REGISTRY
@@ -1460,6 +1451,111 @@ window.__shellSettingsRowGrammarColumnControl = (scenario) => {
   });
   style.remove();
   return broken;
+};
+
+// The divider-inset grammar on the two toolbar sheets whose plain rows sit at the shared inset
+// through the sheet's own padding rather than their own: the hairline a row draws when another row
+// directly precedes it, measured the way the settings sheet's row grammar measures its own — the
+// ::before's 1px height, its resolved colour, where its two ends land. Because the row's box is
+// already the shared 16px in from the sheet's edges, the reference geometry (hairline inset
+// 16px left, flush against the sheet's right edge) reads here as left: 0 / right: -16px relative
+// to the row, and the lane asserts those two ends in the sheet's own coordinate space rather
+// than trusting the declared offsets.
+window.__sheetDividerInsetRows = (scenario) => {
+  let result = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    const sheet = mountedSheet();
+    if (!sheet) { result = { mounted: false }; return; }
+    const sheetRect = sheet.getBoundingClientRect();
+    const sheetStyle = getComputedStyle(sheet);
+    const contentLeft = sheetRect.left + (Number.parseFloat(sheetStyle.borderLeftWidth) || 0);
+    const contentRight = sheetRect.right - (Number.parseFloat(sheetStyle.borderRightWidth) || 0);
+    const rows = Array.from(sheet.querySelectorAll(".obnotion-panel-row")).filter((row) => row.getBoundingClientRect().height > 0);
+    const pairs = [];
+    for (const row of rows) {
+      const prev = row.previousElementSibling;
+      if (!prev || !prev.classList.contains("obnotion-panel-row")) continue;
+      const rowRect = row.getBoundingClientRect();
+      const div = getComputedStyle(row, "::before");
+      const present = div.content !== "none";
+      pairs.push({
+        dividerPresent: present,
+        dividerHeight: Number.parseFloat(div.height) || 0,
+        rowInsetFromSheet: rowRect.left - contentLeft,
+        dividerLeftInset: present ? (rowRect.left + (Number.parseFloat(div.left) || 0)) - contentLeft : null,
+        dividerRightGap: present ? contentRight - (rowRect.right - (Number.parseFloat(div.right) || 0)) : null,
+        color: div.backgroundColor,
+      });
+    }
+    result = { mounted: true, rowCount: rows.length, pairs };
+  });
+  return result;
+};
+
+// The Properties sheet's between-section boundaries: where the sheet's sections meet (header to
+// search row, search row to the property list, property list to the add action) the reference
+// draws its full-bleed hairline. Measured edge-to-edge: each boundary's hairline must reach the
+// sheet's own content edges, which is what distinguishes a section divider from the inset
+// row-to-row seam, and each must resolve to real paint.
+window.__sheetSectionDividerGrammar = (scenario) => {
+  let result = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    const sheet = mountedSheet();
+    if (!sheet) { result = { mounted: false }; return; }
+    const sheetRect = sheet.getBoundingClientRect();
+    const sheetStyle = getComputedStyle(sheet);
+    const contentLeft = sheetRect.left + (Number.parseFloat(sheetStyle.borderLeftWidth) || 0);
+    const contentRight = sheetRect.right - (Number.parseFloat(sheetStyle.borderRightWidth) || 0);
+    const readBoundary = (el, pseudo) => {
+      if (!el) return null;
+      const rect = el.getBoundingClientRect();
+      if (rect.height <= 0) return null;
+      if (!pseudo) {
+        const width = Number.parseFloat(getComputedStyle(el).borderBottomWidth) || 0;
+        if (!(width > 0)) return { present: false };
+        return { present: true, height: width, leftGap: rect.left - contentLeft, rightGap: contentRight - rect.right, color: getComputedStyle(el).borderBottomColor };
+      }
+      const style = getComputedStyle(el, pseudo);
+      if (style.content === "none") return { present: false };
+      const left = Number.parseFloat(style.left) || 0;
+      const right = Number.parseFloat(style.right) || 0;
+      return {
+        present: true,
+        height: Number.parseFloat(style.height) || 0,
+        leftGap: (rect.left + left) - contentLeft,
+        rightGap: contentRight - (rect.right - right),
+        color: style.backgroundColor,
+      };
+    };
+    result = {
+      mounted: true,
+      headerBoundary: readBoundary(sheet.querySelector(":scope > .obnotion-panel-header"), null),
+      searchBoundary: readBoundary(sheet.querySelector(".obnotion-column-manager-search-row"), null),
+      addBoundary: readBoundary(sheet.querySelector(".obnotion-column-manager-add-row"), "::before"),
+    };
+  });
+  return result;
+};
+
+// The control: the injected override kills every hairline this section asserts (the ::before
+// content and the two section-boundary borders), the lane must read them all gone, and removing
+// the override must restore them — proving the assertions measure the shipped rules rather than
+// happening to agree with them.
+window.__sheetDividerInsetControl = (scenario, kind) => {
+  const style = document.createElement("style");
+  style.textContent = kind === "rows"
+    ? ".obnotion-filter-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row::before, .obnotion-sort-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row::before, .obnotion-group-popover.obnotion-mobile-bottom-sheet .obnotion-panel-row::before { content: none !important; }"
+    : ".obnotion-column-manager.obnotion-mobile-bottom-sheet > .obnotion-panel-header, .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-search-row { border-bottom: 0 !important; } .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-add-row::before { content: none !important; }";
+  const measure = kind === "rows"
+    ? (nextScenario) => window.__sheetDividerInsetRows(nextScenario)
+    : (nextScenario) => window.__sheetSectionDividerGrammar(nextScenario);
+  document.head.appendChild(style);
+  let broken = null;
+  try { broken = measure(scenario); } catch (error) { broken = { mounted: false, error: String(error) }; }
+  style.remove();
+  let fixed = null;
+  try { fixed = measure(scenario); } catch (error) { fixed = { mounted: false, error: String(error) }; }
+  return { broken, fixed };
 };
 
 // The record sheet's row grammar — the same reference shape the settings sheet asserts, inherited
@@ -3749,6 +3845,89 @@ try {
     if (!cleanAfter) failures.push(`settings sheet placement-button ink negative control: removing the override left ${fixedOverflowing.length} button(s) overflowing at ${fontSizePx}px`);
     console.log(`  ${wentRed ? "PASS" : "FAIL"}  reverting the wrap rule ${expectRed ? "overflows" : "leaves (as expected, too narrow a string to matter here)"} ${brokenOverflowing.length}/${control.broken.length} buttons at ${fontSizePx}px`);
     console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  removing the override leaves 0/${control.fixed.length} buttons overflowing at ${fontSizePx}px`);
+  }
+  console.log("");
+
+  console.log("sheet-grammar: divider-inset grammar — plain rows on the filter and sort sheets run the shared 1px hairline (inset " + SETTINGS_SHEET_INSET_PX + "px left, flush right; the reference's ~20pt plain-row reading superseded by the shared 16px inset), and the Properties sheet carries edge-to-edge hairlines at its section boundaries\n");
+  const dividerRowSurfaces = [
+    { label: "sort-panel", spec: REGISTERED_SURFACES.find((s) => s.name === "sort-panel").spec },
+    { label: "filter-panel", spec: REGISTERED_SURFACES.find((s) => s.name === "filter-panel").spec },
+  ];
+  const dividerSectionsSpec = REGISTERED_SURFACES.find((s) => s.name === "column-manager").spec;
+  for (const { label, spec } of dividerRowSurfaces) {
+    const report = await page.evaluate((scenario) => window.__sheetDividerInsetRows(scenario), spec);
+    if (!report || !report.mounted) {
+      failures.push("divider-inset grammar " + label + ": the sheet did not mount");
+      console.log("  FAIL  " + label + " — the sheet did not mount");
+      continue;
+    }
+    if (report.pairs.length === 0) {
+      failures.push("divider-inset grammar " + label + ": no divider-owing adjacent row pair to measure");
+      console.log("  FAIL  " + label + " — no divider-owing adjacent row pair");
+      continue;
+    }
+    const wrongPairs = report.pairs.filter((pair) => !pair.dividerPresent
+      || Math.abs(pair.dividerHeight - 1) > 0.5
+      || pair.rowInsetFromSheet < SETTINGS_SHEET_INSET_PX - 0.5
+      || pair.dividerLeftInset == null || Math.abs(pair.dividerLeftInset - pair.rowInsetFromSheet) > 0.5
+      || pair.dividerRightGap == null || Math.abs(pair.dividerRightGap) > 0.5
+      || pair.color === "transparent"
+      || pair.color === "rgba(0, 0, 0, 0)");
+    if (wrongPairs.length > 0) {
+      failures.push("divider-inset grammar " + label + ": " + wrongPairs.length + " of " + report.pairs.length + " divider-owing row pairs do not draw the shared 1px hairline (inset at the row's own column, never tighter than the shared " + SETTINGS_SHEET_INSET_PX + "px, flush right; first: present " + wrongPairs[0].dividerPresent + ", left inset " + (wrongPairs[0].dividerLeftInset == null ? "none" : wrongPairs[0].dividerLeftInset.toFixed(1)) + "px, right gap " + (wrongPairs[0].dividerRightGap == null ? "none" : wrongPairs[0].dividerRightGap.toFixed(1)) + "px)");
+    }
+    console.log("  " + (wrongPairs.length === 0 ? "PASS" : "FAIL") + "  " + label + " — " + (report.pairs.length - wrongPairs.length) + "/" + report.pairs.length + " divider-owing row pairs draw the shared hairline (row sits " + report.pairs[0].rowInsetFromSheet.toFixed(1) + "px from the sheet's edge)");
+  }
+  const dividerRowsControl = await page.evaluate((scenario) => window.__sheetDividerInsetControl(scenario, "rows"), dividerRowSurfaces[0].spec);
+  if (!dividerRowsControl.broken || !dividerRowsControl.broken.pairs || dividerRowsControl.broken.pairs.length === 0) {
+    failures.push("divider-inset grammar negative control: the sort-panel did not mount rows to measure");
+    console.log("  FAIL  divider-inset negative control — the sort-panel did not mount rows to measure");
+  } else {
+    const wentRed = dividerRowsControl.broken.pairs.every((pair) => !pair.dividerPresent);
+    const cleanAfter = dividerRowsControl.fixed && dividerRowsControl.fixed.pairs.length > 0
+      && dividerRowsControl.fixed.pairs.every((pair) => pair.dividerPresent
+        && Math.abs(pair.dividerHeight - 1) <= 0.5
+        && pair.dividerLeftInset != null && Math.abs(pair.dividerLeftInset - pair.rowInsetFromSheet) <= 0.5
+        && pair.dividerRightGap != null && Math.abs(pair.dividerRightGap) <= 0.5);
+    if (!wentRed) failures.push("divider-inset grammar negative control: killing the hairline rule left a divider still drawn");
+    if (!cleanAfter) failures.push("divider-inset grammar negative control: removing the override did not restore the hairlines");
+    console.log("  " + (wentRed ? "PASS" : "FAIL") + "  killing the rule leaves " + dividerRowsControl.broken.pairs.filter((pair) => pair.dividerPresent).length + "/" + dividerRowsControl.broken.pairs.length + " dividers drawn (wanted 0)");
+    console.log("  " + (cleanAfter ? "PASS" : "FAIL") + "  removing the override restores " + (dividerRowsControl.fixed ? dividerRowsControl.fixed.pairs.filter((pair) => pair.dividerPresent).length : 0) + "/" + (dividerRowsControl.fixed ? dividerRowsControl.fixed.pairs.length : 0) + " dividers");
+  }
+  console.log("");
+
+  const sectionReport = await page.evaluate((scenario) => window.__sheetSectionDividerGrammar(scenario), dividerSectionsSpec);
+  if (!sectionReport || !sectionReport.mounted) {
+    failures.push("divider-inset grammar (Properties sheet): the sheet did not mount");
+    console.log("  FAIL  Properties sheet — the sheet did not mount");
+  } else {
+    const boundaries = [["header", sectionReport.headerBoundary], ["search row", sectionReport.searchBoundary], ["add action", sectionReport.addBoundary]];
+    const absent = boundaries.filter(([, boundary]) => !boundary || !boundary.present);
+    const wrongBoundaries = boundaries.filter(([, boundary]) => boundary && boundary.present
+      && (Math.abs(boundary.height - 1) > 0.5
+        || Math.abs(boundary.leftGap) > 0.5
+        || Math.abs(boundary.rightGap) > 0.5
+        || boundary.color === "transparent"
+        || boundary.color === "rgba(0, 0, 0, 0)"));
+    if (absent.length > 0) failures.push("divider-inset grammar (Properties sheet): " + absent.length + " of 3 between-section boundaries carry no edge-to-edge hairline (" + absent.map(([name]) => name).join(", ") + ")");
+    if (wrongBoundaries.length > 0) failures.push("divider-inset grammar (Properties sheet): " + wrongBoundaries.length + " of 3 between-section hairlines are not 1px, edge-to-edge and painted (first: " + wrongBoundaries[0][0] + " at height " + wrongBoundaries[0][1].height + "px, left gap " + wrongBoundaries[0][1].leftGap.toFixed(1) + "px, right gap " + wrongBoundaries[0][1].rightGap.toFixed(1) + "px)");
+    console.log("  " + (absent.length === 0 && wrongBoundaries.length === 0 ? "PASS" : "FAIL") + "  Properties sheet — " + (boundaries.length - absent.length - wrongBoundaries.length) + "/3 between-section boundaries (header, search row, add action) carry the edge-to-edge 1px hairline");
+  }
+  const dividerSectionsControl = await page.evaluate((scenario) => window.__sheetDividerInsetControl(scenario, "sections"), dividerSectionsSpec);
+  if (!dividerSectionsControl.broken || !dividerSectionsControl.broken.mounted || !dividerSectionsControl.fixed || !dividerSectionsControl.fixed.mounted) {
+    failures.push("divider-inset grammar (Properties sheet) negative control: the sheet did not mount to measure");
+    console.log("  FAIL  Properties-sheet divider negative control — the sheet did not mount");
+  } else {
+    const flat = (report) => [report.headerBoundary, report.searchBoundary, report.addBoundary];
+    const wentRed = flat(dividerSectionsControl.broken).every((boundary) => !boundary || !boundary.present);
+    const cleanAfter = flat(dividerSectionsControl.fixed).every((boundary) => boundary && boundary.present
+      && Math.abs(boundary.height - 1) <= 0.5
+      && Math.abs(boundary.leftGap) <= 0.5
+      && Math.abs(boundary.rightGap) <= 0.5);
+    if (!wentRed) failures.push("divider-inset grammar (Properties sheet) negative control: killing the boundary rules left a between-section hairline drawn");
+    if (!cleanAfter) failures.push("divider-inset grammar (Properties sheet) negative control: removing the override left a between-section hairline missing");
+    console.log("  " + (wentRed ? "PASS" : "FAIL") + "  killing the boundary rules leaves " + flat(dividerSectionsControl.broken).filter((boundary) => boundary && boundary.present).length + "/3 hairlines drawn (wanted 0)");
+    console.log("  " + (cleanAfter ? "PASS" : "FAIL") + "  removing the override restores 3/3 between-section hairlines");
   }
   console.log("");
 

@@ -434,7 +434,13 @@
   width: 34px;
   height: 5px;
   flex: 0 0 auto;
-  margin: 6px auto 4px;
+  /* 2px, not the 4px this had: the close-button header's own top margin collapses against this
+     one, and the pair had to shrink together for the header block (frame top edge to first row)
+     to read the reference's true 66-74px band. The bar's own size and 6px drop are untouched.
+     The ::before band's calibration is what the placement pass pins: the default 26px bottom
+     reach still clears the 44px floor with the close control painting above it, and the
+     record-detail override below keeps its own recorded 31px band. */
+  margin: 6px auto 2px;
   border-radius: var(--obnotion-radius-full);
   background: var(--text-faint);
   opacity: 0.65;
@@ -505,9 +511,13 @@
 
    Here the band runs from the sheet's top edge to the bottom of the handle's own margin box, which
    is exactly the chrome and none of the content. Both ends are derived — the top from the padding
-   token plus the handle's own margin, the bottom from that margin — so the band tracks the sheet
-   instead of being pinned to a number that was true once. The menu sheets keep the shared rule:
-   their content starts below where their band already ends, measured, so they steal nothing. */
+   token plus the handle's own margin, the bottom so the band reads the recorded 31px acceptance
+   (16px sheet padding + 6px handle drop + 5px bar + 4px reach) — so the band tracks the sheet
+   instead of being pinned to a number that was true once. The reach stays 4px even though the
+   handle's own bottom margin is 2px now: these are two different edges, the hit band's reach and
+   the layout gap, and the recorded 31px band is what the placement rows count. The menu sheets
+   keep the shared rule: their content starts below where their band already ends, measured, so
+   they steal nothing. */
 .obnotion-record-detail-panel .obnotion-mobile-bottom-sheet-handle::before {
   top: calc(-1 * (var(--obnotion-space-6) + 8px));
   bottom: -4px;
@@ -12236,6 +12246,35 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
   background: var(--obnotion-border-subtle, rgba(221, 221, 221, 0.4));
 }
 
+/* The same hairline grammar, extended to the filter, sort and group sheets — the close-button
+   sheets whose plain rows still answered to no divider rule at all. Those sheets carry the shared
+   16px inset on the sheet rather than on the row, so the row's own box already sits where the
+   grammar puts it; the hairline starts there (left: 0) and runs out through the sheet's own right
+   padding (right: -16px) to land flush against the sheet's edge — the same two anchored ends the
+   rule above declares, reached through the row's own coordinate space. The reference's ~20pt
+   symmetric reading on icon-less rows is superseded by this 16px, the same inset every other
+   phone sheet's rows already sit at: one geometry, not one per surface. */
+.obnotion-filter-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row + .obnotion-panel-row::before,
+.obnotion-sort-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row + .obnotion-panel-row::before,
+.obnotion-group-popover.obnotion-mobile-bottom-sheet .obnotion-panel-row + .obnotion-panel-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: calc(-1 * var(--obnotion-sheet-inset));
+  height: 1px;
+  background: var(--obnotion-border-subtle, rgba(221, 221, 221, 0.4));
+}
+
+/* The hairline's positioning context: the rules above read their offsets from the row itself,
+   so the row must be the nearest positioned ancestor. Absolute children inside these rows (the
+   pickers and menus they open) all portal to the body, so no descent positioning changes here. */
+.obnotion-filter-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row,
+.obnotion-sort-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row,
+.obnotion-group-popover.obnotion-mobile-bottom-sheet .obnotion-panel-row {
+  position: relative;
+}
+
 .obnotion-view-config-panel.obnotion-mobile-bottom-sheet > .obnotion-panel-header {
   flex: 0 0 auto;
   gap: var(--obnotion-space-3);
@@ -13216,13 +13255,16 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
    one: 0px through 4px all measure the identical 75px on the sort-panel, because the header's own
    margin collapses against the handle's own already-shipped `margin: 6px auto 4px` once the
    header's margin is the smaller of the two -- 4px is the largest value that still gets the full
-   benefit of that collapse, so it is what ships, not a lower number chosen for its own sake. 75px
-   is 1px past 66-74pt's own ceiling; closing that last pixel needs the handle's own geometry
-   reopened, a different deliverable than this rule's own file group covers — `tools/live/
-   sheet-grammar.mjs`'s own header-block row pins the achieved 75px rather than the unreached 74,
-   and the packet's own criteria keep this clause unmet against the true reference band. */
+   benefit of that collapse, so it is what ships, not a lower number chosen for its own sake.
+
+   The handle's own geometry was since reopened: its bottom margin dropped 4px to 2px (see
+   `.obnotion-mobile-bottom-sheet-handle`'s own rule), and this margin moved with it — 2px and
+   2px still collapse (the larger, 2px), which lands the header block inside the reference's
+   true 66-74px band. Lifting the header 2px puts the close control's centre inside the shared
+   grab band's reach, so the close itself paints above that band (see
+   `.obnotion-sheet-close`'s own rule) and its presses stay its own. */
 .obnotion-mobile-bottom-sheet > .obnotion-panel-header:has(.obnotion-sheet-close) {
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .obnotion-container .obnotion-panel-header-actions {
@@ -13246,6 +13288,12 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
    without deleting a line of markup. */
 .obnotion-container .obnotion-panel-header > .obnotion-panel-header-actions {
   margin-inline-start: auto;
+  /* Positioned, so the controls this slot carries paint above the grab band's ::before. The
+     record-detail's band reads the acceptance's 31px, and since the close-button sheets lifted
+     their headers 2px the band's bottom rows land on the actions' own boxes — an unpositioned
+     control loses those presses (and their measured 44px) to the earlier, positioned
+     pseudo-element. The controls' own boxes are what a thumb aims at; they keep them. */
+  position: relative;
 }
 
 .obnotion-container .obnotion-panel-title {
@@ -13262,6 +13310,11 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
    affordance still has a target a thumb can hit. */
 .obnotion-container .obnotion-sheet-close,
 .obnotion-container .obnotion-shell-back {
+  /* Positioned, so this control paints above the grab band's ::before: the shared band reaches
+     26px past the bar, which lands inside this 44px control on the close-button sheets, and an
+     unpositioned control loses its own presses to the earlier, positioned pseudo-element. The
+     band still answers everywhere the control does not, so the gesture's target loses nothing. */
+  position: relative;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -13388,6 +13441,50 @@ body.is-phone .obnotion-container .obnotion-shell-header .obnotion-panel-title {
 
 .obnotion-container .obnotion-column-manager-toggle-all input {
   margin: 0;
+}
+
+/* The Properties sheet, on the shared row grammar: like the settings sheet it zeroes its own
+   inline padding so the section boundaries below can run the sheet's full width, and every child
+   — header, search row, property rows, add action — carries the shared 16px inset itself. Those
+   boundaries (under the header, under the search row, above the add action) then each carry the
+   reference's edge-to-edge 1px hairline: they separate the sheet's SECTIONS (its chrome, the
+   property list, the add action), which is why they run edge to edge where a within-section row
+   seam would sit inset. The reference draws its full-bleed hairline under a section heading;
+   this sheet's sections carry no headings, so each divider attaches to the existing boundary it
+   would sit under — the between-section fact, not a section-heading markup this sheet never had. */
+.obnotion-column-manager.obnotion-mobile-bottom-sheet {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+.obnotion-column-manager.obnotion-mobile-bottom-sheet > .obnotion-panel-header {
+  padding-inline: var(--obnotion-sheet-inset);
+  border-bottom: 1px solid var(--obnotion-border-subtle, rgba(221, 221, 221, 0.4));
+}
+
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-search-row {
+  padding: 0 var(--obnotion-sheet-inset) 4px;
+  border-bottom: 1px solid var(--obnotion-border-subtle, rgba(221, 221, 221, 0.4));
+}
+
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-row {
+  padding-inline: var(--obnotion-sheet-inset);
+  position: relative;
+}
+
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-row + .obnotion-column-manager-add-row {
+  padding-inline: var(--obnotion-sheet-inset);
+  position: relative;
+}
+
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-row + .obnotion-column-manager-add-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--obnotion-border-subtle, rgba(221, 221, 221, 0.4));
 }
 
 /* ───────────────────────────────────────────────────────────────
@@ -22431,7 +22528,13 @@ img.obnotion-text-md-image {
 .obnotion-record-detail-panel.obnotion-mobile-bottom-sheet.obnotion-mobile-bottom-sheet .obnotion-board-card-open,
 .obnotion-container .obnotion-record-detail-panel.obnotion-mobile-bottom-sheet .obnotion-cell-edit-close,
 .obnotion-record-detail-panel.obnotion-mobile-bottom-sheet.obnotion-mobile-bottom-sheet .obnotion-cell-edit-close {
-  position: static;
+  /* Positioned, not the static this had: the grab band's ::before is positioned, paints above
+     any unpositioned control it reaches, and its recorded 31px bottom reach lands on these
+     44px boxes' top rows now that the close-button sheets' headers sit 2px higher. A control
+     that loses its own box to the band delivers less than it declares; painting the control
+     above the band gives it its presses back and the band keeps everything the controls
+     themselves do not answer. */
+  position: relative;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;

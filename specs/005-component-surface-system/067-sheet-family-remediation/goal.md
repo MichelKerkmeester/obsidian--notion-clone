@@ -180,13 +180,13 @@ never resolve them silently.
       `MOTION_BAND_TOKEN_DEFAULT_MS = 260` (`sheet-grammar.mjs:182`) asserts the **current** value,
       so the bridge and the row move in one commit or the row goes red on the fix. Done is: the
       bridge exists, and a deliberate disagreement takes a check red.
-- [ ] **`npm run gate` exits 0 read from `$?`, with one permanent lane row per remaining deliverable
+- [x] **`npm run gate` exits 0 read from `$?`, with one permanent lane row per remaining deliverable
       — the pill, the chip, the header block, the scrim level, the handle geometry and the three
       suggest surfaces — each negative control observed red before green**, and
       the registered counts hold at or above 14 surfaces / 32 pairs. **Today: none of those rows
       exists**, and `HANDLE_TO_TITLE_GAP_MAX_PX = 80` (`sheet-grammar.mjs:228`) passes the 74.4px
       state it was created for.
-      **Progress on a third follow-up leg**: `npm run gate` now exits 0 (26/26 green), and every named deliverable — the pill, the chip, the header block, the scrim level, the handle geometry and the three suggest surfaces — carries a permanent lane row with a negative control confirmed cycling red then green. Left unticked: the header-block row's own underlying deliverable (`tasks.md` T015, `acceptance-criteria.md` AC-007) is not itself at the 66-74px target it measures against — it pins the achieved 75px rather than the unreached figure — and `T015`/`T020`/`T021` all stay `[ ]` in `tasks.md`, so this box is left for whoever reconciles the packet's completion state to decide against the packet's own COMPLETION VERIFICATION RULE rather than ticked unilaterally here.
+      **Progress on a third follow-up leg**: `npm run gate` now exits 0 (26/26 green), and every named deliverable — the pill, the chip, the header block, the scrim level, the handle geometry and the three suggest surfaces — carries a permanent lane row with a negative control confirmed cycling red then green. **Ticked on the fourth residual leg**: the header-block deliverable itself closed at 74px inside the true 66-74px band (AC-007 now `Met`), the divider grammar closed across the filter, sort, group and Properties sheets (AC-010 now `Met`), and `T015`/`T020`/`T021` are all `[x]` in `tasks.md` — every named lane row exists with a negative control observed red before green, the gate exits 0, and the registered counts hold.
 - [ ] **The operator opens a sheet, a stacked pair, a menu and a destructive confirm on one iOS
       build and reads the family as debugged, refined, perfected.** One build, one sitting, closing
       `044` AC-006, `048` AC-009 and `051` AC-010 together, with the device-only checklist

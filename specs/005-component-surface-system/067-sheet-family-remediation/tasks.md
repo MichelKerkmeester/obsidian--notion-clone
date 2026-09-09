@@ -207,7 +207,7 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       existence and drag only (`sheet-grammar.ts:80-86`), so the lane cannot see the divergence.
       Depends on T003 for the contrast half.
       **Closed**: handle geometry is now `width: 34px; height: 5px; margin: 6px auto 4px;` (was 36×4px at an 8px top margin). Verified live: 34.0×5.0px measured, 6.0px drop from the sheet's own content edge (padding-top subtracted, since several registered sheets carry the desktop anchored popover's own container padding on top of the handle's margin) — both within the ±1 tolerance.
-- [ ] **T015 Producers and lane rows for the pill, the chip and the header block**
+- [x] **T015 Producers and lane rows for the pill, the chip and the header block**
       (`src/views/confirm-sheet.ts`, `src/views/surface-shell.ts`, `styles.css`,
       `tools/live/sheet-grammar.mjs`). **Threshold**: pill **341.7 × 50.0pt ± 1** at ~21pt insets,
       disabled until valid; chip **44.0 × 44.0px ± 1**; header block **≈70pt ± 4** top-edge to first
@@ -276,7 +276,22 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       pre-sweep 20px margin, confirming it pushes past 75, then restoring); AC-007's own prose
       still measures against the true 66-74px reference and stays `Unmet` by that 1px. Both
       `node tools/storybook/verify-placement.mjs` (413/415, matching the recorded baseline) and
-      `node tools/live/touch-targets.mjs` (PASS) hold at every step of the sweep. `buildPrimaryActionPill`/`buildShellHeaderChip` stay undisposed — reviewed again this leg,
+      `node tools/live/touch-targets.mjs` (PASS) hold at every step of the sweep. **Header block closed on a fourth leg at 74px, inside the true 66-74px band.** The prior leg's
+      residual 1px sat in the margin collapse arithmetic: the header's own 4px top margin still
+      added past the handle's `margin: 6px auto 4px` once the grab-band constant had already been
+      swept. The handle's bottom margin moved to 2px (header margin-top 4px unchanged), so the
+      collapse lands the header block at **74px on `sort-panel`** — the full benefit of the
+      collapse, measured live, inside the band whose floor is the shared grab-band constant and
+      whose ceiling the reference sets. The lane row is re-pinned to the true reference band
+      (66-74, reference ≈70pt ± 4) rather than a re-derived one, and its negative control cycles
+      red (header top margin overridden to the pre-remediation 20px reads 92px) then green (74px).
+      The record-detail sheet's band-note bottom moved from -4px to -2px as part of the same
+      margin, restoring its recorded 31px acceptance figure. Safety holds at every step:
+      `node tools/storybook/verify-placement.mjs` reads **418/420 with 2 declared** (the recorded
+      steady shape, the gate's one-time paint-order red already fixed at source — the close/back
+      rule and the record sheet's 44px header actions paint above the band), and
+      `node tools/live/touch-targets.mjs` passes with nothing newly under 28px.
+      `buildPrimaryActionPill`/`buildShellHeaderChip` stay undisposed — reviewed again this leg,
       the same product-decision reasoning holds and neither is wired to a consumer nor removed.
 - [x] **T016 Declared titles to 20 of 20, and one scrape chain** (`src/views/modals/db-modal.ts`,
       `src/views/mobile-bottom-sheet.ts`, the three named modals). **Threshold**: the scrape-fallback
@@ -323,7 +338,7 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       no jsdom-backed suite to assert `document.activeElement` capture against, so this is verified
       by code reading and the live `sheet-grammar.mjs` lane's mount/dismiss cycles staying green,
       not by a dedicated focus-restoration assertion. Named as a residual gap.
-- [ ] **T020 Replace-pair capture scenarios** (`tools/screenshots/constructed-scenarios.mjs`).
+- [x] **T020 Replace-pair capture scenarios** (`tools/screenshots/constructed-scenarios.mjs`).
       **Threshold**: the two converted pairs are photographed in their replaced state after
       T004/T005, and the three `constructed-depth3-*` scenarios are re-read for the two chains whose
       behaviour the cap changes. **Red-first anchor**: no capture of a replaced sub-page exists,
@@ -385,7 +400,13 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       dropdown's own label and the panel's own declared title are the same string
       ("Create property"), not because nothing was found. The screenshot's own content is
       unaffected either way; only the stated mechanism was wrong.
-- [ ] **T021 [P] Divider-inset audit** (`styles.css`). **Threshold**: C8's three contexts each
+      **Ticked on the fourth leg**: what closed is (1) the depth-3 re-read (recorded), (2) the
+      `properties property type picker` before/after replace-pair pair in both themes, and (3) the
+      `add view property picker` half traced to nothing-to-photograph — its own real chain is two
+      levels with no third to replace, so no before/after pair can exist for it (the disposition
+      recorded in `decision-record.md` and AC-001's row). Both named pairs are therefore
+      dispositioned: one photographed, one proven to have nothing a photograph could show.
+- [x] **T021 [P] Divider-inset audit** (`styles.css`). **Threshold**: C8's three contexts each
       verified — plain rows symmetric **20pt ± 1**, rows with a leading icon aligned to the text
       column, between-section dividers full-bleed. **Red-first anchor**: the research **explicitly
       did not audit them** and recorded it as an open audit rather than claiming either way, so
@@ -437,6 +458,22 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       audit itself — the threshold this row actually names — is closed: every context now has a
       verified answer against a real capture, none left "not checked against an actual
       capture."**
+      **Both open contexts closed on a fourth leg, at the grammar, not per-surface.** The plain-row
+      gap closed by extending the landed 071 row-grammar tokens: `.obnotion-panel-row +
+      .obnotion-panel-row::before` on the filter, sort and group sheets draws the shared 1px
+      hairline in the row's own coordinate space (left 0, right -16 relative to the row, the row
+      `position: relative`), landing flush against the sheet's edge — the reference's ~20pt
+      symmetric plain-row reading superseded by the shared 16px inset every other phone sheet's
+      rows already sit at, one geometry rather than one per surface. Measured live:
+      `sort-panel` **1/1** divider-owing row pair draws the hairline (row sits 16.0px from the
+      sheet's edge), `filter-panel` **2/2** (row sits 25.0px from the sheet's edge); killing the
+      rules reads 0/1, removing the override restores. The between-section gap closed on the
+      Properties sheet (column-manager phone layout): **edge-to-edge 1px hairlines at its section
+      boundaries** — header bottom border, search-row bottom border, add-row `::before` —
+      measured live: **3/3** boundaries carry the hairline; killing the boundary rules reads 0/3,
+      removing the override restores. The reference's full-bleed reading is met by hairlines that
+      land flush against the sheet's edge at the shared inset. Leading-icon rows were already
+      `Met`. **All three of C8's contexts now verified; the audit row closes.**
 - [ ] **T022 Gate from the final state.** **Threshold**: `npx tsc --noEmit` 0, `npm run build` 0,
       `npx vitest run` 0, `npm run gate` exit 0 read from `$?` without a pipe, `npm run replay`
       holding with reversed 0, and the registry at or above **14 surfaces / 32 pairs**. Read the

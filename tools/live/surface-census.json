@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-09T04:17:54.604Z",
+  "measuredAt": "2026-09-09T12:15:41.841Z",
   "inputs": {
-    "styles.css": "55cb284b3244",
+    "styles.css": "4261be904bfb",
     "tools/live/surface-census.mjs": "982af0f4c165",
     "src/views/surface-contract.ts": "99972eb224df",
     "src/views/record-detail-panel.ts": "596d9dba1a40",
@@ -9,13 +9,13 @@
     "src/views/board-card-properties-panel.ts": "b53e1cda8b74"
   },
   "totals": {
-    "rendered": 86,
-    "buildable": 236,
+    "rendered": 78,
+    "buildable": 221,
     "declared": 6,
     "renderedOnly": 0,
-    "buildableNotRendered": 150,
+    "buildableNotRendered": 143,
     "untokened": 0,
-    "unroled": 86,
+    "unroled": 78,
     "recordSurfaceHandBuilt": 0
   },
   "rendered": {
@@ -108,8 +108,6 @@
       "rect": "342x44",
       "scenarios": [
         "add-view-popover",
-        "calendar-toolbar-options",
-        "timeline-toolbar-options",
         "panel-filter-conditions",
         "panel-filter-nested-group",
         "panel-sort-rules",
@@ -121,8 +119,7 @@
         "panel-board-groups",
         "panel-column-manager",
         "panel-column-width-sheet",
-        "chrome-utilities-popover",
-        "chrome-chart-options-popover"
+        "chrome-utilities-popover"
       ]
     },
     "obnotion-panel-title": {
@@ -133,8 +130,6 @@
       "rect": "58x19",
       "scenarios": [
         "add-view-popover",
-        "calendar-toolbar-options",
-        "timeline-toolbar-options",
         "panel-filter-conditions",
         "panel-filter-nested-group",
         "panel-sort-rules",
@@ -146,8 +141,7 @@
         "panel-board-groups",
         "panel-column-manager",
         "panel-column-width-sheet",
-        "chrome-utilities-popover",
-        "chrome-chart-options-popover"
+        "chrome-utilities-popover"
       ]
     },
     "obnotion-sheet-close": {
@@ -216,21 +210,6 @@
       "rect": "77x32",
       "scenarios": [
         "add-view-popover",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
         "panel-filter-conditions",
         "panel-filter-conditions",
         "panel-filter-conditions",
@@ -267,12 +246,7 @@
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-sort",
-        "chrome-active-rule-popover-sort",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover"
+        "chrome-active-rule-popover-sort"
       ]
     },
     "obnotion-dropdown-field-icon": {
@@ -283,21 +257,6 @@
       "rect": "0x0",
       "scenarios": [
         "add-view-popover",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
         "panel-filter-conditions",
         "panel-filter-conditions",
         "panel-filter-conditions",
@@ -334,12 +293,7 @@
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-sort",
-        "chrome-active-rule-popover-sort",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover"
+        "chrome-active-rule-popover-sort"
       ]
     },
     "obnotion-dropdown-field-text": {
@@ -350,21 +304,6 @@
       "rect": "39x17",
       "scenarios": [
         "add-view-popover",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
         "panel-filter-conditions",
         "panel-filter-conditions",
         "panel-filter-conditions",
@@ -401,12 +340,7 @@
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-sort",
-        "chrome-active-rule-popover-sort",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover"
+        "chrome-active-rule-popover-sort"
       ]
     },
     "obnotion-dropdown-field-value": {
@@ -417,21 +351,6 @@
       "rect": "26x17",
       "scenarios": [
         "add-view-popover",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
         "panel-filter-conditions",
         "panel-filter-conditions",
         "panel-filter-conditions",
@@ -468,12 +387,7 @@
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-sort",
-        "chrome-active-rule-popover-sort",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover"
+        "chrome-active-rule-popover-sort"
       ]
     },
     "obnotion-dropdown-field-chevron": {
@@ -484,21 +398,6 @@
       "rect": "16x14",
       "scenarios": [
         "add-view-popover",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
         "panel-filter-conditions",
         "panel-filter-conditions",
         "panel-filter-conditions",
@@ -535,12 +434,7 @@
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-filter",
         "chrome-active-rule-popover-sort",
-        "chrome-active-rule-popover-sort",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover"
+        "chrome-active-rule-popover-sort"
       ]
     },
     "obnotion-menu-separator": {
@@ -820,100 +714,6 @@
         "field-option-color-picker"
       ]
     },
-    "obnotion-calendar-scale-menu": {
-      "cls": "obnotion-calendar-scale-menu",
-      "mountParent": "obnotion-calendar-scale-control",
-      "tokens": true,
-      "role": null,
-      "rect": "0x0",
-      "scenarios": [
-        "calendar-month-view",
-        "calendar-week-time-grid"
-      ]
-    },
-    "obnotion-calendar-scale-menu-label": {
-      "cls": "obnotion-calendar-scale-menu-label",
-      "mountParent": "obnotion-calendar-scale-menu",
-      "tokens": true,
-      "role": null,
-      "rect": "0x0",
-      "scenarios": [
-        "calendar-month-view",
-        "calendar-week-time-grid"
-      ]
-    },
-    "obnotion-calendar-scale-menu-chevron": {
-      "cls": "obnotion-calendar-scale-menu-chevron",
-      "mountParent": "obnotion-calendar-scale-menu",
-      "tokens": true,
-      "role": null,
-      "rect": "0x0",
-      "scenarios": [
-        "calendar-month-view",
-        "calendar-week-time-grid"
-      ]
-    },
-    "obnotion-calendar-mini-popover": {
-      "cls": "obnotion-calendar-mini-popover",
-      "mountParent": "obnotion-container",
-      "tokens": true,
-      "role": null,
-      "rect": "278x324",
-      "scenarios": [
-        "calendar-mini-calendar",
-        "field-date-value-picker",
-        "field-date-value-picker-datetime"
-      ]
-    },
-    "obnotion-calendar-options-popover": {
-      "cls": "obnotion-calendar-options-popover",
-      "mountParent": "obnotion-container",
-      "tokens": true,
-      "role": null,
-      "rect": "538x638",
-      "scenarios": [
-        "calendar-toolbar-options"
-      ]
-    },
-    "obnotion-dropdown-field-label": {
-      "cls": "obnotion-dropdown-field-label",
-      "mountParent": "obnotion-dropdown-field-text",
-      "tokens": true,
-      "role": null,
-      "rect": "90x17",
-      "scenarios": [
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "calendar-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "timeline-toolbar-options",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover"
-      ]
-    },
-    "obnotion-calendar-timeline-options-popover": {
-      "cls": "obnotion-calendar-timeline-options-popover",
-      "mountParent": "obnotion-container",
-      "tokens": true,
-      "role": null,
-      "rect": "538x547",
-      "scenarios": [
-        "timeline-toolbar-options"
-      ]
-    },
     "obnotion-filter-panel": {
       "cls": "obnotion-filter-panel",
       "mountParent": "obnotion-container",
@@ -1111,7 +911,7 @@
       "mountParent": "obnotion-container",
       "tokens": true,
       "role": null,
-      "rect": "1440x311",
+      "rect": "1440x309",
       "scenarios": [
         "panel-column-width-sheet"
       ]
@@ -1311,28 +1111,6 @@
         "chrome-active-rule-popover-sort"
       ]
     },
-    "obnotion-chart-options-popover": {
-      "cls": "obnotion-chart-options-popover",
-      "mountParent": "obnotion-container",
-      "tokens": true,
-      "role": null,
-      "rect": "538x578",
-      "scenarios": [
-        "chrome-chart-options-popover"
-      ]
-    },
-    "obnotion-chart-options-popover-entry": {
-      "cls": "obnotion-chart-options-popover-entry",
-      "mountParent": "obnotion-chart-options-section",
-      "tokens": true,
-      "role": null,
-      "rect": "520x34",
-      "scenarios": [
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover",
-        "chrome-chart-options-popover"
-      ]
-    },
     "obnotion-menu": {
       "cls": "obnotion-menu",
       "mountParent": "(body)",
@@ -1388,6 +1166,17 @@
       "rect": "184x252",
       "scenarios": [
         "field-cell-edit-select"
+      ]
+    },
+    "obnotion-calendar-mini-popover": {
+      "cls": "obnotion-calendar-mini-popover",
+      "mountParent": "obnotion-cell-edit-popover",
+      "tokens": true,
+      "role": null,
+      "rect": "252x287",
+      "scenarios": [
+        "field-date-value-picker",
+        "field-date-value-picker-datetime"
       ]
     },
     "obnotion-icon-picker-popover": {
@@ -1608,26 +1397,19 @@
     "obnotion-delete-modal-info",
     "obnotion-delete-modal-buttons",
     "obnotion-bulk-edit-field-menu",
-    "obnotion-calendar-day-popover",
-    "obnotion-calendar-day-popover-events",
-    "obnotion-calendar-week-allday-popover",
-    "obnotion-calendar-scale-popover",
-    "obnotion-timeline-scale-menu",
-    "obnotion-timeline-scale-menu-label",
-    "obnotion-timeline-scale-menu-chevron",
-    "obnotion-timeline-scale-popover",
-    "obnotion-timeline-mini-popover",
-    "obnotion-timeline-mobile-menu-button",
+    "obnotion-calendar-timeline-options-popover",
+    "obnotion-chart-options-popover",
     "obnotion-chart-options-dropdown",
     "obnotion-calendar-timeline-options-dropdown",
+    "obnotion-calendar-options-popover",
     "obnotion-calendar-date-field-dropdown",
     "obnotion-calendar-options-dropdown",
-    "obnotion-chart-drilldown-modal",
     "obnotion-anchored-popover",
     "obnotion-chart-value-aggregation-popover",
     "obnotion-chart-style-popover",
     "obnotion-chart-visible-groups-popover",
     "obnotion-chart-dropdown-popover",
+    "obnotion-chart-options-popover-entry",
     "obnotion-column-manager-file-property-dropdown",
     "obnotion-add-property-picker",
     "obnotion-column-type-popover",
@@ -1646,11 +1428,11 @@
     "obnotion-column-menu-subpopover",
     "obnotion-mobile-bottom-sheet",
     "obnotion-group-order-popover",
-    "obnotion-calendar-search-results-popover",
     "obnotion-date-edit-popover",
     "obnotion-date-value-popover",
     "obnotion-date-picker-body",
     "obnotion-cell-date-picker",
+    "obnotion-dropdown-field-label",
     "obnotion-dropdown-field-disabled-reason",
     "obnotion-dropdown-popover-desktop-sheet",
     "obnotion-dropdown-empty",
