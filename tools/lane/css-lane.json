@@ -6368,6 +6368,32 @@
     "screenshots/notion-clone/views/constructed-board-subtask-mobile-light.png"
    ],
    "note": "Captured twice (npm run screenshots </dev/null, 480 entries, exit 0 both) and judged by decoded pixel delta against the committed blobs across both runs, no image opened by eye: 60 content movers, every one a board-card capture, every one moved in BOTH runs at IDENTICAL counts and channel deltas — the property grid gaining its field name, the two-column grid, the one-line value and the full-width badge rows, exactly the reported defect, kept as real. 12 of the 60 also changed dimensions (the cards grew taller); the harness writes what it measures and every dimension change is deterministic across both runs. No mover judged jitter: nothing moved in a single run only, so nothing was restored and no manifest bytes patched. The visual read stays the operator device pass."
+  },
+  {
+   "event": "acquire",
+   "phase": "045-board-card-properties",
+   "at": "2026-09-09T21:18:07.335Z",
+   "hash": "6224cfae4b35",
+   "note": "Re-acquiring for the landing verification of the rebased 045 leg: the rebase merged 075/069/007 into the stylesheet (baselineHash moved 6224cfae4b35 -> fcaf3fec28cf on the merged sheet), so the leg’s released captures were re-judged against the committed blobs of the rebased tree. Screenshots captured twice, exit 0, 480 entries each."
+  },
+  {
+   "event": "edit",
+   "phase": "045-board-card-properties",
+   "at": "2026-09-09T21:18:07.335Z",
+   "hash": "fcaf3fec28cf",
+   "note": "The merged stylesheet (075 toolbar strip, 069 touch-drag, 007 settings cards, plus this packet’s board-card meta hunks) re-derives one capture beyond the leg’s released 60: the board-mobile desktop-dark view. baselineHash sits at the merged sheet fcaf3fec28cf."
+  },
+  {
+   "event": "release",
+   "phase": "045-board-card-properties",
+   "at": "2026-09-09T21:18:07.335Z",
+   "hash": "fcaf3fec28cf",
+   "reviewed": [
+    "screenshots/notion-clone/views/board-mobile-desktop-dark.png",
+    "screenshots/notion-clone/fields/field-file-fields-desktop-light.png",
+    "screenshots/notion-clone/components/chrome-view-switcher-mobile-dark.png"
+   ],
+   "note": "Captured twice (npm run screenshots </dev/null, 480 entries, exit 0 each) and judged by decoded pixel delta against the committed blobs across both judged runs, no image opened by eye: 1 mover, board-mobile-desktop-dark (desktop viewport, dark theme), 2 changed pixels at max channel delta 1, moved in BOTH judged runs at identical counts — REAL, kept. It is the merged stylesheet’s (075/069/007 + this packet’s board hunks) 2-antialiased-pixel read of that capture; the leg’s committed blob was struck pre-rebase. The other 60 movers of this packet were released in the previous 045 triplet and reproduced identically here. A second judged pair after the second rebase (docs-only main 58dc5563: no source, stylesheet or fixture input moved) captured twice more, exit 0 each: 0 movers on the first run, 1 further mover on the second — fields/field-file-fields-desktop-light, 42 changed pixels at max channel delta 165, above the 12 jitter bar, so REAL, kept: a time-relative read inside the file-fields fixture crossed between the committed 21:20 blob and the 23:1x recapture, not a renderer or stylesheet change (its sourceHashes, incl. styles.css fcaf3fec28cf, are unmoved). No jitter restores. screenshots:verify judged at the gate. This verification reviews by measurement (headless); the visual read stays the operator device pass. A third judged pair after the 074-testbed ruling leg landed on main (3b15f925/5cd44328, which moved the fixture, one capture and eight evidence stamps) re-captured twice more, exit 0 each: 2 REAL movers kept — chrome-view-switcher-mobile-dark 47 changed pixels at max channel delta 106, BOTH runs at identical counts (the current fixture renders the pre-074 11641-byte/cd35f5721511 variant; these fixtures render wall-clock-dependent reads, so the hour moves them), and field-file-fields-desktop-light again, 42px@165 then 57px@165 across the two runs (both above the 12 bar, counts differing because the read is minutes-relative) — and 1 jitter: board-mobile-desktop-dark 2px@1 in one run only, restored to its committed bytes with its manifest row (bytes 242584, pixelHash 2ab2cdd02bb4) patched back. panel-record-detail-sheet-body-empty-desktop-light moved 6973px@max1 in the first run only (jitter-eligible: delta 1 <= 12, one run) and the second run itself restored its committed variant. The five stale stamps (the 074 leg carried pre-merge styles.css input hashes) were re-measured by their own writers; evidence --check-all reads 16/16 fresh. This verification reviews by measurement (headless); the visual read stays the operator device pass."
   }
  ],
  "outstanding": [
