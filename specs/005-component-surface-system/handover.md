@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T20:45:00Z"
-    last_updated_by: "268-settings-sheet-strict"
-    recent_action: "Scaffolded 071/007 (settings sheet strict alignment), 0.0.36 report"
+    last_updated_at: "2026-09-09T21:55:00Z"
+    last_updated_by: "266-sort-sheet-flush-verify"
+    recent_action: "Landing-verified 071/005 sort-sheet flush fix; ae901a6e on main"
     next_safe_action: "Execute 071/007/tasks.md; operator: 067/061 iOS pass, confirm 0.0.36 tag"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
@@ -41,6 +41,26 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-09 ~21:55, sort-sheet flush frame fix LANDING-VERIFIED — landed on main as `ae901a6e`, worktree `266-sort-sheet-flush`
+
+**What this verifier confirmed on the leg's commit (`94aeac79`, replayed onto the 071/007-scaffolded
+main as `e9f62e41`, artefact re-derivation commit `ae901a6e`, both pushed):** the operator's 0.0.36
+report *"Sort sheet doesnt fill full width like it should like others and has a bottom gap"* is
+fixed at the producer — the shared popover mount's `heightRole` pass-through
+(`src/views/popover-position.ts`) and the sort sheet's declared `heightRole: "flush"`
+(`src/views/sort-panel-renderer.ts`). Mutation re-run by this verifier: declaration removed →
+`tools/live/sheet-grammar.mjs` exit 1 (sort-panel classified floating, left/right/bottom 8/8/8px at
+390px — the leg's RED numbers reproduced); restored → exit 0 (flush, 0/0/0px). Filter and group
+sheets untouched (no styles.css, filter-panel, or group-panel change in the diff). Rebase kept both
+§4 rows (main's 071/007 scaffold stayed row 84, the sort-sheet landing became row 85) and took
+main's graph-metadata for re-derivation. Verification battery: build 0, tsc 0, vitest 1585/1585,
+screenshots x2 exit 0 with 0 moved PNGs across both runs (committed blobs reproduce exactly),
+evidence 15/15 fresh, gate 27 green / 0 red exit 0, `validate --strict` RESULT: PASSED for 071/005
+and the 005 root (backfill refreshed, both re-validated PASSED), scan-comments 0,
+scan-failing-values 0. Docs figures re-derived: 071/005 goal 4/4, 071 parent 4/4 — both already
+correct, no tick names the operator or a device. The operator's own device recheck stays open per
+D3 — the pixel evidence is the harness read, not the device read.
 
 ### 2026-09-09 ~20:38, `071/007-settings-sheet-strict-alignment` SCAFFOLDED — not implemented, worktree `268-settings-sheet-strict`
 
