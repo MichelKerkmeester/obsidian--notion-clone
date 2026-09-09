@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point 2026-09-09 ~01:35: 0.0.33 shipped at f91370f1. Landed: 070, 072, 073, 074, 075, 071/001, 008/001, 008/002, 071/002, 066 rows 81-82 (c5bbcf93). In progress, uncommitted: 071/003, 071/004. Implementation stays paused until this handover is reviewed. GLM 5.3 flash max carries implementation legs; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh."
+description: "Resume point 2026-09-09 ~03:30: 0.0.34 cut at e75a979c. Landed: 070, 072, 073, 074, 075, 071/001, 008/001, 008/002, 071/002, 066 rows 81-82 (c5bbcf93), 071/003 (81b6e328). In progress, uncommitted: 071/004. Implementation stays paused until this handover is reviewed. GLM 5.3 flash max carries implementation legs; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,14 +10,14 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T01:35:00Z"
-    last_updated_by: "243-landing-verify"
-    recent_action: "066 wave2 (toast dwell+close) LANDED+pushed (c5bbcf93): goal 5/6, gate 27/0"
-    next_safe_action: "Resume 071/003+004 next, then cut 0.0.34; 066 wave2 and 071/002 both landed"
+    last_updated_at: "2026-09-09T03:30:00Z"
+    last_updated_by: "244-landing-verify"
+    recent_action: "071/003 LANDED+pushed (81b6e328): goal 3/3, 071 2/4, gate 27/0 twice"
+    next_safe_action: "071/004 lands next (.worktrees/245); 0.0.34 is cut; 008/003's AC-007 discharged on paper"
     blockers:
       - "066's device read (AC-008) and 075's AC-006 still wait on the operator's handset pass — never agent-ticked"
-      - "071/003 (.worktrees/244) and 071/004 (.worktrees/245) are in progress, uncommitted; do not touch those worktrees either"
-      - "008/003 waits on 0.0.34 (carries 008/002's redirect, discharges AC-007)"
+      - "071/004 (`.worktrees/245-view-config-sheet`) is in progress, uncommitted; do not touch that worktree"
+      - "008/002's AC-007 is discharged by the 0.0.34 cut (e75a979c) — 008's own goal/roadmap still to be reconciled by that packet"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
@@ -32,6 +32,7 @@ _memory:
     open_questions:
       - "Does a Notion finding that contradicts a landed Anytype ruling ever become more than Proposed"
     answered_questions:
+      - "071/003 landed+verified twice-rebased (81b6e328): goal 3/3, 071 criterion 2/4; both mutations replayed red→restored; 0.0.34 (e75a979c) carries 008/002's redirect, discharging its AC-007 — 008's docs still to tick"
       - "068 renames to obnotion- with a data.json migration, author MichelKerkmeester, repo obsidian_notion-clone"
       - "The 3500ms dwell and the ::before -19px close hit survived this verifier: mutations red→restored, gate 27/0"
       - "GLM route: --provider llmgateway --model glm-5.3-flash --thinking high (max hangs on launch)"
@@ -42,6 +43,36 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-09 ~03:30, `071/003-add-property-sheet` LANDED on `origin/main` — landing-verified, twice-rebased, pushed
+
+**What landed:** the GLM leg's single commit (`3f1fe088` in `.worktrees/244-add-property-sheet`, "the 21
+property formats render as one flat, scrolling icon+label list inside the create-property sheet")
+replayed onto `1624041e` as `c00cb3c5`, then — after the 0.0.34 release cut landed first — onto `e75a979c`
+as `6a828e7e`, with this verifier's pass at `81b6e328`. **How:** 17 conflicted generated/evidence/lane
+files took main's side and were re-derived; `css-lane.json` history merged append-only (ours' 422 incl.
+072/002/066 triplets + the leg's 003 triplet) with a post-rebase 003 acquire/edit/release triplet
+(baselineHash `f3feddd7c055`, `check-lane` 0); styles.css itself merged cleanly. **Verified, by numbers:**
+both mutations replayed red then restored (unit: gated-reason producer line reverted → 1 failed | 7
+passed → 8/8; device: styles.css hunk stashed → `properties create property` fails pitch min 0.0 / max
+30.0, 16px padding, 210>210 scroll — the note-header/keyboard clearance held unfixed, recorded as the
+leg's finding). At GREEN: 21 rows pitch 44.0/44.0, sheet top 238.4px ≥ note-header bottom 44.0px with the
+336px keyboard inset up (the operator's R6 defect), height 261.6 ≤ 464.0, no 402×874 overflow. vitest
+1742/1742 (161 files), tsc 0, build 0. Screenshots ×2 in BOTH rounds (616/616, exit 0): round 1 — 29
+movers, all in both runs → REAL, 0 restores; round 2 — 28/29, 1 jitter (`calendar-empty-state-mobile-light`
+12px@1) restored with its manifest bytes, `screenshots:verify` 0; 2 content-movers reproduced
+(constructed-cell-editor-text-mobile-light 24165px@9, timeline-subtask-tree-desktop-light 5030px@12);
+13 stale evidence lanes re-derived, engine-parity informational-1 (43 = 002's steady state),
+evidence 15/15. FINAL gate from the committed state: **27/0, both rounds** (round 1 needed the checklist
+regenerated — 186→185 rows, 071 section 2/4 — and the newly ticked 071 criterion given its red-first
+clause for `failing-values`; the folder-docs miss self-heals: the gate writes the gate-logs README).
+`validate --strict` PASSED on 003, 071 and 005 after graph-metadata backfill; scan-comments 0,
+scan-failing-values 0. Docs: 071 goal criterion 2 ticked (002+003 redesign pair; **2/4, 50%** — both
+device reads stay the operator's per D3), 071 LOG 003 row → LANDED+landing-verified, roadmap report row
+75 → LANDED+verified, the stale §5.A 071 row corrected 25%→50% (002's own phrase also refreshed),
+071 goal completion 25→50. Every device row untouched. **Pushed: `e75a979c..81b6e328` on `origin/main`**
+(after one rejection by the 0.0.34 cut, resolved by rebase + full re-derivation). Round-2 note: 0.0.34
+discharges 008/002's AC-007; 008's docs still say it waits.
 
 ### 2026-09-09 ~01:35, `066-notion-states-refinement` wave 2 (rows 81-82) LANDED on `origin/main` — landing-verified, rebased, pushed
 
