@@ -137,8 +137,9 @@ never resolve them silently.
       32 pairs mounted** — while `record column submenu` and `import confirm dropdown chain` keep
       `depth: 3` through parents whose registration never offered a replace. Two controls prove the
       zero is measured, not vacuous: a governed registration whose parent DECLINES the offer stacks
-      at depth 3 and is counted, and mutating the cap's own threshold takes the lane to exit 1 on
-      exactly the governed pair.
+      at depth 3 and is counted, and mutating the cap's own threshold went red with **1 governed
+      pair recorded** where 0 is asserted — `properties property type picker`, lane exit 1, all 11
+      failures from the cap, restored on revert to the byte-identical tree.
 - [ ] **A `menu`-role surface presents on the phone as a handle-less anchored card, and the
       presentation path reads the role.** **Follow-up leg: handle-less, close-retained, parent-
       dimmed are all done and measured live; the "anchored" half of this row's own wording is
