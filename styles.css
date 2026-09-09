@@ -92,9 +92,10 @@
      added later reads the size the first one already declared instead of repeating "44px". */
   --obnotion-shell-edge-control-size: 44px;
   /* The host's border token carries a fallback: a var() left unresolved inside color-mix turns the
-     whole property back into its initial value, and border-style:initial is none — a divider whose
-     width computes to 0px, invisible anywhere the host theme does not define that token. #333333
-     is the dark-theme border grey these sheets' #1e1e1e backgrounds are drawn against. */
+     whole declaration back into its initial value, and border-style:initial is none — a divider
+     whose width computes to 0px, invisible anywhere the host theme does not define that token.
+     #333333 is the dark-theme border grey these sheets' #1e1e1e backgrounds sit on. */
+
   --obnotion-border-subtle: color-mix(in srgb, var(--background-modifier-border, #333333) 40%, transparent);
   --obnotion-border-regular: color-mix(in srgb, var(--background-modifier-border) 70%, transparent);
   --obnotion-border-emphasis: var(--background-modifier-border);
@@ -11802,20 +11803,29 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
   color: var(--text-accent);
 }
 
+/* No divider by default: this is the shape a section title with no earlier sibling of the same
+   class gets, which the panel's own first title always is. `:first-of-type` looked like the
+   right tool here and measured wrong -- it matches the first sibling of a TAG, not of a class,
+   and the popover's own header (`buildShellHeader`) is a `<div>` too, drawn before any title. A
+   title that is genuinely first in the group's own list is therefore never the first `<div>`
+   child, and `:first-of-type` never matched it: every title painted the divider meant to open
+   only the sections after the panel's own first one. The sibling combinator below reads the
+   group's own list instead of the DOM's tag census, so it still divides correctly whatever
+   chrome the shell draws ahead of it. */
 .obnotion-container .obnotion-group-popover-section-title {
-  border-top: 1px solid var(--background-modifier-border);
+  border-top: 0;
   color: var(--text-faint);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0;
-  margin: 6px 0 3px;
-  padding: var(--obnotion-space-3) var(--obnotion-space-2) 0;
+  margin: 2px 0 3px;
+  padding: 0 var(--obnotion-space-2) 0;
 }
 
-.obnotion-container .obnotion-group-popover-section-title:first-of-type {
-  border-top: 0;
-  margin-top: 2px;
-  padding-top: 0;
+.obnotion-container .obnotion-group-popover-section-title ~ .obnotion-group-popover-section-title {
+  border-top: 1px solid var(--background-modifier-border);
+  margin-top: 6px;
+  padding-top: var(--obnotion-space-3);
 }
 
 .obnotion-container .obnotion-group-popover-row {
@@ -13145,23 +13155,38 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
    (`.obnotion-container .obnotion-filter-panel, .obnotion-sort-panel, ...`, § FLOATING PANELS) — correct
    for the small anchored popover the same rule sizes, and 8px short of the shared inset once that
    surface presents as a sheet. Only the inline pair moves; the block pair stays the container's own
-   8px, and the header above takes it from here rather than adding its own second inset. */
+   8px, and the header above takes it from here rather than adding its own second inset. The group
+   sheet joins them: it presents through the same popover shell and used to keep the shared block's
+   8px on the sheet, one inset short of its two siblings. */
 .obnotion-filter-panel.obnotion-mobile-bottom-sheet,
-.obnotion-sort-panel.obnotion-mobile-bottom-sheet {
+.obnotion-sort-panel.obnotion-mobile-bottom-sheet,
+.obnotion-group-popover.obnotion-mobile-bottom-sheet {
   padding-inline: var(--obnotion-sheet-inset);
 }
 
-/* A floating sheet's own 8pt frame inset already claims
-   horizontal space no flush sheet gave up. `obnotion-sort-rule-row`'s condition row was already at its
-   tightest fit inside the 16px content inset above — its trailing "×" landed 11px past its own
-   row even before this leg, absorbed by that inset's own slack rather than by any margin the row
-   carried itself, because `CONDITION_FIELD_FLOOR_PX` (`toolbar-primitives.ts`) sizes the row's two
-   dropdowns for the DESKTOP anchored popover's width, not this sheet's. Losing another 16px to the
-   frame's own inset spends slack the row never had. Halving the content inset when the frame also
-   claims its own restores exactly the content width the row was tuned against, rather than asking
-   a floor several other rows share to shrink for a change none of them own. */
-.obnotion-sort-panel.obnotion-mobile-bottom-sheet.obnotion-sheet-floating {
-  padding-inline: var(--obnotion-space-2);
+/* The grab bar's own drag band is sized from the viewport (`.obnotion-mobile-bottom-sheet-handle
+   ::before`'s own comment explains why: a `%` width resolves against the 34px handle, not the
+   sheet), which only reads correctly if the handle sits at the sheet's true horizontal centre. It
+   drifts off that centre the moment this body needs to scroll: `.obnotion-container`'s own
+   8px `::-webkit-scrollbar` (kept everywhere else for a visible desktop-style thumb) carves that
+   width out of one side of the flex row the handle centres in, so a sheet from this family tall
+   enough to need it — the group sheet with several sections open was the one that measured it,
+   370 of 366px — pushes the band's assumed-centred width past the sheet's own right edge by
+   however much the scrollbar took. A phone scrolls this body by touch, never by dragging a thumb,
+   so nothing here needs the desktop rule's visible track; hidden the same way the toolbar's own
+   horizontal strip already hides its scrollbar (§ `.obnotion-toolbar-right::-webkit-scrollbar`),
+   the handle centres on the same box the band was sized for whether or not this sheet is tall
+   enough to scroll. */
+.obnotion-filter-panel.obnotion-mobile-bottom-sheet,
+.obnotion-sort-panel.obnotion-mobile-bottom-sheet,
+.obnotion-group-popover.obnotion-mobile-bottom-sheet {
+  scrollbar-width: none;
+}
+
+.obnotion-filter-panel.obnotion-mobile-bottom-sheet::-webkit-scrollbar,
+.obnotion-sort-panel.obnotion-mobile-bottom-sheet::-webkit-scrollbar,
+.obnotion-group-popover.obnotion-mobile-bottom-sheet::-webkit-scrollbar {
+  display: none;
 }
 
 /* createSheetHeader's own family — sort, filter, add-view and view-config — sits close enough
@@ -24151,4 +24176,99 @@ input[type="checkbox"].obnotion-checkbox:disabled {
    token for a surface floating above the page, which is what all seven now are. */
 .obnotion-mobile-bottom-sheet.obnotion-mobile-bottom-sheet {
   background: var(--obnotion-surface-overlay);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   30. THE PANEL SHEETS' ROW GRAMMAR (filter, sort, group)
+   The operator's directive: these three sheets carry the reference's own row — one setting per
+   line, a control at its far edge, 44–52px of pitch, one 16px inset, a 1px divider where a
+   section opens, nothing sideways. Every selector here names the surface and the phone and
+   nothing deeper, because a portalled sheet loses the .obnotion-container ancestor the shared
+   §21 block leans on — the reason these rules also sit at the file's end, where each outranks
+   the shared rule it overrides instead of negotiating with it.
+─────────────────────────────────────────────────────────────── */
+
+/* One setting per line, concretely: a condition ("Status is Backlog") is ONE line — property,
+   operator, value, then that rule's own controls — where the phone grid used to give it two, and
+   a sort rule keeps the one line it already had. The 44px floor does the 44–52 window's work here
+   as everywhere: the controls inside a line are 28px, the line they share is the thumb's target,
+   which is how the touch lanes already measure this row. */
+.is-phone .obnotion-filter-panel.obnotion-mobile-bottom-sheet > .obnotion-panel-row,
+.is-phone .obnotion-sort-panel.obnotion-mobile-bottom-sheet > .obnotion-panel-row,
+.is-phone .obnotion-filter-panel.obnotion-mobile-bottom-sheet .obnotion-source-rule-children .obnotion-panel-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--obnotion-space-2);
+  min-height: 44px;
+  margin-bottom: var(--obnotion-space-2);
+}
+
+/* The property and value controls take the line's slack; the operator its word; the trailing
+   controls their own boxes. Every child can shrink (min-width: 0) before the line wraps, so a
+   long property name ellipsises inside its own control instead of pushing the row to two lines —
+   the row's height is the grammar, and the text yields to it. */
+/* The floors these controls carry are inline ( CONDITION_FIELD_FLOOR_PX / CONDITION_VALUE_FLOOR_PX
+   in the shared row builder), sized for the 311px anchored popover the floors were tuned against.
+   On the sheet the 16px inset spends what those floors assumed, so here — and only here — the
+   inline widths must yield; both value controls already truncate their own text, which is the
+   behaviour a floor exists to protect, not to prevent. */
+.is-phone .obnotion-filter-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row > .obnotion-panel-dropdown,
+.is-phone .obnotion-sort-panel.obnotion-mobile-bottom-sheet > .obnotion-panel-row > .obnotion-panel-dropdown,
+.is-phone .obnotion-filter-panel.obnotion-mobile-bottom-sheet > .obnotion-panel-row > input,
+.is-phone .obnotion-filter-panel.obnotion-mobile-bottom-sheet > .obnotion-panel-row > .obnotion-panel-date-value,
+.is-phone .obnotion-filter-panel.obnotion-mobile-bottom-sheet > .obnotion-panel-row > .obnotion-panel-empty-value {
+  flex: 1 1 0;
+  min-width: 0 !important;
+}
+
+.is-phone .obnotion-filter-panel.obnotion-mobile-bottom-sheet > .obnotion-panel-row > .obnotion-filter-operator-dropdown {
+  flex: 0 1 96px;
+  min-width: 0 !important;
+}
+
+.is-phone .obnotion-sort-panel.obnotion-mobile-bottom-sheet > .obnotion-panel-row > .obnotion-sort-direction-dropdown {
+  flex: 0 1 108px;
+  min-width: 0 !important;
+}
+
+.is-phone .obnotion-filter-panel.obnotion-mobile-bottom-sheet > .obnotion-panel-row > .obnotion-panel-button,
+.is-phone .obnotion-sort-panel.obnotion-mobile-bottom-sheet > .obnotion-panel-row > .obnotion-panel-button,
+.is-phone .obnotion-filter-panel.obnotion-mobile-bottom-sheet > .obnotion-panel-row > .obnotion-source-rule-icon-button {
+  flex: 0 0 28px;
+}
+
+/* The drag token and the reorder pair keep their own width, so the property control keeps the
+   line's slack. */
+.is-phone .obnotion-sort-panel.obnotion-mobile-bottom-sheet > .obnotion-panel-row > .obnotion-panel-drag,
+.is-phone .obnotion-sort-panel.obnotion-mobile-bottom-sheet > .obnotion-panel-row > .obnotion-mobile-reorder-controls {
+  flex: 0 0 auto;
+}
+
+/* The group sheet's rows sit at the same 44px floor their section mates already clear; their own
+   16px keeps the label left of a switch or check that hugs the row's far edge. */
+.is-phone .obnotion-group-popover.obnotion-mobile-bottom-sheet .obnotion-menu-item {
+  min-height: 44px;
+}
+
+/* A section's heading and its divider sit on the rows' inset — the sheet's own 16px, so the
+   hairline that opens each group runs through the gutters the rows it introduces use, not the
+   smaller spacing step beside them. The subtle-border token is the ladder's own 40% mix, whose
+   token fallback lives where the token is declared.
+
+   No divider by default, same reasoning as this class's desktop rule above: `:first-of-type`
+   matches the first sibling of a tag, and the sheet header (`buildShellHeader`) draws its own
+   `<div>` before any title, so the panel's genuinely-first title is never the DOM's first `<div>`
+   and the exception never fired -- every title on a phone painted the hairline the panel's own
+   first one was meant to skip. The sibling combinator reads the group's own title list instead. */
+.is-phone .obnotion-group-popover.obnotion-mobile-bottom-sheet .obnotion-group-popover-section-title {
+  margin: 0;
+  padding: 0 var(--obnotion-sheet-inset) 0;
+  border-top: 0;
+}
+
+.is-phone .obnotion-group-popover.obnotion-mobile-bottom-sheet .obnotion-group-popover-section-title ~ .obnotion-group-popover-section-title {
+  margin-top: var(--obnotion-space-2);
+  padding-top: var(--obnotion-space-3);
+  border-top: 1px solid var(--obnotion-border-subtle);
 }

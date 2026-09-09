@@ -288,13 +288,15 @@ export interface ScenarioSpec {
    * Opt-in, renderer "toolbar" only: after the toolbar mounts, clicks one of its own trigger
    * buttons to open the surface it owns — "utilities" clicks the More-tools button
    * (`renderUtilitiesOverflowButton`'s own onclick), "add-view" clicks the view-tab plus button
-   * (`showAddViewMenu`'s own onclick), "tab-menu" right-clicks the first view tab
+   * (`showAddViewMenu`'s own onclick), "tab-menu" right-clicks the first view tab, "group" clicks
+   * the Group sheet trigger (`renderGroupPopover`'s own onclick) — so the panel a real
+   * press opens is the panel measured, not a hand-built stand-in
    * (`showViewTabMenu`'s own oncontextmenu, reading rename/duplicate/remove through the owned-menu
    * primitive). The same anchors a device tap or a right-click reaches; nothing is
    * hand-applied. Undefined leaves the toolbar closed, which is what the plain toolbar
    * scenarios photograph.
    */
-  toolbarPopover?: "utilities" | "add-view" | "tab-menu";
+  toolbarPopover?: "utilities" | "add-view" | "tab-menu" | "group";
   /**
    * Opt-in, renderer "toolbar" only: the search text `renderSearch` reads from the view state.
    * A non-empty value is what widens the collapsed 28px wrap into its active state and reveals
@@ -2170,6 +2172,9 @@ function toolbarAssertions(container: HTMLElement, scenario: ScenarioSpec): Asse
       detail: deleteRow ? `classes=${deleteRow.className}` : "no delete row found",
     });
   }
+  if (scenario.toolbarPopover === "group") {
+    results.push(toolbarPopoverAssertion(container, ".obnotion-group-popover"));
+  }
   if (scenario.searchText) {
     const active = container.querySelector(".obnotion-search-control.is-active");
     const hasText = container.querySelector<HTMLInputElement>(".obnotion-search-input")?.value === scenario.searchText;
@@ -2202,8 +2207,8 @@ function toolbarAssertions(container: HTMLElement, scenario: ScenarioSpec): Asse
     pass: fallbacks.length === 3,
     detail: settingsBtn ? `fallback classes present: ${fallbacks.join(", ") || "none"}` : "no settings trigger",
   });
-  if (scenario.toolbarPopover === "utilities" || scenario.toolbarPopover === "add-view") {
-    const panel = container.querySelector(".obnotion-toolbar-utilities-popover, .obnotion-add-view-popover");
+  if (scenario.toolbarPopover === "utilities" || scenario.toolbarPopover === "add-view" || scenario.toolbarPopover === "group") {
+    const panel = container.querySelector(".obnotion-toolbar-utilities-popover, .obnotion-add-view-popover, .obnotion-group-popover");
     results.push({
       name: "an opened toolbar menu is built through the shared popover shell",
       pass: Boolean(panel?.classList.contains("obnotion-toolbar-popover")),
@@ -3270,6 +3275,8 @@ export function runRenderAssertions(
       // about the real trigger a right-click reaches, so this dispatches the same event type.
       const tab = container.querySelector<HTMLElement>(".obnotion-view-tab:not(.obnotion-view-tab-add)");
       tab?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true, cancelable: true }));
+    } else if (scenario.toolbarPopover === "group") {
+      (container.querySelector<HTMLButtonElement>(".obnotion-group-btn"))?.click();
     }
 
     results.push(provenanceResult(container, "toolbar-renderer"));

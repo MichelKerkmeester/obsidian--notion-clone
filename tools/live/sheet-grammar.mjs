@@ -89,6 +89,11 @@ const REPO = fileURLToPath(new URL("../..", import.meta.url));
 const REGISTERED_SURFACES = [
   { name: "sort-panel", spec: { renderer: "sort-panel", bag: "file-view", captureData: true } },
   { name: "filter-panel", spec: { renderer: "filter-panel", bag: "file-view", captureData: true } },
+  // The Group sheet: the third trigger beside filter and sort on the toolbar. It presents as a
+  // sheet through the same popover shell the other toolbar menus use, so its row here proves the
+  // panel a real press on the Group button opens, not a stand-in — the trigger option is the
+  // harness's own click on that button's handler.
+  { name: "group", spec: { renderer: "toolbar", bag: "file-view", captureData: true, toolbarPopover: "group" } },
   { name: "add-view", spec: { renderer: "toolbar", bag: "file-view", captureData: true, toolbarPopover: "add-view" } },
   { name: "record-detail", spec: { renderer: "record-detail", bag: "file-view", captureData: true } },
   // On a touch mount the peek hands off to the record sheet, so this row asserts the sheet a
@@ -1607,7 +1612,113 @@ window.__shellSettingsPlacementInkNegativeControl = (scenario, fontSizePx) => {
   fixedStyle.remove();
   return { broken, fixed };
 };
+// The panel sheets' reference row grammar — filter, sort and group, the three sheets the
+// toolbar's own trigger row opens. They present as one family, so they share the settings
+// sheet's row thresholds: every row inside the 44–52px window (which is the one-setting-per-line
+// clause — a wrapped condition measures two lines and breaks the ceiling), the sheet's one
+// horizontal inset on the panel, a section introducing its rows through a 1px divider on that
+// same inset, the plugin's own picker (no native select), and no sideways scroll — measured as
+// the extent, because the sheet's own 1px left border counts in scrollWidth but is not sideways
+// scroll. One surface mounts per runRenderAssertions call, so the target list resolves whichever
+// of the three this run actually mounted.
+const PANEL_SHEET_TARGETS = [
+  ["filter", ".obnotion-filter-panel.obnotion-mobile-bottom-sheet"],
+  ["sort", ".obnotion-sort-panel.obnotion-mobile-bottom-sheet"],
+  ["group", ".obnotion-group-popover.obnotion-mobile-bottom-sheet"],
+];
+const measurePanelSheetGrammar = () => {
+  const found = PANEL_SHEET_TARGETS.map(([name, sheetSelector]) => [name, document.querySelector(sheetSelector)]).find((entry) => entry[1]);
+  if (!found) return null;
+  const [name, sheet] = found;
+  const sheetStyle = window.getComputedStyle(sheet);
+  const rows = [];
+  for (const row of sheet.querySelectorAll(".obnotion-panel-row, .obnotion-group-popover-row")) {
+    if (row.classList.contains("obnotion-active-rule-editor-row")) continue; // the chip rail's compact editor is its own grammar
+    if (row.closest(".obnotion-add-view-form")) continue; // the Add view's zero-padding grid, the same documented exception the padded-rows predicate takes
+    const rowRect = row.getBoundingClientRect();
+    if (rowRect.height === 0) continue;
+    const label = row.querySelector(":scope > .obnotion-menu-item-label, :scope > .obnotion-view-config-label");
+    const control = row.querySelector(":scope > .obnotion-toggle-switch, :scope > input, :scope > .obnotion-menu-item-check");
+    const labelRect = label ? label.getBoundingClientRect() : null;
+    const controlRect = control ? control.getBoundingClientRect() : null;
+    rows.push({
+      height: Number(rowRect.height.toFixed(2)),
+      width: Number(rowRect.width.toFixed(2)),
+      // The reference pairs a row's control at its far edge: control right of the label's END,
+      // not merely of its start. Rows without both parties (a condition's controls, a bare
+      // picker) have no second party to this clause and skip it.
+      controlRightOfLabel: labelRect && controlRect ? controlRect.right >= labelRect.right - 2 : null,
+    });
+  }
+  const sectionTitles = Array.from(sheet.querySelectorAll(".obnotion-group-popover-section-title")).map((title) => {
+    const titleStyle = window.getComputedStyle(title);
+    return {
+      paddingLeft: Number.parseFloat(titleStyle.paddingLeft),
+      paddingRight: Number.parseFloat(titleStyle.paddingRight),
+      borderTopWidth: titleStyle.borderTopWidth,
+      borderTopColor: titleStyle.borderTopColor,
+    };
+  });
+  // When the sheet scrolls without any past-edge offender, the excess is a margin tail: the
+  // farthest margin edge from the scroll origin names the rule, because scrollWidth runs from
+  // that origin to the farthest scrolled margin edge.
+  let farthestChild = null;
+  for (const el of sheet.querySelectorAll("*")) {
+    const childStyle = window.getComputedStyle(el);
+    if (childStyle.display === "none" || childStyle.visibility === "hidden") continue;
+    const rect = el.getBoundingClientRect();
+    if (rect.width === 0) continue;
+    const reach = rect.right + (Number.parseFloat(childStyle.marginRight) || 0);
+    if (!farthestChild || reach > farthestChild.reach) {
+      farthestChild = {
+        reach: Number(reach.toFixed(2)),
+        width: Number(rect.width.toFixed(1)),
+        marginRight: Number((Number.parseFloat(childStyle.marginRight) || 0).toFixed(1)),
+        node: describeNode(el),
+      };
+    }
+  }
+  return {
+    name,
+    farthestChild,
+    panelPaddingLeft: Number.parseFloat(sheetStyle.paddingLeft),
+    panelPaddingRight: Number.parseFloat(sheetStyle.paddingRight),
+    rows,
+    sectionTitles,
+    selectCount: sheet.querySelectorAll("select").length,
+    sheetScrollWidth: sheet.scrollWidth,
+    // The sheet's own 1px left border is not sideways scroll; the extent is what compares.
+    sheetScrollExtent: sheet.scrollWidth - (Number.parseFloat(sheetStyle.borderLeftWidth) || 0),
+    sheetClientWidth: sheet.clientWidth,
+  };
+};
 
+window.__shellPanelSheetGrammar = (scenario) => {
+  let measured = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    measured = measurePanelSheetGrammar();
+  });
+  return measured;
+};
+
+// A control that has never been observed red is not evidence. The inset half of the grammar
+// reverted: the panel's own horizontal padding forced back to the shared 8px, so what goes red
+// is exactly the 16px inset clause — the same pattern the settings sheet's controls use.
+window.__shellPanelSheetGrammarControl = (scenario) => {
+  const style = document.createElement("style");
+  style.textContent = ".obnotion-filter-panel.obnotion-mobile-bottom-sheet, .obnotion-sort-panel.obnotion-mobile-bottom-sheet, .obnotion-group-popover.obnotion-mobile-bottom-sheet { padding-inline: 8px !important; }";
+  document.head.appendChild(style);
+  let broken = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    broken = measurePanelSheetGrammar();
+  });
+  style.remove();
+  let fixed = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    fixed = measurePanelSheetGrammar();
+  });
+  return { broken, fixed };
+};
 // The depth cap: a would-be third sheet stacked on a panel-role parent that is itself already two
 // deep. Real createSurfaceShell end to end -- the same call every panel-role DbModal subclass
 // makes -- rather than a hand-built stand-in of the mechanism it is proving.
@@ -2536,9 +2647,15 @@ const lengthenVaultText = (surface) => {
 };
 
 const measureOverflow = (surface) => {
-  const surfaceRight = surface.getBoundingClientRect().right;
-  const style0 = window.getComputedStyle(surface);
+  const surfaceRect = surface.getBoundingClientRect();
+  const surfaceStyle = window.getComputedStyle(surface);
+  const style0 = surfaceStyle;
+  const surfaceRight = surfaceRect.right;
   const past = [];
+  // The farthest margin edge, measured from the scroll origin (the padding box's left). Whatever
+  // owns the maximum owns the excess, because scrollWidth runs from that origin to the farthest
+  // scrolled margin edge: whichever descendant's distance equals scrollWidth IS the rule at fault.
+  let farthest = null;
   for (const el of surface.querySelectorAll("*")) {
     const style = window.getComputedStyle(el);
     if (style.display === "none" || style.visibility === "hidden") continue;
@@ -2547,19 +2664,40 @@ const measureOverflow = (surface) => {
     if (rect.right > surfaceRight + OVERFLOW_TOLERANCE) {
       past.push(describeNode(el) + " +" + (rect.right - surfaceRight).toFixed(1) + "px");
     }
+    const distanceFromOrigin = rect.right
+      + (Number.parseFloat(style.marginRight) || 0)
+      - (surfaceRect.left + (Number.parseFloat(window.getComputedStyle(surface).borderLeftWidth) || 0));
+    if (!farthest || distanceFromOrigin > farthest.distanceFromOrigin) {
+      farthest = {
+        distanceFromOrigin: Number(distanceFromOrigin.toFixed(2)),
+        width: Number(rect.width.toFixed(1)),
+        boxSizing: style.boxSizing,
+        marginRight: Number((Number.parseFloat(style.marginRight) || 0).toFixed(1)),
+        node: describeNode(el),
+      };
+    }
   }
+  const style = window.getComputedStyle(surface);
   return {
     node: describeNode(surface),
     scrollWidth: surface.scrollWidth,
     clientWidth: surface.clientWidth,
-    // scrollWidth counts the box's own left border; clientWidth does not — a bordered sheet
-    // measures 1px of sideways scroll it never scrolls. The extent is what the comparison reads.
+    // 006's extents: scrollWidth counts the box's own left border; clientWidth does not — a
+    // bordered sheet measures 1px of sideways scroll it never scrolls. The extent is what the
+    // comparison reads. The integers above round; a sub-pixel box (0.5px borders, fractional
+    // insets) hides between them, so the box's own width and border pair say which side of the
+    // rounding the 1px came from.
     scrollExtent: surface.scrollWidth - (Number.parseFloat(style0.borderLeftWidth) || 0),
-    // The integers above round; a sub-pixel box (0.5px borders, fractional insets) hides between
-    // them. The box's own width and border pair say which side of the rounding the 1px came from.
-    rectWidth: Number(surface.getBoundingClientRect().width.toFixed(2)),
+    rectWidth: Number(surfaceRect.width.toFixed(2)),
     borderLeftWidth: style0.borderLeftWidth,
     borderRightWidth: style0.borderRightWidth,
+    // 005's farthest-margin-edge diagnosis: whichever descendant's distance equals scrollWidth IS
+    // the rule at fault, so the failure names it (and its box, borders, paddings, scrollLeft).
+    boxWidth: Number(surfaceRect.width.toFixed(2)),
+    borders: [style.borderLeftWidth, style.borderRightWidth].join("/"),
+    paddings: [style.paddingLeft, style.paddingRight].join("/"),
+    scrollLeft: surface.scrollLeft,
+    widestChild: farthest,
     past: past.slice(0, 3),
     pastCount: past.length,
   };
@@ -2683,8 +2821,8 @@ const reportSweep = (engineName, label, report) => {
   }
   for (const surface of report.surfaces) {
     const scrolls = surface.scrollExtent > surface.clientWidth;
-    if (scrolls) failures.push(`overflow sweep ${engineName} ${label}: ${surface.node} scrolls horizontally (extent ${surface.scrollExtent} > clientWidth ${surface.clientWidth})`);
-    console.log(`  ${scrolls ? "FAIL" : "PASS"}  ${engineName} ${label} — ${surface.node} extent ${surface.scrollExtent} ≤ clientWidth ${surface.clientWidth} (box ${surface.rectWidth}px, borders ${surface.borderLeftWidth}/${surface.borderRightWidth}${surface.pastCount ? `, past: ${surface.past.join("; ")}` : ""})`);
+    if (scrolls) failures.push(`overflow sweep ${engineName} ${label}: ${surface.node} scrolls horizontally (extent ${surface.scrollExtent} > clientWidth ${surface.clientWidth}${surface.widestChild ? ` — farthest margin edge ${surface.widestChild.distanceFromOrigin}px from the scroll origin: ${surface.widestChild.node} (box ${surface.boxWidth}px, borders ${surface.borders}, paddings ${surface.paddings}, scrollLeft ${surface.scrollLeft})` : ""})`);
+    console.log(`  ${scrolls ? "FAIL" : "PASS"}  ${engineName} ${label} — ${surface.node} extent ${surface.scrollExtent} ≤ clientWidth ${surface.clientWidth} (scrollWidth ${surface.scrollWidth}, box ${surface.rectWidth}px, borders ${surface.borderLeftWidth}/${surface.borderRightWidth}${surface.pastCount ? `, past: ${surface.past.join("; ")}` : ""})`);
     const clean = surface.pastCount === 0;
     if (!clean) failures.push(`overflow sweep ${engineName} ${label}: ${surface.pastCount} descendant(s) past ${surface.node}'s right edge (${surface.past.join(", ")})`);
     console.log(`  ${clean ? "PASS" : "FAIL"}  ${engineName} ${label} — nothing past ${surface.node}'s right edge${clean ? "" : `: ${surface.past.join(", ")}`}`);
@@ -3678,6 +3816,85 @@ try {
     console.log(`  ${pitchFixed && insetFixed ? "PASS" : "FAIL"}  removing the override restores the grammar (pitch ok: ${pitchFixed}, inset back to ${SETTINGS_SHEET_INSET_PX}px: ${insetFixed})`);
   }
   console.log("");
+  // The panel sheets' reference row grammar. Thresholds, not echoes: 44–52px pitch, one 16px
+  // inset, 1px divider, no native select, no sideways scroll. Every clause prints what it
+  // measured so the gap between red and green is a number, never a shrug.
+  console.log("sheet-grammar: panel sheets row grammar — filter / sort / group: rows 44–52px, one 16px inset, 1px divider, plugin's own picker, no sideways scroll\n");
+  const PANEL_ROW_PITCH_MIN_PX = 44;
+  const PANEL_ROW_PITCH_MAX_PX = 52;
+  const PANEL_SHEET_INSET_PX = 16;
+  const groupSpec = REGISTERED_SURFACES.find((s) => s.name === "group");
+  if (!groupSpec) {
+    failures.push("panel sheets row grammar: the group surface is not in the registry");
+    console.log("  FAIL  panel sheets row grammar — the group surface is not in the registry");
+  }
+  for (const [surfaceName, scenario] of [
+    ["filter-panel", REGISTERED_SURFACES.find((s) => s.name === "filter-panel")?.spec],
+    ["sort-panel", REGISTERED_SURFACES.find((s) => s.name === "sort-panel")?.spec],
+    ["group", groupSpec?.spec],
+  ]) {
+    if (!scenario) continue;
+    const measured = await page.evaluate((spec) => window.__shellPanelSheetGrammar(spec), scenario);
+    if (!measured) {
+      failures.push(`panel sheets row grammar (${surfaceName}): the surface did not mount as a sheet`);
+      console.log(`  FAIL  ${surfaceName} — did not mount as a sheet`);
+      continue;
+    }
+    if (measured.rows.length === 0) {
+      failures.push(`panel sheets row grammar (${surfaceName}): no rows mounted to measure`);
+      console.log(`  FAIL  ${surfaceName} — no rows mounted to measure`);
+      continue;
+    }
+    const offPitch = measured.rows.filter((row) => row.height < PANEL_ROW_PITCH_MIN_PX || row.height > PANEL_ROW_PITCH_MAX_PX);
+    if (offPitch.length > 0) failures.push(`panel sheets row grammar (${surfaceName}): ${offPitch.length}/${measured.rows.length} rows outside the 44–52px window (worst ${Math.min(...measured.rows.map((r) => r.height)).toFixed(1)}–${Math.max(...measured.rows.map((r) => r.height)).toFixed(1)}px)`);
+    console.log(`  ${offPitch.length === 0 ? "PASS" : "FAIL"}  ${surfaceName} — ${measured.rows.length - offPitch.length}/${measured.rows.length} rows inside 44–52px (heights ${measured.rows.map((r) => r.height).join(", ")})`);
+    const insetOff = [measured.panelPaddingLeft, measured.panelPaddingRight].filter((value) => Math.abs(value - PANEL_SHEET_INSET_PX) > FRAME_GEOMETRY_TOLERANCE_PX);
+    if (insetOff.length > 0) failures.push(`panel sheets row grammar (${surfaceName}): panel insets ${measured.panelPaddingLeft}/${measured.panelPaddingRight}px, wanted ${PANEL_SHEET_INSET_PX}px`);
+    console.log(`  ${insetOff.length === 0 ? "PASS" : "FAIL"}  ${surfaceName} — panel padding ${measured.panelPaddingLeft}px/${measured.panelPaddingRight}px (want ${PANEL_SHEET_INSET_PX}px)`);
+    const rowWidths = measured.rows.map((row) => row.width);
+    const widest = Math.max(...rowWidths);
+    const narrowest = Math.min(...rowWidths);
+    const spread = Number((widest - narrowest).toFixed(2));
+    if (spread > 2 * FRAME_GEOMETRY_TOLERANCE_PX) failures.push(`panel sheets row grammar (${surfaceName}): row widths span ${narrowest}–${widest}px (${spread}px) — rows do not share one inset-to-inset span`);
+    console.log(`  ${spread <= 2 * FRAME_GEOMETRY_TOLERANCE_PX ? "PASS" : "FAIL"}  ${surfaceName} — one inset-to-inset row span (widest ${widest}px, narrowest ${narrowest}px)`);
+    const labelRows = measured.rows.filter((row) => row.controlRightOfLabel !== null);
+    const mispair = labelRows.filter((row) => !row.controlRightOfLabel);
+    if (labelRows.length > 0 && mispair.length > 0) failures.push(`panel sheets row grammar (${surfaceName}): ${mispair.length}/${labelRows.length} label+control rows have the control left of its label`);
+    if (labelRows.length > 0) console.log(`  ${mispair.length === 0 ? "PASS" : "FAIL"}  ${surfaceName} — ${labelRows.length - mispair.length}/${labelRows.length} label+control rows pair control right of label`);
+    if (measured.selectCount > 0) failures.push(`panel sheets row grammar (${surfaceName}): ${measured.selectCount} native select(s) on the sheet`);
+    console.log(`  ${measured.selectCount === 0 ? "PASS" : "FAIL"}  ${surfaceName} — native selects: ${measured.selectCount} (want 0; the picker is the plugin's own)`);
+    if (measured.sectionTitles.length > 0) {
+      const insetWanted = PANEL_SHEET_INSET_PX;
+      const headOff = measured.sectionTitles.filter((title) => Math.abs(title.paddingLeft - insetWanted) > FRAME_GEOMETRY_TOLERANCE_PX || Math.abs(title.paddingRight - insetWanted) > FRAME_GEOMETRY_TOLERANCE_PX);
+      if (headOff.length > 0) failures.push(`panel sheets row grammar (${surfaceName}): ${headOff.length}/${measured.sectionTitles.length} section headings off the ${insetWanted}px inset (${measured.sectionTitles.map((t) => `${t.paddingLeft}/${t.paddingRight}`).join(", ")})`);
+      const dividers = measured.sectionTitles.map((title) => title.borderTopWidth);
+      const dividerOk = dividers.every((width, index) => (index === 0 ? Number.parseFloat(width) === 0 : Number.parseFloat(width) === 1));
+      if (!dividerOk) failures.push(`panel sheets row grammar (${surfaceName}): heading dividers ${dividers.join(", ")}px do not follow the first-0px/later-1px rule`);
+      const tokenless = measured.sectionTitles.filter((title) => title.borderTopWidth === "1px" && title.borderTopColor === "rgba(0, 0, 0, 0)");
+      if (tokenless.length > 0) failures.push(`panel sheets row grammar (${surfaceName}): ${tokenless.length} divider(s) compute to the transparent initial — the divider token resolved to nothing`);
+      console.log(`  ${headOff.length === 0 ? "PASS" : "FAIL"}  ${surfaceName} — ${measured.sectionTitles.length} section heading(s) on the ${insetWanted}px inset (${measured.sectionTitles.map((t) => `${t.paddingLeft}/${t.paddingRight}`).join(", ")})`);
+      console.log(`  ${dividerOk && tokenless.length === 0 ? "PASS" : "FAIL"}  ${surfaceName} — heading dividers ${dividers.join(", ") + "px"} (first 0px, later 1px, painted)`);
+    }
+    const noOverflow = measured.sheetScrollExtent <= measured.sheetClientWidth + FRAME_GEOMETRY_TOLERANCE_PX;
+    if (!noOverflow) failures.push(`panel sheets row grammar (${surfaceName}): sheet extent ${measured.sheetScrollExtent} exceeds clientWidth ${measured.sheetClientWidth}${measured.farthestChild ? ` — farthest margin edge ${measured.farthestChild.reach}px: ${measured.farthestChild.node} (${measured.farthestChild.width}px, margin-right ${measured.farthestChild.marginRight}px)` : ""}`);
+    console.log(`  ${noOverflow ? "PASS" : "FAIL"}  ${surfaceName} — extent ${measured.sheetScrollExtent} == clientWidth ${measured.sheetClientWidth} (scrollWidth ${measured.sheetScrollWidth} minus the sheet's 1px left border)`);
+    console.log("");
+  }
+
+  // A control that has never been observed red is not evidence: the inset clause reverted.
+  const panelControl = await page.evaluate((spec) => window.__shellPanelSheetGrammarControl(spec), groupSpec?.spec);
+  if (!panelControl || !panelControl.broken || !panelControl.fixed) {
+    failures.push("panel sheets row grammar negative control: the surface did not mount to measure");
+    console.log("  FAIL  panel sheets row grammar negative control — the surface did not mount");
+  } else {
+    const wentRed = Math.abs(panelControl.broken.panelPaddingLeft - PANEL_SHEET_INSET_PX) > FRAME_GEOMETRY_TOLERANCE_PX;
+    const cleanAfter = Math.abs(panelControl.fixed.panelPaddingLeft - PANEL_SHEET_INSET_PX) <= FRAME_GEOMETRY_TOLERANCE_PX;
+    if (!wentRed) failures.push(`panel sheets row grammar negative control: reverting the inset did not move the measured padding (${panelControl.broken.panelPaddingLeft}px)`);
+    if (!cleanAfter) failures.push(`panel sheets row grammar negative control: removing the override did not restore the inset (${panelControl.fixed.panelPaddingLeft}px)`);
+    console.log(`  ${panelControl.broken.panelPaddingLeft !== PANEL_SHEET_INSET_PX ? "PASS" : "FAIL"}  reverting the inset rule moves the measured panel padding (${panelControl.broken.panelPaddingLeft}px)`);
+    console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  restoring it returns the inset (${panelControl.fixed.panelPaddingLeft}px)`);
+    console.log("");
+  }
 
   console.log("sheet-grammar: depth cap — a third sheet on a panel-role parent replaces instead of stacking\n");
   const depthCapReplace = await page.evaluate(() => window.__shellDepthCapReplace());

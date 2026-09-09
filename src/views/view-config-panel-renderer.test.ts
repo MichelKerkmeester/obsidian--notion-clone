@@ -364,11 +364,13 @@ describe("settings sheet body grammar", () => {
     // `rows` is not asked here for the same reason noted above; `.obnotion-panel-row`'s absence is
     // already asserted two lines up, which is the structural half this tree can answer.
     const report = describeSheetGrammar(panel as unknown as HTMLElement);
-    // With the native radios gone the predicate's only remaining miss on this panel is the
-    // desktop switch, which deliberately keeps its own class on desktop (the phone's shared
-    // -checkbox toggle is the other arm of that ternary); the desktop panel is not a registered
-    // grammar surface, so the column stays what it was — one raw input short of the family.
-    expect(report.segmented).toBe(false);
+    // With the native radios gone, the predicate now recognizes the shared `obnotion-toggle-switch`
+    // class as a conforming choice control alongside `obnotion-checkbox` — the group sheet's own
+    // toggle rows carry that class rather than the checkbox one, and a predicate that rejected it
+    // would fail the one surface that actually has switches instead of measuring its vocabulary.
+    // The desktop switch here carries the same class, so it no longer disqualifies the panel; the
+    // desktop panel is still not a registered grammar surface, so nothing live reads this verdict.
+    expect(report.segmented).toBe(true);
   });
 
   it("on desktop, presents as the side sheet rather than the anchored dropdown", () => {

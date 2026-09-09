@@ -23,13 +23,18 @@ contextType: "general"
 
 | Aspect | Value |
 |--------|-------|
-| **Language/Stack** | [e.g., TypeScript, Python 3.11] |
-| **Framework** | [e.g., React, FastAPI] |
-| **Storage** | [e.g., PostgreSQL, None] |
-| **Testing** | [e.g., Jest, pytest] |
+| **Language/Stack** | TypeScript (plugin source), CSS (`styles.css`, one file, lane-guarded) |
+| **Framework** | Obsidian plugin API; the project's own toolbar/sheet primitives (`toolbar-primitives.ts`, `mobile-bottom-sheet.ts`) |
+| **Storage** | None — this phase touches presentation only |
+| **Testing** | vitest (unit/structural), Playwright-core (Chrome + WebKit, live DOM measurement) via `tools/live/*.mjs` |
 
 ### Overview
-[2-3 sentences: what this implements and the technical approach]
+Filter, sort and group already share one Notion-style row grammar (44-52px pitch, 16px inset,
+single inset-to-inset span, plugin-native pickers). Filter and sort measured green on arrival; the
+group popover's own overflow sweep and heading-divider clause were red. Both traced to shared
+mechanics the group popover alone exercises in this fixture (a scrollbar the popover's tall content
+triggers, and a `:first-of-type` selector matched against the wrong DOM census) rather than to
+group-specific markup, so both fixes stay at the mechanism rather than special-casing one surface.
 <!-- /ANCHOR:summary -->
 
 ---
@@ -38,14 +43,14 @@ contextType: "general"
 ## 2. QUALITY GATES
 
 ### Definition of Ready
-- [ ] Problem statement clear and scope documented
-- [ ] Success criteria measurable
-- [ ] Dependencies identified
+- [x] Problem statement clear and scope documented (`spec.md` §2-3, §4b gap table)
+- [x] Success criteria measurable (`acceptance-criteria.md`, `sheet-grammar.mjs`'s panel-row-grammar and overflow-sweep clauses)
+- [x] Dependencies identified (Phase 1's reference mapping, already cited in the gap table)
 
 ### Definition of Done
-- [ ] All acceptance criteria met
-- [ ] Tests passing (if applicable)
-- [ ] Docs updated (spec/plan/tasks)
+- [x] All acceptance criteria met (`acceptance-criteria.md`)
+- [x] Tests passing (`npx vitest run` 1727/1727; `tools/live/sheet-grammar.mjs`, `sheet-rebuild.mjs`, `render-assertions.mjs`, `touch-targets.mjs`, `verify-placement.mjs` all green; `npm run gate` 27/27)
+- [x] Docs updated (spec/plan/tasks/acceptance-criteria/decision-record/implementation-summary, parent `handover.md`)
 <!-- /ANCHOR:quality-gates -->
 
 ---
@@ -54,14 +59,21 @@ contextType: "general"
 ## 3. ARCHITECTURE
 
 ### Pattern
-[MVC | MVVM | Clean Architecture | Serverless | Monolith | Other]
+Presentation-layer fix inside an existing renderer/stylesheet architecture — no new component, no
+new data flow. The three sheets' producers (`filter-panel-renderer.ts`, `sort-panel-renderer.ts`,
+`toolbar-renderer.ts`'s `renderGroupPopover`) already build the DOM this phase's CSS targets.
 
 ### Key Components
-- **[Component 1]**: [Purpose]
-- **[Component 2]**: [Purpose]
+- **`styles.css` family rules** (filter/sort/group `.obnotion-mobile-bottom-sheet` selectors): own the row pitch, inset, divider and now the scrollbar-hiding and sibling-combinator divider fix.
+- **`mobile-bottom-sheet.ts`**: owns the shared drag-handle chrome (`applySheetChrome`, `createSheetHandle`) whose `::before` band assumes a scrollbar-free content box — untouched by this phase, cited in `decision-record.md` ADR-001 as the seam the fix respects rather than edits.
+- **`tools/live/sheet-grammar.mjs`**: the live measurement gate this phase's fixes were driven by (panel-row-grammar clauses, the all-sheets overflow sweep).
+- **`tools/storybook/sheet-inventory.mjs`**: the coverage inventory generator, given a curated producer for the `group` registry row this phase's gap table already named.
 
 ### Data Flow
-[Brief description of how data moves through the system]
+No data flow change. A phone renders the same sheet DOM; the stylesheet now hides the desktop-style
+scrollbar on these three sheets (so the shared drag handle centres correctly whether or not the
+sheet's content needs to scroll) and divides the group popover's sections by sibling position in its
+own title list rather than by DOM-wide tag position.
 <!-- /ANCHOR:architecture -->
 
 ---

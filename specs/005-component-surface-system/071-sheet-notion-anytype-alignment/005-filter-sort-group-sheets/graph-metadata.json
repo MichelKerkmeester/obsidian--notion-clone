@@ -46,7 +46,19 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "implementation-summary.md"
+      "decision-record.md",
+      "implementation-summary.md",
+      "tools/live/sheet-grammar.mjs",
+      "tools/storybook/sheet-inventory.mjs",
+      "tools/storybook/sheet-inventory.test.mjs",
+      "src/views/view-config-panel-renderer.test.ts",
+      "tools/lane/css-lane.json",
+      "screenshots/manifest.json",
+      "tools/lane/README.md",
+      "tools/live/engine-parity.json",
+      "src/views/toolbar-renderer.ts",
+      "tools/screenshots/pixel-hash.mjs",
+      "tools/live/sheet-rebuild.mjs"
     ],
     "entities": [
       {
@@ -80,9 +92,81 @@
         "source": "derived"
       },
       {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-inventory.mjs",
+        "kind": "file",
+        "path": "tools/storybook/sheet-inventory.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-inventory.test.mjs",
+        "kind": "file",
+        "path": "tools/storybook/sheet-inventory.test.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "view-config-panel-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/view-config-panel-renderer.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
+        "kind": "doc",
+        "path": "tools/lane/README.md",
+        "source": "derived"
+      },
+      {
+        "name": "engine-parity.json",
+        "kind": "config",
+        "path": "tools/live/engine-parity.json",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "pixel-hash.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/pixel-hash.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-rebuild.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-rebuild.mjs",
         "source": "derived"
       },
       {
@@ -120,83 +204,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Clean Architecture",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Key Components",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Data Flow",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Current Role",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The filter, sort and group sheets have a history of freezing on add/close (roadmap §4 rows 21-23, fixed in 85ff504) and have not been redesigned against a single reference since",
     "created_at": "2026-09-08T06:24:05Z",
-    "last_save_at": "2026-09-08T06:50:06.378Z",
+    "last_save_at": "2026-09-09T01:54:06.953Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -205,15 +217,17 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:ac35ec53d795385ce7932eafcc3b9573507f448ac0a380618817f24a09092b6c",
+    "source_fingerprint": "sha256:9a4e02f43c4fac420796cc46fa13e5f25532e568781ddadfc8ba51ca7eefc3d4",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "9ec9ef9168bfd49d4b6f45e085c2c751675a21148eea22fc3765f19506014a7f",
-      "plan.md": "8305971ca1838a62ddac688fc39b892af300e7de90107c480b30d00c7af9040e",
-      "tasks.md": "45611ce52f398833afa7beb8205445a42bbbb561166ff6644b5b5ea14da7eb4f",
-      "implementation-summary.md": "7201f8f4f39cc26202cd97d18d189f7f22ebf940c67e0f2aae88a2bf57cc95bf"
+      "spec.md": "6cc31d0621ac2d970907e50c9365d1da787b44911733a9c7384f694198272e4a",
+      "plan.md": "d79a70427031e3f2cdf55493e45290b19d111a53e9b2872138b316a81d38961c",
+      "tasks.md": "f85a5476438ed9b5c3d65a311ab908e91fa7f3cdc32e920fc1de3a033b82bb8d",
+      "decision-record.md": "10a5261377341883474dc5766c1f78a1c5c268a081cde84d793cc3e425142d8b",
+      "implementation-summary.md": "256aad22fedebca141e8e88dd868e354441e4a826b1b19e8b60a52c57d4a88a5"
     },
     "last_active_at": null
   }

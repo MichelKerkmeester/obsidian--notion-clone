@@ -17,8 +17,8 @@ contextType: "implementation"
 
 **Packet:** 071-sheet-notion-anytype-alignment/005-filter-sort-group-sheets
 **Level:** 3
-**Status:** Draft
-**Date:** 2026-09-08
+**Status:** Implemented
+**Date:** 2026-09-09
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -28,9 +28,9 @@ contextType: "implementation"
 
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
-| AC-001 | REQ-001 | Given Phase 1's inventory, When this phase starts, Then it cites the exact reference mapping rows for filter, sort and group sheets | `plan.md`, quoting the Phase 1 rows | Unmet | - |
-| AC-002 | REQ-002 | Given the redesigned sheets, When captured against their reference, Then layout is measured as converged | Before/after capture | Unmet | - |
-| AC-003 | REQ-003 | Given the redesign, When the freeze-regression check from `85ff504` is rerun, Then it still passes | Regression check, command output | Unmet | - |
+| AC-001 | REQ-001 | Given Phase 1's inventory, When this phase starts, Then it cites the exact reference mapping rows for filter, sort and group sheets | `spec.md:120` onward (filter-panel row 45, sort-panel row 44, group panel row 133 of `001/inventory.md`) | Met | - |
+| AC-002 | REQ-002 | Given the redesigned sheets, When captured against their reference, Then layout is measured as converged | `tools/live/sheet-grammar.mjs:3294` (panel sheets row grammar: rows 44-52px, one 16px inset, one inset-to-inset span, 0 native selects, first-of-type 0px / later 1px painted dividers, no sideways scroll — all PASS for filter, sort and group) | Met | - |
+| AC-003 | REQ-003 | Given the redesign, When the freeze-regression check from `85ff504` is rerun, Then it still passes | `tools/live/sheet-rebuild.mjs:978` (PASS — every rebuilt sheet still has the bar it opened with) | Met | - |
 
 ### Status values
 
@@ -47,7 +47,9 @@ contextType: "implementation"
 <!-- ANCHOR:closure -->
 ## 3. CLOSURE STATEMENT
 
-**Closeable:** No
+**Closeable:** Yes, pending the operator's own device recheck
 
-Not yet started.
+All three criteria are Met by evidence gathered from this worktree's own verification chain (see
+`tasks.md` §Phase 3 and `decision-record.md` ADR-001). Per the parent packet's D3 decision, only the
+operator's own device recheck may close a device-level row; nothing here substitutes for that.
 <!-- /ANCHOR:closure -->

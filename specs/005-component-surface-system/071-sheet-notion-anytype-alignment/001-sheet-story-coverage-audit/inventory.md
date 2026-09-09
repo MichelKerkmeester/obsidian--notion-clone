@@ -43,6 +43,7 @@ Counts are asserted in a test; regenerate rows with `node tools/storybook/sheet-
 | Add-property / property-type picker sheet (CreatePropertyModal, with the absorbed type-picker dropdown) | src/views/database-view.ts:808 | modal → sheet (replace-in-place panel; the type-picker dropdown never becomes a third sheet) | no (untracked — the grammar's replace-in-place shape is exercised by the properties pair rows, not a story) | constructed-depth3-property-type-picker; constructed-depth3-property-type-picker-replaced | notion/ios/database (15: notion-ios-database-properties-01-8bb9115f-e0da-4e01-bd9d-2b627a4b6727.webp, notion-ios-database-properties-02-63512550-9381-42d2-839e-528e416275da.webp +13) / anytype/desktop/app (3: anytype-filter-property-picker-dark.png, anytype-newobject-type-picker-dark.png +1); anytype/mobile/app (4: anytype-mobile-space-typeslist-dark.png, anytype-mobile-space-typeslist-light.png +2) | Notion iOS opens the type picker as a second surface after the name step; our landed shape is replace-in-place — the type-picker dropdown is absorbed into the create panel, never a third sheet. Anytype keeps a modal type grid. Ours is deliberately shallower than both; no pixel reference covers the absorbed shape. |
 | sort-panel (registered) | src/views/database-view.ts:5211 | sheet | no (untracked — not one of the 40 renderable modules; covered by captures, not stories) | panel-sort-calendar-empty; panel-sort-rules | notion/ios/database (10: notion-ios-database-sort-01-84653307-d85f-4766-991d-f060f6cfe1ac.webp, notion-ios-database-sort-02-21c3130a-93ae-4e6f-ba00-a4e67aef5afd.webp +8); notion/ios/states (1: notion-ios-states-group-by-12-dddf6bca-8a57-4ca8-9878-5a1d4329af52.webp) / anytype/desktop/app (1: anytype-view-settings-panel-dark.png) | Anytype exposes sort inside its view-settings panel; ours is a dedicated floating sheet. The calendar-hint variant (empty-date column guidance) has no reference either side. |
 | filter-panel (registered) | src/views/database-view.ts:5183 | sheet | no (untracked — not one of the 40 renderable modules; covered by captures, not stories) | panel-filter-conditions; panel-filter-nested-group | notion/ios/menus (1: notion-ios-menus-filters-15-aeb6d373-0c84-4b69-a591-029ea8938b83.webp); notion/ios/database (9: notion-ios-database-filters-01-1d5d6adc-4e6f-41d9-9831-245a420d790b.webp, notion-ios-database-filters-02-890dd17e-5553-47fb-9637-c8bc43392e2a.webp +7) / anytype/desktop/app (1: anytype-filter-property-picker-dark.png) | Anytype's filter property and tag-value pickers are their own reference captures; our equivalents are stacked listbox children of the panel, not separately captured references. |
+| group (registered) | src/views/toolbar-renderer.ts:1758 | sheet | no (untracked — not one of the 40 renderable modules; covered by captures, not stories) | add-view-popover; chrome-toolbar; chrome-toolbar-search; chrome-utilities-popover; +5 more | none / none | none at filename level — no reference family maps to this surface; our own captures are the only alignment evidence. |
 | add-view (registered) | src/views/toolbar-renderer.ts:207 | sheet on phone (one of the four dropdown families the grammar presents as sheets) | no (untracked — not one of the 40 renderable modules; covered by captures, not stories) | add-view-popover; constructed-toolbar-add-view | none / none | none at filename level — no reference family maps to this surface; our own captures are the only alignment evidence. |
 | record-detail (registered) | src/views/record-detail-panel.ts:172 | sheet | no (untracked — not one of the 40 renderable modules; covered by captures, not stories) | panel-record-detail; panel-record-detail-sheet-body-editing; panel-record-detail-sheet-body-empty; panel-record-detail-sheet; +2 more | notion/ios/database (18: notion-ios-database-properties-01-8bb9115f-e0da-4e01-bd9d-2b627a4b6727.webp, notion-ios-database-properties-02-63512550-9381-42d2-839e-528e416275da.webp +16) / anytype/mobile/sheets (14: anytype-mobile-sheet-cell-date-dark.png, anytype-mobile-sheet-cell-date-light.png +12) | Anytype's mobile cell sheets (date, number, multiselect, assignee) are the closest reference family for per-property editing inside a record surface; ours edits in place within one sheet. The docked placement variant has no reference either side. |
 | record-peek (registered) | src/views/table-record-peek.ts:161 | sheet | allowlisted | panel-record-peek | notion/ios/database (3: notion-ios-database-row-page-03-0cb59457-00da-4154-b7c0-5bb2a4831ba2.webp, notion-ios-database-row-page-04-16ddd22c-d559-4bd7-ab48-9557843441f9.webp +1) / none | No reference shows a peek-to-sheet handoff; on touch we mount the record sheet, so the row's grammar asserts the sheet a phone actually gets. |
@@ -137,15 +138,15 @@ The stacked mounts share their capture evidence — the depth-3 and stacked cons
 <!-- ANCHOR:summary -->
 | Count | Value |
 |-------|-------|
-| Total surfaces (primary + stacked) | 86 |
-| Primary | 54 |
+| Total surfaces (primary + stacked) | 87 |
+| Primary | 55 |
 | Stacked children | 32 |
-| Grammar registries (registered / overflow-only / stacked pairs) | 17 / 11 / 32 |
+| Grammar registries (registered / overflow-only / stacked pairs) | 18 / 11 / 32 |
 | Coverage gate: renderable = stories + exempt | 40 = 19 + 21 |
 | Rows with stories | 6 |
 | Rows allowlisted (exempt with a written reason) | 5 |
-| Rows with a manifest capture | 68 |
+| Rows with a manifest capture | 69 |
 | Rows with a Notion reference | 22 |
 | Rows with an Anytype reference | 33 |
-| Rows with no reference at all | 46 |
+| Rows with no reference at all | 47 |
 <!-- /ANCHOR:summary -->

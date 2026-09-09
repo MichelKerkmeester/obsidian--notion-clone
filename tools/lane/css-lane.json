@@ -1,7 +1,7 @@
 {
-  "holder": "006-record-and-menu-sheets",
-  "acquiredAt": "2026-09-08T23:55:53Z",
-  "baselineHash": "8123dd3b4e9e",
+  "holder": "005-filter-sort-group-sheets",
+  "acquiredAt": "2026-09-09T01:26:53.345Z",
+  "baselineHash": "55cb284b3244",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -5997,6 +5997,73 @@
         "screenshots/notion-clone/views/timeline-view-year-desktop-dark.png"
       ],
       "note": "Screenshots x2 (npm run screenshots, 616 entries, exit 0 both). Judged by decoded pixel delta against the replayed leg's committed blobs across the two sampled runs, no images opened by eye: 12 content movers, every one moved in BOTH sampled runs, so kept, deterministically - and where they overlap this leg's own release record they reproduce its counts exactly (chrome-owned-menu-sheet-mobile-dark 2702@max5, constructed-active-rule-filter-mobile-light 11897@17, constructed-calendar-toolbar-options-mobile-light 6376@15, table-mobile-desktop-light 316@32, the 002/004-era captures whose one-run variance is now two-run stable against the merged stylesheet), while the panel-record-detail-sheet-body-empty foursome moved 1494-6971px at max channel delta 1-2, constructed-toolbar-add-view-mobile-dark 159@176 and timeline-view-year-desktop-dark 483@12 and the calendar-empty-state pair 5/12px@1. Plus board-view-desktop-dark 4px@max1, moved only in the second sampled run - the lane's recurring rasteriser instability 073/002/003/004 all recorded - judged jitter by the rule (max channel delta <= 12, one run only) and restored at its committed bytes; the manifest's row kept its committed bytes and pixelHash, only its sourceHashes.styles.css stamp needed the merged 8123dd3b4e9e, and screenshots:verify reads 616 entries matching their sources, none blank, none identical across themes. 1 restore, 12 keeps, 0 threshold edits. Evidence re-derived against 8123dd3b4e9e: the 13 artefacts the freshness check named refreshed by their own writers (render-assertions.mjs exit 0; engine-parity 82 fixtures / 43 differences, exit 1 INFORMATIONAL by design at >0), evidence --check-all 15/15 fresh. This leg reviews by measurement (headless); the visual read stays the operator device pass."
+    },
+    {
+      "event": "acquire",
+      "phase": "005-filter-sort-group-sheets",
+      "at": "2026-09-09T01:26:53.345Z",
+      "hash": "42b9b9fafd8c",
+      "note": "Two prior GLM runs edited styles.css directly for this phase's filter/sort/group work without going through the lane first; this acquire records the baseline those edits actually started from (072's own released hash) so the takeover is visible rather than silently around it."
+    },
+    {
+      "event": "edit",
+      "phase": "005-filter-sort-group-sheets",
+      "at": "2026-09-09T01:26:53.345Z",
+      "hash": "290906e0c978",
+      "note": "styles.css: filter/sort row-grammar fixes from the two GLM runs, plus this phase's own root-cause fix -- hides the desktop-style ::-webkit-scrollbar on the family's three sheets (filter, sort, group) so the drag handle's ::before band centres on the same box it assumes regardless of whether the sheet needs to scroll."
+    },
+    {
+      "event": "release",
+      "phase": "005-filter-sort-group-sheets",
+      "at": "2026-09-09T01:27:10.594Z",
+      "hash": "290906e0c978",
+      "reviewed": [
+        "screenshots/notion-clone/components/constructed-active-rule-filter-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-active-rule-filter-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-active-rule-sort-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-active-rule-sort-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-depth3-import-confirm-dropdown-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-depth3-import-confirm-dropdown-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-nested-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-nested-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-calendar-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-calendar-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-mobile-light.png"
+      ],
+      "note": "Captured twice (npm run screenshots, 616 entries, exit 0 both) and judged by decoded pixel delta against the committed blobs. 14 content-changed captures named above: each is one of the three families' own panel or its stacked active-rule/import-confirm child, and the delta on every one is the desktop-style scrollbar thumb disappearing from the sheet's right edge (maxChannelDelta 176-209, tens of thousands of pixels, identical across both passes -- a real, reproducible move, not jitter). A third capture pass reproduced the identical 14-file set with no additional mover. board-view-desktop-dark moved bytes only (encoder noise, pixelHash and layoutHash both unchanged from the committed blob) and was restored via git checkout; its manifest bytes field was corrected to match. No capture in this family's reference or competitor roots moved."
+    },
+    {
+      "event": "edit",
+      "phase": "005-filter-sort-group-sheets",
+      "at": "2026-09-09T01:46:49.667Z",
+      "hash": "038a961610dd",
+      "note": "styles.css: replaced the group popover's :first-of-type divider suppression (desktop and phone-scoped .obnotion-group-popover-section-title rules) with a sibling-combinator rule -- :first-of-type matches the first sibling of a TAG, and the popover's own header <div> (buildShellHeader) draws before any section title, so the exception never fired and every section painted the divider meant to open only the ones after the first. No pixel content changed: this fixture only ever renders one section title, so its own divider goes from wrongly-painted-1px to correctly-suppressed-0px, which the row-grammar lane measures directly rather than through a screenshot."
+    },
+    {
+      "event": "release",
+      "phase": "005-filter-sort-group-sheets",
+      "at": "2026-09-09T01:46:49.667Z",
+      "hash": "038a961610dd",
+      "reviewed": [
+        "screenshots/notion-clone/components/constructed-active-rule-filter-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-active-rule-filter-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-active-rule-sort-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-active-rule-sort-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-depth3-import-confirm-dropdown-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-depth3-import-confirm-dropdown-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-nested-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-nested-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-calendar-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-calendar-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-mobile-light.png"
+      ],
+      "note": "Re-captured twice more (npm run screenshots, 616 entries, exit 0 both) after the divider fix. The same 14 captures from the prior release are the only content movers, reproduced identically across both passes -- the divider fix changes no screenshot fixture's rendered pixels (no capture opens the group popover with two or more sections), and is proven instead by tools/live/sheet-grammar.mjs's own heading-divider clause, which went red on the actual bug (wired via a previously-unused dividerOk check) and green after the fix. board-mobile-desktop-dark and board-view-desktop-dark moved bytes only across these passes (encoder noise, pixelHash unchanged from the committed blob both times) and were restored via git checkout with their manifest bytes fields corrected."
     }
   ],
   "outstanding": [

@@ -30,7 +30,7 @@ Redesign the filter, sort and group sheets against their mapped reference, closi
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P2 |
-| **Status** | Draft — blocked on Phase 1 |
+| **Status** | Implemented — pending the operator's own device recheck |
 | **Created** | 2026-09-08 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |
@@ -109,6 +109,41 @@ This sheet family's layout, spacing and control styling match its mapped Notion/
 
 > Acceptance criteria for these requirements live in `acceptance-criteria.md`.
 <!-- /ANCHOR:requirements -->
+
+---
+
+<!-- ANCHOR:gap-table -->
+## 4b. REFERENCE GAP TABLE (Phase 1 mapping, measured 2026-09-08)
+
+REQ-001 evidence — the Phase 1 mapping rows this redesign cites (001's `inventory.md`, this packet's frozen reference):
+
+- **filter-panel** — inventory row 45, `src/views/database-view.ts:5183` (variant rows 62, 65): reference `notion/ios/menus` (1: notion-ios-menus-filters-15) + `notion/ios/database` (9: notion-ios-database-filters-01/02 +7); Anytype `anytype/desktop/app` (anytype-filter-property-picker-dark.png).
+- **sort-panel** — inventory row 44, `src/views/database-view.ts:5211` (variant rows 63, 66): reference `notion/ios/database` (10: notion-ios-database-sort-01/02 +8) + `notion/ios/states` (group-by-12); Anytype `anytype/desktop/app` (anytype-view-settings-panel-dark.png).
+- **group panel** — inventory row 133, "group by dropdown — stacked over toolbar"; the panel itself is the toolbar's Group sheet (`toolbar-renderer.ts` `renderGroupPopover`, `.obnotion-group-popover`); reference: none at filename level (row 133) — the settings-sheet grammar (002) is the shaping authority, with `notion-ios-states-group-by-12` the nearest Notion state.
+
+The third-party captures carry no measurement manifests (002's recorded finding — harvest provenance only), so the Notion/Anytype numbers below are the operator's directive (R5, 2026-09-08: "all sheets should mimic notion way closer") as 002 already operationalised it: single-column rows, one setting per row with label left / control right, 44–52px pitch, 16px inset, 1px section divider inset 16px (first-of-type 0px), the plugin's own sheet-native picker, no horizontal overflow at 402px (extent = scrollWidth − 1px left border == clientWidth). Current numbers are this worktree's declarations/measurements at the cited lines; the lane's RED run below replaces each with a live measurement before the fix.
+
+| Element | Current (this worktree, evidence) | Notion (iOS) | Anytype | Target (gap closes to) |
+|---|---|---|---|---|
+| Header | Shared shell header, title + 44×44 close; header block 66–76px — conforming, asserted by the lane | Full-bleed sheet title, large title, trailing close | View-settings panel: titled, boxed | Keep; no gap (009 T26's header work) |
+| Row height / pitch | Condition controls 28px inside 2px-padded rows, 6px gaps/margins (`styles.css` §21 :13259–13347); 44px `min-height` only while a `.obnotion-container` ancestor exists — lost when the sheet is portalled | 44–52pt setting rows | List rows ~44pt | 44–52px pitch, compact rows 48px, controls 44px minimum, portalled or not |
+| Label / value layout | One condition row packs 3–4 controls inline (field + operator + value + trailing, `createConditionRow`); desktop floors (:140px/:120px) explicitly excluded from the sheet (`:not(.obnotion-mobile-bottom-sheet)`, :13449) | One setting per row: label left, control right | Settings rows: label left, control right | Single-column rows; each control owns its line at the sheet's full inset-to-inset width; label left / control right where a row has both |
+| Dividers | Group section titles: 1px `--background-modifier-border` directly (:11747), not the family's subtle-token ladder, so no 40% mix and no tokenless-host fallback; filter/sort: none | 1px hairline opening each section | Hairline dividers | 1px divider on the subtle token with the #333333 fallback (002's), inset 16px, first-of-type 0px |
+| Section grouping | Group panel: 2 sections (options / group-by), titles 11px/700, padding 12px 8px 0 (:11753) — 8px inset; filter/sort: no sections | Sectioned list, heading on the rows' inset | Sectioned | Heading + divider sit on the same 16px inset the rows use; first title 0px inset |
+| Selects | All pickers already the plugin's own `createDropdownField` (sheet-native); the `<select>` rule at :13347 is vestigial (no native select in these panels' markup) | Native-ish disclosure rows, never overflowing native lists | Own pickers | Selects = the plugin's own sheet-native picker; lane asserts `select` count 0, no overflow |
+| Toggles | Group switch rows: 22px/1fr/auto grid, switch `justify-self: end` (:11798) — control right, row min-height 28px | Switch at row's right, 44pt row | Switch right | Control right; row clears the 44px floor |
+| Horizontal padding | Inconsistent: filter sheet 16px (:13036), sort sheet 8px when floating (:13051), group popover 8px (:11568) | Uniform inset | Uniform | 16px (var(--obnotion-sheet-inset)) on all three, in the portalled sheet state |
+| Typography | Rows 12px, group titles 11px/700 (token ladder) | Untyped (no manifest) | Untyped | Keep the token ladder — no reference numbers exist (002's limitation 1); Recorded, not assumed |
+| Overflow @402px | Fixed: group popover measured 370 vs 366px scrollWidth on WebKit (its own `::-webkit-scrollbar` shrank the flex row the drag handle centres in); filter/sort already conformed. All three now hide that scrollbar (`styles.css`) and pass the sweep on both engines | Fits | Fits | extent == clientWidth at 402×874, extent-minus-border predicate — met |
+
+Implementation note (2026-09-09): the group popover's heading-divider rule also relied on
+`:first-of-type`, which matches the first sibling of a tag rather than of a class — the popover's
+own header `<div>` (drawn by `buildShellHeader`) sits ahead of every section title, so the exception
+never fired and the panel's first section painted the divider meant to open only the ones after it.
+Both the desktop and phone-scoped `.obnotion-group-popover-section-title` rules now divide by
+sibling position within the title's own class (`X ~ X`) instead of by DOM-wide tag census. Full
+reasoning: `decision-record.md` ADR-001.
+<!-- /ANCHOR:gap-table -->
 
 ---
 

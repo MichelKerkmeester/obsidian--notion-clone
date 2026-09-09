@@ -140,6 +140,7 @@ const PRODUCERS = {
   "add-property": () => resolveProducer("src/views/database-view.ts", [/openCreatePropertyModal/]),
   "sort-panel": () => resolveProducer("src/views/database-view.ts", [/private renderSortPanel/]),
   "filter-panel": () => resolveProducer("src/views/database-view.ts", [/private renderFilterPanel/]),
+  group: () => resolveProducer("src/views/toolbar-renderer.ts", [/private renderGroupPopover/]),
   "add-view": () => resolveProducer("src/views/toolbar-renderer.ts", [/class ToolbarRenderer/]),
   "record-detail": () => resolveProducer("src/views/record-detail-panel.ts", [/export function openRecordDetailPanel/]),
   "record-peek": () => resolveProducer("src/views/table-record-peek.ts", [/export function openTableRecordPeek/]),

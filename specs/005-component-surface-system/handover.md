@@ -2678,3 +2678,52 @@ program-level decision record only.
 ## 071/003-add-property-sheet — implemented 2026-09-08 (this leg, run 2)
 
 The property-type picker no longer trades its whole form for a second replaced-in-place surface: the 21 property formats now render as one flat, scrolling list of icon + label rows inside the create-property sheet itself (44px minimum pitch, 16px inline padding, gated formats keeping their reason inline, locked entry points one read-only row), while the name and frontmatter-key fields stay pinned above the list and the note's header stays visible with the keyboard up — closing the operator's R6. The producer's whole form lives in a shared `renderCreatePropertyBody` that the modal class mounts in the plugin and the sheet-grammar harness mounts into its faithful host-modal stand-in (the harness cannot construct a `DbModal` — the obsidian stub only throws), so neither harness measures a copy; the confirm step's collision checks stay with the class. styles.css adds the pinned fields, the sole-scrolling list under a definite keyboard-aware height (`calc(90svh - var(--obnotion-mobile-sheet-bottom, 0px))`, because the pinned fields alone under-fill the 90svH ceiling and an auto-height sheet would give the list a zero-height scrollbox), scoped to `.obnotion-create-property-*` plus one `:has(> .obnotion-create-property-modal)` guard. RED→GREEN, both levels: with the fix's styles rules stashed the `properties create property` lane fails pitch (`min 0.0 / max 30.0`), 16px padding and in-sheet scroll (`210>210`) — the note-header/keyboard assertions already held unfixed (top 84.4 ≥ 44.0), recorded as a finding, not hidden — and at GREEN: 21 rows at pitch 44.0/44.0, sheet top 238.4 ≥ header 44.0, height 261.6 ≤ 464.0 (viewport − 336 keyboard − 44 header), no 402×874 overflow; reverting the gated-reason producer line fails 1 of 8 unit tests, restoring passes 8/8. Battery: `npx tsc --noEmit` 0, `npx vitest run` 160 files / 1731 tests 0, `npm run build` 0, `sheet-grammar.mjs` 0, `render-assertions.mjs` 0, `touch-targets.mjs` 0, `verify-placement.mjs` 413/415 (2 declared), screenshots ×2 0/0 with 2 movers kept as real (board-mobile-desktop-dark 1px@1, board-view-desktop-dark 4px@1 — both moved in both sampled runs at 073's own counts; this leg's rules never touch board view, so they are the lane instability 073 recorded), the 11 evidence artefacts the edits staled re-measured by their own writers (engine-parity steady at 82 fixtures, differences 56→50), `evidence --check-all` 15/15, `npm run gate` **27 green, 0 red for a declared reason**, `scan-comments` 0, `scan-failing-values` 0. The css-lane was taken over from 073 at its own released hash and released at `8991c15f8106` with `check-lane` 0 — 002-settings-sheet, you take the lane from there; it is the next phase in this parent and its checklists stay open. Packet docs: spec §4b gap table, acceptance criteria Met with the evidence block, tasks, implementation summary, decision record (ADR-0001–0004: absorbed 21-row list; the list, not the form, scrolls; definite keyboard-aware height; harnesses measure the shared builder), goal completion criteria — validated strict, RESULT: PASSED (one advisory: AI protocol components), packet graph metadata backfilled. Owned by `071-sheet-notion-anytype-alignment/003-add-property-sheet`. **Not pushed** — a fresh verifier lands it; the operator's on-device read stays the operator's row.
+
+- **2026-09-09, `071/005-filter-sort-group-sheets`: the group popover's overflow and its missing
+  first-section divider closed at their shared mechanism, not with a group-only patch.** Two prior
+  GLM runs had already brought filter and sort's row grammar in line with Notion's own and left the
+  group popover's own overflow sweep red (370 of 366px on WebKit) with an unfinished diagnosis that
+  blamed the same inline-floor-versus-`min-width:0` conflict already fixed for filter/sort's
+  condition rows — a helper the group popover never calls, so the diagnosis could not have applied.
+  Live-instrumented (temporarily, reverted before commit) instead: the drag handle's `::before` band
+  is sized against the popover's full declared width, but `.obnotion-container`'s own 8px
+  `::-webkit-scrollbar` shrinks the flex row the handle centres in the moment the popover's content
+  is tall enough to scroll — which only the group fixture, in this registry, is. Hid that scrollbar
+  on all three of this family's sheets (`scrollbar-width: none` + `::-webkit-scrollbar { display:
+  none }`, matching the phone toolbar's own horizontal strip) rather than special-casing group.
+  Wiring an already-written but never-checked `dividerOk` variable into the row-grammar lane then
+  caught a second bug: the group popover's heading divider used `:first-of-type`, which matches the
+  first sibling of a TAG, not of a class — the popover's own header `<div>` (`buildShellHeader`)
+  draws ahead of every section title, so the exception never fired and every section painted the
+  divider meant to open only the ones after the first. Rewrote both the desktop and phone-scoped
+  `.obnotion-group-popover-section-title` rules to divide by sibling position within the title's own
+  class (`X ~ X`) instead of DOM-wide tag census. Full reasoning and rejected alternatives (a
+  group-only band fix, `scrollbar-gutter: stable both-edges` — hand-computed to make the overflow
+  *worse*, 8px instead of 4 — and hiding the scrollbar on every phone sheet instead of just this
+  family): `071/005-filter-sort-group-sheets/decision-record.md` ADR-001. **Evidence**: both fixes
+  proved with a real red-before-green — the overflow sweep failed 370>366 on both WebKit passes
+  before the scrollbar fix and passed after; the divider clause failed with `heading dividers
+  1pxpx` on the actual bug once wired, passed with `heading dividers 0pxpx` after. Also fixed a
+  pre-existing `lint:tools` red (`dividerOk` unused) by wiring it into the check it belonged to,
+  and closed four `vitest` failures the two prior runs' registry/predicate edits had left
+  uncaught-up (`sheet-inventory` registered-count 17→18 plus a curated `group` producer, its
+  committed `inventory.md` regenerated, and the desktop settings panel's `segmented` verdict
+  updated to `true` following the widened switch-synonym predicate — a side effect on an
+  unregistered desktop surface, not a live regression). Full battery: `npx tsc --noEmit` 0,
+  `npx vitest run` 1727/1727 (run 3x, no flake — the inherited "possibly flaky 5th failure" did not
+  reproduce), `npm run build` 0, `sheet-grammar.mjs` 0, `sheet-rebuild.mjs` 0 (the `85ff504` freeze
+  regression), `render-assertions.mjs` 0, `touch-targets.mjs` 0, `verify-placement.mjs` 413/415 (2
+  declared reds, baseline), two `npm run screenshots` passes (616 each, a third confirmation pass
+  matched) with 14 real movers (the family's own scrollbar thumb disappearing, reproduced
+  identically across every pass) named in a full acquire/edit/release CSS-lane triplet taking the
+  lane over from its released holder (`072-linked-view-blocks-ux`; `styles.css` had two more edits
+  after the first release, so the triplet closes with two edit+release pairs), 2 encoder-jitter
+  files (pixelHash/layoutHash identical to committed) reverted, `evidence --check-all` 15/15 fresh
+  after re-measuring the 11 stale artefacts (`engine-parity.json`'s own re-measurement surfaced a
+  pre-existing, unrelated red — 50 Chrome/WebKit disagreements already on HEAD before this session,
+  none in filter/sort/group — not part of the required 27-check gate), `npm run gate` **27 green, 0
+  red**, `scan-comments`/`scan-failing-values` 0. Owned by `071/005-filter-sort-group-sheets` (its
+  REQ-001–003 and AC-001–003, all Met); validated strict, RESULT: PASSED (1 advisory AI_PROTOCOLS
+  warning, not required for a bug-fix-shaped Level 3 phase); packet graph metadata backfilled.
+  Landed on `.worktrees/247-filter-sort-group-sheets` at its own HEAD; **not pushed** — a fresh
+  verifier lands it. The operator's own device recheck row stays open, per the parent packet's D3.

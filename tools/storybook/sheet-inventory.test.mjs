@@ -39,7 +39,7 @@ describe("sheet-inventory", () => {
   const byKey = (key) => primaryRows.find((r) => r.key === key);
 
   it("carries every grammar registry row", () => {
-    expect(counts.registered).toBe(17);
+    expect(counts.registered).toBe(18);
     expect(counts.stackedPairs).toBe(32);
     expect(counts.overflowOnly).toBe(11);
   });

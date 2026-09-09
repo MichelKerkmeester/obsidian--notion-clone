@@ -158,14 +158,19 @@ function hasSharedDropdownRows(panel: HTMLElement): boolean {
 }
 
 function hasSegmentedToggleRows(panel: HTMLElement): boolean {
-  // Choice groups are a segmented control, the shared checkbox, or the `.obnotion-new-placement` radio
+  // Choice groups are a segmented control, the shared checkbox, the shared switch, or the
+  // `.obnotion-new-placement` radio
   // substitute the settings/toolbar placement rows actually ship — the primitive every surface on
   // this program uses. `.obnotion-segmented` alone was checked before, and no surface has ever used it,
   // which is exactly what made this column pass vacuously: there was nothing on any registered
   // surface that could ever turn it red. Checking `.obnotion-new-placement` too gives it a real surface
   // to fail on if a group's children ever stop carrying the option class.
+  // The switch synonym: the group sheet's toggle rows carry the shared `obnotion-toggle-switch`
+  // class, not the checkbox class — they are the family's own toggle control, drawn by the same
+  // row grammar, and a column that fails the one surface that actually HAS toggles would be
+  // measuring its vocabulary, not the surfaces.
   const checkboxes = Array.from(panel.querySelectorAll<HTMLInputElement>("input[type='checkbox']"));
-  if (checkboxes.some((input) => !input.classList.contains("obnotion-checkbox"))) return false;
+  if (checkboxes.some((input) => !input.classList.contains("obnotion-checkbox") && !input.classList.contains("obnotion-toggle-switch"))) return false;
   if (panel.querySelector("input[type='radio']")) return false;
   const groups = Array.from(panel.querySelectorAll<HTMLElement>(".obnotion-segmented, .obnotion-new-placement"));
   return groups.every((group) => {
