@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point 2026-09-09 ~04:30: 0.0.34 cut at e75a979c. Landed: 070, 072, 073, 074, 075, 071/001, 008/001, 008/002, 071/002, 066 rows 81-82 (c5bbcf93), 071/003 (81b6e328), 071/004 (f72e50cd). Implementation stays paused until this handover is reviewed. GLM 5.3 flash max carries implementation legs; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh."
+description: "Resume point 2026-09-09 ~04:30: 071/005 LANDED+verified (49ee993d, 071 3/4). Earlier: 0.0.34 cut at e75a979c. Landed: 070, 072, 073, 074, 075, 071/001, 008/001, 008/002, 071/002, 066 rows 81-82 (c5bbcf93), 071/003 (81b6e328), 071/004 (f72e50cd), 071/006 (ae89043f). Implementation stays paused until this handover is reviewed. GLM 5.3 flash max carries implementation legs; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T03:30:00Z"
-    last_updated_by: "248-landing-verify"
-    recent_action: "006 LANDED+verified (8bd6973e): goal 2/2, 071 2/4, gate 27/0, scans 0"
+    last_updated_at: "2026-09-09T04:28:42Z"
+    last_updated_by: "247-landing-verify"
+    recent_action: "005 LANDED+verified (49ee993d): goal 3/4, 071 3/4, gate 27/0, scans 0"
     next_safe_action: "071/005 next; the operator device rows stay the operator's"
     blockers:
       - "066's device read (AC-008) and 075's AC-006 still wait on the operator's handset pass — never agent-ticked"
@@ -43,6 +43,33 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-09 ~04:30, `071/005-filter-sort-group-sheets` LANDED on `origin/main` — landing-verified, rebased, pushed
+
+**What landed:** the leg's single commit (`9df04459` in `.worktrees/247-filter-sort-group-sheets`, two
+GLM runs + a Sonnet completion, "the group popover's overflow and divider gap closed at their shared
+mechanism") replayed onto `ae89043f` (the 066+0.0.34+071/003+071/004+071/006-merged main) as
+`4c00bf798`, with this verifier's pass at `49ee993d`. **How:** 20 conflicted files — the 16
+generated/evidence artefacts took main's side and were re-derived (13 of them by their own writers
+after `evidence --check-all` named them); `css-lane.json` history kept append-only (the 005 triplet
+recorded with its own takeover note, then a post-rebase 005 acquire/edit/release triplet, header
+re-pointed at the merged `55cb284b3244`); styles.css's one token-comment conflict merged as one
+comment; `sheet-grammar.mjs`'s four 006-vs-005 seams resolved keeping both landings' intents (006's
+extent predicate + 005's farthest-margin-edge diagnosis; the record and the panel clauses both
+retained). **Verified, by numbers:** the scrollbar-hide mutation red (WebKit group 370 > 366 — the
+pre-fix numbers) then restored; the divider mutation red (`heading dividers 1px`) then restored, both
+via the lane's own clauses (lesson recorded: on the harness page a `var(--background-modifier-border)`
+mutation of that rule is invisible — the token is undefined there, so the shorthand computes to its
+initial); unit mutations: the switch-synonym line reverted → 1 failed | 12 passed, the `group`
+producer row deleted → 2 failed | 7 passed, both restored. At GREEN: filter 3/3 rows 48px, sort 2/2
+rows 48px, group 17/17 rows 44px (the 44–52 window), 16px insets, 0 native selects, extent 374 == 374
+on both engines, overflow sweep 374 ≤ 374; vitest 1747/1747 (1727 on the leg + 004/006's 20), build 0,
+tsc 0, sheet-rebuild 0 (the `85ff504` freeze), placement 413/415 (2 declared), screenshots ×2 616/616
+(1 real mover kept: constructed-toolbar-add-view-mobile-dark 159px@max176, the same mover+numbers
+006's release recorded; 1 one-run 1px jitter restored at its committed manifest bytes), evidence 15/15
+fresh, gate **27 green, 0 red**, all three validations (packet, 071, track) strict RESULT: PASSED,
+scan-comments/scan-failing-values 0. 071's goal criterion 3 ticked (004+005+006 complete) and the
+roadmap §5.A figure re-derived to 3/4; the device read stays the operator's (D3).
 
 ### 2026-09-09 ~03:30, `071/003-add-property-sheet` LANDED on `origin/main` — landing-verified, twice-rebased, pushed
 
