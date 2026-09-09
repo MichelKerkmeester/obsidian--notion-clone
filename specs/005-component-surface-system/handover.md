@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T11:40:00Z"
-    last_updated_by: "255-landing-verify"
-    recent_action: "255-pkg-description LANDED+verified (51470e56): description 3→0, lane 13/13, gate 27/0"
+    last_updated_at: "2026-09-09T12:05:00Z"
+    last_updated_by: "256-landing-verify"
+    recent_action: "256-engine-parity LANDED+verified (1a4c3ff3): steady-gate 23/0, neg-ctrl, 27/0"
     next_safe_action: "Operator device pass on 0.0.35; ORDER OF WORK §1 names every row"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
@@ -30,6 +30,7 @@ _memory:
     open_questions:
       - "Does a Notion finding that contradicts a landed Anytype ruling ever become more than Proposed"
     answered_questions:
+      - "256: the 23 engine-parity disagreements are gated, not suppressed — ADR-001, exit 1 on any new/grown; flicker fixed by settled reads; M1 judged inherent, not fixable-at-stylesheet"
       - "071/003 landed+verified twice-rebased (81b6e328): goal 3/3, 071 criterion 2/4; both mutations replayed red→restored; 0.0.34 (e75a979c) carries 008/002's redirect, discharging its AC-007 — 008's docs still to tick"
       - "068 renames to obnotion- with a data.json migration, author MichelKerkmeester, repo obsidian_notion-clone"
       - "The 3500ms dwell and the ::before -19px close hit survived this verifier: mutations red→restored, gate 27/0"
@@ -176,6 +177,41 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-09 ~10:05, `256-engine-parity-inputs` LANDED+verified on `origin/main` — the 009 engine-parity disagreements are now a gate, pushed
+
+**What landed:** the residual leg's single commit `99ca6fc4` (13 files, styles.css untouched) —
+rebased onto `7502fa6e` (main's 255-pkg-description landing; seven measuredAt-only stamp
+conflicts took main's side, the 005 handover kept both the 255 and 256 sections, no css-lane
+conflict) and landed as `f21cf6d5`, with this verification as `1a4c3ff3`. Every claim
+CONFIRMED: `tools/live/engine-parity.mjs` exits 0 on its recorded steady state — 23
+Chrome-vs-WebKit width disagreements over 67 fixtures, each recorded per scenario/element/
+property with its measured delta — and 1 on any NEW disagreement or grown delta, never a
+blanket suppression. Mutation: the two add-view-popover deltas planted 215.31 → 255.31 →
+exit 1, "steady 21, new 2", exactly the two planted rows flagged; restored → exit 0, "23
+(steady 23, new 0)", three consecutive runs. The 23↔47/39 flicker was the harness reading
+checked-background transitions mid-flight; the read now awaits every finite
+`getAnimations().finished` (allSettled, infinite skipped) in both engines. The record
+fingerprints styles.css + theme.css + runtime-vars.css. ADR-001 judged: M1 justified as
+recorded-inherent, not "open: fixable" — the deltas ARE the engines' intrinsic differences
+(215.31−193 = 22.31; 539.91−521.03 = 18.88; 188.25−170.23 = 18.02) and every disagreeing input
+already declares width:100%/box-sizing (styles.css:23542, :15007; the owning popover :23497), so
+fixing means inventing definite widths across three surfaces, which the ADR deliberately defers;
+M2 (12 deltas, exactly 8px) is headless-WebKit's classic vs this Chrome's overlay scrollbar.
+T27 closed with those numbers; 009's decision-record.md (ADR-001) is new this leg.
+
+**Verification numbers**: `npm run build` 0; `npx tsc --noEmit` 0; `npx vitest run` 1584/1584
+(157 files) — 1581→1584 is main's naming suite 10→13, not this leg; `npm run screenshots` ×2
+plus a third settling pass, exit 0 each, 480 captures — one jittered PNG
+(`project-manager/reference-kanban-desktop-dark.png`, 1268px@Δ1, moved in one run only), the
+third capture reproduced the committed blobs exactly; `npm run gate` 27 green, 0 red for a
+declared reason, exit 0 — engine-parity rides the evidence lane's freshness
+(`fresh tools/live/engine-parity.json`), verify-placement inside it 418/420, 2 declared;
+`validate --strict` RESULT: PASSED for 009 AND 005; backfill 009 `changed: 0`, 005 re-run after
+the roadmap edit; scan-comments 0; scan-failing-values 0. Roadmap §5.A's 009 row: goal.md
+criteria 2/6, unchanged — the four open rows are the probe's, no operator/device row touched;
+prose updated, the engine-parity lane gates now. The verification commit's 7 `tools/live/*.json`
+and 005 graph-metadata.json are measuredAt/fingerprint-only re-derivations.
 
 ### 2026-09-09 ~11:40, `255-pkg-description` LANDED+verified on `origin/main` — the 008/004 npm-listing residual, pushed
 
