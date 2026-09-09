@@ -321,6 +321,11 @@ const SETTINGS_ROW_WIDTH_RATIO_MIN = 0.9;
 const SETTINGS_SHEET_INSET_PX = 16;
 const SETTINGS_ROW_PITCH_MIN_PX = 44;
 const SETTINGS_ROW_PITCH_MAX_PX = 52;
+// The card grouping's thresholds. 8px is the shared large-radius token the plugin already ships;
+// 12px is the gap the reference capture shows between a settings sheet's cards, asserted no
+// tighter than 8px so the retune that follows the operator's own capture stays inside the band.
+const SETTINGS_CARD_RADIUS_MIN_PX = 8;
+const SETTINGS_CARD_GAP_MIN_PX = 8;
 // `--font-ui-small` at the operator's 16px default (15px) and at a size proven to overflow under
 // the host model this page now carries. Set directly on the button rather than resolved from
 // `--font-text-size`: this harness, unlike a real host, never defines that token, and deriving it
@@ -1385,6 +1390,11 @@ const measureSettingsRowGrammar = () => {
   for (const title of sheet.querySelectorAll(".obnotion-view-config-section-title")) {
     const style = getComputedStyle(title);
     const dividerStyle = getComputedStyle(title, "::before");
+    // A heading owes a hairline only when it continues a run of rows. When the sheet groups its
+    // sections into cards the heading sits above its own card container — the card boundary is
+    // the separator the reference uses, so the heading's previous sibling being a card means no
+    // hairline is owed.
+    const titlePrev = title.previousElementSibling;
     sections.push({
       paddingLeft: Number.parseFloat(style.paddingLeft) || 0,
       divider: dividerStyle.content === "none" ? null : {
@@ -1393,13 +1403,33 @@ const measureSettingsRowGrammar = () => {
         right: Number.parseFloat(dividerStyle.right) || 0,
         color: dividerStyle.backgroundColor,
       },
-      dividerExpected: title.previousElementSibling != null,
+      dividerExpected: titlePrev != null && !titlePrev.classList.contains("obnotion-settings-card"),
+      aboveCard:
+        title.closest(".obnotion-settings-card") == null &&
+        title.nextElementSibling?.classList.contains("obnotion-settings-card") === true,
     });
   }
+  // The card grouping: sections render as rounded containers on the sheet's canvas, the way the
+  // reference settings sheet separates its groups. Geometry only — the caller applies thresholds.
+  const cards = Array.from(sheet.querySelectorAll(".obnotion-view-config-body > .obnotion-settings-card")).map((card) => {
+    const style = getComputedStyle(card);
+    const rect = card.getBoundingClientRect();
+    return {
+      borderRadius: Number.parseFloat(style.borderTopLeftRadius) || 0,
+      background: style.backgroundColor,
+      top: rect.top,
+      bottom: rect.bottom,
+    };
+  });
   return {
     rows,
     sections,
+    cards,
+    canvasBackground: getComputedStyle(sheet).backgroundColor,
     nativeSelectCount: sheet.querySelectorAll("select").length,
+    sheetActionRowCount: sheet.querySelectorAll(".obnotion-settings-sheet-action").length,
+    trailingCard:
+      sheet.querySelector(".obnotion-view-config-body > .obnotion-settings-card:last-child")?.classList.contains("obnotion-settings-card-footer") === true,
     sheetScrollWidth: sheet.scrollWidth,
     // The shared extent rule the sideways-overflow sweep itself uses: the sheet's own
     // 1px left border is not sideways scroll. That border resolves once the
@@ -3874,6 +3904,47 @@ try {
     const noOverflow = scrollExtent <= settingsRowGrammar.sheetClientWidth + FRAME_GEOMETRY_TOLERANCE_PX;
     if (!noOverflow) failures.push(`settings sheet reference row grammar: sheet scrollWidth extent ${scrollExtent} exceeds clientWidth ${settingsRowGrammar.sheetClientWidth}`);
     console.log(`  ${noOverflow ? "PASS" : "FAIL"}  sheet scrollWidth extent (${scrollExtent}) === clientWidth (${settingsRowGrammar.sheetClientWidth})`);
+  }
+  console.log("");
+
+  console.log(`sheet-grammar: settings sheet card grouping — the sheet's sections render as >= 2 card containers on a canvas of their own, each card rounded >= ${SETTINGS_CARD_RADIUS_MIN_PX}px with a background distinct from the canvas, consecutive cards >= ${SETTINGS_CARD_GAP_MIN_PX}px apart, and every section heading sitting above its own card rather than inside the list\n`);
+  const settingsCardGrammar = settingsRowGrammar;
+  const settingsCardList = settingsCardGrammar?.cards ?? [];
+  const settingsSectionList = settingsCardGrammar?.sections ?? [];
+  if (!settingsCardGrammar || settingsCardList.length < 2) {
+    failures.push(`settings sheet card grouping: ${settingsCardList.length} card containers on the sheet canvas, wanted >= 2`);
+    console.log(`  FAIL  settings sheet card grouping — ${settingsCardList.length} card containers, wanted >= 2`);
+  } else {
+    const flatCards = settingsCardList.filter((card) => card.borderRadius < SETTINGS_CARD_RADIUS_MIN_PX - 0.5);
+    if (flatCards.length > 0) failures.push(`settings sheet card grouping: ${flatCards.length} of ${settingsCardList.length} cards carry a border-radius under ${SETTINGS_CARD_RADIUS_MIN_PX}px (first measured ${flatCards[0].borderRadius}px)`);
+    console.log(`  ${flatCards.length === 0 ? "PASS" : "FAIL"}  ${settingsCardList.length - flatCards.length}/${settingsCardList.length} cards carry a border-radius >= ${SETTINGS_CARD_RADIUS_MIN_PX}px`);
+    const canvasBlended = settingsCardList.filter((card) => card.background === settingsCardGrammar.canvasBackground);
+    if (canvasBlended.length > 0) failures.push(`settings sheet card grouping: ${canvasBlended.length} of ${settingsCardList.length} cards carry the canvas's own background (${settingsCardGrammar.canvasBackground})`);
+    console.log(`  ${canvasBlended.length === 0 ? "PASS" : "FAIL"}  every card's background differs from the canvas (${settingsCardGrammar.canvasBackground})`);
+    const tightGaps = [];
+    for (let i = 0; i + 1 < settingsCardList.length; i += 1) {
+      const gap = settingsCardList[i + 1].top - settingsCardList[i].bottom;
+      if (gap < SETTINGS_CARD_GAP_MIN_PX - 0.5) tightGaps.push(gap);
+    }
+    if (tightGaps.length > 0) failures.push(`settings sheet card grouping: ${tightGaps.length} of ${settingsCardList.length - 1} card gaps measure under ${SETTINGS_CARD_GAP_MIN_PX}px (tightest ${Math.min(...tightGaps).toFixed(1)}px)`);
+    console.log(`  ${tightGaps.length === 0 ? "PASS" : "FAIL"}  ${settingsCardList.length - 1 - tightGaps.length}/${settingsCardList.length - 1} inter-card gaps measure >= ${SETTINGS_CARD_GAP_MIN_PX}px`);
+    const titlesInsideList = settingsSectionList.filter((section) => !section.aboveCard);
+    if (titlesInsideList.length > 0) failures.push(`settings sheet card grouping: ${titlesInsideList.length} of ${settingsSectionList.length} section headings do not sit above their own card container`);
+    console.log(`  ${titlesInsideList.length === 0 ? "PASS" : "FAIL"}  ${settingsSectionList.length - titlesInsideList.length}/${settingsSectionList.length} section headings sit above their own card`);
+  }
+  console.log("");
+
+  console.log("sheet-grammar: settings sheet footer card — a row the producer marks as a sheet-level action renders inside its own trailing card (vacuous today: 0 marked rows)\n");
+  if (!settingsCardGrammar) {
+    failures.push("settings sheet footer card: the surface did not mount to measure");
+    console.log("  FAIL  settings sheet footer card — the surface did not mount to measure");
+  } else if (settingsCardGrammar.sheetActionRowCount === 0) {
+    console.log(`  PASS  0 rows carry the sheet-action marker — the assertion is vacuous on this sheet's current row set`);
+  } else if (!settingsCardGrammar.trailingCard) {
+    failures.push(`settings sheet footer card: ${settingsCardGrammar.sheetActionRowCount} sheet-action row(s) exist but the sheet's last card is not the footer card`);
+    console.log("  FAIL  settings sheet footer card — sheet-action rows exist outside the trailing card");
+  } else {
+    console.log(`  PASS  ${settingsCardGrammar.sheetActionRowCount} sheet-action row(s) render inside the sheet's own trailing card`);
   }
   console.log("");
 

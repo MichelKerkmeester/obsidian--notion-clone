@@ -115,4 +115,13 @@ describe("view-config sheet reference row grammar", () => {
     expect(producer).not.toMatch(/createEl\(\s*["']select["']/);
     expect(producer).toContain('cls: "obnotion-view-config-field"');
   });
+
+  it("sections collect into rounded cards lifted off the sheet's canvas, a heading above each", () => {
+    const card = ruleFor(
+      "\\.obnotion-view-config-panel\\.obnotion-mobile-bottom-sheet \\.obnotion-view-config-body > \\.obnotion-settings-card(?![:\\w])"
+    );
+    expect(card).toContain("border-radius: var(--obnotion-radius-lg);");
+    expect(card).toContain("background: var(--background-primary);");
+    expect(card).toContain("margin: 0 var(--obnotion-sheet-inset) var(--obnotion-space-5);");
+  });
 });

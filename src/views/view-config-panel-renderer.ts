@@ -376,20 +376,31 @@ export class ViewConfigPanelRenderer {
     // scrolling exactly as it did and only the sheet's rules move the scroller into here.
     const body = panel.createDiv({ cls: "obnotion-view-config-body" });
 
+    // On the sheet, each section's rows collect into a card container: the label sits above its
+    // own card and the card boundary replaces the hairline that used to open each group, the way
+    // the reference settings sheet separates its groups. The anchored panel keeps the continuous
+    // list — a card needs the sheet's width to read as one, and a 320px popover of cards reads
+    // as clutter. Sections that never render a label (the anchored panel) share the body host.
+    const openSection = (label: string | null, scope: "database" | "view" | null): HTMLElement => {
+      if (label && scope) this.renderSectionTitle(body, label, scope);
+      return this.asSheet ? body.createDiv({ cls: "obnotion-settings-card" }) : body;
+    };
+
+    let host: HTMLElement = body;
     if (actions.database) {
-      this.renderSectionTitle(body, t("viewConfig.databaseSection"), "database");
+      host = openSection(t("viewConfig.databaseSection"), "database");
       if (actions.isDatabaseReadOnly) {
-        body.createDiv({ cls: "obnotion-view-config-readonly-note", text: t("viewConfig.databaseReadonly") });
+        host.createDiv({ cls: "obnotion-view-config-readonly-note", text: t("viewConfig.databaseReadonly") });
       }
-      this.renderDatabaseSettings(body, actions.database, actions);
+      this.renderDatabaseSettings(host, actions.database, actions);
     }
 
-    this.renderSectionTitle(body, t("viewConfig.viewSection"), "view");
-    this.renderAppliedSummaries(body, config, actions);
-    this.renderViewType(body, config, actions);
+    host = openSection(t("viewConfig.viewSection"), "view");
+    this.renderAppliedSummaries(host, config, actions);
+    this.renderViewType(host, config, actions);
     if (actions.onOpenLayoutOptions && ["chart", "calendar", "timeline"].includes(config.viewType || "")) {
       const label = config.viewType === "chart" ? t("chart.options") : config.viewType === "timeline" ? t("timeline.options") : t("calendar.options");
-      const layoutOptions = body.createEl("button", {
+      const layoutOptions = host.createEl("button", {
         cls: "obnotion-view-config-layout-options obnotion-panel-button",
         attr: { type: "button", "aria-label": label },
       });
@@ -397,16 +408,16 @@ export class ViewConfigPanelRenderer {
       layoutOptions.createSpan({ cls: "obnotion-panel-button-label", text: label });
       layoutOptions.onclick = () => actions.onOpenLayoutOptions?.(layoutOptions);
     }
-    this.renderViewSourceRulesSection(body, config, actions);
+    this.renderViewSourceRulesSection(host, config, actions);
     if (["table", "board", "gallery", "list", "calendar", "timeline"].includes(config.viewType || "table") && actions.database) {
-      this.renderRecordIconSettings(body, actions.database, config, actions);
+      this.renderRecordIconSettings(host, actions.database, config, actions);
     }
     if (config.viewType !== "chart" && actions.database) {
-      this.renderConditionalFormatting(body, config, actions.database, actions, actions.isDatabaseReadOnly);
+      this.renderConditionalFormatting(host, config, actions.database, actions, actions.isDatabaseReadOnly);
     }
     const showViewStatusPresets = config.viewType !== "chart" && config.viewType !== "calendar" && config.viewType !== "timeline";
     if (showViewStatusPresets) {
-      this.renderStatusPresetSettings(body, {
+      this.renderStatusPresetSettings(host, {
         presets: actions.viewStatusPresets || [],
         defaultPresetId: actions.defaultViewStatusPresetId,
         helpText: actions.viewStatusPresetHelpText,
@@ -417,9 +428,9 @@ export class ViewConfigPanelRenderer {
     }
     const isCalendarTimelineView = config.viewType === "calendar" || config.viewType === "timeline";
     if (config.viewType !== "chart" && !isCalendarTimelineView) {
-      this.renderDefaultColumnWidth(body, config, actions);
+      this.renderDefaultColumnWidth(host, config, actions);
       if (config.viewType === "table") {
-        this.renderSelect(body, t("viewConfig.rowDensity"), [
+        this.renderSelect(host, t("viewConfig.rowDensity"), [
           { value: "compact", text: t("viewConfig.rowDensity.compact") },
           { value: "default", text: t("viewConfig.rowDensity.default") },
           { value: "comfortable", text: t("viewConfig.rowDensity.comfortable") },
@@ -430,18 +441,18 @@ export class ViewConfigPanelRenderer {
         // Default off, matching the pre-existing clip behavior — an upgraded vault's tables
         // render unchanged until the reader opts in. A column's own Wrap/Clip choice (the column
         // menu) always overrides this per-view default.
-        this.renderSwitch(body, t("viewConfig.wrapText"), config.wrapText === true, (value) => {
+        this.renderSwitch(host, t("viewConfig.wrapText"), config.wrapText === true, (value) => {
           config.wrapText = value || undefined;
           actions.onChange(t("undo.wrapTextConfig"));
         });
         // Reader-authored text, not a translation key. Empty/whitespace-only is the unconfigured
         // case — the button falls back to today's fixed "+ New" string.
-        this.renderText(body, t("viewConfig.addRowNoun"), config.addRowNoun || "", t("viewConfig.addRowNoun.placeholder"), (value) => {
+        this.renderText(host, t("viewConfig.addRowNoun"), config.addRowNoun || "", t("viewConfig.addRowNoun.placeholder"), (value) => {
           config.addRowNoun = value || undefined;
           actions.onChange(t("undo.addRowNounConfig"));
         });
       }
-      this.renderSelect(body, t("viewConfig.yearDisplayMode"), [
+      this.renderSelect(host, t("viewConfig.yearDisplayMode"), [
         { value: "always", text: t("viewConfig.yearDisplayMode.always") },
         { value: "smart", text: t("viewConfig.yearDisplayMode.smart") },
         { value: "never", text: t("viewConfig.yearDisplayMode.never") },
@@ -451,15 +462,15 @@ export class ViewConfigPanelRenderer {
       });
     }
     if (config.viewType !== "table" && config.viewType !== "chart" && !isCalendarTimelineView) {
-      this.renderTitleField(body, config, actions);
-      this.renderTitleFormat(body, config, actions);
-      this.renderSwitch(body, t("viewConfig.showEmptyFields"), config.showEmptyFields === true, (value) => {
+      this.renderTitleField(host, config, actions);
+      this.renderTitleFormat(host, config, actions);
+      this.renderSwitch(host, t("viewConfig.showEmptyFields"), config.showEmptyFields === true, (value) => {
         config.showEmptyFields = value || undefined;
         actions.onChange(t("undo.showEmptyFieldsConfig"));
       });
     }
     if (config.viewType === "board") {
-      this.renderBoardSettings(body, config, actions);
+      this.renderBoardSettings(host, config, actions);
       this.presentPanel(panel, anchorEl);
       this.restoreScroll(savedScroll);
       return;

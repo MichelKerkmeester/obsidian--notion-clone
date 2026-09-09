@@ -12234,7 +12234,11 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
 /* The reference's hairline: a row that follows another row, or a heading that follows anything,
    opens with one. It runs inset on the left, where the content it separates sits, and flush right,
    where the sheet's own edge grounds it — one pixel, the subtle divider token where that token
-   resolves, a literal stand-in where its inputs are not defined. */
+   resolves, a literal stand-in where its inputs are not defined.
+
+   A row whose previous sibling is a section card draws no hairline: the card boundary is the
+   separator there, the same way a heading's own card boundary is — a hairline at a card seam
+   would draw two separators one pixel apart. */
 .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-panel-row + .obnotion-panel-row::before,
 .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-section-title:not(:first-child)::before {
   content: "";
@@ -12244,6 +12248,37 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
   right: 0;
   height: 1px;
   background: var(--obnotion-border-subtle, rgba(221, 221, 221, 0.4));
+}
+
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-body > .obnotion-settings-card + .obnotion-view-config-section-title::before {
+  content: none;
+}
+
+/* The settings sheet's card grouping. The sheet's own surface token stays the canvas; each
+   section's rows collect on a card at the host's page fill, which reads lifted against it in both
+   themes (light canvas steps toward black, dark toward white — both away from the page fill).
+   The inset is the sheet's own 16px so the cards' content keeps the one inset every phone sheet
+   already reads; the gap and radius are the provisional numbers pending the operator's reference
+   capture and retune. Content inside the card carries the inset, so the card itself spans the
+   body's full width and the canvas shows through the 12px between cards. */
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-body > .obnotion-settings-card {
+  border-radius: var(--obnotion-radius-lg);
+  background: var(--background-primary);
+  margin: 0 var(--obnotion-sheet-inset) var(--obnotion-space-5);
+}
+
+/* A heading sitting above its own card is the card's label: the card supplies the separation the
+   hairline used to draw, so the heading keeps only its own spacing — top before the first group,
+   bottom breathing room above its card, and the same horizontal inset the rows read. */
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-section-title:has(+ .obnotion-settings-card) {
+  padding: var(--obnotion-space-3) var(--obnotion-sheet-inset) var(--obnotion-space-2);
+}
+
+/* The first heading opens the sheet and carries the header's own spacing; the one before it only
+   owes space to separate it from the card above — the card's bottom margin already gives the
+   rest. */
+.obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-body > .obnotion-settings-card + .obnotion-view-config-section-title {
+  padding-top: 0;
 }
 
 /* The same hairline grammar, extended to the filter, sort and group sheets — the close-button
