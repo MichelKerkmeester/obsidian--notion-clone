@@ -1401,6 +1401,12 @@ const measureSettingsRowGrammar = () => {
     sections,
     nativeSelectCount: sheet.querySelectorAll("select").length,
     sheetScrollWidth: sheet.scrollWidth,
+    // The shared extent rule the sideways-overflow sweep itself uses: the sheet's own
+    // 1px left border is not sideways scroll. That border resolves once the
+    // border-subtle token carries its definition-site fallback, so a raw scrollWidth
+    // reads 1px past clientWidth by construction; the extent is the honest comparison.
+    sheetScrollExtent:
+      sheet.scrollWidth - (Number.parseFloat(getComputedStyle(sheet).borderLeftWidth) || 0),
     sheetClientWidth: sheet.clientWidth,
   };
 };
@@ -3409,9 +3415,10 @@ try {
       if (narrowStacks.length > 0) failures.push(`settings sheet reference row grammar: ${narrowStacks.length} of ${stackRows.length} stack rows give their control less than ${Math.round(SETTINGS_ROW_WIDTH_RATIO_MIN * 100)}% of the sheet's inner width`);
       console.log(`  ${narrowStacks.length === 0 ? "PASS" : "FAIL"}  ${stackRows.length - narrowStacks.length}/${stackRows.length} stack rows keep their control at >= ${Math.round(SETTINGS_ROW_WIDTH_RATIO_MIN * 100)}% of the sheet's inner width`);
     }
-    const noOverflow = settingsRowGrammar.sheetScrollWidth <= settingsRowGrammar.sheetClientWidth + FRAME_GEOMETRY_TOLERANCE_PX;
-    if (!noOverflow) failures.push(`settings sheet reference row grammar: sheet scrollWidth ${settingsRowGrammar.sheetScrollWidth} exceeds clientWidth ${settingsRowGrammar.sheetClientWidth}`);
-    console.log(`  ${noOverflow ? "PASS" : "FAIL"}  sheet scrollWidth (${settingsRowGrammar.sheetScrollWidth}) === clientWidth (${settingsRowGrammar.sheetClientWidth})`);
+    const scrollExtent = settingsRowGrammar.sheetScrollExtent ?? settingsRowGrammar.sheetScrollWidth;
+    const noOverflow = scrollExtent <= settingsRowGrammar.sheetClientWidth + FRAME_GEOMETRY_TOLERANCE_PX;
+    if (!noOverflow) failures.push(`settings sheet reference row grammar: sheet scrollWidth extent ${scrollExtent} exceeds clientWidth ${settingsRowGrammar.sheetClientWidth}`);
+    console.log(`  ${noOverflow ? "PASS" : "FAIL"}  sheet scrollWidth extent (${scrollExtent}) === clientWidth (${settingsRowGrammar.sheetClientWidth})`);
   }
   console.log("");
 

@@ -81,6 +81,13 @@ describe("view-config sheet reference row grammar", () => {
     expect(divider![1]).toContain(
       "background: var(--obnotion-border-subtle, rgba(221, 221, 221, 0.4));"
     );
+    // the earlier settings-sheet leg's surviving intent, carried into this
+    // suite when the two legs' same-path suites merged: the token itself
+    // resolves where the host theme defines no --background-modifier-border,
+    // so the hairline paints there too.
+    expect(stylesContent).toContain(
+      "--obnotion-border-subtle: color-mix(in srgb, var(--background-modifier-border, #333333) 40%, transparent);"
+    );
     // The same line opens a section heading that follows anything, so the
     // heading's own rule only positions it and delegates the divider.
     const heading = ruleFor(

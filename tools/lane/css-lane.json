@@ -5888,6 +5888,36 @@
         "screenshots/notion-clone/panels/panel-view-config-sheet-mobile-light.png"
       ],
       "note": "Recaptured twice from a clean index (npm run screenshots, 616 entries, exit 0 both; identical PNG sets both runs, so nothing on this release is a one-run phantom). 6 captures moved content, all of them the redesigned surface: the view-config sheet's own 4 (constructed-view-config, panel-view-config-sheet, dark and light) and the 2 constructed-board-card-properties, which render the same .obnotion-view-config-panel and so move with it. Read by number, not by eye: view-config 342-345k pixels moved (maxDelta 176-196), board-card-properties 440k (maxDelta 194-209) — the redesign's geometry, deterministic across both runs, no jitter. Two board-view captures moved 1-4 pixels at maxDelta 1 and the working manifest reads their pixelHash unchanged, so they are byte movers, not a review this release owes. This leg reviews by measurement (headless)."
+    },
+    {
+      "event": "acquire",
+      "phase": "004-view-config-sheet",
+      "at": "2026-09-09T02:08:49Z",
+      "hash": "e061ee373e17",
+      "note": "Post-rebase re-take: the leg's single commit c820d688 replayed onto 2d9af89c (which had grown 071/002-settings-sheet, the 066 wave-2 toast, 071/003-add-property-sheet and the 0.0.34 cut) as f72e50cd. 002's own settings-sheet redesign landed underneath this one, so the merged stylesheet is a combination no earlier entry measured; 004 re-takes the lane to reconcile it, exactly the 072/002/003 precedent. styles.css resolved with this leg's hunks (the later redesign of the same sheet); 002's surviving contribution - the #333333 definition-site fallback inside --obnotion-border-subtle's color-mix, whose use-site residue this edit's own divider rule also carries - rides the merge; the ledger keeps both sides' histories append-only."
+    },
+    {
+      "event": "edit",
+      "phase": "004-view-config-sheet",
+      "at": "2026-09-09T02:08:49Z",
+      "hash": "92ad633b2666",
+      "note": "Merged-stylesheet measurement: baselineHash recomputed to 92ad633b2666 (shasum -a 256 of the rebased styles.css). Nothing in styles.css changed during this pass. On the merged tree: tsc --noEmit 0, vitest 161 files / 1742 tests 0, build 0, sheet-grammar exit 0 (13/13 direction, 6/6 pitch 48.0, 18/18 hairlines, 16px insets, 0 native selects; the 5-part negative control reads red then green), scan-comments 0."
+    },
+    {
+      "event": "release",
+      "phase": "004-view-config-sheet",
+      "at": "2026-09-09T02:08:49Z",
+      "hash": "92ad633b2666",
+      "reviewed": [
+        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-view-config-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-view-config-mobile-light.png",
+        "screenshots/notion-clone/panels/panel-view-config-sheet-mobile-dark.png",
+        "screenshots/notion-clone/panels/panel-view-config-sheet-mobile-light.png",
+        "screenshots/notion-clone/views/calendar-empty-state-mobile-light.png"
+      ],
+      "note": "Screenshots x3 (npm run screenshots 616 entries, exit 0 all three; the third supplied the pixel-delta bookkeeping's missing prior-run sample, the 073/002 precedent). Judged by decoded pixel delta against the committed (main-side) blobs across two sampled runs: 6 content movers, all this edit's own redesigned surface (constructed-view-config, panel-view-config-sheet, constructed-board-card-properties, dark and light - 241639-332565 changed pixels, max channel delta 192-209), every one moved in BOTH sampled runs, so kept; the numbers differ from the leg's pre-rebase record because the committed baseline they moved against is now 002's geometry, not the 073-era one. Plus calendar-empty-state-mobile-light 12px at max delta 1, moved in both sampled runs - the lane's recurring rasteriser instability 073/003 recorded, kept at its recaptured bytes. 2 one-run movers reproduced their committed blobs on the second sampled run and so carry no moving bytes to keep: constructed-calendar-toolbar-options-desktop-light 32px at 186 and board-view-desktop-dark 4px at 1 (both precedented; the variance recorded here). 0 restores. This leg reviews by measurement (headless); the visual read stays the operator device pass. Evidence re-derived against 92ad633b2666: the 13 stale census artefacts refreshed by their own writers, evidence --check-all 15/15 fresh; engine-parity 82 fixtures / 51 differences (main's committed 43 + 8: the panel-invalid-events-modal checkbox-background rounding, rgba 0.016 vs 0, exit 1 INFORMATIONAL by design)."
     }
   ],
   "outstanding": [

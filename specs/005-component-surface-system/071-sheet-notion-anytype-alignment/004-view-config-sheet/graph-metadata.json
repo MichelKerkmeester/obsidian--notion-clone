@@ -207,7 +207,7 @@
     ],
     "causal_summary": "The view-config sheet carries the title field/title format controls 058 shipped and the column-visibility controls 045 shipped, built incrementally rather than against a single reference layout",
     "created_at": "2026-09-08T06:24:05Z",
-    "last_save_at": "2026-09-08T22:26:58.740Z",
+    "last_save_at": "2026-09-09T02:26:33.200Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,7 +219,7 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:f757ed16e86c7e9fea5209b3affe7eab3e5320e63e24d28540413f0f5f4a490f",
+    "source_fingerprint": "sha256:06a250876818e4d7b3222c082470e1591a3a361823568686946dcec2af926a2b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "9aaf740492b62bebb8ac9d4b7b1d7009d5f77faf747c985f4e04d20d5647ed19",

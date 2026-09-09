@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-09T00:29:14.909Z",
+  "measuredAt": "2026-09-09T02:01:25.496Z",
   "inputs": {
-    "styles.css": "f3feddd7c055",
+    "styles.css": "92ad633b2666",
     "tools/live/engine-parity.mjs": "de4db2b1d210",
     "tools/screenshots/scenarios.mjs": "4c26fcda113a"
   },
   "totals": {
     "fixtures": 82,
-    "differences": 43
+    "differences": 51
   },
   "differences": [
     {
@@ -168,6 +168,70 @@
       "index": 7,
       "notes": [
         "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 0,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
+      ]
+    },
+    {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 1,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
+      ]
+    },
+    {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 2,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
+      ]
+    },
+    {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 3,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
+      ]
+    },
+    {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": ".obnotion-checkbox",
+      "index": 0,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
+      ]
+    },
+    {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": ".obnotion-checkbox",
+      "index": 1,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
+      ]
+    },
+    {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": ".obnotion-checkbox",
+      "index": 2,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
+      ]
+    },
+    {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": ".obnotion-checkbox",
+      "index": 3,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.016)"
       ]
     },
     {
