@@ -39,6 +39,10 @@ export interface RowMenuActions {
   /** Open the note-name editor for a row. Absent on hosts that cannot rename, such as the
    *  embedded renderer, where the entry then does not appear rather than appearing dead. */
   renameRow?(row: RowData, anchorEl?: HTMLElement): void;
+  /** Jump to the settings sheet's own title rows (the one canonical surface), scrolled to the
+   *  title-field row. Absent on hosts without the settings panel, where the entry then does not
+   *  appear rather than appearing dead — the same rule renameRow above follows. */
+  openCardTitleSettings?(): void;
   isRecordIconShown?(): boolean;
   canToggleRecordIcon?(): boolean;
   toggleRecordIcon?(anchor: HTMLElement, row: RowData): void;
@@ -149,6 +153,20 @@ export class RowMenu {
           icon: "pencil",
           label: t("menu.renameNote"),
           onClick: () => this.actions.renameRow?.(row, anchorEl),
+        });
+      }
+
+      // The settings sheet's title rows sit mid-sheet behind the generic Settings entry, which is
+      // exactly where a reader stops looking: on the board they asked where a card's name and its
+      // number format are set on a build that had shipped both. A board-only row in the menu the
+      // card itself opens puts the control where the question forms — the sheet still owns the
+      // only picker, the menu only names the way in. On any other view the cards' surfaces have
+      // no such seam, so the row would promise more than it scrolls to.
+      if (config?.viewType === "board" && this.actions.openCardTitleSettings) {
+        menu.addRow({
+          icon: "type",
+          label: t("menu.cardTitle"),
+          onClick: () => this.actions.openCardTitleSettings?.(),
         });
       }
 

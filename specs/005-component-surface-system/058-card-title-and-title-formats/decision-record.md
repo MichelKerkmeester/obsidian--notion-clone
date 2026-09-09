@@ -609,3 +609,106 @@ actually reading the same value.
 
 **How to roll back**: Reintroduce the `title.isFileTitle ? row.file.basename : title.text` branch —
 not recommended; it silently drops any file-name titleFormat.
+
+---
+
+## ADR-007: Where the board's card-title control lives, and the Title format row speaks for itself
+
+### Metadata
+
+| Field | Value |
+|-------|-------|
+| **Status** | Accepted |
+| **Date** | 2026-09-09 |
+| **Deciders** | The discoverability leg, implementing AC-012 on the build that already shipped the feature |
+
+---
+
+### Context
+
+The operator reported (2026-09-08, verbatim: "Also how to set a board card name + number format?
+You know that request i asked about?") on the same build that had shipped AC-001..AC-011 in 0.0.32.
+The feature existed; the path to it did not announce itself. The Title field / Title format rows sit
+mid-sheet behind the generic Settings entry, nothing on the board names them, and the Title format
+row's own docstring carries the only statement of the condition that hides it — a chosen column
+keeps its own format, so the row yields to it — a fact no control in the sheet announces. The
+operator therefore met a sheet whose rows include one that can vanish, and asked instead of
+finding.
+
+### Constraints
+
+- Additive only: 071/004 is redesigning this same sheet in a parallel worktree, so the edit must
+  not restyle or re-arrange the sheet's rows — a changed comment beside the title rows and one
+  optional parameter are the entire sheet-side surface.
+- One picker (ADR-002): a menu entry that duplicates the titleField picker would create a second
+  competing control; the entry must reach the sheet's own.
+- No `styles.css` change, so no capture re-review beyond the rows the hint itself moves.
+- The comment grammar: no spec path or artifact id in any code comment.
+
+### Decision
+
+**We chose**: the board card's own overflow menu carries a board-only **Card title** row (two taps:
+the card menu, then the entry) whose jump opens the settings sheet this view already renders —
+`DatabaseView.openCardTitleSettings` calls `toggleHeaderPopover("view")` with the settings button as
+anchor, the same element the toolbar's own click would have stored, so dismissal focus lands where
+the reader expects — and scrolls the `data-config-row="title-field"` row under the thumb. On any
+host without the action the entry does not appear rather than appearing dead, the same rule the
+Rename note row follows. And the Title format row carries a `data-config-row="title-format"` marker
+plus a one-line hint that names both what the row controls and when it applies — a chosen column
+keeps its own format — so the row's disappearance is explained where it happens, not in this
+repository's prose.
+
+**Why this placement and not another**: the Notion reference this packet queued does not exist yet
+(`screenshots/notion/` was still absent at the 2026-09-09 implementation, goal D6), so the choice
+follows the packet's own evidence rather than a reference. The card's context menu is the affordance
+a thumb finds — that is the reasoning the Rename note row already records, and it is the surface
+the operator's question ("card name") points at. The settings sheet keeps sole ownership of the
+picker (ADR-002); the menu only names the way in.
+
+### Alternatives Considered
+
+- A toolbar-adjacent entry: 071/004 owns the toolbar's redesign; racing it with a second
+  Settings-adjacent affordance invites exactly the conflict the additive constraint exists to
+  avoid. The card menu needs neither.
+- Renaming the rows ("Card title" / "Number format"): would churn the three locales and every
+  label-pinning test for a benefit the hint now delivers — the hint says what the row does in the
+  operator's own vocabulary while the established labels stay stable.
+- Making the Title format row always visible: the row would offer a choice that cannot take effect
+  while a column is the title — the condition its docstring already justifies. Announcing the
+  condition (the hint) solves the discovered confusion at a smaller size than an always-present
+  but sometimes-impotent control.
+
+### Consequences
+
+- The board's card menu grows one row; other views are untouched (board-only guard, because the
+  entry promises a scroll to rows only the board's settings sheet shares this way).
+- The 2-tap count is enforced at the source level (`row-menu.test.ts`'s two-tap suite); whether the
+  operator actually finds the control is the device read this packet's AC-008 pattern reserves for
+  the operator.
+- 071/004, when it lands, inherits one extra optional parameter on `renderSelect` and two extra
+  marked rows; nothing it redesigns moves.
+
+### Five Checks Evaluation
+
+| # | Check | Result | Evidence |
+|---|-------|--------|----------|
+| 1 | **Necessary?** | PASS | The operator asked on the build that shipped the feature; the discoverability defect is AC-012's whole subject |
+| 2 | **Beyond Local Maxima?** | PASS | The first fix everyone reaches for is renaming or a hint alone; the 2-tap entry point treats the path, not the label |
+| 3 | **Sufficient?** | PASS | The hint carries the visibility condition out of the docstring, where it was invisible by construction |
+| 4 | **Fits Goal?** | PASS | Grounds AC-012 in this packet's own closure note; the additive constraint serves the parallel-leg coordination the packet's handover records |
+| 5 | **Open Horizons?** | PASS | Calendar/timeline's own title fields (ADR-001, D5) untouched; the hint mechanism is generic but used exactly once |
+
+**Checks Summary**: 5/5 PASS
+
+---
+
+### Implementation
+
+**What changes**: `row-menu.ts` (the guarded board-only row and the optional `openCardTitleSettings`
+action), `database-view.ts` (the wiring and the jump), `view-config-panel-renderer.ts` (the optional
+`hint` parameter; the Title format row's marker and hint), `i18n.ts` (`menu.cardTitle` and
+`viewConfig.titleFormat.hint`, all three locales). Red first: 3/17 failing across the two suites;
+green 17/17; the hint argument alone, reverted, fails 1/14.
+
+**How to roll back**: Revert the four edits — the guarded menu row, the wiring + jump, the hint
+parameter's use on the one row, the two i18n keys. Not recommended; the operator re-asks.

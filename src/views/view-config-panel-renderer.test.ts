@@ -460,6 +460,22 @@ describe("title format row", () => {
     const labels = panel.querySelectorAll(".obnotion-view-config-label").map((row) => row.textContent);
     expect(labels).toContain(t("viewConfig.titleFormat"));
   });
+
+  it("carries a hint naming what the row controls, and a marker the board's card menu can scroll to", () => {
+    // Discoverability: the row only renders while the title reads the file name, a condition no
+    // control declares — the hint has to say what the row does AND when it applies, or the
+    // operator meets a disappearing row and (per the 0.0.32 report) asks instead of finding it.
+    // The marker is the second half of the same defect: the card menu's jump needs a target
+    // distinct from the Title field picker's own marker.
+    const { panel } = mountTitleFormatPanel();
+    const row = panel.querySelector('div[data-config-row="title-format"]');
+    expect(row).not.toBeNull();
+    // This mount is desktop, so hintClass() resolves to the desktop help class (the phone sheet
+    // spelling is proven by the browser lane, which mounts the real sheet).
+    const hint = row!.querySelector(".obnotion-view-config-help");
+    expect(hint).not.toBeNull();
+    expect(hint!.textContent).toBe(t("viewConfig.titleFormat.hint"));
+  });
 });
 
 describe("conditional-colour summary row", () => {

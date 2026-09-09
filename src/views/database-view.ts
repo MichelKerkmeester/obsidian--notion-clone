@@ -763,6 +763,7 @@ export class DatabaseView extends FileView {
       deleteRow: (row) => this.deleteRow(row),
       duplicateRow: (row) => this.duplicateRow(row),
       renameRow: (row, anchorEl) => this.renameRowFromMenu(row, anchorEl),
+      openCardTitleSettings: () => this.openCardTitleSettings(),
       isRecordIconShown: () => this.getConfig()?.showRecordIcon === true,
       canToggleRecordIcon: () => ["table", "board", "gallery", "list", "calendar", "timeline"].includes(this.getConfig()?.viewType || "table"),
       toggleRecordIcon: (anchor, row) => this.toggleCurrentViewRecordIcon(anchor, row),
@@ -5294,6 +5295,18 @@ export class DatabaseView extends FileView {
       },
       this.getHeaderPopoverAnchor("columns")
     );
+  }
+
+  /** The card menu's “Card title” lands here: it opens the settings sheet this view already
+   *  renders — never a second picker — and brings the title-field row up, because a fresh open
+   *  otherwise restores whatever scroll the sheet last had rather than the rows the entry
+   *  promised. The anchor is the settings button, the same one the toolbar's own click would
+   *  have stored, so dismissal still returns focus where the reader expects it. */
+  private openCardTitleSettings(): void {
+    if (!this.isHeaderPopoverVisible("view")) {
+      this.toggleHeaderPopover("view", this.containerEl_?.querySelector<HTMLElement>(".obnotion-view-config-btn") || this.containerEl_!);
+    }
+    this.containerEl_?.querySelector<HTMLElement>('[data-config-row="title-field"]')?.scrollIntoView?.({ behavior: "smooth", block: "center" });
   }
 
   private renderViewConfigPanel(): void {

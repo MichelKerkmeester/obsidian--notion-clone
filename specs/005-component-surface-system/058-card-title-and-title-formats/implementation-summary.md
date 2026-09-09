@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Card Title and Title Formats"
-description: "The shared title resolver routes currency/number/date titleFields through their own column's formatter, the board's Title fixed slot opens the existing picker, and the cross-surface agreement is locked by a regression test; the gate is 26 green and AC-008 stays the operator's."
+description: "The shared title resolver routes currency/number/date titleFields through their own column's formatter, the board's Title fixed slot opens the existing picker, the cross-surface agreement is locked by a regression test, and the board card's own menu carries the two-tap Card title jump with a hint under Title format (AC-012); the gate is 27 green and AC-008 stays the operator's."
 trigger_phrases:
   - "058 implementation summary"
   - "card title format status"
@@ -9,9 +9,9 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/058-card-title-and-title-formats"
-    last_updated_at: "2026-09-06T17:55:00Z"
-    last_updated_by: "impl-058"
-    recent_action: "landed and verified T003-T010; gate 26 green; AC-008 stays the operator's"
+    last_updated_at: "2026-09-09T05:35:00Z"
+    last_updated_by: "impl-058-ac012"
+    recent_action: "landed and verified AC-012; gate 27 green; AC-008 stays the operator's"
     next_safe_action: "AC-008's operator device read on a released build; then close"
     blockers:
       - "AC-008 is the operator's device read, unclosable here"
@@ -19,14 +19,17 @@ _memory:
       - "src/data/title-field-display.ts"
       - "src/views/board-card-properties-panel.ts"
       - "src/views/view-config-panel-renderer.ts"
+      - "src/views/row-menu.ts"
+      - "src/views/database-view.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-058-impl"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 95
     open_questions:
       - "Does 047's landed Notion harvest change ADR-002's picker-location call once 065 reads it"
     answered_questions:
+      - "T015/AC-012 landed 2026-09-09: the 2-tap Card title jump from the board card's own menu, and the Title format row's hint that names what it controls and the chosen-column-keeps-its-own-format condition; the placement is precedented, not referenced (no Notion reference yet, goal D6)"
       - "T004 landed: currency/number titles format via formatEuroCurrency/formatEuroNumber, date/datetime via the existing date formatters, text/file.* byte-identical"
       - "T005 landed: the Title fixed slot scrolls to and opens the general section's titleField dropdown; the Cover row stays a read-only negative control"
       - "T006 landed: the cross-surface titleField agreement is locked by test for every view but calendar/timeline"
@@ -45,7 +48,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 058-card-title-and-title-formats |
-| **Completed** | Code landed and gated. One row stays open: AC-008, the operator's device read, which an agent never ticks |
+| **Completed** | Code landed and gated, the AC-012 discoverability leg included (2026-09-09). One row stays open: AC-008, the operator's device read, which an agent never ticks |
 | **Level** | 2 |
 <!-- /ANCHOR:metadata -->
 
@@ -127,6 +130,46 @@ tint to clickable fixed slots only.
 
 `board-renderer.ts` and `record-detail-panel.ts` were deliberately not edited — they read the
 resolver's output unchanged, and the zero-line diff is the FIX ADDENDUM's own verification.
+
+### The discoverability leg (AC-012, 2026-09-09)
+
+The operator reported (R4, 2026-09-08, "Also how to set a board card name + number format? You know
+that request i asked about?") on the build that had shipped the feature in 0.0.32 — the rows sat
+mid-sheet behind the generic Settings entry, and the one fact that explains the Title format row's
+disappearance (a chosen column keeps its own format) lived only in this repository's prose. The fix
+is purely additive so it cannot collide with the 071/004 redesign of the same sheet, whose leg is
+in flight in a parallel worktree:
+
+- **The two-tap jump** — `row-menu.ts`'s board-only `Card title` row (the board card's own context
+  menu, placed beside Rename note, both naming actions) calls the new optional
+  `RowMenuActions.openCardTitleSettings`; `DatabaseView` implements it as
+  `toggleHeaderPopover("view")` with the settings button as anchor — the element the toolbar's own
+  click would have stored, so dismissal focus behaves as the toolbar path taught — then scrolls
+  `data-config-row="title-field"` (AC-004's seam, reused; no second picker, ADR-002) under the
+  thumb. On hosts without the action the entry does not appear rather than appearing dead, the
+  Rename note row's own rule.
+- **The hint** — `view-config-panel-renderer.ts`'s `renderSelect` gained an optional trailing
+  `hint` (rendered below its own row, the conditional-colour summary's precedent) and the Title
+  format row gained the `data-config-row="title-format"` marker plus a hint naming what it controls
+  and the chosen-column-keeps-its-own-format condition; `i18n.ts` carries `menu.cardTitle` and
+  `viewConfig.titleFormat.hint` in all three locales.
+
+Red first: 3/17 failing across `row-menu.test.ts` (the two-tap path, source-shaped per that suite's
+established precedent — OwnedMenu needs a document the suite does not have) and
+`view-config-panel-renderer.test.ts` (the hint + marker). Green 17/17; the hint argument alone,
+reverted, failed 1/14, restored. Placement precedented, not referenced: `screenshots/notion/` still
+does not exist (goal D6), so the card-menu choice follows the packet's own evidence — it is the
+affordance a thumb finds, the reasoning the Rename note row already records (ADR-007). The hinted
+surface's captures (constructed-board-card-properties, both themes both devices) moved as REAL and
+were reviewed by decoded pixel delta across two sampled runs: 194,742/187,600/55,562/55,566 changed
+pixels at max channel deltas 229/209/176/196, every one moved in both runs with byte-identical
+deltas; `styles.css` untouched, so no css-lane triplet owed — the lane's own hash agrees
+(92ad633b2666), and the two movers the lane had not yet been told about were named on the holder's
+release entry. `evidence --check-all` 15/15 after re-running `capture-device-parity` and
+`sheet-rebuild`; `npm run gate`'s first run FAILed on two stale lanes (operator-list — 071/004's
+reworded landing row, regenerated by its own builder — and css-lane — this leg's unnamed movers);
+the second run PASS, 27 green, 0 red, exit 0 read from the file. The full battery is the AC-012
+Verification cell in `acceptance-criteria.md`; not pushed — a fresh verifier lands it.
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -168,6 +211,7 @@ and the T009 replay (`149aa5ed`, `f10cbf77`).
 | `npm run gate` | exit 0 — 26 green, 0 red |
 | `npm run replay` | exit 0 — all 28 results hold, 0 reversed |
 | `npm run screenshots:verify` | exit 0 — 588/588 entries match their sources; all ten new PNGs opened and read, both themes |
+| After the discoverability leg (2026-09-09), from the final tree | `npx tsc --noEmit` 0; `npm run build` 0; `npx vitest run` 1745/1745; `sheet-grammar`/`render-assertions`/`touch-targets` 0; `verify-placement` 418/420 (2 declared); `evidence --check-all` 15/15; `npm run gate` 27 green, 0 red — see the discoverability leg above; not pushed |
 
 Re-run from the final tree at landing; exit codes read directly, no pipe.
 <!-- /ANCHOR:verification -->

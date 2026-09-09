@@ -2034,6 +2034,14 @@ export class ViewConfigPanelRenderer {
         config.titleFormat = value === "text" ? undefined : (value as ViewConfig["titleFormat"]);
         actions.onChange(t("undo.titleFormatConfig"));
       },
+      // The marker gives the card menu's Card title jump a target of its own (the Title field
+      // picker above carries the title-field one), and the hint carries the row's visibility
+      // condition out of this source file: the row yields to a chosen column's own format, which
+      // no control in the sheet otherwise announces.
+      false,
+      undefined,
+      { "data-config-row": "title-format" },
+      t("viewConfig.titleFormat.hint"),
     );
   }
 
@@ -2132,7 +2140,8 @@ export class ViewConfigPanelRenderer {
     onChange: (value: string) => void,
     searchable = false,
     disabled = false,
-    rowAttr?: Record<string, string>
+    rowAttr?: Record<string, string>,
+    hint?: string
   ): void {
     const row = panel.createDiv({ cls: this.rowClass(), attr: rowAttr });
     row.createDiv({ cls: "obnotion-view-config-label", text: label });
@@ -2154,6 +2163,10 @@ export class ViewConfigPanelRenderer {
         if (!renderDropdownPropertyTypeIcon(parent, icon)) setIcon(parent, icon);
       } : undefined,
     });
+    // A hint rides below its own row (the conditional-colour summary's precedent) rather than
+    // inside the control's field: it speaks for the row, and the row's label stays short enough
+    // to share a line with its control.
+    if (hint) row.createDiv({ cls: this.hintClass(), text: hint });
   }
 
   private toFieldDropdownOption(config: ViewConfig, col: ColumnDef): DropdownOption {
