@@ -56,6 +56,7 @@ resend the full text of this file in chat so the operator can update their copy.
 - [x] Phase 1's reference mapping read before redesign starts — `spec.md:120` onward quotes `001/inventory.md` rows 45 (filter-panel), 44 (sort-panel) and 133 (group panel)
 - [x] Sheets redesigned and recaptured against their mapped reference — filter and sort's row grammar (single-column rows, 44-52px pitch, 16px inset) already converged in prior runs; this session closed the group popover's own overflow (desktop-style scrollbar shrinking the drag-handle row by 8px) and its missing first-section divider (`:first-of-type` tag census vs class-sibling `X ~ X`); `tools/live/sheet-grammar.mjs` PASS exit 0 for filter, sort and group; recapture 616/616 twice, 14 real movers (scrollbar-thumb removal), 2 encoder-jitter reverted; reference columns stay `TBD` (D-005, inherited — no third-party reference carries readable measurements)
 - [x] Regression check against the freeze fix in 85ff504 passes — `tools/live/sheet-rebuild.mjs` PASS exit 0, every rebuilt sheet still has the bar it opened with
+- [x] The sort sheet presents the flush frame — full width, bottom edge on the viewport, no gap — on the operator's 2026-09-09 report; `tools/live/sheet-grammar.mjs`'s frame-role clause RED (floating, 8/8/8px insets at 390px) → GREEN (flush, 0/0/0px) via the sort sheet's declared `heightRole: "flush"`; the operator's own device recheck stays open per the parent D3 decision (not ticked here)
 <!-- /ANCHOR:completion -->
 
 ---

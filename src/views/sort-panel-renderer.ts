@@ -140,7 +140,15 @@ export class SortPanelRenderer {
       this.render(containerEl, true, config, state, actions, this.anchorEl || undefined);
       actions.refresh();
     };
-    positionToolbarPopover(panel, this.anchorEl || undefined, PANEL_POPOVER);
+    positionToolbarPopover(panel, this.anchorEl || undefined, {
+      ...PANEL_POPOVER,
+      // The sheet presents flush: full width, bottom edge on the viewport. Its short body used to
+      // fall to the mounted classifier's floating card — insets on both sides and a gap underneath
+      // — while the taller panels it sits beside on the same toolbar span the viewport, and a
+      // short panel is exactly the case that guess answers differently. Declared, it keeps the
+      // wide frame however few sort rules it renders.
+      heightRole: "flush",
+    });
     if (savedScroll) panel.scrollTop = savedScroll;
   }
 

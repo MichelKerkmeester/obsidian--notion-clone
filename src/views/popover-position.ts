@@ -64,6 +64,14 @@ export interface ToolbarPopoverPositionOptions {
    * overlay stack) rather than inventing a second sheet host for the desktop case.
    */
   forceSheet?: boolean;
+  /**
+   * Which of the two measured phone frame shapes this surface is, declared through the sheet
+   * chrome instead of left to the mounted classifier's midpoint guess. A panel whose height
+   * depends on its own content sits either side of that guess — a short sort list, for one, reads
+   * as the narrow floating card while the taller panels beside it on the same toolbar span the
+   * viewport, which is the divergence a side-by-side trigger row makes visible.
+   */
+  heightRole?: "floating" | "flush";
 }
 
 /**
@@ -186,7 +194,7 @@ export function positionToolbarPopover(
 
   // Presentation now lives in the sheet module so surfaces without an anchor — modals — can reach
   // it too. This function keeps placement, which is the part that genuinely needs an anchor.
-  applySheetChrome(panel, mobileSheet);
+  applySheetChrome(panel, mobileSheet, options.heightRole ? { heightRole: options.heightRole } : undefined);
   // Absorbed rather than presented: the depth cap (`overlay-stack.ts`) can hand a would-be third
   // sheet to a parent shell's own `replace` before this popover ever mounts as one, and
   // `applySheetChrome` takes the sheet class back off to say so (`surface-shell.ts`'s own

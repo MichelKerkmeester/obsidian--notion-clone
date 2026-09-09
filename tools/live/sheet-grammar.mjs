@@ -176,13 +176,16 @@ const TITLE_CENTER_TOLERANCE_PX = 1;
 // 2d. THE FRAME SHAPE
 // ───────────────────────────────────────────────────────────────────
 
-// One short surface, one tall one — the two measured shapes, not a sweep over every registered
-// row: `sort-panel` renders three rows and stays well clear of the 90svh cap (240px measured);
-// `settings` renders the whole view-config body and hits that cap outright (759.6px of an 844px
-// viewport, both measured against the same fixtures the rest of this lane already mounts). A
-// third value between the two is exactly what the capture set never produced either.
+// One row per mechanism, both shapes covered: the column-width adjuster declares `floating` at
+// its own mount (its content is fixed, so nothing there is worth a measurement), the sort sheet
+// declares `flush` so its short body keeps the full-width frame its taller trigger-row neighbours
+// present rather than the floating card its height alone would infer, and `settings` stays
+// undeclared — the classifier's own answer, exercised exactly as a surface without a declaration
+// meets it (759.6px of an 844px viewport, measured against the same fixtures the rest of this
+// lane already mounts).
 const FRAME_SHAPE_SURFACES = [
-  { name: "sort-panel", shape: "floating", spec: { renderer: "sort-panel", bag: "file-view", captureData: true } },
+  { name: "column-width", shape: "floating", spec: { renderer: "column-width-adjuster", bag: "file-view", captureData: true } },
+  { name: "sort-panel", shape: "flush", spec: { renderer: "sort-panel", bag: "file-view", captureData: true } },
   { name: "settings", shape: "flush", spec: { renderer: "view-config", bag: "file-view", captureData: true } },
 ];
 
@@ -863,9 +866,9 @@ window.__sheetFrameShape = (scenario) => {
   return out;
 };
 
-// The negative control neutralises the shape rule itself — the CSS mobile-bottom-sheet.ts's
-// classifier depends on — rather than the class the ResizeObserver toggles, so it proves the
-// GEOMETRY is load-bearing even on a surface the classifier still (correctly) calls floating.
+// The negative control neutralises the shape rule itself — the CSS the floating frame depends
+// on — rather than the class the declaration toggles, so it proves the
+// GEOMETRY is load-bearing even on a surface whose floating role was declared, not classified.
 window.__sheetFrameShapeNegativeControl = (scenario) => {
   const style = document.createElement("style");
   style.textContent = ".obnotion-mobile-bottom-sheet.obnotion-sheet-floating { left: 0 !important; right: 0 !important; bottom: 0 !important; border-radius: 8px 8px 0 0 !important; }";
@@ -3461,6 +3464,38 @@ try {
     console.log(`  ${wentRed ? "PASS" : "FAIL"}  neutralised CSS goes flush despite the floating classification (left ${frameShapeControl.broken.left}px, radius ${frameShapeControl.broken.topLeftRadius}px)`);
     console.log(`  ${cleanAfter ? "PASS" : "FAIL"}  the real rule restores the floating geometry (left ${frameShapeControl.fixed.left}px, radius ${frameShapeControl.fixed.topLeftRadius}px)`);
   }
+  console.log("");
+
+  // The sort sheet presents the flush frame: full width, bottom edge on the viewport bottom — the
+  // presentation the taller panels beside it already reach whenever their content grows past the
+  // classifier's cutoff, and the one its own short body could never reach on its own, because its
+  // scarcity of rows is a data fact, not a presentation wish. Measured on a 390px page so the
+  // numbers answer the device class the report came from.
+  console.log("sheet-grammar: frame role — the sort sheet presents the flush frame\n");
+  const parityPage = await browser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true });
+  parityPage.on("pageerror", (error) => failures.push(`frame role page error: ${error.message}`));
+  await parityPage.goto(`file://${join(work, "index.html")}`);
+  const FRAME_ROLE_PARITY_SURFACES = [
+    { name: "sort-panel", spec: { renderer: "sort-panel", bag: "file-view", captureData: true } },
+  ];
+  for (const { name, spec } of FRAME_ROLE_PARITY_SURFACES) {
+    const report = await parityPage.evaluate((scenario) => window.__sheetFrameShape(scenario), spec);
+    if (!report.mounted || !report.sheetFound) {
+      failures.push(`frame role parity ${name}: did not mount a sheet`);
+      console.log(`  FAIL  ${name} — did not mount a sheet`);
+      continue;
+    }
+    const flushOk = !report.floating;
+    if (!flushOk) failures.push(`frame role parity ${name}: classified ${report.floating ? "floating" : "flush"}, wanted flush`);
+    console.log(`  ${flushOk ? "PASS" : "FAIL"}  ${name} — classified ${report.floating ? "floating" : "flush"}, wanted flush`);
+    const wanted = { left: 0, right: 0, bottom: 0 };
+    for (const [key, want] of Object.entries(wanted)) {
+      const ok = Math.abs(report[key] - want) <= FRAME_GEOMETRY_TOLERANCE_PX;
+      if (!ok) failures.push(`frame role parity ${name}: ${key} measured ${report[key]}px, wanted ${want}px`);
+      console.log(`  ${ok ? "PASS" : "FAIL"}  ${name} — ${key}: ${report[key]}px (want ${want}px)`);
+    }
+  }
+  await parityPage.close();
   console.log("");
 
   console.log("sheet-grammar: confirm card — inset, radius and stacked action layout\n");

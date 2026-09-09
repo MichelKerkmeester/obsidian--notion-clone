@@ -1,6 +1,6 @@
 {
- "holder": "067-sheet-family-remediation",
- "acquiredAt": "2026-09-09T10:58:25Z",
+ "holder": "005-filter-sort-group-sheets",
+ "acquiredAt": "2026-09-09T19:17:54.193Z",
  "baselineHash": "4261be904bfb",
  "inScopeCaptureRoots": [
   "screenshots/notion-clone/",
@@ -6206,6 +6206,33 @@
     "screenshots/notion-clone/panels/panel-view-config-sheet-mobile-light.png"
    ],
    "note": "Recaptured twice after the 13:31 styles.css close-out (record-detail band bottom and the close/back + header-action paint-order fix): npm run screenshots </dev/null twice, exit 0 both, 480 entries. Judged by decoded pixel delta against the committed blobs: 93 captures moved in BOTH runs (92 at identical changedPixels and max channel delta; panel-record-detail-sheet-body-empty-desktop-dark at maxDelta 209 both runs with 51216/49677 changed pixels -- anti-aliasing-level count variance on a real deterministic move). The leg content: every close-button sheet shortened 4px by the margin collapse (field-option-color-picker pair 1584->1580 high), the sort/filter/active-rule sheets gained their 071-grammar row hairlines, the column-manager its between-section boundaries, the panel-record-detail-sheet family its band-note shift and paint-order fix. Three judged jitter by the rule (max channel delta <= 12, moved in one sampled run only) and checked out: board-mobile-desktop-dark 1px@1, board-subtask-tree-desktop-dark 1px@1, table-frozen-column-mobile-light 36px@1 -- their manifest rows differ only in the styles.css sourceHash stamp. This release also discharges the packet recorded 17-capture stale-oversight debt: the panel-record-detail-sheet, modal-sheet-property-editor, depth3-import-confirm-dropdown and owned-menu-sheet captures all moved at measured numbers. The visual read stays the operator device pass."
+  },
+  {
+   "event": "acquire",
+   "phase": "005-filter-sort-group-sheets",
+   "at": "2026-09-09T19:17:54.193Z",
+   "hash": "4261be904bfb",
+   "note": "Taking the lane over from 067-sheet-family-remediation, whose release sits on this same 4261be904bfb: this leg's defect is producer-side (the sort sheet's mount never declared a frame role, so the mounted classifier answered its short body with the floating card) and fixes it in the mount, not the stylesheet — the lane is taken so the capture set the fix moves is judged under a named holder rather than nobody."
+  },
+  {
+   "event": "edit",
+   "phase": "005-filter-sort-group-sheets",
+   "at": "2026-09-09T19:17:54.193Z",
+   "hash": "4261be904bfb",
+   "note": "styles.css: no new declarations. The fix declares the frame at the producer: the shared popover mount learns a heightRole pass-through and the sort panel declares flush; the stylesheet never moved, so the baseline stays 4261be904bfb."
+  },
+  {
+   "event": "release",
+   "phase": "005-filter-sort-group-sheets",
+   "at": "2026-09-09T19:17:54.193Z",
+   "hash": "4261be904bfb",
+   "reviewed": [
+    "screenshots/notion-clone/panels/constructed-sort-panel-calendar-mobile-dark.png",
+    "screenshots/notion-clone/panels/constructed-sort-panel-calendar-mobile-light.png",
+    "screenshots/notion-clone/panels/constructed-sort-panel-mobile-dark.png",
+    "screenshots/notion-clone/panels/constructed-sort-panel-mobile-light.png"
+   ],
+   "note": "Captured twice (npm run screenshots </dev/null, 480 entries, exit 0 both) and judged by decoded pixel delta against the committed blobs across both runs, no image opened by eye: 4 content movers, every one the sort sheet's own captures, every one moved in BOTH runs at IDENTICAL counts and channel deltas (constructed-sort-panel-mobile-dark 117957px@192, -light 136281@209, -calendar-dark 85754@176, -calendar-light 104017@196) — the sort sheet trading the floating card (8px insets, 16px corners) for the flush frame (full width, bottom edge down, 8px top corners), exactly the reported defect, kept as real. board-mobile-desktop-dark moved 1px@1 in the second sampled run only, judged jitter by the rule (max channel delta <= 12, one run) and restored at its committed bytes with its manifest row's bytes field patched back (181633) and the fresh sourceHashes kept. The stylesheet never moved: baselineHash stays 4261be904bfb, the first 12 of the working tree's sha256. screenshots:verify exit 0. This leg reviews by measurement (headless); the visual read stays the operator device pass."
   }
  ],
  "outstanding": [

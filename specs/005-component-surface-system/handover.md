@@ -3301,3 +3301,46 @@ capture pass. 004's AC-001 evidence and closure, its implementation summary
 (limitations/verification/continuation/continuity) and the 008 parent's goal continuity + LOG
 reconciled; validated strict, RESULT: PASSED; 004/008/005 graph metadata backfilled. Not pushed —
 a fresh verifier lands it.
+## 266-sort-sheet-flush — 071/005 residual: the sort sheet presents the flush frame (2026-09-09)
+
+Operator report 0.0.36 (2026-09-09 ~20:40, iPhone), verbatim: *"Sort sheet doesnt fill full width
+like it should like others and has a bottom gap"*. Root cause measured, not guessed: no toolbar
+panel sheet ever declared a frame role, so every one was shaped by `classifySheetFrameShape`'s
+height-ratio midpoint guess — filter and group's taller bodies crossed the flush cutoff on their
+own content, the sort sheet's ~240px body never did, so it alone presented the floating card
+(8px side insets, gap underneath). The landed lane ruling had made sort-panel the FLOATING
+representative of the floating/flush split; the operator's words rule otherwise and the lane's
+expectation is amended floating→flush with the fix (the design-trueup grammar itself untouched —
+short UNDECLARED surfaces still infer the card).
+
+**Fix at the producer, not a per-sheet patch**: `src/views/popover-position.ts` gains a
+`heightRole` pass-through on `ToolbarPopoverPositionOptions` (threaded to `applySheetChrome`, the
+same declaration seam `column-width.ts` already uses for "floating"), and the sort sheet's mount
+(`src/views/sort-panel-renderer.ts`) declares `heightRole: "flush"`. No styles.css edit — the
+stylesheet never moved (baselineHash 4261be904bfb unchanged); the lane was taken over from 067's
+release by 005 with the acquire/edit/release triplet so the movers are judged under a named
+holder.
+
+**RED/GREEN**: new `tools/live/sheet-grammar.mjs` clause "frame role — the sort sheet presents
+the flush frame" (390px phone viewport): RED before — sort-panel classified floating,
+left/right/bottom 8/8/8px; GREEN after — classified flush, 0/0/0px. `FRAME_SHAPE_SURFACES`
+re-cut: column-width (declared floating) is now the floating representative and the
+negative-control's target, sort-panel flush (declared), settings stays the undeclared/inferred
+leg; the negative-control comment now says "declared, not classified".
+
+**The numbers**: `npx tsc --noEmit` 0; `npx vitest run` 1585/1585; `npm run build` 0;
+`node tools/live/sheet-grammar.mjs` 0 (RED exit 1 before the fix); `node
+tools/live/render-assertions.mjs` 0; `node tools/storybook/verify-placement.mjs` 0;
+`npm run screenshots </dev/null` ×2 exit 0 (480 entries each) — 4 content movers, all the sort
+sheet's own captures, identical counts across both runs by decoded pixel delta
+(constructed-sort-panel-mobile-dark 117957px@192, -light 136281px@209, -calendar-dark 85754@176,
+-calendar-light 104017@196), kept as real; board-mobile-desktop-dark 1px@1 one run = jitter,
+restored at committed bytes with its manifest row's bytes field patched (181633);
+`screenshots:verify` 0; css-lane triplet, `check-lane` names all 4 (exit 0); stale evidence
+artefacts re-run by their own writers (capture-device-parity, design-conformance, sheet-rebuild,
+sheet-teardown) — `evidence --check-all` 15/15 fresh; `scan-comments` 0; `scan-failing-values`
+0; `npm run gate` (foreground, `</dev/null`) **27 green, 0 red, exit 0**. AC-004 added and Met;
+tasks.md T018; goal criterion ticked (operator device recheck stays open per D3); roadmap §4 new
+row 84 quoting the report verbatim, state "landed, awaiting device". Validated strict, RESULT:
+PASSED (005, 071 parent, 005-component-surface-system), scoped backfill each. Not pushed — a
+fresh verifier lands it.

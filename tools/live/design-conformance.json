@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-09-09T12:15:33.660Z",
+  "measuredAt": "2026-09-09T19:19:11.059Z",
   "inputs": {
     "styles.css": "4261be904bfb",
     "tools/live/design-conformance.mjs": "8e86069bc5a3",
-    "src/views/popover-position.ts": "ff8449f865d9"
+    "src/views/popover-position.ts": "a65201a60e11"
   },
   "checks": [
     {
@@ -228,7 +228,7 @@
     "src/views/sort-panel-renderer.ts:124  .obnotion-panel-hint",
     "src/views/sort-panel-renderer.ts:129  .obnotion-panel-empty",
     "src/views/sort-panel-renderer.ts:134  .obnotion-panel-button",
-    "src/views/sort-panel-renderer.ts:238  .obnotion-panel-button",
+    "src/views/sort-panel-renderer.ts:246  .obnotion-panel-button",
     "src/views/toolbar-renderer.ts:622  .obnotion-database-popover",
     "src/views/toolbar-renderer.ts:707  .obnotion-database-popover-select",
     "src/views/toolbar-renderer.ts:1375  .obnotion-panel-row",
