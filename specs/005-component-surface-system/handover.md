@@ -1,6 +1,6 @@
 ---
 title: "Session Handover: Component Surface System"
-description: "Resume point 2026-09-09 ~03:30: 0.0.34 cut at e75a979c. Landed: 070, 072, 073, 074, 075, 071/001, 008/001, 008/002, 071/002, 066 rows 81-82 (c5bbcf93), 071/003 (81b6e328). In progress, uncommitted: 071/004. Implementation stays paused until this handover is reviewed. GLM 5.3 flash max carries implementation legs; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh."
+description: "Resume point 2026-09-09 ~04:30: 0.0.34 cut at e75a979c. Landed: 070, 072, 073, 074, 075, 071/001, 008/001, 008/002, 071/002, 066 rows 81-82 (c5bbcf93), 071/003 (81b6e328), 071/004 (f72e50cd). Implementation stays paused until this handover is reviewed. GLM 5.3 flash max carries implementation legs; one Opus 5 xhigh sub-orchestrator at most under Fable; scaffolding on Sonnet 5 xhigh."
 trigger_phrases:
   - "005 handover"
   - "surface system handover"
@@ -10,12 +10,13 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T03:30:00Z"
-    last_updated_by: "244-landing-verify"
-    recent_action: "071/003 LANDED+pushed (81b6e328): goal 3/3, 071 2/4, gate 27/0 twice"
-    next_safe_action: "071/004 lands next (.worktrees/245); 0.0.34 is cut; 008/003's AC-007 discharged on paper"
+    last_updated_at: "2026-09-09T02:30:00Z"
+    last_updated_by: "245-landing-verify"
+    recent_action: "004 LANDED+verified (f72e50cd): goal 3/3, 071 2/4, gate 27/0, scans 0"
+    next_safe_action: "005/006 of 071 next; the operator device rows stay the operator's"
+    blockers:
       - "066's device read (AC-008) and 075's AC-006 still wait on the operator's handset pass — never agent-ticked"
-      - "071/004 (`.worktrees/245-view-config-sheet`) is in progress, uncommitted; do not touch that worktree"
+      - "071/004's landing is complete (f72e50cd, landing-verified); the .worktrees/245-view-config-sheet worktree can be retired once this 005-handover entry lands"
       - "008/002's AC-007 is discharged by the 0.0.34 cut (e75a979c) — 008's own goal/roadmap still to be reconciled by that packet"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
@@ -97,6 +98,41 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-09 ~04:30, `071/004-view-config-sheet` LANDED on `origin/main` — landing-verified, rebased, pushed
+
+**What landed:** the GLM leg's single commit (`c820d688` in `.worktrees/245-view-config-sheet`, 38 files,
++1980/−1630) replayed onto `2d9af89c` — which had grown `071/002-settings-sheet`, the 066 wave-2 toast,
+`071/003-add-property-sheet` and the 0.0.34 cut — and landed as `f72e50cd`, with this continuation's
+verification as the commit right after it. **How:** 24 conflicts. The 5 `styles.css` hunks and 5
+`sheet-grammar.mjs` hunks kept 004's — the later redesign of the same settings sheet — while 002's surviving
+contribution (the #333333 definition-site `--obnotion-border-subtle` fallback, whose use-site residue 004's
+divider already carries) rides the merge, and 002's token-resolvable assertion was carried into 004's unit
+suite so that intent keeps a red/green guard. The two legs' same-path
+`view-config-sheet-row-grammar.test.ts` add/add resolved to 004's 111-line suite (002's mechanism
+declarations — space-between, the heading's border-top, the 4-variant `:has` — are superseded by 004's
+documented geometry). `tools/lane/css-lane.json` merged append-only (main's 002/066/003 histories intact)
+plus a post-rebase 004 acquire/edit/release triplet, baselineHash = `92ad633b2666` (sha256 of the merged
+stylesheet), release 7 reviewed / 0 restores; the 005 handover's continuity took main's and §1 kept both
+sections newest-first; the 16 generated artefacts took main's side and were re-derived. **Verified with
+suspicion, by numbers:** the settings reference-grammar — 13/13 direction, 6/6 plain-row pitches 48.0px
+inside the 44–52 band, 18/18 divider-owing hairlines, 16px insets (21 rows, 2 headings), 0 native selects,
+7/7 stacks — 0 FAIL, the 5-part negative control red→green; both mutations replayed (the unit pin's
+`flex: 1 1 0`→`1 1 auto`: 1 failed / 5 passed, 6/6 restored; an injected 8px row margin: the pitch row
+0/6 @ 56.0px, restored); vitest 1742/1742 (161 files), tsc 0, build 0; screenshots ×3 616/616 — 6 content
+movers, all the redesigned surface (241639–332565px, maxDelta 192–209) + calendar-empty-state-mobile-light
+12px@1, every one moved in BOTH sampled runs → kept, 0 restores, 2 one-run movers reproduced their
+committed blobs (variance recorded); evidence 15/15; engine-parity 82/51 (main's 43 + 8, the
+panel-invalid-events-modal checkbox-background rounding 0.016 vs 0, exit 1 INFORMATIONAL by design);
+check-lane 0; scans 0. **The gate's one red, fixed at its cause:** run 1's sheet-grammar
+scrollWidth (390) vs clientWidth (389) — 002's #333333 fallback resolves the sheet's own 1px left border
+and 004's hunks measured raw scrollWidth where 002's instrument measured the extent — so the
+extent-minus-border rule was carried into the 004 instrument; gate re-run **27 green, 0 red**. `--strict`
+`RESULT: PASSED` on 004, 071 and 005 after the graph-metadata backfill. Docs reconciled: the 071 goal
+criterion 3's 004 clause + LOG row + continuity, the 004 goal's continuity, the roadmap 5.A 071 row; the
+operator checklist regenerated (185 rows / 68 phases). 004's goal 3/3, the 071 parent 2/4 (005/006
+outstanding; the no-regression criterion is judged at the parent's close). The 071 D3 operator device row
+untouched, never ticked by an agent. **Pushed: `2d9af89c..HEAD` on `origin/main` (the verification pair).**
 
 ### 2026-09-08 ~23:55, `071/002-settings-sheet` LANDED on `origin/main` — landing-verified, twice-rebased, pushed
 
