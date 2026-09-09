@@ -474,10 +474,15 @@ Operator rows are marked `[B]` with the owner named, and an agent never ticks on
       removing the override restores. The reference's full-bleed reading is met by hairlines that
       land flush against the sheet's edge at the shared inset. Leading-icon rows were already
       `Met`. **All three of C8's contexts now verified; the audit row closes.**
-- [ ] **T022 Gate from the final state.** **Threshold**: `npx tsc --noEmit` 0, `npm run build` 0,
+- [x] **T022 Gate from the final state.** **Threshold**: `npx tsc --noEmit` 0, `npm run build` 0,
       `npx vitest run` 0, `npm run gate` exit 0 read from `$?` without a pipe, `npm run replay`
       holding with reversed 0, and the registry at or above **14 surfaces / 32 pairs**. Read the
       output and the exit status; a gate that matched no files is green and uninformative.
+      **Closed 2026-09-09, read from the final state after the fourth residual leg**: `npx tsc
+      --noEmit` exit 0; `npm run build` exit 0; `npx vitest run` exit 0, 157 files / 1584 tests
+      passed; `npm run gate` exit 0, `$?` read directly, "27 green, 0 red for a declared reason";
+      `npm run replay` exit 0, all 28 landed results held, 0 reversed; the registry reads
+      **18 surfaces / 32 pairs**, both at or above the 14/32 floor.
 - [ ] **T023 [B] Operator device pass.** One build, one sitting: a sheet, a stacked pair, a menu and
       a destructive confirm on iOS, closing `044` AC-006, `048` AC-009 and `051` AC-010 together.
       **The device-only checklist, answered in the same sitting** — these are what no headless

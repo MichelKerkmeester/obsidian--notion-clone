@@ -10,14 +10,14 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T09:55:00Z"
-    last_updated_by: "goal-refresh-0035"
-    recent_action: "Recounted 071 (4/4, all children landed) and 066 (5/6) DONE-table rows"
-    next_safe_action: "Land 212, then 214, then 215 and 216, one Opus lander at a time"
+    last_updated_at: "2026-09-09T15:20:00Z"
+    last_updated_by: "258-goal-refresh-residuals"
+    recent_action: "Closed 3 residuals 2026-09-09: pkg.json strip, engine-parity gate+ADR-001, 067 T015/T020/T021"
+    next_safe_action: "Remaining work is operator device rows plus the 0.0.36 cut with 067 sheet geometry"
     blockers:
       - "A reserved Notion child is opened by its own Opus synthesis, never by hand"
       - "068 runs as one leg with nothing else in flight; do not start it early"
-      - "061's device row and 067's gate row stay open behind the operator's iOS pass"
+      - "061's device row and 067's depth-cap/anchoring/device rows stay open; gate/lane-row criterion closed 2026-09-09"
       - "Fibery and ClickUp harvests landed; 047 T033-T035 content reclassification is done"
       - "Earlier blockers are in the LOG and roadmap.md rather than here"
     key_files:

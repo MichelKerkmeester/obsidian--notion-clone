@@ -74,6 +74,7 @@ resend the full text of this file in chat so the operator can update their copy.
 | Packet opened | Done | This scaffold, 2026-09-08 |
 | 004 docs leg (worktree `252-deprecation-readme-strip`) | Done | This leg, 2026-09-09: the README strip, the note, the manifest description, the mention lane (red 13+3 → green 0+7/0), the verification battery, the drafted release notes |
 | Release notes published | Done | 0.0.35 cut at `97395196`, GitHub release published 2026-09-09; the release body carries the drafted removal/archive/restore copy (`gh release view 0.0.35`) |
+| `package.json` description residual (worktree `255-pkg-description`) | Done | Retired mentions 3 → 0 (chart 1, calendar 1, timeline 1); the mention lane extended to read `package.json`'s `description` field alone; RED first (old string restored, exit 1, 1 failed/12 passed) then GREEN (exit 0, 13/13); recorded in `implementation-summary.md` Known Limitations #2 — 2026-09-09, `8b14f39f`/`51470e56` |
 
 ### Deviations and findings
 

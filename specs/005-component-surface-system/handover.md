@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T15:05:00Z"
-    last_updated_by: "257-landing-verify"
-    recent_action: "067 residuals LANDED+verified (5195efb6): T015/T020/T021, 27/0, goal 4/7"
-    next_safe_action: "Operator device pass on 0.0.35; ORDER OF WORK §1 names every row"
+    last_updated_at: "2026-09-09T15:30:00Z"
+    last_updated_by: "258-goal-refresh-residuals"
+    recent_action: "Reconciled 3 residuals in docs; T022 closed; gate 27/0, vitest 1584/1584, replay 0 reversed"
+    next_safe_action: "Everything past this point is operator-owned; confirm the 0.0.36 tag before 067 device rows"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
     key_files:
@@ -42,6 +42,29 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-09 ~15:30, residual goal refresh RECONCILED — docs-only, gate-verified, worktree `258-goal-refresh-residuals`
+
+**What this refresh did:** reconciled the three residuals already landed on `main` since the closing
+refresh at `13bc4632` — `008/004`'s `package.json` description strip (`8b14f39f`, verified
+`51470e56`), `009`'s engine-parity lane made a real gate with ADR-001 (`f21cf6d5`, verified
+`1a4c3ff3`, T27 closed), and `067`'s T015/T020/T021 (`b327f1de`, verified `5195efb6`) — against
+`008/004/goal.md` (a LOG row added naming the residual leg), `067/tasks.md` (T022 ticked, its own
+threshold read live from the final state), and the 005 parent's `goal.md` continuity block
+(`recent_action`/`next_safe_action` refreshed; its DONE-table 067 row already read 4/7 from the
+prior verifier). `009/goal.md` (2/6) and `roadmap.md` §5.A's 067/009 rows were already current and
+needed no edit. §6A gained no new decision row — ADR-001 is an engineering ADR, not an operator
+ruling, so it does not fit that section's own contract; named here rather than silently added.
+**Verified from the final state:** `npx tsc --noEmit` 0, `npm run build` 0, `npx vitest run` 0
+(157 files / 1584 tests), `npm run gate` exit 0 ("27 green, 0 red for a declared reason"),
+`npm run replay` exit 0 (28/28 held, 0 reversed), the sheet-family registry at **18 surfaces / 32
+pairs** (at or above the 14/32 floor). `validate.sh --strict` (via the orchestrator, run with
+`NODE_PRESERVE_SYMLINKS=1`) RESULT: PASSED for 005, 067, 008, 008/004, 006 and 007, after
+backfilling graph metadata for 067, 008/004 and the 005 parent. **A concurrent 0.0.36 cut is in
+flight on `main`** (`manifest.json`, `package.json`, `versions.json`, `main.js`, the `0.0.36` tag)
+and does not touch specs; 0.0.35 at `97395196` remains the installed build until that tag and its
+Release/Gates runs are confirmed. Every open row past this point stays operator-owned; no agent
+ticks one.
 
 ### 2026-09-09 ~15:05, `067` T015/T020/T021 residuals LANDED+verified on `origin/main` — landing-verified, rebased, pushed, worktree `257-sheet-family-residuals`
 
