@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T16:25:00Z"
+    last_updated_at: "2026-09-09T17:05:00Z"
     last_updated_by: "260-sheet-depth-cap"
-    recent_action: "067 census: 0 governed/32 pairs; goal 5/7; gate 27/0"
+    recent_action: "067 census landed e9c43dba: mutation-proven, gate 27/0, ratchet row reworded"
     next_safe_action: "Operator device rows only: 067/061 iOS pass; confirm 0.0.36 tag"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
@@ -291,6 +291,31 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-09 ~17:05, the depth-cap census leg LANDING-VERIFIED on `origin/main` — mutation replayed, ratchet reconciled, pushed, worktree `260-sheet-depth-cap`
+
+**What the verifier confirmed against the committed leg (`9628171f`, one commit, 20 files):** the
+census block in `sheet-grammar.mjs` reads exactly as claimed on a green run — **0 governed of 32
+pairs mounted**, `record column submenu` and `import confirm dropdown chain` both reading `depth: 3`
+at `parentOffersReplace=false`, and the declined-replace control counted (`sheet=true, depth 3,
+governed=true`). The mutation was replayed independently: `getRegisteredParent` made blind → lane
+exit **1** on the declined control (governed=false where counted is asserted) and the unit test
+failed **1 | 10 passed**; restored byte-identical (`cmp`), lane green again (2332 PASS / 0 FAIL).
+`npm run build` 0, `tsc --noEmit` 0, `vitest` **1585/1585** (157 files), `screenshots` ×2 exit 0 with
+exactly one mover — `board-view-desktop-dark.png`, 4px, maxDelta 1, one-run — jitter by the rule,
+restored; **0 real movers, no styles.css change, no css-lane entry owed**. Rebase onto `origin/main`
+`37dd185b` was a no-op (0 upstream commits). **One claim was refuted and fixed in verification:** the
+leg's "gate exit 0, 27 green" did not hold on the committed tree — the goal.md tick landed without
+re-deriving two lanes: `failing-values` (the ticked row recorded no failing value, **149 bare >
+baseline 148**) and `operator-list` (checklist still 4/7). Fixed only by what each lane's message
+names: the row now records its watched red (**1 governed pair counted where 0 is asserted**, lane
+exit 1, 11 failures, restored byte-identical) and the checklist re-derived to **181 rows / 67
+phases**, 067 at 5/7. No threshold touched; the 148 baseline unchanged. Post-fix gate from the final
+state: **27 green, 0 red**, `validate --strict` **PASSED** on 067 and 005 after graph-metadata
+backfill, `scan-comments` + `scan-failing-values` exit 0, goal fraction re-derived 5/7 = roadmap §5.A
+71% = DONE-table. Landed as **`e9c43dba`** (docs reconciliation, 10 files) and pushed
+`37dd185b..e9c43dba` on `origin/main`. Nothing left open beyond the operator rows the docs already
+name.
 
 ### 2026-09-09 ~10:05, `256-engine-parity-inputs` LANDED+verified on `origin/main` — the 009 engine-parity disagreements are now a gate, pushed
 
