@@ -38,7 +38,7 @@
       "transport",
       "dev"
     ],
-    "importance_tier": "critical",
+    "importance_tier": "important",
     "status": "in_progress",
     "key_files": [
       "spec.md",
@@ -46,6 +46,7 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md",
       "checklist.md",
       "tools/live/probe.mjs",
@@ -58,7 +59,8 @@
       "tools/live/sheet-grammar.mjs",
       "tools/live/touch-targets.mjs",
       "tools/screenshots/scenarios/panels.mjs",
-      "tools/screenshots/pixel-hash.mjs"
+      "tools/screenshots/pixel-hash.mjs",
+      "tools/live/engine-parity.json"
     ],
     "entities": [
       {
@@ -89,6 +91,12 @@
         "name": "goal.md",
         "kind": "doc",
         "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
         "source": "derived"
       },
       {
@@ -170,6 +178,12 @@
         "source": "derived"
       },
       {
+        "name": "engine-parity.json",
+        "kind": "config",
+        "path": "tools/live/engine-parity.json",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -192,23 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Does Obsidian",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Key Decisions",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The program's founding fact is that a release passed every gate and changed nothing on device",
     "created_at": "2026-08-29T14:34:47.371Z",
-    "last_save_at": "2026-09-07T22:46:57.363Z",
+    "last_save_at": "2026-09-09T09:29:22.605Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,14 +219,16 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:184471fbab49e750eba5d97b932f75a3721be052cb7b06c777a63fdbced131b4",
+    "source_fingerprint": "sha256:e53cd27ff67d56ab2cff36cdab1cbba43398ad43124cca7e02b2cc8194a4e3a8",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "921838990aa54b2ca12c6785e34e0c3295b7d9e3137a66615357213b59adf55f",
       "plan.md": "1c6dcf824de8a59d2f89ff36f7d49b59643e58687beab07d557868e9cf8cb4f7",
-      "tasks.md": "d5cef8a9ebcf0d3afc183aa6ce183908036981a0636e99e0b27404cda2c4aa6d",
+      "tasks.md": "49a0d377109448c0cfb6686b9571bbdf359069f3e1d58a56015f321c3237a9a6",
+      "decision-record.md": "1722a331d0a2d6c86451e6a33c602d8abfc78433451b92e14582ea35a8022027",
       "implementation-summary.md": "a6ce3320fca498ee46a01db1bcca34e6180f5a8ae283d2358dbc9435b4487cb0"
     },
     "last_active_child_id": null,

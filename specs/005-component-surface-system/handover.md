@@ -3009,6 +3009,48 @@ RESULT: PASSED; packet graph metadata backfilled. **Open: the 0.0.35 cut that pu
 drafted notes, then the push** — the packet's last step, a later leg's. Not pushed — a fresh
 verifier lands it.
 
+## 256-engine-parity-inputs — 009 residual: the engine-parity disagreements become a gate — implemented 2026-09-09 (this leg)
+
+The roadmap carried one 009 residual: `tools/live/engine-parity.json`'s 23 recorded
+Chrome-vs-WebKit width disagreements were informational — the lane exited 1 on every run and
+nothing watched them. Measured, not assumed, and the measurement changed the plan: the 23 are
+three mechanisms, none a stylesheet gap (every disagreeing input already carries its width, and
+the popover owning the 8px cascade already carries its box-sizing), so the residual's
+fix-the-stylesheet branch did not apply and the recorded-steady-state branch did. Twelve entries
+at exactly 8px — WebKit reserves a classic scrollbar inside the scrolling surfaces (add-view
+popover clientWidth 358 vs 350 at an identical 360 offsetWidth) where this headless Chrome paints
+overlay; eleven entries (deltas 22.31 ×2, 18.88 ×4, 18.02 ×5) are the engines' intrinsic
+text-input widths leaking through fit-content ancestors (the add-view field's shrink-to-fit
+wrapper, the import modal's auto table column, the cell editor's fit-content popover), each equal
+to the intrinsic difference under that control's own typography. The third mechanism was the
+instrument: six pre-fix runs returned 23/47/47/39/39/23 — the checked-background transitions of
+two modal scenarios' native checkboxes read mid-flight, the failure the module's own header
+documents, which reducedMotion only shortens. Fixed in the harness, both engines: the read awaits
+every finite `document.getAnimations().finished` (via `Promise.allSettled`, infinite animations
+skipped); three consecutive post-fix runs printed the identical 23, and the earlier committed
+record had happened to be a settled read, so the settled steady state needed no new allowance.
+The lane is now a real gate — `engine-parity.mjs` classifies each disagreement against the record
+as it stood before the run (steady = same scenario, element and property, recorded numeric delta
+reproduced within the instrument's own 1.5px; categorical notes matched verbatim), exits 0 only
+when steady, 1 on any new/property-changed/grown disagreement; a vanished one is an improvement.
+No suppression: the committed 23 carry no categorical notes, so a background note appearing
+post-fix fails the run. Negative control: two recorded deltas planted at 255.31 → steady 21 /
+new 2, exit 1, exactly the planted entries flagged; the next run absorbs, exit 0. The record also
+now fingerprints `theme.css` and `runtime-vars.css`, which it loaded but did not date. ADR-001
+lands in 009's `decision-record.md` (new file; created this leg — the packet's AC referenced the
+file and it did not exist) with the per-scenario delta table, the mechanism evidence, the
+inference labels, and what the decision does not decide (whether the deltas are worth equalizing
+— a surface-by-surface question, deliberately unanswered). T27 added to 009's tasks, closed with
+the evidence. Battery, final state: `npx tsc --noEmit` 0; `npx vitest run` 1581/1581 (the
+retired-renderer removal 69308192, in this worktree's ancestry, accounts for the count against
+T26's 1642 — no test lost here); `npm run build` 0; sheet-grammar 0; render-assertions 0;
+verify-placement 0 (418/420, 2 red for a declared reason); engine-parity 0;
+`evidence --check-all` 0 (15/15); `npm run gate` exit 0 — **27 green, 0 red for a declared
+reason**; scan-comments 0; scan-failing-values 0. styles.css untouched — no css-lane triplet, no
+recapture owed; the seven other stamped artefacts the gate itself re-dated differ by `measuredAt`
+only and ride this commit. Validated strict, RESULT: PASSED (0 errors, 0 warnings, after the
+ADR's anchor/continuity nits and the graph-fingerprint backfill); packet graph metadata
+backfilled. Not pushed — a fresh verifier lands it.
 ## 255-pkg-description — 008/004 residual: the npm-listing description (2026-09-09)
 
 The open row 004's lander recorded — `package.json`'s `description` still naming the retired

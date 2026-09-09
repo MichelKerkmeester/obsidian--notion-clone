@@ -1,13 +1,17 @@
 {
-  "measuredAt": "2026-09-09T05:59:01.516Z",
+  "measuredAt": "2026-09-09T09:29:33.192Z",
   "inputs": {
     "styles.css": "55cb284b3244",
-    "tools/live/engine-parity.mjs": "de4db2b1d210",
+    "tools/screenshots/theme.css": "43554e1fbe3e",
+    "tools/screenshots/runtime-vars.css": "96e9c31eb486",
+    "tools/live/engine-parity.mjs": "4896e8ae3824",
     "tools/screenshots/scenarios.mjs": "8e4c7409a92b"
   },
   "totals": {
     "fixtures": 67,
-    "differences": 23
+    "differences": 23,
+    "steady": 23,
+    "new": 0
   },
   "differences": [
     {

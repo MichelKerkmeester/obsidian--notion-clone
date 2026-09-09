@@ -267,6 +267,47 @@ VERIFIED. These three tasks close the other two, or leave them honestly labelled
       the acquire/edit/release handover from `068-rename-to-obnotion` to `009-live-verification`,
       naming all 51 captures. `tools/gate.mjs`'s `sheet-grammar` `expectFail` removed. `npm run
       gate`: **26 green, 0 declared red.**
+- [x] **T27** Make the engine-parity lane a real gate over its recorded steady state — the program's
+      residual: `tools/live/engine-parity.json` recorded 23 Chrome-vs-WebKit width disagreements
+      that the lane reported and nothing watched.
+      *Evidence to close:* the root cause of the width split measured and written down; the lane
+      exiting 0 on the recorded steady state and 1 on any new, changed or grown disagreement, with
+      a negative control; the wider battery green from the final state.
+      *Status 2026-09-09:* **closed.** Measured, not assumed: the 23 are three mechanisms, none a
+      stylesheet gap — every disagreeing input already carries its width and the popover that owns
+      the 8px cascade already carries its box-sizing, so the fix-the-stylesheet branch did not
+      apply and the inherent branch did (ADR-001 in this packet's `decision-record.md` carries the
+      per-scenario delta table and the reasoning). Twelve entries (add-view-popover's six action
+      rows, dropdown-field, chrome-table-load-more, both date pickers) sit at exactly 8px: WebKit
+      reserves a classic scrollbar (popover clientWidth 358 vs 350 at an identical 360 offsetWidth)
+      where this Chrome paints overlay. Eleven entries (delta 22.31 ×2, 18.88 ×4, 18.02 ×5) are the
+      engines' intrinsic text-input widths leaking through fit-content ancestors — the add-view
+      field's shrink-to-fit wrapper, the import modal's auto table column, the cell editor's
+      fit-content popover; the probe read each disagreement as exactly the intrinsic difference
+      under that control's own typography. The third mechanism was the instrument, not the engines:
+      six pre-fix runs returned 23, 47, 47, 39, 39, 23 — the checked-background transitions of two
+      modal scenarios' native checkboxes read mid-flight, the failure the module's own header
+      documents. Fixed in the harness: the read now awaits every finite
+      `document.getAnimations().finished` (via `Promise.allSettled`; infinite animations skipped)
+      in both engines, and three consecutive post-fix runs printed the identical 23. The lane is a
+      gate: it classifies each disagreement against the record as it stood before the run — steady
+      only when the scenario, element and property match and the recorded delta reproduces within
+      the 1.5px the instrument already uses — and exits 0 only then; new, property-changed, or
+      grown disagreement exits 1, a vanished one is an improvement. Negative control: the two
+      add-view deltas planted at 255.31 → steady 21 / new 2, exit 1, both planted entries flagged
+      NEW and nothing else; next run absorbs and exits 0. No suppression: the committed 23 carry no
+      categorical notes, so a background or appearance disagreement appearing now is new and fails.
+      The record now also fingerprints `theme.css` and `runtime-vars.css`, which it loads but
+      previously did not date. RED→GREEN: pre-fix, exit 1 on every run with a count that flickered;
+      post-fix, exit 0 steady (fourth consecutive) — the earlier recorded 23 happened to be a
+      settled read, so the settled steady state needs no new allowance. The wider battery, final
+      state: `npx tsc --noEmit` 0; `npx vitest run` 1581/1581 (the retired-renderer removal 69308192, already in this
+      worktree's ancestry, accounts for the count against T26's recorded 1642 — no test lost by
+      this leg); `npm run build` 0; sheet-grammar 0; render-assertions 0; verify-placement 0
+      (418/420, 2 red for a declared reason); `engine-parity` 0; `evidence --check-all` 0 (15/15);
+      `npm run gate` exit 0 — 27 green, 0 declared red; scan-comments 0; scan-failing-values 0.
+      styles.css untouched, so no recapture owed; the seven other stamped artefacts the gate
+      re-dated differ by `measuredAt` only and ride this commit.
 
 <!-- /ANCHOR:phase-3 -->
 ---
