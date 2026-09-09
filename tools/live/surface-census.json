@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-08T22:58:59.142Z",
+  "measuredAt": "2026-09-09T00:29:23.737Z",
   "inputs": {
-    "styles.css": "73297de05d54",
+    "styles.css": "f3feddd7c055",
     "tools/live/surface-census.mjs": "982af0f4c165",
     "src/views/surface-contract.ts": "99972eb224df",
     "src/views/record-detail-panel.ts": "596d9dba1a40",
@@ -10,10 +10,10 @@
   },
   "totals": {
     "rendered": 86,
-    "buildable": 235,
+    "buildable": 236,
     "declared": 6,
     "renderedOnly": 0,
-    "buildableNotRendered": 149,
+    "buildableNotRendered": 150,
     "untokened": 0,
     "unroled": 86,
     "recordSurfaceHandBuilt": 0
@@ -1678,12 +1678,13 @@
     "obnotion-mobile-sheet-scrim",
     "obnotion-modal-dropdown",
     "obnotion-base-import-type-dropdown",
-    "obnotion-modal-button-row",
+    "obnotion-create-property-modal",
     "obnotion-modal-row",
     "obnotion-modal-label",
+    "obnotion-modal-input",
     "obnotion-modal-row-with-help",
     "obnotion-modal-control-stack",
-    "obnotion-modal-input",
+    "obnotion-modal-button-row",
     "obnotion-delete-database-modal",
     "obnotion-delete-modal-danger-row",
     "obnotion-delete-modal-primary-actions",

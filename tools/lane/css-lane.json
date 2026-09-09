@@ -1,7 +1,7 @@
 {
   "holder": "003-add-property-sheet",
   "acquiredAt": "2026-09-08T21:06:59Z",
-  "baselineHash": "8991c15f8106",
+  "baselineHash": "f3feddd7c055",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -5834,6 +5834,31 @@
         "screenshots/notion-clone/views/board-view-desktop-dark.png"
       ],
       "note": "npm run screenshots twice, exit 0 both. 2 movers, both sampled in two consecutive runs: board-mobile-desktop-dark 1px@max1 and board-view-desktop-dark 4px@max1 — the identical counts 073 saw on the same captures; this leg styles only .obnotion-create-property-* (no board-view rule touched), so the movers are the known lane instability 073 recorded, kept as real movers at their recaptured bytes rather than restored."
+    },
+    {
+      "event": "acquire",
+      "phase": "003-add-property-sheet",
+      "at": "2026-09-09T00:08:35Z",
+      "hash": "8991c15f8106",
+      "note": "Post-rebase re-take: the leg's commit 3f1fe088 replayed onto 1624041e (carrying 072/074, 002-settings-sheet, 066 wave-2 toast and the 008 goal reconciliation) as c00cb3c5; the merged stylesheet is a combination no earlier entry measured, so 003 re-takes the lane to reconcile it. styles.css merged cleanly (this leg's .obnotion-create-property-* rules beside main's 072/002/066 edits); the ledger keeps both sides' histories append-only."
+    },
+    {
+      "event": "edit",
+      "phase": "003-add-property-sheet",
+      "at": "2026-09-09T00:08:35Z",
+      "hash": "f3feddd7c055",
+      "note": "Merged-stylesheet measurement: baselineHash recomputed to f3feddd7c055 (shasum -a 256 of the rebased styles.css). Nothing in styles.css changed during this pass - the hash is the replayed edit's outcome on 1624041e, measured, not edited further. On the merged tree: tsc --noEmit 0, vitest 161 files / 1742 tests 0, build 0."
+    },
+    {
+      "event": "release",
+      "phase": "003-add-property-sheet",
+      "at": "2026-09-09T00:08:35Z",
+      "hash": "f3feddd7c055",
+      "reviewed": [
+        "screenshots/notion-clone/fields/constructed-cell-editor-text-mobile-light.png",
+        "screenshots/notion-clone/views/timeline-subtask-tree-desktop-light.png"
+      ],
+      "note": "Re-verified across the 0.0.34 release-cut rebase (the leg's commit now 6a828e7e on e75a979c; styles.css itself unmoved at f3feddd7c055). Round 2, screenshots x2, 616/616, exit 0 both: 29 movers, 28 moved in BOTH sampled runs -> kept real; 1 jitter, calendar-empty-state-mobile-light 12px at max channel delta 1, moved only in the second sampled run -> restored at its committed bytes with the manifest's bytes field patched back to 33534 (pixelHash/layoutHash/sourceHashes unchanged), screenshots:verify exit 0. Round 1 (the pass this triplet signed) had all 29 in both runs; the 2 content-movers reproduced: constructed-cell-editor-text-mobile-light 24165px at max delta 9, timeline-subtask-tree-desktop-light 5030px at max delta 12 - the 072/002/066 intents this rebase carries (this edit's selectors scope to .obnotion-create-property-*, neither mover's surface is in that family; their pixelHash change is recorded so the next lane sees a fresh, reviewed baseline). The 27 further captures move bytes only at identical pixelHash/layoutHash: board-view-desktop-dark 4px@1, board/record-detail/timeline families - the lane instability 073/002 recorded, at stable counts, moved in both runs. capture-device-parity's stamps refreshed once more after the recapture moved the manifest's sourceHashes."
     }
   ],
   "outstanding": [
