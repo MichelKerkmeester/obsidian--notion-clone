@@ -13,7 +13,7 @@ _memory:
     last_updated_at: "2026-09-10T02:31:39Z"
     last_updated_by: "277-record-sheet-header-verify"
     recent_action: "Landing-verified 071/011 twice-rebased; 86f1420e on main, gate 28/0, 2369 PASS"
-    next_safe_action: "Execute 071/011, then 013-014; 007 awaits the T001 capture"
+    next_safe_action: "Operator device read (D3) closes 013; 071/014-sheet-polish is the last 071 child"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
     key_files:
@@ -425,6 +425,52 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-10 ~05:05, `071/013-sheet-input-and-action-order` LANDING-VERIFIED — landed on `origin/main` as `7ae69b6e`, worktree `279-sheet-action-order`
+
+**Landed SHA `7ae69b6e` on `origin/main`** (the leg's `6edaa0e4` replayed onto the 071/012-merged
+main `22a560fc` as `e1aedbcd` with this verifier's first reconciliation `afefc865`; then push
+attempt 1 REJECTED — 071/011's `76aafa76` had landed meanwhile — so the whole verification
+re-ran on the twice-merged tree: the leg again as `b7fa33aa`, this verification as `7ae69b6e`;
+pushed `76aafa76..7ae69b6e` after one rejection). **What this verifier confirmed** on the final
+tree: the packet's first source task (T005's confirm producer) mutation —
+`src/views/confirm-sheet.ts` reverted to its pre-legend version — took `sheet-grammar.mjs` to
+`FAIL — 1 failure(s)`: exactly the named clause, the stacked confirm reading `Cancel` first
+where the destructive action belongs → restored, exit 0 (2361 PASS, 0 FAIL), and the
+071/002–007 grammar clauses held green in the same runs (44–52px pitch, 16px insets, 0 native
+selects, 067 divider hairlines, 007's card grouping). Unit: `confirm-sheet.test.ts` (the leg's
+one NEW test) 2F/1P → 3/3, the leg's own numbers. The 071/002–007 clauses held green, the
+operator-capture rows unticked and PROVISIONAL as recorded; AC-011 = the operator's device read
+(D3), the goal's criterion 8, stays unticked — goal figure **7/8**. Captures 480×2 per round,
+judged by decoded pixel delta over both judged runs: round 1 — **3 REAL movers kept** (the two
+`constructed-modal-sheet-confirm-stacked` captures, 16722px@Δ180 / 16738px@Δ202 — the leg's own
+numbers — plus `constructed-board-subtask-mobile-light` 62px@Δ2), **2 one-run jitters restored**
+(`panel-record-detail-sheet-body-empty-mobile-light` 5656px@Δ2, the recurring
+`board-mobile-desktop-dark` 2px@Δ1) with their manifest `bytes`; round 2 — **4 REAL, 0 jitter**
+(the two board-adjacent jitters moved in BOTH runs this time, so kept; `board-subtask-tree-desktop-dark`
+477px@Δ185 one-run above the 12-delta bar, its second run reproducing the committed blob). The
+leg's own 24 movers reproduced exactly. css-lane: rebuilt once from the two clean sources after a
+diff3 splice fused 011's release note into the 013-leg's reviewed list — 500→**503** events,
+holder `071-013-sheet-input-and-action-order`, TWO 013-verification acquire/edit/release
+triplets (7b9cd8d06a2b, then the twice-merged stylesheet `4e06417eb091` = +011's hunks), both
+`baselineHash` = `shasum(styles.css)` at their write. Evidence: 14+16 census artefacts went
+STALE across the two rebases → all writers re-run exit 0 (`renderer-coverage`'s writer is
+`render-assertions.mjs`; `replay.mjs`/`render-assertions.mjs` crash parsing their own previous
+record — 76aafa76's valid priors restored, then replay: **28/28 held**) → 16/16 fresh. Two
+verification findings, both fixed at the number: the 071/001 inventory's `group (registered)`
+anchor (the merged registries produce `toolbar-renderer.ts:1829`; the `sheet-inventory` test
+guarded it red until it matched), and 005's backfill writing `"parent_id": "null"` (a STRING)
+where the validator wants JSON `null` — METADATA_DISK_PATH_CONSISTENCY; `repair-derived.cjs`
+reported UNREADABLE (recorded, not diagnostic) so the value was set by hand. One recorded slip:
+the round-2 rebase staged 16 evidence jsons + the manifest with their diff3 residue because the
+resolution's `git add` outran its `git checkout --ours`; the writers' own re-derivation
+remedied it, which is the instruction's remedy. Gate: **28 green, 0 red, exit 0, both rounds**.
+`validate --strict`: 013, 071's FIRST RESULT and 005 — **PASSED** (the scoped backfills: 013
+changed 0, 005 changed 1). `scan-comments` 0; `scan-failing-values` 0 (147 bare vs baseline 148
+— ratchet holds). vitest **1613/1613** (160 files — the leg's 1610 + 011's 3); tsc 0; build 0.
+`operator-checklist.md --check`: PASS, 181 rows / 67 phases, unchanged. Docs: roadmap §5.A's 071
+row carries both 011's and 013's narratives, the 013 note reading **7/8** = goal.md's completion
+criteria, the 8th the operator's device read, unticked. Pushed `76aafa76..7ae69b6e`.
 
 ### 2026-09-10 ~03:55, `071/012-sort-and-group-sheet-rows` LANDING-VERIFIED — landed on `origin/main` as `5afe61e2`+`beaef2fa`, worktree `278-sort-group-rows`
 

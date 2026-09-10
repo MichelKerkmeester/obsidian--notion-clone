@@ -3,7 +3,6 @@
   "packet_id": "005-component-surface-system",
   "spec_folder": "005-component-surface-system",
   "parent_id": null,
-  "parent_id_review_required": true,
   "children_ids": [
     "005-component-surface-system/000-surface-contract-and-truthful-harness",
     "005-component-surface-system/001-overlay-placement-and-menu-language",
@@ -290,7 +289,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-10T02:58:35.665Z",
+    "last_save_at": "2026-09-10T03:03:46.198Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -298,11 +297,11 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:f03a3e22f2efdbad5b3e733407b7906a6bee9b2ac3402ff12d46e03a21f070e0",
+    "source_fingerprint": "sha256:d1c2d495f2b536961ff18fda0f0480e87e1251bd256e617ef9dd03441039b926",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d555fe2d05a8e10476a09464e12aa382dea3fa399b611db29f544003d2dfcd15",
-      "handover.md": "79db88861de73daebab9146a466b849ca60d8f6dd932f44d57f48b6aa8881915"
+      "handover.md": "7dea2dc653c17f9acfa3e0919ca1db03df55521db6461a048dc565e98e14ac1c"
     },
     "last_active_at": null
   }
