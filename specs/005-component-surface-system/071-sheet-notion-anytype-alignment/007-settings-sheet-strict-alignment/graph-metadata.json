@@ -203,7 +203,7 @@
     ],
     "causal_summary": "The phone Settings sheet's card/grouping shell never matched Notion's own grouped-card",
     "created_at": "2026-09-09T18:55:18.823Z",
-    "last_save_at": "2026-09-10T05:17:49.592Z",
+    "last_save_at": "2026-09-10T07:08:36.035Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,12 +214,12 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:3b7a734a0570c04f30d6205b451b6c1f818f4c9813e4fefa39193747cb0176f8",
+    "source_fingerprint": "sha256:f73e225d684a1b89c426d8888511ca5b3952db221053a4b6afebdfa1f9c1f57f",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b1d0be3a1a2bea58b4cb638d90f68bf4f77813acef3c29ba68d9b3cb36565d71",
       "plan.md": "8e41f17b30f0489f2e30c0d651b8c8d81b708aa11780ae3ea82868fb4aa3b0b2",
-      "tasks.md": "f7b1d57bfc47e51d0383b3b29c8087659c3b6af28c1941d52448810d2a6017b1",
+      "tasks.md": "2eff6b5b3cff02cc8faec3e0ac2a091052cbf61e48d8a1d160a4c1d271e76098",
       "implementation-summary.md": "e83eed4befd9747b42fe963515a846fa70c549385135d100ece608a6d2500516"
     },
     "last_active_child_id": null,

@@ -117,24 +117,51 @@ contextType: "implementation"
 Opened by `../sheet-design-review.md` §1 F-1, a `sk-design-fundamentals` pass distinct from this
 child's own Notion-parity work. Not yet implemented.
 
-- [ ] T013 RED first: add a dark-theme card/canvas relative-lightness clause to
+- [x] T013 RED first: add a dark-theme card/canvas relative-lightness clause to
   `tools/live/sheet-grammar.mjs`'s settings-card block — assert
   `cardLightness > canvasLightness` (not merely `!=`) when `document.body` carries `.theme-dark`.
   Run it against the unmodified tree and record the failure: the clause reads card
   `--background-primary` ≈ 0.118 against canvas `--obnotion-surface-overlay` ≈ 0.180 — the card is
   **darker**, so `cardLightness > canvasLightness` is false and the new clause fails red
   (`tools/live/sheet-grammar.mjs`)
-- [ ] T014 Fix at the token: give `.obnotion-settings-card` (`styles.css:12363-12367`) a fill that
+  **LANDED 2026-09-10, worktree `285-dr-settings-cards`:** the clause measures relative luminance
+  (WCAG, both engines' `rgb()`/`color(srgb)` serialisations) of every card against the sheet's own
+  canvas, both themes in one mount pass. RED on the unmodified tree: exit 1, exactly 1 failure —
+  *"in the dark theme the dimmest of 2 cards (relative luminance 0.0130) does not compute lighter
+  than its canvas (0.0270)"*; the light-theme clause passed (0.0130 vs 0.0119). Relative luminance
+  is stricter than the linear 0.118/0.180 figures this task quoted; same direction, smaller margin.
+- [x] T014 Fix at the token: give `.obnotion-settings-card` (`styles.css:12363-12367`) a fill that
   is lighter than `--obnotion-surface-overlay` in **both** themes' own elevation ladders — either
   switch to `--obnotion-surface-modal` (already lighter than overlay in dark mode: ≈0.224 vs
   ≈0.180; ≈5 points darker than overlay in light mode, the same order of magnitude as the current
   light-mode gap) or add a dedicated per-theme token. Re-verify against a live dark-mode render
   before locking the exact value — `007`'s own four card metrics are already flagged provisional,
   and this token choice is provisional alongside them (`styles.css`)
-- [ ] T015 Verify GREEN: T013's clause now passes in dark mode; rerun the existing card-grouping
+  **LANDED 2026-09-10:** the dedicated-per-theme-token branch — `--obnotion-settings-card-fill`,
+  light = `--background-primary` (light behaviour unchanged, the review's own 13/255 correct-
+  direction gap kept rather than weakened), dark = `--obnotion-surface-modal` (the 88% rung above
+  the 93% overlay canvas). Chosen over the direct modal switch because no single ladder rung
+  clears the overlay canvas in both themes: the light ladder steps away from the page fill toward
+  black, the dark ladder toward white, so they cross between the themes. The card rule and its
+  now-stale rationale comment both corrected; live dark re-verified by the T013 clause (0.0409 >
+  0.0270) and by `constructed-view-config-mobile-dark.png` (692,364px@Δ27, identical in both
+  judged runs). The choice stays provisional alongside the four card metrics, pending T001.
+- [x] T015 Verify GREEN: T013's clause now passes in dark mode; rerun the existing card-grouping
   clause (`2/2 cards, radius ≥8px, backgrounds distinct, gap ≥8px, headings above their card`)
   unchanged on both engines and confirm it still passes — the fix must not touch radius, gap or
   the heading-above-card facts, only the fill token. Recapture
   `constructed-view-config-mobile-{light,dark}.png` and `panel-view-config-sheet-mobile-{light,dark}.png`
   and confirm by eye that the card now reads as raised (lighter than its canvas) in dark mode
   (`tools/live/sheet-grammar.mjs`, `screenshots/`)
+  **LANDED 2026-09-10:** GREEN — dark 0.0409 > 0.0270 (was 0.0130), light 0.0130 > 0.0119
+  unchanged; the existing card-grouping clause re-run unchanged, green, exit 0 (2/2 cards, radius,
+  background-distinct, gap, headings — all untouched); the card rule's pinned unit expectation
+  (`view-config-sheet-row-grammar.test.ts`) updated with the token, 1613/1613. Recapture ×2 (480
+  each, exit 0): of the four named captures only `constructed-view-config-mobile-dark.png` moved
+  (692,364px@Δ27, identical counts both runs); the other three reproduced their committed blobs
+  exactly — expected, since the light theme's card token is unchanged and the panel variants do
+  not mount the bottom-sheet card rule. The by-eye read substituted by decoded-pixel judgement,
+  this harness's precedent. tsc 0, build 0, render-assertions 0, placement 418/420 (2 declared),
+  evidence 16/16 fresh, gate 28/0, scans 0; 13 REAL movers kept (11 both-run + the frozen-column
+  pair, one-run above the 12 bar, the 011 precedent), 12 one-run ≤12Δ jitters restored at their
+  committed bytes with the fresh styles.css hash kept.

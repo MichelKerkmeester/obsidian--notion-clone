@@ -4319,6 +4319,38 @@ Validated: `015`, `071` parent and `005` track, `RESULT: PASSED` after each touc
 scoped graph-metadata backfill and a full re-validation. Not pushed at the time this entry was
 written — see the commit trailer for the landing SHA.
 
+---
+
+**007 — design-review follow-up (P1), 2026-09-10, worktree `285-dr-settings-cards`.** The
+`sk-design-fundamentals` review's P1 (roadmap §4 row 88) closed: the settings card's fill computed
+darker than its own canvas in dark theme, inverting the surfaces-stack-upward-in-lightness rule.
+Red first — a new both-themes card>canvas relative-luminance clause in `tools/live/sheet-grammar.mjs`
+read the unmodified tree at exactly 1 failure: dark, dimmest of 2 cards 0.0130 over a 0.0270 canvas
+(card = `--background-primary` #1e1e1e; canvas = `--obnotion-surface-overlay` 45.75/255; relative
+luminance, stricter than the review's 0.118/0.180 linear figures, same direction); the light clause
+passed 0.0130 vs 0.0119. Fix at the token, the dedicated-per-theme branch of the review's own
+options: `--obnotion-settings-card-fill`, light = `--background-primary` (light behaviour
+unchanged), dark = `--obnotion-surface-modal` (the 88% rung above the 93% overlay canvas) — no
+single ladder rung clears the overlay canvas in both themes, because the light ladder steps toward
+black and the dark ladder toward white. Green: dark 0.0409 > 0.0270 (was 0.0130), light unchanged;
+the existing card-grouping clause re-run unchanged, green; the card rule's pinned unit expectation
+(`view-config-sheet-row-grammar.test.ts`) updated with the token, vitest 1613/1613. Screenshots ×2
+(480/480, exit 0 both): 13 REAL movers kept — 11 both-run, headlined by
+`constructed-view-config-mobile-dark` 692,364px@Δ27, the only one of the four named captures that
+moved (the light and both panel-view-config variants reproduced their committed blobs exactly:
+light's card token is unchanged, the panel variants do not mount the bottom-sheet card rule) — plus
+the frozen-column pair, one-run above the 12 bar (the 011 precedent); 12 one-run ≤12Δ jitters
+restored at their committed bytes with the fresh styles.css hash kept. css-lane
+acquire/edit/release triplet recorded for `007-settings-sheet-strict-alignment`
+(`aef17a2f6e8a` → `e3cde65ca233`). tsc 0, build 0, sheet-grammar 0, render-assertions 0, placement
+418/420 (2 declared), evidence 16/16 fresh (12 stale artefacts re-measured by their own tools),
+naming scans 0, gate 28/0. T013/T014/T015 ticked with these numbers in `007`'s tasks; `071/goal.md`'s
+007 row (goal 4/5, D3 still the operator's) and `roadmap.md` §5.A's `071` row carry the leg; ADR-D
+untouched. Validated: `007`, the `071` parent and the `005` track, `RESULT: PASSED`, after each
+touched folder's scoped graph-metadata backfill. Not pushed — see the commit trailer for the
+landing SHA.
+
+
 ## 071/011-record-sheet-header-and-icons — the design-review F-3 follow-up: the row type icon's 4px gap (2026-09-10, this leg)
 
 The Sonnet design review's one `011` finding (F-3, P2 — the per-row type icon rendered glued to

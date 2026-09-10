@@ -105,6 +105,11 @@
   --obnotion-surface-raised: color-mix(in srgb, var(--background-primary) 97%, black);
   --obnotion-surface-overlay: color-mix(in srgb, var(--background-primary) 95%, black);
   --obnotion-surface-modal: color-mix(in srgb, var(--background-primary) 93%, black);
+  /* The grouped settings card's fill, one step lighter than the --obnotion-surface-overlay canvas
+     it sits on. Declared per theme rather than borrowed from a ladder rung: this theme's elevation
+     steps darken away from the page fill, so the page fill itself is the step that clears the
+     overlay canvas, while the dark theme's steps lighten and need the rung above it instead. */
+  --obnotion-settings-card-fill: var(--background-primary);
   --obnotion-surface-modal-border: var(--background-modifier-border);
   --obnotion-elevation-1: 0 1px 3px color-mix(in srgb, black 12%, transparent), 0 1px 2px color-mix(in srgb, black 8%, transparent);
   --obnotion-elevation-2: 0 10px 28px rgba(0, 0, 0, 0.24), 0 3px 8px rgba(0, 0, 0, 0.16);
@@ -1027,6 +1032,10 @@
   --obnotion-surface-raised: color-mix(in srgb, var(--background-primary) 97%, white);
   --obnotion-surface-overlay: color-mix(in srgb, var(--background-primary) 93%, white);
   --obnotion-surface-modal: color-mix(in srgb, var(--background-primary) 88%, white);
+  /* This theme's elevation steps lighten away from the page fill, so the page fill itself sits
+     below the --obnotion-surface-overlay canvas here and would read the card as a recessed well;
+     the modal rung, at 88% versus overlay's 93%, is the step that clears it. */
+  --obnotion-settings-card-fill: var(--obnotion-surface-modal);
   --obnotion-surface-modal-border: rgba(255, 255, 255, 0.12);
   --obnotion-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.30), 0 1px 2px rgba(255, 255, 255, 0.03);
   --obnotion-elevation-2: 0 10px 28px rgba(0, 0, 0, 0.45), 0 3px 8px rgba(0, 0, 0, 0.30);
@@ -12354,15 +12363,17 @@ body.is-phone .obnotion-container .obnotion-record-detail-panel {
 }
 
 /* The settings sheet's card grouping. The sheet's own surface token stays the canvas; each
-   section's rows collect on a card at the host's page fill, which reads lifted against it in both
-   themes (light canvas steps toward black, dark toward white — both away from the page fill).
-   The inset is the sheet's own 16px so the cards' content keeps the one inset every phone sheet
-   already reads; the gap and radius are the provisional numbers pending the operator's reference
-   capture and retune. Content inside the card carries the inset, so the card itself spans the
-   body's full width and the canvas shows through the 12px between cards. */
+   section's rows collect on a card one elevation step lighter than that canvas, read through
+   --obnotion-settings-card-fill so the lighter-than-the-canvas direction is chosen per theme — the
+   two themes' ladders step away from the page fill in opposite directions, so no single rung of
+   either ladder clears the overlay canvas in both. The inset is the sheet's own 16px so the cards'
+   content keeps the one inset every phone sheet already reads; the gap and radius are the
+   provisional numbers pending the operator's reference capture and retune. Content inside the card
+   carries the inset, so the card itself spans the body's full width and the canvas shows through
+   the 12px between cards. */
 .obnotion-view-config-panel.obnotion-mobile-bottom-sheet .obnotion-view-config-body > .obnotion-settings-card {
   border-radius: var(--obnotion-radius-lg);
-  background: var(--background-primary);
+  background: var(--obnotion-settings-card-fill);
   margin: 0 var(--obnotion-sheet-inset) var(--obnotion-space-5);
 }
 
