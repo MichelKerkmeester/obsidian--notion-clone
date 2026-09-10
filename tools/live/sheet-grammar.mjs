@@ -2212,10 +2212,34 @@ const measurePanelSheetGrammar = () => {
       conditionRows.push({ controls: topLevel.length, height: Number(rowEl.getBoundingClientRect().height.toFixed(2)) });
     }
   }
+  // The root group's own actions: the labelled action rows of the first .obnotion-source-rule-node
+  // in document order (a group's header precedes everything nested inside it, so the first node is
+  // the root), plus the legacy header icons container in case a contributor restores it. What the
+  // clause needs is whether each control answers with a word a reader can see — a text node in
+  // the row, not an aria-label or a tooltip — and the box a finger actually lands on, since 44px
+  // is the touch floor this project's coarse-pointer rules already enforce elsewhere.
+  const rootNodeEl = sheet.querySelector(".obnotion-source-rule-node");
+  const legacyActionsEl = sheet.querySelector(".obnotion-source-rule-actions");
+  const rootGroupActionEls = [
+    ...(legacyActionsEl ? Array.from(legacyActionsEl.querySelectorAll(":scope > button")) : []),
+    ...(rootNodeEl ? Array.from(rootNodeEl.querySelectorAll(":scope > .obnotion-source-rule-group-action")) : []),
+  ];
+  const rootGroupActions = rootGroupActionEls.map((control) => {
+    const rect = control.getBoundingClientRect();
+    const text = (control.textContent || "").trim();
+    return {
+      name: control.getAttribute("aria-label") || (control.classList.contains("obnotion-source-rule-group-action") ? control.querySelector(".obnotion-menu-item-label")?.textContent || control.className : control.className),
+      hasVisibleLabel: text.length > 0,
+      labelText: text,
+      width: Number(rect.width.toFixed(2)),
+      height: Number(rect.height.toFixed(2)),
+    };
+  });
   return {
     name,
     farthestChild,
     conditionRows,
+    rootGroupActions,
     panelPaddingLeft: Number.parseFloat(sheetStyle.paddingLeft),
     panelPaddingRight: Number.parseFloat(sheetStyle.paddingRight),
     rows,
@@ -4814,6 +4838,21 @@ try {
       const crowdedRows = measured.conditionRows.filter((row) => row.controls > CONDITION_ROW_CONTROL_MAX);
       if (crowdedRows.length > 0) failures.push(`panel sheets row grammar (${surfaceName}): ${crowdedRows.length}/${measured.conditionRows.length} condition rows exceed ${CONDITION_ROW_CONTROL_MAX} interactive controls (counts ${measured.conditionRows.map((row) => row.controls).join(", ")})`);
       console.log(`  ${crowdedRows.length === 0 ? "PASS" : "FAIL"}  ${surfaceName} — condition rows carry ≤ ${CONDITION_ROW_CONTROL_MAX} interactive controls (counts ${measured.conditionRows.map((row) => row.controls).join(", ")})`);
+    }
+    if (surfaceName === "filter-panel") {
+      // The reference's control answers with a word, not a glyph: every action in the root
+      // group's own row carries text a reader can see, and each measures at least 44px on its
+      // touch axis — the floor the condition rows' labelled actions a few rows below already
+      // meet. The count is part of the clause so a mount that loses the row cannot pass
+      // vacuously.
+      const ROOT_ACTION_TOUCH_FLOOR_PX = 44;
+      const rootActions = measured.rootGroupActions;
+      const unlabelled = rootActions.filter((control) => !control.hasVisibleLabel);
+      const undersized = rootActions.filter((control) => control.width < ROOT_ACTION_TOUCH_FLOOR_PX || control.height < ROOT_ACTION_TOUCH_FLOOR_PX);
+      if (rootActions.length === 0) failures.push(`panel sheets row grammar (${surfaceName}): no root-group action row mounted to measure`);
+      if (unlabelled.length > 0) failures.push(`panel sheets row grammar (${surfaceName}): ${unlabelled.length}/${rootActions.length} root-group action control(s) carry no visible text label (${unlabelled.map((control) => control.name).join(", ")})`);
+      if (undersized.length > 0) failures.push(`panel sheets row grammar (${surfaceName}): ${undersized.length}/${rootActions.length} root-group action controls under the ${ROOT_ACTION_TOUCH_FLOOR_PX}px touch floor (boxes ${undersized.map((control) => `${control.name} ${control.width}x${control.height}px`).join(", ")})`);
+      console.log(`  ${rootActions.length > 0 && unlabelled.length === 0 && undersized.length === 0 ? "PASS" : "FAIL"}  ${surfaceName} — root-group action controls: ${rootActions.length}, visible labels ${rootActions.length - unlabelled.length}/${rootActions.length}, touch boxes ${rootActions.map((control) => `${control.width}x${control.height}px`).join(", ") || "none"} (floor ${ROOT_ACTION_TOUCH_FLOOR_PX}px)`);
     }
     if (measured.sectionTitles.length > 0) {
       const insetWanted = PANEL_SHEET_INSET_PX;

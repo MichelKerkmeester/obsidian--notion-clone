@@ -7036,6 +7036,37 @@
         "screenshots/notion-clone/views/board-mobile-desktop-dark.png"
       ],
       "note": "Recaptured twice at the twice-reconciled stylesheet (npm run screenshots </dev/null, 482 entries, exit 0 each), judged by decoded pixel delta against the committed blobs: the 285 leg's eight 248px@112-132 date-pair movers were already this hold's committed pictures from the 21:20 reconciliation and reproduced exactly, and ZERO further 015 signatures moved. Two movers judged: panel-base-import-modal-desktop-light 172px@102 - a fill-paint signature, not this lane's 248px@112-132 raise signature, kept as the 285 leg's own stamp (its committed picture predates its elevation's painting; theme.css:333 - captures have no pointer, so the coarse-pointer raise cannot touch a desktop scenario); board-mobile-desktop-dark 2px@1, the lane's recurring one-run jitter, restored to its committed pixels with its manifest bytes. evidence 16/16 fresh after 13 stamps were re-run by their own writers; vitest 1614/1614; the full gate re-run after this triplet lands."
+    },
+    {
+      "event": "acquire",
+      "phase": "071-008-filter-sheet-row-model",
+      "at": "2026-09-10T08:45:00Z",
+      "hash": "aef17a2f6e8a",
+      "note": "Re-acquired by the design-review follow-up leg: the root-group action row rebuilt on the labelled-row grammar (the four 28px icon buttons became four 44px labelled rows, sheet-gated) moves captures, so the lane signs over from 014-sheet-polish. The stylesheet itself is untouched by this leg -- the acquire, edit and release all carry the same aef17a2f6e8a, and the moves are judged on the leg's own renderer change."
+    },
+    {
+      "event": "edit",
+      "phase": "071-008-filter-sheet-row-model",
+      "at": "2026-09-10T08:45:00Z",
+      "hash": "aef17a2f6e8a",
+      "note": "styles.css unchanged; the edit that moves pixels is in the producer, src/views/filter-panel-renderer.ts: the group header's four icon buttons (plus, folder-plus, circle-slash-2, trash-2) stop rendering inside the sheet and the same four actions instead render after the group's children through the shared labelled-row primitive, the condition actions' own treatment (44px, warning red). The desktop popover keeps the icon row, proven by the constructed-filter-panel-desktop-{light,dark} captures reproducing their committed bytes while only the manifest's sourceHash moves for them."
+    },
+    {
+      "event": "release",
+      "phase": "071-008-filter-sheet-row-model",
+      "at": "2026-09-10T08:45:00Z",
+      "hash": "aef17a2f6e8a",
+      "reviewed": [
+        "screenshots/notion-clone/panels/constructed-filter-panel-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-nested-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-nested-mobile-light.png",
+        "screenshots/notion-clone/components/table-column-header-mobile-dark.png",
+        "screenshots/notion-clone/fields/field-icon-picker-desktop-dark.png",
+        "screenshots/notion-clone/fields/field-icon-picker-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-depth3-import-confirm-dropdown-mobile-dark.png"
+      ],
+      "note": "npm run screenshots </dev/null twice, exit 0 both, 480 entries. Judged by decoded pixel delta against the committed blobs across both runs, no image opened by eye. 13 REAL movers kept, each judged on identical counts in BOTH runs: this leg's four constructed-filter-panel mobile/nested captures, 1107px at max channel delta 112 (dark) / 132 (light), all four identical -- the root group's four 28x28 icon columns replaced by four 357x44 labelled rows. Nine carried movers, kept by the same rule: table-column-header-mobile-dark 34px at 192, the very mover 014's release judged and kept, whose judged bytes (15750 -> 15724) this recapture finally puts on disk; field-icon-picker-desktop-{dark,light} 4923px at 208/212 with a layoutHash move; constructed-depth3-import-confirm-dropdown-mobile-{dark,light} 997/1001px at 71/78; panel-record-detail-sheet-body-empty-mobile-light 5656px at 2; board-mobile-desktop-dark 2px at 1; constructed-icon-picker-desktop-{dark,light} 6px at 67/78. The nine carried movers' provenance is the recorded one-run flakiness of those surfaces and the 014 precedent of judging cross-legend movers on the counts, not the legend; their per-cause attribution is inferred, the counts are not. 7 one-run movers at max channel delta 1-12, all under the 12 bar, restored at their committed bytes with the manifest rows' bytes and pixelHashes patched back and the fresh sourceHashes kept. The manifest otherwise differs from its committed state only by the 30 sourceHash rows the filter renderer's edit owns. All counts deterministic across both judged runs; the visual read stays the operator device pass."
     }
   ],
   "outstanding": [

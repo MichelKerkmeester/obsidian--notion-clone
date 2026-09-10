@@ -154,26 +154,32 @@ contextType: "implementation"
 ### Design-review follow-ups (2026-09-10)
 
 Opened by `../sheet-design-review.md` §7 F-6, a `sk-design-fundamentals` pass distinct from this
-child's own Notion-parity work. Not yet implemented.
+child's own Notion-parity work. Implemented 2026-09-10 (design-review follow-up leg, worktree
+`286-dr-filter-actions`).
 
-- [ ] T013 RED first: add a clause to `tools/live/sheet-grammar.mjs`'s filter-panel block asserting
-  every root-group action control (`+`, `folder-plus`, `circle-slash-2`, `trash-2` inside
-  `.obnotion-source-rule-actions` at the sheet's own root) carries a visible text label, not only
-  an `aria-label`, and measures ≥44px on its touch axis on a coarse pointer. Run against the
-  unmodified tree and record the failure: 4 of 4 controls have no visible label
-  (`querySelector`-readable text node), and the phone floor is 28×28px, not ≥44px
+- [x] T013 RED recorded: the clause reads the root group's action controls — both presentations,
+  the legacy header icons container and the labelled action rows — and asserts a visible text node
+  plus a 44px touch box on each. Against the unmodified tree: 4 of 4 controls ("Add source rule",
+  "Add rule group", "Negate rule", "Remove rule") carry no visible label, boxes 28x28px against
+  the 44px floor — exit 1 with exactly those 2 failures, every landed clause green
   (`tools/live/sheet-grammar.mjs`)
-- [ ] T014 Fix at the producer: route `renderFilterTreeGroup`'s root-level actions
-  (`filter-panel-renderer.ts:437-449`) through the same `createMenuRow` labelled-row primitive
-  `renderStackedConditionRow` already uses for the condition-level actions three rows below
-  (`:678-702`) — "Add rule", "Add rule group", "Negate rule", "Remove rule" (red, `is-warning`) as
-  44px labelled rows. If the header's own layout cannot hold four full rows without pushing the
-  `AND (all)` dropdown out of its row, keep the icon-only presentation but raise
-  `.obnotion-source-rule-icon-button`'s phone floor to 44px (`styles.css:24471-24474`) and add a
-  persistent (not hover-only) text label beside each icon (`src/views/filter-panel-renderer.ts`,
-  `styles.css`)
-- [ ] T015 Verify GREEN: T013's clause passes; rerun the condition-row controls-per-row and
-  labelled-warning-row clauses this leg already shipped and confirm they are unchanged. Recapture
-  `constructed-filter-panel-mobile-{light,dark}.png` and `constructed-filter-panel-nested-mobile-{light,dark}.png`
-  and confirm by eye that the root-group actions now read in the same visual language as the
-  condition-level actions a few rows below them (`tools/live/sheet-grammar.mjs`, `screenshots/`)
+- [x] T014 Fixed at the producer, primary route: `renderFilterTreeGroup`'s group actions stop
+  rendering as icon buttons inside the sheet and instead render after the group's children through
+  the same `createMenuRow` labelled-row primitive `renderStackedConditionRow` uses — "Add rule",
+  "Add rule group", "Negate rule", "Remove rule" (red, `is-warning`) as 44px labelled rows. The
+  header's own layout could not hold four 44px labelled rows beside the `AND (all)` dropdown
+  (110px of its own, ~357px of row), so the dropdown keeps its row and the four actions read
+  where the condition's own actions read: after the rules they act on. Gated on
+  `isMobileBottomSheet`, the same gate the stacked condition row takes; the desktop popover keeps
+  the icon row, proven by the desktop captures reproducing their committed bytes while only the
+  manifest's sourceHash moves (`src/views/filter-panel-renderer.ts`; `styles.css` untouched, so
+  the fallback's phone-floor raise was not needed)
+- [x] T015 GREEN: the clause reads 4/4 controls, visible labels 4/4, touch boxes 357x44px — the
+  full suite exit 0, 0 failures, with the condition-row clauses this leg's earlier work shipped
+  unchanged (condition rows ≤4 controls, counts 1×8; the labelled-warning clauses in their
+  recorded state). All four captures recaptured twice: 1107px at max channel delta 112 (dark) /
+  132 (light), identical counts in both runs, judged by decoded pixel delta, no image opened by
+  eye — the same-visual-language half is confirmed by measurement instead (the actions now are
+  the shared `createMenuRow` primitive the condition-level actions use: same 357px row span, 44px
+  pitch, `is-warning` red); the operator's device read stays the outstanding row it already was
+  (`tools/live/sheet-grammar.mjs`, `screenshots/`)

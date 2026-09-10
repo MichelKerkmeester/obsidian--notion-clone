@@ -434,19 +434,26 @@ export class FilterPanelRenderer {
       hideLabel: true,
       onChange: (value) => onReplace({ ...group, logic: value === "or" ? "or" : "and" }),
     });
-    const groupActions = header.createDiv({ cls: "obnotion-source-rule-actions" });
-    this.createFilterTreeIconButton(groupActions, "plus", t("viewConfig.sourceRules.addRule"), () => {
-      onReplace(appendLeaf(group, createDefaultFilterRule(config), group.logic));
-    });
-    if (canWrapFilterNode(group, depth)) {
-      this.createFilterTreeIconButton(groupActions, "folder-plus", t("viewConfig.sourceRules.addGroup"), () => {
-        onReplace({ type: "group", logic: "and", rules: [group] });
+    // The phone sheet answers with words: the group's own actions read as labelled rows in the
+    // same voice as the condition's actions below, because four glyph buttons on a touch
+    // surface is the defect the condition rows already lost to. The desktop popover keeps the
+    // icon row — a pointer reads a tooltip, and its fixed 292px width has no room to give.
+    const rendersSheetActions = isMobileBottomSheet(containerEl.ownerDocument);
+    if (!rendersSheetActions) {
+      const groupActions = header.createDiv({ cls: "obnotion-source-rule-actions" });
+      this.createFilterTreeIconButton(groupActions, "plus", t("viewConfig.sourceRules.addRule"), () => {
+        onReplace(appendLeaf(group, createDefaultFilterRule(config), group.logic));
       });
+      if (canWrapFilterNode(group, depth)) {
+        this.createFilterTreeIconButton(groupActions, "folder-plus", t("viewConfig.sourceRules.addGroup"), () => {
+          onReplace({ type: "group", logic: "and", rules: [group] });
+        });
+      }
+      this.createFilterTreeIconButton(groupActions, "circle-slash-2", t("viewConfig.sourceRules.addNot"), () => {
+        onReplace({ type: "not", rule: group });
+      });
+      this.createFilterTreeIconButton(groupActions, "trash-2", t("viewConfig.sourceRules.remove"), () => onReplace(undefined));
     }
-    this.createFilterTreeIconButton(groupActions, "circle-slash-2", t("viewConfig.sourceRules.addNot"), () => {
-      onReplace({ type: "not", rule: group });
-    });
-    this.createFilterTreeIconButton(groupActions, "trash-2", t("viewConfig.sourceRules.remove"), () => onReplace(undefined));
 
     const children = wrap.createDiv({ cls: "obnotion-source-rule-children" });
     if (group.rules.length === 0) {
@@ -469,6 +476,39 @@ export class FilterPanelRenderer {
           onReplace(rules.length > 0 ? { ...group, rules } : undefined);
         }
       );
+    }
+    if (rendersSheetActions) {
+      // The group's own actions come after the rules they act on, the same reading order the
+      // condition's actions use: a rule's rows, then what you can do to it. The delete carries
+      // the warning treatment the shared row primitive owns, so it reads in the destructive red
+      // the condition's delete already uses rather than a second copy of that treatment.
+      createMenuRow(wrap, {
+        cls: "obnotion-source-rule-group-action",
+        icon: "plus",
+        label: t("viewConfig.sourceRules.addRule"),
+        onClick: () => onReplace(appendLeaf(group, createDefaultFilterRule(config), group.logic)),
+      });
+      if (canWrapFilterNode(group, depth)) {
+        createMenuRow(wrap, {
+          cls: "obnotion-source-rule-group-action",
+          icon: "folder-plus",
+          label: t("viewConfig.sourceRules.addGroup"),
+          onClick: () => onReplace({ type: "group", logic: "and", rules: [group] }),
+        });
+      }
+      createMenuRow(wrap, {
+        cls: "obnotion-source-rule-group-action",
+        icon: "circle-slash-2",
+        label: t("viewConfig.sourceRules.addNot"),
+        onClick: () => onReplace({ type: "not", rule: group }),
+      });
+      createMenuRow(wrap, {
+        cls: "obnotion-source-rule-group-action",
+        icon: "trash-2",
+        label: t("viewConfig.sourceRules.remove"),
+        warning: true,
+        onClick: () => onReplace(undefined),
+      });
     }
   }
 

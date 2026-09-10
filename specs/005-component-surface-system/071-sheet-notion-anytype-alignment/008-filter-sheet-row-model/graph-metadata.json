@@ -205,7 +205,7 @@
     ],
     "causal_summary": "The Filter sheet passes every assertion it has and is unreadable",
     "created_at": "2026-09-09T20:48:29.770Z",
-    "last_save_at": "2026-09-10T05:17:49.679Z",
+    "last_save_at": "2026-09-10T07:10:06.921Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,12 +217,12 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:fb1ac62c0af286d0900095922553d131aaf9c91a9e708f317fa54f662651bda8",
+    "source_fingerprint": "sha256:78ed25bd80ae71d3c2e5a83fd7333f5606a0d8cf2b88cf358d25f20222a42930",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "ec8e7dad50bbeda21ca916554a23554c982b7529eb87307a6ca0eb15c439af25",
       "plan.md": "866d5d11ebbc2e503c899667f8161c8318d5c903b2f56c6506b596972ff9036f",
-      "tasks.md": "96f468df0ebba789a4496412122f7d65a569f865e337945133500d26938441a9",
+      "tasks.md": "6a1ddafcaa8577c26af52aae95318478918dfbf6e8c460c9a561c7c5fceecd74",
       "decision-record.md": "c7d6261abc79212c5e7baf5d97452c7534b5929821c3a8c13ea0593d9d6d1038",
       "implementation-summary.md": "65ae60119e5b4d745b2f31b78f04e199a4860263cce053979f8c3e555fa26417"
     },

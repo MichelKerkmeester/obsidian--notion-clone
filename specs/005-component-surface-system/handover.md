@@ -4430,6 +4430,44 @@ touched folder's scoped graph-metadata backfill. Not pushed — see the commit t
 landing SHA.
 
 
+
+## 071/008-filter-sheet-row-model — design-review follow-up: the root-group action row, labelled (2026-09-10, this leg)
+
+The review's own `008` P1, implemented RED-first on this worktree (`286-dr-filter-actions`, relaunched 08:02
+after the previous run's connection died before it wrote anything). The clause came first: `sheet-grammar.mjs`'s
+filter-panel block now reads the root group's action controls — both presentations, the legacy header-icons
+container and the labelled action rows — and asserts a visible text node plus a 44px touch box on each. RED
+against the unmodified tree: 4 of 4 controls ("Add source rule", "Add rule group", "Negate rule", "Remove
+rule") carry no visible label, boxes 28x28px against the 44px floor, exit 1 with exactly those 2 failures and
+every landed clause green. GREEN at the producer: `renderFilterTreeGroup`'s four icon buttons stop rendering
+inside the sheet (gated on `isMobileBottomSheet`, the same gate the stacked condition row takes) and the same
+four actions render after the group's children through the shared `createMenuRow` primitive — "Add rule", "Add
+rule group", "Negate rule", "Remove rule" (warning red) — 4/4 controls, 4/4 visible labels, 357x44px, full
+suite exit 0 with the condition-row clauses unchanged (counts 1x8, ≤4 controls). The desktop popover keeps the
+icon row, proven by its captures reproducing their committed bytes while only the manifest's sourceHash moves.
+`styles.css` untouched, so the fallback (raise the icon-button floor, label beside each icon) was not needed
+and the css-lane signs at the same `aef17a2f6e8a` — acquire/edit/release triplet, holder
+`071-008-filter-sheet-row-model`, the desktop-unchanged proof recorded in the edit note.
+
+Battery from the final state: `npx tsc --noEmit` 0; `npx vitest run` 1613/1613 (160 files); `npm run build` 0;
+`sheet-grammar.mjs` 0; `render-assertions.mjs` 0; `verify-placement.mjs` 0 (418/420, 2 declared);
+`screenshots` twice, exit 0 both, 480 entries — 13 two-run movers kept, judged by decoded pixel delta (this
+leg's four constructed-filter-panel-mobile/nested captures 1107px at max channel delta 112/132, identical
+counts both runs; 9 carried two-run movers incl. the field-icon-picker pair 4923px@208/212 with a layoutHash
+move and the depth3 import-confirm pair 997/1001px@71/78, whose per-cause attribution is inferred, the counts
+not); 7 one-run Δ≤12 jitters restored at their committed bytes with their manifest rows' bytes and pixelHashes
+patched back and the fresh sourceHashes kept; `evidence.mjs --check-all` 16/16 fresh after 13 stale artefact
+writers re-ran by their own tools plus `sheet-rebuild.mjs`; naming scans 0/0; `npm run gate` 28/0 (first run
+red only on the css-lane lane — the release's `reviewed` array named 4 of the 8 pixelHash movers; the carried
+4 named, second run PASS). The check-lane count "8 changed" vs 13 kept: 5 of the 13 moved bytes without
+moving pixelHash or layoutHash, the class the lane's own checker exempts from review.
+
+Docs: the three follow-up tasks ticked with their numbers in the packet's `tasks.md` (goal figure stays 6/7 —
+the follow-ups sit outside the 7 completion criteria and the device read stays the operator's, D3);
+`goal.md`'s continuity refreshed; `roadmap.md` §5.A's `071` row gained the closing note. Validated: this
+packet, the `071` parent (first RESULT) and the `005` track, `RESULT: PASSED`, each after its own scoped
+graph-metadata backfill. Not pushed — see the commit trailer for the landing SHA.
+
 ## 071/011-record-sheet-header-and-icons — the design-review F-3 follow-up: the row type icon's 4px gap (2026-09-10, this leg)
 
 The Sonnet design review's one `011` finding (F-3, P2 — the per-row type icon rendered glued to
