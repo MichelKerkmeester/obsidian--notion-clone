@@ -6986,6 +6986,32 @@
         "screenshots/notion-clone/views/board-mobile-desktop-dark.png"
       ],
       "note": "The 007 leg's verification, recorded after its two commits were rebased onto the 011 and 013 landings, so the judged stylesheet is the fully merged one (the dedicated settings-card fill token, the 011 type-icon 4px gap, 013's sheet-owned date-segment paint) and this release's hash is that tree's, stamped into baselineHash. The leg's earlier acquire/edit (06:25:05Z) are restored here with their original stamps because the second rebase had taken the 013 side of this file wholesale; this release completes their triplet. The leg's both-themes card>canvas luminance clause, lost by that same rebase, was restored from the leg's own commit and re-proven on the merged tree: reverting the card rule's token to --background-primary reads exactly 1 failure, the recorded dark-theme 0.0130 over the 0.0270 canvas, and the restored tree reads the recorded GREEN, dark 0.0409 > 0.0270 and light 0.0130 > 0.0119, 0 failures, beside 013's restored typed-segments clause. Captured twice (npm run screenshots </dev/null, 480/480, exit 0 both), judged by decoded pixel delta against the committed blobs across both runs, no image opened by eye. 2 REAL movers, kept, each named above: views/board-mobile-desktop-dark 2px at 1, reproduced at IDENTICAL counts in both judged runs (pixelHash-identical, 242581 -> 242584 bytes, the 062/067 class the 16x16 averaging cannot see), and components/constructed-board-empty-column-desktop-light 51px at 204 in the second judged run only, above the 12 bar, the returning mover (067's note: 283px at 204, first run only, its second run restoring it; here the roles are swapped and the second run's bytes are the ones kept, 386049 -> 386152). 1 further one-run mover, none committed: components/constructed-card-covers-desktop-dark 200px at 185 in the first judged run only, the second run itself restoring it byte-identical to its committed blob, so nothing was restored and no manifest row was patched. The fresh capture also healed the row-pair the second rebase left: 802a7b65's shipped constructed-view-config-mobile-dark (110456 / 8604bdb3b33a) and constructed-board-card-properties-mobile-dark (115936 / db63413e1d93) sat under 013's landing rows written for their stylesheet (115878 / 2c2204676fd9, 120259 / cd40de40ad0f); this manifest now states the shipped PNGs' own truth, their renders reproducing byte-identically in both judged runs. Every other capture reproduced its committed blob. This verification reviews by measurement (headless); the visual read stays the operator device pass."
+    },
+    {
+      "event": "acquire",
+      "event": "acquire",
+      "phase": "015-sheet-design-fundamentals",
+      "at": "2026-09-10T21:20:00Z",
+      "hash": "5560c2030c05",
+      "note": "Re-acquired at the landing verification: the rebase onto origin/main (through 1f394a36) merged main's 013 F-4 date-segment paint (84bc2996) underneath this leg's raise, so the stylesheet this holder owns changed without a new edit; the lane returns to 015's hold for the reconciliation pass."
+    },
+    {
+      "event": "edit",
+      "phase": "015-sheet-design-fundamentals",
+      "at": "2026-09-10T21:20:00Z",
+      "hash": "993d5770cc60",
+      "note": "Not a new edit: the reconciled stylesheet itself - main's date-seg override plus this leg's 10-line coarse-pointer mini-nav raise, the 0e4d644f1 rebase result; shasum-12 of styles.css, and the lane's baselineHash reset to it."
+    },
+    {
+      "event": "release",
+      "phase": "015-sheet-design-fundamentals",
+      "at": "2026-09-10T21:20:00Z",
+      "hash": "993d5770cc60",
+      "reviewed": [
+        "screenshots/notion-clone/fields/constructed-date-picker-desktop-light.png",
+        "screenshots/notion-clone/views/board-mobile-desktop-dark.png"
+      ],
+      "note": "Recaptured twice at the reconciled stylesheet (npm run screenshots </dev/null, 482 entries, exit 0 each) and judged by decoded pixel delta against the committed blobs: ZERO real movers - the leg's eight 248px@112-132 date-pair captures are the committed pictures and reproduced exactly. The only byte-moves were the lanes' known one-run jitter: constructed-date-picker-desktop-light 10px@1 and board-mobile-desktop-dark 2px@1, each in a single run, both restored to their committed pixels with their manifest rows' bytes patched; pixelHash and layoutHash never moved. Evidence 16/16 fresh after 13 stamps were re-run by their own writers; gate PASS 28/0; vitest 1614/1614."
     }
   ],
   "outstanding": [
