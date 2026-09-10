@@ -16862,7 +16862,7 @@
       },
       "note": "The reference board inside the default-width container: its fixed-width columns page horizontally on a phone while the card tree remains unchanged.",
       "capture": "viewport",
-      "bytes": 242581,
+      "bytes": 242584,
       "fixtureOf": "constructed-board"
     },
     {
@@ -17164,7 +17164,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 280379,
+      "bytes": 280394,
       "fixtureOf": "constructed-board"
     },
     {
