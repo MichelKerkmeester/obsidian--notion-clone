@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/076-sheet-visual-parity/012-board-card-fields",
+  "spec_folder": "005-component-surface-system/076-sheet-visual-parity/012-board-card-fields",
+  "parent_id": "005-component-surface-system/076-sheet-visual-parity",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "076 phase 12",
+      "board card fields visual parity",
+      "012 define table",
+      "board card meta grid single column",
+      "fields never wrap",
+      "implementation plan",
+      "076 phase 12 plan",
+      "012 six step loop",
+      "task breakdown",
+      "076 phase 12 tasks",
+      "012 loop tasks",
+      "acceptance criteria"
+    ],
+    "key_topics": [
+      "phase",
+      "board",
+      "card",
+      "fields",
+      "visual",
+      "parity",
+      "define",
+      "table",
+      "meta",
+      "grid",
+      "single",
+      "column"
+    ],
+    "importance_tier": "normal",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "styles.css",
+      "tools/live/render-assertions.mjs",
+      "src/views/card-field-renderer.ts",
+      "src/views/board-renderer.ts",
+      "tools/bench/board-render-bench.ts",
+      "src/views/record-surface/property-row.ts",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/live/render-assertion-harness.ts",
+      "tools/lane/check-lane.mjs",
+      "src/views/board-card-properties-panel.test.ts",
+      "screenshots/anytype/mobile/app/anytype-mobile-set-kanban-light.png"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "styles.css",
+        "kind": "file",
+        "path": "styles.css",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertions.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "card-field-renderer.ts",
+        "kind": "code",
+        "path": "src/views/card-field-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-render-bench.ts",
+        "kind": "code",
+        "path": "tools/bench/board-render-bench.ts",
+        "source": "derived"
+      },
+      {
+        "name": "property-row.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/property-row.ts",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "board-card-properties-panel.test.ts",
+        "kind": "test",
+        "path": "src/views/board-card-properties-panel.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "anytype-mobile-set-kanban-light.png",
+        "kind": "file",
+        "path": "screenshots/anytype/mobile/app/anytype-mobile-set-kanban-light.png",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Board Card Fields Never Wrap Side",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Sheet Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The board card's property rows (`.obnotion-kanban-card-meta .obnotion-board-card-field`) render in a two-column CSS grid at any viewport 360px or wider (`styles.css:10178-10188`), which the shared per-field renderer's label span (`card-field-renderer.ts:105`) was never built to fit inside: at half the card's width, an ordinary property label — `Due date`, `Related tasks`, `Link`, `Margin %`, `Summary` — has nowhere near enough room, and `.obnotion-board-card-field-label`'s own `text-overflow: ellipsis; white-space: nowrap` (`styles.css:10202-10209`) truncates it exactly as far as the",
+    "created_at": "2026-09-10T20:24:50.845Z",
+    "last_save_at": "2026-09-10T20:24:50.845Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:11958dd1472af75e278714a60239d54bc1f3e45f2ca89c7636d78d593f09a60b",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "f6587c8532243cedaab5e2daf3aedcd9f362ab1958322386dec006502e4c9901",
+      "plan.md": "d7ad64e80c13d10c88259a0948646b316b13aa39873701b1ce72a31d97520d5c",
+      "tasks.md": "26e5c0f60dc896d32bfd8110b8592f54ca34b94c8be5e2383410d0885c6c309c"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

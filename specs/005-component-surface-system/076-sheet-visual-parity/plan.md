@@ -118,7 +118,8 @@ Sequential, per D4. Each child's own `tasks.md` owns its six step groups and the
 | 8 | `008-record-sheet-visual-parity` | Judge twice |
 | 9 | `009-menu-and-confirm-visual-parity` | Judge twice |
 | 10 | `010-picker-sheets-visual-parity` | Judge twice |
-| 11 | `011-toolbar-overflow-and-column-width` | Judge twice; the parent's map goes `complete` |
+| 11 | `011-toolbar-overflow-and-column-width` | Judge twice |
+| 12 | `012-board-card-fields` | Not one of the eleven sheets (added 2026-09-10 ~21:43 by a separate ruling); holds the css-lane in its own turn, independent of the sheet sequence; judge twice against Anytype; the parent's map goes `complete` |
 <!-- /ANCHOR:phases -->
 
 ---

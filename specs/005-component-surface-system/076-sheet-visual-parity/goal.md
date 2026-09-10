@@ -95,6 +95,7 @@ own sheet owes.
 | `009-menu-and-confirm-visual-parity` | Record menu, cell menu and destructive confirm read as the reference's, with the confirm's action order settled |
 | `010-picker-sheets-visual-parity` | Date, icon, colour and property-type pickers each read as their reference |
 | `011-toolbar-overflow-and-column-width` | Toolbar overflow and the column-width sheet read as their references |
+| `012-board-card-fields` | Not one of the eleven sheets — the board card's meta grid renders one field per full-width row, never two side by side, judged against Anytype (the board's own landed parity target) rather than Notion |
 <!-- /ANCHOR:binding -->
 
 ---
@@ -120,8 +121,10 @@ the operator's own confirmation, and no agent ticks it.
 - [ ] `009-menu-and-confirm-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
 - [ ] `010-picker-sheets-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
 - [ ] `011-toolbar-overflow-and-column-width` — judge ≥ 14/16, no 0, twice consecutively; lane green
-- [ ] No `071` clause regressed: `node tools/live/sheet-grammar.mjs` exit 0 across all eleven landings
-- [ ] The operator re-reads the sheets on their own iPhone and reports them aligned — **no agent ticks this row**
+- [ ] `012-board-card-fields` — judge ≥ 14/16, no 0, twice consecutively against Anytype; lane green (not one of the eleven sheets; does not gate or depend on their sequence)
+- [ ] No `071` clause regressed: `node tools/live/sheet-grammar.mjs` exit 0 across all eleven sheet landings
+- [ ] No `056`/`045` board clause regressed: `render-assertions.mjs` exit 0 for `012`'s own landing
+- [ ] The operator re-reads the sheets and the board on their own iPhone and reports them aligned — **no agent ticks this row**
 <!-- /ANCHOR:completion -->
 
 ---

@@ -279,6 +279,7 @@ total. The reviewer writes the score table, with a one-line justification per ro
 | 9 | `009-menu-and-confirm-visual-parity/` | Record menu, cell menu, destructive confirm | `src/views/owned-menu.ts`, `src/views/row-menu.ts`, `src/views/column-menu.ts`, `src/views/confirm-sheet.ts` | scaffolded |
 | 10 | `010-picker-sheets-visual-parity/` | Date, icon, colour and property-type pickers | `src/views/date-value-picker.ts`, `src/views/icon-picker-popover.ts`, `src/views/option-color-picker.ts`, `src/views/record-surface/type-picker.ts` | scaffolded |
 | 11 | `011-toolbar-overflow-and-column-width/` | Toolbar overflow, column width | `src/views/toolbar-renderer.ts`, `src/views/column-width.ts` | scaffolded |
+| 12 | `012-board-card-fields/` | Board card meta grid (not one of the eleven sheets — added 2026-09-10 ~21:43 by a separate operator ruling on the same build) | `styles.css` (`.obnotion-kanban-card-meta`), `tools/live/render-assertions.mjs` | scaffolded |
 
 ### Phase Transition Rules
 
@@ -286,7 +287,10 @@ total. The reviewer writes the score table, with a one-line justification per ro
 - Each child MUST have its image judge pass **twice consecutively on an unchanged tree** before it
   is called done in-repo; the operator's device row stays open past that and no agent ticks it
 - A child that regresses a landed `071` clause closes the regression inside itself or stops
-- Run `validate.sh --recursive` on this parent to validate all eleven as one unit
+- `012` is not one of the eleven sheets and does not gate or depend on their sequence; it holds the
+  shared css-lane triplet in its own turn (D4's rationale, extended to a twelfth holder) and is
+  judged against Anytype rather than Notion, per its own `spec.md` §13
+- Run `validate.sh --recursive` on this parent to validate all twelve as one unit
 
 ### Phase Handoff Criteria
 
@@ -294,7 +298,8 @@ total. The reviewer writes the score table, with a one-line justification per ro
 |------|-----|----------|--------------|
 | 001 | 002 | The settings sheet's judge passes twice, and its DEFINE table's card/row/trailing-element vocabulary is the one every later child reuses | `001/verification.md`, `001/acceptance-criteria.md` |
 | any child | the next | The previous child's lane clauses are in the shared regression set and green | `tools/live/sheet-grammar.mjs` exit 0 |
-| 011 | (parent) | Eleven judge passes recorded; the operator's eleven device rows are the only open criteria | This spec's map, all rows `complete` |
+| 011 | 012 | The eleven sheets' judge passes are recorded; `012` proceeds independently of them since it targets the board card, not a sheet | This spec's map, rows 1-11 `complete` |
+| 012 | (parent) | Twelve judge passes recorded; the operator's twelve device rows are the only open criteria | This spec's map, all rows `complete` |
 <!-- /ANCHOR:phase-map -->
 
 ---

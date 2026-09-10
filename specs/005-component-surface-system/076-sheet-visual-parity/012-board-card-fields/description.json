@@ -1,0 +1,26 @@
+{
+  "level": "2",
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/012-board-card-fields",
+  "description": "The board card's meta grid lays two fields per row above 360px, truncating labels and clipping values; every field must render on its own full-width line",
+  "keywords": [
+    "board",
+    "card",
+    "fields",
+    "meta",
+    "grid",
+    "wrap",
+    "truncate",
+    "anytype",
+    "kanban",
+    "parity"
+  ],
+  "lastUpdated": "2026-09-10T22:15:00.000Z",
+  "specId": "012",
+  "folderSlug": "board-card-fields",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

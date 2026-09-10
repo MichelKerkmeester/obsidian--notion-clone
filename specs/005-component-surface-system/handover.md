@@ -10,13 +10,14 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T21:50:00Z"
-    last_updated_by: "294-loop-graph-docs"
-    recent_action: "Documented 076's loop graph: D6, plan.md §6A, 11 verification.md skeletons, roadmap decision"
+    last_updated_at: "2026-09-10T22:15:00Z"
+    last_updated_by: "293-board-card-fields-plan"
+    recent_action: "Scaffolded 076/012-board-card-fields (DEFINE+PLAN only); twelfth child, no code"
     next_safe_action: "Execute 076/001-settings-sheet-visual-parity, step DEFINE (T001-T004)"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
       - "076 closes no sheet on lane evidence alone; the image judge is a required gate (076 D1)"
+      - "076/012's lane fix must correct render-assertions.mjs's own passing 'meta grid' assertion in the same commit as the producer, or the lane certifies a shape the producer no longer draws"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
@@ -42,6 +43,10 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-10 ~22:15, 076/012-board-card-fields SCAFFOLDED (DEFINE+PLAN only) — worktree `293-board-card-fields-plan`
+
+**What this pass did** — a twelfth `076` child, opened from a second operator ruling on the same 0.0.38 build row 89 already covers: *"Btw fields in board cards should never wrap always under each other add phase for that too"* (2026-09-10 ~21:43). Read against the producer before writing anything: `.obnotion-kanban-card-meta` is a two-column CSS grid at ≥360px (`styles.css:10178-10188`), which truncates a field's label (`text-overflow: ellipsis`, `:10202-10209`) and clips its value (`-webkit-line-clamp: 1`, ~10795-10805) at half the card's width — exactly the "D…"/"Relat…"/"Margi…" and "June 30,…"/"https://examp" the operator's own screenshot shows. **This is not a fixture gap: `tools/live/render-assertions.mjs`'s own "meta grid" clause asserts and passes on two columns wide / one narrow** — the same green-lane-over-a-wrong-picture failure `076` D1 was written to catch, found on the board. It also reverses `056-board-anytype-parity`'s own landed **ADR-008** (single-column, wrap-not-truncate values), silently overtaken by `045-board-card-properties`'s field-names leg in the same edit that made labels visible. Recorded as a settled (not Proposed) contradiction in `roadmap.md` §7.20, since the operator's own words are read as directly resolving it. `012/spec.md`, `plan.md`, `tasks.md` (12 tasks, six-step loop), `acceptance-criteria.md`, `goal.md` and `description.json` written, mirroring `001`'s document set; parent `076/spec.md` (Phase Documentation Map + transition rules), `plan.md` (phases table) and `goal.md` (BINDING + completion criteria, now 15 rows) updated for the 12th child; `checklist.md` gained `012`'s block; `roadmap.md` §4 gained row 90 (quoting the ruling verbatim, routed to `076/012`, status planned), §5.A's `076` bullet and DONE-style row updated, §7.20 opened. **No code changed — DEFINE/PLAN only, per the dispatch's own scope.** `012` (own metadata backfilled), the `076` parent (FIRST RESULT, metadata backfilled) and `005` root all validate `--strict` → `RESULT: PASSED`.
 
 ### 2026-09-10 ~21:05, 013's design-review follow-up (F-4) LANDED+VERIFIED — worktree `288-dr-pickers`
 
