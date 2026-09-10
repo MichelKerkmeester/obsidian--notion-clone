@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T23:45:00Z"
-    last_updated_by: "291-testbed-generator"
-    recent_action: "074 folder ruling landed+verified 2ecaa2af: mutation-verified, gate 28/0, goal 5/6; pushed"
+    last_updated_at: "2026-09-11T00:20:00Z"
+    last_updated_by: "289-sheet-design-fundamentals"
+    recent_action: "015 fundamentals verified+landed 994cf993: 3x rebase, 3x gate 28/0, mutation-proven"
     next_safe_action: "Execute 076/002 T001 (transcribe ADR-L/M), then T002 lands L1-L6 RED"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
@@ -4674,3 +4674,37 @@ Docs: `074/acceptance-criteria.md` AC-006 (the counts, and the closure note), `0
 adopted shape with the 2026-09-10 consolidation note, `roadmap.md` §4 row 88. Validated `074` and
 the `005` track `--strict` PASSED, scoped graph-metadata backfill. Not pushed — see the commit
 trailer for the landing SHA.
+
+## 071/015-sheet-design-fundamentals — the 289 leg's landing verification: three rebases, three green tips (2026-09-10, this leg)
+
+The 289 implementation leg's two cross-sheet findings, landed at `f5c44e28` and verified through
+three origin/main interposes — the 288 F-4 date-seg paint, the 285/007 settings-card elevation
+(`1f8005ff`), the 074 testbed folder ruling — the leg's commit re-landed as `46f0e8e8`, then
+`d308bd5b`, with the verification reconciliations riding as their own commits, the tip this
+entry records being `994cf993`. What the verification proved at every tip:
+
+- The recorded RED→GREEN is real: reverting the styles.css floor-raise hunk took
+  `touch-targets.mjs`'s named-28px floor RED, exit 1, exactly the eight recorded misses
+  (`measured 24x24, under its named 28px floor`, two fixture + two constructed, both themes);
+  restoring it returned GREEN, exit 0. The dispatch's "44px floor" wording does not hold: the
+  mini-nav's floor is a named 28px, deliberately (the goal's 28-vs-44 question answered at 28,
+  D1) — the RAISED entry sits beside the 44px siblings, not among them.
+- 071/002–007's grammar clauses unchanged at every tip: sheet-grammar exit 0 both engines
+  (44–52px pitch, 16px inset, 0 native selects, 067 dividers), render-assertions exit 0 (the 007
+  cards), vitest 1614/1614 then 1617/1617 once 074's three landed, tsc 0, build 0; the full gate
+  28/0 at each tip and once more from the final pre-push state.
+- The css-lane, three reconciles: 5560c2030c05 → 993d5770cc60 (the 013 F-4 paint underneath this
+  leg's raise; zero real movers, two one-run jitters 10px@1 and 2px@1 restored) → 2c86ecdbf16c
+  (the 285 elevation underneath) → third pass judged the import-modal's 172px@102 again at the
+  SAME stylesheet, correcting the second pass's attribution: at a fixed stylesheet that mover is
+  the 074 mock-data, not the 285 elevation; kept again. The leg's eight 248px@112-132 date-pair
+  movers are its own committed pictures and never moved again; board 2px@1 = the lane's recurring
+  jitter, restored each time it appeared. 482/482 captures, exit 0, twice, at every reconcile.
+- Evidence 16/16 after each interpose's stale stamps were re-run by their own writers; the
+  operator checklist re-derived (196 rows / 68 phases, 076's scaffolds folded in, 074's ticks
+  already theirs); the 071/015 §5.A row records the 3/3 its `goal.md` holds; naming scans 0/0;
+  validate `RESULT: PASSED` on 015, the 071 parent (first RESULT) and the 005 track `--strict` at
+  every tip. The worktree's own `.handover.md` stayed unstaged throughout.
+
+Docs: this entry, the continuity trio (`recent_action`/`last_updated_at`/`last_updated_by`), and
+the 071/015 note in `roadmap.md` §5. Landed and pushed as `994cf993`.
