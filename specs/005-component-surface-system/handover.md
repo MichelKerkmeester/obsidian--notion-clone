@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T00:20:00Z"
-    last_updated_by: "289-sheet-design-fundamentals"
-    recent_action: "015 fundamentals verified+landed 994cf993: 3x rebase, 3x gate 28/0, mutation-proven"
+    last_updated_at: "2026-09-11T01:05:00Z"
+    last_updated_by: "286-dr-filter-actions"
+    recent_action: "008 root-group rows labelled, landed 8f720b62: 2x rebase, 2x judged recapture, gate 28/0"
     next_safe_action: "Execute 076/002 T001 (transcribe ADR-L/M), then T002 lands L1-L6 RED"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
@@ -4746,3 +4746,50 @@ entry records being `994cf993`. What the verification proved at every tip:
 
 Docs: this entry, the continuity trio (`recent_action`/`last_updated_at`/`last_updated_by`), and
 the 071/015 note in `roadmap.md` §5. Landed and pushed as `994cf993`.
+
+## 071/008-filter-sheet-row-model — the design-review follow-up's landing verification: two rebases, two green tips (2026-09-11, this leg)
+
+The review's `008` P1 — the root-group action row's four 28px unlabelled icon buttons — implemented RED-first
+by the `286-dr-filter-actions` leg (its implementation entry above), then landed through two origin/main
+interposes, the 074 testbed landing and the 289/015 fundamentals landing, the tip this entry records being
+`8f720b62`. What the verification proved at every tip:
+
+- The recorded RED→GREEN is real, re-proven by producer mutation: reverting `filter-panel-renderer.ts`'s
+  whole diff to origin/main's bytes took `sheet-grammar.mjs`'s root-group clause RED, exit 1, exactly the
+  recorded 2 failures (4/4 controls 28x28px, 0/4 visible labels, "Add source rule"/"Add rule group"/"Negate
+  rule"/"Remove rule"); restoring it returned GREEN, exit 0 — 4/4 controls, 4/4 labels, 357x44px — with the
+  landed 071/002–007 clauses unchanged (6/6 plain-row and 21/21 property pitches inside 44–52px, 16.0px
+  insets, 0 native selects, the 067 divider hairlines, the 007 settings cards). The leg added no test file;
+  its guard is the clause, and the mutation is its proof.
+- Battery at each tip: tsc 0, vitest 1617/1617 (the leg's 1613 + 074's three), build 0, render-assertions 0,
+  placement 418/420 (2 declared); the full gate 28/0 at the 074-merged tip and PASS 28/0 again from the final
+  pre-push state; naming scans 0/0. Validations: `008`, the `071` parent (first RESULT) and the `005` track
+  `RESULT: PASSED` — `005` once `SOURCE_FINGERPRINT_MISMATCH` on the merged 005 docs and closed by the scoped
+  `backfill-graph-metadata.js` (drift []), never by hand.
+- Twice-judged recaptures, judged by decoded pixel delta against the committed blobs, no image opened by eye.
+  First judged cycle (480/480): `panel-filter-nested-group-desktop-light` 67px@209, one judged run, above the
+  12 bar, REAL, its second run restoring the committed blob; `board-view-desktop-dark` 8px@1 BOTH runs, REAL,
+  kept, bytes-only (280394→280379, the recorded 014/008/288 recurring flip); `board-mobile-desktop-dark` 2px@1
+  one run, JITTER, restored at its committed 242584 bytes, pixelHash `2ab2cdd02bb4` identical — the recorded
+  2px@1-invisible-to-16x16 precedent, now reproduced. Second judged cycle (482/482, the 015 landing's count):
+  `board-mobile` 2px@1 BOTH runs, REAL, kept; `constructed-board-title-format-filename-desktop-dark` 23px@117,
+  one run, above the 12 bar, REAL, kept, its 23-pixel in-cell share small enough that its 16x16 pixelHash reads
+  unchanged; `board-view` 8px@1 one run, JITTER, restored at its committed 280379 bytes — healing a HEAD pair
+  whose row (280394) disagreed with its own committed blob. Each interpose's ours-side conflict resolutions
+  also left 30 manifest rows' `filter-panel-renderer.ts` sourceHash stale; each recapture refreshed them, and
+  the 286+289-merged tree reproduced every other committed blob with zero further movers — the feared
+  287-4px/015-28px residue never materialised.
+- The css-lane: the leg's acquire/edit/release triplet (holder `071-008-filter-sheet-row-model`, the
+  stylesheet untouched, all three at `aef17a2f6e8a`) carried through both rebases with its release LAST in
+  the history so the later note-addendum hunks kept their anchor; the 015/289 landing's own two triplets
+  (21:20Z, 23:45Z, 482 entries, holder `015`, baselineHash `2c86ecdbf16c` = the twice-moved stylesheet) took
+  precedence at the top level and the check-lane reads it, exit 0, its movers the bytes-not-pixelHash class
+  no release review owes; this verification's two cycles are recorded as dated addenda on the `008` release
+  note. Evidence 16/16 after each interpose's two stale stamps (capture-device-parity: the manifest;
+  sheet-rebuild: the merged renderer at `37a723f0083c`) were re-run by their own writers.
+- `008`'s goal figure stands at 6/7 — the follow-ups sit outside the 7 completion criteria and the device
+  read (D3) stays the operator's; roadmap §5.A's `071` row now carries the 286, 287, 288 and 015 notes
+  side by side. The worktree's own `.handover.md` stayed unstaged throughout.
+
+Docs: this entry, the continuity trio (`recent_action`/`last_updated_at`/`last_updated_by`), and the residue
+commits' own messages. Landed and pushed as `8f720b62`.
