@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-10T00:33:10.182Z",
+  "measuredAt": "2026-09-10T01:44:26.121Z",
   "inputs": {
-    "styles.css": "4bd3892f7e8a",
+    "styles.css": "89170e31f3fe",
     "tools/live/surface-census.mjs": "982af0f4c165",
     "src/views/surface-contract.ts": "99972eb224df",
     "src/views/record-detail-panel.ts": "596d9dba1a40",
@@ -9,13 +9,13 @@
     "src/views/board-card-properties-panel.ts": "b53e1cda8b74"
   },
   "totals": {
-    "rendered": 78,
+    "rendered": 77,
     "buildable": 221,
     "declared": 6,
     "renderedOnly": 0,
-    "buildableNotRendered": 143,
+    "buildableNotRendered": 144,
     "untokened": 0,
-    "unroled": 78,
+    "unroled": 77,
     "recordSurfaceHandBuilt": 0
   },
   "rendered": {
@@ -187,6 +187,10 @@
         "panel-filter-nested-group",
         "panel-filter-nested-group",
         "panel-filter-nested-group",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-sort-rules",
         "panel-sort-rules",
         "panel-sort-rules",
         "panel-view-config-sheet",
@@ -765,8 +769,6 @@
         "panel-filter-nested-group",
         "panel-filter-nested-group",
         "panel-sort-rules",
-        "panel-sort-rules",
-        "panel-sort-rules",
         "panel-sort-calendar-empty",
         "panel-board-groups",
         "panel-board-groups",
@@ -790,21 +792,10 @@
       "mountParent": "obnotion-container",
       "tokens": true,
       "role": null,
-      "rect": "538x177",
+      "rect": "538x369",
       "scenarios": [
         "panel-sort-rules",
         "panel-sort-calendar-empty"
-      ]
-    },
-    "obnotion-panel-drag": {
-      "cls": "obnotion-panel-drag",
-      "mountParent": "obnotion-panel-row",
-      "tokens": true,
-      "role": null,
-      "rect": "18x19",
-      "scenarios": [
-        "panel-sort-rules",
-        "panel-sort-rules"
       ]
     },
     "obnotion-panel-hint": {
@@ -812,7 +803,7 @@
       "mountParent": "obnotion-sort-panel",
       "tokens": true,
       "role": null,
-      "rect": "520x42",
+      "rect": "520x26",
       "scenarios": [
         "panel-sort-calendar-empty",
         "panel-view-config-sheet",
@@ -1513,6 +1504,7 @@
     "obnotion-view-tabs-dropdown-popover",
     "obnotion-group-popover",
     "obnotion-group-popover-section-title",
+    "obnotion-group-popover-section-action",
     "obnotion-group-popover-row",
     "obnotion-group-popover-marker",
     "obnotion-group-popover-label",

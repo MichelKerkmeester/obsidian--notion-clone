@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-10T00:33:20.946Z",
+  "measuredAt": "2026-09-10T01:44:47.346Z",
   "inputs": {
-    "styles.css": "4bd3892f7e8a",
+    "styles.css": "89170e31f3fe",
     "tools/live/view-census.mjs": "475c0e3f6fe3",
     "tools/screenshots/scenarios.mjs": "8e4c7409a92b"
   },
@@ -361,9 +361,9 @@
   ],
   "totals": {
     "fixtures": 67,
-    "escaping": 433,
+    "escaping": 429,
     "growing": 176,
-    "scrolling": 257,
+    "scrolling": 253,
     "rhythmGroups": 12,
     "ragged": 0,
     "probeBlind": 0
@@ -1179,50 +1179,6 @@
       "cls": "obnotion-panel-button.obnotion-panel-button-narrow",
       "parentCls": "obnotion-panel-row",
       "by": 253.9,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "panel-sort-rules",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "obnotion-dropdown-field.obnotion-panel-dropdown",
-      "parentCls": "obnotion-panel-row.obnotion-sort-rule-row",
-      "by": 44,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "panel-sort-rules",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "obnotion-panel-button.obnotion-panel-button-narrow",
-      "parentCls": "obnotion-panel-row.obnotion-sort-rule-row",
-      "by": 69.9,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "panel-sort-rules",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "obnotion-dropdown-field.obnotion-panel-dropdown",
-      "parentCls": "obnotion-panel-row.obnotion-sort-rule-row",
-      "by": 44,
-      "scrolls": true,
-      "pastHeader": 0
-    },
-    {
-      "width": 320,
-      "fixture": "panel-sort-rules",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "obnotion-panel-button.obnotion-panel-button-narrow",
-      "parentCls": "obnotion-panel-row.obnotion-sort-rule-row",
-      "by": 69.9,
       "scrolls": true,
       "pastHeader": 0
     },
