@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-10: **76 phases**, **9 with nothing left**, **181 rows** waiting on a device.
+Derived 2026-09-10: **77 phases**, **9 with nothing left**, **196 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -401,6 +401,24 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 ## 075-toolbar-labelled-buttons — 5/6
 
 - [ ] Operator device row recorded and left unticked
+
+## 076-sheet-visual-parity — 0/15
+
+- [ ] `001-settings-sheet-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
+- [ ] `002-properties-sheet-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
+- [ ] `003-filter-sheet-visual-parity` — judge ≥ 14/16, no 0, twice consecutively, both filter surfaces; lane green
+- [ ] `004-sort-sheet-visual-parity` — judge ≥ 14/16, no 0, twice consecutively, both sort surfaces; lane green
+- [ ] `005-group-sheet-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
+- [ ] `006-add-view-sheet-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
+- [ ] `007-property-editor-sheet-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
+- [ ] `008-record-sheet-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
+- [ ] `009-menu-and-confirm-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
+- [ ] `010-picker-sheets-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
+- [ ] `011-toolbar-overflow-and-column-width` — judge ≥ 14/16, no 0, twice consecutively; lane green
+- [ ] `012-board-card-fields` — judge ≥ 14/16, no 0, twice consecutively against Anytype; lane green (not one of the eleven sheets; does not gate or depend on their sequence)
+- [ ] No `071` clause regressed: `node tools/live/sheet-grammar.mjs` exit 0 across all eleven sheet landings
+- [ ] No `056`/`045` board clause regressed: `render-assertions.mjs` exit 0 for `012`'s own landing
+- [ ] The operator re-reads the sheets and the board on their own iPhone and reports them aligned — no agent ticks this row
 
 ## Nothing left to check
 

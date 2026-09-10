@@ -79,7 +79,8 @@
     "005-component-surface-system/072-linked-view-blocks-ux",
     "005-component-surface-system/073-checkbox-controls",
     "005-component-surface-system/074-test-data-consolidation",
-    "005-component-surface-system/075-toolbar-labelled-buttons"
+    "005-component-surface-system/075-toolbar-labelled-buttons",
+    "005-component-surface-system/076-sheet-visual-parity"
   ],
   "migrated": true,
   "migration_source": "legacy",
@@ -289,7 +290,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-10T20:44:52.342Z",
+    "last_save_at": "2026-09-10T21:00:40.689Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -297,11 +298,11 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:1f7288cc71a44f6921ca8f8e5fcede59038c08323fe4543b55fab7dcd4725acd",
+    "source_fingerprint": "sha256:74ddefdc4337a377c399845c6eca5936d806312eb93024c73d6d77da2660b068",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d555fe2d05a8e10476a09464e12aa382dea3fa399b611db29f544003d2dfcd15",
-      "handover.md": "2c86a56640f11cf5ffc3f99041a3430ba262a6b2996d1c77c72cb46ff8cb9b1b"
+      "handover.md": "e21b6b706a2f8a3d3ec477d7ab55260d0f3d333e2c9a7ade3ec4b19107a2f683"
     },
     "last_active_at": null
   }

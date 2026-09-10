@@ -3539,7 +3539,7 @@
       },
       "note": "The reference board with one configured select option no row carries, backfilled as a zero-row column through the same withEmptyOptionGroups call the hosts make.",
       "capture": "element",
-      "bytes": 386152,
+      "bytes": 386049,
       "source": "constructed",
       "renderer": "board",
       "bag": "file-view",
