@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T03:05:00Z"
-    last_updated_by: "278-sort-group-rows-implementation"
-    recent_action: "Implemented 071/012 sort-and-group sheet rows on the 278 worktree; battery 28/0"
-    next_safe_action: "Verify and land 071/012; then 008, 009, 011, 013, 014; 007 awaits T001"
+    last_updated_at: "2026-09-10T01:55:00Z"
+    last_updated_by: "278-sort-group-rows-verify"
+    recent_action: "Landing-verified 071/012 sort-and-group; 5afe61e2+beaef2fa on main, gate 28/0"
+    next_safe_action: "Execute 071/011, then 013-014; 007 awaits the T001 capture"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
     key_files:
@@ -425,6 +425,41 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-10 ~03:55, `071/012-sort-and-group-sheet-rows` LANDING-VERIFIED — landed on `origin/main` as `5afe61e2`+`beaef2fa`, worktree `278-sort-group-rows`
+
+**Landed SHA `beaef2fa` on `origin/main`** (leg commit `dde52fa0` replayed onto the 071/008+009-merged
+main `892cc6e9` as `5afe61e2`; this verifier's reconciliation commit `beaef2fa`; `git log -1
+origin/main` read back). **What this verifier confirmed** on the merged tree: the packet's first
+source task (T007's sort producer) mutation — `src/views/sort-panel-renderer.ts` reverted to
+origin/main — took `sheet-grammar.mjs` to exit 1 with exactly the four recorded sort clauses red
+(**5 controls/row, 2 shared-picker rows, 2 affordances, 2 ×/0 warning rows**) → restored, exit 0
+(2358 PASS); the rule-contract unit reverted the same guarded line →
+`sort-panel-renderer.test.ts` **1 failed | 2 passed** → restored **3/3**, the leg's own
+red-then-green numbers. The 071/002–007 grammar clauses held green in the same runs (44–52px
+pitch, 16px insets, 0 native selects, 067 divider hairlines, 007's cards), the operator-capture
+rows (AC-010, ADR-001's C-4 half) unticked and PROVISIONAL as recorded. The T009 008/012 merge
+check the leg's risk table demanded: the rebased lane runs both packets' clauses together —
+**2366 PASS / 0 FAIL** (filter/sort span 357=357, 008's name-legibility clause, the five-rule
+90svH stack, prose 74, 1 affordance, 3+2/1 heaviest controls, 2 bulk actions). Captures 480×2,
+judged by decoded pixel delta over both judged runs: **2 REAL movers** (`board-mobile-desktop-dark`
+2px@Δ1, `constructed-board-subtask-mobile-light` 62px@Δ2 — both reproduced in both runs, kept,
+named in the 012 release note); the leg's own 16 movers reproduced exactly, 0 jitter, none
+restored. css-lane: append-only merge (main's 16 008/009 events 466→482, then the leg's
+acquire `fcaf3fec28cf` / edit+release `6e10b42f6324` = 485), holder `012-sort-and-group-sheet-rows`,
+`baselineHash` reset to the merged stylesheet `shasum(styles.css)` = `89170e31f3fe`. Evidence:
+14 census artefacts went STALE after the rebase → all 15 writers re-run exit 0
+(`renderer-coverage`'s writer is `render-assertions.mjs`) → 16/16 fresh. Gate: **28 green, 0
+red, exit 0**, first run. `validate --strict`: 012, 071's FIRST RESULT and 005 — **PASSED ×3**
+(005's SOURCE_FINGERPRINT_MISMATCH from the rebase's doc edits was expected and repaired by the
+scoped backfill). `scan-comments` 0; `scan-failing-values` 0 (147 bare vs baseline 148 — ratchet
+holds). vitest **1607/1607** (the leg's 1601 + 008/009's); tsc 0; build 0. One finding during
+verification: the 071/001 inventory's four source line numbers (206/206/136/43 →
+210/210/137/55) — the `sheet-inventory` test itself guards them, so it went red (1 failed) until
+the four rows matched the merged sources. Docs: roadmap §5.A's 012 note gained the missing goal
+figure (**7/8** = goal.md's completion criteria, the 8th the operator's device read, unticked);
+`operator-checklist.md` regenerated (unchanged, 181 rows / 67 phases). Pushed `892cc6e9..beaef2fa`
+after zero push rejections.
 
 ### 2026-09-10 ~02:40, `071/009-properties-sheet-row-model` LANDING-VERIFIED — landed on `origin/main` as `4f345718`+`b32b2529`, worktree `275-properties-sheet-rows`
 
