@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T09:40:00Z"
-    last_updated_by: "287-dr-record-icons"
-    recent_action: "287 verified+landed: 011's F-3 gap fix proven, gate 28/0, 1 real mover, pushed bf2a7c0e"
+    last_updated_at: "2026-09-10T21:05:00Z"
+    last_updated_by: "288-dr-pickers"
+    recent_action: "288 verified+landed post-rebase: F-4 no-op proven, 1 real mover, gate 28/0, pushed 10cef60f"
     next_safe_action: "GLM implements the 4 follow-up sections + 015; operator device rows on 0.0.38 remain"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
@@ -41,6 +41,39 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-10 ~21:05, 013's design-review follow-up (F-4) LANDED+VERIFIED — worktree `288-dr-pickers`
+
+**What this verification did** — landed the leg (`2abcb2dc` feature + `7313263f` verification) after its
+first continuation died mid-rebase and this second one rebased it onto the 287 landings (`da8af8ee`):
+25 generated artefacts (manifest, `tools/live/*.json`, 005 graph-metadata) resolved to main's side and
+re-derived; the roadmap 071 row and this handover keep BOTH intents (287's F-3 note + this leg's F-4
+note); the css-lane merged append-only — 287's verification acquire/release kept, the leg's 013
+acquire/edit/release appended newest-last. The merged stylesheet — 287's record-detail icon-gap
+`margin-left: 4px` fix + the leg's `.obnotion-mobile-bottom-sheet .obnotion-date-picker-body
+.obnotion-date-seg { border: 0; background: transparent; }` override — hashes `ab6dcaa73cb9`, and the
+013 release attests exactly it (`check-lane.mjs` exit 0, "stylesheet unchanged since the lane was
+taken"). The F-4 mutation was proven by the previous continuation and recorded in the worktree
+handover: reverting the override alone leaves the clause GREEN (the popover root's three-class rescue
+`.obnotion-cell-edit-popover.obnotion-date-edit-popover .obnotion-date-seg` already computes the bare
+paint — the leg's recorded no-op); killing the rescue too turns it RED (`1px`/`rgb(255,0,0)`, exit 1);
+restored GREEN. This run re-proved the GREEN half on the rebased tree in the gate's own sheet-grammar
+lane. Battery from the final state: build 0, tsc 0, vitest 1614/1614 (160 files — 287's 4th clause
+rides along), `npm run gate` **exit 0 — 28 green, 0 red for a declared reason**. Recapture x2 480/480,
+judged by decoded pixel delta against the rebased committed blobs, no image opened: 1 REAL mover,
+`views/table-frozen-column-desktop-light` 37px@maxDelta32, reproduced in BOTH judged runs
+(pixelHash `29b325925bec` unchanged — 287's shimmer), kept and added to the 013 release's reviewed;
+2 one-run jitters restored at committed bytes with their manifest rows
+(panel-record-detail-sheet-body-editing-mobile-light 5656px@2, views/board-view-desktop-dark 8px@1).
+13 stale evidence writers re-run by their own writers (renderer-coverage's stamp belongs to
+`render-assertions.mjs`); evidence --check-all 16/16, re-confirmed after the landing commit.
+`013`, the `071` parent (FIRST RESULT) and `005` root all validate `--strict` -> `RESULT: PASSED`
+after scoped graph-metadata backfills (013 refreshed-unchanged, 005 refreshed);
+`scan-comments.mjs` / `scan-failing-values.mjs` exit 0. Roadmap 7/8 = goal.md's 7/8 (the device read
+stays the operator's); 015's tasks untouched and unticked (F-5's mini-nav 24x24 stands as its RED
+baseline). Landed as `10cef60f` — first push, no retry; the 968-line manifest diff is the mandatory
+styles.css sourceHash stamp (1e320e716905 -> ab6dcaa73cb9) plus the one kept mover. Open: the
+operator's device read (D3); 013's goal stays 7/8.
 
 ### 2026-09-10 ~09:40, 011's design-review follow-up (F-3) LANDED+VERIFIED — worktree `287-dr-record-icons`
 
