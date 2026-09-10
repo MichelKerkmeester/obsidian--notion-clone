@@ -1,13 +1,7 @@
 {
-<<<<<<< HEAD
-  "measuredAt": "2026-09-10T02:21:00.171Z",
+  "measuredAt": "2026-09-10T02:45:38.760Z",
   "inputs": {
-    "styles.css": "ef4e57917a2c",
-=======
-  "measuredAt": "2026-09-10T02:26:23.845Z",
-  "inputs": {
-    "styles.css": "7b9cd8d06a2b",
->>>>>>> afefc865 (chore(verify): land-verify the 071/013 sheet-input-and-action-order leg on the merged main)
+    "styles.css": "4e06417eb091",
     "tools/live/checkbox-appearance.mjs": "4d9a6548d2e3",
     "tools/screenshots/scenarios.mjs": "8e4c7409a92b"
   },

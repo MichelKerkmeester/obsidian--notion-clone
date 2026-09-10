@@ -1,13 +1,7 @@
 {
-<<<<<<< HEAD
-  "measuredAt": "2026-09-10T02:22:12.839Z",
+  "measuredAt": "2026-09-10T02:46:38.665Z",
   "inputs": {
-    "styles.css": "ef4e57917a2c",
-=======
-  "measuredAt": "2026-09-10T02:28:01.322Z",
-  "inputs": {
-    "styles.css": "7b9cd8d06a2b",
->>>>>>> afefc865 (chore(verify): land-verify the 071/013 sheet-input-and-action-order leg on the merged main)
+    "styles.css": "4e06417eb091",
     "tools/live/surface-census.mjs": "982af0f4c165",
     "src/views/surface-contract.ts": "99972eb224df",
     "src/views/record-detail-panel.ts": "857a220a8ad6",

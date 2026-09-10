@@ -1,20 +1,12 @@
 {
-<<<<<<< HEAD
-  "measuredAt": "2026-09-10T02:29:16.619Z",
-=======
-  "measuredAt": "2026-09-10T02:32:17.191Z",
->>>>>>> afefc865 (chore(verify): land-verify the 071/013 sheet-input-and-action-order leg on the merged main)
+  "measuredAt": "2026-09-10T02:58:16.035Z",
   "inputs": {
     "tools/live/touch-targets.mjs": "fb75d75b1ef1",
     "tools/live/touch-target-measure.mjs": "cf15edfd5901",
     "tools/live/render-assertion-bundle.mjs": "74987129b9ec",
     "tools/live/render-assertion-harness.ts": "4826f7cdd992",
     "tools/screenshots/scenarios.mjs": "8e4c7409a92b",
-<<<<<<< HEAD
-    "styles.css": "ef4e57917a2c"
-=======
-    "styles.css": "7b9cd8d06a2b"
->>>>>>> afefc865 (chore(verify): land-verify the 071/013 sheet-input-and-action-order leg on the merged main)
+    "styles.css": "4e06417eb091"
   },
   "fixture": {
     "measured": 832,

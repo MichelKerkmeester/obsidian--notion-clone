@@ -3,6 +3,7 @@
   "packet_id": "005-component-surface-system",
   "spec_folder": "005-component-surface-system",
   "parent_id": null,
+  "parent_id_review_required": true,
   "children_ids": [
     "005-component-surface-system/000-surface-contract-and-truthful-harness",
     "005-component-surface-system/001-overlay-placement-and-menu-language",
@@ -63,16 +64,16 @@
     "005-component-surface-system/056-board-anytype-parity",
     "005-component-surface-system/057-calendar-anytype-parity",
     "005-component-surface-system/058-card-title-and-title-formats",
-    "005-component-surface-system/067-sheet-family-remediation",
-    "005-component-surface-system/061-notion-sheet-refinement",
     "005-component-surface-system/059-notion-board-refinement",
+    "005-component-surface-system/060-notion-calendar-refinement",
+    "005-component-surface-system/061-notion-sheet-refinement",
     "005-component-surface-system/062-notion-table-refinement",
     "005-component-surface-system/063-notion-dropdown-refinement",
-    "005-component-surface-system/066-notion-states-refinement",
-    "005-component-surface-system/065-notion-record-refinement",
-    "005-component-surface-system/068-rename-to-obnotion",
-    "005-component-surface-system/060-notion-calendar-refinement",
     "005-component-surface-system/064-notion-toolbar-refinement",
+    "005-component-surface-system/065-notion-record-refinement",
+    "005-component-surface-system/066-notion-states-refinement",
+    "005-component-surface-system/067-sheet-family-remediation",
+    "005-component-surface-system/068-rename-to-obnotion",
     "005-component-surface-system/069-board-cross-group-drag",
     "005-component-surface-system/070-ios-view-data-regression",
     "005-component-surface-system/071-sheet-notion-anytype-alignment",
@@ -81,6 +82,8 @@
     "005-component-surface-system/074-test-data-consolidation",
     "005-component-surface-system/075-toolbar-labelled-buttons"
   ],
+  "migrated": true,
+  "migration_source": "legacy",
   "manual": {
     "depends_on": [],
     "supersedes": [],
@@ -287,33 +290,20 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-<<<<<<< HEAD
-    "last_save_at": "2026-09-10T02:32:49.603Z",
-=======
-    "last_save_at": "2026-09-10T02:32:54.060Z",
->>>>>>> afefc865 (chore(verify): land-verify the 071/013 sheet-input-and-action-order leg on the merged main)
-    "save_lineage": "same_pass",
+    "last_save_at": "2026-09-10T02:58:35.665Z",
+    "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "goal.md",
       "handover.md"
     ],
-<<<<<<< HEAD
-    "source_fingerprint": "sha256:3f09f644d29d8d144f258c570099d56d9ad5431e0137164836b8375a2161de88",
+    "source_fingerprint": "sha256:f03a3e22f2efdbad5b3e733407b7906a6bee9b2ac3402ff12d46e03a21f070e0",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d555fe2d05a8e10476a09464e12aa382dea3fa399b611db29f544003d2dfcd15",
-      "handover.md": "d450db95f25c5aa7c8b34f47a101d72aef931aa83ab1c75010ba9ef3a731b09a"
-=======
-    "source_fingerprint": "sha256:c4b75692b1b5dcb97bde8555338a5be3bf0900603b7d5eeba24c1cd2f2b9896b",
-    "source_fingerprint_docset": 3,
-    "source_doc_hashes": {
-      "spec.md": "d555fe2d05a8e10476a09464e12aa382dea3fa399b611db29f544003d2dfcd15",
-      "handover.md": "3d6faab9fb404b5f8fe11ae60bf60cd69d846762f0eac8d814dcc227bd128bd7"
->>>>>>> afefc865 (chore(verify): land-verify the 071/013 sheet-input-and-action-order leg on the merged main)
+      "handover.md": "79db88861de73daebab9146a466b849ca60d8f6dd932f44d57f48b6aa8881915"
     },
-    "last_active_child_id": "005-component-surface-system/036-obsidian-pm-ui-harvest",
-    "last_active_at": "2026-09-02T20:00:54.844Z"
+    "last_active_at": null
   }
 }

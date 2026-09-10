@@ -6752,6 +6752,33 @@
         "screenshots/notion-clone/views/constructed-board-subtask-mobile-light.png"
       ],
       "note": "Post-rebase verification release: the three kept movers are named above; every content-changed capture this release names was judged by decoded pixel delta, not by opening it. The visual read stays the operator device pass."
+    },
+    {
+      "event": "acquire",
+      "phase": "071-013-sheet-input-and-action-order",
+      "at": "2026-09-10T02:55:00Z",
+      "hash": "4e06417eb091",
+      "note": "Re-acquired after the second verifier rebase (push attempt 1 rejected: 071/011’s 76aafa76 landed meanwhile); the twice-merged stylesheet hashes 4e06417eb091."
+    },
+    {
+      "event": "edit",
+      "phase": "071-013-sheet-input-and-action-order",
+      "at": "2026-09-10T02:55:00Z",
+      "hash": "4e06417eb091",
+      "note": "styles.css: the second verifier rebase replayed this packet onto main with 011-record-sheet-header-and-icons — the merged stylesheet (this packet’s released aa57d141259c, plus 012’s and 011’s hunks) hashes 4e06417eb091; this packet’s own selectors untouched. Post-rebase recapture x2 (480/480, exit 0 both), judged by decoded pixel delta against the committed blobs across both runs, no image opened by eye: FOUR movers, every one a real change by the two-run rule. THREE reproduced identically in both runs: panels/constructed-board-groups-panel-mobile-light 103px@Δ76, views/board-mobile-desktop-dark 2px@Δ1 (this capture’s recurring jitter moved in BOTH runs this time, so REAL — kept, its committed-blob restoration precedent not applied) and views/board-view-desktop-dark 8px@Δ1 (the second 012 recorded; deterministic here too); the fourth, views/board-subtask-tree-desktop-dark 477px@Δ185, moved in the first judged run only but above the 12-delta bar, so REAL — its second-run read reproduces the committed blob, so the capture ships at its recorded bytes, its manifest row stamped with the current sourceHashes. All four are 011/012-adjacent board-adjacent captures, consistent with the merged stylesheet this triplet signs; none of this packet’s own 24 movers moved again. ZERO jitters this round — for the first time in three attempts board-mobile-desktop-dark moved in both runs. Selector scope: none — convergence entry, no stylesheet change by this verification."
+    },
+    {
+      "event": "release",
+      "phase": "071-013-sheet-input-and-action-order",
+      "at": "2026-09-10T02:55:00Z",
+      "hash": "4e06417eb091",
+      "reviewed": [
+        "screenshots/notion-clone/panels/constructed-board-groups-panel-mobile-light.png",
+        "screenshots/notion-clone/views/board-mobile-desktop-dark.png",
+        "screenshots/notion-clone/views/board-view-desktop-dark.png",
+        "screenshots/notion-clone/views/board-subtask-tree-desktop-dark.png"
+      ],
+      "note": "Second verification release: the four kept movers are named above; every content-changed capture this release names was judged by decoded pixel delta, not by opening it. The visual read stays the operator device pass."
     }
   ],
   "outstanding": [
