@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T01:55:00Z"
-    last_updated_by: "278-sort-group-rows-verify"
-    recent_action: "Landing-verified 071/012 sort-and-group; 5afe61e2+beaef2fa on main, gate 28/0"
+    last_updated_at: "2026-09-10T02:31:39Z"
+    last_updated_by: "277-record-sheet-header-verify"
+    recent_action: "Landing-verified 071/011 twice-rebased; 86f1420e on main, gate 28/0, 2369 PASS"
     next_safe_action: "Execute 071/011, then 013-014; 007 awaits the T001 capture"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
@@ -3866,3 +3866,30 @@ The audit’s §3.10/§3.11 P2 findings closed. The sort rule reads as three row
 
 **The numbers**: tsc 0; vitest 1601/1601 (158 files); build 0; sheet-grammar 0; render-assertions 0; verify-placement 0 (418/420, 2 declared); four `npm run screenshots` runs 480/480 exit 0 — 16 content movers judged by decoded pixel delta and kept (579014–623107px the constructed-sort-panel desktop pair, 10690–159338px the constructed-sort-panel-calendar pair, deltas 112–212; the four panel-sort-rules and four panel-sort-calendar-empty hand-fixture captures, size-differs), 2 one-run jitters (board-view-desktop-dark 8px@Δ1) restored to their committed bytes with their manifest rows patched back, the recurring 66px@209 import-modal mover pixelHash-identical and therefore byte-only; the hand fixtures in scenarios/panels.mjs mirrored onto the new markup so surface-census reads 0 fixture-only; evidence 16/16 after 13 stamps were re-run by their own writers plus capture-device-parity once more after the manifest moved; gate 28/0 (once, then once more after the test’s own `onclick?.(new Event)` arity failure was fixed); scan-comments 0; scan-failing-values 0; the stylesheet moved fcaf3fec28cf → 6e10b42f6324 inside one acquire/edit/release triplet, holder 012-sort-and-group-sheet-rows, all 16 movers named in the release; validate --strict RESULT: PASSED ×2 (this packet, the 071 parent’s first RESULT) after the scoped backfills, the 005 track’s own after its entry here; docs: decision-record.md (ADR-001/002/003 + the evidence table), implementation-summary.md, acceptance-criteria AC-002..009 Met with the numbers, goal 7/8, spec.md status/branch, roadmap §5.A’s 071 row. **Open**: AC-010, the operator’s own device read (D3), and ADR-001’s C-4 half — both the operator’s. Not pushed — a fresh verifier lands it.
 
+
+## 071/011-record-sheet-header-and-icons — landing verification, twice-rebased (2026-09-10)
+
+The fresh-verification pass on worktree `277-record-sheet-header`, pushed as `86f1420e`
+(the leg `6b6f6418` + this verifier's `8cb990e6`, on the twice-rebased main). Round 1
+rebased the leg onto the 010/008/009-merged main (892cc6e9) and re-derived every generative
+artefact; its push was rejected because `012` landed meanwhile, so round 2 rebased again onto
+`22a560fc` and re-derived everything from the twice-merged tree. What was verified, by number:
+the lane mutation RED→GREEN re-proven at HEAD (reverting the producer: lane exit 1, record-detail
+and record-peek 47.50px off centre via record-family, 0/21 type icons; restored: exit 0, 0.49px
+each via shell, 21/21, 006's clauses 21/21 @44.0px, 20/20 hairlines, 16.0px inset, 0 native
+selects, no 402px overflow — 2369 PASS / 0 FAIL on the merged stylesheet); the unit revert-proof
+re-proven (1 of 3 red at the pre-change producer, 3/3 restored); the two new surface rows confirm
+the centring contract now covers 15 surfaces, and no duplicated header markup remains (the phone
+branch mounts `buildPhoneRecordHeader` → `buildShellHeader`, the desktop anchored panel keeps
+its own). Battery: build 0, tsc 0, vitest 1610/1610 (159 files); screenshots ×2 480/480 exit 0
+both, judged by decoded pixel delta — round 2's real movers: dropdown-field-desktop-light
+99px@max88 (BOTH runs identical, the same one-glyph 8x14px label-ink patch both passes judged),
+constructed-board-groups-panel-mobile-light 103px@76 (second run only), constructed-
+board-subtask-mobile-light 62px@2 (both runs), all kept and named in the 011 second-continuation
+release; the returning jitter board-mobile-desktop-dark 2px@1 restored at its committed bytes.
+13 evidence stamps re-derived by their own writers each pass; css-lane continuations signed at
+791646bdf576 and ef4e57917a2c (012's cycle recorded between them), check-lane 0. Gate 28 green /
+0 red both passes. Validations: `011`, the `071` parent (first RESULT) and the `005` track all
+RESULT: PASSED strict, backfilled; naming scans 0. Roadmap §4 row 87 and §5.A's `071` row now
+read `010`–`012` landed, `013`–`014` not implemented. AC-008 (the operator's own device read)
+stays open — no agent ticks it.
