@@ -1,6 +1,6 @@
 {
-  "holder": "011-record-sheet-header-and-icons",
-  "baselineHash": "1e320e716905",
+  "holder": "013-sheet-input-and-action-order",
+  "baselineHash": "cd3520283351",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -6894,6 +6894,39 @@
       "at": "2026-09-10T07:20:36Z",
       "hash": "1e320e716905",
       "note": "Landing-verification recapture, npm run screenshots judged twice (4 runs total, 480/480 exit 0 each, both themes), judged by decoded pixel delta against the committed blobs, no image opened. 9 one-run jitters (maxDelta 1-4 <= 12, exactly one judged run) restored to committed bytes with their manifest rows re-stamped: judged-run 1 moved constructed-date-picker-desktop-light (51px, maxDelta 196 - a nondeterministic render, its next judged run reproduced the committed blob), project-manager/reference-kanban(-desktop-dark 1268@1, -mobile-dark 4301@1, -mobile-light 1800@1, -subtask-desktop-dark 1268@1); judged-run 2 moved chrome-owned-menu-sheet-mobile-light 9905@2, constructed-active-rule-sort-mobile-dark 347@2, panel-record-detail-sheet-body-empty-mobile-light 5656@2, table-frozen-column-mobile-dark 28@4 - all four restored. 1 REAL mover kept: views/table-frozen-column-desktop-light 37px@maxDelta32, pixelHash-identical (29b325925bec) and layoutHash-identical, reproducible; no styles.css change so no new acquire/edit/edit... triplet, this cycle is the acquire/release record. The twelve record-detail family movers from the 08:14 release did not move: this verification reproduced every committed blob of the record-detail family exactly."
+    },
+    {
+      "event": "acquire",
+      "phase": "013-sheet-input-and-action-order",
+      "at": "2026-09-10T04:11:00Z",
+      "hash": "aef17a2f6e8a",
+      "note": "Acquired from 014-sheet-polish's verification release: the design-review follow-up leg re-edits the date picker's segment paint inside this sheet's own body, the first stylesheet touch since 014 signed at aef17a2f6e8a."
+    },
+    {
+      "event": "edit",
+      "phase": "013-sheet-input-and-action-order",
+      "at": "2026-09-10T04:11:00Z",
+      "hash": "cd3520283351",
+      "note": "One rule added, immediately after the picker-body's own: the phone sheet's typed date segments now own their bare, transparent paint at the sheet level (three classes) instead of leaning on the desktop popover's own class pairing to out-rank the panel-row input treatment their body-adopted panel-row class lets through. No size, no spacing, no other selector touched; every screenshot's computed paint was already border-0/transparent through the popover pairing, so the edit is belt-and-braces for the sheet, not a visual change."
+    },
+    {
+      "event": "release",
+      "phase": "013-sheet-input-and-action-order",
+      "at": "2026-09-10T04:11:00Z",
+      "hash": "cd3520283351",
+      "reviewed": [
+        "screenshots/notion-clone/components/chrome-owned-menu-sheet-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-dropdown-mobile-dark.png",
+        "screenshots/notion-clone/components/table-column-header-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-icon-picker-desktop-dark.png",
+        "screenshots/notion-clone/fields/constructed-icon-picker-desktop-light.png",
+        "screenshots/notion-clone/fields/field-icon-picker-desktop-dark.png",
+        "screenshots/notion-clone/fields/field-icon-picker-desktop-light.png",
+        "screenshots/notion-clone/views/board-mobile-desktop-dark.png",
+        "screenshots/project-manager/reference-kanban-subtask-mobile-dark.png",
+        "screenshots/project-manager/reference-kanban-subtask-mobile-light.png"
+      ],
+      "note": "Captured twice (npm run screenshots </dev/null, 480 entries, exit 0 each), judged by decoded pixel delta against the committed blobs across both judged runs, no image opened by eye. 10 REAL movers, kept, each named above, every one an identical changed-pixel count in both runs at the harness's documented nondeterminism, and none of them a date-picker capture -- this edit's own surface (constructed-date-picker(-datetime), field-date-value-picker) reproduced HEAD's committed pixels exactly, the expected no-op the popover pairing already produced. 7 one-run jitters (max channel delta <= 6) restored: the PNG to its committed blob and the manifest row's bytes with it; the 13 movers of run 1 alone came back to their committed bytes on the second capture, so their rows only carry the stylesheet's sourceHash move. The manifest's stylesheet reference moved aef17a2f6e8a -> cd3520283351 with the edit."
     }
   ],
   "outstanding": [

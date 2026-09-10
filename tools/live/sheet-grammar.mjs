@@ -713,6 +713,21 @@ window.__sheetInputOrderProbe = (kind) => {
       );
       const clearLabel = t("datePicker.clear") || "Clear";
       const clearOutsideGroup = sheet.querySelector(".obnotion-date-clear");
+      // The typed segments' paint: their own rule declares a bare, transparent field, but the
+      // picker body also carries the panel-row class, so the panel rows' bordered, filled input
+      // treatment outranks it on specificity and a phone sheet's segments can grow the box the
+      // panel rows' filters wear. Read the computed paint, not the declared rule — the leak only
+      // shows in the cascade.
+      const seg = sheet.querySelector(".obnotion-date-picker-body .obnotion-date-seg");
+      const segView = seg ? sheet.ownerDocument.defaultView : null;
+      const segStyle = seg && segView ? segView.getComputedStyle(seg) : null;
+      const segPaint = segStyle
+        ? {
+            borderWidth: segStyle.borderWidth,
+            borderColor: segStyle.borderColor,
+            backgroundColor: segStyle.backgroundColor,
+          }
+        : null;
       // Placement publishes the keyboard figure onto the sheet itself while it is open. Not
       // covered = the calendar's bottom sits inside the sheet's own box, above the padding floor
       // that published inset lifts. Both rects are read in the same coordinate space: the
@@ -744,6 +759,7 @@ window.__sheetInputOrderProbe = (kind) => {
         presetLabels,
         clearInPresets: presetLabels.includes(clearLabel),
         clearOutsideGroup: Boolean(clearOutsideGroup),
+        dateSegPaint: segPaint,
         keyboardInsetPublished: inset != null && Number.isFinite(inset),
         keyboardInset: inset,
         calendarBottom,
@@ -4024,6 +4040,9 @@ try {
     const datePickerInsetOk = datePicker.keyboardInsetPublished === true && datePicker.calendarClearsInset === true;
     if (!datePickerInsetOk) failures.push(`input order, date picker: placement published no usable keyboard inset, or the calendar spills past the sheet's lifted floor (inset ${datePicker.keyboardInset}px, calendar bottom ${datePicker.calendarBottom}px, sheet content floor ${datePicker.contentFloor}px)`);
     console.log(`  ${datePickerInsetOk ? "PASS" : "FAIL"}  date picker — placement published --obnotion-keyboard-inset (${datePicker.keyboardInset}px) and the calendar stays inside the sheet's lifted box (bottom ${datePicker.calendarBottom}px, floor ${datePicker.contentFloor}px)`);
+    const datePickerSegOk = datePicker.dateSegPaint != null && datePicker.dateSegPaint.borderWidth === "0px" && datePicker.dateSegPaint.backgroundColor === "rgba(0, 0, 0, 0)";
+    if (!datePickerSegOk) failures.push(`input order, date picker: the typed segments' paint read ${JSON.stringify(datePicker.dateSegPaint)}, wanted the class's own border 0 / transparent rather than the panel-row input's bordered, filled box`);
+    console.log(`  ${datePickerSegOk ? "PASS" : "FAIL"}  date picker — the typed segments' paint is their own (border 0, transparent), not the panel-row input's bordered, filled box (${JSON.stringify(datePicker.dateSegPaint)})`);
     console.log("");
 
     const addView = await page.evaluate(() => window.__sheetInputOrderProbe("add-view"));

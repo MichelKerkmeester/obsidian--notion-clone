@@ -4249,3 +4249,48 @@ criterion), a trailing note on the `071` row in §5.A. Validated: `011`, the `07
 `RESULT`) and `005` track, `RESULT: PASSED` after each touched folder's scoped graph-metadata
 backfill. Not pushed at the time this entry was written — see the commit trailer for the landing
 SHA.
+
+## 2026-09-10 — 013-sheet-input-and-action-order: design-review follow-up (F-4) landed
+
+Worktree `288-dr-pickers`, continuation relaunch 2, 08:02 (the first run of this leg died on a
+gateway connection error before writing anything; this run re-executed it from the standing brief).
+The sonnet fundamentals review's F-4 — `013`'s typed date segments wearing the panel-row input's
+bordered treatment through a documented specificity leak — executed as its tasks.md T012–T014
+dictate, RED first.
+
+**T012 (RED):** a new clause in `tools/live/sheet-grammar.mjs`'s input-and-action-order section
+reads the computed `border`/`background` of the first `.obnotion-date-seg` inside the phone
+sheet's `.obnotion-date-picker-body` and asserts the class's own bare, transparent treatment.
+**The predicted failure never fired.** On the unmodified tree the segment already computed
+`borderWidth: 0px`, `backgroundColor: rgba(0, 0, 0, 0)` — the popover root's own three-class
+pairing (`.obnotion-cell-edit-popover.obnotion-date-edit-popover .obnotion-date-seg`, the rule
+F-4's evidence list missed) also declares the bare treatment and outranks the two-classes-plus-type
+panel-row rule that the body-adopted `obnotion-panel-row` class lets through. Recorded in the
+packet's deviations table rather than as a Proposed ADR: the ruling's action is unchanged, only its
+mechanism citation.
+
+**T013 (the fix):** the ruling's override landed exactly where it names it —
+`.obnotion-mobile-bottom-sheet .obnotion-date-picker-body .obnotion-date-seg { border: 0;
+background: transparent; }` immediately after the picker-body's own rule — with the durable why:
+the phone sheet's typed fields own their paint at the sheet level instead of leaning on the desktop
+popover's class pairing. Belt-and-braces by measurement, not a visual change.
+
+**T014 (GREEN):** the clause passes; the leg's landed order clauses (`calendar precedes segments`,
+`three shortcut presets, Clear outside the group`) read their pre-follow-up values, grammar exit 0.
+Recapture ×2, 480/480, both runs exit 0; the four date-picker captures reproduced their committed
+pixels exactly (zero content movers — the expected no-op), so the visual judgment is the lane's
+printed numbers. The 10 persistent movers the harness's own nondeterminism produced were judged by
+decoded pixel delta across both runs (identical changed-pixel counts) and named in the css-lane
+release; 7 one-run jitters (≤6Δ) restored, their manifest bytes with them. css-lane
+acquire/edit/release triplet, holder `013-sheet-input-and-action-order`, baselineHash
+`cd3520283351`.
+
+Battery from the final state: vitest 1613/1613, tsc 0, build 0, render-assertions 0, placement
+418/420 (2 declared), touch-targets 0 (mini-nav still prints 24×24 — `015`'s RED baseline, no
+ratchet), evidence 16/16 fresh after 11 stylesheet-hash-stale writers re-ran, gate 28/0, scans 0.
+`013`'s goal continuity updated, completion 88→90 (`007`'s precedent: implementation closed, only
+the operator's device read open); `roadmap.md`'s `071` §5.A row carries the leg note.
+
+Validated: `013`, the `071` parent (first RESULT) and `005` track, `RESULT: PASSED`, after each
+touched folder's scoped graph-metadata backfill. Not pushed — see the commit trailer for the
+landing SHA.

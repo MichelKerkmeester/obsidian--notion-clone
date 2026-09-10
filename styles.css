@@ -14306,6 +14306,16 @@ body.is-phone .obnotion-container .obnotion-menu-item {
   border-radius: 0;
 }
 
+/* The picker's body also carries the panel-row class, so the panel rows' bordered, filled input
+   treatment (`§21`) reaches every input inside it and outranks the segments' own two-class rule on
+   specificity. Today the desktop popover's three-class pairing rescues the segments' paint; this
+   override owns it here instead, so the phone sheet's typed fields read bare and transparent
+   whatever happens to the popover classes their markup happens to carry. */
+.obnotion-mobile-bottom-sheet .obnotion-date-picker-body .obnotion-date-seg {
+  border: 0;
+  background: transparent;
+}
+
 /* ───────────────────────────────────────────────────────────────
    22. COLUMN MANAGER PANEL
    One row per property: drag, icon, name, wrap, move up, move down, edit, hide.

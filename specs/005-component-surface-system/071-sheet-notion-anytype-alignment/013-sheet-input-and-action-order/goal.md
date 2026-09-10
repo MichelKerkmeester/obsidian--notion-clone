@@ -9,9 +9,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/071-sheet-notion-anytype-alignment/013-sheet-input-and-action-order"
-    last_updated_at: "2026-09-10T02:05:00Z"
-    last_updated_by: "implement-013-sheet-input-and-action-order"
-    recent_action: "All four surfaces reordered; the order clauses RED→GREEN; gate 28/0"
+    last_updated_at: "2026-09-10T04:30:00Z"
+    last_updated_by: "288-dr-pickers"
+    recent_action: "F-4 follow-up closed: paint clause + sheet override; predicted RED never fired; gate 28/0"
     next_safe_action: "Operator device read (D3) closes the packet; a fresh verifier lands the commit"
     blockers: []
     key_files:
@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "013-sheet-input-and-action-order-scaffold"
       parent_session_id: null
-    completion_pct: 88
+    completion_pct: 90
     open_questions:
       - "ADR-C: does the add-view layout choice become a grid of icon cards, matching Notion, or stay as rows? Held Proposed — `toolbar-renderer.ts:1494-1502` documents a real defect in our own former tiles that Notion's cards may not share"
     answered_questions:
@@ -90,6 +90,7 @@ to the parent: apply it there first, then resend the parent.
 | Root cause located | Done | `confirm-sheet.ts:93` creates the cancel button and `:107` the confirm button; under `flex-direction: column` the first child renders on top, so Cancel sits above the destructive action. A one-line producer change with no geometry consequence |
 | Gap table | Done | `spec.md` §13 |
 | Implementation | Done | 2026-09-10, this leg, worktree `279-sheet-action-order`: all four producers reordered, the order clauses + the placement clause + the confirm's two-variant pair RED→GREEN (`implementation-summary.md`); vitest 1606/1606, tsc 0, build 0, sheet-grammar 0, render-assertions 0, placement 420 checks (418 + 2 declared) exit 0, evidence fresh, gate 28/0, scans 0; validate `RESULT: PASSED` ×3 with the scoped backfill of each |
+| Design-review follow-up (F-4) | Done | 2026-09-10, worktree `288-dr-pickers`: the review's tasks.md T012-T014 executed. The clause green + the sheet-level override landed exactly where the ruling names it; recapture ×2 480/480, the four date-picker captures reproduced their committed pixels (zero movers), the harness's 10 content movers named in the css-lane release (holder this packet, baselineHash `cd3520283351`); vitest 1613/1613, evidence 16/16 fresh, gate 28/0, scans 0 |
 | Operator device read | Open | D3 — the 2026-09-09 ~22:30 ruling opened this; the next device read closes it |
 
 ### Deviations and findings
@@ -102,4 +103,5 @@ to the parent: apply it there first, then resend the parent.
 | The record popover's presets moved behind a row | The goal's second open question — their own sheet, or behind a row? — answered: behind a row. A chevron row swaps the record popover for a presets popover at the same trigger, replacing rather than stacking (the dismissal dance the record popover already runs); landed destination-before-source, the lane proving 15/15 inputs answering there while 15 still sat on the record surface (`decision-record.md` ADR-002) |
 | The storybook's add-view group-distance clause read the groups' order as signed | The reorder legitimately negates it (-344px desktop, -412px phone — the recorded red); the clause now reads the separation either way round, since which group leads is this packet's ruling and the clause's subject is the distance. Everything else in the clause (the trailing-space mathematics, the thresholds) is untouched |
 | The record popover has no constructed scenario | So its before/after is the lane's printed 15→0 plus the destination's 15, not an image — the same precedent the copy packet's leg recorded for the filter's empty state. Adding one is outside this packet's frozen Files-to-Change; named in `implementation-summary.md` |
+| The review's leak premise never reproduced — the ruling's fix is belt-and-braces | F-4 expected the segments to compute the panel-row input's bordered treatment (its 2-classes-plus-type beating the segments' own two-class rule). They never did: the popover root's own three-class pairing (`.obnotion-cell-edit-popover.obnotion-date-edit-popover .obnotion-date-seg`) also declares the bare, transparent treatment and outranks the panel-row rule on every surface that mounts it — the clause read `borderWidth: 0px, backgroundColor: rgba(0, 0, 0, 0)` on the unmodified tree, and the four date-picker captures reproduced their committed pixels after the fix. The ruling's override landed anyway and buys the right thing: the phone sheet's segment paint no longer depends on the desktop popover's class pairing. Recorded here and in the follow-up tasks' completion notes rather than as a Proposed ADR — the ruling's action is unchanged, only its mechanism citation |
 <!-- /ANCHOR:log -->
