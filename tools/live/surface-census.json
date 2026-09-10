@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-09T23:14:37.557Z",
+  "measuredAt": "2026-09-10T00:33:10.182Z",
   "inputs": {
-    "styles.css": "0d6a8dbd2fa2",
+    "styles.css": "4bd3892f7e8a",
     "tools/live/surface-census.mjs": "982af0f4c165",
     "src/views/surface-contract.ts": "99972eb224df",
     "src/views/record-detail-panel.ts": "596d9dba1a40",
@@ -866,7 +866,6 @@
       "rect": "44x44",
       "scenarios": [
         "panel-view-config-sheet",
-        "panel-column-manager",
         "field-cell-edit-select"
       ]
     },

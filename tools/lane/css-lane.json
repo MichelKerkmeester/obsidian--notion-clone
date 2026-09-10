@@ -1,7 +1,7 @@
 {
- "holder": "071-008-filter-sheet-row-model",
- "acquiredAt": "2026-09-10T00:09:41Z",
- "baselineHash": "189a3ef0e188",
+ "holder": "009-properties-sheet-row-model",
+ "acquiredAt": "2026-09-10T00:28:38Z",
+ "baselineHash": "4bd3892f7e8a",
  "inScopeCaptureRoots": [
   "screenshots/notion-clone/",
   "screenshots/project-manager/"
@@ -6500,6 +6500,56 @@
     "screenshots/notion-clone/components/panel-base-import-modal-desktop-light.png"
    ],
    "note": "Recapture x2 on the merged tree, 480/480, judged by decoded pixel delta across both runs: ONE real mover — panel-base-import-modal-desktop-light (66px @ maxDelta 209, deterministic both runs, kept, manifest bytes 65674->65732); TWO one-run jitters at maxDelta 1 (board-mobile-desktop-dark 2px, board-view-desktop-dark 8px — the conflicted binary from the rebase) restored with their committed blobs, board-view-desktop-dark's manifest bytes 280379->280394, board-mobile-desktop-dark needed no manifest change; every other capture pixelHash-identical — the manifest's 532 changed lines are the styles.css stamp (fcaf3fec28cf->189a3ef0e188), which is what this triplet signs."
+  },
+  {
+   "event": "acquire",
+   "phase": "009-properties-sheet-row-model",
+   "at": "2026-09-10T00:06:53Z",
+   "hash": "904e4bff23b0"
+  },
+  {
+   "event": "edit",
+   "phase": "009-properties-sheet-row-model",
+   "at": "2026-09-10T00:06:53Z",
+   "hash": "904e4bff23b0",
+   "note": "styles.css: the verifier rebase replayed this packet onto main with 045-board-card-properties and 075 — the merged stylesheet (fcaf3fec28cf + this packet) hashes 904e4bff23b0; no selector edited. Post-rebase recapture x2 (480/480, exit 0 both): 5 movers, all reproduced identically in both runs, none under the 12-delta one-run-only jitter rule, so none restored; each named reviewed. Selector scope: none — convergence entry, no stylesheet change."
+  },
+  {
+   "event": "release",
+   "phase": "009-properties-sheet-row-model",
+   "at": "2026-09-10T00:06:53Z",
+   "hash": "904e4bff23b0",
+   "reviewed": [
+    "screenshots/notion-clone/components/chrome-owned-menu-sheet-mobile-dark.png",
+    "screenshots/notion-clone/components/constructed-active-view-controls-desktop-light.png",
+    "screenshots/notion-clone/components/panel-base-import-modal-desktop-light.png",
+    "screenshots/notion-clone/views/board-mobile-desktop-dark.png",
+    "screenshots/notion-clone/views/board-view-desktop-dark.png"
+   ]
+  },
+  {
+   "event": "acquire",
+   "phase": "009-properties-sheet-row-model",
+   "at": "2026-09-10T00:28:38Z",
+   "hash": "4bd3892f7e8a"
+  },
+  {
+   "event": "edit",
+   "phase": "009-properties-sheet-row-model",
+   "at": "2026-09-10T00:28:38Z",
+   "hash": "4bd3892f7e8a",
+   "note": "styles.css: the second verifier rebase replayed this packet onto main with 071/008 — the merged stylesheet hashes 4bd3892f7e8a; no selector edited. Post-rebase recapture x2 (480/480, exit 0 both): 3 movers, all reproduced identically in both runs, none under the 12-delta one-run-only jitter rule, so none restored; each named reviewed. Selector scope: none — convergence entry, no stylesheet change."
+  },
+  {
+   "event": "release",
+   "phase": "009-properties-sheet-row-model",
+   "at": "2026-09-10T00:28:38Z",
+   "hash": "4bd3892f7e8a",
+   "reviewed": [
+    "screenshots/notion-clone/components/chrome-owned-menu-sheet-mobile-dark.png",
+    "screenshots/notion-clone/components/constructed-active-view-controls-desktop-light.png",
+    "screenshots/notion-clone/views/board-view-desktop-dark.png"
+   ]
   }
  ],
  "outstanding": [
