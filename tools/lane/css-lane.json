@@ -1,6 +1,6 @@
 {
   "holder": "014-sheet-polish",
-  "baselineHash": "c8a712daf57c",
+  "baselineHash": "aef17a2f6e8a",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -6822,34 +6822,28 @@
     {
       "event": "acquire",
       "phase": "014-sheet-polish",
-      "at": "2026-09-10T03:17:00Z",
-      "hash": "11a91fe1acd8",
-      "note": "Re-acquired by the landing verification: the leg's single commit (e43b4349, replayed as e8233452) rebased onto the 011/012-merged main 76aafa76, whose cycles (011's record-icon release 892ac77282a3, the two verification continuations signing 791646bdf576 and ef4e57917a2c, 012's edit/release 6e10b42f6324, 011's second continuation) sit in the history above. The holder is unchanged (014); this continuation re-signs the polish release onto the twice-merged stylesheet. On the replayed tree the conflict resolution took main's side for the generated captures and they were re-derived by the recapture below."
+      "at": "2026-09-10T03:37:00Z",
+      "hash": "4e06417eb091",
+      "note": "Re-acquired by the landing verification, second pass: the leg's two commits (the replayed 8f11b642, then this verification) were rebased onto the 013-merged main 647a400d after the round-1 push was rejected non-fast-forward -- 013's confirm/date-picker/toolbar ordering leg (b7fa33aa) landed meanwhile with its own css-lane cycle above, signing the lane at 4e06417eb091. The holder signs over here so the polish release can be judged against the thrice-merged stylesheet. The round-1 continuation (judged on the 011/012-merged main, 9 movers all both-runs, signing c8a712daf57c) never pushed; this triplet supersedes it, judged here on the final tree."
     },
     {
       "event": "edit",
       "phase": "014-sheet-polish",
-      "at": "2026-09-10T03:17:00Z",
-      "hash": "c8a712daf57c",
-      "note": "styles.css 11a91fe1acd8 -> c8a712daf57c across the replay, and the delta is the other legs: 011's record additions (the .obnotion-record-detail-field-label .obnotion-record-detail-field-type-icon rule, its svg sizing and the shared record phone header) plus 012's sort/group/calendar hunks (stacked sort rule rows, the 44px delete warning row, the group section action, the shortened calendar hint); git diff e43b4349..HEAD -- styles.css = 126 lines and touches no selector outside those sets. This packet's 33-line polish addition (the icon-picker actions row, the phone-scoped add-row selectors) is unchanged in the replay. The 480-row manifest sourceHash move 11a91fe1acd8 -> c8a712daf57c is that fold, recorded by the recapture itself."
+      "at": "2026-09-10T03:37:00Z",
+      "hash": "aef17a2f6e8a",
+      "note": "styles.css 11a91fe1acd8 -> aef17a2f6e8a across the two replays, and the delta is the other legs: the first (onto the 011/012-merged 76aafa76, signing c8a712daf57c) folded 011's record additions (the .obnotion-record-detail-field-label .obnotion-record-detail-field-type-icon rule, its svg sizing and the shared record phone header) and 012's sort/group/calendar hunks; the second (onto 647a400d) adds 013's confirm/date-picker/toolbar ordering hunks. git diff e43b4349..HEAD -- styles.css = 143 lines and touches no selector outside those sets; this packet's 33-line polish addition (the icon-picker actions row, the phone-scoped add-row selectors) is unchanged in both replays. The 480-row manifest sourceHash move 4e06417eb091 -> aef17a2f6e8a is that fold, recorded by the recapture itself."
     },
     {
       "event": "release",
       "phase": "014-sheet-polish",
-      "at": "2026-09-10T03:17:00Z",
-      "hash": "c8a712daf57c",
+      "at": "2026-09-10T03:37:00Z",
+      "hash": "aef17a2f6e8a",
       "reviewed": [
-        "screenshots/notion-clone/panels/constructed-board-groups-panel-mobile-light.png",
-        "screenshots/notion-clone/panels/constructed-record-detail-desktop-dark.png",
-        "screenshots/notion-clone/panels/constructed-record-detail-desktop-light.png",
-        "screenshots/notion-clone/panels/constructed-record-detail-docked-desktop-dark.png",
-        "screenshots/notion-clone/panels/constructed-record-detail-docked-desktop-light.png",
-        "screenshots/notion-clone/panels/panel-record-detail-sheet-body-editing-desktop-light.png",
-        "screenshots/notion-clone/panels/panel-record-detail-sheet-body-empty-desktop-light.png",
-        "screenshots/notion-clone/views/board-mobile-desktop-dark.png",
-        "screenshots/notion-clone/views/constructed-board-mobile-dark.png"
+        "screenshots/notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-light.png",
+        "screenshots/notion-clone/components/table-column-header-mobile-dark.png"
       ],
-      "note": "Captured twice after the rebase (npm run screenshots </dev/null, 480 entries, exit 0 each; a preliminary judge after runs 1-2 printed the same nine movers at identical counts, then the judged pair, runs 3-4, reproduced every count exactly), judged by decoded pixel delta against the committed blobs across both judged runs, no image opened by eye: 9 REAL movers, every one moved in BOTH judged runs at IDENTICAL counts and channel deltas, none under the 12-delta one-run-only jitter rule, none restored, no checkout and no manifest bytes patch. The mover classes, read from the decoded deltas: the record-detail desktop pair 115519/143510px at max 133/145 and the docked-desktop pair 3818/3813px at 128/145 (011's shared phone header and type icons riding this packet's add-footer pairing), the record body desktop lights 6973px at maxDelta 1 in both runs (this packet's own recorded mover, reproduced exactly), constructed-board-groups-panel-mobile-light 103px at 76 (012's groups panel), views/constructed-board-mobile-dark 9px at 121 (this packet's recorded 9px@121, reproduced exactly) and views/board-mobile-desktop-dark 2px at 1 in BOTH judged runs -- the returning one, but both-runs agreement makes it REAL by the rule, the 012 post-rebase precedent, so it is kept rather than restored. All counts deterministic across both judged runs. This verification reviews by measurement (headless); the visual read stays the operator device pass."
+      "note": "Captured twice after the second rebase (npm run screenshots </dev/null, 480 entries, exit 0 each), judged by decoded pixel delta against the committed blobs across both judged runs, no image opened by eye. 3 REAL movers, kept, each named above: the confirm-stacked pair 183582/213445px at max channel delta 133/117, BOTH judged runs at IDENTICAL counts (this packet's taller 44px dependent-stack riding 013's redesigned confirm -- the same dependent-stack mover class the leg's own release judged on the 013-free tree), and components/table-column-header-mobile-dark 34px at 192, moved in the second judged run only, above the 12 bar so REAL by the rule rather than jitter (the 011 second-run precedent: board-groups-panel 103px@76). 1 jitter, the returning one: views/board-view-desktop-dark 8px at max channel delta 1 in the second judged run only, restored at its committed bytes (280379, manifest row's bytes patched back, pixelHash 284b276d514a unchanged) with the fresh styles.css sourceHash kept. One further mover judged: components/constructed-board-empty-column-desktop-light 283px at 204 in the first judged run only, the second run itself restoring it to its committed bytes byte-identical, so no checkout was needed (the 011 precedent); above the 12 bar, kept by the rule. Every other capture reproduced its committed blob. All counts deterministic across both judged runs. This verification reviews by measurement (headless); the visual read stays the operator device pass."
     }
   ],
   "outstanding": [
