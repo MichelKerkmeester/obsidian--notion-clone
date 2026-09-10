@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T23:12:00Z"
-    last_updated_by: "295-loop-002-properties-sheet-visual-parity"
-    recent_action: "076/002 DEFINE+PLAN landed: corrected a mis-sourced reference, 6 clauses"
+    last_updated_at: "2026-09-10T23:45:00Z"
+    last_updated_by: "291-testbed-generator"
+    recent_action: "074 folder ruling landed+verified 2ecaa2af: mutation-verified, gate 28/0, goal 5/6; pushed"
     next_safe_action: "Execute 076/002 T001 (transcribe ADR-L/M), then T002 lands L1-L6 RED"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
@@ -628,6 +628,26 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-10 ~23:45, 074 testbed-generator folder ruling LANDED+VERIFIED (2ecaa2af) — worktree `291-testbed-generator`
+
+**What this verification leg did** — landed the 074 folder-ruling implementation (b45424e3, replayed
+as 8182526a) onto main after TWO upstream moves (1f394a36, then 2a111da3). Every claim verified by
+number: mutation RED (reverting the `emit-obsidian.ts` per-root hunk) 2 failed | 9 passed →
+restored GREEN 11/11, `catalogue.test.mjs` 20/20; vitest 1617/1617; tsc 0, build 0; four
+`npm run screenshots` passes (480 each) — the final judged pair 2 deterministic movers
+(board-mobile-desktop-dark 2px@Δ1, board-view-desktop-dark 8px@Δ1, both movedInBothRuns, kept; no
+styles.css change, so no css-lane triplet), the earlier passes' four one-run jitter movers (all
+maxDelta ≤ 12) back at committed bytes; gate PASS **28 green, 0 red** (one re-derivation loop: the
+stale operator-checklist regenerated, 196 rows / 68 phases); validate 074 + the 005 track --strict
+PASSED; backfills 074 (changed 0) + 005 (changed 1) exit 0; scan-comments and scan-failing-values 0.
+Roadmap §5.A + §5 `074` rows reconciled to goal.md's criteria: **5/6** (the sixth = the Finance
+databases' on-device read, never ticked by an agent). Independently hit and documented the 076/002
+leg's remint trap: the pre-commit `gate:spec-remint` reads 0 bytes through the worktree's
+relative-`.opencode` symlink (the physical-`$(realpath .opencode)` invocation of the same
+validate.sh reports errors=0, proving the remint had nothing to derive); carried via its documented
+`SPECKIT_SKIP_SPEC_REMINT=1` bypass, evidence recorded in the landing commit. Landed at
+**2ecaa2af** (`origin/main`), pushed.
 
 ### 2026-09-10 ~21:50, 076's loop graph DOCUMENTED — docs-only, worktree `294-loop-graph-docs`
 
