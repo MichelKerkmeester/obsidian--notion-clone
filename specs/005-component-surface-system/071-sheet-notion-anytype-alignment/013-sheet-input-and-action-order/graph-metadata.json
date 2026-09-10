@@ -38,18 +38,21 @@
       "segments",
       "calendar"
     ],
-    "importance_tier": "normal",
-    "status": "planned",
+    "importance_tier": "important",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
+      "implementation-summary.md",
+      "tools/live/sheet-grammar.mjs",
       "src/views/confirm-sheet.ts",
       "src/views/date-value-picker.ts",
       "src/views/toolbar-renderer.ts",
-      "tools/live/sheet-grammar.mjs",
+      "src/views/confirm-sheet.test.ts",
       "src/i18n.ts"
     ],
     "entities": [
@@ -84,6 +87,24 @@
         "source": "derived"
       },
       {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
         "name": "confirm-sheet.ts",
         "kind": "code",
         "path": "src/views/confirm-sheet.ts",
@@ -102,9 +123,9 @@
         "source": "derived"
       },
       {
-        "name": "sheet-grammar.mjs",
-        "kind": "file",
-        "path": "tools/live/sheet-grammar.mjs",
+        "name": "confirm-sheet.test.ts",
+        "kind": "test",
+        "path": "src/views/confirm-sheet.test.ts",
         "source": "derived"
       },
       {
@@ -178,29 +199,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Pattern Producer",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Each of these four sheets passes its clauses because its clauses measure geometry and control types",
     "created_at": "2026-09-09T21:01:05.944Z",
-    "last_save_at": "2026-09-09T21:07:21.186Z",
+    "last_save_at": "2026-09-10T02:01:07.496Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -208,14 +211,18 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:60724d9acdadfce6fc6a22bcb6d0cca8ce1abf8b762cadd8b0bb9e0fbeea20c8",
+    "source_fingerprint": "sha256:4e40dc3eb3c2f82b74d7ed0f67fad8e596ea726be4a9f6f5a8b56ea5b5edf0a7",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "a2d55370f64a9b9605928dd503829598ba1368ad8deef4f0493d2c69fa339a74",
+      "spec.md": "1863987cf81bc4a89fa6eb13e6f97bff8e00f8879b60d6d87ec50cef55edb10e",
       "plan.md": "e5136d21c3d7b0e7dec04cafcb98be7d8fafd28ca0450f0a2d06feb3d576558d",
-      "tasks.md": "0c7c2fe4f260d9fe45724514a7b03d1f6de0fb599e44adfbbd87e71b0101f65e"
+      "tasks.md": "81e70dcaf1962fbe12445abb6f622ff263345c7f0ba4b224dd47c0d10d97c66f",
+      "decision-record.md": "dfe829f2fe10967d3f96373256ac7b9a81620f957a55887952198a31fe7f1d1f",
+      "implementation-summary.md": "4c9374a4569f5d2d033ba23806eb3b46dab9c7dc641bfb699b8b37906c69e473"
     },
     "last_active_child_id": null,
     "last_active_at": null

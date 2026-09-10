@@ -1922,7 +1922,12 @@ const addViewProbe = (isPhone) => {
   const within = Math.max(0, ...withinGaps);
   const lastField = formFields[formFields.length - 1];
   const trailing = Math.round(form.getBoundingClientRect().bottom - lastField.getBoundingClientRect().bottom);
-  const between = Math.round(choices.getBoundingClientRect().top - form.getBoundingClientRect().bottom);
+  // Which group leads is the layout's own ruling — the create rows precede the settings — so the
+  // separation reads either way round: the gap between the two boxes, never their signed order.
+  const gap = (a, b) => (a.top >= b.top
+    ? a.top - b.bottom
+    : b.top - a.bottom);
+  const between = Math.round(gap(choices.getBoundingClientRect(), form.getBoundingClientRect()));
   // `between` carries its own threshold now, and the reason is a control that did not go red.
   //
   // The criterion this serves asked for each heading to be "load-bearing for the gap above", and the

@@ -75,8 +75,10 @@ export function buildPrimaryActionPill(container: HTMLElement, options: PrimaryA
 
 /**
  * Build a confirm dialog's content into an already-chromed host: a declared title, the
- * message as a padded row, and an actions row of cancel, an optional secondary action,
- * then confirm — the destructive action carrying the danger styling.
+ * message as a padded row, and an actions row. In the stacked variant the destructive
+ * action leads and Cancel closes the column — the reading a phone reader gets, and the one
+ * every captured stacked reference agrees on. The side-by-side variant keeps its
+ * cancel-then-confirm reading, an optional secondary action sitting between the two.
  */
 export function buildConfirmSheetBody(host: HTMLElement, options: ConfirmSheetBodyOptions): void {
   host.createEl("h3", { text: options.title });
@@ -89,22 +91,38 @@ export function buildConfirmSheetBody(host: HTMLElement, options: ConfirmSheetBo
   const actions = host.createDiv({
     cls: options.stackedActions ? "obnotion-modal-actions obnotion-confirm-stacked" : "obnotion-modal-actions",
   });
-  actions.createEl("button", {
-    text: options.cancelText,
-    attr: { type: "button" },
-  }).onclick = () => options.onCancel();
-
-  if (options.secondaryButton) {
+  const addCancel = (): void => {
+    actions.createEl("button", {
+      text: options.cancelText,
+      attr: { type: "button" },
+    }).onclick = () => options.onCancel();
+  };
+  const addSecondary = (): void => {
+    if (!options.secondaryButton) return;
     const secondary = options.secondaryButton;
     actions.createEl("button", {
       text: secondary.text,
       attr: { type: "button" },
     }).onclick = () => options.onSecondary?.(secondary.value);
+  };
+  const addConfirm = (): void => {
+    actions.createEl("button", {
+      cls: options.danger ? "mod-warning" : "mod-cta",
+      text: options.confirmText,
+      attr: { type: "button" },
+    }).onclick = () => options.onConfirm();
+  };
+  if (options.stackedActions) {
+    // Every captured stacked confirm reads destructive-then-Cancel: the destructive action is
+    // the card's first, most prominent row, and Cancel — the step backwards — sits beneath it.
+    // The side-by-side footer below keeps its trailing-confirm reading; only the stacked
+    // layout inverts.
+    addConfirm();
+    addSecondary();
+    addCancel();
+    return;
   }
-
-  actions.createEl("button", {
-    cls: options.danger ? "mod-warning" : "mod-cta",
-    text: options.confirmText,
-    attr: { type: "button" },
-  }).onclick = () => options.onConfirm();
+  addCancel();
+  addSecondary();
+  addConfirm();
 }

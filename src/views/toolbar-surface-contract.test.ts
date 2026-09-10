@@ -91,7 +91,7 @@ describe("toolbar surface migrations", () => {
     const toolbar = read("toolbar-renderer.ts");
     expect(types).toContain("newRowPresets?: Record<string, string>");
     expect(dataSource).toContain("newRowPresets");
-    expect(toolbar).toContain('createMenuSection(panel, t("toolbar.settings"))');
+    expect(toolbar).toContain("obnotion-utilities-presets-row");
     expect(toolbar).toContain("applyViewRowPresets");
   });
 

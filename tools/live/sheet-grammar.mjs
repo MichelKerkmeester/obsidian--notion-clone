@@ -591,7 +591,7 @@ const measureMountedSheet = (sheet) => {
 // real, shipped buildConfirmSheetBody, and the header is the real, shipped buildShellHeader, the
 // same pair createSurfaceShell wires together for every other DbModal subclass. Nothing about the
 // markup is mirrored by hand any more; only the Modal host itself is stood in for.
-const mountConfirmStandIn = () => {
+const mountConfirmStandIn = (stacked = true) => {
   const panel = document.createElement("div");
   panel.className = "modal-container";
   const content = document.createElement("div");
@@ -602,7 +602,7 @@ const mountConfirmStandIn = () => {
     cancelText: "Cancel",
     confirmText: "Delete",
     danger: true,
-    stackedActions: true,
+    stackedActions: stacked,
     onCancel: () => {},
     onConfirm: () => {},
   });
@@ -671,6 +671,134 @@ window.__confirmCardShapeNegativeControl = () => {
   const broken = measureConfirmCardShape(panel);
   close();
   return broken;
+};
+
+// The input-and-action-order facts: which of the confirm's two actions comes first, whether the
+// date picker's calendar precedes its numeric segments, whether the add-view sheet offers its
+// create rows before its optional settings, and whether the record popover still shares its
+// surface with free-text preset inputs. One probe, so every fact reads the same mounted markup
+// the other rows read, never a second, hand-ordered copy of any of it.
+window.__sheetInputOrderProbe = (kind) => {
+  if (kind === "confirm" || kind === "confirm-inline") {
+    const { panel, close } = mountConfirmStandIn(kind === "confirm");
+    const actions = panel.querySelector(".obnotion-modal-actions");
+    const children = actions ? Array.from(actions.children) : [];
+    const describe = (el) => ({ text: (el.textContent || "").trim(), cls: el.className || "" });
+    const out = {
+      count: children.length,
+      first: children[0] ? describe(children[0]) : null,
+      last: children[children.length - 1] ? describe(children[children.length - 1]) : null,
+    };
+    close();
+    return out;
+  }
+  const scenarios = ${JSON.stringify({
+  "date-picker": { renderer: "date-picker", bag: "file-view" },
+  "add-view": { renderer: "toolbar", bag: "file-view", captureData: true, toolbarPopover: "add-view" },
+  "toolbar-utilities": { renderer: "toolbar", bag: "file-view", captureData: true, toolbarPopover: "utilities" },
+})};
+  let out = { mounted: false };
+  runRenderAssertions(document.body, scenarios[kind] || scenarios["date-picker"], "", () => {
+    const sheet = mountedSheet();
+    if (!sheet) return;
+    if (kind === "date-picker") {
+      const segments = sheet.querySelector(".obnotion-date-segments");
+      const calendar = sheet.querySelector(".obnotion-calendar-mini-popover");
+      const presetsGroup = sheet.querySelector(".obnotion-date-presets");
+      const presetLabels = presetsGroup
+        ? Array.from(presetsGroup.querySelectorAll(".obnotion-date-preset-label")).map((el) => (el.textContent || "").trim())
+        : [];
+      const calendarBeforeSegments = Boolean(
+        calendar && segments && (calendar.compareDocumentPosition(segments) & Node.DOCUMENT_POSITION_FOLLOWING),
+      );
+      const clearLabel = t("datePicker.clear") || "Clear";
+      const clearOutsideGroup = sheet.querySelector(".obnotion-date-clear");
+      // Placement publishes the keyboard figure onto the sheet itself while it is open. Not
+      // covered = the calendar's bottom sits inside the sheet's own box, above the padding floor
+      // that published inset lifts. Both rects are read in the same coordinate space: the
+      // sheet's entrance keeps a transform on its line, so raw viewport arithmetic would measure
+      // the entrance's containing block, not the sheet.
+      const insetRaw = sheet.style.getPropertyValue("--obnotion-keyboard-inset");
+      const inset = insetRaw.length > 0 ? Number.parseFloat(insetRaw) : null;
+      let calendarBottom = null;
+      let contentFloor = null;
+      if (calendar) {
+        const view = sheet.ownerDocument.defaultView;
+        let scroller = calendar.parentElement;
+        while (scroller && scroller !== sheet) {
+          const oy = view.getComputedStyle(scroller).overflowY;
+          if (oy === "auto" || oy === "scroll") break;
+          scroller = scroller.parentElement;
+        }
+        if (scroller && scroller !== sheet) scroller.scrollTop = scroller.scrollHeight;
+        calendarBottom = Math.round(calendar.getBoundingClientRect().bottom * 10) / 10;
+        const paddingBottom = Number.parseFloat(view.getComputedStyle(sheet).paddingBottom) || 0;
+        contentFloor = Math.round((sheet.getBoundingClientRect().bottom - paddingBottom) * 10) / 10;
+      }
+      out = {
+        mounted: true,
+        calendarFound: Boolean(calendar),
+        segmentsFound: Boolean(segments),
+        calendarBeforeSegments,
+        presetCount: presetLabels.length,
+        presetLabels,
+        clearInPresets: presetLabels.includes(clearLabel),
+        clearOutsideGroup: Boolean(clearOutsideGroup),
+        keyboardInsetPublished: inset != null && Number.isFinite(inset),
+        keyboardInset: inset,
+        calendarBottom,
+        contentFloor,
+        calendarClearsInset: calendarBottom != null && contentFloor != null && calendarBottom <= contentFloor + 0.5,
+      };
+      return;
+    }
+    if (kind === "add-view") {
+      const choices = sheet.querySelector(".obnotion-add-view-choices");
+      const form = sheet.querySelector(".obnotion-add-view-form");
+      const nameInput = sheet.querySelector(".obnotion-add-view-name");
+      out = {
+        mounted: true,
+        choicesFound: Boolean(choices),
+        formFound: Boolean(form),
+        choicesBeforeForm: Boolean(
+          choices && form && (choices.compareDocumentPosition(form) & Node.DOCUMENT_POSITION_FOLLOWING),
+        ),
+        namePlaceholder: nameInput ? (nameInput.getAttribute("placeholder") || "") : null,
+      };
+      return;
+    }
+    if (kind === "toolbar-utilities") {
+      const dropdown = document.querySelector(".obnotion-new-button-dropdown");
+      if (dropdown) dropdown.click();
+      const record = document.querySelector(".obnotion-new-template-popover");
+      const inputsInRecord = record ? record.querySelectorAll("input[type='text']").length : -1;
+      let presetsRowFound = false;
+      let presetsPanel = null;
+      let inputsInPresets = 0;
+      if (record) {
+        const row = record.querySelector(".obnotion-utilities-presets-row");
+        if (row) {
+          presetsRowFound = true;
+          row.click();
+          presetsPanel = document.querySelector(".obnotion-utilities-presets-popover");
+          if (presetsPanel) inputsInPresets = presetsPanel.querySelectorAll("input[type='text']").length;
+        }
+      }
+      out = {
+        mounted: true,
+        recordPanelFound: Boolean(record),
+        inputsInRecord,
+        presetsRowFound,
+        presetsPanelFound: Boolean(presetsPanel),
+        inputsInPresets,
+      };
+      const presetsClose = presetsPanel?.querySelector(".obnotion-sheet-close");
+      if (presetsClose) presetsClose.click();
+      else record?.querySelector(".obnotion-sheet-close")?.click();
+      return;
+    }
+  });
+  return out;
 };
 
 // The three FuzzySuggestModal surfaces: each now presents through the real
@@ -3802,6 +3930,46 @@ try {
     console.log(`  ${wentRed ? "PASS" : "FAIL"}  flush left and side-by-side actions once both classes are stripped (inset.left=${cardShapeControl.inset.left}px, flex-direction=${cardShapeControl.actionFlexDirection})`);
   }
   console.log("");
+
+  console.log("sheet-grammar: input and action order — the confirm, the date picker, the add-view sheet and the record popover, in the order their actions need\n");
+  {
+    const confirmStacked = await page.evaluate(() => window.__sheetInputOrderProbe("confirm"));
+    const confirmStackedOk = confirmStacked.count === 2 && confirmStacked.first?.cls.includes("mod-warning") === true && confirmStacked.last?.text === "Cancel";
+    if (!confirmStackedOk) failures.push(`input order, confirm: the stacked actions read ${JSON.stringify(confirmStacked)}, wanted the destructive action as the first child and Cancel as the last`);
+    console.log(`  ${confirmStackedOk ? "PASS" : "FAIL"}  confirm (stacked) — destructive action is the first child of the actions row, Cancel the last (${JSON.stringify(confirmStacked)})`);
+    const confirmInline = await page.evaluate(() => window.__sheetInputOrderProbe("confirm-inline"));
+    const confirmInlineOk = confirmInline.count === 2 && confirmInline.first?.text === "Cancel" && confirmInline.last?.cls.includes("mod-warning") === true;
+    if (!confirmInlineOk) failures.push(`input order, confirm: the side-by-side variant read ${JSON.stringify(confirmInline)}, wanted Cancel still first there`);
+    console.log(`  ${confirmInlineOk ? "PASS" : "FAIL"}  confirm (side-by-side) — Cancel stays first, confirm last, unchanged (${JSON.stringify(confirmInline)})`);
+    console.log("");
+
+    const datePicker = await page.evaluate(() => window.__sheetInputOrderProbe("date-picker"));
+    const datePickerOrderOk = datePicker.mounted === true && datePicker.calendarFound === true && datePicker.segmentsFound === true && datePicker.calendarBeforeSegments === true;
+    if (!datePickerOrderOk) failures.push(`input order, date picker: calendar-before-segments read ${JSON.stringify(datePicker)}`);
+    console.log(`  ${datePickerOrderOk ? "PASS" : "FAIL"}  date picker — the calendar precedes the numeric segment inputs (calendar: ${datePicker.calendarFound}, segments: ${datePicker.segmentsFound})`);
+    const datePickerClearOk = datePicker.presetCount === 3 && datePicker.clearInPresets === false && datePicker.clearOutsideGroup === true;
+    if (!datePickerClearOk) failures.push(`input order, date picker: presets read ${JSON.stringify(datePicker.presetLabels)} (count ${datePicker.presetCount}), a Clear control outside the group: ${datePicker.clearOutsideGroup}`);
+    console.log(`  ${datePickerClearOk ? "PASS" : "FAIL"}  date picker — exactly three shortcut presets, Clear outside the group as its own row (${JSON.stringify(datePicker.presetLabels)}; outside: ${datePicker.clearOutsideGroup})`);
+    const datePickerInsetOk = datePicker.keyboardInsetPublished === true && datePicker.calendarClearsInset === true;
+    if (!datePickerInsetOk) failures.push(`input order, date picker: placement published no usable keyboard inset, or the calendar spills past the sheet's lifted floor (inset ${datePicker.keyboardInset}px, calendar bottom ${datePicker.calendarBottom}px, sheet content floor ${datePicker.contentFloor}px)`);
+    console.log(`  ${datePickerInsetOk ? "PASS" : "FAIL"}  date picker — placement published --obnotion-keyboard-inset (${datePicker.keyboardInset}px) and the calendar stays inside the sheet's lifted box (bottom ${datePicker.calendarBottom}px, floor ${datePicker.contentFloor}px)`);
+    console.log("");
+
+    const addView = await page.evaluate(() => window.__sheetInputOrderProbe("add-view"));
+    const addViewOk = addView.mounted === true && addView.choicesFound === true && addView.formFound === true && addView.choicesBeforeForm === true;
+    if (!addViewOk) failures.push(`input order, add view: create-before-settings read ${JSON.stringify(addView)}`);
+    console.log(`  ${addViewOk ? "PASS" : "FAIL"}  add view — the create rows precede the optional settings (choices: ${addView.choicesFound}, form: ${addView.formFound}); the name input's placeholder: ${JSON.stringify(addView.namePlaceholder)}`);
+    console.log("");
+
+    const utilities = await page.evaluate(() => window.__sheetInputOrderProbe("toolbar-utilities"));
+    const utilitiesDestinationOk = utilities.mounted === true && utilities.presetsRowFound === true && utilities.presetsPanelFound === true && utilities.inputsInPresets > 0;
+    if (!utilitiesDestinationOk) failures.push(`input order, record popover: the presets' own destination read ${JSON.stringify(utilities)}`);
+    console.log(`  ${utilitiesDestinationOk ? "PASS" : "FAIL"}  record popover — a presets row leads to the presets' own popover and its inputs live there (${JSON.stringify(utilities)})`);
+    const utilitiesSurfaceOk = utilities.recordPanelFound === true && utilities.inputsInRecord === 0;
+    if (!utilitiesSurfaceOk) failures.push(`input order, record popover: ${utilities.inputsInRecord} free-text input(s) still share the record popover's surface with its action rows, wanted 0`);
+    console.log(`  ${utilitiesSurfaceOk ? "PASS" : "FAIL"}  record popover — 0 free-text inputs share the action-row surface (found ${utilities.inputsInRecord})`);
+    console.log("");
+  }
 
   console.log("sheet-grammar: edge control token — the close control reads --obnotion-shell-edge-control-size\n");
   const edgeControlMeasured = await page.evaluate((scenario) => window.__shellEdgeControlToken(scenario), EDGE_CONTROL_TOKEN_SURFACE.spec);

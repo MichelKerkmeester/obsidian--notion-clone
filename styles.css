@@ -897,6 +897,19 @@
   min-height: 44px;
 }
 
+/* The unset closes the sheet: one plain, full-width row beneath the typed segments, visibly apart
+   from the shortcut group above it. It reuses the preset chip's control vocabulary — one tap-target
+   shape for this whole sheet — while its own wrapper keeps it out of the group's role. */
+.obnotion-date-clear {
+  display: flex;
+  padding: 8px 8px 0;
+}
+
+.obnotion-date-clear .obnotion-date-preset {
+  flex: 1 1 auto;
+  align-items: center;
+}
+
 .obnotion-calendar-mini-week { display: contents; }
 
 .obnotion-icon-picker-search {
@@ -7285,9 +7298,9 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
   z-index: auto;
   box-sizing: border-box;
   width: auto;
-  margin-top: 6px;
+  margin-bottom: 6px;
   border: 0;
-  border-top: 1px solid var(--background-modifier-border);
+  border-bottom: 1px solid var(--background-modifier-border);
   border-radius: 0;
   background: transparent;
   box-shadow: none;

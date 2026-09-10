@@ -33,7 +33,7 @@ The operator's ruling named *input* and *content* specifically. `../sheet-notion
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P2 |
-| **Status** | Draft — scaffolded, not implemented |
+| **Status** | Implemented — 2026-09-10, awaiting the operator's device read (D3) |
 | **Created** | 2026-09-09 |
 | **Branch** | `worktrees/272-sheet-notion-audit` |
 | **Parent Spec** | `../spec.md` |

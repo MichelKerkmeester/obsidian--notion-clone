@@ -1424,10 +1424,15 @@ export class ToolbarRenderer {
     this.viewTabPopover = shell.panel;
     const panel = shell.panel;
 
-    // Settings first, actions second, because the settings modify what the actions produce —
-    // reading order follows causal order. What makes the settings skippable is the heading above
-    // them and the weight below them: captions are muted and small, the action rows carry the
-    // normal text colour and an icon, so the eye lands on the actions even though they come after.
+    // Create first, settings second: the reference picker makes the view from one tap on a type
+    // row and asks its questions afterwards, so the create rows lead and the four optional
+    // settings — headed, muted, skippable — follow. The row closures below read the settings'
+    // own inputs; those constants are declared after this block, but no row can be clicked
+    // before the function finishes, which is the same deferred-reference pattern the presets
+    // in this file already rely on.
+    createMenuSection(panel, t("toolbar.addViewCreate"));
+    const choices = panel.createDiv({ cls: "obnotion-add-view-choices" });
+    createMenuSeparator(panel);
     createMenuSection(panel, t("toolbar.addViewOptions"));
     const form = panel.createDiv({ cls: "obnotion-add-view-form" });
     const nameField = this.createAddViewField(form, t("toolbar.newViewName"));
@@ -1472,9 +1477,6 @@ export class ToolbarRenderer {
     duplicate.createSpan({ text: t("toolbar.copyCurrentViewSettings") });
     const duplicateInput = createCheckbox(duplicate, { role: "field" });
 
-    createMenuSeparator(panel);
-    createMenuSection(panel, t("toolbar.addViewCreate"));
-    const choices = panel.createDiv({ cls: "obnotion-add-view-choices" });
     // Rows, not tiles. The tiles carried a preview that was identical for all seven types, so the
     // grid's one advantage over a list — showing what each layout looks like — was never delivered,
     // while it cost a second row vocabulary, an 11px caption and a boundary no theme token can draw
@@ -1516,6 +1518,72 @@ export class ToolbarRenderer {
       });
     }
     this.setPopoverTriggerState(anchorEl, true);
+    this.installMenuKeyboardNavigation(panel);
+  }
+
+  /**
+   * The record popover's presets, one hop deeper: the same per-column defaults the record menu
+   * used to host inline, behind a row that swaps this popover for theirs. It replaces the record
+   * popover rather than stacking on it — the same toolbar anchor, so the reversal (tapping the
+   * chevron again) walks the row's own toggle first, exactly like the record popover it parallels.
+   */
+  private showNewRecordPresetsMenu(
+    event: MouseEvent,
+    anchor: HTMLElement,
+    actions: ToolbarActions,
+    currentDb?: DatabaseConfig,
+    currentView?: ViewConfig,
+  ): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const root = anchor.closest(".obnotion-container");
+    if (!root) return;
+    if (this.utilitiesPopover?.isConnected && this.utilitiesPopover.hasClass("obnotion-utilities-presets-popover")) {
+      this.closeUtilitiesPopover();
+      return;
+    }
+    this.closeUtilitiesPopover();
+    actions.closeToolbarPopovers?.();
+    const shell = createPopoverShell(anchor, {
+      title: t("toolbar.newRowPresets"),
+      role: "menu",
+      className: "obnotion-view-tab-popover obnotion-utilities-presets-popover",
+      id: "obnotion-utilities-presets",
+      onClose: () => {
+        this.utilitiesShell = undefined;
+        this.utilitiesPopover = undefined;
+        this.removeUtilitiesPopoverListener = undefined;
+        (this.toolbarRoot || window.activeDocument).querySelectorAll<HTMLElement>(".obnotion-toolbar-more-btn, .obnotion-new-button-dropdown").forEach((trigger) => {
+          this.setPopoverTriggerState(trigger, false);
+        });
+      },
+    });
+    this.utilitiesShell = shell;
+    this.utilitiesPopover = shell.panel;
+    const panel = shell.panel;
+    // The fields themselves are the ones the record popover hosted until this surface took them:
+    // same rows, same vocabularies, one wrapper deeper.
+    const presetColumns = writablePresetColumns(currentDb?.schema);
+    if (currentView) {
+      for (const column of writablePresetColumns(currentDb?.schema)) {
+        const row = panel.createDiv({ cls: "obnotion-new-preset-row obnotion-menu-item" });
+        row.createSpan({ cls: "obnotion-menu-item-label", text: column.label || column.key });
+        const input = row.createEl("input", {
+          cls: "obnotion-new-preset-input",
+          attr: { type: "text", "aria-label": column.label || column.key, placeholder: t("toolbar.presetNone") },
+        });
+        input.value = currentView.newRowPresets?.[column.key] || "";
+        input.onclick = (e) => e.stopPropagation();
+        input.oninput = () => {
+          const next = { ...(currentView.newRowPresets || {}) };
+          if (input.value) next[column.key] = input.value;
+          else delete next[column.key];
+          currentView.newRowPresets = Object.keys(next).length ? next : undefined;
+          actions.updateViewConfig?.(t("toolbar.settings"));
+        };
+      }
+    }
+    this.setPopoverTriggerState(anchor, true);
     this.installMenuKeyboardNavigation(panel);
   }
 
@@ -2579,25 +2647,16 @@ export class ToolbarRenderer {
     }
     const presetColumns = writablePresetColumns(currentDb?.schema);
     if (currentView && presetColumns.length > 0) {
-      createMenuSeparator(panel);
-      createMenuSection(panel, t("toolbar.settings"));
-      for (const column of presetColumns) {
-        const row = panel.createDiv({ cls: "obnotion-new-preset-row obnotion-menu-item" });
-        row.createSpan({ cls: "obnotion-menu-item-label", text: column.label || column.key });
-        const input = row.createEl("input", {
-          cls: "obnotion-new-preset-input",
-          attr: { type: "text", "aria-label": column.label || column.key, placeholder: t("toolbar.presetNone") },
-        });
-        input.value = currentView.newRowPresets?.[column.key] || "";
-        input.onclick = (event) => event.stopPropagation();
-        input.oninput = () => {
-          const next = { ...(currentView.newRowPresets || {}) };
-          if (input.value) next[column.key] = input.value;
-          else delete next[column.key];
-          currentView.newRowPresets = Object.keys(next).length ? next : undefined;
-          actions.updateViewConfig?.(t("toolbar.settings"));
-        };
-      }
+      // The presets' own destination: the record menu stays plain action rows — no reference menu
+      // in the harvest carries a free-text field — so the per-column defaults live one row deeper,
+      // behind this row, instead of hosting their fields on the menu's own surface.
+      createMenuRow(panel, {
+        icon: "settings-2",
+        label: t("toolbar.newRowPresets"),
+        chevron: true,
+        cls: "obnotion-utilities-presets-row",
+        onClick: (event) => this.showNewRecordPresetsMenu(event, anchor, actions, currentDb, currentView),
+      });
     }
     this.setPopoverTriggerState(anchor, true);
     this.installMenuKeyboardNavigation(panel);

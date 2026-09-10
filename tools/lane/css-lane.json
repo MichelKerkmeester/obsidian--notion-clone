@@ -1,7 +1,10 @@
 {
   "holder": "011-record-sheet-header-and-icons",
   "acquiredAt": "2026-09-10T01:38:00.000Z",
-  "baselineHash": "ef4e57917a2c",
+  "baselineHash": "7b9cd8d06a2b",
+  "holder": "071-013-sheet-input-and-action-order",
+  "acquiredAt": "2026-09-10T01:33:22Z",
+  "baselineHash": "aa57d141259c",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -6503,22 +6506,23 @@
     },
     {
       "event": "acquire",
-      "phase": "009-properties-sheet-row-model",
-      "at": "2026-09-10T00:06:53Z",
-      "hash": "904e4bff23b0"
+      "phase": "071-013-sheet-input-and-action-order",
+      "at": "2026-09-10T01:33:22Z",
+      "hash": "189a3ef0e188",
+      "note": "This packet's four surfaces all touch the shared stylesheet, so the lane is taken over from 071-008's release at the hash that release signed; the producer edits that follow (confirm-sheet, date-value-picker, toolbar-renderer) all ship with the one stylesheet this triplet signs."
     },
     {
       "event": "edit",
-      "phase": "009-properties-sheet-row-model",
-      "at": "2026-09-10T00:06:53Z",
-      "hash": "904e4bff23b0",
-      "note": "styles.css: the verifier rebase replayed this packet onto main with 045-board-card-properties and 075 — the merged stylesheet (fcaf3fec28cf + this packet) hashes 904e4bff23b0; no selector edited. Post-rebase recapture x2 (480/480, exit 0 both): 5 movers, all reproduced identically in both runs, none under the 12-delta one-run-only jitter rule, so none restored; each named reviewed. Selector scope: none — convergence entry, no stylesheet change."
+      "phase": "071-013-sheet-input-and-action-order",
+      "at": "2026-09-10T01:33:22Z",
+      "hash": "aa57d141259c",
+      "note": "Three declarations in styles.css: a .obnotion-date-clear wrapper (display:flex, 8px/8px/0 padding) so the picker's unset control renders as one full-width plain row of preset vocabulary, its .obnotion-date-preset overridden to flex:1 1 auto with a centred label, and the date-edit popover's mini-calendar divider rule moved from the calendar's top edge to its bottom (margin-top/border-top to margin-bottom/border-bottom) because the calendar now leads the picker's body instead of closing it."
     },
     {
       "event": "release",
-      "phase": "009-properties-sheet-row-model",
-      "at": "2026-09-10T00:06:53Z",
-      "hash": "904e4bff23b0",
+      "phase": "071-013-sheet-input-and-action-order",
+      "at": "2026-09-10T01:33:22Z",
+      "hash": "aa57d141259c",
       "reviewed": [
         "screenshots/notion-clone/components/chrome-owned-menu-sheet-mobile-dark.png",
         "screenshots/notion-clone/components/constructed-active-view-controls-desktop-light.png",
@@ -6679,6 +6683,32 @@
         "screenshots/notion-clone/views/constructed-board-subtask-mobile-light.png"
       ],
       "note": "Captured twice (npm run screenshots </dev/null, 480 entries, exit 0 both) after the second rebase, judged by decoded pixel delta against the committed blobs across both judged runs, no image opened by eye. 3 REAL movers, kept: components/dropdown-field-desktop-light 99px at max channel delta 88, BOTH runs at IDENTICAL counts and deltas (the same 8x14px, one-glyph 242->154 label-ink patch at x81-88 y324-337 that the round-1 continuation judged, its only recorded input delta still styles.css, mechanism unchanged and still not decisively attributed -- a copy dependency its sources list does not name, the 010 lesson, remains the plausible second); panels/constructed-board-groups-panel-mobile-light 103px at max 76, moved in the SECOND judged run only, its first-run read reproducing the committed blob exactly, above the 12 bar so REAL by the rule rather than jitter; views/constructed-board-subtask-mobile-light 62px at max 2, BOTH runs at identical counts, a small deterministic 2-channel shift against the committed blob, kept. 1 jitter, the returning one: views/board-mobile-desktop-dark 2px at max channel delta 1 in the second judged run only, restored at its committed bytes (bytes 242581, its manifest row synced) with the fresh styles.css sourceHash kept. The 14 replayed record-family/peek/submenu captures and the other 464 reproduced their committed blobs. Their 012 release (6e10b42f6324, 16 movers) sits above this triplet; the three movers here are judged against this twice-merged tree, not re-opened from theirs. This verification reviews by measurement (headless); the visual read stays the operator device pass."
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-desktop-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-desktop-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-datetime-desktop-dark.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-datetime-desktop-light.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-datetime-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-datetime-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-desktop-dark.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-desktop-light.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-mobile-light.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-datetime-desktop-dark.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-datetime-desktop-light.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-datetime-mobile-dark.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-datetime-mobile-light.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-desktop-dark.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-desktop-light.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-mobile-dark.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-confirm-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-confirm-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-light.png"
+      ],
+      "note": "Recapture x2 on the reordered producers, 480/480, judged by decoded pixel delta across both runs. 24 real movers, deterministic (identical changedPixels and maxDelta in both runs), all kept: 4 constructed-toolbar-add-view (96368/96388/130903/130925 px, maxDelta 192-209) — the add-view reorder puts the create rows above the four settings rows, so the choices group moved up; 8 constructed-date-picker and -datetime (maxDelta 196-242) — the picker's body now reads calendar, then Today/Tomorrow/Next week, then the typed segments, with Clear its own row, and the date-edit popover's mini-calendar divider moved from above it to below it; 8 field-date-value-picker and -datetime, which differ in SIZE rather than pixels because the reordered popover's intrinsic height changed with the reorder and these captures are of the open popover — both runs agree on the new dimensions; 4 constructed-modal-sheet-confirm and -stacked (16722/16738 px, maxDelta 180/202) — the stacked confirm's destructive action now leads. TWO one-run jitters at maxDelta 1 (board-mobile-desktop-dark 2px, board-view-desktop-dark 8px) were restored to their committed blobs in the run-1 judgement; run 2 reproduced the committed bytes for both, so the working manifest's own entries already match the restored blobs. Every remaining manifest change line is the movers' own (bytes, pixelHash, layoutHash, sourceHashes) plus the styles.css stamp (189a3ef0e188 -> aa57d141259c), which is what this triplet signs."
     }
   ],
   "outstanding": [

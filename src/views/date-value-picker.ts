@@ -151,15 +151,26 @@ function openDateValuePicker(
   trigger.setAttr("aria-controls", popoverId);
   if (includeTime) popover.addClass("is-datetime");
   // The padded-row grammar needs somewhere structural to measure on a phone sheet; the desktop
-  // popover keeps building presets/segments/calendar as direct children exactly as before. `close`
-  // is referenced here ahead of its own declaration further down — safe, since `onClose` only runs
-  // from a later click, by which time the closure below has assigned it, the same deferred-reference
-  // pattern every preset button in this function already relies on.
+  // popover keeps building the picker's blocks as its direct children exactly as before, now in
+  // the reference picker's reading order — the calendar leads, the shortcut presets and the
+  // typed segments follow it, and the unset closes the sheet. `close` is referenced here ahead
+  // of its own declaration further down — safe, since `onClose` only runs from a later click, by
+  // which time the closure below has assigned it, the same deferred-reference pattern every
+  // preset button in this function already relies on.
   const content = mountPickerSheetHeader(popover, doc, {
     title: options.fieldLabel || t("filter.value"),
     onClose: () => close(true),
     bodyCls: "obnotion-date-picker-body obnotion-panel-row",
   });
+  const eventIndex: MiniCalendarEventIndex = {
+    dateKeys: new Set(),
+    monthKeys: new Set(),
+    yearKeys: new Set(),
+  };
+  // The calendar leads: pointing at a date is the primary path, and the typed segments — which
+  // nothing on a phone treats as primary — follow it, not precede it.
+  const calendar = content.createDiv({ cls: "obnotion-calendar-mini-popover obnotion-cell-date-picker" });
+  calendar.addEventListener("mousedown", (event) => event.preventDefault());
   const presets = content.createDiv({ cls: "obnotion-date-presets", attr: { role: "group", "aria-label": t("datePicker.presets") } });
   // A relative label ("Tomorrow") reads as a choice with no literal to check it against until the
   // resolved date sits beside it — Notion pairs every relative preset with the date it resolves to
@@ -182,10 +193,6 @@ function openDateValuePicker(
   createPreset(t("datePicker.today"), () => chooseToday(todayKey), todayKey);
   createPreset(t("datePicker.tomorrow"), () => chooseDate(tomorrowKey), tomorrowKey);
   createPreset(t("datePicker.nextWeek"), () => chooseDate(nextWeekKey), nextWeekKey);
-  createPreset(t("datePicker.clear"), () => {
-    setInputs("");
-    close(true);
-  });
   const segments = content.createDiv({ cls: "obnotion-date-segments" });
   const yearInput = segments.createEl("input", {
     cls: "obnotion-date-seg",
@@ -224,13 +231,19 @@ function openDateValuePicker(
     .filter((input): input is HTMLInputElement => Boolean(input));
   setInputs(originalValue);
 
-  const eventIndex: MiniCalendarEventIndex = {
-    dateKeys: new Set(),
-    monthKeys: new Set(),
-    yearKeys: new Set(),
+  // The unset is not a fourth choice: the shortcuts above each ADD a value, Clear removes one, so
+  // it closes the sheet as its own plain row beneath the typed segments rather than riding in the
+  // shortcut group. Same control vocabulary as the shortcuts, its own wrapper so the group role
+  // keeps announcing exactly the three choices.
+  const clearRow = content.createDiv({ cls: "obnotion-date-clear" });
+  const clearButton = clearRow.createEl("button", { cls: "obnotion-date-preset", attr: { type: "button" } });
+  clearButton.createSpan({ cls: "obnotion-date-preset-label", text: t("datePicker.clear") });
+  clearButton.onclick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setInputs("");
+    close(true);
   };
-  const calendar = content.createDiv({ cls: "obnotion-calendar-mini-popover obnotion-cell-date-picker" });
-  calendar.addEventListener("mousedown", (event) => event.preventDefault());
 
   const readDraftDateKey = (): string | null => {
     const year = yearInput.value.replace(/\D/g, "");
