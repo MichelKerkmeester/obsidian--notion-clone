@@ -1,12 +1,12 @@
 {
-  "measuredAt": "2026-09-09T21:15:51.780Z",
+  "measuredAt": "2026-09-10T00:10:15.694Z",
   "inputs": {
-    "styles.css": "fcaf3fec28cf",
+    "styles.css": "189a3ef0e188",
     "tools/live/cascade-audit.mjs": "59b8f50917f8"
   },
-  "sheetLines": 24452,
+  "sheetLines": 24497,
   "totals": {
-    "rules": 3131,
+    "rules": 3134,
     "duplicatedSelectors": 265,
     "conflicts": 135
   },

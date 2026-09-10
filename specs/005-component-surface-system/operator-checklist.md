@@ -16,7 +16,7 @@ contextType: "reference"
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-09: **76 phases**, **9 with nothing left**, **181 rows** waiting on a device.
+Derived 2026-09-10: **76 phases**, **9 with nothing left**, **181 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 

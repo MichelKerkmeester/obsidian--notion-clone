@@ -1,6 +1,6 @@
 {
   "holder": "071-008-filter-sheet-row-model",
-  "acquiredAt": "2026-09-09T23:21:41Z",
+  "acquiredAt": "2026-09-10T00:09:41Z",
   "baselineHash": "189a3ef0e188",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -6426,6 +6426,30 @@
         "screenshots/notion-clone/views/board-view-desktop-dark.png"
       ],
       "note": "npm run screenshots </dev/null twice, exit 0 both, 480 entries. Judged by decoded pixel delta: 8 content movers, all the stacked filter sheet and the one surface that mounts it as a backdrop (constructed-filter-panel-mobile 985076/1003833px maxDelta 214/209, -nested-mobile 821420/841507px maxDelta 206/212, constructed-depth3-import-confirm-dropdown-mobile 697882/721854px maxDelta 123/135 — all four dark/light pairs), every one moved in BOTH sampled runs at identical counts, deterministic, kept. The desktop popover pair also moved (constructed-filter-panel-desktop 547/548px maxDelta 70/89) — the bare \"—\" empty-value glyph becoming the labelled \"Value\" placeholder is shared by every presentation, not phone-only, so this one is expected on desktop too. board-view-desktop-dark moved 4 isolated pixels at maxDelta 1 in both runs — sub-pixel, no filter surface in frame, kept as a real (not one-run) mover per the recorded rule rather than reverted. One capture reverted as jitter: chrome-owned-menu-sheet-mobile-dark.png moved bytes only (pixelHash unchanged, 36685 vs the committed 36716) in the second run alone — git checkout, manifest bytes restored to 36716."
+    },
+    {
+      "event": "acquire",
+      "phase": "071-008-filter-sheet-row-model",
+      "at": "2026-09-10T00:09:41Z",
+      "hash": "676d7838891a",
+      "note": "Re-deriving the lane pointer after this packet's rebase onto origin/main 48802783: the release above signed 676d7838891a, but the replay merged 045-board-card-field-names's styles-only edits (fcaf3fec28cf, released 21:18 while this worktree was checked out) into the same stylesheet, leaving it at 189a3ef0e188 — the release above no longer names the shipped sheet, so the packet takes the lane over again rather than signing a hash it does not ship."
+    },
+    {
+      "event": "edit",
+      "phase": "071-008-filter-sheet-row-model",
+      "at": "2026-09-10T00:09:41Z",
+      "hash": "189a3ef0e188",
+      "note": "The rebase-merged stylesheet: 045's board-card field-name selectors plus this packet's stacked-condition rules, neither touching the other's declarations (styles.css auto-merged, no conflict). Recorded so the release below signs the sheet actually shipping; no declaration was written in this step."
+    },
+    {
+      "event": "release",
+      "phase": "071-008-filter-sheet-row-model",
+      "at": "2026-09-10T00:09:41Z",
+      "hash": "189a3ef0e188",
+      "reviewed": [
+        "screenshots/notion-clone/components/panel-base-import-modal-desktop-light.png"
+      ],
+      "note": "Recapture x2 on the merged tree, 480/480, judged by decoded pixel delta across both runs: ONE real mover — panel-base-import-modal-desktop-light (66px @ maxDelta 209, deterministic both runs, kept, manifest bytes 65674->65732); TWO one-run jitters at maxDelta 1 (board-mobile-desktop-dark 2px, board-view-desktop-dark 8px — the conflicted binary from the rebase) restored with their committed blobs, board-view-desktop-dark's manifest bytes 280379->280394, board-mobile-desktop-dark needed no manifest change; every other capture pixelHash-identical — the manifest's 532 changed lines are the styles.css stamp (fcaf3fec28cf->189a3ef0e188), which is what this triplet signs."
     }
   ],
   "outstanding": [
