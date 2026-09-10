@@ -10342,7 +10342,7 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
 }
 
 .obnotion-container .obnotion-board-groups-panel .obnotion-column-manager-row {
-  grid-template-columns: 18px 0 20px 18px minmax(120px, 1fr);
+  grid-template-columns: 18px 0 18px minmax(120px, 1fr) auto;
 }
 
 .obnotion-container .obnotion-board-groups-actions {
@@ -13624,6 +13624,9 @@ body.is-phone .obnotion-container .obnotion-shell-header .obnotion-panel-title {
 .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-row {
   padding-inline: var(--obnotion-sheet-inset);
   position: relative;
+  /* The 44px floor every other phone sheet's rows already carry through this same token — this
+     row was the one place in the stylesheet still hardcoding a shorter figure. */
+  min-height: var(--obnotion-sheet-row-min-height, 44px);
 }
 
 .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-row + .obnotion-column-manager-add-row,
@@ -13643,13 +13646,33 @@ body.is-phone .obnotion-container .obnotion-shell-header .obnotion-panel-title {
   background: var(--obnotion-border-subtle, rgba(221, 221, 221, 0.4));
 }
 
-/* The add affordances read as full-width rows, not as a side-by-side pill pair: the sheet's list
-   rows are 44px tap targets on the 16px inset, and the pill pair under them measured 17-23% of
-   the row's width. Each affordance keeps its own 44px, its label where the pill's left edge put
-   it, and the pair shares the hairline vocabulary the rows above already use. */
+/* The shown/hidden partition now collects onto cards, the same one-elevation-lighter-than-canvas
+   grouping the settings sheet already landed (`--obnotion-settings-card-fill` reads per theme, so
+   the dark-theme fill direction stays whatever that sheet's own defect fix eventually settles).
+   The nothing-hidden state gets the identical treatment through the same class — one undivided
+   card holding every row, no heading — so a reader never sees a flat canvas in either state. */
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section {
+  border-radius: var(--obnotion-radius-lg);
+  background: var(--obnotion-settings-card-fill);
+  margin: 0 var(--obnotion-sheet-inset) var(--obnotion-space-5);
+}
+
+/* A card boundary is its own separator; drawing the row-to-add-row hairline on top of it would cut
+   a stray line across the card's own rounded top edge. The settings sheet drops the same hairline
+   for the same reason where a heading follows one of its own cards. */
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section + .obnotion-column-manager-add-row::before {
+  content: none;
+}
+
+/* The add-property row gains the identical terminal card the settings sheet's own groups use,
+   rather than sitting on bare canvas below the last section — Notion's own add-property precedent
+   (a different sheet, R-5) ends its own list the same way. */
 .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-add-row {
   flex-direction: column;
   align-items: stretch;
+  border-radius: var(--obnotion-radius-lg);
+  background: var(--obnotion-settings-card-fill);
+  margin: 0 var(--obnotion-sheet-inset) var(--obnotion-space-5);
 }
 .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-add-row .obnotion-column-manager-add-button {
   box-sizing: border-box;
@@ -13663,9 +13686,10 @@ body.is-phone .obnotion-container .obnotion-shell-header .obnotion-panel-title {
 
 /* The shown/hidden partition: a section header line — the section's name on the left, the bulk
    action that governs exactly its own members on the right — sitting on the same 16px inset the
-   sheet's rows use, in the record sheet's own section-header vocabulary (faint uppercase title,
-   muted bulk link). The bulk link carries its own padding so the hit area clears a thumb even
-   though the text itself is small. */
+   sheet's rows use. Sentence case now, matching the reference's own casing rather than the record
+   sheet's uppercase; the heading sits inside the card it labels (the properties sheet never moved
+   it above the card the way the settings sheet's own headings sit). The bulk link carries its own
+   padding so the hit area clears a thumb even though the text itself is small. */
 .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section-header {
   display: flex;
   align-items: center;
@@ -13678,7 +13702,6 @@ body.is-phone .obnotion-container .obnotion-shell-header .obnotion-panel-title {
 .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section-title {
   color: var(--text-faint);
   font-size: var(--font-smaller, 0.8em);
-  text-transform: uppercase;
 }
 
 .obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-section-bulk {
@@ -14326,13 +14349,13 @@ body.is-phone .obnotion-container .obnotion-menu-item {
 
 /* ───────────────────────────────────────────────────────────────
    22. COLUMN MANAGER PANEL
-   One row per property: drag, icon, name, wrap, move up, move down, edit, hide.
+   One row per property: drag, icon, name, trailing eye toggle, move up, move down, edit, hide.
 ─────────────────────────────────────────────────────────────── */
 
-/* Eight columns, each claimed explicitly, so hiding a child leaves its column empty instead of
+/* Seven columns, each claimed explicitly, so hiding a child leaves its column empty instead of
    shifting every child after it one position left.
 
-   The row emits eight children, and which of them are visible depends on two independent things:
+   The row emits seven children, and which of them are visible depends on two independent things:
    the drag handle is desktop-only, the reorder arrows are phone-only, and read-only mode drops the
    edit and delete buttons entirely. With a positional track list every one of those combinations
    lands the children somewhere different, which is how the property name ended up on an `auto`
@@ -14340,10 +14363,12 @@ body.is-phone .obnotion-container .obnotion-menu-item {
    only its content width and clipped.
 
    The columns for the two platform-specific children collapse to zero where they do not apply, so
-   the same five-column frame describes every regime. */
+   the same five-column frame describes every regime. The trailing eye/eye-slash toggle replaces
+   the leading checkbox this row used to draw — Notion's own row anatomy ends on a visibility
+   control rather than opening on one — so it claims the frame's last track instead of a middle one. */
 .obnotion-container .obnotion-column-manager-row {
   display: grid;
-  grid-template-columns: 18px 0 20px 18px minmax(120px, 1fr);
+  grid-template-columns: 18px 0 18px minmax(120px, 1fr) auto;
   align-items: center;
   gap: 6px;
   min-height: 30px;
@@ -14353,15 +14378,15 @@ body.is-phone .obnotion-container .obnotion-menu-item {
 
 .obnotion-container .obnotion-column-manager-row > .obnotion-column-drag { grid-column: 1; }
 .obnotion-container .obnotion-column-manager-row > .obnotion-mobile-reorder-controls { grid-column: 2; }
-.obnotion-container .obnotion-column-manager-row > .obnotion-checkbox { grid-column: 3; }
-.obnotion-container .obnotion-column-manager-row > .obnotion-column-type { grid-column: 4; }
-.obnotion-container .obnotion-column-manager-row > .obnotion-column-name-wrap { grid-column: 5; }
+.obnotion-container .obnotion-column-manager-row > .obnotion-column-type { grid-column: 3; }
+.obnotion-container .obnotion-column-manager-row > .obnotion-column-name-wrap { grid-column: 4; }
+.obnotion-container .obnotion-column-manager-row > .obnotion-column-manager-eye { grid-column: 5; }
 
 /* The board Properties list reuses this row wholesale and has never carried trailing actions;
    the properties sheet joined it when its own wrap and delete controls moved into the
    edit-property surface, so the shared frame is now the five tracks both really need. */
 .obnotion-container .obnotion-view-config-panel .obnotion-column-manager-row {
-  grid-template-columns: 18px 0 20px 18px minmax(120px, 1fr);
+  grid-template-columns: 18px 0 18px minmax(120px, 1fr) auto;
 }
 
 /* The three trailing actions moved into the edit-property surface (a `Wrap content` toggle and a
@@ -14438,6 +14463,41 @@ body.is-phone .obnotion-container .obnotion-menu-item {
 .obnotion-container .obnotion-column-type-icon svg {
   width: 14px;
   height: 14px;
+}
+
+/* The trailing eye/eye-slash toggle that replaces the row's old leading checkbox — the same
+   transparent, centred button `hidden-properties.ts`'s own Shown/Hidden group already draws for
+   the record sheet's equivalent control, reused rather than re-invented. */
+.obnotion-container .obnotion-column-manager-eye {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  appearance: none;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.obnotion-container .obnotion-column-manager-eye:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.obnotion-container .obnotion-column-manager-eye svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* The row's own phone pitch already reserves 44px of content height (`--obnotion-sheet-row-min-height`
+   above) — the eye button's own hit box fills the room the row already sets aside, the same
+   reasoning `hidden-properties.ts`'s landed eye button uses. */
+.obnotion-mobile-bottom-sheet .obnotion-column-manager-eye {
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .obnotion-container .obnotion-column-wrap-toggle.is-active {
@@ -21644,7 +21704,7 @@ body.pm-resize-active * {
 /* The drag handle is hidden on a phone and the reorder arrows take its place, so column 1
    collapses and column 2 opens. Same frame, same order, one swap. */
 .is-phone .obnotion-container .obnotion-column-manager-row {
-  grid-template-columns: 0 auto 20px 18px minmax(120px, 1fr);
+  grid-template-columns: 0 auto 18px minmax(120px, 1fr) auto;
 }
 
 .is-phone .obnotion-settings .setting-group {
@@ -21762,13 +21822,13 @@ body.pm-resize-active * {
    hidden that was the type icon, and the property name fell onto an auto track and clipped. The
    order now matches the frame; the phone difference is which column is collapsed, nothing else. */
 .is-phone .obnotion-container .obnotion-column-manager-row {
-  grid-template-columns: 0 auto 20px 18px minmax(96px, 1fr);
+  grid-template-columns: 0 auto 18px minmax(96px, 1fr) auto;
 }
 
 /* Same reasoning as the desktop override above: the board Properties list has no trailing
    actions, so the phone frame drops the same three unclaimed tracks. */
 .is-phone .obnotion-container .obnotion-view-config-panel .obnotion-column-manager-row {
-  grid-template-columns: 0 auto 20px 18px minmax(96px, 1fr);
+  grid-template-columns: 0 auto 18px minmax(96px, 1fr) auto;
 }
 
 .is-phone .obnotion-modal .obnotion-status-option-row {

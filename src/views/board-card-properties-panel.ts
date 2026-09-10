@@ -111,9 +111,9 @@ export function renderBoardCardProperties(
         },
       },
       checked: entry.visible,
-      checkboxDisabled: Boolean(actions.readOnly),
-      onCheckboxChange: actions.readOnly ? undefined : (checked) => {
-        entry.visible = checked;
+      stateControlDisabled: Boolean(actions.readOnly),
+      onToggle: actions.readOnly ? undefined : (next) => {
+        entry.visible = next;
         persist(config, entries, actions);
       },
       typeClass: "obnotion-column-type",

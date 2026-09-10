@@ -295,7 +295,7 @@ describe("ColumnManagerRenderer property row contract", () => {
     expect(nameEl!.textContent).not.toMatch(/\[[^\]\n]+\]/);
   });
 
-  it("carries three interactive controls: two reorder buttons and the visibility checkbox", () => {
+  it("carries three interactive controls: two reorder buttons and the trailing eye toggle", () => {
     const { row } = renderRow();
     expect(countInteractive(row)).toBe(3);
   });

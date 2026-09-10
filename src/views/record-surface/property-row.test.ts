@@ -274,7 +274,7 @@ describe("buildCheckboxPropertyRow", () => {
     nameText: "Status [status]",
   };
 
-  it("draws drag handle, move controls, checkbox, type icon and name when draggable", () => {
+  it("draws drag handle, move controls, type icon, name and a trailing eye toggle when draggable", () => {
     const parent = new MockElement();
     const handle = buildCheckboxPropertyRow({
       parent: asHTMLElement(parent),
@@ -290,11 +290,13 @@ describe("buildCheckboxPropertyRow", () => {
     const row = handle.row as unknown as MockElement;
     expect(row.draggable).toBe(true);
     expect(row.attributes.get("data-obnotion-column-key")).toBe("status");
+    // Zero checkboxes in the row, and the eye toggle is the row's last child — the trailing edge
+    // Notion's own row ends on, not the leading position a checkbox held.
     expect(row.children.map((child) => child.className)).toEqual([
-      "obnotion-column-drag", "obnotion-mobile-reorder-controls", "obnotion-checkbox obnotion-checkbox-field",
-      "obnotion-column-type", "obnotion-column-name-wrap",
+      "obnotion-column-drag", "obnotion-mobile-reorder-controls",
+      "obnotion-column-type", "obnotion-column-name-wrap", "obnotion-column-manager-eye",
     ]);
-    expect(handle.checkbox.checked).toBe(true);
+    expect(row.children.some((child) => child.hasClass("obnotion-checkbox"))).toBe(false);
     expect((handle.nameEl as unknown as MockElement).text).toBe("Status [status]");
   });
 
@@ -304,34 +306,32 @@ describe("buildCheckboxPropertyRow", () => {
       parent: asHTMLElement(parent),
       ...baseOptions,
       draggable: false,
-      checkboxDisabled: true,
+      stateControlDisabled: true,
     });
 
     const row = handle.row as unknown as MockElement;
     expect(row.draggable).toBe(false);
     expect(row.children.some((child) => child.hasClass("obnotion-column-drag"))).toBe(false);
     expect(row.children.some((child) => child.hasClass("obnotion-mobile-reorder-controls"))).toBe(false);
-    expect(handle.checkbox.disabled).toBe(true);
+    expect((handle.stateControl as unknown as MockElement).disabled).toBe(true);
   });
 
-  it("wires the click handler for a shift-range toggle and the change handler for a plain persist, independently", () => {
-    const onCheckboxClick = vi.fn();
-    const onCheckboxChange = vi.fn();
+  it("toggles on a plain click, carrying the click event for a shift-range caller and the next value for a plain-persist one", () => {
+    const onToggle = vi.fn();
     const parent = new MockElement();
     const handle = buildCheckboxPropertyRow({
       parent: asHTMLElement(parent),
       ...baseOptions,
       draggable: false,
-      onCheckboxClick,
-      onCheckboxChange,
+      checked: true,
+      onToggle,
     });
 
-    const fakeEvent = { preventDefault() {}, stopPropagation() {}, shiftKey: false };
-    (handle.checkbox as unknown as { onclick: (event: unknown) => void }).onclick(fakeEvent);
-    expect(onCheckboxClick).toHaveBeenCalledWith(fakeEvent, handle.checkbox);
-
-    (handle.checkbox as unknown as { onchange: () => void }).onchange();
-    expect(onCheckboxChange).toHaveBeenCalledWith(true);
+    const fakeEvent = { preventDefault() {}, stopPropagation() {}, shiftKey: true };
+    (handle.stateControl as unknown as { onclick: (event: unknown) => void }).onclick(fakeEvent);
+    // `checked` was true, so a plain click asks to turn it off — the row itself never reads its own
+    // DOM state back, it hands the caller the value the click means.
+    expect(onToggle).toHaveBeenCalledWith(false, fakeEvent);
   });
 });
 

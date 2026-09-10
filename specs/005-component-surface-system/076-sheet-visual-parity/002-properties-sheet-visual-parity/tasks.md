@@ -42,13 +42,13 @@ target rows are `spec.md` §13.3/§13.10; the rubric instance is `../spec.md` §
 
 DEFINE and PLAN are written. What remains of them is transcription and the lane.
 
-- [ ] T001 Transcribe `spec.md` §13.13's two Proposed ADRs — **ADR-L** (the scaffold's original
+- [x] T001 Transcribe `spec.md` §13.13's two Proposed ADRs — **ADR-L** (the scaffold's original
   arrow-removal target corrected rather than followed, per `071/012` ADR-001) and **ADR-M** (this
   child's L5 addresses `roadmap.md` §7.18 ADR-D's 44px-floor gap) — into `../../roadmap.md` §7.19's
   table, one row each, raised-by `076/002`. Mark ADR-D (§7.18) addressed-by `076/002` rather than
   leaving it dangling. **Neither is implemented by this task.** Add the §5.A row for this child at
   `planned` (`../../roadmap.md`)
-- [ ] T002 Add clauses **L1-L6** to `tools/live/sheet-grammar.mjs`, unwired, in the idiom already
+- [x] T002 Add clauses **L1-L6** to `tools/live/sheet-grammar.mjs`, unwired, in the idiom already
   there. Run each one and **record its RED number** — the count, not the word "fails". Acquire the
   css-lane triplet for `styles.css`, record the baseline hash, and confirm no other child holds it
   (`tools/live/sheet-grammar.mjs`, `verification.md`, `tools/lane/check-lane.mjs`)
@@ -59,29 +59,29 @@ DEFINE and PLAN are written. What remains of them is transcription and the lane.
 <!-- ANCHOR:phase-2 -->
 ## Phase C: CREATE — RED, producer, GREEN
 
-- [ ] T003 **The state control.** In `buildCheckboxPropertyRow` (`property-row.ts:384-439`), remove
+- [x] T003 **The state control.** In `buildCheckboxPropertyRow` (`property-row.ts:384-439`), remove
   the leading `createCheckbox` call (`:417`) and add a trailing eye/eye-slash icon button as the
   row's last child, wired to the same `checked`/`onCheckboxClick` semantics under new names (an
   `onToggle` reading the same state). **L1 and L2 RED first**, both numbers recorded
   (`src/views/record-surface/property-row.ts`, `styles.css`)
-- [ ] T004 **The required-property contrast.** Give the eye icon a visibly lower-contrast state when
+- [x] T004 **The required-property contrast.** Give the eye icon a visibly lower-contrast state when
   `checkboxDisabled` (renamed to reflect the new control, e.g. `stateControlDisabled`) is true —
   reduced opacity or a muted colour token, targeting the same order of magnitude as R-2's measured
   gap (`rgb(162,162,162)` vs `rgb(30,30,30)`, §13.12). **L3 RED first** (`src/views/record-surface/property-row.ts`, `styles.css`)
-- [ ] T005 **The section cards.** Apply `076/001`'s landed `.obnotion-settings-card` declaration
+- [x] T005 **The section cards.** Apply `076/001`'s landed `.obnotion-settings-card` declaration
   (`background: var(--background-primary); border-radius: var(--obnotion-radius-lg); margin: 0 var(--obnotion-sheet-inset) var(--obnotion-space-5);`)
   to `.obnotion-column-manager-section` in `column-manager-renderer.ts`'s `renderSection` output.
   The existing 1-card/0-heading vs 2-card/2-heading branch (`:121-156`) is unchanged at the logic
   level — only the container gains the card treatment. **L4 RED first** (`src/views/column-manager-renderer.ts`, `styles.css`)
-- [ ] T006 **The section heading.** Drop `text-transform: uppercase` on
+- [x] T006 **The section heading.** Drop `text-transform: uppercase` on
   `.obnotion-column-manager-section-title` (`styles.css:13670-13674`); update the heading strings
   (`panel.shownSection` / `panel.hiddenSection`) to their sentence-case `in table` form in all three
   locales, flagging the open question (`spec.md` §12) inline as a comment rather than resolving it
   silently (`src/i18n.ts`, `styles.css`)
-- [ ] T007 **The add-property card.** Give `.obnotion-column-manager-add-row` the same card
+- [x] T007 **The add-property card.** Give `.obnotion-column-manager-add-row` the same card
   background as T005's sections. The row shape itself is unchanged — confirmed already correct in
   `spec.md` §13.4. **L6 RED first** (`src/views/column-manager-renderer.ts`, `styles.css`)
-- [ ] T008 **The row height.** `.obnotion-column-manager-row`'s `min-height: 30px`
+- [x] T008 **The row height.** `.obnotion-column-manager-row`'s `min-height: 30px`
   (`styles.css:14336-14344`) → `min-height: var(--obnotion-sheet-row-min-height)`. **L5 RED first at
   30**. Re-run the board-groups panel's shared-row clauses and the `071` regression set in the same
   invocation and record them green (`styles.css`, `tools/live/sheet-grammar.mjs`)
@@ -92,7 +92,7 @@ DEFINE and PLAN are written. What remains of them is transcription and the lane.
 <!-- ANCHOR:phase-4 -->
 ## Phase D: SCREENSHOT — capture, then look at it
 
-- [ ] T009 Run `npm run screenshots </dev/null` and record the exit status and the entry count; then
+- [x] T009 Run `npm run screenshots </dev/null` and record the exit status and the entry count; then
   `npm run screenshots:verify` and record the stale count; then, if the rebuild harness covers this
   sheet, `node tools/live/sheet-rebuild.mjs </dev/null` and record its exit status. **Then open the
   phone light and the phone dark PNG and look at each one**, and record what changed against the
@@ -105,7 +105,7 @@ DEFINE and PLAN are written. What remains of them is transcription and the lane.
 <!-- ANCHOR:phase-5 -->
 ## Phase E-F: VERIFY, REMEDIATE — and the gate no agent ticks
 
-- [ ] T010 Gate (a): run every lane clause (L1-L6) and record each GREEN number beside the RED
+- [x] T010 Gate (a): run every lane clause (L1-L6) and record each GREEN number beside the RED
   number T003+ recorded. Re-run the `071` clauses and the board-groups shared-row clauses this sheet
   already carries, unchanged, in the same run (`tools/live/sheet-grammar.mjs`)
 - [ ] T011 **The judge, and the loop until it passes twice.** Give a Sonnet or Opus reviewer our

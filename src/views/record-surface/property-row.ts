@@ -361,11 +361,13 @@ export interface CheckboxPropertyRowOptions {
   drag?: CheckboxPropertyRowDrag;
   move?: CheckboxPropertyRowMove;
   checked: boolean;
-  checkboxDisabled?: boolean;
-  /** Column-manager's shift-range visibility toggle reads the native click event; wire this for it. */
-  onCheckboxClick?: (event: MouseEvent, checkbox: HTMLInputElement) => void;
-  /** The board-card panel's plain persist-on-toggle path; wire this instead of (or beside) the click. */
-  onCheckboxChange?: (checked: boolean) => void;
+  /** The required-column case (a title field, a board's group field): the toggle stays present but
+   *  visibly dimmer and inert, the same contrast drop `hidden-properties.ts`'s own eye button uses. */
+  stateControlDisabled?: boolean;
+  /** Fires on a plain click of the trailing eye/eye-slash toggle. `next` is the visibility this
+   *  click asks for; the event carries `shiftKey` for column-manager's own range-selection, which a
+   *  plain persist-on-toggle caller (the board panels) can ignore. */
+  onToggle?: (next: boolean, event: MouseEvent) => void;
   typeClass: string;
   typeTitle?: string;
   renderTypeIcon: (parent: HTMLElement) => void;
@@ -376,7 +378,7 @@ export interface CheckboxPropertyRowOptions {
 
 export interface CheckboxPropertyRowHandle {
   row: HTMLElement;
-  checkbox: HTMLInputElement;
+  stateControl: HTMLButtonElement;
   nameWrap: HTMLElement;
   nameEl: HTMLElement;
 }
@@ -414,18 +416,6 @@ export function buildCheckboxPropertyRow(options: CheckboxPropertyRowOptions): C
     }
   }
 
-  const checkbox = createCheckbox(row, { role: "field" });
-  checkbox.checked = options.checked;
-  checkbox.disabled = Boolean(options.checkboxDisabled);
-  if (options.onCheckboxClick) {
-    const onCheckboxClick = options.onCheckboxClick;
-    checkbox.onclick = (event) => onCheckboxClick(event, checkbox);
-  }
-  if (options.onCheckboxChange) {
-    const onCheckboxChange = options.onCheckboxChange;
-    checkbox.onchange = () => onCheckboxChange(checkbox.checked);
-  }
-
   const typeEl = row.createSpan({
     cls: options.typeClass,
     ...(options.typeTitle !== undefined ? { attr: { title: options.typeTitle } } : {}),
@@ -435,7 +425,18 @@ export function buildCheckboxPropertyRow(options: CheckboxPropertyRowOptions): C
   const nameWrap = row.createDiv({ cls: options.nameWrapClass });
   const nameEl = nameWrap.createSpan({ text: options.nameText, cls: options.nameClass });
 
-  return { row, checkbox, nameWrap, nameEl };
+  // Trailing edge, after the label: Notion's row ends in an eye/eye-slash toggle rather than a
+  // leading checkbox — the same position and idiom `hidden-properties.ts`'s own Shown/Hidden group
+  // already uses for the record sheet's equivalent control.
+  const stateControl = row.createEl("button", { cls: "obnotion-column-manager-eye", attr: { type: "button" } });
+  stateControl.disabled = Boolean(options.stateControlDisabled);
+  setIcon(stateControl, options.checked ? "eye" : "eye-off");
+  if (options.onToggle) {
+    const onToggle = options.onToggle;
+    stateControl.onclick = (event) => onToggle(!options.checked, event);
+  }
+
+  return { row, stateControl, nameWrap, nameEl };
 }
 
 /** The drag-ignore check both properties panels carried a copy of: a drag starting on a control

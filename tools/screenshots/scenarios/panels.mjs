@@ -59,6 +59,11 @@ const TYPE_ICON = {
   date: glyph('<path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/>'),
 };
 
+/** The trailing eye/eye-slash toggle the row's visibility control draws now, in place
+ *  of the leading checkbox these three fixtures used to draw. */
+const EYE_ICON = glyph('<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/>');
+const EYE_OFF_ICON = glyph('<path d="M10.7 5.1A9 9 0 0 1 12 5c7 0 10 7 10 7a13 13 0 0 1-1.7 2.7"/><path d="M6.6 6.6A13 13 0 0 0 2 12s3 7 10 7a9 9 0 0 0 5.4-1.6"/><path d="m2 2 20 20"/>');
+
 /** The six columns the subscription fixture describes, with the types the plugin stores. */
 const COLUMN_DEFS = [
   { key: "file.name", label: "Name", type: "text" },
@@ -640,10 +645,10 @@ export const PANEL_SCENARIOS = [
     ],
     note: "The Properties section of a board view's settings panel: fixed readonly Cover and "
       + "Title rows above one reorderable row per field. Reuses the column manager's row markup "
-      + "(drag handle, checkbox, type icon, name) but drops its wrap/edit/delete actions, which "
-      + "this list has no equivalent of. Payment is hidden by the operator; Billing — the board's "
-      + "own group-by field — is not in the stored list either, so it is appended last, unchecked, "
-      + "rather than removed from the panel entirely.",
+      + "(drag handle, type icon, name, a trailing eye toggle) but drops its wrap/edit/delete "
+      + "actions, which this list has no equivalent of. Payment is hidden by the operator; Billing "
+      + "— the board's own group-by field — is not in the stored list either, so it is appended "
+      + "last, hidden, rather than removed from the panel entirely.",
     captureCss: ANCHORED_PANEL_CSS,
     html: () => {
       const fields = [
@@ -656,13 +661,13 @@ export const PANEL_SCENARIOS = [
         <div class="obnotion-column-manager-row" draggable="true" data-obnotion-column-key="${field.key}">
           <span class="obnotion-column-drag" title="Drag to reorder">⋮⋮</span>
           ${reorderControls(i === 0, i === fields.length - 1)}
-          <input type="checkbox" class="obnotion-checkbox obnotion-checkbox-field"${field.visible ? " checked" : ""}>
           <span class="obnotion-column-type" title="${field.type}">
             <span class="obnotion-column-type-icon">${TYPE_ICON[field.type]}</span>
           </span>
           <div class="obnotion-column-name-wrap">
             <span class="obnotion-column-name">${field.label}</span>
           </div>
+          <button type="button" class="obnotion-column-manager-eye">${field.visible ? EYE_ICON : EYE_OFF_ICON}</button>
         </div>`;
       return `
       <div class="obnotion-container">
@@ -700,10 +705,11 @@ export const PANEL_SCENARIOS = [
     ],
     note: "Reached from the board column menu's own \"Manage groups\" row: every group option, "
       + "visible or hidden, on the row markup the column manager already uses (drag handle, "
-      + "checkbox, a colour swatch in the type slot instead of a type icon, name), plus hide-all/"
-      + "show-all above the list and \"Hide empty groups\" below it. Done is hidden here — its "
-      + "toggle sits unchecked rather than removed, so it stays reachable from the same surface "
-      + "that hid it.",
+      + "a colour swatch in the type slot instead of a type icon, name, a trailing eye toggle), "
+      + "plus hide-all/show-all above the list and \"Hide empty groups\" below it (that row keeps "
+      + "its own checkbox — a plain settings toggle, not a per-row visibility control). Done is "
+      + "hidden here — its toggle reads eye-off rather than removed, so it stays reachable from "
+      + "the same surface that hid it.",
     captureCss: ANCHORED_PANEL_CSS,
     html: () => {
       const groups = [
@@ -715,13 +721,13 @@ export const PANEL_SCENARIOS = [
         <div class="obnotion-column-manager-row" draggable="true" data-obnotion-column-key="${group.key}">
           <span class="obnotion-column-drag" title="Drag to reorder">⋮⋮</span>
           ${reorderControls(i === 0, i === groups.length - 1)}
-          <input type="checkbox" class="obnotion-checkbox obnotion-checkbox-field"${group.visible ? " checked" : ""}>
           <span class="obnotion-column-type">
             <span class="obnotion-board-groups-dot status-color-${group.color}"></span>
           </span>
           <div class="obnotion-column-name-wrap">
             <span class="obnotion-column-name">${group.key}</span>
           </div>
+          <button type="button" class="obnotion-column-manager-eye">${group.visible ? EYE_ICON : EYE_OFF_ICON}</button>
         </div>`;
       return `
       <div class="obnotion-container">
@@ -751,20 +757,20 @@ export const PANEL_SCENARIOS = [
     width: 600,
     fixtureOf: "constructed-column-manager",
     sources: ["src/views/column-manager-renderer.ts", "src/views/property-type-icon.ts"],
-    note: "One row per property: drag handle, visibility checkbox, type icon, name — three interactive controls. Wrap, edit and delete live on the edit-property surface the name tap opens, and the shown/hidden partition carries the bulk actions.",
+    note: "One row per property: drag handle, type icon, name, a trailing eye/eye-slash visibility toggle — three interactive controls. Wrap, edit and delete live on the edit-property surface the name tap opens, and the shown/hidden partition carries the bulk actions.",
     captureCss: ANCHORED_PANEL_CSS,
     html: () => {
       const row = (col, { visible = true, wrap = false, isFirst = false, isLast = false } = {}) => `
         <div class="obnotion-column-manager-row" draggable="true">
           <span class="obnotion-column-drag" title="Drag to reorder">⋮⋮</span>
           ${reorderControls(isFirst, isLast)}
-          <input type="checkbox" class="obnotion-checkbox obnotion-checkbox-field"${visible ? " checked" : ""}>
           <span class="obnotion-column-type" title="${col.type}">
             <span class="obnotion-column-type-icon">${TYPE_ICON[col.type]}</span>
           </span>
           <div class="obnotion-column-name-wrap">
             <span class="obnotion-column-name" title="Double-click to edit"${wrap ? ' style="max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"' : ""}>${col.label}</span>
           </div>
+          <button type="button" class="obnotion-column-manager-eye">${visible ? EYE_ICON : EYE_OFF_ICON}</button>
         </div>`;
       return `
       <div class="obnotion-container">

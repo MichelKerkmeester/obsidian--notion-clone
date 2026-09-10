@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/076-sheet-visual-parity/002-properties-sheet-visual-parity"
-    last_updated_at: "2026-09-10T23:10:00Z"
+    last_updated_at: "2026-09-11T00:20:00Z"
     last_updated_by: "295-loop-002-properties-sheet-visual-parity"
-    recent_action: "DEFINE + PLAN: brief, delta, 6 clauses, 13 tasks"
-    next_safe_action: "Execute tasks.md T001 (transcribe ADR-L/M), then T002 lane RED"
+    recent_action: "CREATE landed: T001-T010 done, L1-L6 RED-then-GREEN, gate 28/0, awaiting LAND/JUDGE"
+    next_safe_action: "LAND node rebases and pushes; JUDGE node scores verification.md against ../spec.md §5"
     blockers:
       - "No number may come from a 299x678 reference asset (D3)"
       - "The child does not close until the image judge passes twice on an unchanged tree (D1)"
@@ -75,13 +75,13 @@ to the parent: apply it there first, then resend the parent.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] DEFINE complete: every row of `spec.md` §13 has a target, every reference path resolves, every number ours or `TBD`
-- [ ] Every production surface painting this grammar enumerated and covered
-- [ ] Every lane clause RED-then-GREEN, both numbers recorded
-- [ ] Phone light and dark captures current, and both opened and looked at
+- [x] DEFINE complete: every row of `spec.md` §13 has a target, every reference path resolves, every number ours or `TBD`
+- [x] Every production surface painting this grammar enumerated and covered
+- [x] Every lane clause RED-then-GREEN, both numbers recorded
+- [x] Phone light and dark captures current, and both opened and looked at
 - [ ] Image judge **≥ 14/16, no row at 0** — pass #1
 - [ ] Image judge **≥ 14/16, no row at 0** — pass #2, on an unchanged tree
-- [ ] The `071` clauses this sheet carries re-run unchanged and green
+- [x] The `071` clauses this sheet carries re-run unchanged and green
 - [ ] The operator re-reads the sheet on their own iPhone and reports it aligned — **no agent ticks this row**
 <!-- /ANCHOR:completion -->
 
@@ -105,4 +105,32 @@ contradicting it. **2 Proposed ADRs** (L, M) recorded in `spec.md` §13.13 for `
 §7.19; ADR-M notes this child's own L5 clause addresses `roadmap.md` §7.18 ADR-D's 44px-floor gap.
 `076/001`'s already-landed reference scale, card token and dark-theme invariant are reused rather
 than re-derived (§13.5-§13.7, §13.12). 6 lane clauses (L1-L6), 13 tasks.
+
+### 2026-09-11 — CREATE
+
+T001-T010 landed. The row shell (`property-row.ts`'s `buildCheckboxPropertyRow`) drops its leading
+checkbox for a trailing eye/eye-slash toggle (`onCheckboxClick`/`onCheckboxChange`/`checkboxDisabled`
+renamed to `onToggle`/`stateControlDisabled` since the checkbox-shaped names no longer describe the
+control); the shown/hidden sections and the add-property row gain `076/001`'s settings-card fill,
+radius and margin, scoped to `.obnotion-column-manager.obnotion-mobile-bottom-sheet`; the row gains
+the shared 44px min-height floor in that same scope; the section heading drops its uppercase
+transform. Two new i18n keys (`panel.shownInTable`/`panel.hiddenInTable`) carry the "in table" copy
+rather than reusing `panel.shownSection`/`hiddenSection`, which the record sheet's own hidden-group
+and the board's group-by popover also read — a shared-key edit would have misworded both. All six
+lane clauses ran RED against the reverted producer (`git stash`) and GREEN after: L1 16→0, L2 0/16→
+16/16, L3 N/A on this fixture's viewType (no required column to disable — the opacity/disabled wiring
+is unit-tested instead), L4 0→2 cards, L5 34→48px, L6 flat→carded. The shared row shell reaches
+`board-groups-panel.ts` and `board-card-properties-panel.ts` too (§3); their own lane/render-assertion
+coverage was updated to read the eye toggle instead of a checkbox, and three screenshot fixtures
+(`panel-column-manager`, `panel-board-groups`, `panel-board-card-properties`) had their hand-authored
+row markup updated after the new CSS grid broke their stale checkbox layout into two lines — a real
+regression the DEFINE's "no scenario work owed" finding did not anticipate. `tools/storybook/
+obsidian-stub.mjs` gained a plain `eye` icon entry (only `eye-off` existed) after the first capture
+showed a placeholder diamond in its place. Full local gate: tsc 0, vitest 1617/1617, build 0,
+sheet-grammar/render-assertions/touch-targets/verify-placement/naming-scans all green, `npm run gate`
+28/0. css-lane acquired and released as `076-002-properties-sheet-visual-parity` (28 real movers
+named, 2 one-run jitters restored). The judge has not run; the hidden section and add-row card could
+not be visually confirmed in the constructed capture (the fixture's 16-row list scrolls past the
+viewport before either renders) — confirmed structurally instead via the L4/L6 computed-style
+assertions. See `verification.md` for the self-score and what still differs from the reference.
 <!-- /ANCHOR:log -->

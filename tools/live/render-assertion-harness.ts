@@ -2361,17 +2361,19 @@ function boardCardPropertiesPanelAssertions(container: HTMLElement): AssertionRe
     pass: rows.length === 4,
     detail: `${rows.length} row(s), want 4 (hours, tags, due, status)`,
   });
-  const checkedFor = (key: string) =>
-    panel?.querySelector<HTMLInputElement>(`[data-obnotion-column-key="${key}"] input[type='checkbox']`)?.checked;
+  // The row's visibility control is a trailing eye/eye-slash toggle, not a checkbox, so there is
+  // no `.checked` to read; the stub's `setIcon` stamps the icon name onto `data-icon` instead.
+  const eyeIconFor = (key: string) =>
+    panel?.querySelector<HTMLElement>(`[data-obnotion-column-key="${key}"] .obnotion-column-manager-eye`)?.getAttribute("data-icon");
   results.push({
-    name: "the stored list's hidden field renders its checkbox unchecked",
-    pass: checkedFor("tags") === false,
-    detail: `tags checkbox checked=${checkedFor("tags")}`,
+    name: "the stored list's hidden field renders its eye toggle as eye-off",
+    pass: eyeIconFor("tags") === "eye-off",
+    detail: `tags eye icon=${eyeIconFor("tags")}`,
   });
   results.push({
-    name: "a stored visible field renders its checkbox checked",
-    pass: checkedFor("hours") === true && checkedFor("due") === true,
-    detail: `hours checked=${checkedFor("hours")}, due checked=${checkedFor("due")}`,
+    name: "a stored visible field renders its eye toggle as eye",
+    pass: eyeIconFor("hours") === "eye" && eyeIconFor("due") === "eye",
+    detail: `hours icon=${eyeIconFor("hours")}, due icon=${eyeIconFor("due")}`,
   });
   return results;
 }
@@ -2901,7 +2903,9 @@ export function runRenderAssertions(
         const panel = container.querySelector<HTMLElement>(".obnotion-board-groups-panel");
         const width = panel ? panel.getBoundingClientRect().width : null;
         const rowEls = panel ? Array.from(panel.querySelectorAll(".obnotion-column-manager-row")) : [];
-        const toggleCount = rowEls.filter((row) => row.querySelector('input[type="checkbox"]')).length;
+        // The row's visibility control is a trailing eye/eye-slash toggle, not a leading
+        // checkbox — this shared row shell reaches the Groups panel too.
+        const toggleCount = rowEls.filter((row) => row.querySelector(".obnotion-column-manager-eye")).length;
         results.push({
           name: "the Groups panel opens from the column menu at a width inside the panel role's 292-360px band",
           pass: width !== null && width >= 292 && width <= 360,
@@ -2912,7 +2916,7 @@ export function runRenderAssertions(
         results.push({
           name: "every group row in the Groups panel carries a live visibility toggle",
           pass: rowEls.length > 0 && toggleCount === rowEls.length,
-          detail: `${toggleCount} checkbox(es) across ${rowEls.length} row(s)`,
+          detail: `${toggleCount} eye toggle(s) across ${rowEls.length} row(s)`,
         });
       }
       if (scenario.boardCardFieldsHidden) {

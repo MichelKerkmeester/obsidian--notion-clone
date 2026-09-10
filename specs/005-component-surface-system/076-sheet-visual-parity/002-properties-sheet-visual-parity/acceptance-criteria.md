@@ -18,8 +18,8 @@ contextType: "implementation"
 
 **Packet:** 076-sheet-visual-parity/002-properties-sheet-visual-parity
 **Level:** 2
-**Status:** DEFINE and PLAN complete — CREATE not started
-**Date:** 2026-09-10
+**Status:** DEFINE, PLAN and CREATE complete — awaiting LAND/JUDGE
+**Date:** 2026-09-11
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -29,13 +29,13 @@ contextType: "implementation"
 
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
-| AC-001 | REQ-001 | Given the 299×678 ceiling, When any target is written, Then every numeric cell in §13 is traceable to our own measurement or reads `TBD — needs operator capture` | `spec.md` §13; `plan.md` §1 | Unmet | - |
-| AC-002 | REQ-002 | Given the sheet's grammar, When the surfaces are enumerated, Then every production producer painting it is listed in `spec.md` §3 and covered by the lane | `spec.md` §3; lane output | Unmet | - |
-| AC-003 | REQ-003 | Given each lane clause, When it is added, Then its failing number is recorded before the producer moves and its passing number after | `tasks.md` T003-T008; lane RED/GREEN pair | Unmet | - |
+| AC-001 | REQ-001 | Given the 299×678 ceiling, When any target is written, Then every numeric cell in §13 is traceable to our own measurement or reads `TBD — needs operator capture` | `spec.md` §13; `plan.md` §1 | Met | - |
+| AC-002 | REQ-002 | Given the sheet's grammar, When the surfaces are enumerated, Then every production producer painting it is listed in `spec.md` §3 and covered by the lane | `spec.md` §3; lane output | Met | - |
+| AC-003 | REQ-003 | Given each lane clause, When it is added, Then its failing number is recorded before the producer moves and its passing number after | `tasks.md` T003-T008; lane RED/GREEN pair | Met | - |
 | AC-004 | REQ-004 | Given our phone capture and the reference, When a reviewer scores the eight-row rubric, Then the total is **≥ 14/16** with **no row at 0** | `verification.md`, score table #1 | Unmet | - |
 | AC-005 | REQ-004 | Given an unchanged tree, When the reviewer scores it a second time, Then it passes again at the same thresholds | `verification.md`, score table #2 — **two consecutive passes** | Unmet | - |
-| AC-006 | REQ-005 | Given the change, When recaptured at the phone viewport, Then light and dark are both current and both were opened and looked at | `npm run screenshots:verify` 0 stale; `tasks.md` T009 | Unmet | - |
-| AC-007 | REQ-006 | Given the change, When the `071` clauses this sheet already carries re-run unchanged, Then they still pass | Lane exit 0, same run as AC-003 | Unmet | - |
+| AC-006 | REQ-005 | Given the change, When recaptured at the phone viewport, Then light and dark are both current and both were opened and looked at | `npm run screenshots:verify` 0 stale; `tasks.md` T009 | Met | - |
+| AC-007 | REQ-006 | Given the change, When the `071` clauses this sheet already carries re-run unchanged, Then they still pass | Lane exit 0, same run as AC-003 | Met | - |
 | AC-008 | REQ-007 | Given the redesigned sheet, When the operator re-reads it on their own iPhone, Then they report it aligned | Operator's own device read (D5) — **no agent ticks this row** | Unmet | - |
 
 ### The rubric AC-004 and AC-005 score

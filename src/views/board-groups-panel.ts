@@ -147,8 +147,8 @@ export function renderBoardGroupsRows(
         onMoveDown: () => onReorder(index, index + 1),
       },
       checked: !hidden,
-      onCheckboxChange: (checked) => {
-        if (checked) actions.showGroup(groupField, key);
+      onToggle: (next) => {
+        if (next) actions.showGroup(groupField, key);
         else actions.hideGroup(groupField, key);
       },
       typeClass: "obnotion-column-type",

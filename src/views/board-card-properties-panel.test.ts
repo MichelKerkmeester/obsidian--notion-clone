@@ -203,9 +203,9 @@ describe("renderBoardCardProperties", () => {
     expect(panel.querySelectorAll(".obnotion-column-manager-row")).toHaveLength(3);
     expect(panel.querySelectorAll(".obnotion-column-drag")).toHaveLength(0);
     expect(panel.querySelectorAll(".obnotion-mobile-reorder-controls")).toHaveLength(0);
-    const checkbox = panel.querySelector("[data-obnotion-column-key='hours']")?.querySelector("input");
-    expect(checkbox?.disabled).toBe(true);
-    checkbox?.onchange?.();
+    const eye = panel.querySelector("[data-obnotion-column-key='hours']")?.querySelector(".obnotion-column-manager-eye");
+    expect(eye?.disabled).toBe(true);
+    eye?.onclick?.();
     expect(onChange).not.toHaveBeenCalled();
   });
 

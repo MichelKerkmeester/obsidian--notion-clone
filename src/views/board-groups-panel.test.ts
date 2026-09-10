@@ -161,7 +161,7 @@ describe("resolveBoardGroupsPanelKeys", () => {
 });
 
 describe("renderBoardGroupsRows", () => {
-  it("renders one row per key with a live visibility toggle, checked for a visible group and unchecked for a hidden one", () => {
+  it("renders one row per key with zero checkboxes and a trailing eye toggle per row", () => {
     const body = new MockElement("div");
     const config = baseConfig();
     const keys = ["To Do", "Doing", "Done"];
@@ -174,11 +174,12 @@ describe("renderBoardGroupsRows", () => {
 
     const rows = body.querySelectorAll(".obnotion-column-manager-row");
     expect(rows).toHaveLength(3);
-    const checkboxes = body.querySelectorAll("input");
-    expect(checkboxes.map((box) => box.checked)).toEqual([true, true, false]);
+    expect(body.querySelectorAll("input")).toHaveLength(0);
+    const eyes = body.querySelectorAll(".obnotion-column-manager-eye");
+    expect(eyes).toHaveLength(3);
   });
 
-  it("fires showGroup when an unchecked row is checked and hideGroup when a checked row is unchecked", () => {
+  it("fires showGroup on a hidden row's toggle and hideGroup on a visible row's toggle", () => {
     const body = new MockElement("div");
     const config = baseConfig();
     const hideGroup = vi.fn();
@@ -189,13 +190,11 @@ describe("renderBoardGroupsRows", () => {
       showGroup,
     }, vi.fn());
 
-    const [visibleCheckbox, hiddenCheckbox] = body.querySelectorAll("input");
-    hiddenCheckbox.checked = true;
-    hiddenCheckbox.onchange?.();
+    const [visibleEye, hiddenEye] = body.querySelectorAll(".obnotion-column-manager-eye");
+    hiddenEye.onclick?.();
     expect(showGroup).toHaveBeenCalledWith("status", "Done");
 
-    visibleCheckbox.checked = false;
-    visibleCheckbox.onchange?.();
+    visibleEye.onclick?.();
     expect(hideGroup).toHaveBeenCalledWith("status", "To Do");
   });
 

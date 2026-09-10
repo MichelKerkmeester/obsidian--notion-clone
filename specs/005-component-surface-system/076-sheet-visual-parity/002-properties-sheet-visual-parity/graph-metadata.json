@@ -46,17 +46,21 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "implementation-summary.md",
       "src/views/column-manager-renderer.ts",
       "src/views/record-surface/property-row.ts",
       "src/views/checkbox.ts",
       "styles.css",
       "src/views/board-groups-panel.ts",
-      "tools/live/sheet-grammar.mjs",
-      "screenshots/anytype/mobile/sheets/anytype-mobile-sheet-object-properties-settings-light.png",
-      "tools/screenshots/constructed-scenarios.mjs",
-      "tools/lane/check-lane.mjs",
+      "src/views/board-card-properties-panel.ts",
       "src/i18n.ts",
-      "tools/screenshots/capture.mjs"
+      "tools/live/sheet-grammar.mjs",
+      "tools/live/render-assertion-harness.ts",
+      "tools/storybook/obsidian-stub.mjs",
+      "tools/screenshots/scenarios/panels.mjs",
+      "src/views/record-surface/property-row.test.ts",
+      "src/views/column-manager-renderer.test.ts",
+      "src/views/board-groups-panel.test.ts"
     ],
     "entities": [
       {
@@ -90,6 +94,12 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "column-manager-renderer.ts",
         "kind": "code",
         "path": "src/views/column-manager-renderer.ts",
@@ -120,27 +130,9 @@
         "source": "derived"
       },
       {
-        "name": "sheet-grammar.mjs",
-        "kind": "file",
-        "path": "tools/live/sheet-grammar.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "anytype-mobile-sheet-object-properties-settings-light.png",
-        "kind": "file",
-        "path": "screenshots/anytype/mobile/sheets/anytype-mobile-sheet-object-properties-settings-light.png",
-        "source": "derived"
-      },
-      {
-        "name": "constructed-scenarios.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/constructed-scenarios.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "check-lane.mjs",
-        "kind": "file",
-        "path": "tools/lane/check-lane.mjs",
+        "name": "board-card-properties-panel.ts",
+        "kind": "code",
+        "path": "src/views/board-card-properties-panel.ts",
         "source": "derived"
       },
       {
@@ -150,9 +142,45 @@
         "source": "derived"
       },
       {
-        "name": "capture.mjs",
+        "name": "sheet-grammar.mjs",
         "kind": "file",
-        "path": "tools/screenshots/capture.mjs",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "obsidian-stub.mjs",
+        "kind": "file",
+        "path": "tools/storybook/obsidian-stub.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "panels.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/panels.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "property-row.test.ts",
+        "kind": "test",
+        "path": "src/views/record-surface/property-row.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-manager-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/column-manager-renderer.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-groups-panel.test.ts",
+        "kind": "test",
+        "path": "src/views/board-groups-panel.test.ts",
         "source": "derived"
       },
       {
@@ -178,35 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Parent Spec",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Parent Packet",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Properties Sheet",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Every Properties row still renders as up-arrow, down-arrow, a filled blue checkbox, a type icon and a label, on a flat canvas with zero card grouping; Notion's row is a drag affordance, a type icon, a label and a trailing eye, grouped into inset cards",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-10T21:03:24.711Z",
+    "last_save_at": "2026-09-10T23:32:17.514Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,14 +218,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:2ee90502c23a2e9f79bc53d5010b5e1e12b3b97694ce919e7ac97157e2a3ce09",
+    "source_fingerprint": "sha256:482e2d47f7f6e36b045a6acf84945544676d8b5084926f25a08d00a6b8718f76",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "e12ae54a67f8e6b3d2c6572d275621d3a6f1f5bfa50f156271880d80231c2dba",
       "plan.md": "f835a3c1064c92e0d7e7fddb4306e45e4f876a6ea2aae456938822d5e6c35d62",
-      "tasks.md": "b508925f3779edd123e2dec8731325e67ba1ac46fd4e7f2fd8389889f7bbb4e4"
+      "tasks.md": "f80dd500a7ed9e968b8f9af3fd67b3967fa194b0f43a702b384ce60c9b159f68",
+      "implementation-summary.md": "ee28b3644a534da5a5903e86a40029f0685febaaca9ba45614bb9d28af985052"
     },
     "last_active_at": null
   }

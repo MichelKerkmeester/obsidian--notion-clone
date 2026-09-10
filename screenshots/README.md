@@ -945,7 +945,7 @@ Sources: `src/views/toolbar-renderer.ts`, `src/views/popover-position.ts`, `src/
 
 ### Board card properties panel
 
-The Properties section of a board view's settings panel: fixed readonly Cover and Title rows above one reorderable row per field. Reuses the column manager's row markup (drag handle, checkbox, type icon, name) but drops its wrap/edit/delete actions, which this list has no equivalent of. Payment is hidden by the operator; Billing — the board's own group-by field — is not in the stored list either, so it is appended last, unchecked, rather than removed from the panel entirely.
+The Properties section of a board view's settings panel: fixed readonly Cover and Title rows above one reorderable row per field. Reuses the column manager's row markup (drag handle, type icon, name, a trailing eye toggle) but drops its wrap/edit/delete actions, which this list has no equivalent of. Payment is hidden by the operator; Billing — the board's own group-by field — is not in the stored list either, so it is appended last, hidden, rather than removed from the panel entirely.
 
 | dark | light |
 |---|---|
@@ -955,7 +955,7 @@ Sources: `src/views/board-card-properties-panel.ts`, `src/views/view-config-pane
 
 ### Board Groups panel
 
-Reached from the board column menu's own "Manage groups" row: every group option, visible or hidden, on the row markup the column manager already uses (drag handle, checkbox, a colour swatch in the type slot instead of a type icon, name), plus hide-all/show-all above the list and "Hide empty groups" below it. Done is hidden here — its toggle sits unchecked rather than removed, so it stays reachable from the same surface that hid it.
+Reached from the board column menu's own "Manage groups" row: every group option, visible or hidden, on the row markup the column manager already uses (drag handle, a colour swatch in the type slot instead of a type icon, name, a trailing eye toggle), plus hide-all/show-all above the list and "Hide empty groups" below it (that row keeps its own checkbox — a plain settings toggle, not a per-row visibility control). Done is hidden here — its toggle reads eye-off rather than removed, so it stays reachable from the same surface that hid it.
 
 | dark | light |
 |---|---|
@@ -965,7 +965,7 @@ Sources: `src/views/board-groups-panel.ts`, `src/views/record-surface/property-r
 
 ### Column manager
 
-One row per property: drag handle, visibility checkbox, type icon, name — three interactive controls. Wrap, edit and delete live on the edit-property surface the name tap opens, and the shown/hidden partition carries the bulk actions.
+One row per property: drag handle, type icon, name, a trailing eye/eye-slash visibility toggle — three interactive controls. Wrap, edit and delete live on the edit-property surface the name tap opens, and the shown/hidden partition carries the bulk actions.
 
 | dark | light |
 |---|---|

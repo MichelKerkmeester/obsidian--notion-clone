@@ -650,6 +650,26 @@ tree: vitest **1617/1617**, tsc 0, build 0, gate **28 green, 0 red** (exit 0), s
 scan-failing-values 0, RESULT: **PASSED** on 012, 076 and 005 --strict (005 needed one scoped
 backfill after the crossing left a SOURCE_FINGERPRINT_MISMATCH; failed []). Push attempt 1 rejected
 (the cut landed meanwhile), attempt 2 landed **5662ec30** on `origin/main`, pushed.
+### 2026-09-11 ~00:20, 076/002 Properties sheet CREATE landed — worktree `295-loop-002-properties-sheet-visual-parity`
+
+**CREATE node of the loop graph, T001-T010.** Row shell: leading checkbox → trailing eye/eye-slash
+toggle (`property-row.ts`); shown/hidden sections and the add-property row gain `076/001`'s
+settings-card fill/radius/margin, scoped to the phone sheet; row gains the shared 44px min-height
+floor; section heading drops uppercase, gains "in table" copy via two NEW i18n keys (not the shared
+`panel.shownSection`/`hiddenSection`, which the record sheet and the board's group-by popover also
+read). 6 lane clauses RED-then-GREEN (`git stash`-verified): L1 16→0, L2 0/16→16/16, L3 N/A on this
+fixture's viewType, L4 0→2 cards, L5 34→48px, L6 flat→carded. Shared row shell also reaches
+`board-groups-panel.ts`/`board-card-properties-panel.ts`; their lane/render-assertion coverage and
+three stale screenshot fixtures were brought current in the same change (the new CSS grid had broken
+their unedited checkbox markup into two lines). Added a missing `eye` icon to
+`tools/storybook/obsidian-stub.mjs` (only `eye-off` existed). Full local gate: tsc 0, vitest
+1617/1617, build 0, `npm run gate` 28/0; css-lane acquired+released as
+`076-002-properties-sheet-visual-parity` (28 real movers named, 2 one-run jitters restored); validate
+002 + 076 (each refreshed by a scoped backfill) + 005 track all PASSED --strict. **Judge has not
+run.** CREATE-node self-score in `002/verification.md`: 13/16 — the shortfall is `076/001`'s own open
+dark-theme card-contrast defect (ADR-K), not a `076/002` regression. Also removed a stray untracked
+`specs/005-component-surface-system/.handover.md` left by an earlier read-only attempt at this leg.
+Committed, not pushed; LAND/JUDGE run next.
 
 ### 2026-09-10 ~23:45, 074 testbed-generator folder ruling LANDED+VERIFIED (2ecaa2af) — worktree `291-testbed-generator`
 

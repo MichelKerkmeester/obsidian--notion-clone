@@ -1,6 +1,6 @@
 {
-  "holder": "012-board-card-fields",
-  "baselineHash": "4b0cdd3a637f",
+  "holder": "076-002-properties-sheet-visual-parity",
+  "baselineHash": "887e9e3b3449",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -7014,6 +7014,57 @@
     },
     {
       "event": "acquire",
+      "phase": "076-002-properties-sheet-visual-parity",
+      "at": "2026-09-10T23:20:00Z",
+      "hash": "2c86ecdbf16c",
+      "note": "Confirmed no other child holds the lane (015 released clean at this same hash). Acquiring for 076/002: the checkbox-to-eye row shell, the shown/hidden section cards, the add-property terminal card, and the 44px row-height token swap."
+    },
+    {
+      "event": "edit",
+      "phase": "076-002-properties-sheet-visual-parity",
+      "at": "2026-09-10T23:20:00Z",
+      "hash": "6a52f5dce3f8",
+      "note": "Properties sheet visual parity (076/002): .obnotion-column-manager-row grid loses its checkbox track and gains a trailing eye/eye-slash track; .obnotion-column-manager-section and .obnotion-column-manager-add-row gain the settings-card fill/radius/margin (076/001s token, reused verbatim); the row-to-add-row hairline is dropped where a card now sits there instead; .obnotion-column-manager-row gains the 44px min-height floor; .obnotion-column-manager-eye is new (disabled state at 0.5 opacity, 44px hit box on the phone sheet); the shown/hidden section heading drops its uppercase transform."
+    },
+    {
+      "event": "release",
+      "phase": "076-002-properties-sheet-visual-parity",
+      "at": "2026-09-11T00:15:00Z",
+      "hash": "6a52f5dce3f8",
+      "reviewed": [
+        "screenshots/notion-clone/panels/constructed-board-groups-panel-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-board-groups-panel-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-board-groups-panel-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-board-groups-panel-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-replaced-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-depth3-property-type-picker-replaced-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-confirm-stacked-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-property-editor-stacked-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-property-editor-stacked-mobile-light.png",
+        "screenshots/notion-clone/panels/panel-board-card-properties-desktop-dark.png",
+        "screenshots/notion-clone/panels/panel-board-card-properties-desktop-light.png",
+        "screenshots/notion-clone/panels/panel-board-card-properties-mobile-dark.png",
+        "screenshots/notion-clone/panels/panel-board-card-properties-mobile-light.png",
+        "screenshots/notion-clone/panels/panel-board-groups-desktop-dark.png",
+        "screenshots/notion-clone/panels/panel-board-groups-desktop-light.png",
+        "screenshots/notion-clone/panels/panel-board-groups-mobile-dark.png",
+        "screenshots/notion-clone/panels/panel-board-groups-mobile-light.png",
+        "screenshots/notion-clone/panels/panel-column-manager-desktop-dark.png",
+        "screenshots/notion-clone/panels/panel-column-manager-desktop-light.png",
+        "screenshots/notion-clone/panels/panel-column-manager-mobile-dark.png",
+        "screenshots/notion-clone/panels/panel-column-manager-mobile-light.png"
+      ],
+      "note": "Recaptured three times at this edit's stylesheet (npm run screenshots </dev/null, 482 entries, exit 0 each) and judged by decoded pixel delta against the committed blobs. 28 real movers, all traced to the checkbox-to-eye row shell and the new section/add-row cards: the two judged surfaces (constructed-column-manager, constructed-board-groups-panel) plus the shared row shell's other consumers this child does not own the visual redesign of (panel-board-card-properties, panel-board-groups, panel-column-manager fixtures; constructed-depth3-property-type-picker(-replaced); constructed-modal-sheet-confirm-stacked; constructed-modal-sheet-property-editor-stacked, all of which stack the column-manager sheet underneath their own top layer). Two one-run jitters restored to committed bytes: board-mobile-desktop-dark and board-view-desktop-dark, both under the shared ≤12px/one-run threshold, pixelHash/layoutHash unmoved. evidence 16/16 fresh after 11 stale writers were re-run; vitest 1617/1617; sheet-grammar's new L1-L6 clauses and the updated 071 divider/row-model clauses all RED before the producer moved and GREEN after (git-stash-verified); the full gate re-run after this triplet lands."
+    },
+    {
+      "event": "acquire",
       "phase": "012-board-card-fields",
       "at": "2026-09-10T21:39:09Z",
       "hash": "ae430699765b",
@@ -7214,5 +7265,5 @@
     "067-sheet-family-remediation: seventeen captures on this lane still show the surface as it looked BEFORE the depth-cap fix at 173f7d3a. Found by 062's landing verifier, which recaptured on the merged tree and then measured decoded pixels rather than trusting pixelHash: panel-record-detail-sheet-body-empty-desktop-light moves 46,779 pixels at a max channel delta of 214, its dark pair 46,752 at 209, constructed-chart-toolbar-options-mobile-dark and constructed-column-manager-mobile-dark about 260,800 each at 45, and eleven more record-detail-sheet, modal-sheet-property-editor, depth3-dropdown and owned-menu-sheet captures between 10,548 and 42,211 pixels at 46 to 78. Every one of them hashes IDENTICALLY, which is why 173f7d3a's own recapture read them as byte-only re-encodes and restored them. pixelHash averages a 16x16 grid into 32 buckets, so any change confined to a narrow band or a small region moves a cell's average by less than one bucket and hashes the same - 062 hit the identical trap on its frozen-column shadow and fixed it by measuring pixels. Reproduced with 067's OWN stylesheet in the tree (identical counts), so this is 067's debt and not 062's: left restored here rather than recommitted, because reviewing another lane's surface is a review this packet cannot honestly sign. 067 owes a recapture measured by decoded pixel delta, and a read of each of the seventeen."
   ],
   "baselineCommit": "dbb5e7cab7325518c9b3d00f995d41c9041a5e84",
-  "acquiredAt": "2026-09-11T02:17:00Z"
+  "acquiredAt": "2026-09-10T23:20:00Z"
 }

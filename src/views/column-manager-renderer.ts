@@ -112,19 +112,14 @@ export class ColumnManagerRenderer {
     // reuse the same four strings); the properties sheet — whose whole job is showing and hiding
     // properties — is where a reader looks for it. A required column (the title field, a board's
     // group field) counts as shown no matter what the hidden set says, because its checkbox is
-    // disabled checked. The hidden section draws only when something is hidden — an empty
-    // "nothing is hidden" heading is a header over blank space — so an all-shown sheet keeps the
-    // flat list it has always rendered, hairlines included.
+    // disabled checked. Both states collect onto a card now, matching the reference: nothing
+    // hidden draws one undivided card with no heading; anything hidden draws two, each headed.
     const isShown = (col: ColumnDef): boolean =>
       Boolean(this.getRequiredColumnReason(config, state, col)) || !state.hiddenColumns.has(col.key);
     const hiddenColumns = columns.filter((col) => !isShown(col));
-    if (hiddenColumns.length === 0) {
-      columns.forEach((col, index) => {
-        rowsByKey.set(col.key, this.renderColumnRow(panel, col, config, state, actions, columns, index, columns.length));
-      });
-    } else {
-      const renderSection = (title: string, bulkLabel: string, sectionColumns: ColumnDef[], onBulk: () => void): void => {
-        const section = panel.createDiv({ cls: "obnotion-column-manager-section" });
+    const renderSection = (title: string | null, bulkLabel: string | null, sectionColumns: ColumnDef[], onBulk: (() => void) | null): void => {
+      const section = panel.createDiv({ cls: "obnotion-column-manager-section" });
+      if (title !== null && bulkLabel !== null && onBulk !== null) {
         const header = section.createDiv({ cls: "obnotion-column-manager-section-header" });
         header.createSpan({ cls: "obnotion-column-manager-section-title", text: title });
         const bulk = header.createEl("button", {
@@ -137,18 +132,22 @@ export class ColumnManagerRenderer {
           event.stopPropagation();
           onBulk();
         };
-        sectionColumns.forEach((col, index) => {
-          rowsByKey.set(col.key, this.renderColumnRow(section, col, config, state, actions, columns, index, columns.length));
-        });
-      };
+      }
+      sectionColumns.forEach((col, index) => {
+        rowsByKey.set(col.key, this.renderColumnRow(section, col, config, state, actions, columns, index, columns.length));
+      });
+    };
+    if (hiddenColumns.length === 0) {
+      renderSection(null, null, columns, null);
+    } else {
       // The bulk action lives on the section header it governs, where the old header's master
       // checkbox sat. The range-selection anchor follows the same rule that checkbox set: hiding
       // everything drops the anchor, showing everything parks it on the last selectable key.
-      renderSection(t("panel.shownSection"), t("panel.hideAllProperties"), columns.filter((col) => isShown(col)), () => {
+      renderSection(t("panel.shownInTable"), t("panel.hideAllProperties"), columns.filter((col) => isShown(col)), () => {
         actions.setAllColumnsVisible(false);
         this.lastSelectedColumnVisibilityKey = null;
       });
-      renderSection(t("panel.hiddenSection"), t("panel.showAllProperties"), hiddenColumns, () => {
+      renderSection(t("panel.hiddenInTable"), t("panel.showAllProperties"), hiddenColumns, () => {
         actions.setAllColumnsVisible(true);
         const selectableKeys = this.getColumnVisibilityKeys(columns, config, state);
         this.lastSelectedColumnVisibilityKey = selectableKeys[selectableKeys.length - 1] || null;
@@ -382,8 +381,8 @@ export class ColumnManagerRenderer {
         onMoveDown: () => actions.moveColumn(col.key, 1),
       },
       checked,
-      checkboxDisabled: Boolean(requiredReason),
-      onCheckboxClick: (event) => {
+      stateControlDisabled: Boolean(requiredReason),
+      onToggle: (next, event) => {
         const selectedKeys = new Set(columns.filter((candidate) => !state.hiddenColumns.has(candidate.key)).map((candidate) => candidate.key));
         if (requiredReason) selectedKeys.add(col.key);
         this.lastSelectedColumnVisibilityKey = applyRangeSelection({
@@ -391,7 +390,7 @@ export class ColumnManagerRenderer {
           selectedIds: selectedKeys,
           anchorId: this.lastSelectedColumnVisibilityKey,
           targetId: col.key,
-          selected: handle.checkbox.checked,
+          selected: next,
           range: event.shiftKey,
         });
         this.syncColumnVisibility(columns, config, state, actions, selectedKeys);
