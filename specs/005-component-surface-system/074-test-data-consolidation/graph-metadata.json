@@ -211,7 +211,7 @@
     ],
     "causal_summary": "The operator wants less test data overall: one big testbed database with an overview and every view type/column type/grouping/filter/sort/formula/relation the harnesses need, alongside the operator's own Finance databases (Reports/Income/Expenses/Sales, imported from Notion) as a second, real-world dataset — rather than the current spread of separate fixture vaults, screenshot fixtures, story fixtures and an operator-maintained Testbed folder that do not share a single source of truth",
     "created_at": "2026-09-08T06:23:37Z",
-    "last_save_at": "2026-09-09T21:14:02.514Z",
+    "last_save_at": "2026-09-10T04:11:17.488Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -223,7 +223,7 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a817e874bfcaedc94518295bda14fa1b1a87bbea183aed904f1175b25a0e0364",
+    "source_fingerprint": "sha256:ecc15dce01209e5a777952ddf3137f326b01af9a2ad89a17275bb961bf63f91a",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b5153eb29502a833e6520db42280438188aea2ff655fe340f27415c5a9978fea",

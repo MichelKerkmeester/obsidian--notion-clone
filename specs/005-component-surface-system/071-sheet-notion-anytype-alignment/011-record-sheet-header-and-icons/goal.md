@@ -12,7 +12,7 @@ _memory:
     last_updated_at: "2026-09-10T01:05:00Z"
     last_updated_by: "277-record-sheet-header"
     recent_action: "Implemented T001-T009; record family on shared header; 21/21 icons; 006 green; gate 28-0"
-    next_safe_action: "Operator device read (D3) closes the packet; then 008, 009, 012-014 in the audit's order"
+    next_safe_action: "Operator device re-read (D3); every 071 child (008-014) has now landed"
     blockers: []
     key_files:
       - "spec.md"

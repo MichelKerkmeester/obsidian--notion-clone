@@ -28,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "board-touch-drag-groups-session"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 89
     open_questions: []
     answered_questions:
       - "Whether cross-group drag needs a new BoardRendererActions member — no: it reuses moveRowWithGroupUpdatesAndPosition/updateGroup exactly as the desktop dragstart/dragover/drop path already does"

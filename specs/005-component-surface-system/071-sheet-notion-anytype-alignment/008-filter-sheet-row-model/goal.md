@@ -12,7 +12,7 @@ _memory:
     last_updated_at: "2026-09-09T23:21:41Z"
     last_updated_by: "071-008-filter-sheet-row-model"
     recent_action: "Stacked filter rows, labelled actions; lane/gate/screenshots green"
-    next_safe_action: "Operator device re-read (D3); 010/009/011-014 remain to implement"
+    next_safe_action: "Operator device re-read (D3); every 071 child (008-014) has now landed"
     blockers: []
     key_files:
       - "spec.md"

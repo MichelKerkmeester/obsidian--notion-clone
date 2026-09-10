@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "074-test-data-consolidation-scaffold"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 80
     open_questions: []
     answered_questions:
       - "Surviving view types: table, board, calendar, timeline, chart (decision-record ADR-0001)"

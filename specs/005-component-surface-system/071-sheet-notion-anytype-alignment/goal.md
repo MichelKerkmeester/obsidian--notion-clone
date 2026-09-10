@@ -9,11 +9,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/071-sheet-notion-anytype-alignment"
-    last_updated_at: "2026-09-09T23:20:00Z"
-    last_updated_by: "272-sheet-notion-audit"
-    recent_action: "Audited every phone sheet vs Notion; scaffolded children 008-014"
-    next_safe_action: "Execute 010/tasks.md, then 008, 009, 011-014; 007 awaits its operator capture"
-    blockers: []
+    last_updated_at: "2026-09-10T06:30:00Z"
+    last_updated_by: "282-goal-refresh-0038"
+    recent_action: "All seven audit children (008-014) landed; 007's card metrics stay provisional"
+    next_safe_action: "Operator device reads (D3) across 007-014; 007's T001 capture"
+    blockers:
+      - "007's four card metrics stay provisional pending T001's operator capture"
     key_files:
       - "spec.md"
     session_dedup:
@@ -114,7 +115,7 @@ string, not these files.
 | ALL SIX CHILDREN LANDED — parent 4/4 | Done | This refresh, 2026-09-09: criterion 4's own parent-level run confirms no regression on the merged tree (`97395196`): `sheet-grammar.mjs` PASS exit 0, `npx vitest run` PASS exit 0 (157 files / 1581 tests) |
 | 007-settings-sheet-strict-alignment | LANDED, landing-verified | Implementation landed in `worktrees/269-settings-sheet-cards` as `9b6daa3e`+`f2e993e6`, rebased onto origin/main (069/075-merged) as `a56020f7`+`48dbd5d9`; goal 4/5 (the fifth criterion is the operator's own device read, D3). Continuation verification: sheet-grammar card clause RED (0 card containers, exit 1) → GREEN (2/2 cards, radius ≥8px, backgrounds distinct, gap ≥8px, headings above) — reproven by producer mutation (card-wrapper revert → 0 cards, exit 1) and unit mutation (card-background declaration → exactly 1 of 7 fails); vitest 1586/1586, tsc 0, build 0, screenshots ×2 480/480 (0 movers both runs), evidence 16/16 fresh, gate 28/0 (069's lane the 28th), validate --strict PASSED ×3; the four card metrics stay provisional until T001's operator capture |
 | 010-sheet-copy-touch-idiom | LANDED, awaiting the operator's device read (D3) | Implementation landed 2026-09-10 in worktree `273-sheet-copy-idiom`: 52 lines in `src/i18n.ts` + the sheet-copy clause in `tools/live/sheet-grammar.mjs` + `src/i18n.test.ts` created. Lane RED 14 gesture rows + 2 parity rows (failing set exactly the four keys, none of the seven) → GREEN 0 of 237 derived sheet-reachable keys, 2349 PASS / 0 FAIL; unit revert-proof 1 failed → 11/11; vitest 1598/1598, tsc 0, build 0, screenshots ×2 480/480 (8 two-run movers kept: the sort empty state's 518×23px hint band ×4, the 12–14×4px `Custom property…` ellipsis box ×4; 2 one-run 1–4px@Δ1 jitters restored with their manifest bytes), evidence 16/16 fresh, gate 28/0, scans 0. The property-label default (Property/属性/屬性 = `filter.field`) is recorded as the packet's D5. Open: the filter's empty state has no capture scenario (its before/after is the lane's printed `t()` values), and the operator's device read |
-| **Phases 008-014 scaffolded from `sheet-notion-audit.md`** | Scaffold only — 010 landed | Operator ruling 2026-09-09 ~22:30 (D3, verbatim): *"Check more sheets align closer to notion, input, content, wise etc"* / *"Ui improvement is focus here"*. `sheet-notion-audit.md` audits every shipped phone sheet at the level of inputs and content — 16 P1, 26 P2, 13 P3 across sixteen surfaces — and opens seven children. Each validates `RESULT: PASSED`. Implementation order `010` → `008` → `009` → `011` → `012` → `013` → `014`. 010 LANDED 2026-09-10 (its own row above, landed-awaiting-device); 008, 009 and 011–014 are still scaffold-only |
+| **Phases 008-014 scaffolded from `sheet-notion-audit.md`** | All seven landed, awaiting device | Operator ruling 2026-09-09 ~22:30 (D3, verbatim): *"Check more sheets align closer to notion, input, content, wise etc"* / *"Ui improvement is focus here"*. `sheet-notion-audit.md` audits every shipped phone sheet at the level of inputs and content — 16 P1, 26 P2, 13 P3 across sixteen surfaces — and opens seven children. Each validates `RESULT: PASSED`. Implementation order `010` → `008` → `009` → `011` → `012` → `013` → `014`, all landed 2026-09-10: `010` (`48802783`, goal 5/7 — the two open rows are the filter-empty-state capture strand and the operator's device read), `008` (`f64c6398`, goal 6/7), `009` (`892cc6e9`, goal 7/8), `011` (`76aafa76`, goal 6/7), `012` (`22a560fc`, goal 7/8), `013` (`647a400d`, goal 7/8) and `014` (`eb0a2705`, goal 5/6). Every one of the seven closes on the operator's own device read (D3), which no agent ticks; `007`'s four card metrics stay provisional pending T001's operator capture |
 
 ### Deviations and findings
 

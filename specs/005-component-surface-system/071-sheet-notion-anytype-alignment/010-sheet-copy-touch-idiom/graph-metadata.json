@@ -199,7 +199,7 @@
     ],
     "causal_summary": "A phone user opening an empty Filter sheet is told to click something below",
     "created_at": "2026-09-09T21:01:05.656Z",
-    "last_save_at": "2026-09-09T22:20:51.298Z",
+    "last_save_at": "2026-09-10T04:11:17.746Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -210,7 +210,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:9b563966b434dbabcb7bbfbd11b69a917bf8f1517862b0fe102c13583f3e4e78",
+    "source_fingerprint": "sha256:558110b6dfe9aa80ad03d744f84bd268b78927cc83000b6e313e491e31bb50ff",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "a7970b63119acb2ed3aeeefbaae23c9ab531ac4a015734fa8817f3ea0ef8c804",

@@ -10,12 +10,12 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T03:43:00Z"
-    last_updated_by: "280-sheet-polish-verify"
-    recent_action: "Landing-verified 071/014 (071's last child); 6194c403 on main, gate 28/0 twice"
-    next_safe_action: "Operator device read (D3) closes 013+014; every 071 child is now landed"
+    last_updated_at: "2026-09-10T06:45:00Z"
+    last_updated_by: "282-goal-refresh-0038"
+    recent_action: "Goal refresh: reconciled 071/007-014, 075, 069, 045, 074 against 0.0.38 landers"
+    next_safe_action: "Operator device rows on 0.0.38 (goal-body.md ORDER OF WORK §1); no agent work remains"
     blockers:
-      - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
+      - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
@@ -425,6 +425,31 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-10 ~06:45, closing goal refresh — worktree `282-goal-refresh-0038`, reconciled against 0.0.38
+
+**Every child goal.md touched by tonight's landers (071/005, 071/007-014, 075, 069, 045, 074) was
+re-read against the evidence its own lander entries already carry; every checkbox already matched
+the landed evidence, so no tick moved.** What was stale and is now fixed: the parent tables and
+continuity fields that summarize those children. `071/goal.md`'s own Progress table gained the
+seven audit children's landed SHAs (008 `f64c6398`, 009 `892cc6e9`, 010 `48802783`, 011 `76aafa76`,
+012 `22a560fc`, 013 `647a400d`, 014 `eb0a2705`); its parent 4/4 figure is unaffected, per D3.
+`005/goal.md`'s phase-subgoal table corrected four stale fractions to match each child's own
+`goal.md` tally: `045` 0/6 → **1/7** (the field-names criterion, `f055e340`), `069` 7/8 →
+**8/9** (the real-touch scroll-takeover fix, `63fdcc5e`), `074` 3/4 → **4/5** (the one-database
+view-set ruling, `5cd44328`), `075` 4/5 → **5/6** (the vertical-scroll lock, `d7673e22`); `071`
+stays **4/4**. `roadmap.md` §5.A was already current for every touched packet (a prior lander kept
+it in sync); §4 row 87's own state line and its stale "013-014 not implemented" clause were fixed
+to read all seven landed, awaiting device; §6A gained one decision row recording the operator's
+2026-09-09 ~22:30 delegation ruling verbatim (the sheet-audit widening, the Opus-under-claude2 →
+Luna-via-codex → GLM-via-cli-pi fallback ladder, and the UI-improvement-is-focus framing). Scoped
+graph-metadata backfilled per touched packet then the 005 parent; `validate.sh --strict` **RESULT:
+PASSED** on all four top-level parents (005, 006, 007, 008) and every touched child; `npm run gate`
+**28 green, 0 red**, exit 0; `node tools/live/replay.mjs` **28/28 held, reversed 0**; `npx vitest
+run` **160 files / 1613 tests passed**, exit 0. `goal-body.md` (the GLM resume prompt) rewritten
+under its 4000-char cap (3998) with the fallback ladder, the 0.0.38 STATE and the corrected ORDER
+OF WORK. No agent-doable residual remains beyond `071/008`'s ADR-001 group-span question, which
+stays Proposed pending an operator frame-shape ruling.
 
 ### 2026-09-10 ~05:43, `071/014-sheet-polish` LANDING-VERIFIED — landed on `origin/main` as `6194c403`, worktree `280-sheet-polish`
 

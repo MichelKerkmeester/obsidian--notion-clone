@@ -12,7 +12,7 @@ _memory:
     last_updated_at: "2026-09-09T22:15:00Z"
     last_updated_by: "implement-010-sheet-copy-touch-idiom"
     recent_action: "Landed the copy: gesture count 0/237, one spelling, one property word; gate 28/0"
-    next_safe_action: "Execute 008/tasks.md; add the missing filter-empty scenario"
+    next_safe_action: "Operator device re-read (D3); every 071 child (008-014) has now landed"
     blockers: []
     key_files:
       - "spec.md"

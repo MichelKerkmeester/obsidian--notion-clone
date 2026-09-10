@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-045-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 14
     open_questions:
       - "Does the control reach the reference card's five semantic slots"
     answered_questions:

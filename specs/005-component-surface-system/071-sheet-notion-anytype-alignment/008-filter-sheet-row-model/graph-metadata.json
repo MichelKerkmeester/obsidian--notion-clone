@@ -205,7 +205,7 @@
     ],
     "causal_summary": "The Filter sheet passes every assertion it has and is unreadable",
     "created_at": "2026-09-09T20:48:29.770Z",
-    "last_save_at": "2026-09-09T23:44:46.234Z",
+    "last_save_at": "2026-09-10T04:11:17.666Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,7 +217,7 @@
       "decision-record.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:6f518b766d17fef2299abd8ef2be56da8b12329ce43aaa86ecf84f77b7a73415",
+    "source_fingerprint": "sha256:416abee6855b9f81a4124bed785488f9bc5f49d86df6440141c9958f77e605ac",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "ec8e7dad50bbeda21ca916554a23554c982b7529eb87307a6ca0eb15c439af25",
