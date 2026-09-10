@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T02:31:39Z"
-    last_updated_by: "277-record-sheet-header-verify"
-    recent_action: "Landing-verified 071/011 twice-rebased; 86f1420e on main, gate 28/0, 2369 PASS"
-    next_safe_action: "Operator device read (D3) closes 013; 071/014-sheet-polish is the last 071 child"
+    last_updated_at: "2026-09-10T03:43:00Z"
+    last_updated_by: "280-sheet-polish-verify"
+    recent_action: "Landing-verified 071/014 (071's last child); 6194c403 on main, gate 28/0 twice"
+    next_safe_action: "Operator device read (D3) closes 013+014; every 071 child is now landed"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
     key_files:
@@ -425,6 +425,50 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-10 ~05:43, `071/014-sheet-polish` LANDING-VERIFIED — landed on `origin/main` as `6194c403`, worktree `280-sheet-polish`
+
+**Landed SHA `6194c403` on `origin/main`** (the leg's `e43b4349` replayed onto the 071/011+012-merged
+main `76aafa76` as `e8233452` with this verifier's first reconciliation `65488aae`; then push
+attempt 1 REJECTED — 071/013's `647a400d` had landed meanwhile — so the whole verification
+re-ran on the thrice-merged tree: leg as `8f11b642`, this verification as `6194c403`;
+pushed `647a400d..6194c403` after one rejection). **What this verifier confirmed** on the final
+tree: the first ticked task naming a source hunk (T005) mutation — `icon-picker-popover.ts`
+reverted to its pre-leg version — took `sheet-grammar.mjs` to `FAIL — 1 failure(s)`: exactly the
+named clause, the search row carrying **3** of Remove/Random/settings where 0 is wanted →
+restored, exit 0 (2359 PASS, 0 FAIL); T001–T003 name no source hunk (T003's claim IS 0 changed
+lines — `mobile-bottom-sheet.ts` byte-identical). The 071/002–007 grammar clauses held green in
+the same runs (44–52px pitch, 16px insets, 0 native selects, 067 divider hairlines, 007's card
+grouping); the polish clauses GREEN (0 strays; 100% / 92% / 92%). No new test files (the clauses
+live in the existing lane); the lane-clause RED→GREEN is the mutation above. The operator-capture
+rows stay unticked and provisional as recorded: AC-007 = the operator's device read (D3), the
+goal's criterion 6, unticked — goal figure **5/6**, roadmap §5.A's row **83% — 5/6**, matched.
+Captures 480×2 per round, judged by decoded pixel delta over both judged runs: round 1 — **9 REAL
+movers kept, 0 jitter** (every one moved in BOTH runs at identical counts; the returning
+`board-mobile-desktop-dark` 2px@Δ1 moved in both, so REAL by the rule — kept); round 2 — **3 REAL
++ 1 jitter restored**: the confirm-stacked pair 183582/213445px@Δ133/117 both runs (this packet's
+44px dependent-stack riding 013's redesigned confirm), `table-column-header-mobile-dark` 34px@Δ192
+one-run above the bar, `board-view-desktop-dark` 8px@Δ1 one-run jitter restored at its committed
+bytes 280379 (manifest bytes patched, pixelHash unchanged); `constructed-board-empty-column-desktop-light`
+283px@Δ204 one-run, self-restoring in run 2. The leg's own 21 movers: the record-family captures
+re-judged on the merged trees, the icon-picker and properties surfaces reproduced byte-exact.
+css-lane: both sides' history kept append-only through two conflict rounds (011's continuations,
+013's two cycles, then 014's released triplet) — the round-1 continuation (c8a712daf57c, 9 movers)
+never pushed and is superseded by the round-2 continuation signed on the thrice-merged stylesheet:
+acquire@`4e06417eb091`, edit/release@`aef17a2f6e8a` (+011/012/013's hunks; this packet's 33 lines
+unchanged, `git diff e43b4349..HEAD -- styles.css` = 143 lines, none outside the recorded sets),
+3 reviewed, holder `014-sheet-polish`, `baselineHash` = `shasum(styles.css)` = aef17a2f6e8a.
+Evidence: 13 census artefacts STALE after each rebase → all writers re-run exit 0 (`replay`
+**28/28** held) → 16/16 fresh; `build-operator-checklist --check` PASS (181 rows / 67 phases,
+unchanged). Gate: **28 green, 0 red, exit 0, both rounds**. `validate --strict`: 014, 071's FIRST
+RESULT and 005 — **PASSED** (005 failed once per round on GENERATED_METADATA_INTEGRITY
+SOURCE_FINGERPRINT_MISMATCH after the replayed handover/roadmap edits; the scoped backfills — 014
+changed 0, 005 changed 1 — healed it both times). `scan-comments` 0; `scan-failing-values` 0.
+vitest **1610→1613/1613** (159→160 files — 011/012/013's landed tests riding the rebases); tsc 0;
+build 0. Docs reconciled: roadmap §5.A's 014 row **5/6** = goal.md's completion criteria (5 `[x]` / 1
+`[ ]`), the device row and AC-007 never ticked. goal 5/6 — the sixth is the operator's device read
+(D3). All seven 071 children are now landed; the packet closes when the operator re-reads the two
+polished surfaces on their own iPhone.
 
 ### 2026-09-10 ~05:05, `071/013-sheet-input-and-action-order` LANDING-VERIFIED — landed on `origin/main` as `7ae69b6e`, worktree `279-sheet-action-order`
 
