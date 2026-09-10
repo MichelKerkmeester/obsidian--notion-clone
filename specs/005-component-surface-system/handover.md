@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T09:00:00Z"
-    last_updated_by: "284-sheet-design-review"
-    recent_action: "sk-design-fundamentals review of 9 sheets: 2 P1/4 P2 routed to 007/008/011/013; 015 opened"
+    last_updated_at: "2026-09-10T09:40:00Z"
+    last_updated_by: "287-dr-record-icons"
+    recent_action: "287 verified+landed: 011's F-3 gap fix proven, gate 28/0, 1 real mover, pushed bf2a7c0e"
     next_safe_action: "GLM implements the 4 follow-up sections + 015; operator device rows on 0.0.38 remain"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
@@ -41,6 +41,38 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-10 ~09:40, 011's design-review follow-up (F-3) LANDED+VERIFIED — worktree `287-dr-record-icons`
+
+**What this verification did** — checked the one-commit leg (`36f7136e`, 46 files: the 1-line
+`styles.css` fix, the suite's 4th clause, the judged recapture, docs) against its own claims, then
+landed it. Every load-bearing claim was reproduced, not trusted: the mutation — `styles.css`
+line 11336's `margin-left: 4px` reverted to `margin-right: 4px` — sent exactly the 4th clause of
+`record-detail-panel.test.ts` red (1 failed | 3 passed, the icon-to-label gap clause; the leg added
+no new test file, so this one mutation covers the suite), restored 4/4. `sheet-grammar.mjs` and
+`render-assertions.mjs` rerun exit 0 (the 071/002–007 regression clauses — 44–52px pitch, 16.0px
+inset, 0 native selects, the 067 divider rule, the 007 card — all green unchanged). Battery from
+the final state: build 0, tsc 0, vitest 1614/1614 (160 files, the leg's recorded figure),
+`npm run gate` **exit 0 — 28 green, 0 red for a declared reason** (board-touch-drag present, so
+28 not 27; the evidence lane green, no stale writer needed). Judged recapture: four 480/480 runs
+total, the judged pair run through the decoded pixel-delta comparator against the committed blobs,
+no image opened — the record-detail family's blobs (both themes, dark included) reproduced exactly
+in both judged runs, 9 one-run jitters (maxDelta 1–4 ≤ 12, one judged run each) restored to
+committed bytes with their manifest rows, 1 REAL mover kept: `views/table-frozen-column-desktop-light`
+37px@maxDelta32, pixelHash- and layoutHash-identical (`29b325925bec`), which check-lane itself
+scores "bytes moved but not pixelHash/layoutHash — not a review a release owes", exit 0; recorded
+as the verification acquire/release cycle in `css-lane.json` (styles.css unchanged at
+`1e320e716905` = its own baselineHash, so no triplet owed — the lane's own test fixture
+`check-lane.test.mjs:43-45` defines acquire+release as a valid cycle). `011`, the `071` parent
+(first RESULT) and `005` root all validate `--strict` → `RESULT: PASSED`; scoped graph-metadata
+backfills: refreshed 1, **changed 0** each (the leg's metadata was already fresh);
+`scan-comments.mjs` and `scan-failing-values.mjs` exit 0. Residue commit `bf2a7c0e` (11 files:
+the kept mover, the manifest — whose remaining 265-row diff is the serializer writing the em-dash
+literally — the css-lane cycle and 8 fresh gate-evidence stamps) pushed to `main`;
+`origin/main` = `bf2a7c0e`. 011's goal stays 6/7: the operator's own device read (D3) remains the
+standing open criterion, and the F-3 row in goal.md's DONE table correctly names no agent tick.
+Battery from this verification: as above; nothing left inferred — every number above was run here.
+Open: the operator's device read of the 4px gap on the next shipped build (D3, unticked).
 
 ### 2026-09-10 ~06:27, the 0.0.38 operator checklist rows MIRRORED — docs-only, worktree `283-checklist-0038-rows`
 
