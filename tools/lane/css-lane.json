@@ -1,6 +1,6 @@
 {
   "holder": "013-sheet-input-and-action-order",
-  "baselineHash": "cd3520283351",
+  "baselineHash": "ab6dcaa73cb9",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -6913,7 +6913,7 @@
       "event": "release",
       "phase": "013-sheet-input-and-action-order",
       "at": "2026-09-10T04:11:00Z",
-      "hash": "cd3520283351",
+      "hash": "ab6dcaa73cb9",
       "reviewed": [
         "screenshots/notion-clone/components/chrome-owned-menu-sheet-mobile-light.png",
         "screenshots/notion-clone/components/constructed-dropdown-mobile-dark.png",
@@ -6924,9 +6924,10 @@
         "screenshots/notion-clone/fields/field-icon-picker-desktop-light.png",
         "screenshots/notion-clone/views/board-mobile-desktop-dark.png",
         "screenshots/project-manager/reference-kanban-subtask-mobile-dark.png",
-        "screenshots/project-manager/reference-kanban-subtask-mobile-light.png"
+        "screenshots/project-manager/reference-kanban-subtask-mobile-light.png",
+        "screenshots/notion-clone/views/table-frozen-column-desktop-light.png"
       ],
-      "note": "Captured twice (npm run screenshots </dev/null, 480 entries, exit 0 each), judged by decoded pixel delta against the committed blobs across both judged runs, no image opened by eye. 10 REAL movers, kept, each named above, every one an identical changed-pixel count in both runs at the harness's documented nondeterminism, and none of them a date-picker capture -- this edit's own surface (constructed-date-picker(-datetime), field-date-value-picker) reproduced HEAD's committed pixels exactly, the expected no-op the popover pairing already produced. 7 one-run jitters (max channel delta <= 6) restored: the PNG to its committed blob and the manifest row's bytes with it; the 13 movers of run 1 alone came back to their committed bytes on the second capture, so their rows only carry the stylesheet's sourceHash move. The manifest's stylesheet reference moved aef17a2f6e8a -> cd3520283351 with the edit."
+      "note": "Captured twice (npm run screenshots </dev/null, 480 entries, exit 0 each), judged by decoded pixel delta against the committed blobs across both judged runs, no image opened by eye. 10 REAL movers, kept, each named above, every one an identical changed-pixel count in both runs at the harness's documented nondeterminism, and none of them a date-picker capture -- this edit's own surface (constructed-date-picker(-datetime), field-date-value-picker) reproduced HEAD's committed pixels exactly, the expected no-op the popover pairing already produced. 7 one-run jitters (max channel delta <= 6) restored: the PNG to its committed blob and the manifest row's bytes with it; the 13 movers of run 1 alone came back to their committed bytes on the second capture, so their rows only carry the stylesheet's sourceHash move. The manifest's stylesheet reference moved aef17a2f6e8a -> cd3520283351 with the edit. Rebased onto the 287 landing (1e320e716905) before this release: the acquire's recorded aef17a2f6e8a predates 287's verification release, so the released hash attests the merged stylesheet (287's record-detail icon-gap margin fix + this segment-paint override), judged from the rebased tree. Post-rebase recapture x2, 480/480, exit 0 both, judged by decoded pixel delta against the rebased committed blobs: 1 REAL mover, views/table-frozen-column-desktop-light 37px@maxDelta32, reproduced in BOTH judged runs (the same shimmer 287's verification released; pixelHash 29b325925bec still unchanged), kept and added to reviewed. 2 one-run jitters by the rule (max channel delta <= 12, one judged run only): panel-record-detail-sheet-body-editing-mobile-light 5656px@2 and views/board-view-desktop-dark 8px@1 (the lane's recurring one), restored at their committed bytes with their manifest rows. 1 keep, 2 restores, 0 threshold edits."
     }
   ],
   "outstanding": [
