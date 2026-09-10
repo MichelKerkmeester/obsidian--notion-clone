@@ -3810,6 +3810,54 @@ release, as the comparator reads them.
 full-resolution Notion Property-visibility capture, which stays §13's Notion column structural.
 `010` owns the tooltip copy, `014` the add-affordance shape. Validated: 009, 071 (first RESULT)
 and 005; graph metadata backfilled each. Not pushed — a fresh verifier lands it.
+
+## 071/011-record-sheet-header-and-icons — the record sheet's header and property icons (2026-09-10)
+
+The audit's Mechanism B in its clearest form, closed at the producer: the record family was the
+one phone-sheet family the title-centring contract never covered, because it mounted its own
+`.obnotion-record-detail-header` while the clause queried `.obnotion-shell-header` — a contract
+that passes because its surface list omits the surface. The phone record sheet now mounts the
+shared `buildPhoneRecordHeader` (producer branch in `record-detail-panel.ts`; the record icon
+takes the shell's leading slot, the expand action the trailing one, the title's decorations —
+hover, conditional format, rename, empty state — the shared title element; the desktop anchored
+panel keeps its own header, a different surface whose CSS depends on a byte-compatible DOM), the
+clause's surface list gains the family, and the title measure learned a `via record-family`
+fallback that reports which selector answered, so a producer that drifts goes visibly red. Every
+record property row now paints its property's type icon: a 14px glyph inside the label's own
+fixed 96px box (`card-field-renderer.ts` learns a `renderLabelTypeIcon` opt-in), so `006`'s
+landed row grammar is regression-checked, not re-designed.
+
+**RED/GREEN**: measured at the pre-change producers (the four changed source files reverted,
+measured, restored byte-identical) — record-detail **47.50px** and record-peek **47.50px** off
+centre, reported `via record-family`, **0/21** type icons, lane exit 1 → GREEN **0.49px** each
+`via shell`, **21/21** icons, lane exit 0 (2349 PASS / 0 FAIL). `006`'s clauses unchanged:
+21/21 rows 44.0px, 20/20 hairlines (last 0px), 16.0px inset, 1/1 headings 16.0px/1px, 0 native
+selects, scrollWidth 390 ≤ 389+1 at 402px, both engines; row-grammar negative control green.
+Unit revert-proof (`record-detail-panel.test.ts`, new): at the pre-change producer 1 of 3 fails
+(the wiring test; the other two pin pre-existing stylesheet declarations as regression guards),
+restored 3/3.
+
+**The numbers**: tsc 0; vitest 1591/1591 (158 files); build 0; sheet-grammar 0; render-assertions
+0; verify-placement 0 (418/420, 2 declared); touch-targets 0; screenshots ×2 480/480 exit 0 both
+(15 content movers, every one at identical counts across both runs — record-detail family 8,
+record-peek family 4, the submenu fixture that mounts the record detail 2, the time-relative
+field-file-fields read 1; 1 jitter, views/board-mobile-desktop-dark 2px@Δ1 one run, restored
+byte-identical, manifest bytes 242584 patched back, its pixelHash 2ab2cdd02bb4 unchanged); css-lane
+acquire/edit/release triplet signed, holder `011-record-sheet-header-and-icons`, baselineHash
+`892ac77282a3` = the first 12 of the working tree's `styles.css` sha256, check-lane 0 (release
+names all 14 changed captures); evidence 16/16 fresh after 12 stale artefacts were re-derived by
+their own writers (all 12 exit 0); naming scans 0/0; **gate 28 green, 0 red, exit 0**.
+
+**Docs**: `011` tasks T001-T009, acceptance criteria AC-002–AC-007 Met with the evidence in the
+rows (AC-008, the operator's own device read, stays open per D3 — no agent ticks it), goal
+criteria 2-6 ticked, the shape decision recorded (shared producer, structural membership, the
+selector fallback as a measured tripwire), implementation-summary.md written, `spec.md` §13
+landed-note (the C-5 property-count collapse stays `TBD` — it needs the operator's full-resolution
+capture this leg does not own); `roadmap.md` §4 row 87 amended (`011` landed, the other six
+children not) and §5.A's `071` row records the landing, state "landed, awaiting device".
+Validated strict: `011`, `071` parent (first RESULT) and `005` track all RESULT: PASSED; graph
+metadata backfilled (scoped, `011`). Not pushed — a fresh verifier lands it.
+
 ## 071/012-sort-and-group-sheet-rows — sort and group sheet rows (2026-09-10)
 
 The audit’s §3.10/§3.11 P2 findings closed. The sort rule reads as three rows — property with the ↑↓ pair, direction indented to the property picker’s own left edge, then a labelled is-warning Delete row (trash icon, the word, the whole box its own 44px hit target) — and the ⋮⋮ grip is gone, so the sheet carries exactly one reorder affordance, the one that answers to Tab and Enter; the HTML5 row drag stays wired underneath for pointers (ADR-001: ours decided by our own keyboard threshold, the Notion half PROVISIONAL until the audit’s C-4 device capture, which no repository asset answers). The group sheet’s Group-by list partitions into panel.shownSection / panel.hiddenSection — the record sheet’s own shown/hidden vocabulary, read off the view state’s hidden-column set the column manager and the toolbar badge already read — with panel.hideAllProperties / panel.showAllProperties bulk actions riding each header’s own line, carried by one new optional ToolbarActions.setHiddenColumns implemented in both hosts with the required-column guard the main view’s own hide-all already applies (ADR-003); both sections always render, so the partition is the vocabulary, not the counts. The calendar hint shortened 126 → 74 characters in both locales. One record correction by measurement: the ×’s expanded hit box is 40.0×40.0 against the 44px floor, not the “already clears” the scaffold assumed — the labelled row owns the 44px box now (ADR-002).

@@ -6553,6 +6553,44 @@
     },
     {
       "event": "acquire",
+      "phase": "011-record-sheet-header-and-icons",
+      "at": "2026-09-10T00:43:05Z",
+      "hash": "fcaf3fec28cf",
+      "note": "Taking the lane over from 045-board-card-properties, whose released 60-capture sign-off sits at fcaf3fec28cf: this leg closes Mechanism B of the 071 sheet-vs-Notion audit -- the record sheet's phone title mounted a private header, so the title-centring clause's surface list, selector-scoped, had no member to measure and the defect was invisible by construction. Mounting the shared phone header on the record family and giving every property row its type icon both move the stylesheet and its captures, so the movers are judged under a named holder rather than nobody."
+    },
+    {
+      "event": "edit",
+      "phase": "011-record-sheet-header-and-icons",
+      "at": "2026-09-10T00:43:05Z",
+      "hash": "892ac77282a3",
+      "note": "styles.css: one addition, the record property row's type icon. The 14px inline-flex icon paints INSIDE the label's fixed 96px box (the same step the disclosure's type markers use), middle-aligned on the x-height so it stays inside the strut the text already owns -- the row's inner geometry, the value's left edge and the 44px pitch are untouched, which the row-grammar clause measures beside it (21/21 rows still 44.0px). No rule outside the record-detail field-label icon; the phone header itself needs no new declaration because the record family now mounts the shared shell header, whose styles already exist. Producer side (no stylesheet): record-detail-panel.ts mounts buildPhoneRecordHeader on the bottom-sheet path -- record icon into the leading slot, expand action beside the close in the trailing one, the title decorations (hover, conditional format, rename, empty state) onto the shared title element; card-field-renderer.ts learns a renderLabelTypeIcon opt-in that draws into the existing label; record-header.ts's phone builder returns the shell handle. baselineHash moves fcaf3fec28cf -> 892ac77282a3."
+    },
+    {
+      "event": "release",
+      "phase": "011-record-sheet-header-and-icons",
+      "at": "2026-09-10T00:43:05Z",
+      "hash": "892ac77282a3",
+      "reviewed": [
+        "screenshots/notion-clone/fields/field-file-fields-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-depth3-column-submenu-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-depth3-column-submenu-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-docked-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-docked-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-docked-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-docked-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-record-peek-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-peek-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-record-peek-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-peek-mobile-light.png"
+      ],
+      "note": "Captured twice (npm run screenshots </dev/null, 480 entries, exit 0 both) and judged by decoded pixel delta against the committed blobs across both judged runs, no image opened by eye: 15 content movers, every one moved in BOTH judged runs at IDENTICAL counts and channel deltas -- the record-detail family 8 (desktop pairs 8836-8837px at max 192-209; docked and undocked mobile 95328-97309px at 194-196), the record-peek family 4 (desktop 3540px at 86-102, mobile 89705-91691px at 194-196), constructed-depth3-column-submenu-mobile-dark/-light 50719/48554px at 123/117 -- its fixture mounts the record detail, whose new icons and shared header it photographs -- and fields/field-file-fields-desktop-light 15px at 83, its own sourceHashes unmoved: the time-relative read this fixture reproduced on the previous 045 release (42px@165, 57px@165), here 15px@83, above the 12 bar, kept. All counts deterministic across both runs. 1 jitter: views/board-mobile-desktop-dark 2px at max channel delta 1 in the second judged run only, restored at its committed bytes with its manifest row's bytes field patched back (242584, pixelHash 2ab2cdd02bb4 unchanged) and the fresh styles.css sourceHash kept. The stylesheet sits at 892ac77282a3, the first 12 of the working tree's sha256; the record family's own grammar (tools/live/sheet-grammar.mjs) went RED first on exactly the two audit findings -- record-detail/record-peek off the centring clause, 0/21 type icons -- and green after the fix, 21/21 icons, title deltas 0.49px via the shared header, the 006 row clauses (44.0px pitch, 20/20 hairlines, 16px inset, 0 native selects, no 402px overflow) unchanged. This leg reviews by measurement (headless); the visual read stays the operator device pass."
+    },
+    {
+      "event": "acquire",
       "phase": "012-sort-and-group-sheet-rows",
       "at": "2026-09-10T01:38:00.000Z",
       "hash": "fcaf3fec28cf",

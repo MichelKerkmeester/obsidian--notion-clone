@@ -3021,7 +3021,7 @@ const cellResults = await section("what a press on a table cell means", () => ce
       held: getOpenRecordDetailPath(),
       mounted: Boolean(sheet && sheet.isConnected),
       isSheet: Boolean(sheet && sheet.classList.contains("obnotion-mobile-bottom-sheet")),
-      title: sheet ? (sheet.querySelector(".obnotion-record-detail-title")?.textContent ?? "") : "",
+      title: sheet ? (sheet.querySelector(".obnotion-record-detail-title, .obnotion-panel-title")?.textContent ?? "") : "",
       fields: sheet ? sheet.querySelectorAll(".obnotion-record-detail-field").length : 0,
       width: rect ? Math.round(rect.width) : 0,
       height: rect ? Math.round(rect.height) : 0,
@@ -3407,7 +3407,8 @@ const sheetResults = await section("the record sheet's own header", async () => 
       },
     });
     const panel = document.querySelector(".obnotion-record-detail-panel");
-    const title = panel.querySelector(".obnotion-record-detail-title");
+    // The sheet's title now comes from the shared header, so this probe reads either name it mounts.
+    const title = panel.querySelector(".obnotion-record-detail-title, .obnotion-panel-title");
     const box = (el) => { const r = el.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) }; };
     return { titleCentre: box(title) };
   });
@@ -3416,8 +3417,9 @@ const sheetResults = await section("the record sheet's own header", async () => 
     const out = [];
     const panel = document.querySelector(".obnotion-record-detail-panel");
     const handle = panel.querySelector(".obnotion-mobile-bottom-sheet-handle");
-    const title = panel.querySelector(".obnotion-record-detail-title");
-    const actions = [...panel.querySelectorAll(".obnotion-record-detail-header button")];
+    const title = panel.querySelector(".obnotion-record-detail-title, .obnotion-panel-title");
+    // The actions ride the header's trailing slot; the shared class is what the producer mounts now.
+    const actions = [...panel.querySelectorAll(".obnotion-record-detail-header button, .obnotion-shell-header button")];
     const panelTop = panel.getBoundingClientRect().top;
 
     const reaches = (el) => {
@@ -6538,7 +6540,7 @@ await section("lifted probes: the sheet audit", async () => {
   const header = await page.evaluate(() => {
     const panel = document.querySelector(".obnotion-record-detail-panel");
     const open = panel.querySelector(".obnotion-board-card-open");
-    const close = panel.querySelector(".obnotion-cell-edit-close");
+    const close = panel.querySelector(".obnotion-cell-edit-close, .obnotion-sheet-close");
     const box = (el) => { const r = el.getBoundingClientRect(); return { w: +r.width.toFixed(1), h: +r.height.toFixed(1), cy: +(r.top + r.height / 2).toFixed(1), top: +r.top.toFixed(1), right: +r.right.toFixed(1) }; };
     return { open: box(open), close: box(close) };
   });
@@ -7156,7 +7158,7 @@ await section("the sheet's inline editor", async () => {
     // therefore inherits the same height and the same centring correction, while anchoring on a
     // line box of its own. Whether one correction can serve both anchors is only answerable by
     // measuring the second one.
-    const titleEl = panel.querySelector(".obnotion-record-detail-title");
+    const titleEl = panel.querySelector(".obnotion-record-detail-title, .obnotion-panel-title");
     const titleAtRest = rect(titleEl);
     const titleCs = getComputedStyle(titleEl);
     titleEl.dispatchEvent(new window.MouseEvent("dblclick", { bubbles: true, cancelable: true, view: window }));

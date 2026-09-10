@@ -16,7 +16,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Component, MarkdownRenderer } from "obsidian";
+import { App, Component, MarkdownRenderer, setIcon, setTooltip } from "obsidian";
 import { isObsidianTagsKey, toMultiSelectValuesForKey } from "../data/column-types";
 import { getColumnDisplayType, isDerivedColumn } from "../data/column-display";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/file-fields";
@@ -37,7 +37,7 @@ import { mountNoteBodyRegion } from "./note-body-region";
 import type { NoteBodyRegion } from "./note-body-region";
 import { trapFocus } from "./interaction-scope";
 import { openExternalUrl } from "./open-external";
-import { buildDesktopRecordHeader } from "./record-surface/record-header";
+import { buildDesktopRecordHeader, buildPhoneRecordHeader } from "./record-surface/record-header";
 import { getPropertyEmptyPrompt } from "./record-surface/property-row";
 import { createHiddenPropertiesGroup, type HiddenGroupRow, type HiddenPropertiesGroupHandle } from "./record-surface/hidden-properties";
 import { renderPropertyTypeIcon } from "./property-type-icon";
@@ -394,7 +394,46 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     const titleField = title.field || "file.name";
     // 标题区（对齐事件卡片标题）+ 右上角「打开笔记」按钮（复用看板卡片 obnotion-board-card-open 样式）
     const editFileName = titleField === "file.name" ? actions.editFileName : undefined;
-    buildDesktopRecordHeader({
+    // The phone surface mounts the same shared three-slot header every other sheet carries, so
+    // its title centres under the same contract its sibling sheets answer to; the desktop
+    // anchored panel keeps its own header shape. Both build from the record header module, so
+    // the two shapes stay one family rather than two copies drifting apart.
+    if (isMobileBottomSheet(panel.ownerDocument)) {
+      const sheetHeader = buildPhoneRecordHeader({ parent: panel, title: title.text, onClose: () => close() });
+      // The record's own affordances take the shell header's two open slots: the record icon in
+      // the leading slot, the expand action in the trailing one beside the close. The title
+      // decorations (hover preview, conditional format, rename, empty-title state) land on the
+      // shared title element the shell built, so a desktop-side decoration contract never
+      // silently stops applying on the phone.
+      if (!title.isEmpty) actions.renderRecordIcon?.(sheetHeader.leadingEl, r, config);
+      const expandButton = panel.ownerDocument.createElement("button");
+      expandButton.className = "obnotion-board-card-open";
+      expandButton.setAttribute("type", "button");
+      expandButton.setAttribute("aria-label", t("menu.openNote"));
+      sheetHeader.trailingEl.insertBefore(expandButton, sheetHeader.trailingEl.children[0] ?? null);
+      setIcon(expandButton, "maximize-2");
+      setTooltip(expandButton, t("menu.openNote"), { delay: 100 });
+      expandButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        actions.openRow(r);
+        close();
+      });
+      markNoteHoverLink(sheetHeader.titleEl, r.file.path, r.file.path);
+      actions.applyConditionalFormat?.(sheetHeader.titleEl, r, config, titleField);
+      // 仅 file.name 标题可双击重命名；其它字段标题只读（用字段编辑改值）
+      if (editFileName && !actions.isReadOnly) {
+        const editFileNameAction = editFileName;
+        sheetHeader.titleEl.addEventListener("dblclick", (event) => {
+          event.stopPropagation();
+          editFileNameAction(sheetHeader.titleEl, r, title.text);
+        });
+        setFieldTooltip(sheetHeader.titleEl, title.text, t("cell.doubleClickRename"));
+      } else {
+        setFieldTooltip(sheetHeader.titleEl, title.isEmpty ? "" : title.text);
+      }
+      if (title.isEmpty) sheetHeader.titleEl.addClass("is-empty-title");
+    } else {
+      buildDesktopRecordHeader({
       parent: panel,
       title: title.text,
       titleIsEmpty: title.isEmpty,
@@ -412,6 +451,7 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
       // 常驻关闭按钮：桌面端 CSS 隐藏（保持锚定面板原貌），移动端底部抽屉显示，触摸可点关闭。
       onClose: () => close(),
     });
+    }
     // 字段列表（跳过 titleField；空的可见字段按 showEmptyFields 决定是否渲染，不再归入隐藏分组——
     // 该分组现在持有的是视图中被隐藏的列，与看板卡片、peek 一致）
     // The scroll region, holding everything below the header. See `contentHost`.
@@ -546,6 +586,7 @@ function renderRecordField(
   const field = renderCardField({
     app, row, col, config, value: displayValue, displayType, empty,
     fieldClass: "obnotion-record-detail-field", valueClass: "obnotion-board-card-value", labelClass: "obnotion-record-detail-field-label",
+    renderLabelTypeIcon: (label) => renderPropertyTypeIcon(label, col, "obnotion-record-detail-field-type-icon"),
     badgesClass: "obnotion-board-card-badges", linkClass: "obnotion-board-card-link", fieldWidth: getFieldWidth(config, col),
     wrap: col.wrap, readOnly: actions.isReadOnly || isReadonlyFileField(col.key), splitOptionValue: true,
     applyConditionalFormat: actions.applyConditionalFormat,

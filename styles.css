@@ -11307,6 +11307,35 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
   background: var(--background-modifier-hover);
 }
 
+/* The property row's own type icon. Notion's row page leads every property with its type, and
+   so do our properties and filter sheets — the record sheet alone drew a bare label. The icon
+   sits INSIDE the label's fixed 96px box (inline-flex, 14px, the same step the disclosure's
+   type markers use) rather than as a fourth row slot: the row's inner geometry, the label's
+   reading line, the value's left edge and the 44px pitch are untouched, which the row-grammar
+   clause measures beside this one. */
+.obnotion-container .obnotion-record-detail-field-label .obnotion-record-detail-field-type-icon,
+.obnotion-mobile-bottom-sheet .obnotion-record-detail-field-label .obnotion-record-detail-field-type-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+  flex: 0 0 14px;
+  /* Middle, not the baseline: an inline-flex box's baseline is its bottom margin edge, and 14px
+     above the text's own ascent grew the desktop panel's row line by exactly 1px — the 010
+     packet's frozen 26.84px row. Centring on the x-height keeps the icon inside the strut the
+     text already owns, so the row's four frozen values stay frozen. */
+  vertical-align: middle;
+  color: var(--text-faint);
+}
+
+.obnotion-container .obnotion-record-detail-field-label .obnotion-record-detail-field-type-icon svg,
+.obnotion-mobile-bottom-sheet .obnotion-record-detail-field-label .obnotion-record-detail-field-type-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
 .obnotion-record-detail-panel.obnotion-mobile-bottom-sheet .obnotion-record-detail-field-label {
   flex: 0 0 96px;
   min-width: 0;

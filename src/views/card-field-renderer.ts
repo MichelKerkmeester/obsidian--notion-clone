@@ -39,6 +39,10 @@ export interface CardFieldRendererOptions {
   labelClass: string;
   badgesClass: string;
   linkClass: string;
+  /** Draws the property's type icon into the label's own leading edge. The icon lives inside the
+   *  existing label box rather than beside it, so the row's inner geometry — the 96px label
+   *  column, the value's left edge, the 44px pitch — does not move for callers that opt in. */
+  renderLabelTypeIcon?: (label: HTMLElement) => void;
   fieldWidth?: number;
   wrap?: boolean;
   readOnly?: boolean;
@@ -103,6 +107,7 @@ export function renderCardField(options: CardFieldRendererOptions): HTMLElement 
   setFieldTooltip(field, options.empty ? value : value, col.label);
 
   const label = field.createSpan({ cls: labelClass, text: col.label });
+  options.renderLabelTypeIcon?.(label);
   options.onShowColumnMenu && attachColumnMenu(field, label, col, options.onShowColumnMenu);
   const valueEl = field.createDiv({ cls: valueClass });
   if (options.empty) valueEl.addClass("obnotion-card-empty-placeholder");

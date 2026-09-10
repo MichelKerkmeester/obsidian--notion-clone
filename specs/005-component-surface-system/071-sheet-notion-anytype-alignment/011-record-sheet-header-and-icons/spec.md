@@ -32,7 +32,7 @@ contextType: "implementation"
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P1 |
-| **Status** | Draft — scaffolded, not implemented |
+| **Status** | Implemented 2026-09-10 — record family on the shared phone header, 21/21 row type icons, `006` clauses regression-green; the operator device read (D3) stays open |
 | **Created** | 2026-09-09 |
 | **Branch** | `worktrees/272-sheet-notion-audit` |
 | **Parent Spec** | `../spec.md` |
@@ -220,4 +220,6 @@ directly — or it is marked `TBD` and listed in the audit's §5.
 | Add-property affordance | `+ Add property` row (`record-detail-panel.ts:445-447`) | `+ Add a property` row | **Converged** — copy only, and that is `010`'s |
 | Open target | Bottom sheet | **side peek / center peek / full page**, a user setting | **Out of scope** — `006-record-open-target` owns it; recorded so a later reader does not re-open it here |
 | Property count collapse | Not implemented | **Unknown** — every captured row page has exactly 3 properties, so a collapse never triggers | `TBD — needs operator capture` (audit §5 C-5) |
+
+**Landed 2026-09-10** (worktree `277-record-sheet-header`, tasks.md T001-T009): the three gap rows this packet owns closed red→green on the lane — title-centring membership (RED: record-detail and record-peek measured **47.50px** off centre each, reported `via record-family`, lane exit 1; the clause's 15-surface list plus a record-family selector fallback that reports which selector answered) → GREEN **0.49px each, `via shell`** (the phone record sheet now mounts the shared `buildPhoneRecordHeader`; the desktop anchored panel keeps `.obnotion-record-detail-header`); type icon 0/21 → **21/21**, the 14px glyph inside the label's fixed 96px box so §13's no-change rows stayed no-change (21/21 rows 44.0px, 20/20 hairlines, 16.0px inset, 0 native selects, scrollWidth 390 ≤ 389+1 at 402px, all unchanged); the C-5 property-count collapse stays `TBD` exactly as recorded — it needs the full-resolution operator capture this leg does not own. Recapture: ×2 480/480, exit 0 both, 15 two-run movers + 1 restored jitter, judged in `tools/lane/css-lane.json`'s 011 release entry (baselineHash `892ac77282a3`). The side-peek/center-peek/full-page row remains owned by `006`, untouched: `git diff` shows the desktop header branch byte-identical and the same `actions.openRow` still owns the open affordance
 <!-- /ANCHOR:gap-table -->

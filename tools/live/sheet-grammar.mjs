@@ -148,11 +148,13 @@ const REGISTERED_SURFACES = [
 // 2c. TITLE CENTRING
 // ───────────────────────────────────────────────────────────────────
 
-// Every registered header-bearing surface, minus the two whose header is not `buildShellHeader`'s
-// at all — `record-detail` and `record-peek` draw `.obnotion-record-detail-header` by hand in
-// `record-detail-panel.ts`, a third header shape this leg does not touch (`record-header.ts`'s own
-// phone builder now calls `buildShellHeader` too, but no production caller has reached it yet) —
-// plus the one this defect was actually found on: `column-manager` pairs a fixed-width leading
+// Every registered header-bearing surface, including the record family: a surface whose header
+// is not `buildShellHeader`'s used to be excluded here, which is exactly how its title stayed
+// off centre unmeasured — a contract whose coverage rides on a selector's implicit membership
+// silently stops covering any surface that stops using it. The record family now mounts the
+// shared phone header, so it belongs to the clause like every other sheet, and the fallback in
+// `measureTitleCenter` keeps its measured delta honest even if its producer drifts again.
+// Plus the one this defect was actually found on: `column-manager` pairs a fixed-width leading
 // slot with a wider trailing one (the "All" toggle beside the close), so it is the one member of
 // this list guaranteed to expose an unmirrored slot if the centring rule regresses —
 // constructed-column-manager's "Properties" measured off centre before buildShellHeader grouped
@@ -164,7 +166,7 @@ const REGISTERED_SURFACES = [
 // the overflow sweep's own exclusion (§2b) is unrelated: that one is already covered by the
 // stacked-pair rows.
 const TITLE_CENTERED_SURFACES = [
-  ...REGISTERED_SURFACES.filter((s) => s.name !== "record-detail" && s.name !== "record-peek" && s.spec.renderer !== "fuzzy-suggest"),
+  ...REGISTERED_SURFACES.filter((s) => s.spec.renderer !== "fuzzy-suggest"),
   { name: "column-manager", spec: { renderer: "column-manager", bag: "file-view", captureData: true } },
 ];
 
@@ -857,12 +859,23 @@ window.__sheetGrammarNegativeControl = () => {
 };
 
 const measureTitleCenter = (sheet) => {
-  const title = sheet.querySelector(".obnotion-shell-header .obnotion-panel-title");
-  if (!title) return { titleFound: false };
+  // The record family's producer shipped its own header DOM ('.obnotion-record-detail-header')
+  // before it joined the shared phone header, so the contract measures whichever title the
+  // mounted sheet actually carries: the shared header's own pair first, the record header's
+  // legacy classes second. Without the fallback the family's membership could never go red —
+  // the clause would report "no title" instead of how far off centre the title sits — and that
+  // measured delta is the number the shared-only query kept hidden. Which selector matched is
+  // reported, so a producer that silently stops mounting the shared header no longer passes
+  // invisibly.
+  const title = sheet.querySelector(".obnotion-shell-header .obnotion-panel-title")
+    || sheet.querySelector(".obnotion-record-detail-header .obnotion-record-detail-title");
+  if (!title) return { titleFound: false, viaSelector: "none" };
+  const viaSelector = title.closest(".obnotion-shell-header") ? "shell" : "record-family";
   const sheetRect = sheet.getBoundingClientRect();
   const titleRect = title.getBoundingClientRect();
   return {
     titleFound: true,
+    viaSelector,
     delta: Math.abs((sheetRect.left + sheetRect.right) / 2 - (titleRect.left + titleRect.right) / 2),
   };
 };
@@ -1708,6 +1721,10 @@ const measureRecordRowGrammar = () => {
       inset: labelRect.left - sheetContentLeft,
       rowHeight: row.getBoundingClientRect().height,
       borderBottomWidth: getComputedStyle(row).borderBottomWidth,
+      // Notion's row page (and our own properties and filter sheets) mark every property row with
+      // its type; the record sheet's rows carried no such marker, so the icon's presence is part
+      // of this family's measured grammar rather than an accidental by-product of the markup.
+      hasTypeIcon: Boolean(row.querySelector(".obnotion-record-detail-field-type-icon")),
     });
   }
   const lastRow = sheet.querySelector(".obnotion-record-detail-fields > .obnotion-record-detail-field:last-child");
@@ -3660,13 +3677,13 @@ try {
       continue;
     }
     if (!report.titleFound) {
-      failures.push(`title centring ${name}: no .obnotion-shell-header title to measure`);
-      console.log(`  FAIL  ${name} — no .obnotion-shell-header title to measure`);
+      failures.push(`title centring ${name}: no header title to measure (shared header, record family)`);
+      console.log(`  FAIL  ${name} — no header title to measure`);
       continue;
     }
     const ok = report.delta <= TITLE_CENTER_TOLERANCE_PX;
     if (!ok) failures.push(`title centring ${name}: title centre ${report.delta.toFixed(2)}px off the frame centre, wanted <= ${TITLE_CENTER_TOLERANCE_PX}px`);
-    console.log(`  ${ok ? "PASS" : "FAIL"}  ${name} — title centre within ${report.delta.toFixed(2)}px of the frame centre`);
+    console.log(`  ${ok ? "PASS" : "FAIL"}  ${name} — title centre within ${report.delta.toFixed(2)}px of the frame centre (via ${report.viaSelector})`);
   }
   console.log("");
 
@@ -4387,6 +4404,10 @@ try {
       if (badHeaders.length > 0) failures.push(`record sheet: ${badHeaders.length} of ${recordRowGrammar.sectionHeaders.length} section headings miss the shared ${SETTINGS_SHEET_INSET_PX}px inset behind a 1px divider`);
       console.log(`  ${badHeaders.length === 0 ? "PASS" : "FAIL"}  ${recordRowGrammar.sectionHeaders.length}/${recordRowGrammar.sectionHeaders.length} section headings sit on the shared ${SETTINGS_SHEET_INSET_PX}px inset behind a 1px divider (${recordRowGrammar.sectionHeaders.map((h) => `${h.inset.toFixed(1)}px/${h.borderTopWidth}`).join(", ")})`);
     }
+    const iconRows = recordRowGrammar.rows.filter((row) => row.hasTypeIcon).length;
+    const iconOk = iconRows === recordRowGrammar.rows.length;
+    if (!iconOk) failures.push(`record sheet: ${recordRowGrammar.rows.length - iconRows} of ${recordRowGrammar.rows.length} property rows carry no type icon`);
+    console.log(`  ${iconOk ? "PASS" : "FAIL"}  ${iconRows}/${recordRowGrammar.rows.length} property rows carry their property's type icon`);
     const noNativeSelect = recordRowGrammar.selectCount === 0;
     if (!noNativeSelect) failures.push(`record sheet: ${recordRowGrammar.selectCount} native select(s) — the pickers here are the sheet's own stacked menus`);
     console.log(`  ${noNativeSelect ? "PASS" : "FAIL"}  no native select on the sheet (native selects: ${recordRowGrammar.selectCount})`);

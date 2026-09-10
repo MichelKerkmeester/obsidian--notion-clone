@@ -19,7 +19,7 @@ import { setIcon, setTooltip } from "obsidian";
 import { t } from "../../i18n";
 import { setFieldTooltip } from "../field-tooltip";
 import { type SheetHeaderHandle, type SheetHeaderOptions } from "../mobile-bottom-sheet";
-import { buildShellHeader } from "../surface-shell";
+import { buildShellHeader, type SurfaceShellHeaderHandle } from "../surface-shell";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. DESKTOP VARIANT
@@ -123,7 +123,7 @@ export interface PhoneRecordHeaderOptions extends Pick<SheetHeaderOptions, "befo
  * named entry point, pointed at `buildShellHeader` rather than the engine's two-slot builder so a
  * consumer's title lands centred like every other migrated sheet instead of pinned to the leading
  * edge beside a centred one. */
-export function buildPhoneRecordHeader(options: PhoneRecordHeaderOptions): SheetHeaderHandle {
+export function buildPhoneRecordHeader(options: PhoneRecordHeaderOptions): SurfaceShellHeaderHandle {
   return buildShellHeader(options.parent, {
     title: options.title,
     onClose: options.onClose,

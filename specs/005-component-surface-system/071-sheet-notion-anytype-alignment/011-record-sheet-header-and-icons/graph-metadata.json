@@ -39,18 +39,25 @@
       "icon"
     ],
     "importance_tier": "normal",
-    "status": "planned",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "implementation-summary.md",
+      "src/views/record-detail-panel.ts",
+      "src/views/record-surface/record-header.ts",
+      "src/views/card-field-renderer.ts",
+      "tools/live/sheet-grammar.mjs",
+      "src/views/record-detail-panel.test.ts",
+      "tools/lane/css-lane.json",
+      "tools/storybook/verify-placement.mjs",
+      "tools/live/renderer-coverage.json",
       "screenshots/notion-clone/panels/constructed-record-detail-mobile-light.png",
       "screenshots/notion/ios/database/notion-ios-database-row-page-03-0cb59457-00da-4154-b7c0-5bb2a4831ba2.webp",
-      "src/views/record-detail-panel.ts",
       "src/views/table-record-peek.ts",
-      "tools/live/sheet-grammar.mjs",
       "screenshots/notion/ios/flows/database-detail/notion-ios-flow-database-detail-01-74da3d7a-b6b7-4ab8-ba38-9a17f04de3da.webp",
       "src/i18n.ts"
     ],
@@ -86,6 +93,60 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "record-detail-panel.ts",
+        "kind": "code",
+        "path": "src/views/record-detail-panel.ts",
+        "source": "derived"
+      },
+      {
+        "name": "record-header.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/record-header.ts",
+        "source": "derived"
+      },
+      {
+        "name": "card-field-renderer.ts",
+        "kind": "code",
+        "path": "src/views/card-field-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "record-detail-panel.test.ts",
+        "kind": "test",
+        "path": "src/views/record-detail-panel.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "renderer-coverage.json",
+        "kind": "config",
+        "path": "tools/live/renderer-coverage.json",
+        "source": "derived"
+      },
+      {
         "name": "constructed-record-detail-mobile-light.png",
         "kind": "file",
         "path": "screenshots/notion-clone/panels/constructed-record-detail-mobile-light.png",
@@ -98,21 +159,9 @@
         "source": "derived"
       },
       {
-        "name": "record-detail-panel.ts",
-        "kind": "code",
-        "path": "src/views/record-detail-panel.ts",
-        "source": "derived"
-      },
-      {
         "name": "table-record-peek.ts",
         "kind": "code",
         "path": "src/views/table-record-peek.ts",
-        "source": "derived"
-      },
-      {
-        "name": "sheet-grammar.mjs",
-        "kind": "file",
-        "path": "tools/live/sheet-grammar.mjs",
         "source": "derived"
       },
       {
@@ -156,53 +205,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Parent Spec",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Overview The",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Every Notion",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "The Notion",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Pattern Producer",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Thirteen phone sheets centre their titles and two do not, and the gate cannot tell",
     "created_at": "2026-09-09T21:01:05.754Z",
-    "last_save_at": "2026-09-09T21:07:21.016Z",
+    "last_save_at": "2026-09-10T01:03:55.434Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -210,14 +217,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:f8783db5a4289680acf1a7bff19b7af4c0d8a23f19a1262371772f9993f36c1a",
+    "source_fingerprint": "sha256:f134af9ed75fc6b76b4027f7ada97702bb79f5206e6210b9104acb82cb74ccce",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "a047e5594733bec6819a23081a316bb065d5c54df2be46b957e6f2e900ddf488",
+      "spec.md": "69af85fca9f6b4432cb996de7d1d4fb92f00098cb25c2fe5536a6003090d7d7c",
       "plan.md": "b32c91e5020ab5d4ae93c3b95064eccfbae4d3d3c9a8788ad8c9c0ff461e4555",
-      "tasks.md": "712fc18db50992bc83fe547957533fdd78f5d842913fc080aec7ae6244977aaa"
+      "tasks.md": "0bd8d0b1d7005a1994cc3429c2a08c2d4ffbecd3960cae6dddf32ed4ed9be579",
+      "implementation-summary.md": "c6f227d7582e9b8752969befd7e5e25f6deabe02c7ad230c8f7e2f62c7b27c27"
     },
     "last_active_child_id": null,
     "last_active_at": null
