@@ -1,5 +1,5 @@
 {
-  "holder": "012-sort-and-group-sheet-rows",
+  "holder": "011-record-sheet-header-and-icons",
   "acquiredAt": "2026-09-10T01:38:00.000Z",
   "baselineHash": "ef4e57917a2c",
   "inScopeCaptureRoots": [
@@ -6653,6 +6653,32 @@
         "screenshots/notion-clone/views/constructed-board-subtask-mobile-light.png"
       ],
       "note": "Captured twice (npm run screenshots </dev/null, 480 entries, exit 0 each) and judged by decoded pixel delta against the committed blobs across both judged runs, no image opened by eye: 10 movers. 8 REAL, kept, each named above: the four sort-panel captures carry the redesigned three-row rule (579014-623107 changed pixels on the desktop pair, 426530-444802 on the mobile pair, max channel delta 176-212), the four constructed-sort-panel-calendar captures carry the shortened hint beside the same redesign (10690-159338 pixels, max delta 112-196). Two further movers the lane’s own comparator clears: panel-base-import-modal-desktop-light 66 pixels at max delta 209, pixelHash-identical across the redesign (the 16x16-bucket blindness the 067 outstanding note records; the same 66px@209 read the 010 verification judged), and board-view-desktop-dark 8 pixels at max delta 1 in the second judged run only — jitter, restored to its committed bytes with its manifest row (bytes 280394, pixelHash 284b276d514a) patched back, sourceHashes carrying the current fingerprint. Every content-changed capture this release names was judged by decoded pixel delta, not by opening it. This verification reviews by measurement (headless); the visual read stays the operator device pass. A second judged pair after the hand fixtures (tools/screenshots/scenarios/panels.mjs) were mirrored onto the new markup — the hand panel-sort-rules carried the pre-stack one-row rule and the hand calendar-empty carried the long hint — captured twice more, exit 0 each: 8 further REAL movers, the four panel-sort-rules captures and the four panel-sort-calendar-empty captures, named in reviewed (render size itself changed, so the judge reports them size-differs rather than counted); the same 8 constructed sort/calendar captures reproduced at identical counts, the import-modal mover again 66px@209 pixelHash-identical, and board-view-desktop-dark jittered again (8px@1, second run only) — restored again to its committed bytes with its manifest row patched back. 16 content-changed captures named, none opened by eye. Post-rebase (leg replayed onto the 071/008+009-merged main, 892cc6e9) the recapture pair moved two further captures, both reproduced in both judged runs and so kept as real: views/board-mobile-desktop-dark.png 2px@Δ1 and views/constructed-board-subtask-mobile-light.png 62px@Δ2, their manifest rows carried by this run's screenshots. The sort/group surfaces themselves reproduced exactly - not one of the 16 movers moved again, so 008/009's shared-row changes left this packet's pixels untouched. baselineHash reset to the merged stylesheet 89170e31f3fe (this packet's released 6e10b42f6324 plus 008/009's hunks); this packet's own acquire/edit/release events are unchanged."
+    },
+    {
+      "event": "acquire",
+      "phase": "011-record-sheet-header-and-icons",
+      "at": "2026-09-10T02:20:00Z",
+      "hash": "6e10b42f6324",
+      "note": "Re-acquired by the landing verification, second pass: the push of the round-1 verification (c30fcb1e) was rejected non-fast-forward because the 071/012 sort-and-group leg landed meanwhile (5afe61e2/beaef2fa/22a560fc, its acquire 01:38Z and edit/release 02:31Z signing the lane at 6e10b42f6324, all recorded above). The leg was rebased again (6b6f6418 then 8cb990e6, now onto 22a560fc) and the 012 holder signs over here so the record-icon release can be judged against the twice-merged stylesheet."
+    },
+    {
+      "event": "edit",
+      "phase": "011-record-sheet-header-and-icons",
+      "at": "2026-09-10T02:20:00Z",
+      "hash": "ef4e57917a2c",
+      "note": "styles.css 892ac77282a3 -> ef4e57917a2c across two replays, and both deltas are the other legs: the first replay (onto 892cc6e9, signed 791646bdf576) folded 071/008 (filter condition rows onto the shared 16px grammar), 071/009 (properties/section rows, the edit-property delete row, the column-manager scrollbar) and 010 (copy, no stylesheet) under this packet's 27-line record addition (the .obnotion-record-detail-field-label .obnotion-record-detail-field-type-icon rule and its svg sizing); the second (onto 22a560fc) adds 012's sort/group hunks. git diff 892cc6e9..HEAD -- styles.css and 22a560fc..HEAD -- styles.css touch no selector outside those sets; this packet's own declaration set is unchanged. The 480-row manifest sourceHash move 89170e31f3fe -> ef4e57917a2c is that second fold, recorded by the recapture itself."
+    },
+    {
+      "event": "release",
+      "phase": "011-record-sheet-header-and-icons",
+      "at": "2026-09-10T02:20:00Z",
+      "hash": "ef4e57917a2c",
+      "reviewed": [
+        "screenshots/notion-clone/components/dropdown-field-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-board-groups-panel-mobile-light.png",
+        "screenshots/notion-clone/views/constructed-board-subtask-mobile-light.png"
+      ],
+      "note": "Captured twice (npm run screenshots </dev/null, 480 entries, exit 0 both) after the second rebase, judged by decoded pixel delta against the committed blobs across both judged runs, no image opened by eye. 3 REAL movers, kept: components/dropdown-field-desktop-light 99px at max channel delta 88, BOTH runs at IDENTICAL counts and deltas (the same 8x14px, one-glyph 242->154 label-ink patch at x81-88 y324-337 that the round-1 continuation judged, its only recorded input delta still styles.css, mechanism unchanged and still not decisively attributed -- a copy dependency its sources list does not name, the 010 lesson, remains the plausible second); panels/constructed-board-groups-panel-mobile-light 103px at max 76, moved in the SECOND judged run only, its first-run read reproducing the committed blob exactly, above the 12 bar so REAL by the rule rather than jitter; views/constructed-board-subtask-mobile-light 62px at max 2, BOTH runs at identical counts, a small deterministic 2-channel shift against the committed blob, kept. 1 jitter, the returning one: views/board-mobile-desktop-dark 2px at max channel delta 1 in the second judged run only, restored at its committed bytes (bytes 242581, its manifest row synced) with the fresh styles.css sourceHash kept. The 14 replayed record-family/peek/submenu captures and the other 464 reproduced their committed blobs. Their 012 release (6e10b42f6324, 16 movers) sits above this triplet; the three movers here are judged against this twice-merged tree, not re-opened from theirs. This verification reviews by measurement (headless); the visual read stays the operator device pass."
     }
   ],
   "outstanding": [

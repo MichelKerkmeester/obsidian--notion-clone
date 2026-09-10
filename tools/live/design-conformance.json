@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-10T01:43:52.315Z",
+  "measuredAt": "2026-09-10T02:21:56.637Z",
   "inputs": {
-    "styles.css": "89170e31f3fe",
+    "styles.css": "ef4e57917a2c",
     "tools/live/design-conformance.mjs": "8e86069bc5a3",
     "src/views/popover-position.ts": "a65201a60e11"
   },
@@ -18,7 +18,7 @@
     {
       "name": "registry equality — rendered surfaces with no declared role",
       "enforced": false,
-      "value": 78,
+      "value": 77,
       "target": 0,
       "note": "the registry holds five producers; the rest are unmigrated",
       "gated": false,
@@ -27,7 +27,7 @@
     {
       "name": "reachability — buildable surfaces no fixture renders",
       "enforced": false,
-      "value": 143,
+      "value": 144,
       "target": 0,
       "note": "nothing photographs or measures these, so nothing would notice if they broke",
       "gated": false,
