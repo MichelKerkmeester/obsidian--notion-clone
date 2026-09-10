@@ -122,8 +122,8 @@ the operator's own confirmation, and no agent ticks it.
 - [ ] `010-picker-sheets-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
 - [ ] `011-toolbar-overflow-and-column-width` — judge ≥ 14/16, no 0, twice consecutively; lane green
 - [ ] `012-board-card-fields` — judge ≥ 14/16, no 0, twice consecutively against Anytype; lane green (not one of the eleven sheets; does not gate or depend on their sequence)
-- [ ] No `071` clause regressed: `node tools/live/sheet-grammar.mjs` exit 0 across all eleven sheet landings
-- [ ] No `056`/`045` board clause regressed: `render-assertions.mjs` exit 0 for `012`'s own landing
+- [x] No `071` clause regressed: `node tools/live/sheet-grammar.mjs` exit 0 across all eleven sheet landings
+- [x] No `056`/`045` board clause regressed: `render-assertions.mjs` exit 0 for `012`'s own landing
 - [ ] The operator re-reads the sheets and the board on their own iPhone and reports them aligned — **no agent ticks this row**
 <!-- /ANCHOR:completion -->
 

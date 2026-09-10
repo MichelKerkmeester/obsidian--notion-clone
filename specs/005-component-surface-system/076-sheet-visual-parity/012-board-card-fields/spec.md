@@ -12,10 +12,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/076-sheet-visual-parity/012-board-card-fields"
-    last_updated_at: "2026-09-10T22:15:00Z"
-    last_updated_by: "board-card-fields-plan"
-    recent_action: "Scaffolded 012: the six-step loop and the DEFINE table for the board card's meta grid"
-    next_safe_action: "Execute tasks.md Step 1 (DEFINE), T001-T002"
+    last_updated_at: "2026-09-10T22:00:00Z"
+    last_updated_by: "board-card-fields-create"
+    recent_action: "CREATE: single-column meta grid landed; lane, captures and 28-lane gate green"
+    next_safe_action: "Run LAND, then the image judge; two consecutive passes on an unchanged tree close the child"
     blockers:
       - "This child's own reference is Anytype, not Notion — the board's parity target per 056 ADR-001 — because no Notion iOS capture in this repository shows a board card carrying more than a title (D3 rung 3 returns a structural gap, not a card grammar)"
       - "The child does not close until the image judge passes twice on an unchanged tree (parent D1)"
@@ -33,11 +33,11 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "012-board-card-fields-scaffold"
       parent_session_id: "076-sheet-visual-parity-scaffold"
-    completion_pct: 0
+    completion_pct: 70
     open_questions:
-      - "Does the label stay visible (045's later argument — a value without its name does not say which property it belongs to) or return to hidden (056 ADR-008's original single-column shape)? T001 records both readings; the target keeps the label, since deleting it would re-open a question 045 already closed on its own evidence, and the operator's words name wrapping, not naming"
       - "Every value in the Anytype reference is structural. No pixel size, no hex and no font size may be taken from a screenshot"
     answered_questions:
+      - "The label stays visible (045's later argument — a value without its name does not say which property it belongs to; the operator's ruling names wrapping, not naming): the landed clause proves 0 of 306 painted property names clipped at the card's full width, the value keeping its own 1-line clamp"
       - "045-board-card-properties's mechanism (which properties appear, and the panel that configures them) is unaffected; only the meta grid's column count and the label/value truncation rules move (056 ADR-003's guard applies here too: `board-card-properties-panel.test.ts` stays green unmodified)"
       - "The board card is already photographed through the production mount path (`constructedScenario(\"board\", …)`); no scenario work is owed"
       - "The two-column grid is not merely undocumented — it is asserted and PASSING in `tools/live/render-assertions.mjs`'s own 'meta grid' clause today, which is the same green-lane-over-a-wrong-picture failure mode D1 was written to catch (§13 records where)"
@@ -67,7 +67,7 @@ The board card's property grid (`.obnotion-kanban-card-meta`) lays two fields si
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Scaffolded — nothing started |
+| **Status** | In progress — CREATE and SCREENSHOT landed; the judge (twice, unchanged tree) and the operator's read remain |
 | **Created** | 2026-09-10 |
 | **Branch** | `worktrees/293-board-card-fields-plan` |
 | **Parent Spec** | `../spec.md` |

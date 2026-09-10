@@ -10177,24 +10177,21 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
   white-space: nowrap;
 }
 
-/* Property rows: the field name and its value, one per line, one fixed 25px pitch. The name span
-   the shared card renderer emits (the column's display name from the schema, never the raw key)
-   used to be hidden here so the card read values only — but a value without its name does not say
-   which property it belongs to, so the name now sits before the value in the muted voice, and the
-   value keeps the digits aligned (tabular-nums) it had when numbers stood alone. The checkbox row
-   keeps its own shape — glyph first, name after — and the cover image row carries no name over an
-   image. The card's type-name slot is styled alongside these rows above, not part of this block. */
+/* Property rows: the field name and its value, one per line, one fixed 25px pitch. Every property
+   owns the card's full width — a second field beside it halves the row, and at half the width an
+   ordinary property name (Due date, Related tasks, Summary) clips to its first characters while
+   the value's wrap-or-ellipsise alignment below reads as meant only against the card's whole
+   width. The name span the shared card renderer emits (the column's display name from the schema,
+   never the raw key) used to be hidden here so the card read values only — but a value without its
+   name does not say which property it belongs to, so the name now sits before the value in the
+   muted voice, and the value keeps the digits aligned (tabular-nums) it had when numbers stood
+   alone. The checkbox row keeps its own shape — glyph first, name after — and the cover image row
+   carries no name over an image. The card's type-name slot is styled alongside these rows above,
+   not part of this block. */
 .obnotion-container .obnotion-kanban-card-meta {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   column-gap: 12px;
-}
-/* Below a 360px-wide viewport the grid collapses to one column: two named values side by side
-   would leave neither the name nor the value room on the narrowest phones. */
-@media (max-width: 359.9px) {
-  .obnotion-container .obnotion-kanban-card-meta {
-    grid-template-columns: 1fr;
-  }
 }
 .obnotion-container .obnotion-kanban-card-meta .obnotion-board-card-field {
   display: flex;

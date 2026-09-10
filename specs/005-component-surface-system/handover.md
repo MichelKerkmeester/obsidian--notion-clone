@@ -4747,6 +4747,40 @@ entry records being `994cf993`. What the verification proved at every tip:
 Docs: this entry, the continuity trio (`recent_action`/`last_updated_at`/`last_updated_by`), and
 the 071/015 note in `roadmap.md` §5. Landed and pushed as `994cf993`.
 
+## 076/012-board-card-fields — the board card's meta grid: CREATE landed (2026-09-10, this leg)
+
+The board card's property grid (`.obnotion-kanban-card-meta`) is now a single always-on track —
+`grid-template-columns: 1fr`, the 359.9px media collapse deleted as unreachable — so every property
+owns the card's full width and no field ever lays beside another, at any viewport. The label's
+ellipsis floor, the value's 1-line clamp and its left-align/tabular-nums ruling, the badge row's
+full-width exemption and the 25px row pitch are all untouched; the mechanism guard
+(`board-card-properties-panel.test.ts`) ran green, unmodified. The lane clause that had been
+defending the two-column shape was corrected in the same change that stopped it being satisfied by
+that shape, and three clauses joined it in the board-geometry pass: label fit (painted
+scrollWidth ≤ clientWidth for every visible name), the row-pitch range (25px design, plus at most
+one wrapped 13px line — 25–44px), and field-count parity (17 property rows per card, the capture
+fixture's own derivation, uniform across all 18 cards and both widths).
+
+RED → GREEN, by numbers: the pre-fix producer read `meta grid 2 column(s) at 1440px, 1 at 340px`
+(the retired reading) and clipped **72 of 306** painted property names at 1440px, worst
+`withdrawn` by **29px** — lane exit 1, exactly those two, 155 assertions untouched; the post-fix
+producer reads `1 column(s) at 1440px, 1 at 340px`, **0 of 306** clipped, pitch `[25 × 17]` inside
+the range — lane exit 0, same 155 green. Captures: `npm run screenshots` ×2 (480 each, exit 0),
+`screenshots:verify` 480 current, 0 stale; decoded pixel delta across both runs: 57 movers, every
+one a board-card surface (12 content-sized, +100px taller; the frozen-column shimmer 36px at
+channel delta 1, identical in both runs — kept, not jitter), all named in the css-lane release's
+`reviewed`. Battery: tsc 0, vitest 1614/1614 (160 files), build 0, sheet-grammar 0,
+verify-placement 0 (418/420, 2 declared), evidence 16/16 after 12 stale writers re-ran, gate
+**28/0** exit 0, scan-comments 0, scan-failing-values 0, check-lane 0 — acquire 21:39:09Z → edit
+`ca808893599b` → release 21:55:35Z, `baselineHash` = the judged stylesheet.
+
+Docs: the child's tasks ticked T001–T009 and T012 (T010/T011 — the judge's two consecutive passes —
+and the operator's device row stay open, no agent ticks that one); seven acceptance rows Met, the
+judge's two and the operator's left Unmet; `verification.md` still awaits its first judge iteration
+(the loop's judge node owns it). Validated: the child, the 076 parent's first RESULT and the 005
+track, `RESULT: PASSED` on `orchestrator.js --strict` after the scoped
+`backfill-graph-metadata.js` runs. Not pushed at the time this entry was written — see the commit
+trailer for the landing SHA.
 ## 071/008-filter-sheet-row-model — the design-review follow-up's landing verification: two rebases, two green tips (2026-09-11, this leg)
 
 The review's `008` P1 — the root-group action row's four 28px unlabelled icon buttons — implemented RED-first

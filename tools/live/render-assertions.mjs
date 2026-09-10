@@ -457,6 +457,21 @@ window.__cardFieldLabels = (scenario) => {
     const value = container.querySelector(
       ".obnotion-kanban-card-meta .obnotion-board-card-field:not(.is-checkbox-field) .obnotion-board-card-value");
     const meta = container.querySelector(".obnotion-kanban-card-meta");
+    // A name paints its own ellipsis exactly when its box gave it less room than its text needs,
+    // so the painted truncation is read, not inferred from a style. Checkbox names count too:
+    // theirs sits after the glyph on the same row and dies the same way when the row will not
+    // hold it. Sorted by the worst shortfall so a failure names its own cause first.
+    const clippedLabels = visible
+      .map((label) => ({ text: label.textContent.trim(), by: label.scrollWidth - label.clientWidth }))
+      .filter((entry) => entry.by > 0)
+      .sort((a, b) => b.by - a.by);
+    // How many property rows each card carries: the wrap rule decides where a row breaks, never
+    // which rows exist, so every card on the mounted board must answer with the same count.
+    const cardFieldCounts = [...new Set([...container.querySelectorAll(".obnotion-kanban-card")]
+      .map((card) => card.querySelectorAll(
+        ".obnotion-kanban-card-meta .obnotion-board-card-field:not(.is-image-field)").length)
+      .filter((count) => count > 0))]
+      .sort((a, b) => a - b);
     out = {
       provenance,
       fieldCount: fields.length,
@@ -466,8 +481,10 @@ window.__cardFieldLabels = (scenario) => {
       labelStyles,
       mutedColor,
       valueNumeric: value ? getComputedStyle(value).fontVariantNumeric : null,
-      // Track count off the used grid: two space-separated tracks at 360px viewport and above,
-      // one below — a wide card lays two property rows side by side, a narrow one stacks them.
+      clippedLabels,
+      cardFieldCounts,
+      // Track count off the used grid, read at the desktop viewport and again at 340px: the
+      // single-column rule this clause stakes is what both readings must agree on.
       metaColumns: meta ? getComputedStyle(meta).gridTemplateColumns.split(" ").length : 0,
     };
   });
@@ -762,8 +779,8 @@ try {
       { ...GEOMETRY_SCENARIO, captureData: true },
     );
     // The field-name pass rides the geometry page: same bundle, same token sheets, one desktop
-    // evaluation and one below the 360px mark where the property grid must have collapsed to a
-    // single column. The viewport, not the page, is the switch the media query reads.
+    // evaluation and one at 340px, so the single-column reading this clause stakes is proven at a
+    // phone's width too, not only where the desktop capture happens to sit.
     cardLabelWide = await geometryPage.evaluate(
       (scenario) => window.__cardFieldLabels(scenario),
       { ...GEOMETRY_SCENARIO, captureData: true },
@@ -1118,11 +1135,15 @@ if (!geometryOutcome || !geometryOutcome.provenance) {
     + "expected 24px (a capture reads it at 48 device pixels; divide by the DPR before comparing)");
 
   const heights = geometryOutcome.rowHeights;
-  const pitchOk = heights.length > 0 && heights.every((height) => height === 25);
+  // 25px is the design; the headroom above it is one more 13px line, because a value that
+  // legitimately wraps to a second line may grow its own row and nothing taller than that
+  // belongs on a card. An exact-25 reading would be true only while no row could ever wrap.
+  const pitchOk = heights.length > 0 && heights.every((height) => height >= 25 && height <= 44);
   console.log(`  ${pitchOk ? "PASS" : "FAIL"}  ${"row pitch".padEnd(16)} `
-    + `${".obnotion-board-card-field on card one".padEnd(42)} [${heights.join(", ")}]`);
+    + `${".obnotion-board-card-field on card one, 25–44px".padEnd(42)} [${heights.join(", ")}]`);
   if (heights.length === 0) failures.push("board geometry row pitch: no .obnotion-board-card-field row on the first card");
-  else if (!pitchOk) failures.push(`board geometry row pitch: ${[...new Set(heights)].join(", ")}px, expected a uniform 25px`);
+  else if (!pitchOk) failures.push(`board geometry row pitch: ${[...new Set(heights)].join(", ")}px, expected every row within `
+    + `25–44px — the 25px pitch, plus at most one wrapped 13px line (18px) with sub-pixel rounding`);
 
   const radiusOk = geometryOutcome.checkboxRadius === "50%";
   console.log(`  ${radiusOk ? "PASS" : "FAIL"}  ${"checkbox shape".padEnd(16)} `
@@ -1239,14 +1260,45 @@ if (!geometryOutcome || !geometryOutcome.provenance) {
       failures.push("board card field names (narrow): the 340px pass did not measure a provenanced board");
       console.log("  FAIL  field names (narrow) — no provenanced measurement at 340px");
     } else {
-      const wideTwoCol = wide.metaColumns === 2;
-      const narrowOneCol = narrow.metaColumns === 1;
-      console.log(`  ${wideTwoCol && narrowOneCol ? "PASS" : "FAIL"}  ${"meta grid".padEnd(16)} `
+      // One property row per line, at every width the board mounts at. A half-width cell is what
+      // clipped a name to its first characters, so the two-column reading this clause used to
+      // defend was the defect's own receipt, not a fact — both widths must now read one track.
+      const singleColumn = wide.metaColumns === 1 && narrow.metaColumns === 1;
+      console.log(`  ${singleColumn ? "PASS" : "FAIL"}  ${"meta grid".padEnd(16)} `
         + `${wide.metaColumns} column(s) at 1440px, ${narrow.metaColumns} at 340px`);
-      if (!wideTwoCol || !narrowOneCol) failures.push(`board card field names (meta grid): the property grid `
-        + `computed ${wide.metaColumns} column(s) at 1440px and ${narrow.metaColumns} at 340px — two columns `
-        + `at 360px viewport and above, one below, so a card with many fields stays two-across on `
-        + `desktop and stacks on a narrow phone without ever overflowing`);
+      if (!singleColumn) failures.push(`board card field names (meta grid): the property grid `
+        + `computed ${wide.metaColumns} column(s) at 1440px and ${narrow.metaColumns} at 340px — one column, `
+        + `at every width the board mounts at: two named values side by side leave neither the name `
+        + `nor the value room, and each property owns the card's full width`);
+
+      // Painted truncation, not a style read: with the whole card width to share, a name still
+      // shorter than its own text means the row never actually gave it the room.
+      const clipped = wide.clippedLabels ?? [];
+      const fitOk = clipped.length === 0;
+      console.log(`  ${fitOk ? "PASS" : "FAIL"}  ${"label fit".padEnd(16)} `
+        + `${clipped.length} clipped of ${wide.visibleLabelCount} visible label(s) at 1440px`
+        + (clipped.length > 0 ? `, worst "${clipped[0].text}" by ${clipped[0].by}px` : ""));
+      if (!fitOk) failures.push(`board card field names (label fit): ${clipped.length} label(s) painted shorter than `
+        + `their own text at 1440px, worst "${clipped[0].text}" by ${clipped[0].by}px — a name with the whole `
+        + `card width to itself must not truncate below its own words`);
+
+      // Every card must carry the property rows the view configured — the presentation change
+      // decides where a row breaks, so a dropped or doubled row is a content change, not a wrap
+      // change. The count is the capture fixture's own: every non-title, non-select/status column
+      // of its 21-column schema, which the board's own card-field derivation resolves, identical
+      // at both widths because the viewport moves nothing but the wrap.
+      const expectedFieldCount = 17;
+      const wideCounts = wide.cardFieldCounts ?? [];
+      const narrowCounts = narrow.cardFieldCounts ?? [];
+      const parityOk = wideCounts.length === 1 && narrowCounts.length === 1
+        && wideCounts[0] === expectedFieldCount && narrowCounts[0] === expectedFieldCount;
+      console.log(`  ${parityOk ? "PASS" : "FAIL"}  ${"field count".padEnd(16)} `
+        + `${wideCounts.join("/")} field(s) per card at 1440px, ${narrowCounts.join("/")} at 340px, `
+        + `${expectedFieldCount} configured`);
+      if (!parityOk) failures.push(`board card field names (field count): the mounted cards carry `
+        + `[${wideCounts.join(", ")}] property row(s) at 1440px and [${narrowCounts.join(", ")}] at 340px, `
+        + `expected exactly ${expectedFieldCount} everywhere — a presentation change that drops or `
+        + `duplicates a row changes what the card shows, not how it wraps`);
     }
   }
 

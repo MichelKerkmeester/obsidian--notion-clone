@@ -39,13 +39,14 @@
       "column"
     ],
     "importance_tier": "normal",
-    "status": "planned",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "implementation-summary.md",
       "styles.css",
       "tools/live/render-assertions.mjs",
       "src/views/card-field-renderer.ts",
@@ -87,6 +88,12 @@
         "name": "goal.md",
         "kind": "doc",
         "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
@@ -196,17 +203,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The board card's property rows (`.obnotion-kanban-card-meta .obnotion-board-card-field`) render in a two-column CSS grid at any viewport 360px or wider (`styles.css:10178-10188`), which the shared per-field renderer's label span (`card-field-renderer.ts:105`) was never built to fit inside: at half the card's width, an ordinary property label — `Due date`, `Related tasks`, `Link`, `Margin %`, `Summary` — has nowhere near enough room, and `.obnotion-board-card-field-label`'s own `text-overflow: ellipsis; white-space: nowrap` (`styles.css:10202-10209`) truncates it exactly as far as the",
     "created_at": "2026-09-10T20:24:50.845Z",
-    "last_save_at": "2026-09-10T20:24:50.845Z",
+    "last_save_at": "2026-09-10T22:11:09.082Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,14 +215,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:11958dd1472af75e278714a60239d54bc1f3e45f2ca89c7636d78d593f09a60b",
+    "source_fingerprint": "sha256:12f88813b615eeba6bf226bdc132c07568a5e55907632265969642857218396f",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "f6587c8532243cedaab5e2daf3aedcd9f362ab1958322386dec006502e4c9901",
+      "spec.md": "ccad711a75791f29ba6e39b1d206879c747a99743f271acfbcd95a4dcdccc7cf",
       "plan.md": "d7ad64e80c13d10c88259a0948646b316b13aa39873701b1ce72a31d97520d5c",
-      "tasks.md": "26e5c0f60dc896d32bfd8110b8592f54ca34b94c8be5e2383410d0885c6c309c"
+      "tasks.md": "b762cfef618545d737671dd78d6077c5b4abb899e4a88897bc57632a431642c7",
+      "implementation-summary.md": "613d0465f69f32bffa6457a086f7cbd659678e53df93567ea06ae1a25817d434"
     },
     "last_active_child_id": null,
     "last_active_at": null
