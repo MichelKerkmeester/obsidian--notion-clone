@@ -61,9 +61,23 @@ to the parent: apply it there first, then resend the parent.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] `.obnotion-calendar-mini-nav` measures ≥28×28px under a coarse pointer, lane RED→GREEN
-- [ ] A `group` scenario is registered, captured (light + dark, mobile), and opened and looked at
-- [ ] No regression on any landed sheet clause
+- [x] `.obnotion-calendar-mini-nav` measures ≥28×28px under a coarse pointer, lane RED→GREEN
+  — RED: the named-28px assertion in `touch-targets.mjs`'s unconditional RAISED enforcement
+  exited 1 with eight misses at `measured 24x24, under its named 28px floor`; GREEN: exit 0
+  after the `min-width`/`min-height: 28px` raise, census 127→123 and 655→651
+- [x] A `group` scenario is registered, captured (light + dark, mobile), and opened and looked at
+  — `id: "group"`, phone-only, `toolbar-renderer.ts` first in `sources`; the two captures
+  (32068/31175 bytes, 804x1748) show the Group-by bottom sheet: grab bar, the Group/Close
+  header, the checked No-group row, the 012 Shown/Hidden partition with both bulk actions, one
+  property hidden. Judged from the decoded numbers per this worktree's measurement ruling:
+  every pixel theme-inverted, top-100 rows uniform, bottom-200 painted — bottom-anchored. The
+  criterion's look was the review-continuation's, as `acceptance-criteria.md`'s criterion-2
+  wording allows; the operator's device read (D3) stays the packet's standing habit, not a
+  criterion here
+- [x] No regression on any landed sheet clause — sheet-grammar 0 both engines,
+  touch-targets 0, render-assertions 0, vitest 1614/1614, placement 418/420 (2 declared),
+  evidence 16/16 after the eleven named stamps were re-run by their own writers, scans 0/0,
+  check-lane 0, gate 28 green / 0 red, exit 0
 <!-- /ANCHOR:completion -->
 
 ---
@@ -76,7 +90,7 @@ to the parent: apply it there first, then resend the parent.
 | Item | State | Evidence |
 |------|-------|----------|
 | Packet opened | Done | Scaffolded 2026-09-10 from `../sheet-design-review.md` §6 F-5 and §9 F-7, worktree `284-sheet-design-review` |
-| Implementation | Open | Not started |
+| Implementation | Done 2026-09-10, this worktree | Both findings landed, RED→GREEN; battery and lane evidence in the criteria above and in `tasks.md`'s completion notes. Two of the twelve judged capture paths (`table-frozen-column-desktop-light` 37px@32, `board-view-desktop-dark` 8px@1) are today's-engine moves — proven by recapturing with this packet's stylesheet backed out and named in the lane release for that reason; a third, `board-mobile-desktop-dark` (2px@1, one judged run), was restored to its committed bytes and its convergence pass returned it exactly |
 
 ### Deviations and findings
 

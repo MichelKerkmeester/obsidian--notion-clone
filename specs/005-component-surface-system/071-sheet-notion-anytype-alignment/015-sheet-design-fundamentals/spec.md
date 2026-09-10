@@ -43,7 +43,7 @@ touch no producer's row model, order or copy. Neither reopens a landed ruling.
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P2 |
-| **Status** | Draft — scaffolded 2026-09-10, not implemented |
+| **Status** | Implemented 2026-09-10 — both findings landed; acceptance criteria 4/4 Met (see `acceptance-criteria.md`); the operator's device read stays the packet's standing habit, not a criterion here |
 | **Created** | 2026-09-10 |
 | **Branch** | `worktrees/284-sheet-design-review` |
 | **Parent Spec** | `../spec.md` |

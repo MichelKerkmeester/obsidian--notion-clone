@@ -38,6 +38,7 @@ const I = {
   folderPlus: glyph('<path d="M12 10v6M9 13h6"/><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>'),
   circleSlash: glyph('<circle cx="12" cy="12" r="10"/><path d="M22 2 2 22"/>'),
   trash2: glyph('<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6M14 11v6"/>'),
+  check: glyph('<path d="M20 6 9 17l-5-5"/>'),
   undo2: glyph('<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>'),
   arrowUp: glyph('<path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>'),
   arrowDown: glyph('<path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>'),
@@ -323,6 +324,72 @@ export const PANEL_SCENARIOS = [
           <button class="obnotion-panel-button">+ Add sort</button>
         </div>
       </div>`,
+  },
+  {
+    id: "group",
+    title: "Group-by sheet — mobile bottom sheet",
+    group: "panels",
+    width: 402,
+    capture: "viewport",
+    // Photographed on the phone only, for the reason every other bottom-sheet fixture in this
+    // file carries the same restriction: the desktop pass would stretch a phone sheet across a
+    // window the plugin never presents it in.
+    devices: ["mobile"],
+    sources: [
+      "src/views/toolbar-renderer.ts",
+      "src/views/popover-position.ts",
+      "src/views/mobile-bottom-sheet.ts",
+      "src/views/surface-shell.ts",
+    ],
+    note: "The toolbar's Group-by popover as its phone bottom sheet, in the nobody-grouped-yet "
+      + "state the renderer draws when the view has no group field: the No-group row active, and "
+      + "the property list speaking the Shown/Hidden vocabulary with both bulk actions, one "
+      + "property hidden. Markup mirrors what ToolbarRenderer's group-popover builder draws "
+      + "(shell, header, then its sections and rows in order) — the partition and its Hide "
+      + "all/Show all actions were the redesign no capture had ever photographed.",
+    html: () => {
+      const closeGlyph = glyph('<path d="M18 6 6 18M6 6l12 12"/>');
+      // A property row as the group-popover builder draws it: marker (the column's type icon, or
+      // the em-dash token the No-group option carries), then the label, then the check the active
+      // row alone renders.
+      const propertyRow = (label, icon, active) => `
+        <button type="button" class="obnotion-group-popover-row obnotion-menu-item${active ? " is-active" : ""}">
+          <span class="obnotion-group-popover-marker obnotion-menu-item-icon"><span class="obnotion-property-icon">${icon}</span></span>
+          <span class="obnotion-group-popover-label obnotion-menu-item-label">${label}</span>
+          ${active ? `<span class="obnotion-group-popover-check obnotion-menu-item-check">${I.check}</span>` : ""}
+        </button>`;
+      const noGroupRow = `
+        <button type="button" class="obnotion-group-popover-row obnotion-menu-item is-active">
+          <span class="obnotion-group-popover-marker obnotion-menu-item-icon"><span class="obnotion-property-icon obnotion-property-icon-text">–</span></span>
+          <span class="obnotion-group-popover-label obnotion-menu-item-label">No group</span>
+          <span class="obnotion-group-popover-check obnotion-menu-item-check">${I.check}</span>
+        </button>`;
+      const sectionTitle = (title, bulk) => `
+        <div class="obnotion-group-popover-section-title${bulk ? " has-bulk-action" : ""}">${title}${
+          bulk ? `<button type="button" class="obnotion-group-popover-section-action">${bulk}</button>` : ""
+        }</div>`;
+      return `
+      <div class="obnotion-container obnotion-width-default">
+        <div class="obnotion-toolbar-popover obnotion-group-popover obnotion-anchored-popover obnotion-mobile-bottom-sheet is-visible" id="obnotion-group-popover" role="menu" data-surface-role="menu" aria-label="Group">
+          <div class="obnotion-mobile-bottom-sheet-handle" aria-hidden="true"></div>
+          <div class="obnotion-panel-header obnotion-shell-header">
+            <div class="obnotion-shell-header-leading"></div>
+            <span class="obnotion-panel-title">Group</span>
+            <div class="obnotion-shell-header-trailing">
+              <button type="button" class="obnotion-sheet-close" aria-label="Close">${closeGlyph}</button>
+            </div>
+          </div>
+          ${sectionTitle("Group by")}
+          ${noGroupRow}
+          ${sectionTitle("Shown", "Hide all")}
+          ${propertyRow("Name", TYPE_ICON.text)}
+          ${propertyRow("Cost", TYPE_ICON.currency)}
+          ${propertyRow("Billing", TYPE_ICON.select)}
+          ${sectionTitle("Hidden", "Show all")}
+          ${propertyRow("Notes", TYPE_ICON.text)}
+        </div>
+      </div>`;
+    },
   },
   {
     id: "panel-view-config",

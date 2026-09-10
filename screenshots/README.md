@@ -933,6 +933,16 @@ ViewConfigPanelRenderer's own render for a table view with a one-view database, 
 
 Sources: `src/views/view-config-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`
 
+### Group-by sheet — mobile bottom sheet
+
+The toolbar's Group-by popover as its phone bottom sheet, in the nobody-grouped-yet state the renderer draws when the view has no group field: the No-group row active, and the property list speaking the Shown/Hidden vocabulary with both bulk actions, one property hidden. Markup mirrors what ToolbarRenderer's group-popover builder draws (shell, header, then its sections and rows in order) — the partition and its Hide all/Show all actions were the redesign no capture had ever photographed.
+
+| dark | light |
+|---|---|
+| ![group dark](notion-clone/panels/group-mobile-dark.png) | ![group light](notion-clone/panels/group-mobile-light.png) |
+
+Sources: `src/views/toolbar-renderer.ts`, `src/views/popover-position.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/surface-shell.ts`
+
 ### Board card properties panel
 
 The Properties section of a board view's settings panel: fixed readonly Cover and Title rows above one reorderable row per field. Reuses the column manager's row markup (drag handle, checkbox, type icon, name) but drops its wrap/edit/delete actions, which this list has no equivalent of. Payment is hidden by the operator; Billing — the board's own group-by field — is not in the stored list either, so it is appended last, unchecked, rather than removed from the panel entirely.

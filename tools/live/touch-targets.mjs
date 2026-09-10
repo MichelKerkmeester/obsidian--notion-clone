@@ -143,10 +143,13 @@ const DECLARED = [
 ];
 
 /**
- * Controls held to the WCAG 44px floor outright rather than this file's default 28px — the
+ * Controls held to a named floor outright rather than this file's default 28px — the
  * 28-44px band is informational everywhere else, but each control listed here has an
  * operator-ruled phone height that is a fixed number, so a regression back into that band has to
  * fail here rather than only show up as a bigger "between floors" count nobody gates on.
+ * Most entries hold their control at the 44px Enhanced floor; the last one is held at the 28px
+ * default itself, because the census ratchets a total and can never see one control resting at a
+ * constant under-floor size — only a named entry moves the moment its own box shrinks.
  */
 const RAISED = [
   {
@@ -208,6 +211,14 @@ const RAISED = [
     floor: ENHANCED,
     reason: "the phone toolbar's labelled utilities (\"more\") button, same 2026-09-08 ruling as"
       + " the filter button beside it",
+  },
+  {
+    match: "obnotion-calendar-mini-nav",
+    floor: FLOOR,
+    reason: "the miniature calendar's prev/next month arrows declare a 24px width and had no"
+      + " coarse-pointer rule at all, so every touch surface hit a 24x24 box — under this file's"
+      + " 28px floor everywhere the calendar renders. Held here at the floor itself, not left to"
+      + " the census, whose ratchet counts a constant under-floor size as no movement at all",
   },
 ];
 

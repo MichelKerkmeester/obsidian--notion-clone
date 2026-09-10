@@ -1,6 +1,6 @@
 {
-  "holder": "007-settings-sheet-strict-alignment",
-  "baselineHash": "ae430699765b",
+  "holder": "015-sheet-design-fundamentals",
+  "baselineHash": "993d5770cc60",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -6944,6 +6944,39 @@
       "note": "settings grouped-card elevation: dedicated --obnotion-settings-card-fill token (light = --background-primary, unchanged behaviour; dark = --obnotion-surface-modal, the 88% rung above the 93% overlay canvas), the card rule switched to it and its rationale comment corrected; grammar gained a both-themes card>canvas relative-luminance clause, red 0.0130 vs 0.0270, green 0.0409 vs 0.0270"
     },
     {
+      "event": "acquire",
+      "phase": "015-sheet-design-fundamentals",
+      "at": "2026-09-10T20:03:37Z",
+      "hash": "1e320e716905"
+    },
+    {
+      "event": "edit",
+      "phase": "015-sheet-design-fundamentals",
+      "at": "2026-09-10T20:03:37Z",
+      "hash": "5560c2030c05"
+    },
+    {
+      "event": "release",
+      "phase": "015-sheet-design-fundamentals",
+      "at": "2026-09-10T20:03:37Z",
+      "hash": "5560c2030c05",
+      "reviewed": [
+        "screenshots/notion-clone/fields/constructed-date-picker-datetime-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-datetime-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-date-picker-mobile-light.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-datetime-mobile-dark.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-datetime-mobile-light.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-mobile-dark.png",
+        "screenshots/notion-clone/fields/field-date-value-picker-mobile-light.png",
+        "screenshots/notion-clone/panels/group-mobile-dark.png",
+        "screenshots/notion-clone/panels/group-mobile-light.png",
+        "screenshots/notion-clone/views/board-view-desktop-dark.png",
+        "screenshots/notion-clone/views/table-frozen-column-desktop-light.png"
+      ],
+      "note": "Coarse-pointer touch floor raised on the miniature calendar's prev/next month arrows (24x24 declared, now 28x28 under a coarse pointer via min-width/min-height, desktop untouched), and the toolbar's Group-by phone sheet registered its first capture scenario: group-mobile-light/dark, the nobody-grouped-yet state with the Shown/Hidden partition and both bulk actions, one property hidden. npm run screenshots judged twice, 482/482 exit 0 each, judged by decoded pixel delta against the committed blobs, no image opened. Eight judged movers, all the four date-picker scenario pairs' mobile captures, 248 changed pixels at maxDelta 112-132 each, identical counts in both judged runs: the 24->28px raise, nothing else. Two additions: the new group captures (804x1748, 32068/31175 bytes, every pixel theme-inverted, top-100 rows uniform, bottom-200 painted - the sheet is bottom-anchored, which is what the capture shows). Two movers this packet's own edits do not own, proven by recapturing the same scenarios with the packet's stylesheet backed out of the tree: table-frozen-column-desktop-light (37px, maxDelta 32) and board-view-desktop-dark (8px, maxDelta 1), both reproducing identically across runs and with the unedited stylesheet, so they are today's engine, not this edit; they are named here for exactly that reason. One one-run jitter, board-mobile-desktop-dark, 2px at maxDelta 1, restored to its committed bytes; its manifest row already matched. The named-28px touch-target assertion enforces the arrows' floor in tools/live/touch-targets.mjs from here on; both passes exit 0, fixture census 840 elements across 68 scenarios with 123 controls under the 28px floor against a recorded 169, constructed 651 against 785. A third, convergence pass (run to clear the one stale scenario whose committed blob predated this packet's edits) rewrote the corpus again: board-view-desktop-dark came back to its committed pixels exactly, 0 changed pixels, which is what settles its 8px at maxDelta 1 as the chronic single-unit wiggle rather than a trend; the other judged movers returned identical counts and deltas (248@112-132, 37@32), the working tree stayed at the same 12 judged paths, and verify.mjs reports 482/482 fresh with none blank or identical across themes."
+    },
+    {
       "event": "release",
       "phase": "007-settings-sheet-strict-alignment",
       "at": "2026-09-10T20:40:55Z",
@@ -6966,6 +6999,6 @@
     "The obnotion-board-* stylesheet family is now largely dead and was deliberately not cut here. The default board is the only board, and it builds obnotion-kanban-* markup; the extensions branch that built .obnotion-board-column, .obnotion-board-subgroup, .obnotion-board-add-column and their checkboxes is gone. Some of the family is still live and must survive any cut — .obnotion-board-card-cover and .obnotion-board-card-field are both built by the kanban card — so this is a per-rule audit, not a section delete, and it moves captures. One concrete consequence is already measurable: styles.css reads var(--obnotion-board-column-width, 220px) for .obnotion-board-column and nothing assigns that property any more, so the rule resolves its fallback for every user. It is dead rather than wrong, but it is exactly the class scan-pinned-values.mjs exists to catch, and it will stay invisible while the rule it belongs to is unreachable.",
     "067-sheet-family-remediation: seventeen captures on this lane still show the surface as it looked BEFORE the depth-cap fix at 173f7d3a. Found by 062's landing verifier, which recaptured on the merged tree and then measured decoded pixels rather than trusting pixelHash: panel-record-detail-sheet-body-empty-desktop-light moves 46,779 pixels at a max channel delta of 214, its dark pair 46,752 at 209, constructed-chart-toolbar-options-mobile-dark and constructed-column-manager-mobile-dark about 260,800 each at 45, and eleven more record-detail-sheet, modal-sheet-property-editor, depth3-dropdown and owned-menu-sheet captures between 10,548 and 42,211 pixels at 46 to 78. Every one of them hashes IDENTICALLY, which is why 173f7d3a's own recapture read them as byte-only re-encodes and restored them. pixelHash averages a 16x16 grid into 32 buckets, so any change confined to a narrow band or a small region moves a cell's average by less than one bucket and hashes the same - 062 hit the identical trap on its frozen-column shadow and fixed it by measuring pixels. Reproduced with 067's OWN stylesheet in the tree (identical counts), so this is 067's debt and not 062's: left restored here rather than recommitted, because reviewing another lane's surface is a review this packet cannot honestly sign. 067 owes a recapture measured by decoded pixel delta, and a read of each of the seventeen."
   ],
-  "baselineCommit": null,
-  "acquiredAt": "2026-09-10T06:25:05Z"
+  "baselineCommit": "da8af8ee3980",
+  "acquiredAt": "2026-09-10T20:03:37Z"
 }

@@ -24504,6 +24504,16 @@ input[type="checkbox"].obnotion-checkbox.obnotion-checkbox-field {
     min-width: 28px;
     min-height: 28px;
   }
+
+  /* The miniature calendar's prev/next month arrows declare their 24px box beside an explicit
+     width at the base rule, so raising them here means min-width/min-height rather than
+     width/height: a min wins over the declared size without touching it, the same defeat the
+     two controls above were written for. Raised in the media block, not at the declaration,
+     because 24px is a density choice for the pointer that can aim it. */
+  .obnotion-container .obnotion-calendar-mini-nav {
+    min-width: 28px;
+    min-height: 28px;
+  }
 }
 
 input[type="checkbox"].obnotion-checkbox::before {

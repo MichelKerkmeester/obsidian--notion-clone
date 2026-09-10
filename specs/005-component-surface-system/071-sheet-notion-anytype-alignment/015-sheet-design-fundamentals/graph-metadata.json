@@ -41,15 +41,19 @@
       "scenario"
     ],
     "importance_tier": "normal",
-    "status": "draft",
+    "status": "complete",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "tools/screenshots/scenarios/panels.mjs",
+      "implementation-summary.md",
       "tools/live/touch-targets.mjs",
+      "tools/screenshots/scenarios/panels.mjs",
+      "src/views/toolbar-renderer.ts",
+      "tools/live/touch-targets.json",
+      "tools/lane/css-lane.json",
       "tools/live/sheet-grammar.mjs",
       "screenshots/manifest.json",
       "repo-rules/screenshot-currency.md"
@@ -86,15 +90,39 @@
         "source": "derived"
       },
       {
-        "name": "panels.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/scenarios/panels.mjs",
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
         "name": "touch-targets.mjs",
         "kind": "file",
         "path": "tools/live/touch-targets.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "panels.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/panels.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "touch-targets.json",
+        "kind": "config",
+        "path": "tools/live/touch-targets.json",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
         "source": "derived"
       },
       {
@@ -174,35 +202,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Key Components See",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Data Flow Unchanged",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Two findings from `../sheet-design-review.md` have no single owning child",
     "created_at": "2026-09-10T00:00:00.000Z",
-    "last_save_at": "2026-09-10T05:17:49.930Z",
+    "last_save_at": "2026-09-10T20:23:15.057Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -210,14 +214,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d24445a1c3a960c77d2cfc76e81b5d15eccb57a38bf48cc68334c8293824a9c3",
+    "source_fingerprint": "sha256:b234c3e845f61a76bef380c0fb4136ac2f208e232958d25da12d44f635d40f07",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "ce83d3df2361e702c1160ecbf39999c38c9e4cc5123bfec56b3e4cc8e0ad548d",
+      "spec.md": "3d7300e24bf30fbb0a92ac6e9a80f07824d2271e0fe66e0ac0a2ec80ac02d7c8",
       "plan.md": "a6d5a130a2e9701da5db258d884c35688750fd29812dee117a315ab5aa425b14",
-      "tasks.md": "aee4bff97e947914cebe8e80503faa1b57b90fe010c6848b71d7724f68806cf1"
+      "tasks.md": "d5b8de6da50bfdf63e1fcc79041f27be1c8e9549af4b7e4e07b52452345f756a",
+      "implementation-summary.md": "4219c93cd4873bfe5ca5858a192ced5c832a74161924dce698e0256f971bba4d"
     },
     "last_active_at": null
   }
