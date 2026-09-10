@@ -1,0 +1,26 @@
+{
+  "level": "2",
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/003-filter-sheet-visual-parity",
+  "description": "The filter sheet stacks a condition onto three full-width bordered pills; Notion collapses a condition to one summary row and puts property, operator and value ",
+  "keywords": [
+    "filter",
+    "sheet",
+    "condition",
+    "card",
+    "operator",
+    "picker",
+    "active",
+    "rule",
+    "popover",
+    "notion"
+  ],
+  "lastUpdated": "2026-09-10T22:10:00.000Z",
+  "specId": "003",
+  "folderSlug": "filter-sheet-visual-parity",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

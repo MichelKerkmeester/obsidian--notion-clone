@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/076-sheet-visual-parity/011-toolbar-overflow-and-column-width",
+  "spec_folder": "005-component-surface-system/076-sheet-visual-parity/011-toolbar-overflow-and-column-width",
+  "parent_id": "005-component-surface-system/076-sheet-visual-parity",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "076 phase 11",
+      "toolbar overflow and column width visual parity",
+      "011 define table",
+      "toolbar overflow and column width image judge",
+      "implementation plan",
+      "076 phase 11 plan",
+      "011 six step loop",
+      "task breakdown",
+      "076 phase 11 tasks",
+      "011 loop tasks",
+      "acceptance criteria",
+      "011-toolbar-overflow-and-column-width acceptance criteria"
+    ],
+    "key_topics": [
+      "phase",
+      "toolbar",
+      "overflow",
+      "column",
+      "width",
+      "visual",
+      "parity",
+      "define",
+      "table",
+      "image",
+      "judge",
+      "implementation"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "src/views/toolbar-renderer.ts",
+      "src/views/toolbar-primitives.ts",
+      "src/views/column-width.ts",
+      "styles.css",
+      "tools/live/run-phone-toolbar-scroll.mjs",
+      "tools/live/phone-toolbar-scroll.ts",
+      "tools/live/sheet-grammar.mjs",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/live/render-assertion-harness.ts",
+      "tools/lane/check-lane.mjs",
+      "tools/screenshots/capture.mjs",
+      "tools/live/sheet-rebuild.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-primitives.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-primitives.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-width.ts",
+        "kind": "code",
+        "path": "src/views/column-width.ts",
+        "source": "derived"
+      },
+      {
+        "name": "styles.css",
+        "kind": "file",
+        "path": "styles.css",
+        "source": "derived"
+      },
+      {
+        "name": "run-phone-toolbar-scroll.mjs",
+        "kind": "file",
+        "path": "tools/live/run-phone-toolbar-scroll.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "phone-toolbar-scroll.ts",
+        "kind": "code",
+        "path": "tools/live/phone-toolbar-scroll.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-rebuild.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-rebuild.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Toolbar Overflow",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Column Width Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "No Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The toolbar's overflow surface and the column-width sheet, the last two surfaces the operator meets, against their references and the landed 075 labelled-button and vertical-scroll-lock rulings",
+    "created_at": "2026-09-10T22:10:00.000Z",
+    "last_save_at": "2026-09-10T19:59:19.780Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:ae22aeddf6eec1eaa3571c23e95016bf7605ee144654eeec254230e981f9095a",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "db87492b03e2fce285ac0946596bfeabf2710a417816cbc87ad45538161137f7",
+      "plan.md": "44e1459945135a07cb8b76c7027c44eb81c69e491ad96084a286f25b18e0dfac",
+      "tasks.md": "fbb46e2a4d0253d08cce70a60e3ea01bbb1fdbd43094ca129d017ee6522dc61f"
+    },
+    "last_active_at": null
+  }
+}

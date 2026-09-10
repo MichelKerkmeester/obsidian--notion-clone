@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/076-sheet-visual-parity/009-menu-and-confirm-visual-parity",
+  "spec_folder": "005-component-surface-system/076-sheet-visual-parity/009-menu-and-confirm-visual-parity",
+  "parent_id": "005-component-surface-system/076-sheet-visual-parity",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "076 phase 9",
+      "record menu, cell menu and destructive confirm visual parity",
+      "009 define table",
+      "record menu, cell menu and destructive confirm image judge",
+      "implementation plan",
+      "076 phase 9 plan",
+      "009 six step loop",
+      "task breakdown",
+      "076 phase 9 tasks",
+      "009 loop tasks",
+      "acceptance criteria",
+      "009-menu-and-confirm-visual-parity acceptance criteria"
+    ],
+    "key_topics": [
+      "phase",
+      "record",
+      "menu",
+      "cell",
+      "destructive",
+      "confirm",
+      "visual",
+      "parity",
+      "define",
+      "table",
+      "image",
+      "judge"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "src/views/owned-menu.ts",
+      "src/views/row-menu.ts",
+      "src/views/column-menu.ts",
+      "src/views/confirm-sheet.ts",
+      "src/views/modals/confirm-modal.ts",
+      "styles.css",
+      "tools/live/sheet-grammar.mjs",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/live/render-assertion-harness.ts",
+      "tools/lane/check-lane.mjs",
+      "tools/screenshots/capture.mjs",
+      "tools/live/sheet-rebuild.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "owned-menu.ts",
+        "kind": "code",
+        "path": "src/views/owned-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "row-menu.ts",
+        "kind": "code",
+        "path": "src/views/row-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-menu.ts",
+        "kind": "code",
+        "path": "src/views/column-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "confirm-sheet.ts",
+        "kind": "code",
+        "path": "src/views/confirm-sheet.ts",
+        "source": "derived"
+      },
+      {
+        "name": "confirm-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/confirm-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "styles.css",
+        "kind": "file",
+        "path": "styles.css",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-rebuild.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-rebuild.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Record Menu",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Cell Menu",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Destructive Confirm Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The row menu, the column/cell menu and the destructive confirm card against Notion's menus and delete confirms, including the action order 071/013 already ruled on",
+    "created_at": "2026-09-10T22:10:00.000Z",
+    "last_save_at": "2026-09-10T19:59:19.614Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:11871caba16ab73b3d37ef4cc637086b125ef20965afa20013d2ca9a97f46dc6",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "4ab7dea5767de57ca3ed64a2a10a0c22844f9a6bdcfbcce3aff7efe08cc9b3f9",
+      "plan.md": "9738474fe7d671c6242aeb77e8c5e631e1743b3dd023400b2b2420ee5c97598d",
+      "tasks.md": "6d9b78d61a2bac1e8d1560f045afebc18ab9b417926e99ca3267c893adc5aace"
+    },
+    "last_active_at": null
+  }
+}

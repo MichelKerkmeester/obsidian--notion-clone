@@ -1,0 +1,26 @@
+{
+  "level": "2",
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/010-picker-sheets-visual-parity",
+  "description": "Four picker sheets against their references, including the icon picker's crowded search row that 071/014 recorded and the date picker's CSS-specificity leak tha",
+  "keywords": [
+    "picker",
+    "date",
+    "icon",
+    "colour",
+    "color",
+    "property",
+    "type",
+    "search",
+    "sheet",
+    "grid"
+  ],
+  "lastUpdated": "2026-09-10T22:10:00.000Z",
+  "specId": "010",
+  "folderSlug": "picker-sheets-visual-parity",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

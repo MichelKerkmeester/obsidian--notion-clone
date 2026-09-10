@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/076-sheet-visual-parity/007-property-editor-sheet-visual-parity",
+  "spec_folder": "005-component-surface-system/076-sheet-visual-parity/007-property-editor-sheet-visual-parity",
+  "parent_id": "005-component-surface-system/076-sheet-visual-parity",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "076 phase 7",
+      "add / edit property sheet visual parity",
+      "007 define table",
+      "add / edit property sheet image judge",
+      "implementation plan",
+      "076 phase 7 plan",
+      "007 six step loop",
+      "task breakdown",
+      "076 phase 7 tasks",
+      "007 loop tasks",
+      "acceptance criteria",
+      "007-property-editor-sheet-visual-parity acceptance criteria"
+    ],
+    "key_topics": [
+      "phase",
+      "edit",
+      "property",
+      "sheet",
+      "visual",
+      "parity",
+      "define",
+      "table",
+      "image",
+      "judge",
+      "implementation",
+      "plan"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "src/views/modals/create-property-modal.ts",
+      "src/views/record-surface/type-picker.ts",
+      "src/views/record-surface/add-property-row.ts",
+      "src/views/property-type-icon.ts",
+      "styles.css",
+      "tools/live/sheet-grammar.mjs",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/live/render-assertion-harness.ts",
+      "tools/lane/check-lane.mjs",
+      "src/views/keyboard-inset.test.ts",
+      "tools/screenshots/capture.mjs",
+      "tools/live/sheet-rebuild.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "create-property-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/create-property-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "type-picker.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/type-picker.ts",
+        "source": "derived"
+      },
+      {
+        "name": "add-property-row.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/add-property-row.ts",
+        "source": "derived"
+      },
+      {
+        "name": "property-type-icon.ts",
+        "kind": "code",
+        "path": "src/views/property-type-icon.ts",
+        "source": "derived"
+      },
+      {
+        "name": "styles.css",
+        "kind": "file",
+        "path": "styles.css",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "keyboard-inset.test.ts",
+        "kind": "test",
+        "path": "src/views/keyboard-inset.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-rebuild.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-rebuild.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Edit Property Sheet Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Edit",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Number Edit",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Notion's New property sheet is a bordered name field plus an inline type list in the same sheet, not a name field and a chevron to a separate picker; and its delete row is not uniformly red",
+    "created_at": "2026-09-10T22:10:00.000Z",
+    "last_save_at": "2026-09-10T19:59:19.454Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:4d5d2e286dd5d27fb7d42b5e41ce157b89501c1c213c086cf52c373d3c7bd04e",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "216814a5dc4d290ab976be7158eec1cceb7f26fb198cd70e7f027231615c3cf0",
+      "plan.md": "a3d6f08353bc69616263f3ef2e5b21fa7b140f8dcf6c034c8bc23529eef72869",
+      "tasks.md": "084a04facfe6d53058c1eaa575fe283c0cffe722190c84850d09163c71a95b86"
+    },
+    "last_active_at": null
+  }
+}

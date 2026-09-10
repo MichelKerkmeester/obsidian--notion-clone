@@ -1,0 +1,26 @@
+{
+  "level": "2",
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/004-sort-sheet-visual-parity",
+  "description": "The sort sheet's rule is two rows and a labelled delete after 071/012; Notion merges the two rows into one card, picks direction through a drill-in sub-sheet, a",
+  "keywords": [
+    "sort",
+    "sheet",
+    "rule",
+    "direction",
+    "picker",
+    "delete",
+    "active",
+    "rule",
+    "popover",
+    "card"
+  ],
+  "lastUpdated": "2026-09-10T22:10:00.000Z",
+  "specId": "004",
+  "folderSlug": "sort-sheet-visual-parity",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

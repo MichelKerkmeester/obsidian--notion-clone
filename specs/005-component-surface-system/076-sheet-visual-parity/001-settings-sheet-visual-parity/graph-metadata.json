@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/076-sheet-visual-parity/001-settings-sheet-visual-parity",
+  "spec_folder": "005-component-surface-system/076-sheet-visual-parity/001-settings-sheet-visual-parity",
+  "parent_id": "005-component-surface-system/076-sheet-visual-parity",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "076 phase 1",
+      "settings sheet visual parity",
+      "001 define table",
+      "settings sheet image judge",
+      "implementation plan",
+      "076 phase 1 plan",
+      "001 six step loop",
+      "task breakdown",
+      "076 phase 1 tasks",
+      "001 loop tasks",
+      "acceptance criteria",
+      "001-settings-sheet-visual-parity acceptance criteria"
+    ],
+    "key_topics": [
+      "phase",
+      "settings",
+      "sheet",
+      "visual",
+      "parity",
+      "define",
+      "table",
+      "image",
+      "judge",
+      "implementation",
+      "plan",
+      "six"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "src/views/view-config-panel-renderer.ts",
+      "styles.css",
+      "src/i18n.ts",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/live/sheet-grammar.mjs",
+      "tools/live/render-assertion-harness.ts",
+      "tools/lane/check-lane.mjs",
+      "tools/screenshots/capture.mjs",
+      "tools/live/sheet-rebuild.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "view-config-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/view-config-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "styles.css",
+        "kind": "file",
+        "path": "styles.css",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-rebuild.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-rebuild.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Settings Sheet Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Settings",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Where Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Settings Sheet",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview The Settings",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The Settings sheet is one large white card wrapped around a form of bordered text inputs and helper paragraphs; Notion's equivalent is a table of contents built from several inset cards of navigation rows",
+    "created_at": "2026-09-10T22:10:00.000Z",
+    "last_save_at": "2026-09-10T19:59:18.965Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:6c066344ab391472dac6ceb3effd8a4f9535b7120a004d2de786dc1abf1f5682",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "81619d9b86a7b464ea9911503c2201ae73bc020c9a69fba9d4c3132141ce90ea",
+      "plan.md": "8a210fe7dfde879f8e0e2a7dd220f93c7d3be3294d4486e51135bd2b5572d798",
+      "tasks.md": "eb0b233f3e2d0fa683d97b99a400993dc5e03c41c6f045e5ead7a8ab670c8bc6"
+    },
+    "last_active_at": null
+  }
+}

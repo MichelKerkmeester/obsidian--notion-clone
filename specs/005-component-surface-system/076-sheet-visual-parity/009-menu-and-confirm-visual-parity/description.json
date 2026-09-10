@@ -1,0 +1,26 @@
+{
+  "level": "2",
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/009-menu-and-confirm-visual-parity",
+  "description": "The row menu, the column/cell menu and the destructive confirm card against Notion's menus and delete confirms, including the action order 071/013 already ruled",
+  "keywords": [
+    "menu",
+    "row",
+    "cell",
+    "column",
+    "confirm",
+    "destructive",
+    "delete",
+    "order",
+    "cancel",
+    "sheet"
+  ],
+  "lastUpdated": "2026-09-10T22:10:00.000Z",
+  "specId": "009",
+  "folderSlug": "menu-and-confirm-visual-parity",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

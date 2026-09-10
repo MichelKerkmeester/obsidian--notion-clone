@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/076-sheet-visual-parity/008-record-sheet-visual-parity",
+  "spec_folder": "005-component-surface-system/076-sheet-visual-parity/008-record-sheet-visual-parity",
+  "parent_id": "005-component-surface-system/076-sheet-visual-parity",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "076 phase 8",
+      "record sheet visual parity",
+      "008 define table",
+      "record sheet image judge",
+      "implementation plan",
+      "076 phase 8 plan",
+      "008 six step loop",
+      "task breakdown",
+      "076 phase 8 tasks",
+      "008 loop tasks",
+      "acceptance criteria",
+      "008-record-sheet-visual-parity acceptance criteria"
+    ],
+    "key_topics": [
+      "phase",
+      "record",
+      "sheet",
+      "visual",
+      "parity",
+      "define",
+      "table",
+      "image",
+      "judge",
+      "implementation",
+      "plan",
+      "six"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "src/views/record-detail-panel.ts",
+      "src/views/record-surface/property-row.ts",
+      "src/views/record-surface/record-header.ts",
+      "src/views/record-icon-renderer.ts",
+      "styles.css",
+      "tools/live/sheet-grammar.mjs",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/live/render-assertion-harness.ts",
+      "tools/lane/check-lane.mjs",
+      "tools/screenshots/capture.mjs",
+      "tools/live/sheet-rebuild.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "record-detail-panel.ts",
+        "kind": "code",
+        "path": "src/views/record-detail-panel.ts",
+        "source": "derived"
+      },
+      {
+        "name": "property-row.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/property-row.ts",
+        "source": "derived"
+      },
+      {
+        "name": "record-header.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/record-header.ts",
+        "source": "derived"
+      },
+      {
+        "name": "record-icon-renderer.ts",
+        "kind": "code",
+        "path": "src/views/record-icon-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "styles.css",
+        "kind": "file",
+        "path": "styles.css",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-rebuild.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-rebuild.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Record Sheet Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Sheet Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Record Sheet",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The record sheet's header, property rows and body against Notion's row page, reusing the row primitive 002 rebuilds and the card vocabulary 001 settles",
+    "created_at": "2026-09-10T22:10:00.000Z",
+    "last_save_at": "2026-09-10T19:59:19.532Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:6320540e60e54c83990866a79aa60e68d821aefaae413852bb58531481d15be5",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "da85460801c0f4b69bc49b477e8cab65dfed369867332f14d6a7b24d1e4a8aa5",
+      "plan.md": "a5f1c1481d32236d07ae21f0bc27d7f593c3ec78a8f99da75286f3cc0a1e1161",
+      "tasks.md": "500006671256b25dee62bee8e1a932b6655991619bf37481f356cce3a3d62a5f"
+    },
+    "last_active_at": null
+  }
+}

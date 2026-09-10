@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/076-sheet-visual-parity/003-filter-sheet-visual-parity",
+  "spec_folder": "005-component-surface-system/076-sheet-visual-parity/003-filter-sheet-visual-parity",
+  "parent_id": "005-component-surface-system/076-sheet-visual-parity",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "076 phase 3",
+      "filter sheet visual parity",
+      "003 define table",
+      "filter sheet image judge",
+      "implementation plan",
+      "076 phase 3 plan",
+      "003 six step loop",
+      "task breakdown",
+      "076 phase 3 tasks",
+      "003 loop tasks",
+      "acceptance criteria",
+      "003-filter-sheet-visual-parity acceptance criteria"
+    ],
+    "key_topics": [
+      "phase",
+      "filter",
+      "sheet",
+      "visual",
+      "parity",
+      "define",
+      "table",
+      "image",
+      "judge",
+      "implementation",
+      "plan",
+      "six"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "src/views/filter-panel-renderer.ts",
+      "src/views/active-rule-popover-renderer.ts",
+      "src/views/dropdown-field.ts",
+      "styles.css",
+      "tools/live/sheet-grammar.mjs",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/live/render-assertion-harness.ts",
+      "tools/lane/check-lane.mjs",
+      "src/i18n.ts",
+      "tools/screenshots/capture.mjs",
+      "tools/live/sheet-rebuild.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "filter-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/filter-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "active-rule-popover-renderer.ts",
+        "kind": "code",
+        "path": "src/views/active-rule-popover-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "dropdown-field.ts",
+        "kind": "code",
+        "path": "src/views/dropdown-field.ts",
+        "source": "derived"
+      },
+      {
+        "name": "styles.css",
+        "kind": "file",
+        "path": "styles.css",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-rebuild.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-rebuild.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Filter Sheet Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Sheet Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Filter Sheet",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The filter sheet stacks a condition onto three full-width bordered pills; Notion collapses a condition to one summary row and puts property, operator and value in one merged card on a drill-in screen",
+    "created_at": "2026-09-10T22:10:00.000Z",
+    "last_save_at": "2026-09-10T19:59:19.138Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:00bb5d130f8c870804b1c4076a2c58e9a6d7e5a18f9e193b4ef53e11c321b84e",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "b264017150d00a5e72588eba05bd042be66e3b9b6f3b60b179c24768a4cb6123",
+      "plan.md": "fad1ca7a3d501c42e81fe3ccdc3d6807e4fb12cbc68873f5401e4b73d3990a95",
+      "tasks.md": "3cc24aca00053f65101542308d1d6ee98db0bb9a850b3795a5d9810b77abdf30"
+    },
+    "last_active_at": null
+  }
+}

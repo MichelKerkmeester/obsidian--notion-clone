@@ -1,0 +1,26 @@
+{
+  "level": "2",
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/006-add-view-sheet-visual-parity",
+  "description": "The Add view sheet against Notion's Layout screen: a selection grid of layout tiles with the active one outlined, then one card of setting rows carrying toggles",
+  "keywords": [
+    "add",
+    "view",
+    "sheet",
+    "layout",
+    "grid",
+    "tiles",
+    "toggle",
+    "load",
+    "limit",
+    "notion"
+  ],
+  "lastUpdated": "2026-09-10T22:10:00.000Z",
+  "specId": "006",
+  "folderSlug": "add-view-sheet-visual-parity",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

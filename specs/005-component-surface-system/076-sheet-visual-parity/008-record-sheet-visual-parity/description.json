@@ -1,0 +1,26 @@
+{
+  "level": "2",
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/008-record-sheet-visual-parity",
+  "description": "The record sheet's header, property rows and body against Notion's row page, reusing the row primitive 002 rebuilds and the card vocabulary 001 settles.",
+  "keywords": [
+    "record",
+    "sheet",
+    "detail",
+    "row",
+    "page",
+    "header",
+    "property",
+    "body",
+    "peek",
+    "docked"
+  ],
+  "lastUpdated": "2026-09-10T22:10:00.000Z",
+  "specId": "008",
+  "folderSlug": "record-sheet-visual-parity",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

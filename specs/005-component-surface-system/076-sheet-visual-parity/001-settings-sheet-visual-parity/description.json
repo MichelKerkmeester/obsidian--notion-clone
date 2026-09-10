@@ -1,0 +1,26 @@
+{
+  "level": "2",
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/001-settings-sheet-visual-parity",
+  "description": "The Settings sheet is one large white card wrapped around a form of bordered text inputs and helper paragraphs; Notion's equivalent is a table of contents built",
+  "keywords": [
+    "settings",
+    "sheet",
+    "view",
+    "options",
+    "cards",
+    "navigation",
+    "rows",
+    "chevron",
+    "notion",
+    "parity"
+  ],
+  "lastUpdated": "2026-09-10T22:10:00.000Z",
+  "specId": "001",
+  "folderSlug": "settings-sheet-visual-parity",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

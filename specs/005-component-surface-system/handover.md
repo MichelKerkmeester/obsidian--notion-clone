@@ -10,12 +10,13 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T21:05:00Z"
-    last_updated_by: "288-dr-pickers"
-    recent_action: "288 verified+landed post-rebase: F-4 no-op proven, 1 real mover, gate 28/0, pushed 10cef60f"
-    next_safe_action: "GLM implements the 4 follow-up sections + 015; operator device rows on 0.0.38 remain"
+    last_updated_at: "2026-09-10T22:10:00Z"
+    last_updated_by: "290-sheet-parity-program"
+    recent_action: "Scaffolded 076: eleven per-sheet children under an image-judge gate"
+    next_safe_action: "Execute 076/001-settings-sheet-visual-parity, step DEFINE (T001-T004)"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
+      - "076 closes no sheet on lane evidence alone; the image judge is a required gate (076 D1)"
     key_files:
       - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
@@ -4327,3 +4328,71 @@ the operator's device read open); `roadmap.md`'s `071` §5.A row carries the leg
 Validated: `013`, the `071` parent (first RESULT) and `005` track, `RESULT: PASSED`, after each
 touched folder's scoped graph-metadata backfill. Not pushed — see the commit trailer for the
 landing SHA.
+
+## 076-sheet-visual-parity — the programme opened by "0.038 still has same old badish ui" (2026-09-10, this leg)
+
+The operator's ~21:40 ruling on 0.0.38 — *"Btw 0.038 still has same old badish ui in most sheets
+nothing like notion"* and *"Really needs to go step by step multiple ohases per sheet to define,
+plan, create, screenshot & verify and remediate as needed based on anytype or notion or similar
+screens untill perfect"* — opened `076-sheet-visual-parity`, a new Level 3 phase parent under `005`
+with eleven children, one per sheet. **Scaffolded only; no code, styles or lanes were touched.**
+
+**Why it is a new parent rather than a `071` child, stated with the evidence.** `071/002`-`071/015`
+aligned every phone sheet to Notion at the row-grammar level and proved each one with a DOM lane.
+Three captures were opened on `da8af8ee` and each was confirmed against its producer before
+anything was written. `constructed-column-manager-mobile-light.png` — rewritten by `8f11b642`,
+*after* the `4f345718` row rebuild, so it is current — still shows `↑ ↓ · filled blue checkbox ·
+type icon · label`, and `src/views/record-surface/property-row.ts:405-411` still sets
+`arrow-up`/`arrow-down` with `:417` calling `createCheckbox`. `071/009`'s target was *"≤4
+interactive controls per row"* and its lane measured **3**: both numbers are correct, and the
+target encoded the **count** of controls and never their **identity**, so a green lane and an
+unchanged picture are both honest. `constructed-view-config-mobile-light.png` is one white card
+around a form; `view-config-panel-renderer.ts` carries fourteen input/textarea constructions plus
+`settings.*.desc` helper strings.
+
+**One correction to the brief this leg was given.** The three-in-a-row filter the operator cited is
+`constructed-active-rule-filter-mobile-light.png` — the **active-rule popover**, a second
+production surface from `active-rule-popover-renderer.ts`. `071/008` (`64af87ee`) landed the
+stacked rows on the filter *sheet* and touched the `constructed-filter-panel*` captures only, and
+`constructed-filter-panel-mobile-light.png` shows those stacked rows. So the defect is real and the
+mechanism is a **second unnamed surface**, not a fixture photographed instead of production. The
+suspected fixture gap was checked and **disproved**: all 59 constructed scenarios mount the shipped
+renderers through `runRenderAssertions`, all eleven sheets have one, and every duplicating
+`panel-*`/`chrome-*`/`field-*` fixture declares `fixtureOf` at an existing constructed scenario.
+Nine fixtures have no constructed counterpart (the two record-detail title-currency variants, the
+computed-cleanup / invalid-events / base-import modals, the selection status bar, the two toasts,
+table-load-more) and none is one of the eleven sheets. Recorded as D2(b) so it is not re-derived.
+
+**The programme.** Every child carries the same six-step loop as its plan and tasks — DEFINE (a
+row-by-row visual target table against named reference paths), PLAN (producer, stylesheet region,
+scenario **and mount function**, one lane clause per measurable row), CREATE (RED with its number →
+producer → GREEN with its number, legs sized for one GLM or Sonnet pass), SCREENSHOT (phone light +
+dark through the production mount path, plus `tools/live/sheet-rebuild.mjs` where it applies),
+VERIFY (lane numbers **and** an image-judged side-by-side scored 0-2 across frame, sections, row
+anatomy, controls, type, spacing, colour and both themes — pass ≥ 14/16 with no row at 0), and
+REMEDIATE (any row < 2 opens RED → fix → GREEN → recapture → re-judge; done needs **two consecutive
+passes on an unchanged tree**). The operator's own phone read is the third gate and **no agent ticks
+it**. `decision-record.md` carries D1 the judge is required, D2 a target binds every surface of a
+grammar, D3 reference precedence with D15 preserved, D4 one sheet at a time with `001` first.
+
+**Reference reads, and what they could not answer.** Three Sonnet passes over
+`screenshots/notion/ios/**` (all 299×678 Mobbin thumbnails, re-verified with `sips`) produced the
+structural targets for settings, properties, filter, sort and group — and returned explicit gaps
+rather than guesses. Notion's **AND/OR conjunction control**, its **sort-rule reorder affordance**
+and its **grouped shown/hidden screen** are in **no capture in this repository**. Those gaps bind
+`003`, `004` and `005` under D3, and they are why `071/012` ADR-001's Notion half stays PROVISIONAL
+and why `071/012` ADR-003's stated Notion justification is raised as a Proposed ADR.
+
+Parent updates: `roadmap.md` §4 row 89 (both rulings verbatim), a §5.A bullet and table row, a §6A
+decision section, and **§7.19** carrying four Proposed ADRs (**ADR-E** the properties row's arrows
+and checkbox against Notion's grip and eye, **ADR-F** the reorder threshold, **ADR-G** the group
+partition's uncheckable justification, **ADR-H** the filter condition's collapse and the unobserved
+conjunction) — all Proposed under D15, none applied. `goal.md`'s DONE table gained `076` at 0/13.
+
+Phase qualification, measured not asserted: `recommend-level.sh --loc 2400 --files 30
+--architectural` → Level 3, 75/100, phase score **40/50** against the 25 threshold — both
+`phase-definitions.md` §2 thresholds met independently.
+
+Validated: the `076` parent and all eleven children, `RESULT: PASSED` on `orchestrator.js --strict`
+after each folder's scoped `backfill-graph-metadata.js` run, plus the `005` track. Not pushed at the
+time this entry was written — see the commit trailer for the landing SHA.

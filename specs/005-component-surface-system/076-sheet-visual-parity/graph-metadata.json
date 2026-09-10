@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/076-sheet-visual-parity",
+  "spec_folder": "005-component-surface-system/076-sheet-visual-parity",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [
+    "005-component-surface-system/076-sheet-visual-parity/001-settings-sheet-visual-parity",
+    "005-component-surface-system/076-sheet-visual-parity/002-properties-sheet-visual-parity",
+    "005-component-surface-system/076-sheet-visual-parity/003-filter-sheet-visual-parity",
+    "005-component-surface-system/076-sheet-visual-parity/004-sort-sheet-visual-parity",
+    "005-component-surface-system/076-sheet-visual-parity/005-group-sheet-visual-parity",
+    "005-component-surface-system/076-sheet-visual-parity/006-add-view-sheet-visual-parity",
+    "005-component-surface-system/076-sheet-visual-parity/007-property-editor-sheet-visual-parity",
+    "005-component-surface-system/076-sheet-visual-parity/008-record-sheet-visual-parity",
+    "005-component-surface-system/076-sheet-visual-parity/009-menu-and-confirm-visual-parity",
+    "005-component-surface-system/076-sheet-visual-parity/010-picker-sheets-visual-parity",
+    "005-component-surface-system/076-sheet-visual-parity/011-toolbar-overflow-and-column-width"
+  ],
+  "manual": {
+    "depends_on": [
+      {
+        "packet_id": "005-component-surface-system/071-sheet-notion-anytype-alignment",
+        "reason": "Imported from legacy graph-metadata.json",
+        "source": "legacy"
+      }
+    ],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "076 sheet visual parity",
+      "sheet visual parity programme",
+      "image judged sheet verification",
+      "sheet parity rubric",
+      "settings sheet visual parity",
+      "implementation plan",
+      "076 plan",
+      "sheet parity loop plan",
+      "task breakdown",
+      "076 tasks",
+      "sheet parity coordination tasks",
+      "packet goal"
+    ],
+    "key_topics": [
+      "sheet",
+      "visual",
+      "parity",
+      "programme",
+      "image",
+      "judged",
+      "verification",
+      "rubric",
+      "settings",
+      "implementation",
+      "plan",
+      "loop"
+    ],
+    "importance_tier": "important",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "goal.md",
+      "decision-record.md",
+      "screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png",
+      "screenshots/notion-clone/panels/constructed-view-config-mobile-light.png",
+      "src/views/view-config-panel-renderer.ts",
+      "screenshots/notion-clone/components/constructed-active-rule-filter-mobile-light.png",
+      "src/views/active-rule-popover-renderer.ts",
+      "tools/live/sheet-grammar.mjs",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/live/sheet-rebuild.mjs",
+      "src/views/column-manager-renderer.ts",
+      "src/views/record-surface/property-row.ts",
+      "src/views/filter-panel-renderer.ts",
+      "src/views/sort-panel-renderer.ts",
+      "src/views/toolbar-renderer.ts",
+      "src/views/board-groups-panel.ts",
+      "src/views/modals/create-property-modal.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-column-manager-mobile-light.png",
+        "kind": "file",
+        "path": "screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-view-config-mobile-light.png",
+        "kind": "file",
+        "path": "screenshots/notion-clone/panels/constructed-view-config-mobile-light.png",
+        "source": "derived"
+      },
+      {
+        "name": "view-config-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/view-config-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-active-rule-filter-mobile-light.png",
+        "kind": "file",
+        "path": "screenshots/notion-clone/components/constructed-active-rule-filter-mobile-light.png",
+        "source": "derived"
+      },
+      {
+        "name": "active-rule-popover-renderer.ts",
+        "kind": "code",
+        "path": "src/views/active-rule-popover-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-rebuild.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-rebuild.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "column-manager-renderer.ts",
+        "kind": "code",
+        "path": "src/views/column-manager-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "property-row.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/property-row.ts",
+        "source": "derived"
+      },
+      {
+        "name": "filter-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/filter-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sort-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/sort-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-groups-panel.ts",
+        "kind": "code",
+        "path": "src/views/board-groups-panel.ts",
+        "source": "derived"
+      },
+      {
+        "name": "create-property-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/create-property-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Sheet Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "One Sheet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "`071/002`-`071/015` aligned the phone sheets to Notion at the row-grammar level — pitch, inset,",
+    "created_at": "2026-09-10T22:10:00.000Z",
+    "last_save_at": "2026-09-10T19:59:18.877Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "goal.md",
+      "decision-record.md"
+    ],
+    "source_fingerprint": "sha256:4a0464eed5f73c865881c26a866a472e1db3f55965f2f8f2cd886c5a422cd56a",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "fd39be3fc7a0a0986c30b1d9cc4d002b9f739a408ddab2d4c18e64a36e4054e4",
+      "plan.md": "29cb108cc453efd789dd292fdf5525492c81bdcee24349eb5315c639ac368442",
+      "tasks.md": "608229bad146104f15aa14462af11fc18f0ee3dee1f46b6dc07485dff5e1d3f9",
+      "decision-record.md": "031848c76ba68ec32e8b9a47deca78d7a2337b26098a00b8a59c147929678d68"
+    },
+    "last_active_at": null
+  }
+}

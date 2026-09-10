@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/076-sheet-visual-parity/010-picker-sheets-visual-parity",
+  "spec_folder": "005-component-surface-system/076-sheet-visual-parity/010-picker-sheets-visual-parity",
+  "parent_id": "005-component-surface-system/076-sheet-visual-parity",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "076 phase 10",
+      "date, icon, colour and property-type pickers visual parity",
+      "010 define table",
+      "date, icon, colour and property-type pickers image judge",
+      "implementation plan",
+      "076 phase 10 plan",
+      "010 six step loop",
+      "task breakdown",
+      "076 phase 10 tasks",
+      "010 loop tasks",
+      "acceptance criteria",
+      "010-picker-sheets-visual-parity acceptance criteria"
+    ],
+    "key_topics": [
+      "phase",
+      "date",
+      "icon",
+      "colour",
+      "property-type",
+      "pickers",
+      "visual",
+      "parity",
+      "define",
+      "table",
+      "image",
+      "judge"
+    ],
+    "importance_tier": "normal",
+    "status": "draft",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "src/views/date-value-picker.ts",
+      "src/views/date-picker-model.ts",
+      "src/views/icon-picker-popover.ts",
+      "src/views/option-color-picker.ts",
+      "src/views/record-surface/type-picker.ts",
+      "styles.css",
+      "tools/live/sheet-grammar.mjs",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/live/render-assertion-harness.ts",
+      "tools/lane/check-lane.mjs",
+      "src/views/calendar-mini-calendar-renderer.ts",
+      "tools/screenshots/capture.mjs",
+      "tools/live/sheet-rebuild.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "date-value-picker.ts",
+        "kind": "code",
+        "path": "src/views/date-value-picker.ts",
+        "source": "derived"
+      },
+      {
+        "name": "date-picker-model.ts",
+        "kind": "code",
+        "path": "src/views/date-picker-model.ts",
+        "source": "derived"
+      },
+      {
+        "name": "icon-picker-popover.ts",
+        "kind": "code",
+        "path": "src/views/icon-picker-popover.ts",
+        "source": "derived"
+      },
+      {
+        "name": "option-color-picker.ts",
+        "kind": "code",
+        "path": "src/views/option-color-picker.ts",
+        "source": "derived"
+      },
+      {
+        "name": "type-picker.ts",
+        "kind": "code",
+        "path": "src/views/record-surface/type-picker.ts",
+        "source": "derived"
+      },
+      {
+        "name": "styles.css",
+        "kind": "file",
+        "path": "styles.css",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-mini-calendar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-mini-calendar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-rebuild.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-rebuild.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Type Pickers Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Sheet Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Four picker sheets against their references, including the icon picker's crowded search row that 071/014 recorded and the date picker's CSS-specificity leak that the design review found",
+    "created_at": "2026-09-10T22:10:00.000Z",
+    "last_save_at": "2026-09-10T19:59:19.698Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:69aaded89d065a44b21d712de20109ad36b93fe2517029cbebb480c8d9e051a7",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "82bee5fcdbf634fa13f8fb64069cf5802da00fa66e4d3aaa4355d5d867a2e549",
+      "plan.md": "05a58807b98b794c97034818c0489557ce12c11b1c9aa3cb0b7676831bb934a2",
+      "tasks.md": "f1903cf49218c9509683adeddc54c86b18926a3299dd09689140c9ecc527b804"
+    },
+    "last_active_at": null
+  }
+}

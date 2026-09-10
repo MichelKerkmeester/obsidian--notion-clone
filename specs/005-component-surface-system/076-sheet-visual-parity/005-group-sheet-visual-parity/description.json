@@ -1,0 +1,25 @@
+{
+  "level": "2",
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/005-group-sheet-visual-parity",
+  "description": "The group sheet carries a Shown/Hidden partition landed by 071/012 against a Notion screen that is not in this repository; the reference that does exist shows a",
+  "keywords": [
+    "group",
+    "sheet",
+    "group-by",
+    "picker",
+    "checkmark",
+    "shown",
+    "hidden",
+    "partition",
+    "notion"
+  ],
+  "lastUpdated": "2026-09-10T22:10:00.000Z",
+  "specId": "005",
+  "folderSlug": "group-sheet-visual-parity",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

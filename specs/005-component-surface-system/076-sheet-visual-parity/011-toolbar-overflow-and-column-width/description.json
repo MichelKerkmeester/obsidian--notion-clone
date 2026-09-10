@@ -1,0 +1,25 @@
+{
+  "level": "2",
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/011-toolbar-overflow-and-column-width",
+  "description": "The toolbar's overflow surface and the column-width sheet, the last two surfaces the operator meets, against their references and the landed 075 labelled-button",
+  "keywords": [
+    "toolbar",
+    "overflow",
+    "utilities",
+    "column",
+    "width",
+    "sheet",
+    "scroll",
+    "labelled",
+    "buttons"
+  ],
+  "lastUpdated": "2026-09-10T22:10:00.000Z",
+  "specId": "011",
+  "folderSlug": "toolbar-overflow-and-column-width",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

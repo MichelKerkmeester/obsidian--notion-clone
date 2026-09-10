@@ -1,0 +1,26 @@
+{
+  "level": "2",
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/002-properties-sheet-visual-parity",
+  "description": "Every Properties row still renders as up-arrow, down-arrow, a filled blue checkbox, a type icon and a label; Notion's row is a drag handle, a type icon, a label",
+  "keywords": [
+    "properties",
+    "sheet",
+    "row",
+    "anatomy",
+    "eye",
+    "drag",
+    "handle",
+    "shown",
+    "hidden",
+    "checkbox"
+  ],
+  "lastUpdated": "2026-09-10T22:10:00.000Z",
+  "specId": "002",
+  "folderSlug": "properties-sheet-visual-parity",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}
