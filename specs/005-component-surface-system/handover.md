@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-09T23:21:41Z"
-    last_updated_by: "071-008-filter-sheet-row-model"
-    recent_action: "Implemented 071/008 filter-sheet stacking; lane/gate green; not pushed"
-    next_safe_action: "Land 071/008 (274-filter-sheet-rows); then 009, 011-014; 007 awaits T001 capture"
+    last_updated_at: "2026-09-10T00:19:37Z"
+    last_updated_by: "274-filter-sheet-rows-verify"
+    recent_action: "Landing-verified 071/008 filter-sheet-row-model; 64af87ee+6d5a0d07 on main"
+    next_safe_action: "Execute 071/009, then 011-014; 007 awaits T001 capture"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
     key_files:
@@ -425,6 +425,36 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-10 ~00:19, `071/008-filter-sheet-row-model` LANDING-VERIFIED — landed on `origin/main` as `64af87ee`+`6d5a0d07`, worktree `274-filter-sheet-rows`
+
+**Landed SHA `6d5a0d07` on `origin/main`** (leg commit `b6aa29e0` replayed onto the 071/010+045
+main `48802783` as `64af87ee`; verifier commit `6d5a0d07`; `git log -1 origin/main` read back).
+**What this verifier confirmed** on the merged tree: the one-round rebase took main's side for the
+19 generated artefacts (verified by `git show :2:` == `48802783`'s blobs) and re-derived them —
+`005/handover.md` kept both landings' §1 sections, `css-lane.json` merged append-only (main's 466
+entries + this leg's 3 extra = 469, holder `071-008-filter-sheet-row-model`, `baselineHash` set to
+`shasum(styles.css)` = `189a3ef0e188`, the 045+008 merged sheet). Lane RED→GREEN re-proven by
+mutation (the whole leg diff on `filter-panel-renderer.ts` reverted): `sheet-grammar.mjs` exit 1
+with exactly the recorded clauses (controls-per-row 6,6,5; legibility scrollWidth 119 > 17; span
+341≠357) → restored, exit 0; the leg's revert-proof unit tests 3 failed | 7 passed (10) → 10/10.
+Full battery on the merged tree: `npx tsc --noEmit` 0, `npm run build` 0, `npx vitest run`
+1603/1603 (the leg's 1589 + main's 14), `sheet-grammar.mjs` exit 0 both engines (44–52px pitch,
+16px inset, 0 native selects, 067 dividers, 007 cards, AND/OR conjunction retained per ADR-B),
+`screenshots` ×2 exit 0 480/480 judged by decoded pixel delta over both runs — 1 real mover kept
+(`panel-base-import-modal-desktop-light` 66px@Δ209, manifest bytes 65674→65732), 2 one-run Δ1
+jitters restored (board-mobile-desktop-dark 2px, board-view-desktop-dark 8px, the rebase's
+conflicted binary; its manifest bytes 280379→280394), no other pixelHash moved (manifest's 532
+changed lines = the styles.css stamp). css-lane: post-rebase acquire/edit/release triplet for
+`071-008-filter-sheet-row-model` signed @`189a3ef0e188` (baselineHash = `shasum(styles.css)`,
+confirmed). Evidence: 14/16 STALE after the rebase → all 14 writers re-run exit 0 (replay 28/28
+held, sheet-rebuild green) → 16/16 fresh. `npm run gate </dev/null`: **28 green, 0 red** exit 0,
+first run. `validate --strict` orchestrator: 008 child, 071 parent's FIRST RESULT and 005 —
+**PASSED ×3** (008's graph-metadata needed no change; 005's backfilled once, changed 1).
+`scan-comments` 0; `scan-failing-values` 0 (147 bare vs baseline 148 — ratchet holds). Goal 6/7
+matches the §5.A row; AC-011 (operator device read, D3) stays the operator's, unticked. Docs:
+`operator-checklist.md` regenerated (date-only, 76 phases / 181 rows unchanged). Landed
+`48802783..6d5a0d07` after zero push rejections.
 
 ### 2026-09-09 ~23:35, 074-test-data-consolidation 0.0.36 testbed ruling leg LANDED+verified on `origin/main` — landing verifier, two rebases, pushed
 
