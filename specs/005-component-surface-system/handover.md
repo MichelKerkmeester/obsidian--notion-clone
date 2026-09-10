@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T23:10:00Z"
-    last_updated_by: "285-dr-settings-cards-verify"
-    recent_action: "007 P1 verified+landed 3x-rebased (f2f70252): clause restored, gate 28/0, goal 4/5"
-    next_safe_action: "Execute 076/001 T001 (transcribe ADR-I/J/K), then T002 lands L1-L9 RED"
+    last_updated_at: "2026-09-10T23:12:00Z"
+    last_updated_by: "295-loop-002-properties-sheet-visual-parity"
+    recent_action: "076/002 DEFINE+PLAN landed: corrected a mis-sourced reference, 6 clauses"
+    next_safe_action: "Execute 076/002 T001 (transcribe ADR-L/M), then T002 lands L1-L6 RED"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
       - "076 closes no sheet on lane evidence alone; the image judge is a required gate (076 D1)"
@@ -43,6 +43,34 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-10 ~23:12, `076/002-properties-sheet-visual-parity` DEFINE + PLAN LANDED — worktree `295-loop-002-properties-sheet-visual-parity`
+
+**What this leg did** — re-read every reference the scaffold cited against the actual renderer code
+and the current captures, rather than carrying the scaffold's draft forward unverified. Two
+corrections resulted. **First**, the scaffold's "Add affordances" target cited `+ New property` /
+`Learn about properties` as this sheet's own reference; that capture is Notion's **Properties
+editor** sheet (reached from Settings' "Edit properties" row), a different surface from Property
+visibility (this child's actual reference) — confirmed by reading both and finding neither an eye
+icon nor a Shown/Hidden partition anywhere on the editor screen. Property visibility itself has no
+add-affordance at all (a full-height pixel scan of its own reference finds uniform canvas below the
+card). **Second**, the scaffold's arrow-removal target is dropped: `071/012` ADR-001 already ruled
+the arrow pair the sort sheet's survivor because it carries a keyboard path a grip does not, and this
+DEFINE extends that reasoning here rather than contradicting it — no grip is introduced.
+
+`076/001`'s reference scale, card token and dark-theme invariant are reused rather than re-derived,
+consistent with D4's shared vocabulary; a required-property eye-icon contrast gap was measured
+directly (`rgb(162,162,162)` vs `rgb(30,30,30)`, ~5× luma) rather than assumed. 6 lane clauses, 13
+tasks, 2 Proposed ADRs (L, M — ADR-M notes this child's own row-height clause addresses `roadmap.md`
+§7.18 ADR-D's dangling 44px-floor gap).
+
+**Same tooling trap hit and worked around independently**: the pre-commit `gate:spec-remint`'s
+internal `validate.sh` call silently no-ops through this worktree's relative `.opencode` symlink
+(0 bytes vs a real report via the realpath form) and reports `UNREADABLE
+specs/005-component-surface-system`; confirmed by direct reproduction (`--strict --json
+--no-recursive` gave 0 bytes; the identical `--strict` run through `$(realpath .opencode)` +
+`NODE_PRESERVE_SYMLINKS=1` gave `RESULT: PASSED`, 0 errors). Workaround: `SPECKIT_SKIP_SPEC_REMINT=1`
+with the 005-scoped backfill run by hand first.
 
 ### 2026-09-10 ~23:10, `007-settings-sheet-strict-alignment`'s design-review P1 LANDED+VERIFIED (f2f70252) — worktree `285-dr-settings-cards`
 

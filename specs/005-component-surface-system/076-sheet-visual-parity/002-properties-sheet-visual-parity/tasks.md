@@ -1,6 +1,6 @@
 ---
 title: "Tasks: Phase 2: Properties Sheet Visual Parity"
-description: "The six-step loop as ordered tasks. Task Format: T### [P?] Description (file path)"
+description: "Thirteen write-first tasks: each is RED assertion, producer change, GREEN, capture, judge. Task Format: T### [P?] Description (file path)"
 trigger_phrases:
   - "task breakdown"
   - "076 phase 2 tasks"
@@ -27,68 +27,119 @@ contextType: "implementation"
 
 **Task Format**: `T### [P?] Description (file path)`
 
-Each task below is sized for one GLM 5.3 flash or Sonnet leg and states a number to record, not a judgement to make.
+**Write-first is the whole order.** Every task from T003 to T008 runs its clause RED and writes the
+failing number into `verification.md` **before** the producer moves, then GREEN with its number
+beside it. A task that reports a number it did not read is the failure this packet exists to stop.
+
+Each task is sized for one GLM 5.3 flash or Sonnet leg. The lane clauses are `spec.md` §13.11; the
+target rows are `spec.md` §13.3/§13.10; the rubric instance is `../spec.md` §5.
 <!-- /ANCHOR:notation -->
 
 ---
 
 <!-- ANCHOR:phase-1 -->
-## Phase A: DEFINE — the reference and the target table
+## Phase A-B: DEFINE and PLAN — closing out
 
-- [ ] T001 Open every reference in `spec.md` §13 and record, per file, whether it shows this sheet or something else. Mobbin family names are unreliable: three reference reads this session each found roughly a third of files mislabelled. Record every value that cannot be read at 299×678 as a gap, never a guess (`screenshots/notion/ios/**`, `spec.md`)
-- [ ] T002 Open our own current captures, light **and** dark, and fill the Ours column of §13 from what the image shows plus the producer that painted it. Confirm each claim against the producer before writing it — a capture and a source that disagree is the finding (`screenshots/notion-clone/**`, the producers in `plan.md` §3)
-- [ ] T003 Enumerate every production surface that renders this grammar and add any the scaffold missed to `spec.md` §3. If one has no constructed scenario, that becomes T005 and precedes all implementation (D2a, D2b) (`tools/screenshots/constructed-scenarios.mjs`, `spec.md`)
-- [ ] T004 Complete the Target column: every cell is a number measured from our own tree, or `TBD — needs operator capture`. No cell may be derived from a 299×678 asset. Record the contradiction list against landed `071` rulings and open each as a Proposed ADR in `../../roadmap.md` §7 (D3, D15) (`spec.md`, `../../roadmap.md`)
+DEFINE and PLAN are written. What remains of them is transcription and the lane.
+
+- [ ] T001 Transcribe `spec.md` §13.13's two Proposed ADRs — **ADR-L** (the scaffold's original
+  arrow-removal target corrected rather than followed, per `071/012` ADR-001) and **ADR-M** (this
+  child's L5 addresses `roadmap.md` §7.18 ADR-D's 44px-floor gap) — into `../../roadmap.md` §7.19's
+  table, one row each, raised-by `076/002`. Mark ADR-D (§7.18) addressed-by `076/002` rather than
+  leaving it dangling. **Neither is implemented by this task.** Add the §5.A row for this child at
+  `planned` (`../../roadmap.md`)
+- [ ] T002 Add clauses **L1-L6** to `tools/live/sheet-grammar.mjs`, unwired, in the idiom already
+  there. Run each one and **record its RED number** — the count, not the word "fails". Acquire the
+  css-lane triplet for `styles.css`, record the baseline hash, and confirm no other child holds it
+  (`tools/live/sheet-grammar.mjs`, `verification.md`, `tools/lane/check-lane.mjs`)
 <!-- /ANCHOR:phase-1 -->
 
 ---
 
 <!-- ANCHOR:phase-2 -->
-## Phase B: PLAN — files, scenario, mount function, clauses
+## Phase C: CREATE — RED, producer, GREEN
 
-- [ ] T005 If T003 found an unregistered production surface, register it now: a constructed scenario mounting the shipped renderer with accurate `sources`. Nothing else proceeds until the sheet is photographed from production (`tools/screenshots/constructed-scenarios.mjs`)
-- [ ] T006 Confirm the scenario named in `plan.md` §3 mounts the production path end to end — scenario entry, mount driver, in-page entry, harness branch — by reading each link rather than assuming it (`tools/screenshots/constructed-scenarios.mjs`, `tools/live/render-assertion-harness.ts`)
-- [ ] T007 Write one lane clause per measurable row of §13 into the sheet-grammar lane, unwired, and confirm each one can fail before it is asked to pass (`tools/live/sheet-grammar.mjs`)
-- [ ] T008 Acquire the css-lane triplet for `styles.css` and record the baseline hash. Confirm no other child holds it (`tools/lane/check-lane.mjs`)
+- [ ] T003 **The state control.** In `buildCheckboxPropertyRow` (`property-row.ts:384-439`), remove
+  the leading `createCheckbox` call (`:417`) and add a trailing eye/eye-slash icon button as the
+  row's last child, wired to the same `checked`/`onCheckboxClick` semantics under new names (an
+  `onToggle` reading the same state). **L1 and L2 RED first**, both numbers recorded
+  (`src/views/record-surface/property-row.ts`, `styles.css`)
+- [ ] T004 **The required-property contrast.** Give the eye icon a visibly lower-contrast state when
+  `checkboxDisabled` (renamed to reflect the new control, e.g. `stateControlDisabled`) is true —
+  reduced opacity or a muted colour token, targeting the same order of magnitude as R-2's measured
+  gap (`rgb(162,162,162)` vs `rgb(30,30,30)`, §13.12). **L3 RED first** (`src/views/record-surface/property-row.ts`, `styles.css`)
+- [ ] T005 **The section cards.** Apply `076/001`'s landed `.obnotion-settings-card` declaration
+  (`background: var(--background-primary); border-radius: var(--obnotion-radius-lg); margin: 0 var(--obnotion-sheet-inset) var(--obnotion-space-5);`)
+  to `.obnotion-column-manager-section` in `column-manager-renderer.ts`'s `renderSection` output.
+  The existing 1-card/0-heading vs 2-card/2-heading branch (`:121-156`) is unchanged at the logic
+  level — only the container gains the card treatment. **L4 RED first** (`src/views/column-manager-renderer.ts`, `styles.css`)
+- [ ] T006 **The section heading.** Drop `text-transform: uppercase` on
+  `.obnotion-column-manager-section-title` (`styles.css:13670-13674`); update the heading strings
+  (`panel.shownSection` / `panel.hiddenSection`) to their sentence-case `in table` form in all three
+  locales, flagging the open question (`spec.md` §12) inline as a comment rather than resolving it
+  silently (`src/i18n.ts`, `styles.css`)
+- [ ] T007 **The add-property card.** Give `.obnotion-column-manager-add-row` the same card
+  background as T005's sections. The row shape itself is unchanged — confirmed already correct in
+  `spec.md` §13.4. **L6 RED first** (`src/views/column-manager-renderer.ts`, `styles.css`)
+- [ ] T008 **The row height.** `.obnotion-column-manager-row`'s `min-height: 30px`
+  (`styles.css:14336-14344`) → `min-height: var(--obnotion-sheet-row-min-height)`. **L5 RED first at
+  30**. Re-run the board-groups panel's shared-row clauses and the `071` regression set in the same
+  invocation and record them green (`styles.css`, `tools/live/sheet-grammar.mjs`)
 <!-- /ANCHOR:phase-2 -->
 
 ---
 
-<!-- ANCHOR:phase-3 -->
-## Phase C: CREATE — RED, producer, GREEN
-
-Write-first throughout: the clause runs RED and its failing number is written down **before** the producer moves.
-
-- [ ] T009 Replace the arrow pair with a single leading drag grip in the shared primitive, keeping a keyboard path on the survivor — `071/012` ADR-001 chose the arrows *for the sort sheet* because they carried the keyboard and the grip did not, so the grip introduced here must carry one or the ruling is contradicted rather than followed. Run L1 RED at 2 and record it (`src/views/record-surface/property-row.ts`, `styles.css`)
-- [ ] T010 Move the state control from a leading checkbox to a trailing eye / eye-slash icon with a ≥ 44px box, and give the required property a visibly disabled state. Run L2 and L5 RED first and record both (`src/views/record-surface/property-row.ts`, `src/views/column-manager-renderer.ts`, `styles.css`)
-- [ ] T011 Re-order the row to handle · type icon · label · eye and wrap the two sections in separate cards with a ≥ 8px gap, keeping the inline bulk link on each header. Run L3 and L4 RED first and record both (`src/views/column-manager-renderer.ts`, `styles.css`)
-- [ ] T012 Re-run `008`'s record-sheet row clauses unchanged — `property-row.ts` is shared and every change here reaches that surface. Any regression closes here or the change is reverted (`tools/live/sheet-grammar.mjs`)
-<!-- /ANCHOR:phase-3 -->
-
----
-
 <!-- ANCHOR:phase-4 -->
-## Phase D: SCREENSHOT — capture and look at it
+## Phase D: SCREENSHOT — capture, then look at it
 
-- [ ] T020 Run `npm run screenshots </dev/null` and record the exit status and the entry count. Then `npm run screenshots:verify` and record the stale count. A run that moved nothing proves nothing — say so if that is what happened (`tools/screenshots/capture.mjs`)
-- [ ] T021 **Open the phone light and the phone dark capture and look at each one.** Record what changed against the pre-change capture, by decoded pixel delta and by eye. If the rebuild harness covers this sheet, run `node tools/live/sheet-rebuild.mjs` for the real-app WebKit path and record its exit status (`screenshots/notion-clone/**`, `tools/live/sheet-rebuild.mjs`)
+- [ ] T009 Run `npm run screenshots </dev/null` and record the exit status and the entry count; then
+  `npm run screenshots:verify` and record the stale count; then, if the rebuild harness covers this
+  sheet, `node tools/live/sheet-rebuild.mjs </dev/null` and record its exit status. **Then open the
+  phone light and the phone dark PNG and look at each one**, and record what changed against the
+  pre-change capture both by decoded pixel delta and by eye. **A run that moved nothing proves
+  nothing — say so if that is what happened** (`tools/screenshots/capture.mjs`, `screenshots/notion-clone/**`)
 <!-- /ANCHOR:phase-4 -->
 
 ---
 
 <!-- ANCHOR:phase-5 -->
-## Phase E: VERIFY — lane, judge, operator
+## Phase E-F: VERIFY, REMEDIATE — and the gate no agent ticks
 
-- [ ] T022 Gate (a): run every lane clause and record each GREEN number beside the RED number T009+ recorded. Re-run the `071` clauses this sheet already carries, unchanged, in the same run (`tools/live/sheet-grammar.mjs`)
-- [ ] T023 Gate (b): give a Sonnet or Opus reviewer our phone capture and the reference, and have it score the eight-row rubric from `../spec.md` §5 — Frame, Sections, Row anatomy, Controls, Type, Spacing, Colour, Both themes — each 0/1/2. Write the score table with one justification line per row into `verification.md`. **Pass is ≥ 14/16 with no row at 0** (`verification.md`)
-- [ ] T024 Gate (c): record the operator's device row in `acceptance-criteria.md` as **Unmet**. **No agent ticks it** (`acceptance-criteria.md`)
+- [ ] T010 Gate (a): run every lane clause (L1-L6) and record each GREEN number beside the RED
+  number T003+ recorded. Re-run the `071` clauses and the board-groups shared-row clauses this sheet
+  already carries, unchanged, in the same run (`tools/live/sheet-grammar.mjs`)
+- [ ] T011 **The judge, and the loop until it passes twice.** Give a Sonnet or Opus reviewer our
+  phone captures and the references — **R-1/R-2 for the content, `076/001`'s R-4/R-5 precedent for
+  the frame, since this sheet's own frame target is unchanged (§13.1)** — and have it score the
+  eight rows of `../spec.md` §5, each 0/1/2, with a one-line justification per row, into
+  `verification.md`. **Pass is ≥ 14/16 with no row at 0**; Frame is expected at **1** while ADR-I is
+  open (inherited from `076/001`, not re-decided here), so a Frame of 1 is not a remediation trigger.
+  Any **other** row below 2 opens a remediation cycle — clause RED for that row, fix, GREEN,
+  re-screenshot, re-judge — appended to `verification.md` as its own numbered iteration with its own
+  table. **Record the tree hash on every pass**: two passes with a change between them is iteration
+  *n+1*, not the second pass. If one row fails **three consecutive** iterations, stop — the target is
+  wrong and DEFINE re-opens (`verification.md`, `spec.md`)
+- [ ] T012 For every rubric row scoring below 2 (Frame excepted per T011), run the remediation cycle
+  to a second consecutive pass. **The child is not done until the judge passes twice in a row on an
+  unchanged tree** (`verification.md`, `spec.md`)
+- [ ] T013 **Gate (c) and close-out.** Record the operator's device row in `acceptance-criteria.md`
+  as **Unmet** — **no agent ticks it**. Then `npx tsc --noEmit`, `npm run build`, `npx vitest run`,
+  `npm run gate`, reading each exit status and its output rather than assuming them. Release the
+  css-lane triplet naming every capture that moved. Validate with `orchestrator.js --strict`, run the
+  scoped `backfill-graph-metadata.js`, re-validate, tick this child's rows in `../goal.md`, move
+  `../../roadmap.md` §5.A from `planned` to its landed state, and append a dated entry to the top of
+  §1 of `../../handover.md` with `recent_action` ≤ 96 characters (`acceptance-criteria.md`, `../goal.md`, `../../roadmap.md`, `../../handover.md`)
 <!-- /ANCHOR:phase-5 -->
 
 ---
 
-<!-- ANCHOR:phase-6 -->
-## Phase F: REMEDIATE — iterate until two clean passes
+<!-- ANCHOR:ordering -->
+## Ordering and parallelism
 
-- [ ] T025 For every rubric row scoring below 2, open a remediation task and run the cycle: a clause RED for that row, the fix, GREEN, re-screenshot, re-judge. Append each iteration to `verification.md` as its own section with its own score table. **The child is not done until the judge passes twice in a row on an unchanged tree** — a second pass after a change is iteration *n+1*, not the second pass. If one rubric row fails three consecutive iterations, stop: the target is wrong, and DEFINE re-opens (`verification.md`, `spec.md`)
-- [ ] T026 Close out: `npx tsc --noEmit`, `npm run build`, `npx vitest run`, `npm run gate` — read each exit status and output. Release the css-lane triplet naming every capture that moved. Validate with `orchestrator.js --strict`, backfill graph metadata, re-validate, tick this child's row in `../goal.md` and `../checklist.md`, and append a dated entry to `../../handover.md` with `recent_action` ≤ 96 characters (`../goal.md`, `../checklist.md`, `../../handover.md`)
-<!-- /ANCHOR:phase-6 -->
+**Strictly sequential.** T003-T008 all edit `styles.css` or the shared row producer; T005 and T007
+both need the reused `.obnotion-settings-card` declaration in place once, so T005 precedes T007 in
+practice even though nothing blocks doing them the other way round. No `[P]` task in this child.
+
+T008's board-groups regression check depends on T003-T007 already being in (it re-runs the shared
+row's clauses after every change that touches the row shell, not just the height).
+<!-- /ANCHOR:ordering -->

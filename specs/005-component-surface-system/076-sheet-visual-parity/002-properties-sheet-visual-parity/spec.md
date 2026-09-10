@@ -1,6 +1,6 @@
 ---
 title: "Feature Specification: Phase 2: Properties Sheet Visual Parity"
-description: "Every Properties row still renders as up-arrow, down-arrow, a filled blue checkbox, a type icon and a label; Notion's row is a drag handle, a type icon, a label and an eye."
+description: "Every Properties row still renders as up-arrow, down-arrow, a filled blue checkbox, a type icon and a label, with zero card grouping; Notion's row is a drag affordance, a type icon, a label and a trailing eye, grouped into inset cards."
 trigger_phrases:
   - "076 phase 2"
   - "properties sheet visual parity"
@@ -11,10 +11,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/076-sheet-visual-parity/002-properties-sheet-visual-parity"
-    last_updated_at: "2026-09-10T22:10:00Z"
-    last_updated_by: "290-sheet-parity-program"
-    recent_action: "Scaffolded 002: the six-step loop and the DEFINE table"
-    next_safe_action: "Execute tasks.md Step 1 (DEFINE), T001-T004"
+    last_updated_at: "2026-09-10T23:10:00Z"
+    last_updated_by: "295-loop-002-properties-sheet-visual-parity"
+    recent_action: "DEFINE + PLAN: brief, delta, 6 clauses, 13 tasks"
+    next_safe_action: "Execute tasks.md T001 (transcribe ADR-L/M), then T002 lane RED"
     blockers:
       - "No number may come from a 299x678 reference asset (D3)"
       - "The child does not close until the image judge passes twice on an unchanged tree (D1)"
@@ -30,14 +30,17 @@ _memory:
       - "styles.css"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "002-properties-sheet-visual-parity-scaffold"
+      session_id: "002-properties-sheet-visual-parity-plan"
       parent_session_id: "076-sheet-visual-parity-scaffold"
     completion_pct: 0
     open_questions:
-      - "The section headings read Shown in table / Hidden in table. The in table suffix suggests the string may be view-type-specific; no non-table-view capture exists here, so whether it varies is unreadable at 299x678"
+      - "The section headings' `in table` suffix (Shown in table / Hidden in table) may be view-type-specific; no non-table-view capture exists here, so whether it varies is unreadable at 299x678"
+      - "Whether Notion offers a direct (non-Settings-drill-in) entry to Property visibility, the way our toolbar button does, is unobserved in this capture set — Frame's leading-vs-trailing control question is deferred to ADR-I rather than answered here"
     answered_questions:
-      - "The sheet is photographed through the production mount path already; no scenario work is owed unless T001 finds an unregistered surface"
+      - "The sheet is photographed through the production mount path already; no scenario work is owed unless T003 finds an unregistered surface"
       - "Pass is 14/16 with no rubric row at 0, twice consecutively on an unchanged tree"
+      - "The scaffold's `+ New property` / `Learn about properties` citation read the wrong Notion screen (the Properties EDITOR, `database-properties-01`/`property-editor-10`, byte-identical structure across both filenames) rather than Property visibility (`hiding-properties-02/03`); corrected in this DEFINE (13.0)"
+      - "071/012 ADR-001 (arrows survive over the grip on the sort sheet, because they carry a keyboard path) is extended here rather than contradicted: the reorder arrows are unchanged, not replaced by a Notion-style grip"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: spec-core + level2-verify | v2.2 -->
 # Feature Specification: Phase 2: Properties Sheet Visual Parity
@@ -48,9 +51,9 @@ _memory:
 
 ## EXECUTIVE SUMMARY
 
-Every Properties row still renders as up-arrow, down-arrow, a filled blue checkbox, a type icon and a label; Notion's row is a drag handle, a type icon, a label and an eye.
+Every Properties row still renders as up-arrow, down-arrow, a filled blue checkbox, a type icon and a label, on a flat canvas with zero card grouping; Notion's row is a drag affordance, a type icon, a label and a trailing eye, grouped into inset cards with sentence-case headings and inline bulk links.
 
-**The gate that closes this child is an image judge, not a lane** (parent D1). Our capture is opened beside the reference and scored on the eight-row rubric in `../spec.md` §5; pass is **≥ 14/16 with no row at 0**, twice consecutively on an unchanged tree. The lane clauses in §13 are the floor that stops a landed value drifting, and they are never sufficient on their own.
+**The gate that closes this child is an image judge, not a lane** (parent D1). Our capture is opened beside the reference and scored on the eight-row rubric in `../spec.md` §5; pass is **≥ 14/16 with no row at 0**, twice consecutively on an unchanged tree. The lane clauses in §13.11 are the floor that stops a landed value drifting, and they are never sufficient on their own.
 
 **Critical dependencies**: `../001-settings-sheet-visual-parity/` must have passed its judge twice before this child starts (D4). `../003-filter-sheet-visual-parity/` inherits this child's settled vocabulary.
 
@@ -63,9 +66,9 @@ Every Properties row still renders as up-arrow, down-arrow, a filled blue checkb
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Scaffolded — nothing started |
+| **Status** | DEFINE and PLAN complete — CREATE not started |
 | **Created** | 2026-09-10 |
-| **Branch** | `worktrees/290-sheet-parity-program` |
+| **Branch** | `worktrees/295-loop-002-properties-sheet-visual-parity` |
 | **Parent Spec** | `../spec.md` |
 | **Parent Packet** | `076-sheet-visual-parity` |
 | **Predecessor** | `../001-settings-sheet-visual-parity/spec.md` |
@@ -91,7 +94,7 @@ Every Properties row still renders as up-arrow, down-arrow, a filled blue checkb
 
 ### Problem Statement
 
-Every Properties row still renders as up-arrow, down-arrow, a filled blue checkbox, a type icon and a label; Notion's row is a drag handle, a type icon, a label and an eye.
+Every Properties row still renders as up-arrow, down-arrow, a filled blue checkbox, a type icon and a label, on a flat canvas with zero card grouping; Notion's row is a drag affordance, a type icon, a label and a trailing eye, grouped into inset cards.
 
 ### Purpose
 
@@ -107,22 +110,23 @@ The Properties Sheet reads as its reference does — frame, sections, row anatom
 
 Per parent D2(a), a target binds **every** producer painting this grammar, not only the renderer the sheet is named after:
 
-- `constructed-column-manager` — `constructedScenario("column-manager", { renderer: "column-manager" })`, mounted by `mountConstructed` → `window.__mountConstructed` → `runRenderAssertions`, harness branch `scenario.renderer === "column-manager"` at `tools/live/render-assertion-harness.ts:3480`. Captures `screenshots/notion-clone/panels/constructed-column-manager-mobile-{light,dark}.png`
-- `src/views/record-surface/property-row.ts` is **shared with the record sheet** (`008`). A change here reaches `008`'s surface, so `002`'s lane must include `008`'s row clauses as a regression set (D2a)
+- `constructed-column-manager` — `constructedScenario("column-manager", { renderer: "column-manager" })`, mounted by `mountConstructed` → `window.__mountConstructed` → `runRenderAssertions`, harness branch `scenario.renderer === "column-manager"`. Captures `screenshots/notion-clone/panels/constructed-column-manager-mobile-{light,dark}.png` (confirmed current: 804×1748, opened this session)
+- `src/views/record-surface/property-row.ts`'s `buildCheckboxPropertyRow` is **shared** by this sheet and the board-groups panel (`src/views/board-groups-panel.ts`, per `styles.css:10338`'s `.obnotion-board-groups-panel .obnotion-column-manager-row` rule). A change to the row shell reaches that surface too; `005-group-sheet-visual-parity` is downstream of this child and must re-check it
 - Fixture `panel-column-manager` declares `fixtureOf: "constructed-column-manager"`; no scenario work is owed
 
 ### Producers
 
-- `src/views/column-manager-renderer.ts` — the sheet and its sections
-- `src/views/record-surface/property-row.ts` — the shared row primitive that emits the arrows (`:405-411`) and the checkbox (`:417`)
-- `src/views/checkbox.ts` — the control the row would stop using
-- `styles.css`
+- `src/views/column-manager-renderer.ts` — the sheet, its section partition (`renderSection`, `:126-156`), and the add-property row (`:159-210`)
+- `src/views/record-surface/property-row.ts` — the shared row shell (`buildCheckboxPropertyRow`, `:384-439`) that emits the drag handle (`:398`), the arrow pair (`:404-413`) and the checkbox (`:417`)
+- `src/views/checkbox.ts` — the control the row's state indicator stops using
+- `styles.css` — `.obnotion-column-manager-row` (`:14336-14344`, `min-height: 30px`, no reference to the shared `--obnotion-sheet-row-min-height: 44px` token every other sheet's rows use), `.obnotion-column-manager-section*` (no card treatment exists today — grep confirms no base `.obnotion-column-manager-section {` rule), `.obnotion-column-manager-add-row` (`:13642-13654`, already full-width rows, not bare glyphs — see 13.0)
 
 ### Out of Scope
 
-- Behaviour, semantics, persistence and data shape
+- Behaviour, semantics, persistence and data shape. In particular: the tap-to-edit affordance on a row's label (`handle.nameEl.addEventListener("click", () => actions.editColumn(col))`, `:410`) opens the existing edit-property surface and is invisible to a screenshot judge — it is not this child's concern, and Notion's own equivalent for renaming/re-typing a property lives on a **different** sheet (13.0)
 - Desktop presentations, except as a regression check
 - Reopening any `071` landing. A contradiction becomes a Proposed ADR in `../../roadmap.md` §7 (D15), never an amendment made here
+- Splitting our single panel into Notion's two separate sheets (Property visibility vs. Properties editor). Ours conflates visibility, reorder and rename into one surface; that is existing behaviour, and un-conflating it would be an architecture change no operator ruling asked for (13.0)
 <!-- /ANCHOR:scope -->
 
 ---
@@ -165,9 +169,10 @@ Per parent D2(a), a target binds **every** producer painting this grammar, not o
 | Risk | Impact | Mitigation |
 |------|--------|------------|
 | A green lane over an unchanged picture — the failure that opened this programme | The sheet ships looking the same | D1: the judge is a required gate; every rubric row is written about identity and appearance, not count |
-| A second surface renders the same grammar and is missed | Half the sheet is fixed | D2a: §3 enumerates every producer before §13 names a file |
+| A second surface renders the same grammar and is missed | Half the sheet is fixed | D2a: §3 enumerates every producer, including the shared row shell's board-groups consumer |
 | A number is read off a 299×678 thumbnail | A target that is precise and wrong | D3: structural reference only; every number is ours or `TBD` |
 | `styles.css` contention with another child | Two changes each pass alone and conflict merged | D4: one child at a time, one css-lane holder |
+| The reused `.obnotion-settings-card`-style token inherits `076/001`'s own open dark-theme defect (Proposed ADR-K) | Our new cards could invert in dark before ADR-K lands | Recorded as a shared risk in 13.11; not re-diagnosed here — `001` owns the fix |
 <!-- /ANCHOR:risks -->
 
 ---
@@ -180,9 +185,9 @@ Touch targets ≥ 44px on every control this child adds or moves. No contrast re
 
 ## 8. EDGE CASES
 
-- The sheet at its longest content, against the 90svH cap and the published keyboard inset
-- The sheet with the keyboard up
-- Empty and single-item states for every list this sheet renders
+- The sheet at its longest content (15+ properties), against the 90svH cap and the published keyboard inset
+- The sheet with the search field focused and the keyboard up
+- Zero-hidden (flat single card) and many-hidden (two cards) states
 - Both themes, each read on its own rather than assumed from the other
 
 ---
@@ -197,7 +202,7 @@ Level 2. One surface family, presentational, with a shared stylesheet and a shar
 
 | Area | Likelihood | Impact | Net |
 |---|---|---|---|
-| Visual regression on a sibling sheet sharing a primitive | Medium | High | Regression clauses re-run in the same lane run |
+| Visual regression on the board-groups panel, which shares `buildCheckboxPropertyRow` | Medium | Medium | `005`'s own re-check re-runs this row's clauses before it closes |
 | The target itself is wrong | Low | High | Three failed judge iterations on one rubric row re-opens DEFINE rather than patching CREATE |
 
 ---
@@ -210,58 +215,296 @@ As the operator, I open the Properties Sheet on my iPhone and it reads like Noti
 
 ## 12. OPEN QUESTIONS
 
-- The section headings read `Shown in table` / `Hidden in table`. The `in table` suffix suggests the string may be view-type-specific; **no non-table-view capture exists here**, so whether it varies is `unreadable at 299x678`
+- The section headings' `in table` suffix (`Shown in table` / `Hidden in table`) may be view-type-specific; **no non-table-view capture exists here**, so whether it varies is `unreadable at 299x678`
+- Whether Notion offers Property visibility as a direct, non-drill-in entry (the way our toolbar button reaches it) is unobserved; Frame's leading-vs-trailing header control stays deferred to `076/001`'s Proposed ADR-I rather than decided per-child
 
 ---
 
 <!-- ANCHOR:gap-table -->
-## 13. THE DEFINE TABLE — reference, current state, target
+## 13. DEFINE — the designer's brief, and the delta
 
-### References
+> Written as a brief to a builder. §13.0 records what was read and what could not be; §13.1-§13.8 are
+> the target, property by property; §13.9 is the honest before; §13.10 is the delta table with its
+> rubric mapping; §13.11 the lane clauses; §13.12 the provisional register; §13.13 the contradictions
+> held Proposed.
 
-- `screenshots/notion/ios/flows/hiding-properties/` (frames 01-05) — **the primary reference.** Settings → Property visibility, the show/hide screen
-- `screenshots/notion/ios/database/notion-ios-database-database-15-cc8b241a-*.webp` — the same screen: `Shown in table` / `Hidden in table` cards with inline bulk links
-- `screenshots/notion/ios/database/notion-ios-database-properties-01-8bb9115f-*.webp` — the Properties list you navigate from
-- `screenshots/notion/ios/database/notion-ios-database-property-editor-10-0568e792-*.webp` — the same list, second frame
+### 13.0 The references, and the finding that corrects the scaffold
 
-### What the reference cannot answer
+Reference precedence is parent **D3**. Rung 1 (operator capture) and rung 2 (full-resolution Notion
+iOS) are both **empty** — `screenshots/notion/ios/operator/` does not exist, re-checked this session.
+Every structural read below is rung 3, a Mobbin thumbnail at **299×678**, confirmed by `PIL` on every
+file cited.
 
-- The section headings read `Shown in table` / `Hidden in table`. The `in table` suffix suggests the string may be view-type-specific; **no non-table-view capture exists here**, so whether it varies is `unreadable at 299x678`
-
-### The table
-
-Read this session from the captures named above. The Notion column is structural; every Target number is ours or `TBD`. Notion's row has **four** elements and ours has five — but `071/009`'s target was a count (`≤4 interactive controls`) which our row already satisfies at 3. **This table targets identity and order, not count** (D1).
-
-| Element | Ours today | Notion (structural) | Target |
+| # | Path | What it is | What it answers |
 |---|---|---|---|
-| Row: leading edge | `↑` button then `↓` button | A single **six-dot drag grip** (2×3) | 1 reorder affordance at the leading edge, **0** arrow buttons; the survivor carries the keyboard path |
-| Row: state control | A **filled blue checkbox**, ~28px | An **eye / eye-slash icon at the trailing edge**, tap to toggle. No checkbox. No toggle switch | State control sits at the **trailing** edge; 0 checkboxes in the row; box ≥ 44px |
-| Row: type icon | Present, after the checkbox | Present, immediately before the label | Type icon immediately precedes the label, gap ≥ 4px (the `071/011` F-3 rhythm) |
-| Row: label | Present, last | Present, between the type icon and the eye | Label reads the property name only, no storage key |
-| Row order | arrow · arrow · checkbox · icon · label | **handle · type icon · label · eye** | Exactly that order, left to right |
-| Primary property | A row like any other | The Title row's eye renders **greyed / disabled** — Title cannot be hidden | The required property's state control is visibly disabled, not merely inert |
-| Sections | `SHOWN` / `HIDDEN` headings on a flat list | **Two separate rounded cards**, headed `Shown in table` and `Hidden in table`, with a visible gap between them | 2 cards, gap ≥ 8px, each with its own heading |
-| Bulk action | `Hide all` / `Show all` at the right of the heading | Same position — inline blue link text on the section header row itself | Bulk link inline on the header, right-aligned, box ≥ 44px |
-| Search | `Search properties` field at the top | `Search for a property…` filled rounded field, above both cards | Present, above the cards |
-| Add affordances | `+ Add property` and `+ File property` as two adjacent rows | Own card below the list: `+ New property`, `? Learn about properties` | Add affordances in a terminal card, full-width labelled rows |
-| Both themes | — | — | Card, canvas and eye-icon states each distinct in light and dark |
+| R-1 | `screenshots/notion/ios/flows/hiding-properties/…-02-9867cb76-*.webp` | **Property visibility**, all properties shown | The primary content reference: single card, row anatomy, search field, header |
+| R-2 | `…-hiding-properties-03-cc8b241a-*.webp` | The same sheet, **one property hidden** | The two-card state, the section headings, the inline bulk links, the required-property's dimmed eye |
+| R-3 | `…-hiding-properties-01-52348672-*.webp` | Settings / View options, entry point | Context only — shows the `Property visibility  3 ›` row this sheet opens from; not the sheet itself |
+| R-4 | `…-hiding-properties-04/05-*.webp` | A second database's Settings and its full page | Context only — a `Property visibility  1 ›` row on an unrelated database; adds nothing beyond R-3 |
+| R-5 | `screenshots/notion/ios/database/…-properties-01-8bb9115f-*.webp`, `…-property-editor-10-0568e792-*.webp` | **Properties editor** ("Edit properties"), a **different** Notion sheet | The add-property vocabulary only (13.10's "Add affordances" row) — see the correction below |
+| R-6 | `screenshots/anytype/mobile/sheets/anytype-mobile-sheet-object-properties-settings-light.png` | Anytype's property list | Tie-break only, D15. Row anatomy: type icon (leading), label, a trailing **drag** handle (`≡`), no eye. Its own add-affordance is a `+` inline on the "Properties panel" section heading, not a terminal row |
+| R-7 | `071/009` (`property-row.ts:405-411,:417` cited), `071/012` `decision-record.md` ADR-001 | Landed `071` rulings | Contradiction-checking only, not a visual reference |
 
-### The lane clauses these rows become
+**The correction this DEFINE makes.** The scaffold's DEFINE table cited `+ New property` / `? Learn
+about properties` as this sheet's own reference for its add-property row. That citation is **R-5**,
+and R-5 is **not** Property visibility — it is Notion's separate **Properties editor** sheet, reached
+from Settings' *"Edit properties"* row, not from *"Property visibility"*. Confirmed two ways: the
+two R-5 filenames (`database-properties-01`, one hop later `property-editor-10`) are the same screen
+at two states, and neither shows an eye icon, a drag handle, or a Shown/Hidden partition anywhere —
+the vocabulary R-1/R-2 show throughout. **Notion's own Property visibility screen has no add-property
+affordance at all** — R-1 and R-2 both end their card with nothing below it but canvas, confirmed by
+a full-height pixel scan of R-1 finding uniform `rgb(250,248,246)` from `y=280` to the tab bar. Our
+sheet keeps a capability Notion's analogous screen does not carry (13.10's "Add affordances" row,
+unchanged from the scaffold's conclusion but now correctly sourced): the target borrows R-5's own
+row vocabulary for it — full-width labelled rows in their own terminal card — because R-5 is the
+closest Notion precedent for *any* add-affordance of this kind, even though it lives one sheet over.
 
-- **L1** each property row emits exactly 1 reorder affordance and 0 elements with icon `arrow-up`/`arrow-down` — RED today at 2 arrows
-- **L2** each property row emits 0 checkboxes and carries its state control at the trailing edge — RED today at 1 checkbox at position 3
-- **L3** the row's element order is handle, type icon, label, state — RED today
-- **L4** the sheet renders 2 section cards with a gap ≥ 8px — RED today at 0 cards (flat list with headings)
-- **L5** the required property's state control carries a disabled attribute or state class — RED today
-- **L6** every row's state control box measures ≥ 44px
+**A second mislabelling, matching parent D3's warning.** `…-hiding-properties-03-cc8b241a-*.webp` and
+`…-database-database-15-cc8b241a-*.webp` are **byte-identical** (`cmp` confirmed) — the same capture
+filed under two unrelated flow names. Mobbin's naming is not load-bearing; the image content is.
 
-### Contradictions with landed `071` rulings
+**What the references cannot answer.**
 
-Raised as **Proposed ADRs** in `../../roadmap.md` §7 under D15 before this child implements. A `071` child is never amended from here.
+- **No dark-theme Notion capture for this sheet.** Every file above is light; the `001` DEFINE's own
+  120-file dark-theme scan covers the same asset pool. Every dark-theme target below is ours
+- **Divider thickness and the eye-icon's exact glyph weight are `thumbnail, value unreadable`** at
+  1-2px per hairline on a 0.76-scale capture
+- **Whether Property visibility has a direct (non-Settings-drill-in) entry point** is unobserved in
+  this capture set (§12)
 
-- **Direct.** `071/009` landed the arrow pair and the checkbox as the Properties row, against a target that constrained the control **count** (`≤4`) and not their identity. The reference shows a grip and an eye. This is a contradiction with a landed ruling and is raised as a Proposed ADR in `roadmap.md` §7 before `002` implements
-- `071/012` ADR-001 ruled the ↑↓ pair the survivor **on the sort sheet**, on the evidence that the grip carried no keyboard path. `002` may only introduce a grip that does carry one; otherwise it contradicts that ruling rather than being scoped away from it
-- `roadmap.md` §7.18 ADR-D holds the Properties sheet's 34px row density against the 44px thumb floor. The eye control's ≥ 44px box interacts with it; `002` records which way it falls rather than silently re-deciding it
+---
+
+### 13.1 (a) The sheet frame
+
+Read from R-1/R-2. Ours in `column-manager-renderer.ts:270-290` (`renderHeader`, shared
+`buildShellHeader`).
+
+| Property | Target | Where it comes from |
+|---|---|---|
+| Presentation | Bottom sheet, unchanged | Ours, landed |
+| Grab handle | **Present**, centred, above the header | R-1/R-2 both show one; confirmed present in our own capture (`constructed-column-manager-mobile-light.png`) |
+| Canvas | `rgb(250,248,246)` light — **measured on R-1 and R-2, identical to `076/001`'s own finding for the same asset family** (`y=62-108` and `y=148-176` both sampled at this value); ours today is `rgb(242,242,242)`, unchanged for this child (13.10) | Pixel sample, this session |
+| Title | Centred, one line, semibold — **"Properties"**, unchanged | Ours, confirmed correct in the current capture |
+| Trailing control | **`✕` — unchanged for this child.** R-1/R-2 show a leading `‹` back (this is a Settings drill-in in Notion); `buildShellHeader` is the same shared component `076/001` raised as **Proposed ADR-I**. This child does not decide the family question again — it cites ADR-I and targets Frame at **1**, the same posture `001` took | `buildShellHeader` is shared by all eleven sheets (§12) |
+| Leading control | None, unchanged | Matches R-3's toolbar-reached case more than R-1/R-2's drill-in case; see §12 |
+| Footer | None. The last card is the footer | Matches R-1: nothing below the card but canvas |
+<!-- Frame target intentionally does not change; recorded so the rubric's Frame row has a citation rather than a silent carry-forward -->
+
+---
+
+### 13.2 (b) The section list, in order
+
+Read from R-1 (nothing hidden) and R-2 (one hidden). **The count of sections is conditional, and our
+own producer already branches on it** (`column-manager-renderer.ts:121-156`): zero hidden columns →
+one undivided list; one or more hidden → two headed groups. This is correct today at the *logic*
+level and wrong only at the *paint* level (no card, wrong heading case, no `in table` suffix).
+
+| State | R-1/R-2 evidence | Target |
+|---|---|---|
+| Nothing hidden | R-1: one card, no heading at all | 1 card, 0 section headings — matches our own existing branch |
+| ≥ 1 hidden | R-2: two cards, `Shown in table` heading + `Hide all` inline link over the first, `Hidden in table` + `Show all` over the second, visible gap between them | 2 cards, gap ≥ 8px, sentence-case heading with the `in table` suffix (§12's open question), inline bulk link right-aligned on the same line as the heading — matches our own existing branch's *shape*, wrong only in paint |
+
+---
+
+### 13.3 (c) The row-by-row table
+
+| Element | Ours today | Notion (R-1/R-2, structural) | Target |
+|---|---|---|---|
+| Row: reorder | Arrow-up button, arrow-down button (phone; the drag handle swaps in on desktop, `styles.css:21725-21732`) | A single **six-dot drag grip**, leading edge | **Unchanged.** `071/012` ADR-001 ruled the arrow pair the sort sheet's survivor because it carries a keyboard path the grip does not; extended here rather than contradicted (13.13) |
+| Row: state control | A **filled blue checkbox**, leading, before the type icon | An **eye / eye-slash icon, trailing edge**, tap to toggle. No checkbox | State control **moves to the trailing edge** as an eye/eye-slash icon; 0 checkboxes remain in the row; icon hit box ≥ 44px |
+| Row: type icon | Present, immediately before the label already (`property-row.ts:429-433` then `:435-436`, back to back) | Present, immediately before the label | **Unchanged** — already correct; only the checkbox between the arrows and the icon is removed |
+| Row: label | Present | Present, between the type icon and the eye | Unchanged position; now the last leading-side element since the state control leaves |
+| Row order | arrow · arrow · checkbox · icon · label | handle · icon · label · eye | arrow · arrow · icon · label · **eye** |
+| Primary property (Title) | Checkbox `disabled` natively (`property-row.ts:385`, already true), no visible contrast difference confirmed | Eye icon ink measures `rgb(162,162,162)` vs an enabled row's `rgb(30,30,30)` — **measured, this session**, a ~5× luma gap | The eye icon for a required column computes a measurably lower contrast than an enabled row's (target: the same order of luma gap, not the exact hex — D3) |
+| Row min-height | `30px` (`.obnotion-column-manager-row`, `styles.css:14341`) — **the shared `--obnotion-sheet-row-min-height: 44px` token exists in this stylesheet and is simply not referenced here** | ~44pt single-line row (reused from `076/001`'s R-1-derived, `sips`-scale-confirmed figure; provisional, not asserted by a lane clause) | `min-height: var(--obnotion-sheet-row-min-height)` — swap to the token every other sheet's rows already use |
+<!-- /nothing else changes in this table -->
+
+---
+
+### 13.4 (d) Control types
+
+Notion's whole control vocabulary on R-1/R-2 is three kinds relevant to this sheet:
+
+1. **Drag/reorder control** — ours stays the arrow pair (13.3). Unchanged.
+2. **Eye toggle** — icon only, trailing, no label, no chevron. Target for our state control.
+3. **Action row** — leading icon or `+` glyph, label, no chevron, no value. R-5's `+ New property` /
+   `? Learn about properties` is the closest Notion precedent for our add-property row (13.0), since
+   R-1/R-2 have no add-affordance of their own to draw from.
+
+**Unchanged, and confirmed already correct:**
+
+- The add-property row is **already** full-width labelled text, not a bare glyph pair — the
+  `styles.css:13638-13654` comment records this as an intentional prior fix ("the add affordances
+  read as full-width rows, not as a side-by-side pill pair"), and the current capture confirms it
+  (`+ Add property`, `+ File property`, each its own full-width row). **The only remaining gap is the
+  terminal card wrapping it**, not the row shape itself — the scaffold's claim that this needed
+  converting to "full-width labelled rows" was already true before this DEFINE ran
+- The search field is already a bordered rounded pill above the list, matching R-1/R-2's placement.
+  Its copy differs (`Search properties` vs. Notion's `Search for a property…`) — a microcopy delta,
+  noted in 13.10 as optional and non-blocking, since the rubric's Controls row scores control kind
+  and affordance, not literal string text
+
+**Forbidden, unchanged from `071`'s landed floor:** a bordered text input anywhere in the row body
+(none exists), a native `<select>` (0, landed).
+
+---
+
+### 13.5 (e) Type scale
+
+No new type tier is introduced. Section headings and row labels reuse `076/001`'s already-DEFINEd
+tokens (13.5 there): heading `--obnotion-font-md` (13px) / `--text-muted` / sentence case / no
+letter-spacing, once the `in table` casing lands; row label and value stay the landed sheet-row
+tokens, unchanged here.
+
+---
+
+### 13.6 (f) Spacing rhythm
+
+| Property | Reference (R-1/R-2, provisional except where noted) | Ours today | Target |
+|---|---|---|---|
+| Row min-height | ~44pt (32-33 thumbnail px ÷ 0.7608, reusing `076/001`'s derived scale for the same asset family) | **30px**, hardcoded | `var(--obnotion-sheet-row-min-height)` = 44px — **not provisional; this is our own token, not a reference-derived number** |
+| Card inset from sheet edge | white span `x=12…16` to `x=285…288` on R-1, measured this session — **matches `076/001`'s `x=12…286` finding on its own bottom-sheet references exactly** | n/a — no card exists | 16px (`--obnotion-sheet-inset`), reusing the landed token, unchanged from `001`'s own card |
+| Card corner radius | provisional, consistent with `001`'s ~8pt reading | n/a | `--obnotion-radius-lg` (8px), reusing `001`'s landed `.obnotion-settings-card` token rather than a new one |
+| Inter-card gap | provisional, consistent with `001`'s ~16pt reading vs. its 12px-landed retune question | n/a | `--obnotion-space-5` (12px), same as `001`; lane floor `≥ 8px` either way |
+| Search field height | ~42pt (32 thumbnail px, R-1 `y=112-144`) | ours today reads close to this already (unmeasured precisely; not a lane target) | unchanged — not asserted |
+<!-- spacing target reuses 001's landed tokens rather than deriving new ones, per D4's shared vocabulary -->
+
+---
+
+### 13.7 (g) Both themes
+
+No dark-theme Notion reference exists for this sheet (13.0), so the dark target is **ours**, and it
+inherits `076/001`'s own invariant rather than restating a new one:
+
+> **The card band is lighter than its canvas in both themes**, the same rule `001`'s §13.7 states.
+
+Measured on the captures the judge will score, `constructed-column-manager-mobile-{light,dark}.png`:
+
+| | Canvas (measured) | Card (target, once added) |
+|---|---|---|
+| Light | `rgb(242,242,242)` | Reuses `076/001`'s card token (`--background-primary`), light direction already correct there |
+| Dark | `rgb(46,46,46)` — **identical to `076/001`'s own canvas reading**, confirming both sheets share the same theme tokens | Reuses the same token — **and therefore inherits `076/001`'s open Proposed ADR-K (the card fill computes darker than canvas in dark theme) until that lands.** Recorded as a shared risk (§6), not re-diagnosed here |
+
+---
+
+### 13.8 (h) States
+
+| State | Target | Reference |
+|---|---|---|
+| **Nothing hidden** | 1 card, 0 headings — matches our own existing branch, paint only changes | R-1 |
+| **≥ 1 hidden** | 2 cards, both headings, inline bulk links, required property's eye visibly dimmer | R-2 |
+| **Search active / keyboard open** | List does not restructure; filtered-out rows hide via class toggle (`wireVisibilitySearch`, unchanged behaviour) | ours — no reference shows this state for Property visibility specifically |
+| **Long content (15+ properties)** | Body scrolls; grab bar and header do not | ours, landed elsewhere in the family |
+| **Read-only view** | Add-property row and drag affordances hidden (`actions.isReadOnly`, unchanged) | ours — no reference |
+
+---
+
+### 13.9 The before — what a user sees today
+
+Read off `screenshots/notion-clone/panels/constructed-column-manager-mobile-{light,dark}.png`
+(804×1748, both opened this session) and confirmed against `column-manager-renderer.ts` and
+`property-row.ts`.
+
+**Structure.** A grab handle, a centred `Properties` title, a `✕` top-right. A bordered `Search
+properties` field. A `SHOWN` heading — uppercase, grey, small — with `Hide all` right-aligned on the
+same line. Fifteen rows, each: an up arrow, a down arrow, a filled blue checkbox (all checked), a
+small monochrome type icon, a label (`Name`, `Field 1`…`Field 15`). Then a `HIDDEN` heading with
+`Show all`, one row (`Field 2`, unchecked checkbox). Then `+ Add property` and `+ File property`,
+each its own full-width bold-text row. **No card boundary exists anywhere** — pixel-sampled this
+session at `rgb(242,242,242)` light / `rgb(46,46,46)` dark, uniform from the header's bottom edge to
+the sheet's bottom edge, sections and add-row included.
+
+**Controls.** Every row carries five elements in the order arrow-arrow-checkbox-icon-label. The
+`⋮⋮` drag handle `buildCheckboxPropertyRow` can also render is present in the DOM but `display:none`
+on phone (`styles.css:21725-21732`) — the arrows are its phone-native substitute, confirmed by the
+CSS comment naming exactly that swap.
+
+**Type.** Section headings uppercase, no `in table` qualifier. Row labels and values unremarkable,
+no defect found.
+
+**Colour.** Both themes read as a single flat surface; no grouping ink exists to invert, so `001`'s
+dark-inversion defect (ADR-K) has not yet reached this sheet — it will, the moment a card is added
+with the same token, unless `001` lands first (§6).
+
+**In one sentence.** It is a flat, ungrouped settings list with a leading checkbox and a trailing
+label, on a canvas that never varies — where the reference is a two-tier, sectioned list with a
+trailing eye and cards that visibly lift off their canvas.
+
+---
+
+### 13.10 The DELTA table — before → target, per property, with its rubric row
+
+| Property | Before (measured) | Target | Rubric row |
+|---|---|---|---|
+| State control position | leading, before the type icon | trailing, after the label | Row anatomy |
+| State control kind | filled checkbox | eye / eye-slash icon | Controls |
+| Required-row contrast | checkbox `disabled` natively, no measured visual gap confirmed | eye icon measurably dimmer, ~5× luma gap (target order of magnitude, not exact hex) | Colour |
+| Card grouping | **0** cards, ever | 1 card (nothing hidden) or 2 cards (≥1 hidden), matching the branch our own code already has | Sections |
+| Section heading case | uppercase, no suffix | sentence case, `in table` suffix (§12 open) | Type |
+| Row min-height | 30px, hardcoded | 44px, via the existing shared token | Spacing |
+| Add-property row shape | **already** full-width labelled rows (correcting the scaffold's claim) | unchanged row shape; gains a terminal card wrapper | Sections |
+| Card vs canvas, light | n/a (no card) | card lighter than canvas — reuses `001`'s token | Colour |
+| Card vs canvas, dark | n/a (no card) | inherits `001`'s open ADR-K until it lands (§6) | Both themes |
+| Search field copy | `Search properties` | optional: `Search for a property…`; non-blocking, not lane-asserted | — |
+| Reorder affordance | arrow pair | **unchanged** — `071/012` extended, not contradicted | Controls |
+| Type icon position | already before the label | unchanged | Row anatomy |
+
+---
+
+### 13.11 The lane clauses these rows become
+
+Written into `tools/live/sheet-grammar.mjs` beside the landed `properties sheet` clauses (if any) or
+as a new section, in the shared idiom: a `console.log` header, one `PASS`/`FAIL` line per
+measurement, `failures.push` on breach. **No clause asserts a number derived from a reference asset**
+(D3); every threshold below is a structural count, an ours-measured value, or our own token.
+
+| Clause | Assertion | Expected RED today |
+|---|---|---|
+| **L1** | Each property row emits **0** elements matching `input.obnotion-checkbox` | 1 checkbox per row |
+| **L2** | Each property row emits exactly **1** trailing state-control icon (`eye`/`eye-off`) as its last child | 0 |
+| **L3** | The required column's (Title's) state-control icon computes a measurably lower opacity or contrast than an enabled row's state-control icon | n/a — no eye icon exists yet |
+| **L4** | When ≥ 1 column is hidden, the sheet renders **2** section containers each with `background` distinct from the sheet canvas and `border-radius ≥ 8px`; when 0 are hidden, it renders **1** such container and **0** section headings | 0 containers in either state (flat list) |
+| **L5** | Every `.obnotion-column-manager-row` computes `min-height ≥ 44px` | 30px |
+| **L6** | The add-property row container (`.obnotion-column-manager-add-row`) computes `background` distinct from the sheet canvas | none — flat, matches canvas |
+
+**The `071` regression set re-runs unchanged in the same invocation**: the row's own hairline and
+inset grammar this sheet already carries under `071/009`, and the board-groups panel's shared-row
+clauses (`005`'s own concern, §3), re-checked here as a courtesy since this child touches the shared
+shell first.
+
+---
+
+### 13.12 The provisional register — and what settles each
+
+No new provisional values are introduced beyond what `076/001` already registered for the same
+reference family (canvas colour, card inset, card radius, inter-card gap, row height) — this child
+reuses those figures rather than re-deriving them, since both sheets read from the same device/scale
+assumption (299×678, `0.7608`, established in `001/spec.md` §13.12). The one value specific to this
+child:
+
+| Provisional | Value | How it was derived | Settled by |
+|---|---|---|---|
+| Required-row eye-icon contrast gap | ~5× luma (`rgb(162,162,162)` vs `rgb(30,30,30)`) | Darkest-pixel sample in a small box around each eye icon, R-2, this session | A full-resolution operator capture (OC-S1, shared with `001`) would confirm the exact ratio; the lane asserts direction and an order of magnitude, not the hex |
+
+Everything else in §13.6/13.7 is **`076/001`'s own provisional register, cited, not re-derived** —
+see `../001-settings-sheet-visual-parity/spec.md` §13.12 for the full list and its settling captures
+(OC-S1, OC-S2).
+
+---
+
+### 13.13 Contradictions with landed rulings — Proposed, not applied
+
+Under **D15** and parent **D3**, each is a **Proposed ADR** to be transcribed into
+`../../roadmap.md` §7.19 by **T001**. None is implemented by this child.
+
+| # | The landed ruling | What this DEFINE read finds | Raised by |
+|---|---|---|---|
+| **ADR-L** | The scaffold's original DEFINE targeted removing the arrow pair for "1 reorder affordance at the leading edge" (implying a Notion-style grip) | `071/012` ADR-001 already ruled the arrow pair survives on the sort sheet because it carries a keyboard path the grip does not. This DEFINE finds no reason the same reasoning would not hold here, and **does not introduce a grip** — the scaffold's original target is corrected rather than followed. This is a correction to an unlanded scaffold draft, not a contradiction of anything landed, and is recorded here only so the reasoning is legible to whoever implements `tasks.md` | `076/002` |
+| **ADR-M** | `roadmap.md` §7.18 ADR-D holds the Properties sheet's 34px row density against the 44px thumb floor, Proposed | This DEFINE's L5 (13.11) closes exactly that gap — swapping the row's hardcoded `30px` for the shared `44px` token. Recorded here so `T001` can mark ADR-D **addressed by `076/002`** rather than leaving it a dangling Proposed row once this child's CREATE step lands L5 | `076/002` |
+
+Both ADR-I (header glyph) and ADR-K (dark card-fill inversion) from `076/001` apply here unchanged
+by inheritance (13.1, 13.7) and are **not** re-raised as new rows — `T001` cites them, not duplicates
+them.
 
 <!-- /ANCHOR:gap-table -->
 
@@ -271,4 +514,5 @@ Raised as **Proposed ADRs** in `../../roadmap.md` §7 under D15 before this chil
 
 - **Parent**: `../spec.md` (the loop and the rubric), `../decision-record.md` (D1-D4)
 - **Verification**: `verification.md` — created at the VERIFY step, one score table per iteration
+- **Predecessor**: `../001-settings-sheet-visual-parity/spec.md` — the card token, the scale derivation and ADR-I/ADR-K this child reuses
 - **Predecessor packet**: `../../071-sheet-notion-anytype-alignment/`, whose landings are this child's regression floor

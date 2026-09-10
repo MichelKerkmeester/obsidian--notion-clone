@@ -12,10 +12,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/076-sheet-visual-parity"
-    last_updated_at: "2026-09-10T22:10:00Z"
-    last_updated_by: "290-sheet-parity-program"
-    recent_action: "001 DEFINE + PLAN landed; grouping idiom rule settled for all eleven"
-    next_safe_action: "Execute 001 CREATE: T001 transcribes ADR-I/J/K, T002 lands L1-L9 RED"
+    last_updated_at: "2026-09-10T23:10:00Z"
+    last_updated_by: "295-loop-002-properties-sheet-visual-parity"
+    recent_action: "002 DEFINE + PLAN landed; corrected the scaffold's mis-sourced add-property reference"
+    next_safe_action: "Execute 002 CREATE: T001 transcribes ADR-L/M, T002 lands L1-L6 RED"
     blockers:
       - "No sheet may be closed on DOM-lane evidence alone; the image judge is a required gate (D1)"
       - "Sheets run in order, 001 first — the operator named the settings sheet"
@@ -269,7 +269,7 @@ total. The reviewer writes the score table, with a one-line justification per ro
 | Phase | Folder | Sheet | Primary producer | Status |
 |-------|--------|-------|------------------|--------|
 | 1 | `001-settings-sheet-visual-parity/` | Settings | `src/views/view-config-panel-renderer.ts` | **planned** — DEFINE + PLAN complete, CREATE not started |
-| 2 | `002-properties-sheet-visual-parity/` | Properties | `src/views/column-manager-renderer.ts`, `src/views/record-surface/property-row.ts` | scaffolded |
+| 2 | `002-properties-sheet-visual-parity/` | Properties | `src/views/column-manager-renderer.ts`, `src/views/record-surface/property-row.ts` | **planned** — DEFINE + PLAN complete, CREATE not started |
 | 3 | `003-filter-sheet-visual-parity/` | Filter (+ the active-rule filter popover) | `src/views/filter-panel-renderer.ts`, `src/views/active-rule-popover-renderer.ts` | scaffolded |
 | 4 | `004-sort-sheet-visual-parity/` | Sort (+ the active-rule sort popover) | `src/views/sort-panel-renderer.ts`, `src/views/active-rule-popover-renderer.ts` | scaffolded |
 | 5 | `005-group-sheet-visual-parity/` | Group | `src/views/toolbar-renderer.ts`, `src/views/board-groups-panel.ts` | scaffolded |

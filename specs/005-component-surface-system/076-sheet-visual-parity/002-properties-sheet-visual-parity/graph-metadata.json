@@ -50,12 +50,13 @@
       "src/views/record-surface/property-row.ts",
       "src/views/checkbox.ts",
       "styles.css",
+      "src/views/board-groups-panel.ts",
       "tools/live/sheet-grammar.mjs",
+      "screenshots/anytype/mobile/sheets/anytype-mobile-sheet-object-properties-settings-light.png",
       "tools/screenshots/constructed-scenarios.mjs",
-      "tools/live/render-assertion-harness.ts",
       "tools/lane/check-lane.mjs",
-      "tools/screenshots/capture.mjs",
-      "tools/live/sheet-rebuild.mjs"
+      "src/i18n.ts",
+      "tools/screenshots/capture.mjs"
     ],
     "entities": [
       {
@@ -113,9 +114,21 @@
         "source": "derived"
       },
       {
+        "name": "board-groups-panel.ts",
+        "kind": "code",
+        "path": "src/views/board-groups-panel.ts",
+        "source": "derived"
+      },
+      {
         "name": "sheet-grammar.mjs",
         "kind": "file",
         "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "anytype-mobile-sheet-object-properties-settings-light.png",
+        "kind": "file",
+        "path": "screenshots/anytype/mobile/sheets/anytype-mobile-sheet-object-properties-settings-light.png",
         "source": "derived"
       },
       {
@@ -125,27 +138,21 @@
         "source": "derived"
       },
       {
-        "name": "render-assertion-harness.ts",
-        "kind": "code",
-        "path": "tools/live/render-assertion-harness.ts",
-        "source": "derived"
-      },
-      {
         "name": "check-lane.mjs",
         "kind": "file",
         "path": "tools/lane/check-lane.mjs",
         "source": "derived"
       },
       {
-        "name": "capture.mjs",
-        "kind": "file",
-        "path": "tools/screenshots/capture.mjs",
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
         "source": "derived"
       },
       {
-        "name": "sheet-rebuild.mjs",
+        "name": "capture.mjs",
         "kind": "file",
-        "path": "tools/live/sheet-rebuild.mjs",
+        "path": "tools/screenshots/capture.mjs",
         "source": "derived"
       },
       {
@@ -167,6 +174,12 @@
         "source": "derived"
       },
       {
+        "name": "Whether Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -174,12 +187,6 @@
       },
       {
         "name": "Parent Packet",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Phase Context",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -195,17 +202,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
-    "causal_summary": "Every Properties row still renders as up-arrow, down-arrow, a filled blue checkbox, a type icon and a label; Notion's row is a drag handle, a type icon, a label and an eye",
+    "causal_summary": "Every Properties row still renders as up-arrow, down-arrow, a filled blue checkbox, a type icon and a label, on a flat canvas with zero card grouping; Notion's row is a drag affordance, a type icon, a label and a trailing eye, grouped into inset cards",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-10T20:16:57.429Z",
+    "last_save_at": "2026-09-10T21:03:24.711Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,12 +216,12 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:8c13bce35ca0eae496be03ddeb2fcde7c7af0bcfcf7c73a4e04994ad94bae0c4",
+    "source_fingerprint": "sha256:2ee90502c23a2e9f79bc53d5010b5e1e12b3b97694ce919e7ac97157e2a3ce09",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "10bd75b2a5c2b32de5e9b478ca24e4bd1ea4e30600ee468008ca74bb7a1b89e0",
-      "plan.md": "1766a47cd256b25afb460390217983981ca6fe9d7f027cc5528129688a91dbe8",
-      "tasks.md": "696a7a9ec35ad730946972c9fc34c1c545c2119ca300f75cc1d2e419d02ceb24"
+      "spec.md": "e12ae54a67f8e6b3d2c6572d275621d3a6f1f5bfa50f156271880d80231c2dba",
+      "plan.md": "f835a3c1064c92e0d7e7fddb4306e45e4f876a6ea2aae456938822d5e6c35d62",
+      "tasks.md": "b508925f3779edd123e2dec8731325e67ba1ac46fd4e7f2fd8389889f7bbb4e4"
     },
     "last_active_at": null
   }
