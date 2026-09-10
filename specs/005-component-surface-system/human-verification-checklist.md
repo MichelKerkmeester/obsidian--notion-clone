@@ -18,7 +18,7 @@ contextType: "reference"
 > into steps you can run from a phone in one sitting. If the two ever disagree, `operator-checklist.md`
 > is the source of truth and this file is stale.
 
-**Build under test:** `0.0.36`, cut at `04524885`. Installed via the vault's plugin folder,
+**Build under test:** `0.0.38`, cut at `6eeb4493`. Installed via the vault's plugin folder,
 `obnotion` (the id `note-database` used to publish under is gone as of the rename).
 
 **How to record a result:** reply in this chat, one line per row —
@@ -29,7 +29,7 @@ You do not need to tick anything in this file or in `operator-checklist.md` your
 
 ## 0. BEFORE YOU START
 
-- [ ] Update the plugin to `0.0.36` on **both** devices (iOS and desktop) before checking anything below. A stale build reproduces old, already-fixed defects.
+- [ ] Update the plugin to `0.0.38` on **both** devices (iOS and desktop) before checking anything below. A stale build reproduces old, already-fixed defects.
 - [ ] Use the vault that already has the plugin installed under `obnotion` — the same vault you have been testing in.
 - [ ] For anything asking about row counts, freezes or large tables/boards, use the **Testbed** database (seeded from `tools/mock-data/csv/testbed.csv`). It is the 1,000-3,000-row dataset the freeze thresholds below are measured against.
 - [ ] For the Migrations entry that names **Finance** databases by name (§8), use your **own** Finance databases — that dataset is yours, not a fixture, and nothing in this repository can substitute for it.
@@ -38,7 +38,7 @@ You do not need to tick anything in this file or in `operator-checklist.md` your
 *Source:* *"Make sure version is updated and for me to test"*
 - **Mobile steps:** On iOS, check the plugin's version string (Settings sheet, or the community-plugin list).
 - **Desktop steps:** Same, on desktop.
-- **Expect:** both read `0.0.36`.
+- **Expect:** both read `0.0.38`.
 - `[ ] pass  [ ] fail: ____`
 
 ---
@@ -299,7 +299,106 @@ You do not need to tick anything in this file or in `operator-checklist.md` your
 
 ---
 
-## 9. VIEW REMOVED — NO ACTION NEEDED
+## 9. NEW ON 0.0.38 (the operator's 0.0.36 reports and the sheet audit)
+
+**075 AC-006,row 88** — Toolbar strip scrolls sideways only
+*Source:* The menu with horizontal overflow on mobile allows vertical movement which shouldnt happen
+- **Mobile steps:** Open a database. Drag the Sort · Group · Properties · Settings strip up and down, then sideways.
+- **Desktop:** n/a. Phone-only strip.
+- **Expect:** The strip never moves vertically and its labels are never clipped at the bottom; sideways scrolling still works.
+- `[ ] pass  [ ] fail: ____`
+
+**071/005 AC-004,row 85** — Sort sheet fills the width, no bottom gap
+*Source:* Sort sheet doesnt fill full width like it should like others and has a bottom gap
+- **Mobile steps:** Open the sort sheet, then the filter sheet, then the group sheet.
+- **Desktop:** n/a.
+- **Expect:** All three sit edge to edge with their bottom on the screen bottom, the same frame.
+- `[ ] pass  [ ] fail: ____`
+
+**069 AC-010** — Board cards drag between columns by touch
+*Source:* You still cant drag and drop board cards to different columns on mobile
+- **Mobile steps:** Press and hold a card, move it into another column, release. Reopen the note. Then try a plain vertical scroll on a card.
+- **Desktop:** n/a. Desktop drag unchanged.
+- **Expect:** The card moves and the note's group property changed; a plain scroll never starts a drag.
+- `[ ] pass  [ ] fail: ____`
+
+**071/007 D3,row 84** — Settings sheet as rounded cards on a canvas
+*Source:* Settings sheet still has bad ui overall and needs strict alignment with notion sheets
+- **Mobile steps:** Open the database Settings sheet. Compare with Notion's database settings sheet on your phone.
+- **Desktop:** n/a.
+- **Expect:** Rows are grouped into rounded cards on a grey canvas with section labels above each card. Radius, gap and inset are provisional (8 / 12 / 16px) until your Notion capture arrives; say if any of the three looks off.
+- `[ ] pass  [ ] fail: ____`
+
+**045 AC-006** — Board cards show field names
+*Source:* Board cards should also show field name and not just value
+- **Mobile steps:** Open a board with several visible properties.
+- **Desktop:** Same.
+- **Expect:** Each value on a card carries its field's name in small muted type; two columns on a wide card, one on a narrow one.
+- `[ ] pass  [ ] fail: ____`
+
+**074 AC-004** — Testbed is one database with table and board
+*Source:* Also clean testbed only 1 database with table and boars views
+- **Mobile steps:** Open the Testbed database and its view switcher.
+- **Desktop:** Same.
+- **Expect:** One database, exactly a table view and a board view, nothing else.
+- `[ ] pass  [ ] fail: ____`
+
+**071/008 D3** — Filter sheet: stacked condition rows
+*Source:* Audit P1: six controls in one 48px row, names cut to two characters.
+- **Mobile steps:** Open the filter sheet with two or more conditions, one on a long property name.
+- **Desktop:** n/a.
+- **Expect:** Each condition reads as stacked property, operator and value rows; the full property name shows; AND/OR still present; the Add condition button stays reachable as the list grows.
+- `[ ] pass  [ ] fail: ____`
+
+**071/009 D3** — Properties sheet: one clean row per property
+*Source:* Audit P1: eight elements per row and the storage key in every label.
+- **Mobile steps:** Open Properties (the column manager). Toggle one property hidden.
+- **Desktop:** n/a.
+- **Expect:** Each row shows name, type icon and a visibility control only, no bracketed key; hidden properties move to a Hidden section.
+- `[ ] pass  [ ] fail: ____`
+
+**071/010 D3** — Sheet copy speaks touch
+*Source:* Audit P1: four strings name a pointer gesture a phone cannot perform.
+- **Mobile steps:** Open a record and a property row, read the hints.
+- **Desktop:** n/a. Desktop copy unchanged.
+- **Expect:** No sheet says double-click or hover; hints say tap.
+- `[ ] pass  [ ] fail: ____`
+
+**071/011 D3** — Record sheet title centres, rows carry icons
+*Source:* Audit P1: the one sheet title that does not centre.
+- **Mobile steps:** Open a record from a table row and from a board card.
+- **Desktop:** n/a.
+- **Expect:** The title centres like every other sheet; each property row shows its type icon.
+- `[ ] pass  [ ] fail: ____`
+
+**071/012 D3** — Sort rules stacked, groups shown and hidden
+*Source:* Audit P2: one sort row carries field, direction, two arrows and a close glyph.
+- **Mobile steps:** Open the sort sheet with two rules; open the group sheet.
+- **Desktop:** n/a.
+- **Expect:** Each sort rule is stacked rows with a labelled Delete and one reorder affordance; the group sheet splits Shown and Hidden with a bulk action.
+- `[ ] pass  [ ] fail: ____`
+
+**071/013 D3,071/014 D3** — Action order and polish
+*Source:* Audit P2: create-then-name, calendar first, destructive above Cancel, Wrap and Delete in the edit sheet.
+- **Mobile steps:** Add a view; open a date picker; trigger a delete confirm; open a property row's edit sheet; open the icon picker.
+- **Desktop:** n/a.
+- **Expect:** Add view creates first then names; the calendar sits above the numeric boxes; the destructive action sits above Cancel; Wrap and Delete live in the edit sheet; the icon picker's search row is uncrowded.
+- `[ ] pass  [ ] fail: ____`
+
+---
+
+## 10. NOTION CAPTURE PASS
+
+**007 T001,C-1,C-2,C-3,C-4,C-5,C-6** — Six Notion screenshots on your phone
+*Source:* Every card metric shipped tonight is provisional until these exist; the local Mobbin thumbnails are too small to measure.
+- **Mobile steps:** In the Notion iOS app, screenshot: (1) the database Settings sheet; (2) the advanced filter sheet with two rules; (3) the property visibility sheet; (4) the property-type list scrolled to its end; (5) a sort rule being reordered; (6) a record page with many properties. Send them in chat.
+- **Desktop:** n/a. iPhone screenshots only.
+- **Expect:** Six full-resolution images. Mark pass when sent.
+- `[ ] pass  [ ] fail: ____`
+
+---
+
+## 11. VIEW REMOVED — NO ACTION NEEDED
 
 Two of the requested items name the calendar view, which was fully retired and archived by
 `008-calendar-timeline-chart-deprecation` (shipped in release `0.0.35`, commit `97395196`). The
@@ -315,7 +414,7 @@ reintroduced from the archive, both would need to be re-opened and re-read.
 
 ---
 
-## 10. SUMMARY
+## 12. SUMMARY
 
 | Group | Entries |
 |---|---|
@@ -328,7 +427,9 @@ reintroduced from the archive, both would need to be re-opened and re-read.
 | Embedded / linked view blocks | 1 |
 | Record panel | 3 |
 | Migrations | 6 |
-| **Total actionable entries** | **33** |
+| New on 0.0.38 | 12 |
+| Notion capture pass | 1 |
+| **Total actionable entries** | **46** |
 | Obsolete (view removed, no action) | 2 |
 
-**Mobile-only:** 11 · **Desktop-only:** 7 · **Both platforms:** 15
+**Mobile-only:** 22 · **Desktop-only:** 7 · **Both platforms:** 17

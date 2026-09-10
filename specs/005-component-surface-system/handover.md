@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T06:45:00Z"
-    last_updated_by: "282-goal-refresh-0038"
-    recent_action: "Goal refresh: reconciled 071/007-014, 075, 069, 045, 074 against 0.0.38 landers"
+    last_updated_at: "2026-09-10T04:27:00Z"
+    last_updated_by: "283-checklist-0038-rows"
+    recent_action: "Checklist: 12 new 0.0.38 operator rows + 007 capture mirrored into human-verification-checklist"
     next_safe_action: "Operator device rows on 0.0.38 (goal-body.md ORDER OF WORK §1); no agent work remains"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
@@ -41,6 +41,25 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-10 ~06:27, the 0.0.38 operator checklist rows MIRRORED — docs-only, worktree `283-checklist-0038-rows`
+
+**What this leg did** — no code, no row ticked. `human-verification-checklist.md` (last touched by
+`1b534478`, then built under 0.0.36) now carries the 0.0.38 work: build-under-test header → `0.0.38`
+cut `6eeb4493`; §0 update-to bullet and Row 13's installed-version expect → `0.0.38`; a new §9
+"NEW ON 0.0.38 (the operator's 0.0.36 reports and the sheet audit)" with the 12 rows the 0.0.38
+landers made testable — 075 AC-006 (row 88), 071/005 AC-004 (row 85), 069 AC-010, 071/007 D3 (row
+84), 045 AC-006, 074 AC-004, and the six 071 sheet-audit children 008–013 — pasted verbatim from the
+orchestrator's queue file, operator quotes unreworded; a new §10 "NOTION CAPTURE PASS" holding the
+single 007 T001 + C-1…C-6 six-screenshots entry (the provisional 8/12/16px metrics in 071/007's row
+name this pass as their resolution). The former §9 VIEW REMOVED renumbered → §11, SUMMARY → §12:
+two table rows added (New on 0.0.38 | 12, Notion capture pass | 1), actionable total 33 → 46, and
+the platform footer recount 11/7/15 → 22/7/17 (all 13 new entries are phone-first; 045/074 take
+"Desktop: Same"). Other entries untouched — the earlier 075/069/074 appearances in §2/§4/§8 stay,
+they are their own rows' ids. Battery: `validate --strict` RESULT: PASSED ×2, once before and once
+after the scoped metadata backfill (`refreshed: 1, changed: 0`); continuity `recent_action`
+refreshed (95 chars). No build ran — the diff is one prose file; the release 6eeb4493 itself is
+already gated on main.
 
 ### 2026-09-10 ~00:54, `071/010` sheet-copy-touch-idiom LANDING-VERIFIED — landed on main as `822d9746`, worktree `273-sheet-copy-idiom`
 
