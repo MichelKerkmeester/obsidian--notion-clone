@@ -7174,6 +7174,32 @@
         "screenshots/notion-clone/fields/field-status-colors-mobile-dark.png"
       ],
       "note": "post-rebase verification: the landed 012 hunk judged on the merged tree. Captured three times (npm run screenshots </dev/null, 482 entries, exit 0 each — 074 added the two group-panel captures), judged by decoded pixel delta across the last two runs against the committed blobs, no image opened by eye. 4 REAL movers, kept, each named above: views/board-mobile-desktop-dark 820369px at 221 and views/board-view-desktop-dark 1146252px at 224, IDENTICAL counts in both judged runs (the 062/067 board-landing class), both already named in the 21:55:35Z release; views/table-frozen-column-mobile-light 36px at 1, also movedInBothRuns, so not jitter by the moved-in-both-runs rule, already named; NEW here: fields/field-status-colors-mobile-dark 19px at 192, second judged run only, above the 12 bar. 1 further one-run mover, none committed: panels/constructed-modal-sheet-property-editor-mobile-dark 138px at 112 in the first judged run only, the second judged run restoring it byte-identical to its committed blob, so nothing was restored and no manifest row was patched. The 012 hunk changed styles.css after 015's 23:45:00Z release, which is why this triplet exists."
+    },
+    {
+      "event": "acquire",
+      "phase": "012-board-card-fields",
+      "at": "2026-09-11T02:17:00Z",
+      "hash": "4b0cdd3a637f",
+      "note": "re-acquired, same stylesheet, by the second reconciliation: the 286/071-008 landing crossed underneath while this packet sat rebased, and the merged tree had never been photographed"
+    },
+    {
+      "event": "edit",
+      "phase": "012-board-card-fields",
+      "at": "2026-09-11T02:17:00Z",
+      "hash": "4b0cdd3a637f",
+      "note": "no stylesheet movement: 286 touched the filter panel's markup and the grammar tool, not styles.css; the judged hash stays 4b0cdd3a637f"
+    },
+    {
+      "event": "release",
+      "phase": "012-board-card-fields",
+      "at": "2026-09-11T02:17:00Z",
+      "hash": "4b0cdd3a637f",
+      "reviewed": [
+        "screenshots/notion-clone/components/constructed-board-title-format-filename-desktop-dark.png",
+        "screenshots/notion-clone/fields/field-status-colors-mobile-dark.png",
+        "screenshots/notion-clone/views/board-view-desktop-dark.png"
+      ],
+      "note": "the 012+286 merged tree, judged by decoded pixel delta across two runs against the committed blobs, no image opened by eye. NEW: constructed-board-title-format-filename-desktop-dark 1014232px at 218, IDENTICAL counts in both judged runs — 286's filename-title markup photographed on this packet's taller card, a rendering neither landing’s own record contains. fields/field-status-colors-mobile-dark 19px at 192, also identical both runs — the recurring small-Δ class the 015 note attributes to 074's mock-data. views/board-view-desktop-dark 6px at 1, identical both runs. 1 one-run mover, none committed: views/board-mobile-desktop-dark 1px at 1, first judged run only, the second restoring it to its committed bytes — the same self-restoring class this lane’s 00:47:31Z release recorded. 286's own six moved captures carry through their 08:45:00Z release untouched."
     }
   ],
   "outstanding": [
@@ -7187,6 +7213,6 @@
     "The obnotion-board-* stylesheet family is now largely dead and was deliberately not cut here. The default board is the only board, and it builds obnotion-kanban-* markup; the extensions branch that built .obnotion-board-column, .obnotion-board-subgroup, .obnotion-board-add-column and their checkboxes is gone. Some of the family is still live and must survive any cut — .obnotion-board-card-cover and .obnotion-board-card-field are both built by the kanban card — so this is a per-rule audit, not a section delete, and it moves captures. One concrete consequence is already measurable: styles.css reads var(--obnotion-board-column-width, 220px) for .obnotion-board-column and nothing assigns that property any more, so the rule resolves its fallback for every user. It is dead rather than wrong, but it is exactly the class scan-pinned-values.mjs exists to catch, and it will stay invisible while the rule it belongs to is unreachable.",
     "067-sheet-family-remediation: seventeen captures on this lane still show the surface as it looked BEFORE the depth-cap fix at 173f7d3a. Found by 062's landing verifier, which recaptured on the merged tree and then measured decoded pixels rather than trusting pixelHash: panel-record-detail-sheet-body-empty-desktop-light moves 46,779 pixels at a max channel delta of 214, its dark pair 46,752 at 209, constructed-chart-toolbar-options-mobile-dark and constructed-column-manager-mobile-dark about 260,800 each at 45, and eleven more record-detail-sheet, modal-sheet-property-editor, depth3-dropdown and owned-menu-sheet captures between 10,548 and 42,211 pixels at 46 to 78. Every one of them hashes IDENTICALLY, which is why 173f7d3a's own recapture read them as byte-only re-encodes and restored them. pixelHash averages a 16x16 grid into 32 buckets, so any change confined to a narrow band or a small region moves a cell's average by less than one bucket and hashes the same - 062 hit the identical trap on its frozen-column shadow and fixed it by measuring pixels. Reproduced with 067's OWN stylesheet in the tree (identical counts), so this is 067's debt and not 062's: left restored here rather than recommitted, because reviewing another lane's surface is a review this packet cannot honestly sign. 067 owes a recapture measured by decoded pixel delta, and a read of each of the seventeen."
   ],
-  "baselineCommit": "44cffb8b0e5b9ec4e5a30bfa17db17cf52af0e34",
-  "acquiredAt": "2026-09-11T00:47:31Z"
+  "baselineCommit": "dbb5e7cab7325518c9b3d00f995d41c9041a5e84",
+  "acquiredAt": "2026-09-11T02:17:00Z"
 }
