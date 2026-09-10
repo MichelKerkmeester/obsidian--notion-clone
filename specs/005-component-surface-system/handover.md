@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T22:30:00Z"
-    last_updated_by: "292-loop-001-settings-sheet-visual-parity"
-    recent_action: "076/001 DEFINE+PLAN landed: brief, delta, 9 clauses, 14 tasks, 3 ADRs held"
+    last_updated_at: "2026-09-10T23:10:00Z"
+    last_updated_by: "285-dr-settings-cards-verify"
+    recent_action: "007 P1 verified+landed 3x-rebased (f2f70252): clause restored, gate 28/0, goal 4/5"
     next_safe_action: "Execute 076/001 T001 (transcribe ADR-I/J/K), then T002 lands L1-L9 RED"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
@@ -43,6 +43,37 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-10 ~23:10, `007-settings-sheet-strict-alignment`'s design-review P1 LANDED+VERIFIED (f2f70252) — worktree `285-dr-settings-cards`
+
+**What this verifier confirmed** — the 007 leg's every landed number, then landed the leg through
+three concurrent-landing rebases (onto the 011 type-icon-gap, the 013 date-segment-paint, and the
+076/001 scaffolding). The P1's chain holds on the fully merged stylesheet (`ae430699765b`: the
+settings-card token, 011's 4px icon gap, 013's segment paint): reverting the card rule's token reads
+exactly the recorded RED, dark theme dimmest of 2 cards at relative luminance 0.0130 over a 0.0270
+canvas; the restored tree reads the recorded GREEN, 0.0409 > 0.0270 dark and 0.0130 > 0.0119 light,
+0 failures, with the grammar's full 2382-assertion pass (44–52px pitch, 16px insets, 0 native
+selects, 067 dividers) and 013's restored typed-segments clause beside it. Both-theme captures
+moved where the task said: `constructed-view-config-mobile-dark` only.
+
+**The second rebase silently took 55e6c50b's whole `sheet-grammar.mjs`** — the leg's 60-line
+card/canvas elevation clause vanished while its tasks stayed ticked. Restored on top of 013's
+clause (hunk-level, both intents) and re-proven as above; the third rebase's three 480/480 judged
+runs moved one REAL capture (`constructed-board-empty-column-desktop-light` 51px@204 both runs,
+bytes-only, the 062/067 averaging class) and restored three one-run jitters at their committed
+bytes. The lane's 007 cycle (acquire/edit 06:25:05Z + the release) is recorded against the merged
+hash; the manifest rows for the leg's shipped view-config and board-card-properties captures, which
+each 288-landing had overwritten with its own stylesheet's, now state the shipped PNGs' own truth.
+
+**Tooling finding, one line of fix owed:** the pre-commit `gate:spec-remint` runs
+`repair-derived.cjs` → `validate.sh` through the relative `.opencode` symlink, which silently
+no-ops (exit 0, zero output — 0 bytes vs 5502 via the realpath form) and reports
+`UNREADABLE specs/005-component-surface-system`; the first four commits never fired it because
+they staged no `.md` under specs. Workaround used: `SPECKIT_SKIP_SPEC_REMINT=1` with the backfill
+run by hand through `$(realpath .opencode)`. Battery: vitest 1614/1614, tsc 0, build 0, gate 28/0,
+evidence 16/16, placement 418/420 (2 declared), naming scans 0; `007`, the `071` parent (first
+`RESULT`) and `005` validate --strict PASSED after the 005-scoped backfill. `007`'s goal stays 4/5
+— the fifth criterion is the operator's own device read, unticked by rule.
 
 ### 2026-09-10 ~22:30, `076/001-settings-sheet-visual-parity` DEFINE + PLAN LANDED — worktree `292-loop-001-settings-sheet-visual-parity`
 
