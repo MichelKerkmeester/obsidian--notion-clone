@@ -1762,6 +1762,51 @@ window.__shellSettingsRowGrammarNegativeControl = (scenario) => {
   return { broken, fixed };
 };
 
+// Card-vs-canvas relative luminance under both themes. A grouped card reads lifted only when it
+// computes lighter than the canvas it sits on, and which ladder rung delivers that flips between
+// the themes, whose elevation ladders step in opposite directions away from the page fill — so the
+// probe measures the paint itself, not a token comparison, under both themes in one evaluate. The
+// harness page parks the body on the dark theme, so the second mount flips the class, probes, and
+// restores it; both mounts are synchronous and the class is restored before the call returns, so
+// the clauses after this one still see the page they were written against.
+const measureSettingsCardElevation = (scenario) => {
+  let grammar = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    grammar = measureSettingsRowGrammar();
+  });
+  if (!grammar || grammar.cards.length === 0) return null;
+  // One engine serialises rgb()/rgba(), the other color(srgb ...); both carry the same three
+  // gamma-expanded sRGB channels, which is what this relative luminance reads. An unpainted
+  // surface computes to 0 and goes red on its own.
+  const relativeLuminance = (value) => {
+    if (!value || value === "transparent") return 0;
+    const inner = value.slice(value.indexOf("(") + 1, value.lastIndexOf(")"));
+    const withoutAlpha = value.includes("/") ? inner.slice(0, inner.indexOf("/")) : inner;
+    const parts = withoutAlpha.trim().split(/[\\s,]+/);
+    const srgbForm = value.startsWith("color(");
+    const channels = (srgbForm ? parts.slice(1, 4) : parts.slice(0, 3)).map((part) => {
+      const c = Number(part) / (srgbForm ? 1 : 255);
+      return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+  };
+  return {
+    theme: document.body.classList.contains("theme-dark") ? "dark" : "light",
+    canvasLuminance: relativeLuminance(grammar.canvasBackground),
+    canvasBackground: grammar.canvasBackground,
+    cardLuminances: grammar.cards.map((card) => relativeLuminance(card.background)),
+    cardBackgrounds: grammar.cards.map((card) => card.background),
+  };
+};
+
+window.__shellSettingsCardElevation = (scenario) => {
+  const dark = measureSettingsCardElevation(scenario);
+  document.body.classList.remove("theme-dark");
+  const light = measureSettingsCardElevation(scenario);
+  document.body.classList.add("theme-dark");
+  return { dark, light };
+};
+
 // The compact half's own control: every row forced back onto the shared column grammar. The
 // editor rows already read this direction, so what goes red here is exactly the one-line,
 // label-left/control-right shape the compact rows are supposed to carry.
@@ -4437,6 +4482,21 @@ try {
     const titlesInsideList = settingsSectionList.filter((section) => !section.aboveCard);
     if (titlesInsideList.length > 0) failures.push(`settings sheet card grouping: ${titlesInsideList.length} of ${settingsSectionList.length} section headings do not sit above their own card container`);
     console.log(`  ${titlesInsideList.length === 0 ? "PASS" : "FAIL"}  ${settingsSectionList.length - titlesInsideList.length}/${settingsSectionList.length} section headings sit above their own card`);
+  }
+  console.log("");
+
+  console.log("sheet-grammar: settings sheet card/canvas elevation — every card on the sheet's canvas computes lighter than the canvas it sits on, in both themes' own ladder direction (a darker card reads as a recessed well, not a raised group)\n");
+  const settingsCardElevation = await page.evaluate((scenario) => window.__shellSettingsCardElevation(scenario), SETTINGS_SHEET_SURFACE.spec);
+  if (!settingsCardElevation || !settingsCardElevation.dark || !settingsCardElevation.light) {
+    failures.push("settings sheet card/canvas elevation: the surface did not mount to measure both themes");
+    console.log("  FAIL  settings sheet card/canvas elevation — the surface did not mount to measure");
+  } else {
+    for (const probe of [settingsCardElevation.dark, settingsCardElevation.light]) {
+      const dimmest = Math.min(...probe.cardLuminances);
+      const raised = probe.cardLuminances.length > 0 && probe.cardLuminances.every((l) => l > probe.canvasLuminance);
+      if (!raised) failures.push(`settings sheet card/canvas elevation: in the ${probe.theme} theme the dimmest of ${probe.cardLuminances.length} cards (relative luminance ${dimmest.toFixed(4)}) does not compute lighter than its canvas (${probe.canvasLuminance.toFixed(4)})`);
+      console.log(`  ${raised ? "PASS" : "FAIL"}  ${probe.theme} theme: dimmest of ${probe.cardLuminances.length} cards at relative luminance ${dimmest.toFixed(4)} over a canvas at ${probe.canvasLuminance.toFixed(4)}`);
+    }
   }
   console.log("");
 

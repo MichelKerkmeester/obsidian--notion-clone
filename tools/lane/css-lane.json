@@ -1,6 +1,6 @@
 {
-  "holder": "013-sheet-input-and-action-order",
-  "baselineHash": "ab6dcaa73cb9",
+  "holder": "007-settings-sheet-strict-alignment",
+  "baselineHash": "ae430699765b",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -6928,6 +6928,31 @@
         "screenshots/notion-clone/views/table-frozen-column-desktop-light.png"
       ],
       "note": "Captured twice (npm run screenshots </dev/null, 480 entries, exit 0 each), judged by decoded pixel delta against the committed blobs across both judged runs, no image opened by eye. 10 REAL movers, kept, each named above, every one an identical changed-pixel count in both runs at the harness's documented nondeterminism, and none of them a date-picker capture -- this edit's own surface (constructed-date-picker(-datetime), field-date-value-picker) reproduced HEAD's committed pixels exactly, the expected no-op the popover pairing already produced. 7 one-run jitters (max channel delta <= 6) restored: the PNG to its committed blob and the manifest row's bytes with it; the 13 movers of run 1 alone came back to their committed bytes on the second capture, so their rows only carry the stylesheet's sourceHash move. The manifest's stylesheet reference moved aef17a2f6e8a -> cd3520283351 with the edit. Rebased onto the 287 landing (1e320e716905) before this release: the acquire's recorded aef17a2f6e8a predates 287's verification release, so the released hash attests the merged stylesheet (287's record-detail icon-gap margin fix + this segment-paint override), judged from the rebased tree. Post-rebase recapture x2, 480/480, exit 0 both, judged by decoded pixel delta against the rebased committed blobs: 1 REAL mover, views/table-frozen-column-desktop-light 37px@maxDelta32, reproduced in BOTH judged runs (the same shimmer 287's verification released; pixelHash 29b325925bec still unchanged), kept and added to reviewed. 2 one-run jitters by the rule (max channel delta <= 12, one judged run only): panel-record-detail-sheet-body-editing-mobile-light 5656px@2 and views/board-view-desktop-dark 8px@1 (the lane's recurring one), restored at their committed bytes with their manifest rows. 1 keep, 2 restores, 0 threshold edits."
+    },
+    {
+      "event": "acquire",
+      "phase": "007-settings-sheet-strict-alignment",
+      "at": "2026-09-10T06:25:05Z",
+      "hash": "aef17a2f6e8a",
+      "note": "lane released by 013-sheet-input-and-action-order at 04:11Z; this leg picked it up against the committed stylesheet aef17a2f6e8a"
+    },
+    {
+      "event": "edit",
+      "phase": "007-settings-sheet-strict-alignment",
+      "at": "2026-09-10T06:25:05Z",
+      "hash": "e3cde65ca233",
+      "note": "settings grouped-card elevation: dedicated --obnotion-settings-card-fill token (light = --background-primary, unchanged behaviour; dark = --obnotion-surface-modal, the 88% rung above the 93% overlay canvas), the card rule switched to it and its rationale comment corrected; grammar gained a both-themes card>canvas relative-luminance clause, red 0.0130 vs 0.0270, green 0.0409 vs 0.0270"
+    },
+    {
+      "event": "release",
+      "phase": "007-settings-sheet-strict-alignment",
+      "at": "2026-09-10T20:40:55Z",
+      "hash": "ae430699765b",
+      "reviewed": [
+        "screenshots/notion-clone/components/constructed-board-empty-column-desktop-light.png",
+        "screenshots/notion-clone/views/board-mobile-desktop-dark.png"
+      ],
+      "note": "The 007 leg's verification, recorded after its two commits were rebased onto the 011 and 013 landings, so the judged stylesheet is the fully merged one (the dedicated settings-card fill token, the 011 type-icon 4px gap, 013's sheet-owned date-segment paint) and this release's hash is that tree's, stamped into baselineHash. The leg's earlier acquire/edit (06:25:05Z) are restored here with their original stamps because the second rebase had taken the 013 side of this file wholesale; this release completes their triplet. The leg's both-themes card>canvas luminance clause, lost by that same rebase, was restored from the leg's own commit and re-proven on the merged tree: reverting the card rule's token to --background-primary reads exactly 1 failure, the recorded dark-theme 0.0130 over the 0.0270 canvas, and the restored tree reads the recorded GREEN, dark 0.0409 > 0.0270 and light 0.0130 > 0.0119, 0 failures, beside 013's restored typed-segments clause. Captured twice (npm run screenshots </dev/null, 480/480, exit 0 both), judged by decoded pixel delta against the committed blobs across both runs, no image opened by eye. 2 REAL movers, kept, each named above: views/board-mobile-desktop-dark 2px at 1, reproduced at IDENTICAL counts in both judged runs (pixelHash-identical, 242581 -> 242584 bytes, the 062/067 class the 16x16 averaging cannot see), and components/constructed-board-empty-column-desktop-light 51px at 204 in the second judged run only, above the 12 bar, the returning mover (067's note: 283px at 204, first run only, its second run restoring it; here the roles are swapped and the second run's bytes are the ones kept, 386049 -> 386152). 1 further one-run mover, none committed: components/constructed-card-covers-desktop-dark 200px at 185 in the first judged run only, the second run itself restoring it byte-identical to its committed blob, so nothing was restored and no manifest row was patched. The fresh capture also healed the row-pair the second rebase left: 802a7b65's shipped constructed-view-config-mobile-dark (110456 / 8604bdb3b33a) and constructed-board-card-properties-mobile-dark (115936 / db63413e1d93) sat under 013's landing rows written for their stylesheet (115878 / 2c2204676fd9, 120259 / cd40de40ad0f); this manifest now states the shipped PNGs' own truth, their renders reproducing byte-identically in both judged runs. Every other capture reproduced its committed blob. This verification reviews by measurement (headless); the visual read stays the operator device pass."
     }
   ],
   "outstanding": [
@@ -6942,5 +6967,5 @@
     "067-sheet-family-remediation: seventeen captures on this lane still show the surface as it looked BEFORE the depth-cap fix at 173f7d3a. Found by 062's landing verifier, which recaptured on the merged tree and then measured decoded pixels rather than trusting pixelHash: panel-record-detail-sheet-body-empty-desktop-light moves 46,779 pixels at a max channel delta of 214, its dark pair 46,752 at 209, constructed-chart-toolbar-options-mobile-dark and constructed-column-manager-mobile-dark about 260,800 each at 45, and eleven more record-detail-sheet, modal-sheet-property-editor, depth3-dropdown and owned-menu-sheet captures between 10,548 and 42,211 pixels at 46 to 78. Every one of them hashes IDENTICALLY, which is why 173f7d3a's own recapture read them as byte-only re-encodes and restored them. pixelHash averages a 16x16 grid into 32 buckets, so any change confined to a narrow band or a small region moves a cell's average by less than one bucket and hashes the same - 062 hit the identical trap on its frozen-column shadow and fixed it by measuring pixels. Reproduced with 067's OWN stylesheet in the tree (identical counts), so this is 067's debt and not 062's: left restored here rather than recommitted, because reviewing another lane's surface is a review this packet cannot honestly sign. 067 owes a recapture measured by decoded pixel delta, and a read of each of the seventeen."
   ],
   "baselineCommit": null,
-  "acquiredAt": "2026-09-10T08:14:00Z"
+  "acquiredAt": "2026-09-10T06:25:05Z"
 }
