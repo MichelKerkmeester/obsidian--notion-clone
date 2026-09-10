@@ -6731,7 +6731,7 @@
       },
       "note": "The include box in the base-import column table. Same field role as every other modal box, mounted in a centred table cell.",
       "capture": "element",
-      "bytes": 65581
+      "bytes": 65732
     },
     {
       "id": "panel-base-import-modal",

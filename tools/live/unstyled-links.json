@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-10T21:38:39.260Z",
+  "measuredAt": "2026-09-10T22:05:12.919Z",
   "inputs": {
-    "styles.css": "ae430699765b",
+    "styles.css": "2c86ecdbf16c",
     "tools/screenshots/theme.css": "43554e1fbe3e",
     "tools/live/unstyled-links.mjs": "ab2e6ac25fc1",
     "tools/live/unstyled-links-measure.mjs": "d7730f407670",
@@ -11,7 +11,7 @@
   },
   "fixture": {
     "links": 112,
-    "scenarios": 67
+    "scenarios": 68
   },
   "constructed": {
     "links": 1340,
