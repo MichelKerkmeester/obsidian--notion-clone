@@ -209,7 +209,7 @@
     ],
     "causal_summary": "Thirteen phone sheets centre their titles and two do not, and the gate cannot tell",
     "created_at": "2026-09-09T21:01:05.754Z",
-    "last_save_at": "2026-09-10T04:11:17.823Z",
+    "last_save_at": "2026-09-10T05:17:49.764Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -220,12 +220,12 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b17bc28803cec92ab08bbd0ec0f1c8e76b37cc583a0ccb2710d4144498453169",
+    "source_fingerprint": "sha256:e1360e2473a3b38c7a32f12dda76e261c54f0e200af9f16ec61a7cae045e9840",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "69af85fca9f6b4432cb996de7d1d4fb92f00098cb25c2fe5536a6003090d7d7c",
       "plan.md": "b32c91e5020ab5d4ae93c3b95064eccfbae4d3d3c9a8788ad8c9c0ff461e4555",
-      "tasks.md": "0bd8d0b1d7005a1994cc3429c2a08c2d4ffbecd3960cae6dddf32ed4ed9be579",
+      "tasks.md": "a6bd71ffa34ae13af890777866c58146429807285797ca042d782ed1be4d335a",
       "implementation-summary.md": "c6f227d7582e9b8752969befd7e5e25f6deabe02c7ad230c8f7e2f62c7b27c27"
     },
     "last_active_child_id": null,

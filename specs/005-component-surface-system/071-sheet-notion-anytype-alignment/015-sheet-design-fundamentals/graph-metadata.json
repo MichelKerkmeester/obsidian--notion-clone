@@ -1,9 +1,11 @@
 {
   "schema_version": 1,
-  "packet_id": "005-component-surface-system/071-sheet-notion-anytype-alignment/008-filter-sheet-row-model",
-  "spec_folder": "005-component-surface-system/071-sheet-notion-anytype-alignment/008-filter-sheet-row-model",
+  "packet_id": "005-component-surface-system/071-sheet-notion-anytype-alignment/015-sheet-design-fundamentals",
+  "spec_folder": "005-component-surface-system/071-sheet-notion-anytype-alignment/015-sheet-design-fundamentals",
   "parent_id": "005-component-surface-system/071-sheet-notion-anytype-alignment",
   "children_ids": [],
+  "migrated": true,
+  "migration_source": "legacy",
   "manual": {
     "depends_on": [],
     "supersedes": [],
@@ -11,51 +13,46 @@
   },
   "derived": {
     "trigger_phrases": [
-      "071 phase 8",
-      "filter sheet row model",
-      "filter property name truncated",
+      "071 phase 15",
+      "sheet design fundamentals",
+      "calendar mini nav touch target",
+      "group sheet screenshot scenario",
       "implementation plan",
       "technical approach",
-      "architecture decisions",
       "testing strategy",
       "task breakdown",
       "implementation tasks",
       "verification checklist",
-      "task dependencies",
-      "acceptance criteria"
+      "acceptance criteria",
+      "015-sheet-design-fundamentals acceptance criteria"
     ],
     "key_topics": [
       "phase",
-      "filter",
       "sheet",
-      "row",
-      "model",
-      "property",
-      "name",
-      "truncated",
-      "implementation",
-      "plan",
-      "technical",
-      "approach"
+      "design",
+      "fundamentals",
+      "calendar",
+      "mini",
+      "nav",
+      "touch",
+      "target",
+      "group",
+      "screenshot",
+      "scenario"
     ],
     "importance_tier": "normal",
-    "status": "in_progress",
+    "status": "draft",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "decision-record.md",
-      "implementation-summary.md",
-      "src/views/filter-panel-renderer.ts",
+      "tools/screenshots/scenarios/panels.mjs",
+      "tools/live/touch-targets.mjs",
       "tools/live/sheet-grammar.mjs",
-      "src/views/filter-panel-renderer.test.ts",
-      "tools/lane/css-lane.json",
-      "screenshots/notion-clone/views/board-view-desktop-dark.png",
       "screenshots/manifest.json",
-      "screenshots/notion-clone/panels/constructed-filter-panel-mobile-light.png",
-      "tools/live/sheet-rebuild.mjs"
+      "repo-rules/screenshot-currency.md"
     ],
     "entities": [
       {
@@ -89,21 +86,15 @@
         "source": "derived"
       },
       {
-        "name": "decision-record.md",
-        "kind": "doc",
-        "path": "decision-record.md",
+        "name": "panels.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/panels.mjs",
         "source": "derived"
       },
       {
-        "name": "implementation-summary.md",
-        "kind": "doc",
-        "path": "implementation-summary.md",
-        "source": "derived"
-      },
-      {
-        "name": "filter-panel-renderer.ts",
-        "kind": "code",
-        "path": "src/views/filter-panel-renderer.ts",
+        "name": "touch-targets.mjs",
+        "kind": "file",
+        "path": "tools/live/touch-targets.mjs",
         "source": "derived"
       },
       {
@@ -113,39 +104,15 @@
         "source": "derived"
       },
       {
-        "name": "filter-panel-renderer.test.ts",
-        "kind": "test",
-        "path": "src/views/filter-panel-renderer.test.ts",
-        "source": "derived"
-      },
-      {
-        "name": "css-lane.json",
-        "kind": "config",
-        "path": "tools/lane/css-lane.json",
-        "source": "derived"
-      },
-      {
-        "name": "board-view-desktop-dark.png",
-        "kind": "file",
-        "path": "screenshots/notion-clone/views/board-view-desktop-dark.png",
-        "source": "derived"
-      },
-      {
         "name": "manifest.json",
         "kind": "config",
         "path": "screenshots/manifest.json",
         "source": "derived"
       },
       {
-        "name": "constructed-filter-panel-mobile-light.png",
-        "kind": "file",
-        "path": "screenshots/notion-clone/panels/constructed-filter-panel-mobile-light.png",
-        "source": "derived"
-      },
-      {
-        "name": "sheet-rebuild.mjs",
-        "kind": "file",
-        "path": "tools/live/sheet-rebuild.mjs",
+        "name": "screenshot-currency.md",
+        "kind": "doc",
+        "path": "repo-rules/screenshot-currency.md",
         "source": "derived"
       },
       {
@@ -155,7 +122,7 @@
         "source": "derived"
       },
       {
-        "name": "Filter Sheet Row Model",
+        "name": "Sheet Design Fundamentals",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -197,15 +164,45 @@
         "source": "derived"
       },
       {
-        "name": "Every Notion",
+        "name": "Overview Two",
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
+      },
+      {
+        "name": "Pattern Two",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components See",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Data Flow Unchanged",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
       }
     ],
-    "causal_summary": "The Filter sheet passes every assertion it has and is unreadable",
-    "created_at": "2026-09-09T20:48:29.770Z",
-    "last_save_at": "2026-09-10T05:17:49.679Z",
+    "causal_summary": "Two findings from `../sheet-design-review.md` have no single owning child",
+    "created_at": "2026-09-10T00:00:00.000Z",
+    "last_save_at": "2026-09-10T05:17:49.930Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,20 +210,15 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md",
-      "decision-record.md",
-      "implementation-summary.md"
+      "goal.md"
     ],
-    "source_fingerprint": "sha256:fb1ac62c0af286d0900095922553d131aaf9c91a9e708f317fa54f662651bda8",
+    "source_fingerprint": "sha256:d24445a1c3a960c77d2cfc76e81b5d15eccb57a38bf48cc68334c8293824a9c3",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "ec8e7dad50bbeda21ca916554a23554c982b7529eb87307a6ca0eb15c439af25",
-      "plan.md": "866d5d11ebbc2e503c899667f8161c8318d5c903b2f56c6506b596972ff9036f",
-      "tasks.md": "96f468df0ebba789a4496412122f7d65a569f865e337945133500d26938441a9",
-      "decision-record.md": "c7d6261abc79212c5e7baf5d97452c7534b5929821c3a8c13ea0593d9d6d1038",
-      "implementation-summary.md": "65ae60119e5b4d745b2f31b78f04e199a4860263cce053979f8c3e555fa26417"
+      "spec.md": "ce83d3df2361e702c1160ecbf39999c38c9e4cc5123bfec56b3e4cc8e0ad548d",
+      "plan.md": "a6d5a130a2e9701da5db258d884c35688750fd29812dee117a315ab5aa425b14",
+      "tasks.md": "aee4bff97e947914cebe8e80503faa1b57b90fe010c6848b71d7724f68806cf1"
     },
-    "last_active_child_id": null,
     "last_active_at": null
   }
 }

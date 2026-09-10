@@ -65,3 +65,32 @@ contextType: "implementation"
 - [x] T008 DONE 2026-09-10 — Run GREEN on T004 and T005 and record every number. Then rerun `006`'s record clauses unchanged on **both** engines and confirm they still pass: 21/21 rows at 44.0px, 20/20 hairlines, 16.0px inset, 0 native selects, and no horizontal overflow at 402px with a long record title mounted (REQ-005). Confirm by `git diff` that the record's open target is untouched (REQ-006) (`tools/live/sheet-grammar.mjs`)
 - [x] T009 DONE 2026-09-10 — Extend `record-detail-panel.test.ts` with a revert-proof unit test for the header contract and prove it red-then-green. Finish with the full battery — `npx tsc --noEmit`, `npm run build`, `npx vitest run`, `npm run screenshots` for the record sheet and record peek phone light+dark (REQ-007), `npm run gate` — then write the closing docs, validate (`orchestrator --strict` → `RESULT: PASSED`), backfill graph metadata, and append the packet entry to `../../handover.md` (`src/views/record-detail-panel.test.ts`)
 <!-- /ANCHOR:phase-4 -->
+
+---
+
+### Design-review follow-ups (2026-09-10)
+
+Opened by `../sheet-design-review.md` §4 F-3, a `sk-design-fundamentals` pass distinct from this
+child's own Notion-parity work. Not yet implemented.
+
+- [ ] T010 RED first: add a unit assertion to `record-detail-panel.test.ts` (or
+  `card-field-renderer.test.ts` if the icon element is easier to reach there) that measures the
+  rendered gap between a record property label's text node and its trailing type-icon span —
+  either the icon's `getBoundingClientRect().left` minus the text node's own measured right edge,
+  or simpler, that the icon element carries a non-zero `margin-left` (today it has
+  `margin-right: 4px` and no `margin-left`, `styles.css:11329-11344`). Run against the unmodified
+  tree and record the failure: computed gap is 0px (`src/views/record-detail-panel.test.ts`)
+- [ ] T011 Fix at the source: either (a) swap `margin-right: 4px` to `margin-left: 4px` on
+  `.obnotion-record-detail-field-label .obnotion-record-detail-field-type-icon`
+  (`styles.css:11329-11344`) if the icon-after-label order is intentional, or (b) change
+  `renderRecordField` (`record-detail-panel.ts:589`) to insert the icon **before** the label's text
+  node — matching the Properties sheet's own icon-then-label order
+  (`column-manager-renderer.ts:401`) — if leading placement is preferred for cross-sheet
+  consistency. Either fix is a one-line change; pick (a) unless the operator prefers the
+  cross-sheet match (`src/views/record-detail-panel.ts`, `styles.css`)
+- [ ] T012 Verify GREEN: T010's assertion passes; rerun `011`'s own row-grammar clauses (21/21
+  rows 44.0px, 20/20 hairlines, 16.0px inset, 21/21 type icons present) unchanged — the fix must
+  not move the row's pitch or the value's left edge, only the gap between label text and icon.
+  Recapture `constructed-record-detail-mobile-{light,dark}.png` and confirm by eye that
+  `month`/`sort_key`/`Priority`/etc. no longer read glued to their type glyphs
+  (`tools/live/sheet-grammar.mjs`, `screenshots/`)

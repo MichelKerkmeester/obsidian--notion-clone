@@ -120,6 +120,7 @@ Per-phase detail lives in each child's `plan.md`; this row summarizes the audit 
 | 12 | `012-sort-and-group-sheet-rows/` | Sort: a two-row rule with a labelled delete and one reorder affordance rather than two. Group: the Shown/Hidden partition and header-level bulk actions | scaffolded |
 | 13 | `013-sheet-input-and-action-order/` | Four sheets whose controls are ordered against the action they serve — the confirm card puts Cancel above the destructive action, Notion puts it below in 4/4 captures | scaffolded |
 | 14 | `014-sheet-polish/` | The audit's P3 residue in one packet: the icon picker's crowded search row, the side-by-side add affordances, and the convergence findings recorded so they are not re-audited | scaffolded |
+| 15 | `015-sheet-design-fundamentals/` | The two cross-sheet findings from `sheet-design-review.md` (the operator's 2026-09-10 `sk-design-fundamentals` double-check) that no single child owns: the calendar mini-nav's 24px touch target and the missing group-sheet screenshot scenario | scaffolded |
 
 ### The 2026-09-09 audit wave (phases 8-14)
 
@@ -141,6 +142,26 @@ header, then the P2 wave, then polish last.
 
 **Three contradictions are held Proposed, not resolved** (audit §6): card grouping is `007`'s to
 decide, the AND/OR conjunction control is retained by default, and the layout choice stays as rows.
+
+### The 2026-09-10 design-fundamentals double-check (phase 15)
+
+Opened by the operator's 2026-09-10 ruling — *"double check all sheet work, use sonnet 5xhigh
+through claude2 and give them the sk-design-fundamentals skill and check it based on those design
+fundamentals"* — `sheet-design-review.md` reads the nine landed 2026-09-09/10 commits (`005`,
+`007`-`014`) through `sk-design-fundamentals` rather than Notion-parity: hierarchy, spacing, color
+and contrast in both themes, depth, interaction craft, motion and the UX laws. It found **2 P1 and
+4 P2** findings the Notion-audit lens did not surface — a dark-mode elevation inversion on `007`'s
+settings card, a filter-sheet action-row inconsistency `008` left unfixed one level above the
+condition rows it did fix, a label/icon spacing bug on `011`'s new type icons, a CSS-specificity
+leak on `013`'s reordered date picker, an under-floor touch target on a shared calendar control,
+and a missing screenshot scenario for the group sheet. Four findings were appended as
+`### Design-review follow-ups (2026-09-10)` to the owning child's own `tasks.md`
+(`007`, `008`, `011`, `013`); the two cross-sheet findings opened phase 15. One further finding —
+the Properties sheet's 34px row density, already a landed, named decision in `009` — was recorded
+as Proposed ADR-D in `roadmap.md` §7 rather than reopened as a task. Eight of the nine landings read
+as unambiguous improvements against the fundamentals lens, not merely against Notion's screenshots;
+`007` is the one exception, its card-grouping *mechanism* sound but its provisional fill token
+producing no perceptible result in either theme.
 
 ### Phase Transition Rules
 

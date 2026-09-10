@@ -109,3 +109,32 @@ contextType: "implementation"
   RESULT: PASSED ×3 (packet, 071 parent first RESULT, 005 track); graph metadata backfilled;
   packet entry appended to `../../handover.md`
 <!-- /ANCHOR:phase-5 -->
+
+---
+
+### Design-review follow-ups (2026-09-10)
+
+Opened by `../sheet-design-review.md` §1 F-1, a `sk-design-fundamentals` pass distinct from this
+child's own Notion-parity work. Not yet implemented.
+
+- [ ] T013 RED first: add a dark-theme card/canvas relative-lightness clause to
+  `tools/live/sheet-grammar.mjs`'s settings-card block — assert
+  `cardLightness > canvasLightness` (not merely `!=`) when `document.body` carries `.theme-dark`.
+  Run it against the unmodified tree and record the failure: the clause reads card
+  `--background-primary` ≈ 0.118 against canvas `--obnotion-surface-overlay` ≈ 0.180 — the card is
+  **darker**, so `cardLightness > canvasLightness` is false and the new clause fails red
+  (`tools/live/sheet-grammar.mjs`)
+- [ ] T014 Fix at the token: give `.obnotion-settings-card` (`styles.css:12363-12367`) a fill that
+  is lighter than `--obnotion-surface-overlay` in **both** themes' own elevation ladders — either
+  switch to `--obnotion-surface-modal` (already lighter than overlay in dark mode: ≈0.224 vs
+  ≈0.180; ≈5 points darker than overlay in light mode, the same order of magnitude as the current
+  light-mode gap) or add a dedicated per-theme token. Re-verify against a live dark-mode render
+  before locking the exact value — `007`'s own four card metrics are already flagged provisional,
+  and this token choice is provisional alongside them (`styles.css`)
+- [ ] T015 Verify GREEN: T013's clause now passes in dark mode; rerun the existing card-grouping
+  clause (`2/2 cards, radius ≥8px, backgrounds distinct, gap ≥8px, headings above their card`)
+  unchanged on both engines and confirm it still passes — the fix must not touch radius, gap or
+  the heading-above-card facts, only the fill token. Recapture
+  `constructed-view-config-mobile-{light,dark}.png` and `panel-view-config-sheet-mobile-{light,dark}.png`
+  and confirm by eye that the card now reads as raised (lighter than its canvas) in dark mode
+  (`tools/live/sheet-grammar.mjs`, `screenshots/`)

@@ -1,0 +1,15 @@
+{
+  "level": "2",
+  "specFolder": "005-component-surface-system/071-sheet-notion-anytype-alignment/015-sheet-design-fundamentals",
+  "description": "The two cross-sheet findings from the sk-design-fundamentals review that no single child owns: a shared 24px touch target and a missing group-sheet screenshot scenario",
+  "keywords": ["design", "fundamentals", "touch", "target", "calendar", "nav", "group", "sheet", "screenshot", "scenario"],
+  "lastUpdated": "2026-09-10T00:00:00.000Z",
+  "specId": "015",
+  "folderSlug": "sheet-design-fundamentals",
+  "parentChain": [
+    "005-component-surface-system",
+    "071-sheet-notion-anytype-alignment"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

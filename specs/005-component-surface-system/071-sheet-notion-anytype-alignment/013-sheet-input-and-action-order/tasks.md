@@ -67,3 +67,32 @@ contextType: "implementation"
 - [x] T010 Recapture all four surfaces phone-only, light and dark, and record a measured before/after against `spec.md` §13 (REQ-010) (`screenshots/`) — recorded, provisional: 24 deterministic two-run movers in the css-lane triplet (baselineHash `aa57d141259c`); the record popover's half is the lane's printed 15→0 plus the destination's 15, because the constructed corpus has no scenario for that popover; the visual retuning awaits the device read (D3, the audit's C-1..C-6)
 - [x] T011 Full battery: `npx tsc --noEmit`, `npm run build`, `npx vitest run`, `node tools/live/sheet-grammar.mjs`, `npm run gate` — record each exit code. Then write the closing docs including a `decision-record.md` entry for the confirm reorder citing Notion's 4/4, validate (`orchestrator --strict` → `RESULT: PASSED`), backfill graph metadata, and append the packet entry to `../../handover.md` (`tools/live/*`)
 <!-- /ANCHOR:phase-4 -->
+
+---
+
+### Design-review follow-ups (2026-09-10)
+
+Opened by `../sheet-design-review.md` §6 F-4, a `sk-design-fundamentals` pass distinct from this
+child's own reordering work. Not yet implemented.
+
+- [ ] T012 RED first: add a clause to `tools/live/sheet-grammar.mjs`'s date-picker block that
+  reads the computed `border` and `background` of a mounted `.obnotion-date-seg` inside the phone
+  sheet's `.obnotion-date-picker-body`, and asserts they match the class's own declared rule
+  (`border: 0`, `background: transparent`, `styles.css:7171-7182`) rather than the inherited
+  `.obnotion-panel-row input` rule (`styles.css:13836-13846`: `border: 1px solid
+  var(--background-modifier-border)`, `background: var(--background-primary)`). Run against the
+  unmodified tree and record the failure: the segment computes the panel-row input's bordered
+  treatment, not its own (`tools/live/sheet-grammar.mjs`)
+- [ ] T013 Fix with a targeted override, the same resolution the icon-picker search field already
+  uses for the identical leak (`styles.css:14266-14277`, three classes beats two-classes-plus-type
+  on specificity): add
+  `.obnotion-mobile-bottom-sheet .obnotion-date-picker-body .obnotion-date-seg { border: 0; background: transparent; }`
+  immediately after the `.obnotion-mobile-bottom-sheet .obnotion-date-picker-body` rule at
+  `styles.css:14302-14307` (`styles.css`)
+- [ ] T014 Verify GREEN: T012's clause passes; rerun the date-picker order clauses this leg shipped
+  (`calendar precedes segments`, `three shortcut presets, Clear outside the group`) unchanged —
+  the fix touches only the segment inputs' paint, not their order or width. Recapture
+  `constructed-date-picker-mobile-{light,dark}.png` and
+  `field-date-value-picker-mobile-{light,dark}.png` and confirm by eye that the typed-segment row
+  no longer looks like a different input system than the three preset buttons above it
+  (`tools/live/sheet-grammar.mjs`, `screenshots/`)

@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T04:27:00Z"
-    last_updated_by: "283-checklist-0038-rows"
-    recent_action: "Checklist: 12 new 0.0.38 operator rows + 007 capture mirrored into human-verification-checklist"
-    next_safe_action: "Operator device rows on 0.0.38 (goal-body.md ORDER OF WORK §1); no agent work remains"
+    last_updated_at: "2026-09-10T09:00:00Z"
+    last_updated_by: "284-sheet-design-review"
+    recent_action: "sk-design-fundamentals review of 9 sheets: 2 P1/4 P2 routed to 007/008/011/013; 015 opened"
+    next_safe_action: "GLM implements the 4 follow-up sections + 015; operator device rows on 0.0.38 remain"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
     key_files:
@@ -4125,3 +4125,55 @@ scan-comments 0; scan-failing-values 0; **gate 28/28, exit 0**.
 (C-1..C-6) stay outstanding; none gates this packet's criteria, which are all measured against our
 own numbers. Validated: 014, 071 (first RESULT) and 005, `RESULT: PASSED`; graph metadata
 backfilled each. Not pushed — a fresh verifier lands it.
+
+## 071/sheet-design-review — the `sk-design-fundamentals` double-check of the nine landed sheets (2026-09-10)
+
+Operator ruling, verbatim: *"double check all sheet work, use sonnet 5xhigh through claude2 and
+give them the sk-design-fundamentals skill and check it based on those design fundamentals."* This
+is a review packet, not an implementation one — it produced `071/sheet-design-review.md` and a set
+of GLM-ready follow-up tasks; nothing in it is implemented.
+
+The nine SHAs `005`/`007`-`014` land (`e9f62e41`, `8bd38d77`, `64af87ee`, `4f345718`, `41b9619f`,
+`6b6f6418`, `5afe61e2`, `b7fa33aa`, `8f11b642`) were re-read through the full
+`sk-design-fundamentals` skill — hierarchy, spacing, color/contrast in both themes, depth,
+interaction craft, motion, the UX laws — a different lens than `sheet-notion-audit.md`'s own
+Notion-parity checklist. Every phone capture named in the review's Captures Reviewed rows was
+opened and looked at, light and dark, per `screenshot-currency.md`.
+
+**Found: 2 P1, 4 P2, one unfiled P3, one process gap (the group sheet has no screenshot scenario at
+all — no design review of it, this one included, can verify its shipped Shown/Hidden partition
+visually), and one Proposed ADR.** The two P1s: `007`'s settings-card fill computes *darker* than
+its own sheet canvas in dark theme (`--background-primary` ≈0.118 vs `--obnotion-surface-overlay`
+≈0.180, the latter confirmed against the lane's own printed card-grouping measurement) — the exact
+"invert the ramp mechanically" trap `color-system.md` §7 names, masked in light theme only because
+light and dark themes encode elevation in opposite directions; and `008`'s filter sheet still
+carries four unlabelled 28px icon buttons on its root-group action row, the identical defect class
+`008` itself fixed one screen-scroll below for the condition-level actions. The four P2s: `011`'s
+new per-row type icon renders glued to its label with zero gap (a DOM-append-order plus wrong-side
+CSS-margin bug, confirmed at the source); `013`'s reordered date picker inherits a documented
+CSS-specificity leak into its typed segments (the same leak the icon-picker's search field was
+already patched against, never extended to the date picker); a shared `.obnotion-calendar-mini-nav`
+control sits at 24×24px with no coarse-pointer floor raise, unlike its three sibling icon buttons in
+the same media-query block; and the Properties sheet's 34px row density — already a named `009`
+decision — is restated against the 44px thumb floor as Proposed ADR-D (`roadmap.md` §7.18) rather
+than reopened.
+
+**Net verdict**: eight of the nine landings read as unambiguous improvements against the
+fundamentals lens, not merely against Notion's screenshots. `007` is the one exception — its
+card-grouping mechanism (2/2 cards, radius, gap, heading placement) is sound and lane-green, but
+the fill token's direction is backwards in dark mode and too subtle to read in light mode, so
+neither theme yet delivers Notion's actual grouped-card look the packet was opened for.
+
+Four `### Design-review follow-ups (2026-09-10)` sections, each a RED-first GLM task naming the
+file and the verify step, appended to `007-settings-sheet-strict-alignment/tasks.md`,
+`008-filter-sheet-row-model/tasks.md`, `011-record-sheet-header-and-icons/tasks.md` and
+`013-sheet-input-and-action-order/tasks.md`. The two cross-sheet findings (the shared touch target,
+the missing group scenario) opened `071/015-sheet-design-fundamentals` (Level 2: spec, plan, tasks,
+acceptance-criteria, goal, description.json, graph-metadata.json). Parent updates: `071/spec.md`'s
+Phase Documentation Map gained row 15 and a new "2026-09-10 design-fundamentals double-check"
+section; `071/goal.md` gained a log row and a `015` binding entry; `roadmap.md` gained §4 row 88
+(the ruling, quoted verbatim), a trailing note on the `071` row in §5.A, and §7.18 (ADR-D).
+
+Validated: `015`, `071` parent and `005` track, `RESULT: PASSED` after each touched folder's
+scoped graph-metadata backfill and a full re-validation. Not pushed at the time this entry was
+written — see the commit trailer for the landing SHA.

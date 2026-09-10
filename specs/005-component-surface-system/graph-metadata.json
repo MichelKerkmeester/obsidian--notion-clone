@@ -289,7 +289,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-10T04:28:05.130Z",
+    "last_save_at": "2026-09-10T05:17:50.159Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -297,11 +297,11 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:45d6a516201853d2b196033b3677700ffde289072b8622b79b6d61f405ee3cfc",
+    "source_fingerprint": "sha256:12f648f5a4cff80fa77a8a9b830c266d476acdc911a7836936b575d63dfe0fba",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d555fe2d05a8e10476a09464e12aa382dea3fa399b611db29f544003d2dfcd15",
-      "handover.md": "96420f99e317b077557735155abff0cd74b6cac9afcd26b103eb3ed83f1a73de"
+      "handover.md": "730c0efa0812d5133ba8385bdfbe98be938343d9632b9749250ba86a0c04e83b"
     },
     "last_active_at": null
   }

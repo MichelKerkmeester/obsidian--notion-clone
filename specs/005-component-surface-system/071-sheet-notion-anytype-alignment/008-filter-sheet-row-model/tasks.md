@@ -148,3 +148,32 @@ contextType: "implementation"
   reviewed (8 real movers + 1 pre-existing sub-pixel unrelated mover kept, 1 jitter reverted) — see
   `../../handover.md` and the css-lane triplet. `npm run gate`: 28 green, 0 red.
 <!-- /ANCHOR:phase-4 -->
+
+---
+
+### Design-review follow-ups (2026-09-10)
+
+Opened by `../sheet-design-review.md` §7 F-6, a `sk-design-fundamentals` pass distinct from this
+child's own Notion-parity work. Not yet implemented.
+
+- [ ] T013 RED first: add a clause to `tools/live/sheet-grammar.mjs`'s filter-panel block asserting
+  every root-group action control (`+`, `folder-plus`, `circle-slash-2`, `trash-2` inside
+  `.obnotion-source-rule-actions` at the sheet's own root) carries a visible text label, not only
+  an `aria-label`, and measures ≥44px on its touch axis on a coarse pointer. Run against the
+  unmodified tree and record the failure: 4 of 4 controls have no visible label
+  (`querySelector`-readable text node), and the phone floor is 28×28px, not ≥44px
+  (`tools/live/sheet-grammar.mjs`)
+- [ ] T014 Fix at the producer: route `renderFilterTreeGroup`'s root-level actions
+  (`filter-panel-renderer.ts:437-449`) through the same `createMenuRow` labelled-row primitive
+  `renderStackedConditionRow` already uses for the condition-level actions three rows below
+  (`:678-702`) — "Add rule", "Add rule group", "Negate rule", "Remove rule" (red, `is-warning`) as
+  44px labelled rows. If the header's own layout cannot hold four full rows without pushing the
+  `AND (all)` dropdown out of its row, keep the icon-only presentation but raise
+  `.obnotion-source-rule-icon-button`'s phone floor to 44px (`styles.css:24471-24474`) and add a
+  persistent (not hover-only) text label beside each icon (`src/views/filter-panel-renderer.ts`,
+  `styles.css`)
+- [ ] T015 Verify GREEN: T013's clause passes; rerun the condition-row controls-per-row and
+  labelled-warning-row clauses this leg already shipped and confirm they are unchanged. Recapture
+  `constructed-filter-panel-mobile-{light,dark}.png` and `constructed-filter-panel-nested-mobile-{light,dark}.png`
+  and confirm by eye that the root-group actions now read in the same visual language as the
+  condition-level actions a few rows below them (`tools/live/sheet-grammar.mjs`, `screenshots/`)
