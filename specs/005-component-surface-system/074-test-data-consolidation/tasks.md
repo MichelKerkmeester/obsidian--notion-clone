@@ -207,6 +207,7 @@ Red → green (T005/T006): the fixture-registry test's assertions against the te
 
 - [x] CHK-050 [P1] Temp files — the generator's and gate's temp output lives outside the repository; the pixel-delta runs' two JSON reports were read, their numbers recorded above, and removed
 - [x] CHK-051 [P1] scratch/ cleaned — nothing task-created remains: the worktree diff contains exactly the files this packet names
+- [x] CHK-052 [P1] The 2026-09-10 ~20:55 folder ruling held at the source, red first — the registry's new vault-write describe ran RED against the untouched tree (2 failed \| 9 passed: the note sat in a nested `Database Testbed/Testbed/` wrapper, the folder the operator's hand consolidation had removed) and GREEN after the shared path helpers answered the testbed root itself (11/11; full `vitest` 1617/1617, `npm run gate` 28/0); the adoption smoke proved the ruling's shape: exactly one folder, 1 note + 36 records, the note's `viewType` exactly board+table, Finance untouched, second run 0 written
 <!-- /ANCHOR:file-org -->
 
 ---

@@ -10,9 +10,10 @@
 // The vault write is the one irreversible action here. A vault is not a git
 // working tree: overwriting a note there cannot be undone, and the operator's
 // own Testbed database sits in the same folder. So the writer refuses a root
-// that does not already look like the testbed, writes only inside the
-// per-use-case folders it owns, and skips a file whose bytes already match —
-// which is what makes a second run a no-op rather than a churn of timestamps.
+// that does not already look like the testbed, writes only the one consolidated
+// database note and its records folder, and skips a file whose bytes already
+// match — which is what makes a second run a no-op rather than a churn of
+// timestamps.
 //
 // It never deletes. A folder under the testbed root that the catalogue no
 // longer produces is reported and left alone, because deciding that a note in
@@ -36,8 +37,10 @@ import { emitAllCsv, emitJson } from "./emit-portable.ts";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 
-// The two folders the existing testbed owns. The writer never opens either.
-const PRESERVED = new Set(["Records", "Attachments"]);
+// Folders inside the testbed root that this catalogue does not produce but the
+// vault keeps anyway. The records reference the attachments by vault path, so
+// they are part of the fixture the records need, never a stray to report.
+const PRESERVED = new Set(["Attachments"]);
 
 // ───────────────────────────────────────────────────────────────────
 // 2. ARGUMENTS
@@ -137,11 +140,21 @@ function main(): void {
   if (options.vault) {
     const vaultRoot = resolve(options.vault);
     const testbed = assertTestbedRoot(vaultRoot);
-    const owned = new Set(catalogue.useCases.map((useCase) => useCase.name));
+    const files = emitObsidian(catalogue);
+
+    // Folders the write produces, for the stray report: the note sits at the
+    // root itself, so only the records folder contributes a segment. Anything
+    // else under the testbed root is the operator's, and only ever reported.
+    const owned = new Set(
+      files
+        .map((file) => file.path.slice(TESTBED_ROOT.length + 1))
+        .filter((rest) => rest.includes("/"))
+        .map((rest) => rest.split("/")[0])
+    );
 
     let vaultChanged = 0;
     let vaultUnchanged = 0;
-    for (const file of emitObsidian(catalogue)) {
+    for (const file of files) {
       const didChange = writeIfChanged(join(vaultRoot, file.path), file.content);
       if (didChange) vaultChanged += 1;
       else vaultUnchanged += 1;

@@ -10,10 +10,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/074-test-data-consolidation"
-    last_updated_at: "2026-09-08T08:30:00Z"
-    last_updated_by: "markdown-scaffold"
-    recent_action: "Consolidation implemented; Finance fixture kept; registry red-then-green; gate 27/0"
-    next_safe_action: "Await the fresh verifier; the operator adopts testbed-proposal.md"
+    last_updated_at: "2026-09-10T20:16:33Z"
+    last_updated_by: "folder-ruling-leg"
+    recent_action: "Folder ruling landed: vault write emits one folder; registry red-then-green; gate 28/0"
+    next_safe_action: "Await the fresh verifier; the Finance databases' on-device read stays the operator's row"
     blockers: []
     key_files:
       - "tools/screenshots/"
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "074-test-data-consolidation-scaffold"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 95
     open_questions: []
     answered_questions:
       - "The operator's own Database Testbed folder is operator-owned; this packet proposes the consolidated shape for it but does not overwrite it without the operator's own action"

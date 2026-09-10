@@ -48,9 +48,9 @@ no complete row cannot answer what a fully populated record costs to render.
 
 ## 3. THE THREE OUTPUTS
 
-**Obsidian.** `--vault` writes `Database Testbed/<Use Case>/<Use Case>.md` (a `db_view: true`
-database note) and `Database Testbed/<Use Case>/Records/*.md`. The existing `Testbed.md`, `README.md`,
-`Records/` and `Attachments/` are never opened. The write is idempotent: a file whose bytes already
+**Obsidian.** `--vault` writes `Database Testbed/Testbed.md` (a `db_view: true` database note) and
+`Database Testbed/Records/*.md`. `README.md` and `Attachments/` are never opened. The write is
+idempotent: a file whose bytes already
 match is skipped, so a second run reports zero changes rather than churning timestamps in a synced
 vault. Nothing is ever deleted; a folder the catalogue no longer produces is reported and left alone.
 

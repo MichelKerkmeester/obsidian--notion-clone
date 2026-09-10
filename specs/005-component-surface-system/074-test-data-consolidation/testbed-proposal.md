@@ -1,6 +1,6 @@
 ---
 title: "Testbed Proposal: what the operator's Database Testbed folder looks like after the consolidation"
-description: "A proposal, not a change: the consolidated vault shape the packet proposes, the guarded command that writes it, and the folders the operator may retire. The operator's vault folder is never touched by this repository."
+description: "The adopted shape of the operator's consolidated vault: one Database Testbed folder holding the one database — its note at the root, its records inside it — with the guarded command that writes it and the Finance data it never touches. The vault itself was consolidated by the operator's action on 2026-09-10."
 trigger_phrases:
   - "testbed proposal"
   - "database testbed consolidated shape"
@@ -11,11 +11,13 @@ contextType: "planning"
 <!-- SPECKIT_TEMPLATE_SOURCE: decision-record | v2.2 -->
 # Testbed Proposal: the operator's `Database Testbed/` after the consolidation
 
-**Packet:** 074-test-data-consolidation · **Date:** 2026-09-08 · **Status:** Proposed — awaiting the operator · **Amended 2026-09-09** to the 0.0.36 ruling (one database, a table view and a board view — see §1A)
+**Packet:** 074-test-data-consolidation · **Date:** 2026-09-08 · **Status:** Adopted — the vault was consolidated by the operator's action on 2026-09-10 · **Amended 2026-09-09** to the 0.0.36 ruling (one database, a table view and a board view — see §1A) · **Adopted and amended 2026-09-10**: the ~20:55 ruling puts the one database's note at the testbed root with its records inside it (§1, §2), which is the shape the hand consolidation of that day produced
 
 The repository now builds one consolidated testbed database. This note is what the operator's own
-vault would look like with it, written so the decision (and any deletion) stays theirs. Nothing in
-this packet wrote to, renamed, or deleted anything inside the vault.
+vault looks like now that the consolidation is adopted. The consolidation of the vault itself was
+the operator's action of 2026-09-10 — a hand consolidation, nine sub-database folders removed,
+backup kept (its path recorded in the 005 handover entry, not in this code). The repository's own
+code never wrote the vault; it now writes exactly the shape that consolidation produced.
 
 ---
 
@@ -23,15 +25,15 @@ this packet wrote to, renamed, or deleted anything inside the vault.
 
 ```
 Database Testbed/
-├── Testbed.md                  ← the operator's own, kept as it stands (never written by the generator)
-├── Records/                    ← the operator's own, kept
+├── Testbed.md                  ← the one consolidated database note: db_view: true, 28 columns, two
+│                                 views — written, and kept current, by the generator
+├── Records/                    ← 36 record notes, "01 — Full record, every facet filled.md" first,
+│                               ←   "36 — Sparse record, title only.md" (deliberately empty) last
 ├── Attachments/
-│   ├── audit-checklist.md      ← referenced by the new records; kept
-│   └── release-notes.txt       ← referenced by the new records; kept
-└── Testbed/                    ← NEW: the one consolidated database
-    ├── Testbed.md              ← the database note: db_view: true, 28 columns, two views
-    └── Records/                ← 36 record notes, "01 — Full record, every facet filled.md" first,
-                                ←   "36 — Sparse record, title only.md" (deliberately empty) last
+│   ├── audit-checklist.md      ← referenced by the records; kept, never written by the generator
+│   └── release-notes.txt       ← referenced by the records; kept, never written by the generator
+└── (anything else under the root — Finance among it — is the operator's own: reported as "not
+    produced by this catalogue", never written, never deleted)
 ```
 
 The database note declares, in the same on-disk shape the plugin already reads:
@@ -63,8 +65,9 @@ One command, guarded and idempotent:
 
 - it refuses to write unless the target already looks like the testbed (the existing
   `Database Testbed/Testbed.md` is the marker);
-- it writes only the new `Testbed/` folder — never `Testbed.md`, `README.md`, `Records/` or
-  `Attachments/` at the root;
+- it writes only the database note at the testbed root — `Testbed.md`, which adoption keeps current —
+  and the records under `Records/` inside the testbed folder; `README.md` and `Attachments/` are
+  never touched;
 - it skips any file whose bytes already match, so a re-run reports zero changes instead of
   churning timestamps in a synced vault;
 - it never deletes: anything else under the testbed root is reported as
@@ -72,9 +75,10 @@ One command, guarded and idempotent:
 
 ## 3. WHAT THE OPERATOR MAY THEN RETIRE (their call, not this packet's)
 
-The consolidation replaces the nine earlier per-use-case folders (and the finance-flavoured tenth)
-the catalogue used to generate. After adopting the new folder, these are the ones the generator no
-longer produces, and the operator may delete if they no longer want them:
+Adopted 2026-09-10: the nine earlier per-use-case folders (and the finance-flavoured tenth) the
+catalogue used to generate were removed from the vault by the operator's own consolidation, with a
+backup kept (its path recorded in the 005 handover entry, not in this code). These are the folders
+the generator no longer produces:
 
 ```
 Database Testbed/Project Tracker/

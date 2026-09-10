@@ -4562,3 +4562,36 @@ Phase qualification, measured not asserted: `recommend-level.sh --loc 2400 --fil
 Validated: the `076` parent and all eleven children, `RESULT: PASSED` on `orchestrator.js --strict`
 after each folder's scoped `backfill-graph-metadata.js` run, plus the `005` track. Not pushed at the
 time this entry was written — see the commit trailer for the landing SHA.
+
+## 074-test-data-consolidation — the 2026-09-10 ~20:55 folder ruling: the vault write emits the one folder (this leg)
+
+The operator's ruling — *"Testbed has ton of folder on iis still i wanted only 1 folder / database"* —
+named the vault, and the vault itself was already consolidated by hand that day (nine sub-database
+folders removed, backup kept; the backup's path is not recorded in the repository). What remained
+was the repo cause: `tools/mock-data/generate.ts --vault` still wrote the nested
+`Database Testbed/Testbed/` wrapper — exactly the folder the hand consolidation had deleted — so a
+re-run would have recreated it.
+
+Fix at the source: the shared path helpers in `emit-obsidian.ts` answer the testbed root itself —
+the consolidated note at `Database Testbed/Testbed.md`, the records under `Database Testbed/Records/`
+(the shape `tools/live/sheet-rebuild-harness.ts` and the real-data migration fixture in
+`src/data/list-migration-real-data.test.ts` already referenced) — and `emitObsidian` now asserts the
+one-database invariant the registry holds, while the stray report derives its produced folders from
+the write set itself. `README.md`, `Attachments/` and the Finance folder are never written; Finance,
+no longer produced by the one-database catalogue, is reported as "not produced by this catalogue,
+left untouched".
+
+RED→GREEN: the new vault-write describe in `tools/mock-data/consolidation.test.mjs` ran 2 failed |
+9 passed against the untouched tree (the note sat in the nested wrapper, so the note's bytes at the
+root read no views; the Finance-untouched assertion already held), 11/11 after. Battery: `vitest`
+1617/1617, `tsc` 0, `build` 0, `sheet-grammar` 0, `render-assertions` 0, `verify-placement` 0,
+`evidence --check-all` 16/16 fresh, `scan-comments` 0, `scan-failing-values` 0, `npm run gate`
+28 green, 0 red, exit 0. Adoption smoke: first run 37 written (1 note + 36 records) into exactly one
+folder, the note's `viewType` exactly 1×table + 1×board, Finance bytes untouched; second run 0
+written. No styles or renderer changed → no capture pass.
+
+Docs: `074/acceptance-criteria.md` AC-006 (the counts, and the closure note), `074/tasks.md` CHK-052,
+`074/goal.md` criterion + progress + continuity (80→90), `074/testbed-proposal.md` amended to the
+adopted shape with the 2026-09-10 consolidation note, `roadmap.md` §4 row 88. Validated `074` and
+the `005` track `--strict` PASSED, scoped graph-metadata backfill. Not pushed — see the commit
+trailer for the landing SHA.

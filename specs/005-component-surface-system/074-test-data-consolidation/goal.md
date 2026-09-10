@@ -9,19 +9,19 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/074-test-data-consolidation"
-    last_updated_at: "2026-09-08T08:30:00Z"
-    last_updated_by: "markdown-scaffold"
-    recent_action: "Ruling landed 2026-09-09: view set one table + one board (AC-005); gate 27/0"
-    next_safe_action: "Await the fresh verifier; the operator adopts testbed-proposal.md"
+    last_updated_at: "2026-09-10T20:16:33Z"
+    last_updated_by: "folder-ruling-leg"
+    recent_action: "Folder ruling landed: vault write emits one folder; adopted by the operator; gate 28/0"
+    next_safe_action: "Await the fresh verifier; the Finance databases' on-device read stays the operator's row"
     blockers:
-      - "The on-device confirmation of the Finance databases and the adoption of testbed-proposal.md are the operator's rows; this packet never writes their vault"
+      - "The Finance databases' on-device read is the operator's row; the adoption of the consolidated shape happened by the operator's own action on 2026-09-10 (backup noted in the 005 handover)"
     key_files:
       - "spec.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "074-test-data-consolidation-scaffold"
       parent_session_id: null
-    completion_pct: 80
+    completion_pct: 90
     open_questions: []
     answered_questions:
       - "Surviving view types: table, board, calendar, timeline, chart (decision-record ADR-0001)"
@@ -60,6 +60,7 @@ resend the full text of this file in chat so the operator can update their copy.
 - [x] Capture, story and phone-smoke harnesses migrated onto the one consolidated database, each re-verified against its own pass/fail criteria — every catalogue mount repointed; the suite was 1672 tests, now 1678 with the registry's six; the constructed, bench, smoke and story bodies reference no use case and stay, as their lanes' measured subjects (ADR-0003); every criterion re-measured, none loosened
 - [ ] Finance databases confirmed visible once 070 lands, documented as the kept second dataset — code-side proven and documented (ADR-0005, the cold-cache lane, `testbed-proposal.md`); the on-device read of the operator's own Finance databases is the operator's row and this leg does not tick it
 - [x] The 2026-09-09 ~20:48 ruling (0.0.36: *"Also clean testbed only 1 database with table and board views"*): the testbed's view definitions are exactly one table view and one board view — RED: 2 failed | 6 passed, the view count was 6 [table, board, calendar, timeline, chart, table] → GREEN 8/8, full vitest 1587/1587, gate 27/0; recorded as AC-005, which amends the six-view coverage this criterion's second bullet recorded
+- [x] The 2026-09-10 ~20:55 ruling (*"Testbed has ton of folder on iis still i wanted only 1 folder / database"*): the folder the generator's vault write produces is exactly one — the consolidated note at the testbed root, the records inside it, `README.md`/`Attachments/` untouched, the Finance folder never written — RED `consolidation.test.mjs` 2 failed | 9 passed (the note still sat in a nested `Testbed/` wrapper, the very folder the operator's hand consolidation had removed; the Finance-untouched and note-view-bytes assertions already held) → GREEN 11/11, registry + `catalogue.test.mjs` 31/31, full `vitest` 1617/1617; adoption smoke: first run 37 written (1 note + 36 records) into exactly one folder, `viewType` exactly 1×table + 1×board, Finance bytes untouched, second run 0 written; `tsc` 0, `build` 0, `sheet-grammar` 0, `render-assertions` 0, `verify-placement` 0, evidence 16/16, gate 28/0 exit 0; recorded as AC-006, which amends the proposal's premise that the generator never writes the root note
 <!-- /ANCHOR:completion -->
 
 ---
@@ -73,6 +74,8 @@ resend the full text of this file in chat so the operator can update their copy.
 |------|-------|----------|
 | Packet opened | Done | This scaffold, 2026-09-08 |
 | Implementation leg, 2026-09-08 | Done | The consolidation landed in the worktree: ten fixture databases → one Testbed (36 records), the 070 Finance fixture kept as the second dataset, every mount repointed; registry suite 4-of-6 red → 6/6 green; vitest 153/1672 → 154/1678; the full ladder and the gate (27 green, 0 declared red) all exit 0; details, deviations and the capture disposition in the packet's `implementation-summary.md` and `decision-record.md` |
+
+| Folder-ruling leg, 2026-09-10 | Done | The vault write's shape: the shared path helpers answer the testbed root itself (`emit-obsidian.ts`), `emitObsidian` asserts the one-database invariant, the stray report derives its produced folders from the write set; RED→GREEN and the adoption smoke as AC-006 records; the operator's vault consolidated by hand the same day (nine sub-database folders removed, backup kept) |
 
 ### Deviations and findings
 

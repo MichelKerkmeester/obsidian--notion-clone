@@ -218,17 +218,16 @@ describe("vault output", () => {
     }
   });
 
-  it("never writes the files the existing testbed owns", () => {
-    const forbidden = [
-      `${TESTBED_ROOT}/Testbed.md`,
-      `${TESTBED_ROOT}/README.md`,
-    ];
+  it("writes the note at the root and the records beside it, never README or the attachments", () => {
+    // The ruling: the testbed folder IS the database, so the note lives at its
+    // root and the records inside it. README and Attachments belong to the
+    // vault, not to this write.
     const written = new Set(files.map((file) => file.path));
-    for (const path of forbidden) {
-      expect(written.has(path), path).toBe(false);
-    }
+    expect(written.has(`${TESTBED_ROOT}/Testbed.md`), "the consolidated note").toBe(true);
+    expect(written.has(`${TESTBED_ROOT}/README.md`), "README stays whatever the vault holds").toBe(false);
     for (const file of files) {
-      expect(file.path.startsWith(`${TESTBED_ROOT}/Records/`), file.path).toBe(false);
+      if (file.path === `${TESTBED_ROOT}/Testbed.md`) continue;
+      expect(file.path.startsWith(`${TESTBED_ROOT}/Records/`), file.path).toBe(true);
       expect(file.path.startsWith(`${TESTBED_ROOT}/Attachments/`), file.path).toBe(false);
     }
   });

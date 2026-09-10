@@ -17,11 +17,13 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { readFileSync } from "fs";
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "fs";
+import { tmpdir } from "os";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { describe, expect, it } from "vitest";
 import { buildCatalogue, WRITTEN_FACETS } from "./catalogue.ts";
+import { emitObsidian, TESTBED_ROOT } from "./emit-obsidian.ts";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const LIVE = join(HERE, "..", "live");
@@ -119,5 +121,57 @@ describe("the consolidated testbed covers the surfaces", () => {
   it("keeps exactly one record deliberately sparse", () => {
     const sparse = testbed.records.filter((record) => Object.keys(record.values).length === 0);
     expect(sparse, "the deliberately sparse record is missing or no longer alone").toHaveLength(1);
+  });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 4. THE VAULT THE VAULT-WRITE PRODUCES
+// ───────────────────────────────────────────────────────────────────
+
+describe("the vault the vault-write produces", () => {
+  const files = emitObsidian(catalogue);
+
+  it("is one folder: the note at the testbed root, its records beside it, nothing else", () => {
+    // The ruling: one folder, one database. The consolidated note sits at the
+    // testbed root itself and the records beside it, so adopting the fixture
+    // into a vault adds no second nesting level for the operator to unravel.
+    const written = new Set(files.map((file) => file.path));
+    expect(written.has(`${TESTBED_ROOT}/Testbed.md`), "the consolidated note sits at the testbed root").toBe(true);
+    for (const file of files) {
+      if (file.path === `${TESTBED_ROOT}/Testbed.md`) continue;
+      expect(file.path.startsWith(`${TESTBED_ROOT}/Records/`), `${file.path} is a record of the one database`).toBe(true);
+    }
+    expect(files.filter((file) => file.path.includes("/Records/")), "every record").toHaveLength(36);
+    const topSegments = new Set(files.map((file) => file.path.split("/")[1]));
+    expect(topSegments, "beside the note there is exactly one records folder").toEqual(new Set(["Testbed.md", "Records"]));
+  });
+
+  it("declares exactly one table and one board view in the note's bytes", () => {
+    // The catalogue's in-memory view set is checked above; this holds the
+    // frontmatter the plugin actually reads to the same ruling.
+    const note = files.find((file) => file.path === `${TESTBED_ROOT}/Testbed.md`);
+    const viewTypes = [...(note?.content ?? "").matchAll(/viewType: "(\w+)"/g)].map((match) => match[1]);
+    expect(viewTypes).toEqual(["table", "board"]);
+  });
+
+  it("never writes into the operator's Finance Reports folder", () => {
+    // Adoption runs against a vault that already holds the restored Finance
+    // data: materialize the write set over it and whatever was there must come
+    // out untouched, with nothing new written beside it.
+    const vaultRoot = mkdtempSync(join(tmpdir(), "testbed-vault-"));
+    try {
+      const financeNote = join(vaultRoot, TESTBED_ROOT, "Finance Reports", "keep.md");
+      mkdirSync(dirname(financeNote), { recursive: true });
+      writeFileSync(financeNote, "the operator's own", "utf8");
+      for (const file of files) {
+        const target = join(vaultRoot, file.path);
+        mkdirSync(dirname(target), { recursive: true });
+        writeFileSync(target, file.content, "utf8");
+      }
+      expect(readFileSync(financeNote, "utf8")).toBe("the operator's own");
+      expect(files.filter((file) => file.path.startsWith(`${TESTBED_ROOT}/Finance Reports/`))).toHaveLength(0);
+    } finally {
+      rmSync(vaultRoot, { recursive: true, force: true });
+    }
   });
 });

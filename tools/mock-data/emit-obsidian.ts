@@ -108,11 +108,17 @@ export interface VaultFile {
   content: string;
 }
 
-/** The folder the generated databases live in, beside the existing Testbed. */
+/** The vault folder that IS the one consolidated database: its note at the
+ *  root, its records in Records/ inside it, its attachments referenced one
+ *  level over. */
 export const TESTBED_ROOT = "Database Testbed";
 
+/** The ruling keeps exactly one database, and its folder is the testbed root
+ *  itself — the note shares the root with its records instead of nesting a
+ *  second folder the operator would only have to flatten again. Exactly one
+ *  use case is the registry's rule; this relies on it. */
 export function useCaseFolder(useCase: CatalogueUseCase): string {
-  return `${TESTBED_ROOT}/${useCase.name}`;
+  return TESTBED_ROOT;
 }
 
 function recordFolder(useCase: CatalogueUseCase): string {
@@ -345,6 +351,12 @@ function recordNote(useCase: CatalogueUseCase, record: CatalogueRecord): VaultFi
  *  where the vault root is; nothing here reaches the filesystem, which is what
  *  lets the unit tests assert the bytes without a vault. */
 export function emitObsidian(catalogue: Catalogue): VaultFile[] {
+  // One ruling, one database: the testbed folder holds a single note and a
+  // single records folder, so a second use case here would silently merge its
+  // columns and records into the first one's.
+  if (catalogue.useCases.length !== 1) {
+    throw new Error(`emitObsidian: the testbed folder holds exactly one database, the catalogue built ${catalogue.useCases.length}`);
+  }
   const files: VaultFile[] = [];
   for (const useCase of catalogue.useCases) {
     files.push(databaseNote(useCase));

@@ -105,6 +105,7 @@ undone. Three guards, in `generate.ts`:
 
 1. The target must already hold `Database Testbed/Testbed.md`. Nothing is written to a folder that
    has not been proved to be the testbed.
-2. Writes go only under `Database Testbed/<Use Case>/`. The unit suite asserts every emitted path
-   starts inside the testbed root and never targets the four entries the existing testbed owns.
+2. Writes go only to the one database's note, `Database Testbed/Testbed.md`, and to its records
+   under `Database Testbed/Records/`. The unit suites assert every emitted path starts inside the
+   testbed root and never targets `README.md` or `Attachments/`.
 3. A file whose bytes already match is skipped, and nothing is ever deleted.
