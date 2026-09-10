@@ -1,6 +1,6 @@
 ---
 title: "Tasks: Phase 1: Settings Sheet Visual Parity"
-description: "The six-step loop as ordered tasks. Task Format: T### [P?] Description (file path)"
+description: "Fourteen write-first tasks: each is RED assertion, producer change, GREEN, capture, judge. Task Format: T### [P?] Description (file path)"
 trigger_phrases:
   - "task breakdown"
   - "076 phase 1 tasks"
@@ -27,69 +27,67 @@ contextType: "implementation"
 
 **Task Format**: `T### [P?] Description (file path)`
 
-Each task below is sized for one GLM 5.3 flash or Sonnet leg and states a number to record, not a judgement to make.
+**Write-first is the whole order.** Every task from T004 to T011 runs its clause RED and writes the
+failing number into `verification.md` **before** the producer moves, then GREEN with its number
+beside it. A task that reports a number it did not read is the failure this packet exists to stop.
+
+Each task is sized for one GLM 5.3 flash or Sonnet leg. The lane clauses are `plan.md` §3.3; the
+target rows are `spec.md` §13.3; the rubric instance is `plan.md` §3.5.
 <!-- /ANCHOR:notation -->
 
 ---
 
 <!-- ANCHOR:phase-1 -->
-## Phase A: DEFINE — the reference and the target table
+## Phase A-B: DEFINE and PLAN — closing out
 
-- [ ] T001 Open every reference in `spec.md` §13 and record, per file, whether it shows this sheet or something else. Mobbin family names are unreliable: three reference reads this session each found roughly a third of files mislabelled. Record every value that cannot be read at 299×678 as a gap, never a guess (`screenshots/notion/ios/**`, `spec.md`)
-- [ ] T002 Open our own current captures, light **and** dark, and fill the Ours column of §13 from what the image shows plus the producer that painted it. Confirm each claim against the producer before writing it — a capture and a source that disagree is the finding (`screenshots/notion-clone/**`, the producers in `plan.md` §3)
-- [ ] T003 Enumerate every production surface that renders this grammar and add any the scaffold missed to `spec.md` §3. If one has no constructed scenario, that becomes T005 and precedes all implementation (D2a, D2b) (`tools/screenshots/constructed-scenarios.mjs`, `spec.md`)
-- [ ] T004 Complete the Target column: every cell is a number measured from our own tree, or `TBD — needs operator capture`. No cell may be derived from a 299×678 asset. Record the contradiction list against landed `071` rulings and open each as a Proposed ADR in `../../roadmap.md` §7 (D3, D15) (`spec.md`, `../../roadmap.md`)
+DEFINE and PLAN are written. What remains of them is transcription and the two lanes.
+
+- [ ] T001 Transcribe `spec.md` §13.13's three Proposed ADRs — **ADR-I** (the shared header's `✕` against the reference's `Done`), **ADR-J** (the parent's inset-card read of a full-bleed screen, and the presentation rule that reconciles it), **ADR-K** (the dark card/canvas inversion `071/007` left behind) — into `../../roadmap.md` §7.19's table, one row each, raised-by `076/001`. **None is implemented by this child.** Add the §5.A row for this child at `planned` (`../../roadmap.md`)
+- [ ] T002 Add clauses **L1-L9** to the lane, unwired, in the idiom already there: thresholds beside `SETTINGS_CARD_GAP_MIN_PX` (`:329-330`), geometry inside `measureSettingsRowGrammar` (`:1624-1734`), thresholds applied by the node-side caller (`:4341-4460`). Run each one and **record its RED number** — the count, not the word "fails". **L9 is a guard, not a measurement**: prove it by emptying the stack-row set and watching the landed width clause pass vacuously, then watching L9 turn that into an error (`tools/live/sheet-grammar.mjs`, `verification.md`)
+- [ ] T003 Acquire the css-lane triplet for `styles.css`, record the baseline hash, and confirm no other child holds it. Add `src/i18n.ts` to the `constructed-view-config` scenario's `sources` list — T009 changes strings, and today's list would leave the capture looking fresh while its content moved (`tools/lane/check-lane.mjs`, `tools/screenshots/constructed-scenarios.mjs`)
 <!-- /ANCHOR:phase-1 -->
 
 ---
 
 <!-- ANCHOR:phase-2 -->
-## Phase B: PLAN — files, scenario, mount function, clauses
+## Phase C: CREATE — RED, producer, GREEN, one property at a time
 
-- [ ] T005 If T003 found an unregistered production surface, register it now: a constructed scenario mounting the shipped renderer with accurate `sources`. Nothing else proceeds until the sheet is photographed from production (`tools/screenshots/constructed-scenarios.mjs`)
-- [ ] T006 Confirm the scenario named in `plan.md` §3 mounts the production path end to end — scenario entry, mount driver, in-page entry, harness branch — by reading each link rather than assuming it (`tools/screenshots/constructed-scenarios.mjs`, `tools/live/render-assertion-harness.ts`)
-- [ ] T007 Write one lane clause per measurable row of §13 into the sheet-grammar lane, unwired, and confirm each one can fail before it is asked to pass (`tools/live/sheet-grammar.mjs`)
-- [ ] T008 Acquire the css-lane triplet for `styles.css` and record the baseline hash. Confirm no other child holds it (`tools/lane/check-lane.mjs`)
+- [ ] T004 **The dark inversion.** Before editing anything, read `getComputedStyle` on the sheet and on a card in both themes and **name the two tokens by computed value** — the capture's canvas resolves to `rgb(46,46,46)` and `tools/screenshots/theme.css:129-131` declares neither `#1e1e1e` nor `#252525` at that value, so the canvas comes from a third token. Decide from that read whether the wrongness is in the plugin or in the harness stand-in (`screenshot-currency.md` §3), then fix it where it is. **L6 RED first** — dark card 30 against canvas 46 — then GREEN with both luminances (`styles.css` `:12363-12367`, `tools/screenshots/theme.css` `:126-131`)
+- [ ] T005 **The section heading.** Drop `text-transform: uppercase` and `letter-spacing: 0.04em`, take `font-weight` 700 → 400, and move `--obnotion-font-xs` (11px) → `--obnotion-font-md` (13px) on the sheet variant, so `CURRENT DATABASE` reads `Current database`. **L7 RED first** with all three computed values recorded (`styles.css` `:24220-24231`)
+- [ ] T006 **The navigation-row primitive.** Add `renderNavRow()` beside `renderSelect` (`:2145`): leading icon, label, right-aligned secondary value vertically centred on the label's line, trailing chevron, `min-height: 44px`, whole row a tap target with `role="button"` and a keyboard path. Convert **R11-R15** — View type, Properties, Filters, Sorts, Conditional color — onto it, each opening the picker or sheet it already opens. **L3 RED first at 0** (`src/views/view-config-panel-renderer.ts` `:528-610`, `styles.css`)
+- [ ] T007 **The database rows.** Convert **R03-R10** — Source folder, Source rules, New note folder, New record template, Database cover, Record icon, Computed sync, Status presets — onto the T006 primitive, each carrying its value as trailing text. **Source rules takes its three bare glyphs (`+`, folder-plus, `>_`) with it into its own sheet**, which is what empties the strip. **L4 RED first at its true count** (`src/views/view-config-panel-renderer.ts` `:630-796`, `:1234-1360`)
+- [ ] T008 **Retire the bordered form.** `Name` (R01) becomes an icon-chip row with a **borderless** inline field; `Description` (R02) and `Add row noun` (R22) become labelled rows with a borderless inline value; the **textarea path is deleted, not restyled**. **L2 RED first** at the rendered count and the producer's 14 constructions (`src/views/view-config-panel-renderer.ts` `:2190-2243`, `styles.css`)
+- [ ] T009 **The prose tier.** Remove or shorten every text run over 80 characters that reaches this sheet. Five EN keys exceed it and each has a zh and a zh-TW twin: `viewConfig.sourceRules.help` **147** (`:999`, `:2821`, `:4610`), `viewConfig.viewSourceRulesHint` **141** (`:615`, `:2418`, `:4211`), `viewConfig.computedSync.help` **129** (`:1061`, `:2883`, `:4672`), `viewConfig.newRecordFolderLocked` **128** (`:1051`, `:2873`, `:4662`) and `viewConfig.statusPreset.help` **107** (`:1101`, `:2923`, `:4706`). `settings.sourceFolder.desc` measures **65** and is already inside the rule — leave it. Fix in **all three locales**. An explanation that must survive moves behind the row it explains, never under it. **L5 RED first** with the longest run's length and its key — expected **147**, `viewConfig.sourceRules.help` (`src/i18n.ts`, `src/views/view-config-panel-renderer.ts`)
+- [ ] T010 **The terminal action card.** `Manage status presets` (R23) becomes an action row — leading icon, label, **no chevron and no value** — in a last card carrying `obnotion-settings-card-footer`. **L8 RED first** (`src/views/view-config-panel-renderer.ts` `:788-795`, `styles.css`)
+- [ ] T011 **The five cards.** Split `openSection` (`:384-387`) into the five cards of `spec.md` §13.2 — `Name`, `Current database`, `Current view`, `Display`, and the T010 footer — and take the inter-card gap `--obnotion-space-5` (12px) → `--obnotion-space-6` (16px). **L1 RED first at 1 card.** Re-run the whole `071` regression set in the same invocation and record it green: row pitch 44-52px, inset 16px, hairline geometry, 0 native selects, radius and gap floors, title centring (`src/views/view-config-panel-renderer.ts` `:337-470`, `styles.css` `:12363-12367`, `tools/live/sheet-grammar.mjs`)
 <!-- /ANCHOR:phase-2 -->
 
 ---
 
-<!-- ANCHOR:phase-3 -->
-## Phase C: CREATE — RED, producer, GREEN
-
-Write-first throughout: the clause runs RED and its failing number is written down **before** the producer moves.
-
-- [ ] T009 Give the sheet its card shell: replace the single full-bleed white card with a grey canvas carrying ≥ 3 inset cards (radius ≥ 8px, inter-card gap ≥ 8px), tokens distinct in both themes and the dark-theme elevation the right way up. Run L1 and L6 RED first and record both failing numbers (`src/views/view-config-panel-renderer.ts`, `styles.css`)
-- [ ] T010 Build the navigation-row primitive — leading icon, label, trailing grey value, chevron, ≥ 44px box — and convert `Layout`, `Properties`, `Filter`, `Sort`, `Group` and `Database cover` onto it, each opening the sheet it already opens. Run L3 RED first at 0 and record it (`src/views/view-config-panel-renderer.ts`, `styles.css`)
-- [ ] T011 Retire the form: `Source folder` and `New note folder` become navigation rows carrying their value as trailing text, `Description` leaves the sheet or becomes a row that opens its own editor, and `Name` stays as the sheet's single bordered input. Run L2 RED first at its true count and record it (`src/views/view-config-panel-renderer.ts`, `src/i18n.ts`)
-- [ ] T012 Replace the three bare Source-rules glyphs with full-width labelled rows carrying a leading icon, and move the one-tap actions into a terminal card with no chevron. L4 RED → GREEN (`src/views/view-config-panel-renderer.ts`, `styles.css`)
-- [ ] T013 Remove or shorten every helper paragraph; any explanation that must survive moves behind an info affordance. L5 RED → GREEN, both locales (`src/i18n.ts`, `src/views/view-config-panel-renderer.ts`)
-<!-- /ANCHOR:phase-3 -->
-
----
-
 <!-- ANCHOR:phase-4 -->
-## Phase D: SCREENSHOT — capture and look at it
+## Phase D: SCREENSHOT — capture, then look at it
 
-- [ ] T020 Run `npm run screenshots </dev/null` and record the exit status and the entry count. Then `npm run screenshots:verify` and record the stale count. A run that moved nothing proves nothing — say so if that is what happened (`tools/screenshots/capture.mjs`)
-- [ ] T021 **Open the phone light and the phone dark capture and look at each one.** Record what changed against the pre-change capture, by decoded pixel delta and by eye. If the rebuild harness covers this sheet, run `node tools/live/sheet-rebuild.mjs` for the real-app WebKit path and record its exit status (`screenshots/notion-clone/**`, `tools/live/sheet-rebuild.mjs`)
+- [ ] T012 Run `npm run screenshots </dev/null` and record the exit status and the entry count; then `npm run screenshots:verify` and record the stale count; then `node tools/live/sheet-rebuild.mjs </dev/null` and record its exit status and the *"settings sheet chrome survives its own scroll"* result. **Then open the phone light and the phone dark PNG and look at each one**, and record what changed against the pre-change capture both by decoded pixel delta and by eye. **A run that moved nothing proves nothing — say so if that is what happened** (`tools/screenshots/capture.mjs`, `tools/live/sheet-rebuild.mjs`, `screenshots/notion-clone/**`)
 <!-- /ANCHOR:phase-4 -->
 
 ---
 
 <!-- ANCHOR:phase-5 -->
-## Phase E: VERIFY — lane, judge, operator
+## Phase E-F: VERIFY, REMEDIATE — and the gate no agent ticks
 
-- [ ] T022 Gate (a): run every lane clause and record each GREEN number beside the RED number T009+ recorded. Re-run the `071` clauses this sheet already carries, unchanged, in the same run (`tools/live/sheet-grammar.mjs`)
-- [ ] T023 Gate (b): give a Sonnet or Opus reviewer our phone capture and the reference, and have it score the eight-row rubric from `../spec.md` §5 — Frame, Sections, Row anatomy, Controls, Type, Spacing, Colour, Both themes — each 0/1/2. Write the score table with one justification line per row into `verification.md`. **Pass is ≥ 14/16 with no row at 0** (`verification.md`)
-- [ ] T024 Gate (c): record the operator's device row in `acceptance-criteria.md` as **Unmet**. **No agent ticks it** (`acceptance-criteria.md`)
+- [ ] T013 **The judge, and the loop until it passes twice.** Give a Sonnet or Opus reviewer our phone captures and the references — **R-4/R-5 for the frame, R-1 for the content** — and have it score the eight rows of `plan.md` §3.5, each 0/1/2, with a one-line justification per row, into `verification.md`. **Pass is ≥ 14/16 with no row at 0**; the plan predicts **15/16** with *Frame* at 1 while ADR-I is open, so a *Frame* of 1 is expected and is not a remediation trigger. Any **other** row below 2 opens a remediation cycle — clause RED for that row, fix, GREEN, re-screenshot, re-judge — appended to `verification.md` as its own numbered iteration with its own table. **Record the tree hash on every pass**: two passes with a change between them is iteration *n+1*, not the second pass. If one row fails **three consecutive** iterations, stop — the target is wrong and DEFINE re-opens (`verification.md`, `spec.md`)
+- [ ] T014 **Gate (c) and close-out.** Record the operator's device row in `acceptance-criteria.md` as **Unmet** — **no agent ticks it**. Then `npx tsc --noEmit`, `npm run build`, `npx vitest run`, `npm run gate`, reading each exit status and its output rather than assuming them. Release the css-lane triplet naming every capture that moved. Validate with `orchestrator.js --strict`, run the scoped `backfill-graph-metadata.js`, re-validate, tick this child's rows in `../goal.md` and `../checklist.md`, move `../../roadmap.md` §5.A from `planned` to its landed state, and append a dated entry to the top of §1 of `../../handover.md` with `recent_action` ≤ 96 characters (`acceptance-criteria.md`, `../goal.md`, `../checklist.md`, `../../roadmap.md`, `../../handover.md`)
 <!-- /ANCHOR:phase-5 -->
 
 ---
 
-<!-- ANCHOR:phase-6 -->
-## Phase F: REMEDIATE — iterate until two clean passes
+<!-- ANCHOR:ordering -->
+## Ordering and parallelism
 
-- [ ] T025 For every rubric row scoring below 2, open a remediation task and run the cycle: a clause RED for that row, the fix, GREEN, re-screenshot, re-judge. Append each iteration to `verification.md` as its own section with its own score table. **The child is not done until the judge passes twice in a row on an unchanged tree** — a second pass after a change is iteration *n+1*, not the second pass. If one rubric row fails three consecutive iterations, stop: the target is wrong, and DEFINE re-opens (`verification.md`, `spec.md`)
-- [ ] T026 Close out: `npx tsc --noEmit`, `npm run build`, `npx vitest run`, `npm run gate` — read each exit status and output. Release the css-lane triplet naming every capture that moved. Validate with `orchestrator.js --strict`, backfill graph metadata, re-validate, tick this child's row in `../goal.md` and `../checklist.md`, and append a dated entry to `../../handover.md` with `recent_action` ≤ 96 characters (`../goal.md`, `../checklist.md`, `../../handover.md`)
-<!-- /ANCHOR:phase-6 -->
+**Strictly sequential.** T004-T011 all edit `styles.css` or the one producer, and `spec.md` §13.10's
+properties interact: T011's card split needs T006's primitive to exist, T010's footer card needs
+T011's card host, and T008 empties the row set T002's L9 guards. No `[P]` task in this child.
+
+The one dependency that is not internal: **T003 must precede T009**, or the capture that T012 reads
+will look fresh while its strings have moved.
+<!-- /ANCHOR:ordering -->

@@ -13,8 +13,8 @@ _memory:
     packet_pointer: "005-component-surface-system/076-sheet-visual-parity/001-settings-sheet-visual-parity"
     last_updated_at: "2026-09-10T22:10:00Z"
     last_updated_by: "290-sheet-parity-program"
-    recent_action: "Scaffolded 001: the six-step loop and the DEFINE table"
-    next_safe_action: "Execute tasks.md Step 1 (DEFINE), T001-T004"
+    recent_action: "DEFINE + PLAN: brief, delta, 9 clauses, 14 tasks"
+    next_safe_action: "Execute tasks.md T001 (transcribe ADR-I/J/K), then T002 lane RED"
     blockers:
       - "No number may come from a 299x678 reference asset (D3)"
       - "The child does not close until the image judge passes twice on an unchanged tree (D1)"
@@ -33,10 +33,13 @@ _memory:
       parent_session_id: "076-sheet-visual-parity-scaffold"
     completion_pct: 0
     open_questions:
-      - "No destructive row is visible in either View options capture; the content continues below the fold. Where Notion puts Delete view on this sheet is unreadable at 299x678 and 001 may not claim a position for it from the reference"
-      - "Every value in the reference is structural. No pixel size, no hex and no font size may be taken from a 299x678 thumbnail (D3)"
+      - "Done versus the shared close glyph on all eleven sheets: ADR-I; Frame targets 1 until taken"
+      - "No dark Notion reference at any rung: 123 candidates scanned, all light. OC-S2 settles it"
+      - "Inter-card gap: 12px landed versus 16px ratio-derived. A retune, not a gate (OC-S1)"
     answered_questions:
-      - "The sheet is photographed through the production mount path already; no scenario work is owed unless T001 finds an unregistered surface"
+      - "constructed-view-config reaches ViewConfigPanelRenderer.render at harness:3475; no scenario work owed"
+      - "Grouping idiom follows presentation: full-screen full-bleed, sheets inset cards. 071/007 stands"
+      - "View options has no destructive row: content ends after Duplicate view; tail ink is the home indicator"
       - "Pass is 14/16 with no rubric row at 0, twice consecutively on an unchanged tree"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: spec-core + level2-verify | v2.2 -->
@@ -63,7 +66,7 @@ The Settings sheet is one large white card wrapped around a form of bordered tex
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Scaffolded — nothing started |
+| **Status** | DEFINE and PLAN complete — CREATE not started |
 | **Created** | 2026-09-10 |
 | **Branch** | `worktrees/290-sheet-parity-program` |
 | **Parent Spec** | `../spec.md` |
@@ -208,61 +211,387 @@ As the operator, I open the Settings Sheet on my iPhone and it reads like Notion
 
 ## 12. OPEN QUESTIONS
 
-- No destructive row is visible in either View options capture; the content continues below the fold. **Where Notion puts Delete view on this sheet is `unreadable at 299x678`** and `001` may not claim a position for it from the reference
-- Every value in the reference is structural. No pixel size, no hex and no font size may be taken from a 299x678 thumbnail (D3)
+- **Does the operator accept `Done` in place of `✕` across all eleven sheets?** Notion's bottom sheet closes on a text `Done` in accent blue (R-4) or a `‹` back (R-5), never a `✕`. `buildShellHeader` is shared, so this is a family decision — held as **Proposed ADR-I** (§13.13), and until it is taken the rubric's *Frame* row targets **1** rather than 2
+- **The whole dark-theme column has no reference at any rung.** All three view-options files and all 120 `database/` files were scanned by mean luma this session and every one is light. Every dark target is ours, and **OC-S2** — a dark-theme operator capture — is what would settle it
+- **Is the inter-card gap 12px or 16px?** 12px is landed; 16px is the thumbnail's ratio-derived reading. The lane keeps its `≥ 8px` floor either way, so the question is a retune and not a gate (**OC-S1**)
+- Every number in §13 that came from a 299×678 asset is marked provisional in §13.12, and **no lane clause asserts one of them** (D3)
 
 ---
 
 <!-- ANCHOR:gap-table -->
-## 13. THE DEFINE TABLE — reference, current state, target
+## 13. DEFINE — the designer's brief, and the delta
 
-### References
+> This section is written as a brief to a builder. §13.0 records what was read and what could not
+> be; §13.1-§13.8 are the target, property by property; §13.9 is the honest before; §13.10 is the
+> delta table with its rubric mapping; §13.11 the lane clauses; §13.12 the provisional register;
+> §13.13 the contradictions held Proposed.
 
-- `screenshots/notion/ios/flows/view-options/notion-ios-flow-view-options-02-794591f5-*.webp` — **the primary reference.** Notion's View options sheet, at rest
-- `screenshots/notion/ios/flows/view-options/notion-ios-flow-view-options-03-e4dfff31-*.webp` — the same sheet with the View name field focused and the keyboard up
-- `screenshots/notion/ios/database/notion-ios-database-database-14-d1de51a5-*.webp` — the Layout screen a `Layout ›` row opens: a selection grid plus one card of toggle/value rows
-- `screenshots/notion/ios/database/notion-ios-database-database-15-cc8b241a-*.webp` — the Property visibility screen a `Properties ›` row opens (this is `002`'s reference too)
-- `screenshots/notion/ios/database/notion-ios-database-database-01-2cb53019-*.webp` — the Data source actions sheet: two cards of one-tap action rows, no chevrons
-- Anytype: `047` research plus `screenshots/anytype/**` — consulted for tie-breaks only, under D15
+### 13.0 The references, and the one rule that governs them
 
-### What the reference cannot answer
+Reference precedence is parent **D3**. Rung 1 (operator capture) and rung 2 (full-resolution Notion
+iOS) are both **empty** — `screenshots/notion/ios/operator/` does not exist, checked this session.
+Every read below is rung 3, a Mobbin thumbnail at **299×678**, `sips`-confirmed on all three
+view-options files.
 
-- No destructive row is visible in either View options capture; the content continues below the fold. **Where Notion puts Delete view on this sheet is `unreadable at 299x678`** and `001` may not claim a position for it from the reference
-- Every value in the reference is structural. No pixel size, no hex and no font size may be taken from a 299x678 thumbnail (D3)
-
-### The table
-
-The Notion column below is structural and was read this session from the captures named above. **Every number in the Target column is ours** — measured from our own tree with `node tools/live/sheet-grammar.mjs` and from `styles.css` read directly — or is marked `TBD — needs operator capture`. T001-T004 complete the Target column; the Ours and Notion columns are already read.
-
-| Element | Ours today | Notion (structural) | Target |
+| # | Path | What it is | What it answers |
 |---|---|---|---|
-| Sheet frame | One flat sheet, one full-bleed white card | Grey sheet canvas; content in **separate inset cards** with visible gaps; hairline dividers only *within* a card | ≥ 3 distinct cards, gap between cards ≥ 8px, radius ≥ 8px, canvas token distinct from card token in **both** themes |
-| Header | Drag handle, centred title `Settings`, `✕` top-right | Drag handle, centred bold title, **`Done` top-right**, nothing top-left | Handle present; title centred within 1px; one trailing control; `TBD — needs operator capture` on whether it reads `Done` or `✕` |
-| Section: name | `Name` label above a **bordered text input** | A bordered **View name** input, the sheet's only one, above the cards | Exactly **1** bordered text input in the whole sheet |
-| Section: description | `Description` label above a bordered **textarea** with placeholder | **Not present.** Notion has no description field on this sheet | Removed from the sheet, or demoted to a row that opens its own editor |
-| Navigation row | — (the concept does not exist today) | Leading icon · label · **grey value text** · chevron. `Layout` → `Table ›`, `Properties` → `2 shown ›`, `Filter` → `None ›`, `Sort` → `None ›`, `Group` → `None ›`, `Automations` → `None ›` | ≥ 5 rows carrying leading icon + trailing value + chevron; each opens a sheet, none edits in place |
-| Database cover | `Database cover  Not set` with a trailing bare icon button | A navigation row with its state as trailing text | Row carries a leading icon and a chevron; **0** bare icon buttons |
-| Source folder | Label, **bordered text input**, then a helper paragraph | Bordered inputs are for naming and searching only, never for choosing | Becomes a navigation row with the folder as trailing value; helper paragraph removed |
-| Source rules | Label, a helper paragraph, an empty-state line, then **three bare icons** (`+`, folder-plus, `>_`) | Add affordances are **full-width labelled rows with a leading icon**, never a strip of bare glyphs | **0** bare icon buttons; each add affordance is a labelled row ≥ 44px tall |
-| Helper text | Multi-line explanatory paragraphs under several fields | **No row carries an explanatory paragraph.** At most one grey subtitle line, observed once | **0** prose runs > 80 characters in the sheet body |
-| One-tap actions | Mixed in with the form | Their own card at the end: `Lock database`, `Copy link to view`, `Duplicate view` — leading icon, **no chevron**, no trailing value | Action rows sit in a terminal card and carry no chevron |
-| Destructive row | — | `unreadable at 299x678` — below the fold in both captures | `TBD — needs operator capture`; no position claimed from the reference |
-| Both themes | — | — | Card, canvas, divider and secondary-text tokens each resolve to distinct values in light and dark; no elevation inversion (the defect `sheet-design-review.md` found on `071/007`) |
+| R-1 | `screenshots/notion/ios/flows/view-options/notion-ios-flow-view-options-02-794591f5-*.webp` | Notion's **View options**, full-screen, at rest | The row inventory, the row anatomy, the group order, the section-header treatment |
+| R-2 | `…-view-options-03-e4dfff31-*.webp` | The same screen, **View name focused, keyboard up** | The keyboard-open state: the list does not restructure, the focused row shows its value in place, a second `Done` appears on the keyboard accessory bar |
+| R-3 | `…-view-options-01-213f8a7c-*.webp` | The database page the sheet opens from | Context only — it is **not** the sheet, and no target is taken from it |
+| R-4 | `screenshots/notion/ios/database/notion-ios-database-database-01-2cb53019-*.webp` | **Data source actions**, a bottom sheet | The bottom-sheet frame and the terminal action card |
+| R-5 | `…-database-14-d1de51a5-*.webp` | **Layout**, a bottom sheet | The bottom-sheet frame, the drill-in card, and the toggle-row / navigation-row mix |
+| R-6 | `…-database-15-cc8b241a-*.webp` | **Property visibility** | `002`'s reference; consulted here only for the shared card vocabulary |
+| R-7 | `047` research and `screenshots/anytype/**` | Anytype | Tie-breaks only, under D15 |
 
-### The lane clauses these rows become
+**The governing finding, and it is the reason the earlier structural read looked wrong.**
+`../spec.md` §4 describes View options as *"three separate inset cards with visible gaps between
+them"*. Measured on R-1, that is **false of that screen**: sampling the row bands at `x=0` and
+`x=298` returns `rgb(255,255,255)` and the spacer bands return `rgb(247,247,245)`, the dividers span
+`x=0…298` with no left inset, and probing the group's top-left corner at `y=170…182, x=0…10` shows a
+clean grey→white step with no rounding. R-1's groups are **full-bleed white bands with zero radius
+and zero horizontal inset.**
 
-- **L1** the sheet renders ≥ 3 distinct cards with a gap ≥ 8px between them — RED today at 1 card
-- **L2** the sheet contains exactly 1 bordered text input — RED today at 14 input/textarea constructions in the producer
-- **L3** ≥ 5 rows carry a leading icon, a trailing value and a chevron — RED today at 0
-- **L4** the sheet contains 0 bare icon buttons — RED today at ≥ 3 (the Source rules strip)
-- **L5** no prose run in the sheet body exceeds 80 characters — RED today at the Source-rules and New-note-folder helper paragraphs
-- **L6** card and canvas background tokens differ in both themes, and the card is not darker than its canvas in dark theme
+R-4 and R-5 then settle it, and they agree with `../spec.md` §4. Both are **bottom sheets** — grab
+handle, rounded top, dimmed backdrop — and both draw their groups as **inset rounded cards**: white
+span `x=12…286` on a `rgb(250,248,246)` canvas, corner curve resolving over ~6px, 12-13px of canvas
+showing between cards.
 
-### Contradictions with landed `071` rulings
+> **The rule this establishes, and the vocabulary `002`-`011` inherit:**
+> **Notion's grouping idiom is a function of its presentation.** A full-screen list groups
+> **full-bleed** on grey; a **bottom sheet** groups into **inset rounded cards** on a warm-grey
+> canvas. Our Settings surface is a bottom sheet, so **R-4/R-5 are its frame reference and R-1 is
+> its content reference**, and the inset-card grouping `071/007` landed is correct rather than a
+> misread. No child may cite R-1's full-bleed geometry at a bottom sheet.
 
-Raised as **Proposed ADRs** in `../../roadmap.md` §7 under D15 before this child implements. A `071` child is never amended from here.
+**What the references cannot answer.**
 
-- `071/007-settings-sheet-strict-alignment` landed a card-grouping shell whose provisional fill token, per `sheet-design-review.md`, produced **no perceptible result in either theme**. `001` re-tunes that token to a measurable difference rather than reopening `007`. If the re-tune changes `007`'s landed metrics, it is raised as a Proposed ADR in `roadmap.md` §7, not applied to `007`
+- **No dark-theme Notion capture exists.** All three view-options files and all 120 `database/`
+  files were scanned by mean luma this session; the single sub-110 result is a light screen behind a
+  modal scrim, not a dark theme. **Every dark-theme target below is ours**, justified by internal
+  consistency and by the iOS elevation convention, and the rubric's *Both themes* row is judged on
+  internal consistency, never against a dark reference.
+- **No destructive row.** R-1's content terminates after `Duplicate view`: the band from `y=578` to
+  `y=647` is uniform `rgb(247,247,245)` whose only ink is the home indicator at `y≈638`. The screen
+  is at scroll-top, so nothing is below a fold. This **corrects** the scaffold's *"unreadable at
+  299×678 — below the fold"*: the honest read is that **this screen has no destructive row**, and
+  `001` still claims no position for one, because our sheet has none to place.
+- **Every pixel value is ratio-derived and provisional.** R-1's status-bar-plus-nav-bar band measures
+  78px; at 59pt + 44pt that fixes the device at 393×852pt and the scale at `299/393 = 0.7608`, so
+  1 thumbnail px = 1.3143pt. Every pt figure below carries that division. **Under D3 no lane clause
+  asserts one of them** (§13.11); they are design intent, and §13.12 names what settles each.
+- **The accent blue behind `Done` is `thumbnail, value unreadable`** — the glyph is 9px tall and
+  antialiased against white.
+- **Divider thickness is `thumbnail, value unreadable`** — 1-2 thumbnail px at 0.76 scale cannot
+  distinguish a 0.33pt hairline from a 1pt rule.
+
+---
+
+### 13.1 (a) The sheet frame
+
+Read from R-4 and R-5, which are the bottom sheets. Ours in `styles.css:237` and `buildShellHeader`.
+
+| Property | Target | Where it comes from |
+|---|---|---|
+| Presentation | Bottom sheet, `max-height: calc(90svh - keyboard inset)` | Ours, landed by `005/003`; unchanged |
+| Backdrop | Dimmed scrim, sheet rounded at the top only | Ours; matches R-4's `rgb(~222)` scrim |
+| Sheet top radius | Unchanged from the landed sheet token | R-4's corner resolves over ~8-10 thumbnail px (~11-13pt) — provisional, **not asserted** |
+| Grab handle | **Present**, centred, above the header | R-4 and R-5 both show one; the parent's rubric row *Frame* names it |
+| Canvas | The sheet's own surface token, distinct from the card token in **both** themes | R-4/R-5 canvas `rgb(250,248,246)`, cards `rgb(255,255,255)` |
+| Title | Centred within 1px, one line, semibold | R-1/R-4/R-5 all centre it; R-1's title bbox centre is `x=149.0` against a screen centre of `x=149.5` |
+| Trailing control | **`✕` — unchanged for this child.** R-4 shows a text `Done` in accent blue; R-5 shows a `‹` back and no trailing control. Neither is a `✕` | `buildShellHeader` is shared by all eleven sheets, so the change is a family decision → **Proposed ADR-I** (§13.13). The rubric's *Frame* row therefore targets **1**, not 2 (§13.10) |
+| Leading control | None | R-1 and R-4 have nothing top-left; R-5's `‹` belongs to a drill-in, which this sheet is not |
+| Footer | None. The last card is the footer | R-1 and R-4 both end on a card, then canvas |
+
+---
+
+### 13.2 (b) The section list, in order
+
+Five cards. Each is one kind of row throughout — the rule R-1 and R-5 both obey: **router rows carry
+leading icons; option rows do not; action rows carry an icon and no chevron.** Headings are grey,
+**sentence case**, regular weight, sitting on the canvas above their own card (R-1's `View name`).
+
+| # | Heading | Kind | Rows |
+|---|---|---|---|
+| C1 | `Name` | naming | 1 |
+| C2 | `Current database` | router | 9 |
+| C3 | `Current view` | router | 6 |
+| C4 | `Display` | option | 6 |
+| C5 | *(none)* | action, terminal | 1 |
+
+R-1's own shape is the same four kinds in the same order: a one-row naming group under a grey
+heading, two router groups, then a terminal action group with no heading and no chevrons.
+
+---
+
+### 13.3 (c) The row-by-row table
+
+Trailing `›` means a chevron. `[value]` is right-aligned secondary text. `⟨field⟩` is a borderless
+inline text field on the row's own background — **not** a bordered box.
+
+| # | Card | Leading icon | Label | Trailing element | Tap opens |
+|---|---|---|---|---|---|
+| R01 | C1 | database chip (bordered rounded square) | *(none — the field carries the placeholder)* | `⟨database name⟩` | inline edit, in place |
+| R02 | C2 | `file-text` | Description | `⟨description⟩` / `None` | inline edit, in place |
+| R03 | C2 | `folder` | Source folder | `[notes]` `›` | the existing folder picker |
+| R04 | C2 | `filter` | Source rules | `[None]` / `[n rules]` `›` | a Source rules sheet — **and the three bare glyphs go with it** |
+| R05 | C2 | `folder-plus` | New note folder | `[value]` / `[Same as source]` `›` | the existing folder picker |
+| R06 | C2 | `file-plus-2` | New record template | `[value]` / `[Not set]` `›` | the existing template picker |
+| R07 | C2 | `image` | Database cover | `[Not set]` `›` | the existing cover picker |
+| R08 | C2 | `smile` | Record icon | `[value]` / `[Not set]` `›` | the existing icon-field picker |
+| R09 | C2 | `refresh-cw` | Computed sync | `[value]` `›` | the existing computed-sync picker |
+| R10 | C2 | `list-checks` | Status presets | `[n presets]` `›` | the existing preset manager |
+| R11 | C3 | `table` | View type | `[Table]` `›` | the existing view-type picker |
+| R12 | C3 | `list` | Properties | `[n shown]` / `[All shown]` `›` | the Properties sheet |
+| R13 | C3 | `filter` | Filters | `[None]` / `[n applied]` `›` | the Filter sheet |
+| R14 | C3 | `arrow-up-down` | Sorts | `[None]` / `[n applied]` `›` | the Sort sheet |
+| R15 | C3 | `palette` | Conditional color | `[None]` / `[n rules]` `›` | the existing conditional-format editor |
+| R16 | C3 | `sliders-horizontal` | View source rules | switch | toggles in place |
+| R17 | C4 | *(none)* | Row density | `[Default]` `›` | a density picker |
+| R18 | C4 | *(none)* | Wrap text | switch | toggles in place |
+| R19 | C4 | *(none)* | Show empty fields | switch | toggles in place *(non-table views only)* |
+| R20 | C4 | *(none)* | Year display | `[Always]` `›` | a year-display picker |
+| R21 | C4 | *(none)* | Default column width | `[180]` `›` | the existing width control |
+| R22 | C4 | *(none)* | Add row noun | `⟨noun⟩` / `New` | inline edit, in place |
+| R23 | C5 | `settings-2` | Manage status presets | **none** — no chevron, no value | the existing preset manager |
+
+**Nothing in this table is new capability.** Every `Tap opens` names a picker, sheet or editor the
+plugin already ships; R04's sheet is the existing source-rules editor given its own surface. The
+sheet's row count (23) exceeds R-1's (12) because our database carries settings Notion's does not —
+the rubric asks for grammar parity, not row-count parity.
+
+**Two rulings this table deliberately does not cross.** Roadmap **row 83** put Filter, Sort and
+Properties on labelled *toolbar* buttons; R12-R14 are **additional** ways in, which is what the
+sheet already renders as summary rows today, so no toolbar affordance moves. And `071`'s audit §6
+ruled the layout choice **stays as rows**, so R11 opens the existing picker and does not become
+R-5's tile grid — that grid belongs to `006`.
+
+---
+
+### 13.4 (d) Control types
+
+Notion's whole control vocabulary on these three screens is four kinds, and ours must be the same
+four:
+
+1. **Navigation row** — leading icon, label, right-aligned secondary value, chevron. It *opens*
+   something. R-1 uses it for all six router rows; R-5 for `Open pages in` and `Load limit`.
+2. **Toggle row** — label, iOS switch at the trailing edge, no icon, no chevron. R-5's
+   `Show data source title` and `Show page icon`.
+3. **Inline text field** — borderless, on the row's own background. R-1's View name row: the icon is
+   in a 23×23px bordered chip, and the editable text at `x=40…98` has **no box around it**; the row
+   band is uniform white to both edges.
+4. **Action row** — leading icon, label, **no chevron and no value**. R-1's `Lock database` /
+   `Copy link to view` / `Duplicate view`; R-4's two action cards. Probing R-1's `Lock database` row
+   for chevron ink at `x=240…299` returns **nothing**.
+
+**Forbidden on this sheet, each because the reference never does it:**
+
+- A **bordered** text input or textarea anywhere in the sheet body. Notion borders a box only to
+  *search*; it never borders one to name or to choose.
+- A **bare icon-glyph strip** as an add affordance. Notion's add affordances are full-width labelled
+  rows.
+- A **helper paragraph** under a field. R-1 carries exactly one subtitle in the whole screen —
+  `Change settings, add new features`, one line, grey, in a two-line row — and no paragraph.
+- A **native `<select>`**. Already 0 and held by a landed `071` clause.
+
+---
+
+### 13.5 (e) Type scale
+
+Cap-height measured off R-1 and divided by the 0.7608 scale; **every figure provisional**.
+
+| Role | Reference (provisional) | Target token | Weight |
+|---|---|---|---|
+| Sheet title | ~17pt semibold — cap height 9px | the landed shell-header token, unchanged | 600 |
+| Section heading | ~13pt — cap height 8px, `rgb(~140)` grey | `--obnotion-font-md` (13px), `--text-muted` | **400**, sentence case, **no letter-spacing** |
+| Row label | ~17pt — cap height 9px, near-black | the landed sheet row-label token | 400 |
+| Row value | ~17pt, same size as the label, grey | same size as the row label, `--text-muted` | 400 |
+| Two-line subtitle | ~15pt grey, one line | `--obnotion-font-base` (14px), `--text-muted` | 400 |
+| Footnote | **not present** — R-1 has no footnote tier | n/a; the tier is deleted, not restyled | — |
+
+The load-bearing delta: our heading is `styles.css:24220-24231` — `font-size: var(--obnotion-font-xs)`
+(**11px**), `font-weight: 700`, `letter-spacing: 0.04em`, `text-transform: uppercase`. That paints
+`CURRENT DATABASE`. R-1's heading is sentence case, unspaced and regular. **Row value equal in size
+to row label** is the second: a value that shrinks reads as a caption, and R-1's `Table` and `Layout`
+measure the same 9px cap.
+
+---
+
+### 13.6 (f) Spacing rhythm
+
+| Property | Reference (provisional) | Ours today | Target |
+|---|---|---|---|
+| Single-line row height | **44pt** — 33-34px | `--obnotion-sheet-row-min-height: 44px` | unchanged, 44px |
+| Two-line row height | ~63pt — 48px | n/a | ≥ 56px where a subtitle survives |
+| Row inset, left and right | ~16pt — card white starts at `x=12`, chevron ink ends at `x=281` | `--obnotion-sheet-inset: 16px` | unchanged, 16px |
+| Label left edge | ~56pt — `x=42-43` | driven by icon width + gap | icon column + `--obnotion-space-3` gap |
+| Card corner radius | ~8pt — corner curve over ~6px | `--obnotion-radius-lg: 8px` | unchanged, 8px |
+| Inter-card gap | ~16pt — 12-13px of canvas | `--obnotion-space-5: 12px` | **12px → 16px**, provisional retune; the lane keeps its `≥ 8px` floor |
+| Section-heading band | ~43pt — 33px, label baseline near the band's bottom | `space-5 / inset / space-2` | unchanged |
+| Divider | full-bleed *within* a card, hairline; `thumbnail, value unreadable` | 1px inset 16px left, flush right | unchanged — the landed `071/007` grammar |
+
+---
+
+### 13.7 (g) Both themes
+
+There is no dark Notion reference (§13.0), so the dark target is **ours**, and it is one invariant:
+
+> **The card band is lighter than its canvas in both themes.** Light: canvas steps toward grey and
+> the card stays at the page fill. Dark: the card steps toward white and the canvas stays behind it.
+
+Measured on the captures the judge will score, `constructed-view-config-mobile-{light,dark}.png`:
+
+| | Canvas | Card | Direction |
+|---|---|---|---|
+| Light | `rgb(242,242,242)` | `rgb(255,255,255)` | card **+13** — correct |
+| Dark | `rgb(46,46,46)` | `rgb(30,30,30)` | card **−16** — **inverted** |
+
+The dark row is the defect `sheet-design-review.md` recorded against `071/007` as *"no perceptible
+result in either theme"*, now measured with a sign. **Before it is called a plugin defect it must be
+checked against the stand-in** (`screenshot-currency.md` §3): `tools/screenshots/theme.css:129-131`
+declares `--background-primary: #1e1e1e` and `--background-secondary: #252525`, and the capture's
+canvas reads 46 — which is neither, so the canvas resolves from a third token. **T004 names both
+tokens by computed value before it changes either.** Whichever of the two files is wrong, the fix
+lands where the wrongness is, and the lane asserts the direction rather than the hexes.
+
+---
+
+### 13.8 (h) States
+
+| State | Target | Reference |
+|---|---|---|
+| **Empty** | Every router row shows its empty word as secondary text, never a blank trailing area: `None`, `Not set`, `All shown`, `Same as source` | R-1 shows `None` on four of six rows — the empty state *is* the resting state |
+| **Many items** | The count replaces the empty word (`3 applied`, `2 shown`); the row does not grow, wrap or gain a second line | R-1's `2 shown` sits on one line at the same pitch as `None` |
+| **Keyboard open** | The list does **not** restructure. The focused row keeps its place and its value edits in situ; the sheet's `90svh` cap comes down by the published keyboard inset, which is landed behaviour | **R-2 is the direct evidence**: with the keyboard up, every group, order and row is identical to R-1 and only the focused value changes from placeholder to `Table` |
+| **Long content** | The body region scrolls; the grab bar and the header do not — landed, and guarded by `sheet-rebuild.mjs`'s *settings sheet chrome survives its own scroll* surface | ours |
+| **Read-only database** | Router rows keep their chevron only where the destination is readable; inline fields fall back to their read-only value row | ours — no reference |
+
+---
+
+### 13.9 The before — what a user sees today
+
+Read off `screenshots/notion-clone/panels/constructed-view-config-mobile-{light,dark}.png`
+(804×1748, both opened this session) and confirmed against
+`src/views/view-config-panel-renderer.ts`.
+
+**Structure.** A grab handle, a centred `Settings` title, a `✕` top-right. Then a heading
+`CURRENT DATABASE` — uppercase, letterspaced, bold, 11px — and below it **one card** filling the
+sheet, wrapped around a form. The card's inset and radius are landed and correct; what is inside it
+is not.
+
+**Controls, in render order.** `Name` label over a **bordered text input** reading `Bench`.
+`Description` label over a **bordered three-row textarea** reading `Add a short description…`.
+`Database cover  Not set` with a **bare trailing icon button**. `Source folder` label over a
+**bordered text input** reading `notes`, then a **two-line helper paragraph**. `Source rules`, a
+**three-line helper paragraph**, an empty-state line, then a **strip of three bare glyphs** —
+`+`, folder-plus, `>_`. `New note folder` label over a **bordered text input**, then a **three-line
+helper paragraph**. Then `New record template`, clipped by the viewport. The producer carries
+**14** input/textarea constructions (`grep -c`) and reaches the sheet through `renderText`,
+`renderTextarea`, `renderSelect`, `renderSwitch` and `renderRange`.
+
+**Type.** Labels and values are the same size, which is right. The heading is the wrong tier
+entirely. The helper paragraphs are a fourth tier that the reference does not have.
+
+**Colour.** Light reads. Dark does not: the card is 16 RGB units *darker* than its canvas, so the
+grouping `071/007` landed is close to invisible in dark, which is exactly what
+`sheet-design-review.md` reported and what §13.7 now measures.
+
+**In one sentence.** It is a settings *form* on a phone — a stack of bordered boxes with prose
+under them — where the reference is a settings *list*: rows you tap, values on the right, and
+nothing to read.
+
+---
+
+### 13.10 The DELTA table — before → target, per property, with its rubric row
+
+| Property | Before (measured) | Target | Rubric row |
+|---|---|---|---|
+| Card count | **1** card | **5** cards | Sections |
+| Inter-card gap | 12px (`--obnotion-space-5`) | 16px provisional; lane floor stays `≥ 8px` | Spacing |
+| Card radius | 8px (`--obnotion-radius-lg`) | unchanged | Frame |
+| Card vs canvas, light | card `rgb(255,255,255)` on `rgb(242,242,242)`, **+13** | unchanged | Colour |
+| Card vs canvas, dark | card `rgb(30,30,30)` on `rgb(46,46,46)`, **−16** | **card lighter than canvas**, both themes | Both themes |
+| Section heading | 11px / 700 / `0.04em` / uppercase | 13px / 400 / no tracking / sentence case / `--text-muted` | Type |
+| Bordered text inputs in the body | **14** constructions in the producer | **0** — text edits inline, borderless, in its row | Controls |
+| Textareas in the body | **1** (`Description`) | **0** | Controls |
+| Navigation rows (icon + value + chevron) | **0** | **≥ 13** (R03-R15) | Row anatomy |
+| Bare icon-glyph buttons | **≥ 3** (the Source-rules strip) | **0** — they move into the Source rules sheet | Controls |
+| Helper prose runs > 80 chars | **5** EN keys — 147 / 141 / 129 / 128 / 107 chars, each with a zh and zh-TW twin | **0** | Type |
+| Trailing action rows without a chevron | **0** | **1** card, `≥ 1` row, `obnotion-settings-card-footer` | Sections |
+| Row value alignment | mixed — some stacked below the label | right-aligned secondary text on the label's line | Row anatomy |
+| Row height | 44px min, landed | unchanged | Spacing |
+| Row inset | 16px, landed | unchanged | Spacing |
+| Native `<select>` | 0, landed | unchanged | Controls |
+| Header trailing control | `✕` | `✕` — **Proposed ADR-I** would make it `Done` | Frame |
+
+---
+
+### 13.11 The lane clauses these rows become
+
+Written into `tools/live/sheet-grammar.mjs` beside the landed `settings sheet card grouping` and
+`settings sheet reference row grammar` clauses, in their idiom: a `console.log` header, one
+`PASS`/`FAIL` line per measurement, `failures.push` on breach. **No clause asserts a number derived
+from a reference asset** (D3); every threshold below is a structural count, an ours-measured value,
+or a direction.
+
+| Clause | Assertion | Expected RED today |
+|---|---|---|
+| **L1** | The sheet renders **≥ 5** cards under `.obnotion-view-config-body`, each radius `≥ 8px`, each consecutive gap `≥ 8px` | 1 card |
+| **L2** | **0** bordered text inputs and **0** textareas in the sheet body: no `input[type=text]` or `textarea` whose computed `border-width` is non-zero on any side | ≥ 4 rendered; 14 constructions in the producer |
+| **L3** | **≥ 13** rows carry all three of a leading icon, a right-aligned secondary value on the label's line, and a trailing chevron; every one is `≥ 44px` tall | 0 |
+| **L4** | **0** icon-only buttons in the sheet body — every button has a text label | ≥ 3 |
+| **L5** | **0** text runs longer than **80** characters in the sheet body, in all three locales | **147**, `viewConfig.sourceRules.help` |
+| **L6** | Card background luminance **>** canvas background luminance, in **both** themes, from resolved computed values | dark: card 30 vs canvas 46 |
+| **L7** | The section heading computes `text-transform: none`, `letter-spacing: normal`, `font-weight ≤ 500` | `uppercase` / `0.04em` / `700` |
+| **L8** | The last card carries `obnotion-settings-card-footer` and **0** of its rows has a chevron or a trailing value | no footer card |
+| **L9** | *(guard)* The landed stack-row width clause fails on an **empty** row set rather than passing vacuously | passes on a non-empty set today; goes vacuous the moment L2 lands |
+
+**L9 is not decoration.** `spec-tree-layout.md` §2 records the same failure class in
+`scan-failing-values.mjs`: a lane that walks a fixed set reports clean when the set empties. L2
+empties the set the landed clause measures, so without L9 a real regression would land green.
+
+**The `071` regression set re-runs unchanged in the same invocation**: row pitch 44-52px, row inset
+16px, hairline geometry, 0 native selects, card radius and gap floors, and title centring.
+
+---
+
+### 13.12 The provisional register — and what settles each
+
+Two operator captures are named. **OC-S1**: a full-resolution device capture of Notion's View
+options sheet, light. **OC-S2**: the same screen in dark theme — it settles the entire dark column,
+which today has **no reference at any rung**.
+
+| Provisional | Value | How it was derived | Settled by |
+|---|---|---|---|
+| Device and scale | 393×852pt, `299/393 = 0.7608` | R-1's 78px status+nav band against a known 59pt + 44pt | OC-S1 |
+| Single-line row height | ~44pt | 33-34 thumbnail px | OC-S1 |
+| Two-line row height | ~63pt | 48 thumbnail px | OC-S1 |
+| Card inset from the sheet edge | ~16pt | white span `x=12…286` on R-4/R-5 | OC-S1 |
+| Card corner radius | ~8pt | corner curve over ~6 thumbnail px | OC-S1 |
+| Inter-card gap | ~16pt | 12-13 thumbnail px of canvas | OC-S1 |
+| Section-heading band | ~43pt | 33 thumbnail px | OC-S1 |
+| Label left edge | ~56pt | ink at `x=42-43` | OC-S1 |
+| Chevron right inset | ~16pt | ink ends `x=281` of 299 | OC-S1 |
+| Row label / row value size | ~17pt | 9px cap height | OC-S1 |
+| Section-heading size | ~13pt | 8px cap height | OC-S1 |
+| Subtitle size | ~15pt | 11px bbox with descender | OC-S1 |
+| Sheet top radius | ~11-13pt | R-4's corner over 8-10 thumbnail px | OC-S1 |
+| Canvas / card colour | `#FAF8F6` / `#FFFFFF` (sheet); `#F7F7F5` / `#FFFFFF` (full-screen) | direct sample | OC-S1 |
+| Divider thickness | **thumbnail, value unreadable** | 1-2px at 0.76 scale cannot resolve a hairline | OC-S1 |
+| Accent blue behind `Done` | **thumbnail, value unreadable** | 9px antialiased glyph on white | OC-S1 |
+| **Every dark-theme value** | **no reference at any rung** | scanned: 3/3 view-options and 120/120 database files are light | **OC-S2** |
+
+---
+
+### 13.13 Contradictions with landed rulings — Proposed, not applied
+
+Under **D15** and parent **D3**, each is a **Proposed ADR** to be transcribed into
+`../../roadmap.md` §7.19 by **T001**. None is implemented by this child.
+
+| # | The landed ruling | What this DEFINE read finds | Raised by |
+|---|---|---|---|
+| **ADR-I** | Every phone sheet closes on a `✕` glyph in the shared `buildShellHeader` | Notion's bottom sheet closes on a **text `Done` in accent blue** (R-4) or a **`‹` back** where the sheet is a drill-in (R-5). It never shows a `✕`. The change is one shared header, so it moves all eleven sheets at once or none — a family decision, not this child's. Until it is taken, the rubric's *Frame* row targets **1** | `076/001` |
+| **ADR-J** | `../spec.md` §4 reads View options as *"three separate inset cards with visible gaps"* | R-1 is **full-bleed with zero radius and zero inset**, sampled at `x=0`/`x=298` and probed at the corner. The parent's conclusion is right for our surface and its cited evidence is not: the inset-card idiom comes from R-4/R-5, which are bottom sheets. §13.0 records the presentation rule that reconciles them, and `002`-`011` inherit it | `076/001` |
+| **ADR-K** | `071/007` set the card fill token so the card *"reads lifted against the canvas in both themes"* (`styles.css` comment) | In the capture the judge scores, dark is **inverted**: card `rgb(30,30,30)` on canvas `rgb(46,46,46)`. `001` re-tunes to the direction rather than reopening `007`; **if the re-tune moves a metric `007` landed, that lands here as an ADR rather than as an amendment to `007`** | `076/001` |
 
 <!-- /ANCHOR:gap-table -->
 

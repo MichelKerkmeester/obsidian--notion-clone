@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T22:15:00Z"
-    last_updated_by: "293-board-card-fields-plan"
-    recent_action: "Scaffolded 076/012-board-card-fields (DEFINE+PLAN only); twelfth child, no code"
-    next_safe_action: "Execute 076/001-settings-sheet-visual-parity, step DEFINE (T001-T004)"
+    last_updated_at: "2026-09-10T22:30:00Z"
+    last_updated_by: "292-loop-001-settings-sheet-visual-parity"
+    recent_action: "076/001 DEFINE+PLAN landed: brief, delta, 9 clauses, 14 tasks, 3 ADRs held"
+    next_safe_action: "Execute 076/001 T001 (transcribe ADR-I/J/K), then T002 lands L1-L9 RED"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
       - "076 closes no sheet on lane evidence alone; the image judge is a required gate (076 D1)"
@@ -43,6 +43,60 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-10 ~22:30, `076/001-settings-sheet-visual-parity` DEFINE + PLAN LANDED — worktree `292-loop-001-settings-sheet-visual-parity`
+
+**What this leg did** — took the settings sheet back to the drawing board and wrote the brief a
+builder can execute write-first and an image judge can score. Seven references opened and measured;
+the child's `spec.md` §13 is now a designer's brief (frame, section list, a 23-row row-by-row table,
+control types, type scale, spacing rhythm, both themes, four states) plus a delta table mapping every
+property to its rubric row.
+
+**The finding that reshapes the packet, and the vocabulary the other ten children inherit: Notion's
+grouping idiom follows its presentation.** `../spec.md` §4 reads View options as *"three separate
+inset cards with visible gaps"*. Measured, that is false of that screen — its row bands sample
+`rgb(255,255,255)` at both `x=0` and `x=298`, its dividers span `x=0…298`, and a corner probe at
+`y=170…182, x=0…10` shows a clean grey→white step with no rounding. It groups **full-bleed, zero
+radius, zero inset**. The two *bottom sheets* — Data source actions and Layout — do exactly what the
+parent described: white span `x=12…286` on an `rgb(250,248,246)` canvas, corner curve over ~6px,
+12-13px of canvas between cards. **Our surface is a bottom sheet, so `071/007`'s inset cards are
+correct and stay**; the parent's conclusion was right and its cited evidence was not. The work is
+inside the cards.
+
+**Two scaffold reads corrected rather than inherited.** View options has **no destructive row**: the
+`y=578…647` tail band is uniform canvas whose only ink is the home indicator, at scroll-top, so
+nothing is below a fold — the scaffold's *"unreadable, below the fold"* is wrong. And **no
+dark-theme Notion capture exists at any rung**: all 3 view-options and all 120 `database/` files
+were scanned by mean luma and the one sub-110 result is a light screen behind a modal scrim. Every
+dark target is ours, and the rubric's *Both themes* row is judged on internal consistency.
+
+**The plan.** `plan.md` names the producer regions line by line, proves the scenario photographs
+production link by link (`constructed-scenarios.mjs:921` → `mountConstructed` →
+`window.__mountConstructed` → `runRenderAssertions` → the `renderer === "view-config"` branch at
+`:3412` → `ViewConfigPanelRenderer.render` at `:3475` → `provenanceResult` at `:3477`), so **no
+scenario fix is owed**, and instances the eight-row rubric for this sheet. **9 lane clauses, each
+with its failing value**: 1 card against ≥ 5; 14 input/textarea constructions against 0; 0
+navigation rows against ≥ 13; ≥ 3 bare glyph buttons against 0; a 147-character prose run
+(`viewConfig.sourceRules.help`, 5 EN keys over 80) against 80; an 11px/700/uppercase heading
+(`styles.css:24220-24231`) against 13px/400/sentence case; and a dark card at `rgb(30,30,30)` on a
+canvas of `rgb(46,46,46)` — **16 RGB units the wrong way** — against light's correct +13. **L9 is a
+guard, not a measurement**: L2 empties the row set a landed `071` clause measures, and a lane that
+walks an emptied set reports clean, which is the failure `spec-tree-layout.md` §2 records in
+`scan-failing-values.mjs`.
+
+**Held, not applied.** 3 Proposed ADRs in `001/spec.md` §13.13 for §7.19 — **I** the shared
+`buildShellHeader`'s `✕` against the reference's `Done` (R-4) or `‹` (R-5), a family decision because
+one header paints all eleven sheets; **J** the parent's inset-card read of a full-bleed screen; **K**
+`071/007`'s card fill, whose comment claims a lift the dark capture measures as an inversion. ADR-I
+is why the plan targets *Frame* at **1** and predicts **15/16** rather than 16 — a plan that
+predicted 16 with ADR-I open would be predicting something it has no way to deliver. **17 provisional
+values** are registered in §13.12, each with the operator capture that settles it (OC-S1 light,
+OC-S2 dark); under D3 **no lane clause asserts one of them**.
+
+**14 tasks**, write-first throughout, ending on the judge passing twice on an unchanged tree with the
+tree hash recorded on both, and the operator's device row left **unticked**. `validate.sh --strict`
+`RESULT: PASSED`, Errors 0 / Warnings 1 (the scaffold's pre-existing `SESSION_LINEAGE_BROKEN` pair).
+**Nothing was implemented**: no renderer, stylesheet, lane or capture moved.
 
 ### 2026-09-10 ~22:15, 076/012-board-card-fields SCAFFOLDED (DEFINE+PLAN only) — worktree `293-board-card-fields-plan`
 

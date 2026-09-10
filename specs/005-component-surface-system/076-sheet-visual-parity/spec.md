@@ -14,8 +14,8 @@ _memory:
     packet_pointer: "005-component-surface-system/076-sheet-visual-parity"
     last_updated_at: "2026-09-10T22:10:00Z"
     last_updated_by: "290-sheet-parity-program"
-    recent_action: "Scaffolded 076 and its eleven per-sheet children"
-    next_safe_action: "Execute 001-settings-sheet-visual-parity, step DEFINE (T001-T004)"
+    recent_action: "001 DEFINE + PLAN landed; grouping idiom rule settled for all eleven"
+    next_safe_action: "Execute 001 CREATE: T001 transcribes ADR-I/J/K, T002 lands L1-L9 RED"
     blockers:
       - "No sheet may be closed on DOM-lane evidence alone; the image judge is a required gate (D1)"
       - "Sheets run in order, 001 first — the operator named the settings sheet"
@@ -268,7 +268,7 @@ total. The reviewer writes the score table, with a one-line justification per ro
 
 | Phase | Folder | Sheet | Primary producer | Status |
 |-------|--------|-------|------------------|--------|
-| 1 | `001-settings-sheet-visual-parity/` | Settings | `src/views/view-config-panel-renderer.ts` | scaffolded |
+| 1 | `001-settings-sheet-visual-parity/` | Settings | `src/views/view-config-panel-renderer.ts` | **planned** — DEFINE + PLAN complete, CREATE not started |
 | 2 | `002-properties-sheet-visual-parity/` | Properties | `src/views/column-manager-renderer.ts`, `src/views/record-surface/property-row.ts` | scaffolded |
 | 3 | `003-filter-sheet-visual-parity/` | Filter (+ the active-rule filter popover) | `src/views/filter-panel-renderer.ts`, `src/views/active-rule-popover-renderer.ts` | scaffolded |
 | 4 | `004-sort-sheet-visual-parity/` | Sort (+ the active-rule sort popover) | `src/views/sort-panel-renderer.ts`, `src/views/active-rule-popover-renderer.ts` | scaffolded |

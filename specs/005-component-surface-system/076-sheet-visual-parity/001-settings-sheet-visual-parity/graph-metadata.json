@@ -18,11 +18,11 @@
       "implementation plan",
       "076 phase 1 plan",
       "001 six step loop",
+      "001 lane clauses",
+      "001 rubric instance",
       "task breakdown",
       "076 phase 1 tasks",
-      "001 loop tasks",
-      "acceptance criteria",
-      "001-settings-sheet-visual-parity acceptance criteria"
+      "001 loop tasks"
     ],
     "key_topics": [
       "phase",
@@ -51,10 +51,11 @@
       "src/i18n.ts",
       "tools/screenshots/constructed-scenarios.mjs",
       "tools/live/sheet-grammar.mjs",
-      "tools/live/render-assertion-harness.ts",
+      "tools/live/sheet-rebuild.mjs",
+      "tools/screenshots/theme.css",
+      "src/i18n.test.ts",
       "tools/lane/check-lane.mjs",
-      "tools/screenshots/capture.mjs",
-      "tools/live/sheet-rebuild.mjs"
+      "tools/screenshots/capture.mjs"
     ],
     "entities": [
       {
@@ -118,9 +119,21 @@
         "source": "derived"
       },
       {
-        "name": "render-assertion-harness.ts",
-        "kind": "code",
-        "path": "tools/live/render-assertion-harness.ts",
+        "name": "sheet-rebuild.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-rebuild.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "theme.css",
+        "kind": "file",
+        "path": "tools/screenshots/theme.css",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.test.ts",
+        "kind": "test",
+        "path": "src/i18n.test.ts",
         "source": "derived"
       },
       {
@@ -133,12 +146,6 @@
         "name": "capture.mjs",
         "kind": "file",
         "path": "tools/screenshots/capture.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "sheet-rebuild.mjs",
-        "kind": "file",
-        "path": "tools/live/sheet-rebuild.mjs",
         "source": "derived"
       },
       {
@@ -160,12 +167,6 @@
         "source": "derived"
       },
       {
-        "name": "Where Notion",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -173,6 +174,12 @@
       },
       {
         "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -194,17 +201,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Overview The Settings",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The Settings sheet is one large white card wrapped around a form of bordered text inputs and helper paragraphs; Notion's equivalent is a table of contents built from several inset cards of navigation rows",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-10T20:16:57.340Z",
+    "last_save_at": "2026-09-10T20:34:57.579Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,12 +215,12 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:b21dca59db124a2ef091cefe5d2374d97d4bb0853bb047ef42634b0ac13361d0",
+    "source_fingerprint": "sha256:f604026174dfbe8fe9e0f09d1af21a56b8c9486a4a3ce698d201db951d8a30f1",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "81619d9b86a7b464ea9911503c2201ae73bc020c9a69fba9d4c3132141ce90ea",
-      "plan.md": "9c31cca782a45c98eea2bd2164fdaba61d33c5f16df7edbf5073da99f6dc4479",
-      "tasks.md": "eb0b233f3e2d0fa683d97b99a400993dc5e03c41c6f045e5ead7a8ab670c8bc6"
+      "spec.md": "e34894e1bef65717de09a7a7d164995c01d03997e1057bdc0522f9bfdeac0172",
+      "plan.md": "ec7e794104c6c5868de0ca64cfc0f7011470775620bb3a0c66b57f693dddb9cf",
+      "tasks.md": "4b0aed1af4fd45d1eff053938a5578f3af7e1e0a0674485aca3e62074a928cf4"
     },
     "last_active_at": null
   }

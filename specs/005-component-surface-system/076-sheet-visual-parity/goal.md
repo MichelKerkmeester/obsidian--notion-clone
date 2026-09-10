@@ -13,7 +13,7 @@ _memory:
     last_updated_at: "2026-09-10T22:10:00Z"
     last_updated_by: "290-sheet-parity-program"
     recent_action: "Opened the goal with eleven unticked sheet rows and the operator row"
-    next_safe_action: "Execute 001-settings-sheet-visual-parity DEFINE (T001-T004)"
+    next_safe_action: "Execute 001 CREATE: T001 transcribes ADR-I/J/K, T002 lands L1-L9 RED"
     blockers:
       - "Rungs 1 and 2 of D3's reference precedence are empty; every child works structurally from a 299x678 thumbnail"
     key_files:
