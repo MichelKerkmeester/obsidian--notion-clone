@@ -1,12 +1,12 @@
 {
-  "measuredAt": "2026-09-10T20:38:59.577Z",
+  "measuredAt": "2026-09-10T21:38:52.599Z",
   "inputs": {
-    "styles.css": "ae430699765b",
+    "styles.css": "2c86ecdbf16c",
     "tools/live/cascade-audit.mjs": "59b8f50917f8"
   },
-  "sheetLines": 24760,
+  "sheetLines": 24770,
   "totals": {
-    "rules": 3162,
+    "rules": 3163,
     "duplicatedSelectors": 266,
     "conflicts": 135
   },
@@ -2411,7 +2411,7 @@
       "count": 2,
       "lines": [
         23599,
-        24570
+        24580
       ]
     },
     {
@@ -2467,8 +2467,8 @@
       "context": "",
       "count": 2,
       "lines": [
-        24529,
-        24536
+        24539,
+        24546
       ]
     },
     {
@@ -2476,8 +2476,8 @@
       "context": "",
       "count": 2,
       "lines": [
-        24529,
-        24541
+        24539,
+        24551
       ]
     }
   ],

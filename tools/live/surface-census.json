@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-10T20:40:21.933Z",
+  "measuredAt": "2026-09-10T21:40:02.660Z",
   "inputs": {
-    "styles.css": "ae430699765b",
+    "styles.css": "2c86ecdbf16c",
     "tools/live/surface-census.mjs": "982af0f4c165",
     "src/views/surface-contract.ts": "99972eb224df",
     "src/views/record-detail-panel.ts": "857a220a8ad6",
@@ -9,13 +9,13 @@
     "src/views/board-card-properties-panel.ts": "b53e1cda8b74"
   },
   "totals": {
-    "rendered": 77,
+    "rendered": 84,
     "buildable": 223,
     "declared": 6,
     "renderedOnly": 0,
-    "buildableNotRendered": 146,
+    "buildableNotRendered": 139,
     "untokened": 0,
-    "unroled": 77,
+    "unroled": 84,
     "recordSurfaceHandBuilt": 0
   },
   "rendered": {
@@ -112,6 +112,7 @@
         "panel-filter-nested-group",
         "panel-sort-rules",
         "panel-sort-calendar-empty",
+        "group",
         "panel-view-config",
         "panel-view-config-sheet",
         "panel-settings-side-sheet",
@@ -134,6 +135,7 @@
         "panel-filter-nested-group",
         "panel-sort-rules",
         "panel-sort-calendar-empty",
+        "group",
         "panel-view-config",
         "panel-view-config-sheet",
         "panel-settings-side-sheet",
@@ -152,6 +154,7 @@
       "rect": "44x44",
       "scenarios": [
         "add-view-popover",
+        "group",
         "panel-view-config-sheet"
       ]
     },
@@ -820,6 +823,108 @@
         "panel-sort-calendar-empty"
       ]
     },
+    "obnotion-toolbar-popover": {
+      "cls": "obnotion-toolbar-popover",
+      "mountParent": "obnotion-container",
+      "tokens": true,
+      "role": null,
+      "rect": "1440x329",
+      "scenarios": [
+        "group"
+      ]
+    },
+    "obnotion-mobile-bottom-sheet-handle": {
+      "cls": "obnotion-mobile-bottom-sheet-handle",
+      "mountParent": "obnotion-toolbar-popover",
+      "tokens": true,
+      "role": null,
+      "rect": "34x5",
+      "scenarios": [
+        "group",
+        "panel-view-config-sheet",
+        "panel-record-detail-sheet",
+        "panel-record-detail-sheet-title-currency",
+        "panel-record-detail-sheet-body-editing",
+        "panel-record-detail-sheet-body-empty",
+        "panel-column-width-sheet",
+        "chrome-owned-menu-sheet"
+      ]
+    },
+    "obnotion-group-popover-section-title": {
+      "cls": "obnotion-group-popover-section-title",
+      "mountParent": "obnotion-toolbar-popover",
+      "tokens": true,
+      "role": null,
+      "rect": "1407x16",
+      "scenarios": [
+        "group",
+        "group",
+        "group"
+      ]
+    },
+    "obnotion-group-popover-row": {
+      "cls": "obnotion-group-popover-row",
+      "mountParent": "obnotion-toolbar-popover",
+      "tokens": true,
+      "role": null,
+      "rect": "1407x28",
+      "scenarios": [
+        "group",
+        "group",
+        "group",
+        "group",
+        "group"
+      ]
+    },
+    "obnotion-group-popover-marker": {
+      "cls": "obnotion-group-popover-marker",
+      "mountParent": "obnotion-group-popover-row",
+      "tokens": true,
+      "role": null,
+      "rect": "16x16",
+      "scenarios": [
+        "group",
+        "group",
+        "group",
+        "group",
+        "group"
+      ]
+    },
+    "obnotion-group-popover-label": {
+      "cls": "obnotion-group-popover-label",
+      "mountParent": "obnotion-group-popover-row",
+      "tokens": true,
+      "role": null,
+      "rect": "1345x15",
+      "scenarios": [
+        "group",
+        "group",
+        "group",
+        "group",
+        "group"
+      ]
+    },
+    "obnotion-group-popover-check": {
+      "cls": "obnotion-group-popover-check",
+      "mountParent": "obnotion-group-popover-row",
+      "tokens": true,
+      "role": null,
+      "rect": "16x16",
+      "scenarios": [
+        "group"
+      ]
+    },
+    "obnotion-group-popover-section-action": {
+      "cls": "obnotion-group-popover-section-action",
+      "mountParent": "obnotion-group-popover-section-title",
+      "tokens": true,
+      "role": null,
+      "rect": "69x24",
+      "scenarios": [
+        "group",
+        "group"
+      ]
+    },
     "obnotion-view-config-panel": {
       "cls": "obnotion-view-config-panel",
       "mountParent": "obnotion-container",
@@ -831,22 +936,6 @@
         "panel-view-config-sheet",
         "panel-settings-side-sheet",
         "panel-board-card-properties"
-      ]
-    },
-    "obnotion-mobile-bottom-sheet-handle": {
-      "cls": "obnotion-mobile-bottom-sheet-handle",
-      "mountParent": "obnotion-view-config-panel",
-      "tokens": true,
-      "role": null,
-      "rect": "34x5",
-      "scenarios": [
-        "panel-view-config-sheet",
-        "panel-record-detail-sheet",
-        "panel-record-detail-sheet-title-currency",
-        "panel-record-detail-sheet-body-editing",
-        "panel-record-detail-sheet-body-empty",
-        "panel-column-width-sheet",
-        "chrome-owned-menu-sheet"
       ]
     },
     "obnotion-panel-header-actions": {
@@ -1486,7 +1575,6 @@
     "obnotion-table-calculation-popover",
     "obnotion-record-peek-empty",
     "obnotion-record-peek-field-value-empty",
-    "obnotion-toolbar-popover",
     "obnotion-toolbar-utilities-popover",
     "obnotion-toolbar-menu-row",
     "obnotion-database-popover",
@@ -1505,12 +1593,6 @@
     "obnotion-view-tabs-dropdown-popover",
     "obnotion-utilities-presets-popover",
     "obnotion-group-popover",
-    "obnotion-group-popover-section-title",
-    "obnotion-group-popover-section-action",
-    "obnotion-group-popover-row",
-    "obnotion-group-popover-marker",
-    "obnotion-group-popover-label",
-    "obnotion-group-popover-check",
     "obnotion-group-popover-switch-row",
     "obnotion-group-row-limit-dropdown-popover",
     "obnotion-export-popover",

@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-10T20:40:44.739Z",
+  "measuredAt": "2026-09-10T21:40:22.537Z",
   "inputs": {
-    "styles.css": "ae430699765b",
+    "styles.css": "2c86ecdbf16c",
     "tools/live/view-census.mjs": "475c0e3f6fe3",
     "tools/screenshots/scenarios.mjs": "8e4c7409a92b"
   },
@@ -360,9 +360,9 @@
     }
   ],
   "totals": {
-    "fixtures": 67,
-    "escaping": 429,
-    "growing": 176,
+    "fixtures": 68,
+    "escaping": 433,
+    "growing": 180,
     "scrolling": 253,
     "rhythmGroups": 12,
     "ragged": 0,
@@ -1180,6 +1180,17 @@
       "parentCls": "obnotion-panel-row",
       "by": 253.9,
       "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "group",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "obnotion-toolbar-popover.obnotion-group-popover",
+      "parentCls": "obnotion-container.obnotion-width-default",
+      "by": 28,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -3172,6 +3183,17 @@
     },
     {
       "width": 402,
+      "fixture": "group",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "obnotion-toolbar-popover.obnotion-group-popover",
+      "parentCls": "obnotion-container.obnotion-width-default",
+      "by": 28,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
       "fixture": "panel-view-config-sheet",
       "kind": "escaping",
       "tag": "div",
@@ -4379,6 +4401,17 @@
     },
     {
       "width": 768,
+      "fixture": "group",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "obnotion-toolbar-popover.obnotion-group-popover",
+      "parentCls": "obnotion-container.obnotion-width-default",
+      "by": 40,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
       "fixture": "panel-view-config-sheet",
       "kind": "escaping",
       "tag": "div",
@@ -4926,6 +4959,17 @@
     },
     {
       "width": 1440,
+      "fixture": "group",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "obnotion-toolbar-popover.obnotion-group-popover",
+      "parentCls": "obnotion-container.obnotion-width-default",
+      "by": 340,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
       "fixture": "panel-view-config-sheet",
       "kind": "escaping",
       "tag": "div",
@@ -5322,6 +5366,11 @@
     },
     {
       "width": 320,
+      "fixture": "group",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "panel-view-config",
       "probe": "4px"
     },
@@ -5657,6 +5706,11 @@
     },
     {
       "width": 402,
+      "fixture": "group",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "panel-view-config",
       "probe": "4px"
     },
@@ -5992,6 +6046,11 @@
     },
     {
       "width": 768,
+      "fixture": "group",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "panel-view-config",
       "probe": "4px"
     },
@@ -6323,6 +6382,11 @@
     {
       "width": 1440,
       "fixture": "panel-sort-calendar-empty",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "group",
       "probe": "4px"
     },
     {

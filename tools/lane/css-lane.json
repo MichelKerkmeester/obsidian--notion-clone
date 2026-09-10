@@ -1,6 +1,6 @@
 {
   "holder": "015-sheet-design-fundamentals",
-  "baselineHash": "993d5770cc60",
+  "baselineHash": "2c86ecdbf16c",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -6989,7 +6989,6 @@
     },
     {
       "event": "acquire",
-      "event": "acquire",
       "phase": "015-sheet-design-fundamentals",
       "at": "2026-09-10T21:20:00Z",
       "hash": "5560c2030c05",
@@ -7012,6 +7011,31 @@
         "screenshots/notion-clone/views/board-mobile-desktop-dark.png"
       ],
       "note": "Recaptured twice at the reconciled stylesheet (npm run screenshots </dev/null, 482 entries, exit 0 each) and judged by decoded pixel delta against the committed blobs: ZERO real movers - the leg's eight 248px@112-132 date-pair captures are the committed pictures and reproduced exactly. The only byte-moves were the lanes' known one-run jitter: constructed-date-picker-desktop-light 10px@1 and board-mobile-desktop-dark 2px@1, each in a single run, both restored to their committed pixels with their manifest rows' bytes patched; pixelHash and layoutHash never moved. Evidence 16/16 fresh after 13 stamps were re-run by their own writers; gate PASS 28/0; vitest 1614/1614."
+    },
+    {
+      "event": "acquire",
+      "phase": "015-sheet-design-fundamentals",
+      "at": "2026-09-10T23:45:00Z",
+      "hash": "993d5770cc60",
+      "note": "Second reconciliation, at the push: the 285/007 settings-card elevation leg (1f8005ff, the review's 007 P1) landed on main after this hold's 21:20 release, so the round-2 rebase (onto 2a111da3) merged it underneath; the lane returns to 015 for the second reconciliation pass."
+    },
+    {
+      "event": "edit",
+      "phase": "015-sheet-design-fundamentals",
+      "at": "2026-09-10T23:45:00Z",
+      "hash": "2c86ecdbf16c",
+      "note": "Not a new edit: the twice-reconciled stylesheet - the 285 elevation and this leg's 10-line coarse-pointer mini-nav raise, the 46f0e8e8 merge; shasum-12 of styles.css, and the lane's baselineHash reset to it."
+    },
+    {
+      "event": "release",
+      "phase": "015-sheet-design-fundamentals",
+      "at": "2026-09-10T23:45:00Z",
+      "hash": "2c86ecdbf16c",
+      "reviewed": [
+        "screenshots/notion-clone/components/panel-base-import-modal-desktop-light.png",
+        "screenshots/notion-clone/views/board-mobile-desktop-dark.png"
+      ],
+      "note": "Recaptured twice at the twice-reconciled stylesheet (npm run screenshots </dev/null, 482 entries, exit 0 each), judged by decoded pixel delta against the committed blobs: the 285 leg's eight 248px@112-132 date-pair movers were already this hold's committed pictures from the 21:20 reconciliation and reproduced exactly, and ZERO further 015 signatures moved. Two movers judged: panel-base-import-modal-desktop-light 172px@102 - a fill-paint signature, not this lane's 248px@112-132 raise signature, kept as the 285 leg's own stamp (its committed picture predates its elevation's painting; theme.css:333 - captures have no pointer, so the coarse-pointer raise cannot touch a desktop scenario); board-mobile-desktop-dark 2px@1, the lane's recurring one-run jitter, restored to its committed pixels with its manifest bytes. evidence 16/16 fresh after 13 stamps were re-run by their own writers; vitest 1614/1614; the full gate re-run after this triplet lands."
     }
   ],
   "outstanding": [
@@ -7025,6 +7049,6 @@
     "The obnotion-board-* stylesheet family is now largely dead and was deliberately not cut here. The default board is the only board, and it builds obnotion-kanban-* markup; the extensions branch that built .obnotion-board-column, .obnotion-board-subgroup, .obnotion-board-add-column and their checkboxes is gone. Some of the family is still live and must survive any cut — .obnotion-board-card-cover and .obnotion-board-card-field are both built by the kanban card — so this is a per-rule audit, not a section delete, and it moves captures. One concrete consequence is already measurable: styles.css reads var(--obnotion-board-column-width, 220px) for .obnotion-board-column and nothing assigns that property any more, so the rule resolves its fallback for every user. It is dead rather than wrong, but it is exactly the class scan-pinned-values.mjs exists to catch, and it will stay invisible while the rule it belongs to is unreachable.",
     "067-sheet-family-remediation: seventeen captures on this lane still show the surface as it looked BEFORE the depth-cap fix at 173f7d3a. Found by 062's landing verifier, which recaptured on the merged tree and then measured decoded pixels rather than trusting pixelHash: panel-record-detail-sheet-body-empty-desktop-light moves 46,779 pixels at a max channel delta of 214, its dark pair 46,752 at 209, constructed-chart-toolbar-options-mobile-dark and constructed-column-manager-mobile-dark about 260,800 each at 45, and eleven more record-detail-sheet, modal-sheet-property-editor, depth3-dropdown and owned-menu-sheet captures between 10,548 and 42,211 pixels at 46 to 78. Every one of them hashes IDENTICALLY, which is why 173f7d3a's own recapture read them as byte-only re-encodes and restored them. pixelHash averages a 16x16 grid into 32 buckets, so any change confined to a narrow band or a small region moves a cell's average by less than one bucket and hashes the same - 062 hit the identical trap on its frozen-column shadow and fixed it by measuring pixels. Reproduced with 067's OWN stylesheet in the tree (identical counts), so this is 067's debt and not 062's: left restored here rather than recommitted, because reviewing another lane's surface is a review this packet cannot honestly sign. 067 owes a recapture measured by decoded pixel delta, and a read of each of the seventeen."
   ],
-  "baselineCommit": "da8af8ee3980",
-  "acquiredAt": "2026-09-10T20:03:37Z"
+  "baselineCommit": "2a111da38c84",
+  "acquiredAt": "2026-09-10T23:45:00Z"
 }

@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-09-10T20:39:05.984Z",
+  "measuredAt": "2026-09-10T21:38:58.443Z",
   "inputs": {
-    "styles.css": "ae430699765b",
+    "styles.css": "2c86ecdbf16c",
     "tools/live/checkbox-appearance.mjs": "4d9a6548d2e3",
     "tools/screenshots/scenarios.mjs": "8e4c7409a92b"
   },
   "totals": {
     "checkboxes": 170,
-    "fixtures": 67,
+    "fixtures": 68,
     "owned": 170,
     "appearanceOwnedByAncestor": 0,
     "appearanceSelfOwned": 170,
