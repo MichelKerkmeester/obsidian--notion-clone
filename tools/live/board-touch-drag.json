@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "measuredAt": "2026-09-10T02:28:10.514Z",
+=======
+  "measuredAt": "2026-09-10T02:31:12.395Z",
+>>>>>>> afefc865 (chore(verify): land-verify the 071/013 sheet-input-and-action-order leg on the merged main)
   "inputs": {
     "tools/live/board-touch-drag.mjs": "669118e06aaf",
     "src/views/board-renderer.ts": "59f6618fd206",

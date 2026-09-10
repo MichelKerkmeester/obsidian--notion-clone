@@ -1,7 +1,13 @@
 {
+<<<<<<< HEAD
   "measuredAt": "2026-09-10T02:21:00.627Z",
   "inputs": {
     "styles.css": "ef4e57917a2c",
+=======
+  "measuredAt": "2026-09-10T02:26:24.404Z",
+  "inputs": {
+    "styles.css": "7b9cd8d06a2b",
+>>>>>>> afefc865 (chore(verify): land-verify the 071/013 sheet-input-and-action-order leg on the merged main)
     "tools/live/checkbox-inventory.mjs": "905d8557d4b0"
   },
   "totals": {
@@ -103,10 +109,10 @@
     },
     {
       "file": "src/views/toolbar-renderer.ts",
-      "line": 1957,
+      "line": 2025,
       "chain": [
         "obnotion-database-popover",
-        "obnotion-new-preset-row obnotion-menu-item"
+        "obnotion-new-template-row obnotion-menu-item"
       ],
       "classes": [
         "obnotion-toggle-switch"
@@ -116,10 +122,10 @@
     },
     {
       "file": "src/views/toolbar-renderer.ts",
-      "line": 1977,
+      "line": 2045,
       "chain": [
         "obnotion-database-popover",
-        "obnotion-new-preset-row obnotion-menu-item"
+        "obnotion-new-template-row obnotion-menu-item"
       ],
       "classes": [
         "obnotion-toggle-switch"
@@ -129,10 +135,10 @@
     },
     {
       "file": "src/views/toolbar-renderer.ts",
-      "line": 2049,
+      "line": 2117,
       "chain": [
         "obnotion-database-popover",
-        "obnotion-new-preset-row obnotion-menu-item"
+        "obnotion-new-template-row obnotion-menu-item"
       ],
       "classes": [
         "obnotion-toggle-switch"

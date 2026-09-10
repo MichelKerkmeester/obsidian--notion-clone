@@ -1,7 +1,13 @@
 {
+<<<<<<< HEAD
   "measuredAt": "2026-09-10T02:29:22.389Z",
   "inputs": {
     "styles.css": "ef4e57917a2c",
+=======
+  "measuredAt": "2026-09-10T02:32:23.008Z",
+  "inputs": {
+    "styles.css": "7b9cd8d06a2b",
+>>>>>>> afefc865 (chore(verify): land-verify the 071/013 sheet-input-and-action-order leg on the merged main)
     "tools/screenshots/theme.css": "43554e1fbe3e",
     "tools/live/unstyled-links.mjs": "ab2e6ac25fc1",
     "tools/live/unstyled-links-measure.mjs": "d7730f407670",

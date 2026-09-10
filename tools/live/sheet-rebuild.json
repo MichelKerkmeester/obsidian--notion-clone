@@ -1,9 +1,13 @@
 {
+<<<<<<< HEAD
   "measuredAt": "2026-09-10T02:28:37.024Z",
+=======
+  "measuredAt": "2026-09-10T02:31:37.620Z",
+>>>>>>> afefc865 (chore(verify): land-verify the 071/013 sheet-input-and-action-order leg on the merged main)
   "inputs": {
     "tools/live/sheet-rebuild.mjs": "fd7ad549bd82",
     "tools/live/sheet-rebuild-harness.ts": "8b56d2b01f48",
-    "src/views/toolbar-renderer.ts": "5f3a3d2f3acc",
+    "src/views/toolbar-renderer.ts": "2d7ddbc5c708",
     "src/views/popover-position.ts": "a65201a60e11",
     "src/views/mobile-bottom-sheet.ts": "a2360ab4d988",
     "src/views/sort-panel-renderer.ts": "615f1e32eba9",

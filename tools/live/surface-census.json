@@ -1,7 +1,13 @@
 {
+<<<<<<< HEAD
   "measuredAt": "2026-09-10T02:22:12.839Z",
   "inputs": {
     "styles.css": "ef4e57917a2c",
+=======
+  "measuredAt": "2026-09-10T02:28:01.322Z",
+  "inputs": {
+    "styles.css": "7b9cd8d06a2b",
+>>>>>>> afefc865 (chore(verify): land-verify the 071/013 sheet-input-and-action-order leg on the merged main)
     "tools/live/surface-census.mjs": "982af0f4c165",
     "src/views/surface-contract.ts": "99972eb224df",
     "src/views/record-detail-panel.ts": "857a220a8ad6",
@@ -10,10 +16,10 @@
   },
   "totals": {
     "rendered": 77,
-    "buildable": 221,
+    "buildable": 222,
     "declared": 6,
     "renderedOnly": 0,
-    "buildableNotRendered": 144,
+    "buildableNotRendered": 145,
     "untokened": 0,
     "unroled": 77,
     "recordSurfaceHandBuilt": 0
@@ -1502,6 +1508,7 @@
     "obnotion-add-view-popover",
     "obnotion-all-views-popover",
     "obnotion-view-tabs-dropdown-popover",
+    "obnotion-utilities-presets-popover",
     "obnotion-group-popover",
     "obnotion-group-popover-section-title",
     "obnotion-group-popover-section-action",

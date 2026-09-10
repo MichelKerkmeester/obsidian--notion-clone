@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "measuredAt": "2026-09-10T02:28:16.263Z",
+=======
+  "measuredAt": "2026-09-10T02:31:17.731Z",
+>>>>>>> afefc865 (chore(verify): land-verify the 071/013 sheet-input-and-action-order leg on the merged main)
   "inputs": {
     "tools/live/sheet-teardown.mjs": "4291c599b19d",
     "tools/live/sheet-teardown-harness.ts": "c17b90fbc987",
