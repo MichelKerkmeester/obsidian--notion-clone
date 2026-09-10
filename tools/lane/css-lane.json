@@ -1,7 +1,7 @@
 {
   "holder": "012-sort-and-group-sheet-rows",
   "acquiredAt": "2026-09-10T01:38:00.000Z",
-  "baselineHash": "89170e31f3fe",
+  "baselineHash": "ef4e57917a2c",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
     "screenshots/project-manager/"
@@ -6595,6 +6595,30 @@
       "at": "2026-09-10T01:38:00.000Z",
       "hash": "fcaf3fec28cf",
       "note": "Acquired for the 012 sort-and-group sheet-rows leg: the sort sheet stacks its rule into three rows (property with the arrow pair, direction, a labelled is-warning delete row) and the group sheet gains the shown/hidden partition, both of which redraw captures. 045 handed the lane over released at fcaf3fec28cf."
+    },
+    {
+      "event": "acquire",
+      "phase": "011-record-sheet-header-and-icons",
+      "at": "2026-09-10T01:55:00Z",
+      "hash": "892ac77282a3",
+      "note": "Re-acquired by the landing verification: the leg's single commit (b1c74508, replayed as db64ab52) rebased onto the 010/008/009-merged main 892cc6e9, whose own 009-side lane cycles (acquired 00:06:53 at 904e4bff23b0 and again 00:28:38 at 4bd3892f7e8a) sit in the history above. The holder is unchanged; this continuation re-signs the record-icon release onto the merged stylesheet."
+    },
+    {
+      "event": "edit",
+      "phase": "011-record-sheet-header-and-icons",
+      "at": "2026-09-10T01:55:00Z",
+      "hash": "791646bdf576",
+      "note": "styles.css 892ac77282a3 -> 791646bdf576, and the delta is theirs, not ours: the replay folds the 071/008 (filter condition rows onto the shared 16px grammar), 071/009 (properties/section rows, the edit-property delete row, the column-manager scrollbar) and 010 (copy, no stylesheet) hunks under this leg's 27-line record addition (the .obnotion-record-detail-field-label .obnotion-record-detail-field-type-icon rule and its svg sizing) -- git diff 892cc6e9..db64ab52 -- styles.css touches no selector outside the record-detail field-label icon. No further change was made to the stylesheet on this tree; the 480-row manifest sourceHash move 892ac77282a3 -> 791646bdf576 is that fold, recorded by the recapture itself."
+    },
+    {
+      "event": "release",
+      "phase": "011-record-sheet-header-and-icons",
+      "at": "2026-09-10T01:55:00Z",
+      "hash": "791646bdf576",
+      "reviewed": [
+        "screenshots/notion-clone/components/dropdown-field-desktop-light.png"
+      ],
+      "note": "Captured twice (npm run screenshots </dev/null, 480 entries, exit 0 both) after the rebase, judged by decoded pixel delta against the committed blobs across both judged runs, no image opened by eye. 1 REAL mover, kept: components/dropdown-field-desktop-light 99px at max channel delta 88, moved in the second judged run only -- an 8x14px patch at x81-88, y324-337, one glyph's worth of label ink gained (242,242,242 -> 154,156,158, background to ink, no reciprocal), its recorded sourceHashes moving only styles.css 4bd3892f7e8a -> 791646bdf576 while every other recorded input is unchanged; the mechanism is not decisively attributed -- this leg's 27-line record-detail-icon addition is the only recorded input delta, and a copy dependency its sources list does not name (the 010 lesson) remains the plausible second, so it is recorded as judged-and-kept rather than explained. 3 jitter movers, each in the FIRST judged run only at channel delta <= 12 -- views/board-mobile-desktop-dark 2px@1, views/board-view-desktop-dark 8px@1, views/constructed-table-desktop-light 627px@7 -- and the second run itself restored all three to their committed bytes (worktree byte-identical after run 2, git-verified, so no checkout and no manifest patch was needed; their manifest rows carry the fresh styles.css sourceHash at their restored pixelHash). All 14 replayed record-family/peek/submenu captures and the other 464 reproduced their committed blobs identically in both runs. This leg reviews by measurement (headless); the visual read stays the operator device pass."
     },
     {
       "event": "edit",
