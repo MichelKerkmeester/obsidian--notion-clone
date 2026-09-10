@@ -284,3 +284,70 @@ describe("SortPanelRenderer searchable field dropdown (mounted)", () => {
     expect(directionCalls.every((call) => call.searchable === undefined)).toBe(true);
   });
 });
+
+// ───────────────────────────────────────────────────────────────────
+// 5. STACKED RULE ROWS — mounted
+// ───────────────────────────────────────────────────────────────────
+
+describe("SortPanelRenderer stacked rule rows (mounted)", () => {
+  it("reads one rule as a property row, a direction row and a labelled destructive row, carries one reorder affordance, and leaves no glyph behind", () => {
+    const container = makeContainer();
+    const renderer = new SortPanelRenderer();
+    const state = makeState();
+    renderer.render(container as unknown as HTMLElement, true, makeConfig(), state, makeActions());
+
+    const panel = container.querySelector(".obnotion-sort-panel");
+    expect(panel).not.toBeNull();
+
+    // The rule is spoken, not crowded: what to sort by, then which way, then the way out — two
+    // picker rows that each own their line, plus the labelled delete. One picker to a row: a rule
+    // whose property and direction share a line is the pre-stack markup, and this test exists so
+    // that regression reads here and not only on a device.
+    const ruleRows = panel!.querySelectorAll(".obnotion-sort-rule-row");
+    expect(ruleRows).toHaveLength(2);
+    const propertyRow = ruleRows.find((row) => row.querySelector(".obnotion-sort-field-dropdown"));
+    const directionRow = ruleRows.find((row) => row.querySelector(".obnotion-sort-direction-dropdown"));
+    expect(propertyRow).not.toBeNull();
+    expect(directionRow).not.toBeNull();
+    expect(propertyRow!.querySelector(".obnotion-sort-direction-dropdown")).toBeNull();
+    expect(directionRow!.querySelector(".obnotion-sort-field-dropdown")).toBeNull();
+
+    // One reorder affordance, the keyboard one: the arrow pair — real buttons, named for what
+    // they do — survived; the pointer-only drag grip did not. A grip anywhere and the sheet is
+    // back to two ways to reorder, one of them unreachable by Tab.
+    expect(panel!.querySelectorAll(".obnotion-panel-drag")).toHaveLength(0);
+    const reorderControls = panel!.querySelectorAll(".obnotion-mobile-reorder-controls");
+    expect(reorderControls).toHaveLength(1);
+    const moveButtons = reorderControls[0].children.filter((child) => child.tagName === "BUTTON");
+    expect(moveButtons).toHaveLength(2);
+    for (const moveButton of moveButtons) {
+      expect(moveButton.getAttribute("aria-label")).toBeTruthy();
+      expect(moveButton.getAttribute("title")).toBeTruthy();
+    }
+
+    // The delete reads: a word, not a corner. It is the rule's own warning row — the menu's
+    // is-warning treatment — and no glyph controls survive it on the rule.
+    const deleteRows = panel!.querySelectorAll(".obnotion-sort-delete-row");
+    expect(deleteRows).toHaveLength(1);
+    expect(deleteRows[0].tagName).toBe("BUTTON");
+    expect(deleteRows[0].hasClass("is-warning")).toBe(true);
+    expect(deleteRows[0].getAttribute("type")).toBe("button");
+    expect(deleteRows[0].querySelector(".obnotion-sort-delete-label")?.textContent).toContain("Delete");
+    expect(panel!.querySelectorAll(".obnotion-panel-button-narrow")).toHaveLength(0);
+
+    // No rule row answers for more than 4 interactive controls: the property row's arrows and
+    // picker, the direction row's picker, the delete row's own box.
+    for (const row of [propertyRow!, directionRow!, deleteRows[0]]) {
+      const controls = (row.tagName === "BUTTON" ? 1 : 0)
+        + row.querySelectorAll("button").length
+        + row.querySelectorAll("input").length
+        + row.querySelectorAll(".obnotion-toggle-switch").length;
+      expect(controls).toBeLessThanOrEqual(4);
+    }
+
+    // And the labelled row is the deletion: pressing it removes the rule and saves, the same
+    // contract the glyph's click carried.
+    deleteRows[0].onclick?.();
+    expect(state.sortRules).toHaveLength(0);
+  });
+});

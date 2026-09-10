@@ -39,17 +39,20 @@
       "handle"
     ],
     "importance_tier": "normal",
-    "status": "planned",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "decision-record.md",
+      "implementation-summary.md",
+      "tools/live/sheet-grammar.mjs",
+      "tools/screenshots/scenarios/panels.mjs",
+      "src/views/sort-panel-renderer.test.ts",
       "src/views/sort-panel-renderer.ts",
       "src/views/toolbar-renderer.ts",
-      "tools/live/sheet-grammar.mjs",
-      "src/views/sort-panel-renderer.test.ts",
       "src/i18n.ts",
       "screenshots/notion-clone/panels/constructed-sort-panel-mobile-light.png"
     ],
@@ -85,15 +88,15 @@
         "source": "derived"
       },
       {
-        "name": "sort-panel-renderer.ts",
-        "kind": "code",
-        "path": "src/views/sort-panel-renderer.ts",
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
         "source": "derived"
       },
       {
-        "name": "toolbar-renderer.ts",
-        "kind": "code",
-        "path": "src/views/toolbar-renderer.ts",
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
@@ -103,9 +106,27 @@
         "source": "derived"
       },
       {
+        "name": "panels.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/panels.mjs",
+        "source": "derived"
+      },
+      {
         "name": "sort-panel-renderer.test.ts",
         "kind": "test",
         "path": "src/views/sort-panel-renderer.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sort-panel-renderer.ts",
+        "kind": "code",
+        "path": "src/views/sort-panel-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
         "source": "derived"
       },
       {
@@ -179,29 +200,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "The Notion",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Pattern Producer",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Both sheets pass every clause they have",
     "created_at": "2026-09-09T21:01:05.840Z",
-    "last_save_at": "2026-09-09T21:07:21.106Z",
+    "last_save_at": "2026-09-10T01:05:32.751Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,14 +212,18 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b2eab86d18d99f67e4989b06e34b59c83c1afd40bb076051e0bcecd81d3d03ee",
+    "source_fingerprint": "sha256:d0a42ba364c44649f6e5e39ef28e7351edab64e7a247f4ce826d6be17fbe98f4",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "9066ea890e95d146af2340e18e5c13be1885579fc78ba6573c7542be67d96900",
+      "spec.md": "0acd6321325a43cc6e1aa101ff903fa55a26e283e2599e7aa8b1025ffd53093d",
       "plan.md": "c764bd54e5efaf3d5edd1963223f25dcbdfd5accec8ee32d2c67f0ebd767e5e4",
-      "tasks.md": "9c15f61d7a7fbf245c4d969786d6bcb5d4f9b2f6486faf5f71e3661abd94e8ba"
+      "tasks.md": "d10acc93f4189c4731f5a3e81ed962a1669b766e123ee39e324319d992f28036",
+      "decision-record.md": "11f061a6e851a047ffce55c7378aa681b494b6543e59ca0740c68cbb9283485c",
+      "implementation-summary.md": "e44ba9be297e43af7a76b361f16507e7cbe98da0c204ff60b1154c14616ba324"
     },
     "last_active_child_id": null,
     "last_active_at": null

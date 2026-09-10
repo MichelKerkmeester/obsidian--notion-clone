@@ -1492,6 +1492,19 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         this.saveEmbeddedConfigInBackground();
       },
       setGroupRowLimit: (limit) => this.setGroupRowLimit(limit),
+      setHiddenColumns: (keys) => {
+        // Same required-key promise the main view's own Hide all makes: the grouping and title
+        // columns survive a wholesale hide, so the sheet's partitions never lose their anchors.
+        const requiredKeys = this.getRequiredColumnKeys(config);
+        for (const col of getColumnsInOrder(config)) {
+          if (keys.includes(col.key) && !requiredKeys.has(col.key)) this.vs(config).hiddenColumns.add(col.key);
+          else this.vs(config).hiddenColumns.delete(col.key);
+        }
+        this.persistEmbeddedConfigLocally(config);
+        this.updateToolbarIndicators(config);
+        this.renderColumnManager(config);
+        this.renderResults(config);
+      },
       setBoardSubgroupEnabled: (enabled) => {
         config.boardSubgroupEnabled = enabled;
         if (!enabled) config.boardSubgroupField = undefined;

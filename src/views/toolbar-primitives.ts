@@ -125,7 +125,9 @@ export type ConditionPart = HTMLElement | ((parent: HTMLElement) => HTMLElement 
 
 export interface ConditionRowOptions {
   field: ConditionPart;
-  operator: ConditionPart;
+  // Optional: a row may legitimately carry only one part — the stacked sort rule's direction row
+  // is nothing but its picker, and forcing a builder to return nothing there read as ceremony.
+  operator?: ConditionPart;
   value?: ConditionPart;
   leading?: ConditionPart;
   trailing?: ConditionPart;

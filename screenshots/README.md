@@ -1085,7 +1085,7 @@ Sources: `src/views/sort-panel-renderer.ts`
 
 ### Sort panel with two rules
 
-Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.
+Each rule reads as three rows: property with the arrow pair, direction, then the labelled warning row that deletes it. The rule itself stays draggable; the first rule's move-up and the last rule's move-down are disabled.
 
 | dark | light |
 |---|---|

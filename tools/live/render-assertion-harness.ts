@@ -2082,6 +2082,7 @@ export function makeToolbarActions(): ToolbarActions {
     setShowEmptyGroups: () => undefined,
     setGroupDateMode: () => undefined,
     setGroupRowLimit: () => undefined,
+    setHiddenColumns: () => undefined,
     setBoardSubgroupEnabled: () => undefined,
     setBoardSubgroupField: () => undefined,
     toggleViewConfig: () => undefined,

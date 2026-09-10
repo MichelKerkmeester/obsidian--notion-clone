@@ -1850,7 +1850,14 @@ const measurePanelSheetGrammar = () => {
     const control = row.querySelector(":scope > .obnotion-toggle-switch, :scope > input, :scope > .obnotion-menu-item-check");
     const labelRect = label ? label.getBoundingClientRect() : null;
     const controlRect = control ? control.getBoundingClientRect() : null;
+    // Interactive controls the row answers for: the row's own element when it is one, plus every
+    // control descendant, counted once. A crowded row taxes whichever input — pointer, finger or
+    // Tab — reaches it, so the count is what the clause limits, not the sighting.
+    const interactive = new Set();
+    if (row.matches('button, input, select, [role="button"], [role="combobox"], [role="listbox"], [role="switch"], .obnotion-toggle-switch')) interactive.add(row);
+    for (const hit of row.querySelectorAll('button, input, select, [role="button"], [role="combobox"], [role="listbox"], [role="switch"], .obnotion-toggle-switch')) interactive.add(hit);
     rows.push({
+      controls: interactive.size,
       height: Number(rowRect.height.toFixed(2)),
       width: Number(rowRect.width.toFixed(2)),
       // The reference pairs a row's control at its far edge: control right of the label's END,
@@ -1859,15 +1866,53 @@ const measurePanelSheetGrammar = () => {
       controlRightOfLabel: labelRect && controlRect ? controlRect.right >= labelRect.right - 2 : null,
     });
   }
+  // The shown/hidden partition: a section header earns a bulk action when a control sits beside
+  // the title on the header's own line — not among the rows the section introduces.
   const sectionTitles = Array.from(sheet.querySelectorAll(".obnotion-group-popover-section-title")).map((title) => {
     const titleStyle = window.getComputedStyle(title);
+    const bulk = title.querySelector("button");
+    const bulkRect = bulk ? bulk.getBoundingClientRect() : null;
+    const titleRect = title.getBoundingClientRect();
     return {
       paddingLeft: Number.parseFloat(titleStyle.paddingLeft),
       paddingRight: Number.parseFloat(titleStyle.paddingRight),
       borderTopWidth: titleStyle.borderTopWidth,
       borderTopColor: titleStyle.borderTopColor,
+      hasBulkAction: bulk != null,
+      bulkBesideTitle: bulkRect != null && bulkRect.top >= titleRect.top - 1 && bulkRect.bottom <= titleRect.bottom + 1,
     };
   });
+  // The sort sheet's structural questions: how many distinct reorder mechanisms it offers (a grip
+  // and an arrow pair are two), whether a rule's property and direction still share one row, what
+  // the heaviest rule row carries, and whether the sheet still closes a rule with a glyph rather
+  // than a word. And the prose question: the longest piece of body text the sheet renders — the
+  // calendar hint is the sheet's one paragraph, and paragraphs are what the reference does not
+  // carry.
+  const affordanceSelectors = [".obnotion-panel-drag", ".obnotion-mobile-reorder-controls"];
+  const fieldPickers = Array.from(sheet.querySelectorAll(".obnotion-sort-field-dropdown"));
+  const directionPickers = Array.from(sheet.querySelectorAll(".obnotion-sort-direction-dropdown"));
+  const countedRows = Array.from(sheet.querySelectorAll(".obnotion-panel-row, .obnotion-group-popover-row"));
+  // The rule row's glyph and its own hit inset: the record this packet's delete change rests on —
+  // whether the legibility question it answers ever owed anything to the touch floor. The painted
+  // hit box is the glyph's own box grown by its ::before inset, so both are reported.
+  const narrowGlyph = sheet.querySelector(".obnotion-panel-button-narrow");
+  let narrowGlyphBox = null;
+  if (narrowGlyph) {
+    const glyphRect = narrowGlyph.getBoundingClientRect();
+    const glyphBefore = window.getComputedStyle(narrowGlyph, "::before");
+    const grow = (edgeA, edgeB) => Math.abs(Number.parseFloat(edgeA) || 0) + Math.abs(Number.parseFloat(edgeB) || 0);
+    narrowGlyphBox = {
+      box: glyphRect.width.toFixed(1) + "x" + glyphRect.height.toFixed(1),
+      hitBox: (glyphRect.width + grow(glyphBefore.left, glyphBefore.right)).toFixed(1) + "x" + (glyphRect.height + grow(glyphBefore.top, glyphBefore.bottom)).toFixed(1),
+    };
+  }
+  let longestTextRun = 0;
+  for (const el of sheet.querySelectorAll("*")) {
+    for (const textNode of el.childNodes) {
+      if (textNode.nodeType !== 3) continue;
+      longestTextRun = Math.max(longestTextRun, (textNode.textContent || "").trim().length);
+    }
+  }
   // When the sheet scrolls without any past-edge offender, the excess is a margin tail: the
   // farthest margin edge from the scroll origin names the rule, because scrollWidth runs from
   // that origin to the farthest scrolled margin edge.
@@ -1914,6 +1959,15 @@ const measurePanelSheetGrammar = () => {
     panelPaddingLeft: Number.parseFloat(sheetStyle.paddingLeft),
     panelPaddingRight: Number.parseFloat(sheetStyle.paddingRight),
     rows,
+    controlsMax: rows.length > 0 ? Math.max(...rows.map((row) => row.controls)) : 0,
+    reorderAffordances: affordanceSelectors.filter((selector) => sheet.querySelector(selector) != null).length,
+    fieldPickerRows: fieldPickers.length,
+    directionPickerRows: directionPickers.length,
+    rowsWithBothPickers: fieldPickers.filter((field) => field.closest(".obnotion-panel-row, .obnotion-group-popover-row")?.querySelector(".obnotion-sort-direction-dropdown") != null).length,
+    xGlyphRows: countedRows.filter((row) => (row.textContent || "").includes("×")).length,
+    warningRows: countedRows.filter((row) => row.classList.contains("is-warning") || row.querySelector(".is-warning") != null).length,
+    narrowGlyphBox,
+    longestTextRun,
     sectionTitles,
     selectCount: sheet.querySelectorAll("select").length,
     sheetScrollWidth: sheet.scrollWidth,
@@ -1972,6 +2026,32 @@ window.__filterConditionNameLegibility = (scenario, propertyName) => {
     };
   });
   return result;
+};
+
+// The stacked sort rule: five rules mounted through the sheet's own add control, not a second
+// fixture — the producer's own growth path is what a fifth rule exercises. At five rules the
+// sheet's body outruns its 90svH ceiling, so the ceiling must clip it into a scrolled body, the
+// sheet keeping the bottom edge its placement chose.
+window.__shellSortStackCap = (scenario) => {
+  let measured = null;
+  runRenderAssertions(document.body, scenario, "", () => {
+    const panel = document.querySelector(".obnotion-sort-panel.obnotion-mobile-bottom-sheet");
+    if (!panel) return;
+    for (let press = 0; press < 3; press += 1) {
+      const add = Array.from(panel.querySelectorAll(":scope > button.obnotion-panel-button")).find((button) => (button.textContent || "").includes("+"));
+      if (!add) return;
+      add.click();
+    }
+    const rect = panel.getBoundingClientRect();
+    measured = {
+      rules: panel.querySelectorAll(".obnotion-sort-field-dropdown").length,
+      height: Number(rect.height.toFixed(1)),
+      bottom: Number(rect.bottom.toFixed(1)),
+      viewportHeight: window.innerHeight,
+      scrolled: panel.scrollHeight > panel.clientHeight + 1,
+    };
+  });
+  return measured;
 };
 
 // The depth cap: a would-be third sheet stacked on a panel-role parent that is itself already two
@@ -4411,6 +4491,32 @@ try {
     const noOverflow = measured.sheetScrollExtent <= measured.sheetClientWidth + FRAME_GEOMETRY_TOLERANCE_PX;
     if (!noOverflow) failures.push(`panel sheets row grammar (${surfaceName}): sheet extent ${measured.sheetScrollExtent} exceeds clientWidth ${measured.sheetClientWidth}${measured.farthestChild ? ` — farthest margin edge ${measured.farthestChild.reach}px: ${measured.farthestChild.node} (${measured.farthestChild.width}px, margin-right ${measured.farthestChild.marginRight}px)` : ""}`);
     console.log(`  ${noOverflow ? "PASS" : "FAIL"}  ${surfaceName} — extent ${measured.sheetScrollExtent} == clientWidth ${measured.sheetClientWidth} (scrollWidth ${measured.sheetScrollWidth} minus the sheet's 1px left border)`);
+    // The sort rule reads property, direction and delete, not one crowded row. A rule's property
+    // and direction each own their row; the heaviest row carries at most 4 interactive controls;
+    // the sheet offers exactly one way to reorder; and a rule ends in a labelled warning row, not
+    // a ×. Every clause prints the number it measured — red is that number, not a shrug.
+    if (surfaceName === "sort-panel") {
+      const crowded = measured.rows.filter((row) => (row.controls ?? 0) > 4);
+      if (crowded.length > 0) failures.push(`panel sheets row grammar (${surfaceName}): ${crowded.length} rule row(s) carry more than 4 interactive controls (heaviest ${Math.max(...crowded.map((row) => row.controls))})`);
+      console.log(`  ${crowded.length === 0 ? "PASS" : "FAIL"}  ${surfaceName} — interactive controls on the heaviest rule row: ${measured.controlsMax} (want ≤ 4)`);
+      const unstacked = measured.rowsWithBothPickers > 0 || measured.fieldPickerRows === 0 || measured.fieldPickerRows !== measured.directionPickerRows;
+      if (unstacked) failures.push(`panel sheets row grammar (${surfaceName}): a rule's property and direction share ${measured.rowsWithBothPickers} row(s) (field rows ${measured.fieldPickerRows}, direction rows ${measured.directionPickerRows}) — each owns its own row`);
+      console.log(`  ${unstacked ? "FAIL" : "PASS"}  ${surfaceName} — property rows ${measured.fieldPickerRows}, direction rows ${measured.directionPickerRows}, rows carrying both: ${measured.rowsWithBothPickers}`);
+      if (measured.reorderAffordances !== 1) failures.push(`panel sheets row grammar (${surfaceName}): the sheet offers ${measured.reorderAffordances} reorder affordances, wanted exactly 1 — the survivor carries the keyboard path`);
+      console.log(`  ${measured.reorderAffordances === 1 ? "PASS" : "FAIL"}  ${surfaceName} — reorder affordances: ${measured.reorderAffordances} (want 1)`);
+      if (measured.xGlyphRows > 0 || measured.warningRows === 0) failures.push(`panel sheets row grammar (${surfaceName}): ${measured.xGlyphRows} row(s) still close a rule with a ×, ${measured.warningRows} labelled warning row(s) — the delete reads as a labelled destructive row`);
+      console.log(`  ${measured.xGlyphRows === 0 && measured.warningRows > 0 ? "PASS" : "FAIL"}  ${surfaceName} — × glyphs: ${measured.xGlyphRows} (want 0), labelled warning rows: ${measured.warningRows} (want ≥ 1)`);
+      console.log(`  INFO  ${surfaceName} — the rule row's glyph box ${measured.narrowGlyphBox ? measured.narrowGlyphBox.box : "removed"}, hit box grown by its own inset: ${measured.narrowGlyphBox ? measured.narrowGlyphBox.hitBox : "the labelled row carries its own hit area"} (legibility, not a touch-target fix)`);
+    }
+    if (surfaceName === "group") {
+      const crowded = measured.rows.filter((row) => (row.controls ?? 0) > 4);
+      if (crowded.length > 0) failures.push(`panel sheets row grammar (${surfaceName}): ${crowded.length} group row(s) carry more than 4 interactive controls (heaviest ${Math.max(...crowded.map((row) => row.controls))})`);
+      console.log(`  ${crowded.length === 0 ? "PASS" : "FAIL"}  ${surfaceName} — interactive controls on the heaviest group row: ${measured.controlsMax} (want ≤ 4)`);
+      if (measured.sectionTitles.length < 2) failures.push(`panel sheets row grammar (${surfaceName}): the sheet renders ${measured.sectionTitles.length} section heading(s), wanted at least 2 — the shown/hidden partition renders its own headers`);
+      const bulkHeaded = measured.sectionTitles.filter((title) => title.hasBulkAction && title.bulkBesideTitle);
+      if (bulkHeaded.length < 2) failures.push(`panel sheets row grammar (${surfaceName}): only ${bulkHeaded.length} section heading(s) carry a bulk action beside their title, wanted at least 2`);
+      console.log(`  ${measured.sectionTitles.length >= 2 && bulkHeaded.length >= 2 ? "PASS" : "FAIL"}  ${surfaceName} — section headings: ${measured.sectionTitles.length}, with a bulk action on their own line: ${bulkHeaded.length} (want ≥ 2 of each)`);
+    }
     console.log("");
   }
 
@@ -4441,6 +4547,24 @@ try {
     console.log("");
   }
 
+  // The sort sheet's own prose. The calendar hint is the sheet's one paragraph, and a paragraph is
+  // what no sheet in the reference carries: until it earns an info affordance it fits in one
+  // breath — no body-text run longer than 80 characters. Measured on the hint variant, the one
+  // mount where the paragraph actually renders.
+  console.log("sheet-grammar: sort sheet prose — no body-text run longer than 80 characters\n");
+  const proseScenario = (REGISTERED_SURFACES.find((s) => s.name === "sort-panel-calendar-hint") || OVERFLOW_ONLY_SURFACES.find((s) => s.name === "sort-panel-calendar-hint"))?.spec;
+  if (proseScenario) {
+    const proseMeasured = await page.evaluate((spec) => window.__shellPanelSheetGrammar(spec), proseScenario);
+    if (!proseMeasured) {
+      failures.push("sort sheet prose: the calendar-hint variant did not mount as a sheet");
+      console.log("  FAIL  sort sheet prose — the calendar-hint variant did not mount");
+    } else {
+      if (proseMeasured.longestTextRun > 80) failures.push(`sort sheet prose: longest body-text run ${proseMeasured.longestTextRun} characters, wanted ≤ 80`);
+      console.log(`  ${proseMeasured.longestTextRun <= 80 ? "PASS" : "FAIL"}  longest body-text run: ${proseMeasured.longestTextRun} characters (want ≤ 80)`);
+    }
+    console.log("");
+  }
+
   // A filter condition's property control renders its name whole. A name at or
   // above 12 characters is the floor the audit's own gap table sets — long enough that the old
   // one-row layout (six controls sharing 402px) could only ever show two of its characters, and
@@ -4466,6 +4590,23 @@ try {
     }
     console.log("");
   }
+
+  console.log("sheet-grammar: sort rule stack — five rules, the sheet still under its own 90svH ceiling\n");
+  const stackMeasured = await page.evaluate((spec) => window.__shellSortStackCap(spec), REGISTERED_SURFACES.find((s) => s.name === "sort-panel")?.spec);
+  {
+    const mounted = stackMeasured != null && stackMeasured.rules === 5;
+    if (!mounted) failures.push(`sort rule stack: pressing the sheet's own add control three times reached ${stackMeasured ? stackMeasured.rules : 0} rule(s), wanted 5`);
+    const ceilingPx = stackMeasured ? 0.9 * stackMeasured.viewportHeight : 0;
+    const underCap = stackMeasured != null && stackMeasured.height <= ceilingPx + 1;
+    if (!underCap) failures.push(`sort rule stack: the 5-rule sheet measured ${stackMeasured ? stackMeasured.height : "n/a"}px, wanted ≤ 90svH (${ceilingPx.toFixed(1)}px)`);
+    const atCeiling = stackMeasured != null && stackMeasured.height >= ceilingPx - 2;
+    const clipped = !stackMeasured ? false : !atCeiling || stackMeasured.scrolled;
+    if (!clipped) failures.push("sort rule stack: the sheet sits at the 90svH ceiling but never scrolled — the ceiling is not clipping the fifth rule");
+    console.log(`  ${mounted ? "PASS" : "FAIL"}  five rules mounted through the sheet's own add control (${stackMeasured ? stackMeasured.rules : 0})`);
+    console.log(`  ${underCap ? "PASS" : "FAIL"}  sheet height ${stackMeasured ? stackMeasured.height : "n/a"}px against the 90svH ceiling (${ceilingPx.toFixed(1)}px), bottom edge ${stackMeasured ? stackMeasured.bottom : "n/a"}px in a ${stackMeasured ? stackMeasured.viewportHeight : "n/a"}px viewport`);
+    console.log(`  ${clipped ? "PASS" : "FAIL"}  at the ceiling the body scrolls instead of the sheet growing (${stackMeasured && stackMeasured.scrolled ? "scrolls" : "fits under the ceiling"})`);
+  }
+  console.log("");
 
   // A control that has never been observed red is not evidence: the inset clause reverted.
   const panelControl = await page.evaluate((spec) => window.__shellPanelSheetGrammarControl(spec), groupSpec?.spec);

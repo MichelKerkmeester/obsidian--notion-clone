@@ -279,17 +279,21 @@ export const PANEL_SCENARIOS = [
     width: 560,
     fixtureOf: "constructed-sort-panel",
     sources: ["src/views/sort-panel-renderer.ts", "src/views/dropdown-field.ts"],
-    note: "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
+    note: "Each rule reads as three rows: property with the arrow pair, direction, then the labelled warning row that deletes it. The rule itself stays draggable; the first rule's move-up and the last rule's move-down are disabled.",
     captureCss: ANCHORED_PANEL_CSS,
     html: () => {
       const rule = (field, type, direction, isFirst, isLast) => `
         <div class="obnotion-panel-row obnotion-sort-rule-row" draggable="true">
-          <span class="obnotion-panel-drag" title="Drag to reorder">⋮⋮</span>
           ${reorderControls(isFirst, isLast)}
           ${dropdownField("obnotion-panel-dropdown obnotion-sort-field-dropdown", field, TYPE_ICON[type])}
+        </div>
+        <div class="obnotion-panel-row obnotion-sort-rule-row obnotion-sort-direction-row">
           ${dropdownField("obnotion-panel-dropdown obnotion-sort-direction-dropdown", direction)}
-          <button class="obnotion-panel-button obnotion-panel-button-narrow">×</button>
-        </div>`;
+        </div>
+        <button class="obnotion-panel-row obnotion-sort-delete-row is-warning" type="button">
+          <span class="obnotion-sort-delete-icon">${I.trash2}</span>
+          <span class="obnotion-sort-delete-label">Delete</span>
+        </button>`;
       return `
       <div class="obnotion-container">
         <div class="obnotion-sort-panel obnotion-filter-panel" id="obnotion-sort-panel">
@@ -314,7 +318,7 @@ export const PANEL_SCENARIOS = [
       <div class="obnotion-container">
         <div class="obnotion-sort-panel obnotion-filter-panel" id="obnotion-sort-panel">
           <div class="obnotion-panel-header"><span class="obnotion-panel-title">Sort</span></div>
-          <div class="obnotion-panel-hint">Calendar views place spanning, all-day, and overlapping timed events first; sort rules apply within the available event order.</div>
+          <div class="obnotion-panel-hint">Spanning, all-day and overlapping events sort first; rules order the rest.</div>
           <div class="obnotion-panel-empty">Click "Add sort" below to add multi-sort rules.</div>
           <button class="obnotion-panel-button">+ Add sort</button>
         </div>

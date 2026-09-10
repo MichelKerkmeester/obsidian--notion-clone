@@ -32,9 +32,9 @@ contextType: "implementation"
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P2 |
-| **Status** | Draft — scaffolded, not implemented |
+| **Status** | Implemented — the operator's device read (AC-010) outstanding |
 | **Created** | 2026-09-09 |
-| **Branch** | `worktrees/272-sheet-notion-audit` |
+| **Branch** | `worktrees/278-sort-group-rows` |
 | **Parent Spec** | `../spec.md` |
 | **Parent Packet** | `071-sheet-notion-anytype-alignment` |
 <!-- /ANCHOR:metadata -->

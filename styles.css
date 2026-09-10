@@ -13654,6 +13654,56 @@ body.is-phone .obnotion-container .obnotion-menu-item {
   margin-bottom: 12px;
 }
 
+/* The stacked rule: property, direction and delete are three rows of one rule, visually bound by
+   a single left rail (the arrows' column) rather than three loose rows. The direction row reads
+   under its property — indented to the property picker's own left edge, the way a card's second
+   line sits under its first — and the delete row hangs at the rule's end, before the next rule's
+   property row pulls the eye to a new block. The arrow pair lives on the property row, which
+   keeps every rule to one reorder affordance and leaves the pickers the line's slack. */
+.obnotion-container .obnotion-sort-direction-row {
+  margin-top: -8px;
+  box-sizing: border-box;
+  padding-left: 42px;
+}
+
+/* The delete is a row, not a glyph: it owns the rule's full span, reads in the error colour
+   through the menu's own is-warning rule, and its whole box is the hit target — no invisible
+   grown inset, because the label is the affordance. */
+.obnotion-container .obnotion-sort-delete-row {
+  display: flex;
+  align-items: center;
+  gap: var(--obnotion-space-2);
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 44px;
+  margin-bottom: 12px;
+  padding: 2px 2px 2px 42px;
+  border: 0;
+  border-radius: var(--obnotion-radius-sm);
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-error);
+  cursor: pointer;
+  font-size: var(--font-ui-small);
+  font-weight: 600;
+  text-align: left;
+}
+
+.obnotion-container .obnotion-sort-delete-row .obnotion-sort-delete-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.obnotion-container .obnotion-sort-delete-row .obnotion-sort-delete-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.obnotion-container .obnotion-sort-delete-row:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: -2px;
+}
+
 .obnotion-container .obnotion-new-preset-row {
   display: flex;
   align-items: center;
@@ -24541,6 +24591,53 @@ input[type="checkbox"].obnotion-checkbox:disabled {
    16px keeps the label left of a switch or check that hugs the row's far edge. */
 .is-phone .obnotion-group-popover.obnotion-mobile-bottom-sheet .obnotion-menu-item {
   min-height: 44px;
+}
+
+/* The section header's bulk action: on the header's own line, right edge on the rows' inset, the
+   same link tone the record sheet's bulk actions read in. The header is a flex row once it has
+   an action to carry; a plain title keeps the exact box it always had. */
+.is-phone .obnotion-group-popover.obnotion-mobile-bottom-sheet .obnotion-group-popover-section-title.has-bulk-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--obnotion-space-2);
+}
+
+.is-phone .obnotion-group-popover.obnotion-mobile-bottom-sheet .obnotion-group-popover-section-action {
+  flex: 0 0 auto;
+  min-height: 44px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: var(--font-ui-smaller);
+  font-weight: 600;
+}
+
+/* The stacked sort rule reads under the sheet's own row floor: the direction row and the delete
+   row carry the property row's rule-block rhythm, and the delete is its own hit target — no
+   invisible grown inset, because the label is the affordance. */
+.is-phone .obnotion-sort-panel.obnotion-mobile-bottom-sheet .obnotion-sort-direction-row {
+  margin-top: -8px;
+}
+
+.is-phone .obnotion-sort-panel.obnotion-mobile-bottom-sheet .obnotion-sort-delete-row {
+  min-height: 44px;
+  margin-bottom: 12px;
+  color: var(--text-error);
+}
+
+.is-phone .obnotion-sort-panel.obnotion-mobile-bottom-sheet .obnotion-sort-delete-row .obnotion-sort-delete-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.is-phone .obnotion-sort-panel.obnotion-mobile-bottom-sheet .obnotion-sort-delete-row .obnotion-sort-delete-icon svg {
+  width: 16px;
+  height: 16px;
 }
 
 /* A section's heading and its divider sit on the rows' inset — the sheet's own 16px, so the

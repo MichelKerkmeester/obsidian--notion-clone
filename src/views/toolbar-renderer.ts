@@ -153,6 +153,10 @@ export interface ToolbarActions {
   setShowEmptyGroups(field: string, value: boolean): void;
   setGroupDateMode(field: string, mode: DateGroupMode): void;
   setGroupRowLimit(limit: number): void;
+  /** Makes exactly these keys the view's hidden columns. Optional: the popover renders the
+   *  shown/hidden partition with its bulk actions either way, and a host that cannot hide
+   *  columns leaves the actions quiet rather than hiding the sections. */
+  setHiddenColumns?(keys: string[]): void;
   setBoardSubgroupEnabled(enabled: boolean): void;
   setBoardSubgroupField(value: string): void;
   setTableSubgroupField?(value: string): void;
@@ -1834,7 +1838,31 @@ export class ToolbarRenderer {
         onClick: () => actions.setGroupByField(""),
       });
     }
+    // The property list speaks the shown/hidden vocabulary the rest of the plugin speaks: what
+    // the view hides is Hidden, the rest Shown, each section carrying its own bulk action. Both
+    // sections render even when one side is empty — the partition is the vocabulary, and a list
+    // that rearranges itself as soon as the first property hides reads as two different lists.
+    const hiddenColumns = this.groupPopoverState?.hiddenColumns ?? new Set<string>();
+    const shownColumns = config.schema.columns.filter((col) => !hiddenColumns.has(col.key));
+    this.renderGroupPopoverSection(panel, t("panel.shownSection"), {
+      label: t("panel.hideAllProperties"),
+      onBulk: () => this.groupPopoverActions?.setHiddenColumns?.(shownColumns.map((col) => col.key)),
+    });
     for (const col of config.schema.columns) {
+      if (hiddenColumns.has(col.key)) continue;
+      this.renderGroupPopoverRow(panel, {
+        label: col.label,
+        column: col,
+        active: groupValue === col.key,
+        onClick: () => actions.setGroupByField(col.key),
+      });
+    }
+    this.renderGroupPopoverSection(panel, t("panel.hiddenSection"), {
+      label: t("panel.showAllProperties"),
+      onBulk: () => this.groupPopoverActions?.setHiddenColumns?.([]),
+    });
+    for (const col of config.schema.columns) {
+      if (!hiddenColumns.has(col.key)) continue;
       this.renderGroupPopoverRow(panel, {
         label: col.label,
         column: col,
@@ -1878,8 +1906,22 @@ export class ToolbarRenderer {
     panel.scrollTop = scrollTop;
   }
 
-  private renderGroupPopoverSection(panel: HTMLElement, title: string): void {
-    panel.createDiv({ cls: "obnotion-group-popover-section-title", text: title });
+  private renderGroupPopoverSection(panel: HTMLElement, title: string, bulk?: { label: string; onBulk(): void }): void {
+    const titleEl = panel.createDiv({ cls: "obnotion-group-popover-section-title", text: title });
+    if (!bulk) return;
+    // The bulk action rides the header's own line — the section's apartness is what it acts on,
+    // which is why it never sits among the rows the section introduces.
+    titleEl.addClass("has-bulk-action");
+    const bulkAction = titleEl.createEl("button", {
+      cls: "obnotion-group-popover-section-action",
+      text: bulk.label,
+      attr: { type: "button" },
+    });
+    bulkAction.onclick = (event) => {
+      event.stopPropagation();
+      bulk.onBulk();
+      this.rebuildGroupPopover();
+    };
   }
 
   private renderGroupPopoverRow(

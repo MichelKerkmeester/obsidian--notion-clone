@@ -2050,6 +2050,7 @@ export class DatabaseView extends FileView {
       setShowEmptyGroups: (field, value) => this.setShowEmptyGroups(field, value),
       setGroupDateMode: (field, mode) => this.setGroupDateMode(field, mode),
       setGroupRowLimit: (limit) => this.setGroupRowLimit(limit),
+      setHiddenColumns: (keys) => this.setHiddenColumns(keys),
       setBoardSubgroupEnabled: (enabled) => this.setBoardSubgroupEnabled(enabled),
       setBoardSubgroupField: (value) => this.setBoardSubgroupField(value),
       setTableSubgroupField: (value) => this.setTableSubgroupField(value),
@@ -5767,6 +5768,16 @@ export class DatabaseView extends FileView {
       new Notice(t("errors.updateFailed", { error: String(err) }));
       throw err;
     }
+  }
+
+  // Makes exactly these keys the view's hidden columns. Required keys stay visible: a view whose
+  // title or grouping column vanished under its own Hide all would not read as tidier, it would
+  // read as broken, and setAllColumnsVisible already made that promise for the whole hide.
+  private setHiddenColumns(keys: string[]): void {
+    const config = this.getConfig();
+    if (!config) return;
+    const requiredKeys = this.getRequiredColumnKeys(config, this.vs());
+    this.setColumnsVisible(getColumnsInOrder(config).map((col) => ({ col, visible: !keys.includes(col.key) || requiredKeys.has(col.key) })));
   }
 
   private setAllColumnsVisible(visible: boolean): void {

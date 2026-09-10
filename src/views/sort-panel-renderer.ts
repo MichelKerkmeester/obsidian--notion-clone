@@ -14,7 +14,7 @@
 
 import { isSheetTraceEnabled, traceSheet } from "./sheet-trace";
 import { setIcon } from "obsidian";
-import { SortRule, ViewConfig } from "../data/types";
+import { SortRule, ViewConfig, ColumnDef } from "../data/types";
 import { t } from "../i18n";
 import { DatabaseViewState } from "./view-state-store";
 import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
@@ -34,6 +34,18 @@ export interface SortPanelActions {
   save(): void;
   refresh(): void;
   close(): void;
+}
+
+// One rule's render context: everything its rows redraw, shared by the arrows and the pickers
+// rather than copied into each of their closures.
+interface SortRuleRenderContext {
+  panel: HTMLElement;
+  config: ViewConfig;
+  state: DatabaseViewState;
+  actions: SortPanelActions;
+  rule: SortRule;
+  columns: Array<ColumnDef>;
+  index: number;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -175,100 +187,144 @@ export class SortPanelRenderer {
     compact = false
   ): void {
     const columns = getViewRuleColumns(config);
-    const row = createConditionRow(panel, {
+    // Everything a rule's rows redraw is the rule: one context, built once, so no picker or
+    // arrow button holds a second copy of what the next rebuild replaces anyway.
+    const ruleContext: SortRuleRenderContext = { panel, config, state, actions, rule, columns, index };
+    if (compact) {
+      // The chip rail's single-rule editor keeps its own compact grammar: one row, both pickers,
+      // no leading or trailing furniture. The stacked rows below are the sheet's rule, not this
+      // one's, and its space budget is the rail's, not the sheet's.
+      createConditionRow(panel, {
+        className: "obnotion-sort-rule-row",
+        compact,
+        field: (parent) => this.renderRulePropertyPicker(parent, ruleContext),
+        operator: (parent) => this.renderRuleDirectionPicker(parent, ruleContext),
+      });
+      return;
+    }
+    // The rule reads the way it is spoken: what to sort by, then which way, then the way out. Two
+    // picker rows and a labelled delete. The arrow pair is the one reorder affordance the sheet
+    // offers, and it is the one that carries the keyboard: each direction is a real button, so
+    // Tab and Enter reorder what the removed drag grip — a pointer-only affordance — did. The
+    // row itself stays drag-usable where a pointer is present, but nothing on the sheet depends
+    // on finding the grip.
+    const propertyRow = createConditionRow(panel, {
       className: "obnotion-sort-rule-row",
-      compact,
-      leading: compact ? undefined : (parent) => {
-        const drag = parent.createSpan({ cls: "obnotion-panel-drag", text: "⋮⋮" });
-        drag.title = t("panel.dragToSort");
-        const moveControls = parent.createSpan({ cls: "obnotion-mobile-reorder-controls" });
-        const upBtn = moveControls.createEl("button", {
-          attr: { type: "button", title: t("menu.moveUp"), "aria-label": t("menu.moveUp") },
-        });
-        setIcon(upBtn, "arrow-up");
-        upBtn.disabled = index === 0;
-        upBtn.onclick = (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          this.moveRule(panel, config, state, actions, index, index - 1);
-        };
-        const downBtn = moveControls.createEl("button", {
-          attr: { type: "button", title: t("menu.moveDown"), "aria-label": t("menu.moveDown") },
-        });
-        setIcon(downBtn, "arrow-down");
-        downBtn.disabled = index >= (state.sortRules || []).length - 1;
-        downBtn.onclick = (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          this.moveRule(panel, config, state, actions, index, index + 1);
-        };
-      },
-      field: (parent) => {
-        createDropdownField({
-          parent,
-          label: t("panel.field"),
-          options: columns.map((col) => toPropertyDropdownOption(col)),
-          value: rule.field,
-          className: "obnotion-panel-dropdown obnotion-sort-field-dropdown",
-          hideLabel: true,
-          searchable: true,
-          renderIcon: renderDropdownPropertyTypeIcon,
-          onChange: (value) => {
-            state.sortColumn = undefined;
-            state.sortDirection = "asc";
-            rule.field = value;
-            actions.save();
-            actions.refresh();
-          },
-        });
-      },
-      operator: (parent) => {
-        createDropdownField({
-          parent,
-          label: t("panel.sortDirection"),
-          options: [
-            { value: "asc", text: t("common.asc") },
-            { value: "desc", text: t("common.desc") },
-          ],
-          value: rule.direction,
-          className: "obnotion-panel-dropdown obnotion-sort-direction-dropdown",
-          hideLabel: true,
-          onChange: (value) => {
-            state.sortColumn = undefined;
-            state.sortDirection = "asc";
-            rule.direction = value as SortRule["direction"];
-            actions.save();
-            actions.refresh();
-          },
-        });
-      },
-      trailing: compact ? undefined : (parent) => {
-        parent.createEl("button", { cls: "obnotion-panel-button obnotion-panel-button-narrow", text: "×" }).onclick = () => {
-          removeSortRuleAt(state, index);
-          actions.save();
-          this.render(panel.parentElement as HTMLElement, true, config, state, actions, this.anchorEl || undefined);
-          actions.refresh();
-        };
+      leading: (parent) => this.renderRuleMoveControls(parent, ruleContext),
+      field: (parent) => this.renderRulePropertyPicker(parent, ruleContext),
+    });
+    createConditionRow(panel, {
+      className: "obnotion-sort-rule-row obnotion-sort-direction-row",
+      field: (parent) => this.renderRuleDirectionPicker(parent, ruleContext),
+    });
+    propertyRow.draggable = true;
+    propertyRow.ondragstart = (event) => {
+      if (this.shouldIgnoreRuleDrag(event)) {
+        event.preventDefault();
+        return;
+      }
+      this.startDrag(event, index, propertyRow);
+    };
+    propertyRow.ondragover = (event) => {
+      event.preventDefault();
+      propertyRow.addClass("is-drop-target");
+      this.updateDropIndicator(propertyRow, event.clientY <= propertyRow.getBoundingClientRect().top + propertyRow.getBoundingClientRect().height / 2 ? "before" : "after");
+    };
+    propertyRow.ondragleave = () => this.clearDropIndicator(propertyRow);
+    propertyRow.ondrop = (event) => this.dropRuleOn(event, index, propertyRow, panel, config, state, actions);
+    propertyRow.ondragend = () => this.finishDrag();
+    // The delete: a word where the glyph was, in the sheet's error colour, the row its own hit
+    // area. The glyph's invisible grown inset did its work quietly; a phone reads labels, not
+    // corners, so the affordance is the reading, and the target is the whole row.
+    const deleteRow = panel.createEl("button", {
+      cls: "obnotion-panel-row obnotion-sort-delete-row is-warning",
+      attr: { type: "button" },
+    });
+    setIcon(deleteRow.createSpan({ cls: "obnotion-sort-delete-icon" }), "trash");
+    deleteRow.createSpan({ cls: "obnotion-sort-delete-label", text: t("common.delete") });
+    deleteRow.onclick = () => {
+      removeSortRuleAt(state, index);
+      actions.save();
+      this.render(panel.parentElement as HTMLElement, true, config, state, actions, this.anchorEl || undefined);
+      actions.refresh();
+    };
+  }
+
+  private renderRuleMoveControls(
+    parent: HTMLElement,
+    ruleContext: SortRuleRenderContext
+  ): void {
+    const { panel, config, state, actions, index } = ruleContext;
+    const moveControls = parent.createSpan({ cls: "obnotion-mobile-reorder-controls" });
+    const upBtn = moveControls.createEl("button", {
+      attr: { type: "button", title: t("menu.moveUp"), "aria-label": t("menu.moveUp") },
+    });
+    setIcon(upBtn, "arrow-up");
+    upBtn.disabled = index === 0;
+    upBtn.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      this.moveRule(panel, config, state, actions, index, index - 1);
+    };
+    const downBtn = moveControls.createEl("button", {
+      attr: { type: "button", title: t("menu.moveDown"), "aria-label": t("menu.moveDown") },
+    });
+    setIcon(downBtn, "arrow-down");
+    downBtn.disabled = index >= (state.sortRules || []).length - 1;
+    downBtn.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      this.moveRule(panel, config, state, actions, index, index + 1);
+    };
+  }
+
+  private renderRulePropertyPicker(
+    parent: HTMLElement,
+    ruleContext: SortRuleRenderContext
+  ): void {
+    const { columns, rule, state, actions } = ruleContext;
+    createDropdownField({
+      parent,
+      label: t("panel.field"),
+      options: columns.map((col) => toPropertyDropdownOption(col)),
+      value: rule.field,
+      className: "obnotion-panel-dropdown obnotion-sort-field-dropdown",
+      hideLabel: true,
+      searchable: true,
+      renderIcon: renderDropdownPropertyTypeIcon,
+      onChange: (value) => {
+        state.sortColumn = undefined;
+        state.sortDirection = "asc";
+        rule.field = value;
+        actions.save();
+        actions.refresh();
       },
     });
-    if (!compact) {
-      row.draggable = true;
-      row.ondragstart = (event) => {
-        if (this.shouldIgnoreRuleDrag(event)) {
-          event.preventDefault();
-          return;
-        }
-        this.startDrag(event, index, row);
-      };
-      row.ondragover = (event) => {
-        event.preventDefault();
-        row.addClass("is-drop-target");
-        this.updateDropIndicator(row, event.clientY <= row.getBoundingClientRect().top + row.getBoundingClientRect().height / 2 ? "before" : "after");
-      };
-      row.ondragleave = () => this.clearDropIndicator(row);
-      row.ondrop = (event) => this.dropRuleOn(event, index, row, panel, config, state, actions);
-      row.ondragend = () => this.finishDrag();
-    }
+  }
+
+  private renderRuleDirectionPicker(
+    parent: HTMLElement,
+    ruleContext: SortRuleRenderContext
+  ): void {
+    const { rule, state, actions } = ruleContext;
+    createDropdownField({
+      parent,
+      label: t("panel.sortDirection"),
+      options: [
+        { value: "asc", text: t("common.asc") },
+        { value: "desc", text: t("common.desc") },
+      ],
+      value: rule.direction,
+      className: "obnotion-panel-dropdown obnotion-sort-direction-dropdown",
+      hideLabel: true,
+      onChange: (value) => {
+        state.sortColumn = undefined;
+        state.sortDirection = "asc";
+        rule.direction = value as SortRule["direction"];
+        actions.save();
+        actions.refresh();
+      },
+    });
   }
 
   private startDrag(event: DragEvent, index: number, row: HTMLElement): void {
