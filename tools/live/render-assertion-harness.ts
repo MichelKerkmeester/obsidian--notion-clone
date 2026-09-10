@@ -3528,6 +3528,10 @@ export function runRenderAssertions(
     const actions: RecordDetailActions = {
       editCell: () => undefined,
       openRow: () => undefined,
+      // The trailing add-property row is part of the sheet's own markup: without the action the
+      // panel photographs a footer the production record sheet always draws, because the row
+      // only renders when a picker host exists to open onto.
+      addProperty: () => undefined,
     };
     bagKeys = Object.keys(actions).sort();
     openRecordDetailPanel({

@@ -38,22 +38,28 @@
       "row",
       "implementation"
     ],
-    "importance_tier": "normal",
-    "status": "planned",
+    "importance_tier": "important",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
-      "screenshots/notion/ios/sheets/notion-ios-sheets-icon-picker-01-0c4e7197-170b-44d6-adea-534219b9dd35.webp",
+      "decision-record.md",
+      "implementation-summary.md",
       "src/views/icon-picker-popover.ts",
+      "tools/live/sheet-grammar.mjs",
+      "tools/live/render-assertion-harness.ts",
+      "tools/lane/css-lane.json",
+      "src/views/mobile-bottom-sheet.ts",
+      "screenshots/notion/ios/sheets/notion-ios-sheets-icon-picker-01-0c4e7197-170b-44d6-adea-534219b9dd35.webp",
       "src/views/column-manager-renderer.ts",
       "src/views/record-detail-panel.ts",
-      "tools/live/sheet-grammar.mjs",
       "screenshots/notion/ios/flows/adding-a-conditional-color/notion-ios-flow-adding-a-conditional-color-06-fe308218-4a60-4b96-bbb5-212753e870a2.webp",
       "src/i18n.ts",
-      "src/views/mobile-bottom-sheet.ts"
+      "src/views/popover-host.ts",
+      "src/views/surface-shell.ts"
     ],
     "entities": [
       {
@@ -87,15 +93,51 @@
         "source": "derived"
       },
       {
-        "name": "notion-ios-sheets-icon-picker-01-0c4e7197-170b-44d6-adea-534219b9dd35.webp",
-        "kind": "file",
-        "path": "screenshots/notion/ios/sheets/notion-ios-sheets-icon-picker-01-0c4e7197-170b-44d6-adea-534219b9dd35.webp",
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
         "name": "icon-picker-popover.ts",
         "kind": "code",
         "path": "src/views/icon-picker-popover.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "mobile-bottom-sheet.ts",
+        "kind": "code",
+        "path": "src/views/mobile-bottom-sheet.ts",
+        "source": "derived"
+      },
+      {
+        "name": "notion-ios-sheets-icon-picker-01-0c4e7197-170b-44d6-adea-534219b9dd35.webp",
+        "kind": "file",
+        "path": "screenshots/notion/ios/sheets/notion-ios-sheets-icon-picker-01-0c4e7197-170b-44d6-adea-534219b9dd35.webp",
         "source": "derived"
       },
       {
@@ -111,21 +153,21 @@
         "source": "derived"
       },
       {
-        "name": "sheet-grammar.mjs",
-        "kind": "file",
-        "path": "tools/live/sheet-grammar.mjs",
-        "source": "derived"
-      },
-      {
         "name": "i18n.ts",
         "kind": "code",
         "path": "src/i18n.ts",
         "source": "derived"
       },
       {
-        "name": "mobile-bottom-sheet.ts",
+        "name": "popover-host.ts",
         "kind": "code",
-        "path": "src/views/mobile-bottom-sheet.ts",
+        "path": "src/views/popover-host.ts",
+        "source": "derived"
+      },
+      {
+        "name": "surface-shell.ts",
+        "kind": "code",
+        "path": "src/views/surface-shell.ts",
         "source": "derived"
       },
       {
@@ -163,47 +205,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Overview The",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Every Notion",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "The Notion",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Pattern Producer",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "P3 findings have two failure modes and this packet avoids both",
     "created_at": "2026-09-09T21:01:06.034Z",
-    "last_save_at": "2026-09-09T21:07:21.275Z",
+    "last_save_at": "2026-09-10T02:44:19.716Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -211,14 +217,18 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "decision-record.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e39aede299ecad5a9649c5267f43b7e995b472ba2ff111f04dea18f58e1355b5",
+    "source_fingerprint": "sha256:0a0027c84b16cbc85dd3a8a5bed17802fd7a20565cb910882024a957585aeabb",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "a5b85178fd0c6073fdc513bed4fa52da07ec8d1b93632f5fcf6023dc186bbca1",
+      "spec.md": "751d84e408f1eb0e2bc8cc37784fa0bc698e6263fd02303c8a19da34262fd234",
       "plan.md": "43d7c9593012a96697e468bbbcfbc27806bb78d4a74401f383de8bc6728596cd",
-      "tasks.md": "35269f78ee0f955ec37723237ea457325df19b356c779b0ae263a6a3b86e1850"
+      "tasks.md": "3af347f5e91828fc6e45ba46486bc45adffb90e6ab69119a7246acc37516f944",
+      "decision-record.md": "10bde9bb055789058bb74d1d7a41e207df713e9d1ec8aa7e8dfe30308e7cfb9e",
+      "implementation-summary.md": "44f578071e3c4be8c66e76ccc087370c952f9f4021ad343188eb5488f6d1361a"
     },
     "last_active_child_id": null,
     "last_active_at": null

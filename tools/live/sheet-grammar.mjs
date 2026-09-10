@@ -968,6 +968,60 @@ window.__columnManagerRowModel = () => {
   return out;
 };
 
+// The polish clauses. The grammar's eight columns speak to geometry, so they watched the icon
+// picker ship a search field with three action buttons crowded beside it, and the add
+// affordances on the properties and record sheets ship as compact pills, without anything
+// going red. Two structural facts, measured off the real mounted surfaces: how many of the
+// picker's action controls still share the search's own row, and whether each add affordance
+// spans its row. A control the variant does not render simply does not match, so a picker
+// that carries no Remove reports zero strays by the same measurement rather than by a
+// special case.
+window.__sheetPolishRows = () => {
+  const ICON_SCENARIO = ${JSON.stringify(REGISTERED_SURFACES.find((s) => s.name === "icon-picker").spec)};
+  const COLUMN_SCENARIO = ${JSON.stringify(REGISTERED_SURFACES.find((s) => s.name === "column-manager").spec)};
+  const RECORD_SCENARIO = ${JSON.stringify(REGISTERED_SURFACES.find((s) => s.name === "record-detail").spec)};
+  const out = { error: null, iconSearchSiblings: [], iconSearchStrays: -1, addRows: [] };
+  const collectAddRows = (sheet) => {
+    for (const row of Array.from(sheet.querySelectorAll('.obnotion-column-manager-add-row, .obnotion-record-detail-add-row'))) {
+      const rowRect = row.getBoundingClientRect();
+      if (!rowRect.width) continue;
+      const buttons = Array.from(row.querySelectorAll('button'));
+      for (const button of buttons) {
+        const rect = button.getBoundingClientRect();
+        out.addRows.push({
+          row: String(row.className || '').split(' ')[0],
+          label: (button.textContent || '').trim(),
+          buttonsInRow: buttons.length,
+          share: Math.round((rect.width / rowRect.width) * 100) / 100,
+        });
+      }
+    }
+  };
+  try {
+    runRenderAssertions(document.body, RECORD_SCENARIO, '', () => {
+      const sheet = mountedSheet();
+      if (!sheet) { out.error = out.error || 'the record sheet did not mount'; return; }
+      collectAddRows(sheet);
+    });
+    runRenderAssertions(document.body, COLUMN_SCENARIO, '', () => {
+      const sheet = mountedSheet();
+      if (!sheet) { out.error = out.error || 'the properties sheet did not mount'; return; }
+      collectAddRows(sheet);
+    });
+    runRenderAssertions(document.body, ICON_SCENARIO, '', () => {
+      const sheet = mountedSheet();
+      const search = sheet && sheet.querySelector('.obnotion-icon-picker-search');
+      if (!search) { out.error = out.error || 'the icon picker mounted without a search field'; return; }
+      out.iconSearchSiblings = Array.from(search.parentElement.children).map((el) => String(el.className || '').split(' ')[0]);
+      out.iconSearchStrays = Array.from(search.parentElement.children)
+        .filter((el) => el.matches('.obnotion-icon-picker-remove, .obnotion-icon-picker-random, .obnotion-icon-picker-settings')).length;
+    });
+  } catch (error) {
+    out.error = error.message;
+  }
+  return out;
+};
+
 window.__sheetGrammarNegativeControl = () => {
   const scenario = ${JSON.stringify(REGISTERED_SURFACES.find((s) => s.name === NEGATIVE_CONTROL.surface).spec)};
   let removed = null;
@@ -3610,6 +3664,23 @@ try {
     console.log(`  ${rowModel.bracketedLabels.length === 0 ? "PASS" : "FAIL"}  ${rowModel.totalLabels - rowModel.bracketedLabels.length}/${rowModel.totalLabels} labels are key-free`);
     console.log(`  ${rowModel.matches ? "PASS" : "FAIL"}  the shown/hidden partition presents both section headers, each carrying its own bulk action (${rowModel.sectionCount} header(s): ${JSON.stringify(rowModel.sections)})`);
     console.log(`  ${rowModel.nativeSelects === 0 ? "PASS" : "FAIL"}  the sheet mounts ${rowModel.nativeSelects} native select(s), wanted 0`);
+  }
+  console.log("");
+
+  const ADD_AFFORDANCE_SPAN_FLOOR = 0.9;
+  const polishRows = await page.evaluate(() => window.__sheetPolishRows());
+  console.log("sheet-grammar: sheet polish — the picker's search row carries no action controls; every add affordance spans its row\n");
+  if (polishRows.error) {
+    failures.push("sheet polish: " + polishRows.error);
+    console.log("  FAIL  sheet polish — " + polishRows.error);
+  } else {
+    const strays = polishRows.iconSearchStrays;
+    if (strays !== 0) failures.push("sheet polish: the icon picker's search row shares its row with " + strays + " action control(s), wanted 0 (row: " + polishRows.iconSearchSiblings.join(", ") + ")");
+    console.log("  " + (strays === 0 ? "PASS" : "FAIL") + "  the icon picker's search row carries " + strays + " of the Remove/Random/settings controls, wanted 0 (row: " + polishRows.iconSearchSiblings.join(", ") + ")");
+    if (polishRows.addRows.length === 0) failures.push("sheet polish: no add affordance mounted to measure");
+    const narrow = polishRows.addRows.filter((row) => row.share < ADD_AFFORDANCE_SPAN_FLOOR);
+    if (narrow.length > 0) failures.push("sheet polish: " + narrow.length + " add affordance(s) do not span their row (" + narrow.map((row) => row.label + " " + Math.round(row.share * 100) + "%").join(", ") + ")");
+    console.log("  " + (narrow.length === 0 && polishRows.addRows.length > 0 ? "PASS" : "FAIL") + "  every add affordance spans its row (" + polishRows.addRows.map((row) => row.label + " " + Math.round(row.share * 100) + "% of a " + row.buttonsInRow + "-button row").join("; ") + ")");
   }
   console.log("");
 

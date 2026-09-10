@@ -32,7 +32,7 @@ contextType: "implementation"
 |-------|-------|
 | **Level** | 3 |
 | **Priority** | P3 |
-| **Status** | Draft — scaffolded, not implemented |
+| **Status** | Implemented — landed, awaiting the operator's device read (D3) |
 | **Created** | 2026-09-09 |
 | **Branch** | `worktrees/272-sheet-notion-audit` |
 | **Parent Spec** | `../spec.md` |
@@ -220,4 +220,13 @@ directly — or it is marked `TBD` and listed in the audit's §5.
 | Column-width frame | Classified `floating`: 8px insets, 16px radii (lane) — the only sheet in the app so classified | Not applicable | **No change** — deliberate, and proven by its own frame-shape assertion |
 | Menu card grouping | Rows with separators and section headings | Rows grouped into 5-6 rounded cards on a canvas | **Deferred to `007`** — audit §6 ADR-A. No task here |
 | Menu destructive rows | `is-warning` red (`styles.css:813`), 3 producers | Red, last in its card | **No change** — already converged |
+
+**Landed, 2026-09-10** (this packet): the two carried rows — the icon picker's search row now
+ carries the tabs and the search field alone, with `Remove`, `Random` and the settings button on
+ their own 44px action row beneath it (lane: 3 strays → 0; the `Remove`-into-header promotion
+ recorded Proposed in `decision-record.md`); the properties and record sheets' add affordances
+ are full-width 44px rows (lane: 17% / 23% / 22% → 100% / 92% / 92% of their rows). The
+ convergence rows above are carried forward verbatim in `implementation-summary.md` so the next
+ audit does not re-derive them: the option colour picker is already Notion's control, and the
+ column-width sheet has no Notion reference at all.
 <!-- /ANCHOR:gap-table -->

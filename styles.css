@@ -11428,6 +11428,13 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
   padding: var(--obnotion-space-2) 0;
 }
 
+/* The record sheet's own add affordance reads as a full-width row like the properties sheet's —
+   the pill's label kept its place, the tap row grew to the width the row already had. */
+.obnotion-record-detail-panel.obnotion-mobile-bottom-sheet .obnotion-record-detail-add-button {
+  box-sizing: border-box;
+  width: 100%;
+}
+
 .obnotion-record-detail-panel.obnotion-mobile-bottom-sheet .obnotion-record-detail-hidden-row {
   padding: 2px 0;
 }
@@ -13626,6 +13633,24 @@ body.is-phone .obnotion-container .obnotion-shell-header .obnotion-panel-title {
   right: 0;
   height: 1px;
   background: var(--obnotion-border-subtle, rgba(221, 221, 221, 0.4));
+}
+
+/* The add affordances read as full-width rows, not as a side-by-side pill pair: the sheet's list
+   rows are 44px tap targets on the 16px inset, and the pill pair under them measured 17-23% of
+   the row's width. Each affordance keeps its own 44px, its label where the pill's left edge put
+   it, and the pair shares the hairline vocabulary the rows above already use. */
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-add-row {
+  flex-direction: column;
+  align-items: stretch;
+}
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-add-row .obnotion-column-manager-add-button {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  justify-content: flex-start;
+}
+.obnotion-column-manager.obnotion-mobile-bottom-sheet .obnotion-column-manager-add-row .obnotion-column-manager-add-button + .obnotion-column-manager-add-button {
+  border-top: 1px solid var(--obnotion-border-subtle, rgba(221, 221, 221, 0.4));
 }
 
 /* The shown/hidden partition: a section header line — the section's name on the left, the bulk
@@ -22231,6 +22256,14 @@ img.obnotion-text-md-image {
 .obnotion-icon-picker-popover button.obnotion-icon-picker-settings { flex: 0 0 28px; width: 28px; height: 28px; padding: 0; border-radius: var(--obnotion-radius-sm); color: var(--text-muted); }
 .obnotion-icon-picker-popover button.obnotion-icon-picker-random:hover,
 .obnotion-icon-picker-popover button.obnotion-icon-picker-settings:hover { background: var(--background-modifier-hover); color: var(--text-normal); }
+/* The picker's action row. The three controls crowded the search's own wrapped header; they read
+   on their own 44px row now, so the field stands alone and every control keeps a thumb-sized
+   touch box. The row mirrors the header's inset and hairline so the sheet reads as one column
+   of 44px rows above the grid. */
+.obnotion-icon-picker-actions { display: flex; align-items: center; flex: 0 0 auto; gap: 4px; min-height: 44px; padding: 0 var(--obnotion-space-6); border-bottom: 1px solid var(--background-modifier-border); }
+.obnotion-icon-picker-popover .obnotion-icon-picker-actions button.obnotion-icon-picker-remove { height: 44px; margin: 0; margin-right: auto; padding: 0 12px; line-height: 44px; }
+.obnotion-icon-picker-popover .obnotion-icon-picker-actions button.obnotion-icon-picker-random,
+.obnotion-icon-picker-popover .obnotion-icon-picker-actions button.obnotion-icon-picker-settings { flex: 0 0 44px; width: 44px; height: 44px; padding: 0; }
 .obnotion-icon-picker-colors { flex: 0 0 auto; flex-wrap: wrap; gap: var(--obnotion-space-4); padding: 12px 16px 8px; }
 .obnotion-icon-picker-popover button.obnotion-icon-color { width: 20px; height: 20px; padding: 0; border: 2px solid var(--background-primary); border-radius: var(--obnotion-radius-sm); box-shadow: 0 0 0 1px var(--background-modifier-border); }
 .obnotion-icon-picker-popover button.obnotion-icon-color.is-active { outline: 2px solid var(--text-normal); outline-offset: 2px; }

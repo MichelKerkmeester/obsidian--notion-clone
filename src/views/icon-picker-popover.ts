@@ -138,12 +138,17 @@ export function openIconPickerPopover(options: IconPickerOptions): () => void {
       render(true, false);
       view.requestAnimationFrame(() => panel.querySelector<HTMLInputElement>(".obnotion-icon-picker-search")?.focus());
     };
-    const remove = header.createEl("button", { text: t("recordIcon.remove"), cls: "obnotion-icon-picker-remove", attr: { type: "button" } });
+    // These three sat crowded beside the search field; they read on their own 44px row now, so
+    // the field stands alone in the header and each control keeps a thumb-sized touch box.
+    // The shared sheet header exposes no leading slot, so the picker carries Remove in its own
+    // body instead of in the header, the way the picker's cousins already do.
+    const actions = content.createDiv({ cls: "obnotion-icon-picker-actions" });
+    const remove = actions.createEl("button", { text: t("recordIcon.remove"), cls: "obnotion-icon-picker-remove", attr: { type: "button" } });
     remove.onclick = () => { void commit(null); };
-    const random = header.createEl("button", { cls: "obnotion-icon-picker-random", attr: { type: "button", title: t("recordIcon.random"), "aria-label": t("recordIcon.random") } });
+    const random = actions.createEl("button", { cls: "obnotion-icon-picker-random", attr: { type: "button", title: t("recordIcon.random"), "aria-label": t("recordIcon.random") } });
     setIcon(random, "shuffle");
     if (options.onConfigureField) {
-      const settings = header.createEl("button", {
+      const settings = actions.createEl("button", {
         cls: "obnotion-icon-picker-settings",
         attr: { type: "button", title: t("recordIcon.configureField"), "aria-label": t("recordIcon.configureField") },
       });

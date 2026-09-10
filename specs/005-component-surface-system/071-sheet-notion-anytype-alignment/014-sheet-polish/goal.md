@@ -9,25 +9,26 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/071-sheet-notion-anytype-alignment/014-sheet-polish"
-    last_updated_at: "2026-09-09T22:50:00Z"
-    last_updated_by: "sheet-notion-audit"
-    recent_action: "Scaffolded from the sheet-notion audit's gap tables"
-    next_safe_action: "Execute tasks.md T001-T007"
-    blockers: []
+    last_updated_at: "2026-09-10T04:45:00Z"
+    last_updated_by: "implementation-leg"
+    recent_action: "Implemented T001-T007; gate 28/28; device read outstanding"
+    next_safe_action: "Operator device read (D3) closes the packet"
+    blockers:
+      - "The operator's own device read (D3) is the only closing row that waits on a human"
     key_files:
-      - "spec.md"
-      - "../sheet-notion-audit.md"
       - "src/views/icon-picker-popover.ts"
-      - "src/views/column-manager-renderer.ts"
+      - "styles.css"
       - "tools/live/sheet-grammar.mjs"
+      - "tools/live/render-assertion-harness.ts"
+      - "tools/lane/css-lane.json"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "014-sheet-polish-scaffold"
+      session_id: "014-sheet-polish-implementation"
       parent_session_id: null
-    completion_pct: 0
-    open_questions:
-      - "Is the icon picker's Remove action promoted to the sheet header, matching Notion, given that `createSheetHeader` is shared by every phone sheet and a header-slot change there is a whole-app change?"
-    answered_questions: []
+    completion_pct: 83
+    open_questions: []
+    answered_questions:
+      - "Is the icon picker's Remove action promoted to the sheet header, matching Notion, given that `createSheetHeader` is shared by every phone sheet and a header-slot change there is a whole-app change? — Recorded Proposed, not done: the shared header's leading slot exists and the hook chain reaches it without touching the builder, but the promotion needs the picker-host's mount contract to grow the pass-through; the packet relocated the controls within the picker's own body instead (`decision-record.md`)"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
 # Goal: Sheet Polish
@@ -64,10 +65,10 @@ to the parent: apply it there first, then resend the parent.
 ## 3. COMPLETION CRITERIA
 
 - [x] Reference and current-state gap table complete (`spec.md` §13, from `../sheet-notion-audit.md`)
-- [ ] The icon picker's Remove, Random and settings controls no longer share a row with its search field
-- [ ] The add-affordance pairs on the properties and record sheets render as full-width rows
-- [ ] No regression on any landed sheet clause
-- [ ] Recaptured phone-only light and dark for each surface that changes
+- [x] The icon picker's Remove, Random and settings controls no longer share a row with its search field — the lane: 3 strays → 0 (row: tabs, search), 44px touch boxes throughout
+- [x] The add-affordance pairs on the properties and record sheets render as full-width rows — the lane: 17% / 23% / 22% → 100% / 92% / 92% of their rows
+- [x] No regression on any landed sheet clause — rerun exit 0, both engines; gate 28/28
+- [x] Recaptured phone-only light and dark for each surface that changes — ×2 runs, 21 movers all reproduced in both runs, none jitter-restored; the record sheet's phone framing recorded (its add row sits below the capture's fold; the lane clause and the docked-desktop pair carry it)
 - [ ] Operator's own device re-read reports the polish items closed (no agent ticks this row)
 <!-- /ANCHOR:completion -->
 
@@ -85,7 +86,7 @@ to the parent: apply it there first, then resend the parent.
 | Current-state measurement | Done | `node tools/live/sheet-grammar.mjs` PASS exit 0: icon-picker 8/8 grammar columns, close target 44.0x44.0, parent dim ratio 0.390, title centres within 0.49px |
 | Producer read | Done | `icon-picker-popover.ts:122-151` builds tabs, the search input, then `Remove`, `Random` and a settings button into the same header div. `column-manager-renderer.ts:117-137` builds `+ Add property` and `+ File property` as two buttons on one line |
 | Gap table | Done | `spec.md` §13 |
-| Implementation | Not started | Deferred to `tasks.md` |
+| Implementation | Done | T001–T007 landed 2026-09-10, worktree `280-sheet-polish`: the lane RED 3 strays / 17% / 23% / 22% → GREEN 0 / 100% / 92% / 92% (the numbers in `tasks.md`'s Landed rows); the css-lane acquired at `4bd3892f7e8a`, edited and released at `11a91fe1acd8` with 21 captures named; gate 28/28; the shared builder untouched (0 changed lines) |
 | Operator device read | Open | D3 — the 2026-09-09 ~22:30 ruling opened this; the next device read closes it |
 
 ### Deviations and findings
@@ -95,4 +96,5 @@ to the parent: apply it there first, then resend the parent.
 | The colour picker needed no row and is recorded as converged | `option-color-picker.ts:76-89` builds a single-column list of rows carrying a colour dot, a translated name and a checkmark for the current value. Notion's `flows/adding-a-conditional-color/notion-ios-flow-adding-a-conditional-color-06-*.webp` is the same control. The audit records it converged (§3.7) so a later pass does not re-audit it |
 | The column-width sheet has no Notion reference at all | Notion's iOS app exposes no per-column width; the nearest relative is a `Wrap all columns` toggle on its Table layout sheet. No delta can be stated where no reference exists, and the audit says so (§3.13) rather than inventing one |
 | No landed Anytype ruling is contradicted | D15 (`roadmap.md:130`, §7.15) makes Anytype the default only for the board and the calendar, not for sheets. Where a Notion reading contradicts a landed decision, this packet records it as Proposed in `../sheet-notion-audit.md` §6 rather than resolving it |
+| `tools/live/render-assertion-harness.ts` joined the changed set | The record sheet's add affordance was unmeasurable in the lane while the fixture passed only `editCell`/`openRow` — the panel it photographs omits a footer the production record sheet always draws. One `addProperty` action line; recorded here as the packet's one scope addition |
 <!-- /ANCHOR:log -->

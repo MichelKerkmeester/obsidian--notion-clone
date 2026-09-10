@@ -3983,3 +3983,57 @@ before/after is the lane's printed 15→0 plus the destination's 15, not an imag
 corpus has no scenario for that popover (the copy packet's filter-empty precedent), named in
 `implementation-summary.md`. ADR-C stays Proposed: the layout choice still renders as rows. Not
 pushed — a fresh verifier lands it.
+
+## 071/014-sheet-polish — the sheets' P3 polish: the icon picker's crowded search row and the side-by-side add pills (2026-09-10)
+
+The last of the seven 071 children, and the packet the audit itself called droppable: both of its
+carried items are P3 consistency gaps, not defects. Both went red-first in the packet's own clauses
+(`tools/live/sheet-grammar.mjs`, a bespoke mounted-surface block — `window.__sheetPolishRows` —
+that measures the shipped markup, not a stand-in): the icon picker's search row shared its row
+with **3** action controls (row: tabs, search, remove, random, settings) and the properties/record
+add affordances spanned **17% / 23% / 22%** of their rows as a side-by-side pill pair; GREEN, the
+same clauses read **0** strays (row: tabs, search) and **100% / 92% / 92%** — the 92s are
+width:100% inside the row's 16px sheet inset, above the clause's 0.9 span floor. The picker's
+three controls read on their own 44px action row beneath the search, every touch box 44px where
+the pills measured 28; the properties pair became two stacked full-width 44px rows sharing the
+hairline vocabulary the property rows already use, phone-scoped, and the record sheet's add
+affordance is a full-width 44px row at the position the pill's left edge already put it.
+
+`009` had already landed, so the add-affordance rebase was standing: the producers' markup offered
+one row per affordance and only the stylesheet governed the widths — neither
+`column-manager-renderer.ts` nor `record-detail-panel.ts` changed. One recorded scope addition:
+`tools/live/render-assertion-harness.ts` grew the record-detail fixture's `addProperty` action
+(one line), because without it the lane's record mount photographs a panel that omits a footer the
+production record sheet always draws.
+
+The `Remove`-into-shared-header promotion — Notion's actual shape — is recorded **Proposed**, not
+done (`014/decision-record.md`): the shared header's leading slot already exists and the hook
+chain reaches it without touching the builder, but the promotion needs the picker-host's mount
+contract to grow the pass-through, the shared surface the `007` requirement pins;
+`mobile-bottom-sheet.ts`, `surface-shell.ts` and `popover-host.ts` are untouched, 0 changed lines,
+and the packet relocated the controls within the picker's own body instead. Everything else the
+audit's §4 lists for this packet stays recorded: the colour picker converged (§3.7), the
+column-width sheet without a Notion reference (§3.13), card grouping deferred to `007` — carried
+forward verbatim in `014/implementation-summary.md` so the next audit does not re-derive them.
+
+The stylesheet went through the css lane: acquired at `4bd3892f7e8a` (009's released hash), edited,
+released at `11a91fe1acd8` with 21 captures named reviewed, 18 of them content-moved, 3 byte-only.
+Screenshots ×2, 480/480: every mover reproduced in both runs, none under the 12-delta one-run-only
+jitter rule, none restored. The mover classes, read from the decoded deltas: the icon picker's own
+four captures (184818-211045px at maxDelta 209-241), the properties pair (219295/237887px at
+196/209), the dependent stacks where the taller 44px band shifts the sheet's column (depth-3 type
+picker, confirm card, property editor at 117-145, the board view's 9px at 121), the record sheet's
+docked-desktop pair (3810px at 128/145 — the newly rendered add footer; the record sheet's own
+phone captures sit below the capture's fold, the framing trait the 067 outstanding row records),
+and the record body desktop lights (6973px at maxDelta 1, both runs).
+
+**The numbers**: tsc 0; build 0; vitest 1606/1606 (158 files); sheet-grammar RED exit 1 (exactly
+the 2 new clauses) → GREEN exit 0; render-assertions 0 (after the harness's fixture change);
+verify-placement 418/420, 2 declared; evidence 16/16 fresh after re-running the 12 stale census
+writers by their own hands; check-lane 0 — the release names all 18 content-moved captures;
+scan-comments 0; scan-failing-values 0; **gate 28/28, exit 0**.
+
+**Open**: the operator's device read (D3) — no agent ticks it. The audit's §5 operator captures
+(C-1..C-6) stay outstanding; none gates this packet's criteria, which are all measured against our
+own numbers. Validated: 014, 071 (first RESULT) and 005, `RESULT: PASSED`; graph metadata
+backfilled each. Not pushed — a fresh verifier lands it.
