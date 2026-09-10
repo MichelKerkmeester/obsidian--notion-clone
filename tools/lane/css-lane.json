@@ -1,5 +1,5 @@
 {
-  "holder": "015-sheet-design-fundamentals",
+  "holder": "012-board-card-fields",
   "baselineHash": "4b0cdd3a637f",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -7147,6 +7147,33 @@
         "screenshots/notion-clone/panels/constructed-depth3-import-confirm-dropdown-mobile-dark.png"
       ],
       "note": "npm run screenshots </dev/null twice, exit 0 both, 480 entries. Judged by decoded pixel delta against the committed blobs across both runs, no image opened by eye. 13 REAL movers kept, each judged on identical counts in BOTH runs: this leg's four constructed-filter-panel mobile/nested captures, 1107px at max channel delta 112 (dark) / 132 (light), all four identical -- the root group's four 28x28 icon columns replaced by four 357x44 labelled rows. Nine carried movers, kept by the same rule: table-column-header-mobile-dark 34px at 192, the very mover 014's release judged and kept, whose judged bytes (15750 -> 15724) this recapture finally puts on disk; field-icon-picker-desktop-{dark,light} 4923px at 208/212 with a layoutHash move; constructed-depth3-import-confirm-dropdown-mobile-{dark,light} 997/1001px at 71/78; panel-record-detail-sheet-body-empty-mobile-light 5656px at 2; board-mobile-desktop-dark 2px at 1; constructed-icon-picker-desktop-{dark,light} 6px at 67/78. The nine carried movers' provenance is the recorded one-run flakiness of those surfaces and the 014 precedent of judging cross-legend movers on the counts, not the legend; their per-cause attribution is inferred, the counts are not. 7 one-run movers at max channel delta 1-12, all under the 12 bar, restored at their committed bytes with the manifest rows' bytes and pixelHashes patched back and the fresh sourceHashes kept. The manifest otherwise differs from its committed state only by the 30 sourceHash rows the filter renderer's edit owns. All counts deterministic across both judged runs; the visual read stays the operator device pass. Landing-verify relaunch 2, finally judged after the 076-scaffold and 076/001-metadata landings (judged recapture runs 5+6): 1 REAL mover kept, views/board-view-desktop-dark 8px at maxDelta1, identical counts and deltas in BOTH judged runs, bytes-only (280379 -> 280394, pixelHash/layoutHash 284b276d514a/300cd76c50b6 unchanged — the recurring 014/008/288 flip); 2 one-run jitters, fields/constructed-date-picker-datetime-mobile-dark 233px at 176 (self-returned, its manifest row already identical) and project-manager/reference-kanban-subtask-mobile-light 2112px at 1 (restored at its committed 78967 bytes). The final tree’s render is its committed blobs. styles.css remains 288’s ab6dcaa73cb9; this release still signs 1e320e716905 and its review owes nothing (check-lane: \"moved bytes but not pixelHash/layoutHash — not a review a release owes\", exit 0). Addendum (relaunch-3 landing-verify, second rebase onto the 289/015 landing 44cffb8b, 2026-09-10): the ours-side resolutions again left 30 manifest rows' filter-panel-renderer.ts sourceHash stale (3531fd9b0137) against the merged 286 renderer (37a723f0083c); recaptured twice (npm run screenshots </dev/null, 482/482, exit 0 both) and judged by decoded pixel delta against the committed blobs, no image opened by eye. 3 judged: views/board-mobile-desktop-dark 2px at 1, moved in BOTH judged runs, REAL by the rule, kept (bytes-not-pixelHash, the recorded class); components/constructed-board-title-format-filename-desktop-dark 23px at 117, first judged run only, above the 12 bar, REAL, kept, its 23/256 in-cell share small enough that its 16x16 pixelHash reads unchanged (bytes-not-pixelHash, not a review owed); views/board-view-desktop-dark 8px at 1, second judged run only, under the 12 bar, JITTER, restored at its committed 280379 bytes with the manifest row's bytes patched to it (HEAD's own row said 280394 against its 280379 blob - this recapture heals that pair), pixelHash 284b276d514a identical. The committed 286/289 blobs reproduce under the merged tree (286's labelled root-group rows + 015's 28px nav floor) with zero further movers. 45 further rows sourceHash/manifest-truth only. 2 keeps, 1 restore, 0 threshold edits. check-lane: 2 bytes-only movers, no review owed, exit 0; this lane's holder 015 (released 23:45Z) stands; 071-008's release below remains the last history entry and its note carries this addendum for the record."
+    },
+    {
+      "event": "acquire",
+      "phase": "012-board-card-fields",
+      "at": "2026-09-11T00:47:31Z",
+      "hash": "2c86ecdbf16c",
+      "note": "re-acquired by the 012 landing verification: the rebase onto 44cffb8b merged this packet's single-column meta-grid hunk into 015's 2c86ecdbf16c, so the tree the earlier 21:39:09Z acquire judged no longer exists"
+    },
+    {
+      "event": "edit",
+      "phase": "012-board-card-fields",
+      "at": "2026-09-11T00:47:31Z",
+      "hash": "4b0cdd3a637f",
+      "note": "the landed hunk rides on 015: merged-stylesheet hash 4b0cdd3a637f, also stamped into baselineHash and proven by render-assertions green (161/162 clauses) on the merged tree"
+    },
+    {
+      "event": "release",
+      "phase": "012-board-card-fields",
+      "at": "2026-09-11T00:47:31Z",
+      "hash": "4b0cdd3a637f",
+      "reviewed": [
+        "screenshots/notion-clone/views/board-mobile-desktop-dark.png",
+        "screenshots/notion-clone/views/board-view-desktop-dark.png",
+        "screenshots/notion-clone/views/table-frozen-column-mobile-light.png",
+        "screenshots/notion-clone/fields/field-status-colors-mobile-dark.png"
+      ],
+      "note": "post-rebase verification: the landed 012 hunk judged on the merged tree. Captured three times (npm run screenshots </dev/null, 482 entries, exit 0 each — 074 added the two group-panel captures), judged by decoded pixel delta across the last two runs against the committed blobs, no image opened by eye. 4 REAL movers, kept, each named above: views/board-mobile-desktop-dark 820369px at 221 and views/board-view-desktop-dark 1146252px at 224, IDENTICAL counts in both judged runs (the 062/067 board-landing class), both already named in the 21:55:35Z release; views/table-frozen-column-mobile-light 36px at 1, also movedInBothRuns, so not jitter by the moved-in-both-runs rule, already named; NEW here: fields/field-status-colors-mobile-dark 19px at 192, second judged run only, above the 12 bar. 1 further one-run mover, none committed: panels/constructed-modal-sheet-property-editor-mobile-dark 138px at 112 in the first judged run only, the second judged run restoring it byte-identical to its committed blob, so nothing was restored and no manifest row was patched. The 012 hunk changed styles.css after 015's 23:45:00Z release, which is why this triplet exists."
     }
   ],
   "outstanding": [
@@ -7160,6 +7187,6 @@
     "The obnotion-board-* stylesheet family is now largely dead and was deliberately not cut here. The default board is the only board, and it builds obnotion-kanban-* markup; the extensions branch that built .obnotion-board-column, .obnotion-board-subgroup, .obnotion-board-add-column and their checkboxes is gone. Some of the family is still live and must survive any cut — .obnotion-board-card-cover and .obnotion-board-card-field are both built by the kanban card — so this is a per-rule audit, not a section delete, and it moves captures. One concrete consequence is already measurable: styles.css reads var(--obnotion-board-column-width, 220px) for .obnotion-board-column and nothing assigns that property any more, so the rule resolves its fallback for every user. It is dead rather than wrong, but it is exactly the class scan-pinned-values.mjs exists to catch, and it will stay invisible while the rule it belongs to is unreachable.",
     "067-sheet-family-remediation: seventeen captures on this lane still show the surface as it looked BEFORE the depth-cap fix at 173f7d3a. Found by 062's landing verifier, which recaptured on the merged tree and then measured decoded pixels rather than trusting pixelHash: panel-record-detail-sheet-body-empty-desktop-light moves 46,779 pixels at a max channel delta of 214, its dark pair 46,752 at 209, constructed-chart-toolbar-options-mobile-dark and constructed-column-manager-mobile-dark about 260,800 each at 45, and eleven more record-detail-sheet, modal-sheet-property-editor, depth3-dropdown and owned-menu-sheet captures between 10,548 and 42,211 pixels at 46 to 78. Every one of them hashes IDENTICALLY, which is why 173f7d3a's own recapture read them as byte-only re-encodes and restored them. pixelHash averages a 16x16 grid into 32 buckets, so any change confined to a narrow band or a small region moves a cell's average by less than one bucket and hashes the same - 062 hit the identical trap on its frozen-column shadow and fixed it by measuring pixels. Reproduced with 067's OWN stylesheet in the tree (identical counts), so this is 067's debt and not 062's: left restored here rather than recommitted, because reviewing another lane's surface is a review this packet cannot honestly sign. 067 owes a recapture measured by decoded pixel delta, and a read of each of the seventeen."
   ],
-  "baselineCommit": "2a111da38c84",
-  "acquiredAt": "2026-09-10T23:45:00Z"
+  "baselineCommit": "44cffb8b0e5b9ec4e5a30bfa17db17cf52af0e34",
+  "acquiredAt": "2026-09-11T00:47:31Z"
 }

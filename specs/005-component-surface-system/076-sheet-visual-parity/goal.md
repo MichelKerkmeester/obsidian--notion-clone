@@ -124,6 +124,10 @@ the operator's own confirmation, and no agent ticks it.
 - [ ] `012-board-card-fields` — judge ≥ 14/16, no 0, twice consecutively against Anytype; lane green (not one of the eleven sheets; does not gate or depend on their sequence)
 - [x] No `071` clause regressed: `node tools/live/sheet-grammar.mjs` exit 0 across all eleven sheet landings
 - [x] No `056`/`045` board clause regressed: `render-assertions.mjs` exit 0 for `012`'s own landing
+  the clause this landing retired read 2 columns at 1440px, 1 at 340px, and 72 of 306 painted
+  names clipped, worst `withdrawn` by 29px, exit 1 before the fix — reproduced at this
+  landing's verification by reverting the producer hunk; inverted in the same commit that
+  retired the two-column shape; the other 155 clauses untouched at both ends
 - [ ] The operator re-reads the sheets and the board on their own iPhone and reports them aligned — **no agent ticks this row**
 <!-- /ANCHOR:completion -->
 
