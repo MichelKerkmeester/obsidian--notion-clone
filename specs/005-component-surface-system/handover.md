@@ -4177,3 +4177,43 @@ section; `071/goal.md` gained a log row and a `015` binding entry; `roadmap.md` 
 Validated: `015`, `071` parent and `005` track, `RESULT: PASSED` after each touched folder's
 scoped graph-metadata backfill and a full re-validation. Not pushed at the time this entry was
 written — see the commit trailer for the landing SHA.
+
+## 071/011-record-sheet-header-and-icons — the design-review F-3 follow-up: the row type icon's 4px gap (2026-09-10, this leg)
+
+The Sonnet design review's one `011` finding (F-3, P2 — the per-row type icon rendered glued to
+its label, computed text-to-icon gap 0px) closed on this worktree, RED-first. The row builder kept
+its icon-after-label order; the gap moved to the edge that owes it: `margin-right: 4px` →
+`margin-left: 4px` on `.obnotion-record-detail-field-type-icon` in `styles.css` — the icon trails
+the label's text, so the leading edge is the one that owes the 4px rhythm gap, and the old
+trailing margin was spent inside the label's fixed 96px box where it separated nothing. Fix (b)
+of the task (re-inserting the icon before the label's text, the Properties sheet's order) was
+considered and not taken: the record sheet's icon-after-label reading is its own landed order.
+
+RED: a 4th clause in `src/views/record-detail-panel.test.ts` (this suite reads shipped source, so
+the clause pins the icon's declarations through the suite's own `declarationsFor` helper: the
+icon must carry a non-zero `margin-left`, the side that faces the text) — 1 failed | 3 passed at
+the unmodified tree. GREEN: 4/4. `006`'s clauses unchanged: `node tools/live/sheet-grammar.mjs`
+exit 0 (all eight grammar columns, every close target 44x44) and
+`node tools/live/render-assertions.mjs` exit 0; vitest 1614/1614, tsc 0, build 0.
+
+Battery: `npm run screenshots </dev/null` twice, 480/480 exit 0 both, both themes, judged by
+decoded pixel delta against the committed blobs, no image opened: 20 REAL movers kept at
+IDENTICAL changed-pixel counts and max deltas in both runs — the twelve record-detail
+detail/docked/peek captures whose label icons sit 4px further right of their labels (the gap this
+fix adds), 7 deterministic outsiders (table-column-header 34px@192, field/constructed icon-picker
+x4, constructed-depth3-column-submenu x2, views/board-mobile-desktop-dark 2px@1) and
+panel-record-detail-sheet-body-empty-desktop-light 6973px@1, first run only, second run
+reproducing the committed blob; 1 jitter (project-manager/reference-kanban-mobile-light
+1800px@1, second run only) restored with its manifest row re-stamped. The css-lane took the
+acquire/edit/release triplet: holder `011-record-sheet-header-and-icons`, baselineHash
+`1e320e716905` (sha256 of the edited `styles.css`, first 12), every mover named in the release's
+`reviewed`; `node tools/lane/check-lane.mjs` exit 0. Evidence 16/16 fresh after the 12 writers
+the freshness check named were re-run by their own CLIs; placement 418/420 (2 declared, exit 0);
+naming scans 0; the full gate `npm run gate`: 28 green, 0 red, exit 0.
+
+Docs: the three follow-up tasks ticked with their numbers in `011`'s `tasks.md`, a goal.md log row
+added (the goal fraction unchanged at 6/7 — the device read, D3, stays the standing open
+criterion), a trailing note on the `071` row in §5.A. Validated: `011`, the `071` parent (first
+`RESULT`) and `005` track, `RESULT: PASSED` after each touched folder's scoped graph-metadata
+backfill. Not pushed at the time this entry was written — see the commit trailer for the landing
+SHA.

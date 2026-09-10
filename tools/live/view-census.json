@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-10T03:37:43.150Z",
+  "measuredAt": "2026-09-10T06:28:05.001Z",
   "inputs": {
-    "styles.css": "aef17a2f6e8a",
+    "styles.css": "1e320e716905",
     "tools/live/view-census.mjs": "475c0e3f6fe3",
     "tools/screenshots/scenarios.mjs": "8e4c7409a92b"
   },
@@ -1782,7 +1782,7 @@
       "tag": "button",
       "cls": "obnotion-icon-picker-item.obnotion-record-icon-color-blue",
       "parentCls": "obnotion-icon-picker-grid",
-      "by": 8.5,
+      "by": 3,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -1793,7 +1793,7 @@
       "tag": "button",
       "cls": "obnotion-icon-picker-item.obnotion-record-icon-color-blue",
       "parentCls": "obnotion-icon-picker-grid",
-      "by": 8.5,
+      "by": 3,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -1804,7 +1804,7 @@
       "tag": "button",
       "cls": "obnotion-icon-picker-item.obnotion-record-icon-color-blue",
       "parentCls": "obnotion-icon-picker-grid",
-      "by": 8.5,
+      "by": 3,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -3737,7 +3737,7 @@
       "tag": "button",
       "cls": "obnotion-icon-picker-item.obnotion-record-icon-color-blue",
       "parentCls": "obnotion-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -3748,7 +3748,7 @@
       "tag": "button",
       "cls": "obnotion-icon-picker-item.obnotion-record-icon-color-blue",
       "parentCls": "obnotion-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -3759,7 +3759,7 @@
       "tag": "button",
       "cls": "obnotion-icon-picker-item.obnotion-record-icon-color-blue",
       "parentCls": "obnotion-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -4636,7 +4636,7 @@
       "tag": "button",
       "cls": "obnotion-icon-picker-item.obnotion-record-icon-color-blue",
       "parentCls": "obnotion-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -4647,7 +4647,7 @@
       "tag": "button",
       "cls": "obnotion-icon-picker-item.obnotion-record-icon-color-blue",
       "parentCls": "obnotion-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -4658,7 +4658,7 @@
       "tag": "button",
       "cls": "obnotion-icon-picker-item.obnotion-record-icon-color-blue",
       "parentCls": "obnotion-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -5161,7 +5161,7 @@
       "tag": "button",
       "cls": "obnotion-icon-picker-item.obnotion-record-icon-color-blue",
       "parentCls": "obnotion-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -5172,7 +5172,7 @@
       "tag": "button",
       "cls": "obnotion-icon-picker-item.obnotion-record-icon-color-blue",
       "parentCls": "obnotion-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },
@@ -5183,7 +5183,7 @@
       "tag": "button",
       "cls": "obnotion-icon-picker-item.obnotion-record-icon-color-blue",
       "parentCls": "obnotion-icon-picker-grid",
-      "by": 12.5,
+      "by": 7,
       "scrolls": false,
       "pastHeader": 0
     },

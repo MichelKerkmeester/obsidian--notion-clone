@@ -71,26 +71,33 @@ contextType: "implementation"
 ### Design-review follow-ups (2026-09-10)
 
 Opened by `../sheet-design-review.md` §4 F-3, a `sk-design-fundamentals` pass distinct from this
-child's own Notion-parity work. Not yet implemented.
+child's own Notion-parity work. F-3 implemented 2026-09-10 (this worktree); the review's other
+routed findings stay with their own packets.
 
-- [ ] T010 RED first: add a unit assertion to `record-detail-panel.test.ts` (or
-  `card-field-renderer.test.ts` if the icon element is easier to reach there) that measures the
-  rendered gap between a record property label's text node and its trailing type-icon span —
-  either the icon's `getBoundingClientRect().left` minus the text node's own measured right edge,
-  or simpler, that the icon element carries a non-zero `margin-left` (today it has
-  `margin-right: 4px` and no `margin-left`, `styles.css:11329-11344`). Run against the unmodified
-  tree and record the failure: computed gap is 0px (`src/views/record-detail-panel.test.ts`)
-- [ ] T011 Fix at the source: either (a) swap `margin-right: 4px` to `margin-left: 4px` on
-  `.obnotion-record-detail-field-label .obnotion-record-detail-field-type-icon`
-  (`styles.css:11329-11344`) if the icon-after-label order is intentional, or (b) change
-  `renderRecordField` (`record-detail-panel.ts:589`) to insert the icon **before** the label's text
-  node — matching the Properties sheet's own icon-then-label order
-  (`column-manager-renderer.ts:401`) — if leading placement is preferred for cross-sheet
-  consistency. Either fix is a one-line change; pick (a) unless the operator prefers the
-  cross-sheet match (`src/views/record-detail-panel.ts`, `styles.css`)
-- [ ] T012 Verify GREEN: T010's assertion passes; rerun `011`'s own row-grammar clauses (21/21
-  rows 44.0px, 20/20 hairlines, 16.0px inset, 21/21 type icons present) unchanged — the fix must
-  not move the row's pitch or the value's left edge, only the gap between label text and icon.
-  Recapture `constructed-record-detail-mobile-{light,dark}.png` and confirm by eye that
-  `month`/`sort_key`/`Priority`/etc. no longer read glued to their type glyphs
-  (`tools/live/sheet-grammar.mjs`, `screenshots/`)
+- [x] T010 DONE 2026-09-10 — Unit assertion added to `record-detail-panel.test.ts` (this suite
+  reads shipped source, so the gap clause pins the icon's declarations through the suite's own
+  `declarationsFor` helper: the icon element must carry a non-zero `margin-left`, the side that
+  faces the label's text). Run against the unmodified tree: 1 failed | 3 passed — the new clause
+  failed, the icon carried `margin-right: 4px` and no `margin-left`, computed text-to-icon gap
+  0px (`src/views/record-detail-panel.test.ts`)
+- [x] T011 DONE 2026-09-10 — Fix (a): `margin-right: 4px` → `margin-left: 4px` on
+  `.obnotion-record-detail-field-type-icon` (`styles.css`), the icon-after-label order kept as
+  intentional — the renderLabelTypeIcon callback appends the icon after the label's text, so the
+  leading (left) edge is the one that owes the 4px rhythm gap, and the trailing margin was spent
+  inside the label's fixed 96px box where it separates nothing. Fix (b) — re-inserting the icon
+  before the label's text, the Properties sheet's own order — was considered and not taken: (a) is
+  the one-line change and the record sheet's icon-after-label reading is its own landed order, not
+  a defect (`src/views/record-detail-panel.ts`, `styles.css`)
+- [x] T012 DONE 2026-09-10 — GREEN from the final state: T010's clause 4/4; `011`'s row-grammar
+  clauses unchanged (sheet-grammar exit 0 — all eight grammar columns, every close target 44x44;
+  render-assertions exit 0); the fix moved only the gap. Recaptured ×2 480/480 exit 0 both, both
+  themes, judged by decoded pixel delta against the committed blobs, no image opened: 20 two-run
+  movers kept at IDENTICAL counts and max deltas in both runs — the twelve record-detail
+  detail/docked/peek captures whose label icons sit 4px further right of their label text (the
+  gap this fix adds), 7 further movers outside the record sheet reproducing deterministically
+  (table-column-header 34px@192, icon-picker x4, depth3-column-submenu x2, board-mobile-desktop-dark
+  2px@1), and panel-record-detail-sheet-body-empty-desktop-light 6973px@1 moved in the first run
+  only, its second run reproducing the committed blob; 1 jitter restored (project-manager/
+  reference-kanban-mobile-light 1800px@1, second run only, manifest row re-stamped). The judgement
+  is the 011 release entry in `tools/lane/css-lane.json` (`tools/live/sheet-grammar.mjs`,
+  `screenshots/`)

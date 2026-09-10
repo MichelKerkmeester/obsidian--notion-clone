@@ -11333,7 +11333,7 @@ body.obnotion-bottom-dock-taken .obnotion-container .obnotion-cell-selection-pil
   justify-content: center;
   width: 14px;
   height: 14px;
-  margin-right: 4px;
+  margin-left: 4px;
   flex: 0 0 14px;
   /* Middle, not the baseline: an inline-flex box's baseline is its bottom margin edge, and 14px
      above the text's own ascent grew the desktop panel's row line by exactly 1px — the 010

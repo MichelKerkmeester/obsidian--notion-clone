@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-10T04:13:51.450Z",
+  "measuredAt": "2026-09-10T06:32:02.171Z",
   "inputs": {
     "tools/live/board-touch-drag.mjs": "669118e06aaf",
     "src/views/board-renderer.ts": "59f6618fd206",

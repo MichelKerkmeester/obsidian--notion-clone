@@ -73,4 +73,16 @@ describe("record sheet header contract, as written", () => {
     );
     expect(sheetClose).toMatch(/display:\s*inline-flex/);
   });
+
+  it("keeps a 4px rhythm gap between a property label's text and its trailing type icon", () => {
+    // The row's type icon renders after the label's text, so the only thing separating the two
+    // is the icon's own left margin. A zero there reads glued — the label runs into its glyph —
+    // and because the icon sits inside the label's fixed 96px box, no row-geometry clause
+    // catches it. The gap must come from margin-left (the side that faces the text) so the
+    // icon's right edge, and with it the value's left edge, stay where the frozen row wants them.
+    const icon = declarationsFor(
+      ".obnotion-container .obnotion-record-detail-field-label .obnotion-record-detail-field-type-icon"
+    );
+    expect(icon).toMatch(/margin-left:\s*4px/);
+  });
 });
