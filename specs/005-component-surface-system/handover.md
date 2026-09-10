@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T00:19:37Z"
-    last_updated_by: "274-filter-sheet-rows-verify"
-    recent_action: "Landing-verified 071/008 filter-sheet-row-model; 64af87ee+6d5a0d07 on main"
-    next_safe_action: "Execute 071/009, then 011-014; 007 awaits T001 capture"
+    last_updated_at: "2026-09-10T00:50:59Z"
+    last_updated_by: "275-properties-rows-verify"
+    recent_action: "Landing-verified 071/009 properties sheet row; 4f345718+b32b2529 on main"
+    next_safe_action: "Execute 071/011, then 012-014; 007 awaits T001 capture"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.35 (goal-prompt.md ORDER OF WORK §1)"
     key_files:
@@ -425,6 +425,41 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-10 ~02:40, `071/009-properties-sheet-row-model` LANDING-VERIFIED — landed on `origin/main` as `4f345718`+`b32b2529`, worktree `275-properties-sheet-rows`
+
+**Landed SHA `b32b2529` on `origin/main`** (leg commit `a50554e3` replayed three times as the
+concurrent 071/008 leg and its verification kept landing: onto `48802783` as `c8f2ec30`, onto
+`6d5a0d07` as `6953f0d8`, onto `f64c6398` as `4f345718`; this verifier's reconciliation commits
+`f980926a` → `25c7d9dd` → `b32b2529`, two non-fast-forward push rejections, three rounds, all
+pushed; `git log -1 origin/main` read back). **What this verifier confirmed** on the final merged
+tree: the packet's T008 mutation — the `nameText: col.label` hunk in `column-manager-renderer.ts`
+reverted — took `sheet-grammar.mjs` to exit 1 with exactly the key-free clause red (**0/16**,
+controls 3×16 and the partition 2-header clauses still PASS) → restored, exit 0 (**16/16**); the
+row-contract unit reverted the same guarded line → `column-manager-renderer.test.ts` 1 failed |
+6 passed → restored 7/7, the leg's own red-then-green numbers. The 071/002–007 grammar clauses
+held green in the same runs (34px row heights, 44–52px settings pitch, 16px insets, 0 native
+selects, 067 divider hairlines, 007's 2/2 cards). Captures 480×2 per round, judged by decoded
+pixel delta over both runs: round 1, 5 REAL movers (all reproduced in both runs, 0 jitter, none
+restored); round 2, 3 REAL movers; round 3, 1 — `board-mobile-desktop-dark` 2px@Δ1, both runs,
+byte-only by the comparator (not a review the release owes). No jitter anywhere in any round.
+css-lane: styles.css moved twice by the rebases (904e4bff23b0, then 4bd3892f7e8a after 008's
+rules) → a convergence acquire/edit/release triplet signed at each, history 470 → 482 events,
+holder `009-properties-sheet-row-model`, `baselineHash` = `shasum(styles.css)` = `4bd3892f7e8a`
+(append-only merges, verified common prefixes 460 then 466); no selector edited, so the round-2/3
+entries are convergence, recorded as such. Evidence: the 8 census artefacts went STALE on each
+stylesheet generation → all 8 writers re-run exit 0 per round → 16/16 fresh on the final tree.
+Gate: run 1 exited 1 on the evidence lane alone (8/16 stale), every later run **28 green, 0 red,
+exit 0**, the final from the fully amended tree. `validate --strict`: 009, 071's FIRST RESULT and
+005 — **PASSED ×3** on the final state; 005 failed pre-backfill each round
+(SOURCE_FINGERPRINT_MISMATCH — its metadata rode stale rebases while its handover/roadmap gained
+008's sections; expected, repaired by the scoped backfill each time). `scan-comments` 0;
+`scan-failing-values` 0 (147 bare vs baseline 148 — ratchet holds). vitest 1606/1606 (the leg's
+1591 + 010's 12 + 008's 3); tsc 0; build 0. `operator-checklist.md` regenerated (identical, 181
+rows / 67 phases). Docs: goal 7/8 = §5.A's 88%—7/8; AC-008, the operator's device read (D3),
+stays the operator's, unticked; the leg's declared 6th-file deviation (the storybook
+`panel-column-manager` fixture) replayed green — `replay` 28/28 and `placement` 418/420 (2
+declared) on every round, the fixture did not go stale again.
 
 ### 2026-09-10 ~00:19, `071/008-filter-sheet-row-model` LANDING-VERIFIED — landed on `origin/main` as `64af87ee`+`6d5a0d07`, worktree `274-filter-sheet-rows`
 
