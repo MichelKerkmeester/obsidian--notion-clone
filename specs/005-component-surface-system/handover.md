@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-10T22:10:00Z"
-    last_updated_by: "290-sheet-parity-program"
-    recent_action: "Scaffolded 076: eleven per-sheet children under an image-judge gate"
+    last_updated_at: "2026-09-10T21:50:00Z"
+    last_updated_by: "294-loop-graph-docs"
+    recent_action: "Documented 076's loop graph: D6, plan.md §6A, 11 verification.md skeletons, roadmap decision"
     next_safe_action: "Execute 076/001-settings-sheet-visual-parity, step DEFINE (T001-T004)"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
@@ -510,6 +510,22 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-10 ~21:50, 076's loop graph DOCUMENTED — docs-only, worktree `294-loop-graph-docs`
+
+**Made 076's six-step loop an explicit graph, per the operator's ~21:50 ruling** ("Try to mimic a
+graph loop with our phased specs and goal setup"): `076/decision-record.md` gained **D6** — the
+node table (START, PLAN, GATE, CREATE, LAND, JUDGE, REMEDIATE, DONE, ESCALATE), the edge table, the
+verdict-file and state-record JSON/JSONL schemas, the 4-iteration guard and the GATE human
+checkpoint, plus a mermaid `stateDiagram-v2`. `076/plan.md` gained §6A "Running a child through the
+loop" (the two driver invocations, where state/logs live, GATE and ESCALATE behaviour, and that the
+operator's own phone screenshot closes a child, never an agent). `076/goal.md` §3's completion table
+is reframed as the outer graph's DONE WHEN. Each of the eleven children got a one-line pointer to
+§6A in `plan.md` and a new `verification.md` skeleton (iteration table: iteration, sha, light/dark
+capture, eight rubric scores, total, zeros, verdict, findings) — none pre-existed. `roadmap.md` §6A
+gained one decision row quoting the ruling verbatim. Scoped graph-metadata backfilled per touched
+child, the 076 parent and the 005 program root; `validate.sh --strict` **RESULT: PASSED** on all
+three levels. No code changed; no gate beyond spec-doc validation applies.
 
 ### 2026-09-10 ~06:45, closing goal refresh — worktree `282-goal-refresh-0038`, reconciled against 0.0.38
 

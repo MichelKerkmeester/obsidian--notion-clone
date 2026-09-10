@@ -207,7 +207,7 @@
     ],
     "causal_summary": "Notion's New property sheet is a bordered name field plus an inline type list in the same sheet, not a name field and a chevron to a separate picker; and its delete row is not uniformly red",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-10T19:59:19.454Z",
+    "last_save_at": "2026-09-10T20:16:57.852Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,11 +217,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:4d5d2e286dd5d27fb7d42b5e41ce157b89501c1c213c086cf52c373d3c7bd04e",
+    "source_fingerprint": "sha256:f59497a583bb17419c0937539250e8d78be33d3380f248a5cf00364fe2bf1882",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "216814a5dc4d290ab976be7158eec1cceb7f26fb198cd70e7f027231615c3cf0",
-      "plan.md": "a3d6f08353bc69616263f3ef2e5b21fa7b140f8dcf6c034c8bc23529eef72869",
+      "plan.md": "56905cd97b5ee6bde67f364eaf375f2bf198095d8cdcd4a04b05d60e78bcd843",
       "tasks.md": "084a04facfe6d53058c1eaa575fe283c0cffe722190c84850d09163c71a95b86"
     },
     "last_active_at": null

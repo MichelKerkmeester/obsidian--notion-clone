@@ -204,7 +204,7 @@
     ],
     "causal_summary": "The Settings sheet is one large white card wrapped around a form of bordered text inputs and helper paragraphs; Notion's equivalent is a table of contents built from several inset cards of navigation rows",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-10T19:59:18.965Z",
+    "last_save_at": "2026-09-10T20:16:57.340Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,11 +214,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:6c066344ab391472dac6ceb3effd8a4f9535b7120a004d2de786dc1abf1f5682",
+    "source_fingerprint": "sha256:b21dca59db124a2ef091cefe5d2374d97d4bb0853bb047ef42634b0ac13361d0",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "81619d9b86a7b464ea9911503c2201ae73bc020c9a69fba9d4c3132141ce90ea",
-      "plan.md": "8a210fe7dfde879f8e0e2a7dd220f93c7d3be3294d4486e51135bd2b5572d798",
+      "plan.md": "9c31cca782a45c98eea2bd2164fdaba61d33c5f16df7edbf5073da99f6dc4479",
       "tasks.md": "eb0b233f3e2d0fa683d97b99a400993dc5e03c41c6f045e5ead7a8ab670c8bc6"
     },
     "last_active_at": null

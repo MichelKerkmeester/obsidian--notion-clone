@@ -151,6 +151,64 @@ Sequential, per D4. Each child's own `tasks.md` owns its six step groups and the
 
 ---
 
+<!-- ANCHOR:loop-graph -->
+## 6A. RUNNING A CHILD THROUGH THE LOOP
+
+`decision-record.md` **D6** names the graph itself — the node table, the edge table, the two
+JSON/JSONL schemas, the guard and the human gate. This section carries only the operational half:
+how a child is actually driven through it.
+
+### The two driver invocations
+
+```bash
+# One child's inner graph (DEFINE+PLAN -> GATE -> CREATE -> LAND -> JUDGE -> DONE|ESCALATE)
+loop-driver.sh <child-folder-name e.g. 001-settings-sheet-visual-parity> [max_iters=4]
+
+# The outer walk over all eleven children, launching loop-driver.sh per child
+program-loop.sh [concurrency=2] [max_iters_per_child=4]
+```
+
+`program-loop.sh` is normally the one invoked directly; it re-reads the children from
+`origin/main`'s tree on every pass and launches `loop-driver.sh` for any child with no state yet,
+under the concurrency cap, until every child reports `DONE:pass` or the walk is stopped.
+
+### Where state and logs live
+
+- `$S/loop/<child>.jsonl` — the child's append-only state log (D6's child-log schema)
+- `$S/loop/<child>.log` — the same transitions in a human-readable line per entry
+- `$S/loop/<child>/<node>-<iter>.json` — each node's verdict file (D6's verdict-file schema)
+- `$S/loop/<child>/<node>-<iter>.prompt` and `.log` — the exact prompt and raw output for that node's agent run
+- `$S/loop/076.jsonl` — the outer graph's append-only event log (D6's parent-log schema)
+
+`$S` is the scratchpad the orchestrator runs from, not this repository; nothing under `$S/loop/`
+is a spec-doc artefact and none of it is committed.
+
+### What happens at GATE
+
+PLAN's pass is not enough to start CREATE. The orchestrator posts the child's DEFINE table to the
+operator in chat and waits; the operator may correct the plan before approving it. Only once the
+orchestrator drops `$S/loop/<child>/plan-approved` does the driver's GATE node resolve to `pass` and
+CREATE begin. A child sitting at `GATE:waiting` is not stalled — it is waiting on that reply.
+
+### What happens at ESCALATE
+
+Any node reporting `blocked`, or the iteration guard (default 4) being exceeded without two
+consecutive JUDGE passes, moves the child to `ESCALATE` and stops its own driver. The outer
+`program-loop.sh` does not stop for it: an escalated child is skipped on every subsequent pass while
+the other children keep advancing, and the operator decides the escalated child's next step outside
+the graph.
+
+### What closes a child
+
+DONE is the graph's own terminal state — two consecutive JUDGE passes on an unchanged tree — and it
+is necessary but not sufficient. Per D1 and D5, **the operator's own phone screenshot is what
+actually closes a child**, never an agent: DONE hands the child to that final, out-of-graph read, it
+does not substitute for it. `goal.md` §3's per-child operator row stays unticked until the operator
+reports it aligned.
+<!-- /ANCHOR:loop-graph -->
+
+---
+
 <!-- ANCHOR:rollback -->
 ## 7. ROLLBACK PLAN
 

@@ -208,7 +208,7 @@
     ],
     "causal_summary": "Four picker sheets against their references, including the icon picker's crowded search row that 071/014 recorded and the date picker's CSS-specificity leak that the design review found",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-10T19:59:19.698Z",
+    "last_save_at": "2026-09-10T20:16:58.116Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,11 +218,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:69aaded89d065a44b21d712de20109ad36b93fe2517029cbebb480c8d9e051a7",
+    "source_fingerprint": "sha256:d5ca067f7fc3cfb6130fdbb9521d3d8f60881a988ab322374f9d8e16cdb81a1f",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "82bee5fcdbf634fa13f8fb64069cf5802da00fa66e4d3aaa4355d5d867a2e549",
-      "plan.md": "05a58807b98b794c97034818c0489557ce12c11b1c9aa3cb0b7676831bb934a2",
+      "plan.md": "88645d7a3590567e9a11509927db495c364eb92ccdc94a32dcb1e51feea96380",
       "tasks.md": "f1903cf49218c9509683adeddc54c86b18926a3299dd09689140c9ecc527b804"
     },
     "last_active_at": null

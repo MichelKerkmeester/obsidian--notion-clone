@@ -207,7 +207,7 @@
     ],
     "causal_summary": "The row menu, the column/cell menu and the destructive confirm card against Notion's menus and delete confirms, including the action order 071/013 already ruled on",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-10T19:59:19.614Z",
+    "last_save_at": "2026-09-10T20:16:58.028Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,11 +217,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:11871caba16ab73b3d37ef4cc637086b125ef20965afa20013d2ca9a97f46dc6",
+    "source_fingerprint": "sha256:087db375bef6fdd51d9171d42cd7a6189a14726b65ce63506c5b8c77cea1e335",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "4ab7dea5767de57ca3ed64a2a10a0c22844f9a6bdcfbcce3aff7efe08cc9b3f9",
-      "plan.md": "9738474fe7d671c6242aeb77e8c5e631e1743b3dd023400b2b2420ee5c97598d",
+      "plan.md": "04520764ead999b7a0743d673d4a821be408c61467135944531db7a9da967f8c",
       "tasks.md": "6d9b78d61a2bac1e8d1560f045afebc18ab9b417926e99ca3267c893adc5aace"
     },
     "last_active_at": null

@@ -163,3 +163,114 @@ and they share the row vocabulary `001` establishes. Two children redesigning ro
 each pass alone and conflict merged, which is the failure `071/012`'s own T009 merge check was
 written to catch after the fact. Sequencing prevents it instead.
 <!-- /ANCHOR:d4 -->
+
+---
+
+<!-- ANCHOR:d6 -->
+## D6: The loop graph — an explicit state machine drives every child through the six-step loop.
+
+**Decision.** The operator, 2026-09-10 ~21:50, verbatim: *"Try to mimic a graph loop with our
+phased specs and goal setup."* Each child runs as a graph of named nodes with a verdict file and an
+append-only state log, rather than as free-running prose instructions. Two shell drivers implement
+it: `loop-driver.sh <child> [max_iters=4]` runs one child's inner graph; `program-loop.sh
+[concurrency=2] [max_iters=4]` walks the eleven children in the outer graph, launching a
+`loop-driver.sh` per child under a concurrency cap. This decision records the graph so the spec IS
+the graph — a later agent reads this table, not the shell scripts, to know what runs next.
+
+### Nodes (inner graph, one per child)
+
+| Node | Agent | Input | Output artefact | Verdict |
+|---|---|---|---|---|
+| **START** | none (driver bootstrap) | Child folder name, `max_iters` | A `START` state-log line | Always `ok` |
+| **PLAN** (DEFINE+PLAN) | A fresh planner — Opus 5 xhigh for `001`, Sonnet 5 xhigh for every other child | The plan-sheet prompt template, the child's reference images | `spec.md` §13's DEFINE table, `plan.md` §3's PLAN section, on a commit | `PLAN-<iter>.json` |
+| **GATE** | The operator (human) | The DEFINE table, posted to the operator by the orchestrator | A `plan-approved` marker file at `$L/<child>/plan-approved` | `waiting` until the marker exists, then `pass` |
+| **CREATE** | GLM 5.3 flash, write-first (DeepSeek v4.1 flash when available) | `tasks.md`, executed in order | Commits: each lane clause RED with its number, then the producer, then GREEN with its number | `CREATE-<iter>.json` |
+| **LAND** | The GLM lander (lander template) | The worktree, a claims string naming the iteration's commits | Rebase onto `origin/main`, a mutation check, light+dark captures by pixel delta, `validate.sh`, a push | `LAND-<iter>.json` |
+| **JUDGE** | A Sonnet image judge | Our light+dark captures vs. the named reference, the eight-row rubric in `spec.md` §5 | A new iteration section in `verification.md` (score table + verdict); on fail, also `findings-<iter>.md` | `JUDGE-<iter>.json` |
+| **REMEDIATE** | Same as CREATE, in remediate mode | The prior iteration's `findings-<iter-1>.md` | Commits: RED → fix → GREEN per finding, an appended `verification.md` iteration row | `REMEDIATE-<iter>.json` |
+| **DONE** | none (driver, on two consecutive JUDGE passes) | Two consecutive `JUDGE` verdicts of `pass` on an unchanged tree | A `DONE` state-log line | `pass` — the operator's own phone screenshot remains the gate outside this graph (D1, D5) |
+| **ESCALATE** | The operator | Any node reporting `blocked`, or the iteration guard exceeded | The operator's decision; the outer loop keeps walking the other children | `blocked` |
+
+The outer graph adds one more node the table above does not carry: **LAUNCH** — `program-loop.sh`
+dispatching a `loop-driver.sh <child>` for a child with no state yet, under the concurrency cap.
+LAUNCH has no verdict file; it is a state-log event (`{"child":"<c>","event":"LAUNCH", ...}`) in the
+parent JSONL below.
+
+### Edges
+
+| From | Condition | To |
+|---|---|---|
+| START | always | PLAN |
+| PLAN | planner verdict `pass` | GATE |
+| PLAN | planner verdict `fail`/`blocked` | ESCALATE |
+| GATE | `plan-approved` marker absent | GATE (polls every 60s) |
+| GATE | `plan-approved` marker present | CREATE |
+| CREATE | verdict `pass` | LAND |
+| CREATE | verdict `fail`/`blocked` | ESCALATE |
+| LAND | verdict `pass` | JUDGE |
+| LAND | verdict `fail`/`blocked` | ESCALATE |
+| JUDGE | verdict `pass`, 2nd consecutive pass on an unchanged tree | DONE |
+| JUDGE | verdict `pass`, 1st consecutive pass | JUDGE (next iteration) |
+| JUDGE | verdict `fail`, iteration ≤ guard | REMEDIATE |
+| JUDGE | verdict `fail`, iteration > guard | ESCALATE (guard tripped) |
+| REMEDIATE | verdict `pass` | LAND |
+| REMEDIATE | verdict `fail`/`blocked` | ESCALATE |
+
+```mermaid
+stateDiagram-v2
+    [*] --> START
+    START --> PLAN
+    PLAN --> GATE: planner pass
+    PLAN --> ESCALATE: planner fail/blocked
+    GATE --> GATE: plan-approved absent
+    GATE --> CREATE: plan-approved present
+    CREATE --> LAND: create pass
+    CREATE --> ESCALATE: create fail/blocked
+    LAND --> JUDGE: land pass
+    LAND --> ESCALATE: land fail/blocked
+    JUDGE --> DONE: pass, 2nd consecutive
+    JUDGE --> JUDGE: pass, 1st consecutive
+    JUDGE --> REMEDIATE: fail, iter <= guard
+    JUDGE --> ESCALATE: fail, iter > guard
+    REMEDIATE --> LAND: remediate pass
+    REMEDIATE --> ESCALATE: remediate fail/blocked
+    DONE --> [*]: operator phone gate (outside graph, D1/D5)
+    ESCALATE --> [*]: operator decides
+```
+
+### Verdict-file schema
+
+Every node's agent writes its verdict file as its **last action**, at
+`$L/<child>/<node>-<iter>.json`:
+
+```json
+{"status": "pass" | "fail" | "blocked", "sha": "<HEAD short sha or empty>", "score": "<0-16 or null>", "zeros": "<n or null>", "note": "<one line>"}
+```
+
+### State-record schema
+
+Two append-only JSONL logs, never rewritten in place:
+
+- **Child log**, `$S/loop/<child>.jsonl`, one line per node transition:
+  `{"ts": "<ISO 8601>", "node": "<NODE>", "iter": <n>, "status": "<pass|fail|blocked|started|waiting|ok>", "sha": "<sha or empty>", "score": <n or null>, "note": "<one line>"}`
+- **Parent log**, `$S/loop/076.jsonl`, one line per outer-graph event:
+  `{"ts": "<ISO 8601>", "child": "<child-or-076>", "event": "<START|LAUNCH|ESCALATE|DONE>", "note": "<one line>"}`
+
+### The guard and the human gate
+
+**Guard.** `loop-driver.sh`'s second argument is `max_iters` (default 4). If the iteration counter
+exceeds it without two consecutive JUDGE passes, the driver emits `ESCALATE` with `"iteration guard
+$MAX reached without two consecutive judge passes"` and exits — the child stops advancing on its own
+and waits on the operator.
+
+**Human gate.** GATE is the one node inside the graph that blocks on a person: after PLAN passes,
+the orchestrator posts the DEFINE table to the operator, who may correct the plan before the
+orchestrator drops the `plan-approved` marker. Nothing downstream of GATE runs before that marker
+exists. This is distinct from D1/D5's operator phone read, which sits **outside** the graph
+entirely: DONE is the graph's own terminal state, and the operator's own device confirmation is
+what actually closes a child, never an agent (goal.md §1 D5).
+
+**Concurrency.** The outer loop runs at most 2 children at once (`program-loop.sh`'s first
+argument); inside a child, every node that dispatches an agent waits for a free slot under a shared
+cap of 4 concurrent agents before it starts.
+<!-- /ANCHOR:d6 -->

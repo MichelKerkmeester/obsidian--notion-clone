@@ -205,7 +205,7 @@
     ],
     "causal_summary": "The sort sheet's rule is two rows and a labelled delete after 071/012; Notion merges the two rows into one card, picks direction through a drill-in sub-sheet, and separates per-rule delete from whole-config delete",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-10T19:59:19.219Z",
+    "last_save_at": "2026-09-10T20:16:57.601Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,11 +215,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:35a8426b2755aec90dcbafda517c7a120861831384f8624124439449a70da2b3",
+    "source_fingerprint": "sha256:14798a6b0069086783315361855d073858c321e97d5148ad0b679c8691a16a4c",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "fdb224391358e9e1abdfa9c62b050a950522afafd929a81534ff292d29b641fa",
-      "plan.md": "23df18ea10d2060c2bd18410b5bd17d50c695a96d1341abf630f9fec17828447",
+      "plan.md": "7438a9175d03ff64e8453640d67e73da359171c0aeb91afa00c5246be226c4be",
       "tasks.md": "f6ae7a8d7f96317a33ab564b4681828ac2a715778fa0e9587f753d862e27dbd6"
     },
     "last_active_at": null

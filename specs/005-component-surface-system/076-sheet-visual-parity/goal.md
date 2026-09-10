@@ -102,6 +102,13 @@ own sheet owes.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
+**This table is the outer loop graph's DONE WHEN (`decision-record.md` D6, `plan.md` §6A).** The
+outer graph itself terminates once every child's inner state log reports `DONE:pass` — two
+consecutive JUDGE passes on an unchanged tree per child. That is necessary, not sufficient: the rows
+below only tick when the operator has *also* independently confirmed each sheet on their own device
+(D1, D5). `program-loop.sh` reads `DONE:pass` off `$S/loop/<child>.jsonl`; the final row below reads
+the operator's own confirmation, and no agent ticks it.
+
 - [ ] `001-settings-sheet-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
 - [ ] `002-properties-sheet-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
 - [ ] `003-filter-sheet-visual-parity` — judge ≥ 14/16, no 0, twice consecutively, **both** filter surfaces; lane green

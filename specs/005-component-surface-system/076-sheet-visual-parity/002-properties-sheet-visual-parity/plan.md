@@ -34,6 +34,8 @@ Every Properties row still renders as up-arrow, down-arrow, a filled blue checkb
 ### Reference mapping
 
 Every Notion iOS capture in this repository is **299×678**, a Mobbin thumbnail. The Notion column of `spec.md` §13 is **structural only**; every number in its Target column is ours or `TBD — needs operator capture` (parent D3).
+
+> Runs through the parent's loop graph: see `../plan.md` §6A "Running a child through the loop" for the node/edge tables, the verdict-file and state-record schemas, and what happens at GATE and ESCALATE (`../decision-record.md` D6).
 <!-- /ANCHOR:summary -->
 
 ---

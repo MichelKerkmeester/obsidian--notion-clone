@@ -205,7 +205,7 @@
     ],
     "causal_summary": "Every Properties row still renders as up-arrow, down-arrow, a filled blue checkbox, a type icon and a label; Notion's row is a drag handle, a type icon, a label and an eye",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-10T19:59:19.053Z",
+    "last_save_at": "2026-09-10T20:16:57.429Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,11 +215,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:94e7c7afcd10490ccf99782e6da678e5acae1467dc2e1711211d5a334eee9cdc",
+    "source_fingerprint": "sha256:8c13bce35ca0eae496be03ddeb2fcde7c7af0bcfcf7c73a4e04994ad94bae0c4",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "10bd75b2a5c2b32de5e9b478ca24e4bd1ea4e30600ee468008ca74bb7a1b89e0",
-      "plan.md": "6367b6bad15f3264e52fd797d3867d6c2c37ba812e0a9078dd57205fdab0775d",
+      "plan.md": "1766a47cd256b25afb460390217983981ca6fe9d7f027cc5528129688a91dbe8",
       "tasks.md": "696a7a9ec35ad730946972c9fc34c1c545c2119ca300f75cc1d2e419d02ceb24"
     },
     "last_active_at": null
