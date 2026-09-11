@@ -46,6 +46,7 @@ contextType: "implementation"
 | **1 (JUDGE)** | `4ab094cf` | `screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png` | `constructed-column-manager-mobile-dark.png` | 1 | 1 | 2 | 2 | 2 | 2 | 0 | 1 | **11** | **1** | **fail** | `findings-1.md` |
 | **2 (remediate leg)** | `a2146136` | `screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png` | `constructed-column-manager-mobile-dark.png` | 1 (carried) | — | — | — | — | — | — | — | — | — | judge re-score owed | see Iteration 2 below |
 | **3 (remediate leg)** | this commit | `screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png` (932,005 px moved, maxDelta 209) | `constructed-column-manager-mobile-dark.png` (931,997 px moved, maxDelta 176) | 1 (carried) | — | — | — | — | — | — | — | — | — | judge re-score owed | the card findings: rows/add action inside rounded filled containers, sections grouped by card boundary, opaque fills with no hairline divider — clause RED → GREEN table below |
+| **3 (JUDGE)** | this commit | `screenshots/notion-clone/panels/constructed-column-manager-sheet-mobile-light.png` | `constructed-column-manager-sheet-mobile-dark.png` | 1 | 2 | 2 | 2 | 2 | 2 | 1 | 2 | **14** | **0** | **pass** | n/a; second unchanged-tree pass remains owed |
 
 ### Iteration 1 — JUDGE node's own pass
 
@@ -288,6 +289,33 @@ checklist had never been rebuilt from, so the regenerated `operator-checklist.md
 **What this iteration does not prove.** The JUDGE pass on this tree. The clauses prove the surface now
 paints the sheet's own canvas with a hairline boundary; the eight-row rubric is the judge's to re-score,
 twice consecutively, on the captures named above. The operator device row stays unticked — no agent ticks it.
+
+### Iteration 3 — JUDGE node (current tree)
+
+The expanded production-mount captures `screenshots/notion-clone/panels/constructed-column-manager-sheet-mobile-light.png`
+and `constructed-column-manager-sheet-mobile-dark.png` were opened at original resolution beside R-1/R-2
+(`hiding-properties-02/03`), the available operator ruling
+`screenshots/operator/0040-properties-card-container-rejected.png`, R-5 (`database-properties-01` and
+`property-editor-10`), and Anytype R-6 (`anytype-mobile-sheet-object-properties-settings-light.png` and
+its dark sibling); no preferred-rung operator target exists, as `spec.md` §13.0 records.
+
+The visual review follows the parent D7/D9 composition and the loaded fundamentals: plain-sheet grouping
+and hierarchy (`hierarchy.md` §2-3; `ux-laws.md` §5), one consistent depth cue (`depth-and-detail.md` §4
+and §7), readable light/dark ramps (`color-system.md` §6-7), and touchable, named controls
+(`interaction-craft.md` §3 and §5; `review-checklist.md` §5).
+
+| Rubric row | Score | Evidence and design fundamental |
+|---|---:|---|
+| Frame | 1 | Both captures show a full-width bottom sheet with a centred grab handle and plain light/dark sheet body with no row card, but the light canvas is cool gray rather than Notion's warm off-white and the shared trailing `×` remains where R-1/R-2 show a leading back arrow (`depth-and-detail.md` §4; `color-system.md` §7). |
+| Sections | 2 | Both captures show `Shown in table` and `Hidden in table` as plain sentence-case headings with right-aligned bulk links and a single visible hairline divider between the groups, with no filled or rounded section boundary (`hierarchy.md` §3; `ux-laws.md` §5). |
+| Row anatomy | 2 | In both captures each property row reads left-to-right as the retained up/down reorder pair, a type icon, label with the required hint on `Name`, and a trailing eye/eye-off, matching the child's composed target while the Notion/Anytype references confirm leading-icon, label, trailing-control grammar (`hierarchy.md` §2; `depth-and-detail.md` §7). |
+| Controls | 2 | Both captures show eye/eye-off visibility toggles at the trailing edge, phone reorder arrows at the leading edge, and full-width labelled add actions without filled checkboxes, native selects, or row text inputs (`interaction-craft.md` §3 and §5; `review-checklist.md` §5). |
+| Type | 2 | Across light and dark the centred semibold title, sentence-case muted section labels, regular row labels, and subdued required hint preserve the same hierarchy seen in the Notion screens (`hierarchy.md` §2; `review-checklist.md` §5). |
+| Spacing | 2 | Both captures maintain an even tall row pitch, aligned leading/trailing insets, generous group separation, and stable add-action spacing without crowding or drift (`SKILL.md` §3-4; `ux-laws.md` §5). |
+| Colour | 1 | In both captures normal, secondary, disabled, and divider ink remain legible and theme-appropriate, but the bulk links are muted gray instead of the blue accent visible in the Notion reference, leaving one color token off (`color-system.md` §6-7; `hierarchy.md` §2-3). |
+| Both themes | 2 | The light and dark captures mirror the same header, search field, headings, divider, row order, control placement, required-row dimming, and add-action structure while preserving readable contrast in each theme (`color-system.md` §7; `review-checklist.md` §5). |
+
+**Total: 14/16, 0 zeros — pass.** This is the first unchanged-tree pass; D1 still requires a second consecutive pass before the child can close.
 
 <!-- /ANCHOR:iterations -->
 
