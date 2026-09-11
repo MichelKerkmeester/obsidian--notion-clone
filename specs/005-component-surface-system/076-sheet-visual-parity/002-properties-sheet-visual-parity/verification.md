@@ -20,7 +20,7 @@ contextType: "implementation"
 
 **Packet:** 076-sheet-visual-parity/002-properties-sheet-visual-parity
 **Level:** 2
-**Status:** CREATE landed; lane green; CREATE-node self-score recorded below — the JUDGE node's own pass has not run
+**Status:** CREATE landed; lane green; iteration 1 JUDGE pass recorded below — **fail, 11/16, 1 zero (Colour)** — awaiting REMEDIATE
 **Date:** 2026-09-11
 **Loop graph:** `../decision-record.md` D6; `../plan.md` §6A "Running a child through the loop". This file is the VERIFY step's artefact (parent `spec.md` §5 step 5) and the record the JUDGE and REMEDIATE nodes write to.
 <!-- /ANCHOR:metadata -->
@@ -43,6 +43,58 @@ contextType: "implementation"
 | Iteration | SHA | Light capture | Dark capture | Frame | Sections | Row anatomy | Controls | Type | Spacing | Colour | Both themes | Total | Zeros | Verdict | Findings |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | CREATE self-score (not the JUDGE pass) | this commit | `screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png` | `constructed-column-manager-mobile-dark.png` | 1 | 2 | 2 | 2 | 2 | 2 | 1 | 1 | 13 | 0 | self-score, informal | see paragraph below |
+| **1 (JUDGE)** | `4ab094cf` | `screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png` | `constructed-column-manager-mobile-dark.png` | 1 | 1 | 2 | 2 | 2 | 2 | 0 | 1 | **11** | **1** | **fail** | `findings-1.md` |
+
+### Iteration 1 — JUDGE node's own pass
+
+Reviewed against R-1 (`hiding-properties-02`, nothing hidden) and R-2 (`hiding-properties-03`, one
+hidden), per `spec.md` §13.0 precedence (rungs 1-2 empty, rung 3 is binding). Both `constructed-
+column-manager-mobile-{light,dark}.png` opened at full resolution; several claims cross-checked by
+pixel sample (`PIL`) rather than eye alone, since a token-level colour claim is not reliably read off
+a compressed render by inspection.
+
+- **Frame (1)** — Grab handle, centred `Properties` title, trailing `✕`, bottom-sheet presentation
+  all match R-1/R-2 structurally. Canvas measures `rgb(242,242,242)` light / `rgb(46,46,46)` dark
+  against R-1/R-2's own measured `rgb(250,248,246)` — a canvas-token gap `spec.md` §13.1 already
+  records as out of scope for this child (inherited from `076/001`'s Frame ceiling, not a new defect).
+  Capped at 1 by the rubric's own "wrong canvas" anchor, matching the DEFINE's own expectation.
+- **Sections (1)** — What is visible matches the target exactly: one card, `Shown in table` in
+  sentence case, `Hide all` right-aligned on the same line, card visibly lighter than canvas in
+  light theme. **But the judged capture never reaches the second state.** Both PNGs are 1748px tall
+  and end mid-list around `Field 13`/`Field 14` — the `Hidden in table` card, its own heading/`Show
+  all` link, and the add-property card's own terminal wrapper are all outside the frame in both
+  images. A lane clause (`L4`, `L6`) asserts these exist structurally, but D1 is explicit that a lane
+  is a floor, not evidence a picture looks right, and this judge can only score what the two named
+  images show. Scored 1 rather than 2 because half of the rubric's own claim — "same sections, same
+  order" — is unconfirmable from this capture set.
+- **Row anatomy (2)** — Confirmed at 3x crop: `arrow · arrow · type icon · label · eye` in that
+  order, zero checkboxes anywhere in either theme. Matches the DEFINE's corrected target (`arrow ·
+  arrow` retained per `071/012` ADR-001, extended not contradicted).
+- **Controls (2)** — The trailing control is an icon-only eye/eye-off button, no chevron, no value,
+  matching Notion's eye-toggle control kind exactly. Reorder stays the arrow pair, intentionally.
+- **Type (2)** — `Shown in table` renders sentence case, no uppercase transform; row label weight is
+  unchanged and reads correctly against R-1/R-2.
+- **Spacing (2)** — Row pitch reads generously taller than the old 30px hardcode — measured centre-
+  to-centre eye-icon spacing in the capture is consistent with a ≥44px row, clearing the phone thumb
+  floor; card inset and corner radius read consistent with `076/001`'s own landed figures.
+- **Colour (0)** — Two independent, unrelated contrast failures found by direct pixel sample of the
+  capture, not merely a single token off: **(a)** dark card fill measures `rgb(57,57,57)` against
+  dark canvas `rgb(46,46,46)` — an 11/255 delta that reads as visually flat, versus light theme's
+  clearly legible `rgb(255,255,255)` vs `rgb(242,242,242)` pair (inherited `076/001` ADR-K).
+  **(b)** The required `Name` row's eye icon was targeted (`spec.md` §13.3, lane `L3`) to compute a
+  measurably lower contrast than an enabled row's. A 3x crop of the `Name`/`Field 1`/`Field 3` eye
+  icons shows them **pixel-identical** — same stroke colour, same weight — even though the same row's
+  own up-arrow control visibly greys out under the same disabled state. `styles.css:14485`'s
+  `.obnotion-column-manager-eye:disabled { opacity: 0.5 }` rule exists but is not reaching the
+  rendered icon in this capture. Two independent hierarchy breaks, not one token off — scored 0 per
+  the rubric's own "wrong hierarchy or a contrast failure" anchor.
+- **Both themes (1)** — Light is fully legible and internally consistent with the target. Dark is
+  structurally identical (same row order, same single-card branch visible) but its card boundary
+  does not read against canvas for the same ADR-K reason as Colour, so the two themes are not equally
+  legible even though structurally matched.
+
+**Total 11/16, 1 zero (Colour) — fail**, both on the total and on the zero-row rule. Findings
+recorded in `findings-1.md` for REMEDIATE.
 
 Each row is one JUDGE pass. The eight rubric columns hold a 0/1/2 score with a one-line
 justification carried into the Findings cell whenever the score is below 2. Total is the sum out of
