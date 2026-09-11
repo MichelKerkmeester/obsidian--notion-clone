@@ -7537,6 +7537,25 @@
         "screenshots/notion-clone/views/board-mobile-desktop-dark.png"
       ],
       "note": "npm run screenshots </dev/null twice, 504/504 entries, exit 0 both, judged by decoded pixel delta across both runs against the committed blobs (scratchpad/glm/pixel-delta.mjs), no image opened by eye. 13 movers, every one reproduced with identical counts in BOTH judged runs so none is jitter: the four column-manager captures (932k px, maxDelta 176 dark / 209 light) are the judged surface itself - the shown/hidden groups and the add-property row stop painting the card band, so the fill step each row band carried is gone and the group boundary is now a hairline; the eight stacked parent-sheet captures (376k-555k px, maxDelta 112 dark / 122 light) mount the column-manager sheet as their parent beside the operator's own reported pair, so the same repaint shows around the stacked modal; board-mobile-desktop-dark 1px@1 also moved in both judged runs, kept by the lane's moved-in-both-runs rule rather than restored. Attribution proven by negative control, not inferred: with HEAD's stylesheet restored (195782fd8370) a --only recapture of constructed-modal-sheet-confirm-stacked and constructed-depth3-property-type-picker reproduced their committed blobs byte-for-byte (4/4 MATCH, shasum), so these captures moved because of this stylesheet and not because the committed bytes had drifted. views/board-view-desktop-dark moved 6px@1 in run 1 only and returned to its committed bytes on run 2, so nothing was restored and no manifest row was patched. 0 threshold edits; the visual read stays the operator device pass and the image judge."
+    },
+    {
+      "event": "release",
+      "phase": "076-003-filter-sheet-visual-parity",
+      "at": "2026-09-11T05:51:00.000Z",
+      "hash": "195782fd8370",
+      "reviewed": [
+        "screenshots/notion-clone/components/constructed-active-rule-filter-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-active-rule-filter-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-depth3-import-confirm-dropdown-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-depth3-import-confirm-dropdown-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-nested-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-nested-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-sheet-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-sheet-mobile-light.png"
+      ],
+      "note": "npm run screenshots </dev/null three times on the composed tree, 504/504 exit 0 each; the moved set was read by decoded pixel delta against the committed blobs, not by eye, so this is a measured review and NOT a per-image one. Every one of the ten captures moved in BOTH compared runs (295k-389k changed pixels, max channel delta 122-209), and the two filter-panel-sheet captures changed dimensions because a rule now spends one summary row over three detail rows where it spent three equal full-width rows. The two single-run movers outside the filter surfaces (board-view desktop dark at max channel delta 1, card-covers desktop light) were reverted with their manifest entries left at HEAD. NO STYLESHEET RULE CHANGED - the hash is the same sheet the 076-002 release sat on - so every move here is markup. Per-image operator sign-off still owed, as for every prior release."
     }
   ],
   "outstanding": [

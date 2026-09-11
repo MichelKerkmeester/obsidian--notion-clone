@@ -20,7 +20,7 @@ contextType: "implementation"
 
 **Packet:** 076-sheet-visual-parity/003-filter-sheet-visual-parity
 **Level:** 2
-**Status:** Planned — DEFINE + PLAN complete; no CREATE iteration run yet
+**Status:** CREATE iteration 1 landed lane-green; the image judge has not run and the operator row is untouched
 **Date:** 2026-09-11
 **Loop graph:** `../decision-record.md` D6; `../plan.md` §6A "Running a child through the loop". This file is the VERIFY step's artefact (parent `spec.md` §5 step 5) and the record the JUDGE and REMEDIATE nodes write to.
 <!-- /ANCHOR:metadata -->
@@ -70,6 +70,13 @@ justification carried into the Findings cell whenever the score is below 2. Tota
 16; Zeros is the count of rubric rows scored 0; Verdict is `pass` (>= 14, no 0) or `fail`; Findings
 points at `findings-<iter>.md` under the loop's scratch state on a fail (`plan.md` §6A). The child is
 not done in-repo until two consecutive rows both read `pass` on an unchanged tree.
+
+**No judge pass is recorded yet, and none is claimed.** Iteration 1 of this leg ran the lane and
+capture halves only: it can compute geometry and decoded pixel deltas, and it cannot see an image,
+so scoring the eight rows here would be fabrication. What it did prove is recorded as evidence on
+`tasks.md` T006-T011 — the RED baseline, the GREEN numbers, the moved captures and the battery exit
+codes — and what it did not prove is named there too (T009 partial, T012-T014 open). The first
+scored row in the table below is owed to a judging node that can open the PNGs.
 <!-- /ANCHOR:iterations -->
 
 ---

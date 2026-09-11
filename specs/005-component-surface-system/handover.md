@@ -5214,3 +5214,49 @@ interposes, the 074 testbed landing and the 289/015 fundamentals landing, the ti
 
 Docs: this entry, the continuity trio (`recent_action`/`last_updated_at`/`last_updated_by`), and the residue
 commits' own messages. Landed and pushed as `8f720b62`.
+
+## 076/003-filter-sheet-visual-parity — CREATE iteration 1: the rule shape landed lane-green, the image judge still owed (2026-09-11, this leg)
+
+- `src/views/filter-panel-renderer.ts`: a phone rule is now one summary row over a plain-canvas detail
+  group instead of three equal full-width rows plus three action rows. `renderStackedConditionRow` became
+  `renderSheetConditionRule` and writes the markers the new clauses read (`data-filter-leaf`,
+  `data-filter-summary-row`, `data-filter-detail-group`, `data-filter-detail-row`,
+  `data-filter-action-group`); the summary row reads the condition back in one line and toggles its group in
+  place. The mobile branch no longer routes around `options.compact`, so the active-rule companion a chip
+  opens takes the same shape, and the nested Not node renders two labelled rows on a sheet where it put two
+  glyph buttons in its header. **No stylesheet rule changed** — the detail rows keep `.obnotion-panel-row`,
+  so the sheet's own adjacent-row hairline rule draws inside the group; the lane's baselineHash is still
+  `195782fd8370`, the same sheet the 076-002 release sat on.
+- New `tools/live/filter-parity-clauses.mjs` (+ its unit test) and a new block in `tools/live/sheet-grammar.mjs`
+  under `window.__filterSheetPresentation`, measuring the sheet, the nested sheet and the companion. The
+  clauses read the marked markup AND the unmarked shape, deliberately: the RED baseline had to be measured on
+  the tree before any marker existed, and a marker-only clause would have read zero there. RED → GREEN, per
+  rule where the clause reports per rule: L1 1 → 0 on the companion; L2 3 → 0 (9 → 0 sheet, 12 → 0 nested);
+  L3 0 → 1 detail group per rule (with 3 bordered control boxes per rule before); L4 2 → 0 nested Not icon
+  buttons; L5 2/1/1 → 0 (the packet predicted 1 per rule — the unmarked span absorbs one extra operator
+  control, recorded rather than smoothed); L6 3 → 0 (10 → 0 nested). The 071 floor stayed green throughout.
+  A surface that measures zero rules now fails instead of passing silently.
+- Battery, all foreground with exit codes read: `npx tsc --noEmit` 0; `npx vitest run` 0 (161 files, 1623
+  tests); `npm run build` 0; `node tools/live/sheet-grammar.mjs` 0 (28 lanes); render-assertions 0;
+  verify-placement 0 (418/420, 2 declared reds); `npm run screenshots` 0 three times, 504/504 each;
+  `screenshots:verify` 0; `node tools/live/evidence.mjs --check-all` 0 — 16/16 fresh after re-running
+  `sheet-rebuild` (the renderer change had staled it); `npm run gate` 0 (28 green); both naming scans clean.
+- Captures: ten moved in BOTH compared runs (295k-389k pixels, max channel delta 122-209) and the two
+  `constructed-filter-panel-sheet-mobile-*` captures by dimension too, since a rule now spends four rows
+  where it spent three. A new `076-003` release entry on `tools/lane/css-lane.json` names all ten with the
+  measured review note; the two single-run movers outside the filter surfaces were reverted with their
+  manifest entries left at HEAD. Per-image sign-off is recorded as owed — this leg cannot open an image.
+- Two gate lanes were red at HEAD and are green now: `operator-list` (the plan commit added a phase goal
+  without regenerating `specs/005-component-surface-system/operator-checklist.md`) and `css-lane` (no release
+  named the moved captures). `implementation-summary.md` was missing for a level-2 packet and is written;
+  the child, the 076 parent and 005 all validate PASSED under `--strict`, and the child's graph metadata was
+  re-backfilled afterwards.
+- **NOT DONE, and not claimed**: no image-judge pass. `verification.md` §4 holds no scored row, because this
+  node computes geometry and decoded pixel deltas and cannot see an image; scoring the eight rows would be
+  fabrication. T009 is partial — the comparator, property and value still edit in place inside their detail
+  row rather than through a navigation picker, and the L5 clause measures the weaker property (an operator
+  control outside a detail group), so the rubric's Controls row is the judge's call. T012's keyboard-inset
+  assertion was not re-run; T013 and T014 stay open and the operator row is untouched. Not pushed.
+
+Docs: this entry, the packet's `tasks.md` evidence rows, `verification.md` §1/§4, `implementation-summary.md`,
+`spec.md` continuity and `description.json`. Landed as the two commits below this entry's own commit.

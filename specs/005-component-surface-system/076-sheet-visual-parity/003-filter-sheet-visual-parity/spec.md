@@ -11,13 +11,14 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/076-sheet-visual-parity/003-filter-sheet-visual-parity"
-    last_updated_at: "2026-09-11T04:12:12.000Z"
+    last_updated_at: "2026-09-11T05:58:00.000Z"
     last_updated_by: "301-loop-003-filter-sheet-visual-parity"
-    recent_action: "DEFINE + PLAN brief written from Notion, Anytype and current captures"
-    next_safe_action: "Execute CREATE T006 from the recorded RED values"
+    recent_action: "CREATE iteration 1: headline row over detail group, lane RED to GREEN"
+    next_safe_action: "Score T013 judge on the ten moved captures"
     blockers:
       - "C-1 operator capture is absent; reference pixel values remain provisional"
-      - "The child does not close until the image judge passes twice on an unchanged tree"
+      - "The child does not close until the image judge passes twice on an unchanged tree — no scored row exists yet"
+      - "T009 partial: the comparator still edits in place inside its detail row"
     key_files:
       - "spec.md"
       - "plan.md"
@@ -79,7 +80,7 @@ token ladder is explicitly provisional and must be settled by C-1.
 |-------|-------|
 | Level | 2 |
 | Priority | P1 |
-| Status | Planned — DEFINE + PLAN complete; CREATE not started |
+| Status | CREATE iteration 1 landed lane-green; image judge owed |
 | Created | 2026-09-10 |
 | Branch | worktrees/301-loop-003-filter-sheet-visual-parity |
 | Parent Spec | ../spec.md |

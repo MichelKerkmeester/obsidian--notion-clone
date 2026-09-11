@@ -54,6 +54,8 @@ import { fileURLToPath } from "node:url";
 import { chromium, webkit } from "playwright-core";
 import { buildRenderAssertionBundle } from "./render-assertion-bundle.mjs";
 
+import { filterClauseFailures, formatFilterClause } from "./filter-parity-clauses.mjs";
+
 // ───────────────────────────────────────────────────────────────────
 // 1b. THE CONSTANTS BRIDGE
 // ───────────────────────────────────────────────────────────────────
@@ -551,6 +553,7 @@ import { buildConfirmSheetBody, buildPrimaryActionPill } from "${fileURLToPath(n
 import { renderCreatePropertyBody } from "${fileURLToPath(new URL("../../src/views/modals/create-property-modal.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { buildShellHeader, buildShellHeaderChip, createSurfaceShell } from "${fileURLToPath(new URL("../../src/views/surface-shell.ts", import.meta.url)).replace(/\\/g, "/")}";
 import { createHostModalStandIn } from "${fileURLToPath(new URL("./host-modal-stand-in.ts", import.meta.url)).replace(/\\/g, "/")}";
+import { filterClauseFailures, measureFilterSheet } from "${fileURLToPath(new URL("./filter-parity-clauses.mjs", import.meta.url)).replace(/\\/g, "/")}";
 
 setLocale("en");
 
@@ -1137,6 +1140,49 @@ window.__propertiesVisualParityGrammar = () => {
       out.frameLight = readJudgedFrame();
       document.documentElement.style.setProperty("--background-primary", HOST_THEME_PRIMARY.dark);
       document.body.classList.add("theme-dark");
+    });
+  } catch (error) {
+    out.error = error.message;
+  }
+  return out;
+};
+
+// The filter sheet's own presentation clauses: how many rows edit one rule across three
+// controls at once, how many condition rows stack per rule, whether a plain-canvas detail group
+// exists, whether a nested Not still offers glyph buttons with no word on them, whether an
+// operator is edited off a detail row, and whether an action row sits outside a labelled group.
+// Measured on the shipped sheet, the nested tree and the active-rule companion a chip opens, so
+// the numbers describe the markup a phone gets rather than a fixture built to be measured.
+window.__filterSheetPresentation = () => {
+  const PANEL = ${JSON.stringify(REGISTERED_SURFACES.find((s) => s.name === "filter-panel").spec)};
+  const NESTED = ${JSON.stringify({ renderer: "filter-panel", bag: "file-view", captureData: true, filterDepth: "nested" })};
+  const COMPANION = ${JSON.stringify({ renderer: "active-rule-popover", bag: "file-view", captureData: true, ruleKind: "filter" })};
+  const out = { error: null, panel: null, nested: null, companion: null };
+  const summarise = (measured) => ({
+    rules: measured.rules,
+    marked: measured.marked,
+    clauses: measured.clauses,
+    detailRows: measured.detailRows,
+    controlBoxes: measured.controlBoxes,
+    actionGroups: measured.actionGroups,
+    notNodes: measured.notNodes,
+  });
+  const read = (selector) => {
+    const root = document.querySelector(selector);
+    return root ? summarise(measureFilterSheet(root)) : null;
+  };
+  try {
+    runRenderAssertions(document.body, PANEL, "", () => {
+      out.panel = read(".obnotion-filter-panel");
+      if (!out.panel) out.error = out.error || "the filter sheet did not mount";
+    });
+    runRenderAssertions(document.body, NESTED, "", () => {
+      out.nested = read(".obnotion-filter-panel");
+      if (!out.nested) out.error = out.error || "the nested filter sheet did not mount";
+    });
+    runRenderAssertions(document.body, COMPANION, "", () => {
+      out.companion = read(".obnotion-active-rule-popover");
+      if (!out.companion) out.error = out.error || "the active-rule companion did not mount";
     });
   } catch (error) {
     out.error = error.message;
@@ -5755,6 +5801,30 @@ try {
   }
   if (sheetCopyParity.length > 0) failures.push(`sheet copy: ${sheetCopyParity.length} locale-parity row(s): ${sheetCopyParity.join("; ")}`);
   console.log(`  ${sheetCopyParity.length === 0 ? "PASS" : "FAIL"}  no locale keeps a pointer gesture its English dropped (${sheetCopyParity.length} row(s) differ)`);
+  console.log("");
+
+  console.log("sheet-grammar: filter sheet presentation — one summary row per rule, one plain-canvas detail group, no operator edited off a detail row, no unlabelled nested Not button, every action row inside a labelled group\n");
+  const filterPresentation = await page.evaluate(() => window.__filterSheetPresentation());
+  if (filterPresentation.error) failures.push(`filter sheet presentation: ${filterPresentation.error}`);
+  for (const { label, report } of [
+    { label: "filter sheet", report: filterPresentation.panel },
+    { label: "filter sheet, nested", report: filterPresentation.nested },
+    { label: "active-rule companion", report: filterPresentation.companion },
+  ]) {
+    if (!report) {
+      failures.push(`filter sheet presentation ${label}: the surface did not mount`);
+      console.log(`  FAIL  ${label} — the surface did not mount`);
+      continue;
+    }
+    const clauseFailures = filterClauseFailures({ clauses: report.clauses });
+    // A surface that measured no rule at all has not passed: it has said nothing. Every clause
+    // here reads zero on zero rules, which is the one way this lane could go green by accident.
+    if (report.rules === 0) clauseFailures.unshift(`no rule row measured on the ${label}`);
+    for (const failure of clauseFailures) failures.push(`filter sheet presentation ${label}: ${failure}`);
+    console.log(`  ${clauseFailures.length === 0 ? "PASS" : "FAIL"}  ${label} — ${report.rules} rule(s), ${report.marked ? "marked" : "unmarked"} markup`);
+    for (const id of ["L1", "L2", "L3", "L4", "L5", "L6"]) console.log(`      ${formatFilterClause(report, id)}`);
+    console.log(`      detail rows max ${report.detailRows.max}, control boxes max ${report.controlBoxes.max}, action groups max ${report.actionGroups.max}, nested Not headers ${report.notNodes.length}`);
+  }
   console.log("");
 
   await page.close();

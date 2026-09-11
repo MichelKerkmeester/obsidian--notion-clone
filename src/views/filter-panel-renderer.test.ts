@@ -358,35 +358,39 @@ describe("FilterPanelRenderer ≥1-rule tree branch", () => {
   });
 });
 
-// The stacked condition row's own class contract. This suite's fake DOM cannot mount the
-// non-compact branch (see this file's header comment), so the contract is pinned against the
-// source the way the two suites above already do: a caller that reaches for the old single-row
+// The sheet condition rule's own class and marker contract. This suite's fake DOM cannot mount the
+// phone branch (see this file's header comment), so the contract is pinned against the source the
+// way the two suites above already do: a caller that reaches for the old single-row
 // `createConditionRow` call on the phone branch, or drops the `.obnotion-filter-condition-row`
-// class the lane's row-inset and controls-per-row clauses key on, fails this test before it ever
-// reaches the lane. Reverted (the stacked branch and its class deleted, `createConditionRow`
-// called unconditionally) this test fails on both assertions; restored, both pass — checked by
-// hand against a working copy of this diff, not asserted here since a revert-and-restore inside
-// the suite would just describe the same source string twice.
-describe("FilterPanelRenderer stacked condition row (phone sheet)", () => {
-  it("routes a non-compact condition through its own stacked-row builder, gated on the sheet presentation", () => {
+// class the lane's row-inset clause keys on, or stops marking the summary row and the detail group
+// the presentation clauses read, fails this test before it ever reaches the lane. Reverted (the
+// sheet-rule branch and its markers deleted, `createConditionRow` called unconditionally) this test
+// fails on its assertions; restored, they pass — checked by hand against a working copy of this
+// diff, not asserted here since a revert-and-restore inside the suite would just describe the same
+// source string twice.
+describe("FilterPanelRenderer sheet condition rule (phone sheet and companion)", () => {
+  it("routes every phone condition through its own summary-and-detail builder, gated on the sheet presentation", () => {
     expect(source).toContain("isMobileBottomSheet(containerEl.ownerDocument)");
-    expect(source).toContain("this.renderStackedConditionRow(panel, {");
+    expect(source).toContain("this.renderSheetConditionRule(panel, {");
   });
 
-  it("builds the property, operator and value rows on the shared row grammar the lane measures", () => {
-    const stackedMethodStart = source.indexOf("private renderStackedConditionRow(");
-    expect(stackedMethodStart).toBeGreaterThan(0);
-    const stackedMethodBody = source.slice(stackedMethodStart);
-    expect(stackedMethodBody).toContain('cls: "obnotion-panel-row obnotion-filter-condition-row"');
-    expect(stackedMethodBody).toContain("appendConditionRow(parts.buildField)");
-    expect(stackedMethodBody).toContain("appendConditionRow(parts.buildOperator)");
+  it("builds a one-line summary row over a marked detail group on the shared row grammar the lane measures", () => {
+    const sheetRuleMethodStart = source.indexOf("private renderSheetConditionRule(");
+    expect(sheetRuleMethodStart).toBeGreaterThan(0);
+    const sheetRuleMethodBody = source.slice(sheetRuleMethodStart);
+    expect(sheetRuleMethodBody).toContain('"data-filter-summary-row"');
+    expect(sheetRuleMethodBody).toContain('"data-filter-detail-group"');
+    expect(sheetRuleMethodBody).toContain('cls: "obnotion-panel-row obnotion-filter-condition-row obnotion-filter-detail-row"');
+    expect(sheetRuleMethodBody).toContain("appendConditionRow(parts.buildField)");
+    expect(sheetRuleMethodBody).toContain("appendConditionRow(parts.buildOperator)");
   });
 
-  it("renders the rule's own actions as labelled rows, remove carrying the destructive treatment", () => {
-    const stackedMethodStart = source.indexOf("private renderStackedConditionRow(");
-    const stackedMethodBody = source.slice(stackedMethodStart);
-    expect(stackedMethodBody).not.toContain("createFilterTreeIconButton(panel");
-    expect(stackedMethodBody).toContain('icon: "trash-2"');
-    expect(stackedMethodBody).toContain("warning: true");
+  it("renders the rule's own actions as labelled rows inside their own group, remove carrying the destructive treatment", () => {
+    const sheetRuleMethodStart = source.indexOf("private renderSheetConditionRule(");
+    const sheetRuleMethodBody = source.slice(sheetRuleMethodStart);
+    expect(sheetRuleMethodBody).not.toContain("createFilterTreeIconButton(panel");
+    expect(sheetRuleMethodBody).toContain('"data-filter-action-group"');
+    expect(sheetRuleMethodBody).toContain('icon: "trash-2"');
+    expect(sheetRuleMethodBody).toContain("warning: true");
   });
 });

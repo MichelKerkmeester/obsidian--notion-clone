@@ -526,9 +526,17 @@ export class FilterPanelRenderer {
     const wrap = parent.createDiv({ cls: "obnotion-source-rule-node obnotion-source-rule-not" });
     const header = wrap.createDiv({ cls: "obnotion-source-rule-header" });
     header.createSpan({ cls: "obnotion-source-rule-not-label", text: t("viewConfig.sourceRules.not") });
-    const nodeActions = header.createDiv({ cls: "obnotion-source-rule-actions" });
-    this.createFilterTreeIconButton(nodeActions, "undo-2", t("viewConfig.sourceRules.removeNot"), () => onReplace(node.rule));
-    this.createFilterTreeIconButton(nodeActions, "trash-2", t("viewConfig.sourceRules.remove"), () => onReplace(undefined));
+    // The phone sheet answers with words here too: the Not node's two actions are labelled rows
+    // under the rule they act on, the same voice the group node's own actions already use on a
+    // sheet, because two glyph buttons in a header ask a thumb to know an icon by heart. The
+    // desktop popover keeps the icon row — a pointer reads a tooltip, and its fixed width has no
+    // room to give.
+    const rendersSheetActions = isMobileBottomSheet(containerEl.ownerDocument);
+    if (!rendersSheetActions) {
+      const nodeActions = header.createDiv({ cls: "obnotion-source-rule-actions" });
+      this.createFilterTreeIconButton(nodeActions, "undo-2", t("viewConfig.sourceRules.removeNot"), () => onReplace(node.rule));
+      this.createFilterTreeIconButton(nodeActions, "trash-2", t("viewConfig.sourceRules.remove"), () => onReplace(undefined));
+    }
     const content = wrap.createDiv({ cls: "obnotion-source-rule-children" });
     this.renderFilterTreeNode(
       content,
@@ -541,6 +549,25 @@ export class FilterPanelRenderer {
       actions,
       (next) => next ? onReplace({ ...node, rule: next }) : onReplace(undefined)
     );
+    if (rendersSheetActions) {
+      const nodeActionRows = wrap.createDiv({
+        cls: "obnotion-source-rule-action-group",
+        attr: { "data-filter-action-group": "" },
+      });
+      createMenuRow(nodeActionRows, {
+        cls: "obnotion-source-rule-group-action",
+        icon: "undo-2",
+        label: t("viewConfig.sourceRules.removeNot"),
+        onClick: () => onReplace(node.rule),
+      });
+      createMenuRow(nodeActionRows, {
+        cls: "obnotion-source-rule-group-action",
+        icon: "trash-2",
+        label: t("viewConfig.sourceRules.remove"),
+        warning: true,
+        onClick: () => onReplace(undefined),
+      });
+    }
   }
 
   private createFilterTreeIconButton(parent: HTMLElement, icon: string, title: string, onClick: () => void): void {
@@ -657,11 +684,22 @@ export class FilterPanelRenderer {
     // and never takes a free value, so its row is omitted rather than shown with nothing in it.
     const hasValueRow = currentCol?.type !== "checkbox";
 
-    if (!options?.compact && isMobileBottomSheet(containerEl.ownerDocument)) {
-      this.renderStackedConditionRow(panel, {
+    // What the rule filters on, in one line: the property it names, the operator it reads and the
+    // value it compares against. This is the line the summary row shows, and the reason the three
+    // editing controls no longer have to sit open to say what the rule is.
+    const describeRuleSummary = (): string => {
+      const fieldText = currentCol ? toPropertyDropdownOption(currentCol).text : currentField;
+      const operatorText = ops.find(([op]) => op === rule.op)?.[1] || rule.op;
+      const valueText = hasValueRow ? rule.value || t("panel.value") : "";
+      return [fieldText, operatorText, valueText].filter(Boolean).join(" · ");
+    };
+
+    if (isMobileBottomSheet(containerEl.ownerDocument)) {
+      this.renderSheetConditionRule(panel, {
         buildField,
         buildOperator,
         buildValue: hasValueRow ? buildValue : undefined,
+        summary: describeRuleSummary(),
         onWrap: options?.onWrap,
         onNot: options?.onNot,
         showRemove: options?.showRemove !== false,
@@ -689,34 +727,65 @@ export class FilterPanelRenderer {
   }
 
   /**
-   * The phone sheet's own condition shape: property, operator and value each on their own
-   * full-width row instead of three controls sharing one, so a property name gets the row's
-   * whole inner width rather than a fixed fraction of it. The rule's own actions move off the
-   * condition row entirely and render as labelled rows afterward — `createMenuRow` is the same
-   * primitive every other action-in-a-list surface here already uses, so "Remove" reads in the
-   * same destructive red (`is-warning`) three other producers already carry rather than a second
-   * copy of that treatment.
+   * The sheet's own rule shape, and the active-rule companion's: a summary row that reads the
+   * condition back — property, operator, value — over a plain-canvas detail group whose three
+   * hairline-separated rows each edit one part of it, and then the rule's own actions as labelled
+   * rows in a group of their own. The sheet used to spend three equal full-width rows on the
+   * three edits and three more on the actions, so one rule read as a column of six stacked
+   * controls with nothing at the top saying what it filtered on; the summary row is that line,
+   * and every control stays one tap away inside the group it belongs to.
    */
-  private renderStackedConditionRow(
+  private renderSheetConditionRule(
     panel: HTMLElement,
     parts: {
       buildField: (parent: HTMLElement) => void;
       buildOperator: (parent: HTMLElement) => void;
       buildValue?: (parent: HTMLElement) => void;
+      summary: string;
       onWrap?: () => void;
       onNot?: () => void;
       showRemove: boolean;
       onRemove: () => void;
     }
   ): void {
+    const rule = panel.createDiv({ cls: "obnotion-filter-rule", attr: { "data-filter-leaf": "" } });
+    const summary = createMenuRow(rule, {
+      cls: "obnotion-filter-rule-summary",
+      icon: "filter",
+      label: parts.summary,
+      chevron: true,
+    });
+    summary.row.setAttr("data-filter-summary-row", "");
+    summary.row.setAttr("aria-expanded", "true");
+    const detail = rule.createDiv({
+      cls: "obnotion-filter-detail-group",
+      attr: { "data-filter-detail-group": "" },
+    });
+    // Collapsing is in place rather than a re-render: the group is what the summary row names,
+    // and rebuilding the sheet to hide three rows would drop the focus that asked for it.
+    summary.row.onclick = () => {
+      const opening = detail.hidden;
+      detail.hidden = !opening;
+      summary.row.setAttr("aria-expanded", String(opening));
+    };
     const appendConditionRow = (build: (row: HTMLElement) => void): void => {
-      build(panel.createDiv({ cls: "obnotion-panel-row obnotion-filter-condition-row" }));
+      build(
+        detail.createDiv({
+          cls: "obnotion-panel-row obnotion-filter-condition-row obnotion-filter-detail-row",
+          attr: { "data-filter-detail-row": "" },
+        })
+      );
     };
     appendConditionRow(parts.buildField);
     appendConditionRow(parts.buildOperator);
     if (parts.buildValue) appendConditionRow(parts.buildValue);
+    if (!parts.onWrap && !parts.onNot && !parts.showRemove) return;
+    const actions = rule.createDiv({
+      cls: "obnotion-filter-action-group",
+      attr: { "data-filter-action-group": "" },
+    });
     if (parts.onWrap) {
-      createMenuRow(panel, {
+      createMenuRow(actions, {
         cls: "obnotion-filter-condition-action",
         icon: "folder-plus",
         label: t("viewConfig.sourceRules.addGroup"),
@@ -724,7 +793,7 @@ export class FilterPanelRenderer {
       });
     }
     if (parts.onNot) {
-      createMenuRow(panel, {
+      createMenuRow(actions, {
         cls: "obnotion-filter-condition-action",
         icon: "circle-slash-2",
         label: t("viewConfig.sourceRules.addNot"),
@@ -732,7 +801,7 @@ export class FilterPanelRenderer {
       });
     }
     if (parts.showRemove) {
-      createMenuRow(panel, {
+      createMenuRow(actions, {
         cls: "obnotion-filter-condition-action",
         icon: "trash-2",
         label: t("viewConfig.sourceRules.remove"),

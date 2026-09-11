@@ -18,7 +18,7 @@ contextType: "implementation"
 
 Packet: 076-sheet-visual-parity/003-filter-sheet-visual-parity
 Level: 2
-Status: Planned — DEFINE + PLAN complete; CREATE not started
+Status: CREATE iteration 1 landed lane-green; image judge owed
 Date: 2026-09-11
 <!-- /ANCHOR:metadata -->
 
