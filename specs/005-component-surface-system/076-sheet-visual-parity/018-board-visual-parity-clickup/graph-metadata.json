@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/076-sheet-visual-parity/018-board-visual-parity-clickup",
+  "spec_folder": "005-component-surface-system/076-sheet-visual-parity/018-board-visual-parity-clickup",
+  "parent_id": "005-component-surface-system/076-sheet-visual-parity",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "076 phase 18",
+      "board visual parity clickup",
+      "018 define table",
+      "clickup board column headers",
+      "board column tint outline",
+      "implementation plan",
+      "076 phase 18 plan",
+      "018 six step loop",
+      "task breakdown",
+      "076 phase 18 tasks",
+      "018 loop tasks",
+      "acceptance criteria"
+    ],
+    "key_topics": [
+      "phase",
+      "board",
+      "visual",
+      "parity",
+      "clickup",
+      "define",
+      "table",
+      "column",
+      "headers",
+      "tint",
+      "outline",
+      "implementation"
+    ],
+    "importance_tier": "normal",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "src/views/board-renderer.ts",
+      "src/views/card-field-renderer.ts",
+      "styles.css",
+      "tools/live/render-assertions.mjs",
+      "src/views/board-card-properties-panel.test.ts",
+      "tools/screenshots/constructed-scenarios.mjs",
+      "tools/live/render-assertion-harness.ts",
+      "tools/lane/check-lane.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "card-field-renderer.ts",
+        "kind": "code",
+        "path": "src/views/card-field-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "styles.css",
+        "kind": "file",
+        "path": "styles.css",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertions.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "board-card-properties-panel.test.ts",
+        "kind": "test",
+        "path": "src/views/board-card-properties-panel.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "constructed-scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/constructed-scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Board Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview The",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Producer",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Test Type",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The board's column headers today carry a plain label and count with no status-colour pill, no collapse control beyond the existing overflow affordance, and no visible tinted column body — read against the operator's own words and their ClickUp reference, the board reads flatter and less structured than the target",
+    "created_at": "2026-09-11T04:06:44.768Z",
+    "last_save_at": "2026-09-11T04:06:44.768Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:e26c16440b9bc58d5369634e2e8e545a4a6e6f213160ff5ae9f0bcebfef79b4c",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "1777a5bdceceedcee0530e28e7582a8639bdfc40d9a892a5264eff104f94b8d0",
+      "plan.md": "3310804c833bfa8bc62a9cd9108005ee66d46272a0e9f9814352ce2903017d24",
+      "tasks.md": "aa76fcee67825168949573fe21755fff992a4dd4efa480467e88f7d90dc49501"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

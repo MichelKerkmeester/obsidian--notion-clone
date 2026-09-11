@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/076-sheet-visual-parity/019-board-card-drag-feel-clickup",
+  "spec_folder": "005-component-surface-system/076-sheet-visual-parity/019-board-card-drag-feel-clickup",
+  "parent_id": "005-component-surface-system/076-sheet-visual-parity",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "076 phase 19",
+      "board card drag feel clickup",
+      "019 define table",
+      "clickup drag ghost tilt shadow",
+      "board touch drag lift",
+      "implementation plan",
+      "076 phase 19 plan",
+      "019 six step loop",
+      "task breakdown",
+      "076 phase 19 tasks",
+      "019 loop tasks",
+      "acceptance criteria"
+    ],
+    "key_topics": [
+      "phase",
+      "board",
+      "card",
+      "drag",
+      "feel",
+      "clickup",
+      "define",
+      "table",
+      "ghost",
+      "tilt",
+      "shadow",
+      "touch"
+    ],
+    "importance_tier": "normal",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "src/views/board-renderer.ts",
+      "tools/live/board-touch-drag.mjs",
+      "styles.css",
+      "tools/lane/check-lane.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-touch-drag.mjs",
+        "kind": "file",
+        "path": "tools/live/board-touch-drag.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "styles.css",
+        "kind": "file",
+        "path": "styles.css",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Board Card Drag Feel",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Whether Obsidian",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Producer",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Test Type",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "DOM-state",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "neighbour",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "ClickUp's reference shows: on long-press the card lifts as a COMPACT ghost (title row + one key field, not the full card), rotated ~3° with a soft elevated shadow, following the finger; the source column keeps the card's slot as a dimmed placeholder; the column under the finger is highlighted with an accent outline and its header stays visible; neighbouring columns dim; dragging near the edge auto-scrolls the board horizontally; releasing drops the card into the highlighted column at the hovered position",
+    "created_at": "2026-09-11T04:06:44.972Z",
+    "last_save_at": "2026-09-11T04:06:44.972Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:f21f837a42e683d2254e1657aafd1c6d2d371114bb369e23e090a3caa3493729",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "fa712c707eb8259fc9cf51efbd0ad9ed56f5276cab5959381a009faf9aee4e8e",
+      "plan.md": "bf04a7d37f5b2108abd36c251e80adc49a34d733f8bd6816272dfdcd99a0892f",
+      "tasks.md": "6e43b4999ae0797d8def9ee481b692bca737943b946a4a28579448937bc5b310"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

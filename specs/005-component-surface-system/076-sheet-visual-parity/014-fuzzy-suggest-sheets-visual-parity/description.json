@@ -1,0 +1,37 @@
+{
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/014-fuzzy-suggest-sheets-visual-parity",
+  "description": "Five FuzzySuggestModal call sites (file, image, markdown suggest, plus two settings-stacked pickers) share one createSurfaceShell chrome, never target",
+  "keywords": [
+    "five",
+    "fuzzysuggestmodal",
+    "call",
+    "sites",
+    "file",
+    "image",
+    "markdown",
+    "suggest",
+    "plus",
+    "two",
+    "settings-stacked",
+    "pickers",
+    "share",
+    "one",
+    "createsurfaceshell",
+    "chrome",
+    "never",
+    "targeted",
+    "child",
+    "coverage-audit",
+    "gap"
+  ],
+  "lastUpdated": "2026-09-11T04:09:32.039Z",
+  "specId": "014",
+  "folderSlug": "fuzzy-suggest-sheets-visual-parity",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

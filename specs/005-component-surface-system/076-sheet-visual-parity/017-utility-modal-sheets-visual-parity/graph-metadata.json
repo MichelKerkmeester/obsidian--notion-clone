@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/076-sheet-visual-parity/017-utility-modal-sheets-visual-parity",
+  "spec_folder": "005-component-surface-system/076-sheet-visual-parity/017-utility-modal-sheets-visual-parity",
+  "parent_id": "005-component-surface-system/076-sheet-visual-parity",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "076 phase 17",
+      "utility modal sheets visual parity",
+      "017 define table",
+      "DbModal utility sheet visual parity",
+      "implementation plan",
+      "076 phase 17 plan",
+      "017 six step loop",
+      "task breakdown",
+      "076 phase 17 tasks",
+      "017 loop tasks",
+      "acceptance criteria",
+      "017-utility-modal-sheets-visual-parity acceptance criteria"
+    ],
+    "key_topics": [
+      "phase",
+      "utility",
+      "modal",
+      "sheets",
+      "visual",
+      "parity",
+      "define",
+      "table",
+      "dbmodal",
+      "sheet",
+      "implementation",
+      "plan"
+    ],
+    "importance_tier": "normal",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "src/views/modals/base-import-confirm-modal.ts",
+      "src/views/toast.ts",
+      "src/views/bulk-edit-field-menu.ts",
+      "tools/live/sheet-grammar.mjs",
+      "src/settings.ts",
+      "archive/deprecated-views/chart/chart-renderer.ts",
+      "src/views/confirm-sheet.ts",
+      "tools/lane/check-lane.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "base-import-confirm-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/base-import-confirm-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toast.ts",
+        "kind": "code",
+        "path": "src/views/toast.ts",
+        "source": "derived"
+      },
+      {
+        "name": "bulk-edit-field-menu.ts",
+        "kind": "code",
+        "path": "src/views/bulk-edit-field-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "settings.ts",
+        "kind": "code",
+        "path": "src/settings.ts",
+        "source": "derived"
+      },
+      {
+        "name": "chart-renderer.ts",
+        "kind": "code",
+        "path": "archive/deprecated-views/chart/chart-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "confirm-sheet.ts",
+        "kind": "code",
+        "path": "src/views/confirm-sheet.ts",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Sheets Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Eighteen",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Eighteen",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern One",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Test Type",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Eighteen surfaces inherit `DbModal`'s declared sheet presentation and none has ever been read against any reference, any frame ruling, or any rubric",
+    "created_at": "2026-09-11T04:06:44.570Z",
+    "last_save_at": "2026-09-11T04:06:44.570Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:3472d5a4c444ef5e7c945aef00600ef09b2ce7aedd84af0de1e387e8eeca0e31",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "73363c6efdf9051d90312448da79c8de9d3e7934df87a0e2931d3b81473041e7",
+      "plan.md": "cb3886b6712b7e1589e84c532a23620952bcfcc5cb8fc4c4883f561116e7d360",
+      "tasks.md": "f3a75468b9e04794758069ee2180ef1a2082a868b55a69d769d38f4484e1a9bb"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

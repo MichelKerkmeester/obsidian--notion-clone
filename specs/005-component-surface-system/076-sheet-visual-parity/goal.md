@@ -96,6 +96,13 @@ own sheet owes.
 | `010-picker-sheets-visual-parity` | Date, icon, colour and property-type pickers each read as their reference |
 | `011-toolbar-overflow-and-column-width` | Toolbar overflow and the column-width sheet read as their references |
 | `012-board-card-fields` | Not one of the eleven sheets — the board card's meta grid renders one field per full-width row, never two side by side, judged against Anytype (the board's own landed parity target) rather than Notion |
+| `013-board-card-properties-visual-parity` | Coverage-audit gap (2026-09-11) — the board's field-visibility sheet reads as one more sheet in the divider-on-plain-background family, row-shell sharing with `002` confirmed |
+| `014-fuzzy-suggest-sheets-visual-parity` | Coverage-audit gap — all five FuzzySuggestModal call sites read as one consistent result-list family |
+| `015-cell-editor-popovers-visual-parity` | Coverage-audit gap — both inline cell-editor popovers read as a small, consistent piece of the sheet family |
+| `016-view-toolbar-options-visual-parity` | Coverage-audit gap — all four view-toolbar option popovers read as one family, judged on the calendar/mini-calendar anchor surface |
+| `017-utility-modal-sheets-visual-parity` | Coverage-audit gap, largest single one found — all 18 zero-reference DbModal utility sheets read as one family, judged for internal consistency |
+| `018-board-visual-parity-clickup` | Operator ruling (2026-09-11 ~05:36-05:38) — the board's column header, body and card anatomy read as ClickUp's own grammar, without reopening `012`'s single-column field rule |
+| `019-board-card-drag-feel-clickup` | Operator ruling — dragging a board card looks and feels like ClickUp's own drag, layered on `069`'s working mechanism |
 <!-- /ANCHOR:binding -->
 
 ---
@@ -122,6 +129,13 @@ the operator's own confirmation, and no agent ticks it.
 - [ ] `010-picker-sheets-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
 - [ ] `011-toolbar-overflow-and-column-width` — judge ≥ 14/16, no 0, twice consecutively; lane green
 - [ ] `012-board-card-fields` — judge ≥ 14/16, no 0, twice consecutively against Anytype; lane green (not one of the eleven sheets; does not gate or depend on their sequence)
+- [ ] `013-board-card-properties-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green (coverage-audit gap; independent of the eleven sheets' sequence)
+- [ ] `014-fuzzy-suggest-sheets-visual-parity` — judge ≥ 14/16, no 0, twice consecutively on the representative call site; lane green
+- [ ] `015-cell-editor-popovers-visual-parity` — judge ≥ 14/16, no 0, twice consecutively; lane green
+- [ ] `016-view-toolbar-options-visual-parity` — judge ≥ 14/16, no 0, twice consecutively on the calendar/mini-calendar anchor surface; lane green
+- [ ] `017-utility-modal-sheets-visual-parity` — judge ≥ 14/16, no 0, twice consecutively on the representative sample; lane green
+- [ ] `018-board-visual-parity-clickup` — judge ≥ 14/16, no 0, twice consecutively against ClickUp; lane green; `012`'s and `056`'s clauses re-run unchanged
+- [ ] `019-board-card-drag-feel-clickup` — judge ≥ 14/16, no 0, twice consecutively against ClickUp, on a mid-drag capture; lane green; `069`'s clauses re-run unchanged
 - [x] No `071` clause regressed: `node tools/live/sheet-grammar.mjs` exit 0 across all eleven sheet landings
 - [x] No `056`/`045` board clause regressed: `render-assertions.mjs` exit 0 for `012`'s own landing
   the clause this landing retired read 2 columns at 1440px, 1 at 340px, and 72 of 306 painted

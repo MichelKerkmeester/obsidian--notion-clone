@@ -1,0 +1,33 @@
+{
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/013-board-card-properties-visual-parity",
+  "description": "The board's field-visibility sheet toggles which properties paint on a card, sharing a row shell with 002's column manager, never targeted by a 076 ch",
+  "keywords": [
+    "board",
+    "field-visibility",
+    "sheet",
+    "toggles",
+    "properties",
+    "paint",
+    "card",
+    "sharing",
+    "row",
+    "shell",
+    "column",
+    "manager",
+    "never",
+    "targeted",
+    "child",
+    "coverage-audit",
+    "gap"
+  ],
+  "lastUpdated": "2026-09-11T04:09:31.960Z",
+  "specId": "013",
+  "folderSlug": "board-card-properties-visual-parity",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

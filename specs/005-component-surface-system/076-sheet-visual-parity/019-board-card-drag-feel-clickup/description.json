@@ -1,0 +1,30 @@
+{
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/019-board-card-drag-feel-clickup",
+  "description": "The board card's drag interaction gains ClickUp's ghost, placeholder, target-highlight and auto-scroll feel, layered on 069's already-working mechanis",
+  "keywords": [
+    "board",
+    "card",
+    "drag",
+    "interaction",
+    "gains",
+    "clickup",
+    "ghost",
+    "placeholder",
+    "target-highlight",
+    "auto-scroll",
+    "feel",
+    "layered",
+    "already-working",
+    "mechanism"
+  ],
+  "lastUpdated": "2026-09-11T04:09:32.436Z",
+  "specId": "019",
+  "folderSlug": "board-card-drag-feel-clickup",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

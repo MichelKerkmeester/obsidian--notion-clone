@@ -281,8 +281,11 @@ total. The reviewer writes the score table, with a one-line justification per ro
 <!-- ANCHOR:phase-map -->
 ## PHASE DOCUMENTATION MAP
 
-> Eleven children, numbered in the order the operator meets the sheets. **They run in that order,
-> one at a time** (D4). `001` is first because the operator named the settings sheet.
+> Eleven children, numbered in the order the operator meets the sheets, run in that order, one at a
+> time (D4). `001` is first because the operator named the settings sheet. Children `012`-`019` were
+> added later by separate operator rulings and by the 2026-09-11 coverage audit (`coverage-audit.md`)
+> that cross-referenced `tools/storybook/sheet-inventory.mjs`'s 87-surface list against this map; none
+> of `012`-`019` gates or is gated by the eleven sheets' own sequence.
 
 | Phase | Folder | Sheet | Primary producer | Status |
 |-------|--------|-------|------------------|--------|
@@ -298,6 +301,13 @@ total. The reviewer writes the score table, with a one-line justification per ro
 | 10 | `010-picker-sheets-visual-parity/` | Date, icon, colour and property-type pickers | `src/views/date-value-picker.ts`, `src/views/icon-picker-popover.ts`, `src/views/option-color-picker.ts`, `src/views/record-surface/type-picker.ts` | scaffolded |
 | 11 | `011-toolbar-overflow-and-column-width/` | Toolbar overflow, column width | `src/views/toolbar-renderer.ts`, `src/views/column-width.ts` | scaffolded |
 | 12 | `012-board-card-fields/` | Board card meta grid (not one of the eleven sheets — added 2026-09-10 ~21:43 by a separate operator ruling on the same build) | `styles.css` (`.obnotion-kanban-card-meta`), `tools/live/render-assertions.mjs` | scaffolded |
+| 13 | `013-board-card-properties-visual-parity/` | Board card field-visibility sheet (coverage-audit gap, 2026-09-11) | `src/views/board-card-properties-panel.ts` | scaffolded |
+| 14 | `014-fuzzy-suggest-sheets-visual-parity/` | File/image/markdown suggest sheets, incl. settings-stacked template/cover pickers (coverage-audit gap) | `src/main.ts`, `src/views/image-file-suggest-modal.ts`, `src/views/markdown-file-suggest-modal.ts` | scaffolded |
+| 15 | `015-cell-editor-popovers-visual-parity/` | Inline table cell-editor popovers (coverage-audit gap) | `src/views/cell-renderer.ts` | scaffolded |
+| 16 | `016-view-toolbar-options-visual-parity/` | Calendar/timeline/chart/mini-calendar toolbar option popovers (coverage-audit gap) | `src/views/calendar-toolbar-renderer.ts`, `calendar-timeline-toolbar-renderer.ts`, `chart-toolbar-renderer.ts`, `calendar-mini-calendar-renderer.ts` | scaffolded |
+| 17 | `017-utility-modal-sheets-visual-parity/` | 18 zero-reference DbModal utility sheets + toast + bulk-edit field menu (coverage-audit gap; the largest single gap found) | `src/views/modals/*.ts`, `src/settings.ts`, `src/views/toast.ts`, `src/views/bulk-edit-field-menu.ts` | scaffolded |
+| 18 | `018-board-visual-parity-clickup/` | Board column header/body/card-anatomy, retargeted to ClickUp (operator ruling, 2026-09-11 ~05:36-05:38) | `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts` | scaffolded |
+| 19 | `019-board-card-drag-feel-clickup/` | Board card drag interaction feel, retargeted to ClickUp (operator ruling, 2026-09-11 ~05:36) | `src/views/board-renderer.ts`, `tools/live/board-touch-drag.mjs` | scaffolded |
 
 ### Phase Transition Rules
 
@@ -308,7 +318,12 @@ total. The reviewer writes the score table, with a one-line justification per ro
 - `012` is not one of the eleven sheets and does not gate or depend on their sequence; it holds the
   shared css-lane triplet in its own turn (D4's rationale, extended to a twelfth holder) and is
   judged against Anytype rather than Notion, per its own `spec.md` §13
-- Run `validate.sh --recursive` on this parent to validate all twelve as one unit
+- `013`-`017` are coverage-audit gaps (`coverage-audit.md`): each holds the shared css-lane triplet in
+  its own turn and does not gate or depend on `001`-`012`'s sequence
+- `018` and `019` are the operator's ClickUp board rulings: `019` is sequenced strictly after `018` on
+  the shared `board-renderer.ts` file (its own D3), and both depart from `056` ADR-001 for board
+  surfaces only, per the Proposed ADR in `../../roadmap.md` §7
+- Run `validate.sh --recursive` on this parent to validate all nineteen as one unit
 
 ### Phase Handoff Criteria
 
@@ -317,7 +332,10 @@ total. The reviewer writes the score table, with a one-line justification per ro
 | 001 | 002 | The settings sheet's judge passes twice, and its DEFINE table's card/row/trailing-element vocabulary is the one every later child reuses | `001/verification.md`, `001/acceptance-criteria.md` |
 | any child | the next | The previous child's lane clauses are in the shared regression set and green | `tools/live/sheet-grammar.mjs` exit 0 |
 | 011 | 012 | The eleven sheets' judge passes are recorded; `012` proceeds independently of them since it targets the board card, not a sheet | This spec's map, rows 1-11 `complete` |
-| 012 | (parent) | Twelve judge passes recorded; the operator's twelve device rows are the only open criteria | This spec's map, all rows `complete` |
+| 012 | 013-017 | No sequencing dependency; each coverage-audit gap proceeds independently, holding the css-lane triplet in its own turn | This spec's map, rows 13-17 |
+| 017 | 018 | No sequencing dependency in principle, but `018` is scaffolded next in operator-report order | This spec's map, row 18 |
+| 018 | 019 | `018`'s board chrome commits land first on `board-renderer.ts`; `019` rebases over them before its own CREATE | `018/verification.md`, `019/plan.md` §6 |
+| 019 | (parent) | Nineteen judge passes recorded; the operator's nineteen device rows are the only open criteria | This spec's map, all rows `complete` |
 <!-- /ANCHOR:phase-map -->
 
 ---
@@ -337,7 +355,8 @@ total. The reviewer writes the score table, with a one-line justification per ro
 
 ## RELATED DOCUMENTS
 
-- **Phase children**: the eleven `[0-9][0-9][0-9]-*/` sub-folders, each with spec, plan, tasks, acceptance-criteria and goal
+- **Phase children**: nineteen `[0-9][0-9][0-9]-*/` sub-folders, each with spec, plan, tasks, acceptance-criteria, goal and verification
+- **Coverage audit**: `coverage-audit.md` — the 2026-09-11 cross-reference of `tools/storybook/sheet-inventory.mjs`'s 87-surface list against this map, which opened children `013`-`017`
 - **Decisions**: `decision-record.md` — D1 the image judge, D2 every surface of a grammar, D3 reference precedence, D4 one sheet at a time, D6 the loop graph, D7 dividers not cards, D8 release only after DONE, D9 reference composition
 - **Parent Spec**: `../spec.md` (005-component-surface-system)
 - **Predecessor**: `../071-sheet-notion-anytype-alignment/spec.md`, and its `sheet-notion-audit.md` §0 on the 299×678 ceiling

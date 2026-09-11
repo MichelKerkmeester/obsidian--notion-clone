@@ -1,0 +1,36 @@
+{
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/017-utility-modal-sheets-visual-parity",
+  "description": "Eighteen zero-reference DbModal utility sheets plus toast and bulk-edit field menu share one chrome primitive, the largest single coverage gap the aud",
+  "keywords": [
+    "eighteen",
+    "zero-reference",
+    "dbmodal",
+    "utility",
+    "sheets",
+    "plus",
+    "toast",
+    "bulk-edit",
+    "field",
+    "menu",
+    "share",
+    "one",
+    "chrome",
+    "primitive",
+    "largest",
+    "single",
+    "coverage",
+    "gap",
+    "audit",
+    "found"
+  ],
+  "lastUpdated": "2026-09-11T04:09:32.294Z",
+  "specId": "017",
+  "folderSlug": "utility-modal-sheets-visual-parity",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

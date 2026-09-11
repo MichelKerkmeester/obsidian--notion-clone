@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/076-sheet-visual-parity/016-view-toolbar-options-visual-parity",
+  "spec_folder": "005-component-surface-system/076-sheet-visual-parity/016-view-toolbar-options-visual-parity",
+  "parent_id": "005-component-surface-system/076-sheet-visual-parity",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "076 phase 16",
+      "view toolbar options visual parity",
+      "016 define table",
+      "calendar timeline chart toolbar popover visual parity",
+      "implementation plan",
+      "076 phase 16 plan",
+      "016 six step loop",
+      "task breakdown",
+      "076 phase 16 tasks",
+      "016 loop tasks",
+      "acceptance criteria",
+      "016-view-toolbar-options-visual-parity acceptance criteria"
+    ],
+    "key_topics": [
+      "phase",
+      "view",
+      "toolbar",
+      "options",
+      "visual",
+      "parity",
+      "define",
+      "table",
+      "calendar",
+      "timeline",
+      "chart",
+      "popover"
+    ],
+    "importance_tier": "normal",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "src/views/calendar-toolbar-renderer.ts",
+      "src/views/calendar-timeline-toolbar-renderer.ts",
+      "src/views/chart-toolbar-renderer.ts",
+      "src/views/calendar-mini-calendar-renderer.ts",
+      "screenshots/notion/ios/database/notion-ios-database-calendar-02-2413d15d-1ec7-4d3f-9855-9436fc479326.webp",
+      "screenshots/anytype/desktop/menus/anytype-menu-calendar-day-menu-dark-full.png",
+      "tools/live/sheet-grammar.mjs",
+      "tools/lane/check-lane.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-timeline-toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-timeline-toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "chart-toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/chart-toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-mini-calendar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-mini-calendar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "notion-ios-database-calendar-02-2413d15d-1ec7-4d3f-9855-9436fc479326.webp",
+        "kind": "file",
+        "path": "screenshots/notion/ios/database/notion-ios-database-calendar-02-2413d15d-1ec7-4d3f-9855-9436fc479326.webp",
+        "source": "derived"
+      },
+      {
+        "name": "anytype-menu-calendar-day-menu-dark-full.png",
+        "kind": "file",
+        "path": "screenshots/anytype/desktop/menus/anytype-menu-calendar-day-menu-dark-full.png",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Specific Toolbar Option Popovers Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Packet",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Context",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Three",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Four",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Producer",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Test Type",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Three of the four toolbars' options popovers, and every one of their stacked dropdown children, have never been read against any reference — `071/001`'s inventory records `none / none` for `timeline-toolbar-options`, `chart-toolbar-options`, and the chart/calendar/timeline stacked option dropdowns and the timeline event menu",
+    "created_at": "2026-09-11T04:06:44.385Z",
+    "last_save_at": "2026-09-11T04:06:44.385Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:8da2d643989efc7419d713416dc818aa27f66cdff142c5d50898b113745214b2",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "5f3c967fe24689167f0fc1dcd8e4405b97cd6814cc833b38c88546406cca666c",
+      "plan.md": "5b9868facc1a401796a046573f6999a6240348dbe3564dafba2786d433851957",
+      "tasks.md": "be09fb3c1e0e823c7edb9ce2959fe5baec127de867062435c7749038a2c58511"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

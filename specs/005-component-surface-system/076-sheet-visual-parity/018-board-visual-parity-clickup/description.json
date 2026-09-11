@@ -1,0 +1,30 @@
+{
+  "specFolder": "005-component-surface-system/076-sheet-visual-parity/018-board-visual-parity-clickup",
+  "description": "The board's column header, body and card anatomy retarget from Anytype to ClickUp for board surfaces specifically, per the operator's 2026-09-11 rulin",
+  "keywords": [
+    "board",
+    "column",
+    "header",
+    "body",
+    "card",
+    "anatomy",
+    "retarget",
+    "anytype",
+    "clickup",
+    "surfaces",
+    "specifically",
+    "per",
+    "operator",
+    "ruling"
+  ],
+  "lastUpdated": "2026-09-11T04:09:32.367Z",
+  "specId": "018",
+  "folderSlug": "board-visual-parity-clickup",
+  "parentChain": [
+    "005-component-surface-system",
+    "076-sheet-visual-parity"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

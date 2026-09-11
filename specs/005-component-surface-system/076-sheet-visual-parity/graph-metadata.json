@@ -15,7 +15,14 @@
     "005-component-surface-system/076-sheet-visual-parity/009-menu-and-confirm-visual-parity",
     "005-component-surface-system/076-sheet-visual-parity/010-picker-sheets-visual-parity",
     "005-component-surface-system/076-sheet-visual-parity/011-toolbar-overflow-and-column-width",
-    "005-component-surface-system/076-sheet-visual-parity/012-board-card-fields"
+    "005-component-surface-system/076-sheet-visual-parity/012-board-card-fields",
+    "005-component-surface-system/076-sheet-visual-parity/013-board-card-properties-visual-parity",
+    "005-component-surface-system/076-sheet-visual-parity/014-fuzzy-suggest-sheets-visual-parity",
+    "005-component-surface-system/076-sheet-visual-parity/015-cell-editor-popovers-visual-parity",
+    "005-component-surface-system/076-sheet-visual-parity/016-view-toolbar-options-visual-parity",
+    "005-component-surface-system/076-sheet-visual-parity/017-utility-modal-sheets-visual-parity",
+    "005-component-surface-system/076-sheet-visual-parity/018-board-visual-parity-clickup",
+    "005-component-surface-system/076-sheet-visual-parity/019-board-card-drag-feel-clickup"
   ],
   "manual": {
     "depends_on": [
@@ -73,13 +80,13 @@
       "tools/live/sheet-grammar.mjs",
       "tools/screenshots/constructed-scenarios.mjs",
       "tools/live/sheet-rebuild.mjs",
+      "tools/storybook/sheet-inventory.mjs",
       "src/views/column-manager-renderer.ts",
       "src/views/record-surface/property-row.ts",
       "src/views/filter-panel-renderer.ts",
       "src/views/sort-panel-renderer.ts",
       "src/views/toolbar-renderer.ts",
-      "src/views/board-groups-panel.ts",
-      "src/views/modals/create-property-modal.ts"
+      "src/views/board-groups-panel.ts"
     ],
     "entities": [
       {
@@ -161,6 +168,12 @@
         "source": "derived"
       },
       {
+        "name": "sheet-inventory.mjs",
+        "kind": "file",
+        "path": "tools/storybook/sheet-inventory.mjs",
+        "source": "derived"
+      },
+      {
         "name": "column-manager-renderer.ts",
         "kind": "code",
         "path": "src/views/column-manager-renderer.ts",
@@ -197,12 +210,6 @@
         "source": "derived"
       },
       {
-        "name": "create-property-modal.ts",
-        "kind": "code",
-        "path": "src/views/modals/create-property-modal.ts",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -229,7 +236,7 @@
     ],
     "causal_summary": "`071/002`-`071/015` aligned the phone sheets to Notion at the row-grammar level — pitch, inset,",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-11T03:53:42.218Z",
+    "last_save_at": "2026-09-11T04:16:08.054Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -239,11 +246,11 @@
       "goal.md",
       "decision-record.md"
     ],
-    "source_fingerprint": "sha256:a9dd92db56e6a77e8752de9b2a3636b42d298e0928bf65d68bebc55bed636426",
+    "source_fingerprint": "sha256:c96b743c787717c14460c41ced98e104259442a6f290cbe31c24f05f9b5c48ea",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "305edc9dcfc35d94039520ceed1c298736425c8d8c8c925f52389ba250a73a31",
-      "plan.md": "ed9e374abaf90c83b10c16f48e1438c432f39a4778cc41700924e42d5168bcf2",
+      "spec.md": "c7cc0a18affbc311c510ff187aa0c31cf1e6bc230eeee614535a451e2e09b11e",
+      "plan.md": "dcb91bea91e15c0219bafbf17e3d32ac05f24af42711f266d4bba3d5c6b1c135",
       "tasks.md": "608229bad146104f15aa14462af11fc18f0ee3dee1f46b6dc07485dff5e1d3f9",
       "decision-record.md": "d46f4dae6b0d20fc36dbd93da1fa150e7c3993a0f49267cb92343b1484c62c1f"
     },

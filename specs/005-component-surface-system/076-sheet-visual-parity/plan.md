@@ -120,6 +120,13 @@ Sequential, per D4. Each child's own `tasks.md` owns its six step groups and the
 | 10 | `010-picker-sheets-visual-parity` | Judge twice |
 | 11 | `011-toolbar-overflow-and-column-width` | Judge twice |
 | 12 | `012-board-card-fields` | Not one of the eleven sheets (added 2026-09-10 ~21:43 by a separate ruling); holds the css-lane in its own turn, independent of the sheet sequence; judge twice against Anytype; the parent's map goes `complete` |
+| 13 | `013-board-card-properties-visual-parity` | Coverage-audit gap (2026-09-11); independent of the sheet sequence; judge twice |
+| 14 | `014-fuzzy-suggest-sheets-visual-parity` | Coverage-audit gap; independent; judge twice on the representative call site |
+| 15 | `015-cell-editor-popovers-visual-parity` | Coverage-audit gap; independent; judge twice |
+| 16 | `016-view-toolbar-options-visual-parity` | Coverage-audit gap; independent; judge twice on the calendar/mini-calendar anchor surface |
+| 17 | `017-utility-modal-sheets-visual-parity` | Coverage-audit gap, largest single one found; independent; judge twice on the representative sample |
+| 18 | `018-board-visual-parity-clickup` | Operator ClickUp ruling (2026-09-11 ~05:36-05:38); judge twice against ClickUp |
+| 19 | `019-board-card-drag-feel-clickup` | Operator ClickUp ruling; sequenced strictly after `018` on `board-renderer.ts`; judge twice against ClickUp on a mid-drag capture; the parent's map goes `complete` |
 <!-- /ANCHOR:phases -->
 
 ---

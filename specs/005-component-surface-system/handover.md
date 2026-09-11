@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T05:38:00Z"
-    last_updated_by: "300-frame-ruling-docs"
-    recent_action: "Frame ruling (D7-D9) documented: dividers not cards; 001/002 remediation queued"
-    next_safe_action: "Run 076/001 T015-T019 and 076/002 T014-T018 (frame-ruling remediation), then re-judge"
+    last_updated_at: "2026-09-11T05:40:00Z"
+    last_updated_by: "302-sheet-inventory-coverage"
+    recent_action: "076: D7-D9 frame ruling docs landed; coverage audit + 013-019 scaffolded, all validate"
+    next_safe_action: "Run 076/001 T015-T019 + 076/002 T014-T018 (D7-D9 remediation); or start 013-019's DEFINE"
     blockers:
       - "Open rows past this point are operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK)"
       - "076 closes no sheet on lanes alone; the image judge is a required gate (076 D1)"
@@ -645,6 +645,44 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-11 ~05:40, `076-sheet-visual-parity` coverage audit + 7 new children scaffolded — worktree `302-sheet-inventory-coverage`
+
+**What this leg did** — ran `tools/storybook/sheet-inventory.mjs` (87 surfaces: 55 primary + 32
+stacked) and cross-referenced every row against `076`'s children `001`-`012`, per the operator's
+instruction to double-check every sheet/dropdown is inventoried. Wrote
+`076/coverage-audit.md`: a full surface-by-surface table, the split-vs-bundle rationale, and the
+list of surfaces carrying no reference of any kind (47 total per the inventory's own summary; 18 of
+those are `017`'s DbModal bundle alone). Scaffolded seven new children with the full sibling
+document set (`spec.md`, `plan.md`, `tasks.md`, `acceptance-criteria.md`, `goal.md`,
+`verification.md`) each: `013-board-card-properties-visual-parity` (the board's field-visibility
+sheet, no prior target), `014-fuzzy-suggest-sheets-visual-parity` (five FuzzySuggestModal call
+sites bundled on shared chrome), `015-cell-editor-popovers-visual-parity` (two inline cell editors),
+`016-view-toolbar-options-visual-parity` (four view-toolbar option popovers, only one with an
+external reference), `017-utility-modal-sheets-visual-parity` (18 zero-reference DbModal utility
+sheets plus toast and bulk-edit field menu — the largest single gap found). Two further children
+were opened directly from operator rulings delivered mid-audit (2026-09-11 ~05:36-05:38, verbatim:
+*"Board card dragging should look and work like this like in clickup"*; *"In general for board
+styling lets mimic clickup"*): `018-board-visual-parity-clickup` (column header/body/card anatomy,
+retargeted from Anytype to ClickUp for board surfaces specifically — a Proposed ADR against `056`
+ADR-001, §7.21 of `roadmap.md`, resolved directly by the operator's words) and
+`019-board-card-drag-feel-clickup` (the drag interaction's presentation, layered on `069`'s already
+working move-and-persist mechanism, judged on a new evidence shape — a mid-drag capture — since
+every other `076` child judges a static frame). Every new child embeds its operator screenshot
+references (where any exist) directly in its `spec.md` §13 DEFINE table and mirrors them into
+`scratchpad/loop/<child>/operator-notes.md`. Parent docs updated: `076/spec.md`'s Phase
+Documentation Map, Phase Transition Rules and Phase Handoff Criteria; `076/plan.md` §4; `076/goal.md`
+§2 binding table and §3 completion checklist (7 new unticked rows); the 005 `goal.md` DONE table row
+(2/22, up from the stale 2/15); `roadmap.md` rows 93-94 (§4, quoting both sets of rulings verbatim),
+the `076-sheet-visual-parity` row in §5.A, and a new §7.21 Proposed ADR. This leg rebased onto the
+concurrent `300-frame-ruling-docs` leg below rather than overwriting it: both intents are kept,
+and none of this leg's seven new children contradicts D7-D9 — each already applied the same
+dividers-not-cards, ClickUp-for-boards rules independently, reading the same
+`scratchpad/loop/076-frame-ruling.md` this leg's counterpart formalized into the decision record.
+All seven new children plus the `076` parent (`children_ids` backfilled to include them) plus the
+`005` root validate `RESULT: PASSED` after a graph-metadata backfill pass over each folder. No
+`src/` file was touched — this is a documentation-only scaffolding leg; CREATE on any of the
+nineteen children remains entirely unstarted.
 
 ### 2026-09-11 ~05:38, `076-sheet-visual-parity` frame ruling (D7-D9) documented — worktree `300-frame-ruling-docs`
 
