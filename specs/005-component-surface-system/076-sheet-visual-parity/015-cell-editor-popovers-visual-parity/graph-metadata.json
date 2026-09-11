@@ -199,8 +199,8 @@
     ],
     "causal_summary": "Both inline cell-editor variants inherit `cell-renderer.ts:601`'s popover chrome, which has never been read against a reference or the 076 frame ruling",
     "created_at": "2026-09-11T04:06:44.200Z",
-    "last_save_at": "2026-09-11T04:06:44.200Z",
-    "save_lineage": "graph_only",
+    "last_save_at": "2026-09-11T04:39:20.844Z",
+    "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
@@ -209,11 +209,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:4649b0c93211dbddfcadacfe9c0d01392e15b612956acced9a02fb810f3bdcfc",
+    "source_fingerprint": "sha256:da91f3f47dcce7414c01a5140fb5d3f10cc03d320c0d62473de8e652fe7e1c6e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "2128eb5db2eb555ebd72ff28316f3f7003ab8792820a27b466392d4114f3cf47",
-      "plan.md": "b32b42d019c6812b8bb024d80eea086a044b463dbb732344b83f6d80b18ab57c",
+      "spec.md": "dc164e402efc5f96e32ef1cb1d17ce50a4b2f3e6c00517b81451655bc23b1146",
+      "plan.md": "918d1c0111df1b8cf77d221174c62fa4cf587bc08667f8830b47d8f1d223eb96",
       "tasks.md": "309fba2e29bbf938d878501004592eb5bc1e4b192ac8bc778578d5c397283c55"
     },
     "last_active_child_id": null,

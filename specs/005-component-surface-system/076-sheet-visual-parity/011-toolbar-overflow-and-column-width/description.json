@@ -13,13 +13,16 @@
     "labelled",
     "buttons"
   ],
-  "lastUpdated": "2026-09-10T22:10:00.000Z",
+  "lastUpdated": "2026-09-11T04:42:26.189Z",
   "specId": "011",
   "folderSlug": "toolbar-overflow-and-column-width",
   "parentChain": [
     "005-component-surface-system",
     "076-sheet-visual-parity"
   ],
-  "memorySequence": 0,
-  "memoryNameHistory": []
+  "memorySequence": 2,
+  "memoryNameHistory": [
+    "11-09-26_05-39__embedded-reference-images-in-011-toolbar-overflow.md",
+    "11-09-26_05-42__embedded-reference-images-in-011-toolbar-overflow.md"
+  ]
 }

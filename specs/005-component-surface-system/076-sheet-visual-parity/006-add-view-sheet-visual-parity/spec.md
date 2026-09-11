@@ -255,6 +255,36 @@ T001-T004 complete this table. The reference paths and the observed Notion colum
 
 ---
 
+## 14. Reference images
+
+> Embedded so a fresh planner and the image judge see the same screens the operator rules
+> against. (a) operator device captures and the ruling each grounds; (b) on-tree reference
+> captures from Notion/Anytype/ClickUp; (c) the current-state judge capture, where one has
+> landed.
+
+### 14.1 Operator screenshots
+
+![ClickUp iOS Views sheet: large radius, centred bold title, round close-in-a-circle, pinned primary pill](../../../../screenshots/operator/clickup-views-sheet-reference.png)
+Grounds: "They also have good sheet styling"
+
+![0.0.40 Properties sheet: rows sit inside a lighter rounded container on the sheet (rejected)](../../../../screenshots/operator/0040-properties-card-container-rejected.png)
+Grounds: "Never use bg container like here for values, notion / anytype use dividers on plain sheet bg thats better"
+
+### 14.2 Reference captures (Notion / Anytype / ClickUp)
+
+![Notion iOS — adding a table view, step 1](../../../../screenshots/notion/ios/flows/adding-a-table-view/notion-ios-flow-adding-a-table-view-01-77b8a9bb-28e0-4edc-a399-b773dc53567f.webp)
+![Notion iOS — changing database view, step 1](../../../../screenshots/notion/ios/flows/changing-database-view/notion-ios-flow-changing-database-view-01-90277769-e407-4476-bc16-4309ee11276d.webp)
+![Anytype mobile view-switcher sheet (dark)](../../../../screenshots/anytype/mobile/sheets/anytype-mobile-sheet-set-viewswitcher-dark.png)
+![Anytype mobile view-switcher sheet (light)](../../../../screenshots/anytype/mobile/sheets/anytype-mobile-sheet-set-viewswitcher-light.png)
+![ClickUp iOS view switcher — closest reference per operator ruling](../../../../screenshots/clickup/ios/views/clickup-ios-views-view-switcher-f149357b-0e23-4520-abf1-5037462b994b.webp)
+
+### 14.3 Current-state judge capture
+
+![dark — current state (0.0.40)](../../../../screenshots/notion-clone/components/constructed-toolbar-add-view-sheet-mobile-dark.png)
+![light — current state (0.0.40)](../../../../screenshots/notion-clone/components/constructed-toolbar-add-view-sheet-mobile-light.png)
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Parent**: `../spec.md` (the loop and the rubric), `../decision-record.md` (D1-D4)

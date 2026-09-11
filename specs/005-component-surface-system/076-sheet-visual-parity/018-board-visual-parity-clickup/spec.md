@@ -256,6 +256,25 @@ As the operator, I open the board on my iPhone and see status-coloured column he
 
 ---
 
+## 14. Reference images
+
+> Embedded so a fresh planner and the image judge see the same screens the operator rules
+> against. (a) operator device captures and the ruling each grounds; (b) on-tree reference
+> captures from Notion/Anytype/ClickUp; (c) the current-state judge capture, where one has
+> landed.
+
+### 14.1 Operator screenshots
+
+![ClickUp iOS board: column header pills with status colour, count, collapse and add controls](../../../../screenshots/operator/clickup-board-column-headers-reference.png)
+Grounds: "For board clickup column headers are great, button to collapse or add new one and just good ui styling"
+
+### 14.2 Reference captures (Notion / Anytype / ClickUp)
+
+![Anytype mobile kanban (board) view (dark) — supplementary structural reference; ClickUp leads per D9](../../../../screenshots/anytype/mobile/app/anytype-mobile-set-kanban-dark.png)
+![Anytype mobile kanban (board) view (light)](../../../../screenshots/anytype/mobile/app/anytype-mobile-set-kanban-light.png)
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Parent**: `../spec.md`, `../decision-record.md`

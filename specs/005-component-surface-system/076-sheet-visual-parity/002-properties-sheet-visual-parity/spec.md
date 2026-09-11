@@ -535,6 +535,32 @@ duplicates it.
 
 ---
 
+## 14. Reference images
+
+> Embedded so a fresh planner and the image judge see the same screens the operator rules
+> against. (a) operator device captures and the ruling each grounds; (b) on-tree reference
+> captures from Notion/Anytype/ClickUp; (c) the current-state judge capture, where one has
+> landed.
+
+### 14.1 Operator screenshots
+
+![0.0.40 Properties sheet: rows sit inside a lighter rounded container on the sheet (rejected)](../../../../screenshots/operator/0040-properties-card-container-rejected.png)
+Grounds: "Never use bg container like here for values, notion / anytype use dividers on plain sheet bg thats better"
+
+### 14.2 Reference captures (Notion / Anytype / ClickUp)
+
+![Notion iOS property-visibility list, row 1](../../../../screenshots/notion/ios/database/notion-ios-database-properties-01-8bb9115f-e0da-4e01-bd9d-2b627a4b6727.webp)
+![Notion iOS property-visibility list, row 2](../../../../screenshots/notion/ios/database/notion-ios-database-properties-16-142cef4e-fe09-4fc9-bab5-59d0e4e72de1.webp)
+![Anytype mobile object-properties sheet (dark)](../../../../screenshots/anytype/mobile/sheets/anytype-mobile-sheet-object-properties-dark.png)
+![Anytype mobile object-properties sheet (light)](../../../../screenshots/anytype/mobile/sheets/anytype-mobile-sheet-object-properties-light.png)
+
+### 14.3 Current-state judge capture
+
+![dark — current state (0.0.40)](../../../../screenshots/notion-clone/panels/constructed-column-manager-sheet-mobile-dark.png)
+![light — current state (0.0.40)](../../../../screenshots/notion-clone/panels/constructed-column-manager-sheet-mobile-light.png)
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Parent**: `../spec.md` (the loop and the rubric), `../decision-record.md` (D1-D4)

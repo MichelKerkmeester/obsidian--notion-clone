@@ -238,6 +238,26 @@ As the operator, I open any view's toolbar options — calendar, timeline, chart
 
 ---
 
+## 14. Reference images
+
+> Embedded so a fresh planner and the image judge see the same screens the operator rules
+> against. (a) operator device captures and the ruling each grounds; (b) on-tree reference
+> captures from Notion/Anytype/ClickUp; (c) the current-state judge capture, where one has
+> landed.
+
+### 14.1 Operator screenshots
+
+![0.0.40 Properties sheet: rows sit inside a lighter rounded container on the sheet (rejected)](../../../../screenshots/operator/0040-properties-card-container-rejected.png)
+Grounds: "Never use bg container like here for values, notion / anytype use dividers on plain sheet bg thats better"
+
+### 14.2 Reference captures (Notion / Anytype / ClickUp)
+
+![Notion iOS database calendar screen — calendar/mini-calendar reference; timeline and chart carry zero reference](../../../../screenshots/notion/ios/database/notion-ios-database-calendar-02-2413d15d-1ec7-4d3f-9855-9436fc479326.webp)
+![Anytype desktop calendar day-menu (dark, full)](../../../../screenshots/anytype/desktop/menus/anytype-menu-calendar-day-menu-dark-full.png)
+![Anytype desktop calendar month-select menu (dark, full)](../../../../screenshots/anytype/desktop/menus/anytype-menu-calendar-month-select-dark-full.png)
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Parent**: `../spec.md`, `../decision-record.md`

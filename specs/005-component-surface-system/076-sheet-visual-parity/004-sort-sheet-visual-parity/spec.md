@@ -267,6 +267,33 @@ Raised as **Proposed ADRs** in `../../roadmap.md` §7 under D15 before this chil
 
 ---
 
+## 14. Reference images
+
+> Embedded so a fresh planner and the image judge see the same screens the operator rules
+> against. (a) operator device captures and the ruling each grounds; (b) on-tree reference
+> captures from Notion/Anytype/ClickUp; (c) the current-state judge capture, where one has
+> landed.
+
+### 14.1 Operator screenshots
+
+![0.0.40 Properties sheet: rows sit inside a lighter rounded container on the sheet (rejected)](../../../../screenshots/operator/0040-properties-card-container-rejected.png)
+Grounds: "Never use bg container like here for values, notion / anytype use dividers on plain sheet bg thats better"
+
+### 14.2 Reference captures (Notion / Anytype / ClickUp)
+
+![Notion iOS sort screen 1](../../../../screenshots/notion/ios/database/notion-ios-database-sort-01-84653307-d85f-4766-991d-f060f6cfe1ac.webp)
+![Notion iOS sort screen 2](../../../../screenshots/notion/ios/database/notion-ios-database-sort-08-ff7fd824-ac65-4de0-9c97-ffbc39d87b54.webp)
+![Anytype mobile sort-direction sheet (dark)](../../../../screenshots/anytype/mobile/sheets/anytype-mobile-sheet-sort-direction-dark.png)
+![Anytype mobile sort-direction sheet (light)](../../../../screenshots/anytype/mobile/sheets/anytype-mobile-sheet-sort-direction-light.png)
+![ClickUp iOS sort screen](../../../../screenshots/clickup/ios/settings/clickup-ios-settings-sort-3fe0480a-8509-4e6a-82c8-b193dabfaef2.webp)
+
+### 14.3 Current-state judge capture
+
+![dark — current state (0.0.40)](../../../../screenshots/notion-clone/panels/constructed-sort-panel-sheet-mobile-dark.png)
+![light — current state (0.0.40)](../../../../screenshots/notion-clone/panels/constructed-sort-panel-sheet-mobile-light.png)
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Parent**: `../spec.md` (the loop and the rubric), `../decision-record.md` (D1-D4)

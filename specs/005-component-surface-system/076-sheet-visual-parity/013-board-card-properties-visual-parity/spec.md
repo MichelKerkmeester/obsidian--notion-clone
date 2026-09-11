@@ -228,6 +228,27 @@ As the operator, I open the board's "choose visible fields" sheet and see the sa
 
 ---
 
+## 14. Reference images
+
+> Embedded so a fresh planner and the image judge see the same screens the operator rules
+> against. (a) operator device captures and the ruling each grounds; (b) on-tree reference
+> captures from Notion/Anytype/ClickUp; (c) the current-state judge capture, where one has
+> landed.
+
+### 14.1 Operator screenshots
+
+![0.0.40 Properties sheet: rows sit inside a lighter rounded container on the sheet (rejected)](../../../../screenshots/operator/0040-properties-card-container-rejected.png)
+Grounds: "Never use bg container like here for values, notion / anytype use dividers on plain sheet bg thats better"
+
+### 14.2 Reference captures (Notion / Anytype / ClickUp)
+
+![Notion iOS properties-list grammar reference](../../../../screenshots/notion/ios/database/notion-ios-database-properties-02-63512550-9381-42d2-839e-528e416275da.webp)
+![Anytype mobile space types-list (dark)](../../../../screenshots/anytype/mobile/app/anytype-mobile-space-typeslist-dark.png)
+![Anytype mobile space types-list (light)](../../../../screenshots/anytype/mobile/app/anytype-mobile-space-typeslist-light.png)
+![ClickUp iOS row anatomy reference (views/home)](../../../../screenshots/clickup/ios/views/clickup-ios-views-home-00e1f356-5dbc-43c4-b21d-1668bd553833.webp)
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Parent**: `../spec.md` (the loop and the rubric), `../decision-record.md`

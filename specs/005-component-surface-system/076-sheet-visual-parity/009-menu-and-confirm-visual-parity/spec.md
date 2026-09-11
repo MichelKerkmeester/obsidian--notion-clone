@@ -267,6 +267,40 @@ Raised as **Proposed ADRs** in `../../roadmap.md` §7 under D15 before this chil
 
 ---
 
+## 14. Reference images
+
+> Embedded so a fresh planner and the image judge see the same screens the operator rules
+> against. (a) operator device captures and the ruling each grounds; (b) on-tree reference
+> captures from Notion/Anytype/ClickUp; (c) the current-state judge capture, where one has
+> landed.
+
+### 14.1 Operator screenshots
+
+![0.0.40 cell-selection menu: centred title and close, old flat row grammar, no grab handle](../../../../screenshots/operator/0040-cell-menu-no-handle.png)
+Grounds: "This one also not updated yet also missing drag handler"
+
+![0.0.40 column menu: close to target but missing the grab handle, too much side padding, missing dividers](../../../../screenshots/operator/0040-column-menu-close-but.png)
+Grounds: "This one comes close but missing drag handler, too much side padding and missing dividers"
+
+![0.0.40 Wrap-text sub-menu: short floating sheet, missing dividers, should have stacked](../../../../screenshots/operator/0040-wrap-text-submenu.png)
+Grounds: "A lot of issuws here padding drag gandler missing dividers between items and should have been stacked sheet"
+
+![0.0.40 Properties sheet: rows sit inside a lighter rounded container on the sheet (rejected)](../../../../screenshots/operator/0040-properties-card-container-rejected.png)
+Grounds: "Never use bg container like here for values, notion / anytype use dividers on plain sheet bg thats better"
+
+### 14.2 Reference captures (Notion / Anytype / ClickUp)
+
+![Notion iOS block/context menu reference](../../../../screenshots/notion/ios/database/notion-ios-database-block-menu-07-9acbba50-e88a-4e2c-b3ae-a8de35da6a92.webp)
+![Anytype mobile object 'more' menu sheet (dark)](../../../../screenshots/anytype/mobile/sheets/anytype-mobile-sheet-object-more-dark.png)
+![Anytype mobile object 'more' menu sheet (light)](../../../../screenshots/anytype/mobile/sheets/anytype-mobile-sheet-object-more-light.png)
+
+### 14.3 Current-state judge capture
+
+![dark — current state (0.0.40)](../../../../screenshots/notion-clone/components/constructed-owned-menu-sheet-mobile-dark.png)
+![light — current state (0.0.40)](../../../../screenshots/notion-clone/components/constructed-owned-menu-sheet-mobile-light.png)
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Parent**: `../spec.md` (the loop and the rubric), `../decision-record.md` (D1-D4)

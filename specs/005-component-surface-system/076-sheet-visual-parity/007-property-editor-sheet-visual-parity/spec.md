@@ -271,6 +271,35 @@ Raised as **Proposed ADRs** in `../../roadmap.md` §7 under D15 before this chil
 
 ---
 
+## 14. Reference images
+
+> Embedded so a fresh planner and the image judge see the same screens the operator rules
+> against. (a) operator device captures and the ruling each grounds; (b) on-tree reference
+> captures from Notion/Anytype/ClickUp; (c) the current-state judge capture, where one has
+> landed.
+
+### 14.1 Operator screenshots
+
+![0.0.40 property-type list opens as a floating card over the note with the keyboard up (rejected)](../../../../screenshots/operator/0040-property-type-picker-floating-card.png)
+Grounds: "Properties like this should be a stacked sheet"
+
+![0.0.40 Properties sheet: rows sit inside a lighter rounded container on the sheet (rejected)](../../../../screenshots/operator/0040-properties-card-container-rejected.png)
+Grounds: "Never use bg container like here for values, notion / anytype use dividers on plain sheet bg thats better"
+
+### 14.2 Reference captures (Notion / Anytype / ClickUp)
+
+![Notion iOS property editor screen 1](../../../../screenshots/notion/ios/database/notion-ios-database-property-editor-02-658fd83b-c23b-4573-aac8-a18e06e185a1.webp)
+![Notion iOS property editor screen 2](../../../../screenshots/notion/ios/database/notion-ios-database-property-editor-05-6ae4ac3f-ea7e-4002-9f69-5b9bfa1b0307.webp)
+![Anytype mobile new-relation format sheet (dark)](../../../../screenshots/anytype/mobile/sheets/anytype-mobile-sheet-relation-new-format-dark.png)
+![Anytype mobile new-relation format sheet (light)](../../../../screenshots/anytype/mobile/sheets/anytype-mobile-sheet-relation-new-format-light.png)
+
+### 14.3 Current-state judge capture
+
+![dark — current state (0.0.40)](../../../../screenshots/notion-clone/panels/constructed-modal-sheet-property-editor-sheet-mobile-dark.png)
+![light — current state (0.0.40)](../../../../screenshots/notion-clone/panels/constructed-modal-sheet-property-editor-sheet-mobile-light.png)
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Parent**: `../spec.md` (the loop and the rubric), `../decision-record.md` (D1-D4)

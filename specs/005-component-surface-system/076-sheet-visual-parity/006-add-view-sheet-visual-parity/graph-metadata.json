@@ -205,8 +205,8 @@
     ],
     "causal_summary": "The Add view sheet against Notion's Layout screen: a selection grid of layout tiles with the active one outlined, then one card of setting rows carrying toggles and trailing values",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-11T03:53:48.735Z",
-    "save_lineage": "graph_only",
+    "last_save_at": "2026-09-11T04:38:46.906Z",
+    "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
@@ -215,11 +215,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:a495d760ff823f94c344b4a28ef5ec88005a9bd8fb794850a7deccc018dd97c8",
+    "source_fingerprint": "sha256:2911805cf236237c4a193e09091ff2782810707bb29a9a9889e269450201f0c3",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "923d046374fb7b3696fe3bf79ddbf572e8f657158f8dcfb86c639e4f4af3ccec",
-      "plan.md": "266ca7af2cff77e9b662e6444817ad4447793e4711f48a7c356d1bacfb4f86ca",
+      "spec.md": "54f20e1e010d271b132e410136d5407b87db6096a635c8184cf50cdfe142c7f0",
+      "plan.md": "e1c7cf43b9b43a2cc7cae38d784637985395c4ca3026d8accc435ad4bd5aa6ad",
       "tasks.md": "3ff041b4a8910a07446c415ac5f94a134efab035b1542e461922fdce2531f912"
     },
     "last_active_at": null

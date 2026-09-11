@@ -203,8 +203,8 @@
     ],
     "causal_summary": "`src/views/board-card-properties-panel.ts` renders as a sheet with one row per board property: a drag handle, a checkbox, and the property's label and type icon",
     "created_at": "2026-09-11T04:06:43.817Z",
-    "last_save_at": "2026-09-11T04:06:43.817Z",
-    "save_lineage": "graph_only",
+    "last_save_at": "2026-09-11T04:39:15.149Z",
+    "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
@@ -213,11 +213,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:dbd0b5ed583e532d54325109cf8966d8fc298468ff11e452f690ea8b3c5965ac",
+    "source_fingerprint": "sha256:079ed3e9ff42d6e89b69ac8e169142b016d8213d8e91923b356289fc6b22f12b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "acf50074cc58303eec6edbbd5d7a79cbdc1b5a9b60df907f92000bb3a48f29e6",
-      "plan.md": "16c414e5745edc6e048f4ae6eaa919c54d66f0bc376f2f86c5c069bd75801a5e",
+      "spec.md": "4088c335deb8450e785f9c339994669c276fc15d7ec37b124968c0fc96ef8fb8",
+      "plan.md": "978e0a5a203e7ab1ad54d080cd3bf7ccbdc5b126f96a03f9c91a2a77f6659feb",
       "tasks.md": "53f644c6001ea8a43e9e82dc5dc09f4d19a7f8fcfefd585fddcdf31bce82472d"
     },
     "last_active_child_id": null,

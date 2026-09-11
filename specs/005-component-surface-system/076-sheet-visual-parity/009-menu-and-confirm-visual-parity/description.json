@@ -14,13 +14,16 @@
     "cancel",
     "sheet"
   ],
-  "lastUpdated": "2026-09-10T22:10:00.000Z",
+  "lastUpdated": "2026-09-11T04:42:25.070Z",
   "specId": "009",
   "folderSlug": "menu-and-confirm-visual-parity",
   "parentChain": [
     "005-component-surface-system",
     "076-sheet-visual-parity"
   ],
-  "memorySequence": 0,
-  "memoryNameHistory": []
+  "memorySequence": 2,
+  "memoryNameHistory": [
+    "11-09-26_05-38__embedded-reference-images-in-009-menu-and-confirm.md",
+    "11-09-26_05-42__embedded-reference-images-in-009-menu-and-confirm.md"
+  ]
 }

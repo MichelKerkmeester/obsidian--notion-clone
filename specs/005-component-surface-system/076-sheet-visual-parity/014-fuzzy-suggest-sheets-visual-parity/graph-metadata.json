@@ -202,8 +202,8 @@
     ],
     "causal_summary": "None of the five FuzzySuggestModal-family surfaces has ever been read against a reference",
     "created_at": "2026-09-11T04:06:44.010Z",
-    "last_save_at": "2026-09-11T04:06:44.010Z",
-    "save_lineage": "graph_only",
+    "last_save_at": "2026-09-11T04:39:18.007Z",
+    "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
@@ -212,11 +212,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:f2f8860baf322e0bfc2a70b36b092125b65860a2e6bbd6b874d6e2408c6ffff8",
+    "source_fingerprint": "sha256:9471b27e607d790863d39cace854eb5a347d28046bd67156acf426e50449fc9d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "4b7f11903116afd5fe5397850f9d3b6ac59a3efb5762de937c2cd8af402e4e7f",
-      "plan.md": "1a42811d11662a08d2710132b3d0cd0e0f3a3b03fa42b90805abb6d607bdf152",
+      "spec.md": "44eed0b508bfc29ade20475a4c6dc9f0e5c04b37d1c084e7c6e8bb206b2ed881",
+      "plan.md": "9565febed826e21108abc1028c59e7fdc721be9652cab77ab3e0ce63383a9853",
       "tasks.md": "9f9a2b5a41971cc44ca320d60027b3bc651d32631dcd71b94d557985bf3185a3"
     },
     "last_active_child_id": null,

@@ -1,4 +1,5 @@
 {
+  "level": "phase",
   "specFolder": "005-component-surface-system/076-sheet-visual-parity",
   "description": "Eleven phone sheets to Notion's own presentation, one child each, closed by an image-judged side-by-side rather than a DOM lane",
   "keywords": [
@@ -14,13 +15,15 @@
     "remediate",
     "per-sheet"
   ],
-  "lastUpdated": "2026-09-10T22:10:00.000Z",
+  "lastUpdated": "2026-09-11T04:42:31.242Z",
   "specId": "076",
   "folderSlug": "sheet-visual-parity",
   "parentChain": [
     "005-component-surface-system"
   ],
-  "memorySequence": 0,
-  "memoryNameHistory": [],
-  "level": "phase"
+  "memorySequence": 2,
+  "memoryNameHistory": [
+    "11-09-26_05-39__embedded-reference-images-across-all-19-076.md",
+    "11-09-26_05-42__embedded-reference-images-across-all-19-076.md"
+  ]
 }

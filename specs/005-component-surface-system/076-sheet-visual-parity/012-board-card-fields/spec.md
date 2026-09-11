@@ -286,6 +286,31 @@ Recorded as its own entry in `../../roadmap.md` §7, per `../decision-record.md`
 
 ---
 
+## 14. Reference images
+
+> Embedded so a fresh planner and the image judge see the same screens the operator rules
+> against. (a) operator device captures and the ruling each grounds; (b) on-tree reference
+> captures from Notion/Anytype/ClickUp; (c) the current-state judge capture, where one has
+> landed.
+
+### 14.1 Operator screenshots
+
+![0.0.40 Properties sheet: rows sit inside a lighter rounded container on the sheet (rejected)](../../../../screenshots/operator/0040-properties-card-container-rejected.png)
+Grounds: "Never use bg container like here for values, notion / anytype use dividers on plain sheet bg thats better"
+
+### 14.2 Reference captures (Notion / Anytype / ClickUp)
+
+![Anytype mobile kanban (board) view (dark) — this child's structural parity target (056 ADR-001)](../../../../screenshots/anytype/mobile/app/anytype-mobile-set-kanban-dark.png)
+![Anytype mobile kanban (board) view (light)](../../../../screenshots/anytype/mobile/app/anytype-mobile-set-kanban-light.png)
+![ClickUp iOS task list row — one field per line grammar](../../../../screenshots/clickup/ios/tasks/clickup-ios-tasks-my-tasks-3a3b2c04-ff74-446b-8e26-c2b587e41979.webp)
+
+### 14.3 Current-state judge capture
+
+![dark — current state (0.0.40) — not a 5c57f594 sheet variant; the board's own current capture](../../../../screenshots/notion-clone/views/constructed-board-mobile-dark.png)
+![light — current state (0.0.40) — not a 5c57f594 sheet variant; the board's own current capture](../../../../screenshots/notion-clone/views/constructed-board-mobile-light.png)
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Parent**: `../spec.md` (the loop and the rubric), `../decision-record.md` (D1-D4, D15)

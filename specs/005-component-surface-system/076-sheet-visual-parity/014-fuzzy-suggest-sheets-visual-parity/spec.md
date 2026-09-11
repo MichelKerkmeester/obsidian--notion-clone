@@ -233,6 +233,25 @@ As the operator, I open any file/image/markdown picker — standalone or from in
 
 ---
 
+## 14. Reference images
+
+> Embedded so a fresh planner and the image judge see the same screens the operator rules
+> against. (a) operator device captures and the ruling each grounds; (b) on-tree reference
+> captures from Notion/Anytype/ClickUp; (c) the current-state judge capture, where one has
+> landed.
+
+### 14.1 Operator screenshots
+
+![0.0.40 Properties sheet: rows sit inside a lighter rounded container on the sheet (rejected)](../../../../screenshots/operator/0040-properties-card-container-rejected.png)
+Grounds: "Never use bg container like here for values, notion / anytype use dividers on plain sheet bg thats better"
+
+### 14.2 Reference captures (Notion / Anytype / ClickUp)
+
+![Anytype desktop search palette, query state — form-factor mismatch (desktop vs our sheet), recorded in spec.md §13](../../../../screenshots/anytype/desktop/app/anytype-search-palette-query-dark.png)
+![Anytype desktop search palette, recent state — same form-factor caveat](../../../../screenshots/anytype/desktop/app/anytype-search-palette-recent-dark.png)
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Parent**: `../spec.md`, `../decision-record.md`

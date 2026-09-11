@@ -97,3 +97,6 @@ repo-rules/uncertainty-and-honesty.md
 
 # worktree-local lander notes, never part of the tree
 .handover.md
+
+# operator device screenshots — personal data, never publish to a public repo
+screenshots/operator/

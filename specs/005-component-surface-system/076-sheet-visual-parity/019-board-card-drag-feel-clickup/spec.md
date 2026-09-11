@@ -253,6 +253,25 @@ As the operator, I long-press and drag a board card on my iPhone and it lifts as
 
 ---
 
+## 14. Reference images
+
+> Embedded so a fresh planner and the image judge see the same screens the operator rules
+> against. (a) operator device captures and the ruling each grounds; (b) on-tree reference
+> captures from Notion/Anytype/ClickUp; (c) the current-state judge capture, where one has
+> landed.
+
+### 14.1 Operator screenshots
+
+![ClickUp iOS board: card lifted as a compact tilted ghost mid-drag, target column outlined](../../../../screenshots/operator/clickup-board-card-drag-reference.png)
+Grounds: "Board card dragging should look and work like this like in clickup"
+
+### 14.2 Reference captures (Notion / Anytype / ClickUp)
+
+![Anytype mobile kanban (board) view (dark) — generic board context; no on-tree drag/motion reference exists](../../../../screenshots/anytype/mobile/app/anytype-mobile-set-kanban-dark.png)
+![Anytype mobile kanban (board) view (light)](../../../../screenshots/anytype/mobile/app/anytype-mobile-set-kanban-light.png)
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Parent**: `../spec.md`, `../decision-record.md`

@@ -199,8 +199,8 @@
     ],
     "causal_summary": "ClickUp's reference shows: on long-press the card lifts as a COMPACT ghost (title row + one key field, not the full card), rotated ~3° with a soft elevated shadow, following the finger; the source column keeps the card's slot as a dimmed placeholder; the column under the finger is highlighted with an accent outline and its header stays visible; neighbouring columns dim; dragging near the edge auto-scrolls the board horizontally; releasing drops the card into the highlighted column at the hovered position",
     "created_at": "2026-09-11T04:06:44.972Z",
-    "last_save_at": "2026-09-11T04:06:44.972Z",
-    "save_lineage": "graph_only",
+    "last_save_at": "2026-09-11T04:39:34.328Z",
+    "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
@@ -209,11 +209,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:f21f837a42e683d2254e1657aafd1c6d2d371114bb369e23e090a3caa3493729",
+    "source_fingerprint": "sha256:fe49add41d1a46569bb80624e7ebf9209aa18a0fa3393b8566a54aadf4361792",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "fa712c707eb8259fc9cf51efbd0ad9ed56f5276cab5959381a009faf9aee4e8e",
-      "plan.md": "bf04a7d37f5b2108abd36c251e80adc49a34d733f8bd6816272dfdcd99a0892f",
+      "spec.md": "9e33992ff5349c28eb92220ffbbade51c99b7009355db92248746b8cbd04fc05",
+      "plan.md": "ce921197d992d6f1b721f8d08b2b554127aa5503ca6b2ba7733248ead7154d5e",
       "tasks.md": "6e43b4999ae0797d8def9ee481b692bca737943b946a4a28579448937bc5b310"
     },
     "last_active_child_id": null,

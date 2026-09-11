@@ -630,6 +630,38 @@ Under **D15** and parent **D3**, each is a **Proposed ADR** to be transcribed in
 
 ---
 
+## 14. Reference images
+
+> Embedded so a fresh planner and the image judge see the same screens the operator rules
+> against. (a) operator device captures and the ruling each grounds; (b) on-tree reference
+> captures from Notion/Anytype/ClickUp; (c) the current-state judge capture, where one has
+> landed.
+
+### 14.1 Operator screenshots
+
+![0.0.40 Properties sheet: rows sit inside a lighter rounded container on the sheet (rejected)](../../../../screenshots/operator/0040-properties-card-container-rejected.png)
+Grounds: "Never use bg container like here for values, notion / anytype use dividers on plain sheet bg thats better"
+
+![0.0.40 Settings sheet: bordered cards, three stacked pill buttons for Formula result storage, inconsistent type sizes](../../../../screenshots/operator/0040-settings-sheet-cards-typography.png)
+Grounds: "Same for settings, which als has bad typigraphy layout ans sizing etc" / "0.40 doesnt feel like the upgrade the graph loop requested"
+
+![ClickUp iOS Views sheet: large radius, centred bold title, round close-in-a-circle, pinned primary pill](../../../../screenshots/operator/clickup-views-sheet-reference.png)
+Grounds: "They also have good sheet styling"
+
+### 14.2 Reference captures (Notion / Anytype / ClickUp)
+
+![Notion iOS database settings screen — row anatomy reference](../../../../screenshots/notion/ios/database/notion-ios-database-settings-09-0193b407-2676-4f20-a428-06c7f8cff72a.webp)
+![Anytype mobile App settings sheet (dark) — divider rows on plain background](../../../../screenshots/anytype/mobile/sheets/anytype-mobile-sheet-app-settings-dark.png)
+![Anytype mobile App settings sheet (light)](../../../../screenshots/anytype/mobile/sheets/anytype-mobile-sheet-app-settings-light.png)
+![ClickUp iOS Settings screen — row grammar reference](../../../../screenshots/clickup/ios/settings/clickup-ios-settings-settings-3257908d-b0f3-460a-8976-b311ff9cd738.webp)
+
+### 14.3 Current-state judge capture
+
+![dark — current state (0.0.40)](../../../../screenshots/notion-clone/panels/constructed-view-config-sheet-mobile-dark.png)
+![light — current state (0.0.40)](../../../../screenshots/notion-clone/panels/constructed-view-config-sheet-mobile-light.png)
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Parent**: `../spec.md` (the loop and the rubric), `../decision-record.md` (D1-D4)

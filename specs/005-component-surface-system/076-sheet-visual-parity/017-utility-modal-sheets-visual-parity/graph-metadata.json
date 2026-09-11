@@ -203,8 +203,8 @@
     ],
     "causal_summary": "Eighteen surfaces inherit `DbModal`'s declared sheet presentation and none has ever been read against any reference, any frame ruling, or any rubric",
     "created_at": "2026-09-11T04:06:44.570Z",
-    "last_save_at": "2026-09-11T04:06:44.570Z",
-    "save_lineage": "graph_only",
+    "last_save_at": "2026-09-11T04:39:27.286Z",
+    "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
@@ -213,11 +213,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:3472d5a4c444ef5e7c945aef00600ef09b2ce7aedd84af0de1e387e8eeca0e31",
+    "source_fingerprint": "sha256:de622513ec1fd62629112237db81210a9478de5d233af5c28133b0c912d5b60c",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "73363c6efdf9051d90312448da79c8de9d3e7934df87a0e2931d3b81473041e7",
-      "plan.md": "cb3886b6712b7e1589e84c532a23620952bcfcc5cb8fc4c4883f561116e7d360",
+      "spec.md": "b5f7ca94c38251c53afb818e2f42fe6352d4e5858192fa7155886c0d6295414c",
+      "plan.md": "09f864661f47c3f7b6194e5cf8c4ea3d27bf534a0830095a350ed261f9775459",
       "tasks.md": "f3a75468b9e04794758069ee2180ef1a2082a868b55a69d769d38f4484e1a9bb"
     },
     "last_active_child_id": null,

@@ -258,6 +258,32 @@ T001-T004 complete this table. `008` runs **after** `002`, and its property-row 
 
 ---
 
+## 14. Reference images
+
+> Embedded so a fresh planner and the image judge see the same screens the operator rules
+> against. (a) operator device captures and the ruling each grounds; (b) on-tree reference
+> captures from Notion/Anytype/ClickUp; (c) the current-state judge capture, where one has
+> landed.
+
+### 14.1 Operator screenshots
+
+![0.0.40 Properties sheet: rows sit inside a lighter rounded container on the sheet (rejected)](../../../../screenshots/operator/0040-properties-card-container-rejected.png)
+Grounds: "Never use bg container like here for values, notion / anytype use dividers on plain sheet bg thats better"
+
+### 14.2 Reference captures (Notion / Anytype / ClickUp)
+
+![Notion iOS row-page (record detail) screen 1](../../../../screenshots/notion/ios/database/notion-ios-database-row-page-03-0cb59457-00da-4154-b7c0-5bb2a4831ba2.webp)
+![Notion iOS row-page (record detail) screen 2](../../../../screenshots/notion/ios/database/notion-ios-database-row-page-04-16ddd22c-d559-4bd7-ab48-9557843441f9.webp)
+![Anytype mobile object page (dark)](../../../../screenshots/anytype/mobile/app/anytype-mobile-object-page-dark.png)
+![Anytype mobile object page (light)](../../../../screenshots/anytype/mobile/app/anytype-mobile-object-page-light.png)
+
+### 14.3 Current-state judge capture
+
+![dark — current state (0.0.40)](../../../../screenshots/notion-clone/panels/constructed-record-detail-sheet-mobile-dark.png)
+![light — current state (0.0.40)](../../../../screenshots/notion-clone/panels/constructed-record-detail-sheet-mobile-light.png)
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Parent**: `../spec.md` (the loop and the rubric), `../decision-record.md` (D1-D4)

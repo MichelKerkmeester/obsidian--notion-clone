@@ -207,8 +207,8 @@
     ],
     "causal_summary": "Notion's New property sheet is a bordered name field plus an inline type list in the same sheet, not a name field and a chevron to a separate picker; and its delete row is not uniformly red",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-11T03:53:48.821Z",
-    "save_lineage": "graph_only",
+    "last_save_at": "2026-09-11T04:38:49.701Z",
+    "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
@@ -217,11 +217,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:4555a69d4be53049eb73056378b3a4499aa90ab8d109ad082f68025ffd6005cd",
+    "source_fingerprint": "sha256:84f26cbb6f02e12e767f02a72d0adf2f94ba5784896ce421fa35995ade7c360c",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "91c5100467583fd4bf9b4a402a239acf6feaadb6e7e2f918f38795ffbdb57361",
-      "plan.md": "53e5446ee5a55d45998116c8667170266550b6800c9d78eb2000b2243849e733",
+      "spec.md": "2cff55d4cb8d4efc067d3a793ec0780cb2c32ad847415f9fa6294e30b4541e1e",
+      "plan.md": "c366496b51fb274aaf55fa797cdd3fe9ca9c229a44f82d8809d4842a4e07dd1b",
       "tasks.md": "084a04facfe6d53058c1eaa575fe283c0cffe722190c84850d09163c71a95b86"
     },
     "last_active_at": null

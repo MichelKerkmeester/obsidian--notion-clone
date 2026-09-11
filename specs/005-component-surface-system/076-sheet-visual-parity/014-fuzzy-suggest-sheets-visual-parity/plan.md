@@ -18,6 +18,8 @@ contextType: "general"
 <!-- ANCHOR:summary -->
 ## 1. SUMMARY
 
+Reference images: see spec.md §Reference images — the planner reads every image before writing lane clauses.
+
 ### Technical Context
 
 | Aspect | Value |

@@ -269,6 +269,36 @@ Raised as **Proposed ADRs** in `../../roadmap.md` §7 under D15 before this chil
 
 ---
 
+## 14. Reference images
+
+> Embedded so a fresh planner and the image judge see the same screens the operator rules
+> against. (a) operator device captures and the ruling each grounds; (b) on-tree reference
+> captures from Notion/Anytype/ClickUp; (c) the current-state judge capture, where one has
+> landed.
+
+### 14.1 Operator screenshots
+
+![0.0.40 Filter sheet property-picker step: too much side padding, dim icons, old row grammar](../../../../screenshots/operator/0040-filter-property-picker-padding.png)
+Grounds: "Too much side padding and still looks like old one"
+
+![0.0.40 Properties sheet: rows sit inside a lighter rounded container on the sheet (rejected)](../../../../screenshots/operator/0040-properties-card-container-rejected.png)
+Grounds: "Never use bg container like here for values, notion / anytype use dividers on plain sheet bg thats better"
+
+### 14.2 Reference captures (Notion / Anytype / ClickUp)
+
+![Notion iOS advanced filter screen 1](../../../../screenshots/notion/ios/database/notion-ios-database-filters-01-1d5d6adc-4e6f-41d9-9831-245a420d790b.webp)
+![Notion iOS advanced filter screen 2](../../../../screenshots/notion/ios/database/notion-ios-database-filters-07-8b59d2b6-dc19-42af-ac49-fd9cf95c8c0a.webp)
+![Anytype mobile filter-condition sheet (dark)](../../../../screenshots/anytype/mobile/sheets/anytype-mobile-sheet-filter-condition-text-dark.png)
+![Anytype mobile filter-condition sheet (light)](../../../../screenshots/anytype/mobile/sheets/anytype-mobile-sheet-filter-condition-text-light.png)
+![ClickUp iOS filter dialog — row/AND-OR control reference](../../../../screenshots/clickup/ios/dialogs/clickup-ios-dialogs-filters-19b00eaa-f469-4634-a804-b1e33ac1fc70.webp)
+
+### 14.3 Current-state judge capture
+
+![dark — current state (0.0.40)](../../../../screenshots/notion-clone/panels/constructed-filter-panel-sheet-mobile-dark.png)
+![light — current state (0.0.40)](../../../../screenshots/notion-clone/panels/constructed-filter-panel-sheet-mobile-light.png)
+
+---
+
 ## RELATED DOCUMENTS
 
 - **Parent**: `../spec.md` (the loop and the rubric), `../decision-record.md` (D1-D4)

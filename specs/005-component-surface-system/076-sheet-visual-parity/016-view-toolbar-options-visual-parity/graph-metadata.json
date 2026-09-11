@@ -203,8 +203,8 @@
     ],
     "causal_summary": "Three of the four toolbars' options popovers, and every one of their stacked dropdown children, have never been read against any reference — `071/001`'s inventory records `none / none` for `timeline-toolbar-options`, `chart-toolbar-options`, and the chart/calendar/timeline stacked option dropdowns and the timeline event menu",
     "created_at": "2026-09-11T04:06:44.385Z",
-    "last_save_at": "2026-09-11T04:06:44.385Z",
-    "save_lineage": "graph_only",
+    "last_save_at": "2026-09-11T04:39:23.988Z",
+    "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
@@ -213,11 +213,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:8da2d643989efc7419d713416dc818aa27f66cdff142c5d50898b113745214b2",
+    "source_fingerprint": "sha256:be9ca0eb70c74f30be45ab3c0071982932bf2bf756338f02e094237a43ba6a42",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "5f3c967fe24689167f0fc1dcd8e4405b97cd6814cc833b38c88546406cca666c",
-      "plan.md": "5b9868facc1a401796a046573f6999a6240348dbe3564dafba2786d433851957",
+      "spec.md": "60fb7a9739f421206a58262a9e94095a066008a800740af393561b2066d7cef4",
+      "plan.md": "ba2f50c2aa1bd521b364b0686abf1abf61d8f8878150d37c240c5afc26a52e14",
       "tasks.md": "be09fb3c1e0e823c7edb9ce2959fe5baec127de867062435c7749038a2c58511"
     },
     "last_active_child_id": null,

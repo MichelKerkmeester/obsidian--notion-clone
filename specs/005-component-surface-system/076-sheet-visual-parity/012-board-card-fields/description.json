@@ -14,13 +14,16 @@
     "kanban",
     "parity"
   ],
-  "lastUpdated": "2026-09-10T22:15:00.000Z",
+  "lastUpdated": "2026-09-11T04:42:26.740Z",
   "specId": "012",
   "folderSlug": "board-card-fields",
   "parentChain": [
     "005-component-surface-system",
     "076-sheet-visual-parity"
   ],
-  "memorySequence": 0,
-  "memoryNameHistory": []
+  "memorySequence": 2,
+  "memoryNameHistory": [
+    "11-09-26_05-39__embedded-reference-images-in-012-board-card-fields.md",
+    "11-09-26_05-42__embedded-reference-images-in-012-board-card-fields.md"
+  ]
 }

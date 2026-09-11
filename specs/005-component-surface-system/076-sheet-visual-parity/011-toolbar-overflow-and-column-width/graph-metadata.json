@@ -207,8 +207,8 @@
     ],
     "causal_summary": "The toolbar's overflow surface and the column-width sheet, the last two surfaces the operator meets, against their references and the landed 075 labelled-button and vertical-scroll-lock rulings",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-11T03:53:49.156Z",
-    "save_lineage": "graph_only",
+    "last_save_at": "2026-09-11T04:39:09.538Z",
+    "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
@@ -217,11 +217,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:d865663f356ae6f4cc8618b1eb887e69370e7c2dd38e65e374ed4cae33c8cbcd",
+    "source_fingerprint": "sha256:c01bfea1134095729cbf17ef9ee39796e9d5244263356902c50697d3b2906add",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "8ec25adb30f9c3090a5708c1b84c7716c348d1156a473157a73ea0e67254b2e7",
-      "plan.md": "acd26d881bf677593e83ada9734a8d19dbbc0303b9a03d2ff75736c31a4c8c9b",
+      "spec.md": "3b7dc59fe9a2bda793fe215ef41bde999d2916257f9fd016be1ddae43ea902c2",
+      "plan.md": "675c6ea36e0e614fe5e1439ee50d3e4e95b9066158cd6f4a741821cd9b70191e",
       "tasks.md": "fbb46e2a4d0253d08cce70a60e3ea01bbb1fdbd43094ca129d017ee6522dc61f"
     },
     "last_active_at": null

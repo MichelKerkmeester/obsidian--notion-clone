@@ -27,7 +27,7 @@ _memory:
       - "tools/live/sheet-grammar.mjs"
       - "verification.md"
     session_dedup:
-      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      fingerprint: "sha256:1b73e06198e21bf0c8543b7ca197a22c9d87dae093296ff2731e80a1950da7e4"
       session_id: "292-loop-001-settings-sheet-visual-parity"
       parent_session_id: "001-settings-sheet-visual-parity-scaffold"
     completion_pct: 60
