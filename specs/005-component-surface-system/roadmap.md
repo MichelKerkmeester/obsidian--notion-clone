@@ -848,6 +848,12 @@ for d in specs/005-component-surface-system/0*/; do
 done | sort -n
 ```
 
+#### 076 sheet-visual-parity child progress
+
+| Child | State | Where it stands, 2026-09-11 |
+|---|---|---|
+| 076/003-filter-sheet-visual-parity | **planned** | DEFINE + PLAN landed: Notion/Anytype/current-capture evidence, operator frame ruling and production mount path, plain-canvas summary/detail/action divider grammar under D7, packet RED values L1=1, L2=3 per leaf/9 total, L3=0 detail-group markers plus 3 bordered controls per leaf, L4=2 unlabelled nested-NOT icons, L5=1 inline comparator per leaf/3 total and L6=3 repeated actions per leaf/9 total, capture set and judge rubric are named. CREATE, screenshot, judge and operator read have not started. |
+
 | Phase | Derived | State | Where it stands, 2026-09-05 |
 |---|---|---|---|
 | `000-surface-contract-and-truthful-harness` | **50%** — 5/10 | Partially shipped | `.db-surface` on both token roots, census instruments under `tools/live/`. Four harness-reachable rows open plus the operator's; `009`'s live number does not exist to agree with. |

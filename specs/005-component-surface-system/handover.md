@@ -671,6 +671,15 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
 
+### 2026-09-11 ~07:08, 076/003-filter-sheet-visual-parity PLANNED — DEFINE + PLAN reconciled with D7
+
+recent_action: "076/003 DEFINE + PLAN reconciled with D7"
+
+The child packet records the Notion card observation and the parent D7 target of dividers on the
+plain sheet background. Its measured packet-specific RED values, production mount path, capture set
+and judge rubric are complete. No renderer, stylesheet or scenario implementation was changed;
+C-1, CREATE, the image judge and the operator device read remain open.
+
 ### 2026-09-11 ~06:41, `076-sheet-visual-parity` embeds reference images in every child — worktree `303-embed-076-screenshots`
 
 **Docs-only leg, no producer code touched.** Every one of the nineteen `076` children (`001`-`019`)
@@ -780,7 +789,6 @@ screenshot reports to `076/001` and `076/002` with state "remediation queued". V
 `001`, `002`, every touched child (`003`-`012`) and `005-component-surface-system` all
 `orchestrator.js --strict` → `RESULT: PASSED`; `backfill-graph-metadata.js` re-run scoped per
 touched folder then the `005` parent, re-validated clean.
-
 ### 2026-09-11 ~03:10, `076-sheet-visual-parity` full-sheet harness LANDED+VERIFIED (6da1b90d) — worktree `298-sheet-full-captures`
 
 **What this verifier confirmed** — the harness leg (5445ce3c, then 6d370067) through two

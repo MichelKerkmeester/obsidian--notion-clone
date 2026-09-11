@@ -236,7 +236,7 @@
     ],
     "causal_summary": "`071/002`-`071/015` aligned the phone sheets to Notion at the row-grammar level — pitch, inset,",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-11T04:42:31.287Z",
+    "last_save_at": "2026-09-11T05:25:07.850Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -246,10 +246,10 @@
       "goal.md",
       "decision-record.md"
     ],
-    "source_fingerprint": "sha256:c96b743c787717c14460c41ced98e104259442a6f290cbe31c24f05f9b5c48ea",
+    "source_fingerprint": "sha256:70125e4ea7b286dc6010a3981c32dec05fe930db13fdf36ea29e99a72b96a960",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "c7cc0a18affbc311c510ff187aa0c31cf1e6bc230eeee614535a451e2e09b11e",
+      "spec.md": "d9da737c5e1e630f03eb5f5e1b97c4c926ba4a6c7e67ea0dd64b18d6bf409b0b",
       "plan.md": "dcb91bea91e15c0219bafbf17e3d32ac05f24af42711f266d4bba3d5c6b1c135",
       "tasks.md": "608229bad146104f15aa14462af11fc18f0ee3dee1f46b6dc07485dff5e1d3f9",
       "decision-record.md": "d46f4dae6b0d20fc36dbd93da1fa150e7c3993a0f49267cb92343b1484c62c1f"

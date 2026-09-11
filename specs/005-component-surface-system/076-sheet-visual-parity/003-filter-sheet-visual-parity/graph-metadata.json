@@ -53,10 +53,14 @@
       "tools/live/sheet-grammar.mjs",
       "tools/screenshots/constructed-scenarios.mjs",
       "tools/live/render-assertion-harness.ts",
-      "tools/lane/check-lane.mjs",
+      "tools/live/sheet-rebuild.mjs",
+      "screenshots/operator/0040-filter-property-picker-padding.png",
+      "screenshots/operator/0040-properties-card-container-rejected.png",
       "src/i18n.ts",
       "tools/screenshots/capture.mjs",
-      "tools/live/sheet-rebuild.mjs"
+      "tools/screenshots/verify.mjs",
+      "tools/live/sheet-rebuild-harness.ts",
+      "tools/lane/check-lane.mjs"
     ],
     "entities": [
       {
@@ -132,9 +136,21 @@
         "source": "derived"
       },
       {
-        "name": "check-lane.mjs",
+        "name": "sheet-rebuild.mjs",
         "kind": "file",
-        "path": "tools/lane/check-lane.mjs",
+        "path": "tools/live/sheet-rebuild.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "0040-filter-property-picker-padding.png",
+        "kind": "file",
+        "path": "screenshots/operator/0040-filter-property-picker-padding.png",
+        "source": "derived"
+      },
+      {
+        "name": "0040-properties-card-container-rejected.png",
+        "kind": "file",
+        "path": "screenshots/operator/0040-properties-card-container-rejected.png",
         "source": "derived"
       },
       {
@@ -150,9 +166,21 @@
         "source": "derived"
       },
       {
-        "name": "sheet-rebuild.mjs",
+        "name": "verify.mjs",
         "kind": "file",
-        "path": "tools/live/sheet-rebuild.mjs",
+        "path": "tools/screenshots/verify.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-rebuild-harness.ts",
+        "kind": "code",
+        "path": "tools/live/sheet-rebuild-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
         "source": "derived"
       },
       {
@@ -178,36 +206,12 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Phase Context",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Sheet Visual Parity",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Filter Sheet",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
-    "causal_summary": "The filter sheet stacks a condition onto three full-width bordered pills; Notion collapses a condition to one summary row and puts property, operator and value in one merged card on a drill-in screen",
+    "causal_summary": "The current constructed filter-panel captures begin with a centred Filter header, then show three",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-11T04:38:38.496Z",
-    "save_lineage": "same_pass",
+    "last_save_at": "2026-09-11T05:24:46.530Z",
+    "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
@@ -216,12 +220,12 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:ba02e1dcf931e53f6f587055efd4dd562dd5901379c89ca551b1a459af84b481",
+    "source_fingerprint": "sha256:0f73f18d076194b619b63605ee8501bd6dee039cda4be5389bd82efdc3a485b1",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "fa143b9c013d74c21ab1e9d881913fb016fe27a79eca092fdc7f2c14a4a96450",
-      "plan.md": "8b17e866096ecacc329ef0fe36f0513461fd2565a7af4f0a1dd096f9a31aad87",
-      "tasks.md": "3cc24aca00053f65101542308d1d6ee98db0bb9a850b3795a5d9810b77abdf30"
+      "spec.md": "078006a42d47ffc79b3dbef31d3717ddc8b8ecd4303434fe8e45391813daef59",
+      "plan.md": "9440b57ca2a34cd65bfe1b9734ef452db6c6688c1b42f3fe9840774259882934",
+      "tasks.md": "7a2bd4316d257332946bde760f378abaebab18d6fb5852aca93ab1bf921dcb98"
     },
     "last_active_at": null
   }

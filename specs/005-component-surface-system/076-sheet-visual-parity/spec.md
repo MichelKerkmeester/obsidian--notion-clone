@@ -291,7 +291,7 @@ total. The reviewer writes the score table, with a one-line justification per ro
 |-------|--------|-------|------------------|--------|
 | 1 | `001-settings-sheet-visual-parity/` | Settings | `src/views/view-config-panel-renderer.ts` | **planned** — DEFINE + PLAN complete, CREATE not started |
 | 2 | `002-properties-sheet-visual-parity/` | Properties | `src/views/column-manager-renderer.ts`, `src/views/record-surface/property-row.ts` | **planned** — DEFINE + PLAN complete, CREATE not started |
-| 3 | `003-filter-sheet-visual-parity/` | Filter (+ the active-rule filter popover) | `src/views/filter-panel-renderer.ts`, `src/views/active-rule-popover-renderer.ts` | scaffolded |
+| 3 | `003-filter-sheet-visual-parity/` | Filter (+ the active-rule filter popover) | `src/views/filter-panel-renderer.ts`, `src/views/active-rule-popover-renderer.ts` | **planned** — DEFINE + PLAN complete with summary/detail/action divider grammar under D7, CREATE not started |
 | 4 | `004-sort-sheet-visual-parity/` | Sort (+ the active-rule sort popover) | `src/views/sort-panel-renderer.ts`, `src/views/active-rule-popover-renderer.ts` | scaffolded |
 | 5 | `005-group-sheet-visual-parity/` | Group | `src/views/toolbar-renderer.ts`, `src/views/board-groups-panel.ts` | scaffolded |
 | 6 | `006-add-view-sheet-visual-parity/` | Add view | `src/views/toolbar-renderer.ts` | scaffolded |

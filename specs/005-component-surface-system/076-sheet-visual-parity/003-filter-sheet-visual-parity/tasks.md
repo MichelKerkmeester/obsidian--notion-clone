@@ -1,6 +1,6 @@
 ---
 title: "Tasks: Phase 3: Filter Sheet Visual Parity"
-description: "The six-step loop as ordered tasks. Task Format: T### [P?] Description (file path)"
+description: "Fourteen write-first tasks for the filter sheet loop. Each task names RED assertion, producer change, GREEN proof, capture and judge; the final two tasks are the unchanged-tree judge and operator gate."
 trigger_phrases:
   - "task breakdown"
   - "076 phase 3 tasks"
@@ -18,78 +18,55 @@ contextType: "implementation"
 <!-- ANCHOR:notation -->
 ## Task Notation
 
-| Prefix | Meaning |
-|--------|---------|
-| `[ ]` | Pending |
-| `[x]` | Completed |
-| `[P]` | Parallelizable |
-| `[B]` | Blocked |
+All tasks are pending because this leg defines and plans; it does not implement. Every CREATE or
+verification task follows the write-first sequence:
 
-**Task Format**: `T### [P?] Description (file path)`
+**RED assertion → producer change → GREEN proof → capture → judge.**
 
-Each task below is sized for one GLM 5.3 flash or Sonnet leg and states a number to record, not a judgement to make.
+The failing values are evidence to record, not values to silently overwrite. The judge is the
+eight-row 0/1/2 image rubric; pass is at least 14/16 with no row at 0.
 <!-- /ANCHOR:notation -->
 
 ---
 
-<!-- ANCHOR:phase-1 -->
-## Phase A: DEFINE — the reference and the target table
+<!-- ANCHOR:tasks -->
+## Ordered tasks
 
-- [ ] T001 Open every reference in `spec.md` §13 and record, per file, whether it shows this sheet or something else. Mobbin family names are unreliable: three reference reads this session each found roughly a third of files mislabelled. Record every value that cannot be read at 299×678 as a gap, never a guess (`screenshots/notion/ios/**`, `spec.md`)
-- [ ] T002 Open our own current captures, light **and** dark, and fill the Ours column of §13 from what the image shows plus the producer that painted it. Confirm each claim against the producer before writing it — a capture and a source that disagree is the finding (`screenshots/notion-clone/**`, the producers in `plan.md` §3)
-- [ ] T003 Enumerate every production surface that renders this grammar and add any the scaffold missed to `spec.md` §3. If one has no constructed scenario, that becomes T005 and precedes all implementation (D2a, D2b) (`tools/screenshots/constructed-scenarios.mjs`, `spec.md`)
-- [ ] T004 Complete the Target column: every cell is a number measured from our own tree, or `TBD — needs operator capture`. No cell may be derived from a 299×678 asset. Record the contradiction list against landed `071` rulings and open each as a Proposed ADR in `../../roadmap.md` §7 (D3, D15) (`spec.md`, `../../roadmap.md`)
-<!-- /ANCHOR:phase-1 -->
+- [ ] T001 [P] Inventory and classify every reference — RED: any relevant Notion/Anytype path is unresolved or its role is unknown; producer change: complete spec.md §13.1 with canonical database filters, setting-up-filter flow, Anytype mobile sheets, duplicate flow assets and adjacent out-of-scope names; GREEN: every named path resolves, every thumbnail-only pixel says “thumbnail, value unreadable” and C-1 is named; capture: open each canonical light/dark pair and the current plugin captures; judge: design lead checks structure, order, copy, control type and grouping only.
 
----
+- [ ] T002 [P] Record the honest before — RED: spec.md lacks a capture-by-capture current description; producer change: fill §13.2 from the opened 804×1748 viewport, 804×2590 full-sheet and active-rule images and the named renderer functions; GREEN: the before records the three stacked controls per condition, repeated actions, nested NOT toolbar and active-rule horizontal row without inferring unreadable pixels; capture: preserve the existing light/dark filenames as baseline; judge: reviewer can identify the same defects from the images.
 
-<!-- ANCHOR:phase-2 -->
-## Phase B: PLAN — files, scenario, mount function, clauses
+- [ ] T003 Prove the production mount and state coverage — RED: a scenario cannot be traced through constructedScenario → mountConstructed → window.__mountConstructed → renderer branch, or empty/comparator state has no production coverage; producer change: add `filterPresentation` to `ScenarioSpec`, `SPEC_OPTIONS`, the registry and harness only as needed for `constructed-filter-panel-empty`, `-summary`, `-comparator` and the primary detail state; GREEN: populated, summary, nested, comparator, active-rule and empty paths invoke shipped renderers with no fixture-only image; capture: record the scenario-to-function trace and source list; judge: implementation lead rejects any fixture substitute.
 
-- [ ] T005 If T003 found an unregistered production surface, register it now: a constructed scenario mounting the shipped renderer with accurate `sources`. Nothing else proceeds until the sheet is photographed from production (`tools/screenshots/constructed-scenarios.mjs`)
-- [ ] T006 Confirm the scenario named in `plan.md` §3 mounts the production path end to end — scenario entry, mount driver, in-page entry, harness branch — by reading each link rather than assuming it (`tools/screenshots/constructed-scenarios.mjs`, `tools/live/render-assertion-harness.ts`)
-- [ ] T007 Write one lane clause per measurable row of §13 into the sheet-grammar lane, unwired, and confirm each one can fail before it is asked to pass (`tools/live/sheet-grammar.mjs`)
-- [ ] T008 Acquire the css-lane triplet for `styles.css` and record the baseline hash. Confirm no other child holds it (`tools/lane/check-lane.mjs`)
-<!-- /ANCHOR:phase-2 -->
+- [ ] T004 Complete the DEFINE drawing board and Proposed ADR boundary — RED: any frame, section, row, control, type, spacing, theme or state property lacks a target or rubric mapping; producer change: finish spec.md §13.3–§13.15, including the Source-bearing row table, DELTA table, provisional ledger, plain-canvas divider grammar and ADR-H/D15 statement; GREEN: every target is token-backed or says “thumbnail, value unreadable” / “TBD — needs operator capture” with C-1 named, D7 is cited for the frame and no conflicting card target remains; capture: compare the brief beside canonical Notion frames, the operator rejected-container capture and 076/001/071/007 decisions as superseded by D7; judge: reviewer confirms a builder can execute without guessing.
 
----
+- [ ] T005 Write the implementation plan and rubric instance — RED: a producer, stylesheet region, scenario/mount function, state, capture or judge expectation is unnamed; producer change: complete plan.md with exact files/functions, the real mount chain, divider-group tiers, full-sheet rules, active-rule companion, real-app output, lane clauses and concrete eight-row rubric; GREEN: a CREATE leg can start from this plan with no new architectural decision; capture: map every planned output to a filename or report; judge: implementation lead checks production mounting and scope.
 
-<!-- ANCHOR:phase-3 -->
-## Phase C: CREATE — RED, producer, GREEN
+- [ ] T006 [P] Add filter clauses and capture the RED baseline — RED: L1–L6 are absent or unwired; producer change: add stable presentation markers and packet-specific clauses to tools/live/sheet-grammar.mjs after acquiring the css-lane triplet; GREEN proof: run the current tree before any producer/style change and record L1=1, L2=3 per leaf/9 total, L3=0 detail-group markers plus 3 bordered control boxes per leaf, L4=2 unlabelled nested-NOT icon buttons, L5=1 inline comparator per leaf/3 total and L6=3 repeated action rows per leaf/9 total, alongside the already-green 071 floor of 9/9 rows at 48px, 16px inset, 357px span, 0 native selects and 4 labelled root actions; capture: retain the exact lane output; judge: reviewer confirms each RED is caused by the current production mount.
 
-Write-first throughout: the clause runs RED and its failing number is written down **before** the producer moves.
+- [ ] T007 Bring the active-rule filter onto the shared grammar first — RED: L1=1 active-rule row carrying Field 3 / equals / Backlog in three side-by-side controls; producer change: update `active-rule-popover-renderer.ts` `toggleFilter`/`open` and the shared filter producer so the active rule has a readable summary/detail route without changing filter data flow; GREEN: L1=0 and the companion has the same navigation-row/divider-group grammar; capture: `constructed-active-rule-filter` mobile light/dark; judge: compare the companion beside Notion detail and comparator references.
 
-- [ ] T009 **Bring the active-rule popover onto the sheet's grammar first** — it is the surface the operator photographed and the one no `071` child touched. Run L1 RED at 1 and record it, then make the popover render the condition through the same builder the sheet uses (`src/views/active-rule-popover-renderer.ts`, `src/views/filter-panel-renderer.ts`)
-- [ ] T010 Collapse a condition to one summary row at list level, with a trailing count and chevron that opens the detail. Run L2 RED at 3 and record it (`src/views/filter-panel-renderer.ts`, `styles.css`)
-- [ ] T011 Build the merged condition card: property, operator and value as three rows inside one shared outline with hairline dividers, replacing three separately-bordered pills. Run L3 RED first and record the outline count (`src/views/filter-panel-renderer.ts`, `styles.css`)
-- [ ] T012 Move operator choice into a drill-in sub-sheet and give the value row its clear affordance. L5 RED → GREEN (`src/views/filter-panel-renderer.ts`, `src/views/dropdown-field.ts`)
-- [ ] T013 Replace the header's four bare icons with labelled add rows in their own card, and collapse the repeated per-condition action rows into one action card in the detail. L4 and L6 RED → GREEN (`src/views/filter-panel-renderer.ts`, `src/i18n.ts`, `styles.css`)
-<!-- /ANCHOR:phase-3 -->
+- [ ] T008 Replace stacked condition pills with summary/detail divider groups — RED: L2=3 condition rows per leaf and L3=0 detail-group markers plus 3 bordered control boxes per leaf; producer change: update `filter-panel-renderer.ts` `renderFilterTreeGroup`, `renderFilterRow` and `renderStackedConditionRow` to create one summary row per condition and one plain-canvas detail group with three hairline-separated rows; GREEN: L2 maximum=1, L3 detail-group count=1 per selected rule, detail rows=3 and nested bordered control count=0; capture: primary detail and full-sheet light/dark plus nested; judge: score Sections and Row anatomy informally before the formal judge.
+
+- [ ] T009 Move controls/actions into divider groups and tune both themes — RED: L4=2 unlabelled nested-NOT icon buttons, L5=1 inline comparator per leaf and L6=3 repeated action rows per leaf; producer change: route property/comparator/value through navigation pickers, add value Edit/clear, labelled rule-action/add-actions/Delete divider groups, stable focus/keyboard markers, token-backed light/dark plain canvases and missing i18n labels; GREEN: L4=0, L5=0, summary action rows=0, detail action-group/add-group/Delete-group counts=1/1/1, all interactive hits ≥44px and both themes keep one readable canvas with painted dividers; capture: empty, filled, comparator, keyboard probe and light/dark states; judge: review Controls, Type, Colour and Both themes.
+
+- [ ] T010 Capture the production sheet set — RED: any required image is missing, stale, blank, theme-blind or hides the lower action/add/Delete groups below the judged viewport; producer change: run the production screenshot scenarios and let capture.mjs emit the primary full-sheet variant; GREEN: screenshot verification reports zero missing/stale/blank/theme-blind entries and manifest sources include changed producers; capture: primary viewport/full-sheet pairs, summary pair, empty pair, nested pair, comparator pair and active-rule pair; judge: open every changed PNG and write observed deltas.
+
+- [ ] T011 Run lane, regression and unit battery — RED: any L1–L6 or unchanged 071 floor is failing; producer change: correct only the named producer/style/marker that owns the failure; GREEN: every clause has RED→GREEN numbers, row height/inset/divider/native-select/overflow/root-action floors remain green and `npx tsc --noEmit`, `npm run build`, `npx vitest run` and `npm run gate` pass; capture: retain lane, test and gate output; judge: reviewer checks that green DOM evidence does not replace the image obligation.
+
+- [ ] T012 Exercise the real-app and keyboard paths — RED: a Chrome/WebKit sheet-rebuild add-row, inside-tap, rebuild or keyboard-inset assertion fails or is unobserved; producer change: fix the production path named by the assertion while keeping renderer/data boundaries unchanged; GREEN: the filter sheet remains open for inside taps/rebuild, add actions work, and the keyboard probe keeps header, input and clear/edit reachable; capture: `tools/live/sheet-rebuild.json` and sheet-grammar keyboard evidence; judge: read the exact filter cases, not unrelated passing cases.
+
+- [ ] T013 Judge pass twice on an unchanged tree — RED: the first image-judge score is below 14/16 or any row is 0; producer change: for every row below 2, run a new RED → producer fix → GREEN → recapture cycle and document it in verification.md; GREEN: two consecutive complete eight-row passes each score at least 14/16 with no zero and the tree SHA is unchanged between them; capture: primary full-sheet light/dark plus active-rule companion; judge: record both complete score tables and one-line findings.
+
+- [ ] T014 Operator gate and closeout — RED: acceptance/goal/verification lacks the operator row, or it is accidentally ticked by an agent; producer change: keep the device row present and Unmet/unticked, update progress metadata only after strict validation and graph backfill; GREEN: strict validation is PASSED, the child and parent progress rows say planned until CREATE lands, the named commit carries both required trailers, rebase/push succeeds and origin has no root `.handover.md`; capture: final evidence index and handover entry; judge: the operator is the sole judge of device alignment.
+<!-- /ANCHOR:tasks -->
 
 ---
 
-<!-- ANCHOR:phase-4 -->
-## Phase D: SCREENSHOT — capture and look at it
+<!-- ANCHOR:completion -->
+## Completion rules
 
-- [ ] T020 Run `npm run screenshots </dev/null` and record the exit status and the entry count. Then `npm run screenshots:verify` and record the stale count. A run that moved nothing proves nothing — say so if that is what happened (`tools/screenshots/capture.mjs`)
-- [ ] T021 **Open the phone light and the phone dark capture and look at each one.** Record what changed against the pre-change capture, by decoded pixel delta and by eye. If the rebuild harness covers this sheet, run `node tools/live/sheet-rebuild.mjs` for the real-app WebKit path and record its exit status (`screenshots/notion-clone/**`, `tools/live/sheet-rebuild.mjs`)
-<!-- /ANCHOR:phase-4 -->
-
----
-
-<!-- ANCHOR:phase-5 -->
-## Phase E: VERIFY — lane, judge, operator
-
-- [ ] T022 Gate (a): run every lane clause and record each GREEN number beside the RED number T009+ recorded. Re-run the `071` clauses this sheet already carries, unchanged, in the same run (`tools/live/sheet-grammar.mjs`)
-- [ ] T023 Gate (b): give a Sonnet or Opus reviewer our phone capture and the reference, and have it score the eight-row rubric from `../spec.md` §5 — Frame, Sections, Row anatomy, Controls, Type, Spacing, Colour, Both themes — each 0/1/2. Write the score table with one justification line per row into `verification.md`. **Pass is ≥ 14/16 with no row at 0** (`verification.md`)
-- [ ] T024 Gate (c): record the operator's device row in `acceptance-criteria.md` as **Unmet**. **No agent ticks it** (`acceptance-criteria.md`)
-<!-- /ANCHOR:phase-5 -->
-
----
-
-<!-- ANCHOR:phase-6 -->
-## Phase F: REMEDIATE — iterate until two clean passes
-
-- [ ] T025 For every rubric row scoring below 2, open a remediation task and run the cycle: a clause RED for that row, the fix, GREEN, re-screenshot, re-judge. Append each iteration to `verification.md` as its own section with its own score table. **The child is not done until the judge passes twice in a row on an unchanged tree** — a second pass after a change is iteration *n+1*, not the second pass. If one rubric row fails three consecutive iterations, stop: the target is wrong, and DEFINE re-opens (`verification.md`, `spec.md`)
-- [ ] T026 Close out: `npx tsc --noEmit`, `npm run build`, `npx vitest run`, `npm run gate` — read each exit status and output. Release the css-lane triplet naming every capture that moved. Validate with `orchestrator.js --strict`, backfill graph metadata, re-validate, tick this child's row in `../goal.md` and `../checklist.md`, and append a dated entry to `../../handover.md` with `recent_action` ≤ 96 characters (`../goal.md`, `../checklist.md`, `../../handover.md`)
-<!-- /ANCHOR:phase-6 -->
+T013 cannot close on a single score or on a changed-tree re-judge. Two passes must be consecutive
+and on an unchanged tree. T014 must leave the operator row unticked even when every agent-side
+criterion is green. A contradiction with a landed 071 ruling remains a Proposed ADR under D15.
+<!-- /ANCHOR:completion -->

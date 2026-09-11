@@ -1,7 +1,7 @@
 {
   "level": "2",
   "specFolder": "005-component-surface-system/076-sheet-visual-parity/003-filter-sheet-visual-parity",
-  "description": "The filter sheet stacks a condition onto three full-width bordered pills; Notion collapses a condition to one summary row and puts property, operator and value ",
+  "description": "The filter sheet is planned as a Notion-shaped phone surface with one summary row per condition, plain-canvas divider groups for detail and actions, a comparator child sheet and a shared grammar for the active-rule filter popover under parent D7.",
   "keywords": [
     "filter",
     "sheet",
@@ -14,7 +14,7 @@
     "popover",
     "notion"
   ],
-  "lastUpdated": "2026-09-11T04:42:21.694Z",
+  "lastUpdated": "2026-09-11T05:08:00.000Z",
   "specId": "003",
   "folderSlug": "filter-sheet-visual-parity",
   "parentChain": [
