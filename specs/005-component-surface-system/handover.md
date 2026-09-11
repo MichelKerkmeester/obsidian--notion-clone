@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T07:55:00Z"
-    last_updated_by: "295-loop-002-properties-sheet-visual-parity"
-    recent_action: "076/002 iter-3 landed+verified 2736c2cda: mutation RED->GREEN, gate 28/0, judge re-score owed"
-    next_safe_action: "JUDGE re-scores 076/002 twice on 2736c2cda; T017 by-eye and T018 owed"
+    last_updated_at: "2026-09-11T08:10:00Z"
+    last_updated_by: "304-research-076"
+    recent_action: "Synthesized 076 three-lineage research fan-out into research/research.md"
+    next_safe_action: "Fix the D7/lane card-container contradiction (research.md Rec a1), then JUDGE re-scores 076/002 twice on 2736c2cda"
     blockers:
       - "Open rows past this point are operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK)"
       - "076 closes no sheet on lanes alone; the image judge is a required gate (076 D1)"
@@ -45,6 +45,31 @@ _memory:
 
 <!-- SPECKIT_LEVEL: phase -->
 <!-- SPECKIT_TEMPLATE_SOURCE: handover | v1.0 -->
+
+### 2026-09-11, 076 three-lineage research fan-out synthesized into `research/research.md`
+
+**What this leg did** — the three parallel research lineages (deepseek 10 iters, luna 5 iters, glm
+5 iters) that audited 076's coverage/depth/reference-composition/design-system/loop-logic all
+completed their work but were flagged `failed` by the fan-out runner for a write-containment
+technicality (each wrote one file one directory level too high); their actual lineage output was
+complete and undamaged. This leg read all three lineages' syntheses and iteration/findings files,
+re-verified the load-bearing claims directly against the packet's `decision-record.md`, `spec.md`,
+`roadmap.md`, `coverage-audit.md`, and design-system source files (`sheet-grammar.mjs`, `styles.css`,
+`css-lane.json`, `surface-shell.ts`), and wrote one consolidated `research/research.md` with an
+Operator summary, a per-audit-class Verdict, a deduplicated Findings table (CONFIRMED vs REPORTED),
+a Contradictions section (including a live lane assertion that still requires ≥2 card containers
+against D7's `cardContainers = 0` ban), ranked Recommendations, a reconciled 19-child Coverage
+matrix, Open questions, and a Method section. The two stray one-level-too-high research files were
+deleted before landing; only the allowlisted research artifacts were staged (lineage machinery —
+logs, ledgers, `.executor-state`, `locks-and-fencing-v1`, `luna/prompts/` — was left untracked/
+gitignored).
+
+**Key finding for the next agent:** `tools/live/sheet-grammar.mjs:4871-4933` still requires the
+settings sheet to render ≥2 rounded card containers, directly contradicting D7 (2026-09-11,
+`cardContainers = 0`). This is the highest-leverage mechanical repair named in the synthesis
+(Recommendation a1) and should land before or alongside `001`'s next CREATE pass.
+
+---
 
 ### 2026-09-11 ~07:50, `076/002-properties-sheet-visual-parity` REMEDIATE leg (iteration 3, the D7 frame ruling) — worktree `295-loop-002-properties-sheet-visual-parity`
 

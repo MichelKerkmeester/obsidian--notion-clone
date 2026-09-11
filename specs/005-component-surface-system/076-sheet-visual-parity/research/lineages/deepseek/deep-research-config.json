@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "session_id": "fanout-deepseek-1789102713325-fbmgv2",
+  "lineage_label": "deepseek",
+  "generation": 1,
+  "lifecycle_mode": "new",
+  "loop_type": "research",
+  "artifact_dir": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/deepseek",
+  "artifact_dir_binding": "config.fanout_lineage_artifact_dir override — resolveArtifactRoot node command deliberately NOT run",
+  "spec_folder": "specs/005-component-surface-system/076-sheet-visual-parity",
+  "state_paths": {
+    "state_log": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/deepseek/deep-research-state.jsonl",
+    "strategy": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/deepseek/deep-research-strategy.md",
+    "dashboard": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/deepseek/deep-research-dashboard.md",
+    "iterations": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/deepseek/iterations/iteration-NNN.md",
+    "iteration_pattern": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/deepseek/iterations/iteration-{NNN}.md",
+    "findings": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/deepseek/findings/iter-{n}.md",
+    "deltas": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/deepseek/deltas/iter-{NNN}.jsonl",
+    "synthesis": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/deepseek/research.md",
+    "convergence_report": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/deepseek/convergence-report.md",
+    "judge_rubric": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/deepseek/judge-rubric.md"
+  },
+  "write_surface": [
+    "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/deepseek/**"
+  ],
+  "read_only_surface": [
+    "specs/005-component-surface-system/**",
+    "tools/**",
+    "src/**",
+    "styles.css"
+  ],
+  "stopPolicy": "max-iterations",
+  "maxIterations": 10,
+  "convergenceThreshold": 0.05,
+  "convergence_role": "telemetry-only; convergence before the cap does not stop the loop — broaden review angles instead",
+  "executor": {
+    "kind": "cli-pi",
+    "model": "deepseek-v4.1-flash",
+    "reasoningEffort": "max",
+    "execution_mode": "in-process — this session IS the executor for every iteration; no nested CLI, agent or subprocess dispatch"
+  },
+  "role": "design-programme auditor and planner (Notion/Anytype/ClickUp-class mobile sheet designer + spec-kit reviewer)",
+  "gap_classes": [
+    "COVERAGE",
+    "DEPTH",
+    "REFERENCE_COMPOSITION",
+    "DESIGN_SYSTEM",
+    "LOOP_LOGIC"
+  ],
+  "resource_map": {
+    "emit": false,
+    "reason": "write surface is the lineage directory only; the program's resource map is the parent packet's own coverage-audit.md"
+  },
+  "flags": {
+    "noResourceMap": true,
+    "writeOutsideLineageForbidden": true,
+    "generateContextForbidden": true,
+    "validateShForbidden": true,
+    "gitWriteForbidden": true
+  }
+}

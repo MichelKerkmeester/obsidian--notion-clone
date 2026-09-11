@@ -72,6 +72,7 @@
       "tasks.md",
       "goal.md",
       "decision-record.md",
+      "research/research.md",
       "screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png",
       "screenshots/notion-clone/panels/constructed-view-config-mobile-light.png",
       "src/views/view-config-panel-renderer.ts",
@@ -85,8 +86,7 @@
       "src/views/record-surface/property-row.ts",
       "src/views/filter-panel-renderer.ts",
       "src/views/sort-panel-renderer.ts",
-      "src/views/toolbar-renderer.ts",
-      "src/views/board-groups-panel.ts"
+      "src/views/toolbar-renderer.ts"
     ],
     "entities": [
       {
@@ -117,6 +117,12 @@
         "name": "decision-record.md",
         "kind": "doc",
         "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
         "source": "derived"
       },
       {
@@ -204,12 +210,6 @@
         "source": "derived"
       },
       {
-        "name": "board-groups-panel.ts",
-        "kind": "code",
-        "path": "src/views/board-groups-panel.ts",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -218,7 +218,7 @@
       {
         "name": "Sheet Visual Parity",
         "kind": "proper_noun",
-        "path": "spec.md",
+        "path": "research/research.md",
         "source": "derived"
       },
       {
@@ -236,25 +236,27 @@
     ],
     "causal_summary": "`071/002`-`071/015` aligned the phone sheets to Notion at the row-grammar level — pitch, inset,",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-11T05:25:07.850Z",
-    "save_lineage": "graph_only",
+    "last_save_at": "2026-09-11T05:57:57.319Z",
+    "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "goal.md",
-      "decision-record.md"
+      "decision-record.md",
+      "research/research.md"
     ],
-    "source_fingerprint": "sha256:70125e4ea7b286dc6010a3981c32dec05fe930db13fdf36ea29e99a72b96a960",
+    "source_fingerprint": "sha256:3a47d4f43e10f2353b79db2db0c02a617fd6ccc58753bb50b0094f7bb8771220",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d9da737c5e1e630f03eb5f5e1b97c4c926ba4a6c7e67ea0dd64b18d6bf409b0b",
       "plan.md": "dcb91bea91e15c0219bafbf17e3d32ac05f24af42711f266d4bba3d5c6b1c135",
       "tasks.md": "608229bad146104f15aa14462af11fc18f0ee3dee1f46b6dc07485dff5e1d3f9",
-      "decision-record.md": "d46f4dae6b0d20fc36dbd93da1fa150e7c3993a0f49267cb92343b1484c62c1f"
+      "decision-record.md": "d46f4dae6b0d20fc36dbd93da1fa150e7c3993a0f49267cb92343b1484c62c1f",
+      "research/research.md": "f8b1ac7a1e4ff1b6d0e3a52f4f42fcba22a093259f412e8441d20a5676ec2046"
     },
     "last_active_child_id": null,
-    "last_active_at": "2026-09-11T04:42:31.287Z"
+    "last_active_at": "2026-09-11T05:57:57.319Z"
   }
 }

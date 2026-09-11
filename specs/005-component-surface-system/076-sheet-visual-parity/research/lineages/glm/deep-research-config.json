@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "session_id": "fanout-glm-1789102713325-fbmgv2",
+  "lineage_label": "glm",
+  "generation": 1,
+  "lifecycle_mode": "new",
+  "loop_type": "research",
+  "artifact_dir": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/glm",
+  "artifact_dir_binding": "config.fanout_lineage_artifact_dir override — resolveArtifactRoot node command deliberately NOT run",
+  "spec_folder": "specs/005-component-surface-system/076-sheet-visual-parity",
+  "state_paths": {
+    "state_log": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/glm/research/deep-research-state.jsonl",
+    "strategy": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/glm/research/deep-research-strategy.md",
+    "dashboard": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/glm/research/deep-research-dashboard.md",
+    "iterations": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/glm/research/findings/iter-{NNN}.md",
+    "iteration_pattern": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/glm/research/findings/iter-{NNN}.md",
+    "findings": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/glm/research/findings/iter-{n}.md",
+    "deltas": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/glm/research/deltas/iter-{NNN}.jsonl",
+    "synthesis": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/glm/research/research.md",
+    "convergence_report": "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/glm/research/convergence-report.md"
+  },
+  "write_surface": [
+    "specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/glm/**"
+  ],
+  "read_only_surface": [
+    "specs/**",
+    "tools/**",
+    "src/**",
+    "styles.css",
+    "roadmap.md"
+  ],
+  "stopPolicy": "max-iterations",
+  "maxIterations": 5,
+  "convergenceThreshold": 0.05,
+  "convergence_role": "telemetry-only; convergence before the cap does not stop the loop — broaden review angles instead",
+  "executor": {
+    "kind": "cli-pi",
+    "model": "glm-5.3-flash",
+    "reasoningEffort": "max",
+    "execution_mode": "in-process — this session IS the executor for every iteration; no nested CLI, agent or subprocess dispatch"
+  },
+  "role": "design-programme auditor and planner (Notion/Anytype/ClickUp-class mobile sheet designer + spec-kit reviewer)",
+  "gap_classes": [
+    "COVERAGE",
+    "DEPTH",
+    "REFERENCE_COMPOSITION",
+    "DESIGN_SYSTEM",
+    "LOOP_LOGIC"
+  ],
+  "resource_map": {
+    "emit": false,
+    "reason": "write surface is the lineage directory only; the programme's resource map is the parent packet's own coverage-audit.md"
+  },
+  "flags": {
+    "noResourceMap": true,
+    "writeOutsideLineageForbidden": true,
+    "generateContextForbidden": true,
+    "validateShForbidden": true,
+    "gitWriteForbidden": true
+  }
+}

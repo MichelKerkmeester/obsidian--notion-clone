@@ -1,0 +1,22 @@
+{
+  "run_id": "1789102713325-fbmgv2",
+  "loop_type": "research",
+  "spec_folder": "specs/005-component-surface-system/076-sheet-visual-parity",
+  "base_artifact_dir": "specs/005-component-surface-system/076-sheet-visual-parity/research",
+  "total_cli_lineages": 3,
+  "orphaned_lineages": [],
+  "total": 3,
+  "succeeded": 0,
+  "failed": 3,
+  "all_failed": true,
+  "gauges": {
+    "lag": 0,
+    "pending": 0,
+    "failed": 3
+  },
+  "failure_classes": {
+    "timeout": 0,
+    "exit": 3,
+    "salvage_miss": 0
+  }
+}

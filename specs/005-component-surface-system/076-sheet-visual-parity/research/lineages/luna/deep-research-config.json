@@ -1,0 +1,65 @@
+{
+  "topic": "CONTEXT — The Obnotion Obsidian plugin is rebuilding every phone sheet, menu, picker and board under phase 076; audit coverage, L3/L3+ plan depth, reference composition, design-system cohesion, and the six-phase graph loop so the synthesis is directly patchable.",
+  "researchTopic": "CONTEXT — The Obnotion Obsidian plugin (repo root = this worktree) is rebuilding every phone sheet, menu, picker and the board under the phase parent specs/005-component-surface-system/076-sheet-visual-parity/.",
+  "maxIterations": 5,
+  "convergenceThreshold": 0.05,
+  "stuckThreshold": 3,
+  "stopPolicy": "max-iterations",
+  "antiConvergence": {
+    "minIterations": 3,
+    "convergenceMode": "default",
+    "stopPolicy": "max-iterations"
+  },
+  "maxToolCallsPerIteration": 12,
+  "progressiveSynthesis": true,
+  "specFolder": "specs/005-component-surface-system/076-sheet-visual-parity",
+  "artifactDir": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/.worktrees/304-research-076/specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/luna",
+  "createdAt": "2026-09-11T00:00:00.000Z",
+  "status": "initialized",
+  "executionMode": "detached-fanout-inline-executor",
+  "executor": {
+    "kind": "cli-codex",
+    "executable": "codex",
+    "model": "gpt-5.6-luna",
+    "reasoningEffort": null,
+    "serviceTier": null,
+    "sandboxMode": "workspace-write",
+    "timeoutSeconds": 900,
+    "inline": true,
+    "nestedDispatch": false
+  },
+  "loopType": "research",
+  "lineage": {
+    "sessionId": "fanout-luna-1789102713325-fbmgv2",
+    "parentSessionId": null,
+    "lineageMode": "new",
+    "generation": 1,
+    "continuedFromRun": null
+  },
+  "resource_map_present": false,
+  "resource_map": {
+    "emit": true,
+    "path": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/.worktrees/304-research-076/specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/luna/resource-map.md"
+  },
+  "statePaths": {
+    "config": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/.worktrees/304-research-076/specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/luna/deep-research-config.json",
+    "stateLog": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/.worktrees/304-research-076/specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/luna/deep-research-state.jsonl",
+    "strategy": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/.worktrees/304-research-076/specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/luna/deep-research-strategy.md",
+    "registry": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/.worktrees/304-research-076/specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/luna/findings-registry.json",
+    "dashboard": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/.worktrees/304-research-076/specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/luna/deep-research-dashboard.md",
+    "iterationPattern": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/.worktrees/304-research-076/specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/luna/iterations/iteration-{NNN}.md",
+    "deltaPattern": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/.worktrees/304-research-076/specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/luna/deltas/iter-{NNN}.jsonl",
+    "synthesis": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/.worktrees/304-research-076/specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/luna/research.md",
+    "requiredSynthesisMirror": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/.worktrees/304-research-076/specs/005-component-surface-system/076-sheet-visual-parity/research/lineages/luna/research/research.md"
+  },
+  "fileProtection": {
+    "deep-research-config.json": "immutable",
+    "deep-research-state.jsonl": "append-only",
+    "deep-research-strategy.md": "mutable",
+    "deep-research-dashboard.md": "auto-generated",
+    "findings-registry.json": "auto-generated",
+    "iteration-*.md": "write-once",
+    "deltas/iter-*.jsonl": "write-once",
+    "research/research.md": "workflow-owned"
+  }
+}

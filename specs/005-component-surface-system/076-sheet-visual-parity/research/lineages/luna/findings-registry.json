@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "fanout-luna-1789102713325-fbmgv2",
+  "mode": "research",
+  "openQuestions": [
+    "Q1 coverage matrix completeness",
+    "Q2 L3/L3+ depth by child and phase",
+    "Q3 reference composition and D7/D9 contradictions",
+    "Q4 shared design-system landing order",
+    "Q5 D6 loop reliability and release gating"
+  ],
+  "resolvedQuestions": [
+    {"id":"Q1","status":"partial","summary":"87 inventory rows map to existing/proposed owners; contextual rows 8/30 and roadmap bridge remain open.","iteration":1},
+    {"id":"Q2","status":"no","summary":"All 19 children are below L3 in at least one phase; no child is L3+ across all six phases. A shared stable-row, capture, judge, and remediation contract is required.","iteration":2},
+    {"id":"Q3","status":"no","summary":"DEFINE tables do not consistently carry a normalized Source, reason, evidence rung, or operator override; D7 card targets and D9 picker precedence still need patch text and an ADR.","iteration":3},
+    {"id":"Q4","status":"partial","summary":"Shared shell/header and record-surface seams exist, but row/divider geometry, card tokens, status/priority roles, and theme authorities remain fragmented. A token-first primitive-first landing order is specified.","iteration":4},
+    {"id":"Q5","status":"partial","summary":"D6 has a clear graph and hard guard but lacks phase heartbeats, evidence-bearing verdicts, judge calibration, dependency-aware scheduling, and durable transition receipts.","iteration":5}
+  ],
+  "keyFindings": [
+    {"id":"f-cov-contextual-gaps","severity":"P1","summary":"Record-peek and generic dropdown lack dedicated six-phase contracts; propose 020.","iteration":1},
+    {"id":"f-cov-eleven-vs-nineteen","severity":"P1","summary":"Parent scope/tasks/D6 say eleven while the phase map and goal enumerate nineteen.","iteration":1},
+    {"id":"f-cov-legacy-requests","severity":"P1","summary":"Roadmap rows 70-88 need an explicit 076 dependency/guard bridge.","iteration":1},
+    {"id":"f-depth-l2-scaffold","severity":"P1","summary":"All 19 packets need a stable-row L3/L3+ evidence addendum.","iteration":2},
+    {"id":"f-depth-002-phase-gap","severity":"P1","summary":"002 plan omits DEFINE and PLAN from its phase table.","iteration":2},
+    {"id":"f-depth-capture-contract","severity":"P1","summary":"Named per-state theme captures and full-sheet variants are missing.","iteration":2},
+    {"id":"f-depth-remediation-ledger","severity":"P1","summary":"Remediation needs assertion IDs, result receipts, and unchanged-tree hashes.","iteration":2},
+    {"id":"f-ref-source-gaps","severity":"P1","summary":"Normalize Source, reason, rung, measurement, and operator override in every DEFINE row.","iteration":3},
+    {"id":"f-ref-d7-stale-targets","severity":"P1","summary":"Rewrite stale card targets instead of deferring D7 to CREATE.","iteration":3},
+    {"id":"f-ref-stacking-contradiction","severity":"P1","summary":"Add Proposed ADR-N for stacked picker versus form replacement.","iteration":3},
+    {"id":"f-ref-board-scope","severity":"P1","summary":"Repeat 012 Anytype exception beside the ClickUp board lead.","iteration":3},
+    {"id":"f-design-token-conflicts","severity":"P1","summary":"Add semantic aliases and deprecate sheet card tokens.","iteration":4},
+    {"id":"f-design-primitive-topology","severity":"P1","summary":"Wire shared frame, row, divider, and record primitives before family tuning.","iteration":4},
+    {"id":"f-design-theme-roles","severity":"P1","summary":"Add semantic status and priority roles for light and dark themes.","iteration":4},
+    {"id":"f-design-css-lane","severity":"P1","summary":"Keep shared CSS and primitive landings serial under D4.","iteration":4},
+    {"id":"f-loop-stall-liveness","severity":"P1","summary":"Add phase heartbeats, stale timers, and explicit recovery-to-ESCALATE rules","iteration":5},
+    {"id":"f-loop-verdict-evidence","severity":"P1","summary":"Extend verdicts with hashes, captures, themes, rubric rows, lane receipts, and fixture identity","iteration":5},
+    {"id":"f-loop-judge-calibration","severity":"P1","summary":"Calibrate the image judge against gold operator reads and require an operator closure receipt","iteration":5},
+    {"id":"f-loop-scheduling","severity":"P1","summary":"Encode two-child/four-agent caps, serial shared-CSS locks, and 018 to 019 dependency","iteration":5},
+    {"id":"f-loop-durable-logging","severity":"P1","summary":"Persist graph transition receipts beside gateway-backed lineage state","iteration":5}
+  ],
+  "ruledOutDirections": [
+    {"direction":"nested executor dispatch","reason":"User explicitly requires inline execution in this fan-out lineage."},
+    {"direction":"early convergence synthesis","reason":"User requires all five iterations and a maxIterationsReached terminal record."}
+  ],
+  "iterations": [
+    {"iteration":1,"focus":"COVERAGE","newInfoRatio":0.97,"status":"complete"},
+    {"iteration":2,"focus":"DEPTH","newInfoRatio":0.88,"status":"complete"},
+    {"iteration":3,"focus":"REFERENCE COMPOSITION","newInfoRatio":0.84,"status":"complete"},
+    {"iteration":4,"focus":"DESIGN SYSTEM","newInfoRatio":0.80,"status":"complete"},
+    {"iteration":5,"focus":"LOOP LOGIC","newInfoRatio":0.77,"status":"complete"}
+  ],
+  "lastUpdated": "2026-09-11T05:34:10.000Z"
+}
