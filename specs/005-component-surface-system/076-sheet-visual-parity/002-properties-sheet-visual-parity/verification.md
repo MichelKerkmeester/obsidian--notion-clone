@@ -44,6 +44,7 @@ contextType: "implementation"
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | CREATE self-score (not the JUDGE pass) | this commit | `screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png` | `constructed-column-manager-mobile-dark.png` | 1 | 2 | 2 | 2 | 2 | 2 | 1 | 1 | 13 | 0 | self-score, informal | see paragraph below |
 | **1 (JUDGE)** | `4ab094cf` | `screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png` | `constructed-column-manager-mobile-dark.png` | 1 | 1 | 2 | 2 | 2 | 2 | 0 | 1 | **11** | **1** | **fail** | `findings-1.md` |
+| **2 (remediate leg)** | `a2146136` | `screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png` | `constructed-column-manager-mobile-dark.png` | 1 (carried) | — | — | — | — | — | — | — | — | — | judge re-score owed | see Iteration 2 below |
 
 ### Iteration 1 — JUDGE node's own pass
 
@@ -148,6 +149,37 @@ own — the shared token is `076/001`'s to fix — so a first official JUDGE pas
 own dark-card fix to land first, or may accept the light-theme correctness and score the dark
 shortfall as a shared, tracked risk rather than a `076/002`-owned remediation target. Recorded here
 so the JUDGE node has this reasoning rather than rediscovering it.
+### Iteration 2 — remediate leg (clause RED → producer → GREEN; the judge's re-score is owed, not recorded here)
+
+The remediate leg took the three rows the judge scored below 2 (Sections 1, Colour 0, Both themes 1) one
+clause at a time: the clause runs RED against the judged fixture as it stood, the producer moves, the
+clause runs GREEN, then the whole corpus is re-photographed twice and the judged captures themselves
+are sampled. Rows the judge scored 2 were not touched, and Frame 1 stays the carried, expected 1 —
+the canvas token gap is the same cross-child dependency it has been since the judge's pass, owned by
+the settings packet, not remediated here.
+
+| Finding (judge, iteration 1) | RED — the clause, before | Producer | GREEN — the clause, after | Judged-capture evidence |
+|---|---|---|---|---|
+| Sections 1 — the judged captures end mid-list; the hidden-section card, its bulk link and the add-property card sit past the judged fold | judged-frame clause: the sheet measures 1064.8px against the 874px judged viewport (deepest section 964.8px, add-property row 1064.8px into the sheet, both themes) | the judged fixture: sixteen rows became ten (nine shown, one hidden) | judged-frame clause: sheet 786.6px, deepest section 676.8px, add-property row 776.8px into the sheet — all inside 874, both themes | the judged 804×1748 captures sampled: the hidden-section card's fill at y=1500 and the add-property card's at y=1690 read the card, the 12px margin below the add-row reads the canvas — both grouping states, both headings and the bulk links are inside the judged frame |
+| Colour 0 (a) — the dark card fill computes rgb(57,57,57) against a rgb(46,46,46) canvas, 11/255, visually flat | both-themes card-step clause, dark: 11.25/255 (floor 12; light leg 12.75/255 under the theme's own token) | the shared grouped-settings card token: the dark theme declares its own 85% mix instead of borrowing the 88% modal rung — 63.75 on the 45.75 canvas, 18/255; light theme untouched | both-themes card-step clause: dark 18/255, light 12.75/255 | the judged dark capture: cards rgb(64,64,64) on rgb(46,46,46); light unchanged: rgb(255,255,255) on rgb(242,242,242). This lands the settings packet's own ADR-K re-tune on its behalf; its verdict rows inherit the brighter dark fill (57 → 64 on a 46 canvas) and its own judge leg reconciles its recorded current state |
+| Colour 0 (b) — the required column's eye renders pixel-identical to an enabled row's | required-eye clause: 0 disabled eyes of 16 — the fixture's config declared no titleField, so no eye ever mounted disabled, and the 0-case printed N/A instead of failing | the judged fixture declares the titleField; the title column mounts required — its eye renders with the `disabled` attribute and the 0.5 opacity rule (specificity: the `:disabled` rule outranks the bottom-sheet hit-box rule, confirmed by the computed read, not by selector arithmetic) | required-eye clause: 0.5 vs 1, 1 required of 10 rows | the judged captures mount the Name row's eye disabled and dimmed; the required-column hint reads beneath the label, the shipped required indicator, not a fixture-only decoration |
+| Both themes 1 — the dark card boundary does not read against its canvas | = the Colour (a) dark leg | = the 85% step | = the 18/255 dark step | the judged dark capture: rgb(64,64,64) cards against rgb(46,46,46) — 18/255, wider than light's 13/255 reference delta, so the dark boundary now reads at least as distinctly as the light one |
+
+**Corpus evidence.** The full capture corpus ran twice; the two runs agreed, so the 27 moved captures are
+deterministic: the column-manager pair and its desktop pair from the fixture, the settings-carded surfaces
+from the 57 → 64 fill, the view-config/settings/panel views from the same shared token, and two board views
+at 1-6px on one channel. 15 of the 27 move at the manifest's own fingerprints, 12 at bytes only; the lane
+release names all 15 content-moved captures (check-lane exit 0). The 16 evidence artefacts were re-derived
+by their own tools against this tree (evidence 16/16 fresh). Gate 28/28. Type, spacing and row-anatomy
+behaviour rode the same fixture change and their clauses stayed green (L1 0 checkboxes, L2 10/10 exactly one
+trailing eye, L5 heights 48, L4 2 sections, L6 add-row carded) — the two board-view 1px moves are the
+card token's own residual, recorded in the lane release.
+
+**What this iteration does not prove.** The pass-2 judge row. The clauses above prove the judged fixture now
+mounts the states the reference photographs; the eight-row rubric is the judge's to re-score, twice, on this
+tree. The one defect this leg carried, the canvas token (rgb(46,46,46) ours against the
+reference's rgb(250,248,246)), is the settings packet's — carried, untouched, not remediated here.
+
 <!-- /ANCHOR:iterations -->
 
 ---
