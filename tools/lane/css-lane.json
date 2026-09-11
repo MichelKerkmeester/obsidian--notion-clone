@@ -7251,6 +7251,34 @@
         "screenshots/notion-clone/views/board-view-desktop-dark.png"
       ],
       "note": "the 012+286 merged tree, judged by decoded pixel delta across two runs against the committed blobs, no image opened by eye. NEW: constructed-board-title-format-filename-desktop-dark 1014232px at 218, IDENTICAL counts in both judged runs — 286's filename-title markup photographed on this packet's taller card, a rendering neither landing’s own record contains. fields/field-status-colors-mobile-dark 19px at 192, also identical both runs — the recurring small-Δ class the 015 note attributes to 074's mock-data. views/board-view-desktop-dark 6px at 1, identical both runs. 1 one-run mover, none committed: views/board-mobile-desktop-dark 1px at 1, first judged run only, the second restoring it to its committed bytes — the same self-restoring class this lane’s 00:47:31Z release recorded. 286's own six moved captures carry through their 08:45:00Z release untouched."
+    },
+    {
+      "event": "acquire",
+      "phase": "076-002-properties-sheet-visual-parity",
+      "at": "2026-09-11T00:16:41Z",
+      "hash": "887e9e3b3449",
+      "note": "Re-acquired by the landing verification: the leg rebased onto the 012-board-card-fields landing (5662ec30) and the merged stylesheet 6a52f5dce3f8 -> 887e9e3b3449 (this leg's row-shell/section/add-row hunks riding 012's single-column meta-grid hunk) is a tree whose committed captures are partly 012-era."
+    },
+    {
+      "event": "edit",
+      "phase": "076-002-properties-sheet-visual-parity",
+      "at": "2026-09-11T00:16:41Z",
+      "hash": "887e9e3b3449",
+      "note": "No further producer edits: the stylesheet is the landing-rebase merge of this leg's hunks (checkbox-to-eye row shell, section/add-row settings cards, 44px row floor, sentence-case heading) with 012's board-card meta-grid; this reconciliation edits nothing, it photographs the merged tree. The leg's own 23:20:00Z edit below still describes the produce change."
+    },
+    {
+      "event": "release",
+      "phase": "076-002-properties-sheet-visual-parity",
+      "at": "2026-09-11T00:16:41Z",
+      "hash": "887e9e3b3449",
+      "reviewed": [
+        "screenshots/notion-clone/panels/constructed-board-groups-panel-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-board-groups-panel-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-board-groups-panel-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-board-groups-panel-mobile-light.png",
+        "screenshots/notion-clone/components/board-empty-column-desktop-light.png"
+      ],
+      "note": "npm run screenshots </dev/null twice, 482/482, exit 0 both, judged by decoded pixel delta across both runs against the committed blobs (node scratchpad/glm/pixel-delta.mjs), no image opened by eye. 5 REAL movers, kept, every one moved in BOTH judged runs: the four constructed-board-groups-panel captures (13175px@234, 13176px@202, 160935px@255, 178246px@255) -- the merged tree re-renders this leg's checkbox-to-eye row shell and section cards whose committed bytes the ours-side conflict resolution had taken from main -- plus components/board-empty-column-desktop-light 4px@209. 1 one-run jitter: views/board-view-desktop-dark 6px@1, second run only, restored at its committed 248575 bytes with its manifest row patched (pixelHash be56588f7b1d / layoutHash 8a3e6fc3977c both unchanged, fresh sourceHashes kept: property-row.ts 762506aece49, styles.css 887e9e3b3449, panels.mjs 14bd62a748eb). 0 threshold edits; the visual read stays the operator device pass; the 076/002 leg's own release below still carries the leg CREATE's 28-mover judgement on its own 6a52f5dce3f8 tree."
     }
   ],
   "outstanding": [
@@ -7265,5 +7293,5 @@
     "067-sheet-family-remediation: seventeen captures on this lane still show the surface as it looked BEFORE the depth-cap fix at 173f7d3a. Found by 062's landing verifier, which recaptured on the merged tree and then measured decoded pixels rather than trusting pixelHash: panel-record-detail-sheet-body-empty-desktop-light moves 46,779 pixels at a max channel delta of 214, its dark pair 46,752 at 209, constructed-chart-toolbar-options-mobile-dark and constructed-column-manager-mobile-dark about 260,800 each at 45, and eleven more record-detail-sheet, modal-sheet-property-editor, depth3-dropdown and owned-menu-sheet captures between 10,548 and 42,211 pixels at 46 to 78. Every one of them hashes IDENTICALLY, which is why 173f7d3a's own recapture read them as byte-only re-encodes and restored them. pixelHash averages a 16x16 grid into 32 buckets, so any change confined to a narrow band or a small region moves a cell's average by less than one bucket and hashes the same - 062 hit the identical trap on its frozen-column shadow and fixed it by measuring pixels. Reproduced with 067's OWN stylesheet in the tree (identical counts), so this is 067's debt and not 062's: left restored here rather than recommitted, because reviewing another lane's surface is a review this packet cannot honestly sign. 067 owes a recapture measured by decoded pixel delta, and a read of each of the seventeen."
   ],
   "baselineCommit": "dbb5e7cab7325518c9b3d00f995d41c9041a5e84",
-  "acquiredAt": "2026-09-10T23:20:00Z"
+  "acquiredAt": "2026-09-11T00:16:41Z"
 }

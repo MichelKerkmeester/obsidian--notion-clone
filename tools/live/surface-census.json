@@ -1,12 +1,12 @@
 {
-  "measuredAt": "2026-09-10T22:47:06.807Z",
+  "measuredAt": "2026-09-11T00:18:51.239Z",
   "inputs": {
-    "styles.css": "4b0cdd3a637f",
+    "styles.css": "887e9e3b3449",
     "tools/live/surface-census.mjs": "982af0f4c165",
     "src/views/surface-contract.ts": "99972eb224df",
     "src/views/record-detail-panel.ts": "857a220a8ad6",
     "src/views/table-record-peek.ts": "a00ed045be67",
-    "src/views/board-card-properties-panel.ts": "b53e1cda8b74"
+    "src/views/board-card-properties-panel.ts": "9569212a28d2"
   },
   "totals": {
     "rendered": 84,

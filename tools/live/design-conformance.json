@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-10T22:46:45.912Z",
+  "measuredAt": "2026-09-11T00:18:35.412Z",
   "inputs": {
-    "styles.css": "4b0cdd3a637f",
+    "styles.css": "887e9e3b3449",
     "tools/live/design-conformance.mjs": "8e86069bc5a3",
     "src/views/popover-position.ts": "a65201a60e11"
   },
@@ -81,7 +81,7 @@
     {
       "name": "cascade — property values overridden by a later duplicate block",
       "enforced": false,
-      "value": 135,
+      "value": 136,
       "target": 0,
       "note": "each needs a disposition: intended, or a defect",
       "gated": false,
@@ -121,9 +121,9 @@
     "src/views/chart-toolbar-renderer.ts:342  .obnotion-chart-options-popover",
     "src/views/chart-toolbar-renderer.ts:915  .obnotion-panel-empty",
     "src/views/column-header-controller.ts:73  .obnotion-column-menu-trigger",
-    "src/views/column-manager-renderer.ts:161  .obnotion-panel-button",
-    "src/views/column-manager-renderer.ts:176  .obnotion-panel-button",
-    "src/views/column-manager-renderer.ts:231  .obnotion-dropdown-popover",
+    "src/views/column-manager-renderer.ts:160  .obnotion-panel-button",
+    "src/views/column-manager-renderer.ts:175  .obnotion-panel-button",
+    "src/views/column-manager-renderer.ts:230  .obnotion-dropdown-popover",
     "src/views/column-menu.ts:281  .obnotion-dropdown-section-title",
     "src/views/column-menu.ts:416  .obnotion-column-menu-back",
     "src/views/column-width.ts:353  .obnotion-mobile-column-width-panel",
@@ -150,8 +150,8 @@
     "src/views/filter-panel-renderer.ts:287  .obnotion-panel-button",
     "src/views/filter-panel-renderer.ts:335  .obnotion-panel-header-actions",
     "src/views/filter-panel-renderer.ts:336  .obnotion-panel-button",
-    "src/views/filter-panel-renderer.ts:645  .obnotion-panel-button",
-    "src/views/filter-panel-renderer.ts:673  .obnotion-panel-row",
+    "src/views/filter-panel-renderer.ts:685  .obnotion-panel-button",
+    "src/views/filter-panel-renderer.ts:713  .obnotion-panel-row",
     "src/views/icon-picker-popover.ts:65  .obnotion-icon-picker-popover",
     "src/views/icon-picker-popover.ts:122  .obnotion-icon-picker-header",
     "src/views/icon-picker-popover.ts:123  .obnotion-icon-picker-tabs",
