@@ -925,7 +925,7 @@ Sources: `src/views/sort-panel-renderer.ts`, `tools/bench/table-render-bench.ts`
 
 ### View configuration panel (constructed)
 
-ViewConfigPanelRenderer's own render for a table view with a one-view database, so both the database-scoped and the view-scoped sections draw. `src/i18n.ts` is in this list because 076/001's prose-length fix moves sheet-reached copy, and without it here a copy-only change would leave this capture's freshness check reporting current.
+ViewConfigPanelRenderer's own render for a table view with a one-view database, so both the database-scoped and the view-scoped sections draw. `src/i18n.ts` is in this list because a copy-only prose-length fix moves sheet-reached strings, and without it here that change would leave this capture's freshness check reporting current.
 
 | dark | light |
 |---|---|

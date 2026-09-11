@@ -7321,6 +7321,45 @@
         "screenshots/notion-clone/components/board-empty-column-desktop-light.png"
       ],
       "note": "npm run screenshots </dev/null twice, 482/482, exit 0 both, judged by decoded pixel delta across both runs against the committed blobs (node scratchpad/glm/pixel-delta.mjs), no image opened by eye. 5 REAL movers, kept, every one moved in BOTH judged runs: the four constructed-board-groups-panel captures (13175px@234, 13176px@202, 160935px@255, 178246px@255) -- the merged tree re-renders this leg's checkbox-to-eye row shell and section cards whose committed bytes the ours-side conflict resolution had taken from main -- plus components/board-empty-column-desktop-light 4px@209. 1 one-run jitter: views/board-view-desktop-dark 6px@1, second run only, restored at its committed 248575 bytes with its manifest row patched (pixelHash be56588f7b1d / layoutHash 8a3e6fc3977c both unchanged, fresh sourceHashes kept: property-row.ts 762506aece49, styles.css 887e9e3b3449, panels.mjs 14bd62a748eb). 0 threshold edits; the visual read stays the operator device pass; the 076/002 leg's own release below still carries the leg CREATE's 28-mover judgement on its own 6a52f5dce3f8 tree."
+    },
+    {
+      "event": "acquire",
+      "phase": "001-settings-sheet-visual-parity",
+      "at": "2026-09-11T01:51:21Z",
+      "hash": "887e9e3b3449",
+      "note": "landing rebase: 001-settings-sheet-visual-parity rebased onto the 002-properties + 012-crossings tip of origin/main (eacfe192); lane re-acquired against the committed 002-era stylesheet 887e9e3b3449"
+    },
+    {
+      "event": "edit",
+      "phase": "001-settings-sheet-visual-parity",
+      "at": "2026-09-11T01:51:21Z",
+      "hash": "3a2f5143dd74",
+      "note": "rebase-merged stylesheet 3a2f5143dd74 = 001-creators hunks (dark-theme card ladder step via .theme-dark .obnotion-settings-card background: var(--obnotion-surface-modal), the 13px/400/sentence-case section heading, the renderNavRow/renderActionRow/footer-card paint, the inter-card gap space-5->space-6) replayed onto the 002-era base whose --obnotion-settings-card-fill token (styles.css light :112 / dark :1038) now serves 002-creators shown/hidden cards; the settings card keeps 001-creators own mechanism, both landings values identical (light background-primary, dark surface-modal)"
+    },
+    {
+      "event": "release",
+      "phase": "001-settings-sheet-visual-parity",
+      "at": "2026-09-11T01:51:21Z",
+      "hash": "3a2f5143dd74",
+      "reviewed": [
+        "screenshots/notion-clone/fields/constructed-cell-editor-text-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-cell-editor-text-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-board-card-properties-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-view-config-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-view-config-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-view-config-mobile-dark.png",
+        "screenshots/notion-clone/panels/panel-board-card-properties-desktop-dark.png",
+        "screenshots/notion-clone/panels/panel-board-card-properties-desktop-light.png",
+        "screenshots/notion-clone/panels/panel-board-card-properties-mobile-dark.png",
+        "screenshots/notion-clone/panels/panel-board-card-properties-mobile-light.png",
+        "screenshots/notion-clone/panels/panel-settings-side-sheet-desktop-dark.png",
+        "screenshots/notion-clone/panels/panel-settings-side-sheet-desktop-light.png",
+        "screenshots/notion-clone/panels/panel-view-config-desktop-dark.png",
+        "screenshots/notion-clone/panels/panel-view-config-desktop-light.png",
+        "screenshots/notion-clone/panels/panel-view-config-mobile-dark.png",
+        "screenshots/notion-clone/panels/panel-view-config-mobile-light.png"
+      ],
+      "note": "npm run screenshots </dev/null twice, 482/482, exit 0 both, judged by decoded pixel delta across both runs against the committed blobs (node scratchpad/glm/pixel-delta.mjs), no image opened by eye. 16 REAL movers, kept, every one reproduced across both judged runs: the 14 constructed/panel view-config, board-card-properties, settings-side-sheet and 2 cell-editor-text captures (maxDelta 112-195, changedPixels 75-530299) -- the merged tree re-renders 001-creators five-card settings sheet and the shared row shell whose committed bytes ours-side conflict resolution had taken from main. 1 one-run jitter (views/board-view-desktop-dark.png 6px@1, <=12) restored at its committed 248575 bytes with its manifest row patched (pixelHash be56588f7b1d unchanged, fresh styles.css sourceHash 3a2f5143dd74 kept). 0 threshold edits; the visual read stays the operator device pass. The 076/001 leg-creator own release above still carries the 20-mover judgement on its pre-rebase e34760384a34 tree."
     }
   ],
   "outstanding": [

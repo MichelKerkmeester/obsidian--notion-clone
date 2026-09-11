@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-11T00:18:35.412Z",
+  "measuredAt": "2026-09-11T01:53:23.191Z",
   "inputs": {
-    "styles.css": "887e9e3b3449",
+    "styles.css": "3a2f5143dd74",
     "tools/live/design-conformance.mjs": "8e86069bc5a3",
     "src/views/popover-position.ts": "a65201a60e11"
   },
@@ -9,7 +9,7 @@
     {
       "name": "contract scan — surfaces created without a declared role",
       "enforced": false,
-      "value": 153,
+      "value": 154,
       "target": 0,
       "note": "counted, not gated: gating today would fail on known debt",
       "gated": false,
@@ -81,7 +81,7 @@
     {
       "name": "cascade — property values overridden by a later duplicate block",
       "enforced": false,
-      "value": 136,
+      "value": 137,
       "target": 0,
       "note": "each needs a disposition: intended, or a defect",
       "gated": false,
@@ -132,7 +132,7 @@
     "src/views/confirm-sheet.ts:89  .obnotion-modal-help",
     "src/views/database-view.ts:3170  .obnotion-group-order-popover",
     "src/views/database-view.ts:3284  .obnotion-panel-button",
-    "src/views/database-view.ts:11924  .obnotion-dropdown-popover",
+    "src/views/database-view.ts:11930  .obnotion-dropdown-popover",
     "src/views/date-value-picker.ts:145  .obnotion-cell-edit-popover",
     "src/views/date-value-picker.ts:172  .obnotion-calendar-mini-popover",
     "src/views/dropdown-field.ts:164  .obnotion-dropdown-field-text",
@@ -204,6 +204,7 @@
     "src/views/modals/property-type-conflict-modal.ts:136  .obnotion-modal-actions",
     "src/views/modals/relation-rollup-config-modal.ts:259  .modal-button-container",
     "src/views/modals/relation-rollup-config-modal.ts:270  .modal-button-container",
+    "src/views/modals/settings-sub-sheet-modal.ts:46  .obnotion-settings-sub-sheet-body",
     "src/views/modals/status-options-modal.ts:158  .obnotion-modal-button-row",
     "src/views/modals/status-preset-manager-modal.ts:63  .obnotion-modal-help",
     "src/views/modals/status-preset-manager-modal.ts:79  .obnotion-modal-button-row",
@@ -248,8 +249,8 @@
     "src/views/toolbar-renderer.ts:2621  .obnotion-menu-item",
     "src/views/toolbar-renderer.ts:2630  .obnotion-menu-item",
     "src/views/toolbar-renderer.ts:2641  .obnotion-menu-item",
-    "src/views/view-config-panel-renderer.ts:355  .obnotion-view-config-panel",
-    "src/views/view-config-panel-renderer.ts:403  .obnotion-panel-button",
-    "src/views/view-config-panel-renderer.ts:1580  .obnotion-dropdown-field"
+    "src/views/view-config-panel-renderer.ts:364  .obnotion-view-config-panel",
+    "src/views/view-config-panel-renderer.ts:424  .obnotion-panel-button",
+    "src/views/view-config-panel-renderer.ts:1787  .obnotion-dropdown-field"
   ]
 }

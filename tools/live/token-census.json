@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-11T00:18:51.880Z",
+  "measuredAt": "2026-09-11T01:53:33.294Z",
   "inputs": {
-    "styles.css": "887e9e3b3449",
+    "styles.css": "3a2f5143dd74",
     "tools/live/token-census.mjs": "8561512231df"
   },
   "tokenRoots": [
@@ -9,9 +9,9 @@
     ".obnotion-surface"
   ],
   "totals": {
-    "classes": 82,
-    "differOnBody": 82,
-    "tokenlessOnBody": 79
+    "classes": 83,
+    "differOnBody": 83,
+    "tokenlessOnBody": 80
   },
   "rows": [
     {
@@ -1612,6 +1612,30 @@
     },
     {
       "cls": "obnotion-settings-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "tokensWhenMarked": true,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      },
+      "marked": {
+        "radius": "0px",
+        "font": "16px",
+        "token": "8px"
+      }
+    },
+    {
+      "cls": "obnotion-settings-sheet",
       "differing": [
         "fontSize"
       ],

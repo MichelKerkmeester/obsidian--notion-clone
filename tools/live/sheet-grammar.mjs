@@ -3999,31 +3999,31 @@ try {
 
   // The Properties sheet's checkbox-to-eye row shell and its card grouping.
   console.log("sheet-grammar: Properties sheet visual parity (076/002) — 0 checkboxes, a trailing eye per row, a dimmer eye on the required column, cards distinct from canvas, a 44px row floor, a carded add-property row\n");
-  const parity = await page.evaluate(() => window.__propertiesVisualParityGrammar());
-  if (parity.error) {
-    failures.push(`Properties sheet visual parity: ${parity.error}`);
-    console.log(`  FAIL  Properties sheet visual parity — ${parity.error}`);
+  const propertiesParity = await page.evaluate(() => window.__propertiesVisualParityGrammar());
+  if (propertiesParity.error) {
+    failures.push(`Properties sheet visual parity: ${propertiesParity.error}`);
+    console.log(`  FAIL  Properties sheet visual parity — ${propertiesParity.error}`);
   } else {
     // L1 — zero checkboxes in the row.
-    const l1Pass = parity.checkboxCount === 0;
-    if (!l1Pass) failures.push(`Properties sheet visual parity (L1): ${parity.checkboxCount} checkbox(es) remain in the row, wanted 0`);
-    console.log(`  ${l1Pass ? "PASS" : "FAIL"}  L1 — ${parity.checkboxCount} checkbox(es) in the row, wanted 0`);
+    const l1Pass = propertiesParity.checkboxCount === 0;
+    if (!l1Pass) failures.push(`Properties sheet visual parity (L1): ${propertiesParity.checkboxCount} checkbox(es) remain in the row, wanted 0`);
+    console.log(`  ${l1Pass ? "PASS" : "FAIL"}  L1 — ${propertiesParity.checkboxCount} checkbox(es) in the row, wanted 0`);
 
     // L2 — exactly one trailing eye/eye-slash icon, as the row's last child.
-    const wrongEyeCount = parity.rows.filter((row) => row.eyeCount !== 1);
-    const notTrailing = parity.rows.filter((row) => row.eyeCount === 1 && !row.lastChildIsEye);
+    const wrongEyeCount = propertiesParity.rows.filter((row) => row.eyeCount !== 1);
+    const notTrailing = propertiesParity.rows.filter((row) => row.eyeCount === 1 && !row.lastChildIsEye);
     const l2Pass = wrongEyeCount.length === 0 && notTrailing.length === 0;
-    if (wrongEyeCount.length > 0) failures.push(`Properties sheet visual parity (L2): ${wrongEyeCount.length} of ${parity.rows.length} rows do not carry exactly 1 eye toggle (${JSON.stringify(wrongEyeCount.map((row) => [row.key, row.eyeCount]))})`);
-    if (notTrailing.length > 0) failures.push(`Properties sheet visual parity (L2): ${notTrailing.length} of ${parity.rows.length} rows carry an eye toggle that is not the row's last child`);
-    console.log(`  ${l2Pass ? "PASS" : "FAIL"}  L2 — ${parity.rows.length - wrongEyeCount.length}/${parity.rows.length} rows carry exactly 1 trailing eye toggle`);
+    if (wrongEyeCount.length > 0) failures.push(`Properties sheet visual parity (L2): ${wrongEyeCount.length} of ${propertiesParity.rows.length} rows do not carry exactly 1 eye toggle (${JSON.stringify(wrongEyeCount.map((row) => [row.key, row.eyeCount]))})`);
+    if (notTrailing.length > 0) failures.push(`Properties sheet visual parity (L2): ${notTrailing.length} of ${propertiesParity.rows.length} rows carry an eye toggle that is not the row's last child`);
+    console.log(`  ${l2Pass ? "PASS" : "FAIL"}  L2 — ${propertiesParity.rows.length - wrongEyeCount.length}/${propertiesParity.rows.length} rows carry exactly 1 trailing eye toggle`);
 
     // L3 — the required column's (Title's) eye computes a measurably lower opacity than an
     // enabled row's. `column-manager`'s fixture has no title-field row (its `viewType` is
     // "table", where getRequiredColumnReason returns null for every column), so this reads the
     // one column the fixture DOES disable-lock — none today — against the busiest enabled row;
     // when no disabled row exists the check reports so explicitly rather than passing by default.
-    const disabledRows = parity.rows.filter((row) => row.disabled);
-    const enabledRows = parity.rows.filter((row) => !row.disabled && row.opacity != null);
+    const disabledRows = propertiesParity.rows.filter((row) => row.disabled);
+    const enabledRows = propertiesParity.rows.filter((row) => !row.disabled && row.opacity != null);
     let l3Pass = true;
     if (disabledRows.length === 0) {
       console.log("  N/A   L3 — the mounted fixture's viewType carries no required column to disable; see verification.md for how the dimmer-eye contrast was checked instead");
@@ -4037,26 +4037,26 @@ try {
 
     // L4 — the shown/hidden partition draws onto cards distinct from the sheet canvas, each with
     // >= 8px radius; the fixture's one-hidden-column state exercises the 2-card branch.
-    const wrongCards = parity.sections.filter((section) => section.background === parity.canvasBackground || section.borderRadiusPx < 8);
-    const l4Pass = parity.sectionCount === 2 && wrongCards.length === 0;
-    if (parity.sectionCount !== 2) failures.push(`Properties sheet visual parity (L4): ${parity.sectionCount} section container(s) rendered with one column hidden, wanted 2`);
-    if (wrongCards.length > 0) failures.push(`Properties sheet visual parity (L4): ${wrongCards.length} of ${parity.sectionCount} section(s) do not read as a card (background ${JSON.stringify(wrongCards.map((s) => s.background))} vs canvas ${parity.canvasBackground}, or radius < 8px)`);
-    console.log(`  ${l4Pass ? "PASS" : "FAIL"}  L4 — ${parity.sectionCount} section container(s), ${parity.sectionCount - wrongCards.length} carrying a card background distinct from the canvas (${parity.canvasBackground}) at >= 8px radius`);
+    const wrongCards = propertiesParity.sections.filter((section) => section.background === propertiesParity.canvasBackground || section.borderRadiusPx < 8);
+    const l4Pass = propertiesParity.sectionCount === 2 && wrongCards.length === 0;
+    if (propertiesParity.sectionCount !== 2) failures.push(`Properties sheet visual parity (L4): ${propertiesParity.sectionCount} section container(s) rendered with one column hidden, wanted 2`);
+    if (wrongCards.length > 0) failures.push(`Properties sheet visual parity (L4): ${wrongCards.length} of ${propertiesParity.sectionCount} section(s) do not read as a card (background ${JSON.stringify(wrongCards.map((s) => s.background))} vs canvas ${propertiesParity.canvasBackground}, or radius < 8px)`);
+    console.log(`  ${l4Pass ? "PASS" : "FAIL"}  L4 — ${propertiesParity.sectionCount} section container(s), ${propertiesParity.sectionCount - wrongCards.length} carrying a card background distinct from the canvas (${propertiesParity.canvasBackground}) at >= 8px radius`);
 
     // L5 — every row computes min-height >= 44px.
-    const shortRows = parity.rows.filter((row) => row.heightPx < 44);
+    const shortRows = propertiesParity.rows.filter((row) => row.heightPx < 44);
     const l5Pass = shortRows.length === 0;
-    if (!l5Pass) failures.push(`Properties sheet visual parity (L5): ${shortRows.length} of ${parity.rows.length} rows compute under 44px (${JSON.stringify(shortRows.map((row) => [row.key, row.heightPx]))})`);
-    console.log(`  ${l5Pass ? "PASS" : "FAIL"}  L5 — row heights ${JSON.stringify(parity.rows.map((row) => row.heightPx))}, wanted >= 44px`);
+    if (!l5Pass) failures.push(`Properties sheet visual parity (L5): ${shortRows.length} of ${propertiesParity.rows.length} rows compute under 44px (${JSON.stringify(shortRows.map((row) => [row.key, row.heightPx]))})`);
+    console.log(`  ${l5Pass ? "PASS" : "FAIL"}  L5 — row heights ${JSON.stringify(propertiesParity.rows.map((row) => row.heightPx))}, wanted >= 44px`);
 
     // L6 — the add-property row's own background reads distinct from the sheet canvas. A
     // transparent fill is not "distinct" in the sense this clause means — it shows the canvas
     // straight through — so it is rejected the same way the divider clauses reject a paintless
     // border above.
-    const addRowIsTransparent = parity.addRowBackground === "transparent" || parity.addRowBackground === "rgba(0, 0, 0, 0)";
-    const l6Pass = parity.addRowBackground != null && !addRowIsTransparent && parity.addRowBackground !== parity.canvasBackground;
-    if (!l6Pass) failures.push(`Properties sheet visual parity (L6): the add-property row's background (${parity.addRowBackground}) does not read distinct from the canvas (${parity.canvasBackground})`);
-    console.log(`  ${l6Pass ? "PASS" : "FAIL"}  L6 — add-property row background ${parity.addRowBackground} vs canvas ${parity.canvasBackground}`);
+    const addRowIsTransparent = propertiesParity.addRowBackground === "transparent" || propertiesParity.addRowBackground === "rgba(0, 0, 0, 0)";
+    const l6Pass = propertiesParity.addRowBackground != null && !addRowIsTransparent && propertiesParity.addRowBackground !== propertiesParity.canvasBackground;
+    if (!l6Pass) failures.push(`Properties sheet visual parity (L6): the add-property row's background (${propertiesParity.addRowBackground}) does not read distinct from the canvas (${propertiesParity.canvasBackground})`);
+    console.log(`  ${l6Pass ? "PASS" : "FAIL"}  L6 — add-property row background ${propertiesParity.addRowBackground} vs canvas ${propertiesParity.canvasBackground}`);
   }
   console.log("");
 

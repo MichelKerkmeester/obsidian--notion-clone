@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-11T00:18:51.239Z",
+  "measuredAt": "2026-09-11T01:53:32.617Z",
   "inputs": {
-    "styles.css": "887e9e3b3449",
+    "styles.css": "3a2f5143dd74",
     "tools/live/surface-census.mjs": "982af0f4c165",
     "src/views/surface-contract.ts": "99972eb224df",
     "src/views/record-detail-panel.ts": "857a220a8ad6",
@@ -10,10 +10,10 @@
   },
   "totals": {
     "rendered": 84,
-    "buildable": 223,
+    "buildable": 225,
     "declared": 6,
     "renderedOnly": 0,
-    "buildableNotRendered": 139,
+    "buildableNotRendered": 141,
     "untokened": 0,
     "unroled": 84,
     "recordSurfaceHandBuilt": 0
@@ -1558,6 +1558,7 @@
     "obnotion-property-conflict-type-dropdown",
     "obnotion-relation-rollup-config-modal",
     "obnotion-relation-rollup-config-dropdown",
+    "obnotion-settings-sub-sheet-body",
     "obnotion-status-preset-default-dropdown",
     "obnotion-color-picker-body",
     "obnotion-owned-menu",
@@ -1607,6 +1608,7 @@
     "obnotion-source-rule-property-picker",
     "obnotion-view-config-dropdown",
     "obnotion-status-preset-setting-dropdown",
+    "obnotion-settings-sheet-action",
     "obnotion-view-config-field-dropdown",
     "obnotion-view-config-dropdown-popover"
   ],
