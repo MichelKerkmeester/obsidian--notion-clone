@@ -206,7 +206,7 @@
     ],
     "causal_summary": "The filter sheet stacks a condition onto three full-width bordered pills; Notion collapses a condition to one summary row and puts property, operator and value in one merged card on a drill-in screen",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-10T20:16:57.517Z",
+    "last_save_at": "2026-09-11T03:53:48.484Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,11 +216,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:0a6a5f33f221d07357d16eddde73ef1ca3ffbcf3db003b2441dc8e00fe8c6b46",
+    "source_fingerprint": "sha256:4e995defb08f5eb18f10e4126845ca5300b745a04c0138301a3c229f5099ebf4",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "b264017150d00a5e72588eba05bd042be66e3b9b6f3b60b179c24768a4cb6123",
-      "plan.md": "c34ac17f804379d41554ca3d89501d017dcff9e118ac571c1dc215c6a4ac4c25",
+      "spec.md": "e5fcb542ffaa205c1360d77d36a4a2edff3594ac78c0f5f4095408dedeb92483",
+      "plan.md": "f051b162c6d51fae25f7297e0a87633bfefa914b5ceed8fff55ef457b1a276b1",
       "tasks.md": "3cc24aca00053f65101542308d1d6ee98db0bb9a850b3795a5d9810b77abdf30"
     },
     "last_active_at": null

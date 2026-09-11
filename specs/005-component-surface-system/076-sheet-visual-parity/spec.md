@@ -178,14 +178,32 @@ capture. When they arrive they become the preferred reference and any child targ
 re-opens its DEFINE step against them. Precedence is D3 in `decision-record.md`.
 
 Notion's **View options** sheet (`screenshots/notion/ios/flows/view-options/…-02-*.webp`, `-03-*.webp`)
-is the single most load-bearing reference in this packet, because it is what our Settings sheet
-should have been. Read structurally it is: a drag handle; a centred title; **Done** top-right and
-nothing top-left; one bordered **View name** input; then three separate inset cards with visible
-gaps between them and hairline dividers only *within* a card. Its rows are `Layout` → `Table ›`,
-`Properties` → `2 shown ›`, `Filter` → `None ›`, `Sort` → `None ›`, `Group` → `None ›`,
-`Automations` → `None ›`, each with a leading icon; then a card of one-tap actions with no chevron
-at all. Bordered inputs appear **only** for naming and searching, never for choosing. No row carries
-an explanatory paragraph.
+is a load-bearing reference in this packet for row and section structure. Read structurally it is: a
+drag handle; a centred title; **Done** top-right and nothing top-left; one bordered **View name**
+input; then rows grouped by hairline dividers, with plain small section labels sitting above each
+group on the sheet's own background. Its rows are `Layout` → `Table ›`, `Properties` → `2 shown ›`,
+`Filter` → `None ›`, `Sort` → `None ›`, `Group` → `None ›`, `Automations` → `None ›`, each with a
+leading icon; then a group of one-tap actions with no chevron at all. Bordered inputs appear
+**only** for naming and searching, never for choosing. No row carries an explanatory paragraph.
+
+**Frame ruling (D7, operator, 2026-09-11).** Every sheet in this packet — regardless of what any
+individual reference screen shows — presents its rows on the **plain sheet background**, separated
+by **hairline dividers** (inset from the leading edge to the label, full-bleed to the trailing edge),
+**never inside a rounded or lighter "card" container.** Section labels are plain small
+secondary-colour text set off by spacing and a divider, not by a card boundary. This binds every
+child in the Phase Documentation Map below; a child's own reference reads may differ on other rows,
+but never on this one. It supersedes this section's earlier reading of View options as "three
+separate inset cards with visible gaps between them," and `071/007`'s settings-card landing and its
+dark-theme retune (`roadmap.md` §7.19 ADR-J, ADR-K — both **resolved by the operator**, not
+Proposed, per D7).
+
+**Reference composition (D9, operator, 2026-09-11).** Anytype and Notion are joined by a third
+sheet reference, ClickUp (`scratchpad/operator-references/clickup-views-sheet-reference.png`), and
+no one of the three outranks the others: each child's DEFINE table composes its target row by row,
+naming which reference it follows and why, with the operator's own captures and words outranking all
+three where they speak directly. Board surfaces read ClickUp first (a resolved ADR against
+`056-board-anytype-parity`'s Anytype board rulings). D9 does not reopen D7 — the no-container,
+dividers-on-plain-background rule holds regardless of which reference a given row otherwise follows.
 
 ### In Scope
 
@@ -244,8 +262,8 @@ A Sonnet or Opus reviewer opens our capture and the reference side by side and s
 
 | Row | 0 | 1 | 2 |
 |---|---|---|---|
-| **Frame** | Different surface shape | Right shape, wrong canvas/radius/handle | Canvas colour token, corner radius, handle and header layout all match |
-| **Sections** | No grouping where the reference groups | Grouped, wrong boundaries or order | Same sections, same order, same visual separation |
+| **Frame** | Different surface shape, **or any row or value sits inside a rounded/lighter card container** (D7) | Right shape, no card container, but wrong canvas/radius/handle | Rows sit on the plain sheet background with hairline dividers (D7); canvas colour token, corner radius, handle and header layout all match the child's composed reference (D9) |
+| **Sections** | No grouping where the reference groups, **or grouping is painted as a card boundary rather than a heading-plus-divider** (D7) | Grouped by heading and divider, wrong boundaries or order | Same sections, same order, same heading-plus-divider separation — no card boundary anywhere (D7) |
 | **Row anatomy** | Different elements per row | Same elements, wrong order or edge | Leading icon, label and trailing element as the reference has them |
 | **Controls** | Wrong control kind (an input where the reference navigates) | Right kind, wrong affordance | Same control kind and same affordance throughout |
 | **Type** | Different scale or weight hierarchy | Hierarchy right, one level off | Scale and weights read as the reference's |
@@ -320,7 +338,7 @@ total. The reviewer writes the score table, with a one-line justification per ro
 ## RELATED DOCUMENTS
 
 - **Phase children**: the eleven `[0-9][0-9][0-9]-*/` sub-folders, each with spec, plan, tasks, acceptance-criteria and goal
-- **Decisions**: `decision-record.md` — D1 the image judge, D2 every surface of a grammar, D3 reference precedence, D4 one sheet at a time
+- **Decisions**: `decision-record.md` — D1 the image judge, D2 every surface of a grammar, D3 reference precedence, D4 one sheet at a time, D6 the loop graph, D7 dividers not cards, D8 release only after DONE, D9 reference composition
 - **Parent Spec**: `../spec.md` (005-component-surface-system)
 - **Predecessor**: `../071-sheet-notion-anytype-alignment/spec.md`, and its `sheet-notion-audit.md` §0 on the 299×678 ceiling
 - **Graph Metadata**: `graph-metadata.json`

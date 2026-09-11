@@ -205,7 +205,7 @@
     ],
     "causal_summary": "The group sheet carries a Shown/Hidden partition landed by 071/012 against a Notion screen that is not in this repository; the reference that does exist shows a two-row entry sheet and a flat checkmark property picker",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-10T20:16:57.682Z",
+    "last_save_at": "2026-09-11T03:53:48.647Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,11 +215,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:ada831756954a48dfe82dba5f02466a054f5ceb0f23d886e6d6d3a46cb6ce167",
+    "source_fingerprint": "sha256:118a7624ca715f7f1d6e5dd86c4971c61e1974c9294a9309a852959b907a4c39",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "1932018bc8e5b320f82796d4a6341b5d7f8585c0e158a97f56f722601dcdf004",
-      "plan.md": "380f21c3e3844119945b7867c82c462bc9ad06932134f58955514971c6d9f3e2",
+      "spec.md": "675971ab9747a18bceaf1192fa4cca3f0fd32bbb56e6c0df7a460fc23560af17",
+      "plan.md": "caa4b00cea996b1f237c1341bc45187f0ed4c52e2822f405328ab90f9502f01b",
       "tasks.md": "9ac6f82105b188d3b176f8055220d421ddb0ab667519cddc957688c3bc5bc5e7"
     },
     "last_active_at": null

@@ -223,6 +223,8 @@ As the operator, I open the Add / Edit Property Sheet on my iPhone and it reads 
 <!-- ANCHOR:gap-table -->
 ## 13. THE DEFINE TABLE — reference, current state, target
 
+> **Frame ruling (D7, operator, 2026-09-11):** no card containers anywhere in this sheet — rows group with hairline dividers on the plain sheet background; where the table below still names a card, D7 overrides it at CREATE time even though this scaffolded table is not rewritten here.
+
 ### References
 
 - `screenshots/notion/ios/flows/adding-a-new-property/` frame 03 (= `database/notion-ios-database-database-11-1589e7c8-*.webp`) — **the primary reference.** The New property sheet: a bordered name field, an `AI Autofill` section, then a `Type` section that is a **flat inline list** of type rows with **no chevrons**

@@ -172,7 +172,7 @@ Per parent D2(a), a target binds **every** producer painting this grammar, not o
 | A second surface renders the same grammar and is missed | Half the sheet is fixed | D2a: §3 enumerates every producer, including the shared row shell's board-groups consumer |
 | A number is read off a 299×678 thumbnail | A target that is precise and wrong | D3: structural reference only; every number is ours or `TBD` |
 | `styles.css` contention with another child | Two changes each pass alone and conflict merged | D4: one child at a time, one css-lane holder |
-| The reused `.obnotion-settings-card`-style token inherits `076/001`'s own open dark-theme defect (Proposed ADR-K) | Our new cards could invert in dark before ADR-K lands | Recorded as a shared risk in 13.11; not re-diagnosed here — `001` owns the fix |
+| A card container renders anywhere in this sheet | Scores 0 on the rubric's Frame row regardless of everything else (D7, operator, 2026-09-11) | No card token is reused from `001`; groups are separated by a hairline divider, the same grammar `001`'s own remediation carries |
 <!-- /ANCHOR:risks -->
 
 ---
@@ -272,6 +272,15 @@ filed under two unrelated flow names. Mobbin's naming is not load-bearing; the i
 - **Whether Property visibility has a direct (non-Settings-drill-in) entry point** is unobserved in
   this capture set (§12)
 
+**Superseded 2026-09-11 by D7 (operator ruling).** Every card reference below — R-1/R-2's own card
+boundary, the card inset/radius/gap this section reused from `001`, and the card vs. canvas
+invariant in §13.7 — is retired. The operator ruled directly: *"Never use bg container like here for
+values, notion / anytype use dividers on plain sheet bg thats better"*. This sheet's two-state
+grouping (nothing hidden / one-or-more hidden) still exists at the *logic* level (§13.2) but paints
+with a **hairline divider and a plain heading**, never a card. `002` also inherits `001`'s
+typography and control-shape findings on the same operator session where they apply structurally the
+same way (row label weight, icon size, row height range) — see §13.5-§13.6.
+
 ---
 
 ### 13.1 (a) The sheet frame
@@ -297,12 +306,13 @@ Read from R-1/R-2. Ours in `column-manager-renderer.ts:270-290` (`renderHeader`,
 Read from R-1 (nothing hidden) and R-2 (one hidden). **The count of sections is conditional, and our
 own producer already branches on it** (`column-manager-renderer.ts:121-156`): zero hidden columns →
 one undivided list; one or more hidden → two headed groups. This is correct today at the *logic*
-level and wrong only at the *paint* level (no card, wrong heading case, no `in table` suffix).
+level and wrong only at the *paint* level (no divider, wrong heading case, no `in table` suffix) —
+"no card" is **not** a defect (D7): the target was never a card, once D7 lands on this child too.
 
-| State | R-1/R-2 evidence | Target |
+| State | R-1/R-2 evidence | Target (D7: dividers, not cards) |
 |---|---|---|
-| Nothing hidden | R-1: one card, no heading at all | 1 card, 0 section headings — matches our own existing branch |
-| ≥ 1 hidden | R-2: two cards, `Shown in table` heading + `Hide all` inline link over the first, `Hidden in table` + `Show all` over the second, visible gap between them | 2 cards, gap ≥ 8px, sentence-case heading with the `in table` suffix (§12's open question), inline bulk link right-aligned on the same line as the heading — matches our own existing branch's *shape*, wrong only in paint |
+| Nothing hidden | R-1: one card, no heading at all | 0 containers, 0 section headings, 0 dividers needed — a single undivided list on the plain background, matching our own existing branch |
+| ≥ 1 hidden | R-2: two cards, `Shown in table` heading + `Hide all` inline link over the first, `Hidden in table` + `Show all` over the second, visible gap between them | 0 containers; **1 hairline divider** between the two groups, each with a sentence-case heading carrying the `in table` suffix (§12's open question) and its inline bulk link right-aligned on the same line — matches our own existing branch's *shape*, wrong only in paint |
 
 ---
 
@@ -352,38 +362,43 @@ Notion's whole control vocabulary on R-1/R-2 is three kinds relevant to this she
 ### 13.5 (e) Type scale
 
 No new type tier is introduced. Section headings and row labels reuse `076/001`'s already-DEFINEd
-tokens (13.5 there): heading `--obnotion-font-md` (13px) / `--text-muted` / sentence case / no
-letter-spacing, once the `in table` casing lands; row label and value stay the landed sheet-row
-tokens, unchanged here.
+tokens (13.5 there, rewritten 2026-09-11 for D7): heading `--obnotion-font-md` (13px) / `--text-muted`
+/ sentence case / no letter-spacing, once the `in table` casing lands; row label **17pt regular
+(weight ≤ 500)**, row value **17pt, secondary colour**, both reusing `001`'s landed sheet-row tokens,
+unchanged here; the row's type icon reuses `001`'s **20-22pt, label-ink** leading-icon target where
+this sheet's icon plays the same leading-icon role.
 
 ---
 
 ### 13.6 (f) Spacing rhythm
 
+**No card inset, radius or gap exists to reuse from `001` (D7, 2026-09-11) — `001`'s own card tokens
+are retired, and this table's provisional register moves with them.**
+
 | Property | Reference (R-1/R-2, provisional except where noted) | Ours today | Target |
 |---|---|---|---|
-| Row min-height | ~44pt (32-33 thumbnail px ÷ 0.7608, reusing `076/001`'s derived scale for the same asset family) | **30px**, hardcoded | `var(--obnotion-sheet-row-min-height)` = 44px — **not provisional; this is our own token, not a reference-derived number** |
-| Card inset from sheet edge | white span `x=12…16` to `x=285…288` on R-1, measured this session — **matches `076/001`'s `x=12…286` finding on its own bottom-sheet references exactly** | n/a — no card exists | 16px (`--obnotion-sheet-inset`), reusing the landed token, unchanged from `001`'s own card |
-| Card corner radius | provisional, consistent with `001`'s ~8pt reading | n/a | `--obnotion-radius-lg` (8px), reusing `001`'s landed `.obnotion-settings-card` token rather than a new one |
-| Inter-card gap | provisional, consistent with `001`'s ~16pt reading vs. its 12px-landed retune question | n/a | `--obnotion-space-5` (12px), same as `001`; lane floor `≥ 8px` either way |
+| Row min-height | **44-48pt** (32-33 thumbnail px ÷ 0.7608, reusing `076/001`'s widened range) | **30px**, hardcoded | `var(--obnotion-sheet-row-min-height)` = 44px floor, **44-48pt** provisional target — **not derived from a reference asset**, this is our own token range |
+| Row inset from sheet edge | white span `x=12…16` to `x=285…288` on R-1, measured this session — matches `076/001`'s `x=12…286` finding | n/a — no grouping surface exists | 16px (`--obnotion-sheet-inset`), reusing the landed token; now read as the row's own inset, not a card's |
+| ~~Card corner radius~~ | *(retired, D7 — no card exists on this sheet either)* | n/a | n/a |
+| Divider between groups | R-2's inter-card gap read structurally as a boundary; D7 repaints it as a hairline divider rather than a gap between two surfaces | n/a — no boundary painted today | 1 hairline divider, inset to the label on the leading edge, full-bleed on the trailing edge, same grammar as `001` |
 | Search field height | ~42pt (32 thumbnail px, R-1 `y=112-144`) | ours today reads close to this already (unmeasured precisely; not a lane target) | unchanged — not asserted |
-<!-- spacing target reuses 001's landed tokens rather than deriving new ones, per D4's shared vocabulary -->
+<!-- spacing target reuses 001's landed divider grammar rather than its retired card tokens, per D4's shared vocabulary and D7's frame ruling -->
 
 ---
 
 ### 13.7 (g) Both themes
 
-No dark-theme Notion reference exists for this sheet (13.0), so the dark target is **ours**, and it
-inherits `076/001`'s own invariant rather than restating a new one:
+No dark-theme Notion reference exists for this sheet (13.0), so the dark target is **ours** — and,
+per D7, there is no card fill left to invert:
 
-> **The card band is lighter than its canvas in both themes**, the same rule `001`'s §13.7 states.
+> **The divider is a consistent hairline token, visible against the plain sheet background in both
+> themes**, the same rule `001`'s rewritten §13.7 states. There is no second surface to invert.
 
-Measured on the captures the judge will score, `constructed-column-manager-mobile-{light,dark}.png`:
-
-| | Canvas (measured) | Card (target, once added) |
-|---|---|---|
-| Light | `rgb(242,242,242)` | Reuses `076/001`'s card token (`--background-primary`), light direction already correct there |
-| Dark | `rgb(46,46,46)` — **identical to `076/001`'s own canvas reading**, confirming both sheets share the same theme tokens | Reuses the same token — **and therefore inherits `076/001`'s open Proposed ADR-K (the card fill computes darker than canvas in dark theme) until that lands.** Recorded as a shared risk (§6), not re-diagnosed here |
+The retired card/canvas pairing this row previously targeted — light `rgb(242,242,242)` canvas
+reused against `001`'s card token, dark `rgb(46,46,46)` canvas (identical to `001`'s own reading,
+confirming both sheets share the same theme tokens) — no longer applies. This sheet's inheritance of
+`001`'s open **ADR-K** is moot for the same reason `001` itself retired it: D7 removes the card
+before its fill direction matters (§6, updated).
 
 ---
 
@@ -422,32 +437,37 @@ CSS comment naming exactly that swap.
 **Type.** Section headings uppercase, no `in table` qualifier. Row labels and values unremarkable,
 no defect found.
 
-**Colour.** Both themes read as a single flat surface; no grouping ink exists to invert, so `001`'s
-dark-inversion defect (ADR-K) has not yet reached this sheet — it will, the moment a card is added
-with the same token, unless `001` lands first (§6).
+**Colour.** Both themes read as a single flat surface; no grouping ink exists to invert. `001`'s
+dark-inversion defect (**ADR-K, resolved by the operator, not open**) never reached this sheet at
+all, and D7 means it never will: this sheet groups with a divider, which has no fill direction to
+invert.
 
 **In one sentence.** It is a flat, ungrouped settings list with a leading checkbox and a trailing
 label, on a canvas that never varies — where the reference is a two-tier, sectioned list with a
-trailing eye and cards that visibly lift off their canvas.
+trailing eye.
 
 ---
 
 ### 13.10 The DELTA table — before → target, per property, with its rubric row
 
-| Property | Before (measured) | Target | Rubric row |
-|---|---|---|---|
-| State control position | leading, before the type icon | trailing, after the label | Row anatomy |
-| State control kind | filled checkbox | eye / eye-slash icon | Controls |
-| Required-row contrast | checkbox `disabled` natively, no measured visual gap confirmed | eye icon measurably dimmer, ~5× luma gap (target order of magnitude, not exact hex) | Colour |
-| Card grouping | **0** cards, ever | 1 card (nothing hidden) or 2 cards (≥1 hidden), matching the branch our own code already has | Sections |
-| Section heading case | uppercase, no suffix | sentence case, `in table` suffix (§12 open) | Type |
-| Row min-height | 30px, hardcoded | 44px, via the existing shared token | Spacing |
-| Add-property row shape | **already** full-width labelled rows (correcting the scaffold's claim) | unchanged row shape; gains a terminal card wrapper | Sections |
-| Card vs canvas, light | n/a (no card) | card lighter than canvas — reuses `001`'s token | Colour |
-| Card vs canvas, dark | n/a (no card) | inherits `001`'s open ADR-K until it lands (§6) | Both themes |
-| Search field copy | `Search properties` | optional: `Search for a property…`; non-blocking, not lane-asserted | — |
-| Reorder affordance | arrow pair | **unchanged** — `071/012` extended, not contradicted | Controls |
-| Type icon position | already before the label | unchanged | Row anatomy |
+**This child's own CREATE has since landed a two-container shape** (`roadmap.md` §4 row 89's own
+entry: "L4 0→2 section containers reading a card background distinct from canvas"), which the D7
+ruling retires in turn — the same sequence `001` went through. Both "before" states are recorded.
+
+| Property | Before (pre-`076`) | Before (shipped CREATE) | Target (D7) | Rubric row |
+|---|---|---|---|---|
+| State control position | leading, before the type icon | trailing, after the label (landed) | unchanged | Row anatomy |
+| State control kind | filled checkbox | eye / eye-slash icon (landed) | unchanged | Controls |
+| Required-row contrast | checkbox `disabled` natively, no measured visual gap confirmed | eye icon measurably dimmer (landed) | unchanged | Colour |
+| Card / container grouping | **0** cards, ever | **1** card (nothing hidden) or **2** cards (≥1 hidden) | **0** containers, ever; a hairline divider between the two groups when ≥1 is hidden | Sections |
+| Section heading case | uppercase, no suffix | unchanged from pre-`076` | sentence case, `in table` suffix (§12 open) | Type |
+| Row min-height | 30px, hardcoded | 44px (landed) | **44-48pt**, provisional widened range (D7 remediation) | Spacing |
+| Add-property row shape | **already** full-width labelled rows | gained a terminal card wrapper | unchanged row shape; the card wrapper is retired, not replaced | Sections |
+| Card vs canvas, light | n/a (no card) | card lighter than canvas, reused `001`'s token | n/a — retired (D7) | Colour |
+| Card vs canvas, dark | n/a (no card) | inherited `001`'s then-open ADR-K | n/a — retired (D7); ADR-K resolved, not Proposed | Both themes |
+| Search field copy | `Search properties` | unchanged | optional: `Search for a property…`; non-blocking, not lane-asserted | — |
+| Reorder affordance | arrow pair | unchanged | **unchanged** — `071/012` extended, not contradicted | Controls |
+| Type icon position | already before the label | unchanged | unchanged | Row anatomy |
 
 ---
 
@@ -458,14 +478,18 @@ as a new section, in the shared idiom: a `console.log` header, one `PASS`/`FAIL`
 measurement, `failures.push` on breach. **No clause asserts a number derived from a reference asset**
 (D3); every threshold below is a structural count, an ours-measured value, or our own token.
 
-| Clause | Assertion | Expected RED today |
+**L4 and L6 are rewritten below to D7's target (2026-09-11).** Both had already gone GREEN against
+the two-container shape this child's first CREATE landed; the remediation task block in `tasks.md`
+runs each rewritten clause RED-first against that shipped tree before the producer changes again.
+
+| Clause | Assertion | Expected RED today (against the shipped tree) |
 |---|---|---|
-| **L1** | Each property row emits **0** elements matching `input.obnotion-checkbox` | 1 checkbox per row |
-| **L2** | Each property row emits exactly **1** trailing state-control icon (`eye`/`eye-off`) as its last child | 0 |
-| **L3** | The required column's (Title's) state-control icon computes a measurably lower opacity or contrast than an enabled row's state-control icon | n/a — no eye icon exists yet |
-| **L4** | When ≥ 1 column is hidden, the sheet renders **2** section containers each with `background` distinct from the sheet canvas and `border-radius ≥ 8px`; when 0 are hidden, it renders **1** such container and **0** section headings | 0 containers in either state (flat list) |
-| **L5** | Every `.obnotion-column-manager-row` computes `min-height ≥ 44px` | 30px |
-| **L6** | The add-property row container (`.obnotion-column-manager-add-row`) computes `background` distinct from the sheet canvas | none — flat, matches canvas |
+| **L1** | Each property row emits **0** elements matching `input.obnotion-checkbox` | 0 — already GREEN, re-run unchanged |
+| **L2** | Each property row emits exactly **1** trailing state-control icon (`eye`/`eye-off`) as its last child | 0 — already GREEN, re-run unchanged |
+| **L3** | The required column's (Title's) state-control icon computes a measurably lower opacity or contrast than an enabled row's state-control icon | 0 — already GREEN, re-run unchanged |
+| **L4** | **0 containers; dividers present.** The sheet renders **0** elements with a card-like background/border-radius container, in either the nothing-hidden or the ≥1-hidden state; when ≥1 column is hidden, **1** hairline divider separates the two groups | 2 section containers with a card background, `border-radius ≥ 8px`, and 0 dividers |
+| **L5** | Every `.obnotion-column-manager-row` computes `min-height ≥ 44px` | 44px — already GREEN, re-run unchanged (target widens to 44-48pt, provisional, per `001`'s remediation) |
+| **L6** | **0 containers; dividers present.** The add-property row computes a `background` **matching** the sheet canvas — no residual container fill of any kind | The add-property row container (`.obnotion-column-manager-add-row`) computes a `background` distinct from the sheet canvas |
 
 **The `071` regression set re-runs unchanged in the same invocation**: the row's own hairline and
 inset grammar this sheet already carries under `071/009`, and the board-groups panel's shared-row
@@ -477,10 +501,11 @@ shell first.
 ### 13.12 The provisional register — and what settles each
 
 No new provisional values are introduced beyond what `076/001` already registered for the same
-reference family (canvas colour, card inset, card radius, inter-card gap, row height) — this child
-reuses those figures rather than re-deriving them, since both sheets read from the same device/scale
-assumption (299×678, `0.7608`, established in `001/spec.md` §13.12). The one value specific to this
-child:
+reference family (canvas colour, row inset, divider grammar, row height) — this child reuses those
+figures rather than re-deriving them, since both sheets read from the same device/scale assumption
+(299×678, `0.7608`, established in `001/spec.md` §13.12). The card inset/radius/gap rows `001`
+previously carried are retired there (D7) and are not reused here either. The one value specific to
+this child:
 
 | Provisional | Value | How it was derived | Settled by |
 |---|---|---|---|
@@ -502,9 +527,9 @@ Under **D15** and parent **D3**, each is a **Proposed ADR** to be transcribed in
 | **ADR-L** | The scaffold's original DEFINE targeted removing the arrow pair for "1 reorder affordance at the leading edge" (implying a Notion-style grip) | `071/012` ADR-001 already ruled the arrow pair survives on the sort sheet because it carries a keyboard path the grip does not. This DEFINE finds no reason the same reasoning would not hold here, and **does not introduce a grip** — the scaffold's original target is corrected rather than followed. This is a correction to an unlanded scaffold draft, not a contradiction of anything landed, and is recorded here only so the reasoning is legible to whoever implements `tasks.md` | `076/002` |
 | **ADR-M** | `roadmap.md` §7.18 ADR-D holds the Properties sheet's 34px row density against the 44px thumb floor, Proposed | This DEFINE's L5 (13.11) closes exactly that gap — swapping the row's hardcoded `30px` for the shared `44px` token. Recorded here so `T001` can mark ADR-D **addressed by `076/002`** rather than leaving it a dangling Proposed row once this child's CREATE step lands L5 | `076/002` |
 
-Both ADR-I (header glyph) and ADR-K (dark card-fill inversion) from `076/001` apply here unchanged
-by inheritance (13.1, 13.7) and are **not** re-raised as new rows — `T001` cites them, not duplicates
-them.
+**ADR-J and ADR-K, both from `076/001`, are resolved by the operator (D7), not open.** ADR-I (header
+glyph) remains open and applies here unchanged by inheritance (13.1) — `T001` cites it, not
+duplicates it.
 
 <!-- /ANCHOR:gap-table -->
 
@@ -514,5 +539,5 @@ them.
 
 - **Parent**: `../spec.md` (the loop and the rubric), `../decision-record.md` (D1-D4)
 - **Verification**: `verification.md` — created at the VERIFY step, one score table per iteration
-- **Predecessor**: `../001-settings-sheet-visual-parity/spec.md` — the card token, the scale derivation and ADR-I/ADR-K this child reuses
+- **Predecessor**: `../001-settings-sheet-visual-parity/spec.md` — the divider grammar, the scale derivation and ADR-I this child reuses; ADR-J/ADR-K are resolved (D7), not reused as open questions
 - **Predecessor packet**: `../../071-sheet-notion-anytype-alignment/`, whose landings are this child's regression floor

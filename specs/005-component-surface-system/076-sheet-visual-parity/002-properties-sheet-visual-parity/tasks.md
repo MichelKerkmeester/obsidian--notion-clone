@@ -143,3 +143,42 @@ practice even though nothing blocks doing them the other way round. No `[P]` tas
 T008's board-groups regression check depends on T003-T007 already being in (it re-runs the shared
 row's clauses after every change that touches the row shell, not just the height).
 <!-- /ANCHOR:ordering -->
+
+---
+
+<!-- ANCHOR:frame-ruling-remediation -->
+### Frame-ruling remediation (2026-09-11)
+
+T005 gave this sheet's two groups `076/001`'s `.obnotion-settings-card` treatment; the operator has
+since ruled the card container out entirely (D7, `../decision-record.md`), on the same session as
+`076/001`'s own remediation. This block runs before T011 is (re-)attempted. Write-first, same idiom
+as T003-T008 — clause RED against the **shipped, card-grouped tree**, then the producer change, then
+GREEN.
+
+- [ ] T014 **RED.** Run the rewritten `spec.md` §13.11 clauses against the current, unchanged tree
+  and record the failing numbers: L4 ("0 containers; dividers present") reads **2 section containers
+  with a card background, 0 dividers** when ≥1 column is hidden, and **1 container** when none is;
+  L6 ("0 containers; dividers present") reads **1 add-property container** with a background distinct
+  from canvas. Record both numbers in `verification.md` before touching the producer
+  (`tools/live/sheet-grammar.mjs`)
+- [ ] T015 **Producer change.** Remove the `.obnotion-settings-card` background/radius from
+  `.obnotion-column-manager-section` and from `.obnotion-column-manager-add-row`
+  (`column-manager-renderer.ts`); when ≥1 column is hidden, paint a hairline divider between the
+  `Shown in table` and `Hidden in table` groups (leading-edge inset to the label, full-bleed to the
+  trailing edge, the same grammar `076/001`'s remediation lands); when none is hidden, no divider is
+  needed since there is only one group. Widen the row min-height target to the 44-48pt provisional
+  range alongside `076/001`'s own retune (`src/views/column-manager-renderer.ts`, `styles.css`)
+- [ ] T016 **GREEN.** Re-run L4 and L6 and record: L4 at **0** containers in both states, **1** divider
+  present when ≥1 column is hidden; L6 at **0** containers, the add-property row's background matching
+  canvas. Re-run L1-L3, L5 and the `071`/board-groups regression set in the same invocation and
+  confirm they stay green (`tools/live/sheet-grammar.mjs`, `verification.md`)
+- [ ] T017 **Capture.** Run `npm run screenshots </dev/null` and `npm run screenshots:verify`; open
+  the phone light and dark PNGs and confirm by eye that no card boundary remains and, where a group
+  boundary exists, it is a divider. Record the pixel delta against the pre-remediation capture
+  (`screenshots/notion-clone/**`)
+- [ ] T018 **Judge, remediation pass.** Score the eight-row rubric (`../spec.md` §5, as rewritten for
+  D7) against the new capture, same reviewer discipline as T011: **Frame** and **Sections** score
+  against dividers-on-plain-background, and a card container anywhere scores **0** on Frame. Record
+  the score table into `verification.md` as its own iteration. This pass, not any pre-remediation
+  pass, is what T011/T012's "twice consecutively" counts from
+<!-- /ANCHOR:frame-ruling-remediation -->

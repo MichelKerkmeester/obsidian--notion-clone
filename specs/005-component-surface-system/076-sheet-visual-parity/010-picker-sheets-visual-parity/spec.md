@@ -225,6 +225,8 @@ As the operator, I open the Date, Icon, Colour and Property-Type Pickers on my i
 <!-- ANCHOR:gap-table -->
 ## 13. THE DEFINE TABLE — reference, current state, target
 
+> **Frame ruling (D7, operator, 2026-09-11):** no card containers anywhere in this sheet — rows group with hairline dividers on the plain sheet background; where the table below still names a card, D7 overrides it at CREATE time even though this scaffolded table is not rewritten here.
+
 ### References
 
 - `screenshots/notion/ios/sheets/notion-ios-sheets-date-picker-03-cb9d8cab-*.webp`, `-04-fd9402ee-*.webp`, `-09-cfca14fb-*.webp` — the date picker

@@ -215,6 +215,8 @@ As the operator, I open the Add View Sheet on my iPhone and it reads like Notion
 <!-- ANCHOR:gap-table -->
 ## 13. THE DEFINE TABLE — reference, current state, target
 
+> **Frame ruling (D7, operator, 2026-09-11):** no card containers anywhere in this sheet — rows group with hairline dividers on the plain sheet background; where the table below still names a card, D7 overrides it at CREATE time even though this scaffolded table is not rewritten here.
+
 ### References
 
 - `screenshots/notion/ios/database/notion-ios-database-database-14-d1de51a5-*.webp` — the Layout screen with **List** selected: a 3×3 tile grid, then one card of four rows (`Show data source title` toggle, `Show page icon` toggle, `Open pages in` → `Side peek ›`, `Load limit` → `50 ›`)

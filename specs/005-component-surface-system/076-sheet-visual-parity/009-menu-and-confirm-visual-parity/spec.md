@@ -222,6 +222,8 @@ As the operator, I open the Record Menu, Cell Menu and Destructive Confirm on my
 <!-- ANCHOR:gap-table -->
 ## 13. THE DEFINE TABLE — reference, current state, target
 
+> **Frame ruling (D7, operator, 2026-09-11):** no card containers anywhere in this sheet — rows group with hairline dividers on the plain sheet background; where the table below still names a card, D7 overrides it at CREATE time even though this scaffolded table is not rewritten here.
+
 ### References
 
 - `screenshots/notion/ios/sheets/notion-ios-sheets-delete-confirm-01-55602f6a-*.webp` and frames `-02`, `-03`, `-06`, `-07`, `-14`, `-15` — seven destructive-confirm captures, the best-populated reference family in this packet

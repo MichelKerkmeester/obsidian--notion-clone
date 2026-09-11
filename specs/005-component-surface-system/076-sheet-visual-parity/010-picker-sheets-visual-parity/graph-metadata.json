@@ -208,7 +208,7 @@
     ],
     "causal_summary": "Four picker sheets against their references, including the icon picker's crowded search row that 071/014 recorded and the date picker's CSS-specificity leak that the design review found",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-10T20:16:58.116Z",
+    "last_save_at": "2026-09-11T03:53:49.069Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,11 +218,11 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:d5ca067f7fc3cfb6130fdbb9521d3d8f60881a988ab322374f9d8e16cdb81a1f",
+    "source_fingerprint": "sha256:493fb0671209f24b1de0cf87403aa6714d6171f2fa26f8fd2e67728eb325cd4d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "82bee5fcdbf634fa13f8fb64069cf5802da00fa66e4d3aaa4355d5d867a2e549",
-      "plan.md": "88645d7a3590567e9a11509927db495c364eb92ccdc94a32dcb1e51feea96380",
+      "spec.md": "ef9cafa21a1c8c420cc344865939f7d3997ddc911811bd444fb2f2f957e4c0ae",
+      "plan.md": "3de8f42e7311f55507a8fc8b7302517d9659467bbe823aa53095e12b3c37446d",
       "tasks.md": "f1903cf49218c9509683adeddc54c86b18926a3299dd09689140c9ecc527b804"
     },
     "last_active_at": null

@@ -235,6 +235,13 @@ As the operator, I glance at a board card on my iPhone and read every field's fu
 <!-- ANCHOR:gap-table -->
 ## 13. THE DEFINE TABLE — reference, current state, target
 
+> **Frame ruling (D7, operator, 2026-09-11):** this child is not one of the eleven sheets, but D7's
+> no-container rule still binds its own field grid — a board card's field/value pairs are not to be
+> wrapped in a lighter or bordered container either. **D9 (2026-09-11) also names this child's own
+> reference directly: board surfaces read ClickUp first**, Anytype and Notion secondary, superseding
+> `056-board-anytype-parity`'s Anytype-only board reference for this grid. Neither decision rewrites
+> the scaffolded table below.
+
 ### References
 
 - **Operator capture** (rung 1 of D3, populated for this child specifically): `/private/tmp/claude-501/-Users-michelkerkmeester-MEGA-Development-Obsidian-Plugin/e80c6d75-9d5c-4af2-af70-05fb120371b4/scratchpad/operator-references/0038-board-card-fields-two-column.png` — 0.0.38, iPhone, board view, `By Status`. Shows two cards: one with a two-column grid of label/value pairs truncated to "D…", "Relat…", "L…", "Margi…", "Sum…" (labels) and "June 30,…", "https://examp" (values); one with the same grid beside a relation-chip row that wraps cleanly because it already spans the full card width

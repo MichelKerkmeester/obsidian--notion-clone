@@ -207,7 +207,7 @@
     ],
     "causal_summary": "The board card's property rows (`.obnotion-kanban-card-meta .obnotion-board-card-field`) render in a two-column CSS grid at any viewport 360px or wider (`styles.css:10178-10188`), which the shared per-field renderer's label span (`card-field-renderer.ts:105`) was never built to fit inside: at half the card's width, an ordinary property label — `Due date`, `Related tasks`, `Link`, `Margin %`, `Summary` — has nowhere near enough room, and `.obnotion-board-card-field-label`'s own `text-overflow: ellipsis; white-space: nowrap` (`styles.css:10202-10209`) truncates it exactly as far as the",
     "created_at": "2026-09-10T20:24:50.845Z",
-    "last_save_at": "2026-09-10T22:11:09.082Z",
+    "last_save_at": "2026-09-11T03:53:49.251Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,10 +218,10 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:12f88813b615eeba6bf226bdc132c07568a5e55907632265969642857218396f",
+    "source_fingerprint": "sha256:6d4dbf4d61ca32bffb365445e1907173a182bd0e070d03b9f58d4f2f7d2c463f",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "ccad711a75791f29ba6e39b1d206879c747a99743f271acfbcd95a4dcdccc7cf",
+      "spec.md": "2103d4025972e392e507cd9fdaea36cd6075629524b8312acb16a0bb44cc87a5",
       "plan.md": "d7ad64e80c13d10c88259a0948646b316b13aa39873701b1ce72a31d97520d5c",
       "tasks.md": "b762cfef618545d737671dd78d6077c5b4abb899e4a88897bc57632a431642c7",
       "implementation-summary.md": "613d0465f69f32bffa6457a086f7cbd659678e53df93567ea06ae1a25817d434"

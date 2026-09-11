@@ -91,3 +91,48 @@ T011's card host, and T008 empties the row set T002's L9 guards. No `[P]` task i
 The one dependency that is not internal: **T003 must precede T009**, or the capture that T012 reads
 will look fresh while its strings have moved.
 <!-- /ANCHOR:ordering -->
+
+---
+
+<!-- ANCHOR:frame-ruling-remediation -->
+### Frame-ruling remediation (2026-09-11)
+
+The operator ruled out the card container T011 built (D7, `../decision-record.md`) and separately
+named typography and sizing defects on the same sheet, on the same capture (0.0.40). This block runs
+**before** T013 is re-attempted: `spec.md` §13 is already rewritten to the divider target; these
+tasks carry the shipped tree to it. Write-first, same idiom as T004-T011 — clause RED against the
+**shipped, 5-card tree**, then the producer change, then GREEN.
+
+- [ ] T015 **RED.** Run the rewritten `spec.md` §13.11 clauses against the current, unchanged tree
+  and record the failing numbers: L1 ("0 card containers under `.obnotion-view-config-body`; ≥4
+  dividers") reads **5 card containers, 0 group dividers**; L6 ("0 elements compute a background
+  distinct from canvas, both themes") reads **5 elements per theme** (the five `.obnotion-settings-card`
+  fills); L8 ("0 card wrapper on the terminal group") reads **1** (`obnotion-settings-card-footer`);
+  L10 (row label weight ≤ 500, leading icon 20-22pt) reads today's computed weight and icon size.
+  Record every number in `verification.md` before touching the producer (`tools/live/sheet-grammar.mjs`)
+- [ ] T016 **Producer change.** Remove `.obnotion-settings-card` and its five container instances from
+  `view-config-panel-renderer.ts`'s five groups; replace the card boundary with a hairline divider
+  between groups (leading-edge inset to the label, full-bleed to the trailing edge, per `spec.md`
+  §13.6); drop the card fill token and the dark-theme retune it needed (D7 retires ADR-K, no fill to
+  invert). Retune the row label to regular (400) weight and the leading icon to the 20-22pt range.
+  Convert **R09** (`Formula result storage`, `viewConfig.computedSyncMode`) from its inline
+  three-option segmented control into a single navigation row — icon, label, the chosen option as its
+  trailing value, chevron — opening a picker sheet that lists the three options
+  (`displayOnly`/`manual`/`automatic`) as their own rows; carry **R09 (Computed sync)** as the same
+  row under its corrected label rather than as a second control (`src/views/view-config-panel-renderer.ts`,
+  `styles.css`)
+- [ ] T017 **GREEN.** Re-run the same clauses and record: L1 at **0** card containers with the group
+  count of dividers now present; L6 at **0** elements with a background distinct from canvas, both
+  themes; L8 at **0** card wrapper on the terminal group; L10 at the new label weight and icon size.
+  Re-run the `071` regression set and the rest of L2-L5, L7, L9 in the same invocation and confirm
+  they stay green (`tools/live/sheet-grammar.mjs`, `verification.md`)
+- [ ] T018 **Capture.** Run `npm run screenshots </dev/null`, `npm run screenshots:verify`, and
+  `node tools/live/sheet-rebuild.mjs </dev/null`; open the phone light and dark PNGs and confirm by
+  eye that no card boundary remains and dividers separate the five groups. Record the pixel delta
+  against the pre-remediation capture (`screenshots/notion-clone/**`)
+- [ ] T019 **Judge, remediation pass.** Score the eight-row rubric (`spec.md` §5, as rewritten for D7)
+  against the new capture, same reviewer discipline as T013: **Frame** and **Sections** score against
+  dividers-on-plain-background, and a card container anywhere scores **0** on Frame. Record the score
+  table into `verification.md` as its own iteration. This pass, not the pre-remediation one, is what
+  T013's "twice consecutively on an unchanged tree" counts from
+<!-- /ANCHOR:frame-ruling-remediation -->

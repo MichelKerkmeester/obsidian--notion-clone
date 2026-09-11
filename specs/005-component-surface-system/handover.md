@@ -10,14 +10,16 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T03:12:00Z"
-    last_updated_by: "298-verify"
-    recent_action: "076 full-sheet harness verified+landed 6da1b90d: 2 rebases, 5 movers, gate 28/0"
-    next_safe_action: "JUDGE scores 076/002 verification.md against 076/spec.md 5; REMEDIATE if any row <2"
+    last_updated_at: "2026-09-11T05:38:00Z"
+    last_updated_by: "300-frame-ruling-docs"
+    recent_action: "Frame ruling (D7-D9) documented: dividers not cards; 001/002 remediation queued"
+    next_safe_action: "Run 076/001 T015-T019 and 076/002 T014-T018 (frame-ruling remediation), then re-judge"
     blockers:
       - "Open rows past this point are operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK)"
       - "076 closes no sheet on lanes alone; the image judge is a required gate (076 D1)"
       - "076/012's lane fix must correct render-assertions.mjs's own 'meta grid' assertion in the same commit"
+      - "076/001 and 076/002 do not close until their frame-ruling remediation lands and re-judges (D7)"
+      - "A release ships a 076 child's work only after that child's own DONE, not on CREATE/LAND (D8)"
     key_files:
       - "specs/005-component-surface-system/goal.md"
       - "specs/005-component-surface-system/roadmap.md"
@@ -643,6 +645,28 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-11 ~05:38, `076-sheet-visual-parity` frame ruling (D7-D9) documented — worktree `300-frame-ruling-docs`
+
+**Docs-only leg, no producer code touched.** The operator ruled out `001`'s and `002`'s shipped card
+containers directly (D7: dividers on the plain sheet background, never a card) after both scored
+11/16 on their first judge pass against the 5-card/2-card shapes; separately named settings-sheet
+typography and control defects (row label weight, leading-icon size, row height range, Formula
+result storage's control shape), and ruled that a release is cut only after a child reaches DONE
+(D8) — 0.0.40 was cut before either child's judge passed. A third window of rulings (ClickUp as a
+third sheet reference, board surfaces leading with ClickUp) was recorded as **D9**. Recorded in
+`076/decision-record.md` (D7, D8, D9); `076/spec.md` §4 and §5's rubric rewritten to the divider
+grammar; `076/plan.md` §6A gains "When a release may be cut (D8)"; `076/001` and `076/002`'s
+`spec.md` §13 rewritten target-by-target (cards → divider-separated groups; typography targets
+added; Formula result storage/Computed sync become navigation rows opening a picker) with a
+`### Frame-ruling remediation (2026-09-11)` task block appended to each `tasks.md` (T015-T019,
+T014-T018) and their `acceptance-criteria.md`/`goal.md` rows moved back to Unmet, unticked;
+`076/003`-`076/012/spec.md` each gain a one-line D7 pointer, tables untouched; `roadmap.md` gains
+two §6A decision rows, marks ADR-J/ADR-K resolved in §7.19, and adds rows 91-92 to §4 routing both
+screenshot reports to `076/001` and `076/002` with state "remediation queued". Validated: parent,
+`001`, `002`, every touched child (`003`-`012`) and `005-component-surface-system` all
+`orchestrator.js --strict` → `RESULT: PASSED`; `backfill-graph-metadata.js` re-run scoped per
+touched folder then the `005` parent, re-validated clean.
 
 ### 2026-09-11 ~03:10, `076-sheet-visual-parity` full-sheet harness LANDED+VERIFIED (6da1b90d) — worktree `298-sheet-full-captures`
 

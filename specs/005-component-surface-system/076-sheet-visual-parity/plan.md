@@ -206,6 +206,20 @@ is necessary but not sufficient. Per D1 and D5, **the operator's own phone scree
 actually closes a child**, never an agent: DONE hands the child to that final, out-of-graph read, it
 does not substitute for it. `goal.md` §3's per-child operator row stays unticked until the operator
 reports it aligned.
+
+### When a release may be cut (D8)
+
+**A release is cut only after a child reaches DONE — never on a CREATE or LAND verdict, and never on
+a single JUDGE pass.** LAND's own push to `origin/main` happens every iteration, exactly as D6's node
+table has it; what this section adds is a separate gate on top of that push, governing when the
+orchestrator additionally cuts a version bump and a GitHub release. 0.0.40 was cut after `001` and
+`002` had both landed CREATE but before either had a passing JUDGE verdict — both scored 11/16 on
+their first judge pass, nine points under the required floor — and the operator's own read named the
+result as not the upgrade the loop had promised. The rule this closes: before cutting a release that
+carries a `076` child's work, confirm that child's own `$S/loop/<child>.jsonl` shows a `DONE` event
+(two consecutive `pass` JUDGE verdicts on an unchanged tree), not merely a `LAND:pass`. A child still
+mid-loop may keep landing to `origin/main` — the branch stays current — but its work does not enter a
+cut release until DONE.
 <!-- /ANCHOR:loop-graph -->
 
 ---

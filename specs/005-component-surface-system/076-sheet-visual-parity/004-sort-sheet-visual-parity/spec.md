@@ -217,6 +217,8 @@ As the operator, I open the Sort Sheet on my iPhone and it reads like Notion's, 
 <!-- ANCHOR:gap-table -->
 ## 13. THE DEFINE TABLE — reference, current state, target
 
+> **Frame ruling (D7, operator, 2026-09-11):** no card containers anywhere in this sheet — rows group with hairline dividers on the plain sheet background; where the table below still names a card, D7 overrides it at CREATE time even though this scaffolded table is not rewritten here.
+
 ### References
 
 - `screenshots/notion/ios/database/notion-ios-database-sort-01-84653307-*.webp` — the sort rule: property row and direction row **merged into one card**, a red `Delete` card below it, and an `Add sort` / `Delete sort` card at the bottom

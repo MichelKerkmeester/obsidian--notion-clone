@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/076-sheet-visual-parity"
-    last_updated_at: "2026-09-10T22:10:00Z"
-    last_updated_by: "290-sheet-parity-program"
-    recent_action: "Recorded D1-D4 at scaffold: judge gate, every surface, precedence, order"
-    next_safe_action: "001's DEFINE step applies D3's precedence to pick its references"
+    last_updated_at: "2026-09-11T05:38:00Z"
+    last_updated_by: "300-frame-ruling-docs"
+    recent_action: "Recorded D7-D9: dividers not cards, release only after DONE, reference composition"
+    next_safe_action: "001 and 002 remediate their DEFINE tables and lane clauses to D7/D9 before the next CREATE"
     blockers: []
     key_files:
       - "spec.md"
@@ -29,6 +29,9 @@ _memory:
     answered_questions:
       - "The lane is the floor, not the ceiling: no sheet closes on lane evidence alone (D1)"
       - "A sheet's target binds every production surface that renders its grammar, not just the renderer it is named after (D2)"
+      - "Sheets group with hairline dividers on the plain background, never a card container (D7)"
+      - "A release is cut only after a child's judge passes twice on an unchanged tree, never on a CREATE or single JUDGE verdict (D8)"
+      - "Sheets compose their target per element from Anytype, Notion and ClickUp; boards lead with ClickUp (D9)"
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: decision-record | v2.2 -->
 <!-- SPECKIT_LEVEL: phase -->
@@ -285,3 +288,137 @@ what actually closes a child, never an agent (goal.md §1 D5).
 argument); inside a child, every node that dispatches an agent waits for a free slot under a shared
 cap of 4 concurrent agents before it starts.
 <!-- /ANCHOR:d6 -->
+
+---
+
+<!-- ANCHOR:d7 -->
+## D7: Frame — dividers on the plain sheet background, never card containers
+
+**Decision.** The operator, 2026-09-11 05:30, verbatim, reading
+`scratchpad/operator-references/0040-properties-card-container-rejected.png` (the Properties sheet on
+0.0.40, rows inside a lighter rounded container on the sheet): *"Never use bg container like here for
+values, notion / anytype use dividers on plain sheet bg thats better"*.
+
+**The rule.** Sheet content sits on the **plain sheet background** — one canvas token, no second
+"card" surface painted on top of it. Rows are separated by **hairline dividers**: inset from the
+leading edge to the label, full-bleed to the trailing edge, the way Notion and Anytype both do it.
+**No rounded or lighter container of any kind around a row or a value.** Section labels are plain
+small secondary-colour text on the same background, set off by spacing and a divider rather than by a
+card boundary. Search fields keep their own recessed-field treatment — that is a control, not a
+grouping device, and is unaffected. Concretely:
+
+- Rows on the sheet background, hairline dividers inset from the leading edge to the label and
+  full-bleed to the trailing edge.
+- Section labels as plain, small, secondary-colour text with spacing above and below — no
+  uppercase-only requirement, no card boundary.
+- Search fields stay recessed fields, unchanged.
+- No rounded or lighter container around rows or values, anywhere in a sheet.
+
+**What this supersedes.** Four things, all built on the premise that a bottom sheet groups its rows
+into inset rounded cards:
+
+- The parent spec's own §4 reading of Notion's View options sheet as *"three separate inset cards
+  with visible gaps between them"* — the premise the eleven children's card vocabulary was built on.
+- **ADR-J** (`roadmap.md` §7.19): raised to correct the parent's cited *evidence* (R-1 is full-bleed,
+  the inset-card reading comes from R-4/R-5), it left the **inset-card conclusion** itself standing
+  for a bottom sheet. That conclusion is now overruled directly by the operator, not by a better
+  reference read — D7 outranks D3's precedence ladder here because it is a ruling on the target, not
+  a correction to a citation.
+- `071/007`'s settings-card landing (`8bd38d77`) — the `.obnotion-settings-card` container, its fill
+  token, its radius and its inter-card gap all go; the rows it grouped are re-grouped by dividers.
+- **ADR-K** (`roadmap.md` §7.19), the dark-theme card-fill/canvas contrast retune — moot once no card
+  fill exists to invert. Both ADR-J and ADR-K are marked **resolved by the operator** in `roadmap.md`
+  §7 rather than left Proposed; D7 is the ruling that resolves them.
+
+**Rubric impact.** The eight-row rubric in `spec.md` §5 judges **Frame** and **Sections** against
+this grammar from now on: a card container around rows or values scores **0** on Frame regardless of
+how well it otherwise matches the reference, and **Sections** is judged by heading-plus-divider
+grouping, not by a card boundary.
+
+**What it does not reach.** `001`'s and `002`'s typography and control targets (label size, icon
+size, row height, navigation-row shape) are unaffected by this decision on their own terms — D7
+governs the *frame* a row sits in, not the row's own anatomy. Where `001`'s notes on the settings
+sheet also name typography and sizing defects, those are carried as provisional targets under D7's
+remediation rather than as a separate decision (see the settings-sheet finding folded into this
+same operator session, recorded in each child's own `spec.md` §13).
+<!-- /ANCHOR:d7 -->
+
+---
+
+<!-- ANCHOR:d8 -->
+## D8: A release is cut only after a child reaches DONE
+
+**Decision.** The operator, 2026-09-11 05:31, verbatim, on 0.0.40: *"0.40 doesnt feel like the
+upgrade the graph loop requested"*. **0.0.40 was cut after a child's CREATE node landed and before
+its JUDGE node had passed twice** — `001` and `002` were both still `created, awaiting judge` at the
+cut, and the first judge pass on each scored 11/16, nine short of the required floor. The release
+therefore shipped the CREATE-stage picture (cards, the typography defects the operator's second
+screenshot names) as if it were the finished one.
+
+**The rule, going forward.** A release is cut for a child only after that child reaches the graph's
+own **DONE** state — two consecutive JUDGE passes at ≥ 14/16 with no row at 0, on an unchanged tree
+(D1, D6). LAND's own push to `origin/main` is unaffected and still happens every iteration; what
+changes is **when the orchestrator cuts a version and a GitHub release**: never on a CREATE or LAND
+verdict alone, and never on a single JUDGE pass. `plan.md` §6A records this as the operational rule
+alongside the loop graph it binds.
+
+**Why this is not already covered by D1.** D1 governs when a child is closed **in-repo** — it says
+the image judge is required and a lane is a floor. D8 governs a different action, cutting and
+shipping a **release**, which was happening on a faster cadence than D1's own gate and was not
+previously tied to it at all. A release cut mid-loop is not a violation of D1 (the child was never
+claimed closed in-repo), but it does ship an intermediate, unjudged state to the operator's phone as
+if it were current, which is the exact failure D1 was written to prevent one level up.
+<!-- /ANCHOR:d8 -->
+
+---
+
+<!-- ANCHOR:d9 -->
+## D9: Reference composition — sheets mix Anytype, Notion and ClickUp; boards lead with ClickUp
+
+**Decision.** Three more rulings, operator, 2026-09-11 05:36-05:38, verbatim:
+
+- *"They also have good sheet styling"* — on `scratchpad/operator-references/clickup-views-sheet-reference.png`, ClickUp's iOS **Views** sheet.
+- *"In general for board styling lets mimic clickup"*.
+- *"Mix match best of anytype, notion, clickup for sheets"*.
+
+**ClickUp joins Anytype and Notion as a third sheet reference, additive under D15.** Read off the
+screenshot: a large sheet top radius; a centred bold title with a **round `✕` in a circle** at the
+top-right (an input to ADR-I, which stays the operator's own call — ClickUp does show a close glyph,
+unlike Notion, but in a circular button rather than a bare glyph); rows at roughly **64pt** with a
+coloured rounded icon tile, a label, and trailing link-plus-`···` actions; a hairline **divider**
+separating the pinned group from the rest, on the plain sheet background — consistent with D7, not
+in tension with it; the selected row carries a subtle full-width rounded band, read as a **selection
+state**, not a grouping container, and permitted on that basis only; and a full-width white primary
+pill (`+ Add view`) pinned at the bottom of the sheet.
+
+**For sheets: no single source outranks the others, and the DEFINE table composes per element.**
+Every sheet child's `spec.md` §13 row-by-row and control-type tables gain a **Source** column naming
+which of Anytype, Notion or ClickUp that row's target follows, and why — frame/radius/handle,
+header (title plus its control), row anatomy, dividers, selection state, primary action, and
+pickers/stacking are each chosen independently, best-of-three, not inherited wholesale from one app.
+**The operator's own screenshots and words outrank all three references** wherever they speak
+directly to an element (D7's frame ruling is exactly such a case, and composition never reopens it).
+
+**For boards: ClickUp leads.** This is a **Proposed ADR** against `056-board-anytype-parity`'s
+landed Anytype board rulings, held Proposed only in the sense that it needs the same transcription
+into `roadmap.md` §7 every other contradiction gets — the operator has already resolved the
+direction (*"lets mimic clickup"*), so the transcription records a **resolved** ruling, not an open
+question. `076/012-board-card-fields` and any future board child read ClickUp first, Anytype and
+Notion as secondary references, under the same "operator outranks all three" clause above.
+
+**Hard constraints that always hold, regardless of composition:**
+
+- No grouping containers — dividers on the plain background (D7, unchanged and not reopened by this
+  decision).
+- Stacked sheets for sub-menus and pickers, per the family's existing stacking model (`048`).
+- A grab handle on every phone sheet.
+- 16pt inset.
+- Rows at 44pt or taller (D7's remediation register also carries a 44-48pt provisional range for the
+  settings/properties sheets specifically; this constraint is the floor every sheet shares).
+
+**Rubric impact.** The eight-row rubric's **Frame**, **Sections** and **Controls** rows judge each
+sheet against its own **composed** target — the Source column recorded for that child — not against
+any single reference app. A child that best-matches Notion on row anatomy but ClickUp on its primary
+action button is scored against that composition, not marked down for not looking like one app
+throughout.
+<!-- /ANCHOR:d9 -->

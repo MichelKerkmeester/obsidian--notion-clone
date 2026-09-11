@@ -220,6 +220,8 @@ As the operator, I open the Toolbar Overflow and Column Width on my iPhone and i
 <!-- ANCHOR:gap-table -->
 ## 13. THE DEFINE TABLE — reference, current state, target
 
+> **Frame ruling (D7, operator, 2026-09-11):** no card containers anywhere in this sheet — rows group with hairline dividers on the plain sheet background; where the table below still names a card, D7 overrides it at CREATE time even though this scaffolded table is not rewritten here.
+
 ### References
 
 - `screenshots/notion/ios/flows/view-options/notion-ios-flow-view-options-02-794591f5-*.webp` — the sheet the toolbar's overflow leads to, for card and row grammar
