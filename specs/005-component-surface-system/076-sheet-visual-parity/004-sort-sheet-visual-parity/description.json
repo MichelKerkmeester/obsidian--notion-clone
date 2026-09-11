@@ -1,7 +1,7 @@
 {
   "level": "2",
   "specFolder": "005-component-surface-system/076-sheet-visual-parity/004-sort-sheet-visual-parity",
-  "description": "The sort sheet's rule is two rows and a labelled delete after 071/012; Notion merges the two rows into one card, picks direction through a drill-in sub-sheet, a",
+  "description": "The sort sheet is planned as a Notion-shaped phone surface with a merged property/direction rule group, a direction drill-in sub-sheet, a separated per-rule delete group and a terminal add/delete-sort group, composed from Notion, Anytype and ClickUp under parent D7/D9.",
   "keywords": [
     "sort",
     "sheet",
@@ -12,9 +12,9 @@
     "active",
     "rule",
     "popover",
-    "card"
+    "divider"
   ],
-  "lastUpdated": "2026-09-11T04:42:22.276Z",
+  "lastUpdated": "2026-09-11T08:30:00.000Z",
   "specId": "004",
   "folderSlug": "sort-sheet-visual-parity",
   "parentChain": [

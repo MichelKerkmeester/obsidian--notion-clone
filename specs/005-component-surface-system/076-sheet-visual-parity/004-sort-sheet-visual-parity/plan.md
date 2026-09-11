@@ -1,6 +1,6 @@
 ---
 title: "Implementation Plan: Phase 4: Sort Sheet Visual Parity"
-description: "The six-step loop for the Sort Sheet: define, plan, create, screenshot, verify, remediate — with the mount path, the lane clauses and the judge named."
+description: "Write-first six-step plan for the production sort sheet and active-rule sort surface, with exact files, mount path, lane assertions, captures and image-judge expectations."
 trigger_phrases:
   - "implementation plan"
   - "076 phase 4 plan"
@@ -18,26 +18,33 @@ contextType: "general"
 <!-- ANCHOR:summary -->
 ## 1. SUMMARY
 
-Reference images: see spec.md §Reference images — the planner reads every image before writing lane clauses.
+Reference images: see spec.md §14 Reference images — the planner reads every embedded operator,
+Notion, Anytype and current-state image before writing lane clauses.
 
 ### Technical Context
 
 | Aspect | Value |
-|--------|-------|
-| **Language/Stack** | TypeScript, Obsidian plugin, no framework |
-| **Framework** | The plugin's own sheet renderers plus `styles.css` |
-| **Storage** | None — presentational |
-| **Testing** | Vitest, `tools/live/sheet-grammar.mjs`, the constructed capture pipeline, and an image judge |
+|---|---|
+| Language/Stack | TypeScript, Obsidian plugin, no framework |
+| Framework | The plugin's own sheet renderers plus `styles.css` |
+| Storage | None — presentational |
+| Testing | Vitest, `tools/live/sheet-grammar.mjs`, constructed captures and an image judge |
 
 ### Overview
 
-The sort sheet's rule is two rows and a labelled delete after 071/012; Notion merges the two rows into one card, picks direction through a drill-in sub-sheet, and separates per-rule delete from whole-config delete. The active-rule sort popover kept the old grammar.
+This is a planning packet, not an implementation. The producer must move the current loose row
+stack to the DEFINE brief in spec.md §13: one merged rule group (property + direction), a direction
+drill-in sub-sheet, a separated per-rule delete group and a terminal add/delete-sort group — all as
+plain-canvas divider groups under parent D7, composed per-row from Notion, Anytype and ClickUp under
+D9 and recorded in spec.md §13.5's Source column. The active-rule sort popover is a second producer
+surface and adopts the same grammar without losing either of its two required controls.
 
-### Reference mapping
-
-Every Notion iOS capture in this repository is **299×678**, a Mobbin thumbnail. The Notion column of `spec.md` §13 is **structural only**; every number in its Target column is ours or `TBD — needs operator capture` (parent D3).
-
-> Runs through the parent's loop graph: see `../plan.md` §6A "Running a child through the loop" for the node/edge tables, the verdict-file and state-record schemas, and what happens at GATE and ESCALATE (`../decision-record.md` D6).
+The parent D1 gate is an image judge. Eight rows score 0/1/2 for 16 points; pass is at least 14/16
+with no row at 0, twice consecutively on an unchanged tree. The lane is a drift floor, not closure.
+Parent D2 requires production mounts and D3 forbids numeric values read from the 299×678 Notion
+thumbnails. The per-rule-delete placement contradiction with `071/012` is recorded additively in
+spec.md §13.15 per `roadmap.md` §7.19's own pointer; `071/012` ADR-001's reorder ruling (roadmap
+ADR-F) is not reopened.
 <!-- /ANCHOR:summary -->
 
 ---
@@ -47,17 +54,25 @@ Every Notion iOS capture in this repository is **299×678**, a Mobbin thumbnail.
 
 ### Definition of Ready
 
-- [ ] DEFINE table complete; every reference path resolves
-- [ ] Every production surface enumerated (D2a)
-- [ ] Every numeric target ours or `TBD` (D3)
+- [x] spec.md §13 has the frame, ordered sections, row table, controls, type, spacing, themes,
+  states and before → target DELTA table.
+- [x] Every relevant Notion/Anytype/ClickUp path is classified; thumbnail-only numeric gaps say
+  "thumbnail, value unreadable" and name the capture that would settle them.
+- [x] Both production surfaces are enumerated and their production mount chain is proven by reading
+  each link (scenario → harness branch → renderer).
+- [x] Packet-specific L1-L6 RED values are recorded before any producer or stylesheet change.
+- [ ] The css-lane holder (currently `076-002-properties-sheet-visual-parity`) is confirmed released
+  before `styles.css` is edited.
 
 ### Definition of Done
 
-- [ ] Every lane clause RED-then-GREEN with both numbers recorded
-- [ ] `npm run screenshots` exit 0; `npm run screenshots:verify` 0 stale; both themes opened and looked at
-- [ ] Judge ≥ 14/16, no row at 0, **twice consecutively on an unchanged tree**
-- [ ] `npx tsc --noEmit`, `npm run build`, `npx vitest run`, `npm run gate` all read and green
-- [ ] The operator row present and unticked
+- [ ] L1-L6 and unchanged 071 floors are GREEN with RED/GREEN numbers recorded.
+- [ ] Phone light/dark and full-sheet sort captures are current, opened and read; the active-rule
+  companion pair is current and read.
+- [ ] The eight-row image judge is at least 14/16 with no zero, twice on an unchanged tree.
+- [ ] TypeScript, build, Vitest, gate, screenshot freshness and strict packet validation are read
+  green.
+- [ ] The operator row remains present and unticked.
 <!-- /ANCHOR:quality-gates -->
 
 ---
@@ -65,31 +80,73 @@ Every Notion iOS capture in this repository is **299×678**, a Mobbin thumbnail.
 <!-- ANCHOR:architecture -->
 ## 3. ARCHITECTURE
 
-### Files to change
+### Exact files and responsibilities
 
-- `src/views/sort-panel-renderer.ts` — the sort sheet
-- `src/views/active-rule-popover-renderer.ts` — **the second surface**
-- `styles.css`
-- `tools/live/sheet-grammar.mjs` — the clauses in §13
-- `verification.md` — created at VERIFY
+| File | Planned responsibility | Named functions/regions |
+|---|---|---|
+| `src/views/sort-panel-renderer.ts` | Wrap property+direction in one rule-group marker, replace the inline direction dropdown with a drill-in sub-sheet call, move the delete button into its own group, add the terminal add/delete-sort group | `render` (66-165), `renderRule` (180-251), `renderRuleMoveControls` (253-279), `renderRulePropertyPicker` (281-303), `renderRuleDirectionPicker` (305-328); new `renderRuleGroup`, `renderDirectionSubSheet` or equivalent, `renderTerminalActionsGroup` |
+| `src/views/active-rule-popover-renderer.ts` | Route the sort branch of `toggleSort`/`open` through the same rule-group grammar the sheet uses, keeping both field and direction controls | `toggleSort` (66-90), `open` (109-149) |
+| `src/views/toolbar-primitives.ts` | Only if the rule-group wrapper is promoted to a shared primitive rather than kept sort-local | `createConditionRow` (152-166) |
+| `styles.css` | Style the new group markers with existing sheet/canvas/spacing/divider/focus tokens; suppress the sibling-divider rule between a rule group's two member rows while keeping it between groups | `.obnotion-sort-rule-row`/`.obnotion-sort-direction-row`/`.obnotion-sort-delete-row` (13904-13957); `.obnotion-panel-row` sibling divider (12547-12561); dropdown icon rules (14054-14125) |
+| `src/i18n.ts` | Add the "Delete sort" whole-config label only | Sort keys around line 581-589 |
+| `tools/screenshots/constructed-scenarios.mjs` | Confirm existing `sort-panel` and `active-rule-sort` registrations need no new state; register a two-rule sort-stack state if the primary judge capture does not already show a rule-group boundary between two rules | `constructedScenario` entries for `sort-panel` and `active-rule-sort` |
+| `tools/live/render-assertion-harness.ts` | No new branch required; both mount paths already confirmed at 3314 and 3388 | `scenario.renderer === "sort-panel"` / `"active-rule-popover"` |
+| `tools/live/sheet-grammar.mjs` | Encode L1-L6 and re-run unchanged `071` shell floors and the existing sort rule-stack/prose clauses | Sort registrations at 90, 190, 394-395, 457, 499, 502, 2418, 2468-2660, 5254, 5436, 5513, 5570, 5610 |
+| `tools/screenshots/capture.mjs` / `verify.mjs` | Capture the phone pair, the full-sheet variant and the active-rule companion from the production scenarios | Existing scenario loop, no new entries required |
+| `tools/lane/check-lane.mjs` / `tools/lane/css-lane.json` | Confirm `002`'s release, then acquire/release the triplet for this child's CREATE `styles.css` edits | css-lane acquire/edit/release triplet |
+| `verification.md` | Record lane RED/GREEN evidence, both judge score tables and the unticked operator gate | VERIFY artefact |
 
-### The scenario and its mount function
+### Production mount path and scenario proof
 
-The capture that the judge scores comes from these scenarios, each mounting the shipped renderer:
+The storybook-like constructed screenshot path is:
 
-The judged image is the full-sheet variant `screenshots/notion-clone/panels/constructed-sort-panel-sheet-mobile-{light,dark}.png` (same run, emitted beside the viewport shot): the sheet expanded past its 90svh cap to its own content height, so the cards a viewport crop keeps below the fold are scored.
+`constructedScenario(...)`
+→ `mountConstructed(page, device, theme, spec)`
+→ `window.__mountConstructed(spec)`
+→ `runRenderAssertions(...)`
+→ the renderer branch in `tools/live/render-assertion-harness.ts`.
 
-- `constructed-sort-panel` and `constructed-sort-panel-calendar` — `constructedScenario("sort-panel", { renderer: "sort-panel" })`, harness branch `scenario.renderer === "sort-panel"` at `tools/live/render-assertion-harness.ts:3388`. Captures `screenshots/notion-clone/panels/constructed-sort-panel*-mobile-{light,dark}.png`
-- `constructed-active-rule-sort` — `constructedScenario("active-rule-sort", { renderer: "active-rule-popover", ruleKind: "sort" })`, harness branch at `tools/live/render-assertion-harness.ts:3314`. Captures `screenshots/notion-clone/components/constructed-active-rule-sort-mobile-{light,dark}.png`. The same second-surface gap as `003` (D2a)
-- Fixtures `panel-sort-rules`, `panel-sort-calendar-empty` and `chrome-active-rule-popover-sort` declare `fixtureOf` at these; no scenario work is owed
+The sort branch (`scenario.renderer === "sort-panel"`, harness line 3388) constructs the production
+`SortPanelRenderer`; the active-rule branch (`scenario.renderer === "active-rule-popover"`, harness
+line 3314) constructs the production `ActiveRulePopoverRenderer` with `ruleKind: "sort"`. Both were
+read this session and confirmed to reach the shipped renderer with no fixture substitution. Fixtures
+`panel-sort-rules`, `panel-sort-calendar-empty` and `chrome-active-rule-popover-sort` declare
+`fixtureOf` at these two scenarios and owe no new registration.
 
-### Pattern
+The judged image is the full-sheet variant `screenshots/notion-clone/panels/constructed-sort-panel-
+sheet-mobile-{light,dark}.png`, emitted beside the viewport shot from the same run: the sheet
+expands past its 90svh cap to its own content height so the terminal group a viewport crop would
+keep below the fold is scored.
 
-Producer plus stylesheet. No new runtime pattern.
+### Capture set
 
-### Data flow
+| Evidence | Required files/output | What it proves |
+|---|---|---|
+| Sort viewport | `screenshots/notion-clone/panels/constructed-sort-panel-mobile-{light,dark}.png` | Primary CSS phone view through the production mount |
+| Sort full sheet (judged) | `screenshots/notion-clone/panels/constructed-sort-panel-sheet-mobile-{light,dark}.png` | Full rule/delete/terminal group content for the primary judge |
+| Calendar-view sort | `constructed-sort-panel-calendar-mobile-{light,dark}.png` | Calendar-hint regression, unchanged |
+| Active-rule companion | `screenshots/notion-clone/components/constructed-active-rule-sort-mobile-{light,dark}.png` | Second production surface uses the shared rule-group grammar |
+| Real app | `tools/live/sheet-rebuild.json` from `node tools/live/sheet-rebuild.mjs`, if the harness covers this sheet | Chrome/WebKit production interaction |
 
-Unchanged. Only arrangement, grouping, labelling and control kind move.
+### Image-judge rubric instance
+
+The reviewer opens the primary full-sheet light/dark pair beside Notion sort-01/sort-02 and checks
+the active-rule companion for the same rule-group grammar. Every Notion image is a 299×678
+thumbnail, so exact reference pixels remain unreadable. Score each row 0/1/2:
+
+| Row | 0 | 1 | 2 — concrete expectation for this sheet |
+|---|---|---|---|
+| Frame | Wrong sheet or popup shape | Correct shell but wrong canvas/radius/handle | Flush shell on the token ladder, centred handle/`✕` per ADR-I; direction sub-sheet's own title + Done |
+| Sections | Missing or ambiguous grouping | Some group/order wrong | Rule group → delete group → terminal group, each its own divider-separated unit with a larger between-group gap |
+| Row anatomy | Wrong elements | Right concepts but wrong order/edge | Property (arrows, type icon, chevron) then direction (indented, chevron) in one group; delete and terminal rows exactly as spec.md §13.5 |
+| Controls | Input/dropdown where navigation is required | Correct kind with weak affordance | Direction opens a drill-in sub-sheet; property/direction pills remain the only inline controls |
+| Type | Wrong hierarchy | One level off | 16px/600 title, 16px/400 labels, destructive rows at the existing small/600 token, no helper paragraph |
+| Spacing | Wrong rhythm | One region off | Divider suppressed within a rule group, kept between groups; existing 44px row floor, 42px indent, 16px inset |
+| Colour | Hierarchy or contrast failure | One token off | One grey/dark sheet canvas, painted dividers, contrast-safe destructive red, unchanged token roles |
+| Both themes | One theme broken | Both work but inconsistent | Light and dark share order/geometry and independently readable divider/text contrast |
+
+Pass is at least 14/16 with no row at 0. Record one justification line for each row in
+`verification.md`; any row below 2 opens remediation.
 <!-- /ANCHOR:architecture -->
 
 ---
@@ -97,7 +154,9 @@ Unchanged. Only arrangement, grouping, labelling and control kind move.
 <!-- ANCHOR:affected-surfaces -->
 ## FIX ADDENDUM: AFFECTED SURFACES
 
-Not applicable — a presentational change to the surfaces named above. No security, path handling, env precedence, schema boundary, persistence, public response or shared policy is touched.
+Presentational only. No sort semantics, persistence, data shape, public API, security boundary or
+desktop behavior changes. The active-rule popover is intentionally included because it paints the
+same phone sort grammar and was missed by `071/012`.
 <!-- /ANCHOR:affected-surfaces -->
 
 ---
@@ -107,12 +166,12 @@ Not applicable — a presentational change to the surfaces named above. No secur
 
 | Phase | Step | Tasks | Artefact | Pass rule |
 |---|---|---|---|---|
-| A | DEFINE | T001-T004 | `spec.md` §13 | Every row has a target; every reference resolves; every number ours or `TBD` |
-| B | PLAN | T005-T008 | this file §3 + the lane clauses | Producer, stylesheet region, scenario **and mount function**, and one clause per measurable row are all named |
-| C | CREATE | T009-T013 | Commits | Each clause RED with its number, then the producer, then GREEN with its number |
-| D | SCREENSHOT | T020-T021 | The capture set | `npm run screenshots` exit 0; light **and** dark current and looked at |
-| E | VERIFY | T022-T024 | `verification.md` | Lane green **and** judge ≥ 14/16 with no 0; operator row left open |
-| F | REMEDIATE | T025-T026 | `verification.md` iterations | Any row < 2 opens a RED→fix→GREEN→recapture→re-judge cycle; done needs **two** consecutive passes |
+| A | DEFINE | T001-T004 | `spec.md` §13 | All refs classified; every row has a target; thumbnail numbers are explicitly unreadable/provisional |
+| B | PLAN | T005-T006 | This plan and lane baseline | Production mount proven; packet-specific RED values named |
+| C | CREATE | T007-T009 | Renderer/style/i18n changes | Each producer move follows RED → change → GREEN |
+| D | SCREENSHOT | T010 | Capture/manifest/evidence | Light/dark viewport, full-sheet and active-rule pairs are current and opened |
+| E | VERIFY | T011-T012 | Lane, regression and real-app output | L1-L6 and 071 floors green; rebuild path read where covered |
+| F | REMEDIATE/JUDGE | T013-T014 | `verification.md` and acceptance/goal | Two unchanged-tree passes ≥14/16 with no zero; operator row remains unticked |
 <!-- /ANCHOR:phases -->
 
 ---
@@ -120,14 +179,16 @@ Not applicable — a presentational change to the surfaces named above. No secur
 <!-- ANCHOR:testing -->
 ## 5. TESTING STRATEGY
 
-| Test Type | Scope | Tools |
-|-----------|-------|-------|
-| Lane (live) | Every measurable row of §13, plus the `071` regression set | `tools/live/sheet-grammar.mjs` |
-| Unit | A revert-proof contract per new class or string rule | Vitest |
-| Capture | Phone light + dark through the production mount path | `npm run screenshots`, `npm run screenshots:verify` |
-| Real-app (WebKit) | Where the rebuild harness covers this sheet, on an emulated iPhone | `node tools/live/sheet-rebuild.mjs` |
-| **Image judge** | The eight-row rubric, our capture beside the reference | A Sonnet or Opus reviewer; result in `verification.md` |
-| Manual/device | Whole-surface read | The operator's own iPhone (D5, not agent-tickable) |
+| Test type | Scope | Tool/output |
+|---|---|---|
+| Write-first lane | L1-L6 plus unchanged 071 floors | `node tools/live/sheet-grammar.mjs` |
+| Production render | Both scenario branches, provenance | `tools/live/render-assertion-harness.ts` |
+| Unit/source contract | New group markers and the "Delete sort" copy key; mutation must go RED | `npx vitest run` |
+| Capture | Phone light/dark, full-sheet, calendar variant and active-rule companion | `npm run screenshots`; `npm run screenshots:verify` |
+| Real app | Sort add-row, rebuild and inside-tap cases where the harness covers this sheet | `node tools/live/sheet-rebuild.mjs` |
+| Screenshot review | Open every changed light/dark image and read layout, not only manifest entries | `screenshots/` and decoded evidence |
+| Image judge | Eight parent rows, 0/1/2 | Sonnet/Opus result in `verification.md` |
+| Regression battery | TypeScript, build, Vitest, gate and strict packet validation | `npx tsc --noEmit`; `npm run build`; `npx vitest run`; `npm run gate`; orchestrator |
 <!-- /ANCHOR:testing -->
 
 ---
@@ -135,12 +196,13 @@ Not applicable — a presentational change to the surfaces named above. No secur
 <!-- ANCHOR:dependencies -->
 ## 6. DEPENDENCIES
 
-| Dependency | Type | Status | Impact if Blocked |
-|------------|------|--------|-------------------|
-| The previous child's judge passing twice | Internal | Sequential (D4) | This child does not start |
-| The css-lane triplet on `styles.css` | Internal | One holder at a time | Edits serialise or conflict |
-| The operator's C-1..C-6 / settings capture | External | **Not supplied** | Structural targets unaffected; `TBD` cells wait |
-| An image-judge reviewer | External (model) | Available | Without it the child cannot close (D1) |
+| Dependency | Status | Effect |
+|---|---|---|
+| `003` filter child | Sequential predecessor under parent D4 | CREATE starts only after the predecessor is accepted by the loop |
+| css-lane triplet | Currently held by `076-002-properties-sheet-visual-parity`; must be released, then reacquired here before `styles.css` is edited | Prevents concurrent stylesheet writers and makes RED/GREEN CSS evidence attributable |
+| Operator full-resolution Sort capture | Not supplied | Keeps group-gap/indent/radius pixel comparisons provisional; the structural brief remains executable without it |
+| Image judge | Required at VERIFY | Without two unchanged-tree passes the child remains open |
+| Operator iPhone read | Required and agent-untickable | Acceptance remains Unmet until the operator reports alignment |
 <!-- /ANCHOR:dependencies -->
 
 ---
@@ -148,6 +210,9 @@ Not applicable — a presentational change to the surfaces named above. No secur
 <!-- ANCHOR:rollback -->
 ## 7. ROLLBACK PLAN
 
-- **Trigger**: a `071` clause regresses and cannot be closed inside this child's files; or the judge fails a third consecutive iteration on the same rubric row, which means the target is wrong rather than the implementation.
-- **Procedure**: revert this child's producer and stylesheet commits — the surface returns to its shipped shape, green on the existing lane — and release the css-lane triplet. The new clauses go red and are reverted in the same commit. A wrong target re-opens at DEFINE, not at CREATE.
+If a 071 floor regresses, stop the current CREATE sequence and restore the producer/style change
+within this child before release. If one rubric row fails three consecutive iterations, reopen
+DEFINE and record the target problem; do not keep tuning CSS against a wrong reference. Any
+stylesheet rollback releases the css-lane triplet with the moved capture list named. Per parent D8,
+no release/cut is claimed until T013 passes twice unchanged and T014 leaves the operator gate open.
 <!-- /ANCHOR:rollback -->

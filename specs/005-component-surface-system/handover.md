@@ -725,6 +725,17 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
 
+### 2026-09-11 ~08:30, 076/004-sort-sheet-visual-parity PLANNED — DEFINE + PLAN reconciled with D7/D9
+
+recent_action: "076/004 DEFINE + PLAN reconciled with D7/D9"
+
+The child packet composes its DEFINE table from Notion sort-01/02, both full-resolution Anytype
+Sorts/direction pairs and the ClickUp sheet-frame reference (D9's Source column), reclassifies five
+mislabeled "sort"-family files, and corrects the inherited scaffold's active-rule dropdown count
+(2, not 3). Packet RED values, production mount path, capture set and judge rubric are complete. No
+renderer, stylesheet or scenario implementation was changed; CREATE, the image judge and the
+operator device read remain open.
+
 ### 2026-09-11 ~08:25, `076/003-filter-sheet-visual-parity` CREATE LANDED+VERIFIED (7776ae7db) — worktree `301-loop-003-filter-sheet-visual-parity`
 
 recent_action: "076/003 filter CREATE landed+verified 7776ae7db: mutations red->green, gate 28/0, judge owed"

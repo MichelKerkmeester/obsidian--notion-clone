@@ -52,10 +52,14 @@
       "tools/live/sheet-grammar.mjs",
       "tools/screenshots/constructed-scenarios.mjs",
       "tools/live/render-assertion-harness.ts",
-      "tools/lane/check-lane.mjs",
+      "src/views/toolbar-primitives.ts",
       "src/i18n.ts",
       "tools/screenshots/capture.mjs",
-      "tools/live/sheet-rebuild.mjs"
+      "tools/screenshots/verify.mjs",
+      "tools/lane/check-lane.mjs",
+      "tools/lane/css-lane.json",
+      "screenshots/operator/clickup-views-sheet-reference.png",
+      "tools/live/sheet-rebuild.json"
     ],
     "entities": [
       {
@@ -125,9 +129,9 @@
         "source": "derived"
       },
       {
-        "name": "check-lane.mjs",
-        "kind": "file",
-        "path": "tools/lane/check-lane.mjs",
+        "name": "toolbar-primitives.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-primitives.ts",
         "source": "derived"
       },
       {
@@ -143,9 +147,33 @@
         "source": "derived"
       },
       {
-        "name": "sheet-rebuild.mjs",
+        "name": "verify.mjs",
         "kind": "file",
-        "path": "tools/live/sheet-rebuild.mjs",
+        "path": "tools/screenshots/verify.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "check-lane.mjs",
+        "kind": "file",
+        "path": "tools/lane/check-lane.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "clickup-views-sheet-reference.png",
+        "kind": "file",
+        "path": "screenshots/operator/clickup-views-sheet-reference.png",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-rebuild.json",
+        "kind": "config",
+        "path": "tools/live/sheet-rebuild.json",
         "source": "derived"
       },
       {
@@ -161,51 +189,27 @@
         "source": "derived"
       },
       {
+        "name": "Anytype Edit",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Five Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Parent Packet",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Phase Context",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Sheet Visual Parity",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Sort Sheet",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Technical Context",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
-    "causal_summary": "The sort sheet's rule is two rows and a labelled delete after 071/012; Notion merges the two rows into one card, picks direction through a drill-in sub-sheet, and separates per-rule delete from whole-config delete",
+    "causal_summary": "The current constructed sort-panel captures (`constructed-sort-panel-sheet-mobile-{light,dark}.png`)",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-11T04:38:41.290Z",
+    "last_save_at": "2026-09-11T06:40:37.740Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,12 +219,12 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:f9845729c750f7673c8c78ac514de4b860cba1857fe6fe626268eeb6bc53e0f7",
+    "source_fingerprint": "sha256:4aa03df897361d10828434b4feea33b0b40dc082e7c96ee5b9b09e51b1cedcdb",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "ee0668b55b241af6edd82c6b79aee7979a17f16b059225004b5a274025aeac65",
-      "plan.md": "5c7ffa74bab5ad90916672ac00c787efaa08758094fc8b9c6567637a07499347",
-      "tasks.md": "f6ae7a8d7f96317a33ab564b4681828ac2a715778fa0e9587f753d862e27dbd6"
+      "spec.md": "062a2ec0689f8e6992d922566e852ab4be4c6ed63556c9494d4fdecdc620004a",
+      "plan.md": "bc96eda2eecf010d66b1ead5770ab902aae2ac6a82a1caa135bc75cdb7d4d5e9",
+      "tasks.md": "843fe7de0992a870b3c2d7b9ebc420af400cd255b628c456c9354f371c68e5f1"
     },
     "last_active_at": null
   }
