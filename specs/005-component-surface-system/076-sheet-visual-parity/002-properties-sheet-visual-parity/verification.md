@@ -20,7 +20,7 @@ contextType: "implementation"
 
 **Packet:** 076-sheet-visual-parity/002-properties-sheet-visual-parity
 **Level:** 2
-**Status:** CREATE landed; lane green; iteration 1 JUDGE pass recorded below — **fail, 11/16, 1 zero (Colour)** — awaiting REMEDIATE
+**Status:** CREATE landed; lane green; iteration 3 JUDGE has two consecutive unchanged-tree passes at **14/16 with 0 zeros**; operator gate remains open
 **Date:** 2026-09-11
 **Loop graph:** `../decision-record.md` D6; `../plan.md` §6A "Running a child through the loop". This file is the VERIFY step's artefact (parent `spec.md` §5 step 5) and the record the JUDGE and REMEDIATE nodes write to.
 <!-- /ANCHOR:metadata -->
@@ -47,6 +47,7 @@ contextType: "implementation"
 | **2 (remediate leg)** | `a2146136` | `screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png` | `constructed-column-manager-mobile-dark.png` | 1 (carried) | — | — | — | — | — | — | — | — | — | judge re-score owed | see Iteration 2 below |
 | **3 (remediate leg)** | this commit | `screenshots/notion-clone/panels/constructed-column-manager-mobile-light.png` (932,005 px moved, maxDelta 209) | `constructed-column-manager-mobile-dark.png` (931,997 px moved, maxDelta 176) | 1 (carried) | — | — | — | — | — | — | — | — | — | judge re-score owed | the card findings: rows/add action inside rounded filled containers, sections grouped by card boundary, opaque fills with no hairline divider — clause RED → GREEN table below |
 | **3 (JUDGE)** | this commit | `screenshots/notion-clone/panels/constructed-column-manager-sheet-mobile-light.png` | `constructed-column-manager-sheet-mobile-dark.png` | 1 | 2 | 2 | 2 | 2 | 2 | 1 | 2 | **14** | **0** | **pass** | n/a; second unchanged-tree pass remains owed |
+| **3 (JUDGE, independent second pass)** | this commit | `screenshots/notion-clone/panels/constructed-column-manager-sheet-mobile-light.png` | `constructed-column-manager-sheet-mobile-dark.png` | 1 | 2 | 2 | 2 | 2 | 2 | 1 | 2 | **14** | **0** | **pass** | n/a; two-pass judge gate satisfied |
 
 ### Iteration 1 — JUDGE node's own pass
 
@@ -316,6 +317,34 @@ and §7), readable light/dark ramps (`color-system.md` §6-7), and touchable, na
 | Both themes | 2 | The light and dark captures mirror the same header, search field, headings, divider, row order, control placement, required-row dimming, and add-action structure while preserving readable contrast in each theme (`color-system.md` §7; `review-checklist.md` §5). |
 
 **Total: 14/16, 0 zeros — pass.** This is the first unchanged-tree pass; D1 still requires a second consecutive pass before the child can close.
+
+### Iteration 3 — JUDGE node (independent second pass, 2026-09-11)
+
+The expanded production-mount captures `screenshots/notion-clone/panels/constructed-column-manager-sheet-mobile-light.png`
+and `constructed-column-manager-sheet-mobile-dark.png` were opened at original resolution beside the named
+Notion Property visibility states R-1/R-2, the available operator ruling
+`screenshots/operator/0040-properties-card-container-rejected.png`, and the Anytype properties-list references
+R-6 in both themes. The live DOM lane `node tools/live/sheet-grammar.mjs` exited 0; its Properties-specific
+L1-L8 checks reported green. This scoring uses those captures and that lane only.
+
+The visual review applies the loaded fundamentals: hierarchy through weight and colour (`hierarchy.md` §2-3),
+plain-sheet depth and grouping (`depth-and-detail.md` §4 and §7; `ux-laws.md` §5), theme-aware colour
+(`color-system.md` §6-7), and touchable, named controls (`interaction-craft.md` §3 and §5;
+`review-checklist.md` §5).
+
+| Rubric row | Score | Evidence and design fundamental |
+|---|---:|---|
+| Frame | 1 | Both captures show a full-width bottom sheet with a centered grab handle, centered title, and no filled row/card surface, but the light canvas is cool gray rather than the warm off-white reference and the shared trailing `×` remains where R-1/R-2 show a leading back arrow (`depth-and-detail.md` §4; `color-system.md` §7). |
+| Sections | 2 | Both captures visibly show `Shown in table` and `Hidden in table` in order, each with its right-aligned bulk link, plus a single hairline divider and no rounded or filled group boundary (`hierarchy.md` §3; `ux-laws.md` §5). |
+| Row anatomy | 2 | In each theme every property row reads as the retained up/down reorder pair, type icon, label or required hint, and trailing eye/eye-off, matching the child’s composed target while preserving the leading-icon/label/trailing-control grammar of the references (`hierarchy.md` §2; `depth-and-detail.md` §7). |
+| Controls | 2 | Both captures show trailing eye/eye-off visibility controls, leading phone reorder arrows, and full-width labelled add actions, with no filled checkbox, native select, or row text input (`interaction-craft.md` §3 and §5; `review-checklist.md` §5). |
+| Type | 2 | Light and dark preserve the centered semibold title, small muted sentence-case section labels, regular row labels, and subdued required-row hint hierarchy visible in the Notion screens (`hierarchy.md` §2; `review-checklist.md` §5). |
+| Spacing | 2 | Both captures maintain the same even tall row pitch, aligned leading/trailing insets, generous group separation, and stable add-action spacing without visible crowding or drift (`SKILL.md` §3-4; `ux-laws.md` §5). |
+| Colour | 1 | In both captures normal, secondary, disabled, and divider ink remain legible and theme-appropriate, but the bulk links are muted gray instead of the blue accent visible in the Notion reference, leaving one colour token off (`color-system.md` §6-7; `hierarchy.md` §2-3). |
+| Both themes | 2 | The light and dark captures mirror the same header, search field, headings, divider, row order, control placement, required-row dimming, and add-action structure while remaining internally legible in each theme (`color-system.md` §7; `review-checklist.md` §5). |
+
+**Total: 14/16, 0 zeros — pass.** The ≥14/16 and no-zero rule is satisfied, and this independent pass is
+the second consecutive pass on the unchanged tree required by D1.
 
 <!-- /ANCHOR:iterations -->
 
