@@ -108,7 +108,9 @@
   /* The grouped settings card's fill, one step lighter than the --obnotion-surface-overlay canvas
      it sits on. Declared per theme rather than borrowed from a ladder rung: this theme's elevation
      steps darken away from the page fill, so the page fill itself is the step that clears the
-     overlay canvas, while the dark theme's steps lighten and need the rung above it instead. */
+     overlay canvas; the dark theme's steps lighten the other way and declare their own wider step
+     in the block below, sized against this theme's reference delta rather than a rung's
+     adjacency. */
   --obnotion-settings-card-fill: var(--background-primary);
   --obnotion-surface-modal-border: var(--background-modifier-border);
   --obnotion-elevation-1: 0 1px 3px color-mix(in srgb, black 12%, transparent), 0 1px 2px color-mix(in srgb, black 8%, transparent);
@@ -1034,8 +1036,12 @@
   --obnotion-surface-modal: color-mix(in srgb, var(--background-primary) 88%, white);
   /* This theme's elevation steps lighten away from the page fill, so the page fill itself sits
      below the --obnotion-surface-overlay canvas here and would read the card as a recessed well;
-     the modal rung, at 88% versus overlay's 93%, is the step that clears it. */
-  --obnotion-settings-card-fill: var(--obnotion-surface-modal);
+     the modal rung, at 88% versus overlay's 93%, clears it — but only by 11/255, which next to
+     this theme's flatness reads as an unbounded card rather than a group. The card therefore
+     declares its own step instead of borrowing the modal rung: 85% lifts the fill 18/255 above
+     the overlay canvas, the same bounded band light theme's #FFFFFF card gives its #F2F2F2
+     canvas. */
+  --obnotion-settings-card-fill: color-mix(in srgb, var(--background-primary) 85%, white);
   --obnotion-surface-modal-border: rgba(255, 255, 255, 0.12);
   --obnotion-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.30), 0 1px 2px rgba(255, 255, 255, 0.03);
   --obnotion-elevation-2: 0 10px 28px rgba(0, 0, 0, 0.45), 0 3px 8px rgba(0, 0, 0, 0.30);

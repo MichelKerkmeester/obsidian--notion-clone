@@ -563,6 +563,12 @@ setLocale("en");
 // browser's unstyled default, so it is set directly rather than by pulling in the whole stand-in
 // sheet.
 document.documentElement.style.setProperty("--background-primary", "#1e1e1e");
+// The judged-frame probe below flips to the light theme to read its paints, and this host token
+// is what that flip must swap: the parked-dark run keeps #1e1e1e (above), the light read pins the
+// light theme's own #ffffff so the paints it measures are the judged theme's relationship, not
+// the parked theme's repainted through the other block. Both values live here so the flip and
+// the restore cannot drift apart.
+const HOST_THEME_PRIMARY = { dark: "#1e1e1e", light: "#ffffff" };
 // The divider token, for the same reason: the sheets' own --obnotion-border-subtle mixes this host
 // token at 40%, and without it the section dividers computed to a 0px width here — the one host
 // token a divider needs resolved. #333333 is the dark-theme border grey #1e1e1e is drawn against.
@@ -1049,7 +1055,8 @@ window.__propertiesVisualParityGrammar = () => {
           heightPx: Math.round(row.getBoundingClientRect().height * 10) / 10,
         };
       });
-      out.sections = Array.from(sheet.querySelectorAll(".obnotion-column-manager-section")).map((section) => {
+      const sectionEls = Array.from(sheet.querySelectorAll(".obnotion-column-manager-section"));
+      out.sections = sectionEls.map((section) => {
         const style = getComputedStyle(section);
         return {
           background: style.backgroundColor,
@@ -1060,6 +1067,27 @@ window.__propertiesVisualParityGrammar = () => {
       out.sectionCount = out.sections.length;
       const addRow = sheet.querySelector(".obnotion-column-manager-add-row");
       out.addRowBackground = addRow ? getComputedStyle(addRow).backgroundColor : null;
+      // The judged photograph clips at the phone viewport, so whatever the sheet grows past the
+      // viewport's own height the picture never shows. The frame facts read here in the sheet's
+      // own coordinate space, then once more under the light theme: the class flip re-resolves
+      // this same mounted sheet, so the geometry and the paints read under both themes without a
+      // second mount, and the class is restored before this evaluate returns.
+      const readJudgedFrame = () => ({
+        innerHeight: window.innerHeight,
+        sheetTop: Math.round(sheet.getBoundingClientRect().top * 10) / 10,
+        sheetHeight: Math.round(sheet.getBoundingClientRect().height * 10) / 10,
+        sectionBottoms: sectionEls.map((section) => Math.round(section.getBoundingClientRect().bottom * 10) / 10),
+        addRowBottom: addRow ? Math.round(addRow.getBoundingClientRect().bottom * 10) / 10 : 0,
+        sectionBackgrounds: sectionEls.map((section) => getComputedStyle(section).backgroundColor),
+        addRowBackground: addRow ? getComputedStyle(addRow).backgroundColor : null,
+        canvasBackground: getComputedStyle(sheet).backgroundColor,
+      });
+      out.frameDark = readJudgedFrame();
+      document.body.classList.remove("theme-dark");
+      document.documentElement.style.setProperty("--background-primary", HOST_THEME_PRIMARY.light);
+      out.frameLight = readJudgedFrame();
+      document.documentElement.style.setProperty("--background-primary", HOST_THEME_PRIMARY.dark);
+      document.body.classList.add("theme-dark");
     });
   } catch (error) {
     out.error = error.message;
@@ -4018,22 +4046,19 @@ try {
     console.log(`  ${l2Pass ? "PASS" : "FAIL"}  L2 — ${propertiesParity.rows.length - wrongEyeCount.length}/${propertiesParity.rows.length} rows carry exactly 1 trailing eye toggle`);
 
     // L3 — the required column's (Title's) eye computes a measurably lower opacity than an
-    // enabled row's. `column-manager`'s fixture has no title-field row (its `viewType` is
-    // "table", where getRequiredColumnReason returns null for every column), so this reads the
-    // one column the fixture DOES disable-lock — none today — against the busiest enabled row;
-    // when no disabled row exists the check reports so explicitly rather than passing by default.
+    // enabled row's. The mounted fixture must EXERCISE the required column, because a fixture
+    // whose config leaves every eye enabled photographs the required-property state at full
+    // strength — the reference's dimmed eye gone missing. So a mount with no disabled eye is a
+    // red clause, not an informative N/A, and every disabled eye must compute strictly below the
+    // enabled ceiling.
     const disabledRows = propertiesParity.rows.filter((row) => row.disabled);
     const enabledRows = propertiesParity.rows.filter((row) => !row.disabled && row.opacity != null);
-    let l3Pass = true;
-    if (disabledRows.length === 0) {
-      console.log("  N/A   L3 — the mounted fixture's viewType carries no required column to disable; see verification.md for how the dimmer-eye contrast was checked instead");
-    } else {
-      const maxEnabledOpacity = Math.max(...enabledRows.map((row) => row.opacity));
-      const wrongContrast = disabledRows.filter((row) => !(row.opacity < maxEnabledOpacity));
-      l3Pass = wrongContrast.length === 0;
-      if (!l3Pass) failures.push(`Properties sheet visual parity (L3): ${wrongContrast.length} required-column eye(s) do not compute a lower opacity than an enabled row's (${JSON.stringify(wrongContrast)})`);
-      console.log(`  ${l3Pass ? "PASS" : "FAIL"}  L3 — required-column eye opacity ${JSON.stringify(disabledRows.map((row) => row.opacity))} vs enabled-row ceiling ${maxEnabledOpacity}`);
-    }
+    const maxEnabledOpacity = enabledRows.length > 0 ? Math.max(...enabledRows.map((row) => row.opacity)) : 1;
+    const wrongContrast = disabledRows.filter((row) => !(row.opacity < maxEnabledOpacity));
+    const l3Pass = disabledRows.length > 0 && wrongContrast.length === 0;
+    if (disabledRows.length === 0) failures.push(`Properties sheet visual parity (L3): 0 required-column eye(s) disabled — the mounted fixture exercises no required column, wanted >= 1 (row states: ${JSON.stringify(propertiesParity.rows.map((row) => [row.key, row.disabled]))})`);
+    if (wrongContrast.length > 0) failures.push(`Properties sheet visual parity (L3): ${wrongContrast.length} required-column eye(s) do not compute a lower opacity than an enabled row's (${JSON.stringify(wrongContrast)})`);
+    console.log(`  ${l3Pass ? "PASS" : "FAIL"}  L3 — required-column eye opacity ${JSON.stringify(disabledRows.map((row) => row.opacity))} vs enabled-row ceiling ${maxEnabledOpacity} (${disabledRows.length} required of ${propertiesParity.rows.length} rows)`);
 
     // L4 — the shown/hidden partition draws onto cards distinct from the sheet canvas, each with
     // >= 8px radius; the fixture's one-hidden-column state exercises the 2-card branch.
@@ -4057,6 +4082,57 @@ try {
     const l6Pass = propertiesParity.addRowBackground != null && !addRowIsTransparent && propertiesParity.addRowBackground !== propertiesParity.canvasBackground;
     if (!l6Pass) failures.push(`Properties sheet visual parity (L6): the add-property row's background (${propertiesParity.addRowBackground}) does not read distinct from the canvas (${propertiesParity.canvasBackground})`);
     console.log(`  ${l6Pass ? "PASS" : "FAIL"}  L6 — add-property row background ${propertiesParity.addRowBackground} vs canvas ${propertiesParity.canvasBackground}`);
+
+    // L7 — the judged frame: the capture clips at the phone viewport, so whatever the sheet
+    // grows past its own height is photographed half-shown. The sheet is measured mid-entrance
+    // (its translate still holds it one viewport down), so the clause reads the
+    // translation-invariant facts: the sheet's own height, and how far into the sheet the deepest
+    // section and the add-property row sit — a bottom-anchored sheet fits the frame exactly when
+    // its height clears the viewport, and then every carded surface inside it rises into the
+    // photograph with it. Both themes, half-px slack for a fractional box edge.
+    const FRAME_FIT_SLACK_PX = 0.5;
+    const judgedFrames = [["dark", propertiesParity.frameDark], ["light", propertiesParity.frameLight]].filter((pair) => pair[1]);
+    const judgedFrameFits = (frame) => frame.addRowBottom > 0
+      && frame.sheetHeight <= frame.innerHeight + FRAME_FIT_SLACK_PX
+      && Math.max(...frame.sectionBottoms) - frame.sheetTop <= frame.innerHeight + FRAME_FIT_SLACK_PX
+      && frame.addRowBottom - frame.sheetTop <= frame.innerHeight + FRAME_FIT_SLACK_PX;
+    const judgedFrameMisses = judgedFrames.filter((pair) => !judgedFrameFits(pair[1]));
+    const l7Pass = judgedFrames.length === 2 && judgedFrameMisses.length === 0;
+    for (const [name, frame] of judgedFrames) {
+      console.log(`  ${judgedFrameFits(frame) ? "PASS" : "FAIL"}  L7 — ${name}: sheetHeight ${frame.sheetHeight}px, deepest section ${Math.round((Math.max(...frame.sectionBottoms) - frame.sheetTop) * 10) / 10}px into the sheet, add-row ${Math.round((frame.addRowBottom - frame.sheetTop) * 10) / 10}px into the sheet, judged viewport ${frame.innerHeight}px`);
+    }
+    if (!l7Pass) failures.push(`Properties sheet visual parity (L7): the sheet's grouping states do not fit the judged frame under ${judgedFrameMisses.map((pair) => pair[0]).join(" and ") || "either theme"} (frames: ${JSON.stringify(judgedFrames.map((pair) => pair[1]))})`);
+
+    // L8 — the card step, both themes: a grouped card reads as a bounded band only when its fill
+    // clears the canvas by a step the theme can actually show. Light's own reference delta is
+    // 13/255, so the floor is 12/255 in every channel, for every carded surface — the shown/hidden
+    // sections and the add-property row alike, because a section that clears the floor while the
+    // add-row sits flat photographs the same unreadable boundary.
+    const paintChannels = (value) => {
+      if (!value || value === "transparent") return null;
+      const inner = value.slice(value.indexOf("(") + 1, value.lastIndexOf(")"));
+      const withoutAlpha = value.includes("/") ? inner.slice(0, inner.indexOf("/")) : inner;
+      const parts = withoutAlpha.trim().split(/[\s,]+/);
+      const srgbForm = value.startsWith("color(");
+      return (srgbForm ? parts.slice(1, 4) : parts.slice(0, 3)).map((part) => Number(part) * (srgbForm ? 255 : 1));
+    };
+    const CARD_STEP_FLOOR = 12;
+    const cardSteps = (frame) => {
+      const canvas = paintChannels(frame.canvasBackground);
+      if (!canvas) return null;
+      const paints = frame.sectionBackgrounds.concat(frame.addRowBackground ? [frame.addRowBackground] : []);
+      return paints.map((paint) => {
+        const channels = paintChannels(paint);
+        return channels ? Math.min(...channels.map((channel, index) => Math.abs(channel - canvas[index]))) : 0;
+      });
+    };
+    const stepReads = [["dark", cardSteps(propertiesParity.frameDark)], ["light", cardSteps(propertiesParity.frameLight)]].filter((pair) => pair[1]);
+    const flatSteps = stepReads.filter((pair) => pair[1].some((step) => step < CARD_STEP_FLOOR));
+    const l8Pass = stepReads.length === 2 && flatSteps.length === 0;
+    for (const [name, steps] of stepReads) {
+      console.log(`  ${steps.every((step) => step >= CARD_STEP_FLOOR) ? "PASS" : "FAIL"}  L8 — ${name}: card-vs-canvas step ${JSON.stringify(steps)}/255, floor ${CARD_STEP_FLOOR}`);
+    }
+    if (!l8Pass) failures.push(`Properties sheet visual parity (L8): a carded surface's fill clears the canvas by under ${CARD_STEP_FLOOR}/255 under ${flatSteps.map((pair) => pair[0]).join(" and ") || "either theme"} (steps: ${JSON.stringify(stepReads.map((pair) => [pair[0], pair[1]]))})`);
   }
   console.log("");
 

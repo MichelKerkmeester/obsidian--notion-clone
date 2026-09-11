@@ -3497,11 +3497,18 @@ export function runRenderAssertions(
     }
   } else if (scenario.renderer === "column-manager") {
     // The properties panel: one row per schema column, with a hidden column so the select-all
-    // checkbox sits in its real indeterminate state.
-    const columns = makeTableColumns(TABLE_COLUMNS, "mixed");
+    // checkbox sits in its real indeterminate state. The fixture's own row count answers to the
+    // judged phone frame: at the table bench's sixteen rows the shown list ran past the viewport
+    // and the hidden-section card, its bulk link and the add-property row were all photographed
+    // past the judged fold, so the fixture carries ten — both grouping states, the required
+    // column's disabled eye and the add-property card land inside one 874px viewport. The
+    // bench config carries no viewType, so declaring the titleField here is what makes the title
+    // column the required one: its eye renders disabled and dimmed, the reference's
+    // required-property state, instead of the whole list reading as freely hideable.
+    const columns = makeTableColumns(10, "mixed");
     const rows = makeTableRows(TABLE_ROWS, columns);
     applyCaptureOptions(columns, rows);
-    const config = { ...makeTableConfig(columns), schema: { columns, computedFields: [] } } as ViewConfig;
+    const config = { ...makeTableConfig(columns), schema: { columns, computedFields: [] }, titleField: columns[0].key } as ViewConfig;
     const state = makeSurfaceState({ hiddenColumns: new Set(columns.length > 2 ? [columns[2].key] : []) });
     const actions: ColumnManagerActions = {
       close: () => undefined,
