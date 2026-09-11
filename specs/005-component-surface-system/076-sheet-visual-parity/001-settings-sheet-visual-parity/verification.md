@@ -20,7 +20,7 @@ contextType: "implementation"
 
 **Packet:** 076-sheet-visual-parity/001-settings-sheet-visual-parity
 **Level:** 2
-**Status:** CREATE landed, lane green (gate (a) met) — awaiting the image judge (gate (b)) and the operator (gate (c))
+**Status:** CREATE landed, lane green (gate (a) met) — image judge iteration 1 **fail** (11/16; gate (b) not met), remediation owed on `findings-1.md`; operator (gate (c)) still open
 **Date:** 2026-09-11
 **Loop graph:** `../decision-record.md` D6; `../plan.md` §6A "Running a child through the loop". This file is the VERIFY step's artefact (parent `spec.md` §5 step 5) and the record the JUDGE and REMEDIATE nodes write to.
 <!-- /ANCHOR:metadata -->
@@ -70,6 +70,20 @@ so the rule's GREEN number is 0 of all ten, in all three locales.
 | Iteration | SHA | Light capture | Dark capture | Frame | Sections | Row anatomy | Controls | Type | Spacing | Colour | Both themes | Total | Zeros | Verdict | Findings |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | CREATE (pre-judge) | recorded by the lander at land time | `screenshots/notion-clone/panels/constructed-view-config-mobile-light.png` | `screenshots/notion-clone/panels/constructed-view-config-mobile-dark.png` | — | — | — | — | — | — | — | — | — | — | not judged — this row is CREATE's own look, not a JUDGE pass | see below |
+| **1** | `0a04895f` | `screenshots/notion-clone/panels/constructed-view-config-mobile-light.png` | `screenshots/notion-clone/panels/constructed-view-config-mobile-dark.png` | 1 | 1 | 1 | 1 | 1 | 2 | 2 | 2 | **11** | 0 | **fail** | `findings-1.md` |
+
+**Iteration 1 evidence**, each capture opened beside R-1 (`notion-ios-flow-view-options-02-794591f5-*`, content reference), R-4 (`notion-ios-database-database-01-2cb53019-*`, bottom-sheet frame with `Done`) and R-5 (`notion-ios-database-database-14-d1de51a5-*`, bottom-sheet frame with `‹`):
+
+- **Frame (1).** Grab handle centred above the header, title centred, canvas token visibly distinct from the card token in both themes, and the dimmed-scrim/rounded-top shape all match R-4/R-5. But the trailing control is still `✕` where both bottom-sheet references show `Done` (R-4) or `‹` (R-5), never a `✕` — the known ADR-I gap, not closed by this iteration.
+- **Sections (1).** Card 1 (`Bench`) renders with no heading above it at all, while R-1 shows a grey `View name` heading over its equivalent row and every other card in our capture (`Current database`) does carry its heading — one of the five sections is missing its labelling boundary.
+- **Row anatomy (1).** Every visible row from `Description` through `Record icon field` correctly shows icon · label · right-aligned value · chevron on one line. The `Computed sync` row (icon: refresh-cw) breaks this: the icon sits alone on its own line with no label beside it, and `Formula result storage` prints as a second line underneath — a stacked icon-over-label layout the DEFINE table names as forbidden ("no stacked label-over-control anywhere").
+- **Controls (1).** The same `Computed sync` region renders three full-width flat rounded-rectangle option rows (`Show only in this database (recommended)`, `Save to note properties manually`, `Automatically save to note properties`) as an inline segmented/radio list — a fifth control kind outside the four permitted (navigation row, toggle row, borderless inline field, action row). Every other visible control on the sheet is a correct navigation row or borderless field.
+- **Type (1).** Section heading (`Current database`) is correctly sentence-case, unbolded, untracked, and row label/value read at equal size, matching target. But the `Computed sync` block reintroduces a helper-paragraph tier (`Formulas always calculate for display; this only controls saving to notes.`) that §13.4/§13.9 both say the redesign deletes — the "form with prose under it" defect recurring in one isolated spot.
+- **Spacing (2).** Row pitch, 16px inset, 8px card radius and inter-card gap on the two visible cards read consistent with target; the segmented-option rows keep the same rhythm even though their affordance is wrong.
+- **Colour (2).** Label near-`--text-normal`, value muted grey, divider hairline subtle, chevron at the value's weight in both captures; the accent-tinted `Save to note properties manually` row reads correctly in both themes with no contrast failure.
+- **Both themes (2).** Light and dark are internally consistent with each other structurally, and the card now reads lighter than its canvas in **both** themes (light `rgb(255,255,255)` on `rgb(242,242,242)`; dark card lighter than its canvas) — the `071/007` inversion this child set out to fix is gone in both captures.
+
+**Verdict: fail, 11/16, no row at 0.** The visible defect is isolated to one row (`Computed sync`) and one missing card heading (`Name`), but it recurs across four rubric rows (Row anatomy, Controls, Type, and partially Sections) because it is the exact regression class D1 was written against: a segmented button list plus a helper paragraph, the same shape as the pre-CREATE "form" the child exists to remove. Additionally, only 2 of the 5 target cards (`Name`, `Current database`) are visible within this capture's fixed 804×1748 viewport frame — `Current view`, `Display` and the footer action card were not observable and are not scored either way. Findings recorded in `findings-1.md`.
 
 Each row is one JUDGE pass. The eight rubric columns hold a 0/1/2 score with a one-line
 justification carried into the Findings cell whenever the score is below 2. Total is the sum out of
