@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T02:06:20Z"
-    last_updated_by: "298-sheet-full-captures"
-    recent_action: "076 harness: 22 judged full-sheet variant shots + verify check, gate 28/0"
+    last_updated_at: "2026-09-11T03:12:00Z"
+    last_updated_by: "298-verify"
+    recent_action: "076 full-sheet harness verified+landed 6da1b90d: 2 rebases, 5 movers, gate 28/0"
     next_safe_action: "JUDGE scores 076/002 verification.md against 076/spec.md 5; REMEDIATE if any row <2"
     blockers:
       - "Open rows past this point are operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK)"
@@ -643,6 +643,29 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-11 ~03:10, `076-sheet-visual-parity` full-sheet harness LANDED+VERIFIED (6da1b90d) — worktree `298-sheet-full-captures`
+
+**What this verifier confirmed** — the harness leg (5445ce3c, then 6d370067) through two
+concurrent-landing rebases: onto the 076/001-settings tip `0a04895f` (25 artefact conflicts, all
+generated → main's side then re-derived; 005/handover continuity = the leg's later values; the
+css-lane got the leg's 076 acquire/edit/release appended after 001-settings' own, baselineHash
+re-set to the merged stylesheet), then onto the 0.0.40 cut `25390149` (clean). Verify mutation:
+deleting one judged variant (record-detail-sheet, mobile dark) reads `NO FULL-SHEET CAPTURE (1 of
+22)` naming it; restored, 504/504. The leg added no new test files. The re-derivation moved the
+manifest 482→504 (the 22 judged-variant entries came back) with 5 REAL movers kept, every one
+reproduced in both judged snapshots: 2×`view-config-sheet-mobile` (size differs — the merged
+3a2f5143dd74 tree renders the sheet at new dimensions), `panel-invalid-events-modal-desktop-dark`
+47px@192, `board-view-desktop-dark` 6px@1, then round 2's `panel-base-import-modal-desktop-dark`
+165px@59 (round 2, after the 0.0.40 rebase; board-view-desktop-dark reproduced its committed bytes
+there, the documented 6px@1 flap). Round-2 casualties, both re-derived: the 071/001 inventory
+(generated twice — once too early, against the 482-entry manifest, which the gate's tests lane
+caught) and the rebased 005/handover.md frontmatter, whose conflict markers survived the rebase
+continue (005 --strict: 2 errors, YAML 13:20); both green after. `capture-device-parity.mjs`
+re-run twice (112 scenarios, PASS), evidence 16/16 fresh, check-lane 0, scans 0, vitest 1617/1617,
+build/tsc 0, gate 28/0 twice, 005+076 orchestrators --strict PASSED. Roadmap §5.A 076 figure
+re-counted: 2/15 = 13%, already correct, nothing ticked (no judge, no device read). Landed
+`6da1b90d` after one non-fast-forward round; push 2/2.
 
 ### 2026-09-11 ~03:58, `076/001-settings-sheet-visual-parity` LANDED+VERIFIED (60e68480) — worktree `292-loop-001-settings-sheet-visual-parity`
 
