@@ -180,6 +180,36 @@ mounts the states the reference photographs; the eight-row rubric is the judge's
 tree. The one defect this leg carried, the canvas token (rgb(46,46,46) ours against the
 reference's rgb(250,248,246)), is the settings packet's — carried, untouched, not remediated here.
 
+### Iteration 2 — JUDGE node (current tree)
+
+The expanded production-mount captures `screenshots/notion-clone/panels/constructed-column-manager-sheet-mobile-light.png`
+and `constructed-column-manager-sheet-mobile-dark.png` were opened at full resolution beside the named
+Notion Property visibility states R-1/R-2, the separate add-affordance precedent R-5, and the Anytype
+properties list R-6. No operator capture exists at the preferred reference rung, as recorded in `spec.md`
+§13.0. The current pixels, rather than the lane prose, are decisive: both themes still paint the shown,
+hidden, and add-property groups as rounded filled containers, which the operator's D7 ruling explicitly
+rejects.
+
+The visual review applies the loaded design fundamentals as the decision lens: hierarchy is carried by
+weight and color before size (`hierarchy.md` §2-3), group separation uses proximity and a deliberate boundary
+(`ux-laws.md` §5), surfaces emulate one consistent depth cue (`depth-and-detail.md` §2 and §7), colors are
+checked for readable light/dark contrast (`color-system.md` §6-7), and the component/state checks include
+touchable icon controls and consistent typography (`interaction-craft.md` §3-5; `review-checklist.md` §5).
+
+| Rubric row | Score | Evidence and design fundamental |
+|---|---:|---|
+| Frame | 0 | Both light and dark captures visibly put the property rows and add actions inside rounded lighter/darker containers on the sheet, which is an explicit D7 no-container failure under the parent rubric (`depth-and-detail.md` §7; `diagnosis-table.md` §3). |
+| Sections | 0 | Both captures show the shown, hidden, and add-property groups separated by filled rounded card boundaries rather than plain headings plus a hairline divider, the exact grouping form D7 scores zero (`hierarchy.md` §3; `ux-laws.md` §5). |
+| Row anatomy | 2 | In both themes each row visibly reads as paired reorder arrows, leading type icon, label or required hint, and a trailing eye/eye-off, matching this child’s composed target and the reference’s leading-label-trailing grammar (`spec.md` §13.3; `interaction-craft.md` §5). |
+| Controls | 2 | Both captures show the trailing eye/eye-off toggle and retained reorder arrows with no filled checkbox or native input in the row, while the add actions remain full-width labelled rows (`interaction-craft.md` §3 and §5; `review-checklist.md` §5). |
+| Type | 2 | Light and dark preserve the same centered semibold title, sentence-case muted section labels, regular row labels, and subdued required hint hierarchy visible in the Notion references (`hierarchy.md` §2; `review-checklist.md` §5). |
+| Spacing | 2 | Both captures show a consistent generous row pitch, stable leading/trailing insets, and even section gaps without local crowding or drift (`SKILL.md` §3-4; `ux-laws.md` §5). |
+| Colour | 1 | In both captures the primary and secondary text remains legible and the theme contrast is now visible, but the expected hairline divider is absent and opaque group fills remain the dominant color cue, leaving the divider/color treatment one token off (`color-system.md` §6-7; `hierarchy.md` §2-3). |
+| Both themes | 2 | The light and dark captures share the same header, row order, section count, control placement, and required-row treatment, and each remains internally legible with an appropriate theme contrast (`color-system.md` §7; `review-checklist.md` §5). |
+
+**Total: 11/16, 2 zeros — fail.** The pass rule is 14/16 or higher with no zero, so this iteration does
+not close the child and opens remediation for Frame, Sections, and Colour.
+
 <!-- /ANCHOR:iterations -->
 
 ---
