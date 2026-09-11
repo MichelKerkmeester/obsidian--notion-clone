@@ -7541,8 +7541,8 @@
     {
       "event": "release",
       "phase": "076-003-filter-sheet-visual-parity",
-      "at": "2026-09-11T05:51:00.000Z",
-      "hash": "195782fd8370",
+      "at": "2026-09-11T06:16:21.000Z",
+      "hash": "41b124f19c2c",
       "reviewed": [
         "screenshots/notion-clone/components/constructed-active-rule-filter-mobile-dark.png",
         "screenshots/notion-clone/components/constructed-active-rule-filter-mobile-light.png",
@@ -7555,7 +7555,7 @@
         "screenshots/notion-clone/panels/constructed-filter-panel-sheet-mobile-dark.png",
         "screenshots/notion-clone/panels/constructed-filter-panel-sheet-mobile-light.png"
       ],
-      "note": "npm run screenshots </dev/null three times on the composed tree, 504/504 exit 0 each; the moved set was read by decoded pixel delta against the committed blobs, not by eye, so this is a measured review and NOT a per-image one. Every one of the ten captures moved in BOTH compared runs (295k-389k changed pixels, max channel delta 122-209), and the two filter-panel-sheet captures changed dimensions because a rule now spends one summary row over three detail rows where it spent three equal full-width rows. The two single-run movers outside the filter surfaces (board-view desktop dark at max channel delta 1, card-covers desktop light) were reverted with their manifest entries left at HEAD. NO STYLESHEET RULE CHANGED - the hash is the same sheet the 076-002 release sat on - so every move here is markup. Per-image operator sign-off still owed, as for every prior release."
+      "note": "npm run screenshots </dev/null three times on the composed tree, 504/504 exit 0 each; the moved set was read by decoded pixel delta against the committed blobs, not by eye, so this is a measured review and NOT a per-image one. Every one of the ten captures moved in BOTH compared runs (295k-389k changed pixels, max channel delta 122-209), and the two filter-panel-sheet captures changed dimensions because a rule now spends one summary row over three detail rows where it spent three equal full-width rows. The two single-run movers outside the filter surfaces (board-view desktop dark at max channel delta 1, card-covers desktop light) were reverted with their manifest entries left at HEAD. NO STYLESHEET RULE CHANGED - the hash is the same sheet the 076-002 release sat on - so every move here is markup. Per-image operator sign-off still owed, as for every prior release. LANDING re-measurement (this packet rebased onto 272b45194, so the composed sheet is 076-002's own iteration-3 41b124f19c2c and the release hash above is that sheet): `npm run screenshots` twice more on the composed tree, 504/504 exit 0 both, judged by the same decoded pixel delta against the committed blobs. All ten captures named above reproduce their committed bytes on the composed tree - zero of them moved - so this review stands on reproduced pictures rather than on the pre-rebase tree, and no stylesheet rule was reverted or retuned to make that so. Two captures moved bytes and nothing else: components/constructed-board-title-format-filename-desktop-light (650 px at max channel delta 145, run 2 only) keeps its pixelHash 1e8a9c8fc707 and layoutHash 7c8c45cacd02 unchanged and its declared sources all unchanged, 368057 -> 368010, and is kept (this lane's own comparator reads bytes, not a picture, which is the class its pixelHash exists to absorb) and named here per the moved-file rule; views/board-mobile-desktop-dark (1 px at max channel delta 1, run 2 only, pixelHash f926f7e2f7a2 / layoutHash 83d7d7454c3c unchanged) was restored to its committed 213420 with its manifest bytes patched back. 0 threshold edits; the visual read stays the operator device pass and the image judge."
     }
   ],
   "outstanding": [
