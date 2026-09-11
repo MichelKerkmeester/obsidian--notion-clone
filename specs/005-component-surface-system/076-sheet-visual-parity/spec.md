@@ -293,7 +293,7 @@ total. The reviewer writes the score table, with a one-line justification per ro
 | 2 | `002-properties-sheet-visual-parity/` | Properties | `src/views/column-manager-renderer.ts`, `src/views/record-surface/property-row.ts` | **planned** — DEFINE + PLAN complete, CREATE not started |
 | 3 | `003-filter-sheet-visual-parity/` | Filter (+ the active-rule filter popover) | `src/views/filter-panel-renderer.ts`, `src/views/active-rule-popover-renderer.ts` | **planned** — DEFINE + PLAN complete with summary/detail/action divider grammar under D7, CREATE not started |
 | 4 | `004-sort-sheet-visual-parity/` | Sort (+ the active-rule sort popover) | `src/views/sort-panel-renderer.ts`, `src/views/active-rule-popover-renderer.ts` | **planned** — DEFINE + PLAN complete with merged rule-group/divider grammar under D7/D9, CREATE not started |
-| 5 | `005-group-sheet-visual-parity/` | Group | `src/views/toolbar-renderer.ts`, `src/views/board-groups-panel.ts` | scaffolded |
+| 5 | `005-group-sheet-visual-parity/` | Group | `src/views/toolbar-renderer.ts`, `src/views/board-groups-panel.ts` | **planned** — DEFINE + PLAN complete; found and named a second bound producer the scaffold missed (D2a), CREATE not started |
 | 6 | `006-add-view-sheet-visual-parity/` | Add view | `src/views/toolbar-renderer.ts` | scaffolded |
 | 7 | `007-property-editor-sheet-visual-parity/` | Add / edit property | `src/views/modals/create-property-modal.ts`, `src/views/record-surface/type-picker.ts` | scaffolded |
 | 8 | `008-record-sheet-visual-parity/` | Record | `src/views/record-detail-panel.ts`, `src/views/record-surface/*` | scaffolded |

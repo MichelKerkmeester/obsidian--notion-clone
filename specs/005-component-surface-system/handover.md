@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T06:25:52Z"
-    last_updated_by: "301-loop-003-filter-sheet-visual-parity"
-    recent_action: "076/003 filter CREATE landed+verified 7776ae7db: mutations red->green, gate 28/0, judge owed"
+    last_updated_at: "2026-09-11T08:35:00Z"
+    last_updated_by: "307-loop-005-group-sheet-visual-parity"
+    recent_action: "076/005 DEFINE+PLAN redone: 2nd producer found, ADR-G resolved"
     next_safe_action: "Fix the D7/lane card-container contradiction (research.md Rec a1), then JUDGE re-scores 076/002 twice on 2736c2cda"
     blockers:
       - "Open rows past this point are operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK)"
@@ -724,6 +724,12 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-11 ~08:35, `076/005-group-sheet-visual-parity` DEFINE+PLAN redone — worktree `307-loop-005-group-sheet-visual-parity`
+
+**What this leg did** — a fresh DEFINE+PLAN pass rather than carrying the scaffold's own draft forward. Opened every Notion/Anytype/ClickUp reference the scaffold named plus the wider `flows/group`/`flows/group-2` families it never checked, and read `board-groups-panel.ts` and `toolbar-renderer.ts`'s group-popover functions directly against the current captures rather than trusting prose. Two corrections: **(1)** D2(a) gap — the scaffold analysed only `board-groups-panel.ts`; `toolbar-renderer.ts`'s own Group/Sub-group popover is a second bound producer, and its registered capture (`scenarios/panels.mjs:333`) is a hand-authored fixture with no `fixtureOf` pointing at a `constructed-*` counterpart — the D2(b) gap is fixture-versus-production, not missing registration (a first read got that wrong and was corrected against `roadmap.md`'s own record before writing it down). **(2)** ADR-G (`roadmap.md` §7) is **resolved**, not escalated: `screenshots/notion/ios/flows/group-2/…-03/-04.webp` is the populated Notion grouped-result screen two prior audits reported missing, validating `071/012`'s landed Visible/Hidden partition rather than leaving it unjustified — `roadmap.md`'s own §5.A row and its ADR-G entry were both corrected in the same pass. Frame targeted at 1 (not 2) on both surfaces pending ADR-I, following `001`/`002`'s own precedent; Surface B's reorder control stays the arrow pair, extending `076/002`'s ADR-L again. `tasks.md` rewritten to 13 write-first tasks across both surfaces, following `076/002`'s own convention of leaving DEFINE/PLAN transcription tasks unchecked in `tasks.md` until actually done (a checked box there gates `implementation-summary.md`, which a PLAN-only leg has no content for). `076/005` validates `RESULT: PASSED` (0 errors, 1 warning) via the correct realpath+NODE_PRESERVE_SYMLINKS invocation, after `backfill-graph-metadata.js` re-derived the metadata pair. CREATE has not started.
+
+---
 
 ### 2026-09-11 ~08:30, 076/004-sort-sheet-visual-parity PLANNED — DEFINE + PLAN reconciled with D7/D9
 

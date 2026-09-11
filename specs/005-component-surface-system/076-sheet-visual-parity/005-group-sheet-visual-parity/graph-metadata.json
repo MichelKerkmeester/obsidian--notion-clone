@@ -48,14 +48,14 @@
       "goal.md",
       "src/views/toolbar-renderer.ts",
       "src/views/board-groups-panel.ts",
-      "src/views/group-label-renderer.ts",
       "styles.css",
-      "tools/live/sheet-grammar.mjs",
       "tools/screenshots/constructed-scenarios.mjs",
-      "tools/live/render-assertion-harness.ts",
+      "screenshots/manifest.json",
+      "tools/live/sheet-grammar.mjs",
+      "screenshots/operator/clickup-views-sheet-reference.png",
+      "tools/screenshots/scenarios/panels.mjs",
       "tools/lane/check-lane.mjs",
-      "tools/screenshots/capture.mjs",
-      "tools/live/sheet-rebuild.mjs"
+      "tools/screenshots/capture.mjs"
     ],
     "entities": [
       {
@@ -101,21 +101,9 @@
         "source": "derived"
       },
       {
-        "name": "group-label-renderer.ts",
-        "kind": "code",
-        "path": "src/views/group-label-renderer.ts",
-        "source": "derived"
-      },
-      {
         "name": "styles.css",
         "kind": "file",
         "path": "styles.css",
-        "source": "derived"
-      },
-      {
-        "name": "sheet-grammar.mjs",
-        "kind": "file",
-        "path": "tools/live/sheet-grammar.mjs",
         "source": "derived"
       },
       {
@@ -125,9 +113,27 @@
         "source": "derived"
       },
       {
-        "name": "render-assertion-harness.ts",
-        "kind": "code",
-        "path": "tools/live/render-assertion-harness.ts",
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-grammar.mjs",
+        "kind": "file",
+        "path": "tools/live/sheet-grammar.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "clickup-views-sheet-reference.png",
+        "kind": "file",
+        "path": "screenshots/operator/clickup-views-sheet-reference.png",
+        "source": "derived"
+      },
+      {
+        "name": "panels.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/panels.mjs",
         "source": "derived"
       },
       {
@@ -143,12 +149,6 @@
         "source": "derived"
       },
       {
-        "name": "sheet-rebuild.mjs",
-        "kind": "file",
-        "path": "tools/live/sheet-rebuild.mjs",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -156,6 +156,12 @@
       },
       {
         "name": "Group Sheet Visual Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Notion",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -179,12 +185,6 @@
         "source": "derived"
       },
       {
-        "name": "Sheet Visual Parity",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
         "name": "Implementation Plan",
         "kind": "proper_noun",
         "path": "plan.md",
@@ -203,9 +203,9 @@
         "source": "derived"
       }
     ],
-    "causal_summary": "The group sheet carries a Shown/Hidden partition landed by 071/012 against a Notion screen that is not in this repository; the reference that does exist shows a two-row entry sheet and a flat checkmark property picker",
+    "causal_summary": "The group sheet spans two producers this DEFINE finds where the scaffold named one: `toolbar-renderer.ts`'s Group/Sub-group popover (the field picker, already close to the composed target) and `board-groups-panel.ts`'s Manage groups sheet (per-group visibility, reorder and hide-empty — carrying the real gaps)",
     "created_at": "2026-09-10T22:10:00.000Z",
-    "last_save_at": "2026-09-11T04:38:44.141Z",
+    "last_save_at": "2026-09-11T06:49:10.541Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,12 +215,12 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:26a2a044b2abda1a56898295fb4cd23645f12e191d6d2cab0a5a580f4217bec8",
+    "source_fingerprint": "sha256:ba7e973ced5b086cb6507c1aa1545d27e65c9834a26ea92f647bfecfc782782b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "0955c7e9c4e251dad534bb68d622dd3bb28b05287240ab2aac9e0c8635ddc8a2",
-      "plan.md": "3950ccb3f723b87c2ce9e8c749ecf288a816ecb0e2d59da720981911fcc76e0d",
-      "tasks.md": "9ac6f82105b188d3b176f8055220d421ddb0ab667519cddc957688c3bc5bc5e7"
+      "spec.md": "586c5f44388004c9744b88848a358f1cb0060701319e718e02276bd6f9e44306",
+      "plan.md": "4b5824489db0fb920f2e71e4815ec782aebe80927fa612be7f992074a5653610",
+      "tasks.md": "4e73051f00effc6e74057b1fd86abb002a5e5f31fbbe79c4cf58288fbe09f13c"
     },
     "last_active_at": null
   }

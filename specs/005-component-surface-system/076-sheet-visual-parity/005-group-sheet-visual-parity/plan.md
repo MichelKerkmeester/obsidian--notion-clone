@@ -31,7 +31,7 @@ Reference images: see spec.md §Reference images — the planner reads every ima
 
 ### Overview
 
-The group sheet carries a Shown/Hidden partition landed by 071/012 against a Notion screen that is not in this repository; the reference that does exist shows a two-row entry sheet and a flat checkmark property picker.
+DEFINE found two bound producers where the scaffold named one (D2a): **Surface A**, `toolbar-renderer.ts`'s Group/Sub-group popover-as-sheet (the field picker — already close to the composed target), and **Surface B**, `board-groups-panel.ts`'s Manage groups sheet (per-group visibility, reorder, hide-empty — carrying the real gaps: no `Visible groups`/`Hidden groups` partition, no inter-row dividers, an 8px flat inset instead of the shared 16px, a 30px row floor instead of the family's 44px, and a checkbox where every sibling control of the same setting is a toggle). Surface A's registered capture (`scenarios/panels.mjs:333`, `id: "group"`) is a **hand-authored fixture that mirrors the renderer's own markup rather than mounting it** — it carries no `fixtureOf` pointing at a `constructed-*` counterpart, unlike every sibling fixture in that file, and is drift-blind because its template never reads the sources it lists (D2b, T003). The prior scaffold's cited contradiction, ADR-G (`roadmap.md` §7), is **resolved**, not escalated: `screenshots/notion/ios/flows/group-2/…-03/-04.webp` is the populated Notion grouped-result screen the earlier audit reported missing, filed under a flow name neither prior read checked.
 
 ### Reference mapping
 
@@ -47,9 +47,10 @@ Every Notion iOS capture in this repository is **299×678**, a Mobbin thumbnail.
 
 ### Definition of Ready
 
-- [ ] DEFINE table complete; every reference path resolves
-- [ ] Every production surface enumerated (D2a)
-- [ ] Every numeric target ours or `TBD` (D3)
+- [x] DEFINE table complete; every reference path resolves
+- [x] Every production surface enumerated (D2a) — two named, one carrying a fixture instead of a production mount (T003)
+- [x] Every numeric target ours or `TBD` (D3)
+- [x] Declared deviation recorded: Frame capped at 1 (ceiling ≤ 15/16) pending ADR-I, following `001`/`002`'s own precedent
 
 ### Definition of Done
 
@@ -67,25 +68,24 @@ Every Notion iOS capture in this repository is **299×678**, a Mobbin thumbnail.
 
 ### Files to change
 
-- `src/views/toolbar-renderer.ts` — the group builder
-- `src/views/board-groups-panel.ts` — the board's groups panel
-- `src/views/group-label-renderer.ts`
-- `styles.css`
+- `src/views/toolbar-renderer.ts` — Surface A, the Group/Sub-group popover-as-sheet
+- `src/views/board-groups-panel.ts` — Surface B, the board's Manage groups sheet
+- `styles.css` — inset, divider, row-floor and toggle-control rules for Surface B; join it to the shared `.obnotion-mobile-bottom-sheet` selector lists it is currently missing from
+- `tools/screenshots/constructed-scenarios.mjs` — adds Surface A's missing `constructed-*` mount (T003, D2b) — none of this child's other work may proceed on Surface A before this lands
+- `tools/screenshots/scenarios/panels.mjs` — wires the existing `group` fixture's `fixtureOf` to the new constructed scenario, matching every sibling fixture's own convention
 - `tools/live/sheet-grammar.mjs` — the clauses in §13
 - `verification.md` — created at VERIFY
 
 ### The scenario and its mount function
 
-The capture that the judge scores comes from these scenarios, each mounting the shipped renderer:
+Two scenarios, one per surface, each mounting the shipped renderer:
 
-The judged image is the full-sheet variant `screenshots/notion-clone/panels/constructed-board-groups-panel-sheet-mobile-{light,dark}.png` (same run, emitted beside the viewport shot): the sheet expanded past its 90svh cap to its own content height, so the cards a viewport crop keeps below the fold are scored.
-
-- `constructed-board-groups-panel` — `constructedScenario("board-groups-panel", { boardGroupsPanel: true })`. Captures `screenshots/notion-clone/panels/constructed-board-groups-panel-mobile-{light,dark}.png`
-- The **group sheet built by `toolbar-renderer.ts`** is the surface `071/015` opened for a missing screenshot scenario. `005`'s first task confirms whether that scenario now exists; if it does not, registering it is T001 and precedes everything else (D2b)
+- **Surface B (registered today).** `constructedScenario("board-groups-panel", { boardGroupsPanel: true })` — `render-assertion-harness.ts:2889` clicks the real board's own column-options button then its `Manage groups` row, the same two taps a reader makes. Captures `screenshots/notion-clone/panels/constructed-board-groups-panel-mobile-{light,dark}.png`. The judged image is the full-sheet variant `constructed-board-groups-panel-sheet-mobile-{light,dark}.png` (same run, emitted beside the viewport shot): the sheet expanded past its 90svh cap to its own content height, so the cards a viewport crop keeps below the fold are scored.
+- **Surface A (fixture only — T003).** `scenarios/panels.mjs:333` (`id: "group"`) is registered and current, but its `html()` is a hand-typed template that mirrors `ToolbarRenderer`'s group-popover markup rather than mounting it — no entry for it exists in `constructed-scenarios.mjs`. The mount path already exists in the lane harness: `render-assertion-harness.ts:3278` clicks `.obnotion-group-btn` when `scenario.toolbarPopover === "group"` (the `toolbarPopover` opt-in documented at `:286-291`), which is exactly `renderGroupPopover`'s own trigger — no new click-through logic needed. T003 adds `constructedScenario("group-popover", { renderer: "toolbar", toolbarPopover: "group", … })` mirroring `board-groups-panel`'s own registration shape, producing `constructed-group-popover-mobile-{light,dark}.png` plus its own full-sheet variant for the judge, and points the existing `group` fixture's `fixtureOf` at it — the same convention `panel-sort-calendar-empty` (two entries above it in the same file) already follows.
 
 ### Pattern
 
-Producer plus stylesheet. No new runtime pattern.
+Producer plus stylesheet plus one new scenario registration. No new runtime pattern.
 
 ### Data flow
 
@@ -107,12 +107,11 @@ Not applicable — a presentational change to the surfaces named above. No secur
 
 | Phase | Step | Tasks | Artefact | Pass rule |
 |---|---|---|---|---|
-| A | DEFINE | T001-T004 | `spec.md` §13 | Every row has a target; every reference resolves; every number ours or `TBD` |
-| B | PLAN | T005-T008 | this file §3 + the lane clauses | Producer, stylesheet region, scenario **and mount function**, and one clause per measurable row are all named |
-| C | CREATE | T009-T013 | Commits | Each clause RED with its number, then the producer, then GREEN with its number |
-| D | SCREENSHOT | T020-T021 | The capture set | `npm run screenshots` exit 0; light **and** dark current and looked at |
-| E | VERIFY | T022-T024 | `verification.md` | Lane green **and** judge ≥ 14/16 with no 0; operator row left open |
-| F | REMEDIATE | T025-T026 | `verification.md` iterations | Any row < 2 opens a RED→fix→GREEN→recapture→re-judge cycle; done needs **two** consecutive passes |
+| A-B | DEFINE + PLAN | T001-T002 (transcription + lane setup; content already written into `spec.md` §13 / this file §3) | `spec.md` §13, this file §3, the lane clauses | Every row has a target; every reference resolves; every number ours or `TBD`; both surfaces enumerated; producer, stylesheet region, both scenarios **and their mount functions** all named |
+| C | CREATE | T003-T010 | Commits | Each clause RED with its number, then the producer, then GREEN with its number, across both surfaces |
+| D | SCREENSHOT | T011 | The capture set | `npm run screenshots` exit 0; both surfaces, light **and** dark, current and looked at |
+| E | VERIFY | T012-T013 | `verification.md` | Lane green **and** judge ≥ 14/16 with no 0 on both surfaces; operator row left open |
+| F | REMEDIATE | (§ Phase F) | `verification.md` iterations | Any row < 2 on either surface opens a RED→fix→GREEN→recapture→re-judge cycle; each surface needs **two** consecutive passes |
 <!-- /ANCHOR:phases -->
 
 ---
@@ -141,6 +140,8 @@ Not applicable — a presentational change to the surfaces named above. No secur
 | The css-lane triplet on `styles.css` | Internal | One holder at a time | Edits serialise or conflict |
 | The operator's C-1..C-6 / settings capture | External | **Not supplied** | Structural targets unaffected; `TBD` cells wait |
 | An image-judge reviewer | External (model) | Available | Without it the child cannot close (D1) |
+| ADR-I (shared close-glyph) resolving | External (operator) | Unresolved, same as `001`/`002` | Frame stays capped at 1; ceiling ≤ 15/16, not a blocker to passing at 14 |
+| `076/002`'s ADR-L (arrow-pair reorder survives) | Internal precedent | Landed | Extended, not re-litigated, for Surface B's reorder control |
 <!-- /ANCHOR:dependencies -->
 
 ---

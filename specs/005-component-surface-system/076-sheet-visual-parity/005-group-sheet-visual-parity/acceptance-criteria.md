@@ -18,8 +18,8 @@ contextType: "implementation"
 
 **Packet:** 076-sheet-visual-parity/005-group-sheet-visual-parity
 **Level:** 2
-**Status:** Scaffolded — nothing started
-**Date:** 2026-09-10
+**Status:** Planned — DEFINE and PLAN complete, CREATE not started
+**Date:** 2026-09-11
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -29,9 +29,9 @@ contextType: "implementation"
 
 | AC-ID | REQ | Given / When / Then | Verification | Status | Waiver |
 |-------|-----|---------------------|--------------|--------|--------|
-| AC-001 | REQ-001 | Given the 299×678 ceiling, When any target is written, Then every numeric cell in §13 is traceable to our own measurement or reads `TBD — needs operator capture` | `spec.md` §13; `plan.md` §1 | Unmet | - |
-| AC-002 | REQ-002 | Given the sheet's grammar, When the surfaces are enumerated, Then every production producer painting it is listed in `spec.md` §3 and covered by the lane | `spec.md` §3; lane output | Unmet | - |
-| AC-003 | REQ-003 | Given each lane clause, When it is added, Then its failing number is recorded before the producer moves and its passing number after | `tasks.md` T009+; lane RED/GREEN pair | Unmet | - |
+| AC-001 | REQ-001 | Given the 299×678 ceiling, When any target is written, Then every numeric cell in §13 is traceable to our own measurement or reads `TBD — needs operator capture` | `spec.md` §13; `plan.md` §1 | Met | - |
+| AC-002 | REQ-002 | Given the sheet's grammar, When the surfaces are enumerated, Then every production producer painting it is listed in `spec.md` §3 and covered by the lane | `spec.md` §3 (two surfaces named); lane coverage pending T003 | Unmet | - |
+| AC-003 | REQ-003 | Given each lane clause, When it is added, Then its failing number is recorded before the producer moves and its passing number after | `tasks.md` T003+; lane RED/GREEN pair | Unmet | - |
 | AC-004 | REQ-004 | Given our phone capture and the reference, When a reviewer scores the eight-row rubric, Then the total is **≥ 14/16** with **no row at 0** | `verification.md`, score table #1 | Unmet | - |
 | AC-005 | REQ-004 | Given an unchanged tree, When the reviewer scores it a second time, Then it passes again at the same thresholds | `verification.md`, score table #2 — **two consecutive passes** | Unmet | - |
 | AC-006 | REQ-005 | Given the change, When recaptured at the phone viewport, Then light and dark are both current and both were opened and looked at | `npm run screenshots:verify` 0 stale; `tasks.md` T021 | Unmet | - |
@@ -55,6 +55,8 @@ Eight rows, **0 / 1 / 2** each, maximum **16**. Defined in full in `../spec.md` 
 
 **Pass: total ≥ 14 AND no row at 0.** A 13 fails with seven 2s. Any 0 fails at any total.
 
+**Declared deviation.** ADR-I (the shared `buildShellHeader`'s bare `✕` against every reference's own close control) is still operator-held and unresolved, the same as `001` and `002`. Both surfaces keep the bare `✕`, so Frame is targeted at **1**, not 2, on both — the predicted ceiling here is **≤ 15/16**, not 16. This does not change the pass bar; 14/16 still passes.
+
 ### Status values
 
 | Value | Meaning |
@@ -70,5 +72,5 @@ Eight rows, **0 / 1 / 2** each, maximum **16**. Defined in full in `../spec.md` 
 <!-- ANCHOR:closure -->
 ## 3. CLOSURE STATEMENT
 
-**Closeable:** not yet — nothing has started. When the eight rows above are reached, AC-008 is the one that stays open: the operator's own device read, which no agent ticks. AC-005 is the row that most often blocks closure, because it requires the judge to pass a **second** time on a tree nothing has touched since the first pass — a re-judge after a fix is a new iteration, not the second pass.
+**Closeable:** not yet — DEFINE and PLAN are complete (AC-001, and enumeration under AC-002); CREATE has not started on either surface. When the eight rows above are reached **on both surfaces**, AC-008 is the one that stays open: the operator's own device read, which no agent ticks. AC-005 is the row that most often blocks closure, because it requires the judge to pass a **second** time on a tree nothing has touched since the first pass — a re-judge after a fix is a new iteration, not the second pass.
 <!-- /ANCHOR:closure -->
