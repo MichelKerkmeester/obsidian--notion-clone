@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T05:40:00Z"
-    last_updated_by: "302-sheet-inventory-coverage"
-    recent_action: "076: D7-D9 frame ruling docs landed; coverage audit + 013-019 scaffolded, all validate"
-    next_safe_action: "Run 076/001 T015-T019 + 076/002 T014-T018 (D7-D9 remediation); or start 013-019's DEFINE"
+    last_updated_at: "2026-09-11T04:27:21Z"
+    last_updated_by: "295-loop-002-properties-sheet-visual-parity"
+    recent_action: "076/002 iteration-2 landed+verified b42d481a: 6 crossings, gate 28/0, corpus 0 diffs"
+    next_safe_action: "JUDGE re-scores 076/002 (pass-2 owed) on b42d481a; D7-D9 remediation T014-T018 owed"
     blockers:
       - "Open rows past this point are operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK)"
       - "076 closes no sheet on lanes alone; the image judge is a required gate (076 D1)"
@@ -670,6 +670,38 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-11 ~04:27, `076/002-properties-sheet-visual-parity` ITERATION-2 LANDED+VERIFIED (b42d481a) — worktree `295-loop-002-properties-sheet-visual-parity`
+
+**What this verifier confirmed** — the remediation leg's every landed number, then landed the leg
+through a seven-crossing rebase storm (the 076/001 landing `60e68480`, the 0.0.40 cut `25390149`,
+the 298 full-sheet captures `6da1b90d`, the 298-verify docs `ba46cea6`, the D7-D9 frame ruling
+`a86bb58a`, the 013-019 scaffolding `b366c3cc` — each round re-running the full battery, the gate
+28/0, the orchestrators and the scans; every crossing docs-only except the 0.0.40/full-sheet one,
+whose composed judgement is recorded in the lane and the roadmap row). Both claimed mutations
+re-run: reverting the fixture hunk reads the recorded RED exactly (L3 0-of-16, L7 1064.8px > 874);
+restored, GREEN — grammar clause numbers intact (L3 0.5 vs 1 at 1 required of 10; L7 sheet 786.6px
+of the 874px judged viewport, both themes; L8 18/255 dark, 12.75/255 light, floor 12). Battery all
+exit 0: build, `tsc --noEmit`, vitest 1617/1617, `npm run gate` **28 green, 0 red** first-run on
+every round, evidence 16/16 fresh, scan-comments and scan-failing-values 0. Captures re-judged by
+decoded pixel delta across runs at every round: the composed delta stays exactly the judged
+column-manager-sheet pair (the 002-creator surfaces, the 10-col fixture), everything else — the
+depth3-picker, panel-base, board-title-currency and panel-filter excursions — flipped back to the
+committed blobs on a third run and was restored, leaving the corpus at 0 tracked diffs on the final
+tree; the one-run >12 movers are recorded as flip classes in the lane note. The css-lane carries
+the leg's triplet (baseline `195782fd8370` = the merged stylesheet, reviewed = the two
+column-manager-sheet content movers). Orchestrators `--strict`: 002, the 076 parent (first RESULT)
+and 005 all RESULT: PASSED at every round's end (005 via the fingerprint backfill after each
+crossing's handover merge). The roadmap §5.A 076 figure re-certified at the final tree:
+`076/goal.md` = 2 ticked + 20 open = **9% (2/22)** after 013-019's scaffolding — the rescue keeps
+both the new figure and this leg's 002 clause (the judge's 11/16, the remediation, LAND-2 and the
+`60e68480`-crossing composed facts). Pushed `b366c3cc..b42d481a` on the seventh attempt after six
+crossings, every redo fully re-verified; nothing ticked that names the operator or a device.
+
+**Still owed, nobody's-else**: the image judge's 002 pass-2 (≥14/16, no 0, twice consecutively on
+this tree — the D8 ruling says a release ships a child only after its own DONE) and the new
+frame-ruling remediation rows (`076/002` T014-T018, dividers not cards) that `300`'s ruling queued
+while this leg was in flight. Neither is ticked by this landing.
 
 ### 2026-09-11 ~05:40, `076-sheet-visual-parity` coverage audit + 7 new children scaffolded — worktree `302-sheet-inventory-coverage`
 
