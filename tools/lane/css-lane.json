@@ -7419,6 +7419,33 @@
         "screenshots/notion-clone/views/board-mobile-desktop-dark.png"
       ],
       "note": "npm run screenshots </dev/null twice, 504/504 entries, exit 0 both, judged by decoded pixel delta against the committed blobs (scratchpad/glm/pixel-delta.mjs) and per-capture HEAD-fingerprint probes; no image opened by eye. 14 movers kept: 13 by decoded-fine-delta (maxDelta 135-192, changedPixels 47-171), all but fields/constructed-cell-editor-text-mobile-light at its head pixelHash/layoutHash (byte-level only; that one moved true, pixelHash 0921a0a975d5 -> cb3a1efcaf8c at an unchanged 11c27f9a6372), plus views/board-mobile-desktop-dark, whose 1px@1 delta repeated its post-run bytes exactly on a third targeted pass, so it moved in both judged runs. 1 one-run jitter: views/board-view-desktop-dark 6px@1, third targeted pass returned the committed 248575 bytes, restored at those bytes with its manifest row patched (pixelHash be56588f7b1d, layoutHash 8a3e6fc3977c, fresh sourceHashes kept). 22 additions: the full-sheet judged captures, each an id-suffixed variant of its viewport shot (capture: sheet, the sheet expanded past its 90svh cap, recorded sheetHeight). 0 threshold edits; the visual read stays the operator device pass."
+    },
+    {
+      "event": "acquire",
+      "phase": "076-sheet-visual-parity",
+      "at": "2026-09-11T02:40:18Z",
+      "hash": "887e9e3b3449",
+      "note": "verification-leg re-derivation: the harness leg (6d370067) rebased onto the 076/001 landing tip of origin/main (0a04895f), so the lane is re-acquired against the stylesheet the 076/001 landing committed, 887e9e3b3449"
+    },
+    {
+      "event": "edit",
+      "phase": "076-sheet-visual-parity",
+      "at": "2026-09-11T02:40:18Z",
+      "hash": "3a2f5143dd74",
+      "note": "no stylesheet edit of this leg's own: the rebase carries 076/001's rebase-merged stylesheet 3a2f5143dd74 (001-creators five-card settings sheet hunks) into this hold, so the re-derived captures photograph 3a2f5143dd74 where the leg's own release above judged 887e9e3b3449"
+    },
+    {
+      "event": "release",
+      "phase": "076-sheet-visual-parity",
+      "at": "2026-09-11T02:40:18Z",
+      "hash": "3a2f5143dd74",
+      "reviewed": [
+        "screenshots/notion-clone/panels/constructed-view-config-sheet-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-view-config-sheet-mobile-light.png",
+        "screenshots/notion-clone/panels/panel-invalid-events-modal-desktop-dark.png",
+        "screenshots/notion-clone/views/board-view-desktop-dark.png"
+      ],
+      "note": "npm run screenshots </dev/null three times, 504/504, exit 0 each, judged by decoded pixel delta against the committed blobs (scratchpad/glm/pixel-delta.mjs), no image opened by eye. The rebase had taken main's side of the 25 conflicting artefacts, so the 22 judged full-sheet variant manifest entries were re-derived here; 4 REAL movers, each reproduced in both judged snapshots (post-run-2 and post-run-3 working trees): the two constructed-view-config-sheet-mobile variants (size differs -- the merged 3a2f5143dd74 tree renders the view-config sheet at new dimensions than the pre-rebase judged capture), panel-invalid-events-modal-desktop-dark 47px@192, views/board-view-desktop-dark 6px@1 (<=12 yet reproduced both judged snapshots, so kept, not restored). constructed-board-card-properties-hidden-desktop-light moved 127px@204 in the second run's product and reproduced its committed bytes on the third, so it carries no diff. 0 threshold edits; the visual read stays the operator device pass."
     }
   ],
   "outstanding": [

@@ -10,17 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-<<<<<<< HEAD
     last_updated_at: "2026-09-11T02:06:20Z"
     last_updated_by: "298-sheet-full-captures"
     recent_action: "076 harness: 22 judged full-sheet variant shots + verify check, gate 28/0"
     next_safe_action: "JUDGE scores 076/002 verification.md against 076/spec.md 5; REMEDIATE if any row <2"
-=======
-    last_updated_at: "2026-09-11T02:06:20Z"
-    last_updated_by: "298-sheet-full-captures"
-    recent_action: "076 harness: 22 judged full-sheet variant shots + verify check, gate 28/0"
-    next_safe_action: "JUDGE scores 076/002 verification.md against 076/spec.md 5; REMEDIATE if any row <2"
->>>>>>> 5445ce3c (feat(screenshots): judged phone sheets gain a full-sheet capture variant)
     blockers:
       - "Open rows past this point are operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK)"
       - "076 closes no sheet on lanes alone; the image judge is a required gate (076 D1)"
