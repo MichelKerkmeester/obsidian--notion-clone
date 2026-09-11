@@ -424,7 +424,7 @@
         "src/views/board-renderer.ts"
       ],
       "layoutHash": "4f44b8bebdb5",
-      "pixelHash": "01b157728da9",
+      "pixelHash": "fa80e74a1aa8",
       "sourceHashes": {
         "src/views/board-renderer.ts": "59f6618fd206",
         "styles.css": "887e9e3b3449",
@@ -440,7 +440,7 @@
       },
       "note": "A populated lane beside an empty lane, preserving the rendered column header and empty cards container.",
       "capture": "element",
-      "bytes": 64677,
+      "bytes": 64670,
       "fixtureOf": "constructed-board-empty-column"
     },
     {
