@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T04:27:21Z"
-    last_updated_by: "295-loop-002-properties-sheet-visual-parity"
-    recent_action: "076/002 iteration-2 landed+verified b42d481a: 6 crossings, gate 28/0, corpus 0 diffs"
-    next_safe_action: "JUDGE re-scores 076/002 (pass-2 owed) on b42d481a; D7-D9 remediation T014-T018 owed"
+    last_updated_at: "2026-09-11T06:41:00Z"
+    last_updated_by: "303-embed-076-screenshots"
+    recent_action: "076: all 19 children embed Reference images; 002 iter-2 landed b42d481a, gate 28/0"
+    next_safe_action: "JUDGE re-scores 076/002 (pass-2 owed) on b42d481a; 001/002 T014-T019 (D7-D9) owed"
     blockers:
       - "Open rows past this point are operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK)"
       - "076 closes no sheet on lanes alone; the image judge is a required gate (076 D1)"
@@ -670,6 +670,24 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-11 ~06:41, `076-sheet-visual-parity` embeds reference images in every child — worktree `303-embed-076-screenshots`
+
+**Docs-only leg, no producer code touched.** Every one of the nineteen `076` children (`001`-`019`)
+gained a new `## 14. Reference images` section in its `spec.md`, embedded directly rather than left
+as a path table: the operator's own device screenshots grounding that child's rulings (copied to a
+gitignored `screenshots/operator/` — never committed, this repo is public), 2-6 on-tree Notion,
+Anytype and ClickUp reference captures matched by filename/manifest to that child's sheet (mixed
+per D9; boards `018`/`019` lead with the operator's ClickUp captures), and — for `001`-`012` — the
+full-sheet current-state judge capture pair (`5c57f594`'s variants, or the board's own current
+capture for `012`). Each child's `plan.md` gained a one-line pointer under `## 1. SUMMARY` directing
+the planner to read `spec.md`'s Reference images section before writing lane clauses. `017` and
+`014`/`015`/`016` record their genuine reference gaps or form-factor mismatches honestly rather than
+forcing a weak match. Continuity metadata regenerated per touched child plus the `076` parent via
+the continuity writer (run twice per packet — `implementation-summary.md`'s post-hoc fingerprint
+stamp otherwise leaves the first pass's `source_fingerprint` one write stale). No rubric row,
+decision, or task was changed. `076` parent plus all nineteen children validate `RESULT: PASSED`,
+Errors 0.
 
 ### 2026-09-11 ~04:27, `076/002-properties-sheet-visual-parity` ITERATION-2 LANDED+VERIFIED (b42d481a) — worktree `295-loop-002-properties-sheet-visual-parity`
 
