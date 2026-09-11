@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T02:45:00Z"
+    last_updated_at: "2026-09-11T01:59:00Z"
     last_updated_by: "292-loop-001-settings-sheet-visual-parity"
-    recent_action: "076/001 CREATE landed: 5 cards, L1-L9 green, lane exit 0, gate 28/28"
-    next_safe_action: "Dispatch the image judge on 076/001, twice consecutively on this tree"
+    recent_action: "076/001 landed+verified 60e68480: rebased, mutations red/green, gate 28/0, judge next"
+    next_safe_action: "JUDGE scores 076/001 verification.md against 076/spec.md 5; REMEDIATE if any row <2"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
       - "076 closes no sheet on lane evidence alone; the image judge is a required gate (076 D1)"
@@ -645,6 +645,52 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-11 ~03:58, `076/001-settings-sheet-visual-parity` LANDED+VERIFIED (60e68480) — worktree `292-loop-001-settings-sheet-visual-parity`
+
+**What this verifier confirmed** — the CREATE leg's every landed number, then landed the leg
+through the second concurrent-landing rebase (onto the 002-properties + 012-crossings tip
+`eacfe192`; the leg's 30-commit-earlier base made 30 paths conflict). Sources keep both landings'
+intent: the settings card keeps this leg's own mechanism (background-primary + the `.theme-dark`
+surface-modal ladder step, the space-6 gap) while 002's `--obnotion-settings-card-fill` token
+stays defined for its shown/hidden cards — both resolve to the same values, so no judgement
+changed; the roadmap 076 row keeps 002's 13% (2/15) figure with 001's status advanced to
+`created, awaiting judge`; §7.19 now carries this leg's ADR-I/J/K beside 002's ADR-L/M. One
+landing seam: the auto-merge of `sheet-grammar.mjs` declared `const parity` twice (002's
+Properties clause + this leg's clause in one function scope); 002's binding renamed
+`propertiesParity`, its clause otherwise untouched — caught by the gate's own lint lane (a parse
+error) and proven by `node --check` + eslint before the re-gate.
+
+**Both named mutations red, then green.** Reverting T004's producer hunk (the
+`.theme-dark .obnotion-settings-card` background) reads the recorded RED exactly —
+`node tools/live/sheet-grammar.mjs` exit 1, *card vs canvas: dark rgb(30,30,30) on srgb 0.179412*,
+the L6 -1.41e-2 inversion; restored, exit 0. Reverting the pinned inter-card margin
+(`--obnotion-space-6` → 5) reads `view-config-sheet-row-grammar.test.ts` 1 failed | 6 passed;
+restored, 7/7. The leg added no new test files (8 modified, none added), so the claims' named
+mutation is the one applied — both directions.
+
+**Captures judged by decoded pixel delta over two runs** (`npm run screenshots` 482/482, exit 0
+both; the scratchpad `pixel-delta.mjs`): 16 REAL movers, kept, every one reproduced across both
+judged runs — the constructed/panel view-config, board-card-properties, settings-side-sheet and 2
+cell-editor-text captures (75–530299 changed px, maxDelta 112–195), exactly the producer's own
+surface. 1 one-run jitter (`board-view-desktop-dark` 6px@1, the lane's recurring one) restored at
+its committed 248575 bytes with its manifest row patched. The lane records this landing's
+acquire/edit/release triplet (887e9e3b3449 → 3a2f5143dd74) reviewing the 16.
+
+**Battery, all exit 0**: build, `tsc --noEmit`, vitest 1617/1617, `npm run gate` **28 green, 0
+red** (the first run's 2 lanes red, one root cause, the seam above), evidence 16/16 fresh (14
+were stale from the rebase; the 8 non-gate owners re-derived, the other 6 refreshed by their own
+gate lanes), scan-comments and scan-failing-values 0, the operator checklist re-derived (194
+rows). Orchestrator `--strict`: 001, the 076 parent (first RESULT) and 005 all RESULT: PASSED —
+005: 0 errors, 1 no-post-save-payload informational warning; the 005-scoped backfill ran before
+the landing commit (changed: 1, the root graph metadata — replacing the leg's second commit,
+which the rebase had emptied). The pre-commit remint gate was bypassed with the documented
+`SPECKIT_SKIP_SPEC_REMINT=1` (the relative `.opencode` symlink no-op both prior landings
+reproduced). Roadmap 076 figure re-counted from `goal.md`: 2/15 = 13%, unchanged — 001's judge
+rows stay open until the judge, twice, says otherwise.
+
+**Still owed, nobody's-else**: T013 (the image judge, ≥14/16 no 0, twice consecutively on this
+tree) and the operator's device read. Neither is ticked by this landing.
 
 ### 2026-09-11 ~00:41, 076/002-properties-sheet-visual-parity LANDED+VERIFIED (768508f8) — worktree `295-loop-002-properties-sheet-visual-parity`
 
