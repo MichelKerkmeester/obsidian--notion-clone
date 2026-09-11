@@ -10,10 +10,10 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T02:05:00Z"
-    last_updated_by: "012-board-card-fields"
-    recent_action: "012 board card fields landed+verified 5662ec30: 2x crossing rebase, judged movers, gate 28/0"
-    next_safe_action: "Execute 076/002 T001 (transcribe ADR-L/M), then T002 lands L1-L6 RED"
+    last_updated_at: "2026-09-11T00:41:51Z"
+    last_updated_by: "295-loop-002-properties-sheet-visual-parity"
+    recent_action: "076/002 landed+verified 768508f8: 2x crossing, judged movers, gate 28/0, judge next"
+    next_safe_action: "JUDGE scores 076/002 verification.md against 076/spec.md 5; REMEDIATE if any row <2"
     blockers:
       - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
       - "076 closes no sheet on lane evidence alone; the image judge is a required gate (076 D1)"
@@ -628,6 +628,38 @@ operator checklist 187→186 rows (066 section 5/6). AC-008 and every device row
 
 <!-- ANCHOR:handover-summary -->
 ## 1. WHERE THINGS STAND
+
+### 2026-09-11 ~00:41, 076/002-properties-sheet-visual-parity LANDED+VERIFIED (768508f8) — worktree `295-loop-002-properties-sheet-visual-parity`
+
+**What this verification leg did** — landed the 076/002 CREATE leg (96994bb9/36219a9c: leading checkbox → trailing
+eye/eye-slash toggle on the Properties row, the shown/hidden sections and the add-property row gain `076/001`'s
+settings-card treatment, the 44px row-height token, sentence-case "in table" headings) onto main through TWO
+upstream crossings, both judged. The leg's RED→GREEN was mutation-verified: reverting the first task's producer hunk
+(`property-row.ts` to its pre-076/002 blob) turned its guard test RED — 3 failed | 11 passed (14) — restore → GREEN
+14/14; the leg added no new test files, so this was the only owed mutation. Crossing 1: the 012 landing (5662ec30)
+merged the stylesheet 6a52f5dce3f8 → **887e9e3b3449**; recaptured 482/482 twice, judged by decoded pixel delta: 5
+REAL movers, every one moved in BOTH judged runs — the four constructed-board-groups-panel captures (13175px@234,
+13176px@202, 160935px@255, 178246px@255 — the merged tree re-rendering this leg's own row shell whose committed
+bytes the conflict resolution had taken from main) plus components/board-empty-column-desktop-light 4px@209 — kept
+and named in a corrective 076/002 acquire/edit/release triplet signed at 887e9e3b3449; 1 one-run jitter
+(board-view-desktop-dark 6px@1, bytes-only, pixelHash/layoutHash unmoved) restored at its committed 248575 bytes.
+13 evidence artefacts the crossing had stale'd were re-stamped by their own writers. Crossing 2: the 012 judge
+(a7a6e1f8, 15/16) crossed mid-verify; its 012-era evidence stamps (capture-device-parity, renderer-coverage, replay,
+touch-targets, unstyled-links) re-stamped again on the merged tree, 16/16 fresh; second recapture pair judged 1 REAL
+(board-empty-column-desktop-light 4px@209 AGAIN — it moves in both runs, it is this release's own named capture, so
+no further lane sign owed at the unchanged 887e9e3b3449) and 2 bytes-only jitters (board-view-desktop-dark 6px@1,
+board-mobile-desktop-dark 1px@1 — the latter joins the recorded 014/008/288/012 self-restoring class) restored.
+Battery from both final trees: vitest **1617/1617** (160 files), tsc 0, build 0, gate **28 green, 0 red** (exit 0,
+twice), scan-comments 0, scan-failing-values 0. 005's GENERATED_METADATA_INTEGRITY needed a scoped backfill after
+each crossing (the judge's and 012's own 005-doc words crossed); 002, 076 and 005 all validate RESULT: **PASSED**
+--strict. Roadmap §5.A's 076-row figure confirmed 2/15 against goal.md (the two no-regression rows 012's landing
+ticked; the twelve children and the operator's device row correctly unticked — 076/002's own judge rows stay open,
+JUDGE runs next); the row's 002 clause now records this landing. Worktree mechanics recorded: the pre-commit
+`gate:spec-remint` no-ops through this worktree's symlinked `.opencode` (validate.sh 0 bytes, exit 0; the
+AGENTS.md validity warning), so the metadata was re-derived by hand through `realpath .opencode` and the hook's own
+documented `SPECKIT_SKIP_SPEC_REMINT=1` bypass used. Push attempt 1 rejected (the 012 judge landed underneath);
+attempt 2 landed **768508f8** on `origin/main`. Docs: this entry, the continuity trio, and 005's regenerated
+graph-metadata.
 
 ### 2026-09-11 ~02:05, 012-board-card-fields LANDED+VERIFIED (5662ec30) — worktree `296-loop-012-board-card-fields`
 
