@@ -78,6 +78,8 @@ Every Notion iOS capture in this repository is **299×678**, a Mobbin thumbnail.
 
 The capture that the judge scores comes from these scenarios, each mounting the shipped renderer:
 
+The judged image is the full-sheet variant `screenshots/notion-clone/fields/constructed-icon-picker-sheet-mobile-{light,dark}.png` (same run, emitted beside the viewport shot): the sheet expanded past its 90svh cap to its own content height, so the cards a viewport crop keeps below the fold are scored.
+
 - `constructed-date-picker` and `constructed-date-picker-datetime` — harness branch `scenario.renderer === "date-picker"` at `tools/live/render-assertion-harness.ts:3724`
 - `constructed-icon-picker` — harness branch at `tools/live/render-assertion-harness.ts:3741`
 - `constructed-option-color-picker` — harness branch `scenario.renderer === "color-picker"` at `tools/live/render-assertion-harness.ts:3767`

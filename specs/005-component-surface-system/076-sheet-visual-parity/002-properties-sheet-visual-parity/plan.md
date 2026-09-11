@@ -97,6 +97,8 @@ reused token, or `TBD — needs operator capture` (parent D3).
 
 The capture that the judge scores comes from this scenario, mounting the shipped renderer:
 
+The judged image is the full-sheet variant `screenshots/notion-clone/panels/constructed-column-manager-sheet-mobile-{light,dark}.png` (same run, emitted beside the viewport shot): the sheet expanded past its 90svh cap to its own content height, so the cards a viewport crop keeps below the fold are scored.
+
 - `constructed-column-manager` — `constructedScenario("column-manager", { renderer: "column-manager" })`
   in `tools/screenshots/constructed-scenarios.mjs`, mounted by `mountConstructed` →
   `window.__mountConstructed` → `runRenderAssertions`, harness branch

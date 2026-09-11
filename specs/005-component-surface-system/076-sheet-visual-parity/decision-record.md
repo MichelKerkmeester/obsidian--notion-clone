@@ -101,6 +101,17 @@ scenario. Nine fixtures have no constructed counterpart — the two record-detai
 variants, the computed-cleanup / invalid-events / base-import modals, the selection status bar, the
 two toasts and table-load-more — and **none is one of the eleven**. Any child that finds an
 unregistered production surface registers it as its **first** task.
+
+**Note on the judged image (added by the capture-harness leg).** Both judged sheets so far lost
+rubric points to a harness property, not a plugin defect: the phone capture was
+`capture: "viewport"` (804×1748), so a sheet taller than the 874 CSS px viewport kept its lower
+cards — the settings sheet's C3–C5, the properties sheet's Hidden and add-property cards — below
+the fold, and the judge graded half a surface. The capture harness now emits a **full-sheet
+variant** beside every judged viewport shot — `<scenario>-sheet-mobile-{light,dark}.png`, the
+sheet expanded past its 90svh cap to its own content height, its recorded height checked against
+the picture's by `npm run screenshots:verify` — and each child's capture set names that variant as
+the image the judge scores. D2(b) is unchanged: the variant photographs the same production mount,
+only uncropped.
 <!-- /ANCHOR:d2 -->
 
 ---

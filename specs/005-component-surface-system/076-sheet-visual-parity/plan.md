@@ -131,7 +131,7 @@ Sequential, per D4. Each child's own `tasks.md` owns its six step groups and the
 |-----------|-------|-------|
 | Lane (live) | Every measurable row of each child's DEFINE table, plus the `071` regression set | `tools/live/sheet-grammar.mjs` |
 | Unit | A revert-proof contract per new class or string rule | Vitest |
-| Capture | Phone light + dark through the production mount path | `npm run screenshots`, `npm run screenshots:verify` |
+| Capture | Phone light + dark through the production mount path; each of the eleven judged sheets is photographed twice — the device-viewport shot, and the full-sheet variant (`<scenario>-sheet-mobile-<theme>.png`, the sheet expanded past its 90svh cap to its own content height), which is the image the judge scores, because a viewport capture hides whatever the sheet's own scroll keeps below the fold — the settings sheet's C3–C5 and the properties sheet's Hidden / add-property cards never entered the 804×1748 frame | `npm run screenshots`, `npm run screenshots:verify` |
 | Real-app (WebKit) | Sheets the rebuild harness covers, on an emulated iPhone in both engines | `node tools/live/sheet-rebuild.mjs` |
 | **Image judge** | The eight-row rubric, our capture beside the reference | A Sonnet or Opus reviewer; result in the child's `verification.md` |
 | Manual/device | Whole-surface read | The operator's own iPhone (D5, not agent-tickable) |

@@ -10,20 +10,25 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-11T01:59:00Z"
-    last_updated_by: "292-loop-001-settings-sheet-visual-parity"
-    recent_action: "076/001 landed+verified 60e68480: rebased, mutations red/green, gate 28/0, judge next"
-    next_safe_action: "JUDGE scores 076/001 verification.md against 076/spec.md 5; REMEDIATE if any row <2"
+<<<<<<< HEAD
+    last_updated_at: "2026-09-11T02:06:20Z"
+    last_updated_by: "298-sheet-full-captures"
+    recent_action: "076 harness: 22 judged full-sheet variant shots + verify check, gate 28/0"
+    next_safe_action: "JUDGE scores 076/002 verification.md against 076/spec.md 5; REMEDIATE if any row <2"
+=======
+    last_updated_at: "2026-09-11T02:06:20Z"
+    last_updated_by: "298-sheet-full-captures"
+    recent_action: "076 harness: 22 judged full-sheet variant shots + verify check, gate 28/0"
+    next_safe_action: "JUDGE scores 076/002 verification.md against 076/spec.md 5; REMEDIATE if any row <2"
+>>>>>>> 5445ce3c (feat(screenshots): judged phone sheets gain a full-sheet capture variant)
     blockers:
-      - "Every open row past this point is operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK §1)"
-      - "076 closes no sheet on lane evidence alone; the image judge is a required gate (076 D1)"
-      - "076/012's lane fix must correct render-assertions.mjs's own passing 'meta grid' assertion in the same commit as the producer, or the lane certifies a shape the producer no longer draws"
+      - "Open rows past this point are operator-owned: device rechecks on 0.0.38 (goal-body.md ORDER OF WORK)"
+      - "076 closes no sheet on lanes alone; the image judge is a required gate (076 D1)"
+      - "076/012's lane fix must correct render-assertions.mjs's own 'meta grid' assertion in the same commit"
     key_files:
-      - "specs/005-component-surface-system/goal-prompt.md"
       - "specs/005-component-surface-system/goal.md"
       - "specs/005-component-surface-system/roadmap.md"
       - "specs/005-component-surface-system/071-sheet-notion-anytype-alignment/goal.md"
-      - "specs/008-calendar-timeline-chart-deprecation/goal.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "254-goal-refresh-0035"
@@ -4964,3 +4969,15 @@ interposes, the 074 testbed landing and the 289/015 fundamentals landing, the ti
 
 Docs: this entry, the continuity trio (`recent_action`/`last_updated_at`/`last_updated_by`), and the residue
 commits' own messages. Landed and pushed as `8f720b62`.
+## 076-sheet-visual-parity — the capture-harness leg: every judged phone sheet photographs its whole height (2026-09-11, this leg)
+
+Both judged sheets had lost rubric points to the harness, not the plugin: the judged phone capture was `capture: "viewport"` (804x1748), so the lower cards — the settings sheet's C3-C5, the properties sheet's Hidden / add-property cards — never entered the 874 CSS px frame. This leg closed the gap at the source:
+
+- RED first: `tools/screenshots/verify.mjs` gained the judged-sheet check — eleven sheet scenarios (one per judged child; the ids are the sheets the children name as their judged mounts: view-config, column-manager, filter-panel, sort-panel, board-groups-panel, toolbar-add-view, modal-sheet-property-editor, record-detail, owned-menu, icon-picker, column-width-adjuster) must each carry a full-sheet variant `<id>-sheet-mobile-{light,dark}.png` whose PNG height equals twice the recorded `sheetHeight` (deviceScaleFactor 2, 2px slack). RED: `NO FULL-SHEET CAPTURE (22 of 22)`, exit 1, 0 of 11 sheets.
+- Then the harness: `tools/screenshots/capture.mjs` (importing the judged set from verify.mjs so one list cannot drift) shoots the variant beside the viewport shot — tallest `.obnotion-mobile-bottom-sheet`, its 90svh cap overridden inline-important, a 3-pass settle (sheets sizing inner areas against the very viewport the reshoot resizes), the page viewport grown to the sheet height, `waitForConstructedLayout` between passes, `capture: "sheet"` + `sheetHeight` recorded. Theme-blind/blank/freshness gates read the variant entries through their own ids unchanged. Trial: the view-config sheet is 2101px against the 874px viewport — the documented C3-C5 gap, now numeric.
+- Green: `npm run screenshots </dev/null` twice, 504/504 entries (482 + 22 additions), exit 0 both; `verify` exit 0 (no blank, none identical across themes, the 22 sheet x theme shots present at their recorded heights). Movers judged by decoded pixel delta against the committed blobs, no image opened by eye: 14 kept (13 fine-delta, 12 of them at their head pixelHash/layoutHash, byte-level only, plus fields/constructed-cell-editor-text-mobile-light moved true 0921a0a975d5 -> cb3a1efcaf8c at an unchanged 11c27f9a6372, plus views/board-mobile-desktop-dark whose 1px@1 third targeted pass reproduced its post-run bytes exactly); 1 one-run jitter restored, views/board-view-desktop-dark 6px@1, third targeted pass returning the committed 248575 bytes, manifest row patched with fresh sourceHashes kept (the 071/008 precedent). 9/9 sampled movers head-current, so the movement is run-to-run, never committed-capture staleness.
+- The css-lane: this leg's acquire/edit/release triplet, holder `076-sheet-visual-parity`, all three at `887e9e3b3449` (the stylesheet untouched); check-lane exit 0, `release names all 23 changed capture(s)`. The storybook inventory regenerated by its own writer (`sheet-inventory.mjs`, the +N capture counts the 22 additions move) — its 9 tests green, the only vitest casualty of the additions.
+- Battery: `tsc` 0, vitest 1617/1617, build 0, sheet-grammar 0, render-assertions 0, verify-placement 418/420 (2 red for a declared reason) exit 0, comments 0/0, failing-values 0, evidence 16/16 (capture-device-parity re-run by its own writer after the manifest), gate `PASS - 28 green, 0 red for a declared reason`, exit 0. Viewport captures unmoved at the pixelHash/layoutHash level; the 22 variant files are pure additions.
+- Docs: the 076 parent plan.md capture row names the variant as the judged image; the decision-record D2 note (added) records why, D2(b) unchanged — the variant photographs the same production mount, only uncropped; each of the eleven judged children's plan.md gained its judged-variant line. 076 then `RESULT: PASSED` after its scoped `backfill-graph-metadata.js` (the two GENERATED_METADATA errors were this leg's own doc edits, never hand-patched); the `005` track and `071/001` also `RESULT: PASSED` (the inventory edits ride this leg).
+
+Docs: this entry and the continuity trio. Commit pending; no push. The worktree's `.handover.md` stays unstaged.

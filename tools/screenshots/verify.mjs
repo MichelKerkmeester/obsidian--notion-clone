@@ -55,6 +55,28 @@ import { fileURLToPath } from "node:url";
 import { SCENARIOS } from "./scenarios.mjs";
 import { decodePng } from "./pixel-hash.mjs";
 
+/**
+ * The phone-sheet surfaces the visual-parity judge scores. Each is photographed twice: once
+ * through the device viewport, which shows what a phone actually shows, and once as a full-sheet
+ * variant — the sheet expanded past the 90svh cap to its own content height — because a judged
+ * surface taller than the viewport keeps its lower cards below the fold, and a judge scoring the
+ * viewport shot grades half a surface. One representative sheet scenario per judged surface
+ * family; the variant only exists on the phone, where the sheet presentation lives.
+ */
+export const SHEET_JUDGE_SCENARIOS = new Set([
+  "constructed-view-config",
+  "constructed-column-manager",
+  "constructed-filter-panel",
+  "constructed-sort-panel",
+  "constructed-board-groups-panel",
+  "constructed-toolbar-add-view",
+  "constructed-modal-sheet-property-editor",
+  "constructed-record-detail",
+  "constructed-owned-menu",
+  "constructed-icon-picker",
+  "constructed-column-width-adjuster",
+]);
+
 // ───────────────────────────────────────────────────────────────────
 // 2. CONFIGURATION
 // ───────────────────────────────────────────────────────────────────
@@ -288,6 +310,8 @@ function main() {
   const blank = [];
   const unreadable = [];
   const themeBlind = [];
+  const sheetMissing = [];
+  const sheetShort = [];
   const byThemePair = new Map();
 
   for (const entry of manifest.scenarios) {
@@ -331,17 +355,50 @@ function main() {
     }
   }
 
+  // Every judged sheet must also exist as a full-sheet capture, in both themes, and the
+  // variant's image height must equal the sheet's own expanded height — recorded at capture
+  // time, in CSS px — rather than the device viewport's. deviceScaleFactor is 2 for every
+  // device this harness defines, so the PNG carries exactly twice the recorded height; the
+  // comparison tolerates a 2px rounding slack and nothing more, because a variant that shrinks
+  // back to the viewport cap is the very failure the variant exists to answer.
+  const judgedIds = [...SHEET_JUDGE_SCENARIOS].sort();
+  for (const base of judgedIds) {
+    for (const theme of ["dark", "light"]) {
+      const variantId = `${base}-sheet`;
+      const variantShots = manifest.scenarios.filter(
+        (e) => e.id === variantId && e.device === "mobile" && e.theme === theme,
+      );
+      if (variantShots.length === 0) {
+        sheetMissing.push(`${variantId} (mobile, ${theme})`);
+        continue;
+      }
+      for (const entry of variantShots) {
+        if (!existsSync(join(REPO, entry.file))) continue; // already reported above
+        const image = decodePng(readFileSync(join(REPO, entry.file)));
+        const expected = 2 * (entry.sheetHeight ?? 0);
+        if (!image || !expected || Math.abs(image.height - expected) > 2) {
+          sheetShort.push(`${entry.file} — image ${image ? `${image.height}px` : "unreadable"}`
+            + ` vs sheet ${entry.sheetHeight ?? "not recorded"}px`);
+        }
+      }
+    }
+  }
+
   // A scenario added to the registry but never captured is just as stale as a changed one,
   // and is the easier mistake to make: the registry edit and the capture run are separate steps.
   const captured = new Set(manifest.scenarios.map((s) => s.id));
   const uncaptured = SCENARIOS.filter((s) => !captured.has(s.id)).map((s) => s.id);
 
   const problems = stale.length + missingFile.length + missingSource.length + uncaptured.length
-    + blank.length + unreadable.length + themeBlind.length;
+    + blank.length + unreadable.length + themeBlind.length
+    + sheetMissing.length + sheetShort.length;
 
-  if (json) {
+    if (json) {
     console.log(JSON.stringify({
       stale, missingFile, missingSource, vendorUnavailable, uncaptured, blank, unreadable, themeBlind,
+      sheetMissing, sheetShort,
+      sheetJudgeTotal: judgedIds.length * 2,
+      sheetPresent: judgedIds.length * 2 - sheetMissing.length,
       ok: problems === 0,
     }, null, 2));
   } else {
@@ -371,6 +428,15 @@ function main() {
       console.log("    A fixture whose subject is fixed or absolutely positioned contributes no");
       console.log("    height to the captured element. Give the scenario a captureCss block that");
       console.log("    restores flow without restyling what is being photographed.");
+    }
+    if (sheetMissing.length) {
+      console.log(`  NO FULL-SHEET CAPTURE (${sheetMissing.length} of ${judgedIds.length * 2}`
+        + ` judged sheet×theme shots):`);
+      for (const s of sheetMissing) console.log(`    ${s}`);
+    }
+    if (sheetShort.length) {
+      console.log(`  SHEET TRUNCATED (${sheetShort.length}) - the image is not the whole sheet:`);
+      for (const s of sheetShort) console.log(`    ${s}`);
     }
     if (themeBlind.length) {
       console.log(`  IDENTICAL ACROSS THEMES (${themeBlind.length}) - the theme never reached the subject:`);

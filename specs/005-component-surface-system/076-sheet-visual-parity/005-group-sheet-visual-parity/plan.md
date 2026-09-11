@@ -76,6 +76,8 @@ Every Notion iOS capture in this repository is **299×678**, a Mobbin thumbnail.
 
 The capture that the judge scores comes from these scenarios, each mounting the shipped renderer:
 
+The judged image is the full-sheet variant `screenshots/notion-clone/panels/constructed-board-groups-panel-sheet-mobile-{light,dark}.png` (same run, emitted beside the viewport shot): the sheet expanded past its 90svh cap to its own content height, so the cards a viewport crop keeps below the fold are scored.
+
 - `constructed-board-groups-panel` — `constructedScenario("board-groups-panel", { boardGroupsPanel: true })`. Captures `screenshots/notion-clone/panels/constructed-board-groups-panel-mobile-{light,dark}.png`
 - The **group sheet built by `toolbar-renderer.ts`** is the surface `071/015` opened for a missing screenshot scenario. `005`'s first task confirms whether that scenario now exists; if it does not, registering it is T001 and precedes everything else (D2b)
 

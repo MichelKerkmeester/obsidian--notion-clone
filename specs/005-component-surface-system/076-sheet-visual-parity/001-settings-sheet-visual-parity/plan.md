@@ -171,6 +171,7 @@ and the shared title-centring clause.
 |---|---|---|
 | `constructed-view-config-mobile-light.png` | `npm run screenshots` | The judged surface, light |
 | `constructed-view-config-mobile-dark.png` | ″ | The judged surface, dark — and L6's direction by eye |
+| `constructed-view-config-sheet-mobile-{light,dark}.png` | ″ | **The judged image** — the full-sheet variant, the sheet expanded past its 90svh cap to its own content height (2101px against the 874px viewport), so the cards a viewport crop keeps below the fold (C3–C5) are scored |
 | `constructed-view-config-desktop-{light,dark}.png` | ″ | Regression only: the anchored side sheet keeps the continuous list and must not gain cards |
 | `panel-view-config*`, `panel-settings-side-sheet*` | ″ | The three `fixtureOf` fixtures, which move with the constructed one |
 | Freshness | `npm run screenshots:verify` | 0 stale. `sources` for the constructed scenario must gain `src/i18n.ts` — L5 changes strings and today's list would not invalidate the capture |

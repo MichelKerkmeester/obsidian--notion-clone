@@ -369,6 +369,16 @@ createOwnedMenu's own entry with rows built through the handle's addRow the way 
 
 Sources: `src/views/owned-menu.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/menu-row.ts`, `src/views/mobile-bottom-sheet.ts`
 
+### Owned menu — the shell every context menu uses (constructed)
+
+createOwnedMenu's own entry with rows built through the handle's addRow the way ColumnMenu builds them. The menu mounts on document.body by design, so the capture is full-page; the phone device pass becomes the bottom-sheet presentation through the module's own showAt placement. Supersedes the desktop menu and the phone sheet fixtures together.
+
+| dark | light |
+|---|---|
+| ![constructed-owned-menu-sheet dark](notion-clone/components/constructed-owned-menu-sheet-mobile-dark.png) | ![constructed-owned-menu-sheet light](notion-clone/components/constructed-owned-menu-sheet-mobile-light.png) |
+
+Sources: `src/views/owned-menu.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/menu-row.ts`, `src/views/mobile-bottom-sheet.ts`
+
 ### Summary row (constructed)
 
 SummaryRenderer's own render with the onChange hook that makes the rule items draggable and clickable, over the same three rule kinds the grouped table uses.
@@ -416,6 +426,16 @@ The view-tab plus button clicked, opening the add-view popover through showAddVi
 | dark | light |
 |---|---|
 | ![constructed-toolbar-add-view dark](notion-clone/components/constructed-toolbar-add-view-mobile-dark.png) | ![constructed-toolbar-add-view light](notion-clone/components/constructed-toolbar-add-view-mobile-light.png) |
+
+Sources: `src/views/toolbar-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/menu-row.ts`, `src/views/popover-position.ts`
+
+### Add view popover (constructed)
+
+The view-tab plus button clicked, opening the add-view popover through showAddViewMenu's own onclick; captured full-page for the same position: fixed reason as the utilities popover.
+
+| dark | light |
+|---|---|
+| ![constructed-toolbar-add-view-sheet dark](notion-clone/components/constructed-toolbar-add-view-sheet-mobile-dark.png) | ![constructed-toolbar-add-view-sheet light](notion-clone/components/constructed-toolbar-add-view-sheet-mobile-light.png) |
 
 Sources: `src/views/toolbar-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/menu-row.ts`, `src/views/popover-position.ts`
 
@@ -548,6 +568,16 @@ openIconPickerPopover's own entry with a lucide current token, which is what the
 | dark | light |
 |---|---|
 | ![constructed-icon-picker dark](notion-clone/fields/constructed-icon-picker-mobile-dark.png) | ![constructed-icon-picker light](notion-clone/fields/constructed-icon-picker-mobile-light.png) |
+
+Sources: `src/views/icon-picker-popover.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/record-icon-renderer.ts`
+
+### Icon picker popover (constructed)
+
+openIconPickerPopover's own entry with a lucide current token, which is what the module reads to open its Icons tab with the colour strip. The panel mounts on document.body, so the capture is full-page.
+
+| dark | light |
+|---|---|
+| ![constructed-icon-picker-sheet dark](notion-clone/fields/constructed-icon-picker-sheet-mobile-dark.png) | ![constructed-icon-picker-sheet light](notion-clone/fields/constructed-icon-picker-sheet-mobile-light.png) |
 
 Sources: `src/views/icon-picker-popover.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/record-icon-renderer.ts`
 
@@ -733,6 +763,16 @@ The reference board's own column-options button, then the "Manage groups" row it
 
 Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/board-groups-panel.ts`, `src/views/record-surface/property-row.ts`, `src/views/checkbox.ts`
 
+### Board Groups panel (constructed)
+
+The reference board's own column-options button, then the "Manage groups" row it opens — the same two clicks a reader makes, not a hand-built panel.
+
+| dark | light |
+|---|---|
+| ![constructed-board-groups-panel-sheet dark](notion-clone/panels/constructed-board-groups-panel-sheet-mobile-dark.png) | ![constructed-board-groups-panel-sheet light](notion-clone/panels/constructed-board-groups-panel-sheet-mobile-light.png) |
+
+Sources: `src/views/board-renderer.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/board-groups-panel.ts`, `src/views/record-surface/property-row.ts`, `src/views/checkbox.ts`
+
 ### Column manager (constructed)
 
 ColumnManagerRenderer's own render over the table bench's sixteen columns with one hidden, so the select-all checkbox sits in its real indeterminate state.
@@ -743,6 +783,16 @@ ColumnManagerRenderer's own render over the table bench's sixteen columns with o
 
 Sources: `src/views/column-manager-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
 
+### Column manager (constructed)
+
+ColumnManagerRenderer's own render over the table bench's sixteen columns with one hidden, so the select-all checkbox sits in its real indeterminate state.
+
+| dark | light |
+|---|---|
+| ![constructed-column-manager-sheet dark](notion-clone/panels/constructed-column-manager-sheet-mobile-dark.png) | ![constructed-column-manager-sheet light](notion-clone/panels/constructed-column-manager-sheet-mobile-light.png) |
+
+Sources: `src/views/column-manager-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/property-type-icon.ts`, `src/views/checkbox.ts`
+
 ### Column width adjuster (constructed)
 
 openColumnWidthAdjuster's own module entry over a real currency column from the table bench. On the phone device isMobileBottomSheet's own check turns it into the shared bottom sheet (chrome, placement, entrance, drag-to-dismiss); on desktop it stays the fixed panel it has always been. Both presentations share the panel-family body markup photographed here, not a bespoke strip.
@@ -750,6 +800,16 @@ openColumnWidthAdjuster's own module entry over a real currency column from the 
 | dark | light |
 |---|---|
 | ![constructed-column-width-adjuster dark](notion-clone/panels/constructed-column-width-adjuster-mobile-dark.png) | ![constructed-column-width-adjuster light](notion-clone/panels/constructed-column-width-adjuster-mobile-light.png) |
+
+Sources: `src/views/column-width.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `src/views/popover-auto-close.ts`
+
+### Column width adjuster (constructed)
+
+openColumnWidthAdjuster's own module entry over a real currency column from the table bench. On the phone device isMobileBottomSheet's own check turns it into the shared bottom sheet (chrome, placement, entrance, drag-to-dismiss); on desktop it stays the fixed panel it has always been. Both presentations share the panel-family body markup photographed here, not a bespoke strip.
+
+| dark | light |
+|---|---|
+| ![constructed-column-width-adjuster-sheet dark](notion-clone/panels/constructed-column-width-adjuster-sheet-mobile-dark.png) | ![constructed-column-width-adjuster-sheet light](notion-clone/panels/constructed-column-width-adjuster-sheet-mobile-light.png) |
 
 Sources: `src/views/column-width.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `src/views/popover-auto-close.ts`
 
@@ -813,6 +873,16 @@ The same renderer over a tree that holds a NOT node and an inner OR group — th
 
 Sources: `src/views/filter-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/data/view-filter-tree.ts`
 
+### Filter panel with active conditions (constructed)
+
+FilterPanelRenderer's own render over a flat AND group of three rules, so the panel header defers its logic button to the group's own dropdown.
+
+| dark | light |
+|---|---|
+| ![constructed-filter-panel-sheet dark](notion-clone/panels/constructed-filter-panel-sheet-mobile-dark.png) | ![constructed-filter-panel-sheet light](notion-clone/panels/constructed-filter-panel-sheet-mobile-light.png) |
+
+Sources: `src/views/filter-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/views/date-value-picker.ts`, `src/data/view-filter-tree.ts`
+
 ### Confirm sheet — a DbModal presented as a phone sheet (constructed)
 
 ConfirmModal's own onOpen, mounted the same way: the real buildConfirmSheetBody inside the faithful host-modal stand-in, chromed by the real attachSheetChromeToModal.
@@ -840,6 +910,16 @@ ColumnRenameModal's own onOpen ("Edit property — Month"), invoked on an instan
 | dark | light |
 |---|---|
 | ![constructed-modal-sheet-property-editor dark](notion-clone/panels/constructed-modal-sheet-property-editor-mobile-dark.png) | ![constructed-modal-sheet-property-editor light](notion-clone/panels/constructed-modal-sheet-property-editor-mobile-light.png) |
+
+Sources: `src/views/modals/obnotion-modal.ts`, `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/modals/column-rename-modal.ts`
+
+### Edit property sheet — a DbModal presented as a phone sheet (constructed)
+
+ColumnRenameModal's own onOpen ("Edit property — Month"), invoked on an instance built from its own prototype rather than through new — its constructor calls Obsidian's real Modal, which this bundle's obsidian-stub deliberately cannot fake — mounted inside the faithful host-modal stand-in attachSheetChromeToModal has to neutralise: a native empty title and a native close button beside the shipped form.
+
+| dark | light |
+|---|---|
+| ![constructed-modal-sheet-property-editor-sheet dark](notion-clone/panels/constructed-modal-sheet-property-editor-sheet-mobile-dark.png) | ![constructed-modal-sheet-property-editor-sheet light](notion-clone/panels/constructed-modal-sheet-property-editor-sheet-mobile-light.png) |
 
 Sources: `src/views/modals/obnotion-modal.ts`, `src/views/surface-shell.ts`, `src/views/mobile-bottom-sheet.ts`, `src/views/popover-position.ts`, `tools/live/host-modal-stand-in.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/modals/column-rename-modal.ts`
 
@@ -893,6 +973,16 @@ The same panel opened by an affordance carrying no element — a menu item, a ca
 
 Sources: `src/views/record-detail-panel.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`, `src/views/popover-position.ts`, `src/views/record-open-target.ts`
 
+### Record detail panel (constructed)
+
+openRecordDetailPanel's own entry against a real anchor over a capture-sized board row: the panel chrome and its typed fields. The note body is absent — mounting it needs a live MarkdownRenderer — and the phone device pass becomes the bottom sheet through positionToolbarPopover's own is-phone branch. Supersedes the desktop panel and the phone sheet fixtures together.
+
+| dark | light |
+|---|---|
+| ![constructed-record-detail-sheet dark](notion-clone/panels/constructed-record-detail-sheet-mobile-dark.png) | ![constructed-record-detail-sheet light](notion-clone/panels/constructed-record-detail-sheet-mobile-light.png) |
+
+Sources: `src/views/record-detail-panel.ts`, `tools/bench/board-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/card-field-renderer.ts`, `src/views/record-surface/property-row.ts`, `src/views/popover-position.ts`, `src/views/mobile-bottom-sheet.ts`
+
 ### Table record peek (constructed)
 
 openTableRecordPeek's own entry docked beside the real table it opens from, with the row's typed values rendered through the peek's own property renderer.
@@ -923,6 +1013,16 @@ The calendar view's sort panel: the renderer reads config.viewType === "calendar
 
 Sources: `src/views/sort-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`
 
+### Sort panel with two rules (constructed)
+
+SortPanelRenderer's own render over two real rules, with the first rule's move-up and the last rule's move-down disabled by the renderer itself.
+
+| dark | light |
+|---|---|
+| ![constructed-sort-panel-sheet dark](notion-clone/panels/constructed-sort-panel-sheet-mobile-dark.png) | ![constructed-sort-panel-sheet light](notion-clone/panels/constructed-sort-panel-sheet-mobile-light.png) |
+
+Sources: `src/views/sort-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`
+
 ### View configuration panel (constructed)
 
 ViewConfigPanelRenderer's own render for a table view with a one-view database, so both the database-scoped and the view-scoped sections draw. `src/i18n.ts` is in this list because a copy-only prose-length fix moves sheet-reached strings, and without it here that change would leave this capture's freshness check reporting current.
@@ -932,6 +1032,16 @@ ViewConfigPanelRenderer's own render for a table view with a one-view database, 
 | ![constructed-view-config dark](notion-clone/panels/constructed-view-config-mobile-dark.png) | ![constructed-view-config light](notion-clone/panels/constructed-view-config-mobile-light.png) |
 
 Sources: `src/views/view-config-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`, `src/i18n.ts`
+
+### View configuration panel (constructed)
+
+ViewConfigPanelRenderer's own render for a table view with a one-view database, so both the database-scoped and the view-scoped sections draw.
+
+| dark | light |
+|---|---|
+| ![constructed-view-config-sheet dark](notion-clone/panels/constructed-view-config-sheet-mobile-dark.png) | ![constructed-view-config-sheet light](notion-clone/panels/constructed-view-config-sheet-mobile-light.png) |
+
+Sources: `src/views/view-config-panel-renderer.ts`, `tools/bench/table-render-bench.ts`, `tools/live/render-assertion-harness.ts`, `tools/live/render-assertion-bundle.mjs`, `tools/screenshots/constructed-scenarios.mjs`, `tools/storybook/obsidian-stub.mjs`, `tools/storybook/obsidian-dom-shim.mjs`, `src/views/dropdown-field.ts`
 
 ### Group-by sheet — mobile bottom sheet
 

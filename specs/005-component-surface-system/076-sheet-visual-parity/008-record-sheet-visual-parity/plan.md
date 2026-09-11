@@ -77,6 +77,8 @@ Every Notion iOS capture in this repository is **299×678**, a Mobbin thumbnail.
 
 The capture that the judge scores comes from these scenarios, each mounting the shipped renderer:
 
+The judged image is the full-sheet variant `screenshots/notion-clone/panels/constructed-record-detail-sheet-mobile-{light,dark}.png` (same run, emitted beside the viewport shot): the sheet expanded past its 90svh cap to its own content height, so the cards a viewport crop keeps below the fold are scored.
+
 - `constructed-record-detail`, `constructed-record-detail-docked`, `constructed-record-detail-body-editing`, `constructed-record-detail-body-empty` — `constructedScenario("record-detail"/"record-detail-body", …)`, harness branches at `tools/live/render-assertion-harness.ts:3507` and `:3552`
 - `constructed-record-peek` — harness branch at `tools/live/render-assertion-harness.ts:3583`
 - **Two fixtures in this family have no constructed counterpart** — `panel-record-detail-title-currency` and `panel-record-detail-sheet-title-currency`. They are the only sheets in this packet with an unregistered state, and registering them is `008`'s T001 (D2b)

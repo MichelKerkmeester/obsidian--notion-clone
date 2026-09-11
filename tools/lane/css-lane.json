@@ -1,5 +1,5 @@
 {
-  "holder": "001-settings-sheet-visual-parity",
+  "holder": "076-sheet-visual-parity",
   "baselineHash": "3a2f5143dd74",
   "inScopeCaptureRoots": [
     "screenshots/notion-clone/",
@@ -7360,6 +7360,65 @@
         "screenshots/notion-clone/panels/panel-view-config-mobile-light.png"
       ],
       "note": "npm run screenshots </dev/null twice, 482/482, exit 0 both, judged by decoded pixel delta across both runs against the committed blobs (node scratchpad/glm/pixel-delta.mjs), no image opened by eye. 16 REAL movers, kept, every one reproduced across both judged runs: the 14 constructed/panel view-config, board-card-properties, settings-side-sheet and 2 cell-editor-text captures (maxDelta 112-195, changedPixels 75-530299) -- the merged tree re-renders 001-creators five-card settings sheet and the shared row shell whose committed bytes ours-side conflict resolution had taken from main. 1 one-run jitter (views/board-view-desktop-dark.png 6px@1, <=12) restored at its committed 248575 bytes with its manifest row patched (pixelHash be56588f7b1d unchanged, fresh styles.css sourceHash 3a2f5143dd74 kept). 0 threshold edits; the visual read stays the operator device pass. The 076/001 leg-creator own release above still carries the 20-mover judgement on its pre-rebase e34760384a34 tree."
+    },
+    {
+      "event": "acquire",
+      "phase": "076-sheet-visual-parity",
+      "at": "2026-09-11T01:52:42Z",
+      "hash": "887e9e3b3449",
+      "note": "Acquired by the capture-harness leg: no stylesheet edit is planned, the lane is taken only to sign off the recapture its harness change forces."
+    },
+    {
+      "event": "edit",
+      "phase": "076-sheet-visual-parity",
+      "at": "2026-09-11T01:52:42Z",
+      "hash": "887e9e3b3449",
+      "note": "No stylesheet edit: the leg touches the capture harness only (verify gains the full-sheet judged-capture check, capture gains the variant), so this reconciliation photographs the unchanged tree at 887e9e3b3449."
+    },
+    {
+      "event": "release",
+      "phase": "076-sheet-visual-parity",
+      "at": "2026-09-11T01:52:42Z",
+      "hash": "887e9e3b3449",
+      "reviewed": [
+        "screenshots/notion-clone/components/constructed-owned-menu-sheet-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-owned-menu-sheet-mobile-light.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-sheet-mobile-dark.png",
+        "screenshots/notion-clone/components/constructed-toolbar-add-view-sheet-mobile-light.png",
+        "screenshots/notion-clone/components/panel-invalid-events-modal-desktop-dark.png",
+        "screenshots/notion-clone/fields/constructed-cell-editor-text-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-cell-editor-text-mobile-light.png",
+        "screenshots/notion-clone/fields/constructed-icon-picker-sheet-mobile-dark.png",
+        "screenshots/notion-clone/fields/constructed-icon-picker-sheet-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-board-groups-panel-sheet-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-board-groups-panel-sheet-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-sheet-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-column-manager-sheet-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-column-width-adjuster-sheet-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-column-width-adjuster-sheet-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-sheet-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-filter-panel-sheet-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-property-editor-sheet-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-modal-sheet-property-editor-sheet-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-sheet-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-record-detail-sheet-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-sheet-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-sort-panel-sheet-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-view-config-desktop-dark.png",
+        "screenshots/notion-clone/panels/constructed-view-config-desktop-light.png",
+        "screenshots/notion-clone/panels/constructed-view-config-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-view-config-mobile-light.png",
+        "screenshots/notion-clone/panels/constructed-view-config-sheet-mobile-dark.png",
+        "screenshots/notion-clone/panels/constructed-view-config-sheet-mobile-light.png",
+        "screenshots/notion-clone/panels/panel-settings-side-sheet-desktop-dark.png",
+        "screenshots/notion-clone/panels/panel-settings-side-sheet-desktop-light.png",
+        "screenshots/notion-clone/panels/panel-view-config-desktop-dark.png",
+        "screenshots/notion-clone/panels/panel-view-config-desktop-light.png",
+        "screenshots/notion-clone/panels/panel-view-config-mobile-dark.png",
+        "screenshots/notion-clone/panels/panel-view-config-mobile-light.png",
+        "screenshots/notion-clone/views/board-mobile-desktop-dark.png"
+      ],
+      "note": "npm run screenshots </dev/null twice, 504/504 entries, exit 0 both, judged by decoded pixel delta against the committed blobs (scratchpad/glm/pixel-delta.mjs) and per-capture HEAD-fingerprint probes; no image opened by eye. 14 movers kept: 13 by decoded-fine-delta (maxDelta 135-192, changedPixels 47-171), all but fields/constructed-cell-editor-text-mobile-light at its head pixelHash/layoutHash (byte-level only; that one moved true, pixelHash 0921a0a975d5 -> cb3a1efcaf8c at an unchanged 11c27f9a6372), plus views/board-mobile-desktop-dark, whose 1px@1 delta repeated its post-run bytes exactly on a third targeted pass, so it moved in both judged runs. 1 one-run jitter: views/board-view-desktop-dark 6px@1, third targeted pass returned the committed 248575 bytes, restored at those bytes with its manifest row patched (pixelHash be56588f7b1d, layoutHash 8a3e6fc3977c, fresh sourceHashes kept). 22 additions: the full-sheet judged captures, each an id-suffixed variant of its viewport shot (capture: sheet, the sheet expanded past its 90svh cap, recorded sheetHeight). 0 threshold edits; the visual read stays the operator device pass."
     }
   ],
   "outstanding": [
@@ -7373,6 +7432,6 @@
     "The obnotion-board-* stylesheet family is now largely dead and was deliberately not cut here. The default board is the only board, and it builds obnotion-kanban-* markup; the extensions branch that built .obnotion-board-column, .obnotion-board-subgroup, .obnotion-board-add-column and their checkboxes is gone. Some of the family is still live and must survive any cut — .obnotion-board-card-cover and .obnotion-board-card-field are both built by the kanban card — so this is a per-rule audit, not a section delete, and it moves captures. One concrete consequence is already measurable: styles.css reads var(--obnotion-board-column-width, 220px) for .obnotion-board-column and nothing assigns that property any more, so the rule resolves its fallback for every user. It is dead rather than wrong, but it is exactly the class scan-pinned-values.mjs exists to catch, and it will stay invisible while the rule it belongs to is unreachable.",
     "067-sheet-family-remediation: seventeen captures on this lane still show the surface as it looked BEFORE the depth-cap fix at 173f7d3a. Found by 062's landing verifier, which recaptured on the merged tree and then measured decoded pixels rather than trusting pixelHash: panel-record-detail-sheet-body-empty-desktop-light moves 46,779 pixels at a max channel delta of 214, its dark pair 46,752 at 209, constructed-chart-toolbar-options-mobile-dark and constructed-column-manager-mobile-dark about 260,800 each at 45, and eleven more record-detail-sheet, modal-sheet-property-editor, depth3-dropdown and owned-menu-sheet captures between 10,548 and 42,211 pixels at 46 to 78. Every one of them hashes IDENTICALLY, which is why 173f7d3a's own recapture read them as byte-only re-encodes and restored them. pixelHash averages a 16x16 grid into 32 buckets, so any change confined to a narrow band or a small region moves a cell's average by less than one bucket and hashes the same - 062 hit the identical trap on its frozen-column shadow and fixed it by measuring pixels. Reproduced with 067's OWN stylesheet in the tree (identical counts), so this is 067's debt and not 062's: left restored here rather than recommitted, because reviewing another lane's surface is a review this packet cannot honestly sign. 067 owes a recapture measured by decoded pixel delta, and a read of each of the seventeen."
   ],
-  "baselineCommit": null,
-  "acquiredAt": "2026-09-11T02:50:00.000Z"
+  "baselineCommit": "eacfe192f886",
+  "acquiredAt": "2026-09-11T01:52:42Z"
 }

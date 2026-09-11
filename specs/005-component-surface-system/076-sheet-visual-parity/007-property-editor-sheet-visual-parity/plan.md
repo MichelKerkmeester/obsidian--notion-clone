@@ -77,6 +77,8 @@ Every Notion iOS capture in this repository is **299×678**, a Mobbin thumbnail.
 
 The capture that the judge scores comes from these scenarios, each mounting the shipped renderer:
 
+The judged image is the full-sheet variant `screenshots/notion-clone/panels/constructed-modal-sheet-property-editor-sheet-mobile-{light,dark}.png` (same run, emitted beside the viewport shot): the sheet expanded past its 90svh cap to its own content height, so the cards a viewport crop keeps below the fold are scored.
+
 - `constructed-modal-sheet-property-editor` and `constructed-modal-sheet-property-editor-stacked` — `constructedModalSheetScenario("property-editor", …)`, mounted by `mountConstructedModalSheet` → `window.__mountConstructedModalSheet` (its own bundle entry, not `__mountConstructed`). Captures `screenshots/notion-clone/panels/constructed-modal-sheet-property-editor*-mobile-{light,dark}.png`
 - `constructed-depth3-property-type-picker` and `constructed-depth3-property-type-picker-replaced` — `constructedDepth3Scenario`/`constructedDepth3ReplaceScenario`, mounted by `mountConstructedDepth3Stack` / `mountConstructedDepth3Replace`. These photograph the **three-level chain** the current design creates, which is the thing the reference says should not exist (D2a)
 - All four are production mounts; no scenario work is owed

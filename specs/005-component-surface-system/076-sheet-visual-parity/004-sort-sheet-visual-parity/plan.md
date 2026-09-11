@@ -75,6 +75,8 @@ Every Notion iOS capture in this repository is **299×678**, a Mobbin thumbnail.
 
 The capture that the judge scores comes from these scenarios, each mounting the shipped renderer:
 
+The judged image is the full-sheet variant `screenshots/notion-clone/panels/constructed-sort-panel-sheet-mobile-{light,dark}.png` (same run, emitted beside the viewport shot): the sheet expanded past its 90svh cap to its own content height, so the cards a viewport crop keeps below the fold are scored.
+
 - `constructed-sort-panel` and `constructed-sort-panel-calendar` — `constructedScenario("sort-panel", { renderer: "sort-panel" })`, harness branch `scenario.renderer === "sort-panel"` at `tools/live/render-assertion-harness.ts:3388`. Captures `screenshots/notion-clone/panels/constructed-sort-panel*-mobile-{light,dark}.png`
 - `constructed-active-rule-sort` — `constructedScenario("active-rule-sort", { renderer: "active-rule-popover", ruleKind: "sort" })`, harness branch at `tools/live/render-assertion-harness.ts:3314`. Captures `screenshots/notion-clone/components/constructed-active-rule-sort-mobile-{light,dark}.png`. The same second-surface gap as `003` (D2a)
 - Fixtures `panel-sort-rules`, `panel-sort-calendar-empty` and `chrome-active-rule-popover-sort` declare `fixtureOf` at these; no scenario work is owed

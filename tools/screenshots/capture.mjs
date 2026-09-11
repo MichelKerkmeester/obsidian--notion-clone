@@ -38,6 +38,7 @@ import {
 } from "./reference-scenarios.mjs";
 import { captureRootFor, validateManifestEntry } from "./manifest-schema.mjs";
 import { pixelHash } from "./pixel-hash.mjs";
+import { SHEET_JUDGE_SCENARIOS } from "./verify.mjs";
 
 // This page does not reproduce the workspace leaf, and unlike the placement harness it does not
 // need to. The leaf's `contain: strict` matters to anything positioned against the viewport, and
@@ -376,7 +377,32 @@ async function main() {
       const wanted = scenario.devices
         ? devices.filter((d) => scenario.devices.includes(d.id))
         : devices;
-      for (const device of wanted) {
+      // Grows once, then reads back: the sheet's own 90svh cap is an `!important` stylesheet rule, so
+  // only an inline important declaration outranks it, and the point of the exercise is that the
+  // sheet ends the run exactly its content's height. Returns the tallest sheet's height, rounded
+  // up, or null when the page mounts no sheet at all.
+  const EXPAND_SHEET = () => {
+    const sheets = [...document.querySelectorAll(".obnotion-mobile-bottom-sheet")];
+    if (!sheets.length) return null;
+    let sheet = sheets[0];
+    for (const s of sheets) {
+      if (s.getBoundingClientRect().height > sheet.getBoundingClientRect().height) sheet = s;
+    }
+    sheet.style.setProperty("max-height", "none", "important");
+    return Math.ceil(sheet.getBoundingClientRect().height);
+  };
+
+  // The provenance fields — which renderer a capture photographed, and what it mirrors — are
+  // properties of the scenario, not of the theme or the device, so both the viewport entry and
+  // the full-sheet variant entry below carry the same record.
+  const provenance = scenario.kind === "reference"
+    ? { source: "reference", renderer: scenario.renderer, ...(scenario.referenceOf ? { referenceOf: scenario.referenceOf } : {}) }
+    : scenario.mount
+      ? { source: "constructed", renderer: scenario.renderer, bag: scenario.bag, ...(scenario.scale ? { scale: scenario.scale } : {}) }
+      : {};
+  const fixtureOfEntry = scenario.fixtureOf ? { fixtureOf: scenario.fixtureOf } : {};
+
+  for (const device of wanted) {
       for (const theme of themes) {
         // Reduced motion is emulated, not incidental. Several plugin properties are transitioned,
         // so a capture taken before they settle records an animation frame — and the same page
@@ -544,15 +570,81 @@ async function main() {
           // name the vendored view they photographed and the constructed scenario they
           // mirror; fixtures that a constructed capture supersedes declare it, so the
           // manifest can tell the authorities apart.
-          ...(scenario.kind === "reference"
-            ? { source: "reference", renderer: scenario.renderer, ...(scenario.referenceOf ? { referenceOf: scenario.referenceOf } : {}) }
-            : scenario.mount
-              ? { source: "constructed", renderer: scenario.renderer, bag: scenario.bag, ...(scenario.scale ? { scale: scenario.scale } : {}) }
-              : {}),
-          ...(scenario.fixtureOf ? { fixtureOf: scenario.fixtureOf } : {}),
+          ...provenance,
+          ...(fixtureOfEntry),
         });
         count += 1;
         console.log(`  captured ${rel} (${bytes.length} bytes)`);
+
+        // The judged sheet's second picture. The viewport shot above is what a phone actually
+        // shows; this one expands the sheet past its 90svh cap to its own content height, so the
+        // lower cards a phone keeps below the fold are photographed too. That matters because the
+        // parity judge scores the picture, and a judge scoring only the viewport grades half a
+        // surface. The grow-then-reshoot loop runs until the reported height stops changing,
+        // because some sheets size their inner areas against the very viewport this reshapes —
+        // one pass would trust a measurement the resize itself had just invalidated.
+        if (SHEET_JUDGE_SCENARIOS.has(scenario.id) && device.id === "mobile") {
+          const variantRel = (root ? `${root}/` : "")
+            + `${scenario.group}/${scenario.id}-sheet-${device.id}-${theme}.png`;
+          try {
+            let settled = -1;
+            for (let pass = 0; pass < 3; pass++) {
+              const height = await page.evaluate(EXPAND_SHEET);
+              if (height == null) {
+                failures.push(`${variantRel}: no sheet element found to expand`);
+                console.log(`  NOSHEET ${scenario.id}-${device.id}-${theme}`);
+                break;
+              }
+              if (height === settled) break;
+              settled = height;
+              await page.setViewportSize({ width: device.width, height });
+              await waitForConstructedLayout(page);
+            }
+            if (settled > 0) {
+              const sheetHeight = await page.evaluate(() => {
+                let best = null;
+                for (const s of document.querySelectorAll(".obnotion-mobile-bottom-sheet")) {
+                  const r = s.getBoundingClientRect();
+                  if (!best || r.height > best.height) best = r;
+                }
+                return best ? Math.floor(best.height) : 0;
+              });
+              const variantDest = join(OUT, variantRel);
+              mkdirSync(dirname(variantDest), { recursive: true });
+              await page.screenshot({ path: variantDest, timeout: 15000, animations: "disabled" });
+              const variantBytes = readFileSync(variantDest);
+              // The same record the viewport entry carries, with the sheet's own expanded height
+              // beside it: the freshness gate compares the picture's pixel height against this
+              // number, so a variant that came back viewport-sized fails instead of posing.
+              manifest.push({
+                id: `${scenario.id}-sheet`,
+                title: scenario.title,
+                group: scenario.group,
+                theme,
+                device: device.id,
+                file: `screenshots/${variantRel}`,
+                sources: scenario.sources,
+                layoutHash: null,
+                pixelHash: pixelHash(variantBytes),
+                sourceHashes: Object.fromEntries(
+                  [...scenario.sources, ...CAPTURE_INPUTS].map((s) => [s, fingerprint(s)]),
+                ),
+                note: scenario.note || null,
+                capture: "sheet",
+                sheetHeight,
+                bytes: variantBytes.length,
+                ...provenance,
+                ...fixtureOfEntry,
+              });
+              count += 1;
+              console.log(`  captured ${variantRel} (${variantBytes.length} bytes, sheet ${sheetHeight}px)`);
+            }
+          } catch (err) {
+            failures.push(`${variantRel}: ${err.message.split("\n")[0]}`);
+            console.log(`  FAILED ${variantRel}`);
+          }
+        }
+
         await page.close();
       }
       }

@@ -78,6 +78,8 @@ Every Notion iOS capture in this repository is **299×678**, a Mobbin thumbnail.
 
 The capture that the judge scores comes from these scenarios, each mounting the shipped renderer:
 
+The judged image is the full-sheet variant `screenshots/notion-clone/components/constructed-owned-menu-sheet-mobile-{light,dark}.png` (same run, emitted beside the viewport shot): the sheet expanded past its 90svh cap to its own content height, so the cards a viewport crop keeps below the fold are scored.
+
 - `constructed-owned-menu` — harness branch `scenario.renderer === "owned-menu"` at `tools/live/render-assertion-harness.ts:3667`. Captures include the sheet presentation (`chrome-owned-menu-sheet` declares `fixtureOf` at it)
 - `constructed-column-submenu` and `constructed-depth3-column-submenu` — `constructedDepth3Scenario`, via `mountConstructedDepth3Stack`
 - `constructed-modal-sheet-confirm` and `constructed-modal-sheet-confirm-stacked` — `constructedModalSheetScenario`, via `mountConstructedModalSheet`

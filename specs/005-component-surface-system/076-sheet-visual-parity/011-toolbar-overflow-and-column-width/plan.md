@@ -76,6 +76,8 @@ Every Notion iOS capture in this repository is **299×678**, a Mobbin thumbnail.
 
 The capture that the judge scores comes from these scenarios, each mounting the shipped renderer:
 
+The judged image is the full-sheet variant `screenshots/notion-clone/panels/constructed-column-width-adjuster-sheet-mobile-{light,dark}.png` (same run, emitted beside the viewport shot): the sheet expanded past its 90svh cap to its own content height, so the cards a viewport crop keeps below the fold are scored.
+
 - `constructed-toolbar-utilities` — `constructedScenario("toolbar-utilities", { renderer: "toolbar", toolbarPopover })`, harness branch `scenario.renderer === "toolbar"` at `tools/live/render-assertion-harness.ts:3227`
 - `constructed-column-width-adjuster` — harness branch `scenario.renderer === "column-width-adjuster"` at `tools/live/render-assertion-harness.ts:3627`. Captures `screenshots/notion-clone/panels/constructed-column-width-adjuster-mobile-{light,dark}.png`
 - Fixtures `chrome-utilities-popover` and `panel-column-width-sheet` declare `fixtureOf` at these; no scenario work is owed

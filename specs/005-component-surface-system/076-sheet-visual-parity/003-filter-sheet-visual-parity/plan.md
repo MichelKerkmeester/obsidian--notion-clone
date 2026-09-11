@@ -76,6 +76,8 @@ Every Notion iOS capture in this repository is **299×678**, a Mobbin thumbnail.
 
 The capture that the judge scores comes from these scenarios, each mounting the shipped renderer:
 
+The judged image is the full-sheet variant `screenshots/notion-clone/panels/constructed-filter-panel-sheet-mobile-{light,dark}.png` (same run, emitted beside the viewport shot): the sheet expanded past its 90svh cap to its own content height, so the cards a viewport crop keeps below the fold are scored.
+
 - `constructed-filter-panel` and `constructed-filter-panel-nested` — `constructedScenario("filter-panel", { renderer: "filter-panel", filterDepth })`, harness branch `scenario.renderer === "filter-panel"` at `tools/live/render-assertion-harness.ts:3345`. Captures `screenshots/notion-clone/panels/constructed-filter-panel{,-nested}-mobile-{light,dark}.png`
 - `constructed-active-rule-filter` — `constructedScenario("active-rule-filter", { renderer: "active-rule-popover", ruleKind: "filter" })`, harness branch `scenario.renderer === "active-rule-popover"` at `tools/live/render-assertion-harness.ts:3314`. Captures `screenshots/notion-clone/components/constructed-active-rule-filter-mobile-{light,dark}.png`. **This is the capture the operator cited.** `071/008` (`64af87ee`) touched the `constructed-filter-panel*` captures only, so this surface kept the old grammar
 - Both are production mounts. Fixtures `panel-filter-conditions`, `panel-filter-nested-group` and `chrome-active-rule-popover-filter` all declare `fixtureOf` at these; no scenario work is owed
